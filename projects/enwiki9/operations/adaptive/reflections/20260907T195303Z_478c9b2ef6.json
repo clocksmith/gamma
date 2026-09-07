@@ -1,0 +1,113 @@
+{
+  "attribution": {
+    "causalConfidence": "medium",
+    "controlsEquivalent": true,
+    "failureClass": "algorithmic-loss",
+    "localizedCause": "The fixed reversed block costs73498BZip2payload bytes versus72658forward. The matched implementation establishes direction loss here; it does not isolate internal BZip2 transform or coding contributions."
+  },
+  "candidateId": "raw_reverse_bz2250k_q0_v1",
+  "candidateRevision": {
+    "candidateId": "raw_reverse_bz2250k_q0_v1",
+    "candidateTreeSha256": "sha256:7e9c96ff94e4d4af731487bde068031ea28dd53d0038776f31f0fb84c73b252c",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/raw_reverse_bz2250k_q0_v1/20260907T195244541750Z_7e9c96ff94e4.json",
+      "sha256": "sha256:49ce3161b1243457a716b4d5d349e28fa8d9414c3bb58dfe842035d28e33c553"
+    }
+  },
+  "decision": {
+    "killPredicatesPass": false,
+    "nextGateBytes": null,
+    "promotionPredicatesPass": false,
+    "rationale": "No fresh confirmation or1MB for unchanged reversal. Continue independent source-based exploration of stronger measured substrates rather than another byte-order variation.",
+    "verdict": "hold"
+  },
+  "evidence": [
+    {
+      "path": "operations/provenance/raw_reverse_bz2_terminal_20260907.json",
+      "sha256": "sha256:f8fd1469ed2d954839d06429df1936cc46f8e07ba23a1cfb0080aecee5bd2307"
+    },
+    {
+      "path": "operations/provenance/raw_reverse_bz2_terminal_20260907/index.json",
+      "sha256": "sha256:e83660adc28d5cf13f80d719342096c618f887ae452dc433b565db4b860ef064"
+    },
+    {
+      "path": "results/raw_reverse_bz2250k_q0_v1/costs-table.json",
+      "sha256": "sha256:73c1fa98308235a3d85be053f56f51b1ebb6ceb8bed6b29d398e1c673f5932ec"
+    },
+    {
+      "path": "results/raw_reverse_bz2250k_q0_v1/stage-decision.json",
+      "sha256": "sha256:45a47ffde2fb83117723cbcc7998db5036603c5e22cd0da5ef3c7052b826619a"
+    }
+  ],
+  "experiment": {
+    "path": "operations/adaptive/experiments/raw_reverse_bz2250k_q0_v1.json",
+    "sha256": "sha256:b7e8f912942bd38786bf1ac83eef9a8b17c8ed5cfe1916ce5eebb078091c39d6"
+  },
+  "generatedUtc": "2026-09-07T20:01:20+00:00",
+  "hypothesis": {
+    "rationale": "On fixed opening250KB, forward P/K each72723bytes and reversed D73563bytes:840bytes growth under identical65-byte framing.",
+    "verdict": "refuted"
+  },
+  "job": {
+    "path": "operations/adaptive/completed/909_20260907T195303Z_478c9b2ef6.json",
+    "sha256": "sha256:2f72e1d791c591b7a7f93d07aecede3b55a84f1ead7e943426c1db95394c9097"
+  },
+  "knowledge": {
+    "retiredDimensions": [
+      "raw_reverse_bz2_level9_fixed250000_opening250k"
+    ],
+    "transferableLessons": [
+      "Favorable synthetic direction differences do not establish corpus benefit; retain forced treatment archives and independent inverses even when they lose."
+    ],
+    "uncertainties": [
+      "This sample does not prove direction loss on every population, codec or block partition."
+    ]
+  },
+  "measurementAssertions": [
+    {
+      "field": "netBytesSaved",
+      "pointer": "/p_minus_d_bytes",
+      "source": {
+        "path": "results/raw_reverse_bz2250k_q0_v1/costs-table.json",
+        "sha256": "sha256:73c1fa98308235a3d85be053f56f51b1ebb6ceb8bed6b29d398e1c673f5932ec"
+      }
+    },
+    {
+      "field": "scopeBytes",
+      "pointer": "/raw_bytes",
+      "source": {
+        "path": "results/raw_reverse_bz2250k_q0_v1/costs-table.json",
+        "sha256": "sha256:73c1fa98308235a3d85be053f56f51b1ebb6ceb8bed6b29d398e1c673f5932ec"
+      }
+    }
+  ],
+  "measurements": {
+    "idealBitsSaved": null,
+    "memoryRatio": null,
+    "minimumPartitionIdealBitsSaved": null,
+    "netBytesSaved": -840,
+    "positiveSegmentFraction": null,
+    "runtimeRatio": null,
+    "scopeBytes": 250000,
+    "scopeSymbols": null,
+    "sourceBytesDelta": null,
+    "transferRetention": null
+  },
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:16badfa6c1a53b47bcc12b089fdd9c21f7405ea56a84344d60c28d2252da8288",
+    "objectiveId": "gamma-enwiki9-hutter-99m-v2",
+    "objectivePath": "contracts/research/v2/objective-contract.json",
+    "targetScoreBytes": 99000000
+  },
+  "reflectionId": "r-20260907t195303z_478c9b2ef6",
+  "schema": "gamma.enwiki9.reflection-receipt.v1",
+  "validity": {
+    "classification": "valid",
+    "reasons": [
+      "Nine closed guarded phases; fresh P, identical K, forced reversed D with independent raw inverse and repeat, exact decoder-common projections, matched block/header costs and unchanged source/runtime bindings."
+    ],
+    "valid": true
+  }
+}
