@@ -1,0 +1,113 @@
+{
+  "command": [
+    "taskset",
+    "-c",
+    "3",
+    "python3",
+    "-B",
+    "/tmp/gamma-field-wrt-review-20260907/plan_review.py"
+  ],
+  "obligations": [
+    "P and K reproduce the exact complete parent archive including the 46-byte prefix.",
+    "Native Q16 values are used directly without float requantization.",
+    "Native arithmetic byte renormalization and final flush are reproduced exactly.",
+    "Q16-only decoder input omits all native trace truth and interval columns.",
+    "Decoder reconstruction plus canonical re-encoding validates native zero extension.",
+    "Q16 dependency remains external diagnostic input and earns no standalone/package credit."
+  ],
+  "observed_utc": "2026-09-07T02:06:53.013713+00:00",
+  "opening": {
+    "archive_prefix_bytes": 46,
+    "archive_prefix_components": {
+      "GFV1": 4,
+      "literal_type_and_raw_length": 5,
+      "modeled_length_and_trained_flag": 5,
+      "vocabulary_bitmap": 32
+    },
+    "archive_reference": {
+      "bytes": 33429,
+      "path": "results/fx2_weight_native_transfer250k_q0_v1/opening/P/archive.bin",
+      "sha256": "70325310e96b83b48677d76d53141e69ddb47519b4cdffd1c85f51fe2c444dbe"
+    },
+    "arithmetic_payload_bytes": 33383,
+    "complete_archive_bytes": 33429,
+    "modeled_bytes": 151210,
+    "native_trace_bytes": 33871040,
+    "native_trace_record_bytes": 28,
+    "native_trace_records": 1209680,
+    "native_trace_words": [
+      "float_bits",
+      "q16",
+      "pre_low",
+      "pre_high",
+      "post_low",
+      "post_high",
+      "bit"
+    ],
+    "raw_bytes": 250000,
+    "stored_header_bytes": 10,
+    "trace_reference": {
+      "bytes": 33871040,
+      "path": "results/fx2_weight_native_transfer250k_q0_v1/work/native/opening-P-encode.trace",
+      "sha256": "a5a0afbf0715a9c5371d5f097aaa1b478c1c6a2c030448c79b4ca70f1279c716"
+    }
+  },
+  "plan": {
+    "path": "operations/provenance/fx2_causal_field_wrt_replay250k_q0_v1_plan.json",
+    "sha256": "46da8bedfffac3c941d1d0220d4afe906c2ee113f52b4a27dcf6b5a5ef079f7c"
+  },
+  "read_scope": "source and terminal receipt metadata only; no raw, stored, archive or trace payload files opened",
+  "references_checked": [
+    {
+      "bytes": 21470,
+      "path": "tools/causal_field_dependency_v1.py",
+      "sha256": "f34a42054ba151219c67060cf3420e06fb1e1aff8ea9f01aa408e116b495ec0a"
+    },
+    {
+      "bytes": 6839,
+      "path": "tools/wrt_exact.py",
+      "sha256": "ae08246ee8b4708904f78aa5f694111834d6420deece34957c61d6fea3a9797a"
+    },
+    {
+      "bytes": 26483,
+      "path": "tools/fx2_attribution_external_base_screen.py",
+      "sha256": "d908e9958aa9d0cdd6f8d43ada46c58b618b40f7dffbc5e2c45dcfa607edf4c2"
+    },
+    {
+      "bytes": 2359,
+      "path": "tools/fx2_coder_trace_v1.hpp",
+      "sha256": "d72dfa104668e2f3138e41e7bdfd54c8ad634d00d64338a627dbf1835656a11b"
+    },
+    {
+      "bytes": 11624,
+      "path": "lib/fx2_native_gate_v1.py",
+      "sha256": "b4c2c843d58932681d78720ff74f2d2bc4f36e88994bcd0a807ddbde4a5b5b3d"
+    },
+    {
+      "bytes": 22104,
+      "path": "operations/evidence/20260906_causal_field_dependency_unit.json",
+      "sha256": "36ba3f9c693702eb28b4e2280588eb1ac2ea8476f4f845e7a8e2c7926095cf43"
+    },
+    {
+      "bytes": 4513,
+      "path": "operations/adaptive/reflections/20260905T233740Z_c2a28dc2f7.json",
+      "sha256": "203e514646f50b7f1c341c3fb0ec84f8135e9dcce0ec7d61535acba83d0c8b6c"
+    },
+    {
+      "bytes": 165489,
+      "path": "operations/provenance/public_fx2_weight_native_transfer_terminal_20260905.json",
+      "sha256": "a085b5e5d4f9b79312067329cf1dfef7e03e8c3106f8cd1a467e2fb26a4e074b"
+    },
+    {
+      "bytes": 1108,
+      "path": "results/fx2_weight_native_transfer250k_q0_v1/work/native/src/coder/encoder.cpp",
+      "sha256": "e1586dca62d959dff81f156512d37a22a5e2abbb332c77962e0e8a0a0c646d29"
+    },
+    {
+      "bytes": 1026,
+      "path": "results/fx2_weight_native_transfer250k_q0_v1/work/native/src/coder/decoder.cpp",
+      "sha256": "cfed5d718bc6d1e797bb7c22be769040a7407086baf7918fcb522fd558c25258"
+    }
+  ],
+  "schema": "gamma.independent-field-wrt-plan-review.v1"
+}

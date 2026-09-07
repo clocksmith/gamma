@@ -1,0 +1,122 @@
+{
+  "child_max_rss_kib": 90544,
+  "coder_cases": [
+    {
+      "bits": 0,
+      "name": "empty",
+      "payload_hex": "ff"
+    },
+    {
+      "bits": 1,
+      "name": "half_one",
+      "payload_hex": "7f"
+    },
+    {
+      "bits": 1,
+      "name": "half_zero",
+      "payload_hex": "ff"
+    },
+    {
+      "bits": 1,
+      "name": "rare_one",
+      "payload_hex": "0000ff"
+    },
+    {
+      "bits": 1,
+      "name": "rare_zero",
+      "payload_hex": "ffffff"
+    },
+    {
+      "bits": 65536,
+      "name": "max_rare_ones",
+      "payload": "/tmp/gamma-field-wrt-review-20260907/max_rare_ones.payload",
+      "payload_bytes": 131073,
+      "payload_sha256": "7e89ec72c9766c935fef4c2c97ddddba001aff147152f56078d9151950311398",
+      "q16": 1,
+      "raw_bytes": 8192,
+      "raw_sha256": "7d2c7ac4888bfd75cd5f56e8d61f69595121183afc81556c876732fd3782c62f"
+    },
+    {
+      "bits": 65536,
+      "name": "max_rare_zeros",
+      "payload": "/tmp/gamma-field-wrt-review-20260907/max_rare_zeros.payload",
+      "payload_bytes": 131073,
+      "payload_sha256": "5636a1cb044bba050975425902c321b0f7fbfdaab709624a2cafa1743d2be519",
+      "q16": 65535,
+      "raw_bytes": 8192,
+      "raw_sha256": "9f1dcbc35c350d6027f98be0f5c8b43b42ca52b7604459c0c42be3aa88913d47"
+    }
+  ],
+  "command": [
+    "taskset",
+    "-c",
+    "3",
+    "python3",
+    "-B",
+    "/tmp/gamma-field-wrt-review-20260907/review_coder.py"
+  ],
+  "corpus_bytes": 0,
+  "cpu_affinity": [
+    3
+  ],
+  "cwd": "/home/x/deco/gamma/projects/enwiki9",
+  "elapsed_seconds": 3.5629884900990874,
+  "limits": {
+    "address_space_bytes": 536870912,
+    "cpu_seconds": 60,
+    "raw_bytes_max": 8192,
+    "scratch_bytes": 33554432,
+    "wall_seconds": 90
+  },
+  "posterior_cases": [
+    {
+      "checks": 2176,
+      "final_state_digest": "7e997c55be79a731b970d3ce3cf9c4b813b05d8dfc2f59ef614bafc05c7e93f0",
+      "fixture": "/tmp/gamma-field-wrt-review-20260907/maximum_ones_rare_parent.fixture.json",
+      "fixture_sha256": "f8c3d330365969bf875e3ddfdb2c62c6a20ac9b26fb29ccd83ecb603a48cc031",
+      "name": "maximum_ones_rare_parent"
+    },
+    {
+      "checks": 2176,
+      "final_state_digest": "15fa6fee21692e949bafc24cea88be698e815b43e3f030f91199ae94871eb90d",
+      "fixture": "/tmp/gamma-field-wrt-review-20260907/maximum_zeros_rare_parent.fixture.json",
+      "fixture_sha256": "488ae3c20b26ef20987b266c0019192f24752aecb0cfadbeb1035020f273d420",
+      "name": "maximum_zeros_rare_parent"
+    },
+    {
+      "checks": 2176,
+      "final_state_digest": "f27bc768e77606a1052ddebb640fa32481452c0cb4970ba7350c6ca387b31976",
+      "fixture": "/tmp/gamma-field-wrt-review-20260907/varying_parent.fixture.json",
+      "fixture_sha256": "532333f1ef710597f13666b2eee61ea63977a5daab96a7072f46b8d7286f0dc0",
+      "name": "varying_parent"
+    },
+    {
+      "checks": 2176,
+      "final_state_digest": "e708767172a83128ab7e5cf877673ab4b344c471c3b53187f986036552564823",
+      "fixture": "/tmp/gamma-field-wrt-review-20260907/late_mismatch.fixture.json",
+      "fixture_sha256": "5e118cce4ab0b934b740113f9291e33bc18d80518dcdce509ce99feab0bb6805",
+      "name": "late_mismatch"
+    },
+    {
+      "checks": 2176,
+      "final_state_digest": "e708767172a83128ab7e5cf877673ab4b344c471c3b53187f986036552564823",
+      "fixture": "/tmp/gamma-field-wrt-review-20260907/early_mismatch.fixture.json",
+      "fixture_sha256": "b93a8e7c08302fefb00ea9575071da1f97a103a3c35e2cedc410eb8fc5c64ed9",
+      "name": "early_mismatch"
+    }
+  ],
+  "posterior_reference_checks": 10880,
+  "script_sha256": "904ba17d0a9c7f9dea1cc41e04554e4036235297cd0f666d3bdeebaafe04af25",
+  "self_max_rss_kib": 32876,
+  "source_hashes": {
+    "tests/test_causal_field_parent_coder_v1.py": "0604ba6a648fc7e3bc9d3605cf5876878c7a635bf68988b8df2f6896562a8021",
+    "tools/causal_field_parent_coder_v1.py": "6c6f8311b6fda0bbf5fdbd0a45a52ea9f145ebc1fe9d506e1af1923478d5abb8"
+  },
+  "status": "passed",
+  "synthetic_only": true,
+  "unit_tests": {
+    "errors": 0,
+    "failures": 0,
+    "run": 14
+  }
+}
