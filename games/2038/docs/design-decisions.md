@@ -12,6 +12,29 @@ five selected proposals were implemented. Earlier 19-tile, every-Era
 map-motion, transmission, Tactic, secret-objective, and endgame-scoring
 assumptions are historical only.
 
+## Three Headline simplification
+
+The user selected this pass after the source audit of the six-per-Era expansion.
+Analog Havens spends two Runway instead of losing a Customer, preserving Customer
+counts and their permanent awards without a new physical history record. Two
+Runway is a provisional price, not a measured balance result. Its benefit remains
+two Trust and removal of two Scrutiny.
+
+Limb Liquidity offers ordinary Agent reassignment before selection, without a
+payment, a rival response, or a restricted destination. Wartime Water Bridge
+awards one Trust and removes one Scrutiny once per institution that has a powered
+Facility adjacent to a powered rival Facility. Co-location, offline hosts, and
+additional eligible pairs give no extra reward. No contribution or refund occurs.
+
+These are deliberate mechanical changes: they remove shrinking the customer
+business, negotiated movement purchases, and collective funding decisions. They
+retain the stories, twenty-four-card inventory, immediate resolution, and twelve
+Headlines revealed per game. Research risk, local Power, simultaneous selection,
+Fusion, Joint Venture hosting, AGI timing, and World Endings are unchanged.
+The earlier expansion evidence retains its original rules and identity. This
+pass claims implementation and contract checks, not easier human learning or
+improved balance; those require playtesting.
+
 ## Rules review closure — 2026-09-07
 
 This addresses the source review of `299b3e74`, on the current authoring tree.

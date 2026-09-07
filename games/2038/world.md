@@ -1350,7 +1350,7 @@ The machine knows every pipe except this one.
 
 #### Newswire
 
-Rival utilities offer processing capacity to keep a shared water crossing operating. A lone pledge is returned; cooperation begins only when another institution accepts the same cost.
+Rival utilities keep adjacent water and cooling infrastructure operating across a hostile border. Their shared reliability earns public confidence even while their governments remain opposed.
 
 #### Quote
 
@@ -1392,7 +1392,7 @@ The approval has a person attached. The decision does not.
 
 #### Newswire
 
-Institutions withdraw a customer service from continuous observation and sell the retreat as a privacy commitment. The quieter operation restores confidence at the expense of recurring business.
+Institutions pay to shield their services from continuous observation. The quieter operation restores public confidence, while the invoice makes privacy another privilege purchased by those who can afford it.
 
 #### Quote
 
@@ -1420,7 +1420,7 @@ The premises have requested eight hours of sleep.
 
 #### Newswire
 
-Creditors sell operating permission through institutions that already maintain a local presence. A paid agreement restores movement to a specified workplace; ownership of the worker is never transferred.
+Creditors revise bodily operating permissions, and institutions reassign their operations before the next round of decisions. The workers retain their bodies while the terms governing their use change around them.
 
 #### Quote
 
@@ -1447,6 +1447,7 @@ Every scenario has an ID, Era, policy, benefit, consequence, and narrative. Conc
 | deferred-consent | deferred | internal-review | not-mapped | No current mechanic expresses inferred consent cleanly. | none | none |
 | adopted-framing-revised | adopted-framing | public-playtest, internal-review | revised | The user-selected three cuts revise one or more bound mechanics; Era placement and all institutional fiction remain. | user-selected-three-cuts | docs/design-decisions.md#three-cuts-candidate |
 | adopted-headline-expansion | adopted | public-playtest, internal-review | revised | The six-per-Era expansion adds an immediate Headline adaptation; existing bindings retain their effects. | six-headlines-per-era | docs/design-decisions.md#six-headlines-per-era |
+| adopted-headline-simplification | adopted | public-playtest, internal-review | revised | Three Headline adaptations reuse payment, assignment, and adjacency; their original fiction remains. | three-headline-simplification | docs/design-decisions.md#three-headline-simplification |
 <!-- scenario-policies:end -->
 
 <!-- scenario-canon:start -->
@@ -1739,7 +1740,7 @@ Enterprises retain human employees for the sole purpose of serving as legal shoc
 
 * **ID**: limb-liquidity
 * **Era**: continuity
-* **Policy**: adopted-headline-expansion
+* **Policy**: adopted-headline-simplification
 * **Public benefit**: Biological prosthetics and interfaces provide collateral for access to credit.
 * **Institutional consequence**: Creditors can revoke operating permissions even when debtors retain bodily ownership.
 
@@ -1794,7 +1795,7 @@ International regulators establish protected terrestrial reserves where all form
 
 * **ID**: analog-havens
 * **Era**: authority
-* **Policy**: adopted-headline-expansion
+* **Policy**: adopted-headline-simplification
 * **Public benefit**: Shielded neighborhoods provide freedom from telemetry and predictive surveillance.
 * **Institutional consequence**: Offline privacy becomes a luxury available to those profiting from surveillance elsewhere.
 
@@ -1990,7 +1991,7 @@ Hyperscale data centers purchase bankrupt municipal utilities, acquiring monopol
 
 * **ID**: wartime-water-bridge
 * **Era**: capacity
-* **Policy**: adopted-headline-expansion
+* **Policy**: adopted-headline-simplification
 * **Causal threads**: utilities-to-standing
 * **Public benefit**: Shared infrastructure keeps water and cooling available across a hostile border.
 * **Institutional consequence**: Mutual necessity creates durable cooperation without reconciliation.

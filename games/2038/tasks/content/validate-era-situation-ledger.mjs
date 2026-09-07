@@ -322,7 +322,10 @@ export async function validateEraSituationLedger(ledger) {
            (revision?.decisionId === "user-selected-three-cuts" &&
             revision?.record === "docs/design-decisions.md#three-cuts-candidate") ||
            (revision?.decisionId === "six-headlines-per-era" &&
-            revision?.record === "docs/design-decisions.md#six-headlines-per-era"))) {
+            revision?.record === "docs/design-decisions.md#six-headlines-per-era") ||
+           (revision?.decisionId === "three-headline-simplification" &&
+            revision?.record === "docs/design-decisions.md#three-headline-simplification" &&
+            ["analog-havens", "limb-liquidity", "wartime-water-bridge"].includes(scenario.id)))) {
         throw new Error(`Adopted scenario lacks an authorized mechanic revision: ${scenario.id}`);
       }
     }

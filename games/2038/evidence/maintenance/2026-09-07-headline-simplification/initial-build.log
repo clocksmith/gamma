@@ -1,0 +1,17 @@
+
+> mandate-2038@0.19.8 build:all
+> npm run content:build && npm run docs:html && npm run gallery:html
+
+
+> mandate-2038@0.19.8 content:build
+> node tasks/content/validate-era-situation-ledger.mjs && node tasks/content/compile.mjs
+
+file:///Users/xyz/deco/gamma/games/2038/tasks/content/validate-era-situation-ledger.mjs:326
+        throw new Error(`Adopted scenario lacks an authorized mechanic revision: ${scenario.id}`);
+              ^
+
+Error: Adopted scenario lacks an authorized mechanic revision: analog-havens
+    at validateEraSituationLedger (file:///Users/xyz/deco/gamma/games/2038/tasks/content/validate-era-situation-ledger.mjs:326:15)
+    at async file:///Users/xyz/deco/gamma/games/2038/tasks/content/validate-era-situation-ledger.mjs:381:18
+
+Node.js v22.20.0

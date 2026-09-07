@@ -79,28 +79,31 @@ test("the plumber retainer counts distinct Agent districts, not Agents, Faciliti
   assert.deepEqual(match.players.map(player => player.runway), [1, 2, 2]);
 });
 
-test("water cooperation refunds one contributor, rewards two, and excludes disconnected or insolvent institutions", async () => {
-  for (const contributors of [0, 1, 2]) {
+test("water bridge rewards adjacent powered rivals once without payment, prompts, or contracts", async () => {
+  for (const relation of ["adjacent", "co-located", "distant", "offline", "own-only"]) {
     const match = await game();
-    for (const player of match.players) { power(match, player); player.compute = 2; player.trust = 1; player.scrutiny = 1; }
-    match.choose = async (_p, seat, _stage, choices) => seat < contributors ? choices.at(-1) : choices[0];
+    const [left, right, extra] = match.players;
+    const tile = match.board.find(t => t.category === "cloud");
+    const adjacent = match.board.find(t => t.category !== "frontier" && match.areAdjacent(tile.instanceId, t.instanceId));
+    const distant = match.board.find(t => t.category !== "frontier" && t.instanceId !== tile.instanceId && !match.areAdjacent(tile.instanceId, t.instanceId));
+    for (const player of match.players) Object.assign(player, { compute: 0, runway: 0, trust: 1, scrutiny: 1, facilities: [], generators: [] });
+    left.facilities = [{ id: "left", tileId: tile.instanceId, category: tile.category }];
+    const other = relation === "co-located" ? tile : relation === "distant" ? distant : adjacent;
+    right.facilities = [{ id: "right", tileId: other.instanceId, category: other.category }];
+    if (relation === "offline") right.facilities.unshift({ id: "first", tileId: distant.instanceId, category: distant.category });
+    if (relation === "own-only") { left.facilities.push(...right.facilities); right.facilities = []; }
+    if (relation === "adjacent") extra.facilities = [{ id: "extra", tileId: adjacent.instanceId, category: adjacent.category }];
+    match.choose = async () => { throw new Error("Water bridge must not request contribution or settlement choices"); };
     await reveal(match, "wartime_water_bridge");
     for (const player of match.players) {
-      const funded = contributors >= 2 && player.seat < contributors;
-      assert.equal(player.compute, 2 - Number(funded));
-      assert.equal(player.trust, 1 + Number(funded));
-      assert.equal(player.scrutiny, 1 - Number(funded));
+      const reward = relation === "adjacent";
+      assert.equal(player.trust, 1 + Number(reward), `${relation}, seat ${player.seat}`);
+      assert.equal(player.scrutiny, 1 - Number(reward));
+      assert.equal(player.compute, 0); assert.equal(player.runway, 0);
     }
+    assert.equal(match.contracts.length, 0);
+    assert.ok(!match.replay.some(event => event.type === "headline_contributions_settled"));
   }
-  const match = await game();
-  for (const player of match.players) { power(match, player); player.compute = 1; }
-  match.players[0].facilities = [];
-  match.players[1].compute = 0;
-  const prompted = [];
-  match.choose = async (_p, seat, _stage, choices) => { prompted.push(seat); return choices.at(-1); };
-  await reveal(match, "wartime_water_bridge");
-  assert.deepEqual(prompted, [2]);
-  assert.equal(match.players[2].compute, 1);
 });
 
 test("cognitive leasing spends real Trust, respects the Compute cap, and preserves already-earned awards", async () => {
@@ -139,14 +142,20 @@ test("sponsorship removes actual rival Scrutiny, charges the sponsor, and cannot
   assert.equal(player.runway, 1);
 });
 
-test("analog withdrawal sacrifices a Customer, floors Scrutiny at zero, and cannot be repeated without a Customer", async () => {
-  const match = await game(); const player = match.players[0];
-  Object.assign(player, { customers: 1, trust: 1, scrutiny: 1 });
-  match.choose = acceptSeat(0);
-  await reveal(match, "analog_havens");
-  assert.equal(player.customers, 0); assert.equal(player.trust, 3); assert.equal(player.scrutiny, 0);
-  await reveal(match, "analog_havens");
-  assert.equal(player.trust, 3);
+test("analog privacy spends Runway, preserves Customers, and respects affordability and caps", async () => {
+  for (const [runway, customers, trust, accept] of [[2, 0, 1, true], [2, 2, 5, true], [1, 2, 1, false], [0, 2, 1, false]]) {
+    const match = await game(); const player = match.players[0];
+    Object.assign(player, { runway, customers, trust, scrutiny: 1 });
+    match.synchronizePublicMandate(player, "test");
+    const customerAwards = player.mandateAwards.filter(a => a.id.startsWith("customer-"));
+    match.choose = acceptSeat(0);
+    await reveal(match, "analog_havens");
+    assert.equal(player.runway, runway - (accept ? 2 : 0));
+    assert.equal(player.customers, customers);
+    assert.deepEqual(player.mandateAwards.filter(a => a.id.startsWith("customer-")), customerAwards);
+    assert.equal(player.trust, Math.min(6, trust + (accept ? 2 : 0)));
+    assert.equal(player.scrutiny, accept ? 0 : 1);
+  }
 });
 
 test("biological hosting counts deployed Agents, caps output at three, and never exceeds shared risk supply", async () => {
@@ -163,35 +172,29 @@ test("biological hosting counts deployed Agents, caps output at three, and never
   assert.equal(match.matchMetrics.systemicRiskCreated, 1);
 });
 
-test("creditor reassignment requires consent before payment, preserves ownership, and grants no Action or Trade bonus", async () => {
-  for (const consent of [false, true]) {
-    const match = await game(); const player = match.players[0], rival = match.players[1];
-    const tile = match.board.find(tile => tile.category === "media");
-    rival.pieces[0].tileId = tile.instanceId;
-    player.runway = 2; rival.runway = 0;
+test("limb reassignment uses ordinary assignment to any district with no transaction or bonus", async () => {
+  for (const stay of [false, true]) {
+    const match = await game(); const player = match.players[0];
+    const tile = match.board.find(t => t.category === "government");
+    for (const p of match.players) p.runway = 0;
     const original = structuredClone(player.pieces);
-    const rivalPieces = structuredClone(rival.pieces);
+    const before = match.players.map(p => ({ runway: p.runway, compute: p.compute, trust: p.trust, scrutiny: p.scrutiny, pieces: structuredClone(p.pieces) }));
     match.choose = async (_p, seat, stage, choices) => {
-      assert.ok(choices.every(c => !c.label.includes("undefined")));
-      if (stage.endsWith("_consent")) {
-        assert.equal(seat, 1);
-        assert.equal(player.runway, 2); assert.equal(rival.runway, 0);
-        assert.deepEqual(player.pieces, original, "movement awaits consent");
-        return consent ? choices.at(-1) : choices[0];
-      }
-      return seat === 0 ? choices.find(c => c.parameters?.recipientSeat === 1 && c.parameters.tileId === tile.instanceId && c.parameters.pieceId === original[0].id) : choices[0];
+      assert.equal(stage, "headline_limb_liquidity");
+      assert.equal(choices.length, 1 + match.players[seat].pieces.length * match.board.length);
+      if (seat !== 0) return choices[0];
+      return choices.find(c => c.parameters?.pieceId === original[0].id && c.parameters.destinationId === (stay ? original[0].tileId : tile.instanceId));
     };
     await reveal(match, "limb_liquidity");
-    assert.equal(player.runway, consent ? 1 : 2, "Dovetalis receives no ordinary Trade bonus");
-    assert.equal(rival.runway, Number(consent));
-    assert.deepEqual(rival.pieces, rivalPieces);
-    assert.deepEqual(player.pieces, consent ? [{ ...original[0], tileId: tile.instanceId }, original[1]] : original);
+    for (const p of match.players) for (const k of ["runway", "compute", "trust", "scrutiny"]) assert.equal(p[k], before[p.seat][k]);
+    assert.deepEqual(player.pieces, stay ? original : [{ ...original[0], tileId: tile.instanceId }, original[1]]);
+    for (const p of match.players.slice(1)) assert.deepEqual(p.pieces, before[p.seat].pieces);
     assert.equal(player.agentsInSupply, 2);
   }
 });
 
 test("all optional additions can be declined without changing any player's position", async () => {
-  for (const id of Object.keys(additions).filter(id => id !== "last_plumber_boom")) {
+  for (const id of Object.keys(additions).filter(id => !["last_plumber_boom", "wartime_water_bridge"].includes(id))) {
     const match = await game();
     for (const player of match.players) { power(match, player); Object.assign(player, { runway: 5, compute: 5, customers: 1, capability: 4, scrutiny: 2, trust: 3 }); }
     const position = () => match.players.map(({ runway, compute, customers, capability, scrutiny, trust, pieces }) => ({ runway, compute, customers, capability, scrutiny, trust, pieces: structuredClone(pieces) }));
@@ -230,7 +233,7 @@ test("all eight additions traverse the actual browser decision contract and repl
       match.headlineDecks[match.round][0] = card;
       await match.prepareHeadline(policies);
       assert.ok(match.replay.some(event => event.type === "headline_resolved"));
-      if (id !== "last_plumber_boom") {
+      if (!["last_plumber_boom", "wartime_water_bridge"].includes(id)) {
         assert.ok(packets.length >= count);
         assert.equal(new Set(packets.map(packet => packet.requestId)).size, packets.length);
         assert.ok(match.replay.some(event => event.type === "strategy_decision"));
