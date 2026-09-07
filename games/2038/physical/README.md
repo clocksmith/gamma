@@ -4,6 +4,11 @@
 encoding, and dimensions. It is neither player-facing copy nor
 machine-enforced game data.
 
+The selected forms are cards (including flat chips), Agent position tokens,
+and cubes. Boards remain printed surfaces; the bag and writing pen are
+accessories. Shared project references stay face up; project chips or existing
+checkboxes record construction. Numerical tracks use cubes rather than sliders.
+
 ## Ownership
 
 - `component-spec.md` defines what each component physically is, how a player

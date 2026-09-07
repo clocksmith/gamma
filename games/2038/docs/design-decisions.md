@@ -12,6 +12,26 @@ five selected proposals were implemented. Earlier 19-tile, every-Era
 map-motion, transmission, Tactic, secret-objective, and endgame-scoring
 assumptions are historical only.
 
+## Physical component families
+
+The user selected cards (including compact flat chips), Agent position tokens,
+and cubes as the three movable component families. Boards remain printed
+surfaces. Five track cubes per faction replace captive sliders; Mandate uses a
+cube on the shared score track. Individual Scrutiny and Systemic Risk cubes
+retain their existing supplies and tactile equivalence in the Audit bag.
+
+Facilities and Generators share a chip format with distinct printed identities.
+Matched project chips retain their host identifiers. Shared project references
+stay face up: construction flips Mega-Cluster host chips or the unique Fusion
+chip, while Quantum retains its personal completion checkbox. No manual Power
+flip, extra Quantum piece, or mandatory project chain is introduced.
+
+This changes physical presentation and supply description, not construction
+eligibility, project rewards, Audit probabilities, scoring, or completion limits.
+The physical specification and rulebook inventory own the updated forms;
+historical manufacturing estimates and frozen kits retain their original designs.
+Table readability and handling still require physical testing.
+
 ## Infrastructure progression
 
 The user selected Mega-Cluster II, Fusion III, and Quantum IV. This is implemented

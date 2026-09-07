@@ -68,6 +68,9 @@ Deliver a coherent, replayable institutional strategy game whose authored rules,
   excluded. Release identity remains in build receipts.
 - Physical specifications own form and state encoding; supported inventory
   prose is projected from the rulebook, not maintained in a second physical file.
+  Movable pieces use cards/chips, Agent position tokens, and cubes. Shared project
+  references remain readable; host chips and existing completion checkboxes record
+  construction. Component form must not change project limits or Audit probabilities.
 - Every admitted lore situation has one structured Era placement, and every
   governed lore surface is bound exactly once with copy and mechanic receipts.
 - World Markdown owns all scenario definitions and shared qualification policies.

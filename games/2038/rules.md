@@ -23,16 +23,16 @@ numbered sections in order.
    and the shuffled twelve-tile public ring around the complete outer edge.
 2. Separate the twenty-four ${terms.systems.headline} cards by Era. Shuffle
    each deck into its printed Era panel's Headline well. Each Era uses three
-   ${terms.systems.headlines}. Place the Current Era marker in its Start bay.
+   ${terms.systems.headlines}. Place the Current Era chip in its Start bay.
 3. Shuffle the Training deck. Separate the twelve Era ${terms.playerTracks.mandate} cards into
    four three-card Era decks. Shuffle each deck and place it beside its Era
    panel.
-4. Place the two infrastructure project references face up beside the Governance Board and
+4. Place all ${content.gameConfig.sharedSupply.projectReferences} infrastructure project references face up beside the Governance Board and
    stage the remaining shared supplies. Ordinary
    ${terms.infrastructure.power} contracts are printed on the Energy tiles;
    Fusion's is on its project reference.
-5. Each player takes one prepacked Faction tray and foldout aid. Set its captive
-   sliders to their printed starts. Premark the Trust award checkboxes at or below
+5. Each player takes one prepacked Faction tray and foldout aid. Set its
+   track cubes to their printed starts. Premark the Trust award checkboxes at or below
    starting Trust; these awards are already included in starting Mandate.
 6. Place two Agents per player at ${terms.locations.frontier}. Keep the other two Agents in
    supply. Keep all four Facilities and the Generator in supply; no Facility
@@ -45,7 +45,7 @@ numbered sections in order.
 8. Add every Faction’s printed starting ${terms.playerTracks.trust} and record the result as
    **Setup Collective ${terms.playerTracks.trust}** in the Governance Board ledger. This fixed value is used
    during the World Ending.
-9. Choose Initiative randomly and give that player the Initiative marker.
+9. Choose Initiative randomly and give that player the Initiative chip.
    Begin Era I.
 
 ### Modular hex board
@@ -175,13 +175,13 @@ ${terms.playerTracks.mandate} is normally scored immediately on one public track
 - Printed ${terms.playerTracks.mandate} from ${terms.systems.headlines}, Era Mandates, Fusion, and faction abilities.
 
 Threshold awards are permanent; later losses do not reverse them. Beside the
-Trust slider, mark the matching two, four, or six checkbox when its award is
+Trust track, mark the matching two, four, or six checkbox when its award is
 first scored. Keep all three marks for the whole game, even when Trust falls
 or the Era ledger is erased. Returning to a marked threshold scores nothing.
 
 There is no hidden or deferred conversion of Facilities, controlled hexes,
 stored resources, or unused cards into ${terms.playerTracks.mandate}. If an effect scores ${terms.playerTracks.mandate}, move
-the public marker when that effect resolves.
+the Mandate cube when that effect resolves.
 
 ### Universal costs and caps
 
@@ -227,7 +227,7 @@ ReAct means reasoning and acting with feedback from the world.
 
 ### Agents as persistent assignments
 
-An Agent is an operation carrying out your institution's instructions. Its marker
+An Agent is an operation carrying out your institution's instructions. Its position token
 shows where you commit attention and influence. Each contributes one presence
 and remains until reassigned. Rival Agents may coexist. Agents have no paths,
 movement allowance, intermediate districts, or exhaustion rule. Any Agent can
@@ -444,7 +444,7 @@ both hosts remain adjacent and connected. No additional Power is assigned.
 #### Construct ${terms.technology.advancedGeneration} (Era III onward)
 
 The acting piece must be assigned to the ${terms.locations.grid}. Spend
-${facts.shared.advancedGeneration.runwayCostWord} ${terms.resources.runway} and construct ${terms.technology.advancedGenerationShort} there. It uses a dedicated ${terms.technology.advancedGenerationShort} marker,
+${facts.shared.advancedGeneration.runwayCostWord} ${terms.resources.runway} and construct ${terms.technology.advancedGenerationShort} there. It uses a dedicated ${terms.technology.advancedGenerationShort} chip,
 occupies one of that tile’s three Generator slots, provides local ${terms.infrastructure.power}, scores
 ${facts.shared.advancedGeneration.mandateWord} ${terms.playerTracks.mandate}, and adds ${facts.shared.advancedGeneration.scrutinyWord} ${terms.playerTracks.scrutiny}. ${terms.technology.advancedGenerationShort} counts as an owned Generator for
 local Power connections. It does not count
@@ -452,7 +452,7 @@ against the owner’s one ordinary Generator-piece limit. If all three Grid
 Generator slots are occupied, ${terms.technology.advancedGenerationShort} cannot be constructed. A full ${terms.locations.grid}
 blocks construction.
 
-There is one shared ${terms.technology.advancedGenerationShort} marker and one
+There is one shared ${terms.technology.advancedGenerationShort} chip and one
 Fusion project in the game. Once any player constructs it, no other player may
 select or construct Fusion.
 
@@ -511,7 +511,7 @@ The ${terms.actions.influence} Action creates no separate presence piece.
 
 #### Contract hosts
 
-Joint Ventures and Mega-Clusters use shared, matched token pairs. A Mega-Cluster
+Joint Ventures and Mega-Clusters use shared, matched chip pairs. A Mega-Cluster
 is always owned by one player. Create one
 only while its pair is available; place one numbered half on each host.
 
@@ -556,7 +556,7 @@ ${terms.actions.influence} effect.
 
 ### A. Begin the quarter
 
-- Move the Current Era marker to Era I; in later Eras, advance one panel.
+- Move the Current Era chip to Era I; in later Eras, advance one panel.
 - Read that Era’s **New this Era** strip aloud. Those systems are now active.
 - Reveal one ${terms.playerTracks.mandate} from the current Era’s three-card deck. Return the other
   two cards in that deck to the box unseen.
@@ -582,7 +582,7 @@ one offer to one rival: give exactly one ${terms.resources.runway} for one
 ${terms.resources.compute}, or one ${terms.resources.compute} for one
 ${terms.resources.runway}. The named rival accepts or rejects. Gifts, bundles,
 same-resource exchanges, unequal amounts, counteroffers, redirects, and
-third-party claims are not legal. Adjust both players' captive sliders
+third-party claims are not legal. Adjust both players' track cubes
 immediately after acceptance.
 
 The selected Action remains committed whether the offer is accepted or rejected.
@@ -797,7 +797,7 @@ Production income unless explicitly instructed. No Core Action resolves.
 
 <!-- era-panels:start -->
 These four panels are printed on the Governance Board. Move the Current Era
-marker between them; no separate Era cards are used. The board prints the
+chip between them; no separate Era cards are used. The board prints the
 Era name, epigraph, rules, and unlock text.
 <!-- era-panels:end -->
 
@@ -816,7 +816,16 @@ component states. Exact effects appear on the cards and boards.
 
 <!-- components:start -->
 <!-- inventory:start -->
-Pack the components in the labelled trays and Era packets described below.
+Pack three component families in the labelled trays and Era packets:
+
+| Family | Job |
+| --- | --- |
+| Cards, including flat chips | Explain rules; identify infrastructure and projects |
+| Agent position tokens | Locate assignments; one shape in each faction colour |
+| Cubes | Mark numerical tracks; supply individual Audit draws |
+
+Chips are small durable cards. Maps and boards are printed surfaces; the bag
+and pen are accessories. Trust awards and Quantum use permanent checkboxes.
 
 ### Shared Governance Board
 
@@ -833,7 +842,7 @@ It provides:
   ledger with one row per faction;
 - Setup and final Collective Trust, unresolved Systemic Risk, AGI recognition,
   winner, and World Ending fields;
-- two infrastructure project reference positions;
+- ${content.gameConfig.sharedSupply.projectReferences} infrastructure project reference positions;
 - six numbered Joint Venture pair bays, six numbered Mega-Cluster pair bays,
   and one Fusion position; and
 - staging for the Audit bag, Scrutiny, Systemic Risk, and unused contract pairs.
@@ -846,15 +855,17 @@ extra rules state.
 
 Each of the six trays contains:
 
-- 1 faction board with five captive sliders: Runway, Compute, Capability,
+- 1 faction board with five numbered tracks: Runway, Compute, Capability,
   Customers, and Trust; three permanent-for-the-game Trust award checkboxes
-- ${content.gameConfig.playerSupply.agents} Agents
-- ${content.gameConfig.playerSupply.facilities} Facilities, numbered 1–${content.gameConfig.playerSupply.facilities}
-- ${content.gameConfig.playerSupply.generators} Generator
+  and one Quantum completed checkbox
+- ${content.gameConfig.playerSupply.factionBoardTrackCubes} faction-coloured track cubes, one per numbered faction track
+- ${content.gameConfig.playerSupply.agents} Agents (position tokens)
+- ${content.gameConfig.playerSupply.facilities} Facilities as flat chips, numbered 1–${content.gameConfig.playerSupply.facilities}
+- ${content.gameConfig.playerSupply.generators} Generator chip
 - ${content.gameConfig.playerSupply.startingGridIdentifiers} integrated starting-grid identifier on Facility 1; Facilities are
   constructed in number order
 - ${content.gameConfig.playerSupply.scrutinyCubes} ${terms.playerTracks.scrutiny} cubes
-- 1 Mandate marker
+- 1 Mandate cube
 - ${content.gameConfig.playerSupply.coreActionCards} Core Action cards
 - 1 three-panel foldout player aid
 
@@ -865,23 +876,23 @@ Generators do not count against the Facility limit.
 - ${content.gameConfig.sharedSupply.governanceBoards} Governance Board
 - ${content.gameConfig.board.selectedTileCount} district tiles: Frontier, six operational, and twelve public
 - ${content.gameConfig.sharedSupply.projectReferences} project references
-- ${content.gameConfig.sharedSupply.currentEraMarkers} Current Era marker
+- ${content.gameConfig.sharedSupply.currentEraMarkers} Current Era chip
 - ${content.gameConfig.sharedSupply.sharedDryEraseMarkers} shared fine-tip dry-erase marker
 - 24 Headline cards; reveal 12 per game
 - 12 Mandate cards; reveal 4 per game
 - 40 Training cards
-- ${content.gameConfig.sharedSupply.jointVenturePairs} matched Joint Venture pairs
-- ${content.gameConfig.sharedSupply.megaClusterPairs} matched Mega-Cluster pairs
-- 1 Fusion Demonstrator marker
-- 18 Systemic Risk pieces, tactually identical to Scrutiny while concealed
+- ${content.gameConfig.sharedSupply.jointVenturePairs} matched Joint Venture chip pairs
+- ${content.gameConfig.sharedSupply.megaClusterPairs} matched Mega-Cluster chip pairs
+- 1 Fusion Demonstrator chip
+- ${content.gameConfig.sharedSupply.systemicRiskCubes} Systemic Risk cubes, tactually identical to Scrutiny while concealed
 - 1 opaque Audit bag
-- 1 Initiative marker
+- 1 Initiative chip
 
-The six faction trays supply six Mandate markers and six player aids.
+The six faction trays supply six Mandate cubes and six player aids.
 Choose two through five factions for a game; leave every unchosen tray in the box.
 
-Fusion is a single shared project; its dedicated marker leaves the supply once
-constructed. Unused contract tokens cannot be reserved; create a Joint Venture
+Fusion is a single shared project; its shared chip leaves the supply once
+constructed. Unused contract chips cannot be reserved; create a Joint Venture
 or Mega-Cluster only while a matched pair is available.
 
 ### Setup packaging
@@ -890,7 +901,7 @@ The insert provides six labelled faction trays, four labelled Era packets, one
 project-reference well, one Training well, and one contract/power well. Era packets
 contain `6 / 6 / 6 / 6` Headlines plus three Mandates each.
 
-### Exact printed-paper count
+### Standard cards and foldout count
 
 The game contains 115 standard cards plus 6 foldout player aids:
 
@@ -901,8 +912,9 @@ The game contains 115 standard cards plus 6 foldout player aids:
 - 40 Training cards
 - 6 foldout player aids
 
-Printed Era panels and Power contracts are part of the Governance
-Board, tiles, and project references.
+The chip quantities are listed in the faction and shared inventories above;
+chips are not additional standard deck cards. Printed Era panels and Power
+contracts are part of the Governance Board, tiles, and project references.
 
 ### Excluded deferred content
 
@@ -911,8 +923,13 @@ Patrons.
 
 ### Production form
 
-Power is read directly from Generator adjacency and Facility 1's integrated
-starting-grid identifier. No Power cube or allocation surface is supplied.
+Use one cube per numbered resource or score track, never in the Audit bag.
+Scrutiny and Systemic Risk retain individual cubes to preserve draw probabilities.
+
+Facilities and Generators use separate flat chips with distinct symbols and
+faction identities. Read Power from Generator adjacency and Facility 1's
+starting-grid identifier; no Power cubes, allocation surface, or powered/unpowered
+flipping is required.
 Board dimensions, fold pattern, material, writable finish, and retention
 tolerances remain manufacturing decisions.
 
@@ -939,7 +956,11 @@ up in its Era row to form the twelve-card ${terms.systems.futureTimeline}.
 
 Place all three project references face up. They show Mega-Cluster, Fusion, and Quantum
 construction costs and operation. Build constructs these projects; the references
-are never selected, exhausted, or marked with use history.
+are never selected, exhausted, flipped, or marked with use history. Record a
+built Mega-Cluster using its matched host chips and Fusion using its unique
+location chip; flip those chips from Available to Built when constructed. Keep
+their Built faces up if connections later change. Mark Quantum on the owning
+institution's existing checkbox. Shared references always remain readable.
 
 ### Defined markers and effects
 
