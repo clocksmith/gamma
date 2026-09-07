@@ -11,6 +11,7 @@ import { execFile } from "node:child_process";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { promisify } from "node:util";
+import { verifyRelease } from "./release-artifacts.mjs";
 import { loadEraSituationLedger } from "./content/validate-era-situation-ledger.mjs";
 
 const execFileAsync = promisify(execFile);
@@ -234,6 +235,7 @@ export async function buildFirebaseSite({ outputRoot, profileId = defaultProfile
   const ledger = await loadEraSituationLedger();
   const profile = ledger.deploymentProfiles[profileId];
   if (!profile) throw new TypeError(`Unknown deployment profile: ${profileId}`);
+  if (profile.deployable) await verifyRelease(projectRoot);
   outputRoot = outputRoot || resolve(projectRoot, profile.outputRoot);
   if (outputRoot === gammaRoot || outputRoot === resolve(gammaRoot, "web")) {
     throw new RangeError("Refusing to replace a repository or Firebase web root.");

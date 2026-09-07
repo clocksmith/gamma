@@ -1,20 +1,15 @@
 # Creative writer's review
 
-**Human review of the game's prose and rule clarity matters most.**
+Read and edit creative prose in [world.md](../world.md): the setting, Era overviews,
+endings, token and box copy, component prose, and scenario canon. Named excerpts
+keep card text editable as ordinary Markdown without JSON escaping.
 
-Read the fiction first:
+Review the assembled [World and Institutions](../dist/docs/world-and-institutions.md)
+and [Card and Board Reference](../dist/docs/card-reference.md). These are reading
+copies generated from the same source. Writing guidance stays in `world.md`.
 
-1. [world.md](../world.md): the four Era overviews, ending descriptions, and scenario canon. Writing notes
-   follow the story.
-2. [factions.json](factions.json): six institution introductions and mottos.
-3. [headlines.json](headlines.json): events and quotations beside their effects.
-4. [projects.json](projects.json) and [mandates.json](mandates.json): short component prose.
-5. [rules.md](../rules.md): procedures and terminology players need to act.
-
-Read the assembled [World and Institutions](../dist/docs/world-and-institutions.md)
-and [Card and Board Reference](../dist/docs/card-reference.md) without JSON syntax.
-Edit the sources above; these reading copies are generated.
-
-Keep scenes engaging, institutions distinct, and rules unambiguous. `$scenario` references Markdown scenario IDs; `$era` owns Era metadata.
-Both are excluded from play. Shared-name references resolve
-during the build. [The editing map](../content/README.md) explains those paths.
+Use [rules.md](../rules.md) for procedures. Inspect component JSON when reviewing
+mechanics, IDs, or scenario bindings; creative fields there are references.
+`$scenario` links to a scenario ID, while `$era` owns Era placement metadata.
+Neither enters playable output. The [editing map](../content/README.md) gives
+build commands and release verification requirements.

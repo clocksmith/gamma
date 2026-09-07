@@ -747,3 +747,32 @@ from the current Audit table and points current README/protocol guidance to the
 release declaration. Historical six-player studies remain unchanged. These
 additional source edits are captured as executable `0.19.4` and candidate
 `0.11.0-rc.6-test`; the intermediate consolidation artifacts remain intact.
+
+## Markdown component prose and shared scenario policies
+
+The authoring simplification following the world-source migration moves 118
+creative component fields into named excerpts in `world.md`. Components retain
+mechanics, stable IDs, rule wording, and references. The existing excerpt resolver
+supplies the runtime strings; no copy overlay or second authored lore file is added.
+All runtime JSON values and all fifty-one scenario definitions matched the preceding
+revision before the release identifiers changed.
+
+Seven shared Markdown policies replace repeated per-scenario disposition,
+deployment, and mechanic-qualification declarations. Scenario metadata falls from
+531 lines to 297. Concepts default to the heading and causal threads to none;
+explicit overrides retain every existing concept and thread. Required IDs, Eras,
+benefits, consequences, narratives, and admission checks remain enforced.
+
+The thematic-content-bible reading projection is retired. Authors read the guide
+in `world.md`; the procedural Core Rules and setting companion retain distinct
+reading purposes. Existing immutable releases retain their original layouts.
+
+Authoring checks validate current source and generated views without requiring
+an immutable release after each prose edit. The existing release verifier is now
+called directly by public-site generation and physical-kit freezing. They reject
+stale frozen identity before producing releasable output. Current-source JSON
+checks omit generated, historical, dependency, and evidence directories, preventing
+temporary test artifacts from racing the authoring scan. Release and evidence
+validation remain separate operations.
+
+This changes authoring and release boundaries, not mechanics or balance claims.

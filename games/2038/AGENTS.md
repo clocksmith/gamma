@@ -23,8 +23,9 @@ systems and incentives, not jokes or allegations about real people.
 
 ## Canonical Boundaries
 
-- `components/` owns complete component records: mechanics, IDs, wording, and
-  author-only `$scenario` references. Era panels own names, epigraphs, rules, unlocks,
+- `components/` owns mechanical records: mechanics, IDs, rule wording, and
+  author-only `$scenario` references. Creative prose resolves from named excerpts
+  in `world.md`. Era panels own names, rules, unlocks, and epigraph references,
   and structured `$era` notes; the Era overviews own extended setting prose.
 - `rules.md` owns Game procedures, map instructions, component states, and
   supported inventory prose. Its named excerpts generate the map, component,

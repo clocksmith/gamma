@@ -1,3 +1,4 @@
+import { verifyRelease } from "./release-artifacts.mjs";
 import { execFile } from "node:child_process";
 import {
   copyFile,
@@ -81,6 +82,8 @@ Source published at origin/main: ${identity.sourcePublished}
 ${section}
 `;
 }
+
+await verifyRelease(projectRoot);
 
 const status = await git("status", "--porcelain", "--untracked-files=all", "--", ".");
 if (status) {

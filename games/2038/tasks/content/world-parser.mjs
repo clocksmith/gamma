@@ -1,6 +1,6 @@
 import { readFile } from "node:fs/promises";
 import { resolve } from "node:path";
-import { documentSection } from "./authored.mjs";
+import { documentSection, documentTable } from "./authored.mjs";
 
 const root = resolve(import.meta.dirname, "../..");
 const ENDING_IDS = ["singularity", "closed_loop", "plural_future", "assured_continuity"];
@@ -13,9 +13,8 @@ const BOX_FIELDS = new Map([
   ["Front strapline", "frontStrapline"], ["Back copy", "backCopy"],
   ["Short pitch", "shortPitch"], ["Content warning", "contentWarning"]
 ]);
-const SCENARIO_FIELDS = ["ID", "Era", "Disposition", "Concepts", "Causal threads",
-  "Public benefit", "Institutional consequence", "Mechanic status", "Mechanic summary",
-  "Mechanic revision", "Deployment profiles"];
+const SCENARIO_FIELDS = ["ID", "Era", "Policy", "Concepts", "Causal threads",
+  "Public benefit", "Institutional consequence"];
 const DISPOSITIONS = new Set(["adopted", "adopted-framing", "lore-only", "deferred", "research-backlog"]);
 
 function unique(value, seen, label) {
@@ -104,6 +103,18 @@ export function parseWorldCopyFromText(worldText) {
 
 export function parseScenarioCanon(worldText) {
   worldText = worldText.replace(/\r\n/g, "\n");
+  const policies = new Map();
+  for (const row of documentTable(worldText, "scenario-policies",
+    ["Policy", "Disposition", "Deployment", "Mechanics", "Meaning", "Decision", "Record"])) {
+    const id = identity(row.Policy, "scenario policy");
+    if (policies.has(id)) throw new Error(`Duplicate scenario policy: ${id}`);
+    if (!DISPOSITIONS.has(row.Disposition)) throw new Error(`Invalid policy disposition: ${id}`);
+    const mechanicPreservation = { status: row.Mechanics, summary: row.Meaning };
+    if ((row.Decision === "none") !== (row.Record === "none")) throw new Error(`Incomplete policy revision: ${id}`);
+    if (row.Decision !== "none") mechanicPreservation.revision = { decisionId: row.Decision, record: row.Record };
+    policies.set(id, { disposition: row.Disposition, mechanicPreservation,
+      deploymentProfiles: list(row.Deployment, `${id} deployment profiles`) });
+  }
   const section = documentSection(worldText, "scenario-canon").trim();
   if (/```/.test(section)) throw new Error("Scenario canon must use Markdown records, not fenced data");
   const blocks = section.split(/\r?\n(?=### )/);
@@ -115,23 +126,18 @@ export function parseScenarioCanon(worldText) {
     const title = heading[1].trim();
     unique(title, names, "scenario title");
     const { fields, prose } = fieldsAndProse(block.slice(heading[0].length), SCENARIO_FIELDS, title);
-    required(fields, SCENARIO_FIELDS.filter(key => key !== "Mechanic revision"), title);
+    required(fields, ["ID", "Era", "Policy", "Public benefit", "Institutional consequence"], title);
     const id = identity(fields.ID, "scenario ID");
     unique(id, seen, "scenario ID");
-    if (!DISPOSITIONS.has(fields.Disposition)) throw new Error(`Invalid scenario disposition: ${id}`);
+    const policy = policies.get(fields.Policy);
+    if (!policy) throw new Error(`Unknown scenario policy: ${fields.Policy}`);
     if (!prose || /^#{1,6} |<!--|\$\{/m.test(prose)) throw new Error(`Missing or malformed scenario narrative: ${id}`);
-    const mechanicPreservation = { status: fields["Mechanic status"], summary: fields["Mechanic summary"] };
-    if (fields["Mechanic revision"]) {
-      const parts = fields["Mechanic revision"].split("|").map(part => part.trim());
-      if (parts.length !== 2 || parts.some(part => !part)) throw new Error(`Invalid mechanic revision: ${id}`);
-      mechanicPreservation.revision = { decisionId: parts[0], record: parts[1] };
-    }
     return {
-      id, title, eraId: fields.Era, disposition: fields.Disposition,
-      concepts: list(fields.Concepts, `${id} concepts`),
-      causalThreadIds: list(fields["Causal threads"], `${id} causal threads`, true),
+      id, title, eraId: fields.Era, disposition: policy.disposition,
+      concepts: fields.Concepts ? list(fields.Concepts, `${id} concepts`) : [title],
+      causalThreadIds: fields["Causal threads"] ? list(fields["Causal threads"], `${id} causal threads`) : [],
       publicBenefit: fields["Public benefit"], institutionalConsequence: fields["Institutional consequence"],
-      mechanicPreservation, deploymentProfiles: list(fields["Deployment profiles"], `${id} deployment profiles`),
+      mechanicPreservation: structuredClone(policy.mechanicPreservation), deploymentProfiles: [...policy.deploymentProfiles],
       narrative: prose
     };
   });

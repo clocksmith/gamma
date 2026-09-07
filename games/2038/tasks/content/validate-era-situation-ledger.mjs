@@ -220,7 +220,7 @@ async function assertDeferredTermsAbsentFromBaseline(scenarios) {
   const baseline = (await Promise.all(
     baselinePaths.map(async path => {
       const source = await readFile(resolve(projectRoot, path), "utf8");
-      if (path === "world.md") return documentSection(source, "player-world");
+      if (path === "world.md") return documentSection(source, "player-world") + documentSection(source, "component-prose");
       return path.endsWith(".json") ? JSON.stringify(playerContent(JSON.parse(source))) : source;
     })
   )).join("\n").toLocaleLowerCase("en-US");

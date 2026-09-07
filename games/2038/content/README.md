@@ -18,9 +18,10 @@ those documents are generated views of the sources below.
 | Component form, dimensions, and state encoding | [physical/](../physical/README.md) |
 | Rationale and open design questions | [docs/design-decisions.md](../docs/design-decisions.md) |
 
-Each component record keeps its own mechanics and wording together. For example,
-`components/headlines.json` holds each Headline's Era, timing, effect, title,
-newswire, quote, and scenario references. Change a quantity where it is defined;
+Each component record owns its mechanics, rule wording, title, and scenario
+references. Creative fields such as newswires, quotes, introductions, and flavor
+reference named Markdown excerpts in `world.md`, using the existing excerpt
+resolver and `trim` formatter. No parallel copy file or overlay is maintained. Change a quantity where it is defined;
 references such as `${content.gameConfig.playerSupply.facilities}` reuse that
 value in prose. Simulation and strategy copy remain in `content/runtime/`;
 deferred modules remain in `experimental/`.
@@ -41,7 +42,8 @@ standalone document; it changes no prose.
   Duration and timing labels are selected from shared labels using the record's value.
 - The `player-world` excerpt becomes World and Institutions: four concise
   Era overviews authored in `world.md`, followed by Markdown-owned ending narratives.
-  Era names and epigraphs resolve from Era panels, which contain no extended lore
+  Era names resolve from Era panels; their epigraphs reference Markdown excerpts.
+  Era panels contain no extended lore
   summaries. Writing notes and the scenario canon follow the fiction in its source and stay
   outside the companion.
 - Rule Change Register combines the design ledger's `decision-register` introduction
@@ -71,7 +73,9 @@ dist/site/ + public-playtest allowlist -> dist/firebase/public/
 dist/site/ + internal-review profile -> dist/review/
 ```
 
-Generated outputs are not authoring locations. Existing reader routes, including
+Generated outputs are not authoring locations. The former thematic-content-bible
+projection is retired; writing guidance is read directly in `world.md`. Core Rules
+and World and Institutions retain distinct procedural and setting purposes. Existing reader routes, including
 `/docs/core-rules.html`, `/docs/map-reference.html`, and
 `/docs/component-inventory.html`, stay stable. `docs/` contains rationale,
 evidence contracts, and research; it is not another player rulebook.
@@ -82,7 +86,11 @@ npm test
 npm run check
 ```
 
-Builds remain local. Publication requires the separate deployment action.
+Builds remain local. `npm run check` validates the current authoring tree without
+requiring a new immutable release for each edit. `npm run game:release:verify`
+verifies frozen identity; public site generation and physical-kit freezing call
+that verifier before producing releasable output. Publication requires the
+separate deployment action.
 `versions/current-release.json` declares current release identities;
 `npm run game:release` records a new identity and refuses to overwrite historical
 bundles. `versions/<version>/` and frozen `dist/physical-kit/` artifacts are evidence,
@@ -91,8 +99,11 @@ not current sources. Historical bundles retain their original source layout.
 ## Scenario notes
 
 The marked `scenario-canon` section in `world.md` defines every scenario once,
-including its narrative, ID, Era, disposition, concepts, public benefit, institutional
-consequence, mechanic qualification, and deployment profiles. Components use
+with five required fields: ID, Era, policy, public benefit, and institutional
+consequence, followed by ordinary narrative paragraphs. Concepts default to the
+heading and causal threads to none; specify either only when needed. Seven shared
+policies in the same Markdown source supply disposition, mechanic qualification,
+and deployment profiles without repeating those declarations on every record. Components use
 `{"$scenario": {"ref": "cheap-token-rebound"}}` to share it. Later expressions
 also set `"eraRelation": "later-expression"`; Era cards own `$era` metadata.
 The compiler generates the scenario index and

@@ -276,7 +276,8 @@ for (const forbiddenLoreAuthority of [
 }
 
 async function walk(directory) {
-  const entries = await readdir(directory, { withFileTypes: true });
+  const entries = (await readdir(directory, { withFileTypes: true }))
+    .filter(entry => directory !== root || !["dist", "versions", "evidence", "node_modules", ".git"].includes(entry.name));
   return (await Promise.all(entries.map(async (entry) => {
     const path = resolve(directory, entry.name);
     return entry.isDirectory() ? walk(path) : [path];
@@ -285,10 +286,8 @@ async function walk(directory) {
 
 const files = await walk(root);
 let jsonCount = 0;
-const localSimulationArchive = `${resolve(root, "evidence/studies/simulation")}${sep}`;
 for (const file of files) {
   if (extname(file) !== ".json") continue;
-  if (file.startsWith(localSimulationArchive)) continue;
   JSON.parse(await readFile(file, "utf8"));
   jsonCount += 1;
 }
@@ -419,5 +418,5 @@ for (const path of proceduralCandidateDocuments) {
 }
 
 process.stdout.write(
-  `check-project: ${required.length} required files, ${jsonCount} JSON files, executable game ${gameVersion.gameVersion}, physical candidate ${gameVersion.rulesCandidate.version}, report schema 6, unified strategic-unsolvability contract, 40-card Training contract, structurally complete thematic manifest\n`
+  `check-project: ${required.length} required files, ${jsonCount} authored JSON files, executable game ${gameVersion.gameVersion}, physical candidate ${gameVersion.rulesCandidate.version}, report schema 6, unified strategic-unsolvability contract, 40-card Training contract, structurally complete thematic manifest\n`
 );

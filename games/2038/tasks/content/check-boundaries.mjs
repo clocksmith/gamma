@@ -1,6 +1,6 @@
 import { readFile, readdir } from "node:fs/promises";
 import { resolve } from "node:path";
-import { validateReferenceLayout } from "./authored.mjs";
+import { documentSections, validateReferenceLayout } from "./authored.mjs";
 
 const root = resolve(import.meta.dirname, "../..");
 const readJson = async path => JSON.parse(await readFile(resolve(root, path), "utf8"));
@@ -11,10 +11,18 @@ const forbidden = new Set([
   "inventoryStatus", "potentialHook", "prototypeNote", "theme", "tone"
 ]);
 
+const creativeFields = new Set(["flavorText", "newswire", "quote", "motto", "introduction", "agiDeclaration", "strapline", "publicClaim"]);
+const copyReferences = new Set();
+
 function inspect(value, path, authored) {
   if (Array.isArray(value)) return value.forEach((entry, i) => inspect(entry, `${path}/${i}`, authored));
   if (!value || typeof value !== "object") return;
   for (const [key, entry] of Object.entries(value)) {
+    if (authored && path.startsWith("components/") && creativeFields.has(key)) {
+      const reference = typeof entry === "string" && /^\$\{excerpts\.world\.(copy-[a-z0-9-]+)\|trim\}$/.exec(entry);
+      if (!reference) throw new Error(`Creative prose belongs in world.md: ${path}/${key}`);
+      copyReferences.add(reference[1]);
+    }
     if (key.startsWith("$")) {
       if (!authored || !["$scenario", "$era"].includes(key)) {
         throw new Error(`Unexpected editorial metadata: ${path}/${key}`);
@@ -38,6 +46,11 @@ for (const directory of ["components", "experimental/components"]) {
     inspect(await readJson(path), path, true);
     count++;
   }
+}
+const sections = documentSections(await readFile(resolve(root, graph.world), "utf8"));
+for (const id of copyReferences) if (!sections[id]?.trim()) throw new Error(`Missing component prose excerpt: ${id}`);
+for (const id of Object.keys(sections).filter(id => id.startsWith("copy-"))) {
+  if (!copyReferences.has(id)) throw new Error(`Unreferenced component prose excerpt: ${id}`);
 }
 for (const artifact of graph.artifacts) {
   if ("overlays" in artifact) throw new Error(`Retired copy overlay in ${artifact.target}`);
