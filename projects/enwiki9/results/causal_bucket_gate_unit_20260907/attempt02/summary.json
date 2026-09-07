@@ -1,0 +1,95 @@
+{
+  "status": "passed",
+  "tests_passed": 18,
+  "native_synthetic_phases": 18,
+  "fixtures": {
+    "favorable": {
+      "raw_bytes": 8192,
+      "archive_bytes": {
+        "D": 3245,
+        "K": 3499,
+        "P": 3499
+      },
+      "p_minus_d_bytes": 254,
+      "native_phases": 9,
+      "exact_inverse": true,
+      "raw_encoder_repeat": true,
+      "p_k_byte_identity": true
+    },
+    "fallback": {
+      "raw_bytes": 2048,
+      "archive_bytes": {
+        "D": 2140,
+        "K": 2140,
+        "P": 2140
+      },
+      "p_minus_d_bytes": 0,
+      "native_phases": 9,
+      "exact_inverse": true,
+      "raw_encoder_repeat": true,
+      "p_k_byte_identity": true
+    }
+  },
+  "bindings": [
+    {
+      "path": "tools/causal_bucket_gate_v2.py",
+      "bytes": 20435,
+      "sha256": "9ec553516e31f19876ffd83dc2dc2f4aab4160a3ffacc5f141dafd02825d669f"
+    },
+    {
+      "path": "tests/test_causal_bucket_gate_v2.py",
+      "bytes": 15142,
+      "sha256": "68c254f68f238a63229b32d91d8fc64a0402ab1e1f3e6fac4ac0d14b7a8de396"
+    },
+    {
+      "path": "tools/causal_bucket_v2.py",
+      "bytes": 8137,
+      "sha256": "4000408f3763e995b7ab71cb158c4ccc61a0810d68bb015a3ee598a6009295ec"
+    },
+    {
+      "path": "results/causal_bucket_gate_unit_20260907/attempt02/validation.log",
+      "bytes": 2311,
+      "sha256": "56d500b9af3ab551403967111f345e0e129bb686ecebacf9b993722b9c1908b0"
+    },
+    {
+      "path": "results/causal_bucket_gate_unit_20260907/attempt02/evidence.zip",
+      "bytes": 91198,
+      "sha256": "79e4a7468274abb2d408895ffffd9e6356e60e44a5bc15c2abbf2dda95c4d077"
+    }
+  ],
+  "bundle_file_count": 87,
+  "schema": "gamma.enwiki9.causal-bucket-gate-unit.v1",
+  "scope": "Predetermined invented inputs only. No corpus launch or corpus evidence opened.",
+  "boundaries": "Actual child phases use shared driver's CPU/address/file/wall stops; canonical corpus authentication mocked only within synthetic integration tests.",
+  "checks": [
+    "exact raw P/K/D inverse and repeat",
+    "raw restored input re-encoded, not cached archive",
+    "P/K byte identity",
+    "strict selected frame and exact fallback costs",
+    "decoder-common report parity",
+    "inverse/payload/repeat/cost corruption rejection",
+    "K/D transformed candidate agreement",
+    "source closure and final reauthentication failure",
+    "development identity and separately frozen validation/confirmation shape",
+    "no output overwrite and validate-only does not execute",
+    "explicit execution failure classification"
+  ],
+  "limits": {
+    "cpu": 5,
+    "address_space_bytes": 536870912,
+    "cpu_seconds": 120,
+    "wall_stop_seconds": 180,
+    "file_bytes": 33554432
+  },
+  "complete_package_bytes": null,
+  "full_corpus_score_bytes": null,
+  "objective_credit_bytes": 0,
+  "interpretation": "254 synthetic archive bytes saved on the fixed Markov walk; zero on fixed arbitrary bytes. Correctness and runner evidence only, no corpus or package gain.",
+  "command": "mkdir -p results/causal_bucket_gate_unit_20260907/attempt02/tmp; timeout --signal=TERM --kill-after=2s 180s taskset -c 5 /usr/bin/python3 - <<'PY' > results/causal_bucket_gate_unit_20260907/attempt02/validation.log 2>&1\nimport os,resource,unittest\nfrom pathlib import Path\nroot=Path.cwd()\nout=root/'results/causal_bucket_gate_unit_20260907/attempt02'\nos.environ['TMPDIR']=str(out/'tmp')\nos.environ['CAUSAL_GATE_EVIDENCE_ZIP']=str(out/'evidence.zip')\nresource.setrlimit(resource.RLIMIT_AS,(536870912,536870912))\nresource.setrlimit(resource.RLIMIT_CPU,(120,120))\nresource.setrlimit(resource.RLIMIT_FSIZE,(33554432,33554432))\nsuite=unittest.defaultTestLoader.loadTestsFromName('tests.test_causal_bucket_gate_v2')\nresult=unittest.TextTestRunner(verbosity=2).run(suite)\nraise SystemExit(not result.wasSuccessful())\nPY",
+  "command_exit_code": 0,
+  "lineage": {
+    "previous_evidence": "results/causal_bucket_gate_unit_20260907/attempt01/summary.json",
+    "previous_runner_preserved": true,
+    "change": "Dependency-only runner/test successor binding codec v2 output cap; format/spec unchanged."
+  }
+}

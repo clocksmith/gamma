@@ -1,0 +1,90 @@
+{
+  "status": "passed",
+  "tests_passed": 18,
+  "native_synthetic_phases": 18,
+  "fixtures": {
+    "favorable": {
+      "raw_bytes": 8192,
+      "archive_bytes": {
+        "D": 3245,
+        "K": 3499,
+        "P": 3499
+      },
+      "p_minus_d_bytes": 254,
+      "native_phases": 9,
+      "exact_inverse": true,
+      "raw_encoder_repeat": true,
+      "p_k_byte_identity": true
+    },
+    "fallback": {
+      "raw_bytes": 2048,
+      "archive_bytes": {
+        "D": 2140,
+        "K": 2140,
+        "P": 2140
+      },
+      "p_minus_d_bytes": 0,
+      "native_phases": 9,
+      "exact_inverse": true,
+      "raw_encoder_repeat": true,
+      "p_k_byte_identity": true
+    }
+  },
+  "bindings": [
+    {
+      "path": "tools/causal_bucket_gate_v1.py",
+      "bytes": 20435,
+      "sha256": "23c206265333d610da0a87bbe9bf717ae1f52cabc9a391474c7ff320ea95ae2b"
+    },
+    {
+      "path": "tests/test_causal_bucket_gate_v1.py",
+      "bytes": 15142,
+      "sha256": "eec5f10d27749d6690926eb66c252fc214ab35c24f31b96c62604b8dec3a5be8"
+    },
+    {
+      "path": "tools/causal_bucket_v1.py",
+      "bytes": 7860,
+      "sha256": "f5b89c1a3ed4bd79c1ca4bb9f635bcd622bc9f2ca5fcf7879a34975576373542"
+    },
+    {
+      "path": "results/causal_bucket_gate_unit_20260907/attempt01/validation.log",
+      "bytes": 2311,
+      "sha256": "6815393fc97bcbd52a89b95676ee36c1ca989620da399d8ab1587ce9ef3cd275"
+    },
+    {
+      "path": "results/causal_bucket_gate_unit_20260907/attempt01/evidence.zip",
+      "bytes": 91217,
+      "sha256": "6c28c757efc7ab0a66efb182d0cb692b851e5e82c332b07fa6a2b39391148f82"
+    }
+  ],
+  "bundle_file_count": 87,
+  "schema": "gamma.enwiki9.causal-bucket-gate-unit.v1",
+  "scope": "Predetermined invented inputs only. No corpus launch or corpus evidence opened.",
+  "boundaries": "Actual child phases use shared driver's CPU/address/file/wall stops; canonical corpus authentication mocked only within synthetic integration tests.",
+  "checks": [
+    "exact raw P/K/D inverse and repeat",
+    "raw restored input re-encoded, not cached archive",
+    "P/K byte identity",
+    "strict selected frame and exact fallback costs",
+    "decoder-common report parity",
+    "inverse/payload/repeat/cost corruption rejection",
+    "K/D transformed candidate agreement",
+    "source closure and final reauthentication failure",
+    "development identity and separately frozen validation/confirmation shape",
+    "no output overwrite and validate-only does not execute",
+    "explicit execution failure classification"
+  ],
+  "limits": {
+    "cpu": 5,
+    "address_space_bytes": 536870912,
+    "cpu_seconds": 120,
+    "wall_stop_seconds": 180,
+    "file_bytes": 33554432
+  },
+  "complete_package_bytes": null,
+  "full_corpus_score_bytes": null,
+  "objective_credit_bytes": 0,
+  "interpretation": "254 synthetic archive bytes saved on the fixed Markov walk; zero on fixed arbitrary bytes. Correctness and runner evidence only, no corpus or package gain.",
+  "command": "mkdir -p results/causal_bucket_gate_unit_20260907/attempt01/tmp; timeout --signal=TERM --kill-after=2s 180s taskset -c 5 /usr/bin/python3 - <<'PY' > results/causal_bucket_gate_unit_20260907/attempt01/validation.log 2>&1\nimport os,resource,unittest\nfrom pathlib import Path\nroot=Path.cwd()\nout=root/'results/causal_bucket_gate_unit_20260907/attempt01'\nos.environ['TMPDIR']=str(out/'tmp')\nos.environ['CAUSAL_GATE_EVIDENCE_ZIP']=str(out/'evidence.zip')\nresource.setrlimit(resource.RLIMIT_AS,(536870912,536870912))\nresource.setrlimit(resource.RLIMIT_CPU,(120,120))\nresource.setrlimit(resource.RLIMIT_FSIZE,(33554432,33554432))\nsuite=unittest.defaultTestLoader.loadTestsFromName('tests.test_causal_bucket_gate_v1')\nresult=unittest.TextTestRunner(verbosity=2).run(suite)\nraise SystemExit(not result.wasSuccessful())\nPY",
+  "command_exit_code": 0
+}
