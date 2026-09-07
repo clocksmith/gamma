@@ -1,0 +1,100 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "canonical-raw-transformed-coder-scope-v1.schema.json",
+  "title": "Canonical raw/transformed/coder scope manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "scope_id",
+    "population",
+    "coordinates",
+    "entry_identity",
+    "mapping_authority",
+    "economics",
+    "verification",
+    "claim_boundary"
+  ],
+  "properties": {
+    "schema": {"const": "gamma.enwiki9.canonical-raw-transformed-coder-scope.v1"},
+    "scope_id": {"type": "string", "minLength": 1},
+    "population": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["canonical_raw_sha256", "transformed_sha256", "frontend_source_sha256", "parent_source_sha256"],
+      "properties": {
+        "canonical_raw_sha256": {"const": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc"},
+        "transformed_sha256": {"$ref": "#/$defs/sha256"},
+        "frontend_source_sha256": {"$ref": "#/$defs/sha256"},
+        "parent_source_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "coordinates": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["canonical_raw", "transformed_bytes", "coder_bits"],
+      "properties": {
+        "canonical_raw": {"$ref": "#/$defs/interval"},
+        "transformed_bytes": {"$ref": "#/$defs/interval"},
+        "coder_bits": {"$ref": "#/$defs/interval"}
+      }
+    },
+    "entry_identity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["frontend_state_sha256", "parent_state_sha256", "coder_state_sha256", "replay_from_raw_zero"],
+      "properties": {
+        "frontend_state_sha256": {"$ref": "#/$defs/sha256"},
+        "parent_state_sha256": {"$ref": "#/$defs/sha256"},
+        "coder_state_sha256": {"$ref": "#/$defs/sha256"},
+        "replay_from_raw_zero": {"const": true}
+      }
+    },
+    "mapping_authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["raw_to_transformed_receipt_sha256", "coordinate_trace_sha256", "repeat_coordinate_trace_sha256", "byte_identical_repeat"],
+      "properties": {
+        "raw_to_transformed_receipt_sha256": {"$ref": "#/$defs/sha256"},
+        "coordinate_trace_sha256": {"$ref": "#/$defs/sha256"},
+        "repeat_coordinate_trace_sha256": {"$ref": "#/$defs/sha256"},
+        "byte_identical_repeat": {"const": true}
+      }
+    },
+    "economics": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["activation_receipt_sha256", "canonical_raw_scope_bytes", "gross_savings_gate_bytes"],
+      "properties": {
+        "activation_receipt_sha256": {"$ref": "#/$defs/sha256"},
+        "canonical_raw_scope_bytes": {"type": "integer", "minimum": 1, "maximum": 1000000000},
+        "gross_savings_gate_bytes": {"type": "integer", "minimum": 0}
+      }
+    },
+    "verification": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["intervals_half_open", "raw_span_matches_economics", "entry_states_replayed", "coordinates_monotone", "errors"],
+      "properties": {
+        "intervals_half_open": {"const": true},
+        "raw_span_matches_economics": {"const": true},
+        "entry_states_replayed": {"const": true},
+        "coordinates_monotone": {"const": true},
+        "errors": {"type": "array", "maxItems": 0}
+      }
+    },
+    "claim_boundary": {"type": "array", "minItems": 2, "items": {"type": "string", "minLength": 1}}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "interval": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["start_inclusive", "end_exclusive"],
+      "properties": {
+        "start_inclusive": {"type": "integer", "minimum": 0},
+        "end_exclusive": {"type": "integer", "minimum": 1}
+      }
+    }
+  }
+}

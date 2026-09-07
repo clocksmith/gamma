@@ -1,0 +1,76 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gamma.enwiki9.cmix-filebacked-fxcm-full-identity-verification.v1",
+  "title": "Independent CMIX file-backed FXCM full identity verification",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema", "candidate_id", "source_receipt", "checks", "derived",
+    "errors", "verification_pass", "claim_boundary", "gamma_score_credit_bytes"
+  ],
+  "properties": {
+    "schema": {"const": "gamma.enwiki9.cmix-filebacked-fxcm-full-identity-verification.v1"},
+    "candidate_id": {"const": "cmix_obias_memory_safe_parent_filebacked_q1_v1"},
+    "source_receipt": {"$ref": "#/$defs/file"},
+    "checks": {
+      "type": "object", "minProperties": 1,
+      "additionalProperties": {"type": "boolean"}
+    },
+    "derived": {
+      "type": "object", "additionalProperties": false,
+      "required": [
+        "activation_pass", "calibration_pass", "exclusive_lane_pass", "probability_identity_pass",
+        "coder_checkpoint_identity_pass", "state_checkpoint_identity_pass",
+        "modeled_stream_identity_pass", "payload_identity_pass",
+        "controls_pass", "full_identity_pass"
+      ],
+      "properties": {
+        "activation_pass": {"type": "boolean"},
+        "calibration_pass": {"type": "boolean"},
+        "exclusive_lane_pass": {"type": "boolean"},
+        "probability_identity_pass": {"type": "boolean"},
+        "coder_checkpoint_identity_pass": {"type": "boolean"},
+        "state_checkpoint_identity_pass": {"type": "boolean"},
+        "modeled_stream_identity_pass": {"type": "boolean"},
+        "payload_identity_pass": {"type": "boolean"},
+        "controls_pass": {"type": "boolean"},
+        "full_identity_pass": {"type": "boolean"}
+      }
+    },
+    "errors": {"type": "array", "items": {"type": "string", "minLength": 1}},
+    "verification_pass": {"type": "boolean"},
+    "claim_boundary": {"type": "string", "minLength": 1},
+    "gamma_score_credit_bytes": {"const": 0}
+  },
+  "allOf": [{
+    "if": {"properties": {"verification_pass": {"const": true}}},
+    "then": {"properties": {
+      "checks": {"additionalProperties": {"const": true}},
+      "derived": {"properties": {
+        "activation_pass": {"const": true},
+        "calibration_pass": {"const": true},
+        "exclusive_lane_pass": {"const": true},
+        "probability_identity_pass": {"const": true},
+        "coder_checkpoint_identity_pass": {"const": true},
+        "state_checkpoint_identity_pass": {"const": true},
+        "modeled_stream_identity_pass": {"const": true},
+        "payload_identity_pass": {"const": true},
+        "controls_pass": {"const": true},
+        "full_identity_pass": {"const": true}
+      }},
+      "errors": {"maxItems": 0}
+    }}
+  }],
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "file": {
+      "type": "object", "additionalProperties": false,
+      "required": ["path", "bytes", "sha256"],
+      "properties": {
+        "path": {"type": "string", "pattern": "^/"},
+        "bytes": {"type": "integer", "minimum": 1},
+        "sha256": {"$ref": "#/$defs/sha256"}
+      }
+    }
+  }
+}

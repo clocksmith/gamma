@@ -26,14 +26,14 @@ This diagnoses the frozen selector's inactivity; it does not establish globally
 unique first values or any compression benefit. The guard closes cleanly at
 4.5434 seconds with 38,920,192 peak cgroup bytes. The [terminal receipt](../operations/provenance/fx2_causal_field_opportunity_terminal_20260907.json)
 binds the independent audit and validated observation/hold reflection. No new
-archive or score is asserted. The [adjacent selector](../tools/causal_field_preceding_selector_v1.py)
-now passes [14 author and six additional independent tests](../operations/evidence/20260907_causal_field_preceding_unit.json).
-On predefined 84/132-byte synthetic fixtures, T archives are 159/206 bytes versus
-P/K167/215, with exact inverses, repeats and state/probability agreement. Each adds
-two dictionary bytes and one arm-option byte; source/runtime costs remain separate.
-The [integration plan](../operations/provenance/fx2_causal_preceding_wrt250k_q0_v1_plan.json)
-binds one explicit factory and six controls against retained parent probabilities.
-Synthetic raw input remains capped at8192; corpus execution needs its own contract.
+archive or score is asserted. The [sealed adjacent selector](../operations/evidence/20260907_causal_field_preceding_unit.json)
+has a separate [250KB wrapper and six-arm integration](../operations/evidence/20260907_fx2_causal_preceding_integration_unit.json).
+Thirteen codec tests,24 runner tests and four additional independent tests pass.
+The runner fixture gives T129 versus P/K/O/R/S138 bytes; all arms invert/repeat
+and synchronize. Source72134 bytes, external Q16 and one arm-option byte remain
+additional. The failed v1 runner test is retained; [v2](../tools/fx2_causal_field_preceding_gate_v2.py) is active.
+The [prospective opening250KB contract](../operations/adaptive/experiments/fx2_causal_preceding_wrt250k_q0_v1.json)
+binds original O parity and matched adjacent controls; actual execution is pending.
 
 ## 2026-09-07 - Align causal field donors with WRT and the real parent
 

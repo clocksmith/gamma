@@ -1,0 +1,80 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gamma.enwiki9.safe-mix-integer-reference-receipt.v1",
+  "title": "SAFE-MIX exact integer reference receipt v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "candidate_id", "mode", "authority", "input", "native_trace", "population", "q63", "ideal_sequence", "terminal_pass", "archive_promotion_authority", "compression_credit_bytes", "score_credit_bytes"],
+  "properties": {
+    "schema": {"const": "gamma.enwiki9.safe-mix-integer-reference-receipt.v1"},
+    "candidate_id": {"const": "gamma_safe_mix_v1"},
+    "mode": {"const": "integer_reference"},
+    "authority": {"const": "diagnostic_only"},
+    "input": {"$ref": "#/$defs/artifactWithCanonicalRows"},
+    "native_trace": {"oneOf": [{"$ref": "#/$defs/artifact"}, {"type": "null"}]},
+    "population": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["event_count", "probability_scale", "complete_population_pass"],
+      "properties": {
+        "event_count": {"type": "integer", "minimum": 1, "maximum": 65536},
+        "probability_scale": {"type": "integer", "minimum": 3},
+        "complete_population_pass": {"type": "boolean"}
+      }
+    },
+    "q63": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["weight_total", "initial_parent_weight", "final_parent_weight", "trace_sha256", "bookkeeping_neutrality_pass", "native_trace_identity_pass"],
+      "properties": {
+        "weight_total": {"const": 9223372036854775807},
+        "initial_parent_weight": {"const": 4611686018427387903},
+        "final_parent_weight": {"type": "integer", "minimum": 1, "maximum": 9223372036854775806},
+        "trace_sha256": {"$ref": "#/$defs/sha256"},
+        "bookkeeping_neutrality_pass": {"type": "boolean"},
+        "native_trace_identity_pass": {"type": ["boolean", "null"]}
+      }
+    },
+    "ideal_sequence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["common_denominator_is_two_times_scale_power", "scale_power_bit_length", "parent_numerator_bit_length", "treatment_numerator_bit_length", "mixture_numerator_bit_length", "equal_prior_one_bit_bound_exact_pass"],
+      "properties": {
+        "common_denominator_is_two_times_scale_power": {"const": true},
+        "scale_power_bit_length": {"type": "integer", "minimum": 1},
+        "parent_numerator_bit_length": {"type": "integer", "minimum": 1},
+        "treatment_numerator_bit_length": {"type": "integer", "minimum": 1},
+        "mixture_numerator_bit_length": {"type": "integer", "minimum": 1},
+        "equal_prior_one_bit_bound_exact_pass": {"type": "boolean"}
+      }
+    },
+    "terminal_pass": {"type": "boolean"},
+    "archive_promotion_authority": {"const": false},
+    "compression_credit_bytes": {"const": 0},
+    "score_credit_bytes": {"const": 0}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "artifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "bytes", "sha256"],
+      "properties": {
+        "path": {"type": "string", "minLength": 1},
+        "bytes": {"type": "integer", "minimum": 0},
+        "sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "artifactWithCanonicalRows": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "bytes", "sha256", "canonical_rows_sha256"],
+      "properties": {
+        "path": {"type": "string", "minLength": 1},
+        "bytes": {"type": "integer", "minimum": 0},
+        "sha256": {"$ref": "#/$defs/sha256"},
+        "canonical_rows_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    }
+  }
+}

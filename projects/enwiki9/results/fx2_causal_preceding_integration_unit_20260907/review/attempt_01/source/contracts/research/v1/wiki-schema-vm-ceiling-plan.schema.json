@@ -1,0 +1,183 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gamma.enwiki9.wiki-schema-vm-ceiling-plan.v1",
+  "title": "WIKI-SCHEMA-VM sealed opportunity-screen execution plan",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "$schema",
+    "planning_schema_sha256",
+    "artifact_id",
+    "revision",
+    "candidate_id",
+    "operational_status",
+    "role",
+    "execution_authorized",
+    "claim_boundary",
+    "candidate_revision",
+    "experiment",
+    "proposal",
+    "implementation",
+    "schemas",
+    "exclusive_lane",
+    "population",
+    "activation_dependencies",
+    "command_template",
+    "outputs",
+    "promotion_condition",
+    "kill_condition",
+    "archive_authority",
+    "gamma_compression_credit_bytes",
+    "gamma_score_credit_bytes"
+  ],
+  "properties": {
+    "$schema": {"const": "wiki-schema-vm-ceiling-plan.schema.json"},
+    "planning_schema_sha256": {"$ref": "#/$defs/sha256"},
+    "artifact_id": {"const": "wiki_schema_vm_ceiling_q0_v1"},
+    "revision": {"const": 2},
+    "candidate_id": {"const": "wiki_schema_vm_ceiling_q0_v1"},
+    "operational_status": {
+      "const": "frozen_waiting_for_qualified_q1_parent_and_released_full1g_lease"
+    },
+    "role": {"const": "zero_credit_causal_shadow_opportunity_and_association_screen"},
+    "execution_authorized": {"const": false},
+    "claim_boundary": {"type": "string", "minLength": 1},
+    "candidate_revision": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "sha256", "candidate_tree_sha256"],
+      "properties": {
+        "path": {
+          "const": "operations/adaptive/candidate-revisions/wiki_schema_vm_ceiling_q0_v1/20260824T030345533597Z_0e08910e5a25.json"
+        },
+        "sha256": {"$ref": "#/$defs/sha256"},
+        "candidate_tree_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "experiment": {
+      "$ref": "#/$defs/pathArtifact"
+    },
+    "proposal": {
+      "$ref": "#/$defs/pathArtifact"
+    },
+    "implementation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source",
+        "source_sha256",
+        "interface",
+        "interface_sha256",
+        "runner",
+        "runner_sha256"
+      ],
+      "properties": {
+        "source": {"const": "programs/wiki_schema_vm_ceiling_q0_v1/schema-vm-scan.cpp"},
+        "source_sha256": {"$ref": "#/$defs/sha256"},
+        "interface": {"const": "programs/wiki_schema_vm_ceiling_q0_v1/interface-contract.json"},
+        "interface_sha256": {"$ref": "#/$defs/sha256"},
+        "runner": {"const": "tools/wiki_schema_vm_ceiling_q0_v1.py"},
+        "runner_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "schemas": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "plan",
+        "scan",
+        "scan_sha256",
+        "decision",
+        "decision_sha256",
+        "output_manifest",
+        "output_manifest_sha256"
+      ],
+      "properties": {
+        "plan": {"const": "contracts/research/v1/wiki-schema-vm-ceiling-plan.schema.json"},
+        "scan": {"const": "contracts/research/v1/wiki-schema-vm-scan.schema.json"},
+        "scan_sha256": {"$ref": "#/$defs/sha256"},
+        "decision": {"const": "contracts/research/v1/wiki-schema-vm-ceiling-decision.schema.json"},
+        "decision_sha256": {"$ref": "#/$defs/sha256"},
+        "output_manifest": {"const": "contracts/research/v1/wiki-schema-vm-output-manifest.schema.json"},
+        "output_manifest_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "exclusive_lane": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["implementation", "implementation_sha256", "schema", "schema_sha256", "policy"],
+      "properties": {
+        "implementation": {"const": "tools/managed_exclusive_lease.py"},
+        "implementation_sha256": {"$ref": "#/$defs/sha256"},
+        "schema": {"const": "operations/runtime/exclusive_full1g.schema.json"},
+        "schema_sha256": {"$ref": "#/$defs/sha256"},
+        "policy": {"type": "string", "minLength": 1}
+      }
+    },
+    "population": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "bytes", "sha256"],
+      "properties": {
+        "path": {
+          "const": "/home/x/enwiki9-nonproof/cmix_lex_payload_gate/cmix_lex_payload_transfer_v1_retry2/transformed_ready.bin"
+        },
+        "bytes": {"const": 587138826},
+        "sha256": {
+          "const": "7826ff63dedd526c119dda08e6e044be8fa8f6e89a55f3d6b1f3447cdfc5c1ce"
+        }
+      }
+    },
+    "activation_dependencies": {
+      "type": "array",
+      "minItems": 5,
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1}
+    },
+    "command_template": {
+      "type": "array",
+      "prefixItems": [
+        {"const": "python3"},
+        {"const": "tools/wiki_schema_vm_ceiling_q0_v1.py"},
+        {"const": "--parent-qualification-receipt"},
+        {"const": "<schema-valid-q1-qualification-receipt>"},
+        {"const": "--parent-qualification-verification"},
+        {"const": "<schema-valid-independent-q1-verification>"}
+      ],
+      "items": false,
+      "minItems": 6,
+      "maxItems": 6
+    },
+    "outputs": {
+      "type": "array",
+      "prefixItems": [
+        {"const": "results/wiki_schema_vm_ceiling_q0_v1/lease-evidence.json"},
+        {"const": "results/wiki_schema_vm_ceiling_q0_v1/lease-transitions.json"},
+        {"const": "results/wiki_schema_vm_ceiling_q0_v1/scan-a.json"},
+        {"const": "results/wiki_schema_vm_ceiling_q0_v1/scan-b.json"},
+        {"const": "results/wiki_schema_vm_ceiling_q0_v1/decision.json"},
+        {"const": "results/wiki_schema_vm_ceiling_q0_v1/output-manifest.json"}
+      ],
+      "items": false,
+      "minItems": 6,
+      "maxItems": 6
+    },
+    "promotion_condition": {"type": "string", "minLength": 1},
+    "kill_condition": {"type": "string", "minLength": 1},
+    "archive_authority": {"const": false},
+    "gamma_compression_credit_bytes": {"const": 0},
+    "gamma_score_credit_bytes": {"const": 0}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "pathArtifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "sha256"],
+      "properties": {
+        "path": {"type": "string", "minLength": 1},
+        "sha256": {"$ref": "#/$defs/sha256"}
+      }
+    }
+  }
+}

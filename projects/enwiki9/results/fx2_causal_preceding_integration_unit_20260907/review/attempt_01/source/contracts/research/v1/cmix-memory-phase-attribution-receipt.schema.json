@@ -1,0 +1,352 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gamma.enwiki9.cmix-memory-phase-attribution-receipt.v1",
+  "title": "CMIX memory phase attribution receipt v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "receipt_id",
+    "candidate_id",
+    "parent_identity",
+    "input_identity",
+    "invocation",
+    "measurement_contract",
+    "phase_events",
+    "samples",
+    "high_water",
+    "allocation_lifetimes",
+    "identity_comparison",
+    "decision"
+  ],
+  "properties": {
+    "schema": {
+      "const": "gamma.enwiki9.cmix-memory-phase-attribution-receipt.v1"
+    },
+    "receipt_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "candidate_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "parent_identity": {
+      "$ref": "#/$defs/artifactIdentity"
+    },
+    "input_identity": {
+      "$ref": "#/$defs/artifactIdentity"
+    },
+    "invocation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "command",
+        "command_sha256",
+        "environment_sha256",
+        "working_directory",
+        "started_utc",
+        "ended_utc",
+        "root_pid",
+        "root_proc_start_ticks",
+        "return_code"
+      ],
+      "properties": {
+        "command": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+        "command_sha256": {"$ref": "#/$defs/sha256"},
+        "environment_sha256": {"$ref": "#/$defs/sha256"},
+        "working_directory": {"type": "string", "minLength": 1},
+        "started_utc": {"type": "string", "format": "date-time"},
+        "ended_utc": {"type": "string", "format": "date-time"},
+        "root_pid": {"type": "integer", "minimum": 1},
+        "root_proc_start_ticks": {"type": "integer", "minimum": 1},
+        "return_code": {"type": "integer"},
+        "cpu_affinity": {"type": "array", "items": {"type": "integer", "minimum": 0}, "uniqueItems": true},
+        "thread_limit": {"type": ["integer", "null"], "minimum": 1}
+      }
+    },
+    "measurement_contract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "observer_sha256",
+        "sample_interval_nanoseconds",
+        "clock",
+        "tree_membership_key",
+        "units",
+        "cgroup_v2",
+        "smaps_rollup",
+        "per_process_high_water",
+        "observer_instrumentation_mode"
+      ],
+      "properties": {
+        "observer_sha256": {"$ref": "#/$defs/sha256"},
+        "sample_interval_nanoseconds": {"type": "integer", "minimum": 1},
+        "clock": {"enum": ["CLOCK_MONOTONIC_RAW", "CLOCK_MONOTONIC"]},
+        "tree_membership_key": {"const": "pid_plus_proc_start_ticks"},
+        "units": {"const": "bytes"},
+        "cgroup_v2": {"type": "boolean"},
+        "smaps_rollup": {"type": "boolean"},
+        "per_process_high_water": {"type": "boolean"},
+        "observer_instrumentation_mode": {"enum": ["external_observer", "source_phase_markers", "external_observer_plus_source_phase_markers"]},
+        "kernel_release": {"type": "string"},
+        "procfs_mount_identity": {"type": ["string", "null"]},
+        "cgroup_path": {"type": ["string", "null"]},
+        "cgroup_memory_max_bytes": {"type": ["integer", "null"], "minimum": 1}
+      }
+    },
+    "phase_events": {
+      "type": "array",
+      "minItems": 2,
+      "items": {"$ref": "#/$defs/phaseEvent"}
+    },
+    "samples": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/sample"}
+    },
+    "high_water": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "tree_rss_peak_bytes",
+        "tree_rss_peak_phase",
+        "tree_rss_peak_monotonic_nanoseconds",
+        "largest_process_vmhwm_bytes",
+        "largest_process_identity",
+        "cgroup_memory_peak_bytes",
+        "authoritative_observed_peak_lower_bound_bytes",
+        "gamma_limit_bytes",
+        "gamma_pass"
+      ],
+      "properties": {
+        "tree_rss_peak_bytes": {"type": "integer", "minimum": 0},
+        "tree_rss_peak_phase": {"$ref": "#/$defs/phase"},
+        "tree_rss_peak_monotonic_nanoseconds": {"type": "integer", "minimum": 0},
+        "largest_process_vmhwm_bytes": {"type": "integer", "minimum": 0},
+        "largest_process_identity": {"$ref": "#/$defs/processIdentity"},
+        "cgroup_memory_peak_bytes": {"type": ["integer", "null"], "minimum": 0},
+        "authoritative_observed_peak_lower_bound_bytes": {"type": "integer", "minimum": 0},
+        "gamma_limit_bytes": {"const": 10000000000},
+        "gamma_pass": {"type": "boolean"},
+        "first_limit_crossing_monotonic_nanoseconds": {"type": ["integer", "null"], "minimum": 0},
+        "first_limit_crossing_phase": {"oneOf": [{"$ref": "#/$defs/phase"}, {"type": "null"}]},
+        "memory_events_sha256": {"oneOf": [{"$ref": "#/$defs/sha256"}, {"type": "null"}]}
+      }
+    },
+    "allocation_lifetimes": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/allocationLifetime"}
+    },
+    "identity_comparison": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "comparison_parent_id",
+        "integer_probability_stream_sha256",
+        "payload_sha256",
+        "archive_sha256",
+        "persistent_state_checkpoint_manifest_sha256",
+        "integer_probability_identity_pass",
+        "payload_identity_pass",
+        "archive_identity_pass",
+        "persistent_state_identity_pass"
+      ],
+      "properties": {
+        "comparison_parent_id": {"type": "string", "minLength": 1},
+        "integer_probability_stream_sha256": {"oneOf": [{"$ref": "#/$defs/sha256"}, {"type": "null"}]},
+        "payload_sha256": {"oneOf": [{"$ref": "#/$defs/sha256"}, {"type": "null"}]},
+        "archive_sha256": {"oneOf": [{"$ref": "#/$defs/sha256"}, {"type": "null"}]},
+        "persistent_state_checkpoint_manifest_sha256": {"oneOf": [{"$ref": "#/$defs/sha256"}, {"type": "null"}]},
+        "integer_probability_identity_pass": {"type": ["boolean", "null"]},
+        "payload_identity_pass": {"type": ["boolean", "null"]},
+        "archive_identity_pass": {"type": ["boolean", "null"]},
+        "persistent_state_identity_pass": {"type": ["boolean", "null"]}
+      }
+    },
+    "decision": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "receipt_complete",
+        "phase_attribution_pass",
+        "dominant_peak_phase",
+        "dominant_allocation_ids",
+        "probability_identical_reduction_supported",
+        "hard_limit_reduction_required_bytes",
+        "engineering_target_reduction_required_bytes",
+        "qualification_authority",
+        "terminal_classification"
+      ],
+      "properties": {
+        "receipt_complete": {"type": "boolean"},
+        "phase_attribution_pass": {"type": "boolean"},
+        "dominant_peak_phase": {"oneOf": [{"$ref": "#/$defs/phase"}, {"type": "null"}]},
+        "dominant_allocation_ids": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+        "probability_identical_reduction_supported": {"type": ["boolean", "null"]},
+        "hard_limit_reduction_required_bytes": {"type": "integer", "minimum": 0},
+        "engineering_target_reduction_required_bytes": {"type": "integer", "minimum": 0},
+        "qualification_authority": {"const": "diagnostic_only"},
+        "terminal_classification": {
+          "enum": [
+            "attributed_probability_identical_reduction_available",
+            "attributed_semantics_changing_reduction_only",
+            "attributed_insufficient_reduction",
+            "unattributed_peak",
+            "identity_mismatch",
+            "resource_observer_failure",
+            "invalid_receipt"
+          ]
+        },
+        "notes": {"type": "array", "items": {"type": "string"}}
+      }
+    }
+  },
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "artifactIdentity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["role", "path", "size_bytes", "sha256"],
+      "properties": {
+        "role": {"type": "string", "minLength": 1},
+        "path": {"type": "string", "minLength": 1},
+        "size_bytes": {"type": "integer", "minimum": 0},
+        "sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "phase": {
+      "enum": [
+        "process_start",
+        "preprocessing",
+        "dictionary_or_order_construction",
+        "model_initialization",
+        "encode_steady_state",
+        "encode_termination_or_archive_construction",
+        "decode_initialization",
+        "decode_steady_state",
+        "raw_reconstruction",
+        "cleanup",
+        "process_terminal",
+        "unknown"
+      ]
+    },
+    "processIdentity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["pid", "proc_start_ticks", "comm", "state", "command_sha256"],
+      "properties": {
+        "pid": {"type": "integer", "minimum": 1},
+        "proc_start_ticks": {"type": "integer", "minimum": 1},
+        "ppid": {"type": ["integer", "null"], "minimum": 0},
+        "comm": {"type": "string"},
+        "state": {"type": "string", "minLength": 1, "maxLength": 1},
+        "command_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "phaseEvent": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sequence", "phase", "event", "monotonic_nanoseconds", "source", "process_identity"],
+      "properties": {
+        "sequence": {"type": "integer", "minimum": 0},
+        "phase": {"$ref": "#/$defs/phase"},
+        "event": {"enum": ["begin", "checkpoint", "end"]},
+        "monotonic_nanoseconds": {"type": "integer", "minimum": 0},
+        "source": {"enum": ["source_marker", "process_observer", "runner_observer"]},
+        "process_identity": {"$ref": "#/$defs/processIdentity"},
+        "marker_payload_sha256": {"oneOf": [{"$ref": "#/$defs/sha256"}, {"type": "null"}]}
+      }
+    },
+    "processSample": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["identity", "rss_bytes", "vmhwm_bytes", "vmsize_bytes", "threads"],
+      "properties": {
+        "identity": {"$ref": "#/$defs/processIdentity"},
+        "rss_bytes": {"type": "integer", "minimum": 0},
+        "vmhwm_bytes": {"type": "integer", "minimum": 0},
+        "vmsize_bytes": {"type": "integer", "minimum": 0},
+        "threads": {"type": "integer", "minimum": 0},
+        "smaps_rss_bytes": {"type": ["integer", "null"], "minimum": 0},
+        "smaps_pss_bytes": {"type": ["integer", "null"], "minimum": 0},
+        "anonymous_bytes": {"type": ["integer", "null"], "minimum": 0},
+        "file_backed_bytes": {"type": ["integer", "null"], "minimum": 0},
+        "shared_bytes": {"type": ["integer", "null"], "minimum": 0}
+      }
+    },
+    "sample": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "sequence",
+        "monotonic_nanoseconds",
+        "phase",
+        "tree_membership_sha256",
+        "processes",
+        "tree_rss_bytes",
+        "tree_vmsize_bytes",
+        "tree_threads",
+        "cgroup_memory_current_bytes",
+        "cgroup_memory_peak_bytes",
+        "scratch_logical_bytes",
+        "scratch_allocated_bytes",
+        "vanished_pids",
+        "scratch_complete"
+      ],
+      "properties": {
+        "sequence": {"type": "integer", "minimum": 0},
+        "monotonic_nanoseconds": {"type": "integer", "minimum": 0},
+        "phase": {"$ref": "#/$defs/phase"},
+        "tree_membership_sha256": {"$ref": "#/$defs/sha256"},
+        "processes": {"type": "array", "items": {"$ref": "#/$defs/processSample"}},
+        "tree_rss_bytes": {"type": "integer", "minimum": 0},
+        "tree_vmsize_bytes": {"type": "integer", "minimum": 0},
+        "tree_threads": {"type": "integer", "minimum": 0},
+        "cgroup_memory_current_bytes": {"type": ["integer", "null"], "minimum": 0},
+        "cgroup_memory_peak_bytes": {"type": ["integer", "null"], "minimum": 0},
+        "scratch_logical_bytes": {"type": "integer", "minimum": 0},
+        "scratch_allocated_bytes": {"type": "integer", "minimum": 0},
+        "vanished_pids": {
+          "type": "array",
+          "items": {"type": "integer", "minimum": 1},
+          "uniqueItems": true
+        },
+        "scratch_complete": {"type": "boolean"}
+      }
+    },
+    "allocationLifetime": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "allocation_id",
+        "owner",
+        "allocation_class",
+        "first_phase",
+        "last_phase",
+        "peak_resident_bytes",
+        "peak_virtual_bytes",
+        "probability_affecting",
+        "reclaim_hypothesis",
+        "evidence_sha256"
+      ],
+      "properties": {
+        "allocation_id": {"type": "string", "minLength": 1},
+        "owner": {"type": "string", "minLength": 1},
+        "allocation_class": {"enum": ["anonymous_heap", "anonymous_mapping", "file_mapping", "shared_mapping", "stack", "allocator_arena", "page_cache_proxy", "unknown"]},
+        "mapped_path": {"type": ["string", "null"]},
+        "first_phase": {"$ref": "#/$defs/phase"},
+        "last_phase": {"$ref": "#/$defs/phase"},
+        "peak_resident_bytes": {"type": "integer", "minimum": 0},
+        "peak_virtual_bytes": {"type": "integer", "minimum": 0},
+        "probability_affecting": {"type": ["boolean", "null"]},
+        "reclaim_hypothesis": {"enum": ["shorten_lifetime", "lazy_allocate", "compact_representation", "release_allocator_arena", "unmap_file", "reuse_buffer", "cannot_change_without_semantics", "unknown"]},
+        "reclaimable_lower_bound_bytes": {"type": ["integer", "null"], "minimum": 0},
+        "evidence_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    }
+  }
+}

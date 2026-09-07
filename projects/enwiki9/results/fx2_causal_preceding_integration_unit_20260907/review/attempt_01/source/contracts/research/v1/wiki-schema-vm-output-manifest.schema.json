@@ -1,0 +1,99 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gamma.enwiki9.wiki-schema-vm-output-manifest.v1",
+  "title": "WIKI-SCHEMA-VM closed output manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "candidate_id",
+    "result_root",
+    "pre_manifest_exact_file_set_pass",
+    "unexpected_pre_manifest_entries",
+    "complete_result_artifacts_pass",
+    "artifacts"
+  ],
+  "properties": {
+    "schema": {"const": "gamma.enwiki9.wiki-schema-vm-output-manifest.v1"},
+    "candidate_id": {"const": "wiki_schema_vm_ceiling_q0_v1"},
+    "result_root": {"const": "results/wiki_schema_vm_ceiling_q0_v1"},
+    "pre_manifest_exact_file_set_pass": {"type": "boolean"},
+    "unexpected_pre_manifest_entries": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))(?!.*//).+$"
+      }
+    },
+    "complete_result_artifacts_pass": {"type": "boolean"},
+    "artifacts": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 12,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["role", "path", "bytes", "sha256"],
+        "properties": {
+          "role": {
+            "enum": [
+              "lease_evidence",
+              "lease_transitions",
+              "compile_stdout",
+              "compile_stderr",
+              "scanner_binary",
+              "scan_a_receipt",
+              "scan_a_stdout",
+              "scan_a_stderr",
+              "scan_b_receipt",
+              "scan_b_stdout",
+              "scan_b_stderr",
+              "decision"
+            ]
+          },
+          "path": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))(?!.*//).+$"
+          },
+          "bytes": {"type": "integer", "minimum": 0},
+          "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+        }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {"complete_result_artifacts_pass": {"const": true}},
+        "required": ["complete_result_artifacts_pass"]
+      },
+      "then": {
+        "properties": {
+          "pre_manifest_exact_file_set_pass": {"const": true},
+          "unexpected_pre_manifest_entries": {"maxItems": 0},
+          "artifacts": {
+            "minItems": 12,
+            "maxItems": 12,
+            "allOf": [
+              {"contains": {"properties": {"role": {"const": "lease_evidence"}}, "required": ["role"]}, "minContains": 1, "maxContains": 1},
+              {"contains": {"properties": {"role": {"const": "lease_transitions"}}, "required": ["role"]}, "minContains": 1, "maxContains": 1},
+              {"contains": {"properties": {"role": {"const": "compile_stdout"}}, "required": ["role"]}, "minContains": 1, "maxContains": 1},
+              {"contains": {"properties": {"role": {"const": "compile_stderr"}}, "required": ["role"]}, "minContains": 1, "maxContains": 1},
+              {"contains": {"properties": {"role": {"const": "scanner_binary"}}, "required": ["role"]}, "minContains": 1, "maxContains": 1},
+              {"contains": {"properties": {"role": {"const": "scan_a_receipt"}}, "required": ["role"]}, "minContains": 1, "maxContains": 1},
+              {"contains": {"properties": {"role": {"const": "scan_a_stdout"}}, "required": ["role"]}, "minContains": 1, "maxContains": 1},
+              {"contains": {"properties": {"role": {"const": "scan_a_stderr"}}, "required": ["role"]}, "minContains": 1, "maxContains": 1},
+              {"contains": {"properties": {"role": {"const": "scan_b_receipt"}}, "required": ["role"]}, "minContains": 1, "maxContains": 1},
+              {"contains": {"properties": {"role": {"const": "scan_b_stdout"}}, "required": ["role"]}, "minContains": 1, "maxContains": 1},
+              {"contains": {"properties": {"role": {"const": "scan_b_stderr"}}, "required": ["role"]}, "minContains": 1, "maxContains": 1},
+              {"contains": {"properties": {"role": {"const": "decision"}}, "required": ["role"]}, "minContains": 1, "maxContains": 1}
+            ]
+          }
+        }
+      }
+    }
+  ]
+}

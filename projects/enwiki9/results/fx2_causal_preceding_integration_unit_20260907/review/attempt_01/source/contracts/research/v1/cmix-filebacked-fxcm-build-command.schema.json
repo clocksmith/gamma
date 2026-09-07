@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gamma.enwiki9.cmix-filebacked-fxcm-build-command.v1",
+  "title": "CMIX file-backed FXCM normalized build command",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "candidate_id", "build_role", "prepare_argv", "compile_argv", "link_argv", "compile_definitions", "environment", "compiler_trace_relative_path", "binary_relative_path"],
+  "properties": {
+    "schema": {"const": "gamma.enwiki9.cmix-filebacked-fxcm-build-command.v1"},
+    "candidate_id": {"const": "cmix_obias_memory_safe_parent_filebacked_q1_v1"},
+    "build_role": {"enum": ["release", "harness"]},
+    "prepare_argv": {"oneOf": [{"$ref": "#/$defs/argv"}, {"type": "null"}]},
+    "compile_argv": {"$ref": "#/$defs/argv"},
+    "link_argv": {"$ref": "#/$defs/argv"},
+    "compile_definitions": {
+      "type": "array",
+      "items": {"type": "string", "minLength": 1},
+      "uniqueItems": true
+    },
+    "environment": {
+      "type": "object",
+      "additionalProperties": {"type": "string"}
+    },
+    "compiler_trace_relative_path": {"type": "string", "pattern": "^[A-Za-z0-9._+/-]+$"},
+    "binary_relative_path": {"type": "string", "pattern": "^[A-Za-z0-9._+/-]+$"}
+  },
+  "$defs": {
+    "argv": {"type": "array", "minItems": 1, "items": {"type": "string"}}
+  }
+}
