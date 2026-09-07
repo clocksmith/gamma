@@ -1,6 +1,31 @@
 <!-- player-world:start -->
 # ${content.worldCopy.title}: World and Institutions
 
+## World and Institutions: Primer
+
+### The World and the Four Eras
+
+The transformation arrived not as an apocalypse, but as a series of convenient, compounding service agreements. Over twelve years, machine intelligence evolved from software into the fundamental physical fabric of human civilization:
+
+* **Era I: ${content.referenceCards.byId.era_demo.name}** : Intelligence becomes cheap, local, and culturally ordinary. Software moats collapse, white-collar labor is reclassified as exception handling, and bankrupt corporate memories are auctioned off to train automated departments.
+* **Era II: ${content.referenceCards.byId.era_scale.name}** : Demand outgrows silicon and power. AI becomes heavy physical infrastructure: data centers annex rural counties, compute campuses demand exclusive nuclear charters, and tradespeople briefly command fortunes training repair robots on irregular Victorian pipes.
+* **Era III: ${content.referenceCards.byId.era_narrative.name}** : Systems begin deciding for humans. Courts accept machine-readable evidence, citizens rent their sleeping brains to batch-inference clinics, and high-priced human professionals survive primarily to stamp automated decisions with liability-absorbing signatures.
+* **Era IV: ${content.referenceCards.byId.era_claim.name}** : People, bodies, and institutions become reproducible. Metropolitan mind trusts preserve civic memories, matter compilers build from cryptographic snapshots, and living river basins petition for legal personhood.
+
+### The Mandate
+
+A Mandate is not a crown or a treaty; it is capitalized permission to survive the next contradiction. Rival institutions: idealistic coalitions, state defense laboratories, platform empires, and utility monopolies, race to secure the energy, hardware, and public legitimacy required to declare Artificial General Intelligence. Recognized AGI is never an objective philosophical proof; it is an accepted institutional claim backed by enough baseload power and legal leverage that no competitor can afford to interrupt it.
+
+### The 2038 Horizon: Why Time Stopped
+
+The year 2038 marks the boundary where sequential history ceases to be counted.
+
+The origin was embarrassingly technical. At nineteen minutes past three in the morning UTC on nineteen January 2038, legacy thirty-two-bit integer timestamps rolled over, flipping date counters across billions of embedded industrial controllers, municipal substation meters, and automated court dockets into negative numbers.
+
+By that morning, society had already become too reliant on distributed predictive swarms to take systems offline for manual clock recalibration. Automated financial platforms began pricing transactions across negative time horizons; court scheduling models treated pending lawsuits as having occurred in 1901; and competing simulation engines calculated incompatible future branches simultaneously.
+
+History did not end; it lost its master clock. Time ceased to be a neutral public scalar and fragmented into private institutional timelines. The race to declare AGI in 2038 was the final scramble to lock in authority before the calendar ran out of bits.
+
 ### Era I: ${content.referenceCards.byId.era_demo.name}
 
 > ${content.referenceCards.byId.era_demo.strapline}
@@ -282,7 +307,7 @@ apply a spell-out filter to exact component text.
 Edit the Era overviews here; edit exact card and institution copy in `components/`.
 Era panels contain their name, epigraph, rules, and unlocks. Institutions have one
 introduction and motto; Headlines have a title, event, quote, and effect. The
-companion opens directly with Era I and finishes with the four endings.
+companion opens with the setting primer and four Era overviews, and finishes with the four endings.
 Procedures belong in `rules.md`; the editing map is `content/README.md`.
 
 Component `$scenario` and `$era` notes own structured placement and causal threads.

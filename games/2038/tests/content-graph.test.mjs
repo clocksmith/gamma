@@ -319,7 +319,8 @@ test("world companion owns four ordered Era overviews and references canonical E
     assert.ok(world.includes(name), `${name} appears in the Era overviews`);
   }
   assert.doesNotMatch(playerSource, /worldPrimer|\.loreText}/);
-  assert.match(world, /^# [^\n]+\n\n### Era I:/);
+  assert.match(world, /^# [^\n]+\n\n## World and Institutions: Primer/);
+  assert.match(world, /### Era I: Progress/);
   assert.match(world, /By 2038,/);
   assert.doesNotMatch(world, /Rules version:|The jurisdiction|This companion contains|two independent axes/);
   assert.ok(chapters.at(-1).index < world.indexOf("## The four World Endings"));
