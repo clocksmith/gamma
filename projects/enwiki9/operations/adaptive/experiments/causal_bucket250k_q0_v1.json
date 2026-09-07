@@ -1,0 +1,359 @@
+{
+  "budget": {
+    "expectedGrossSavingsBytes": 0,
+    "expectedNetSavingsBytes": -10000000,
+    "maximumAddedPackageBytes": 10000000
+  },
+  "causalBoundary": {
+    "availableInformation": [
+      "Encoder: complete bounded raw frame; stable predecessor queues and final byte.",
+      "Decoder: stored final byte, payload histogram, deterministic FIFO path and exact raw checksum."
+    ],
+    "forbiddenInformation": [
+      "Untransmitted dictionaries, supplied probabilities, pretrained models, neighboring campaign state.",
+      "Confirmation input used for development selection."
+    ]
+  },
+  "changedMechanism": "Begin with predecessor0. Append every raw byte to its predecessor's FIFO bucket, then concatenate buckets in byte order. Transmit the final raw byte. Bucket v has size histogram(v)+[v=0]-[v=last]. The decoder follows the same predecessor path through the queues, checks full consumption and exact final byte. Definitions, dictionaries and a256-count table are unnecessary.",
+  "controls": [
+    {
+      "definition": "{\"id\": \"P\", \"mode\": \"plain\"}",
+      "id": "P",
+      "role": "comparator"
+    },
+    {
+      "definition": "{\"id\": \"K\", \"mode\": \"K\"}",
+      "id": "K",
+      "role": "comparator"
+    },
+    {
+      "definition": "{\"id\": \"D\", \"mode\": \"D\"}",
+      "id": "D",
+      "role": "treatment"
+    }
+  ],
+  "evidenceClass": "diagnostic",
+  "experimentId": "causal_bucket250k_q0_v1",
+  "generatedUtc": "2026-09-07T19:30:15.791229+00:00",
+  "hypothesis": {
+    "claim": "Stable previous-byte grouping improves complete Deflate frame costs on raw opening250KB when queue lengths are reconstructed from a histogram and one stored final byte.",
+    "falsification": "One fixed raw opening250KB P/K/D comparison. D must be strictly smaller than unchanged P; K must equal P; exact independent inverse and raw repeats are mandatory. Equality holds this configuration and triggers independent exploration, not confirmation or a claim of impossibility."
+  },
+  "inputs": [
+    {
+      "id": "bound-0",
+      "path": "tools/causal_bucket_v2.py",
+      "sha256": "sha256:4000408f3763e995b7ab71cb158c4ccc61a0810d68bb015a3ee598a6009295ec"
+    },
+    {
+      "id": "bound-1",
+      "path": "tools/causal_bucket_gate_v2.py",
+      "sha256": "sha256:9ec553516e31f19876ffd83dc2dc2f4aab4160a3ffacc5f141dafd02825d669f"
+    },
+    {
+      "id": "bound-2",
+      "path": "tests/test_causal_bucket_gate_v2.py",
+      "sha256": "sha256:68c254f68f238a63229b32d91d8fc64a0402ab1e1f3e6fac4ac0d14b7a8de396"
+    },
+    {
+      "id": "bound-3",
+      "path": "tests/test_causal_bucket_review_v1.py",
+      "sha256": "sha256:420fd3e3cbd76945b6e0f8da910047071f2db9676f5e2e7b2e09543c0f6ec83b"
+    },
+    {
+      "id": "bound-4",
+      "path": "tools/dualstream_grammar_v1.py",
+      "sha256": "sha256:9f31a671610aeb2b0f753b13346a06cf1729a4b6b0ce92d2fd7590b3018023bd"
+    },
+    {
+      "id": "bound-5",
+      "path": "tools/dualstream_grammar_argtokens_v2.py",
+      "sha256": "sha256:f2e4627780a4b9ea89691ed8a9c06f7407cbc0cadb19a987fb6813dafa0061b2"
+    },
+    {
+      "id": "bound-6",
+      "path": "tools/dualstream_grammar_decode_dispatch_v1.py",
+      "sha256": "sha256:61317cf031c972dfe93d0a02e2cef4219b2e99352d2a6149329f197a05f3cc25"
+    },
+    {
+      "id": "bound-7",
+      "path": "tools/dualstream_grammar_gate_v1.py",
+      "sha256": "sha256:7b30a36d4c28113d23d6b9cf475d1b2d48ba40853074c5003322b459af496902"
+    },
+    {
+      "id": "bound-8",
+      "path": "operations/provenance/causal_bucket_v1_plan.json",
+      "sha256": "sha256:b6c2adc0865960f02141270c3ff64f75d60d25e5f27bece345cde82df13d6a48"
+    },
+    {
+      "id": "bound-9",
+      "path": "operations/provenance/causal_bucket_v2_measure.py",
+      "sha256": "sha256:1f9dbacf25d6806e23424f3eba26ac8d99bc9c9f15974dfe3d4ed9e0e58b8a32"
+    },
+    {
+      "id": "bound-10",
+      "path": "docs/causal_bucket_v1.md",
+      "sha256": "sha256:417e6d6d1fc25cb14f8560c744cbcec4e4866cf0cfaf6dbe15c7a5fa198ded59"
+    },
+    {
+      "id": "bound-11",
+      "path": "operations/evidence/fixtures/dualstream_opening250k_v1.raw",
+      "sha256": "sha256:665fc689441b68462d88f82dc33212abe9c4824be095d03a556c9b55a2829fd3"
+    },
+    {
+      "id": "bound-12",
+      "path": "results/dualstream_grammar_argtokens250k_q0_v2/P.d2g",
+      "sha256": "sha256:1c67e760d01c45398bbbd74882ee0026baf0e6995f6a7c782a305dad572c729a"
+    },
+    {
+      "id": "bound-13",
+      "path": "operations/provenance/dualstream_literal_first_terminal_20260907.json",
+      "sha256": "sha256:5170a7fda82129b7f13e1590b654efdca88272fc27737cdb4a61491e08ae9184"
+    },
+    {
+      "id": "bound-14",
+      "path": "operations/adaptive/reflections/20260907T183536Z_a3505ed881.json",
+      "sha256": "sha256:1b6351caef666e6dcfe51d0451047ec0c5af4f3c1b482475dd0f442e189460b8"
+    },
+    {
+      "id": "bound-15",
+      "path": "results/causal_bucket_unit_20260907/kernel02/receipt.json",
+      "sha256": "sha256:cbc99b351e94774ebbf69be51debee0494d9a7f2554c8a01e1e2e48278c37931"
+    },
+    {
+      "id": "bound-16",
+      "path": "results/causal_bucket_unit_20260907/kernel02/index.json",
+      "sha256": "sha256:03009aaaa5ebca2ea418d711dea885154149d83aff0675f0cfd45b7ebaf6f3f5"
+    },
+    {
+      "id": "bound-17",
+      "path": "results/causal_bucket_unit_20260907/review/summary.json",
+      "sha256": "sha256:55395d9f24680134e7033377bef914a4109696db4cd2d6d46dcbbf11b9d78f1d"
+    },
+    {
+      "id": "bound-18",
+      "path": "results/causal_bucket_unit_20260907/review/evidence-index.json",
+      "sha256": "sha256:8ec8ea3e4da923e6d9d852e66656e411f8cf0d0a9b7d37568d7ab44994138013"
+    },
+    {
+      "id": "bound-19",
+      "path": "results/causal_bucket_unit_20260907/review/evidence.zip",
+      "sha256": "sha256:5484fbdc5b3ac02c8b10a436672ab3bdf7d1465c409bf01e0401a814ace5caa9"
+    },
+    {
+      "id": "bound-20",
+      "path": "results/causal_bucket_gate_unit_20260907/attempt02/summary.json",
+      "sha256": "sha256:35a7ce87f4c548248627663f1517232382bafbafbb045ff461d5c75a05e53ecd"
+    },
+    {
+      "id": "bound-21",
+      "path": "results/causal_bucket_gate_unit_20260907/attempt02/index.json",
+      "sha256": "sha256:95aa7b1df3f7d1aad54d5a532a4b550dfbaec0d0cca15b04e30d9a11642bd76a"
+    },
+    {
+      "id": "bound-22",
+      "path": "results/causal_bucket_gate_unit_20260907/attempt02/evidence.zip",
+      "sha256": "sha256:79e4a7468274abb2d408895ffffd9e6356e60e44a5bc15c2abbf2dda95c4d077"
+    },
+    {
+      "id": "bound-23",
+      "path": "results/causal_bucket_gate_unit_20260907/attempt02/validation.log",
+      "sha256": "sha256:56d500b9af3ab551403967111f345e0e129bb686ecebacf9b993722b9c1908b0"
+    },
+    {
+      "id": "bound-24",
+      "path": "operations/evidence/20260907_causal_bucket_unit.json",
+      "sha256": "sha256:2a0dc940b7d3fd2b0e6cc49508a4767bff5004cf53844346b6c0f5f1d737f673"
+    },
+    {
+      "id": "grammar-gate-plan",
+      "path": "operations/provenance/causal_bucket250k_q0_v1_plan.json",
+      "sha256": "sha256:ee7fd612badd76d433878bed4ef0808b3f354d277907376170f4e4a873764e6f"
+    }
+  ],
+  "invariants": [
+    "P/K archives exactly unchanged D2GRAM02 plain output.",
+    "D selected only on strict complete frame savings, including endpoint and framing.",
+    "All raw inverses, raw repeats and decoder-common payload/output projections agree.",
+    "No grammar, pretrained model, parent probability file, dictionary or transmitted count table.",
+    "CPU2 one codec thread; aggregate1GiB RAM zeroSwap64MiB scratch300wall; each child512MiB AS60CPU90wall32MiB file. Shared-host timing diagnostic.",
+    "Complete package/license/runtime/options and full-corpus score unknown. Added package cap10M is a bound, not a measured estimate.",
+    "25 synthetic tests including9841 exhaustive inverses and18 full runner phases pass; synthetic254B is not corpus credit."
+  ],
+  "killPredicates": [
+    {
+      "id": "no-impossibility-claim",
+      "measurement": "scientific_rejection_applicable",
+      "operator": "eq",
+      "threshold": true
+    }
+  ],
+  "measurements": [
+    {
+      "definition": "Closed diagnostic evidence only; full-corpus promotion remains unauthorized.",
+      "id": "correctness_pass",
+      "unit": "boolean"
+    },
+    {
+      "definition": "Closed diagnostic evidence only; full-corpus promotion remains unauthorized.",
+      "id": "frozen_inputs_reverified",
+      "unit": "boolean"
+    },
+    {
+      "definition": "Closed diagnostic evidence only; full-corpus promotion remains unauthorized.",
+      "id": "continuous_guard_pass",
+      "unit": "boolean"
+    },
+    {
+      "definition": "Closed diagnostic evidence only; full-corpus promotion remains unauthorized.",
+      "id": "artifact_closure_pass",
+      "unit": "boolean"
+    },
+    {
+      "definition": "Closed diagnostic evidence only; full-corpus promotion remains unauthorized.",
+      "id": "accounting_pass",
+      "unit": "boolean"
+    },
+    {
+      "definition": "Closed diagnostic evidence only; full-corpus promotion remains unauthorized.",
+      "id": "p_k_archive_identity_pass",
+      "unit": "boolean"
+    },
+    {
+      "definition": "Closed diagnostic evidence only; full-corpus promotion remains unauthorized.",
+      "id": "raw_encoder_repeat_proved",
+      "unit": "boolean"
+    },
+    {
+      "definition": "Closed diagnostic evidence only; full-corpus promotion remains unauthorized.",
+      "id": "promotion_authorized",
+      "unit": "boolean"
+    },
+    {
+      "definition": "Closed diagnostic evidence only; full-corpus promotion remains unauthorized.",
+      "id": "scientific_rejection_applicable",
+      "unit": "boolean"
+    },
+    {
+      "definition": "Closed diagnostic evidence only; full-corpus promotion remains unauthorized.",
+      "id": "strict_d_improvement",
+      "unit": "boolean"
+    },
+    {
+      "definition": "Measured finite development quantity, not a full-corpus forecast or package score.",
+      "id": "native_phases",
+      "unit": "processes"
+    },
+    {
+      "definition": "Measured finite development quantity, not a full-corpus forecast or package score.",
+      "id": "raw_bytes",
+      "unit": "bytes"
+    },
+    {
+      "definition": "Measured finite development quantity, not a full-corpus forecast or package score.",
+      "id": "p_minus_d_bytes",
+      "unit": "bytes"
+    },
+    {
+      "definition": "Measured finite development quantity, not a full-corpus forecast or package score.",
+      "id": "p_minus_k_bytes",
+      "unit": "bytes"
+    }
+  ],
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:16badfa6c1a53b47bcc12b089fdd9c21f7405ea56a84344d60c28d2252da8288",
+    "objectiveId": "gamma-enwiki9-hutter-99m-v2",
+    "objectivePath": "contracts/research/v2/objective-contract.json",
+    "targetScoreBytes": 99000000
+  },
+  "objectiveCreditBytes": 0,
+  "outputManifestPolicy": "complete-result-artifacts-v1",
+  "outputs": [
+    "results/causal_bucket250k_q0_v1/P-encode.execution.json",
+    "results/causal_bucket250k_q0_v1/P-encode.stdout",
+    "results/causal_bucket250k_q0_v1/P-encode.stderr",
+    "results/causal_bucket250k_q0_v1/P-decode.execution.json",
+    "results/causal_bucket250k_q0_v1/P-decode.stdout",
+    "results/causal_bucket250k_q0_v1/P-decode.stderr",
+    "results/causal_bucket250k_q0_v1/P-repeat.execution.json",
+    "results/causal_bucket250k_q0_v1/P-repeat.stdout",
+    "results/causal_bucket250k_q0_v1/P-repeat.stderr",
+    "results/causal_bucket250k_q0_v1/P.d2g",
+    "results/causal_bucket250k_q0_v1/P.raw",
+    "results/causal_bucket250k_q0_v1/P.repeat.d2g",
+    "results/causal_bucket250k_q0_v1/P.result.json",
+    "results/causal_bucket250k_q0_v1/K-encode.execution.json",
+    "results/causal_bucket250k_q0_v1/K-encode.stdout",
+    "results/causal_bucket250k_q0_v1/K-encode.stderr",
+    "results/causal_bucket250k_q0_v1/K-decode.execution.json",
+    "results/causal_bucket250k_q0_v1/K-decode.stdout",
+    "results/causal_bucket250k_q0_v1/K-decode.stderr",
+    "results/causal_bucket250k_q0_v1/K-repeat.execution.json",
+    "results/causal_bucket250k_q0_v1/K-repeat.stdout",
+    "results/causal_bucket250k_q0_v1/K-repeat.stderr",
+    "results/causal_bucket250k_q0_v1/K.d2g",
+    "results/causal_bucket250k_q0_v1/K.raw",
+    "results/causal_bucket250k_q0_v1/K.repeat.d2g",
+    "results/causal_bucket250k_q0_v1/K.result.json",
+    "results/causal_bucket250k_q0_v1/D-encode.execution.json",
+    "results/causal_bucket250k_q0_v1/D-encode.stdout",
+    "results/causal_bucket250k_q0_v1/D-encode.stderr",
+    "results/causal_bucket250k_q0_v1/D-decode.execution.json",
+    "results/causal_bucket250k_q0_v1/D-decode.stdout",
+    "results/causal_bucket250k_q0_v1/D-decode.stderr",
+    "results/causal_bucket250k_q0_v1/D-repeat.execution.json",
+    "results/causal_bucket250k_q0_v1/D-repeat.stdout",
+    "results/causal_bucket250k_q0_v1/D-repeat.stderr",
+    "results/causal_bucket250k_q0_v1/D.d2g",
+    "results/causal_bucket250k_q0_v1/D.raw",
+    "results/causal_bucket250k_q0_v1/D.repeat.d2g",
+    "results/causal_bucket250k_q0_v1/D.result.json",
+    "results/causal_bucket250k_q0_v1/costs-table.json",
+    "results/causal_bucket250k_q0_v1/artifacts.json",
+    "results/causal_bucket250k_q0_v1/stage-decision.json",
+    "results/causal_bucket250k_q0_v1/decision.json"
+  ],
+  "parent": {
+    "candidateId": "dualstream_literal_first250k_q0_v1",
+    "revision": {
+      "path": "operations/adaptive/candidate-revisions/dualstream_literal_first250k_q0_v1/20260907T183535566342Z_eb1916662482.json",
+      "sha256": "sha256:50a50ea2b2c6586dc49ab7a522f36aa7b241e7548144a583210ec3468b9c5160"
+    }
+  },
+  "population": {
+    "coordinate": "raw_identity_v1 offsets0..249999, independent65536-byte frames, unchanged level9 Deflate.",
+    "scopeBytes": 250000,
+    "scopeSymbols": 250000,
+    "selection": "Previously examined opening development only; one fixed transform. Fresh validation and confirmation remain sealed and require strict improvement, a separately frozen plan and new admission.",
+    "unit": "raw byte"
+  },
+  "promotionPredicates": [
+    {
+      "id": "diagnostic-no-promotion",
+      "measurement": "promotion_authorized",
+      "operator": "eq",
+      "threshold": true
+    }
+  ],
+  "proposalId": "causal_bucket250k_q0_v1",
+  "pythonSourceClosureEntries": [
+    "bound-0",
+    "bound-1",
+    "bound-4",
+    "bound-5",
+    "bound-6",
+    "bound-7"
+  ],
+  "registrationTiming": "prospective",
+  "schema": "gamma.enwiki9.adaptive-experiment-contract.v1",
+  "search": {
+    "expectedMemoryRatio": 1,
+    "expectedRuntimeRatio": 1,
+    "expectedTransferRetention": 0,
+    "interactionRisk": 1,
+    "uncertaintyRisk": 1
+  },
+  "status": "frozen"
+}

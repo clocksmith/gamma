@@ -1,0 +1,47 @@
+{
+  "candidate_id": "causal_bucket250k_q0_v1",
+  "claimed_at": "2026-09-07T19:30:41+00:00",
+  "created_at": "2026-09-07T19:30:41+00:00",
+  "developed_at": "2026-09-07T19:30:42+00:00",
+  "evidence": [
+    {
+      "path": "operations/evidence/20260907_causal_bucket_unit.json",
+      "sha256": "sha256:2a0dc940b7d3fd2b0e6cc49508a4767bff5004cf53844346b6c0f5f1d737f673"
+    }
+  ],
+  "expected_savings_bytes": 0,
+  "experiment": {
+    "path": "operations/adaptive/experiments/causal_bucket250k_q0_v1.json",
+    "sha256": "sha256:a4280d6c09db7bcb463401f746cb9f966a2fcc685a95e4c04b884ba8648dce8b"
+  },
+  "hypothesis": "Stable previous-byte grouping improves complete Deflate frame costs on raw opening250KB when queue lengths are reconstructed from a histogram and one stored final byte.",
+  "interfaces_exposed": [
+    "Raw bytes -> stable predecessor FIFO payload plus final byte -> exact raw bytes."
+  ],
+  "kill_condition": "Hold exact configuration if P-D<=0 with valid evidence. Resource stops are not scientific disproof.",
+  "max_program_bytes": 10000000,
+  "mechanism_change": "replace_representation",
+  "mechanism_change_bonus": 18,
+  "mechanism_class": "representation",
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:16badfa6c1a53b47bcc12b089fdd9c21f7405ea56a84344d60c28d2252da8288",
+    "objectiveId": "gamma-enwiki9-hutter-99m-v2",
+    "objectivePath": "contracts/research/v2/objective-contract.json",
+    "targetScoreBytes": 99000000
+  },
+  "owner": "root_explore",
+  "parent": "dualstream_literal_first250k_q0_v1",
+  "parent_proposal_id": null,
+  "priority": 50,
+  "promotion_condition": "Diagnostic only; strict D<P and K=P plus exact inverses/repeats permits separately frozen validation; complete package and full corpus remain unknown.",
+  "proposal_id": "causal_bucket250k_q0_v1",
+  "retired_neighborhoods": [
+    "No grammar discovery, byte enumeration, interpreter context, numeric island or supplied WRT probabilities."
+  ],
+  "schema": "gamma.enwiki9.algorithm-proposal.v2",
+  "search_priority": 68,
+  "state": "developed",
+  "title": "Stable raw predecessor FIFO ordering"
+}
