@@ -6,6 +6,100 @@
   "family": "unclassified",
   "hypothesis": "Reversing fixed250000-byte raw blocks reduces complete BZip2 level9 archives relative to forward blocks under identical framing.",
   "id": "raw_reverse_bz2250k_q0_v1",
+  "measured": {
+    "reflections": {
+      "20260907T195303Z_478c9b2ef6": {
+        "decision": "hold",
+        "path": "operations/adaptive/reflections/20260907T195303Z_478c9b2ef6.json",
+        "sha256": "sha256:24f535d2c278d4578f49060369eda199d3f2733254b8a0fa8ca7c41d27724f4e",
+        "valid": true
+      }
+    },
+    "terminal_results": {
+      "20260907T195303Z_478c9b2ef6": {
+        "index": {
+          "path": "operations/provenance/raw_reverse_bz2_terminal_20260907/index.json",
+          "sha256": "sha256:e83660adc28d5cf13f80d719342096c618f887ae452dc433b565db4b860ef064"
+        },
+        "reflection": {
+          "decision": "hold",
+          "path": "operations/adaptive/reflections/20260907T195303Z_478c9b2ef6.json",
+          "sha256": "sha256:24f535d2c278d4578f49060369eda199d3f2733254b8a0fa8ca7c41d27724f4e",
+          "valid": true
+        },
+        "guard_validation_mode": "discovery-budget-schema",
+        "qualification_authority": false,
+        "missing_diagnostics": [
+          "kernel cpuset controller is not delegated; taskset assignment and existing affinity guard remain active"
+        ],
+        "arms": {
+          "P": {
+            "result_path": "projects/enwiki9/operations/provenance/raw_reverse_bz2_terminal_20260907/normalized/P.json",
+            "result_json_bytes": 5205,
+            "result_json_sha256": "513fd38ae59afc949c3a5dfcb355dc7507a3f761e531ef62976f9e792e4e5409",
+            "data_size": 250000,
+            "data_md5": "58df7be6473925f769c9621aeaff05cb",
+            "data_sha256": "665fc689441b68462d88f82dc33212abe9c4824be095d03a556c9b55a2829fd3",
+            "compressed_size": 72723,
+            "program_size": null,
+            "hutter_score": null,
+            "bits_per_byte": 2.327136,
+            "roundtrip_ok": true,
+            "determinism": true,
+            "compressed_sha256": "24c4dcb69a9bfa40504c573afb7185ca63e5abd1faa18ecc8ac1ca6c5b0da63f",
+            "compress_time_s": 0.02612545806914568,
+            "decompress_time_s": 0.012029352830722928,
+            "missing_diagnostics": [
+              "kernel cpuset controller is not delegated; taskset assignment and existing affinity guard remain active"
+            ],
+            "run_id": "raw_reverse_bz2250k_q0_v1__20260907T195303Z_478c9b2ef6__P"
+          },
+          "K": {
+            "result_path": "projects/enwiki9/operations/provenance/raw_reverse_bz2_terminal_20260907/normalized/K.json",
+            "result_json_bytes": 5198,
+            "result_json_sha256": "d346289827706d0f9fcff66105a21628d0c198dbe5ee600609bc3d6bc8388c0a",
+            "data_size": 250000,
+            "data_md5": "58df7be6473925f769c9621aeaff05cb",
+            "data_sha256": "665fc689441b68462d88f82dc33212abe9c4824be095d03a556c9b55a2829fd3",
+            "compressed_size": 72723,
+            "program_size": null,
+            "hutter_score": null,
+            "bits_per_byte": 2.327136,
+            "roundtrip_ok": true,
+            "determinism": true,
+            "compressed_sha256": "24c4dcb69a9bfa40504c573afb7185ca63e5abd1faa18ecc8ac1ca6c5b0da63f",
+            "compress_time_s": 0.01750755007378757,
+            "decompress_time_s": 0.012184386141598225,
+            "missing_diagnostics": [
+              "kernel cpuset controller is not delegated; taskset assignment and existing affinity guard remain active"
+            ],
+            "run_id": "raw_reverse_bz2250k_q0_v1__20260907T195303Z_478c9b2ef6__K"
+          },
+          "D": {
+            "result_path": "projects/enwiki9/operations/provenance/raw_reverse_bz2_terminal_20260907/normalized/D.json",
+            "result_json_bytes": 5198,
+            "result_json_sha256": "fa4a1bf6504d91f6effd75f6ae3cfd397dbbdc8997cb8d6f89f2d2921cd0bb3a",
+            "data_size": 250000,
+            "data_md5": "58df7be6473925f769c9621aeaff05cb",
+            "data_sha256": "665fc689441b68462d88f82dc33212abe9c4824be095d03a556c9b55a2829fd3",
+            "compressed_size": 73563,
+            "program_size": null,
+            "hutter_score": null,
+            "bits_per_byte": 2.354016,
+            "roundtrip_ok": true,
+            "determinism": true,
+            "compressed_sha256": "fa601187e288c2d5e58ae76d4c0f2acfc8936777da3a4de0a1a725706e85996f",
+            "compress_time_s": 0.017747091129422188,
+            "decompress_time_s": 0.012251422042027116,
+            "missing_diagnostics": [
+              "kernel cpuset controller is not delegated; taskset assignment and existing affinity guard remain active"
+            ],
+            "run_id": "raw_reverse_bz2250k_q0_v1__20260907T195303Z_478c9b2ef6__D"
+          }
+        }
+      }
+    }
+  },
   "omega": {
     "experiment": {
       "path": "operations/adaptive/experiments/raw_reverse_bz2250k_q0_v1.json",
@@ -22,5 +116,6 @@
     ]
   },
   "parent": "causal_bucket250k_q0_v1",
-  "status": "candidate"
+  "status": "blocked_dependency",
+  "verdict": "No fresh confirmation or1MB for unchanged reversal. Continue independent source-based exploration of stronger measured substrates rather than another byte-order variation."
 }
