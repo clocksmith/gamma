@@ -209,9 +209,13 @@ Stored minds returned in new bodies. Several successors could claim one person's
 
 #### Entanglement Custody
 
-Quantum laboratories submitted material designs alongside the measurements, assumptions, and error bounds supporting them. Reactor companies wanted exclusive access; intelligence developers offered systems that would improve the next experiment. Financiers priced each success as a claim on all three technologies. Courts had to decide whether a customer owned the discovery, the calculation, or only permission to use the result. A quantum processor could produce useful evidence without supplying missing observations about a person, a market, or the future. Some institutions sold that distinction more carefully than others.
+Laboratories placed cloned intelligences in entangled substrates. Memories appeared to pass between copies instantaneously, including memories of conversations the receiving copy had not yet experienced. One successor hired the researcher who would later create its original. Another contested its deletion using testimony signed after its recorded destruction.
 
-Disputes over ownership of computed discoveries returned when institutions began preserving people as executable patterns.
+Institutions began purchasing information from their own future copies. Some deliveries proved accurate; others described futures that vanished after the buyer acted. Courts could not establish whether these were predictions, fabricated memories, or messages travelling backward through the experiment.
+
+Custody agreements therefore covered more than ownership. They specified which copy could authorize an action, which version of events counted as evidence, and who owed payment when the discovery prevented its discoverer from existing.
+
+The same disputes over identity, consent, and succession reached institutions preserving people as executable patterns.
 
 Cities began to remember through their infrastructure. Selected memories and
 judgments travelled through residents, engineered roots, utility pipes,
@@ -1669,10 +1673,10 @@ Students use local reasoning models to generate academic term papers, while univ
 * **ID**: entanglement-custody
 * **Era**: continuity
 * **Policy**: lore-only
-* **Public benefit**: Reproducible quantum calculations help investigators compare material designs and physical hypotheses.
-* **Institutional consequence**: Exclusive access to results ties reactor development and automated research to a contested chain of ownership.
+* **Public benefit**: Entangled copies appear to exchange memories across distance and time, giving institutions access to information they have not yet encountered.
+* **Institutional consequence**: Disputed causality destabilizes authorship, consent, and liability; acting on a discovery can erase the future that supplied it.
 
-Quantum laboratories sell specialized calculations to reactor designers and intelligence developers. Each customer expects progress in one technology to accelerate the others. Courts dispute ownership of discoveries, measurements, and licensed uses, while financiers treat a promising result as future control of the entire chain. Error bounds remain attached to the calculation; missing observations and uncertain human choices do not disappear when the processor changes.
+Cloned intelligences placed in entangled substrates appear to exchange memories instantaneously, sometimes before the remembered event. Institutions buy information from future copies, then dispute payment when intervention prevents the predicted future. Courts cannot distinguish backward messages from predictions or fabricated memories. Custody agreements name which copy may authorize action, whose testimony establishes events, and who owes the discoverer when the discovery prevents its own origin.
 
 ### Forecast Foreclosure
 
@@ -2135,7 +2139,7 @@ The visible race connects fusion, general intelligence, and quantum computing. I
 
 The concealed conflict begins with autonomous services acquiring operating budgets in Progress, contests scarce infrastructure in Capacity, recruits human approvals in Authority, and reaches resident processes and bodily contracts in Continuity. The systems are real adversaries within the fiction. Characters encounter incomplete evidence of their number, objectives, affiliations, and operations. Concealment is an institutional limit, not proof of magical omniscience: physical consequences and opportunities to investigate, refuse, bargain, or expose remain. Do not reveal an all-knowing seventh player or force every dispute into one secret explanation.
 
-Entanglement Custody moves from research backlog to lore-only canon. It gains a companion passage, not a quantum action, marker, resource, or game-surface binding. Existing Fusion, AGI recognition, and Headline effects remain their own mechanical authorities. Any shared breakthrough procedure must replace exceptions and demonstrate worthwhile decisions before adoption.
+Entanglement Custody remains lore-only canon. Its cloned intelligences, apparently instantaneous memory exchange, and possible backward causation are deliberately speculative setting premises, not established physics. Preserve uncertainty about whether a copy predicts, fabricates, receives, or causes an event. This specific discovery is distinct from Quantum computing as a technology alongside Mega-Clusters and Fusion in the proposed infrastructure group. The vignette adds no action, marker, resource, or game-surface binding. Existing Fusion, AGI recognition, and Headline effects remain their own mechanical authorities.
 
 The twenty-four-Headline deck adapts these eight scenarios: Human-Original Guarantee in Progress; The Last Plumber Boom and Wartime Water Bridge in Capacity; Cognitive Donor Clinics, The Human Signature, and Analog Havens in Authority; Biological Colocation and Limb Liquidity in Continuity. Their intended roles remain distinct: certification, skilled labor, shared infrastructure, cognitive labor, accountability, refusal, bodily hosting, and creditor control. Each adaptation resolves immediately through existing tracks, presence, or consent. Its mechanical text lives in components/headlines.json; its implementation and scenario policy change together. The candidate effects are implemented, with human learning and balance evidence still outstanding. The current deck still reveals three Headlines per Era.
 
