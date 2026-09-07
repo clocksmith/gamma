@@ -51,3 +51,4 @@ Archived files preserve complete H2 records.
 - [part-033.md: 2026-09-05 restored terminal receipt navigation](archive/part-033.md)
 - [part-034.md: 2026-09-05 public FX2 reproduction and measured comparisons](archive/part-034.md)
 - [part-035.md: 2026-09-05 open MIDAS parent and native boundary/checkpoint integration](archive/part-035.md)
+- [part-036.md: 2026-09-05 standalone MIDAS build caching and incremental prediction](archive/part-036.md)

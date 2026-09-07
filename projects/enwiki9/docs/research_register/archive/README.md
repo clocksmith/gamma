@@ -37,3 +37,4 @@
 - [part-033.md: 2026-09-05 restored terminal receipt navigation](part-033.md)
 - [part-034.md: 2026-09-05 public FX2 reproduction and measured comparisons](part-034.md)
 - [part-035.md: 2026-09-05 open MIDAS parent and native boundary/checkpoint integration](part-035.md)
+- [part-036.md: 2026-09-05 standalone MIDAS build caching and incremental prediction](part-036.md)
