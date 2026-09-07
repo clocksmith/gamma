@@ -1,0 +1,332 @@
+{
+  "budget": {
+    "expectedGrossSavingsBytes": 0,
+    "expectedNetSavingsBytes": -10000000,
+    "maximumAddedPackageBytes": 10000000
+  },
+  "causalBoundary": {
+    "availableInformation": [
+      "Encoder: complete bounded raw block, fixed direction and unchanged BZip2 level9.",
+      "Decoder: block framing, stored direction and self-contained BZip2 payload; reverse decoded bytes when direction1."
+    ],
+    "forbiddenInformation": [
+      "Untransmitted dictionaries, supplied probabilities, pretrained models, neighboring campaign state.",
+      "Confirmation input used for development selection."
+    ]
+  },
+  "changedMechanism": "Reverse the complete raw byte sequence inside each independent bounded block, encode it with installed standard-library BZip2 level9, then reverse the independently decoded bytes. No tokenization, dictionary, grammar, new entropy coder or inherited parent probabilities.",
+  "controls": [
+    {
+      "definition": "{\"id\": \"P\", \"mode\": \"P\"}",
+      "id": "P",
+      "role": "comparator"
+    },
+    {
+      "definition": "{\"id\": \"K\", \"mode\": \"K\"}",
+      "id": "K",
+      "role": "comparator"
+    },
+    {
+      "definition": "{\"id\": \"D\", \"mode\": \"D\"}",
+      "id": "D",
+      "role": "treatment"
+    }
+  ],
+  "evidenceClass": "diagnostic",
+  "experimentId": "raw_reverse_bz2250k_q0_v1",
+  "generatedUtc": "2026-09-07T19:52:11.736341+00:00",
+  "hypothesis": {
+    "claim": "Reversing fixed250000-byte raw blocks reduces complete BZip2 level9 archives relative to forward blocks under identical framing.",
+    "falsification": "One fixed opening250KB P/K/D direction comparison. D must be strictly smaller than fresh framed P; K must equal P; all three independently invert and repeat from raw bytes. D is forced even if larger. Equality/loss holds this fixed direction and continues independent search; execution stops are not scientific disproof."
+  },
+  "inputs": [
+    {
+      "id": "bound-0",
+      "path": "tools/raw_reverse_bz2_v1.py",
+      "sha256": "sha256:59612e24aa7888a66ba8eb784ca37553aee8a11d5298383712f7f011bf2311b7"
+    },
+    {
+      "id": "bound-1",
+      "path": "tools/raw_reverse_bz2_gate_v1.py",
+      "sha256": "sha256:1c6166e5977fae4ddf8e039ad2fbc999c22b21df7ef4c4b00234b0c9932d4c1e"
+    },
+    {
+      "id": "bound-2",
+      "path": "tests/test_raw_reverse_bz2_gate_v1.py",
+      "sha256": "sha256:2a7e06e9147a51f7c9e156243ff7c7fa00463de0f3268d825821c87da5ef37e6"
+    },
+    {
+      "id": "bound-3",
+      "path": "tests/test_raw_reverse_bz2_v1.py",
+      "sha256": "sha256:5dd2425d40942c916811b0e7dc5774a2b9f92e1f1cd4373501ba358e7384a51d"
+    },
+    {
+      "id": "bound-4",
+      "path": "tools/dualstream_grammar_gate_v1.py",
+      "sha256": "sha256:7b30a36d4c28113d23d6b9cf475d1b2d48ba40853074c5003322b459af496902"
+    },
+    {
+      "id": "bound-5",
+      "path": "tools/dualstream_grammar_v1.py",
+      "sha256": "sha256:9f31a671610aeb2b0f753b13346a06cf1729a4b6b0ce92d2fd7590b3018023bd"
+    },
+    {
+      "id": "bound-6",
+      "path": "programs/baseline_bz2/program.py",
+      "sha256": "sha256:4739aff6a8e8b40185e788d45e51b158637fefeec3fe9da52f5f2e10c1e141a3"
+    },
+    {
+      "id": "bound-7",
+      "path": "operations/provenance/raw_reverse_bz2_v1_plan.json",
+      "sha256": "sha256:7c50f4adcf73f2d95a7a32032c8e37ba1a56409f58215180dcbb56ac64d85cd8"
+    },
+    {
+      "id": "bound-8",
+      "path": "docs/raw_reverse_bz2_v1.md",
+      "sha256": "sha256:c33ff1ec67da21c19f7d9acde1bcbc5846b74456eedd94a9a05364430e61b6f4"
+    },
+    {
+      "id": "bound-9",
+      "path": "operations/evidence/fixtures/dualstream_opening250k_v1.raw",
+      "sha256": "sha256:665fc689441b68462d88f82dc33212abe9c4824be095d03a556c9b55a2829fd3"
+    },
+    {
+      "id": "bound-10",
+      "path": "operations/provenance/causal_bucket_terminal_20260907.json",
+      "sha256": "sha256:3b59a9bc8222b4295c12a4067e17b5d9fe2d58eeb4bb1ff6dea368c2b6d899f7"
+    },
+    {
+      "id": "bound-11",
+      "path": "operations/adaptive/reflections/20260907T193106Z_9f544523f2.json",
+      "sha256": "sha256:d5ff5310e23f1db2edb71668d037905ba305a6d4a2c13d1caffa90ea536f3513"
+    },
+    {
+      "id": "bound-12",
+      "path": "results/raw_reverse_bz2_unit_20260907/review/summary.json",
+      "sha256": "sha256:cbf2fd0b0934d2f693124562b0b529a14534d7b4c7f96670a3f82e15340ccbdb"
+    },
+    {
+      "id": "bound-13",
+      "path": "results/raw_reverse_bz2_unit_20260907/review/evidence-index.json",
+      "sha256": "sha256:1b5918f0202a8cee420337704ecd393771b40ab1f3f682ec87c8eff6375e73dd"
+    },
+    {
+      "id": "bound-14",
+      "path": "results/raw_reverse_bz2_unit_20260907/review/evidence.zip",
+      "sha256": "sha256:918b0819fe38ac8479d6816563100659ca70ce5f77fe279e153e4b8b1cfe91cf"
+    },
+    {
+      "id": "bound-15",
+      "path": "results/raw_reverse_bz2_gate_unit_20260907/attempt01/summary.json",
+      "sha256": "sha256:be9d3ad6204dc6b4530a969c0d349d8132f4225ee3dd2a57ba1d12951a133491"
+    },
+    {
+      "id": "bound-16",
+      "path": "results/raw_reverse_bz2_gate_unit_20260907/attempt01/index.json",
+      "sha256": "sha256:7301e76ada01014d1524f8e9af067215a72db47b02694fd93b4259a68064659a"
+    },
+    {
+      "id": "bound-17",
+      "path": "results/raw_reverse_bz2_gate_unit_20260907/attempt01/validation.log",
+      "sha256": "sha256:bea99059745581a9759dee1eb2957631168d599a0a80af9c1434afe3951490e0"
+    },
+    {
+      "id": "bound-18",
+      "path": "results/raw_reverse_bz2_gate_unit_20260907/attempt01/evidence.zip",
+      "sha256": "sha256:5264d78f7c5f987ad6bedd159dc293d011b4446a81da697563943a9540fe883d"
+    },
+    {
+      "id": "bound-19",
+      "path": "operations/evidence/20260907_raw_reverse_bz2_unit.json",
+      "sha256": "sha256:a980a883f7e2c35f1f4408b7ce7bb8de22051e68ad1e4006d800b9c711732ad3"
+    },
+    {
+      "id": "grammar-gate-plan",
+      "path": "operations/provenance/raw_reverse_bz2250k_q0_v1_plan.json",
+      "sha256": "sha256:bbe2de0f0ffe7aa0100914da56424868e07a139234e76712ced2583f0f876540"
+    }
+  ],
+  "invariants": [
+    "P/K archives exactly identical; P payload equals unchanged baseline_bz2 compression within common framing.",
+    "D always codes reversed blocks; all treatment inverse/repeat artifacts are retained even on growth.",
+    "All raw inverses, raw repeats and decoder-common coded-input/output projections agree.",
+    "No tokenization, dictionary, grammar, new entropy coder or supplied probabilities.",
+    "CPU2 one codec thread; aggregate1GiB RAM zeroSwap64MiB scratch300wall; each child512MiB AS60CPU90wall32MiB file. Shared-host timing diagnostic.",
+    "Complete package/license/runtime/options and full-corpus score unknown. Added package cap10M is a bound, not a measured estimate.",
+    "28 synthetic tests and36 actual codec phases pass; no corpus compression credit."
+  ],
+  "killPredicates": [
+    {
+      "id": "no-impossibility-claim",
+      "measurement": "scientific_rejection_applicable",
+      "operator": "eq",
+      "threshold": true
+    }
+  ],
+  "measurements": [
+    {
+      "definition": "Closed diagnostic evidence only; full-corpus promotion remains unauthorized.",
+      "id": "correctness_pass",
+      "unit": "boolean"
+    },
+    {
+      "definition": "Closed diagnostic evidence only; full-corpus promotion remains unauthorized.",
+      "id": "frozen_inputs_reverified",
+      "unit": "boolean"
+    },
+    {
+      "definition": "Closed diagnostic evidence only; full-corpus promotion remains unauthorized.",
+      "id": "continuous_guard_pass",
+      "unit": "boolean"
+    },
+    {
+      "definition": "Closed diagnostic evidence only; full-corpus promotion remains unauthorized.",
+      "id": "artifact_closure_pass",
+      "unit": "boolean"
+    },
+    {
+      "definition": "Closed diagnostic evidence only; full-corpus promotion remains unauthorized.",
+      "id": "accounting_pass",
+      "unit": "boolean"
+    },
+    {
+      "definition": "Closed diagnostic evidence only; full-corpus promotion remains unauthorized.",
+      "id": "p_k_archive_identity_pass",
+      "unit": "boolean"
+    },
+    {
+      "definition": "Closed diagnostic evidence only; full-corpus promotion remains unauthorized.",
+      "id": "raw_encoder_repeat_proved",
+      "unit": "boolean"
+    },
+    {
+      "definition": "Closed diagnostic evidence only; full-corpus promotion remains unauthorized.",
+      "id": "promotion_authorized",
+      "unit": "boolean"
+    },
+    {
+      "definition": "Closed diagnostic evidence only; full-corpus promotion remains unauthorized.",
+      "id": "scientific_rejection_applicable",
+      "unit": "boolean"
+    },
+    {
+      "definition": "Closed diagnostic evidence only; full-corpus promotion remains unauthorized.",
+      "id": "strict_d_improvement",
+      "unit": "boolean"
+    },
+    {
+      "definition": "Measured finite development quantity, not a full-corpus forecast or package score.",
+      "id": "native_phases",
+      "unit": "processes"
+    },
+    {
+      "definition": "Measured finite development quantity, not a full-corpus forecast or package score.",
+      "id": "raw_bytes",
+      "unit": "bytes"
+    },
+    {
+      "definition": "Measured finite development quantity, not a full-corpus forecast or package score.",
+      "id": "p_minus_d_bytes",
+      "unit": "bytes"
+    },
+    {
+      "definition": "Measured finite development quantity, not a full-corpus forecast or package score.",
+      "id": "p_minus_k_bytes",
+      "unit": "bytes"
+    }
+  ],
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:16badfa6c1a53b47bcc12b089fdd9c21f7405ea56a84344d60c28d2252da8288",
+    "objectiveId": "gamma-enwiki9-hutter-99m-v2",
+    "objectivePath": "contracts/research/v2/objective-contract.json",
+    "targetScoreBytes": 99000000
+  },
+  "objectiveCreditBytes": 0,
+  "outputManifestPolicy": "complete-result-artifacts-v1",
+  "outputs": [
+    "results/raw_reverse_bz2250k_q0_v1/P-encode.execution.json",
+    "results/raw_reverse_bz2250k_q0_v1/P-encode.stdout",
+    "results/raw_reverse_bz2250k_q0_v1/P-encode.stderr",
+    "results/raw_reverse_bz2250k_q0_v1/P-decode.execution.json",
+    "results/raw_reverse_bz2250k_q0_v1/P-decode.stdout",
+    "results/raw_reverse_bz2250k_q0_v1/P-decode.stderr",
+    "results/raw_reverse_bz2250k_q0_v1/P-repeat.execution.json",
+    "results/raw_reverse_bz2250k_q0_v1/P-repeat.stdout",
+    "results/raw_reverse_bz2250k_q0_v1/P-repeat.stderr",
+    "results/raw_reverse_bz2250k_q0_v1/P.rbz",
+    "results/raw_reverse_bz2250k_q0_v1/P.raw",
+    "results/raw_reverse_bz2250k_q0_v1/P.repeat.rbz",
+    "results/raw_reverse_bz2250k_q0_v1/P.result.json",
+    "results/raw_reverse_bz2250k_q0_v1/K-encode.execution.json",
+    "results/raw_reverse_bz2250k_q0_v1/K-encode.stdout",
+    "results/raw_reverse_bz2250k_q0_v1/K-encode.stderr",
+    "results/raw_reverse_bz2250k_q0_v1/K-decode.execution.json",
+    "results/raw_reverse_bz2250k_q0_v1/K-decode.stdout",
+    "results/raw_reverse_bz2250k_q0_v1/K-decode.stderr",
+    "results/raw_reverse_bz2250k_q0_v1/K-repeat.execution.json",
+    "results/raw_reverse_bz2250k_q0_v1/K-repeat.stdout",
+    "results/raw_reverse_bz2250k_q0_v1/K-repeat.stderr",
+    "results/raw_reverse_bz2250k_q0_v1/K.rbz",
+    "results/raw_reverse_bz2250k_q0_v1/K.raw",
+    "results/raw_reverse_bz2250k_q0_v1/K.repeat.rbz",
+    "results/raw_reverse_bz2250k_q0_v1/K.result.json",
+    "results/raw_reverse_bz2250k_q0_v1/D-encode.execution.json",
+    "results/raw_reverse_bz2250k_q0_v1/D-encode.stdout",
+    "results/raw_reverse_bz2250k_q0_v1/D-encode.stderr",
+    "results/raw_reverse_bz2250k_q0_v1/D-decode.execution.json",
+    "results/raw_reverse_bz2250k_q0_v1/D-decode.stdout",
+    "results/raw_reverse_bz2250k_q0_v1/D-decode.stderr",
+    "results/raw_reverse_bz2250k_q0_v1/D-repeat.execution.json",
+    "results/raw_reverse_bz2250k_q0_v1/D-repeat.stdout",
+    "results/raw_reverse_bz2250k_q0_v1/D-repeat.stderr",
+    "results/raw_reverse_bz2250k_q0_v1/D.rbz",
+    "results/raw_reverse_bz2250k_q0_v1/D.raw",
+    "results/raw_reverse_bz2250k_q0_v1/D.repeat.rbz",
+    "results/raw_reverse_bz2250k_q0_v1/D.result.json",
+    "results/raw_reverse_bz2250k_q0_v1/costs-table.json",
+    "results/raw_reverse_bz2250k_q0_v1/artifacts.json",
+    "results/raw_reverse_bz2250k_q0_v1/stage-decision.json",
+    "results/raw_reverse_bz2250k_q0_v1/decision.json"
+  ],
+  "parent": {
+    "candidateId": "causal_bucket250k_q0_v1",
+    "revision": {
+      "path": "operations/adaptive/candidate-revisions/causal_bucket250k_q0_v1/20260907T193055566673Z_d296f5cf56e1.json",
+      "sha256": "sha256:1e5f5ee9d4959c2372044299e6e72e2e8fb04c5946987c612f1bca43f75d58a9"
+    }
+  },
+  "population": {
+    "coordinate": "raw_identity_v1 offsets0..249999; fixed250000-byte independent blocks; BZip2 level9 and matched65-byte archive/block framing.",
+    "scopeBytes": 250000,
+    "scopeSymbols": 250000,
+    "selection": "Previously examined opening development only; fixed direction. Fresh250KB validation and1MB confirmation require separately frozen selection and admission. Historical72658 raw-BZip2 size is metadata, not an authenticated comparison archive.",
+    "unit": "raw byte"
+  },
+  "promotionPredicates": [
+    {
+      "id": "diagnostic-no-promotion",
+      "measurement": "promotion_authorized",
+      "operator": "eq",
+      "threshold": true
+    }
+  ],
+  "proposalId": "raw_reverse_bz2250k_q0_v1",
+  "pythonSourceClosureEntries": [
+    "bound-0",
+    "bound-1",
+    "bound-4",
+    "bound-5"
+  ],
+  "registrationTiming": "prospective",
+  "schema": "gamma.enwiki9.adaptive-experiment-contract.v1",
+  "search": {
+    "expectedMemoryRatio": 1,
+    "expectedRuntimeRatio": 1,
+    "expectedTransferRetention": 0,
+    "interactionRisk": 1,
+    "uncertaintyRisk": 1
+  },
+  "status": "frozen"
+}

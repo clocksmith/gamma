@@ -1,0 +1,93 @@
+{
+  "status": "passed",
+  "tests_passed": 19,
+  "native_synthetic_phases": 18,
+  "fixtures": {
+    "walk": {
+      "raw_bytes": 8192,
+      "archive_bytes": {
+        "D": 2612,
+        "K": 2631,
+        "P": 2631
+      },
+      "p_minus_d_bytes": 19,
+      "native_phases": 9,
+      "exact_inverse": true,
+      "raw_encoder_repeat": true,
+      "p_k_byte_identity": true,
+      "forced_treatment": true
+    },
+    "arbitrary": {
+      "raw_bytes": 2048,
+      "archive_bytes": {
+        "D": 2494,
+        "K": 2516,
+        "P": 2516
+      },
+      "p_minus_d_bytes": 22,
+      "native_phases": 9,
+      "exact_inverse": true,
+      "raw_encoder_repeat": true,
+      "p_k_byte_identity": true,
+      "forced_treatment": true
+    }
+  },
+  "bindings": [
+    {
+      "path": "tools/raw_reverse_bz2_gate_v1.py",
+      "bytes": 15807,
+      "sha256": "1c6166e5977fae4ddf8e039ad2fbc999c22b21df7ef4c4b00234b0c9932d4c1e"
+    },
+    {
+      "path": "tests/test_raw_reverse_bz2_gate_v1.py",
+      "bytes": 15552,
+      "sha256": "2a7e06e9147a51f7c9e156243ff7c7fa00463de0f3268d825821c87da5ef37e6"
+    },
+    {
+      "path": "tools/raw_reverse_bz2_v1.py",
+      "bytes": 6197,
+      "sha256": "59612e24aa7888a66ba8eb784ca37553aee8a11d5298383712f7f011bf2311b7"
+    },
+    {
+      "path": "results/raw_reverse_bz2_gate_unit_20260907/attempt01/validation.log",
+      "bytes": 2489,
+      "sha256": "bea99059745581a9759dee1eb2957631168d599a0a80af9c1434afe3951490e0"
+    },
+    {
+      "path": "results/raw_reverse_bz2_gate_unit_20260907/attempt01/evidence.zip",
+      "bytes": 85939,
+      "sha256": "5264d78f7c5f987ad6bedd159dc293d011b4446a81da697563943a9540fe883d"
+    }
+  ],
+  "bundle_file_count": 87,
+  "schema": "gamma.enwiki9.raw-reverse-bz2-gate-unit.v1",
+  "scope": "Predetermined invented inputs only; no corpus read or corpus launch.",
+  "boundaries": "Actual child phases use existing shared driver bounds. Canonical admission mocked only inside synthetic integration; separate tests validate source/control/plan policies.",
+  "limits": {
+    "cpu": 5,
+    "address_space_bytes": 536870912,
+    "cpu_seconds": 60,
+    "wall_stop_seconds": 90,
+    "file_bytes": 33554432
+  },
+  "checks": [
+    "fresh forward BZip2 payload equality",
+    "exact P/K byte identity",
+    "forced reversed input hash and direction",
+    "all three independent raw inverses and repeats",
+    "archive framing and payload accounting",
+    "decoder common-report parity",
+    "inverse/repeat/report/direction/cost corruption rejection",
+    "final authentication failure prevents table publication",
+    "plan stage and population restrictions",
+    "source closure and controls",
+    "read-only validation and output replacement refusal",
+    "negative size difference remains measurement"
+  ],
+  "complete_package_bytes": null,
+  "full_corpus_score_bytes": null,
+  "objective_credit_bytes": 0,
+  "interpretation": "Synthetic implementation and runner correctness only. Fresh matched framed P is the comparator; historical BZip2 metadata and Deflate results provide no direction credit.",
+  "command": "mkdir -p results/raw_reverse_bz2_gate_unit_20260907/attempt01/tmp; timeout --signal=TERM --kill-after=2s 90s taskset -c 5 /usr/bin/python3 - <<'PY' > results/raw_reverse_bz2_gate_unit_20260907/attempt01/validation.log 2>&1\nimport os,resource,unittest\nfrom pathlib import Path\nout=Path.cwd()/'results/raw_reverse_bz2_gate_unit_20260907/attempt01'\nos.environ['TMPDIR']=str(out/'tmp')\nos.environ['RAW_REVERSE_GATE_EVIDENCE_ZIP']=str(out/'evidence.zip')\nresource.setrlimit(resource.RLIMIT_AS,(536870912,536870912))\nresource.setrlimit(resource.RLIMIT_CPU,(60,60))\nresource.setrlimit(resource.RLIMIT_FSIZE,(33554432,33554432))\nsuite=unittest.defaultTestLoader.loadTestsFromName('tests.test_raw_reverse_bz2_gate_v1')\nresult=unittest.TextTestRunner(verbosity=2).run(suite)\nraise SystemExit(not result.wasSuccessful())\nPY",
+  "command_exit_code": 0
+}

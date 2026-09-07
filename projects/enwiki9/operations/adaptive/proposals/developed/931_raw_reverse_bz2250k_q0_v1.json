@@ -1,0 +1,47 @@
+{
+  "candidate_id": "raw_reverse_bz2250k_q0_v1",
+  "claimed_at": "2026-09-07T19:52:43+00:00",
+  "created_at": "2026-09-07T19:52:43+00:00",
+  "developed_at": "2026-09-07T19:52:44+00:00",
+  "evidence": [
+    {
+      "path": "operations/evidence/20260907_raw_reverse_bz2_unit.json",
+      "sha256": "sha256:a980a883f7e2c35f1f4408b7ce7bb8de22051e68ad1e4006d800b9c711732ad3"
+    }
+  ],
+  "expected_savings_bytes": 0,
+  "experiment": {
+    "path": "operations/adaptive/experiments/raw_reverse_bz2250k_q0_v1.json",
+    "sha256": "sha256:b7e8f912942bd38786bf1ac83eef9a8b17c8ed5cfe1916ce5eebb078091c39d6"
+  },
+  "hypothesis": "Reversing fixed250000-byte raw blocks reduces complete BZip2 level9 archives relative to forward blocks under identical framing.",
+  "interfaces_exposed": [
+    "Raw block -> unchanged BZip2 in forward or reversed direction -> exact original bytes."
+  ],
+  "kill_condition": "Hold fixed direction if P-D<=0 under valid controls; execution stops are not scientific disproof.",
+  "max_program_bytes": 10000000,
+  "mechanism_change": "replace_representation",
+  "mechanism_change_bonus": 18,
+  "mechanism_class": "representation",
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:16badfa6c1a53b47bcc12b089fdd9c21f7405ea56a84344d60c28d2252da8288",
+    "objectiveId": "gamma-enwiki9-hutter-99m-v2",
+    "objectivePath": "contracts/research/v2/objective-contract.json",
+    "targetScoreBytes": 99000000
+  },
+  "owner": "root_explore",
+  "parent": "causal_bucket250k_q0_v1",
+  "parent_proposal_id": null,
+  "priority": 50,
+  "promotion_condition": "D<P with K=P, independent inverses and raw repeats allows separately frozen validation; no complete-package or full-corpus credit.",
+  "proposal_id": "raw_reverse_bz2250k_q0_v1",
+  "retired_neighborhoods": [
+    "Whole-block direction retains adjacency oppositely; no predecessor bucket grouping, grammar, opcode dictionary or parent probability trace."
+  ],
+  "schema": "gamma.enwiki9.algorithm-proposal.v2",
+  "search_priority": 68,
+  "state": "developed",
+  "title": "Fixed raw-block BZip2 direction"
+}
