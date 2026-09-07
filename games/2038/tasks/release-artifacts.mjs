@@ -1,4 +1,6 @@
 import { mkdir, readFile, writeFile } from "node:fs/promises";
+import { execFile } from "node:child_process";
+import { promisify } from "node:util";
 import { dirname } from "node:path";
 
 export async function writeImmutableArtifact(path, contents) {
@@ -22,4 +24,10 @@ export async function writeImmutableArtifact(path, contents) {
     throw error;
   }
   return true;
+}
+
+// Publication and kit freezing verify immutable identity; ordinary authoring
+// checks can validate revised prose before a new release is declared.
+export async function verifyRelease(root) {
+  return promisify(execFile)(process.execPath, ["tasks/create-game-release.mjs", "--verify"], { cwd: root });
 }

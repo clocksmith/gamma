@@ -339,7 +339,7 @@ test("Era overviews retain institutions and scenarios alongside authorized mecha
   const currentWorld = await readJson("dist/runtime/world-copy.json");
   const originalWorld = previous.contentGraph["components/world.json"];
   assert.deepEqual(currentWorld.endings.map(row => row.id), originalWorld.endings.map(row => row.id));
-  const { factions } = await readJson("components/factions.json");
+  const { factions } = await readJson("dist/runtime/factions.json");
   for (const faction of factions) {
     const old = previous.contentGraph["components/factions.json"].factions.find(row => row.id === faction.id);
     assert.deepEqual(faction.ceo, old.ceo, "CEO remains the same faction character");

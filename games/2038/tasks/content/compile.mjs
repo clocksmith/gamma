@@ -77,7 +77,7 @@ for (const [name, descriptor] of Object.entries(graph.contexts || {})) {
   const collectionName = typeof descriptor === "string" ? undefined : descriptor.collection;
   const contextPath = resolveSourcePath(path, `context ${name}`, sourceRoots);
   const raw = path.endsWith(".md")
-    ? (await readWorldDocument(contextPath)).worldCopy
+    ? playerContent((await readWorldDocument(contextPath)).worldCopy)
     : playerContent(await readJson(contextPath));
   const collections = Object.values(raw).filter(Array.isArray);
   const entries = collectionName

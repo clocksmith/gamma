@@ -62,3 +62,24 @@ export function validateReferenceLayout(source, path) {
     }
   }
 }
+
+// Strict named Markdown tables share the same section ownership as excerpts.
+export function documentTable(source, name, columns) {
+  const lines = documentSection(source, name).trim().split(/\r?\n/);
+  const cells = line => {
+    if (!/^\|.*\|$/.test(line) || line.includes("\0")) throw new Error(`Malformed ${name} table row`);
+    return line.slice(1, -1).replace(/\\\|/g, "\0").split("|")
+      .map(value => value.replace(/\0/g, "|").trim());
+  };
+  const separator = cells(lines[1] || "");
+  if (JSON.stringify(cells(lines[0])) !== JSON.stringify(columns) || separator.length !== columns.length ||
+      separator.some(value => !/^:?-{3,}:?$/.test(value))) {
+    throw new Error(`Unexpected ${name} table columns`);
+  }
+  if (lines.length < 3) throw new Error(`Empty ${name} table`);
+  return lines.slice(2).map(line => {
+    const values = cells(line);
+    if (values.length !== columns.length || values.some(value => !value)) throw new Error(`Incomplete ${name} table row`);
+    return Object.fromEntries(columns.map((column, index) => [column, values[index]]));
+  });
+}

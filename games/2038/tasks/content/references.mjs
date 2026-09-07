@@ -23,6 +23,10 @@ function parseReference(reference) {
 }
 
 function formatValue(value, formatter, variables) {
+  if (formatter === "trim") {
+    if (typeof value !== "string") throw new Error("Trim formatter requires a string.");
+    return value.trim();
+  }
   if (formatter === "headings-up") {
     if (typeof value !== "string") throw new Error("Heading formatter requires a string.");
     return value.replace(/^#{2,6} /gm, heading => heading.slice(1));

@@ -1,11 +1,16 @@
 import { createHash } from "node:crypto";
 import assert from "node:assert/strict";
-import { readFile } from "node:fs/promises";
+import { cp, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import test from "node:test";
+import { execFile } from "node:child_process";
+import { promisify } from "node:util";
+import { tmpdir } from "node:os";
+import { join, resolve } from "node:path";
+import { verifyRelease } from "../tasks/release-artifacts.mjs";
 import { parseWorldCopyFromText, parseScenarioCanon, readWorldDocument } from "../tasks/content/world-parser.mjs";
 import { buildScenarioIndex } from "../tasks/content/scenario-index.mjs";
 import { validateEraSituationLedger } from "../tasks/content/validate-era-situation-ledger.mjs";
-import { playerContent, documentSection } from "../tasks/content/authored.mjs";
+import { playerContent, documentSection, documentSections, documentTable } from "../tasks/content/authored.mjs";
 const read = path => readFile(new URL(`../${path}`, import.meta.url), "utf8");
 
 test("Markdown is the complete source of runtime copy and scenario definitions", async () => {
@@ -46,8 +51,8 @@ test("canon requires explicit unique identities, dispositions, and complete narr
   const text = await read("world.md");
   for (const [changed, error] of [
     [text.replace("* **ID**: agi-refinancing-declaration", "* **ID**: abundance-constituency"), /Duplicate scenario ID/],
-    [text.replace("* **Disposition**: adopted", "* **Disposition**: unknown"), /Invalid scenario disposition/],
-    [text.replace(/^\* \*\*Disposition\*\*:[^\n]*\n/m, ""), /Missing.*Disposition/],
+    [text.replace("* **Policy**: adopted-revised", "* **Policy**: unknown"), /Unknown scenario policy/],
+    [text.replace(/^\* \*\*Policy\*\*:[^\n]*\n/m, ""), /Missing.*Policy/],
     [text.replace("* **Era**: progress", "* **Era**: progress\n* **Era**: capacity"), /Duplicate.*field: Era/],
     [text.replace("* **Era**:", "* **Erra**:"), /Unknown.*field: Erra/],
     [text.replace("<!-- scenario-canon:start -->", "<!-- scenario-canon:start -->\n```json"), /not fenced data/]
@@ -98,5 +103,45 @@ test("current teaching materials follow the release declaration and supported Au
     assert.doesNotMatch(table, /6 players/);
     assert.equal(table.split("\n")[0], "| Era | 2 players | 3 players | 4 players | 5 players |");
     assert.ok(table.includes("| IV | 3 | 4 | 5 | 6 |"));
+  }
+});
+
+
+test("shared policy tables reject malformed rows and preserve escaped punctuation", () => {
+  const source = "<!-- policies:start -->\n| Key | Meaning |\n| --- | --- |\n| sample | One \\| two |\n<!-- policies:end -->";
+  assert.deepEqual(documentTable(source, "policies", ["Key", "Meaning"]), [{Key:"sample",Meaning:"One | two"}]);
+  assert.throws(() => documentTable(source.replace("| --- | --- |", "| --- |"), "policies", ["Key", "Meaning"]), /columns/);
+  assert.throws(() => documentTable(source.replace("| sample | One \\| two |", "| sample | |"), "policies", ["Key", "Meaning"]), /Incomplete/);
+});
+
+test("an edited Markdown excerpt compiles while stale release publication and freezing are rejected", async () => {
+  const root = new URL("../", import.meta.url);
+  const fixture = await mkdtemp(join(tmpdir(), "mandate-world-authoring-"));
+  const exec = promisify(execFile);
+  try {
+    const graph = JSON.parse(await read("content/graph.json"));
+    const release = JSON.parse(await read("versions/current-release.json"));
+    const sources = new Set([...graph.sourceRoots, "tasks", "lab", "docs", "physical", "package.json",
+      "dist/runtime", "dist/docs", "versions/current-release.json"]);
+    for (const source of sources) await cp(new URL(source, root), resolve(fixture, source), {recursive:true});
+    await exec(process.execPath, ["tasks/create-game-release.mjs"], {cwd:fixture});
+    await verifyRelease(fixture);
+    const sealedManifest = await readFile(resolve(fixture, `versions/${release.gameVersion}/manifest.json`), "utf8");
+    const path = resolve(fixture, "world.md");
+    const original = await readFile(path, "utf8");
+    const id = Object.keys(documentSections(original)).find(key => key.startsWith("copy-") && key.endsWith("-motto"));
+    assert.ok(id);
+    const marker = `<!-- ${id}:start -->`;
+    await writeFile(path, original.replace(marker, marker + "\nAuthoring fixture correction."));
+    await exec(process.execPath, ["tasks/content/compile.mjs"], {cwd:fixture});
+    await exec(process.execPath, ["tasks/content/compile.mjs", "--check"], {cwd:fixture});
+    const runtime = JSON.parse(await readFile(resolve(fixture, "dist/runtime/factions.json"), "utf8"));
+    assert.ok(runtime.factions.some(f => f.motto.startsWith("Authoring fixture correction.")));
+    await assert.rejects(verifyRelease(fixture), /Stale generated release artifact/);
+    await assert.rejects(exec(process.execPath, ["tasks/build-firebase-site.mjs", "--profile", "public-playtest"], {cwd:fixture}), /Stale generated release artifact/);
+    await assert.rejects(exec(process.execPath, ["tasks/create-physical-kit.mjs", "--local"], {cwd:fixture}), /Stale generated release artifact/);
+    assert.equal(await readFile(resolve(fixture, `versions/${release.gameVersion}/manifest.json`), "utf8"), sealedManifest);
+  } finally {
+    await rm(fixture, {recursive:true,force:true});
   }
 });

@@ -85,7 +85,7 @@ physical teachability, numerical balance, or that the AGI coda is enjoyable.
 ## Folder Map
 
 - [`world.md`](world.md), [`rules.md`](rules.md), and [`ui.json`](ui.json) own lore, play instructions, and browser wording.
-- [`components/`](components/) contains complete component records with wording, mechanics, and scenario notes; deferred modules live under `experimental/components/`.
+- [`components/`](components/) contains mechanical records with rule wording, Markdown prose references, and scenario links; deferred modules live under `experimental/components/`.
 - [`content/`](content/README.md) contains build declarations, reference templates, shared variables, simulation copy, and numeric provenance.
 - [`physical/`](physical/README.md) owns component form and state encoding. The supported box inventory is generated from `rules.md`.
 - [`dist/docs/`](dist/docs/) is compiler-owned Markdown projected from declared
@@ -117,7 +117,7 @@ the canonical server:
   art-direction placeholders.
 
 `npm start` intentionally remains the raw `node tasks/serve.mjs` contract used
-by the release gate. On a clean checkout, use `npm run dev`; if generated views
+by authoring checks. On a clean checkout, use `npm run dev`; if generated views
 are already current, `npm start` serves them without rebuilding.
 
 The public playtest interface at `https://canvascontext.com/` contains only the
@@ -194,9 +194,10 @@ node tasks/content/compile.mjs --check
 node tasks/check-project.mjs
 ```
 
-`npm run check` is the release gate. It verifies the declared executable
-bundle, its synchronized physical-rules candidate, both
-identity vocabularies, numeric provenance, and generated content.
+`npm run check` validates current authored content, identity vocabularies, numeric
+provenance, and generated projections. It can run during prose editing.
+`npm run game:release:verify` additionally checks frozen release identity and is
+required by public site generation and physical-kit freezing.
 
 Create and verify the attributed artifacts with:
 

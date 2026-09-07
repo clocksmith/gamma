@@ -238,7 +238,6 @@ test("internal review build remains complete but explicitly non-deployable", asy
       "gallery.html",
       "gallery-baseline.html",
       "library/index.html",
-      "docs/thematic-content-bible.html",
       "docs/manufacturing-and-publishing-study.html",
       "docs/balance-and-exploitability.html",
       "docs/design-decisions.html",
@@ -251,6 +250,7 @@ test("internal review build remains complete but explicitly non-deployable", asy
     ]) {
       assert.ok((await stat(resolve(outputRoot, required))).isFile(), `reviews ${required}`);
     }
+    await assert.rejects(stat(resolve(outputRoot, "docs/thematic-content-bible.html")), { code: "ENOENT" });
     const rootIndex = await readFile(resolve(outputRoot, "index.html"), "utf8");
     assert.match(rootIndex, /Simulation lab/i);
     assert.match(rootIndex, /Complete content gallery/i);
