@@ -3,6 +3,7 @@ import { dirname, resolve, sep } from "node:path";
 import { documentSection, documentSections, omitDocumentSections, playerContent, stripSectionMarkers, validateReferenceLayout } from "./authored.mjs";
 import { buildScenarioIndex } from "./scenario-index.mjs";
 import { assertNoReferences, resolveString, resolveValue } from "./references.mjs";
+import { readWorldDocument } from "./world-parser.mjs";
 
 const projectRoot = resolve(import.meta.dirname, "../..");
 const args = process.argv.slice(2);
@@ -75,7 +76,9 @@ for (const [name, descriptor] of Object.entries(graph.contexts || {})) {
   const path = typeof descriptor === "string" ? descriptor : descriptor.path;
   const collectionName = typeof descriptor === "string" ? undefined : descriptor.collection;
   const contextPath = resolveSourcePath(path, `context ${name}`, sourceRoots);
-  const raw = playerContent(await readJson(contextPath));
+  const raw = path.endsWith(".md")
+    ? (await readWorldDocument(contextPath)).worldCopy
+    : playerContent(await readJson(contextPath));
   const collections = Object.values(raw).filter(Array.isArray);
   const entries = collectionName
     ? raw[collectionName]
@@ -105,10 +108,12 @@ variables.excerpts = excerpts;
 
 const contexts = {};
 for (const [name, context] of Object.entries(rawContexts)) {
-  const { byId: ignoredById, ...raw } = context;
-  const resolved = resolveValue(raw, variables);
-  const collections = Object.values(resolved).filter(Array.isArray);
   const descriptor = graph.contexts[name];
+  const path = typeof descriptor === "string" ? descriptor : descriptor.path;
+  const isMd = path.endsWith(".md");
+  const { byId: ignoredById, ...raw } = context;
+  const resolved = isMd ? raw : resolveValue(raw, variables);
+  const collections = Object.values(resolved).filter(Array.isArray);
   const collectionName = typeof descriptor === "string" ? undefined : descriptor.collection;
   const entries = collectionName
     ? resolved[collectionName]
@@ -141,10 +146,16 @@ for (const artifact of graph.artifacts) {
 
   let output;
   if (artifact.format === "json") {
-    const resolved = resolveValue(
-      playerContent(await readJson(sourcePath)),
-      variables
-    );
+    let resolved;
+    if (artifact.source.endsWith(".md")) {
+      const { worldCopy } = await readWorldDocument(sourcePath);
+      resolved = resolveValue(playerContent(worldCopy), variables);
+    } else {
+      resolved = resolveValue(
+        playerContent(await readJson(sourcePath)),
+        variables
+      );
+    }
     assertNoReferences(resolved, artifact.source);
     output = `${JSON.stringify(resolved, null, 2)}\n`;
   } else if (artifact.format === "text") {

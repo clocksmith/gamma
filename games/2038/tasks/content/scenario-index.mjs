@@ -1,6 +1,7 @@
 import { readFile } from "node:fs/promises";
 import { resolve } from "node:path";
 import { documentSection } from "./authored.mjs";
+import { readWorldDocument } from "./world-parser.mjs";
 
 const root = resolve(import.meta.dirname, "../..");
 const readJson = async path => JSON.parse(await readFile(resolve(root, path), "utf8"));
@@ -14,8 +15,7 @@ export async function scenarioSurfaces() {
     ["components/reference-cards.json", "eraCards", "reference", "round"],
     ["components/projects.json", "projects", "project", "unlockedRound"],
     ["components/projects.json", "institutionalHistory", "history", "unlockedRound"],
-    ["components/factions.json", "factions", "faction", "round"],
-    ["components/world.json", "endings", "ending", null]
+    ["components/factions.json", "factions", "faction", "round"]
   ];
   const surfaces = [];
   for (const [path, collection, kind, eraKey] of specifications) {
@@ -33,6 +33,15 @@ export async function scenarioSurfaces() {
         });
       }
     }
+  }
+  const { worldCopy } = await readWorldDocument();
+  for (const ending of worldCopy.endings) {
+    surfaces.push({
+      surfaceId: `ending:${ending.id}`,
+      eraOrder: 4,
+      copyReference: `world.md#endings/${ending.id}`,
+      record: ending
+    });
   }
   return surfaces;
 }
@@ -77,12 +86,7 @@ export function assembleScenarioIndex({ surfaces, backlog, deploymentProfiles })
 export async function buildScenarioIndex() {
   const graph = await readJson("content/graph.json");
   if (graph.world !== "world.md") throw new Error("The world source must be world.md.");
-  const world = await readFile(resolve(root, graph.world), "utf8");
-  const section = documentSection(world, "scenario-backlog").trim();
-  const match = /^```json\r?\n([\s\S]*)\r?\n```$/.exec(section);
-  if (!match) throw new Error("Scenario backlog must be one JSON code block in world.md.");
-  const backlog = JSON.parse(match[1]);
-  if (!Array.isArray(backlog)) throw new Error("Scenario backlog must be an array.");
+  const { backlog } = await readWorldDocument(graph.world);
   return assembleScenarioIndex({
     surfaces: await scenarioSurfaces(), backlog, deploymentProfiles: graph.deploymentProfiles
   });

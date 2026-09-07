@@ -110,8 +110,7 @@ test("physical sources are projected from declared ownership roots", async () =>
     "components/headlines.json",
     "components/mandates.json",
     "components/reference-cards.json",
-    "components/projects.json",
-    "components/world.json"
+    "components/projects.json"
   ];
 
   for (const source of physicalSources) {
@@ -332,11 +331,14 @@ test("Era overviews retain institutions and scenarios alongside authorized mecha
   const player = source.split("<!-- player-world:start -->")[1].split("<!-- player-world:end -->")[0];
   assert.doesNotMatch(player, /Mara|Lio|Southbank|Chapter/);
   for (const subtitle of ["AI becomes ordinary", "AI becomes infrastructure", "AI begins deciding for people", "people and institutions become reproducible"]) assert.ok(player.toLowerCase().includes(subtitle.toLowerCase()));
-  for (const [file, collection] of [["factions.json", "factions"], ["headlines.json", "headlines"], ["reference-cards.json", "eraCards"], ["world.json", "endings"]]) {
+  for (const [file, collection] of [["factions.json", "factions"], ["headlines.json", "headlines"], ["reference-cards.json", "eraCards"]]) {
     const current = await readJson(`components/${file}`);
     const original = previous.contentGraph[`components/${file}`];
     assert.deepEqual(current[collection].map(row => row.id), original[collection].map(row => row.id));
   }
+  const currentWorld = await readJson("dist/runtime/world-copy.json");
+  const originalWorld = previous.contentGraph["components/world.json"];
+  assert.deepEqual(currentWorld.endings.map(row => row.id), originalWorld.endings.map(row => row.id));
   const { factions } = await readJson("components/factions.json");
   for (const faction of factions) {
     const old = previous.contentGraph["components/factions.json"].factions.find(row => row.id === faction.id);

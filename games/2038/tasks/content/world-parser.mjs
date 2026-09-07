@@ -71,7 +71,7 @@ export function parseWorldCopyFromText(worldText) {
 
   // Parse Endings from player-world
   const endings = [];
-  const endingMatches = [...playerWorld.matchAll(/###\s+([^\n]+)\r?\n\r?\n_Condition:\s*([^_]+)_\r?\n\r?\n([\s\S]+?)(?=\r?\n###|\r?\n<!--|\Z)/g)];
+  const endingMatches = [...playerWorld.matchAll(/###\s+([^\n]+)\r?\n\r?\n_Condition:\s*([^_]+)_\r?\n\r?\n([\s\S]+?)(?=\r?\n###|\r?\n<!--|$)/g)];
   for (const match of endingMatches) {
     const name = match[1].trim();
     const condition = match[2].trim();
