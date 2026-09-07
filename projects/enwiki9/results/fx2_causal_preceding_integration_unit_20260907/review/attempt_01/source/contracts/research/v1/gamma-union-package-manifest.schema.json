@@ -1,0 +1,109 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gamma.local/contracts/research/v1/gamma-union-package-manifest.schema.json",
+  "title": "Gamma Union Package Manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "candidate_id",
+    "root_semantics",
+    "path_order",
+    "symlinks_allowed",
+    "hardlinks_allowed",
+    "special_files_allowed",
+    "file_count",
+    "total_logical_bytes",
+    "entries"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "gamma-union-package-manifest.v1"
+    },
+    "candidate_id": {
+      "const": "gamma_parent_fallback_archive_select_q0_v1"
+    },
+    "root_semantics": {
+      "const": "The package root contains exactly the listed regular files and ordinary directories; every byte required to decode either emitted mode is listed."
+    },
+    "path_order": {
+      "const": "strict ascending UTF-8 byte order over normalized POSIX relative paths"
+    },
+    "symlinks_allowed": {
+      "const": false
+    },
+    "hardlinks_allowed": {
+      "const": false
+    },
+    "special_files_allowed": {
+      "const": false
+    },
+    "file_count": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "total_logical_bytes": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "entries": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/entry"
+      }
+    }
+  },
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "entry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "logical_bytes",
+        "sha256",
+        "executable",
+        "roles"
+      ],
+      "properties": {
+        "path": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.?(?:/|$))(?!.*//)(?!.*\\\\)[^\\u0000]+$"
+        },
+        "logical_bytes": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "executable": {
+          "type": "boolean"
+        },
+        "roles": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "frame_decoder",
+              "parent_decoder",
+              "candidate_decoder",
+              "shared_runtime",
+              "model",
+              "table",
+              "frontend",
+              "inverse",
+              "dependency"
+            ]
+          }
+        }
+      }
+    }
+  }
+}

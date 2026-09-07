@@ -1,0 +1,203 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gamma.dev/enwiki9/research/v1/dependency-sealed-decode-receipt.v2.schema.json",
+  "title": "gamma.enwiki9.dependency-sealed-decode-receipt.v2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "candidateId",
+    "archive",
+    "canonical",
+    "runtimeRoot",
+    "isolationHarness",
+    "environment",
+    "processes",
+    "fileAccess",
+    "network",
+    "output",
+    "resource",
+    "scratch",
+    "repeat",
+    "gates",
+    "overallPass",
+    "officialEligibilityPass",
+    "verdict",
+    "scoreCreditBytes",
+    "generatedUtc"
+  ],
+  "properties": {
+    "schema": { "const": "gamma.enwiki9.dependency-sealed-decode-receipt.v2" },
+    "candidateId": { "type": "string", "minLength": 1 },
+    "archive": { "$ref": "#/$defs/artifact" },
+    "canonical": { "$ref": "#/$defs/artifact" },
+    "runtimeRoot": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["manifest", "rootTreeSha256", "complete"],
+      "properties": {
+        "manifest": { "$ref": "#/$defs/reference" },
+        "rootTreeSha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+        "complete": { "type": "boolean" }
+      }
+    },
+    "isolationHarness": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["bubblewrap", "command", "networkNamespaceUnshared", "hostRootVisible"],
+      "properties": {
+        "bubblewrap": { "$ref": "#/$defs/artifact" },
+        "command": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string" }
+        },
+        "networkNamespaceUnshared": { "type": "boolean" },
+        "hostRootVisible": { "type": "boolean" }
+      }
+    },
+    "environment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["declared", "observedUndeclaredReads"],
+      "properties": {
+        "declared": { "type": "object", "additionalProperties": { "type": "string" } },
+        "observedUndeclaredReads": {
+          "type": "array",
+          "items": { "type": "string" },
+          "uniqueItems": true
+        }
+      }
+    },
+    "processes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["ordinal", "parentOrdinal", "insidePath", "bytes", "sha256", "origin"],
+        "properties": {
+          "ordinal": { "type": "integer", "minimum": 0 },
+          "parentOrdinal": { "type": ["integer", "null"], "minimum": 0 },
+          "insidePath": { "type": "string", "minLength": 1 },
+          "bytes": { "type": "integer", "minimum": 0 },
+          "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+          "origin": { "enum": ["runtime_root", "extracted_from_archive"] }
+        }
+      }
+    },
+    "fileAccess": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "trace",
+        "successfulReadPaths",
+        "successfulWritePaths",
+        "undeclaredReadPaths",
+        "writesOutsideDeclaredMounts"
+      ],
+      "properties": {
+        "trace": { "$ref": "#/$defs/reference" },
+        "successfulReadPaths": {
+          "type": "array",
+          "items": { "type": "string" },
+          "uniqueItems": true
+        },
+        "successfulWritePaths": {
+          "type": "array",
+          "items": { "type": "string" },
+          "uniqueItems": true
+        },
+        "undeclaredReadPaths": {
+          "type": "array",
+          "items": { "type": "string" },
+          "uniqueItems": true
+        },
+        "writesOutsideDeclaredMounts": {
+          "type": "array",
+          "items": { "type": "string" },
+          "uniqueItems": true
+        }
+      }
+    },
+    "network": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["namespaceUnshared", "attemptedNetworkSyscalls"],
+      "properties": {
+        "namespaceUnshared": { "type": "boolean" },
+        "attemptedNetworkSyscalls": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "output": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["returnCode", "bytes", "sha256", "byteIdentity"],
+      "properties": {
+        "returnCode": { "type": "integer" },
+        "bytes": { "type": "integer", "minimum": 0 },
+        "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+        "byteIdentity": { "type": "boolean" }
+      }
+    },
+    "resource": { "$ref": "#/$defs/reference" },
+    "scratch": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "logicalPeakBytes",
+        "allocatedPeakBytes",
+        "beforeCleanupBytes",
+        "afterCleanupBytes",
+        "cleanupPass"
+      ],
+      "properties": {
+        "logicalPeakBytes": { "type": "integer", "minimum": 0 },
+        "allocatedPeakBytes": { "type": "integer", "minimum": 0 },
+        "beforeCleanupBytes": { "type": "integer", "minimum": 0 },
+        "afterCleanupBytes": { "type": "integer", "minimum": 0 },
+        "cleanupPass": { "type": "boolean" }
+      }
+    },
+    "repeat": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["executed", "outputIdentity", "processClosureIdentity", "fileAccessIdentity"],
+      "properties": {
+        "executed": { "type": "boolean" },
+        "outputIdentity": { "type": "boolean" },
+        "processClosureIdentity": { "type": "boolean" },
+        "fileAccessIdentity": { "type": "boolean" }
+      }
+    },
+    "gates": { "type": "object", "additionalProperties": { "type": "boolean" } },
+    "overallPass": { "type": "boolean" },
+    "officialEligibilityPass": { "type": ["boolean", "null"] },
+    "verdict": { "type": "string", "minLength": 1 },
+    "scoreCreditBytes": { "type": "integer" },
+    "generatedUtc": { "type": "string", "format": "date-time" }
+  },
+  "$defs": {
+    "reference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "sha256"],
+      "properties": {
+        "path": { "type": "string", "minLength": 1 },
+        "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+      }
+    },
+    "artifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "bytes", "sha256"],
+      "properties": {
+        "path": { "type": "string", "minLength": 1 },
+        "bytes": { "type": "integer", "minimum": 0 },
+        "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+      }
+    }
+  }
+}

@@ -1,0 +1,152 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gamma.dev/enwiki9/research/v1/named-gradient-detail.schema.json",
+  "title": "gamma.enwiki9.named-gradient-detail.v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "experiment", "candidateRevision", "summary", "build", "executions", "runs"],
+  "properties": {
+    "schema": { "const": "gamma.enwiki9.named-gradient-detail.v1" },
+    "experiment": { "$ref": "#/$defs/reference" },
+    "candidateRevision": { "$ref": "#/$defs/candidateReference" },
+    "summary": { "$ref": "#/$defs/summary" },
+    "build": { "$ref": "#/$defs/build" },
+    "executions": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 2,
+      "items": { "$ref": "#/$defs/execution" }
+    },
+    "runs": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 2,
+      "items": {
+        "type": "array",
+        "minItems": 1,
+        "items": { "$ref": "#/$defs/gradientRow" }
+      }
+    }
+  },
+  "$defs": {
+    "digest": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "hexDigest": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "id": { "type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]*$" },
+    "relativePath": { "type": "string", "minLength": 1, "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$)).+$" },
+    "reference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "sha256"],
+      "properties": {
+        "path": { "$ref": "#/$defs/relativePath" },
+        "sha256": { "$ref": "#/$defs/digest" }
+      }
+    },
+    "candidateReference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["candidateId", "candidateTreeSha256", "receipt"],
+      "properties": {
+        "candidateId": { "$ref": "#/$defs/id" },
+        "candidateTreeSha256": { "$ref": "#/$defs/digest" },
+        "receipt": { "$ref": "#/$defs/reference" }
+      }
+    },
+    "command": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string" }
+    },
+    "build": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["command", "elapsed_seconds", "returncode", "stdout_sha256", "stderr_sha256"],
+      "properties": {
+        "command": { "$ref": "#/$defs/command" },
+        "elapsed_seconds": { "type": "number", "minimum": 0 },
+        "returncode": { "const": 0 },
+        "stdout_sha256": { "$ref": "#/$defs/hexDigest" },
+        "stderr_sha256": { "$ref": "#/$defs/hexDigest" }
+      }
+    },
+    "execution": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["command", "elapsedSeconds", "returncode", "stdoutSha256", "stderr"],
+      "properties": {
+        "command": { "$ref": "#/$defs/command" },
+        "elapsedSeconds": { "type": "number", "minimum": 0 },
+        "returncode": { "const": 0 },
+        "stdoutSha256": { "$ref": "#/$defs/hexDigest" },
+        "stderr": { "$ref": "#/$defs/reference" }
+      }
+    },
+    "energyMap": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": { "type": "number", "minimum": 0 }
+    },
+    "summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "blockCount", "parameterCount", "allBlocksSameParameterSet",
+        "allGradientFinite", "groupEnergy", "thirdGroupEnergy",
+        "dominantNonHeadGroup", "thirdDominantNonHeadGroups",
+        "stableDominantNonHeadGroup", "minimumThirdDominantNonHeadShare",
+        "headGroupShare"
+      ],
+      "properties": {
+        "blockCount": { "type": "integer", "minimum": 1 },
+        "parameterCount": { "type": "integer", "minimum": 1 },
+        "allBlocksSameParameterSet": { "type": "boolean" },
+        "allGradientFinite": { "type": "boolean" },
+        "groupEnergy": { "$ref": "#/$defs/energyMap" },
+        "thirdGroupEnergy": {
+          "type": "array",
+          "minItems": 3,
+          "maxItems": 3,
+          "items": { "$ref": "#/$defs/energyMap" }
+        },
+        "dominantNonHeadGroup": { "type": "string", "minLength": 1 },
+        "thirdDominantNonHeadGroups": {
+          "type": "array",
+          "minItems": 3,
+          "maxItems": 3,
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "stableDominantNonHeadGroup": { "type": "boolean" },
+        "minimumThirdDominantNonHeadShare": { "type": "number", "minimum": 0, "maximum": 1 },
+        "headGroupShare": { "type": "number", "minimum": 0, "maximum": 1 },
+        "allDirectReferenceFinite": { "type": "boolean" },
+        "maxDirectReferenceRelativeDelta": { "type": "number", "minimum": 0 }
+      },
+      "dependentRequired": {
+        "allDirectReferenceFinite": ["maxDirectReferenceRelativeDelta"],
+        "maxDirectReferenceRelativeDelta": ["allDirectReferenceFinite"]
+      }
+    },
+    "gradientRow": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["block", "name", "gradientHash", "gradientElements", "parameterElements", "energy", "finite"],
+      "properties": {
+        "block": { "type": "integer", "minimum": 0 },
+        "name": { "type": "string", "minLength": 1 },
+        "gradientHash": { "type": "string", "pattern": "^[0-9a-f]{8}$" },
+        "gradientElements": { "type": "integer", "minimum": 1 },
+        "parameterElements": { "type": "integer", "minimum": 1 },
+        "energy": { "type": "number", "minimum": 0 },
+        "finite": { "type": "boolean" },
+        "referenceEnergy": { "type": "number", "minimum": 0 },
+        "referenceFinite": { "type": "boolean" },
+        "relativeDelta": { "type": "number", "minimum": 0 }
+      },
+      "dependentRequired": {
+        "referenceEnergy": ["referenceFinite", "relativeDelta"],
+        "referenceFinite": ["referenceEnergy", "relativeDelta"],
+        "relativeDelta": ["referenceEnergy", "referenceFinite"]
+      }
+    }
+  }
+}

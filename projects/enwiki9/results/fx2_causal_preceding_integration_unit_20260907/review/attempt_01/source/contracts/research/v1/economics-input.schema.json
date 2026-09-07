@@ -1,0 +1,118 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gamma.dev/enwiki9/research/v1/economics-input.schema.json",
+  "title": "gamma.enwiki9.economics-input.v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "candidateId",
+    "objective",
+    "parent",
+    "scoreFormula",
+    "economics",
+    "evidence",
+    "scopesBytes"
+  ],
+  "properties": {
+    "schema": { "const": "gamma.enwiki9.economics-input.v1" },
+    "candidateId": { "type": "string", "pattern": "^[a-z0-9][a-z0-9._-]*$" },
+    "objective": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["targetCompleteCountedBytes", "corpusBytes"],
+      "properties": {
+        "targetCompleteCountedBytes": { "type": "integer", "minimum": 1 },
+        "corpusBytes": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "parent": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "candidateId",
+        "completeCountedBytes",
+        "evidenceStatus",
+        "terminal"
+      ],
+      "properties": {
+        "candidateId": { "type": "string", "minLength": 1 },
+        "completeCountedBytes": { "type": "integer", "minimum": 0 },
+        "evidenceStatus": {
+          "enum": [
+            "reported_external_unverified",
+            "terminal_external",
+            "terminal_gamma"
+          ]
+        },
+        "terminal": { "type": "boolean" },
+        "evidencePath": { "type": ["string", "null"] },
+        "evidenceSha256": {
+          "type": ["string", "null"],
+          "pattern": "^(sha256:)?[0-9a-f]{64}$"
+        }
+      }
+    },
+    "scoreFormula": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "bound", "sourcePath"],
+      "properties": {
+        "id": {
+          "enum": [
+            "official_primary",
+            "official_separate_archive",
+            "gamma_expanded_closure"
+          ]
+        },
+        "bound": { "type": "boolean" },
+        "sourcePath": { "type": "string", "minLength": 1 }
+      }
+    },
+    "economics": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "maximumAddedPackageBytes",
+        "transferReserveBytes",
+        "realizedExactPackageSavingsBytes"
+      ],
+      "properties": {
+        "maximumAddedPackageBytes": { "type": "integer", "minimum": 0 },
+        "transferReserveBytes": { "type": "integer", "minimum": 0 },
+        "realizedExactPackageSavingsBytes": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "dependenciesPassed",
+        "resourceFeasible",
+        "measuredOracleCeilingBytes",
+        "measuredLowerBoundGainBytes",
+        "measuredTransferPassed"
+      ],
+      "properties": {
+        "dependenciesPassed": { "type": "boolean" },
+        "resourceFeasible": { "type": "boolean" },
+        "measuredOracleCeilingBytes": { "type": ["integer", "null"], "minimum": 0 },
+        "measuredOracleCeilingScopeBytes": { "type": ["integer", "null"], "minimum": 1 },
+        "measuredLowerBoundGainBytes": { "type": ["integer", "null"], "minimum": 0 },
+        "measuredLowerBoundGainScopeBytes": { "type": ["integer", "null"], "minimum": 1 },
+        "measuredTransferPassed": { "type": ["boolean", "null"] },
+        "evidencePaths": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 },
+          "uniqueItems": true
+        }
+      }
+    },
+    "scopesBytes": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "type": "integer", "minimum": 1 }
+    }
+  }
+}

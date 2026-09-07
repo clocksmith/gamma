@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gamma.enwiki9.cmix-memory-safe-parent-command-manifest-verification.v1",
+  "title": "CMIX memory-safe parent exact command manifest verification v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "candidate_id", "verified", "errors", "manifest_sha256", "checks", "claim_authority", "execution_authority", "promotion_authority"],
+  "properties": {
+    "schema": {"const": "gamma.enwiki9.cmix-memory-safe-parent-command-manifest-verification.v1"},
+    "candidate_id": {"const": "cmix_obias_memory_safe_parent_filebacked_q1_v1"},
+    "verified": {"type": "boolean"},
+    "errors": {"type": "array", "items": {"type": "string"}},
+    "manifest_sha256": {"$ref": "#/$defs/sha256"},
+    "checks": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["identity_pass", "step_set_pass", "ordinal_pass", "argv_environment_pass", "static_input_identity_pass", "generated_input_dag_pass", "output_isolation_pass", "command_digest_pass"],
+      "properties": {
+        "identity_pass": {"type": "boolean"},
+        "step_set_pass": {"type": "boolean"},
+        "ordinal_pass": {"type": "boolean"},
+        "argv_environment_pass": {"type": "boolean"},
+        "static_input_identity_pass": {"type": "boolean"},
+        "generated_input_dag_pass": {"type": "boolean"},
+        "output_isolation_pass": {"type": "boolean"},
+        "command_digest_pass": {"type": "boolean"}
+      }
+    },
+    "claim_authority": {"const": "none"},
+    "execution_authority": {"const": false},
+    "promotion_authority": {"const": false}
+  },
+  "$defs": {"sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}}
+}

@@ -1,0 +1,119 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gamma.enwiki9.cmix-filebacked-fxcm-100m-observer-calibration-verification.v1",
+  "title": "Independent CMIX q1 100M observer calibration verification",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "candidate_id",
+    "verifier",
+    "input_schema",
+    "output_schema",
+    "planning_contract",
+    "verified",
+    "passed",
+    "errors",
+    "receipt_sha256",
+    "artifact_checks",
+    "derived_comparisons",
+    "claim_authority",
+    "promotion_authority",
+    "gamma_compression_credit_bytes",
+    "gamma_score_credit_bytes"
+  ],
+  "properties": {
+    "schema": {
+      "const": "gamma.enwiki9.cmix-filebacked-fxcm-100m-observer-calibration-verification.v1"
+    },
+    "candidate_id": {
+      "const": "cmix_obias_memory_safe_parent_filebacked_q1_v1"
+    },
+    "verifier": {"$ref": "#/$defs/artifact"},
+    "input_schema": {"$ref": "#/$defs/artifact"},
+    "output_schema": {"$ref": "#/$defs/artifact"},
+    "planning_contract": {"$ref": "#/$defs/artifact"},
+    "verified": {"type": "boolean"},
+    "passed": {"type": "boolean"},
+    "errors": {
+      "type": "array",
+      "items": {"type": "string", "minLength": 1}
+    },
+    "receipt_sha256": {"$ref": "#/$defs/sha256"},
+    "artifact_checks": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "required_artifact_count",
+        "verified_artifact_count",
+        "all_artifacts_pass",
+        "fixed_run_contract_pass",
+        "observer_geometry_pass"
+      ],
+      "properties": {
+        "required_artifact_count": {"type": "integer", "minimum": 0},
+        "verified_artifact_count": {"type": "integer", "minimum": 0},
+        "all_artifacts_pass": {"type": "boolean"},
+        "fixed_run_contract_pass": {"type": "boolean"},
+        "observer_geometry_pass": {"type": "boolean"}
+      }
+    },
+    "derived_comparisons": {"$ref": "#/$defs/comparisons"},
+    "claim_authority": {"const": "none"},
+    "promotion_authority": {"const": false},
+    "gamma_compression_credit_bytes": {"const": 0},
+    "gamma_score_credit_bytes": {"const": 0}
+  },
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "artifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "bytes", "sha256"],
+      "properties": {
+        "path": {"type": "string", "minLength": 1},
+        "bytes": {"type": "integer", "minimum": 0},
+        "sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "comparisons": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "all_runs_complete",
+        "opening_post_head_reference_pass",
+        "distant_post_head_reference_pass",
+        "parent_q1_probability_identity_pass",
+        "parent_q1_coder_identity_pass",
+        "parent_q1_state_identity_pass",
+        "pre_head_probability_negative_control_pass",
+        "pre_head_payload_identity_pass",
+        "pre_head_state_identity_pass",
+        "all_payload_reference_identity_pass",
+        "opening_all_raw_inverses_pass",
+        "opening_all_transformed_inverses_pass",
+        "state_mutation_control_pass",
+        "observer_calibration_pass"
+      ],
+      "properties": {
+        "all_runs_complete": {"type": "boolean"},
+        "opening_post_head_reference_pass": {"type": "boolean"},
+        "distant_post_head_reference_pass": {"type": "boolean"},
+        "parent_q1_probability_identity_pass": {"type": "boolean"},
+        "parent_q1_coder_identity_pass": {"type": "boolean"},
+        "parent_q1_state_identity_pass": {"type": "boolean"},
+        "pre_head_probability_negative_control_pass": {"type": "boolean"},
+        "pre_head_payload_identity_pass": {"type": "boolean"},
+        "pre_head_state_identity_pass": {"type": "boolean"},
+        "all_payload_reference_identity_pass": {"type": "boolean"},
+        "opening_all_raw_inverses_pass": {"type": "boolean"},
+        "opening_all_transformed_inverses_pass": {"type": "boolean"},
+        "state_mutation_control_pass": {"type": "boolean"},
+        "observer_calibration_pass": {"type": "boolean"}
+      }
+    }
+  }
+}

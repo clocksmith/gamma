@@ -1,0 +1,156 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gamma.enwiki9.gamma-safe-mix-receipt.v1",
+  "title": "Gamma SAFE-MIX receipt v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "receipt_id", "candidate_id", "mode", "input_lock", "scope", "arithmetic", "arms", "comparisons", "repeat", "accounting", "decision", "authority"],
+  "properties": {
+    "schema": {"const": "gamma.enwiki9.gamma-safe-mix-receipt.v1"},
+    "receipt_id": {"type": "string", "minLength": 1},
+    "candidate_id": {"const": "gamma_safe_mix_v1"},
+    "mode": {"enum": ["integer_reference", "archive_proof"]},
+    "input_lock": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["planning_contract_sha256", "implementation_sha256", "build_receipt_sha256", "binary_sha256", "runtime_root_manifest_sha256", "parent_manifest_sha256", "treatment_manifest_sha256", "population_manifest_sha256", "economics_receipt_sha256"],
+      "properties": {
+        "planning_contract_sha256": {"$ref": "#/$defs/sha256"},
+        "implementation_sha256": {"$ref": "#/$defs/sha256"},
+        "build_receipt_sha256": {"$ref": "#/$defs/sha256"},
+        "binary_sha256": {"$ref": "#/$defs/sha256"},
+        "runtime_root_manifest_sha256": {"$ref": "#/$defs/sha256"},
+        "parent_manifest_sha256": {"$ref": "#/$defs/sha256"},
+        "treatment_manifest_sha256": {"$ref": "#/$defs/sha256"},
+        "population_manifest_sha256": {"$ref": "#/$defs/sha256"},
+        "economics_receipt_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["raw_bytes", "event_count", "complete_population_pass", "required_gross_archive_gain_bytes"],
+      "properties": {
+        "raw_bytes": {"type": "integer", "minimum": 1, "maximum": 1000000000},
+        "event_count": {"type": "integer", "minimum": 1},
+        "complete_population_pass": {"type": "boolean"},
+        "required_gross_archive_gain_bytes": {"type": "integer", "minimum": 0}
+      }
+    },
+    "arithmetic": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["coder_scale", "weight_total", "initial_parent_weight", "rounding", "clamp", "floating_point_absent_pass", "reference_population_complete_pass", "native_reference_identity_pass"],
+      "properties": {
+        "coder_scale": {"type": "integer", "minimum": 3},
+        "weight_total": {"const": 9223372036854775807},
+        "initial_parent_weight": {"const": 4611686018427387903},
+        "rounding": {"const": "nearest_ties_to_even"},
+        "clamp": {"const": "counts_[1,C-1]_weights_[1,T-1]"},
+        "floating_point_absent_pass": {"type": "boolean"},
+        "reference_population_complete_pass": {"type": "boolean"},
+        "native_reference_identity_pass": {"type": "boolean"},
+        "maximum_native_reference_count_difference": {"type": "integer", "minimum": 0}
+      }
+    },
+    "arms": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["P", "K", "D", "M"],
+      "properties": {
+        "P": {"allOf": [{"$ref": "#/$defs/armReceipt"}, {"type": "object", "properties": {"arm": {"const": "P"}}}]},
+        "K": {"allOf": [{"$ref": "#/$defs/armReceipt"}, {"type": "object", "properties": {"arm": {"const": "K"}}}]},
+        "D": {"allOf": [{"$ref": "#/$defs/armReceipt"}, {"type": "object", "properties": {"arm": {"const": "D"}}}]},
+        "M": {"allOf": [{"$ref": "#/$defs/armReceipt"}, {"type": "object", "properties": {"arm": {"const": "M"}}}]}
+      }
+    },
+    "comparisons": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["P_K_probability_identity_pass", "P_K_posterior_neutrality_pass", "P_K_coder_identity_pass", "P_K_archive_identity_pass", "ideal_parent_bits", "ideal_treatment_bits", "ideal_mixture_bits", "ideal_best_expert_regret_bits", "ideal_one_bit_bound_pass", "M_minus_P_archive_bytes", "M_minus_D_archive_bytes", "M_economic_gate_pass"],
+      "properties": {
+        "P_K_probability_identity_pass": {"type": "boolean"},
+        "P_K_posterior_neutrality_pass": {"type": "boolean"},
+        "P_K_coder_identity_pass": {"type": ["boolean", "null"]},
+        "P_K_archive_identity_pass": {"type": ["boolean", "null"]},
+        "ideal_parent_bits": {"type": "number"},
+        "ideal_treatment_bits": {"type": "number"},
+        "ideal_mixture_bits": {"type": "number"},
+        "ideal_best_expert_regret_bits": {"type": "number"},
+        "ideal_one_bit_bound_pass": {"type": "boolean"},
+        "M_minus_P_archive_bytes": {"type": ["integer", "null"]},
+        "M_minus_D_archive_bytes": {"type": ["integer", "null"]},
+        "M_economic_gate_pass": {"type": ["boolean", "null"]}
+      }
+    },
+    "repeat": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["first_manifest_sha256", "second_manifest_sha256", "byte_identity_pass"],
+      "properties": {
+        "first_manifest_sha256": {"oneOf": [{"$ref": "#/$defs/sha256"}, {"type": "null"}]},
+        "second_manifest_sha256": {"oneOf": [{"$ref": "#/$defs/sha256"}, {"type": "null"}]},
+        "byte_identity_pass": {"type": ["boolean", "null"]}
+      }
+    },
+    "accounting": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["incremental_package_bytes", "maximum_added_package_bytes", "package_pass", "all_resource_receipts_pass", "all_dependency_closure_receipts_pass"],
+      "properties": {
+        "incremental_package_bytes": {"type": "integer", "minimum": 0},
+        "maximum_added_package_bytes": {"const": 65536},
+        "package_pass": {"type": "boolean"},
+        "all_resource_receipts_pass": {"type": "boolean"},
+        "all_dependency_closure_receipts_pass": {"type": "boolean"}
+      }
+    },
+    "decision": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["mode_has_archive_authority", "integer_exactness_pass", "bookkeeping_identity_pass", "ideal_bound_pass", "finite_archive_gate_pass", "terminal_classification", "authorized_successor", "scientific_verdict"],
+      "properties": {
+        "mode_has_archive_authority": {"type": "boolean"},
+        "integer_exactness_pass": {"type": "boolean"},
+        "bookkeeping_identity_pass": {"type": "boolean"},
+        "ideal_bound_pass": {"type": "boolean"},
+        "finite_archive_gate_pass": {"type": ["boolean", "null"]},
+        "terminal_classification": {"enum": ["pass_integer_reference", "pass_finite_archive_gate", "fail_integer_realization", "fail_bookkeeping_identity", "fail_finite_archive_economics", "fail_repeat_resource_package_or_dependency", "invalid_receipt"]},
+        "authorized_successor": {"enum": ["next_preregistered_scope", "one_switching_or_specialist_successor", "one_correction_only_implementation_successor", "none"]},
+        "scientific_verdict": {"enum": ["pass", "fail", "none", "invalid"]}
+      }
+    },
+    "authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["ideal_bound_compression_credit_bytes", "finite_archive_score_credit_bytes", "promotion_authority"],
+      "properties": {
+        "ideal_bound_compression_credit_bytes": {"const": 0},
+        "finite_archive_score_credit_bytes": {"type": "integer", "minimum": 0},
+        "promotion_authority": {"type": "boolean"}
+      }
+    }
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "armReceipt": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["arm", "command_sha256", "return_codes", "integer_probability_stream_sha256", "posterior_state_manifest_sha256", "coder_state_manifest_sha256", "archive_size_bytes", "archive_sha256", "decoded_sha256", "raw_inverse_pass", "resource_receipt_sha256", "resource_pass"],
+      "properties": {
+        "arm": {"enum": ["P", "K", "D", "M"]},
+        "command_sha256": {"$ref": "#/$defs/sha256"},
+        "return_codes": {"type": "object", "additionalProperties": false, "required": ["encode", "decode", "raw_inverse"], "properties": {"encode": {"type": ["integer", "null"]}, "decode": {"type": ["integer", "null"]}, "raw_inverse": {"type": ["integer", "null"]}}},
+        "integer_probability_stream_sha256": {"$ref": "#/$defs/sha256"},
+        "posterior_state_manifest_sha256": {"$ref": "#/$defs/sha256"},
+        "coder_state_manifest_sha256": {"oneOf": [{"$ref": "#/$defs/sha256"}, {"type": "null"}]},
+        "archive_size_bytes": {"type": ["integer", "null"], "minimum": 0},
+        "archive_sha256": {"oneOf": [{"$ref": "#/$defs/sha256"}, {"type": "null"}]},
+        "decoded_sha256": {"oneOf": [{"$ref": "#/$defs/sha256"}, {"type": "null"}]},
+        "raw_inverse_pass": {"type": ["boolean", "null"]},
+        "resource_receipt_sha256": {"$ref": "#/$defs/sha256"},
+        "resource_pass": {"type": "boolean"}
+      }
+    }
+  }
+}

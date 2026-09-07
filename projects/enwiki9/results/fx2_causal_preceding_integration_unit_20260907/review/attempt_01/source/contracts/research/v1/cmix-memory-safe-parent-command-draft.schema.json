@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gamma.enwiki9.cmix-memory-safe-parent-command-draft.v1",
+  "title": "CMIX memory-safe parent command draft v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "candidate_id", "workspace_root", "result_root", "steps", "claim_authority", "execution_authority"],
+  "properties": {
+    "schema": {"const": "gamma.enwiki9.cmix-memory-safe-parent-command-draft.v1"},
+    "candidate_id": {"const": "cmix_obias_memory_safe_parent_filebacked_q1_v1"},
+    "workspace_root": {"const": "/home/x/deco/gamma"},
+    "result_root": {"type": "string", "minLength": 1},
+    "steps": {
+      "type": "array",
+      "minItems": 12,
+      "maxItems": 12,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["ordinal", "id", "cwd", "argv", "environment", "executable_path", "input_paths", "generated_input_refs", "declared_outputs"],
+        "properties": {
+          "ordinal": {"type": "integer", "minimum": 0, "maximum": 11},
+          "id": {"type": "string", "minLength": 1},
+          "cwd": {"const": "/home/x/deco/gamma"},
+          "argv": {"type": "array", "minItems": 2, "items": {"type": "string", "minLength": 1}},
+          "environment": {"type": "object", "additionalProperties": {"type": "string"}},
+          "executable_path": {"type": "string", "minLength": 1},
+          "input_paths": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+          "generated_input_refs": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["producer_step", "path"],
+              "properties": {
+                "producer_step": {"type": "string", "minLength": 1},
+                "path": {"type": "string", "minLength": 1}
+              }
+            }
+          },
+          "declared_outputs": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "minLength": 1}}
+        }
+      }
+    },
+    "claim_authority": {"const": "none"},
+    "execution_authority": {"const": false}
+  }
+}

@@ -1,0 +1,535 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gamma.dev/enwiki9/research/v1/endpoint428-horizon-terminal-route.schema.json",
+  "title": "Endpoint428 HORIZON terminal route receipt v1",
+  "oneOf": [
+    {"$ref": "#/$defs/blockedReceipt"},
+    {"$ref": "#/$defs/failureReceipt"},
+    {"$ref": "#/$defs/missingDecisionReceipt"},
+    {"$ref": "#/$defs/scientificReceipt"}
+  ],
+  "$defs": {
+    "digest": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "relativePath": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$)).+$"
+    },
+    "artifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "bytes", "sha256"],
+      "properties": {
+        "path": {"$ref": "#/$defs/relativePath"},
+        "bytes": {"type": "integer", "minimum": 0},
+        "sha256": {"$ref": "#/$defs/digest"}
+      }
+    },
+    "terminalJobArtifact": {
+      "allOf": [
+        {"$ref": "#/$defs/artifact"},
+        {
+          "properties": {
+            "path": {
+              "type": "string",
+              "pattern": "^operations/adaptive/(completed|failed|cancelled)/[^/]+\\.json$"
+            }
+          }
+        }
+      ]
+    },
+    "reflectionArtifact": {
+      "allOf": [
+        {"$ref": "#/$defs/artifact"},
+        {
+          "properties": {
+            "path": {
+              "type": "string",
+              "pattern": "^operations/adaptive/reflections/[^/]+\\.json$"
+            }
+          }
+        }
+      ]
+    },
+    "experimentArtifact": {
+      "allOf": [
+        {"$ref": "#/$defs/artifact"},
+        {
+          "properties": {
+            "path": {"const": "operations/adaptive/experiments/endpoint428_horizon_retained_parent_trace_q0_v1.json"},
+            "sha256": {"const": "sha256:1ee83f431531f05654ac0990de302acbbbde36fa4ac42acd3bebbd9dd26f20aa"}
+          }
+        }
+      ]
+    },
+    "proposalArtifact": {
+      "allOf": [
+        {"$ref": "#/$defs/artifact"},
+        {
+          "properties": {
+            "path": {"const": "operations/adaptive/proposals/developed/000_endpoint428_horizon_retained_parent_trace_q0_v1.json"},
+            "sha256": {"const": "sha256:5df724d51eb28e7ebaaea782210960e32ad95ad7fac374f6ccfff597f1eaaa62"}
+          }
+        }
+      ]
+    },
+    "revisionArtifact": {
+      "allOf": [
+        {"$ref": "#/$defs/artifact"},
+        {
+          "properties": {
+            "path": {"const": "operations/adaptive/candidate-revisions/endpoint428_horizon_retained_parent_trace_q0_v1/20260830T224806838440Z_565130472695.json"},
+            "sha256": {"const": "sha256:f27573bb08cac47dfe9ed0915617a692c72d8fa5f0c406c0517e3664574013f4"}
+          }
+        }
+      ]
+    },
+    "runnerArtifact": {
+      "allOf": [
+        {"$ref": "#/$defs/artifact"},
+        {
+          "properties": {
+            "path": {"const": "tools/endpoint428_horizon_retained_parent_trace_q0_v1.py"},
+            "sha256": {"const": "sha256:f1f309dfc58f704d316af840b91cdefedbe277da87347a05fbed5c10121645a1"}
+          }
+        }
+      ]
+    },
+    "decisionArtifact": {
+      "allOf": [
+        {"$ref": "#/$defs/artifact"},
+        {"properties": {"path": {"const": "results/endpoint428_horizon_retained_parent_trace_q0_v1/decision.json"}}}
+      ]
+    },
+    "activeJob": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "state", "job_id", "reason"],
+      "properties": {
+        "path": {"$ref": "#/$defs/relativePath"},
+        "state": {"enum": ["pending", "running"]},
+        "job_id": {
+          "oneOf": [
+            {"type": "string", "minLength": 1},
+            {"type": "null"}
+          ]
+        },
+        "reason": {
+          "enum": [
+            "candidate-nonterminal",
+            "frozen-job-identity-drift",
+            "unreadable-active-record",
+            "unsafe-active-namespace"
+          ]
+        }
+      }
+    },
+    "blockedReceipt": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema", "candidate_id", "status", "active_jobs",
+        "decision_accessed", "result_root_accessed", "claim_authority"
+      ],
+      "properties": {
+        "schema": {"const": "gamma.enwiki9.endpoint428-horizon-terminal-route.v1"},
+        "candidate_id": {"const": "endpoint428_horizon_retained_parent_trace_q0_v1"},
+        "status": {"const": "BLOCKED_NONTERMINAL"},
+        "active_jobs": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/activeJob"}
+        },
+        "decision_accessed": {"const": false},
+        "result_root_accessed": {"const": false},
+        "claim_authority": {"const": "none"}
+      }
+    },
+    "baseBindings": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "terminal_job", "reflection", "experiment", "proposal",
+        "candidate_revision", "runner"
+      ],
+      "properties": {
+        "terminal_job": {"$ref": "#/$defs/terminalJobArtifact"},
+        "reflection": {"$ref": "#/$defs/reflectionArtifact"},
+        "experiment": {"$ref": "#/$defs/experimentArtifact"},
+        "proposal": {"$ref": "#/$defs/proposalArtifact"},
+        "candidate_revision": {"$ref": "#/$defs/revisionArtifact"},
+        "runner": {"$ref": "#/$defs/runnerArtifact"}
+      }
+    },
+    "scientificBindings": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "terminal_job", "reflection", "experiment", "proposal",
+        "candidate_revision", "runner", "decision"
+      ],
+      "properties": {
+        "terminal_job": {"$ref": "#/$defs/terminalJobArtifact"},
+        "reflection": {"$ref": "#/$defs/reflectionArtifact"},
+        "experiment": {"$ref": "#/$defs/experimentArtifact"},
+        "proposal": {"$ref": "#/$defs/proposalArtifact"},
+        "candidate_revision": {"$ref": "#/$defs/revisionArtifact"},
+        "runner": {"$ref": "#/$defs/runnerArtifact"},
+        "decision": {"$ref": "#/$defs/decisionArtifact"}
+      }
+    },
+    "failureReceipt": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema", "candidate_id", "status", "terminal_state",
+        "terminal_returncode", "branch", "branch_reason", "host_lane_release",
+        "bindings", "decision_accessed", "result_root_accessed",
+        "opaque_outputs_semantically_parsed", "claim_authority"
+      ],
+      "properties": {
+        "schema": {"const": "gamma.enwiki9.endpoint428-horizon-terminal-route.v1"},
+        "candidate_id": {"const": "endpoint428_horizon_retained_parent_trace_q0_v1"},
+        "status": {"const": "TERMINAL_ROUTED"},
+        "terminal_state": {"enum": ["failed", "cancelled"]},
+        "terminal_returncode": {"type": ["integer", "null"]},
+        "branch": {"enum": ["CORRECTION_RETRY_ONLY", "QUARANTINE_AND_CORRECT"]},
+        "branch_reason": {"type": "string", "minLength": 1},
+        "host_lane_release": {"const": true},
+        "bindings": {"$ref": "#/$defs/baseBindings"},
+        "decision_accessed": {"const": false},
+        "result_root_accessed": {"const": false},
+        "opaque_outputs_semantically_parsed": {"type": "array", "maxItems": 0},
+        "claim_authority": {"const": "zero-credit-terminal-routing-only"}
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"terminal_state": {"const": "cancelled"}}},
+          "then": {"properties": {"terminal_returncode": {"const": null}}}
+        },
+        {
+          "if": {"properties": {"terminal_state": {"const": "failed"}}},
+          "then": {
+            "properties": {
+              "terminal_returncode": {
+                "type": "integer",
+                "not": {"const": 0}
+              }
+            }
+          }
+        }
+      ]
+    },
+    "missingDecisionReceipt": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema", "candidate_id", "status", "terminal_state", "terminal_returncode",
+        "branch", "branch_reason", "host_lane_release", "bindings", "output_closure",
+        "decision_accessed", "result_root_accessed",
+        "opaque_outputs_semantically_parsed", "claim_authority"
+      ],
+      "properties": {
+        "schema": {"const": "gamma.enwiki9.endpoint428-horizon-terminal-route.v1"},
+        "candidate_id": {"const": "endpoint428_horizon_retained_parent_trace_q0_v1"},
+        "status": {"const": "TERMINAL_ROUTED"},
+        "terminal_state": {"const": "completed"},
+        "terminal_returncode": {"const": 0},
+        "branch": {"const": "CORRECTION_RETRY_ONLY"},
+        "branch_reason": {"const": "declared terminal decision is missing or nonregular"},
+        "host_lane_release": {"const": true},
+        "bindings": {"$ref": "#/$defs/baseBindings"},
+        "output_closure": {
+          "allOf": [
+            {"$ref": "#/$defs/outputClosure"},
+            {
+              "properties": {
+                "complete": {"const": false},
+                "failure_class": {"const": "nonregular-or-missing"},
+                "artifact_names": {"not": {"contains": {"const": "decision.json"}}}
+              }
+            }
+          ]
+        },
+        "decision_accessed": {"const": false},
+        "result_root_accessed": {"const": true},
+        "opaque_outputs_semantically_parsed": {"type": "array", "maxItems": 0},
+        "claim_authority": {"const": "zero-credit-terminal-routing-only"}
+      }
+    },
+    "outputName": {
+      "enum": [
+        "manifest-a.bin", "manifest-b.bin", "parent.p1", "parent.archive",
+        "analysis-a.json", "analysis-b.json", "decision.json"
+      ]
+    },
+    "outputPath": {
+      "enum": [
+        "results/endpoint428_horizon_retained_parent_trace_q0_v1/manifest-a.bin",
+        "results/endpoint428_horizon_retained_parent_trace_q0_v1/manifest-b.bin",
+        "results/endpoint428_horizon_retained_parent_trace_q0_v1/parent.p1",
+        "results/endpoint428_horizon_retained_parent_trace_q0_v1/parent.archive",
+        "results/endpoint428_horizon_retained_parent_trace_q0_v1/analysis-a.json",
+        "results/endpoint428_horizon_retained_parent_trace_q0_v1/analysis-b.json",
+        "results/endpoint428_horizon_retained_parent_trace_q0_v1/decision.json"
+      ]
+    },
+    "outputArtifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "bytes", "sha256"],
+      "properties": {
+        "path": {"$ref": "#/$defs/outputPath"},
+        "bytes": {"type": "integer", "minimum": 0},
+        "sha256": {"$ref": "#/$defs/digest"}
+      }
+    },
+    "outputClosure": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "complete", "failure_class", "namespace_safe", "declared_output_count",
+        "bound_output_count", "artifact_names", "missing", "nonregular",
+        "extras", "artifacts"
+      ],
+      "properties": {
+        "complete": {"type": "boolean"},
+        "failure_class": {"enum": [null, "nonregular-or-missing", "undeclared-extras"]},
+        "namespace_safe": {"type": "boolean"},
+        "declared_output_count": {"const": 7},
+        "bound_output_count": {"type": "integer", "minimum": 0, "maximum": 7},
+        "artifact_names": {
+          "type": "array", "minItems": 0, "maxItems": 7, "uniqueItems": true,
+          "items": {"$ref": "#/$defs/outputName"}
+        },
+        "missing": {
+          "type": "array", "minItems": 0, "maxItems": 7, "uniqueItems": true,
+          "items": {"$ref": "#/$defs/outputName"}
+        },
+        "nonregular": {
+          "type": "array", "minItems": 0, "maxItems": 7, "uniqueItems": true,
+          "items": {"$ref": "#/$defs/outputName"}
+        },
+        "extras": {
+          "type": "array", "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1}
+        },
+        "artifacts": {
+          "type": "array", "minItems": 0, "maxItems": 7, "uniqueItems": true,
+          "items": {"$ref": "#/$defs/outputArtifact"}
+        }
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"complete": {"const": true}}},
+          "then": {
+            "properties": {
+              "failure_class": {"const": null},
+              "namespace_safe": {"const": true},
+              "bound_output_count": {"const": 7},
+              "artifact_names": {
+                "const": [
+                  "manifest-a.bin", "manifest-b.bin", "parent.p1", "parent.archive",
+                  "analysis-a.json", "analysis-b.json", "decision.json"
+                ]
+              },
+              "missing": {"maxItems": 0},
+              "nonregular": {"maxItems": 0},
+              "extras": {"maxItems": 0},
+              "artifacts": {"minItems": 7, "maxItems": 7}
+            }
+          },
+          "else": {"properties": {"failure_class": {"not": {"const": null}}}}
+        },
+        {
+          "if": {"properties": {"bound_output_count": {"const": 0}}},
+          "then": {"properties": {"artifact_names": {"maxItems": 0}, "artifacts": {"maxItems": 0}}}
+        },
+        {
+          "if": {"properties": {"bound_output_count": {"const": 1}}},
+          "then": {"properties": {"artifact_names": {"minItems": 1, "maxItems": 1}, "artifacts": {"minItems": 1, "maxItems": 1}}}
+        },
+        {
+          "if": {"properties": {"bound_output_count": {"const": 2}}},
+          "then": {"properties": {"artifact_names": {"minItems": 2, "maxItems": 2}, "artifacts": {"minItems": 2, "maxItems": 2}}}
+        },
+        {
+          "if": {"properties": {"bound_output_count": {"const": 3}}},
+          "then": {"properties": {"artifact_names": {"minItems": 3, "maxItems": 3}, "artifacts": {"minItems": 3, "maxItems": 3}}}
+        },
+        {
+          "if": {"properties": {"bound_output_count": {"const": 4}}},
+          "then": {"properties": {"artifact_names": {"minItems": 4, "maxItems": 4}, "artifacts": {"minItems": 4, "maxItems": 4}}}
+        },
+        {
+          "if": {"properties": {"bound_output_count": {"const": 5}}},
+          "then": {"properties": {"artifact_names": {"minItems": 5, "maxItems": 5}, "artifacts": {"minItems": 5, "maxItems": 5}}}
+        },
+        {
+          "if": {"properties": {"bound_output_count": {"const": 6}}},
+          "then": {"properties": {"artifact_names": {"minItems": 6, "maxItems": 6}, "artifacts": {"minItems": 6, "maxItems": 6}}}
+        },
+        {
+          "if": {"properties": {"bound_output_count": {"const": 7}}},
+          "then": {"properties": {"artifact_names": {"minItems": 7, "maxItems": 7}, "artifacts": {"minItems": 7, "maxItems": 7}}}
+        }
+      ]
+    },
+    "promotionEvaluations": {
+      "type": "array",
+      "minItems": 8,
+      "maxItems": 8,
+      "prefixItems": [
+        {"$ref": "#/$defs/promotion0"}, {"$ref": "#/$defs/promotion1"},
+        {"$ref": "#/$defs/promotion2"}, {"$ref": "#/$defs/promotion3"},
+        {"$ref": "#/$defs/promotion4"}, {"$ref": "#/$defs/promotion5"},
+        {"$ref": "#/$defs/promotion6"}, {"$ref": "#/$defs/promotion7"}
+      ],
+      "items": false
+    },
+    "killEvaluations": {
+      "type": "array",
+      "minItems": 4,
+      "maxItems": 4,
+      "prefixItems": [
+        {"$ref": "#/$defs/kill0"}, {"$ref": "#/$defs/kill1"},
+        {"$ref": "#/$defs/kill2"}, {"$ref": "#/$defs/kill3"}
+      ],
+      "items": false
+    },
+    "numericEvaluation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["predicate_id", "measurement_id", "operator", "threshold", "observed", "result"],
+      "properties": {
+        "predicate_id": {"type": "string"},
+        "measurement_id": {"type": "string"},
+        "operator": {"enum": ["eq", "gte", "gt", "lt", "lte"]},
+        "threshold": {"type": "number"},
+        "observed": {"type": "number"},
+        "result": {"type": "boolean"}
+      }
+    },
+    "booleanEvaluation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["predicate_id", "measurement_id", "operator", "threshold", "observed", "result"],
+      "properties": {
+        "predicate_id": {"type": "string"},
+        "measurement_id": {"type": "string"},
+        "operator": {"const": "eq"},
+        "threshold": {"type": "boolean"},
+        "observed": {"type": "boolean"},
+        "result": {"type": "boolean"}
+      }
+    },
+    "promotion0": {"allOf": [{"$ref": "#/$defs/numericEvaluation"}, {"properties": {"predicate_id": {"const": "complete-active-population"}, "measurement_id": {"const": "activeBytes"}, "operator": {"const": "eq"}, "threshold": {"const": 2331505}}}]},
+    "promotion1": {"allOf": [{"$ref": "#/$defs/numericEvaluation"}, {"properties": {"predicate_id": {"const": "complete-parent-trace"}, "measurement_id": {"const": "parentTraceRows"}, "operator": {"const": "eq"}, "threshold": {"const": 5182388736}}}]},
+    "promotion2": {"allOf": [{"$ref": "#/$defs/numericEvaluation"}, {"properties": {"predicate_id": {"const": "target-bearing-mixture"}, "measurement_id": {"const": "treatmentMixtureGainBits"}, "operator": {"const": "gte"}, "threshold": {"const": 40163160}}}]},
+    "promotion3": {"allOf": [{"$ref": "#/$defs/numericEvaluation"}, {"properties": {"predicate_id": {"const": "every-third-positive"}, "measurement_id": {"const": "minimumThirdMixtureGainBits"}, "operator": {"const": "gt"}, "threshold": {"const": 0}}}]},
+    "promotion4": {"allOf": [{"$ref": "#/$defs/numericEvaluation"}, {"properties": {"predicate_id": {"const": "controls-separated"}, "measurement_id": {"const": "minimumControlMarginBits"}, "operator": {"const": "gt"}, "threshold": {"const": 0}}}]},
+    "promotion5": {"allOf": [{"$ref": "#/$defs/booleanEvaluation"}, {"properties": {"predicate_id": {"const": "manifest-repeat"}, "measurement_id": {"const": "manifestRepeatIdentityPass"}, "threshold": {"const": true}}}]},
+    "promotion6": {"allOf": [{"$ref": "#/$defs/booleanEvaluation"}, {"properties": {"predicate_id": {"const": "analysis-repeat"}, "measurement_id": {"const": "analysisRepeatIdentityPass"}, "threshold": {"const": true}}}]},
+    "promotion7": {"allOf": [{"$ref": "#/$defs/booleanEvaluation"}, {"properties": {"predicate_id": {"const": "read-only-parent"}, "measurement_id": {"const": "parentReadOnlyPass"}, "threshold": {"const": true}}}]},
+    "kill0": {"allOf": [{"$ref": "#/$defs/numericEvaluation"}, {"properties": {"predicate_id": {"const": "subscale"}, "measurement_id": {"const": "treatmentMixtureGainBits"}, "operator": {"const": "lt"}, "threshold": {"const": 40163160}}}]},
+    "kill1": {"allOf": [{"$ref": "#/$defs/numericEvaluation"}, {"properties": {"predicate_id": {"const": "third-failure"}, "measurement_id": {"const": "minimumThirdMixtureGainBits"}, "operator": {"const": "lte"}, "threshold": {"const": 0}}}]},
+    "kill2": {"allOf": [{"$ref": "#/$defs/numericEvaluation"}, {"properties": {"predicate_id": {"const": "control-failure"}, "measurement_id": {"const": "minimumControlMarginBits"}, "operator": {"const": "lte"}, "threshold": {"const": 0}}}]},
+    "kill3": {"allOf": [{"$ref": "#/$defs/booleanEvaluation"}, {"properties": {"predicate_id": {"const": "trace-or-repeat-failure"}, "measurement_id": {"const": "parentReadOnlyPass"}, "threshold": {"const": false}}}]},
+    "consistency": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "decision_gates_match_recomputed", "decision_promotion_matches_recomputed",
+        "decision_verdict_matches_recomputed", "promotion_predicates_pass",
+        "kill_predicates_pass"
+      ],
+      "properties": {
+        "decision_gates_match_recomputed": {"const": true},
+        "decision_promotion_matches_recomputed": {"const": true},
+        "decision_verdict_matches_recomputed": {"const": true},
+        "promotion_predicates_pass": {"type": "boolean"},
+        "kill_predicates_pass": {"type": "boolean"}
+      }
+    },
+    "scientificReceipt": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema", "candidate_id", "status", "terminal_state", "terminal_returncode",
+        "branch", "branch_reason", "host_lane_release", "bindings", "output_closure",
+        "predicate_evaluations", "consistency", "decision_accessed",
+        "result_root_accessed", "opaque_outputs_semantically_parsed", "claim_authority"
+      ],
+      "properties": {
+        "schema": {"const": "gamma.enwiki9.endpoint428-horizon-terminal-route.v1"},
+        "candidate_id": {"const": "endpoint428_horizon_retained_parent_trace_q0_v1"},
+        "status": {"const": "TERMINAL_ROUTED"},
+        "terminal_state": {"const": "completed"},
+        "terminal_returncode": {"const": 0},
+        "branch": {
+          "enum": [
+            "CORRECTION_RETRY_ONLY", "QUARANTINE_AND_CORRECT",
+            "RETIRE_PHYSICAL_HORIZON", "EXACT_REPRICE_Q0_V2"
+          ]
+        },
+        "branch_reason": {"type": "string", "minLength": 1},
+        "host_lane_release": {"const": true},
+        "bindings": {"$ref": "#/$defs/scientificBindings"},
+        "output_closure": {"$ref": "#/$defs/outputClosure"},
+        "predicate_evaluations": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["promotion", "kill"],
+          "properties": {
+            "promotion": {"$ref": "#/$defs/promotionEvaluations"},
+            "kill": {"$ref": "#/$defs/killEvaluations"}
+          }
+        },
+        "consistency": {"$ref": "#/$defs/consistency"},
+        "decision_accessed": {"const": true},
+        "result_root_accessed": {"const": true},
+        "opaque_outputs_semantically_parsed": {"type": "array", "maxItems": 0},
+        "claim_authority": {"const": "zero-credit-terminal-routing-only"}
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"branch": {"const": "EXACT_REPRICE_Q0_V2"}}},
+          "then": {
+            "properties": {
+              "output_closure": {"properties": {"complete": {"const": true}}},
+              "consistency": {"properties": {"promotion_predicates_pass": {"const": true}, "kill_predicates_pass": {"const": false}}}
+            }
+          }
+        },
+        {
+          "if": {"properties": {"branch": {"const": "RETIRE_PHYSICAL_HORIZON"}}},
+          "then": {
+            "properties": {
+              "output_closure": {"properties": {"complete": {"const": true}}},
+              "consistency": {"properties": {"promotion_predicates_pass": {"const": false}}}
+            }
+          }
+        },
+        {
+          "if": {"properties": {"branch": {"const": "CORRECTION_RETRY_ONLY"}}},
+          "then": {
+            "properties": {
+              "output_closure": {
+                "properties": {
+                  "failure_class": {
+                    "enum": ["undeclared-extras", "nonregular-or-missing"]
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": {"properties": {"branch": {"const": "QUARANTINE_AND_CORRECT"}}},
+          "then": false
+        }
+      ]
+    }
+  }
+}

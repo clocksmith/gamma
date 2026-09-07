@@ -1,0 +1,243 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gamma.enwiki9.cmix-filebacked-fxcm-full-identity.v1",
+  "title": "CMIX file-backed FXCM full-stream probability and state identity",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema", "candidate_id", "authoritative_parent_id", "planning_contract",
+    "coordinator", "arm_runner", "arm_schema", "python_source_closure",
+    "population", "activation", "exclusive_lease",
+    "observer_antecedents", "calibration", "arms", "controls", "decisions",
+    "errors", "terminal_pass", "claim_boundary",
+    "gamma_compression_credit_bytes", "gamma_score_credit_bytes"
+  ],
+  "properties": {
+    "schema": {"const": "gamma.enwiki9.cmix-filebacked-fxcm-full-identity.v1"},
+    "candidate_id": {"const": "cmix_obias_memory_safe_parent_filebacked_q1_v1"},
+    "authoritative_parent_id": {"const": "cmix_obias_source_full1g_roundtrip_a_qm0_v1"},
+    "planning_contract": {"$ref": "#/$defs/file"},
+    "coordinator": {"$ref": "#/$defs/file"},
+    "arm_runner": {"$ref": "#/$defs/file"},
+    "arm_schema": {"$ref": "#/$defs/file"},
+    "python_source_closure": {"$ref": "#/$defs/nonemptyFile"},
+    "population": {
+      "allOf": [
+        {"$ref": "#/$defs/nonemptyFile"},
+        {"properties": {
+          "bytes": {"const": 1000000000},
+          "sha256": {"const": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc"}
+        }}
+      ]
+    },
+    "activation": {
+      "type": "object", "additionalProperties": false,
+      "required": [
+        "full_roundtrip_a", "full_roundtrip_a_verification",
+        "full_roundtrip_b", "full_roundtrip_b_verification",
+        "opening_100m_receipt", "opening_100m_verification",
+        "managed_lease_verification"
+      ],
+      "properties": {
+        "full_roundtrip_a": {"$ref": "#/$defs/nonemptyFile"},
+        "full_roundtrip_a_verification": {"$ref": "#/$defs/nonemptyFile"},
+        "full_roundtrip_b": {"$ref": "#/$defs/nonemptyFile"},
+        "full_roundtrip_b_verification": {"$ref": "#/$defs/nonemptyFile"},
+        "opening_100m_receipt": {"$ref": "#/$defs/nonemptyFile"},
+        "opening_100m_verification": {"$ref": "#/$defs/nonemptyFile"},
+        "managed_lease_verification": {"$ref": "#/$defs/nonemptyFile"}
+      }
+    },
+    "exclusive_lease": {
+      "type": "object", "additionalProperties": false,
+      "required": ["candidate_id", "lease_id", "release_pass", "evidence", "transitions"],
+      "properties": {
+        "candidate_id": {"const": "cmix_filebacked_fxcm_full_probability_state_identity_q0_v1"},
+        "lease_id": {"$ref": "#/$defs/sha256"},
+        "release_pass": {"type": "boolean"},
+        "evidence": {"$ref": "#/$defs/nonemptyFile"},
+        "transitions": {"$ref": "#/$defs/nonemptyFile"}
+      }
+    },
+    "observer_antecedents": {
+      "type": "object", "additionalProperties": false,
+      "required": [
+        "build_receipt", "build_schema", "calibration_receipt",
+        "calibration_verification"
+      ],
+      "properties": {
+        "build_receipt": {"$ref": "#/$defs/nonemptyFile"},
+        "build_schema": {"$ref": "#/$defs/nonemptyFile"},
+        "calibration_receipt": {"$ref": "#/$defs/nonemptyFile"},
+        "calibration_verification": {"$ref": "#/$defs/nonemptyFile"}
+      }
+    },
+    "calibration": {
+      "type": "array", "minItems": 2, "maxItems": 2,
+      "items": {
+        "type": "object", "additionalProperties": false,
+        "required": [
+          "population", "expected_probability_sha256",
+          "observed_probability_sha256", "expected_coded_bits",
+          "observed_coded_bits"
+        ],
+        "properties": {
+          "population": {"enum": ["opening_10m", "distant_10m"]},
+          "expected_probability_sha256": {"$ref": "#/$defs/sha256"},
+          "observed_probability_sha256": {"$ref": "#/$defs/sha256"},
+          "expected_coded_bits": {"type": "integer", "minimum": 1},
+          "observed_coded_bits": {"type": "integer", "minimum": 1}
+        }
+      }
+    },
+    "arms": {
+      "type": "object", "additionalProperties": false,
+      "required": ["parent", "q1"],
+      "properties": {
+        "parent": {"$ref": "#/$defs/arm"},
+        "q1": {"$ref": "#/$defs/arm"}
+      }
+    },
+    "controls": {
+      "type": "object", "additionalProperties": false,
+      "required": [
+        "observer_off_payload_sha256", "observer_on_payload_sha256",
+        "post_head_probability_sha256", "pre_head_probability_sha256",
+        "unmutated_state_sha256", "single_byte_mutated_state_sha256",
+        "checkpoint_negative_controls_rejected"
+      ],
+      "properties": {
+        "observer_off_payload_sha256": {"$ref": "#/$defs/sha256"},
+        "observer_on_payload_sha256": {"$ref": "#/$defs/sha256"},
+        "post_head_probability_sha256": {"$ref": "#/$defs/sha256"},
+        "pre_head_probability_sha256": {"$ref": "#/$defs/sha256"},
+        "unmutated_state_sha256": {"$ref": "#/$defs/sha256"},
+        "single_byte_mutated_state_sha256": {"$ref": "#/$defs/sha256"},
+        "checkpoint_negative_controls_rejected": {"type": "boolean"}
+      }
+    },
+    "decisions": {
+      "type": "object", "additionalProperties": false,
+      "required": [
+        "activation_pass", "calibration_pass", "exclusive_lane_pass", "probability_identity_pass",
+        "coder_checkpoint_identity_pass", "state_checkpoint_identity_pass",
+        "modeled_stream_identity_pass", "payload_identity_pass",
+        "controls_pass", "full_identity_pass"
+      ],
+      "properties": {
+        "activation_pass": {"type": "boolean"},
+        "calibration_pass": {"type": "boolean"},
+        "exclusive_lane_pass": {"type": "boolean"},
+        "probability_identity_pass": {"type": "boolean"},
+        "coder_checkpoint_identity_pass": {"type": "boolean"},
+        "state_checkpoint_identity_pass": {"type": "boolean"},
+        "modeled_stream_identity_pass": {"type": "boolean"},
+        "payload_identity_pass": {"type": "boolean"},
+        "controls_pass": {"type": "boolean"},
+        "full_identity_pass": {"type": "boolean"}
+      }
+    },
+    "errors": {"type": "array", "items": {"type": "string", "minLength": 1}},
+    "terminal_pass": {"type": "boolean"},
+    "claim_boundary": {"type": "string", "minLength": 1},
+    "gamma_compression_credit_bytes": {"const": 0},
+    "gamma_score_credit_bytes": {"const": 0}
+  },
+  "allOf": [{
+    "if": {"properties": {"terminal_pass": {"const": true}}},
+    "then": {"properties": {
+      "decisions": {"properties": {"full_identity_pass": {"const": true}}},
+      "errors": {"maxItems": 0}
+    }}
+  }],
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "file": {
+      "type": "object", "additionalProperties": false,
+      "required": ["path", "bytes", "sha256"],
+      "properties": {
+        "path": {"type": "string", "pattern": "^/"},
+        "bytes": {"type": "integer", "minimum": 0},
+        "sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "nonemptyFile": {
+      "type": "object", "additionalProperties": false,
+      "required": ["path", "bytes", "sha256"],
+      "properties": {
+        "path": {"type": "string", "pattern": "^/"},
+        "bytes": {"type": "integer", "minimum": 1},
+        "sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "coderCheckpoint": {
+      "type": "object", "additionalProperties": false,
+      "required": [
+        "modeled_bytes", "kind", "coded_bits", "low", "high",
+        "payload_bytes", "probability_sha256"
+      ],
+      "properties": {
+        "modeled_bytes": {"type": "integer", "minimum": 0},
+        "kind": {"enum": ["start", "fixed", "terminal"]},
+        "coded_bits": {"type": "integer", "minimum": 0},
+        "low": {"type": "integer", "minimum": 0, "maximum": 4294967295},
+        "high": {"type": "integer", "minimum": 0, "maximum": 4294967295},
+        "payload_bytes": {"type": "integer", "minimum": 0},
+        "probability_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "stateCheckpoint": {
+      "type": "object", "additionalProperties": false,
+      "required": ["modeled_bytes", "kind", "allocation_count", "manifest_sha256"],
+      "properties": {
+        "modeled_bytes": {"type": "integer", "minimum": 0},
+        "kind": {"enum": ["start", "fixed", "terminal"]},
+        "allocation_count": {"const": 26},
+        "manifest_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "leaseWitness": {
+      "type": "object", "additionalProperties": false,
+      "required": [
+        "candidate_id", "lease_id", "owner_pid", "owner_start_ticks",
+        "result_path", "scratch_path", "signal_authority"
+      ],
+      "properties": {
+        "candidate_id": {"const": "cmix_filebacked_fxcm_full_probability_state_identity_q0_v1"},
+        "lease_id": {"$ref": "#/$defs/sha256"},
+        "owner_pid": {"type": "integer", "minimum": 1},
+        "owner_start_ticks": {"type": "integer", "minimum": 1},
+        "result_path": {"type": "string", "pattern": "^/"},
+        "scratch_path": {"type": "string", "pattern": "^/"},
+        "signal_authority": {"const": false}
+      }
+    },
+    "arm": {
+      "type": "object", "additionalProperties": false,
+      "required": [
+        "observer_receipt", "binary", "return_code", "modeled_stream",
+        "coded_bits", "probability_sha256", "coder_checkpoints",
+        "state_checkpoints", "exclusive_lease_witness", "payload", "self_extracting_archive"
+      ],
+      "properties": {
+        "observer_receipt": {"$ref": "#/$defs/nonemptyFile"},
+        "binary": {"$ref": "#/$defs/nonemptyFile"},
+        "return_code": {"type": "integer"},
+        "modeled_stream": {"$ref": "#/$defs/nonemptyFile"},
+        "coded_bits": {"type": "integer", "minimum": 1},
+        "probability_sha256": {"$ref": "#/$defs/sha256"},
+        "coder_checkpoints": {
+          "type": "array", "minItems": 7, "maxItems": 7,
+          "items": {"$ref": "#/$defs/coderCheckpoint"}
+        },
+        "state_checkpoints": {
+          "type": "array", "minItems": 7, "maxItems": 7,
+          "items": {"$ref": "#/$defs/stateCheckpoint"}
+        },
+        "exclusive_lease_witness": {"$ref": "#/$defs/leaseWitness"},
+        "payload": {"$ref": "#/$defs/nonemptyFile"},
+        "self_extracting_archive": {"$ref": "#/$defs/nonemptyFile"}
+      }
+    }
+  }
+}

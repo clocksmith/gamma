@@ -1,0 +1,84 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gamma.enwiki9.cmix-obias-midpoint-source-difference.v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema", "candidate_id", "parent_candidate_id", "parent_source_closure",
+    "parent_tree_sha256", "candidate_source_root", "candidate_tree_sha256",
+    "parent_file_count", "candidate_file_count", "candidate_files", "allowlist",
+    "changes", "checks", "authority"
+  ],
+  "properties": {
+    "schema": {"const": "gamma.enwiki9.cmix-obias-midpoint-source-difference.v1"},
+    "candidate_id": {"const": "cmix_obias_shadow_midpoint_oracle64_q0_v4"},
+    "parent_candidate_id": {"const": "cmix_obias_memory_safe_parent_filebacked_q1_v1"},
+    "parent_source_closure": {"$ref": "#/$defs/artifact"},
+    "parent_tree_sha256": {"$ref": "#/$defs/sha256"},
+    "candidate_source_root": {"type": "string", "pattern": "^results/.+/source/candidate-tree$"},
+    "candidate_tree_sha256": {"$ref": "#/$defs/sha256"},
+    "parent_file_count": {"const": 119},
+    "candidate_file_count": {"const": 123},
+    "candidate_files": {
+      "type": "array", "minItems": 123, "maxItems": 123,
+      "items": {"$ref": "#/$defs/entry"}
+    },
+    "allowlist": {
+      "type": "object", "additionalProperties": false,
+      "required": ["modified_paths", "added_paths", "removed_paths"],
+      "properties": {
+        "modified_paths": {"type": "array", "minItems": 5, "maxItems": 5, "items": {"$ref": "#/$defs/relative"}, "uniqueItems": true},
+        "added_paths": {"type": "array", "minItems": 4, "maxItems": 4, "items": {"$ref": "#/$defs/relative"}, "uniqueItems": true},
+        "removed_paths": {"type": "array", "maxItems": 0}
+      }
+    },
+    "changes": {
+      "type": "object", "additionalProperties": false,
+      "required": ["added", "modified", "removed", "unchanged_paths", "unchanged_paths_sha256"],
+      "properties": {
+        "added": {"type": "array", "minItems": 4, "maxItems": 4, "items": {"$ref": "#/$defs/addition"}},
+        "modified": {"type": "array", "minItems": 5, "maxItems": 5, "items": {"$ref": "#/$defs/modification"}},
+        "removed": {"type": "array", "maxItems": 0},
+        "unchanged_paths": {"type": "array", "minItems": 114, "maxItems": 114, "items": {"$ref": "#/$defs/relative"}, "uniqueItems": true},
+        "unchanged_paths_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "checks": {
+      "type": "object", "additionalProperties": false,
+      "required": ["complete_parent_closure", "complete_candidate_closure", "all_changes_within_allowlist", "all_unchanged_files_byte_identical", "no_removed_files", "no_symlinks_or_hardlinks"],
+      "properties": {
+        "complete_parent_closure": {"const": true},
+        "complete_candidate_closure": {"const": true},
+        "all_changes_within_allowlist": {"const": true},
+        "all_unchanged_files_byte_identical": {"const": true},
+        "no_removed_files": {"const": true},
+        "no_symlinks_or_hardlinks": {"const": true}
+      }
+    },
+    "authority": {"const": "source_identity_only"}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "relative": {"type": "string", "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$)).+$"},
+    "artifact": {
+      "type": "object", "additionalProperties": false,
+      "required": ["path", "bytes", "sha256"],
+      "properties": {"path": {"$ref": "#/$defs/relative"}, "bytes": {"type": "integer", "minimum": 1}, "sha256": {"$ref": "#/$defs/sha256"}}
+    },
+    "entry": {
+      "type": "object", "additionalProperties": false,
+      "required": ["path", "bytes", "sha256", "role"],
+      "properties": {"path": {"$ref": "#/$defs/relative"}, "bytes": {"type": "integer", "minimum": 0}, "sha256": {"$ref": "#/$defs/sha256"}, "role": {"enum": ["source", "build_input", "shared_allocator_header"]}}
+    },
+    "addition": {
+      "type": "object", "additionalProperties": false,
+      "required": ["path", "after"],
+      "properties": {"path": {"$ref": "#/$defs/relative"}, "after": {"$ref": "#/$defs/entry"}}
+    },
+    "modification": {
+      "type": "object", "additionalProperties": false,
+      "required": ["path", "before", "after"],
+      "properties": {"path": {"$ref": "#/$defs/relative"}, "before": {"$ref": "#/$defs/entry"}, "after": {"$ref": "#/$defs/entry"}}
+    }
+  }
+}

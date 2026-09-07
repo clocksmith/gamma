@@ -1,0 +1,85 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gamma.enwiki9.cmix-obias-midpoint-source-materialization-receipt.v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema", "candidate_id", "parent_candidate_id", "proposal", "activated_at",
+    "activation_requirement", "parent_qualification", "bindings", "materialization",
+    "checks", "materialized", "authority", "build_exists", "archive_observed",
+    "execution_authority", "archive_authority", "scientific_verdict",
+    "gamma_compression_credit_bytes", "gamma_score_credit_bytes"
+  ],
+  "properties": {
+    "schema": {"const": "gamma.enwiki9.cmix-obias-midpoint-source-materialization-receipt.v1"},
+    "candidate_id": {"const": "cmix_obias_shadow_midpoint_oracle64_q0_v4"},
+    "parent_candidate_id": {"const": "cmix_obias_memory_safe_parent_filebacked_q1_v1"},
+    "proposal": {"$ref": "#/$defs/artifact"},
+    "activated_at": {"type": "string", "minLength": 1},
+    "activation_requirement": {"$ref": "#/$defs/verifiedRequirement"},
+    "parent_qualification": {
+      "type": "object", "additionalProperties": false,
+      "required": ["receipt", "verification", "policy", "activated_plan", "policy_revision", "claim_authority"],
+      "properties": {
+        "receipt": {"$ref": "#/$defs/artifact"}, "verification": {"$ref": "#/$defs/artifact"},
+        "policy": {"$ref": "#/$defs/artifact"}, "activated_plan": {"$ref": "#/$defs/artifact"},
+        "policy_revision": {"type": "integer", "minimum": 7},
+        "claim_authority": {"const": "memory_safe_external_parent_only"}
+      }
+    },
+    "bindings": {"type": "object", "minProperties": 15, "additionalProperties": {"$ref": "#/$defs/artifact"}},
+    "materialization": {
+      "type": "object", "additionalProperties": false,
+      "required": ["output_root", "candidate_source_root", "parent_file_count", "candidate_file_count", "copied_parent_files", "copied_overlay_files", "patch", "source_difference_manifest", "parent_tree_sha256", "candidate_tree_sha256", "publish_method", "atomic_publish"],
+      "properties": {
+        "output_root": {"$ref": "#/$defs/relative"}, "candidate_source_root": {"$ref": "#/$defs/relative"},
+        "parent_file_count": {"const": 119}, "candidate_file_count": {"const": 123},
+        "copied_parent_files": {"const": 119}, "copied_overlay_files": {"const": 4},
+        "patch": {"$ref": "#/$defs/patch"}, "source_difference_manifest": {"$ref": "#/$defs/artifact"},
+        "parent_tree_sha256": {"$ref": "#/$defs/sha256"}, "candidate_tree_sha256": {"$ref": "#/$defs/sha256"},
+        "publish_method": {"const": "renameat2_noreplace_under_exclusive_sibling_lock"},
+        "atomic_publish": {"const": true}
+      }
+    },
+    "checks": {
+      "type": "object", "minProperties": 8,
+      "additionalProperties": {"const": true}
+    },
+    "materialized": {"const": true},
+    "authority": {"const": "source_identity_only"},
+    "build_exists": {"const": false}, "archive_observed": {"const": false},
+    "execution_authority": {"const": false}, "archive_authority": {"const": false},
+    "scientific_verdict": {"type": "null"},
+    "gamma_compression_credit_bytes": {"const": 0}, "gamma_score_credit_bytes": {"const": 0}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "relative": {"type": "string", "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$)).+$"},
+    "artifact": {
+      "type": "object", "additionalProperties": false,
+      "required": ["path", "bytes", "sha256"],
+      "properties": {"path": {"$ref": "#/$defs/relative"}, "bytes": {"type": "integer", "minimum": 1}, "sha256": {"$ref": "#/$defs/sha256"}}
+    },
+    "verifiedRequirement": {
+      "type": "object", "additionalProperties": false,
+      "required": ["kind", "candidate_id", "qualification_receipt_path", "qualification_receipt_sha256", "verification_path", "verification_sha256", "policy_revision", "claim_authority", "qualified"],
+      "properties": {
+        "kind": {"const": "terminal_parent_qualification_v3"},
+        "candidate_id": {"const": "cmix_obias_memory_safe_parent_filebacked_q1_v1"},
+        "qualification_receipt_path": {"$ref": "#/$defs/relative"}, "qualification_receipt_sha256": {"$ref": "#/$defs/sha256"},
+        "verification_path": {"$ref": "#/$defs/relative"}, "verification_sha256": {"$ref": "#/$defs/sha256"},
+        "policy_revision": {"type": "integer", "minimum": 7},
+        "claim_authority": {"const": "memory_safe_external_parent_only"}, "qualified": {"const": true}
+      }
+    },
+    "patch": {
+      "type": "object", "additionalProperties": false,
+      "required": ["path", "argv", "return_code", "stdout_sha256", "stderr_sha256"],
+      "properties": {
+        "path": {"$ref": "#/$defs/artifact"},
+        "argv": {"type": "array", "prefixItems": [{"const": "/usr/bin/git"}, {"const": "apply"}, {"const": "--whitespace=error-all"}, {"const": "-"}], "items": false},
+        "return_code": {"const": 0}, "stdout_sha256": {"$ref": "#/$defs/sha256"}, "stderr_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    }
+  }
+}
