@@ -1,0 +1,32 @@
+
+> mandate-2038@0.19.5 check
+> npm run content:check && npm run content:check:boundaries && npm run content:validate && npm run content:validate:lore && npm run content:lint:provenance && node tasks/check-project.mjs
+
+
+> mandate-2038@0.19.5 content:check
+> node tasks/content/validate-era-situation-ledger.mjs && node tasks/content/compile.mjs --check
+
+era-situation-ledger: verified 4 Eras, 51 scenarios, and 54 game surfaces
+content-graph: verified 27 generated artifacts
+
+> mandate-2038@0.19.5 content:check:boundaries
+> node tasks/content/check-boundaries.mjs
+
+content-boundaries: verified 10 complete component sources
+
+> mandate-2038@0.19.5 content:validate
+> node tasks/content/validate-era-situation-ledger.mjs && node tasks/content/compile.mjs --validate
+
+era-situation-ledger: verified 4 Eras, 51 scenarios, and 54 game surfaces
+content-graph: validated 27 generated artifacts
+
+> mandate-2038@0.19.5 content:validate:lore
+> node tasks/content/validate-era-situation-ledger.mjs
+
+era-situation-ledger: verified 4 Eras, 51 scenarios, and 54 game surfaces
+
+> mandate-2038@0.19.5 content:lint:provenance
+> node tasks/content/lint-provenance.mjs
+
+numeric-provenance: 293 hypotheses, 14 evidence-backed values
+check-project: 254 required files, 430 authored JSON files, executable game 0.19.5, physical candidate 0.11.0-rc.7-test, report schema 6, unified strategic-unsolvability contract, 40-card Training contract, structurally complete thematic manifest

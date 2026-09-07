@@ -1096,9 +1096,11 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
       for (const player of ordered) this.addResource(player, "capability", 1);
       this.addResource(extreme("customers", Math.min), "trust", 1);
     } else if (id === "export_controls") {
-      for (const category of ["chip", "government"]) {
-        const seat = this.controller(category);
-        if (seat !== null) this.addResource(this.players[seat], "runway", 1);
+      const chip = this.board.find(tile => tile.category === "chip");
+      const chipController = chip ? this.districtController(chip.instanceId) : null;
+      if (chipController !== null) this.addResource(this.players[chipController], "runway", 1);
+      for (const player of ordered) {
+        if (this.controlledCategories(player).has("government")) this.addResource(player, "runway", 1);
       }
     } else if (id === "weights_on_internet") {
       const low = extreme("capability", Math.min), high = extreme("capability", Math.max);
@@ -1116,13 +1118,14 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
         this.awardMandate(player, 1, id);
       }
     } else if (id === "ai_written_law") {
-      const controller = this.controller("government");
       let accepted = 0;
       for (const player of ordered) if (await offer(player, "Pay 1 Runway; gain 1 Trust", { runway: -1, trust: 1 }, player.runway >= 1)) {
         this.spendRunway(player, 1, { cause: id });
         this.addResource(player, "trust", 1); accepted++;
       }
-      if (controller !== null) this.addResource(this.players[controller], "runway", accepted);
+      for (const player of ordered) {
+        if (this.controlledCategories(player).has("government")) this.addResource(player, "runway", accepted);
+      }
     } else if (id === "autonomous_corporation") {
       const counts = this.players.map(player => this.board.filter(tile => this.districtController(tile.instanceId) === player.seat).length);
       const player = this.players[this.nearestInitiative(this.players.filter(player => counts[player.seat] === Math.max(...counts)).map(player => player.seat))];

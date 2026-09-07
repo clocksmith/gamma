@@ -46,9 +46,11 @@ Deliver a coherent, replayable institutional strategy game whose authored rules,
   detailed references without copying their source prose.
 - `world.md` is the sole authored source for world lore, World Endings, token
   microcopy, box copy, component creative prose, and scenario canon, projecting `dist/runtime/world-copy.json`
-  and `dist/docs/world-and-institutions.md`. It opens with the setting primer,
-  the four concise Era overviews, and the four World Endings; publishing copy,
-  concise editorial notes, the scenario canon and its explicit dispositions follow the fiction.
+  and the selected `dist/docs/world-and-institutions.md` companion. It is an internal
+  author bible organized into setting/Eras, institutions and component copy,
+  scenarios, endings, publishing copy, and editorial notes. Only explicitly selected
+  passages and labeled player fields enter player projections. Ending conditions
+  belong beside the mechanical outcome configuration in `components/game.json`.
   Era panels own their name, rules, and unlocks and reference Markdown epigraphs. Shared identities resolve
   from their existing owners. The overview preserves lore in accessible past-tense
   narration from 2038, without a character plot or mandatory events.
@@ -59,7 +61,9 @@ Deliver a coherent, replayable institutional strategy game whose authored rules,
 - Every admitted lore situation has one structured Era placement, and every
   governed lore surface is bound exactly once with copy and mechanic receipts.
 - World Markdown owns all scenario definitions and shared qualification policies.
-  Creative component fields reference its named excerpts through the existing resolver.
+  Components use one `loreRef` per record to select labeled player copy. Missing
+  references, duplicate fields, and overrides fail compilation. Author notes and
+  unselected lore are unavailable to player templates.
   Components retain mechanical text and own scenario
   references and surface-specific Era relations; Era panels retain `$era` metadata.
   Lore-only scenarios assert no dedicated mechanic or game binding. The Era-situation index and its

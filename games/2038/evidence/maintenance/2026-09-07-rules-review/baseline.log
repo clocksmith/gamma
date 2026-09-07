@@ -1,0 +1,44 @@
+TAP version 13
+# Subtest: Government rewards reach both district controllers regardless of tile order
+not ok 1 - Government rewards reach both district controllers regardless of tile order
+  ---
+  duration_ms: 10.474708
+  type: 'test'
+  location: '/private/var/folders/85/l5dptg296tlfx03cd_k7h0l80000gn/T/mandate-government-baseline-q6en39my/tests/rules-review.test.mjs:38:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    export_controls, reverse=false
+    + actual - expected
+    
+      [
+        6,
+    -   6,
+        5,
+    +   5
+      ]
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+    0: 6
+    1: 6
+    2: 5
+  actual:
+    0: 6
+    1: 5
+    2: 5
+  operator: 'deepStrictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///private/var/folders/85/l5dptg296tlfx03cd_k7h0l80000gn/T/mandate-government-baseline-q6en39my/tests/rules-review.test.mjs:44:12)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 0
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 79.311

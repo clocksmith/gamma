@@ -123,6 +123,7 @@ Each faction board provides:
 
 - faction identity, starts, and one permanent ability;
 - five captive sliders for Runway, Compute, Capability, Customers, and Trust;
+- three labelled Trust award checkboxes beside the Trust slider: 2, 4, and 6;
 - six Core Action positions;
 - supply wells for four Agents, Facilities, Generator, Scrutiny, and
   Mandate marker; and
@@ -143,6 +144,19 @@ All other Facilities are connected by an own Generator on the same or an adjacen
 district. Evaluate current positions; use no Power cubes, capacity tracks, or
 retained allocation. A Mega-Cluster operates while both hosts remain adjacent
 and connected.
+
+### Permanent Trust award record
+
+Print three writable checkboxes beside the Trust slider, labelled 2, 4, and 6.
+Premark every threshold at or below the faction's printed starting Trust: its
+award is already included in starting Mandate. Mark each remaining box when
+that threshold first scores. Never erase a marked box during the game, including
+after a Trust loss, Audit, or Era change. Clear only for a new game, then restore
+the starting marks. Use the shared marker; no additional token is required.
+
+Example: after Trust reaches four and scores, a fall to three leaves the four
+box marked. Returning to four earns no second award. Keep these boxes physically
+separate from the erasable Current Mandate ledger.
 
 ### Current Mandate ledger
 

@@ -1,3 +1,4 @@
+import { parseComponentLore, worldPassages, parseWorldCopyFromText } from "./world-parser.mjs";
 import { readFile } from "node:fs/promises";
 import { dirname, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -220,7 +221,7 @@ async function assertDeferredTermsAbsentFromBaseline(scenarios) {
   const baseline = (await Promise.all(
     baselinePaths.map(async path => {
       const source = await readFile(resolve(projectRoot, path), "utf8");
-      if (path === "world.md") return documentSection(source, "player-world") + documentSection(source, "component-prose");
+      if (path === "world.md") return JSON.stringify([worldPassages(source), parseComponentLore(source), playerContent(parseWorldCopyFromText(source))]);
       return path.endsWith(".json") ? JSON.stringify(playerContent(JSON.parse(source))) : source;
     })
   )).join("\n").toLocaleLowerCase("en-US");

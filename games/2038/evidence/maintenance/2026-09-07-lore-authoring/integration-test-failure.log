@@ -1,0 +1,80 @@
+TAP version 13
+# Subtest: Markdown owns narrative; mechanics own ending conditions; player projections contain neither editorial notes nor unresolved references
+ok 1 - Markdown owns narrative; mechanics own ending conditions; player projections contain neither editorial notes nor unresolved references
+  ---
+  duration_ms: 27.475167
+  type: 'test'
+  ...
+# Subtest: world copy rejects duplicates, omissions, unknown labels, and missing identities
+ok 2 - world copy rejects duplicates, omissions, unknown labels, and missing identities
+  ---
+  duration_ms: 3.894458
+  type: 'test'
+  ...
+# Subtest: canon requires explicit unique identities, dispositions, and complete narratives
+ok 3 - canon requires explicit unique identities, dispositions, and complete narratives
+  ---
+  duration_ms: 5.117875
+  type: 'test'
+  ...
+# Subtest: lore-only entries cannot gain mechanics, public deployment, or game bindings
+ok 4 - lore-only entries cannot gain mechanics, public deployment, or game bindings
+  ---
+  duration_ms: 135.1555
+  type: 'test'
+  ...
+# Subtest: historical world releases retain their first committed bytes
+ok 5 - historical world releases retain their first committed bytes
+  ---
+  duration_ms: 41.037292
+  type: 'test'
+  ...
+# Subtest: current teaching materials follow the release declaration and supported Audit counts
+ok 6 - current teaching materials follow the release declaration and supported Audit counts
+  ---
+  duration_ms: 9.436042
+  type: 'test'
+  ...
+# Subtest: shared policy tables reject malformed rows and preserve escaped punctuation
+ok 7 - shared policy tables reject malformed rows and preserve escaped punctuation
+  ---
+  duration_ms: 0.593875
+  type: 'test'
+  ...
+# Subtest: an edited Markdown excerpt compiles while stale release publication and freezing are rejected
+not ok 8 - an edited Markdown excerpt compiles while stale release publication and freezing are rejected
+  ---
+  duration_ms: 1080.486917
+  type: 'test'
+  location: '/Users/xyz/deco/gamma/games/2038/tests/world-authoring.test.mjs:118:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    The expression evaluated to a falsy value:
+    
+      assert.ok(cards.includes("Authoring fixture correction."))
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: '=='
+  stack: |-
+    TestContext.<anonymous> (file:///Users/xyz/deco/gamma/games/2038/tests/world-authoring.test.mjs:146:12)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: lore references reject missing entries, ambiguous overrides, unapproved fields and internal excerpt access
+ok 9 - lore references reject missing entries, ambiguous overrides, unapproved fields and internal excerpt access
+  ---
+  duration_ms: 11.199291
+  type: 'test'
+  ...
+1..9
+# tests 9
+# suites 0
+# pass 8
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1400.96175
