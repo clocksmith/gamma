@@ -1,0 +1,41 @@
+{
+  "command": [
+    "/usr/bin/taskset",
+    "-c",
+    "5",
+    "/usr/bin/timeout",
+    "--signal=TERM",
+    "--kill-after=2",
+    "90",
+    "/usr/bin/prlimit",
+    "--as=536870912:536870912",
+    "--cpu=60:60",
+    "--fsize=33554432:33554432",
+    "--",
+    "/usr/bin/python3",
+    "-B",
+    "-m",
+    "unittest",
+    "discover",
+    "-s",
+    "tests",
+    "-p",
+    "test_causal_field_opportunity_gate_v1.py",
+    "-v"
+  ],
+  "returncode": 0,
+  "wall_seconds": 0.11398402508348227,
+  "cpu_seconds": 0.07547,
+  "peak_child_rss_kib": 29372,
+  "sources": [
+    {
+      "path": "tools/causal_field_opportunity_gate_v1.py",
+      "sha256": "4097fdc42f53294c27178e04d15ea40221296ff7a4ad58807d87ba49ec2c5fdf"
+    },
+    {
+      "path": "tests/test_causal_field_opportunity_gate_v1.py",
+      "sha256": "7540ec68eea73eb4086e920a203ddc9715082fd6d05cc4d97eaac05313176164"
+    }
+  ],
+  "corpus_bytes": 0
+}

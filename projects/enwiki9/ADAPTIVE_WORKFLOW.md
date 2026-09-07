@@ -75,6 +75,12 @@ Host capacity, this shell's affinity, and a job's resource assignment differ.
 Visible cgroup ancestors can further restrict capacity; hidden limits and other
 jobs' guards still need inspection. Unknown probes stay unknown.
 
+Check the filesystem used by `TMPDIR` as well as `results/`. A tmpfs user quota
+can return `EDQUOT` while `df` still shows free space. Preserve the failed attempt;
+route temporary work to a uniquely owned workspace directory when needed, bind
+that path in the execution plan, and include its actual writes in the scratch
+guard. The lab already counts its candidate snapshot as guarded scratch.
+
 Choose the next move from current evidence and measured costs:
 
 1. Inspect live/unknown jobs, claims, leases, their CPU/thread assignments and

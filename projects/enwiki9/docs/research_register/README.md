@@ -49,3 +49,4 @@ Archived files preserve complete H2 records.
 - [part-031.md: 2026-09-05 bounded frontier comparisons through 2026-09-04 Fiber-FOSSIL retirement](archive/part-031.md)
 - [part-032.md: 2026-09-05 native MIDAS coder and causal scheduler synthetic checks](archive/part-032.md)
 - [part-033.md: 2026-09-05 restored terminal receipt navigation](archive/part-033.md)
+- [part-034.md: 2026-09-05 public FX2 reproduction and measured comparisons](archive/part-034.md)

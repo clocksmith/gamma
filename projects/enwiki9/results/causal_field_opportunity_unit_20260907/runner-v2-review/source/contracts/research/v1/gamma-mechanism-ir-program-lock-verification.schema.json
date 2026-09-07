@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gamma.enwiki9.gamma-mechanism-ir-program-lock-verification.v1",
+  "title": "Gamma Mechanism IR v3 program-lock verification",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "program_id",
+    "verified",
+    "errors",
+    "source_contract_sha256",
+    "program_lock_sha256",
+    "recomputed_artifact_set_sha256",
+    "checks",
+    "claim_authority",
+    "execution_authority",
+    "promotion_authority"
+  ],
+  "properties": {
+    "schema": {"const": "gamma.enwiki9.gamma-mechanism-ir-program-lock-verification.v1"},
+    "program_id": {"const": "gamma_mechanism_ir_v3"},
+    "verified": {"type": "boolean"},
+    "errors": {"type": "array", "items": {"type": "string"}},
+    "source_contract_sha256": {"$ref": "#/$defs/sha256"},
+    "program_lock_sha256": {"$ref": "#/$defs/sha256"},
+    "recomputed_artifact_set_sha256": {"$ref": "#/$defs/sha256"},
+    "checks": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["contract_identity_pass", "path_closure_pass", "file_identity_pass", "artifact_set_pass", "filesystem_safety_pass"],
+      "properties": {
+        "contract_identity_pass": {"type": "boolean"},
+        "path_closure_pass": {"type": "boolean"},
+        "file_identity_pass": {"type": "boolean"},
+        "artifact_set_pass": {"type": "boolean"},
+        "filesystem_safety_pass": {"type": "boolean"}
+      }
+    },
+    "claim_authority": {"const": "none"},
+    "execution_authority": {"const": false},
+    "promotion_authority": {"const": false}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  }
+}

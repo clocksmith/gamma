@@ -1,0 +1,22 @@
+{
+  "command": [
+    "/usr/bin/taskset",
+    "-c",
+    "3",
+    "/usr/bin/timeout",
+    "--signal=TERM",
+    "--kill-after=2",
+    "90",
+    "/usr/bin/prlimit",
+    "--as=536870912:536870912",
+    "--cpu=60:60",
+    "--fsize=33554432:33554432",
+    "--",
+    "/usr/bin/python3",
+    "-B",
+    "tools/enwiki9_lab.py",
+    "start"
+  ],
+  "returncode": 0,
+  "wall_seconds": 6.71194999711588
+}
