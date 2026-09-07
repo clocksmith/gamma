@@ -1,0 +1,29 @@
+{
+  "schema": "gamma.enwiki9.enumerative-implementation-plan.v1",
+  "owner": "root_explore",
+  "candidate": "dualstream_enumerative250k_q0_v1",
+  "objective_bytes": 99000000,
+  "hypothesis": "Exact bounded enumeration of the unchanged serialized grammar sections reduces complete stored bytes relative to Deflate for at least one fixed representation. Separately measure the old versus tokenized argument representation under the same enumerative backend.",
+  "mechanism": "Rank serialized section bytes in lexicographic multiset order, using 4096-byte chunks and exact integer rank widths. Transmit all counts, chunk lengths, sections, modes and frame boundaries. This is byte-alphabet enumeration, not token-level enumeration or fresh grammar discovery.",
+  "development": "Synthetic exhaustive small alphabets, exact power-of-256 rank boundaries, arbitrary bytes, corruption, output bounds, shared arguments and file inversion first. Then one previously examined opening250000-byte fixed-program diagnostic. No tuning, confirmation or larger run in this candidate.",
+  "population": "operations/evidence/fixtures/dualstream_opening250k_v1.raw",
+  "comparisons": [
+    "P: unchanged retained plain Deflate archive, copied and independently decoded",
+    "B: unchanged retained old selected-program Deflate archive",
+    "E: enumerative storage of exactly B's old-argument sections",
+    "T: enumerative storage of exactly B's program with tokenized argument storage",
+    "R: enumerative storage of P's raw byte stream with identical chunk policy"
+  ],
+  "identity": "E and T retain B's exact tagged program graph, argument boundaries, selected rules and raw frame partitions. E preserves every uncompressed serialized section. T changes only literal definitions and argument storage. Decoder receives archive plus declared source/runtime only. Repeats start from the retained selected archive; no raw-discovery repeat claim.",
+  "bounds": {
+    "cpu_set": [2], "threads": 1, "memory_bytes": 1073741824,
+    "scratch_bytes": 67108864, "wall_seconds": 600,
+    "phase_cpu_seconds": 60, "phase_wall_seconds": 90,
+    "phase_address_bytes": 536870912, "file_bytes": 33554432,
+    "synthetic_cpu_seconds": 60, "synthetic_wall_seconds": 90
+  },
+  "kernel_basis": "Prior fixed-program gate is measured; exact big-integer kernel is not. Synthetic tests must measure it before any corpus admission. These are stops, not engineering-duration estimates.",
+  "accounting": "Count ranks, count tables, stream lengths, dictionaries, programs, options and all framing in actual archive length. Inventory required local codec source and runtime separately. Complete package remains unknown until dependency/license/distribution closure is verified; no 99M or prize certificate from this sample.",
+  "stop": "Hold on source, resource, inverse, repeat, graph or additive-cost failure. A larger complete archive rejects only this representation/coding realization. No field-selector successor, no HORIZON/MIDAS/FX2 state access, no installations.",
+  "publication": "This prospective plan publishes implementation ownership and frozen scientific choices. Completed source, tests, synthetic kernel receipts and execution plan must be hash-bound in a new frozen adaptive experiment and published claim before corpus execution."
+}
