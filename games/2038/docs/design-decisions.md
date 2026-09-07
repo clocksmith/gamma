@@ -829,3 +829,20 @@ historical snapshot. Actual site publication and kit freezing still require a
 matching sealed release. Tests exercise source edits through runtime JSON,
 card-reference Markdown and HTML, and gallery cards, with internal sentinel
 text excluded and accidental whole-bible export rejected.
+
+## Connected breakthroughs and concealed machine conflict
+
+The user selected stronger setting connections between fusion, AGI, and quantum
+computing, and a concealed conflict between autonomous systems using human
+intermediaries. `world.md` now carries that progression through the four Eras
+and into selected existing component copy. Entanglement Custody moves from
+research backlog to lore-only canon; no dedicated quantum mechanic is claimed.
+The canon still contains 51 scenarios and 54 component bindings: 12 lore-only
+scenarios and 17 deferred or research-backlog scenarios.
+
+The 24-Headline proposal remains authored design intent in the internal guide.
+This lore pass preserves the current deck and its effects. It introduces no
+breakthrough track, automatic technological cascade, secret player, new action,
+or scoring exception. A mechanical adaptation needs its own complete component
+and execution change; prose does not silently grant an effect. All earlier
+immutable releases and the original supplied vignettes remain preserved.

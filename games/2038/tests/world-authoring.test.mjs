@@ -17,8 +17,8 @@ const read = path => readFile(new URL(`../${path}`, import.meta.url), "utf8");
 test("Markdown owns narrative; mechanics own ending conditions; player projections contain neither editorial notes nor unresolved references", async () => {
   const { text, worldCopy, scenarios } = await readWorldDocument();
   assert.equal(scenarios.length, 51);
-  assert.equal(scenarios.filter(s => s.disposition === "lore-only").length, 11);
-  assert.equal(scenarios.filter(s => ["deferred", "research-backlog"].includes(s.disposition)).length, 18);
+  assert.equal(scenarios.filter(s => s.disposition === "lore-only").length, 12);
+  assert.equal(scenarios.filter(s => ["deferred", "research-backlog"].includes(s.disposition)).length, 17);
   const index = await buildScenarioIndex();
   assert.deepEqual(index.scenarios.map(({ surfaceBindings, ...s }) => s), [...scenarios].sort((a, b) => a.id.localeCompare(b.id, "en")));
   assert.deepEqual(JSON.parse(await read("dist/runtime/world-copy.json")), playerContent(worldCopy));
