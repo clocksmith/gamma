@@ -33,9 +33,15 @@ retains 20 passing runner tests and 22 independent review tests, including the
 actual canonical timer semantics. The superseded runner is archived with its
 receipts; the [v2 entry point](../tools/fx2_causal_field_wrt_gate_v2.py) verifies
 the live outer controller before corpus buffers. The [frozen experiment](../operations/adaptive/experiments/fx2_causal_field_wrt_replay250k_q0_v1.json)
-binds 205 inputs and 134 outputs. ROOT owns job `20260907T130508Z_c3d4b66329`;
-its held ownership and inputs are published at `6a4385fdb`. No corpus result is
-yet asserted.
+binds 205 inputs and 134 outputs. Job `20260907T130508Z_c3d4b66329` is closed.
+The [terminal receipt](../operations/provenance/fx2_causal_field_wrt_terminal_20260907.json)
+records P/K/T/S **33,429 bytes**, R **33,433**: zero treatment savings. All five
+inverses, repeats and every-byte state chains pass independent review. T/S never
+activate despite 51 completed invocations and 86 associations; R selects 50 values.
+The [validated reflection](../operations/adaptive/reflections/20260907T130508Z_c3d4b66329.json)
+holds this inconclusive comparison. The [next implementation](../operations/provenance/fx2_causal_field_opportunity_q0_v1_plan.json)
+isolates selector eligibility; no larger gate or scientific rejection follows.
+The decoder still requires 2,831,356 external Q16/dictionary bytes; score credit is zero.
 
 The [operational reconciliation](../operations/provenance/endpoint428_horizon_terminal_occupancy_reconciliation_20260907.json)
 records the completed observer and exact process absence. Validated observer and

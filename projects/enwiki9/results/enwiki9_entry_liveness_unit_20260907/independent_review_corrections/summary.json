@@ -1,0 +1,59 @@
+{
+  "scope": "Agent-entry liveness projection cleanup, observational only; no corpus reads or scientific run/codec changes. Prior attempt remains retained unchanged.",
+  "intent_preserved": true,
+  "boundary_effects": "None; canonical lab liveness remains authority; no new registry or launch permission.",
+  "changes": [
+    "Count only unknown liveness as unverified_running, excluding terminal preserved running-directory records.",
+    "Warn about idle or safe-launch receipt only when recorded running jobs are live or unverified.",
+    "Extend existing fixtures for terminal/live/unknown counts, warning behavior, and unchanged launch denial."
+  ],
+  "sources": [
+    {
+      "path": "tools/enwiki9_ledger.py",
+      "bytes": 55414,
+      "sha256": "4c3e089bbf8ff8e06a48796d5760b1ccba028def7bb2dd516886e3139f955ce1"
+    },
+    {
+      "path": "tests/test_enwiki9_entry_resources.py",
+      "bytes": 21788,
+      "sha256": "d6468c04127f597df22b9b7f4088c67d485b13443ea8191ec236d5ca0a43f4d8"
+    }
+  ],
+  "tests": {
+    "command_receipt": "execution.json",
+    "log": "regression.log",
+    "passed": 21,
+    "result": "passed",
+    "timing_scope": "shared-host diagnostic",
+    "full_schema_validation_mocked": "Only unrelated full scientific schema in isolated terminal identity fixture; canonical terminal/reflection hashes checked."
+  },
+  "bounds": {
+    "cpu_affinity": [
+      3
+    ],
+    "address_space_bytes": 536870912,
+    "cpu_seconds": 60,
+    "wall_seconds": 90,
+    "scratch_ceiling_bytes": 33554432
+  },
+  "real_start": {
+    "before": "before-start.json",
+    "after": "after-start.json",
+    "before_unverified_running": 1,
+    "after_unverified_running": 0,
+    "terminal_original_row": {
+      "job_id": "20260830T224837Z_a120752fb5",
+      "recorded_state": "running",
+      "observed_liveness": "terminal"
+    },
+    "stale_idle_warning_removed": true,
+    "launch_authorized": false
+  },
+  "checks": "checks.json",
+  "prior_attempt": {
+    "path": "/tmp/gamma-agent-entry-liveness-20260907",
+    "summary_sha256": "577dd7e7565fe7ef412c19af85bc168576ab3cea8c80053475f22a8a668df6d0",
+    "artifacts_sha256": "5c9b8af33dc4d5eb0a57b48e183b41f19357a6ba708b0e7ba3e0ebb3881687e4"
+  },
+  "failures_this_attempt": []
+}

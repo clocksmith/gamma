@@ -1,0 +1,44 @@
+{
+  "command": [
+    "/usr/bin/taskset",
+    "-c",
+    "3",
+    "/usr/bin/timeout",
+    "--signal=TERM",
+    "--kill-after=2",
+    "90",
+    "/usr/bin/prlimit",
+    "--as=536870912:536870912",
+    "--cpu=60:60",
+    "--fsize=33554432:33554432",
+    "--",
+    "/usr/bin/python3",
+    "-B",
+    "-m",
+    "unittest",
+    "discover",
+    "-s",
+    "tests",
+    "-p",
+    "test_enwiki9_entry_resources.py",
+    "-v"
+  ],
+  "cwd": "/home/x/deco/gamma/projects/enwiki9",
+  "returncode": 0,
+  "wall_seconds": 0.40331914206035435,
+  "child_cpu_seconds": 0.319944,
+  "max_child_rss_kib": 37808,
+  "sources": [
+    {
+      "path": "tools/enwiki9_ledger.py",
+      "bytes": 55414,
+      "sha256": "4c3e089bbf8ff8e06a48796d5760b1ccba028def7bb2dd516886e3139f955ce1"
+    },
+    {
+      "path": "tests/test_enwiki9_entry_resources.py",
+      "bytes": 21788,
+      "sha256": "d6468c04127f597df22b9b7f4088c67d485b13443ea8191ec236d5ca0a43f4d8"
+    }
+  ],
+  "scope": "Synthetic stdlib entry tests, full schema mocked only for isolated terminal fixture; shared-host diagnostic timing"
+}

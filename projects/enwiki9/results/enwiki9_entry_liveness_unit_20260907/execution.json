@@ -1,0 +1,45 @@
+{
+  "command": [
+    "/usr/bin/taskset",
+    "-c",
+    "3",
+    "/usr/bin/timeout",
+    "--signal=TERM",
+    "--kill-after=2",
+    "90",
+    "/usr/bin/prlimit",
+    "--as=536870912:536870912",
+    "--cpu=60:60",
+    "--fsize=33554432:33554432",
+    "--",
+    "/usr/bin/python3",
+    "-B",
+    "-m",
+    "pytest",
+    "-q",
+    "-p",
+    "no:cacheprovider",
+    "tests/test_enwiki9_entry_resources.py",
+    "tests/test_enwiki9_ledger_navigation.py",
+    "tests/test_enwiki9_status_receipt_worker_liveness.py"
+  ],
+  "cwd": "/home/x/deco/gamma/projects/enwiki9",
+  "returncode": 1,
+  "wall_seconds": 0.11370768514461815,
+  "child_cpu_seconds": 0.010275999999999999,
+  "max_child_rss_kib": 17348,
+  "sources": [
+    {
+      "path": "tools/enwiki9_ledger.py",
+      "bytes": 55321,
+      "sha256": "ac6c767b91a5ff05f863c45e785d2050800f84f398472276bbb73157acf4d508"
+    },
+    {
+      "path": "tests/test_enwiki9_entry_resources.py",
+      "bytes": 19505,
+      "sha256": "8f2458798de2b7de5f7287081fad4e2fc23c8c2067d3503e9711c497b9abb7cf"
+    }
+  ],
+  "changed_files_absent_from_running_field_inputs": true,
+  "scope": "Synthetic tests only; no canonical data or job mutation. Reflection digest and identity checks use real helpers; unrelated full scientific schema validation is mocked in small fixtures."
+}

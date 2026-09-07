@@ -1,0 +1,71 @@
+--- retained_attempt_01/tools/enwiki9_ledger.py
++++ current/tools/enwiki9_ledger.py
+@@ -745,7 +745,7 @@
+         "current_algorithms": sum(a["browsing_state"] == "current" for a in algorithms.values()),
+         "historical_algorithms": sum(a["browsing_state"] == "historical" for a in algorithms.values()),
+         "running": sum(r["state"] == "running" and r["liveness"].get("state") == "live" for r in runs),
+-        "unverified_running": sum(r["state"] == "running" and r["liveness"].get("state") != "live" for r in runs),
++        "unverified_running": sum(r["state"] == "running" and r["liveness"].get("state") == "unknown" for r in runs),
+         "jobs": dict(Counter(d.get("state") for _, d in jobs)), "read_issues": len(records.issues)}
+     data["reviews"] = review_backlog(data)
+     return data
+@@ -883,8 +883,9 @@
+     status = records.read("docs/status_receipt.json")
+     operator = status.get("operator_summary") or {}
+     old_active = (status.get("gate_liveness") or {}).get("is_live")
+-    if running and (old_active is False or operator.get("safe_to_launch_candidate_gate") is True):
+-        issues.append({"path": "docs/status_receipt.json", "reason": "operator receipt reports idle or safe launch while running jobs exist; inspect its timestamp and the existing observer before scheduling"})
++    if any(r["liveness"].get("state", "unknown") != "terminal" for r in running) and (
++            old_active is False or operator.get("safe_to_launch_candidate_gate") is True):
++        issues.append({"path": "docs/status_receipt.json", "reason": "operator receipt reports idle or safe launch while live or unverified jobs exist; inspect its timestamp and the existing observer before scheduling"})
+     keys = ("id", "candidate_id", "state", "purpose", "scope", "source", "liveness", "progress",
+             "execution_mode", "resource_budget", "timing_authority", "timeline")
+     return {"schema": "enwiki9_agent_start_v1", "generated_at": data["generated_at"], "host": data["host"],
+--- retained_attempt_01/tests/test_enwiki9_entry_resources.py
++++ current/tests/test_enwiki9_entry_resources.py
+@@ -266,6 +266,9 @@
+                 "decision": {"verdict": "hold"}})
+             metadata = write("programs/example/meta.json", {
+                 "id": "example", "measured": {"reflections": {"source": reflections.reference(reflection)}}})
++            write("docs/status_receipt.json", {
++                "gate_liveness": {"is_live": False},
++                "operator_summary": {"safe_to_launch_candidate_gate": True}})
+             yield lab, root, job, running, terminal, reflection, metadata, validation
+ 
+     def test_entry_reuses_exact_terminal_reflection_without_rewriting_running_record(self):
+@@ -277,6 +280,10 @@
+             self.assertEqual(row["state"], "running")
+             self.assertEqual(row["liveness"]["state"], "terminal")
+             self.assertIn("exact recorded reflection", row["liveness"]["detail"])
++            self.assertEqual(entry["records"]["running"], 0)
++            self.assertEqual(entry["records"]["unverified_running"], 0)
++            self.assertEqual(entry["records"]["jobs"]["running"], 1)
++            self.assertFalse(any(issue["path"] == "docs/status_receipt.json" for issue in entry["issues"]))
+             self.assertFalse(entry["queue"]["launch_authorized"])
+             self.assertEqual({path: path.read_bytes() for path in originals}, originals)
+             validation.assert_called_once_with(reflection, verify_files=True)
+@@ -299,12 +306,24 @@
+                 else:
+                     validation.side_effect = ValueError("invalid reflection schema")
+                 self.assertEqual(ledger.live_job(job, root)["state"], "unknown")
++                with patch.object(ledger, "resource_snapshot", return_value={"launch_authorized": False}):
++                    entry = ledger.start_payload(ledger.build(root), root)
++                self.assertEqual(entry["records"]["running"], 0)
++                self.assertEqual(entry["records"]["unverified_running"], 1)
++                self.assertTrue(any(issue["path"] == "docs/status_receipt.json" for issue in entry["issues"]))
++                self.assertFalse(entry["queue"]["launch_authorized"])
+ 
+     def test_exact_live_worker_takes_precedence_over_terminal_fallback(self):
+         with self.terminal_fixture() as (lab, root, job, _, _, reflection, _, validation):
+             reflection.unlink()
+             with patch.object(lab, "worker_pid_matches_job", return_value=True):
+                 self.assertEqual(ledger.live_job(job, root)["state"], "live")
++                with patch.object(ledger, "resource_snapshot", return_value={"launch_authorized": False}):
++                    entry = ledger.start_payload(ledger.build(root), root)
++                self.assertEqual(entry["records"]["running"], 1)
++                self.assertEqual(entry["records"]["unverified_running"], 0)
++                self.assertTrue(any(issue["path"] == "docs/status_receipt.json" for issue in entry["issues"]))
++                self.assertFalse(entry["queue"]["launch_authorized"])
+             validation.assert_not_called()
+ 
+     def test_foreign_root_cannot_borrow_canonical_terminal_records(self):

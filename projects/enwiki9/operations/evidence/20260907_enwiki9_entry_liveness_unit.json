@@ -1,0 +1,51 @@
+{
+  "schema": "gamma.enwiki9.entry-liveness-unit.v1",
+  "observed_date": "2026-09-07",
+  "change": "Canonical start views reuse enwiki9_lab.running_job_liveness. Verified terminal records no longer count as unverified running or trigger the stale idle-status warning; their original state remains visible and immutable. Foreign-root views cannot borrow canonical terminal evidence.",
+  "sources": [
+    {
+      "path": "tools/enwiki9_ledger.py",
+      "sha256": "sha256:4c3e089bbf8ff8e06a48796d5760b1ccba028def7bb2dd516886e3139f955ce1"
+    },
+    {
+      "path": "tests/test_enwiki9_entry_resources.py",
+      "sha256": "sha256:d6468c04127f597df22b9b7f4088c67d485b13443ea8191ec236d5ca0a43f4d8"
+    }
+  ],
+  "evidence": [
+    {
+      "path": "results/enwiki9_entry_liveness_unit_20260907/independent_review_corrections/artifacts.json",
+      "sha256": "sha256:9a42e2c859b2fa2cd309c227e68c56560782e69c53da3c92778e99d9659c45d3"
+    },
+    {
+      "path": "results/enwiki9_entry_liveness_unit_20260907/independent_review_corrections/summary.json",
+      "sha256": "sha256:ee91c82946a153d677c855cf462c94c8211fde09736045852a51f742d78f8261"
+    },
+    {
+      "path": "results/enwiki9_entry_liveness_unit_20260907/independent_review_corrections/execution.json",
+      "sha256": "sha256:c980545bb8387285f66ce40749612049bd0b78f82972b6b54ad1a5d0272ed436"
+    },
+    {
+      "path": "results/enwiki9_entry_liveness_unit_20260907/independent_review_corrections/after-start.json",
+      "sha256": "sha256:ab633fc9dd70f6097c72d4903b3d76bc6657a0f71df417e4625f8b4cd1f2eb96"
+    }
+  ],
+  "earlier_attempt": {
+    "retained_directory": "results/enwiki9_entry_liveness_unit_20260907",
+    "source_superseded": true,
+    "reason": "Independent review found counts and stale-idle warning still treated terminal rows as unknown. Both predicates and regression assertions are now corrected; original evidence remains immutable."
+  },
+  "validation": {
+    "stdlib_tests_passed": 21,
+    "retained_final_manifest_entries_verified": 13,
+    "real_entry_preserved_recorded_running_state": true,
+    "real_entry_verified_terminal_liveness": true,
+    "real_running_count": 0,
+    "real_unverified_running_count": 0,
+    "stale_idle_warning_present": false,
+    "launch_authorized": false
+  },
+  "limits": "Isolated fixtures mock unrelated scientific schema validation but use real terminal identity and digest checks; real start uses full canonical validation. Earlier missing-pytest attempt retained; no installation.",
+  "frozen_field_inputs_changed": false,
+  "objective_credit_bytes": 0
+}
