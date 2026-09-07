@@ -2,6 +2,50 @@
 
 [Record index](research_register/README.md) | [Earlier records](research_register/archive/README.md)
 
+## 2026-09-07 - Causal FIFO byte buckets select only plain fallback
+
+`causal_bucket250k_q0_v1` tests one raw-byte ordering before unchanged Deflate.
+Each byte enters its predecessor's FIFO bucket; ascending bucket concatenation
+and the final raw byte let the inverse derive bucket counts and reconstruct the
+original walk. This bounded frame transform uses neither a grammar nor supplied
+parent probabilities. [Codec and inverse](causal_bucket_v1.md) document the
+endpoint requirement, exact byte preservation and fixed 65,536-byte framing.
+
+The [implementation evidence](../operations/evidence/20260907_causal_bucket_unit.json)
+records 25 tests, 9,841 exhaustive inverse cases and 18 synthetic child phases.
+The v2 encoder repairs an archive-cap boundary before corpus freezing; the v1
+source and synthetic measurements remain preserved. Review identified the cap
+defect analytically. Synthetic gains establish only that the transform can pay
+on its constructed fixture.
+
+Closed job `20260907T193106Z_9f544523f2` completes all nine opening250KB phases.
+P/K/D archives are each 89,041 bytes and byte-identical, with exact independent
+inverses and deterministic repeats from raw bytes. All four D frames fall back.
+The [cost table](../results/causal_bucket250k_q0_v1/costs-table.json) and
+[stage receipt](../results/causal_bucket250k_q0_v1/stage-decision.json) report zero
+archive savings; fallback equality does not authorize confirmation.
+The [terminal record](../operations/provenance/causal_bucket_terminal_20260907.json)
+retains the closed comparison and its limits.
+
+Rejected transformed frame costs are 36,484, 35,231, 28,063 and 30,521 bytes.
+Their sum plus the 24-byte archive header is 130,323 bytes: 41,282 above P.
+This is arithmetic over encoder comparison costs, not a retained forced-mode
+archive, inverse or repeat. Only the selected fallback archives receive those
+correctness claims. Known source union is 41,941 bytes. The uncompressed local
+encode/decode source inventories are P 33,804 and D 35,943 bytes, an increase
+of 2,139; complete package, runtime/license/option accounting and full-corpus
+score remain unknown.
+
+Prior alternatives remain scoped to their recorded evidence. [RADIX-STC N4](research_register/archive/part-002.md#2026-07-26-radix-stc-target-scale-numeric-representation-probe)
+added 1,013 bytes on opening1M; the broader historical
+[`revlog_numeric_relations_terminal_v1`](../operations/adaptive/exclusions/revlog_numeric_relations_terminal_v1.json)
+exclusion concerns numeric parent bypass. [Same-page public ordering](../operations/adaptive/exclusions/public_article_order_same_page_native_subscale_v1.json)
+saved 39 bytes on 1,000,179 raw bytes, with inverse/repeat unproved after its
+budget stop; that transfer remains held. These do not supply gains or a theorem
+against this raw FIFO transform, which also differs from WRT context retrieval
+and numeric side channels. Park this tested configuration and use the measured
+loss to select a distinct question; no full-score projection or larger gate.
+
 ## 2026-09-07 - Literal-first templates fall back without a paying replacement
 
 `dualstream_literal_first250k_q0_v1` replaces whole-input grammar conversion
@@ -686,95 +730,3 @@ boundary traces, complete package accounting and isolated qualification. Four
 diagnostic P/K/F/S rows retain the measured archives in the
 [run ledger](../results/run_ledger.jsonl), with unknown package score preserved.
 No distant confirmation or successor launch follows automatically.
-
-## 2026-09-06 - Open MIDAS opening250KB ownership and exact-residual unit
-
-`root_explore` owns `midas_open_incremental_corpus250k_q0_v1`, the first bounded
-raw corpus runner for the unchanged standalone incremental codec. Its
-[frozen experiment](../operations/adaptive/experiments/midas_open_incremental_corpus250k_q0_v1.json)
-binds the existing kernel measurements, retained executable, exact opening
-250,000-byte population, P/K/F/S controls, package components and CPU2 resource
-envelope. Eighteen [runner tests](../operations/evidence/20260906_midas_open_corpus_runner_unit.json)
-pass, including retained 65-byte archives and cache-drift rejection. No compiler
-runs in the corpus gate. No corpus result is available at registration.
-
-Each arm must independently invert, repeat and agree on complete terminal
-state; P/K authoritative parent projections must agree. The unchanged codec
-does not emit every-midpoint probability/state traces. That missing evidence
-blocks promotion and cannot be inferred from terminal equality. Complete package
-and calibrated resource qualification remain unresolved. HORIZON is unchanged.
-
-The [exact-residual probe unit](../operations/evidence/20260906_fx2_exact_residual_unit.json)
-passes seven synthetic tests, including independent goldens, exact signed XOR,
-exceptional floating-point payloads, malformed-input rejection and exclusive
-publication. Rejection tests now require the probe's exact error exit and
-diagnostic prefix; crashes cannot pass as expected codec rejection. The trained
-model package and probability comparison remain unmeasured.
-
-## 2026-09-06 - Exact representation experiments and precision diagnosis
-
-The active target remains 99,000,000 complete bytes; the 10,389,323-byte distance
-from the best counted Gamma forecast is planning debt. HORIZON remains unchanged.
-The user selected exact-residual model packing, an independently framed schema
-codec with paid exceptions, and a predefined tensor-restoration diagnostic.
-These are separate experiments; existing component savings do not prove 99M.
-MIDAS independently advances the unchanged standalone codec toward a bounded
-P/K/F/S raw corpus comparison after synthetic runner validation and published
-ownership. No new corpus result is implied by these source assignments.
-
-The [run-ranked exception screen](../operations/provenance/public_fx2_xml_exception_geometry_screen_20260906.json)
-counts masks with n positions, e exceptions and r runs by
-`C(e-1,r-1) * C(n-e+1,r)`. The reviewer checked all 8,191 masks of lengths 0..12.
-On opening 250KB, 87 eligible prior-route pairs displace only 10.8837 parent ideal
-bytes; even optimistic mask/descriptor costs leave -301.479 bytes saved. No pair
-pays, and the distant cold population has no eligible explicit-key pairs.
-This rejects that screened realization on these populations, not grammar,
-cross-field dependencies or mature-history opportunities as information sources.
-
-A separate considered mechanism keys a later template field by an earlier
-field's decoded value, learned only from completed previous templates. Its
-conditional lookup differs from same-route value copying and outer-XML numeric
-dependencies. An exact equal mixture of two sequence models costs at most one
-ideal bit above the better model per activation; finite rounding and package
-cost remain unmeasured. [SQUISH](https://arxiv.org/abs/1602.04256v2) provides an
-attribute-dependency precedent, not transferable Gamma compression credit.
-It is considered evidence, not another queued specialist.
-
-For the selected schema realization, sequential reversible grammar construction
-has [published precedent](https://doi.org/10.1109/18.841161), while ambiguous
-grammars require a [paid derivation or deterministic resolution](https://arxiv.org/abs/2003.08097).
-The proposed block fallback is compared with an equivalently framed baseline;
-it does not inherit an overhead bound against uninterrupted FX2.
-
-## 2026-09-06 - Open MIDAS source bundle survives relocation and exact replay
-
-`tools/midas_open_source_bundle_v1.py` materializes the unchanged default
-incremental codec as a deterministic 84,030-byte source ZIP containing 30 local
-files and its source manifest. Compiler-discovered includes preserve the sealed
-forward translation unit; Python helpers and Gamma-relative LICENSE layout are
-retained. This is counted local source, not a complete submission package.
-
-A fresh extracted tree, isolated Python imports and a separate empty build cache
-produce the same native executable. Repacking from the extracted tree produces
-the identical source ZIP despite the intentionally different absolute-path cache
-identity. All four P/K/F/S arms reproduce the retained 65-byte fixture archives,
-decode without the raw source, and re-encode with exact same-arm final-state
-witnesses. P/K archives and authoritative parent-state projections match.
-The 105-byte archives exceed raw size; no compression gain is inferred.
-
-Nine new regressions and all 26 combined MIDAS tests pass. Review corrections reject noncanonical manifest
-bytes and file/directory prefix collisions, enforce aggregate bounds before
-loading excess source, and name the required `prlimit` and `ldd` utilities.
-Corruption, extra/missing members, path escapes, symlinks, FIFO input and existing
-output targets fail closed. No extracted code runs automatically. All 46 source
-bindings in the prior standalone evidence remain unchanged.
-
-Evidence: `operations/evidence/20260906_midas_relocatable_source_bundle_unit.json`.
-Usage: `docs/midas_open_source_bundle_v1.md`. Compiler/runtime distribution,
-license closure, accepted package accounting, composite resource qualification
-and full-corpus performance remain unproved. This source reconstruction and
-synthetic inversion result grants no queue or objective authority. HORIZON's
-worker, observer and partial scientific outputs were not changed or inspected;
-the concurrent external-derived FX2 lane was preserved. The compact predictor
-still needs a separately frozen compression and kernel-budget gate before a
-corpus claim or larger population launch.

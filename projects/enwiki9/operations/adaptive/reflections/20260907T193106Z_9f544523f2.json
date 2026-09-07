@@ -1,0 +1,113 @@
+{
+  "attribution": {
+    "causalConfidence": "low",
+    "controlsEquivalent": true,
+    "failureClass": "algorithmic-loss",
+    "localizedCause": "This fixed predecessor FIFO representation with level9 Deflate loses the complete per-frame comparison on all four frames. Higher-order match disruption is plausible but its contribution was not separately measured."
+  },
+  "candidateId": "causal_bucket250k_q0_v1",
+  "candidateRevision": {
+    "candidateId": "causal_bucket250k_q0_v1",
+    "candidateTreeSha256": "sha256:d296f5cf56e1cff427c3a4c05102a4a00fc7b6066b3cd5688068ba95773a7ea2",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/causal_bucket250k_q0_v1/20260907T193055566673Z_d296f5cf56e1.json",
+      "sha256": "sha256:1e5f5ee9d4959c2372044299e6e72e2e8fb04c5946987c612f1bca43f75d58a9"
+    }
+  },
+  "decision": {
+    "killPredicatesPass": false,
+    "nextGateBytes": null,
+    "promotionPredicatesPass": false,
+    "rationale": "No fresh confirmation or1MB for this fixed fallback configuration. Continue distinct evidence-based exploration; do not reinterpret safety equality as gain.",
+    "verdict": "hold"
+  },
+  "evidence": [
+    {
+      "path": "operations/provenance/causal_bucket_terminal_20260907.json",
+      "sha256": "sha256:3b59a9bc8222b4295c12a4067e17b5d9fe2d58eeb4bb1ff6dea368c2b6d899f7"
+    },
+    {
+      "path": "operations/provenance/causal_bucket_terminal_20260907/index.json",
+      "sha256": "sha256:f18a521ba3ec8507b8d539d4a94a725318a06efc88fd31e0bb01c918495921cf"
+    },
+    {
+      "path": "results/causal_bucket250k_q0_v1/costs-table.json",
+      "sha256": "sha256:bef55a9d6d0427ef9efc818829bf23afcf9c0a5de04abd1e39d1668de731a280"
+    },
+    {
+      "path": "results/causal_bucket250k_q0_v1/stage-decision.json",
+      "sha256": "sha256:3a3caa9a224e5c392a383267c49fc810abe03875539eb5a1c3ab7f6b7edd84a4"
+    }
+  ],
+  "experiment": {
+    "path": "operations/adaptive/experiments/causal_bucket250k_q0_v1.json",
+    "sha256": "sha256:a4280d6c09db7bcb463401f746cb9f966a2fcc685a95e4c04b884ba8648dce8b"
+  },
+  "generatedUtc": "2026-09-07T19:37:13+00:00",
+  "hypothesis": {
+    "rationale": "All three archives are89041bytes on opening250KB. Each transformed frame is larger, so no transformation is selected. The four encoded candidate frame costs sum to130323bytes with header,41282overP; no complete forced archive was retained.",
+    "verdict": "refuted"
+  },
+  "job": {
+    "path": "operations/adaptive/completed/909_20260907T193106Z_9f544523f2.json",
+    "sha256": "sha256:04d4209af2b68381f2b4367acdf5e054b6a9ecfd40e75112439c1c80787531f4"
+  },
+  "knowledge": {
+    "retiredDimensions": [
+      "causal_bucket_predecessor0_fifo_zlib9_65536_opening250k_fixed"
+    ],
+    "transferableLessons": [
+      "An exact count-balance identity removes the count table but does not make byte reordering profitable; include destroyed sequence opportunities and full frame costs."
+    ],
+    "uncertainties": [
+      "The experiment does not isolate why candidate payloads cost more or bound other ordering transforms."
+    ]
+  },
+  "measurementAssertions": [
+    {
+      "field": "netBytesSaved",
+      "pointer": "/p_minus_d_bytes",
+      "source": {
+        "path": "results/causal_bucket250k_q0_v1/costs-table.json",
+        "sha256": "sha256:bef55a9d6d0427ef9efc818829bf23afcf9c0a5de04abd1e39d1668de731a280"
+      }
+    },
+    {
+      "field": "scopeBytes",
+      "pointer": "/raw_bytes",
+      "source": {
+        "path": "results/causal_bucket250k_q0_v1/costs-table.json",
+        "sha256": "sha256:bef55a9d6d0427ef9efc818829bf23afcf9c0a5de04abd1e39d1668de731a280"
+      }
+    }
+  ],
+  "measurements": {
+    "idealBitsSaved": null,
+    "memoryRatio": null,
+    "minimumPartitionIdealBitsSaved": null,
+    "netBytesSaved": 0,
+    "positiveSegmentFraction": null,
+    "runtimeRatio": null,
+    "scopeBytes": 250000,
+    "scopeSymbols": null,
+    "sourceBytesDelta": null,
+    "transferRetention": null
+  },
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:16badfa6c1a53b47bcc12b089fdd9c21f7405ea56a84344d60c28d2252da8288",
+    "objectiveId": "gamma-enwiki9-hutter-99m-v2",
+    "objectivePath": "contracts/research/v2/objective-contract.json",
+    "targetScoreBytes": 99000000
+  },
+  "reflectionId": "r-20260907t193106z_9f544523f2",
+  "schema": "gamma.enwiki9.reflection-receipt.v1",
+  "validity": {
+    "classification": "valid",
+    "reasons": [
+      "Nine closed native phases, unchanged P/K, exact D fallback, independent raw inverses and repeats, matching decoder projections and candidate costs, frozen input verification and closed clean resource guard."
+    ],
+    "valid": true
+  }
+}
