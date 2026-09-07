@@ -2,7 +2,7 @@
 
 [Record index](research_register/README.md) | [Earlier records](research_register/archive/README.md)
 
-## 2026-09-07 - Literal-first templates reach a bounded executable comparison
+## 2026-09-07 - Literal-first templates fall back without a paying replacement
 
 `dualstream_literal_first250k_q0_v1` replaces whole-input grammar conversion
 with selected raw spans, exact template arguments and untouched literal runs.
@@ -21,11 +21,29 @@ not Wikipedia gains. Decoder costs include canonical re-Deflation, repeated
 interpreter execution and prefix hashing. Complete compressed payload/framing
 costs are distinct from pre-Deflate definition/call/argument byte counts.
 
-Ownership: `operations/provenance/dualstream_literal_first_v1_plan.json`.
-Usage and limits: `docs/dualstream_literal_first_v1.md`. The separately frozen
-opening250KB P/K/D gate requires published source and fresh resource admission.
-Fallback equality grants no confirmation. A strict archive reduction may justify
-a separately frozen fresh population; complete package and 99M remain unproved.
+The published opening250KB job `20260907T183536Z_a3505ed881` closed all nine
+native phases with exact inverses and raw-discovery repeats. P/K/D each occupy
+89,041 bytes and are byte-identical. The 96 evaluated proposals all lost; the
+best rejected complete-frame deltas were -61, -55, -48 and -47 bytes. No rules,
+calls or repeated bindings were selected. The third frame retained 1,024 of
+1,573 available spans; the other frames retained all spans. No proposal count
+cap was reached within those retained spans. This rejects the evaluated pool,
+not the omitted spans or all literal-first representations.
+
+D encode/decode CPU was 0.225800/0.008489 seconds under the published diagnostic
+guard. The as-executed local source inventories total 33,804 bytes for P and
+46,040 for D, a 12,236-byte increase; their union is 52,038 bytes. These are
+uncompressed source inventories, not qualified packages. Complete runtime,
+licensing, source/option accounting and prize qualification remain unknown.
+Fallback safety earned zero archive bytes and does not pay additional code.
+The validated reflection holds this realization; no fresh250KB or1MB was run.
+Exact results: `operations/provenance/dualstream_literal_first_terminal_20260907.json`.
+Three arm rows are recorded through its normalized terminal index; no row claims
+a full-corpus score. Usage and limits: `docs/dualstream_literal_first_v1.md`.
+Complete package and 99M remain unproved.
+Independent closure review:
+`operations/provenance/dualstream_literal_first_terminal_20260907_review/summary.json`.
+Its verifier checks the retained artifacts without rerunning the codecs.
 Enumeration, interpreter-context tuning and neighboring campaigns stay parked
 or with their existing owners. Two complete older records moved to archive 036
 with their evidence text preserved.
