@@ -43,11 +43,14 @@ Deliver a coherent, replayable institutional strategy game whose authored rules,
   sourced excerpts and fields, but cannot independently author rule paragraphs
   or numeric overrides. Named excerpts produce the compact Core Rules and the
   detailed references without copying their source prose.
-- `world.md` opens with the setting primer, the four concise Era overviews,
-  and ending references; concise editorial notes follow the fiction. Era panels own their name, epigraph,
-  rules, and unlocks. Shared identities resolve from their existing owners.
-  The overview preserves lore in accessible past-tense narration from 2038,
-  without a character plot or mandatory events.
+- `world.md` is the sole authored source for world lore, World Endings, token
+  microcopy, box copy, and scenario canon, projecting `dist/runtime/world-copy.json`
+  and `dist/docs/world-and-institutions.md`. It opens with the setting primer,
+  the four concise Era overviews, and the four World Endings; publishing copy,
+  concise editorial notes, the 50-scenario canon, and unadopted backlog follow the fiction.
+  Era panels own their name, epigraph, rules, and unlocks. Shared identities resolve
+  from their existing owners. The overview preserves lore in accessible past-tense
+  narration from 2038, without a character plot or mandatory events.
 - Site home pages present one flat list of linked titles without section groups,
   subtitles, or duplicated navigation. Release identity remains in build receipts.
 - Physical specifications own form and state encoding; supported inventory

@@ -214,7 +214,6 @@ async function assertDeferredTermsAbsentFromBaseline(scenarios) {
     "components/reference-cards.json",
     "components/projects.json",
     "components/factions.json",
-    "components/world.json",
     "web/templates/prototype.html",
     "web/templates/first-game-guide.html"
   ];
