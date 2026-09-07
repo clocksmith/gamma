@@ -1,0 +1,39 @@
+{
+  "schema": "gamma.enwiki9.enumerative-runner-prelaunch-repair.v1",
+  "candidate_before": "dualstream_enumerative250k_q0_v1",
+  "candidate_after": "dualstream_enumerative250k_q0_v2",
+  "finding": "Shared subprocess runner catches OSError and returns last.error. V1 classified the subsequent ValueError as an implementation failure. V2 restores infrastructure classification; timeout and codec failure remain distinct. SIGKILL remains ambiguous infrastructure without further guard evidence.",
+  "reviewer": "enumerative_review",
+  "v1_corpus_phases": 0,
+  "v1_job_outcome": "cancelled before execution",
+  "codec_source_unchanged": true,
+  "tests_passed": 2,
+  "objective_credit_bytes": 0,
+  "evidence": [
+    {
+      "path": "tools/dualstream_enumerative_gate_v2.py",
+      "sha256": "e2671e7a7d08b06f177dbf31541aba209a8bfecc5402495d515c22c611ebb9be",
+      "bytes": 10328
+    },
+    {
+      "path": "tests/test_dualstream_enumerative_gate_v2.py",
+      "sha256": "cf765c1b5bd2d06bd0276c4a93a0339afd20d6a1fd4494c41f875c439dbd05f9",
+      "bytes": 1128
+    },
+    {
+      "path": "results/dualstream_enumerative_gate_v2_unit_20260907/tests.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "results/dualstream_enumerative_gate_v2_unit_20260907/tests.stderr",
+      "sha256": "d09b3e2502ab881ec5f06fa582b4e82fc02604e35988c04808c0ad585920af51",
+      "bytes": 1187
+    },
+    {
+      "path": "operations/adaptive/cancelled/909_20260907T162607Z_59dc25a35b.json",
+      "sha256": "94140ae821087211310ae006e2706d408390970a4d0bf4837c523294af42e8c5",
+      "bytes": 2586
+    }
+  ]
+}
