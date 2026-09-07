@@ -50,3 +50,4 @@ Archived files preserve complete H2 records.
 - [part-032.md: 2026-09-05 native MIDAS coder and causal scheduler synthetic checks](archive/part-032.md)
 - [part-033.md: 2026-09-05 restored terminal receipt navigation](archive/part-033.md)
 - [part-034.md: 2026-09-05 public FX2 reproduction and measured comparisons](archive/part-034.md)
+- [part-035.md: 2026-09-05 open MIDAS parent and native boundary/checkpoint integration](archive/part-035.md)

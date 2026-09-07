@@ -32,9 +32,9 @@ serialization only, not fresh grammar-discovery determinism.
 
 The frozen comparison uses unchanged plain Deflate P, old grammar Deflate B,
 enumerative B sections E, the same B graph with token arguments T, and plain
-byte enumeration R. All use identical raw frame boundaries. Historical selected
-programs contain zero repeated argument bindings: T tests argument storage,
-while synthetic fixtures alone exercise shared-binding interpretation.
+byte enumeration R. All use identical raw frame boundaries. The old selected
+program contains twelve repeated-argument references, preserved by B/E/T.
+T tests argument storage; it does not add or remove bindings.
 
 Run synthetic correctness with:
 
@@ -61,3 +61,42 @@ inverse are checked locally. The [contest rules](https://hutter1.net/prize/hrule
 also require executable verification and count the chosen package/option form,
 including applicable separate encoder/decoder multiplicities. Their accounting
 must be resolved before treating C as a complete prize-facing package.
+
+## Opening250KB result
+
+The [closed corpus receipt](../operations/provenance/dualstream_enumerative_terminal_20260907.json)
+records all fifteen successful phases under the published v3 job:
+
+| Arm | Complete archive bytes |
+| --- | ---: |
+| Plain Deflate P | 89,041 |
+| Fixed grammar Deflate B | 102,492 |
+| Same grammar enumerative E | 140,524 |
+| Same graph, token arguments T | 141,295 |
+| Plain byte enumeration R | 160,547 |
+
+Every arm independently reconstructs the exact 250,000 raw bytes and repeats
+from its fixed source. E/T preserve B's program graph; their decoded serialized
+section hashes match the encoder. B/E/T each retain twelve repeated-argument
+references in the third frame. The initial frozen-plan annotation and synthetic
+review incorrectly generalized zero bindings from the newer selected grammar
+to B's old selection. Those records remain unchanged; this explicit correction
+does not change the stored program, controls or measured differences.
+
+E's rank payload alone is 128,666 bytes, already larger than B's entire 102,492
+bytes. Eliminating its count tables and headers cannot make these fixed ranks
+beat B. This is a bound on this transmitted representation and chunk policy,
+not all enumerative or grammar codecs. E adds 38,032 complete bytes over B.
+
+T saves 33,580 literal-definition rank bytes but adds 34,216 argument rank
+bytes, 132 count-table bytes and three stream-header bytes: a 771-byte loss.
+Programs, structure and content ranks remain unchanged.
+
+The measured E serializer uses 0.840286281 CPU seconds; its independent decoder
+uses 0.92072695. The full guarded job records 34,979,840 peak cgroup bytes and
+10.0568 elapsed seconds, with no exceeded guards. Timing is diagnostic.
+The experiment source union is 56,323 bytes; complete counted package remains
+unknown. Prior runner failures and their repairs remain immutable and separate.
+Keep the evaluator; park this exact coding realization. A successor must change
+the transmitted representation or conditional coding, then measure its own
+complete bytes. No confirmation or larger gate is authorized by this loss.
