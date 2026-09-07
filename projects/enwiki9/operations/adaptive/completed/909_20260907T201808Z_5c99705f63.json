@@ -5,27 +5,66 @@
     "sha256": "sha256:71e90b2eeee65d7f7a868285f1ba226d5c60c2559a2864d4774c3186f4d7c4b8"
   },
   "candidate_tree_sha256": "sha256:deff49da4676a76ae4ebf3379d8c1aa579f30253321385a47f2c3e884b107a85",
+  "elapsed_seconds": 1268.898,
   "execution_guard": {
     "path": "tools/run_with_resource_guard_v3.py",
     "sha256": "sha256:044147f7ffe6922ea8dafd52fc3d4426077b20958adbcd421245ad41adcfc1e4"
   },
   "execution_mode": "discovery",
+  "execution_resources": {
+    "boot_id": "3ce46712-27bc-4199-8e48-e2b3d23926cb",
+    "budget": {
+      "cgroup_parent": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice",
+      "cpus": [
+        2
+      ],
+      "memory_bytes": 2147483648,
+      "scratch_bytes": 536870912,
+      "swap_bytes": 0,
+      "wall_seconds": 3600
+    },
+    "cgroup_inode": 247355,
+    "cgroup_path": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/gamma-enwiki9-20260907T201808Z_5c99705f63",
+    "cleanup_complete": true,
+    "cpu_enforcement": "taskset-and-sampled-affinity-guard",
+    "groups": [
+      {
+        "created": true,
+        "inode": 247355,
+        "kernel_cpuset": false,
+        "memory_bytes": 2147483648,
+        "path": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/gamma-enwiki9-20260907T201808Z_5c99705f63"
+      }
+    ],
+    "guard_command_sha256": "a5a1075e76a9b289f9c72a35249b385bd425885857e84d9e31b22fd1ad7db1cc",
+    "guard_path": "run_logs/adaptive/20260907T201808Z_5c99705f63.resources/guard.json",
+    "missing_diagnostics": [
+      "kernel cpuset controller is not delegated; taskset assignment and existing affinity guard remain active"
+    ],
+    "timing_authority": "diagnostic"
+  },
   "experiment": {
     "path": "operations/adaptive/experiments/midas_open_observed_sha_opening250k_q0_v1.json",
     "sha256": "sha256:5f2a16552c89b45aa280752911430de930b23538f04e77722a3bcca2feb51398"
   },
+  "finished_at": "2026-09-07T20:40:29+00:00",
   "gate_size": 250000,
-  "held": true,
+  "held": false,
   "held_at": "2026-09-07T20:18:16+00:00",
   "hold_history": [
     {
       "at": "2026-09-07T20:18:16+00:00",
       "held": true,
       "reason": "Await exact source, ownership and job publication verification plus fresh CPU2 resource admission; static trace bounds fit frozen caps."
+    },
+    {
+      "at": "2026-09-07T20:19:19+00:00",
+      "held": false,
+      "reason": "Published 0d3a7dd77; 374 frozen refs and ownership/job match local HEAD and origin/main. Static per-file/scratch audit fits caps. Fresh results/midas_observed_sha250k_admission_20260907.json confirms CPU2 available, memory/scratch headroom, no live/unknown jobs or exclusive lease. Preserve HORIZON administrative records."
     }
   ],
-  "hold_reason": "Await exact source, ownership and job publication verification plus fresh CPU2 resource admission; static trace bounds fit frozen caps.",
   "job_id": "20260907T201808Z_5c99705f63",
+  "log_path": "run_logs/adaptive/20260907T201808Z_5c99705f63.log",
   "priority": 90,
   "proposal": {
     "path": "operations/adaptive/proposals/developed/949_midas_open_observed_sha_opening250k_q0_v1.json",
@@ -33,6 +72,7 @@
   },
   "proposal_id": "midas_open_observed_sha_opening250k_q0_v1",
   "purpose": "diagnostic",
+  "released_at": "2026-09-07T20:19:19+00:00",
   "resource_budget": {
     "cgroup_parent": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice",
     "cpus": [
@@ -43,6 +83,7 @@
     "swap_bytes": 0,
     "wall_seconds": 3600
   },
+  "returncode": 0,
   "runner": {
     "path": "tools/midas_open_observed_sha_gate_v1.py",
     "sha256": "sha256:fa48461e16e5cb2cee6caaaf551f6a395f2884a69034feb064987ab3a2e92c6c"
@@ -51,7 +92,8 @@
   "scratch_directories": [
     "results/midas_open_observed_sha_opening250k_q0_v1"
   ],
-  "state": "pending",
+  "started_at": "2026-09-07T20:19:20+00:00",
+  "state": "completed",
   "submitted_at": "2026-09-07T20:18:08+00:00",
   "tags": [],
   "timing_authority": "diagnostic",
@@ -59,5 +101,8 @@
   "tool_args": [
     "--candidate",
     "midas_open_observed_sha_opening250k_q0_v1"
-  ]
+  ],
+  "worker_pid": 1499775,
+  "worker_proc_start_ticks": 190849852,
+  "worker_started_at": "2026-09-07T20:19:20+00:00"
 }
