@@ -240,8 +240,48 @@ source is 5,991 bytes, 245 above the compact parent. The existing comparison
 runner is reused through a candidate adapter. Job `20260908T165054Z_e47978f5d4`
 started after [publication verification and fresh admission](../results/opcode_slot_reset_admission_20260908.json); it binds CPU2, one thread,
 4GiB aggregate memory, zero swap, 1GiB scratch and a 2,400-second elapsed stop.
-The opening250KB comparison is active, without a terminal result. The
+The opening250KB comparison is terminal. The
 [fixed source-ZIP diagnostic](../results/opcode_slot_reset_source_zip_20260908/attempt01/cost.json)
 measures 5,815 parent versus 5,950 treatment bytes: 135 added ZIP bytes, or 270
 under the conditional two-copy program accounting. Six relocated synthetic
 codec phases pass. Full package and score are unknown.
+
+The [terminal comparison](../operations/provenance/opcode_slot_reset_terminal_20260908.json)
+passes all ten phases: P/K 67,658 bytes and D 67,626 bytes, saving 32. Each arm
+independently reconstructs and repeats; complete witnesses, P/K identity and
+unobserved treatment identity pass. All guard flags are clear and cleanup is
+complete; aggregate cgroup peak is 512,638,976 bytes. The conditional package
+comparison is 32 minus 270, a 238-byte loss before other dependencies.
+
+All arms decode 96 text closes. Four D closes clear nonzero slot state; P/K
+encounter nonzero state at 90 closes. D differs from the reconstructed parent
+slot over 154,749 modeled bytes, including literal and both copy paths. These
+occupancy counts are not per-byte predictive gains. The
+[validated reflection](../operations/adaptive/reflections/20260908T165054Z_e47978f5d4.json)
+retains the development result and holds larger tests for economics. The next
+action is one creative discovery cycle using the recorded costs, including an
+alternative outside this bitmix state-repair sequence. No full-corpus projection
+or additional context-key mutation follows from this result.
+
+## Existing calibration attribution
+
+The next [registered diagnostic](../operations/adaptive/experiments/opcode_calibration_cost_v1.json)
+uses creative lenses 8 and 9 deliberately: inspect an existing adaptation stage
+before adding model capacity. Three alternatives were considered: another slot
+key (deferred because neither slot repair pays its current source cost), native
+FX2 predictor attribution (outside this family, but requiring a separately bound
+internal-predictor observation surface), and isolating the existing bitmix SSE.
+The selected diagnostic already has access to both probabilities before truth
+and can retain the unchanged parent archive; it adds no context or entropy coder.
+Prior evidence is the field-repair confirmation and both slot receipts above.
+Searching current proposal/experiment records and candidate descriptions found
+no separately measured SSE ablation for this compact parent; this is a scoped
+search finding, not an exhaustive absence claim.
+
+`root_explore` owns `opcode_calibration_cost_v1`. Its
+[eight tests and retained three-phase synthetic receipt](../operations/evidence/20260908_opcode_calibration_unit.json)
+pass. The 23-byte fixture archive is unchanged; SSE reduces its literal ideal
+loss by about 0.558 bits. The corpus aggregate remains unmeasured. Counted literal
+bits and hypothetical copy-bit losses stay separate, and field partitions do
+not select a treatment. A positive corpus excess can justify a separately frozen
+archive ablation; these floating-point diagnostics cannot certify a size bound.
