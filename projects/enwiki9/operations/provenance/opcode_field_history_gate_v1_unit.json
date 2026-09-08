@@ -1,0 +1,71 @@
+{
+  "schema": "gamma.enwiki9.opcode-field-history-runner-unit.v1",
+  "id": "opcode_field_history_gate_v1_unit",
+  "owner": "root_explore",
+  "status": "passed",
+  "experiment": "operations/adaptive/experiments/opcode_field_history250k_q0_v1.json",
+  "tests_passed": 7,
+  "reported_test_elapsed_seconds": 3.906,
+  "command": [
+    "taskset",
+    "-c",
+    "3",
+    "prlimit",
+    "--as=2147483648",
+    "--cpu=180",
+    "--fsize=33554432",
+    "--core=0",
+    "timeout",
+    "240",
+    "python3",
+    "-m",
+    "unittest",
+    "discover",
+    "-s",
+    "tests",
+    "-p",
+    "test_opcode_field_history_gate_v1.py",
+    "-v"
+  ],
+  "scope": "Synthetic only; actual 16-phase runner plus injected missing telemetry, mandatory audit loss, state divergence and retained-parent corruption.",
+  "sources": [
+    {
+      "path": "tools/opcode_field_history_corpus_v1.py",
+      "bytes": 2340,
+      "sha256": "0e7bec457ce06e09213de9bb92ed26e7eba5c8517521b4ec72f4414e5f2513b9"
+    },
+    {
+      "path": "tools/opcode_field_history_gate_v1.py",
+      "bytes": 7893,
+      "sha256": "053a97368ad3880dcc4c38680e2d97d1b802b1145124ab6c2b2d3d47a502a2ca"
+    },
+    {
+      "path": "tests/test_opcode_field_history_gate_v1.py",
+      "bytes": 6612,
+      "sha256": "65d6053333bbf776c03eceb780a3021d57c5559b366e65ad292929bbd6cd8d76"
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "results/opcode_field_history_gate_v1_unit/stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "results/opcode_field_history_gate_v1_unit/stderr",
+      "bytes": 1067,
+      "sha256": "c16ae33162f47f351fb0df3d5863a4a66e10f53eae0926b58f94a2c44a08bf07"
+    }
+  ],
+  "checks": [
+    "All five arms independently invert and repeat, with complete state witnesses.",
+    "P/K projection and retained parent identities required.",
+    "D observed/unobserved identity required.",
+    "All three strict archive predicates computed separately.",
+    "Missing optional telemetry remains explicit; mandatory evidence blocks.",
+    "First state divergence retained; resource exhaustion is a distinct exception.",
+    "Frozen population, source closure, package and resource limits validated; original authentication body reused without mutating its module."
+  ],
+  "objective_credit_bytes": 0,
+  "next": "Seal candidate and queue held job, publish all bindings, then refresh admission before CPU2 corpus execution."
+}
