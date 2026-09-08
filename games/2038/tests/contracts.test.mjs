@@ -24,7 +24,7 @@ test("current release declaration separates executable game from physical rules 
   assert.ok(current.playtestKitFiles.includes("dist/runtime/simulation-copy.json"));
   assert.deepEqual(current.rulesCandidate.files, [
     "dist/docs/core-rules.md",
-    "physical/governance-ledger.md"
+    "physical/governance-tracks.md"
   ]);
 });
 
@@ -32,7 +32,7 @@ test("physical authority defines one inventory and preserves automatic blind Aud
   const [spec, inventory, governanceLedger, manufacturing, manifest] = await Promise.all([
     readFile(new URL("physical/component-spec.md", root), "utf8"),
     readFile(new URL("dist/review/docs/component-inventory.md", root), "utf8"),
-    readFile(new URL("physical/governance-ledger.md", root), "utf8"),
+    readFile(new URL("physical/governance-tracks.md", root), "utf8"),
     readFile(new URL("docs/manufacturing-and-publishing-study.md", root), "utf8"),
     readJson("content/data/content-manifest.json")
   ]);

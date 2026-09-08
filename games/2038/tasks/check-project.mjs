@@ -96,7 +96,7 @@ const required = [
   "tasks/content/validate-era-situation-ledger.mjs",
   "tasks/content/lint-provenance.mjs",
   "tasks/release-artifacts.mjs",
-  "physical/governance-ledger.md",
+  "physical/governance-tracks.md",
   "versions/current.json",
   "versions/0.1.0/manifest.json",
   "versions/0.1.0/game-bundle.json",
@@ -390,7 +390,7 @@ if (
 }
 const candidate = gameVersion.rulesCandidate;
 const proceduralCandidateDocuments = ["dist/docs/core-rules.md"];
-const requiredCandidateDocuments = [...proceduralCandidateDocuments, "physical/governance-ledger.md"];
+const requiredCandidateDocuments = [...proceduralCandidateDocuments, "physical/governance-tracks.md"];
 const candidateStatusValid = candidate?.implementationStatus === "not-synchronized"
   ? candidate.implementedByGameVersion === null
   : candidate?.implementationStatus === "synchronized"

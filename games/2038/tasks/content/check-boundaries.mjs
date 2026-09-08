@@ -76,7 +76,7 @@ if (publicDocuments.length !== 1 || publicDocuments[0] !== "core-rules.html") {
   throw new Error("Default player documents contain one complete rulebook; supplements belong to internal review.");
 }
 const release = await readJson("versions/current-release.json");
-const candidateDocuments = new Set(["dist/docs/core-rules.md", "physical/governance-ledger.md"]);
+const candidateDocuments = new Set(["dist/docs/core-rules.md", "physical/governance-tracks.md"]);
 if (release.rulesCandidate.files.length !== candidateDocuments.size ||
     release.rulesCandidate.files.some(path => !candidateDocuments.has(path))) {
   throw new Error("The physical candidate must contain the rulebook and writable ledger, without authoring documents.");
