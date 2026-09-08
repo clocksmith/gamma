@@ -14,8 +14,8 @@ Compare identical population hashes; equal input sizes alone do not define match
 
 ## Proof Boundary
 
-- Result JSON files scanned: `233`
-- Roundtrip-passing rows: `62`
+- Result JSON files scanned: `237`
+- Roundtrip-passing rows: `66`
 - Verified full `1G` rows in this checkout: `0`
 - Active target score: `90,000,000` bytes (`9.0000000%`)
 - `9.0000000%` target reached by this matrix: `False`
@@ -26,6 +26,7 @@ Compare identical population hashes; equal input sizes alone do not define match
 | Program / arm | Population SHA256 | Mechanism | Scope | Local subtotal | Archive | Program | b/B | Determinism | Result |
 |---|---|---|---:|---:|---:|---:|---:|---|---|
 | `nncp_compact5_preprocessed_cqq_x86xzopt_nodebug_t4_tarslack_v1` | `321868b6f37a` | custom candidate | 10,000 | 240,248 | 6,229 | 234,019 | 4.9832 | true | `results/nncp_compact5_preprocessed_cqq_x86xzopt_nodebug_t4_tarslack_v1/2026-07-27T213234.json` |
+| `fx2_residual_ratio_fixture50051_q0_v3:D` | `890b3e1210a2` | custom candidate | 50,051 | 9,429,024 | 3,223 | 9,425,801 | 0.515154542 | true | `operations/provenance/fx2_ratio_fixture_terminal_20260908/D.json` |
 | `opcode_typed_anchor_bitmix_v1` | `665fc689441b` | syntax opcode preprocessor | 250,000 | 72,800 | 67,959 | 4,841 | 2.174688 | true | `results/opcode_typed_anchor_bitmix_v1/2026-07-21T124407.json` |
 | `sleeping_trie_global4_selector_raw_v1` | `369b688978f6` | custom candidate | 1,000,000 | 494,499 | 473,912 | 20,587 | 3.791296 | true | `results/sleeping_trie_global4_selector_raw_v1/2026-08-01T193730.json` |
 
@@ -35,6 +36,7 @@ Compare identical population hashes; equal input sizes alone do not define match
 |---|---|---|---:|---:|---:|---:|---:|---|---|
 | `cmix_obias_full1g_submission_accounting_qm1_v1` | unidentified | custom candidate | 0 | unknown | 0 | unknown | n/a | not recorded | `results/cmix_obias_full1g_submission_accounting_qm1_v1/decision.json` |
 | `nncp_compact5_preprocessed_cqq_x86xzopt_nodebug_t4_tarslack_v1` | `321868b6f37a` | custom candidate | 10,000 | 240,248 | 6,229 | 234,019 | 4.9832 | true | `results/nncp_compact5_preprocessed_cqq_x86xzopt_nodebug_t4_tarslack_v1/2026-07-27T213234.json` |
+| `fx2_residual_ratio_fixture50051_q0_v3:D` | `890b3e1210a2` | custom candidate | 50,051 | 9,429,024 | 3,223 | 9,425,801 | 0.515154542 | true | `operations/provenance/fx2_ratio_fixture_terminal_20260908/D.json` |
 | `matched_frontier_reserved_q0_v1:validation-FX2` | `4c6b839c7799` | custom candidate | 250,000 | unknown | 35,464 | unknown | 1.134848 | true | `operations/provenance/matched_frontier_reserved_terminal_20260908/validation-FX2.json` |
 | `matched_frontier_reserved_q0_v1:confirmation-FX2` | `20b4d8d7e140` | custom candidate | 1,000,000 | unknown | 131,238 | unknown | 1.049904 | true | `operations/provenance/matched_frontier_reserved_terminal_20260908/confirmation-FX2.json` |
 
