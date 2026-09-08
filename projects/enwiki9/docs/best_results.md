@@ -10,7 +10,7 @@ No prefix row proves 9.9000000%.
 No forecast or metadata-inherited row is included.
 ```
 
-- Result JSON files scanned: `180`
+- Result JSON files scanned: `182`
 - Roundtrip-passing rows: `20`
 - Active target score: `99,000,000` bytes (`9.9000000%`)
 

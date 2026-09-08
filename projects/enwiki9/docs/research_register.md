@@ -25,8 +25,12 @@ The gate reproduced the historical bitmix parent byte-for-byte. The
 selects this unchanged codec for the separately reserved 250KB validation slice.
 `root_explore` owns `opcode_field_validation250k_q0_v1`; its transfer runner passes
 [22 synthetic tests](../operations/evidence/20260908_opcode_field_transfer_unit.json).
-The validation job remains held pending publication and fresh resource admission.
-No confirmation or full-corpus improvement is established.
+The [validation terminal](../operations/provenance/opcode_field_validation_terminal_20260908.json)
+passes all ten phases: P/K 71,788 bytes, D 71,717, saving 71 archive bytes.
+Peak cgroup memory is 567,230,464 bytes and guard closure passes. The validated
+reflection selects the unchanged codec for reserved 1MB confirmation.
+`root_explore` owns `opcode_field_confirmation1m_q0_v1`, held pending publication
+and fresh admission. Complete package economics and full-corpus score remain unknown.
 
 ## 2026-09-07 - MIDAS opening250KB closes the missing boundary evidence
 

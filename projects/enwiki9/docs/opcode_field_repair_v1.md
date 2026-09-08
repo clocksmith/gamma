@@ -30,10 +30,25 @@ decoded event produces the same adaptive update and next field on both sides;
 the comparison checks this induction with prediction and state evidence.
 Encoder lookahead and search tables are not decoder inputs.
 
-The routing defect is measured; its archive cost is not yet known. The gate
-must reproduce the unchanged parent, establish P/K identity, independently
-invert every arm, and repeat encoding from restored raw bytes. Archive savings
-and added source/options are reported separately. Python and runtime licensing,
+The [development receipt](../operations/provenance/opcode_field_repair_terminal_20260908.json)
+records 67,959-byte P/K archives and a 67,658-byte D archive: a 301-byte saving.
+The unchanged parent was reproduced, P/K identity held, and independent inverses,
+raw-input repeats and shared-state checks passed. All inputs below are the same
+opening 250,000 original bytes; retained baselines were authenticated rather than
+rerun. Their frontend and dependency differences remain explicit in the
+[baseline inventory](../operations/provenance/small_input_frontier_baselines_20260908.json).
+
+| Codec | Complete development archive bytes | Evidence scope |
+| --- | ---: | --- |
+| Framed Deflate | 89,041 | Retained exact inverse and repeat |
+| Bitmix parent / bookkeeping | 67,959 | Fresh P/K identity, inverse and repeat |
+| Opcode field repair | 67,658 | Fresh inverse, repeat and state witnesses |
+| Source-bound FX2 | 33,429 | Retained cold-slice inverse and repeat; supplied trained assets |
+
+These are archive sizes, not prize scores. The candidate's 15,403 uncompressed
+source bytes exceed the retained parent's 4,841 by 10,562 bytes. Complete package
+economics remain unknown; the archive benefit alone does not pay that raw source
+increase. Python and runtime licensing,
 accepted complete-package accounting and cross-host floating-point lookup
 initialization remain qualification obligations.
 
@@ -41,3 +56,9 @@ Development uses the previously examined opening 250KB. One fixed mutation
 must improve its own parent before selection on a disjoint 250KB validation
 population; the separately reserved 1MB confirmation population stays outside
 design and tuning. The 99,000,000-byte complete objective remains unproved.
+
+The [separate validation receipt](../operations/provenance/opcode_field_validation_terminal_20260908.json)
+records P/K 71,788 and D 71,717 bytes, a 71-byte archive gain. All ten phases,
+inverses, repeats and shared-state checks pass. The unchanged codec is selected
+for the reserved 1MB confirmation; neither sample establishes package savings.
+Deflate and FX2 have not yet been measured on this reserved validation slice.

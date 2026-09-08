@@ -1,0 +1,107 @@
+{
+  "attribution": {
+    "causalConfidence": "high",
+    "controlsEquivalent": true,
+    "failureClass": "algorithmic-gain",
+    "localizedCause": "The same decoded-opcode field coordinate transfers a positive archive benefit without any new tuning or mechanism."
+  },
+  "candidateId": "opcode_field_validation250k_q0_v1",
+  "candidateRevision": {
+    "candidateId": "opcode_field_validation250k_q0_v1",
+    "candidateTreeSha256": "sha256:dc801b1b2ab20f68b1a81cbb9c5312d89b5fe47c8ac7de949b11948f3890a06e",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/opcode_field_validation250k_q0_v1/20260908T135911720274Z_dc801b1b2ab2.json",
+      "sha256": "sha256:e5aaacd1c193962daa8484f5a8ceaa3727e24f1e3e41cd106f6b5cba0e66a2c0"
+    }
+  },
+  "decision": {
+    "killPredicatesPass": false,
+    "nextGateBytes": 1000000,
+    "promotionPredicatesPass": true,
+    "rationale": "Freeze the unchanged selected codec on reserved1MB confirmation; no tuning, no full-corpus launch, and fresh publication and resource admission required.",
+    "verdict": "next-gate"
+  },
+  "evidence": [
+    {
+      "path": "operations/provenance/opcode_field_validation_terminal_20260908.json",
+      "sha256": "sha256:2981cc8bde93f9f213dc5582cc91c16e49eaad104b17f1c77db8806f69618305"
+    },
+    {
+      "path": "operations/provenance/opcode_field_validation_terminal_20260908/index.json",
+      "sha256": "sha256:fb3cb4b330925cde0fde8defe56623bc1341654ed9d546619e2644c05d1d8301"
+    },
+    {
+      "path": "results/opcode_field_validation250k_q0_v1/stage-decision.json",
+      "sha256": "sha256:904d5f9b3e2b9dc7f687f533ad4c4ee8afea6291e85db135934f2f1c6cbec18b"
+    }
+  ],
+  "experiment": {
+    "path": "operations/adaptive/experiments/opcode_field_validation250k_q0_v1.json",
+    "sha256": "sha256:9c47a6e57c45484341ffdcbce0086b6e9da062b6aa672a92331066078ab9b16d"
+  },
+  "generatedUtc": "2026-09-08T14:12:20+00:00",
+  "hypothesis": {
+    "rationale": "The unchanged selected codec reduces the separately reserved250KB archive from71788 to71717 bytes;71 archive bytes is not a complete package gain.",
+    "verdict": "supported"
+  },
+  "job": {
+    "path": "operations/adaptive/completed/909_20260908T135924Z_4a0618920c.json",
+    "sha256": "sha256:051367c82f93ee257910e673fb081b91b2995ea28f6eeca8df7f0d888a07c9ad"
+  },
+  "knowledge": {
+    "retiredDimensions": [],
+    "transferableLessons": [
+      "A301-byte development archive gain retains71 bytes on the reserved validation slice; measure transfer rather than assuming identical gain across populations."
+    ],
+    "uncertainties": [
+      "Complete package remains unknown and added uncompressed source10562 bytes exceeds both small-scope gains; larger confirmation and calibrated resources remain unproved."
+    ]
+  },
+  "measurementAssertions": [
+    {
+      "field": "netBytesSaved",
+      "pointer": "/measurements/archive_saving_bytes",
+      "source": {
+        "path": "operations/provenance/opcode_field_validation_terminal_20260908.json",
+        "sha256": "sha256:2981cc8bde93f9f213dc5582cc91c16e49eaad104b17f1c77db8806f69618305"
+      }
+    },
+    {
+      "field": "sourceBytesDelta",
+      "pointer": "/measurements/added_uncompressed_source_bytes",
+      "source": {
+        "path": "operations/provenance/opcode_field_validation_terminal_20260908.json",
+        "sha256": "sha256:2981cc8bde93f9f213dc5582cc91c16e49eaad104b17f1c77db8806f69618305"
+      }
+    }
+  ],
+  "measurements": {
+    "idealBitsSaved": null,
+    "memoryRatio": null,
+    "minimumPartitionIdealBitsSaved": null,
+    "netBytesSaved": 71,
+    "positiveSegmentFraction": null,
+    "runtimeRatio": null,
+    "scopeBytes": null,
+    "scopeSymbols": null,
+    "sourceBytesDelta": 10562,
+    "transferRetention": null
+  },
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:16badfa6c1a53b47bcc12b089fdd9c21f7405ea56a84344d60c28d2252da8288",
+    "objectiveId": "gamma-enwiki9-hutter-99m-v2",
+    "objectivePath": "contracts/research/v2/objective-contract.json",
+    "targetScoreBytes": 99000000
+  },
+  "reflectionId": "r-20260908t135924z_4a0618920c",
+  "schema": "gamma.enwiki9.reflection-receipt.v1",
+  "validity": {
+    "classification": "valid",
+    "reasons": [
+      "Ten closed phases pass fresh parent identity, P/K identity, independent inverse, raw repeat, shared prediction and state witnesses; guard flags are false and cleanup is complete."
+    ],
+    "valid": true
+  }
+}
