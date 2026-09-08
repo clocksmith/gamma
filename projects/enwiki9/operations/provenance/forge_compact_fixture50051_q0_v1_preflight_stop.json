@@ -1,0 +1,18 @@
+{
+  "schema": "gamma.enwiki9.preflight-stop.v1",
+  "candidate_id": "forge_compact_fixture50051_q0_v1",
+  "job_id": "20260908T194103Z_ab49468717",
+  "owner": "root_explore",
+  "native_executed": false,
+  "correctness_pass": null,
+  "archive_bytes": null,
+  "cause": "Source inspection before releasing the held job found PPMD(25,14000,...) and StartSubAllocator(SASize << 20). Its logical heap alone exceeds the frozen scratch ceiling.",
+  "frozen_scratch_bytes": 4000000000,
+  "required_ppmd_heap_bytes": 14680064000,
+  "source_plan": "operations/provenance/forge_parent_source_audit_v1_plan.json",
+  "source_locations": ["src/predictor.cpp:275", "src/models/ppmd.cpp:160"],
+  "failure_class": "resource-plan-error",
+  "scientific_verdict": "not-tested",
+  "action": "Cancel without launching. Create a separately bound retry with16000000000 scratch bytes, unchanged predictor, fixture, phase stops, CPU and memory. Retain the original contract and source unchanged.",
+  "objective_credit_bytes": 0
+}
