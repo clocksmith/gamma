@@ -17,6 +17,14 @@ Five synthetic tests pass, including exact inverse/repeat, P/K identity and
 introduced-state witnesses. The published next gate uses only 48 artificial
 records on CPU3; no corpus measurement or compression gain is claimed yet.
 
+The [terminal synthetic comparison](../operations/provenance/opcode_field_history_synthetic_v1_terminal.json)
+passes all 17 fresh processes and complete shared/introduced witnesses.
+On 3,744 artificial bytes, P/K/D/G/S archives are 498/498/499/504/516 bytes.
+Aligned history beats the two routing controls but loses one byte to the parent;
+this establishes implementation correctness, not corpus economics. Peak phase
+RSS is 31,244KiB. The [opening250KB contract](../operations/adaptive/experiments/opcode_field_history250k_q0_v1.json)
+is frozen and claimed by `root_explore`; package/runner preparation precedes queueing.
+
 ## 2026-09-08 - Bound compact-parent complementarity before constructing a selector
 
 Owner `root_explore` selects lenses 7/9 for an exact ideal-cost opportunity
