@@ -39,7 +39,9 @@ retains the supported development result and holds integration/scaling. Freeze
 a separate validation population without changing the mechanism; no full-score credit.
 The [validation contract](../operations/adaptive/experiments/opcode_field_history_validation250k_q0_v1.json)
 is frozen and claimed by `root_explore`: raw offsets 347250000..347499999, unchanged
-codec and controls, no tuning or control-arm selection after validation. Runner preparation remains.
+codec and controls, no tuning or control-arm selection after validation.
+The [validation runner tests](../operations/provenance/opcode_field_history_validation_gate_v1_unit.json)
+pass ten synthetic checks. The sealed sixteen-phase job is held for publication and fresh CPU2 admission.
 
 ## 2026-09-08 - Bound compact-parent complementarity before constructing a selector
 

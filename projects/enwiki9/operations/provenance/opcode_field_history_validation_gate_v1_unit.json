@@ -1,0 +1,63 @@
+{
+  "schema": "gamma.enwiki9.opcode-field-history-validation-runner-unit.v1",
+  "id": "opcode_field_history_validation_gate_v1_unit",
+  "owner": "root_explore",
+  "status": "passed",
+  "tests_passed": 10,
+  "reported_test_elapsed_seconds": 5.228,
+  "scope": "Synthetic only: seven reused engine failure-injection tests and three validation-wrapper tests; no corpus.",
+  "experiment": "operations/adaptive/experiments/opcode_field_history_validation250k_q0_v1.json",
+  "command": [
+    "taskset",
+    "-c",
+    "3",
+    "prlimit",
+    "--as=2147483648",
+    "--cpu=180",
+    "--fsize=33554432",
+    "--core=0",
+    "timeout",
+    "240",
+    "python3",
+    "-m",
+    "unittest",
+    "discover",
+    "-s",
+    "tests",
+    "-p",
+    "test_opcode_field_history_validation_gate_v1.py",
+    "-v"
+  ],
+  "sources": [
+    {
+      "path": "tools/opcode_field_history_validation_gate_v1.py",
+      "bytes": 4123,
+      "sha256": "74e8aba1664e493e8ce6fdb4027970039fb86d5e9523a68b2dac9d875697f9df"
+    },
+    {
+      "path": "tests/test_opcode_field_history_validation_gate_v1.py",
+      "bytes": 3538,
+      "sha256": "d90f832add7ed8f6dc377ec632ce6916703d46bdfd41d34233a28ca212e431e0"
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "results/opcode_field_history_validation_gate_v1_unit/stdout",
+      "bytes": 47,
+      "sha256": "c16d0c816de0fd0e34aa2f38bd2408f532f597aaa393cf3d67f3458c3900a5b4"
+    },
+    {
+      "path": "results/opcode_field_history_validation_gate_v1_unit/stderr",
+      "bytes": 1630,
+      "sha256": "d25fa542012bbb65ad5a11ca13b8a4eccddbb0b0a3d2c1523eaf1347f871d7ca"
+    }
+  ],
+  "checks": [
+    "Actual validation entrypoint closes sixteen synthetic encode/decode/repeat/observation phases with all five arms.",
+    "Development population, changed packed-codec hash and wrong CPU assignment are rejected.",
+    "Comparison body and authentication body are reused without modifying their original module globals.",
+    "Inherited fault tests retain state divergence, reject missing mandatory evidence and separate optional telemetry failures."
+  ],
+  "objective_credit_bytes": 0,
+  "next": "Publish sealed candidate, runner and held job; refresh admission before reserved250KB execution."
+}
