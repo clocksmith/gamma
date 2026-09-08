@@ -1,0 +1,85 @@
+{
+  "bounds": {
+    "address_space_bytes": 2147483648,
+    "cpu": 3,
+    "cpu_seconds": 240,
+    "scratch_bytes": 67108864,
+    "threads": 1,
+    "wall_seconds": 300
+  },
+  "candidate_id": "opcode_wiki_slot_v1",
+  "checks": [
+    "Independent P/K/D encoder, decoder and raw repeat agree on complete witnesses.",
+    "P/K payload and parent projection match the unchanged compact codec.",
+    "Only slot is exposed; raw reconstruction waits for a complete opcode pair. All dictionary tokens and escaped zero are covered.",
+    "Retained ten-phase CLI execution passes. Optional telemetry missing is explicit; missing audits, wrong parent and changed state block.",
+    "Copied and literal byte counts and slot-change counts are independently reported."
+  ],
+  "complete_package_bytes": null,
+  "failures_preserved": [
+    {
+      "cause": "CLI audit included binary side-state in JSON; serialize its exact value as hex before publication.",
+      "classification": "implementation-failure",
+      "path": "results/opcode_wiki_slot_runner_unit_20260908/attempt01/validation.log"
+    },
+    {
+      "cause": "Runner artifact paths were relative; normalize the owned output directory before recording.",
+      "classification": "implementation-failure",
+      "path": "results/opcode_wiki_slot_unit_20260908/retained"
+    }
+  ],
+  "generated_utc": "2026-09-08T16:21:24.253867+00:00",
+  "local_source_bytes": 6350,
+  "objective_credit_bytes": 0,
+  "retained": {
+    "bytes": 38726,
+    "path": "results/opcode_wiki_slot_unit_20260908/retained02/receipt.json",
+    "sha256": "251e38cb93e487620780a4779875668e9736b16ca08370cffbd4161aae1f6e5c"
+  },
+  "retained_phases": 10,
+  "schema": "gamma.enwiki9.opcode-wiki-slot-unit.v1",
+  "scope": "Synthetic only; the fixture loss is not a corpus result.",
+  "source_files": [
+    {
+      "bytes": 5423,
+      "path": "programs/opcode_wiki_slot_v1/p",
+      "sha256": "7d331ba82c635af8afe6517bf5f4471b41dcf7854c6ec01cb5564078d9bb56a8"
+    },
+    {
+      "bytes": 927,
+      "path": "programs/opcode_wiki_slot_v1/program.py",
+      "sha256": "93514bf36ed453e84ad211bfb6121a56363b90c74c6c327f581e86f952341bce"
+    },
+    {
+      "bytes": 4712,
+      "path": "tools/opcode_wiki_slot_observe_v1.py",
+      "sha256": "be5831e4d1d1449741f6781437d1d9a6fed6a3724046f113e57da707d49f86e2"
+    },
+    {
+      "bytes": 10083,
+      "path": "tools/opcode_wiki_slot_gate_v1.py",
+      "sha256": "7e1acff79e3f4030832c6402d0885c2de39b8e1cbe8ad23f55c86b653eb1d4a4"
+    },
+    {
+      "bytes": 4924,
+      "path": "tests/test_opcode_wiki_slot_v1.py",
+      "sha256": "71f3f41938d97a3e6fd3ecf9a49506fcc3cd49a908af3fd0c203befb8e5bcead"
+    },
+    {
+      "bytes": 4189,
+      "path": "tests/test_opcode_wiki_slot_gate_v1.py",
+      "sha256": "450043c04ad7f7e5bdfbe0e1aaebba7c62ad949bb07db514b311c866f61eae71"
+    }
+  ],
+  "synthetic_archive_bytes": {
+    "D": 44,
+    "K": 43,
+    "P": 43
+  },
+  "tests_passed": 11,
+  "validation": {
+    "bytes": 1458,
+    "path": "results/opcode_wiki_slot_runner_unit_20260908/attempt02/validation.log",
+    "sha256": "d1581bd77509c10b4e8075b2a5bc8d8d5c4738d4bff08910b24738dd779bf37b"
+  }
+}

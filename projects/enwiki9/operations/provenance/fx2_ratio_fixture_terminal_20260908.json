@@ -1,0 +1,123 @@
+{
+  "schema": "gamma.enwiki9.native-ratio-terminal-audit.v1",
+  "candidate_id": "fx2_residual_ratio_fixture50051_q0_v3",
+  "job": {
+    "path": "operations/adaptive/completed/959_20260908T190345Z_1e4e5a7eee.json",
+    "bytes": 4136,
+    "sha256": "371ad2add46fbc3235b61438f0a992a637aea21757bff217c65855c530525509"
+  },
+  "guard": {
+    "path": "run_logs/adaptive/20260908T190345Z_1e4e5a7eee.resources/guard.json",
+    "bytes": 97113,
+    "sha256": "b0940951c6511eca08ad0d50a5ee56bc46eac4d32db218259f02aadbbc88483d"
+  },
+  "stage": {
+    "path": "results/fx2_residual_ratio_fixture50051_q0_v3/stage-decision.json",
+    "bytes": 4016,
+    "sha256": "e55e9f9752643922a7aaeba45693f9c47b76ad4f7d4655b324a5dc63eb03826a"
+  },
+  "source_manifest": {
+    "path": "results/fx2_residual_ratio_fixture50051_q0_v3/artifacts.json",
+    "bytes": 57221,
+    "sha256": "2edd669a5faee1df8dc773f810a7cd01107954297d0af1cd088a7e57d110385e"
+  },
+  "objective_target_bytes": 90000000,
+  "objective_credit_bytes": 0,
+  "full_corpus_score_bytes": null,
+  "arms": {
+    "P": {
+      "archive_bytes": 3223,
+      "exact_inverse": true,
+      "repeat_equal": true,
+      "traced_untraced_archive_equal": true,
+      "coder_records": 259824,
+      "calibration_records": 64956,
+      "quantized_probability_changes_vs_P": 0,
+      "first_changed_bit": null,
+      "diagnostic_ideal_bits_saved_vs_P": 0
+    },
+    "K": {
+      "archive_bytes": 3223,
+      "exact_inverse": true,
+      "repeat_equal": true,
+      "traced_untraced_archive_equal": true,
+      "coder_records": 259824,
+      "calibration_records": 64956,
+      "quantized_probability_changes_vs_P": 0,
+      "first_changed_bit": null,
+      "diagnostic_ideal_bits_saved_vs_P": 0
+    },
+    "D": {
+      "archive_bytes": 3223,
+      "exact_inverse": true,
+      "repeat_equal": true,
+      "traced_untraced_archive_equal": true,
+      "coder_records": 259824,
+      "calibration_records": 64956,
+      "quantized_probability_changes_vs_P": 64583,
+      "first_changed_bit": 66,
+      "diagnostic_ideal_bits_saved_vs_P": -1.7474386861516857
+    },
+    "S": {
+      "archive_bytes": 3236,
+      "exact_inverse": true,
+      "repeat_equal": true,
+      "traced_untraced_archive_equal": true,
+      "coder_records": 259824,
+      "calibration_records": 64956,
+      "quantized_probability_changes_vs_P": 125388,
+      "first_changed_bit": 48,
+      "diagnostic_ideal_bits_saved_vs_P": -103.46822831487749
+    }
+  },
+  "archive_saving_bytes": 0,
+  "control_margin_bytes": 13,
+  "added_local_component_bytes": 22746,
+  "source_delta_bytes": 10436,
+  "binary_delta_bytes": 12288,
+  "package": {
+    "path": "results/fx2_residual_ratio_fixture50051_q0_v3/package.json",
+    "bytes": 29362,
+    "sha256": "c283efd0841cb0eaa2734062b7c91bcf6759f61401e13564ae33d80806a6ed44"
+  },
+  "complete_package_bytes": null,
+  "guard_peaks": {
+    "cgroup_memory_peak_bytes": 7545712640,
+    "max_observed_process_vmhwm_kib": 5259992,
+    "max_sampled_allowed_cpu_count": 1,
+    "max_sampled_cgroup_current_bytes": 7524220928,
+    "max_sampled_scratch_allocated_bytes": 2048618496,
+    "max_sampled_scratch_logical_bytes": 16727105348,
+    "max_sampled_single_rss_kib": 5246008,
+    "max_sampled_tree_live_threads": 5,
+    "max_sampled_tree_rss_kib": 5312060,
+    "max_sampled_tree_runnable_threads": 1
+  },
+  "guard_measurements": {
+    "affinity_complete": true,
+    "cgroup_v2_complete": true,
+    "per_process_vmhwm_sampled": true,
+    "phase_markers_complete": true,
+    "process_tree_rss_complete": true,
+    "scratch_logical_and_allocated_complete": true,
+    "smaps_rollup_complete": true
+  },
+  "guard_flags": {
+    "cgroup_memory_guard_exceeded": false,
+    "logical_cpu_guard_exceeded": false,
+    "measurement_incomplete": false,
+    "official_decimal_memory_exceeded": false,
+    "phase_marker_invalid": false,
+    "rss_guard_exceeded": false,
+    "temporary_disk_guard_exceeded": false,
+    "wall_time_guard_exceeded": false
+  },
+  "actual_elapsed_seconds": 296.6297,
+  "timing_authority": "shared-host diagnostic",
+  "promotion_pass": false,
+  "kill_pass": true,
+  "decision": "retire this fixed calibration realization on this fixture; retain reusable native implementation",
+  "attribution": "FX2/CMIX, transformer weights and dictionary remain external work; Gamma supplies the causal ratio calibration, adapters and validation.",
+  "diagnostic_limits": "Ideal log losses use quantized bit probabilities and floating point summation; they are not a finite-coder certificate. Complete legacy parent state serialization is not claimed. All coder probabilities and intervals and complete introduced calibration state agree independently within each arm.",
+  "next_action": "Use changed-event loss attribution to diagnose calibration strength or parent redundancy before selecting one separately frozen successor; do not scale this zero-gain fixture."
+}

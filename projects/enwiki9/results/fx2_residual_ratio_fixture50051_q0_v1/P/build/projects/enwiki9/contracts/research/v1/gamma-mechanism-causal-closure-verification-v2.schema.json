@@ -1,0 +1,355 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gamma.enwiki9.gamma-mechanism-causal-closure-verification.v2",
+  "title": "Gamma Mechanism IR generalized causal-closure verification v2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "mechanism_id",
+    "verdict",
+    "representation_verified",
+    "native_causality_proved",
+    "errors",
+    "inputs",
+    "verifier",
+    "independence",
+    "checks",
+    "truth_boundary_verification",
+    "compilation_input_authority",
+    "execution_authority",
+    "compression_authority",
+    "promotion_authority",
+    "claim_authority"
+  ],
+  "properties": {
+    "schema": {
+      "const": "gamma.enwiki9.gamma-mechanism-causal-closure-verification.v2"
+    },
+    "mechanism_id": {"$ref": "#/$defs/id"},
+    "verdict": {"enum": ["pass", "fail"]},
+    "representation_verified": {"type": "boolean"},
+    "native_causality_proved": {"type": "boolean"},
+    "errors": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1}
+    },
+    "inputs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "mechanism_ir_schema",
+        "mechanism_ir",
+        "causal_closure_schema",
+        "causal_closure",
+        "implementation_source"
+      ],
+      "properties": {
+        "mechanism_ir_schema": {"$ref": "#/$defs/artifact"},
+        "mechanism_ir": {"$ref": "#/$defs/artifact"},
+        "causal_closure_schema": {"$ref": "#/$defs/artifact"},
+        "causal_closure": {"$ref": "#/$defs/artifact"},
+        "implementation_source": {"$ref": "#/$defs/artifact"}
+      }
+    },
+    "verifier": {"$ref": "#/$defs/artifact"},
+    "independence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "verifier_differs_from_compiler",
+        "inputs_reopened_from_disk",
+        "hashes_rederived",
+        "no_compiler_derived_verdict_state"
+      ],
+      "properties": {
+        "verifier_differs_from_compiler": {"const": true},
+        "inputs_reopened_from_disk": {"const": true},
+        "hashes_rederived": {"const": true},
+        "no_compiler_derived_verdict_state": {"const": true}
+      }
+    },
+    "checks": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_meta_pass",
+        "input_binding_pass",
+        "mechanism_identity_pass",
+        "unique_identity_pass",
+        "arm_set_and_role_equality_pass",
+        "information_source_set_equality_pass",
+        "event_order_pass",
+        "source_availability_pass",
+        "state_reference_closure_pass",
+        "state_access_authority_pass",
+        "pretruth_truth_exclusion_pass",
+        "truth_access_mode_pass",
+        "matched_opportunity_pass",
+        "control_outcome_isolation_pass",
+        "reset_closure_pass",
+        "join_or_explicit_no_join_pass",
+        "mixture_lifecycle_consistency_pass",
+        "artifact_path_safety_pass",
+        "deterministic_reverification_pass"
+      ],
+      "properties": {
+        "schema_meta_pass": {"type": "boolean"},
+        "input_binding_pass": {"type": "boolean"},
+        "mechanism_identity_pass": {"type": "boolean"},
+        "unique_identity_pass": {"type": "boolean"},
+        "arm_set_and_role_equality_pass": {"type": "boolean"},
+        "information_source_set_equality_pass": {"type": "boolean"},
+        "event_order_pass": {"type": "boolean"},
+        "source_availability_pass": {"type": "boolean"},
+        "state_reference_closure_pass": {"type": "boolean"},
+        "state_access_authority_pass": {"type": "boolean"},
+        "pretruth_truth_exclusion_pass": {"type": "boolean"},
+        "truth_access_mode_pass": {"type": "boolean"},
+        "matched_opportunity_pass": {"type": "boolean"},
+        "control_outcome_isolation_pass": {"type": "boolean"},
+        "reset_closure_pass": {"type": "boolean"},
+        "join_or_explicit_no_join_pass": {"type": "boolean"},
+        "mixture_lifecycle_consistency_pass": {"type": "boolean"},
+        "artifact_path_safety_pass": {"type": "boolean"},
+        "deterministic_reverification_pass": {"type": "boolean"}
+      }
+    },
+    "truth_boundary_verification": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "mode",
+        "physical_truth_visible_during_target_construction",
+        "source_data_flow",
+        "native_predecode"
+      ],
+      "properties": {
+        "mode": {"enum": ["native_predecode", "shadow_score_only_argument"]},
+        "physical_truth_visible_during_target_construction": {"type": "boolean"},
+        "source_data_flow": {"$ref": "#/$defs/proofStage"},
+        "native_predecode": {"$ref": "#/$defs/proofStage"}
+      }
+    },
+    "compilation_input_authority": {"type": "boolean"},
+    "execution_authority": {"const": false},
+    "compression_authority": {"const": false},
+    "promotion_authority": {"const": false},
+    "claim_authority": {"const": "none"}
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {"representation_verified": {"const": true}},
+        "required": ["representation_verified"]
+      },
+      "then": {
+        "properties": {
+          "verdict": {"const": "pass"},
+          "errors": {"maxItems": 0},
+          "checks": {"$ref": "#/$defs/allChecksTrue"},
+          "compilation_input_authority": {"const": true}
+        }
+      },
+      "else": {
+        "properties": {
+          "verdict": {"const": "fail"},
+          "errors": {"minItems": 1},
+          "checks": {"not": {"$ref": "#/$defs/allChecksTrue"}},
+          "compilation_input_authority": {"const": false}
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "truth_boundary_verification": {
+            "properties": {"mode": {"const": "shadow_score_only_argument"}},
+            "required": ["mode"]
+          }
+        },
+        "required": ["truth_boundary_verification"]
+      },
+      "then": {
+        "properties": {
+          "truth_boundary_verification": {
+            "properties": {
+              "physical_truth_visible_during_target_construction": {"const": true},
+              "source_data_flow": {
+                "properties": {"required": {"const": true}}
+              },
+              "native_predecode": {
+                "properties": {"required": {"const": true}}
+              }
+            }
+          }
+        }
+      },
+      "else": {
+        "properties": {
+          "truth_boundary_verification": {
+            "properties": {
+              "physical_truth_visible_during_target_construction": {"const": false},
+              "source_data_flow": {
+                "properties": {
+                  "required": {"const": false},
+                  "status": {"const": "not_applicable"}
+                }
+              },
+              "native_predecode": {
+                "properties": {"required": {"const": true}}
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "representation_verified": {"const": true},
+          "truth_boundary_verification": {
+            "properties": {"mode": {"const": "shadow_score_only_argument"}},
+            "required": ["mode"]
+          }
+        },
+        "required": ["representation_verified", "truth_boundary_verification"]
+      },
+      "then": {
+        "properties": {
+          "truth_boundary_verification": {
+            "properties": {
+              "source_data_flow": {
+                "properties": {"status": {"const": "pass"}}
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "representation_verified": {"const": true},
+          "truth_boundary_verification": {
+            "properties": {"mode": {"const": "native_predecode"}},
+            "required": ["mode"]
+          }
+        },
+        "required": ["representation_verified", "truth_boundary_verification"]
+      },
+      "then": {
+        "properties": {
+          "truth_boundary_verification": {
+            "properties": {
+              "native_predecode": {
+                "properties": {"status": {"const": "pass"}}
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "representation_verified": {"const": true},
+          "truth_boundary_verification": {
+            "properties": {
+              "native_predecode": {
+                "properties": {"status": {"const": "pass"}},
+                "required": ["status"]
+              }
+            },
+            "required": ["native_predecode"]
+          }
+        },
+        "required": ["representation_verified", "truth_boundary_verification"]
+      },
+      "then": {
+        "properties": {"native_causality_proved": {"const": true}}
+      },
+      "else": {
+        "properties": {"native_causality_proved": {"const": false}}
+      }
+    }
+  ],
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9._-]*$"},
+    "artifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "bytes", "sha256"],
+      "properties": {
+        "path": {"type": "string", "pattern": "^projects/enwiki9/"},
+        "bytes": {"type": "integer", "minimum": 1},
+        "sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "proofStage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["required", "status", "verifier_method", "evidence"],
+      "properties": {
+        "required": {"type": "boolean"},
+        "status": {"enum": ["not_applicable", "unverified", "pass", "fail"]},
+        "verifier_method": {"type": ["string", "null"], "minLength": 1},
+        "evidence": {
+          "oneOf": [{"$ref": "#/$defs/artifact"}, {"type": "null"}]
+        }
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"required": {"const": false}}},
+          "then": {"properties": {"status": {"const": "not_applicable"}}},
+          "else": {
+            "properties": {
+              "status": {"enum": ["unverified", "pass", "fail"]}
+            }
+          }
+        },
+        {
+          "if": {"properties": {"status": {"enum": ["pass", "fail"]}}},
+          "then": {
+            "properties": {
+              "verifier_method": {"type": "string", "minLength": 1},
+              "evidence": {"$ref": "#/$defs/artifact"}
+            }
+          },
+          "else": {
+            "properties": {
+              "verifier_method": {"type": "null"},
+              "evidence": {"type": "null"}
+            }
+          }
+        }
+      ]
+    },
+    "allChecksTrue": {
+      "type": "object",
+      "properties": {
+        "schema_meta_pass": {"const": true},
+        "input_binding_pass": {"const": true},
+        "mechanism_identity_pass": {"const": true},
+        "unique_identity_pass": {"const": true},
+        "arm_set_and_role_equality_pass": {"const": true},
+        "information_source_set_equality_pass": {"const": true},
+        "event_order_pass": {"const": true},
+        "source_availability_pass": {"const": true},
+        "state_reference_closure_pass": {"const": true},
+        "state_access_authority_pass": {"const": true},
+        "pretruth_truth_exclusion_pass": {"const": true},
+        "truth_access_mode_pass": {"const": true},
+        "matched_opportunity_pass": {"const": true},
+        "control_outcome_isolation_pass": {"const": true},
+        "reset_closure_pass": {"const": true},
+        "join_or_explicit_no_join_pass": {"const": true},
+        "mixture_lifecycle_consistency_pass": {"const": true},
+        "artifact_path_safety_pass": {"const": true},
+        "deterministic_reverification_pass": {"const": true}
+      }
+    }
+  }
+}

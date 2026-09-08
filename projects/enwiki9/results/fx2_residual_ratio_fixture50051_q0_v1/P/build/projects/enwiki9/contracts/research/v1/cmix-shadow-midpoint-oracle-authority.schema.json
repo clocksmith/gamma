@@ -1,0 +1,60 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gamma.enwiki9.cmix-shadow-midpoint-oracle-authority.v1",
+  "title": "CMIX shadow midpoint oracle terminal authority interface",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema", "candidate_id", "verified", "scientific_verdict", "scope_bytes",
+    "checks", "derived", "source_receipt_sha256", "score_credit_bytes",
+    "persistence_attribution_activation_authority", "errors"
+  ],
+  "properties": {
+    "schema": {"const": "gamma.enwiki9.cmix-shadow-midpoint-oracle-authority.v1"},
+    "candidate_id": {"const": "cmix_obias_shadow_midpoint_oracle64_q0_v2"},
+    "verified": {"const": true},
+    "scientific_verdict": {"const": "pass"},
+    "scope_bytes": {"const": 10000000},
+    "checks": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "P_K_probability_identity_pass", "P_K_state_identity_pass",
+        "all_exact_inverse_pass", "F_repeat_identity_pass", "F_beats_S_pass",
+        "F_all_thirds_beats_P_pass", "F_all_thirds_beats_S_pass",
+        "resource_pass", "dependency_closure_pass", "package_pass"
+      ],
+      "properties": {
+        "P_K_probability_identity_pass": {"const": true},
+        "P_K_state_identity_pass": {"const": true},
+        "all_exact_inverse_pass": {"const": true},
+        "F_repeat_identity_pass": {"const": true},
+        "F_beats_S_pass": {"const": true},
+        "F_all_thirds_beats_P_pass": {"const": true},
+        "F_all_thirds_beats_S_pass": {"const": true},
+        "resource_pass": {"const": true},
+        "dependency_closure_pass": {"const": true},
+        "package_pass": {"const": true}
+      }
+    },
+    "derived": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["P_archive_bytes", "F_archive_bytes", "S_archive_bytes", "F_gain_bytes", "required_F_gain_bytes"],
+      "properties": {
+        "P_archive_bytes": {"type": "integer", "minimum": 1},
+        "F_archive_bytes": {"type": "integer", "minimum": 1},
+        "S_archive_bytes": {"type": "integer", "minimum": 1},
+        "F_gain_bytes": {"type": "integer", "minimum": 40793},
+        "required_F_gain_bytes": {"const": 40793}
+      }
+    },
+    "source_receipt_sha256": {"$ref": "#/$defs/sha256"},
+    "score_credit_bytes": {"const": 0},
+    "persistence_attribution_activation_authority": {"const": true},
+    "errors": {"type": "array", "maxItems": 0}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  }
+}

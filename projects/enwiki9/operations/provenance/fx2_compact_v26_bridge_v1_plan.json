@@ -1,0 +1,16 @@
+{
+  "schema": "gamma.enwiki9.source-interface-plan.v1",
+  "owner": "root_explore",
+  "id": "fx2_compact_v26_bridge_v1",
+  "objective_target_bytes": 90000000,
+  "objective_credit_bytes": 0,
+  "synthesis_lenses": [3, 9],
+  "premise": "The cold forge parent comparison cannot attribute v26 independently of its LSTM. Preserve FX2's trained transformer and later test only replacement of its431-output FXCM block with compact403 v26.",
+  "immediate_deliverable": "Synthetic and source-interface checks only: repair the v1 probability-endpoint rejection in a new adapter, verify every clipped raw mapping, and compile a P/K/D model bridge without executing an upstream predictor.",
+  "sources": ["operations/provenance/forge_parent_source_audit_v1_plan.json", "operations/provenance/forge_compact_fixture_terminal_20260908.json", "operations/provenance/public_fx2_cmix_transformer_v1.json"],
+  "failure_under_test": "Pinned squashc may round to4095; upstream multiplies by1/4095 and yields1.0. FX2's sigmoid handles that endpoint, while the published Gamma v1 adapter incorrectly rejects it.",
+  "controls": ["Preserve the original v1 adapter and demonstrate its rejection", "V2 preserves upstream floating values exactly, including endpoints", "K copies original output values without modifying predictor updates", "D uses explicit compact raw mapping with neutral inactive outputs"],
+  "bounds": {"cpu_set": [3], "address_space_bytes": 536870912, "per_child_cpu_seconds": 90, "elapsed_seconds": 120, "per_file_bytes": 33554432, "scratch_bytes": 67108864},
+  "stop_rule": "One endpoint repair and one explicit bridge implementation; any disagreement stops integration pending diagnosis. No corpus, native model initialization, installation, or changes to measured sources.",
+  "later_gate": "A new frozen native comparison must establish P/K archive and probability identity, D independent inversion and repeat, changed model-output identity, and actual package/resource costs. No larger gate is authorized by this plan."
+}

@@ -1,0 +1,55 @@
+{
+  "candidate_id": "opcode_slot_reset_v1",
+  "claimed_at": "2026-09-08T16:43:16+00:00",
+  "created_at": "2026-09-08T16:43:16+00:00",
+  "developed_at": "2026-09-08T16:43:17+00:00",
+  "evidence": [
+    {
+      "path": "operations/provenance/opcode_wiki_slot_terminal_20260908.json",
+      "sha256": "sha256:75fa6e15a71ecee91a385d8b08c3a29ae198c881ee24a815846b15a795c614bc"
+    },
+    {
+      "path": "operations/adaptive/reflections/20260908T162205Z_46ebdbaee4.json",
+      "sha256": "sha256:c3141ea195c6538d0b20f90a16c8f0cff68d18c20e7ec82f1be2c35c1f07575c"
+    },
+    {
+      "path": "results/opcode_slot_reset_diagnostic_20260908/receipt.json",
+      "sha256": "sha256:fe6c896aa4af9ffe32fe9dc98940a7fdc04693207882d54954774dd4c72f1dd2"
+    }
+  ],
+  "expected_savings_bytes": 0,
+  "experiment": {
+    "path": "operations/adaptive/experiments/opcode_slot_reset_v1.json",
+    "sha256": "sha256:861855958578ed51f24b29c1e93396d6405b56d84d636cd0b2bcfcb5d156495c"
+  },
+  "hypothesis": "Resetting stale slot state at decoded text-close boundaries reduces the complete opening250KB archive relative to the unchanged compact parent and unused-reset control.",
+  "interfaces_exposed": [
+    "Existing slot reset on a complete decoded opcode2; no new parser or entropy coder."
+  ],
+  "kill_condition": "No archive gain rejects only this reset realization; missing activation and execution failures stay distinct.",
+  "max_program_bytes": 100000,
+  "mechanism_change": "add_state_coordinate",
+  "mechanism_change_bonus": 10,
+  "mechanism_class": "endpoint",
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:e91ff20e92c3cac8acb0cbe5c79fc8e8a3b427d7e151245c8eecc52b1c32fa00",
+    "objectiveId": "gamma-enwiki9-hutter-90m-v3",
+    "objectivePath": "contracts/research/v3/objective-contract.json",
+    "targetScoreBytes": 90000000
+  },
+  "owner": "root_explore",
+  "parent": "opcode_field_compact_v1",
+  "parent_proposal_id": null,
+  "priority": 50,
+  "promotion_condition": "Strict archive gain with exact controls, independent inverses, repeats and shared state; price required source separately.",
+  "proposal_id": "opcode_slot_reset_v1",
+  "retired_neighborhoods": [
+    "No full raw semantic slot sidecar, field mutation or entropy-coder rewrite."
+  ],
+  "schema": "gamma.enwiki9.algorithm-proposal.v2",
+  "search_priority": 60,
+  "state": "developed",
+  "title": "Reset stale slot only at complete decoded text close"
+}

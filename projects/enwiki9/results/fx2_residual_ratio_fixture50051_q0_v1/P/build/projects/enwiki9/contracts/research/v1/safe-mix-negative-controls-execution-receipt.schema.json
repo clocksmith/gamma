@@ -1,0 +1,74 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gamma.enwiki9.safe-mix-negative-controls-execution-receipt.v1",
+  "title": "SAFE-MIX bound transactional-controls execution receipt v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "candidate_id", "input_lock", "normalized_argv", "command_sha256", "environment_sha256", "return_code", "stdout_bytes", "stdout_sha256", "stderr_bytes", "stderr_sha256", "subject_canonical_sha256", "subject", "exclusive_lease_absent_pass", "terminal_pass", "execution_authority", "archive_authority", "score_credit_bytes"],
+  "properties": {
+    "schema": {"const": "gamma.enwiki9.safe-mix-negative-controls-execution-receipt.v1"},
+    "candidate_id": {"const": "gamma_safe_mix_v1"},
+    "input_lock": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["program_lock_sha256", "build_receipt_sha256", "independent_build_verification_sha256", "binary_sha256", "capture_sha256", "python_executable_sha256"],
+      "properties": {
+        "program_lock_sha256": {"$ref": "#/$defs/sha256"},
+        "build_receipt_sha256": {"$ref": "#/$defs/sha256"},
+        "independent_build_verification_sha256": {"$ref": "#/$defs/sha256"},
+        "binary_sha256": {"$ref": "#/$defs/sha256"},
+        "capture_sha256": {"$ref": "#/$defs/sha256"},
+        "python_executable_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "normalized_argv": {"type": "array", "prefixItems": [{"const": "{NEGATIVE_CONTROLS_BINARY}"}], "items": false},
+    "command_sha256": {"$ref": "#/$defs/sha256"},
+    "environment_sha256": {"$ref": "#/$defs/sha256"},
+    "return_code": {"const": 0},
+    "stdout_bytes": {"type": "integer", "minimum": 1},
+    "stdout_sha256": {"$ref": "#/$defs/sha256"},
+    "stderr_bytes": {"type": "integer", "minimum": 0},
+    "stderr_sha256": {"$ref": "#/$defs/sha256"},
+    "subject_canonical_sha256": {"$ref": "#/$defs/sha256"},
+    "subject": {"$ref": "#/$defs/subject"},
+    "exclusive_lease_absent_pass": {"const": true},
+    "terminal_pass": {"const": true},
+    "execution_authority": {"const": false},
+    "archive_authority": {"const": false},
+    "score_credit_bytes": {"const": 0}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "subject": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema", "candidate_id", "probability_scale", "controls", "pending_state_digest_pass", "identity_control_pass", "all_controls_pass", "execution_authority", "archive_authority", "score_credit_bytes"],
+      "properties": {
+        "schema": {"const": "gamma.enwiki9.safe-mix-negative-controls-receipt.v1"},
+        "candidate_id": {"const": "gamma_safe_mix_v1"},
+        "probability_scale": {"const": 4096},
+        "controls": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["invalid_initialization", "repeated_reset", "nested_mix", "observe_without_mix", "mismatched_observe", "null_output", "invalid_parent_count", "invalid_treatment_count"],
+          "properties": {
+            "invalid_initialization": {"const": true},
+            "repeated_reset": {"const": true},
+            "nested_mix": {"const": true},
+            "observe_without_mix": {"const": true},
+            "mismatched_observe": {"const": true},
+            "null_output": {"const": true},
+            "invalid_parent_count": {"const": true},
+            "invalid_treatment_count": {"const": true}
+          }
+        },
+        "pending_state_digest_pass": {"const": true},
+        "identity_control_pass": {"const": true},
+        "all_controls_pass": {"const": true},
+        "execution_authority": {"const": false},
+        "archive_authority": {"const": false},
+        "score_credit_bytes": {"const": 0}
+      }
+    }
+  }
+}

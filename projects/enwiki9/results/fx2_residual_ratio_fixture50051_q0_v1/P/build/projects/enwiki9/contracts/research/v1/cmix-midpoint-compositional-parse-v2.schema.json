@@ -1,0 +1,706 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gamma.enwiki9.cmix-midpoint-compositional-parse.v2",
+  "title": "CMIX midpoint v6 independent compositional observability parse receipt",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "receipt_id",
+    "candidate_id",
+    "abi",
+    "layout",
+    "parser",
+    "candidate_source",
+    "run",
+    "population",
+    "streams",
+    "counts",
+    "coordinates",
+    "checkpoints",
+    "terminal",
+    "updates",
+    "checks",
+    "errors",
+    "parse_pass",
+    "claim_authority",
+    "gamma_compression_credit_bytes",
+    "gamma_score_credit_bytes"
+  ],
+  "properties": {
+    "schema": {
+      "const": "gamma.enwiki9.cmix-midpoint-compositional-parse.v2"
+    },
+    "receipt_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "candidate_id": {
+      "const": "cmix_obias_shadow_midpoint_oracle64_q0_v6"
+    },
+    "abi": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["format_id", "contract"],
+      "properties": {
+        "format_id": {
+          "const": "gamma-midpoint-compositional-abi-v2"
+        },
+        "contract": {
+          "$ref": "#/$defs/exactAbiArtifact"
+        }
+      }
+    },
+    "layout": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["layout_id", "contract"],
+      "properties": {
+        "layout_id": {
+          "const": "gamma-cmix-midpoint-component-layout-v2"
+        },
+        "contract": {
+          "$ref": "#/$defs/exactLayoutArtifact"
+        }
+      }
+    },
+    "parser": {
+      "$ref": "#/$defs/nonemptyArtifact"
+    },
+    "candidate_source": {
+      "$ref": "#/$defs/nonemptyArtifact"
+    },
+    "run": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["run_id", "arm", "replicate", "direction"],
+      "properties": {
+        "run_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "arm": {
+          "enum": ["P", "K", "F", "S"]
+        },
+        "replicate": {
+          "enum": ["A", "B"]
+        },
+        "direction": {
+          "enum": ["encode", "decode"]
+        }
+      }
+    },
+    "population": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "raw_bytes",
+        "raw_sha256",
+        "modeled_events",
+        "modeled_sha256",
+        "coded_bits",
+        "complete_population"
+      ],
+      "properties": {
+        "raw_bytes": {
+          "enum": [250000, 1000000, 10000000]
+        },
+        "raw_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "modeled_events": {
+          "type": "integer",
+          "minimum": 250000
+        },
+        "modeled_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "coded_bits": {
+          "type": "integer",
+          "minimum": 2000000
+        },
+        "complete_population": {
+          "const": true
+        }
+      }
+    },
+    "streams": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["checkpoint", "update"],
+      "properties": {
+        "checkpoint": {
+          "$ref": "#/$defs/checkpointArtifact"
+        },
+        "update": {
+          "$ref": "#/$defs/nonemptyArtifact"
+        }
+      }
+    },
+    "counts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "checkpoint_records",
+        "checkpoint_body_bytes",
+        "probability_records",
+        "component_boundary_records",
+        "scheduled_closures",
+        "update_records",
+        "update_body_bytes",
+        "committed_update_records",
+        "detached_update_records",
+        "k_dynamic_equal_records"
+      ],
+      "properties": {
+        "checkpoint_records": {
+          "const": 6
+        },
+        "checkpoint_body_bytes": {
+          "const": 1224
+        },
+        "probability_records": {
+          "type": "integer",
+          "minimum": 2000000
+        },
+        "component_boundary_records": {
+          "type": "integer",
+          "minimum": 2000000
+        },
+        "scheduled_closures": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "update_records": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "update_body_bytes": {
+          "type": "integer",
+          "minimum": 0,
+          "multipleOf": 256
+        },
+        "committed_update_records": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "detached_update_records": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "k_dynamic_equal_records": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "coordinates": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "start",
+        "first_closure",
+        "first_native_horizon",
+        "population_midpoint",
+        "terminal_pre_flush",
+        "finalization"
+      ],
+      "properties": {
+        "start": {
+          "const": 0
+        },
+        "first_closure": {
+          "const": 33
+        },
+        "first_native_horizon": {
+          "const": 128
+        },
+        "population_midpoint": {
+          "type": "integer",
+          "minimum": 125000
+        },
+        "terminal_pre_flush": {
+          "type": "integer",
+          "minimum": 250000
+        },
+        "finalization": {
+          "type": "integer",
+          "minimum": 250000
+        }
+      }
+    },
+    "checkpoints": {
+      "type": "array",
+      "minItems": 6,
+      "maxItems": 6,
+      "prefixItems": [
+        {
+          "allOf": [
+            {"$ref": "#/$defs/checkpoint"},
+            {"properties": {"ordinal": {"const": 0}, "kind": {"const": "start"}, "hook_phase": {"const": "start"}}}
+          ]
+        },
+        {
+          "allOf": [
+            {"$ref": "#/$defs/checkpoint"},
+            {"properties": {"ordinal": {"const": 1}, "kind": {"const": "first_closure"}, "hook_phase": {"const": "after_end_trace_byte"}}}
+          ]
+        },
+        {
+          "allOf": [
+            {"$ref": "#/$defs/checkpoint"},
+            {"properties": {"ordinal": {"const": 2}, "kind": {"const": "first_native_horizon"}, "hook_phase": {"const": "after_end_trace_byte"}}}
+          ]
+        },
+        {
+          "allOf": [
+            {"$ref": "#/$defs/checkpoint"},
+            {"properties": {"ordinal": {"const": 3}, "kind": {"const": "population_midpoint"}, "hook_phase": {"const": "after_end_trace_byte"}}}
+          ]
+        },
+        {
+          "allOf": [
+            {"$ref": "#/$defs/checkpoint"},
+            {"properties": {"ordinal": {"const": 4}, "kind": {"const": "terminal_pre_flush"}, "hook_phase": {"const": "terminal_pre_flush"}}}
+          ]
+        },
+        {
+          "allOf": [
+            {"$ref": "#/$defs/checkpoint"},
+            {"properties": {"ordinal": {"const": 5}, "kind": {"const": "finalization"}, "hook_phase": {"const": "finalization"}}}
+          ]
+        }
+      ],
+      "items": false
+    },
+    "terminal": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "probability_sha256",
+        "component_boundary_sha256",
+        "payload_prefix_sha256",
+        "component_state_root_sha256",
+        "payload_prefix_bytes",
+        "terminal_finalization_state_equal"
+      ],
+      "properties": {
+        "probability_sha256": {"$ref": "#/$defs/sha256"},
+        "component_boundary_sha256": {"$ref": "#/$defs/sha256"},
+        "payload_prefix_sha256": {"$ref": "#/$defs/sha256"},
+        "component_state_root_sha256": {"$ref": "#/$defs/sha256"},
+        "payload_prefix_bytes": {"type": "integer", "minimum": 1},
+        "terminal_finalization_state_equal": {"type": "boolean"}
+      }
+    },
+    "updates": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "body_sha256",
+        "first_record",
+        "last_record",
+        "all_k_dynamic_equal",
+        "all_finite"
+      ],
+      "properties": {
+        "body_sha256": {"$ref": "#/$defs/sha256"},
+        "first_record": {
+          "oneOf": [
+            {"type": "null"},
+            {"$ref": "#/$defs/updateEdge"}
+          ]
+        },
+        "last_record": {
+          "oneOf": [
+            {"type": "null"},
+            {"$ref": "#/$defs/updateEdge"}
+          ]
+        },
+        "all_k_dynamic_equal": {"type": "boolean"},
+        "all_finite": {"type": "boolean"}
+      }
+    },
+    "checks": {
+      "$ref": "#/$defs/checks"
+    },
+    "errors": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "parse_pass": {
+      "type": "boolean"
+    },
+    "claim_authority": {
+      "const": "compositional_observability_parse_only"
+    },
+    "gamma_compression_credit_bytes": {
+      "const": 0
+    },
+    "gamma_score_credit_bytes": {
+      "const": 0
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {"parse_pass": {"const": true}},
+        "required": ["parse_pass"]
+      },
+      "then": {
+        "properties": {
+          "checks": {"$ref": "#/$defs/passingChecks"},
+          "errors": {"maxItems": 0},
+          "terminal": {
+            "properties": {"terminal_finalization_state_equal": {"const": true}}
+          },
+          "updates": {
+            "properties": {"all_finite": {"const": true}}
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {"run": {"properties": {"arm": {"enum": ["P", "K"]}}, "required": ["arm"]}},
+        "required": ["run"]
+      },
+      "then": {
+        "properties": {"run": {"properties": {"replicate": {"const": "A"}}}}
+      }
+    },
+    {
+      "if": {
+        "properties": {"run": {"properties": {"arm": {"const": "P"}}, "required": ["arm"]}},
+        "required": ["run"]
+      },
+      "then": {
+        "properties": {
+          "counts": {
+            "properties": {
+              "update_records": {"const": 0},
+              "update_body_bytes": {"const": 0},
+              "committed_update_records": {"const": 0},
+              "detached_update_records": {"const": 0},
+              "k_dynamic_equal_records": {"const": 0}
+            }
+          },
+          "updates": {
+            "properties": {
+              "first_record": {"type": "null"},
+              "last_record": {"type": "null"},
+              "all_k_dynamic_equal": {"const": true}
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {"run": {"properties": {"arm": {"const": "K"}}, "required": ["arm"]}},
+        "required": ["run"]
+      },
+      "then": {
+        "properties": {
+          "counts": {
+            "properties": {
+              "update_records": {"minimum": 1},
+              "committed_update_records": {"const": 0},
+              "detached_update_records": {"minimum": 1},
+              "k_dynamic_equal_records": {"minimum": 1}
+            }
+          },
+          "updates": {
+            "properties": {
+              "first_record": {"$ref": "#/$defs/kUpdateEdge"},
+              "last_record": {"$ref": "#/$defs/kUpdateEdge"},
+              "all_k_dynamic_equal": {"const": true}
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {"run": {"properties": {"arm": {"const": "F"}}, "required": ["arm"]}},
+        "required": ["run"]
+      },
+      "then": {
+        "properties": {
+          "counts": {
+            "properties": {
+              "update_records": {"minimum": 1},
+              "committed_update_records": {"minimum": 1},
+              "detached_update_records": {"const": 0},
+              "k_dynamic_equal_records": {"const": 0}
+            }
+          },
+          "updates": {
+            "properties": {
+              "first_record": {"$ref": "#/$defs/fUpdateEdge"},
+              "last_record": {"$ref": "#/$defs/fUpdateEdge"},
+              "all_k_dynamic_equal": {"const": true}
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {"run": {"properties": {"arm": {"const": "S"}}, "required": ["arm"]}},
+        "required": ["run"]
+      },
+      "then": {
+        "properties": {
+          "counts": {
+            "properties": {
+              "update_records": {"minimum": 1},
+              "committed_update_records": {"minimum": 1},
+              "detached_update_records": {"const": 0},
+              "k_dynamic_equal_records": {"const": 0}
+            }
+          },
+          "updates": {
+            "properties": {
+              "first_record": {"$ref": "#/$defs/sUpdateEdge"},
+              "last_record": {"$ref": "#/$defs/sUpdateEdge"},
+              "all_k_dynamic_equal": {"const": true}
+            }
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "nonemptyArtifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "bytes", "sha256"],
+      "properties": {
+        "path": {"type": "string", "minLength": 1},
+        "bytes": {"type": "integer", "minimum": 1},
+        "sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "exactAbiArtifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "bytes", "sha256"],
+      "properties": {
+        "path": {"const": "operations/planning/cmix_obias_shadow_midpoint_oracle64_q0_v6_compositional_observability_abi_q0_v1.json"},
+        "bytes": {"const": 22882},
+        "sha256": {"const": "2eda40753506c2b8f1a9bb17124a24c75efa3dd60103533a079df60beafce813"}
+      }
+    },
+    "exactLayoutArtifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "bytes", "sha256"],
+      "properties": {
+        "path": {"const": "operations/planning/cmix_obias_shadow_midpoint_oracle64_q0_v6_source_layout_q0_v1.json"},
+        "bytes": {"const": 13726},
+        "sha256": {"const": "6dd5492cbe3f06de9f9a6d1c954ca7138ccead3b9139cc9139962013e40ec245"}
+      }
+    },
+    "checkpointArtifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "bytes", "sha256"],
+      "properties": {
+        "path": {"type": "string", "minLength": 1},
+        "bytes": {"const": 1472},
+        "sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "coder": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["range_low", "range_high", "range_code", "coder_aux"],
+      "properties": {
+        "range_low": {"type": "integer", "minimum": 0, "maximum": 4294967295},
+        "range_high": {"type": "integer", "minimum": 0, "maximum": 4294967295},
+        "range_code": {"type": "integer", "minimum": 0, "maximum": 4294967295},
+        "coder_aux": {"type": "integer", "minimum": 0, "maximum": 4294967295}
+      }
+    },
+    "checkpoint": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "ordinal",
+        "kind",
+        "hook_phase",
+        "modeled_events",
+        "coded_bits",
+        "probability_records",
+        "component_boundary_records",
+        "midpoint_update_records",
+        "payload_prefix_bytes",
+        "coder",
+        "probability_sha256",
+        "component_boundary_sha256",
+        "payload_prefix_sha256",
+        "component_state_root_sha256"
+      ],
+      "properties": {
+        "ordinal": {"type": "integer", "minimum": 0, "maximum": 5},
+        "kind": {"enum": ["start", "first_closure", "first_native_horizon", "population_midpoint", "terminal_pre_flush", "finalization"]},
+        "hook_phase": {"enum": ["start", "after_end_trace_byte", "terminal_pre_flush", "finalization"]},
+        "modeled_events": {"type": "integer", "minimum": 0},
+        "coded_bits": {"type": "integer", "minimum": 0},
+        "probability_records": {"type": "integer", "minimum": 0},
+        "component_boundary_records": {"type": "integer", "minimum": 0},
+        "midpoint_update_records": {"type": "integer", "minimum": 0},
+        "payload_prefix_bytes": {"type": "integer", "minimum": 0},
+        "coder": {"$ref": "#/$defs/coder"},
+        "probability_sha256": {"$ref": "#/$defs/sha256"},
+        "component_boundary_sha256": {"$ref": "#/$defs/sha256"},
+        "payload_prefix_sha256": {"$ref": "#/$defs/sha256"},
+        "component_state_root_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "updateEdge": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "update_ordinal",
+        "segment_start_modeled_events",
+        "closure_modeled_events",
+        "boundary_record_count",
+        "probability_record_count",
+        "native_start_phase",
+        "closure_phase",
+        "arm_code",
+        "committed",
+        "detached",
+        "target_rotation",
+        "k_dynamic_equal",
+        "source_symbols_sha256",
+        "unrotated_targets_sha256",
+        "pre_restore_dynamic_sha256",
+        "post_replay_dynamic_sha256",
+        "cumulative_probability_sha256",
+        "cumulative_component_boundary_sha256"
+      ],
+      "properties": {
+        "update_ordinal": {"type": "integer", "minimum": 0},
+        "segment_start_modeled_events": {"type": "integer", "minimum": 0},
+        "closure_modeled_events": {"type": "integer", "minimum": 33},
+        "boundary_record_count": {"type": "integer", "minimum": 264},
+        "probability_record_count": {"type": "integer", "minimum": 264},
+        "native_start_phase": {"enum": [0, 64]},
+        "closure_phase": {"enum": [32, 96]},
+        "arm_code": {"enum": [1, 2, 3]},
+        "committed": {"enum": [0, 1]},
+        "detached": {"enum": [0, 1]},
+        "target_rotation": {"enum": [0, 16]},
+        "k_dynamic_equal": {"enum": [0, 1]},
+        "source_symbols_sha256": {"$ref": "#/$defs/sha256"},
+        "unrotated_targets_sha256": {"$ref": "#/$defs/sha256"},
+        "pre_restore_dynamic_sha256": {"$ref": "#/$defs/sha256"},
+        "post_replay_dynamic_sha256": {"$ref": "#/$defs/sha256"},
+        "cumulative_probability_sha256": {"$ref": "#/$defs/sha256"},
+        "cumulative_component_boundary_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "kUpdateEdge": {
+      "allOf": [
+        {"$ref": "#/$defs/updateEdge"},
+        {"properties": {"arm_code": {"const": 1}, "committed": {"const": 0}, "detached": {"const": 1}, "target_rotation": {"const": 0}, "k_dynamic_equal": {"const": 1}}}
+      ]
+    },
+    "fUpdateEdge": {
+      "allOf": [
+        {"$ref": "#/$defs/updateEdge"},
+        {"properties": {"arm_code": {"const": 2}, "committed": {"const": 1}, "detached": {"const": 0}, "target_rotation": {"const": 0}, "k_dynamic_equal": {"const": 0}}}
+      ]
+    },
+    "sUpdateEdge": {
+      "allOf": [
+        {"$ref": "#/$defs/updateEdge"},
+        {"properties": {"arm_code": {"const": 3}, "committed": {"const": 1}, "detached": {"const": 0}, "target_rotation": {"const": 16}, "k_dynamic_equal": {"const": 0}}}
+      ]
+    },
+    "checks": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "header_identity_pass",
+        "header_hash_bindings_pass",
+        "reserved_zero_pass",
+        "record_framing_pass",
+        "body_digest_pass",
+        "clean_eof_pass",
+        "checkpoint_order_pass",
+        "checkpoint_coordinate_formula_pass",
+        "coded_bit_formula_pass",
+        "probability_count_pass",
+        "component_boundary_count_pass",
+        "update_count_formula_pass",
+        "update_coordinate_formula_pass",
+        "arm_update_semantics_pass",
+        "rolling_digest_checkpoint_pass",
+        "payload_prefix_geometry_pass",
+        "component_root_shape_pass",
+        "terminal_finalization_invariant_pass",
+        "finite_float_pass"
+      ],
+      "properties": {
+        "header_identity_pass": {"type": "boolean"},
+        "header_hash_bindings_pass": {"type": "boolean"},
+        "reserved_zero_pass": {"type": "boolean"},
+        "record_framing_pass": {"type": "boolean"},
+        "body_digest_pass": {"type": "boolean"},
+        "clean_eof_pass": {"type": "boolean"},
+        "checkpoint_order_pass": {"type": "boolean"},
+        "checkpoint_coordinate_formula_pass": {"type": "boolean"},
+        "coded_bit_formula_pass": {"type": "boolean"},
+        "probability_count_pass": {"type": "boolean"},
+        "component_boundary_count_pass": {"type": "boolean"},
+        "update_count_formula_pass": {"type": "boolean"},
+        "update_coordinate_formula_pass": {"type": "boolean"},
+        "arm_update_semantics_pass": {"type": "boolean"},
+        "rolling_digest_checkpoint_pass": {"type": "boolean"},
+        "payload_prefix_geometry_pass": {"type": "boolean"},
+        "component_root_shape_pass": {"type": "boolean"},
+        "terminal_finalization_invariant_pass": {"type": "boolean"},
+        "finite_float_pass": {"type": "boolean"}
+      }
+    },
+    "passingChecks": {
+      "allOf": [
+        {"$ref": "#/$defs/checks"},
+        {
+          "properties": {
+            "header_identity_pass": {"const": true},
+            "header_hash_bindings_pass": {"const": true},
+            "reserved_zero_pass": {"const": true},
+            "record_framing_pass": {"const": true},
+            "body_digest_pass": {"const": true},
+            "clean_eof_pass": {"const": true},
+            "checkpoint_order_pass": {"const": true},
+            "checkpoint_coordinate_formula_pass": {"const": true},
+            "coded_bit_formula_pass": {"const": true},
+            "probability_count_pass": {"const": true},
+            "component_boundary_count_pass": {"const": true},
+            "update_count_formula_pass": {"const": true},
+            "update_coordinate_formula_pass": {"const": true},
+            "arm_update_semantics_pass": {"const": true},
+            "rolling_digest_checkpoint_pass": {"const": true},
+            "payload_prefix_geometry_pass": {"const": true},
+            "component_root_shape_pass": {"const": true},
+            "terminal_finalization_invariant_pass": {"const": true},
+            "finite_float_pass": {"const": true}
+          }
+        }
+      ]
+    }
+  }
+}

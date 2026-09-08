@@ -1,0 +1,88 @@
+{
+  "schema": "gamma.enwiki9.interface-unit.v1",
+  "id": "fx2_compact_v26_bridge_v1",
+  "status": "pass",
+  "source_bindings": {
+    "results/forge_parent_source_audit_v1/source-tree/src/models/fxcm_v26.cpp": "cd4534a22908d7e2a55b594e8604b3c513922e646ff206b4d237a1dd95a71149",
+    "tests/run_fxcm_model_bridge_v1.py": "3ad9afefa9bb7943d5eaf6c9a82d75f823371970585f3daabb47f0c0c7f7e06a",
+    "tests/fxcm_model_bridge_v1.cpp": "d414592054059fdf82d117d11f387b4102e0709b23b9565cbf1bcd1b1cc5ab74",
+    "tests/fxcm_model_bridge_upstream_v1.cpp": "7fd7f5d1d63f3498082663e88132e60a5f40a75854721db74fb240d5674c7776",
+    "lib/fxcm_model_bridge_v1.hpp": "60bd9631fcf135156929b5ec72c6b3a33895b4c8efc02f2dad060d8f5e653d30",
+    "lib/forge_fxcm_raw_adapter_v1.hpp": "119c1df0c32f2100fb3fb41111e89f52d07e3cbf154029b77b6004f0bfbc689e",
+    "lib/forge_fxcm_raw_adapter_v2.hpp": "e49558d066ceb9eac83023ebc8e47d7b6549b1a95b72b48bb65ca7e451a71106",
+    "operations/provenance/fx2_compact_v26_bridge_v1_plan.json": "ce76177cefec00a87a138a310205ee98fc1f00c708a864680b0b6d32a54c8691"
+  },
+  "phases": [
+    {
+      "name": "compile",
+      "argv": [
+        "g++",
+        "-std=c++17",
+        "-include",
+        "cstdint",
+        "-march=x86-64-v3",
+        "-fno-fast-math",
+        "-fno-math-errno",
+        "-fno-exceptions",
+        "-fno-threadsafe-statics",
+        "-mrecip=none",
+        "-O2",
+        "-I",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_compact_v26_bridge_v1/unit01",
+        "tests/fxcm_model_bridge_v1.cpp",
+        "-o",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_compact_v26_bridge_v1/unit01/fixture"
+      ],
+      "returncode": 0,
+      "elapsed_seconds": 0.37493335898034275,
+      "cpu_seconds": 0.254132,
+      "cumulative_child_maxrss_kib": 83488,
+      "timeout": false,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "fixture",
+      "argv": [
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_compact_v26_bridge_v1/unit01/fixture"
+      ],
+      "returncode": 0,
+      "elapsed_seconds": 0.016656584106385708,
+      "cpu_seconds": 0.012396000000000018,
+      "cumulative_child_maxrss_kib": 83488,
+      "timeout": false,
+      "stdout_sha256": "9ec5c2ac0716853a332a88c6b9c596429e96aefd59aaaf862c464d6fcf45719d",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "upstream_syntax",
+      "argv": [
+        "g++",
+        "-std=c++17",
+        "-include",
+        "cstdint",
+        "-march=x86-64-v3",
+        "-fno-fast-math",
+        "-fno-math-errno",
+        "-fno-exceptions",
+        "-fno-threadsafe-statics",
+        "-mrecip=none",
+        "-fsyntax-only",
+        "tests/fxcm_model_bridge_upstream_v1.cpp"
+      ],
+      "returncode": 0,
+      "elapsed_seconds": 0.21767047909088433,
+      "cpu_seconds": 0.197297,
+      "cumulative_child_maxrss_kib": 85384,
+      "timeout": false,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "actual_upstream_initialization": false,
+  "corpus_execution": false,
+  "fixture_output": "raw_values=4095 endpoint_values=22 v1_rejections=22 bridge_updates=4096 exact=1",
+  "extracted_function_sha256": "2eed5627ef241e0a9aa0b75127b1cb28b53eaa15fbec4a147503d67d272473d5",
+  "scope": "Synthetic state/update parity and authenticated pure mapping; native synchronization unproved",
+  "objective_credit_bytes": 0
+}

@@ -1,0 +1,180 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gamma.dev/enwiki9/research/v1/delta-midas-probe-result.schema.json",
+  "title": "gamma.enwiki9.delta-midas-probe-result.v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema", "objective", "experimentId", "experiment", "analyzer",
+    "analyzerDependencies", "status", "inputs", "population", "alignment",
+    "protocolAudit", "partitions", "metrics", "model", "gateEvaluations",
+    "decision", "scoreCreditBytes", "generatedUtc"
+  ],
+  "properties": {
+    "schema": { "const": "gamma.enwiki9.delta-midas-probe-result.v1" },
+    "objective": { "$ref": "#/$defs/objectiveBinding" },
+    "experimentId": { "$ref": "#/$defs/id" },
+    "experiment": { "$ref": "#/$defs/reference" },
+    "analyzer": { "$ref": "#/$defs/reference" },
+    "analyzerDependencies": {
+      "type": "array", "minItems": 1, "uniqueItems": true,
+      "items": { "$ref": "#/$defs/namedReference" }
+    },
+    "status": { "enum": ["pass", "fail"] },
+    "inputs": {
+      "type": "array", "minItems": 2, "uniqueItems": true,
+      "items": { "$ref": "#/$defs/namedReference" }
+    },
+    "population": {
+      "type": "object", "additionalProperties": false,
+      "required": ["rows", "branches", "segments", "segmentLength", "firstHalfLength"],
+      "properties": {
+        "rows": { "type": "integer", "minimum": 1 },
+        "branches": { "type": "integer", "minimum": 1 },
+        "segments": { "type": "integer", "minimum": 1 },
+        "segmentLength": { "type": "integer", "minimum": 2 },
+        "firstHalfLength": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "alignment": {
+      "type": "object", "additionalProperties": false,
+      "required": ["complete", "rowIdentity", "symbolIdentity", "treeIdentity", "truthPathIdentity"],
+      "properties": {
+        "complete": { "type": "boolean" },
+        "rowIdentity": { "type": "boolean" },
+        "symbolIdentity": { "type": "boolean" },
+        "treeIdentity": { "type": "boolean" },
+        "truthPathIdentity": { "type": "boolean" }
+      }
+    },
+    "protocolAudit": {
+      "type": "object", "additionalProperties": false,
+      "required": ["decoderFeatureAuditPass", "trainingLeakageAuditPass", "quantizedEvaluationPass", "observedFeatureNames", "forbiddenFeatureNames"],
+      "properties": {
+        "decoderFeatureAuditPass": { "type": "boolean" },
+        "trainingLeakageAuditPass": { "type": "boolean" },
+        "quantizedEvaluationPass": { "type": "boolean" },
+        "observedFeatureNames": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "type": "string", "minLength": 1 } },
+        "forbiddenFeatureNames": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "type": "string", "minLength": 1 } }
+      }
+    },
+    "partitions": {
+      "type": "array", "minItems": 3, "uniqueItems": true,
+      "items": {
+        "type": "object", "additionalProperties": false,
+        "required": ["id", "segments", "branches", "baseIdealBits", "correctedIdealBits", "shiftedControlIdealBits", "gainIdealBits", "shiftedControlGainIdealBits"],
+        "properties": {
+          "id": { "$ref": "#/$defs/id" },
+          "segments": { "type": "integer", "minimum": 1 },
+          "branches": { "type": "integer", "minimum": 1 },
+          "baseIdealBits": { "type": "number", "minimum": 0 },
+          "correctedIdealBits": { "type": "number", "minimum": 0 },
+          "shiftedControlIdealBits": { "type": "number", "minimum": 0 },
+          "gainIdealBits": { "type": "number" },
+          "shiftedControlGainIdealBits": { "type": "number" }
+        }
+      }
+    },
+    "metrics": {
+      "type": "object", "additionalProperties": false,
+      "required": [
+        "alignmentComplete", "decoderFeatureAuditPass", "trainingLeakageAuditPass",
+        "quantizedEvaluationPass", "validationIdealGainBits", "testIdealGainBits",
+        "testThirdIdealGainBits", "testThirdMinIdealGainBits",
+        "testShiftedControlGainBits", "testOverShiftedControlBits",
+        "testPositiveSegments", "testNegativeSegments", "testPositiveSegmentFraction",
+        "modelPayloadBytes"
+      ],
+      "properties": {
+        "alignmentComplete": { "type": "boolean" },
+        "decoderFeatureAuditPass": { "type": "boolean" },
+        "trainingLeakageAuditPass": { "type": "boolean" },
+        "quantizedEvaluationPass": { "type": "boolean" },
+        "validationIdealGainBits": { "type": "number" },
+        "testIdealGainBits": { "type": "number" },
+        "testThirdIdealGainBits": { "type": "array", "minItems": 3, "maxItems": 3, "items": { "type": "number" } },
+        "testThirdMinIdealGainBits": { "type": "number" },
+        "testShiftedControlGainBits": { "type": "number" },
+        "testOverShiftedControlBits": { "type": "number" },
+        "testPositiveSegments": { "type": "integer", "minimum": 0 },
+        "testNegativeSegments": { "type": "integer", "minimum": 0 },
+        "testPositiveSegmentFraction": { "type": "number", "minimum": 0, "maximum": 1 },
+        "modelPayloadBytes": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "model": {
+      "type": "object", "additionalProperties": false,
+      "required": ["payload", "bytes", "dimension", "encoding", "scale", "nonzeroWeights"],
+      "properties": {
+        "payload": { "$ref": "#/$defs/reference" },
+        "bytes": { "type": "integer", "minimum": 1 },
+        "dimension": { "type": "integer", "minimum": 1 },
+        "encoding": { "const": "float64-scale-plus-int16-le-v1" },
+        "scale": { "type": "number", "exclusiveMinimum": 0 },
+        "nonzeroWeights": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "gateEvaluations": {
+      "type": "array", "minItems": 1, "uniqueItems": true,
+      "items": {
+        "type": "object", "additionalProperties": false,
+        "required": ["id", "pass", "predicates"],
+        "properties": {
+          "id": { "$ref": "#/$defs/id" },
+          "pass": { "type": "boolean" },
+          "predicates": {
+            "type": "array", "minItems": 1,
+            "items": {
+              "type": "object", "additionalProperties": false,
+              "required": ["metric", "operator", "threshold", "observed", "pass"],
+              "properties": {
+                "metric": { "$ref": "#/$defs/id" },
+                "operator": { "enum": ["eq", "gt", "gte", "lt", "lte"] },
+                "threshold": { "type": ["boolean", "number"] },
+                "observed": { "type": ["boolean", "number"] },
+                "pass": { "type": "boolean" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "decision": {
+      "type": "object", "additionalProperties": false,
+      "required": ["verdict", "rationale", "authorizedNextAction", "forbiddenClaims"],
+      "properties": {
+        "verdict": { "enum": ["authorize-open-base-integration", "retire-hashed-linear-probe"] },
+        "rationale": { "type": "string", "minLength": 1 },
+        "authorizedNextAction": { "type": ["string", "null"] },
+        "forbiddenClaims": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "type": "string", "minLength": 1 } }
+      }
+    },
+    "scoreCreditBytes": { "const": 0 },
+    "generatedUtc": { "type": "string", "format": "date-time" }
+  },
+  "$defs": {
+    "digest": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "id": { "type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]*$" },
+    "relativePath": { "type": "string", "minLength": 1, "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$)).+$" },
+    "reference": {
+      "type": "object", "additionalProperties": false, "required": ["path", "sha256"],
+      "properties": { "path": { "$ref": "#/$defs/relativePath" }, "sha256": { "$ref": "#/$defs/digest" } }
+    },
+    "namedReference": {
+      "type": "object", "additionalProperties": false, "required": ["id", "path", "sha256"],
+      "properties": { "id": { "$ref": "#/$defs/id" }, "path": { "$ref": "#/$defs/relativePath" }, "sha256": { "$ref": "#/$defs/digest" } }
+    },
+    "objectiveBinding": {
+      "type": "object", "additionalProperties": false,
+      "required": ["objectiveId", "objectiveDigest", "objectivePath", "targetScoreBytes", "corpusBytes", "corpusSha256"],
+      "properties": {
+        "objectiveId": { "type": "string", "minLength": 1 },
+        "objectiveDigest": { "$ref": "#/$defs/digest" },
+        "objectivePath": { "type": "string", "minLength": 1 },
+        "targetScoreBytes": { "type": "integer", "minimum": 1 },
+        "corpusBytes": { "type": "integer", "minimum": 1 },
+        "corpusSha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+      }
+    }
+  }
+}

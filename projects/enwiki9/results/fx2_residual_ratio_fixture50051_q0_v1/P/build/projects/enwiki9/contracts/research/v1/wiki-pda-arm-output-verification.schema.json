@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gamma.enwiki9.wiki-pda-arm-output-verification.v1",
+  "title": "WIKI-PDA per-arm closed output verification",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "candidate_id", "run_id", "arm", "verified", "errors", "computed"],
+  "properties": {
+    "schema": {"const": "gamma.enwiki9.wiki-pda-arm-output-verification.v1"},
+    "candidate_id": {"const": "wiki_pda_structural_replay_q0_v2"},
+    "run_id": {"type": "string", "minLength": 1},
+    "arm": {"enum": ["P", "K", "D", "R", "S"]},
+    "verified": {"type": "boolean"},
+    "errors": {"type": "array", "items": {"type": "string"}},
+    "computed": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["manifest_sha256", "observed_regular_files", "observed_regular_bytes"],
+      "properties": {
+        "manifest_sha256": {"$ref": "#/$defs/sha256"},
+        "observed_regular_files": {"type": "integer", "minimum": 0},
+        "observed_regular_bytes": {"type": "integer", "minimum": 0}
+      }
+    }
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  }
+}

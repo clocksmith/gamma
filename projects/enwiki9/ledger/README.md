@@ -36,6 +36,14 @@ to publish a reviewed arm set to the existing run ledger. Routine refresh alread
 rebuilds this browser; a separate browser-generation command is only needed when
 you want to refresh this view alone.
 
+For measured comparisons, open [best results](../docs/best_results.md) and the
+[evidence matrix](../docs/evidence_matrix.md). These views include tracked legacy
+results and terminal arm indexes verified through the existing recorder. Best
+results groups populations by raw-input hash; equal byte counts alone do not
+establish a matched comparison. Missing package costs remain unknown. Terminal
+indexes that cannot validate against this checkout appear with their failure
+reason; consult their pinned historical sources without rewriting old bindings.
+
 ## Record map
 
 | Record | Canonical source |

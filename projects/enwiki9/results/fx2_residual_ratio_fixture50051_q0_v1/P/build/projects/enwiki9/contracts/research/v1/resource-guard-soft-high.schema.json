@@ -1,0 +1,64 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gamma.enwiki9.resource-guard-soft-high.v1",
+  "title": "Resource guard v3 soft memory pressure wrapper",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema", "underlying_guard", "cgroup_path", "cgroup_inode",
+    "previous_memory_high", "requested_memory_high_bytes",
+    "effective_memory_high_bytes", "memory_high_rounding_bytes",
+    "memory_high_restore_pass", "guard_return_code", "guard_receipt",
+    "guard_status", "high_event_count", "errors", "wrapper_pass",
+    "claim_boundary"
+  ],
+  "properties": {
+    "schema": {"const": "gamma.enwiki9.resource-guard-soft-high.v1"},
+    "underlying_guard": {"$ref": "#/$defs/file"},
+    "cgroup_path": {"type": "string", "pattern": "^/sys/fs/cgroup/"},
+    "cgroup_inode": {"type": "integer", "minimum": 1},
+    "previous_memory_high": {"type": "string", "minLength": 1},
+    "requested_memory_high_bytes": {"const": 9000000000},
+    "effective_memory_high_bytes": {"type": ["integer", "null"], "minimum": 8999995905, "maximum": 9000000000},
+    "memory_high_rounding_bytes": {"type": ["integer", "null"], "minimum": 0, "maximum": 4095},
+    "memory_high_restore_pass": {"type": "boolean"},
+    "guard_return_code": {"type": ["integer", "null"]},
+    "guard_receipt": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/file"}]},
+    "guard_status": {"type": ["string", "null"]},
+    "high_event_count": {"type": ["integer", "null"], "minimum": 0},
+    "errors": {"type": "array", "items": {"type": "string", "minLength": 1}},
+    "wrapper_pass": {"type": "boolean"},
+    "claim_boundary": {"type": "string", "minLength": 1}
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"wrapper_pass": {"const": true}}},
+      "then": {
+        "properties": {
+          "effective_memory_high_bytes": {"type": "integer"},
+          "memory_high_rounding_bytes": {"type": "integer"},
+          "memory_high_restore_pass": {"const": true},
+          "guard_return_code": {"type": "integer"},
+          "guard_receipt": {"$ref": "#/$defs/file"},
+          "guard_status": {"type": "string"},
+          "high_event_count": {"type": "integer"},
+          "errors": {"maxItems": 0}
+        }
+      },
+      "else": {"properties": {"errors": {"minItems": 1}}}
+    }
+  ],
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "file": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "bytes", "sha256"],
+      "properties": {
+        "path": {"type": "string", "pattern": "^/"},
+        "bytes": {"type": "integer", "minimum": 1},
+        "sha256": {"$ref": "#/$defs/sha256"}
+      }
+    }
+  }
+}

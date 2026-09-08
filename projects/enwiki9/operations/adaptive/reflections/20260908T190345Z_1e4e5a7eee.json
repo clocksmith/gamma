@@ -1,0 +1,125 @@
+{
+  "attribution": {
+    "causalConfidence": "high",
+    "controlsEquivalent": true,
+    "failureClass": "algorithmic-loss",
+    "localizedCause": "Calibration activates at 64583 quantized bit events but changes diagnostic ideal loss by negative 1.747438686 bits saved; finite archive savings are zero. No causal attribution to a specific parameter is claimed."
+  },
+  "candidateId": "fx2_residual_ratio_fixture50051_q0_v3",
+  "candidateRevision": {
+    "candidateId": "fx2_residual_ratio_fixture50051_q0_v3",
+    "candidateTreeSha256": "sha256:0ef68380a71f457e19b5e8ffbc334a8b2089ae1eade0a15865984f1ee09810e8",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/fx2_residual_ratio_fixture50051_q0_v3/20260908T190345141430Z_0ef68380a71f.json",
+      "sha256": "sha256:02dc9c980a9afd2bf69c4b2b9abdcbc4e5f8e235a740fc79df74a4ca7a06902f"
+    }
+  },
+  "decision": {
+    "killPredicatesPass": true,
+    "nextGateBytes": null,
+    "promotionPredicatesPass": false,
+    "rationale": "Frozen positive archive-gain predicate fails. Preserve implementation and diagnose measured loss before any separately frozen successor; no larger replay.",
+    "verdict": "retire"
+  },
+  "evidence": [
+    {
+      "path": "operations/adaptive/completed/959_20260908T190345Z_1e4e5a7eee.json",
+      "sha256": "sha256:371ad2add46fbc3235b61438f0a992a637aea21757bff217c65855c530525509"
+    },
+    {
+      "path": "operations/provenance/fx2_ratio_fixture_terminal_20260908.json",
+      "sha256": "sha256:e8a57ac5e8979962d3aeb92388a0ded97f62710cc78b86b5d85301a2d17ea03b"
+    },
+    {
+      "path": "operations/provenance/fx2_ratio_fixture_terminal_20260908/index.json",
+      "sha256": "sha256:3fdf6364b2c9920c64162214cf2daac04e7948666ecf6759c0926197e47a1e00"
+    },
+    {
+      "path": "operations/provenance/fx2_ratio_fixture_trace_retention_20260908.json",
+      "sha256": "sha256:4979d31897bdce7afaa2badf93f3f72b2093ec1009c43187936b6da0951a6d2d"
+    },
+    {
+      "path": "results/fx2_residual_ratio_fixture50051_q0_v3/stage-decision.json",
+      "sha256": "sha256:e55e9f9752643922a7aaeba45693f9c47b76ad4f7d4655b324a5dc63eb03826a"
+    }
+  ],
+  "experiment": {
+    "path": "operations/adaptive/experiments/fx2_residual_ratio_fixture50051_q0_v3.json",
+    "sha256": "sha256:2c13bb5355f22d6b90183a8c6f825bedc49b4243fa6694cb282d854ce77742b7"
+  },
+  "generatedUtc": "2026-09-08T19:13:21+00:00",
+  "hypothesis": {
+    "rationale": "D does not reduce P archive bytes on the frozen fixture: both are 3223. S is 3236. Local component inventory increases 22746 bytes.",
+    "verdict": "refuted"
+  },
+  "job": {
+    "path": "operations/adaptive/completed/959_20260908T190345Z_1e4e5a7eee.json",
+    "sha256": "sha256:371ad2add46fbc3235b61438f0a992a637aea21757bff217c65855c530525509"
+  },
+  "knowledge": {
+    "retiredDimensions": [
+      "This fixed prior32 decay256 Q16 residual ratio realization on the pinned 50051-byte fixture."
+    ],
+    "transferableLessons": [
+      "Native activation and superiority to wrong-truth control do not establish improvement over an unchanged strong parent."
+    ],
+    "uncertainties": [
+      "Other calibration laws or populations remain untested; complete package licensing and qualification remain unresolved."
+    ]
+  },
+  "measurementAssertions": [
+    {
+      "field": "idealBitsSaved",
+      "pointer": "/arms/D/diagnostic_ideal_bits_saved_vs_P",
+      "source": {
+        "path": "operations/provenance/fx2_ratio_fixture_terminal_20260908.json",
+        "sha256": "sha256:e8a57ac5e8979962d3aeb92388a0ded97f62710cc78b86b5d85301a2d17ea03b"
+      }
+    },
+    {
+      "field": "scopeBytes",
+      "pointer": "/gate_size",
+      "source": {
+        "path": "operations/adaptive/completed/959_20260908T190345Z_1e4e5a7eee.json",
+        "sha256": "sha256:371ad2add46fbc3235b61438f0a992a637aea21757bff217c65855c530525509"
+      }
+    },
+    {
+      "field": "sourceBytesDelta",
+      "pointer": "/source_delta_bytes",
+      "source": {
+        "path": "operations/provenance/fx2_ratio_fixture_terminal_20260908.json",
+        "sha256": "sha256:e8a57ac5e8979962d3aeb92388a0ded97f62710cc78b86b5d85301a2d17ea03b"
+      }
+    }
+  ],
+  "measurements": {
+    "idealBitsSaved": -1.7474386861516857,
+    "memoryRatio": null,
+    "minimumPartitionIdealBitsSaved": null,
+    "netBytesSaved": null,
+    "positiveSegmentFraction": null,
+    "runtimeRatio": null,
+    "scopeBytes": 50051,
+    "scopeSymbols": null,
+    "sourceBytesDelta": 10436,
+    "transferRetention": null
+  },
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:e91ff20e92c3cac8acb0cbe5c79fc8e8a3b427d7e151245c8eecc52b1c32fa00",
+    "objectiveId": "gamma-enwiki9-hutter-90m-v3",
+    "objectivePath": "contracts/research/v3/objective-contract.json",
+    "targetScoreBytes": 90000000
+  },
+  "reflectionId": "r-20260908t190345z_1e4e5a7eee",
+  "schema": "gamma.enwiki9.reflection-receipt.v1",
+  "validity": {
+    "classification": "valid",
+    "reasons": [
+      "All four native arms independently invert and repeat; introduced state and coder records synchronize; P/K match retained parent; guards and cleanup pass."
+    ],
+    "valid": true
+  }
+}

@@ -45,10 +45,10 @@ and the [creative prompts](workbench/PROMPTS.md#creative-discovery) when changin
 
 ## Scientific invariants
 
-- The [active v2 objective](contracts/research/v2/objective-contract.json) is
+- The [active v3 objective](contracts/research/v3/objective-contract.json) is
   exact, deterministic reconstruction of 1,000,000,000 bytes with a fully counted
-  score at or below **99,000,000 bytes**. Preserve historical objective digests
-  and experiment bindings, including the v1 105M milestone. Consult
+  score at or below **90,000,000 bytes**. Preserve historical objective digests
+  and experiment bindings, including the v1 105M and v2 99M milestones. Consult
   [competitive provenance](operations/provenance/competitive_frontier_v1.json)
   before treating engineering economics as an accepted prize threshold.
 - Every semantic mutation gets a new candidate. Never edit running, sealed, or
@@ -91,8 +91,8 @@ Complete cross-device handoff by publishing source, ownership, receipts, run
 rows, conclusions, and generated status through the
 [manual's handoff procedure](ADAPTIVE_WORKFLOW.md#cross-device-operation).
 
-When explicitly asked for Hutter status, include the `99,000,000` byte and
-`9.9000000%` targets, the verified full-1G score or `unknown`, the best counted
+When explicitly asked for Hutter status, include the `90,000,000` byte and
+`9.0000000%` targets, the verified full-1G score or `unknown`, the best counted
 forecast and signed target distance, and the active gate's receipt-backed scope,
 progress, guard state, and terminal status. Historical detailed instructions are
 preserved at `docs/reference/legacy_instructions/AGENTS_20260724.md`.

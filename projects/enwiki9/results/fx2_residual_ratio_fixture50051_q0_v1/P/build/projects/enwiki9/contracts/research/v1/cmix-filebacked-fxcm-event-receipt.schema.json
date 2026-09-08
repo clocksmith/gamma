@@ -1,0 +1,146 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gamma.enwiki9.cmix-filebacked-fxcm-event-receipt.v1",
+  "title": "CMIX file-backed FXCM event-stream receipt",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "candidate_id",
+    "authority",
+    "stream",
+    "allocations",
+    "pageout_cycles",
+    "releases",
+    "terminal_modeled_bytes",
+    "integrity",
+    "errors",
+    "terminal_pass",
+    "memory_qualification_authority",
+    "compression_credit_bytes",
+    "score_credit_bytes"
+  ],
+  "properties": {
+    "schema": {"const": "gamma.enwiki9.cmix-filebacked-fxcm-event-receipt.v1"},
+    "candidate_id": {"const": "cmix_obias_memory_safe_parent_filebacked_q1_v1"},
+    "authority": {"const": "allocator_event_integrity_only"},
+    "stream": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "bytes", "sha256", "record_bytes", "record_count", "byte_order", "magic_hex", "version", "parser_stream_ceiling_bytes"],
+      "properties": {
+        "path": {"type": "string", "minLength": 1},
+        "bytes": {"type": "integer", "minimum": 0},
+        "sha256": {"$ref": "#/$defs/sha256"},
+        "record_bytes": {"const": 64},
+        "record_count": {"type": "integer", "minimum": 0},
+        "byte_order": {"const": "little"},
+        "magic_hex": {"const": "31465847"},
+        "version": {"const": 1}
+        ,"parser_stream_ceiling_bytes": {"const": 402653184}
+      }
+    },
+    "allocations": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/allocation"}
+    },
+    "pageout_cycles": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/cycle"}
+    },
+    "releases": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/release"}
+    },
+    "terminal_modeled_bytes": {"type": ["integer", "null"], "minimum": 0},
+    "integrity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "complete_records_pass",
+        "strict_sequence_pass",
+        "known_event_types_pass",
+        "allocation_geometry_pass",
+        "allocation_before_pageout_pass",
+        "initial_cycle_pass",
+        "fixed_cadence_pass",
+        "complete_live_mapping_cycles_pass",
+        "zero_pageout_return_codes_pass",
+        "release_lifecycle_pass",
+        "cleanup_last_pass",
+        "all_mappings_released_pass"
+      ],
+      "properties": {
+        "complete_records_pass": {"type": "boolean"},
+        "strict_sequence_pass": {"type": "boolean"},
+        "known_event_types_pass": {"type": "boolean"},
+        "allocation_geometry_pass": {"type": "boolean"},
+        "allocation_before_pageout_pass": {"type": "boolean"},
+        "initial_cycle_pass": {"type": "boolean"},
+        "fixed_cadence_pass": {"type": "boolean"},
+        "complete_live_mapping_cycles_pass": {"type": "boolean"},
+        "zero_pageout_return_codes_pass": {"type": "boolean"},
+        "release_lifecycle_pass": {"type": "boolean"},
+        "cleanup_last_pass": {"type": "boolean"},
+        "all_mappings_released_pass": {"type": "boolean"}
+      }
+    },
+    "errors": {"type": "array", "items": {"type": "string"}},
+    "terminal_pass": {"type": "boolean"},
+    "memory_qualification_authority": {"const": false},
+    "compression_credit_bytes": {"const": 0},
+    "score_credit_bytes": {"const": 0}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "allocation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sequence", "mapping_id", "modeled_bytes", "mapping_base", "usable_pointer", "mapping_bytes", "requested_bytes", "alignment"],
+      "properties": {
+        "sequence": {"type": "integer", "minimum": 1},
+        "mapping_id": {"type": "integer", "minimum": 0},
+        "modeled_bytes": {"type": "integer", "minimum": 0},
+        "mapping_base": {"type": "integer", "minimum": 1},
+        "usable_pointer": {"type": "integer", "minimum": 1},
+        "mapping_bytes": {"type": "integer", "minimum": 67108864},
+        "requested_bytes": {"type": "integer", "minimum": 1},
+        "alignment": {"type": "integer", "minimum": 1}
+      }
+    },
+    "call": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sequence", "mapping_id", "registry_order", "return_code"],
+      "properties": {
+        "sequence": {"type": "integer", "minimum": 1},
+        "mapping_id": {"type": "integer", "minimum": 0},
+        "registry_order": {"type": "integer", "minimum": 0},
+        "return_code": {"type": "integer"}
+      }
+    },
+    "cycle": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["cycle", "reason", "modeled_bytes", "calls", "expected_live_mapping_ids", "complete_pass"],
+      "properties": {
+        "cycle": {"type": "integer", "minimum": 0},
+        "reason": {"enum": ["post_initialization", "fixed_cadence"]},
+        "modeled_bytes": {"type": "integer", "minimum": 0},
+        "calls": {"type": "array", "items": {"$ref": "#/$defs/call"}},
+        "expected_live_mapping_ids": {"type": "array", "items": {"type": "integer", "minimum": 0}},
+        "complete_pass": {"type": "boolean"}
+      }
+    },
+    "release": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sequence", "mapping_id", "modeled_bytes"],
+      "properties": {
+        "sequence": {"type": "integer", "minimum": 1},
+        "mapping_id": {"type": "integer", "minimum": 0},
+        "modeled_bytes": {"type": "integer", "minimum": 0}
+      }
+    }
+  }
+}

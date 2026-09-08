@@ -1,0 +1,554 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gamma.dev/enwiki9/research/v1/endpoint428-horizon-output-closure-receipt-v1.schema.json",
+  "title": "Endpoint428 HORIZON v1 output-closure receipt",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "candidate_id",
+    "status",
+    "execution_mode",
+    "source_candidate_id",
+    "activation",
+    "dependencies",
+    "immutable_bindings",
+    "source_namespace",
+    "decision_preservation",
+    "routing",
+    "output_manifest",
+    "authority",
+    "claim_boundary"
+  ],
+  "properties": {
+    "schema": {
+      "const": "gamma.enwiki9.endpoint428-horizon-output-closure-receipt.v1"
+    },
+    "candidate_id": {
+      "const": "endpoint428_horizon_retained_parent_trace_output_closure_q0_v2"
+    },
+    "status": {"const": "closed"},
+    "execution_mode": {"enum": ["canonical", "synthetic"]},
+    "source_candidate_id": {
+      "const": "endpoint428_horizon_retained_parent_trace_q0_v1"
+    },
+    "activation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "terminal_route_receipt",
+        "terminal_route_receipt_hash_argument",
+        "terminal_route_object_matches_recomputation",
+        "incoming_branch",
+        "incoming_failure_class"
+      ],
+      "properties": {
+        "terminal_route_receipt": {
+          "allOf": [
+            {"$ref": "#/$defs/artifact"},
+            {
+              "properties": {
+                "path": {
+                  "pattern": "^operations/evidence/[^/]+\\.json$"
+                }
+              }
+            }
+          ]
+        },
+        "terminal_route_receipt_hash_argument": {"$ref": "#/$defs/digest"},
+        "terminal_route_object_matches_recomputation": {"const": true},
+        "incoming_branch": {"const": "CORRECTION_RETRY_ONLY"},
+        "incoming_failure_class": {"const": "undeclared-extras"}
+      }
+    },
+    "dependencies": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "closure_tool",
+        "closure_schema",
+        "terminal_router",
+        "terminal_router_schema"
+      ],
+      "properties": {
+        "closure_tool": {
+          "allOf": [
+            {"$ref": "#/$defs/artifact"},
+            {
+              "properties": {
+                "path": {
+                  "const": "tools/endpoint428_horizon_retained_parent_trace_output_closure_q0_v2.py"
+                }
+              }
+            }
+          ]
+        },
+        "closure_schema": {
+          "allOf": [
+            {"$ref": "#/$defs/artifact"},
+            {
+              "properties": {
+                "path": {
+                  "const": "contracts/research/v1/endpoint428-horizon-output-closure-receipt-v1.schema.json"
+                }
+              }
+            }
+          ]
+        },
+        "terminal_router": {
+          "allOf": [
+            {"$ref": "#/$defs/artifact"},
+            {
+              "properties": {
+                "path": {"const": "tools/endpoint428_horizon_terminal_route_v1.py"},
+                "sha256": {
+                  "const": "sha256:e93e6fd61b80c22caac0cb331ad63b780e674d9017433e0f2d089571d237e223"
+                }
+              }
+            }
+          ]
+        },
+        "terminal_router_schema": {
+          "allOf": [
+            {"$ref": "#/$defs/artifact"},
+            {
+              "properties": {
+                "path": {
+                  "const": "contracts/research/v1/endpoint428-horizon-terminal-route.schema.json"
+                },
+                "sha256": {
+                  "const": "sha256:c032cda7b92b4014a441e357c6511f3af885616ed677c8f99570084a63743c60"
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    "immutable_bindings": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "terminal_job",
+        "reflection",
+        "experiment",
+        "proposal",
+        "candidate_revision",
+        "runner",
+        "decision"
+      ],
+      "properties": {
+        "terminal_job": {
+          "allOf": [
+            {"$ref": "#/$defs/artifact"},
+            {
+              "properties": {
+                "path": {
+                  "pattern": "^operations/adaptive/completed/[^/]+\\.json$"
+                }
+              }
+            }
+          ]
+        },
+        "reflection": {
+          "allOf": [
+            {"$ref": "#/$defs/artifact"},
+            {
+              "properties": {
+                "path": {
+                  "pattern": "^operations/adaptive/reflections/[^/]+\\.json$"
+                }
+              }
+            }
+          ]
+        },
+        "experiment": {
+          "allOf": [
+            {"$ref": "#/$defs/artifact"},
+            {
+              "properties": {
+                "path": {
+                  "const": "operations/adaptive/experiments/endpoint428_horizon_retained_parent_trace_q0_v1.json"
+                },
+                "sha256": {
+                  "const": "sha256:1ee83f431531f05654ac0990de302acbbbde36fa4ac42acd3bebbd9dd26f20aa"
+                }
+              }
+            }
+          ]
+        },
+        "proposal": {
+          "allOf": [
+            {"$ref": "#/$defs/artifact"},
+            {
+              "properties": {
+                "path": {
+                  "const": "operations/adaptive/proposals/developed/000_endpoint428_horizon_retained_parent_trace_q0_v1.json"
+                },
+                "sha256": {
+                  "const": "sha256:5df724d51eb28e7ebaaea782210960e32ad95ad7fac374f6ccfff597f1eaaa62"
+                }
+              }
+            }
+          ]
+        },
+        "candidate_revision": {
+          "allOf": [
+            {"$ref": "#/$defs/artifact"},
+            {
+              "properties": {
+                "path": {
+                  "const": "operations/adaptive/candidate-revisions/endpoint428_horizon_retained_parent_trace_q0_v1/20260830T224806838440Z_565130472695.json"
+                },
+                "sha256": {
+                  "const": "sha256:f27573bb08cac47dfe9ed0915617a692c72d8fa5f0c406c0517e3664574013f4"
+                }
+              }
+            }
+          ]
+        },
+        "runner": {
+          "allOf": [
+            {"$ref": "#/$defs/artifact"},
+            {
+              "properties": {
+                "path": {"const": "tools/endpoint428_horizon_retained_parent_trace_q0_v1.py"},
+                "sha256": {
+                  "const": "sha256:f1f309dfc58f704d316af840b91cdefedbe277da87347a05fbed5c10121645a1"
+                }
+              }
+            }
+          ]
+        },
+        "decision": {
+          "allOf": [
+            {"$ref": "#/$defs/artifact"},
+            {
+              "properties": {
+                "path": {
+                  "const": "results/endpoint428_horizon_retained_parent_trace_q0_v1/decision.json"
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    "source_namespace": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "expected_artifact_count",
+        "observed_artifact_count",
+        "expected_names",
+        "exact_names_pass",
+        "all_regular_non_symlink_pass",
+        "artifacts"
+      ],
+      "properties": {
+        "path": {
+          "const": "results/endpoint428_horizon_retained_parent_trace_q0_v1"
+        },
+        "expected_artifact_count": {"const": 23},
+        "observed_artifact_count": {"const": 23},
+        "expected_names": {
+          "const": [
+            "analysis-a-guard.json",
+            "analysis-a.json",
+            "analysis-a.log",
+            "analysis-b-guard.json",
+            "analysis-b.json",
+            "analysis-b.log",
+            "build.json",
+            "compile-analyzer.log",
+            "compile-manifest.log",
+            "decision.json",
+            "manifest-a-guard.json",
+            "manifest-a.bin",
+            "manifest-a.log",
+            "manifest-b-guard.json",
+            "manifest-b.bin",
+            "manifest-b.log",
+            "materialize.log",
+            "parent-trace-guard.json",
+            "parent-trace.log",
+            "parent.archive",
+            "parent.p1",
+            "scan-a.json",
+            "scan-b.json"
+          ]
+        },
+        "exact_names_pass": {"const": true},
+        "all_regular_non_symlink_pass": {"const": true},
+        "artifacts": {
+          "type": "array",
+          "minItems": 23,
+          "maxItems": 23,
+          "uniqueItems": true,
+          "items": {
+            "allOf": [
+              {"$ref": "#/$defs/artifact"},
+              {
+                "properties": {
+                  "path": {
+                    "pattern": "^results/endpoint428_horizon_retained_parent_trace_q0_v1/[^/]+$"
+                  }
+                }
+              }
+            ]
+          }
+        }
+      }
+    },
+    "decision_preservation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source",
+        "preserved_copy",
+        "byte_identical",
+        "source_verdict",
+        "source_promotion_authorized",
+        "scientific_values_modified"
+      ],
+      "properties": {
+        "source": {"$ref": "#/$defs/artifact"},
+        "preserved_copy": {
+          "allOf": [
+            {"$ref": "#/$defs/artifact"},
+            {
+              "properties": {
+                "path": {
+                  "const": "results/endpoint428_horizon_retained_parent_trace_output_closure_q0_v2/decision.v1.json"
+                }
+              }
+            }
+          ]
+        },
+        "byte_identical": {"const": true},
+        "source_verdict": {
+          "enum": [
+            "authorize_one_native_horizon_pkd_finite_coder",
+            "retire_endpoint428_physical_horizon_a"
+          ]
+        },
+        "source_promotion_authorized": {"type": "boolean"},
+        "scientific_values_modified": {"const": false}
+      }
+    },
+    "routing": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "incoming_branch",
+        "recomputed_scientific_branch",
+        "branch_recomputed_from_unchanged_decision",
+        "predicate_evaluations",
+        "consistency"
+      ],
+      "properties": {
+        "incoming_branch": {"const": "CORRECTION_RETRY_ONLY"},
+        "recomputed_scientific_branch": {
+          "enum": ["EXACT_REPRICE_Q0_V2", "RETIRE_PHYSICAL_HORIZON"]
+        },
+        "branch_recomputed_from_unchanged_decision": {"const": true},
+        "predicate_evaluations": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["promotion", "kill"],
+          "properties": {
+            "promotion": {
+              "type": "array",
+              "minItems": 8,
+              "maxItems": 8,
+              "items": {"$ref": "#/$defs/evaluation"}
+            },
+            "kill": {
+              "type": "array",
+              "minItems": 4,
+              "maxItems": 4,
+              "items": {"$ref": "#/$defs/evaluation"}
+            }
+          }
+        },
+        "consistency": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "decision_gates_match_recomputed",
+            "decision_promotion_matches_recomputed",
+            "decision_verdict_matches_recomputed",
+            "promotion_predicates_pass",
+            "kill_predicates_pass"
+          ],
+          "properties": {
+            "decision_gates_match_recomputed": {"const": true},
+            "decision_promotion_matches_recomputed": {"const": true},
+            "decision_verdict_matches_recomputed": {"const": true},
+            "promotion_predicates_pass": {"type": "boolean"},
+            "kill_predicates_pass": {"type": "boolean"}
+          }
+        }
+      }
+    },
+    "output_manifest": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "policy",
+        "declared_names",
+        "decision_entry",
+        "receipt_self_exclusion",
+        "exact_names_pass",
+        "receipt_published_last",
+        "no_clobber"
+      ],
+      "properties": {
+        "policy": {"const": "complete-result-artifacts-v1"},
+        "declared_names": {"const": ["decision.v1.json", "receipt.json"]},
+        "decision_entry": {"$ref": "#/$defs/artifact"},
+        "receipt_self_exclusion": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["path", "reason"],
+          "properties": {
+            "path": {
+              "const": "results/endpoint428_horizon_retained_parent_trace_output_closure_q0_v2/receipt.json"
+            },
+            "reason": {
+              "const": "terminal receipt is published last and cannot hash itself"
+            }
+          }
+        },
+        "exact_names_pass": {"const": true},
+        "receipt_published_last": {"const": true},
+        "no_clobber": {"const": true}
+      }
+    },
+    "authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "archive_authority",
+        "score_credit_bytes",
+        "verified_full_1g_score_bytes",
+        "hutter_result_authority",
+        "corpus_accessed",
+        "cmix_invoked",
+        "analyzer_invoked",
+        "source_result_mutated"
+      ],
+      "properties": {
+        "archive_authority": {"const": false},
+        "score_credit_bytes": {"const": 0},
+        "verified_full_1g_score_bytes": {"const": null},
+        "hutter_result_authority": {"const": false},
+        "corpus_accessed": {"const": false},
+        "cmix_invoked": {"const": false},
+        "analyzer_invoked": {"const": false},
+        "source_result_mutated": {"const": false}
+      }
+    },
+    "claim_boundary": {
+      "type": "array",
+      "minItems": 3,
+      "maxItems": 3,
+      "items": {"type": "string", "minLength": 1}
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "routing": {
+            "properties": {
+              "recomputed_scientific_branch": {"const": "EXACT_REPRICE_Q0_V2"}
+            }
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "decision_preservation": {
+            "properties": {
+              "source_verdict": {
+                "const": "authorize_one_native_horizon_pkd_finite_coder"
+              },
+              "source_promotion_authorized": {"const": true}
+            }
+          },
+          "routing": {
+            "properties": {
+              "consistency": {
+                "properties": {
+                  "promotion_predicates_pass": {"const": true},
+                  "kill_predicates_pass": {"const": false}
+                }
+              }
+            }
+          }
+        }
+      },
+      "else": {
+        "properties": {
+          "decision_preservation": {
+            "properties": {
+              "source_verdict": {
+                "const": "retire_endpoint428_physical_horizon_a"
+              },
+              "source_promotion_authorized": {"const": false}
+            }
+          },
+          "routing": {
+            "properties": {
+              "consistency": {
+                "properties": {
+                  "promotion_predicates_pass": {"const": false}
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "digest": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "relativePath": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$)).+$"
+    },
+    "artifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "bytes", "sha256"],
+      "properties": {
+        "path": {"$ref": "#/$defs/relativePath"},
+        "bytes": {"type": "integer", "minimum": 0},
+        "sha256": {"$ref": "#/$defs/digest"}
+      }
+    },
+    "evaluation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "predicate_id",
+        "measurement_id",
+        "operator",
+        "threshold",
+        "observed",
+        "result"
+      ],
+      "properties": {
+        "predicate_id": {"type": "string", "minLength": 1},
+        "measurement_id": {"type": "string", "minLength": 1},
+        "operator": {"enum": ["eq", "gte", "gt", "lt", "lte"]},
+        "threshold": {"type": ["number", "boolean"]},
+        "observed": {"type": ["number", "boolean"]},
+        "result": {"type": "boolean"}
+      }
+    }
+  }
+}

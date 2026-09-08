@@ -1,0 +1,38 @@
+{
+  "schema": "gamma.enwiki9.synthetic-implementation-plan.v1",
+  "id": "fx2_residual_ratio_native_v1",
+  "owner": "root_explore",
+  "date": "2026-09-08",
+  "status": "native component and source adapter implementation only",
+  "corpus_launch_authorized": false,
+  "objective_bytes": 90000000,
+  "objective_credit_bytes": 0,
+  "premise": "The completed integer reference supplies synthetic causality and inverse evidence only. Implement the distinct native probability boundary before freezing an FX2 scientific gate.",
+  "source_preimage": {
+    "path": "results/fx2_cmix_transformer_static_vocab_fixture50051_q0_v1/work/src/predictor.cpp",
+    "sha256": "0b79f43644daee942c9cb6da18fa464f0eb0185b6fc7ffc43cde703808fe537e"
+  },
+  "reference_receipt": {
+    "path": "results/fx2_residual_ratio_synthetic_v1/attempt01/receipt.json",
+    "sha256": "2c8cd9aae0a981638ef3197113fb16881d7c828888031d608d6780301a8c179a"
+  },
+  "configuration": {
+    "alphabet": "2..256 ordered symbols; native FX2 uses its authenticated 205-symbol vocabulary",
+    "base": "Original float32 row after existing half conversion and >=1e-6 guard. Preserve the upstream scalar subnormal quirk. Reject values outside [float32(1e-6),1].",
+    "expected": "Decode each positive IEEE float32 exactly into integer units of 2^-43. Normalize to total Q16 mass with largest remainders and ascending-id ties.",
+    "history": "Prior 32*65536, one Q16 observed count after truth, expected base counts after truth, floor-halving both histories after every 256 observed symbols.",
+    "correction": "Floor(65536*(prior+observed)/(prior+expected)), clipped to [16384,262144]. D/S replace each float32 p by float32(float64(p)*multiplier/65536), with nearest-even rounding. This is a new explicit native boundary, not bit-identical to the earlier integer-output reference.",
+    "controls": {"P": "Original output bits, no learned history", "K": "Learn histories but preserve original output bits", "D": "Learn from decoded symbol", "S": "Learn from successor vocabulary index modulo alphabet size"},
+    "integration": "Inside Predictor::TransformerByteUpdate observe the completed token against the preceding pending row, then predict on the next clamped native row immediately before ByteMixer::SetProbs. Skip the first unpredicted token. Do not reset this calibration at article boundaries. Preserve all original transformer, PPM and final-mixer updates.",
+    "unsupported_modes": "Reject explicit non-P calibration when native transformer is absent, transformer-only, PPM-only, loaded probability mode, or probability dumping is selected; do not silently report another boundary."
+  },
+  "acceptance": [
+    "Compile a dependency-free C++17 component with GCC, compare native outputs and complete serialized state against an independent exact Python arithmetic reference.",
+    "Exercise normal/subnormal-derived half values, the 1e-6 floor, ties, unequal input mass, maximum ratios, decay, invalid values and pending-state resume.",
+    "Use the existing lib/predictor.py arithmetic fixture for fresh synthetic P/K/D/S inverse and repeat checks. No new entropy coder or corpus data.",
+    "Produce a source-preimage-bound adapter in a new file; apply only to new materialized copies. Test altered preimages are rejected. Native parent archive equivalence remains required before corpus promotion."
+  ],
+  "bounds": {"configurations": 1, "synthetic_bytes_per_fixture": 4096, "corpus_bytes": 0, "cpu": 3, "threads": 1, "address_space_bytes": 536870912, "cpu_seconds": 120, "wall_seconds": 180, "scratch_bytes": 67108864, "install_dependencies": false},
+  "next_gate": "Freeze source, full native build closure, trained assets, existing 50051-byte public fixture, matched controls, package estimates and resource caps; publish canonical proposal and ownership before any native codec launch.",
+  "protected": ["HORIZON", "MIDAS", "sealed source and historical experiments"]
+}
