@@ -493,3 +493,11 @@ Cube positions, missed Production, and whether Quantum's single final-Era yield
 was understood. Inspect Fusion's newly connected Facilities rather than counting
 its construction alone as a useful benefit. A real physical session is pending;
 rendered print checks do not establish human handling or understanding.
+
+The runner checkpoints after every accepted game using an atomic replacement.
+`personal --resume CHECKPOINT` verifies saved report/outcome hashes, scheduling
+options and engine identity before continuing into a new checkpoint file. It
+never overwrites its input checkpoint. A collector or runtime identity change
+requires a fresh run rather than pooling incompatible results. The initial v1
+collection stopped on ENOSPC; v2 uses a new seed and retains v1 as rejected,
+incomplete evidence. Neither run changes the candidate's mechanics.
