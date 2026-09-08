@@ -29,8 +29,17 @@ The [validation terminal](../operations/provenance/opcode_field_validation_termi
 passes all ten phases: P/K 71,788 bytes, D 71,717, saving 71 archive bytes.
 Peak cgroup memory is 567,230,464 bytes and guard closure passes. The validated
 reflection selects the unchanged codec for reserved 1MB confirmation.
-`root_explore` owns `opcode_field_confirmation1m_q0_v1`, held pending publication
-and fresh admission. Complete package economics and full-corpus score remain unknown.
+`root_explore` owns `opcode_field_confirmation1m_q0_v1`, published at `5fa7b7701`
+and admitted on CPU2. Complete package economics and full-corpus score remain unknown.
+
+The independently identified
+[reserved-sample comparator](../operations/adaptive/experiments/matched_frontier_reserved_q0_v1.json)
+reuses framed Deflate and the measured native FX2 adapter on the same validation
+and confirmation bytes. It adds no codec mutation. Ten synthetic tests pass;
+preflight authenticates cached source, model and vocabulary. Its CPU2 job stays
+held until confirmation closes, source publishes and admission is refreshed.
+Unsupported FX2 frontend coordinates must remain explicit, and supplied assets
+remain inventoried. Neither content deduplication nor a cold slice qualifies a package.
 
 ## 2026-09-07 - MIDAS opening250KB closes the missing boundary evidence
 

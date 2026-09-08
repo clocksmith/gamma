@@ -62,3 +62,8 @@ records P/K 71,788 and D 71,717 bytes, a 71-byte archive gain. All ten phases,
 inverses, repeats and shared-state checks pass. The unchanged codec is selected
 for the reserved 1MB confirmation; neither sample establishes package savings.
 Deflate and FX2 have not yet been measured on this reserved validation slice.
+The [matched comparator contract](../operations/adaptive/experiments/matched_frontier_reserved_q0_v1.json)
+binds both reserved populations to the unchanged Deflate CLI and cached FX2
+executable. Its [synthetic tests](../operations/evidence/20260908_matched_frontier_unit.json)
+cover exact Deflate replay, native header/vocabulary checks, and explicit model
+inventory. The comparator waits for CPU2; tests are not corpus measurements.
