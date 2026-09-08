@@ -2,6 +2,25 @@
 
 [Record index](research_register/README.md) | [Earlier records](research_register/archive/README.md)
 
+## 2026-09-08 - Decoder-known WRT support exposes a bounded positive opportunity
+
+After the output correction failed, discovery lenses1/7 select a conservative
+code-language automaton over the existing WRT representation. Paid semantic
+routing lacks a newly measured gain family; another grammar wrapper lacks a
+new cost advantage. [Published inputs and bounds](../operations/provenance/fx2_wrt_support_audit_v1_plan.json)
+authorize only a CPU3 retained-trace audit, with no native inference or scaling.
+The [terminal audit](../operations/provenance/fx2_wrt_support_audit_v1_terminal.json)
+passes five tests and all44,880 legal dictionary code shapes, including ambiguous
+two/three-byte prefixes, escaped literals, disabled mode and truncation checks.
+It reconstructs the exact50,051 raw bytes from the retained WRT store and aligns
+all259,824 native bit records without exposing future event boundaries.
+There are7,994 decoder-forced bits; all truths remain in support. Setting only
+these actual-bit probabilities to65535/65536 saves18.86068334435965 ideal bits,
+or2.3575854180449562 ideal bytes, on the unchanged parent trajectory. This is
+an exact support premise with a measured conditional ideal gain, not an archive
+or package result. A native successor must preserve parent updates and measure
+complete archives and added package costs; no full-corpus slope is inferred.
+
 ## 2026-09-08 - Native output-tail comparison freezes one numerical correction
 
 The [new comparison](../operations/adaptive/experiments/fx2_half_tail_fixture50051_q0_v1.json)
@@ -747,45 +766,3 @@ attempt is closed; authentication or another provider is not a research blocker.
 Continue locally from the measured literal-definition cost, with independent
 review and exact benchmark comparisons. Keep the failed request as historical
 provenance and keep confirmation inputs withheld from development.
-
-## 2026-09-06 - Standalone two-stream parameter grammar development
-
-ROOT owns the new standalone `dualstream_grammar_v1` implementation work. The
-user's `sandbox:/mnt/data/dualstream_grammar_v0.zip` is not accessible on this
-host and no local copy was found; this is a new implementation from the supplied
-specification, not a verified modification of that ZIP. The user-reported
-prototype measurements remain unverified external evidence.
-
-Hypothesis: jointly factoring exact phrases, parameterized byte templates and
-repeated invocation arguments can reduce complete framed archives against an
-identically framed Deflate baseline. All definitions precede use, references
-are backward-only, and independent frames permit bounded encoder lookahead.
-The decoder only interprets exact byte programs. XMill's grouping and existing
-phrase grammars are precedent, not Gamma novelty. Prior XML deletion ledger
-losses and the retired schema-exception realization remain unchanged.
-
-The [18-test synthetic receipt](../operations/evidence/20260906_dualstream_grammar_v1_unit.json)
-proves exact byte/interpreter behavior and the bounded runner checks.
-The [development plan](../operations/provenance/dualstream_grammar_development250k_q0_v1_plan.json)
-binds 11 inputs, eight configurations, 18 arms and 54 separate phases. Ownership
-was published at `a46a8109f31f0d03ade9beaa799401992bc3025e` before release after
-fresh admission. CPU2, 2GiB memory, 256MiB scratch, zero swap and the frozen
-elapsed/phase stops were enforced. HORIZON and model campaigns stayed separate.
-
-The [terminal audit](../operations/provenance/dualstream_grammar_development250k_terminal_20260906.json)
-verifies all 54 phases, 18 exact inverses and repeats, 237 final outputs and
-complete additive archive accounting. P is 89,041 bytes; S is 113,406; matched
-G2 is 109,201; best T2 is 102,492. T6 ties T2, with the frozen stable-ID tie break
-selecting T2. Shared templates save 6,709 bytes against G2 but lose 13,451 bytes
-against plain Deflate. Each T activates 12 repeated argument references.
-T2's literal definitions cost 64,557 bytes, motivating a representation-cost
-diagnostic; the accounting does not isolate separate binding/template effects.
-
-The [validated reflection](../operations/adaptive/reflections/20260906T174841Z_181d2f2c47.json)
-records an algorithmic loss and authorizes only a separately identified
-development mutation. No validation or confirmation population was opened.
-All eight tested configurations remain retained; this is no impossibility claim
-about grammar compression. Eighteen normalized run rows are linked to unchanged
-arm receipts. The guard passed with 141.2443 seconds elapsed; shared-host timing
-and incomplete Python/zlib package accounting provide no qualification credit.
-The [codec guide](dualstream_grammar_v1.md) covers the implementation and results.

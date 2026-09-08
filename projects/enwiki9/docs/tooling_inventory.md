@@ -12,7 +12,7 @@ Reusable artifact helpers for new tools: [lib/artifacts.py](../lib/artifacts.py)
 The LibNC initializer teacher launcher exits before the first forward, gradient, update, or coded symbol; its source-bound experiment defines that boundary.
 The delayed-status helper's `enwiki9_delayed_status_latest.log` pointer is operational history, not present-host occupancy proof.
 
-Coverage: **1058 files** (33 .c, 67 .cpp, 1 .gdb, 1 .h, 1 .hpp, 1 .html, 951 .py, 3 .sh).
+Coverage: **1059 files** (33 .c, 67 .cpp, 1 .gdb, 1 .h, 1 .hpp, 1 .html, 952 .py, 3 .sh).
 
 | Tool | Purpose | Referenced contracts |
 |---|---|---|
@@ -392,6 +392,7 @@ Coverage: **1058 files** (33 .c, 67 .cpp, 1 .gdb, 1 .h, 1 .hpp, 1 .html, 951 .py
 | [`tools/fx2_weight_restore_group_probe_v1.cpp`](../tools/fx2_weight_restore_group_probe_v1.cpp) | Diagnostic restoration of one predefined INT4 tensor group at a time. Reuse the immutable even7 parser, mapping checks and atomic publication. Native prediction is unchanged; restored-group effects require fresh archives. | [1](../operations/adaptive/experiments/fx2_weight_restore_groups_fixture50051_q0_v1.json) |
 | [`tools/fx2_weight_restore_groups_fixture50051_q0_v1.py`](../tools/fx2_weight_restore_groups_fixture50051_q0_v1.py) | Independent group restorations into the failed even7 model; diagnostic only. | [1](../operations/adaptive/experiments/fx2_weight_restore_groups_fixture50051_q0_v1.json) |
 | [`tools/fx2_wrt_code_loss.py`](../tools/fx2_wrt_code_loss.py) | Join FX2_LOSS_LEDGER rows to WRT dictionary code spans. | none found |
+| [`tools/fx2_wrt_support_audit_v1.py`](../tools/fx2_wrt_support_audit_v1.py) | Causal WRT forced-bit opportunity audit over a retained native parent trace. | none found |
 | [`tools/fx2_xml_residual_screen.py`](../tools/fx2_xml_residual_screen.py) | Rank compact causal XML/Wiki residual corrections on cached FX2 traces. | none found |
 | [`tools/fx2lite_fxcm_hash_mixer_trace.cpp`](../tools/fx2lite_fxcm_hash_mixer_trace.cpp) | Emit causal P1 endpoints from compact hashed mixers over FX2-lite FXCM. // Build this file against the dependency-closed fx2lite endpoint source. The FXCM object already computes 431 probabilities to expose slot 428. These probes reuse that live vector, project it through a deterministic signed feature hash, and train small logistic mixers from decoded truth. No offline weights or trace data enter the emitted endpoint. | none found |
 | [`tools/fxcm_balanced_min_tie_verify.py`](../tools/fxcm_balanced_min_tie_verify.py) | Verify balanced minimum-priority FXCM tie selection. | none found |
