@@ -58,6 +58,9 @@ class GateTests(unittest.TestCase):
                                             sha256=gate.driver.sha(Path(sys.executable)))], resources=copy.deepcopy(gate.CAPS),
                         historical_parent=dict(archive_bytes=len(archive), archive_sha256=hashlib.sha256(archive).hexdigest()),
                         **gate.PHASE_CAPS)
+        # Only invented fixtures bypass production authentication. The synthetic
+        # supervisor cannot raise its inherited limits to corpus-phase ceilings.
+        cls.plan.update(phase_cpu_seconds=45, phase_wall_seconds=60, phase_address_bytes=536870912)
         cls.contract_ref = dict(path='synthetic-contract.json', sha256='sha256:'+'a'*64)
         cls.gold = cls.root/'results'/'gold'
         cls.gold.mkdir(parents=True)

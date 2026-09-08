@@ -33,7 +33,7 @@ def source(candidate_root):
     decoder = lzma.LZMADecompressor(format=lzma.FORMAT_ALONE)
     expanded = decoder.decompress(packed, max_length=65536)
     require(decoder.eof and not decoder.unused_data and digest(expanded) == EXPANDED_SHA256, "expanded parent changed")
-    return expanded.decode("ascii")
+    return expanded.decode("utf-8")
 
 
 def untouched(candidate_root):
@@ -195,7 +195,7 @@ def report(archive, raw, modeled, arm, captured):
             "packed_parent_sha256": PACKED_SHA256, "expanded_parent_sha256": EXPANDED_SHA256,
             "arm_value_bytes": 1, "archive_plus_arm_value_bytes": len(archive) + 1,
             "invocation_options": ["--arm", arm], "complete_options_bytes": None,
-            "canonical_payload_reencode_pass": True, "complete_package_bytes": None,
+            "canonical_payload_policy": "decoder-replays-intervals", "complete_package_bytes": None,
             "full_corpus_score_bytes": None, "audit": captured.get("audit")}
 
 
