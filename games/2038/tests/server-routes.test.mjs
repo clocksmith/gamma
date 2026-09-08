@@ -48,13 +48,16 @@ async function startServer(port, {
 }
 
 async function readTerminalJob(request, id) {
-  for (let attempt = 0; attempt < 40; attempt += 1) {
+  const deadline = performance.now() + 15000;
+  let lastStatus = "unobserved";
+  while (performance.now() < deadline) {
     const response = await request(`/api/simulations/${id}`);
     const job = await response.json();
+    lastStatus = job.status;
     if (["complete", "failed", "cancelled"].includes(job.status)) return job;
     await new Promise((resolve) => setTimeout(resolve, 25));
   }
-  throw new Error(`Simulation job ${id} did not settle.`);
+  throw new Error(`Simulation job ${id} did not settle within 15 seconds (last status: ${lastStatus}).`);
 }
 
 test("cancelled simulation jobs cannot publish a report or archive", async () => {
