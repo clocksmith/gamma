@@ -231,3 +231,13 @@ establishes the demonstrated mismatch, not its compression contribution.
 The next single mutation should start from the compact parent and restore only
 that reset, with matched P/K/D controls and measured source cost. It must not
 simultaneously introduce raw slot discovery or assume the previous saving transfers.
+
+The independently sealed [reset experiment](../operations/adaptive/experiments/opcode_slot_reset_v1.json)
+implements that single mutation under `root_explore`. Its
+[ten synthetic tests and retained ten-phase fixture](../operations/evidence/20260908_opcode_slot_reset_unit.json)
+pass; P/K are 38 bytes and D is 37 on the synthetic fixture only. Required local
+source is 5,991 bytes, 245 above the compact parent. The existing comparison
+runner is reused through a candidate adapter. Job `20260908T165054Z_e47978f5d4`
+is held until publication and fresh resource admission; it binds CPU2, one thread,
+4GiB aggregate memory, zero swap, 1GiB scratch and a 2,400-second elapsed stop.
+The opening250KB comparison remains unmeasured. Full package and score are unknown.
