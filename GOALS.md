@@ -24,3 +24,10 @@ Its durable goals are:
 Current measurements and project status belong in tests, registries, receipts,
 and reports. Architecture decisions belong in design documents. Component
 authority and invariants belong in the applicable `CATSCAN.md` chain.
+
+For enwiki9, the active end-to-end objective is the versioned
+[90M complete-byte witness](projects/enwiki9/contracts/research/v3/objective-contract.json):
+an exact deterministic full-corpus archive, complete counted package, independent
+resource verification, source/license closure and reproducible submission.
+The lane's adaptive workflow governs bounded implementation, prediction research,
+confirmation and scale decisions; historical 105M and 99M evidence stays intact.

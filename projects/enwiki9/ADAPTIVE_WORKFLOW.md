@@ -5,10 +5,25 @@ for permissions and evidence invariants, and the [record map](ledger/README.md#r
 for canonical storage. Run commands from `gamma/projects/enwiki9/`. Uppercase
 names and angle-bracketed values are placeholders resolved from actual records.
 
-The [active objective](contracts/research/v2/objective-contract.json) is
-**99,000,000 complete bytes** with exact full-corpus reconstruction and independent
-resource compliance. Preserve historical v1 bindings and its 105M milestone;
+The [active objective](contracts/research/v3/objective-contract.json) is
+**90,000,000 complete bytes** with exact full-corpus reconstruction and independent
+resource compliance. Preserve historical v1 105M and v2 99M bindings;
 copied target values are not independent authority.
+
+For new work, prefer prediction improvements with decoder-reconstructed XML
+state and bounded phrase memory, tested against the identical predictor with
+each addition disabled. Add online adaptation only after its isolated comparison
+pays. Reuse builds and verified traces, retain bounded development outcomes, and
+freeze before confirmation. Cold and causally warmed inputs answer different
+questions. A tenfold increase in useful experiment throughput is an aspiration
+to measure, not a compression claim or permission to relax checks.
+
+The complete witness is archive plus all charged package and option bytes at or
+below 90M. Package multiplicities follow the selected submission form; exact
+inversion, deterministic replay, independent resource evidence and license
+closure remain necessary. Historical forecast debt is planning information.
+Complete the small matched gate and package economics before 10MB, then 100MB
+and full 1GB. A combination always needs a fresh joint archive.
 
 ## Start And Find Records
 

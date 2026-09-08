@@ -4,7 +4,7 @@ Parent: [Gamma research projects](../CATSCAN.md)
 
 ## Target
 
-Produce a Gamma-authored, self-contained codec that exactly reconstructs canonical enwik9 with a fully counted score at or below 99,000,000 bytes and satisfies the bound prize-resource rules.
+Produce a Gamma-authored, self-contained codec that exactly reconstructs canonical enwik9 with a fully counted score at or below 90,000,000 bytes and satisfies the bound prize-resource rules. Preserve the historical 105M and 99M objective contracts and frozen experiment bindings.
 
 ## Authority
 
@@ -19,7 +19,7 @@ Produce a Gamma-authored, self-contained codec that exactly reconstructs canonic
 
 ## Contracts
 
-- Input: Canonical [objective contract](contracts/research/v2/objective-contract.json) and immutable, hash-bound experiment evidence.
+- Input: Canonical [objective contract](contracts/research/v3/objective-contract.json) and immutable, hash-bound experiment evidence.
 - Output: Candidate packages, exact receipts, reflections, ledgers, and ultimately one independently replayable full-corpus proof.
 
 ## Invariants
