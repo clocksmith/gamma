@@ -12,7 +12,7 @@ Reusable artifact helpers for new tools: [lib/artifacts.py](../lib/artifacts.py)
 The LibNC initializer teacher launcher exits before the first forward, gradient, update, or coded symbol; its source-bound experiment defines that boundary.
 The delayed-status helper's `enwiki9_delayed_status_latest.log` pointer is operational history, not present-host occupancy proof.
 
-Coverage: **1068 files** (33 .c, 67 .cpp, 1 .gdb, 1 .h, 1 .hpp, 1 .html, 961 .py, 3 .sh).
+Coverage: **1069 files** (33 .c, 67 .cpp, 1 .gdb, 1 .h, 1 .hpp, 1 .html, 962 .py, 3 .sh).
 
 | Tool | Purpose | Referenced contracts |
 |---|---|---|
@@ -863,6 +863,7 @@ Coverage: **1068 files** (33 .c, 67 .cpp, 1 .gdb, 1 .h, 1 .hpp, 1 .html, 961 .py
 | [`tools/opcode_field_history_corpus_v1.py`](../tools/opcode_field_history_corpus_v1.py) | Execute a sealed field-history bundle with the existing complete witnesses. | [1](../operations/adaptive/experiments/opcode_field_history_validation250k_q0_v1.json) |
 | [`tools/opcode_field_history_gate_v1.py`](../tools/opcode_field_history_gate_v1.py) | Bounded field-history comparison; reuse published guard and identity checks. | [1](../operations/adaptive/experiments/opcode_field_history_validation250k_q0_v1.json) |
 | [`tools/opcode_field_history_v1.py`](../tools/opcode_field_history_v1.py) | Standalone parent loading and existing witnesses for the history experiment. | [2](../operations/adaptive/experiments/opcode_field_history250k_q0_v1.json) |
+| [`tools/opcode_field_history_validation_gate_v1.py`](../tools/opcode_field_history_validation_gate_v1.py) | Validate the unchanged field-history codec using the measured comparison engine. | none found |
 | [`tools/opcode_field_repair_cli_v1.py`](../tools/opcode_field_repair_cli_v1.py) | Bounded command adapter and optional witnesses for the frozen field repair. | [1](../operations/adaptive/experiments/opcode_field_compact_v1.json) |
 | [`tools/opcode_field_repair_gate_v1.py`](../tools/opcode_field_repair_gate_v1.py) | Run the sealed field-only P/K/D comparison through the existing phase driver. | none found |
 | [`tools/opcode_field_repair_gate_v2.py`](../tools/opcode_field_repair_gate_v2.py) | Run the sealed field-only P/K/D comparison through the existing phase driver. | none found |
