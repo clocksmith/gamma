@@ -46,3 +46,5 @@
 - [part-041.md: 2026-09-06 MIDAS opening100KB complete boundary observation](part-041.md)
 
 - [part-042.md: 2026-09-06 MIDAS distant100KB observed transfer](part-042.md)
+
+- [part-043.md: 2026-09-06 MIDAS SHA observer cost comparison](part-043.md)

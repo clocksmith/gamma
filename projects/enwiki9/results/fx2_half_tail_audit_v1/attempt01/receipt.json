@@ -1,0 +1,103 @@
+{
+  "schema": "gamma.enwiki9.half-tail-audit.v1",
+  "status": "passed",
+  "inputs": [
+    {
+      "path": "results/fx2_cmix_transformer_static_vocab_fixture50051_q0_v1/work/src/predictor.cpp",
+      "bytes": 27424,
+      "sha256": "0b79f43644daee942c9cb6da18fa464f0eb0185b6fc7ffc43cde703808fe537e"
+    },
+    {
+      "path": "results/fx2_cmix_transformer_static_vocab_fixture50051_q0_v1/kernel.json",
+      "bytes": 3912,
+      "sha256": "eae6f67f96ae3dc86bae22f6ce42e59c77e3bb9d3460fe74a2af9d7d99d0e575"
+    },
+    {
+      "path": "results/fx2_cmix_transformer_static_vocab_fixture50051_q0_v1/kernel.probabilities.f32le",
+      "bytes": 839680,
+      "sha256": "869135027761b4350792e3f461053644bf5401358d8383aba4d3277773dac61f"
+    },
+    {
+      "path": "tools/fx2_transformer_kernel_probe_v1.cpp",
+      "bytes": 7253,
+      "sha256": "857e0395cf09d7a88802d11279ee01e765b8f8c188573bc0808257ab040d0f19"
+    },
+    {
+      "path": "tests/run_fx2_half_tail_audit_v1.py",
+      "bytes": 5702,
+      "sha256": "cc8216e7e222eff1b0bdd29e517f1ffc0bda980ed94fd14ff5386ae245ce685d"
+    },
+    {
+      "path": "operations/provenance/fx2_half_tail_audit_v1_plan.json",
+      "bytes": 2112,
+      "sha256": "4f3be36e2ee56b0682dbfb9f37035f83ef8afab452d6aabe00b6a4ed64fecc12"
+    }
+  ],
+  "phases": [
+    {
+      "name": "compile",
+      "argv": [
+        "/usr/bin/g++",
+        "-std=c++17",
+        "-O2",
+        "-march=x86-64-v3",
+        "-fno-fast-math",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_half_tail_audit_v1/attempt01/probe.cpp",
+        "-o",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_half_tail_audit_v1/attempt01/probe"
+      ],
+      "returncode": 0,
+      "elapsed_seconds": 0.40398363792337477,
+      "cpu_seconds": 0.315966,
+      "cumulative_child_peak_rss_kib": 161916
+    },
+    {
+      "name": "execute",
+      "argv": [
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_half_tail_audit_v1/attempt01/probe"
+      ],
+      "returncode": 0,
+      "elapsed_seconds": 0.10384280700236559,
+      "cpu_seconds": 0.0022189999999999988,
+      "cumulative_child_peak_rss_kib": 161916
+    }
+  ],
+  "numeric": {
+    "probability_patterns": 15361,
+    "scalar_disagreements": 1023,
+    "after_floor_disagreements": 1007,
+    "exact_scalar_matches_f16c": true
+  },
+  "retained_kernel": {
+    "unique_synthetic_rows": 512,
+    "duplicate_repeat_excluded": true,
+    "columns": {
+      "200": {
+        "subnormal": 136,
+        "changed_after_floor": 88
+      },
+      "201": {
+        "subnormal": 170,
+        "changed_after_floor": 128
+      },
+      "202": {
+        "subnormal": 270,
+        "changed_after_floor": 199
+      },
+      "203": {
+        "subnormal": 176,
+        "changed_after_floor": 129
+      },
+      "204": {
+        "subnormal": 175,
+        "changed_after_floor": 125
+      }
+    },
+    "rows_changed_after_floor": 324,
+    "maximum_row_mass_increase": 9.572505950927734e-05
+  },
+  "objective_credit_bytes": 0,
+  "native_model_executed": false,
+  "scope": "Numerical compatibility and synthetic kernel rows only; no corpus event frequency or native archive improvement.",
+  "next_required": "Any output-conversion successor must preserve input half priors and model state, then establish native P/K identity and D inverse/repeat against the unchanged baseline."
+}
