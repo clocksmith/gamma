@@ -10,21 +10,56 @@
     "sha256": "sha256:044147f7ffe6922ea8dafd52fc3d4426077b20958adbcd421245ad41adcfc1e4"
   },
   "execution_mode": "discovery",
+  "execution_resources": {
+    "boot_id": "3ce46712-27bc-4199-8e48-e2b3d23926cb",
+    "budget": {
+      "cgroup_parent": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice",
+      "cpus": [
+        2
+      ],
+      "memory_bytes": 12884901888,
+      "scratch_bytes": 2147483648,
+      "swap_bytes": 0,
+      "wall_seconds": 12000
+    },
+    "cgroup_inode": 257037,
+    "cgroup_path": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/gamma-enwiki9-20260908T141403Z_9512817e06",
+    "cpu_enforcement": "taskset-and-sampled-affinity-guard",
+    "groups": [
+      {
+        "created": true,
+        "inode": 257037,
+        "kernel_cpuset": false,
+        "memory_bytes": 12884901888,
+        "path": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/gamma-enwiki9-20260908T141403Z_9512817e06"
+      }
+    ],
+    "guard_command_sha256": "bf69bb055112f6fb43f7bd8cc1c4f36043c0d5d2c2639524cccd62d18aeed449",
+    "guard_path": "run_logs/adaptive/20260908T141403Z_9512817e06.resources/guard.json",
+    "missing_diagnostics": [
+      "kernel cpuset controller is not delegated; taskset assignment and existing affinity guard remain active"
+    ],
+    "timing_authority": "diagnostic"
+  },
   "experiment": {
     "path": "operations/adaptive/experiments/opcode_field_confirmation1m_q0_v1.json",
     "sha256": "sha256:fbf174c3f4affa2d1823a31691d050cf63710404012c6172b148b64e5061b82e"
   },
   "gate_size": 1000000,
-  "held": true,
+  "held": false,
   "held_at": "2026-09-08T14:14:26+00:00",
   "hold_history": [
     {
       "at": "2026-09-08T14:14:26+00:00",
       "held": true,
       "reason": "Hold pending publication of positive validation closure and unchanged confirmation source, followed by fresh resource admission."
+    },
+    {
+      "at": "2026-09-08T14:17:49+00:00",
+      "held": false,
+      "reason": "Exact held job, source and selection evidence published at5fa7b7701; results/opcode_field_confirmation_admission_20260908.json verifies local/HEAD/origin and fresh CPU2 memory/scratch admission."
     }
   ],
-  "hold_reason": "Hold pending publication of positive validation closure and unchanged confirmation source, followed by fresh resource admission.",
   "job_id": "20260908T141403Z_9512817e06",
   "priority": 90,
   "proposal": {
@@ -33,6 +68,7 @@
   },
   "proposal_id": "opcode_field_confirmation1m_q0_v1",
   "purpose": "diagnostic",
+  "released_at": "2026-09-08T14:17:49+00:00",
   "resource_budget": {
     "cgroup_parent": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice",
     "cpus": [
@@ -51,7 +87,8 @@
   "scratch_directories": [
     "results/opcode_field_confirmation1m_q0_v1"
   ],
-  "state": "pending",
+  "started_at": "2026-09-08T14:17:49+00:00",
+  "state": "running",
   "submitted_at": "2026-09-08T14:14:03+00:00",
   "tags": [
     "opcode-field-confirmation"
@@ -61,5 +98,8 @@
   "tool_args": [
     "--candidate",
     "opcode_field_confirmation1m_q0_v1"
-  ]
+  ],
+  "worker_pid": 33870,
+  "worker_proc_start_ticks": 197320761,
+  "worker_started_at": "2026-09-08T14:17:49+00:00"
 }
