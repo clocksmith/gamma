@@ -44,3 +44,5 @@
 - [part-040.md: 2026-09-06 MIDAS observation cost gate and accelerated observer checks](part-040.md)
 
 - [part-041.md: 2026-09-06 MIDAS opening100KB complete boundary observation](part-041.md)
+
+- [part-042.md: 2026-09-06 MIDAS distant100KB observed transfer](part-042.md)
