@@ -1,0 +1,82 @@
+{
+  "attribution": {
+    "causalConfidence": "high",
+    "controlsEquivalent": null,
+    "failureClass": "infrastructure-failure",
+    "localizedCause": "Startup shell inherited coordinator affinity before taskset applied the frozen CPU2 assignment"
+  },
+  "candidateId": "forge_compact_fixture50051_q0_v2",
+  "candidateRevision": {
+    "candidateId": "forge_compact_fixture50051_q0_v2",
+    "candidateTreeSha256": "sha256:6a8ff7d50e38572326065d488511e1df975491ec0a6c153c29a8cea14f258b95",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/forge_compact_fixture50051_q0_v2/20260908T194435970398Z_6a8ff7d50e38.json",
+      "sha256": "sha256:481444745b9d06fdb9e592bdf485924b2bd43140e4cfc87435b4bc4e25b43ae7"
+    }
+  },
+  "decision": {
+    "killPredicatesPass": null,
+    "nextGateBytes": null,
+    "promotionPredicatesPass": null,
+    "rationale": "Repeat the unchanged source and experiment under a new job identity with coordinator taskset CPU2; original output directory is empty and failed guard remains retained",
+    "verdict": "retry"
+  },
+  "evidence": [
+    {
+      "path": "run_logs/adaptive/20260908T194436Z_afbc14a52e.resources/guard.json",
+      "sha256": "sha256:7f85e27a7de6ad99b988261a80189e0d1438719cdfdc47ec7e6be367de250cec"
+    }
+  ],
+  "experiment": {
+    "path": "operations/adaptive/experiments/forge_compact_fixture50051_q0_v2.json",
+    "sha256": "sha256:4f654157c93e28568e7c7729d993af779f0f814b0158803fd1423ac4c6b9dfae"
+  },
+  "generatedUtc": "2026-09-08T19:47:17+00:00",
+  "hypothesis": {
+    "rationale": "Result directory is empty and phase markers absent; first guard sample has32 allowed CPUs",
+    "verdict": "not-tested"
+  },
+  "job": {
+    "path": "operations/adaptive/failed/959_20260908T194436Z_afbc14a52e.json",
+    "sha256": "sha256:b6cc427febbfa40c266f616a30da6c09e5ae14cdcf6fa89ba393bd65e45f864f"
+  },
+  "knowledge": {
+    "retiredDimensions": [],
+    "transferableLessons": [
+      "Pin coordinator to the assigned CPU before its guarded child is spawned, preserving the same one-core limit from the first sample"
+    ],
+    "uncertainties": [
+      "Native archive and resource cost remain unmeasured"
+    ]
+  },
+  "measurementAssertions": [],
+  "measurements": {
+    "idealBitsSaved": null,
+    "memoryRatio": null,
+    "minimumPartitionIdealBitsSaved": null,
+    "netBytesSaved": null,
+    "positiveSegmentFraction": null,
+    "runtimeRatio": null,
+    "scopeBytes": null,
+    "scopeSymbols": null,
+    "sourceBytesDelta": null,
+    "transferRetention": null
+  },
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:e91ff20e92c3cac8acb0cbe5c79fc8e8a3b427d7e151245c8eecc52b1c32fa00",
+    "objectiveId": "gamma-enwiki9-hutter-90m-v3",
+    "objectivePath": "contracts/research/v3/objective-contract.json",
+    "targetScoreBytes": 90000000
+  },
+  "reflectionId": "r-20260908t194436z_afbc14a52e",
+  "schema": "gamma.enwiki9.reflection-receipt.v1",
+  "validity": {
+    "classification": "infrastructure-failure",
+    "reasons": [
+      "Guard terminated initial shell before worker phase or codec source execution"
+    ],
+    "valid": false
+  }
+}
