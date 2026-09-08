@@ -623,6 +623,15 @@ After publishing ownership, run the named eligible gate:
 python3 tools/enwiki9_lab.py run --candidate CANDIDATE --max-workers 1
 ```
 
+For a job assigned one logical CPU, also pin this coordinator to that same CPU:
+`taskset -c CPU python3 tools/enwiki9_lab.py run --candidate CANDIDATE --max-workers 1`.
+The guard's startup shell inherits coordinator affinity before its inner
+`taskset` executes. Starting the coordinator with broad affinity can therefore
+trip the first guard sample before the codec runs, as recorded in
+[this startup failure](operations/adaptive/reflections/20260908T194436Z_afbc14a52e.json).
+Keep the affinity guard enabled and preserve failed attempts; pinning the
+coordinator enforces the existing assignment from process creation.
+
 Use `run --adaptive --continuous` only within the authorized ownership and
 resource envelope; `--max-workers` and admission limits do not replace each
 job's frozen guards.
