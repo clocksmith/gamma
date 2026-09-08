@@ -2,6 +2,29 @@
 
 [Record index](research_register/README.md) | [Earlier records](research_register/archive/README.md)
 
+## 2026-09-08 - Compact block replacement loses its native matched comparison
+
+The [terminal receipt](../operations/provenance/fx2_compact_v26_terminal_20260908.json)
+closes job `20260908T202406Z_5d61a00d99`: P/K archives are 3,223 bytes and
+D is 3,240 bytes. All exact raw inverses, deterministic repeats, 259,824-record
+coder trajectory comparisons and observed/unobserved archive checks pass.
+The selected compact403 block loses 17 archive bytes and adds 45,745 bytes to
+the overlapping local source/assets/binary/options inventory. That subtotal
+is not an official package score. D encoder/decoder CPU costs are 28.726/28.653
+seconds versus P 14.677/14.699; concurrent timing remains diagnostic.
+All resource guards pass with 6,779,830,272-byte cgroup peak, 14,796,629,769-byte
+logical scratch peak, one allowed CPU and closed children/cgroup removal.
+
+Posthoc aligned probability analysis finds 147,190 changed quantized events
+and 134.316 ideal bits lost; all chronological thirds lose. The archive loss
+therefore is not solely a framing effect. No internal submodel cause is isolated.
+The [validated reflection](../operations/adaptive/reflections/20260908T202406Z_5d61a00d99.json)
+retires this exact block replacement on the public fixture. Three canonical
+arm rows preserve its evidence. Do not scale it or rename it as an unchanged
+successor; retain the stronger original parent and select a distinct mechanism
+from measured costs. Full predictor-state certification, fresh transfer and
+complete-package qualification remain open. No 90M full-corpus score credit.
+
 ## 2026-09-08 - Native FX2 compact block comparison frozen
 
 `root_explore` owns held job `20260908T202406Z_5d61a00d99` under the [154-input contract](../operations/adaptive/experiments/fx2_compact_v26_fixture50051_q0_v1.json).
@@ -774,26 +797,3 @@ During preparation, admission rejected an attempted edit to the older bound
 observer documentation. ROOT restored its exact bytes before enqueueing and
 reverified all 238 distant-gate and 304 cost-gate input hashes. Executable
 sources and cached binaries were unchanged; current guidance stays here.
-
-## 2026-09-06 - MIDAS distant100KB passes exact observed transfer
-
-The [terminal audit](../operations/provenance/midas_open_observed_distant100k_terminal_20260906.json)
-closes all 16 phases. P/K produce 51,531 bytes, F 45,587, and S 50,882.
-F saves 5,944 bytes against P and 5,295 against S. All four raw inverses,
-repeated archives, fresh unobserved reference archives/final states, 800,000
-pre-truth probabilities and 3,127 boundary records pass their comparisons.
-The resource guard passes and the cgroup is removed. The [validated reflection](../operations/adaptive/reflections/20260906T143122Z_85238bbb11.json)
-permits a separately frozen 250KB gate after observation cost is measured under
-the unchanged native limits. Four new run rows bring the ledger to 1,001 unique
-identities. This previously examined cold population provides transfer evidence;
-complete-package, fresh-confirmation and full-corpus claims remain unproved.
-
-ROOT owns `midas_open_observed_distant100k_q0_v1`, initially held job
-`20260906T143122Z_85238bbb11`. The [plan](../operations/provenance/midas_open_observed_distant100k_q0_v1_plan.json)
-reuses the exact opening-gate codecs and 16-phase runner at canonical raw offset
-500,000,000 for 100,000 bytes, with cold causal initialization and all P/K/F/S
-controls. Its 238 inputs include the validated opening reflection. CPU2, 2GiB
-outer memory, 256MiB scratch, zero swap and 1,200-second aggregate stop are bound;
-native limits stay unchanged. F must beat P and S with complete boundary
-evidence. This is a transfer test on previously examined data, not a sealed
-holdout or full-score claim. Publication precedes release and execution.
