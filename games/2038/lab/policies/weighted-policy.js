@@ -9,6 +9,7 @@ export const supportedPolicyTreatments = new Set([
   null,
   "coalition_conversion_v1",
   "infrastructure_plan_v1",
+  "personal_infrastructure_v1",
   "research_deploy_plan_v1"
 ]);
 

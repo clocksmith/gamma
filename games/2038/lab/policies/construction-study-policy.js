@@ -4,6 +4,7 @@ const distance = (a, b) => (Math.abs(a.q - b.q) + Math.abs(a.r - b.r) +
   Math.abs(a.q + a.r - b.q - b.r)) / 2;
 
 export function constructionStudyScore(packet, decision, treatment) {
+  if (treatment === "personal_infrastructure_v1") return personalInfrastructureScore(packet, decision);
   if (!["infrastructure_plan_v1", "research_deploy_plan_v1"].includes(treatment)) return null;
   const { self, board, round, publicTable } = packet.observation;
   const own = publicTable.players.find(player => player.seat === packet.seat);
@@ -74,4 +75,35 @@ export function constructionStudyScore(packet, decision, treatment) {
   }
   if (decision.actionId === "deploy" && p.destinationId) return p.computeCost === 0 ? 100 : 1;
   return null;
+}
+
+// Current personal-project diagnostic. This deliberately tries upgrades; it is
+// not an optimized strategy or a replacement for the authored default personas.
+function personalInfrastructureScore(packet, decision) {
+  const {self, board, round, personalProjectRules: rules, publicTable} = packet.observation;
+  const own = publicTable.players.find(player => player.seat === packet.seat);
+  const tile = id => board.find(t => t.tileId === id);
+  const pending = rules.projects.filter(project => project.unlockedRound <= round &&
+    !own.projects.some(built => built.projectId === project.id));
+  const goal = own.facilities.length ? pending.find(project => !project.powerSource ||
+    own.facilities.some(host => host.powered && (tile(host.tileId).facilitySpacesOpen > 0 ||
+      own.facilities.some(other => !other.powered && distance(tile(host.tileId),tile(other.tileId)) <= 1))))?.id : 'first';
+  const p = decision.parameters || {};
+  const runwayNeeded = goal === 'first' ? 2 : rules.cost.runway;
+  const computeNeeded = goal === 'first' ? 0 : rules.cost.compute;
+  if (decision.consequences?.stage === 'action_selection') {
+    if (!decision.consequences.resolvableWithoutTrade) return .001;
+    const needsFunds = goal && self.runway < runwayNeeded;
+    return ({fund: needsFunds ? 200 : self.runway < 3 ? 25 : 1,
+      build: goal && !needsFunds && self.compute >= computeNeeded ? 160 : .001,
+      research: self.capability < 9 ? 60 : 8, deploy: self.canDeploy ? 70 : .001,
+      influence: self.trust < 4 ? 30 : 12, organize: .1})[decision.actionId] ?? null;
+  }
+  if (decision.actionId === 'build' && p.buildMode === 'construction') {
+    if (goal === 'first') return p.facility && !p.project && ['cloud','chip','research'].includes(p.destinationCategory) ? 2000 : .001;
+    if (p.project?.id === goal) return goal === 'fusion_demonstrator' && p.facility ? 4000 : !p.facility ? 2000 : 1;
+    return .001;
+  }
+  // Keep the control's Fund, Research, Deploy, trade and stopping decisions.
+  return constructionStudyScore(packet, decision, 'research_deploy_plan_v1');
 }

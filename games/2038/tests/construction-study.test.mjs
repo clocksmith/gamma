@@ -41,3 +41,23 @@ test("the deliberate infrastructure plan funds, connects hosts, and selects a le
   await match.produceAll([]);
   assert.equal(match.matchMetrics.projectProduction.length, 1);
 });
+
+test('personal infrastructure treatment targets each unlock and reads the public price', async () => {
+ const {match}=await createInteractiveGame({playerCount:4,seed:'personal-policy-contract'},()=>{});
+ await match.beginRound([]);
+ const profiles=await loadPlayerProfiles();const policy=new WeightedPlayerPolicy(profiles.find(p=>p.id==='infrastructure_compounder'),{selection:'greedy',treatment:'personal_infrastructure_v1'});
+ const p=match.players[0];p.runway=12;p.compute=10;
+ const choose=choices=>policy.rank(match.packet(0,'study',choices))[0].decision;
+ match.applyResolution(0,choose(match.legalResolutions(0,'build')));
+ for(const [era,id] of [[2,'mega_cluster'],[3,'fusion_demonstrator'],[4,'quantum']]) {
+  match.round=era;await match.beginRound([]);p.runway=12;p.compute=10;
+  const decision=choose(match.legalResolutions(0,'build'));
+  assert.equal(decision.parameters.project?.id,id);
+  if(id==='fusion_demonstrator')assert.equal(decision.parameters.facility,true);
+  match.applyResolution(0,decision);
+ }
+ assert.equal(p.projects.length,3);
+ assert.ok(p.facilities.length>=2);
+ const packet=match.packet(0,'study',match.legalActionSelections(0));
+ assert.deepEqual(packet.observation.personalProjectRules.cost,match.projectDocument.constructionCost);
+});

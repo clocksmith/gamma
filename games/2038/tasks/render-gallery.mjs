@@ -221,11 +221,10 @@ function buildMandates(data) {
 
 function buildProjects(data, factions) {
   const chips = factions.factions.flatMap(faction => data.projects.map(project =>
-    card({ accent: faction.color, title: project.name, subtitle: faction.name,
-      badgeList: [roundBadge(project.unlockedRound), "Personal project chip"],
-      bodyHtml: `<div class="project-front"><strong>Available — front</strong><p>${escapeHtml(project.frontText)}</p></div>
-<div class="project-back"><strong>Built — back</strong><p>${escapeHtml(project.backText)}</p></div>`
-    })
+    `<article class="card project-chip" style="--accent:${escapeHtml(faction.color)}" data-project="${escapeHtml(project.id)}" data-faction="${escapeHtml(faction.id)}">
+${[['Available', project.frontText], ['Built', project.backText]].map(([state, text]) =>
+  `<div class="chip-face" data-chip-state="${state.toLowerCase()}"><h3>${escapeHtml(project.name)}</h3><p class="chip-owner">${escapeHtml(faction.name)}</p><strong>${state}</strong><p>${escapeHtml(text)}</p></div>`).join('')}
+</article>`
   )).join("");
   return section("projects", "Personal project chips", factions.factions.length * data.chipsPerFaction,
     chips, data.constructionRule);
@@ -367,6 +366,17 @@ main { padding: 1.8rem clamp(1rem, 3vw, 2.4rem); }
 .badge { font-size: 0.68rem; font-weight: 600; background: color-mix(in srgb, var(--accent) 16%, #eef0f2); color: color-mix(in srgb, var(--accent) 75%, #334155); border-radius: 5px; padding: 0.1rem 0.42rem; }
 .tags { display: flex; flex-wrap: wrap; gap: 0.25rem; }
 .tag { font-size: 0.66rem; color: #94a3b8; background: #f1f1ee; border-radius: 4px; padding: 0.05rem 0.35rem; }
+.project-chip { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.chip-face { padding: .7rem; }
+.chip-face + .chip-face { border-left: 2px dashed var(--accent); }
+.chip-face h3 { margin: 0; }
+.chip-owner { font-weight: 600; color: var(--accent); }
+@media print {
+  #projects .grid { display: block; }
+  .project-chip { width: 150mm; height: 85mm; margin-bottom: 5mm; border: 1px solid #333; border-radius: 0; box-sizing: border-box; break-inside: avoid; }
+  .chip-face { box-sizing: border-box; overflow-wrap: anywhere; font: 10pt/1.3 sans-serif; padding: 4mm; }
+  .chip-face h3 { font-size: 12pt; }
+}
 .stats { display: flex; flex-wrap: wrap; gap: 0.4rem; margin: 0; }
 .stats div { background: #f4f4f2; border-radius: 6px; padding: 0.2rem 0.45rem; text-align: center; min-width: 3.4rem; }
 .stats dt { font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.05em; color: #9aa3ad; margin: 0; }

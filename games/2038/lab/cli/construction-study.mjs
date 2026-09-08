@@ -6,16 +6,16 @@ import { archiveSimulationReport } from "../report-archive.js";
 
 const root = resolve(import.meta.dirname, "../..");
 const mode = process.argv[2] || "calibration";
-if (!["calibration", "holdout"].includes(mode)) throw new Error("Use calibration or holdout.");
-const seed = `2038-construction-${mode}-20260906-${mode === "calibration" ? "v2" : "v1"}`;
+if (!["calibration", "holdout", "personal"].includes(mode)) throw new Error("Use calibration, holdout, or personal.");
+const seed = mode === "personal" ? "2038-construction-personal-20260908-v1" : `2038-construction-${mode}-20260906-${mode === "calibration" ? "v2" : "v1"}`;
 const factions = JSON.parse(await readFile(resolve(root, "dist/runtime/factions.json"))).factions;
-const arms = [null, "infrastructure_plan_v1", "research_deploy_plan_v1"];
+const arms = mode === "personal" ? ["personal_infrastructure_v1", "research_deploy_plan_v1"] : [null, "infrastructure_plan_v1", "research_deploy_plan_v1"];
 const opponents = ["balanced_operator", "capability_rusher", "market_maximalist", "trust_governor"];
 const blocks = [];
 for (const count of mode === "calibration" ? [4] : [4, 2, 3, 5]) {
   for (const faction of factions.slice(0, mode === "calibration" ? 1 : 6)) {
     for (let seat = 0; seat < (count === 4 && mode === "holdout" ? 4 : 1); seat++) {
-      for (const backend of ["greedy", "weighted"]) blocks.push({ count, faction: faction.id, seat, backend });
+      for (const backend of ["greedy", "weighted"]) blocks.push({ count, faction: faction.id, seat: mode === "personal" ? factions.indexOf(faction) % count : seat, backend });
     }
   }
 }
@@ -33,7 +33,7 @@ try {
     factionIds.splice(seat, 0, faction);
     const profileIds = Array.from({ length: count - 1 }, (_, index) => opponents[index]);
     profileIds.splice(seat, 0, "infrastructure_compounder");
-    for (const treatment of count === 4 ? arms : arms.slice(1)) {
+    for (const treatment of mode === "personal" || count === 4 ? arms : arms.slice(1)) {
       const policyTreatments = Array(count).fill(null);
       policyTreatments[seat] = treatment;
       const options = { runs: 1, playerCount: count, seed: `${seed}-block-${blockIndex}`,
@@ -42,6 +42,7 @@ try {
         simulateNegotiation: true, rulesVariant: {}, sampleReplays: 0,
         returnOutcomes: true, projection: "rich" };
       const { report, outcomes } = await createSimulation(options);
+      if (mode === "personal" && report.provenance.sourceDirty) throw new Error("Personal project comparison requires a clean committed source.");
       const archive = await archiveSimulationReport(report, { projectRoot: root, jobId: treatment || "baseline" });
       const reportBytes = await readFile(resolve(root, archive.relativePath));
       const outcomePath = archive.relativePath.replace(/\.json$/, "-outcomes.json");
@@ -56,7 +57,9 @@ try {
         score: focal.score, winShare: outcome.winnerSeats.includes(seat) ? 1 / outcome.winnerSeats.length : 0,
         projects: focal.metrics.projects, construction: focal.metrics.construction,
         firstProductiveProjectEra: production[0]?.round ?? null,
-        productiveProjectEras: production.length,
+        productiveProjectEras: new Set(production.map(event => event.round)).size,
+        projectProduction: production,
+        projectCapabilityGained: production.filter(event => event.resource === "capability").reduce((sum, event) => sum + event.gained, 0),
         projectComputeGained: production.filter(event => event.resource === "compute").reduce((sum, event) => sum + event.gained, 0),
         agiDeclared: focal.agiDeclared, actions: focal.metrics.actions,
         capability: focal.capability, customers: focal.customers, trust: focal.trust,
