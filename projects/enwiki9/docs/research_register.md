@@ -24,7 +24,7 @@ no corpus frequency or archive gain is claimed. The [validated reflection](../op
 selects [opcode_wiki_slot_v1](../operations/adaptive/experiments/opcode_wiki_slot_v1.json),
 owned by `root_explore`. Its [terminal gate](../operations/provenance/opcode_wiki_slot_terminal_20260908.json)
 passes ten phases: P/K 67,658 / D 67,601 bytes. The 57-byte gain does not pay the
-conditional 554-byte source charge. Next isolate the diagnosed text-close reset.
+conditional 554-byte source charge. [Reset-only successor](../operations/adaptive/experiments/opcode_slot_reset_v1.json): ten synthetic tests pass; corpus gate awaits publication/admission.
 
 ## 2026-09-08 - Opcode field repair confirms a 1,541-byte archive improvement
 
