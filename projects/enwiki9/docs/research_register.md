@@ -2,6 +2,29 @@
 
 [Record index](research_register/README.md) | [Earlier records](research_register/archive/README.md)
 
+## 2026-09-08 - Residual-ratio calibration passes synthetic inverse checks
+
+`root_explore` published [ownership and fixed controls](../operations/provenance/fx2_residual_ratio_synthetic_v1_plan.json)
+before implementation. Discovery lenses 8/9 select integer observed/expected
+symbol ratios, distinct from the retired NNCP output-bias midpoint update.
+That earlier configuration lost 1,604 bytes; it supplies no inherited gain.
+Forge-cmix remains an external parent research alternative, not a Gamma result.
+The new [reference component](../lib/residual_ratio_v1.py) learns only after
+complete decoded symbols, clips ratios, decays bounded histories, and validates
+pending checkpoints. The existing arithmetic fixture supplies the coder.
+[Retained fresh-process evidence](../results/fx2_residual_ratio_synthetic_v1/attempt01/receipt.json)
+passes nine tests and 24 encode/decode/repeat phases. Both fixtures contain
+1,024 synthetic raw bytes. Constant-byte P/K/D/S archives are 1,041/1,041/790/1,043;
+balanced-byte archives are 1,041/1,041/1,043/1,038. Every inverse, repeat,
+pre-truth probability and predictor-state boundary agrees within each arm.
+P/K archives and probabilities match. The balanced loss and favorable rotated
+control prevent interpreting synthetic activation as corpus evidence.
+Peak phase RSS is 22,593,536 bytes; retained artifacts before receipt are 109,892
+bytes. Python/runtime package accounting remains unresolved. No corpus ran.
+Next: a separately identified native FX2 adapter must resolve half-probability
+mapping, reproduce P/K, and measure actual P/K/D/S archives before promotion.
+HORIZON, MIDAS and measured codec sources remain unchanged; objective credit is zero.
+
 ## 2026-09-08 - Compact field implementation and 90M objective
 
 The [v3 migration](../operations/provenance/objective90_migration_20260908.json)
@@ -759,41 +782,3 @@ snapshot matches the original observer across all P/K/F/S phases. The native
 binary is 437,128 bytes; 540 observer and 521 hash-fixture compiler dependencies
 were rehashed. The guard and child cleanup pass. This remains synthetic
 correctness evidence; corpus-scale observation cost still needs measurement.
-
-## 2026-09-06 - MIDAS boundary observability passes exact synthetic checks
-
-The [new observer](midas_open_boundary_observer_v1.md) wraps the unchanged native
-MIDAS codec and records every pre-truth probability plus complete serialized
-state at initialization, every 32 decoded bytes, and finalization. All five
-[synthetic regression tests](../operations/evidence/20260906_midas_open_boundary_observer_unit.json)
-pass on CPU2. P/K/F/S preserve the retained 105-byte archives of the 65-byte
-fixture; each independent decoder and repeat matches every probability,
-boundary record, complete state and exact snapshot. An independent parser
-checks all 17 component ranges, and identical malformed bundles cannot pass.
-
-The 432,528-byte observer executable and all 532 compiler dependencies are
-hash-bound. The aggregate guard passes and its cgroup is removed. This supplies
-observability code, not a corpus certificate or package qualification. The
-existing opening250KB gain remains held until a separately frozen successor
-measures these boundaries on corpus data. No measured MIDAS source changed.
-
-## 2026-09-06 - Schema transfer is exact but every block falls back
-
-The [terminal audit](../operations/provenance/wiki_schema_exact_transfer250k_terminal_20260906.json)
-closes all 24 phases of `wiki_schema_exact_transfer250k_q0_v2`. All P/L/D/C arms
-produce 111,159 bytes on opening250KB and 106,139 bytes on distant250KB; all eight
-inverses and repeats pass. ROOT independently reconstructs every baseline block
-and verifies its framing, hash, and exact accounting. Serialized dictionaries
-agree at all 62 block boundaries across every arm and phase.
-
-D proposes 454 opening and 337 distant references, but no grammar block is
-selected. Even the cheapest proposal exceeds its baseline by 168 opening bits
-or 88 distant bits. Archive saving is zero and selected C associations are
-inactive, leaving causal attribution inconclusive. This evidence concerns the
-tested cold-population realization and does not disprove grammatical structure.
-
-The [canonical decision](../results/wiki_schema_exact_transfer250k_q0_v2/decision.json)
-binds all 142 other required outputs. Its frozen aggregate rules yield both
-promotion and kill false, hence `retry`; the [validated reflection](../operations/adaptive/reflections/20260906T023145Z_eb44974e5c.json)
-holds work without an automatic rerun or 1M gate. Eight canonical ledger rows
-preserve unknown complete-package and full-score values.
