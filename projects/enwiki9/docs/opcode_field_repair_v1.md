@@ -139,7 +139,7 @@ a 27-byte archive; this is correctness evidence only.
 Local source shrinks by 9,657 bytes from the observed implementation and remains
 905 bytes above the original parent. These are source subtotals, not a complete
 package result: invocation bytes, runtime and the chosen accounting multiplicity
-must still be resolved. The compact codec has not yet replayed corpus archives.
+must still be resolved. The compact codec now passes the corpus parity gate.
 Its [parity runner](../tools/opcode_field_compact_gate_v1.py) passes
 [seven synthetic runner tests](../operations/evidence/20260908_opcode_field_compact_runner_unit.json).
 The sealed CPU2 job `20260908T154100Z_6b9653a04d` started after source publication
@@ -148,6 +148,12 @@ fresh unobserved encode, observed encode, independent decode and raw repeat on
 each existing population. Limits are 12GiB memory, zero swap, 2GiB scratch and
 12,000 elapsed seconds. Historical confirmation inputs may prove exact
 implementation parity; they must not be described as fresh model confirmation.
+The [terminal receipt](../operations/provenance/opcode_field_compact_terminal_20260908.json)
+closes all twelve phases with archives of 67,658 / 71,717 / 255,828 bytes,
+matching the three retained D populations. Independent reconstruction, repeats,
+complete shared witnesses and frozen input identities pass. Peak cgroup memory
+is 1,308,880,896 bytes; every guard is false and cleanup completes. The validated
+reflection retains this implementation and selects a separate prediction mutation.
 
 The [source ZIP diagnostic](../operations/provenance/opcode_field_source_zip_cost_20260908.json)
 uses the existing deterministic ZIP builder with one fixed Deflate level9 policy.
@@ -161,7 +167,7 @@ compressor/decoder source package is counted twice under the separate-archive
 form, that adds 1,548 bytes: seven more than the historical 1MB archive saving.
 CLI/build entry, required options, license closure and runtime costs remain
 unresolved. This arithmetic does not establish a package score or authorize a
-larger gate; the active compact corpus parity is a separate pending result.
+larger gate; the subsequently closed compact parity adds no archive savings.
 
 The [synthetic wiki-state probe](../results/opcode_wiki_state_diagnostic_20260908/attempt01/receipt.json)
 inspects the unchanged source on eleven predefined strings. Eight expose missed
@@ -169,7 +175,7 @@ wiki coordinates after opcode substitution: links, categories, images, template
 names/arguments and reference names. Three controls retain their expected state,
 including the repaired XML field. All frontend inverses are exact. This proves
 the demonstrated state mismatch, not its corpus frequency or compression cost.
-After the active gate closes and its reflection validates, the next bounded
-prediction question is whether exposing a decoder-reconstructed wiki slot pays
+The compact gate is now closed and reflected. The next bounded prediction
+question is whether exposing a decoder-reconstructed wiki slot pays
 against an otherwise unchanged parent and disabled bookkeeping control. Preserve
 the byte histories and existing model/copy laws; do not combine another feature.

@@ -11,17 +11,17 @@ experiments. Four migration tests preserve historical digests and obligations.
 the same confirmed field rule and canonical decoder checks in 5,746 local source
 bytes, down from 15,403. [Seven synthetic tests](../operations/evidence/20260908_opcode_field_compact_unit.json)
 pass archive and complete shared-state parity; a retained 65-byte fixture has a
-27-byte exact repeatable archive. Corpus parity and complete package economics
-remain unproved. The bounded parity runner now passes seven synthetic runner
-tests; job `20260908T154100Z_6b9653a04d` is active after publication and fresh CPU2
-admission. No new predictor is combined. The [source ZIP comparison](../operations/provenance/opcode_field_source_zip_cost_20260908.json)
+27-byte exact repeatable archive. The [terminal parity receipt](../operations/provenance/opcode_field_compact_terminal_20260908.json)
+passes twelve phases: development 67,658 / validation 71,717 / confirmation 255,828
+archive bytes, exact inverses/repeats and retained shared-state identity. Guards
+and cleanup pass; no new archive saving is claimed. The [source ZIP comparison](../operations/provenance/opcode_field_source_zip_cost_20260908.json)
 measures parent 5,041 / compact 5,815 bytes with exact synthetic relocation.
 Twice the 774-byte increase is 1,548 bytes, exceeding the historical 1MB archive
 saving by seven bytes before other package costs. Complete accounting stays open.
 An independent [synthetic state probe](../results/opcode_wiki_state_diagnostic_20260908/attempt01/receipt.json)
 finds eight opcode/wiki-coordinate mismatches among eleven predefined strings;
-no corpus frequency or archive gain is claimed. After parity closure, test one
-decoded wiki-slot coordinate with parent and unused-bookkeeping controls.
+no corpus frequency or archive gain is claimed. The [validated reflection](../operations/adaptive/reflections/20260908T154100Z_6b9653a04d.json)
+selects one decoded wiki-slot mutation with parent and unused-bookkeeping controls.
 
 ## 2026-09-08 - Opcode field repair confirms a 1,541-byte archive improvement
 
