@@ -40,11 +40,17 @@ remain unknown. These three sample gains are not summed into a codec score.
 The independently identified
 [reserved-sample comparator](../operations/adaptive/experiments/matched_frontier_reserved_q0_v1.json)
 reuses framed Deflate and the measured native FX2 adapter on the same validation
-and confirmation bytes. It adds no codec mutation. Ten synthetic tests pass;
-preflight authenticates cached source, model and vocabulary. Its CPU2 job stays
-held pending fresh admission after the confirmed job's guard closure.
-Unsupported FX2 frontend coordinates must remain explicit, and supplied assets
-remain inventoried. Neither content deduplication nor a cold slice qualifies a package.
+and confirmation bytes. It adds no codec mutation. Ten synthetic tests pass.
+The [closed comparator](../operations/provenance/matched_frontier_reserved_terminal_20260908.json)
+passes all fourteen phases: validation Deflate 94,674 / FX2 35,464 bytes;
+confirmation Deflate 360,475 / FX2 131,238. All independent inverses and repeats
+pass, frozen source and native libraries rehash, and resource guards are clear.
+The aggregate cgroup peak is 5,999,730,688 bytes; native per-phase memory remains
+unmeasured. The [matched table](opcode_field_repair_v1.md) keeps sample identities,
+timings and package inventory separate. Field repair improves its own baseline
+but remains larger than supplied-model FX2 in archive bytes. Next assess a
+separately bound smaller implementation preserving its confirmed archives.
+Neither content deduplication nor a cold slice qualifies a complete package.
 
 ## 2026-09-07 - MIDAS opening250KB closes the missing boundary evidence
 

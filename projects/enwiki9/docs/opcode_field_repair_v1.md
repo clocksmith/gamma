@@ -61,7 +61,7 @@ The [separate validation receipt](../operations/provenance/opcode_field_validati
 records P/K 71,788 and D 71,717 bytes, a 71-byte archive gain. All ten phases,
 inverses, repeats and shared-state checks pass. The unchanged codec is selected
 for the reserved 1MB confirmation; neither sample establishes package savings.
-Deflate and FX2 have not yet been measured on this reserved validation slice.
+Deflate and FX2 are now measured on the same reserved validation slice below.
 The retained field counters show 217,459 of 230,968 modeled bytes in nonzero
 fields on development, and 236,452 of 241,793 on validation. Higher overall
 coverage accompanies the smaller validation saving. These are opcode-stream
@@ -70,7 +70,8 @@ The [matched comparator contract](../operations/adaptive/experiments/matched_fro
 binds both reserved populations to the unchanged Deflate CLI and cached FX2
 executable. Its [synthetic tests](../operations/evidence/20260908_matched_frontier_unit.json)
 cover exact Deflate replay, native header/vocabulary checks, and explicit model
-inventory. The comparator waits for CPU2; tests are not corpus measurements.
+inventory. Its separately published CPU2 corpus job has now closed all fourteen
+phases with exact inverses, deterministic repeats and no resource violations.
 
 The [reserved 1MB confirmation](../operations/provenance/opcode_field_confirmation_terminal_20260908.json)
 passes all ten phases and the resource guard, with P/K 257,369 bytes and D
@@ -83,7 +84,43 @@ passes all ten phases and the resource guard, with P/K 257,369 bytes and D
 | Reserved confirmation 1MB | 257,369 | 255,828 | 1,541 |
 
 All inverses, repeats and shared-state checks pass. These improvements retain
-their individual populations. Larger gates remain held while the matched
-frontier comparison and complete package cost are assessed. Reducing source cost
+their individual populations. Larger gates remain held while complete package
+cost is assessed. Reducing source cost
 requires an executable release that preserves the confirmed archives, not merely
 removing required files from its inventory.
+
+The [matched comparator receipt](../operations/provenance/matched_frontier_reserved_terminal_20260908.json)
+authenticates all retained output files and rechecks the native runtime libraries
+after closure. No codec was changed for this comparison.
+
+| Population | Framed Deflate | Bitmix parent / K | Field repair D | Source-bound FX2 |
+| --- | ---: | ---: | ---: | ---: |
+| Opening 250KB development | 89,041 | 67,959 | 67,658 | 33,429 |
+| Separate 250KB validation | 94,674 | 71,788 | 71,717 | 35,464 |
+| Reserved 1MB confirmation | 360,475 | 257,369 | 255,828 | 131,238 |
+
+Entries are complete archive bytes for identical original bytes within each row.
+Opening baselines are retained measurements; both reserved comparator rows are
+fresh. The Deflate wrapper retains 65,536-byte frames. FX2 uses its explicit
+cold-slice adapter, trained weights and dictionary; this does not reproduce its
+published full-corpus pipeline, establish unseen-model generalization, or confer
+its compression performance on Gamma's independent codec.
+
+| Comparator phase | Validation wall seconds | Confirmation wall seconds |
+| --- | ---: | ---: |
+| Deflate encode / decode / repeat | 0.066 / 0.066 / 0.066 | 0.116 / 0.066 / 0.116 |
+| FX2 encode / decode / repeat | 38.134 / 38.136 / 39.137 | 128.004 / 124.698 / 124.202 |
+
+The receipt retains CPU measurements separately, including preprocessing. These
+are shared-host diagnostic timings. The closed comparator's aggregate cgroup
+peak is 5,999,730,688 bytes; FX2 per-phase memory maxima are not measured.
+The 6,338,269-byte content-deduplicated inventory includes source, harness and
+native assets. Its 3,826,496 runtime-asset bytes include the model and dictionary.
+Host shared libraries are separately inventoried. None of these subtotals is a
+complete qualified submission package.
+
+The fixed field repair earns further implementation work through its confirmed
+parent-relative gain. Its next package question is whether a separately bound
+standalone release can implement the same field rule with lower source cost and
+preserve the existing archives. This comparison supplies no authority for a
+larger corpus run and no projection to the 99,000,000-byte target.
