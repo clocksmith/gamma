@@ -30,6 +30,18 @@ The bounded CPU2 gate requires retained P/K archives, independent inverses,
 repeats, all introduced-state records and unchanged parent float predictions.
 It remains held for publication and admission; no native archive result yet.
 
+The [closed native comparison](../operations/provenance/fx2_wrt_support_terminal_20260908.json)
+now proves a two-byte fixture archive gain: D3,221 versus P/K3,223. All raw
+inverses, repeats, introduced-state traces and original parent float predictions
+agree. The7,994 projected bits save18.86068334435965 ideal bits, with positive
+chronological thirds. The guard passes at5,574,987,776 peak cgroup bytes and
+261.1875 seconds elapsed; owned children close and the cgroup is removed.
+Paired local inventory differs by one option byte, but common implementation
+adds5,908 source bytes including diagnostics, and binary size is4,096 bytes above
+the supplied uninstrumented parent. No complete-package gain is established.
+The validated reflection retains the component and holds larger promotion for
+minimal deployment package measurement and separately frozen fresh validation.
+
 ## 2026-09-08 - Native output-tail comparison freezes one numerical correction
 
 The [new comparison](../operations/adaptive/experiments/fx2_half_tail_fixture50051_q0_v1.json)

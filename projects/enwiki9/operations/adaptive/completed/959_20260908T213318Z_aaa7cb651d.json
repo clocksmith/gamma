@@ -5,27 +5,66 @@
     "sha256": "sha256:af70e2ad0308386320acc843d7128d274ff826d7fdbd02f1644263e38388a4da"
   },
   "candidate_tree_sha256": "sha256:69b2e6bd279e02aa4038f98822497ca044cd54ac9b7147037de94b4b33f61777",
+  "elapsed_seconds": 261.32,
   "execution_guard": {
     "path": "tools/run_with_resource_guard_v3.py",
     "sha256": "sha256:044147f7ffe6922ea8dafd52fc3d4426077b20958adbcd421245ad41adcfc1e4"
   },
   "execution_mode": "discovery",
+  "execution_resources": {
+    "boot_id": "3ce46712-27bc-4199-8e48-e2b3d23926cb",
+    "budget": {
+      "cgroup_parent": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice",
+      "cpus": [
+        2
+      ],
+      "memory_bytes": 9999998976,
+      "scratch_bytes": 24000000000,
+      "swap_bytes": 0,
+      "wall_seconds": 1200
+    },
+    "cgroup_inode": 262116,
+    "cgroup_path": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/gamma-enwiki9-20260908T213318Z_aaa7cb651d",
+    "cleanup_complete": true,
+    "cpu_enforcement": "taskset-and-sampled-affinity-guard",
+    "groups": [
+      {
+        "created": true,
+        "inode": 262116,
+        "kernel_cpuset": false,
+        "memory_bytes": 9999998976,
+        "path": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/gamma-enwiki9-20260908T213318Z_aaa7cb651d"
+      }
+    ],
+    "guard_command_sha256": "2745a5515757849c9b6e228a6646bba03efed80b94a194745511538075f591a5",
+    "guard_path": "run_logs/adaptive/20260908T213318Z_aaa7cb651d.resources/guard.json",
+    "missing_diagnostics": [
+      "kernel cpuset controller is not delegated; taskset assignment and existing affinity guard remain active"
+    ],
+    "timing_authority": "diagnostic"
+  },
   "experiment": {
     "path": "operations/adaptive/experiments/fx2_wrt_support_fixture50051_q0_v1.json",
     "sha256": "sha256:2d607662821e6b682a513165a33daf4b611d4010e14e423d06594802aa35068d"
   },
+  "finished_at": "2026-09-08T21:39:46+00:00",
   "gate_size": 50051,
-  "held": true,
+  "held": false,
   "held_at": "2026-09-08T21:33:18+00:00",
   "hold_history": [
     {
       "at": "2026-09-08T21:33:18+00:00",
       "held": true,
       "reason": "Await source and ownership publication plus fresh CPU2 admission."
+    },
+    {
+      "at": "2026-09-08T21:35:24+00:00",
+      "held": false,
+      "reason": "Published ownership/source at5dbb724d1; all151 inputs reverified. Admission 2026-09-08T21:35:07+00:00 resolves legacy terminal ownership, zero unheld jobs,32GiB headroom plus10GB allocation and24GB scratch; coordinator pinnedCPU2."
     }
   ],
-  "hold_reason": "Await source and ownership publication plus fresh CPU2 admission.",
   "job_id": "20260908T213318Z_aaa7cb651d",
+  "log_path": "run_logs/adaptive/20260908T213318Z_aaa7cb651d.log",
   "priority": 40,
   "proposal": {
     "path": "operations/adaptive/proposals/developed/931_fx2_wrt_support_fixture50051_q0_v1.json",
@@ -33,6 +72,7 @@
   },
   "proposal_id": "fx2_wrt_support_fixture50051_q0_v1",
   "purpose": "diagnostic",
+  "released_at": "2026-09-08T21:35:24+00:00",
   "resource_budget": {
     "cgroup_parent": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice",
     "cpus": [
@@ -43,6 +83,7 @@
     "swap_bytes": 0,
     "wall_seconds": 1200
   },
+  "returncode": 0,
   "runner": {
     "path": "tools/fx2_wrt_support_fixture50051_q0_v1.py",
     "sha256": "sha256:78155476dd6802a6fe98d0705c09dbd8b1089acb6385e439c24342ba6e44cebc"
@@ -51,10 +92,14 @@
   "scratch_directories": [
     "results/fx2_wrt_support_fixture50051_q0_v1"
   ],
-  "state": "pending",
+  "started_at": "2026-09-08T21:35:25+00:00",
+  "state": "completed",
   "submitted_at": "2026-09-08T21:33:18+00:00",
   "tags": [],
   "timing_authority": "diagnostic",
   "tool": "tools/fx2_wrt_support_fixture50051_q0_v1.py",
-  "tool_args": []
+  "tool_args": [],
+  "worker_pid": 1125141,
+  "worker_proc_start_ticks": 199946305,
+  "worker_started_at": "2026-09-08T21:35:25+00:00"
 }
