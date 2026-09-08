@@ -252,20 +252,21 @@
       4
     ],
     "agents": 4,
-    "startingAgents": 2
+    "startingAgents": 2,
+    "projectChips": 3,
+    "trustMilestoneCubes": 1,
+    "objectiveProgressCubes": 1,
+    "agiRecognitionCubes": 1
   },
   "sharedSupply": {
     "systemicRiskCubes": 18,
     "jointVenturePairs": "${facts.shared.components.jointVenturePairs}",
-    "megaClusterPairs": "${facts.shared.components.megaClusterPairs}",
     "governanceBoards": 1,
     "governanceBoardEraPanels": 4,
     "currentEraMarkers": 1,
     "playerAidFoldouts": 6,
-    "governanceLedgers": 1,
-    "sharedDryEraseMarkers": 1,
     "mandateMarkers": 6,
-    "projectReferences": 3
+    "governanceTrackPanels": 1
   },
   "board": {
     "selectedTileCount": 19,
@@ -562,18 +563,6 @@
       "name": "${terms.technology.emergencyInfrastructure}",
       "rulesText": "Build ${terms.technology.emergencyInfrastructure} here for 1 ${terms.resources.runway}. Connect your Facilities on this or adjacent districts. Add 1 ${terms.playerTracks.scrutiny} each Production it serves a Facility. One ordinary Generator per player.",
       "loreRef": "game-power-sources-emergency-infrastructure"
-    },
-    {
-      "id": "fusion_demonstrator",
-      "round": 3,
-      "runwayCost": "${facts.shared.advancedGeneration.runwayCost}",
-      "mandate": "${facts.shared.advancedGeneration.mandate}",
-      "scrutinyOnBuild": "${facts.shared.advancedGeneration.scrutiny}",
-      "location": "grid_reactor",
-      "physicalSurface": "fusion_demonstrator_project",
-      "name": "${terms.technology.advancedGeneration}",
-      "rulesText": "Era III onward Build project. On ${terms.locations.grid}, spend ${facts.shared.advancedGeneration.runwayCost} ${terms.resources.runway}. Place the sole shared Fusion chip in a legal Generator slot. It is an additional Generator that connects your Facilities on this or adjacent districts. Score ${facts.shared.advancedGeneration.mandate} ${terms.playerTracks.mandate} and add ${facts.shared.advancedGeneration.scrutiny} ${terms.playerTracks.scrutiny}. Only one Fusion may be built.",
-      "loreRef": "game-power-sources-fusion-demonstrator"
     }
   ],
   "scoring": {
@@ -676,5 +665,8 @@
       "quantum"
     ]
   },
-  "quantumCompletionLabel": "${content.projects.byId.quantum.completionLabel}"
+  "personalProjects": {
+    "cost": "${content.projects.constructionCost}",
+    "definitions": "${content.projects.projects}"
+  }
 }

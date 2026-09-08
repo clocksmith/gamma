@@ -1,7 +1,6 @@
 {
-  "schemaVersion": 2,
-  "constructionRule": "During Build, construct up to one Facility, then up to one unlocked project from the same Agent assignment. Pay each cost and check requirements after placing the Facility.",
-  "sharedCardCount": 3,
+  "schemaVersion": 3,
+  "constructionRule": "During Build, choose a connected Facility you own at your Agent assignment, pay 3 Runway and 1 Compute, add 1 Scrutiny, then flip and attach one unlocked personal project chip. Each institution builds each project once. Different projects may share a host; no project chain is required.",
   "projects": [
     {
       "id": "mega_cluster",
@@ -9,11 +8,18 @@
       "timing": "during_action",
       "name": "${terms.technology.megaCluster}",
       "displayName": "Regional Capacity Project",
-      "text": "Spend 3 ${terms.resources.runway} and 2 ${terms.resources.compute} to place a ${terms.technology.megaCluster} across two adjacent connected Facilities you own. Add 2 ${terms.playerTracks.scrutiny}. It produces 3 ${terms.resources.compute} during Production while both hosts remain adjacent and connected. No additional Power is assigned.",
+      "text": "${content.projects.constructionRule} The host produces 2 additional Compute during Production while connected.",
       "$scenario": {
         "ref": "utility-capture"
       },
-      "loreRef": "project-mega-cluster"
+      "loreRef": "project-mega-cluster",
+      "requiresConnectedHost": true,
+      "production": {
+        "resource": "compute",
+        "amount": 2
+      },
+      "frontText": "Era II. Build at a connected Facility you own: pay 3 Runway and 1 Compute; add 1 Scrutiny. Once per institution.",
+      "backText": "The host produces 2 additional Compute during Production while connected. Keep this chip with its host when relocated; no immediate reward."
     },
     {
       "id": "fusion_demonstrator",
@@ -21,11 +27,15 @@
       "timing": "during_action",
       "name": "${terms.technology.advancedGeneration}",
       "displayName": "Grid Continuity Demonstrator",
-      "text": "Era III onward Build project. On ${terms.locations.grid}, spend ${facts.shared.advancedGeneration.runwayCost} ${terms.resources.runway}. Place the sole shared Fusion chip in a legal Generator slot. It is an additional Generator that connects your Facilities on this or adjacent districts. Score ${facts.shared.advancedGeneration.mandate} ${terms.playerTracks.mandate} and add ${facts.shared.advancedGeneration.scrutiny} ${terms.playerTracks.scrutiny}. Only one Fusion may be built.",
+      "text": "${content.projects.constructionRule} The host supplies local Power to itself and your Facilities on the same or adjacent districts. No Generator slot is used.",
       "$scenario": {
         "ref": "fusion-authority"
       },
-      "loreRef": "project-fusion-demonstrator"
+      "loreRef": "project-fusion-demonstrator",
+      "requiresConnectedHost": true,
+      "powerSource": true,
+      "frontText": "Era III. Build at a connected Facility you own: pay 3 Runway and 1 Compute; add 1 Scrutiny. Once per institution.",
+      "backText": "The host supplies local Power to itself and your Facilities on the same or adjacent districts. No Generator slot is used. Keep this chip with its host when relocated; no immediate reward."
     },
     {
       "id": "quantum",
@@ -33,17 +43,18 @@
       "timing": "during_action",
       "name": "Quantum",
       "displayName": "Scientific Computing Project",
-      "runwayCost": 4,
-      "computeCost": 2,
-      "capabilityGain": 2,
-      "scrutinyOnBuild": 1,
-      "completionLimit": 1,
-      "completionLabel": "Quantum completed",
-      "text": "Era IV Build project. Assign an Agent to a district with a connected Facility you own; a Facility placed earlier in this Build may qualify. Pay ${content.projects.byId.quantum.runwayCost} Runway and ${content.projects.byId.quantum.computeCost} Compute. Gain ${content.projects.byId.quantum.capabilityGain} Capability, respecting the normal cap and threshold awards, and add ${content.projects.byId.quantum.scrutinyOnBuild} Scrutiny. Mark Quantum completed on your faction board. Once per institution per game; no shared limit and no other project prerequisite. This is an immediate gain, not Production income.",
+      "text": "${content.projects.constructionRule} The host produces 1 additional Capability during Production while connected. Apply the normal cap and permanent threshold awards.",
       "loreRef": "project-quantum",
       "$scenario": {
         "ref": "quantum-infrastructure"
-      }
+      },
+      "requiresConnectedHost": true,
+      "production": {
+        "resource": "capability",
+        "amount": 1
+      },
+      "frontText": "Era IV. Build at a connected Facility you own: pay 3 Runway and 1 Compute; add 1 Scrutiny. Once per institution.",
+      "backText": "The host produces 1 additional Capability during Production while connected. Apply the normal cap and permanent threshold awards. Keep this chip with its host when relocated; no immediate reward."
     }
   ],
   "institutionalHistory": [
@@ -87,5 +98,12 @@
       },
       "loreRef": "projects-institutional-history-agent-swarm"
     }
-  ]
+  ],
+  "chipsPerFaction": 3,
+  "constructionCost": {
+    "runway": 3,
+    "compute": 1,
+    "scrutiny": 1
+  },
+  "completionLimit": 1
 }

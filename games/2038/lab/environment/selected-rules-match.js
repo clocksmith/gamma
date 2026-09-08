@@ -166,8 +166,6 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
     });
     this.contractSerial = 0;
     this.contracts = [];
-    this.megaClusters = [];
-    this.fusionBuiltBy = null;
     this.trainingDrawPile = buildTrainingDeck(config, `${seed}:training-deck`);
     this.trainingDiscard = [];
     this.trainingShuffle = 0;
@@ -251,8 +249,7 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
       player.tacticPlayedCycleKey = null;
       player.objectiveId = null;
       player.jointVentures = [];
-      player.megaClusters = [];
-      player.quantumCompleted = false;
+      player.projects = [];
       player.agiDeclared = false;
       player.agiClaimed = false;
       player.latestProductionSnapshot = null;
@@ -873,7 +870,8 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
         objectiveId: player.objectiveId,
         agentsInSupply: player.agentsInSupply,
         jointVentures: player.jointVentures.length,
-        quantumCompleted: player.quantumCompleted,
+        projects: clone(player.projects || []),
+        highestTrustMilestone: this.highestTrustMilestone(player),
           agiDeclared: player.agiDeclared,
         agiReadiness: this.declarationReadiness(player),
         dealFlowConversion: {
@@ -902,8 +900,8 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
           factionAbilityUsed: this.copyPublic(candidate.factionAbilityUsed || {}),
           agentsInSupply: candidate.agentsInSupply,
           jointVentures: this.copyPublic(candidate.jointVentures),
-          megaClusters: this.copyPublic(candidate.megaClusters || []),
-          quantumCompleted: candidate.quantumCompleted,
+          projects: this.copyPublic(candidate.projects || []),
+          highestTrustMilestone: this.highestTrustMilestone(candidate),
           agiDeclared: candidate.agiDeclared,
           agiReadiness: this.declarationReadiness(candidate),
           currentScore: this.currentScore(candidate)
@@ -1694,21 +1692,12 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
           const location = this.rulesVariant.singleGeneratorRule.locations[destination.id];
           if (location) projects.push({ id: "generator", sourceId: location.sourceId, runway: location.constructionCost, compute: 0 });
         }
-        if (this.round >= 2 && this.megaClusters.length < this.config.sharedSupply.megaClusterPairs) {
-          for (const left of preview.facilities) for (const right of preview.facilities) {
-            if (left.id >= right.id || ![left.tileId, right.tileId].includes(destination.instanceId)) continue;
-            if (this.megaClusterHostsAvailable([left.id, right.id]) && this.megaClusterLocallyEligible(preview, [left.id, right.id])) {
-              projects.push({ id: "mega_cluster", leftId: left.id, rightId: right.id, runway: 3, compute: 2 });
-            }
+        for (const definition of this.projectDocument.projects) {
+          if (this.round < definition.unlockedRound || player.projects.some(p => p.projectId === definition.id)) continue;
+          for (const host of this.latestPoweredFacilities(preview).filter(f => f.tileId === destination.instanceId)) {
+            const cost = this.projectDocument.constructionCost;
+            projects.push({ id: definition.id, hostId: host.id, runway: cost.runway, compute: cost.compute });
           }
-        }
-        if (this.round >= this.projectDocument.projects.find(p => p.id === "fusion_demonstrator").unlockedRound && destination.id === "grid_reactor" && this.fusionBuiltBy === null && this.generatorOccupancy(destination.instanceId) < 3) {
-          projects.push({ id: "fusion_demonstrator", runway: this.config.powerSources.find(source => source.id === "fusion_demonstrator").runwayCost, compute: 0 });
-        }
-        const quantum = this.projectDocument.projects.find(project => project.id === "quantum");
-        if (this.round >= quantum.unlockedRound && !player.quantumCompleted &&
-            this.latestPoweredFacilities(preview).some(host => host.tileId === destination.instanceId)) {
-          projects.push({ id: quantum.id, runway: quantum.runwayCost, compute: quantum.computeCost });
         }
         for (const project of projects) {
           if (!facility && !project) continue;
@@ -1716,7 +1705,7 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
           if (runway > player.runway || (project?.compute || 0) > player.compute) continue;
           const parts = [facility ? "Facility" : null, project ? (project.id === "generator" ? this.config.powerSources.find(source => source.id === project.sourceId).name : this.projectDocument.projects.find(item => item.id === project.id).name) : null].filter(Boolean);
           decisions.push({
-            decisionId: `build_${facility ? `facility_${destination.category}` : project?.id === "generator" ? `generator_${project.sourceId}` : project?.id}_${project?.id || "none"}_${project?.leftId || ""}_${project?.rightId || ""}_${piece.id}_${destination.instanceId}`,
+            decisionId: `build_${facility ? `facility_${destination.category}` : project?.id === "generator" ? `generator_${project.sourceId}` : project?.id}_${project?.id || "none"}_${project?.hostId || ""}_${piece.id}_${destination.instanceId}`,
             label: `Assign ${piece.id} to ${destination.name}: construct ${parts.join(" + ")} (${runway} Runway${project?.compute ? `, ${project.compute} Compute` : ""})`,
             actionId: "build", parameters: { ...base, buildMode: "construction", facility, project, facilityCost: facility ? facilityCost : 0, actualRunwayCost: runway },
             consequences: { runway: -runway, compute: -(project?.compute || 0), ...(facility ? { facility: destination.category } : {}), ...(project ? { project: project.id, connectsLocalFacilities: ["generator", "fusion_demonstrator"].includes(project.id) } : {}) }
@@ -1747,19 +1736,10 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
       player.generators.push({ id: `s${seat}-generator-${player.generators.length + 1}`, tileId: p.destinationId, sourceId: source.id });
       this.addResource(player, "trust", source.trust || 0);
       this.addScrutiny(player, source.scrutinyOnBuild || 0);
-    } else if (project?.id === "mega_cluster") {
-      const cluster = { id: `mega-${this.megaClusters.length + 1}`, leadSeat: seat, leftId: project.leftId, rightId: project.rightId, powered: false, builtEra: this.round };
-      this.megaClusters.push(cluster); player.megaClusters.push(cluster);
-      this.addScrutiny(player, 2);
-    } else if (project?.id === "fusion_demonstrator") {
-      player.generators.push({ id: `s${seat}-fusion`, tileId: p.destinationId, sourceId: project.id });
-      this.fusionBuiltBy = seat; player.history.fusionBuilt = true;
-      this.awardMandate(player, 2, project.id); this.addScrutiny(player, 3);
-    } else if (project?.id === "quantum") {
-      const quantum = this.projectDocument.projects.find(item => item.id === project.id);
-      player.quantumCompleted = true;
-      this.addResource(player, "capability", quantum.capabilityGain);
-      this.addScrutiny(player, quantum.scrutinyOnBuild);
+    } else if (project) {
+      player.projects.push({ projectId: project.id, hostId: project.hostId, builtEra: this.round });
+      this.addScrutiny(player, this.projectDocument.constructionCost.scrutiny);
+      if (project.id === "fusion_demonstrator") player.history.fusionBuilt = true;
     }
     (player.metrics.construction ||= []).push({ era: this.round, facility: p.facility, project: project?.id || null });
     this.markAction(player, "build", legal.label);
@@ -2092,29 +2072,13 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
     return { locallyEligible, connectedGenerators };
   }
 
-  megaClusterLocallyEligible(player, facilityIds) {
-    if (facilityIds.length !== 2 || new Set(facilityIds).size !== 2) return false;
-    const hosts = facilityIds.map((id) => player.facilities.find((facility) => facility.id === id));
+  operatingProjects(player) {
     const connected = this.infrastructureState(player).locallyEligible;
-    return hosts.every(Boolean) && hosts.every((host) => connected.has(host.id)) &&
-      this.areAdjacent(hosts[0].tileId, hosts[1].tileId);
+    return (player.projects || []).filter(project => connected.has(project.hostId));
   }
 
-  megaClusterHostsAvailable(facilityIds) {
-    const requested = new Set(facilityIds);
-    if (requested.size !== facilityIds.length) return false;
-    return this.megaClusters.every((cluster) =>
-      !requested.has(cluster.leftId) && !requested.has(cluster.rightId)
-    );
-  }
-
-  megaClusterDecisionLocallyEligible(seat, parameters = {}) {
-    const player = this.players[seat];
-    if (!player || !parameters.leftId || !parameters.rightId) return false;
-    if (!this.megaClusterHostsAvailable([parameters.leftId, parameters.rightId])) {
-      return false;
-    }
-    return this.megaClusterLocallyEligible(player, [parameters.leftId, parameters.rightId]);
+  highestTrustMilestone(player) {
+    return Math.max(0, ...player.mandateAwards.filter(a => a.id.startsWith("trust-")).map(a => Number(a.id.slice(6))));
   }
 
   facilityContractResource(facility) {
@@ -2196,26 +2160,11 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
         }
       }
       for (const facility of player.facilities) facility.powered = state.locallyEligible.has(facility.id);
-      player.roundMetrics.poweredProjectIds = this.megaClusters.filter((cluster) =>
-        cluster.leadSeat === player.seat && this.megaClusterLocallyEligible(player, [cluster.leftId, cluster.rightId])
-      ).map((cluster) => cluster.id);
     }
     await this.settlePendingScrutinyOverflow(policies, "production_generator_scrutiny_overflow");
 
-    for (const cluster of this.megaClusters) {
-      const lead = this.players[cluster.leadSeat];
-      const left = lead.facilities.find((facility) => facility.id === cluster.leftId);
-      const right = lead.facilities.find((facility) => facility.id === cluster.rightId);
-      const leadCommitted = lead.roundMetrics.poweredProjectIds?.includes(cluster.id);
-      cluster.powered = Boolean(
-        left && right && left.powered && right.powered &&
-        this.areAdjacent(left.tileId, right.tileId) &&
-        leadCommitted
-      );
-    }
-
     // Produce box: Facilities for every player, then Customer income, then
-    // active Mega-Clusters. Initiative orders each sub-step.
+    // personal host upgrades. Initiative orders each sub-step.
     for (const seat of this.initiativeOrder()) {
       const player = this.players[seat];
       for (const facility of player.facilities.filter((candidate) => candidate.powered)) {
@@ -2233,23 +2182,19 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
       this.addResource(player, "runway", customerIncome);
     }
 
-    const initiativeRank = new Map(
-      this.initiativeOrder().map((seat, index) => [seat, index])
-    );
-    for (const cluster of [...this.megaClusters].sort((left, right) =>
-      initiativeRank.get(left.leadSeat) - initiativeRank.get(right.leadSeat) ||
-      left.id.localeCompare(right.id)
-    )) {
-      if (!cluster.powered) continue;
-      const lead = this.players[cluster.leadSeat];
-      const computeBefore = lead.compute;
-      this.addResource(lead, "compute", 3);
-      lead.roundMetrics.computeProduced += 3;
-      this.matchMetrics.projectProduction.push({
-        round: this.round, seat: lead.seat, projectId: cluster.id,
-        project: "mega_cluster", nominalCompute: 3,
-        gainedCompute: lead.compute - computeBefore
-      });
+    for (const seat of this.initiativeOrder()) {
+      const player = this.players[seat];
+      for (const project of this.operatingProjects(player)) {
+        const definition = this.projectDocument.projects.find(d => d.id === project.projectId);
+        if (!definition.production) continue;
+        const { resource, amount } = definition.production;
+        const before = player[resource];
+        this.addResource(player, resource, amount);
+        if (resource === "compute") player.roundMetrics.computeProduced += amount;
+        this.matchMetrics.projectProduction.push({ round: this.round, seat,
+          project: project.projectId, hostId: project.hostId,
+          resource, nominal: amount, gained: player[resource] - before });
+      }
     }
 
     // Partner box: Joint Ventures always resolve after all Produce sub-steps.
@@ -2398,7 +2343,7 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
       if (id === "quarter_humanity_notices") return player.capability - player.roundMetrics.capabilityStart;
       if (id === "continent_signs_loi") return player.customers - player.roundMetrics.customersStart;
       if (id === "building_has_weather") return this.latestPoweredFacilities(player).length;
-      if (id === "stack_reaches_horizon") return this.latestPoweredFacilities(player).length + player.megaClusters.filter(cluster => this.megaClusterLocallyEligible(player, [cluster.leftId, cluster.rightId])).length;
+      if (id === "stack_reaches_horizon") return this.latestPoweredFacilities(player).length + this.operatingProjects(player).filter(p => p.projectId === "mega_cluster").length;
       if (id === "voluntary_coordination_triumphs") return player.roundMetrics.activeNewJointVentures || 0;
       if (id === "legibility_offensive") return player.roundMetrics.deployed ? player.trust : -1;
       if (id === "national_champion_without_nationalization") return this.controlledCategories(player).size;
@@ -2964,7 +2909,6 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
         }
         : null,
       roundMandate: this.roundMandate?.id || null,
-      fusionBuiltBy: this.fusionBuiltBy,
       systemicRisk: this.systemicRisk,
       players: base.players.map((snapshot, seat) => {
         const player = this.players[seat];
@@ -2973,8 +2917,8 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
           tactics: [...(player.tactics || [])],
           objectiveId: player.objectiveId,
           jointVentures: clone(player.jointVentures || []),
-          megaClusters: clone(player.megaClusters || []),
-          quantumCompleted: player.quantumCompleted,
+          projects: clone(player.projects || []),
+        highestTrustMilestone: this.highestTrustMilestone(player),
           agiDeclared: player.agiDeclared,
           agiClaimed: player.agiClaimed,
           agiReadiness: this.declarationReadiness(player),
@@ -3017,7 +2961,8 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
         facilities: player.facilities.length,
         poweredFacilityMandate,
         offlinePenalty,
-        quantumCompleted: player.quantumCompleted,
+        projects: clone(player.projects || []),
+        highestTrustMilestone: this.highestTrustMilestone(player),
           agiDeclared: player.agiDeclared,
         agiClaimed: player.agiClaimed,
         agiReadiness: this.declarationReadiness(player),
