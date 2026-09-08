@@ -53,6 +53,8 @@ class ReportTargetTests(unittest.TestCase):
             score=row.hutter_score,
             roundtrip_ok=row.roundtrip_ok,
             determinism_ok=row.determinism_ok,
+            data_sha256=row.data_sha256,
+            full_corpus_proof=row.is_full_corpus_proof,
         )
 
     def markdown(self, cert: dict) -> str:
@@ -66,17 +68,19 @@ class ReportTargetTests(unittest.TestCase):
         historical = research_contracts.objective_binding(
             objective_path="contracts/research/v1/objective-contract.json"
         )
-        self.assertEqual(active["score"]["targetBytes"], 99_000_000)
+        self.assertEqual(active["score"]["targetBytes"], 90_000_000)
         self.assertEqual(historical["targetScoreBytes"], 105_000_000)
-        self.assertEqual(historical["objectiveDigest"], active["migration"]["previousObjectiveDigest"])
+        previous = research_contracts.objective_binding(objective_path="contracts/research/v2/objective-contract.json")
+        self.assertEqual(previous["targetScoreBytes"], 99_000_000)
+        self.assertEqual(previous["objectiveDigest"], active["migration"]["previousObjectiveDigest"])
         self.assertNotEqual(historical["objectiveDigest"], certificate.OBJECTIVE_BINDING["objectiveDigest"])
         self.assertEqual(evidence.FULL_INPUT_BYTES, active["corpus"]["bytes"])
         self.assertEqual(evidence.TARGET_10_95, active["score"]["targetBytes"])
         self.assertEqual(certificate.TARGET_10_95, evidence.TARGET_10_95)
-        self.assertEqual(evidence.TARGET_PERCENT, 9.9)
+        self.assertEqual(evidence.TARGET_PERCENT, 9.0)
 
-    def test_100m_full_score_misses_active_target_despite_historical_margin(self) -> None:
-        row = self.result(100_000_000)
+    def test_95m_full_score_misses_active_target_despite_historical_margin(self) -> None:
+        row = self.result(95_000_000)
         historical_target = certificate.OBJECTIVE["migration"]["historicalMilestoneBytes"]
         self.assertLess(row.hutter_score, historical_target)
         self.assertGreater(row.hutter_score, certificate.TARGET_10_95)
@@ -85,22 +89,22 @@ class ReportTargetTests(unittest.TestCase):
         self.assertTrue(status["has_full_corpus_constructive_result"])
         self.assertFalse(status["has_10_95_constructive_upper_bound"])
         self.assertIsNone(status["best_10_95_result"])
-        self.assertEqual(status["best_full_corpus_result"]["hutter_score"], 100_000_000)
-        self.assertEqual(cert["target"]["target_score_10_95"], 99_000_000)
+        self.assertEqual(status["best_full_corpus_result"]["hutter_score"], 95_000_000)
+        self.assertEqual(cert["target"]["target_score_10_95"], 90_000_000)
         self.assertEqual(cert["objective"], certificate.OBJECTIVE_BINDING)
         self.assertIn(
-            "`9.9000000%` target reached by this matrix: `False`",
+            "`9.0000000%` target reached by this matrix: `False`",
             evidence.render([self.matrix_row(row)], 1),
         )
 
     def test_exact_target_boundary_remains_inclusive(self) -> None:
-        for score, hit in ((99_000_000, True), (99_000_001, False)):
+        for score, hit in ((90_000_000, True), (90_000_001, False)):
             with self.subTest(score=score):
                 row = self.result(score)
                 cert = certificate.build_certificate([row])
                 self.assertEqual(cert["proof_status"]["has_10_95_constructive_upper_bound"], hit)
                 self.assertIn(
-                    f"`9.9000000%` target reached by this matrix: `{hit}`",
+                    f"`9.0000000%` target reached by this matrix: `{hit}`",
                     evidence.render([self.matrix_row(row)], 1),
                 )
 
@@ -112,7 +116,7 @@ class ReportTargetTests(unittest.TestCase):
                 "independent_decode_ok", "license_audit_ok", "prize_claimable",
             )
         ] + [
-            {"data_size": 100_000_000},
+            {"data_size": 95_000_000},
             {"data_sha256": "different-corpus"},
             {"objective_digest": certificate.OBJECTIVE["migration"]["previousObjectiveDigest"]},
         ]
@@ -127,16 +131,16 @@ class ReportTargetTests(unittest.TestCase):
                     self.assertEqual(recorded["objective_digest"], row.objective_digest)
 
     def test_matrix_prefix_and_failed_roundtrip_still_miss_target(self) -> None:
-        for changes in ({"data_size": 100_000_000}, {"roundtrip_ok": False}):
+        for changes in ({"data_size": 95_000_000}, {"roundtrip_ok": False}):
             with self.subTest(changes=changes):
                 row = self.matrix_row(self.result(9_000_000, **changes))
                 self.assertIn(
-                    "`9.9000000%` target reached by this matrix: `False`",
+                    "`9.0000000%` target reached by this matrix: `False`",
                     evidence.render([row], 1),
                 )
 
     def test_all_reports_render_matching_active_target_and_notes(self) -> None:
-        row = self.result(100_000_000)
+        row = self.result(95_000_000)
         cert = certificate.build_certificate([row])
         reports = {
             "certificate": self.markdown(cert),
@@ -145,14 +149,14 @@ class ReportTargetTests(unittest.TestCase):
         }
         for name, rendered in reports.items():
             with self.subTest(report=name):
-                self.assertIn("9.9000000%", rendered)
-                self.assertIn("99,000,000", rendered)
+                self.assertIn("9.0000000%", rendered)
+                self.assertIn("90,000,000", rendered)
                 self.assertNotIn("10.5%", rendered)
                 self.assertNotIn("10.5000000%", rendered)
                 self.assertNotIn("105000000", rendered)
                 self.assertNotIn("105,000,000", rendered)
         self.assertIn(
-            "A 9.9000000% proof requires a full 1,000,000,000-byte result with score <= 99,000,000.",
+            "A 9.0000000% proof requires a full 1,000,000,000-byte result with score <= 90,000,000.",
             cert["notes"],
         )
 
@@ -166,14 +170,14 @@ class ReportTargetTests(unittest.TestCase):
             FULL_INPUT_BYTES=historical["corpusBytes"],
             TARGET_10_95=historical["targetScoreBytes"],
         ):
-            cert = certificate.build_certificate([self.result(100_000_000)])
+            cert = certificate.build_certificate([self.result(95_000_000)])
         rendered = self.markdown(cert)
-        self.assertEqual(certificate.TARGET_10_95, 99_000_000)
+        self.assertEqual(certificate.TARGET_10_95, 90_000_000)
         self.assertEqual(cert["objective"]["objectiveDigest"], historical["objectiveDigest"])
         self.assertTrue(cert["proof_status"]["has_10_95_constructive_upper_bound"])
         self.assertIn("10.5000000% target score: `105,000,000`", rendered)
         self.assertIn("score <= 105,000,000.", rendered)
-        self.assertNotIn("9.9000000%", rendered)
+        self.assertNotIn("9.0000000%", rendered)
 
 
 if __name__ == "__main__":
