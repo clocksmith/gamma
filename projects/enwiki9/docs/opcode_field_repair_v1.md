@@ -281,7 +281,25 @@ search finding, not an exhaustive absence claim.
 `root_explore` owns `opcode_calibration_cost_v1`. Its
 [eight tests and retained three-phase synthetic receipt](../operations/evidence/20260908_opcode_calibration_unit.json)
 pass. The 23-byte fixture archive is unchanged; SSE reduces its literal ideal
-loss by about 0.558 bits. The corpus aggregate remains unmeasured. Counted literal
+loss by about 0.558 bits. Counted literal
 bits and hypothetical copy-bit losses stay separate, and field partitions do
 not select a treatment. A positive corpus excess can justify a separately frozen
 archive ablation; these floating-point diagnostics cannot certify a size bound.
+
+Job `20260908T171535Z_9962b82f49` started after
+[publication verification and fresh admission](../results/opcode_calibration_admission_20260908.json).
+It runs the three replay phases on CPU2 with one thread, 4GiB aggregate memory,
+zero swap, 1GiB scratch and a 900-second elapsed stop.
+
+The [terminal diagnostic](../operations/provenance/opcode_calibration_terminal_20260908.json)
+passes all three phases and preserves the 67,658-byte archive, exact raw inverse,
+repeat, parent projection and complete diagnostic event hash. It observes
+1,847,744 modeled-bit events; 1,439,392 are actually coded literal bits. SSE
+reduces their fixed-parse ideal loss by approximately 6,615.574 bits. All guard
+flags are clear; cgroup peak is 518,012,928 bytes and cleanup completed.
+The [validated reflection](../operations/adaptive/reflections/20260908T171535Z_9962b82f49.json)
+refutes the presumed aggregate calibration penalty and leaves SSE intact.
+No deletion ablation or field-subset selection follows. This is zero archive
+gain and zero objective credit. Next pursue an independent eligible parent or
+predictor question with a new measured premise; do not repeat slot or calibration
+mutations under a new name.

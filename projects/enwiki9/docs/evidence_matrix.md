@@ -12,7 +12,7 @@ No forecast or inherited metadata is included here.
 
 ## Proof Boundary
 
-- Result JSON files scanned: `187`
+- Result JSON files scanned: `188`
 - Roundtrip-passing rows: `20`
 - Verified full `1G` rows in this checkout: `0`
 - Active target score: `90,000,000` bytes (`9.0000000%`)

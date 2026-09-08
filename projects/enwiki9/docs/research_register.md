@@ -24,7 +24,7 @@ no corpus frequency or archive gain is claimed. The [validated reflection](../op
 selects [opcode_wiki_slot_v1](../operations/adaptive/experiments/opcode_wiki_slot_v1.json),
 owned by `root_explore`. Its [terminal gate](../operations/provenance/opcode_wiki_slot_terminal_20260908.json)
 passes ten phases: P/K 67,658 / D 67,601 bytes. The 57-byte gain does not pay the
-conditional 554-byte source charge. [Reset-only terminal](../operations/provenance/opcode_slot_reset_terminal_20260908.json) passes ten phases: P/K 67,658 / D 67,626; gain 32 versus conditional source charge 270. Validated reflection holds scaling and selects creative discovery outside further bitmix state-key tuning.
+conditional 554-byte source charge. [Reset terminal](../operations/provenance/opcode_slot_reset_terminal_20260908.json): P/K 67,658 / D 67,626; gain32 versus conditional source charge270. [Calibration diagnostic](../operations/provenance/opcode_calibration_terminal_20260908.json): existing SSE helps fixed-parse literals by6,615.574 ideal bits, unchanged archive. Both reflections validate; scaling and SSE deletion remain held. Next independent predictor research.
 
 ## 2026-09-08 - Opcode field repair confirms a 1,541-byte archive improvement
 
