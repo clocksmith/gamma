@@ -12,7 +12,7 @@ Reusable artifact helpers for new tools: [lib/artifacts.py](../lib/artifacts.py)
 The LibNC initializer teacher launcher exits before the first forward, gradient, update, or coded symbol; its source-bound experiment defines that boundary.
 The delayed-status helper's `enwiki9_delayed_status_latest.log` pointer is operational history, not present-host occupancy proof.
 
-Coverage: **1052 files** (33 .c, 67 .cpp, 1 .gdb, 1 .h, 1 .hpp, 1 .html, 945 .py, 3 .sh).
+Coverage: **1054 files** (33 .c, 67 .cpp, 1 .gdb, 1 .h, 1 .hpp, 1 .html, 947 .py, 3 .sh).
 
 | Tool | Purpose | Referenced contracts |
 |---|---|---|
@@ -292,6 +292,8 @@ Coverage: **1052 files** (33 .c, 67 .cpp, 1 .gdb, 1 .h, 1 .hpp, 1 .html, 945 .py
 | [`tools/finite_residual_rule_gate.cpp`](../tools/finite_residual_rule_gate.cpp) | unknown; inspect source and the selected experiment | none found |
 | [`tools/finite_xz_family_minimum.py`](../tools/finite_xz_family_minimum.py) | Certify the minimum member of a frozen finite XZ parameter family. | none found |
 | [`tools/forecast_frontier.py`](../tools/forecast_frontier.py) | Forecast archive-first enwiki9 frontiers from measured small-scope rows. The frontier runner is exact-scope accounting. This tool is the efficient screening layer: mine existing driver JSONL and program metadata, collect 1MB/10MB archive rows, fit a simple archive scaling curve, and rank programs by projected distance to 10 percent at 100MB and 1GB. | none found |
+| [`tools/forge_compact_fixture50051_q0_v1.py`](../tools/forge_compact_fixture50051_q0_v1.py) | Reproduce one pinned compact forge parent using the existing native guard. | [2](../operations/adaptive/experiments/forge_compact_fixture50051_q0_v1.json) |
+| [`tools/forge_compact_fixture50051_q0_v2.py`](../tools/forge_compact_fixture50051_q0_v2.py) | Retry the unchanged parent with a scratch envelope covering its PPM heap. | [1](../operations/adaptive/experiments/forge_compact_fixture50051_q0_v2.json) |
 | [`tools/fractal2_compact_replacement_transfer_qm4.py`](../tools/fractal2_compact_replacement_transfer_qm4.py) | Rejected tombstone for the noncausal compact QM3 transfer. | none found |
 | [`tools/fractal2_endpoint428_paid_mdl_qp1.py`](../tools/fractal2_endpoint428_paid_mdl_qp1.py) | Paid trace-level FRACTAL-2 QP1 command/residual codec and controls. The container is constructive and exactly replayed, but it consumes a frozen Endpoint428 P1 trace. It therefore remains zero-credit until the same bypass and state updates are integrated into the counted native parent codec. | none found |
 | [`tools/fractal2_endpoint428_recursive_punct_qm3.py`](../tools/fractal2_endpoint428_recursive_punct_qm3.py) | Run frozen FRACTAL-2 QM2 on the archive-identical Endpoint428 10M trace. | none found |

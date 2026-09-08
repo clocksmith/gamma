@@ -2,6 +2,32 @@
 
 [Record index](research_register/README.md) | [Earlier records](research_register/archive/README.md)
 
+## 2026-09-08 - Compact forge parent independently reconstructs and repeats
+
+The [terminal audit](../operations/provenance/forge_compact_fixture_terminal_20260908.json)
+records job `20260908T194717Z_2dbdc105ee`: 50,051 public profiling bytes become
+4,808 archive bytes, independently reconstruct and repeat byte-identically.
+The same raw fixture's retained native FX2 archive is 3,223 bytes: forge costs
+1,585 extra archive bytes. This compares different cold native parents, not an
+isolated structural mechanism or fresh confirmation. External authors retain
+their algorithm credit; Gamma supplies the reproduction and measurement.
+GCC builds the unchanged compact23/aux1/cells270 source into 373,720 bytes.
+Raw source/assets total 2,627,584 bytes; adding binary and options gives a
+3,001,984-byte overlapping local inventory, not a qualified submission package.
+Encoding, decoding and repeat use 38.993, 40.244 and 43.777 CPU seconds.
+The complete guard passes: one allowed CPU, 6,642,286,592-byte cgroup peak,
+14,690,369,525-byte logical scratch peak, and verified child cleanup.
+
+The initial 4GB scratch plan was cancelled before launch because the pinned
+PPM heap alone is 14,680,064,000 bytes. A second startup stopped before the
+codec when the guard saw inherited broad affinity; the unchanged candidate
+then ran with its coordinator pinned to CPU2 from process creation. Both
+failures and their reflections remain preserved. Five synthetic runner tests
+and both complete-source syntax checks pass. The validated terminal reflection
+retains this reproducible external baseline without authorizing a larger gate.
+Full predictor-state traces, source/runtime license closure, package accounting,
+independent-host replay and corpus transfer remain open. No 90M score credit.
+
 ## 2026-09-08 - Forge parent source audit exposes the active prediction interface
 
 `root_explore` selected discovery lenses 3/9 after residual-ratio calibration
