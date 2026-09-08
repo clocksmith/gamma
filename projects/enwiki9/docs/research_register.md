@@ -18,6 +18,10 @@ admission. No new predictor is combined. The [source ZIP comparison](../operatio
 measures parent 5,041 / compact 5,815 bytes with exact synthetic relocation.
 Twice the 774-byte increase is 1,548 bytes, exceeding the historical 1MB archive
 saving by seven bytes before other package costs. Complete accounting stays open.
+An independent [synthetic state probe](../results/opcode_wiki_state_diagnostic_20260908/attempt01/receipt.json)
+finds eight opcode/wiki-coordinate mismatches among eleven predefined strings;
+no corpus frequency or archive gain is claimed. After parity closure, test one
+decoded wiki-slot coordinate with parent and unused-bookkeeping controls.
 
 ## 2026-09-08 - Opcode field repair confirms a 1,541-byte archive improvement
 
