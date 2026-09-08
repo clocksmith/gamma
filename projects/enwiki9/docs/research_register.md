@@ -36,7 +36,7 @@ Compiler `/tmp` quota failure is retained; an owned temporary directory resolves
 The [actual native fixture gate](../operations/adaptive/experiments/fx2_residual_ratio_fixture50051_q0_v1.json)
 is frozen and owned by `root_explore`: job `20260908T184428Z_97a71f959c`, CPU2,
 four arms, exact parent/coder/calibration-state checks and explicit component costs.
-Publication verification and fresh admission precede release; no result is claimed here.
+The published gate built but failed before native encode: driver arm dispatch reloaded the stub, ignoring the supplied native module. The [reflection](../operations/adaptive/reflections/20260908T184428Z_97a71f959c.json) classifies an implementation failure. Its first terminal index has an abbreviated revision and is refused; the preserved failure is recorded in candidate metadata without archive claims. The [dispatch-only retry](../operations/adaptive/experiments/fx2_residual_ratio_fixture50051_q0_v2.json) retains the complete scientific comparison. Its synthetic dispatch regression checks three independent processes, inverse, repeat and artifact retention. Job `20260908T185901Z_3a15dbc589` remains held pending publication and admission.
 
 ## 2026-09-08 - Compact field implementation and 90M objective
 

@@ -1,0 +1,99 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gamma.enwiki9.cmix-allocation-marker-receipt.v1",
+  "title": "CMIX allocation marker receipt v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "candidate_id", "authority", "marker_stream", "source_integration_manifest", "events", "label_summary", "live_at_stream_terminal", "integrity", "terminal_pass", "memory_qualification_authority", "compression_credit_bytes", "score_credit_bytes"],
+  "properties": {
+    "schema": {"const": "gamma.enwiki9.cmix-allocation-marker-receipt.v1"},
+    "candidate_id": {"const": "cmix_obias_memory_allocation_markers_q0_v1"},
+    "authority": {"const": "diagnostic_only"},
+    "marker_stream": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "bytes", "sha256", "record_bytes", "record_count", "canonical_events_sha256"],
+      "properties": {
+        "path": {"type": "string", "minLength": 1},
+        "bytes": {"type": "integer", "minimum": 64},
+        "sha256": {"$ref": "#/$defs/sha256"},
+        "record_bytes": {"const": 64},
+        "record_count": {"type": "integer", "minimum": 1},
+        "canonical_events_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "source_integration_manifest": {"$ref": "#/$defs/artifact"},
+    "events": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/event"}
+    },
+    "label_summary": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["label", "allocation_count", "release_count", "pageout_count", "allocated_bytes"],
+        "properties": {
+          "label": {"$ref": "#/$defs/label"},
+          "allocation_count": {"type": "integer", "minimum": 0},
+          "release_count": {"type": "integer", "minimum": 0},
+          "pageout_count": {"type": "integer", "minimum": 0},
+          "allocated_bytes": {"type": "integer", "minimum": 0}
+        }
+      }
+    },
+    "live_at_stream_terminal": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/event"}
+    },
+    "integrity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["complete_fixed_records_pass", "strict_sequence_pass", "known_labels_and_events_pass", "pointer_geometry_pass", "lifetime_order_pass"],
+      "properties": {
+        "complete_fixed_records_pass": {"const": true},
+        "strict_sequence_pass": {"const": true},
+        "known_labels_and_events_pass": {"const": true},
+        "pointer_geometry_pass": {"const": true},
+        "lifetime_order_pass": {"const": true}
+      }
+    },
+    "terminal_pass": {"const": true},
+    "memory_qualification_authority": {"const": false},
+    "compression_credit_bytes": {"const": 0},
+    "score_credit_bytes": {"const": 0}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "artifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "bytes", "sha256"],
+      "properties": {
+        "path": {"type": "string", "minLength": 1},
+        "bytes": {"type": "integer", "minimum": 1},
+        "sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "label": {
+      "enum": ["fxcm_alloc", "fxcm_alloc_aligned", "context_history", "context_shared_map", "context_indirect_1", "context_indirect_2", "context_indirect_3", "mixer_slab", "ppmd_arena_anonymous", "ppmd_arena_file_backed"]
+    },
+    "event": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sequence", "event", "label", "allocation_base", "usable_pointer", "allocation_bytes", "usable_bytes", "alignment"],
+      "properties": {
+        "sequence": {"type": "integer", "minimum": 0},
+        "event": {"enum": ["allocation", "release", "pageout"]},
+        "label": {"$ref": "#/$defs/label"},
+        "allocation_base": {"type": "integer", "minimum": 1},
+        "usable_pointer": {"type": "integer", "minimum": 1},
+        "allocation_bytes": {"type": "integer", "minimum": 1},
+        "usable_bytes": {"type": "integer", "minimum": 0},
+        "alignment": {"type": "integer", "minimum": 1}
+      }
+    }
+  }
+}

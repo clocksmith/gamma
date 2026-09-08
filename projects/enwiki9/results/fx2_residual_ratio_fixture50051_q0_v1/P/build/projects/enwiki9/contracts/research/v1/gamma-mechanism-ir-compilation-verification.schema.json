@@ -1,0 +1,109 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gamma.enwiki9.gamma-mechanism-ir-compilation-verification.v1",
+  "title": "Gamma Mechanism IR independent compilation verification",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "mechanism_id",
+    "verified",
+    "errors",
+    "compiler_sha256",
+    "source_ir_sha256",
+    "repeat",
+    "negative_controls",
+    "evidence_root"
+  ],
+  "properties": {
+    "schema": {"const": "gamma.enwiki9.gamma-mechanism-ir-compilation-verification.v1"},
+    "mechanism_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9._-]*$"},
+    "verified": {"type": "boolean"},
+    "errors": {"type": "array", "items": {"type": "string"}},
+    "compiler_sha256": {"$ref": "#/$defs/sha256"},
+    "source_ir_sha256": {"$ref": "#/$defs/sha256"},
+    "repeat": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["run_a_return_code", "run_b_return_code", "receipt_identity_pass", "artifact_identity_pass", "artifact_set_sha256"],
+      "properties": {
+        "run_a_return_code": {"type": "integer"},
+        "run_b_return_code": {"type": "integer"},
+        "receipt_identity_pass": {"type": "boolean"},
+        "artifact_identity_pass": {"type": "boolean"},
+        "artifact_set_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "negative_controls": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "invalid_mechanism_id",
+        "equation_hash_mismatch",
+        "missing_state_hash",
+        "undeclared_persistent_write",
+        "missing_K_control",
+        "incomplete_output_set",
+        "memory_ceiling_exceeded"
+      ],
+      "properties": {
+        "invalid_mechanism_id": {"$ref": "#/$defs/control"},
+        "equation_hash_mismatch": {"$ref": "#/$defs/control"},
+        "missing_state_hash": {"$ref": "#/$defs/control"},
+        "undeclared_persistent_write": {"$ref": "#/$defs/control"},
+        "missing_K_control": {"$ref": "#/$defs/control"},
+        "incomplete_output_set": {"$ref": "#/$defs/control"},
+        "memory_ceiling_exceeded": {"$ref": "#/$defs/control"}
+      }
+    },
+    "evidence_root": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["regular_file_count", "regular_file_bytes", "manifest_sha256", "symlink_count", "hardlink_count", "special_count", "filesystem_anomaly_absence_pass"],
+      "properties": {
+        "regular_file_count": {"type": "integer", "minimum": 0},
+        "regular_file_bytes": {"type": "integer", "minimum": 0},
+        "manifest_sha256": {"$ref": "#/$defs/sha256"},
+        "symlink_count": {"type": "integer", "minimum": 0},
+        "hardlink_count": {"type": "integer", "minimum": 0},
+        "special_count": {"type": "integer", "minimum": 0},
+        "filesystem_anomaly_absence_pass": {"type": "boolean"}
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {"verified": {"const": true}},
+        "required": ["verified"]
+      },
+      "then": {
+        "properties": {
+          "evidence_root": {
+            "properties": {
+              "symlink_count": {"const": 0},
+              "hardlink_count": {"const": 0},
+              "special_count": {"const": 0},
+              "filesystem_anomaly_absence_pass": {"const": true}
+            }
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "control": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["return_code", "rejected", "stdout_sha256", "stderr_sha256", "no_artifacts_pass"],
+      "properties": {
+        "return_code": {"type": "integer"},
+        "rejected": {"type": "boolean"},
+        "stdout_sha256": {"$ref": "#/$defs/sha256"},
+        "stderr_sha256": {"$ref": "#/$defs/sha256"},
+        "no_artifacts_pass": {"type": "boolean"}
+      }
+    }
+  }
+}

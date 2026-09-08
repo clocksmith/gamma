@@ -1,0 +1,174 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gamma.enwiki9.cmix-filebacked-fxcm-100m-release-stage.v1",
+  "title": "CMIX q1 opening-100M release roundtrip with phase resources",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "candidate_id",
+    "runner",
+    "receipt_schema",
+    "command_sha256",
+    "population",
+    "inputs",
+    "outputs",
+    "return_codes",
+    "phase_measurements",
+    "backing_cleanup_pass",
+    "scratch_after_cleanup_bytes",
+    "exact_raw_inverse_pass",
+    "errors",
+    "stage_pass",
+    "claim_authority",
+    "execution_authority",
+    "gamma_compression_credit_bytes",
+    "gamma_score_credit_bytes"
+  ],
+  "properties": {
+    "schema": {"const": "gamma.enwiki9.cmix-filebacked-fxcm-100m-release-stage.v1"},
+    "candidate_id": {"const": "cmix_obias_memory_safe_parent_filebacked_q1_v1"},
+    "runner": {"$ref": "#/$defs/artifact"},
+    "receipt_schema": {"$ref": "#/$defs/artifact"},
+    "command_sha256": {"$ref": "#/$defs/sha256"},
+    "population": {"$ref": "#/$defs/artifact"},
+    "inputs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "raw_binary",
+        "dictionary_payload",
+        "article_order_payload",
+        "package_header",
+        "head_blob"
+      ],
+      "properties": {
+        "raw_binary": {"$ref": "#/$defs/artifact"},
+        "dictionary_payload": {"$ref": "#/$defs/artifact"},
+        "article_order_payload": {"$ref": "#/$defs/artifact"},
+        "package_header": {"$ref": "#/$defs/artifact"},
+        "head_blob": {"$ref": "#/$defs/artifact"}
+      }
+    },
+    "outputs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "packaged_compressor",
+        "arithmetic_payload",
+        "self_extracting_archive",
+        "raw_inverse"
+      ],
+      "properties": {
+        "packaged_compressor": {"$ref": "#/$defs/nullableArtifact"},
+        "arithmetic_payload": {"$ref": "#/$defs/nullableArtifact"},
+        "self_extracting_archive": {"$ref": "#/$defs/nullableArtifact"},
+        "raw_inverse": {"$ref": "#/$defs/nullableArtifact"}
+      }
+    },
+    "return_codes": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["encode", "decode", "raw_inverse"],
+      "properties": {
+        "encode": {"type": ["integer", "null"]},
+        "decode": {"type": ["integer", "null"]},
+        "raw_inverse": {"type": ["integer", "null"]}
+      }
+    },
+    "phase_measurements": {
+      "type": "array",
+      "minItems": 0,
+      "maxItems": 8,
+      "items": {"$ref": "#/$defs/phase"}
+    },
+    "backing_cleanup_pass": {"type": "boolean"},
+    "scratch_after_cleanup_bytes": {"type": "integer", "minimum": 0},
+    "exact_raw_inverse_pass": {"type": "boolean"},
+    "errors": {
+      "type": "array",
+      "items": {"type": "string", "minLength": 1}
+    },
+    "stage_pass": {"type": "boolean"},
+    "claim_authority": {"const": "opening_100m_release_roundtrip_and_phase_resources_only"},
+    "execution_authority": {"const": false},
+    "gamma_compression_credit_bytes": {"const": 0},
+    "gamma_score_credit_bytes": {"const": 0}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "artifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "bytes", "sha256"],
+      "properties": {
+        "path": {"type": "string", "minLength": 1},
+        "bytes": {"type": "integer", "minimum": 0},
+        "sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "nullableArtifact": {
+      "oneOf": [
+        {"type": "null"},
+        {"$ref": "#/$defs/artifact"}
+      ]
+    },
+    "phase": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "phase",
+        "observed",
+        "tree_rss_peak_kib",
+        "largest_process_vmhwm_kib",
+        "cgroup_peak_bytes",
+        "anonymous_bytes",
+        "file_backed_bytes",
+        "shmem_bytes",
+        "kernel_bytes",
+        "page_table_bytes",
+        "scratch_logical_bytes",
+        "scratch_allocated_bytes"
+      ],
+      "properties": {
+        "phase": {
+          "enum": [
+            "package_helper_construction",
+            "frontend_preprocessing",
+            "model_pretraining",
+            "arithmetic_payload_encode",
+            "archive_assembly",
+            "archive_decode",
+            "frontend_inverse",
+            "cleanup"
+          ]
+        },
+        "observed": {"const": true},
+        "tree_rss_peak_kib": {"type": "integer", "minimum": 0},
+        "largest_process_vmhwm_kib": {"type": "integer", "minimum": 0},
+        "cgroup_peak_bytes": {"type": "integer", "minimum": 0},
+        "anonymous_bytes": {"type": "integer", "minimum": 0},
+        "file_backed_bytes": {"type": "integer", "minimum": 0},
+        "shmem_bytes": {"type": "integer", "minimum": 0},
+        "kernel_bytes": {"type": "integer", "minimum": 0},
+        "page_table_bytes": {"type": "integer", "minimum": 0},
+        "scratch_logical_bytes": {"type": "integer", "minimum": 0},
+        "scratch_allocated_bytes": {"type": "integer", "minimum": 0}
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"stage_pass": {"const": true}}, "required": ["stage_pass"]},
+      "then": {
+        "properties": {
+          "phase_measurements": {"minItems": 8, "maxItems": 8},
+          "backing_cleanup_pass": {"const": true},
+          "scratch_after_cleanup_bytes": {"const": 0},
+          "exact_raw_inverse_pass": {"const": true},
+          "errors": {"maxItems": 0}
+        }
+      }
+    }
+  ]
+}
