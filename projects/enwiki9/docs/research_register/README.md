@@ -54,3 +54,4 @@ Archived files preserve complete H2 records.
 - [part-036.md: 2026-09-05 standalone MIDAS build caching and incremental prediction](archive/part-036.md)
 - [part-037.md: 2026-09-06 MIDAS ownership and source bundle, exact representation experiments](archive/part-037.md)
 - [part-038.md: 2026-09-06 tensor restoration and schema gates, exact-residual and MIDAS terminal records](archive/part-038.md)
+- [part-039.md: 2026-09-06 MIDAS boundary observability and schema transfer terminal](archive/part-039.md)
