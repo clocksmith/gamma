@@ -105,7 +105,7 @@ test("baseline gallery excludes every deferred physical module", async () => {
 
 test("physical candidate contains final player copy and retains source provenance separately", async () => {
   const declaration = JSON.parse(await readFile(new URL("versions/current-release.json", root), "utf8"));
-  assert.deepEqual(declaration.rulesCandidate.files, ["dist/docs/core-rules.md", "physical/governance-ledger.md"]);
+  assert.deepEqual(declaration.rulesCandidate.files, ["dist/docs/core-rules.md", "physical/governance-tracks.md"]);
   const graph = JSON.parse(await readFile(new URL("content/graph.json", root), "utf8"));
   for (const source of ["world.md", "physical/", "docs/design-decisions.md", "docs/playtesting-and-evidence.md"]) {
     assert.ok(graph.sourceRoots.includes(source), `${source} retains source provenance`);

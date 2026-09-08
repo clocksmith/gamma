@@ -228,7 +228,7 @@ ${content.gameConfig.actions.5.summary}
 
 _${content.gameConfig.actions.5.flavorText}_
 
-## Infrastructure project references
+## Personal project chips
 
 ${excerpts.rules.construction}
 

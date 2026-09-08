@@ -95,10 +95,10 @@ function buildFactions(data, config) {
       const stats = f.starts
         ? `<dl class="stats">${Object.entries(f.starts)
             .map(([k, v]) => `<div><dt>${escapeHtml(k)}</dt><dd>${escapeHtml(v)}${k === "trust"
-              ? `<span class="trust-award-record" aria-label="Trust awards already scored"><small>Awards scored</small> ${config.scoring.trustThresholds
-                .map(({ value }) => `<span data-trust-threshold="${value}" data-scored="${v >= value}">${v >= value ? "[x]" : "[ ]"} ${value}</span>`).join(" ")}</span>`
+              ? `<span class="trust-milestone-track" aria-label="Highest Trust milestone awarded"><small>Highest Trust milestone awarded</small> ${[0, ...config.scoring.trustThresholds.map(t => t.value)]
+                .map(value => `<span data-trust-threshold="${value}" data-start="${value === Math.max(0, ...config.scoring.trustThresholds.filter(t => v >= t.value).map(t => t.value))}">${value}</span>`).join(" · ")}</span>`
               : ""}</dd></div>`)
-            .join("")}</dl><p class="quantum-record">[ ] ${escapeHtml(config.quantumCompletionLabel)}</p>`
+            .join("")}</dl><p class="recognition-track">AGI recognition: No · Recognized — one cube</p><p class="objective-track">Era objective: one reusable progress cube</p>`
         : "";
       const abilities = (f.abilities || [])
         .map(
@@ -219,21 +219,16 @@ function buildMandates(data) {
   return section("mandates", "Era Mandates", data.mandates.length, cards, "Per-Era scoring races; the qualifying leader scores.");
 }
 
-function buildProjects(data) {
-  const cards = data.projects
-    .map((w) =>
-      card({
-        title: w.displayName || w.name,
-        subtitle: w.displayName && w.displayName !== w.name ? w.name : "",
-        badgeList: [roundBadge(w.unlockedRound), timingBadge(w.timing)],
-        bodyHtml: textRows([
-          { text: w.text, kind: "rules" },
-          { text: w.flavorText, kind: "flavor" }
-        ])
-      })
-    )
-    .join("");
-  return section("projects", "Infrastructure projects", data.projects.length, cards, "Build constructs up to one Facility and one unlocked project.");
+function buildProjects(data, factions) {
+  const chips = factions.factions.flatMap(faction => data.projects.map(project =>
+    card({ accent: faction.color, title: project.name, subtitle: faction.name,
+      badgeList: [roundBadge(project.unlockedRound), "Personal project chip"],
+      bodyHtml: `<div class="project-front"><strong>Available — front</strong><p>${escapeHtml(project.frontText)}</p></div>
+<div class="project-back"><strong>Built — back</strong><p>${escapeHtml(project.backText)}</p></div>`
+    })
+  )).join("");
+  return section("projects", "Personal project chips", factions.factions.length * data.chipsPerFaction,
+    chips, data.constructionRule);
 }
 
 function buildPowerSources(config) {
@@ -425,7 +420,7 @@ async function build() {
     { id: "rounds", label: "Eras", html: buildRounds(config, reference), n: config.rounds.length },
     { id: "headlines", label: "Headlines", html: buildHeadlines(headlines), n: headlines.headlines.length },
     { id: "mandates", label: "Era Mandates", html: buildMandates(mandates), n: mandates.mandates.length },
-    { id: "projects", label: "Infrastructure projects", html: buildProjects(escalation), n: escalation.projects.length },
+    { id: "projects", label: "Infrastructure projects", html: buildProjects(escalation, factions), n: factions.factions.length * escalation.chipsPerFaction },
     { id: "power", label: "Embedded Power Contracts", html: buildPowerSources(config), n: config.powerSources.length },
     { id: "reference", label: "Board Panels and Player Aids", html: buildReferenceCards(reference), n: (reference.eraCards || []).length + (reference.playerReferences || []).length },
     { id: "tactics", label: "Tactics", html: buildTactics(tactics), n: tactics.tactics.length },
