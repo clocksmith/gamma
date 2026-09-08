@@ -2,11 +2,15 @@
 export function connectedFacilityIds(board, player) {
   const distance = (a, b) => Math.max(Math.abs(a.q - b.q), Math.abs(a.r - b.r),
     Math.abs((-a.q - a.r) - (-b.q - b.r)));
+  const sources = [...player.generators, ...(player.projects || [])
+    .filter(project => project.projectId === "fusion_demonstrator")
+    .map(project => player.facilities.find(host => host.id === project.hostId))
+    .filter(Boolean)];
   const firstId = player.facilities[0]?.id;
   return new Set(player.facilities.filter((facility) => {
     if (facility.id === firstId) return true;
     const district = board.find((tile) => tile.instanceId === facility.tileId);
-    return district && player.generators.some((generator) => {
+    return district && sources.some((generator) => {
       const source = board.find((tile) => tile.instanceId === generator.tileId);
       return source && distance(source, district) <= 1;
     });
