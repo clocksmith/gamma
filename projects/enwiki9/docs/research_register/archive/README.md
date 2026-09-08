@@ -51,3 +51,4 @@
 - [part-044.md: 2026-09-06 organization audit connects reflections to the agent loop](part-044.md)
 - [part-045.md: 2026-09-06 dual-stream grammar development comparison](part-045.md)
 - [part-046.md: 2026-09-06 closed external design request and local inverse repair](part-046.md)
+- [part-047.md: 2026-09-06 shared token-argument terminal comparison](part-047.md)

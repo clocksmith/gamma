@@ -2,6 +2,21 @@
 
 [Record index](research_register/README.md) | [Earlier records](research_register/archive/README.md)
 
+## 2026-09-08 - Standalone XML field histories enter executable synthetic testing
+
+Owner `root_explore` selects lenses 3/9 and the confirmed compact opcode parent.
+The [frozen synthetic plan](../operations/provenance/opcode_field_history_synthetic_v1_plan.json)
+tests persistent three-byte body suffixes for six completed XML opcode fields,
+replacing context families 8/9 while keeping all twelve tables and update laws.
+P/K preserve the parent; D uses aligned histories, G global eligible-body history,
+and S deterministic randomized routes at field entry. Escaped zero is appended
+only after its complete escape; opcode bytes are excluded from body histories.
+Every reconstructed copy byte follows the same update. This is a distinct raw
+opcode experiment, leaving dormant q1 Fiber-CTS and retired WRT Skip-CTS intact.
+Five synthetic tests pass, including exact inverse/repeat, P/K identity and
+introduced-state witnesses. The published next gate uses only 48 artificial
+records on CPU3; no corpus measurement or compression gain is claimed yet.
+
 ## 2026-09-08 - Bound compact-parent complementarity before constructing a selector
 
 Owner `root_explore` selects lenses 7/9 for an exact ideal-cost opportunity
@@ -773,27 +788,3 @@ bind the four recorded rows and the passing 36,098,048-byte discovery guard.
 Raw-encoder determinism and compression runtime remain null in those rows:
 their repeats start from fixed archives, not renewed raw-input discovery.
 No validation, confirmation, package qualification or full-score credit follows.
-
-## 2026-09-06 - Shared token arguments lose the complete grammar comparison
-
-ROOT/root_explore published `dualstream_grammar_argtokens250k_q0_v2` ownership,
-all 15 frozen inputs and its held CPU2 job before execution. This independent
-successor diagnoses the preceding whole-argument dictionary overhead; it leaves
-MIDAS, FX2 and HORIZON unchanged. One fixed T2 configuration, zlib9 and 65536-byte
-frames were used on previously examined opening250KB. Forty-three synthetic
-tests passed before the corpus gate; all 15 corpus processes then closed with
-exact inverses, deterministic repeats and a passing discovery guard.
-
-Archives: plain P **89,041**, split S **113,406**, recursive G **109,201**,
-unchanged parameter B **102,492**, token-argument T **109,170** bytes. B exactly
-reproduces historical T2; P/S/G retain their previous payloads. T reduces
-dictionary cost but loses **6,678** bytes to B and **20,129** to P, and its
-selected programs contain zero repeated argument references. Cost-based program
-selection changes with representation; section differences are not additive
-causal attribution. Park this fixed realization; no scale or confirmation gate
-follows. The [terminal audit](../operations/provenance/dualstream_grammar_argtokens250k_terminal_20260906.json)
-and [reflection](../operations/adaptive/reflections/20260906T204205Z_89a5d39e43.json)
-bind all five recorded arms. Full package and full-corpus credit remain unknown.
-The separately identified `dualstream_grammar_argtokens_bounded_v2.py` reuses
-the existing archive-cap repair for tiny-frame API calls; measured source and
-the fixed-frame corpus archives remain unchanged.
