@@ -12,9 +12,8 @@ export function constructionStudyScore(packet, decision, treatment) {
   const energy = board.filter(candidate => candidate.category === "energy" &&
     candidate.components.filter(component => component.type === "generator").length < 3);
   const infrastructure = treatment === "infrastructure_plan_v1";
-  const hasCluster = own.megaClusters.length > 0;
-  const fusionAvailable = round === 4 && !publicTable.players.some(player =>
-    player.generators.some(generator => generator.sourceId === "fusion_demonstrator"));
+  const hasCluster = own.projects.some(p => p.projectId === "mega_cluster");
+  const fusionAvailable = round >= 3 && !own.projects.some(p => p.projectId === "fusion_demonstrator");
   // Budget the next construction before selecting Build. Legal resolution still
   // owns actual prices, occupancy, host eligibility, and simultaneous contention.
   let goal = null;
@@ -26,9 +25,9 @@ export function constructionStudyScore(packet, decision, treatment) {
   } else if (infrastructure && round >= 2 && !own.generators.length) {
     goal = "generator"; runwayNeeded = 2;
   } else if (infrastructure && round >= 2 && !hasCluster) {
-    goal = "mega_cluster"; runwayNeeded = 3; computeNeeded = 2;
+    goal = "mega_cluster"; runwayNeeded = 3; computeNeeded = 1;
   } else if (infrastructure && fusionAvailable) {
-    goal = "fusion_demonstrator"; runwayNeeded = 5;
+    goal = "fusion_demonstrator"; runwayNeeded = 3; computeNeeded = 1;
   }
   const p = decision.parameters || {};
   if (decision.consequences?.stage === "action_selection") {

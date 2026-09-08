@@ -12,53 +12,45 @@ five selected proposals were implemented. Earlier 19-tile, every-Era
 map-motion, transmission, Tactic, secret-objective, and endgame-scoring
 assumptions are historical only.
 
-## Physical component families
+## Personal infrastructure and no-writing play
 
-The user selected cards (including compact flat chips), Agent position tokens,
-and cubes as the three movable component families. Boards remain printed
-surfaces. Five track cubes per faction replace captive sliders; Mandate uses a
-cube on the shared score track. Individual Scrutiny and Systemic Risk cubes
-retain their existing supplies and tactile equivalence in the Audit bag.
+The user selected a mechanical replacement for the earlier project forms.
+Each institution owns one Mega-Cluster (II), Fusion (III), and Quantum (IV).
+Build attaches one unlocked chip to a connected owned Facility at the Agent's
+assignment. A newly built Facility may qualify; different upgrades may share
+one host and travel with it. There is no sequence prerequisite.
 
-Facilities and Generators share a chip format with distinct printed identities.
-Matched project chips retain their host identifiers. Shared project references
-stay face up: construction flips Mega-Cluster host chips or the unique Fusion
-chip, while Quantum retains its personal completion checkbox. No manual Power
-flip, extra Quantum piece, or mandatory project chain is introduced.
+For the first test candidate, the common price is 3 Runway and 1 Compute plus
+1 Scrutiny. Mega-Cluster adds 2 Compute to connected-host Production; Quantum
+adds 1 Capability with normal caps and threshold awards. Fusion makes its host
+a local Power source for itself and nearby owned Facilities. There is no
+immediate project Mandate or Capability reward. These newly selected amounts
+are provisional implementation choices, not carried-over balance evidence.
 
-This changes physical presentation and supply description, not construction
-eligibility, project rewards, Audit probabilities, scoring, or completion limits.
-The physical specification and rulebook inventory own the updated forms;
-historical manufacturing estimates and frozen kits retain their original designs.
-Table readability and handling still require physical testing.
+All completion records use the same hosted chip state. The previous shared
+Mega-Cluster pairs, unique Fusion Generator and Quantum checkbox are removed.
+Ordinary Generators retain their construction and slot rules; Fusion uses none.
+AGI recognition remains separate and is evaluated after Era IV Production.
+
+Trust milestone cubes advance monotonically from the highest starting award.
+Objective records preserve only information absent from visible state: starting
+resource, accumulated Fund or Scrutiny, best banked run, Production Compute,
+or a Deploy flag. Current-state objectives use the board. Joint Venture chips
+record construction Era by orientation, without handwriting. Recognition uses
+one cube. World Endings use final state and printed participating starts.
+
+Runtime decisions, canonical source records, reference copy, printable chip
+faces, board tracks, browser records, and regression tests change together.
+Prior releases and simulation reports keep their original rules and remain
+historical. No human learning, handling, or balance claim follows from software
+checks. Existing fiction and fictional institutions are preserved.
 
 ## Infrastructure progression
 
-The user selected Mega-Cluster II, Fusion III, and Quantum IV. This is implemented
-through the ordinary Build action, with earlier projects remaining available.
-There is no mandatory chain. AGI recognition and the World Ending stay separate.
-
-Fusion moves from Era IV to III with its existing cost, reward, unique supply,
-location, and slot requirements unchanged. Earlier local Power is an intended
-consequence; no improved balance is claimed.
-
-Quantum uses provisional values: 4 Runway and 2 Compute for 2 Capability and
-1 Scrutiny, once per institution. The Agent must be assigned to a district with
-an owned connected Facility, checked after any Facility built in the same action.
-Quantum occupies no host slot and needs no other project. A faction-board checkbox
-records completion permanently through Audit and restart snapshots. Ordinary
-Capability caps and permanent threshold awards apply immediately. Each institution
-may complete it, so it needs no contested shared marker or supplier.
-
-The quantities are implementation choices for playtesting, not measured balance.
-This replaces the earlier incomplete proposal. Three project cards, Era panels,
-rulebook, runtime decisions, public state, physical faction faces, and inventory
-are updated together. Original scenario placements and vignettes remain intact;
-Fusion Authority and Quantum Infrastructure provide explicit new project bindings.
-Entanglement Custody remains a separate lore-only discovery.
-
-The retained construction study still describes Fusion IV without Quantum. Human
-learning, enjoyment, and balance of this progression remain untested.
+The Era order remains II / III / IV. The personal-infrastructure decision above
+supersedes the former paired Mega-Cluster, unique Fusion and immediate Quantum
+procedures. The historical construction study tested Fusion IV without Quantum;
+it provides no balance evidence for the replacement.
 
 ## Three Headline simplification
 

@@ -349,19 +349,18 @@ Exhaust Build once after completing both steps. There is no extra action,
 assignment, trade, or destination bonus between them.
 
 Facility spaces, Generator slots, numbered Facility order, unlocked Eras,
-adjacent connected hosts, and shared component supply still apply. Choose a
-plan you can fully afford on the current board when Build resolves. Facility 2
-and its Generator can be built together in Era II; an existing pair can receive
-a Mega-Cluster in Era III, leaving Era IV's Build available for Fusion.
+connected personal hosts, and ordinary Generator slots still apply. Choose a
+plan you can fully afford when Build resolves. A newly built connected Facility
+may receive its first unlocked upgrade in that same Build.
 <!-- construction:end -->
 
 #### ${terms.infrastructure.power} connections
 
 Facility 1 is always powered, including after relocation. Every other Facility
 is powered when it shares a district with, or is adjacent to, one of its owner's
-Generators. This condition is checked on the current board whenever an effect
+Generators or Fusion hosts. This condition is checked on the current board whenever an effect
 uses “powered” or “connected.” Other players' Generators do not connect yours.
-Facilities never transmit Power onward. No Power is assigned, spent, or marked.
+Only Fusion-upgraded Facilities transmit Power; other Facilities do not. No Power is assigned, spent, or marked.
 
 A Generator has no numeric capacity. A cheap emergency Generator adds its
 printed recurring Scrutiny during Production when it serves a Facility. A clean
@@ -533,9 +532,9 @@ ${terms.actions.influence} effect.
 - Read that Era’s **New this Era** strip aloud. Those systems are now active.
 - Reveal one ${terms.playerTracks.mandate} from the current Era’s three-card deck. Return the other
   two cards in that deck to the box unseen.
-- Clear the Current Mandate ledger and write the revealed criterion and
-  minimum. Start this-Era values at zero; evaluate current-state values when
-  scored.
+- Keep the Mandate visible. Set its cube record to the printed starting resource
+  value when requested, otherwise zero. Update only the named historical value;
+  evaluate current-state objectives directly from the board at scoring.
 - Ready all six Core Actions.
 
 ### B. Three action cycles
@@ -648,8 +647,11 @@ leaders score one ${terms.playerTracks.mandate} each.
 
 Compare only the revealed Mandate’s printed criterion. Resources, control, and
 public score do not break its tie. Leave the scored card beside its Era as part
-of the table’s public history. The ledger is a counting aid; clear
-it when the next Mandate is revealed.
+of the table’s public history. Reset the objective cube when the next Mandate
+is revealed. A starting-resource record stays fixed: compare the final resource
+with that starting value. Other history records track the named total, best run,
+or Yes/No status. For new active Joint Ventures, inspect their printed Era edges
+and current connections during Production; no additional record is needed.
 
 The revealed Mandate card is the exact qualification and scoring authority.
 <!-- mandate-scoring:end -->
@@ -895,7 +897,7 @@ Facilities and Generators use separate flat chips with distinct symbols and
 faction identities. Read Power from Generator adjacency and Facility 1's
 starting-grid identifier; no Power cubes, allocation surface, or powered/unpowered
 flipping is required.
-Board dimensions, fold pattern, material, writable finish, and retention
+Board dimensions, fold pattern, material and retention
 tolerances remain manufacturing decisions.
 
 <!-- inventory:end -->
@@ -928,7 +930,7 @@ on the two faces. The eighteen chips are three per faction, not shuffled cards.
 - **Remove Scrutiny:** return up to the stated number of your cubes from the Audit bag.
 - **Connected/powered:** Facility 1, or an own Generator on the same or an adjacent district, evaluated on the current board.
 - **Current Mandate:** keep the objective card visible. For a history-dependent objective, reset and use its printed cube record. Evaluate current-state objectives directly from visible pieces.
-- **Recognized AGI:** record every paid declaration on the final public ledger. Recognition persists through the Audit.
+- **Recognized AGI:** move that institution’s recognition cube to Recognized after payment. It remains there through Audit.
 - **Offline recovery:** an infrastructure change can immediately reconnect a Facility. Facilities never flip.
 
 <!-- components:end -->

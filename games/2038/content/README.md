@@ -76,8 +76,8 @@ Run `npm run content:build` to regenerate it; `npm run content:check` rejects dr
   separately. The local reader serves these at `/docs/` and `/review/`.
 - `dist/firebase/public/` is the default player site; `dist/review/site/` is the
   separate local review package. Building it never replaces review sources.
-- Each frozen physical kit keeps the rulebook, component masters, and writable
-  ledger at its root. `observer/` contains the protocol, receipt schema, release
+- Each frozen physical kit keeps the rulebook, component masters, and printed
+  track panel at its root. `observer/` contains the protocol, receipt schema, release
   evidence, and compiled reference data. Actual session observations remain in
   `evidence/playtests/`; kit creation never invents a completed receipt.
 
@@ -89,7 +89,7 @@ only the complete rulebook; cards and boards are published as baseline component
 masters. The browser uses the same compiled records. Internal review exposes the
 supplementary extracts, card catalog, optional lore companion, and design records.
 They do not appear in the default player package. The physical candidate bundle
-contains the complete rulebook and writable Governance Board ledger. Authoring
+contains the complete rulebook and printed Governance Board tracks. Authoring
 sources remain bound by the release content manifest, separately from player copy.
 Historical releases and frozen kits keep their original documents.
 

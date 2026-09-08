@@ -5,9 +5,8 @@ encoding, and dimensions. It is neither player-facing copy nor
 machine-enforced game data.
 
 The selected forms are cards (including flat chips), Agent position tokens,
-and cubes. Boards remain printed surfaces; the bag and writing pen are
-accessories. Shared project references stay face up; project chips or existing
-checkboxes record construction. Numerical tracks use cubes rather than sliders.
+and cubes. Boards remain printed surfaces; the bag is an accessory. Each faction owns three personal project chips; flipping and host placement
+record construction. Numerical tracks use cubes rather than sliders.
 
 ## Ownership
 
@@ -20,7 +19,7 @@ checkboxes record construction. Numerical tracks use cubes rather than sliders.
   `inventory` section of [rules.md](../rules.md). It separates Default
   requirements and deferred content. Edit the rulebook or
   its referenced component records, then build; there is no second authored inventory here.
-- `governance-ledger.md` specifies the single writable board panel for the
+- `governance-tracks.md` specifies the printed cube-track panel for the
   current Mandate, Setup Collective Trust, and
   final public resolution. Read Power directly from current infrastructure positions.
 - `production/` is reserved for printer-ready specifications, dielines, and
@@ -33,7 +32,7 @@ legal game state. Change the owning component record or shared variable and
 the affected rulebook procedure together.
 
 `dist/physical-kit/` is generated frozen output. Do not edit it. The rulebook,
-component masters, and writable ledger sit at the kit root; protocols, receipt
+component masters, and printed track panel sit at the kit root; protocols, receipt
 schemas, release manifests, and compiled reference data live under `observer/`.
 
 The authored Markdown specifications are included in the review reader
