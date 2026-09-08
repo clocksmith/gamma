@@ -10,8 +10,8 @@ No prefix row proves 9.9000000%.
 No forecast or metadata-inherited row is included.
 ```
 
-- Result JSON files scanned: `179`
-- Roundtrip-passing rows: `19`
+- Result JSON files scanned: `180`
+- Roundtrip-passing rows: `20`
 - Active target score: `99,000,000` bytes (`9.9000000%`)
 
 ## Scope `1,000,000,000` Bytes
@@ -50,14 +50,14 @@ No roundtrip-passing result JSONs are present for this scope in this checkout.
 
 | Program | Mechanism | Score | Archive | Program bytes | b/B | Determinism | Result |
 |---|---|---:|---:|---:|---:|---|---|
+| `opcode_typed_anchor_bitmix_v1` | syntax opcode preprocessor | 72,800 | 67,959 | 4,841 | 2.174688 | true | `results/opcode_typed_anchor_bitmix_v1/2026-07-21T124407.json` |
 | `opcode_word_bz2_min_deflate_v1` | syntax opcode preprocessor | 73,335 | 71,887 | 1,448 | 2.300384 | true | `results/opcode_word_bz2_min_deflate_v1/2026-07-21T124141.json` |
 | `trigger_receipt_copy_lzma_v0` | LZMA/LZMA2 baseline or preprocessor | 82,940 | 75,561 | 7,379 | 2.417952 | true | `results/trigger_receipt_copy_lzma_v0/2026-08-01T194211.json` |
-| `sleeping_trie_global4_selector_raw_v1` | custom candidate | 139,970 | 119,383 | 20,587 | 3.820256 | true | `results/sleeping_trie_global4_selector_raw_v1/2026-08-01T193328.json` |
 
 ### Best Archives
 
 | Program | Mechanism | Score | Archive | Program bytes | b/B | Determinism | Result |
 |---|---|---:|---:|---:|---:|---|---|
+| `opcode_typed_anchor_bitmix_v1` | syntax opcode preprocessor | 72,800 | 67,959 | 4,841 | 2.174688 | true | `results/opcode_typed_anchor_bitmix_v1/2026-07-21T124407.json` |
 | `opcode_word_bz2_min_deflate_v1` | syntax opcode preprocessor | 73,335 | 71,887 | 1,448 | 2.300384 | true | `results/opcode_word_bz2_min_deflate_v1/2026-07-21T124141.json` |
 | `trigger_receipt_copy_lzma_v0` | LZMA/LZMA2 baseline or preprocessor | 82,940 | 75,561 | 7,379 | 2.417952 | true | `results/trigger_receipt_copy_lzma_v0/2026-08-01T194211.json` |
-| `sleeping_trie_global4_selector_raw_v1` | custom candidate | 139,970 | 119,383 | 20,587 | 3.820256 | true | `results/sleeping_trie_global4_selector_raw_v1/2026-08-01T193328.json` |

@@ -2,7 +2,7 @@
 
 [Record index](research_register/README.md) | [Earlier records](research_register/archive/README.md)
 
-## 2026-09-08 - Freeze one standalone opcode field repair
+## 2026-09-08 - Opcode field repair saves 301 development archive bytes
 
 `root_explore` owns [opcode_field_repair250k_q0_v1](../operations/adaptive/experiments/opcode_field_repair250k_q0_v1.json).
 It changes only the existing field coordinate after complete decoded XML opcode
@@ -12,13 +12,21 @@ The [26 synthetic tests](../operations/evidence/20260908_opcode_field_repair_uni
 pass exact inversion, raw repeats, P/K identity, decoder-common witnesses,
 exception bounds and evidence-failure classification. A missing audit-count
 field failed the first synthetic attempt and was repaired before sealing.
-No corpus result is claimed by this implementation evidence.
+The [terminal comparison](../operations/provenance/opcode_field_repair_terminal_20260908.json)
+now records ten closed native phases: P/K are 67,959 bytes and D is 67,658.
+Independent inverses, raw-input repeats and prediction/state witnesses pass.
+The 301-byte archive gain is not a package gain: uncompressed decoder source
+increases by 10,562 bytes; complete package accounting remains unknown.
 
 The [baseline inventory](../operations/provenance/small_input_frontier_baselines_20260908.json)
 verifies retained opening250KB Deflate 89,041 and native FX2 33,429 byte archives.
-The new gate must freshly reproduce the historical bitmix 67,959-byte parent.
-One development mutation precedes disjoint validation and sealed confirmation;
-archive and package differences stay separate, with complete accounting unknown.
+The gate reproduced the historical bitmix parent byte-for-byte. The
+[validated reflection](../operations/adaptive/reflections/20260908T133436Z_6b57b0e164.json)
+selects this unchanged codec for the separately reserved 250KB validation slice.
+`root_explore` owns `opcode_field_validation250k_q0_v1`; its transfer runner passes
+[22 synthetic tests](../operations/evidence/20260908_opcode_field_transfer_unit.json).
+The validation job remains held pending publication and fresh resource admission.
+No confirmation or full-corpus improvement is established.
 
 ## 2026-09-07 - MIDAS opening250KB closes the missing boundary evidence
 
