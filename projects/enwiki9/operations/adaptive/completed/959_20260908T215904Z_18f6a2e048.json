@@ -5,27 +5,66 @@
     "sha256": "sha256:41034c27aeb06a19bba54233f88b9ea2f5194c5bde64a509a3e621a25910ede0"
   },
   "candidate_tree_sha256": "sha256:b15f08a0311b0e28ecae7d800570b80287bf3fdb7cdccb04aefbfd9d17793ee2",
+  "elapsed_seconds": 133.683,
   "execution_guard": {
     "path": "tools/run_with_resource_guard_v3.py",
     "sha256": "sha256:044147f7ffe6922ea8dafd52fc3d4426077b20958adbcd421245ad41adcfc1e4"
   },
   "execution_mode": "discovery",
+  "execution_resources": {
+    "boot_id": "3ce46712-27bc-4199-8e48-e2b3d23926cb",
+    "budget": {
+      "cgroup_parent": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice",
+      "cpus": [
+        2
+      ],
+      "memory_bytes": 9999998976,
+      "scratch_bytes": 24000000000,
+      "swap_bytes": 0,
+      "wall_seconds": 1200
+    },
+    "cgroup_inode": 262292,
+    "cgroup_path": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/gamma-enwiki9-20260908T215904Z_18f6a2e048",
+    "cleanup_complete": true,
+    "cpu_enforcement": "taskset-and-sampled-affinity-guard",
+    "groups": [
+      {
+        "created": true,
+        "inode": 262292,
+        "kernel_cpuset": false,
+        "memory_bytes": 9999998976,
+        "path": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/gamma-enwiki9-20260908T215904Z_18f6a2e048"
+      }
+    ],
+    "guard_command_sha256": "701ecc87cc20a9e0170bc58f9e4ea70fb889bccd0d528fa432067869db01f0ad",
+    "guard_path": "run_logs/adaptive/20260908T215904Z_18f6a2e048.resources/guard.json",
+    "missing_diagnostics": [
+      "kernel cpuset controller is not delegated; taskset assignment and existing affinity guard remain active"
+    ],
+    "timing_authority": "diagnostic"
+  },
   "experiment": {
     "path": "operations/adaptive/experiments/fx2_wrt_support_deploy_fixture_v1.json",
     "sha256": "sha256:6a5f4d755e393c2c063ba3f6ceeac08631b12ce9497a8767d7bc214b5b3ca9a3"
   },
+  "finished_at": "2026-09-08T22:03:29+00:00",
   "gate_size": 50051,
-  "held": true,
+  "held": false,
   "held_at": "2026-09-08T21:59:04+00:00",
   "hold_history": [
     {
       "at": "2026-09-08T21:59:04+00:00",
       "held": true,
       "reason": "Publish frozen lean deployment ownership and verify fresh host admission before any native execution"
+    },
+    {
+      "at": "2026-09-08T22:01:14+00:00",
+      "held": false,
+      "reason": "Ownership published at90e8f74e9; all149 frozen inputs and toolchain verified; fresh admission56313581568 RAM bytes exceeds32GiB headroom plus10GB allocation,113133617152 scratch bytes,CPU2 allowed,zero unheld competitors,no unresolved live ownership"
     }
   ],
-  "hold_reason": "Publish frozen lean deployment ownership and verify fresh host admission before any native execution",
   "job_id": "20260908T215904Z_18f6a2e048",
+  "log_path": "run_logs/adaptive/20260908T215904Z_18f6a2e048.log",
   "priority": 40,
   "proposal": {
     "path": "operations/adaptive/proposals/developed/929_fx2_wrt_support_deploy_fixture_v1.json",
@@ -33,6 +72,7 @@
   },
   "proposal_id": "fx2_wrt_support_deploy_fixture_v1",
   "purpose": "diagnostic",
+  "released_at": "2026-09-08T22:01:14+00:00",
   "resource_budget": {
     "cgroup_parent": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice",
     "cpus": [
@@ -43,6 +83,7 @@
     "swap_bytes": 0,
     "wall_seconds": 1200
   },
+  "returncode": 0,
   "runner": {
     "path": "tools/fx2_wrt_support_deploy_fixture_v1.py",
     "sha256": "sha256:87cf39fa4bcd7a51c6cc06d4cad00b2f99c84d8ba1a624de5db4af3f1c8ccbaa"
@@ -51,10 +92,14 @@
   "scratch_directories": [
     "results/fx2_wrt_support_deploy_fixture_v1"
   ],
-  "state": "pending",
+  "started_at": "2026-09-08T22:01:15+00:00",
+  "state": "completed",
   "submitted_at": "2026-09-08T21:59:04+00:00",
   "tags": [],
   "timing_authority": "diagnostic",
   "tool": "tools/fx2_wrt_support_deploy_fixture_v1.py",
-  "tool_args": []
+  "tool_args": [],
+  "worker_pid": 1429657,
+  "worker_proc_start_ticks": 200101309,
+  "worker_started_at": "2026-09-08T22:01:15+00:00"
 }
