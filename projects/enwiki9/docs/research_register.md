@@ -42,6 +42,15 @@ the supplied uninstrumented parent. No complete-package gain is established.
 The validated reflection retains the component and holds larger promotion for
 minimal deployment package measurement and separately frozen fresh validation.
 
+The [lean deployment gate](../operations/adaptive/experiments/fx2_wrt_support_deploy_fixture_v1.json)
+now removes diagnostics without changing the measured support State. Its unit
+replay matches all259,824 prior quantized probabilities; three runner tests pass.
+Owner `root_explore` holds job `20260908T215904Z_18f6a2e048` for publication and
+fresh CPU2 admission. Two original/lean builds must reproduce retained P3,223
+and D3,221 archives, independent inverses and repeats. Source, binary and delivery
+ZIP costs are measured separately; runtime/license closure remains unresolved.
+No larger population, new prediction feature or additional gain is claimed.
+
 ## 2026-09-08 - Native output-tail comparison freezes one numerical correction
 
 The [new comparison](../operations/adaptive/experiments/fx2_half_tail_fixture50051_q0_v1.json)

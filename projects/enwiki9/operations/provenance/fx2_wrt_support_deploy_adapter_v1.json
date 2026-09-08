@@ -1,0 +1,59 @@
+{
+  "schema": "gamma.enwiki9.exact-source-adapter-multi.v1",
+  "adapter_id": "fx2_wrt_support_deploy_v1",
+  "files": [
+    {
+      "source_path": "src/coder/encoder.cpp",
+      "source_bytes": 914,
+      "source_sha256": "ecd9a2f4f39553e3864c8e9c96c7b512edca46a6fbb3197beaccaf47b0a8fdce",
+      "patched_bytes": 1024,
+      "patched_sha256": "9d53b932c91e13c7d7ff54514bbfd9a04920c72257ce5b7ffe0a7b2b0f811a09",
+      "replacements": [
+        {
+          "before": "#include \"encoder.h\"",
+          "after": "#include \"encoder.h\"\n#include \"gamma-wrt-support.h\""
+        },
+        {
+          "before": "  const unsigned int p = Discretize(p_->Predict());",
+          "after": "  const unsigned int p = gamma_wrt_support::coder().project(Discretize(p_->Predict()));"
+        },
+        {
+          "before": "  p_->Perceive(bit);",
+          "after": "  gamma_wrt_support::coder().observe(bit);\n  p_->Perceive(bit);"
+        }
+      ]
+    },
+    {
+      "source_path": "src/coder/decoder.cpp",
+      "source_bytes": 832,
+      "source_sha256": "1bae2c108906625fb124f3fc602d1d59d814e5a415d963ab74246bf474e8bae9",
+      "patched_bytes": 942,
+      "patched_sha256": "814187e2b1c32c674261d642bfcd926a45a005c6fa98ba30d44d4f7b1e1b3e87",
+      "replacements": [
+        {
+          "before": "#include \"decoder.h\"",
+          "after": "#include \"decoder.h\"\n#include \"gamma-wrt-support.h\""
+        },
+        {
+          "before": "  const unsigned int p = Discretize(p_->Predict());",
+          "after": "  const unsigned int p = gamma_wrt_support::coder().project(Discretize(p_->Predict()));"
+        },
+        {
+          "before": "  p_->Perceive(bit);",
+          "after": "  gamma_wrt_support::coder().observe(bit);\n  p_->Perceive(bit);"
+        }
+      ]
+    }
+  ],
+  "added_files": [
+    {
+      "source": {
+        "path": "lib/wrt_support_deploy_v1.hpp",
+        "bytes": 1827,
+        "sha256": "2be5a826ca56d24f2fcf74c961160f996410f89cb6daf359fa2c5d330271eaee"
+      },
+      "target": "src/coder/gamma-wrt-support.h"
+    }
+  ],
+  "boundary": "Same causal State and probability mapping as native D; diagnostic traces, counters, labels and arm switch removed. Parent Predictor calls unchanged."
+}
