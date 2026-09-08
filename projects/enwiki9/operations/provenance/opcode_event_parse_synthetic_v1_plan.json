@@ -1,0 +1,38 @@
+{
+  "schema": "gamma.enwiki9.synthetic-source-plan.v1",
+  "id": "opcode_event_parse_synthetic_v1",
+  "owner": "root_explore",
+  "status": "frozen",
+  "parent": "programs/opcode_field_compact_v1/p",
+  "parent_sha256": "7d331ba82c635af8afe6517bf5f4471b41dcf7854c6ec01cb5564078d9bb56a8",
+  "evidence": "operations/provenance/opcode_literal_event_cost_v1_unit.json",
+  "hypothesis": "Correct adaptive literal-event costs can change encoder copy selection while preserving the original arithmetic decoder and every byte-driven predictor update.",
+  "mutation": "Replace only the repeated initial literal-event charge with a locally updated count cost at the actual decoded byte contexts. Preserve candidate enumeration, literal predictor, copy prices, 0.5-bit admission threshold, and decoder.",
+  "controls": {
+    "P": "Authenticated unmodified compact parent",
+    "K": "Compute corrected prices but select using unchanged parent prices",
+    "D": "Select using corrected literal-event prices"
+  },
+  "tests": [
+    "P/K archive and complete witness identity",
+    "Every arm independently decoded by the unmodified parent",
+    "Deterministic encode from reconstructed synthetic input",
+    "Observed/unobserved archive identity and encoder/decoder complete witnesses",
+    "Context lookahead follows the same pre-byte GST keys as actual decoding",
+    "Retain every synthetic archive size, including losses"
+  ],
+  "bounds": {
+    "cpu": 3,
+    "threads": 1,
+    "address_space_bytes": 2147483648,
+    "cpu_seconds": 120,
+    "wall_seconds": 180,
+    "file_bytes": 33554432,
+    "maximum_raw_fixture_bytes": 8192,
+    "maximum_literal_span": 258,
+    "corpus_bytes": 0
+  },
+  "stop_rule": "Any inverse, repeat, P/K or shared-state mismatch blocks corpus integration. Synthetic sizes do not select a corpus configuration. A separately frozen and published corpus gate is required.",
+  "scope": "Synthetic integration only; no HORIZON, MIDAS, corpus, decoder, predictor, or sealed source mutation.",
+  "objective_credit_bytes": 0
+}

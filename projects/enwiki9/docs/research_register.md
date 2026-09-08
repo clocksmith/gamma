@@ -15,8 +15,17 @@ pass four checks against the authenticated parent CM, including rescaling and no
 For ten zeros in one fresh three-symbol context, exact adaptive probability is
 1/66 while repeated initial pricing uses 1/59049. This proves a constructed
 event-cost approximation error, not corpus savings or an optimal parse.
-Next implement a separately identified P/K/D encoder-only correction and exact
-roundtrips through the unchanged decoder before any corpus claim. No new corpus job exists.
+The [separate integration plan](../operations/provenance/opcode_event_parse_synthetic_v1_plan.json)
+now has an [executable synthetic result](../operations/provenance/opcode_event_parse_v1_unit.json):
+three tests pass over empty, arbitrary-byte, repeated-text and XML fixtures.
+P/K archives and complete witnesses match; every arm independently decodes through
+the original parent, repeats deterministically, and preserves observed/unobserved bytes.
+Archives are respectively 9/224/17/46 bytes in every arm: no synthetic gain.
+Only encoder literal-event pricing changes; the original decoder, predictor,
+copy candidates and 0.5-bit admission threshold remain. Context lookahead follows
+the original pre-byte GST state. Next freeze and publish one bounded P/K/D
+development corpus comparison, including source/package deltas and fresh resource
+admission. No new corpus job exists; this is implementation evidence only.
 
 ## 2026-09-08 - Standalone XML field histories enter executable synthetic testing
 
