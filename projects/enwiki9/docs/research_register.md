@@ -12,8 +12,9 @@ the same confirmed field rule and canonical decoder checks in 5,746 local source
 bytes, down from 15,403. [Seven synthetic tests](../operations/evidence/20260908_opcode_field_compact_unit.json)
 pass archive and complete shared-state parity; a retained 65-byte fixture has a
 27-byte exact repeatable archive. Corpus parity and complete package economics
-remain unproved. Next build the bounded retained-archive parity runner, publish
-its source and ownership, then admit execution. No new predictor is combined.
+remain unproved. The bounded parity runner now passes seven synthetic runner
+tests; job `20260908T154100Z_6b9653a04d` is held for publication and fresh CPU2
+admission. No new predictor is combined.
 
 ## 2026-09-08 - Opcode field repair confirms a 1,541-byte archive improvement
 
