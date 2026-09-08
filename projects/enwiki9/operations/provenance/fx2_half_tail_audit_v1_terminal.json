@@ -1,0 +1,126 @@
+{
+  "schema": "gamma.enwiki9.source-audit-terminal.v1",
+  "id": "fx2_half_tail_audit_v1",
+  "owner": "root_explore",
+  "published_plan_commit": "15b0e6258",
+  "status": "passed",
+  "evidence_class": "infrastructure",
+  "numeric": {
+    "probability_patterns": 15361,
+    "scalar_disagreements": 1023,
+    "after_floor_disagreements": 1007,
+    "exact_scalar_matches_f16c": true
+  },
+  "retained_kernel": {
+    "unique_synthetic_rows": 512,
+    "duplicate_repeat_excluded": true,
+    "columns": {
+      "200": {
+        "subnormal": 136,
+        "changed_after_floor": 88
+      },
+      "201": {
+        "subnormal": 170,
+        "changed_after_floor": 128
+      },
+      "202": {
+        "subnormal": 270,
+        "changed_after_floor": 199
+      },
+      "203": {
+        "subnormal": 176,
+        "changed_after_floor": 129
+      },
+      "204": {
+        "subnormal": 175,
+        "changed_after_floor": 125
+      }
+    },
+    "rows_changed_after_floor": 324,
+    "maximum_row_mass_increase": 9.572505950927734e-05
+  },
+  "inputs": [
+    {
+      "path": "results/fx2_cmix_transformer_static_vocab_fixture50051_q0_v1/work/src/predictor.cpp",
+      "bytes": 27424,
+      "sha256": "0b79f43644daee942c9cb6da18fa464f0eb0185b6fc7ffc43cde703808fe537e"
+    },
+    {
+      "path": "results/fx2_cmix_transformer_static_vocab_fixture50051_q0_v1/kernel.json",
+      "bytes": 3912,
+      "sha256": "eae6f67f96ae3dc86bae22f6ce42e59c77e3bb9d3460fe74a2af9d7d99d0e575"
+    },
+    {
+      "path": "results/fx2_cmix_transformer_static_vocab_fixture50051_q0_v1/kernel.probabilities.f32le",
+      "bytes": 839680,
+      "sha256": "869135027761b4350792e3f461053644bf5401358d8383aba4d3277773dac61f"
+    },
+    {
+      "path": "tools/fx2_transformer_kernel_probe_v1.cpp",
+      "bytes": 7253,
+      "sha256": "857e0395cf09d7a88802d11279ee01e765b8f8c188573bc0808257ab040d0f19"
+    },
+    {
+      "path": "tests/run_fx2_half_tail_audit_v1.py",
+      "bytes": 5702,
+      "sha256": "cc8216e7e222eff1b0bdd29e517f1ffc0bda980ed94fd14ff5386ae245ce685d"
+    },
+    {
+      "path": "operations/provenance/fx2_half_tail_audit_v1_plan.json",
+      "bytes": 2112,
+      "sha256": "4f3be36e2ee56b0682dbfb9f37035f83ef8afab452d6aabe00b6a4ed64fecc12"
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "results/fx2_half_tail_audit_v1/attempt01/compile.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "results/fx2_half_tail_audit_v1/attempt01/compile.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "results/fx2_half_tail_audit_v1/attempt01/execute.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "results/fx2_half_tail_audit_v1/attempt01/execute.stdout",
+      "bytes": 125,
+      "sha256": "80fa91fc84f4ac17cc483be9f41f2b18389578a019806993a3c07e237a570981"
+    },
+    {
+      "path": "results/fx2_half_tail_audit_v1/attempt01/phases.json",
+      "bytes": 793,
+      "sha256": "5c38f6fd420f1259c69b482240901ab48c0ea43c041616c95aa3eb0a373a7ef1"
+    },
+    {
+      "path": "results/fx2_half_tail_audit_v1/attempt01/probe",
+      "bytes": 16128,
+      "sha256": "0940d2eff977bf189af5faf812df392f6edb326f07e891ed6bd7fc6ed6f7cb22"
+    },
+    {
+      "path": "results/fx2_half_tail_audit_v1/attempt01/probe.cpp",
+      "bytes": 1973,
+      "sha256": "b42ca8e2111f2d09a1b70fc7d25b59fcd1b11f535de630f0c15ea51099e026e5"
+    },
+    {
+      "path": "results/fx2_half_tail_audit_v1/attempt01/receipt.json",
+      "bytes": 3327,
+      "sha256": "f3034f0176fd0543e36233258a485c368b998a079cc65a70de519a01fdedb2e3"
+    }
+  ],
+  "objective_target_bytes": 90000000,
+  "objective_credit_bytes": 0,
+  "full_corpus_score_bytes": null,
+  "meaning": "An exact scalar reference matches hardware F16C over the complete nonnegative probability domain. Synthetic kernel activation is not measured corpus prevalence or archive saving.",
+  "next_mutation": "Keep P original and K bookkeeping-only. D corrects only the final transformer-output scalar tail conversion before the unchanged floor; preserve the PPM prior half representation, trained weights, model initialization and transformer update/reset order.",
+  "next_required": "Freeze a separate native candidate with P/K retained identity, every-arm independent inverse and repeat, coder traces, affected-output counts, package and resource costs. Do not alter original measured source.",
+  "rejections": [
+    "A second full model mixture is not selected because added state and conditional benefit remain unmeasured.",
+    "No new grammar representation is selected without a measured cost mechanism."
+  ]
+}

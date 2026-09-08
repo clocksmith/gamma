@@ -60,3 +60,5 @@ Archived files preserve complete H2 records.
 - [part-041.md: 2026-09-06 MIDAS opening100KB complete boundary observation](archive/part-041.md)
 
 - [part-042.md: 2026-09-06 MIDAS distant100KB observed transfer](archive/part-042.md)
+
+- [part-043.md: 2026-09-06 MIDAS SHA observer cost comparison](archive/part-043.md)
