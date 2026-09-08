@@ -212,3 +212,22 @@ extracted copies pass six synthetic encode/decode/repeat phases. The conditional
 twice-counted program form adds 554 source bytes; the corpus run must supply its
 own archive difference. Runtime, options, licensing and final packaging remain
 unresolved. No archive gain is inferred from synthetic reconstruction.
+
+The [closed development gate](../operations/provenance/opcode_wiki_slot_terminal_20260908.json)
+passes all ten phases: P/K 67,658 bytes, D 67,601, a 57-byte archive improvement.
+P/K projections, inverses, raw repeats, observation identity and complete state
+witnesses agree; guard and cleanup checks pass. The [validated reflection](../operations/adaptive/reflections/20260908T162205Z_46ebdbaee4.json)
+retains this narrow positive result. Subtracting the conditional 554-byte source
+charge yields a 497-byte loss before other package costs. No confirmation or
+larger launch follows automatically.
+
+Post-update occupancy is diagnostic: P/K retain slot9 for 172,400 modeled bytes;
+D uses it for 5,703. These counts do not assign the 57-byte benefit to a slot.
+A [synthetic boundary probe](../results/opcode_slot_reset_diagnostic_20260908/receipt.json)
+shows the parent retaining slot9 across an encoded `</text>` and into the next
+article, while raw semantic state resets after the complete opcode. The original
+detector looks for literal `</text>` after preprocessing has replaced it. This
+establishes the demonstrated mismatch, not its compression contribution.
+The next single mutation should start from the compact parent and restore only
+that reset, with matched P/K/D controls and measured source cost. It must not
+simultaneously introduce raw slot discovery or assume the previous saving transfers.

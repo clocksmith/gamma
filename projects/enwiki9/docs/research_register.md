@@ -22,9 +22,9 @@ An independent [synthetic state probe](../results/opcode_wiki_state_diagnostic_2
 finds eight opcode/wiki-coordinate mismatches among eleven predefined strings;
 no corpus frequency or archive gain is claimed. The [validated reflection](../operations/adaptive/reflections/20260908T154100Z_6b9653a04d.json)
 selects [opcode_wiki_slot_v1](../operations/adaptive/experiments/opcode_wiki_slot_v1.json),
-owned by `root_explore`. Eleven synthetic tests and ten retained CLI phases pass;
-P/K are 43 bytes and D is 44 on the fixture. The opening250KB gate is active on
-CPU2 after publication/admission; no corpus gain is claimed. Only slot is exposed.
+owned by `root_explore`. Its [terminal gate](../operations/provenance/opcode_wiki_slot_terminal_20260908.json)
+passes ten phases: P/K 67,658 / D 67,601 bytes. The 57-byte gain does not pay the
+conditional 554-byte source charge. Next isolate the diagnosed text-close reset.
 
 ## 2026-09-08 - Opcode field repair confirms a 1,541-byte archive improvement
 
