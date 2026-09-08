@@ -14,8 +14,8 @@ Compare identical population hashes; equal input sizes alone do not define match
 
 ## Proof Boundary
 
-- Result JSON files scanned: `254`
-- Roundtrip-passing rows: `78`
+- Result JSON files scanned: `260`
+- Roundtrip-passing rows: `83`
 - Verified full `1G` rows in this checkout: `0`
 - Active target score: `90,000,000` bytes (`9.0000000%`)
 - `9.0000000%` target reached by this matrix: `False`
@@ -73,13 +73,13 @@ Compare identical population hashes; equal input sizes alone do not define match
 | Program / arm | Population SHA256 | Mechanism | Scope | Local subtotal | Archive | Program | b/B | Determinism | Result |
 |---|---|---|---:|---:|---:|---:|---:|---|---|
 | `matched_frontier_reserved_q0_v1:validation-FX2` | `4c6b839c7799` | custom candidate | 250,000 | unknown | 35,464 | unknown | 1.134848 | true | `operations/provenance/matched_frontier_reserved_terminal_20260908/validation-FX2.json` |
+| `opcode_field_history250k_q0_v1:D` | `665fc689441b` | syntax opcode preprocessor | 250,000 | unknown | 67,578 | unknown | 2.162496 | true | `operations/provenance/opcode_field_history_terminal_20260908/D.json` |
+| `opcode_field_history250k_q0_v1:G` | `665fc689441b` | syntax opcode preprocessor | 250,000 | unknown | 67,579 | unknown | 2.162528 | true | `operations/provenance/opcode_field_history_terminal_20260908/G.json` |
+| `opcode_field_history250k_q0_v1:S` | `665fc689441b` | syntax opcode preprocessor | 250,000 | unknown | 67,584 | unknown | 2.162688 | true | `operations/provenance/opcode_field_history_terminal_20260908/S.json` |
 | `opcode_wiki_slot_v1:D` | `665fc689441b` | syntax opcode preprocessor | 250,000 | unknown | 67,601 | unknown | 2.163232 | true | `operations/provenance/opcode_wiki_slot_terminal_20260908/D.json` |
 | `opcode_slot_reset_v1:D` | `665fc689441b` | syntax opcode preprocessor | 250,000 | unknown | 67,626 | unknown | 2.164032 | true | `operations/provenance/opcode_slot_reset_terminal_20260908/D.json` |
 | `opcode_calibration_cost_v1:K` | `665fc689441b` | syntax opcode preprocessor | 250,000 | unknown | 67,658 | unknown | 2.165056 | true | `operations/provenance/opcode_calibration_terminal_20260908/K.json` |
 | `opcode_field_compact_v1:development` | `665fc689441b` | syntax opcode preprocessor | 250,000 | unknown | 67,658 | unknown | 2.165056 | true | `operations/provenance/opcode_field_compact_terminal_20260908/development.json` |
-| `opcode_field_repair250k_q0_v1:D` | `665fc689441b` | syntax opcode preprocessor | 250,000 | unknown | 67,658 | unknown | 2.165056 | true | `operations/provenance/opcode_field_repair_terminal_20260908/D.json` |
-| `opcode_slot_reset_v1:K` | `665fc689441b` | syntax opcode preprocessor | 250,000 | unknown | 67,658 | unknown | 2.165056 | true | `operations/provenance/opcode_slot_reset_terminal_20260908/K.json` |
-| `opcode_slot_reset_v1:P` | `665fc689441b` | syntax opcode preprocessor | 250,000 | unknown | 67,658 | unknown | 2.165056 | true | `operations/provenance/opcode_slot_reset_terminal_20260908/P.json` |
 
 ## Unavailable terminal evidence
 

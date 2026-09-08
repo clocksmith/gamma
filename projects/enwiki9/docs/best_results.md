@@ -12,8 +12,8 @@ Unknown package cost stays unknown. Local subtotals are not complete submission 
 Populations are grouped by raw-input SHA256; compare matched controls in each receipt.
 ```
 
-- Result JSON files scanned: `254`
-- Roundtrip-passing rows: `78`
+- Result JSON files scanned: `260`
+- Roundtrip-passing rows: `83`
 - Active target score: `90,000,000` bytes (`9.0000000%`)
 
 ## Scope `1,000,000,000` Bytes
@@ -84,9 +84,9 @@ No roundtrip-passing result JSONs are present for this scope in this checkout.
 
 | Program / arm | Mechanism | Local subtotal | Archive | Program bytes | b/B | Determinism | Result |
 |---|---|---:|---:|---:|---:|---|---|
-| `opcode_wiki_slot_v1:D` | syntax opcode preprocessor | unknown | 67,601 | unknown | 2.163232 | true | `operations/provenance/opcode_wiki_slot_terminal_20260908/D.json` |
-| `opcode_slot_reset_v1:D` | syntax opcode preprocessor | unknown | 67,626 | unknown | 2.164032 | true | `operations/provenance/opcode_slot_reset_terminal_20260908/D.json` |
-| `opcode_calibration_cost_v1:K` | syntax opcode preprocessor | unknown | 67,658 | unknown | 2.165056 | true | `operations/provenance/opcode_calibration_terminal_20260908/K.json` |
+| `opcode_field_history250k_q0_v1:D` | syntax opcode preprocessor | unknown | 67,578 | unknown | 2.162496 | true | `operations/provenance/opcode_field_history_terminal_20260908/D.json` |
+| `opcode_field_history250k_q0_v1:G` | syntax opcode preprocessor | unknown | 67,579 | unknown | 2.162528 | true | `operations/provenance/opcode_field_history_terminal_20260908/G.json` |
+| `opcode_field_history250k_q0_v1:S` | syntax opcode preprocessor | unknown | 67,584 | unknown | 2.162688 | true | `operations/provenance/opcode_field_history_terminal_20260908/S.json` |
 
 
 ## Unavailable terminal evidence

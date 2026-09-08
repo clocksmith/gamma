@@ -23,9 +23,23 @@ On 3,744 artificial bytes, P/K/D/G/S archives are 498/498/499/504/516 bytes.
 Aligned history beats the two routing controls but loses one byte to the parent;
 this establishes implementation correctness, not corpus economics. Peak phase
 RSS is 31,244KiB. The [opening250KB contract](../operations/adaptive/experiments/opcode_field_history250k_q0_v1.json)
-is frozen; `root_explore` holds job `20260908T224949Z_59e57de621` pending publication/admission.
+was published by `root_explore`; job `20260908T224949Z_59e57de621` is complete.
 The [two-file bundle tests](../operations/provenance/opcode_field_history_bundle_v1_unit.json)
 pass five checks; [runner tests](../operations/provenance/opcode_field_history_gate_v1_unit.json) pass seven. Local source is 6,606 bytes (+860); full package unresolved.
+
+The [terminal corpus comparison](../operations/provenance/opcode_field_history_terminal_20260908.json)
+closes all sixteen phases: P/K/D/G/S archives are 67,658/67,658/67,578/67,579/67,584 bytes.
+D saves 80 bytes and separates from G/S by only 1/6 bytes; all exact inverses,
+repeats, parent projections and complete state witnesses pass. The discovery
+guard closes without violations, peaking at 590,028,800 bytes on CPU2.
+The [source-ZIP comparison](../results/opcode_field_history_source_zip_v1/attempt01/cost.json)
+adds 794 source-delivery bytes, which this sample's archive gain does not pay.
+The [validated reflection](../operations/adaptive/reflections/20260908T224949Z_59e57de621.json)
+retains the supported development result and holds integration/scaling. Freeze
+a separate validation population without changing the mechanism; no full-score credit.
+The [validation contract](../operations/adaptive/experiments/opcode_field_history_validation250k_q0_v1.json)
+is frozen and claimed by `root_explore`: raw offsets 347250000..347499999, unchanged
+codec and controls, no tuning or control-arm selection after validation. Runner preparation remains.
 
 ## 2026-09-08 - Bound compact-parent complementarity before constructing a selector
 
@@ -771,30 +785,3 @@ Existing parsers inspect complete invocations, so a prefix-driven parser and
 independent decoder are missing. The [synthetic implementation plan](../operations/provenance/causal_field_dependency_synthetic_q0_v1_plan.json)
 assigns that bounded work to `refresh_cleanup_review`, with uniform P/K,
 conditional T, recency R and causal association control S. No corpus gate follows.
-
-## 2026-09-06 - Fixed programs isolate the token-storage loss
-
-ROOT/root_explore completed `dualstream_grammar_reserialize250k_q0_v1` after
-publishing ownership, reviewed code and 20 frozen inputs at `43e1bbee8`.
-All 12 independently bounded processes passed exact reconstruction and fixed
-program reserialization repeats. The two diagonal archives reproduce their
-published sources; every frame, rule, literal, argument and fixed section agrees.
-
-| Selected program | Old argument storage | Token argument storage |
-| --- | ---: | ---: |
-| Old selection | 102,492 | 110,700 |
-| New selection | 109,098 | 109,170 |
-
-With old selection fixed, token storage adds **8,208 bytes**: definitions save
-17,184 bytes while argument references add 25,392. Under new selection it adds
-72 bytes. Changed selection recovers 1,530 bytes under token storage; it mitigates
-the loss. This closes the named attribution uncertainty and parks this exact
-storage realization. A separate constructed synthetic fixture demonstrates
-73 bytes of paid shared-binding gain; broader grammar mechanisms remain open.
-
-The [terminal audit](../operations/provenance/dualstream_grammar_reserialize250k_terminal_20260906.json)
-and [validated reflection](../operations/adaptive/reflections/20260906T213306Z_c8ad39e02a.json)
-bind the four recorded rows and the passing 36,098,048-byte discovery guard.
-Raw-encoder determinism and compression runtime remain null in those rows:
-their repeats start from fixed archives, not renewed raw-input discovery.
-No validation, confirmation, package qualification or full-score credit follows.

@@ -66,3 +66,4 @@ Archived files preserve complete H2 records.
 - [part-045.md: 2026-09-06 dual-stream grammar development comparison](archive/part-045.md)
 - [part-046.md: 2026-09-06 closed external design request and local inverse repair](archive/part-046.md)
 - [part-047.md: 2026-09-06 shared token-argument terminal comparison](archive/part-047.md)
+- [part-048.md: 2026-09-06 fixed-program token-storage attribution](archive/part-048.md)
