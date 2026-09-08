@@ -2,6 +2,23 @@
 
 [Record index](research_register/README.md) | [Earlier records](research_register/archive/README.md)
 
+## 2026-09-08 - Native output-tail comparison freezes one numerical correction
+
+The [new comparison](../operations/adaptive/experiments/fx2_half_tail_fixture50051_q0_v1.json)
+tests whether correcting final transformer half outputs pays in native archives.
+P/K retain the original 431-input block; D changes only positive subnormal tail
+outputs before the existing floor. Input priors, trained weights, resets and
+piece-boundary fallback remain unchanged. All input/output half trajectories
+must agree across arms, alongside exact archives, inverses and coder traces.
+The [unit receipt](../operations/evidence/20260908_fx2_half_tail_native_unit.json)
+retains exhaustive finite conversion checks and five passing runner tests.
+The failed temporary-directory compile and test-scope mistake remain recorded.
+Owner `root_explore` holds job `20260908T210238Z_20d11a6e91` for publication and
+fresh CPU2 admission. One 50,051-byte development fixture; no tuning or holdout.
+The guard allows 9,999,998,976 memory bytes, zero swap, 24GB scratch and a
+1,200-second elapsed stop. No native corpus result or compression gain exists
+yet; complete hidden state and submission package qualification remain open.
+
 ## 2026-09-08 - Scalar half-output audit isolates a trained boundary discrepancy
 
 After the compact-block loss, lenses4/8 select an output-conversion question.

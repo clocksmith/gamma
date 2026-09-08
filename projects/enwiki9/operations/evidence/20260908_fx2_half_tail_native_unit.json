@@ -1,0 +1,131 @@
+{
+  "schema": "gamma.enwiki9.half-tail-native-unit.v1",
+  "status": "passed",
+  "sources": [
+    {
+      "path": "lib/fx2_half_tail_v1.hpp",
+      "bytes": 2293,
+      "sha256": "c4b935080ca3162a73f4092ad16ee2b85c36d213ad5af16b0364f498331307d1"
+    },
+    {
+      "path": "tools/fx2_half_tail_native_adapter_v1.py",
+      "bytes": 3201,
+      "sha256": "3ae0a803182d11aa0236ca415b80de9938ef37997225762eb4df15b9e7f4a63d"
+    },
+    {
+      "path": "tools/fx2_half_tail_fixture50051_q0_v1.py",
+      "bytes": 4475,
+      "sha256": "882386114e0454bd12699372c953f794955d2a982408c8654fa167da241214d6"
+    },
+    {
+      "path": "tests/fx2_half_tail_native_v1.cpp",
+      "bytes": 1829,
+      "sha256": "f7ce9bbd693b918f2e724fdad89fd291546ef8665e9a4011303fe721accd9d69"
+    },
+    {
+      "path": "tests/test_fx2_half_tail_native_v1.py",
+      "bytes": 4712,
+      "sha256": "0668c3896a3e5f72b77a57c0c5e335c564bd2a90126247d1fac08f4b635f2932"
+    },
+    {
+      "path": "operations/provenance/fx2_half_tail_native_adapter_v1.json",
+      "bytes": 2700,
+      "sha256": "4b1aa55d4cc423368dcfa91fb85e685d8564317d89379074545d6734ded5c4d2"
+    },
+    {
+      "path": "results/fx2_half_tail_native_v1/unit02/receipt.json",
+      "bytes": 2384,
+      "sha256": "9fd5ecb8d1160c85ca2ab468dd3b095e5ea69d2e2493c708653ff635a8c17a6f"
+    }
+  ],
+  "logs": [
+    {
+      "path": "results/fx2_half_tail_native_v1/python_unit01/stderr",
+      "bytes": 1585,
+      "sha256": "041ed2cb056104e1bd913b503f3641d7c6b8a669eb46cf0551f93bbb2a28a27d"
+    },
+    {
+      "path": "results/fx2_half_tail_native_v1/python_unit01/stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "results/fx2_half_tail_native_v1/python_unit02/stderr",
+      "bytes": 820,
+      "sha256": "629c14f6625f064942370ab7356466f0eadc464b5715448ef830f49153e88f4a"
+    },
+    {
+      "path": "results/fx2_half_tail_native_v1/python_unit02/stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "results/fx2_half_tail_native_v1/unit01/compile.stderr",
+      "bytes": 151,
+      "sha256": "ac6d7b13beefa72835899e52974313a66ed9d4c3e55480fa3075ee22f152eb04"
+    },
+    {
+      "path": "results/fx2_half_tail_native_v1/unit01/compile.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "results/fx2_half_tail_native_v1/unit01/execute.stderr",
+      "bytes": 75,
+      "sha256": "eb5b3f71cf1f7572c48b628683b898b09ee577c6dbb249cbc8397dd4ef127dfc"
+    },
+    {
+      "path": "results/fx2_half_tail_native_v1/unit01/execute.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "results/fx2_half_tail_native_v1/unit02/compile.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "results/fx2_half_tail_native_v1/unit02/compile.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "results/fx2_half_tail_native_v1/unit02/execute.stderr",
+      "bytes": 46,
+      "sha256": "afa737f42320ec269e49e1b92047720f381228316aa4cabfa21c7a4872ee302b"
+    },
+    {
+      "path": "results/fx2_half_tail_native_v1/unit02/execute.stdout",
+      "bytes": 90,
+      "sha256": "5843e3ef51806400bb03cde14fe64bb678b16cc084e91ee5c845d9211e62a380"
+    }
+  ],
+  "cpp": "15361 nonnegative half patterns from zero through one, P/K identity, corrected tail, unchanged fallback, invalid arguments and update order pass.",
+  "python": {
+    "tests": 5,
+    "passed": 5,
+    "command": "TMPDIR=results/fx2_half_tail_native_v1/python_unit02 taskset -c 3 timeout 60 python3 -m unittest discover -s tests -p test_fx2_half_tail_native_v1.py -v",
+    "checks": [
+      "Bound adapter and engine identities",
+      "Correction before the relevant transformer output floor",
+      "Original431 model for all arms",
+      "Wrong source, duplicate or incomplete activation rejected",
+      "Native421-byte audit framing, corruption and first divergence"
+    ]
+  },
+  "preserved_failures": [
+    "unit01 compilation: TMPDIR user quota exceeded; no executable ran. Retried with owned workspace TMPDIR.",
+    "python_unit01: test searched for the first floor in the entire source rather than TransformerByteUpdate. Corrected test scope; codec unchanged."
+  ],
+  "bounds": {
+    "cpu": [
+      3
+    ],
+    "cpp_phase_wall_seconds": 60,
+    "cpp_address_space_bytes": 536870912,
+    "cpp_file_bytes": 33554432,
+    "python_wall_seconds": 60
+  },
+  "native_corpus_executed": false,
+  "objective_credit_bytes": 0
+}

@@ -12,7 +12,7 @@ Reusable artifact helpers for new tools: [lib/artifacts.py](../lib/artifacts.py)
 The LibNC initializer teacher launcher exits before the first forward, gradient, update, or coded symbol; its source-bound experiment defines that boundary.
 The delayed-status helper's `enwiki9_delayed_status_latest.log` pointer is operational history, not present-host occupancy proof.
 
-Coverage: **1056 files** (33 .c, 67 .cpp, 1 .gdb, 1 .h, 1 .hpp, 1 .html, 949 .py, 3 .sh).
+Coverage: **1058 files** (33 .c, 67 .cpp, 1 .gdb, 1 .h, 1 .hpp, 1 .html, 951 .py, 3 .sh).
 
 | Tool | Purpose | Referenced contracts |
 |---|---|---|
@@ -335,13 +335,15 @@ Coverage: **1056 files** (33 .c, 67 .cpp, 1 .gdb, 1 .h, 1 .hpp, 1 .html, 949 .py
 | [`tools/fx2_cmix_transformer_static_vocab_fixture50051_q0_v1.py`](../tools/fx2_cmix_transformer_static_vocab_fixture50051_q0_v1.py) | Prospective GCC diagnostic on one immutable public profiling fixture. | [1](../operations/adaptive/experiments/fx2_cmix_transformer_static_vocab_fixture50051_q0_v1.json) |
 | [`tools/fx2_cmix_transformer_transfer250k_q0_v1.py`](../tools/fx2_cmix_transformer_transfer250k_q0_v1.py) | Frozen transfer diagnostic using the measured FX2 binary and existing driver. | [1](../operations/adaptive/experiments/fx2_cmix_transformer_transfer250k_q0_v1.json) |
 | [`tools/fx2_cmix_transformer_transfer250k_q0_v2.py`](../tools/fx2_cmix_transformer_transfer250k_q0_v2.py) | Frozen transfer diagnostic using the measured FX2 binary and existing driver. | [2](../operations/adaptive/experiments/fx2_cmix_transformer_transfer250k_q0_v2.json) |
-| [`tools/fx2_coder_trace_v1.hpp`](../tools/fx2_coder_trace_v1.hpp) | Gamma diagnostic instrumentation for the pinned public FX2 arithmetic coder. Records compare probabilities and coder intervals; they are not codec state serialization or a substitute for exact decoded output and archive repeats. | [7](../operations/adaptive/experiments/fx2_causal_field_wrt_replay250k_q0_v1.json) |
+| [`tools/fx2_coder_trace_v1.hpp`](../tools/fx2_coder_trace_v1.hpp) | Gamma diagnostic instrumentation for the pinned public FX2 arithmetic coder. Records compare probabilities and coder intervals; they are not codec state serialization or a substitute for exact decoded output and archive repeats. | [8](../operations/adaptive/experiments/fx2_causal_field_wrt_replay250k_q0_v1.json) |
 | [`tools/fx2_compact_trace_window.py`](../tools/fx2_compact_trace_window.py) | Run a frozen random window through compact FX2 probability tracing. | none found |
-| [`tools/fx2_compact_v26_fixture50051_q0_v1.py`](../tools/fx2_compact_v26_fixture50051_q0_v1.py) | Guarded P/K/D native FXCM block comparison with the fixed FX2 transformer. | [1](../operations/adaptive/experiments/fx2_compact_v26_fixture50051_q0_v1.json) |
+| [`tools/fx2_compact_v26_fixture50051_q0_v1.py`](../tools/fx2_compact_v26_fixture50051_q0_v1.py) | Guarded P/K/D native FXCM block comparison with the fixed FX2 transformer. | [2](../operations/adaptive/experiments/fx2_compact_v26_fixture50051_q0_v1.json) |
 | [`tools/fx2_compact_v26_native_adapter_v1.py`](../tools/fx2_compact_v26_native_adapter_v1.py) | Exact source adapter selecting original, copy-control or compact FXCM. | [1](../operations/adaptive/experiments/fx2_compact_v26_fixture50051_q0_v1.json) |
 | [`tools/fx2_core_tune_package.py`](../tools/fx2_core_tune_package.py) | Build and package an fx2 core-tuning candidate. This creates a score-honest candidate by rebuilding the local fx2-cmix source with compile-time predictor knobs, compressing the resulting executable, and dropping it into an existing wrapper template. | none found |
 | [`tools/fx2_core_tune_queue.py`](../tools/fx2_core_tune_queue.py) | Build and gate fx2 core-tuning candidates through one serialized lane. | none found |
 | [`tools/fx2_gepa_order_package.py`](../tools/fx2_gepa_order_package.py) | Package a self-contained fx2 candidate from a GEPA page-order key. | none found |
+| [`tools/fx2_half_tail_fixture50051_q0_v1.py`](../tools/fx2_half_tail_fixture50051_q0_v1.py) | Reuse the frozen native comparison machinery for one output-tail mutation. | [1](../operations/adaptive/experiments/fx2_half_tail_fixture50051_q0_v1.json) |
+| [`tools/fx2_half_tail_native_adapter_v1.py`](../tools/fx2_half_tail_native_adapter_v1.py) | Source-bound final-output correction, preserving native model input priors. | [1](../operations/adaptive/experiments/fx2_half_tail_fixture50051_q0_v1.json) |
 | [`tools/fx2_issa_shadow_search.py`](../tools/fx2_issa_shadow_search.py) | Offline I-SSA shadow search over fx2 residual logs. This tests the Integer State-Space Attractor idea without running a compressor. It consumes existing per-bit fx2 residual rows, keeps a tiny deterministic integer state vector derived only from prior decoded bits/fields, and measures whether that state improves an exact binary arithmetic shadow coder. The correction is deliberately conservative: a causal residual-bias table keyed by p_bucket, bit_pos, and the attractor bucke | none found |
 | [`tools/fx2_loss_ledger.py`](../tools/fx2_loss_ledger.py) | Aggregate FX2_LOSS_LEDGER rows from an fx2-cmix stderr log. | none found |
 | [`tools/fx2_loss_probe.py`](../tools/fx2_loss_probe.py) | Build and run a reproducible fx2-cmix coder-side loss ledger probe. | none found |

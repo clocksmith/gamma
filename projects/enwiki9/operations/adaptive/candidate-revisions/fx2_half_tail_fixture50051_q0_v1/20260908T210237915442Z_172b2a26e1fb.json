@@ -1,0 +1,56 @@
+{
+  "candidateId": "fx2_half_tail_fixture50051_q0_v1",
+  "candidateTreeSha256": "sha256:172b2a26e1fb474f985b688aa03053137d4f1af545f83c271fcc562f46e2f1f8",
+  "change": {
+    "evidence": [
+      "operations/adaptive/experiments/fx2_half_tail_fixture50051_q0_v1.json"
+    ],
+    "hypothesis": "Correcting only scalar positive-subnormal transformer output tail values before the existing floor, with unchanged half input priors and model trajectories, reduces the exact FX2 fixture archive.",
+    "kind": "implementation",
+    "replacements": [],
+    "summary": [
+      "D alone doubles the existing scalar conversion for positive subnormal half outputs at indices200..204 of205-symbol transformer rows. P/K audit without mutation. Preserve originalFXCM431, PPM fallback, trained weights, input priors, WRT and original downstream mixer."
+    ]
+  },
+  "files": [
+    {
+      "blobPath": "operations/adaptive/candidate-blobs/sha256/f9/f9f5f712340416ed432be4cfb20af56a01a63e3ece3a69384f7a0d2aa86c0f21",
+      "bytes": 970,
+      "normalization": "semantic-meta-v1",
+      "path": "meta.json",
+      "sha256": "f9f5f712340416ed432be4cfb20af56a01a63e3ece3a69384f7a0d2aa86c0f21"
+    },
+    {
+      "blobPath": "operations/adaptive/candidate-blobs/sha256/60/606465ab90199873d6e1eb244d1459edc713bf90522c3a58f3265bb04edbe772",
+      "bytes": 285,
+      "normalization": "verbatim",
+      "path": "program.py",
+      "sha256": "606465ab90199873d6e1eb244d1459edc713bf90522c3a58f3265bb04edbe772"
+    }
+  ],
+  "generatedUtc": "2026-09-08T21:02:37+00:00",
+  "immutableBlobsComplete": true,
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:e91ff20e92c3cac8acb0cbe5c79fc8e8a3b427d7e151245c8eecc52b1c32fa00",
+    "objectiveId": "gamma-enwiki9-hutter-90m-v3",
+    "objectivePath": "contracts/research/v3/objective-contract.json",
+    "targetScoreBytes": 90000000
+  },
+  "parentRevision": {
+    "candidateId": "fx2_cmix_transformer_static_vocab_fixture50051_q0_v1",
+    "candidateTreeSha256": "sha256:c34d07a6c86181c0c998d250e4fa69de351212ad9cce4537d563ee9c71017d07",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/fx2_cmix_transformer_static_vocab_fixture50051_q0_v1/20260905T194245889420Z_c34d07a6c861.json",
+      "sha256": "sha256:20cc2bdcc672b351b693bf7e348fc0f58675a686127571249a07b769d279c564"
+    }
+  },
+  "previousRevision": {
+    "path": "operations/adaptive/candidate-revisions/fx2_half_tail_fixture50051_q0_v1/20260908T210209832610Z_14d04b1f7766.json",
+    "sha256": "sha256:b928f259c8c934afbaea5d250150885266377e6ac835231ea1dd4190a807a35e"
+  },
+  "provenanceClass": "native",
+  "schema": "gamma.enwiki9.candidate-revision.v1",
+  "treeDigestAlgorithm": "sha256-canonical-counted-files-v1"
+}

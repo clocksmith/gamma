@@ -1,0 +1,82 @@
+{
+  "schema": "gamma.enwiki9.half-tail-unit.v1",
+  "cpu": [
+    3
+  ],
+  "memory_ceiling_bytes": 536870912,
+  "phase_wall_cap_seconds": 60,
+  "file_cap_bytes": 33554432,
+  "tmpdir": "results/fx2_half_tail_native_v1/unit02/tmp",
+  "inputs": [
+    {
+      "path": "lib/fx2_half_tail_v1.hpp",
+      "bytes": 2293,
+      "sha256": "c4b935080ca3162a73f4092ad16ee2b85c36d213ad5af16b0364f498331307d1"
+    },
+    {
+      "path": "tests/fx2_half_tail_native_v1.cpp",
+      "bytes": 1829,
+      "sha256": "f7ce9bbd693b918f2e724fdad89fd291546ef8665e9a4011303fe721accd9d69"
+    }
+  ],
+  "commands": [
+    {
+      "phase": "compile",
+      "argv": [
+        "/usr/bin/g++",
+        "-std=c++17",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-march=x86-64-v3",
+        "-fno-fast-math",
+        "tests/fx2_half_tail_native_v1.cpp",
+        "-o",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_half_tail_native_v1/unit02/fixture"
+      ],
+      "returncode": 0,
+      "elapsed_seconds": 0.36592316487804055,
+      "cpu_seconds": 0.36106,
+      "peak_rss_kib": 177724
+    },
+    {
+      "phase": "execute",
+      "argv": [
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_half_tail_native_v1/unit02/fixture"
+      ],
+      "returncode": 0,
+      "elapsed_seconds": 0.0044092300813645124,
+      "cpu_seconds": 0.003440999999999965,
+      "peak_rss_kib": 177724
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "results/fx2_half_tail_native_v1/unit02/compile.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "results/fx2_half_tail_native_v1/unit02/compile.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "results/fx2_half_tail_native_v1/unit02/execute.stderr",
+      "bytes": 46,
+      "sha256": "afa737f42320ec269e49e1b92047720f381228316aa4cabfa21c7a4872ee302b"
+    },
+    {
+      "path": "results/fx2_half_tail_native_v1/unit02/execute.stdout",
+      "bytes": 90,
+      "sha256": "5843e3ef51806400bb03cde14fe64bb678b16cc084e91ee5c845d9211e62a380"
+    },
+    {
+      "path": "results/fx2_half_tail_native_v1/unit02/fixture",
+      "bytes": 17096,
+      "sha256": "e64a77e50a20fdbdcef0b174daed5bf5bded57ead2a697cc238ad18b7b5dfdf2"
+    }
+  ],
+  "passed": true,
+  "scientific_credit_bytes": 0
+}
