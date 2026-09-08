@@ -12,7 +12,7 @@ Reusable artifact helpers for new tools: [lib/artifacts.py](../lib/artifacts.py)
 The LibNC initializer teacher launcher exits before the first forward, gradient, update, or coded symbol; its source-bound experiment defines that boundary.
 The delayed-status helper's `enwiki9_delayed_status_latest.log` pointer is operational history, not present-host occupancy proof.
 
-Coverage: **1041 files** (33 .c, 67 .cpp, 1 .gdb, 1 .h, 1 .hpp, 1 .html, 934 .py, 3 .sh).
+Coverage: **1042 files** (33 .c, 67 .cpp, 1 .gdb, 1 .h, 1 .hpp, 1 .html, 935 .py, 3 .sh).
 
 | Tool | Purpose | Referenced contracts |
 |---|---|---|
@@ -839,6 +839,7 @@ Coverage: **1041 files** (33 .c, 67 .cpp, 1 .gdb, 1 .h, 1 .hpp, 1 .html, 934 .py
 | [`tools/nncp_zipf_output_bias_qm0.py`](../tools/nncp_zipf_output_bias_qm0.py) | Test one fixed decoder-derived Zipf initialization of NNCP output bias. | none found |
 | [`tools/online_bpe_gate.py`](../tools/online_bpe_gate.py) | Zero-table online macro tokenizer for enwik probes. The encoder and decoder both start with the 256 byte literals. As emitted symbols repeat, the next unused high-byte slot is bound to the repeated symbol pair. Token definitions store their expanded bytes, so later token creation is independent of recursive table mutation. | none found |
 | [`tools/opcode_field_compact_build_v1.py`](../tools/opcode_field_compact_build_v1.py) | Build only a new compact field-repair source bundle from authenticated inputs. | none found |
+| [`tools/opcode_field_compact_gate_v1.py`](../tools/opcode_field_compact_gate_v1.py) | Bounded replay of compact source against retained archives and shared state. | none found |
 | [`tools/opcode_field_compact_observe_v1.py`](../tools/opcode_field_compact_observe_v1.py) | External witnesses for compact field repair; no model or probability changes. | none found |
 | [`tools/opcode_field_repair_cli_v1.py`](../tools/opcode_field_repair_cli_v1.py) | Bounded command adapter and optional witnesses for the frozen field repair. | [1](../operations/adaptive/experiments/opcode_field_compact_v1.json) |
 | [`tools/opcode_field_repair_gate_v1.py`](../tools/opcode_field_repair_gate_v1.py) | Run the sealed field-only P/K/D comparison through the existing phase driver. | none found |
