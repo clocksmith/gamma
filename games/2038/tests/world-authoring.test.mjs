@@ -67,7 +67,7 @@ test("canon requires explicit unique identities, dispositions, and complete narr
 
 test("lore-only entries cannot gain mechanics, public deployment, or game bindings", async () => {
   const ledger = await buildScenarioIndex();
-  assert.deepEqual(await validateEraSituationLedger(ledger), { eras: 4, scenarios: 53, surfaces: 63 });
+  assert.deepEqual(await validateEraSituationLedger(ledger), { eras: 4, scenarios: 53, surfaces: 64 });
   for (const mutate of [
     s => { s.mechanicPreservation.status = "retained"; },
     s => { s.deploymentProfiles.push("public-playtest"); },

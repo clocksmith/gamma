@@ -43,7 +43,7 @@ test("single-generator contract is canonical and obsolete options fail closed", 
 test("local connections retain exact construction prices and remove allocation components", async () => {
  const config = await readJson("dist/runtime/game-config.json");
  const rules = await readFile(new URL("dist/docs/core-rules.md", root), "utf8");
- assert.deepEqual(config.powerSources.map(s => s.runwayCost), [2, 1, 5]);
+ assert.deepEqual(config.powerSources.map(s => s.runwayCost), [2, 1]);
  assert.ok(config.powerSources.every(s => !Object.hasOwn(s, "capacity")));
  assert.equal(config.playerSupply.agents, 4);
  assert.equal(config.playerSupply.startingAgents, 2);

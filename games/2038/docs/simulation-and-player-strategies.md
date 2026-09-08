@@ -443,7 +443,10 @@ handling, fairness, and fun.
 
 The three cuts candidate records each Build in `metrics.construction` with its
 Era, Facility step, and project. `projectCounts` counts Generators, Mega-Clusters,
-and Fusion. `meanShovelsIncome` now measures Corthaven's actual capped Production
+Fusion, and Quantum. Production receipts identify the resource, nominal yield, and
+accepted gain per hosted project. The September 6 construction reports retain
+their earlier paired/unique project rules and are not evidence for this candidate.
+`meanShovelsIncome` now measures Corthaven's actual capped Production
 income. Historical reports retain their former fields and frozen rule identities.
 
 ## Deliberate construction diagnostic

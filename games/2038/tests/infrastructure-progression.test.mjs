@@ -79,9 +79,11 @@ test('Fusion follows its host, powers itself and only owned nearby Facilities, a
  p.facilities.push({id:'s0-facility-2',tileId:neighbor.instanceId,category:neighbor.category});
  m.applyBuild(0,alone(m,0,'fusion_demonstrator'));
  assert.equal(m.latestPoweredFacilities(p).length,2);assert.equal(p.generators.length,0);
- const distant=m.board.find(t=>t.category!=='frontier'&&t.instanceId!==neighbor.instanceId&&!m.areAdjacent(t.instanceId,neighbor.instanceId));
+ const distant=m.board.find(t=>t.category!=='frontier'&&m.areAdjacent(tile.instanceId,t.instanceId)&&t.instanceId!==neighbor.instanceId&&!m.areAdjacent(t.instanceId,neighbor.instanceId));
  const occupiedBefore=m.generatorOccupancy(tile.instanceId);
- p.facilities[0].tileId=distant.instanceId;p.facilities[0].category=distant.category;
+ const relocation=m.legalResolutions(0,'organize').find(d=>d.parameters.mode==='relocate'&&d.parameters.facilityId===p.facilities[0].id&&d.parameters.facilityDestinationId===distant.instanceId);
+ assert.ok(relocation);m.applyResolution(0,relocation);
+ assert.equal(p.facilities[0].tileId,distant.instanceId);assert.equal(p.projects[0].hostId,p.facilities[0].id);
  assert.equal(m.generatorOccupancy(tile.instanceId),occupiedBefore);
  assert.deepEqual([...m.infrastructureState(p).locallyEligible],[p.facilities[0].id]);
  const rival=m.players[1];rival.facilities.push({id:'rival-second',tileId:distant.instanceId,category:distant.category});
@@ -112,4 +114,17 @@ test('Trust milestone and objective records use existing scoring history without
  assert.deepEqual(m.objectiveRecord(p),{kind:'Runway gained through Fund',value:7});
  assert.deepEqual(m.snapshot().players[0].objectiveRecord,m.objectiveRecord(p));
  m.roundMandate=m.mandateDocument.mandates.find(x=>x.id==='building_has_weather');assert.equal(m.objectiveRecord(p),null);
+});
+
+test('a nonstarting Fusion host remains a Power source after its ordinary Generator is removed', async()=>{
+ const m=await setup();m.round=3;const p=m.players[0];
+ const tile=m.board.find(t=>t.category==='energy'&&t.instanceId!==p.facilities[0].tileId);
+ p.facilities.push({id:'s0-facility-2',tileId:tile.instanceId,category:tile.category});
+ p.generators=[{id:'fixture-generator',tileId:tile.instanceId,sourceId:'clean_infrastructure'}];
+ const plan=choices(m,0,'fusion_demonstrator').find(d=>!d.parameters.facility&&d.parameters.project.hostId==='s0-facility-2');
+ assert.ok(plan);m.applyBuild(0,plan);p.generators=[];
+ assert.ok(m.infrastructureState(p).locallyEligible.has('s0-facility-2'));
+ const neighbor=m.board.find(t=>t.category!=='frontier'&&m.areAdjacent(tile.instanceId,t.instanceId));
+ p.facilities.push({id:'s0-facility-3',tileId:neighbor.instanceId,category:neighbor.category});
+ assert.ok(m.infrastructureState(p).locallyEligible.has('s0-facility-3'));
 });

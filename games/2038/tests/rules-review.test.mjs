@@ -100,7 +100,7 @@ test("Joint Ventures can share Mega-Cluster hosts and repeat a pair up to shared
   const b = match.board.find(tile => tile.category !== "frontier" && match.areAdjacent(a.instanceId, tile.instanceId));
   left.facilities = [{ id: "left", tileId: a.instanceId, category: a.category }];
   right.facilities = [{ id: "right", tileId: b.instanceId, category: b.category }];
-  match.megaClusters = [{ id: "existing-cluster", leadSeat: 0, leftId: "left", rightId: "other-host" }];
+  left.projects = [{ projectId: "mega_cluster", hostId: "left", builtEra: 2 }];
   for (let i = 0; i < match.config.sharedSupply.jointVenturePairs; i++) {
     const proposal = match.legalResolutions(0, "influence").find(choice => choice.parameters.mode === "joint_venture");
     assert.ok(proposal, `host remains eligible for venture ${i + 1}`);
@@ -111,7 +111,7 @@ test("Joint Ventures can share Mega-Cluster hosts and repeat a pair up to shared
   assert.equal(new Set(match.contracts.map(contract => contract.id)).size, match.config.sharedSupply.jointVenturePairs);
   // Compare identical Production states with and without two active duplicate contracts.
   match.contracts = match.contracts.slice(0, 2);
-  match.megaClusters = [];
+  left.projects = [];
   const original = match.contracts;
   match.contracts = [];
   for (const player of match.players) { player.runway = 0; player.compute = 0; }
@@ -133,9 +133,14 @@ test("player documents teach actions early and preserve permanent physical state
     previous = index;
   }
   assert.doesNotMatch(rules, /Dossier|universal Protection|Safety currency|faction scoring rule|quantum record disputes|Era halves upward/);
+  const gallery = await read("dist/site/gallery.html");
+  assert.equal((gallery.match(/data-objective-value="99"/g) || []).length, 6);
+  assert.equal((gallery.match(/data-objective-value=/g) || []).length, 600);
+  assert.equal((gallery.match(/class="recognition-track"/g) || []).length, 6);
+  assert.doesNotMatch(gallery, /class="trust-award-record"|quantum-completion/);
   const spec = await read("physical/component-spec.md");
-  assert.match(spec, /checkboxes beside the Trust track, labelled 2, 4, and 6/);
-  assert.match(spec, /Never erase a marked box during the game/);
+  assert.match(spec, /Trust milestone positions are 0, 2, 4, 6/);
+  assert.match(spec, /never moves backward/);
   const references = JSON.parse(await read("dist/runtime/reference-cards.json")).playerReferences;
   const production = references.find(card => card.id === "production_audit");
   assert.match(production.frontText.join(" "), /faction Production income first/);

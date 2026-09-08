@@ -57,7 +57,7 @@ try {
         projects: focal.metrics.projects, construction: focal.metrics.construction,
         firstProductiveProjectEra: production[0]?.round ?? null,
         productiveProjectEras: production.length,
-        projectComputeGained: production.reduce((sum, event) => sum + event.gainedCompute, 0),
+        projectComputeGained: production.filter(event => event.resource === "compute").reduce((sum, event) => sum + event.gained, 0),
         agiDeclared: focal.agiDeclared, actions: focal.metrics.actions,
         capability: focal.capability, customers: focal.customers, trust: focal.trust,
         poweredFacilities: focal.poweredFacilityMandate, worldEnding: outcome.worldEnding.id,

@@ -298,7 +298,7 @@ function renderPlayers(state) {
         <dt>${copy.tracks.customers}</dt><dd>${player.customers}</dd>
         <dt>${copy.tracks.trust}</dt><dd>${player.trust}</dd>
         <dt>${copy.tracks.scrutiny}</dt><dd>${player.scrutiny}</dd>
-        <dt>${escapeHtml(copy.browser.personalProjects)}</dt><dd>${(player.projects || []).map(project => `${escapeHtml(project.projectId.replaceAll("_", " "))}: ${escapeHtml(project.hostId)}`).join("; ") || "None"}</dd>
+        <dt>${escapeHtml(copy.browser.personalProjects)}</dt><dd>${(player.projects || []).map(project => `${escapeHtml(config.personalProjects.definitions.find(definition => definition.id === project.projectId)?.name || project.projectId)}: ${escapeHtml(project.hostId)}`).join("; ") || "None"}</dd>
         <dt>${escapeHtml(copy.browser.trustMilestone)}</dt><dd>${player.highestTrustMilestone ?? 0}</dd>
         <dt>${escapeHtml(copy.browser.objectiveProgress)}</dt><dd>${player.objectiveRecord ? `${escapeHtml(player.objectiveRecord.kind)}: ${player.objectiveRecord.value}` : "—"}</dd>
         <dt>AGI recognized</dt><dd>${player.agiDeclared ? "Yes" : "No"}</dd>

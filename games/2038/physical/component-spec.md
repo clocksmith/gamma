@@ -25,7 +25,8 @@ Facilities and Generators use the same flat chip format with distinct printed
 symbols. Facilities are visibly numbered 1–4. Facility 1 carries its integrated
 starting-grid identifier. Never put Facility and Generator on opposite faces:
 both can exist simultaneously. Ordinary shuffled decks have indistinguishable
-backs within each deck.
+backs within each deck. Ordinary Power contracts use their printed tile identity;
+no separate reference card is needed.
 
 ## Personal project chips
 
