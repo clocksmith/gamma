@@ -1,0 +1,64 @@
+{
+  "adapter_id": "fx2_residual_ratio_native_v1",
+  "added_files": [
+    {
+      "source": {
+        "bytes": 5457,
+        "path": "lib/fx2_residual_ratio_v1.hpp",
+        "sha256": "ec501bf0b1fae7d576e694055671548a42335bc07c0411a738951cfd43b9b97c"
+      },
+      "target": "src/gamma-residual-ratio.h"
+    }
+  ],
+  "boundary": "Preserve original clamped float32 rows for P/K; Q16 multiplicative correction only for D/S.",
+  "files": [
+    {
+      "patched_bytes": 7341,
+      "patched_sha256": "40bf82d69197cb377f476ef635a615a5873dc0a97cb18b531cb8f5e28ac5ca73",
+      "replacements": [
+        {
+          "after": "#include \"gamma-residual-ratio.h\"\n#include \"mixer/sigmoid.h\"",
+          "before": "#include \"mixer/sigmoid.h\""
+        },
+        {
+          "after": "  ~Predictor();\n  float Predict();",
+          "before": "  float Predict();"
+        },
+        {
+          "after": "  void TransformerByteUpdate();\n  void GammaRatioAudit(unsigned char event);\n  gamma_ratio::Ratio gamma_ratio_;\n  bool gamma_ratio_enabled_ = false;\n  FILE* gamma_ratio_trace_ = nullptr;",
+          "before": "  void TransformerByteUpdate();"
+        }
+      ],
+      "source_bytes": 7136,
+      "source_path": "src/predictor.h",
+      "source_sha256": "348d3924fc4e1f4890d0332b0f33ba9591afa6ee06971b9a9bdeaa376b41f458"
+    },
+    {
+      "patched_bytes": 29451,
+      "patched_sha256": "7460c802c3a522d37aeca5bdee11244b2542eaf41627a362a239f63d45081c54",
+      "replacements": [
+        {
+          "after": "  memset(separator_window_, 0xFF, sizeof(separator_window_));\n  const char* gamma_setting = std::getenv(\"GAMMA_FX2_RATIO_ARM\");\n  const char gamma_arm = gamma_setting ? gamma_setting[0] : 'P';\n  if (gamma_setting && (!gamma_setting[0] || gamma_setting[1]))\n    Fail(\"Gamma ratio arm must be P, K, D or S\");\n  const bool gamma_native = transformer_ && !ppmd_only_ && !transformer_only_ &&\n      !transformer_probs_reader_ && !transformer_probs_writer_ && !ppmd_probs_writer_;\n  if (gamma_arm != 'P' && !gamma_native)\n    Fail(\"Gamma ratio requires native transformer without probability dumping\");\n  if (gamma_native) {\n    if (!gamma_ratio_.configure(vocab_size_, gamma_arm)) Fail(\"invalid Gamma ratio configuration\");\n    gamma_ratio_enabled_ = true;\n    const char* trace = std::getenv(\"GAMMA_FX2_RATIO_TRACE\");\n    if (trace) {\n      gamma_ratio_trace_ = std::fopen(trace, \"wbx\");\n      if (!gamma_ratio_trace_) Fail(\"cannot create Gamma ratio trace\");\n      GammaRatioAudit('I');\n    }\n    std::fprintf(stderr, \"Gamma ratio selected=%c\\n\", gamma_arm);\n  }\n",
+          "before": "  memset(separator_window_, 0xFF, sizeof(separator_window_));"
+        },
+        {
+          "after": "\nPredictor::~Predictor() {\n  if (gamma_ratio_trace_ && std::fclose(gamma_ratio_trace_) != 0)\n    Fail(\"failed closing Gamma ratio trace\");\n}\n\nvoid Predictor::GammaRatioAudit(unsigned char event) {\n  if (!gamma_ratio_trace_) return;\n  const auto state = gamma_ratio_.serialize();\n  const uint32_t n = state.size();\n  const unsigned char header[5] = {event, (unsigned char)n,\n      (unsigned char)(n>>8), (unsigned char)(n>>16), (unsigned char)(n>>24)};\n  if (std::fwrite(header,1,5,gamma_ratio_trace_) != 5 ||\n      std::fwrite(state.data(),1,n,gamma_ratio_trace_) != n)\n    Fail(\"failed writing Gamma ratio trace\");\n}\n\nunsigned long long Predictor::GetNumModels() {",
+          "before": "unsigned long long Predictor::GetNumModels() {"
+        },
+        {
+          "after": "void Predictor::TransformerByteUpdate() {\n  if (gamma_ratio_.pending()) {\n    const int token = byte_to_index_[manager_.bit_context_];\n    if (token < 0 || !gamma_ratio_.observe((unsigned)token)) Fail(\"Gamma ratio truth alignment failed\");\n    GammaRatioAudit('O');\n  }",
+          "before": "void Predictor::TransformerByteUpdate() {"
+        },
+        {
+          "after": "  if (byte_mixer_) {\n    if (gamma_ratio_enabled_) {\n      if (!gamma_ratio_.predict(probs_scratch_.data())) Fail(\"Gamma ratio probability boundary failed\");\n      GammaRatioAudit('P');\n    }\n    byte_mixer_->SetProbs(probs_scratch_.data());\n  }",
+          "before": "  if (byte_mixer_) byte_mixer_->SetProbs(probs_scratch_.data());"
+        }
+      ],
+      "source_bytes": 27424,
+      "source_path": "src/predictor.cpp",
+      "source_sha256": "0b79f43644daee942c9cb6da18fa464f0eb0185b6fc7ffc43cde703808fe537e"
+    }
+  ],
+  "schema": "gamma.enwiki9.exact-source-adapter-multi.v1",
+  "scope": "Native source adapter only; no native corpus result or eligibility claim."
+}
