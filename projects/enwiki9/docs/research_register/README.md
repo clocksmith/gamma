@@ -65,3 +65,4 @@ Archived files preserve complete H2 records.
 - [part-044.md: 2026-09-06 organization audit connects reflections to the agent loop](archive/part-044.md)
 - [part-045.md: 2026-09-06 dual-stream grammar development comparison](archive/part-045.md)
 - [part-046.md: 2026-09-06 closed external design request and local inverse repair](archive/part-046.md)
+- [part-047.md: 2026-09-06 shared token-argument terminal comparison](archive/part-047.md)
