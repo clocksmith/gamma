@@ -17,9 +17,10 @@ institutions racing to build, deploy, regulate, and plausibly declare AGI.
 It combines spatial engine building, push-your-luck research, asymmetric
 institutions, negotiation, and shared public scrutiny.
 
-The tone is neutral institutional retro-futurism with slight dystopian
-pressure. The world treats escalating events solemnly. Humor comes from
-systems and incentives, not jokes or allegations about real people.
+The writing contract in `world.md` owns tone and Era placement. Ground the
+setting in concrete situations, with wonder, opportunity, absurdity, and danger.
+Humor comes from recognizable behavior and incentives, not allegations about
+real people. Do not force every scene into the same dystopian conclusion.
 
 ## Canonical Boundaries
 

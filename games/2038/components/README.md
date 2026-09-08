@@ -10,7 +10,7 @@ An optional `#### Author notes` passage stays out of all player projections.
 The lore ID is stable even when a title changes. Keep exact costs, effects, and
 ending conditions in component JSON; use [rules.md](../rules.md) for procedures.
 
-Review the generated [World and Institutions](../dist/review/docs/world-and-institutions.md)
+Review the generated [World and Institutions](../dist/docs/world-and-institutions.md)
 and [Card and Board Reference](../dist/review/docs/card-reference.md) to judge what the
 player sees. Neither is an authoring location. Internal describes the source's
 audience; it does not mean access restrictions.

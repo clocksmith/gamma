@@ -161,14 +161,16 @@ test("public playtest publication is an allowlist with release identity and feed
     assert.equal((docsBody.match(/<li>/g) ?? []).length, 2);
     assert.doesNotMatch(docsBody, /<h[2-6]\b|<nav\b|<p\b|doc-card|Required play kit/);
     const worldCompanion = await readFile(resolve(fixture.root, "dist/site/docs/world-and-institutions.html"), "utf8");
-    for (const opening of [
-      "Intelligence became cheap enough",
-      "The public pool stayed warm",
-      "A personal agent could reach the court",
-      "Cities began to remember"
-    ]) {
+    const chapters = [...worldCompanion.matchAll(/<h3\b[^>]*>Era ([IV]+): ([^<]+)<\/h3>([\s\S]*?)(?=<h[23]\b|<\/main>)/g)];
+    assert.deepEqual(chapters.map(([, numeral, name]) => [numeral, name]),
+      eraCards.map((era, index) => [["I", "II", "III", "IV"][index], era.name]),
+      "the companion presents each ordered Era overview once");
+    for (const [, , , chapter] of chapters) {
+      const opening = [...chapter.matchAll(/<p>([\s\S]*?)<\/p>/g)]
+        .map(([, text]) => text).find(text => !text.includes("<"));
+      assert.ok(opening, "each Era includes narrative prose after its heading");
       assert.ok(!rootIndex.includes(opening), "home links to the setting without repeating its paragraphs");
-      assert.equal(worldCompanion.split(opening).length - 1, 1, "the companion presents each Era overview once");
+      assert.equal(worldCompanion.split(opening).length - 1, 1, "the companion does not duplicate an Era's opening prose");
     }
     assert.match(rootIndex, /Send playtest feedback/);
     assert.doesNotMatch(rootIndex, /Simulation lab/i);

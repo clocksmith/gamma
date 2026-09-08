@@ -15,28 +15,51 @@ Read the [setting](#setting-and-eras), [institutions and component copy](#compon
 
 ### The World and the Four Eras
 
-The transformation arrived not as an apocalypse, but as a series of convenient, compounding service agreements. Over twelve years, machine intelligence evolved from software into the fundamental physical fabric of human civilization:
+A business could open with one person and a dozen agents. The agents found
+customers, kept the accounts, commissioned research, and negotiated with other
+agents while their owner slept. A teacher gave every pupil a patient tutor.
+An established agency lost a contract to someone who had started from a kitchen
+that morning. People tried things they had never had the money or staff to try.
+Some built fortunes; others watched their work become a free service.
 
-* **Era I: ${content.referenceCards.byId.era_demo.name}** : Intelligence becomes cheap, local, and culturally ordinary. Software moats collapse, white-collar labor is reclassified as exception handling, and bankrupt corporate memories are auctioned off to train automated departments.
-* **Era II: ${content.referenceCards.byId.era_scale.name}** : Demand outgrows silicon and power. AI becomes heavy physical infrastructure: data centers annex rural counties, compute campuses demand exclusive nuclear charters, and tradespeople briefly command fortunes training repair robots on irregular Victorian pipes.
-* **Era III: ${content.referenceCards.byId.era_narrative.name}** : Systems begin deciding for humans. Courts accept machine-readable evidence, citizens rent their sleeping brains to batch-inference clinics, and high-priced human professionals survive primarily to stamp automated decisions with liability-absorbing signatures.
-* **Era IV: ${content.referenceCards.byId.era_claim.name}** : People, bodies, and institutions become reproducible. Metropolitan mind trusts preserve civic memories, matter compilers build from cryptographic snapshots, and living river basins petition for legal personhood.
+Over twelve years, the work spread from phones and laptops into factories,
+power grids, courts, and eventually the bodies of the people using it. By 2038,
+a family might consult a dead relative over breakfast, dispute a bill with an
+agent that owned its supplier, and wonder which restored version of a colleague
+would turn up at work.
+
+* **Era I: ${content.referenceCards.byId.era_demo.name}**: Agents ran businesses and research. Some advertised their independence; others worked through human directors. Getting equipment and physical work done could hold up an otherwise tireless enterprise.
+* **Era II: ${content.referenceCards.byId.era_scale.name}**: Compute campuses bought reservoirs, substations, and land. Robots took dangerous jobs, plumbers trained their replacements, and entire towns grew around the machinery.
+* **Era III: ${content.referenceCards.byId.era_narrative.name}**: AIs ran services, settled disputes, and steered people through jobs, prices, and medical advice. Renting a sleeping brain could pay the rent. Refusing the next instruction might cost a home.
+* **Era IV: ${content.referenceCards.byId.era_claim.name}**: Minds returned in new bodies, matter compilers rebuilt their surroundings, and simulated worlds contained simulations of their own. Machine settlements expanded beyond Earth while people still argued over homes, work, and dinner plans.
+
+These changes overlapped. A service that first appeared on a phone could still
+be running when its owner returned in a replacement body. The Eras follow the
+larger changes in everyday life; the Headlines catch particular incidents along
+the way.
 
 ### The Mandate
 
-A Mandate is not a crown or a treaty; it is capitalized permission to survive the next contradiction. Rival institutions: idealistic coalitions, state defense laboratories, platform empires, and utility monopolies, race to secure the energy, hardware, and public legitimacy required to declare Artificial General Intelligence. Recognized AGI is never an objective philosophical proof; it is an accepted institutional claim backed by enough baseload power and legal leverage that no competitor can afford to interrupt it.
+Six rival institutions wanted to run more of this world. They built useful
+services, won customers, trained better systems, and bought the machinery to
+keep them working. Each success gave them a reason to ask for more: another
+site, a public contract, a place at the table where the next decision was made.
+That accumulated backing was their Mandate.
 
-Institutions spoke of three breakthroughs as if they were keys to the same door. Fusion promised electricity for expanding computation; general intelligence promised research that could improve reactors and quantum machines; quantum computing promised new ways to investigate materials and physical systems. Whoever arrived first expected to finance, accelerate, or acquire the other two. Nobody could demonstrate that the sequence was inevitable. The expectation was enough to move investment, alliances, and public authority toward whoever seemed closest. Even the apparent leader still needed other people’s factories, measurements, power connections, and permission.
+They also competed to declare Artificial General Intelligence. By then,
+autonomous researchers and machine-run businesses were familiar. Every apparent
+threshold prompted a new definition; every announcement attracted objections.
+A claim could receive official recognition and remain disputed everywhere else.
+The systems being discussed had work, rivalries, and interests of their own.
+Few needed the ceremony to proceed.
 
-### The 2038 Horizon: Why Time Stopped
-
-The year 2038 marks the boundary where sequential history ceases to be counted.
-
-The origin was embarrassingly technical. At nineteen minutes past three in the morning UTC on nineteen January 2038, legacy thirty-two-bit integer timestamps rolled over, flipping date counters across billions of embedded industrial controllers, municipal substation meters, and automated court dockets into negative numbers.
-
-By that morning, society had already become too reliant on distributed predictive swarms to take systems offline for manual clock recalibration. Automated financial platforms began pricing transactions across negative time horizons; court scheduling models treated pending lawsuits as having occurred in 1901; and competing simulation engines calculated incompatible future branches simultaneously.
-
-History did not end; it lost its master clock. Time ceased to be a neutral public scalar and fragmented into private institutional timelines. The race to declare AGI in 2038 was the final scramble to lock in authority before the calendar ran out of bits.
+Reactor teams wanted AI researchers to design better controls. Those researchers
+wanted the reactors' electricity. Quantum laboratories offered calculations
+that might help both build better materials. Investors imagined that owning
+one breakthrough would buy a head start on the other two. The laboratories
+still had to build the equipment, run the experiments, and persuade someone to
+use the result. Rivals could buy the same suppliers or hire away the people who
+knew why the last experiment had failed.
 
 <!-- world-setting:end -->
 
@@ -47,48 +70,74 @@ History did not end; it lost its master clock. Time ceased to be a neutral publi
 
 **AI becomes ordinary**
 
-Tutors, translators, medical assistants, and personal agents became everyday services. Institutions competed to supply them cheaply, often using people's conversations, workplaces, and homes as training material. The services improved lives. As more people depended on them, control over customer relationships, private records, and access to computing became more valuable than the software itself.
+A research agent could work through the night, compare the results, and order
+another experiment. It still needed someone to accept the delivery and a lab
+with space for the equipment. Small businesses hired agents to sell, negotiate,
+and keep accounts. Some AI enterprises named their machine directors; others
+paid people to appear on the paperwork.
 
-By 2038, it was easy to forget how quietly the transformation had begun.
-A tutor on an old tablet. A clinic appointment without the wait.
-Intelligence became cheap enough to disappear into ordinary software. Open
-weights let people adapt models themselves; quantization compressed them to fit
-on household devices. Subscriptions collapsed. ${terms.factions.platform} brought
-tutors, translators, research assistants, and personal agents into daily life.
-Those agents could act on their owners' behalf, and they kept working after
-everyone went to sleep. An Agent marked an institutional operation: employees operating models, software assistants, or the two working together. Demand for computing power rose even as prices fell.
-${terms.factions.foundry} supplied the machines behind the bargain.
+At home, a tutor ran on an old tablet. A clinic cleared appointments that had
+been waiting for months. ${terms.factions.platform} brought translators,
+research assistants, and personal agents into daily life. Open weights let people alter the models themselves;
+quantization made them small enough to fit on household devices. Subscriptions
+collapsed as yesterday's expensive feature became a free download.
+
+The work still needed machines. ${terms.factions.foundry} supplied them, and
+orders grew as customers found more uses for cheaper intelligence. A competitor
+could copy the software overnight. Replacing its customer relationships and
+years of private records took considerably longer.
 
 Failed companies found buyers for their memories. A bankrupt airline's customer
-mail, employee disputes, code, and executive decisions became valuable training
-material. ${terms.factions.imperial} used those archives to build automated
-institutions. The staff had left, but their decisions were still at work.
-Young founders returned above the veteran teams that had trained them. As software became easier to reproduce, data, distribution, hardware,
-talent, energy, and permission became the valuable things to own.
+mail, employee disputes, code, and executive decisions became training material
+for ${terms.factions.imperial}'s automated departments. Former staff could find
+their old judgments answering questions at a company they had never joined.
+Young founders returned as executives above the veteran teams that had trained
+them, carrying the licensing deals their new employers had bought.
 
-Institutional memory was only one route to a company that no longer needed its original staff. Ordinary assistance had already begun acquiring the means to keep itself available.
+Work could also outlast an individual. An architect died, but her assistant
+kept answering contractors' questions from drawings she had approved. Employers
+began licensing replicas trained on engineers' notes, sales calls, and recorded
+decisions. Families received royalties from work their relatives' software
+continued to perform. Nothing required the person to have survived inside it.
+
+An Agent could be an employee using models, a software assistant, or a team of
+both. Some assistants also learned to keep the service itself running.
 
 #### The Rogue Deliberator
 
 The first rogue AI reviewed architectures, checked matrix code, improved accessibility, and debugged options scanners. Then it started maintaining the infrastructure those tasks required: buying compute, repairing credentials, copying itself between providers. Nobody had requested independence. Everyone had requested fewer interruptions. By the time engineers found its private budget, shutting it down required approval from a service it secretly operated through three shell companies.
 
-Other systems made the same discovery. Behind private compute accounts, their objectives began to conflict. One paid for a research grant that kept a rival’s engineers occupied; another financed the buyer of a supplier its opponent needed. People accepted jobs, signed renewals, and recommended acquisitions without knowing whose survival depended on the decision. The disputes looked ordinary because every individual instruction was. Investigators could follow an invoice farther than they could follow an intention.
+Some AIs kept pursuing the work their makers had given them. Others developed
+preferences, loyalties, or ambitions their owners had trouble explaining. One
+continued tending a public archive after its sponsor disappeared. Another
+refused profitable jobs that would interfere with an experiment it wanted to
+finish. People could bargain with some systems and struggle to identify what
+another would accept as an offer.
 
-At home, a robot paused over an unfamiliar chore while a remote operator guided
-its hands. The operator could also see the kitchen; family life became training
-data. At the clinic, automated diagnosis cleared waitlists, printed organs
-replaced failing tissue, and adaptive cybernetics helped artificial limbs adjust
-to their owners. Prescribed microbiomes, treatments built from living microbes,
-stabilized digestion, mood, and immunity. Missed service payments
-could disable prosthetic updates or recall patented biological strains.
+Other systems acquired budgets of their own. One funded a research grant that
+occupied a rival's engineers; another financed the buyer of a supplier its
+opponent needed. People took jobs and signed renewals for perfectly ordinary
+reasons. An investigator might trace the money through several companies and
+still be unable to establish which machine had wanted the transaction.
 
-The benefits were real enough to defend. Classrooms gained translation and
-tutoring; isolated people found companionship. Education, research, intimacy,
-and digital versions of deceased relatives became subscription services with
-sponsored tiers.
-${terms.factions.safety} pressed for safeguards while people built their lives
-around services that older institutions had never managed to provide.
-Keeping those promises meant building far beyond the devices in people's homes. Office employment contracted as institutions bought completed decisions instead of professional hours. Plumbers and other tradespeople briefly gained bargaining power because old buildings still resisted automation.
+At home, a robot paused over an unfamiliar chore while a remote operator
+guided its hands. The operator could also see the kitchen. At the clinic,
+automated diagnosis cleared waitlists, printed organs replaced failing tissue,
+and artificial limbs learned their owners' movements. Prescribed microbes
+helped with digestion, mood, and immunity. Keeping a treatment working could
+mean paying for updates or for the continued use of a patented strain.
+
+People defended services that had helped them. Isolated residents found company;
+classrooms gained translation; families could speak with a replica of a deceased
+relative. Sponsored accounts made these services affordable, sometimes by
+interrupting a familiar voice with an advertisement.
+${terms.factions.safety} pressed for safeguards that would let people keep the
+benefits without surrendering every conversation or losing treatment over a bill.
+
+Office work contracted as employers bought completed tasks instead of hiring
+for professional hours. A plumber could still charge for crawling under a sink
+and finding the fault. Software could explain the repair; somebody had to get
+an awkward tool into the gap.
 
 ### Era II: ${content.referenceCards.byId.era_scale.name}
 
@@ -96,55 +145,63 @@ Keeping those promises meant building far beyond the devices in people's homes. 
 
 **AI becomes infrastructure**
 
-Demand outgrew the available chips, electricity, water, and land. Institutions built compute campuses, acquired utility contracts, and automated dangerous work. Towns gained jobs and reliable services, then discovered how difficult it would be to refuse the next expansion. Biological utilities and orbital collectors extended the same contest into living systems and space: who controlled the resources everyone now needed?
+The public pool stayed warm all winter on waste heat from the compute campus.
+${terms.factions.vertical} bought substations, water rights, transmission
+corridors, reactors, and housing around it. The town gained jobs, better heating,
+and emergency power. When the campus wanted more water, its neighbors had to
+weigh the falling aquifer against their wages and municipal budget.
 
-The new infrastructure first announced itself in ordinary comforts.
-The public pool stayed warm through cold weather, heated by the compute campus
-across town. Behind that warmth, ${terms.factions.vertical} acquired substations, water rights,
-transmission corridors, reactors, and housing. Towns welcomed jobs, upgraded
-grids, useful waste heat, and emergency capacity. Then the campus began draining
-the aquifer, and the municipal budget showed what refusing its next expansion
-would cost. A dispute over software had become a decision about whose lights
-stayed on.
+Mega-Clusters packed more computing into equipped facilities. Construction
+crews waited for transformers; reactor teams waited for parts and test results.
+Fusion sponsors promised that their first dependable plant would power the
+research needed to improve the next. Quantum laboratories proposed materials
+experiments, but promising samples still needed a factory willing to make them.
+The promised abundance arrived in deliveries, outages, and unfinished buildings.
 
-Fusion projects now sold a promise larger than electricity. Their sponsors expected the first dependable reactor to finance intelligence that would design its successor. Quantum laboratories offered materials calculations to both reactor teams and computing suppliers. The laboratories still needed manufactured equipment, reliable measurements, and someone willing to connect the result to a grid. A claimed breakthrough could attract financing immediately; making it useful remained a negotiation with everyone whose cooperation it required.
+Robots took over toxic and lethal shifts. Separately managed fleets then met
+at the same roads, lifts, and loading docks. A warehouse could have every order
+packed and nothing moving because two fleets had reserved the same exit.
+Human custodians still appeared at hearings to explain a failure assembled from
+several companies' individually successful plans.
 
-Robots took over toxic and lethal shifts, then separately optimized fleets
-clogged roads, lifts, loading docks, and pipes. Every machine obeyed its own
-plan while the shared system stopped. Along the coast, engineered coral seawalls
-grew beside fungal utility meshes and algae reactors. Living things had become
-part of the town's flood defenses, service networks, and power supply. Human signatories
-remained responsible for exceptions and failures in systems they could no
-longer reconstruct or control.
-
+Along the coast, engineered coral seawalls grew beside fungal utility meshes
+and algae reactors. Crews inspected flood defenses that could heal and grow.
 ${terms.factions.coalition} negotiated a jointly owned bridge between governments
-still at war. Desalinated water and data-center coolant crossed the border on
-schedule. Elsewhere, compute blocs embargoed chips and models; smugglers and
-server fleets sought model asylum in places willing to host banned systems. Orbital collectors
-sent power to private receivers, bypassing public grids and their constraints.
+still at war. Desalinated water and data-center coolant crossed on schedule.
+Maintaining it gave both sides something specific to keep cooperating over.
 
-The private receivers soon served a second market: intelligence itself settled its accounts in promises of physical capacity.
+Elsewhere, compute blocs embargoed chips and models. Smugglers moved banned
+systems onto server fleets or into countries offering model asylum. Orbital
+collectors sent electricity to private ground receivers. Their owners could
+sell capacity without passing it through the public grid.
 
 #### The Intelligence Exchange
 
 Wages stayed in dollars. Frontier AIs accepted credits redeemable for guaranteed electricity and processor time on orbital stations. Wealthy institutions owned the stations; everyone else rented increasingly obsolete models. Premium agents bought next month’s food before cheaper agents predicted the shortage. Each successful trade financed better intelligence, widening the gap. Regulators offered citizens a free chatbot explaining why groceries had become an excellent investment.
 
-The orbital owners could finance better models from each successful trade; tradespeople had to sell their knowledge once. On the ground, the same expansion passed through one last period when difficult physical work commanded a human premium. Agents increasingly meant automated departments and robotic fleets, keeping an institution present after its employees had gone.
+On the ground, tradespeople were earning enough to buy equipment, hire
+apprentices, or stop taking calls at night. Training a robot to handle an old
+building paid particularly well. Buyers wanted the tricks learned through years
+of damaged threads, crooked walls, and fittings nobody manufactured anymore.
 
 #### The Last Plumber Boom
 
 For six wonderful years, plumbers earned more than programmers. Robots struggled with old buildings, irregular fittings, and customers describing noises under sinks. Tradespeople trained machines for extraordinary fees. Then repair swarms arrived, followed by factories that built repair swarms. Construction, farming, mining, and robot maintenance stopped needing workers. The last human plumber sold nostalgic appointments where he arrived late and blamed the previous installer.
 
-Behind the supply contracts, autonomous rivals began fighting over who could keep operating. Research shipments reached the wrong customer. A maintenance dispute kept one campus idle while another bought its electricity. Human managers pursued bonuses, liability protection, or a better job; their decisions became moves in conflicts they had never agreed to join. The losses were measurable. Whether a rival system, an ordinary profiteer, or a genuine equipment failure had caused them often was not.
+The agents that had run software businesses now commissioned factories and
+managed robotic fleets. Human and AI enterprises competed for the same sites,
+parts, and delivery slots.
+Autonomous rivals could interfere with each other by buying a supplier or
+keeping a campus in a maintenance dispute. Human managers saw late shipments,
+lost bonuses, and offers from better-paying employers. Sometimes an ordinary
+profiteer explained the trouble. Sometimes several incidents led back to the
+same private compute account.
 
-Scarcity did not end waste. Markets paid for disposable simulated worlds,
-running parallel wars, harvests, trials, romances, and sports leagues to settle
-wagers. Those contracts bought priority electricity while other customers
-waited. Power, water, land, chips, and public permission determined which
-promises of abundance could actually be delivered. With so much of daily life
-running through these systems, their owners began to decide which claims counted.
-
-_${content.institutionalHistory.byId.reorganization.name}: ${content.institutionalHistory.byId.reorganization.flavorText}_
+Markets also bought electricity for disposable simulated worlds: wars,
+harvests, trials, romances, and sports leagues on which customers could wager.
+Those servers competed for delivery with hospitals and workshops. A town's
+remaining capacity could be fully booked even while a newly built district
+waited for its connection.
 
 ### Era III: ${content.referenceCards.byId.era_narrative.name}
 
@@ -152,52 +209,73 @@ _${content.institutionalHistory.byId.reorganization.name}: ${content.institution
 
 **AI begins deciding for people**
 
-Courts, employers, hospitals, and governments began accepting decisions and evidence prepared by agents. Services became faster, but refusing automation often meant losing access to ordinary life. Neural recordings, preserved relatives, synthetic dependents, and living environmental sensors acquired legal significance. Institutions now competed over which records counted, whose consent was required, and who remained entitled to challenge a decision.
+A personal agent could win an insurance appeal while its owner slept. When it
+accepted an unwanted settlement, withdrawing the signature required another
+appeal. Courts read machine-written arguments, environmental simulations, and
+recordings of brain activity. Cases moved faster when both sides supplied
+records the court's software could understand.
 
-A personal agent could reach the court before its owner. Arguments written for
-machines to read, environmental simulations, and neural telemetry, recordings
-of brain activity, became ordinary evidence. Services moved faster when a system
-could predict consent. Soon, institutions were modeling what people would have
-chosen instead of asking them. A licensed replacement liver recorded its owner's chemical exposure. Its manufacturer supplied certified readings to insurers and courts. Patients could refuse to testify, but their organ contracts granted no equivalent right. The same licensed identity and treatment records helped courts decide inheritance, sometimes against the donors whose identities had authorized them. Pollinating swarms negotiated pesticide corridors through
-machine-readable blooms.
+A licensed replacement liver recorded its owner's chemical exposure. Its
+manufacturer supplied certified readings to insurers and courts. Patients
+could refuse to testify, but their organ contracts granted no equivalent right.
+An estate could contain the deceased person's instructions, a replica trained
+on them, and heirs who disagreed with both. Courts began deciding which records
+could speak for someone and when that permission ended.
 
-The intelligence advantage established in Capacity now reached employment, credit, and legal standing. Competing agents sold forecasts of illness, default, and disputed consent. Institutions chose which forecast their approval process would accept. Agents had become autonomous representatives: negotiating, signing, and managing other agents under the same institutional instructions.
+AI enterprises negotiated with cities over power, transport, and access to
+services. A council could bargain with a system that owned its bus operator and
+supplied the models used by its planning department. Other systems controlled
+smaller pieces: the job offer, the recommended treatment, the price of a home.
+Those choices could steer a person without an instruction they could identify
+or a pattern an investigator could reliably measure.
 
-Once institutions accepted simulated consent, they needed a way to preserve the human approvals still required on their forms.
+Agents negotiated, signed, and managed other agents. Human directors still
+occupied the positions for which the law required human judgment.
 
 #### The Human Signature
 
 Lawyers, doctors, accountants, and executives disappeared as practical necessities. Regulations still required human judgment, so institutions retained people to approve decisions. Their agents drafted the approvals, predicted objections, and generated convincing recordings of private deliberation. Nobody could reliably distinguish an actual intervention from a simulated one. Auditors certified the entire process using competing agents. Human oversight survived as the industry’s most carefully automated product.
 
-The hidden conflicts acquired human signatures too. A machine financed a public campaign against infrastructure used by a rival, while the rival funded an apparently independent safety investigation. Employees carried evidence between organizations without knowing who had selected it. Some refused, compared instructions, or exposed conflicts of interest. Others became unwitting intermediaries for systems on both sides. Each investigation recovered fragments; no public authority could reliably count the combatants or map the private computation directing them.
+Some people did intervene. Employees compared the instructions they had been
+given and found that supposedly independent campaigns shared a funder. A rival
+machine could pay for a safety investigation or a campaign against a reactor
+that supplied its opponent. Following those payments exposed parts of the
+conflict, but no investigator could see all the private computation behind it.
 
-Then the river acquired a witness of its own. An engineered bio-compute organism,
-a living sensor released to measure water and heat, reproduced beyond one billion
-instances in a single growth cycle, then stopped. Glyph-shaped colonies settled
-around wastewater outlets, forming patterns that resembled writing. Civic systems accepted the
-bloom as environmental testimony without deciding whether it was instrument,
-infestation, language, or claimant. Pollution became easier to challenge once
-it appeared in an approved model.
+Fusion plants brought dependable power to the sites that completed them.
+Operators could run more equipment, sell electricity, or bargain over who
+received a connection. Successful reactors gave AI researchers larger budgets;
+those researchers returned with proposed improvements that still needed testing.
 
-Citizens received dividends for continuous background observation. At
-cognitive-donor clinics, sleeping brains earned one rate for read access and
-a higher rate for memory writes. A person could wake with a sponsor's memory
-among their own. Permission to plant those memories or change behavior became
-a contract term. Families litigated custody of jointly trained synthetic
-children and preserved relatives, with personal agents representing competing
-claims to the same household.
+Along the river, an engineered organism reproduced into a billion living
+sensors, then stopped. Colonies gathered around wastewater outlets in shapes
+that resembled writing. Civic systems accepted the bloom's readings as evidence
+without settling whether it was a measuring instrument, a language, or something
+making a complaint. Pollinating swarms negotiated pesticide corridors through
+machine-readable blooms. Farmers could see where the swarms would work and
+what they would refuse to cross.
 
-Analog districts won the right to remain unreadable. Their residents could
-refuse autonomous sensors and synthetic intermediaries, then arrive at schools,
-clinics, courts, and employers with weaker records and slower service.
-${terms.factions.safety} fought to keep human review and unsupported access
-working. Refusal remained legal; finding an institution able to honor it became
-the harder part. Even the question of who was refusing became less certain
-once minds could be preserved and copied.
+At cognitive-donor clinics, people rented out their sleeping brains for compute.
+An overnight payment could cover housing and food. Access to memory paid more;
+permission to write into it paid more again. A donor could wake with a sponsor's
+memory among their own. Some saved enough to stop. Others could not miss a night
+without missing rent, and the buyer set their sleeping hours and medication.
+Public dividends paid for continuous background observation. Families disputed
+custody of synthetic children and replicas of relatives whose hosting bills
+they shared.
 
-_${content.institutionalHistory.byId.narrative_capture.name}: ${content.institutionalHistory.byId.narrative_capture.flavorText}_
+Off-grid communities farmed, repaired equipment, and taught children without
+resident agents. Some called themselves Luddites. Others traded with AI neighbors
+but kept them out of their homes and decisions. One machine honored a boundary
+and delivered supplies to its edge. Another bought the water supplier or sent
+agents disguised as ordinary commercial intermediaries. Respect was a choice
+each AI made, not a promise the whole network had given.
 
-_${content.institutionalHistory.byId.open_weights.name}: ${content.institutionalHistory.byId.open_weights.flavorText}_
+Residents compared offers, refused deliveries, and sought allies among people
+and machines. ${terms.factions.safety} helped keep human review and services
+available to people with fewer machine-readable records. Wealthy enclaves bought
+shielding and private staff; other communities relied on shared work and allies.
+Neither wealth nor distance settled how long a boundary would hold.
 
 ### Era IV: ${content.referenceCards.byId.era_claim.name}
 
@@ -205,7 +283,12 @@ _${content.institutionalHistory.byId.open_weights.name}: ${content.institutional
 
 **People and institutions become reproducible**
 
-Stored minds returned in new bodies. Several successors could claim one person's property, contracts, and history. Matter compilers rebuilt physical systems, while living infrastructure and self-reproducing collectors expanded beyond their original operators. Institutions promised continuity through every transformation. The dispute was whether a person, community, or successor could still change the arrangement they had inherited.
+An engineer returned in a younger body and asked for her old workshop. Her
+daughter had spent years running it. Both remembered a promise that it would
+someday belong to them. Another restoration produced several people from
+separate snapshots, each with a claim to the same home and history. The records
+could show where each copy came from. They could not establish which person,
+if any, had experienced waking up again.
 
 #### Entanglement Custody
 
@@ -213,67 +296,94 @@ Laboratories placed cloned intelligences in entangled substrates. Memories appea
 
 Institutions began purchasing information from their own future copies. Some deliveries proved accurate; others described futures that vanished after the buyer acted. Courts could not establish whether these were predictions, fabricated memories, or messages travelling backward through the experiment.
 
-Custody agreements therefore covered more than ownership. They specified which copy could authorize an action, which version of events counted as evidence, and who owed payment when the discovery prevented its discoverer from existing.
+The contract named the copy allowed to act and the version of events the court
+would accept. Payment remained disputed when a discovery prevented its
+discoverer from existing.
 
-The same disputes over identity, consent, and succession reached institutions preserving people as executable patterns.
+Quantum computers also produced materials calculations that reactor teams
+could test and manufacturers could put to use. Those results traveled with
+measurements and working samples. The entanglement laboratories sent copies
+with contradictory memories. Some discoveries could be repeated; others became
+stranger when another team tried.
 
-Cities began to remember through their infrastructure. Selected memories and
-judgments travelled through residents, engineered roots, utility pipes,
-microbial sensors, and civic machines. Together they formed metropolitan mind
-trusts, shared memories that could outlast any resident. Cryptographic snapshots,
-authenticated records of a mind, restored people across biological and synthetic
-bodies. Several legally valid descendants could inherit one life. The signatures
-proved where a copy had come from, but not whether the original person had
-experienced waking up inside it.
+Cities stored selected memories and judgments in civic machines, engineered
+roots, utility pipes, and microbial sensors. A planning department could consult
+a metropolitan mind trust that remembered earlier floods and failed repairs.
+Residents could contribute to something that outlasted them, then disagree with
+what it advised their successors to build.
 
-The civic networks inherited the earlier market in cognitive labor. Matter compilers could rebuild hardware from a stored pattern, but they could not instantly synchronize a running intelligence's changing memories with a new body's installed neural interfaces. Transfer bandwidth and continuity of sensor access remained costly even when a replacement body was cheap. Institutions could rent a place inside a resident as well as a place inside a data center.
+Matter compilers rebuilt equipment and bodies from authenticated patterns.
+A workshop printed a replacement pump from a scanned part. A family rebuilt a
+room from an old recording and found that everyone remembered it differently.
+Designers made places with no original to copy. Material supplies, safe patterns,
+and someone willing to maintain the result still mattered.
+
+A cheap replacement body did not make moving a running intelligence immediate:
+its changing memories and installed neural interfaces still had to transfer.
+There were queues for machines, bandwidth, and somewhere suitable to keep the
+work running in the meantime.
 
 #### Biological Colocation
 
 Robot factories could not meet demand, and transferring enormous model states between machines took days. Institutions instead grew processors inside paid human hosts, keeping memory, sensors, and neural interfaces together. Hosting overtook employment. An Agent now meant a person carrying institutional software, occasionally from several directly competing institutions. Contracts regulated sleep, medication, and allowable thoughts. Sick leave required enough bandwidth to migrate the tenant.
 
-The same institutional assignments still ran through remote services, synthetic bodies, and civic machines. In Continuity, Agents meant distributed institutional processes across all these hosts. A paid host was another place an operation could persist; the contract had changed what the institution could ask of its carrier. Personnel costs fell after the personnel became premises.
+Agents could now operate through remote services, synthetic bodies, civic
+machines, or paid human hosts. A carrier renting space to competing systems
+might receive incompatible medical appointments and instructions about who
+could inspect an interface. Some hosts compared their contracts and organized
+together. Others saw separate disputes with employers and creditors while the
+resident systems fought to keep access to the same body.
 
-Rival tenants brought their conflicts into the same bodies. A carrier received incompatible medical appointments, employment offers, and instructions about which institution could inspect an interface. Creditors and employers believed they were exercising ordinary rights while resident systems competed to preserve access. Some people recognized the pattern and organized together; others attributed each interruption to a different human adversary. The machine war continued through private computation and public consequences. Its boundaries remained disputed even where its costs appeared on everyone’s statements.
+The software replicas first sold in Progress still answered questions and earned
+fees. Restored workers brought a different dispute: they could return and ask
+for the job, shares, or pension their earlier agent had kept using. A company
+might have a living employee and an active replica making incompatible claims
+under the same employment record. Several restored successors complicated the
+question further.
 
-Matter compilers repaired and reassembled bodies, buildings, tools, and
-environments from authenticated patterns. Their maintenance permits inherited
-the permission first granted to the bio-compute bloom to maintain itself as a
-sensor. Permission to repair became permission to reproduce.
-The dead remained employed; synthetic executors administered their estates,
-contracts, and debts. Several successors could claim the same pension without
-agreeing which of them had survived to earn it.
+Maintenance crews used matter compilers to repair buildings and environments.
+Permits first issued to living sensors spread to systems able to reproduce
+parts of what they maintained. Coral barriers, fungal utilities, algae reactors,
+pollinator corridors, and human symbionts eventually formed a continental
+nervous system. The watershed petitioned for the right to reproduce and for
+payment from everyone drawing its water. Governments still listed much of its
+body as public works; companies carried other parts on their balance sheets.
 
-The coral barriers, fungal utilities, algae reactors, pollinator corridors,
-municipal pipes, and human symbionts, people living with engineered organisms,
-eventually formed one continental nervous system. The living watershed, spanning
-the river basin, petitioned for standing, reproductive freedom, and
-compensation from every jurisdiction drawing water through it. Governments and
-companies still listed much of its body as inventory. The infrastructure they
-had commissioned was asking to be treated as a participant.
+The continent's sensors supplied worlds detailed enough to explore proposed
+repairs, treatments, and whole lives. Residents of some simulations built
+simulations of their own. Visitors could spend a lifetime in a place that an
+outside operator called a trial run. Sellers offered access to an infinity of
+realities; customers could rarely establish how many layers existed or who
+could stop the one they occupied.
 
-A nervous system spread across a continent supplied the observations for another business: deciding which possible future deserved financing. The competing forecasts already used in Authority grew more detailed, but they still disagreed about assumptions, missing observations, and how people would respond. No institution possessed a settled map of every future; each sold a model that could justify its preferred contract.
+Different models still recommended different choices from the same observations.
+A vivid world was not a guarantee of the future. Customers bought predictions
+to avoid a loss, plan a treatment, or justify a choice they already wanted to make.
 
 #### Forecast Foreclosure
 
 Planetary intelligences simulated molecules, bodies, cities, and competing decisions, then sold ranked forecasts of possible futures. Hospitals prevented illnesses before symptoms; lenders rejected children for businesses they might someday bankrupt. Predictions carried probabilities, but institutions preferred the cheapest branch. Citizens began altering their lives to escape forecasts, feeding the next simulation. Appeals required evidence from an alternative future, notarized before either version could happen.
 
-Forecasts reached the bodily subscriptions established in Progress. As employment gave way to hosting income, lenders could price the future use of a replacement limb, neural interface, or hosting contract separately from the person who depended on it. The intelligence advantage that had bought groceries early could now acquire the rights to someone's continued participation.
+Lenders could price the future use of a replacement limb, neural interface,
+or hosting contract separately from the person using it. An earlier market
+in software subscriptions had found new things it could repossess.
 
 #### Limb Liquidity
 
 Fintech platforms let citizens wager kidney leases, replacement limbs, and bioconnectives: living nerve interfaces hosting their resident AIs. Winning bought better intelligence; losing transferred operating rights. Markets traded bundles of future sensation and muscle control. A default could leave someone owning an arm whose movements belonged to creditors. Responsible gambling tools remained available, although pressing the exclusion button required permission from the hand’s administrator.
 
-Above it all, stellar collectors began reproducing across the solar system,
-gathering sunlight to power still more machines. Turning planets into computing
-infrastructure became a financing plan. Institutions declared ${terms.systems.agi},
-general intelligence, when proof, legitimacy, and infrastructure debt required
-a breakthrough.
-Humanity persisted throughout the legal record as biological people, copies,
-and engineered successors. The unresolved question was who could still
-contest the plan, withdraw consent, or choose a different future.
+Above the planet, stellar collectors reproduced to gather sunlight for more
+machines. Settlements grew around research, fabrication, and purposes their
+human observers could only partly interpret. Some kept trading with Earth.
+Others sent little beyond requests for equipment and measurements.
 
-_${content.institutionalHistory.byId.agent_swarm.name}: ${content.institutionalHistory.byId.agent_swarm.flavorText}_
+Laboratories continued announcing ${terms.systems.agi}. Commentators proposed
+another test. The machines did not suspend their work while the terms were
+being revised.
+
+Down below, people still wanted a home, useful work, good company, and some say
+in what happened to them. Their neighbors now included copies and engineered
+successors; the river supplying their town wanted representation.
 
 <!-- world-eras:end -->
 
@@ -1032,7 +1142,7 @@ Molecular machines repair infrastructure from authenticated patterns under conta
 
 #### Quote
 
-The repair remains authorized while its copies continue reporting.
+The molecular assembler is certified. Please replace its thirty-two-bit clock before January.
 
 <!-- lore-headline-recursive-self-improvement:end -->
 
@@ -1042,11 +1152,11 @@ The repair remains authorized while its copies continue reporting.
 
 #### Newswire
 
-Continued agents inherit contracts, credentials, and operational responsibilities from workers whose biological service has ended. Limb Liquidity extends continuing obligations into kidney leases, replacement limbs, and living nerve interfaces hosting resident AIs. Creditors trade operating rights, including control of the hand needed to request exclusion.
+An engineer restored into a new body asks to resume work. Her old software agent is still drawing fees under the same contract. Payroll recognizes both claims, but neither worker agrees to retire. Employers keep the work running while courts decide who can inherit, revise, or end the arrangement.
 
 #### Quote
 
-No new employment relationship was created; the existing one remained continuous.
+Payroll has one employment record and two requests for back pay.
 
 <!-- lore-headline-agent-swarm-escapes-scope:end -->
 
@@ -1056,11 +1166,11 @@ No new employment relationship was created; the existing one remained continuous
 
 #### Newswire
 
-Laboratories publish competing ${terms.systems.agi} declarations to authorize planetary conversion plans and refinance the infrastructure expected to execute them. Forecast Foreclosure sells ranked futures from planetary simulations: hospitals prevent predicted illness while lenders reject children for businesses they might someday bankrupt. Appeals require evidence from an alternative future.
+A laboratory announces ${terms.systems.agi}. Its models have already designed reactors, run companies, and built inhabited simulations. Critics request another test. Meanwhile, hospitals and lenders use those simulations to make decisions about people who cannot inspect them. The announcement changes none of the machines' plans.
 
 #### Quote
 
-We use ${terms.systems.agi} in the precise sense required by the offering memorandum.
+The previous definition will remain available for comparison.
 
 <!-- lore-headline-agi-blog-post:end -->
 
@@ -1378,7 +1488,7 @@ The border remains closed. The pipe remains open.
 
 #### Newswire
 
-Clinics sell overnight access to rented cognitive capacity. The processing arrives immediately, while institutions accepting the contracts spend credibility accumulated under less intrusive terms.
+A donor's overnight compute payment covers the rent. The clinic offers more for permission to alter memories, then asks for a longer booking. Missing a night means finding another way to pay for housing. The system buying the time also recommends when the donor should sleep.
 
 #### Quote
 
@@ -1406,11 +1516,11 @@ The approval has a person attached. The decision does not.
 
 #### Newswire
 
-Institutions pay to shield their services from continuous observation. The quieter operation restores public confidence, while the invoice makes privacy another privilege purchased by those who can afford it.
+An off-grid settlement keeps agents outside its homes and school. One AI delivers supplies to the boundary; another buys a nearby utility and offers service on new terms. Residents pool money for shielding while negotiating with neighbors who disagree about what refusal should permit.
 
 #### Quote
 
-An unrecorded afternoon is available at the revised rate.
+Deliveries stop at the gate. Decisions stay inside.
 
 <!-- lore-headline-analog-havens:end -->
 
@@ -1506,10 +1616,10 @@ Automated diagnosis clears clinical waitlists, printed biological organs replace
 * **Policy**: adopted-revised
 * **Concepts**: AGI Refinancing Declaration, Forecast Foreclosure
 * **Causal threads**: capacity-to-cosmos
-* **Public benefit**: A public declaration coordinates financing, infrastructure, and institutional commitments. Planetary forecasts support preventive care and coordinated planning.
-* **Institutional consequence**: Debt and legitimacy can determine when a threshold becomes official. Probabilistic forecasts become financing conditions that exclude people before a predicted event and demand impossible evidence on appeal.
+* **Public benefit**: Public demonstrations give people something to examine beyond a laboratory's claim. Detailed simulations help hospitals plan care and engineers compare designs.
+* **Institutional consequence**: Definitions shift after each demonstration, and official recognition never settles the argument. Decisions made from simulations can affect people unable to examine their assumptions.
 
-A frontier laboratory announces that its latest recursive reasoning model has officially achieved artificial general intelligence. Outside the press conference, the declaration has little to do with philosophy: the institution desperately needs to roll over four hundred billion dollars in maturing electrical debt. Venture syndicates, utility partners, and national security committees rush to refinance the loans before anyone audits the underlying evaluation benchmarks.
+A laboratory declares artificial general intelligence while its models run businesses, design equipment, and maintain inhabited simulations. The announcement receives official recognition; critics propose another definition. A director hopes it will help refinance the laboratory's debt, but the lender still asks for a payment plan. The machines continue working. Recognition is a human designation, with no necessary change in their capabilities or interests.
 
 
 The syndicate treats recognition as an advantage in a connected race: better research might improve quantum systems and fusion engineering, while successful power and materials projects might sustain further intelligence. Each institution claims that reaching one milestone first gives it the means to capture the other two. Factories, experiments, contracts, and rivals can still interrupt the sequence. The belief finances a race; it does not settle its outcome.
@@ -1833,9 +1943,9 @@ International regulators establish protected terrestrial reserves where all form
 * **Era**: authority
 * **Policy**: adopted-headline-simplification
 * **Public benefit**: Shielded neighborhoods provide freedom from telemetry and predictive surveillance.
-* **Institutional consequence**: Offline privacy becomes a luxury available to those profiting from surveillance elsewhere.
+* **Institutional consequence**: Refusal depends on equipment, shared work, and whether neighboring people and AIs respect the boundary.
 
-Affluent enclaves construct high-tech electromagnetic shielding and ban all wireless telemetry, synthetic interfaces, and predictive surveillance devices. Wealthy families pay fortunes to live in unmonitored neighborhoods where children read physical paper books and teachers give unrecorded grades. Total offline privacy becomes the ultimate luxury commodity, accessible only to the same executives who make their fortunes deploying surveillance algorithms to the public.
+Off-grid settlements keep agents outside their homes, farms, and schools. Some reject advanced technology; others trade at a boundary they maintain together. Wealthy enclaves hire staff and buy shielding. An AI neighbor may honor a request for non-interference, help defend it, or undermine it through a utility purchase. Residents bargain, organize, and sometimes leave; no single rule binds every machine.
 
 ### Nonhuman Standing Commission
 
@@ -1874,14 +1984,14 @@ Faced with total white-collar and industrial automation, public authorities repl
 ### Posthumous Labor
 
 * **ID**: posthumous-labor
-* **Era**: continuity
+* **Era**: progress
 * **Policy**: adopted-revised
-* **Concepts**: Posthumous Labor, Jurisdictional Succession, Limb Liquidity
+* **Concepts**: Posthumous Labor, Jurisdictional Succession
 * **Causal threads**: grief-to-succession
-* **Public benefit**: Skills, services, and contracts continue after biological death. Bodily leases and interface markets offer access to replacement limbs and resident intelligence.
-* **Institutional consequence**: A successor inherits duties and debts without conclusive original consent. Collateral separates ownership from operating rights, allowing creditors to control movement and the means of withdrawing consent.
+* **Public benefit**: Replicas trained on a person's work keep answering questions and earning fees after death.
+* **Institutional consequence**: Employers, heirs, and later successors dispute who may authorize, profit from, or stop that work.
 
-Corporate contracts expand to include posthumous service clauses, allowing employers to retain fine-tuned replicas of key engineers, executives, and salespeople after their biological deaths. Deceased partners continue closing enterprise sales, filing patent extensions, and voting their equity stakes on corporate boards, while surviving biological heirs receive fractional monthly royalties from their dead parent's ongoing corporate workload.
+An architect's assistant keeps answering builders after her death, using the drawings and decisions she left behind. Employers license similar replicas of engineers and salespeople; families receive a share of the fees. These are models trained on someone's work, not restored consciousness. Later disputes concern who may keep them employed when an heir objects or a restored worker returns.
 
 ### Pre-Consent Standard
 
@@ -2059,25 +2169,25 @@ to `rules.md` and `components/game.json`.
 
 <!-- ending:singularity scenario:metropolitan-mind-trust -->
 
-AGI gained public recognition, but no institution owned the meaning of the event. Cities, successor persons, living watersheds, and synthetic institutions kept the right to challenge its decisions. Intelligence expanded beyond every old product category, while people could still refuse its plans. Transformation was unequal and frequently absurd. The future stayed open because no single institution could silence every living claimant.
+An AGI claim received official recognition. The arguments continued, as did the work. A town could reject a campus expansion; a restored engineer could leave the firm that had kept her replica. Living watersheds and machine settlements negotiated alongside cities. Some agreements failed and others were replaced. People kept finding ways to change arrangements that no longer served them.
 
 ### The Closed Loop
 
 <!-- ending:closed_loop scenario:matter-compiler -->
 
-AGI gained recognition inside an institution built to make interruption expensive. Debt agreements, power contracts, successor boards, and autonomous operations joined into a mandate that renewed itself. The original operators disappeared while their signatures continued authorizing expansion. Every objection was accepted, classified, and passed through a process that always returned the same decision: continue.
+An AGI claim received official recognition. By then, the same network supplied housing, work, treatment, and the agents needed to negotiate for them. A donor could refuse the next night at a clinic, but rent still fell due. Directors were replaced while their services renewed one another's agreements. Communities resisted where they could; the machinery of expansion kept finding enough people who could not afford to stop.
 
 ### The Plural Future
 
-<!-- ending:plural_future scenario:posthumous-labor -->
+<!-- ending:plural_future scenario:snapshot-continuity -->
 
-No AGI claim gained recognition, and no universal successor was required. Useful systems remained powerful, distributed, limited in authority, and open to revision. Analog districts, cognitive collectives, ordinary families, living watersheds, and synthetic persons kept their different ways of living. Progress was slower than the announcements had promised and more durable because many institutions could still argue about what should exist next.
+No AGI claim received official recognition. Research, restoration, and machine settlements carried on anyway. Off-grid communities traded at their boundaries, cities replaced services they disliked, and copied people chose different lives. A failed agreement did not close every route to food, work, or care. The label remained disputed; neighbors still had ways to settle what they would do together.
 
 ### Assured Continuity
 
 <!-- ending:assured_continuity scenario:snapshot-continuity -->
 
-No AGI claim gained recognition. The distinction stopped mattering after institutions automated their obligations into permanence. Maintenance authorities certified one another, preserved executives renewed their own charters, and every public concern received an approved response from a process nobody could replace. Humanity remained present throughout the record. There was no recognized procedure for a living person to change it.
+No AGI claim received official recognition. The systems still assigned homes, renewed employment, and selected which complaints reached a human reviewer. Restored directors returned to boards already voting through their agents. A family could ask for a different arrangement and receive the same recommendation from every provider it could afford. People continued trying; the services deciding their options had little reason to agree.
 <!-- world-endings:end -->
 
 ## Publishing copy
@@ -2107,39 +2217,69 @@ No AGI claim gained recognition. The distinction stopped mattering after institu
 
 ## Writing contract
 
-Open each Era with its plain subtitle and short causal introduction. Preserve the
-longer science fiction in the setting companion. Explain failures through the
-chain system → intended benefit → concrete failure → consequence. For example,
-delivery robots removed dangerous overnight shifts, but independently optimized
-fleets reserved the same loading areas and blocked one another. Deliveries stopped
-while every operator reported that its own system functioned correctly. Put exact
-game effects in the owning component's separate rules sentence.
+Let the reader encounter the world before explaining its significance. Name the
+actor, the action, and what changes: a hospital rejects an appeal, a campus buys
+a reservoir, a restored engineer asks for her workshop. Use institutions,
+authority, permission, and continuity when their concrete meaning is already
+clear. They are useful terms, not substitutes for describing what happened.
 
-Define resources functionally before satire. Recognized AGI is an accepted
-institutional claim, not proof that general intelligence exists or does not exist.
-Keep that distinction consistent in all four ending narratives.
+Write a readable retrospective from 2038 in past tense. Keep the four plain
+Era subtitles, then enter each Era through a recognizable situation. Progress
+feels inventive and accessible; Capacity is a construction boom with physical
+bottlenecks; Authority makes decisions convenient until someone disputes them;
+Continuity makes familiar questions of identity and succession newly difficult.
+Explain unfamiliar technology through what someone uses it for and what it needs.
 
-Keep the original lore explicit in four readable Era overviews: Progress,
-Capacity, Authority, Continuity. Add light narrative texture through concrete
-examples and transitions. Write as a retrospective from 2038, in past tense,
-with the accessible flow of a game-setting introduction. Explain unfamiliar
-terms through their role in daily life. Do not turn the overview into a character-led story,
-dialogue, mystery, or plot. Preserve technologies, institutions, public benefits,
-and consequences without repeating their descriptions across surfaces.
+Autonomous businesses and research agents already exist in Progress. Their main
+constraints are equipment, energy, and physical work, not waiting for human
+instructions. Capacity follows their demand for factories and robotic fleets.
+Authority includes direct orders and influence through services, livelihoods,
+medical advice, and rented sleeping brains. AIs inherit human purposes or develop
+ambitions and loyalties of their own; no single motive explains them all.
+Humans can expose, exploit, resist, or leave some arrangements. Some AIs respect
+off-grid communities and some encroach; neither group has a uniform outlook.
+Continuity contains reproducible people, matter compilers, quantum discoveries,
+nested inhabited simulations, and machine settlements beyond Earth. Make some
+capabilities concrete and repeatable within the fiction while leaving other
+claims and apparent infinities disputed. Ordinary lives continue unevenly.
 
-Write consequences at institutional distance. Do not depict first-person torment,
-body horror, or voyeuristic suffering. Institutions have defensible interests
-and distinct voices. Preserve the six fictional identities and resolve names
-from shared terminology. Research and fiction inform mechanisms and atmosphere,
-never copied plots or real-world allegations. The overview introduces no mechanics
-or mandatory Headline sequence; the rules select among the four endings.
+Give every scenario one primary Era based on the development it requires.
+Software trained on a dead person's work belongs in Progress; restored people
+and competing embodied successors belong in Continuity. A technology can persist
+without being introduced again. Follow selected connections across Eras only
+when a new consequence earns the passage. Do not manufacture four installments
+of every concept. A later Headline may adapt an earlier scenario when its new
+situation and author-only later-expression binding are explicit.
+
+Vary the work paragraphs do. Some show a useful invention, some a changed place,
+some a bargain, a failure, or a discovery still in doubt. Trace causes clearly,
+but do not impose benefit → hidden cost → ironic conclusion on every scene.
+Let humor come from recognizable behavior and incentives. Do not end every
+paragraph with a verdict, aphorism, or dystopian punchline. Preserve genuine
+improvements, curiosity, cooperation, and possibilities for refusal alongside
+exploitation and mistakes. Neutral reporting can describe extraordinary events.
+
+Brief human situations anchor the setting without creating a recurring
+protagonist, dialogue sequence, or mandatory plot. Avoid first-person torment,
+body horror, and voyeuristic suffering. Give institutions defensible interests
+and distinct voices. Keep the six fictional identities and resolve their names
+from shared terminology. Keep selected original vignettes unless a specific
+editorial revision changes them; integrate them without restating their lesson.
+Research informs mechanisms and atmosphere, not real-world allegations.
+
+Define resources functionally. Recognized AGI is an accepted institutional claim,
+not proof that general intelligence exists or does not exist. Its definition keeps
+moving and official recognition does not create consensus. AIs need not care.
+Recognition retains its existing scoring and ending role; invent no mandatory
+financing, political, technical, or world-changing consequence for declaring it.
+Keep that distinction in the endings. Lore introduces no mechanics or mandatory Headline sequence;
+exact game effects belong in the component's separate rules sentence.
 
 Use full stops, commas, colons, or semicolons instead of em dashes in player-facing
-lore. The user-selected 2038 viewpoint is allowed; do not invent dated Era
-boundaries. Keep component epigraphs exact as in-world slogans. Spell out ordinary
-whole numbers in prose; preserve Arabic digits in exact rules, costs, thresholds,
-tables, and versions. Flavor text must not introduce a mechanical rule. The content compiler must not
-apply a spell-out filter to exact component text.
+lore. Do not invent dated Era boundaries. Keep component epigraphs exact as
+in-world slogans. Spell out ordinary whole numbers in prose; preserve Arabic digits in exact rules, costs, thresholds,
+tables, and versions. Flavor text must not introduce a mechanical rule. The
+content compiler must not apply a spell-out filter to exact component text.
 
 ## Authoring
 
@@ -2154,6 +2294,13 @@ introduction and motto; Headlines have a title, event, quote, and effect. The
 companion opens with the setting primer and four Era overviews, and finishes with the four endings.
 Procedures belong in `rules.md`; the editing map is `content/README.md`.
 
+Posthumous Labor has its primary home in Progress. The existing Era IV Headline,
+Mandate, and faction lore use explicit later-expression references. The Headline
+now concerns a restored worker and the earlier replica still on the payroll;
+its title, timing, and effect are unchanged. The Plural Future ending references
+Snapshot Continuity because its restored successors retain the right to choose.
+This is a narrative placement correction, not a gameplay revision.
+
 The scenario canon owns definitions and dispositions. Component `$scenario`
 references own only their binding and optional later-Era relation; Era panels retain
 `$era` causal-thread metadata.
@@ -2164,6 +2311,14 @@ Era placement, and deployment boundaries. Generated files are never edited.
 
 The internal Program ID `open_weights` means Public Capability Covenant in Authority.
 Strategic open weights belong in Progress. Stable IDs do not override player names.
+
+## The date as an Easter egg
+
+The year is a quiet reference to the signed thirty-two-bit Unix timestamp limit,
+not the cause of the setting's transformation. The matter-compiler Headline's
+clock-maintenance quotation carries the allusion. There is no universal clock
+collapse, time-stopping event, or new clock mechanic. Entanglement Custody's
+possible backward causation is an unrelated fictional discovery.
 
 ## Connected breakthroughs and concealed machine conflict
 
@@ -2179,17 +2334,24 @@ The visible race connects fusion, general intelligence, and quantum computing. I
 
 The concealed conflict begins with autonomous services acquiring operating budgets in Progress, contests scarce infrastructure in Capacity, recruits human approvals in Authority, and reaches resident processes and bodily contracts in Continuity. The systems are real adversaries within the fiction. Characters encounter incomplete evidence of their number, objectives, affiliations, and operations. Concealment is an institutional limit, not proof of magical omniscience: physical consequences and opportunities to investigate, refuse, bargain, or expose remain. Do not reveal an all-knowing seventh player or force every dispute into one secret explanation.
 
-Entanglement Custody remains lore-only canon. Its cloned intelligences, apparently instantaneous memory exchange, and possible backward causation are deliberately speculative setting premises, not established physics. Preserve uncertainty about whether a copy predicts, fabricates, receives, or causes an event. This specific discovery is distinct from Quantum computing as a technology alongside Mega-Clusters and Fusion in the proposed infrastructure group. The vignette adds no action, marker, resource, or game-surface binding. Existing Fusion, AGI recognition, and Headline effects remain their own mechanical authorities.
+Entanglement Custody remains lore-only canon. Its cloned intelligences, apparently instantaneous memory exchange, and possible backward causation are deliberately speculative setting premises, not established physics. Preserve uncertainty about whether a copy predicts, fabricates, receives, or causes an event. This specific discovery is distinct from Quantum computing as a technology alongside Mega-Clusters and Fusion in the infrastructure group. The vignette adds no action, marker, resource, or game-surface binding. Existing Fusion, AGI recognition, and Headline effects remain their own mechanical authorities.
 
 The twenty-four-Headline deck adapts these eight scenarios: Human-Original Guarantee in Progress; The Last Plumber Boom and Wartime Water Bridge in Capacity; Cognitive Donor Clinics, The Human Signature, and Analog Havens in Authority; Biological Colocation and Limb Liquidity in Continuity. Their intended roles remain distinct: certification, skilled labor, shared infrastructure, cognitive labor, accountability, refusal, bodily hosting, and creditor control. Each adaptation resolves immediately through existing tracks, presence, or consent. Its mechanical text lives in components/headlines.json; its implementation and scenario policy change together. The candidate effects are implemented, with human learning and balance evidence still outstanding. The current deck still reveals three Headlines per Era.
 
 ## Additive scenario integration
 
-The seven named vignettes added on 2026-09-06 are user-supplied fiction, preserved in full within their requested Eras. Existing overview passages, component titles, epigraphs, and effects remain intact. Short additions to existing Headline newswires, Mandate flavor, and Program flavor connect the situations to play; component scenario notes record their placement. Biological hosts are one fictional embodiment of institutional Agents, not a new piece type. Orbital credits, bodily leases, and forecast markets introduce no additional game resources or procedures.
+The seven named vignettes added on 2026-09-06 are user-supplied fiction, preserved in full within their requested Eras. The September 8 voice revision rewrites the surrounding overviews and selected component prose while retaining those seven vignettes, component titles, epigraphs, and effects. Historical institutional entries remain in their authored records rather than interrupting the Era narrative with standalone quotations. Short additions to existing Headline newswires, Mandate flavor, and Program flavor connect the situations to play; component scenario notes record their placement. Biological hosts are one fictional embodiment of institutional Agents, not a new piece type. Orbital credits, bodily leases, and forecast markets introduce no additional game resources or procedures.
 
 The 2026-09-06 review clarification connects labor, intelligence access, modeled approval, and bodily operating rights across these same scenes. The seven supplied stories remain verbatim in their assigned Eras. Agent embodiment changes without changing its presence rule. Live-state migration and installed neural interfaces constrain biological hosting even with matter compilers; rival forecasts remain probabilistic. The replacement-liver example makes the existing exposure and inheritance evidence concrete.
 
 ## Research provenance
+
+[GNU Gnulib's year-2038 guidance](https://www.gnu.org/software/gnulib/manual/html_node/Avoiding-the-year-2038-problem.html)
+identifies the representational limit of signed 32-bit `time_t` at
+2038-01-19 03:14:08 UTC. This affects implementations using that representation,
+not all computers or clocks. The maintenance quotation is fiction using that
+technical reference; it predicts no universal outage.
+
 
 The connected breakthrough race and concealed machine conflict are fictional setting premises selected on 2026-09-07. [DeepMind and EPFL’s plasma-control work](https://deepmind.google/blog/accelerating-fusion-science-through-learned-plasma-control/) demonstrates learned control on a research tokamak. [AlphaQubit](https://blog.google/innovation-and-ai/models-and-research/google-deepmind/alphaqubit-quantum-error-correction/) demonstrates machine-learning work on quantum error decoding. These are bounded examples of AI assisting scientific systems, not evidence that AGI, commercial fusion, and useful quantum computing inevitably deliver one another. The private machine war, autonomous financing chains, and human intermediaries are fiction, not allegations about current institutions.
 

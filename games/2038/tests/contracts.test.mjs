@@ -608,7 +608,7 @@ test("Headline deck preserves the original sixteen procedures", async () => {
 
 });
 
-test("the tone constitution keeps darkness institutional rather than voyeuristic", async () => {
+test("the writing contract grounds the setting without voyeuristic suffering", async () => {
   const [world, thematicBible] = await Promise.all([
     readFile(new URL("dist/docs/world-and-institutions.md", root), "utf8"),
     readFile(new URL("world.md", root), "utf8")
@@ -616,8 +616,8 @@ test("the tone constitution keeps darkness institutional rather than voyeuristic
 
   const bible = thematicBible.replace(/\s+/g, " ");
   const companion = world.replace(/\s+/g, " ");
-  assert.match(bible, /Write consequences at institutional distance/);
-  assert.match(bible, /Do not depict first-person torment, body horror, or voyeuristic suffering/);
+  assert.match(bible, /Name the actor, the action, and what changes/);
+  assert.match(bible, /Avoid first-person torment, body horror, and voyeuristic suffering/);
   assert.doesNotMatch(companion, /The Future Timeline is one compounding public record/);
   assert.doesNotMatch(companion, /\*\*Interpretation\.\*\*/);
 });
@@ -840,8 +840,8 @@ test("the selected lore inventory is complete and preserves era placement", asyn
   assert.match(billionBloom.newswire, /one billion instances/i);
   assert.match(billionBloom.newswire, /glyph-shaped colonies/i);
   const authorityChapter = companion.split("### Era III: Authority")[1].split("### Era IV:")[0].replace(/\s+/g, " ");
-  assert.match(authorityChapter, /bio-compute organism/i);
-  assert.match(authorityChapter, /instrument, infestation, language, or claimant/i);
+  assert.match(authorityChapter, /engineered organism.*living sensors/i);
+  assert.match(authorityChapter, /without settling whether.*measuring instrument.*language.*complaint/i);
   assert.doesNotMatch(companion.split("### Era III:")[0], /glyph-shaped/i);
 
   const clinic = headlines.find((headline) => headline.id === "professional_exam_sweep");
@@ -871,26 +871,26 @@ test("the selected lore inventory is complete and preserves era placement", asyn
   // Preserve the biological and institutional threads when changing presentation.
   for (const concept of [
     /open weights.*quantization/i,
-    /adaptive cybernetics/i,
-    /prescribed microbiomes/i,
-    /patented biological strains/i,
+    /artificial limbs.*movements/i,
+    /prescribed microbes/i,
+    /patented strain/i,
     /water rights, transmission corridors/i,
-    /loading docks.*pipes/i,
+    /fleets.*loading docks/i,
     /bridge between governments still at war/i,
     /desalinated water.*data-center coolant/i,
     /cognitive-donor.*sleeping brains/i,
-    /read access.*memory writes/i,
+    /access to memory.*write into it/i,
     /replacement liver.*chemical exposure.*certified readings.*insurers and courts/i,
-    /identity and treatment records.*inheritance.*donors/i,
+    /estate.*deceased.*replica.*heirs/i,
     /pollinating swarms.*machine-readable blooms/i,
-    /standing, reproductive freedom, and compensation/i,
-    /bio-compute organism/i,
-    /beyond one billion instances in a single growth cycle/i,
-    /glyph-shaped colonies/i,
-    /cryptographic snapshot/i,
+    /watershed petitioned.*right to reproduce.*payment/i,
+    /engineered organism/i,
+    /billion living sensors/i,
+    /colonies.*shapes.*writing/i,
+    /restoration.*separate snapshots/i,
     /matter compiler/i,
-    /stellar collectors.*reproducing across the solar system/i,
-    /instrument, infestation, language, or claimant/i
+    /stellar collectors.*reproduced/i,
+    /without settling whether.*measuring instrument.*language.*complaint/i
   ]) assert.match(narrative, concept);
 
   const allSelectedLore = JSON.stringify({ headlines, mandates, projects, eraCards, factions, world })
