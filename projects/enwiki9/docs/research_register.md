@@ -19,6 +19,15 @@ The guard allows 9,999,998,976 memory bytes, zero swap, 24GB scratch and a
 1,200-second elapsed stop. No native corpus result or compression gain exists
 yet; complete hidden state and submission package qualification remain open.
 
+The [terminal comparison](../operations/provenance/fx2_half_tail_terminal_20260908.json)
+now closes all arms: P/K/D are each 3,223 bytes, with exact inverses and repeats.
+D changes 28,022 after-floor outputs and 13,148 final quantized events, but
+posthoc ideal coding cost worsens 0.4416 bits and the archive saves zero bytes.
+All nine half input/output trajectories match exactly. The guard passes with
+5,823,074,304 peak cgroup bytes and owned children removed. The validated
+reflection retires this configuration; numerical fidelity alone did not improve
+this fixture's compression. No larger gate or full-corpus score is authorized.
+
 ## 2026-09-08 - Scalar half-output audit isolates a trained boundary discrepancy
 
 After the compact-block loss, lenses4/8 select an output-conversion question.
@@ -780,15 +789,3 @@ about grammar compression. Eighteen normalized run rows are linked to unchanged
 arm receipts. The guard passed with 141.2443 seconds elapsed; shared-host timing
 and incomplete Python/zlib package accounting provide no qualification credit.
 The [codec guide](dualstream_grammar_v1.md) covers the implementation and results.
-
-## 2026-09-06 - Organization audit connects reflections to the agent loop
-
-The [parallel audit](organization_audit.md#organization-scorecard-2026-09-06)
-rates the pre-change environment 5.6/10, with experiment-loop simplicity the
-weakest dimension. The existing ledger now projects recorded lessons, causes,
-uncertainties, retired dimensions and next actions into CLI and browser search
-and candidate history. The workbench prompt requires the next experiment to name
-the lesson it applies or uncertainty it tests. This changes browsing and routing,
-not evidence validity or scientific status. Historical snapshots and source paths
-remain intact. The audit distinguishes implemented retrieval from recommended
-terminal-record consolidation and routine/full report refresh profiles.

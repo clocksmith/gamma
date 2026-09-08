@@ -62,3 +62,4 @@ Archived files preserve complete H2 records.
 - [part-042.md: 2026-09-06 MIDAS distant100KB observed transfer](archive/part-042.md)
 
 - [part-043.md: 2026-09-06 MIDAS SHA observer cost comparison](archive/part-043.md)
+- [part-044.md: 2026-09-06 organization audit connects reflections to the agent loop](archive/part-044.md)
