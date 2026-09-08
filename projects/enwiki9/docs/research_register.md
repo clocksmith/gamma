@@ -2,6 +2,26 @@
 
 [Record index](research_register/README.md) | [Earlier records](research_register/archive/README.md)
 
+## 2026-09-08 - Compact FXCM bridge repairs a real probability-endpoint rejection
+
+The [interface receipt](../operations/provenance/fx2_compact_v26_bridge_v1_terminal.json)
+tests all 4,095 clipped raw values using the authenticated upstream squash
+function. Exactly 22 map to probability 1.0, which the historical Gamma v1
+adapter incorrectly rejects even though FX2 accepts these mixer inputs.
+The separately identified [v2 adapter](../lib/forge_fxcm_raw_adapter_v2.hpp)
+preserves every upstream float bit, accepts endpoints, rejects invalid values
+and leaves inactive outputs neutral. Synthetic P/K state and update parity
+passes 4,096 events; the bridge compiles against both real upstream interfaces.
+This is an implementation repair, not a native synchronization or archive claim.
+The prior native forge baseline did not use v1 and its receipt remains valid.
+
+The selected successor keeps FX2's trained transformer and replaces only its
+431-output FXCM block with compact403 v26 through an explicit P/K/D bridge.
+The whole-forge comparison cannot attribute those components independently.
+Next: freeze one native fixture comparison with original/bookkeeping identity,
+independent inversion, deterministic repeat, coder traces and package/resource
+costs. Full predictor-state certification remains open; no 90M score credit.
+
 ## 2026-09-08 - Compact forge parent independently reconstructs and repeats
 
 The [terminal audit](../operations/provenance/forge_compact_fixture_terminal_20260908.json)
@@ -770,21 +790,3 @@ outer memory, 256MiB scratch, zero swap and 1,200-second aggregate stop are boun
 native limits stay unchanged. F must beat P and S with complete boundary
 evidence. This is a transfer test on previously examined data, not a sealed
 holdout or full-score claim. Publication precedes release and execution.
-
-## 2026-09-06 - MIDAS opening100KB passes complete boundary observation
-
-The [terminal audit](../operations/provenance/midas_open_observed_opening100k_terminal_20260906.json)
-closes all 16 phases with passing resource guards. P/K archives are 52,661 bytes,
-F is 48,714, and S is 52,770. F saves 3,947 bytes against P and 4,056 against S.
-All four inverses and repeats pass; fresh unobserved reference archives and
-complete final states agree. Every same-arm 800,000-probability trace and 3,127
-boundary records match exactly. P/K authoritative projections agree.
-
-The [validated reflection](../operations/adaptive/reflections/20260906T135533Z_1c3e7bc7d3.json)
-selects a separately frozen distant100KB transfer gate. This opening population
-was examined before; package accounting, calibrated resources and full-1G
-performance remain unknown. Four corpus run rows retain zero full-score credit.
-The [record reconciliation](../operations/evidence/20260906_midas_observed_record_reconciliation.json)
-disambiguates identical P/K row IDs by arm while preserving all measured files
-and values. All 997 row IDs are unique; complete older register records move
-intact into the existing archive to keep the current register bounded.
