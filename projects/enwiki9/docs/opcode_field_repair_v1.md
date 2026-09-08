@@ -238,6 +238,10 @@ implements that single mutation under `root_explore`. Its
 pass; P/K are 38 bytes and D is 37 on the synthetic fixture only. Required local
 source is 5,991 bytes, 245 above the compact parent. The existing comparison
 runner is reused through a candidate adapter. Job `20260908T165054Z_e47978f5d4`
-is held until publication and fresh resource admission; it binds CPU2, one thread,
+started after [publication verification and fresh admission](../results/opcode_slot_reset_admission_20260908.json); it binds CPU2, one thread,
 4GiB aggregate memory, zero swap, 1GiB scratch and a 2,400-second elapsed stop.
-The opening250KB comparison remains unmeasured. Full package and score are unknown.
+The opening250KB comparison is active, without a terminal result. The
+[fixed source-ZIP diagnostic](../results/opcode_slot_reset_source_zip_20260908/attempt01/cost.json)
+measures 5,815 parent versus 5,950 treatment bytes: 135 added ZIP bytes, or 270
+under the conditional two-copy program accounting. Six relocated synthetic
+codec phases pass. Full package and score are unknown.

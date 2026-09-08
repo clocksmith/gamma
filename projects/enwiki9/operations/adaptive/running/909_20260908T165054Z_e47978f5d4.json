@@ -10,21 +10,56 @@
     "sha256": "sha256:044147f7ffe6922ea8dafd52fc3d4426077b20958adbcd421245ad41adcfc1e4"
   },
   "execution_mode": "discovery",
+  "execution_resources": {
+    "boot_id": "3ce46712-27bc-4199-8e48-e2b3d23926cb",
+    "budget": {
+      "cgroup_parent": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice",
+      "cpus": [
+        2
+      ],
+      "memory_bytes": 4294967296,
+      "scratch_bytes": 1073741824,
+      "swap_bytes": 0,
+      "wall_seconds": 2400
+    },
+    "cgroup_inode": 258774,
+    "cgroup_path": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/gamma-enwiki9-20260908T165054Z_e47978f5d4",
+    "cpu_enforcement": "taskset-and-sampled-affinity-guard",
+    "groups": [
+      {
+        "created": true,
+        "inode": 258774,
+        "kernel_cpuset": false,
+        "memory_bytes": 4294967296,
+        "path": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/gamma-enwiki9-20260908T165054Z_e47978f5d4"
+      }
+    ],
+    "guard_command_sha256": "5e25a16c5dfefa968a5e1485ff61a63d1b9ed076ca95e957379d79069c325d6e",
+    "guard_path": "run_logs/adaptive/20260908T165054Z_e47978f5d4.resources/guard.json",
+    "missing_diagnostics": [
+      "kernel cpuset controller is not delegated; taskset assignment and existing affinity guard remain active"
+    ],
+    "timing_authority": "diagnostic"
+  },
   "experiment": {
     "path": "operations/adaptive/experiments/opcode_slot_reset_v1.json",
     "sha256": "sha256:861855958578ed51f24b29c1e93396d6405b56d84d636cd0b2bcfcb5d156495c"
   },
   "gate_size": 250000,
-  "held": true,
+  "held": false,
   "held_at": "2026-09-08T16:50:54+00:00",
   "hold_history": [
     {
       "at": "2026-09-08T16:50:54+00:00",
       "held": true,
       "reason": "Await source and ownership publication verification and fresh CPU2 resource admission."
+    },
+    {
+      "at": "2026-09-08T16:52:49+00:00",
+      "held": false,
+      "reason": "Published source, ownership, runtime and fresh CPU2 admission verified in results/opcode_slot_reset_admission_20260908.json; preserve 32GiB host headroom."
     }
   ],
-  "hold_reason": "Await source and ownership publication verification and fresh CPU2 resource admission.",
   "job_id": "20260908T165054Z_e47978f5d4",
   "priority": 90,
   "proposal": {
@@ -33,6 +68,7 @@
   },
   "proposal_id": "opcode_slot_reset_v1",
   "purpose": "diagnostic",
+  "released_at": "2026-09-08T16:52:49+00:00",
   "resource_budget": {
     "cgroup_parent": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice",
     "cpus": [
@@ -51,12 +87,16 @@
   "scratch_directories": [
     "results/opcode_slot_reset_v1"
   ],
-  "state": "pending",
+  "started_at": "2026-09-08T16:52:50+00:00",
+  "state": "running",
   "submitted_at": "2026-09-08T16:50:54+00:00",
   "tags": [
     "opcode_slot_reset"
   ],
   "timing_authority": "diagnostic",
   "tool": "tools/opcode_slot_reset_gate_v1.py",
-  "tool_args": []
+  "tool_args": [],
+  "worker_pid": 1833233,
+  "worker_proc_start_ticks": 198250822,
+  "worker_started_at": "2026-09-08T16:52:50+00:00"
 }
