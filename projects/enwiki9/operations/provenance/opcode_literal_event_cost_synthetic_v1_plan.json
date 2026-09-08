@@ -1,0 +1,40 @@
+{
+  "schema": "gamma.enwiki9.synthetic-source-plan.v1",
+  "id": "opcode_literal_event_cost_synthetic_v1",
+  "owner": "root_explore",
+  "status": "frozen",
+  "lenses": [1, 9],
+  "selection": "Deliberate: finite reconstruction programs and paid encoder selection, after aligned-history validation failed its randomized control and the prior calibration audit supported keeping SSE.",
+  "hypothesis": "The compact encoder's repeated current literal-event charge differs from the exact adaptive cost of the same literal sequence, even with unchanged decoded-context keys. An encoder-only cost helper can reproduce the actual token model's conditional costs without mutating decoder state.",
+  "source_finding": "compress_inner uses L*tok.evc(st,0) for candidate literal spans. TOK.eve updates CM counts after every emitted event, and its context is (st.f,st.w,st.pg,st.c). Existing literal predictions and updates also run for every copied byte.",
+  "parent": {
+    "path": "programs/opcode_field_compact_v1/p",
+    "sha256": "7d331ba82c635af8afe6517bf5f4471b41dcf7854c6ec01cb5564078d9bb56a8"
+  },
+  "evidence": [
+    "operations/provenance/opcode_calibration_terminal_20260908.json",
+    "operations/provenance/opcode_field_history_validation_terminal_20260908.json",
+    "operations/adaptive/reflections/20260908T232009Z_a13fbfa9a9.json"
+  ],
+  "deliverable": "One bounded cost helper plus tests against the authenticated original CM implementation, including an exact rational counterexample, repeated and interleaved contexts, rescaling, and nonmutation.",
+  "mechanism": "For a proposed all-literal span, copy only the relevant event-count triples, compute each zero-event conditional probability, then perform the original count increment and4096-total rescaling on the local copies. Return cumulative costs, leaving the authoritative models untouched.",
+  "bounds": {
+    "cpu": 3,
+    "threads": 1,
+    "address_space_bytes": 2147483648,
+    "cpu_seconds": 90,
+    "wall_seconds": 120,
+    "file_bytes": 33554432,
+    "maximum_span_events": 258,
+    "maximum_distinct_contexts_per_span": 258,
+    "corpus_bytes": 0
+  },
+  "stop_rule": "Any mismatch with sequential original CM probabilities or any authoritative-state mutation blocks integration. Passing demonstrates cost accounting only; a separately frozen P/K/D exact archive comparison is required before claiming compression benefit.",
+  "non_goals": [
+    "No entropy coder, predictor, SSE, history bank, decoder or corpus mutation.",
+    "No claimed global optimal parse or finite archive gain from ideal event-cost differences.",
+    "No1MB continuation of the rejected field-history configuration, and no selection of its randomized control.",
+    "No installation, model download, HORIZON or MIDAS change."
+  ],
+  "objective_credit_bytes": 0
+}
