@@ -62,8 +62,28 @@ records P/K 71,788 and D 71,717 bytes, a 71-byte archive gain. All ten phases,
 inverses, repeats and shared-state checks pass. The unchanged codec is selected
 for the reserved 1MB confirmation; neither sample establishes package savings.
 Deflate and FX2 have not yet been measured on this reserved validation slice.
+The retained field counters show 217,459 of 230,968 modeled bytes in nonzero
+fields on development, and 236,452 of 241,793 on validation. Higher overall
+coverage accompanies the smaller validation saving. These are opcode-stream
+coverage counts, not improved raw bytes or per-field attribution of archive gain.
 The [matched comparator contract](../operations/adaptive/experiments/matched_frontier_reserved_q0_v1.json)
 binds both reserved populations to the unchanged Deflate CLI and cached FX2
 executable. Its [synthetic tests](../operations/evidence/20260908_matched_frontier_unit.json)
 cover exact Deflate replay, native header/vocabulary checks, and explicit model
 inventory. The comparator waits for CPU2; tests are not corpus measurements.
+
+The [reserved 1MB confirmation](../operations/provenance/opcode_field_confirmation_terminal_20260908.json)
+passes all ten phases and the resource guard, with P/K 257,369 bytes and D
+255,828: a 1,541-byte archive saving. The codec was unchanged across all stages.
+
+| Stage | Parent / bookkeeping | Treatment | Archive saving |
+| --- | ---: | ---: | ---: |
+| Development 250KB | 67,959 | 67,658 | 301 |
+| Separate validation 250KB | 71,788 | 71,717 | 71 |
+| Reserved confirmation 1MB | 257,369 | 255,828 | 1,541 |
+
+All inverses, repeats and shared-state checks pass. These improvements retain
+their individual populations. Larger gates remain held while the matched
+frontier comparison and complete package cost are assessed. Reducing source cost
+requires an executable release that preserves the confirmed archives, not merely
+removing required files from its inventory.
