@@ -858,6 +858,11 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
     const player = this.players[seat];
     return {
       ...base,
+      personalProjectRules: {
+        cost: clone(this.projectDocument.constructionCost),
+        projects: this.projectDocument.projects.map(({id, unlockedRound, production, powerSource}) =>
+          ({id, unlockedRound, production, powerSource: Boolean(powerSource)}))
+      },
       activeHeadline: this.activeHeadline
         ? { id: this.activeHeadline.id, name: this.activeHeadline.name, text: this.activeHeadline.text }
         : null,

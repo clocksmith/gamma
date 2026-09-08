@@ -31,7 +31,9 @@ no separate reference card is needed.
 ## Personal project chips
 
 Every faction receives three two-sided chips: Mega-Cluster, Fusion, and Quantum.
-Both sides identify the faction and project. No shared project references or
+Both sides identify the faction and project. Prototype masters print each pair
+as a 150 × 85 mm strip: cut the outer border, fold along the dashed centre line,
+and attach back to back for a 75 × 85 mm chip. Print at 100% scale. No shared project references or
 unique Fusion piece are needed.
 
 | Face | Required information |

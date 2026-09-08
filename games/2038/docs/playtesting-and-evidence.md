@@ -342,7 +342,7 @@ Report deliberate presence sacrifices divided by eligible ordinary assignments w
 
 - Current Facility/Generator positions and connected Facilities, including changes between Productions.
 - Generator cost, recurring Scrutiny, Audit loss, and competition for Energy slots.
-- Mega-Cluster host adjacency, Joint Venture host legality, and their production.
+- Personal project host connection, Joint Venture host legality, and their production.
 - Production handling time, rules lookups, and whether removed rationing mattered.
 - Each one-for-one trade, whether it enabled the committed action, and rejected offers.
 - Fusion built, declined, or blocked, with reasons.
@@ -470,4 +470,26 @@ Prepare the complete rulebook and component masters linked in the README and the
 
 Players receive one complete rulebook and the frozen components. The optional World companion is not included in the default kit; record it explicitly if supplied. Do not give them the study results or a recommended construction sequence before play. A silent observer records questions and timings; any supplied rules answer makes the session facilitated and must be recorded. After an assignment resolves, neutrally ask for its reason without suggesting a preferred district or bonus.
 
-Use the generated notes tables to capture reminders, each project's first actual productive Era, meaningful presence sacrifices under the definition above, and individual postgame explanations of both outcomes. Fusion is a connection and construction award, not direct Compute production. Record games with no projects and unsuccessful explanations, too. There is no numerical pass threshold yet for enjoyment or teachability. Return the actual observations before selecting further cuts or changing incentives.
+Use the generated notes tables to capture reminders, each project's first actual productive Era, meaningful presence sacrifices under the definition above, and individual postgame explanations of both outcomes. Fusion supplies local Power without a construction award; Mega-Cluster produces Compute and Quantum produces Capability. Record games with no projects and unsuccessful explanations, too. There is no numerical pass threshold yet for enjoyment or teachability. Return the actual observations before selecting further cuts or changing incentives.
+
+
+### Personal project diagnostic — 2026-09-08
+
+Before observing results, freeze current project costs and yields. The `personal`
+mode of `node lab/cli/construction-study.mjs` compares the new
+`personal_infrastructure_v1` treatment with `research_deploy_plan_v1` using
+common seeds. Test every faction at 2, 3, 4 and 5 players under greedy and
+weighted backends: 48 paired blocks, 96 games. Rotate the focal seat by faction
+index; this is not complete faction-by-seat coverage. Four-player results are
+primary; two-player results remain exploratory. Opponents, rules and stopping
+policy remain equal within each pair. Record construction, resource-specific
+yields, cap clipping, final score, AGI, unused projects and the paired score
+differences. The control is the retained Research/Deploy policy, not a claim of
+optimal play. Do not infer balance, dominance or enjoyment from this screen.
+
+For the blind teach, additionally record chip identity on both faces, host
+attachment after relocation, stacked-chip visibility, any attempt to write,
+Cube positions, missed Production, and whether Quantum's single final-Era yield
+was understood. Inspect Fusion's newly connected Facilities rather than counting
+its construction alone as a useful benefit. A real physical session is pending;
+rendered print checks do not establish human handling or understanding.

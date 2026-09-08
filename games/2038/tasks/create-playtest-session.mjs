@@ -191,7 +191,7 @@ For ordinary assignments, use the board at resolution. Record only legal alterna
 | --- | --- | --- | --- | --- | --- |
 | | | | | | |
 
-Fusion grants its construction award and connects Facilities; it does not itself produce Compute. Record the first Facility it connects and its production separately from Mega-Cluster production.
+Fusion connects Facilities without a construction award. Record newly connected Facilities and their output separately from Mega-Cluster Compute and Quantum Capability. Record cap clipping, the alternative action declined, stacked-chip visibility, relocation, missed Production, and every attempted handwritten record.
 
 ## Postgame explanation
 
