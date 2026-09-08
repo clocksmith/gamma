@@ -228,3 +228,16 @@ test("the infrastructure Mandate counts current connections rather than removed 
   const before = player.mandate;
   match.scoreMandate(); assert.equal(player.mandate, before + 2);
 });
+
+test("personal project plans reject lost ownership before payment", async () => {
+  const match = await game(); match.round = 3; await match.beginRound([]);
+  const player = match.players[0]; player.runway = 10; player.compute = 10;
+  const tile = match.board.find(t => t.category !== "frontier");
+  player.facilities = [{ id: "s0-facility-1", tileId: tile.instanceId, category: tile.category }];
+  const choice = match.legalResolutions(0, "build").find(c => !c.parameters.facility && c.parameters.project?.id === "mega_cluster");
+  assert.ok(choice);
+  match.players[1].facilities = player.facilities; player.facilities = [];
+  assert.throws(() => match.applyResolution(0, choice), /no longer legal/);
+  assert.equal(player.runway, 10); assert.equal(player.compute, 10);
+});
+

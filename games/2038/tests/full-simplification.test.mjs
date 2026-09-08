@@ -155,6 +155,7 @@ test("Production never requests allocation and personal upgrades need only a con
   player.generators = [];
   await match.produceAll([]);
   assert.equal(match.operatingProjects(player).length, 0);
+  assert.equal(match.matchMetrics.projectProduction.filter(row => row.seat === 0 && row.project === "mega_cluster").length, 1);
 });
 
 test("every qualifying institution may score AGI without replacing the Mandate winner", async () => {
