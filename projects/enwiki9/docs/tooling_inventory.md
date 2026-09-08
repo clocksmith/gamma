@@ -12,7 +12,7 @@ Reusable artifact helpers for new tools: [lib/artifacts.py](../lib/artifacts.py)
 The LibNC initializer teacher launcher exits before the first forward, gradient, update, or coded symbol; its source-bound experiment defines that boundary.
 The delayed-status helper's `enwiki9_delayed_status_latest.log` pointer is operational history, not present-host occupancy proof.
 
-Coverage: **1048 files** (33 .c, 67 .cpp, 1 .gdb, 1 .h, 1 .hpp, 1 .html, 941 .py, 3 .sh).
+Coverage: **1049 files** (33 .c, 67 .cpp, 1 .gdb, 1 .h, 1 .hpp, 1 .html, 942 .py, 3 .sh).
 
 | Tool | Purpose | Referenced contracts |
 |---|---|---|
@@ -358,6 +358,7 @@ Coverage: **1048 files** (33 .c, 67 .cpp, 1 .gdb, 1 .h, 1 .hpp, 1 .html, 941 .py
 | [`tools/fx2_residual_oracle_partitions.py`](../tools/fx2_residual_oracle_partitions.py) | Screen causal row partitions with oracle and held-out empirical bounds. This is an offline triage tool. It asks whether a candidate structural key has enough residual loss mass to justify implementation work. The all-slice oracle uses post-hoc empirical bit rates per key, so it is not decoder-realizable. The held-out score trains per-key KT probabilities on the prefix and scores the suffix without updating those probabilities. | none found |
 | [`tools/fx2_residual_oracle_upper_bound.py`](../tools/fx2_residual_oracle_upper_bound.py) | Oracle upper-bound scan for fx2 residual structural states. This tool is intentionally non-constructive: it assumes a perfect per-state calibration table after seeing the scored rows. If a state family cannot clear the target under this optimistic bound, its causal implementation should be pruned before writing more candidate wrappers. | none found |
 | [`tools/fx2_residual_probe.py`](../tools/fx2_residual_probe.py) | Run the certificate-first fx2 residual APM probe. | none found |
+| [`tools/fx2_residual_ratio_native_adapter_v1.py`](../tools/fx2_residual_ratio_native_adapter_v1.py) | Build a hash-bound adapter for fresh native FX2 materializations only. | none found |
 | [`tools/fx2_residual_shadow_matrix.py`](../tools/fx2_residual_shadow_matrix.py) | Generate a matrix of cached FX2 residual/SSE shadow evidence. | none found |
 | [`tools/fx2_residual_state_search.py`](../tools/fx2_residual_state_search.py) | Search causal fx2 residual correction keys on FX2_RESIDUAL_ROW logs. The search model matches fx2_residual_apm_score.py: for each bit, predict from the current table state, score the bit, then update the table. This is an online decoder-realizable search, not an offline oracle. | none found |
 | [`tools/fx2_residual_state_search_stream.py`](../tools/fx2_residual_state_search_stream.py) | Single-pass search for causal fx2 residual correction keys. This is the large-log companion to fx2_residual_state_search.py. It parses each FX2_RESIDUAL_ROW once, updates all requested candidate keys, and ranks them by causal train/test or all-stream log-loss gain. | none found |

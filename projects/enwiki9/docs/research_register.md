@@ -25,6 +25,17 @@ Next: a separately identified native FX2 adapter must resolve half-probability
 mapping, reproduce P/K, and measure actual P/K/D/S archives before promotion.
 HORIZON, MIDAS and measured codec sources remain unchanged; objective credit is zero.
 
+The [native boundary](../lib/fx2_residual_ratio_v1.hpp) now preserves original
+float32 P/K rows, including upstream half-conversion quirks, and applies a frozen
+Q16 multiplier for D/S. [Native evidence](../results/fx2_residual_ratio_native_v1/attempt01/receipt.json)
+passes seven tests, 4,160 exact-reference symbol updates and 24 fresh-process
+synthetic phases, reproducing the same toy archive sizes. The new source adapter
+passes real FX2 syntax checks with 461 recorded dependencies; no full native FX2
+build or roundtrip has run. The 5,457-byte component source is not a package score.
+Compiler `/tmp` quota failure is retained; an owned temporary directory resolves it.
+Next: freeze the actual native fixture gate, including complete build inputs,
+model/vocabulary hashes, activation, parent/coder/state traces and package costs.
+
 ## 2026-09-08 - Compact field implementation and 90M objective
 
 The [v3 migration](../operations/provenance/objective90_migration_20260908.json)
