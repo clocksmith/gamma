@@ -21,7 +21,10 @@ saving by seven bytes before other package costs. Complete accounting stays open
 An independent [synthetic state probe](../results/opcode_wiki_state_diagnostic_20260908/attempt01/receipt.json)
 finds eight opcode/wiki-coordinate mismatches among eleven predefined strings;
 no corpus frequency or archive gain is claimed. The [validated reflection](../operations/adaptive/reflections/20260908T154100Z_6b9653a04d.json)
-selects one decoded wiki-slot mutation with parent and unused-bookkeeping controls.
+selects [opcode_wiki_slot_v1](../operations/adaptive/experiments/opcode_wiki_slot_v1.json),
+owned by `root_explore`. Eleven synthetic tests and ten retained CLI phases pass;
+P/K are 43 bytes and D is 44 on the fixture. The opening250KB gate is held for
+publication/admission; no corpus gain is claimed. Only the slot is exposed.
 
 ## 2026-09-08 - Opcode field repair confirms a 1,541-byte archive improvement
 
