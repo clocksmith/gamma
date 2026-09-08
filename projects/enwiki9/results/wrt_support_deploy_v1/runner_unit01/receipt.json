@@ -1,0 +1,53 @@
+{
+  "schema": "gamma.enwiki9.wrt-support-deploy-runner-unit.v1",
+  "status": "passed",
+  "tests": 3,
+  "command": "TMPDIR=results/wrt_support_deploy_v1/runner_unit01 taskset -c 3 timeout 60 python3 -m unittest discover -s tests -p test_wrt_support_deploy_v1.py -v",
+  "checks": [
+    "Deterministic ZIP bytes with fixed timestamps and exact member reconstruction",
+    "Existing output rejected",
+    "Adapter source identities and original Predict/Perceive call counts",
+    "Changed execution engine rejected"
+  ],
+  "inputs": [
+    {
+      "path": "tools/fx2_wrt_support_deploy_fixture_v1.py",
+      "bytes": 6971,
+      "sha256": "87cf39fa4bcd7a51c6cc06d4cad00b2f99c84d8ba1a624de5db4af3f1c8ccbaa"
+    },
+    {
+      "path": "tools/fx2_wrt_support_deploy_adapter_v1.py",
+      "bytes": 2331,
+      "sha256": "78a45a4e8db66d5424e58fda499b7d7a11fde57a14bb0a1cfa842d941a5c981b"
+    },
+    {
+      "path": "tests/test_wrt_support_deploy_v1.py",
+      "bytes": 2195,
+      "sha256": "8de4927e8247386ed23a7d9eade3356d6760ee0c4c428733e1a6ddeb43f30da8"
+    },
+    {
+      "path": "lib/wrt_support_deploy_v1.hpp",
+      "bytes": 1827,
+      "sha256": "2be5a826ca56d24f2fcf74c961160f996410f89cb6daf359fa2c5d330271eaee"
+    },
+    {
+      "path": "operations/provenance/fx2_wrt_support_deploy_adapter_v1.json",
+      "bytes": 2217,
+      "sha256": "8b03ad9dcace6e61445df5f8714ddff869c12f4ac17b9c74a33d1b169cdf6af9"
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "results/wrt_support_deploy_v1/runner_unit01/stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "results/wrt_support_deploy_v1/runner_unit01/stderr",
+      "bytes": 502,
+      "sha256": "3e0ef7758cdf890775f4838834bb033efa56c53445df76629ab9f12037599004"
+    }
+  ],
+  "native_corpus_executed": false,
+  "objective_credit_bytes": 0
+}
