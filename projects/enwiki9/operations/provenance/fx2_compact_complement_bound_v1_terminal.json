@@ -1,0 +1,78 @@
+{
+  "schema": "gamma.enwiki9.compact-complement-terminal.v1",
+  "id": "fx2_compact_complement_bound_v1",
+  "owner": "root_explore",
+  "status": "passed",
+  "plan": {
+    "path": "operations/provenance/fx2_compact_complement_bound_v1_plan.json",
+    "bytes": 5570,
+    "sha256": "81725f745ccae8d6d81dc3fb557a516986dbb58cb8cf2dc4e23299a97ed7fbb0"
+  },
+  "audit": {
+    "path": "results/fx2_compact_complement_bound_v1/attempt01/audit.json",
+    "bytes": 2374,
+    "sha256": "938e2ec9fdffacd222b8fc1b7ae5e649c8c4ebb960e4d2600d376ef7c63a7f89"
+  },
+  "execution": {
+    "path": "results/fx2_compact_complement_bound_v1/attempt01/execution.json",
+    "bytes": 1546,
+    "sha256": "3fb901e276a4fa1930c2dcb305ab3e6ccf0973436c211e0c81c88150b89e1620"
+  },
+  "synthetic_tests": 5,
+  "unit_artifacts": [
+    {
+      "path": "results/fx2_compact_complement_bound_v1/unit01/stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "results/fx2_compact_complement_bound_v1/unit01/stderr",
+      "bytes": 745,
+      "sha256": "a4881be86466be09c6ea0d48e23799081d343d9431068c0b7ffa952a38a3277d"
+    }
+  ],
+  "inputs_rehashed": 13,
+  "raw_bytes": 50051,
+  "trace_records": 259824,
+  "clairvoyant_ideal_gain_ceiling_bits": 972,
+  "clairvoyant_ideal_gain_ceiling_bytes": 121.5,
+  "all_treatment_ideal_gain_bits_approx": -134.31604234016459,
+  "fixed_block_oracles": [
+    {
+      "block_bytes": 1,
+      "blocks": 32478,
+      "treatment_blocks": 13991,
+      "gross_ideal_gain_ceiling_bits": 560,
+      "selector_bits": 32478,
+      "after_selector_ideal_gain_ceiling_bits": -31918
+    },
+    {
+      "block_bytes": 64,
+      "blocks": 508,
+      "treatment_blocks": 187,
+      "gross_ideal_gain_ceiling_bits": 104,
+      "selector_bits": 508,
+      "after_selector_ideal_gain_ceiling_bits": -404
+    },
+    {
+      "block_bytes": 1024,
+      "blocks": 32,
+      "treatment_blocks": 5,
+      "gross_ideal_gain_ceiling_bits": 8,
+      "selector_bits": 32,
+      "after_selector_ideal_gain_ceiling_bits": -24
+    }
+  ],
+  "measured_replacement_inventory_delta_bytes": 45745,
+  "decision": "Do not implement a selector over this fixed native P/D pair from this fixture. All predefined one-bit-per-block selectors lose in ideal cost, while even unpriced per-bit choice has at most121.5 ideal bytes. Next seek a new predictive source or a source-backed correction; do not tune switching priors or scale these traces.",
+  "scope": "An exact ideal-cost ceiling on the fixed two-stream convex family for this fixture. Not a finite arithmetic archive bound, a lower bound on all possible package implementations, or an impossibility theorem for compact models on other data.",
+  "mathematical_claim": "For every sequence of convex weights applied to the frozen P/D probabilities, summed ideal gain over P is at most972 bits. Fixed1/64/1024-byte block choice, after exactly one label bit per block, has upper bounds -31918/-404/-24 ideal bits.",
+  "missing": [
+    "New information beyond the fixed P/D pair",
+    "Finite joint native archive and full package witness",
+    "Fresh-population transfer and full-corpus evidence"
+  ],
+  "objective_target_bytes": 90000000,
+  "objective_credit_bytes": 0,
+  "full_corpus_score_bytes": null
+}

@@ -16,6 +16,13 @@ tests pass, including exhaustive rational ceilings and malformed coordinates.
 CPU3, 512MiB address space, 60-second elapsed stop, no native inference. Publication
 and fresh admission precede the audit; no corpus result is claimed yet.
 
+The [terminal bound](../operations/provenance/fx2_compact_complement_bound_v1_terminal.json)
+caps even unpriced per-bit convex selection at 972 ideal bits (121.5 bytes).
+Paid 1/64/1024-byte block choices have ceilings -31,918/-404/-24 ideal bits.
+All 259,824 truth coordinates and 13 inputs verify; no native model reran.
+Do not build a selector for this fixed pair from this fixture. Seek new predictive
+information; this is not a finite-archive or full-corpus impossibility theorem.
+
 ## 2026-09-08 - Decoder-known WRT support exposes a bounded positive opportunity
 
 After the output correction failed, discovery lenses1/7 select a conservative

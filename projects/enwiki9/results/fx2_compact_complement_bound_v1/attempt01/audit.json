@@ -1,0 +1,58 @@
+{
+  "schema": "gamma.enwiki9.compact-complement-bound.v1",
+  "status": "passed",
+  "plan": "operations/provenance/fx2_compact_complement_bound_v1_plan.json",
+  "raw_bytes": 50051,
+  "modeled_bytes": 32478,
+  "exact_wrt_inverse": true,
+  "trace_truth_alignment": true,
+  "events": 259824,
+  "changed_events": 147190,
+  "treatment_better_events": 88498,
+  "treatment_worse_events": 58692,
+  "all_treatment_ideal_gain_bits_approx": -134.31604234016459,
+  "clairvoyant_ideal_gain_bits_approx": 971.9577566166566,
+  "clairvoyant_ideal_gain_ceiling_bits": 972,
+  "fixed_block_oracles": [
+    {
+      "block_bytes": 1,
+      "blocks": 32478,
+      "treatment_blocks": 13991,
+      "gross_ideal_gain_ceiling_bits": 560,
+      "selector_bits": 32478,
+      "after_selector_ideal_gain_ceiling_bits": -31918
+    },
+    {
+      "block_bytes": 64,
+      "blocks": 508,
+      "treatment_blocks": 187,
+      "gross_ideal_gain_ceiling_bits": 104,
+      "selector_bits": 508,
+      "after_selector_ideal_gain_ceiling_bits": -404
+    },
+    {
+      "block_bytes": 1024,
+      "blocks": 32,
+      "treatment_blocks": 5,
+      "gross_ideal_gain_ceiling_bits": 8,
+      "selector_bits": 32,
+      "after_selector_ideal_gain_ceiling_bits": -24
+    }
+  ],
+  "floating_point_authority": "Diagnostic only; ceilings use exact integer products and shifts",
+  "measured_replacement_inventory_delta_bytes": 45745,
+  "oracle_ideal_ceiling_below_replacement_inventory_bits": true,
+  "proof": "For any per-event convex mixture of these fixed two quantized streams, actual truth mass is at most max(P,D). The product of max(P,D)/P bounds its ideal likelihood ratio. Integer shifts compute an exact ceiling of its base-two logarithm.",
+  "limitations": [
+    "Oracle uses future truth; it is not a decoder or a causal prediction result",
+    "No finite arithmetic archive saving bound is proved",
+    "Replacement inventory is an observed overlapping subtotal, not the cost of a yet-unbuilt joint codec",
+    "A combined decoder must reconstruct both probability trajectories within its resource and package limits",
+    "Fixed block labels exclude model, framing, termination and runtime costs",
+    "This used fixture supplies no full-corpus or confirmation evidence"
+  ],
+  "archive_saving_bytes": null,
+  "complete_package_bytes": null,
+  "objective_credit_bytes": 0,
+  "full_corpus_score_bytes": null
+}
