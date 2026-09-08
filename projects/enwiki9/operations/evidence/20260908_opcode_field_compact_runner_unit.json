@@ -1,0 +1,66 @@
+{
+  "candidate_id": "opcode_field_compact_v1",
+  "checks": [
+    "Four fresh CLI phases with exact bytes and full state witnesses.",
+    "Archive and state divergence diagnostics.",
+    "Budget, infrastructure and codec failure classes.",
+    "Missing optional telemetry remains explicit; mandatory evidence blocks.",
+    "Resource, population and inventory validation."
+  ],
+  "command": [
+    "taskset",
+    "-c",
+    "3",
+    "timeout",
+    "--signal=TERM",
+    "--kill-after=5",
+    "240",
+    "bash",
+    "-c",
+    "ulimit -v 2097152; ulimit -t 180; ulimit -f 65536; python3 tests/test_opcode_field_compact_gate_v1.py"
+  ],
+  "complete_package_bytes": null,
+  "corpus_executed": false,
+  "log": {
+    "bytes": 866,
+    "path": "results/opcode_field_compact_runner_unit_20260908/attempt02/validation.log",
+    "sha256": "5a66e0969943545e6ac66288da0926286cc5fed3792f2f82591bec67b76b6f10"
+  },
+  "objective_credit_bytes": 0,
+  "observed_utc": "2026-09-08T15:40:42.194406+00:00",
+  "previous_attempt": {
+    "change": "Add plan resource/population and inventory rejection tests before sealing.",
+    "log": {
+      "bytes": 724,
+      "path": "results/opcode_field_compact_runner_unit_20260908/attempt01/validation.log",
+      "sha256": "bf5c210f3d12b3e4978d007c038b8793e1e5336c6e1dab6ddfd0b015b4b273aa"
+    },
+    "tests_passed": 6
+  },
+  "schema": "gamma.enwiki9.opcode-field-compact-runner-unit.v1",
+  "source_files": [
+    {
+      "bytes": 11377,
+      "path": "tools/opcode_field_compact_gate_v1.py",
+      "sha256": "5c53537bd2ed7de44aaa78367d5020af0976d4f8240d1dec3c072a101e335ef1"
+    },
+    {
+      "bytes": 5564,
+      "path": "tests/test_opcode_field_compact_gate_v1.py",
+      "sha256": "f5b6c7779056338edd34007b35a2c654e2d745fbf3c4010f9c62064684b4c0f6"
+    },
+    {
+      "bytes": 5965,
+      "path": "tools/opcode_field_compact_observe_v1.py",
+      "sha256": "9715b76f275099ebe287d038e061b48a8b3195201d9fadaaed03cca1b6b9bb50"
+    },
+    {
+      "bytes": 4769,
+      "path": "tools/opcode_field_compact_build_v1.py",
+      "sha256": "7d141592322bbcc72cdb621ec6377e7bdbeebde3211a642ec5985235d0211052"
+    }
+  ],
+  "status": "passed",
+  "synthetic_only": true,
+  "tests_passed": 7
+}

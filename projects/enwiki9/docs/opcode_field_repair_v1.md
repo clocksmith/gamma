@@ -140,6 +140,11 @@ Local source shrinks by 9,657 bytes from the observed implementation and remains
 905 bytes above the original parent. These are source subtotals, not a complete
 package result: invocation bytes, runtime and the chosen accounting multiplicity
 must still be resolved. The compact codec has not yet replayed corpus archives.
-Its frozen implementation-equivalence experiment awaits a tested, sealed parity
-runner and published admission. Historical confirmation inputs may prove exact
+Its [parity runner](../tools/opcode_field_compact_gate_v1.py) passes
+[seven synthetic runner tests](../operations/evidence/20260908_opcode_field_compact_runner_unit.json).
+The sealed CPU2 job `20260908T154100Z_6b9653a04d` is held for publication and fresh
+admission. Twelve phases compare retained archives and shared state against
+fresh unobserved encode, observed encode, independent decode and raw repeat on
+each existing population. Limits are 12GiB memory, zero swap, 2GiB scratch and
+12,000 elapsed seconds. Historical confirmation inputs may prove exact
 implementation parity; they must not be described as fresh model confirmation.
