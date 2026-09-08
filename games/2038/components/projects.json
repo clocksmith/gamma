@@ -1,6 +1,6 @@
 {
   "schemaVersion": 3,
-  "constructionRule": "During Build, choose a connected Facility you own at your Agent assignment, pay 3 Runway and 1 Compute, add 1 Scrutiny, then flip and attach one unlocked personal project chip. Each institution builds each project once. Different projects may share a host; no project chain is required.",
+  "constructionRule": "During Build, choose a connected Facility you own at your Agent assignment, pay ${content.projects.constructionCost.runway} Runway and ${content.projects.constructionCost.compute} Compute; add ${content.projects.constructionCost.scrutiny} Scrutiny, then flip and attach one unlocked personal project chip. Each institution builds each project once. Different projects may share a host; no project chain is required.",
   "projects": [
     {
       "id": "mega_cluster",
@@ -8,7 +8,7 @@
       "timing": "during_action",
       "name": "${terms.technology.megaCluster}",
       "displayName": "Regional Capacity Project",
-      "text": "${content.projects.constructionRule} The host produces 2 additional Compute during Production while connected.",
+      "text": "${content.projects.constructionRule} The host produces ${content.projects.projects.0.production.amount} additional Compute during Production while connected.",
       "$scenario": {
         "ref": "utility-capture"
       },
@@ -18,8 +18,8 @@
         "resource": "compute",
         "amount": 2
       },
-      "frontText": "Era II. Build at a connected Facility you own: pay 3 Runway and 1 Compute; add 1 Scrutiny. Once per institution.",
-      "backText": "The host produces 2 additional Compute during Production while connected. Keep this chip with its host when relocated; no immediate reward."
+      "frontText": "Era II. Build at a connected Facility you own: pay ${content.projects.constructionCost.runway} Runway and ${content.projects.constructionCost.compute} Compute; add ${content.projects.constructionCost.scrutiny} Scrutiny. Once per institution.",
+      "backText": "The host produces ${content.projects.projects.0.production.amount} additional Compute during Production while connected. Keep this chip with its host when relocated; no immediate reward."
     },
     {
       "id": "fusion_demonstrator",
@@ -34,7 +34,7 @@
       "loreRef": "project-fusion-demonstrator",
       "requiresConnectedHost": true,
       "powerSource": true,
-      "frontText": "Era III. Build at a connected Facility you own: pay 3 Runway and 1 Compute; add 1 Scrutiny. Once per institution.",
+      "frontText": "Era III. Build at a connected Facility you own: pay ${content.projects.constructionCost.runway} Runway and ${content.projects.constructionCost.compute} Compute; add ${content.projects.constructionCost.scrutiny} Scrutiny. Once per institution.",
       "backText": "The host supplies local Power to itself and your Facilities on the same or adjacent districts. No Generator slot is used. Keep this chip with its host when relocated; no immediate reward."
     },
     {
@@ -43,7 +43,7 @@
       "timing": "during_action",
       "name": "Quantum",
       "displayName": "Scientific Computing Project",
-      "text": "${content.projects.constructionRule} The host produces 1 additional Capability during Production while connected. Apply the normal cap and permanent threshold awards.",
+      "text": "${content.projects.constructionRule} The host produces ${content.projects.projects.2.production.amount} additional Capability during Production while connected. Apply the normal cap and permanent threshold awards.",
       "loreRef": "project-quantum",
       "$scenario": {
         "ref": "quantum-infrastructure"
@@ -53,8 +53,8 @@
         "resource": "capability",
         "amount": 1
       },
-      "frontText": "Era IV. Build at a connected Facility you own: pay 3 Runway and 1 Compute; add 1 Scrutiny. Once per institution.",
-      "backText": "The host produces 1 additional Capability during Production while connected. Apply the normal cap and permanent threshold awards. Keep this chip with its host when relocated; no immediate reward."
+      "frontText": "Era IV. Build at a connected Facility you own: pay ${content.projects.constructionCost.runway} Runway and ${content.projects.constructionCost.compute} Compute; add ${content.projects.constructionCost.scrutiny} Scrutiny. Once per institution.",
+      "backText": "The host produces ${content.projects.projects.2.production.amount} additional Capability during Production while connected. Apply the normal cap and permanent threshold awards. Keep this chip with its host when relocated; no immediate reward."
     }
   ],
   "institutionalHistory": [

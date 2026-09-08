@@ -26,8 +26,8 @@ construction Era toward the host label so new active ventures can be identified.
 1. Sum the participating institutions' **printed starting Trust**.
 2. Compare their final Trust total with that sum plus the number of players.
 3. Compare remaining black Audit cubes with the number of players.
-4. Inspect the institutions' AGI recognition cubes and use the printed World
-   Ending table. Determine the institutional winner from Mandate and ordinary ties.
+4. Inspect the institutions' AGI recognition cubes and use the printed World Ending
+   table. Determine the institutional winner from Mandate and ordinary ties.
 
 Compute the result from the visible state. No written setup total or ending
 record is required. The current rulebook owns the exact scoring procedure.

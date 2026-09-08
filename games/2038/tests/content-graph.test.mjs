@@ -147,7 +147,6 @@ test("shared semantic references construct current cards, rules, UI, and simulat
   );
 
   const advancedName = variables.terms.technology.advancedGeneration;
-  const advancedFacts = variables.facts.shared.advancedGeneration;
   assert.equal(variables.facts.shared.roundsWord, "four");
   assert.deepEqual(variables.terms.resources, {
     runway: "Runway",
@@ -170,19 +169,11 @@ test("shared semantic references construct current cards, rules, UI, and simulat
   });
   const world = await readJson("dist/runtime/world-copy.json");
   assert.equal(config.title, world.title);
-  assert.equal(
-    config.powerSources.find((source) => source.id === "fusion_demonstrator").name,
-    advancedName
-  );
-  assert.equal(
-    escalation.projects.find((action) => action.id === "fusion_demonstrator").name,
-    advancedName
-  );
-  assert.equal(
-    config.powerSources.find((source) => source.id === "fusion_demonstrator").capacity,
-    advancedFacts.power
-  );
-  assert.ok(rules.includes(`#### Construct ${advancedName} (Era III onward)`));
+  const fusion = escalation.projects.find(project => project.id === "fusion_demonstrator");
+  assert.equal(fusion.name, advancedName);
+  assert.equal(fusion.powerSource, true);
+  assert.ok(!config.powerSources.some(source=>source.id === "fusion_demonstrator"));
+  assert.match(rules, /Personal infrastructure upgrades/);
   assert.equal(ui.prototype.tracks.runway, variables.terms.resources.runway);
   assert.match(simulation.decisions.constructAdvancedGeneration, new RegExp(advancedName));
   assert.match(simulation.coverage.selectedRules.automated.join("\n"), /local Generator connections/);
@@ -191,7 +182,7 @@ test("shared semantic references construct current cards, rules, UI, and simulat
     simulation.coverage.selectedRules.automated.join("\n"),
     /adjacency Networks/
   );
-  assert.ok(rulesSource.includes("${terms.technology.advancedGeneration}"));
+  assert.ok(rulesSource.includes("${content.projects.byId.fusion_demonstrator.name}"));
   assert.ok(rulesSource.includes("${facts.shared.roundsWord | capitalize}"));
   assert.match(rules, /\*\*Standard game:\*\* Four Eras, three turns per player per Era/);
   assert.ok(allSources.join("\n").match(/\$\{[^}]+\}/g).length > 500);

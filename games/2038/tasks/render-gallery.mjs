@@ -98,7 +98,7 @@ function buildFactions(data, config) {
               ? `<span class="trust-milestone-track" aria-label="Highest Trust milestone awarded"><small>Highest Trust milestone awarded</small> ${[0, ...config.scoring.trustThresholds.map(t => t.value)]
                 .map(value => `<span data-trust-threshold="${value}" data-start="${value === Math.max(0, ...config.scoring.trustThresholds.filter(t => v >= t.value).map(t => t.value))}">${value}</span>`).join(" · ")}</span>`
               : ""}</dd></div>`)
-            .join("")}</dl><p class="recognition-track">AGI recognition: No · Recognized — one cube</p><p class="objective-track">Era objective: one reusable progress cube</p>`
+            .join("")}</dl><p class="recognition-track">AGI recognition: <span>No</span> <span>Recognized</span></p><details class="objective-panel" open><summary>Era objective · one cube</summary><div class="objective-track" aria-label="Era objective count, 0 through 99">${Array.from({length: 100}, (_, value) => `<span data-objective-value="${value}">${value}</span>`).join("")}</div></details>`
         : "";
       const abilities = (f.abilities || [])
         .map(
@@ -371,8 +371,13 @@ main { padding: 1.8rem clamp(1rem, 3vw, 2.4rem); }
 .stats div { background: #f4f4f2; border-radius: 6px; padding: 0.2rem 0.45rem; text-align: center; min-width: 3.4rem; }
 .stats dt { font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.05em; color: #9aa3ad; margin: 0; }
 .stats dd { margin: 0; font-weight: 700; font-size: 0.95rem; }
-.trust-award-record { display: block; margin-top: 0.3rem; font-size: 0.8rem; }
-.trust-award-record small { display: block; font-weight: 400; }
+.trust-milestone-track { display: block; margin-top: .3rem; }
+.trust-milestone-track small { display: block; font-weight: 400; }
+.trust-milestone-track span, .recognition-track span { display: inline-block; padding: .35rem; border: 1px solid currentColor; }
+.trust-milestone-track [data-start="true"] { outline: 2px solid currentColor; }
+.objective-track { display: grid; grid-template-columns: repeat(10, minmax(0, 1fr)); margin-top: .5rem; }
+.objective-track span { border: 1px solid #9aa3ad; text-align: center; padding: .3rem 0; font-variant-numeric: tabular-nums; }
+@media print { .objective-track span { min-width: 7mm; min-height: 7mm; } }
 .abilities { display: flex; flex-direction: column; gap: 0.5rem; }
 .ability { border-left: 3px solid color-mix(in srgb, var(--accent) 45%, #d7d7d2); padding-left: 0.6rem; }
 .ability-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.4rem; }
