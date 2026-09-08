@@ -2,7 +2,7 @@
 
 Generated from the current certificate, gate receipts, resource guards, and process table.
 
-- Generated at UTC: `2026-09-08T14:31:54+00:00`
+- Generated at UTC: `2026-09-08T14:58:42+00:00`
 
 ## Target State
 
@@ -16,16 +16,16 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 
 ## Operator Summary
 
-- Candidate: `opcode_field_confirmation1m_q0_v1`
-- Scope bytes: `1,000,000`
-- Scope symbols: `1,000,000`
+- Candidate: `matched_frontier_reserved_q0_v1`
+- Scope bytes: `1,250,000`
+- Scope symbols: `1,250,000`
 - Scope unit: `raw byte`
 - Gate verdict: `running`
 - Gate next action: `wait_for_gate_completion`
 - Active stage: `n/a`
 - Roundtrip arm: `n/a`
 - Active scorer observed: `true`
-- Active cmix mode: `n/a`
+- Active cmix mode: `compress`
 - Driver result present: `false`
 - RSS guard status: `n/a`
 - RSS samples: `n/a`
@@ -39,8 +39,8 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 - Latest decimal single-process margin KiB: `n/a`
 - Safe to launch candidate gate: `false`
 - Terminal verdict present: `false`
-- Pending adaptive jobs: `27`
-- Held pending adaptive jobs: `27`
+- Pending adaptive jobs: `26`
+- Held pending adaptive jobs: `26`
 - Claimable pending adaptive jobs: `0`
 - Canonical release bundles: `2`
 - Validated release run receipts: `0`
@@ -54,14 +54,14 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 
 - Gate verdict: `running`
 - Next action: `wait_for_gate_completion`
-- Candidate: `opcode_field_confirmation1m_q0_v1`
-- Scope bytes: `1,000,000`
-- Scope symbols: `1,000,000`
+- Candidate: `matched_frontier_reserved_q0_v1`
+- Scope bytes: `1,250,000`
+- Scope symbols: `1,250,000`
 - Scope unit: `raw byte`
 - Active stage: `n/a`
 - Roundtrip arm: `n/a`
 - Coordinator PID: `n/a`
-- Driver result JSON: `projects/enwiki9/results/opcode_field_confirmation1m_q0_v1/decision.json`
+- Driver result JSON: `projects/enwiki9/results/matched_frontier_reserved_q0_v1/decision.json`
 - Driver result present: `false`
 - RSS guard JSON: `not present`
 - RSS guard present: `unknown`
@@ -84,8 +84,8 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 
 ## Observed Gate Command
 
-- Expected candidate: `opcode_field_confirmation1m_q0_v1`
-- Expected scope bytes: `1,000,000`
+- Expected candidate: `matched_frontier_reserved_q0_v1`
+- Expected scope bytes: `1,250,000`
 - Driver process count: `0`
 - Active gate command observed: `false`
 - Driver command mismatch count: `0`
@@ -96,8 +96,8 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 
 ## Observed Controller Command
 
-- Expected active candidate: `opcode_field_confirmation1m_q0_v1`
-- Expected active scope bytes: `1,000,000`
+- Expected active candidate: `matched_frontier_reserved_q0_v1`
+- Expected active scope bytes: `1,250,000`
 - Controller process count: `0`
 - Scope note: `Controller scope may be the completed parent gate that launched the active child; the observed driver command is authoritative for the active gate scope.`
 
@@ -131,13 +131,13 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 
 - Audit return code: `0`
 - Audit mode: `inventory_snapshot`
-- Inventory generated: `2026-09-08T14:31:52+00:00`
+- Inventory generated: `2026-09-08T14:57:47+00:00`
 - Snapshot identity is verified; inventory inputs were not rescanned. This is not live occupancy or launch authority.
 - Program directories: `996`
 - Registered programs: `535`
-- Untracked nonignored entries: `15`
-- Modified tracked entries: `5`
-- Candidate statuses: `active=18, blocked_dependency=67, candidate=242, measured_negative=100, retired=568, track_source_before_evolution=1`
+- Untracked nonignored entries: `8`
+- Modified tracked entries: `13`
+- Candidate statuses: `active=18, blocked_dependency=68, candidate=242, measured_negative=100, retired=568`
 
 ## View Refresh
 
@@ -148,40 +148,52 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 
 | Role | PID | PPID | RSS KiB | Command |
 |---|---:|---:|---:|---|
-| `process` | 33,694 | 2,643,307 | 42,656 | `python3 tools/enwiki9_lab.py run --candidate opcode_field_confirmation1m_q0_v1 --max-workers 1` |
-| `resource_guard` | 33,870 | 33,694 | 36,848 | `/usr/bin/python3 /home/x/deco/gamma/projects/enwiki9/tools/run_with_resource_guard_v3.py --limit-kib 12582912 --official-decimal-limit-kib 12582912...` |
-| `process` | 33,883 | 33,870 | 25,552 | `/usr/bin/python3 /home/x/deco/gamma/projects/enwiki9/tools/opcode_field_repair_gate_v2.py --candidate opcode_field_confirmation1m_q0_v1` |
-| `process` | 165,783 | 33,883 | 921,816 | `/usr/bin/python3 /home/x/deco/gamma/projects/enwiki9/tools/opcode_field_repair_cli_v1.py encode /home/x/deco/gamma/projects/enwiki9/operations/evid...` |
+| `process` | 432,418 | 2,643,307 | 43,716 | `python3 tools/enwiki9_lab.py run --candidate matched_frontier_reserved_q0_v1 --max-workers 1` |
+| `resource_guard` | 432,586 | 432,418 | 34,796 | `/usr/bin/python3 /home/x/deco/gamma/projects/enwiki9/tools/run_with_resource_guard_v3.py --limit-kib 10485760 --official-decimal-limit-kib 10485760...` |
+| `process` | 432,605 | 432,586 | 34,340 | `/usr/bin/python3 /home/x/deco/gamma/projects/enwiki9/tools/matched_frontier_reserved_v1.py` |
+| `process` | 453,411 | 432,605 | 7,784 | `/usr/bin/timeout --signal=TERM --kill-after=5 600 /home/x/deco/gamma/projects/enwiki9/results/matched_frontier_reserved_q0_v1/work/cmix -c english....` |
+| `native_cmix` | 453,412 | 453,411 | 5,807,460 | `/home/x/deco/gamma/projects/enwiki9/results/matched_frontier_reserved_q0_v1/work/cmix -c english.dic confirmation-encode.raw confirmation-encode.cm...` |
 
 ## Active Candidate Recent Artifacts
 
 | Path | Bytes | Modified UTC |
 |---|---:|---|
-| `projects/enwiki9/results/opcode_field_confirmation1m_q0_v1/K-encode.stdout` | 0 | `2026-09-08T14:29:44+00:00` |
-| `projects/enwiki9/results/opcode_field_confirmation1m_q0_v1/K-encode.stderr` | 0 | `2026-09-08T14:29:44+00:00` |
-| `projects/enwiki9/results/opcode_field_confirmation1m_q0_v1/P.result.json` | 102,038 | `2026-09-08T14:29:44+00:00` |
-| `projects/enwiki9/results/opcode_field_confirmation1m_q0_v1/P-repeat.execution.json` | 927 | `2026-09-08T14:29:44+00:00` |
-| `projects/enwiki9/results/opcode_field_confirmation1m_q0_v1/P-repeat.stdout` | 82,723 | `2026-09-08T14:29:44+00:00` |
-| `projects/enwiki9/results/opcode_field_confirmation1m_q0_v1/P-repeat.audit.json` | 92,341 | `2026-09-08T14:29:44+00:00` |
-| `projects/enwiki9/results/opcode_field_confirmation1m_q0_v1/P.repeat.arc` | 257,369 | `2026-09-08T14:29:44+00:00` |
-| `projects/enwiki9/results/opcode_field_confirmation1m_q0_v1/P-repeat.stderr` | 0 | `2026-09-08T14:26:00+00:00` |
-| `projects/enwiki9/results/opcode_field_confirmation1m_q0_v1/P-decode.execution.json` | 914 | `2026-09-08T14:26:00+00:00` |
-| `projects/enwiki9/results/opcode_field_confirmation1m_q0_v1/P-decode.audit.json` | 92,341 | `2026-09-08T14:26:00+00:00` |
-| `projects/enwiki9/results/opcode_field_confirmation1m_q0_v1/P-decode.stdout` | 82,727 | `2026-09-08T14:26:00+00:00` |
-| `projects/enwiki9/results/opcode_field_confirmation1m_q0_v1/P.raw` | 1,000,000 | `2026-09-08T14:26:00+00:00` |
+| `projects/enwiki9/results/matched_frontier_reserved_q0_v1/work/ppm.temp` | 14,680,064,001 | `2026-09-08T14:58:42+00:00` |
+| `projects/enwiki9/results/matched_frontier_reserved_q0_v1/confirmation-encode.stderr` | 760,030 | `2026-09-08T14:58:42+00:00` |
+| `projects/enwiki9/results/matched_frontier_reserved_q0_v1/work/progress.log` | 118,004 | `2026-09-08T14:58:42+00:00` |
+| `projects/enwiki9/results/matched_frontier_reserved_q0_v1/work/confirmation-encode.cmix` | 0 | `2026-09-08T14:56:36+00:00` |
+| `projects/enwiki9/results/matched_frontier_reserved_q0_v1/work/confirmation-encode.cmix.cmix.temp` | 653,301 | `2026-09-08T14:56:36+00:00` |
+| `projects/enwiki9/results/matched_frontier_reserved_q0_v1/confirmation-encode.stdout` | 0 | `2026-09-08T14:56:36+00:00` |
+| `projects/enwiki9/results/matched_frontier_reserved_q0_v1/work/confirmation-encode.raw` | 1,000,000 | `2026-09-08T14:56:36+00:00` |
+| `projects/enwiki9/results/matched_frontier_reserved_q0_v1/confirmation-preprocess.execution.json` | 698 | `2026-09-08T14:56:36+00:00` |
+| `projects/enwiki9/results/matched_frontier_reserved_q0_v1/confirmation.stored` | 653,306 | `2026-09-08T14:56:36+00:00` |
+| `projects/enwiki9/results/matched_frontier_reserved_q0_v1/confirmation-preprocess.stdout` | 43 | `2026-09-08T14:56:36+00:00` |
+| `projects/enwiki9/results/matched_frontier_reserved_q0_v1/confirmation-preprocess.stderr` | 89 | `2026-09-08T14:56:36+00:00` |
+| `projects/enwiki9/results/matched_frontier_reserved_q0_v1/confirmation-P-repeat.execution.json` | 672 | `2026-09-08T14:56:36+00:00` |
 
 ## Active RSS
 
-- Max cmix PID: `n/a`
-- Active cmix mode: `n/a`
-- Max cmix RSS KiB: `n/a`
-- Active process tree RSS KiB: `1,026,872`
+- Max cmix PID: `453412`
+- Active cmix mode: `compress`
+- Max cmix RSS KiB: `5,807,460`
+- Active process tree RSS KiB: `5,928,096`
 - Local binary `10GiB` guard KiB: `10,485,760`
 - Decimal `10GB` guard KiB: `9,765,625`
-- Single-process binary margin KiB: `n/a`
-- Single-process decimal margin KiB: `n/a`
-- Active process tree margin KiB (binary): `9,458,888`
-- Active process tree decimal margin KiB: `8,738,753`
+- Single-process binary margin KiB: `4,678,300`
+- Single-process decimal margin KiB: `3,958,165`
+- Active process tree margin KiB (binary): `4,557,664`
+- Active process tree decimal margin KiB: `3,837,529`
+- Temp input path: `/home/x/deco/gamma/projects/enwiki9/results/matched_frontier_reserved_q0_v1/work/--transformer`
+- Temp output path: `/home/x/deco/gamma/projects/enwiki9/results/matched_frontier_reserved_q0_v1/work/weights.tfwc2`
+- Temp output staging path: `/home/x/deco/gamma/projects/enwiki9/results/matched_frontier_reserved_q0_v1/work/weights.tfwc2.cmix.temp`
+- Temp input bytes: `n/a`
+- Temp output bytes: `2,930,652`
+- Temp output staging bytes: `n/a`
+- Temp input modified UTC: `n/a`
+- Temp output modified UTC: `2026-09-08T14:54:39+00:00`
+- Temp output staging modified UTC: `n/a`
+- Process read bytes: `0`
+- Process write bytes: `36,970,496`
 
 ## Contingencies
 

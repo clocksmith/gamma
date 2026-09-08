@@ -10,21 +10,56 @@
     "sha256": "sha256:044147f7ffe6922ea8dafd52fc3d4426077b20958adbcd421245ad41adcfc1e4"
   },
   "execution_mode": "discovery",
+  "execution_resources": {
+    "boot_id": "3ce46712-27bc-4199-8e48-e2b3d23926cb",
+    "budget": {
+      "cgroup_parent": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice",
+      "cpus": [
+        2
+      ],
+      "memory_bytes": 10737418240,
+      "scratch_bytes": 16000000000,
+      "swap_bytes": 0,
+      "wall_seconds": 3000
+    },
+    "cgroup_inode": 257301,
+    "cgroup_path": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/gamma-enwiki9-20260908T142727Z_bd11cf5582",
+    "cpu_enforcement": "taskset-and-sampled-affinity-guard",
+    "groups": [
+      {
+        "created": true,
+        "inode": 257301,
+        "kernel_cpuset": false,
+        "memory_bytes": 10737418240,
+        "path": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/gamma-enwiki9-20260908T142727Z_bd11cf5582"
+      }
+    ],
+    "guard_command_sha256": "29f77f2e18f8b32379d9f8c09bfc72d61a3d85d1883886fbb3e77122d10e075a",
+    "guard_path": "run_logs/adaptive/20260908T142727Z_bd11cf5582.resources/guard.json",
+    "missing_diagnostics": [
+      "kernel cpuset controller is not delegated; taskset assignment and existing affinity guard remain active"
+    ],
+    "timing_authority": "diagnostic"
+  },
   "experiment": {
     "path": "operations/adaptive/experiments/matched_frontier_reserved_q0_v1.json",
     "sha256": "sha256:29c0a816c523d537a2fcf0ad56818a47252fd3d35e62754fcd1f1d62f40a046d"
   },
   "gate_size": 1250000,
-  "held": true,
+  "held": false,
   "held_at": "2026-09-08T14:27:39+00:00",
   "hold_history": [
     {
       "at": "2026-09-08T14:27:39+00:00",
       "held": true,
       "reason": "Await source and ownership publication and fresh resource admission; CPU2 belongs to active opcode confirmation until its guard closes."
+    },
+    {
+      "at": "2026-09-08T14:54:39+00:00",
+      "held": false,
+      "reason": "Published exact source and ownership atbdc8aa40e; results/matched_frontier_admission_20260908.json verifies remote bindings, closed prior CPU2 guard, native runtime hashes and fresh host admission."
     }
   ],
-  "hold_reason": "Await source and ownership publication and fresh resource admission; CPU2 belongs to active opcode confirmation until its guard closes.",
   "job_id": "20260908T142727Z_bd11cf5582",
   "priority": 91,
   "proposal": {
@@ -33,6 +68,7 @@
   },
   "proposal_id": "matched_frontier_reserved_q0_v1",
   "purpose": "diagnostic",
+  "released_at": "2026-09-08T14:54:39+00:00",
   "resource_budget": {
     "cgroup_parent": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice",
     "cpus": [
@@ -51,12 +87,16 @@
   "scratch_directories": [
     "results/matched_frontier_reserved_q0_v1"
   ],
-  "state": "pending",
+  "started_at": "2026-09-08T14:54:39+00:00",
+  "state": "running",
   "submitted_at": "2026-09-08T14:27:27+00:00",
   "tags": [
     "matched-frontier"
   ],
   "timing_authority": "diagnostic",
   "tool": "tools/matched_frontier_reserved_v1.py",
-  "tool_args": []
+  "tool_args": [],
+  "worker_pid": 432586,
+  "worker_proc_start_ticks": 197541749,
+  "worker_started_at": "2026-09-08T14:54:39+00:00"
 }
