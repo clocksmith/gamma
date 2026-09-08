@@ -162,3 +162,14 @@ form, that adds 1,548 bytes: seven more than the historical 1MB archive saving.
 CLI/build entry, required options, license closure and runtime costs remain
 unresolved. This arithmetic does not establish a package score or authorize a
 larger gate; the active compact corpus parity is a separate pending result.
+
+The [synthetic wiki-state probe](../results/opcode_wiki_state_diagnostic_20260908/attempt01/receipt.json)
+inspects the unchanged source on eleven predefined strings. Eight expose missed
+wiki coordinates after opcode substitution: links, categories, images, template
+names/arguments and reference names. Three controls retain their expected state,
+including the repaired XML field. All frontend inverses are exact. This proves
+the demonstrated state mismatch, not its corpus frequency or compression cost.
+After the active gate closes and its reflection validates, the next bounded
+prediction question is whether exposing a decoder-reconstructed wiki slot pays
+against an otherwise unchanged parent and disabled bookkeeping control. Preserve
+the byte histories and existing model/copy laws; do not combine another feature.
