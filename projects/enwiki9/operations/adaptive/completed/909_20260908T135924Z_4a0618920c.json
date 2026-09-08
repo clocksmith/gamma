@@ -5,27 +5,66 @@
     "sha256": "sha256:e5aaacd1c193962daa8484f5a8ceaa3727e24f1e3e41cd106f6b5cba0e66a2c0"
   },
   "candidate_tree_sha256": "sha256:dc801b1b2ab20f68b1a81cbb9c5312d89b5fe47c8ac7de949b11948f3890a06e",
+  "elapsed_seconds": 484.244,
   "execution_guard": {
     "path": "tools/run_with_resource_guard_v3.py",
     "sha256": "sha256:044147f7ffe6922ea8dafd52fc3d4426077b20958adbcd421245ad41adcfc1e4"
   },
   "execution_mode": "discovery",
+  "execution_resources": {
+    "boot_id": "3ce46712-27bc-4199-8e48-e2b3d23926cb",
+    "budget": {
+      "cgroup_parent": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice",
+      "cpus": [
+        2
+      ],
+      "memory_bytes": 4294967296,
+      "scratch_bytes": 536870912,
+      "swap_bytes": 0,
+      "wall_seconds": 3600
+    },
+    "cgroup_inode": 256905,
+    "cgroup_path": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/gamma-enwiki9-20260908T135924Z_4a0618920c",
+    "cleanup_complete": true,
+    "cpu_enforcement": "taskset-and-sampled-affinity-guard",
+    "groups": [
+      {
+        "created": true,
+        "inode": 256905,
+        "kernel_cpuset": false,
+        "memory_bytes": 4294967296,
+        "path": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/gamma-enwiki9-20260908T135924Z_4a0618920c"
+      }
+    ],
+    "guard_command_sha256": "13f83a57cc245715ab0b3c668b52ad40137c45f35f3428c57c39055ac449839c",
+    "guard_path": "run_logs/adaptive/20260908T135924Z_4a0618920c.resources/guard.json",
+    "missing_diagnostics": [
+      "kernel cpuset controller is not delegated; taskset assignment and existing affinity guard remain active"
+    ],
+    "timing_authority": "diagnostic"
+  },
   "experiment": {
     "path": "operations/adaptive/experiments/opcode_field_validation250k_q0_v1.json",
     "sha256": "sha256:9c47a6e57c45484341ffdcbce0086b6e9da062b6aa672a92331066078ab9b16d"
   },
+  "finished_at": "2026-09-08T14:09:29+00:00",
   "gate_size": 250000,
-  "held": true,
+  "held": false,
   "held_at": "2026-09-08T13:59:43+00:00",
   "hold_history": [
     {
       "at": "2026-09-08T13:59:43+00:00",
       "held": true,
       "reason": "Hold until validation source, positive development reflection, all artifacts and exact ownership publish; require fresh CPU2 resource admission."
+    },
+    {
+      "at": "2026-09-08T14:01:25+00:00",
+      "held": false,
+      "reason": "Published ownership, unchanged source and bound evidence at d2a905a5f; results/opcode_field_validation_admission_20260908.json verifies exact local/HEAD/origin files and fresh CPU2 admission."
     }
   ],
-  "hold_reason": "Hold until validation source, positive development reflection, all artifacts and exact ownership publish; require fresh CPU2 resource admission.",
   "job_id": "20260908T135924Z_4a0618920c",
+  "log_path": "run_logs/adaptive/20260908T135924Z_4a0618920c.log",
   "priority": 90,
   "proposal": {
     "path": "operations/adaptive/proposals/developed/949_opcode_field_validation250k_q0_v1.json",
@@ -33,6 +72,7 @@
   },
   "proposal_id": "opcode_field_validation250k_q0_v1",
   "purpose": "diagnostic",
+  "released_at": "2026-09-08T14:01:25+00:00",
   "resource_budget": {
     "cgroup_parent": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice",
     "cpus": [
@@ -43,6 +83,7 @@
     "swap_bytes": 0,
     "wall_seconds": 3600
   },
+  "returncode": 0,
   "runner": {
     "path": "tools/opcode_field_repair_gate_v2.py",
     "sha256": "sha256:29c91cf94b232361b6371a83da8491b18499c8403a8b81e74e45ad7886e7d694"
@@ -51,7 +92,8 @@
   "scratch_directories": [
     "results/opcode_field_validation250k_q0_v1"
   ],
-  "state": "pending",
+  "started_at": "2026-09-08T14:01:25+00:00",
+  "state": "completed",
   "submitted_at": "2026-09-08T13:59:24+00:00",
   "tags": [
     "opcode-field-validation"
@@ -61,5 +103,8 @@
   "tool_args": [
     "--candidate",
     "opcode_field_validation250k_q0_v1"
-  ]
+  ],
+  "worker_pid": 4039109,
+  "worker_proc_start_ticks": 197222339,
+  "worker_started_at": "2026-09-08T14:01:25+00:00"
 }
