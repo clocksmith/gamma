@@ -63,3 +63,4 @@ Archived files preserve complete H2 records.
 
 - [part-043.md: 2026-09-06 MIDAS SHA observer cost comparison](archive/part-043.md)
 - [part-044.md: 2026-09-06 organization audit connects reflections to the agent loop](archive/part-044.md)
+- [part-045.md: 2026-09-06 dual-stream grammar development comparison](archive/part-045.md)
