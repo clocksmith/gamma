@@ -179,3 +179,27 @@ The compact gate is now closed and reflected. The next bounded prediction
 question is whether exposing a decoder-reconstructed wiki slot pays
 against an otherwise unchanged parent and disabled bookkeeping control. Preserve
 the byte histories and existing model/copy laws; do not combine another feature.
+
+`root_explore` has implemented [opcode_wiki_slot_v1](../operations/adaptive/experiments/opcode_wiki_slot_v1.json).
+It expands completed opcode pairs into a bounded raw-state detector and exposes
+only its `slot`; the repaired XML field and all other context coordinates remain
+the parent values. P uses the unchanged compact namespace, K runs unused slot
+bookkeeping, and D uses the slot. Literal and copy updates follow the same path.
+The external audit binds the complete raw side state, slot occupancy, changed
+slot bytes by literal/raw-copy/chain-copy mode, and all existing shared witnesses.
+
+[Eleven tests](../operations/evidence/20260908_opcode_wiki_slot_unit.json) pass.
+An independently retained ten-phase synthetic CLI comparison produces P/K 43
+bytes and D 44, with exact reconstruction, repeats and P/K projection identity.
+The first CLI tests caught binary JSON audit values and relative artifact paths;
+both were fixed before sealing. A source-closure preflight also rejected an
+incomplete dependency list before the sealed plan bound the missing imports.
+No corpus ran during these corrections. Required local source is 6,350 bytes,
+604 above the compact parent; the complete package remains unqualified.
+
+Job `20260908T162205Z_46ebdbaee4` is sealed and held for publication and fresh
+admission. Its opening250KB comparison has ten phases, CPU2/one thread, 4GiB
+aggregate memory, zero swap, 1GiB scratch and a 2,400-second elapsed stop.
+Each phase has 2GiB address-space, 180 CPU-second and 240 wall-second limits.
+Promotion requires a strictly smaller archive and all controls/inverses/witnesses;
+package cost and fresh confirmation remain separate subsequent decisions.
