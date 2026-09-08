@@ -5,27 +5,66 @@
     "sha256": "sha256:e7f6622f083ae7166d7d387dad62f1d963e6d36f5db7fa02a7ea71744ee324ee"
   },
   "candidate_tree_sha256": "sha256:c3242480b882490e9e170ec13e84faea979d1048f89900e5327aa544bde3a766",
+  "elapsed_seconds": 872.487,
   "execution_guard": {
     "path": "tools/run_with_resource_guard_v3.py",
     "sha256": "sha256:044147f7ffe6922ea8dafd52fc3d4426077b20958adbcd421245ad41adcfc1e4"
   },
   "execution_mode": "discovery",
+  "execution_resources": {
+    "boot_id": "3ce46712-27bc-4199-8e48-e2b3d23926cb",
+    "budget": {
+      "cgroup_parent": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice",
+      "cpus": [
+        2
+      ],
+      "memory_bytes": 4294967296,
+      "scratch_bytes": 1073741824,
+      "swap_bytes": 0,
+      "wall_seconds": 2400
+    },
+    "cgroup_inode": 264140,
+    "cgroup_path": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/gamma-enwiki9-20260908T232009Z_a13fbfa9a9",
+    "cleanup_complete": true,
+    "cpu_enforcement": "taskset-and-sampled-affinity-guard",
+    "groups": [
+      {
+        "created": true,
+        "inode": 264140,
+        "kernel_cpuset": false,
+        "memory_bytes": 4294967296,
+        "path": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/gamma-enwiki9-20260908T232009Z_a13fbfa9a9"
+      }
+    ],
+    "guard_command_sha256": "aadd6d3e67b7cbb7bc434a38dedf2ab338a9d775e8a4bbd78b10171b5a3263ba",
+    "guard_path": "run_logs/adaptive/20260908T232009Z_a13fbfa9a9.resources/guard.json",
+    "missing_diagnostics": [
+      "kernel cpuset controller is not delegated; taskset assignment and existing affinity guard remain active"
+    ],
+    "timing_authority": "diagnostic"
+  },
   "experiment": {
     "path": "operations/adaptive/experiments/opcode_field_history_validation250k_q0_v1.json",
     "sha256": "sha256:f6450ef0e5da4f14faa36e965c1e95362bb8dc1abb557cf2e7990670b7516c01"
   },
+  "finished_at": "2026-09-08T23:36:56+00:00",
   "gate_size": 250000,
-  "held": true,
+  "held": false,
   "held_at": "2026-09-08T23:20:27+00:00",
   "hold_history": [
     {
       "at": "2026-09-08T23:20:27+00:00",
       "held": true,
       "reason": "Validation source, unit tests, sealed inputs and ownership publication require verification before fresh CPU2 admission"
+    },
+    {
+      "at": "2026-09-08T23:22:23+00:00",
+      "held": false,
+      "reason": "Published 510c9c49288b3dd13c13cc0bddbfef5863defa1f exact bindings verified; fresh admission run_logs/adaptive/20260908T232009Z_a13fbfa9a9.admission.json retains32GiB reserve plus full4GiB allocation"
     }
   ],
-  "hold_reason": "Validation source, unit tests, sealed inputs and ownership publication require verification before fresh CPU2 admission",
   "job_id": "20260908T232009Z_a13fbfa9a9",
+  "log_path": "run_logs/adaptive/20260908T232009Z_a13fbfa9a9.log",
   "priority": 90,
   "proposal": {
     "path": "operations/adaptive/proposals/developed/949_opcode_field_history_validation250k_q0_v1.json",
@@ -33,6 +72,7 @@
   },
   "proposal_id": "opcode_field_history_validation250k_q0_v1",
   "purpose": "diagnostic",
+  "released_at": "2026-09-08T23:22:23+00:00",
   "resource_budget": {
     "cgroup_parent": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice",
     "cpus": [
@@ -43,6 +83,7 @@
     "swap_bytes": 0,
     "wall_seconds": 2400
   },
+  "returncode": 0,
   "runner": {
     "path": "tools/opcode_field_history_validation_gate_v1.py",
     "sha256": "sha256:74e8aba1664e493e8ce6fdb4027970039fb86d5e9523a68b2dac9d875697f9df"
@@ -51,12 +92,16 @@
   "scratch_directories": [
     "results/opcode_field_history_validation250k_q0_v1"
   ],
-  "state": "pending",
+  "started_at": "2026-09-08T23:22:24+00:00",
+  "state": "completed",
   "submitted_at": "2026-09-08T23:20:09+00:00",
   "tags": [
     "field-history-validation"
   ],
   "timing_authority": "diagnostic",
   "tool": "tools/opcode_field_history_validation_gate_v1.py",
-  "tool_args": []
+  "tool_args": [],
+  "worker_pid": 2392429,
+  "worker_proc_start_ticks": 200588210,
+  "worker_started_at": "2026-09-08T23:22:24+00:00"
 }
