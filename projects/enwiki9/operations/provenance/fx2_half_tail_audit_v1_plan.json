@@ -1,0 +1,21 @@
+{
+  "schema": "gamma.enwiki9.source-audit-plan.v1",
+  "id": "fx2_half_tail_audit_v1",
+  "owner": "root_explore",
+  "objective_target_bytes": 90000000,
+  "objective_credit_bytes": 0,
+  "synthesis_lenses": [4, 8],
+  "selection": "Inspect numerical compatibility at a trained-model boundary before any precision mutation. The compact-block comparison lost17 archive bytes; no cause inside that model was isolated. A conditional two-model mixture would add unpriced state, and another grammar transform lacks a new measured representation advantage. Select the explicit scalar half-output discrepancy for a bounded audit.",
+  "hypothesis": "Correcting only scalar output conversion changes a precisely bounded subset of half probabilities. Input priors and trained recurrent/cache states can remain unchanged. Whether this improves native coding is unmeasured.",
+  "inputs": [
+    "results/fx2_cmix_transformer_static_vocab_fixture50051_q0_v1/work/src/predictor.cpp",
+    "results/fx2_cmix_transformer_static_vocab_fixture50051_q0_v1/kernel.json",
+    "results/fx2_cmix_transformer_static_vocab_fixture50051_q0_v1/kernel.probabilities.f32le",
+    "tools/fx2_transformer_kernel_probe_v1.cpp",
+    "operations/provenance/fx2_compact_v26_terminal_20260908.json"
+  ],
+  "controls": ["Preserved original scalar conversion", "F16C exact reference", "Separately extracted scalar conversion with exponent113 instead of112", "Same float32 probability floor in both branches"],
+  "scope": "Exhaustive nonnegative half probabilities from0 to1 and the retained512-row synthetic kernel population, with its duplicate excluded from counts. No native model execution, corpus inference, archive claim, or measured-source modification.",
+  "bounds": {"cpu_set": [3], "address_space_bytes": 536870912, "elapsed_seconds": 60, "per_file_bytes": 33554432, "scratch_bytes": 67108864},
+  "stop_rule": "One exact numeric audit. If source authentication or conversion checks fail, stop and diagnose. Synthetic row frequency cannot authorize corpus or larger promotion; a native successor must freeze its own controls and source bindings."
+}
