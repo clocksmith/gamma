@@ -18,8 +18,8 @@ test("generated provenance follows moved graph destinations and rejects stale ma
     assert.match(map, /not a complete dependency graph/);
     assert.match(map, /dist\/firebase\/public\/web\/index.html/);
     assert.match(map, /observer\/playtest-protocol.md/);
-    assert.deepEqual(await readdir(resolve(fixture.root, "dist/docs")), ["core-rules.md"]);
-    assert.deepEqual((await readdir(resolve(fixture.root, "dist/site/docs"))).sort(), ["core-rules.html", "index.html"]);
+    assert.deepEqual(await readdir(resolve(fixture.root, "dist/docs")), ["core-rules.md", "world-and-institutions.md"]);
+    assert.deepEqual((await readdir(resolve(fixture.root, "dist/site/docs"))).sort(), ["core-rules.html", "index.html", "world-and-institutions.html"]);
 
     const artifact = graph.artifacts.find(item => item.target === "dist/review/docs/component-inventory.md");
     graph.retiredTargets.push(artifact.target);

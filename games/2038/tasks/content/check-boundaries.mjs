@@ -72,14 +72,14 @@ if (rulebook?.source !== "rules.md" || rulebook.section || rulebook.excludeSecti
   throw new Error("The player rulebook must include all of rules.md, including map and inventory.");
 }
 const publicDocuments = graph.deploymentProfiles["public-playtest"].documents;
-if (publicDocuments.length !== 1 || publicDocuments[0] !== "core-rules.html") {
-  throw new Error("Default player documents contain one complete rulebook; supplements belong to internal review.");
+if (JSON.stringify(publicDocuments) !== JSON.stringify(["core-rules.html", "world-and-institutions.html"])) {
+  throw new Error("Public documents contain the complete rulebook and selected world companion.");
 }
 const release = await readJson("versions/current-release.json");
 const candidateDocuments = new Set(["dist/docs/core-rules.md", "physical/governance-tracks.md"]);
 if (release.rulesCandidate.files.length !== candidateDocuments.size ||
     release.rulesCandidate.files.some(path => !candidateDocuments.has(path))) {
-  throw new Error("The physical candidate must contain the rulebook and writable ledger, without authoring documents.");
+  throw new Error("The physical candidate must contain the rulebook and printed governance tracks, without authoring documents.");
 }
 for (const descriptor of Object.values(graph.contexts)) {
   if (typeof descriptor === "object" && "overlays" in descriptor) throw new Error("Retired context overlay.");

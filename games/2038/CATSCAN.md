@@ -45,7 +45,8 @@ Deliver a coherent, replayable institutional strategy game whose authored rules,
   or numeric overrides. The complete Core Rules include map, components, and
   inventory. Supplementary extracts and the card catalog are internal review
   outputs, not required player books. Default public output is the rulebook,
-  actual game components, and browser game; the lore companion is optional.
+  actual game components, browser game, and the optional selected narrative
+  companion. The public companion never includes author notes or scenario metadata.
   Physical candidate files exclude authoring documents and deferred modules.
   Source provenance remains in the executable release content manifest.
   Generated review documents live in `dist/review/docs/` and render separately
@@ -54,7 +55,7 @@ Deliver a coherent, replayable institutional strategy game whose authored rules,
   content provenance map; that map does not claim complete code dependencies.
 - `world.md` is the sole authored source for world lore, World Endings, token
   microcopy, box copy, component creative prose, and scenario canon, projecting `dist/runtime/world-copy.json`
-  and the selected `dist/review/docs/world-and-institutions.md` companion. It is an internal
+  and the selected `dist/docs/world-and-institutions.md` companion. It is an internal
   author bible organized into setting/Eras, institutions and component copy,
   scenarios, endings, publishing copy, and editorial notes. Only explicitly selected
   passages and labeled player fields enter player projections. Ending conditions
