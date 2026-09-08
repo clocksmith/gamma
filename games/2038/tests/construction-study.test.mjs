@@ -33,8 +33,8 @@ test("the deliberate infrastructure plan funds, connects hosts, and selects a le
   assert.equal(cluster.parameters.facility, false);
   match.applyResolution(0, cluster);
   await match.produceAll([]);
-  assert.deepEqual(match.matchMetrics.projectProduction.map(event => [event.round, event.seat, event.nominalCompute]), [[3, 0, 3]]);
-  assert.ok(match.matchMetrics.projectProduction[0].gainedCompute <= 3);
+  assert.deepEqual(match.matchMetrics.projectProduction.map(event => [event.round, event.seat, event.nominal]), [[3, 0, 2]]);
+  assert.ok(match.matchMetrics.projectProduction[0].gained <= 2);
   // An existing project that loses its hosts must not count as productive.
   player.facilities = [];
   match.round = 4;

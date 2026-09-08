@@ -42,7 +42,7 @@ test("physical authority defines one inventory and preserves automatic blind Aud
   assert.doesNotMatch(spec, /distinguishable by touch or sight/);
   assert.match(spec, /shared Mandate track/);
   assert.match(spec, /AGI recognition/);
-  assert.match(spec, /Fusion Demonstrator/);
+  assert.match(spec, /Fusion/);
   assert.doesNotMatch(spec, /Economic Benchmark/);
   assert.doesNotMatch(spec, /Market Access/);
   assert.doesNotMatch(spec, /Influence cube/);
@@ -55,19 +55,19 @@ test("physical authority defines one inventory and preserves automatic blind Aud
   assert.match(inventory, /## One prepacked faction tray per player/);
 
   assert.match(inventory, /five numbered tracks/);
-  assert.match(inventory, /3 project references/);
+  assert.match(inventory, /3 two-sided personal project chips/);
   assert.doesNotMatch(inventory, /Program markers/);
   assert.match(inventory, /6 foldout player aids/);
   assert.match(inventory, /4 Agents/);
   assert.doesNotMatch(inventory, /Temporary Compute/);
   assert.doesNotMatch(inventory, /final production copy count remains open/);
   assert.doesNotMatch(inventory, /Unresolved packing quantities/);
-  assert.match(governanceLedger, /Current Mandate/);
-  assert.match(governanceLedger, /Criterion value or status/);
-  assert.match(governanceLedger, /Setup Collective Trust/);
-  assert.match(governanceLedger, /Unresolved Systemic Risk/);
-  assert.match(governanceLedger, /Final institutional winner/);
-  assert.match(governanceLedger, /World Ending/);
+  assert.match(governanceLedger, /Mandate cube/);
+  assert.match(governanceLedger, /active objective card/);
+  assert.match(governanceLedger, /printed starting Trust/);
+  assert.match(governanceLedger, /remaining black Audit cubes/);
+  assert.match(governanceLedger, /institutional winner/);
+  assert.match(governanceLedger, /World\s+Ending/);
   assert.doesNotMatch(governanceLedger, /Permanent Program use/);
 
   for (const staleClaim of [
@@ -86,7 +86,7 @@ test("physical authority defines one inventory and preserves automatic blind Aud
   const mapSurface = manifest.surfaces.find((surface) => surface.id === "map_tile_types");
   assert.equal(mapSurface.physicalCopies, 19);
   const governanceLedgerSurface = manifest.surfaces.find(
-    (surface) => surface.id === "governance_ledger"
+    (surface) => surface.id === "governance_tracks"
   );
   assert.equal(governanceLedgerSurface.physicalCopies, 1);
   assert.equal(
@@ -123,8 +123,8 @@ test("complexity-reduction review rules preserve precision and remove table acco
     `**Rules version:** ${current.rulesCandidate.version}`,
     `synchronized with executable game ${current.gameVersion}`,
     "Political control uses Agents and Facilities already on the board",
-    "two adjacent connected Facilities you own",
-    "Each Facility may host only one Mega-Cluster",
+    "a connected Facility you own",
+    "Each institution builds each project once",
     "Facility 1 is always powered",
     "acting Agent's district",
     "Every cross-player contract or jointly funded project requires the explicit",
@@ -181,14 +181,14 @@ test("the thematic inventory matches the two-source Power contract", async () =>
   assert.doesNotMatch(bible, /## Physical quantity interpretation/);
   assert.doesNotMatch(bible, /## Concept inventory by Era/);
   assert.match(inventory, /1 three-panel foldout player aid/);
-  assert.match(inventory, /3 project references/);
+  assert.match(inventory, /3 two-sided personal project chips/);
   assert.doesNotMatch(inventory, /Program markers/);
   assert.match(inventory, /The Grid and Renewable tiles print ordinary Power contracts/);
   assert.match(inventory, /10 Scrutiny cubes/);
   assert.match(inventory, /1 Mandate cube/);
   assert.match(inventory, /4 Agents/);
   assert.match(inventory, /integrated starting-grid identifier on Facility 1/);
-  assert.match(specification, /Ordinary Power contract[\s\S]*Tile identity; no separate reference card/);
+  assert.match(specification, /Never put Facility and Generator on opposite faces/);
 });
 
 test("one thematic authority governs every lore-bearing surface", async () => {
@@ -215,7 +215,7 @@ test("one thematic authority governs every lore-bearing surface", async () => {
   assert.equal(eraLedger.scenarios.length, 53);
   assert.equal(
     eraLedger.scenarios.flatMap((scenario) => scenario.surfaceBindings).length,
-    63
+    64
   );
   assert.match(bible, /Bankruptcy Data Estates/);
   const tracedConcepts = new Set(eraLedger.scenarios.flatMap((scenario) => scenario.concepts));
@@ -259,7 +259,8 @@ test("selected deck contracts have exact physical counts", async () => {
   assert.equal(tactics.tactics.length * tactics.copiesPerCard, 36);
   assert.equal(escalation.projects.length, 3);
   assert.equal(escalation.cardsPerPlayer, undefined);
-  assert.equal(escalation.sharedCardCount, 3);
+  assert.equal(escalation.sharedCardCount, undefined);
+  assert.equal(escalation.chipsPerFaction, 3);
   const defaultHeadlineCount = headlines.headlines.filter(
     (headline) => !headline.requiredRuleModules?.length
   ).length;
@@ -273,13 +274,12 @@ test("selected deck contracts have exact physical counts", async () => {
   );
   const defaultStandardCards =
     config.playerSupply.coreActionCards * factions.factions.length +
-    config.sharedSupply.projectReferences +
     defaultHeadlineCount +
     mandates.mandates.length +
     trainingCount;
   const defaultPrintedPieces = defaultStandardCards + config.sharedSupply.playerAidFoldouts;
-  assert.equal(defaultStandardCards, 115);
-  assert.equal(defaultPrintedPieces, 121);
+  assert.equal(defaultStandardCards, 112);
+  assert.equal(defaultPrintedPieces, 118);
   assert.deepEqual(
     config.powerSources.filter((source) => source.id !== "fusion_demonstrator").map((source) => source.id),
     ["clean_infrastructure", "emergency_infrastructure"]
@@ -295,8 +295,7 @@ test("selected deck contracts have exact physical counts", async () => {
     Object.fromEntries(config.powerSources.map((source) => [source.id, source.physicalSurface])),
     {
       clean_infrastructure: "renewable_basin_tile",
-      emergency_infrastructure: "grid_reactor_tile",
-      fusion_demonstrator: "fusion_demonstrator_project"
+      emergency_infrastructure: "grid_reactor_tile"
     }
   );
   assert.deepEqual(config.playerSupply.facilityConstructionOrder, [1, 2, 3, 4]);
@@ -314,8 +313,8 @@ test("selected deck contracts have exact physical counts", async () => {
       governanceBoardEraPanels: 4,
       currentEraMarkers: 1,
       playerAidFoldouts: 6,
-      governanceLedgers: 1,
-      sharedDryEraseMarkers: 1,
+      governanceLedgers: undefined,
+      sharedDryEraseMarkers: undefined,
       temporaryComputeTokens: undefined,
       mandateMarkers: 6
     }

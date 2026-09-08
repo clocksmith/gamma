@@ -134,8 +134,8 @@ test("player documents teach actions early and preserve permanent physical state
   }
   assert.doesNotMatch(rules, /Dossier|universal Protection|Safety currency|faction scoring rule|quantum record disputes|Era halves upward/);
   const spec = await read("physical/component-spec.md");
-  assert.match(spec, /checkboxes beside the Trust track, labelled 2, 4, and 6/);
-  assert.match(spec, /Never erase a marked box during the game/);
+  assert.match(spec, /Trust milestone positions are 0, 2, 4, 6/);
+  assert.match(spec, /never moves backward/i);
   const references = JSON.parse(await read("dist/runtime/reference-cards.json")).playerReferences;
   const production = references.find(card => card.id === "production_audit");
   assert.match(production.frontText.join(" "), /faction Production income first/);

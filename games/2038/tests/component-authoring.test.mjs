@@ -99,7 +99,7 @@ test("scenario bindings derive from component identity and point to the complete
     "components/headlines.json#headlines/ten_dollar_intelligence"));
   assert.equal(event.surfaceBindings.length, 4);
   assert.equal(index.eras.length, 4);
-  assert.equal(index.scenarios.flatMap(s => s.surfaceBindings).length, 63);
+  assert.equal(index.scenarios.flatMap(s => s.surfaceBindings).length, 64);
 });
 
 test("authoring rejects missing, duplicate, and unresolved scenario definitions", async () => {

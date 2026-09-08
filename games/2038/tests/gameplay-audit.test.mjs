@@ -253,22 +253,13 @@ test("Mega-Cluster operates automatically with connected adjacent hosts", async 
     sourceId: "clean_infrastructure",
     capacity: 4
   }];
-  const cluster = {
-    id: "mega-choice",
-    leadSeat: player.seat,
-    partnerSeat: null,
-    leftId: "mega-left",
-    rightId: "mega-right",
-    powered: false
-  };
-  match.megaClusters = [cluster];
-  player.megaClusters = [cluster];
+  player.projects = [{ projectId: "mega_cluster", hostId: "mega-left", builtEra: 2 }];
   match.choose = async (_policies, _seat, stage, decisions) => {
     assert.notEqual(stage, "power_allocation");
     return decisions[0];
   };
   await match.produceAll([]);
-  assert.equal(cluster.powered, true);
+  assert.ok(match.matchMetrics.projectProduction.some(row => row.seat === player.seat && row.project === "mega_cluster" && row.nominal === 2));
 });
 
 
