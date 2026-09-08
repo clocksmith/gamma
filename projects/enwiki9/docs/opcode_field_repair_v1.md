@@ -197,9 +197,18 @@ incomplete dependency list before the sealed plan bound the missing imports.
 No corpus ran during these corrections. Required local source is 6,350 bytes,
 604 above the compact parent; the complete package remains unqualified.
 
-Job `20260908T162205Z_46ebdbaee4` is sealed and held for publication and fresh
-admission. Its opening250KB comparison has ten phases, CPU2/one thread, 4GiB
+Job `20260908T162205Z_46ebdbaee4` started after publication at `f12a45666` and
+[fresh admission](../results/opcode_wiki_slot_admission_20260908.json), including
+31 exact published bindings and a 32GiB host headroom reserve. Its opening250KB
+comparison has ten phases, CPU2/one thread, 4GiB
 aggregate memory, zero swap, 1GiB scratch and a 2,400-second elapsed stop.
 Each phase has 2GiB address-space, 180 CPU-second and 240 wall-second limits.
 Promotion requires a strictly smaller archive and all controls/inverses/witnesses;
 package cost and fresh confirmation remain separate subsequent decisions.
+
+The [fixed source-ZIP comparison](../results/opcode_wiki_slot_source_zip_20260908/attempt01/cost.json)
+measures parent 5,815 / treatment 6,092 bytes, a 277-byte increase. Separate
+extracted copies pass six synthetic encode/decode/repeat phases. The conditional
+twice-counted program form adds 554 source bytes; the corpus run must supply its
+own archive difference. Runtime, options, licensing and final packaging remain
+unresolved. No archive gain is inferred from synthetic reconstruction.
