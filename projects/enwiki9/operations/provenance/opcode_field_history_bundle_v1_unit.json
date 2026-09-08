@@ -1,0 +1,87 @@
+{
+  "schema": "gamma.enwiki9.opcode-field-history-bundle-unit.v1",
+  "id": "opcode_field_history_bundle_v1_unit",
+  "owner": "root_explore",
+  "status": "passed",
+  "experiment": "operations/adaptive/experiments/opcode_field_history250k_q0_v1.json",
+  "synthetic_terminal": "operations/provenance/opcode_field_history_synthetic_v1_terminal.json",
+  "source_publication_parent": "f2b6de5e16dd157dd177e259baaa4b4d099f46ea",
+  "command": [
+    "taskset",
+    "-c",
+    "3",
+    "prlimit",
+    "--as=2147483648",
+    "--cpu=180",
+    "--fsize=33554432",
+    "--core=0",
+    "timeout",
+    "240",
+    "python3",
+    "-m",
+    "unittest",
+    "discover",
+    "-s",
+    "tests",
+    "-p",
+    "test_opcode_field_history_build_v1.py",
+    "-v"
+  ],
+  "tests_passed": 5,
+  "reported_test_elapsed_seconds": 3.249,
+  "raw_population": "Synthetic only; retained 3744-byte fixture and inline arbitrary-byte fixture.",
+  "checks": [
+    "Relocated two-file loader under isolated Python reproduces all five retained archive hashes, exact inverses and repeats.",
+    "Bundled implementation matches measured implementation archives and shared/introduced state witnesses for all P/K/D/G/S arms.",
+    "Build repeats byte-identically and refuses an existing output directory.",
+    "Missing or replaced packed source is rejected before execution.",
+    "Changed authenticated build input is rejected."
+  ],
+  "sources": [
+    {
+      "path": "tools/opcode_field_history_build_v1.py",
+      "bytes": 2624,
+      "sha256": "095db783cb86e442af0ab3197ef0cc6b4b4d0ea00f6ac7bcfa76f57cb815498a"
+    },
+    {
+      "path": "tests/test_opcode_field_history_build_v1.py",
+      "bytes": 4266,
+      "sha256": "acb9741f1071c025def5793d60cf7896a94d769ba45674ef0b7b6df3a46919e3"
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "results/opcode_field_history_bundle_v1_unit/stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "results/opcode_field_history_bundle_v1_unit/stderr",
+      "bytes": 820,
+      "sha256": "932e5b0ae14c694e542607331c8d227978eb24a8c8a8d981dd4a79db4dfd188c"
+    },
+    {
+      "path": "results/opcode_field_history_bundle_v1_unit/codec/p",
+      "bytes": 6075,
+      "sha256": "2d29f154a9df186caa7b547fa304820b6ceb6d675aef59005d7a1319febf3c64"
+    },
+    {
+      "path": "results/opcode_field_history_bundle_v1_unit/codec/program.py",
+      "bytes": 531,
+      "sha256": "b96d641dc5a84dc9130932cca52d62b7fcefa54c2a0fce39027cb95bc1eee2ae"
+    }
+  ],
+  "local_source_bytes": 6606,
+  "parent_local_source_bytes": 5746,
+  "source_delta_bytes": 860,
+  "expanded_source_sha256": "113eb69e5676eedbf7aca749527e509e4560c02d77855b56962d6fe56434def2",
+  "complete_package_bytes": null,
+  "objective_credit_bytes": 0,
+  "unresolved": [
+    "Python and standard-library runtime inventory",
+    "License closure",
+    "Official package multiplicities and options",
+    "Corpus gate runner, publication verification and fresh admission"
+  ],
+  "decision": "Bundle parity passes. Keep measured mechanism unchanged. Prepare separately identified opening250KB runner; no corpus launch or promotion recorded."
+}
