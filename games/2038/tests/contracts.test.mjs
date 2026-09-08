@@ -299,6 +299,7 @@ test("selected deck contracts have exact physical counts", async () => {
       emergency_infrastructure: "grid_reactor_tile"
     }
   );
+  assert.equal(config.sharedSupply.governanceLedgers, undefined);
   assert.deepEqual(config.playerSupply.facilityConstructionOrder, [1, 2, 3, 4]);
   assert.deepEqual(
     {
