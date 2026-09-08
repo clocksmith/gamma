@@ -12,7 +12,7 @@ Unknown package cost stays unknown. Local subtotals are not complete submission 
 Populations are grouped by raw-input SHA256; compare matched controls in each receipt.
 ```
 
-- Result JSON files scanned: `230`
+- Result JSON files scanned: `231`
 - Roundtrip-passing rows: `62`
 - Active target score: `90,000,000` bytes (`9.0000000%`)
 
@@ -93,4 +93,5 @@ No roundtrip-passing result JSONs are present for this scope in this checkout.
 
 - operations/provenance/fx2_causal_field_wrt_terminal_20260907/index.json: /home/x/deco/gamma/projects/enwiki9/operations/adaptive/experiments/fx2_causal_field_wrt_replay250k_q0_v1.json: input frozen-input-202: referenced evidence digest differs: /home/x/deco/gamma/projects/enwiki9/tools/research_contracts.py
 - operations/provenance/fx2_causal_preceding_terminal_20260907/index.json: /home/x/deco/gamma/projects/enwiki9/operations/adaptive/experiments/fx2_causal_preceding_wrt250k_q0_v1.json: input frozen-input-206: referenced evidence digest differs: /home/x/deco/gamma/projects/enwiki9/tools/research_contracts.py
+- operations/provenance/fx2_ratio_fixture_failure_20260908/index.json: result differs from the reflected candidate revision
 - operations/provenance/midas_open_observed_sha_opening250k_terminal_20260907/index.json: /home/x/deco/gamma/projects/enwiki9/operations/adaptive/experiments/midas_open_observed_sha_opening250k_q0_v1.json: input input-224: referenced evidence digest differs: /home/x/deco/gamma/projects/enwiki9/tools/research_contracts.py

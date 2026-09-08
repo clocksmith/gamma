@@ -1,0 +1,94 @@
+{
+  "attribution": {
+    "causalConfidence": "high",
+    "controlsEquivalent": null,
+    "failureClass": "implementation-failure",
+    "localizedCause": "Runner demands line-start activation marker; native stderr emits preprocessing progress immediately before its valid marker."
+  },
+  "candidateId": "fx2_residual_ratio_fixture50051_q0_v2",
+  "candidateRevision": {
+    "candidateId": "fx2_residual_ratio_fixture50051_q0_v2",
+    "candidateTreeSha256": "sha256:09d15da6086194912415dfc8dd4aba8124f1118ee7d8e342d3f355d042694bdc",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/fx2_residual_ratio_fixture50051_q0_v2/20260908T185900805993Z_09d15da60861.json",
+      "sha256": "sha256:120266a53f01e4ebf6950fbcb635c19c00ea4bda513b35682ee49bcae60ed798"
+    }
+  },
+  "decision": {
+    "killPredicatesPass": null,
+    "nextGateBytes": null,
+    "promotionPredicatesPass": null,
+    "rationale": "Repair only activation receipt parsing; retain scientific inputs and native implementation.",
+    "verdict": "retry"
+  },
+  "evidence": [
+    {
+      "path": "results/fx2_residual_ratio_fixture50051_q0_v2/P-encode.execution.json",
+      "sha256": "sha256:5d3e47b8e75dcbf403a660fee6382c7e6a321462a38c7d7f927463f77655b9e0"
+    },
+    {
+      "path": "results/fx2_residual_ratio_fixture50051_q0_v2/P-encode.stderr",
+      "sha256": "sha256:62edf9db9cd716f7ad803a9da498b29b9c91e3d9a0fc579c6144960605920238"
+    },
+    {
+      "path": "results/fx2_residual_ratio_fixture50051_q0_v2/artifacts.json",
+      "sha256": "sha256:ffe0f6412ace68227d4dd759454466a9097faaaeadd58e57108d0e1424d32891"
+    },
+    {
+      "path": "results/fx2_residual_ratio_fixture50051_q0_v2/stage-decision.json",
+      "sha256": "sha256:d192f422fce59a82aaf8474050a1640c5d809ea78725f6f874e6b3e64b814f87"
+    }
+  ],
+  "experiment": {
+    "path": "operations/adaptive/experiments/fx2_residual_ratio_fixture50051_q0_v2.json",
+    "sha256": "sha256:572ec4316e7bb085e3e9b3a053a111f3d4a1681a97a80e304756943bf2c58669"
+  },
+  "generatedUtc": "2026-09-08T19:02:16+00:00",
+  "hypothesis": {
+    "rationale": "Decode, repeat and treatment phases did not execute.",
+    "verdict": "not-tested"
+  },
+  "job": {
+    "path": "operations/adaptive/failed/959_20260908T185901Z_3a15dbc589.json",
+    "sha256": "sha256:2b6d8484967d4133670026f33ef872c1966ab397ed4c0145e21e0da4ff89db1e"
+  },
+  "knowledge": {
+    "retiredDimensions": [],
+    "transferableLessons": [
+      "Parse the exact unique activation marker without assuming upstream progress output ends in a newline."
+    ],
+    "uncertainties": [
+      "Native D archive and control separation remain untested."
+    ]
+  },
+  "measurementAssertions": [],
+  "measurements": {
+    "idealBitsSaved": null,
+    "memoryRatio": null,
+    "minimumPartitionIdealBitsSaved": null,
+    "netBytesSaved": null,
+    "positiveSegmentFraction": null,
+    "runtimeRatio": null,
+    "scopeBytes": null,
+    "scopeSymbols": null,
+    "sourceBytesDelta": null,
+    "transferRetention": null
+  },
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:e91ff20e92c3cac8acb0cbe5c79fc8e8a3b427d7e151245c8eecc52b1c32fa00",
+    "objectiveId": "gamma-enwiki9-hutter-90m-v3",
+    "objectivePath": "contracts/research/v3/objective-contract.json",
+    "targetScoreBytes": 90000000
+  },
+  "reflectionId": "r-20260908t185901z_3a15dbc589",
+  "schema": "gamma.enwiki9.reflection-receipt.v1",
+  "validity": {
+    "classification": "implementation-failure",
+    "reasons": [
+      "Native P encode returned zero and retained parent archive but activation parser rejected a marker after progress text."
+    ],
+    "valid": false
+  }
+}
