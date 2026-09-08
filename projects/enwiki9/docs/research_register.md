@@ -2,6 +2,13 @@
 
 [Record index](research_register/README.md) | [Earlier records](research_register/archive/README.md)
 
+## 2026-09-08 - Native FX2 compact block comparison frozen
+
+`root_explore` owns held job `20260908T202406Z_5d61a00d99` under the [154-input contract](../operations/adaptive/experiments/fx2_compact_v26_fixture50051_q0_v1.json).
+Five [native adapter/runner regressions](../operations/evidence/20260908_fx2_compact_v26_native_unit.json) pass. P/K retain431 outputs; D maps compact403 while preserving the trained transformer and frontend.
+CPU2, memory9,999,998,976 bytes, scratch24GB, zero swap and elapsed1,200 seconds bound three serial builds and all-arm encode/decode/repeat/unobserved comparisons on the public50,051-byte fixture.
+Publication and fresh admission precede execution. P/K retained identity, independent inverses, traces and package deltas are mandatory; complete predictor-state certification and any larger gate remain unproved.
+
 ## 2026-09-08 - Compact FXCM bridge repairs a real probability-endpoint rejection
 
 The [interface receipt](../operations/provenance/fx2_compact_v26_bridge_v1_terminal.json)
