@@ -2,6 +2,24 @@
 
 [Record index](research_register/README.md) | [Earlier records](research_register/archive/README.md)
 
+## 2026-09-08 - Freeze one standalone opcode field repair
+
+`root_explore` owns [opcode_field_repair250k_q0_v1](../operations/adaptive/experiments/opcode_field_repair250k_q0_v1.json).
+It changes only the existing field coordinate after complete decoded XML opcode
+pairs. P retains bitmix, K computes unused bookkeeping, and D exposes that field;
+byte histories, model laws and copy search remain otherwise unchanged.
+The [26 synthetic tests](../operations/evidence/20260908_opcode_field_repair_unit.json)
+pass exact inversion, raw repeats, P/K identity, decoder-common witnesses,
+exception bounds and evidence-failure classification. A missing audit-count
+field failed the first synthetic attempt and was repaired before sealing.
+No corpus result is claimed by this implementation evidence.
+
+The [baseline inventory](../operations/provenance/small_input_frontier_baselines_20260908.json)
+verifies retained opening250KB Deflate 89,041 and native FX2 33,429 byte archives.
+The new gate must freshly reproduce the historical bitmix 67,959-byte parent.
+One development mutation precedes disjoint validation and sealed confirmation;
+archive and package differences stay separate, with complete accounting unknown.
+
 ## 2026-09-07 - MIDAS opening250KB closes the missing boundary evidence
 
 The [terminal audit](../operations/provenance/midas_open_observed_sha_opening250k_terminal_20260907.json)
