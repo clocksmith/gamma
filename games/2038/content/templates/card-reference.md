@@ -687,12 +687,3 @@ ${content.gameConfig.powerSources.1.rulesText}
 
 ${content.gameConfig.powerSources.1.publicClaim}
 
-### ${content.gameConfig.powerSources.2.name}
-
-**Printed on project reference:** ${terms.technology.advancedGeneration}
-
-**${content.gameConfig.powerSources.2.tagline}**
-
-${content.gameConfig.powerSources.2.rulesText}
-
-${content.gameConfig.powerSources.2.publicClaim}

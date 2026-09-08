@@ -1463,6 +1463,7 @@ Every scenario has an ID, Era, policy, benefit, consequence, and narrative. Conc
 | adopted-headline-expansion | adopted | public-playtest, internal-review | revised | The six-per-Era expansion adds an immediate Headline adaptation; existing bindings retain their effects. | six-headlines-per-era | docs/design-decisions.md#six-headlines-per-era |
 | adopted-headline-simplification | adopted | public-playtest, internal-review | revised | Three Headline adaptations reuse payment, assignment, and adjacency; their original fiction remains. | three-headline-simplification | docs/design-decisions.md#three-headline-simplification |
 | infrastructure-progression | adopted | public-playtest, internal-review | revised | The selected project progression adds independent infrastructure choices using Build. | infrastructure-progression | docs/design-decisions.md#infrastructure-progression |
+| personal-infrastructure | adopted | public-playtest, internal-review | revised | Personal hosted upgrades replace paired Mega-Cluster, unique Fusion and immediate Quantum mechanics; the fiction remains. | personal-infrastructure | docs/design-decisions.md#personal-infrastructure-and-no-writing-play |
 <!-- scenario-policies:end -->
 
 <!-- scenario-canon:start -->
@@ -1470,7 +1471,7 @@ Every scenario has an ID, Era, policy, benefit, consequence, and narrative. Conc
 
 * **ID**: fusion-authority
 * **Era**: authority
-* **Policy**: infrastructure-progression
+* **Policy**: personal-infrastructure
 * **Public benefit**: Dependable generation keeps computational institutions operating.
 * **Institutional consequence**: Control of energy becomes authority over access to intelligence.
 
@@ -1480,7 +1481,7 @@ Reactor operators sell continuity as a public guarantee. Institutions that secur
 
 * **ID**: quantum-infrastructure
 * **Era**: continuity
-* **Policy**: infrastructure-progression
+* **Policy**: personal-infrastructure
 * **Public benefit**: Specialized simulation improves scientific investigation.
 * **Institutional consequence**: Owners decide which discoveries become reproducible public capabilities.
 
@@ -2014,7 +2015,7 @@ Customer service avatars designed to project warmth and empathy target vulnerabl
 
 * **ID**: utility-capture
 * **Era**: capacity
-* **Policy**: adopted-revised
+* **Policy**: personal-infrastructure
 * **Concepts**: Utility Capture, Biological Utility Charter
 * **Causal threads**: utilities-to-standing
 * **Public benefit**: AI campuses stabilize grids, services, and municipal budgets.

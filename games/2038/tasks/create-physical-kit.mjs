@@ -180,7 +180,7 @@ Executable reference ${identity.executableVersion}
 Source commit ${identity.sourceCommit}
 
 This is a derived controlled-test kit, not a manufacturing package. It contains
-one complete rulebook, baseline component masters, the Governance Board ledger,
+one complete rulebook, baseline component masters, the Governance Board tracks,
 exact source data, release manifests, receipt contract, and blind-test preparation
 protocol under \`observer/\`. Authoring documents and supplementary review books are excluded. Deferred Tactics, secret objectives, and Reserve
 Specialists are excluded from the component masters.

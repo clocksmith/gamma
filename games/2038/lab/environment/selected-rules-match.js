@@ -872,6 +872,7 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
         jointVentures: player.jointVentures.length,
         projects: clone(player.projects || []),
         highestTrustMilestone: this.highestTrustMilestone(player),
+        objectiveRecord: this.objectiveRecord(player),
           agiDeclared: player.agiDeclared,
         agiReadiness: this.declarationReadiness(player),
         dealFlowConversion: {
@@ -902,6 +903,7 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
           jointVentures: this.copyPublic(candidate.jointVentures),
           projects: this.copyPublic(candidate.projects || []),
           highestTrustMilestone: this.highestTrustMilestone(candidate),
+          objectiveRecord: this.objectiveRecord(candidate),
           agiDeclared: candidate.agiDeclared,
           agiReadiness: this.declarationReadiness(candidate),
           currentScore: this.currentScore(candidate)
@@ -1687,7 +1689,7 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
         if (facility) preview.facilities.push(newFacility);
         const projects = [null];
         if (this.round >= 2 && destination.category === "energy" &&
-            player.generators.filter(g => g.sourceId !== "fusion_demonstrator").length < this.rulesVariant.singleGeneratorRule.ordinaryGeneratorLimit &&
+            player.generators.length < this.rulesVariant.singleGeneratorRule.ordinaryGeneratorLimit &&
             this.generatorOccupancy(destination.instanceId) < 3) {
           const location = this.rulesVariant.singleGeneratorRule.locations[destination.id];
           if (location) projects.push({ id: "generator", sourceId: location.sourceId, runway: location.constructionCost, compute: 0 });
@@ -2078,7 +2080,7 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
   }
 
   highestTrustMilestone(player) {
-    return Math.max(0, ...player.mandateAwards.filter(a => a.id.startsWith("trust-")).map(a => Number(a.id.slice(6))));
+    return Math.max(0, ...(player.mandateAwards || publicMandateAwards(this.config, player)).filter(a => a.id.startsWith("trust-")).map(a => Number(a.id.slice(6))));
   }
 
   facilityContractResource(facility) {
@@ -2337,9 +2339,17 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
     }
   }
 
-  scoreMandate() {
+  objectiveRecord(player) {
+    const record = this.roundMandate?.record;
+    if (!record || !player.roundMetrics) return null;
+    const value = record.field === "scrutinyAdded"
+      ? player.metrics.scrutinyAdded - player.roundMetrics.scrutinyStart
+      : Number(player.roundMetrics[record.field] || 0);
+    return { kind: record.label, value };
+  }
+
+  mandateValue(player) {
     const id = this.roundMandate.id;
-    const values = this.players.map((player) => {
       if (id === "quarter_humanity_notices") return player.capability - player.roundMetrics.capabilityStart;
       if (id === "continent_signs_loi") return player.customers - player.roundMetrics.customersStart;
       if (id === "building_has_weather") return this.latestPoweredFacilities(player).length;
@@ -2356,7 +2366,11 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
       if (id === "responsible_acceleration") return player.trust >= 4 ? player.capability : -1;
       if (id === "markets_prefer_destiny") return player.roundMetrics.fundRunway;
       return 0;
-    });
+  }
+
+  scoreMandate() {
+    const id = this.roundMandate.id;
+    const values = this.players.map(player => this.mandateValue(player));
     const minimum = this.roundMandate.minimumQualification ?? 1;
     const qualificationValues = id === "zero_incident_quarter"
       ? this.players.map((player) =>
@@ -2919,6 +2933,7 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
           jointVentures: clone(player.jointVentures || []),
           projects: clone(player.projects || []),
         highestTrustMilestone: this.highestTrustMilestone(player),
+        objectiveRecord: this.objectiveRecord(player),
           agiDeclared: player.agiDeclared,
           agiClaimed: player.agiClaimed,
           agiReadiness: this.declarationReadiness(player),
@@ -2963,6 +2978,7 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
         offlinePenalty,
         projects: clone(player.projects || []),
         highestTrustMilestone: this.highestTrustMilestone(player),
+        objectiveRecord: this.objectiveRecord(player),
           agiDeclared: player.agiDeclared,
         agiClaimed: player.agiClaimed,
         agiReadiness: this.declarationReadiness(player),
