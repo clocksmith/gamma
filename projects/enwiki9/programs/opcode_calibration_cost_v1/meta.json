@@ -5,6 +5,56 @@
   "description": "Measure existing final calibration cost at identical coded parent states",
   "hypothesis": "The compact parent final SSE calibration increases aggregate ideal log loss on actually arithmetic-coded literal bits of opening250KB, relative to its pre-SSE mixture at identical states.",
   "id": "opcode_calibration_cost_v1",
+  "measured": {
+    "reflections": {
+      "20260908T171535Z_9962b82f49": {
+        "decision": "hold",
+        "path": "operations/adaptive/reflections/20260908T171535Z_9962b82f49.json",
+        "sha256": "sha256:fe312e92256dd9521a71fe9bcafc2490010a2a24751d5c48f5b5fced24bc1937",
+        "valid": true
+      }
+    },
+    "terminal_results": {
+      "20260908T171535Z_9962b82f49": {
+        "index": {
+          "path": "operations/provenance/opcode_calibration_terminal_20260908/index.json",
+          "sha256": "sha256:ac8bd1eda18381eaae6a204cdf1637e8e9dff0884c3bf36b748ac6dbc004fd1b"
+        },
+        "reflection": {
+          "decision": "hold",
+          "path": "operations/adaptive/reflections/20260908T171535Z_9962b82f49.json",
+          "sha256": "sha256:fe312e92256dd9521a71fe9bcafc2490010a2a24751d5c48f5b5fced24bc1937",
+          "valid": true
+        },
+        "guard_validation_mode": "discovery-budget-schema",
+        "qualification_authority": false,
+        "missing_diagnostics": [
+          "kernel cpuset controller is not delegated; taskset assignment and existing affinity guard remain active"
+        ],
+        "arms": {
+          "K": {
+            "result_path": "projects/enwiki9/operations/provenance/opcode_calibration_terminal_20260908/K.json",
+            "result_json_bytes": 3708,
+            "result_json_sha256": "15272e13fc71a16778158ceff81a7a88a6d431ed1beb20a6752ac18c2463d5d5",
+            "data_size": 250000,
+            "data_md5": "58df7be6473925f769c9621aeaff05cb",
+            "data_sha256": "665fc689441b68462d88f82dc33212abe9c4824be095d03a556c9b55a2829fd3",
+            "compressed_size": 67658,
+            "program_size": null,
+            "hutter_score": null,
+            "bits_per_byte": 2.165056,
+            "roundtrip_ok": true,
+            "determinism": true,
+            "compressed_sha256": "bda617eab7628f7cec6724ca3d82bf505efee9c2be4813dd404dcfa715140e6f",
+            "compress_time_s": 59.96468884986825,
+            "decompress_time_s": 34.43455563299358,
+            "missing_diagnostics": [],
+            "run_id": "opcode_calibration_cost_v1__20260908T171535Z_9962b82f49__K"
+          }
+        }
+      }
+    }
+  },
   "omega": {
     "experiment": {
       "path": "operations/adaptive/experiments/opcode_calibration_cost_v1.json",
@@ -21,5 +71,6 @@
     ]
   },
   "parent": "opcode_field_compact_v1",
-  "status": "candidate"
+  "status": "blocked_dependency",
+  "verdict": "Retain the current SSE. Do not launch its deletion ablation or select a favorable field subset from these development diagnostics. Continue independent eligible-parent/predictor research rather than another bitmix state-key or calibration mutation without a new measured premise."
 }
