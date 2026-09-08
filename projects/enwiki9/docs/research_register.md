@@ -13,8 +13,11 @@ bytes, down from 15,403. [Seven synthetic tests](../operations/evidence/20260908
 pass archive and complete shared-state parity; a retained 65-byte fixture has a
 27-byte exact repeatable archive. Corpus parity and complete package economics
 remain unproved. The bounded parity runner now passes seven synthetic runner
-tests; job `20260908T154100Z_6b9653a04d` is held for publication and fresh CPU2
-admission. No new predictor is combined.
+tests; job `20260908T154100Z_6b9653a04d` is active after publication and fresh CPU2
+admission. No new predictor is combined. The [source ZIP comparison](../operations/provenance/opcode_field_source_zip_cost_20260908.json)
+measures parent 5,041 / compact 5,815 bytes with exact synthetic relocation.
+Twice the 774-byte increase is 1,548 bytes, exceeding the historical 1MB archive
+saving by seven bytes before other package costs. Complete accounting stays open.
 
 ## 2026-09-08 - Opcode field repair confirms a 1,541-byte archive improvement
 

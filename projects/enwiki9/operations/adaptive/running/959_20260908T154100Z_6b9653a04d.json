@@ -10,21 +10,56 @@
     "sha256": "sha256:044147f7ffe6922ea8dafd52fc3d4426077b20958adbcd421245ad41adcfc1e4"
   },
   "execution_mode": "discovery",
+  "execution_resources": {
+    "boot_id": "3ce46712-27bc-4199-8e48-e2b3d23926cb",
+    "budget": {
+      "cgroup_parent": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice",
+      "cpus": [
+        2
+      ],
+      "memory_bytes": 12884901888,
+      "scratch_bytes": 2147483648,
+      "swap_bytes": 0,
+      "wall_seconds": 12000
+    },
+    "cgroup_inode": 258290,
+    "cgroup_path": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/gamma-enwiki9-20260908T154100Z_6b9653a04d",
+    "cpu_enforcement": "taskset-and-sampled-affinity-guard",
+    "groups": [
+      {
+        "created": true,
+        "inode": 258290,
+        "kernel_cpuset": false,
+        "memory_bytes": 12884901888,
+        "path": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/gamma-enwiki9-20260908T154100Z_6b9653a04d"
+      }
+    ],
+    "guard_command_sha256": "55d0abcc15bb40b2a9f1e1a78ae4b1f37883100c01add4bbf24a9a070aad2228",
+    "guard_path": "run_logs/adaptive/20260908T154100Z_6b9653a04d.resources/guard.json",
+    "missing_diagnostics": [
+      "kernel cpuset controller is not delegated; taskset assignment and existing affinity guard remain active"
+    ],
+    "timing_authority": "diagnostic"
+  },
   "experiment": {
     "path": "operations/adaptive/experiments/opcode_field_compact_v1.json",
     "sha256": "sha256:19e78dfe07c81f14ba2ce317624ab8a8efb1d2323a86e1c4630d959227c108f3"
   },
   "gate_size": 1500000,
-  "held": true,
+  "held": false,
   "held_at": "2026-09-08T15:41:20+00:00",
   "hold_history": [
     {
       "at": "2026-09-08T15:41:20+00:00",
       "held": true,
       "reason": "Await published sealed runner and ownership, then fresh CPU2 admission. No corpus execution before publication verification."
+    },
+    {
+      "at": "2026-09-08T15:43:02+00:00",
+      "held": false,
+      "reason": "Published runner and ownership at fbe4b33c4; results/opcode_field_compact_admission_20260908.json verifies source/runtime identities, terminal prior occupancy and fresh CPU2 headroom."
     }
   ],
-  "hold_reason": "Await published sealed runner and ownership, then fresh CPU2 admission. No corpus execution before publication verification.",
   "job_id": "20260908T154100Z_6b9653a04d",
   "priority": 40,
   "proposal": {
@@ -33,6 +68,7 @@
   },
   "proposal_id": "opcode_field_compact_v1",
   "purpose": "diagnostic",
+  "released_at": "2026-09-08T15:43:02+00:00",
   "resource_budget": {
     "cgroup_parent": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice",
     "cpus": [
@@ -51,12 +87,16 @@
   "scratch_directories": [
     "results/opcode_field_compact_v1"
   ],
-  "state": "pending",
+  "started_at": "2026-09-08T15:43:03+00:00",
+  "state": "running",
   "submitted_at": "2026-09-08T15:41:00+00:00",
   "tags": [
     "compact-parity"
   ],
   "timing_authority": "diagnostic",
   "tool": "tools/opcode_field_compact_gate_v1.py",
-  "tool_args": []
+  "tool_args": [],
+  "worker_pid": 1002136,
+  "worker_proc_start_ticks": 197832135,
+  "worker_started_at": "2026-09-08T15:43:03+00:00"
 }
