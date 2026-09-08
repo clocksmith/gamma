@@ -12,7 +12,7 @@ Reusable artifact helpers for new tools: [lib/artifacts.py](../lib/artifacts.py)
 The LibNC initializer teacher launcher exits before the first forward, gradient, update, or coded symbol; its source-bound experiment defines that boundary.
 The delayed-status helper's `enwiki9_delayed_status_latest.log` pointer is operational history, not present-host occupancy proof.
 
-Coverage: **1059 files** (33 .c, 67 .cpp, 1 .gdb, 1 .h, 1 .hpp, 1 .html, 952 .py, 3 .sh).
+Coverage: **1061 files** (33 .c, 67 .cpp, 1 .gdb, 1 .h, 1 .hpp, 1 .html, 954 .py, 3 .sh).
 
 | Tool | Purpose | Referenced contracts |
 |---|---|---|
@@ -335,9 +335,9 @@ Coverage: **1059 files** (33 .c, 67 .cpp, 1 .gdb, 1 .h, 1 .hpp, 1 .html, 952 .py
 | [`tools/fx2_cmix_transformer_static_vocab_fixture50051_q0_v1.py`](../tools/fx2_cmix_transformer_static_vocab_fixture50051_q0_v1.py) | Prospective GCC diagnostic on one immutable public profiling fixture. | [1](../operations/adaptive/experiments/fx2_cmix_transformer_static_vocab_fixture50051_q0_v1.json) |
 | [`tools/fx2_cmix_transformer_transfer250k_q0_v1.py`](../tools/fx2_cmix_transformer_transfer250k_q0_v1.py) | Frozen transfer diagnostic using the measured FX2 binary and existing driver. | [1](../operations/adaptive/experiments/fx2_cmix_transformer_transfer250k_q0_v1.json) |
 | [`tools/fx2_cmix_transformer_transfer250k_q0_v2.py`](../tools/fx2_cmix_transformer_transfer250k_q0_v2.py) | Frozen transfer diagnostic using the measured FX2 binary and existing driver. | [2](../operations/adaptive/experiments/fx2_cmix_transformer_transfer250k_q0_v2.json) |
-| [`tools/fx2_coder_trace_v1.hpp`](../tools/fx2_coder_trace_v1.hpp) | Gamma diagnostic instrumentation for the pinned public FX2 arithmetic coder. Records compare probabilities and coder intervals; they are not codec state serialization or a substitute for exact decoded output and archive repeats. | [8](../operations/adaptive/experiments/fx2_causal_field_wrt_replay250k_q0_v1.json) |
+| [`tools/fx2_coder_trace_v1.hpp`](../tools/fx2_coder_trace_v1.hpp) | Gamma diagnostic instrumentation for the pinned public FX2 arithmetic coder. Records compare probabilities and coder intervals; they are not codec state serialization or a substitute for exact decoded output and archive repeats. | [9](../operations/adaptive/experiments/fx2_causal_field_wrt_replay250k_q0_v1.json) |
 | [`tools/fx2_compact_trace_window.py`](../tools/fx2_compact_trace_window.py) | Run a frozen random window through compact FX2 probability tracing. | none found |
-| [`tools/fx2_compact_v26_fixture50051_q0_v1.py`](../tools/fx2_compact_v26_fixture50051_q0_v1.py) | Guarded P/K/D native FXCM block comparison with the fixed FX2 transformer. | [2](../operations/adaptive/experiments/fx2_compact_v26_fixture50051_q0_v1.json) |
+| [`tools/fx2_compact_v26_fixture50051_q0_v1.py`](../tools/fx2_compact_v26_fixture50051_q0_v1.py) | Guarded P/K/D native FXCM block comparison with the fixed FX2 transformer. | [3](../operations/adaptive/experiments/fx2_compact_v26_fixture50051_q0_v1.json) |
 | [`tools/fx2_compact_v26_native_adapter_v1.py`](../tools/fx2_compact_v26_native_adapter_v1.py) | Exact source adapter selecting original, copy-control or compact FXCM. | [1](../operations/adaptive/experiments/fx2_compact_v26_fixture50051_q0_v1.json) |
 | [`tools/fx2_core_tune_package.py`](../tools/fx2_core_tune_package.py) | Build and package an fx2 core-tuning candidate. This creates a score-honest candidate by rebuilding the local fx2-cmix source with compile-time predictor knobs, compressing the resulting executable, and dropping it into an existing wrapper template. | none found |
 | [`tools/fx2_core_tune_queue.py`](../tools/fx2_core_tune_queue.py) | Build and gate fx2 core-tuning candidates through one serialized lane. | none found |
@@ -393,6 +393,8 @@ Coverage: **1059 files** (33 .c, 67 .cpp, 1 .gdb, 1 .h, 1 .hpp, 1 .html, 952 .py
 | [`tools/fx2_weight_restore_groups_fixture50051_q0_v1.py`](../tools/fx2_weight_restore_groups_fixture50051_q0_v1.py) | Independent group restorations into the failed even7 model; diagnostic only. | [1](../operations/adaptive/experiments/fx2_weight_restore_groups_fixture50051_q0_v1.json) |
 | [`tools/fx2_wrt_code_loss.py`](../tools/fx2_wrt_code_loss.py) | Join FX2_LOSS_LEDGER rows to WRT dictionary code spans. | none found |
 | [`tools/fx2_wrt_support_audit_v1.py`](../tools/fx2_wrt_support_audit_v1.py) | Causal WRT forced-bit opportunity audit over a retained native parent trace. | none found |
+| [`tools/fx2_wrt_support_fixture50051_q0_v1.py`](../tools/fx2_wrt_support_fixture50051_q0_v1.py) | Native P/K/D WRT support comparison using the existing guarded engine. | [1](../operations/adaptive/experiments/fx2_wrt_support_fixture50051_q0_v1.json) |
+| [`tools/fx2_wrt_support_native_adapter_v1.py`](../tools/fx2_wrt_support_native_adapter_v1.py) | Compose the authenticated coder trace adapter with causal WRT support. | [1](../operations/adaptive/experiments/fx2_wrt_support_fixture50051_q0_v1.json) |
 | [`tools/fx2_xml_residual_screen.py`](../tools/fx2_xml_residual_screen.py) | Rank compact causal XML/Wiki residual corrections on cached FX2 traces. | none found |
 | [`tools/fx2lite_fxcm_hash_mixer_trace.cpp`](../tools/fx2lite_fxcm_hash_mixer_trace.cpp) | Emit causal P1 endpoints from compact hashed mixers over FX2-lite FXCM. // Build this file against the dependency-closed fx2lite endpoint source. The FXCM object already computes 431 probabilities to expose slot 428. These probes reuse that live vector, project it through a deterministic signed feature hash, and train small logistic mixers from decoded truth. No offline weights or trace data enter the emitted endpoint. | none found |
 | [`tools/fxcm_balanced_min_tie_verify.py`](../tools/fxcm_balanced_min_tie_verify.py) | Verify balanced minimum-priority FXCM tie selection. | none found |
