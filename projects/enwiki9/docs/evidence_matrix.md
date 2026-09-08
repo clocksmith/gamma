@@ -1,6 +1,6 @@
 # enwiki9 Evidence Matrix
 
-Generated from result JSON files present in this checkout.
+Generated from tracked legacy results and reviewed terminal indexes in this checkout.
 
 Claim rule:
 
@@ -8,12 +8,14 @@ Claim rule:
 A row is artifact-backed only for its measured scope.
 No prefix row proves 9.0000000%.
 No forecast or inherited metadata is included here.
+Unknown package cost stays unknown. Local subtotals are not complete submission scores.
+Compare identical population hashes; equal input sizes alone do not define matched experiments.
 ```
 
 ## Proof Boundary
 
-- Result JSON files scanned: `188`
-- Roundtrip-passing rows: `20`
+- Result JSON files scanned: `230`
+- Roundtrip-passing rows: `62`
 - Verified full `1G` rows in this checkout: `0`
 - Active target score: `90,000,000` bytes (`9.0000000%`)
 - `9.0000000%` target reached by this matrix: `False`
@@ -21,50 +23,64 @@ No forecast or inherited metadata is included here.
 
 ## Best Exact Score By Scope
 
-| Program | Mechanism | Scope | Score | Archive | Program | b/B | Determinism | Result |
-|---|---|---:|---:|---:|---:|---:|---|---|
-| `cmix_obias_full1g_submission_accounting_qm1_v1` | custom candidate | 0 | 0 | 0 | 0 | n/a | not recorded | `results/cmix_obias_full1g_submission_accounting_qm1_v1/decision.json` |
-| `nncp_compact5_preprocessed_cqq_x86xzopt_nodebug_t4_tarslack_v1` | custom candidate | 10,000 | 240,248 | 6,229 | 234,019 | 4.9832 | true | `results/nncp_compact5_preprocessed_cqq_x86xzopt_nodebug_t4_tarslack_v1/2026-07-27T213234.json` |
-| `opcode_typed_anchor_bitmix_v1` | syntax opcode preprocessor | 250,000 | 72,800 | 67,959 | 4,841 | 2.174688 | true | `results/opcode_typed_anchor_bitmix_v1/2026-07-21T124407.json` |
-| `sleeping_trie_global4_selector_raw_v1` | custom candidate | 1,000,000 | 494,499 | 473,912 | 20,587 | 3.791296 | true | `results/sleeping_trie_global4_selector_raw_v1/2026-08-01T193730.json` |
+| Program / arm | Population SHA256 | Mechanism | Scope | Local subtotal | Archive | Program | b/B | Determinism | Result |
+|---|---|---|---:|---:|---:|---:|---:|---|---|
+| `nncp_compact5_preprocessed_cqq_x86xzopt_nodebug_t4_tarslack_v1` | `321868b6f37a` | custom candidate | 10,000 | 240,248 | 6,229 | 234,019 | 4.9832 | true | `results/nncp_compact5_preprocessed_cqq_x86xzopt_nodebug_t4_tarslack_v1/2026-07-27T213234.json` |
+| `opcode_typed_anchor_bitmix_v1` | `665fc689441b` | syntax opcode preprocessor | 250,000 | 72,800 | 67,959 | 4,841 | 2.174688 | true | `results/opcode_typed_anchor_bitmix_v1/2026-07-21T124407.json` |
+| `sleeping_trie_global4_selector_raw_v1` | `369b688978f6` | custom candidate | 1,000,000 | 494,499 | 473,912 | 20,587 | 3.791296 | true | `results/sleeping_trie_global4_selector_raw_v1/2026-08-01T193730.json` |
 
 ## Best Exact Archive By Scope
 
-| Program | Mechanism | Scope | Score | Archive | Program | b/B | Determinism | Result |
-|---|---|---:|---:|---:|---:|---:|---|---|
-| `cmix_obias_full1g_submission_accounting_qm1_v1` | custom candidate | 0 | 0 | 0 | 0 | n/a | not recorded | `results/cmix_obias_full1g_submission_accounting_qm1_v1/decision.json` |
-| `nncp_compact5_preprocessed_cqq_x86xzopt_nodebug_t4_tarslack_v1` | custom candidate | 10,000 | 240,248 | 6,229 | 234,019 | 4.9832 | true | `results/nncp_compact5_preprocessed_cqq_x86xzopt_nodebug_t4_tarslack_v1/2026-07-27T213234.json` |
-| `opcode_typed_anchor_bitmix_v1` | syntax opcode preprocessor | 250,000 | 72,800 | 67,959 | 4,841 | 2.174688 | true | `results/opcode_typed_anchor_bitmix_v1/2026-07-21T124407.json` |
-| `sleeping_trie_global4_selector_raw_v1` | custom candidate | 1,000,000 | 494,499 | 473,912 | 20,587 | 3.791296 | true | `results/sleeping_trie_global4_selector_raw_v1/2026-08-01T193730.json` |
+| Program / arm | Population SHA256 | Mechanism | Scope | Local subtotal | Archive | Program | b/B | Determinism | Result |
+|---|---|---|---:|---:|---:|---:|---:|---|---|
+| `cmix_obias_full1g_submission_accounting_qm1_v1` | unidentified | custom candidate | 0 | unknown | 0 | unknown | n/a | not recorded | `results/cmix_obias_full1g_submission_accounting_qm1_v1/decision.json` |
+| `nncp_compact5_preprocessed_cqq_x86xzopt_nodebug_t4_tarslack_v1` | `321868b6f37a` | custom candidate | 10,000 | 240,248 | 6,229 | 234,019 | 4.9832 | true | `results/nncp_compact5_preprocessed_cqq_x86xzopt_nodebug_t4_tarslack_v1/2026-07-27T213234.json` |
+| `matched_frontier_reserved_q0_v1:validation-FX2` | `4c6b839c7799` | custom candidate | 250,000 | unknown | 35,464 | unknown | 1.134848 | true | `operations/provenance/matched_frontier_reserved_terminal_20260908/validation-FX2.json` |
+| `matched_frontier_reserved_q0_v1:confirmation-FX2` | `20b4d8d7e140` | custom candidate | 1,000,000 | unknown | 131,238 | unknown | 1.049904 | true | `operations/provenance/matched_frontier_reserved_terminal_20260908/confirmation-FX2.json` |
 
 ## Top Score Rows At 1,000,000 Bytes
 
-| Program | Mechanism | Scope | Score | Archive | Program | b/B | Determinism | Result |
-|---|---|---:|---:|---:|---:|---:|---|---|
-| `sleeping_trie_global4_selector_raw_v1` | custom candidate | 1,000,000 | 494,499 | 473,912 | 20,587 | 3.791296 | true | `results/sleeping_trie_global4_selector_raw_v1/2026-08-01T193730.json` |
+| Program / arm | Population SHA256 | Mechanism | Scope | Local subtotal | Archive | Program | b/B | Determinism | Result |
+|---|---|---|---:|---:|---:|---:|---:|---|---|
+| `sleeping_trie_global4_selector_raw_v1` | `369b688978f6` | custom candidate | 1,000,000 | 494,499 | 473,912 | 20,587 | 3.791296 | true | `results/sleeping_trie_global4_selector_raw_v1/2026-08-01T193730.json` |
 
 ## Top Archive Rows At 1,000,000 Bytes
 
-| Program | Mechanism | Scope | Score | Archive | Program | b/B | Determinism | Result |
-|---|---|---:|---:|---:|---:|---:|---|---|
-| `sleeping_trie_global4_selector_raw_v1` | custom candidate | 1,000,000 | 494,499 | 473,912 | 20,587 | 3.791296 | true | `results/sleeping_trie_global4_selector_raw_v1/2026-08-01T193730.json` |
+| Program / arm | Population SHA256 | Mechanism | Scope | Local subtotal | Archive | Program | b/B | Determinism | Result |
+|---|---|---|---:|---:|---:|---:|---:|---|---|
+| `matched_frontier_reserved_q0_v1:confirmation-FX2` | `20b4d8d7e140` | custom candidate | 1,000,000 | unknown | 131,238 | unknown | 1.049904 | true | `operations/provenance/matched_frontier_reserved_terminal_20260908/confirmation-FX2.json` |
+| `opcode_field_compact_v1:confirmation` | `20b4d8d7e140` | syntax opcode preprocessor | 1,000,000 | unknown | 255,828 | unknown | 2.046624 | true | `operations/provenance/opcode_field_compact_terminal_20260908/confirmation.json` |
+| `opcode_field_confirmation1m_q0_v1:D` | `20b4d8d7e140` | syntax opcode preprocessor | 1,000,000 | unknown | 255,828 | unknown | 2.046624 | true | `operations/provenance/opcode_field_confirmation_terminal_20260908/D.json` |
+| `opcode_field_confirmation1m_q0_v1:K` | `20b4d8d7e140` | syntax opcode preprocessor | 1,000,000 | unknown | 257,369 | unknown | 2.058952 | true | `operations/provenance/opcode_field_confirmation_terminal_20260908/K.json` |
+| `opcode_field_confirmation1m_q0_v1:P` | `20b4d8d7e140` | syntax opcode preprocessor | 1,000,000 | unknown | 257,369 | unknown | 2.058952 | true | `operations/provenance/opcode_field_confirmation_terminal_20260908/P.json` |
+| `matched_frontier_reserved_q0_v1:confirmation-Deflate` | `20b4d8d7e140` | custom candidate | 1,000,000 | unknown | 360,475 | unknown | 2.8838 | true | `operations/provenance/matched_frontier_reserved_terminal_20260908/confirmation-Deflate.json` |
+| `sleeping_trie_global4_selector_raw_v1` | `369b688978f6` | custom candidate | 1,000,000 | 494,499 | 473,912 | 20,587 | 3.791296 | true | `results/sleeping_trie_global4_selector_raw_v1/2026-08-01T193730.json` |
 
 ## Top Score Rows At 250,000 Bytes
 
-| Program | Mechanism | Scope | Score | Archive | Program | b/B | Determinism | Result |
-|---|---|---:|---:|---:|---:|---:|---|---|
-| `opcode_typed_anchor_bitmix_v1` | syntax opcode preprocessor | 250,000 | 72,800 | 67,959 | 4,841 | 2.174688 | true | `results/opcode_typed_anchor_bitmix_v1/2026-07-21T124407.json` |
-| `opcode_word_bz2_min_deflate_v1` | syntax opcode preprocessor | 250,000 | 73,335 | 71,887 | 1,448 | 2.300384 | true | `results/opcode_word_bz2_min_deflate_v1/2026-07-21T124141.json` |
-| `trigger_receipt_copy_lzma_v0` | LZMA/LZMA2 baseline or preprocessor | 250,000 | 82,940 | 75,561 | 7,379 | 2.417952 | true | `results/trigger_receipt_copy_lzma_v0/2026-08-01T194211.json` |
-| `sleeping_trie_global4_selector_raw_v1` | custom candidate | 250,000 | 139,970 | 119,383 | 20,587 | 3.820256 | true | `results/sleeping_trie_global4_selector_raw_v1/2026-08-01T193328.json` |
-| `typed_event_sleeping_trie_raw_v0` | custom candidate | 250,000 | 140,272 | 119,692 | 20,580 | 3.830144 | true | `results/typed_event_sleeping_trie_raw_v0/2026-08-01T192928.json` |
+| Program / arm | Population SHA256 | Mechanism | Scope | Local subtotal | Archive | Program | b/B | Determinism | Result |
+|---|---|---|---:|---:|---:|---:|---:|---|---|
+| `opcode_typed_anchor_bitmix_v1` | `665fc689441b` | syntax opcode preprocessor | 250,000 | 72,800 | 67,959 | 4,841 | 2.174688 | true | `results/opcode_typed_anchor_bitmix_v1/2026-07-21T124407.json` |
+| `opcode_word_bz2_min_deflate_v1` | `665fc689441b` | syntax opcode preprocessor | 250,000 | 73,335 | 71,887 | 1,448 | 2.300384 | true | `results/opcode_word_bz2_min_deflate_v1/2026-07-21T124141.json` |
+| `trigger_receipt_copy_lzma_v0` | `665fc689441b` | LZMA/LZMA2 baseline or preprocessor | 250,000 | 82,940 | 75,561 | 7,379 | 2.417952 | true | `results/trigger_receipt_copy_lzma_v0/2026-08-01T194211.json` |
+| `sleeping_trie_global4_selector_raw_v1` | `665fc689441b` | custom candidate | 250,000 | 139,970 | 119,383 | 20,587 | 3.820256 | true | `results/sleeping_trie_global4_selector_raw_v1/2026-08-01T193328.json` |
+| `typed_event_sleeping_trie_raw_v0` | `665fc689441b` | custom candidate | 250,000 | 140,272 | 119,692 | 20,580 | 3.830144 | true | `results/typed_event_sleeping_trie_raw_v0/2026-08-01T192928.json` |
 
 ## Top Archive Rows At 250,000 Bytes
 
-| Program | Mechanism | Scope | Score | Archive | Program | b/B | Determinism | Result |
-|---|---|---:|---:|---:|---:|---:|---|---|
-| `opcode_typed_anchor_bitmix_v1` | syntax opcode preprocessor | 250,000 | 72,800 | 67,959 | 4,841 | 2.174688 | true | `results/opcode_typed_anchor_bitmix_v1/2026-07-21T124407.json` |
-| `opcode_word_bz2_min_deflate_v1` | syntax opcode preprocessor | 250,000 | 73,335 | 71,887 | 1,448 | 2.300384 | true | `results/opcode_word_bz2_min_deflate_v1/2026-07-21T124141.json` |
-| `trigger_receipt_copy_lzma_v0` | LZMA/LZMA2 baseline or preprocessor | 250,000 | 82,940 | 75,561 | 7,379 | 2.417952 | true | `results/trigger_receipt_copy_lzma_v0/2026-08-01T194211.json` |
-| `sleeping_trie_global4_selector_raw_v1` | custom candidate | 250,000 | 139,970 | 119,383 | 20,587 | 3.820256 | true | `results/sleeping_trie_global4_selector_raw_v1/2026-08-01T193328.json` |
-| `typed_event_sleeping_trie_raw_v0` | custom candidate | 250,000 | 140,272 | 119,692 | 20,580 | 3.830144 | true | `results/typed_event_sleeping_trie_raw_v0/2026-08-01T192928.json` |
+| Program / arm | Population SHA256 | Mechanism | Scope | Local subtotal | Archive | Program | b/B | Determinism | Result |
+|---|---|---|---:|---:|---:|---:|---:|---|---|
+| `matched_frontier_reserved_q0_v1:validation-FX2` | `4c6b839c7799` | custom candidate | 250,000 | unknown | 35,464 | unknown | 1.134848 | true | `operations/provenance/matched_frontier_reserved_terminal_20260908/validation-FX2.json` |
+| `opcode_wiki_slot_v1:D` | `665fc689441b` | syntax opcode preprocessor | 250,000 | unknown | 67,601 | unknown | 2.163232 | true | `operations/provenance/opcode_wiki_slot_terminal_20260908/D.json` |
+| `opcode_slot_reset_v1:D` | `665fc689441b` | syntax opcode preprocessor | 250,000 | unknown | 67,626 | unknown | 2.164032 | true | `operations/provenance/opcode_slot_reset_terminal_20260908/D.json` |
+| `opcode_calibration_cost_v1:K` | `665fc689441b` | syntax opcode preprocessor | 250,000 | unknown | 67,658 | unknown | 2.165056 | true | `operations/provenance/opcode_calibration_terminal_20260908/K.json` |
+| `opcode_field_compact_v1:development` | `665fc689441b` | syntax opcode preprocessor | 250,000 | unknown | 67,658 | unknown | 2.165056 | true | `operations/provenance/opcode_field_compact_terminal_20260908/development.json` |
+| `opcode_field_repair250k_q0_v1:D` | `665fc689441b` | syntax opcode preprocessor | 250,000 | unknown | 67,658 | unknown | 2.165056 | true | `operations/provenance/opcode_field_repair_terminal_20260908/D.json` |
+| `opcode_slot_reset_v1:K` | `665fc689441b` | syntax opcode preprocessor | 250,000 | unknown | 67,658 | unknown | 2.165056 | true | `operations/provenance/opcode_slot_reset_terminal_20260908/K.json` |
+| `opcode_slot_reset_v1:P` | `665fc689441b` | syntax opcode preprocessor | 250,000 | unknown | 67,658 | unknown | 2.165056 | true | `operations/provenance/opcode_slot_reset_terminal_20260908/P.json` |
+
+## Unavailable terminal evidence
+
+- operations/provenance/fx2_causal_field_wrt_terminal_20260907/index.json: /home/x/deco/gamma/projects/enwiki9/operations/adaptive/experiments/fx2_causal_field_wrt_replay250k_q0_v1.json: input frozen-input-202: referenced evidence digest differs: /home/x/deco/gamma/projects/enwiki9/tools/research_contracts.py
+- operations/provenance/fx2_causal_preceding_terminal_20260907/index.json: /home/x/deco/gamma/projects/enwiki9/operations/adaptive/experiments/fx2_causal_preceding_wrt250k_q0_v1.json: input frozen-input-206: referenced evidence digest differs: /home/x/deco/gamma/projects/enwiki9/tools/research_contracts.py
+- operations/provenance/midas_open_observed_sha_opening250k_terminal_20260907/index.json: /home/x/deco/gamma/projects/enwiki9/operations/adaptive/experiments/midas_open_observed_sha_opening250k_q0_v1.json: input input-224: referenced evidence digest differs: /home/x/deco/gamma/projects/enwiki9/tools/research_contracts.py

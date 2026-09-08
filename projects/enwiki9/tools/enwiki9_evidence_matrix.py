@@ -39,10 +39,13 @@ class Row:
     program_id: str
     data_size: int
     compressed_size: int
-    program_size: int
-    score: int
+    program_size: int | None
+    score: int | None
     roundtrip_ok: bool
     determinism_ok: bool | None
+    data_sha256: str = ""
+    arm: str = ""
+    full_corpus_proof: bool = False
 
     @property
     def archive_bpb(self) -> float:
@@ -52,7 +55,7 @@ class Row:
 
     @property
     def percent(self) -> float:
-        if self.data_size <= 0:
+        if self.data_size <= 0 or self.score is None:
             return math.inf
         return 100.0 * self.score / self.data_size
 
@@ -69,6 +72,16 @@ def as_int(data: dict[str, Any], key: str) -> int:
         return int(value)
     except (TypeError, ValueError):
         return 0
+
+
+def optional_int(value: Any) -> int | None:
+    if value is None or isinstance(value, bool):
+        return None
+    try:
+        parsed = int(value)
+        return parsed if parsed >= 0 and str(parsed) == str(value) else None
+    except (TypeError, ValueError):
+        return None
 
 
 def load_row(path: pathlib.Path) -> Row | None:
@@ -93,12 +106,14 @@ def load_row(path: pathlib.Path) -> Row | None:
     if not compressed_size and isinstance(data.get("archive"), dict):
         compressed_size = as_int(data["archive"], "bytes")
 
-    program_size = as_int(data, "program_size")
-    if not program_size and isinstance(data.get("program"), dict):
-        program_size = as_int(data["program"], "total_bytes")
+    program_size = optional_int(data.get("program_size"))
+    if program_size is None and isinstance(data.get("program"), dict):
+        program_size = optional_int(data["program"].get("total_bytes"))
 
-    score = as_int(data, "hutter_score") or as_int(data, "counted_score_bytes")
-    if score == 0 and (compressed_size or program_size):
+    score = optional_int(data.get("hutter_score"))
+    if score is None:
+        score = optional_int(data.get("counted_score_bytes"))
+    if score is None and program_size is not None and data.get("score_accounting_complete") is not False:
         score = compressed_size + program_size
 
     roundtrip = (
@@ -112,6 +127,13 @@ def load_row(path: pathlib.Path) -> Row | None:
     if isinstance(det, dict) and isinstance(det.get("single_host_byte_equal"), bool):
         determinism = det["single_host_byte_equal"]
 
+    # Reuse the certificate's full-scope obligations; report discovery grants
+    # no qualification just because a result fits the numerical target.
+    try:
+        from projects.enwiki9.tools import hutter_upper_bound_certificate as certificate
+    except ModuleNotFoundError:
+        import hutter_upper_bound_certificate as certificate
+    certified = certificate.load_result(path)
     return Row(
         path=path,
         program_id=program_id,
@@ -121,6 +143,10 @@ def load_row(path: pathlib.Path) -> Row | None:
         score=score,
         roundtrip_ok=roundtrip,
         determinism_ok=determinism,
+        data_sha256=str(data.get("data_sha256", "")),
+        arm=str(data.get("arm", "")),
+        full_corpus_proof=(score is not None and certified is not None
+                           and score == certified.hutter_score and certified.is_full_corpus_proof),
     )
 
 
@@ -142,6 +168,7 @@ def canonical_tracked_result_paths(
         return None
     try:
         result_prefix = RESULTS_DIR.relative_to(REPO_ROOT).as_posix()
+        provenance_prefix = (ROOT / "operations/provenance").relative_to(REPO_ROOT).as_posix()
         proc = subprocess.run(
             [
                 "git",
@@ -151,6 +178,7 @@ def canonical_tracked_result_paths(
                 "-z",
                 "--",
                 result_prefix,
+                provenance_prefix,
             ],
             capture_output=True,
             check=False,
@@ -166,12 +194,42 @@ def canonical_tracked_result_paths(
     }
 
 
-def iter_rows(results_dir: pathlib.Path) -> list[Row]:
-    tracked_paths = canonical_tracked_result_paths(results_dir)
-    rows: list[Row] = []
-    for path in sorted(results_dir.glob("*/*.json")):
-        if tracked_paths is not None and path.resolve() not in tracked_paths:
+def reviewed_terminal_paths(tracked: set[pathlib.Path], issues: list[str]) -> set[pathlib.Path]:
+    """Reuse the existing read-only terminal recorder validation, not a new registry."""
+    try:
+        from projects.enwiki9.tools import record_driver_result as recorder
+    except ModuleNotFoundError:
+        import record_driver_result as recorder
+    paths: set[pathlib.Path] = set()
+    for index_path in sorted(tracked):
+        if index_path.name != "index.json" or index_path.parent.parent != ROOT / "operations/provenance":
             continue
+        try:
+            index = json.loads(index_path.read_text())
+            if not isinstance(index, dict) or index.get("schema") != "gamma.enwiki9.terminal-result-index.v1":
+                continue
+            entries = index["arms"]
+            selected = {recorder.project_path(entry["result"]["path"]) for entry in entries}
+            if not selected or not selected <= tracked:
+                raise ValueError("terminal arm receipt is not tracked")
+            first = json.loads(min(selected).read_text())
+            report = recorder.record_terminal(first["program_id"], index_path, check_only=True)
+            if report["missing_rows"]:
+                raise ValueError("terminal arm is not recorded in the canonical ledger")
+            paths.update(selected)
+        except (OSError, ValueError, KeyError, TypeError, IndexError) as error:
+            issues.append(f"{index_path.relative_to(ROOT)}: {error}")
+    return paths
+
+
+def iter_rows(results_dir: pathlib.Path, issues: list[str] | None = None) -> list[Row]:
+    tracked_paths = canonical_tracked_result_paths(results_dir)
+    issues = issues if issues is not None else []
+    rows: list[Row] = []
+    paths = {p for p in results_dir.glob("*/*.json") if tracked_paths is None or p.resolve() in tracked_paths}
+    if tracked_paths is not None:
+        paths.update(reviewed_terminal_paths(tracked_paths, issues))
+    for path in sorted(paths):
         row = load_row(path)
         if row is not None:
             rows.append(row)
@@ -204,7 +262,7 @@ def mechanism_hint(program_id: str) -> str:
 def best_by_scope(rows: list[Row], key: str) -> list[Row]:
     best: dict[int, Row] = {}
     for row in rows:
-        if not row.roundtrip_ok:
+        if not row.roundtrip_ok or key == "score" and row.score is None:
             continue
         current = best.get(row.data_size)
         if current is None:
@@ -218,16 +276,17 @@ def best_by_scope(rows: list[Row], key: str) -> list[Row]:
 
 
 def top_rows(rows: list[Row], data_size: int, key: str, limit: int) -> list[Row]:
-    scoped = [row for row in rows if row.roundtrip_ok and row.data_size == data_size]
+    scoped = [row for row in rows if row.roundtrip_ok and row.data_size == data_size
+              and (key != "score" or row.score is not None)]
     if key == "score":
         return sorted(scoped, key=lambda row: (row.score, row.compressed_size, row.program_id))[:limit]
     if key == "archive":
-        return sorted(scoped, key=lambda row: (row.compressed_size, row.score, row.program_id))[:limit]
+        return sorted(scoped, key=lambda row: (row.compressed_size, row.score if row.score is not None else math.inf, row.program_id))[:limit]
     raise ValueError(key)
 
 
-def fmt_int(value: int) -> str:
-    return f"{value:,}"
+def fmt_int(value: int | None) -> str:
+    return "unknown" if value is None else f"{value:,}"
 
 
 def fmt_float(value: float) -> str:
@@ -238,8 +297,8 @@ def fmt_float(value: float) -> str:
 
 def table(rows: list[Row]) -> list[str]:
     lines = [
-        "| Program | Mechanism | Scope | Score | Archive | Program | b/B | Determinism | Result |",
-        "|---|---|---:|---:|---:|---:|---:|---|---|",
+        "| Program / arm | Population SHA256 | Mechanism | Scope | Local subtotal | Archive | Program | b/B | Determinism | Result |",
+        "|---|---|---|---:|---:|---:|---:|---:|---|---|",
     ]
     for row in rows:
         det = "true" if row.determinism_ok is True else "false" if row.determinism_ok is False else "not recorded"
@@ -247,7 +306,8 @@ def table(rows: list[Row]) -> list[str]:
             "| "
             + " | ".join(
                 [
-                    f"`{row.program_id}`",
+                    f"`{row.program_id}{':'+row.arm if row.arm else ''}`",
+                    f"`{row.data_sha256[:12]}`" if row.data_sha256 else "unidentified",
                     mechanism_hint(row.program_id),
                     fmt_int(row.data_size),
                     fmt_int(row.score),
@@ -263,16 +323,16 @@ def table(rows: list[Row]) -> list[str]:
     return lines
 
 
-def render(rows: list[Row], top_limit: int) -> str:
+def render(rows: list[Row], top_limit: int, issues: list[str] | tuple[str, ...] = ()) -> str:
     exact = [row for row in rows if row.roundtrip_ok]
-    full = [row for row in exact if row.data_size == FULL_INPUT_BYTES]
+    full = [row for row in exact if row.full_corpus_proof and row.score is not None]
     best_full = min(full, key=lambda row: row.score, default=None)
     hit = best_full is not None and best_full.score <= TARGET_10_95
 
     lines: list[str] = [
         "# enwiki9 Evidence Matrix",
         "",
-        "Generated from result JSON files present in this checkout.",
+        "Generated from tracked legacy results and reviewed terminal indexes in this checkout.",
         "",
         "Claim rule:",
         "",
@@ -280,6 +340,8 @@ def render(rows: list[Row], top_limit: int) -> str:
         "A row is artifact-backed only for its measured scope.",
         f"No prefix row proves {TARGET_PERCENT:.7f}%.",
         "No forecast or inherited metadata is included here.",
+        "Unknown package cost stays unknown. Local subtotals are not complete submission scores.",
+        "Compare identical population hashes; equal input sizes alone do not define matched experiments.",
         "```",
         "",
         "## Proof Boundary",
@@ -311,6 +373,8 @@ def render(rows: list[Row], top_limit: int) -> str:
             lines.extend(table(archive_rows))
 
     lines.append("")
+    if issues:
+        lines.extend(["## Unavailable terminal evidence", "", *[f"- {issue}" for issue in issues], ""])
     return "\n".join(lines)
 
 
@@ -322,8 +386,9 @@ def main() -> int:
     parser.add_argument("--check", action="store_true", help="verify output is up to date")
     args = parser.parse_args()
 
-    rows = iter_rows(args.results_dir)
-    rendered = render(rows, max(1, args.top_limit))
+    issues: list[str] = []
+    rows = iter_rows(args.results_dir, issues)
+    rendered = render(rows, max(1, args.top_limit), issues)
     if args.check:
         try:
             current = args.out.read_text()
