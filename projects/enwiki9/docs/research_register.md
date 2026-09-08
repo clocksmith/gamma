@@ -2,6 +2,22 @@
 
 [Record index](research_register/README.md) | [Earlier records](research_register/archive/README.md)
 
+## 2026-09-08 - Exact adaptive literal-event pricing before changing encoder choices
+
+After field-alignment transfer failed its randomized control, `root_explore`
+selects lenses 1/9 deliberately: reconstruction programs and paid encoder selection.
+Source inspection finds that the compact encoder prices a candidate's literal
+alternative as `L*tok.evc(st,0)`, although real event counts update after each literal.
+The [frozen synthetic plan](../operations/provenance/opcode_literal_event_cost_synthetic_v1_plan.json)
+preserves the predictor, SSE and decoder; prior calibration evidence supports keeping SSE.
+The [bounded helper tests](../operations/provenance/opcode_literal_event_cost_v1_unit.json)
+pass four checks against the authenticated parent CM, including rescaling and nonmutation.
+For ten zeros in one fresh three-symbol context, exact adaptive probability is
+1/66 while repeated initial pricing uses 1/59049. This proves a constructed
+event-cost approximation error, not corpus savings or an optimal parse.
+Next implement a separately identified P/K/D encoder-only correction and exact
+roundtrips through the unchanged decoder before any corpus claim. No new corpus job exists.
+
 ## 2026-09-08 - Standalone XML field histories enter executable synthetic testing
 
 Owner `root_explore` selects lenses 3/9 and the confirmed compact opcode parent.
@@ -41,7 +57,14 @@ The [validation contract](../operations/adaptive/experiments/opcode_field_histor
 is frozen and claimed by `root_explore`: raw offsets 347250000..347499999, unchanged
 codec and controls, no tuning or control-arm selection after validation.
 The [validation runner tests](../operations/provenance/opcode_field_history_validation_gate_v1_unit.json)
-pass ten synthetic checks. The sealed sixteen-phase job is held for publication and fresh CPU2 admission.
+pass ten synthetic checks. The published validation job completed all sixteen phases.
+The [validation terminal](../operations/provenance/opcode_field_history_validation_terminal_20260908.json)
+reports P/K/D/G/S = 71,717/71,717/71,673/71,676/71,669 bytes. D saves 44 versus P
+but loses four bytes to S, so the all-control transfer claim fails despite exact
+inverses, repeats and complete state witnesses. Peak guard memory is 622,522,368 bytes;
+all guards pass. The [validated reflection](../operations/adaptive/reflections/20260908T232009Z_a13fbfa9a9.json)
+retires this exact configuration: no1MB launch, tuning or post-validation selection of S.
+The reason S wins remains unmeasured; neither positive parent-relative gain is erased.
 
 ## 2026-09-08 - Bound compact-parent complementarity before constructing a selector
 
@@ -743,47 +766,3 @@ and update donor odds from actual parent probabilities. The uniform-parent
 `2^matched_bits` rule cannot be inherited. Replay is diagnostic until a native
 decoder reproduces it; prune unused dependencies in a new candidate before
 package promotion. Cold opening250KB cannot establish mature-history benefit.
-
-## 2026-09-06 - Causal word references lose the exact opcode/BZip2 comparison
-
-ROOT assigned the separate FIFO128 word-code lane to `refresh_cleanup_review`;
-`grammar_blind_review` independently checked its decoder and resource bounds.
-The [prospective plan](../operations/provenance/causal_wordcode_fifo128_bz2_q0_v1_plan.json)
-freezes exact 5-32-byte alphabetic words, causal FIFO learning, and P/K/T/L.
-The [retained synthetic receipt](../operations/evidence/20260906_causal_wordcode_fifo128_bz2_unit.json)
-binds 17 passing tests and eight exact arm runs: reuse P/K 2,186, T 1,923,
-L 2,716 bytes; eviction P/K/L 3,808, T 4,157. State and transition digests agree.
-These gains do not pay the 16,656-byte conservative local-source increment.
-P/K both perform lexical diagnostics, so their timings do not isolate that cost.
-The [driver integration receipt](../operations/evidence/20260906_causal_wordcode_fifo128_gate_unit.json)
-adds 25 passing synthetic tests and twelve fresh codec processes. Independent
-review passed. The [frozen corpus contract](../operations/adaptive/experiments/causal_wordcode_fifo128_bz2_q0_v1.json)
-binds 192 inputs and the exact adapter. Ownership and inputs were verified on
-`origin/main` at `af0c6df9b` before CPU4 job `20260906T221245Z_f195ae35dd` ran.
-
-All twelve corpus phases pass independent exact inversion, raw-encoder repeats,
-state and every-word transition agreement. P/K reproduce the historical parent:
-**71,887 bytes**, versus **73,603 T** and **72,243 literal L**. T costs 1,716 extra
-archive bytes; the 17,171-byte source increment makes its conservative net loss
-**18,887 bytes**. Its 4,979 references shrink the pre-BZip2 representation but
-add 1,360 complete bytes against L. Eviction alone is not isolated as the cause.
-The [terminal audit](../operations/provenance/causal_wordcode_fifo128_terminal_20260906.json)
-and [validated hold](../operations/adaptive/reflections/20260906T221245Z_f195ae35dd.json)
-bind four ledger rows and the passing 56,840,192-byte discovery guard. Hold this
-fixed realization without tuning, confirmation, scaling or full-score credit.
-Source inspection also found the existing `opcode_bz2_v1` literal-only codec
-(1,383 source bytes), with no indexed trial receipt. No duplicate source or run
-was created; its package economics remain unmeasured.
-
-The [FX2 readiness audit](../operations/evidence/20260906_fx2_weight_readiness_audit.json)
-confirms that trained exact-residual packing and tensor restorations already
-completed and were held. Their original requests are not missing experiments.
-
-Independent next-step review identified an unowned earlier-field-value to
-later-field-value predictor, distinct from the owned dormant WIKI-LOOM model.
-Its smallest falsifier is `a=A,b=X; a=B,b=Y; a=A,b=X`, followed by changing only
-the final future value: predictions before that value must stay identical.
-Existing parsers inspect complete invocations, so a prefix-driven parser and
-independent decoder are missing. The [synthetic implementation plan](../operations/provenance/causal_field_dependency_synthetic_q0_v1_plan.json)
-assigns that bounded work to `refresh_cleanup_review`, with uniform P/K,
-conditional T, recency R and causal association control S. No corpus gate follows.

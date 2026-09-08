@@ -1,0 +1,96 @@
+{
+  "schema": "gamma.enwiki9.opcode-literal-event-cost-unit.v1",
+  "id": "opcode_literal_event_cost_v1_unit",
+  "owner": "root_explore",
+  "status": "passed",
+  "tests_passed": 4,
+  "reported_test_elapsed_seconds": 0.008,
+  "plan": {
+    "path": "operations/provenance/opcode_literal_event_cost_synthetic_v1_plan.json",
+    "bytes": 2809,
+    "sha256": "27798e5ef1343d3c099eba5e391c0659fa10f6f20305be8e6967cada01feb22a"
+  },
+  "sources": [
+    {
+      "path": "lib/opcode_literal_event_cost_v1.py",
+      "bytes": 1413,
+      "sha256": "ad49a96b20d6505514b4a5224018729bda90c86aa0f108cfbfdb28df8c8cb697"
+    },
+    {
+      "path": "tests/test_opcode_literal_event_cost_v1.py",
+      "bytes": 2875,
+      "sha256": "9b15088eeacc59d72880e2acfbe2c51538dcaeec1042c9e7ad6fcac55591c2fd"
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "results/opcode_literal_event_cost_v1_unit/stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "results/opcode_literal_event_cost_v1_unit/stderr",
+      "bytes": 658,
+      "sha256": "58554f54fa4896c94a47351d656a01aa97e12a7686d931c2833200461434304c"
+    }
+  ],
+  "prior_evidence": [
+    {
+      "path": "operations/provenance/opcode_calibration_terminal_20260908.json",
+      "bytes": 8387,
+      "sha256": "8ec2b58cd7b97b1d1037543de361d28e2d18d5aab5695620326ce17ac994a3e1"
+    },
+    {
+      "path": "operations/provenance/opcode_field_history_validation_terminal_20260908.json",
+      "bytes": 5463,
+      "sha256": "1830129d2e386df2d7de9f456b22f3648bcad32a76bd2dcf3b13269f0b6b4485"
+    }
+  ],
+  "command": [
+    "taskset",
+    "-c",
+    "3",
+    "prlimit",
+    "--as=2147483648",
+    "--cpu=90",
+    "--fsize=33554432",
+    "--core=0",
+    "timeout",
+    "120",
+    "python3",
+    "-m",
+    "unittest",
+    "discover",
+    "-s",
+    "tests",
+    "-p",
+    "test_opcode_literal_event_cost_v1.py",
+    "-v"
+  ],
+  "exact_counterexample": {
+    "events": 10,
+    "constant_context": true,
+    "initial_counts": [
+      1,
+      1,
+      1
+    ],
+    "literal_event": 0,
+    "actual_adaptive_joint_probability": "1/66",
+    "repeated_initial_joint_probability": "1/59049",
+    "claim": "Repeated initial event cost overprices this constructed all-literal alternative."
+  },
+  "checks": [
+    "Exact per-event count pairs match the authenticated original CM for repeated and interleaved contexts.",
+    "Original4096-total rescaling agrees for a258-event span.",
+    "Authoritative input models and totals remain unchanged.",
+    "Oversized spans and inconsistent counts are rejected."
+  ],
+  "limits": [
+    "No corpus read or archive improvement measured.",
+    "The helper requires correct byte-span context keys; integration has not been implemented.",
+    "Costs are floating-point ideal estimates; rational counterexample is exact, but no finite-archive gain or globally optimal parse follows."
+  ],
+  "objective_credit_bytes": 0,
+  "next": "Implement one separately identified encoder-only correction with P/K/D, unchanged compact decoder, exact archives, repeats and full state witnesses before any corpus credit."
+}
