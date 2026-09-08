@@ -61,3 +61,19 @@ test('personal infrastructure treatment targets each unlock and reads the public
  const packet=match.packet(0,'study',match.legalActionSelections(0));
  assert.deepEqual(packet.observation.personalProjectRules.cost,match.projectDocument.constructionCost);
 });
+
+test('study checkpoints verify both artifacts and reject duplicates, tampering and completed runs', async () => {
+ const {loadCheckpoint}=await import('../lab/cli/construction-study.mjs');
+ const {mkdtemp,mkdir,writeFile,rm}=await import('node:fs/promises');const {tmpdir}=await import('node:os');const {join}=await import('node:path');const {createHash}=await import('node:crypto');
+ const root=await mkdtemp(join(tmpdir(),'mandate-checkpoint-'));
+ try {
+  const folder=join(root,'evidence/studies/simulation');await mkdir(folder,{recursive:true});
+  const row={block:0,treatment:'personal_infrastructure_v1'};
+  for(const key of ['report','outcomes']) {row[key]=`evidence/studies/simulation/${key}.json`;const bytes='{}\n';await writeFile(join(root,row[key]),bytes);row[`${key}Sha256`]=`sha256:${createHash('sha256').update(bytes).digest('hex')}`;}
+  const path=join(folder,'checkpoint.json');const checkpoint={mode:'personal',seed:'fixture',complete:false,results:[row]};const args={root,mode:'personal',seed:'fixture'};
+  await writeFile(path,JSON.stringify(checkpoint));assert.deepEqual((await loadCheckpoint(path,args)).results,[row]);
+  await writeFile(join(root,row.outcomes),'changed');await assert.rejects(()=>loadCheckpoint(path,args),/hash mismatch/);await writeFile(join(root,row.outcomes),'{}\n');
+  await writeFile(path,JSON.stringify({...checkpoint,results:[row,row]}));await assert.rejects(()=>loadCheckpoint(path,args),/Duplicate/);
+  await writeFile(path,JSON.stringify({...checkpoint,complete:true}));await assert.rejects(()=>loadCheckpoint(path,args),/completed/);
+ } finally {await rm(root,{recursive:true,force:true});}
+});
