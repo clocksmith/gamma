@@ -23,7 +23,7 @@ test("Markdown owns narrative; mechanics own ending conditions; player projectio
   assert.deepEqual(index.scenarios.map(({ surfaceBindings, ...s }) => s), [...scenarios].sort((a, b) => a.id.localeCompare(b.id, "en")));
   assert.deepEqual(JSON.parse(await read("dist/runtime/world-copy.json")), playerContent(worldCopy));
   assert.doesNotMatch(text, /```json|content\.worldCopy|scenario-backlog/);
-  const player = await read("dist/review/docs/world-and-institutions.md");
+  const player = await read("dist/docs/world-and-institutions.md");
   assert.doesNotMatch(player, /\$\{|<!--|Mechanic status|scenario-canon/);
   for (const ending of worldCopy.endings) assert.ok(player.includes(ending.text));
   const variables = JSON.parse(await read("content/data/variables.json"));

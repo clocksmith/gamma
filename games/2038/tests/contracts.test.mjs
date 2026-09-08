@@ -610,7 +610,7 @@ test("Headline deck preserves the original sixteen procedures", async () => {
 
 test("the tone constitution keeps darkness institutional rather than voyeuristic", async () => {
   const [world, thematicBible] = await Promise.all([
-    readFile(new URL("dist/review/docs/world-and-institutions.md", root), "utf8"),
+    readFile(new URL("dist/docs/world-and-institutions.md", root), "utf8"),
     readFile(new URL("world.md", root), "utf8")
   ]);
 
@@ -792,7 +792,7 @@ test("the selected lore inventory is complete and preserves era placement", asyn
     readJson("dist/runtime/factions.json"),
     readJson("dist/runtime/world-copy.json"),
     readFile(new URL("dist/docs/core-rules.md", root), "utf8"),
-    readFile(new URL("dist/review/docs/world-and-institutions.md", root), "utf8")
+    readFile(new URL("dist/docs/world-and-institutions.md", root), "utf8")
   ]);
 
   assert.equal(headlines.length, 24);

@@ -6,7 +6,7 @@ const required = [
   "AGENTS.md",
   "README.md",
   "dist/docs/core-rules.md",
-  "dist/review/docs/world-and-institutions.md",
+  "dist/docs/world-and-institutions.md",
   "dist/review/docs/optional-tactics.md",
   "docs/design-decisions.md",
   "docs/manufacturing-and-publishing-study.md",

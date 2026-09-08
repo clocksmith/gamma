@@ -146,15 +146,21 @@ test("public playtest publication is an allowlist with release identity and feed
     assert.match(rootIndex, /id="sources-title">Sources/);
     assert.doesNotMatch(rootIndex, /adaptive cybernetics|living watershed|world-primer/);
     assert.doesNotMatch(rootIndex, /turning cheap intelligence into infrastructure, authority/);
-    assert.doesNotMatch(rootIndex, /href="docs\/(world-and-institutions|card-reference|map-reference|component-reference)\.html"/);
+    assert.doesNotMatch(rootIndex, /href="docs\/(card-reference|map-reference|component-reference)\.html"/);
+    assert.match(rootIndex, /href="docs\/world-and-institutions\.html"/);
+    const publishedWorld = await readFile(resolve(outputRoot, "docs/world-and-institutions.html"), "utf8");
+    for (const era of ["Progress", "Capacity", "Authority", "Continuity"]) assert.ok(publishedWorld.includes(era));
+    assert.doesNotMatch(publishedWorld, /Research provenance|scenario-backlog|Master Scenario Canon|Writing contracts|world-guide/);
+    await assert.rejects(stat(resolve(outputRoot, "sources/world.md")), {code: "ENOENT"});
+    await assert.rejects(stat(resolve(outputRoot, "review/world-and-institutions.html")), {code: "ENOENT"});
     const docsIndex = await readFile(resolve(fixture.root, "dist/site/docs/index.html"), "utf8");
     assert.doesNotMatch(docsIndex, /world-primer|adaptive cybernetics/);
-    assert.doesNotMatch(docsIndex, /href="world-and-institutions\.html"/);
+    assert.match(docsIndex, /href="world-and-institutions\.html"/);
     const docsBody = docsIndex.split("<body>")[1];
     assert.equal((docsBody.match(/<ul\b/g) ?? []).length, 1);
-    assert.equal((docsBody.match(/<li>/g) ?? []).length, 1);
+    assert.equal((docsBody.match(/<li>/g) ?? []).length, 2);
     assert.doesNotMatch(docsBody, /<h[2-6]\b|<nav\b|<p\b|doc-card|Required play kit/);
-    const worldCompanion = await readFile(resolve(fixture.root, "dist/site/review/world-and-institutions.html"), "utf8");
+    const worldCompanion = await readFile(resolve(fixture.root, "dist/site/docs/world-and-institutions.html"), "utf8");
     for (const opening of [
       "Intelligence became cheap enough",
       "The public pool stayed warm",
@@ -193,8 +199,7 @@ test("public playtest publication is an allowlist with release identity and feed
       "docs/map-reference.html",
       "docs/component-reference.html",
       "docs/card-reference.html",
-      "docs/world-and-institutions.html",
-      "docs/manufacturing-and-publishing-study.html",
+            "docs/manufacturing-and-publishing-study.html",
       "docs/balance-and-exploitability.html",
       "docs/design-decisions.html",
       "docs/defect-investigation-and-closure.html",
@@ -270,7 +275,7 @@ test("internal review build remains complete but explicitly non-deployable", asy
     assert.match(rootIndex, /Complete content gallery/i);
     assert.doesNotMatch(rootIndex, /adaptive cybernetics|living watershed|world-primer/);
     assert.doesNotMatch(rootIndex, /turning cheap intelligence into infrastructure, authority/);
-    assert.match(rootIndex, /href="review\/world-and-institutions\.html"/);
+    assert.match(rootIndex, /href="docs\/world-and-institutions\.html"/);
   } finally {
     await rm(outputRoot, { recursive: true, force: true });
   }

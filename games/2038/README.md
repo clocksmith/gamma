@@ -32,7 +32,7 @@ This repository is a **prototype**, not a manufactured or published product.
   same component records and selected lore used by the browser game.
 - The browser’s First Game Guide teaches those rules interactively; it is an
   onboarding aid, not a second rules authority.
-- [World and Institutions](dist/review/docs/world-and-institutions.md) is the
+- [World and Institutions](dist/docs/world-and-institutions.md) is the
   optional setting companion for tone, Era fiction, and ending narratives.
 - The excluded Tactic module retains its complete contract in
   [Optional Tactic Rules](dist/review/docs/optional-tactics.md).

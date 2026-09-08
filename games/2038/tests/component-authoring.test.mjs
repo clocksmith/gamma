@@ -61,7 +61,7 @@ test("map, component and inventory readers reuse the rulebook's owned passages",
   assert.match(core, /Build the jurisdiction/);
   assert.ok(core.includes(stripSectionMarkers(resolveString(documentSection(source, "inventory"), context)).trim()), "Core Rules include the owned inventory");
   assert.doesNotMatch(core, /<!--|\/docs\/(map-reference|component-reference|card-reference)\.html/);
-  assert.deepEqual(graph.deploymentProfiles["public-playtest"].documents, ["core-rules.html"]);
+  assert.deepEqual(graph.deploymentProfiles["public-playtest"].documents, ["core-rules.html", "world-and-institutions.html"]);
   const cardReference = await read("dist/review/docs/card-reference.md");
   const {headlines} = JSON.parse(await read("dist/runtime/headlines.json"));
   for (const card of headlines) {

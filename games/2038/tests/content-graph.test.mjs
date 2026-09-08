@@ -66,7 +66,7 @@ test("semantic graph owns every player-facing construction surface", async () =>
     "dist/review/docs/map-reference.md",
     "dist/review/docs/component-reference.md",
     "dist/review/docs/card-reference.md",
-    "dist/review/docs/world-and-institutions.md",
+    "dist/docs/world-and-institutions.md",
     "dist/review/docs/optional-tactics.md",
     "dist/contracts/era-situation-ledger.json",
     "dist/runtime/game-config.json",
@@ -292,7 +292,7 @@ test("Card and Board Reference projects every other required card surface", asyn
 test("world companion owns four ordered Era overviews and references canonical Era identities", async () => {
   const { eraCards } = await readJson("dist/runtime/reference-cards.json");
   const variables = await readJson("content/data/variables.json");
-  const world = await readFile(new URL("dist/review/docs/world-and-institutions.md", root), "utf8");
+  const world = await readFile(new URL("dist/docs/world-and-institutions.md", root), "utf8");
   const source = await readFile(new URL("world.md", root), "utf8");
   const playerSource = Object.values(worldPassages(source)).join("\n");
   const chapters = [...world.matchAll(/^### Era ([IV]+): (.+)$/gm)];
@@ -347,7 +347,7 @@ test("Era overviews retain institutions and scenarios alongside authorized mecha
 
 test("ending descriptions retain four rule-owned outcomes without procedural prose", async () => {
   const { endings } = await readJson("dist/runtime/world-copy.json");
-  const world = await readFile(new URL("dist/review/docs/world-and-institutions.md", root), "utf8");
+  const world = await readFile(new URL("dist/docs/world-and-institutions.md", root), "utf8");
   const config = await readJson("dist/runtime/game-config.json");
   assert.deepEqual(endings.map((ending) => ending.name).sort(), Object.values(config.worldEnding.outcomes).sort());
   for (const ending of endings) {
@@ -433,7 +433,7 @@ test("Core Rules are compact while every moved authority has one table surface",
     readFile(new URL("dist/docs/core-rules.md", root), "utf8"),
     readFile(new URL("dist/review/docs/map-reference.md", root), "utf8"),
     readFile(new URL("dist/review/docs/component-reference.md", root), "utf8"),
-    readFile(new URL("dist/review/docs/world-and-institutions.md", root), "utf8"),
+    readFile(new URL("dist/docs/world-and-institutions.md", root), "utf8"),
     readFile(new URL("dist/review/docs/optional-tactics.md", root), "utf8"),
     readJson("dist/runtime/tactics.json")
   ]);

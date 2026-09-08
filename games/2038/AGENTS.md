@@ -32,8 +32,9 @@ systems and incentives, not jokes or allegations about real people.
   sections. Named excerpts also generate internal review references; those are
   not required player documents.
   `world.md` is an authoring document. A layout selects approved setting and Era
-  passages and compiled ending fields for the player companion. The whole bible
-  is never a player document. Internal means audience, not access control.
+  passages and compiled ending fields for the player companion. The selected companion is published as an optional narrative at
+  `/docs/world-and-institutions.html`; it is not required in the physical kit.
+  The whole bible is never a player document. Internal means audience, not access control.
 - The game has one ruleset: a static map, local Power, and the twenty-four current
   Headlines. There is no selectable rules profile, connected Network, Link,
   Power market, Realignment, or Volatility module. Simulation parameter research

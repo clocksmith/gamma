@@ -69,9 +69,8 @@ This is content provenance, not a complete dependency graph: rendering code,
 styles, image dependencies, and execution dependencies are outside its scope.
 Run `npm run content:build` to regenerate it; `npm run content:check` rejects drift.
 
-- `dist/docs/` contains the complete player rulebook.
-- `dist/review/docs/` contains generated review catalogs, extracts, the optional
-  lore companion, and the provenance map.
+- `dist/docs/` contains the complete player rulebook and optional world companion.
+- `dist/review/docs/` contains generated review catalogs, extracts, and the provenance map.
 - `dist/site/docs/` and `dist/site/review/` render player and review documents
   separately. The local reader serves these at `/docs/` and `/review/`.
 - `dist/firebase/public/` is the default player site; `dist/review/site/` is the
@@ -85,9 +84,9 @@ Templates and renderers assemble the declared outputs. Edit source content in
 its owning files; do not maintain a second handwritten path diagram.
 
 Generated outputs are not authoring locations. The public document list contains
-only the complete rulebook; cards and boards are published as baseline component
+the complete rulebook and selected world companion; cards and boards are published as baseline component
 masters. The browser uses the same compiled records. Internal review exposes the
-supplementary extracts, card catalog, optional lore companion, and design records.
+supplementary extracts, card catalog, and design records.
 They do not appear in the default player package. The physical candidate bundle
 contains the complete rulebook and printed Governance Board tracks. Authoring
 sources remain bound by the release content manifest, separately from player copy.
