@@ -1,0 +1,32 @@
+{
+  "schema": "gamma.enwiki9.reporting-validation.v1",
+  "date": "2026-09-08",
+  "scope": "Reporting only; no codec mutation or new corpus execution",
+  "objective_bytes": 90000000,
+  "sources": {
+    "tools/enwiki9_evidence_matrix.py": "222146e549062b0bfe6f57c49cbaddf9ef251d3884f27a86bc482327632d1906",
+    "tools/enwiki9_best_results.py": "8797a7f1a5cc205e34625e377f670873f9fbc70e28a5dfb795ffe64dd7524c61",
+    "tests/test_enwiki9_terminal_report_discovery.py": "29c1326b520bcac1cb68c1599af631ed1a80bef3bba448600c2e38a92a0a2fe0",
+    "tests/test_enwiki9_report_targets.py": "28ad87aa5c157b6b9b62b0c657e6b40f5115ab37857a8a88a5e42740813fd52a"
+  },
+  "validation": {
+    "command": "env PYTHONPATH=/home/x/deco/gamma PYTHONDONTWRITEBYTECODE=1 taskset -c 3 python3 -m unittest tests.test_enwiki9_result_discovery tests.test_enwiki9_terminal_report_discovery tests.test_enwiki9_report_targets tests.test_record_driver_result tests.test_objective90_migration -v",
+    "tests_passed": 41,
+    "exit_code": 0,
+    "best_results_check": "passed",
+    "evidence_matrix_check": "passed",
+    "doc_lint": "passed",
+    "diff_check": "passed"
+  },
+  "observed_report": {
+    "rows": 230,
+    "roundtrip_passing_rows": 62,
+    "unavailable_terminal_indexes": 3,
+    "unavailable_reason": "Historical indexes bind an earlier research_contracts.py; current-checkout validation reports source drift. Historical bindings were not changed.",
+    "population_grouping": "Raw input SHA256",
+    "unknown_package_cost": "Unknown, never zero",
+    "terminal_validation": "Existing record_driver_result.record_terminal(check_only=True), with all arm rows already recorded",
+    "full_corpus_qualification": "Existing upper-bound certificate obligations, not size and roundtrip alone"
+  },
+  "scientific_credit": "None; report discovery grants no compression or qualification claim"
+}

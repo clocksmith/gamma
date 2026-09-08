@@ -1,10 +1,10 @@
 # enwiki9
 
 Compression research toward exact reconstruction of canonical enwik9's
-1,000,000,000 bytes with a fully counted score at or below 99,000,000 bytes.
-The [active objective](contracts/research/v2/objective-contract.json) defines the
-proof. This is a provisional engineering target; the unchanged 105M objective
-remains historical. [Competitive provenance](operations/provenance/competitive_frontier_v1.json)
+1,000,000,000 bytes with a fully counted score at or below 90,000,000 bytes.
+The [active objective](contracts/research/v3/objective-contract.json) defines the
+proof. This is a provisional engineering target; the unchanged 105M and 99M
+objectives remain historical. [Competitive provenance](operations/provenance/competitive_frontier_v1.json)
 separates published submissions, the official record, and contingent thresholds.
 
 From `gamma/projects/enwiki9/`, begin with:

@@ -2,6 +2,213 @@
 
 [Record index](research_register/README.md) | [Earlier records](research_register/archive/README.md)
 
+## 2026-09-08 - Compact block replacement loses its native matched comparison
+
+The [terminal receipt](../operations/provenance/fx2_compact_v26_terminal_20260908.json)
+closes job `20260908T202406Z_5d61a00d99`: P/K archives are 3,223 bytes and
+D is 3,240 bytes. All exact raw inverses, deterministic repeats, 259,824-record
+coder trajectory comparisons and observed/unobserved archive checks pass.
+The selected compact403 block loses 17 archive bytes and adds 45,745 bytes to
+the overlapping local source/assets/binary/options inventory. That subtotal
+is not an official package score. D encoder/decoder CPU costs are 28.726/28.653
+seconds versus P 14.677/14.699; concurrent timing remains diagnostic.
+All resource guards pass with 6,779,830,272-byte cgroup peak, 14,796,629,769-byte
+logical scratch peak, one allowed CPU and closed children/cgroup removal.
+
+Posthoc aligned probability analysis finds 147,190 changed quantized events
+and 134.316 ideal bits lost; all chronological thirds lose. The archive loss
+therefore is not solely a framing effect. No internal submodel cause is isolated.
+The [validated reflection](../operations/adaptive/reflections/20260908T202406Z_5d61a00d99.json)
+retires this exact block replacement on the public fixture. Three canonical
+arm rows preserve its evidence. Do not scale it or rename it as an unchanged
+successor; retain the stronger original parent and select a distinct mechanism
+from measured costs. Full predictor-state certification, fresh transfer and
+complete-package qualification remain open. No 90M full-corpus score credit.
+
+## 2026-09-08 - Native FX2 compact block comparison frozen
+
+`root_explore` owns held job `20260908T202406Z_5d61a00d99` under the [154-input contract](../operations/adaptive/experiments/fx2_compact_v26_fixture50051_q0_v1.json).
+Five [native adapter/runner regressions](../operations/evidence/20260908_fx2_compact_v26_native_unit.json) pass. P/K retain431 outputs; D maps compact403 while preserving the trained transformer and frontend.
+CPU2, memory9,999,998,976 bytes, scratch24GB, zero swap and elapsed1,200 seconds bound three serial builds and all-arm encode/decode/repeat/unobserved comparisons on the public50,051-byte fixture.
+Publication and fresh admission precede execution. P/K retained identity, independent inverses, traces and package deltas are mandatory; complete predictor-state certification and any larger gate remain unproved.
+
+## 2026-09-08 - Compact FXCM bridge repairs a real probability-endpoint rejection
+
+The [interface receipt](../operations/provenance/fx2_compact_v26_bridge_v1_terminal.json)
+tests all 4,095 clipped raw values using the authenticated upstream squash
+function. Exactly 22 map to probability 1.0, which the historical Gamma v1
+adapter incorrectly rejects even though FX2 accepts these mixer inputs.
+The separately identified [v2 adapter](../lib/forge_fxcm_raw_adapter_v2.hpp)
+preserves every upstream float bit, accepts endpoints, rejects invalid values
+and leaves inactive outputs neutral. Synthetic P/K state and update parity
+passes 4,096 events; the bridge compiles against both real upstream interfaces.
+This is an implementation repair, not a native synchronization or archive claim.
+The prior native forge baseline did not use v1 and its receipt remains valid.
+
+The selected successor keeps FX2's trained transformer and replaces only its
+431-output FXCM block with compact403 v26 through an explicit P/K/D bridge.
+The whole-forge comparison cannot attribute those components independently.
+Next: freeze one native fixture comparison with original/bookkeeping identity,
+independent inversion, deterministic repeat, coder traces and package/resource
+costs. Full predictor-state certification remains open; no 90M score credit.
+
+## 2026-09-08 - Compact forge parent independently reconstructs and repeats
+
+The [terminal audit](../operations/provenance/forge_compact_fixture_terminal_20260908.json)
+records job `20260908T194717Z_2dbdc105ee`: 50,051 public profiling bytes become
+4,808 archive bytes, independently reconstruct and repeat byte-identically.
+The same raw fixture's retained native FX2 archive is 3,223 bytes: forge costs
+1,585 extra archive bytes. This compares different cold native parents, not an
+isolated structural mechanism or fresh confirmation. External authors retain
+their algorithm credit; Gamma supplies the reproduction and measurement.
+GCC builds the unchanged compact23/aux1/cells270 source into 373,720 bytes.
+Raw source/assets total 2,627,584 bytes; adding binary and options gives a
+3,001,984-byte overlapping local inventory, not a qualified submission package.
+Encoding, decoding and repeat use 38.993, 40.244 and 43.777 CPU seconds.
+The complete guard passes: one allowed CPU, 6,642,286,592-byte cgroup peak,
+14,690,369,525-byte logical scratch peak, and verified child cleanup.
+
+The initial 4GB scratch plan was cancelled before launch because the pinned
+PPM heap alone is 14,680,064,000 bytes. A second startup stopped before the
+codec when the guard saw inherited broad affinity; the unchanged candidate
+then ran with its coordinator pinned to CPU2 from process creation. Both
+failures and their reflections remain preserved. Five synthetic runner tests
+and both complete-source syntax checks pass. The validated terminal reflection
+retains this reproducible external baseline without authorizing a larger gate.
+Full predictor-state traces, source/runtime license closure, package accounting,
+independent-host replay and corpus transfer remain open. No 90M score credit.
+
+## 2026-09-08 - Forge parent source audit exposes the active prediction interface
+
+`root_explore` selected discovery lenses 3/9 after residual-ratio calibration
+failed its native archive gate. The [pinned source audit](../operations/provenance/forge_parent_source_audit_v1_terminal.json)
+authenticates 120 Git blobs at `11a25d3990460a55fdfd90d46edd82b0ab147e45`.
+The older full560 v26 test saved 20 bytes but missed its frozen 500-byte ceiling;
+its skipped inverse/repeat remains unknown. It is not evidence against every
+compact structural/lexical model or against a different native parent.
+Forge's compact23/aux1 has 403 outputs. Its legacy `Predict()` array is neutral;
+the live interface is `RawPredictions()` plus `ActivePredictions()` and the
+upstream probability mapping. The [Gamma adapter](../lib/forge_fxcm_raw_adapter_v1.hpp)
+compiles with the actual pinned upstream class and passes synthetic invalid-input,
+inactive-output, and exact-value tests. A compile-time check proves the selected
+403-output configuration. GCC syntax passes without dependencies installed.
+No upstream predictor or corpus was executed, and no Gamma gain is claimed.
+Next: one separately frozen direct-fixture parent roundtrip with complete
+source/dictionary/options inventory and measured resource costs; do not run the
+upstream installation, PGO, UPX or full-corpus pipeline automatically.
+
+## 2026-09-08 - Residual-ratio calibration passes synthetic inverse checks
+
+`root_explore` published [ownership and fixed controls](../operations/provenance/fx2_residual_ratio_synthetic_v1_plan.json)
+before implementation. Discovery lenses 8/9 select integer observed/expected
+symbol ratios, distinct from the retired NNCP output-bias midpoint update.
+That earlier configuration lost 1,604 bytes; it supplies no inherited gain.
+Forge-cmix remains an external parent research alternative, not a Gamma result.
+The new [reference component](../lib/residual_ratio_v1.py) learns only after
+complete decoded symbols, clips ratios, decays bounded histories, and validates
+pending checkpoints. The existing arithmetic fixture supplies the coder.
+[Retained fresh-process evidence](../results/fx2_residual_ratio_synthetic_v1/attempt01/receipt.json)
+passes nine tests and 24 encode/decode/repeat phases. Both fixtures contain
+1,024 synthetic raw bytes. Constant-byte P/K/D/S archives are 1,041/1,041/790/1,043;
+balanced-byte archives are 1,041/1,041/1,043/1,038. Every inverse, repeat,
+pre-truth probability and predictor-state boundary agrees within each arm.
+P/K archives and probabilities match. The balanced loss and favorable rotated
+control prevent interpreting synthetic activation as corpus evidence.
+Peak phase RSS is 22,593,536 bytes; retained artifacts before receipt are 109,892
+bytes. Python/runtime package accounting remains unresolved. No corpus ran.
+Next: a separately identified native FX2 adapter must resolve half-probability
+mapping, reproduce P/K, and measure actual P/K/D/S archives before promotion.
+HORIZON, MIDAS and measured codec sources remain unchanged; objective credit is zero.
+
+The [native boundary](../lib/fx2_residual_ratio_v1.hpp) now preserves original
+float32 P/K rows, including upstream half-conversion quirks, and applies a frozen
+Q16 multiplier for D/S. [Native evidence](../results/fx2_residual_ratio_native_v1/attempt01/receipt.json)
+passes seven tests, 4,160 exact-reference symbol updates and 24 fresh-process
+synthetic phases, reproducing the same toy archive sizes. The new source adapter
+passes real FX2 syntax checks with 461 recorded dependencies; no full native FX2
+build or roundtrip has run. The 5,457-byte component source is not a package score.
+Compiler `/tmp` quota failure is retained; an owned temporary directory resolves it.
+The [actual native fixture gate](../operations/adaptive/experiments/fx2_residual_ratio_fixture50051_q0_v1.json)
+is frozen and owned by `root_explore`: job `20260908T184428Z_97a71f959c`, CPU2,
+four arms, exact parent/coder/calibration-state checks and explicit component costs.
+The published gate built but failed before native encode: driver arm dispatch reloaded the stub, ignoring the supplied native module. The [reflection](../operations/adaptive/reflections/20260908T184428Z_97a71f959c.json) classifies an implementation failure. Its first terminal index has an abbreviated revision and is refused; the preserved failure is recorded in candidate metadata without archive claims. The [dispatch-only retry](../operations/adaptive/experiments/fx2_residual_ratio_fixture50051_q0_v2.json) retains the complete scientific comparison. Its synthetic dispatch regression checks three independent processes, inverse, repeat and artifact retention. Job `20260908T185901Z_3a15dbc589` remains held pending publication and admission.
+
+The dispatch retry reproduced P then rejected progress-prefixed activation text; its failure stays preserved. The corrected [v3 terminal comparison](../operations/provenance/fx2_ratio_fixture_terminal_20260908.json) yields P/K/D 3,223 bytes and S 3,236. All four inverse/repeats and complete introduced-state/coder traces match. D changes 64,583 quantized probabilities, loses 1.747438686 diagnostic ideal bits and saves zero archive bytes; added overlapping local components cost 22,746 bytes. Guards and cleanup pass. The [validated reflection](../operations/adaptive/reflections/20260908T190345Z_1e4e5a7eee.json) rejects only this fixed fixture realization. Four canonical rows are recorded; twelve raw traces publish as four hash-verified gzip objects. Next: diagnose measured prediction loss before one separately frozen successor; no larger replay or full-corpus credit.
+
+## 2026-09-08 - Compact field implementation and 90M objective
+
+The [v3 migration](../operations/provenance/objective90_migration_20260908.json)
+activates 90,000,000 complete bytes, preserving 105M and 99M contracts and frozen
+experiments. Four migration tests preserve historical digests and obligations.
+`root_explore` owns [opcode_field_compact_v1](../operations/adaptive/experiments/opcode_field_compact_v1.json):
+the same confirmed field rule and canonical decoder checks in 5,746 local source
+bytes, down from 15,403. [Seven synthetic tests](../operations/evidence/20260908_opcode_field_compact_unit.json)
+pass archive and complete shared-state parity; a retained 65-byte fixture has a
+27-byte exact repeatable archive. The [terminal parity receipt](../operations/provenance/opcode_field_compact_terminal_20260908.json)
+passes twelve phases: development 67,658 / validation 71,717 / confirmation 255,828
+archive bytes, exact inverses/repeats and retained shared-state identity. Guards
+and cleanup pass; no new archive saving is claimed. The [source ZIP comparison](../operations/provenance/opcode_field_source_zip_cost_20260908.json)
+measures parent 5,041 / compact 5,815 bytes with exact synthetic relocation.
+Twice the 774-byte increase is 1,548 bytes, exceeding the historical 1MB archive
+saving by seven bytes before other package costs. Complete accounting stays open.
+An independent [synthetic state probe](../results/opcode_wiki_state_diagnostic_20260908/attempt01/receipt.json)
+finds eight opcode/wiki-coordinate mismatches among eleven predefined strings;
+no corpus frequency or archive gain is claimed. The [validated reflection](../operations/adaptive/reflections/20260908T154100Z_6b9653a04d.json)
+selects [opcode_wiki_slot_v1](../operations/adaptive/experiments/opcode_wiki_slot_v1.json),
+owned by `root_explore`. Its [terminal gate](../operations/provenance/opcode_wiki_slot_terminal_20260908.json)
+passes ten phases: P/K 67,658 / D 67,601 bytes. The 57-byte gain does not pay the
+conditional 554-byte source charge. [Reset terminal](../operations/provenance/opcode_slot_reset_terminal_20260908.json): P/K 67,658 / D 67,626; gain32 versus conditional source charge270. [Calibration diagnostic](../operations/provenance/opcode_calibration_terminal_20260908.json): existing SSE helps fixed-parse literals by6,615.574 ideal bits, unchanged archive. Both reflections validate; scaling and SSE deletion remain held. Next independent predictor research.
+
+## 2026-09-08 - Opcode field repair confirms a 1,541-byte archive improvement
+
+`root_explore` owns [opcode_field_repair250k_q0_v1](../operations/adaptive/experiments/opcode_field_repair250k_q0_v1.json).
+It changes only the existing field coordinate after complete decoded XML opcode
+pairs. P retains bitmix, K computes unused bookkeeping, and D exposes that field;
+byte histories, model laws and copy search remain otherwise unchanged.
+The [26 synthetic tests](../operations/evidence/20260908_opcode_field_repair_unit.json)
+pass exact inversion, raw repeats, P/K identity, decoder-common witnesses,
+exception bounds and evidence-failure classification. A missing audit-count
+field failed the first synthetic attempt and was repaired before sealing.
+The [terminal comparison](../operations/provenance/opcode_field_repair_terminal_20260908.json)
+now records ten closed native phases: P/K are 67,959 bytes and D is 67,658.
+Independent inverses, raw-input repeats and prediction/state witnesses pass.
+The 301-byte archive gain is not a package gain: uncompressed decoder source
+increases by 10,562 bytes; complete package accounting remains unknown.
+
+The [baseline inventory](../operations/provenance/small_input_frontier_baselines_20260908.json)
+verifies retained opening250KB Deflate 89,041 and native FX2 33,429 byte archives.
+The gate reproduced the historical bitmix parent byte-for-byte. The
+[validated reflection](../operations/adaptive/reflections/20260908T133436Z_6b57b0e164.json)
+selects this unchanged codec for the separately reserved 250KB validation slice.
+`root_explore` owns `opcode_field_validation250k_q0_v1`; its transfer runner passes
+[22 synthetic tests](../operations/evidence/20260908_opcode_field_transfer_unit.json).
+The [validation terminal](../operations/provenance/opcode_field_validation_terminal_20260908.json)
+passes all ten phases: P/K 71,788 bytes, D 71,717, saving 71 archive bytes.
+Peak cgroup memory is 567,230,464 bytes and guard closure passes. The validated
+reflection selects the unchanged codec for reserved 1MB confirmation.
+The [reserved 1MB confirmation](../operations/provenance/opcode_field_confirmation_terminal_20260908.json)
+also closes all ten phases: P/K 257,369 bytes and D 255,828, saving 1,541.
+Independent inverses, repeats and shared-state checks pass; guard closure passes
+without violations. Its validated reflection retains the improvement and holds
+larger gates for package review. The current 10,562 additional uncompressed
+source bytes exceed this saving; complete package economics and full-corpus score
+remain unknown. These three sample gains are not summed into a codec score.
+
+The independently identified
+[reserved-sample comparator](../operations/adaptive/experiments/matched_frontier_reserved_q0_v1.json)
+reuses framed Deflate and the measured native FX2 adapter on the same validation
+and confirmation bytes. It adds no codec mutation. Ten synthetic tests pass.
+The [closed comparator](../operations/provenance/matched_frontier_reserved_terminal_20260908.json)
+passes all fourteen phases: validation Deflate 94,674 / FX2 35,464 bytes;
+confirmation Deflate 360,475 / FX2 131,238. All independent inverses and repeats
+pass, frozen source and native libraries rehash, and resource guards are clear.
+The aggregate cgroup peak is 5,999,730,688 bytes; native per-phase memory remains
+unmeasured. The [matched table](opcode_field_repair_v1.md) keeps sample identities,
+timings and package inventory separate. Field repair improves its own baseline
+but remains larger than supplied-model FX2 in archive bytes. Next assess a
+separately bound smaller implementation preserving its confirmed archives.
+Neither content deduplication nor a cold slice qualifies a complete package.
+
 ## 2026-09-07 - MIDAS opening250KB closes the missing boundary evidence
 
 The [terminal audit](../operations/provenance/midas_open_observed_sha_opening250k_terminal_20260907.json)
@@ -590,136 +797,3 @@ During preparation, admission rejected an attempted edit to the older bound
 observer documentation. ROOT restored its exact bytes before enqueueing and
 reverified all 238 distant-gate and 304 cost-gate input hashes. Executable
 sources and cached binaries were unchanged; current guidance stays here.
-
-## 2026-09-06 - MIDAS distant100KB passes exact observed transfer
-
-The [terminal audit](../operations/provenance/midas_open_observed_distant100k_terminal_20260906.json)
-closes all 16 phases. P/K produce 51,531 bytes, F 45,587, and S 50,882.
-F saves 5,944 bytes against P and 5,295 against S. All four raw inverses,
-repeated archives, fresh unobserved reference archives/final states, 800,000
-pre-truth probabilities and 3,127 boundary records pass their comparisons.
-The resource guard passes and the cgroup is removed. The [validated reflection](../operations/adaptive/reflections/20260906T143122Z_85238bbb11.json)
-permits a separately frozen 250KB gate after observation cost is measured under
-the unchanged native limits. Four new run rows bring the ledger to 1,001 unique
-identities. This previously examined cold population provides transfer evidence;
-complete-package, fresh-confirmation and full-corpus claims remain unproved.
-
-ROOT owns `midas_open_observed_distant100k_q0_v1`, initially held job
-`20260906T143122Z_85238bbb11`. The [plan](../operations/provenance/midas_open_observed_distant100k_q0_v1_plan.json)
-reuses the exact opening-gate codecs and 16-phase runner at canonical raw offset
-500,000,000 for 100,000 bytes, with cold causal initialization and all P/K/F/S
-controls. Its 238 inputs include the validated opening reflection. CPU2, 2GiB
-outer memory, 256MiB scratch, zero swap and 1,200-second aggregate stop are bound;
-native limits stay unchanged. F must beat P and S with complete boundary
-evidence. This is a transfer test on previously examined data, not a sealed
-holdout or full-score claim. Publication precedes release and execution.
-
-## 2026-09-06 - MIDAS opening100KB passes complete boundary observation
-
-The [terminal audit](../operations/provenance/midas_open_observed_opening100k_terminal_20260906.json)
-closes all 16 phases with passing resource guards. P/K archives are 52,661 bytes,
-F is 48,714, and S is 52,770. F saves 3,947 bytes against P and 4,056 against S.
-All four inverses and repeats pass; fresh unobserved reference archives and
-complete final states agree. Every same-arm 800,000-probability trace and 3,127
-boundary records match exactly. P/K authoritative projections agree.
-
-The [validated reflection](../operations/adaptive/reflections/20260906T135533Z_1c3e7bc7d3.json)
-selects a separately frozen distant100KB transfer gate. This opening population
-was examined before; package accounting, calibrated resources and full-1G
-performance remain unknown. Four corpus run rows retain zero full-score credit.
-The [record reconciliation](../operations/evidence/20260906_midas_observed_record_reconciliation.json)
-disambiguates identical P/K row IDs by arm while preserving all measured files
-and values. All 997 row IDs are unique; complete older register records move
-intact into the existing archive to keep the current register bounded.
-
-## 2026-09-06 - MIDAS observation cost gate frozen before execution
-
-ROOT owns `midas_open_observer_cost4096_q0_v1`, initially held job
-`20260906T133935Z_7bac5ae319`. The [runner tests](../operations/evidence/20260906_midas_open_observed_gate_unit.json)
-pass six synthetic cases, including probability divergence, missing boundary
-evidence, changed reference archives, and elapsed-budget exhaustion.
-The [frozen plan](../operations/provenance/midas_open_observer_cost4096_q0_v1_plan.json)
-binds a deterministic 4,096-byte synthetic population and both published cached
-codecs. Sixteen phases compare unchanged P/K/F/S encoding with independently
-observed encoding, decoding, and repeat encoding. CPU2, one thread, zero swap,
-2GiB outer memory, 256MiB scratch, 600-second aggregate and 120-second phase
-stops are explicit execution limits.
-
-This measures observation cost and exact archive/state parity. It supplies no
-corpus economics or full-score credit. Ownership and all frozen inputs must be
-published before release; HORIZON and measured codec sources remain unchanged.
-
-The [terminal audit](../operations/provenance/midas_open_observer_cost4096_terminal_20260906.json)
-now closes all 16 phases, 227 inputs and 157 required outputs. Every arm
-independently reconstructs and repeats; all reference archives, complete final
-states, 32,768 probabilities and 130 boundary records agree within their
-required comparisons. P/K authoritative projections agree. Each synthetic
-archive is 4,143 bytes; this gives no corpus compression evidence.
-
-Observed/reference encoder CPU ratios are P 3.039, K 2.613, F 2.257 and S 2.219.
-The guard passes with 50,470,912-byte sampled tree RSS and 25,883,922-byte sampled
-logical scratch. The validated reflection holds automatic promotion: measure a
-smaller frozen corpus synchronization gate or optimize observation before
-attempting opening250KB under the unchanged native 120-CPU-second cap. Four
-canonical run rows retain unknown complete-package and full-score values.
-
-ROOT next owns `midas_open_observed_opening100k_q0_v1`, initially held job
-`20260906T135533Z_1c3e7bc7d3`. Its [frozen plan](../operations/provenance/midas_open_observed_opening100k_q0_v1_plan.json)
-reuses both codecs and the same runner for 16 phases on canonical opening100KB.
-This previously examined population is a boundary-observation replay, not fresh
-confirmation data. The reduced scope follows measured observation overhead;
-native limits stay unchanged. F must beat both P and S with complete identity
-evidence before a separately frozen transfer gate. Complete-package and
-full-corpus qualification remain unresolved.
-
-ROOT is preparing an [observation-only SHA adapter](../operations/provenance/midas_observer_sha_source_v1.json)
-to the same sealed observer. It retains the attributed public upstream block
-routine and scalar fallback. Synthetic parity tests must pass before this
-unmeasured implementation can enter a separately frozen corpus gate.
-
-The [accelerated observer unit receipt](../operations/evidence/20260906_midas_open_boundary_observer_sha_unit.json)
-now records six passing tests: five inherited observer cases and 138 digest
-vectors checked against both the unchanged scalar routine and Python hashlib.
-Every retained archive, probability trace, boundary record, final state and
-snapshot matches the original observer across all P/K/F/S phases. The native
-binary is 437,128 bytes; 540 observer and 521 hash-fixture compiler dependencies
-were rehashed. The guard and child cleanup pass. This remains synthetic
-correctness evidence; corpus-scale observation cost still needs measurement.
-
-## 2026-09-06 - MIDAS boundary observability passes exact synthetic checks
-
-The [new observer](midas_open_boundary_observer_v1.md) wraps the unchanged native
-MIDAS codec and records every pre-truth probability plus complete serialized
-state at initialization, every 32 decoded bytes, and finalization. All five
-[synthetic regression tests](../operations/evidence/20260906_midas_open_boundary_observer_unit.json)
-pass on CPU2. P/K/F/S preserve the retained 105-byte archives of the 65-byte
-fixture; each independent decoder and repeat matches every probability,
-boundary record, complete state and exact snapshot. An independent parser
-checks all 17 component ranges, and identical malformed bundles cannot pass.
-
-The 432,528-byte observer executable and all 532 compiler dependencies are
-hash-bound. The aggregate guard passes and its cgroup is removed. This supplies
-observability code, not a corpus certificate or package qualification. The
-existing opening250KB gain remains held until a separately frozen successor
-measures these boundaries on corpus data. No measured MIDAS source changed.
-
-## 2026-09-06 - Schema transfer is exact but every block falls back
-
-The [terminal audit](../operations/provenance/wiki_schema_exact_transfer250k_terminal_20260906.json)
-closes all 24 phases of `wiki_schema_exact_transfer250k_q0_v2`. All P/L/D/C arms
-produce 111,159 bytes on opening250KB and 106,139 bytes on distant250KB; all eight
-inverses and repeats pass. ROOT independently reconstructs every baseline block
-and verifies its framing, hash, and exact accounting. Serialized dictionaries
-agree at all 62 block boundaries across every arm and phase.
-
-D proposes 454 opening and 337 distant references, but no grammar block is
-selected. Even the cheapest proposal exceeds its baseline by 168 opening bits
-or 88 distant bits. Archive saving is zero and selected C associations are
-inactive, leaving causal attribution inconclusive. This evidence concerns the
-tested cold-population realization and does not disprove grammatical structure.
-
-The [canonical decision](../results/wiki_schema_exact_transfer250k_q0_v2/decision.json)
-binds all 142 other required outputs. Its frozen aggregate rules yield both
-promotion and kill false, hence `retry`; the [validated reflection](../operations/adaptive/reflections/20260906T023145Z_eb44974e5c.json)
-holds work without an automatic rerun or 1M gate. Eight canonical ledger rows
-preserve unknown complete-package and full-score values.

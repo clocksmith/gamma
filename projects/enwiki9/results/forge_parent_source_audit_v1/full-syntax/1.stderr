@@ -1,0 +1,42 @@
+src/preprocess/preprocessor.cpp: In function 'void preprocessor::Encode(FILE*, FILE*, long long unsigned int, const std::string&, FILE*)':
+src/preprocess/preprocessor.cpp:223:22: warning: unused variable 'size' [-Wunused-variable]
+  223 |   unsigned long long size = n;
+      |                      ^~~~
+src/preprocess/preprocessor.cpp: In function 'int preprocessor::DecodeByte(FILE*, FILE*)':
+src/preprocess/preprocessor.cpp:247:21: warning: variable 'reset' set but not used [-Wunused-but-set-variable]
+  247 |   static int len=0, reset=0;
+      |                     ^~~~~
+In file included from src/preprocess/dictionary.h:5,
+                 from src/preprocess/dictionary.cpp:1:
+src/preprocess/../ds/emhash_map.hpp: In instantiation of 'void emhash6::HashMap<KeyT, ValueT, HashT, EqT>::rehash(uint64_t) [with KeyT = std::__cxx11::basic_string<char>; ValueT = unsigned int; HashT = std::hash<std::__cxx11::basic_string<char> >; EqT = std::equal_to<std::__cxx11::basic_string<char> >; uint64_t = long unsigned int]':
+src/preprocess/../ds/emhash_map.hpp:449:9:   required from 'void emhash6::HashMap<KeyT, ValueT, HashT, EqT>::init(emhash6::size_type, float) [with KeyT = std::__cxx11::basic_string<char>; ValueT = unsigned int; HashT = std::hash<std::__cxx11::basic_string<char> >; EqT = std::equal_to<std::__cxx11::basic_string<char> >; emhash6::size_type = unsigned int]'
+  449 |         rehash(bucket);
+      |         ^~~~~~
+src/preprocess/../ds/emhash_map.hpp:454:9:   required from 'emhash6::HashMap<KeyT, ValueT, HashT, EqT>::HashMap(emhash6::size_type, float) [with KeyT = std::__cxx11::basic_string<char>; ValueT = unsigned int; HashT = std::hash<std::__cxx11::basic_string<char> >; EqT = std::equal_to<std::__cxx11::basic_string<char> >; emhash6::size_type = unsigned int]'
+  454 |         init(bucket, lf);
+      |         ^~~~
+src/preprocess/dictionary.cpp:37:66:   required from here
+   37 | Dictionary::Dictionary(FILE* dictionary, bool encode, bool decode) {
+      |                                                                  ^
+src/preprocess/../ds/emhash_map.hpp:1271:15: warning: 'void* memset(void*, int, size_t)' writing to an object of type 'emhash6::HashMap<std::__cxx11::basic_string<char>, unsigned int>::PairT' {aka 'struct emhash6::entry<std::__cxx11::basic_string<char>, unsigned int>'} with no trivial copy-assignment [-Wclass-memaccess]
+ 1271 |         memset(_pairs, -1, sizeof(_pairs[0]) * num_buckets);
+      |         ~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+src/preprocess/../ds/emhash_map.hpp:160:8: note: 'emhash6::HashMap<std::__cxx11::basic_string<char>, unsigned int>::PairT' {aka 'struct emhash6::entry<std::__cxx11::basic_string<char>, unsigned int>'} declared here
+  160 | struct entry {
+      |        ^~~~~
+src/preprocess/../ds/emhash_map.hpp: In instantiation of 'void emhash6::HashMap<KeyT, ValueT, HashT, EqT>::rehash(uint64_t) [with KeyT = unsigned int; ValueT = std::__cxx11::basic_string<char>; HashT = std::hash<unsigned int>; EqT = std::equal_to<unsigned int>; uint64_t = long unsigned int]':
+src/preprocess/../ds/emhash_map.hpp:449:9:   required from 'void emhash6::HashMap<KeyT, ValueT, HashT, EqT>::init(emhash6::size_type, float) [with KeyT = unsigned int; ValueT = std::__cxx11::basic_string<char>; HashT = std::hash<unsigned int>; EqT = std::equal_to<unsigned int>; emhash6::size_type = unsigned int]'
+  449 |         rehash(bucket);
+      |         ^~~~~~
+src/preprocess/../ds/emhash_map.hpp:454:9:   required from 'emhash6::HashMap<KeyT, ValueT, HashT, EqT>::HashMap(emhash6::size_type, float) [with KeyT = unsigned int; ValueT = std::__cxx11::basic_string<char>; HashT = std::hash<unsigned int>; EqT = std::equal_to<unsigned int>; emhash6::size_type = unsigned int]'
+  454 |         init(bucket, lf);
+      |         ^~~~
+src/preprocess/dictionary.cpp:37:66:   required from here
+   37 | Dictionary::Dictionary(FILE* dictionary, bool encode, bool decode) {
+      |                                                                  ^
+src/preprocess/../ds/emhash_map.hpp:1271:15: warning: 'void* memset(void*, int, size_t)' writing to an object of type 'emhash6::HashMap<unsigned int, std::__cxx11::basic_string<char> >::PairT' {aka 'struct emhash6::entry<unsigned int, std::__cxx11::basic_string<char> >'} with no trivial copy-assignment [-Wclass-memaccess]
+ 1271 |         memset(_pairs, -1, sizeof(_pairs[0]) * num_buckets);
+      |         ~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+src/preprocess/../ds/emhash_map.hpp:160:8: note: 'emhash6::HashMap<unsigned int, std::__cxx11::basic_string<char> >::PairT' {aka 'struct emhash6::entry<unsigned int, std::__cxx11::basic_string<char> >'} declared here
+  160 | struct entry {
+      |        ^~~~~

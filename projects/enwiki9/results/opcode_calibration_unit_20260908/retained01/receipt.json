@@ -1,0 +1,205 @@
+{
+  "archive_bytes": 23,
+  "archive_saving_bytes": 0,
+  "artifacts": {
+    "archive": {
+      "bytes": 23,
+      "path": "results/opcode_calibration_unit_20260908/retained01/K.arc",
+      "sha256": "e928841d2d0b07e4c44c9352aee34e1c21ce296fe3fda1a9694ca7008a850b69"
+    },
+    "repeat": {
+      "bytes": 23,
+      "path": "results/opcode_calibration_unit_20260908/retained01/K.repeat.arc",
+      "sha256": "e928841d2d0b07e4c44c9352aee34e1c21ce296fe3fda1a9694ca7008a850b69"
+    },
+    "restored": {
+      "bytes": 294,
+      "path": "results/opcode_calibration_unit_20260908/retained01/K.raw",
+      "sha256": "3e40dc439c627f84c5aba61321a2fc0b378ebe49baa824eaac95f5e7da0a598a"
+    }
+  },
+  "audit": {
+    "coded_literal_bits": 80,
+    "diagnostic_event_sha256": "7b038bdf8a2b740e7b890900b2e289729d5634818895ef7fe5eb92aac1f8b409",
+    "interpretation": "Positive excess means calibration worsens fixed-parse literal log loss. Copied-bit losses are hypothetical. No counterfactual archive or rigorous rounding certificate.",
+    "literal_sse_excess_bits": -0.5582240835909895,
+    "modes": [
+      "literal",
+      "raw-copy",
+      "chain-copy"
+    ],
+    "observed_bits": 912,
+    "parent": {
+      "arithmetic_events": 99,
+      "arithmetic_sha256": "dfae516f859a8b63adae5f53098d8e3e8cc06f42d4e43fb100e90100ed95d2c1",
+      "checkpoints": [
+        {
+          "arithmetic_events": 99,
+          "arithmetic_sha256": "dfae516f859a8b63adae5f53098d8e3e8cc06f42d4e43fb100e90100ed95d2c1",
+          "modeled_bytes": 114,
+          "predictor_bits": 912,
+          "probability_sha256": "74d97314e663a0f2e6403f7b4695109bd4cced290ec8314f319ae86af91545f5",
+          "transition_sha256": "81f52c985a3529641aa0a1682bc87e6238ce572a27044d6c835b0cd67fae4f84"
+        }
+      ],
+      "excluded_state": [
+        "Encoder prefix-cost pass and raw-match search table",
+        "Pristine cost-only count allocations",
+        "Direction-specific arithmetic IO; decoder shadow verifies canonical payload"
+      ],
+      "field_byte_counts": [
+        18,
+        0,
+        0,
+        0,
+        0,
+        0,
+        96
+      ],
+      "initialization": "Authenticated parent source defaults and explicit arm field policy",
+      "lookup_tables_sha256": "8f7ae35245ebb0f2fb7da8d8f53e726fc9542a92549a3e8bb28f1eaadc0b8c78",
+      "modeled_bytes": 114,
+      "parent_projection_sha256": "364b604fe46a1a65b05e0bc3b3c456d489eabcc4b300be69c242187be196cb61",
+      "predictor_bits": 912,
+      "probability_sha256": "74d97314e663a0f2e6403f7b4695109bd4cced290ec8314f319ae86af91545f5",
+      "schema": "gamma.enwiki9.opcode-field-audit.v1",
+      "terminal_common_state_bytes": 71358,
+      "terminal_common_state_sha256": "364b604fe46a1a65b05e0bc3b3c456d489eabcc4b300be69c242187be196cb61",
+      "transition_sha256": "81f52c985a3529641aa0a1682bc87e6238ce572a27044d6c835b0cd67fae4f84",
+      "witness_scope": "All shared prediction/update events; final shared state. SHA256 witnesses, not full intermediate snapshots."
+    },
+    "rows": [
+      {
+        "bits": 24,
+        "calibrated_loss_bits": 20.96360805410837,
+        "changed_bits": 0,
+        "field": 0,
+        "mixed_loss_bits": 20.96360805410837,
+        "mode": 0,
+        "sse_excess_bits": 0.0
+      },
+      {
+        "bits": 56,
+        "calibrated_loss_bits": 52.73805151263885,
+        "changed_bits": 24,
+        "field": 6,
+        "mixed_loss_bits": 53.29627559622983,
+        "mode": 0,
+        "sse_excess_bits": -0.5582240835909895
+      },
+      {
+        "bits": 72,
+        "calibrated_loss_bits": 44.85082174217705,
+        "changed_bits": 13,
+        "field": 6,
+        "mixed_loss_bits": 45.17751939865513,
+        "mode": 1,
+        "sse_excess_bits": -0.3266976564780826
+      },
+      {
+        "bits": 120,
+        "calibrated_loss_bits": 47.871834587779404,
+        "changed_bits": 44,
+        "field": 0,
+        "mixed_loss_bits": 45.69338685977137,
+        "mode": 2,
+        "sse_excess_bits": 2.178447728008033
+      },
+      {
+        "bits": 640,
+        "calibrated_loss_bits": 150.8757361365808,
+        "changed_bits": 526,
+        "field": 6,
+        "mixed_loss_bits": 154.68384329487066,
+        "mode": 2,
+        "sse_excess_bits": -3.8081071582898187
+      }
+    ],
+    "schema": "gamma.enwiki9.opcode-calibration-audit.v1"
+  },
+  "commands": [
+    {
+      "argv": [
+        "/usr/bin/python3",
+        "/home/x/deco/gamma/projects/enwiki9/tools/opcode_calibration_observe_v1.py",
+        "encode",
+        "/home/x/deco/gamma/projects/enwiki9/results/opcode_calibration_unit_20260908/retained01/input.raw",
+        "/home/x/deco/gamma/projects/enwiki9/results/opcode_calibration_unit_20260908/retained01/K.arc",
+        "--candidate-root",
+        "/home/x/deco/gamma/projects/enwiki9/programs/opcode_calibration_cost_v1",
+        "--audit",
+        "/home/x/deco/gamma/projects/enwiki9/results/opcode_calibration_unit_20260908/retained01/encode.audit.json"
+      ],
+      "codec_resources": {
+        "cpu_seconds": 0.033988079000000004,
+        "elapsed_seconds": 0.033454082906246185,
+        "output_bytes": 23,
+        "peak_process_rss_kib": 25040
+      },
+      "elapsed_seconds": 0.11603794014081359,
+      "error": null,
+      "phase": "encode",
+      "returncode": 0,
+      "system_cpu_seconds": 0.009970999999999999,
+      "timeout": false,
+      "timing_authority": "shared-host diagnostic",
+      "user_cpu_seconds": 0.059829
+    },
+    {
+      "argv": [
+        "/usr/bin/python3",
+        "/home/x/deco/gamma/projects/enwiki9/tools/opcode_calibration_observe_v1.py",
+        "decode",
+        "/home/x/deco/gamma/projects/enwiki9/results/opcode_calibration_unit_20260908/retained01/K.arc",
+        "/home/x/deco/gamma/projects/enwiki9/results/opcode_calibration_unit_20260908/retained01/K.raw",
+        "--candidate-root",
+        "/home/x/deco/gamma/projects/enwiki9/programs/opcode_calibration_cost_v1",
+        "--audit",
+        "/home/x/deco/gamma/projects/enwiki9/results/opcode_calibration_unit_20260908/retained01/decode.audit.json"
+      ],
+      "codec_resources": {
+        "cpu_seconds": 0.024987355000000003,
+        "elapsed_seconds": 0.02452231221832335,
+        "output_bytes": 294,
+        "peak_process_rss_kib": 24688
+      },
+      "elapsed_seconds": 0.06607087119482458,
+      "error": null,
+      "phase": "decode",
+      "returncode": 0,
+      "system_cpu_seconds": 0.0059840000000000015,
+      "timeout": false,
+      "timing_authority": "shared-host diagnostic",
+      "user_cpu_seconds": 0.05584799999999999
+    },
+    {
+      "argv": [
+        "/usr/bin/python3",
+        "/home/x/deco/gamma/projects/enwiki9/tools/opcode_calibration_observe_v1.py",
+        "encode",
+        "/home/x/deco/gamma/projects/enwiki9/results/opcode_calibration_unit_20260908/retained01/K.raw",
+        "/home/x/deco/gamma/projects/enwiki9/results/opcode_calibration_unit_20260908/retained01/K.repeat.arc",
+        "--candidate-root",
+        "/home/x/deco/gamma/projects/enwiki9/programs/opcode_calibration_cost_v1",
+        "--audit",
+        "/home/x/deco/gamma/projects/enwiki9/results/opcode_calibration_unit_20260908/retained01/repeat.audit.json"
+      ],
+      "codec_resources": {
+        "cpu_seconds": 0.033976407,
+        "elapsed_seconds": 0.03352779196575284,
+        "output_bytes": 23,
+        "peak_process_rss_kib": 24680
+      },
+      "elapsed_seconds": 0.11635252111591399,
+      "error": null,
+      "phase": "repeat",
+      "returncode": 0,
+      "system_cpu_seconds": 0.005977999999999997,
+      "timeout": false,
+      "timing_authority": "shared-host diagnostic",
+      "user_cpu_seconds": 0.064761
+    }
+  ],
+  "correctness_pass": true,
+  "literal_sse_excess_bits": -0.5582240835909895
+}

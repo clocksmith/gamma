@@ -1,0 +1,65 @@
+test_budget_stop_is_distinct (__main__.GateTests.test_budget_stop_is_distinct) ... ok
+test_missing_mandatory_audit_blocks (__main__.GateTests.test_missing_mandatory_audit_blocks) ... ok
+test_optional_telemetry_is_explicitly_missing (__main__.GateTests.test_optional_telemetry_is_explicitly_missing) ... ERROR
+test_side_state_divergence_is_retained (__main__.GateTests.test_side_state_divergence_is_retained) ... FAIL
+test_ten_fresh_phases_and_complete_controls (__main__.GateTests.test_ten_fresh_phases_and_complete_controls) ... ERROR
+test_wrong_retained_parent_fails (__main__.GateTests.test_wrong_retained_parent_fails) ... ok
+
+======================================================================
+ERROR: test_optional_telemetry_is_explicitly_missing (__main__.GateTests.test_optional_telemetry_is_explicitly_missing)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/x/deco/gamma/projects/enwiki9/tests/test_opcode_wiki_slot_gate_v1.py", line 51, in test_optional_telemetry_is_explicitly_missing
+    with patch.object(gate.phase,'run_phase',side_effect=missing):result=self.run_gate()
+                                                                         ~~~~~~~~~~~~~^^
+  File "/home/x/deco/gamma/projects/enwiki9/tests/test_opcode_wiki_slot_gate_v1.py", line 33, in run_gate
+    return gate.run_comparison(self.out,self.plan,self.snapshot,self.base/'phases.jsonl',self.limits)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/x/deco/gamma/projects/enwiki9/tools/opcode_wiki_slot_gate_v1.py", line 100, in run_comparison
+    run(arm+'-encode','encode',raw,arc,arm,audits['encode'])
+    ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/x/deco/gamma/projects/enwiki9/tools/opcode_wiki_slot_gate_v1.py", line 92, in run
+    require_phase(record, (directory/(label+'.stderr')).read_text(errors='replace'))
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/x/deco/gamma/projects/enwiki9/tools/opcode_field_compact_gate_v1.py", line 99, in require_phase
+    require(record['returncode']==0,'codec phase failed')
+    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/x/deco/gamma/projects/enwiki9/tools/dualstream_grammar_v1.py", line 46, in require
+    raise CodecError(message)
+tools.dualstream_grammar_v1.CodecError: codec phase failed
+
+======================================================================
+ERROR: test_ten_fresh_phases_and_complete_controls (__main__.GateTests.test_ten_fresh_phases_and_complete_controls)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/x/deco/gamma/projects/enwiki9/tests/test_opcode_wiki_slot_gate_v1.py", line 36, in test_ten_fresh_phases_and_complete_controls
+    result=self.run_gate()
+  File "/home/x/deco/gamma/projects/enwiki9/tests/test_opcode_wiki_slot_gate_v1.py", line 33, in run_gate
+    return gate.run_comparison(self.out,self.plan,self.snapshot,self.base/'phases.jsonl',self.limits)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/x/deco/gamma/projects/enwiki9/tools/opcode_wiki_slot_gate_v1.py", line 100, in run_comparison
+    run(arm+'-encode','encode',raw,arc,arm,audits['encode'])
+    ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/x/deco/gamma/projects/enwiki9/tools/opcode_wiki_slot_gate_v1.py", line 92, in run
+    require_phase(record, (directory/(label+'.stderr')).read_text(errors='replace'))
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/x/deco/gamma/projects/enwiki9/tools/opcode_field_compact_gate_v1.py", line 99, in require_phase
+    require(record['returncode']==0,'codec phase failed')
+    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/x/deco/gamma/projects/enwiki9/tools/dualstream_grammar_v1.py", line 46, in require
+    raise CodecError(message)
+tools.dualstream_grammar_v1.CodecError: codec phase failed
+
+======================================================================
+FAIL: test_side_state_divergence_is_retained (__main__.GateTests.test_side_state_divergence_is_retained)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/x/deco/gamma/projects/enwiki9/tests/test_opcode_wiki_slot_gate_v1.py", line 72, in test_side_state_divergence_is_retained
+    self.assertTrue((self.out/'K-decode-state.divergence.json').exists())
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: False is not true
+
+----------------------------------------------------------------------
+Ran 6 tests in 1.690s
+
+FAILED (failures=1, errors=2)

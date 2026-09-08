@@ -19,7 +19,7 @@ SCOPES = [1_000_000_000, 100_000_000, 10_000_000, 1_000_000, 250_000]
 
 def row_table(rows: list[evidence.Row]) -> list[str]:
     lines = [
-        "| Program | Mechanism | Score | Archive | Program bytes | b/B | Determinism | Result |",
+        "| Program / arm | Mechanism | Local subtotal | Archive | Program bytes | b/B | Determinism | Result |",
         "|---|---|---:|---:|---:|---:|---|---|",
     ]
     for row in rows:
@@ -28,7 +28,7 @@ def row_table(rows: list[evidence.Row]) -> list[str]:
             "| "
             + " | ".join(
                 [
-                    f"`{row.program_id}`",
+                    f"`{row.program_id}{':'+row.arm if row.arm else ''}`",
                     evidence.mechanism_hint(row.program_id),
                     evidence.fmt_int(row.score),
                     evidence.fmt_int(row.compressed_size),
@@ -43,36 +43,47 @@ def row_table(rows: list[evidence.Row]) -> list[str]:
     return lines
 
 
-def section(rows: list[evidence.Row], scope: int, top_limit: int) -> list[str]:
+def population_section(rows: list[evidence.Row], scope: int, top_limit: int) -> list[str]:
     score_rows = evidence.top_rows(rows, scope, "score", top_limit)
     archive_rows = evidence.top_rows(rows, scope, "archive", top_limit)
-    lines = ["", f"## Scope `{evidence.fmt_int(scope)}` Bytes", ""]
+    lines = []
     if not score_rows and not archive_rows:
         lines.extend(
             [
-                "No roundtrip-passing result JSONs are present for this scope in this checkout.",
+                "No eligible rows for this population.",
                 "",
             ]
         )
         return lines
 
     if score_rows:
-        lines.extend(["### Best Local Scores", ""])
+        lines.extend(["**Smallest known local subtotals**", ""])
         lines.extend(row_table(score_rows))
         lines.append("")
     if archive_rows:
-        lines.extend(["### Best Archives", ""])
+        lines.extend(["**Smallest archives (package cost reported separately)**", ""])
         lines.extend(row_table(archive_rows))
         lines.append("")
     return lines
 
 
-def render(rows: list[evidence.Row], top_limit: int) -> str:
+def section(rows: list[evidence.Row], scope: int, top_limit: int) -> list[str]:
+    scoped = [r for r in rows if r.roundtrip_ok and r.data_size == scope]
+    lines = ["", f"## Scope `{evidence.fmt_int(scope)}` Bytes", ""]
+    if not scoped:
+        return lines + ["No roundtrip-passing result JSONs are present for this scope in this checkout.", ""]
+    for digest in sorted({r.data_sha256 for r in scoped}):
+        lines += [f"### Population `{digest}`" if digest else "### Unidentified legacy population (not a matched comparison)", ""]
+        lines += population_section([r for r in scoped if r.data_sha256 == digest], scope, top_limit)
+    return lines
+
+
+def render(rows: list[evidence.Row], top_limit: int, issues: list[str] | tuple[str, ...] = ()) -> str:
     exact = [row for row in rows if row.roundtrip_ok]
     lines = [
         "# enwiki9 Best Results",
         "",
-        "Generated from exact result JSON files present in this checkout.",
+        "Generated from tracked legacy results and reviewed terminal indexes in this checkout.",
         "",
         "Claim rule:",
         "",
@@ -80,6 +91,8 @@ def render(rows: list[evidence.Row], top_limit: int) -> str:
         "Rows here are artifact-backed only for their measured scope.",
         f"No prefix row proves {evidence.TARGET_PERCENT:.7f}%.",
         "No forecast or metadata-inherited row is included.",
+        "Unknown package cost stays unknown. Local subtotals are not complete submission scores.",
+        "Populations are grouped by raw-input SHA256; compare matched controls in each receipt.",
         "```",
         "",
         f"- Result JSON files scanned: `{len(rows)}`",
@@ -89,6 +102,8 @@ def render(rows: list[evidence.Row], top_limit: int) -> str:
     ]
     for scope in SCOPES:
         lines.extend(section(rows, scope, top_limit))
+    if issues:
+        lines += ["", "## Unavailable terminal evidence", "", *[f"- {issue}" for issue in issues]]
     return "\n".join(lines).rstrip() + "\n"
 
 
@@ -100,8 +115,9 @@ def main() -> int:
     parser.add_argument("--check", action="store_true")
     args = parser.parse_args()
 
-    rows = evidence.iter_rows(args.results_dir)
-    rendered = render(rows, max(1, args.top_limit))
+    issues: list[str] = []
+    rows = evidence.iter_rows(args.results_dir, issues)
+    rendered = render(rows, max(1, args.top_limit), issues)
     if args.check:
         try:
             current = args.out.read_text()

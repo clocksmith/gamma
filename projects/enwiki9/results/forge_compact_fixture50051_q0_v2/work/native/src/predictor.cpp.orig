@@ -1,0 +1,796 @@
+#include "predictor.h"
+#include "profile-timer.h"
+#include <vector>
+#include <stdlib.h>
+#include <stdio.h>
+#include <cstdlib>
+
+#if defined(__linux__) && FX3_ENABLE_ANON_THP_ADVISE
+#include <cstdint>
+#include <cstring>
+#include <sys/mman.h>
+#include <unistd.h>
+#endif
+
+#ifndef FX3_LSTM_CELLS
+#define FX3_LSTM_CELLS 200
+#endif
+#ifndef FX3_LSTM_LAYERS
+#define FX3_LSTM_LAYERS 1
+#endif
+#ifndef FX3_LSTM_HORIZON
+#define FX3_LSTM_HORIZON 128
+#endif
+#ifndef FX3_LSTM_LR
+#define FX3_LSTM_LR 0.03f
+#endif
+#ifndef FX3_LSTM_CLIP
+#define FX3_LSTM_CLIP 10.0f
+#endif
+#ifndef FX3_BYTE_MIXER_OUTPUT_EPS
+#define FX3_BYTE_MIXER_OUTPUT_EPS 0.0f
+#endif
+#ifndef FX3_BYTE_MIXER_EXACT_OVERRIDE
+#define FX3_BYTE_MIXER_EXACT_OVERRIDE 1
+#endif
+#ifndef FX3_LSTM_LOWPROB_CONTEXT_THRESHOLD
+#define FX3_LSTM_LOWPROB_CONTEXT_THRESHOLD 0.0f
+#endif
+#ifndef FX3_LSTM_LOWPROB_CONTEXT_BUCKETS
+#define FX3_LSTM_LOWPROB_CONTEXT_BUCKETS 0
+#endif
+#ifndef FX3_LSTM_LOWPROB_CONTEXT_LR
+#define FX3_LSTM_LOWPROB_CONTEXT_LR 0.001f
+#endif
+#ifndef FX3_LSTM_MIXER_CONTEXT_BUCKETS
+#define FX3_LSTM_MIXER_CONTEXT_BUCKETS 0
+#endif
+#ifndef FX3_LSTM_MIXER_CONTEXT_LR
+#define FX3_LSTM_MIXER_CONTEXT_LR 0.0005f
+#endif
+#ifndef FX3_AUX_CONTEXT_MODE
+#define FX3_AUX_CONTEXT_MODE 0
+#endif
+#ifndef FX3_AUX_DISAGREE_BUCKETS
+#define FX3_AUX_DISAGREE_BUCKETS 8
+#endif
+#ifndef FX3_LAYER1_LR
+#define FX3_LAYER1_LR 0.0003f
+#endif
+#ifndef FX3_LAYER1_FXCM_INPUT_SCALE
+#define FX3_LAYER1_FXCM_INPUT_SCALE 1.0f
+#endif
+#ifndef FX3_LAYER1_BYTE_MIXER_INPUT_SCALE
+#define FX3_LAYER1_BYTE_MIXER_INPUT_SCALE 1.0f
+#endif
+#ifndef FX3_LAYER1_LSTM_CONTEXT_BUCKETS
+#define FX3_LAYER1_LSTM_CONTEXT_BUCKETS 0
+#endif
+#ifndef FX3_ENABLE_MAINLINE_WORD_PACK
+#define FX3_ENABLE_MAINLINE_WORD_PACK 0
+#endif
+#ifndef FX3_ENABLE_MAINLINE_MATCH_PACK
+#define FX3_ENABLE_MAINLINE_MATCH_PACK 0
+#endif
+#ifndef FX3_ENABLE_MAINLINE_DIRECT_PACK
+#define FX3_ENABLE_MAINLINE_DIRECT_PACK 0
+#endif
+#ifndef FX3_ENABLE_FXCM_V26
+#define FX3_ENABLE_FXCM_V26 0
+#endif
+#ifndef FX3_ENABLE_HEAP_THP_ADVISE
+#define FX3_ENABLE_HEAP_THP_ADVISE 0
+#endif
+#ifndef FX3_ENABLE_ANON_THP_ADVISE
+#define FX3_ENABLE_ANON_THP_ADVISE 0
+#endif
+#if FX3_ENABLE_ANON_THP_ADVISE != 0 && FX3_ENABLE_ANON_THP_ADVISE != 1
+#error "FX3_ENABLE_ANON_THP_ADVISE must be 0 or 1"
+#endif
+#if FX3_LSTM_LAYERS < 1 || FX3_LSTM_LAYERS > 4
+#error "FX3_LSTM_LAYERS must be in [1, 4]"
+#endif
+#if FX3_ENABLE_MAINLINE_WORD_PACK != 0 && FX3_ENABLE_MAINLINE_WORD_PACK != 1
+#error "FX3_ENABLE_MAINLINE_WORD_PACK must be 0 or 1"
+#endif
+#if FX3_ENABLE_MAINLINE_MATCH_PACK != 0 && FX3_ENABLE_MAINLINE_MATCH_PACK != 1
+#error "FX3_ENABLE_MAINLINE_MATCH_PACK must be 0 or 1"
+#endif
+#if FX3_ENABLE_MAINLINE_DIRECT_PACK != 0 && FX3_ENABLE_MAINLINE_DIRECT_PACK != 1
+#error "FX3_ENABLE_MAINLINE_DIRECT_PACK must be 0 or 1"
+#endif
+#if FX3_ENABLE_FXCM_V26 != 0 && FX3_ENABLE_FXCM_V26 != 1
+#error "FX3_ENABLE_FXCM_V26 must be 0 or 1"
+#endif
+#if FX3_BYTE_MIXER_EXACT_OVERRIDE != 0 && FX3_BYTE_MIXER_EXACT_OVERRIDE != 1
+#error "FX3_BYTE_MIXER_EXACT_OVERRIDE must be 0 or 1"
+#endif
+static_assert(FX3_BYTE_MIXER_OUTPUT_EPS >= 0.0f &&
+              FX3_BYTE_MIXER_OUTPUT_EPS < 0.5f,
+              "FX3_BYTE_MIXER_OUTPUT_EPS must be in [0, 0.5)");
+static_assert(FX3_LSTM_LOWPROB_CONTEXT_THRESHOLD >= 0.0f &&
+              FX3_LSTM_LOWPROB_CONTEXT_THRESHOLD <= 1.0f,
+              "FX3_LSTM_LOWPROB_CONTEXT_THRESHOLD must be in [0, 1]");
+static_assert(FX3_LSTM_LOWPROB_CONTEXT_BUCKETS >= 0,
+              "FX3_LSTM_LOWPROB_CONTEXT_BUCKETS must be >= 0");
+static_assert(FX3_LSTM_LOWPROB_CONTEXT_LR > 0.0f,
+              "FX3_LSTM_LOWPROB_CONTEXT_LR must be > 0");
+static_assert(FX3_LSTM_MIXER_CONTEXT_BUCKETS >= 0 &&
+              FX3_LSTM_MIXER_CONTEXT_BUCKETS <= 16,
+              "FX3_LSTM_MIXER_CONTEXT_BUCKETS must be in [0, 16]");
+static_assert(FX3_LSTM_MIXER_CONTEXT_LR > 0.0f,
+              "FX3_LSTM_MIXER_CONTEXT_LR must be > 0");
+static_assert(FX3_AUX_CONTEXT_MODE >= 0 && FX3_AUX_CONTEXT_MODE <= 1,
+              "FX3_AUX_CONTEXT_MODE must be 0 or 1");
+static_assert(FX3_AUX_DISAGREE_BUCKETS >= 2 &&
+              FX3_AUX_DISAGREE_BUCKETS <= 32,
+              "FX3_AUX_DISAGREE_BUCKETS must be in [2, 32]");
+static_assert(FX3_LAYER1_LR > 0.0f, "FX3_LAYER1_LR must be > 0");
+static_assert(FX3_LAYER1_FXCM_INPUT_SCALE >= 0.0f,
+              "FX3_LAYER1_FXCM_INPUT_SCALE must be >= 0");
+static_assert(FX3_LAYER1_BYTE_MIXER_INPUT_SCALE >= 0.0f,
+              "FX3_LAYER1_BYTE_MIXER_INPUT_SCALE must be >= 0");
+static_assert(FX3_LAYER1_LSTM_CONTEXT_BUCKETS >= 0 &&
+              FX3_LAYER1_LSTM_CONTEXT_BUCKETS <= 16,
+              "FX3_LAYER1_LSTM_CONTEXT_BUCKETS must be in [0, 16]");
+
+namespace {
+
+void AdviseAnonymousTransparentHugePages() {
+#if defined(__linux__) && FX3_ENABLE_ANON_THP_ADVISE
+  constexpr std::size_t kMinimumMappingBytes = 2u * 1024u * 1024u;
+  FILE* maps = std::fopen("/proc/self/maps", "r");
+  if (maps == nullptr) {
+    std::fprintf(stderr, "FX3_ANON_THP status=OPEN_FAILED\n");
+    return;
+  }
+  char line[512];
+  std::vector<std::pair<std::uintptr_t, std::size_t>> ranges;
+  const long page = sysconf(_SC_PAGESIZE);
+  const std::uintptr_t page_size =
+      page > 0 ? static_cast<std::uintptr_t>(page) : 4096u;
+  while (std::fgets(line, sizeof(line), maps) != nullptr) {
+    unsigned long start = 0;
+    unsigned long end = 0;
+    unsigned long offset = 0;
+    unsigned long inode = 0;
+    unsigned int device_major = 0;
+    unsigned int device_minor = 0;
+    char permissions[5] = {};
+    char path[512] = {};
+    const int fields = std::sscanf(line, "%lx-%lx %4s %lx %x:%x %lu %511[^\n]",
+        &start, &end, permissions, &offset, &device_major, &device_minor,
+        &inode, path);
+    if (fields < 7 || std::strcmp(permissions, "rw-p") != 0 || end <= start) {
+      continue;
+    }
+    char* label = path;
+    while (*label == ' ' || *label == '\t') ++label;
+    const bool is_private_anonymous = fields == 7;
+    const bool is_heap = fields == 8 && std::strcmp(label, "[heap]") == 0;
+    if (!is_private_anonymous && !is_heap) continue;
+
+    const std::uintptr_t aligned_start =
+        (static_cast<std::uintptr_t>(start) + page_size - 1u) & ~(page_size - 1u);
+    const std::uintptr_t aligned_end =
+        static_cast<std::uintptr_t>(end) & ~(page_size - 1u);
+    const std::size_t length = aligned_end > aligned_start
+        ? static_cast<std::size_t>(aligned_end - aligned_start) : 0u;
+    if (length >= kMinimumMappingBytes) ranges.emplace_back(aligned_start, length);
+  }
+  std::fclose(maps);
+
+  std::size_t advised_bytes = 0;
+  std::size_t advised_mappings = 0;
+  std::size_t failed_mappings = 0;
+  for (const auto& range : ranges) {
+    if (madvise(reinterpret_cast<void*>(range.first), range.second,
+                MADV_HUGEPAGE) == 0) {
+      advised_bytes += range.second;
+      ++advised_mappings;
+    } else {
+      ++failed_mappings;
+    }
+  }
+  std::fprintf(stderr,
+      "FX3_ANON_THP status=%s mappings=%zu bytes=%zu failed=%zu\n",
+      failed_mappings == 0 && advised_mappings > 0 ? "OK" : "FAILED",
+      advised_mappings, advised_bytes, failed_mappings);
+#endif
+}
+
+}  // namespace
+
+Predictor::Predictor(const std::vector<bool>& vocab) : manager_(),
+    sigmoid_(100001), vocab_(vocab) {
+#if FX3_ENABLE_FXCM_V26
+  fxcm_neutral_input_ = sigmoid_.Logit(0.5f);
+  for (int raw = -2047; raw <= 2047; ++raw) {
+    float p = fxcm_model_.RawPredictionProbability(static_cast<short>(raw));
+    if (p < 1.0e-4f) p = 1.0e-4f;
+    else if (p > 1.0f - 1.0e-4f) p = 1.0f - 1.0e-4f;
+    fxcm_stretched_inputs_[raw + 2047] = sigmoid_.Logit(p);
+  }
+  fxcm_stretched_inputs_[4095] = fxcm_neutral_input_;
+#endif
+  AddBracket();
+  AddPPMD();
+  AddWord();
+#if FX3_ENABLE_MAINLINE_DIRECT_PACK
+  AddDirect();
+#endif
+  AddMatch();
+  AddDoubleIndirect();
+  AddMixers();
+  AdviseAnonymousTransparentHugePages();
+  auxiliary_size_ = 2;
+}
+
+unsigned long long Predictor::GetNumModels() {
+  unsigned long long num = 0;
+
+  // models
+  num += bracket_model_->NumOutputs(); // bracket
+  num += fxcm_model_.NumOutputs();
+  num += direct_models_.size();
+#if FX3_ENABLE_MAINLINE_DIRECT_PACK
+  num += direct_hash_models_.size();
+#endif
+  num += match_models_.size();
+  num += indirect_ns_models_.size();
+  num += indirect_r_models_.size();
+  num += byte_model_->NumOutputs();
+  num += byte_mixer_->NumOutputs();
+  return num;
+}
+
+void Predictor::AddMixer(int layer, const unsigned long long& context,
+    float learning_rate) {
+  if (layer == 0) {
+    mixer_0_.emplace_back(
+        layers_[layer].Inputs(), layers_[layer].ExtraInputs(), context,
+      learning_rate, mixer_0_.size());
+  } else {
+    mixer_1_.emplace_back(
+        layers_[layer].Inputs(), layers_[layer].ExtraInputs(), context,
+      learning_rate, mixer_1_.size());
+  }
+}
+
+void Predictor::AddBracket() {
+  bracket_model_.emplace(manager_.bit_context_, 200, 10, 100000, vocab_);
+  const Context& context = manager_.AddBracketContext(manager_.bit_context_, 256, 15);
+  direct_models_.emplace_back(context.GetContext(), manager_.bit_context_, 30, 0,
+      context.Size());
+  indirect_ns_models_.emplace_back(manager_.nonstationary_, context.GetContext(),
+      manager_.bit_context_, 300, manager_.shared_map_);
+}
+
+void Predictor::AddPPMD() {
+  byte_model_.emplace(25, 14000, manager_.bit_context_, vocab_);
+}
+
+void Predictor::AddWord() {
+  float delta = 200;
+  std::vector<std::vector<unsigned int>> model_params = {
+  {0},
+   {0, 1},
+      {1},
+      {1, 2},
+      {1, 3},
+       {2, 3},
+       {3, 4},
+      {1, 2, 4},
+      {2, 3, 4},
+       {2}
+      };
+#if FX3_ENABLE_MAINLINE_WORD_PACK
+  // Re-enables the sparse word contexts present in mainline cmix but pruned
+  // from FX3. They share the existing map and are therefore cheap to gate.
+  model_params.push_back({7, 2});
+  model_params.push_back({7});
+  model_params.push_back({1, 2, 3});
+  model_params.push_back({1, 4});
+  model_params.push_back({1, 5});
+  model_params.push_back({1, 2, 3, 4});
+  model_params.push_back({1, 2, 3, 4, 5});
+  model_params.push_back({1, 2, 3, 4, 5, 6});
+#endif
+  for (const auto& params : model_params) {
+    const Context& context = manager_.AddSparseContext(manager_.words_, params);
+    indirect_ns_models_.emplace_back(manager_.nonstationary_, context.GetContext(),
+        manager_.bit_context_, delta, manager_.shared_map_);
+  }
+
+  std::vector<std::vector<unsigned int>> model_params2 = {
+  {0},
+      {1},
+      {1, 3},
+       {1, 2, 3},
+       {7, 2}};
+#if FX3_ENABLE_MAINLINE_WORD_PACK
+  model_params2.push_back({7});
+#endif
+  for (const auto& params : model_params2) {
+    const Context& context = manager_.AddSparseContext(manager_.words_, params);
+    match_models_.emplace_back(manager_.history_, context.GetContext(),
+        manager_.bit_context_, 200, 0.5, 2000000, &(manager_.longest_match_));
+    if (params[0] == 1 && params.size() == 1) {
+      indirect_r_models_.emplace_back(manager_.run_map_, context.GetContext(),
+          manager_.bit_context_, delta, manager_.shared_map_);
+    }
+  }
+}
+
+#if FX3_ENABLE_MAINLINE_DIRECT_PACK
+void Predictor::AddDirect() {
+  float delta = 0;
+  int limit = 30;
+  std::vector<std::vector<int>> model_params = {{0, 8}, {1, 8}, {2, 8}, {3, 8}};
+  for (const auto& params : model_params) {
+    const Context& context = manager_.AddContextHashContext(
+        manager_.bit_context_, params[0], params[1]);
+    if (params[0] < 3) {
+      direct_models_.emplace_back(context.GetContext(), manager_.bit_context_,
+          limit, delta, context.Size());
+    } else {
+      direct_hash_models_.emplace_back(context.GetContext(), manager_.bit_context_,
+          limit, delta, 100000);
+    }
+  }
+}
+#endif
+
+void Predictor::AddMatch() {
+  float delta = 0.5;
+  int limit = 200;
+  unsigned long long max_size = 2000000;
+  std::vector<std::vector<int>> model_params = {
+  {0, 8},
+  {1, 8},
+  {7, 4},
+      {11, 3},
+      {13, 2},
+  };
+#if FX3_ENABLE_MAINLINE_MATCH_PACK
+  // Keeps FX3's bounded 2M match maps while restoring mainline's omitted
+  // long-range context selectors one by one behind a gate macro.
+  model_params.push_back({2, 8});
+  model_params.push_back({15, 2});
+  model_params.push_back({17, 2});
+  model_params.push_back({20, 1});
+  model_params.push_back({25, 1});
+#endif
+
+  for (const auto& params : model_params) {
+    const Context& context = manager_.AddContextHashContext(manager_.bit_context_,params[0], params[1]);
+    match_models_.emplace_back(manager_.history_, context.GetContext(),
+        manager_.bit_context_, limit, delta, std::min(max_size, context.Size()),
+        &(manager_.longest_match_));
+  }
+}
+
+void Predictor::AddDoubleIndirect() {
+  float delta = 400;
+  indirect_ns_models_.emplace_back(manager_.nonstationary_, manager_.ind1,  manager_.bit_context_, delta, manager_.shared_map_);
+  indirect_ns_models_.emplace_back(manager_.nonstationary_, manager_.ind2,  manager_.bit_context_, delta, manager_.shared_map_);
+  indirect_ns_models_.emplace_back(manager_.nonstationary_, manager_.ind3,  manager_.bit_context_, delta, manager_.shared_map_);
+  indirect_ns_models_.emplace_back(manager_.nonstationary_, manager_.ind5,  manager_.bit_context_, delta, manager_.shared_map_);
+}
+unsigned int Discretize(float p) {
+  return 1 + 4094 * p;
+}
+
+static unsigned long long LowProbContextState(float actual_prob,
+    bool actual_in_vocab) {
+  if (!actual_in_vocab || FX3_LSTM_LOWPROB_CONTEXT_BUCKETS <= 1 ||
+      FX3_LSTM_LOWPROB_CONTEXT_THRESHOLD <= 0.0f ||
+      actual_prob >= FX3_LSTM_LOWPROB_CONTEXT_THRESHOLD) {
+    return 0;
+  }
+  float severity = (FX3_LSTM_LOWPROB_CONTEXT_THRESHOLD - actual_prob) /
+      FX3_LSTM_LOWPROB_CONTEXT_THRESHOLD;
+  if (severity < 0.0f) severity = 0.0f;
+  if (severity > 1.0f) severity = 1.0f;
+  unsigned long long state = 1 + static_cast<unsigned long long>(
+      severity * (FX3_LSTM_LOWPROB_CONTEXT_BUCKETS - 1));
+  if (state >= FX3_LSTM_LOWPROB_CONTEXT_BUCKETS) {
+    state = FX3_LSTM_LOWPROB_CONTEXT_BUCKETS - 1;
+  }
+  return state;
+}
+
+void Predictor::AddMixers() {
+  unsigned int vocab_size = 0;
+  for (unsigned int i = 0; i < vocab_.size(); ++i) {
+    if (vocab_[i]) ++vocab_size;
+  }
+  byte_mixer_.emplace(1, manager_.bit_context_, vocab_,
+      vocab_size, new Lstm(vocab_size, vocab_size, FX3_LSTM_CELLS,
+      FX3_LSTM_LAYERS,
+      FX3_LSTM_HORIZON, FX3_LSTM_LR, FX3_LSTM_CLIP));
+
+  for (int i = 0; i < 2; ++i) {
+    layers_.emplace_back(sigmoid_,
+        1.0e-4);
+  }
+
+  unsigned long long input_size = GetNumModels();
+  std::cout << "num models " << input_size << "\n";
+  layers_[0].SetNumModels(input_size);
+
+  AddMixer(0, manager_.mx9, 0.005);
+  AddMixer(0, manager_.mx10, 0.0005);
+  AddMixer(0, manager_.mx11, 0.005);
+  AddMixer(0, manager_.mx12, 0.0005);
+  AddMixer(0, manager_.mx13, 0.005);
+  AddMixer(0, manager_.mxx, 0.001);
+  AddMixer(0, manager_.recent_bytes_[2], 0.002);
+  AddMixer(0, manager_.line_break_, 0.0007);
+  AddMixer(0, manager_.longest_match_, 0.0005);
+  AddMixer(0, manager_.mx19cxt, 0.002);
+  AddMixer(0, manager_.auxiliary_context_, 0.0005);
+  AddMixer(0, manager_.mx18, 0.001);
+  AddMixer(0,manager_.mx7, 0.001);
+  AddMixer(0, manager_.wordscxt, 0.005);
+  AddMixer(0, manager_.b2streamcxt, 0.001);
+  AddMixer(0, manager_.mx5, 0.001);
+  AddMixer(0, manager_.mx6, 0.005);
+  AddMixer(0, manager_.b3streamcxt, 0.001);
+  AddMixer(0, manager_.mx8, 0.001);
+  AddMixer(0, manager_.mx17, 0.005);
+  AddMixer(0, manager_.mx16, 0.005);
+  AddMixer(0, manager_.mx14, 0.005);
+  AddMixer(0, manager_.mx15, 0.005);
+#ifdef ENABLE_TEMPLATE_PHASE_CONTEXT
+#if TEMPLATE_PHASE_MICROCORE_MODE
+  std::cout << "Template-phase microcore contexts enabled\n";
+#else
+  std::cout << "Template-phase automaton contexts enabled\n";
+#endif
+#ifndef TEMPLATE_PHASE_MAIN_MIXER_LR
+#define TEMPLATE_PHASE_MAIN_MIXER_LR 0.00022
+#endif
+#ifndef TEMPLATE_PHASE_SHAPE_MIXER_LR
+#define TEMPLATE_PHASE_SHAPE_MIXER_LR 0.00016
+#endif
+#ifndef DISABLE_TEMPLATE_PHASE_MAIN_MIXER
+  AddMixer(0, manager_.template_phase_context_, TEMPLATE_PHASE_MAIN_MIXER_LR);
+#endif
+#ifndef DISABLE_TEMPLATE_PHASE_SHAPE_MIXER
+  AddMixer(0, manager_.template_phase_shape_context_, TEMPLATE_PHASE_SHAPE_MIXER_LR);
+#endif
+#endif
+  if (FX3_LSTM_LOWPROB_CONTEXT_BUCKETS > 1 &&
+      FX3_LSTM_LOWPROB_CONTEXT_THRESHOLD > 0.0f) {
+    AddMixer(0, manager_.lstm_lowprob_context_, FX3_LSTM_LOWPROB_CONTEXT_LR);
+  }
+  if (FX3_LSTM_MIXER_CONTEXT_BUCKETS > 1) {
+    AddMixer(0, manager_.lstm_mixer_context_, FX3_LSTM_MIXER_CONTEXT_LR);
+  }
+
+  input_size = mixer_0_.size() + auxiliary_size_;
+  layers_[1].SetNumModels(input_size);
+
+  if (FX3_LAYER1_LSTM_CONTEXT_BUCKETS > 1) {
+    AddMixer(1, manager_.lstm_mixer_context_, FX3_LAYER1_LR);
+  } else {
+    AddMixer(1, manager_.zero_context_, FX3_LAYER1_LR);
+  }
+
+  layers_[0].SetExtraInputSize(mixer_0_.size());
+
+}
+int lstmpr=0, lstmex=0;
+float byte_mixer_output=0.0f;
+float Predictor::Predict() {
+  FX3_PROFILE_SCOPE("predictor.predict.total");
+  unsigned int input_index = 0;
+  auto bracket_model_output = bracket_model_->Predict()[0];
+  layers_[0].SetInput(input_index++, bracket_model_output);
+
+#if FX3_ENABLE_FXCM_V26
+  const unsigned int fxcm_model_outputs = fxcm_model_.NumOutputs();
+  const short* fxcm_raw_outputs = fxcm_model_.RawPredictions();
+  unsigned int fxcm_active_outputs = fxcm_model_.ActivePredictions();
+  if (fxcm_active_outputs > fxcm_model_outputs) {
+    fxcm_active_outputs = fxcm_model_outputs;
+  }
+  for (unsigned int j = 0; j < fxcm_active_outputs; ++j) {
+    layers_[0].SetStretchedInput(
+        input_index, fxcm_stretched_inputs_[fxcm_raw_outputs[j] + 2047]);
+    ++input_index;
+  }
+  for (unsigned int j = fxcm_active_outputs; j < fxcm_model_outputs; ++j) {
+    layers_[0].SetStretchedInput(input_index, fxcm_neutral_input_);
+    ++input_index;
+  }
+#else
+  const auto& fxcm_model_outputs = fxcm_model_.Predict();
+  for (unsigned int j = 0; j < fxcm_model_outputs.size(); ++j) {
+    layers_[0].SetInput(input_index, fxcm_model_outputs[j]);
+    ++input_index;
+  }
+#endif
+  auto fxcm_model_index = input_index - 1;
+
+
+  for (unsigned int i = 0; i < direct_models_.size(); ++i) {
+    const std::valarray<float>& outputs = direct_models_[i].Predict();
+    for (unsigned int j = 0; j < outputs.size(); ++j) {
+      layers_[0].SetInput(input_index, outputs[j]);
+      ++input_index;
+    }
+  }
+#if FX3_ENABLE_MAINLINE_DIRECT_PACK
+  for (unsigned int i = 0; i < direct_hash_models_.size(); ++i) {
+    const std::valarray<float>& outputs = direct_hash_models_[i].Predict();
+    for (unsigned int j = 0; j < outputs.size(); ++j) {
+      layers_[0].SetInput(input_index, outputs[j]);
+      ++input_index;
+    }
+  }
+#endif
+
+  for (unsigned int i = 0; i < match_models_.size(); ++i) {
+    const std::valarray<float>& outputs = match_models_[i].Predict();
+    for (unsigned int j = 0; j < outputs.size(); ++j) {
+      layers_[0].SetInput(input_index, outputs[j]);
+      ++input_index;
+    }
+  }
+
+  for (unsigned int i = 0; i < indirect_ns_models_.size(); ++i) {
+    const std::valarray<float>& outputs = indirect_ns_models_[i].Predict();
+    for (unsigned int j = 0; j < outputs.size(); ++j) {
+      layers_[0].SetInput(input_index, outputs[j]);
+      ++input_index;
+    }
+  }
+
+ for (unsigned int i = 0; i < indirect_r_models_.size(); ++i) {
+    const std::valarray<float>& outputs = indirect_r_models_[i].Predict();
+    for (unsigned int j = 0; j < outputs.size(); ++j) {
+      layers_[0].SetInput(input_index, outputs[j]);
+      ++input_index;
+    }
+  }
+  layers_[0].SetInput(input_index++, byte_model_->Predict()[0]);
+
+  float byte_mixer_override = -1;
+
+  if (FX3_BYTE_MIXER_EXACT_OVERRIDE &&
+      (byte_mixer_output == 0 || byte_mixer_output == 1)) {
+    byte_mixer_override = byte_mixer_output;
+  }
+  layers_[0].SetInput(input_index++, byte_mixer_output);
+  auto byte_mixer_index = input_index - 1;
+  if (FX3_LSTM_MIXER_CONTEXT_BUCKETS > 1 ||
+      FX3_LAYER1_LSTM_CONTEXT_BUCKETS > 1) {
+    float confidence = byte_mixer_output >= 0.5f
+        ? (byte_mixer_output - 0.5f) * 2.0f
+        : (0.5f - byte_mixer_output) * 2.0f;
+    if (confidence < 0.0f) confidence = 0.0f;
+    if (confidence > 1.0f) confidence = 1.0f;
+    const unsigned long long context_buckets =
+        FX3_LAYER1_LSTM_CONTEXT_BUCKETS > 1
+            ? FX3_LAYER1_LSTM_CONTEXT_BUCKETS
+            : FX3_LSTM_MIXER_CONTEXT_BUCKETS;
+    unsigned long long bucket = static_cast<unsigned long long>(
+        confidence * context_buckets);
+    if (bucket >= context_buckets) {
+      bucket = context_buckets - 1;
+    }
+    const unsigned long long sign = byte_mixer_output >= 0.5f ? 1 : 0;
+    manager_.lstm_mixer_context_ =
+        (bucket * 2 + sign) * 256 + manager_.long_bit_context_;
+  }
+
+  float fxcm_probability = Sigmoid::Logistic(layers_[0].Inputs()[fxcm_model_index]);
+  float byte_mixer_probability =
+      Sigmoid::Logistic(layers_[0].Inputs()[byte_mixer_index]);
+  if (FX3_AUX_CONTEXT_MODE == 1) {
+    float disagreement = byte_mixer_probability - fxcm_probability;
+    const unsigned long long sign = disagreement >= 0.0f ? 1 : 0;
+    if (disagreement < 0.0f) disagreement = -disagreement;
+    if (disagreement > 1.0f) disagreement = 1.0f;
+    unsigned long long bucket = static_cast<unsigned long long>(
+        disagreement * FX3_AUX_DISAGREE_BUCKETS);
+    if (bucket >= FX3_AUX_DISAGREE_BUCKETS) {
+      bucket = FX3_AUX_DISAGREE_BUCKETS - 1;
+    }
+    manager_.auxiliary_context_ =
+        (bucket * 2 + sign) * 256 + manager_.long_bit_context_;
+  } else {
+    float auxiliary_average = fxcm_probability + byte_mixer_probability;
+    auxiliary_average /= auxiliary_size_;
+    manager_.auxiliary_context_ = auxiliary_average * 15;
+  }
+
+  for (unsigned int i = 0; i < mixer_0_.size(); ++i) {
+    float p = mixer_0_[i].Mix();
+    layers_[0].SetExtraInput(i, p);
+    layers_[1].SetStretchedInput(i, p);
+  }
+  layers_[1].SetStretchedInput(
+      mixer_0_.size(),
+      layers_[0].Inputs()[fxcm_model_index] * FX3_LAYER1_FXCM_INPUT_SCALE);
+  layers_[1].SetStretchedInput(
+      mixer_0_.size() + 1,
+      layers_[0].Inputs()[byte_mixer_index] *
+          FX3_LAYER1_BYTE_MIXER_INPUT_SCALE);
+
+  float p = Sigmoid::Logistic(mixer_1_[0].Mix());
+  p = sse_.Predict(p);
+  if (byte_mixer_override >= 0) {
+    return byte_mixer_override;
+  }
+  return p;
+}
+
+void Predictor::Perceive(int bit) {
+  FX3_PROFILE_SCOPE("predictor.perceive.total");
+  bracket_model_->Perceive(bit);
+
+  for (unsigned int i = 0; i < direct_models_.size(); ++i) {
+    direct_models_[i].Perceive(bit);
+  }
+#if FX3_ENABLE_MAINLINE_DIRECT_PACK
+  for (unsigned int i = 0; i < direct_hash_models_.size(); ++i) {
+    direct_hash_models_[i].Perceive(bit);
+  }
+#endif
+  for (unsigned int i = 0; i < match_models_.size(); ++i) {
+    match_models_[i].Perceive(bit);
+  }
+  for (unsigned int i = 0; i < indirect_ns_models_.size(); ++i) {
+    indirect_ns_models_[i].Perceive(bit);
+  }
+  for (unsigned int i = 0; i < indirect_r_models_.size(); ++i) {
+    indirect_r_models_[i].Perceive(bit);
+  }
+
+  byte_model_->Perceive(bit);
+
+  byte_mixer_->Perceive(bit);
+
+  for (auto& mixer: mixer_0_) {
+    mixer.Perceive(bit);
+  }
+  for (auto& mixer: mixer_1_) {
+    mixer.Perceive(bit);
+  }
+
+  sse_.Perceive(bit);
+
+  bool byte_update = false;
+  if (manager_.bit_context_ >= 128) byte_update = true;
+
+  manager_.UpdateContexts(bit);
+  if (byte_update) {
+    FX3_PROFILE_SCOPE("predictor.byte_update_block");
+    bracket_model_->ByteUpdate();
+
+    for (unsigned int i = 0; i < direct_models_.size(); ++i) {
+      direct_models_[i].ByteUpdate();
+    }
+#if FX3_ENABLE_MAINLINE_DIRECT_PACK
+    for (unsigned int i = 0; i < direct_hash_models_.size(); ++i) {
+      direct_hash_models_[i].ByteUpdate();
+    }
+#endif
+    for (unsigned int i = 0; i < match_models_.size(); ++i) {
+      match_models_[i].ByteUpdate();
+    }
+    for (unsigned int i = 0; i < indirect_ns_models_.size(); ++i) {
+      indirect_ns_models_[i].ByteUpdate();
+    }
+
+    for (unsigned int i = 0; i < indirect_r_models_.size(); ++i) {
+      indirect_r_models_[i].ByteUpdate();
+    }
+
+    byte_model_->ByteUpdate();
+
+    const std::valarray<float>& p = byte_model_->BytePredict();
+    {
+      FX3_PROFILE_SCOPE("predictor.byte_mixer_set_inputs");
+      for (unsigned int j = 0; j < 256; ++j) {
+        byte_mixer_->SetInput(j,p[j]);
+      }
+    }
+
+    byte_mixer_->ByteUpdate();
+    manager_.lstm_lowprob_state_ = LowProbContextState(
+        byte_mixer_->LastActualProb(), byte_mixer_->LastActualInVocab());
+    manager_.lstm_lowprob_context_ =
+        manager_.lstm_lowprob_state_ * 256 + manager_.long_bit_context_;
+
+  }
+  byte_mixer_output = byte_mixer_->Predict()[0];
+  if (FX3_BYTE_MIXER_OUTPUT_EPS > 0.0f) {
+    if (byte_mixer_output < FX3_BYTE_MIXER_OUTPUT_EPS) {
+      byte_mixer_output = FX3_BYTE_MIXER_OUTPUT_EPS;
+    }
+    if (byte_mixer_output > 1.0f - FX3_BYTE_MIXER_OUTPUT_EPS) {
+      byte_mixer_output = 1.0f - FX3_BYTE_MIXER_OUTPUT_EPS;
+    }
+  }
+  lstmpr=Discretize(byte_mixer_output);
+  lstmex=byte_mixer_->ex;
+  fxcm_model_.Perceive(bit);
+  if (byte_update)manager_.bit_context_ = 1;
+}
+
+void Predictor::Pretrain(int bit) {
+  FX3_PROFILE_SCOPE("predictor.pretrain.total");
+  bracket_model_->Predict();
+  fxcm_model_.Predict();
+
+  for (unsigned int i = 0; i < direct_models_.size(); ++i) {
+    direct_models_[i].Predict();
+  }
+#if FX3_ENABLE_MAINLINE_DIRECT_PACK
+  for (unsigned int i = 0; i < direct_hash_models_.size(); ++i) {
+    direct_hash_models_[i].Predict();
+  }
+#endif
+  for (unsigned int i = 0; i < match_models_.size(); ++i) {
+    match_models_[i].Predict();
+  }
+  for (unsigned int i = 0; i < indirect_ns_models_.size(); ++i) {
+    indirect_ns_models_[i].Predict();
+  }
+  for (unsigned int i = 0; i < indirect_r_models_.size(); ++i) {
+    indirect_r_models_[i].Predict();
+  }
+
+
+  bracket_model_->Perceive(bit);
+  fxcm_model_.Perceive(bit);
+
+  for (unsigned int i = 0; i < direct_models_.size(); ++i) {
+    direct_models_[i].Perceive(bit);
+  }
+#if FX3_ENABLE_MAINLINE_DIRECT_PACK
+  for (unsigned int i = 0; i < direct_hash_models_.size(); ++i) {
+    direct_hash_models_[i].Perceive(bit);
+  }
+#endif
+  for (unsigned int i = 0; i < match_models_.size(); ++i) {
+    match_models_[i].Perceive(bit);
+  }
+  for (unsigned int i = 0; i < indirect_ns_models_.size(); ++i) {
+    indirect_ns_models_[i].Perceive(bit);
+  }
+  for (unsigned int i = 0; i < indirect_r_models_.size(); ++i) {
+    indirect_r_models_[i].Perceive(bit);
+  }
+
+
+  bool byte_update = false;
+  if (manager_.bit_context_ >= 128) byte_update = true;
+  manager_.UpdateContexts(bit);
+  if (byte_update) {
+    bracket_model_->ByteUpdate();
+
+    for (unsigned int i = 0; i < direct_models_.size(); ++i) {
+      direct_models_[i].ByteUpdate();
+    }
+#if FX3_ENABLE_MAINLINE_DIRECT_PACK
+    for (unsigned int i = 0; i < direct_hash_models_.size(); ++i) {
+      direct_hash_models_[i].ByteUpdate();
+    }
+#endif
+    for (unsigned int i = 0; i < match_models_.size(); ++i) {
+      match_models_[i].ByteUpdate();
+    }
+    for (unsigned int i = 0; i < indirect_ns_models_.size(); ++i) {
+      indirect_ns_models_[i].ByteUpdate();
+    }
+    for (unsigned int i = 0; i < indirect_r_models_.size(); ++i) {
+      indirect_r_models_[i].ByteUpdate();
+    }
+    manager_.bit_context_ = 1;
+  }
+}

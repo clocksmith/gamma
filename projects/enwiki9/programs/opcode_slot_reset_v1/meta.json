@@ -1,0 +1,114 @@
+{
+  "added": "2026-09-08",
+  "candidate_revision_protocol": "gamma.enwiki9.candidate-revision.v1",
+  "deps": [],
+  "description": "Reset stale slot only at complete decoded text close",
+  "hypothesis": "Resetting stale slot state at decoded text-close boundaries reduces the complete opening250KB archive relative to the unchanged compact parent and unused-reset control.",
+  "id": "opcode_slot_reset_v1",
+  "measured": {
+    "reflections": {
+      "20260908T165054Z_e47978f5d4": {
+        "decision": "hold",
+        "path": "operations/adaptive/reflections/20260908T165054Z_e47978f5d4.json",
+        "sha256": "sha256:69a45171653614d4b990a789f5ebd5401f5e709bb2d5c6a7582ea7c1d3fdee6d",
+        "valid": true
+      }
+    },
+    "terminal_results": {
+      "20260908T165054Z_e47978f5d4": {
+        "index": {
+          "path": "operations/provenance/opcode_slot_reset_terminal_20260908/index.json",
+          "sha256": "sha256:a5d19e7edfb29133b7cc347a5df4f37ed972bf4f0925c54be6483cee127de4ab"
+        },
+        "reflection": {
+          "decision": "hold",
+          "path": "operations/adaptive/reflections/20260908T165054Z_e47978f5d4.json",
+          "sha256": "sha256:69a45171653614d4b990a789f5ebd5401f5e709bb2d5c6a7582ea7c1d3fdee6d",
+          "valid": true
+        },
+        "guard_validation_mode": "discovery-budget-schema",
+        "qualification_authority": false,
+        "missing_diagnostics": [
+          "kernel cpuset controller is not delegated; taskset assignment and existing affinity guard remain active"
+        ],
+        "arms": {
+          "P": {
+            "result_path": "projects/enwiki9/operations/provenance/opcode_slot_reset_terminal_20260908/P.json",
+            "result_json_bytes": 4177,
+            "result_json_sha256": "c8074bd791b5a2c201d651f7e8cba5b719866c710a0703dafcada1492d51c9c4",
+            "data_size": 250000,
+            "data_md5": "58df7be6473925f769c9621aeaff05cb",
+            "data_sha256": "665fc689441b68462d88f82dc33212abe9c4824be095d03a556c9b55a2829fd3",
+            "compressed_size": 67658,
+            "program_size": null,
+            "hutter_score": null,
+            "bits_per_byte": 2.165056,
+            "roundtrip_ok": true,
+            "determinism": true,
+            "compressed_sha256": "bda617eab7628f7cec6724ca3d82bf505efee9c2be4813dd404dcfa715140e6f",
+            "compress_time_s": 71.87743883696385,
+            "decompress_time_s": 39.729224004084244,
+            "missing_diagnostics": [],
+            "run_id": "opcode_slot_reset_v1__20260908T165054Z_e47978f5d4__P"
+          },
+          "K": {
+            "result_path": "projects/enwiki9/operations/provenance/opcode_slot_reset_terminal_20260908/K.json",
+            "result_json_bytes": 4176,
+            "result_json_sha256": "8508b214ce7ee51a5e8c44ce6679adb3b28fdce5822cad910af7d1851732bc5d",
+            "data_size": 250000,
+            "data_md5": "58df7be6473925f769c9621aeaff05cb",
+            "data_sha256": "665fc689441b68462d88f82dc33212abe9c4824be095d03a556c9b55a2829fd3",
+            "compressed_size": 67658,
+            "program_size": null,
+            "hutter_score": null,
+            "bits_per_byte": 2.165056,
+            "roundtrip_ok": true,
+            "determinism": true,
+            "compressed_sha256": "bda617eab7628f7cec6724ca3d82bf505efee9c2be4813dd404dcfa715140e6f",
+            "compress_time_s": 71.95065846084617,
+            "decompress_time_s": 39.55076839402318,
+            "missing_diagnostics": [],
+            "run_id": "opcode_slot_reset_v1__20260908T165054Z_e47978f5d4__K"
+          },
+          "D": {
+            "result_path": "projects/enwiki9/operations/provenance/opcode_slot_reset_terminal_20260908/D.json",
+            "result_json_bytes": 4176,
+            "result_json_sha256": "dbf4a6e721d57d79ef5d11cd2b2e799a8ccaa3cb76a07a72864e84bc3e729bef",
+            "data_size": 250000,
+            "data_md5": "58df7be6473925f769c9621aeaff05cb",
+            "data_sha256": "665fc689441b68462d88f82dc33212abe9c4824be095d03a556c9b55a2829fd3",
+            "compressed_size": 67626,
+            "program_size": null,
+            "hutter_score": null,
+            "bits_per_byte": 2.164032,
+            "roundtrip_ok": true,
+            "determinism": true,
+            "compressed_sha256": "860a3d64726cfd3a9ac88d20d13c3358a6d3f876944042271d8c88edb1eaf929",
+            "compress_time_s": 69.83254091604613,
+            "decompress_time_s": 37.50598200294189,
+            "missing_diagnostics": [],
+            "run_id": "opcode_slot_reset_v1__20260908T165054Z_e47978f5d4__D"
+          }
+        }
+      }
+    }
+  },
+  "omega": {
+    "experiment": {
+      "path": "operations/adaptive/experiments/opcode_slot_reset_v1.json",
+      "sha256": "sha256:861855958578ed51f24b29c1e93396d6405b56d84d636cd0b2bcfcb5d156495c"
+    },
+    "interfaces_exposed": [
+      "Existing slot reset on a complete decoded opcode2; no new parser or entropy coder."
+    ],
+    "mechanism_change": "add_state_coordinate",
+    "parent_proposal_id": null,
+    "proposal_id": "opcode_slot_reset_v1",
+    "retired_neighborhoods": [
+      "No full raw semantic slot sidecar, field mutation or entropy-coder rewrite."
+    ]
+  },
+  "parent": "opcode_field_compact_v1",
+  "status": "blocked_dependency",
+  "verdict": "Retain the narrow positive result and hold this implementation for package economics. No additional context key or automatic confirmation follows. Use one creative discovery cycle to select a materially different measured-cost question, including a candidate outside this bitmix state-repair sequence."
+}

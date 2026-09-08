@@ -1,0 +1,82 @@
+{
+  "attribution": {
+    "causalConfidence": "high",
+    "controlsEquivalent": null,
+    "failureClass": "infrastructure-failure",
+    "localizedCause": "PPMD allocates14000 MiB logical mapped heap; frozen scratch was4GB"
+  },
+  "candidateId": "forge_compact_fixture50051_q0_v1",
+  "candidateRevision": {
+    "candidateId": "forge_compact_fixture50051_q0_v1",
+    "candidateTreeSha256": "sha256:053d11760f01d6a5b9688a90cb50a25215de9075a361331e1a964d948de4dae9",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/forge_compact_fixture50051_q0_v1/20260908T194103350908Z_053d11760f01.json",
+      "sha256": "sha256:5a2ed4b458fd518405642832d2296e08dae6f885eeb2c524783a009ba3207530"
+    }
+  },
+  "decision": {
+    "killPredicatesPass": null,
+    "nextGateBytes": null,
+    "promotionPredicatesPass": null,
+    "rationale": "Correct scratch envelope in a separately frozen retry without changing predictor or population",
+    "verdict": "retry"
+  },
+  "evidence": [
+    {
+      "path": "operations/provenance/forge_compact_fixture50051_q0_v1_preflight_stop.json",
+      "sha256": "sha256:9b1d1b070566ea0f58245a9e2f6da03b7d89feff8f22aaf961bc781ddbe7b40d"
+    }
+  ],
+  "experiment": {
+    "path": "operations/adaptive/experiments/forge_compact_fixture50051_q0_v1.json",
+    "sha256": "sha256:9a2f43a465bed004fa9a4593d01d0f672f8705aff4bb687de4ef5750933d0528"
+  },
+  "generatedUtc": "2026-09-08T19:42:53+00:00",
+  "hypothesis": {
+    "rationale": "No upstream build or native fixture phase executed",
+    "verdict": "not-tested"
+  },
+  "job": {
+    "path": "operations/adaptive/cancelled/959_20260908T194103Z_ab49468717.json",
+    "sha256": "sha256:3c6b63b97bcc85d8f5a4c96ecfc1dbe1bf0c97a742dacf7644fe7c2eb31dae67"
+  },
+  "knowledge": {
+    "retiredDimensions": [],
+    "transferableLessons": [
+      "Include mapped logical heap in scratch admission before freezing a native parent gate"
+    ],
+    "uncertainties": [
+      "Archive, inverse, repeat and actual kernel costs remain unmeasured"
+    ]
+  },
+  "measurementAssertions": [],
+  "measurements": {
+    "idealBitsSaved": null,
+    "memoryRatio": null,
+    "minimumPartitionIdealBitsSaved": null,
+    "netBytesSaved": null,
+    "positiveSegmentFraction": null,
+    "runtimeRatio": null,
+    "scopeBytes": null,
+    "scopeSymbols": null,
+    "sourceBytesDelta": null,
+    "transferRetention": null
+  },
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:e91ff20e92c3cac8acb0cbe5c79fc8e8a3b427d7e151245c8eecc52b1c32fa00",
+    "objectiveId": "gamma-enwiki9-hutter-90m-v3",
+    "objectivePath": "contracts/research/v3/objective-contract.json",
+    "targetScoreBytes": 90000000
+  },
+  "reflectionId": "r-20260908t194103z_ab49468717",
+  "schema": "gamma.enwiki9.reflection-receipt.v1",
+  "validity": {
+    "classification": "infrastructure-failure",
+    "reasons": [
+      "Cancelled before launch after source audit found insufficient scratch budget"
+    ],
+    "valid": false
+  }
+}

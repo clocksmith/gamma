@@ -1,0 +1,46 @@
+{
+  "schema": "gamma.enwiki9.synthetic-implementation-plan.v1",
+  "id": "fx2_residual_ratio_synthetic_v1",
+  "owner": "root_explore",
+  "date": "2026-09-08",
+  "status": "synthetic implementation only",
+  "objective_bytes": 90000000,
+  "objective_credit_bytes": 0,
+  "corpus_launch_authorized": false,
+  "discovery": {
+    "lenses": [8, 9],
+    "selection": "Deliberate: test bounded causal adaptation of the native transformer's distribution before final bit mixing, with an explicit wrong-truth control.",
+    "alternatives": [
+      "Forge-cmix public source offers a distinct eligible-parent audit, but its published architecture alone supplies no new Gamma mechanism or measured improvement. Source inspection may continue; no build or corpus launch selected.",
+      "Exact-residual model packing already completed with a 23-byte model saving erased by its external restorer. Do not repeat that realization.",
+      "Select residual-ratio calibration for a synthetic causal and inverse test before any native integration."
+    ],
+    "prior_negative": "NNCP output-bias-only midpoint adaptation lost 1604 archive bytes. This candidate does not inherit MIDAS gains: it uses bounded integer observed/expected counts on a separate fixed predictor, not midpoint gradient updates. No evidence yet shows this correction helps FX2."
+  },
+  "hypothesis": "A bounded observed-to-expected symbol ratio can correct persistent marginal miscalibration while preserving exact decoder-rebuilt state. Synthetic success only establishes implementation feasibility; native final archives must establish benefit.",
+  "inputs": [
+    {"path": "lib/predictor.py", "sha256": "2291091f2f4eb2103eb98cc2b22900ce9cb001bcebab097d4076a56eef4b1bdb"},
+    {"path": "results/nncp_midpoint_bias_only_qm0_v1/decision.json", "sha256": "e2187a81796dfe753ba5a840a8ef704942c74b1c26c24fce720096d92e354938"},
+    {"path": "operations/provenance/public_fx2_static_vocab_fixture_terminal_20260905.json", "sha256": "121c6586ccb0bca066f8c7602e97b02177d20966ca74409481dfd651babce1ab"},
+    {"path": "results/fx2_cmix_transformer_static_vocab_fixture50051_q0_v1/work/src/predictor.cpp", "sha256": "0b79f43644daee942c9cb6da18fa464f0eb0185b6fc7ffc43cde703808fe537e"}
+  ],
+  "configuration": {
+    "alphabet": "2..256 symbols; ordered positive integer base counts, each <=65535",
+    "normalization": "Expected counts use floor(p_i * 65536 / sum(p)), distributing the remaining units by descending remainder, ties by ascending symbol id.",
+    "prior_q16": 2097152,
+    "ratio": "(prior + observed_i) / (prior + expected_i), clipped to [1/4,4]; floor(base_i * clipped ratio), minimum 1. No floating-point prediction arithmetic.",
+    "update": "Predict before truth. Add one Q16 count to decoded symbol; add normalized base probabilities to expected counts. After every 256 updates halve both histories by floor division.",
+    "arms": {"P": "Unchanged base counts", "K": "Train identical histories but emit unchanged base counts", "D": "Emit corrected counts and train from decoded truth", "S": "Same correction trained from (decoded symbol + 1) modulo alphabet size"},
+    "state": "Serialize all future-affecting history, position, arm, alphabet, and pending base/output counts. Validate before restore; reject duplicate predict or observe before predict."
+  },
+  "bounds": {"configurations": 1, "synthetic_raw_bytes_per_fixture": 4096, "corpus_bytes": 0, "cpu": 3, "threads": 1, "address_space_bytes": 536870912, "cpu_seconds": 120, "wall_seconds": 180, "scratch_bytes": 67108864, "install_dependencies": false},
+  "acceptance": [
+    "Reuse lib/predictor.py arithmetic fixture, not a new entropy coder. P/K payload identity; all four arms independently invert and repeat on synthetic raw bytes.",
+    "Compare every pre-truth probability and full state boundary, including decay. Future suffix changes cannot affect earlier predictions.",
+    "Roundtrip pending and nonpending checkpoints; reject invalid counts, impossible positions, oversized state and malformed histories.",
+    "Retain archive sizes, parameter/state size, source inventory and process costs. Synthetic archive gains receive no corpus or package qualification credit."
+  ],
+  "next_gate": "Only after synthetic correctness, freeze one separately identified native FX2 P/K/D/S fixture with unchanged trained model, vocabulary and frontend, complete probability/state traces, package delta and resource admission. Do not tune on reserved corpus populations.",
+  "protected": ["HORIZON", "MIDAS", "all sealed source and prior experiment bindings"],
+  "output_directory": "results/fx2_residual_ratio_synthetic_v1"
+}

@@ -1,0 +1,90 @@
+{
+  "attribution": {
+    "causalConfidence": "high",
+    "controlsEquivalent": null,
+    "failureClass": "implementation-failure",
+    "localizedCause": "Passing arm to driver.run selects its Python candidate subprocess dispatch and ignores the supplied native adapter module."
+  },
+  "candidateId": "fx2_residual_ratio_fixture50051_q0_v1",
+  "candidateRevision": {
+    "candidateId": "fx2_residual_ratio_fixture50051_q0_v1",
+    "candidateTreeSha256": "sha256:c55be21afb549fb26a51447c3256389216e23d6b1e2e325d51c76f7ba7102f4e",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/fx2_residual_ratio_fixture50051_q0_v1/20260908T184402629756Z_c55be21afb54.json",
+      "sha256": "sha256:caa9c166359e555a2b81f5de34e9c65339f81e482a9926dc9168c3f5c5242ee1"
+    }
+  },
+  "decision": {
+    "killPredicatesPass": null,
+    "nextGateBytes": null,
+    "promotionPredicatesPass": null,
+    "rationale": "Change only native driver dispatch in a separately identified implementation retry.",
+    "verdict": "retry"
+  },
+  "evidence": [
+    {
+      "path": "operations/provenance/fx2_ratio_fixture_failure_20260908/index.json",
+      "sha256": "sha256:f5d0c87f98539df0a207dc9d8b3140d776e1c5907aa6055152a1106d05a02e8f"
+    },
+    {
+      "path": "results/fx2_residual_ratio_fixture50051_q0_v1/P/result.json",
+      "sha256": "sha256:b89e1bbff94a89016c8d26c8bd634a936febcd1403ebb96d900f4eb52d3af350"
+    },
+    {
+      "path": "results/fx2_residual_ratio_fixture50051_q0_v1/stage-decision.json",
+      "sha256": "sha256:3beffc759e8651c0e80353fb3a1855420695f427fbd2fa4ba79b888d71e0631f"
+    }
+  ],
+  "experiment": {
+    "path": "operations/adaptive/experiments/fx2_residual_ratio_fixture50051_q0_v1.json",
+    "sha256": "sha256:8c33d63cef4af08c0fcfb8a18c733ae3f0c59fd20c7a11b512f7815807c06e1c"
+  },
+  "generatedUtc": "2026-09-08T18:54:57+00:00",
+  "hypothesis": {
+    "rationale": "No native P archive was generated; scientific predicates remain untested.",
+    "verdict": "not-tested"
+  },
+  "job": {
+    "path": "operations/adaptive/failed/959_20260908T184428Z_97a71f959c.json",
+    "sha256": "sha256:db8c98e25fd024612218557afe664a9b773670905fb3179a980aee808179e1cf"
+  },
+  "knowledge": {
+    "retiredDimensions": [],
+    "transferableLessons": [
+      "Use the existing legacy module interface for adapters that independently launch fresh native codec processes; test dispatch with a synthetic adapter."
+    ],
+    "uncertainties": [
+      "Native calibration archive economics remain unmeasured."
+    ]
+  },
+  "measurementAssertions": [],
+  "measurements": {
+    "idealBitsSaved": null,
+    "memoryRatio": null,
+    "minimumPartitionIdealBitsSaved": null,
+    "netBytesSaved": null,
+    "positiveSegmentFraction": null,
+    "runtimeRatio": null,
+    "scopeBytes": null,
+    "scopeSymbols": null,
+    "sourceBytesDelta": null,
+    "transferRetention": null
+  },
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:e91ff20e92c3cac8acb0cbe5c79fc8e8a3b427d7e151245c8eecc52b1c32fa00",
+    "objectiveId": "gamma-enwiki9-hutter-90m-v3",
+    "objectivePath": "contracts/research/v3/objective-contract.json",
+    "targetScoreBytes": 90000000
+  },
+  "reflectionId": "r-20260908t184428z_97a71f959c",
+  "schema": "gamma.enwiki9.reflection-receipt.v1",
+  "validity": {
+    "classification": "implementation-failure",
+    "reasons": [
+      "Build and invalid-arm checks passed; driver reloaded registration stub before first native encode."
+    ],
+    "valid": false
+  }
+}

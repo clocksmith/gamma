@@ -1,0 +1,259 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gamma.enwiki9.cmix-midpoint-observability-parse.v1",
+  "title": "CMIX midpoint v5 independent observability parse receipt",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "receipt_id",
+    "candidate_id",
+    "abi",
+    "parser",
+    "run",
+    "population",
+    "streams",
+    "counts",
+    "coordinates",
+    "partitions",
+    "checks",
+    "errors",
+    "parse_pass",
+    "claim_authority",
+    "gamma_compression_credit_bytes",
+    "gamma_score_credit_bytes"
+  ],
+  "properties": {
+    "schema": {
+      "const": "gamma.enwiki9.cmix-midpoint-observability-parse.v1"
+    },
+    "receipt_id": {"type": "string", "minLength": 1},
+    "candidate_id": {
+      "const": "cmix_obias_shadow_midpoint_oracle64_q0_v5"
+    },
+    "abi": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["format_id", "contract"],
+      "properties": {
+        "format_id": {"const": "gamma-midpoint-observability-abi-v1"},
+        "contract": {"$ref": "#/$defs/artifact"}
+      }
+    },
+    "parser": {"$ref": "#/$defs/artifact"},
+    "run": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["run_id", "arm", "replicate", "direction"],
+      "properties": {
+        "run_id": {"type": "string", "minLength": 1},
+        "arm": {"enum": ["P", "K", "F", "S"]},
+        "replicate": {"enum": ["A", "B"]},
+        "direction": {"enum": ["encode", "decode"]}
+      }
+    },
+    "population": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "raw_bytes",
+        "raw_sha256",
+        "modeled_events",
+        "modeled_sha256",
+        "coded_bits",
+        "complete_population"
+      ],
+      "properties": {
+        "raw_bytes": {"type": "integer", "minimum": 1},
+        "raw_sha256": {"$ref": "#/$defs/sha256"},
+        "modeled_events": {"type": "integer", "minimum": 1},
+        "modeled_sha256": {"$ref": "#/$defs/sha256"},
+        "coded_bits": {"type": "integer", "minimum": 8},
+        "complete_population": {"const": true}
+      }
+    },
+    "streams": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "layout",
+        "probabilities",
+        "checkpoints",
+        "updates"
+      ],
+      "properties": {
+        "layout": {"$ref": "#/$defs/nonemptyArtifact"},
+        "probabilities": {"$ref": "#/$defs/nonemptyArtifact"},
+        "checkpoints": {"$ref": "#/$defs/nonemptyArtifact"},
+        "updates": {"$ref": "#/$defs/nonemptyArtifact"}
+      }
+    },
+    "counts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "layout_records",
+        "probability_records",
+        "checkpoint_records",
+        "periodic_checkpoint_records",
+        "update_records",
+        "expected_update_records",
+        "committed_update_records",
+        "detached_update_records"
+      ],
+      "properties": {
+        "layout_records": {"type": "integer", "minimum": 1},
+        "probability_records": {"type": "integer", "minimum": 8},
+        "checkpoint_records": {"type": "integer", "minimum": 3},
+        "periodic_checkpoint_records": {"type": "integer", "minimum": 0},
+        "update_records": {"type": "integer", "minimum": 0},
+        "expected_update_records": {"type": "integer", "minimum": 0},
+        "committed_update_records": {"type": "integer", "minimum": 0},
+        "detached_update_records": {"type": "integer", "minimum": 0}
+      }
+    },
+    "coordinates": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "first_modeled_event",
+        "last_modeled_event",
+        "first_coded_bit",
+        "last_coded_bit",
+        "terminal_pre_flush_seen",
+        "finalization_seen"
+      ],
+      "properties": {
+        "first_modeled_event": {"const": 0},
+        "last_modeled_event": {"type": "integer", "minimum": 1},
+        "first_coded_bit": {"const": 0},
+        "last_coded_bit": {"type": "integer", "minimum": 8},
+        "terminal_pre_flush_seen": {"type": "boolean"},
+        "finalization_seen": {"type": "boolean"}
+      }
+    },
+    "partitions": {
+      "type": "array",
+      "minItems": 6,
+      "maxItems": 6,
+      "items": {"$ref": "#/$defs/partition"},
+      "allOf": [
+        {"contains": {"properties": {"partition_id": {"const": "dynamic"}}, "required": ["partition_id"]}, "minContains": 1, "maxContains": 1},
+        {"contains": {"properties": {"partition_id": {"const": "parameters"}}, "required": ["partition_id"]}, "minContains": 1, "maxContains": 1},
+        {"contains": {"properties": {"partition_id": {"const": "optimizer"}}, "required": ["partition_id"]}, "minContains": 1, "maxContains": 1},
+        {"contains": {"properties": {"partition_id": {"const": "ordinary_tape"}}, "required": ["partition_id"]}, "minContains": 1, "maxContains": 1},
+        {"contains": {"properties": {"partition_id": {"const": "external_predictor"}}, "required": ["partition_id"]}, "minContains": 1, "maxContains": 1},
+        {"contains": {"properties": {"partition_id": {"const": "midpoint"}}, "required": ["partition_id"]}, "minContains": 1, "maxContains": 1}
+      ]
+    },
+    "checks": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "header_identity_pass",
+        "reserved_zero_pass",
+        "record_framing_pass",
+        "clean_eof_pass",
+        "layout_order_pass",
+        "probability_count_pass",
+        "checkpoint_formula_pass",
+        "checkpoint_order_pass",
+        "checkpoint_phase_pass",
+        "partition_population_pass",
+        "merkle_recomputation_pass",
+        "payload_prefix_recomputation_pass",
+        "update_count_formula_pass",
+        "update_order_pass",
+        "arm_commit_semantics_pass",
+        "finite_float_pass",
+        "terminal_finalization_pass"
+      ],
+      "properties": {
+        "header_identity_pass": {"type": "boolean"},
+        "reserved_zero_pass": {"type": "boolean"},
+        "record_framing_pass": {"type": "boolean"},
+        "clean_eof_pass": {"type": "boolean"},
+        "layout_order_pass": {"type": "boolean"},
+        "probability_count_pass": {"type": "boolean"},
+        "checkpoint_formula_pass": {"type": "boolean"},
+        "checkpoint_order_pass": {"type": "boolean"},
+        "checkpoint_phase_pass": {"type": "boolean"},
+        "partition_population_pass": {"type": "boolean"},
+        "merkle_recomputation_pass": {"type": "boolean"},
+        "payload_prefix_recomputation_pass": {"type": "boolean"},
+        "update_count_formula_pass": {"type": "boolean"},
+        "update_order_pass": {"type": "boolean"},
+        "arm_commit_semantics_pass": {"type": "boolean"},
+        "finite_float_pass": {"type": "boolean"},
+        "terminal_finalization_pass": {"type": "boolean"}
+      }
+    },
+    "errors": {
+      "type": "array",
+      "items": {"type": "string", "minLength": 1}
+    },
+    "parse_pass": {"type": "boolean"},
+    "claim_authority": {
+      "const": "observability_parse_only"
+    },
+    "gamma_compression_credit_bytes": {"const": 0},
+    "gamma_score_credit_bytes": {"const": 0}
+  },
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "artifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "bytes", "sha256"],
+      "properties": {
+        "path": {"type": "string", "minLength": 1},
+        "bytes": {"type": "integer", "minimum": 0},
+        "sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "nonemptyArtifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "bytes", "sha256"],
+      "properties": {
+        "path": {"type": "string", "minLength": 1},
+        "bytes": {"type": "integer", "minimum": 1},
+        "sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "partition": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "partition_id",
+        "tensor_count",
+        "logical_bytes",
+        "initial_root_sha256",
+        "terminal_root_sha256",
+        "dirty_leaf_events",
+        "mutation_control_pass"
+      ],
+      "properties": {
+        "partition_id": {
+          "enum": [
+            "dynamic",
+            "parameters",
+            "optimizer",
+            "ordinary_tape",
+            "external_predictor",
+            "midpoint"
+          ]
+        },
+        "tensor_count": {"type": "integer", "minimum": 1},
+        "logical_bytes": {"type": "integer", "minimum": 1},
+        "initial_root_sha256": {"$ref": "#/$defs/sha256"},
+        "terminal_root_sha256": {"$ref": "#/$defs/sha256"},
+        "dirty_leaf_events": {"type": "integer", "minimum": 0},
+        "mutation_control_pass": {"type": "boolean"}
+      }
+    }
+  }
+}
