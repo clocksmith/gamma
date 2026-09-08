@@ -1,0 +1,51 @@
+{
+  "candidate_id": "fx2_half_tail_fixture50051_q0_v1",
+  "claimed_at": "2026-09-08T21:02:09+00:00",
+  "created_at": "2026-09-08T21:02:08+00:00",
+  "developed_at": "2026-09-08T21:02:09+00:00",
+  "evidence": [
+    {
+      "path": "operations/provenance/fx2_half_tail_audit_v1_terminal.json",
+      "sha256": "sha256:cdb58a2b58020362b7f682324bd63d40df7aa3d6a6ed0d41370ffc6ae730fc13"
+    },
+    {
+      "path": "operations/evidence/20260908_fx2_half_tail_native_unit.json",
+      "sha256": "sha256:b371fe1f26c152fa75f2557a556f2d0a68d5a8688bce4862f7c245558e9c2eaa"
+    }
+  ],
+  "expected_savings_bytes": 0,
+  "experiment": {
+    "path": "operations/adaptive/experiments/fx2_half_tail_fixture50051_q0_v1.json",
+    "sha256": "sha256:4ea80011904a3e25cc13dddf66f0115f4019d46f7cc2ba33c3fd03da23c905de"
+  },
+  "hypothesis": "Correcting only scalar positive-subnormal transformer output tail values before the existing floor, with unchanged half input priors and model trajectories, reduces the exact FX2 fixture archive.",
+  "interfaces_exposed": [
+    "Unchanged native predictor and final mixture; output conversion only."
+  ],
+  "kill_condition": "Any P/K retained-parent mismatch, failed inverse/repeat, or changed half input/output trajectory rejects implementation. D archive not smaller rejects this one configuration on this fixture. Resource stops and omitted evidence are separate outcomes.",
+  "max_program_bytes": 10000000,
+  "mechanism_change": "other",
+  "mechanism_change_bonus": 0,
+  "mechanism_class": "endpoint",
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:e91ff20e92c3cac8acb0cbe5c79fc8e8a3b427d7e151245c8eecc52b1c32fa00",
+    "objectiveId": "gamma-enwiki9-hutter-90m-v3",
+    "objectivePath": "contracts/research/v3/objective-contract.json",
+    "targetScoreBytes": 90000000
+  },
+  "owner": "root_explore",
+  "parent": "fx2_cmix_transformer_static_vocab_fixture50051_q0_v1",
+  "parent_proposal_id": null,
+  "priority": 50,
+  "promotion_condition": "Exact controls, same half trajectories, D archive smaller than P and local inventory within10000000 bytes. No automatic larger gate.",
+  "proposal_id": "fx2_half_tail_fixture50051_q0_v1",
+  "retired_neighborhoods": [
+    "Compact-v26 block loss and ratio calibration; neither is reintroduced."
+  ],
+  "schema": "gamma.enwiki9.algorithm-proposal.v2",
+  "search_priority": 50,
+  "state": "developed",
+  "title": "FX2 final transformer half-tail conversion"
+}

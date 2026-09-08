@@ -1,0 +1,55 @@
+{
+  "schema": "gamma.enwiki9.exact-source-adapter-multi.v1",
+  "adapter_id": "fx2_half_tail_native_v1",
+  "files": [
+    {
+      "source_path": "src/predictor.h",
+      "source_bytes": 7136,
+      "source_sha256": "348d3924fc4e1f4890d0332b0f33ba9591afa6ee06971b9a9bdeaa376b41f458",
+      "patched_bytes": 7225,
+      "patched_sha256": "43aa60f2e3d4f2603e4fe76eeb37899ab0eb0354c76cc6fa7894f81fbf43454c",
+      "replacements": [
+        {
+          "before": "#include \"models/fxcmv1.h\"",
+          "after": "#include \"models/fxcmv1.h\"\n#include \"gamma-half-tail.h\""
+        },
+        {
+          "before": "  void TransformerByteUpdate();",
+          "after": "  void TransformerByteUpdate();\n  gamma_half_tail::Audit gamma_half_audit_{GAMMA_FXCM_ARM};"
+        }
+      ]
+    },
+    {
+      "source_path": "src/predictor.cpp",
+      "source_bytes": 27424,
+      "source_sha256": "0b79f43644daee942c9cb6da18fa464f0eb0185b6fc7ffc43cde703808fe537e",
+      "patched_bytes": 27816,
+      "patched_sha256": "227575de822624352f4988d16ef1800eab70c4cc474fbd569b0f2bdeb4c2ce27",
+      "replacements": [
+        {
+          "before": "  fxcm_model_.emplace();",
+          "after": "  fxcm_model_.emplace();\n  if(fxcm_model_->NumOutputs()!=431)Fail(\"Gamma original FXCM count differs\");\n  std::fprintf(stderr,\"Gamma FXCM arm=%c outputs=431\\n\",\"PKD\"[GAMMA_FXCM_ARM]);"
+        },
+        {
+          "before": "  FloatsToHalves(probs_scratch_.data(), half_scratch_.data(), vocab_size_);\n\n  int token = byte_to_index_",
+          "after": "  FloatsToHalves(probs_scratch_.data(), half_scratch_.data(), vocab_size_);\n  if(!gamma_half_audit_.prior(half_scratch_.data(),vocab_size_))Fail(\"Gamma prior audit order\");\n\n  int token = byte_to_index_"
+        },
+        {
+          "before": "  if (transformer_probs_writer_) {\n    transformer_probs_writer_->WriteHalves(half_scratch_.data(), vocab_size_);\n  }",
+          "after": "  if(!gamma_half_audit_.output(half_scratch_.data(),probs_scratch_.data(),vocab_size_,!last_of_piece))Fail(\"Gamma output audit order\");\n  if (transformer_probs_writer_) {\n    transformer_probs_writer_->WriteHalves(half_scratch_.data(), vocab_size_);\n  }"
+        }
+      ]
+    }
+  ],
+  "added_files": [
+    {
+      "source": {
+        "path": "lib/fx2_half_tail_v1.hpp",
+        "bytes": 2293,
+        "sha256": "c4b935080ca3162a73f4092ad16ee2b85c36d213ad5af16b0364f498331307d1"
+      },
+      "target": "src/gamma-half-tail.h"
+    }
+  ],
+  "boundary": "Only D doubles scalar positive subnormal outputs at transformer output tail indices200..204 before the original floor. Piece-boundary PPM fallback, input priors, weights and model steps are unchanged."
+}
