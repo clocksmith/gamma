@@ -28,9 +28,9 @@ REPOSITORY_ROOT = PROJECT_ROOT.parents[1]
 CONTRACT_ROOT = PROJECT_ROOT / "contracts" / "research" / "v1"
 OBJECTIVE_PATHS = {
     version: PROJECT_ROOT / "contracts" / "research" / version / "objective-contract.json"
-    for version in ("v1", "v2")
+    for version in ("v1", "v2", "v3")
 }
-OBJECTIVE_PATH = OBJECTIVE_PATHS["v2"]
+OBJECTIVE_PATH = OBJECTIVE_PATHS["v3"]
 SCHEMA_PATH = OBJECTIVE_PATH.with_name("objective-contract.schema.json")
 NAMED_GRADIENT_BLOCK_STRIDE = 64
 SCHEMA_PATHS = {
@@ -3108,7 +3108,7 @@ def validate_artifact(path: Path, verify_files: bool = True) -> dict[str, Any]:
         result = _validate_adaptive_job(value, artifact_path)
     elif schema_id == "gamma.enwiki9.algorithm-proposal.v2":
         result = _validate_algorithm_proposal(value, artifact_path)
-    elif schema_id in {"gamma.enwiki9.objective-contract.v1", "gamma.enwiki9.objective-contract.v2"}:
+    elif schema_id in {f"gamma.enwiki9.objective-contract.{version}" for version in OBJECTIVE_PATHS}:
         _require(
             value == validate_objective(objective_path=OBJECTIVE_PATHS["v" + str(value["version"])]),
             f"{artifact_path}: objective differs from canonical contract",

@@ -2,17 +2,17 @@
 
 Generated from the current certificate, gate receipts, resource guards, and process table.
 
-- Generated at UTC: `2026-09-08T15:14:04+00:00`
+- Generated at UTC: `2026-09-08T15:33:10+00:00`
 
 ## Target State
 
-- Objective ID: `gamma-enwiki9-hutter-99m-v2`
-- Objective digest: `sha256:16badfa6c1a53b47bcc12b089fdd9c21f7405ea56a84344d60c28d2252da8288`
-- Objective path: `contracts/research/v2/objective-contract.json`
-- Active `9.9000000%` target score: `99,000,000`
+- Objective ID: `gamma-enwiki9-hutter-90m-v3`
+- Objective digest: `sha256:e91ff20e92c3cac8acb0cbe5c79fc8e8a3b427d7e151245c8eecc52b1c32fa00`
+- Objective path: `contracts/research/v3/objective-contract.json`
+- Active `9.0000000%` target score: `90,000,000`
 - Full-corpus constructive result present: `false`
 - Active objective constructive upper bound present: `false`
-- Source certificate target (legacy field names): `99,000,000`; certificate upper bound present: `false`
+- Source certificate target (legacy field names): `90,000,000`; certificate upper bound present: `false`
 
 ## Operator Summary
 
@@ -131,13 +131,13 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 
 - Audit return code: `0`
 - Audit mode: `inventory_snapshot`
-- Inventory generated: `2026-09-08T15:14:01+00:00`
+- Inventory generated: `2026-09-08T15:33:07+00:00`
 - Snapshot identity is verified; inventory inputs were not rescanned. This is not live occupancy or launch authority.
-- Program directories: `996`
-- Registered programs: `535`
-- Untracked nonignored entries: `8`
+- Program directories: `997`
+- Registered programs: `536`
+- Untracked nonignored entries: `21`
 - Modified tracked entries: `9`
-- Candidate statuses: `active=18, blocked_dependency=69, candidate=241, measured_negative=100, retired=568`
+- Candidate statuses: `active=18, blocked_dependency=69, candidate=241, measured_negative=100, retired=568, track_source_before_evolution=1`
 
 ## View Refresh
 
@@ -166,4 +166,4 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 
 ## Claim Rule
 
-No prefix row proves the `9.9000000%` full-corpus target.
+No prefix row proves the `9.0000000%` full-corpus target.

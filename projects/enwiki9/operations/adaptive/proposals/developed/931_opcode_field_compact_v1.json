@@ -1,0 +1,51 @@
+{
+  "candidate_id": "opcode_field_compact_v1",
+  "claimed_at": "2026-09-08T15:19:44+00:00",
+  "created_at": "2026-09-08T15:19:44+00:00",
+  "developed_at": "2026-09-08T15:19:45+00:00",
+  "evidence": [
+    {
+      "path": "operations/provenance/opcode_field_confirmation_terminal_20260908.json",
+      "sha256": "sha256:7a5b3bdf56437419e24c688add13e6c4c91358610fa227753933cd0d133a9457"
+    },
+    {
+      "path": "operations/adaptive/reflections/20260908T141403Z_9512817e06.json",
+      "sha256": "sha256:2c87e66c3541ef7345aaf5e2cd00d46c5ef8a7bbbaa8fdc3dee6aef562f6c2bc"
+    }
+  ],
+  "expected_savings_bytes": 0,
+  "experiment": {
+    "path": "operations/adaptive/experiments/opcode_field_compact_v1.json",
+    "sha256": "sha256:19e78dfe07c81f14ba2ce317624ab8a8efb1d2323a86e1c4630d959227c108f3"
+  },
+  "hypothesis": "A compact standalone implementation preserves confirmed D archives and all shared predictive state while reducing required local source bytes.",
+  "interfaces_exposed": [
+    "Standalone compress/decompress with bounded canonical decoding and optional external observers."
+  ],
+  "kill_condition": "Archive or state mismatch, or no reduction in required source bytes.",
+  "max_program_bytes": 100000,
+  "mechanism_change": "compile_state_machine",
+  "mechanism_change_bonus": 18,
+  "mechanism_class": "endpoint",
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:16badfa6c1a53b47bcc12b089fdd9c21f7405ea56a84344d60c28d2252da8288",
+    "objectiveId": "gamma-enwiki9-hutter-99m-v2",
+    "objectivePath": "contracts/research/v2/objective-contract.json",
+    "targetScoreBytes": 99000000
+  },
+  "owner": "root_explore",
+  "parent": "opcode_field_confirmation1m_q0_v1",
+  "parent_proposal_id": null,
+  "priority": 50,
+  "promotion_condition": "Strictly smaller required source and exact archive plus shared-state parity on all retained populations.",
+  "proposal_id": "opcode_field_compact_v1",
+  "retired_neighborhoods": [
+    "No predictor mutation, grammar discovery or entropy-coder rewrite."
+  ],
+  "schema": "gamma.enwiki9.algorithm-proposal.v2",
+  "search_priority": 68,
+  "state": "developed",
+  "title": "Compile confirmed opcode field repair into a compact standalone source"
+}

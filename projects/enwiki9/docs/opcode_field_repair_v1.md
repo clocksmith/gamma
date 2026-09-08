@@ -124,3 +124,22 @@ parent-relative gain. Its next package question is whether a separately bound
 standalone release can implement the same field rule with lower source cost and
 preserve the existing archives. This comparison supplies no authority for a
 larger corpus run and no projection to the 99,000,000-byte target.
+
+On September 8 the engineering objective moved to
+[90M v3](../contracts/research/v3/objective-contract.json); the experiments above
+retain their original 99M bindings. The separately owned
+[compact implementation](../operations/adaptive/experiments/opcode_field_compact_v1.json)
+packs the same predictor and field update with bounded canonical decoding into
+two local files totaling 5,746 bytes. Its
+[seven synthetic tests and retained fixture](../operations/evidence/20260908_opcode_field_compact_unit.json)
+pass exact archive parity, independent inversion, deterministic repeats and
+complete common-state witness comparisons. The retained 65-byte fixture produces
+a 27-byte archive; this is correctness evidence only.
+
+Local source shrinks by 9,657 bytes from the observed implementation and remains
+905 bytes above the original parent. These are source subtotals, not a complete
+package result: invocation bytes, runtime and the chosen accounting multiplicity
+must still be resolved. The compact codec has not yet replayed corpus archives.
+Its frozen implementation-equivalence experiment awaits a tested, sealed parity
+runner and published admission. Historical confirmation inputs may prove exact
+implementation parity; they must not be described as fresh model confirmation.

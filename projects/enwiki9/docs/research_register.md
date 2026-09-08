@@ -2,6 +2,19 @@
 
 [Record index](research_register/README.md) | [Earlier records](research_register/archive/README.md)
 
+## 2026-09-08 - Compact field implementation and 90M objective
+
+The [v3 migration](../operations/provenance/objective90_migration_20260908.json)
+activates 90,000,000 complete bytes, preserving 105M and 99M contracts and frozen
+experiments. Four migration tests preserve historical digests and obligations.
+`root_explore` owns [opcode_field_compact_v1](../operations/adaptive/experiments/opcode_field_compact_v1.json):
+the same confirmed field rule and canonical decoder checks in 5,746 local source
+bytes, down from 15,403. [Seven synthetic tests](../operations/evidence/20260908_opcode_field_compact_unit.json)
+pass archive and complete shared-state parity; a retained 65-byte fixture has a
+27-byte exact repeatable archive. Corpus parity and complete package economics
+remain unproved. Next build the bounded retained-archive parity runner, publish
+its source and ownership, then admit execution. No new predictor is combined.
+
 ## 2026-09-08 - Opcode field repair confirms a 1,541-byte archive improvement
 
 `root_explore` owns [opcode_field_repair250k_q0_v1](../operations/adaptive/experiments/opcode_field_repair250k_q0_v1.json).
