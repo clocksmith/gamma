@@ -171,7 +171,7 @@ test("shared semantic references construct current cards, rules, UI, and simulat
   const world = await readJson("dist/runtime/world-copy.json");
   assert.equal(config.title, world.title);
   assert.equal(
-    config.powerSources.find((source) => source.id === "fusion_demonstrator").name,
+    escalation.projects.find((source) => source.id === "fusion_demonstrator").name,
     advancedName
   );
   assert.equal(
@@ -179,10 +179,11 @@ test("shared semantic references construct current cards, rules, UI, and simulat
     advancedName
   );
   assert.equal(
-    config.powerSources.find((source) => source.id === "fusion_demonstrator").capacity,
-    advancedFacts.power
+    escalation.projects.find((source) => source.id === "fusion_demonstrator").powerSource,
+    true
   );
-  assert.ok(rules.includes(`#### Construct ${advancedName} (Era III onward)`));
+  assert.ok(rules.includes(advancedName));
+  assert.ok(rules.includes("Each institution builds each project once"));
   assert.equal(ui.prototype.tracks.runway, variables.terms.resources.runway);
   assert.match(simulation.decisions.constructAdvancedGeneration, new RegExp(advancedName));
   assert.match(simulation.coverage.selectedRules.automated.join("\n"), /local Generator connections/);
@@ -191,7 +192,7 @@ test("shared semantic references construct current cards, rules, UI, and simulat
     simulation.coverage.selectedRules.automated.join("\n"),
     /adjacency Networks/
   );
-  assert.ok(rulesSource.includes("${terms.technology.advancedGeneration}"));
+  assert.ok(rulesSource.includes("${content.projects.constructionRule}"));
   assert.ok(rulesSource.includes("${facts.shared.roundsWord | capitalize}"));
   assert.match(rules, /\*\*Standard game:\*\* Four Eras, three turns per player per Era/);
   assert.ok(allSources.join("\n").match(/\$\{[^}]+\}/g).length > 500);

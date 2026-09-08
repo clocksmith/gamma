@@ -294,10 +294,8 @@ test("shared contract supplies cap construction and Joint Venture termination re
   assert.equal(player.jointVentures.some((venture) => venture.contractId === 1), false);
   assert.equal(partner.jointVentures.some((venture) => venture.contractId === 1), false);
 
-  match.megaClusters = Array.from(
-    { length: match.config.sharedSupply.megaClusterPairs },
-    (_, index) => ({ id: `mega-${index + 1}` })
-  );
+  player.projects = [{ projectId: "mega_cluster", hostId: "political-host", builtEra: 3 }];
+  assert.equal(match.config.sharedSupply.megaClusterPairs, undefined);
   assert.deepEqual(match.legalResolutions(0, "build").filter(choice => choice.parameters.project?.id === "mega_cluster"), []);
 });
 

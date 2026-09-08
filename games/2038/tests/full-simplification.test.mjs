@@ -140,21 +140,21 @@ test("current connection changes affect claims and penalties without another Pro
   assert.equal(match.finalMandate(player).offlinePenalty, 1);
 });
 
-test("Production never requests allocation and Mega-Clusters need only connected adjacent hosts", async () => {
+test("Production never requests allocation and personal Mega-Clusters need a connected host", async () => {
   const match = await game(); const player = match.players[0]; qualify(match, player);
   player.compute = 0;
   match.round = 2;
-  match.megaClusters.push({ id: "fixture-cluster", leadSeat: 0, leftId: player.facilities[0].id, rightId: player.facilities[1].id });
+  player.projects.push({ projectId: "mega_cluster", hostId: player.facilities[1].id, builtEra: 2 });
   match.choose = async (_policies, _seat, stage, choices) => {
     assert.doesNotMatch(stage, /allocation|additional_movement|talent_movement/);
     return choices[0];
   };
   await match.produceAll([]);
-  assert.equal(match.megaClusters[0].powered, true);
+  assert.ok(match.matchMetrics.projectProduction.some(row => row.seat === 0 && row.project === "mega_cluster"));
   assert.ok(player.compute >= 3);
   player.generators = [];
   await match.produceAll([]);
-  assert.equal(match.megaClusters[0].powered, false);
+  assert.equal(match.matchMetrics.projectProduction.filter(row => row.seat === 0 && row.project === "mega_cluster").length, 1);
 });
 
 test("every qualifying institution may score AGI without replacing the Mandate winner", async () => {

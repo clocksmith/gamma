@@ -109,12 +109,12 @@ test("Build supplies an Era III production engine and still leaves Era IV for Fu
   match.round = 3; await match.beginRound([]);
   build(choice => !choice.parameters.facility && choice.parameters.project?.id === "mega_cluster");
   await match.produceAll([]);
-  assert.equal(player.megaClusters.length, 1);
-  assert.equal(player.megaClusters[0].powered, true);
+  assert.equal(player.projects.length, 1);
+  assert.ok(match.matchMetrics.projectProduction.some(row => row.project === "mega_cluster"));
   match.round = 4; await match.beginRound([]);
   build(choice => !choice.parameters.facility && choice.parameters.project?.id === "fusion_demonstrator");
-  assert.equal(match.fusionBuiltBy, 0);
-  assert.equal(player.megaClusters[0].builtEra, 3);
+  assert.ok(player.projects.some(row => row.projectId === "fusion_demonstrator"));
+  assert.equal(player.projects[0].builtEra, 3);
 });
 
 test("Build checks the combined price and refuses stale plans without partial construction", async () => {
@@ -191,33 +191,29 @@ test("Dovetalis earns on its own optional trades across turns, never on a rival'
   assert.equal(player.runway, 6, "only the traded Runway arrives on a rival's turn");
 });
 
-test("Mega-Cluster host ownership, shared supply, and stale plans remain authoritative under Build", async () => {
+test("personal project plans reject lost ownership before payment", async () => {
   const match = await game(); match.round = 3; await match.beginRound([]);
   const player = match.players[0]; player.runway = 10; player.compute = 10;
-  const energy = match.board.find(t => t.id === "renewable_basin");
-  const adjacent = match.board.find(t => t.category !== "frontier" && match.areAdjacent(t.instanceId, energy.instanceId));
-  player.facilities = [{ id: "s0-facility-1", tileId: energy.instanceId, category: "energy" }];
-  const second = { id: "s1-facility-1", tileId: adjacent.instanceId, category: adjacent.category };
-  match.players[1].facilities = [second];
-  player.generators = [{ id: "g0", tileId: energy.instanceId, sourceId: "clean_infrastructure" }];
-  assert.ok(!match.legalResolutions(0, "build").some(c => !c.parameters.facility && c.parameters.project?.id === "mega_cluster"));
-  match.players[1].facilities = []; player.facilities.push({ ...second, id: "s0-facility-2" });
+  const tile = match.board.find(t => t.category !== "frontier");
+  player.facilities = [{ id: "s0-facility-1", tileId: tile.instanceId, category: tile.category }];
   const choice = match.legalResolutions(0, "build").find(c => !c.parameters.facility && c.parameters.project?.id === "mega_cluster");
   assert.ok(choice);
-  match.megaClusters.push({ id: "occupied", leftId: choice.parameters.project.leftId, rightId: choice.parameters.project.rightId });
+  match.players[1].facilities = player.facilities; player.facilities = [];
   assert.throws(() => match.applyResolution(0, choice), /no longer legal/);
   assert.equal(player.runway, 10); assert.equal(player.compute, 10);
-  match.megaClusters = Array.from({ length: match.config.sharedSupply.megaClusterPairs }, (_, i) => ({ id: `full-${i}`, leftId: `left-${i}`, rightId: `right-${i}` }));
-  assert.ok(!match.legalResolutions(0, "build").some(c => c.parameters.project?.id === "mega_cluster"));
 });
 
-test("Fusion remains unique across all institutions and consumes a Generator slot", async () => {
-  const match = await game(); match.round = 4; await match.beginRound([]);
-  for (const player of match.players) player.runway = 10;
-  const choice = match.legalResolutions(0, "build").find(c => c.parameters.project?.id === "fusion_demonstrator");
-  match.applyResolution(0, choice);
-  assert.equal(match.fusionBuiltBy, 0);
-  assert.ok(match.players.every(player => !match.legalResolutions(player.seat, "build").some(c => c.parameters.project?.id === "fusion_demonstrator")));
+test("Fusion is personal and leaves ordinary Generator slots unchanged", async () => {
+  const match = await game(); match.round = 3; await match.beginRound([]);
+  const tile = match.board.find(t => t.category !== "frontier");
+  for (const player of match.players) {
+    player.runway = 10; player.compute = 10;
+    player.facilities = [{ id: `s${player.seat}-facility-1`, tileId: tile.instanceId, category: tile.category }];
+    const choice = match.legalResolutions(player.seat, "build").find(c => !c.parameters.facility && c.parameters.project?.id === "fusion_demonstrator");
+    assert.ok(choice); match.applyResolution(player.seat, choice);
+    assert.equal(player.generators.length, 0);
+    assert.ok(!match.legalResolutions(player.seat, "build").some(c => c.parameters.project?.id === "fusion_demonstrator"));
+  }
 });
 
 test("the infrastructure Mandate counts current connections rather than removed Power allocation", async () => {
