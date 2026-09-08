@@ -6,6 +6,83 @@
   "family": "public_fx2_transformer",
   "hypothesis": "Removing diagnostic instrumentation while retaining the exact measured WRT support state preserves the P3223 and D3221 fixture archives and reduces deployment code overhead relative to the instrumented realization.",
   "id": "fx2_wrt_support_deploy_fixture_v1",
+  "measured": {
+    "reflections": {
+      "20260908T215904Z_18f6a2e048": {
+        "decision": "hold",
+        "path": "operations/adaptive/reflections/20260908T215904Z_18f6a2e048.json",
+        "sha256": "sha256:a00d54c77e92fb2ba9b9b3295130a45ac6c914ad8fdba41a0fed81ffc9032a4d",
+        "valid": true
+      }
+    },
+    "terminal_results": {
+      "20260908T215904Z_18f6a2e048": {
+        "index": {
+          "path": "operations/provenance/fx2_wrt_support_deploy_terminal_20260908/index.json",
+          "sha256": "sha256:2cee8945ce8537f7c407d5c5f5fcbd1ca22e9e274867e3f5da0b9106a30e5d46"
+        },
+        "reflection": {
+          "decision": "hold",
+          "path": "operations/adaptive/reflections/20260908T215904Z_18f6a2e048.json",
+          "sha256": "sha256:a00d54c77e92fb2ba9b9b3295130a45ac6c914ad8fdba41a0fed81ffc9032a4d",
+          "valid": true
+        },
+        "guard_validation_mode": "discovery-budget-schema",
+        "qualification_authority": false,
+        "missing_diagnostics": [
+          "kernel cpuset controller is not delegated; taskset assignment and existing affinity guard remain active"
+        ],
+        "arms": {
+          "D": {
+            "result_path": "projects/enwiki9/operations/provenance/fx2_wrt_support_deploy_terminal_20260908/D.json",
+            "result_json_bytes": 3295,
+            "result_json_sha256": "de438152864da4f38dde2477d4d0101885bcd8f12c95f9c6b209e8b4f43aceb5",
+            "data_size": 50051,
+            "data_md5": "4ed2a1eb921e43b0a87dff54b396fe0e",
+            "data_sha256": "890b3e1210a24a249768d86bd5a79a1775ce19b2d56984ce3069ee26359ef2e6",
+            "compressed_size": 3221,
+            "program_size": 6016729,
+            "hutter_score": null,
+            "bits_per_byte": 0.5148348684341971,
+            "roundtrip_ok": true,
+            "determinism": true,
+            "compressed_sha256": "4d8daf2b6a1a502e9fc1f8ce1a7f05f1a016de95b2711da78ef0b72a7d52209e",
+            "compress_time_s": 17.12450726190582,
+            "decompress_time_s": 17.62247348483652,
+            "missing_diagnostics": [
+              "No new complete predictor state or per-event probability trace in deployment; exact mapping unit and previous native traces remain distinct evidence",
+              "Compiler/runtime/model licensing and accepted complete package remain unresolved",
+              "Development fixture; no independent holdout transfer"
+            ],
+            "run_id": "fx2_wrt_support_deploy_fixture_v1__20260908T215904Z_18f6a2e048__D"
+          },
+          "P": {
+            "result_path": "projects/enwiki9/operations/provenance/fx2_wrt_support_deploy_terminal_20260908/P.json",
+            "result_json_bytes": 3297,
+            "result_json_sha256": "3fdb471232e04294d7f0f593c62b06659704b0d50bac1f90f42189fda2cdfc33",
+            "data_size": 50051,
+            "data_md5": "4ed2a1eb921e43b0a87dff54b396fe0e",
+            "data_sha256": "890b3e1210a24a249768d86bd5a79a1775ce19b2d56984ce3069ee26359ef2e6",
+            "compressed_size": 3223,
+            "program_size": 6010586,
+            "hutter_score": null,
+            "bits_per_byte": 0.5151545423667859,
+            "roundtrip_ok": true,
+            "determinism": true,
+            "compressed_sha256": "cc94af1a3af764b9c3906f1a30397ed987e71df19b02dca81c50b62146b27805",
+            "compress_time_s": 16.325096152955666,
+            "decompress_time_s": 16.823577472940087,
+            "missing_diagnostics": [
+              "No new complete predictor state or per-event probability trace in deployment; exact mapping unit and previous native traces remain distinct evidence",
+              "Compiler/runtime/model licensing and accepted complete package remain unresolved",
+              "Development fixture; no independent holdout transfer"
+            ],
+            "run_id": "fx2_wrt_support_deploy_fixture_v1__20260908T215904Z_18f6a2e048__P"
+          }
+        }
+      }
+    }
+  },
   "omega": {
     "experiment": {
       "path": "operations/adaptive/experiments/fx2_wrt_support_deploy_fixture_v1.json",
@@ -22,5 +99,6 @@
     ]
   },
   "parent": "fx2_wrt_support_fixture50051_q0_v1",
-  "status": "candidate"
+  "status": "blocked_dependency",
+  "verdict": "Deployment parity gate passes; retain component but do not scale this nonpaying fixture on linear forecasts. Explore a distinct predictive opportunity next"
 }

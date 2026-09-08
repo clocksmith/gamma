@@ -1,0 +1,121 @@
+{
+  "archive": {
+    "bytes": 3223,
+    "path": "results/fx2_wrt_support_deploy_fixture_v1/work/P/archive",
+    "sha256": "cc94af1a3af764b9c3906f1a30397ed987e71df19b02dca81c50b62146b27805"
+  },
+  "binary": {
+    "bytes": 483848,
+    "path": "results/fx2_wrt_support_deploy_fixture_v1/work/P/cmix",
+    "sha256": "08b9e9cf3734ad5952b7a3a5eb403fdc1c4cbb1a853cda613392d52f0a77bea0"
+  },
+  "delivery_zip_bytes": 4128055,
+  "exact_inverse": true,
+  "exact_repeat": true,
+  "overlapping_local_inventory_bytes": 6010586,
+  "package": {
+    "bytes": 28775,
+    "path": "results/fx2_wrt_support_deploy_fixture_v1/P-package.json",
+    "sha256": "5dd4f616f9f91ee513bea0d9f2b701219c21eac0064f056e8062fb0ce1eac81b"
+  },
+  "phases": {
+    "decode": {
+      "accepted_returncodes": [
+        0
+      ],
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "120",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_wrt_support_deploy_fixture_v1/work/P/cmix",
+        "-d",
+        "dictionary/english.dic",
+        "archive",
+        "restored",
+        "--transformer",
+        "models/6m-q4-fp32.tfwc2"
+      ],
+      "elapsed_cap_seconds": 120,
+      "elapsed_seconds": 16.823577472940087,
+      "environment": {},
+      "launch_error": null,
+      "missing_diagnostics": [],
+      "phase": "P-decode",
+      "returncode": 0,
+      "system_cpu_seconds": 1.759842,
+      "timing_authority": "shared-host diagnostic",
+      "user_cpu_seconds": 14.861074000000002
+    },
+    "encode": {
+      "accepted_returncodes": [
+        0
+      ],
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "120",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_wrt_support_deploy_fixture_v1/work/P/cmix",
+        "-c",
+        "dictionary/english.dic",
+        "input",
+        "archive",
+        "--transformer",
+        "models/6m-q4-fp32.tfwc2"
+      ],
+      "elapsed_cap_seconds": 120,
+      "elapsed_seconds": 16.325096152955666,
+      "environment": {},
+      "launch_error": null,
+      "missing_diagnostics": [],
+      "phase": "P-encode",
+      "returncode": 0,
+      "system_cpu_seconds": 1.637066,
+      "timing_authority": "shared-host diagnostic",
+      "user_cpu_seconds": 14.090034000000001
+    },
+    "repeat": {
+      "accepted_returncodes": [
+        0
+      ],
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "120",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_wrt_support_deploy_fixture_v1/work/P/cmix",
+        "-c",
+        "dictionary/english.dic",
+        "restored",
+        "repeat",
+        "--transformer",
+        "models/6m-q4-fp32.tfwc2"
+      ],
+      "elapsed_cap_seconds": 120,
+      "elapsed_seconds": 16.820361598860472,
+      "environment": {},
+      "launch_error": null,
+      "missing_diagnostics": [],
+      "phase": "P-repeat",
+      "returncode": 0,
+      "system_cpu_seconds": 1.711068,
+      "timing_authority": "shared-host diagnostic",
+      "user_cpu_seconds": 14.952527999999994
+    }
+  },
+  "prior_archive_identical": true,
+  "raw_bytes": 50051,
+  "raw_sha256": "890b3e1210a24a249768d86bd5a79a1775ce19b2d56984ce3069ee26359ef2e6",
+  "repeat": {
+    "bytes": 3223,
+    "path": "results/fx2_wrt_support_deploy_fixture_v1/work/P/repeat",
+    "sha256": "cc94af1a3af764b9c3906f1a30397ed987e71df19b02dca81c50b62146b27805"
+  },
+  "restored": {
+    "bytes": 50051,
+    "path": "results/fx2_wrt_support_deploy_fixture_v1/work/P/restored",
+    "sha256": "890b3e1210a24a249768d86bd5a79a1775ce19b2d56984ce3069ee26359ef2e6"
+  },
+  "transient_cleanup": null
+}
