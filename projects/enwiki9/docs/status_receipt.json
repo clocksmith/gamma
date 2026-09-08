@@ -1,16 +1,134 @@
 {
-  "active_candidate": null,
-  "active_candidate_recent_artifacts": [],
-  "active_gate": null,
+  "active_candidate": {
+    "active_source": "live_adaptive_tool_rss_guard",
+    "evidence": "current process, guard, and adaptive-job evidence identify this candidate",
+    "label": "active candidate",
+    "program_id": "opcode_wiki_slot_v1",
+    "scope_bytes": 250000,
+    "status": "running"
+  },
+  "active_candidate_recent_artifacts": [
+    {
+      "bytes": 0,
+      "mtime_utc": "2026-09-08T16:28:14+00:00",
+      "path": "projects/enwiki9/results/opcode_wiki_slot_v1/K-decode.stdout"
+    },
+    {
+      "bytes": 0,
+      "mtime_utc": "2026-09-08T16:28:14+00:00",
+      "path": "projects/enwiki9/results/opcode_wiki_slot_v1/K-decode.stderr"
+    },
+    {
+      "bytes": 880,
+      "mtime_utc": "2026-09-08T16:28:14+00:00",
+      "path": "projects/enwiki9/results/opcode_wiki_slot_v1/K-encode.execution.json"
+    },
+    {
+      "bytes": 122,
+      "mtime_utc": "2026-09-08T16:28:14+00:00",
+      "path": "projects/enwiki9/results/opcode_wiki_slot_v1/K-encode.stdout"
+    },
+    {
+      "bytes": 32229,
+      "mtime_utc": "2026-09-08T16:28:14+00:00",
+      "path": "projects/enwiki9/results/opcode_wiki_slot_v1/K-encode.audit.json"
+    },
+    {
+      "bytes": 67658,
+      "mtime_utc": "2026-09-08T16:28:14+00:00",
+      "path": "projects/enwiki9/results/opcode_wiki_slot_v1/K.arc"
+    },
+    {
+      "bytes": 0,
+      "mtime_utc": "2026-09-08T16:27:00+00:00",
+      "path": "projects/enwiki9/results/opcode_wiki_slot_v1/K-encode.stderr"
+    },
+    {
+      "bytes": 865,
+      "mtime_utc": "2026-09-08T16:27:00+00:00",
+      "path": "projects/enwiki9/results/opcode_wiki_slot_v1/P-repeat.execution.json"
+    },
+    {
+      "bytes": 123,
+      "mtime_utc": "2026-09-08T16:27:00+00:00",
+      "path": "projects/enwiki9/results/opcode_wiki_slot_v1/P-repeat.stdout"
+    },
+    {
+      "bytes": 31487,
+      "mtime_utc": "2026-09-08T16:27:00+00:00",
+      "path": "projects/enwiki9/results/opcode_wiki_slot_v1/P-repeat.audit.json"
+    },
+    {
+      "bytes": 67658,
+      "mtime_utc": "2026-09-08T16:27:00+00:00",
+      "path": "projects/enwiki9/results/opcode_wiki_slot_v1/P.repeat.arc"
+    },
+    {
+      "bytes": 0,
+      "mtime_utc": "2026-09-08T16:26:06+00:00",
+      "path": "projects/enwiki9/results/opcode_wiki_slot_v1/P-repeat.stderr"
+    }
+  ],
+  "active_gate": {
+    "active_source": "live adaptive worker receipt: operations/adaptive/running/909_20260908T162205Z_46ebdbaee4.json",
+    "driver_result_json": "projects/enwiki9/results/opcode_wiki_slot_v1/decision.json",
+    "driver_result_json_present": false,
+    "evidence": "gate decision is running; wait for terminal receipts",
+    "gate_size": 250000,
+    "label": "active gate",
+    "next_action": "wait_for_gate_completion",
+    "program_id": "opcode_wiki_slot_v1",
+    "scope_bytes": 250000,
+    "scope_symbols": 250000,
+    "scope_unit": "raw byte",
+    "source": "live_adaptive_tool_rss_guard",
+    "status": "running"
+  },
   "active_processes": {
-    "active_rows": [],
-    "active_scorer_observed": false,
+    "active_rows": [
+      {
+        "args": "python3 tools/enwiki9_lab.py run --candidate opcode_wiki_slot_v1 --max-workers 1",
+        "pgid": 1508746,
+        "pid": 1508746,
+        "ppid": 2643307,
+        "rss_kib": 41916,
+        "stat": "Ssl"
+      },
+      {
+        "args": "/usr/bin/python3 /home/x/deco/gamma/projects/enwiki9/tools/run_with_resource_guard_v3.py --limit-kib 4194304 --official-decimal-limit-kib 4194304 --limit-mode tree --cgroup-path /sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/gamma-enwiki9-20260908T162205Z_46ebdbaee4 --cgroup-memory-max-bytes 4294967296 --temporary-disk-limit-bytes 1073741824 --phase-marker-path /home/x/deco/gamma/projects/enwiki9/run_logs/adaptive/20260908T162205Z_46ebdbaee4.resources/phases.jsonl --max-logical-cpus 1 --guard-json /home/x/deco/gamma/projects/enwiki9/run_logs/adaptive/20260908T162205Z_46ebdbaee4.resources/guard.json --label 20260908T162205Z_46ebdbaee4 --phase diagnostic --scratch-path /home/x/deco/gamma/projects/enwiki9/results/opcode_wiki_slot_runtime_tmp_20260908/gamma-enwiki9-20260908T162205Z_46ebdbaee4-4s1hyeg5/opcode_wiki_slot_v1 --scratch-path /home/x/deco/gamma/projects/enwiki9/results/opcode_wiki_slot_v1 --scratch-path /home/x/deco/gamma/projects/enwiki9/run_logs/adaptive/20260908T162205Z_46ebdbaee4.log --scratch-path /home/x/deco/gamma/projects/enwiki9/run_logs/adaptive/20260908T162205Z_46ebdbaee4.resources -- /usr/bin/taskset --cpu-list 2 /bin/sh -c printf '%s\\n' '{\"phase\":\"diagnostic\",\"event\":\"worker_start\",\"detail\":\"operational envelope only; no codec phase credit\"}' >> \"$GAMMA_RESOURCE_PHASE_MARKERS\" || exit 125; exec \"$@\" enwiki9-discovery-envelope /usr/bin/python3 /home/x/deco/gamma/projects/enwiki9/tools/opcode_wiki_slot_gate_v1.py",
+        "pgid": 1508746,
+        "pid": 1508944,
+        "ppid": 1508746,
+        "rss_kib": 33696,
+        "stat": "S"
+      },
+      {
+        "args": "/usr/bin/python3 /home/x/deco/gamma/projects/enwiki9/tools/opcode_wiki_slot_gate_v1.py",
+        "pgid": 1508962,
+        "pid": 1508962,
+        "ppid": 1508944,
+        "rss_kib": 24876,
+        "stat": "Ss"
+      },
+      {
+        "args": "/usr/bin/python3 /home/x/deco/gamma/projects/enwiki9/tools/opcode_wiki_slot_observe_v1.py decode /home/x/deco/gamma/projects/enwiki9/results/opcode_wiki_slot_v1/K.arc /home/x/deco/gamma/projects/enwiki9/results/opcode_wiki_slot_v1/K.raw --candidate-root /home/x/deco/gamma/projects/enwiki9/results/opcode_wiki_slot_runtime_tmp_20260908/gamma-enwiki9-20260908T162205Z_46ebdbaee4-4s1hyeg5/opcode_wiki_slot_v1 --arm K --audit /home/x/deco/gamma/projects/enwiki9/results/opcode_wiki_slot_v1/K-decode.audit.json",
+        "pgid": 1548245,
+        "pid": 1548245,
+        "ppid": 1508962,
+        "rss_kib": 403668,
+        "stat": "Rs"
+      }
+    ],
+    "active_scorer_observed": true,
+    "active_tree_decimal_10gb_margin_kib": 9261469,
+    "active_tree_margin_kib": 9981604,
+    "active_tree_rss_kib": 504156,
     "cmix_rows": [],
     "controller_rows": [],
     "decimal_10gb_guard_kib": 9765625,
     "existing_observer_source_live": false,
     "max_cmix_process": null,
-    "recorded_running_job_count": 1,
+    "recorded_running_job_count": 2,
     "research_rows": [],
     "rss_guard_kib": 10485760
   },
@@ -18,7 +136,7 @@
     "claimable_pending_job_count": 0,
     "held_pending_job_count": 26,
     "pending_job_count": 26,
-    "running_job_count": 1,
+    "running_job_count": 2,
     "running_jobs": [
       {
         "candidate_id": "endpoint428_horizon_retained_parent_trace_q0_v1",
@@ -37,6 +155,33 @@
         "timing_authority": "unverified",
         "worker_pid": 2878467,
         "worker_pid_live": false
+      },
+      {
+        "candidate_id": "opcode_wiki_slot_v1",
+        "execution_mode": "discovery",
+        "experiment": {
+          "path": "operations/adaptive/experiments/opcode_wiki_slot_v1.json",
+          "sha256": "sha256:ed51779aefe0c51051f95aa5c995144afab8ee780d73e4a7a9305f76b5d39aae"
+        },
+        "gate_size": 250000,
+        "job_id": "20260908T162205Z_46ebdbaee4",
+        "liveness": "live",
+        "path": "projects/enwiki9/operations/adaptive/running/909_20260908T162205Z_46ebdbaee4.json",
+        "resource_budget": {
+          "cgroup_parent": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice",
+          "cpus": [
+            2
+          ],
+          "memory_bytes": 4294967296,
+          "scratch_bytes": 1073741824,
+          "swap_bytes": 0,
+          "wall_seconds": 2400
+        },
+        "started_at": "2026-09-08T16:24:43+00:00",
+        "state": "running",
+        "timing_authority": "diagnostic",
+        "worker_pid": 1508944,
+        "worker_pid_live": true
       }
     ]
   },
@@ -123,43 +268,47 @@
     "scope_bytes": 1000000000,
     "status": "not verified"
   },
-  "blocker": null,
+  "blocker": {
+    "evidence": "active 250,000 byte deterministic replay has not produced terminal driver and RSS receipts yet",
+    "label": "blocker",
+    "status": "open"
+  },
   "candidate_audit": {
-    "expected_sha256": "f228aaaa6001326724be1e831ace9fa7fcb1856006a64545d97ac541ae05ea4e",
+    "expected_sha256": "ae1a49c9defce0529e2802f036996ad7e79f40ea611cd188464e4be9ab2a532d",
     "freshness": "not_revalidated",
-    "generated_at": "2026-09-08T16:09:45+00:00",
+    "generated_at": "2026-09-08T16:28:48+00:00",
     "mode": "inventory_snapshot",
     "notice": "Snapshot identity is verified; inventory inputs were not rescanned. This is not live occupancy or launch authority.",
     "path": "/home/x/deco/gamma/projects/enwiki9/candidate_inventory.json",
     "returncode": 0,
-    "sha256": "f228aaaa6001326724be1e831ace9fa7fcb1856006a64545d97ac541ae05ea4e",
+    "sha256": "ae1a49c9defce0529e2802f036996ad7e79f40ea611cd188464e4be9ab2a532d",
     "summary": {
       "candidate_status_counts": {
         "active": 18,
         "blocked_dependency": 69,
-        "candidate": 242,
+        "candidate": 243,
         "measured_negative": 100,
         "retired": 568
       },
-      "directories": 6789,
-      "file_entries": 49346,
-      "ignored_entries": 19494,
-      "modified_tracked_entries": 6,
-      "program_directories": 997,
+      "directories": 6815,
+      "file_entries": 49496,
+      "ignored_entries": 19549,
+      "modified_tracked_entries": 3,
+      "program_directories": 998,
       "proposal_contract_status_counts": {
         "invalid": 125,
         "legacy-unstructured": 212,
         "orphaned": 9,
         "unclassified": 574,
-        "valid": 77
+        "valid": 78
       },
-      "registered_programs": 536,
+      "registered_programs": 537,
       "revision_status_counts": {
-        "current": 206,
+        "current": 207,
         "missing": 790,
         "mutable-drift": 1
       },
-      "successor_eligible_candidates": 76,
+      "successor_eligible_candidates": 77,
       "top_level_file_entries": {
         ".agents": 1,
         ".claude": 2,
@@ -175,32 +324,44 @@
         "external": 400,
         "ledger": 3,
         "lib": 17,
-        "operations": 3932,
+        "operations": 3943,
         "patches": 41,
-        "programs": 3233,
-        "results": 29339,
+        "programs": 3237,
+        "results": 29467,
         "results_preserve": 9383,
-        "run_logs": 936,
+        "run_logs": 939,
         "scratch": 181,
         "skills": 5,
-        "tests": 156,
-        "tools": 1043,
+        "tests": 158,
+        "tools": 1045,
         "workbench": 3
       },
-      "tracked_entries": 30581,
+      "tracked_entries": 30682,
       "unreflected_terminal_candidates": 117,
-      "untracked_nonignored_entries": 6
+      "untracked_nonignored_entries": 0
     }
   },
   "certificate_active_candidate": {
-    "active_source": "recorded jobs have unknown host liveness",
-    "evidence": "Recorded ownership remains unresolved; no launch permission is inferred.",
+    "active_source": "live adaptive worker receipt: operations/adaptive/running/909_20260908T162205Z_46ebdbaee4.json",
+    "evidence": "active 250,000 byte replay is running; no constructive result is present for this candidate yet",
     "label": "active candidate",
-    "program_id": null,
-    "status": "unknown"
+    "program_id": "opcode_wiki_slot_v1",
+    "scope_bytes": 250000,
+    "status": "running gate"
   },
-  "certificate_active_gate": null,
-  "certificate_blocker": null,
+  "certificate_active_gate": {
+    "active_source": "live adaptive worker receipt: operations/adaptive/running/909_20260908T162205Z_46ebdbaee4.json",
+    "evidence": "unchanged 250,000 byte RSS-guarded determinism replay; wait for terminal receipts",
+    "label": "active gate",
+    "program_id": "opcode_wiki_slot_v1",
+    "scope_bytes": 250000,
+    "status": "pending"
+  },
+  "certificate_blocker": {
+    "evidence": "active 250,000 byte deterministic replay has not produced terminal driver and RSS receipts yet",
+    "label": "blocker",
+    "status": "open"
+  },
   "certificate_objective": {
     "corpusBytes": 1000000000,
     "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
@@ -209,57 +370,95 @@
     "objectivePath": "contracts/research/v3/objective-contract.json",
     "targetScoreBytes": 90000000
   },
-  "contingencies": null,
-  "gate_decision": null,
+  "contingencies": {
+    "if_passes": {
+      "action": "record pass and inspect the frozen candidate promotion rule",
+      "next_scope_bytes": null,
+      "reason": "the generic scope ladder grants no candidate-specific authority; a larger scope requires an explicitly authorized successor gate"
+    },
+    "if_roundtrip_or_determinism_fails": {
+      "action": "record failure and do not promote",
+      "reason": "compression evidence is not a deterministic constructive upper-bound row"
+    },
+    "if_rss_fails": {
+      "action": "record RSS failure and retire or repackage this integration shape",
+      "lower_memory_suggestion": null
+    }
+  },
+  "gate_decision": {
+    "adaptive_job_id": "20260908T162205Z_46ebdbaee4",
+    "adaptive_job_path": "projects/enwiki9/operations/adaptive/running/909_20260908T162205Z_46ebdbaee4.json",
+    "adaptive_worker_pid": 1508944,
+    "candidate": "opcode_wiki_slot_v1",
+    "claim_rule": "A nested RSS guard inherits candidate and scope from its verified live adaptive worker; the guard supplies resource and terminal metrics only.",
+    "driver_result_json": "projects/enwiki9/results/opcode_wiki_slot_v1/decision.json",
+    "driver_result_json_present": false,
+    "gate_size": 250000,
+    "guard_inferred_scope_bytes": null,
+    "guard_label_candidate": "opcode_wiki_slot_v1",
+    "next_action": "wait_for_gate_completion",
+    "scope_bytes": 250000,
+    "scope_symbols": 250000,
+    "scope_unit": "raw byte",
+    "source": "live_adaptive_tool_rss_guard",
+    "verdict": "running"
+  },
   "gate_evidence_status": {
     "claim_rule": "Only a terminal driver result with roundtrip evidence can become a benchmark row.",
     "claim_status": "awaiting_gate_receipts",
     "driver_result_terminal": false,
-    "live_gate": false,
+    "live_gate": true,
     "live_guard_only": false,
-    "liveness_classification": "not_persisted_running",
+    "liveness_classification": "live_observed_owner",
     "rss_guard_terminal": false,
     "scored_gate_result_present": false
   },
   "gate_liveness": {
-    "candidate": null,
+    "candidate": "opcode_wiki_slot_v1",
     "claim_rule": "A running receipt or registered adaptive job is live only with an exact driver, owning controller, matching live worker, or frozen adopted process identities.",
-    "classification": "not_persisted_running",
-    "gate_size": null,
-    "is_live": false,
-    "matching_adaptive_job_count": 0,
-    "matching_adaptive_worker_live": false,
+    "classification": "live_observed_owner",
+    "gate_size": 250000,
+    "is_live": true,
+    "matching_adaptive_job_count": 1,
+    "matching_adaptive_worker_live": true,
     "matching_adopted_source_live": false,
     "matching_controller_count": 0,
     "matching_driver_observed": false,
-    "persisted_running": false,
-    "receipt_running": false,
-    "scope_bytes": null,
-    "scope_symbols": null,
-    "scope_unit": null
+    "persisted_running": true,
+    "receipt_running": true,
+    "scope_bytes": 250000,
+    "scope_symbols": 250000,
+    "scope_unit": "raw byte"
   },
-  "generated_at_utc": "2026-09-08T16:09:48+00:00",
+  "generated_at_utc": "2026-09-08T16:28:52+00:00",
   "handoff": {
-    "active_scorer_observed": false,
-    "candidate": null,
+    "active_scorer_observed": true,
+    "candidate": "opcode_wiki_slot_v1",
     "claim_rule": "Only an exact full-corpus package can prove the active objective.",
     "command_source": "none while gate is non-terminal",
     "gate_mutation_allowed": false,
-    "gate_next_action": null,
-    "gate_size": null,
-    "gate_verdict": null,
+    "gate_next_action": "wait_for_gate_completion",
+    "gate_size": 250000,
+    "gate_verdict": "running",
     "has_10_95_constructive_upper_bound": false,
     "has_full_corpus_constructive_result": false,
-    "recommended_action": "verify_recorded_running_jobs_on_host",
-    "scope_bytes": null,
-    "scope_symbols": null,
-    "scope_unit": null,
+    "recommended_action": "wait_for_gate_receipts",
+    "scope_bytes": 250000,
+    "scope_symbols": 250000,
+    "scope_unit": "raw byte",
     "terminal_verdict_present": false
   },
   "has_10_95_constructive_upper_bound": false,
   "has_current_objective_constructive_upper_bound": false,
   "has_full_corpus_constructive_result": false,
-  "next_gate": null,
+  "next_gate": {
+    "active_source": "live adaptive worker receipt: operations/adaptive/running/909_20260908T162205Z_46ebdbaee4.json",
+    "evidence": "unchanged 250,000 byte RSS-guarded determinism replay; wait for terminal receipts",
+    "label": "active gate",
+    "program_id": "opcode_wiki_slot_v1",
+    "scope_bytes": 250000,
+    "status": "pending"
+  },
   "objective": {
     "corpusBytes": 1000000000,
     "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
@@ -271,21 +470,21 @@
   "observed_controller_command": {
     "controller_process_count": 0,
     "controller_processes": [],
-    "expected_active_candidate": null,
-    "expected_active_scope_bytes": null,
+    "expected_active_candidate": "opcode_wiki_slot_v1",
+    "expected_active_scope_bytes": 250000,
     "scope_note": "Controller scope may be the completed parent gate that launched the active child; the observed driver command is authoritative for the active gate scope."
   },
   "observed_gate_command": {
     "active_gate_command_observed": false,
     "driver_process_count": 0,
     "driver_processes": [],
-    "expected_candidate": null,
-    "expected_scope_bytes": null,
+    "expected_candidate": "opcode_wiki_slot_v1",
+    "expected_scope_bytes": 250000,
     "mismatch_count": 0
   },
   "operator_action": {
-    "action": "verify_recorded_running_jobs_on_host",
-    "reason": "Recorded running jobs must be attributed or reconciled before this status view can recommend a launch.",
+    "action": "wait_for_gate_receipts",
+    "reason": "the gate state is incomplete and cannot drive a mutation yet",
     "safe_to_launch_gate": false
   },
   "operator_logs": {
@@ -295,24 +494,24 @@
   },
   "operator_summary": {
     "active_cmix_mode": null,
-    "active_process_tree_decimal_10gb_margin_kib": null,
-    "active_process_tree_margin_kib": null,
-    "active_process_tree_rss_kib": null,
-    "active_scorer_observed": false,
+    "active_process_tree_decimal_10gb_margin_kib": 9261469,
+    "active_process_tree_margin_kib": 9981604,
+    "active_process_tree_rss_kib": 504156,
+    "active_scorer_observed": true,
     "active_stage": null,
     "binary_10gib_guard_kib": 10485760,
-    "candidate": null,
+    "candidate": "opcode_wiki_slot_v1",
     "claim_rule": "Only an exact full-corpus package can prove the active objective.",
     "claimable_pending_adaptive_jobs": 0,
     "codec_progress": null,
     "command_source": "none while gate is non-terminal",
     "decimal_10gb_guard_kib": 9765625,
-    "driver_result_json": null,
-    "driver_result_present": null,
+    "driver_result_json": "projects/enwiki9/results/opcode_wiki_slot_v1/decision.json",
+    "driver_result_present": false,
     "gate_mutation_allowed": false,
-    "gate_next_action": null,
-    "gate_size": null,
-    "gate_verdict": null,
+    "gate_next_action": "wait_for_gate_completion",
+    "gate_size": 250000,
+    "gate_verdict": "running",
     "has_10_95_constructive_upper_bound": false,
     "has_full_corpus_constructive_result": false,
     "held_pending_adaptive_jobs": 26,
@@ -331,7 +530,7 @@
     "observer_job_id": null,
     "observer_progress": null,
     "observer_worker_live": null,
-    "operator_action": "verify_recorded_running_jobs_on_host",
+    "operator_action": "wait_for_gate_receipts",
     "pending_adaptive_jobs": 26,
     "release_bundles": 2,
     "release_failed_attempts": 0,
@@ -343,9 +542,9 @@
     "rss_guard_status": null,
     "rss_samples": null,
     "safe_to_launch_gate": false,
-    "scope_bytes": null,
-    "scope_symbols": null,
-    "scope_unit": null,
+    "scope_bytes": 250000,
+    "scope_symbols": 250000,
+    "scope_unit": "raw byte",
     "single_rss_margin_kib": null,
     "source_processes_live": null,
     "terminal_verdict_present": false
