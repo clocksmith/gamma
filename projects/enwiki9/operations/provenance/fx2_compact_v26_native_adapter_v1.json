@@ -1,0 +1,96 @@
+{
+  "schema": "gamma.enwiki9.exact-source-adapter-multi.v1",
+  "adapter_id": "fx2_compact_v26_native_v1",
+  "files": [
+    {
+      "source_path": "src/predictor.h",
+      "source_sha256": "348d3924fc4e1f4890d0332b0f33ba9591afa6ee06971b9a9bdeaa376b41f458",
+      "source_bytes": 7136,
+      "patched_sha256": "39ac83cc7421f4663e8ad20eb0a7eae4ac554b35140c5938d3dfebc42ce7c7ee",
+      "patched_bytes": 7512,
+      "replacements": [
+        {
+          "before": "#include \"models/fxcmv1.h\"",
+          "after": "#include \"fxcm_model_bridge_v1.hpp\"\n#if GAMMA_FXCM_ARM == 2\n#include \"models/fxcm_v26.h\"\nusing GammaFxcmModel = gamma_fxcm_bridge::Raw<FXCMV26,403>;\n#elif GAMMA_FXCM_ARM == 1\n#include \"models/fxcmv1.h\"\nusing GammaFxcmModel = gamma_fxcm_bridge::Copy<FXCM>;\n#elif GAMMA_FXCM_ARM == 0\n#include \"models/fxcmv1.h\"\nusing GammaFxcmModel = FXCM;\n#else\n#error \"GAMMA_FXCM_ARM must be 0, 1 or 2\"\n#endif"
+        },
+        {
+          "before": "std::optional<FXCM> fxcm_model_",
+          "after": "std::optional<GammaFxcmModel> fxcm_model_"
+        }
+      ]
+    },
+    {
+      "source_path": "src/predictor.cpp",
+      "source_sha256": "0b79f43644daee942c9cb6da18fa464f0eb0185b6fc7ffc43cde703808fe537e",
+      "source_bytes": 27424,
+      "patched_sha256": "e3b4d56298ea79fe140a6a67cdb865b2ee982c63aea89512fda3dd52d22885e7",
+      "patched_bytes": 27681,
+      "replacements": [
+        {
+          "before": "  fxcm_model_.emplace();",
+          "after": "  fxcm_model_.emplace();\n  constexpr unsigned gamma_outputs = GAMMA_FXCM_ARM == 2 ? 403 : 431;\n  if (fxcm_model_->NumOutputs() != gamma_outputs) Fail(\"Gamma FXCM output count differs\");\n  std::fprintf(stderr, \"Gamma FXCM arm=%c outputs=%u\\n\", \"PKD\"[GAMMA_FXCM_ARM], gamma_outputs);"
+        }
+      ]
+    }
+  ],
+  "added_files": [
+    {
+      "source": {
+        "path": "lib/forge_fxcm_raw_adapter_v2.hpp",
+        "bytes": 1039,
+        "sha256": "e49558d066ceb9eac83023ebc8e47d7b6549b1a95b72b48bb65ca7e451a71106"
+      },
+      "target": "src/forge_fxcm_raw_adapter_v2.hpp"
+    },
+    {
+      "source": {
+        "path": "lib/fxcm_model_bridge_v1.hpp",
+        "bytes": 1611,
+        "sha256": "60bd9631fcf135156929b5ec72c6b3a33895b4c8efc02f2dad060d8f5e653d30"
+      },
+      "target": "src/fxcm_model_bridge_v1.hpp"
+    },
+    {
+      "source": {
+        "path": "results/forge_parent_source_audit_v1/source-tree/src/models/fxcm_v26.cpp",
+        "bytes": 226676,
+        "sha256": "cd4534a22908d7e2a55b594e8604b3c513922e646ff206b4d237a1dd95a71149"
+      },
+      "target": "src/models/fxcm_v26.cpp"
+    },
+    {
+      "source": {
+        "path": "results/forge_parent_source_audit_v1/source-tree/src/models/fxcm_v26.h",
+        "bytes": 665,
+        "sha256": "5072046c441df432991b4d7f6e89aaaf7b0f372c2ec782203be3518e384d0594"
+      },
+      "target": "src/models/fxcm_v26.h"
+    },
+    {
+      "source": {
+        "path": "results/forge_parent_source_audit_v1/source-tree/src/profile-timer.h",
+        "bytes": 2157,
+        "sha256": "ca45fa4fbf843621790a3af4efd3753c15d2aafed27ac2afd1e982440599b7f6"
+      },
+      "target": "src/profile-timer.h"
+    },
+    {
+      "source": {
+        "path": "results/forge_parent_source_audit_v1/source-tree/LICENSE",
+        "bytes": 35149,
+        "sha256": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986"
+      },
+      "target": "FORGE-LICENSE"
+    },
+    {
+      "source": {
+        "path": "results/forge_parent_source_audit_v1/source-tree/THIRD-PARTY-NOTICES.md",
+        "bytes": 5426,
+        "sha256": "ca70993bf25bbb9ee7b164e63935c9af6c7d0315c37171019bfe9002020fbc8c"
+      },
+      "target": "FORGE-THIRD-PARTY-NOTICES.md"
+    }
+  ],
+  "boundary": "P keeps FXCM; K copies the same floats; D maps compact403 raw outputs exactly. Transformer/frontend/update order stay unchanged.",
+  "scope": "Source materialization only; native inversion and full predictor state remain unproved."
+}
