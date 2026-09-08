@@ -21,6 +21,15 @@ an exact support premise with a measured conditional ideal gain, not an archive
 or package result. A native successor must preserve parent updates and measure
 complete archives and added package costs; no full-corpus slope is inferred.
 
+The [native comparison](../operations/adaptive/experiments/fx2_wrt_support_fixture50051_q0_v1.json)
+is now frozen under owner `root_explore`, job `20260908T213318Z_aaa7cb651d`.
+Four native unit tests pass: all code shapes match Python, P/K/D projection and
+state traces agree, source composition preserves every parent call, and invalid
+activation is rejected. Only the final integer coder probability changes in D.
+The bounded CPU2 gate requires retained P/K archives, independent inverses,
+repeats, all introduced-state records and unchanged parent float predictions.
+It remains held for publication and admission; no native archive result yet.
+
 ## 2026-09-08 - Native output-tail comparison freezes one numerical correction
 
 The [new comparison](../operations/adaptive/experiments/fx2_half_tail_fixture50051_q0_v1.json)

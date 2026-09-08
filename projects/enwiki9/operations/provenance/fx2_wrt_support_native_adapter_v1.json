@@ -1,0 +1,91 @@
+{
+  "schema": "gamma.enwiki9.exact-source-adapter-multi.v1",
+  "adapter_id": "fx2_wrt_support_native_v1",
+  "files": [
+    {
+      "source_path": "src/coder/encoder.cpp",
+      "source_bytes": 914,
+      "source_sha256": "ecd9a2f4f39553e3864c8e9c96c7b512edca46a6fbb3197beaccaf47b0a8fdce",
+      "patched_bytes": 1218,
+      "patched_sha256": "25f97156d816ef55a348260ca5467e7fb108f40c2c3b98741d46a28d469226c3",
+      "replacements": [
+        {
+          "before": "#include \"encoder.h\"",
+          "after": "#include \"encoder.h\"\n#include \"gamma-coder-trace.h\""
+        },
+        {
+          "before": "  const unsigned int p = Discretize(p_->Predict());",
+          "after": "  const float gamma_probability = p_->Predict();\n  const unsigned int p = Discretize(gamma_probability);\n  gamma_fx2_trace::Record gamma_record(gamma_probability, p, x1_, x2_);"
+        },
+        {
+          "before": "    x2_ = (x2_ << 8) + 255;\n  }\n}\n\nvoid Encoder::Flush()",
+          "after": "    x2_ = (x2_ << 8) + 255;\n  }\n  gamma_record.Finish(bit, x1_, x2_);\n}\n\nvoid Encoder::Flush()"
+        },
+        {
+          "before": "#include \"gamma-coder-trace.h\"",
+          "after": "#include \"gamma-coder-trace.h\"\n#include \"gamma-wrt-support.h\""
+        },
+        {
+          "before": "const unsigned int p = Discretize(gamma_probability);",
+          "after": "const unsigned int p = gamma_wrt_support::audit().project(Discretize(gamma_probability));"
+        },
+        {
+          "before": "  p_->Perceive(bit);",
+          "after": "  gamma_wrt_support::audit().observe(bit);\n  p_->Perceive(bit);"
+        }
+      ]
+    },
+    {
+      "source_path": "src/coder/decoder.cpp",
+      "source_bytes": 832,
+      "source_sha256": "1bae2c108906625fb124f3fc602d1d59d814e5a415d963ab74246bf474e8bae9",
+      "patched_bytes": 1136,
+      "patched_sha256": "4a5c60f8130e7f6988031af40ee357392ab86c77a709a47e869b7d4db9d722cc",
+      "replacements": [
+        {
+          "before": "#include \"decoder.h\"",
+          "after": "#include \"decoder.h\"\n#include \"gamma-coder-trace.h\""
+        },
+        {
+          "before": "  const unsigned int p = Discretize(p_->Predict());",
+          "after": "  const float gamma_probability = p_->Predict();\n  const unsigned int p = Discretize(gamma_probability);\n  gamma_fx2_trace::Record gamma_record(gamma_probability, p, x1_, x2_);"
+        },
+        {
+          "before": "  return bit;",
+          "after": "  gamma_record.Finish(bit, x1_, x2_);\n  return bit;"
+        },
+        {
+          "before": "#include \"gamma-coder-trace.h\"",
+          "after": "#include \"gamma-coder-trace.h\"\n#include \"gamma-wrt-support.h\""
+        },
+        {
+          "before": "const unsigned int p = Discretize(gamma_probability);",
+          "after": "const unsigned int p = gamma_wrt_support::audit().project(Discretize(gamma_probability));"
+        },
+        {
+          "before": "  p_->Perceive(bit);",
+          "after": "  gamma_wrt_support::audit().observe(bit);\n  p_->Perceive(bit);"
+        }
+      ]
+    }
+  ],
+  "added_files": [
+    {
+      "source": {
+        "path": "lib/wrt_support_native_v1.hpp",
+        "bytes": 2941,
+        "sha256": "ed2e5e579cfdf6a329c3b02368b97c628efff5596181bc527fa7ff0c7af920a9"
+      },
+      "target": "src/coder/gamma-wrt-support.h"
+    },
+    {
+      "source": {
+        "path": "tools/fx2_coder_trace_v1.hpp",
+        "bytes": 2359,
+        "sha256": "d72dfa104668e2f3138e41e7bdfd54c8ad634d00d64338a627dbf1835656a11b"
+      },
+      "target": "src/coder/gamma-coder-trace.h"
+    }
+  ],
+  "boundary": "Only final coder probabilities change in D; all parent Predict and Perceive calls remain exactly once and unchanged. Decoder constraint state updates only from decoded bits."
+}
