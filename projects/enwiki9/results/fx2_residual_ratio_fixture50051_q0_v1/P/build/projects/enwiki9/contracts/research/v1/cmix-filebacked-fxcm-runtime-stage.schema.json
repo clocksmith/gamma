@@ -1,0 +1,153 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gamma.enwiki9.cmix-filebacked-fxcm-runtime-stage.v1",
+  "title": "CMIX file-backed FXCM prize-facing runtime stage",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema", "candidate_id", "mode", "population", "inputs", "command",
+    "return_code", "outputs", "exact_raw_inverse_pass",
+    "backing_cleanup_pass", "errors", "phase_marker", "stage_runner",
+    "work_root", "result_root", "stage_pass", "claim_authority",
+    "execution_authority", "gamma_compression_credit_bytes",
+    "gamma_score_credit_bytes"
+  ],
+  "properties": {
+    "schema": {"const": "gamma.enwiki9.cmix-filebacked-fxcm-runtime-stage.v1"},
+    "candidate_id": {"const": "cmix_obias_memory_safe_parent_filebacked_q1_v1"},
+    "mode": {"enum": ["encode", "decode"]},
+    "population": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["bytes", "sha256"],
+      "properties": {
+        "bytes": {"const": 1000000000},
+        "sha256": {"const": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc"}
+      }
+    },
+    "inputs": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "corpus": {"$ref": "#/$defs/canonicalFile"},
+        "package": {"$ref": "#/$defs/file"},
+        "head": {"$ref": "#/$defs/file"},
+        "archive": {"$ref": "#/$defs/file"}
+      }
+    },
+    "command": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"type": "string", "minLength": 1}
+    },
+    "return_code": {"type": "integer"},
+    "outputs": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "payload": {"$ref": "#/$defs/file"},
+        "archive": {"$ref": "#/$defs/file"},
+        "restored": {"$ref": "#/$defs/file"}
+      }
+    },
+    "exact_raw_inverse_pass": {"type": ["boolean", "null"]},
+    "backing_cleanup_pass": {"type": "boolean"},
+    "errors": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1}
+    },
+    "phase_marker": {"$ref": "#/$defs/file"},
+    "stage_runner": {"$ref": "#/$defs/file"},
+    "work_root": {"type": "string", "pattern": "^/"},
+    "result_root": {"type": "string", "pattern": "^/"},
+    "stage_pass": {"type": "boolean"},
+    "claim_authority": {"const": "single_guarded_prize_runtime_stage_only"},
+    "execution_authority": {"const": false},
+    "gamma_compression_credit_bytes": {"const": 0},
+    "gamma_score_credit_bytes": {"const": 0}
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"mode": {"const": "encode"}}, "required": ["mode"]},
+      "then": {
+        "properties": {
+          "inputs": {
+            "required": ["corpus", "package", "head"],
+            "not": {"required": ["archive"]}
+          },
+          "outputs": {"not": {"required": ["restored"]}},
+          "exact_raw_inverse_pass": {"const": null}
+        }
+      },
+      "else": {
+        "properties": {
+          "inputs": {
+            "required": ["archive"],
+            "not": {
+              "anyOf": [
+                {"required": ["corpus"]},
+                {"required": ["package"]},
+                {"required": ["head"]}
+              ]
+            }
+          },
+          "outputs": {
+            "not": {"anyOf": [{"required": ["payload"]}, {"required": ["archive"]}]}
+          }
+        }
+      }
+    },
+    {
+      "if": {"properties": {"stage_pass": {"const": true}}, "required": ["stage_pass"]},
+      "then": {
+        "properties": {
+          "return_code": {"const": 0},
+          "backing_cleanup_pass": {"const": true},
+          "errors": {"maxItems": 0}
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {"stage_pass": {"const": true}, "mode": {"const": "encode"}},
+        "required": ["stage_pass", "mode"]
+      },
+      "then": {"properties": {"outputs": {"required": ["payload", "archive"]}}}
+    },
+    {
+      "if": {
+        "properties": {"stage_pass": {"const": true}, "mode": {"const": "decode"}},
+        "required": ["stage_pass", "mode"]
+      },
+      "then": {
+        "properties": {
+          "outputs": {"required": ["restored"]},
+          "exact_raw_inverse_pass": {"const": true}
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "file": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "bytes", "sha256"],
+      "properties": {
+        "path": {"type": "string", "pattern": "^/"},
+        "bytes": {"type": "integer", "minimum": 1},
+        "sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "canonicalFile": {
+      "allOf": [
+        {"$ref": "#/$defs/file"},
+        {"properties": {
+          "bytes": {"const": 1000000000},
+          "sha256": {"const": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc"}
+        }}
+      ]
+    }
+  }
+}

@@ -1,0 +1,360 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gamma.dev/enwiki9/research/v1/resource-guard-receipt.v3.schema.json",
+  "title": "gamma.enwiki9.resource_guard_receipt.v3",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "objective",
+    "label",
+    "phase",
+    "command",
+    "command_sha256",
+    "sample_interval_seconds",
+    "geekbench5_single_core_score",
+    "wall_time_limit_seconds",
+    "limit_kib",
+    "limit_mode",
+    "official_decimal_limit_kib",
+    "cgroup",
+    "scratch_paths",
+    "temporary_disk_limit_bytes",
+    "phase_marker_path",
+    "max_logical_cpus",
+    "measurements",
+    "peaks",
+    "cgroup_events",
+    "peak_process_vmhwm",
+    "peak_sample",
+    "peak_tree_sample",
+    "latest_sample",
+    "smaps_rollup_checkpoints",
+    "phase_markers",
+    "sample_count",
+    "guards",
+    "returncode",
+    "status",
+    "elapsed_s"
+  ],
+  "properties": {
+    "schema": {"const": "gamma.enwiki9.resource-guard-receipt.v3"},
+    "objective": {"$ref": "#/$defs/objectiveBinding"},
+    "label": {"type": "string", "minLength": 1},
+    "phase": {"enum": ["compression", "decompression", "diagnostic"]},
+    "command": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"type": "string", "minLength": 1}
+    },
+    "command_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "sample_interval_seconds": {"type": "number", "minimum": 0.1},
+    "geekbench5_single_core_score": {
+      "type": ["number", "null"],
+      "exclusiveMinimum": 0
+    },
+    "wall_time_limit_seconds": {"type": ["number", "null"], "exclusiveMinimum": 0},
+    "limit_kib": {"type": "integer", "minimum": 1},
+    "limit_mode": {"enum": ["max_single", "tree"]},
+    "official_decimal_limit_kib": {"type": "integer", "minimum": 1},
+    "cgroup": {"$ref": "#/$defs/cgroup"},
+    "scratch_paths": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1}
+    },
+    "temporary_disk_limit_bytes": {"type": "integer", "minimum": 1},
+    "phase_marker_path": {"type": "string", "minLength": 1},
+    "max_logical_cpus": {"type": "integer", "minimum": 1},
+    "measurements": {"$ref": "#/$defs/measurements"},
+    "peaks": {"$ref": "#/$defs/peaks"},
+    "cgroup_events": {"$ref": "#/$defs/cgroupEvents"},
+    "peak_process_vmhwm": {
+      "oneOf": [{"type": "null"}, {"$ref": "#/$defs/peakProcessVmHwm"}]
+    },
+    "peak_sample": {"$ref": "#/$defs/nullableSample"},
+    "peak_tree_sample": {"$ref": "#/$defs/nullableSample"},
+    "latest_sample": {"$ref": "#/$defs/nullableSample"},
+    "smaps_rollup_checkpoints": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/smapsCheckpoint"}
+    },
+    "phase_markers": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/phaseMarker"}
+    },
+    "sample_count": {"type": "integer", "minimum": 0},
+    "guards": {"$ref": "#/$defs/guards"},
+    "returncode": {"type": ["integer", "null"]},
+    "status": {
+      "enum": [
+        "running",
+        "complete",
+        "cgroup_memory_guard_exceeded",
+        "official_decimal_memory_guard_exceeded",
+        "rss_guard_exceeded",
+        "temporary_disk_guard_exceeded",
+        "logical_cpu_guard_exceeded",
+        "wall_time_guard_exceeded",
+        "phase_marker_invalid",
+        "measurement_incomplete"
+      ]
+    },
+    "elapsed_s": {"type": "number", "minimum": 0},
+    "failure": {"type": "string", "minLength": 1}
+  },
+  "$defs": {
+    "digest": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "objectiveBinding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "objectiveId",
+        "objectiveDigest",
+        "objectivePath",
+        "targetScoreBytes",
+        "corpusBytes",
+        "corpusSha256"
+      ],
+      "properties": {
+        "objectiveId": {"type": "string", "minLength": 1},
+        "objectiveDigest": {"$ref": "#/$defs/digest"},
+        "objectivePath": {"type": "string", "minLength": 1},
+        "targetScoreBytes": {"type": "integer", "minimum": 1},
+        "corpusBytes": {"type": "integer", "minimum": 1},
+        "corpusSha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      }
+    },
+    "integerMap": {
+      "type": "object",
+      "additionalProperties": {"type": "integer", "minimum": 0}
+    },
+    "cgroup": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "inode",
+        "previous_memory_max",
+        "requested_memory_max_bytes",
+        "memory_max_bytes",
+        "memory_max_rounding_bytes",
+        "memory_peak_reset",
+        "joined_before_exec"
+      ],
+      "properties": {
+        "path": {"type": "string", "minLength": 1},
+        "inode": {"type": "integer", "minimum": 1},
+        "previous_memory_max": {"type": "string", "minLength": 1},
+        "requested_memory_max_bytes": {"const": 10000000000},
+        "memory_max_bytes": {"type": "integer", "minimum": 1},
+        "memory_max_rounding_bytes": {"type": "integer", "minimum": 0, "maximum": 4095},
+        "memory_peak_reset": {"type": "boolean"},
+        "joined_before_exec": {"type": "boolean"}
+      }
+    },
+    "measurements": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "process_tree_rss_complete",
+        "per_process_vmhwm_sampled",
+        "cgroup_v2_complete",
+        "scratch_logical_and_allocated_complete",
+        "affinity_complete",
+        "smaps_rollup_complete",
+        "phase_markers_complete"
+      ],
+      "properties": {
+        "process_tree_rss_complete": {"type": "boolean"},
+        "per_process_vmhwm_sampled": {"type": "boolean"},
+        "cgroup_v2_complete": {"type": "boolean"},
+        "scratch_logical_and_allocated_complete": {"type": "boolean"},
+        "affinity_complete": {"type": "boolean"},
+        "smaps_rollup_complete": {"type": "boolean"},
+        "phase_markers_complete": {"type": "boolean"}
+      }
+    },
+    "peaks": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "max_sampled_single_rss_kib",
+        "max_sampled_tree_rss_kib",
+        "max_observed_process_vmhwm_kib",
+        "max_sampled_cgroup_current_bytes",
+        "cgroup_memory_peak_bytes",
+        "max_sampled_scratch_logical_bytes",
+        "max_sampled_scratch_allocated_bytes",
+        "max_sampled_allowed_cpu_count",
+        "max_sampled_tree_live_threads",
+        "max_sampled_tree_runnable_threads"
+      ],
+      "properties": {
+        "max_sampled_single_rss_kib": {"type": "integer", "minimum": 0},
+        "max_sampled_tree_rss_kib": {"type": "integer", "minimum": 0},
+        "max_observed_process_vmhwm_kib": {"type": "integer", "minimum": 0},
+        "max_sampled_cgroup_current_bytes": {"type": "integer", "minimum": 0},
+        "cgroup_memory_peak_bytes": {"type": "integer", "minimum": 0},
+        "max_sampled_scratch_logical_bytes": {"type": "integer", "minimum": 0},
+        "max_sampled_scratch_allocated_bytes": {"type": "integer", "minimum": 0},
+        "max_sampled_allowed_cpu_count": {"type": "integer", "minimum": 0},
+        "max_sampled_tree_live_threads": {"type": "integer", "minimum": 0},
+        "max_sampled_tree_runnable_threads": {"type": "integer", "minimum": 0}
+      }
+    },
+    "cgroupEvents": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["baseline", "final", "delta"],
+      "properties": {
+        "baseline": {"$ref": "#/$defs/integerMap"},
+        "final": {"$ref": "#/$defs/integerMap"},
+        "delta": {"$ref": "#/$defs/integerMap"}
+      }
+    },
+    "peakProcessVmHwm": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["pid", "start_ticks", "comm", "vmhwm_kib", "observed_elapsed_s"],
+      "properties": {
+        "pid": {"type": "integer", "minimum": 1},
+        "start_ticks": {"type": "integer", "minimum": 1},
+        "comm": {"type": ["string", "null"]},
+        "vmhwm_kib": {"type": "integer", "minimum": 0},
+        "observed_elapsed_s": {"type": "number", "minimum": 0}
+      }
+    },
+    "process": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "pid",
+        "start_ticks",
+        "comm",
+        "rss_kib",
+        "vmhwm_kib",
+        "live_threads",
+        "runnable_threads",
+        "allowed_cpus"
+      ],
+      "properties": {
+        "pid": {"type": "integer", "minimum": 1},
+        "start_ticks": {"type": "integer", "minimum": 1},
+        "comm": {"type": ["string", "null"]},
+        "rss_kib": {"type": "integer", "minimum": 0},
+        "vmhwm_kib": {"type": "integer", "minimum": 0},
+        "live_threads": {"type": "integer", "minimum": 0},
+        "runnable_threads": {"type": "integer", "minimum": 0},
+        "allowed_cpus": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"type": "integer", "minimum": 0}
+        }
+      }
+    },
+    "sample": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "processes",
+        "max_single_rss_kib",
+        "tree_rss_kib",
+        "tree_live_threads",
+        "tree_runnable_threads",
+        "allowed_cpu_union",
+        "persistent_status_misses",
+        "elapsed_s",
+        "cgroup_current_bytes",
+        "scratch_logical_bytes",
+        "scratch_allocated_bytes",
+        "scratch_file_count",
+        "scratch_race_count"
+      ],
+      "properties": {
+        "processes": {"type": "array", "items": {"$ref": "#/$defs/process"}},
+        "max_single_rss_kib": {"type": "integer", "minimum": 0},
+        "tree_rss_kib": {"type": "integer", "minimum": 0},
+        "tree_live_threads": {"type": "integer", "minimum": 0},
+        "tree_runnable_threads": {"type": "integer", "minimum": 0},
+        "allowed_cpu_union": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"type": "integer", "minimum": 0}
+        },
+        "persistent_status_misses": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"type": "integer", "minimum": 1}
+        },
+        "elapsed_s": {"type": "number", "minimum": 0},
+        "cgroup_current_bytes": {"type": "integer", "minimum": 0},
+        "scratch_logical_bytes": {"type": "integer", "minimum": 0},
+        "scratch_allocated_bytes": {"type": "integer", "minimum": 0},
+        "scratch_file_count": {"type": "integer", "minimum": 0},
+        "scratch_race_count": {"type": "integer", "minimum": 0}
+      }
+    },
+    "nullableSample": {
+      "oneOf": [{"type": "null"}, {"$ref": "#/$defs/sample"}]
+    },
+    "smapsProcess": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["pid", "start_ticks", "rollup_kib"],
+      "properties": {
+        "pid": {"type": "integer", "minimum": 1},
+        "start_ticks": {"type": "integer", "minimum": 1},
+        "rollup_kib": {"$ref": "#/$defs/integerMap"}
+      }
+    },
+    "smapsCheckpoint": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["reason", "elapsed_s", "tree_rss_kib", "processes"],
+      "properties": {
+        "reason": {"type": "string", "minLength": 1},
+        "elapsed_s": {"type": "number", "minimum": 0},
+        "tree_rss_kib": {"type": "integer", "minimum": 0},
+        "processes": {"type": "array", "items": {"$ref": "#/$defs/smapsProcess"}}
+      }
+    },
+    "phaseMarker": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source_line", "phase", "event", "detail", "observed_elapsed_s"],
+      "properties": {
+        "source_line": {"type": "integer", "minimum": 1},
+        "phase": {"type": "string", "minLength": 1},
+        "event": {"type": "string", "minLength": 1},
+        "detail": {},
+        "observed_elapsed_s": {"type": "number", "minimum": 0}
+      }
+    },
+    "guards": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "rss_guard_exceeded",
+        "official_decimal_memory_exceeded",
+        "cgroup_memory_guard_exceeded",
+        "temporary_disk_guard_exceeded",
+        "logical_cpu_guard_exceeded",
+        "wall_time_guard_exceeded",
+        "phase_marker_invalid",
+        "measurement_incomplete"
+      ],
+      "properties": {
+        "rss_guard_exceeded": {"type": "boolean"},
+        "official_decimal_memory_exceeded": {"type": "boolean"},
+        "cgroup_memory_guard_exceeded": {"type": "boolean"},
+        "temporary_disk_guard_exceeded": {"type": "boolean"},
+        "logical_cpu_guard_exceeded": {"type": "boolean"},
+        "wall_time_guard_exceeded": {"type": "boolean"},
+        "phase_marker_invalid": {"type": "boolean"},
+        "measurement_incomplete": {"type": "boolean"}
+      }
+    }
+  }
+}

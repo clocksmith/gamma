@@ -1,0 +1,75 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gamma.enwiki9.gamma-mechanism-ir-compilation-receipt.v1",
+  "title": "Gamma Mechanism IR compilation receipt v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "mechanism_id", "operational_status", "source_ir", "compiler", "artifacts", "artifact_set_sha256", "validation", "claim_authority", "execution_authority", "promotion_authority"],
+  "properties": {
+    "schema": {"const": "gamma.enwiki9.gamma-mechanism-ir-compilation-receipt.v1"},
+    "mechanism_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9._-]*$"},
+    "operational_status": {"const": "compiled_non_authoritative"},
+    "source_ir": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "bytes", "sha256", "canonical_sha256"],
+      "properties": {
+        "path": {"type": "string", "minLength": 1},
+        "bytes": {"type": "integer", "minimum": 1},
+        "sha256": {"$ref": "#/$defs/sha256"},
+        "canonical_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "compiler": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "bytes", "sha256"],
+      "properties": {
+        "path": {"type": "string", "minLength": 1},
+        "bytes": {"type": "integer", "minimum": 1},
+        "sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "artifacts": {
+      "type": "array",
+      "minItems": 7,
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["path", "bytes", "sha256"],
+        "properties": {
+          "path": {"type": "string", "minLength": 1},
+          "bytes": {"type": "integer", "minimum": 1},
+          "sha256": {"$ref": "#/$defs/sha256"}
+        }
+      }
+    },
+    "artifact_set_sha256": {"$ref": "#/$defs/sha256"},
+    "validation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["causal_source_declarations_present", "state_sets_closed", "state_hash_coverage_pass", "persistent_write_policy_pass", "join_coverage_pass", "numeric_contract_pass", "equation_identity_pass", "matched_controls_pass", "synchronization_hashes_pass", "resource_ceiling_pass", "artifact_closure_pass", "canonical_render_pass"],
+      "properties": {
+        "causal_source_declarations_present": {"const": true},
+        "state_sets_closed": {"const": true},
+        "state_hash_coverage_pass": {"const": true},
+        "persistent_write_policy_pass": {"const": true},
+        "join_coverage_pass": {"const": true},
+        "numeric_contract_pass": {"const": true},
+        "equation_identity_pass": {"const": true},
+        "matched_controls_pass": {"const": true},
+        "synchronization_hashes_pass": {"const": true},
+        "resource_ceiling_pass": {"const": true},
+        "artifact_closure_pass": {"const": true},
+        "canonical_render_pass": {"const": true}
+      }
+    },
+    "claim_authority": {"const": "none"},
+    "execution_authority": {"const": false},
+    "promotion_authority": {"const": false}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  }
+}

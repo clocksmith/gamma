@@ -1,0 +1,424 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gamma.enwiki9.cmix-shadow-midpoint-oracle-v5-receipt.v1",
+  "title": "CMIX midpoint oracle v5 joint finite-coder receipt",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "receipt_id",
+    "candidate_id",
+    "mode",
+    "abi",
+    "provenance",
+    "population",
+    "runs",
+    "comparisons",
+    "decision",
+    "authority"
+  ],
+  "properties": {
+    "schema": {
+      "const": "gamma.enwiki9.cmix-shadow-midpoint-oracle-v5-receipt.v1"
+    },
+    "receipt_id": {"type": "string", "minLength": 1},
+    "candidate_id": {
+      "const": "cmix_obias_shadow_midpoint_oracle64_q0_v5"
+    },
+    "mode": {"enum": ["synthetic_fixture", "native_finite_coder"]},
+    "abi": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "format_id",
+        "contract",
+        "parse_schema",
+        "joint_receipt_schema",
+        "independent_parser",
+        "instrumentation_completeness_audit",
+        "neutrality_receipt"
+      ],
+      "properties": {
+        "format_id": {"const": "gamma-midpoint-observability-abi-v1"},
+        "contract": {"$ref": "#/$defs/artifact"},
+        "parse_schema": {"$ref": "#/$defs/artifact"},
+        "joint_receipt_schema": {"$ref": "#/$defs/artifact"},
+        "independent_parser": {"$ref": "#/$defs/artifact"},
+        "instrumentation_completeness_audit": {"$ref": "#/$defs/artifact"},
+        "neutrality_receipt": {"$ref": "#/$defs/artifact"}
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "q1_qualification_receipt",
+        "q1_qualification_verification",
+        "v4_materialization_receipt",
+        "v5_source_difference_manifest",
+        "mechanism_ir",
+        "build_a",
+        "build_b",
+        "binary",
+        "dependency_closure"
+      ],
+      "properties": {
+        "q1_qualification_receipt": {"$ref": "#/$defs/artifact"},
+        "q1_qualification_verification": {"$ref": "#/$defs/artifact"},
+        "v4_materialization_receipt": {"$ref": "#/$defs/artifact"},
+        "v5_source_difference_manifest": {"$ref": "#/$defs/artifact"},
+        "mechanism_ir": {"$ref": "#/$defs/artifact"},
+        "build_a": {"$ref": "#/$defs/artifact"},
+        "build_b": {"$ref": "#/$defs/artifact"},
+        "binary": {"$ref": "#/$defs/artifact"},
+        "dependency_closure": {"$ref": "#/$defs/artifact"}
+      }
+    },
+    "population": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "role",
+        "raw_input",
+        "modeled_stream",
+        "start_offset",
+        "end_offset_exclusive",
+        "modeled_events",
+        "coded_bits",
+        "segment_events",
+        "capture_events",
+        "expected_update_count",
+        "expected_periodic_checkpoint_count",
+        "required_gross_gain_bytes",
+        "complete_population_pass"
+      ],
+      "properties": {
+        "role": {
+          "enum": [
+            "diagnostic_250k",
+            "calibration_1m",
+            "opening_10m",
+            "distant_10m"
+          ]
+        },
+        "raw_input": {"$ref": "#/$defs/nonemptyArtifact"},
+        "modeled_stream": {"$ref": "#/$defs/nonemptyArtifact"},
+        "start_offset": {"type": "integer", "minimum": 0},
+        "end_offset_exclusive": {"type": "integer", "minimum": 1},
+        "modeled_events": {"type": "integer", "minimum": 1},
+        "coded_bits": {"type": "integer", "minimum": 8},
+        "segment_events": {"const": 64},
+        "capture_events": {"const": 32},
+        "expected_update_count": {"type": "integer", "minimum": 0},
+        "expected_periodic_checkpoint_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "required_gross_gain_bytes": {"type": "integer", "minimum": 0},
+        "complete_population_pass": {"type": "boolean"}
+      }
+    },
+    "runs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["P", "K", "F_A", "F_B", "S_A", "S_B"],
+      "properties": {
+        "P": {
+          "allOf": [
+            {"$ref": "#/$defs/run"},
+            {"properties": {
+              "arm": {"const": "P"},
+              "replicate": {"const": "A"},
+              "committed_updates": {"const": 0},
+              "detached_updates": {"const": 0}
+            }}
+          ]
+        },
+        "K": {
+          "allOf": [
+            {"$ref": "#/$defs/run"},
+            {"properties": {
+              "arm": {"const": "K"},
+              "replicate": {"const": "A"},
+              "committed_updates": {"const": 0}
+            }}
+          ]
+        },
+        "F_A": {
+          "allOf": [
+            {"$ref": "#/$defs/run"},
+            {"properties": {
+              "arm": {"const": "F"},
+              "replicate": {"const": "A"},
+              "detached_updates": {"const": 0}
+            }}
+          ]
+        },
+        "F_B": {
+          "allOf": [
+            {"$ref": "#/$defs/run"},
+            {"properties": {
+              "arm": {"const": "F"},
+              "replicate": {"const": "B"},
+              "detached_updates": {"const": 0}
+            }}
+          ]
+        },
+        "S_A": {
+          "allOf": [
+            {"$ref": "#/$defs/run"},
+            {"properties": {
+              "arm": {"const": "S"},
+              "replicate": {"const": "A"},
+              "detached_updates": {"const": 0}
+            }}
+          ]
+        },
+        "S_B": {
+          "allOf": [
+            {"$ref": "#/$defs/run"},
+            {"properties": {
+              "arm": {"const": "S"},
+              "replicate": {"const": "B"},
+              "detached_updates": {"const": 0}
+            }}
+          ]
+        }
+      }
+    },
+    "comparisons": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "P_q1_probability_payload_archive_inverse_identity_pass",
+        "K_P_probability_identity_pass",
+        "K_P_coder_payload_prefix_identity_pass",
+        "K_P_six_partition_identity_pass",
+        "K_P_payload_archive_inverse_identity_pass",
+        "F_encode_decode_synchronization_pass",
+        "S_encode_decode_synchronization_pass",
+        "F_repeat_identity_pass",
+        "S_repeat_identity_pass",
+        "F_S_only_target_rotation_pass",
+        "all_layout_identity_pass",
+        "all_mutation_controls_pass",
+        "all_instrumentation_neutrality_pass",
+        "F_gross_gain_bytes",
+        "S_gross_gain_bytes",
+        "F_minus_S_bytes",
+        "F_beats_P_pass",
+        "F_beats_S_pass"
+      ],
+      "properties": {
+        "P_q1_probability_payload_archive_inverse_identity_pass": {
+          "type": "boolean"
+        },
+        "K_P_probability_identity_pass": {"type": "boolean"},
+        "K_P_coder_payload_prefix_identity_pass": {"type": "boolean"},
+        "K_P_six_partition_identity_pass": {"type": "boolean"},
+        "K_P_payload_archive_inverse_identity_pass": {"type": "boolean"},
+        "F_encode_decode_synchronization_pass": {"type": "boolean"},
+        "S_encode_decode_synchronization_pass": {"type": "boolean"},
+        "F_repeat_identity_pass": {"type": "boolean"},
+        "S_repeat_identity_pass": {"type": "boolean"},
+        "F_S_only_target_rotation_pass": {"type": "boolean"},
+        "all_layout_identity_pass": {"type": "boolean"},
+        "all_mutation_controls_pass": {"type": "boolean"},
+        "all_instrumentation_neutrality_pass": {"type": "boolean"},
+        "F_gross_gain_bytes": {"type": "integer"},
+        "S_gross_gain_bytes": {"type": "integer"},
+        "F_minus_S_bytes": {"type": "integer"},
+        "F_beats_P_pass": {"type": "boolean"},
+        "F_beats_S_pass": {"type": "boolean"}
+      }
+    },
+    "decision": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "evidence_complete_pass",
+        "implementation_closure_pass",
+        "exactness_pass",
+        "bookkeeping_control_pass",
+        "causal_control_pass",
+        "repeat_pass",
+        "resource_pass",
+        "package_pass",
+        "economic_gate_pass",
+        "terminal_classification",
+        "authorized_successor",
+        "scientific_verdict"
+      ],
+      "properties": {
+        "evidence_complete_pass": {"type": "boolean"},
+        "implementation_closure_pass": {"type": "boolean"},
+        "exactness_pass": {"type": "boolean"},
+        "bookkeeping_control_pass": {"type": "boolean"},
+        "causal_control_pass": {"type": "boolean"},
+        "repeat_pass": {"type": "boolean"},
+        "resource_pass": {"type": "boolean"},
+        "package_pass": {"type": "boolean"},
+        "economic_gate_pass": {"type": "boolean"},
+        "terminal_classification": {
+          "enum": [
+            "pass_target_scale_causal_midpoint_value",
+            "pass_smaller_scope_only",
+            "fail_subscale_full_midpoint",
+            "fail_causal_alignment",
+            "fail_bookkeeping_identity",
+            "fail_encoder_decoder_synchronization",
+            "fail_repeat_identity",
+            "fail_archive_or_inverse",
+            "fail_resource_or_dependency",
+            "invalid_receipt"
+          ]
+        },
+        "authorized_successor": {
+          "enum": [
+            "next_preregistered_scope",
+            "cmix_obias_midpoint_persistence_attribution64_q0_v3",
+            "one_observability_only_correction",
+            "none_retire_cmix_midas"
+          ]
+        },
+        "scientific_verdict": {"enum": ["pass", "fail", "invalid"]}
+      }
+    },
+    "authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "claim_authority",
+        "archive_promotion_authority",
+        "persistence_attribution_authority",
+        "gamma_compression_credit_bytes",
+        "gamma_score_credit_bytes"
+      ],
+      "properties": {
+        "claim_authority": {
+          "const": "zero_credit_causal_midpoint_oracle_only"
+        },
+        "archive_promotion_authority": {"const": false},
+        "persistence_attribution_authority": {"type": "boolean"},
+        "gamma_compression_credit_bytes": {"const": 0},
+        "gamma_score_credit_bytes": {"const": 0}
+      }
+    }
+  },
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "artifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "bytes", "sha256"],
+      "properties": {
+        "path": {"type": "string", "minLength": 1},
+        "bytes": {"type": "integer", "minimum": 0},
+        "sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "nonemptyArtifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "bytes", "sha256"],
+      "properties": {
+        "path": {"type": "string", "minLength": 1},
+        "bytes": {"type": "integer", "minimum": 1},
+        "sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "observation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "parse_receipt",
+        "probability_stream",
+        "checkpoint_stream",
+        "update_stream",
+        "layout_manifest",
+        "probability_records",
+        "checkpoint_records",
+        "update_records",
+        "terminal_probability_sha256",
+        "terminal_checkpoint_sha256",
+        "terminal_update_sha256",
+        "parse_pass"
+      ],
+      "properties": {
+        "parse_receipt": {"$ref": "#/$defs/nonemptyArtifact"},
+        "probability_stream": {"$ref": "#/$defs/nonemptyArtifact"},
+        "checkpoint_stream": {"$ref": "#/$defs/nonemptyArtifact"},
+        "update_stream": {"$ref": "#/$defs/nonemptyArtifact"},
+        "layout_manifest": {"$ref": "#/$defs/nonemptyArtifact"},
+        "probability_records": {"type": "integer", "minimum": 8},
+        "checkpoint_records": {"type": "integer", "minimum": 3},
+        "update_records": {"type": "integer", "minimum": 0},
+        "terminal_probability_sha256": {"$ref": "#/$defs/sha256"},
+        "terminal_checkpoint_sha256": {"$ref": "#/$defs/sha256"},
+        "terminal_update_sha256": {"$ref": "#/$defs/sha256"},
+        "parse_pass": {"type": "boolean"}
+      }
+    },
+    "run": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "run_id",
+        "arm",
+        "replicate",
+        "command_sha256",
+        "encode_return_code",
+        "decode_return_code",
+        "encode_observation",
+        "decode_observation",
+        "committed_updates",
+        "detached_updates",
+        "ideal_bits",
+        "payload",
+        "archive",
+        "decoded_modeled_stream",
+        "raw_inverse",
+        "modeled_roundtrip_pass",
+        "raw_inverse_pass",
+        "resource_guard",
+        "process_tree_peak_rss_kib",
+        "cgroup_peak_bytes",
+        "incremental_live_bytes",
+        "resource_pass",
+        "package_manifest",
+        "incremental_package_bytes",
+        "package_pass"
+      ],
+      "properties": {
+        "run_id": {"type": "string", "minLength": 1},
+        "arm": {"enum": ["P", "K", "F", "S"]},
+        "replicate": {"enum": ["A", "B"]},
+        "command_sha256": {"$ref": "#/$defs/sha256"},
+        "encode_return_code": {"const": 0},
+        "decode_return_code": {"const": 0},
+        "encode_observation": {"$ref": "#/$defs/observation"},
+        "decode_observation": {"$ref": "#/$defs/observation"},
+        "committed_updates": {"type": "integer", "minimum": 0},
+        "detached_updates": {"type": "integer", "minimum": 0},
+        "ideal_bits": {"type": "number", "minimum": 0},
+        "payload": {"$ref": "#/$defs/nonemptyArtifact"},
+        "archive": {"$ref": "#/$defs/nonemptyArtifact"},
+        "decoded_modeled_stream": {"$ref": "#/$defs/nonemptyArtifact"},
+        "raw_inverse": {"$ref": "#/$defs/nonemptyArtifact"},
+        "modeled_roundtrip_pass": {"type": "boolean"},
+        "raw_inverse_pass": {"type": "boolean"},
+        "resource_guard": {"$ref": "#/$defs/nonemptyArtifact"},
+        "process_tree_peak_rss_kib": {"type": "integer", "minimum": 0},
+        "cgroup_peak_bytes": {"type": "integer", "minimum": 0},
+        "incremental_live_bytes": {"type": "integer", "minimum": 0},
+        "resource_pass": {"type": "boolean"},
+        "package_manifest": {"$ref": "#/$defs/nonemptyArtifact"},
+        "incremental_package_bytes": {"type": "integer", "minimum": 0},
+        "package_pass": {"type": "boolean"}
+      }
+    }
+  }
+}

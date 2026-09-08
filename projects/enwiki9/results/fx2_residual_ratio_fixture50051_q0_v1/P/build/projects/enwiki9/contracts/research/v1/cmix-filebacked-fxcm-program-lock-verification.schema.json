@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gamma.enwiki9.cmix-filebacked-fxcm-program-lock-verification.v1",
+  "title": "CMIX file-backed FXCM program-lock verification",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "candidate_id",
+    "verified",
+    "errors",
+    "program_lock_sha256",
+    "checks",
+    "claim_authority",
+    "execution_authority"
+  ],
+  "properties": {
+    "schema": {"const": "gamma.enwiki9.cmix-filebacked-fxcm-program-lock-verification.v1"},
+    "candidate_id": {"const": "cmix_obias_memory_safe_parent_filebacked_q1_v1"},
+    "verified": {"type": "boolean"},
+    "errors": {"type": "array", "items": {"type": "string"}},
+    "program_lock_sha256": {"$ref": "#/$defs/sha256"},
+    "checks": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["identity_pass", "pending_identity_pass", "file_set_pass", "file_identity_pass", "manifest_digest_pass"],
+      "properties": {
+        "identity_pass": {"type": "boolean"},
+        "pending_identity_pass": {"type": "boolean"},
+        "file_set_pass": {"type": "boolean"},
+        "file_identity_pass": {"type": "boolean"},
+        "manifest_digest_pass": {"type": "boolean"}
+      }
+    },
+    "claim_authority": {"const": "source_implementation_only"},
+    "execution_authority": {"const": false}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  }
+}

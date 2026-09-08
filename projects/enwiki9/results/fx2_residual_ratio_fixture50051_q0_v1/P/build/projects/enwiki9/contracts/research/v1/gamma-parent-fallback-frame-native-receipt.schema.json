@@ -1,0 +1,399 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gamma.local/contracts/research/v1/gamma-parent-fallback-frame-native-receipt.schema.json",
+  "title": "Gamma Parent-Fallback Frame Native Receipt",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "program_id",
+    "identity",
+    "fixtures",
+    "controls",
+    "package",
+    "decision"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "gamma-parent-fallback-frame-native-receipt.v1"
+    },
+    "program_id": {
+      "const": "gamma_parent_fallback_archive_select_q0_v1"
+    },
+    "identity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "interface_contract_sha256",
+        "program_lock_sha256",
+        "source_sha256",
+        "compiler_sha256",
+        "build_command_sha256",
+        "build_environment_sha256",
+        "build_log_sha256",
+        "binary_sha256"
+      ],
+      "properties": {
+        "interface_contract_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "program_lock_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "source_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "compiler_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "build_command_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "build_environment_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "build_log_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "binary_sha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    },
+    "fixtures": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "parent_smaller",
+        "candidate_smaller",
+        "equal_size_parent_tie"
+      ],
+      "properties": {
+        "parent_smaller": {
+          "$ref": "#/$defs/fixture"
+        },
+        "candidate_smaller": {
+          "$ref": "#/$defs/fixture"
+        },
+        "equal_size_parent_tie": {
+          "$ref": "#/$defs/fixture"
+        }
+      }
+    },
+    "controls": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "bad_magic_rejected",
+        "bad_version_rejected",
+        "bad_mode_rejected",
+        "short_header_rejected",
+        "short_payload_rejected",
+        "trailing_bytes_rejected",
+        "existing_output_preserved",
+        "symlink_input_rejected",
+        "nonregular_input_rejected",
+        "repeat_archive_identity"
+      ],
+      "properties": {
+        "bad_magic_rejected": {
+          "type": "boolean"
+        },
+        "bad_version_rejected": {
+          "type": "boolean"
+        },
+        "bad_mode_rejected": {
+          "type": "boolean"
+        },
+        "short_header_rejected": {
+          "type": "boolean"
+        },
+        "short_payload_rejected": {
+          "type": "boolean"
+        },
+        "trailing_bytes_rejected": {
+          "type": "boolean"
+        },
+        "existing_output_preserved": {
+          "type": "boolean"
+        },
+        "symlink_input_rejected": {
+          "type": "boolean"
+        },
+        "nonregular_input_rejected": {
+          "type": "boolean"
+        },
+        "repeat_archive_identity": {
+          "type": "boolean"
+        }
+      }
+    },
+    "package": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "binary_bytes",
+        "dependency_closure_sha256",
+        "included_in_union_package",
+        "added_package_bytes"
+      ],
+      "properties": {
+        "binary_bytes": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "dependency_closure_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "included_in_union_package": {
+          "type": "boolean"
+        },
+        "added_package_bytes": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 65536
+        }
+      }
+    },
+    "decision": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "native_frame_authority",
+        "compression_authority",
+        "reason_codes"
+      ],
+      "properties": {
+        "status": {
+          "enum": [
+            "pass",
+            "fail",
+            "invalid"
+          ]
+        },
+        "native_frame_authority": {
+          "type": "boolean"
+        },
+        "compression_authority": {
+          "const": false
+        },
+        "reason_codes": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "fixture": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "parent_bytes",
+        "candidate_bytes",
+        "expected_mode",
+        "create_return_code",
+        "create_stdout_sha256",
+        "archive_bytes",
+        "archive_sha256",
+        "extract_return_code",
+        "extract_stdout_sha256",
+        "extracted_bytes",
+        "extracted_sha256",
+        "selected_payload_sha256",
+        "payload_identity"
+      ],
+      "properties": {
+        "parent_bytes": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "candidate_bytes": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "expected_mode": {
+          "enum": [
+            "P",
+            "C"
+          ]
+        },
+        "create_return_code": {
+          "type": "integer"
+        },
+        "create_stdout_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "archive_bytes": {
+          "type": "integer",
+          "minimum": 14
+        },
+        "archive_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "extract_return_code": {
+          "type": "integer"
+        },
+        "extract_stdout_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "extracted_bytes": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "extracted_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "selected_payload_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "payload_identity": {
+          "type": "boolean"
+        }
+      }
+    },
+    "passing_fixture": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/fixture"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "create_return_code": {
+              "const": 0
+            },
+            "extract_return_code": {
+              "const": 0
+            },
+            "payload_identity": {
+              "const": true
+            }
+          }
+        }
+      ]
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "decision": {
+            "properties": {
+              "native_frame_authority": {
+                "const": true
+              }
+            }
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "fixtures": {
+            "properties": {
+              "parent_smaller": {
+                "allOf": [
+                  {
+                    "$ref": "#/$defs/passing_fixture"
+                  },
+                  {
+                    "properties": {
+                      "expected_mode": {
+                        "const": "P"
+                      }
+                    }
+                  }
+                ]
+              },
+              "candidate_smaller": {
+                "allOf": [
+                  {
+                    "$ref": "#/$defs/passing_fixture"
+                  },
+                  {
+                    "properties": {
+                      "expected_mode": {
+                        "const": "C"
+                      }
+                    }
+                  }
+                ]
+              },
+              "equal_size_parent_tie": {
+                "allOf": [
+                  {
+                    "$ref": "#/$defs/passing_fixture"
+                  },
+                  {
+                    "properties": {
+                      "expected_mode": {
+                        "const": "P"
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          "controls": {
+            "properties": {
+              "bad_magic_rejected": {
+                "const": true
+              },
+              "bad_version_rejected": {
+                "const": true
+              },
+              "bad_mode_rejected": {
+                "const": true
+              },
+              "short_header_rejected": {
+                "const": true
+              },
+              "short_payload_rejected": {
+                "const": true
+              },
+              "trailing_bytes_rejected": {
+                "const": true
+              },
+              "existing_output_preserved": {
+                "const": true
+              },
+              "symlink_input_rejected": {
+                "const": true
+              },
+              "nonregular_input_rejected": {
+                "const": true
+              },
+              "repeat_archive_identity": {
+                "const": true
+              }
+            }
+          },
+          "package": {
+            "properties": {
+              "included_in_union_package": {
+                "const": true
+              }
+            }
+          },
+          "decision": {
+            "properties": {
+              "status": {
+                "const": "pass"
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

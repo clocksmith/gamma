@@ -1,0 +1,125 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gamma.local/contracts/research/v1/gamma-parent-fallback-archive-select-verification.schema.json",
+  "title": "Gamma Parent-Fallback Archive Selection Verification",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "candidate_id",
+    "verified",
+    "computed",
+    "errors"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "gamma-parent-fallback-archive-select-verification.v1"
+    },
+    "candidate_id": {
+      "const": "gamma_parent_fallback_archive_select_q0_v1"
+    },
+    "verified": {
+      "type": "boolean"
+    },
+    "computed": {
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "$ref": "#/$defs/computed"
+        }
+      ]
+    },
+    "errors": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    }
+  },
+  "$defs": {
+    "computed": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "parent_payload_bytes",
+        "candidate_payload_bytes",
+        "selected_mode",
+        "selected_payload_bytes",
+        "framed_archive_bytes",
+        "union_package_bytes",
+        "complete_counted_score_bytes",
+        "score_limit_bytes",
+        "promotion_should_be_authorized"
+      ],
+      "properties": {
+        "parent_payload_bytes": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "candidate_payload_bytes": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "selected_mode": {
+          "enum": [
+            "P",
+            "C"
+          ]
+        },
+        "selected_payload_bytes": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "framed_archive_bytes": {
+          "type": "integer",
+          "minimum": 14
+        },
+        "union_package_bytes": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "complete_counted_score_bytes": {
+          "type": "integer",
+          "minimum": 14
+        },
+        "score_limit_bytes": {
+          "const": 105000000
+        },
+        "promotion_should_be_authorized": {
+          "type": "boolean"
+        }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "verified": {
+            "const": true
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "computed": {
+            "$ref": "#/$defs/computed"
+          },
+          "errors": {
+            "maxItems": 0
+          }
+        }
+      },
+      "else": {
+        "properties": {
+          "errors": {
+            "minItems": 1
+          }
+        }
+      }
+    }
+  ]
+}

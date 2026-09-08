@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gamma.local/contracts/research/v1/cmix-obias-full1g-oom-terminal-verification.schema.json",
+  "title": "CMIX-OBIAS Full-1G OOM Terminal Verification",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "candidate_id", "verified", "checks", "errors"],
+  "properties": {
+    "schema": {"const": "gamma.enwiki9.cmix-obias-full1g-oom-terminal-verification.v1"},
+    "candidate_id": {"const": "cmix_obias_source_full1g_roundtrip_b_qm0_v1"},
+    "verified": {"type": "boolean"},
+    "checks": {"type": "object", "additionalProperties": {"type": "boolean"}},
+    "errors": {"type": "array", "items": {"type": "string", "minLength": 1}}
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"verified": {"const": true}}},
+      "then": {"properties": {"errors": {"maxItems": 0}}},
+      "else": {"properties": {"errors": {"minItems": 1}}}
+    }
+  ]
+}
