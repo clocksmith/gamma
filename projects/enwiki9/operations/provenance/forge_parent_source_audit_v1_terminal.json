@@ -1,0 +1,158 @@
+{
+  "schema": "gamma.enwiki9.parent-source-audit.v1",
+  "owner": "root_explore",
+  "generated_at": "2026-09-08T19:28:06.525920+00:00",
+  "plan": {
+    "path": "operations/provenance/forge_parent_source_audit_v1_plan.json",
+    "bytes": 27428,
+    "sha256": "030c68b58dc9ccb4bcd9b9283adc08e0abe2cd5992406eae1e3e1f2f3900ea26"
+  },
+  "source_commit": "11a25d3990460a55fdfd90d46edd82b0ab147e45",
+  "source_archive": {
+    "path": "results/forge_parent_source_audit_v1/source.zip",
+    "bytes": 1641589,
+    "sha256": "d810f15de5bb0441342ea35d99a72af646d5d41c0e3d4d5c3aa8896bb410334d"
+  },
+  "git_blobs_authenticated": 120,
+  "upstream_tree_total_bytes": 5086305,
+  "attribution": "Kaido Orav and Ibrahim Marcouch supply inherited v26; Dirk Nesner supplies forge changes. Gamma supplies this interface adapter and checks. No upstream compression result is Gamma credit.",
+  "prior_result": {
+    "path": "results/cmix_lex_fxcm_v26_250k_v1/decision.json",
+    "bytes": 971,
+    "sha256": "33bcc62e8ed29dc10c4c0bdb97a9ba4cd6620f2cb07c8a1aadafebd6f016f1ce"
+  },
+  "prior_scope": "Full 560-output cmix-lex versus Gamma B2 on opening250KB saved 20 bytes but missed a frozen 500-byte improvement ceiling; inverse and repeat were skipped. Preserve that historical budget rejection, not a general proof against all v26 or structural predictors.",
+  "source_findings": [
+    "The present public FX2 transformer parent uses fxcmv1, not this v26 model.",
+    "Forge compact group23/aux1 exposes 403 outputs (31 fixed +84 order +194 structure +87 word-tail +7 match), verified by a compile-time assertion.",
+    "The pinned v26 legacy Predict() returns a neutral array; actual values use RawPredictions and ActivePredictions. Parent caller explicitly reads raw outputs.",
+    "Missing active outputs require neutral probabilities; raw outputs require the upstream probability mapping, not raw short-to-float reinterpretation.",
+    "The published build calls for clang PGO and UPX; current GCC syntax compatibility proves neither published binary identity nor archive equivalence."
+  ],
+  "checks": {
+    "actual_upstream_syntax_pass": true,
+    "actual_interface_instantiation_pass": true,
+    "compact403_static_assert_pass": true,
+    "synthetic_adapter_pass": true,
+    "synthetic_negative_cases": [
+      "wrong output count",
+      "active count overflow",
+      "missing active pointer",
+      "raw above range",
+      "raw below range",
+      "NaN probability",
+      "null output"
+    ],
+    "negative_cases_leave_output_unchanged": true,
+    "inactive_outputs_neutral": true,
+    "legacy_predict_deleted_in_fixture": true,
+    "upstream_predictor_executed": false,
+    "corpus_bytes": 0,
+    "installed_dependencies": false
+  },
+  "resource_evidence": {
+    "cpu_set": [
+      3
+    ],
+    "address_space_cap_bytes": 536870912,
+    "per_child_cpu_cap_seconds": 90,
+    "wall_cap_seconds": 180,
+    "measured_first_three_phase_elapsed_seconds": [
+      0.6188338650390506,
+      0.11503755091689527,
+      0.0024786500725895166
+    ],
+    "measured_first_three_phase_cpu_seconds": 0.6883269999999999,
+    "cumulative_child_maxrss_kib": 211176,
+    "compile_count_probe_elapsed_unmeasured": true,
+    "actual_predictor_kernel_cost": null
+  },
+  "compiler": {
+    "path": "/usr/bin/g++",
+    "bytes": 1305304,
+    "sha256": "e6718f7e0c7d057c3ff77b550c603da9bc4030e3ede3c053705acce1293dbe4d"
+  },
+  "artifacts": [
+    {
+      "path": "results/forge_parent_source_audit_v1/checks/compact-count.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "results/forge_parent_source_audit_v1/checks/compact-count.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "results/forge_parent_source_audit_v1/checks/fixture",
+      "bytes": 16184,
+      "sha256": "60d4c0ee2995fb0693c499b44fff829010d5096a903ebf213e2c2775a1184cfc"
+    },
+    {
+      "path": "results/forge_parent_source_audit_v1/checks/fixture-build.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "results/forge_parent_source_audit_v1/checks/fixture-build.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "results/forge_parent_source_audit_v1/checks/fixture-execute.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "results/forge_parent_source_audit_v1/checks/fixture-execute.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "results/forge_parent_source_audit_v1/checks/upstream-syntax.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "results/forge_parent_source_audit_v1/checks/upstream-syntax.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "lib/forge_fxcm_raw_adapter_v1.hpp",
+      "bytes": 1109,
+      "sha256": "119c1df0c32f2100fb3fb41111e89f52d07e3cbf154029b77b6004f0bfbc689e"
+    },
+    {
+      "path": "tests/forge_fxcm_raw_adapter_v1.cpp",
+      "bytes": 1523,
+      "sha256": "b0eeaac161fc592147d2c8c1ad65cf069f38d96ac9858b761ea399ba741e30a2"
+    },
+    {
+      "path": "tests/forge_fxcm_raw_interface_v1.cpp",
+      "bytes": 263,
+      "sha256": "3b9e80b728be48dc022f7a1b4541a4c73103f74883276c436ac168b27effddc1"
+    },
+    {
+      "path": "tests/forge_fxcm_compact_count_v1.cpp",
+      "bytes": 380,
+      "sha256": "a0734eb210b3be499a6b50075e044421c6680134d8a568c159ca284819d2a96a"
+    }
+  ],
+  "replay": {
+    "cwd": "projects/enwiki9",
+    "compiler": "/usr/bin/g++",
+    "common_flags": ["-std=c++17", "-include", "cstdint", "-march=x86-64-v3", "-fno-fast-math", "-fno-math-errno", "-fno-exceptions", "-fno-threadsafe-statics", "-mrecip=none"],
+    "compact_flags": ["-DFX3_FXCM_V26_GROUP_MASK=23", "-DFX3_FXCM_V26_AUX_MASK=1", "-DFX3_FXCM_V26_COMPACT_OUTPUTS=1", "-DFX3_FXCM_V26_AUDIT_INPUT_COUNT=1"],
+    "syntax_suffix": ["-fsyntax-only", "results/forge_parent_source_audit_v1/source-tree/src/models/fxcm_v26.cpp", "tests/forge_fxcm_raw_interface_v1.cpp"],
+    "count_suffix": ["-fsyntax-only", "tests/forge_fxcm_compact_count_v1.cpp"],
+    "fixture_suffix": ["-O2", "tests/forge_fxcm_raw_adapter_v1.cpp", "-o", "FRESH_OWNED_OUTPUT/fixture"],
+    "procedure": "Verify the bound inputs first. For the syntax and count commands append common_flags, compact_flags and the named suffix. For the fixture append common_flags and fixture_suffix, then execute the resulting synthetic fixture. Replace FRESH_OWNED_OUTPUT with a new owned directory; do not overwrite retained artifacts. Apply the recorded CPU3 and resource caps. No upstream model is instantiated by these checks."
+  },
+  "decision": "Select the compact forge source as an independent eligible-parent reproduction candidate, conditional on bounded native inversion, repeat and resource evidence. Do not port the unchanged full560 configuration or run a full-corpus baseline.",
+  "next_executable_gate": "Freeze one direct raw 50051-byte public-fixture parent build/encode/decode/repeat with the compact23/aux1/cells270 settings, CPU2, counted dictionary/options/binary inventory and actual kernel costs. Compare identical raw bytes; GCC non-PGO build is a separate implementation identity. No expensive build script or shipped ELF execution.",
+  "full_package_eligibility": "unproved",
+  "native_archive_bytes": null,
+  "objective_target_bytes": 90000000,
+  "objective_credit_bytes": 0
+}
