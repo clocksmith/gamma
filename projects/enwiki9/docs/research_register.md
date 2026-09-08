@@ -23,9 +23,9 @@ On 3,744 artificial bytes, P/K/D/G/S archives are 498/498/499/504/516 bytes.
 Aligned history beats the two routing controls but loses one byte to the parent;
 this establishes implementation correctness, not corpus economics. Peak phase
 RSS is 31,244KiB. The [opening250KB contract](../operations/adaptive/experiments/opcode_field_history250k_q0_v1.json)
-is frozen and claimed by `root_explore`; runner preparation precedes queueing.
+is frozen; `root_explore` holds job `20260908T224949Z_59e57de621` pending publication/admission.
 The [two-file bundle tests](../operations/provenance/opcode_field_history_bundle_v1_unit.json)
-pass all five checks; local source is 6,606 bytes, +860 over P, with full package unresolved.
+pass five checks; [runner tests](../operations/provenance/opcode_field_history_gate_v1_unit.json) pass seven. Local source is 6,606 bytes (+860); full package unresolved.
 
 ## 2026-09-08 - Bound compact-parent complementarity before constructing a selector
 
