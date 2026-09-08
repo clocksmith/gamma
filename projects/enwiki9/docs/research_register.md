@@ -33,8 +33,10 @@ synthetic phases, reproducing the same toy archive sizes. The new source adapter
 passes real FX2 syntax checks with 461 recorded dependencies; no full native FX2
 build or roundtrip has run. The 5,457-byte component source is not a package score.
 Compiler `/tmp` quota failure is retained; an owned temporary directory resolves it.
-Next: freeze the actual native fixture gate, including complete build inputs,
-model/vocabulary hashes, activation, parent/coder/state traces and package costs.
+The [actual native fixture gate](../operations/adaptive/experiments/fx2_residual_ratio_fixture50051_q0_v1.json)
+is frozen and owned by `root_explore`: job `20260908T184428Z_97a71f959c`, CPU2,
+four arms, exact parent/coder/calibration-state checks and explicit component costs.
+Publication verification and fresh admission precede release; no result is claimed here.
 
 ## 2026-09-08 - Compact field implementation and 90M objective
 
