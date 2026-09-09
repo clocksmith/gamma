@@ -18,6 +18,13 @@ removing table bytes without using neighbors. Three adapter tests cover25 fresh
 mixed-model phases, empty input, mismatch rejection and exclusive output preservation.
 Source publication and fresh CPU3 admission precede the model audit. No inference,
 full-model package, native corpus or full-score claim; the90M objective remains unproved.
+Published at `0a6db4aa8`, the [terminal model audit](../operations/provenance/fx2_weight_adaptive_neighbor_model_v1_terminal.json)
+passes1333 fresh phases and rehashes1443 artifacts; all111 previous P archives match.
+P/K2782839,A2777312,D2784847 bytes: D loses2008 against P and7535 against A.
+A saves5527 by removing6660 table bytes while adding1133 range-stream bytes.
+Reject the neighbor policy. The predeclared marginal control earns a separately
+identified complete-container test, not automatic native integration or score credit.
+Every tensor, inverse, repeat and log is retained in the verified transport ZIP.
 
 ## 2026-09-09 - Calibrate literals after the decoder knows the copy mode
 
