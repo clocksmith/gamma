@@ -5,6 +5,94 @@
   "description": "Literal-only SSE training with unchanged base model and copy parse",
   "hypothesis": "Training SSE only on coded literals reduces the complete opening250KB archive while preserving the original parse and all non-SSE predictor updates.",
   "id": "opcode_literal_sse250k_q0_v1",
+  "measured": {
+    "reflections": {
+      "20260909T023015Z_9564fe8ecc": {
+        "decision": "retire",
+        "path": "operations/adaptive/reflections/20260909T023015Z_9564fe8ecc.json",
+        "sha256": "sha256:dd11ebfb35b4e133492e2704ac1b87d4fbb61aa48ed17cb5dac0b32fd1cee472",
+        "valid": true
+      }
+    },
+    "terminal_results": {
+      "20260909T023015Z_9564fe8ecc": {
+        "index": {
+          "path": "operations/provenance/opcode_literal_sse_terminal_20260909/index.json",
+          "sha256": "sha256:d50fd8e74f2cec3ec78e62cba3bcc79ea6ac6ddb25fdaf67f3d3e4bb2d35c327"
+        },
+        "reflection": {
+          "decision": "retire",
+          "path": "operations/adaptive/reflections/20260909T023015Z_9564fe8ecc.json",
+          "sha256": "sha256:dd11ebfb35b4e133492e2704ac1b87d4fbb61aa48ed17cb5dac0b32fd1cee472",
+          "valid": true
+        },
+        "guard_validation_mode": "discovery-budget-schema",
+        "qualification_authority": false,
+        "missing_diagnostics": [
+          "kernel cpuset controller is not delegated; taskset assignment and existing affinity guard remain active"
+        ],
+        "arms": {
+          "D": {
+            "result_path": "projects/enwiki9/operations/provenance/opcode_literal_sse_terminal_20260909/D.json",
+            "result_json_bytes": 4405,
+            "result_json_sha256": "aa9f56f0331a10426b50ffb77529330627d1e27937a3fa145a83e410988bf8d9",
+            "data_size": 250000,
+            "data_md5": "58df7be6473925f769c9621aeaff05cb",
+            "data_sha256": "665fc689441b68462d88f82dc33212abe9c4824be095d03a556c9b55a2829fd3",
+            "compressed_size": 67744,
+            "program_size": null,
+            "hutter_score": null,
+            "bits_per_byte": 2.167808,
+            "roundtrip_ok": true,
+            "determinism": true,
+            "compressed_sha256": "25be939962241cc59dd37231cb78283f68ae7d26cc94d268834b9ca6774a8464",
+            "compress_time_s": 58.7278670349624,
+            "decompress_time_s": 33.309454859932885,
+            "missing_diagnostics": [],
+            "run_id": "opcode_literal_sse250k_q0_v1__20260909T023015Z_9564fe8ecc__D"
+          },
+          "K": {
+            "result_path": "projects/enwiki9/operations/provenance/opcode_literal_sse_terminal_20260909/K.json",
+            "result_json_bytes": 4417,
+            "result_json_sha256": "8f1c96177e9ca1957e4233ad71e43be05d01ce94b73881832308b54b37914083",
+            "data_size": 250000,
+            "data_md5": "58df7be6473925f769c9621aeaff05cb",
+            "data_sha256": "665fc689441b68462d88f82dc33212abe9c4824be095d03a556c9b55a2829fd3",
+            "compressed_size": 67658,
+            "program_size": null,
+            "hutter_score": null,
+            "bits_per_byte": 2.165056,
+            "roundtrip_ok": true,
+            "determinism": true,
+            "compressed_sha256": "bda617eab7628f7cec6724ca3d82bf505efee9c2be4813dd404dcfa715140e6f",
+            "compress_time_s": 58.33185500605032,
+            "decompress_time_s": 33.642680465010926,
+            "missing_diagnostics": [],
+            "run_id": "opcode_literal_sse250k_q0_v1__20260909T023015Z_9564fe8ecc__K"
+          },
+          "P": {
+            "result_path": "projects/enwiki9/operations/provenance/opcode_literal_sse_terminal_20260909/P.json",
+            "result_json_bytes": 4408,
+            "result_json_sha256": "9d70c86ae97bb36eb5dc563aa3542f93ae76101b564e149453c0ed92034aad6a",
+            "data_size": 250000,
+            "data_md5": "58df7be6473925f769c9621aeaff05cb",
+            "data_sha256": "665fc689441b68462d88f82dc33212abe9c4824be095d03a556c9b55a2829fd3",
+            "compressed_size": 67658,
+            "program_size": null,
+            "hutter_score": null,
+            "bits_per_byte": 2.165056,
+            "roundtrip_ok": true,
+            "determinism": true,
+            "compressed_sha256": "bda617eab7628f7cec6724ca3d82bf505efee9c2be4813dd404dcfa715140e6f",
+            "compress_time_s": 58.24627540097572,
+            "decompress_time_s": 33.9994787981268,
+            "missing_diagnostics": [],
+            "run_id": "opcode_literal_sse250k_q0_v1__20260909T023015Z_9564fe8ecc__P"
+          }
+        }
+      }
+    }
+  },
   "omega": {
     "experiment": {
       "path": "operations/adaptive/experiments/opcode_literal_sse250k_q0_v1.json",
@@ -19,5 +107,6 @@
     "retired_neighborhoods": []
   },
   "parent": "opcode_field_compact_v1",
-  "status": "candidate"
+  "status": "retired",
+  "verdict": "Reject this fixed literal-only SSE policy; no confirmation or1MB run follows. Continue a distinct evidence-directed discovery cycle."
 }

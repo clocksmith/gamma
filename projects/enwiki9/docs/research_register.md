@@ -24,7 +24,11 @@ Bundle7117bytes adds1371 local source bytes; complete package remains unresolved
 The [opening250KB contract](../operations/adaptive/experiments/opcode_literal_sse250k_q0_v1.json)
 binds job `20260909T023015Z_9564fe8ecc`. Source/ownership published at `54c1eca99`;
 [fresh CPU2 admission](../operations/provenance/opcode_literal_sse250k_admission_20260909.json)
-released it. P encode is verified live under the existing4GiB/zero-swap guard; no terminal result yet.
+released it. The [terminal audit](../operations/provenance/opcode_literal_sse_terminal_20260909.json)
+rehashes49 artifacts from ten exact phases: P/K67658,D67744 bytes, an86-byte archive loss.
+Unchanged parse and non-SSE state isolate this training policy; local source adds1371bytes.
+The [validated reflection](../operations/adaptive/reflections/20260909T023015Z_9564fe8ecc.json)
+retires this fixed policy. Three run rows are recorded; no confirmation or1MB follows.
 
 ## 2026-09-09 - Context acquisition for a causal edit-continuation expert
 
