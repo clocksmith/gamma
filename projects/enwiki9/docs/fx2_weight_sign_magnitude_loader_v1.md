@@ -33,3 +33,11 @@ With unchanged options, two model copies save 832 bytes. The runtime-pair delta
 is `2 * (binary_delta - 416)`; the source-plus-decoder delta is
 `binary_delta + source_delta - 832`. These are accounting formulas, not measured
 package savings. No corpus launch or objective credit follows from source tests.
+
+The [native unit receipt](../operations/provenance/fx2_weight_sign_magnitude_loader_unit_v1_terminal.json)
+now records two native checker builds and seven passing tests from published
+source `f1d979c69`. It confirms synthetic tensor parity, adaptive-parent
+compatibility, mixed-sign rescaling and malformed-stream rejection. All26 input
+bindings remain unchanged. Test fixtures were temporary; exact sources, test
+logs and checker binaries are retained. This does not execute the production
+dispatcher, initialize the trained model or measure production package cost.
