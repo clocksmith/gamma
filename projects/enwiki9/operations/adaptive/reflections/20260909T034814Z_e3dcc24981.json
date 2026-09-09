@@ -1,0 +1,90 @@
+{
+  "attribution": {
+    "causalConfidence": "high",
+    "controlsEquivalent": null,
+    "failureClass": "implementation-failure",
+    "localizedCause": "OptModel::load in cpp_infer/src/opt/arena_build.cpp recognizes GFX2MAR1 but omits GFX2ADM1. Direct tensor comparator bypasses this entrypoint."
+  },
+  "candidateId": "fx2_weight_adaptive_fixture50051_q0_v1",
+  "candidateRevision": {
+    "candidateId": "fx2_weight_adaptive_fixture50051_q0_v1",
+    "candidateTreeSha256": "sha256:a23bdce2ab2792666842bb5d10626bcd1771b678a02ab5d150cea79a8e35c20a",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/fx2_weight_adaptive_fixture50051_q0_v1/20260909T034226544326Z_a23bdce2ab27.json",
+      "sha256": "sha256:1b5eab39e8c87d2cd50e96e921c8c8672d3615a9ea042aab8f46af97df15d83c"
+    }
+  },
+  "decision": {
+    "killPredicatesPass": null,
+    "nextGateBytes": null,
+    "promotionPredicatesPass": false,
+    "rationale": "Use a separately identified dispatch repair and rebuild; preserve model bytes, inference arithmetic, population and controls. Reprice the resulting binary before a new corpus gate.",
+    "verdict": "retry"
+  },
+  "evidence": [
+    {
+      "path": "operations/provenance/fx2_weight_adaptive_fixture50051_v1_terminal.json",
+      "sha256": "sha256:9044c1d0916447e1556798dba02f2a1dfedd94aa9285605f207cd3bd0cffd2e7"
+    },
+    {
+      "path": "operations/provenance/fx2_weight_adaptive_fixture50051_v1_terminal/index.json",
+      "sha256": "sha256:7723243b751def96e0d1b62f0a0d67495ff839d99fb8356a7f1522940353beca"
+    },
+    {
+      "path": "results/fx2_weight_adaptive_fixture50051_q0_v1/stage-decision.json",
+      "sha256": "sha256:fab9d94c628cb5ae3f79f2721460990e1cff82f156d38f0eead6e28339d6e85d"
+    }
+  ],
+  "experiment": {
+    "path": "operations/adaptive/experiments/fx2_weight_adaptive_fixture50051_q0_v1.json",
+    "sha256": "sha256:1536cde98e2d2f5a30f4fb7ab774a7888d8b61da79c9592322d912ff0d931232"
+  },
+  "generatedUtc": "2026-09-09T03:53:43+00:00",
+  "hypothesis": {
+    "rationale": "The production arena loader routes GFX2ADM1 to the raw loader; no D archive or probability stream exists.",
+    "verdict": "not-tested"
+  },
+  "job": {
+    "path": "operations/adaptive/failed/959_20260909T034814Z_e3dcc24981.json",
+    "sha256": "sha256:0142b266e829ab69c5d16da620fb759d8a9672ffc4e8f8afe1599581e10442a3"
+  },
+  "knowledge": {
+    "retiredDimensions": [],
+    "transferableLessons": [
+      "Test the production model dispatch and arena initialization in addition to direct tensor loading before claiming native format integration."
+    ],
+    "uncertainties": [
+      "Adaptive packing economics after dispatch repair and native archive parity remain untested."
+    ]
+  },
+  "measurementAssertions": [],
+  "measurements": {
+    "idealBitsSaved": null,
+    "memoryRatio": null,
+    "minimumPartitionIdealBitsSaved": null,
+    "netBytesSaved": null,
+    "positiveSegmentFraction": null,
+    "runtimeRatio": null,
+    "scopeBytes": null,
+    "scopeSymbols": null,
+    "sourceBytesDelta": null,
+    "transferRetention": null
+  },
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:e91ff20e92c3cac8acb0cbe5c79fc8e8a3b427d7e151245c8eecc52b1c32fa00",
+    "objectiveId": "gamma-enwiki9-hutter-90m-v3",
+    "objectivePath": "contracts/research/v3/objective-contract.json",
+    "targetScoreBytes": 90000000
+  },
+  "reflectionId": "r-20260909t034814z_e3dcc24981",
+  "schema": "gamma.enwiki9.reflection-receipt.v1",
+  "validity": {
+    "classification": "implementation-failure",
+    "reasons": [
+      "P and K finish exact native inverse and repeat; D aborts in production format dispatch before prediction. All resource guards pass and children close."
+    ],
+    "valid": false
+  }
+}

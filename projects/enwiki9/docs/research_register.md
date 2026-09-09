@@ -16,6 +16,16 @@ Publish ownership, then freshly admit CPU 2 with 9,999,998,976 memory bytes,
 16,000,000,000 scratch bytes and a 900-second elapsed stop before execution.
 The measured 6,042-byte model reduction per copy and alternative component
 costs remain separate from archive savings and full-corpus score credit.
+Published source `892767eeb` and job `1166ec554` produced a
+[terminal implementation failure](../operations/provenance/fx2_weight_adaptive_fixture50051_v1_terminal.json).
+P/K each reconstruct and repeat their exact 3,223-byte parent archive. D exits
+before prediction: production `OptModel::load` omits `GFX2ADM1` from compressed
+format dispatch and calls the raw loader. Direct tensor tests bypassed this
+entrypoint. All resource flags remain false, child/scratch cleanup completes,
+and 436 retained artifacts verify. Missing D evidence blocks promotion; this
+does not reject adaptive model packing. The validated reflection selects a
+separate dispatch repair, production-entrypoint test and rebuild/repricing
+before another frozen native comparison.
 
 ## 2026-09-09 - Decode adaptive model counts directly in the native loader
 

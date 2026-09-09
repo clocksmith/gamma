@@ -1,0 +1,87 @@
+{
+  "schema": "gamma.enwiki9.adaptive-model-fixture-terminal.v1",
+  "owner": "root_explore",
+  "candidate_id": "fx2_weight_adaptive_fixture50051_q0_v1",
+  "status": "implementation-failure",
+  "hypothesis_verdict": "not-tested",
+  "job": {
+    "path": "operations/adaptive/failed/959_20260909T034814Z_e3dcc24981.json",
+    "sha256": "sha256:0142b266e829ab69c5d16da620fb759d8a9672ffc4e8f8afe1599581e10442a3"
+  },
+  "guard": {
+    "path": "run_logs/adaptive/20260909T034814Z_e3dcc24981.resources/guard.json",
+    "sha256": "sha256:9cf99247fcc89f66a0089c9933a418fe4f85aa78e6570affd5aa6416dc0323e5"
+  },
+  "source_publication_commit": "892767eeb",
+  "job_publication_commit": "1166ec554",
+  "stage": {
+    "path": "results/fx2_weight_adaptive_fixture50051_q0_v1/stage-decision.json",
+    "sha256": "sha256:fab9d94c628cb5ae3f79f2721460990e1cff82f156d38f0eead6e28339d6e85d"
+  },
+  "artifact_manifest": {
+    "path": "results/fx2_weight_adaptive_fixture50051_q0_v1/artifacts.json",
+    "sha256": "sha256:9bc76001026c05bd31f3f3cd4ab09f9fddffd89379970847212719fe988f1d9d"
+  },
+  "artifact_files_rehashed": 436,
+  "phase_count": 8,
+  "successful_phase_count": 7,
+  "failed_phase": "fixture-D-encode",
+  "parent_archive_bytes": 3223,
+  "bookkeeping_archive_bytes": 3223,
+  "parent_and_bookkeeping_inverse_repeat_pass": true,
+  "treatment_archive_bytes": null,
+  "archive_saving_bytes": null,
+  "treatment_probability_events": 0,
+  "failure_evidence": {
+    "path": "results/fx2_weight_adaptive_fixture50051_q0_v1/fixture-D-encode.stderr",
+    "sha256": "sha256:5409c96c392c5a1642cf319aaf92137c505f57c2740ef785d6347a3593e1e542"
+  },
+  "localized_cause": "Production arena_build.cpp dispatch recognizes GFX2MAR1 but omits GFX2ADM1, so it routes the adaptive model to the raw loader, which rejects bad magic before prediction. Direct tensor comparisons bypassed this dispatch.",
+  "dispatch_source": {
+    "path": "results/fx2_weight_adaptive_fixture50051_q0_v1/work/native/cpp_infer/src/opt/arena_build.cpp",
+    "sha256": "sha256:0166dd25bcd182e488261518eb42fa4cba0284d8f2e684e06a9c48325a7a01ab"
+  },
+  "guard_flags": {
+    "cgroup_memory_guard_exceeded": false,
+    "logical_cpu_guard_exceeded": false,
+    "measurement_incomplete": false,
+    "official_decimal_memory_exceeded": false,
+    "phase_marker_invalid": false,
+    "rss_guard_exceeded": false,
+    "temporary_disk_guard_exceeded": false,
+    "wall_time_guard_exceeded": false
+  },
+  "guard_peaks": {
+    "cgroup_memory_peak_bytes": 5499056128,
+    "max_observed_process_vmhwm_kib": 5260300,
+    "max_sampled_allowed_cpu_count": 1,
+    "max_sampled_cgroup_current_bytes": 5495529472,
+    "max_sampled_scratch_allocated_bytes": 62332928,
+    "max_sampled_scratch_logical_bytes": 14740261317,
+    "max_sampled_single_rss_kib": 5260300,
+    "max_sampled_tree_live_threads": 3,
+    "max_sampled_tree_rss_kib": 5322784,
+    "max_sampled_tree_runnable_threads": 1
+  },
+  "elapsed_seconds": 90.3318,
+  "cleanup_complete": true,
+  "retention": {
+    "bundle": {
+      "path": "results/fx2_weight_adaptive_fixture50051_v1_retained.zip",
+      "sha256": "sha256:c882a22bf2235a6c48381345f0063b62a3f5e81c0be3342abc630939bb66007f"
+    },
+    "bytes": 22668820,
+    "members": 439,
+    "all_members_compared": true
+  },
+  "objective_target_bytes": 90000000,
+  "objective_credit_bytes": 0,
+  "full_corpus_score_bytes": null,
+  "complete_package_bytes": null,
+  "decision": "Preserve this failed integration; prepare a separate production-dispatch repair, test actual arena initialization, rebuild and reprice before another frozen native corpus gate.",
+  "limitations": [
+    "D never reached prediction; no compression verdict follows.",
+    "Previously measured tensor identity and component sizes remain scoped to their exact build.",
+    "Missing D inverse, repeat and trace evidence blocks promotion."
+  ]
+}

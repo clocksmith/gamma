@@ -14,7 +14,7 @@ Compare identical population hashes; equal input sizes alone do not define match
 
 ## Proof Boundary
 
-- Result JSON files scanned: `282`
+- Result JSON files scanned: `283`
 - Roundtrip-passing rows: `100`
 - Verified full `1G` rows in this checkout: `0`
 - Active target score: `90,000,000` bytes (`9.0000000%`)
