@@ -15,6 +15,15 @@ One fixed synthetic policy covers matching/opposing distributions, width changes
 empty tensors, rescaling and malformed inputs. Trained-model access requires its
 own published inputs and admission. No compression or package gain exists yet.
 
+The [synthetic result](../operations/evidence/20260909_fx2_weight_width_carry_v1_unit.json)
+passes seven tests, including every recorded INT4 pre-truth count row, independent
+inversion, repeats and original-parent/P/K identity. The initial compile failure
+and entrypoint-only repair remain retained. A150670-byte ZIP preserves23 files;
+test-local count traces are assertion-checked, not retained corpus evidence.
+Comparison executables are107792/129824 bytes; their22032-byte difference is
+not a native loader estimate. Next freeze a complete-model size/inverse audit;
+no trained parameter or corpus execution has occurred for this candidate.
+
 ## 2026-09-09 - Freeze independent adaptive FX2 package fixture execution
 
 Owner `root_explore` binds [the native package fixture](../operations/adaptive/experiments/fx2_adaptive_package_fixture50051_q0_v1.json)
