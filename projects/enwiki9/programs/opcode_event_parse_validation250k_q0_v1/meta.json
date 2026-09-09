@@ -5,6 +5,94 @@
   "description": "Reserved validation of unchanged adaptive event-pricing encoder",
   "hypothesis": "The unchanged exact event-pricing encoder reduces the complete archive on reserved raw offsets614250000..614499999 relative to its unchanged parent, while P/K and original decoding remain identical.",
   "id": "opcode_event_parse_validation250k_q0_v1",
+  "measured": {
+    "reflections": {
+      "20260909T003116Z_e61e66c5fb": {
+        "decision": "hold",
+        "path": "operations/adaptive/reflections/20260909T003116Z_e61e66c5fb.json",
+        "sha256": "sha256:7e36811707723129c5e3e7a9e1a0c589d202a0a40ce4a126c0b2dfd0e0c6626a",
+        "valid": true
+      }
+    },
+    "terminal_results": {
+      "20260909T003116Z_e61e66c5fb": {
+        "index": {
+          "path": "operations/provenance/opcode_event_parse_validation_terminal_20260908/index.json",
+          "sha256": "sha256:d25272154788339b5d04af84bd0c3ec22f32e4b8ea15b87693c2b33ab1d5eae9"
+        },
+        "reflection": {
+          "decision": "hold",
+          "path": "operations/adaptive/reflections/20260909T003116Z_e61e66c5fb.json",
+          "sha256": "sha256:7e36811707723129c5e3e7a9e1a0c589d202a0a40ce4a126c0b2dfd0e0c6626a",
+          "valid": true
+        },
+        "guard_validation_mode": "discovery-budget-schema",
+        "qualification_authority": false,
+        "missing_diagnostics": [
+          "kernel cpuset controller is not delegated; taskset assignment and existing affinity guard remain active"
+        ],
+        "arms": {
+          "P": {
+            "result_path": "projects/enwiki9/operations/provenance/opcode_event_parse_validation_terminal_20260908/P.json",
+            "result_json_bytes": 4627,
+            "result_json_sha256": "7705ae764e9d0c0f1c2a2743478204f267736cbeba85117e31f8d1d9c5ade888",
+            "data_size": 250000,
+            "data_md5": "1a2fbd33df06d70ddc2d6df144ca277a",
+            "data_sha256": "ffb6c9e73f59dc3ee7109441aa05881d1980ff440f47db63120bf36822b765bf",
+            "compressed_size": 68981,
+            "program_size": null,
+            "hutter_score": null,
+            "bits_per_byte": 2.207392,
+            "roundtrip_ok": true,
+            "determinism": true,
+            "compressed_sha256": "da66b4d059e30280e9de55c00f6c4755501e341388fc7d4e5f9d39e1f02e1eb6",
+            "compress_time_s": 54.13099795184098,
+            "decompress_time_s": 28.494764009024948,
+            "missing_diagnostics": [],
+            "run_id": "opcode_event_parse_validation250k_q0_v1__20260909T003116Z_e61e66c5fb__P"
+          },
+          "K": {
+            "result_path": "projects/enwiki9/operations/provenance/opcode_event_parse_validation_terminal_20260908/K.json",
+            "result_json_bytes": 4634,
+            "result_json_sha256": "67559070481287b02e37e4cf0c451caf85737ef3c1e96ae950dd9e0b389b922e",
+            "data_size": 250000,
+            "data_md5": "1a2fbd33df06d70ddc2d6df144ca277a",
+            "data_sha256": "ffb6c9e73f59dc3ee7109441aa05881d1980ff440f47db63120bf36822b765bf",
+            "compressed_size": 68981,
+            "program_size": null,
+            "hutter_score": null,
+            "bits_per_byte": 2.207392,
+            "roundtrip_ok": true,
+            "determinism": true,
+            "compressed_sha256": "da66b4d059e30280e9de55c00f6c4755501e341388fc7d4e5f9d39e1f02e1eb6",
+            "compress_time_s": 53.96825302997604,
+            "decompress_time_s": 28.289655356900766,
+            "missing_diagnostics": [],
+            "run_id": "opcode_event_parse_validation250k_q0_v1__20260909T003116Z_e61e66c5fb__K"
+          },
+          "D": {
+            "result_path": "projects/enwiki9/operations/provenance/opcode_event_parse_validation_terminal_20260908/D.json",
+            "result_json_bytes": 4636,
+            "result_json_sha256": "700eaf385b88a36fc95afdac33f566c1443458dcd7a7096bd32034275988c6a3",
+            "data_size": 250000,
+            "data_md5": "1a2fbd33df06d70ddc2d6df144ca277a",
+            "data_sha256": "ffb6c9e73f59dc3ee7109441aa05881d1980ff440f47db63120bf36822b765bf",
+            "compressed_size": 68868,
+            "program_size": null,
+            "hutter_score": null,
+            "bits_per_byte": 2.203776,
+            "roundtrip_ok": true,
+            "determinism": true,
+            "compressed_sha256": "6d24aa0af180bea3a78f1f9a5a9c9ddf81cd7aa2ba5efd0e9af6be385a5b4072",
+            "compress_time_s": 53.203355269972235,
+            "decompress_time_s": 28.385723744053394,
+            "missing_diagnostics": [],
+            "run_id": "opcode_event_parse_validation250k_q0_v1__20260909T003116Z_e61e66c5fb__D"
+          }
+        }
+      }
+    }
+  },
   "omega": {
     "experiment": {
       "path": "operations/adaptive/experiments/opcode_event_parse_validation250k_q0_v1.json",
@@ -21,5 +109,6 @@
     ]
   },
   "parent": "opcode_event_parse250k_q0_v1",
-  "status": "candidate"
+  "status": "blocked_dependency",
+  "verdict": "Preserve positive validation with unchanged source, hold scaling and integration pending a separately frozen accounting or confirmation gate, and do not tune on validation"
 }

@@ -48,7 +48,19 @@ supports the development gain and holds scaling/integration for package and fres
 transfer evidence. Three arm rows are recorded. The [new validation population](../operations/provenance/opcode_event_parse_validation_population_v1.json)
 authenticates raw offsets 614250000..614499999 against the full canonical input hash;
 The [validation contract](../operations/adaptive/experiments/opcode_event_parse_validation250k_q0_v1.json) binds the unchanged codec and owner `root_explore`.
-Job `20260909T003116Z_e61e66c5fb` is active on CPU2 after publication/admission. No full-corpus score is claimed.
+Job `20260909T003116Z_e61e66c5fb` completed after publication and fresh CPU2 admission.
+The [validation terminal](../operations/provenance/opcode_event_parse_validation_terminal_20260908.json)
+reports P/K 68,981 bytes versus D 68,868: 113 archive bytes saved on reserved250KB.
+All ten phases, original-decoder inverses, repeats, complete state witnesses and
+observation parity pass. The closed resource guard reports no violations.
+The [validated reflection](../operations/adaptive/reflections/20260909T003116Z_e61e66c5fb.json)
+retains positive transfer and holds scaling/integration. Archive saving minus one
+source-ZIP increment is -1,782 bytes; complete package remains unresolved.
+Both populations are now measured and unavailable for tuning. No full-corpus credit.
+Next freeze a separate 1MB confirmation to test archive economics at the larger
+scope while preserving the three-file codec. The [existing parent 1MB receipt](../operations/provenance/opcode_field_compact_terminal_20260908/confirmation.json)
+measures 304.29 seconds encode, 156.82 seconds decode and 1,273,496KiB peak process RSS;
+use those measured costs when bounding the next runner. No 1MB job is launched yet.
 
 ## 2026-09-08 - Standalone XML field histories enter executable synthetic testing
 
@@ -762,39 +774,3 @@ the lost controller's return code, scientific validity or continuous resource
 proof. The original frozen running record remains unchanged; its terminal
 counterpart supports independent discovery. The sealed HORIZON router and
 qualification still need compatibility repair. The `codex` recovery owner remains.
-
-## 2026-09-06 - Earlier-field conditioning passes the synthetic codec gate
-
-ROOT coordinated implementation and independent decoder review of
-`causal_field_dependency_synthetic_q0_v1`. The [published plan](../operations/provenance/causal_field_dependency_synthetic_q0_v1_plan.json)
-binds a prefix-only flat-template parser, FIFO128 completed associations,
-uniform P/K, conditional T, recency R and shuffled-association S controls.
-The [executable codec](../tools/causal_field_dependency_v1.py) learns only after
-a complete valid invocation and independently reconstructs every coded byte.
-
-The [retained unit receipt](../operations/evidence/20260906_causal_field_dependency_unit.json)
-binds 19 passing tests and 15 independent encode/decode/repeat processes.
-All five arms invert exactly, repeat byte-identically and agree in their
-probability, state and synchronization digests; P/K archives also match.
-On the constructed **269-byte** dependency fixture, T produces **294 bytes**
-versus **347** for each control: 53 bytes saved, but every archive exceeds raw.
-This demonstrates the intended conditional mechanism only on that fixture.
-It establishes no corpus benefit, competitive-parent transfer or package gain.
-
-Independent review prompted checkpoint probability rederivation and work-cap
-checks before source freeze. Rejected checkpoints and a prior test-harness
-failure remain retained. Seven required local source files total **228,815 bytes**;
-Python/runtime licensing and complete package accounting remain unresolved.
-The implementation cap is 8,192 raw bytes. Any corpus successor needs its own
-identity, frontend/parent adapter, reviewed source, ownership and frozen resource
-and population bindings. No corpus job or larger launch is authorized by this
-synthetic result; HORIZON, MIDAS and other owners remain unchanged.
-
-Read-only native-gate review found no competing field integration. Reuse
-`lib/fx2_native_gate_v1.py` and the [held native transfer](../operations/adaptive/reflections/20260905T233740Z_c2a28dc2f7.json):
-its opening parent archive is 33,429 bytes. Missing code must emit raw parser
-bytes only after complete WRT events, bind donor spans to aligned WRT boundaries,
-and update donor odds from actual parent probabilities. The uniform-parent
-`2^matched_bits` rule cannot be inherited. Replay is diagnostic until a native
-decoder reproduces it; prune unused dependencies in a new candidate before
-package promotion. Cold opening250KB cannot establish mature-history benefit.
