@@ -2,6 +2,22 @@
 
 [Record index](research_register/README.md) | [Earlier records](research_register/archive/README.md)
 
+## 2026-09-09 - Calibrate literals after the decoder knows the copy mode
+
+Seed `post_edit_attribution_discovery_20260909_v1` selects lenses6/8: decoded representation
+choices condition online calibration. Source inspection rejects training copied bytes as new:
+the standalone bitmix parent already updates its literal predictor on every reconstructed bit.
+Owner `root_explore` instead [freezes literal-only SSE training](../operations/provenance/opcode_literal_sse_v1_synthetic_plan.json),
+preserving context counts, mixer weights, original prefix estimates and copy-selection costs.
+The [four-test synthetic result](../operations/provenance/opcode_literal_sse_v1_synthetic_terminal.json)
+has exact inverses/repeats, P/K identity and within-arm probability/update/arithmetic witnesses.
+The copy fixture is P/K35,D37 bytes; empty9, arbitrary222 and XML46 bytes tie. No corpus gain.
+This tests mode-conditioned calibration, not MIDAS or a new entropy coder. The latest edit
+attribution rejects resetting its unchanged experts; the failed event-pricing mutation stays out.
+Next use the existing corpus runner for one published opening250KB P/K/D gate, with native
+D decoding, independent processes, identical parse events, calibration-free parent projections
+and package costs. The existing ranking includes already-completed validation; do not rerun it.
+
 ## 2026-09-09 - Context acquisition for a causal edit-continuation expert
 
 Seed `post_confirmation_discovery_20260909_v1` selected lenses5/1. Plain hierarchical
