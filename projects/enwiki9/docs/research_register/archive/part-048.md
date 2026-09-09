@@ -625,3 +625,26 @@ The whole-forge comparison cannot attribute those components independently.
 Next: freeze one native fixture comparison with original/bookkeeping identity,
 independent inversion, deterministic repeat, coder traces and package/resource
 costs. Full predictor-state certification remains open; no 90M score credit.
+
+## 2026-09-08 - Compact block replacement loses its native matched comparison
+
+The [terminal receipt](../../../operations/provenance/fx2_compact_v26_terminal_20260908.json)
+closes job `20260908T202406Z_5d61a00d99`: P/K archives are 3,223 bytes and
+D is 3,240 bytes. All exact raw inverses, deterministic repeats, 259,824-record
+coder trajectory comparisons and observed/unobserved archive checks pass.
+The selected compact403 block loses 17 archive bytes and adds 45,745 bytes to
+the overlapping local source/assets/binary/options inventory. That subtotal
+is not an official package score. D encoder/decoder CPU costs are 28.726/28.653
+seconds versus P 14.677/14.699; concurrent timing remains diagnostic.
+All resource guards pass with 6,779,830,272-byte cgroup peak, 14,796,629,769-byte
+logical scratch peak, one allowed CPU and closed children/cgroup removal.
+
+Posthoc aligned probability analysis finds 147,190 changed quantized events
+and 134.316 ideal bits lost; all chronological thirds lose. The archive loss
+therefore is not solely a framing effect. No internal submodel cause is isolated.
+The [validated reflection](../../../operations/adaptive/reflections/20260908T202406Z_5d61a00d99.json)
+retires this exact block replacement on the public fixture. Three canonical
+arm rows preserve its evidence. Do not scale it or rename it as an unchanged
+successor; retain the stronger original parent and select a distinct mechanism
+from measured costs. Full predictor-state certification, fresh transfer and
+complete-package qualification remain open. No 90M full-corpus score credit.
