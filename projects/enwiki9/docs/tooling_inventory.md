@@ -12,7 +12,7 @@ Reusable artifact helpers for new tools: [lib/artifacts.py](../lib/artifacts.py)
 The LibNC initializer teacher launcher exits before the first forward, gradient, update, or coded symbol; its source-bound experiment defines that boundary.
 The delayed-status helper's `enwiki9_delayed_status_latest.log` pointer is operational history, not present-host occupancy proof.
 
-Coverage: **1095 files** (33 .c, 72 .cpp, 1 .gdb, 1 .h, 1 .hpp, 1 .html, 983 .py, 3 .sh).
+Coverage: **1096 files** (33 .c, 72 .cpp, 1 .gdb, 1 .h, 1 .hpp, 1 .html, 984 .py, 3 .sh).
 
 | Tool | Purpose | Referenced contracts |
 |---|---|---|
@@ -384,6 +384,7 @@ Coverage: **1095 files** (33 .c, 72 .cpp, 1 .gdb, 1 .h, 1 .hpp, 1 .html, 983 .py
 | [`tools/fx2_weight_adaptive_dispatch_gate_v2.py`](../tools/fx2_weight_adaptive_dispatch_gate_v2.py) | Bounded production-entrypoint parity and native rebuild for adaptive packing. | none found |
 | [`tools/fx2_weight_adaptive_dispatch_v1.py`](../tools/fx2_weight_adaptive_dispatch_v1.py) | Emit the production dispatch repair without changing retained native source. | none found |
 | [`tools/fx2_weight_adaptive_fixture50051_q0_v1.py`](../tools/fx2_weight_adaptive_fixture50051_q0_v1.py) | Guarded native archive parity for the exact adaptive model representation. | [1](../operations/adaptive/experiments/fx2_weight_adaptive_fixture50051_q0_v1.json) |
+| [`tools/fx2_weight_adaptive_fixture50051_q0_v2.py`](../tools/fx2_weight_adaptive_fixture50051_q0_v2.py) | Guarded native archive parity for the exact adaptive model representation. | none found |
 | [`tools/fx2_weight_adaptive_loader_gate_v1.py`](../tools/fx2_weight_adaptive_loader_gate_v1.py) | Source-bound native tensor parity and build cost; never run corpus inference. | none found |
 | [`tools/fx2_weight_adaptive_loader_v1.py`](../tools/fx2_weight_adaptive_loader_v1.py) | Emit an isolated adaptive loader from its authenticated, immutable parent. | none found |
 | [`tools/fx2_weight_adaptive_marginal_model_v1.py`](../tools/fx2_weight_adaptive_marginal_model_v1.py) | Bounded complete-model comparison with exact independent restoration. | none found |
