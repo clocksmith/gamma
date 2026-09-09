@@ -14,8 +14,8 @@ Compare identical population hashes; equal input sizes alone do not define match
 
 ## Proof Boundary
 
-- Result JSON files scanned: `290`
-- Roundtrip-passing rows: `105`
+- Result JSON files scanned: `296`
+- Roundtrip-passing rows: `111`
 - Verified full `1G` rows in this checkout: `0`
 - Active target score: `90,000,000` bytes (`9.0000000%`)
 - `9.0000000%` target reached by this matrix: `False`
@@ -37,7 +37,7 @@ Compare identical population hashes; equal input sizes alone do not define match
 | `cmix_obias_full1g_submission_accounting_qm1_v1` | unidentified | custom candidate | 0 | unknown | 0 | unknown | n/a | not recorded | `results/cmix_obias_full1g_submission_accounting_qm1_v1/decision.json` |
 | `nncp_compact5_preprocessed_cqq_x86xzopt_nodebug_t4_tarslack_v1` | `321868b6f37a` | custom candidate | 10,000 | 240,248 | 6,229 | 234,019 | 4.9832 | true | `results/nncp_compact5_preprocessed_cqq_x86xzopt_nodebug_t4_tarslack_v1/2026-07-27T213234.json` |
 | `fx2_wrt_support_deploy_fixture_v1:D` | `890b3e1210a2` | custom candidate | 50,051 | 6,019,950 | 3,221 | 6,016,729 | 0.514834868 | true | `operations/provenance/fx2_wrt_support_deploy_terminal_20260908/D.json` |
-| `matched_frontier_reserved_q0_v1:validation-FX2` | `4c6b839c7799` | custom candidate | 250,000 | unknown | 35,464 | unknown | 1.134848 | true | `operations/provenance/matched_frontier_reserved_terminal_20260908/validation-FX2.json` |
+| `fx2_weight_adaptive_transfer250k_q0_v1:distant-D` | `f0d01801279f` | custom candidate | 250,000 | unknown | 9,499 | 4,907,384 | 0.303968 | true | `operations/provenance/fx2_weight_adaptive_transfer250k_v1_terminal/distant-D.json` |
 | `matched_frontier_reserved_q0_v1:confirmation-FX2` | `20b4d8d7e140` | custom candidate | 1,000,000 | unknown | 131,238 | unknown | 1.049904 | true | `operations/provenance/matched_frontier_reserved_terminal_20260908/confirmation-FX2.json` |
 
 ## Top Score Rows At 1,000,000 Bytes
@@ -73,14 +73,14 @@ Compare identical population hashes; equal input sizes alone do not define match
 
 | Program / arm | Population SHA256 | Mechanism | Scope | Local subtotal | Archive | Program | b/B | Determinism | Result |
 |---|---|---|---:|---:|---:|---:|---:|---|---|
+| `fx2_weight_adaptive_transfer250k_q0_v1:distant-D` | `f0d01801279f` | custom candidate | 250,000 | unknown | 9,499 | 4,907,384 | 0.303968 | true | `operations/provenance/fx2_weight_adaptive_transfer250k_v1_terminal/distant-D.json` |
+| `fx2_weight_adaptive_transfer250k_q0_v1:distant-K` | `f0d01801279f` | custom candidate | 250,000 | unknown | 9,499 | 4,913,426 | 0.303968 | true | `operations/provenance/fx2_weight_adaptive_transfer250k_v1_terminal/distant-K.json` |
+| `fx2_weight_adaptive_transfer250k_q0_v1:distant-P` | `f0d01801279f` | custom candidate | 250,000 | unknown | 9,499 | 4,913,426 | 0.303968 | true | `operations/provenance/fx2_weight_adaptive_transfer250k_v1_terminal/distant-P.json` |
+| `fx2_weight_adaptive_transfer250k_q0_v1:opening-D` | `665fc689441b` | custom candidate | 250,000 | unknown | 33,429 | 4,907,384 | 1.069728 | true | `operations/provenance/fx2_weight_adaptive_transfer250k_v1_terminal/opening-D.json` |
+| `fx2_weight_adaptive_transfer250k_q0_v1:opening-K` | `665fc689441b` | custom candidate | 250,000 | unknown | 33,429 | 4,913,426 | 1.069728 | true | `operations/provenance/fx2_weight_adaptive_transfer250k_v1_terminal/opening-K.json` |
+| `fx2_weight_adaptive_transfer250k_q0_v1:opening-P` | `665fc689441b` | custom candidate | 250,000 | unknown | 33,429 | 4,913,426 | 1.069728 | true | `operations/provenance/fx2_weight_adaptive_transfer250k_v1_terminal/opening-P.json` |
 | `matched_frontier_reserved_q0_v1:validation-FX2` | `4c6b839c7799` | custom candidate | 250,000 | unknown | 35,464 | unknown | 1.134848 | true | `operations/provenance/matched_frontier_reserved_terminal_20260908/validation-FX2.json` |
 | `opcode_event_parse250k_q0_v1:D` | `665fc689441b` | syntax opcode preprocessor | 250,000 | unknown | 67,520 | unknown | 2.16064 | true | `operations/provenance/opcode_event_parse_terminal_20260908/D.json` |
-| `opcode_field_history250k_q0_v1:D` | `665fc689441b` | syntax opcode preprocessor | 250,000 | unknown | 67,578 | unknown | 2.162496 | true | `operations/provenance/opcode_field_history_terminal_20260908/D.json` |
-| `opcode_field_history250k_q0_v1:G` | `665fc689441b` | syntax opcode preprocessor | 250,000 | unknown | 67,579 | unknown | 2.162528 | true | `operations/provenance/opcode_field_history_terminal_20260908/G.json` |
-| `opcode_field_history250k_q0_v1:S` | `665fc689441b` | syntax opcode preprocessor | 250,000 | unknown | 67,584 | unknown | 2.162688 | true | `operations/provenance/opcode_field_history_terminal_20260908/S.json` |
-| `opcode_wiki_slot_v1:D` | `665fc689441b` | syntax opcode preprocessor | 250,000 | unknown | 67,601 | unknown | 2.163232 | true | `operations/provenance/opcode_wiki_slot_terminal_20260908/D.json` |
-| `opcode_slot_reset_v1:D` | `665fc689441b` | syntax opcode preprocessor | 250,000 | unknown | 67,626 | unknown | 2.164032 | true | `operations/provenance/opcode_slot_reset_terminal_20260908/D.json` |
-| `opcode_calibration_cost_v1:K` | `665fc689441b` | syntax opcode preprocessor | 250,000 | unknown | 67,658 | unknown | 2.165056 | true | `operations/provenance/opcode_calibration_terminal_20260908/K.json` |
 
 ## Unavailable terminal evidence
 

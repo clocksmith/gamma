@@ -12,7 +12,7 @@ Reusable artifact helpers for new tools: [lib/artifacts.py](../lib/artifacts.py)
 The LibNC initializer teacher launcher exits before the first forward, gradient, update, or coded symbol; its source-bound experiment defines that boundary.
 The delayed-status helper's `enwiki9_delayed_status_latest.log` pointer is operational history, not present-host occupancy proof.
 
-Coverage: **1097 files** (33 .c, 72 .cpp, 1 .gdb, 1 .h, 1 .hpp, 1 .html, 985 .py, 3 .sh).
+Coverage: **1098 files** (33 .c, 72 .cpp, 1 .gdb, 1 .h, 1 .hpp, 1 .html, 986 .py, 3 .sh).
 
 | Tool | Purpose | Referenced contracts |
 |---|---|---|
@@ -268,6 +268,7 @@ Coverage: **1097 files** (33 .c, 72 .cpp, 1 .gdb, 1 .h, 1 .hpp, 1 .html, 985 .py
 | [`tools/enwiki9_lab.py`](../tools/enwiki9_lab.py) | Adaptive, durable experiment loop for enwiki9 candidates. | [16](../operations/adaptive/experiments/cmix_obias_shadow_midpoint_oracle64_q0_v4.json) |
 | [`tools/enwiki9_ledger.html`](../tools/enwiki9_ledger.html) | unknown; inspect source and the selected experiment | none found |
 | [`tools/enwiki9_ledger.py`](../tools/enwiki9_ledger.py) | Build the browsing ledger from existing records; never launch or change a run. | [1](../operations/adaptive/experiments/fx2_causal_field_opportunity_q0_v1.json) |
+| [`tools/enwiki9_native_package_replay_v1.py`](../tools/enwiki9_native_package_replay_v1.py) | Native package discovery through existing closure, sandbox and gate helpers. Called by a separately frozen NativeGate, never an independent launch surface. This reports execution parity even when license or submission closure is missing. It cannot issue a release-canary pass or an objective receipt. | none found |
 | [`tools/enwiki9_normalize_receipts.py`](../tools/enwiki9_normalize_receipts.py) | Regenerate lock-safe enwiki9 receipt documents. This tool does not launch compression or mutate candidate source. It refreshes the operator-facing documents that should be current after a gate finishes or while a guarded scorer is being observed. | none found |
 | [`tools/enwiki9_omega.py`](../tools/enwiki9_omega.py) | OMEGA archive operations for the enwiki9 adaptive search loop. | [1](../operations/adaptive/experiments/fx2_causal_field_opportunity_q0_v1.json) |
 | [`tools/enwiki9_package_accounting.py`](../tools/enwiki9_package_accounting.py) | Seal official Hutter score and Gamma expanded-closure package accounting. | none found |

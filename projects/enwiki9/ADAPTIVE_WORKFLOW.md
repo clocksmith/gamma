@@ -752,6 +752,15 @@ independent builds, exact reconstruction, repeat archives, missing-file rejectio
 and license reporting with zero objective credit. The
 [prize-facing package procedure](#compose-prize-facing-evidence) remains separate.
 
+Native packages that exceed the synthetic canary bounds can use
+`tools/enwiki9_native_package_replay_v1.py` through a separately frozen
+`NativeGate`. It reuses dependency manifests and the isolated replay mounts,
+requires three fresh builds and exact archive/inverse/trace comparisons, and
+reports incomplete dependency/license evidence without release or score credit.
+Its caller must publish ownership, bind every package input and explicitly admit
+CPU, memory, scratch and elapsed bounds before executing it. Synthetic helper
+tests do not establish that an actual native package builds or reconstructs.
+
 Before submission, confirm the accepted reference and accounting with the
 committee, prepare public source/package and an algorithm explanation, document
 authorship and external contributions, and provide build/encode/decode commands.

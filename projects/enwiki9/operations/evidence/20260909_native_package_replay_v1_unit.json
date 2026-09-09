@@ -1,0 +1,102 @@
+{
+  "schema": "gamma.enwiki9.native-package-replay-unit.v1",
+  "owner": "root_explore",
+  "inputs": [
+    {
+      "path": "tools/enwiki9_native_package_replay_v1.py",
+      "bytes": 7742,
+      "sha256": "5e8baaa82e75355ae1f7c3d24136854a1a6d54eff1394646e54178f0bf7228f8"
+    },
+    {
+      "path": "tests/test_enwiki9_native_package_replay_v1.py",
+      "bytes": 8493,
+      "sha256": "495eeba09478c17baf5467bcd6891381d88c4767a81cce00e775e9a5117924db"
+    },
+    {
+      "path": "tools/enwiki9_clean_room_replay.py",
+      "bytes": 39185,
+      "sha256": "b9e9c1601722897510b089b1b4c041df568b4fea81c8c7cd862b19654df8393c"
+    },
+    {
+      "path": "tools/enwiki9_dependency_closure.py",
+      "bytes": 8281,
+      "sha256": "690bba1d79c9e0692a0d73cfdd5838af2c250aa3ada98f5dc4be93fbdd2e4c52"
+    },
+    {
+      "path": "tools/research_contracts.py",
+      "bytes": 134762,
+      "sha256": "451e915f4297a3232d6370d16f3c608697d7a7df62bc905f3e298953f3927f62"
+    },
+    {
+      "path": "tests/test_enwiki9_release_canary.py",
+      "bytes": 7625,
+      "sha256": "422a7ec00f56a3d1f62a630408c58a0fbc9a3eef54f5275c9772b775f4a14e20"
+    }
+  ],
+  "executions": [
+    {
+      "command": [
+        "/usr/bin/taskset",
+        "-c",
+        "3",
+        "/usr/bin/python3",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-p",
+        "test_enwiki9_native_package_replay_v1.py",
+        "-v"
+      ],
+      "returncode": 0,
+      "elapsed_seconds": 0.9165589171461761,
+      "stdout": "results/native_package_replay_v1_unit_20260909/native.stdout",
+      "stderr": "results/native_package_replay_v1_unit_20260909/native.stderr"
+    },
+    {
+      "command": [
+        "/usr/bin/taskset",
+        "-c",
+        "3",
+        "/usr/bin/python3",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-p",
+        "test_enwiki9_release_canary.py",
+        "-v"
+      ],
+      "returncode": 0,
+      "elapsed_seconds": 0.11591996112838387,
+      "stdout": "results/native_package_replay_v1_unit_20260909/canary.stdout",
+      "stderr": "results/native_package_replay_v1_unit_20260909/canary.stderr"
+    }
+  ],
+  "status": "passed",
+  "native_codec_executed": false,
+  "corpus_executed": false,
+  "objective_credit_bytes": 0,
+  "full_corpus_score_bytes": null,
+  "bounds": {
+    "cpu_set": [
+      3
+    ],
+    "address_space_bytes": 536870912,
+    "per_phase_cpu_seconds": 120,
+    "per_phase_elapsed_seconds": 120,
+    "per_file_bytes": 8388608
+  },
+  "development_failure": {
+    "test": "test_forbidden_decode_corpus_placeholder",
+    "reason": "Initial assertion expected a later rejection message; existing manifest validator rejected decoder corpus access first.",
+    "correction": "Accept the earlier valid corpus-access rejection; execution behavior unchanged.",
+    "initial_tests_run": 11,
+    "initial_assertion_failures": 1
+  },
+  "meaning": "Synthetic FakeGate orchestration and existing release-canary regression tests; native rebuilding and corpus compression remain unexecuted."
+}

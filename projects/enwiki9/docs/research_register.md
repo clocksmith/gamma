@@ -2,6 +2,19 @@
 
 [Record index](research_register/README.md) | [Earlier records](research_register/archive/README.md)
 
+## 2026-09-09 - Native package replay reuses existing isolation and resource guards
+
+Owner `root_explore` implements the [native package replay helper](../tools/enwiki9_native_package_replay_v1.py)
+after exact adaptive-model transfer. It consumes frozen dependency manifests
+and uses existing sandbox mounts and `NativeGate` execution to require three
+independent builds, exact archives/inverses/repeats and retained coder traces.
+It reports unresolved licenses and dependencies without inventing release or
+score credit. [Synthetic validation](../operations/evidence/20260909_native_package_replay_v1_unit.json)
+covers tampering, missing inputs, decoder isolation, explicit bounds and refusing
+existing outputs; the existing release-canary regressions also pass. No native
+codec or corpus ran in these tests. Next freeze an actual adaptive-model package
+and its fixture through the canonical lifecycle, then measure independent replay.
+
 ## 2026-09-09 - Transfer exact adaptive packing to opening and distant 250KB
 
 Owner `root_explore` freezes [the two-population native comparison](../operations/adaptive/experiments/fx2_weight_adaptive_transfer250k_q0_v1.json)
