@@ -1,0 +1,81 @@
+{
+  "schema": "gamma.enwiki9.source-review.v1",
+  "id": "opcode_event_opportunity_source_review_v1",
+  "reviewer": "/root/next_prediction_gate_review",
+  "owner": "root_explore",
+  "parent": "opcode_field_compact_v1",
+  "inputs": [
+    {
+      "path": "programs/opcode_field_compact_v1/p",
+      "bytes": 5423,
+      "sha256": "7d331ba82c635af8afe6517bf5f4471b41dcf7854c6ec01cb5564078d9bb56a8"
+    },
+    {
+      "path": "tools/opcode_field_compact_observe_v1.py",
+      "bytes": 5965,
+      "sha256": "9715b76f275099ebe287d038e061b48a8b3195201d9fadaaed03cca1b6b9bb50"
+    },
+    {
+      "path": "tools/opcode_field_repair_cli_v1.py",
+      "bytes": 7766,
+      "sha256": "a5f49b2587a296155f9b6dea12e159513fb8d033ea5776a2b57a864cf313d0fc"
+    },
+    {
+      "path": "results/opcode_event_parse250k_q0_v1/artifacts.json",
+      "bytes": 9215,
+      "sha256": "2b25046a5ab8a84816c232ab98817cdf3cac490ca45003ffda361253e39e15a7"
+    },
+    {
+      "path": "results/opcode_event_parse_validation250k_q0_v1/artifacts.json",
+      "bytes": 9754,
+      "sha256": "d1fed9b7611c19f3cb73516dea536bb6bc9382ea55a2ae708eb5310e3e172a42"
+    },
+    {
+      "path": "results/opcode_event_parse_confirmation1m_q0_v1/artifacts.json",
+      "bytes": 9764,
+      "sha256": "651e6b7ed8df1e6432ea8104adb6b2a5fbba2ce386268996581d952a43578b7f"
+    },
+    {
+      "path": "results/opcode_event_parse250k_q0_v1/P-encode.audit.json",
+      "bytes": 24889,
+      "sha256": "7aa2091cc61cf1bc838062df300aff0719d23eec0cfc734508f56d5633356315"
+    }
+  ],
+  "finding": "Compact event predictor uses field/word/page/current-byte context; source omission of previous-event type is not evidence that another context key improves coding. Existing artifacts retain arithmetic/probability hashes and checkpoints, not recoverable event sequences.",
+  "observed": {
+    "modeled_bytes": 230968,
+    "arithmetic_operations": 1644427,
+    "artifact_counts": {
+      "results/opcode_event_parse250k_q0_v1/artifacts.json": 49,
+      "results/opcode_event_parse_validation250k_q0_v1/artifacts.json": 49,
+      "results/opcode_event_parse_confirmation1m_q0_v1/artifacts.json": 49
+    }
+  },
+  "interpretation": "Arithmetic operations include literal bits and operands; they cannot be presented as opcode frequencies or transition evidence.",
+  "decision": "Instrument parent event opportunities before proposing a predictive mutation.",
+  "implementation_assignment": {
+    "agent": "/root/next_prediction_gate_review",
+    "files": [
+      "tools/opcode_event_opportunity_observe_v1.py",
+      "tests/test_opcode_event_opportunity_observe_v1.py"
+    ],
+    "scope": "New external observer and tiny synthetic tests only; no corpus reexecution or prediction change."
+  },
+  "required_observer_fields": [
+    "event index",
+    "modeled position",
+    "existing key",
+    "previous decoded event",
+    "pre-update counts/total",
+    "decoded event",
+    "post-update counts/total"
+  ],
+  "invariants": [
+    "Preserve parent probabilities,parse,archives,existing audit and state",
+    "Cost-only queries never advance observer",
+    "Independent encoder/decoder event records must match",
+    "Do not inspect validation/confirmation to select contexts"
+  ],
+  "next_gate": "Only after synthetic P/K identity, exact inverse/repeat and event-witness agreement, freeze a decode-only development archive observation using retained P.arc. This review grants no corpus launch or scientific promotion.",
+  "objective_credit_bytes": 0
+}
