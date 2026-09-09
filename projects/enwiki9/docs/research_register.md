@@ -2,6 +2,17 @@
 
 [Record index](research_register/README.md) | [Earlier records](research_register/archive/README.md)
 
+## 2026-09-09 - Preserve parent learning while changing ratio delivery
+
+Owner `root_explore` claimed [coder-boundary delivery](../operations/adaptive/experiments/fx2_ratio_coder_delivery_v1.json)
+after the retained diagnostic. It keeps the existing ratio policy and original
+expert/mixer learning; only the final discretized coding probability changes.
+The [stateless integer kernel](../lib/fx2_ratio_coder_delivery_v1.hpp) derives
+conditional prefix odds and rounds Q16 through bounded128-bit division steps.
+The synthetic gate compares independent arbitrary-precision rationals, neutral
+parents, sparse support, extreme masses and ties. No native integration or
+corpus archive exists yet. Publish ownership and source before bounded tests.
+
 ## 2026-09-09 - Locate residual-ratio prediction loss before another mutation
 
 Owner `root_explore` now follows the prior residual-ratio loss attribution request.
