@@ -2,6 +2,29 @@
 
 [Record index](research_register/README.md) | [Earlier records](research_register/archive/README.md)
 
+## 2026-09-09 - Native causal field observer prepares a prediction transfer
+
+Owner `root_explore` selects lenses6/9 after BPD1's native archive loss.
+The [source-reviewed direction](fx2_xml_field_observer_v1.md) tests explicit
+six-field conditioning inside one existing FX2 base predictor. Standalone
+field repair's301/71/1541-byte gains are confirmed but not transferred to FX2.
+Native FXCM already tracks some XML/wiki state; this is a missing-coordinate
+hypothesis, not a claim that its parser has the standalone bug. History-bank
+routing, another final-calibration sweep and dictionary integration rescue are
+unselected under their existing negative or unpaid evidence.
+
+The [new native observer](../lib/fx2_xml_field_observer_v1.hpp) reconstructs exact
+WRT events before updating raw XML field state. Seven optimized/UBSan tests
+pass in the [unit receipt](../results/fx2_xml_field_observer_v1_unit/attempt02/receipt.json).
+The first failed test attempt is retained; longest-marker storage and an invalid
+synthetic escape were repaired. Independent review rehashed all5 source and11
+artifact bindings and checked parity with the retained WRT inverse and exact
+opcode marker table. No native inference or corpus run occurred.
+Next implement one dedicated context scalar without changing shared Sparse
+contexts or constructor order, exclude observer pretraining, and compare P/K/D
+against a fixed4096-modeled-byte delayed-field control. Freeze and publish the
+native runner and inputs before execution. No prize or archive credit yet.
+
 ## 2026-09-09 - Native inverse prepares a fixed dictionary representation test
 
 `root_explore` selects lenses10/1 deliberately after the valid but unpaid
@@ -735,65 +758,3 @@ Paid 1/64/1024-byte block choices have ceilings -31,918/-404/-24 ideal bits.
 All 259,824 truth coordinates and 13 inputs verify; no native model reran.
 Do not build a selector for this fixed pair from this fixture. Seek new predictive
 information; this is not a finite-archive or full-corpus impossibility theorem.
-
-## 2026-09-08 - Decoder-known WRT support exposes a bounded positive opportunity
-
-After the output correction failed, discovery lenses1/7 select a conservative
-code-language automaton over the existing WRT representation. Paid semantic
-routing lacks a newly measured gain family; another grammar wrapper lacks a
-new cost advantage. [Published inputs and bounds](../operations/provenance/fx2_wrt_support_audit_v1_plan.json)
-authorize only a CPU3 retained-trace audit, with no native inference or scaling.
-The [terminal audit](../operations/provenance/fx2_wrt_support_audit_v1_terminal.json)
-passes five tests and all44,880 legal dictionary code shapes, including ambiguous
-two/three-byte prefixes, escaped literals, disabled mode and truncation checks.
-It reconstructs the exact50,051 raw bytes from the retained WRT store and aligns
-all259,824 native bit records without exposing future event boundaries.
-There are7,994 decoder-forced bits; all truths remain in support. Setting only
-these actual-bit probabilities to65535/65536 saves18.86068334435965 ideal bits,
-or2.3575854180449562 ideal bytes, on the unchanged parent trajectory. This is
-an exact support premise with a measured conditional ideal gain, not an archive
-or package result. A native successor must preserve parent updates and measure
-complete archives and added package costs; no full-corpus slope is inferred.
-
-The [native comparison](../operations/adaptive/experiments/fx2_wrt_support_fixture50051_q0_v1.json)
-is now frozen under owner `root_explore`, job `20260908T213318Z_aaa7cb651d`.
-Four native unit tests pass: all code shapes match Python, P/K/D projection and
-state traces agree, source composition preserves every parent call, and invalid
-activation is rejected. Only the final integer coder probability changes in D.
-The bounded CPU2 gate requires retained P/K archives, independent inverses,
-repeats, all introduced-state records and unchanged parent float predictions.
-It remains held for publication and admission; no native archive result yet.
-
-The [closed native comparison](../operations/provenance/fx2_wrt_support_terminal_20260908.json)
-now proves a two-byte fixture archive gain: D3,221 versus P/K3,223. All raw
-inverses, repeats, introduced-state traces and original parent float predictions
-agree. The7,994 projected bits save18.86068334435965 ideal bits, with positive
-chronological thirds. The guard passes at5,574,987,776 peak cgroup bytes and
-261.1875 seconds elapsed; owned children close and the cgroup is removed.
-Paired local inventory differs by one option byte, but common implementation
-adds5,908 source bytes including diagnostics, and binary size is4,096 bytes above
-the supplied uninstrumented parent. No complete-package gain is established.
-The validated reflection retains the component and holds larger promotion for
-minimal deployment package measurement and separately frozen fresh validation.
-
-The [lean deployment gate](../operations/adaptive/experiments/fx2_wrt_support_deploy_fixture_v1.json)
-now removes diagnostics without changing the measured support State. Its unit
-replay matches all259,824 prior quantized probabilities; three runner tests pass.
-Owner `root_explore` holds job `20260908T215904Z_18f6a2e048` for publication and
-fresh CPU2 admission. Two original/lean builds must reproduce retained P3,223
-and D3,221 archives, independent inverses and repeats. Source, binary and delivery
-ZIP costs are measured separately; runtime/license closure remains unresolved.
-No larger population, new prediction feature or additional gain is claimed.
-
-The [closed deployment comparison](../operations/provenance/fx2_wrt_support_deploy_terminal_20260908.json)
-preserves both archives, exact raw inversion and repeats. Added source falls
-from 5,908 to 2,047 bytes, but the matched executable remains 4,096 bytes larger.
-Delivery ZIPs are P 4,128,055 and D 4,130,182 bytes: adding archives produces a
-2,125-byte local loss. These ZIPs do not resolve official package accounting.
-All 149 inputs and 315 closed artifacts rehash; the guard passes with
-5,487,140,864 peak cgroup bytes and 133.5528 seconds elapsed. Children close.
-The validated reflection and both normalized rows retain deployment parity,
-hold larger promotion and exclude further packaging-only sweeps on this fixture.
-The next search needs a distinct measured predictive opportunity, not a linear
-projection of this two-byte gain. Full-corpus score and complete package remain
-unknown; the 90M objective remains active.
