@@ -25,7 +25,14 @@ Only encoder literal-event pricing changes; the original decoder, predictor,
 copy candidates and 0.5-bit admission threshold remain. Context lookahead follows
 the original pre-byte GST state. Next freeze and publish one bounded P/K/D
 development corpus comparison, including source/package deltas and fresh resource
-admission. No new corpus job exists; this is implementation evidence only.
+admission. This is implementation evidence only.
+The [corpus contract](../operations/adaptive/experiments/opcode_event_parse250k_q0_v1.json)
+now freezes opening250KB P/K/D under owner `root_explore`, with the original
+decoder for every arm. The [runner and bundle tests](../operations/provenance/opcode_event_parse_gate_v1_unit.json)
+pass six synthetic checks, including ten fresh phases, relocation and deliberate
+state-divergence rejection. Local source is 7,742 bytes (+1,996); complete package
+remains unresolved. The unique canonical job is held for publication verification
+and fresh CPU2 admission; no corpus result exists yet.
 
 ## 2026-09-08 - Standalone XML field histories enter executable synthetic testing
 

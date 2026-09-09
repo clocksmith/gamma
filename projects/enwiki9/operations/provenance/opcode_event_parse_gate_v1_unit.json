@@ -1,0 +1,93 @@
+{
+  "schema": "gamma.enwiki9.opcode-event-parse-gate-unit.v1",
+  "id": "opcode_event_parse_gate_v1_unit",
+  "owner": "root_explore",
+  "status": "passed",
+  "tests_passed": 6,
+  "reported_test_elapsed_seconds": 2.621,
+  "bindings": [
+    {
+      "path": "tools/opcode_event_parse_build_v1.py",
+      "bytes": 2319,
+      "sha256": "bed24dc43d7399882605c3f37d8b9daed2db232daddcac87f2bfacbabf2f9a1a"
+    },
+    {
+      "path": "tools/opcode_event_parse_corpus_v1.py",
+      "bytes": 2352,
+      "sha256": "b7739d443ac013c056ad17c96074b353a40865ed8c8c26dd52baad759a12c135"
+    },
+    {
+      "path": "tools/opcode_event_parse_gate_v1.py",
+      "bytes": 7488,
+      "sha256": "0a49427ffb79ffa5a335fd2ca55df5c79a27443596cfe0061441f003c4f56aaa"
+    },
+    {
+      "path": "tests/test_opcode_event_parse_gate_v1.py",
+      "bytes": 6266,
+      "sha256": "5263543e9b0276d8133c8a055de832290e1afdcc317a79ee2a44a1597e4b53fd"
+    },
+    {
+      "path": "operations/provenance/opcode_event_parse_v1_unit.json",
+      "bytes": 5174,
+      "sha256": "d0fe2c985aebd2daaa900f4faf48c79c27f135bb99f8e2fc8b88fb6080e699eb"
+    },
+    {
+      "path": "results/opcode_event_parse_gate_v1_unit/stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "results/opcode_event_parse_gate_v1_unit/stderr",
+      "bytes": 988,
+      "sha256": "400034278702bf4a844cbc42ffb258da2f0a719dc9e32229a7127d7f9444f87f"
+    }
+  ],
+  "package": {
+    "p": {
+      "bytes": 5423,
+      "sha256": "7d331ba82c635af8afe6517bf5f4471b41dcf7854c6ec01cb5564078d9bb56a8"
+    },
+    "v": {
+      "bytes": 1551,
+      "sha256": "d9c4d28792936916715d37b1ace4572c0cdc2cc106498077418a3f32b66de48b"
+    },
+    "program.py": {
+      "bytes": 768,
+      "sha256": "12ed0a23ee98326da0d0c174d726cdbc6543c3cf8921d326cb967d0a99f55c1b"
+    }
+  },
+  "local_source_bytes": 7742,
+  "local_source_delta_bytes": 1996,
+  "complete_package_bytes": null,
+  "command": [
+    "taskset",
+    "-c",
+    "3",
+    "prlimit",
+    "--as=2147483648",
+    "--cpu=120",
+    "--fsize=33554432",
+    "--core=0",
+    "timeout",
+    "180",
+    "python3",
+    "-m",
+    "unittest",
+    "discover",
+    "-s",
+    "tests",
+    "-p",
+    "test_opcode_event_parse_gate_v1.py",
+    "-v"
+  ],
+  "checks": [
+    "Ten fresh P/K/D encode/decode/repeat and D unobserved phases",
+    "Every decode uses original parent arm",
+    "Relocated deterministic bundle independently reconstructs all arms",
+    "Corrupt source, parent archive and complete-state witness rejected",
+    "Incorrect population, CPU, phase budget or absent source/package/runtime/evidence rejected",
+    "Optional resource diagnostics stay explicitly missing without invalidating exact inverse evidence"
+  ],
+  "scope": "Synthetic only; no corpus execution or gain claim",
+  "objective_credit_bytes": 0
+}
