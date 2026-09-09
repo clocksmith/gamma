@@ -19,6 +19,14 @@ stops after P builds: upstream deletes objects after linking. No model executes.
 The [separate v2 runner](../tools/fx2_weight_adaptive_dispatch_gate_v2.py) builds
 the objects and links the probe before CMIX consumes them; codec source,
 controls, populations and bounds remain fixed. Publish before fresh admission.
+Published at `56303d030`, [v2 passes all 16 phases](../operations/provenance/fx2_weight_adaptive_dispatch_gate_v2_terminal.json).
+All six production probability/logit outputs match exactly; the old dispatch
+failure reproduces. Both native binaries are 496,136 bytes. Adaptive packing
+saves 6,042 model bytes per copy; 914 added raw source bytes leave scoped
+runtime-pair and source-plus-decoder savings of 12,084 and 11,170 bytes.
+Only the tensor loader and production dispatcher differ among 125 native
+sources. Preserve the failed fixture and freeze a new native archive retry;
+synthetic entrypoint agreement supplies no corpus or full-score credit.
 
 ## 2026-09-09 - Verify adaptive packing through native fixture archives
 

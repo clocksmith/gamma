@@ -1,0 +1,133 @@
+{
+  "schema": "gamma.enwiki9.source-audit-terminal.v1",
+  "id": "fx2_weight_adaptive_dispatch_gate_v2",
+  "owner": "root_explore",
+  "publication_commit": "56303d030",
+  "objective_target_bytes": 90000000,
+  "objective_credit_bytes": 0,
+  "validity": "valid-native-production-entrypoint-and-component-comparison",
+  "hypothesis_verdict": "passed-scoped-component-gate",
+  "result": {
+    "schema": "gamma.enwiki9.adaptive-production-dispatch.v1",
+    "status": "passed",
+    "native_builds": {
+      "P": {
+        "path": "results/fx2_weight_adaptive_dispatch_gate_v2/attempt01/P/cmix",
+        "bytes": 496136,
+        "sha256": "c848acc756c8ced70422dfc4c8da03ac936417754b877eb8addf0143ce2ba100"
+      },
+      "D": {
+        "path": "results/fx2_weight_adaptive_dispatch_gate_v2/attempt01/D/cmix",
+        "bytes": 496136,
+        "sha256": "94dde19a6a308cba1eda4c9585f94b414ac9ecf630d6bf56fb7611e3ae78bcc6"
+      }
+    },
+    "needed_libraries": {
+      "P": [
+        "libstdc++.so.6",
+        "libm.so.6",
+        "libgcc_s.so.1",
+        "libc.so.6"
+      ],
+      "D": [
+        "libstdc++.so.6",
+        "libm.so.6",
+        "libgcc_s.so.1",
+        "libc.so.6"
+      ]
+    },
+    "synthetic_symbols_per_phase": 64,
+    "output_bytes_per_phase": 104960,
+    "production_outputs": [
+      {
+        "path": "results/fx2_weight_adaptive_dispatch_gate_v2/attempt01/P-original.bin",
+        "bytes": 104960,
+        "sha256": "3684d01e7490a596ade94ed12b58e27fa51560876892c9c8dc29eb78eaf81fbe"
+      },
+      {
+        "path": "results/fx2_weight_adaptive_dispatch_gate_v2/attempt01/P-fixed.bin",
+        "bytes": 104960,
+        "sha256": "3684d01e7490a596ade94ed12b58e27fa51560876892c9c8dc29eb78eaf81fbe"
+      },
+      {
+        "path": "results/fx2_weight_adaptive_dispatch_gate_v2/attempt01/D-original.bin",
+        "bytes": 104960,
+        "sha256": "3684d01e7490a596ade94ed12b58e27fa51560876892c9c8dc29eb78eaf81fbe"
+      },
+      {
+        "path": "results/fx2_weight_adaptive_dispatch_gate_v2/attempt01/D-fixed.bin",
+        "bytes": 104960,
+        "sha256": "3684d01e7490a596ade94ed12b58e27fa51560876892c9c8dc29eb78eaf81fbe"
+      },
+      {
+        "path": "results/fx2_weight_adaptive_dispatch_gate_v2/attempt01/D-adaptive.bin",
+        "bytes": 104960,
+        "sha256": "3684d01e7490a596ade94ed12b58e27fa51560876892c9c8dc29eb78eaf81fbe"
+      },
+      {
+        "path": "results/fx2_weight_adaptive_dispatch_gate_v2/attempt01/D-repeat.bin",
+        "bytes": 104960,
+        "sha256": "3684d01e7490a596ade94ed12b58e27fa51560876892c9c8dc29eb78eaf81fbe"
+      }
+    ],
+    "all_production_outputs_exact": true,
+    "old_dispatch_negative_reproduced": true,
+    "model_delta_per_copy": -6042,
+    "binary_delta_per_copy": 0,
+    "raw_source_delta": 914,
+    "runtime_pair_delta": -12084,
+    "source_compressor_plus_decoder_delta": -11170,
+    "option_delta_bytes": 0,
+    "complete_package_bytes": null,
+    "full_corpus_score_bytes": null,
+    "objective_credit_bytes": 0
+  },
+  "receipt": {
+    "path": "results/fx2_weight_adaptive_dispatch_gate_v2/attempt01/receipt.json",
+    "bytes": 2463,
+    "sha256": "18fafb1387dc79fc97cb3e528dbac8e12b4acb00586bee3410ed3f0c8f6e72bc"
+  },
+  "admission": {
+    "path": "results/fx2_weight_adaptive_dispatch_gate_v2/admission.json",
+    "bytes": 15224,
+    "sha256": "00145dedf6940f49baa945cdbfa8cdc3eecfb9a72eb789dd9b3a05f6eb367045"
+  },
+  "execution": {
+    "path": "results/fx2_weight_adaptive_dispatch_gate_v2/execution.json",
+    "bytes": 408,
+    "sha256": "6323c45f9b2a082caa9a93c267b0f6e3e4259ffd77cf4c3b849c7c43ed2e43e5"
+  },
+  "verification": {
+    "phase_count": 16,
+    "native_source_bindings_verified": 250,
+    "changed_native_sources": [
+      "cpp_infer/src/opt/arena_build.cpp",
+      "cpp_infer/src/weights_io_compressed.cpp"
+    ],
+    "sum_subprocess_cpu_seconds": 30.697254000000008,
+    "max_child_peak_rss_kib": 381396,
+    "synthetic_output_sets": 6,
+    "all_output_bytes_compared": true,
+    "probability_and_logit_bytes_per_set": 104960,
+    "parent_binary_reproduced": true
+  },
+  "retention": {
+    "bundle": {
+      "path": "results/fx2_weight_adaptive_dispatch_gate_v2_retained.zip",
+      "bytes": 2902657,
+      "sha256": "c30501c47d4a2506542a12c6852ab80adf13bc7d3f6d8b885c05fe6af2cce180"
+    },
+    "members": 298,
+    "all_members_compared": true
+  },
+  "complete_package_bytes": null,
+  "full_corpus_score_bytes": null,
+  "conclusion": "Production TransformerOpt loading and64 fixed synthetic steps now match exactly for original, fixed and adaptive model files, including two reset coordinates and a fresh adaptive repeat. The original dispatch fails as diagnosed. Native binary size remains496136; model saving6042 per copy pays both scoped alternatives after914 raw added source bytes.",
+  "limitations": [
+    "No corpus archive, inverse or complete coder-state replay was performed in this source gate.",
+    "This probe compares emitted probability/logit bytes, not every hidden recurrent-state field.",
+    "Prior direct all-tensor identity remains bound to its original measurement.",
+    "Dynamic libraries remain identical; complete source/runtime/license/option closure and isolated resource qualification remain unresolved."
+  ],
+  "next_action": "Freeze a separately identified native50051 fixture retry with this exact repaired binary and sources; require original parent archives, all native coder records, independent inverses and deterministic repeats. Do not reuse or overwrite the failed fixture source."
+}
