@@ -598,3 +598,30 @@ No upstream predictor or corpus was executed, and no Gamma gain is claimed.
 Next: one separately frozen direct-fixture parent roundtrip with complete
 source/dictionary/options inventory and measured resource costs; do not run the
 upstream installation, PGO, UPX or full-corpus pipeline automatically.
+
+## 2026-09-08 - Native FX2 compact block comparison frozen
+
+`root_explore` owns held job `20260908T202406Z_5d61a00d99` under the [154-input contract](../../../operations/adaptive/experiments/fx2_compact_v26_fixture50051_q0_v1.json).
+Five [native adapter/runner regressions](../../../operations/evidence/20260908_fx2_compact_v26_native_unit.json) pass. P/K retain431 outputs; D maps compact403 while preserving the trained transformer and frontend.
+CPU2, memory9,999,998,976 bytes, scratch24GB, zero swap and elapsed1,200 seconds bound three serial builds and all-arm encode/decode/repeat/unobserved comparisons on the public50,051-byte fixture.
+Publication and fresh admission precede execution. P/K retained identity, independent inverses, traces and package deltas are mandatory; complete predictor-state certification and any larger gate remain unproved.
+
+## 2026-09-08 - Compact FXCM bridge repairs a real probability-endpoint rejection
+
+The [interface receipt](../../../operations/provenance/fx2_compact_v26_bridge_v1_terminal.json)
+tests all 4,095 clipped raw values using the authenticated upstream squash
+function. Exactly 22 map to probability 1.0, which the historical Gamma v1
+adapter incorrectly rejects even though FX2 accepts these mixer inputs.
+The separately identified [v2 adapter](../../../lib/forge_fxcm_raw_adapter_v2.hpp)
+preserves every upstream float bit, accepts endpoints, rejects invalid values
+and leaves inactive outputs neutral. Synthetic P/K state and update parity
+passes 4,096 events; the bridge compiles against both real upstream interfaces.
+This is an implementation repair, not a native synchronization or archive claim.
+The prior native forge baseline did not use v1 and its receipt remains valid.
+
+The selected successor keeps FX2's trained transformer and replaces only its
+431-output FXCM block with compact403 v26 through an explicit P/K/D bridge.
+The whole-forge comparison cannot attribute those components independently.
+Next: freeze one native fixture comparison with original/bookkeeping identity,
+independent inversion, deterministic repeat, coder traces and package/resource
+costs. Full predictor-state certification remains open; no 90M score credit.
