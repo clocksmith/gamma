@@ -33,6 +33,14 @@ invocation is preserved. Added source totals16162 bytes, exceeding the unchanged
 package budget and source identity. No native archive, model execution, or
 compression gain was measured. The155-file bundle retains both attempts.
 
+The [native delivery comparison](../operations/adaptive/experiments/fx2_ratio_coder_fixture50051_q0_v1.json)
+passed six runner tests, but job20260909T065353Z_a016a11707 stopped at the cgroup
+memory boundary during S-repeat. Its [resource receipt](../operations/provenance/fx2_ratio_coder_fixture_v1_resource_stop.json)
+and validated retry reflection preserve the incomplete result; no scientific verdict.
+The retry flushes and releases only closed owned trace pages after native phases.
+Four cache tests pass. Native executable identity and all scientific predicates
+must remain unchanged; CPU2,10GB memory,24GB scratch and1200 elapsed limits persist.
+
 ## 2026-09-09 - Locate residual-ratio prediction loss before another mutation
 
 Owner `root_explore` now follows the prior residual-ratio loss attribution request.
