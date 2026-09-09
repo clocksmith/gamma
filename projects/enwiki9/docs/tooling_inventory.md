@@ -12,7 +12,7 @@ Reusable artifact helpers for new tools: [lib/artifacts.py](../lib/artifacts.py)
 The LibNC initializer teacher launcher exits before the first forward, gradient, update, or coded symbol; its source-bound experiment defines that boundary.
 The delayed-status helper's `enwiki9_delayed_status_latest.log` pointer is operational history, not present-host occupancy proof.
 
-Coverage: **1099 files** (33 .c, 72 .cpp, 1 .gdb, 1 .h, 1 .hpp, 1 .html, 987 .py, 3 .sh).
+Coverage: **1101 files** (33 .c, 73 .cpp, 1 .gdb, 1 .h, 1 .hpp, 1 .html, 988 .py, 3 .sh).
 
 | Tool | Purpose | Referenced contracts |
 |---|---|---|
@@ -413,6 +413,8 @@ Coverage: **1099 files** (33 .c, 72 .cpp, 1 .gdb, 1 .h, 1 .hpp, 1 .html, 987 .py
 | [`tools/fx2_weight_production_dispatch_probe_v1.cpp`](../tools/fx2_weight_production_dispatch_probe_v1.cpp) | Production-entrypoint smoke test; no corpus access or compression claim. Linked public FX2 components retain their GPLv3 provenance and LICENSE. | none found |
 | [`tools/fx2_weight_restore_group_probe_v1.cpp`](../tools/fx2_weight_restore_group_probe_v1.cpp) | Diagnostic restoration of one predefined INT4 tensor group at a time. Reuse the immutable even7 parser, mapping checks and atomic publication. Native prediction is unchanged; restored-group effects require fresh archives. | [1](../operations/adaptive/experiments/fx2_weight_restore_groups_fixture50051_q0_v1.json) |
 | [`tools/fx2_weight_restore_groups_fixture50051_q0_v1.py`](../tools/fx2_weight_restore_groups_fixture50051_q0_v1.py) | Independent group restorations into the failed even7 model; diagnostic only. | [1](../operations/adaptive/experiments/fx2_weight_restore_groups_fixture50051_q0_v1.json) |
+| [`tools/fx2_weight_width_carry_probe_v1.cpp`](../tools/fx2_weight_width_carry_probe_v1.cpp) | Exact container probe. Preserve the inherited FX2 GPLv3 source notices. | none found |
+| [`tools/fx2_weight_width_carry_v1.py`](../tools/fx2_weight_width_carry_v1.py) | Materialize one source-bound exact-model mutation; never edit its parent. | none found |
 | [`tools/fx2_wrt_code_loss.py`](../tools/fx2_wrt_code_loss.py) | Join FX2_LOSS_LEDGER rows to WRT dictionary code spans. | none found |
 | [`tools/fx2_wrt_support_audit_v1.py`](../tools/fx2_wrt_support_audit_v1.py) | Causal WRT forced-bit opportunity audit over a retained native parent trace. | none found |
 | [`tools/fx2_wrt_support_deploy_adapter_v1.py`](../tools/fx2_wrt_support_deploy_adapter_v1.py) | Minimal coder adapter with the measured support state preserved verbatim. | [1](../operations/adaptive/experiments/fx2_wrt_support_deploy_fixture_v1.json) |

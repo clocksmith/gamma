@@ -1,0 +1,140 @@
+{
+  "schema": "gamma.enwiki9.adaptive-experiment-contract.v1",
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:e91ff20e92c3cac8acb0cbe5c79fc8e8a3b427d7e151245c8eecc52b1c32fa00",
+    "objectiveId": "gamma-enwiki9-hutter-90m-v3",
+    "objectivePath": "contracts/research/v3/objective-contract.json",
+    "targetScoreBytes": 90000000
+  },
+  "experimentId": "fx2_weight_width_carry_v1",
+  "proposalId": "fx2_weight_width_carry_v1",
+  "status": "frozen",
+  "registrationTiming": "prospective",
+  "evidenceClass": "diagnostic",
+  "objectiveCreditBytes": 0,
+  "parent": {
+    "candidateId": "fx2_weight_adaptive_transfer250k_q0_v1",
+    "revision": {
+      "path": "operations/adaptive/candidate-revisions/fx2_weight_adaptive_transfer250k_q0_v1/20260909T043011936131Z_939f4605fe29.json",
+      "sha256": "sha256:f263c1bbdab652a63ef6650479558c1e6f34a4403f28ad3f858263fa99b85bc5"
+    }
+  },
+  "hypothesis": {
+    "claim": "Retaining fifteen adaptive INT4 counts across earlier tensors with the same decoded row width reduces complete model bytes relative to resetting at every tensor, while preserving every parameter bit.",
+    "falsification": "Any inverse, repeat or count-state mismatch rejects implementation correctness; a nonpositive complete model saving rejects this representation on that model. Synthetic savings are not model or corpus evidence."
+  },
+  "changedMechanism": "Carry existing adaptive counts across tensors keyed solely by decoded last dimension. No neighbor context, transmitted tables, weight changes, native inference or entropy coder change.",
+  "invariants": [
+    "Owner root_explore; one realization with lenses 3 and 10, selected for bounded shared state and exact model representation. Preserve HORIZON, MIDAS, and sealed sources.",
+    "Synthetic correctness only in this stage: CPU3, one thread, 512MiB address space per executable,120 CPU seconds,180 elapsed seconds,32MiB per output file,128MiB scratch and32GiB host headroom. No trained-model or corpus launch. Compiler separately capped at1GiB address space.",
+    "Fifteen unit counts per previously unseen row width; existing Q11 tree; predict before observe; rescale at65536 with upward halving. Metadata is decoded before choosing a bank. At most the existing tensor-count bound of bank entries.",
+    "P unchanged adaptive marginal container; K performs carry bookkeeping but writes exact P; D uses width bank. Preserve metadata, names, non-INT4 coding and eight-byte format header length.",
+    "Synthetic fixture choices fixed before execution: empty/all types, same-width similar and reversed distributions, different widths, zero elements, rescaling, corrupt input. One policy, no tuning.",
+    "Require independent process inversion and repeat, exact P/K and retained adaptive-parent parity, and every INT4 pre-truth count row in encoder and decoder. No package promotion from fixtures.",
+    "After synthetic correctness freeze a separate full-model comparison with source/toolchain bindings and fresh admission before any trained model execution. Charge added loader, source, binary, metadata and options; score remains unknown."
+  ],
+  "controls": [
+    {
+      "id": "P",
+      "role": "comparator",
+      "definition": "Immutable reset-per-tensor adaptive marginal container."
+    },
+    {
+      "id": "K",
+      "role": "negative",
+      "definition": "Exact P archive with width-bank bookkeeping."
+    },
+    {
+      "id": "D",
+      "role": "treatment",
+      "definition": "Counts retained between tensors of identical decoded row width."
+    },
+    {
+      "id": "inverse-repeat",
+      "role": "replay",
+      "definition": "Independent decoder and repeat process plus full pre-truth count comparison."
+    }
+  ],
+  "population": {
+    "unit": "synthetic tensor byte",
+    "scopeBytes": 300000,
+    "scopeSymbols": 300000,
+    "selection": "Fixed synthetic fixtures only; no trained parameters or enwik9 data.",
+    "coordinate": "Stored tensor order and element index; metadata row width is available before payload."
+  },
+  "causalBoundary": {
+    "availableInformation": [
+      "Already decoded tensor metadata and values",
+      "Unit pseudocounts and deterministic bank updates"
+    ],
+    "forbiddenInformation": [
+      "Future tensor values",
+      "Transmitted but uncounted tables",
+      "Native corpus inference in synthetic stage"
+    ]
+  },
+  "inputs": [
+    {
+      "id": "adaptive-parent",
+      "path": "lib/fx2_weight_adaptive_marginal_v1.hpp",
+      "sha256": "sha256:3264d084d8c9d7511ec119b23500deae622eb0bb74c700d8c0ad62698674e71d"
+    },
+    {
+      "id": "original-format",
+      "path": "lib/fx2_weight_format_v1.hpp",
+      "sha256": "sha256:aa615fc92b456bada499602888c2bf38ea8a98918694ce2cfd9691d384b2fa30"
+    },
+    {
+      "id": "parent-result",
+      "path": "operations/provenance/fx2_weight_adaptive_transfer250k_v1_terminal.json",
+      "sha256": "sha256:2457a29ad320981d150561a75d04a59a4503dc2bdbb56c89b54c3267d433de55"
+    },
+    {
+      "id": "parent-reflection",
+      "path": "operations/adaptive/reflections/20260909T043012Z_39a4f8a2a9.json",
+      "sha256": "sha256:34c01ae6588b19c9c81b973dbf51620c0a5befbe083169bbc8523f59fe6a8d35"
+    }
+  ],
+  "budget": {
+    "expectedGrossSavingsBytes": 0,
+    "maximumAddedPackageBytes": 8192,
+    "expectedNetSavingsBytes": -8192
+  },
+  "search": {
+    "expectedTransferRetention": 0,
+    "expectedRuntimeRatio": 1,
+    "expectedMemoryRatio": 1,
+    "uncertaintyRisk": 1,
+    "interactionRisk": 0
+  },
+  "measurements": [
+    {
+      "id": "synthetic_exact",
+      "definition": "All controls, inverses, repeats and count states match.",
+      "unit": "boolean"
+    }
+  ],
+  "promotionPredicates": [
+    {
+      "id": "synthetic-pass",
+      "measurement": "synthetic_exact",
+      "operator": "eq",
+      "threshold": true
+    }
+  ],
+  "killPredicates": [
+    {
+      "id": "synthetic-fail",
+      "measurement": "synthetic_exact",
+      "operator": "eq",
+      "threshold": false
+    }
+  ],
+  "outputs": [
+    "operations/evidence/20260909_fx2_weight_width_carry_v1_unit.json"
+  ],
+  "outputManifestPolicy": "complete-result-artifacts-v1",
+  "generatedUtc": "2026-09-09T05:28:30.017779+00:00"
+}

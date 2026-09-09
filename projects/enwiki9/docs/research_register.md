@@ -2,6 +2,19 @@
 
 [Record index](research_register/README.md) | [Earlier records](research_register/archive/README.md)
 
+## 2026-09-09 - Carry exact-model counts across decoded tensor widths
+
+Owner `root_explore` selects lenses3/10: bounded shared state and exact model
+representation. The [frozen synthetic experiment](../operations/adaptive/experiments/fx2_weight_width_carry_v1.json)
+changes only reset-per-tensor INT4 counts into a bank keyed by decoded row width.
+No preceding-symbol model, quantization, native prediction or entropy coder changes.
+The [source adapter](../tools/fx2_weight_width_carry_v1.py) authenticates the sealed
+parent before materializing a separate header. P/K preserve parent bytes; D
+must independently invert and repeat with every pre-truth count row identical.
+One fixed synthetic policy covers matching/opposing distributions, width changes,
+empty tensors, rescaling and malformed inputs. Trained-model access requires its
+own published inputs and admission. No compression or package gain exists yet.
+
 ## 2026-09-09 - Freeze independent adaptive FX2 package fixture execution
 
 Owner `root_explore` binds [the native package fixture](../operations/adaptive/experiments/fx2_adaptive_package_fixture50051_q0_v1.json)
@@ -763,32 +776,3 @@ timings and package inventory separate. Field repair improves its own baseline
 but remains larger than supplied-model FX2 in archive bytes. Next assess a
 separately bound smaller implementation preserving its confirmed archives.
 Neither content deduplication nor a cold slice qualifies a complete package.
-
-## 2026-09-07 - MIDAS opening250KB closes the missing boundary evidence
-
-The [terminal audit](../operations/provenance/midas_open_observed_sha_opening250k_terminal_20260907.json)
-closes `midas_open_observed_sha_opening250k_q0_v1`, job
-`20260907T201808Z_5c99705f63`. All 16 native phases pass: four unobserved
-references plus independent observed encode, decode and raw-input repeat for
-each P/K/F/S arm. Archives remain P/K 115,921, F 107,176 and S 119,779 bytes.
-The 8,745-byte F-versus-P and 12,603-byte F-versus-S advantages reproduce the
-historical comparison; this observation gate earns no additional archive gain.
-
-Each observed phase retains all 2,000,000 pre-truth Q16 values and 7,814
-initial/every-32-byte/final serialized-state SHA-256 boundary witnesses.
-Within-arm encoder/decoder/repeat comparisons and the P/K parent projection
-agree. All four inverses are exact, fresh unobserved references agree, and all
-24 historical archive/state file pairs match. This closes the original 250KB
-boundary-evidence gap; full intermediate snapshots remain disabled.
-
-The guard passes with cleanup complete, peak cgroup memory 391,360,512 bytes
-and peak sampled allocated scratch 299,016,192 bytes. Timing remains a shared-host
-diagnostic. Four normalized P/K/F/S ledger rows preserve the component evidence;
-complete package, calibrated resource qualification and full-corpus score remain
-unknown. Previously examined opening data supplies no fresh confirmation.
-
-The [validated reflection](../operations/adaptive/reflections/20260907T201808Z_5c99705f63.json)
-supports separately selecting and freezing a fresh distant250KB confirmation.
-It authorizes no automatic launch, larger scope or combined saving. The
-[read-only audit command](../operations/provenance/midas_open_observed_sha_opening250k_terminal_20260907/README.md)
-binds the closed job and guard hashes and supplies the required Gamma import path.
