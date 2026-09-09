@@ -1,0 +1,111 @@
+{
+  "schema": "gamma.enwiki9.source-audit-terminal.v1",
+  "id": "context_edit_fx2_attribution_v1",
+  "owner": "root_explore",
+  "generated_at": "2026-09-09T02:13:46.332490+00:00",
+  "plan": {
+    "path": "operations/provenance/context_edit_fx2_attribution_v1_plan.json",
+    "sha256": "0cbe550c0ab990e7b1340acd13e7694910564a2ebf0b99717e78fbb979f8b3c8"
+  },
+  "validity": "valid",
+  "decision": "do_not_implement_equal_prior_episode_reset",
+  "hypothesis_verdict": "reset_remedy_rejected_for_this_fixed_expert_population_and_ideal_model",
+  "summary": {
+    "L": {
+      "pure_saved_bits": -98773.86844150744,
+      "profitable_episodes": 0,
+      "hindsight_positive_bits": 0.0,
+      "hindsight_selection_after_one_bit_per_episode": -826.0,
+      "ideal_equal_prior_reset_saved_bits": -825.9999238462459,
+      "first_parent_saturation_after_bit": 952,
+      "saturation_exit_count": 1639,
+      "last_changed_q16_bit": 894
+    },
+    "D": {
+      "pure_saved_bits": -79034.15620805549,
+      "profitable_episodes": 0,
+      "hindsight_positive_bits": 0.0,
+      "hindsight_selection_after_one_bit_per_episode": -826.0,
+      "ideal_equal_prior_reset_saved_bits": -825.9999986919364,
+      "first_parent_saturation_after_bit": 973,
+      "saturation_exit_count": 1688,
+      "last_changed_q16_bit": 897
+    },
+    "S": {
+      "pure_saved_bits": -171355.21003158484,
+      "profitable_episodes": 0,
+      "hindsight_positive_bits": 0.0,
+      "hindsight_selection_after_one_bit_per_episode": -826.0,
+      "ideal_equal_prior_reset_saved_bits": -826.0,
+      "first_parent_saturation_after_bit": 956,
+      "saturation_exit_count": 1721,
+      "last_changed_q16_bit": 816
+    }
+  },
+  "episode_count": 826,
+  "verification": {
+    "original_probability_and_state_trajectory_verified": true,
+    "state_boundaries": 1015,
+    "episode_gain_sums_match_original": true,
+    "synthetic_tests": 2
+  },
+  "execution": {
+    "argv": [
+      "python3",
+      "tools/context_edit_fx2_attribution_v1.py"
+    ],
+    "returncode": 0,
+    "status": "completed",
+    "elapsed_seconds": 10.995959006017074,
+    "cpu_seconds": 10.978567,
+    "cumulative_child_peak_rss_kib": 37248
+  },
+  "artifacts": [
+    {
+      "path": "results/context_edit_fx2_attribution_v1/attempt01/admission.json",
+      "bytes": 14620,
+      "sha256": "91f30dcadc71e4df84121c834bd310fe012d69573d5c8acf4e7cffe2ec1745c7"
+    },
+    {
+      "path": "results/context_edit_fx2_attribution_v1/attempt01/attribution.json",
+      "bytes": 270389,
+      "sha256": "328448721f8ebedd189f74cd770e9f7c39479512cba62773392d7753230063a7"
+    },
+    {
+      "path": "results/context_edit_fx2_attribution_v1/attempt01/execution.json",
+      "bytes": 237,
+      "sha256": "34b269af85f68ecc9192dad5cbac277f2d493ab3257e731ced30b0f29a6bba68"
+    },
+    {
+      "path": "results/context_edit_fx2_attribution_v1/attempt01/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "results/context_edit_fx2_attribution_v1/unit01/execution.json",
+      "bytes": 322,
+      "sha256": "82563fe1256507b411cbba48bdd7cf381632ae348ed63936132750ec2a0aa152"
+    },
+    {
+      "path": "results/context_edit_fx2_attribution_v1/unit01/stderr",
+      "bytes": 368,
+      "sha256": "d7f29c44e96215d254bf3eb21a8014c8b22dbd39e34d137bc826050cafd74ca3"
+    },
+    {
+      "path": "results/context_edit_fx2_attribution_v1/unit01/stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "reflection": {
+    "observed": "All826 unmixed episodes lose to P for L,D,S. D is better than L and S in aggregate but still loses79034.156208 ideal bits. Last D changed Q16 bit is897; first D parent saturation is after bit973, with1688 subsequent exits from exact saturation. Saturation is not permanent, although later weight changes never change Q16 output.",
+    "lesson": "The current global mixture is not suppressing any whole episode that beats P under these fixed expert distributions. Equal-prior episode resets lose825.999998692 ideal bits for D. Do not implement a reset or hindsight episode selector as the remedy.",
+    "scope": "Whole32-byte episodes on this retained development fixture only. Individual bits, different calibration or donor acquisition, and other populations are not excluded. Native FX2 may already model these local matches; that redundancy has not been directly isolated.",
+    "next_action": "Return to evidence-directed exploration. Require a measured conditional predictive advantage or a diagnosed calibration mechanism before a new edit-predictor mutation. Do not tune or reset this fixed mixture merely to avoid the recorded negative."
+  },
+  "archive_saving_bytes": null,
+  "complete_package_bytes": null,
+  "full_corpus_score_bytes": null,
+  "objective_target_bytes": 90000000,
+  "objective_credit_bytes": 0
+}
