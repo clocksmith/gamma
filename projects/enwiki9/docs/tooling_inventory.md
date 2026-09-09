@@ -12,7 +12,7 @@ Reusable artifact helpers for new tools: [lib/artifacts.py](../lib/artifacts.py)
 The LibNC initializer teacher launcher exits before the first forward, gradient, update, or coded symbol; its source-bound experiment defines that boundary.
 The delayed-status helper's `enwiki9_delayed_status_latest.log` pointer is operational history, not present-host occupancy proof.
 
-Coverage: **1072 files** (33 .c, 67 .cpp, 1 .gdb, 1 .h, 1 .hpp, 1 .html, 965 .py, 3 .sh).
+Coverage: **1073 files** (33 .c, 67 .cpp, 1 .gdb, 1 .h, 1 .hpp, 1 .html, 966 .py, 3 .sh).
 
 | Tool | Purpose | Referenced contracts |
 |---|---|---|
@@ -856,9 +856,10 @@ Coverage: **1072 files** (33 .c, 67 .cpp, 1 .gdb, 1 .h, 1 .hpp, 1 .html, 965 .py
 | [`tools/online_bpe_gate.py`](../tools/online_bpe_gate.py) | Zero-table online macro tokenizer for enwik probes. The encoder and decoder both start with the 256 byte literals. As emitted symbols repeat, the next unused high-byte slot is bound to the repeated symbol pair. Token definitions store their expanded bytes, so later token creation is independent of recursive table mutation. | none found |
 | [`tools/opcode_calibration_gate_v1.py`](../tools/opcode_calibration_gate_v1.py) | Bounded unchanged-parent calibration attribution using existing phase guards. | none found |
 | [`tools/opcode_calibration_observe_v1.py`](../tools/opcode_calibration_observe_v1.py) | Observe existing mixed/calibrated probabilities without changing codec execution. | none found |
-| [`tools/opcode_event_parse_build_v1.py`](../tools/opcode_event_parse_build_v1.py) | Relocatable bundle of the unchanged parent and measured encoder correction. | [1](../operations/adaptive/experiments/opcode_event_parse250k_q0_v1.json) |
-| [`tools/opcode_event_parse_corpus_v1.py`](../tools/opcode_event_parse_corpus_v1.py) | Bounded event-pricing encode; every decode uses the original parent. | [1](../operations/adaptive/experiments/opcode_event_parse250k_q0_v1.json) |
-| [`tools/opcode_event_parse_gate_v1.py`](../tools/opcode_event_parse_gate_v1.py) | Matched P/K/D event-pricing comparison with the existing guard machinery. | [1](../operations/adaptive/experiments/opcode_event_parse250k_q0_v1.json) |
+| [`tools/opcode_event_parse_build_v1.py`](../tools/opcode_event_parse_build_v1.py) | Relocatable bundle of the unchanged parent and measured encoder correction. | [2](../operations/adaptive/experiments/opcode_event_parse250k_q0_v1.json) |
+| [`tools/opcode_event_parse_corpus_v1.py`](../tools/opcode_event_parse_corpus_v1.py) | Bounded event-pricing encode; every decode uses the original parent. | [2](../operations/adaptive/experiments/opcode_event_parse250k_q0_v1.json) |
+| [`tools/opcode_event_parse_gate_v1.py`](../tools/opcode_event_parse_gate_v1.py) | Matched P/K/D event-pricing comparison with the existing guard machinery. | [2](../operations/adaptive/experiments/opcode_event_parse250k_q0_v1.json) |
+| [`tools/opcode_event_parse_validation_gate_v1.py`](../tools/opcode_event_parse_validation_gate_v1.py) | Validate the unchanged codec with a fresh parent comparison on reserved bytes. | [1](../operations/adaptive/experiments/opcode_event_parse_validation250k_q0_v1.json) |
 | [`tools/opcode_field_compact_build_v1.py`](../tools/opcode_field_compact_build_v1.py) | Build only a new compact field-repair source bundle from authenticated inputs. | none found |
 | [`tools/opcode_field_compact_gate_v1.py`](../tools/opcode_field_compact_gate_v1.py) | Bounded replay of compact source against retained archives and shared state. | none found |
 | [`tools/opcode_field_compact_observe_v1.py`](../tools/opcode_field_compact_observe_v1.py) | External witnesses for compact field repair; no model or probability changes. | none found |
