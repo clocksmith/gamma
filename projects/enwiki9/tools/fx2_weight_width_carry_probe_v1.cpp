@@ -1,7 +1,8 @@
 // Exact container probe. Preserve the inherited FX2 GPLv3 source notices.
-#define main fx2_preserved_adaptive_cli_main
-#include "fx2_weight_adaptive_marginal_probe_v1.cpp"
+#define main fx2_preserved_marginal_cli_main
+#include "fx2_weight_marginal_probe_v1.cpp"
 #undef main
+#include "../lib/fx2_weight_adaptive_marginal_v1.hpp"
 #include "fx2_width_carry_generated.hpp"
 namespace {
 Bytes count_trace;
