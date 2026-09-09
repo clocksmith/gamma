@@ -2,6 +2,21 @@
 
 [Record index](research_register/README.md) | [Earlier records](research_register/archive/README.md)
 
+## 2026-09-09 - Verify adaptive packing through native fixture archives
+
+Owner `root_explore` has developed `fx2_weight_adaptive_fixture50051_q0_v1`.
+The [frozen experiment](../operations/adaptive/experiments/fx2_weight_adaptive_fixture50051_q0_v1.json)
+binds 316 inputs and the retained 50,051-byte public fixture. P/K use the fixed
+model; D uses adaptive packing with the same cached native binary. Require
+original-parent archive and probability identity, independent inverses, repeats,
+and unchanged preprocessing. The fixture is reused correctness evidence, not a
+fresh enwik9 confirmation population. Eleven routing and failure-path tests
+pass in the [synthetic execution receipt](../results/fx2_weight_adaptive_fixture_v1_unit/attempt01/execution.json).
+Publish ownership, then freshly admit CPU 2 with 9,999,998,976 memory bytes,
+16,000,000,000 scratch bytes and a 900-second elapsed stop before execution.
+The measured 6,042-byte model reduction per copy and alternative component
+costs remain separate from archive savings and full-corpus score credit.
+
 ## 2026-09-09 - Decode adaptive model counts directly in the native loader
 
 Owner `root_explore` follows the6042-byte complete-model saving and rejects the
