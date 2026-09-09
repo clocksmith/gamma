@@ -13,6 +13,15 @@ The synthetic gate compares independent arbitrary-precision rationals, neutral
 parents, sparse support, extreme masses and ties. No native integration or
 corpus archive exists yet. Publish ownership and source before bounded tests.
 
+The [bounded kernel result](../operations/evidence/20260909_fx2_ratio_coder_delivery_unit.json)
+passes seven tests in both optimized and UBSan builds. All65535 parent counts
+preserve neutral/proportional identity;2000 seeded prefix cases and extreme
+products match exact rational rounding. Float-unit conversion, sparse support,
+ties and malformed-input rejection pass. The2630-byte kernel is stateless;
+it supplies no standalone codec or native parent-state witness. Next freeze
+its delivery comparison and adapter with P/K/D/S, unchanged parent updates,
+complete cached-row/ratio state, exact inverses, repeats and package accounting.
+
 ## 2026-09-09 - Locate residual-ratio prediction loss before another mutation
 
 Owner `root_explore` now follows the prior residual-ratio loss attribution request.
@@ -769,27 +778,3 @@ four arms, exact parent/coder/calibration-state checks and explicit component co
 The published gate built but failed before native encode: driver arm dispatch reloaded the stub, ignoring the supplied native module. The [reflection](../operations/adaptive/reflections/20260908T184428Z_97a71f959c.json) classifies an implementation failure. Its first terminal index has an abbreviated revision and is refused; the preserved failure is recorded in candidate metadata without archive claims. The [dispatch-only retry](../operations/adaptive/experiments/fx2_residual_ratio_fixture50051_q0_v2.json) retains the complete scientific comparison. Its synthetic dispatch regression checks three independent processes, inverse, repeat and artifact retention. Job `20260908T185901Z_3a15dbc589` remains held pending publication and admission.
 
 The dispatch retry reproduced P then rejected progress-prefixed activation text; its failure stays preserved. The corrected [v3 terminal comparison](../operations/provenance/fx2_ratio_fixture_terminal_20260908.json) yields P/K/D 3,223 bytes and S 3,236. All four inverse/repeats and complete introduced-state/coder traces match. D changes 64,583 quantized probabilities, loses 1.747438686 diagnostic ideal bits and saves zero archive bytes; added overlapping local components cost 22,746 bytes. Guards and cleanup pass. The [validated reflection](../operations/adaptive/reflections/20260908T190345Z_1e4e5a7eee.json) rejects only this fixed fixture realization. Four canonical rows are recorded; twelve raw traces publish as four hash-verified gzip objects. Next: diagnose measured prediction loss before one separately frozen successor; no larger replay or full-corpus credit.
-
-## 2026-09-08 - Compact field implementation and 90M objective
-
-The [v3 migration](../operations/provenance/objective90_migration_20260908.json)
-activates 90,000,000 complete bytes, preserving 105M and 99M contracts and frozen
-experiments. Four migration tests preserve historical digests and obligations.
-`root_explore` owns [opcode_field_compact_v1](../operations/adaptive/experiments/opcode_field_compact_v1.json):
-the same confirmed field rule and canonical decoder checks in 5,746 local source
-bytes, down from 15,403. [Seven synthetic tests](../operations/evidence/20260908_opcode_field_compact_unit.json)
-pass archive and complete shared-state parity; a retained 65-byte fixture has a
-27-byte exact repeatable archive. The [terminal parity receipt](../operations/provenance/opcode_field_compact_terminal_20260908.json)
-passes twelve phases: development 67,658 / validation 71,717 / confirmation 255,828
-archive bytes, exact inverses/repeats and retained shared-state identity. Guards
-and cleanup pass; no new archive saving is claimed. The [source ZIP comparison](../operations/provenance/opcode_field_source_zip_cost_20260908.json)
-measures parent 5,041 / compact 5,815 bytes with exact synthetic relocation.
-Twice the 774-byte increase is 1,548 bytes, exceeding the historical 1MB archive
-saving by seven bytes before other package costs. Complete accounting stays open.
-An independent [synthetic state probe](../results/opcode_wiki_state_diagnostic_20260908/attempt01/receipt.json)
-finds eight opcode/wiki-coordinate mismatches among eleven predefined strings;
-no corpus frequency or archive gain is claimed. The [validated reflection](../operations/adaptive/reflections/20260908T154100Z_6b9653a04d.json)
-selects [opcode_wiki_slot_v1](../operations/adaptive/experiments/opcode_wiki_slot_v1.json),
-owned by `root_explore`. Its [terminal gate](../operations/provenance/opcode_wiki_slot_terminal_20260908.json)
-passes ten phases: P/K 67,658 / D 67,601 bytes. The 57-byte gain does not pay the
-conditional 554-byte source charge. [Reset terminal](../operations/provenance/opcode_slot_reset_terminal_20260908.json): P/K 67,658 / D 67,626; gain32 versus conditional source charge270. [Calibration diagnostic](../operations/provenance/opcode_calibration_terminal_20260908.json): existing SSE helps fixed-parse literals by6,615.574 ideal bits, unchanged archive. Both reflections validate; scaling and SSE deletion remain held. Next independent predictor research.

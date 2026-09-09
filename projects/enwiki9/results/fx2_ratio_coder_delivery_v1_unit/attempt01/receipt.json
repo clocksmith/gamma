@@ -1,0 +1,188 @@
+{
+  "schema": "gamma.enwiki9.unit-validation.v1",
+  "id": "fx2_ratio_coder_delivery_v1_unit",
+  "owner": "root_explore",
+  "publication": "0f75d23d5f9beea5f8eb85b08746a003fd06fb9a",
+  "tests_passed_per_build": 7,
+  "builds": [
+    "optimized",
+    "ubsan"
+  ],
+  "all_tests_pass": true,
+  "native_kernel_scope": "Stateless Q16 delivery only. No parent, frontend, learner or coder is supplied.",
+  "neutral_parent_counts_checked": 65535,
+  "seeded_prefix_comparisons_per_build": 2000,
+  "random_seed": "fx2_ratio_coder_delivery_v1",
+  "exact_reference": "Python arbitrary-precision integers and Fraction, independent of native unsigned128 division steps.",
+  "checks": [
+    "Every parent count preserved for proportional rows",
+    "Random and extreme prefix masses equal exact reference",
+    "Nearest-even midpoint ties",
+    "Missing initial row and absent prefix branch neutral",
+    "Malformed probabilities, prefix, alphabet, mass and nonfinite float rejected",
+    "Exact binary32 conversion into2^-45 units"
+  ],
+  "sources": [
+    {
+      "path": "lib/fx2_ratio_coder_delivery_v1.hpp",
+      "bytes": 2630,
+      "sha256": "750b2686c53f79d40824711cdaef4a112f6615a2f84b3cafe1e9eb378f6133c9"
+    },
+    {
+      "path": "tests/fx2_ratio_coder_delivery_bridge_v1.cpp",
+      "bytes": 529,
+      "sha256": "5a1e658e072cd27a30f0145abdcc4c1b466b1e4d945d45eaaf7be43e76bf261f"
+    },
+    {
+      "path": "tests/test_fx2_ratio_coder_delivery_v1.py",
+      "bytes": 4283,
+      "sha256": "83eac81fdabf3e513627bfc52ee6abf292464b6f15e86cf29818f2923cb74f8e"
+    },
+    {
+      "path": "operations/adaptive/experiments/fx2_ratio_coder_delivery_v1.json",
+      "bytes": 7345,
+      "sha256": "0ec6e745bbce66708e01d98405663fc6951e995fe91496b9a378e59f71d59850"
+    }
+  ],
+  "phases": [
+    {
+      "name": "compile-optimized",
+      "command": [
+        "/usr/bin/g++",
+        "-std=c++17",
+        "-O2",
+        "-fno-fast-math",
+        "-ffp-contract=off",
+        "-shared",
+        "-fPIC",
+        "tests/fx2_ratio_coder_delivery_bridge_v1.cpp",
+        "-o",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_ratio_coder_delivery_v1_unit/attempt01/optimized.so"
+      ],
+      "returncode": 0,
+      "elapsed_seconds": 0.06743626506067812,
+      "cpu_seconds": 0.058574,
+      "cumulative_child_peak_rss_kib": 35656
+    },
+    {
+      "name": "test-optimized",
+      "command": [
+        "/usr/bin/python3",
+        "tests/test_fx2_ratio_coder_delivery_v1.py",
+        "-v"
+      ],
+      "returncode": 0,
+      "elapsed_seconds": 0.3665342968888581,
+      "cpu_seconds": 0.36152799999999996,
+      "cumulative_child_peak_rss_kib": 35656
+    },
+    {
+      "name": "compile-ubsan",
+      "command": [
+        "/usr/bin/g++",
+        "-std=c++17",
+        "-O2",
+        "-fno-fast-math",
+        "-ffp-contract=off",
+        "-shared",
+        "-fPIC",
+        "tests/fx2_ratio_coder_delivery_bridge_v1.cpp",
+        "-fsanitize=undefined",
+        "-fno-sanitize-recover=all",
+        "-o",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_ratio_coder_delivery_v1_unit/attempt01/ubsan.so"
+      ],
+      "returncode": 0,
+      "elapsed_seconds": 0.11801800201646984,
+      "cpu_seconds": 0.06581300000000005,
+      "cumulative_child_peak_rss_kib": 38352
+    },
+    {
+      "name": "test-ubsan",
+      "command": [
+        "/usr/bin/python3",
+        "tests/test_fx2_ratio_coder_delivery_v1.py",
+        "-v"
+      ],
+      "returncode": 0,
+      "elapsed_seconds": 0.3163012859877199,
+      "cpu_seconds": 0.29333899999999996,
+      "cumulative_child_peak_rss_kib": 38352
+    }
+  ],
+  "files": [
+    {
+      "path": "results/fx2_ratio_coder_delivery_v1_unit/attempt01/admission.json",
+      "bytes": 14528,
+      "sha256": "94e33e1026e34edef7dcdf0ff1fa0680e18919352d16557f4bc1f9d804bc34fe"
+    },
+    {
+      "path": "results/fx2_ratio_coder_delivery_v1_unit/attempt01/commands.jsonl",
+      "bytes": 1374,
+      "sha256": "5f0cba7fe3832ee6ee3975d3b8189d27984bfab82b4827aded5a94d3cdb2d640"
+    },
+    {
+      "path": "results/fx2_ratio_coder_delivery_v1_unit/attempt01/compile-optimized.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "results/fx2_ratio_coder_delivery_v1_unit/attempt01/compile-optimized.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "results/fx2_ratio_coder_delivery_v1_unit/attempt01/compile-ubsan.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "results/fx2_ratio_coder_delivery_v1_unit/attempt01/compile-ubsan.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "results/fx2_ratio_coder_delivery_v1_unit/attempt01/optimized.so",
+      "bytes": 15560,
+      "sha256": "b92ae882d73f5e4cd39fdae4520e09a24cd58221c3c8f1be6a95f64f94037113"
+    },
+    {
+      "path": "results/fx2_ratio_coder_delivery_v1_unit/attempt01/test-optimized.stderr",
+      "bytes": 884,
+      "sha256": "0cad9c51d3feef2a06ce18ae14e420a4d9091b8b6c921f32114d8f88ff50449f"
+    },
+    {
+      "path": "results/fx2_ratio_coder_delivery_v1_unit/attempt01/test-optimized.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "results/fx2_ratio_coder_delivery_v1_unit/attempt01/test-ubsan.stderr",
+      "bytes": 884,
+      "sha256": "437610c11bc03e089dd0903ec0f00fbdb71ef2b2a32c1d53c67b2337b13e7ba4"
+    },
+    {
+      "path": "results/fx2_ratio_coder_delivery_v1_unit/attempt01/test-ubsan.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "results/fx2_ratio_coder_delivery_v1_unit/attempt01/ubsan.so",
+      "bytes": 16800,
+      "sha256": "3bb22f7f9a3442cb3bde4eed605720dd306150a209e33ac273349272a9112456"
+    }
+  ],
+  "retained_bundle": {
+    "path": "results/fx2_ratio_coder_delivery_v1_unit_retained.zip",
+    "bytes": 12701,
+    "sha256": "148f9bc7c58c166717ae245842913f63c5b59e2868b835ec1eb6e19b27ef711d"
+  },
+  "retained_members_verified": 12,
+  "corpus_access": false,
+  "model_access": false,
+  "archive_bytes_saved": null,
+  "complete_package_bytes": null,
+  "full_corpus_score_bytes": null,
+  "objective_credit_bytes": 0,
+  "next_action": "Freeze and publish a separate delivery comparison; native integration must preserve original parent predictions and learning, witness all cached row and ratio state, and pass P/K/D/S inverse/repeat/package gates."
+}
