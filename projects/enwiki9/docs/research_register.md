@@ -2,6 +2,19 @@
 
 [Record index](research_register/README.md) | [Earlier records](research_register/archive/README.md)
 
+## 2026-09-09 - Repair production model dispatch and exercise native initialization
+
+Owner `root_explore` implements the [separate dispatch repair](../tools/fx2_weight_adaptive_dispatch_v1.py)
+after the validated fixture failure. Only `OptModel::load` format admission
+changes; measured model bytes, neural kernels and old source remain untouched.
+The [frozen source gate](../operations/provenance/fx2_weight_adaptive_dispatch_gate_v1_plan.json)
+rebuilds P/D and links a probe against their actual transformer objects. Compare
+64 synthetic symbols through production `TransformerOpt`, including two article
+resets; old dispatch must reproduce the failure. All original/fixed/adaptive
+positive controls must match exact probability/logit bytes. Five patch and
+phase-guard tests pass. Publish, freshly admit CPU 3, then measure executable
+and source increments before preparing another corpus gate. No score credit.
+
 ## 2026-09-09 - Verify adaptive packing through native fixture archives
 
 Owner `root_explore` has developed `fx2_weight_adaptive_fixture50051_q0_v1`.
