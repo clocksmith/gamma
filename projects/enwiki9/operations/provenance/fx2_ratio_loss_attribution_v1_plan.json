@@ -1,0 +1,79 @@
+{
+  "schema": "gamma.enwiki9.source-audit-plan.v1",
+  "id": "fx2_ratio_loss_attribution_v1",
+  "owner": "root_explore",
+  "hypothesis": "Diagnose whether the unchanged residual-ratio correction improves normalized transformer output loss before the downstream mixer, while reproducing its actual recorded count states and final coder loss.",
+  "selection": "One retrospective diagnostic on the already closed50051-byte public fixture. No parameter tuning or new candidate, no native encode/decode rerun.",
+  "objective_target_bytes": 90000000,
+  "objective_credit_bytes": 0,
+  "files": {
+    "half": {
+      "path": "results/fx2_half_tail_fixture50051_q0_v1/work/P/encode.trace.half",
+      "bytes": 27346476,
+      "sha256": "92e9853644465ce65991291e2ab5a787d7714422fb434d010494a5e4191aa9dc"
+    },
+    "half_parent_coder": {
+      "path": "results/fx2_half_tail_fixture50051_q0_v1/work/P/encode.trace",
+      "bytes": 7275072,
+      "sha256": "afde9a32c6f122fac22def6f072568173d9de9dbc5ddc7951d897ca523773403"
+    },
+    "parent_coder": {
+      "path": "results/fx2_residual_ratio_fixture50051_q0_v3/work/P-encode.coder",
+      "bytes": 7275072,
+      "sha256": "afde9a32c6f122fac22def6f072568173d9de9dbc5ddc7951d897ca523773403"
+    },
+    "treatment_coder": {
+      "path": "results/fx2_residual_ratio_fixture50051_q0_v3/work/D-encode.coder",
+      "bytes": 7275072,
+      "sha256": "d31e500c11ae84038aaf1eb08b53b80c873c88fff9144d04ea6c2ecc796e0cac"
+    },
+    "state": {
+      "path": "results/fx2_residual_ratio_fixture50051_q0_v3/work/D-encode.ratio",
+      "bytes": 161155836,
+      "sha256": "e3e0aaa52f81bde8be13275d4787479f53c3a87e1c326dfea9d0b7fbc8f18bc5"
+    },
+    "vocabulary": {
+      "path": "operations/provenance/public_fx2_authenticated_vocabulary_20260905.json",
+      "bytes": 3406,
+      "sha256": "515773fe04e18a687171142913a4be6effa281e3298865fc015f3ad0770f336b"
+    },
+    "library": {
+      "path": "results/fx2_residual_ratio_native_v1/attempt01/ratio.so",
+      "bytes": 20936,
+      "sha256": "7aff56a9576d74d897664adebe01def02efa822ca23e877670e29cb47bffe255"
+    }
+  },
+  "rows": 32478,
+  "vocabulary_size": 205,
+  "half_record_bytes": 421,
+  "coder_record_bytes": 28,
+  "state_record_bytes": 2481,
+  "parent_evidence": [
+    "operations/provenance/fx2_ratio_fixture_terminal_20260908.json",
+    "operations/provenance/fx2_half_tail_terminal_20260908.json"
+  ],
+  "invariants": [
+    "First byte has no ratio prediction; row0 predicts byte1. Score before observing each decoded truth; final predicted row remains unconsumed.",
+    "Reproduce original F16C conversion for indices0..199 and scalar half-subnormal quirk for200..204, then the exact float32 floor.",
+    "All64956 existing I/P/O calibration states must match the unchanged native Ratio library before any attribution is accepted.",
+    "The half-trace parent coder records must equal the ratio parent records byte-for-byte, and D/P truth bytes must agree.",
+    "Reproduce the recorded -1.7474386861516857 final ideal bits within1e-6 and64583 changed Q16 events. These are floating point diagnostics, not finite-archive bounds.",
+    "Report normalized expert loss and final coder loss separately, chronological thirds, actual matched rows, and any first mismatch. Missing alignment blocks interpretation."
+  ],
+  "bounds": {
+    "cpu_set": [
+      3
+    ],
+    "address_space_bytes": 536870912,
+    "elapsed_seconds": 120,
+    "phase_elapsed_seconds": 120,
+    "cpu_seconds_per_phase": 120,
+    "per_file_bytes": 33554432,
+    "scratch_bytes": 67108864,
+    "reserve_bytes": 34359738368
+  },
+  "output": "results/fx2_ratio_loss_attribution_v1/attempt01",
+  "next_action": "If alignment passes, use measured loss location to choose a separately frozen successor or change information source. This diagnostic cannot revive a retired configuration, grant archive credit, or authorize a larger run.",
+  "complete_package_bytes": null,
+  "full_corpus_score_bytes": null
+}
