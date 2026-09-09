@@ -2,6 +2,26 @@
 
 [Record index](research_register/README.md) | [Earlier records](research_register/archive/README.md)
 
+## 2026-09-09 - Native inverse prepares a fixed dictionary representation test
+
+`root_explore` selects lenses10/1 deliberately after the valid but unpaid
+two-byte final-count gain. Fixed adjacent-prefix dictionary coding addresses
+stored package cost. A transformer recurrent-reset mutation remains unselected:
+reset behavior matches training and useful retained-history opportunity is
+unmeasured. No further final-count parameter sweep is selected.
+The [native inverse](../lib/fx2_prefix_dictionary_v1.hpp) passes optimized and
+UBSan [synthetic fixtures](../results/fx2_prefix_dictionary_v1_unit/attempt01/receipt.json).
+It bounds input, output and word lengths, rejects malformed references and
+truncation, and preserves the caller's output on format rejection. CPU3,
+512MiB address space,64MiB scratch,120-second aggregate stop; no corpus run.
+The [public containers](../operations/provenance/public_fx2_container_pair_20260905.json)
+already store a100,096-byte dictionary each. The older B2/LZMA prefix-code gain
+cannot transfer to FX2 accounting. Next: freeze one matched P/K/D dictionary
+comparison using the pinned auxiliary compressor, exact inverse and repeats;
+count both compressed copies and actual restoration code. The caller must verify
+restored dictionary size/hash: whole-record truncation is syntactically valid.
+Preserve the held B2 job. Implementation ownership grants no launch or score credit.
+
 ## 2026-09-09 - Freeze the final-parent count comparison
 
 `root_explore` owns `fx2_final_counts_opening250k_q0_v1`, held job
@@ -777,19 +797,3 @@ All nine half input/output trajectories match exactly. The guard passes with
 5,823,074,304 peak cgroup bytes and owned children removed. The validated
 reflection retires this configuration; numerical fidelity alone did not improve
 this fixture's compression. No larger gate or full-corpus score is authorized.
-
-## 2026-09-08 - Scalar half-output audit isolates a trained boundary discrepancy
-
-After the compact-block loss, lenses4/8 select an output-conversion question.
-The [bounded audit](../operations/provenance/fx2_half_tail_audit_v1_terminal.json)
-compares all 15,361 nonnegative half patterns through one against hardware F16C.
-The preserved upstream scalar decoder halves 1,023 positive subnormal values;
-1,007 differences survive its float32 probability floor. Correcting the scalar
-exponent in an extracted reference matches F16C exactly over the tested domain.
-The original native source and every trained parameter remain unchanged.
-In 512 retained unique synthetic kernel rows, 324 rows and669 tail entries change
-after the floor. These are synthetic inputs, not corpus prevalence or gain.
-Next: separately freeze P/K/D with correction only on final transformer outputs,
-leaving PPM input priors, weights and model update/reset order unchanged.
-Require native inverses, repeat, control identity, affected-output counts and
-complete cost evidence. No scientific promotion or full-corpus score is earned.
