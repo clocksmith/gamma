@@ -12,8 +12,8 @@ Unknown package cost stays unknown. Local subtotals are not complete submission 
 Populations are grouped by raw-input SHA256; compare matched controls in each receipt.
 ```
 
-- Result JSON files scanned: `274`
-- Roundtrip-passing rows: `94`
+- Result JSON files scanned: `278`
+- Roundtrip-passing rows: `97`
 - Active target score: `90,000,000` bytes (`9.0000000%`)
 
 ## Scope `1,000,000,000` Bytes
@@ -56,6 +56,16 @@ No roundtrip-passing result JSONs are present for this scope in this checkout.
 | Program / arm | Mechanism | Local subtotal | Archive | Program bytes | b/B | Determinism | Result |
 |---|---|---:|---:|---:|---:|---|---|
 | `sleeping_trie_global4_selector_raw_v1` | custom candidate | 494,499 | 473,912 | 20,587 | 3.791296 | true | `results/sleeping_trie_global4_selector_raw_v1/2026-08-01T193730.json` |
+
+### Population `851329174ac0763701a0364fed26b58ba7c6847a3c0b8a737d2c5b88a24785d4`
+
+**Smallest archives (package cost reported separately)**
+
+| Program / arm | Mechanism | Local subtotal | Archive | Program bytes | b/B | Determinism | Result |
+|---|---|---:|---:|---:|---:|---|---|
+| `opcode_event_parse_confirmation1m_q0_v1:K` | syntax opcode preprocessor | unknown | 259,468 | unknown | 2.075744 | true | `operations/provenance/opcode_event_parse_confirmation_terminal_20260909/K.json` |
+| `opcode_event_parse_confirmation1m_q0_v1:P` | syntax opcode preprocessor | unknown | 259,468 | unknown | 2.075744 | true | `operations/provenance/opcode_event_parse_confirmation_terminal_20260909/P.json` |
+| `opcode_event_parse_confirmation1m_q0_v1:D` | syntax opcode preprocessor | unknown | 259,540 | unknown | 2.07632 | true | `operations/provenance/opcode_event_parse_confirmation_terminal_20260909/D.json` |
 
 
 ## Scope `250,000` Bytes

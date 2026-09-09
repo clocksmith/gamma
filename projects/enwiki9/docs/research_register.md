@@ -91,9 +91,22 @@ measures 304.29 seconds encode, 156.82 seconds decode and 1,273,496KiB peak proc
 those measurements bound CPU2,4GiB aggregate memory,600 CPU seconds per phase,
 720 elapsed seconds per phase and6000 aggregate elapsed seconds. Three synthetic
 runner tests pass, including ten phases and exact wrapper size boundaries.
-Job `20260909T005909Z_a4db760844` is held for publication/admission. The source-component
+Job `20260909T005909Z_a4db760844` was held for publication/admission. The source-component
 predicate requires archive gain greater than1895 bytes; a smaller positive gain
 stays positive archive evidence but does not authorize scaling. No full-package claim.
+
+The [closed confirmation](../operations/provenance/opcode_event_parse_confirmation_terminal_20260909.json)
+now verifies all49 artifact files and ten phases: P/K259,468 versus D259,540 bytes.
+D loses72 archive bytes; adding the fixed source-ZIP increment makes the scoped loss1,967.
+Original inverses, repeats, complete shared-state witnesses and observation parity pass;
+the resource guard closes without violations and owned process/cgroup cleanup completes.
+The [validated reflection](../operations/adaptive/reflections/20260909T005909Z_a4db760844.json)
+retires this exact configuration for scaling. Three normalized arm rows are recorded.
+Do not launch10MB or tune on confirmation. Earlier138/113-byte gains remain scoped facts;
+individual copy-choice and future-context causes of this72-byte loss are unmeasured.
+Next discovery seed `post_confirmation_discovery_20260909_v1` selects lenses5/1:
+causal alignment corridors and exact reconstruction programs. Inspect prior HARM/HELICAL
+evidence before selecting a distinct executable gate; no new candidate is selected yet.
 
 ## 2026-09-08 - Standalone XML field histories enter executable synthetic testing
 
