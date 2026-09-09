@@ -25,6 +25,24 @@ contexts or constructor order, exclude observer pretraining, and compare P/K/D
 against a fixed4096-modeled-byte delayed-field control. Freeze and publish the
 native runner and inputs before execution. No prize or archive credit yet.
 
+The [native context component](../lib/fx2_xml_word_context_v1.hpp) and
+[source adapter](../tools/fx2_xml_word_native_adapter_v1.py) now implement that
+one-model change. Synthetic optimized/UBSan checks preserve parent/bookkeeping
+probabilities and map state through the actual Sparse/Indirect templates; six
+adapter tests pass. The [native build](../results/fx2_xml_word_native_build_v1/attempt02/receipt.json)
+passes at504,328 executable bytes,20,480 above the original. Early unsupported
+frontend rejection was added before freezing; historical source preimages and
+receipts are retained. The opening250KB runner is under implementation; no
+corpus result, package gain or model-prediction transfer is established yet.
+
+The [opening comparison](../operations/adaptive/experiments/fx2_xml_word_opening250k_q0_v1.json)
+now freezes351 inputs under owner `root_explore`, held job
+`20260909T102756Z_82a65eed5d`. Seven runner fixtures pass, including package
+limits, exact state checks, physical decoded-input repeats and cleanup rejection.
+The13 native phases use CPU2,10GB memory,zero swap,32GB scratch and1800 elapsed
+seconds,180 per phase. G aliases K rather than duplicating a native run.
+Publication verification and fresh admission remain necessary before execution.
+
 ## 2026-09-09 - Native inverse prepares a fixed dictionary representation test
 
 `root_explore` selects lenses10/1 deliberately after the valid but unpaid
