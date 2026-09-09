@@ -664,3 +664,29 @@ Next: separately freeze P/K/D with correction only on final transformer outputs,
 leaving PPM input priors, weights and model update/reset order unchanged.
 Require native inverses, repeat, control identity, affected-output counts and
 complete cost evidence. No scientific promotion or full-corpus score is earned.
+
+## 2026-09-08 - Native output-tail comparison freezes one numerical correction
+
+The [new comparison](../../../operations/adaptive/experiments/fx2_half_tail_fixture50051_q0_v1.json)
+tests whether correcting final transformer half outputs pays in native archives.
+P/K retain the original 431-input block; D changes only positive subnormal tail
+outputs before the existing floor. Input priors, trained weights, resets and
+piece-boundary fallback remain unchanged. All input/output half trajectories
+must agree across arms, alongside exact archives, inverses and coder traces.
+The [unit receipt](../../../operations/evidence/20260908_fx2_half_tail_native_unit.json)
+retains exhaustive finite conversion checks and five passing runner tests.
+The failed temporary-directory compile and test-scope mistake remain recorded.
+Owner `root_explore` holds job `20260908T210238Z_20d11a6e91` for publication and
+fresh CPU2 admission. One 50,051-byte development fixture; no tuning or holdout.
+The guard allows 9,999,998,976 memory bytes, zero swap, 24GB scratch and a
+1,200-second elapsed stop. No native corpus result or compression gain exists
+yet; complete hidden state and submission package qualification remain open.
+
+The [terminal comparison](../../../operations/provenance/fx2_half_tail_terminal_20260908.json)
+now closes all arms: P/K/D are each 3,223 bytes, with exact inverses and repeats.
+D changes 28,022 after-floor outputs and 13,148 final quantized events, but
+posthoc ideal coding cost worsens 0.4416 bits and the archive saves zero bytes.
+All nine half input/output trajectories match exactly. The guard passes with
+5,823,074,304 peak cgroup bytes and owned children removed. The validated
+reflection retires this configuration; numerical fidelity alone did not improve
+this fixture's compression. No larger gate or full-corpus score is authorized.
