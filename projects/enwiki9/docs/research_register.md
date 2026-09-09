@@ -39,6 +39,18 @@ synthetic adapter tests pass. CPU3,512MiB,128MiB scratch and120 aggregate elapse
 seconds derive from earlier model measurements. Publish and freshly admit the
 complete input closure before any trained-model execution. No model gain yet.
 
+Published at `faca94e14`, the [complete-model result](../operations/provenance/fx2_weight_sign_magnitude_model_v1_terminal.json)
+passes all ten phases: P/K2,902,287 versus D2,901,871 bytes, saving416 model bytes.
+All original-container inverses, repeats and independent parent comparisons match.
+Independent review verifies39 inputs and ten model references; no codec remains
+live. Recorded child peak RSS is52,832KiB, with no native inference or qualifying
+resource claim. The comparison executable adds21,312 bytes, losing20,896 combined
+bytes as a separate converter. Retain the exact representation; reject that
+packaging. The next bounded gate is direct native-loader initialization parity
+and measured source/binary accounting, not a corpus launch or projected score.
+All32 closed artifacts remain directly retained; Git reuses identical model and
+repeat blobs instead of creating another duplicate transport ZIP. Full score unknown.
+
 ## 2026-09-09 - Closing names are correct but leave little parent surprise
 
 The [closed audit](../results/fx2_closing_cost_opening250k_v3/stage-decision.json)
