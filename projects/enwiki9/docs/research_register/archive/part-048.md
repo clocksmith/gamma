@@ -441,3 +441,53 @@ supports separately selecting and freezing a fresh distant250KB confirmation.
 It authorizes no automatic launch, larger scope or combined saving. The
 [read-only audit command](../../../operations/provenance/midas_open_observed_sha_opening250k_terminal_20260907/README.md)
 binds the closed job and guard hashes and supplies the required Gamma import path.
+
+## 2026-09-08 - Opcode field repair confirms a 1,541-byte archive improvement
+
+`root_explore` owns [opcode_field_repair250k_q0_v1](../../../operations/adaptive/experiments/opcode_field_repair250k_q0_v1.json).
+It changes only the existing field coordinate after complete decoded XML opcode
+pairs. P retains bitmix, K computes unused bookkeeping, and D exposes that field;
+byte histories, model laws and copy search remain otherwise unchanged.
+The [26 synthetic tests](../../../operations/evidence/20260908_opcode_field_repair_unit.json)
+pass exact inversion, raw repeats, P/K identity, decoder-common witnesses,
+exception bounds and evidence-failure classification. A missing audit-count
+field failed the first synthetic attempt and was repaired before sealing.
+The [terminal comparison](../../../operations/provenance/opcode_field_repair_terminal_20260908.json)
+now records ten closed native phases: P/K are 67,959 bytes and D is 67,658.
+Independent inverses, raw-input repeats and prediction/state witnesses pass.
+The 301-byte archive gain is not a package gain: uncompressed decoder source
+increases by 10,562 bytes; complete package accounting remains unknown.
+
+The [baseline inventory](../../../operations/provenance/small_input_frontier_baselines_20260908.json)
+verifies retained opening250KB Deflate 89,041 and native FX2 33,429 byte archives.
+The gate reproduced the historical bitmix parent byte-for-byte. The
+[validated reflection](../../../operations/adaptive/reflections/20260908T133436Z_6b57b0e164.json)
+selects this unchanged codec for the separately reserved 250KB validation slice.
+`root_explore` owns `opcode_field_validation250k_q0_v1`; its transfer runner passes
+[22 synthetic tests](../../../operations/evidence/20260908_opcode_field_transfer_unit.json).
+The [validation terminal](../../../operations/provenance/opcode_field_validation_terminal_20260908.json)
+passes all ten phases: P/K 71,788 bytes, D 71,717, saving 71 archive bytes.
+Peak cgroup memory is 567,230,464 bytes and guard closure passes. The validated
+reflection selects the unchanged codec for reserved 1MB confirmation.
+The [reserved 1MB confirmation](../../../operations/provenance/opcode_field_confirmation_terminal_20260908.json)
+also closes all ten phases: P/K 257,369 bytes and D 255,828, saving 1,541.
+Independent inverses, repeats and shared-state checks pass; guard closure passes
+without violations. Its validated reflection retains the improvement and holds
+larger gates for package review. The current 10,562 additional uncompressed
+source bytes exceed this saving; complete package economics and full-corpus score
+remain unknown. These three sample gains are not summed into a codec score.
+
+The independently identified
+[reserved-sample comparator](../../../operations/adaptive/experiments/matched_frontier_reserved_q0_v1.json)
+reuses framed Deflate and the measured native FX2 adapter on the same validation
+and confirmation bytes. It adds no codec mutation. Ten synthetic tests pass.
+The [closed comparator](../../../operations/provenance/matched_frontier_reserved_terminal_20260908.json)
+passes all fourteen phases: validation Deflate 94,674 / FX2 35,464 bytes;
+confirmation Deflate 360,475 / FX2 131,238. All independent inverses and repeats
+pass, frozen source and native libraries rehash, and resource guards are clear.
+The aggregate cgroup peak is 5,999,730,688 bytes; native per-phase memory remains
+unmeasured. The [matched table](../../opcode_field_repair_v1.md) keeps sample identities,
+timings and package inventory separate. Field repair improves its own baseline
+but remains larger than supplied-model FX2 in archive bytes. Next assess a
+separately bound smaller implementation preserving its confirmed archives.
+Neither content deduplication nor a cold slice qualifies a complete package.

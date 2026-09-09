@@ -31,6 +31,23 @@ It reuses the existing phase guard, retains exact2902287-byte adaptive parent
 identity and charges comparison executables separately. Publish these inputs
 and refresh admission before trained-model execution; no inference is included.
 
+The [terminal model comparison](../operations/provenance/fx2_weight_width_carry_model_v1_terminal.json)
+passes all ten phases but loses1250 model bytes: P/K2902287, D2903537.
+All complete original-model inverses, repeats and independent parent checks pass.
+The comparison executable adds22032 bytes, producing23282 bytes of combined loss;
+that executable inventory is separate from a native package estimate. The
+33-member retained ZIP replays exact files. Measured child CPU sums6.403115 seconds
+and cumulative child peak RSS is52808KiB; these are diagnostic source-audit bounds,
+not continuous corpus qualification. Proposal and scoped exclusion retain the
+rejection. No native integration follows from this losing representation.
+
+The existing Scalar-MIDAS64 v2 proposal was inspected as a possible independent
+prediction route. Its parent remains `candidate_unexecuted` and is explicitly
+superseded by `cmix_obias_ppm_disk_joint_q0_v3` in its developed proposal. The
+[historical dependency finding](research_register/archive/part-022.md) remains
+relevant: a proposed label is not terminal parent evidence. No claim or launch
+was made for that route; no scalar-MIDAS hypothesis was scientifically rejected.
+
 ## 2026-09-09 - Freeze independent adaptive FX2 package fixture execution
 
 Owner `root_explore` binds [the native package fixture](../operations/adaptive/experiments/fx2_adaptive_package_fixture50051_q0_v1.json)
@@ -742,53 +759,3 @@ selects [opcode_wiki_slot_v1](../operations/adaptive/experiments/opcode_wiki_slo
 owned by `root_explore`. Its [terminal gate](../operations/provenance/opcode_wiki_slot_terminal_20260908.json)
 passes ten phases: P/K 67,658 / D 67,601 bytes. The 57-byte gain does not pay the
 conditional 554-byte source charge. [Reset terminal](../operations/provenance/opcode_slot_reset_terminal_20260908.json): P/K 67,658 / D 67,626; gain32 versus conditional source charge270. [Calibration diagnostic](../operations/provenance/opcode_calibration_terminal_20260908.json): existing SSE helps fixed-parse literals by6,615.574 ideal bits, unchanged archive. Both reflections validate; scaling and SSE deletion remain held. Next independent predictor research.
-
-## 2026-09-08 - Opcode field repair confirms a 1,541-byte archive improvement
-
-`root_explore` owns [opcode_field_repair250k_q0_v1](../operations/adaptive/experiments/opcode_field_repair250k_q0_v1.json).
-It changes only the existing field coordinate after complete decoded XML opcode
-pairs. P retains bitmix, K computes unused bookkeeping, and D exposes that field;
-byte histories, model laws and copy search remain otherwise unchanged.
-The [26 synthetic tests](../operations/evidence/20260908_opcode_field_repair_unit.json)
-pass exact inversion, raw repeats, P/K identity, decoder-common witnesses,
-exception bounds and evidence-failure classification. A missing audit-count
-field failed the first synthetic attempt and was repaired before sealing.
-The [terminal comparison](../operations/provenance/opcode_field_repair_terminal_20260908.json)
-now records ten closed native phases: P/K are 67,959 bytes and D is 67,658.
-Independent inverses, raw-input repeats and prediction/state witnesses pass.
-The 301-byte archive gain is not a package gain: uncompressed decoder source
-increases by 10,562 bytes; complete package accounting remains unknown.
-
-The [baseline inventory](../operations/provenance/small_input_frontier_baselines_20260908.json)
-verifies retained opening250KB Deflate 89,041 and native FX2 33,429 byte archives.
-The gate reproduced the historical bitmix parent byte-for-byte. The
-[validated reflection](../operations/adaptive/reflections/20260908T133436Z_6b57b0e164.json)
-selects this unchanged codec for the separately reserved 250KB validation slice.
-`root_explore` owns `opcode_field_validation250k_q0_v1`; its transfer runner passes
-[22 synthetic tests](../operations/evidence/20260908_opcode_field_transfer_unit.json).
-The [validation terminal](../operations/provenance/opcode_field_validation_terminal_20260908.json)
-passes all ten phases: P/K 71,788 bytes, D 71,717, saving 71 archive bytes.
-Peak cgroup memory is 567,230,464 bytes and guard closure passes. The validated
-reflection selects the unchanged codec for reserved 1MB confirmation.
-The [reserved 1MB confirmation](../operations/provenance/opcode_field_confirmation_terminal_20260908.json)
-also closes all ten phases: P/K 257,369 bytes and D 255,828, saving 1,541.
-Independent inverses, repeats and shared-state checks pass; guard closure passes
-without violations. Its validated reflection retains the improvement and holds
-larger gates for package review. The current 10,562 additional uncompressed
-source bytes exceed this saving; complete package economics and full-corpus score
-remain unknown. These three sample gains are not summed into a codec score.
-
-The independently identified
-[reserved-sample comparator](../operations/adaptive/experiments/matched_frontier_reserved_q0_v1.json)
-reuses framed Deflate and the measured native FX2 adapter on the same validation
-and confirmation bytes. It adds no codec mutation. Ten synthetic tests pass.
-The [closed comparator](../operations/provenance/matched_frontier_reserved_terminal_20260908.json)
-passes all fourteen phases: validation Deflate 94,674 / FX2 35,464 bytes;
-confirmation Deflate 360,475 / FX2 131,238. All independent inverses and repeats
-pass, frozen source and native libraries rehash, and resource guards are clear.
-The aggregate cgroup peak is 5,999,730,688 bytes; native per-phase memory remains
-unmeasured. The [matched table](opcode_field_repair_v1.md) keeps sample identities,
-timings and package inventory separate. Field repair improves its own baseline
-but remains larger than supplied-model FX2 in archive bytes. Next assess a
-separately bound smaller implementation preserving its confirmed archives.
-Neither content deduplication nor a cold slice qualifies a complete package.
