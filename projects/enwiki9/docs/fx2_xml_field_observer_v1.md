@@ -88,3 +88,43 @@ Require exact inverses, independent repeats, P/K identity and D beating P/G/S.
 Only a controlled package-paying result justifies fresh confirmation. Shared-map
 collisions may propagate D's changes; require within-arm encoder/decoder state
 agreement, not D/P equality. Full score and complete package remain unknown.
+
+## Native context integration
+
+`fx2_xml_word_context_v1` now implements the fixed coordinate law and delayed
+control in a [separate component](../lib/fx2_xml_word_context_v1.hpp). It validates
+dictionary bounds before constructing the observer. Its 4,204-byte serialized
+state contains the complete 4,096-byte delay ring, position, current/delayed/
+effective fields, parent/selected coordinates and the observer state. The native
+adapter also records its actual referenced scalar: framed records are 4,217 bytes.
+
+The [source adapter](../tools/fx2_xml_word_native_adapter_v1.py) preserves every
+model constructor and uses a dedicated scalar for only the first nonstationary
+word context. It reads the pinned dictionary with bounded `pread`, preserving
+the parent's FILE buffering and cursor, and starts observation after pretraining.
+Unsigned header bytes supply the decoder's raw limit; compression additionally
+checks that the single TEXT block covers the complete input. Unsupported non-P
+frontends fail before coding. P returns through the original path.
+
+Optimized and UBSan fixtures exercise the fixed delay, all serialized replay
+boundaries, bounds and actual parent Sparse/Indirect template behavior with
+identical seeded offsets. Parent/bookkeeping probabilities and learned maps
+match in that synthetic model test. Six source-adapter tests verify construction,
+update order, lifecycle hooks and unchanged coder Predict/Perceive calls. The
+[current adapter receipt](../results/fx2_xml_word_context_v1_unit/attempt02/receipt.json)
+links the unchanged component checks. Historical source preimages remain in
+attempt01/source; the original attempt receipt is preserved.
+
+The [native build](../results/fx2_xml_word_native_build_v1/attempt02/receipt.json)
+produces a 504,328-byte executable. This is 20,480 bytes above the retained
+483,848-byte original before source/options. The native Makefile compiled the
+complete source; copying the previous worktree did not reuse compiled objects.
+No native encode/decode or probability result follows from successful compilation.
+
+Owner `root_explore` is preparing `fx2_xml_word_opening250k_q0_v1` with P/K/D/S;
+G is the identical K field-zero comparator. Opening151,210 modeled bytes require
+637,661,004 XML witness bytes per observed K/D/S phase, including initial/final
+records. Nine phases retain5,738,949,036 bytes. The native gate must price those
+alongside sparse PPM scratch and release only closed observation-file cache;
+dropping ring state to fit an old scratch limit is not permitted. Source,
+ownership, inputs and resource admission remain prerequisites for execution.

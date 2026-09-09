@@ -1,0 +1,147 @@
+{
+  "schema": "gamma.enwiki9.exact-source-adapter-multi.v1",
+  "adapter_id": "fx2_xml_word_native_v1",
+  "files": [
+    {
+      "source_path": "src/predictor.h",
+      "source_sha256": "348d3924fc4e1f4890d0332b0f33ba9591afa6ee06971b9a9bdeaa376b41f458",
+      "source_bytes": 7136,
+      "patched_sha256": "5e21f717580fd982221ea4e031c9a98bdc115eb6c72f130cbfedae3b5e0a706d",
+      "patched_bytes": 7531,
+      "replacements": [
+        {
+          "before": "#include \"mixer/sigmoid.h\"",
+          "after": "#include \"fx2_xml_word_context_v1.hpp\"\n#include \"mixer/sigmoid.h\""
+        },
+        {
+          "before": "  void Pretrain(int bit);",
+          "after": "  void Pretrain(int bit);\n  void GammaXmlBegin(FILE*, const char*, uint64_t);\n  void GammaXmlEnd();"
+        },
+        {
+          "before": "  void TransformerByteUpdate();",
+          "after": "  void TransformerByteUpdate();\n  void GammaXmlUpdate(bool);\n  void GammaXmlAudit(unsigned char);\n  gamma_xml_word::Context gamma_xml_;\n  unsigned long long gamma_xml_context_ = 0;\n  char gamma_xml_arm_ = 'P';\n  bool gamma_xml_active_ = false;\n  FILE* gamma_xml_trace_ = nullptr;\n  FILE* gamma_xml_raw_ = nullptr;"
+        }
+      ]
+    },
+    {
+      "source_path": "src/predictor.cpp",
+      "source_sha256": "0b79f43644daee942c9cb6da18fa464f0eb0185b6fc7ffc43cde703808fe537e",
+      "source_bytes": 27424,
+      "patched_sha256": "5ee6235111b13806773a139a9d01642f138e4329af0616f82f9833a21e56b694",
+      "patched_bytes": 32338,
+      "replacements": [
+        {
+          "before": "#include \"predictor.h\"",
+          "after": "#include \"predictor.h\"\n#include <sys/stat.h>\n#include <unistd.h>\n#include <cerrno>"
+        },
+        {
+          "before": "  memset(separator_window_, 0xFF, sizeof(separator_window_));",
+          "after": "  memset(separator_window_, 0xFF, sizeof(separator_window_));\n  const char* gamma_arm = std::getenv(\"GAMMA_FX2_XML_ARM\");\n  if (gamma_arm) {\n    if (!gamma_arm[0] || gamma_arm[1] ||\n        (gamma_arm[0]!='P' && gamma_arm[0]!='K' && gamma_arm[0]!='D' && gamma_arm[0]!='S'))\n      Fail(\"Gamma XML arm must be P, K, D or S\");\n    gamma_xml_arm_ = gamma_arm[0];\n  }\n  if (gamma_xml_arm_ != 'P' && (!transformer_ || ppmd_only_ || transformer_only_ ||\n      transformer_probs_reader_ || transformer_probs_writer_ || ppmd_probs_writer_))\n    Fail(\"Gamma XML requires native transformer without probability dumping\");"
+        },
+        {
+          "before": "void Predictor::AddWord() {",
+          "after": "\nvoid Predictor::GammaXmlBegin(FILE* dictionary, const char* header, uint64_t expected_raw) {\n  if (gamma_xml_arm_ == 'P') return;\n  if (!dictionary || !header || header[0] != 7 || gamma_xml_active_)\n    Fail(\"Gamma XML requires one dictionary TEXT block\");\n  struct stat info;\n  if (fstat(fileno(dictionary), &info) || !S_ISREG(info.st_mode) || info.st_size != 411996)\n    Fail(\"Gamma XML dictionary size or type differs\");\n  std::vector<unsigned char> data(411996);\n  size_t position = 0;\n  while (position < data.size()) {\n    ssize_t n = pread(fileno(dictionary), data.data()+position, data.size()-position, position);\n    if (n < 0 && errno == EINTR) continue;\n    if (n <= 0) Fail(\"Gamma XML dictionary read failed\");\n    position += n;\n  }\n  uint64_t digest = UINT64_C(0xcbf29ce484222325);\n  std::vector<std::string> words;\n  std::string word;\n  size_t word_bytes = 0, longest = 0;\n  for (unsigned char c : data) {\n    digest = (digest ^ c) * UINT64_C(0x100000001b3);\n    if (c >= 'a' && c <= 'z') word += c;\n    else if (!word.empty()) {\n      if (word.size() > 58 || words.size() >= 44515) Fail(\"Gamma XML dictionary bounds differ\");\n      word_bytes += word.size(); longest = std::max(longest, word.size());\n      words.push_back(word); word.clear();\n    }\n  }\n  if (digest != UINT64_C(0x2c3946082300051a) || !word.empty() ||\n      words.size() != 44515 || word_bytes != 367481 || longest != 58 || data.back() != '\\n')\n    Fail(\"Gamma XML dictionary identity differs\");\n  uint64_t raw_length = 0;\n  for (int i = 1; i < 5; ++i) raw_length = (raw_length << 8) | (unsigned char)header[i];\n  if (expected_raw && raw_length != expected_raw) Fail(\"Gamma XML requires the complete single TEXT block\");\n  if (!gamma_xml_.begin(words, raw_length, gamma_xml_arm_)) Fail(\"Gamma XML observer initialization failed\");\n  gamma_xml_active_ = true;\n  const char* trace = std::getenv(\"GAMMA_FX2_XML_TRACE\");\n  const char* raw = std::getenv(\"GAMMA_FX2_XML_RAW\");\n  if (trace) {\n    gamma_xml_trace_ = std::fopen(trace, \"wbx\");\n    if (!gamma_xml_trace_) Fail(\"Gamma XML cannot create state trace\");\n  }\n  if (raw) {\n    gamma_xml_raw_ = std::fopen(raw, \"wbx\");\n    if (!gamma_xml_raw_) Fail(\"Gamma XML cannot create raw witness\");\n  }\n  GammaXmlAudit('I');\n  std::fprintf(stderr, \"Gamma XML selected=%c\\n\", gamma_xml_arm_);\n}\n\nvoid Predictor::GammaXmlUpdate(bool byte_update) {\n  if (!byte_update || gamma_xml_arm_ == 'P') return;\n  // Pretraining uses the original coordinate, with no observer/ring updates.\n  gamma_xml_context_ = manager_.words_[0];\n  if (!gamma_xml_active_) return;\n  gamma_xml_field::Bytes raw;\n  uint64_t context = gamma_xml_context_;\n  if (!gamma_xml_.observe(manager_.bit_context_, manager_.words_[0], context, raw))\n    Fail(\"Gamma XML causal WRT observation failed\");\n  gamma_xml_context_ = context;\n  if (gamma_xml_raw_ && std::fwrite(raw.data(),1,raw.size(),gamma_xml_raw_) != raw.size())\n    Fail(\"Gamma XML raw witness write failed\");\n  GammaXmlAudit('B');\n}\n\nvoid Predictor::GammaXmlAudit(unsigned char event) {\n  if (!gamma_xml_trace_) return;\n  auto state = gamma_xml_.state();\n  // The external scalar is a live native reference and separately witnessed.\n  for (unsigned shift=0; shift<64; shift+=8) state.push_back(gamma_xml_context_ >> shift);\n  const uint32_t n = state.size();\n  const unsigned char header[5] = {event,(unsigned char)n,(unsigned char)(n>>8),\n                                  (unsigned char)(n>>16),(unsigned char)(n>>24)};\n  if (std::fwrite(header,1,5,gamma_xml_trace_) != 5 ||\n      std::fwrite(state.data(),1,n,gamma_xml_trace_) != n)\n    Fail(\"Gamma XML state trace write failed\");\n}\n\nvoid Predictor::GammaXmlEnd() {\n  if (gamma_xml_arm_ == 'P') return;\n  if (!gamma_xml_active_ || !gamma_xml_.finish()) Fail(\"Gamma XML terminal state differs\");\n  GammaXmlAudit('F');\n  if (gamma_xml_trace_ && std::fclose(gamma_xml_trace_)) Fail(\"Gamma XML state close failed\");\n  if (gamma_xml_raw_ && std::fclose(gamma_xml_raw_)) Fail(\"Gamma XML raw close failed\");\n  gamma_xml_trace_ = gamma_xml_raw_ = nullptr;\n  gamma_xml_active_ = false;\n}\n\nvoid Predictor::AddWord() {"
+        },
+        {
+          "before": "    indirect_ns_models_.emplace_back(manager_.nonstationary_, context.GetContext(),\n        manager_.bit_context_, delta, manager_.shared_map_);",
+          "after": "    const unsigned long long& gamma_context =\n        gamma_xml_arm_ != 'P' && params.size() == 1 && params[0] == 0\n        ? gamma_xml_context_ : context.GetContext();\n    indirect_ns_models_.emplace_back(manager_.nonstationary_, gamma_context,\n        manager_.bit_context_, delta, manager_.shared_map_);"
+        },
+        {
+          "before": "  manager_.UpdateContexts(bit);\n  if (byte_update) {\n    if (print_transformer_loss_) AccumulateTransformerLoss();",
+          "after": "  manager_.UpdateContexts(bit);\n  GammaXmlUpdate(byte_update);\n  if (byte_update) {\n    if (print_transformer_loss_) AccumulateTransformerLoss();"
+        },
+        {
+          "before": "  manager_.UpdateContexts(bit);\n  if (byte_update) {\n    bracket_model_->ByteUpdate();",
+          "after": "  manager_.UpdateContexts(bit);\n  GammaXmlUpdate(byte_update);\n  if (byte_update) {\n    bracket_model_->ByteUpdate();"
+        }
+      ]
+    },
+    {
+      "source_path": "src/runner.cpp",
+      "source_sha256": "241dd65dddc11b7a47c09b373753986b0d0554ec1eba12e3d745aa7bd5d61852",
+      "source_bytes": 45841,
+      "patched_sha256": "319d091ee89e9e0baa728c7a593cd5ebd34f1e2deb89aea8615ea0a6c342c3eb",
+      "patched_bytes": 46070,
+      "replacements": [
+        {
+          "before": "  Compress(temp_bytes, &temp_in, &data_out, output_bytes, &p);",
+          "after": "  p.GammaXmlBegin(dictionary, gamma_static_frontend ? gamma_literal_header : nullptr, *input_bytes);\n  Compress(temp_bytes, &temp_in, &data_out, output_bytes, &p);\n  p.GammaXmlEnd();"
+        },
+        {
+          "before": "  Decompress(*output_bytes, &data_in, &temp_out, &p);",
+          "after": "  p.GammaXmlBegin(dictionary, gamma_static_frontend ? gamma_literal_header : nullptr, 0);\n  Decompress(*output_bytes, &data_in, &temp_out, &p);\n  p.GammaXmlEnd();"
+        }
+      ]
+    },
+    {
+      "source_path": "src/coder/encoder.cpp",
+      "source_sha256": "ecd9a2f4f39553e3864c8e9c96c7b512edca46a6fbb3197beaccaf47b0a8fdce",
+      "source_bytes": 914,
+      "patched_sha256": "e1586dca62d959dff81f156512d37a22a5e2abbb332c77962e0e8a0a0c646d29",
+      "patched_bytes": 1108,
+      "replacements": [
+        {
+          "before": "#include \"encoder.h\"",
+          "after": "#include \"encoder.h\"\n#include \"gamma-coder-trace.h\""
+        },
+        {
+          "before": "  const unsigned int p = Discretize(p_->Predict());",
+          "after": "  const float gamma_probability = p_->Predict();\n  const unsigned int p = Discretize(gamma_probability);\n  gamma_fx2_trace::Record gamma_record(gamma_probability, p, x1_, x2_);"
+        },
+        {
+          "before": "    x2_ = (x2_ << 8) + 255;\n  }\n}\n\nvoid Encoder::Flush()",
+          "after": "    x2_ = (x2_ << 8) + 255;\n  }\n  gamma_record.Finish(bit, x1_, x2_);\n}\n\nvoid Encoder::Flush()"
+        }
+      ]
+    },
+    {
+      "source_path": "src/coder/decoder.cpp",
+      "source_sha256": "1bae2c108906625fb124f3fc602d1d59d814e5a415d963ab74246bf474e8bae9",
+      "source_bytes": 832,
+      "patched_sha256": "cfed5d718bc6d1e797bb7c22be769040a7407086baf7918fcb522fd558c25258",
+      "patched_bytes": 1026,
+      "replacements": [
+        {
+          "before": "#include \"decoder.h\"",
+          "after": "#include \"decoder.h\"\n#include \"gamma-coder-trace.h\""
+        },
+        {
+          "before": "  const unsigned int p = Discretize(p_->Predict());",
+          "after": "  const float gamma_probability = p_->Predict();\n  const unsigned int p = Discretize(gamma_probability);\n  gamma_fx2_trace::Record gamma_record(gamma_probability, p, x1_, x2_);"
+        },
+        {
+          "before": "  return bit;",
+          "after": "  gamma_record.Finish(bit, x1_, x2_);\n  return bit;"
+        }
+      ]
+    }
+  ],
+  "added_files": [
+    {
+      "source": {
+        "path": "lib/fx2_xml_field_observer_v1.hpp",
+        "bytes": 6382,
+        "sha256": "19ed1422036e7bb45afa5b602f67f88f662c61788f9ded295aee61def4ed0e09"
+      },
+      "target": "src/fx2_xml_field_observer_v1.hpp"
+    },
+    {
+      "source": {
+        "path": "lib/fx2_xml_word_context_v1.hpp",
+        "bytes": 2734,
+        "sha256": "f69c78aa89f52a67fe97fe051f3f02e8774ba90cfe0eaa2035d24b78bede9d58"
+      },
+      "target": "src/fx2_xml_word_context_v1.hpp"
+    },
+    {
+      "source": {
+        "path": "tools/fx2_coder_trace_v1.hpp",
+        "bytes": 2359,
+        "sha256": "d72dfa104668e2f3138e41e7bdfd54c8ad634d00d64338a627dbf1835656a11b"
+      },
+      "target": "src/coder/gamma-coder-trace.h"
+    }
+  ],
+  "boundary": "Only first nonstationary word {0} context changes; P unchanged, K field zero, D current field, S 4096-modeled-byte delayed field. Native model construction and update order preserved.",
+  "scope": "Source adapter; no native archive or qualification result."
+}
