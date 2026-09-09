@@ -1,0 +1,51 @@
+{
+  "candidate_id": "opcode_event_parse250k_q0_v1",
+  "claimed_at": "2026-09-09T00:06:22+00:00",
+  "created_at": "2026-09-09T00:06:22+00:00",
+  "developed_at": "2026-09-09T00:06:23+00:00",
+  "evidence": [
+    {
+      "path": "operations/provenance/opcode_event_parse_gate_v1_unit.json",
+      "sha256": "sha256:c7f6be5ef5dff64e455281dd882a0492d2a1431b3c01adad005623a884caba77"
+    },
+    {
+      "path": "operations/provenance/opcode_literal_event_cost_v1_unit.json",
+      "sha256": "sha256:4c6e678b1cb69e6d4a3bad79d657cb4e862db11b1647b911263ec852f215cb0c"
+    }
+  ],
+  "expected_savings_bytes": 0,
+  "experiment": {
+    "path": "operations/adaptive/experiments/opcode_event_parse250k_q0_v1.json",
+    "sha256": "sha256:c07aad933362b82c8b56cd8a85bd8967262db438795a69bbc83b99dde98ab0f7"
+  },
+  "hypothesis": "Correct adaptive literal-event pricing improves the complete opening250KB archive by selecting better literal/copy parses, without changing the predictor or decoder.",
+  "interfaces_exposed": [
+    "Existing raw compress and decompress with unchanged decoder"
+  ],
+  "kill_condition": "No positive archive saving rejects this fixed encoder pricing realization",
+  "max_program_bytes": 20000,
+  "mechanism_change": "other",
+  "mechanism_change_bonus": 0,
+  "mechanism_class": "coder",
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:e91ff20e92c3cac8acb0cbe5c79fc8e8a3b427d7e151245c8eecc52b1c32fa00",
+    "objectiveId": "gamma-enwiki9-hutter-90m-v3",
+    "objectivePath": "contracts/research/v3/objective-contract.json",
+    "targetScoreBytes": 90000000
+  },
+  "owner": "root_explore",
+  "parent": "opcode_field_compact_v1",
+  "parent_proposal_id": null,
+  "priority": 50,
+  "promotion_condition": "Positive archive saving with exact P/K, original decoding and repeats; package separate",
+  "proposal_id": "opcode_event_parse250k_q0_v1",
+  "retired_neighborhoods": [
+    "Encoder event pricing, not failed field history or another context key"
+  ],
+  "schema": "gamma.enwiki9.algorithm-proposal.v2",
+  "search_priority": 50,
+  "state": "developed",
+  "title": "Exact adaptive literal event pricing in the compact encoder"
+}
