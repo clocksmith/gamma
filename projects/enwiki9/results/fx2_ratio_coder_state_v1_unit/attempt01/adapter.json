@@ -1,0 +1,138 @@
+{
+  "schema": "gamma.enwiki9.exact-source-adapter-multi.v1",
+  "adapter_id": "fx2_ratio_coder_native_v1",
+  "files": [
+    {
+      "source_path": "src/predictor.h",
+      "source_sha256": "348d3924fc4e1f4890d0332b0f33ba9591afa6ee06971b9a9bdeaa376b41f458",
+      "source_bytes": 7136,
+      "patched_sha256": "b0247b27a22a6a33983be269a238910848ff262a950d6411481ac80fb3f69962",
+      "patched_bytes": 7407,
+      "replacements": [
+        {
+          "before": "#include \"mixer/sigmoid.h\"",
+          "after": "#include \"fx2_ratio_coder_state_v1.hpp\"\n#include \"mixer/sigmoid.h\""
+        },
+        {
+          "before": "  float Predict();",
+          "after": "  ~Predictor();\n  float Predict();"
+        },
+        {
+          "before": "  void TransformerByteUpdate();",
+          "after": "  void TransformerByteUpdate();\n  void GammaRatioAudit(unsigned char event);\n  gamma_ratio_delivery::State gamma_ratio_;\n  bool gamma_ratio_enabled_ = false;\n  FILE* gamma_ratio_trace_ = nullptr;"
+        },
+        {
+          "before": "  float Predict();",
+          "after": "  float Predict();\n  unsigned GammaFinalProbability(unsigned parent);"
+        }
+      ]
+    },
+    {
+      "source_path": "src/predictor.cpp",
+      "source_sha256": "0b79f43644daee942c9cb6da18fa464f0eb0185b6fc7ffc43cde703808fe537e",
+      "source_bytes": 27424,
+      "patched_sha256": "2697ebd874d1dec4387c2f5a13ec8476c472dc3a19da2955abc588ee970d22ec",
+      "patched_bytes": 29743,
+      "replacements": [
+        {
+          "before": "  memset(separator_window_, 0xFF, sizeof(separator_window_));",
+          "after": "  memset(separator_window_, 0xFF, sizeof(separator_window_));\n  const char* gamma_setting = std::getenv(\"GAMMA_FX2_RATIO_ARM\");\n  const char gamma_arm = gamma_setting ? gamma_setting[0] : 'P';\n  if (gamma_setting && (!gamma_setting[0] || gamma_setting[1]))\n    Fail(\"Gamma ratio arm must be P, K, D or S\");\n  const bool gamma_native = transformer_ && !ppmd_only_ && !transformer_only_ &&\n      !transformer_probs_reader_ && !transformer_probs_writer_ && !ppmd_probs_writer_;\n  if (gamma_arm != 'P' && !gamma_native)\n    Fail(\"Gamma ratio requires native transformer without probability dumping\");\n  if (gamma_native) {\n    if (!gamma_ratio_.configure(vocab_size_, gamma_arm, vocab_bytes_)) Fail(\"invalid Gamma ratio configuration\");\n    gamma_ratio_enabled_ = true;\n    const char* trace = std::getenv(\"GAMMA_FX2_RATIO_TRACE\");\n    if (trace) {\n      gamma_ratio_trace_ = std::fopen(trace, \"wbx\");\n      if (!gamma_ratio_trace_) Fail(\"cannot create Gamma ratio trace\");\n      GammaRatioAudit('I');\n    }\n    std::fprintf(stderr, \"Gamma ratio selected=%c\\n\", gamma_arm);\n  }\n"
+        },
+        {
+          "before": "unsigned long long Predictor::GetNumModels() {",
+          "after": "\nPredictor::~Predictor() {\n  if (gamma_ratio_trace_ && std::fclose(gamma_ratio_trace_) != 0)\n    Fail(\"failed closing Gamma ratio trace\");\n}\n\nvoid Predictor::GammaRatioAudit(unsigned char event) {\n  if (!gamma_ratio_trace_) return;\n  const auto state = gamma_ratio_.serialize();\n  const uint32_t n = state.size();\n  const unsigned char header[5] = {event, (unsigned char)n,\n      (unsigned char)(n>>8), (unsigned char)(n>>16), (unsigned char)(n>>24)};\n  if (std::fwrite(header,1,5,gamma_ratio_trace_) != 5 ||\n      std::fwrite(state.data(),1,n,gamma_ratio_trace_) != n)\n    Fail(\"failed writing Gamma ratio trace\");\n}\n\nunsigned long long Predictor::GetNumModels() {"
+        },
+        {
+          "before": "void Predictor::TransformerByteUpdate() {",
+          "after": "void Predictor::TransformerByteUpdate() {\n  if (gamma_ratio_.pending()) {\n    const int token = byte_to_index_[manager_.bit_context_];\n    if (token < 0 || !gamma_ratio_.observe((unsigned)token)) Fail(\"Gamma ratio truth alignment failed\");\n    GammaRatioAudit('O');\n  }"
+        },
+        {
+          "before": "  if (byte_mixer_) byte_mixer_->SetProbs(probs_scratch_.data());",
+          "after": "  if (byte_mixer_) {\n    if (gamma_ratio_enabled_) {\n      if (!gamma_ratio_.predict(probs_scratch_.data())) Fail(\"Gamma ratio probability boundary failed\");\n      GammaRatioAudit('P');\n    }\n    byte_mixer_->SetProbs(probs_scratch_.data());\n  }"
+        },
+        {
+          "before": "unsigned long long Predictor::GetNumModels() {",
+          "after": "unsigned Predictor::GammaFinalProbability(unsigned parent) {\n  if(!gamma_ratio_enabled_)return parent;\n  unsigned output=0;\n  if(!gamma_ratio_.final_probability(parent,manager_.bit_context_,output))\n    Fail(\"Gamma delivery prefix or update order differs\");\n  return output;\n}\n\nunsigned long long Predictor::GetNumModels() {"
+        }
+      ]
+    },
+    {
+      "source_path": "src/coder/encoder.cpp",
+      "source_sha256": "ecd9a2f4f39553e3864c8e9c96c7b512edca46a6fbb3197beaccaf47b0a8fdce",
+      "source_bytes": 914,
+      "patched_sha256": "53473b8abfd2d2e04bc1943507cbfdb60a9683b0c725a61116f7b4ce2e697249",
+      "patched_bytes": 1135,
+      "replacements": [
+        {
+          "before": "#include \"encoder.h\"",
+          "after": "#include \"encoder.h\"\n#include \"gamma-coder-trace.h\""
+        },
+        {
+          "before": "  const unsigned int p = Discretize(p_->Predict());",
+          "after": "  const float gamma_probability = p_->Predict();\n  const unsigned int p = p_->GammaFinalProbability(Discretize(gamma_probability));\n  gamma_fx2_trace::Record gamma_record(gamma_probability, p, x1_, x2_);"
+        },
+        {
+          "before": "    x2_ = (x2_ << 8) + 255;\n  }\n}\n\nvoid Encoder::Flush()",
+          "after": "    x2_ = (x2_ << 8) + 255;\n  }\n  gamma_record.Finish(bit, x1_, x2_);\n}\n\nvoid Encoder::Flush()"
+        }
+      ]
+    },
+    {
+      "source_path": "src/coder/decoder.cpp",
+      "source_sha256": "1bae2c108906625fb124f3fc602d1d59d814e5a415d963ab74246bf474e8bae9",
+      "source_bytes": 832,
+      "patched_sha256": "0573cb4c6ecdef82ba1cc8b1d0a7426167a4870183720c7e50e7e9c52b574442",
+      "patched_bytes": 1053,
+      "replacements": [
+        {
+          "before": "#include \"decoder.h\"",
+          "after": "#include \"decoder.h\"\n#include \"gamma-coder-trace.h\""
+        },
+        {
+          "before": "  const unsigned int p = Discretize(p_->Predict());",
+          "after": "  const float gamma_probability = p_->Predict();\n  const unsigned int p = p_->GammaFinalProbability(Discretize(gamma_probability));\n  gamma_fx2_trace::Record gamma_record(gamma_probability, p, x1_, x2_);"
+        },
+        {
+          "before": "  return bit;",
+          "after": "  gamma_record.Finish(bit, x1_, x2_);\n  return bit;"
+        }
+      ]
+    }
+  ],
+  "added_files": [
+    {
+      "source": {
+        "path": "lib/fx2_residual_ratio_v1.hpp",
+        "bytes": 5457,
+        "sha256": "ec501bf0b1fae7d576e694055671548a42335bc07c0411a738951cfd43b9b97c"
+      },
+      "target": "src/fx2_residual_ratio_v1.hpp"
+    },
+    {
+      "source": {
+        "path": "lib/fx2_ratio_coder_delivery_v1.hpp",
+        "bytes": 2630,
+        "sha256": "750b2686c53f79d40824711cdaef4a112f6615a2f84b3cafe1e9eb378f6133c9"
+      },
+      "target": "src/fx2_ratio_coder_delivery_v1.hpp"
+    },
+    {
+      "source": {
+        "path": "lib/fx2_ratio_coder_state_v1.hpp",
+        "bytes": 2684,
+        "sha256": "f93a4dcb1a52276f0817898be275844d3bad069a6a3656aa5e9cd7e37579bd03"
+      },
+      "target": "src/fx2_ratio_coder_state_v1.hpp"
+    },
+    {
+      "source": {
+        "path": "tools/fx2_coder_trace_v1.hpp",
+        "bytes": 2359,
+        "sha256": "d72dfa104668e2f3138e41e7bdfd54c8ad634d00d64338a627dbf1835656a11b"
+      },
+      "target": "src/coder/gamma-coder-trace.h"
+    }
+  ],
+  "boundary": "Read-only original expert rows; original Predict/Perceive unchanged; correction only after coder discretization. K computes D state and returns parent.",
+  "scope": "Source adapter, not a native archive or qualification result."
+}
