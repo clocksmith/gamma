@@ -48,7 +48,7 @@ supports the development gain and holds scaling/integration for package and fres
 transfer evidence. Three arm rows are recorded. The [new validation population](../operations/provenance/opcode_event_parse_validation_population_v1.json)
 authenticates raw offsets 614250000..614499999 against the full canonical input hash;
 The [validation contract](../operations/adaptive/experiments/opcode_event_parse_validation250k_q0_v1.json) binds the unchanged codec and owner `root_explore`.
-Its ten-phase job is held for publication/admission. No full-corpus score is claimed.
+Job `20260909T003116Z_e61e66c5fb` is active on CPU2 after publication/admission. No full-corpus score is claimed.
 
 ## 2026-09-08 - Standalone XML field histories enter executable synthetic testing
 
