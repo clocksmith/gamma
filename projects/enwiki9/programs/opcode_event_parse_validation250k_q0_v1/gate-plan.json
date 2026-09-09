@@ -1,6 +1,6 @@
 {
-  "schema": "gamma.enwiki9.opcode-event-parse-plan.v1",
-  "candidate_id": "opcode_event_parse250k_q0_v1",
+  "schema": "gamma.enwiki9.opcode-event-parse-validation-plan.v1",
+  "candidate_id": "opcode_event_parse_validation250k_q0_v1",
   "resources": {
     "cpus": [
       2
@@ -47,6 +47,11 @@
       "sha256": "f9878f9524e2991c2d723ea45e25a6a1ffc58c5f3ed9734dd7d4a67cda37a0cc"
     },
     {
+      "path": "tests/test_opcode_event_parse_validation_gate_v1.py",
+      "bytes": 3878,
+      "sha256": "24b5580061d9a9bf7a9f852d3d92131ca3ebdbb1123123d598587aa77cafe1dd"
+    },
+    {
       "path": "tests/test_opcode_literal_event_cost_v1.py",
       "bytes": 2875,
       "sha256": "9b15088eeacc59d72880e2acfbe2c51538dcaeec1042c9e7ad6fcac55591c2fd"
@@ -75,6 +80,11 @@
       "path": "tools/opcode_event_parse_gate_v1.py",
       "bytes": 7488,
       "sha256": "0a49427ffb79ffa5a335fd2ca55df5c79a27443596cfe0061441f003c4f56aaa"
+    },
+    {
+      "path": "tools/opcode_event_parse_validation_gate_v1.py",
+      "bytes": 5327,
+      "sha256": "3be8ad7c3c1e195b86fed9267b2ebf5414a2a95ee8eaddc9d22f7556d0d914b6"
     },
     {
       "path": "tools/opcode_field_compact_gate_v1.py",
@@ -147,6 +157,26 @@
       "path": "operations/provenance/opcode_calibration_terminal_20260908.json",
       "bytes": 8387,
       "sha256": "8ec2b58cd7b97b1d1037543de361d28e2d18d5aab5695620326ce17ac994a3e1"
+    },
+    {
+      "path": "operations/provenance/opcode_event_parse_terminal_20260908.json",
+      "bytes": 4599,
+      "sha256": "640cadec2f6a61ea95d8eca7488181a197aa8945f0500043df2b8e5565505b7c"
+    },
+    {
+      "path": "operations/adaptive/reflections/20260909T000728Z_01310d96d4.json",
+      "bytes": 4603,
+      "sha256": "4b67b56eac0bda583276c505571f9aaa976ec084642a535e0e43c392be817588"
+    },
+    {
+      "path": "operations/provenance/opcode_event_parse_validation_population_v1.json",
+      "bytes": 909,
+      "sha256": "8772dc181bbad2d400ff68df6558c2ef0a902a4cb117a70b5232cafac1055c13"
+    },
+    {
+      "path": "operations/provenance/opcode_event_parse_validation_gate_v1_unit.json",
+      "bytes": 3487,
+      "sha256": "b29f9bbe756f10dc0599f69e2015147b6205b327c5a40beb45245c8c8b2bf36a"
     }
   ],
   "runtime_files": [
@@ -178,34 +208,24 @@
   ],
   "package_files": [
     {
-      "path": "programs/opcode_event_parse250k_q0_v1/p",
+      "path": "programs/opcode_event_parse_validation250k_q0_v1/p",
       "bytes": 5423,
       "sha256": "7d331ba82c635af8afe6517bf5f4471b41dcf7854c6ec01cb5564078d9bb56a8"
     },
     {
-      "path": "programs/opcode_event_parse250k_q0_v1/v",
+      "path": "programs/opcode_event_parse_validation250k_q0_v1/v",
       "bytes": 1551,
       "sha256": "d9c4d28792936916715d37b1ace4572c0cdc2cc106498077418a3f32b66de48b"
     },
     {
-      "path": "programs/opcode_event_parse250k_q0_v1/program.py",
+      "path": "programs/opcode_event_parse_validation250k_q0_v1/program.py",
       "bytes": 768,
       "sha256": "12ed0a23ee98326da0d0c174d726cdbc6543c3cf8921d326cb967d0a99f55c1b"
     }
   ],
   "input": {
+    "path": "operations/evidence/fixtures/opcode_event_parse_validation250k_v1.raw",
     "bytes": 250000,
-    "path": "operations/evidence/fixtures/dualstream_opening250k_v1.raw",
-    "sha256": "665fc689441b68462d88f82dc33212abe9c4824be095d03a556c9b55a2829fd3"
-  },
-  "parent_archive": {
-    "bytes": 67658,
-    "path": "results/opcode_field_compact_v1/development.arc",
-    "sha256": "bda617eab7628f7cec6724ca3d82bf505efee9c2be4813dd404dcfa715140e6f"
-  },
-  "parent_audit": {
-    "bytes": 23901,
-    "path": "results/opcode_field_compact_v1/development-encode.audit.json",
-    "sha256": "169b866fa11381853dd81ea87ccc948cc7c5c169c37c240a8c0e4eccbc0d50a8"
+    "sha256": "ffb6c9e73f59dc3ee7109441aa05881d1980ff440f47db63120bf36822b765bf"
   }
 }
