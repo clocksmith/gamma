@@ -24,8 +24,8 @@ and state parity. Published at `1d64f6795`, both freshly admitted CPU3 audits fi
 The [terminal diagnostic](../operations/provenance/context_edit_fx2_audit_v1_terminal.json)
 records826 donors,26432 active WRT bytes and95 changed D probabilities; D loses0.999808232
 ideal bits to P. All mixtures end at Q63 parent weight2^63-1. No native integration follows.
-Next isolate per-episode unmixed expert costs and saturation coordinates before changing
-the mixture; frequent activation alone does not establish useful donor predictions.
+The [attribution plan](../operations/provenance/context_edit_fx2_attribution_v1_plan.json)
+freezes episode costs and saturation coordinates before mutation; two synthetic tests pass.
 
 ## 2026-09-09 - Test neighboring-weight dependence with fully paid symbol tables
 
