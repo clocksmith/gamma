@@ -2,7 +2,7 @@
 
 Generated from the current certificate, gate receipts, resource guards, and process table.
 
-- Generated at UTC: `2026-09-09T05:05:53+00:00`
+- Generated at UTC: `2026-09-09T05:10:15+00:00`
 
 ## Target State
 
@@ -131,13 +131,13 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 
 - Audit return code: `0`
 - Audit mode: `inventory_snapshot`
-- Inventory generated: `2026-09-09T04:45:32+00:00`
+- Inventory generated: `2026-09-09T05:09:13+00:00`
 - Snapshot identity is verified; inventory inputs were not rescanned. This is not live occupancy or launch authority.
-- Program directories: `1,018`
-- Registered programs: `557`
-- Untracked nonignored entries: `9`
-- Modified tracked entries: `3`
-- Candidate statuses: `active=18, blocked_dependency=78, candidate=248, measured_negative=100, retired=574`
+- Program directories: `1,019`
+- Registered programs: `558`
+- Untracked nonignored entries: `1`
+- Modified tracked entries: `1`
+- Candidate statuses: `active=18, blocked_dependency=79, candidate=248, measured_negative=100, retired=574`
 
 ## View Refresh
 
