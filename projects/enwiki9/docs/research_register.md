@@ -16,6 +16,15 @@ counted; native parent reconstruction and complete packaging are unresolved.
 Publish ownership/source and refresh admission before the opening250KB P/K/D/S
 comparison. No larger run, confirmation or new trained model is authorized.
 
+The [terminal comparison](../operations/provenance/fx2_final_counts_opening250k_v1_terminal.json)
+is valid: P/K33429, D33427, S39985 bytes. D saves2 archive bytes; its25,390-byte
+overlapping component subtotal remains unpaid (net-25,388). All13 phases,
+independent raw inverses, repeats and2,419,360 complete model-state boundaries
+per phase pass. Supplied Q16 and dictionary cost2,831,356 bytes. Peak cgroup
+memory110,460,928 bytes, elapsed146.5727 seconds, all guards clear and cleanup
+complete. The validated reflection holds this positive but unpaid diagnostic.
+No confirmation, native parent reconstruction, full score or scale credit.
+
 ## 2026-09-09 - Test causal residual learning against the final parent
 
 Owner `root_explore` selected discovery lenses 8 and 9 after expert-level
