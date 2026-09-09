@@ -1,0 +1,66 @@
+{
+  "schema": "gamma.enwiki9.source-audit-terminal.v1",
+  "id": "fx2_weight_sign_magnitude_loader_unit_v1",
+  "owner": "root_explore",
+  "implementation": "fx2_weight_sign_magnitude_loader_v1",
+  "publication_commit": "f1d979c691c1cb451fa4fc714aa0614fa7d812b1",
+  "validity": "valid",
+  "hypothesis_verdict": "supported-synthetic-native-tensor-parity-only",
+  "decision": "freeze-production-parity-and-package-accounting-next",
+  "plan": {
+    "path": "operations/provenance/fx2_weight_sign_magnitude_loader_unit_v1_plan.json",
+    "bytes": 7709,
+    "sha256": "b26a184040b05b3e6e43198e250c026c19357e35113aa90ad01bb5de103cd708"
+  },
+  "admission": {
+    "path": "results/fx2_weight_sign_magnitude_loader_unit_v1_admission.json",
+    "bytes": 16478,
+    "sha256": "bf410a68767cab2c43a53674c3151c96f760d6b68c31fb618dca4128dba02bd7"
+  },
+  "result": {
+    "path": "results/fx2_weight_sign_magnitude_loader_unit_v1_attempt01/receipt.json",
+    "bytes": 4334,
+    "sha256": "345de256cef48cd24a4599794617a104824eea71648346956e354e191d71115d"
+  },
+  "closure": {
+    "path": "results/fx2_weight_sign_magnitude_loader_unit_v1_attempt01/closure.json",
+    "bytes": 3461,
+    "sha256": "be2cac55d03a3adda05fae7261828b26a16f065e352b90e03481e8d2a250e1aa"
+  },
+  "tests": {
+    "source_adapter": 4,
+    "native": 7,
+    "all_passed": true
+  },
+  "execution": {
+    "phases": 3,
+    "all_returncodes_zero": true,
+    "cpu_seconds": 3.4247490000000003,
+    "elapsed_seconds": 3.609705973882228,
+    "cumulative_child_peak_rss_kib": 142776,
+    "bounds_scope": "Per-process address-space/CPU/file limits, process-group elapsed cancellation, post-phase scratch checks. No continuous qualifying resource certificate."
+  },
+  "independent_review": {
+    "reviewer": "/root/direction_certificate_review",
+    "input_bindings_verified": 26,
+    "materialized_sources_verified": 5,
+    "executable_bindings_verified": 2,
+    "native_suite_cases": 7,
+    "native_case_breakdown": "Five native cases and two source checks",
+    "blocking_findings": [],
+    "temporary_directory_empty": true,
+    "live_bound_executables": 0,
+    "native_reexecution": false
+  },
+  "limitations": [
+    "Synthetic fixtures were temporary; retained binaries, source and test logs establish tests, not a retained corpus archive.",
+    "Actual production dispatcher source is patched but not compiled or exercised by this gate.",
+    "Trained-model tensor parity, production probability parity, matched production binary/source sizes and complete package qualification remain unmeasured.",
+    "Older-format tests cover FX2TFWC2, GFX2MAR1 and GFX2ADM1; no claim of exhaustive legacy-format test coverage."
+  ],
+  "next_action": "Publish a separately frozen native model/production probe gate with matched adaptive parent rebuild; compare all434 initialized tensors and actual TransformerOpt outputs, then price binary/source deltas against416 model bytes saved per copy. No corpus run until that result.",
+  "objective_target_bytes": 90000000,
+  "objective_credit_bytes": 0,
+  "complete_package_bytes": null,
+  "full_corpus_score_bytes": null
+}

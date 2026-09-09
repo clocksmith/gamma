@@ -7,11 +7,19 @@
 Owner `root_explore` implements [direct loading](fx2_weight_sign_magnitude_loader_v1.md)
 to price the 416-byte model saving without the losing separate converter.
 The immutable adaptive loader and production dispatcher gain explicit GFX2SMG1
-admission. Four source-adapter tests pass; native parity remains unmeasured.
+admission. Before native execution, four source-adapter tests passed.
 The [bounded synthetic plan](../operations/provenance/fx2_weight_sign_magnitude_loader_unit_v1_plan.json)
 binds exact inputs, CPU3,512MiB address space,128MiB scratch and180 elapsed seconds.
 It tests native tensor inversion, older formats, rescaling and invalid streams;
 it authorizes no trained-model or corpus execution and grants no score credit.
+
+Published source `f1d979c69` passes all seven
+[native synthetic tests](../operations/provenance/fx2_weight_sign_magnitude_loader_unit_v1_terminal.json),
+including exact raw tensor parity, ADM compatibility, independent sign/magnitude
+rescaling, reset and malformed-stream rejection. Three bounded phases complete;
+all26 inputs remain unchanged. The production dispatcher and trained model
+remain unexecuted. Next freeze actual production parity and binary/source cost;
+416 model bytes saved per copy remain a component result, not package credit.
 
 ## 2026-09-09 - Exact weight magnitude and shared-sign factorization
 
