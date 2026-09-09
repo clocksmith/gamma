@@ -12,7 +12,7 @@ Reusable artifact helpers for new tools: [lib/artifacts.py](../lib/artifacts.py)
 The LibNC initializer teacher launcher exits before the first forward, gradient, update, or coded symbol; its source-bound experiment defines that boundary.
 The delayed-status helper's `enwiki9_delayed_status_latest.log` pointer is operational history, not present-host occupancy proof.
 
-Coverage: **1103 files** (33 .c, 73 .cpp, 1 .gdb, 1 .h, 1 .hpp, 1 .html, 990 .py, 3 .sh).
+Coverage: **1104 files** (33 .c, 73 .cpp, 1 .gdb, 1 .h, 1 .hpp, 1 .html, 991 .py, 3 .sh).
 
 | Tool | Purpose | Referenced contracts |
 |---|---|---|
@@ -361,6 +361,7 @@ Coverage: **1103 files** (33 .c, 73 .cpp, 1 .gdb, 1 .h, 1 .hpp, 1 .html, 990 .py
 | [`tools/fx2_profile_summary.py`](../tools/fx2_profile_summary.py) | Summarize FX2_LOSS_PROFILE stderr output. | none found |
 | [`tools/fx2_public_repro_queue.py`](../tools/fx2_public_repro_queue.py) | Lane 0 public fx2-cmix reproduction helper. This helper is intentionally full-corpus only. The upstream `cmix -e` path uses fixed enwik9 split/reorder constants and emits `archive9`, so prefix gates are not meaningful for reproducing the published Hutter entry. | none found |
 | [`tools/fx2_public_vocabulary.py`](../tools/fx2_public_vocabulary.py) | Authenticate public fx2 vocabulary and optional package components without execution. | none found |
+| [`tools/fx2_ratio_coder_native_adapter_v1.py`](../tools/fx2_ratio_coder_native_adapter_v1.py) | Materialize coder-boundary delivery against immutable native preimages. | none found |
 | [`tools/fx2_ratio_loss_attribution_v1.py`](../tools/fx2_ratio_loss_attribution_v1.py) | Replay a closed ratio experiment; no predictor mutation or corpus launch. | none found |
 | [`tools/fx2_rdo_feasibility.py`](../tools/fx2_rdo_feasibility.py) | Estimate copy-style RDO headroom from FX2_LOSS_LEDGER rows. | none found |
 | [`tools/fx2_reorder_dictionary.py`](../tools/fx2_reorder_dictionary.py) | Reorder/dictionary experiments. | none found |
