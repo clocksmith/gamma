@@ -12,6 +12,15 @@ between recorded Q16 endpoints, not every native weakening or finite archive.
 Six synthetic tests pass. Source, runtime hashes and ownership publish before
 the two bounded closed-trace computations; no coefficient search or codec launch.
 
+The [repeated certificate](../operations/provenance/fx2_final_direction_v1_terminal.json)
+encloses D's derivative strictly below zero (approximately-35.053867351 bits per
+unit alpha). Concavity excludes positive-alpha ideal gains on this fixed D path.
+S has a positive initial derivative (approximately450.791479476 bits per unit),
+despite its full-strength loss. All coefficient/log-interval witnesses repeat
+exactly. This is no finite-archive bound or claim about the original pre-rounding
+native law. Next investigate final-parent residual learning and controls rather
+than blindly attenuating D or relabeling S as an eligible treatment.
+
 ## 2026-09-09 - Locate expert versus final-coder loss on retained opening traces
 
 Owner `root_explore` froze a [closed-trace attribution check](../operations/provenance/fx2_ratio_delivery_loss_attribution_v1_plan.json)
