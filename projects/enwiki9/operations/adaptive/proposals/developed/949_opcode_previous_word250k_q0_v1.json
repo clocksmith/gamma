@@ -1,0 +1,51 @@
+{
+  "candidate_id": "opcode_previous_word250k_q0_v1",
+  "claimed_at": "2026-09-09T15:01:11+00:00",
+  "created_at": "2026-09-09T15:01:10+00:00",
+  "developed_at": "2026-09-09T15:01:12+00:00",
+  "evidence": [
+    {
+      "path": "operations/provenance/opcode_previous_word_v1_synthetic_terminal.json",
+      "sha256": "sha256:098aebf20f4118c00f28374486b0d420d7d62d0579d8de4c6ba4660983603129"
+    },
+    {
+      "path": "operations/evidence/20260909_opcode_previous_word_gate_unit.json",
+      "sha256": "sha256:b1478eb35e7599e1117edfe5dd9d47d208a34be68e3fe4ec7e8e0b0eacc618aa"
+    }
+  ],
+  "expected_savings_bytes": 0,
+  "experiment": {
+    "path": "operations/adaptive/experiments/opcode_previous_word250k_q0_v1.json",
+    "sha256": "sha256:6acacb980b22e816edfcf99d6edc36a3c1647663ee18c195e273b7ea6c554401"
+  },
+  "hypothesis": "Replacing only the column literal context with immediate previous-completed-word suffix context reduces the fixed opening250KB archive versus unchanged parent and causal delayed-word control.",
+  "interfaces_exposed": [
+    "Same-arm standalone encode/decode and complete word/parent state witnesses"
+  ],
+  "kill_condition": "Any source, inverse, repeat, parse, P/K parent-projection or within-arm state mismatch invalidates the comparison. D failing to beat P or S rejects this fixed previous-word policy on development data; resource stops and missing evidence are not algorithmic disproof.",
+  "max_program_bytes": 1277,
+  "mechanism_change": "add_state_coordinate",
+  "mechanism_change_bonus": 10,
+  "mechanism_class": "endpoint",
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:e91ff20e92c3cac8acb0cbe5c79fc8e8a3b427d7e151245c8eecc52b1c32fa00",
+    "objectiveId": "gamma-enwiki9-hutter-90m-v3",
+    "objectivePath": "contracts/research/v3/objective-contract.json",
+    "targetScoreBytes": 90000000
+  },
+  "owner": "root_explore",
+  "parent": "opcode_field_compact_v1",
+  "parent_proposal_id": null,
+  "priority": 40,
+  "promotion_condition": "D smaller than P and S with all exact state/inverse/repeat controls; price package before separate confirmation.",
+  "proposal_id": "opcode_previous_word250k_q0_v1",
+  "retired_neighborhoods": [
+    "Persistent field-body routing, literal-only SSE, event-pricing and entropy-coder rewrite remain excluded."
+  ],
+  "schema": "gamma.enwiki9.algorithm-proposal.v2",
+  "search_priority": 50,
+  "state": "developed",
+  "title": "Previous completed word context with fixed parse and delayed control"
+}
