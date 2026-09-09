@@ -1,0 +1,19 @@
+{
+  "schema": "gamma.enwiki9.source-audit-plan.v1",
+  "id": "context_edit_fixture_v1",
+  "owner": "root_explore",
+  "objective_target_bytes": 90000000,
+  "objective_credit_bytes": 0,
+  "inputs": [
+    {"path": "lib/context_edit_continuation_v1.py", "sha256": "6abddef47c86f04fba081936475806387e248cef5a397b2426b30b24a6377022"},
+    {"path": "lib/predictor.py", "sha256": "2291091f2f4eb2103eb98cc2b22900ce9cb001bcebab097d4076a56eef4b1bdb"},
+    {"path": "programs/harm_route_edit_residual_shadow_q0_v1/core.py", "sha256": "cc03d407d176d64abc1d92be3ec79ce45a56c2c65d8c08d48a93ee81c39233d0"}
+  ],
+  "hypothesis": "The unchanged context-acquisition adapter and HARM integer mixtures can be connected to the existing binary fixture coder with causal per-bit parent updates, exact inverse/repeat, P/K identity and identical future-affecting model state in each arm.",
+  "parent": "Existing raw-byte CountingPredictor(order=8), not a competitive CMIX or MIDAS parent.",
+  "controls": ["P/K return the unchanged counting parent while all specialist bookkeeping runs", "L/D/S each use their own unchanged HARM SleepingMixture with initial parent weight2^62 and existing Q63 update law"],
+  "update_order": "At each byte start, acquire one donor and cache L/D/S byte histograms. Predict the parent bit, condition each cached histogram on the already decoded bit prefix, and compute each mixture before truth. Update parent and all mixtures after the decoded bit; after eight bits update continuation models and the mature bank. Full snapshots include pending probabilities and cached histograms.",
+  "scope": "Synthetic fixtures only, at most4096 raw bytes each. Exact archives include existing fixture framing; the selected arm remains a required external option and source/runtime costs remain unresolved. No corpus or native parent inference.",
+  "bounds": {"cpu_set": [3], "address_space_bytes": 536870912, "elapsed_seconds": 120, "per_phase_seconds": 30, "scratch_bytes": 67108864},
+  "stop_rule": "Require independent fresh-process encodes, decodes and repeats for all five arms, P/K byte identity, every-byte model-state witnesses and malformed/truncated-input checks. Success is implementation evidence only and cannot authorize corpus or native promotion."
+}

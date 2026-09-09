@@ -2,6 +2,24 @@
 
 [Record index](research_register/README.md) | [Earlier records](research_register/archive/README.md)
 
+## 2026-09-09 - Context acquisition for a causal edit-continuation expert
+
+Seed `post_confirmation_discovery_20260909_v1` selected lenses5/1. Plain hierarchical
+COPY/PATCH renaming remains excluded; HELICAL ledger savings alone are not backend gains.
+Owner `root_explore` instead [freezes decoder-built context acquisition](../operations/provenance/context_edit_continuation_v1_synthetic_plan.json)
+around the unchanged HARM edit arithmetic: exact8-byte context tags,4096 slots and fully
+observed32-byte donors, with one32-byte episode and identical lockstep/shifted controls.
+The source adapter passes four synthetic ordering, availability, collision and replay tests.
+The [existing-coder integration](../operations/provenance/context_edit_fixture_v1_plan.json)
+uses CountingPredictor(order8) and unchanged Q63 sleeping mixtures, with all bookkeeping
+in P/K. The [terminal synthetic receipt](../operations/provenance/context_edit_fixture_v1_terminal.json)
+retains independent five-arm inverse/repeat processes, every pre-truth probability and
+every-byte model-state witnesses, plus truncated-archive rejection. Empty archives are17
+bytes; on the constructed120-byte insertion P/K/L/S are124 and D106 bytes.
+No corpus, native FX2 comparison or competitive parent was used. Source/package costs remain.
+Next freeze one existing-fixture native-probability diagnostic with explicit WRT coordinates,
+controls and opportunity counts. No native integration or full-corpus score follows yet.
+
 ## 2026-09-09 - Test neighboring-weight dependence with fully paid symbol tables
 
 Owner `root_explore` selects lenses10/3 under the [synthetic plan](../operations/provenance/fx2_weight_neighbor_synthetic_v1_plan.json).
