@@ -32,13 +32,23 @@ decoder for every arm. The [runner and bundle tests](../operations/provenance/op
 pass six synthetic checks, including ten fresh phases, relocation and deliberate
 state-divergence rejection. Local source is 7,742 bytes (+1,996); complete package
 remains unresolved. Source and ownership were published at `f6142f74b`;
-job `20260909T000728Z_01310d96d4` is active on CPU2 after fresh admission verified
+job `20260909T000728Z_01310d96d4` ran on CPU2 after fresh admission verified
 44 published bindings and reserved 32GiB plus the complete 4GiB allocation.
 The [fixed source-ZIP diagnostic](../results/opcode_event_parse_source_zip_v1/attempt01/cost.json)
 reuses the existing builder and relocated replay: parent 5,815 bytes, treatment
 7,710 bytes (+1,895). Both synthetic inverses and repeats pass. This source-component
 cost is separate from runtime, options, license closure and official multiplicities.
-No terminal corpus result exists yet; the unchanged ten-phase comparison remains active.
+The [terminal corpus receipt](../operations/provenance/opcode_event_parse_terminal_20260908.json)
+closes all ten phases: P/K 67,658 bytes, D 67,520, saving 138 archive bytes.
+Original decoding, exact reconstruction, repeats, complete state witnesses and
+observation parity pass. The guard closes cleanly at 533,942,272 peak cgroup bytes.
+Archive saving minus one source-ZIP increment is -1,757 bytes on this sample.
+The [validated reflection](../operations/adaptive/reflections/20260909T000728Z_01310d96d4.json)
+supports the development gain and holds scaling/integration for package and fresh
+transfer evidence. Three arm rows are recorded. The [new validation population](../operations/provenance/opcode_event_parse_validation_population_v1.json)
+authenticates raw offsets 614250000..614499999 against the full canonical input hash;
+no codec has evaluated it. Keep source fixed and freeze its separate gate next.
+No full-corpus score is claimed.
 
 ## 2026-09-08 - Standalone XML field histories enter executable synthetic testing
 
