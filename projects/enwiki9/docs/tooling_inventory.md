@@ -12,7 +12,7 @@ Reusable artifact helpers for new tools: [lib/artifacts.py](../lib/artifacts.py)
 The LibNC initializer teacher launcher exits before the first forward, gradient, update, or coded symbol; its source-bound experiment defines that boundary.
 The delayed-status helper's `enwiki9_delayed_status_latest.log` pointer is operational history, not present-host occupancy proof.
 
-Coverage: **1086 files** (33 .c, 70 .cpp, 1 .gdb, 1 .h, 1 .hpp, 1 .html, 976 .py, 3 .sh).
+Coverage: **1088 files** (33 .c, 71 .cpp, 1 .gdb, 1 .h, 1 .hpp, 1 .html, 977 .py, 3 .sh).
 
 | Tool | Purpose | Referenced contracts |
 |---|---|---|
@@ -380,6 +380,8 @@ Coverage: **1086 files** (33 .c, 70 .cpp, 1 .gdb, 1 .h, 1 .hpp, 1 .html, 976 .py
 | [`tools/fx2_shadow_residual_coder.py`](../tools/fx2_shadow_residual_coder.py) | Exact shadow-coder certificate for causal fx2 residual corrections. This is stricter than a log-loss ledger. Given per-bit fx2 residual rows, it drives a deterministic binary arithmetic coder with corrected causal probabilities and reports the exact byte count that this proposed coder emits. Rows can be JSONL, TSV, key=value lines, or FX2_RESIDUAL_ROW logs. Required row fields are: bit=&lt;0&#124;1&gt; p1=&lt;1..65535&gt; If corrected_p1 is present, it is used directly. Otherwise the tool bui | none found |
 | [`tools/fx2_transformer_kernel_probe_v1.cpp`](../tools/fx2_transformer_kernel_probe_v1.cpp) | Diagnostic kernel measurement of the pinned public model, not a codec score. The runner authenticates source/weights and enforces the memory/scratch guard. | [1](../operations/adaptive/experiments/fx2_cmix_transformer_static_vocab_fixture50051_q0_v1.json) |
 | [`tools/fx2_typed_anchor_soft_queue.py`](../tools/fx2_typed_anchor_soft_queue.py) | Build and gate native fx2 typed-anchor soft-state candidates. | none found |
+| [`tools/fx2_weight_adaptive_marginal_model_v1.py`](../tools/fx2_weight_adaptive_marginal_model_v1.py) | Bounded complete-model comparison with exact independent restoration. | none found |
+| [`tools/fx2_weight_adaptive_marginal_probe_v1.cpp`](../tools/fx2_weight_adaptive_marginal_probe_v1.cpp) | Exact full-container comparison; preserve the included GPLv3 provenance. | none found |
 | [`tools/fx2_weight_adaptive_neighbor_model_v1.py`](../tools/fx2_weight_adaptive_neighbor_model_v1.py) | Compare P/K/A/D exact INT4 substreams; no inference or corpus credit. | none found |
 | [`tools/fx2_weight_adaptive_neighbor_probe_v1.cpp`](../tools/fx2_weight_adaptive_neighbor_probe_v1.cpp) | Reuse immutable file IO; preserve the upstream FX2 GPLv3 provenance. | none found |
 | [`tools/fx2_weight_even7_fixture50051_q0_v1.py`](../tools/fx2_weight_even7_fixture50051_q0_v1.py) | Prospective fixed even7 model mutation and exact native fixture comparison. | [3](../operations/adaptive/experiments/fx2_weight_even7_fixture50051_q0_v1.json) |
