@@ -2,6 +2,23 @@
 
 [Record index](research_register/README.md) | [Earlier records](research_register/archive/README.md)
 
+## 2026-09-09 - Rebuild neighboring-weight counts instead of storing tables
+
+Seed `post_literal_sse_discovery_20260909_v1` selects lenses3/5. Owner `root_explore`
+targets the measured99900-byte fixed-table overhead that erased2751 coded bytes
+of neighbor benefit. The [new adaptive kernel](../lib/fx2_weight_adaptive_neighbor_v1.hpp)
+keeps exact INT4 symbols, row boundaries and the existing Q11 range coder.
+The [synthetic result](../operations/provenance/fx2_weight_adaptive_neighbor_v1_synthetic_terminal.json)
+passes18 cases and420042 complete count-state boundaries; the initial compile-only
+namespace error is retained. Adaptive neighbor D beats marginal A on the constructed
+periodic sequence but loses on pseudorandom symbols. These are not trained-model gains.
+The [frozen model plan](../operations/provenance/fx2_weight_adaptive_neighbor_model_v1_plan.json)
+compares P/K/A/D on every111 INT4 tensors with no posthoc selection. A controls for
+removing table bytes without using neighbors. Three adapter tests cover25 fresh
+mixed-model phases, empty input, mismatch rejection and exclusive output preservation.
+Source publication and fresh CPU3 admission precede the model audit. No inference,
+full-model package, native corpus or full-score claim; the90M objective remains unproved.
+
 ## 2026-09-09 - Calibrate literals after the decoder knows the copy mode
 
 Seed `post_edit_attribution_discovery_20260909_v1` selects lenses6/8: decoded representation
@@ -769,32 +786,3 @@ parks this fixed grammar/model realization; no confirmation or larger run.
 Retain the exact evaluators and inverse. Known local source union is 80,016
 bytes; complete runtime/license/package accounting and full-corpus score remain
 unknown. This result neither attains 99M nor disproves structured prediction.
-
-## 2026-09-07 - Exact enumerative grammar costs are executable and negative
-
-The [enumerative codec and inverse](dualstream_enumerative_v1.md) count every
-serialized-section rank, count table, stream length and frame header. Exact
-integer widths include M=1 and powers of256. Twenty-three synthetic tests across
-the preserved codec, review and runner revisions include all15 child phases.
-Two invalid runner attempts remain recorded: caught OSError routing, then
-a supplied D2GRAM02 plain baseline incorrectly reserialized as D2GRAM01.
-
-`dualstream_enumerative250k_q0_v3` [closes its published comparison](../operations/provenance/dualstream_enumerative_terminal_20260907.json)
-with all15 phases on the existing250000-byte development sample. P plain
-Deflate is89041 bytes; B fixed grammar Deflate102492; E same grammar enumerative
-140524; T token-argument storage141295; R plain enumeration160547.
-All arms independently invert and repeat fixed-source serialization.
-E/T preserve B's exact program graph. B/E/T retain12 repeated-argument references
-in frame three; the frozen zero-binding annotation was wrong and is explicitly
-corrected. Existing bindings do not turn a storage comparison into their ablation.
-
-E adds38032 archive bytes over B. Its ranks alone cost128666 bytes, so removing
-all count tables and headers cannot make these fixed ranks beat B.
-T saves33580 definition-rank bytes but adds34216 argument-rank bytes,132 table
-bytes and3 stream-length bytes:771 bytes worse. Other stream ranks are unchanged.
-The [reflection](../operations/adaptive/reflections/20260907T163610Z_dfcedb020f.json)
-holds this exact realization as a valid storage loss. Keep the evaluator;
-a successor must change the representation or conditional coding and measure
-its complete bytes. No larger gate, confirmation or global impossibility claim.
-The five-file source union is56323 bytes; complete runtime/package accounting
-remains unknown. No full-corpus score exists; the99M objective remains active.
