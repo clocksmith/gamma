@@ -1,0 +1,194 @@
+{
+  "schema": "gamma.enwiki9.final-residual-counts-unit.v1",
+  "id": "fx2_final_residual_counts_v1",
+  "status": "passed",
+  "scope": "synthetic component correctness only",
+  "tests_per_build": 5,
+  "builds": [
+    "optimized",
+    "ubsan"
+  ],
+  "state_bytes": 4612,
+  "inputs": [
+    {
+      "path": "/home/x/deco/gamma/projects/enwiki9/lib/fx2_final_residual_counts_v1.hpp",
+      "bytes": 4042,
+      "sha256": "479d5f719b8d3d04a84f1af41e7997d4c6c24b0f642fce15ed0b4517a68f95c5"
+    },
+    {
+      "path": "/home/x/deco/gamma/projects/enwiki9/lib/fx2_ratio_coder_delivery_v1.hpp",
+      "bytes": 2630,
+      "sha256": "750b2686c53f79d40824711cdaef4a112f6615a2f84b3cafe1e9eb378f6133c9"
+    },
+    {
+      "path": "/home/x/deco/gamma/projects/enwiki9/tests/fx2_final_residual_counts_v1_fixture.cpp",
+      "bytes": 699,
+      "sha256": "eea4f975bfa213432ad2fa9748ba7ba7af0a52dd0b185fb739ed91ec16274055"
+    },
+    {
+      "path": "/home/x/deco/gamma/projects/enwiki9/tests/test_fx2_final_residual_counts_v1.py",
+      "bytes": 5104,
+      "sha256": "def0753e218107663e994efe99f5005fea72357b774865078fc2a09067a51601"
+    },
+    {
+      "path": "/home/x/deco/gamma/projects/enwiki9/docs/fx2_final_residual_counts_v1.md",
+      "bytes": 3779,
+      "sha256": "cb5288363f6b9ac05e7ee3af73add08a5252bafc3d828a42e3ab1bdf5a10f287"
+    }
+  ],
+  "bounds": {
+    "address_space_bytes": 536870912,
+    "cpu_seconds_per_phase": 60,
+    "per_file_bytes": 33554432,
+    "scratch_bytes": 67108864,
+    "phase_elapsed_seconds": 60
+  },
+  "commands": [
+    {
+      "name": "build-optimized",
+      "command": [
+        "/usr/bin/g++",
+        "-std=c++17",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-shared",
+        "-fPIC",
+        "-O2",
+        "-I",
+        "/home/x/deco/gamma/projects/enwiki9/lib",
+        "/home/x/deco/gamma/projects/enwiki9/tests/fx2_final_residual_counts_v1_fixture.cpp",
+        "-o",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_final_residual_counts_v1_unit/attempt01/optimized.so"
+      ],
+      "returncode": 0,
+      "elapsed_seconds": 0.26894565392285585,
+      "cpu_seconds": 0.23447199999999999,
+      "cumulative_child_peak_rss_kib": 69424
+    },
+    {
+      "name": "tests-optimized",
+      "command": [
+        "/usr/bin/env",
+        "FX2_FINAL_COUNTS_LIBRARY=/home/x/deco/gamma/projects/enwiki9/results/fx2_final_residual_counts_v1_unit/attempt01/optimized.so",
+        "/usr/bin/python3",
+        "/home/x/deco/gamma/projects/enwiki9/tests/test_fx2_final_residual_counts_v1.py",
+        "-v"
+      ],
+      "returncode": 0,
+      "elapsed_seconds": 1.2672439960297197,
+      "cpu_seconds": 1.224211,
+      "cumulative_child_peak_rss_kib": 69424
+    },
+    {
+      "name": "build-ubsan",
+      "command": [
+        "/usr/bin/g++",
+        "-std=c++17",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-shared",
+        "-fPIC",
+        "-O1",
+        "-fsanitize=undefined",
+        "-fno-sanitize-recover=all",
+        "-I",
+        "/home/x/deco/gamma/projects/enwiki9/lib",
+        "/home/x/deco/gamma/projects/enwiki9/tests/fx2_final_residual_counts_v1_fixture.cpp",
+        "-o",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_final_residual_counts_v1_unit/attempt01/ubsan.so"
+      ],
+      "returncode": 0,
+      "elapsed_seconds": 0.21726774191483855,
+      "cpu_seconds": 0.16770200000000002,
+      "cumulative_child_peak_rss_kib": 70596
+    },
+    {
+      "name": "tests-ubsan",
+      "command": [
+        "/usr/bin/env",
+        "FX2_FINAL_COUNTS_LIBRARY=/home/x/deco/gamma/projects/enwiki9/results/fx2_final_residual_counts_v1_unit/attempt01/ubsan.so",
+        "/usr/bin/python3",
+        "/home/x/deco/gamma/projects/enwiki9/tests/test_fx2_final_residual_counts_v1.py",
+        "-v"
+      ],
+      "returncode": 0,
+      "elapsed_seconds": 1.617545607034117,
+      "cpu_seconds": 1.609505,
+      "cumulative_child_peak_rss_kib": 70596
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "/home/x/deco/gamma/projects/enwiki9/results/fx2_final_residual_counts_v1_unit/attempt01/admission.json",
+      "bytes": 14457,
+      "sha256": "789a6e227da508c4ccc7bbb2074a8d7fe96db617b72dc804b09c5a7267c6f23e"
+    },
+    {
+      "path": "/home/x/deco/gamma/projects/enwiki9/results/fx2_final_residual_counts_v1_unit/attempt01/build-optimized.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/x/deco/gamma/projects/enwiki9/results/fx2_final_residual_counts_v1_unit/attempt01/build-optimized.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/x/deco/gamma/projects/enwiki9/results/fx2_final_residual_counts_v1_unit/attempt01/build-ubsan.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/x/deco/gamma/projects/enwiki9/results/fx2_final_residual_counts_v1_unit/attempt01/build-ubsan.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/x/deco/gamma/projects/enwiki9/results/fx2_final_residual_counts_v1_unit/attempt01/commands.jsonl",
+      "bytes": 1880,
+      "sha256": "ddb58c9982daf4378523e44aee4baca5592dce5c12cf428de4265b173099bd89"
+    },
+    {
+      "path": "/home/x/deco/gamma/projects/enwiki9/results/fx2_final_residual_counts_v1_unit/attempt01/inputs.json",
+      "bytes": 1002,
+      "sha256": "aa9e7b861da4399546cf3e40f799d67674758d3995809b61d9ee86a964a126a9"
+    },
+    {
+      "path": "/home/x/deco/gamma/projects/enwiki9/results/fx2_final_residual_counts_v1_unit/attempt01/optimized.so",
+      "bytes": 20648,
+      "sha256": "03d3fb8d423979ff7a101c0232cdfba0d5d76e699715427444854a81e0ceb9ab"
+    },
+    {
+      "path": "/home/x/deco/gamma/projects/enwiki9/results/fx2_final_residual_counts_v1_unit/attempt01/tests-optimized.stderr",
+      "bytes": 736,
+      "sha256": "f8f2fc5464007c32eee8560efba5eb4cb404880f98cc02fbff4ea6e55549ea90"
+    },
+    {
+      "path": "/home/x/deco/gamma/projects/enwiki9/results/fx2_final_residual_counts_v1_unit/attempt01/tests-optimized.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/x/deco/gamma/projects/enwiki9/results/fx2_final_residual_counts_v1_unit/attempt01/tests-ubsan.stderr",
+      "bytes": 736,
+      "sha256": "65472a9ea134be804d0106e5788acde075032f6c5a5a58078be971473b38ff0d"
+    },
+    {
+      "path": "/home/x/deco/gamma/projects/enwiki9/results/fx2_final_residual_counts_v1_unit/attempt01/tests-ubsan.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/home/x/deco/gamma/projects/enwiki9/results/fx2_final_residual_counts_v1_unit/attempt01/ubsan.so",
+      "bytes": 38248,
+      "sha256": "d6a351d331e60193756cf527c11068acd8748d0964b09ddd96657f965c65232e"
+    }
+  ],
+  "archive_bytes": null,
+  "complete_package_bytes": null,
+  "full_corpus_score_bytes": null,
+  "objective_credit_bytes": 0,
+  "next_action": "Freeze and publish one bounded closed-trace opening comparison before execution; no corpus evidence yet."
+}
