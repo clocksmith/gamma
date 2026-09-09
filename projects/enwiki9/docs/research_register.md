@@ -22,6 +22,17 @@ it supplies no standalone codec or native parent-state witness. Next freeze
 its delivery comparison and adapter with P/K/D/S, unchanged parent updates,
 complete cached-row/ratio state, exact inverses, repeats and package accounting.
 
+The [native state validation](../operations/evidence/20260909_fx2_ratio_coder_state_unit.json)
+passes six tests in optimized and UBSan builds, including257 rows across decay,
+independent exact references, unchanged expert inputs, update-order rejection,
+and K/D state equality after arm-tag normalization. The5971-byte state contains
+all introduced masses, vocabulary and ratio state. Native predictor/encoder/decoder
+syntax passes with original build defines; the initial missing-UPDATE_LIMIT
+invocation is preserved. Added source totals16162 bytes, exceeding the unchanged
+8192-byte prototype allowance. A native comparison needs a separately frozen
+package budget and source identity. No native archive, model execution, or
+compression gain was measured. The155-file bundle retains both attempts.
+
 ## 2026-09-09 - Locate residual-ratio prediction loss before another mutation
 
 Owner `root_explore` now follows the prior residual-ratio loss attribution request.

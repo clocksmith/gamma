@@ -1,0 +1,172 @@
+{
+  "schema": "gamma.enwiki9.unit-validation.v1",
+  "id": "fx2_ratio_coder_state_v1_unit",
+  "classification": "synthetic-state-and-native-syntax-pass",
+  "tests_passed_per_build": 6,
+  "builds": [
+    "optimized",
+    "ubsan"
+  ],
+  "synthetic_evidence": "results/fx2_ratio_coder_state_v1_unit/attempt01/commands.jsonl",
+  "syntax_evidence": "results/fx2_ratio_coder_state_v1_unit/attempt02/commands.jsonl",
+  "preserved_failed_attempt": "results/fx2_ratio_coder_state_v1_unit/attempt01/receipt.json",
+  "failure_cause": "Initial syntax invocation omitted upstream UPDATE_LIMIT macro. Retried unchanged sources with the existing FAST native compile flags, including UPDATE_LIMIT=3000 and SEED=923.",
+  "serialized_state_bytes_205_symbols": 5971,
+  "raw_added_source_bytes": 16162,
+  "corpus_access": false,
+  "model_access": false,
+  "archive_bytes_saved": null,
+  "complete_package_bytes": null,
+  "full_corpus_score_bytes": null,
+  "objective_credit_bytes": 0,
+  "owner": "root_explore",
+  "result": {
+    "path": "results/fx2_ratio_coder_state_v1_unit/attempt02/receipt.json",
+    "bytes": 965,
+    "sha256": "418f2dd1b6d33466ef48a512d72e52f789d407b1cc68c1fc1ad134a18469b7c9"
+  },
+  "plan": {
+    "path": "operations/provenance/fx2_ratio_coder_state_v1_unit_plan.json",
+    "bytes": 4036,
+    "sha256": "3a4d31949c7fc58516509f3e3f6bfa92f7cbd04dd1610da6a3dfd2adba2bc27c"
+  },
+  "retained_bundle": {
+    "path": "results/fx2_ratio_coder_state_v1_unit_retained.zip",
+    "bytes": 3968299,
+    "sha256": "7c93ab2c4849b8b6ff44728b9af67707fba82d43704a4284728a139e6901fb83"
+  },
+  "retained_members_verified": 155,
+  "commands": [
+    {
+      "name": "build-optimized",
+      "command": [
+        "g++",
+        "-std=c++17",
+        "-O2",
+        "-fno-fast-math",
+        "-ffp-contract=off",
+        "-shared",
+        "-fPIC",
+        "tests/fx2_ratio_coder_state_bridge_v1.cpp",
+        "-o",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_ratio_coder_state_v1_unit/attempt01/optimized.so"
+      ],
+      "returncode": 0,
+      "elapsed_seconds": 0.36885340488515794,
+      "cpu_seconds": 0.347184,
+      "cumulative_child_peak_rss_kib": 75532
+    },
+    {
+      "name": "test-optimized",
+      "command": [
+        "env",
+        "FX2_STATE_LIBRARY=/home/x/deco/gamma/projects/enwiki9/results/fx2_ratio_coder_state_v1_unit/attempt01/optimized.so",
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-p",
+        "test_fx2_ratio_coder_state_v1.py",
+        "-v"
+      ],
+      "returncode": 0,
+      "elapsed_seconds": 0.46723629883490503,
+      "cpu_seconds": 0.43187500000000006,
+      "cumulative_child_peak_rss_kib": 75532
+    },
+    {
+      "name": "build-ubsan",
+      "command": [
+        "g++",
+        "-std=c++17",
+        "-O2",
+        "-fno-fast-math",
+        "-ffp-contract=off",
+        "-shared",
+        "-fPIC",
+        "-fsanitize=undefined",
+        "-fno-sanitize-recover=undefined",
+        "tests/fx2_ratio_coder_state_bridge_v1.cpp",
+        "-o",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_ratio_coder_state_v1_unit/attempt01/ubsan.so"
+      ],
+      "returncode": 0,
+      "elapsed_seconds": 0.418385247932747,
+      "cpu_seconds": 0.380554,
+      "cumulative_child_peak_rss_kib": 86724
+    },
+    {
+      "name": "test-ubsan",
+      "command": [
+        "env",
+        "FX2_STATE_LIBRARY=/home/x/deco/gamma/projects/enwiki9/results/fx2_ratio_coder_state_v1_unit/attempt01/ubsan.so",
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-p",
+        "test_fx2_ratio_coder_state_v1.py",
+        "-v"
+      ],
+      "returncode": 0,
+      "elapsed_seconds": 0.41709571797400713,
+      "cpu_seconds": 0.397827,
+      "cumulative_child_peak_rss_kib": 86724
+    },
+    {
+      "name": "native-syntax",
+      "command": [
+        "g++",
+        "-std=c++17",
+        "-include",
+        "cstdint",
+        "-fno-fast-math",
+        "-fno-exceptions",
+        "-march=x86-64-v3",
+        "-fsyntax-only",
+        "src/predictor.cpp",
+        "src/coder/encoder.cpp",
+        "src/coder/decoder.cpp"
+      ],
+      "returncode": 1,
+      "elapsed_seconds": 1.1689310709480196,
+      "cpu_seconds": 1.1423280000000002,
+      "cumulative_child_peak_rss_kib": 295520
+    },
+    {
+      "name": "native-syntax",
+      "command": [
+        "g++",
+        "-DSEED=923",
+        "-DUPDATE_LIMIT=3000",
+        "-m64",
+        "-Wall",
+        "-std=c++17",
+        "-include",
+        "cstdint",
+        "-fno-fast-math",
+        "-fno-math-errno",
+        "-fno-exceptions",
+        "-fno-threadsafe-statics",
+        "-march=x86-64-v3",
+        "-mtune=generic",
+        "-mrecip=none",
+        "-fdata-sections",
+        "-ffunction-sections",
+        "-fsyntax-only",
+        "src/predictor.cpp",
+        "src/coder/encoder.cpp",
+        "src/coder/decoder.cpp"
+      ],
+      "returncode": 0,
+      "elapsed_seconds": 1.3197254890110344,
+      "cpu_seconds": 1.2876969999999999,
+      "cumulative_child_peak_rss_kib": 296856
+    }
+  ],
+  "scope": "State-wrapper and adapter validation only. No native executable or corpus archive. The 8192-byte prototype allowance is unchanged; a native candidate needs a separately frozen actual package budget."
+}
