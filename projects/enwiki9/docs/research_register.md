@@ -24,6 +24,13 @@ Comparison executables are107792/129824 bytes; their22032-byte difference is
 not a native loader estimate. Next freeze a complete-model size/inverse audit;
 no trained parameter or corpus execution has occurred for this candidate.
 
+The [complete-model audit](../operations/provenance/fx2_weight_width_carry_model_v1_plan.json)
+is now frozen with cached executables,434 tensors, ten independent phases and
+CPU3/512MiB/128MiB scratch/120 elapsed seconds. Three synthetic runner tests pass.
+It reuses the existing phase guard, retains exact2902287-byte adaptive parent
+identity and charges comparison executables separately. Publish these inputs
+and refresh admission before trained-model execution; no inference is included.
+
 ## 2026-09-09 - Freeze independent adaptive FX2 package fixture execution
 
 Owner `root_explore` binds [the native package fixture](../operations/adaptive/experiments/fx2_adaptive_package_fixture50051_q0_v1.json)
