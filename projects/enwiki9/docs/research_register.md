@@ -22,7 +22,9 @@ and ten fresh codec phases. The first wrapper attempt could not raise its16MiB i
 cap to the reused runner's32MiB; the bound-only retry passes without codec changes.
 Bundle7117bytes adds1371 local source bytes; complete package remains unresolved.
 The [opening250KB contract](../operations/adaptive/experiments/opcode_literal_sse250k_q0_v1.json)
-binds job `20260909T023015Z_9564fe8ecc`, held for publication and fresh CPU2 admission.
+binds job `20260909T023015Z_9564fe8ecc`. Source/ownership published at `54c1eca99`;
+[fresh CPU2 admission](../operations/provenance/opcode_literal_sse250k_admission_20260909.json)
+released it. P encode is verified live under the existing4GiB/zero-swap guard; no terminal result yet.
 
 ## 2026-09-09 - Context acquisition for a causal edit-continuation expert
 

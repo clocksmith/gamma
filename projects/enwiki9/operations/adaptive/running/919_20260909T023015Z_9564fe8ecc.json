@@ -10,21 +10,56 @@
     "sha256": "sha256:044147f7ffe6922ea8dafd52fc3d4426077b20958adbcd421245ad41adcfc1e4"
   },
   "execution_mode": "discovery",
+  "execution_resources": {
+    "boot_id": "3ce46712-27bc-4199-8e48-e2b3d23926cb",
+    "budget": {
+      "cgroup_parent": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice",
+      "cpus": [
+        2
+      ],
+      "memory_bytes": 4294967296,
+      "scratch_bytes": 1073741824,
+      "swap_bytes": 0,
+      "wall_seconds": 2400
+    },
+    "cgroup_inode": 265958,
+    "cgroup_path": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/gamma-enwiki9-20260909T023015Z_9564fe8ecc",
+    "cpu_enforcement": "taskset-and-sampled-affinity-guard",
+    "groups": [
+      {
+        "created": true,
+        "inode": 265958,
+        "kernel_cpuset": false,
+        "memory_bytes": 4294967296,
+        "path": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/gamma-enwiki9-20260909T023015Z_9564fe8ecc"
+      }
+    ],
+    "guard_command_sha256": "68a16f6a520d8bdaf7d4f23420b4c043056551bfac190df826a6101c516af456",
+    "guard_path": "run_logs/adaptive/20260909T023015Z_9564fe8ecc.resources/guard.json",
+    "missing_diagnostics": [
+      "kernel cpuset controller is not delegated; taskset assignment and existing affinity guard remain active"
+    ],
+    "timing_authority": "diagnostic"
+  },
   "experiment": {
     "path": "operations/adaptive/experiments/opcode_literal_sse250k_q0_v1.json",
     "sha256": "sha256:a71bff99ad9c6a37d1b820cb2d0ce629d37776b8ea7248f3bae34e723382f5d7"
   },
   "gate_size": 250000,
-  "held": true,
+  "held": false,
   "held_at": "2026-09-09T02:30:45+00:00",
   "hold_history": [
     {
       "at": "2026-09-09T02:30:45+00:00",
       "held": true,
       "reason": "Await publication verification and fresh CPU2 resource admission"
+    },
+    {
+      "at": "2026-09-09T02:32:32+00:00",
+      "held": false,
+      "reason": "Source and ownership published at54c1eca99; fresh CPU2 and memory admission operations/provenance/opcode_literal_sse250k_admission_20260909.json"
     }
   ],
-  "hold_reason": "Await publication verification and fresh CPU2 resource admission",
   "job_id": "20260909T023015Z_9564fe8ecc",
   "priority": 80,
   "proposal": {
@@ -33,6 +68,7 @@
   },
   "proposal_id": "opcode_literal_sse250k_q0_v1",
   "purpose": "diagnostic",
+  "released_at": "2026-09-09T02:32:32+00:00",
   "resource_budget": {
     "cgroup_parent": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice",
     "cpus": [
@@ -51,12 +87,16 @@
   "scratch_directories": [
     "results/opcode_literal_sse250k_q0_v1"
   ],
-  "state": "pending",
+  "started_at": "2026-09-09T02:32:41+00:00",
+  "state": "running",
   "submitted_at": "2026-09-09T02:30:15+00:00",
   "tags": [
     "literal-sse-development"
   ],
   "timing_authority": "diagnostic",
   "tool": "tools/opcode_literal_sse_gate_v1.py",
-  "tool_args": []
+  "tool_args": [],
+  "worker_pid": 434438,
+  "worker_proc_start_ticks": 201729940,
+  "worker_started_at": "2026-09-09T02:32:41+00:00"
 }
