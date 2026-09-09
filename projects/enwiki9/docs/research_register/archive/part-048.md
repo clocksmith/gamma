@@ -2,6 +2,42 @@
 
 [Current register](../../research_register.md) | [Register index](../README.md) | [Archive index](README.md)
 
+## 2026-09-06 - Earlier-field conditioning passes the synthetic codec gate
+
+ROOT coordinated implementation and independent decoder review of
+`causal_field_dependency_synthetic_q0_v1`. The [published plan](../../../operations/provenance/causal_field_dependency_synthetic_q0_v1_plan.json)
+binds a prefix-only flat-template parser, FIFO128 completed associations,
+uniform P/K, conditional T, recency R and shuffled-association S controls.
+The [executable codec](../../../tools/causal_field_dependency_v1.py) learns only after
+a complete valid invocation and independently reconstructs every coded byte.
+
+The [retained unit receipt](../../../operations/evidence/20260906_causal_field_dependency_unit.json)
+binds 19 passing tests and 15 independent encode/decode/repeat processes.
+All five arms invert exactly, repeat byte-identically and agree in their
+probability, state and synchronization digests; P/K archives also match.
+On the constructed **269-byte** dependency fixture, T produces **294 bytes**
+versus **347** for each control: 53 bytes saved, but every archive exceeds raw.
+This demonstrates the intended conditional mechanism only on that fixture.
+It establishes no corpus benefit, competitive-parent transfer or package gain.
+
+Independent review prompted checkpoint probability rederivation and work-cap
+checks before source freeze. Rejected checkpoints and a prior test-harness
+failure remain retained. Seven required local source files total **228,815 bytes**;
+Python/runtime licensing and complete package accounting remain unresolved.
+The implementation cap is 8,192 raw bytes. Any corpus successor needs its own
+identity, frontend/parent adapter, reviewed source, ownership and frozen resource
+and population bindings. No corpus job or larger launch is authorized by this
+synthetic result; HORIZON, MIDAS and other owners remain unchanged.
+
+Read-only native-gate review found no competing field integration. Reuse
+`lib/fx2_native_gate_v1.py` and the [held native transfer](../../../operations/adaptive/reflections/20260905T233740Z_c2a28dc2f7.json):
+its opening parent archive is 33,429 bytes. Missing code must emit raw parser
+bytes only after complete WRT events, bind donor spans to aligned WRT boundaries,
+and update donor odds from actual parent probabilities. The uniform-parent
+`2^matched_bits` rule cannot be inherited. Replay is diagnostic until a native
+decoder reproduces it; prune unused dependencies in a new candidate before
+package promotion. Cold opening250KB cannot establish mature-history benefit.
+
 ## 2026-09-06 - Causal word references lose the exact opcode/BZip2 comparison
 
 ROOT assigned the separate FIFO128 word-code lane to `refresh_cleanup_review`;

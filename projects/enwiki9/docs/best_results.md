@@ -12,8 +12,8 @@ Unknown package cost stays unknown. Local subtotals are not complete submission 
 Populations are grouped by raw-input SHA256; compare matched controls in each receipt.
 ```
 
-- Result JSON files scanned: `270`
-- Roundtrip-passing rows: `91`
+- Result JSON files scanned: `274`
+- Roundtrip-passing rows: `94`
 - Active target score: `90,000,000` bytes (`9.0000000%`)
 
 ## Scope `1,000,000,000` Bytes
@@ -87,6 +87,16 @@ No roundtrip-passing result JSONs are present for this scope in this checkout.
 | `opcode_event_parse250k_q0_v1:D` | syntax opcode preprocessor | unknown | 67,520 | unknown | 2.16064 | true | `operations/provenance/opcode_event_parse_terminal_20260908/D.json` |
 | `opcode_field_history250k_q0_v1:D` | syntax opcode preprocessor | unknown | 67,578 | unknown | 2.162496 | true | `operations/provenance/opcode_field_history_terminal_20260908/D.json` |
 | `opcode_field_history250k_q0_v1:G` | syntax opcode preprocessor | unknown | 67,579 | unknown | 2.162528 | true | `operations/provenance/opcode_field_history_terminal_20260908/G.json` |
+
+### Population `ffb6c9e73f59dc3ee7109441aa05881d1980ff440f47db63120bf36822b765bf`
+
+**Smallest archives (package cost reported separately)**
+
+| Program / arm | Mechanism | Local subtotal | Archive | Program bytes | b/B | Determinism | Result |
+|---|---|---:|---:|---:|---:|---|---|
+| `opcode_event_parse_validation250k_q0_v1:D` | syntax opcode preprocessor | unknown | 68,868 | unknown | 2.203776 | true | `operations/provenance/opcode_event_parse_validation_terminal_20260908/D.json` |
+| `opcode_event_parse_validation250k_q0_v1:K` | syntax opcode preprocessor | unknown | 68,981 | unknown | 2.207392 | true | `operations/provenance/opcode_event_parse_validation_terminal_20260908/K.json` |
+| `opcode_event_parse_validation250k_q0_v1:P` | syntax opcode preprocessor | unknown | 68,981 | unknown | 2.207392 | true | `operations/provenance/opcode_event_parse_validation_terminal_20260908/P.json` |
 
 
 ## Unavailable terminal evidence
