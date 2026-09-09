@@ -1,0 +1,10 @@
+portable AVX2 baseline (x86-64-v3) used
+/usr/bin/g++ -m64 -O3 -std=c++17 -Wall -Wextra -fno-math-errno -fdata-sections -ffunction-sections -march=x86-64-v3 -mtune=generic -mrecip=none -c cpp_infer/src/weights_io.cpp -o tf_weights_io.o
+/usr/bin/g++ -m64 -std=c++17 -Wall -Wextra -fno-math-errno -fdata-sections -ffunction-sections -march=x86-64-v3 -mtune=generic -mrecip=none -Os -c cpp_infer/src/weights_io_compressed.cpp -o tf_weights_io_compressed.o
+/usr/bin/g++ -m64 -O3 -std=c++17 -Wall -Wextra -fno-math-errno -fdata-sections -ffunction-sections -march=x86-64-v3 -mtune=generic -mrecip=none -c cpp_infer/src/opt/qmat_dense.cpp -o tf_qmat_dense.o
+/usr/bin/g++ -m64 -O3 -std=c++17 -Wall -Wextra -fno-math-errno -fdata-sections -ffunction-sections -march=x86-64-v3 -mtune=generic -mrecip=none -c cpp_infer/src/opt/qmat_sparse.cpp -o tf_qmat_sparse.o
+/usr/bin/g++ -m64 -O3 -std=c++17 -Wall -Wextra -fno-math-errno -fdata-sections -ffunction-sections -march=x86-64-v3 -mtune=generic -mrecip=none -c cpp_infer/src/opt/attn.cpp -o tf_attn.o
+/usr/bin/g++ -m64 -O3 -std=c++17 -Wall -Wextra -fno-math-errno -fdata-sections -ffunction-sections -march=x86-64-v3 -mtune=generic -mrecip=none -c cpp_infer/src/opt/kda.cpp -o tf_kda.o
+/usr/bin/g++ -m64 -O3 -std=c++17 -Wall -Wextra -fno-math-errno -fdata-sections -ffunction-sections -march=x86-64-v3 -mtune=generic -mrecip=none -c cpp_infer/src/opt/glue.cpp -o tf_glue.o
+/usr/bin/g++ -m64 -O3 -std=c++17 -Wall -Wextra -fno-math-errno -fdata-sections -ffunction-sections -march=x86-64-v3 -mtune=generic -mrecip=none -c cpp_infer/src/opt/arena_build.cpp -o tf_arena_build.o
+/usr/bin/g++ -m64 -O3 -std=c++17 -Wall -Wextra -fno-math-errno -fdata-sections -ffunction-sections -march=x86-64-v3 -mtune=generic -mrecip=none -c cpp_infer/src/opt/model_opt.cpp -o tf_model_opt.o

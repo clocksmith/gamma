@@ -21,6 +21,13 @@ all26 inputs remain unchanged. The production dispatcher and trained model
 remain unexecuted. Next freeze actual production parity and binary/source cost;
 416 model bytes saved per copy remain a component result, not package credit.
 
+The [production gate](../operations/provenance/fx2_weight_sign_magnitude_production_v1_terminal.json)
+now verifies434 native tensors and six exact production probability/logit traces.
+Binary delta0, model delta-416/copy, raw source delta+1638: runtime pair saves832,
+raw-source-plus-decoder grows806. Frozen both-negative gate fails; no corpus run.
+Next separately measure actual source/assets ZIP accounting and relocated build,
+an explicit rules-permitted representation, preserving this raw-source failure.
+
 ## 2026-09-09 - Exact weight magnitude and shared-sign factorization
 
 Owner `root_explore` selects lenses10/3 deliberately: exact model representation
