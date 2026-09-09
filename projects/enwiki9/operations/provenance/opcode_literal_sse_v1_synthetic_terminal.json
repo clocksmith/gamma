@@ -1,0 +1,131 @@
+{
+  "schema": "gamma.enwiki9.source-audit-terminal.v1",
+  "id": "opcode_literal_sse_v1_synthetic",
+  "owner": "root_explore",
+  "generated_at": "2026-09-09T02:21:50.599748+00:00",
+  "plan": {
+    "path": "operations/provenance/opcode_literal_sse_v1_synthetic_plan.json",
+    "sha256": "bf223d8a52a0a37c77e74d8609128e0803857cc77831437af6b6ca2c5209a481"
+  },
+  "validity": "valid",
+  "hypothesis_verdict": "implementation_correctness_only",
+  "decision": "prepare_bounded_development_comparison",
+  "synthetic_tests": 4,
+  "measurements": [
+    {
+      "fixture": "empty",
+      "raw_bytes": 0,
+      "archive_bytes": {
+        "P": 9,
+        "K": 9,
+        "D": 9
+      },
+      "archive_sha256": {
+        "P": "5edfe25b7b7ac7f16027787bc463050f33f1a84397a5ffbd1cbc8dd507cafdd6",
+        "K": "5edfe25b7b7ac7f16027787bc463050f33f1a84397a5ffbd1cbc8dd507cafdd6",
+        "D": "5edfe25b7b7ac7f16027787bc463050f33f1a84397a5ffbd1cbc8dd507cafdd6"
+      }
+    },
+    {
+      "fixture": "arbitrary",
+      "raw_bytes": 265,
+      "archive_bytes": {
+        "P": 222,
+        "K": 222,
+        "D": 222
+      },
+      "archive_sha256": {
+        "P": "84e88bca7ac351368cd9ed47915ef71937dc473936af7115aa6ad000edce779c",
+        "K": "84e88bca7ac351368cd9ed47915ef71937dc473936af7115aa6ad000edce779c",
+        "D": "84e88bca7ac351368cd9ed47915ef71937dc473936af7115aa6ad000edce779c"
+      }
+    },
+    {
+      "fixture": "copies",
+      "raw_bytes": 460,
+      "archive_bytes": {
+        "P": 35,
+        "K": 35,
+        "D": 37
+      },
+      "archive_sha256": {
+        "P": "3047d9c7614057c20ded1991c172ba61e793f2f931bbbc2ec51d3cd1ab4d1e1d",
+        "K": "3047d9c7614057c20ded1991c172ba61e793f2f931bbbc2ec51d3cd1ab4d1e1d",
+        "D": "a923d76c523ecd7d015fca9486d4ea4154f2fc4f1f43c4b83d82b790f24e9d9b"
+      }
+    },
+    {
+      "fixture": "xml",
+      "raw_bytes": 648,
+      "archive_bytes": {
+        "P": 46,
+        "K": 46,
+        "D": 46
+      },
+      "archive_sha256": {
+        "P": "a3a6e8ac0ac7dc30213fb1051b63c49ecf4bf376fa84a4fa953306b255cdb878",
+        "K": "a3a6e8ac0ac7dc30213fb1051b63c49ecf4bf376fa84a4fa953306b255cdb878",
+        "D": "e1f946b6a60cecbd0c4f4f86a6560c180b46afdd77c506e43a2fc6287faf2f07"
+      }
+    }
+  ],
+  "verification": {
+    "exact_inverse": true,
+    "deterministic_reencode": true,
+    "PK_archive_and_common_witness_identity": true,
+    "observed_unobserved_archives_equal": true,
+    "within_arm_probability_transition_arithmetic_and_terminal_witnesses_equal": true,
+    "unchanged_prefix_estimator": true,
+    "context_counts_and_mixer_weights_equal_under_copied_training": true
+  },
+  "execution": {
+    "argv": [
+      "python3",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "tests",
+      "-p",
+      "test_opcode_literal_sse_v1.py",
+      "-v"
+    ],
+    "returncode": 0,
+    "elapsed_seconds": 2.168440300039947,
+    "cpu_seconds": 2.144553,
+    "cumulative_child_peak_rss_kib": 34872,
+    "cpu": [
+      3
+    ],
+    "address_space_bytes": 536870912,
+    "elapsed_cap_seconds": 120
+  },
+  "artifacts": [
+    {
+      "path": "results/opcode_literal_sse_v1_unit/attempt01/execution.json",
+      "bytes": 372,
+      "sha256": "89af8a6d50d4323ba78ddf7756d33abbfbbe4ebf1a7b6b76a7fcdcf57bb0972b"
+    },
+    {
+      "path": "results/opcode_literal_sse_v1_unit/attempt01/stderr",
+      "bytes": 574,
+      "sha256": "23b35cb931fbf224cf5042d35e9b940dd6e9571433e677829bbd855298556831"
+    },
+    {
+      "path": "results/opcode_literal_sse_v1_unit/attempt01/stdout",
+      "bytes": 1297,
+      "sha256": "7370cd63f88f05208f06fd25a61ef112cebe8dbd487c61f9ec76116e70a7be4c"
+    }
+  ],
+  "interpretation": "Literal-only SSE changes the copy-heavy fixture from35 to37bytes and ties other archive sizes. These synthetic results establish inversion and controlled state updates, not useful corpus calibration. The decoder knows literal/copy mode before any affected probability.",
+  "limits": [
+    "Tests execute fresh namespaces within one process, not yet independent CLI processes or a relocatable package.",
+    "Source uses inherited floating-point lookup initialization; cross-platform and full package qualification remain unresolved.",
+    "Actual parse-event identity and a calibration-free parent projection must be explicitly retained in the corpus gate."
+  ],
+  "next_action": "Create a separately identified existing-runner P/K/D opening250KB gate. Include native per-arm decoder, fresh-process inverses and repeats, calibration-free parent projections, identical parse events, package inventory, resource and publication checks. Do not use the original decoder for D because its SSE training law changed.",
+  "full_corpus_score_bytes": null,
+  "complete_package_bytes": null,
+  "objective_target_bytes": 90000000,
+  "objective_credit_bytes": 0
+}
