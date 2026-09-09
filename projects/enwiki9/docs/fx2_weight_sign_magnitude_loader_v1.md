@@ -63,3 +63,11 @@ separate package realization will measure actual deterministic source/assets
 ZIP bytes, extracted hashes and a relocated build. It must retain models,
 dictionary, notices and options; raw-source and actual ZIP economics are distinct.
 This preserves the negative result and grants no complete-package credit.
+
+The [ZIP plan](../operations/provenance/fx2_weight_sign_magnitude_zip_v1_plan.json)
+references the existing129-member dependency inventory and only three treatment
+overrides. Both arms add identical quoted build/usage instructions. Five synthetic
+tests pass for exact repeats/extraction, malformed membership and shared-manifest
+resolution. Each relocated build executes the delivered build instruction.
+The source ZIP contains one model, so its measured delta receives only one
+additional decoder-side model delta; complete dependency qualifications remain open.

@@ -12,7 +12,7 @@ Reusable artifact helpers for new tools: [lib/artifacts.py](../lib/artifacts.py)
 The LibNC initializer teacher launcher exits before the first forward, gradient, update, or coded symbol; its source-bound experiment defines that boundary.
 The delayed-status helper's `enwiki9_delayed_status_latest.log` pointer is operational history, not present-host occupancy proof.
 
-Coverage: **1125 files** (33 .c, 76 .cpp, 1 .gdb, 1 .h, 1 .hpp, 1 .html, 1009 .py, 3 .sh).
+Coverage: **1126 files** (33 .c, 76 .cpp, 1 .gdb, 1 .h, 1 .hpp, 1 .html, 1010 .py, 3 .sh).
 
 | Tool | Purpose | Referenced contracts |
 |---|---|---|
@@ -434,6 +434,7 @@ Coverage: **1125 files** (33 .c, 76 .cpp, 1 .gdb, 1 .h, 1 .hpp, 1 .html, 1009 .p
 | [`tools/fx2_weight_sign_magnitude_probe_v1.cpp`](../tools/fx2_weight_sign_magnitude_probe_v1.cpp) | Container comparison; preserve the included public FX2 GPLv3 notices. | [1](../operations/adaptive/experiments/fx2_weight_sign_magnitude_v1.json) |
 | [`tools/fx2_weight_sign_magnitude_production_v1.py`](../tools/fx2_weight_sign_magnitude_production_v1.py) | Reuse the measured production gate for exact sign/magnitude integration. | none found |
 | [`tools/fx2_weight_sign_magnitude_v1.py`](../tools/fx2_weight_sign_magnitude_v1.py) | Materialize a separate exact weight factorization from an authenticated parent. | [1](../operations/adaptive/experiments/fx2_weight_sign_magnitude_v1.json) |
+| [`tools/fx2_weight_sign_magnitude_zip_v1.py`](../tools/fx2_weight_sign_magnitude_zip_v1.py) | Measure exact source/assets ZIPs and relocated native builds; no corpus run. | none found |
 | [`tools/fx2_weight_width_carry_model_v1.py`](../tools/fx2_weight_width_carry_model_v1.py) | One complete-model width-carry comparison using existing phase bounds. | none found |
 | [`tools/fx2_weight_width_carry_probe_v1.cpp`](../tools/fx2_weight_width_carry_probe_v1.cpp) | Exact container probe. Preserve the inherited FX2 GPLv3 source notices. | none found |
 | [`tools/fx2_weight_width_carry_v1.py`](../tools/fx2_weight_width_carry_v1.py) | Materialize one source-bound exact-model mutation; never edit its parent. | none found |
