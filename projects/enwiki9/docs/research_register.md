@@ -31,8 +31,14 @@ now freezes opening250KB P/K/D under owner `root_explore`, with the original
 decoder for every arm. The [runner and bundle tests](../operations/provenance/opcode_event_parse_gate_v1_unit.json)
 pass six synthetic checks, including ten fresh phases, relocation and deliberate
 state-divergence rejection. Local source is 7,742 bytes (+1,996); complete package
-remains unresolved. The unique canonical job is held for publication verification
-and fresh CPU2 admission; no corpus result exists yet.
+remains unresolved. Source and ownership were published at `f6142f74b`;
+job `20260909T000728Z_01310d96d4` is active on CPU2 after fresh admission verified
+44 published bindings and reserved 32GiB plus the complete 4GiB allocation.
+The [fixed source-ZIP diagnostic](../results/opcode_event_parse_source_zip_v1/attempt01/cost.json)
+reuses the existing builder and relocated replay: parent 5,815 bytes, treatment
+7,710 bytes (+1,895). Both synthetic inverses and repeats pass. This source-component
+cost is separate from runtime, options, license closure and official multiplicities.
+No terminal corpus result exists yet; the unchanged ten-phase comparison remains active.
 
 ## 2026-09-08 - Standalone XML field histories enter executable synthetic testing
 
