@@ -1,0 +1,47 @@
+{
+  "commands": [
+    {
+      "name": "compile",
+      "argv": [
+        "/usr/bin/g++",
+        "-std=c++17",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "tools/fx2_weight_neighbor_model_extract_v1.cpp",
+        "-o",
+        "results/fx2_weight_neighbor_model_v1_unit/attempt01/extractor"
+      ],
+      "returncode": 0,
+      "elapsed_seconds": 1.117306025000289,
+      "memory_limit_bytes": 1073741824
+    },
+    {
+      "name": "unit",
+      "argv": [
+        "/usr/bin/python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-p",
+        "test_fx2_weight_neighbor_model_audit_v1.py",
+        "-v"
+      ],
+      "returncode": 0,
+      "elapsed_seconds": 0.1646440310869366,
+      "memory_limit_bytes": 536870912
+    }
+  ],
+  "environment": {
+    "TMPDIR": "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_neighbor_model_v1_unit/attempt01/tmp",
+    "FX2_NEIGHBOR_TEST_TMP": "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_neighbor_model_v1_unit/attempt01/tmp",
+    "FX2_NEIGHBOR_EXTRACTOR": "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_neighbor_model_v1_unit/attempt01/extractor",
+    "FX2_NEIGHBOR_PROBE": "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_neighbor_synthetic_v1/cli01/probe"
+  },
+  "cpu_set": [
+    3
+  ]
+}

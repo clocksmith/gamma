@@ -1,0 +1,18 @@
+{
+  "schema": "gamma.enwiki9.source-audit-plan.v1",
+  "id": "fx2_weight_neighbor_model_v1",
+  "owner": "root_explore",
+  "objective_target_bytes": 90000000,
+  "objective_credit_bytes": 0,
+  "synthesis_lenses": [10, 3],
+  "hypothesis": "The unchanged row-local preceding-weight model reduces total fully framed INT4 substream bytes on the pinned public model compared with the equivalently framed fixed marginal baseline, after every count table and range flush is included.",
+  "model": {"path": "results/fx2_weight_marginal_roundtrip_q0_v1/work/model.P", "bytes": 2930652, "sha256": "7f4db6c8c843a7e6264b6a48ed4805e9e431f543df7a9a0ecb37a35a5e4b8860"},
+  "expected": {"tensors": 434, "int4_tensors": 111, "int4_symbols": 5868864},
+  "controls": ["P: fixed marginal substream", "K: conditional bookkeeping with byte-identical P output", "D: unchanged sixteen-context neighbor substream"],
+  "comparison": "Encode every INT4 tensor independently in all arms, then independently restore and re-encode it in fresh processes. All tensors contribute to each total; no per-tensor mode selection or tuning. Preserve row width and offset-symbol coordinates. Authenticate canonical original-model reserialization before extraction.",
+  "accounting": "Report count-table, framing, range-stream and total substream bytes, plus source/executable inventory. Tensor metadata, non-INT4 payloads, container integration, native prediction equality, runtime/license closure and official multiplicities remain outside this diagnostic. No direct comparison of these substream totals against the complete original model is permitted.",
+  "bounds": {"cpu_set": [3], "address_space_bytes": 536870912, "compile_address_space_bytes": 1073741824, "elapsed_seconds": 240, "phase_elapsed_seconds": 60, "cpu_seconds_per_phase": 60, "per_file_bytes": 33554432, "scratch_bytes": 134217728, "reserve_bytes": 34359738368},
+  "execution": "Compile and test the extraction/audit adapter on synthetic models first. Bind all final source digests in a separate immutable inputs receipt, publish both receipts and ownership, then freshly admit before reading the public model. Use owned compiler scratch. Preserve the active CPU2 confirmation and its full4GiB reservation.",
+  "stop_rule": "One complete model audit. Require all exact inverses, deterministic repeats and P/K identities. If total D substream bytes are not smaller, reject this fixed table/context realization without inference or a packaging sweep. A positive result only justifies a separately frozen complete-container comparison. Resource or evidence failure yields no scientific verdict.",
+  "full_corpus_score_bytes": null
+}
