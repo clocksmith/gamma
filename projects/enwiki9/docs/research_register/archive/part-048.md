@@ -752,3 +752,24 @@ hold larger promotion and exclude further packaging-only sweeps on this fixture.
 The next search needs a distinct measured predictive opportunity, not a linear
 projection of this two-byte gain. Full-corpus score and complete package remain
 unknown; the 90M objective remains active.
+
+## 2026-09-08 - Bound compact-parent complementarity before constructing a selector
+
+Owner `root_explore` selects lenses 7/9 for an exact ideal-cost opportunity
+[audit](../../../operations/provenance/fx2_compact_complement_bound_v1_plan.json).
+The retired compact block loses 17 native bytes overall; local complementarity
+remains unmeasured. Existing Endpoint428 fixed-share ladders stay excluded.
+This different native P/D pair receives one retained-trace audit, not a selector
+or another codec. Exact integer products bound any per-bit convex mixture;
+fixed 1/64/1024-byte block oracles pay one selector bit per block. These are
+ideal-cost bounds, not finite-archive or submission certificates. Five synthetic
+tests pass, including exhaustive rational ceilings and malformed coordinates.
+CPU3, 512MiB address space, 60-second elapsed stop, no native inference. Publication
+and fresh admission precede the audit; no corpus result is claimed yet.
+
+The [terminal bound](../../../operations/provenance/fx2_compact_complement_bound_v1_terminal.json)
+caps even unpriced per-bit convex selection at 972 ideal bits (121.5 bytes).
+Paid 1/64/1024-byte block choices have ceilings -31,918/-404/-24 ideal bits.
+All 259,824 truth coordinates and 13 inputs verify; no native model reran.
+Do not build a selector for this fixed pair from this fixture. Seek new predictive
+information; this is not a finite-archive or full-corpus impossibility theorem.
