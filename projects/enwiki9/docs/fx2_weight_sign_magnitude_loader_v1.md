@@ -71,3 +71,13 @@ tests pass for exact repeats/extraction, malformed membership and shared-manifes
 resolution. Each relocated build executes the delivered build instruction.
 The source ZIP contains one model, so its measured delta receives only one
 additional decoder-side model delta; complete dependency qualifications remain open.
+
+Published source `cec187616` passes the
+[ZIP gate](../operations/provenance/fx2_weight_sign_magnitude_zip_v1_terminal.json).
+P/D source-assets ZIPs are3439053/3439013 bytes. Loader and dispatcher ZIP entries
+grow369 and7 bytes, while the model entry shrinks416: net ZIP saving40 bytes.
+The separate decoder-side model saves another416, giving456 scoped bytes saved.
+Both130-member ZIP repeats/extractions and relocated builds are exact; both
+runtime-pair and this ZIP-based incremental alternative pay. The previous raw
+source alternative still fails. Preserve qualification gaps and freeze a distinct
+canonical corpus replay before any transfer or objective claim.
