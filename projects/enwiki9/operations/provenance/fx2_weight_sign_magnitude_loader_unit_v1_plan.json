@@ -1,0 +1,174 @@
+{
+  "schema": "gamma.enwiki9.source-audit-plan.v1",
+  "id": "fx2_weight_sign_magnitude_loader_unit_v1",
+  "owner": "root_explore",
+  "implementation": "fx2_weight_sign_magnitude_loader_v1",
+  "parent_evidence": "operations/provenance/fx2_weight_sign_magnitude_model_v1_terminal.json",
+  "hypothesis": "Direct native loading exactly reconstructs the sign/magnitude format on synthetic tensors while preserving older formats.",
+  "mutation": "Only INT4 representation loading and explicit new-format admission; no grammar, neural kernel, or trained parameter changes.",
+  "population": "Synthetic fixture tensors only: all encoding classes, empty models, exceptional bit patterns, repeated zero and nonzero weights, mixed signs, tensor resets and rescaling, malformed/truncated/trailing streams.",
+  "controls": "Independent raw fixtures and original/fixed encoded fixtures; retained adaptive loader supplies old-format baseline; standalone sign encoder supplies treatment; native comparator checks exact tensors.",
+  "selection": "One fixed loader implementation; no tuning or corpus access.",
+  "sources": {
+    "weights_io.h": "results/fx2_weight_adaptive_loader_v1_unit/attempt02/source/weights_io.h",
+    "weights_io.cpp": "results/fx2_weight_adaptive_loader_v1_unit/attempt02/source/weights_io.cpp",
+    "test_weights_compressed.cpp": "results/fx2_weight_adaptive_loader_v1_unit/attempt02/source/test_weights_compressed.cpp",
+    "compare.cpp": "tools/fx2_weight_native_compare_v1.cpp",
+    "weights_io_compressed.cpp": "operations/provenance/fx2_adaptive_package_fixture_v1/bundle/package/cpp_infer/src/weights_io_compressed.cpp"
+  },
+  "codec": "results/fx2_weight_sign_magnitude_v1_unit/attempt01/probe",
+  "old": "results/fx2_weight_adaptive_loader_v1_unit/attempt02/new",
+  "inputs": [
+    {
+      "path": "/usr/bin/make",
+      "bytes": 295120,
+      "sha256": "27c9f6d806aee15882b01c2c61848f7aa75caa14bc7b6f608ba422f9e46a7d49"
+    },
+    {
+      "path": "/usr/bin/python3.14",
+      "bytes": 7477160,
+      "sha256": "52e0a13e60a981d8c4b6478be2ba5176f69da07948a056bf49cf6f077e30cb41"
+    },
+    {
+      "path": "/usr/bin/taskset",
+      "bytes": 31184,
+      "sha256": "42acb8e233943873f3bf9eeb1e15bd3281498b5603a5b10d0f9bc37067a12d57"
+    },
+    {
+      "path": "/usr/bin/x86_64-linux-gnu-as",
+      "bytes": 826608,
+      "sha256": "4e5fcaa3cdc160173cb5cfe7aa35dc39d7aa1f06ba8d75b8d923bbae5473991b"
+    },
+    {
+      "path": "/usr/bin/x86_64-linux-gnu-g++-15",
+      "bytes": 1305304,
+      "sha256": "e6718f7e0c7d057c3ff77b550c603da9bc4030e3ede3c053705acce1293dbe4d"
+    },
+    {
+      "path": "/usr/bin/x86_64-linux-gnu-ld.bfd",
+      "bytes": 1890472,
+      "sha256": "97f48d93b8b076a92d2809ec29dcb17f0f37c8827358f832255e2ed22fef6075"
+    },
+    {
+      "path": "/usr/bin/x86_64-linux-gnu-objdump",
+      "bytes": 415760,
+      "sha256": "44f07f8da860b15bd4dec909f229dec536595fb170a616fe3ab29c7b21c9736f"
+    },
+    {
+      "path": "/usr/lib/cargo/bin/coreutils/timeout",
+      "bytes": 11352352,
+      "sha256": "48893b0fb21436b54619db80486e83ef39dfccaf1aefe83dfa00c02d6146e8c0"
+    },
+    {
+      "path": "/usr/libexec/gcc/x86_64-linux-gnu/15/cc1plus",
+      "bytes": 39797952,
+      "sha256": "6f2b2c0e3fd32042eb2acace19a57fdb0b229d9c24cdd5e2cc100639c77e9ff0"
+    },
+    {
+      "path": "operations/provenance/fx2_adaptive_package_fixture_v1/bundle/package/cpp_infer/src/weights_io_compressed.cpp",
+      "bytes": 22650,
+      "sha256": "7099d24019bb5aa18421f8521838ced8ffb31aef84bdb173c7ff4753e0c3834a"
+    },
+    {
+      "path": "operations/provenance/public_fx2_gcc15_toolchain_20260909.json",
+      "bytes": 2593,
+      "sha256": "efa2c48ae7e4f1b627ec270f66149ffc4ea2a858241b8bd1b2bd000629a9e292"
+    },
+    {
+      "path": "results/fx2_weight_adaptive_loader_v1_unit/attempt02/new",
+      "bytes": 51416,
+      "sha256": "9a6928e0d1bc954ed169889d7091c4772337c830d4d0f4cb587a9e6e01a0c48f"
+    },
+    {
+      "path": "results/fx2_weight_adaptive_loader_v1_unit/attempt02/source/test_weights_compressed.cpp",
+      "bytes": 1369,
+      "sha256": "0eb136cfe217e185c0bdae2a71431cb2eafb7017ba79d55f5e0456822e492d32"
+    },
+    {
+      "path": "results/fx2_weight_adaptive_loader_v1_unit/attempt02/source/weights_io.cpp",
+      "bytes": 3445,
+      "sha256": "5b505339a8a3410661b74d2062d3843359709873dec0e759199a0f2a24f2b323"
+    },
+    {
+      "path": "results/fx2_weight_adaptive_loader_v1_unit/attempt02/source/weights_io.h",
+      "bytes": 1800,
+      "sha256": "c6abb82b462baa1a10c5244fa8ba52852397fc2b09950d483f9fc3873fd972ec"
+    },
+    {
+      "path": "results/fx2_weight_sign_magnitude_v1_unit/attempt01/probe",
+      "bytes": 129104,
+      "sha256": "a4accbc417f28cac43e2d805176eb7e5cd79c6b13809f062dcbac5f20cc3c2d8"
+    },
+    {
+      "path": "tests/test_fx2_weight_adaptive_loader_v1.py",
+      "bytes": 3371,
+      "sha256": "bcefbe0d21c5546fbe27db3cc38bb065cc98e74628bc8e25cb165947b621742e"
+    },
+    {
+      "path": "tests/test_fx2_weight_sign_magnitude_native_v1.py",
+      "bytes": 1766,
+      "sha256": "ddd02fe8fd4811b907a4e7f96f90485f1cb309467df5ebfb52a2ff4bb467d10d"
+    },
+    {
+      "path": "tools/fx2_weight_adaptive_loader_gate_v1.py",
+      "bytes": 7174,
+      "sha256": "6fc5639c855e11ca5903ec7aef6771ab1f68bbaeae9a73cf680160180a54bd7e"
+    },
+    {
+      "path": "tools/fx2_weight_adaptive_loader_v1.py",
+      "bytes": 3869,
+      "sha256": "ab5276dbe8994d3f4e8c7bd444cbe0c2efab7cdf2e1b61e4664e1ce2dcfc5974"
+    },
+    {
+      "path": "tools/fx2_weight_marginal_fixtures_v1.py",
+      "bytes": 21305,
+      "sha256": "f1905a844767f9506029336bb1d77992a7f714fe887f79e6f108b48d5ea51d4e"
+    },
+    {
+      "path": "tools/fx2_weight_native_compare_v1.cpp",
+      "bytes": 10021,
+      "sha256": "50e4fdaffa9de58c087c29f7e94d8bdcddc4e709cc93915a4d6cb0c9f1d65a02"
+    },
+    {
+      "path": "tools/fx2_weight_neighbor_model_audit_v1.py",
+      "bytes": 7052,
+      "sha256": "176e6c7086de4534586aed2afd82e30d7d28191dd2fe22f9afe37e91a51fa80c"
+    },
+    {
+      "path": "tools/fx2_weight_sign_magnitude_loader_unit_v1.py",
+      "bytes": 3804,
+      "sha256": "e2609f175c934959c75eabaa56590914a8a0aea72c42351b9e923081566d660d"
+    },
+    {
+      "path": "tools/fx2_weight_sign_magnitude_loader_v1.py",
+      "bytes": 5595,
+      "sha256": "ce2b057c1b4e31642d3d177170c08cc56911c4966d4e35c061e871903010cd29"
+    },
+    {
+      "path": "results/fx2_weight_sign_magnitude_v1_unit/attempt01/parent",
+      "bytes": 107792,
+      "sha256": "85fbcd68c51852a83c42447363c97a2f16123f3af316f09c687ec5555252eae4"
+    }
+  ],
+  "bounds": {
+    "cpu_set": [
+      3
+    ],
+    "address_space_bytes": 536870912,
+    "elapsed_seconds": 180,
+    "phase_elapsed_seconds": 60,
+    "cpu_seconds_per_phase": 60,
+    "per_file_bytes": 33554432,
+    "scratch_bytes": 134217728,
+    "reserve_bytes": 34359738368
+  },
+  "output": "results/fx2_weight_sign_magnitude_loader_unit_v1_attempt01",
+  "execution": "Publish this ownership and all source/binary inputs, verify publication and current occupancy, use bounded phase helper. Shared-host source audit; per-process bounds are not a qualifying tree resource certificate.",
+  "stop_rule": "Any compiler, exact tensor, source identity, malformed stream, or resource failure blocks native advancement. Unit executable size is not production binary cost.",
+  "next_action": "Only on pass, separately freeze trained-model native tensor and actual production probability parity plus matched native binary/source accounting.",
+  "objective_target_bytes": 90000000,
+  "objective_credit_bytes": 0,
+  "complete_package_bytes": null,
+  "full_corpus_score_bytes": null,
+  "adaptive_codec": "results/fx2_weight_sign_magnitude_v1_unit/attempt01/parent"
+}

@@ -2,6 +2,17 @@
 
 [Record index](research_register/README.md) | [Earlier records](research_register/archive/README.md)
 
+## 2026-09-09 - Direct sign/magnitude native loader
+
+Owner `root_explore` implements [direct loading](fx2_weight_sign_magnitude_loader_v1.md)
+to price the 416-byte model saving without the losing separate converter.
+The immutable adaptive loader and production dispatcher gain explicit GFX2SMG1
+admission. Four source-adapter tests pass; native parity remains unmeasured.
+The [bounded synthetic plan](../operations/provenance/fx2_weight_sign_magnitude_loader_unit_v1_plan.json)
+binds exact inputs, CPU3,512MiB address space,128MiB scratch and180 elapsed seconds.
+It tests native tensor inversion, older formats, rescaling and invalid streams;
+it authorizes no trained-model or corpus execution and grants no score credit.
+
 ## 2026-09-09 - Exact weight magnitude and shared-sign factorization
 
 Owner `root_explore` selects lenses10/3 deliberately: exact model representation

@@ -12,7 +12,7 @@ Reusable artifact helpers for new tools: [lib/artifacts.py](../lib/artifacts.py)
 The LibNC initializer teacher launcher exits before the first forward, gradient, update, or coded symbol; its source-bound experiment defines that boundary.
 The delayed-status helper's `enwiki9_delayed_status_latest.log` pointer is operational history, not present-host occupancy proof.
 
-Coverage: **1122 files** (33 .c, 76 .cpp, 1 .gdb, 1 .h, 1 .hpp, 1 .html, 1006 .py, 3 .sh).
+Coverage: **1124 files** (33 .c, 76 .cpp, 1 .gdb, 1 .h, 1 .hpp, 1 .html, 1008 .py, 3 .sh).
 
 | Tool | Purpose | Referenced contracts |
 |---|---|---|
@@ -428,6 +428,8 @@ Coverage: **1122 files** (33 .c, 76 .cpp, 1 .gdb, 1 .h, 1 .hpp, 1 .html, 1006 .p
 | [`tools/fx2_weight_production_dispatch_probe_v1.cpp`](../tools/fx2_weight_production_dispatch_probe_v1.cpp) | Production-entrypoint smoke test; no corpus access or compression claim. Linked public FX2 components retain their GPLv3 provenance and LICENSE. | none found |
 | [`tools/fx2_weight_restore_group_probe_v1.cpp`](../tools/fx2_weight_restore_group_probe_v1.cpp) | Diagnostic restoration of one predefined INT4 tensor group at a time. Reuse the immutable even7 parser, mapping checks and atomic publication. Native prediction is unchanged; restored-group effects require fresh archives. | [1](../operations/adaptive/experiments/fx2_weight_restore_groups_fixture50051_q0_v1.json) |
 | [`tools/fx2_weight_restore_groups_fixture50051_q0_v1.py`](../tools/fx2_weight_restore_groups_fixture50051_q0_v1.py) | Independent group restorations into the failed even7 model; diagnostic only. | [1](../operations/adaptive/experiments/fx2_weight_restore_groups_fixture50051_q0_v1.json) |
+| [`tools/fx2_weight_sign_magnitude_loader_unit_v1.py`](../tools/fx2_weight_sign_magnitude_loader_unit_v1.py) | Bounded synthetic native tensor parity; no trained model or corpus access. | none found |
+| [`tools/fx2_weight_sign_magnitude_loader_v1.py`](../tools/fx2_weight_sign_magnitude_loader_v1.py) | Emit isolated native GFX2SMG1 loading from authenticated adaptive sources. | none found |
 | [`tools/fx2_weight_sign_magnitude_model_v1.py`](../tools/fx2_weight_sign_magnitude_model_v1.py) | Complete-model magnitude/sign comparison; preserves the tested width-carry runner procedure. | none found |
 | [`tools/fx2_weight_sign_magnitude_probe_v1.cpp`](../tools/fx2_weight_sign_magnitude_probe_v1.cpp) | Container comparison; preserve the included public FX2 GPLv3 notices. | [1](../operations/adaptive/experiments/fx2_weight_sign_magnitude_v1.json) |
 | [`tools/fx2_weight_sign_magnitude_v1.py`](../tools/fx2_weight_sign_magnitude_v1.py) | Materialize a separate exact weight factorization from an authenticated parent. | [1](../operations/adaptive/experiments/fx2_weight_sign_magnitude_v1.json) |
