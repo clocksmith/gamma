@@ -14,6 +14,29 @@ memory, 16GB scratch and the prior 1,100-second transfer budget. Publish held
 ownership before fresh admission. Package alternatives and zero archive savings
 remain separate; no new codec mechanism, compilation or full-score credit.
 
+The [closed transfer](../operations/provenance/fx2_weight_adaptive_transfer250k_v1_terminal.json)
+passes all twenty phases: every P/K/D opening archive is 33,429 bytes and every
+distant archive is 9,499 bytes, each with independent inverse and repeat.
+All eighteen native coder traces match their retained parent; 530 artifacts
+rehash and seven retention bundles preserve every result file. The canonical
+guard reports no violations, 6,346,084,352 peak cgroup bytes and complete cleanup.
+Archive saving is zero; the fixed package alternatives remain 12,084 and 11,170
+bytes smaller and must not be summed across populations. The validated
+[reflection](../operations/adaptive/reflections/20260909T043012Z_39a4f8a2a9.json)
+permits separately identified package integration, not an automatic larger run.
+
+Read-only inspection identifies the next executable boundary. The retained
+FX2 `src/runner.cpp` self-extracting entry invokes corpus-specific split,
+reorder and PHDA preprocessing; native cold-slice parity does not exercise it.
+The existing [clean-room replay](../tools/enwiki9_clean_room_replay.py) synthetic
+canary caps memory at 256 MiB, below this codec's measured footprint. Preserve
+that canary and qualification contracts; a bounded native package diagnostic
+needs explicit resource bounds and must report unresolved licenses rather than
+claiming a release pass. Reuse the existing
+[dependency inventory](../operations/provenance/fx2_native_dependency_closure_v1/receipt.json)
+and replay machinery. Do not run full-corpus preprocessing merely to test model
+packaging. Full-corpus score and complete package qualification remain unknown.
+
 ## 2026-09-09 - Replay the native fixture after production dispatch repair
 
 Owner `root_explore` uses the canonical implementation-retry freezer for
@@ -760,35 +783,3 @@ and repeat; then freeze a bounded 250KB comparison with incremental source costs
 Bitmix actually has 12 literal contexts, uses floating-point lookup initialization,
 and pads exhausted arithmetic input with zeros. Reproduction, malformed-input
 bounds and replay evidence remain preconditions; complete score stays unknown.
-
-## 2026-09-07 - Forced raw reversal loses the matched BZip2 comparison
-
-`raw_reverse_bz2250k_q0_v1` changes only byte direction inside one fixed
-250,000-byte block before BZip2 level 9. P encodes forward bytes; K reverses
-and restores them before encoding P; D always encodes the reversed block.
-The [standalone inverse](raw_reverse_bz2_v1.md) follows the transmitted direction
-and verifies exact raw length, stream termination and original-byte checksum.
-All arms pay the same 65-byte archive/block framing, with no selected fallback.
-
-The [synthetic evidence](../operations/evidence/20260907_raw_reverse_bz2_unit.json)
-records 28 tests and 36 separate encode/decode/repeat phases, including malformed
-streams, exact parent payloads and decoder-common projection agreement.
-Closed corpus job `20260907T195303Z_478c9b2ef6` then passes all nine phases:
-independent inverses, raw-input repeats and complete common projections agree.
-P/K are byte-identical at 72,723 bytes: 72,658 payload plus 65 framing.
-Forced D is 73,563 bytes: 73,498 payload plus 65 framing, an 840-byte loss.
-Its treatment archive, inverse and repeat are retained, even though it loses.
-[Costs](../results/raw_reverse_bz2250k_q0_v1/costs-table.json),
-[stage](../results/raw_reverse_bz2250k_q0_v1/stage-decision.json) and
-[terminal evidence](../operations/provenance/raw_reverse_bz2_terminal_20260907.json)
-retain this fixed comparison; no confirmation follows from equality or loss.
-
-The historical 72,658-byte BZip2 metadata lacked an archive hash. The fresh P
-remeasures that payload size and establishes its own exact artifact; historical
-identity is not inferred. The 89,041-byte Deflate result has another backend and
-framing, so its difference supplies no direction-change credit. P/K/D invoke
-the same 6,197-byte source, distinct from the historical 166-byte bare baseline.
-This is an uncompressed local source inventory, not a complete package.
-Runtime, licensing, option accounting and the full-corpus score remain unknown.
-Hold this exact fixed-reversal configuration and continue independent research;
-the result neither projects a full-corpus size nor excludes other raw transforms.

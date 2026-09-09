@@ -342,3 +342,35 @@ budget stop; that transfer remains held. These do not supply gains or a theorem
 against this raw FIFO transform, which also differs from WRT context retrieval
 and numeric side channels. Park this tested configuration and use the measured
 loss to select a distinct question; no full-score projection or larger gate.
+
+## 2026-09-07 - Forced raw reversal loses the matched BZip2 comparison
+
+`raw_reverse_bz2250k_q0_v1` changes only byte direction inside one fixed
+250,000-byte block before BZip2 level 9. P encodes forward bytes; K reverses
+and restores them before encoding P; D always encodes the reversed block.
+The [standalone inverse](../../raw_reverse_bz2_v1.md) follows the transmitted direction
+and verifies exact raw length, stream termination and original-byte checksum.
+All arms pay the same 65-byte archive/block framing, with no selected fallback.
+
+The [synthetic evidence](../../../operations/evidence/20260907_raw_reverse_bz2_unit.json)
+records 28 tests and 36 separate encode/decode/repeat phases, including malformed
+streams, exact parent payloads and decoder-common projection agreement.
+Closed corpus job `20260907T195303Z_478c9b2ef6` then passes all nine phases:
+independent inverses, raw-input repeats and complete common projections agree.
+P/K are byte-identical at 72,723 bytes: 72,658 payload plus 65 framing.
+Forced D is 73,563 bytes: 73,498 payload plus 65 framing, an 840-byte loss.
+Its treatment archive, inverse and repeat are retained, even though it loses.
+[Costs](../../../results/raw_reverse_bz2250k_q0_v1/costs-table.json),
+[stage](../../../results/raw_reverse_bz2250k_q0_v1/stage-decision.json) and
+[terminal evidence](../../../operations/provenance/raw_reverse_bz2_terminal_20260907.json)
+retain this fixed comparison; no confirmation follows from equality or loss.
+
+The historical 72,658-byte BZip2 metadata lacked an archive hash. The fresh P
+remeasures that payload size and establishes its own exact artifact; historical
+identity is not inferred. The 89,041-byte Deflate result has another backend and
+framing, so its difference supplies no direction-change credit. P/K/D invoke
+the same 6,197-byte source, distinct from the historical 166-byte bare baseline.
+This is an uncompressed local source inventory, not a complete package.
+Runtime, licensing, option accounting and the full-corpus score remain unknown.
+Hold this exact fixed-reversal configuration and continue independent research;
+the result neither projects a full-corpus size nor excludes other raw transforms.
