@@ -1,0 +1,77 @@
+{
+  "schema": "gamma.enwiki9.source-audit-plan.v1",
+  "id": "fx2_weight_sign_magnitude_production_v1",
+  "owner": "root_explore",
+  "implementation": "fx2_weight_sign_magnitude_loader_v1",
+  "parent_evidence": "operations/provenance/fx2_weight_sign_magnitude_loader_unit_v1_terminal.json",
+  "hypothesis": "Native sign/magnitude model loading preserves initialized tensors and production predictions while the416-byte model saving per copy pays the actual binary/source increment.",
+  "mutation": "Direct sign/magnitude INT4 loader and explicit production format admission only; all neural kernels, weights and reversible frontend remain unchanged.",
+  "models": {
+    "original": {
+      "path": "results/fx2_weight_marginal_roundtrip_q0_v1/work/model.P",
+      "bytes": 2930652,
+      "sha256": "7f4db6c8c843a7e6264b6a48ed4805e9e431f543df7a9a0ecb37a35a5e4b8860"
+    },
+    "parent": {
+      "path": "results/fx2_weight_adaptive_marginal_model_v1/attempt01/D.model",
+      "bytes": 2902287,
+      "sha256": "44d4a875784611b8d034f09347c710137e69aa3a830198375aafc19339b0210d"
+    },
+    "adaptive": {
+      "path": "results/fx2_weight_sign_magnitude_model_v1/attempt01/D.model",
+      "bytes": 2901871,
+      "sha256": "5a83c6aba9ebef6f313fd56104292e375f98e845a7f1241149ea6247a90ae0d5"
+    }
+  },
+  "native_parent": {
+    "path": "results/fx2_weight_adaptive_dispatch_gate_v2/attempt01/D/cmix",
+    "bytes": 496136,
+    "sha256": "94dde19a6a308cba1eda4c9585f94b414ac9ecf630d6bf56fb7611e3ae78bcc6"
+  },
+  "patched_loader": {
+    "path": "results/fx2_weight_sign_magnitude_loader_unit_v1_attempt01/source/weights_io_compressed.cpp",
+    "bytes": 24226,
+    "sha256": "46b9f2e8c6e9c8c98b33ce8d9ad7c0b972bfe6045bed6d28c1b167fefaf46328"
+  },
+  "tensor_comparator": {
+    "path": "results/fx2_weight_sign_magnitude_loader_unit_v1_attempt01/compare",
+    "bytes": 68368,
+    "sha256": "6626fe9ec35ac8af256090d6a21d94951ef372bc9ad515461e8ce84b8ca5ab39"
+  },
+  "probe": "tools/fx2_weight_production_dispatch_probe_v1.cpp",
+  "bounds": {
+    "cpu_set": [
+      3
+    ],
+    "address_space_bytes": 1073741824,
+    "tree_reservation_bytes": 8589934592,
+    "elapsed_seconds": 600,
+    "phase_elapsed_seconds": 180,
+    "cpu_seconds_per_phase": 180,
+    "per_file_bytes": 33554432,
+    "scratch_bytes": 268435456,
+    "reserve_bytes": 34359738368
+  },
+  "output": "results/fx2_weight_sign_magnitude_production_v1_attempt01",
+  "population": "All434 initialized tensors/39588806 native bytes, followed by64 predetermined synthetic tokens(i*73+19)%205 with1/256 prior, article reset at0 and32, offsets0 and31. No canonical corpus reads.",
+  "controls": [
+    "P native rebuild must match the exact adaptive production parent hash",
+    "P production rejects GFX2SMG1 with bad magic and writes no output",
+    "P original and adaptive parent, D original/adaptive parent/sign-magnitude and repeated sign-magnitude must have identical104960-byte probability/logit outputs",
+    "Direct native original-versus-parent/treatment/treatment-repeat compares every initialized tensor byte, including generated RoPE"
+  ],
+  "interface_aliases": {
+    "adaptive": "New sign/magnitude treatment; legacy runner field name",
+    "P_fixed": "Adaptive parent output; inherited filename only",
+    "D_fixed": "Adaptive parent with treatment executable; inherited filename only"
+  },
+  "package_accounting": "Report model,binary,raw source and options separately. runtime_pair_delta=2*(model_delta+binary_delta); source_compressor_plus_decoder_delta=2*model_delta+binary_delta+source_delta. Both must be negative before a corpus gate. These incremental alternatives are not complete licensing/runtime/official accounting closure.",
+  "resource_basis": "Reuse previous adaptive dispatch gate bounds and compiler flags; make-j1, CPU3, per-process address-space/CPU/file limits and process-group elapsed stop.8GiB tree reservation is admission headroom, not a cgroup certificate. Concurrent timing diagnostic.",
+  "selection": "One fixed direct-loader realization; no tuning or confirmation population.",
+  "stop_rule": "Any identity,tensor,production probability,repeat,negative-control,dependency,forbidden-instruction or resource failure blocks advancement. Nonnegative accounting rejects this native arrangement and is not a theorem against exact weight packing.",
+  "next_action": "Only if both incremental accounting alternatives pay, freeze a distinct bounded corpus replay. Otherwise retain exact result and explore a different measured cost.",
+  "objective_target_bytes": 90000000,
+  "objective_credit_bytes": 0,
+  "complete_package_bytes": null,
+  "full_corpus_score_bytes": null
+}

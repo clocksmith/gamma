@@ -41,3 +41,11 @@ compatibility, mixed-sign rescaling and malformed-stream rejection. All26 input
 bindings remain unchanged. Test fixtures were temporary; exact sources, test
 logs and checker binaries are retained. This does not execute the production
 dispatcher, initialize the trained model or measure production package cost.
+
+The next [production gate](../operations/provenance/fx2_weight_sign_magnitude_production_v1_plan.json)
+reuses the existing matched native build procedure after three full tensor
+comparisons. It binds125 native source files, the comparator, runtime and helper
+closure. The treatment uses GFX2SMG1; inherited runner labels are mapped explicitly
+in its outer receipt. Three orchestration failure tests pass. Publication and
+fresh admission precede execution; both incremental package alternatives must
+pay before any separately frozen corpus test.
