@@ -2,6 +2,34 @@
 
 [Record index](research_register/README.md) | [Earlier records](research_register/archive/README.md)
 
+## 2026-09-09 - Closing names are correct but leave little parent surprise
+
+The [closed audit](../results/fx2_closing_cost_opening250k_v3/stage-decision.json)
+finds 2,087 active bytes, all correct donors, on opening250KB. D saves 48.209189
+ideal bits; R/S lose 194.323761/194.318895. All chronological thirds are positive;
+K changes no probabilities. Exact WRT inversion and separate scanner repeats pass.
+[Independent review](../operations/provenance/fx2_closing_cost_opening250k_v3_independent_review.json)
+verifies 26 inputs, 18 artifacts and 1,209,680 truth records. Exact integer chunk
+ceilings [146,15,3,10,1] sum to 175 ideal bits, below the frozen 32,768-bit
+integration-budget floor. Even perfect predictions on these opportunities leave
+little gain; this is not a finite-archive bound or universal XML impossibility.
+The [validated reflection](../operations/adaptive/reflections/20260909T112210Z_11c2ea587b.json)
+retires this fixed development realization while preserving positive control
+separation. No native compression or archive ledger row is claimed. All resource
+flags pass; memory peaks at 292,990,976 bytes and the owned cgroup is removed.
+Complete package and full-corpus score remain unknown. Do not tune this mixture
+or launch confirmation under the failed predicate.
+Discovery seed `post_closing_cost_discovery_20260909_v1` draws lenses9/6:
+regime-conditioned specialists and reversible field views. The historical
+[TWINSTREAM decision](../results/twinstream_raw_wrt_dual_reconstruction_v1/decision.json)
+preserves a positive raw-history aggregate but rejects shared-state constructions.
+[Subsequent delayed-raw and heading tests](research_register/archive/part-003.md)
+record losses of 2,693 and 1,409 archive bytes; a Bayesian heading switch loses two.
+Independent review rejects reviving those exact configurations from the earlier
+positive observation. These are historical exclusions, not fresh FX2 measurements.
+No successor candidate or corpus run is selected; a distinct causal mechanism and
+its smallest falsifying fixture are required before further implementation.
+
 ## 2026-09-09 - Freeze closing-name opportunity cost before native integration
 
 Owner `root_explore` freezes [execution v3](../operations/adaptive/experiments/fx2_closing_cost_opening250k_v3.json)

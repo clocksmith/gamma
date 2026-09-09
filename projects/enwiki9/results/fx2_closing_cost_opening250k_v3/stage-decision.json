@@ -1,0 +1,154 @@
+{
+  "active_bits": 16696,
+  "active_bytes": 2087,
+  "archive_saving_bytes": null,
+  "arms": {
+    "D": {
+      "changed_probabilities": 10529,
+      "correct_donors": 2087,
+      "ideal_bits_saved": 48.209189378667546,
+      "thirds": [
+        42.015363921901084,
+        6.0017934953081715,
+        0.1920319614583676
+      ]
+    },
+    "K": {
+      "changed_probabilities": 0,
+      "correct_donors": 0,
+      "ideal_bits_saved": 0.0,
+      "thirds": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    "R": {
+      "changed_probabilities": 2702,
+      "correct_donors": 0,
+      "ideal_bits_saved": -194.3237614079967,
+      "thirds": [
+        -44.413254516254376,
+        -127.93612966447252,
+        -21.9743772272704
+      ]
+    },
+    "S": {
+      "changed_probabilities": 7402,
+      "correct_donors": 0,
+      "ideal_bits_saved": -194.31889536673518,
+      "thirds": [
+        -44.407019846963394,
+        -127.93698972135822,
+        -21.974885798415034
+      ]
+    }
+  },
+  "artifact_manifest": {
+    "bytes": 3650,
+    "path": "results/fx2_closing_cost_opening250k_v3/artifacts.json",
+    "sha256": "7a38125622d184d8d35188b44ff9611274c0be9c6b5f1ac8fad98ecd9588cbe5"
+  },
+  "candidate_id": "fx2_closing_cost_opening250k_v3",
+  "ceiling_chunk_events": 4096,
+  "ceiling_chunks": 5,
+  "commands": [
+    {
+      "accepted_returncodes": [
+        0
+      ],
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "60",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_closing_cost_opening250k_v3/work/scanner",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_closing_cost_opening250k_v3/work/modeled.bin",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_closing_cost_opening250k_v3/work/scan.bin"
+      ],
+      "elapsed_cap_seconds": 60,
+      "elapsed_seconds": 0.30275894701480865,
+      "environment": {},
+      "launch_error": null,
+      "missing_diagnostics": [],
+      "phase": "scan",
+      "returncode": 0,
+      "system_cpu_seconds": 0.0010069999999999999,
+      "timing_authority": "shared-host diagnostic",
+      "user_cpu_seconds": 0.221377
+    },
+    {
+      "accepted_returncodes": [
+        0
+      ],
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "60",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_closing_cost_opening250k_v3/work/scanner",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_closing_cost_opening250k_v3/work/modeled.bin",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_closing_cost_opening250k_v3/work/repeat.bin"
+      ],
+      "elapsed_cap_seconds": 60,
+      "elapsed_seconds": 0.30210541607812047,
+      "environment": {},
+      "launch_error": null,
+      "missing_diagnostics": [],
+      "phase": "repeat",
+      "returncode": 0,
+      "system_cpu_seconds": 0.004431999999999999,
+      "timing_authority": "shared-host diagnostic",
+      "user_cpu_seconds": 0.21859099999999998
+    }
+  ],
+  "complete_package_bytes": null,
+  "control_margin_ideal_bits": 242.52808474540274,
+  "controlled_positive": true,
+  "donor_repeat": {
+    "bytes": 1513236,
+    "path": "results/fx2_closing_cost_opening250k_v3/work/repeat.bin",
+    "sha256": "1bfeaf4f2857abdabf43196fdec2d72968d2605ecc69dc078281a87f27b31337"
+  },
+  "donor_trace": {
+    "bytes": 1513236,
+    "path": "results/fx2_closing_cost_opening250k_v3/work/scan.bin",
+    "sha256": "1bfeaf4f2857abdabf43196fdec2d72968d2605ecc69dc078281a87f27b31337"
+  },
+  "exact_wrt_inverse": true,
+  "experiment": {
+    "path": "operations/adaptive/experiments/fx2_closing_cost_opening250k_v3.json",
+    "sha256": "sha256:56e70c6a4994520fb0f639ff75615822236d0e5bb272acc8d8f81a8c0d412161"
+  },
+  "floating_point_authority": "Arm gains are rounded-Q16 ideal-cost diagnostics, not exact archive savings",
+  "gate_purpose": "opportunity-cost diagnostic; not an archive or standalone decoder",
+  "headroom_pass": false,
+  "larger_gate_authorized": false,
+  "limitations": [
+    "Parent probability trace and dictionary are supplied diagnostic dependencies, not free decoder inputs",
+    "The32768-bit floor is an integration-budget decision, not a lower bound on package size",
+    "The ceiling keeps this opportunity set and parent fixed and grants perfect predictions even on incorrect donors",
+    "No finite archive bound, cold-to-warm transfer or full-corpus conclusion follows",
+    "Intermediate state hashes are divergence diagnostics; complete mutable state is serialized at terminal"
+  ],
+  "minimum_ideal_headroom_bits": 32768,
+  "modeled_bytes": 151210,
+  "native_compression_runs": 0,
+  "objective_credit_bytes": 0,
+  "perfect_probability_ideal_ceiling_bits": 175,
+  "plan": {
+    "bytes": 1976,
+    "path": "operations/provenance/fx2_closing_cost_opening250k_v3_plan.json",
+    "sha256": "31e337db1740f3939b77d7f8d4aeaf7bb93ccbe73a370283c709cf795b144b52"
+  },
+  "proof": "On every fixed active event any allowed Q16 actual-bit count is at most65535. Multiply65535/parent_actual_count within fixed4096-event chunks, take exact integer log2 ceilings, and sum. Inactive events remain unchanged. This grants clairvoyant predictions and includes incorrect donors; it is not a finite-archive bound.",
+  "raw_bytes": 250000,
+  "scanner_repeat_equal": true,
+  "schema": "gamma.enwiki9.closing-opportunity-terminal.v1",
+  "scientific_verdict": "stop_fixed_development_realization",
+  "source_component_bytes": 4400,
+  "status": "passed",
+  "supplied_dictionary_bytes": 411996,
+  "supplied_parent_trace_bytes": 33871040,
+  "trace_truth_alignment": true
+}
