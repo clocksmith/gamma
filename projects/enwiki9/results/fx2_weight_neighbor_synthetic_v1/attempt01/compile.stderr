@@ -1,0 +1,14 @@
+tests/fx2_weight_neighbor_v1_unit.cpp: In function ‘int main()’:
+tests/fx2_weight_neighbor_v1_unit.cpp:14:22: error: loop variable ‘values’ creates a copy from type ‘const fx2_weights_v1::Bytes’ {aka ‘const std::vector<unsigned char>’} [-Werror=range-loop-construct]
+   14 |     for (const Bytes values : {Bytes{}, Bytes{0}, Bytes{14}, Bytes{0,14,3,3,1}, Bytes(4096, 7)}) {
+      |                      ^~~~~~
+tests/fx2_weight_neighbor_v1_unit.cpp:14:22: note: use reference type to prevent copying
+   14 |     for (const Bytes values : {Bytes{}, Bytes{0}, Bytes{14}, Bytes{0,14,3,3,1}, Bytes(4096, 7)}) {
+      |                      ^~~~~~
+      |                      &
+tests/fx2_weight_neighbor_v1_unit.cpp: At global scope:
+tests/fx2_weight_neighbor_v1_unit.cpp:65:1: fatal error: error writing to /tmp/ccbubMow.s: Disk quota exceeded
+   65 | }
+      | ^
+compilation terminated.
+cc1plus: all warnings being treated as errors

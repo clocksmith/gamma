@@ -2,6 +2,23 @@
 
 [Record index](research_register/README.md) | [Earlier records](research_register/archive/README.md)
 
+## 2026-09-09 - Test neighboring-weight dependence with fully paid symbol tables
+
+Owner `root_explore` selects lenses10/3 under the [synthetic plan](../operations/provenance/fx2_weight_neighbor_synthetic_v1_plan.json).
+The old exact-residual factorization saved23 packed bytes and failed restorer economics;
+the fixed marginal packer does not condition on the previous weight within a row.
+The [new substream codec](../lib/fx2_weight_neighbor_v1.hpp) pays explicit count tables,
+row widths, lengths and range flush bytes; P/K use marginals and D uses row-local history.
+The [synthetic receipt](../operations/provenance/fx2_weight_neighbor_synthetic_v1_terminal.json)
+retains15 unit cases, row-boundary and malformed-stream checks, plus fresh-process
+P/K/D encodes, independent inverses and repeats of30,000 constructed symbols.
+Dependent-fixture P/K14,733 versus D992 bytes demonstrates exercisability;
+pseudorandom P14,732 versus D15,611 demonstrates table overhead without useful dependence.
+The failed compiler attempt is preserved: test-copy warning and compiler /tmp quota.
+Corrected tests and owned compiler scratch pass. No trained model or corpus was read.
+Next freeze one model substream audit; publish source/input bindings and freshly admit it.
+This is not a complete model container, native probability comparison or prize score.
+
 ## 2026-09-08 - Exact adaptive literal-event pricing before changing encoder choices
 
 After field-alignment transfer failed its randomized control, `root_explore`
