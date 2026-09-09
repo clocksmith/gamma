@@ -1,0 +1,55 @@
+{
+  "candidate_id": "opcode_event_parse_confirmation1m_q0_v1",
+  "claimed_at": "2026-09-09T00:57:53+00:00",
+  "created_at": "2026-09-09T00:57:52+00:00",
+  "developed_at": "2026-09-09T00:57:53+00:00",
+  "evidence": [
+    {
+      "path": "operations/provenance/opcode_event_parse_validation_terminal_20260908.json",
+      "sha256": "sha256:63231dbd54341d14cf3eb4a2afcab16c8f4765dad29dd629b5c611789a355800"
+    },
+    {
+      "path": "operations/provenance/opcode_event_parse_confirmation_gate_v1_unit.json",
+      "sha256": "sha256:8ffcb91d2b6de9ffa6a53248695c91f0bd3c44be0ecec0ef85f833e34bd705e5"
+    },
+    {
+      "path": "operations/provenance/opcode_field_compact_terminal_20260908/confirmation.json",
+      "sha256": "sha256:ed42a654f773e1b947bb6cdcad151a38ec16c773b3ce9825c60a301190d1b7a2"
+    }
+  ],
+  "expected_savings_bytes": 0,
+  "experiment": {
+    "path": "operations/adaptive/experiments/opcode_event_parse_confirmation1m_q0_v1.json",
+    "sha256": "sha256:b87ec799e215bf0bbba74b5587341e39519b0c2b6a29468fe66265b89e805962"
+  },
+  "hypothesis": "The unchanged adaptive event-pricing encoder saves more than1895 archive bytes on raw offsets819000000..819999999 relative to the unchanged parent, covering one measured source-ZIP increment with exact original decoding and P/K identity.",
+  "interfaces_exposed": [
+    "Unchanged three-file codec, P/K/D and original decoder at one million raw bytes"
+  ],
+  "kill_condition": "Nonpositive archive saving after one ZIP source increment holds this source delivery from scaling; retain any positive gross archive evidence",
+  "max_program_bytes": 20000,
+  "mechanism_change": "other",
+  "mechanism_change_bonus": 0,
+  "mechanism_class": "coder",
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:e91ff20e92c3cac8acb0cbe5c79fc8e8a3b427d7e151245c8eecc52b1c32fa00",
+    "objectiveId": "gamma-enwiki9-hutter-90m-v3",
+    "objectivePath": "contracts/research/v3/objective-contract.json",
+    "targetScoreBytes": 90000000
+  },
+  "owner": "root_explore",
+  "parent": "opcode_event_parse_validation250k_q0_v1",
+  "parent_proposal_id": null,
+  "priority": 50,
+  "promotion_condition": "Exact archives and positive archive saving after the fixed1895-byte source ZIP increment; full package and larger gate remain separate",
+  "proposal_id": "opcode_event_parse_confirmation1m_q0_v1",
+  "retired_neighborhoods": [
+    "No new context, predictor, wrapper storage scheme or tuning; fixed-code confirmation with explicit source-component cost"
+  ],
+  "schema": "gamma.enwiki9.algorithm-proposal.v2",
+  "search_priority": 50,
+  "state": "developed",
+  "title": "One megabyte event-pricing confirmation and fixed source component cost"
+}
