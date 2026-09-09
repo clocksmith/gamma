@@ -1,0 +1,367 @@
+{
+  "schema": "gamma.enwiki9.unit-validation.v1",
+  "id": "fx2_weight_width_carry_v1_unit",
+  "generated_at": "2026-09-09T05:37:13.621709+00:00",
+  "owner": "root_explore",
+  "candidate": "fx2_weight_width_carry_v1",
+  "tests_passed": 7,
+  "tests_failed": 0,
+  "classification": "synthetic-correctness-pass",
+  "initial_failure": {
+    "publication": "0179bcc1c7acdc518ee9fcf79b144481067d97d6",
+    "phase": "build-treatment",
+    "class": "implementation-failure",
+    "cause": "Nested main macro wrapper was undefined by the included adaptive CLI, defining a second main before any tests.",
+    "repair": "Include the immutable base IO CLI and adaptive header separately; no coding mechanism changed.",
+    "codec_execution": false
+  },
+  "successful_publication": "02e453f44",
+  "sources": [
+    {
+      "path": "tools/fx2_weight_width_carry_v1.py",
+      "bytes": 2158,
+      "sha256": "db0c818735ba763af18547abf7f8f072d29620456fa7258455fbc3f0ed123ae4"
+    },
+    {
+      "path": "tools/fx2_weight_width_carry_probe_v1.cpp",
+      "bytes": 2536,
+      "sha256": "2fc624fba14de12ad16baab379d52717f6f69895faf83614f7d246dd46bb4ecc"
+    },
+    {
+      "path": "tests/test_fx2_weight_width_carry_v1.py",
+      "bytes": 5084,
+      "sha256": "63830a25dc318dcb44e6196aae4d3f08b0cc274d230001b1c092244b9f00b57d"
+    },
+    {
+      "path": "tools/fx2_weight_adaptive_marginal_probe_v1.cpp",
+      "bytes": 2356,
+      "sha256": "ac18d5db3ee7c69f87ccf5c2cd6717a6bd349b00bcbd1cf78b8ed2120b58f49a"
+    },
+    {
+      "path": "tools/fx2_weight_marginal_probe_v1.cpp",
+      "bytes": 5894,
+      "sha256": "eb23bcc621be8b75f75e42592e5af55014474530a9353cc4aa19893c2de1f08f"
+    },
+    {
+      "path": "tools/fx2_weight_marginal_fixtures_v1.py",
+      "bytes": 21305,
+      "sha256": "f1905a844767f9506029336bb1d77992a7f714fe887f79e6f108b48d5ea51d4e"
+    },
+    {
+      "path": "lib/fx2_weight_adaptive_marginal_v1.hpp",
+      "bytes": 7277,
+      "sha256": "3264d084d8c9d7511ec119b23500deae622eb0bb74c700d8c0ad62698674e71d"
+    },
+    {
+      "path": "lib/fx2_weight_format_v1.hpp",
+      "bytes": 20196,
+      "sha256": "aa615fc92b456bada499602888c2bf38ea8a98918694ce2cfd9691d384b2fa30"
+    },
+    {
+      "path": "operations/adaptive/experiments/fx2_weight_width_carry_v1.json",
+      "bytes": 6298,
+      "sha256": "ec007fa641732eb9a605bfdf2b7728ce6deecc5b54265d698b1156cb21801e2a"
+    }
+  ],
+  "attempts": {
+    "attempt01": {
+      "phases": [
+        {
+          "name": "materialize",
+          "args": [
+            "/usr/bin/python3",
+            "tools/fx2_weight_width_carry_v1.py",
+            "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_width_carry_v1_unit/attempt01/fx2_width_carry_generated.hpp"
+          ],
+          "returncode": 0,
+          "elapsed_seconds": 0.06440606387332082,
+          "cpu_seconds": 0.033058000000000004,
+          "cumulative_child_peak_rss_kib": 20200,
+          "address_space_limit": 536870912
+        },
+        {
+          "name": "build-parent",
+          "args": [
+            "/usr/bin/g++",
+            "-std=c++17",
+            "-O2",
+            "-fno-fast-math",
+            "-Ilib",
+            "-I/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_width_carry_v1_unit/attempt01",
+            "tools/fx2_weight_adaptive_marginal_probe_v1.cpp",
+            "-o",
+            "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_width_carry_v1_unit/attempt01/parent"
+          ],
+          "returncode": 0,
+          "elapsed_seconds": 1.467804690124467,
+          "cpu_seconds": 1.436787,
+          "cumulative_child_peak_rss_kib": 179000,
+          "address_space_limit": 1073741824
+        },
+        {
+          "name": "build-treatment",
+          "args": [
+            "/usr/bin/g++",
+            "-std=c++17",
+            "-O2",
+            "-fno-fast-math",
+            "-Ilib",
+            "-I/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_width_carry_v1_unit/attempt01",
+            "tools/fx2_weight_width_carry_probe_v1.cpp",
+            "-o",
+            "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_width_carry_v1_unit/attempt01/probe"
+          ],
+          "returncode": 1,
+          "elapsed_seconds": 0.26531968591734767,
+          "cpu_seconds": 0.259062,
+          "cumulative_child_peak_rss_kib": 179000,
+          "address_space_limit": 1073741824
+        }
+      ]
+    },
+    "attempt02": {
+      "phases": [
+        {
+          "name": "materialize",
+          "args": [
+            "/usr/bin/python3",
+            "tools/fx2_weight_width_carry_v1.py",
+            "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_width_carry_v1_unit/attempt02/fx2_width_carry_generated.hpp"
+          ],
+          "returncode": 0,
+          "elapsed_seconds": 0.06432521203532815,
+          "cpu_seconds": 0.032913,
+          "cumulative_child_peak_rss_kib": 20152,
+          "address_space_limit": 536870912
+        },
+        {
+          "name": "build-parent",
+          "args": [
+            "/usr/bin/g++",
+            "-std=c++17",
+            "-O2",
+            "-fno-fast-math",
+            "-Ilib",
+            "-I/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_width_carry_v1_unit/attempt02",
+            "tools/fx2_weight_adaptive_marginal_probe_v1.cpp",
+            "-o",
+            "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_width_carry_v1_unit/attempt02/parent"
+          ],
+          "returncode": 0,
+          "elapsed_seconds": 1.4673597780056298,
+          "cpu_seconds": 1.429613,
+          "cumulative_child_peak_rss_kib": 178884,
+          "address_space_limit": 1073741824
+        },
+        {
+          "name": "build-treatment",
+          "args": [
+            "/usr/bin/g++",
+            "-std=c++17",
+            "-O2",
+            "-fno-fast-math",
+            "-Ilib",
+            "-I/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_width_carry_v1_unit/attempt02",
+            "tools/fx2_weight_width_carry_probe_v1.cpp",
+            "-o",
+            "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_width_carry_v1_unit/attempt02/probe"
+          ],
+          "returncode": 0,
+          "elapsed_seconds": 1.5174552199896425,
+          "cpu_seconds": 1.4979559999999998,
+          "cumulative_child_peak_rss_kib": 204660,
+          "address_space_limit": 1073741824
+        },
+        {
+          "name": "unit",
+          "args": [
+            "/usr/bin/python3",
+            "tests/test_fx2_weight_width_carry_v1.py",
+            "-v"
+          ],
+          "returncode": 0,
+          "elapsed_seconds": 1.319116175873205,
+          "cpu_seconds": 1.2195910000000003,
+          "cumulative_child_peak_rss_kib": 204660,
+          "address_space_limit": 536870912
+        }
+      ]
+    }
+  },
+  "required_checks": [
+    "P equals unchanged adaptive parent bytes",
+    "K archive equals P",
+    "independent per-arm exact original-container inversion",
+    "fresh raw-input deterministic repeat",
+    "all recorded pre-truth INT4 count rows match between D encoder and decoder",
+    "unit counts for new widths and reuse on width return",
+    "count rescaling and opposite distributions",
+    "all stored tensor encodings and special bytes",
+    "empty document and empty tensor",
+    "truncated, oversized-count and noncanonical inputs rejected",
+    "sealed parent and existing outputs protected"
+  ],
+  "scope": {
+    "population": "Fixed synthetic tensors only",
+    "trained_model_access": false,
+    "corpus_access": false,
+    "inference_executed": false,
+    "trace_artifacts": "Test-local traces are compared completely by assertions and removed with each test temporary directory; retained test logs attest those checks, not retained corpus state certification."
+  },
+  "resource_scope": {
+    "cpu": 3,
+    "threads": 1,
+    "codec_address_space_bytes": 536870912,
+    "compiler_address_space_bytes": 1073741824,
+    "cpu_seconds_per_phase": 120,
+    "elapsed_stop_seconds_per_attempt": 180,
+    "per_file_bytes": 33554432,
+    "scratch_bytes": 134217728,
+    "headroom_bytes": 34359738368,
+    "scratch_enforcement": "Per-file OS limits plus output allocation checks after phases; no continuous cgroup scratch certificate claimed.",
+    "timing": "Shared-host diagnostic; cumulative child maximum RSS is not a phase-specific peak."
+  },
+  "package_inventory": {
+    "parent_comparison_executable": {
+      "path": "results/fx2_weight_width_carry_v1_unit/attempt02/parent",
+      "bytes": 107792,
+      "sha256": "85fbcd68c51852a83c42447363c97a2f16123f3af316f09c687ec5555252eae4"
+    },
+    "treatment_comparison_executable": {
+      "path": "results/fx2_weight_width_carry_v1_unit/attempt02/probe",
+      "bytes": 129824,
+      "sha256": "e3a1a57c3e5e15fc2476b039e60c365b340a5d3eefa43991ba55f536b36f4e95"
+    },
+    "comparison_executable_added_bytes": 22032,
+    "interpretation": "Comparison CLI includes both codecs and trace instrumentation. This increment is measured, not a native deployment package estimate. Complete loader/source/binary/options accounting still required."
+  },
+  "retained_bundle": {
+    "path": "results/fx2_weight_width_carry_v1_unit_retained.zip",
+    "bytes": 150670,
+    "sha256": "2ed646e80c7027254aa0ca20801252e1101fd1618754f1bcb96ec5d5a83d8d5a"
+  },
+  "retained_bundle_members_verified": 23,
+  "files": [
+    {
+      "path": "results/fx2_weight_width_carry_v1_unit/attempt01/admission.json",
+      "bytes": 14503,
+      "sha256": "ed1eb2e04e7a48e45ed226da214fce77f74951b4fcc5fae685dbf6e1d4c3104d"
+    },
+    {
+      "path": "results/fx2_weight_width_carry_v1_unit/attempt01/build-parent.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "results/fx2_weight_width_carry_v1_unit/attempt01/build-parent.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "results/fx2_weight_width_carry_v1_unit/attempt01/build-treatment.stderr",
+      "bytes": 727,
+      "sha256": "3521e721350eec4b0629502d5899ca2e0ca59a26c9709bfbdac4fd728fe460f5"
+    },
+    {
+      "path": "results/fx2_weight_width_carry_v1_unit/attempt01/build-treatment.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "results/fx2_weight_width_carry_v1_unit/attempt01/commands.jsonl",
+      "bytes": 1370,
+      "sha256": "205a2467f99de708dede33f77625c23aafe5cf4af71187234fdd2aea48515071"
+    },
+    {
+      "path": "results/fx2_weight_width_carry_v1_unit/attempt01/fx2_width_carry_generated.hpp",
+      "bytes": 7848,
+      "sha256": "4c8a34afb9f9e8baa68974f0a94ee98e5ae851dd07ba8d11ae9311f5a6c72111"
+    },
+    {
+      "path": "results/fx2_weight_width_carry_v1_unit/attempt01/materialize.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "results/fx2_weight_width_carry_v1_unit/attempt01/materialize.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "results/fx2_weight_width_carry_v1_unit/attempt01/parent",
+      "bytes": 107792,
+      "sha256": "85fbcd68c51852a83c42447363c97a2f16123f3af316f09c687ec5555252eae4"
+    },
+    {
+      "path": "results/fx2_weight_width_carry_v1_unit/attempt02/admission.json",
+      "bytes": 14509,
+      "sha256": "fd733d6063bb2a819cb21cb6b031f9e655c0bd70d5866a83723504cdb347f077"
+    },
+    {
+      "path": "results/fx2_weight_width_carry_v1_unit/attempt02/build-parent.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "results/fx2_weight_width_carry_v1_unit/attempt02/build-parent.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "results/fx2_weight_width_carry_v1_unit/attempt02/build-treatment.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "results/fx2_weight_width_carry_v1_unit/attempt02/build-treatment.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "results/fx2_weight_width_carry_v1_unit/attempt02/commands.jsonl",
+      "bytes": 1629,
+      "sha256": "06f7c66b65c9b044f3f01866cacfcb624bb59697e209c209e736660ea26b28fe"
+    },
+    {
+      "path": "results/fx2_weight_width_carry_v1_unit/attempt02/fx2_width_carry_generated.hpp",
+      "bytes": 7848,
+      "sha256": "4c8a34afb9f9e8baa68974f0a94ee98e5ae851dd07ba8d11ae9311f5a6c72111"
+    },
+    {
+      "path": "results/fx2_weight_width_carry_v1_unit/attempt02/materialize.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "results/fx2_weight_width_carry_v1_unit/attempt02/materialize.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "results/fx2_weight_width_carry_v1_unit/attempt02/parent",
+      "bytes": 107792,
+      "sha256": "85fbcd68c51852a83c42447363c97a2f16123f3af316f09c687ec5555252eae4"
+    },
+    {
+      "path": "results/fx2_weight_width_carry_v1_unit/attempt02/probe",
+      "bytes": 129824,
+      "sha256": "e3a1a57c3e5e15fc2476b039e60c365b340a5d3eefa43991ba55f536b36f4e95"
+    },
+    {
+      "path": "results/fx2_weight_width_carry_v1_unit/attempt02/unit.stderr",
+      "bytes": 906,
+      "sha256": "38df9c4bfb3b1f18d7a57b3e22c61b03165480eee9a81daa354815381e847944"
+    },
+    {
+      "path": "results/fx2_weight_width_carry_v1_unit/attempt02/unit.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "trained_model_bytes_saved": null,
+  "complete_package_bytes": null,
+  "full_corpus_score_bytes": null,
+  "objective_target_bytes": 90000000,
+  "objective_credit_bytes": 0,
+  "decision": "Freeze a separate full-model audit before trained parameter access; require complete-model reduction and exact reconstruction before native loader work."
+}
