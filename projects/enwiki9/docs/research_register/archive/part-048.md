@@ -515,3 +515,41 @@ selects [opcode_wiki_slot_v1](../../../operations/adaptive/experiments/opcode_wi
 owned by `root_explore`. Its [terminal gate](../../../operations/provenance/opcode_wiki_slot_terminal_20260908.json)
 passes ten phases: P/K 67,658 / D 67,601 bytes. The 57-byte gain does not pay the
 conditional 554-byte source charge. [Reset terminal](../../../operations/provenance/opcode_slot_reset_terminal_20260908.json): P/K 67,658 / D 67,626; gain32 versus conditional source charge270. [Calibration diagnostic](../../../operations/provenance/opcode_calibration_terminal_20260908.json): existing SSE helps fixed-parse literals by6,615.574 ideal bits, unchanged archive. Both reflections validate; scaling and SSE deletion remain held. Next independent predictor research.
+
+## 2026-09-08 - Residual-ratio calibration passes synthetic inverse checks
+
+`root_explore` published [ownership and fixed controls](../../../operations/provenance/fx2_residual_ratio_synthetic_v1_plan.json)
+before implementation. Discovery lenses 8/9 select integer observed/expected
+symbol ratios, distinct from the retired NNCP output-bias midpoint update.
+That earlier configuration lost 1,604 bytes; it supplies no inherited gain.
+Forge-cmix remains an external parent research alternative, not a Gamma result.
+The new [reference component](../../../lib/residual_ratio_v1.py) learns only after
+complete decoded symbols, clips ratios, decays bounded histories, and validates
+pending checkpoints. The existing arithmetic fixture supplies the coder.
+[Retained fresh-process evidence](../../../results/fx2_residual_ratio_synthetic_v1/attempt01/receipt.json)
+passes nine tests and 24 encode/decode/repeat phases. Both fixtures contain
+1,024 synthetic raw bytes. Constant-byte P/K/D/S archives are 1,041/1,041/790/1,043;
+balanced-byte archives are 1,041/1,041/1,043/1,038. Every inverse, repeat,
+pre-truth probability and predictor-state boundary agrees within each arm.
+P/K archives and probabilities match. The balanced loss and favorable rotated
+control prevent interpreting synthetic activation as corpus evidence.
+Peak phase RSS is 22,593,536 bytes; retained artifacts before receipt are 109,892
+bytes. Python/runtime package accounting remains unresolved. No corpus ran.
+Next: a separately identified native FX2 adapter must resolve half-probability
+mapping, reproduce P/K, and measure actual P/K/D/S archives before promotion.
+HORIZON, MIDAS and measured codec sources remain unchanged; objective credit is zero.
+
+The [native boundary](../../../lib/fx2_residual_ratio_v1.hpp) now preserves original
+float32 P/K rows, including upstream half-conversion quirks, and applies a frozen
+Q16 multiplier for D/S. [Native evidence](../../../results/fx2_residual_ratio_native_v1/attempt01/receipt.json)
+passes seven tests, 4,160 exact-reference symbol updates and 24 fresh-process
+synthetic phases, reproducing the same toy archive sizes. The new source adapter
+passes real FX2 syntax checks with 461 recorded dependencies; no full native FX2
+build or roundtrip has run. The 5,457-byte component source is not a package score.
+Compiler `/tmp` quota failure is retained; an owned temporary directory resolves it.
+The [actual native fixture gate](../../../operations/adaptive/experiments/fx2_residual_ratio_fixture50051_q0_v1.json)
+is frozen and owned by `root_explore`: job `20260908T184428Z_97a71f959c`, CPU2,
+four arms, exact parent/coder/calibration-state checks and explicit component costs.
+The published gate built but failed before native encode: driver arm dispatch reloaded the stub, ignoring the supplied native module. The [reflection](../../../operations/adaptive/reflections/20260908T184428Z_97a71f959c.json) classifies an implementation failure. Its first terminal index has an abbreviated revision and is refused; the preserved failure is recorded in candidate metadata without archive claims. The [dispatch-only retry](../../../operations/adaptive/experiments/fx2_residual_ratio_fixture50051_q0_v2.json) retains the complete scientific comparison. Its synthetic dispatch regression checks three independent processes, inverse, repeat and artifact retention. Job `20260908T185901Z_3a15dbc589` remains held pending publication and admission.
+
+The dispatch retry reproduced P then rejected progress-prefixed activation text; its failure stays preserved. The corrected [v3 terminal comparison](../../../operations/provenance/fx2_ratio_fixture_terminal_20260908.json) yields P/K/D 3,223 bytes and S 3,236. All four inverse/repeats and complete introduced-state/coder traces match. D changes 64,583 quantized probabilities, loses 1.747438686 diagnostic ideal bits and saves zero archive bytes; added overlapping local components cost 22,746 bytes. Guards and cleanup pass. The [validated reflection](../../../operations/adaptive/reflections/20260908T190345Z_1e4e5a7eee.json) rejects only this fixed fixture realization. Four canonical rows are recorded; twelve raw traces publish as four hash-verified gzip objects. Next: diagnose measured prediction loss before one separately frozen successor; no larger replay or full-corpus credit.
