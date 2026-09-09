@@ -17,6 +17,28 @@ boundary, exact Q11 vectors, and malformed-stream rejection. One fixed policy,
 CPU3,512MiB address space,128MiB scratch and300 aggregate elapsed seconds;
 publish ownership and source before execution. No trained-model access or gain.
 
+Published source `dec598d53` passes the [synthetic execution](../operations/evidence/20260909_fx2_weight_sign_magnitude_v1_unit.json):
+eight tests, optimized/UBSan exact-vector fixtures and three existing-runner
+compatibility tests. All P/K/parent identities, original-container inverses,
+repeats and 30,000 retained pre-weight states agree. The independent-sign fixture
+is P13,618 versus D13,614 bytes; magnitude-dependent signs lose3,687 bytes.
+Independent review verifies19 input bindings and74 artifact bindings. Comparison
+executables are107,792/129,104 bytes; the21,312-byte increment is not native loader
+cost. Source/toolchain identities remain unchanged. The verified transport ZIP
+retains exact source, binaries, traces and logs. No trained model has executed.
+Next freeze all434 trained tensors with the retained executables and explicit
+complete-model inverse/repeat and cost accounting. Do not trace every model
+weight into the32MiB fixture buffer; this stage tests full model reconstruction,
+while native probability identity and deployment cost remain separate gates.
+
+The [complete-model plan](../operations/provenance/fx2_weight_sign_magnitude_model_v1_plan.json)
+now freezes retained P/D executables, original and adaptive model hashes, all434
+tensors and ten independent P/K/D inverse/repeat phases. The separately named
+runner preserves the tested procedure with new plan/schema identifiers; three
+synthetic adapter tests pass. CPU3,512MiB,128MiB scratch and120 aggregate elapsed
+seconds derive from earlier model measurements. Publish and freshly admit the
+complete input closure before any trained-model execution. No model gain yet.
+
 ## 2026-09-09 - Closing names are correct but leave little parent surprise
 
 The [closed audit](../results/fx2_closing_cost_opening250k_v3/stage-decision.json)
