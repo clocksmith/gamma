@@ -1,0 +1,109 @@
+{
+  "attribution": {
+    "causalConfidence": "high",
+    "controlsEquivalent": true,
+    "failureClass": "algorithmic-loss",
+    "localizedCause": "Changing only SSE training to exclude copied bits increases the complete archive by86 bytes while copy choices and non-SSE predictor state remain identical; responsible calibration buckets were not separately attributed"
+  },
+  "candidateId": "opcode_literal_sse250k_q0_v1",
+  "candidateRevision": {
+    "candidateId": "opcode_literal_sse250k_q0_v1",
+    "candidateTreeSha256": "sha256:48e943976fcb35b398a2f19d81db4d1778336f5a5702e1d062b4bae59048344f",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/opcode_literal_sse250k_q0_v1/20260909T023014598338Z_48e943976fcb.json",
+      "sha256": "sha256:ff605ce3cfaf22e1e78c2158d24b3b0bddbf36ce4e5dd3b4ec1e70fd0849be3f"
+    }
+  },
+  "decision": {
+    "killPredicatesPass": true,
+    "nextGateBytes": null,
+    "promotionPredicatesPass": false,
+    "rationale": "Reject this fixed literal-only SSE policy; no confirmation or1MB run follows. Continue a distinct evidence-directed discovery cycle.",
+    "verdict": "retire"
+  },
+  "evidence": [
+    {
+      "path": "operations/provenance/opcode_literal_sse_terminal_20260909.json",
+      "sha256": "sha256:5dc9b3feb482e04202e98b76759551e0c805e84b5bcafda30a94479b33ed1916"
+    },
+    {
+      "path": "operations/provenance/opcode_literal_sse_terminal_20260909/index.json",
+      "sha256": "sha256:d50fd8e74f2cec3ec78e62cba3bcc79ea6ac6ddb25fdaf67f3d3e4bb2d35c327"
+    },
+    {
+      "path": "results/opcode_literal_sse250k_q0_v1/stage-decision.json",
+      "sha256": "sha256:46f59f6a069fc6b384ce120bddb0818459fb0544a19f0bf5b5decba3a42040b6"
+    }
+  ],
+  "experiment": {
+    "path": "operations/adaptive/experiments/opcode_literal_sse250k_q0_v1.json",
+    "sha256": "sha256:a71bff99ad9c6a37d1b820cb2d0ce629d37776b8ea7248f3bae34e723382f5d7"
+  },
+  "generatedUtc": "2026-09-09T02:42:29+00:00",
+  "hypothesis": {
+    "rationale": "D is67744 bytes versus P/K67658 on opening250KB, losing86 complete archive bytes; the frozen positive archive predicate fails",
+    "verdict": "refuted"
+  },
+  "job": {
+    "path": "operations/adaptive/completed/919_20260909T023015Z_9564fe8ecc.json",
+    "sha256": "sha256:71b94192a7d73b91915692f93adc6c7d7309c47693fee4265674d2ac5a38277a"
+  },
+  "knowledge": {
+    "retiredDimensions": [
+      "Literal-only SSE updates with the original compact parent and unchanged opening250KB parse"
+    ],
+    "transferableLessons": [
+      "Decoder-known literal mode does not by itself justify discarding copied-byte calibration observations; this fixed selective-training policy failed its own unchanged parent"
+    ],
+    "uncertainties": [
+      "The loss does not establish that all mode-conditioned calibration fails, nor isolate individual bucket contributions; fresh populations and complete package economics remain untested"
+    ]
+  },
+  "measurementAssertions": [
+    {
+      "field": "scopeBytes",
+      "pointer": "/input/bytes",
+      "source": {
+        "path": "results/opcode_literal_sse250k_q0_v1/stage-decision.json",
+        "sha256": "sha256:46f59f6a069fc6b384ce120bddb0818459fb0544a19f0bf5b5decba3a42040b6"
+      }
+    },
+    {
+      "field": "sourceBytesDelta",
+      "pointer": "/source_delta_bytes",
+      "source": {
+        "path": "results/opcode_literal_sse250k_q0_v1/stage-decision.json",
+        "sha256": "sha256:46f59f6a069fc6b384ce120bddb0818459fb0544a19f0bf5b5decba3a42040b6"
+      }
+    }
+  ],
+  "measurements": {
+    "idealBitsSaved": null,
+    "memoryRatio": null,
+    "minimumPartitionIdealBitsSaved": null,
+    "netBytesSaved": null,
+    "positiveSegmentFraction": null,
+    "runtimeRatio": null,
+    "scopeBytes": 250000,
+    "scopeSymbols": null,
+    "sourceBytesDelta": 1371,
+    "transferRetention": null
+  },
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:e91ff20e92c3cac8acb0cbe5c79fc8e8a3b427d7e151245c8eecc52b1c32fa00",
+    "objectiveId": "gamma-enwiki9-hutter-90m-v3",
+    "objectivePath": "contracts/research/v3/objective-contract.json",
+    "targetScoreBytes": 90000000
+  },
+  "reflectionId": "r-20260909t023015z_9564fe8ecc",
+  "schema": "gamma.enwiki9.reflection-receipt.v1",
+  "validity": {
+    "classification": "valid",
+    "reasons": [
+      "All ten phases closed with exact matching-arm inverses, deterministic repeats, original P reproduction, P/K identity, unchanged non-SSE updates and parse, and clear resource guards"
+    ],
+    "valid": true
+  }
+}
