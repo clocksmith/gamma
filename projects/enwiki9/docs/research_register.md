@@ -34,7 +34,7 @@ an explicit rules-permitted representation, preserving this raw-source failure.
 The [measured ZIP realization](../operations/provenance/fx2_weight_sign_magnitude_zip_v1_terminal.json)
 saves40 source/assets ZIP bytes and456 bytes including the separate decoder.
 Both130-member ZIP repeats, exact extraction and relocated binary rebuilds pass.
-The [native fixture](../operations/adaptive/experiments/fx2_weight_sign_magnitude_fixture50051_q0_v1.json) freezes P/K/D archive and coder-record parity under CPU2 guards.
+The [native fixture passes](../operations/provenance/fx2_weight_sign_magnitude_fixture50051_v1_terminal.json): three exact3223-byte archives, inverses/repeats and nine parent coder traces; guarded peak RAM5,531,414,528 bytes. Package delta-456 remains scoped.
 
 ## 2026-09-09 - Exact weight magnitude and shared-sign factorization
 
