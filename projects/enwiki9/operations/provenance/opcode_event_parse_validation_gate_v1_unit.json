@@ -1,0 +1,100 @@
+{
+  "schema": "gamma.enwiki9.opcode-event-parse-validation-gate-unit.v1",
+  "owner": "root_explore",
+  "status": "passed",
+  "tests_passed": 3,
+  "reported_test_elapsed_seconds": 1.509,
+  "bindings": [
+    {
+      "path": "tools/opcode_event_parse_validation_gate_v1.py",
+      "bytes": 5327,
+      "sha256": "3be8ad7c3c1e195b86fed9267b2ebf5414a2a95ee8eaddc9d22f7556d0d914b6"
+    },
+    {
+      "path": "tests/test_opcode_event_parse_validation_gate_v1.py",
+      "bytes": 3878,
+      "sha256": "24b5580061d9a9bf7a9f852d3d92131ca3ebdbb1123123d598587aa77cafe1dd"
+    },
+    {
+      "path": "tools/opcode_event_parse_gate_v1.py",
+      "bytes": 7488,
+      "sha256": "0a49427ffb79ffa5a335fd2ca55df5c79a27443596cfe0061441f003c4f56aaa"
+    },
+    {
+      "path": "operations/provenance/opcode_event_parse_gate_v1_unit.json",
+      "bytes": 2859,
+      "sha256": "c7f6be5ef5dff64e455281dd882a0492d2a1431b3c01adad005623a884caba77"
+    },
+    {
+      "path": "results/opcode_event_parse_validation_gate_v1_unit/diagnostic.stderr",
+      "bytes": 1987,
+      "sha256": "6723578924171f39bc76ba66501308eb85fcd52de374d3448949a18095c07cca"
+    },
+    {
+      "path": "results/opcode_event_parse_validation_gate_v1_unit/diagnostic.stdout",
+      "bytes": 48,
+      "sha256": "b9c34631738aeba311c3459bda953c75b2c751ca0b885beb0d4f020ee67a9c2b"
+    },
+    {
+      "path": "results/opcode_event_parse_validation_gate_v1_unit/passed.stderr",
+      "bytes": 596,
+      "sha256": "cbaa32ce2d02bad8999ede4bec8ed8b6e51546665fa8f300847b5ae605f0f1dd"
+    },
+    {
+      "path": "results/opcode_event_parse_validation_gate_v1_unit/passed.stdout",
+      "bytes": 47,
+      "sha256": "c16d0c816de0fd0e34aa2f38bd2408f532f597aaa393cf3d67f3458c3900a5b4"
+    },
+    {
+      "path": "results/opcode_event_parse_validation_gate_v1_unit/stderr",
+      "bytes": 1223,
+      "sha256": "e4d6ec867ae9253b6eefa31178f66bc72dfdf68e7bea9372e1e8e9f4ce3ba0eb"
+    },
+    {
+      "path": "results/opcode_event_parse_validation_gate_v1_unit/stdout",
+      "bytes": 48,
+      "sha256": "b9c34631738aeba311c3459bda953c75b2c751ca0b885beb0d4f020ee67a9c2b"
+    }
+  ],
+  "command": [
+    "taskset",
+    "-c",
+    "3",
+    "prlimit",
+    "--as=2147483648",
+    "--cpu=120",
+    "--fsize=33554432",
+    "--core=0",
+    "timeout",
+    "180",
+    "python3",
+    "-m",
+    "unittest",
+    "discover",
+    "-s",
+    "tests",
+    "-p",
+    "test_opcode_event_parse_validation_gate_v1.py",
+    "-v"
+  ],
+  "synthetic_phase_bounds": {
+    "cpu_seconds": 10,
+    "wall_seconds": 15,
+    "address_bytes": 536870912
+  },
+  "checks": [
+    "Actual validation main completes ten fresh phases without any retained archive for the new population",
+    "Original parent decoding, P/K identity, independent inverses and repeat/state checks pass",
+    "Missing mandatory D decoder witness is rejected",
+    "Changed population, CPU assignment or measured package hash rejected",
+    "Original measured modules remain unchanged; exact reuse sites fail closed on mismatch"
+  ],
+  "failed_test_attempts": {
+    "count": 2,
+    "cause": "Synthetic harness initially inherited corpus180-second CPU phase limit under outer120-second hard limit; subprocess preexec correctly rejected the attempted limit increase.",
+    "resolution": "Synthetic main test explicitly supplies10-second CPU,15-second wall and512MiB phase limits. Codec and corpus bounds unchanged.",
+    "logs_preserved": true
+  },
+  "codec_executed_on_corpus": false,
+  "objective_credit_bytes": 0
+}
