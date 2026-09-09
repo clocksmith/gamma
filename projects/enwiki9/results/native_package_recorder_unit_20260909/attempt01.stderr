@@ -1,0 +1,43 @@
+test_real_reflection_guard_and_results_validate_without_canonical_writes (test_record_driver_result.RecordedEvidenceIntegrationTests.test_real_reflection_guard_and_results_validate_without_canonical_writes)
+A disposable projection binds retained records through full validators. ... ok
+test_changed_entire_arm_set_cannot_replace_interrupted_claim (test_record_driver_result.RecorderTests.test_changed_entire_arm_set_cannot_replace_interrupted_claim) ... ok
+test_check_is_read_only (test_record_driver_result.RecorderTests.test_check_is_read_only) ... ok
+test_check_rejects_conflicting_metadata_projection (test_record_driver_result.RecorderTests.test_check_rejects_conflicting_metadata_projection) ... ok
+test_check_rejects_evidence_replacement_after_ledger_read (test_record_driver_result.RecorderTests.test_check_rejects_evidence_replacement_after_ledger_read) ... ok
+test_completed_prefix_is_resumable_but_torn_line_preserved (test_record_driver_result.RecorderTests.test_completed_prefix_is_resumable_but_torn_line_preserved) ... ok
+test_concurrent_distinct_and_duplicate_recording (test_record_driver_result.RecorderTests.test_concurrent_distinct_and_duplicate_recording) ... ERROR
+test_distinct_identical_archive_arms_and_idempotent_retry (test_record_driver_result.RecorderTests.test_distinct_identical_archive_arms_and_idempotent_retry) ... ok
+test_duplicate_claim_and_replaced_index_after_recording_rejected (test_record_driver_result.RecorderTests.test_duplicate_claim_and_replaced_index_after_recording_rejected) ... ok
+test_evidence_replaced_during_append_is_not_projected (test_record_driver_result.RecorderTests.test_evidence_replaced_during_append_is_not_projected) ... ok
+test_failed_arm_can_preserve_missing_archive_without_inventing_claims (test_record_driver_result.RecorderTests.test_failed_arm_can_preserve_missing_archive_without_inventing_claims) ... ok
+test_guard_command_and_job_identity_rejected (test_record_driver_result.RecorderTests.test_guard_command_and_job_identity_rejected) ... ok
+test_hostname_string_projects_without_changing_sealed_evidence (test_record_driver_result.RecorderTests.test_hostname_string_projects_without_changing_sealed_evidence) ... ok
+test_interruption_after_ledger_append_retries_metadata (test_record_driver_result.RecorderTests.test_interruption_after_ledger_append_retries_metadata) ... ok
+test_legacy_result_cli_preserved (test_record_driver_result.RecorderTests.test_legacy_result_cli_preserved) ... ok
+test_live_terminal_worker_rejected_and_zombie_is_not_live (test_record_driver_result.RecorderTests.test_live_terminal_worker_rejected_and_zombie_is_not_live) ... ok
+test_missing_claim_evidence_and_alias_repeat_rejected (test_record_driver_result.RecorderTests.test_missing_claim_evidence_and_alias_repeat_rejected) ... ok
+test_missing_cleanup_and_running_guard_rejected (test_record_driver_result.RecorderTests.test_missing_cleanup_and_running_guard_rejected) ... ok
+test_missing_or_replaced_artifact_rejected_before_writes (test_record_driver_result.RecorderTests.test_missing_or_replaced_artifact_rejected_before_writes) ... ok
+test_replaced_result_reflection_and_validator_rejection (test_record_driver_result.RecorderTests.test_replaced_result_reflection_and_validator_rejection) ... ok
+test_reserved_source_tags_cannot_bypass_interrupted_job_identity (test_record_driver_result.RecorderTests.test_reserved_source_tags_cannot_bypass_interrupted_job_identity) ... ok
+test_retry_after_boot_change_preserves_recorded_bytes (test_record_driver_result.RecorderTests.test_retry_after_boot_change_preserves_recorded_bytes) ... ok
+test_running_or_duplicate_live_claim_rejected (test_record_driver_result.RecorderTests.test_running_or_duplicate_live_claim_rejected) ... ok
+
+======================================================================
+ERROR: test_concurrent_distinct_and_duplicate_recording (test_record_driver_result.RecorderTests.test_concurrent_distinct_and_duplicate_recording)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/x/deco/gamma/projects/enwiki9/tests/test_record_driver_result.py", line 307, in test_concurrent_distinct_and_duplicate_recording
+    second = self.make_job("job2")
+  File "/home/x/deco/gamma/projects/enwiki9/tests/test_record_driver_result.py", line 77, in make_job
+    path.write_bytes(b"fixture")
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "/usr/lib/python3.14/pathlib/__init__.py", line 797, in write_bytes
+    with self.open(mode='wb') as f:
+         ~~~~~~~~~^^^^^^^^^^^
+OSError: [Errno 122] Disk quota exceeded
+
+----------------------------------------------------------------------
+Ran 23 tests in 1.304s
+
+FAILED (errors=1)

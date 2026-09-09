@@ -267,8 +267,13 @@ def _prepare_terminal(program_id: str, index_path: pathlib.Path, metadata: dict[
         ):
             raise ValueError("result uses reserved terminal recorder identity tags")
         _artifact_claims(result, entry.get("artifacts", {}), bindings)
+        # Some native adapters report uname's hostname directly. Normalize the
+        # ledger projection without replacing the hash-bound source receipt.
+        ledger_result = result
+        if isinstance(result.get("host"), str) and result["host"].strip():
+            ledger_result = {**result, "host": {"hostname": result["host"]}}
         row = research_contracts.build_driver_run_ledger_row(
-            result, path, program_name=result.get("program_name") or program_id,
+            ledger_result, path, program_name=result.get("program_name") or program_id,
             recorded_utc=job["finished_at"],
         )
         row["run_id"] = f"{program_id}__{job_id}__{arm}"

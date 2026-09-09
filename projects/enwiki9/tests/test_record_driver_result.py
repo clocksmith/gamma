@@ -150,6 +150,24 @@ class RecorderTests(unittest.TestCase):
         self.assertEqual((self.root / "programs/fixture/meta.json").read_bytes(), before)
         self.assertEqual({path: path.read_bytes() for path in inputs}, inputs)
 
+    def test_hostname_string_projects_without_changing_sealed_evidence(self):
+        path = self.root / 'results/job1/P.json'
+        result = json.loads(path.read_text())
+        result['host'] = 'native-host'
+        path.write_text(json.dumps(result) + '\n')
+        index = json.loads(self.index.read_text())
+        index['arms'][0]['result'] = self.reference(path)
+        self.index.write_text(json.dumps(index) + '\n')
+        self.refresh_bindings()
+        original = {p: p.read_bytes() for p in (path, self.index,
+                    self.root / 'operations/adaptive/reflections/job1.json')}
+        self.assertEqual(self.record()['appended_rows'], 2)
+        row = next(row for row in self.rows() if row['run_id'].endswith('__P'))
+        self.assertEqual(row['host'], {'hostname': 'native-host'})
+        self.assertEqual(row['result_sha256'], hashlib.sha256(original[path]).hexdigest())
+        self.assertEqual({p: p.read_bytes() for p in original}, original)
+        self.assertEqual(self.record()['appended_rows'], 0)
+
     def test_guard_command_and_job_identity_rejected(self):
         path = self.root / "results/job1/guard.json"
         original = json.loads(path.read_text())

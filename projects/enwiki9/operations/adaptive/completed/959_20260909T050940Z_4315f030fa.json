@@ -5,27 +5,66 @@
     "sha256": "sha256:8d10b808519647acc36524e06163d628d210eeb8d79103c13e818c7445d35bdb"
   },
   "candidate_tree_sha256": "sha256:47d011d6b6465a282949f9eb331c50fff171cd46e94c6b3cd3c695c7a46db0fa",
+  "elapsed_seconds": 88.811,
   "execution_guard": {
     "path": "tools/run_with_resource_guard_v3.py",
     "sha256": "sha256:044147f7ffe6922ea8dafd52fc3d4426077b20958adbcd421245ad41adcfc1e4"
   },
   "execution_mode": "discovery",
+  "execution_resources": {
+    "boot_id": "3ce46712-27bc-4199-8e48-e2b3d23926cb",
+    "budget": {
+      "cgroup_parent": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice",
+      "cpus": [
+        2
+      ],
+      "memory_bytes": 9999998976,
+      "scratch_bytes": 16000000000,
+      "swap_bytes": 0,
+      "wall_seconds": 900
+    },
+    "cgroup_inode": 267278,
+    "cgroup_path": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/gamma-enwiki9-20260909T050940Z_4315f030fa",
+    "cleanup_complete": true,
+    "cpu_enforcement": "taskset-and-sampled-affinity-guard",
+    "groups": [
+      {
+        "created": true,
+        "inode": 267278,
+        "kernel_cpuset": false,
+        "memory_bytes": 9999998976,
+        "path": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/gamma-enwiki9-20260909T050940Z_4315f030fa"
+      }
+    ],
+    "guard_command_sha256": "8c1360bdf41951e11d2d5afff4854d85ca2e27d78c9a8ac4845e6ffcafdf808d",
+    "guard_path": "run_logs/adaptive/20260909T050940Z_4315f030fa.resources/guard.json",
+    "missing_diagnostics": [
+      "kernel cpuset controller is not delegated; taskset assignment and existing affinity guard remain active"
+    ],
+    "timing_authority": "diagnostic"
+  },
   "experiment": {
     "path": "operations/adaptive/experiments/fx2_adaptive_package_fixture50051_q0_v1.json",
     "sha256": "sha256:20f96eff3817bdfab51ad96cde4235369c183844c2641dd27181aed3b6657e1c"
   },
+  "finished_at": "2026-09-09T05:12:44+00:00",
   "gate_size": 50051,
-  "held": true,
+  "held": false,
   "held_at": "2026-09-09T05:09:40+00:00",
   "hold_history": [
     {
       "at": "2026-09-09T05:09:40+00:00",
       "held": true,
       "reason": "Preserve reviewed terminal launch failure; publish retry ownership, then run coordinator under taskset CPU2 before any guarded child is spawned. Frozen source, package and caps unchanged."
+    },
+    {
+      "at": "2026-09-09T05:11:15+00:00",
+      "held": false,
+      "reason": "Published3eb438d68 and unchanged321-input preflight verified; fresh admission 2026-09-09T05:10:59+00:00 RAM 76182196224 scratch 57705492480 bytes. No live/unknown competing jobs; reserve34359738368 host bytes. Coordinator must run under taskset -c2 before all child creation; same frozen package and900-second cap."
     }
   ],
-  "hold_reason": "Preserve reviewed terminal launch failure; publish retry ownership, then run coordinator under taskset CPU2 before any guarded child is spawned. Frozen source, package and caps unchanged.",
   "job_id": "20260909T050940Z_4315f030fa",
+  "log_path": "run_logs/adaptive/20260909T050940Z_4315f030fa.log",
   "priority": 40,
   "proposal": {
     "path": "operations/adaptive/proposals/developed/949_fx2_adaptive_package_fixture50051_q0_v1.json",
@@ -33,6 +72,7 @@
   },
   "proposal_id": "fx2_adaptive_package_fixture50051_q0_v1",
   "purpose": "diagnostic",
+  "released_at": "2026-09-09T05:11:15+00:00",
   "resource_budget": {
     "cgroup_parent": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice",
     "cpus": [
@@ -43,6 +83,7 @@
     "swap_bytes": 0,
     "wall_seconds": 900
   },
+  "returncode": 0,
   "runner": {
     "path": "tools/fx2_adaptive_package_fixture50051_q0_v1.py",
     "sha256": "sha256:bf22e1f48441a211af4470ba2b75a93a22ed55c7fdb062040e6df36bd59777b5"
@@ -51,12 +92,16 @@
   "scratch_directories": [
     "results/fx2_adaptive_package_fixture50051_q0_v1"
   ],
-  "state": "pending",
+  "started_at": "2026-09-09T05:11:15+00:00",
+  "state": "completed",
   "submitted_at": "2026-09-09T05:09:40+00:00",
   "tags": [
     "native-package-affinity-retry"
   ],
   "timing_authority": "diagnostic",
   "tool": "tools/fx2_adaptive_package_fixture50051_q0_v1.py",
-  "tool_args": []
+  "tool_args": [],
+  "worker_pid": 2125150,
+  "worker_proc_start_ticks": 202681378,
+  "worker_started_at": "2026-09-09T05:11:16+00:00"
 }

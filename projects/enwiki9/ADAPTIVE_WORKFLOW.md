@@ -275,8 +275,11 @@ and exact artifact hashes. It writes distinct job-and-arm ledger identities and
 a derived metadata projection; it does not choose a scientific verdict. A retry
 can finish an interrupted row set or metadata update without duplicating rows.
 Changed receipts and conflicting claims fail closed. A torn ledger line is
-preserved for explicit repair. Calls to this recorder serialize with one another;
-coordinate other ledger or metadata writers separately because they do not honor
+preserved for explicit repair. Native hostname strings become
+`{ "hostname": VALUE }` in the ledger projection
+without changing the sealed result or its hash-bound evidence.
+Calls to this recorder serialize with one another; coordinate other ledger or
+metadata writers separately because they do not honor
 its lock.
 The legacy `--result`/`--label` metadata command remains available for historical
 formats and does not provide these terminal-publication guarantees.
