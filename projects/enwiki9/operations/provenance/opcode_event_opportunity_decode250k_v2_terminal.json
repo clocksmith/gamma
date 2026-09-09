@@ -1,0 +1,444 @@
+{
+  "schema": "gamma.enwiki9.opcode-event-opportunity-terminal.v1",
+  "generated_at": "2026-09-09T14:16:22.913966+00:00",
+  "candidate_id": "opcode_event_opportunity_decode250k_q0_v2",
+  "owner": "next_prediction_gate_review",
+  "status": "passed",
+  "scientific_verdict": "valid observation; compression inconclusive",
+  "publication": "1c621649b05e73b82e4af3c9ddcaffd8ead19f7c",
+  "job": {
+    "path": "operations/adaptive/completed/959_20260909T140149Z_274c03e2c0.json",
+    "bytes": 4114,
+    "sha256": "8d3b5c088c2c079bf9d09add92a9b84f17a144cbf78c37842af5b137a0604623"
+  },
+  "experiment": {
+    "path": "operations/adaptive/experiments/opcode_event_opportunity_decode250k_q0_v2.json",
+    "bytes": 13536,
+    "sha256": "3c6351921da37156833655ea962698ea96d50ffab4d782300dec8691c010c080"
+  },
+  "candidate_revision": {
+    "path": "operations/adaptive/candidate-revisions/opcode_event_opportunity_decode250k_q0_v2/20260909T140011961944Z_06827b21e379.json",
+    "bytes": 3314,
+    "sha256": "3e7946eca20d0894783a522710d12ef60a543ec81bfcba4f996c57721933f734"
+  },
+  "candidate_tree_sha256": "sha256:06827b21e379fee057840fc3061b014ce3a36f88aabeade20e79eae99724b9ee",
+  "frozen_inputs": {
+    "path": "operations/provenance/opcode_event_opportunity_decode250k_v2_inputs.json",
+    "bytes": 36661,
+    "sha256": "889ba4c775652836abe51cff44788b0be4d525e0dfc621c7e98d92de22e64203"
+  },
+  "joint_admission": {
+    "path": "results/smg_opcode_parallel_admission_20260909.json",
+    "bytes": 21372,
+    "sha256": "31b1868c83bb2120719c425bfe907bf89185c05b826d4b5b4c267b77de2a3dcc"
+  },
+  "parent": {
+    "candidate_id": "opcode_field_compact_v1",
+    "source": {
+      "bytes": 5423,
+      "path": "programs/opcode_field_compact_v1/p",
+      "sha256": "7d331ba82c635af8afe6517bf5f4471b41dcf7854c6ec01cb5564078d9bb56a8"
+    },
+    "archive": {
+      "bytes": 67658,
+      "path": "results/opcode_event_parse250k_q0_v1/P.arc",
+      "sha256": "bda617eab7628f7cec6724ca3d82bf505efee9c2be4813dd404dcfa715140e6f"
+    },
+    "raw": {
+      "bytes": 250000,
+      "path": "results/opcode_event_parse250k_q0_v1/P.raw",
+      "sha256": "665fc689441b68462d88f82dc33212abe9c4824be095d03a556c9b55a2829fd3"
+    },
+    "audit": {
+      "bytes": 24889,
+      "path": "results/opcode_event_parse250k_q0_v1/P-decode.audit.json",
+      "sha256": "7aa2091cc61cf1bc838062df300aff0719d23eec0cfc734508f56d5633356315"
+    },
+    "audit_comparison": "Returned P/K/K-repeat audits exactly equal retained audit JSON parent field."
+  },
+  "stage": {
+    "path": "results/opcode_event_opportunity_decode250k_q0_v2/stage-decision.json",
+    "bytes": 1054064,
+    "sha256": "e09ac342899c174488d5dd261b677768095bf335afbc49b92853010d7ecd1b0a"
+  },
+  "artifact_manifest": {
+    "path": "results/opcode_event_opportunity_decode250k_q0_v2/artifacts.json",
+    "bytes": 3809,
+    "sha256": "14521893c25f72a2a705073ee31f0244d2e75cd54799baea47ece4cea10d5712"
+  },
+  "population": {
+    "raw_bytes": 250000,
+    "modeled_bytes": 230968,
+    "coordinate": "Cold opening raw offsets 0..249999; chronological thirds use pre-event modeled position."
+  },
+  "measurements": {
+    "event_count": 182582,
+    "event_counts": [
+      179924,
+      1844,
+      814
+    ],
+    "event_counts_by_modeled_third": [
+      [
+        64847,
+        474,
+        225
+      ],
+      [
+        53550,
+        680,
+        315
+      ],
+      [
+        61527,
+        690,
+        274
+      ]
+    ],
+    "transition_counts": [
+      [
+        177623,
+        1637,
+        663
+      ],
+      [
+        1649,
+        90,
+        105
+      ],
+      [
+        651,
+        117,
+        46
+      ],
+      [
+        1,
+        0,
+        0
+      ]
+    ],
+    "arithmetic_operations": 1644427,
+    "literal_predictor_bits": 1847744,
+    "ideal_event_saving_upper_bits": 17576,
+    "ideal_upper_bits_by_third": [
+      5002,
+      5999,
+      6575
+    ]
+  },
+  "correctness": {
+    "exact_raw_inverse_all_three": true,
+    "complete_parent_audits_equal_all_three": true,
+    "K_repeat_event_binary_and_summary_bytes_equal": true,
+    "original_frozen_inputs_unchanged": true,
+    "manifest_files_verified": 19,
+    "contract_inputs_verified": 28,
+    "runtime_refs_verified": 171,
+    "observed_contexts": 37,
+    "count_rescalings": 78,
+    "record_bytes": 64,
+    "event_stream_bytes_each": 11685248,
+    "integer_chunks_verified": 47
+  },
+  "integer_witness_verification": {
+    "method": "Independently stream <16I records, require continuous index and previous-event state, increasing modeled positions, valid key coordinates, per-key pre/post count continuity, initial counts [1,1,1], and exact rescaling. Rebuild counts, transitions, context tables and products in chronological order, flushing on third changes or 4096 events. Compare every chunk field and product hex value against retained K summary. No observer or codec imported or executed.",
+    "ceiling_law": "For N=product(pre_total) and D=product(pre_count[decoded_event]), k is the smallest nonnegative integer with N <= (D << k), checked also by k=0 or N > (D << (k-1)). Sum all 47 verified k values.",
+    "independent_reviewer": "direction_certificate_review (Fermat) separately recomputed all records, 37 contexts, 78 rescalings, 47 chunks and the same 17576-bit ceiling; no blocker.",
+    "command_class": "taskset -c 3 python3, read-only retained-artifact verification",
+    "result": "passed"
+  },
+  "guard": {
+    "path": "run_logs/adaptive/20260909T140149Z_274c03e2c0.resources/guard.json",
+    "bytes": 15406,
+    "sha256": "09e3daaa26868f4397f18a9639ded1c1f5ebb169ccad8ca549493d1654fc9a28"
+  },
+  "guard_outcome": {
+    "status": "complete",
+    "returncode": 0,
+    "flags": {
+      "cgroup_memory_guard_exceeded": false,
+      "logical_cpu_guard_exceeded": false,
+      "measurement_incomplete": false,
+      "official_decimal_memory_exceeded": false,
+      "phase_marker_invalid": false,
+      "rss_guard_exceeded": false,
+      "temporary_disk_guard_exceeded": false,
+      "wall_time_guard_exceeded": false
+    },
+    "measurements": {
+      "affinity_complete": true,
+      "cgroup_v2_complete": true,
+      "per_process_vmhwm_sampled": true,
+      "phase_markers_complete": true,
+      "process_tree_rss_complete": true,
+      "scratch_logical_and_allocated_complete": true,
+      "smaps_rollup_complete": true
+    },
+    "peaks": {
+      "cgroup_memory_peak_bytes": 511053824,
+      "max_observed_process_vmhwm_kib": 472364,
+      "max_sampled_allowed_cpu_count": 1,
+      "max_sampled_cgroup_current_bytes": 508432384,
+      "max_sampled_scratch_allocated_bytes": 27451392,
+      "max_sampled_scratch_logical_bytes": 27381944,
+      "max_sampled_single_rss_kib": 469900,
+      "max_sampled_tree_live_threads": 2,
+      "max_sampled_tree_rss_kib": 494988,
+      "max_sampled_tree_runnable_threads": 1
+    },
+    "elapsed_seconds": 95.2674,
+    "cgroup_events_delta": {
+      "high": 0,
+      "low": 0,
+      "max": 0,
+      "oom": 0,
+      "oom_group_kill": 0,
+      "oom_kill": 0,
+      "sock_throttled": 0
+    },
+    "cleanup_complete": true,
+    "cgroup_absent_at_review": true,
+    "terminal_process_list_empty": true,
+    "resource_budget": {
+      "cgroup_parent": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice",
+      "cpus": [
+        3
+      ],
+      "memory_bytes": 2147483648,
+      "scratch_bytes": 67108864,
+      "swap_bytes": 0,
+      "wall_seconds": 600
+    },
+    "phase_wall_limit_seconds": 180,
+    "phase_cpu_limit_seconds": 120,
+    "timing_authority": "shared-host diagnostic; not resource qualification",
+    "limits": "Kernel cpuset unavailable; taskset and sampled affinity guard active. Guard wall field is null; phase controller and canonical job carry the frozen wall deadlines. No independent guard wall-limit claim."
+  },
+  "phase_execution": [
+    {
+      "argv": [
+        "/usr/bin/python3",
+        "/home/x/deco/gamma/projects/enwiki9/tools/opcode_event_opportunity_decode250k_q0_v2.py",
+        "--decode-phase",
+        "P",
+        "--inputs",
+        "/home/x/deco/gamma/projects/enwiki9/operations/provenance/opcode_event_opportunity_decode250k_v2_inputs.json",
+        "--output",
+        "/home/x/deco/gamma/projects/enwiki9/results/opcode_event_opportunity_decode250k_q0_v2"
+      ],
+      "codec_resources": {
+        "cpu_seconds": 30.419228543000003,
+        "elapsed_seconds": 30.52408821787685,
+        "output_bytes": 250000,
+        "peak_process_rss_kib": 472276
+      },
+      "elapsed_seconds": 30.61878044786863,
+      "error": null,
+      "phase": "P",
+      "returncode": 0,
+      "system_cpu_seconds": 0.143783,
+      "timeout": false,
+      "timing_authority": "shared-host diagnostic",
+      "user_cpu_seconds": 30.33028
+    },
+    {
+      "argv": [
+        "/usr/bin/python3",
+        "/home/x/deco/gamma/projects/enwiki9/tools/opcode_event_opportunity_decode250k_q0_v2.py",
+        "--decode-phase",
+        "K",
+        "--inputs",
+        "/home/x/deco/gamma/projects/enwiki9/operations/provenance/opcode_event_opportunity_decode250k_v2_inputs.json",
+        "--output",
+        "/home/x/deco/gamma/projects/enwiki9/results/opcode_event_opportunity_decode250k_q0_v2"
+      ],
+      "codec_resources": {
+        "cpu_seconds": 32.014557778,
+        "elapsed_seconds": 32.13331417692825,
+        "output_bytes": 250000,
+        "peak_process_rss_kib": 472364
+      },
+      "elapsed_seconds": 32.2197909289971,
+      "error": null,
+      "phase": "K",
+      "returncode": 0,
+      "system_cpu_seconds": 0.12082700000000002,
+      "timeout": false,
+      "timing_authority": "shared-host diagnostic",
+      "user_cpu_seconds": 31.953261
+    },
+    {
+      "argv": [
+        "/usr/bin/python3",
+        "/home/x/deco/gamma/projects/enwiki9/tools/opcode_event_opportunity_decode250k_q0_v2.py",
+        "--decode-phase",
+        "K-repeat",
+        "--inputs",
+        "/home/x/deco/gamma/projects/enwiki9/operations/provenance/opcode_event_opportunity_decode250k_v2_inputs.json",
+        "--output",
+        "/home/x/deco/gamma/projects/enwiki9/results/opcode_event_opportunity_decode250k_q0_v2"
+      ],
+      "codec_resources": {
+        "cpu_seconds": 31.725024298999998,
+        "elapsed_seconds": 31.838790982961655,
+        "output_bytes": 250000,
+        "peak_process_rss_kib": 472144
+      },
+      "elapsed_seconds": 31.91806455189362,
+      "error": null,
+      "phase": "K-repeat",
+      "returncode": 0,
+      "system_cpu_seconds": 0.14771999999999996,
+      "timeout": false,
+      "timing_authority": "shared-host diagnostic",
+      "user_cpu_seconds": 31.639056999999994
+    }
+  ],
+  "archive_saving_bytes": 0,
+  "objective_credit_bytes": 0,
+  "full_corpus_score_bytes": null,
+  "interpretation": [
+    "17576 bits is a rigorous sum of chunk-rounded ideal parent-event costs on this fixed parse, equivalently 2197 ideal bytes. It is a bounded component budget, not finite archive savings or demonstrated previous-event predictive benefit.",
+    "Literal prediction and copy operand costs lie outside this event bound. Arithmetic operations are not token event counts.",
+    "Post-hoc transition counts do not establish causal predictive benefit conditional on the existing context key. No treatment probabilities or new archive were produced.",
+    "This one retained development opening does not support confirmation, transfer, extrapolated full-corpus savings or any score credit."
+  ],
+  "v1_preflight_failure_preserved": {
+    "path": "operations/evidence/20260909_opcode_event_opportunity_preflight_v1.json",
+    "bytes": 53607,
+    "sha256": "a5cbe159d98079753c24a33173984ce8f0cfb33b2121bf7adca7839c2e3262ba"
+  },
+  "next_decision": "Hold; no automatic successor or larger gate. The next justified question is whether previous-event information reduces causal prequential event loss conditional on the existing key under a separately frozen matched-capacity and delayed-history comparison using this trace. This question remains untested.",
+  "transport": {
+    "archive": {
+      "path": "operations/evidence/20260909_opcode_event_opportunity_decode250k_v2_terminal.zip",
+      "bytes": 6155656,
+      "sha256": "89e7d21ad37bd011c1d249066be01ebb67eec26228023d50d7db54f428807c70"
+    },
+    "format": "ZIP DEFLATE level9; sorted project-relative members; timestamp1980-01-01; Unix regular-file mode0644; no symlinks",
+    "all_member_bytes_verified_against_originals": true,
+    "original_files_unchanged": true,
+    "members": [
+      {
+        "path": "results/opcode_event_opportunity_decode250k_q0_v2/K-repeat.audit.json",
+        "bytes": 23901,
+        "sha256": "169b866fa11381853dd81ea87ccc948cc7c5c169c37c240a8c0e4eccbc0d50a8"
+      },
+      {
+        "path": "results/opcode_event_opportunity_decode250k_q0_v2/K-repeat.events.bin",
+        "bytes": 11685248,
+        "sha256": "6382d7cd95c2c7402dbc0fe011e9b4331bdcc6772beea7bb86cd40a0126ae17e"
+      },
+      {
+        "path": "results/opcode_event_opportunity_decode250k_q0_v2/K-repeat.events.json",
+        "bytes": 1047317,
+        "sha256": "7a37abcf55e724c303d0306e6f9c2d5d11df8799a7a8d9f4eba0feae6232401c"
+      },
+      {
+        "path": "results/opcode_event_opportunity_decode250k_q0_v2/K-repeat.execution.json",
+        "bytes": 670,
+        "sha256": "a43da62e9a0aa43fc434a13b6bcff214ed243d0fa8305c89a8cbab06dc62a0e2"
+      },
+      {
+        "path": "results/opcode_event_opportunity_decode250k_q0_v2/K-repeat.raw",
+        "bytes": 250000,
+        "sha256": "665fc689441b68462d88f82dc33212abe9c4824be095d03a556c9b55a2829fd3"
+      },
+      {
+        "path": "results/opcode_event_opportunity_decode250k_q0_v2/K-repeat.stderr",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "results/opcode_event_opportunity_decode250k_q0_v2/K-repeat.stdout",
+        "bytes": 131,
+        "sha256": "a3a18bf0422c0f84a1a5d2550be27ca475800ae5dd8de31a33bb1c03ddd57da7"
+      },
+      {
+        "path": "results/opcode_event_opportunity_decode250k_q0_v2/K.audit.json",
+        "bytes": 23901,
+        "sha256": "169b866fa11381853dd81ea87ccc948cc7c5c169c37c240a8c0e4eccbc0d50a8"
+      },
+      {
+        "path": "results/opcode_event_opportunity_decode250k_q0_v2/K.events.bin",
+        "bytes": 11685248,
+        "sha256": "6382d7cd95c2c7402dbc0fe011e9b4331bdcc6772beea7bb86cd40a0126ae17e"
+      },
+      {
+        "path": "results/opcode_event_opportunity_decode250k_q0_v2/K.events.json",
+        "bytes": 1047317,
+        "sha256": "7a37abcf55e724c303d0306e6f9c2d5d11df8799a7a8d9f4eba0feae6232401c"
+      },
+      {
+        "path": "results/opcode_event_opportunity_decode250k_q0_v2/K.execution.json",
+        "bytes": 646,
+        "sha256": "bc28fe694fe2447c31acd36a97de37839a55902ea7d96c7053368cbefe45916b"
+      },
+      {
+        "path": "results/opcode_event_opportunity_decode250k_q0_v2/K.raw",
+        "bytes": 250000,
+        "sha256": "665fc689441b68462d88f82dc33212abe9c4824be095d03a556c9b55a2829fd3"
+      },
+      {
+        "path": "results/opcode_event_opportunity_decode250k_q0_v2/K.stderr",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "results/opcode_event_opportunity_decode250k_q0_v2/K.stdout",
+        "bytes": 124,
+        "sha256": "2fe3f13a7b85b19e46afe7ec475fe5c9fbfc41c4447d64a40f86696ea5245f72"
+      },
+      {
+        "path": "results/opcode_event_opportunity_decode250k_q0_v2/P.audit.json",
+        "bytes": 23901,
+        "sha256": "169b866fa11381853dd81ea87ccc948cc7c5c169c37c240a8c0e4eccbc0d50a8"
+      },
+      {
+        "path": "results/opcode_event_opportunity_decode250k_q0_v2/P.execution.json",
+        "bytes": 635,
+        "sha256": "f110833e222f2711d07189e6f76b9717abab07e53ee2ccabf7cc221aa54ecd1e"
+      },
+      {
+        "path": "results/opcode_event_opportunity_decode250k_q0_v2/P.raw",
+        "bytes": 250000,
+        "sha256": "665fc689441b68462d88f82dc33212abe9c4824be095d03a556c9b55a2829fd3"
+      },
+      {
+        "path": "results/opcode_event_opportunity_decode250k_q0_v2/P.stderr",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "results/opcode_event_opportunity_decode250k_q0_v2/P.stdout",
+        "bytes": 130,
+        "sha256": "9d8e582de8ed7d701b555c95fca8dae7872894bb160ca884e70e465062b650a1"
+      },
+      {
+        "path": "results/opcode_event_opportunity_decode250k_q0_v2/artifacts.json",
+        "bytes": 3809,
+        "sha256": "14521893c25f72a2a705073ee31f0244d2e75cd54799baea47ece4cea10d5712"
+      },
+      {
+        "path": "results/opcode_event_opportunity_decode250k_q0_v2/stage-decision.json",
+        "bytes": 1054064,
+        "sha256": "e09ac342899c174488d5dd261b677768095bf335afbc49b92853010d7ecd1b0a"
+      },
+      {
+        "path": "run_logs/adaptive/20260909T140149Z_274c03e2c0.log",
+        "bytes": 21650,
+        "sha256": "5a97edb9055bff635d4abd5657556542cc3185346c19ed2481555f25fe2e36bf"
+      },
+      {
+        "path": "run_logs/adaptive/20260909T140149Z_274c03e2c0.resources/guard.json",
+        "bytes": 15406,
+        "sha256": "09e3daaa26868f4397f18a9639ded1c1f5ebb169ccad8ca549493d1654fc9a28"
+      },
+      {
+        "path": "run_logs/adaptive/20260909T140149Z_274c03e2c0.resources/phases.jsonl",
+        "bytes": 312,
+        "sha256": "3f86f9011ae3cbd92138ebcdadd0102f9356fc9dc875dbd216e9bc3362b91616"
+      }
+    ]
+  }
+}
