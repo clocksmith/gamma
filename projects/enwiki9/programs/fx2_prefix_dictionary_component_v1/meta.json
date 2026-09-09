@@ -6,6 +6,94 @@
   "family": "public_fx2_transformer",
   "hypothesis": "Fixed adjacent-prefix representation of the authenticated dictionary improves its matched FX2 auxiliary compressed component after counting two stored copies and the explicit native restoration helper.",
   "id": "fx2_prefix_dictionary_component_v1",
+  "measured": {
+    "reflections": {
+      "20260909T092825Z_5e9dade1e8": {
+        "decision": "retire",
+        "path": "operations/adaptive/reflections/20260909T092825Z_5e9dade1e8.json",
+        "sha256": "sha256:a41b7af3faf864bc57fe3b9f18e9f1b5a45fa42cb2cef92185064fe4c497d90e",
+        "valid": true
+      }
+    },
+    "terminal_results": {
+      "20260909T092825Z_5e9dade1e8": {
+        "index": {
+          "path": "operations/provenance/fx2_prefix_dictionary_component_v1_terminal/index.json",
+          "sha256": "sha256:59734d0635f39512ae0c9292d6302a8996f4f1dd4e27ddd63aada86edbb10a99"
+        },
+        "reflection": {
+          "decision": "retire",
+          "path": "operations/adaptive/reflections/20260909T092825Z_5e9dade1e8.json",
+          "sha256": "sha256:a41b7af3faf864bc57fe3b9f18e9f1b5a45fa42cb2cef92185064fe4c497d90e",
+          "valid": true
+        },
+        "guard_validation_mode": "discovery-budget-schema",
+        "qualification_authority": false,
+        "missing_diagnostics": [
+          "kernel cpuset controller is not delegated; taskset assignment and existing affinity guard remain active"
+        ],
+        "arms": {
+          "P": {
+            "result_path": "projects/enwiki9/operations/provenance/fx2_prefix_dictionary_component_v1_terminal/P.json",
+            "result_json_bytes": 6253,
+            "result_json_sha256": "0efe95225705fa765bb824a7542de464ebce25db87177b8883f46b4df0069e34",
+            "data_size": 411996,
+            "data_md5": "b3a9cf9fac570b2dc9a0375534792980",
+            "data_sha256": "4c8568cca9343b9a6212477880f56f8efd162f8784224a25edd043097d36215a",
+            "compressed_size": 100098,
+            "program_size": 483848,
+            "hutter_score": null,
+            "bits_per_byte": 1.943669,
+            "roundtrip_ok": true,
+            "determinism": true,
+            "compressed_sha256": "6d35d069777a6ba0381ce320fadf728bb17030df6fd6351f28ffdbef69ea2858",
+            "compress_time_s": 76.0852,
+            "decompress_time_s": 76.576,
+            "missing_diagnostics": [],
+            "run_id": "fx2_prefix_dictionary_component_v1__20260909T092825Z_5e9dade1e8__P"
+          },
+          "K": {
+            "result_path": "projects/enwiki9/operations/provenance/fx2_prefix_dictionary_component_v1_terminal/K.json",
+            "result_json_bytes": 6254,
+            "result_json_sha256": "fdede3ea60982ce6c5e74cbdbcab2da76e5c9cf631202c8927658ecbb9f0edf8",
+            "data_size": 411996,
+            "data_md5": "b3a9cf9fac570b2dc9a0375534792980",
+            "data_sha256": "4c8568cca9343b9a6212477880f56f8efd162f8784224a25edd043097d36215a",
+            "compressed_size": 100098,
+            "program_size": 483848,
+            "hutter_score": null,
+            "bits_per_byte": 1.943669,
+            "roundtrip_ok": true,
+            "determinism": true,
+            "compressed_sha256": "6d35d069777a6ba0381ce320fadf728bb17030df6fd6351f28ffdbef69ea2858",
+            "compress_time_s": 76.0578,
+            "decompress_time_s": 75.7803,
+            "missing_diagnostics": [],
+            "run_id": "fx2_prefix_dictionary_component_v1__20260909T092825Z_5e9dade1e8__K"
+          },
+          "D": {
+            "result_path": "projects/enwiki9/operations/provenance/fx2_prefix_dictionary_component_v1_terminal/D.json",
+            "result_json_bytes": 7113,
+            "result_json_sha256": "f4c9cf72404fa1943b119135a0edd5532c3d56a8052091ec6f5988ccab3355c0",
+            "data_size": 411996,
+            "data_md5": "b3a9cf9fac570b2dc9a0375534792980",
+            "data_sha256": "4c8568cca9343b9a6212477880f56f8efd162f8784224a25edd043097d36215a",
+            "compressed_size": 113945,
+            "program_size": 502108,
+            "hutter_score": null,
+            "bits_per_byte": 2.212546,
+            "roundtrip_ok": true,
+            "determinism": true,
+            "compressed_sha256": "89eb1e73a185074ebe2f4bf7112b1d82f54ef62c1733bb7e4e5d78dad0ba7e79",
+            "compress_time_s": 73.795,
+            "decompress_time_s": 73.5039,
+            "missing_diagnostics": [],
+            "run_id": "fx2_prefix_dictionary_component_v1__20260909T092825Z_5e9dade1e8__D"
+          }
+        }
+      }
+    }
+  },
   "omega": {
     "experiment": {
       "path": "operations/adaptive/experiments/fx2_prefix_dictionary_component_v1.json",
@@ -18,5 +106,6 @@
     "retired_neighborhoods": []
   },
   "parent": "fx2_cmix_transformer_static_vocab_fixture50051_q0_v1",
-  "status": "candidate"
+  "status": "retired",
+  "verdict": "Retire this tested realization. Even zero restoration helper and source costs leave27694 extra stream bytes across two copies. Select a materially different measured opportunity; no general dictionary-compression impossibility claim."
 }

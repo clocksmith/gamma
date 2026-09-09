@@ -1,0 +1,130 @@
+{
+  "attribution": {
+    "causalConfidence": "high",
+    "controlsEquivalent": true,
+    "failureClass": "algorithmic-loss",
+    "localizedCause": "The fixed BPD1 dictionary representation makes the same auxiliary backend emit a larger archive. Which predictor contributions cause that loss was not instrumented."
+  },
+  "candidateId": "fx2_prefix_dictionary_component_v1",
+  "candidateRevision": {
+    "candidateId": "fx2_prefix_dictionary_component_v1",
+    "candidateTreeSha256": "sha256:e34c3b6f211e1949e536bae868dcfdbd6bf8e8bd82517a848e8dbb2f0108f724",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/fx2_prefix_dictionary_component_v1/20260909T092824890693Z_e34c3b6f211e.json",
+      "sha256": "sha256:b6fad945ec1e739b649b3c06054a686d8a1ed7b226523a42bd12397133285449"
+    }
+  },
+  "decision": {
+    "killPredicatesPass": true,
+    "nextGateBytes": null,
+    "promotionPredicatesPass": false,
+    "rationale": "Retire this tested realization. Even zero restoration helper and source costs leave27694 extra stream bytes across two copies. Select a materially different measured opportunity; no general dictionary-compression impossibility claim.",
+    "verdict": "retire"
+  },
+  "evidence": [
+    {
+      "path": "operations/adaptive/experiments/fx2_prefix_dictionary_component_v1.json",
+      "sha256": "sha256:ea04a840e39786e9dfb6f289af1587097109232846a4485b65b5e18fa64254d2"
+    },
+    {
+      "path": "operations/provenance/fx2_prefix_dictionary_component_v1_terminal.json",
+      "sha256": "sha256:5ca1ec80cdacd2ac551f5786a28cc9ae16d52bfd778af147959cabc77055a527"
+    },
+    {
+      "path": "operations/provenance/fx2_prefix_dictionary_component_v1_terminal/index.json",
+      "sha256": "sha256:59734d0635f39512ae0c9292d6302a8996f4f1dd4e27ddd63aada86edbb10a99"
+    },
+    {
+      "path": "results/fx2_prefix_dictionary_component_v1/stage-decision.json",
+      "sha256": "sha256:5c30cb3388a719f4bf44ba1a01a80b4b8f1d9d000bef8270f86fc84464fccb80"
+    }
+  ],
+  "experiment": {
+    "path": "operations/adaptive/experiments/fx2_prefix_dictionary_component_v1.json",
+    "sha256": "sha256:ea04a840e39786e9dfb6f289af1587097109232846a4485b65b5e18fa64254d2"
+  },
+  "generatedUtc": "2026-09-09T09:47:54+00:00",
+  "hypothesis": {
+    "rationale": "P/K100098 bytes, D113945; fixed prefix coding loses13847 bytes per copy before helper cost and60514 bytes under the declared two-container subtotal.",
+    "verdict": "refuted"
+  },
+  "job": {
+    "path": "operations/adaptive/completed/909_20260909T092825Z_5e9dade1e8.json",
+    "sha256": "sha256:de0343dd5b9a7590f39a619c0bea6566cf6098280028ea3469779ff8136d91f5"
+  },
+  "knowledge": {
+    "retiredDimensions": [
+      "Fixed BPD1 adjacent-prefix dictionary with this source-bound GCC auxiliary backend and this pinned dictionary; no prefix parameter ladder or helper-only rescue."
+    ],
+    "transferableLessons": [
+      "A smaller raw dictionary representation and a gain under B2/LZMA do not establish a gain under the actual FX2 auxiliary backend.",
+      "Exact native inversion and repeat establish correctness, while whole-record truncation additionally requires fixed output identity checks."
+    ],
+    "uncertainties": [
+      "No model-specific attribution, full-container inference, official complete package, or full-corpus score was measured."
+    ]
+  },
+  "measurementAssertions": [
+    {
+      "field": "scopeBytes",
+      "pointer": "/raw_dictionary_bytes",
+      "source": {
+        "path": "operations/provenance/fx2_prefix_dictionary_component_v1_terminal.json",
+        "sha256": "sha256:5ca1ec80cdacd2ac551f5786a28cc9ae16d52bfd778af147959cabc77055a527"
+      }
+    },
+    {
+      "field": "scopeSymbols",
+      "pointer": "/population/scopeSymbols",
+      "source": {
+        "path": "operations/adaptive/experiments/fx2_prefix_dictionary_component_v1.json",
+        "sha256": "sha256:ea04a840e39786e9dfb6f289af1587097109232846a4485b65b5e18fa64254d2"
+      }
+    },
+    {
+      "field": "netBytesSaved",
+      "pointer": "/diagnostic_net_bytes",
+      "source": {
+        "path": "operations/provenance/fx2_prefix_dictionary_component_v1_terminal.json",
+        "sha256": "sha256:5ca1ec80cdacd2ac551f5786a28cc9ae16d52bfd778af147959cabc77055a527"
+      }
+    },
+    {
+      "field": "sourceBytesDelta",
+      "pointer": "/added_raw_source_bytes",
+      "source": {
+        "path": "operations/provenance/fx2_prefix_dictionary_component_v1_terminal.json",
+        "sha256": "sha256:5ca1ec80cdacd2ac551f5786a28cc9ae16d52bfd778af147959cabc77055a527"
+      }
+    }
+  ],
+  "measurements": {
+    "idealBitsSaved": null,
+    "memoryRatio": null,
+    "minimumPartitionIdealBitsSaved": null,
+    "netBytesSaved": -60514,
+    "positiveSegmentFraction": null,
+    "runtimeRatio": null,
+    "scopeBytes": 411996,
+    "scopeSymbols": 44515,
+    "sourceBytesDelta": 3700,
+    "transferRetention": null
+  },
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:e91ff20e92c3cac8acb0cbe5c79fc8e8a3b427d7e151245c8eecc52b1c32fa00",
+    "objectiveId": "gamma-enwiki9-hutter-90m-v3",
+    "objectivePath": "contracts/research/v3/objective-contract.json",
+    "targetScoreBytes": 90000000
+  },
+  "reflectionId": "r-20260909t092825z_5e9dade1e8",
+  "schema": "gamma.enwiki9.reflection-receipt.v1",
+  "validity": {
+    "classification": "valid",
+    "reasons": [
+      "All277 artifacts rehash; all15 execution phases match guard markers; independent inverses/repeats and P/K payload identity pass. Independent CPU3 audit agrees; owned cgroup removed and all guards clear."
+    ],
+    "valid": true
+  }
+}
