@@ -12,7 +12,7 @@ Reusable artifact helpers for new tools: [lib/artifacts.py](../lib/artifacts.py)
 The LibNC initializer teacher launcher exits before the first forward, gradient, update, or coded symbol; its source-bound experiment defines that boundary.
 The delayed-status helper's `enwiki9_delayed_status_latest.log` pointer is operational history, not present-host occupancy proof.
 
-Coverage: **1131 files** (33 .c, 76 .cpp, 1 .gdb, 1 .h, 1 .hpp, 1 .html, 1015 .py, 3 .sh).
+Coverage: **1133 files** (33 .c, 76 .cpp, 1 .gdb, 1 .h, 1 .hpp, 1 .html, 1017 .py, 3 .sh).
 
 | Tool | Purpose | Referenced contracts |
 |---|---|---|
@@ -929,6 +929,8 @@ Coverage: **1131 files** (33 .c, 76 .cpp, 1 .gdb, 1 .h, 1 .hpp, 1 .html, 1015 .p
 | [`tools/opcode_literal_sse_build_v1.py`](../tools/opcode_literal_sse_build_v1.py) | Build an independently loadable parent plus literal-calibration mutation. | [1](../operations/adaptive/experiments/opcode_literal_sse250k_q0_v1.json) |
 | [`tools/opcode_literal_sse_corpus_v1.py`](../tools/opcode_literal_sse_corpus_v1.py) | Native-arm decoding and separate witnesses for calibration and unchanged state. | [1](../operations/adaptive/experiments/opcode_literal_sse250k_q0_v1.json) |
 | [`tools/opcode_literal_sse_gate_v1.py`](../tools/opcode_literal_sse_gate_v1.py) | Existing guarded comparison plus exact non-calibration and parse controls. | [1](../operations/adaptive/experiments/opcode_literal_sse250k_q0_v1.json) |
+| [`tools/opcode_previous_word_build_v1.py`](../tools/opcode_previous_word_build_v1.py) | Build a deterministic standalone previous-word literal package. | none found |
+| [`tools/opcode_previous_word_observe_v1.py`](../tools/opcode_previous_word_observe_v1.py) | Optional complete-history and unchanged-parse witnesses for word contexts. | none found |
 | [`tools/opcode_slot_reset_gate_v1.py`](../tools/opcode_slot_reset_gate_v1.py) | Bind the existing ten-phase runner to the independently sealed reset experiment. | none found |
 | [`tools/opcode_slot_reset_observe_v1.py`](../tools/opcode_slot_reset_observe_v1.py) | Existing CLI/wrappers with witnesses for the reset-only decoder state. | none found |
 | [`tools/opcode_wiki_slot_gate_v1.py`](../tools/opcode_wiki_slot_gate_v1.py) | One bounded P/K/D wiki-slot comparison over the frozen development input. | [1](../operations/adaptive/experiments/opcode_literal_sse250k_q0_v1.json) |
