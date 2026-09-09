@@ -1,0 +1,12 @@
+{
+  "command": [
+    "/usr/bin/taskset",
+    "-c",
+    "3",
+    "/usr/bin/python3",
+    "-B",
+    "-c",
+    "import resource,signal,unittest\nfor key,value in ((resource.RLIMIT_AS,536870912),(resource.RLIMIT_CPU,30),(resource.RLIMIT_FSIZE,33554432)):\n resource.setrlimit(key,(value,value))\nsignal.alarm(45)\nsuite=unittest.defaultTestLoader.discover('tests',pattern='test_fx2_weight_sign_magnitude_fixture50051_q0_v1.py')\nresult=unittest.TextTestRunner(verbosity=2).run(suite)\nraise SystemExit(not result.wasSuccessful())\n"
+  ],
+  "cwd": "/home/x/deco/gamma/projects/enwiki9"
+}
