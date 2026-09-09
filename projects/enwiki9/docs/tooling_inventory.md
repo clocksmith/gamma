@@ -12,7 +12,7 @@ Reusable artifact helpers for new tools: [lib/artifacts.py](../lib/artifacts.py)
 The LibNC initializer teacher launcher exits before the first forward, gradient, update, or coded symbol; its source-bound experiment defines that boundary.
 The delayed-status helper's `enwiki9_delayed_status_latest.log` pointer is operational history, not present-host occupancy proof.
 
-Coverage: **1126 files** (33 .c, 76 .cpp, 1 .gdb, 1 .h, 1 .hpp, 1 .html, 1010 .py, 3 .sh).
+Coverage: **1127 files** (33 .c, 76 .cpp, 1 .gdb, 1 .h, 1 .hpp, 1 .html, 1011 .py, 3 .sh).
 
 | Tool | Purpose | Referenced contracts |
 |---|---|---|
@@ -904,6 +904,7 @@ Coverage: **1126 files** (33 .c, 76 .cpp, 1 .gdb, 1 .h, 1 .hpp, 1 .html, 1010 .p
 | [`tools/online_bpe_gate.py`](../tools/online_bpe_gate.py) | Zero-table online macro tokenizer for enwik probes. The encoder and decoder both start with the 256 byte literals. As emitted symbols repeat, the next unused high-byte slot is bound to the repeated symbol pair. Token definitions store their expanded bytes, so later token creation is independent of recursive table mutation. | none found |
 | [`tools/opcode_calibration_gate_v1.py`](../tools/opcode_calibration_gate_v1.py) | Bounded unchanged-parent calibration attribution using existing phase guards. | none found |
 | [`tools/opcode_calibration_observe_v1.py`](../tools/opcode_calibration_observe_v1.py) | Observe existing mixed/calibrated probabilities without changing codec execution. | none found |
+| [`tools/opcode_event_opportunity_observe_v1.py`](../tools/opcode_event_opportunity_observe_v1.py) | Observe actual compact-parent token events without changing codec state. Records are diagnostics, not probabilities supplied to the decoder. Callers own the record sink and execution bounds; this module creates no files or jobs. | none found |
 | [`tools/opcode_event_parse_build_v1.py`](../tools/opcode_event_parse_build_v1.py) | Relocatable bundle of the unchanged parent and measured encoder correction. | [3](../operations/adaptive/experiments/opcode_event_parse250k_q0_v1.json) |
 | [`tools/opcode_event_parse_confirmation_gate_v1.py`](../tools/opcode_event_parse_confirmation_gate_v1.py) | One fixed-code 1MB confirmation, including the measured source-ZIP increment. | [1](../operations/adaptive/experiments/opcode_event_parse_confirmation1m_q0_v1.json) |
 | [`tools/opcode_event_parse_corpus1m_v1.py`](../tools/opcode_event_parse_corpus1m_v1.py) | Use the unchanged codec execution with an explicit one-million-byte ceiling. | [1](../operations/adaptive/experiments/opcode_event_parse_confirmation1m_q0_v1.json) |

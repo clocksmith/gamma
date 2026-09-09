@@ -2,6 +2,9 @@
 
 [Record index](research_register/README.md) | [Earlier records](research_register/archive/README.md)
 
+Independent [opcode opportunity review](../operations/provenance/opcode_event_opportunity_source_review_v1.json)
+finds no transition evidence; the [observer passes four synthetic tests](../operations/evidence/20260909_opcode_event_opportunity_observer_unit.json) before any predictor mutation.
+
 ## 2026-09-09 - Direct sign/magnitude native loader
 
 Owner `root_explore` implements [direct loading](fx2_weight_sign_magnitude_loader_v1.md)
