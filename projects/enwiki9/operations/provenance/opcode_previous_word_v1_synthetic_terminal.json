@@ -1,0 +1,343 @@
+{
+  "schema": "gamma.enwiki9.source-audit-terminal.v1",
+  "id": "opcode_previous_word_v1_synthetic",
+  "owner": "root_explore",
+  "implementation_owner": "next_prediction_gate_review",
+  "status": "passed",
+  "scope": "Synthetic implementation and independent reconstruction only; no corpus run or adaptive candidate created.",
+  "objective_target_bytes": 90000000,
+  "objective_credit_bytes": 0,
+  "full_corpus_score_bytes": null,
+  "complete_package_bytes": null,
+  "source_publication_base": "e66c3c30f7e39913c87d0f9e3542ee0dbc9d028c",
+  "design": "docs/opcode_previous_word_v1.md",
+  "inputs": [
+    {
+      "bytes": 5493,
+      "path": "docs/opcode_previous_word_v1.md",
+      "sha256": "03c60e820fceac04010d2179bf6d9b5102b2ad0c56c5f5fcf7ee00d635900dff"
+    },
+    {
+      "bytes": 1770,
+      "path": "lib/opcode_previous_word_v1.py",
+      "sha256": "b25ea617a34707d4928a9a9605ad4710dbccb63b2c5d4da80a57eea6ef1f26c5"
+    },
+    {
+      "bytes": 1925,
+      "path": "tools/opcode_previous_word_build_v1.py",
+      "sha256": "5be410cc3102c69d42f14e146606abc1880efee4690b46e0c0aee8485abff421"
+    },
+    {
+      "bytes": 7361,
+      "path": "tools/opcode_previous_word_observe_v1.py",
+      "sha256": "33b69c71525fc49fa968c59652744eac9795d9950442ae35e2bdda000a670b0c"
+    },
+    {
+      "bytes": 5909,
+      "path": "tests/test_opcode_previous_word_v1.py",
+      "sha256": "ce9e2cf75c03a8dd25f74a74a213d490000460c7130c544a358beec8eae74445"
+    },
+    {
+      "bytes": 8242,
+      "path": "tests/test_opcode_previous_word_observe_v1.py",
+      "sha256": "0e5ac8ff10bf43c6b9faf020be0821227853469de7b0b907d3b0e02a69de1cde"
+    },
+    {
+      "bytes": 5423,
+      "path": "programs/opcode_field_compact_v1/p",
+      "sha256": "7d331ba82c635af8afe6517bf5f4471b41dcf7854c6ec01cb5564078d9bb56a8"
+    },
+    {
+      "bytes": 323,
+      "path": "programs/opcode_field_compact_v1/program.py",
+      "sha256": "7361c8aa3695ec9d1556be02de66a1f0781414e78b44827511fb08bf8c8c05eb"
+    },
+    {
+      "bytes": 5965,
+      "path": "tools/opcode_field_compact_observe_v1.py",
+      "sha256": "9715b76f275099ebe287d038e061b48a8b3195201d9fadaaed03cca1b6b9bb50"
+    },
+    {
+      "bytes": 7766,
+      "path": "tools/opcode_field_repair_cli_v1.py",
+      "sha256": "a5f49b2587a296155f9b6dea12e159513fb8d033ea5776a2b57a864cf313d0fc"
+    },
+    {
+      "bytes": 14343,
+      "path": "tools/dualstream_grammar_gate_v1.py",
+      "sha256": "7b30a36d4c28113d23d6b9cf475d1b2d48ba40853074c5003322b459af496902"
+    },
+    {
+      "bytes": 8387,
+      "path": "operations/provenance/opcode_calibration_terminal_20260908.json",
+      "sha256": "8ec2b58cd7b97b1d1037543de361d28e2d18d5aab5695620326ce17ac994a3e1"
+    },
+    {
+      "bytes": 5012,
+      "path": "operations/adaptive/reflections/20260908T154100Z_6b9653a04d.json",
+      "sha256": "188a91df9266082781b0b46e1a70b7cc9f1aa7e0d0d0b67995c2b9e6d6efe14c"
+    },
+    {
+      "bytes": 5463,
+      "path": "operations/provenance/opcode_field_history_validation_terminal_20260908.json",
+      "sha256": "1830129d2e386df2d7de9f456b22f3648bcad32a76bd2dcf3b13269f0b6b4485"
+    },
+    {
+      "bytes": 4076,
+      "path": "operations/provenance/opcode_literal_sse_terminal_20260909.json",
+      "sha256": "5dc9b3feb482e04202e98b76759551e0c805e84b5bcafda30a94479b33ed1916"
+    }
+  ],
+  "hypothesis": "Replacing the column literal context with previous-completed-word suffix context may reduce corpus literal coding loss; this synthetic gate establishes implementation correctness only.",
+  "changed_mechanism": "One of twelve literal contexts replaced; D uses immediate completed-word suffix8 with current suffix2 and field, S uses one-word-delayed suffix8. P is immutable, K keeps both histories with unchanged parent contexts. Original prefix estimator and parse remain fixed.",
+  "discovery": {
+    "selection": "Source-directed diagnosis of lost completed-word context; retain existing SSE calibration.",
+    "alternatives": [
+      "Event-only mutation has a scoped 17576-ideal-bit opportunity budget, not a finite archive saving; defer it.",
+      "Persistent field-body histories failed global/randomized control separation on validation; do not relabel that configuration.",
+      "New entropy coder or grammar wrapper lacks a measured source of improvement; retain existing coder."
+    ]
+  },
+  "validation": {
+    "adapter_tests_passed": 6,
+    "observer_tests_passed": 4,
+    "fresh_process_phases": 12,
+    "synthetic_fixtures": 6,
+    "all_exact_inverses": true,
+    "all_deterministic_repeats": true,
+    "observed_unobserved_archive_identity": true,
+    "parent_bookkeeping_archive_and_projection_identity": true,
+    "all_arm_parse_identity": true,
+    "within_arm_complete_witness_identity": true,
+    "copied_byte_history_checked_against_independent_regex": true,
+    "missing_history_and_changed_witness_rejected": true,
+    "relocated_decoder_pass": true
+  },
+  "measurements": [
+    {
+      "archives": {
+        "D": {
+          "bytes": 9,
+          "sha256": "5edfe25b7b7ac7f16027787bc463050f33f1a84397a5ffbd1cbc8dd507cafdd6"
+        },
+        "K": {
+          "bytes": 9,
+          "sha256": "5edfe25b7b7ac7f16027787bc463050f33f1a84397a5ffbd1cbc8dd507cafdd6"
+        },
+        "P": {
+          "bytes": 9,
+          "sha256": "5edfe25b7b7ac7f16027787bc463050f33f1a84397a5ffbd1cbc8dd507cafdd6"
+        },
+        "S": {
+          "bytes": 9,
+          "sha256": "5edfe25b7b7ac7f16027787bc463050f33f1a84397a5ffbd1cbc8dd507cafdd6"
+        }
+      },
+      "exact": true,
+      "fixture": "empty",
+      "parent_bookkeeping_equal": true,
+      "parse_equal": true,
+      "raw_bytes": 0,
+      "repeat": true
+    },
+    {
+      "archives": {
+        "D": {
+          "bytes": 16,
+          "sha256": "87fbb1ebdb6fed2c73928c5d1cd933f2544df3016952092b5c78c255618140bf"
+        },
+        "K": {
+          "bytes": 16,
+          "sha256": "87fbb1ebdb6fed2c73928c5d1cd933f2544df3016952092b5c78c255618140bf"
+        },
+        "P": {
+          "bytes": 16,
+          "sha256": "87fbb1ebdb6fed2c73928c5d1cd933f2544df3016952092b5c78c255618140bf"
+        },
+        "S": {
+          "bytes": 16,
+          "sha256": "87fbb1ebdb6fed2c73928c5d1cd933f2544df3016952092b5c78c255618140bf"
+        }
+      },
+      "exact": true,
+      "fixture": "no_letters",
+      "parent_bookkeeping_equal": true,
+      "parse_equal": true,
+      "raw_bytes": 80,
+      "repeat": true
+    },
+    {
+      "archives": {
+        "D": {
+          "bytes": 229,
+          "sha256": "c3af0d54f701af2bb6e738b7e88d57f418337281361c2b92524552ba9d2dbc4f"
+        },
+        "K": {
+          "bytes": 222,
+          "sha256": "abdf520419183577c87754b0c735b79ffbd175e19ea235363f1f95d9f139c3fe"
+        },
+        "P": {
+          "bytes": 222,
+          "sha256": "abdf520419183577c87754b0c735b79ffbd175e19ea235363f1f95d9f139c3fe"
+        },
+        "S": {
+          "bytes": 230,
+          "sha256": "4397bbee6caa908022006c49d15205762de689bbd2bca78f9b8e8c2f9798b197"
+        }
+      },
+      "exact": true,
+      "fixture": "arbitrary",
+      "parent_bookkeeping_equal": true,
+      "parse_equal": true,
+      "raw_bytes": 265,
+      "repeat": true
+    },
+    {
+      "archives": {
+        "D": {
+          "bytes": 42,
+          "sha256": "b2cabbf466b4df136c86e9cd18740a17ec0a000282f7e7719e98c557c5f9231b"
+        },
+        "K": {
+          "bytes": 42,
+          "sha256": "96d3375124f3795c1a3b9399205f6614cd678a317620465a61592e59ae534036"
+        },
+        "P": {
+          "bytes": 42,
+          "sha256": "96d3375124f3795c1a3b9399205f6614cd678a317620465a61592e59ae534036"
+        },
+        "S": {
+          "bytes": 42,
+          "sha256": "78c8805c7887e3ea1ce55eceec9ddc24d4b1fde2eb8918f0694957103efb3f60"
+        }
+      },
+      "exact": true,
+      "fixture": "words",
+      "parent_bookkeeping_equal": true,
+      "parse_equal": true,
+      "raw_bytes": 320,
+      "repeat": true
+    },
+    {
+      "archives": {
+        "D": {
+          "bytes": 36,
+          "sha256": "90410edadded58bb23725d5f241e4ef69ab67fb006239019d5de8a89c3d46e6e"
+        },
+        "K": {
+          "bytes": 35,
+          "sha256": "3047d9c7614057c20ded1991c172ba61e793f2f931bbbc2ec51d3cd1ab4d1e1d"
+        },
+        "P": {
+          "bytes": 35,
+          "sha256": "3047d9c7614057c20ded1991c172ba61e793f2f931bbbc2ec51d3cd1ab4d1e1d"
+        },
+        "S": {
+          "bytes": 36,
+          "sha256": "6811f22b290cca9577bd9e45d922a76740f49074e2a19892ed49b967d1290b33"
+        }
+      },
+      "exact": true,
+      "fixture": "overlap",
+      "parent_bookkeeping_equal": true,
+      "parse_equal": true,
+      "raw_bytes": 460,
+      "repeat": true
+    },
+    {
+      "archives": {
+        "D": {
+          "bytes": 48,
+          "sha256": "c8bc60d3a8e037695e47a5b0183b7ab65fb5afa68eedbb4b338ff7a8c45fbe67"
+        },
+        "K": {
+          "bytes": 48,
+          "sha256": "4df5ededaa48e595889b2669afc841ffd5e0f1b3a7833df1df08da68e9c5d3c9"
+        },
+        "P": {
+          "bytes": 48,
+          "sha256": "4df5ededaa48e595889b2669afc841ffd5e0f1b3a7833df1df08da68e9c5d3c9"
+        },
+        "S": {
+          "bytes": 48,
+          "sha256": "b44d668a7d807613a5938022682d76ee26b39829b7ebe351ac97fb53a5f36c4a"
+        }
+      },
+      "exact": true,
+      "fixture": "xml",
+      "parent_bookkeeping_equal": true,
+      "parse_equal": true,
+      "raw_bytes": 440,
+      "repeat": true
+    },
+    {
+      "fresh_process_phases": 12,
+      "local_package_bytes": 7023,
+      "relocated_package": {
+        "p": {
+          "bytes": 5423,
+          "sha256": "7d331ba82c635af8afe6517bf5f4471b41dcf7854c6ec01cb5564078d9bb56a8"
+        },
+        "program.py": {
+          "bytes": 768,
+          "sha256": "2fea664bc823dd817d0ad66bc310d05e8d0c903e65f697ce66079e6a9dfd6297"
+        },
+        "v": {
+          "bytes": 832,
+          "sha256": "2415dc99d1338ab9d50f189070144fdf0d54c751e091e2b7a307eaf2e682481b"
+        }
+      }
+    }
+  ],
+  "package": {
+    "parent_local_source_bytes": 5746,
+    "candidate_local_source_bytes": 7023,
+    "local_source_delta_bytes": 1277,
+    "description": "Deterministic p/v/program.py bundle includes immutable compressed parent, compressed mutation and loader. Runtime, licensing and official counting multiplicities unresolved; diagnostic observer and transport ZIP are excluded from this local codec-source subtotal.",
+    "scope": "local source only"
+  },
+  "resources": {
+    "cpu_sets": {
+      "adapter": [
+        3
+      ],
+      "observer": [
+        2
+      ]
+    },
+    "suite_address_space_bytes": 536870912,
+    "suite_process_cpu_seconds": 120,
+    "suite_elapsed_stop_seconds": 180,
+    "phase_address_space_bytes": 536870912,
+    "phase_cpu_seconds": 15,
+    "phase_elapsed_stop_seconds": 20,
+    "phase_file_bytes": 33554432,
+    "retained_file_allowance_bytes": 33554432,
+    "retained_files_bytes": 299915,
+    "timing_authority": "shared-host diagnostic",
+    "qualification": false,
+    "note": "timeout/taskset/prlimit suite controls and existing per-phase resource limits; no canonical corpus job or cgroup qualification. Measured times/RSS retained in exact logs and phase execution receipts."
+  },
+  "independent_review": {
+    "reviewer": "direction_certificate_review",
+    "scope": "Read-only source/state and retained artifact review. Independently verified15 input bindings,258 artifacts,258 ZIP members,24 fixture/arm inverses/repeats/observed equality,72 fixture audits and12 successful relocated phases. No blocking defect. Missing K/D/S history rejection and every-byte update counts are tested. Independent regex confirms terminal history with3368 copied-bit updates in the overlap fixture."
+  },
+  "artifacts": {
+    "path": "operations/evidence/20260909_opcode_previous_word_synthetic_artifacts.json",
+    "bytes": 67539,
+    "sha256": "c21ff22ec01442c9a221fd21b2be153ba532f994e647e2689558765be5667a4f"
+  },
+  "retention": {
+    "bytes": 226555,
+    "path": "operations/evidence/20260909_opcode_previous_word_synthetic.zip",
+    "sha256": "659b3f09adfdaf7d7a07109e67472e6917c5d21f0e84d02074c222132d0db699"
+  },
+  "decision": {
+    "verdict": "synthetic-correctness-pass",
+    "compression_claim": "unproved",
+    "reason": "Fixtures tie or lose to P. Synthetic inputs test correctness, not corpus economics. Twelve tables do not guarantee constant memory.",
+    "next_action": "Prepare one separately prospectively frozen opening250KB P/K/D/S runner using these immutable sources; bind exact parent projection, original parse, full word-state witnesses, resources and actual package inventory; publish ownership and freshly admit before execution.",
+    "promotion_gate": "D archive must beat both P/K and delayed S, then price complete delivery cost before separate fresh confirmation.",
+    "automatic_corpus_launch": false
+  }
+}
