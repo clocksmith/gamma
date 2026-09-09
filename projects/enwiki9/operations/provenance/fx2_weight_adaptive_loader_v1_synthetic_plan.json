@@ -1,0 +1,19 @@
+{
+  "schema": "gamma.enwiki9.source-audit-plan.v1",
+  "id": "fx2_weight_adaptive_loader_v1_synthetic",
+  "owner": "root_explore",
+  "objective_target_bytes": 90000000,
+  "objective_credit_bytes": 0,
+  "parent_evidence": "operations/provenance/fx2_weight_adaptive_marginal_model_v1_terminal.json",
+  "hypothesis": "Direct native GFX2ADM1 loading reconstructs identical tensors while avoiding the separate transcoder's20480-byte increment.",
+  "source": "results/fx2_weight_native_fixture50051_q0_v1/work/native/cpp_infer/src/weights_io_compressed.cpp",
+  "source_sha256": "ea32c4e69e8f630c3aac19faeb28d81ebdd51a6b712791b70669c9ca6e14e466",
+  "mutation": "Add an explicit adaptive format branch to the existing loader. Keep original and fixed-marginal loading, metadata procedures, non-INT4 decoding and generated RoPE arithmetic. Use the unchanged Q11 fixed_tree and unit-count update law. Extend existing canonical range re-encoding and allocation bounds to the new format.",
+  "population": "Existing eight synthetic tensor populations, including special floating-point bit patterns and generated position-zero RoPE; add a rescale-crossing population. No trained model or corpus access.",
+  "controls": ["Preserved native raw-reference checker", "Same checker linked to the adaptive loader", "Existing compressed-container comparator"],
+  "bounds": {"cpu_set": [3], "address_space_bytes": 536870912, "cpu_seconds": 120, "elapsed_seconds": 120, "per_file_bytes": 33554432, "scratch_bytes": 67108864, "reserve_bytes": 34359738368},
+  "output": "results/fx2_weight_adaptive_loader_v1_unit/attempt01",
+  "requirements": ["Exact raw-reference tensor comparison for original, fixed and adaptive formats", "canonicality rejection for truncated and trailing adaptive bytes", "count-rescale coverage", "exclusive output and pinned-source rejection", "matched compiler flags and binary inventory"],
+  "stop_rule": "Any correctness failure blocks publication for trained-model execution. Loader test-binary sizes are diagnostic and cannot replace measuring the actual native binary package.",
+  "next_action": "Freeze and publish a separately bounded all-tensor native parity and native-build size comparison before trained-model access or full native compilation. No corpus inference in that gate."
+}
