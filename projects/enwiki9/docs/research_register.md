@@ -36,6 +36,18 @@ Bounds are10GB memory,zero swap,16GB scratch,3600 seconds aggregate and360 per
 phase. Retain sparse-file cleanup evidence; never hash transient `ppm.temp`.
 No corpus, native inference identity, integrated package or prize score is tested.
 
+The [closed comparison](../operations/provenance/fx2_prefix_dictionary_component_v1_terminal.json)
+rejects this realization: P/K100,098 bytes, D113,945, a13,847-byte loss per copy.
+All inverses/repeats and native rejection controls pass;277 artifacts and15 phases
+were independently rechecked. Diagnostic two-copy net is-60,514 bytes. Even zero
+helper/source cost leaves27,694 extra stream bytes, so the source-reviewed
+in-process restoration alternative is not selected to rescue this prefix format.
+The guard closes cleanly:679.1036 seconds,5,283,262,464 peak cgroup bytes,
+14,695,204,691 logical and22,638,592 allocated scratch bytes; owned group removed.
+The validated reflection retires fixed BPD1 on this dictionary and backend.
+The prior B2/LZMA gain does not transfer. Predictor-specific cause is unmeasured;
+no general dictionary-packing impossibility or full-corpus score is claimed.
+
 ## 2026-09-09 - Freeze the final-parent count comparison
 
 `root_explore` owns `fx2_final_counts_opening250k_q0_v1`, held job

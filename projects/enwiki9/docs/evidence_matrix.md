@@ -14,8 +14,8 @@ Compare identical population hashes; equal input sizes alone do not define match
 
 ## Proof Boundary
 
-- Result JSON files scanned: `314`
-- Roundtrip-passing rows: `124`
+- Result JSON files scanned: `318`
+- Roundtrip-passing rows: `127`
 - Verified full `1G` rows in this checkout: `0`
 - Active target score: `90,000,000` bytes (`9.0000000%`)
 - `9.0000000%` target reached by this matrix: `False`
@@ -38,6 +38,7 @@ Compare identical population hashes; equal input sizes alone do not define match
 | `nncp_compact5_preprocessed_cqq_x86xzopt_nodebug_t4_tarslack_v1` | `321868b6f37a` | custom candidate | 10,000 | 240,248 | 6,229 | 234,019 | 4.9832 | true | `results/nncp_compact5_preprocessed_cqq_x86xzopt_nodebug_t4_tarslack_v1/2026-07-27T213234.json` |
 | `fx2_wrt_support_deploy_fixture_v1:D` | `890b3e1210a2` | custom candidate | 50,051 | 6,019,950 | 3,221 | 6,016,729 | 0.514834868 | true | `operations/provenance/fx2_wrt_support_deploy_terminal_20260908/D.json` |
 | `fx2_weight_adaptive_transfer250k_q0_v1:distant-D` | `f0d01801279f` | custom candidate | 250,000 | unknown | 9,499 | 4,907,384 | 0.303968 | true | `operations/provenance/fx2_weight_adaptive_transfer250k_v1_terminal/distant-D.json` |
+| `fx2_prefix_dictionary_component_v1:K` | `4c8568cca934` | custom candidate | 411,996 | unknown | 100,098 | 483,848 | 1.94366936 | true | `operations/provenance/fx2_prefix_dictionary_component_v1_terminal/K.json` |
 | `matched_frontier_reserved_q0_v1:confirmation-FX2` | `20b4d8d7e140` | custom candidate | 1,000,000 | unknown | 131,238 | unknown | 1.049904 | true | `operations/provenance/matched_frontier_reserved_terminal_20260908/confirmation-FX2.json` |
 
 ## Top Score Rows At 1,000,000 Bytes
