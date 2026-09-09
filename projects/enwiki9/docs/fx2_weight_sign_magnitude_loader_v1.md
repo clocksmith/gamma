@@ -49,3 +49,17 @@ closure. The treatment uses GFX2SMG1; inherited runner labels are mapped explici
 in its outer receipt. Three orchestration failure tests pass. Publication and
 fresh admission precede execution; both incremental package alternatives must
 pay before any separately frozen corpus test.
+
+Published source `3e626e457` completed the
+[production gate](../operations/provenance/fx2_weight_sign_magnitude_production_v1_terminal.json).
+All434 initialized tensors and six104960-byte production probability/logit
+outputs match exactly. The retained parent binary rebuilds identically; both
+binaries are496136 bytes. The loader adds1576 raw source bytes and dispatch62.
+Runtime-pair components save832 bytes, but raw-source-plus-decoder components
+grow806 bytes. The frozen both-negative predicate fails; no corpus advancement.
+
+The rules permit ZIP source and makefile as an executable alternative. The next
+separate package realization will measure actual deterministic source/assets
+ZIP bytes, extracted hashes and a relocated build. It must retain models,
+dictionary, notices and options; raw-source and actual ZIP economics are distinct.
+This preserves the negative result and grants no complete-package credit.
