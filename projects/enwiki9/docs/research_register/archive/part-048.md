@@ -491,3 +491,27 @@ timings and package inventory separate. Field repair improves its own baseline
 but remains larger than supplied-model FX2 in archive bytes. Next assess a
 separately bound smaller implementation preserving its confirmed archives.
 Neither content deduplication nor a cold slice qualifies a complete package.
+
+## 2026-09-08 - Compact field implementation and 90M objective
+
+The [v3 migration](../../../operations/provenance/objective90_migration_20260908.json)
+activates 90,000,000 complete bytes, preserving 105M and 99M contracts and frozen
+experiments. Four migration tests preserve historical digests and obligations.
+`root_explore` owns [opcode_field_compact_v1](../../../operations/adaptive/experiments/opcode_field_compact_v1.json):
+the same confirmed field rule and canonical decoder checks in 5,746 local source
+bytes, down from 15,403. [Seven synthetic tests](../../../operations/evidence/20260908_opcode_field_compact_unit.json)
+pass archive and complete shared-state parity; a retained 65-byte fixture has a
+27-byte exact repeatable archive. The [terminal parity receipt](../../../operations/provenance/opcode_field_compact_terminal_20260908.json)
+passes twelve phases: development 67,658 / validation 71,717 / confirmation 255,828
+archive bytes, exact inverses/repeats and retained shared-state identity. Guards
+and cleanup pass; no new archive saving is claimed. The [source ZIP comparison](../../../operations/provenance/opcode_field_source_zip_cost_20260908.json)
+measures parent 5,041 / compact 5,815 bytes with exact synthetic relocation.
+Twice the 774-byte increase is 1,548 bytes, exceeding the historical 1MB archive
+saving by seven bytes before other package costs. Complete accounting stays open.
+An independent [synthetic state probe](../../../results/opcode_wiki_state_diagnostic_20260908/attempt01/receipt.json)
+finds eight opcode/wiki-coordinate mismatches among eleven predefined strings;
+no corpus frequency or archive gain is claimed. The [validated reflection](../../../operations/adaptive/reflections/20260908T154100Z_6b9653a04d.json)
+selects [opcode_wiki_slot_v1](../../../operations/adaptive/experiments/opcode_wiki_slot_v1.json),
+owned by `root_explore`. Its [terminal gate](../../../operations/provenance/opcode_wiki_slot_terminal_20260908.json)
+passes ten phases: P/K 67,658 / D 67,601 bytes. The 57-byte gain does not pay the
+conditional 554-byte source charge. [Reset terminal](../../../operations/provenance/opcode_slot_reset_terminal_20260908.json): P/K 67,658 / D 67,626; gain32 versus conditional source charge270. [Calibration diagnostic](../../../operations/provenance/opcode_calibration_terminal_20260908.json): existing SSE helps fixed-parse literals by6,615.574 ideal bits, unchanged archive. Both reflections validate; scaling and SSE deletion remain held. Next independent predictor research.
