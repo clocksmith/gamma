@@ -28,6 +28,11 @@ raw-source-plus-decoder grows806. Frozen both-negative gate fails; no corpus run
 Next separately measure actual source/assets ZIP accounting and relocated build,
 an explicit rules-permitted representation, preserving this raw-source failure.
 
+The [measured ZIP realization](../operations/provenance/fx2_weight_sign_magnitude_zip_v1_terminal.json)
+saves40 source/assets ZIP bytes and456 bytes including the separate decoder.
+Both130-member ZIP repeats, exact extraction and relocated binary rebuilds pass.
+Retain this package improvement; next freeze canonical corpus replay independently.
+
 ## 2026-09-09 - Exact weight magnitude and shared-sign factorization
 
 Owner `root_explore` selects lenses10/3 deliberately: exact model representation
