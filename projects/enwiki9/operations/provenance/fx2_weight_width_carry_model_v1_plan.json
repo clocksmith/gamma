@@ -1,0 +1,67 @@
+{
+  "schema": "gamma.enwiki9.source-audit-plan.v1",
+  "id": "fx2_weight_width_carry_model_v1",
+  "owner": "root_explore",
+  "candidate": "fx2_weight_width_carry_v1",
+  "objective_target_bytes": 90000000,
+  "objective_credit_bytes": 0,
+  "hypothesis": "Counts shared between already decoded tensors with identical row width reduce the complete exact model representation relative to per-tensor resets.",
+  "parent_evidence": "operations/provenance/fx2_weight_adaptive_transfer250k_v1_terminal.json",
+  "synthetic_evidence": "operations/evidence/20260909_fx2_weight_width_carry_v1_unit.json",
+  "models": {
+    "original": {
+      "path": "results/fx2_weight_marginal_roundtrip_q0_v1/work/model.P",
+      "bytes": 2930652,
+      "sha256": "7f4db6c8c843a7e6264b6a48ed4805e9e431f543df7a9a0ecb37a35a5e4b8860"
+    },
+    "parent": {
+      "path": "results/fx2_weight_adaptive_marginal_model_v1/attempt01/D.model",
+      "bytes": 2902287,
+      "sha256": "44d4a875784611b8d034f09347c710137e69aa3a830198375aafc19339b0210d"
+    }
+  },
+  "executables": {
+    "parent": {
+      "path": "results/fx2_weight_width_carry_v1_unit/attempt02/parent",
+      "bytes": 107792,
+      "sha256": "85fbcd68c51852a83c42447363c97a2f16123f3af316f09c687ec5555252eae4"
+    },
+    "treatment": {
+      "path": "results/fx2_weight_width_carry_v1_unit/attempt02/probe",
+      "bytes": 129824,
+      "sha256": "e3a1a57c3e5e15fc2476b039e60c365b340a5d3eefa43991ba55f536b36f4e95"
+    }
+  },
+  "controls": [
+    "P: unchanged adaptive marginal representation from the combined probe",
+    "K: exact P with width-bank bookkeeping",
+    "D: counts retained by decoded width",
+    "Independent parent: unchanged adaptive-only probe in D mode"
+  ],
+  "comparison": "All434 tensors, independent original-model restoration and raw-input repeat for every arm. Compare exact bytes, not just sizes. No model selection, trained-weight changes, native inference, or enwik9 access.",
+  "bounds": {
+    "cpu_set": [
+      3
+    ],
+    "address_space_bytes": 536870912,
+    "elapsed_seconds": 120,
+    "phase_elapsed_seconds": 30,
+    "cpu_seconds_per_phase": 30,
+    "per_file_bytes": 33554432,
+    "scratch_bytes": 134217728,
+    "reserve_bytes": 34359738368
+  },
+  "measured_cost_basis": {
+    "source": "results/fx2_weight_adaptive_marginal_model_v1/attempt01/commands.jsonl",
+    "largest_previous_phase_seconds": 0.866,
+    "largest_previous_cumulative_child_peak_rss_kib": 52772,
+    "meaning": "Existing complete-model comparison, not an estimate of engineering duration or guaranteed successor runtime."
+  },
+  "selection": "One preselected row-width policy on the full pinned trained model; no tuning or holdout claim. Synthetic runner tests precede execution.",
+  "package_accounting": "Report complete model delta and measured107792/129824-byte comparison executables separately. Test executable delta22032 is real but not native deployment cost. Positive model savings permit only separately frozen direct-loader accounting; do not assume that cost is zero.",
+  "output": "results/fx2_weight_width_carry_model_v1/attempt01",
+  "execution": "Publish source, frozen inputs and root_explore ownership; verify remote publication, fresh resources and no conflicting live or unknown jobs before execution. CPU3, no installation. Preserve HORIZON and MIDAS.",
+  "stop_rule": "Any inverse, repeat, input or parent mismatch blocks a scientific verdict. Model saving<=0 rejects this exact width-carry realization on the pinned model. A resource stop is not an algorithmic loss. Positive savings with unpaid comparison tooling allow only direct-loader feasibility, not native corpus promotion.",
+  "complete_package_bytes": null,
+  "full_corpus_score_bytes": null
+}
