@@ -1,0 +1,56 @@
+{
+  "phases": [
+    {
+      "phase": "compile",
+      "command": [
+        "g++",
+        "-std=c++17",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-ffunction-sections",
+        "-fdata-sections",
+        "-Wl,--gc-sections",
+        "-s",
+        "tools/fx2_weight_adaptive_marginal_probe_v1.cpp",
+        "-o",
+        "results/fx2_weight_adaptive_marginal_v1_unit/attempt01/probe"
+      ],
+      "returncode": 0,
+      "elapsed_seconds": 1.4672126779332757
+    },
+    {
+      "phase": "fixed",
+      "command": [
+        "g++",
+        "-std=c++17",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-ffunction-sections",
+        "-fdata-sections",
+        "-Wl,--gc-sections",
+        "-s",
+        "tools/fx2_weight_adaptive_marginal_probe_v1.cpp",
+        "-DFX2_FIXED_ONLY",
+        "-o",
+        "results/fx2_weight_adaptive_marginal_v1_unit/attempt01/fixed"
+      ],
+      "returncode": 0,
+      "elapsed_seconds": 0.9671884409617633
+    },
+    {
+      "phase": "unit",
+      "command": [
+        "python3",
+        "tests/test_fx2_weight_adaptive_marginal_v1.py",
+        "-v"
+      ],
+      "returncode": 0,
+      "elapsed_seconds": 0.8673050431534648
+    }
+  ],
+  "objective_credit_bytes": 0
+}

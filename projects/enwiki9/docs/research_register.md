@@ -2,6 +2,21 @@
 
 [Record index](research_register/README.md) | [Earlier records](research_register/archive/README.md)
 
+## 2026-09-09 - Carry adaptive marginal counts into the complete model
+
+Owner `root_explore` takes the measured5527-byte marginal substream saving into
+[a distinct complete format](../lib/fx2_weight_adaptive_marginal_v1.hpp). Metadata,
+names and non-INT4 coding procedures stay fixed; only per-tensor INT4 counts change.
+The [synthetic codec and runner checks](../operations/provenance/fx2_weight_adaptive_marginal_v1_synthetic_terminal.json)
+pass six tests with independent original-model inverses, repeats, parent identity,
+rescaling, malformed-input rejection and exclusive output protection. Matched
+stripped executables cost71976 fixed versus92456 adaptive bytes; the20480-byte
+increase is material and cannot disappear from comparison packaging.
+The [full-model plan](../operations/provenance/fx2_weight_adaptive_marginal_model_v1_plan.json)
+freezes the existing2908329-byte parent, every434 tensors, P/K/D and fixed-only P.
+Publish and freshly admit before model access. No native corpus run or complete
+package claim follows automatically from a smaller model.
+
 ## 2026-09-09 - Rebuild neighboring-weight counts instead of storing tables
 
 Seed `post_literal_sse_discovery_20260909_v1` selects lenses3/5. Owner `root_explore`
@@ -760,36 +775,3 @@ Its verifier checks the retained artifacts without rerunning the codecs.
 Enumeration, interpreter-context tuning and neighboring campaigns stay parked
 or with their existing owners. Two complete older records moved to archive 036
 with their evidence text preserved.
-
-## 2026-09-07 - Interpreter context fails the fixed-grammar prediction gate
-
-`dualstream_event250k_q0_v1` [completed the frozen P/B/R/G/X comparison](../operations/provenance/dualstream_event_terminal_20260907.json)
-on the opening 250,000 raw bytes. The [event codec](dualstream_event_v1.md)
-preserves B's selected graph and all twelve repeated-argument references.
-Arguments arrive at first use; every expanded byte updates shared output history.
-G/X share typed events, integer arithmetic, model budget and updates; X alone
-adds interpreter position. No grammar discovery or binding mutation occurred.
-
-| Arm | Complete archive bytes |
-| --- | ---: |
-| P: unchanged plain Deflate | 89,041 |
-| B: unchanged grammar Deflate | 102,492 |
-| R: raw context coding | 125,624 |
-| G: grammar events, sequential context | 116,986 |
-| X: adds interpreter context | 117,345 |
-
-All fifteen phases pass separate inversion and deterministic repeats. R repeats
-raw encoding; G/X repeat fixed-graph encoding. Their complete decoder reports,
-model/coder traces and interpreter boundary chains match. Thirty-seven targeted
-synthetic tests preceded publication. The closed guard has 153 samples, no
-triggered limit, 36,200,448 bytes peak cgroup memory and complete cleanup.
-
-X adds 359 bytes over G: argument attribution +349, literal definitions +18,
-program +25, content -35, framing +2. These are coder-emission byte categories,
-not independently compressed sections or proof of a causal loss mechanism.
-X beats R by 8,279 bytes but loses to P by 28,304 and B by 14,853.
-The [independent audit](../operations/provenance/dualstream_event_terminal_20260907_review/summary.json) agrees; the [reflection](../operations/adaptive/reflections/20260907T174128Z_3e40a47003.json)
-parks this fixed grammar/model realization; no confirmation or larger run.
-Retain the exact evaluators and inverse. Known local source union is 80,016
-bytes; complete runtime/license/package accounting and full-corpus score remain
-unknown. This result neither attains 99M nor disproves structured prediction.
