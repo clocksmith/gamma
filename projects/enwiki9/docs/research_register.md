@@ -16,6 +16,12 @@ The [full-model plan](../operations/provenance/fx2_weight_adaptive_marginal_mode
 freezes the existing2908329-byte parent, every434 tensors, P/K/D and fixed-only P.
 Publish and freshly admit before model access. No native corpus run or complete
 package claim follows automatically from a smaller model.
+Published at `4930cd374`, the [complete-model result](../operations/provenance/fx2_weight_adaptive_marginal_model_v1_terminal.json)
+passes ten independent phases: P/K2908329,D2902287 bytes, saving6042 model bytes.
+Every arm restores the exact2930652-byte original and repeats; fixed-only P matches.
+The adaptive transcoder adds20480 executable bytes, losing14438 combined bytes.
+Retain the exact format but reject separate-transcoder packaging. A separately
+bounded direct-loader parity/size test must price native code before any corpus run.
 
 ## 2026-09-09 - Rebuild neighboring-weight counts instead of storing tables
 
