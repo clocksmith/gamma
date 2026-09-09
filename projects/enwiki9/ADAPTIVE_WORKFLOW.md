@@ -120,6 +120,13 @@ Choose the next move from current evidence and measured costs:
    If resources are occupied, advance source research, reflection, or a smaller
    admitted task and revisit at the next recorded event or progress update.
 
+For a one-CPU native gate, pin the coordinator before its guarded launcher is
+spawned, for example `taskset -c 2 python3 tools/enwiki9_lab.py run --candidate ID`.
+Use the job's assigned CPU, not an arbitrary free core. Otherwise the initial
+guard sample can catch `taskset` itself inheriting the coordinator's wider CPU
+affinity before narrowing it. Preserve strict enforcement and the failed launch
+receipt; a retry needs terminal cleanup, reflection and fresh admission.
+
 `running_jobs[].timeline` separates submission/start timestamps, elapsed time,
 the declared wall budget, and predictions. `budget_stop_reference_at` is recorded
 job start plus budget: consult the actual guard's timebase for enforcement.

@@ -16,6 +16,12 @@ builds and three codec phases, requiring the retained 496,136-byte executable,
 3,223-byte fixture archive, exact inverse/repeat and all 259,824 coder records.
 Publish held ownership before fresh admission; no native run or new saving is
 claimed by preparation. Preserve all previous science and qualification limits.
+The [first launch](../operations/provenance/fx2_adaptive_package_fixture_v1_launch_terminal.json)
+terminated before any build or worker phase: the initial guard sample saw the
+`taskset` launcher inheriting 32 CPUs before narrowing affinity. Cleanup is
+complete and the result directory is empty. The validated infrastructure-failure
+reflection permits an unchanged retry with the coordinator itself pre-pinned to
+CPU 2. No codec inference or scientific rejection occurred in this attempt.
 
 ## 2026-09-09 - Native package replay reuses existing isolation and resource guards
 

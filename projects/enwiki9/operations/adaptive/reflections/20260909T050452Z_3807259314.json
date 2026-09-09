@@ -1,0 +1,82 @@
+{
+  "attribution": {
+    "causalConfidence": "high",
+    "controlsEquivalent": null,
+    "failureClass": "infrastructure-failure",
+    "localizedCause": "The outer coordinator was not pre-pinned. Its taskset child inherited32 CPUs until exec-time narrowing, and the initial guard sample caught that interval."
+  },
+  "candidateId": "fx2_adaptive_package_fixture50051_q0_v1",
+  "candidateRevision": {
+    "candidateId": "fx2_adaptive_package_fixture50051_q0_v1",
+    "candidateTreeSha256": "sha256:47d011d6b6465a282949f9eb331c50fff171cd46e94c6b3cd3c695c7a46db0fa",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/fx2_adaptive_package_fixture50051_q0_v1/20260909T050451761050Z_47d011d6b646.json",
+      "sha256": "sha256:8d10b808519647acc36524e06163d628d210eeb8d79103c13e818c7445d35bdb"
+    }
+  },
+  "decision": {
+    "killPredicatesPass": false,
+    "nextGateBytes": null,
+    "promotionPredicatesPass": false,
+    "rationale": "Retry unchanged source, package, population and caps under a new job with coordinator affinity already CPU2; preserve the failed launch evidence.",
+    "verdict": "retry"
+  },
+  "evidence": [
+    {
+      "path": "operations/provenance/fx2_adaptive_package_fixture_v1_launch_terminal.json",
+      "sha256": "sha256:be4e8da0d125b0fc92c58b7b40fe92df9231f273ca7c0250dd089bf324bc395b"
+    }
+  ],
+  "experiment": {
+    "path": "operations/adaptive/experiments/fx2_adaptive_package_fixture50051_q0_v1.json",
+    "sha256": "sha256:20f96eff3817bdfab51ad96cde4235369c183844c2641dd27181aed3b6657e1c"
+  },
+  "generatedUtc": "2026-09-09T05:09:04+00:00",
+  "hypothesis": {
+    "rationale": "No build or codec phase executed; package parity remains untested.",
+    "verdict": "not-tested"
+  },
+  "job": {
+    "path": "operations/adaptive/failed/959_20260909T050452Z_3807259314.json",
+    "sha256": "sha256:33a26b9c5d479f13bb0a281851dae75138baa55aa27e6315ec38804f6a84f96e"
+  },
+  "knowledge": {
+    "retiredDimensions": [],
+    "transferableLessons": [
+      "Pin the canonical coordinator to the assigned CPU before spawning the guarded launcher; preserve strict affinity enforcement."
+    ],
+    "uncertainties": [
+      "Native package rebuild and reconstruction remain unexecuted."
+    ]
+  },
+  "measurementAssertions": [],
+  "measurements": {
+    "idealBitsSaved": null,
+    "memoryRatio": null,
+    "minimumPartitionIdealBitsSaved": null,
+    "netBytesSaved": null,
+    "positiveSegmentFraction": null,
+    "runtimeRatio": null,
+    "scopeBytes": null,
+    "scopeSymbols": null,
+    "sourceBytesDelta": null,
+    "transferRetention": null
+  },
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:e91ff20e92c3cac8acb0cbe5c79fc8e8a3b427d7e151245c8eecc52b1c32fa00",
+    "objectiveId": "gamma-enwiki9-hutter-90m-v3",
+    "objectivePath": "contracts/research/v3/objective-contract.json",
+    "targetScoreBytes": 90000000
+  },
+  "reflectionId": "r-20260909t050452z_3807259314",
+  "schema": "gamma.enwiki9.reflection-receipt.v1",
+  "validity": {
+    "classification": "infrastructure-failure",
+    "reasons": [
+      "Initial guard sample found the taskset launcher with32 allowed CPUs; no worker or native phase began. Guard terminated it and canonical cleanup completed."
+    ],
+    "valid": false
+  }
+}
