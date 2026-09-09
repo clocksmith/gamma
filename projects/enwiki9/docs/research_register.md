@@ -2,6 +2,20 @@
 
 [Record index](research_register/README.md) | [Earlier records](research_register/archive/README.md)
 
+## 2026-09-09 - Frozen final-coder ratio opening development comparison
+
+Owner `root_explore` bound [opening250KB](../operations/adaptive/experiments/fx2_ratio_coder_opening250k_q0_v1.json)
+to the identical fixture executable, original dictionary, stored population,
+parent archive and trace. No native semantic change or model-packing composition.
+The [runner](../tools/fx2_ratio_coder_opening250k_q0_v1.py) passes nine synthetic
+tests, including a full250KB driver inverse/repeat and owned-cache handling.
+Job `20260909T073614Z_92f9e13b9e` is held until publication and fresh admission.
+CPU2,9999998976 memory bytes,40GB scratch and1200 elapsed seconds are explicit
+discovery limits. P/K/D/S require original parent identity, independent inverses,
+repeats and every introduced state/coder boundary. The fixture's one-byte gain
+did not pay its32568-byte local component increment. This development gate has
+no confirmation or full-corpus authority; no native result exists at registration.
+
 ## 2026-09-09 - Preserve parent learning while changing ratio delivery
 
 Owner `root_explore` claimed [coder-boundary delivery](../operations/adaptive/experiments/fx2_ratio_coder_delivery_v1.json)
