@@ -1,0 +1,69 @@
+{
+  "schema": "gamma.enwiki9.unit-validation.v1",
+  "candidate": "fx2_weight_sign_magnitude_v1",
+  "owner": "root_explore",
+  "classification": "synthetic-correctness-pass",
+  "source_publication": "dec598d532df4e0e0282e58623e1ce288abafceb",
+  "tests_passed": 8,
+  "exact_vector_builds": [
+    "optimized",
+    "ubsan"
+  ],
+  "runner_compatibility_tests_passed": 3,
+  "result": {
+    "path": "results/fx2_weight_sign_magnitude_v1_unit/attempt01/receipt.json",
+    "bytes": 17169,
+    "sha256": "9ef4363e0ca6c391de62ad8e8b8145e7f37d5e6319269065592280434d4654bf"
+  },
+  "runner_test_log": {
+    "path": "results/fx2_weight_sign_magnitude_v1_runner_unit/attempt01/runner-tests.stderr",
+    "bytes": 506,
+    "sha256": "3e97e4ae4f2606229c1450513f3a7e427c935cdc9995cd4efd259f3b5d9c322f"
+  },
+  "retained_bundle": {
+    "path": "results/fx2_weight_sign_magnitude_v1_unit_retained.zip",
+    "bytes": 977085,
+    "sha256": "1c5a645a95612697f3c21af935870db59a95ed1aaf9bfa09147694d4472d4a82"
+  },
+  "retained_bundle_members_verified": 79,
+  "fixture": {
+    "weights": 30000,
+    "P_bytes": 13618,
+    "D_bytes": 13614,
+    "saved_bytes": 4,
+    "state_boundaries": 30000
+  },
+  "adversarial_fixture": {
+    "P_bytes": 10577,
+    "D_bytes": 14264,
+    "saved_bytes": -3687,
+    "evidence": {
+      "path": "results/fx2_weight_sign_magnitude_v1_unit/attempt01/unittest.stdout",
+      "bytes": 960,
+      "sha256": "ea6577340feac163352d8cdf395d87ebc2b13713eb40a9603758810635b52f5d"
+    }
+  },
+  "comparison_executable_added_bytes": 21312,
+  "comparison_executable_scope": "Measured probe increment, not native deployment cost.",
+  "source_and_toolchain_unchanged": true,
+  "independent_review": {
+    "reviewer": "/root/direction_certificate_review",
+    "input_bindings_verified": 19,
+    "artifact_bindings_verified": 74,
+    "toolchain_files_verified": 9,
+    "pre_weight_states_independently_checked": 30000,
+    "blocking_findings": []
+  },
+  "measured_execution": {
+    "phases": 17,
+    "all_returncodes_zero": true,
+    "child_cpu_seconds": 5.253886,
+    "largest_cumulative_child_peak_rss_kib": 193640,
+    "scope": "Bounded synthetic source audit; no continuous corpus qualification."
+  },
+  "trained_model_bytes_saved": null,
+  "complete_package_bytes": null,
+  "full_corpus_score_bytes": null,
+  "objective_credit_bytes": 0,
+  "next_action": "Freeze a complete-model comparison of all434 tensors using retained executables and independently admitted resources. Omit full-model count traces because their49-byte records exceed the32MiB trace cap. Require exact original-model reconstruction and repeats before native loader accounting."
+}

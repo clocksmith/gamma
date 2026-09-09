@@ -1,0 +1,68 @@
+{
+  "schema": "gamma.enwiki9.source-audit-plan.v1",
+  "id": "fx2_weight_sign_magnitude_model_v1",
+  "owner": "root_explore",
+  "candidate": "fx2_weight_sign_magnitude_v1",
+  "objective_target_bytes": 90000000,
+  "objective_credit_bytes": 0,
+  "hypothesis": "Sharing exact nonzero sign statistics across magnitudes reduces complete trained-model bytes against the per-tensor adaptive marginal parent.",
+  "parent_evidence": "operations/provenance/fx2_weight_adaptive_transfer250k_v1_terminal.json",
+  "synthetic_evidence": "operations/evidence/20260909_fx2_weight_sign_magnitude_v1_unit.json",
+  "models": {
+    "original": {
+      "path": "results/fx2_weight_marginal_roundtrip_q0_v1/work/model.P",
+      "bytes": 2930652,
+      "sha256": "7f4db6c8c843a7e6264b6a48ed4805e9e431f543df7a9a0ecb37a35a5e4b8860"
+    },
+    "parent": {
+      "path": "results/fx2_weight_adaptive_marginal_model_v1/attempt01/D.model",
+      "bytes": 2902287,
+      "sha256": "44d4a875784611b8d034f09347c710137e69aa3a830198375aafc19339b0210d"
+    }
+  },
+  "executables": {
+    "parent": {
+      "path": "results/fx2_weight_sign_magnitude_v1_unit/attempt01/parent",
+      "bytes": 107792,
+      "sha256": "85fbcd68c51852a83c42447363c97a2f16123f3af316f09c687ec5555252eae4"
+    },
+    "treatment": {
+      "path": "results/fx2_weight_sign_magnitude_v1_unit/attempt01/probe",
+      "bytes": 129104,
+      "sha256": "a4accbc417f28cac43e2d805176eb7e5cd79c6b13809f062dcbac5f20cc3c2d8"
+    }
+  },
+  "controls": [
+    "P: unchanged adaptive marginal model",
+    "K: exact P through new bookkeeping path, not a measured runtime control",
+    "D: tensor-local magnitude/shared-sign factorization",
+    "Independent parent: unchanged adaptive-only probe in D mode"
+  ],
+  "comparison": "All434 tensors, independent original-model restoration and raw-input repeat for every arm. Compare exact bytes, not just sizes. No model selection, trained-weight changes, native inference, or enwik9 access.",
+  "bounds": {
+    "cpu_set": [
+      3
+    ],
+    "address_space_bytes": 536870912,
+    "elapsed_seconds": 120,
+    "phase_elapsed_seconds": 30,
+    "cpu_seconds_per_phase": 30,
+    "per_file_bytes": 33554432,
+    "scratch_bytes": 134217728,
+    "reserve_bytes": 34359738368
+  },
+  "measured_cost_basis": {
+    "source": "results/fx2_weight_adaptive_marginal_model_v1/attempt01/commands.jsonl",
+    "largest_previous_phase_seconds": 0.866,
+    "largest_previous_cumulative_child_peak_rss_kib": 52772,
+    "meaning": "Existing complete-model comparison, not an estimate of engineering duration or guaranteed successor runtime."
+  },
+  "selection": "One preselected factorization over all434 trained tensors; no tuning or holdout claim.",
+  "package_accounting": "Report complete model delta and107792/129104-byte comparison executables separately. The21312-byte probe increment is not a native loader estimate. Positive model savings permit separately frozen direct-loader accounting only.",
+  "output": "results/fx2_weight_sign_magnitude_model_v1/attempt01",
+  "execution": "Publish source, frozen inputs and root_explore ownership; verify remote publication, fresh resources and no conflicting live or unknown jobs before execution. CPU3, no installation. Preserve HORIZON and MIDAS.",
+  "stop_rule": "Any inverse, repeat, source or parent mismatch blocks a scientific verdict. Model saving<=0 rejects this fixed sign-magnitude representation on the pinned model. Resource failure is not algorithmic rejection. Positive model savings authorize only native-loader feasibility and separate price measurement.",
+  "complete_package_bytes": null,
+  "full_corpus_score_bytes": null,
+  "trace_policy": "Four-argument probe calls only. Full model has5868864 INT4 elements;49-byte state rows exceed the32MiB fixture trace bound. This gate measures exact complete original-container restoration, not native probability-stream identity."
+}
