@@ -1,0 +1,542 @@
+[
+  {
+    "argv": [
+      "/usr/bin/python3",
+      "-I",
+      "-S",
+      "-B",
+      "-c",
+      "import importlib.util,json,pathlib,resource,sys,time\nbegin,cpu=time.monotonic(),time.process_time()\nloader,operation,source,output=sys.argv[1:]\nspec=importlib.util.spec_from_file_location('delivered_codec',loader)\nmodule=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)\nresult=getattr(module,operation)(pathlib.Path(source).read_bytes())\nwith open(output,'xb') as stream:stream.write(result)\nprint(json.dumps(dict(output_bytes=len(result),cpu_seconds=time.process_time()-cpu,\n elapsed_seconds=time.monotonic()-begin,peak_process_rss_kib=resource.getrusage(resource.RUSAGE_SELF).ru_maxrss)))\n",
+      "/home/x/deco/gamma/projects/enwiki9/results/opcode_previous_word_release_v1_unit_20260909/fixtures/release/program.py",
+      "compress",
+      "/home/x/deco/gamma/projects/enwiki9/results/opcode_previous_word_release_v1_unit_20260909/fixtures/standalone/empty.input",
+      "/home/x/deco/gamma/projects/enwiki9/results/opcode_previous_word_release_v1_unit_20260909/fixtures/standalone/empty-encode.bin"
+    ],
+    "codec_resources": {
+      "cpu_seconds": 0.006999561999999999,
+      "elapsed_seconds": 0.007158065913245082,
+      "output_bytes": 9,
+      "peak_process_rss_kib": 56048
+    },
+    "cwd": "/home/x/deco/gamma/projects/enwiki9/results/opcode_previous_word_release_v1_unit_20260909/fixtures/release",
+    "elapsed_seconds": 0.033226332161575556,
+    "fixture": "empty",
+    "output": {
+      "bytes": 9,
+      "path": "results/opcode_previous_word_release_v1_unit_20260909/fixtures/standalone/empty-encode.bin",
+      "sha256": "5edfe25b7b7ac7f16027787bc463050f33f1a84397a5ffbd1cbc8dd507cafdd6"
+    },
+    "phase": "encode",
+    "returncode": 0
+  },
+  {
+    "argv": [
+      "/usr/bin/python3",
+      "-I",
+      "-S",
+      "-B",
+      "-c",
+      "import importlib.util,json,pathlib,resource,sys,time\nbegin,cpu=time.monotonic(),time.process_time()\nloader,operation,source,output=sys.argv[1:]\nspec=importlib.util.spec_from_file_location('delivered_codec',loader)\nmodule=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)\nresult=getattr(module,operation)(pathlib.Path(source).read_bytes())\nwith open(output,'xb') as stream:stream.write(result)\nprint(json.dumps(dict(output_bytes=len(result),cpu_seconds=time.process_time()-cpu,\n elapsed_seconds=time.monotonic()-begin,peak_process_rss_kib=resource.getrusage(resource.RUSAGE_SELF).ru_maxrss)))\n",
+      "/home/x/deco/gamma/projects/enwiki9/results/opcode_previous_word_release_v1_unit_20260909/fixtures/standalone/relocated/program.py",
+      "decompress",
+      "/home/x/deco/gamma/projects/enwiki9/results/opcode_previous_word_release_v1_unit_20260909/fixtures/standalone/empty-encode.bin",
+      "/home/x/deco/gamma/projects/enwiki9/results/opcode_previous_word_release_v1_unit_20260909/fixtures/standalone/empty-decode.bin"
+    ],
+    "codec_resources": {
+      "cpu_seconds": 0.006777091000000001,
+      "elapsed_seconds": 0.0067570090759545565,
+      "output_bytes": 0,
+      "peak_process_rss_kib": 56048
+    },
+    "cwd": "/home/x/deco/gamma/projects/enwiki9/results/opcode_previous_word_release_v1_unit_20260909/fixtures/standalone/relocated",
+    "elapsed_seconds": 0.0335050281137228,
+    "fixture": "empty",
+    "output": {
+      "bytes": 0,
+      "path": "results/opcode_previous_word_release_v1_unit_20260909/fixtures/standalone/empty-decode.bin",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "phase": "decode",
+    "returncode": 0
+  },
+  {
+    "argv": [
+      "/usr/bin/python3",
+      "-I",
+      "-S",
+      "-B",
+      "-c",
+      "import importlib.util,json,pathlib,resource,sys,time\nbegin,cpu=time.monotonic(),time.process_time()\nloader,operation,source,output=sys.argv[1:]\nspec=importlib.util.spec_from_file_location('delivered_codec',loader)\nmodule=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)\nresult=getattr(module,operation)(pathlib.Path(source).read_bytes())\nwith open(output,'xb') as stream:stream.write(result)\nprint(json.dumps(dict(output_bytes=len(result),cpu_seconds=time.process_time()-cpu,\n elapsed_seconds=time.monotonic()-begin,peak_process_rss_kib=resource.getrusage(resource.RUSAGE_SELF).ru_maxrss)))\n",
+      "/home/x/deco/gamma/projects/enwiki9/results/opcode_previous_word_release_v1_unit_20260909/fixtures/standalone/relocated/program.py",
+      "compress",
+      "/home/x/deco/gamma/projects/enwiki9/results/opcode_previous_word_release_v1_unit_20260909/fixtures/standalone/empty-decode.bin",
+      "/home/x/deco/gamma/projects/enwiki9/results/opcode_previous_word_release_v1_unit_20260909/fixtures/standalone/empty-repeat.bin"
+    ],
+    "codec_resources": {
+      "cpu_seconds": 0.0069910960000000005,
+      "elapsed_seconds": 0.006670176051557064,
+      "output_bytes": 9,
+      "peak_process_rss_kib": 56048
+    },
+    "cwd": "/home/x/deco/gamma/projects/enwiki9/results/opcode_previous_word_release_v1_unit_20260909/fixtures/standalone/relocated",
+    "elapsed_seconds": 0.03348348708823323,
+    "fixture": "empty",
+    "output": {
+      "bytes": 9,
+      "path": "results/opcode_previous_word_release_v1_unit_20260909/fixtures/standalone/empty-repeat.bin",
+      "sha256": "5edfe25b7b7ac7f16027787bc463050f33f1a84397a5ffbd1cbc8dd507cafdd6"
+    },
+    "phase": "repeat",
+    "returncode": 0
+  },
+  {
+    "argv": [
+      "/usr/bin/python3",
+      "-I",
+      "-S",
+      "-B",
+      "-c",
+      "import importlib.util,json,pathlib,resource,sys,time\nbegin,cpu=time.monotonic(),time.process_time()\nloader,operation,source,output=sys.argv[1:]\nspec=importlib.util.spec_from_file_location('delivered_codec',loader)\nmodule=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)\nresult=getattr(module,operation)(pathlib.Path(source).read_bytes())\nwith open(output,'xb') as stream:stream.write(result)\nprint(json.dumps(dict(output_bytes=len(result),cpu_seconds=time.process_time()-cpu,\n elapsed_seconds=time.monotonic()-begin,peak_process_rss_kib=resource.getrusage(resource.RUSAGE_SELF).ru_maxrss)))\n",
+      "/home/x/deco/gamma/projects/enwiki9/results/opcode_previous_word_release_v1_unit_20260909/fixtures/release/program.py",
+      "compress",
+      "/home/x/deco/gamma/projects/enwiki9/results/opcode_previous_word_release_v1_unit_20260909/fixtures/standalone/no_letters.input",
+      "/home/x/deco/gamma/projects/enwiki9/results/opcode_previous_word_release_v1_unit_20260909/fixtures/standalone/no_letters-encode.bin"
+    ],
+    "codec_resources": {
+      "cpu_seconds": 0.014984887,
+      "elapsed_seconds": 0.014136522775515914,
+      "output_bytes": 16,
+      "peak_process_rss_kib": 56048
+    },
+    "cwd": "/home/x/deco/gamma/projects/enwiki9/results/opcode_previous_word_release_v1_unit_20260909/fixtures/release",
+    "elapsed_seconds": 0.033223405946046114,
+    "fixture": "no_letters",
+    "output": {
+      "bytes": 16,
+      "path": "results/opcode_previous_word_release_v1_unit_20260909/fixtures/standalone/no_letters-encode.bin",
+      "sha256": "87fbb1ebdb6fed2c73928c5d1cd933f2544df3016952092b5c78c255618140bf"
+    },
+    "phase": "encode",
+    "returncode": 0
+  },
+  {
+    "argv": [
+      "/usr/bin/python3",
+      "-I",
+      "-S",
+      "-B",
+      "-c",
+      "import importlib.util,json,pathlib,resource,sys,time\nbegin,cpu=time.monotonic(),time.process_time()\nloader,operation,source,output=sys.argv[1:]\nspec=importlib.util.spec_from_file_location('delivered_codec',loader)\nmodule=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)\nresult=getattr(module,operation)(pathlib.Path(source).read_bytes())\nwith open(output,'xb') as stream:stream.write(result)\nprint(json.dumps(dict(output_bytes=len(result),cpu_seconds=time.process_time()-cpu,\n elapsed_seconds=time.monotonic()-begin,peak_process_rss_kib=resource.getrusage(resource.RUSAGE_SELF).ru_maxrss)))\n",
+      "/home/x/deco/gamma/projects/enwiki9/results/opcode_previous_word_release_v1_unit_20260909/fixtures/standalone/relocated/program.py",
+      "decompress",
+      "/home/x/deco/gamma/projects/enwiki9/results/opcode_previous_word_release_v1_unit_20260909/fixtures/standalone/no_letters-encode.bin",
+      "/home/x/deco/gamma/projects/enwiki9/results/opcode_previous_word_release_v1_unit_20260909/fixtures/standalone/no_letters-decode.bin"
+    ],
+    "codec_resources": {
+      "cpu_seconds": 0.009984293,
+      "elapsed_seconds": 0.009677960071712732,
+      "output_bytes": 80,
+      "peak_process_rss_kib": 56048
+    },
+    "cwd": "/home/x/deco/gamma/projects/enwiki9/results/opcode_previous_word_release_v1_unit_20260909/fixtures/standalone/relocated",
+    "elapsed_seconds": 0.033728027949109674,
+    "fixture": "no_letters",
+    "output": {
+      "bytes": 80,
+      "path": "results/opcode_previous_word_release_v1_unit_20260909/fixtures/standalone/no_letters-decode.bin",
+      "sha256": "7c927f1f02ded2fadf996786d0f4f5e417acd6738ba80da96303ccb192254bc5"
+    },
+    "phase": "decode",
+    "returncode": 0
+  },
+  {
+    "argv": [
+      "/usr/bin/python3",
+      "-I",
+      "-S",
+      "-B",
+      "-c",
+      "import importlib.util,json,pathlib,resource,sys,time\nbegin,cpu=time.monotonic(),time.process_time()\nloader,operation,source,output=sys.argv[1:]\nspec=importlib.util.spec_from_file_location('delivered_codec',loader)\nmodule=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)\nresult=getattr(module,operation)(pathlib.Path(source).read_bytes())\nwith open(output,'xb') as stream:stream.write(result)\nprint(json.dumps(dict(output_bytes=len(result),cpu_seconds=time.process_time()-cpu,\n elapsed_seconds=time.monotonic()-begin,peak_process_rss_kib=resource.getrusage(resource.RUSAGE_SELF).ru_maxrss)))\n",
+      "/home/x/deco/gamma/projects/enwiki9/results/opcode_previous_word_release_v1_unit_20260909/fixtures/standalone/relocated/program.py",
+      "compress",
+      "/home/x/deco/gamma/projects/enwiki9/results/opcode_previous_word_release_v1_unit_20260909/fixtures/standalone/no_letters-decode.bin",
+      "/home/x/deco/gamma/projects/enwiki9/results/opcode_previous_word_release_v1_unit_20260909/fixtures/standalone/no_letters-repeat.bin"
+    ],
+    "codec_resources": {
+      "cpu_seconds": 0.01399225,
+      "elapsed_seconds": 0.01439836691133678,
+      "output_bytes": 16,
+      "peak_process_rss_kib": 56048
+    },
+    "cwd": "/home/x/deco/gamma/projects/enwiki9/results/opcode_previous_word_release_v1_unit_20260909/fixtures/standalone/relocated",
+    "elapsed_seconds": 0.033323603915050626,
+    "fixture": "no_letters",
+    "output": {
+      "bytes": 16,
+      "path": "results/opcode_previous_word_release_v1_unit_20260909/fixtures/standalone/no_letters-repeat.bin",
+      "sha256": "87fbb1ebdb6fed2c73928c5d1cd933f2544df3016952092b5c78c255618140bf"
+    },
+    "phase": "repeat",
+    "returncode": 0
+  },
+  {
+    "argv": [
+      "/usr/bin/python3",
+      "-I",
+      "-S",
+      "-B",
+      "-c",
+      "import importlib.util,json,pathlib,resource,sys,time\nbegin,cpu=time.monotonic(),time.process_time()\nloader,operation,source,output=sys.argv[1:]\nspec=importlib.util.spec_from_file_location('delivered_codec',loader)\nmodule=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)\nresult=getattr(module,operation)(pathlib.Path(source).read_bytes())\nwith open(output,'xb') as stream:stream.write(result)\nprint(json.dumps(dict(output_bytes=len(result),cpu_seconds=time.process_time()-cpu,\n elapsed_seconds=time.monotonic()-begin,peak_process_rss_kib=resource.getrusage(resource.RUSAGE_SELF).ru_maxrss)))\n",
+      "/home/x/deco/gamma/projects/enwiki9/results/opcode_previous_word_release_v1_unit_20260909/fixtures/release/program.py",
+      "compress",
+      "/home/x/deco/gamma/projects/enwiki9/results/opcode_previous_word_release_v1_unit_20260909/fixtures/standalone/arbitrary.input",
+      "/home/x/deco/gamma/projects/enwiki9/results/opcode_previous_word_release_v1_unit_20260909/fixtures/standalone/arbitrary-encode.bin"
+    ],
+    "codec_resources": {
+      "cpu_seconds": 0.036945449,
+      "elapsed_seconds": 0.03687216993421316,
+      "output_bytes": 229,
+      "peak_process_rss_kib": 56048
+    },
+    "cwd": "/home/x/deco/gamma/projects/enwiki9/results/opcode_previous_word_release_v1_unit_20260909/fixtures/release",
+    "elapsed_seconds": 0.0653325798921287,
+    "fixture": "arbitrary",
+    "output": {
+      "bytes": 229,
+      "path": "results/opcode_previous_word_release_v1_unit_20260909/fixtures/standalone/arbitrary-encode.bin",
+      "sha256": "c3af0d54f701af2bb6e738b7e88d57f418337281361c2b92524552ba9d2dbc4f"
+    },
+    "phase": "encode",
+    "returncode": 0
+  },
+  {
+    "argv": [
+      "/usr/bin/python3",
+      "-I",
+      "-S",
+      "-B",
+      "-c",
+      "import importlib.util,json,pathlib,resource,sys,time\nbegin,cpu=time.monotonic(),time.process_time()\nloader,operation,source,output=sys.argv[1:]\nspec=importlib.util.spec_from_file_location('delivered_codec',loader)\nmodule=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)\nresult=getattr(module,operation)(pathlib.Path(source).read_bytes())\nwith open(output,'xb') as stream:stream.write(result)\nprint(json.dumps(dict(output_bytes=len(result),cpu_seconds=time.process_time()-cpu,\n elapsed_seconds=time.monotonic()-begin,peak_process_rss_kib=resource.getrusage(resource.RUSAGE_SELF).ru_maxrss)))\n",
+      "/home/x/deco/gamma/projects/enwiki9/results/opcode_previous_word_release_v1_unit_20260909/fixtures/standalone/relocated/program.py",
+      "decompress",
+      "/home/x/deco/gamma/projects/enwiki9/results/opcode_previous_word_release_v1_unit_20260909/fixtures/standalone/arbitrary-encode.bin",
+      "/home/x/deco/gamma/projects/enwiki9/results/opcode_previous_word_release_v1_unit_20260909/fixtures/standalone/arbitrary-decode.bin"
+    ],
+    "codec_resources": {
+      "cpu_seconds": 0.023333657999999997,
+      "elapsed_seconds": 0.02317326283082366,
+      "output_bytes": 265,
+      "peak_process_rss_kib": 56048
+    },
+    "cwd": "/home/x/deco/gamma/projects/enwiki9/results/opcode_previous_word_release_v1_unit_20260909/fixtures/standalone/relocated",
+    "elapsed_seconds": 0.06540289195254445,
+    "fixture": "arbitrary",
+    "output": {
+      "bytes": 265,
+      "path": "results/opcode_previous_word_release_v1_unit_20260909/fixtures/standalone/arbitrary-decode.bin",
+      "sha256": "2da775854b71eb5629c278a7769d41e42a1a41e15f7ffb73b68e8af0345937fc"
+    },
+    "phase": "decode",
+    "returncode": 0
+  },
+  {
+    "argv": [
+      "/usr/bin/python3",
+      "-I",
+      "-S",
+      "-B",
+      "-c",
+      "import importlib.util,json,pathlib,resource,sys,time\nbegin,cpu=time.monotonic(),time.process_time()\nloader,operation,source,output=sys.argv[1:]\nspec=importlib.util.spec_from_file_location('delivered_codec',loader)\nmodule=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)\nresult=getattr(module,operation)(pathlib.Path(source).read_bytes())\nwith open(output,'xb') as stream:stream.write(result)\nprint(json.dumps(dict(output_bytes=len(result),cpu_seconds=time.process_time()-cpu,\n elapsed_seconds=time.monotonic()-begin,peak_process_rss_kib=resource.getrusage(resource.RUSAGE_SELF).ru_maxrss)))\n",
+      "/home/x/deco/gamma/projects/enwiki9/results/opcode_previous_word_release_v1_unit_20260909/fixtures/standalone/relocated/program.py",
+      "compress",
+      "/home/x/deco/gamma/projects/enwiki9/results/opcode_previous_word_release_v1_unit_20260909/fixtures/standalone/arbitrary-decode.bin",
+      "/home/x/deco/gamma/projects/enwiki9/results/opcode_previous_word_release_v1_unit_20260909/fixtures/standalone/arbitrary-repeat.bin"
+    ],
+    "codec_resources": {
+      "cpu_seconds": 0.03599693599999999,
+      "elapsed_seconds": 0.03688468411564827,
+      "output_bytes": 229,
+      "peak_process_rss_kib": 56048
+    },
+    "cwd": "/home/x/deco/gamma/projects/enwiki9/results/opcode_previous_word_release_v1_unit_20260909/fixtures/standalone/relocated",
+    "elapsed_seconds": 0.0651027059648186,
+    "fixture": "arbitrary",
+    "output": {
+      "bytes": 229,
+      "path": "results/opcode_previous_word_release_v1_unit_20260909/fixtures/standalone/arbitrary-repeat.bin",
+      "sha256": "c3af0d54f701af2bb6e738b7e88d57f418337281361c2b92524552ba9d2dbc4f"
+    },
+    "phase": "repeat",
+    "returncode": 0
+  },
+  {
+    "argv": [
+      "/usr/bin/python3",
+      "-I",
+      "-S",
+      "-B",
+      "-c",
+      "import importlib.util,json,pathlib,resource,sys,time\nbegin,cpu=time.monotonic(),time.process_time()\nloader,operation,source,output=sys.argv[1:]\nspec=importlib.util.spec_from_file_location('delivered_codec',loader)\nmodule=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)\nresult=getattr(module,operation)(pathlib.Path(source).read_bytes())\nwith open(output,'xb') as stream:stream.write(result)\nprint(json.dumps(dict(output_bytes=len(result),cpu_seconds=time.process_time()-cpu,\n elapsed_seconds=time.monotonic()-begin,peak_process_rss_kib=resource.getrusage(resource.RUSAGE_SELF).ru_maxrss)))\n",
+      "/home/x/deco/gamma/projects/enwiki9/results/opcode_previous_word_release_v1_unit_20260909/fixtures/release/program.py",
+      "compress",
+      "/home/x/deco/gamma/projects/enwiki9/results/opcode_previous_word_release_v1_unit_20260909/fixtures/standalone/boundaries.input",
+      "/home/x/deco/gamma/projects/enwiki9/results/opcode_previous_word_release_v1_unit_20260909/fixtures/standalone/boundaries-encode.bin"
+    ],
+    "codec_resources": {
+      "cpu_seconds": 0.014983844999999999,
+      "elapsed_seconds": 0.014997587073594332,
+      "output_bytes": 72,
+      "peak_process_rss_kib": 56048
+    },
+    "cwd": "/home/x/deco/gamma/projects/enwiki9/results/opcode_previous_word_release_v1_unit_20260909/fixtures/release",
+    "elapsed_seconds": 0.03353195800445974,
+    "fixture": "boundaries",
+    "output": {
+      "bytes": 72,
+      "path": "results/opcode_previous_word_release_v1_unit_20260909/fixtures/standalone/boundaries-encode.bin",
+      "sha256": "11534b16218bc44b4b2d77adc30d1ec20b3ab9ad6f562197c4694f6a99044c96"
+    },
+    "phase": "encode",
+    "returncode": 0
+  },
+  {
+    "argv": [
+      "/usr/bin/python3",
+      "-I",
+      "-S",
+      "-B",
+      "-c",
+      "import importlib.util,json,pathlib,resource,sys,time\nbegin,cpu=time.monotonic(),time.process_time()\nloader,operation,source,output=sys.argv[1:]\nspec=importlib.util.spec_from_file_location('delivered_codec',loader)\nmodule=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)\nresult=getattr(module,operation)(pathlib.Path(source).read_bytes())\nwith open(output,'xb') as stream:stream.write(result)\nprint(json.dumps(dict(output_bytes=len(result),cpu_seconds=time.process_time()-cpu,\n elapsed_seconds=time.monotonic()-begin,peak_process_rss_kib=resource.getrusage(resource.RUSAGE_SELF).ru_maxrss)))\n",
+      "/home/x/deco/gamma/projects/enwiki9/results/opcode_previous_word_release_v1_unit_20260909/fixtures/standalone/relocated/program.py",
+      "decompress",
+      "/home/x/deco/gamma/projects/enwiki9/results/opcode_previous_word_release_v1_unit_20260909/fixtures/standalone/boundaries-encode.bin",
+      "/home/x/deco/gamma/projects/enwiki9/results/opcode_previous_word_release_v1_unit_20260909/fixtures/standalone/boundaries-decode.bin"
+    ],
+    "codec_resources": {
+      "cpu_seconds": 0.010994133000000001,
+      "elapsed_seconds": 0.011235538870096207,
+      "output_bytes": 72,
+      "peak_process_rss_kib": 56048
+    },
+    "cwd": "/home/x/deco/gamma/projects/enwiki9/results/opcode_previous_word_release_v1_unit_20260909/fixtures/standalone/relocated",
+    "elapsed_seconds": 0.03379163797944784,
+    "fixture": "boundaries",
+    "output": {
+      "bytes": 72,
+      "path": "results/opcode_previous_word_release_v1_unit_20260909/fixtures/standalone/boundaries-decode.bin",
+      "sha256": "87a55b9d00451f1e1284db60f806dcce2b5d298cb581ec15b2b5f65b44a2bfb6"
+    },
+    "phase": "decode",
+    "returncode": 0
+  },
+  {
+    "argv": [
+      "/usr/bin/python3",
+      "-I",
+      "-S",
+      "-B",
+      "-c",
+      "import importlib.util,json,pathlib,resource,sys,time\nbegin,cpu=time.monotonic(),time.process_time()\nloader,operation,source,output=sys.argv[1:]\nspec=importlib.util.spec_from_file_location('delivered_codec',loader)\nmodule=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)\nresult=getattr(module,operation)(pathlib.Path(source).read_bytes())\nwith open(output,'xb') as stream:stream.write(result)\nprint(json.dumps(dict(output_bytes=len(result),cpu_seconds=time.process_time()-cpu,\n elapsed_seconds=time.monotonic()-begin,peak_process_rss_kib=resource.getrusage(resource.RUSAGE_SELF).ru_maxrss)))\n",
+      "/home/x/deco/gamma/projects/enwiki9/results/opcode_previous_word_release_v1_unit_20260909/fixtures/standalone/relocated/program.py",
+      "compress",
+      "/home/x/deco/gamma/projects/enwiki9/results/opcode_previous_word_release_v1_unit_20260909/fixtures/standalone/boundaries-decode.bin",
+      "/home/x/deco/gamma/projects/enwiki9/results/opcode_previous_word_release_v1_unit_20260909/fixtures/standalone/boundaries-repeat.bin"
+    ],
+    "codec_resources": {
+      "cpu_seconds": 0.014984446,
+      "elapsed_seconds": 0.014928085962310433,
+      "output_bytes": 72,
+      "peak_process_rss_kib": 56048
+    },
+    "cwd": "/home/x/deco/gamma/projects/enwiki9/results/opcode_previous_word_release_v1_unit_20260909/fixtures/standalone/relocated",
+    "elapsed_seconds": 0.03379929205402732,
+    "fixture": "boundaries",
+    "output": {
+      "bytes": 72,
+      "path": "results/opcode_previous_word_release_v1_unit_20260909/fixtures/standalone/boundaries-repeat.bin",
+      "sha256": "11534b16218bc44b4b2d77adc30d1ec20b3ab9ad6f562197c4694f6a99044c96"
+    },
+    "phase": "repeat",
+    "returncode": 0
+  },
+  {
+    "argv": [
+      "/usr/bin/python3",
+      "-I",
+      "-S",
+      "-B",
+      "-c",
+      "import importlib.util,json,pathlib,resource,sys,time\nbegin,cpu=time.monotonic(),time.process_time()\nloader,operation,source,output=sys.argv[1:]\nspec=importlib.util.spec_from_file_location('delivered_codec',loader)\nmodule=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)\nresult=getattr(module,operation)(pathlib.Path(source).read_bytes())\nwith open(output,'xb') as stream:stream.write(result)\nprint(json.dumps(dict(output_bytes=len(result),cpu_seconds=time.process_time()-cpu,\n elapsed_seconds=time.monotonic()-begin,peak_process_rss_kib=resource.getrusage(resource.RUSAGE_SELF).ru_maxrss)))\n",
+      "/home/x/deco/gamma/projects/enwiki9/results/opcode_previous_word_release_v1_unit_20260909/fixtures/release/program.py",
+      "compress",
+      "/home/x/deco/gamma/projects/enwiki9/results/opcode_previous_word_release_v1_unit_20260909/fixtures/standalone/overlap.input",
+      "/home/x/deco/gamma/projects/enwiki9/results/opcode_previous_word_release_v1_unit_20260909/fixtures/standalone/overlap-encode.bin"
+    ],
+    "codec_resources": {
+      "cpu_seconds": 0.05176344099999999,
+      "elapsed_seconds": 0.05156775796785951,
+      "output_bytes": 36,
+      "peak_process_rss_kib": 56048
+    },
+    "cwd": "/home/x/deco/gamma/projects/enwiki9/results/opcode_previous_word_release_v1_unit_20260909/fixtures/release",
+    "elapsed_seconds": 0.0650425620842725,
+    "fixture": "overlap",
+    "output": {
+      "bytes": 36,
+      "path": "results/opcode_previous_word_release_v1_unit_20260909/fixtures/standalone/overlap-encode.bin",
+      "sha256": "90410edadded58bb23725d5f241e4ef69ab67fb006239019d5de8a89c3d46e6e"
+    },
+    "phase": "encode",
+    "returncode": 0
+  },
+  {
+    "argv": [
+      "/usr/bin/python3",
+      "-I",
+      "-S",
+      "-B",
+      "-c",
+      "import importlib.util,json,pathlib,resource,sys,time\nbegin,cpu=time.monotonic(),time.process_time()\nloader,operation,source,output=sys.argv[1:]\nspec=importlib.util.spec_from_file_location('delivered_codec',loader)\nmodule=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)\nresult=getattr(module,operation)(pathlib.Path(source).read_bytes())\nwith open(output,'xb') as stream:stream.write(result)\nprint(json.dumps(dict(output_bytes=len(result),cpu_seconds=time.process_time()-cpu,\n elapsed_seconds=time.monotonic()-begin,peak_process_rss_kib=resource.getrusage(resource.RUSAGE_SELF).ru_maxrss)))\n",
+      "/home/x/deco/gamma/projects/enwiki9/results/opcode_previous_word_release_v1_unit_20260909/fixtures/standalone/relocated/program.py",
+      "decompress",
+      "/home/x/deco/gamma/projects/enwiki9/results/opcode_previous_word_release_v1_unit_20260909/fixtures/standalone/overlap-encode.bin",
+      "/home/x/deco/gamma/projects/enwiki9/results/opcode_previous_word_release_v1_unit_20260909/fixtures/standalone/overlap-decode.bin"
+    ],
+    "codec_resources": {
+      "cpu_seconds": 0.025300115999999997,
+      "elapsed_seconds": 0.024813257157802582,
+      "output_bytes": 460,
+      "peak_process_rss_kib": 56048
+    },
+    "cwd": "/home/x/deco/gamma/projects/enwiki9/results/opcode_previous_word_release_v1_unit_20260909/fixtures/standalone/relocated",
+    "elapsed_seconds": 0.0658611161634326,
+    "fixture": "overlap",
+    "output": {
+      "bytes": 460,
+      "path": "results/opcode_previous_word_release_v1_unit_20260909/fixtures/standalone/overlap-decode.bin",
+      "sha256": "556543bb229096d2f7843e09fa9f3ca4cf5eb29421bf5df7cd74c19eae67efc9"
+    },
+    "phase": "decode",
+    "returncode": 0
+  },
+  {
+    "argv": [
+      "/usr/bin/python3",
+      "-I",
+      "-S",
+      "-B",
+      "-c",
+      "import importlib.util,json,pathlib,resource,sys,time\nbegin,cpu=time.monotonic(),time.process_time()\nloader,operation,source,output=sys.argv[1:]\nspec=importlib.util.spec_from_file_location('delivered_codec',loader)\nmodule=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)\nresult=getattr(module,operation)(pathlib.Path(source).read_bytes())\nwith open(output,'xb') as stream:stream.write(result)\nprint(json.dumps(dict(output_bytes=len(result),cpu_seconds=time.process_time()-cpu,\n elapsed_seconds=time.monotonic()-begin,peak_process_rss_kib=resource.getrusage(resource.RUSAGE_SELF).ru_maxrss)))\n",
+      "/home/x/deco/gamma/projects/enwiki9/results/opcode_previous_word_release_v1_unit_20260909/fixtures/standalone/relocated/program.py",
+      "compress",
+      "/home/x/deco/gamma/projects/enwiki9/results/opcode_previous_word_release_v1_unit_20260909/fixtures/standalone/overlap-decode.bin",
+      "/home/x/deco/gamma/projects/enwiki9/results/opcode_previous_word_release_v1_unit_20260909/fixtures/standalone/overlap-repeat.bin"
+    ],
+    "codec_resources": {
+      "cpu_seconds": 0.051974861,
+      "elapsed_seconds": 0.05135321314446628,
+      "output_bytes": 36,
+      "peak_process_rss_kib": 56048
+    },
+    "cwd": "/home/x/deco/gamma/projects/enwiki9/results/opcode_previous_word_release_v1_unit_20260909/fixtures/standalone/relocated",
+    "elapsed_seconds": 0.06546697299927473,
+    "fixture": "overlap",
+    "output": {
+      "bytes": 36,
+      "path": "results/opcode_previous_word_release_v1_unit_20260909/fixtures/standalone/overlap-repeat.bin",
+      "sha256": "90410edadded58bb23725d5f241e4ef69ab67fb006239019d5de8a89c3d46e6e"
+    },
+    "phase": "repeat",
+    "returncode": 0
+  },
+  {
+    "argv": [
+      "/usr/bin/python3",
+      "-I",
+      "-S",
+      "-B",
+      "-c",
+      "import importlib.util,json,pathlib,resource,sys,time\nbegin,cpu=time.monotonic(),time.process_time()\nloader,operation,source,output=sys.argv[1:]\nspec=importlib.util.spec_from_file_location('delivered_codec',loader)\nmodule=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)\nresult=getattr(module,operation)(pathlib.Path(source).read_bytes())\nwith open(output,'xb') as stream:stream.write(result)\nprint(json.dumps(dict(output_bytes=len(result),cpu_seconds=time.process_time()-cpu,\n elapsed_seconds=time.monotonic()-begin,peak_process_rss_kib=resource.getrusage(resource.RUSAGE_SELF).ru_maxrss)))\n",
+      "/home/x/deco/gamma/projects/enwiki9/results/opcode_previous_word_release_v1_unit_20260909/fixtures/release/program.py",
+      "compress",
+      "/home/x/deco/gamma/projects/enwiki9/results/opcode_previous_word_release_v1_unit_20260909/fixtures/standalone/opcodes.input",
+      "/home/x/deco/gamma/projects/enwiki9/results/opcode_previous_word_release_v1_unit_20260909/fixtures/standalone/opcodes-encode.bin"
+    ],
+    "codec_resources": {
+      "cpu_seconds": 0.019783497,
+      "elapsed_seconds": 0.020460625179111958,
+      "output_bytes": 39,
+      "peak_process_rss_kib": 56048
+    },
+    "cwd": "/home/x/deco/gamma/projects/enwiki9/results/opcode_previous_word_release_v1_unit_20260909/fixtures/release",
+    "elapsed_seconds": 0.0330578931607306,
+    "fixture": "opcodes",
+    "output": {
+      "bytes": 39,
+      "path": "results/opcode_previous_word_release_v1_unit_20260909/fixtures/standalone/opcodes-encode.bin",
+      "sha256": "d75033d1184e5ebca6b814b4122451c76d2b1daea9df16c161f0a383ca86a346"
+    },
+    "phase": "encode",
+    "returncode": 0
+  },
+  {
+    "argv": [
+      "/usr/bin/python3",
+      "-I",
+      "-S",
+      "-B",
+      "-c",
+      "import importlib.util,json,pathlib,resource,sys,time\nbegin,cpu=time.monotonic(),time.process_time()\nloader,operation,source,output=sys.argv[1:]\nspec=importlib.util.spec_from_file_location('delivered_codec',loader)\nmodule=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)\nresult=getattr(module,operation)(pathlib.Path(source).read_bytes())\nwith open(output,'xb') as stream:stream.write(result)\nprint(json.dumps(dict(output_bytes=len(result),cpu_seconds=time.process_time()-cpu,\n elapsed_seconds=time.monotonic()-begin,peak_process_rss_kib=resource.getrusage(resource.RUSAGE_SELF).ru_maxrss)))\n",
+      "/home/x/deco/gamma/projects/enwiki9/results/opcode_previous_word_release_v1_unit_20260909/fixtures/standalone/relocated/program.py",
+      "decompress",
+      "/home/x/deco/gamma/projects/enwiki9/results/opcode_previous_word_release_v1_unit_20260909/fixtures/standalone/opcodes-encode.bin",
+      "/home/x/deco/gamma/projects/enwiki9/results/opcode_previous_word_release_v1_unit_20260909/fixtures/standalone/opcodes-decode.bin"
+    ],
+    "codec_resources": {
+      "cpu_seconds": 0.011777551999999998,
+      "elapsed_seconds": 0.012560578994452953,
+      "output_bytes": 296,
+      "peak_process_rss_kib": 56048
+    },
+    "cwd": "/home/x/deco/gamma/projects/enwiki9/results/opcode_previous_word_release_v1_unit_20260909/fixtures/standalone/relocated",
+    "elapsed_seconds": 0.03282063594087958,
+    "fixture": "opcodes",
+    "output": {
+      "bytes": 296,
+      "path": "results/opcode_previous_word_release_v1_unit_20260909/fixtures/standalone/opcodes-decode.bin",
+      "sha256": "392ea4dd09c0edb8e3150dda94ed91e649163dc867559e19ebf0fd2c698a8a26"
+    },
+    "phase": "decode",
+    "returncode": 0
+  },
+  {
+    "argv": [
+      "/usr/bin/python3",
+      "-I",
+      "-S",
+      "-B",
+      "-c",
+      "import importlib.util,json,pathlib,resource,sys,time\nbegin,cpu=time.monotonic(),time.process_time()\nloader,operation,source,output=sys.argv[1:]\nspec=importlib.util.spec_from_file_location('delivered_codec',loader)\nmodule=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)\nresult=getattr(module,operation)(pathlib.Path(source).read_bytes())\nwith open(output,'xb') as stream:stream.write(result)\nprint(json.dumps(dict(output_bytes=len(result),cpu_seconds=time.process_time()-cpu,\n elapsed_seconds=time.monotonic()-begin,peak_process_rss_kib=resource.getrusage(resource.RUSAGE_SELF).ru_maxrss)))\n",
+      "/home/x/deco/gamma/projects/enwiki9/results/opcode_previous_word_release_v1_unit_20260909/fixtures/standalone/relocated/program.py",
+      "compress",
+      "/home/x/deco/gamma/projects/enwiki9/results/opcode_previous_word_release_v1_unit_20260909/fixtures/standalone/opcodes-decode.bin",
+      "/home/x/deco/gamma/projects/enwiki9/results/opcode_previous_word_release_v1_unit_20260909/fixtures/standalone/opcodes-repeat.bin"
+    ],
+    "codec_resources": {
+      "cpu_seconds": 0.019786483,
+      "elapsed_seconds": 0.020164086017757654,
+      "output_bytes": 39,
+      "peak_process_rss_kib": 56048
+    },
+    "cwd": "/home/x/deco/gamma/projects/enwiki9/results/opcode_previous_word_release_v1_unit_20260909/fixtures/standalone/relocated",
+    "elapsed_seconds": 0.03283188701607287,
+    "fixture": "opcodes",
+    "output": {
+      "bytes": 39,
+      "path": "results/opcode_previous_word_release_v1_unit_20260909/fixtures/standalone/opcodes-repeat.bin",
+      "sha256": "d75033d1184e5ebca6b814b4122451c76d2b1daea9df16c161f0a383ca86a346"
+    },
+    "phase": "repeat",
+    "returncode": 0
+  }
+]
