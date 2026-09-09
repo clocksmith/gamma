@@ -17,8 +17,11 @@ retains independent five-arm inverse/repeat processes, every pre-truth probabili
 every-byte model-state witnesses, plus truncated-archive rejection. Empty archives are17
 bytes; on the constructed120-byte insertion P/K/L/S are124 and D106 bytes.
 No corpus, native FX2 comparison or competitive parent was used. Source/package costs remain.
-Next freeze one existing-fixture native-probability diagnostic with explicit WRT coordinates,
-controls and opportunity counts. No native integration or full-corpus score follows yet.
+The [retained FX2 diagnostic plan](../operations/provenance/context_edit_fx2_audit_v1_plan.json)
+freezes one existing50051-raw-byte fixture, explicit WRT coordinates, controls and opportunity
+counts. Three synthetic adapter tests pass, including exact published-fixture probability
+and state parity. Publish source and freshly admit CPU3 before the two diagnostic repeats.
+No native integration or full-corpus score follows from this conditional evidence alone.
 
 ## 2026-09-09 - Test neighboring-weight dependence with fully paid symbol tables
 
