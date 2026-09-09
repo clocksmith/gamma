@@ -1,0 +1,58 @@
+test_all_fields_literal_and_dictionary_tokens (__main__.Tests.test_all_fields_literal_and_dictionary_tokens) ... FAIL
+test_case_escapes_and_no_entity_expansion (__main__.Tests.test_case_escapes_and_no_entity_expansion) ... FAIL
+test_event_completion_is_causal (__main__.Tests.test_event_completion_is_causal) ... ok
+test_native_rejections_and_state (__main__.Tests.test_native_rejections_and_state) ... ok
+test_partial_markers_and_malformed_markup_are_literal (__main__.Tests.test_partial_markers_and_malformed_markup_are_literal) ... ERROR
+test_random_synthetic_events (__main__.Tests.test_random_synthetic_events) ... ok
+test_truncated_and_invalid_codes (__main__.Tests.test_truncated_and_invalid_codes) ... ok
+
+======================================================================
+ERROR: test_partial_markers_and_malformed_markup_are_literal (__main__.Tests.test_partial_markers_and_malformed_markup_are_literal)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/x/deco/gamma/projects/enwiki9/tests/test_fx2_xml_field_observer_v1.py", line 86, in test_partial_markers_and_malformed_markup_are_literal
+    self.compare(b'<title>x</titleX><<id>2</id>\0\xff<title')
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/x/deco/gamma/projects/enwiki9/tests/test_fx2_xml_field_observer_v1.py", line 44, in compare
+    raw.extend(state.word(WORDS[wrt.token_index(token)]))
+                                ~~~~~~~~~~~~~~~^^^^^^^
+  File "/home/x/deco/gamma/projects/enwiki9/tools/wrt_exact.py", line 76, in token_index
+    raise ValueError(f"invalid WRT dictionary code: {code.hex()}")
+ValueError: invalid WRT dictionary code: ff3c
+
+======================================================================
+FAIL: test_all_fields_literal_and_dictionary_tokens (__main__.Tests.test_all_fields_literal_and_dictionary_tokens)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/x/deco/gamma/projects/enwiki9/tests/test_fx2_xml_field_observer_v1.py", line 73, in test_all_fields_literal_and_dictionary_tokens
+    self.compare(b'<title>a</title><id>12</id><timestamp>x</timestamp>'
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                 b'<username>x</username><comment>x</comment>'
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                 b'<text xml:space="preserve">x</text>')
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/x/deco/gamma/projects/enwiki9/tests/test_fx2_xml_field_observer_v1.py", line 63, in compare
+    self.assertEqual(int(actual_field),field,(end,bytes(accumulated)))
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 0 != 6 : (121, b'<title>a</title><id>12</id><timestamp>x</timestamp><username>x</username><comment>x</comment><text xml:space="preserve">')
+
+======================================================================
+FAIL: test_case_escapes_and_no_entity_expansion (__main__.Tests.test_case_escapes_and_no_entity_expansion)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/x/deco/gamma/projects/enwiki9/tests/test_fx2_xml_field_observer_v1.py", line 81, in test_case_escapes_and_no_entity_expansion
+    self.compare(b'<\x40\x80>x</\x80><text xml:space="preserve">'
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                 b'&lt;title&gt;\x07ab\x06\x40z\x0c\xff\x40\x0c!a'
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                 b'\x07\x40\x80</text>')
+                 ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/x/deco/gamma/projects/enwiki9/tests/test_fx2_xml_field_observer_v1.py", line 63, in compare
+    self.assertEqual(int(actual_field),field,(end,bytes(accumulated)))
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 0 != 6 : (37, b'<Title>x</title><text xml:space="preserve">')
+
+----------------------------------------------------------------------
+Ran 7 tests in 0.130s
+
+FAILED (failures=2, errors=1)
