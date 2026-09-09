@@ -22,6 +22,20 @@ count both compressed copies and actual restoration code. The caller must verify
 restored dictionary size/hash: whole-record truncation is syntactically valid.
 Preserve the held B2 job. Implementation ownership grants no launch or score credit.
 
+The [frozen component gate](../operations/adaptive/experiments/fx2_prefix_dictionary_component_v1.json)
+now binds371 inputs and the original GCC auxiliary executable. `root_explore`
+owns held job `20260909T092825Z_5e9dade1e8` pending publication and fresh CPU2
+admission. Six runner fixtures and three helper rejection tests pass; helper
+tests pass optimized and UBSan. The helper is14,560 bytes, with3,700 restoration
+source bytes. The declared two-container subtotal needs16,411 compressed bytes
+saved per copy to pay. This is a measured cost threshold, not a gain forecast.
+P/K/D independently decode and repeat the411,996-byte dictionary; K runs the
+prefix transform and native inverse before unchanged auxiliary compression.
+All arms retain public online-LSTM auxiliary mode without transformer weights.
+Bounds are10GB memory,zero swap,16GB scratch,3600 seconds aggregate and360 per
+phase. Retain sparse-file cleanup evidence; never hash transient `ppm.temp`.
+No corpus, native inference identity, integrated package or prize score is tested.
+
 ## 2026-09-09 - Freeze the final-parent count comparison
 
 `root_explore` owns `fx2_final_counts_opening250k_q0_v1`, held job
@@ -771,29 +785,3 @@ hold larger promotion and exclude further packaging-only sweeps on this fixture.
 The next search needs a distinct measured predictive opportunity, not a linear
 projection of this two-byte gain. Full-corpus score and complete package remain
 unknown; the 90M objective remains active.
-
-## 2026-09-08 - Native output-tail comparison freezes one numerical correction
-
-The [new comparison](../operations/adaptive/experiments/fx2_half_tail_fixture50051_q0_v1.json)
-tests whether correcting final transformer half outputs pays in native archives.
-P/K retain the original 431-input block; D changes only positive subnormal tail
-outputs before the existing floor. Input priors, trained weights, resets and
-piece-boundary fallback remain unchanged. All input/output half trajectories
-must agree across arms, alongside exact archives, inverses and coder traces.
-The [unit receipt](../operations/evidence/20260908_fx2_half_tail_native_unit.json)
-retains exhaustive finite conversion checks and five passing runner tests.
-The failed temporary-directory compile and test-scope mistake remain recorded.
-Owner `root_explore` holds job `20260908T210238Z_20d11a6e91` for publication and
-fresh CPU2 admission. One 50,051-byte development fixture; no tuning or holdout.
-The guard allows 9,999,998,976 memory bytes, zero swap, 24GB scratch and a
-1,200-second elapsed stop. No native corpus result or compression gain exists
-yet; complete hidden state and submission package qualification remain open.
-
-The [terminal comparison](../operations/provenance/fx2_half_tail_terminal_20260908.json)
-now closes all arms: P/K/D are each 3,223 bytes, with exact inverses and repeats.
-D changes 28,022 after-floor outputs and 13,148 final quantized events, but
-posthoc ideal coding cost worsens 0.4416 bits and the archive saves zero bytes.
-All nine half input/output trajectories match exactly. The guard passes with
-5,823,074,304 peak cgroup bytes and owned children removed. The validated
-reflection retires this configuration; numerical fidelity alone did not improve
-this fixture's compression. No larger gate or full-corpus score is authorized.
