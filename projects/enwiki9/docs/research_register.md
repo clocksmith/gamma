@@ -2,6 +2,18 @@
 
 [Record index](research_register/README.md) | [Earlier records](research_register/archive/README.md)
 
+## 2026-09-09 - Transfer exact adaptive packing to opening and distant 250KB
+
+Owner `root_explore` freezes [the two-population native comparison](../operations/adaptive/experiments/fx2_weight_adaptive_transfer250k_q0_v1.json)
+after validated fixture parity. The same repaired binary, models and dictionary
+must preserve opening 33,429-byte and distant 9,499-byte archives, exact inverses,
+repeats and all eighteen coder traces. These previously examined cold slices
+test fresh execution, not statistical holdout or mature history. Thirteen
+regression tests and the 337-input preflight pass. Retain CPU 2, 10GB-class
+memory, 16GB scratch and the prior 1,100-second transfer budget. Publish held
+ownership before fresh admission. Package alternatives and zero archive savings
+remain separate; no new codec mechanism, compilation or full-score credit.
+
 ## 2026-09-09 - Replay the native fixture after production dispatch repair
 
 Owner `root_explore` uses the canonical implementation-retry freezer for

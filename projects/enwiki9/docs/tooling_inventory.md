@@ -12,7 +12,7 @@ Reusable artifact helpers for new tools: [lib/artifacts.py](../lib/artifacts.py)
 The LibNC initializer teacher launcher exits before the first forward, gradient, update, or coded symbol; its source-bound experiment defines that boundary.
 The delayed-status helper's `enwiki9_delayed_status_latest.log` pointer is operational history, not present-host occupancy proof.
 
-Coverage: **1096 files** (33 .c, 72 .cpp, 1 .gdb, 1 .h, 1 .hpp, 1 .html, 984 .py, 3 .sh).
+Coverage: **1097 files** (33 .c, 72 .cpp, 1 .gdb, 1 .h, 1 .hpp, 1 .html, 985 .py, 3 .sh).
 
 | Tool | Purpose | Referenced contracts |
 |---|---|---|
@@ -391,6 +391,7 @@ Coverage: **1096 files** (33 .c, 72 .cpp, 1 .gdb, 1 .h, 1 .hpp, 1 .html, 984 .py
 | [`tools/fx2_weight_adaptive_marginal_probe_v1.cpp`](../tools/fx2_weight_adaptive_marginal_probe_v1.cpp) | Exact full-container comparison; preserve the included GPLv3 provenance. | none found |
 | [`tools/fx2_weight_adaptive_neighbor_model_v1.py`](../tools/fx2_weight_adaptive_neighbor_model_v1.py) | Compare P/K/A/D exact INT4 substreams; no inference or corpus credit. | none found |
 | [`tools/fx2_weight_adaptive_neighbor_probe_v1.cpp`](../tools/fx2_weight_adaptive_neighbor_probe_v1.cpp) | Reuse immutable file IO; preserve the upstream FX2 GPLv3 provenance. | none found |
+| [`tools/fx2_weight_adaptive_transfer250k_q0_v1.py`](../tools/fx2_weight_adaptive_transfer250k_q0_v1.py) | Guarded native archive parity for the exact adaptive model representation. | none found |
 | [`tools/fx2_weight_even7_fixture50051_q0_v1.py`](../tools/fx2_weight_even7_fixture50051_q0_v1.py) | Prospective fixed even7 model mutation and exact native fixture comparison. | [3](../operations/adaptive/experiments/fx2_weight_even7_fixture50051_q0_v1.json) |
 | [`tools/fx2_weight_even7_probe_v1.cpp`](../tools/fx2_weight_even7_probe_v1.cpp) | Prospective lossy INT4 weight challenger, not a corpus codec or gain receipt. Reuses Gamma's derived GPLv3 tensor primitive. Retain its pinned upstream LICENSE and provenance; FX2/CMIX model and predictor authorship stay upstream. | [3](../operations/adaptive/experiments/fx2_weight_even7_fixture50051_q0_v1.json) |
 | [`tools/fx2_weight_exact_residual_model_q0_v1.py`](../tools/fx2_weight_exact_residual_model_q0_v1.py) | Bounded exact-residual model packing and restored native fixture identity. | [1](../operations/adaptive/experiments/fx2_weight_exact_residual_model_q0_v1.json) |
