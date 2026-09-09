@@ -2,6 +2,19 @@
 
 [Record index](research_register/README.md) | [Earlier records](research_register/archive/README.md)
 
+## 2026-09-09 - Decode adaptive model counts directly in the native loader
+
+Owner `root_explore` follows the6042-byte complete-model saving and rejects the
+separate transcoder's20480-byte increment. The [direct-loader mutation](../tools/fx2_weight_adaptive_loader_v1.py)
+preserves native inference and generated RoPE arithmetic, adding only the format
+branch, per-tensor counts and existing canonicality/limits for the new format.
+The [synthetic receipt](../operations/provenance/fx2_weight_adaptive_loader_v1_synthetic_terminal.json)
+passes five loader tests and three phase-guard tests. Matched native raw checkers
+are51416 bytes each. A preparation-only LICENSE path failure remains retained.
+The [next frozen gate](../operations/provenance/fx2_weight_adaptive_loader_gate_v1_plan.json)
+binds125 original source files, all434 trained tensors and matched native builds.
+Publish and freshly admit before execution; no corpus inference is included.
+
 ## 2026-09-09 - Carry adaptive marginal counts into the complete model
 
 Owner `root_explore` takes the measured5527-byte marginal substream saving into

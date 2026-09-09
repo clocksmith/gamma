@@ -1,0 +1,67 @@
+{
+  "schema": "gamma.enwiki9.source-audit-plan.v1",
+  "id": "fx2_weight_adaptive_loader_gate_v1",
+  "owner": "root_explore",
+  "objective_target_bytes": 90000000,
+  "objective_credit_bytes": 0,
+  "parent_evidence": "operations/provenance/fx2_weight_adaptive_marginal_model_v1_terminal.json",
+  "hypothesis": "Direct adaptive loading preserves all initialized tensor bytes and makes the6042-byte model saving pay the native implementation increment.",
+  "models": {
+    "original": {
+      "path": "results/fx2_weight_marginal_roundtrip_q0_v1/work/model.P",
+      "bytes": 2930652,
+      "sha256": "7f4db6c8c843a7e6264b6a48ed4805e9e431f543df7a9a0ecb37a35a5e4b8860"
+    },
+    "parent": {
+      "path": "results/fx2_weight_marginal_roundtrip_q0_v1/work/model.D",
+      "bytes": 2908329,
+      "sha256": "5cae4299a64af88b88a637f3c14e9ee54a5fd98c559e391f35dfa7d832b00e4a"
+    },
+    "adaptive": {
+      "path": "results/fx2_weight_adaptive_marginal_model_v1/attempt01/D.model",
+      "bytes": 2902287,
+      "sha256": "44d4a875784611b8d034f09347c710137e69aa3a830198375aafc19339b0210d"
+    }
+  },
+  "comparators": {
+    "parent": {
+      "path": "results/fx2_weight_native_fixture50051_q0_v1/work/compare",
+      "bytes": 73288,
+      "sha256": "00f56912bac3aaa625c329af970cacf4ef259c5dc00e691ab6904861f0058a82"
+    },
+    "adaptive": {
+      "path": "results/fx2_weight_adaptive_loader_v1_unit/attempt02/compare",
+      "bytes": 59608,
+      "sha256": "e58fc48f42d0641ce3c15e23e2b74e67c439209030e7037a69e86ecd88caa538"
+    }
+  },
+  "native_parent": {
+    "path": "results/fx2_weight_native_fixture50051_q0_v1/work/native/cmix",
+    "bytes": 496136,
+    "sha256": "c848acc756c8ced70422dfc4c8da03ac936417754b877eb8addf0143ce2ba100"
+  },
+  "patched_loader": {
+    "path": "results/fx2_weight_adaptive_loader_v1_unit/attempt02/source/adaptive.cpp",
+    "bytes": 22650,
+    "sha256": "7099d24019bb5aa18421f8521838ced8ffb31aef84bdb173c7ff4753e0c3834a"
+  },
+  "comparison": "Old loader compares the original model to the retained fixed-marginal model. New loader compares original to adaptive model twice in fresh processes. Require all434 tensors and39588806 initialized payload bytes, including generated RoPE, to agree directly. Rebuild native P and D in separate directories with identical known GCC flags; P must match the retained496136-byte binary hash. No neural inference or corpus archive execution.",
+  "bounds": {
+    "cpu_set": [
+      3
+    ],
+    "address_space_bytes": 1073741824,
+    "tree_reservation_bytes": 8589934592,
+    "elapsed_seconds": 600,
+    "phase_elapsed_seconds": 180,
+    "cpu_seconds_per_phase": 180,
+    "per_file_bytes": 33554432,
+    "scratch_bytes": 268435456,
+    "reserve_bytes": 34359738368
+  },
+  "resource_basis": "The prior exact native integration compiled this source under a180-second phase cap. Builds use make-j1, CPU3, bounded child address space and CPU, process-group elapsed cancellation, and owned compiler scratch. The8GiB tree reservation is host admission headroom, not a claimed aggregate cgroup memory limit. This is shared-host discovery, not qualification.",
+  "output": "results/fx2_weight_adaptive_loader_gate_v1/attempt01",
+  "package_accounting": "Use the prior component accounting alternatives separately: runtime_pair_delta=2*(model_delta+native_binary_delta); source_compressor_plus_decoder_delta=2*model_delta+native_binary_delta+raw_loader_source_delta. Preserve invocation options and require identical dynamic dependencies. These are incremental raw component comparisons, not complete source distribution/runtime/license/official scoring closure.",
+  "stop_rule": "Any tensor, canonicality, repeat, parent rebuild or dependency mismatch blocks promotion. Reject a native realization if either declared component delta is nonnegative. Negative deltas permit only a separately frozen native archive/probability comparison; no archive savings or full-score credit from model packing alone.",
+  "full_corpus_score_bytes": null
+}

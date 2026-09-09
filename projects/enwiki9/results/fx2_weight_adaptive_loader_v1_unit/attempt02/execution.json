@@ -1,0 +1,117 @@
+{
+  "phases": [
+    {
+      "phase": "old",
+      "command": [
+        "g++",
+        "-std=c++17",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-fno-fast-math",
+        "-ffp-contract=off",
+        "-fno-math-errno",
+        "-march=x86-64-v3",
+        "-mtune=generic",
+        "-mrecip=none",
+        "-ffunction-sections",
+        "-fdata-sections",
+        "-Wl,--gc-sections",
+        "-s",
+        "results/fx2_weight_adaptive_loader_v1_unit/attempt02/source/test_weights_compressed.cpp",
+        "results/fx2_weight_adaptive_loader_v1_unit/attempt02/source/weights_io.cpp",
+        "results/fx2_weight_adaptive_loader_v1_unit/attempt02/source/weights_io_compressed.cpp",
+        "-o",
+        "results/fx2_weight_adaptive_loader_v1_unit/attempt02/old",
+        "-lm"
+      ],
+      "returncode": 0,
+      "elapsed_seconds": 1.2674471240025014
+    },
+    {
+      "phase": "new",
+      "command": [
+        "g++",
+        "-std=c++17",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-fno-fast-math",
+        "-ffp-contract=off",
+        "-fno-math-errno",
+        "-march=x86-64-v3",
+        "-mtune=generic",
+        "-mrecip=none",
+        "-ffunction-sections",
+        "-fdata-sections",
+        "-Wl,--gc-sections",
+        "-s",
+        "results/fx2_weight_adaptive_loader_v1_unit/attempt02/source/test_weights_compressed.cpp",
+        "results/fx2_weight_adaptive_loader_v1_unit/attempt02/source/weights_io.cpp",
+        "results/fx2_weight_adaptive_loader_v1_unit/attempt02/source/adaptive.cpp",
+        "-o",
+        "results/fx2_weight_adaptive_loader_v1_unit/attempt02/new",
+        "-lm"
+      ],
+      "returncode": 0,
+      "elapsed_seconds": 1.017113854875788
+    },
+    {
+      "phase": "compare",
+      "command": [
+        "g++",
+        "-std=c++17",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-fno-fast-math",
+        "-ffp-contract=off",
+        "-fno-math-errno",
+        "-march=x86-64-v3",
+        "-mtune=generic",
+        "-mrecip=none",
+        "-ffunction-sections",
+        "-fdata-sections",
+        "-Wl,--gc-sections",
+        "-s",
+        "results/fx2_weight_adaptive_loader_v1_unit/attempt02/source/compare.cpp",
+        "results/fx2_weight_adaptive_loader_v1_unit/attempt02/source/weights_io.cpp",
+        "results/fx2_weight_adaptive_loader_v1_unit/attempt02/source/adaptive.cpp",
+        "-o",
+        "results/fx2_weight_adaptive_loader_v1_unit/attempt02/compare",
+        "-lm"
+      ],
+      "returncode": 0,
+      "elapsed_seconds": 1.2678660049568862
+    },
+    {
+      "phase": "unit",
+      "command": [
+        "python3",
+        "tests/test_fx2_weight_adaptive_loader_v1.py",
+        "-v"
+      ],
+      "returncode": 0,
+      "elapsed_seconds": 0.9171498939394951
+    }
+  ],
+  "source_bindings": [
+    {
+      "path": "results/fx2_weight_native_fixture50051_q0_v1/work/native/cpp_infer/src/weights_io_compressed.cpp",
+      "sha256": "ea32c4e69e8f630c3aac19faeb28d81ebdd51a6b712791b70669c9ca6e14e466"
+    },
+    {
+      "path": "results/fx2_weight_native_fixture50051_q0_v1/work/native/cpp_infer/src/weights_io.h",
+      "sha256": "c6abb82b462baa1a10c5244fa8ba52852397fc2b09950d483f9fc3873fd972ec"
+    },
+    {
+      "path": "results/fx2_weight_native_fixture50051_q0_v1/work/native/cpp_infer/src/weights_io.cpp",
+      "sha256": "5b505339a8a3410661b74d2062d3843359709873dec0e759199a0f2a24f2b323"
+    },
+    {
+      "path": "results/fx2_weight_native_fixture50051_q0_v1/work/native/cpp_infer/src/test_weights_compressed.cpp",
+      "sha256": "0eb136cfe217e185c0bdae2a71431cb2eafb7017ba79d55f5e0456822e492d32"
+    }
+  ],
+  "objective_credit_bytes": 0
+}

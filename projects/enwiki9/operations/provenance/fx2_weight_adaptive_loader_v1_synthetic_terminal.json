@@ -1,0 +1,112 @@
+{
+  "schema": "gamma.enwiki9.source-audit-terminal.v1",
+  "id": "fx2_weight_adaptive_loader_v1_synthetic",
+  "owner": "root_explore",
+  "objective_target_bytes": 90000000,
+  "objective_credit_bytes": 0,
+  "validity": "synthetic-correctness-only",
+  "decision": "publish-native-tensor-and-build-gate",
+  "loader_tests": 5,
+  "phase_guard_tests": 3,
+  "synthetic_populations": 10,
+  "scope": "Eight existing fixture populations plus a two70000-symbol rescale/reset fixture and a small corruption fixture. Each compares original/fixed loading with old and new native raw checkers, then adaptive loading with raw reference and compressed-model comparator.",
+  "exact_native_tensor_comparisons": true,
+  "canonical_range_rejections": true,
+  "source_binding_rejection": true,
+  "exclusive_output_rejection": true,
+  "process_group_timeout_test_passed": true,
+  "test_executable_bytes": {
+    "parent_raw_checker": 51416,
+    "adaptive_raw_checker": 51416,
+    "adaptive_comparator": 59608
+  },
+  "retry": "Attempt01 stopped at source preparation because LICENSE was resolved from work instead of native. No compiler or codec executed there. Attempt02 fixes only the harness path and preserves both attempts.",
+  "source_bindings": [
+    {
+      "path": "tools/fx2_weight_adaptive_loader_v1.py",
+      "bytes": 3869,
+      "sha256": "ab5276dbe8994d3f4e8c7bd444cbe0c2efab7cdf2e1b61e4664e1ce2dcfc5974"
+    },
+    {
+      "path": "tools/fx2_weight_adaptive_loader_gate_v1.py",
+      "bytes": 7174,
+      "sha256": "6fc5639c855e11ca5903ec7aef6771ab1f68bbaeae9a73cf680160180a54bd7e"
+    },
+    {
+      "path": "tools/fx2_weight_neighbor_model_audit_v1.py",
+      "bytes": 7052,
+      "sha256": "176e6c7086de4534586aed2afd82e30d7d28191dd2fe22f9afe37e91a51fa80c"
+    },
+    {
+      "path": "tools/fx2_weight_native_compare_v1.cpp",
+      "bytes": 10021,
+      "sha256": "50e4fdaffa9de58c087c29f7e94d8bdcddc4e709cc93915a4d6cb0c9f1d65a02"
+    },
+    {
+      "path": "tools/fx2_weight_marginal_fixtures_v1.py",
+      "bytes": 21305,
+      "sha256": "f1905a844767f9506029336bb1d77992a7f714fe887f79e6f108b48d5ea51d4e"
+    },
+    {
+      "path": "tests/test_fx2_weight_adaptive_loader_v1.py",
+      "bytes": 3371,
+      "sha256": "bcefbe0d21c5546fbe27db3cc38bb065cc98e74628bc8e25cb165947b621742e"
+    },
+    {
+      "path": "tests/test_fx2_weight_adaptive_loader_gate_v1.py",
+      "bytes": 2122,
+      "sha256": "81141ef7eea8ba0278a9bde18ad1099e97a62519bb04191a994380cd5c8f2875"
+    },
+    {
+      "path": "operations/provenance/fx2_weight_adaptive_loader_v1_synthetic_plan.json",
+      "bytes": 2292,
+      "sha256": "55ec8e5be3204c61d29c6c5b6b9158986491fd4f60ae4845f775b1b61c362eb4"
+    },
+    {
+      "path": "operations/provenance/fx2_weight_adaptive_loader_gate_v1_plan.json",
+      "bytes": 3988,
+      "sha256": "ba85678f9ce4aeabfa7b9563351d7d66edc1a0a68adafc6137ead981f0ab42ad"
+    },
+    {
+      "path": "operations/provenance/fx2_weight_adaptive_marginal_model_v1_terminal.json",
+      "bytes": 7210,
+      "sha256": "3031b5e9f8ddbbadb8d8ee8291d1877a8b9f46a56387b7d676443c75a4405827"
+    },
+    {
+      "path": "operations/provenance/public_fx2_weight_native_terminal_20260905.json",
+      "bytes": 260413,
+      "sha256": "9370d51f64049b536a909f79115ffe6bbd91dea2ff5157eb18ea24cadd74ef1e"
+    },
+    {
+      "path": "results/fx2_weight_adaptive_loader_v1_unit/attempt02/execution.json",
+      "bytes": 3651,
+      "sha256": "9d2f3a900ed17fa03dc09da661440daeca992618c909f0d7ca22322b0fe280cb"
+    },
+    {
+      "path": "results/fx2_weight_adaptive_loader_v1_unit/runner01/execution.json",
+      "bytes": 194,
+      "sha256": "a290db51d6b7afd5ba02a18c09a5ef1c448dc074bc990693308cb5c248886c54"
+    },
+    {
+      "path": "/usr/bin/g++",
+      "bytes": 1305304,
+      "sha256": "e6718f7e0c7d057c3ff77b550c603da9bc4030e3ede3c053705acce1293dbe4d"
+    },
+    {
+      "path": "/usr/bin/make",
+      "bytes": 295120,
+      "sha256": "27c9f6d806aee15882b01c2c61848f7aa75caa14bc7b6f608ba422f9e46a7d49"
+    },
+    {
+      "path": "/usr/bin/objdump",
+      "bytes": 415760,
+      "sha256": "44f07f8da860b15bd4dec909f229dec536595fb170a616fe3ab29c7b21c9736f"
+    }
+  ],
+  "limitations": [
+    "Test binary sizes are not actual native cmix binary sizes.",
+    "No trained model or corpus accessed in synthetic validation.",
+    "No full-corpus score or complete runtime/license/package accounting."
+  ],
+  "next_action": "Publish the bound125-file source closure and ownership, verify remote state and fresh CPU3 admission, then compare all434 native tensors and build matched P/D binaries without corpus execution."
+}
