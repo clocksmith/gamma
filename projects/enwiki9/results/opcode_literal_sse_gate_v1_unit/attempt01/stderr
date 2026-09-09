@@ -1,0 +1,40 @@
+test_bundle_relocation_and_repeat (test_opcode_literal_sse_gate_v1.GateTests.test_bundle_relocation_and_repeat) ... ok
+test_projection_divergence_is_rejected (test_opcode_literal_sse_gate_v1.GateTests.test_projection_divergence_is_rejected) ... ok
+test_ten_fresh_phases_and_unchanged_parse (test_opcode_literal_sse_gate_v1.GateTests.test_ten_fresh_phases_and_unchanged_parse) ... ERROR
+
+======================================================================
+ERROR: test_ten_fresh_phases_and_unchanged_parse (test_opcode_literal_sse_gate_v1.GateTests.test_ten_fresh_phases_and_unchanged_parse)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/x/deco/gamma/projects/enwiki9/tests/test_opcode_literal_sse_gate_v1.py", line 34, in test_ten_fresh_phases_and_unchanged_parse
+    r = gate.run_comparison(self.out, self.plan, self.snapshot, self.base/'phases.jsonl', self.limits)
+  File "/home/x/deco/gamma/projects/enwiki9/tools/opcode_literal_sse_gate_v1.py", line 34, in run_comparison
+    result = _comparison(directory, plan, snapshot, marker, limits)
+  File "/home/x/deco/gamma/projects/enwiki9/tools/opcode_event_parse_gate_v1.py", line 72, in run_comparison
+    run(arm+'-encode', 'encode', raw, arc, arm, audits['encode'])
+    ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/x/deco/gamma/projects/enwiki9/tools/opcode_event_parse_gate_v1.py", line 61, in run
+    record = phase.run_phase(directory, label, command, limits, marker)
+  File "/home/x/deco/gamma/projects/enwiki9/tools/dualstream_grammar_gate_v1.py", line 142, in run_phase
+    with subprocess.Popen(argv, stdout=out, stderr=err, preexec_fn=limits, start_new_session=True,
+         ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                          env={'PATH': '/usr/bin:/bin', 'LC_ALL': 'C', 'PYTHONDONTWRITEBYTECODE': '1'}) as child:
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.14/subprocess.py", line 1039, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                        pass_fds, cwd, env,
+                        ^^^^^^^^^^^^^^^^^^^
+    ...<5 lines>...
+                        gid, gids, uid, umask,
+                        ^^^^^^^^^^^^^^^^^^^^^^
+                        start_new_session, process_group)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.14/subprocess.py", line 1993, in _execute_child
+    raise child_exception_type(err_msg)
+subprocess.SubprocessError: Exception occurred in preexec_fn.
+
+----------------------------------------------------------------------
+Ran 3 tests in 0.729s
+
+FAILED (errors=1)
