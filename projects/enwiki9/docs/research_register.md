@@ -2,6 +2,20 @@
 
 [Record index](research_register/README.md) | [Earlier records](research_register/archive/README.md)
 
+## 2026-09-09 - Freeze the final-parent count comparison
+
+`root_explore` owns `fx2_final_counts_opening250k_q0_v1`, held job
+`20260909T085323Z_f36bf2c2cf`. Its [frozen plan](../operations/provenance/fx2_final_counts_opening250k_v1_plan.json)
+uses CPU2,1GiB memory,256MiB scratch,900 seconds aggregate and120 per phase.
+The [runner](../tools/fx2_final_counts_opening250k_q0_v1.py) reuses the existing
+range coder, WRT inverse and source-bound native residual component. Four replay
+fixtures pass. A failed corruption assertion led to explicit expected-raw-digest
+validation; both failed and repaired unit logs are retained. Decoder receives
+no truth trace. External Q16, dictionary, local code/library and options remain
+counted; native parent reconstruction and complete packaging are unresolved.
+Publish ownership/source and refresh admission before the opening250KB P/K/D/S
+comparison. No larger run, confirmation or new trained model is authorized.
+
 ## 2026-09-09 - Test causal residual learning against the final parent
 
 Owner `root_explore` selected discovery lenses 8 and 9 after expert-level
@@ -770,26 +784,3 @@ Next: separately freeze P/K/D with correction only on final transformer outputs,
 leaving PPM input priors, weights and model update/reset order unchanged.
 Require native inverses, repeat, control identity, affected-output counts and
 complete cost evidence. No scientific promotion or full-corpus score is earned.
-
-## 2026-09-08 - Compact block replacement loses its native matched comparison
-
-The [terminal receipt](../operations/provenance/fx2_compact_v26_terminal_20260908.json)
-closes job `20260908T202406Z_5d61a00d99`: P/K archives are 3,223 bytes and
-D is 3,240 bytes. All exact raw inverses, deterministic repeats, 259,824-record
-coder trajectory comparisons and observed/unobserved archive checks pass.
-The selected compact403 block loses 17 archive bytes and adds 45,745 bytes to
-the overlapping local source/assets/binary/options inventory. That subtotal
-is not an official package score. D encoder/decoder CPU costs are 28.726/28.653
-seconds versus P 14.677/14.699; concurrent timing remains diagnostic.
-All resource guards pass with 6,779,830,272-byte cgroup peak, 14,796,629,769-byte
-logical scratch peak, one allowed CPU and closed children/cgroup removal.
-
-Posthoc aligned probability analysis finds 147,190 changed quantized events
-and 134.316 ideal bits lost; all chronological thirds lose. The archive loss
-therefore is not solely a framing effect. No internal submodel cause is isolated.
-The [validated reflection](../operations/adaptive/reflections/20260908T202406Z_5d61a00d99.json)
-retires this exact block replacement on the public fixture. Three canonical
-arm rows preserve its evidence. Do not scale it or rename it as an unchanged
-successor; retain the stronger original parent and select a distinct mechanism
-from measured costs. Full predictor-state certification, fresh transfer and
-complete-package qualification remain open. No 90M full-corpus score credit.
