@@ -2,6 +2,17 @@
 
 [Record index](research_register/README.md) | [Earlier records](research_register/archive/README.md)
 
+## 2026-09-09 - Replay the native fixture after production dispatch repair
+
+Owner `root_explore` uses the canonical implementation-retry freezer for
+[`fx2_weight_adaptive_fixture50051_q0_v2`](../operations/adaptive/experiments/fx2_weight_adaptive_fixture50051_q0_v2.json).
+The repaired native build and 324 inputs bind the unchanged 50,051-byte
+population, P/K/D, parent archive and all native coder records. Fourteen routing,
+antecedent and failure-path tests pass. The dispatch adds 62 source bytes to
+the failed implementation; report 914 total added source bytes and the measured
+11,170-byte source-plus-decoder saving separately from inherited estimates.
+Publish the held job and source before fresh CPU 2 admission. No larger gate.
+
 ## 2026-09-09 - Repair production model dispatch and exercise native initialization
 
 Owner `root_explore` implements the [separate dispatch repair](../tools/fx2_weight_adaptive_dispatch_v1.py)
