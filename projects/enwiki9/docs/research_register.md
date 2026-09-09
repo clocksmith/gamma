@@ -26,6 +26,13 @@ records826 donors,26432 active WRT bytes and95 changed D probabilities; D loses0
 ideal bits to P. All mixtures end at Q63 parent weight2^63-1. No native integration follows.
 The [attribution plan](../operations/provenance/context_edit_fx2_attribution_v1_plan.json)
 freezes episode costs and saturation coordinates before mutation; two synthetic tests pass.
+After source publication at `1e411299c`, the [terminal attribution](../operations/provenance/context_edit_fx2_attribution_v1_terminal.json)
+verifies the original probability hashes and1015 state boundaries: none of826 whole episodes
+beats P for L,D or S. D alone loses79034.156208 ideal bits; resetting each episode would lose
+825.999998692 ideal bits before finite arithmetic/package costs. Do not implement that reset.
+D last changes Q16 at bit897; Q63 first saturates after bit973 and later exits1688 times.
+The fixed donor distributions lose; neither permanent lockout nor useful suppressed whole
+episodes explains the result. Return to exploration; other calibrations/bits/populations remain untested.
 
 ## 2026-09-09 - Test neighboring-weight dependence with fully paid symbol tables
 
@@ -763,36 +770,3 @@ a successor must change the representation or conditional coding and measure
 its complete bytes. No larger gate, confirmation or global impossibility claim.
 The five-file source union is56323 bytes; complete runtime/package accounting
 remains unknown. No full-corpus score exists; the99M objective remains active.
-
-## 2026-09-07 - Adjacent field conditioning activates without control separation
-
-The [observation-only diagnostic](../operations/provenance/fx2_causal_field_opportunity_terminal_20260907.json)
-preserves all151210 modeled-byte states and the exact250000 raw bytes.
-Its141 value starts include106 eligible starts:56 lack a prior matching template
-and50 lack an exact first-value association. This explains original T inactivity;
-it does not prove globally unique values or reject all field relationships.
-
-The [synthetic adjacent selector](../operations/evidence/20260907_causal_field_preceding_unit.json)
-changes only the conditioning field. Its [native-framed integration](../operations/evidence/20260907_fx2_causal_preceding_integration_unit.json)
-passes13 codec tests,24 runner tests and four additional independent tests.
-The failed v1 runner fixture remains retained; v2 is the reviewed active source.
-Synthetic savings establish favorable fixtures, not corpus or package benefit.
-
-`fx2_causal_preceding_wrt250k_q0_v1` [closed its six-arm comparison](../operations/provenance/fx2_causal_preceding_terminal_20260907.json)
-follows published source/contract `e1a048203` and ownership `b520befe4`.
-All18 independent phases invert, repeat and synchronize every modeled byte.
-P/K/T/O/S archives are33429 bytes; recency R is33433. T/S each select seven
-values and change280 probability bits, producing identical probabilities and
-archives. T differs from P in archive bytes despite tying its total size.
-Donors are present for42 modeled bytes in each injecting T/S arm; distinct
-changed-probability bytes and eligible-transition counts were not collected.
-Seven local codec sources cost72134 bytes; Q16/dictionary add2831356 and each
-arm needs one option byte. The matched counted subtotal is2936920 bytes except
-R2936924: T saves zero. Full runtime/package closure remains unknown.
-The independent audit verifies209 frozen inputs,153 guard samples and clean
-closure at76.3389 measured seconds with171331584 peak cgroup bytes.
-The [validated reflection](../operations/adaptive/reflections/20260907T153225Z_61daf1a29b.json)
-retires only this opening250KB adjacent/FIFO128/unchanged-mixture realization.
-Six canonical run rows are recorded. No larger replay, native integration or
-full-corpus credit follows; independent work must address a different measured
-failure and respect existing ownership.

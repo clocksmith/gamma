@@ -157,3 +157,36 @@ the lost controller's return code, scientific validity or continuous resource
 proof. The original frozen running record remains unchanged; its terminal
 counterpart supports independent discovery. The sealed HORIZON router and
 qualification still need compatibility repair. The `codex` recovery owner remains.
+
+## 2026-09-07 - Adjacent field conditioning activates without control separation
+
+The [observation-only diagnostic](../../../operations/provenance/fx2_causal_field_opportunity_terminal_20260907.json)
+preserves all151210 modeled-byte states and the exact250000 raw bytes.
+Its141 value starts include106 eligible starts:56 lack a prior matching template
+and50 lack an exact first-value association. This explains original T inactivity;
+it does not prove globally unique values or reject all field relationships.
+
+The [synthetic adjacent selector](../../../operations/evidence/20260907_causal_field_preceding_unit.json)
+changes only the conditioning field. Its [native-framed integration](../../../operations/evidence/20260907_fx2_causal_preceding_integration_unit.json)
+passes13 codec tests,24 runner tests and four additional independent tests.
+The failed v1 runner fixture remains retained; v2 is the reviewed active source.
+Synthetic savings establish favorable fixtures, not corpus or package benefit.
+
+`fx2_causal_preceding_wrt250k_q0_v1` [closed its six-arm comparison](../../../operations/provenance/fx2_causal_preceding_terminal_20260907.json)
+follows published source/contract `e1a048203` and ownership `b520befe4`.
+All18 independent phases invert, repeat and synchronize every modeled byte.
+P/K/T/O/S archives are33429 bytes; recency R is33433. T/S each select seven
+values and change280 probability bits, producing identical probabilities and
+archives. T differs from P in archive bytes despite tying its total size.
+Donors are present for42 modeled bytes in each injecting T/S arm; distinct
+changed-probability bytes and eligible-transition counts were not collected.
+Seven local codec sources cost72134 bytes; Q16/dictionary add2831356 and each
+arm needs one option byte. The matched counted subtotal is2936920 bytes except
+R2936924: T saves zero. Full runtime/package closure remains unknown.
+The independent audit verifies209 frozen inputs,153 guard samples and clean
+closure at76.3389 measured seconds with171331584 peak cgroup bytes.
+The [validated reflection](../../../operations/adaptive/reflections/20260907T153225Z_61daf1a29b.json)
+retires only this opening250KB adjacent/FIFO128/unchanged-mixture realization.
+Six canonical run rows are recorded. No larger replay, native integration or
+full-corpus credit follows; independent work must address a different measured
+failure and respect existing ownership.

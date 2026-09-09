@@ -52,4 +52,4 @@
 - [part-045.md: 2026-09-06 dual-stream grammar development comparison](part-045.md)
 - [part-046.md: 2026-09-06 closed external design request and local inverse repair](part-046.md)
 - [part-047.md: 2026-09-06 shared token-argument terminal comparison](part-047.md)
-- [part-048.md: 2026-09-06 field conditioning, word references and fixed-program attribution](part-048.md)
+- [part-048.md: 2026-09-06/07 field conditioning, word references and fixed-program attribution](part-048.md)
