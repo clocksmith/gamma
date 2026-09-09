@@ -22,6 +22,19 @@ terminated before any build or worker phase: the initial guard sample saw the
 complete and the result directory is empty. The validated infrastructure-failure
 reflection permits an unchanged retry with the coordinator itself pre-pinned to
 CPU 2. No codec inference or scientific rejection occurred in this attempt.
+The unchanged [retry passes](../operations/provenance/fx2_adaptive_package_fixture_v1_terminal.json):
+three independent isolated builds reproduce the same 496,136-byte executable;
+two encodes retain the 3,223-byte archive and the independent decoder reconstructs
+all 50,051 input bytes without that input mounted. All three 259,824-record traces
+match. Six phases close with no guard violations, 5,488,873,472 peak cgroup bytes
+and verified cleanup; 663 artifacts rehash. The retained source package and
+license limitations remain explicit. No new archive saving or full-score credit.
+Terminal recording initially rejected a hostname string where its ledger schema
+requires an object. The recorder now converts only that projection, preserving
+sealed result/index/reflection bytes. All 23 recorder tests pass, including
+immutable evidence and idempotent hostname conversion; an initial `/tmp` quota
+failure is retained and the unchanged tests pass with owned `TMPDIR` storage.
+The validated reflection and exact package run are recorded in the existing ledger.
 
 ## 2026-09-09 - Native package replay reuses existing isolation and resource guards
 

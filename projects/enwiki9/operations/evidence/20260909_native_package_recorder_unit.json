@@ -1,0 +1,56 @@
+{
+  "schema": "gamma.enwiki9.native-package-recorder-unit.v1",
+  "status": "passed",
+  "command": [
+    "/usr/bin/taskset",
+    "-c",
+    "3",
+    "/usr/bin/python3",
+    "-B",
+    "-m",
+    "unittest",
+    "discover",
+    "-s",
+    "tests",
+    "-p",
+    "test_record_driver_result.py",
+    "-v"
+  ],
+  "returncode": 0,
+  "elapsed_seconds": 1.818628401029855,
+  "inputs": [
+    {
+      "path": "tools/record_driver_result.py",
+      "bytes": 28546,
+      "sha256": "cb4690807246504b51f6c50741548b862b09fa94d9b40d02fc1c457d837d684b"
+    },
+    {
+      "path": "tests/test_record_driver_result.py",
+      "bytes": 28247,
+      "sha256": "1e1e9a67a6b950528a60bce9d50ecee53492dc229daa709942e8eee2aa9f0d7d"
+    },
+    {
+      "path": "results/native_package_recorder_unit_20260909/attempt01.stderr",
+      "bytes": 4700,
+      "sha256": "6928b1f1c01c9920defb0a260e4bae92e642d1a2a7d1c43a8fb9b72c0abb0f52"
+    },
+    {
+      "path": "results/native_package_recorder_unit_20260909/attempt02.stderr",
+      "bytes": 3829,
+      "sha256": "868a0f50365e5282fcaa1ad52c8189b4ee33484fa9dd8169b5c0cadd7711267a"
+    }
+  ],
+  "initial_attempt": "One test errored while writing its fixture under /tmp with EDQUOT; hostname conversion regression passed. Preserve the log. Rerun unchanged source with TMPDIR in owned results.",
+  "reporting_failure": "Native package receipt host was a hostname string; ledger requires object or null. Project hostname strings to hostname objects without changing any sealed receipt or reflection.",
+  "bounds": {
+    "cpu_set": [
+      3
+    ],
+    "address_space_bytes": 536870912,
+    "per_phase_cpu_seconds": 120,
+    "elapsed_seconds": 120,
+    "per_file_bytes": 8388608
+  },
+  "native_codec_executed": false,
+  "objective_credit_bytes": 0
+}
