@@ -5,27 +5,66 @@
     "sha256": "sha256:37ac0f8dda5d8feb73fb193b3b653c21268ca86205c539c1dd11a37670c4201f"
   },
   "candidate_tree_sha256": "sha256:e667560ab49fe23f1ee75297f2f61b8089dec4b28d5faebbb26ffb5fe744df27",
+  "elapsed_seconds": 244.825,
   "execution_guard": {
     "path": "tools/run_with_resource_guard_v3.py",
     "sha256": "sha256:044147f7ffe6922ea8dafd52fc3d4426077b20958adbcd421245ad41adcfc1e4"
   },
   "execution_mode": "discovery",
+  "execution_resources": {
+    "boot_id": "3ce46712-27bc-4199-8e48-e2b3d23926cb",
+    "budget": {
+      "cgroup_parent": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice",
+      "cpus": [
+        2
+      ],
+      "memory_bytes": 9999998976,
+      "scratch_bytes": 24000000000,
+      "swap_bytes": 0,
+      "wall_seconds": 1200
+    },
+    "cgroup_inode": 267850,
+    "cgroup_path": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/gamma-enwiki9-20260909T065353Z_a016a11707",
+    "cleanup_complete": true,
+    "cpu_enforcement": "taskset-and-sampled-affinity-guard",
+    "groups": [
+      {
+        "created": true,
+        "inode": 267850,
+        "kernel_cpuset": false,
+        "memory_bytes": 9999998976,
+        "path": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/gamma-enwiki9-20260909T065353Z_a016a11707"
+      }
+    ],
+    "guard_command_sha256": "4e956f42e2528a5d6a02d86575a8f04a9d5a73f0595ee749a87613e062163943",
+    "guard_path": "run_logs/adaptive/20260909T065353Z_a016a11707.resources/guard.json",
+    "missing_diagnostics": [
+      "kernel cpuset controller is not delegated; taskset assignment and existing affinity guard remain active"
+    ],
+    "timing_authority": "diagnostic"
+  },
   "experiment": {
     "path": "operations/adaptive/experiments/fx2_ratio_coder_fixture50051_q0_v1.json",
     "sha256": "sha256:331aea85bba139d35b624ce077f21df46ccbef7cac9ed00fe19a916401099d96"
   },
+  "finished_at": "2026-09-09T06:58:48+00:00",
   "gate_size": 50051,
-  "held": true,
+  "held": false,
   "held_at": "2026-09-09T06:54:10+00:00",
   "hold_history": [
     {
       "at": "2026-09-09T06:54:10+00:00",
       "held": true,
       "reason": "Await source and ownership publication plus fresh host admission."
+    },
+    {
+      "at": "2026-09-09T06:54:42+00:00",
+      "held": false,
+      "reason": "Published058797b9b; fresh admission confirms CPU2,32GiB headroom and24GB scratch, no live or unknown competing job."
     }
   ],
-  "hold_reason": "Await source and ownership publication plus fresh host admission.",
   "job_id": "20260909T065353Z_a016a11707",
+  "log_path": "run_logs/adaptive/20260909T065353Z_a016a11707.log",
   "priority": 40,
   "proposal": {
     "path": "operations/adaptive/proposals/developed/934_fx2_ratio_coder_fixture50051_q0_v1.json",
@@ -33,6 +72,8 @@
   },
   "proposal_id": "fx2_ratio_coder_fixture50051_q0_v1",
   "purpose": "diagnostic",
+  "released_at": "2026-09-09T06:54:42+00:00",
+  "residual_processes_terminated": true,
   "resource_budget": {
     "cgroup_parent": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice",
     "cpus": [
@@ -43,6 +84,7 @@
     "swap_bytes": 0,
     "wall_seconds": 1200
   },
+  "returncode": 75,
   "runner": {
     "path": "tools/fx2_ratio_coder_fixture50051_q0_v1.py",
     "sha256": "sha256:0db7d3b7b5fefb1232a494b1c691e6dc3a514b057f99cefa609f863e32c4be09"
@@ -51,10 +93,14 @@
   "scratch_directories": [
     "results/fx2_ratio_coder_fixture50051_q0_v1"
   ],
-  "state": "pending",
+  "started_at": "2026-09-09T06:54:42+00:00",
+  "state": "failed",
   "submitted_at": "2026-09-09T06:53:53+00:00",
   "tags": [],
   "timing_authority": "diagnostic",
   "tool": "tools/fx2_ratio_coder_fixture50051_q0_v1.py",
-  "tool_args": []
+  "tool_args": [],
+  "worker_pid": 3217624,
+  "worker_proc_start_ticks": 203302108,
+  "worker_started_at": "2026-09-09T06:54:43+00:00"
 }

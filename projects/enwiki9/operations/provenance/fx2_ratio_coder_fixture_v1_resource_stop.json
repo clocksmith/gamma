@@ -1,0 +1,107 @@
+{
+  "schema": "gamma.enwiki9.native-resource-stop.v1",
+  "id": "fx2_ratio_coder_fixture50051_q0_v1",
+  "job_id": "20260909T065353Z_a016a11707",
+  "classification": "resource-stop-incomplete-comparison",
+  "evidence": [
+    {
+      "path": "operations/adaptive/failed/959_20260909T065353Z_a016a11707.json",
+      "bytes": 4063,
+      "sha256": "sha256:da6f47055d28e51eb625103380053415e601dd256ac7ee79105bff6c2e5dcd44"
+    },
+    {
+      "path": "run_logs/adaptive/20260909T065353Z_a016a11707.resources/guard.json",
+      "bytes": 92899,
+      "sha256": "sha256:88fcf38dcb81677d1c0d2143b86d9d7932fb8b505125df1cbc7785e8e17bb49b"
+    },
+    {
+      "path": "run_logs/adaptive/20260909T065353Z_a016a11707.resources/phases.jsonl",
+      "bytes": 1712,
+      "sha256": "sha256:ad9737660c29926bdbc6ededcbb03e71ba7bfe42aaea669d88bc0a49ea01bb2d"
+    }
+  ],
+  "elapsed_seconds": 244.2689,
+  "peaks": {
+    "cgroup_memory_peak_bytes": 9999998976,
+    "max_observed_process_vmhwm_kib": 5260060,
+    "max_sampled_allowed_cpu_count": 1,
+    "max_sampled_cgroup_current_bytes": 9983582208,
+    "max_sampled_scratch_allocated_bytes": 4609060864,
+    "max_sampled_scratch_logical_bytes": 19287981727,
+    "max_sampled_single_rss_kib": 5252880,
+    "max_sampled_tree_live_threads": 5,
+    "max_sampled_tree_rss_kib": 5317872,
+    "max_sampled_tree_runnable_threads": 2
+  },
+  "guards": {
+    "cgroup_memory_guard_exceeded": true,
+    "logical_cpu_guard_exceeded": false,
+    "measurement_incomplete": false,
+    "official_decimal_memory_exceeded": false,
+    "phase_marker_invalid": false,
+    "rss_guard_exceeded": false,
+    "temporary_disk_guard_exceeded": false,
+    "wall_time_guard_exceeded": false
+  },
+  "cgroup_events": {
+    "baseline": {
+      "high": 0,
+      "low": 0,
+      "max": 0,
+      "oom": 0,
+      "oom_group_kill": 0,
+      "oom_kill": 0,
+      "sock_throttled": 0
+    },
+    "delta": {
+      "high": 0,
+      "low": 0,
+      "max": 2,
+      "oom": 0,
+      "oom_group_kill": 0,
+      "oom_kill": 0,
+      "sock_throttled": 0
+    },
+    "final": {
+      "high": 0,
+      "low": 0,
+      "max": 2,
+      "oom": 0,
+      "oom_group_kill": 0,
+      "oom_kill": 0,
+      "sock_throttled": 0
+    }
+  },
+  "closed_phases": [
+    "compile",
+    "disassemble",
+    "invalid-2",
+    "invalid-3",
+    "invalid-4",
+    "invalid-5",
+    "P-encode",
+    "P-decode",
+    "P-repeat",
+    "P-plain",
+    "K-encode",
+    "K-decode",
+    "K-repeat",
+    "K-plain",
+    "D-encode",
+    "D-decode",
+    "D-repeat",
+    "D-plain",
+    "S-encode",
+    "S-decode"
+  ],
+  "stopped_phase": "S-repeat",
+  "cleanup_complete": true,
+  "stage_decision_present": false,
+  "scientific_verdict": "not-tested-to-completion",
+  "archive_saving_bytes": null,
+  "complete_package_bytes": null,
+  "full_corpus_score_bytes": null,
+  "objective_credit_bytes": 0,
+  "diagnosis": "Cgroup reached9999998976 bytes while peak sampled process-tree RSS was5317872KiB and retained scratch reached4609060864 allocated bytes. Closed trace page-cache accumulation is a plausible operational cause; exact memory.stat attribution was not retained.",
+  "next_action": "Separate implementation retry will sync and release only closed owned trace pages after each native phase. Preserve native source, law, population, controls and strict resource limits. No algorithmic rejection from this stop."
+}
