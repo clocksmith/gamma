@@ -10,21 +10,56 @@
     "sha256": "sha256:044147f7ffe6922ea8dafd52fc3d4426077b20958adbcd421245ad41adcfc1e4"
   },
   "execution_mode": "discovery",
+  "execution_resources": {
+    "boot_id": "3ce46712-27bc-4199-8e48-e2b3d23926cb",
+    "budget": {
+      "cgroup_parent": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice",
+      "cpus": [
+        2
+      ],
+      "memory_bytes": 4294967296,
+      "scratch_bytes": 1073741824,
+      "swap_bytes": 0,
+      "wall_seconds": 6000
+    },
+    "cgroup_inode": 265254,
+    "cgroup_path": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/gamma-enwiki9-20260909T005909Z_a4db760844",
+    "cpu_enforcement": "taskset-and-sampled-affinity-guard",
+    "groups": [
+      {
+        "created": true,
+        "inode": 265254,
+        "kernel_cpuset": false,
+        "memory_bytes": 4294967296,
+        "path": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/gamma-enwiki9-20260909T005909Z_a4db760844"
+      }
+    ],
+    "guard_command_sha256": "98bc6e3d1a75651c33691de658c0b005edfb08fddf9ecbc1451502eaf09d08e1",
+    "guard_path": "run_logs/adaptive/20260909T005909Z_a4db760844.resources/guard.json",
+    "missing_diagnostics": [
+      "kernel cpuset controller is not delegated; taskset assignment and existing affinity guard remain active"
+    ],
+    "timing_authority": "diagnostic"
+  },
   "experiment": {
     "path": "operations/adaptive/experiments/opcode_event_parse_confirmation1m_q0_v1.json",
     "sha256": "sha256:b87ec799e215bf0bbba74b5587341e39519b0c2b6a29468fe66265b89e805962"
   },
   "gate_size": 1000000,
-  "held": true,
+  "held": false,
   "held_at": "2026-09-09T00:59:10+00:00",
   "hold_history": [
     {
       "at": "2026-09-09T00:59:10+00:00",
       "held": true,
       "reason": "Verify confirmation publication, exact frozen source and ownership before fresh CPU2 resource admission"
+    },
+    {
+      "at": "2026-09-09T01:03:21+00:00",
+      "held": false,
+      "reason": "Published 3e13006b5ced53c80a53707c3067e66f10558d2b exact confirmation inputs and ownership verified; fresh admission retains32GiB reserve plus full4GiB allocation"
     }
   ],
-  "hold_reason": "Verify confirmation publication, exact frozen source and ownership before fresh CPU2 resource admission",
   "job_id": "20260909T005909Z_a4db760844",
   "priority": 80,
   "proposal": {
@@ -33,6 +68,7 @@
   },
   "proposal_id": "opcode_event_parse_confirmation1m_q0_v1",
   "purpose": "diagnostic",
+  "released_at": "2026-09-09T01:03:21+00:00",
   "resource_budget": {
     "cgroup_parent": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice",
     "cpus": [
@@ -51,12 +87,16 @@
   "scratch_directories": [
     "results/opcode_event_parse_confirmation1m_q0_v1"
   ],
-  "state": "pending",
+  "started_at": "2026-09-09T01:03:22+00:00",
+  "state": "running",
   "submitted_at": "2026-09-09T00:59:09+00:00",
   "tags": [
     "event-parse-confirmation"
   ],
   "timing_authority": "diagnostic",
   "tool": "tools/opcode_event_parse_confirmation_gate_v1.py",
-  "tool_args": []
+  "tool_args": [],
+  "worker_pid": 3639172,
+  "worker_proc_start_ticks": 201194025,
+  "worker_started_at": "2026-09-09T01:03:22+00:00"
 }
