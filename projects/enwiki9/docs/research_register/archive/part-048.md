@@ -374,3 +374,41 @@ This is an uncompressed local source inventory, not a complete package.
 Runtime, licensing, option accounting and the full-corpus score remain unknown.
 Hold this exact fixed-reversal configuration and continue independent research;
 the result neither projects a full-corpus size nor excludes other raw transforms.
+
+## 2026-09-07 - Recover the standalone bitmix parent; isolate dormant XML fields
+
+The historical `opcode_typed_anchor_bitmix_v1` is an executable stdlib-only
+challenger, independent of MIDAS and native FX2. Its [opening250KB receipt](../../../results/opcode_typed_anchor_bitmix_v1/2026-07-21T124407.json)
+reports 67,959 archive bytes; its [opening1M receipt](../../../results/opcode_typed_anchor_bitmix_v1/2026-07-21T150923.json)
+reports 261,652. Both record exact inversion and identical repeats, with 4,841
+local source bytes. Relative to the [PPM parent at 250KB](../../../results/opcode_typed_anchor_ppm_o5_v1/2026-07-21T124224.json)
+and [1M](../../../results/opcode_typed_anchor_ppm_o5_v1/2026-07-21T145001.json), the historical
+archive-plus-local-source differences favor bitmix by 2,199 and 3,596 bytes.
+These old receipts lack source hashes and complete resource/package closure;
+fresh source binding and historical archive reproduction precede a new claim.
+
+The [source diagnostic](../../../operations/provenance/opcode_field_state_diagnostic_20260907/summary.json)
+authenticates both retained packed implementations. Its 20 synthetic checks
+show that six raw XML openings activate `GST.f`, while their opcode forms leave
+it zero; exception inverses remain exact. Neither codec nor corpus was run.
+Both codecs currently feed modeled bytes to raw-tag suffix checks. This exposes
+a dormant context route, not measured savings or a theorem about XML modeling.
+Creative lenses 2 (role versus exact surface) and 3 (decoder-visible field state)
+were selected deliberately from this source defect; no random seed was used.
+
+Prior implementations matter: [`opcode_semantic_mixer_range_v1`](../../../programs/opcode_semantic_mixer_range_v1/program.py)
+already maps complete opcode events to fields in `ST.apply_op`. Its different
+predictor's [250KB result](../../../results/opcode_semantic_mixer_range_v1/2026-07-21T124249.json)
+is 78,456 archive bytes plus 20,101 local source bytes. The inspected bitblend
+and ringmix receipt variants recognize opcode title/link events but retain the
+raw-tag field checks; the PAQ SSE fix instead addresses a raw-input codec.
+No isolated bitmix field repair was found in the searched lineage and ownership
+records. Existing semantic-state modeling is prior art, not a new Gamma claim.
+
+The smallest next question is whether a prefix-only opcode inverse can drive
+only the existing field coordinate while preserving modeled-byte history.
+First prove split-opcode/escape and copied-byte causality, P/K identity, inverse
+and repeat; then freeze a bounded 250KB comparison with incremental source costs.
+Bitmix actually has 12 literal contexts, uses floating-point lookup initialization,
+and pads exhausted arithmetic input with zeros. Reproduction, malformed-input
+bounds and replay evidence remain preconditions; complete score stays unknown.
