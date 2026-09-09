@@ -12,7 +12,7 @@ Reusable artifact helpers for new tools: [lib/artifacts.py](../lib/artifacts.py)
 The LibNC initializer teacher launcher exits before the first forward, gradient, update, or coded symbol; its source-bound experiment defines that boundary.
 The delayed-status helper's `enwiki9_delayed_status_latest.log` pointer is operational history, not present-host occupancy proof.
 
-Coverage: **1107 files** (33 .c, 73 .cpp, 1 .gdb, 1 .h, 1 .hpp, 1 .html, 994 .py, 3 .sh).
+Coverage: **1108 files** (33 .c, 73 .cpp, 1 .gdb, 1 .h, 1 .hpp, 1 .html, 995 .py, 3 .sh).
 
 | Tool | Purpose | Referenced contracts |
 |---|---|---|
@@ -365,6 +365,7 @@ Coverage: **1107 files** (33 .c, 73 .cpp, 1 .gdb, 1 .h, 1 .hpp, 1 .html, 994 .py
 | [`tools/fx2_ratio_coder_fixture50051_q0_v2.py`](../tools/fx2_ratio_coder_fixture50051_q0_v2.py) | Repeat the sealed native comparison with bounded closed-trace cache residency. | [2](../operations/adaptive/experiments/fx2_ratio_coder_fixture50051_q0_v2.json) |
 | [`tools/fx2_ratio_coder_native_adapter_v1.py`](../tools/fx2_ratio_coder_native_adapter_v1.py) | Materialize coder-boundary delivery against immutable native preimages. | none found |
 | [`tools/fx2_ratio_coder_opening250k_q0_v1.py`](../tools/fx2_ratio_coder_opening250k_q0_v1.py) | Bounded cached native delivery comparison on opening250KB enwik9. | [1](../operations/adaptive/experiments/fx2_ratio_coder_opening250k_q0_v1.json) |
+| [`tools/fx2_ratio_delivery_loss_attribution_v1.py`](../tools/fx2_ratio_delivery_loss_attribution_v1.py) | Attribute closed GRD2 delivery losses using exact cached rows and native replay. | none found |
 | [`tools/fx2_ratio_loss_attribution_v1.py`](../tools/fx2_ratio_loss_attribution_v1.py) | Replay a closed ratio experiment; no predictor mutation or corpus launch. | none found |
 | [`tools/fx2_rdo_feasibility.py`](../tools/fx2_rdo_feasibility.py) | Estimate copy-style RDO headroom from FX2_LOSS_LEDGER rows. | none found |
 | [`tools/fx2_reorder_dictionary.py`](../tools/fx2_reorder_dictionary.py) | Reorder/dictionary experiments. | none found |

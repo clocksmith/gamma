@@ -2,6 +2,19 @@
 
 [Record index](research_register/README.md) | [Earlier records](research_register/archive/README.md)
 
+## 2026-09-09 - Locate expert versus final-coder loss on retained opening traces
+
+Owner `root_explore` froze a [closed-trace attribution check](../operations/provenance/fx2_ratio_delivery_loss_attribution_v1_plan.json)
+after the opening rejection. It replays the unchanged native Ratio library
+against every recorded GRR1 state and corrected cached mass for D and S.
+Expert normalization and final coder loss remain separate, with exact vocabulary,
+stored-population alignment and explicit first/unconsumed-last prediction rules.
+Five synthetic tests pass, including expected causal loss, full state replay and
+rejection of altered predictions, masses, state and truncation. The published
+source/bindings precede actual trace replay. CPU3,512MiB address space,240 seconds
+per phase,480 seconds aggregate and64MiB output scratch are diagnostic bounds.
+No parameter search, native corpus encode, archive credit or revival is authorized.
+
 ## 2026-09-09 - Frozen final-coder ratio opening development comparison
 
 Owner `root_explore` bound [opening250KB](../operations/adaptive/experiments/fx2_ratio_coder_opening250k_q0_v1.json)
@@ -753,48 +766,3 @@ The whole-forge comparison cannot attribute those components independently.
 Next: freeze one native fixture comparison with original/bookkeeping identity,
 independent inversion, deterministic repeat, coder traces and package/resource
 costs. Full predictor-state certification remains open; no 90M score credit.
-
-## 2026-09-08 - Compact forge parent independently reconstructs and repeats
-
-The [terminal audit](../operations/provenance/forge_compact_fixture_terminal_20260908.json)
-records job `20260908T194717Z_2dbdc105ee`: 50,051 public profiling bytes become
-4,808 archive bytes, independently reconstruct and repeat byte-identically.
-The same raw fixture's retained native FX2 archive is 3,223 bytes: forge costs
-1,585 extra archive bytes. This compares different cold native parents, not an
-isolated structural mechanism or fresh confirmation. External authors retain
-their algorithm credit; Gamma supplies the reproduction and measurement.
-GCC builds the unchanged compact23/aux1/cells270 source into 373,720 bytes.
-Raw source/assets total 2,627,584 bytes; adding binary and options gives a
-3,001,984-byte overlapping local inventory, not a qualified submission package.
-Encoding, decoding and repeat use 38.993, 40.244 and 43.777 CPU seconds.
-The complete guard passes: one allowed CPU, 6,642,286,592-byte cgroup peak,
-14,690,369,525-byte logical scratch peak, and verified child cleanup.
-
-The initial 4GB scratch plan was cancelled before launch because the pinned
-PPM heap alone is 14,680,064,000 bytes. A second startup stopped before the
-codec when the guard saw inherited broad affinity; the unchanged candidate
-then ran with its coordinator pinned to CPU2 from process creation. Both
-failures and their reflections remain preserved. Five synthetic runner tests
-and both complete-source syntax checks pass. The validated terminal reflection
-retains this reproducible external baseline without authorizing a larger gate.
-Full predictor-state traces, source/runtime license closure, package accounting,
-independent-host replay and corpus transfer remain open. No 90M score credit.
-
-## 2026-09-08 - Forge parent source audit exposes the active prediction interface
-
-`root_explore` selected discovery lenses 3/9 after residual-ratio calibration
-failed its native archive gate. The [pinned source audit](../operations/provenance/forge_parent_source_audit_v1_terminal.json)
-authenticates 120 Git blobs at `11a25d3990460a55fdfd90d46edd82b0ab147e45`.
-The older full560 v26 test saved 20 bytes but missed its frozen 500-byte ceiling;
-its skipped inverse/repeat remains unknown. It is not evidence against every
-compact structural/lexical model or against a different native parent.
-Forge's compact23/aux1 has 403 outputs. Its legacy `Predict()` array is neutral;
-the live interface is `RawPredictions()` plus `ActivePredictions()` and the
-upstream probability mapping. The [Gamma adapter](../lib/forge_fxcm_raw_adapter_v1.hpp)
-compiles with the actual pinned upstream class and passes synthetic invalid-input,
-inactive-output, and exact-value tests. A compile-time check proves the selected
-403-output configuration. GCC syntax passes without dependencies installed.
-No upstream predictor or corpus was executed, and no Gamma gain is claimed.
-Next: one separately frozen direct-fixture parent roundtrip with complete
-source/dictionary/options inventory and measured resource costs; do not run the
-upstream installation, PGO, UPX or full-corpus pipeline automatically.
