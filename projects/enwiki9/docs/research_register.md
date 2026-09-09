@@ -2,6 +2,16 @@
 
 [Record index](research_register/README.md) | [Earlier records](research_register/archive/README.md)
 
+## 2026-09-09 - Bound the direction of the recorded final probability correction
+
+Owner `root_explore` froze the [fixed-path derivative check](../operations/provenance/fx2_final_direction_v1_plan.json)
+after expert/delivery attribution. It aggregates exact integer log coefficients
+from P/D and P/S counts, encloses logarithms and certifies the sign at the parent.
+The [argument and scope](fx2_final_direction_v1.md) cover unrounded logit paths
+between recorded Q16 endpoints, not every native weakening or finite archive.
+Six synthetic tests pass. Source, runtime hashes and ownership publish before
+the two bounded closed-trace computations; no coefficient search or codec launch.
+
 ## 2026-09-09 - Locate expert versus final-coder loss on retained opening traces
 
 Owner `root_explore` froze a [closed-trace attribution check](../operations/provenance/fx2_ratio_delivery_loss_attribution_v1_plan.json)
