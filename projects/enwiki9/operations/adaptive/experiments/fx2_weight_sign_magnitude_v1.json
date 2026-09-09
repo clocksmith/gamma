@@ -1,0 +1,196 @@
+{
+  "schema": "gamma.enwiki9.adaptive-experiment-contract.v1",
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:e91ff20e92c3cac8acb0cbe5c79fc8e8a3b427d7e151245c8eecc52b1c32fa00",
+    "objectiveId": "gamma-enwiki9-hutter-90m-v3",
+    "objectivePath": "contracts/research/v3/objective-contract.json",
+    "targetScoreBytes": 90000000
+  },
+  "experimentId": "fx2_weight_sign_magnitude_v1",
+  "proposalId": "fx2_weight_sign_magnitude_v1",
+  "status": "frozen",
+  "registrationTiming": "prospective",
+  "evidenceClass": "diagnostic",
+  "objectiveCreditBytes": 0,
+  "parent": {
+    "candidateId": "fx2_weight_adaptive_transfer250k_q0_v1",
+    "revision": {
+      "path": "operations/adaptive/candidate-revisions/fx2_weight_adaptive_transfer250k_q0_v1/20260909T043011936131Z_939f4605fe29.json",
+      "sha256": "sha256:f263c1bbdab652a63ef6650479558c1e6f34a4403f28ad3f858263fa99b85bc5"
+    }
+  },
+  "hypothesis": {
+    "claim": "Factoring exact INT4 weights into magnitude and a shared nonzero sign reduces complete model bytes relative to fifteen adaptive symbol counts.",
+    "falsification": "Any inverse, repeat or count-state mismatch rejects implementation correctness. Nonpositive complete model saving rejects this representation on that model. Synthetic gains are not trained-model evidence."
+  },
+  "changedMechanism": "Within each tensor, use eight adaptive magnitude counts and two shared nonzero sign counts with the existing Q11 coder. Preserve every weight and all non-INT4 representation.",
+  "invariants": [
+    "Owner root_explore; deliberate lenses10/3. Preserve measured sources, HORIZON and MIDAS.",
+    "Synthetic stage only: CPU3,512MiB address space,60 CPU seconds and90 elapsed seconds per phase,300 aggregate elapsed seconds,32MiB per file,128MiB scratch,32GiB host reserve. No trained model or corpus access.",
+    "q=symbol-7; magnitude=abs(q); sign0 positive,sign1 negative; zero emits no sign. Magnitude priors [1,2,2,2,2,2,2,2]; sign priors [1,1]. These give the same unquantized prior, not necessarily identical rounded Q11 probabilities.",
+    "Use magnitude tree depth3 and sign tree depth1 with nearest Q11 p0 and clamp1..2047. Update after complete weight. Independently rescale totals at65536 using upward halving. Reset both count rows for each tensor.",
+    "P unchanged adaptive format; K new bookkeeping but exact P archive; D new factorization. Metadata, tensor order, names, non-INT4 payloads and header length unchanged.",
+    "Fixed synthetic fixtures: empty, all types, zero weights, independent signs, magnitude-dependent signs, resets, rescaling and malformed inputs. No tuning.",
+    "Require independent exact inversion/repeat, P/K/authoritative-parent identity, every pre-weight count state equality and canonical stream rejection.",
+    "Only a separately frozen, published, admitted complete-model gate can measure trained tensor economics. Integrated source/binary/options and model multiplicities remain counted; no synthetic score credit."
+  ],
+  "controls": [
+    {
+      "id": "P",
+      "role": "comparator",
+      "definition": "Immutable reset-per-tensor adaptive marginal container."
+    },
+    {
+      "id": "K",
+      "role": "negative",
+      "definition": "Exact P archive with magnitude/shared-sign bookkeeping."
+    },
+    {
+      "id": "D",
+      "role": "treatment",
+      "definition": "Magnitude and shared nonzero sign coding, resetting both counts per tensor."
+    },
+    {
+      "id": "inverse-repeat",
+      "role": "replay",
+      "definition": "Independent decoder and repeat process plus full pre-truth count comparison."
+    }
+  ],
+  "population": {
+    "unit": "synthetic tensor byte",
+    "scopeBytes": 300000,
+    "scopeSymbols": 300000,
+    "selection": "Fixed synthetic suite only; no trained parameters or enwik9.",
+    "coordinate": "Tensor order and stored INT4 element index; metadata precedes payload."
+  },
+  "causalBoundary": {
+    "availableInformation": [
+      "Previously decoded tensor metadata and exact values",
+      "Fixed magnitude/sign priors and deterministic updates"
+    ],
+    "forbiddenInformation": [
+      "Future tensor values",
+      "Uncounted tables",
+      "Trained model or native corpus execution in this stage"
+    ]
+  },
+  "inputs": [
+    {
+      "id": "adaptive-parent",
+      "path": "lib/fx2_weight_adaptive_marginal_v1.hpp",
+      "sha256": "sha256:3264d084d8c9d7511ec119b23500deae622eb0bb74c700d8c0ad62698674e71d"
+    },
+    {
+      "id": "original-format",
+      "path": "lib/fx2_weight_format_v1.hpp",
+      "sha256": "sha256:aa615fc92b456bada499602888c2bf38ea8a98918694ce2cfd9691d384b2fa30"
+    },
+    {
+      "id": "parent-result",
+      "path": "operations/provenance/fx2_weight_adaptive_transfer250k_v1_terminal.json",
+      "sha256": "sha256:2457a29ad320981d150561a75d04a59a4503dc2bdbb56c89b54c3267d433de55"
+    },
+    {
+      "id": "parent-reflection",
+      "path": "operations/adaptive/reflections/20260909T043012Z_39a4f8a2a9.json",
+      "sha256": "sha256:34c01ae6588b19c9c81b973dbf51620c0a5befbe083169bbc8523f59fe6a8d35"
+    },
+    {
+      "id": "sign-input-0",
+      "path": "lib/fx2_weight_sign_magnitude_v1.hpp",
+      "sha256": "sha256:c3e824a40c49dbd5971bed7cde51929b9258040ee5be1e59e14a958102f17ae1"
+    },
+    {
+      "id": "sign-input-1",
+      "path": "tools/fx2_weight_sign_magnitude_v1.py",
+      "sha256": "sha256:2fae0dbe9a16a055b0409d46b3deeb68983b27d494d1347b3538ce40110fc3e2"
+    },
+    {
+      "id": "sign-input-2",
+      "path": "tools/fx2_weight_sign_magnitude_probe_v1.cpp",
+      "sha256": "sha256:6a5c1d8a0b4196ceb51cb84d08ca73178b4c7ec4749a533604357b8d1aa49137"
+    },
+    {
+      "id": "sign-input-3",
+      "path": "tests/test_fx2_weight_sign_magnitude_v1.py",
+      "sha256": "sha256:828a75044ceda26aea63323cb2b1d50d2ddf8957e742417d345b9d422e2b284b"
+    },
+    {
+      "id": "sign-input-4",
+      "path": "tools/fx2_weight_marginal_fixtures_v1.py",
+      "sha256": "sha256:f1905a844767f9506029336bb1d77992a7f714fe887f79e6f108b48d5ea51d4e"
+    },
+    {
+      "id": "sign-input-5",
+      "path": "tools/fx2_weight_marginal_probe_v1.cpp",
+      "sha256": "sha256:eb23bcc621be8b75f75e42592e5af55014474530a9353cc4aa19893c2de1f08f"
+    },
+    {
+      "id": "sign-input-6",
+      "path": "tools/fx2_weight_pack_probe_v1.cpp",
+      "sha256": "sha256:0f826c627f603c9f1acf1a0ae37d6373234197a400d39dfe4a985ece74655292"
+    },
+    {
+      "id": "sign-input-7",
+      "path": "tools/fx2_weight_adaptive_marginal_probe_v1.cpp",
+      "sha256": "sha256:ac18d5db3ee7c69f87ccf5c2cd6717a6bd349b00bcbd1cf78b8ed2120b58f49a"
+    },
+    {
+      "id": "sign-input-8",
+      "path": "tools/fx2_weight_adaptive_loader_gate_v1.py",
+      "sha256": "sha256:6fc5639c855e11ca5903ec7aef6771ab1f68bbaeae9a73cf680160180a54bd7e"
+    },
+    {
+      "id": "sign-input-9",
+      "path": "operations/provenance/fx2_weight_sign_magnitude_v1_synthetic_plan.json",
+      "sha256": "sha256:2f0ac09c790a418bb768cd108c03545f2cbe786d610d74fd2a34446731d8709b"
+    },
+    {
+      "id": "sign-input-10",
+      "path": "operations/provenance/public_fx2_gcc15_toolchain_20260909.json",
+      "sha256": "sha256:efa2c48ae7e4f1b627ec270f66149ffc4ea2a858241b8bd1b2bd000629a9e292"
+    }
+  ],
+  "budget": {
+    "expectedGrossSavingsBytes": 0,
+    "maximumAddedPackageBytes": 8192,
+    "expectedNetSavingsBytes": -8192
+  },
+  "search": {
+    "expectedTransferRetention": 0,
+    "expectedRuntimeRatio": 1,
+    "expectedMemoryRatio": 1,
+    "uncertaintyRisk": 1,
+    "interactionRisk": 0
+  },
+  "measurements": [
+    {
+      "id": "synthetic_exact",
+      "definition": "All controls, inverses, repeats and count states match.",
+      "unit": "boolean"
+    }
+  ],
+  "promotionPredicates": [
+    {
+      "id": "synthetic-pass",
+      "measurement": "synthetic_exact",
+      "operator": "eq",
+      "threshold": true
+    }
+  ],
+  "killPredicates": [
+    {
+      "id": "synthetic-fail",
+      "measurement": "synthetic_exact",
+      "operator": "eq",
+      "threshold": false
+    }
+  ],
+  "outputs": [
+    "operations/evidence/20260909_fx2_weight_sign_magnitude_v1_unit.json"
+  ],
+  "outputManifestPolicy": "complete-result-artifacts-v1",
+  "generatedUtc": "2026-09-09T11:44:20.684Z"
+}
