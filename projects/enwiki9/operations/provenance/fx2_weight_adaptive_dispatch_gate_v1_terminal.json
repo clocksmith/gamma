@@ -1,0 +1,31 @@
+{
+  "schema": "gamma.enwiki9.source-audit-terminal.v1",
+  "id": "fx2_weight_adaptive_dispatch_gate_v1",
+  "owner": "root_explore",
+  "publication_commit": "c82fefb2c",
+  "status": "implementation-failure",
+  "hypothesis_verdict": "not-tested",
+  "cause": "Upstream cmix links its nine transformer objects then removes every object. The probe incorrectly tried to consume them afterward. No model or synthetic inference execution occurred.",
+  "execution": {
+    "path": "results/fx2_weight_adaptive_dispatch_gate_v1/execution.json",
+    "bytes": 408,
+    "sha256": "2a57ddfbb59aae801e37f86186b407858b494e8998b3450d74045f4582a6ba1d"
+  },
+  "log": {
+    "path": "results/fx2_weight_adaptive_dispatch_gate_v1/gate.stderr",
+    "bytes": 731,
+    "sha256": "e602d4414ce04a47785b35ffbed0790eac88cfcb6324db8eb976c6ddb3a6fefc"
+  },
+  "commands": {
+    "path": "results/fx2_weight_adaptive_dispatch_gate_v1/attempt01/commands.jsonl",
+    "bytes": 730,
+    "sha256": "a7f42cd16347c976b4073727b22bb10a7a9f7ce1a85db89455105fc8635d90ca"
+  },
+  "parent_binary": {
+    "path": "results/fx2_weight_adaptive_dispatch_gate_v1/attempt01/P/cmix",
+    "bytes": 496136,
+    "sha256": "c848acc756c8ced70422dfc4c8da03ac936417754b877eb8addf0143ce2ba100"
+  },
+  "objective_credit_bytes": 0,
+  "next_action": "Preserve this source and build attempt; use a new runner that links the probe before the unchanged cmix recipe consumes the same objects."
+}

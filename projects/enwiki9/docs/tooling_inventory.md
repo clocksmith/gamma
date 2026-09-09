@@ -12,7 +12,7 @@ Reusable artifact helpers for new tools: [lib/artifacts.py](../lib/artifacts.py)
 The LibNC initializer teacher launcher exits before the first forward, gradient, update, or coded symbol; its source-bound experiment defines that boundary.
 The delayed-status helper's `enwiki9_delayed_status_latest.log` pointer is operational history, not present-host occupancy proof.
 
-Coverage: **1094 files** (33 .c, 72 .cpp, 1 .gdb, 1 .h, 1 .hpp, 1 .html, 982 .py, 3 .sh).
+Coverage: **1095 files** (33 .c, 72 .cpp, 1 .gdb, 1 .h, 1 .hpp, 1 .html, 983 .py, 3 .sh).
 
 | Tool | Purpose | Referenced contracts |
 |---|---|---|
@@ -381,6 +381,7 @@ Coverage: **1094 files** (33 .c, 72 .cpp, 1 .gdb, 1 .h, 1 .hpp, 1 .html, 982 .py
 | [`tools/fx2_transformer_kernel_probe_v1.cpp`](../tools/fx2_transformer_kernel_probe_v1.cpp) | Diagnostic kernel measurement of the pinned public model, not a codec score. The runner authenticates source/weights and enforces the memory/scratch guard. | [1](../operations/adaptive/experiments/fx2_cmix_transformer_static_vocab_fixture50051_q0_v1.json) |
 | [`tools/fx2_typed_anchor_soft_queue.py`](../tools/fx2_typed_anchor_soft_queue.py) | Build and gate native fx2 typed-anchor soft-state candidates. | none found |
 | [`tools/fx2_weight_adaptive_dispatch_gate_v1.py`](../tools/fx2_weight_adaptive_dispatch_gate_v1.py) | Bounded production-entrypoint parity and native rebuild for adaptive packing. | none found |
+| [`tools/fx2_weight_adaptive_dispatch_gate_v2.py`](../tools/fx2_weight_adaptive_dispatch_gate_v2.py) | Bounded production-entrypoint parity and native rebuild for adaptive packing. | none found |
 | [`tools/fx2_weight_adaptive_dispatch_v1.py`](../tools/fx2_weight_adaptive_dispatch_v1.py) | Emit the production dispatch repair without changing retained native source. | none found |
 | [`tools/fx2_weight_adaptive_fixture50051_q0_v1.py`](../tools/fx2_weight_adaptive_fixture50051_q0_v1.py) | Guarded native archive parity for the exact adaptive model representation. | [1](../operations/adaptive/experiments/fx2_weight_adaptive_fixture50051_q0_v1.json) |
 | [`tools/fx2_weight_adaptive_loader_gate_v1.py`](../tools/fx2_weight_adaptive_loader_gate_v1.py) | Source-bound native tensor parity and build cost; never run corpus inference. | none found |

@@ -298,3 +298,47 @@ Its verifier checks the retained artifacts without rerunning the codecs.
 Enumeration, interpreter-context tuning and neighboring campaigns stay parked
 or with their existing owners. Two complete older records moved to archive 036
 with their evidence text preserved.
+
+## 2026-09-07 - Causal FIFO byte buckets select only plain fallback
+
+`causal_bucket250k_q0_v1` tests one raw-byte ordering before unchanged Deflate.
+Each byte enters its predecessor's FIFO bucket; ascending bucket concatenation
+and the final raw byte let the inverse derive bucket counts and reconstruct the
+original walk. This bounded frame transform uses neither a grammar nor supplied
+parent probabilities. [Codec and inverse](../../causal_bucket_v1.md) document the
+endpoint requirement, exact byte preservation and fixed 65,536-byte framing.
+
+The [implementation evidence](../../../operations/evidence/20260907_causal_bucket_unit.json)
+records 25 tests, 9,841 exhaustive inverse cases and 18 synthetic child phases.
+The v2 encoder repairs an archive-cap boundary before corpus freezing; the v1
+source and synthetic measurements remain preserved. Review identified the cap
+defect analytically. Synthetic gains establish only that the transform can pay
+on its constructed fixture.
+
+Closed job `20260907T193106Z_9f544523f2` completes all nine opening250KB phases.
+P/K/D archives are each 89,041 bytes and byte-identical, with exact independent
+inverses and deterministic repeats from raw bytes. All four D frames fall back.
+The [cost table](../../../results/causal_bucket250k_q0_v1/costs-table.json) and
+[stage receipt](../../../results/causal_bucket250k_q0_v1/stage-decision.json) report zero
+archive savings; fallback equality does not authorize confirmation.
+The [terminal record](../../../operations/provenance/causal_bucket_terminal_20260907.json)
+retains the closed comparison and its limits.
+
+Rejected transformed frame costs are 36,484, 35,231, 28,063 and 30,521 bytes.
+Their sum plus the 24-byte archive header is 130,323 bytes: 41,282 above P.
+This is arithmetic over encoder comparison costs, not a retained forced-mode
+archive, inverse or repeat. Only the selected fallback archives receive those
+correctness claims. Known source union is 41,941 bytes. The uncompressed local
+encode/decode source inventories are P 33,804 and D 35,943 bytes, an increase
+of 2,139; complete package, runtime/license/option accounting and full-corpus
+score remain unknown.
+
+Prior alternatives remain scoped to their recorded evidence. [RADIX-STC N4](part-002.md#2026-07-26-radix-stc-target-scale-numeric-representation-probe)
+added 1,013 bytes on opening1M; the broader historical
+[`revlog_numeric_relations_terminal_v1`](../../../operations/adaptive/exclusions/revlog_numeric_relations_terminal_v1.json)
+exclusion concerns numeric parent bypass. [Same-page public ordering](../../../operations/adaptive/exclusions/public_article_order_same_page_native_subscale_v1.json)
+saved 39 bytes on 1,000,179 raw bytes, with inverse/repeat unproved after its
+budget stop; that transfer remains held. These do not supply gains or a theorem
+against this raw FIFO transform, which also differs from WRT context retrieval
+and numeric side channels. Park this tested configuration and use the measured
+loss to select a distinct question; no full-score projection or larger gate.
