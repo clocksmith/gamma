@@ -15,6 +15,16 @@ source/bindings precede actual trace replay. CPU3,512MiB address space,240 secon
 per phase,480 seconds aggregate and64MiB output scratch are diagnostic bounds.
 No parameter search, native corpus encode, archive credit or revival is authorized.
 
+The [repeated attribution](../operations/provenance/fx2_ratio_delivery_loss_attribution_v1_terminal.json)
+is exact: D saves242.031200583 ideal expert bits but loses81.151414044 final-coder
+bits; all expert thirds improve and all coder thirds worsen. S loses3518.630
+expert bits and3535.293 coder bits. Each arm reproduces302420 native states
+and151210 exact corrected rows. The first symbol is unscored by the expert and
+the last prediction unconsumed; these thirds use modeled-byte boundaries.
+The result identifies a delivery/objective mismatch, not its detailed cause.
+Next distinguish excessive fixed strength from an unhelpful correction direction
+relative to the final parent before a new mechanism; retain the archive rejection.
+
 ## 2026-09-09 - Frozen final-coder ratio opening development comparison
 
 Owner `root_explore` bound [opening250KB](../operations/adaptive/experiments/fx2_ratio_coder_opening250k_q0_v1.json)
