@@ -12,8 +12,8 @@ Unknown package cost stays unknown. Local subtotals are not complete submission 
 Populations are grouped by raw-input SHA256; compare matched controls in each receipt.
 ```
 
-- Result JSON files scanned: `304`
-- Roundtrip-passing rows: `116`
+- Result JSON files scanned: `309`
+- Roundtrip-passing rows: `120`
 - Active target score: `90,000,000` bytes (`9.0000000%`)
 
 ## Scope `1,000,000,000` Bytes
@@ -94,9 +94,9 @@ No roundtrip-passing result JSONs are present for this scope in this checkout.
 
 | Program / arm | Mechanism | Local subtotal | Archive | Program bytes | b/B | Determinism | Result |
 |---|---|---:|---:|---:|---:|---|---|
+| `fx2_ratio_coder_opening250k_q0_v1:K` | custom candidate | unknown | 33,429 | 9,435,623 | 1.069728 | true | `operations/provenance/fx2_ratio_coder_opening250k_v1_terminal/K.json` |
+| `fx2_ratio_coder_opening250k_q0_v1:P` | custom candidate | unknown | 33,429 | 9,435,623 | 1.069728 | true | `operations/provenance/fx2_ratio_coder_opening250k_v1_terminal/P.json` |
 | `fx2_weight_adaptive_transfer250k_q0_v1:opening-D` | custom candidate | unknown | 33,429 | 4,907,384 | 1.069728 | true | `operations/provenance/fx2_weight_adaptive_transfer250k_v1_terminal/opening-D.json` |
-| `fx2_weight_adaptive_transfer250k_q0_v1:opening-K` | custom candidate | unknown | 33,429 | 4,913,426 | 1.069728 | true | `operations/provenance/fx2_weight_adaptive_transfer250k_v1_terminal/opening-K.json` |
-| `fx2_weight_adaptive_transfer250k_q0_v1:opening-P` | custom candidate | unknown | 33,429 | 4,913,426 | 1.069728 | true | `operations/provenance/fx2_weight_adaptive_transfer250k_v1_terminal/opening-P.json` |
 
 ### Population `f0d01801279f29e353d1dd932a43133e191ea905da6626575b1ee174957717b8`
 

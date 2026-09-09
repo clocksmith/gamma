@@ -16,6 +16,19 @@ repeats and every introduced state/coder boundary. The fixture's one-byte gain
 did not pay its32568-byte local component increment. This development gate has
 no confirmation or full-corpus authority; no native result exists at registration.
 
+The [terminal comparison](../operations/provenance/fx2_ratio_coder_opening250k_v1_terminal.json)
+is a valid rejection: P/K33429,D33439,S33871 bytes. D loses10 archive bytes
+and81.151414 ideal bits across731400 changed events; all chronological thirds
+lose. Every original parent projection and introduced-state comparison passes,
+including302420 complete K/D boundaries. All22 phases close with clean guards,
+7797497856 peak cgroup bytes and709.7693 elapsed seconds. Added local components
+cost32568 bytes; conservative adjusted saving is-32578, with complete package
+qualification still unknown. The [reflection](../operations/adaptive/reflections/20260909T073614Z_92f9e13b9e.json)
+retires this fixed development realization, not causal calibration generally.
+Seven unique traces are retained in exactly reconstructible compressed chunks.
+Next: reuse closed cached masses and truth traces to distinguish normalized
+expert loss from final-coder delivery loss before another mechanism or corpus run.
+
 ## 2026-09-09 - Preserve parent learning while changing ratio delivery
 
 Owner `root_explore` claimed [coder-boundary delivery](../operations/adaptive/experiments/fx2_ratio_coder_delivery_v1.json)
