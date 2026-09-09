@@ -14,8 +14,8 @@ Compare identical population hashes; equal input sizes alone do not define match
 
 ## Proof Boundary
 
-- Result JSON files scanned: `309`
-- Roundtrip-passing rows: `120`
+- Result JSON files scanned: `314`
+- Roundtrip-passing rows: `124`
 - Verified full `1G` rows in this checkout: `0`
 - Active target score: `90,000,000` bytes (`9.0000000%`)
 - `9.0000000%` target reached by this matrix: `False`
@@ -76,11 +76,11 @@ Compare identical population hashes; equal input sizes alone do not define match
 | `fx2_weight_adaptive_transfer250k_q0_v1:distant-D` | `f0d01801279f` | custom candidate | 250,000 | unknown | 9,499 | 4,907,384 | 0.303968 | true | `operations/provenance/fx2_weight_adaptive_transfer250k_v1_terminal/distant-D.json` |
 | `fx2_weight_adaptive_transfer250k_q0_v1:distant-K` | `f0d01801279f` | custom candidate | 250,000 | unknown | 9,499 | 4,913,426 | 0.303968 | true | `operations/provenance/fx2_weight_adaptive_transfer250k_v1_terminal/distant-K.json` |
 | `fx2_weight_adaptive_transfer250k_q0_v1:distant-P` | `f0d01801279f` | custom candidate | 250,000 | unknown | 9,499 | 4,913,426 | 0.303968 | true | `operations/provenance/fx2_weight_adaptive_transfer250k_v1_terminal/distant-P.json` |
+| `fx2_final_counts_opening250k_q0_v1:D` | `665fc689441b` | custom candidate | 250,000 | unknown | 33,427 | 2,885,214 | 1.069664 | true | `operations/provenance/fx2_final_counts_opening250k_v1_terminal/D.json` |
+| `fx2_final_counts_opening250k_q0_v1:K` | `665fc689441b` | custom candidate | 250,000 | unknown | 33,429 | 2,885,214 | 1.069728 | true | `operations/provenance/fx2_final_counts_opening250k_v1_terminal/K.json` |
+| `fx2_final_counts_opening250k_q0_v1:P` | `665fc689441b` | custom candidate | 250,000 | unknown | 33,429 | 2,885,214 | 1.069728 | true | `operations/provenance/fx2_final_counts_opening250k_v1_terminal/P.json` |
 | `fx2_ratio_coder_opening250k_q0_v1:K` | `665fc689441b` | custom candidate | 250,000 | unknown | 33,429 | 9,435,623 | 1.069728 | true | `operations/provenance/fx2_ratio_coder_opening250k_v1_terminal/K.json` |
 | `fx2_ratio_coder_opening250k_q0_v1:P` | `665fc689441b` | custom candidate | 250,000 | unknown | 33,429 | 9,435,623 | 1.069728 | true | `operations/provenance/fx2_ratio_coder_opening250k_v1_terminal/P.json` |
-| `fx2_weight_adaptive_transfer250k_q0_v1:opening-D` | `665fc689441b` | custom candidate | 250,000 | unknown | 33,429 | 4,907,384 | 1.069728 | true | `operations/provenance/fx2_weight_adaptive_transfer250k_v1_terminal/opening-D.json` |
-| `fx2_weight_adaptive_transfer250k_q0_v1:opening-K` | `665fc689441b` | custom candidate | 250,000 | unknown | 33,429 | 4,913,426 | 1.069728 | true | `operations/provenance/fx2_weight_adaptive_transfer250k_v1_terminal/opening-K.json` |
-| `fx2_weight_adaptive_transfer250k_q0_v1:opening-P` | `665fc689441b` | custom candidate | 250,000 | unknown | 33,429 | 4,913,426 | 1.069728 | true | `operations/provenance/fx2_weight_adaptive_transfer250k_v1_terminal/opening-P.json` |
 
 ## Unavailable terminal evidence
 
