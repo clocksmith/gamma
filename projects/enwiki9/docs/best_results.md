@@ -12,8 +12,8 @@ Unknown package cost stays unknown. Local subtotals are not complete submission 
 Populations are grouped by raw-input SHA256; compare matched controls in each receipt.
 ```
 
-- Result JSON files scanned: `290`
-- Roundtrip-passing rows: `105`
+- Result JSON files scanned: `296`
+- Roundtrip-passing rows: `111`
 - Active target score: `90,000,000` bytes (`9.0000000%`)
 
 ## Scope `1,000,000,000` Bytes
@@ -94,9 +94,19 @@ No roundtrip-passing result JSONs are present for this scope in this checkout.
 
 | Program / arm | Mechanism | Local subtotal | Archive | Program bytes | b/B | Determinism | Result |
 |---|---|---:|---:|---:|---:|---|---|
-| `opcode_event_parse250k_q0_v1:D` | syntax opcode preprocessor | unknown | 67,520 | unknown | 2.16064 | true | `operations/provenance/opcode_event_parse_terminal_20260908/D.json` |
-| `opcode_field_history250k_q0_v1:D` | syntax opcode preprocessor | unknown | 67,578 | unknown | 2.162496 | true | `operations/provenance/opcode_field_history_terminal_20260908/D.json` |
-| `opcode_field_history250k_q0_v1:G` | syntax opcode preprocessor | unknown | 67,579 | unknown | 2.162528 | true | `operations/provenance/opcode_field_history_terminal_20260908/G.json` |
+| `fx2_weight_adaptive_transfer250k_q0_v1:opening-D` | custom candidate | unknown | 33,429 | 4,907,384 | 1.069728 | true | `operations/provenance/fx2_weight_adaptive_transfer250k_v1_terminal/opening-D.json` |
+| `fx2_weight_adaptive_transfer250k_q0_v1:opening-K` | custom candidate | unknown | 33,429 | 4,913,426 | 1.069728 | true | `operations/provenance/fx2_weight_adaptive_transfer250k_v1_terminal/opening-K.json` |
+| `fx2_weight_adaptive_transfer250k_q0_v1:opening-P` | custom candidate | unknown | 33,429 | 4,913,426 | 1.069728 | true | `operations/provenance/fx2_weight_adaptive_transfer250k_v1_terminal/opening-P.json` |
+
+### Population `f0d01801279f29e353d1dd932a43133e191ea905da6626575b1ee174957717b8`
+
+**Smallest archives (package cost reported separately)**
+
+| Program / arm | Mechanism | Local subtotal | Archive | Program bytes | b/B | Determinism | Result |
+|---|---|---:|---:|---:|---:|---|---|
+| `fx2_weight_adaptive_transfer250k_q0_v1:distant-D` | custom candidate | unknown | 9,499 | 4,907,384 | 0.303968 | true | `operations/provenance/fx2_weight_adaptive_transfer250k_v1_terminal/distant-D.json` |
+| `fx2_weight_adaptive_transfer250k_q0_v1:distant-K` | custom candidate | unknown | 9,499 | 4,913,426 | 0.303968 | true | `operations/provenance/fx2_weight_adaptive_transfer250k_v1_terminal/distant-K.json` |
+| `fx2_weight_adaptive_transfer250k_q0_v1:distant-P` | custom candidate | unknown | 9,499 | 4,913,426 | 0.303968 | true | `operations/provenance/fx2_weight_adaptive_transfer250k_v1_terminal/distant-P.json` |
 
 ### Population `ffb6c9e73f59dc3ee7109441aa05881d1980ff440f47db63120bf36822b765bf`
 
