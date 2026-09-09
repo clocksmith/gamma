@@ -1,0 +1,120 @@
+{
+  "schema": "gamma.enwiki9.source-audit-terminal.v1",
+  "id": "fx2_weight_adaptive_neighbor_model_v1",
+  "owner": "root_explore",
+  "objective_target_bytes": 90000000,
+  "objective_credit_bytes": 0,
+  "publication_commit": "0a6db4aa848089ad27c0d18bc4e7309c306e190b",
+  "validity": "valid-component-comparison",
+  "hypothesis_verdict": "neighbor-treatment-refuted",
+  "decision": "reject-neighbor-policy; separately-test-adaptive-marginal-container",
+  "population": {
+    "tensors": 434,
+    "int4_tensors": 111,
+    "int4_symbols": 5868864
+  },
+  "artifact_references_rehashed": 1443,
+  "retained_parent_archives_matched": 111,
+  "all_population_coordinates_match": true,
+  "phase_count": 1333,
+  "sum_subprocess_cpu_seconds": 5.010433999999997,
+  "max_child_peak_rss_kib": 51768,
+  "allocated_scratch_bytes": 60604416,
+  "totals": {
+    "P": 2782839,
+    "K": 2782839,
+    "A": 2777312,
+    "D": 2784847
+  },
+  "count_table_bytes": {
+    "P": 6660,
+    "K": 6660,
+    "A": 0,
+    "D": 0
+  },
+  "range_stream_bytes": {
+    "P": 2774292,
+    "K": 2774292,
+    "A": 2775425,
+    "D": 2782960
+  },
+  "framing_bytes_per_arm": 1887,
+  "receipt": {
+    "path": "results/fx2_weight_adaptive_neighbor_model_v1/attempt01/receipt.json",
+    "bytes": 430954,
+    "sha256": "c947dbfe7b4c6e60e99b6cb88ed7daf19ed727f42e1132bd8ec66f9b7140acc3"
+  },
+  "execution": {
+    "command": [
+      "python3",
+      "tools/fx2_weight_adaptive_neighbor_model_v1.py",
+      "--inputs",
+      "operations/provenance/fx2_weight_adaptive_neighbor_model_v1_inputs.json",
+      "--admission",
+      "results/fx2_weight_adaptive_neighbor_model_v1/admission.json",
+      "--output",
+      "results/fx2_weight_adaptive_neighbor_model_v1/attempt01",
+      "--extractor",
+      "results/fx2_weight_neighbor_model_v1_unit/attempt01/extractor",
+      "--probe",
+      "results/fx2_weight_adaptive_neighbor_model_v1_unit/attempt01/probe"
+    ],
+    "returncode": 0,
+    "elapsed_seconds": 9.580161039950326
+  },
+  "admission": {
+    "path": "results/fx2_weight_adaptive_neighbor_model_v1/admission.json",
+    "bytes": 15587,
+    "sha256": "e9c64bc6e69ec0f093c92609a85c69a3da94acaa2bd87b981d969a74eb88adc7"
+  },
+  "retention": {
+    "bundle": {
+      "path": "results/fx2_weight_adaptive_neighbor_model_v1/retained.zip",
+      "bytes": 39451772,
+      "sha256": "fd8895fa82e0943333cacc98fb5ab199f4318281841e99b24673b1aa39c596bd"
+    },
+    "members": 4115,
+    "all_compared": true
+  },
+  "adaptive_marginal_bytes_saved": 5527,
+  "neighbor_bytes_saved_against_fixed_parent": -2008,
+  "neighbor_bytes_saved_against_adaptive_marginal": -7535,
+  "source_inventory": [
+    {
+      "path": "lib/fx2_weight_format_v1.hpp",
+      "bytes": 20196,
+      "sha256": "aa615fc92b456bada499602888c2bf38ea8a98918694ce2cfd9691d384b2fa30"
+    },
+    {
+      "path": "lib/fx2_weight_neighbor_v1.hpp",
+      "bytes": 3497,
+      "sha256": "d5a760bc5695effde59510039b06a770a4b9268624e694d947e91e7b446a306c"
+    },
+    {
+      "path": "lib/fx2_weight_adaptive_neighbor_v1.hpp",
+      "bytes": 4187,
+      "sha256": "95cd3eeb41e46f755a18ce47ffa14c266fc509793d59f4c5baf59b3a24461add"
+    },
+    {
+      "path": "tools/fx2_weight_neighbor_probe_v1.cpp",
+      "bytes": 2819,
+      "sha256": "ad9e4571254f9347955b4b49bfca49d63c53537e4ddb264a0ddc56913cd1aa7e"
+    },
+    {
+      "path": "tools/fx2_weight_adaptive_neighbor_probe_v1.cpp",
+      "bytes": 1495,
+      "sha256": "2518affa3b2f2c48ed4229914eaa8dcf370d70a316791e8dc580d29376358850"
+    }
+  ],
+  "source_union_bytes": 32194,
+  "complete_package_bytes": null,
+  "full_corpus_score_bytes": null,
+  "conclusion": "A removes6660 table bytes while its range stream grows1133 bytes, saving5527 fully framed substream bytes. D removes the same tables but its range stream grows8668 bytes, losing2008 versus P and7535 versus A. All111 retained parent archives and coordinates match. No tensor selection or tuning was performed.",
+  "limitations": [
+    "These are separately terminated INT4 substreams, not a complete model container; tensor metadata, other payloads and integration overhead remain unmeasured for the new representation.",
+    "No native inference or corpus archive was run. Exact restored symbols support a lossless packing successor, not probability or full-score credit.",
+    "Source and executable inventory is not complete runtime, license or official multiplicity accounting.",
+    "Per-child resource bounds and aggregate elapsed stop were enforced. Scratch was sampled after each tensor; retained transport ZIP is separate from measured execution scratch. Timing and RSS are shared-host diagnostics."
+  ],
+  "next_action": "Freeze a separately identified adaptive marginal complete-container successor; keep metadata and non-INT4 representation fixed, reconstruct the original model byte-identically, measure total model and decoder costs before native archive validation. Do not integrate D."
+}
