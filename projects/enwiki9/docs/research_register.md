@@ -2,6 +2,25 @@
 
 [Record index](research_register/README.md) | [Earlier records](research_register/archive/README.md)
 
+## 2026-09-09 - Closing-name replay enters causal synthetic testing
+
+Owner `root_explore` selects lenses5/6 after the native XML coordinate's
+zero-gain result. The [new component](fx2_closing_replay_v1.md) retains decoded
+opening-name spellings and predicts stored closing-name bytes only after the
+closing slash. It changes neither the retired context key nor historical q1
+WIKI-PDA contracts. No transition table, pretrained model or future truth is used.
+The hypothesis is useful residual name information beyond FX2's delimiter model;
+its corpus opportunity frequency and parent surprise remain unmeasured.
+[Seven synthetic tests](../results/fx2_closing_replay_v1_unit/attempt01/receipt.json)
+pass optimized/UBSan builds and repeats, including prediction-before-observe,
+nested names, attributes, mismatches, overflow and stored multibyte spellings.
+All mutable state is serialized in1124 bytes; source preimages and binaries remain.
+Next freeze one independently bounded opportunity-cost gate on the exact
+retained native parent. No corpus access, archive saving or promotion occurs here.
+Independent source review found no blocking defect. Four additional
+[boundary groups](../results/fx2_closing_replay_v1_unit/boundaries01/receipt.json)
+pass optimized/UBSan builds and repeats without changing the measured component.
+
 ## 2026-09-09 - Native XML field coordinate is active but does not pay
 
 The [closed opening250KB comparison](../operations/provenance/fx2_xml_word_opening250k_v1_terminal.json)
@@ -776,24 +795,3 @@ inverses, repeats and complete state witnesses. Peak guard memory is 622,522,368
 all guards pass. The [validated reflection](../operations/adaptive/reflections/20260908T232009Z_a13fbfa9a9.json)
 retires this exact configuration: no1MB launch, tuning or post-validation selection of S.
 The reason S wins remains unmeasured; neither positive parent-relative gain is erased.
-
-## 2026-09-08 - Bound compact-parent complementarity before constructing a selector
-
-Owner `root_explore` selects lenses 7/9 for an exact ideal-cost opportunity
-[audit](../operations/provenance/fx2_compact_complement_bound_v1_plan.json).
-The retired compact block loses 17 native bytes overall; local complementarity
-remains unmeasured. Existing Endpoint428 fixed-share ladders stay excluded.
-This different native P/D pair receives one retained-trace audit, not a selector
-or another codec. Exact integer products bound any per-bit convex mixture;
-fixed 1/64/1024-byte block oracles pay one selector bit per block. These are
-ideal-cost bounds, not finite-archive or submission certificates. Five synthetic
-tests pass, including exhaustive rational ceilings and malformed coordinates.
-CPU3, 512MiB address space, 60-second elapsed stop, no native inference. Publication
-and fresh admission precede the audit; no corpus result is claimed yet.
-
-The [terminal bound](../operations/provenance/fx2_compact_complement_bound_v1_terminal.json)
-caps even unpriced per-bit convex selection at 972 ideal bits (121.5 bytes).
-Paid 1/64/1024-byte block choices have ceilings -31,918/-404/-24 ideal bits.
-All 259,824 truth coordinates and 13 inputs verify; no native model reran.
-Do not build a selector for this fixed pair from this fixture. Seek new predictive
-information; this is not a finite-archive or full-corpus impossibility theorem.
