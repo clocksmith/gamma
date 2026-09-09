@@ -12,7 +12,7 @@ Reusable artifact helpers for new tools: [lib/artifacts.py](../lib/artifacts.py)
 The LibNC initializer teacher launcher exits before the first forward, gradient, update, or coded symbol; its source-bound experiment defines that boundary.
 The delayed-status helper's `enwiki9_delayed_status_latest.log` pointer is operational history, not present-host occupancy proof.
 
-Coverage: **1078 files** (33 .c, 69 .cpp, 1 .gdb, 1 .h, 1 .hpp, 1 .html, 969 .py, 3 .sh).
+Coverage: **1079 files** (33 .c, 69 .cpp, 1 .gdb, 1 .h, 1 .hpp, 1 .html, 970 .py, 3 .sh).
 
 | Tool | Purpose | Referenced contracts |
 |---|---|---|
@@ -201,6 +201,7 @@ Coverage: **1078 files** (33 .c, 69 .cpp, 1 .gdb, 1 .h, 1 .hpp, 1 .html, 969 .py
 | [`tools/compact_nncp_sparse_router_gate.cpp`](../tools/compact_nncp_sparse_router_gate.cpp) | unknown; inspect source and the selected experiment | none found |
 | [`tools/compile_hashed_residual_program.py`](../tools/compile_hashed_residual_program.py) | Compile endpoint428's final-minus-base trace into counted hashed offsets. | none found |
 | [`tools/complete_prior_factor_cover_gate.cpp`](../tools/complete_prior_factor_cover_gate.cpp) | unknown; inspect source and the selected experiment | none found |
+| [`tools/context_edit_fixture_v1.py`](../tools/context_edit_fixture_v1.py) | Fresh-process synthetic context-edit codec fixture with explicit arm options. | none found |
 | [`tools/continue_endpoint428_pair_layer0_10m.py`](../tools/continue_endpoint428_pair_layer0_10m.py) | Finish endpoint428 pair/layer-0 10M proof only after economics passes. | none found |
 | [`tools/cpp_comment_quotient.py`](../tools/cpp_comment_quotient.py) | Build the frozen CQQ-1 comment-quotiented SCC source payload. | none found |
 | [`tools/cpp_line_whitespace_quotient.py`](../tools/cpp_line_whitespace_quotient.py) | Canonicalize provably irrelevant C/C++ horizontal whitespace. | none found |
