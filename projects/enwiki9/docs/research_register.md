@@ -2,6 +2,27 @@
 
 [Record index](research_register/README.md) | [Earlier records](research_register/archive/README.md)
 
+## 2026-09-09 - Native XML field coordinate is active but does not pay
+
+The [closed opening250KB comparison](../operations/provenance/fx2_xml_word_opening250k_v1_terminal.json)
+produces33,429 bytes in each P/K/D/S arm. All inverses and repeats pass;
+P/K payloads and probabilities agree. D/S payloads differ despite equal lengths.
+Treatment changes452,749 probabilities and loses2.525 ideal bits post hoc;
+the delayed control changes438,369 and loses2.779. Neither has archive savings.
+The valid control has37,714 field disagreements and130,203 delayed-active bytes.
+Added local source/binary/options total37,901 bytes; complete package remains unknown.
+[Independent review](../operations/provenance/fx2_xml_word_opening250k_v1_review.json)
+verifies264 bindings,13 closed phases and complete observer/ring/context state.
+The controller owns the1800-second aggregate deadline; the separate guard's
+null wall-limit field is not its enforcement record. Execution is diagnostic.
+[Trace retention](../results/fx2_xml_word_opening250k_v1_retention/receipt.json)
+reconstructs all21 traces from six unique streams and preserves original files.
+The [validated reflection](../operations/adaptive/reflections/20260909T102756Z_82a65eed5d.json)
+retires this fixed coordinate under its zero-gain stop, not XML information.
+No confirmation, context/delay sweep or larger run follows this result.
+Next select a distinct measured dependence through the creative discovery cycle;
+collision, calibration and observation-fragmentation attribution remain unknown.
+
 ## 2026-09-09 - Native causal field observer prepares a prediction transfer
 
 Owner `root_explore` selects lenses6/9 after BPD1's native archive loss.
