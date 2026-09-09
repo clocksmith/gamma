@@ -17,6 +17,12 @@ attribution rejects resetting its unchanged experts; the failed event-pricing mu
 Next use the existing corpus runner for one published opening250KB P/K/D gate, with native
 D decoding, independent processes, identical parse events, calibration-free parent projections
 and package costs. The existing ranking includes already-completed validation; do not rerun it.
+The [runner tests](../operations/provenance/opcode_literal_sse_gate_v1_unit.json) pass three checks
+and ten fresh codec phases. The first wrapper attempt could not raise its16MiB inherited file
+cap to the reused runner's32MiB; the bound-only retry passes without codec changes.
+Bundle7117bytes adds1371 local source bytes; complete package remains unresolved.
+The [opening250KB contract](../operations/adaptive/experiments/opcode_literal_sse250k_q0_v1.json)
+binds job `20260909T023015Z_9564fe8ecc`, held for publication and fresh CPU2 admission.
 
 ## 2026-09-09 - Context acquisition for a causal edit-continuation expert
 
