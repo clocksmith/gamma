@@ -648,3 +648,19 @@ arm rows preserve its evidence. Do not scale it or rename it as an unchanged
 successor; retain the stronger original parent and select a distinct mechanism
 from measured costs. Full predictor-state certification, fresh transfer and
 complete-package qualification remain open. No 90M full-corpus score credit.
+
+## 2026-09-08 - Scalar half-output audit isolates a trained boundary discrepancy
+
+After the compact-block loss, lenses4/8 select an output-conversion question.
+The [bounded audit](../../../operations/provenance/fx2_half_tail_audit_v1_terminal.json)
+compares all 15,361 nonnegative half patterns through one against hardware F16C.
+The preserved upstream scalar decoder halves 1,023 positive subnormal values;
+1,007 differences survive its float32 probability floor. Correcting the scalar
+exponent in an extracted reference matches F16C exactly over the tested domain.
+The original native source and every trained parameter remain unchanged.
+In 512 retained unique synthetic kernel rows, 324 rows and669 tail entries change
+after the floor. These are synthetic inputs, not corpus prevalence or gain.
+Next: separately freeze P/K/D with correction only on final transformer outputs,
+leaving PPM input priors, weights and model update/reset order unchanged.
+Require native inverses, repeat, control identity, affected-output counts and
+complete cost evidence. No scientific promotion or full-corpus score is earned.
