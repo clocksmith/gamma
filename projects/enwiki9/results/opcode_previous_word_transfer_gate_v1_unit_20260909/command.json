@@ -1,0 +1,28 @@
+{
+  "argv": [
+    "/usr/bin/timeout",
+    "--signal=TERM",
+    "--kill-after=5",
+    "180",
+    "/usr/bin/prlimit",
+    "--as=536870912:536870912",
+    "--cpu=120:120",
+    "--fsize=33554432:33554432",
+    "/usr/bin/python3",
+    "-B",
+    "-c",
+    "import hashlib,importlib.util,json,os,resource,sys,time,unittest\nfrom pathlib import Path\nroot=Path.cwd();out=Path(os.environ['UNIT_OUTPUT'])\ndef save(name,value):\n with (out/name).open('x') as f:json.dump(value,f,sort_keys=True,indent=2);f.write('\\n')\ndef ref(p):\n b=p.read_bytes();return dict(path=str(p.relative_to(root)),bytes=len(b),sha256=hashlib.sha256(b).hexdigest())\nstart=time.monotonic()\nsave('resource-start.json',dict(affinity=sorted(os.sched_getaffinity(0)),address_limit=resource.getrlimit(resource.RLIMIT_AS),cpu_limit=resource.getrlimit(resource.RLIMIT_CPU),file_limit=resource.getrlimit(resource.RLIMIT_FSIZE),tmpdir=os.environ['TMPDIR']))\np=root/'tests/test_opcode_previous_word_transfer_gate_v1.py';spec=importlib.util.spec_from_file_location('transfer_unit',p);module=importlib.util.module_from_spec(spec);sys.modules['transfer_unit']=module;spec.loader.exec_module(module)\npaths={p}\nfor m in tuple(sys.modules.values()):\n name=getattr(m,'__file__',None)\n if name:\n  q=Path(name).resolve()\n  if q.is_relative_to(root) and q.is_file():paths.add(q)\npaths.update(root/q for q in module.gate.SOURCES)\npaths.update(root/q for q in (module.compact.PARENT,module.release.SOURCE,module.release.LOADER))\nrefs=[ref(p) for p in sorted(paths)];save('source-inputs.json',refs)\nresult=unittest.TextTestRunner(verbosity=2).run(unittest.defaultTestLoader.loadTestsFromModule(module))\nunchanged=refs==[ref(p) for p in sorted(paths)]\nu=resource.getrusage(resource.RUSAGE_SELF);c=resource.getrusage(resource.RUSAGE_CHILDREN)\nsave('resource-end.json',dict(elapsed_seconds=time.monotonic()-start,user_cpu_seconds=u.ru_utime,system_cpu_seconds=u.ru_stime,peak_self_rss_kib=u.ru_maxrss,children_user_cpu_seconds=c.ru_utime,children_system_cpu_seconds=c.ru_stime,children_peak_rss_kib=c.ru_maxrss,tests=result.testsRun,failures=len(result.failures),errors=len(result.errors),source_inputs_unchanged=unchanged,source_input_count=len(refs)))\nsys.exit(0 if result.wasSuccessful() and unchanged else 1)\n"
+  ],
+  "cwd": "/home/x/deco/gamma/projects/enwiki9",
+  "affinity": [
+    3
+  ],
+  "environment": {
+    "UNIT_OUTPUT": "/home/x/deco/gamma/projects/enwiki9/results/opcode_previous_word_transfer_gate_v1_unit_20260909",
+    "TMPDIR": "/home/x/deco/gamma/projects/enwiki9/results/opcode_previous_word_transfer_gate_v1_unit_20260909/tmp",
+    "GAMMA_PREVIOUS_WORD_TRANSFER_GATE_UNIT_OUTPUT": "/home/x/deco/gamma/projects/enwiki9/results/opcode_previous_word_transfer_gate_v1_unit_20260909/fixtures",
+    "PYTHONDONTWRITEBYTECODE": "1"
+  },
+  "synthetic_raw_unique_bytes": 120,
+  "wall_limit_seconds": 180
+}

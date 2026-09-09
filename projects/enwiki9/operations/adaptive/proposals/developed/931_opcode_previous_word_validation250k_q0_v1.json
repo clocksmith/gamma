@@ -1,0 +1,55 @@
+{
+  "candidate_id": "opcode_previous_word_validation250k_q0_v1",
+  "claimed_at": "2026-09-09T16:25:41+00:00",
+  "created_at": "2026-09-09T16:25:40+00:00",
+  "developed_at": "2026-09-09T16:25:41+00:00",
+  "evidence": [
+    {
+      "path": "operations/provenance/opcode_previous_word_release_terminal_20260909.json",
+      "sha256": "sha256:540699d30d12f86c9e29b4565e83bf87870f2144b8f4fa679470e7853cf539c7"
+    },
+    {
+      "path": "operations/provenance/opcode_previous_word_transfer_gate_unit_20260909.json",
+      "sha256": "sha256:2bc24658f7618013280315f9362965ff36dd2942b5e0fe8b0f521ce0339860e3"
+    },
+    {
+      "path": "operations/adaptive/reflections/20260909T155216Z_3a4347c920.json",
+      "sha256": "sha256:666f40b46975fd40004065f1774cef37ffdf24a4163fa6211ae0c5a0e7671a71"
+    }
+  ],
+  "expected_savings_bytes": 147,
+  "experiment": {
+    "path": "operations/adaptive/experiments/opcode_previous_word_validation250k_q0_v1.json",
+    "sha256": "sha256:6389e0a9bc39250d5b43b6cae2107b27c280222127a5d1335c75353ac72c3d3c"
+  },
+  "hypothesis": "The unchanged immediate previous-word predictor transfers its archive advantage over original P and delayed-word S to a separately selected cold250KB population, while its actual compact release exactly reproduces D and pays one local source-copy increment.",
+  "interfaces_exposed": [
+    "Frozen standalone codec with compact P/K/D/S controls and full observation."
+  ],
+  "kill_condition": "D not smaller than P or S rejects this transfer gate; archive saving not exceeding110 bytes fails its one-copy local subtotal. Any inverse, repeat, full state, release parity or binding mismatch invalidates execution. Missing evidence and resource exhaustion do not disprove the information source.",
+  "max_program_bytes": 110,
+  "mechanism_change": "compile_state_machine",
+  "mechanism_change_bonus": 18,
+  "mechanism_class": "representation",
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:e91ff20e92c3cac8acb0cbe5c79fc8e8a3b427d7e151245c8eecc52b1c32fa00",
+    "objectiveId": "gamma-enwiki9-hutter-90m-v3",
+    "objectivePath": "contracts/research/v3/objective-contract.json",
+    "targetScoreBytes": 90000000
+  },
+  "owner": "root_explore",
+  "parent": "opcode_previous_word_release250k_q0_v1",
+  "parent_proposal_id": null,
+  "priority": 50,
+  "promotion_condition": "Exact17 phases, D<P and D<S, archive saving greater than110 local source bytes; complete accounting separate.",
+  "proposal_id": "opcode_previous_word_validation250k_q0_v1",
+  "retired_neighborhoods": [
+    "No grammar or key mutation; unchanged predictor transfer only."
+  ],
+  "schema": "gamma.enwiki9.algorithm-proposal.v2",
+  "search_priority": 68,
+  "state": "developed",
+  "title": "Unchanged compact previous-word predictor cold validation"
+}
