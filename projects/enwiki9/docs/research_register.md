@@ -2,6 +2,17 @@
 
 [Record index](research_register/README.md) | [Earlier records](research_register/archive/README.md)
 
+## 2026-09-09 - Locate residual-ratio prediction loss before another mutation
+
+Owner `root_explore` now follows the prior residual-ratio loss attribution request.
+The [frozen replay diagnostic](../operations/provenance/fx2_ratio_loss_attribution_v1_plan.json)
+reuses the unchanged native calibration library and closed half/coder/state traces
+to separate transformer-output loss from final mixer loss. Five synthetic alignment
+checks pass. All64956 calibration states and the exact shared parent trajectory
+must match before interpreting loss. No policy mutation, native rerun, model or
+corpus installation is included. CPU3/512MiB/64MiB scratch/120 elapsed seconds;
+publish source and ownership, then refresh admission before the retained-trace replay.
+
 ## 2026-09-09 - Carry exact-model counts across decoded tensor widths
 
 Owner `root_explore` selects lenses3/10: bounded shared state and exact model
