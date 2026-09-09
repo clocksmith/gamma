@@ -2,7 +2,7 @@
 
 Generated from the current certificate, gate receipts, resource guards, and process table.
 
-- Generated at UTC: `2026-09-09T01:18:52+00:00`
+- Generated at UTC: `2026-09-09T01:29:38+00:00`
 
 ## Target State
 
@@ -149,39 +149,39 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 | Role | PID | PPID | RSS KiB | Command |
 |---|---:|---:|---:|---|
 | `process` | 3,639,003 | 2,643,307 | 42,556 | `python3 tools/enwiki9_lab.py run --candidate opcode_event_parse_confirmation1m_q0_v1 --max-workers 1` |
-| `resource_guard` | 3,639,172 | 3,639,003 | 37,616 | `/usr/bin/python3 /home/x/deco/gamma/projects/enwiki9/tools/run_with_resource_guard_v3.py --limit-kib 4194304 --official-decimal-limit-kib 4194304 -...` |
-| `process` | 3,639,186 | 3,639,172 | 26,036 | `/usr/bin/python3 /home/x/deco/gamma/projects/enwiki9/tools/opcode_event_parse_confirmation_gate_v1.py` |
-| `process` | 3,815,620 | 3,639,186 | 476,728 | `/usr/bin/python3 /home/x/deco/gamma/projects/enwiki9/tools/opcode_event_parse_corpus1m_v1.py encode /home/x/deco/gamma/projects/enwiki9/results/opc...` |
+| `resource_guard` | 3,639,172 | 3,639,003 | 48,580 | `/usr/bin/python3 /home/x/deco/gamma/projects/enwiki9/tools/run_with_resource_guard_v3.py --limit-kib 4194304 --official-decimal-limit-kib 4194304 -...` |
+| `process` | 3,639,186 | 3,639,172 | 26,180 | `/usr/bin/python3 /home/x/deco/gamma/projects/enwiki9/tools/opcode_event_parse_confirmation_gate_v1.py` |
+| `process` | 3,925,613 | 3,639,186 | 916,120 | `/usr/bin/python3 /home/x/deco/gamma/projects/enwiki9/tools/opcode_event_parse_corpus1m_v1.py encode /home/x/deco/gamma/projects/enwiki9/results/opc...` |
 
 ## Active Candidate Recent Artifacts
 
 | Path | Bytes | Modified UTC |
 |---|---:|---|
-| `projects/enwiki9/results/opcode_event_parse_confirmation1m_q0_v1/K-repeat.stderr` | 0 | `2026-09-09T01:18:29+00:00` |
-| `projects/enwiki9/results/opcode_event_parse_confirmation1m_q0_v1/K-repeat.stdout` | 0 | `2026-09-09T01:18:29+00:00` |
-| `projects/enwiki9/results/opcode_event_parse_confirmation1m_q0_v1/K-decode.execution.json` | 863 | `2026-09-09T01:18:29+00:00` |
-| `projects/enwiki9/results/opcode_event_parse_confirmation1m_q0_v1/K-decode.stdout` | 133 | `2026-09-09T01:18:29+00:00` |
-| `projects/enwiki9/results/opcode_event_parse_confirmation1m_q0_v1/K-decode.audit.json` | 94,857 | `2026-09-09T01:18:29+00:00` |
-| `projects/enwiki9/results/opcode_event_parse_confirmation1m_q0_v1/K.raw` | 1,000,000 | `2026-09-09T01:18:29+00:00` |
-| `projects/enwiki9/results/opcode_event_parse_confirmation1m_q0_v1/K-decode.stderr` | 0 | `2026-09-09T01:16:29+00:00` |
-| `projects/enwiki9/results/opcode_event_parse_confirmation1m_q0_v1/K-encode.execution.json` | 879 | `2026-09-09T01:16:29+00:00` |
-| `projects/enwiki9/results/opcode_event_parse_confirmation1m_q0_v1/K-encode.stdout` | 127 | `2026-09-09T01:16:29+00:00` |
-| `projects/enwiki9/results/opcode_event_parse_confirmation1m_q0_v1/K-encode.audit.json` | 94,857 | `2026-09-09T01:16:29+00:00` |
-| `projects/enwiki9/results/opcode_event_parse_confirmation1m_q0_v1/K.arc` | 259,468 | `2026-09-09T01:16:29+00:00` |
-| `projects/enwiki9/results/opcode_event_parse_confirmation1m_q0_v1/K-encode.stderr` | 0 | `2026-09-09T01:12:43+00:00` |
+| `projects/enwiki9/results/opcode_event_parse_confirmation1m_q0_v1/D-repeat.stdout` | 0 | `2026-09-09T01:28:03+00:00` |
+| `projects/enwiki9/results/opcode_event_parse_confirmation1m_q0_v1/D-repeat.stderr` | 0 | `2026-09-09T01:28:03+00:00` |
+| `projects/enwiki9/results/opcode_event_parse_confirmation1m_q0_v1/D-decode.execution.json` | 862 | `2026-09-09T01:28:03+00:00` |
+| `projects/enwiki9/results/opcode_event_parse_confirmation1m_q0_v1/D-decode.audit.json` | 94,857 | `2026-09-09T01:28:03+00:00` |
+| `projects/enwiki9/results/opcode_event_parse_confirmation1m_q0_v1/D-decode.stdout` | 128 | `2026-09-09T01:28:03+00:00` |
+| `projects/enwiki9/results/opcode_event_parse_confirmation1m_q0_v1/D.raw` | 1,000,000 | `2026-09-09T01:28:03+00:00` |
+| `projects/enwiki9/results/opcode_event_parse_confirmation1m_q0_v1/D-decode.stderr` | 0 | `2026-09-09T01:26:07+00:00` |
+| `projects/enwiki9/results/opcode_event_parse_confirmation1m_q0_v1/D-encode.execution.json` | 879 | `2026-09-09T01:26:07+00:00` |
+| `projects/enwiki9/results/opcode_event_parse_confirmation1m_q0_v1/D-encode.stdout` | 132 | `2026-09-09T01:26:07+00:00` |
+| `projects/enwiki9/results/opcode_event_parse_confirmation1m_q0_v1/D-encode.audit.json` | 94,857 | `2026-09-09T01:26:07+00:00` |
+| `projects/enwiki9/results/opcode_event_parse_confirmation1m_q0_v1/D.arc` | 259,540 | `2026-09-09T01:26:07+00:00` |
+| `projects/enwiki9/results/opcode_event_parse_confirmation1m_q0_v1/D-encode.stderr` | 0 | `2026-09-09T01:22:27+00:00` |
 
 ## Active RSS
 
 - Max cmix PID: `n/a`
 - Active cmix mode: `n/a`
 - Max cmix RSS KiB: `n/a`
-- Active process tree RSS KiB: `582,936`
+- Active process tree RSS KiB: `1,033,436`
 - Local binary `10GiB` guard KiB: `10,485,760`
 - Decimal `10GB` guard KiB: `9,765,625`
 - Single-process binary margin KiB: `n/a`
 - Single-process decimal margin KiB: `n/a`
-- Active process tree margin KiB (binary): `9,902,824`
-- Active process tree decimal margin KiB: `9,182,689`
+- Active process tree margin KiB (binary): `9,452,324`
+- Active process tree decimal margin KiB: `8,732,189`
 
 ## Contingencies
 

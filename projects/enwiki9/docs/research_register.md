@@ -19,6 +19,16 @@ Corrected tests and owned compiler scratch pass. No trained model or corpus was 
 Next freeze one model substream audit; publish source/input bindings and freshly admit it.
 This is not a complete model container, native probability comparison or prize score.
 
+The [published model audit](../operations/provenance/fx2_weight_neighbor_model_v1_plan.json)
+passes three synthetic adapter tests, then all111 trained-model tensors after publication
+and fresh CPU3 admission. The [terminal receipt](../operations/provenance/fx2_weight_neighbor_model_v1_terminal.json)
+verifies1,000 subprocess phases and1,110 artifact references: all inverses/repeats and P/K agree.
+Fully framed INT4 substreams total P/K2,782,839 versus D2,879,988 bytes: D loses97,149.
+Conditioning saves2,751 range-stream bytes but adds99,900 table bytes. No tensors are excluded.
+Reject this fixed table/context realization without another inference or packaging sweep.
+All exact artifacts remain locally retained and publish in one verified ZIP to limit file clutter.
+This is a substream comparison, not a complete model container or full-corpus score.
+
 ## 2026-09-08 - Exact adaptive literal-event pricing before changing encoder choices
 
 After field-alignment transfer failed its randomized control, `root_explore`
@@ -748,52 +758,3 @@ retires only this opening250KB adjacent/FIFO128/unchanged-mixture realization.
 Six canonical run rows are recorded. No larger replay, native integration or
 full-corpus credit follows; independent work must address a different measured
 failure and respect existing ownership.
-
-## 2026-09-07 - Align causal field donors with WRT and the real parent
-
-`fx2_causal_field_wrt_replay250k_q0_v1` implements the missing raw/WRT adapter
-and exact donor-versus-parent sequence posterior in separately identified source.
-The [published implementation plan](../operations/provenance/fx2_causal_field_wrt_replay250k_q0_v1_plan.json)
-preserves the FIFO128 field configuration and P/K/T/R/S controls. Donors enter
-only after complete valid invocations, with aligned WRT event boundaries and
-matching capitalization state. The native integer interval coder is preserved.
-
-The [unit receipt](../operations/evidence/20260907_fx2_causal_field_wrt_unit.json)
-binds 37 passing author tests, independent rational and boundary checks, and
-21 author plus 15 reviewer encode/decode/repeat processes. Every tested inverse,
-repeat and every-modeled-byte state chain agrees. The 197-byte synthetic fixture
-produces P/K/S 254, T 198 and R 255 bytes; it is not corpus evidence.
-Five required local sources total 66,054 bytes, with unused model dependencies
-removed from the replay path. Runtime and complete-package closure remain open.
-
-The [execution plan](../operations/provenance/fx2_causal_field_wrt_replay250k_q0_v1_execution.json)
-binds the already examined opening250KB population and closed native parent
-trace. Its decoder explicitly depends on a retained Q16 stream and dictionary;
-even fresh archive improvement will be conditional predictive evidence only.
-One CPU2 discovery gate must pass publication and fresh ownership admission.
-Inactive treatment or required controls is inconclusive, not a causal rejection.
-No confirmation, larger gate, standalone score or HORIZON transition follows
-from synthetic correctness. The sole HORIZON observer and other lanes remain owned.
-
-The [gate receipt](../operations/evidence/20260907_fx2_causal_field_wrt_gate_unit.json)
-retains 20 passing runner tests and 22 independent review tests, including the
-actual canonical timer semantics. The superseded runner is archived with its
-receipts; the [v2 entry point](../tools/fx2_causal_field_wrt_gate_v2.py) verifies
-the live outer controller before corpus buffers. The [frozen experiment](../operations/adaptive/experiments/fx2_causal_field_wrt_replay250k_q0_v1.json)
-binds 205 inputs and 134 outputs. Job `20260907T130508Z_c3d4b66329` is closed.
-The [terminal receipt](../operations/provenance/fx2_causal_field_wrt_terminal_20260907.json)
-records P/K/T/S **33,429 bytes**, R **33,433**: zero treatment savings. All five
-inverses, repeats and every-byte state chains pass independent review. T/S never
-activate despite 51 completed invocations and 86 associations; R selects 50 values.
-The [validated reflection](../operations/adaptive/reflections/20260907T130508Z_c3d4b66329.json)
-holds this inconclusive comparison. The [next implementation](../operations/provenance/fx2_causal_field_opportunity_q0_v1_plan.json)
-isolates selector eligibility; no larger gate or scientific rejection follows.
-The decoder still requires 2,831,356 external Q16/dictionary bytes; score credit is zero.
-
-The [operational reconciliation](../operations/provenance/endpoint428_horizon_terminal_occupancy_reconciliation_20260907.json)
-records the completed observer and exact process absence. Validated observer and
-incomplete-source reflections close administrative occupancy without claiming
-the lost controller's return code, scientific validity or continuous resource
-proof. The original frozen running record remains unchanged; its terminal
-counterpart supports independent discovery. The sealed HORIZON router and
-qualification still need compatibility repair. The `codex` recovery owner remains.
