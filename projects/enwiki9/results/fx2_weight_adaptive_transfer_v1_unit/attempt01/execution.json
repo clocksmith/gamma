@@ -1,0 +1,31 @@
+{
+  "phases": [
+    {
+      "name": "transfer",
+      "command": [
+        "python3",
+        "tests/test_fx2_weight_adaptive_transfer_v1.py",
+        "-v"
+      ],
+      "returncode": 0,
+      "elapsed_seconds": 0.2150203101336956
+    },
+    {
+      "name": "failure-paths",
+      "command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-p",
+        "test_fx2_native_transfer_failure_paths.py",
+        "-v"
+      ],
+      "returncode": 0,
+      "elapsed_seconds": 0.11571054602973163
+    }
+  ],
+  "objective_credit_bytes": 0
+}
