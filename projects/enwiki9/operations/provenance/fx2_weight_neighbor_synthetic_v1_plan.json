@@ -1,0 +1,20 @@
+{
+  "schema": "gamma.enwiki9.source-audit-plan.v1",
+  "id": "fx2_weight_neighbor_synthetic_v1",
+  "owner": "root_explore",
+  "objective_target_bytes": 90000000,
+  "objective_credit_bytes": 0,
+  "synthesis_lenses": [10, 3],
+  "selection": "The measured local marginal packer uses one histogram per INT4 tensor. Exact approximation/XOR factorization saved only 23 packed bytes and did not pay its restorer. Select a distinct correlation question: condition a weight on the previous decoded weight within the same tensor row. The historical scalar-MIDAS proposal needs unresolved parent/source review and is not selected. No inference or precision mutation is needed for this synthetic test.",
+  "hypothesis": "A fixed row-local preceding-weight context can reduce complete INT4 substream bytes after paying every conditional count table, relative to equivalently framed marginal coding. A positive synthetic example proves exercisability only; trained-model prevalence remains unmeasured.",
+  "inputs": [
+    {"path": "lib/fx2_weight_format_v1.hpp", "sha256": "aa615fc92b456bada499602888c2bf38ea8a98918694ce2cfd9691d384b2fa30"},
+    {"path": "operations/provenance/public_fx2_weight_exact_residual_terminal_20260906.json", "sha256": "356e6ad76010bbbd3a9b48248a2c92de1a103098d8e9d201059a1e78cc3782d9"},
+    {"path": "operations/provenance/public_fx2_weight_marginal_terminal_20260905.json", "sha256": "b879a20c6a4f621c27e5d0ef247cddeccc2cb59a5e6ce776684140eb4a5adf62"}
+  ],
+  "controls": ["P: one fixed marginal histogram", "K: conditional histogram bookkeeping with P encoding unchanged", "D: sixteen fixed histograms, preceding symbols 0..14 and row-start sentinel15"],
+  "representation": "Each independently terminated substream stores magic, mode, symbol count, row width, all 15-symbol uint32 count rows, and the existing Q11 range stream. D resets context at row boundaries. Decoder checks counts and canonical re-encoding. All table, framing and flush bytes count; unchanged tensor metadata and non-INT4 payloads are outside this synthetic substream comparison.",
+  "scope": "Synthetic empty, singleton, dependent, independent, row-boundary and malformed streams only. No trained-model reading, corpus use, inference, source overwrite or installation.",
+  "bounds": {"cpu_set": [3], "address_space_bytes": 536870912, "compile_address_space_bytes": 1073741824, "elapsed_seconds": 120, "max_symbols_per_stream": 1048576, "scratch_bytes": 67108864},
+  "stop_rule": "One implementation and synthetic suite. Failures are implementation defects. A trained-model comparison requires separate published source/input bindings and fresh admission. No automatic candidate or full-corpus promotion; complete package remains unknown."
+}

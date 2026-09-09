@@ -1,0 +1,194 @@
+[
+  {
+    "name": "compile",
+    "command": [
+      "/usr/bin/g++",
+      "-std=c++17",
+      "-O2",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "tools/fx2_weight_neighbor_probe_v1.cpp",
+      "-o",
+      "results/fx2_weight_neighbor_synthetic_v1/cli01/probe"
+    ],
+    "returncode": 0,
+    "elapsed_seconds": 0.6160155080724508,
+    "memory_limit_bytes": 1073741824,
+    "cpu_set": [
+      3
+    ]
+  },
+  {
+    "name": "Pencode",
+    "command": [
+      "results/fx2_weight_neighbor_synthetic_v1/cli01/probe",
+      "P",
+      "results/fx2_weight_neighbor_synthetic_v1/cli01/input.bin",
+      "results/fx2_weight_neighbor_synthetic_v1/cli01/P.bin",
+      "150"
+    ],
+    "returncode": 0,
+    "elapsed_seconds": 0.004556827014312148,
+    "memory_limit_bytes": 536870912,
+    "cpu_set": [
+      3
+    ]
+  },
+  {
+    "name": "Pdecode",
+    "command": [
+      "results/fx2_weight_neighbor_synthetic_v1/cli01/probe",
+      "restore",
+      "results/fx2_weight_neighbor_synthetic_v1/cli01/P.bin",
+      "results/fx2_weight_neighbor_synthetic_v1/cli01/P.restored"
+    ],
+    "returncode": 0,
+    "elapsed_seconds": 0.002020701067522168,
+    "memory_limit_bytes": 536870912,
+    "cpu_set": [
+      3
+    ]
+  },
+  {
+    "name": "Prepeat",
+    "command": [
+      "results/fx2_weight_neighbor_synthetic_v1/cli01/probe",
+      "P",
+      "results/fx2_weight_neighbor_synthetic_v1/cli01/input.bin",
+      "results/fx2_weight_neighbor_synthetic_v1/cli01/P.repeat",
+      "150"
+    ],
+    "returncode": 0,
+    "elapsed_seconds": 0.0016363488975912333,
+    "memory_limit_bytes": 536870912,
+    "cpu_set": [
+      3
+    ]
+  },
+  {
+    "name": "Kencode",
+    "command": [
+      "results/fx2_weight_neighbor_synthetic_v1/cli01/probe",
+      "K",
+      "results/fx2_weight_neighbor_synthetic_v1/cli01/input.bin",
+      "results/fx2_weight_neighbor_synthetic_v1/cli01/K.bin",
+      "150"
+    ],
+    "returncode": 0,
+    "elapsed_seconds": 0.0016279839910566807,
+    "memory_limit_bytes": 536870912,
+    "cpu_set": [
+      3
+    ]
+  },
+  {
+    "name": "Kdecode",
+    "command": [
+      "results/fx2_weight_neighbor_synthetic_v1/cli01/probe",
+      "restore",
+      "results/fx2_weight_neighbor_synthetic_v1/cli01/K.bin",
+      "results/fx2_weight_neighbor_synthetic_v1/cli01/K.restored"
+    ],
+    "returncode": 0,
+    "elapsed_seconds": 0.0016119640786200762,
+    "memory_limit_bytes": 536870912,
+    "cpu_set": [
+      3
+    ]
+  },
+  {
+    "name": "Krepeat",
+    "command": [
+      "results/fx2_weight_neighbor_synthetic_v1/cli01/probe",
+      "K",
+      "results/fx2_weight_neighbor_synthetic_v1/cli01/input.bin",
+      "results/fx2_weight_neighbor_synthetic_v1/cli01/K.repeat",
+      "150"
+    ],
+    "returncode": 0,
+    "elapsed_seconds": 0.0020771860145032406,
+    "memory_limit_bytes": 536870912,
+    "cpu_set": [
+      3
+    ]
+  },
+  {
+    "name": "Dencode",
+    "command": [
+      "results/fx2_weight_neighbor_synthetic_v1/cli01/probe",
+      "D",
+      "results/fx2_weight_neighbor_synthetic_v1/cli01/input.bin",
+      "results/fx2_weight_neighbor_synthetic_v1/cli01/D.bin",
+      "150"
+    ],
+    "returncode": 0,
+    "elapsed_seconds": 0.0016090581193566322,
+    "memory_limit_bytes": 536870912,
+    "cpu_set": [
+      3
+    ]
+  },
+  {
+    "name": "Ddecode",
+    "command": [
+      "results/fx2_weight_neighbor_synthetic_v1/cli01/probe",
+      "restore",
+      "results/fx2_weight_neighbor_synthetic_v1/cli01/D.bin",
+      "results/fx2_weight_neighbor_synthetic_v1/cli01/D.restored"
+    ],
+    "returncode": 0,
+    "elapsed_seconds": 0.0016376420389860868,
+    "memory_limit_bytes": 536870912,
+    "cpu_set": [
+      3
+    ]
+  },
+  {
+    "name": "Drepeat",
+    "command": [
+      "results/fx2_weight_neighbor_synthetic_v1/cli01/probe",
+      "D",
+      "results/fx2_weight_neighbor_synthetic_v1/cli01/input.bin",
+      "results/fx2_weight_neighbor_synthetic_v1/cli01/D.repeat",
+      "150"
+    ],
+    "returncode": 0,
+    "elapsed_seconds": 0.0016223632264882326,
+    "memory_limit_bytes": 536870912,
+    "cpu_set": [
+      3
+    ]
+  },
+  {
+    "name": "reject_overwrite",
+    "command": [
+      "results/fx2_weight_neighbor_synthetic_v1/cli01/probe",
+      "D",
+      "results/fx2_weight_neighbor_synthetic_v1/cli01/input.bin",
+      "results/fx2_weight_neighbor_synthetic_v1/cli01/D.bin",
+      "150"
+    ],
+    "returncode": 1,
+    "elapsed_seconds": 0.001591044943779707,
+    "memory_limit_bytes": 536870912,
+    "cpu_set": [
+      3
+    ]
+  },
+  {
+    "name": "reject_truncated",
+    "command": [
+      "results/fx2_weight_neighbor_synthetic_v1/cli01/probe",
+      "restore",
+      "results/fx2_weight_neighbor_synthetic_v1/cli01/truncated.bin",
+      "results/fx2_weight_neighbor_synthetic_v1/cli01/bad-restored"
+    ],
+    "returncode": 1,
+    "elapsed_seconds": 0.0015995500143617392,
+    "memory_limit_bytes": 536870912,
+    "cpu_set": [
+      3
+    ]
+  }
+]
