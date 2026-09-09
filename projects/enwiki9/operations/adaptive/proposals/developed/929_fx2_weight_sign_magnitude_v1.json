@@ -1,0 +1,47 @@
+{
+  "candidate_id": "fx2_weight_sign_magnitude_v1",
+  "claimed_at": "2026-09-09T11:44:57+00:00",
+  "created_at": "2026-09-09T11:44:43+00:00",
+  "developed_at": "2026-09-09T11:44:58+00:00",
+  "evidence": [
+    {
+      "path": "operations/provenance/fx2_weight_adaptive_transfer250k_v1_terminal.json",
+      "sha256": "sha256:2457a29ad320981d150561a75d04a59a4503dc2bdbb56c89b54c3267d433de55"
+    }
+  ],
+  "expected_savings_bytes": 0,
+  "experiment": {
+    "path": "operations/adaptive/experiments/fx2_weight_sign_magnitude_v1.json",
+    "sha256": "sha256:314c96df46a858e5766ee3b459e0c4937cc1779851b00d1714450f2ded08bdc9"
+  },
+  "hypothesis": "Factoring exact INT4 weights into magnitude and a shared nonzero sign reduces complete model bytes relative to fifteen adaptive symbol counts.",
+  "interfaces_exposed": [
+    "Exact full-container encode/decode with magnitude/shared-sign factorization"
+  ],
+  "kill_condition": "Any inverse, repeat or count-state mismatch rejects implementation correctness. Nonpositive complete model saving rejects this representation on that model. Synthetic gains are not trained-model evidence.",
+  "max_program_bytes": 8192,
+  "mechanism_change": "change_coded_alphabet",
+  "mechanism_change_bonus": 20,
+  "mechanism_class": "representation",
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:e91ff20e92c3cac8acb0cbe5c79fc8e8a3b427d7e151245c8eecc52b1c32fa00",
+    "objectiveId": "gamma-enwiki9-hutter-90m-v3",
+    "objectivePath": "contracts/research/v3/objective-contract.json",
+    "targetScoreBytes": 90000000
+  },
+  "owner": "root_explore",
+  "parent": "fx2_weight_adaptive_transfer250k_q0_v1",
+  "parent_proposal_id": null,
+  "priority": 50,
+  "promotion_condition": "Synthetic exact inverse repeat and all count states pass; model access requires a separately published gate.",
+  "proposal_id": "fx2_weight_sign_magnitude_v1",
+  "retired_neighborhoods": [
+    "No neighbor, width-bank, quantization or corpus predictor mutation"
+  ],
+  "schema": "gamma.enwiki9.algorithm-proposal.v2",
+  "search_priority": 70,
+  "state": "developed",
+  "title": "Exact magnitude and shared-sign model packing"
+}
