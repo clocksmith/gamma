@@ -14,6 +14,13 @@ are51416 bytes each. A preparation-only LICENSE path failure remains retained.
 The [next frozen gate](../operations/provenance/fx2_weight_adaptive_loader_gate_v1_plan.json)
 binds125 original source files, all434 trained tensors and matched native builds.
 Publish and freshly admit before execution; no corpus inference is included.
+Published at `b6076c3af`, the [native gate](../operations/provenance/fx2_weight_adaptive_loader_gate_v1_terminal.json)
+compares434 tensors and39588806 initialized bytes exactly, including adaptive replay.
+Both native binaries are496136 bytes; P reproduces its retained hash. All252 source
+and binary bindings verify, and dependencies/instruction checks pass. Model savings
+6042 per copy pay the runtime-pair and source-compressor alternatives by12084 and
+11232 bytes respectively. These are scoped component gains, not corpus scores.
+Next freeze native probability/archive/inverse/repeat checks on the existing fixture.
 
 ## 2026-09-09 - Carry adaptive marginal counts into the complete model
 
@@ -748,49 +755,3 @@ budget stop; that transfer remains held. These do not supply gains or a theorem
 against this raw FIFO transform, which also differs from WRT context retrieval
 and numeric side channels. Park this tested configuration and use the measured
 loss to select a distinct question; no full-score projection or larger gate.
-
-## 2026-09-07 - Literal-first templates fall back without a paying replacement
-
-`dualstream_literal_first250k_q0_v1` replaces whole-input grammar conversion
-with selected raw spans, exact template arguments and untouched literal runs.
-The Deflate backend and 65,536-byte frame partition remain fixed. P uses the
-unchanged plain codec; K discovers and measures without admitting replacements;
-D admits only strict whole-frame byte reductions and re-evaluates afterward.
-Every repeat starts from raw input and repeats discovery. All-plain archives
-retain exact P bytes. Definitions exist only for selected templates; one-off
-arguments and ordinary text do not enter a global dictionary.
-
-Thirty-three synthetic tests pass across the codec, independent interpreter
-review and runner, including 18 actual runner encode/decode/repeat phases. A
-constructed 250KB shared-field fixture produces P/K 84,187 bytes and D 67,158;
-the arbitrary-byte fixture falls back exactly. These are implementation checks,
-not Wikipedia gains. Decoder costs include canonical re-Deflation, repeated
-interpreter execution and prefix hashing. Complete compressed payload/framing
-costs are distinct from pre-Deflate definition/call/argument byte counts.
-
-The published opening250KB job `20260907T183536Z_a3505ed881` closed all nine
-native phases with exact inverses and raw-discovery repeats. P/K/D each occupy
-89,041 bytes and are byte-identical. The 96 evaluated proposals all lost; the
-best rejected complete-frame deltas were -61, -55, -48 and -47 bytes. No rules,
-calls or repeated bindings were selected. The third frame retained 1,024 of
-1,573 available spans; the other frames retained all spans. No proposal count
-cap was reached within those retained spans. This rejects the evaluated pool,
-not the omitted spans or all literal-first representations.
-
-D encode/decode CPU was 0.225800/0.008489 seconds under the published diagnostic
-guard. The as-executed local source inventories total 33,804 bytes for P and
-46,040 for D, a 12,236-byte increase; their union is 52,038 bytes. These are
-uncompressed source inventories, not qualified packages. Complete runtime,
-licensing, source/option accounting and prize qualification remain unknown.
-Fallback safety earned zero archive bytes and does not pay additional code.
-The validated reflection holds this realization; no fresh250KB or1MB was run.
-Exact results: `operations/provenance/dualstream_literal_first_terminal_20260907.json`.
-Three arm rows are recorded through its normalized terminal index; no row claims
-a full-corpus score. Usage and limits: `docs/dualstream_literal_first_v1.md`.
-Complete package and 99M remain unproved.
-Independent closure review:
-`operations/provenance/dualstream_literal_first_terminal_20260907_review/summary.json`.
-Its verifier checks the retained artifacts without rerunning the codecs.
-Enumeration, interpreter-context tuning and neighboring campaigns stay parked
-or with their existing owners. Two complete older records moved to archive 036
-with their evidence text preserved.
