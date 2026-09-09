@@ -1,0 +1,78 @@
+{
+  "schema": "gamma.enwiki9.source-audit-plan.v1",
+  "id": "fx2_weight_adaptive_dispatch_gate_v2",
+  "owner": "root_explore",
+  "objective_target_bytes": 90000000,
+  "objective_credit_bytes": 0,
+  "parent_evidence": "operations/provenance/fx2_weight_adaptive_fixture50051_v1_terminal.json",
+  "parent_reflection": "operations/adaptive/reflections/20260909T034814Z_e3dcc24981.json",
+  "hypothesis": "Adding the missing GFX2ADM1 production dispatch preserves original and fixed-model loading and reproduces exact synthetic production probabilities and logits while the smaller model pays the rebuilt implementation increment.",
+  "mutation": "Only add GFX2ADM1 to the compressed-format condition in OptModel::load, alongside the already tested adaptive tensor loader. Preserve all neural kernels, frontend and model bytes.",
+  "models": {
+    "original": {
+      "path": "results/fx2_weight_marginal_roundtrip_q0_v1/work/model.P",
+      "bytes": 2930652,
+      "sha256": "7f4db6c8c843a7e6264b6a48ed4805e9e431f543df7a9a0ecb37a35a5e4b8860"
+    },
+    "parent": {
+      "path": "results/fx2_weight_marginal_roundtrip_q0_v1/work/model.D",
+      "bytes": 2908329,
+      "sha256": "5cae4299a64af88b88a637f3c14e9ee54a5fd98c559e391f35dfa7d832b00e4a"
+    },
+    "adaptive": {
+      "path": "results/fx2_weight_adaptive_marginal_model_v1/attempt01/D.model",
+      "bytes": 2902287,
+      "sha256": "44d4a875784611b8d034f09347c710137e69aa3a830198375aafc19339b0210d"
+    }
+  },
+  "native_parent": {
+    "path": "results/fx2_weight_native_fixture50051_q0_v1/work/native/cmix",
+    "bytes": 496136,
+    "sha256": "c848acc756c8ced70422dfc4c8da03ac936417754b877eb8addf0143ce2ba100"
+  },
+  "patched_loader": {
+    "path": "results/fx2_weight_adaptive_loader_v1_unit/attempt02/source/adaptive.cpp",
+    "bytes": 22650,
+    "sha256": "7099d24019bb5aa18421f8521838ced8ffb31aef84bdb173c7ff4753e0c3834a"
+  },
+  "probe": "tools/fx2_weight_production_dispatch_probe_v1.cpp",
+  "bounds": {
+    "cpu_set": [
+      3
+    ],
+    "address_space_bytes": 1073741824,
+    "tree_reservation_bytes": 8589934592,
+    "elapsed_seconds": 600,
+    "phase_elapsed_seconds": 180,
+    "cpu_seconds_per_phase": 180,
+    "per_file_bytes": 33554432,
+    "scratch_bytes": 268435456,
+    "reserve_bytes": 34359738368
+  },
+  "output": "results/fx2_weight_adaptive_dispatch_gate_v2/attempt01",
+  "population": "64 predetermined synthetic transformer symbols (i*73+19)%205, constant exact 1/256 prior, article reset at symbols 0 and32 with offsets 0 and31. Serialize205 fp32 probabilities and205 logits per step. No canonical corpus access.",
+  "controls": [
+    "P native build must reproduce the retained fixed-marginal binary hash",
+    "P production entry must reject the adaptive model with bad magic before writing output",
+    "P original and fixed models and D original, fixed, adaptive and fresh adaptive repeat must produce identical104960-byte outputs"
+  ],
+  "package_accounting": "Use the prior component accounting alternatives separately: runtime_pair_delta=2*(model_delta+native_binary_delta); source_compressor_plus_decoder_delta=2*model_delta+native_binary_delta+raw_loader_source_delta. Preserve invocation options and require identical dynamic dependencies. These are incremental raw component comparisons, not complete source distribution/runtime/license/official scoring closure.",
+  "resource_basis": "The prior exact native integration compiled this source under a180-second phase cap. Builds use make-j1, CPU3, bounded child address space and CPU, process-group elapsed cancellation, and owned compiler scratch. The8GiB tree reservation is host admission headroom, not a claimed aggregate cgroup memory limit. This is shared-host discovery, not qualification.",
+  "requirements": [
+    "Two independently rebuilt native binaries, using the unchanged compiler and flags",
+    "Probe linked to exactly the same nine transformer objects as native CMIX",
+    "Actual TransformerOpt constructor and step, not direct tensor loader calls",
+    "Exact synthetic probability/logit output comparison, two reset coordinates, deterministic repeat",
+    "Same dynamic libraries; no forbidden reciprocal or AVX512 instructions",
+    "Rehash every frozen input after execution; preserve old failed fixture source"
+  ],
+  "stop_rule": "Any source, parent rebuild, production output, negative control, dependency or bound failure blocks advancement. Both incremental component alternatives must remain negative before another separately frozen corpus gate.",
+  "limitations": [
+    "Production smoke outputs do not prove full recurrent state agreement or full-corpus score.",
+    "Package alternatives exclude unresolved complete runtime and licensing qualification.",
+    "No corpus execution is authorized by this source audit."
+  ],
+  "full_corpus_score_bytes": null,
+  "implementation_failure": "operations/provenance/fx2_weight_adaptive_dispatch_gate_v1_terminal.json",
+  "implementation_delta": "Build nine transformer objects, link the probe, then link native CMIX using those same objects before its cleanup. Neural and dispatcher sources, smoke populations, controls and budgets unchanged."
+}
