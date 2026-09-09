@@ -190,3 +190,32 @@ retires only this opening250KB adjacent/FIFO128/unchanged-mixture realization.
 Six canonical run rows are recorded. No larger replay, native integration or
 full-corpus credit follows; independent work must address a different measured
 failure and respect existing ownership.
+
+## 2026-09-07 - Exact enumerative grammar costs are executable and negative
+
+The [enumerative codec and inverse](dualstream_enumerative_v1.md) count every
+serialized-section rank, count table, stream length and frame header. Exact
+integer widths include M=1 and powers of256. Twenty-three synthetic tests across
+the preserved codec, review and runner revisions include all15 child phases.
+Two invalid runner attempts remain recorded: caught OSError routing, then
+a supplied D2GRAM02 plain baseline incorrectly reserialized as D2GRAM01.
+
+`dualstream_enumerative250k_q0_v3` [closes its published comparison](../../../operations/provenance/dualstream_enumerative_terminal_20260907.json)
+with all15 phases on the existing250000-byte development sample. P plain
+Deflate is89041 bytes; B fixed grammar Deflate102492; E same grammar enumerative
+140524; T token-argument storage141295; R plain enumeration160547.
+All arms independently invert and repeat fixed-source serialization.
+E/T preserve B's exact program graph. B/E/T retain12 repeated-argument references
+in frame three; the frozen zero-binding annotation was wrong and is explicitly
+corrected. Existing bindings do not turn a storage comparison into their ablation.
+
+E adds38032 archive bytes over B. Its ranks alone cost128666 bytes, so removing
+all count tables and headers cannot make these fixed ranks beat B.
+T saves33580 definition-rank bytes but adds34216 argument-rank bytes,132 table
+bytes and3 stream-length bytes:771 bytes worse. Other stream ranks are unchanged.
+The [reflection](../../../operations/adaptive/reflections/20260907T163610Z_dfcedb020f.json)
+holds this exact realization as a valid storage loss. Keep the evaluator;
+a successor must change the representation or conditional coding and measure
+its complete bytes. No larger gate, confirmation or global impossibility claim.
+The five-file source union is56323 bytes; complete runtime/package accounting
+remains unknown. No full-corpus score exists; the99M objective remains active.

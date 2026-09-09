@@ -1,0 +1,25 @@
+{
+  "schema": "gamma.enwiki9.source-audit-plan.v1",
+  "id": "fx2_weight_adaptive_neighbor_v1_synthetic",
+  "owner": "root_explore",
+  "objective_target_bytes": 90000000,
+  "objective_credit_bytes": 0,
+  "hypothesis": "Decoder-rebuilt neighbor counts can eliminate fixed table overhead while retaining useful exact INT4 prediction.",
+  "parent_evidence": "operations/provenance/fx2_weight_neighbor_model_v1_terminal.json",
+  "measured_cost": {"range_stream_saving_bytes": 2751, "additional_table_bytes": 99900},
+  "arms": {
+    "P": "Unchanged fixed marginal archive and encoder",
+    "K": "P bytes with adaptive neighbor bookkeeping",
+    "A": "Adaptive marginal counts, no count table",
+    "D": "Adaptive preceding-symbol counts, explicit row-start context, no count table"
+  },
+  "update": "Fifteen unit pseudocounts per row; existing Q11 fixed_tree before truth; increment after truth; at total 65536 halve each count rounding upward. A and D share update law and sixteen allocated rows.",
+  "population": "Synthetic only: empty, arbitrary INT4, 70000 repeated symbols, 30000 periodic symbols, seeded pseudorandom symbols; widths 1,3,64,150.",
+  "selection": "One policy, no tuning. No trained model or corpus access authorized by this plan.",
+  "bounds": {"cpu": 3, "threads": 1, "address_space_bytes": 536870912, "cpu_seconds": 120, "wall_seconds": 120, "file_bytes": 33554432, "scratch_bytes": 67108864, "host_headroom_bytes": 34359738368},
+  "output": "results/fx2_weight_adaptive_neighbor_v1_unit/attempt01",
+  "temporary_directory": "results/fx2_weight_adaptive_neighbor_v1_unit/attempt01/tmp",
+  "required": ["P/K exact archive identity", "all arm inverses", "deterministic repeats", "all adaptive count entries at every symbol boundary", "rescale coverage", "malformed and truncated rejection", "measured synthetic kernel cost"],
+  "stop_rule": "Any correctness failure blocks model audit. Synthetic savings grant no corpus or package credit.",
+  "next_gate": "Publish source, synthetic result, ownership and frozen model-audit inputs; refresh admission before trained-model execution."
+}
