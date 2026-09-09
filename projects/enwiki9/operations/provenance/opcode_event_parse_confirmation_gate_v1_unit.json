@@ -1,0 +1,73 @@
+{
+  "schema": "gamma.enwiki9.opcode-event-parse-confirmation-gate-unit.v1",
+  "owner": "root_explore",
+  "status": "passed",
+  "tests_passed": 3,
+  "reported_test_elapsed_seconds": 1.412,
+  "bindings": [
+    {
+      "path": "tools/opcode_event_parse_corpus1m_v1.py",
+      "bytes": 785,
+      "sha256": "828f1e35c6eabb8c86b2283c58979ddf33adc277066bb1b8ec16b0dd95c0e30c"
+    },
+    {
+      "path": "tools/opcode_event_parse_confirmation_gate_v1.py",
+      "bytes": 3077,
+      "sha256": "b54e081406d181f147e24ddb8c93c3c48a35b47cfd4c39ade1af284b03a30962"
+    },
+    {
+      "path": "tests/test_opcode_event_parse_confirmation_gate_v1.py",
+      "bytes": 4654,
+      "sha256": "c882385c8b84883cc89bd9f52aa970001bc9b1ffb7720ce533f0992cad0ebb58"
+    },
+    {
+      "path": "operations/provenance/opcode_event_parse_validation_gate_v1_unit.json",
+      "bytes": 3487,
+      "sha256": "b29f9bbe756f10dc0599f69e2015147b6205b327c5a40beb45245c8c8b2bf36a"
+    },
+    {
+      "path": "results/opcode_event_parse_confirmation_gate_v1_unit/stdout",
+      "bytes": 178,
+      "sha256": "6e0d5ceb6f373e3d73b8505d1518728c8b83431ae33e870e761c598dbcedbdb9"
+    },
+    {
+      "path": "results/opcode_event_parse_confirmation_gate_v1_unit/stderr",
+      "bytes": 604,
+      "sha256": "1bb71e314032f7a54730be0c38436bb8fdc8a814de3151f1aa778911eacf649e"
+    }
+  ],
+  "command": [
+    "taskset",
+    "-c",
+    "3",
+    "prlimit",
+    "--as=2147483648",
+    "--cpu=120",
+    "--fsize=33554432",
+    "--core=0",
+    "timeout",
+    "180",
+    "python3",
+    "-m",
+    "unittest",
+    "discover",
+    "-s",
+    "tests",
+    "-p",
+    "test_opcode_event_parse_confirmation_gate_v1.py",
+    "-v"
+  ],
+  "checks": [
+    "Actual confirmation main completes ten fresh synthetic P/K/D phases with independent original-parent decoding, repeats, full state and observation parity",
+    "Fixed ZIP source increment1895 is charged separately and compared against archive saving",
+    "Wrapper accepts exactly1000000 synthetic bytes with mocked execution, rejects1000001 input bytes before codec execution, and rejects oversized reconstructed output before writing",
+    "Population, resource and source-cost omission rejected; underlying measured codec execution and comparison code objects remain unchanged"
+  ],
+  "synthetic_phase_bounds": {
+    "cpu_seconds": 10,
+    "wall_seconds": 15,
+    "address_bytes": 536870912
+  },
+  "codec_executed_on_corpus": false,
+  "objective_credit_bytes": 0
+}

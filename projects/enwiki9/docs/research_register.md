@@ -57,10 +57,16 @@ The [validated reflection](../operations/adaptive/reflections/20260909T003116Z_e
 retains positive transfer and holds scaling/integration. Archive saving minus one
 source-ZIP increment is -1,782 bytes; complete package remains unresolved.
 Both populations are now measured and unavailable for tuning. No full-corpus credit.
-Next freeze a separate 1MB confirmation to test archive economics at the larger
-scope while preserving the three-file codec. The [existing parent 1MB receipt](../operations/provenance/opcode_field_compact_terminal_20260908/confirmation.json)
+The [separate 1MB confirmation](../operations/adaptive/experiments/opcode_event_parse_confirmation1m_q0_v1.json)
+is frozen on raw offsets819000000..819999999 with the identical three-file codec.
+The [existing parent 1MB receipt](../operations/provenance/opcode_field_compact_terminal_20260908/confirmation.json)
 measures 304.29 seconds encode, 156.82 seconds decode and 1,273,496KiB peak process RSS;
-use those measured costs when bounding the next runner. No 1MB job is launched yet.
+those measurements bound CPU2,4GiB aggregate memory,600 CPU seconds per phase,
+720 elapsed seconds per phase and6000 aggregate elapsed seconds. Three synthetic
+runner tests pass, including ten phases and exact wrapper size boundaries.
+Job `20260909T005909Z_a4db760844` is held for publication/admission. The source-component
+predicate requires archive gain greater than1895 bytes; a smaller positive gain
+stays positive archive evidence but does not authorize scaling. No full-package claim.
 
 ## 2026-09-08 - Standalone XML field histories enter executable synthetic testing
 
