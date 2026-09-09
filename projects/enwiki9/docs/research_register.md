@@ -13,6 +13,18 @@ must match before interpreting loss. No policy mutation, native rerun, model or
 corpus installation is included. CPU3/512MiB/64MiB scratch/120 elapsed seconds;
 publish source and ownership, then refresh admission before the retained-trace replay.
 
+The [closed attribution](../operations/provenance/fx2_ratio_loss_attribution_v1_terminal.json)
+matches all64956 native calibration states and shared parent coder bytes.
+Across32477 scored symbols, corrected expert loss improves51.5203783783 ideal bits;
+its chronological thirds gain2.954120243/12.578361181/35.987896954 bits. This boundary
+includes85 prescribed PPM fallback rows. Final coder loss still worsens1.7474386862
+bits, reproducing64583 changed Q16 events and the prior zero-byte archive gain.
+The correction improves measured expert loss but that gain does not
+transfer through this integration. Mixer redundancy, learning and SSE effects
+are not separately identified. Next test delivery while preserving original
+parent learning; first synthetic prefix/rounding checks, then a fresh native
+comparison. The old integration remains rejected and receives no new credit.
+
 ## 2026-09-09 - Carry exact-model counts across decoded tensor widths
 
 Owner `root_explore` selects lenses3/10: bounded shared state and exact model

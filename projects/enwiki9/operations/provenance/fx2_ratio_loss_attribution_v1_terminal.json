@@ -1,0 +1,126 @@
+{
+  "schema": "gamma.enwiki9.source-audit-terminal.v1",
+  "id": "fx2_ratio_loss_attribution_v1",
+  "owner": "root_explore",
+  "publication_commit": "ea9ee6805971af8491e524574a4f107148a7e750",
+  "objective_target_bytes": 90000000,
+  "objective_credit_bytes": 0,
+  "validity": "valid",
+  "hypothesis_verdict": "diagnostic-resolved",
+  "decision": "retain-original-archive-rejection-and-test-delivery-separately",
+  "result": {
+    "path": "results/fx2_ratio_loss_attribution_v1/attempt01/receipt.json",
+    "bytes": 980,
+    "sha256": "8b9d3375274b7ac85c624523349f29a2d193a435a52295dcab15eb4f83bd858d"
+  },
+  "plan": {
+    "path": "operations/provenance/fx2_ratio_loss_attribution_v1_plan.json",
+    "bytes": 3960,
+    "sha256": "8f27204fdf07ca86cc325c11af97e5f740ff7d2cec52652fe5e7223c529a500e"
+  },
+  "inputs": {
+    "path": "operations/provenance/fx2_ratio_loss_attribution_v1_inputs.json",
+    "bytes": 3112,
+    "sha256": "8ed059725b778d7822c54ec86b3d5c634039d7bc866f7d3005504a96b5400253"
+  },
+  "files": [
+    {
+      "path": "results/fx2_ratio_loss_attribution_v1/attempt01/admission.json",
+      "bytes": 15078,
+      "sha256": "4a6b4d8422cc28eee721f90954e9712bfe012d1ed1b78a93a8f3d031716b16c2"
+    },
+    {
+      "path": "results/fx2_ratio_loss_attribution_v1/attempt01/commands.jsonl",
+      "bytes": 489,
+      "sha256": "46e746bb3a87c6b374fb53422ab889d5cfcef26cf87935de316f8d453ad359d6"
+    },
+    {
+      "path": "results/fx2_ratio_loss_attribution_v1/attempt01/receipt.json",
+      "bytes": 980,
+      "sha256": "8b9d3375274b7ac85c624523349f29a2d193a435a52295dcab15eb4f83bd858d"
+    },
+    {
+      "path": "results/fx2_ratio_loss_attribution_v1/attempt01/replay.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "results/fx2_ratio_loss_attribution_v1/attempt01/replay.stdout",
+      "bytes": 862,
+      "sha256": "e09a6cf9b1f63556572ae929de7cf7bfb0a2f59906962d6aa9947dee5cde8fda"
+    }
+  ],
+  "measurements": {
+    "schema": "gamma.enwiki9.ratio-loss-attribution.v1",
+    "rows": 32478,
+    "scored_symbols": 32477,
+    "matched_calibration_states": 64956,
+    "expert_parent_ideal_bits": 26661.49458580403,
+    "expert_treatment_ideal_bits": 26609.97420742572,
+    "expert_ideal_bits_saved": 51.52037837831197,
+    "final_coder_ideal_bits_saved": -1.747438686151686,
+    "changed_q16_events": 64583,
+    "chronological_thirds": [
+      {
+        "expert_bits_saved": 2.95412024298048,
+        "final_coder_bits_saved": 1.4464851500807605,
+        "scored_symbols": 10825
+      },
+      {
+        "expert_bits_saved": 12.578361181236408,
+        "final_coder_bits_saved": -0.6799184516296551,
+        "scored_symbols": 10826
+      },
+      {
+        "expert_bits_saved": 35.98789695409502,
+        "final_coder_bits_saved": -2.5140053846027888,
+        "scored_symbols": 10826
+      }
+    ],
+    "initial_byte_unscored_by_expert": true,
+    "final_prediction_unconsumed": true,
+    "objective_credit_bytes": 0,
+    "full_corpus_score_bytes": null
+  },
+  "half_events": {
+    "I": 32478,
+    "O": 32393,
+    "F": 85
+  },
+  "execution": {
+    "name": "replay",
+    "command": [
+      "/usr/bin/python3",
+      "tools/fx2_ratio_loss_attribution_v1.py",
+      "--plan",
+      "operations/provenance/fx2_ratio_loss_attribution_v1_plan.json",
+      "--inputs",
+      "operations/provenance/fx2_ratio_loss_attribution_v1_inputs.json",
+      "--output",
+      "/home/x/deco/gamma/projects/enwiki9/results/fx2_ratio_loss_attribution_v1/attempt01/receipt.json"
+    ],
+    "returncode": 0,
+    "elapsed_seconds": 5.421834018081427,
+    "cpu_seconds": 5.370106000000001,
+    "cumulative_child_peak_rss_kib": 44452
+  },
+  "verification": {
+    "all64956_native_calibration_states_identical": true,
+    "cross_experiment_parent_coder_bytes_identical": true,
+    "all_parent_treatment_truth_bits_identical": true,
+    "original_final_coder_loss_reproduced": true,
+    "all_source_and_trace_bindings_rehashed_before_and_after": true,
+    "initial_byte_excluded_and_terminal_prediction_unused": true
+  },
+  "scope": "Previously examined50051 raw bytes,32478 modeled bytes. Expert loss refers to the transformer output boundary including85 prescribed PPM fallback rows; no new native archive was generated.",
+  "finding": "The fixed ratio policy saves51.52037837831197 normalized expert ideal bits, positive in all chronological thirds, but the existing integrated final coder loses1.747438686151686 ideal bits and saved zero native archive bytes.",
+  "limits": [
+    "The positive expert loss is not an archive saving or finite-coder certificate.",
+    "This does not isolate mixer redundancy, mixer weight changes, SSE interactions or a particular tensor as the cause.",
+    "The diagnostic uses retained probabilities and states as counted external inputs; it is not a standalone compressor.",
+    "The rejected integration remains rejected. No automatic larger run, package credit or full-corpus projection."
+  ],
+  "next_action": "Select a separately frozen test of delivery: preserve original expert and parent learning, and apply the same causal ratio only at a distinct final-coder boundary with matched P/K and rotated control. First implement synthetic prefix/rounding/synchronization checks; measure fresh native archives before claiming gain.",
+  "complete_package_bytes": null,
+  "full_corpus_score_bytes": null
+}
