@@ -1,0 +1,67 @@
+{
+  "schema": "gamma.enwiki9.source-audit-plan.v1",
+  "id": "fx2_final_direction_v1",
+  "owner": "root_explore",
+  "hypothesis": "Determine the certified sign of the ideal log-likelihood saving derivative at the parent along fixed recorded P-to-D and P-to-S Q16 logit paths.",
+  "selection": "Closed opening250KB diagnostic only; no coefficient sweep, new predictor, corpus inference or confirmation data.",
+  "files": {
+    "P": {
+      "path": "results/fx2_ratio_coder_opening250k_q0_v1/work/P-encode.coder",
+      "bytes": 33871040,
+      "sha256": "a5a0afbf0715a9c5371d5f097aaa1b478c1c6a2c030448c79b4ca70f1279c716"
+    },
+    "D": {
+      "path": "results/fx2_ratio_coder_opening250k_q0_v1/work/D-encode.coder",
+      "bytes": 33871040,
+      "sha256": "f3186f059a1af163cca3045631200f7191fa1928c97d4f1407ec77f2aa855648"
+    },
+    "S": {
+      "path": "results/fx2_ratio_coder_opening250k_q0_v1/work/S-encode.coder",
+      "bytes": 33871040,
+      "sha256": "234b189602988c92ba65ac1ac15160f8b03f968036263027779efb6ff38f7abc"
+    },
+    "terminal": {
+      "path": "operations/provenance/fx2_ratio_coder_opening250k_v1_terminal.json",
+      "bytes": 5072,
+      "sha256": "8e25617b1effe2a7223695dd842bb1026a258405a697c8592405ef528d88df01"
+    },
+    "attribution": {
+      "path": "operations/provenance/fx2_ratio_delivery_loss_attribution_v1_terminal.json",
+      "bytes": 8092,
+      "sha256": "1e96fa744236e639b7128e7e9a951c9b58035644c026aed4cfb42b2c1dce19ff"
+    }
+  },
+  "rows": 1209680,
+  "expected_changed": {
+    "D": 731400,
+    "S": 1111530
+  },
+  "objective_target_bytes": 90000000,
+  "objective_credit_bytes": 0,
+  "path_definition": "p_t=P_count/65536; q_t=arm_count/65536; r_t(alpha)=sigmoid(logit(p_t)+alpha*(logit(q_t)-logit(p_t))). Fixed recorded endpoints; no additional Q16 rounding along the analytic path.",
+  "invariants": [
+    "Preserve original parent float words and truth bits; require every count in1..65535. Aggregate derivative coefficients with exact integer arithmetic.",
+    "For each event add(65536*y-P_count) to the arm-count logit coefficient and subtract it from the parent-count coefficient. Regroup logit(c)=ln(c)-ln(65536-c).",
+    "Enclose ln(n),1<=n<=65535, using80-digit correctly rounded Decimal.ln. Convert its exact decimal ratio to scale10^40 with integer floor and enlarge by one unit below and two units above. Exact integer interval accumulation must determine the derivative sign.",
+    "For this analytic path, saving second derivative is minus sum(r*(1-r)*delta^2), hence nonpositive. A nonpositive upper derivative bound excludes positive-alpha ideal gains only for this fixed path. A positive lower bound proves a local ideal improvement exists, not a finite archive improvement.",
+    "Recorded Q16 endpoints differ from the pre-rounding native odds law. Do not claim the certificate excludes every weakening of that original law, quantized recodings, online coefficients, or another population.",
+    "Repeat the full coefficient and enclosure computation; require identical certificates and witness files. No native archive or full-score credit."
+  ],
+  "decimal_source": "https://docs.python.org/3.14/library/decimal.html#decimal.Decimal.ln",
+  "bounds": {
+    "cpu_set": [
+      3
+    ],
+    "address_space_bytes": 536870912,
+    "elapsed_seconds": 360,
+    "phase_elapsed_seconds": 180,
+    "cpu_seconds_per_phase": 180,
+    "per_file_bytes": 33554432,
+    "scratch_bytes": 67108864,
+    "reserve_bytes": 34359738368
+  },
+  "output": "results/fx2_final_direction_v1/attempt01",
+  "next_action": "If the D path has no positive direction, avoid blind attenuation of this endpoint path and change the learned objective or information source. If positive, separately freeze a finite arithmetic comparison; no automatic corpus run.",
+  "complete_package_bytes": null,
+  "full_corpus_score_bytes": null
+}

@@ -12,7 +12,7 @@ Reusable artifact helpers for new tools: [lib/artifacts.py](../lib/artifacts.py)
 The LibNC initializer teacher launcher exits before the first forward, gradient, update, or coded symbol; its source-bound experiment defines that boundary.
 The delayed-status helper's `enwiki9_delayed_status_latest.log` pointer is operational history, not present-host occupancy proof.
 
-Coverage: **1108 files** (33 .c, 73 .cpp, 1 .gdb, 1 .h, 1 .hpp, 1 .html, 995 .py, 3 .sh).
+Coverage: **1109 files** (33 .c, 73 .cpp, 1 .gdb, 1 .h, 1 .hpp, 1 .html, 996 .py, 3 .sh).
 
 | Tool | Purpose | Referenced contracts |
 |---|---|---|
@@ -347,6 +347,7 @@ Coverage: **1108 files** (33 .c, 73 .cpp, 1 .gdb, 1 .h, 1 .hpp, 1 .html, 995 .py
 | [`tools/fx2_compact_v26_native_adapter_v1.py`](../tools/fx2_compact_v26_native_adapter_v1.py) | Exact source adapter selecting original, copy-control or compact FXCM. | [1](../operations/adaptive/experiments/fx2_compact_v26_fixture50051_q0_v1.json) |
 | [`tools/fx2_core_tune_package.py`](../tools/fx2_core_tune_package.py) | Build and package an fx2 core-tuning candidate. This creates a score-honest candidate by rebuilding the local fx2-cmix source with compile-time predictor knobs, compressing the resulting executable, and dropping it into an existing wrapper template. | none found |
 | [`tools/fx2_core_tune_queue.py`](../tools/fx2_core_tune_queue.py) | Build and gate fx2 core-tuning candidates through one serialized lane. | none found |
+| [`tools/fx2_final_direction_v1.py`](../tools/fx2_final_direction_v1.py) | Enclose the ideal derivative along a fixed recorded Q16 logit path. | none found |
 | [`tools/fx2_gepa_order_package.py`](../tools/fx2_gepa_order_package.py) | Package a self-contained fx2 candidate from a GEPA page-order key. | none found |
 | [`tools/fx2_half_tail_fixture50051_q0_v1.py`](../tools/fx2_half_tail_fixture50051_q0_v1.py) | Reuse the frozen native comparison machinery for one output-tail mutation. | [1](../operations/adaptive/experiments/fx2_half_tail_fixture50051_q0_v1.json) |
 | [`tools/fx2_half_tail_native_adapter_v1.py`](../tools/fx2_half_tail_native_adapter_v1.py) | Source-bound final-output correction, preserving native model input priors. | [1](../operations/adaptive/experiments/fx2_half_tail_fixture50051_q0_v1.json) |
