@@ -1,0 +1,111 @@
+{
+  "schema": "gamma.enwiki9.dependency-closure.v1",
+  "objective": {
+    "objectiveId": "gamma-enwiki9-hutter-90m-v3",
+    "objectiveDigest": "sha256:e91ff20e92c3cac8acb0cbe5c79fc8e8a3b427d7e151245c8eecc52b1c32fa00",
+    "objectivePath": "contracts/research/v3/objective-contract.json",
+    "targetScoreBytes": 90000000,
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc"
+  },
+  "candidateId": "opcode_previous_word_release_package_20260909",
+  "candidateTreeSha256": "sha256:da21c6c25bf1ef966ce6632f35d9e21151f90afbeaa312e37ef5ad1716844e88",
+  "candidateTreeDigestAlgorithm": "sha256-canonical-counted-files-v1",
+  "candidateRoot": "package",
+  "entryPoint": "program.py",
+  "platform": "linux-x86-64",
+  "commands": {
+    "build": [
+      "/usr/bin/python3",
+      "-I",
+      "-S",
+      "-B",
+      "-c",
+      "pass"
+    ],
+    "compress": [
+      "/usr/bin/python3",
+      "-I",
+      "-S",
+      "-B",
+      "-c",
+      "import importlib.util,json,pathlib,resource,sys,time\nbegin,cpu=time.monotonic(),time.process_time()\nloader,operation,source,output=sys.argv[1:]\nspec=importlib.util.spec_from_file_location('delivered_codec',loader)\nmodule=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)\nresult=getattr(module,operation)(pathlib.Path(source).read_bytes())\nwith open(output,'xb') as stream:stream.write(result)\nprint(json.dumps(dict(output_bytes=len(result),cpu_seconds=time.process_time()-cpu,\n elapsed_seconds=time.monotonic()-begin,peak_process_rss_kib=resource.getrusage(resource.RUSAGE_SELF).ru_maxrss)))\n",
+      "{entry_point}",
+      "compress",
+      "{corpus}",
+      "{archive}"
+    ],
+    "decompress": [
+      "/usr/bin/python3",
+      "-I",
+      "-S",
+      "-B",
+      "-c",
+      "import importlib.util,json,pathlib,resource,sys,time\nbegin,cpu=time.monotonic(),time.process_time()\nloader,operation,source,output=sys.argv[1:]\nspec=importlib.util.spec_from_file_location('delivered_codec',loader)\nmodule=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)\nresult=getattr(module,operation)(pathlib.Path(source).read_bytes())\nwith open(output,'xb') as stream:stream.write(result)\nprint(json.dumps(dict(output_bytes=len(result),cpu_seconds=time.process_time()-cpu,\n elapsed_seconds=time.monotonic()-begin,peak_process_rss_kib=resource.getrusage(resource.RUSAGE_SELF).ru_maxrss)))\n",
+      "{entry_point}",
+      "decompress",
+      "{archive}",
+      "{restored}"
+    ]
+  },
+  "countedFiles": [
+    {
+      "path": "p",
+      "bytes": 5423,
+      "sha256": "7d331ba82c635af8afe6517bf5f4471b41dcf7854c6ec01cb5564078d9bb56a8",
+      "role": "source"
+    },
+    {
+      "path": "program.py",
+      "bytes": 323,
+      "sha256": "7361c8aa3695ec9d1556be02de66a1f0781414e78b44827511fb08bf8c8c05eb",
+      "role": "source"
+    }
+  ],
+  "requiredOptions": [
+    "-B",
+    "-I",
+    "-S",
+    "-c",
+    "compress",
+    "decompress",
+    "import importlib.util,json,pathlib,resource,sys,time\nbegin,cpu=time.monotonic(),time.process_time()\nloader,operation,source,output=sys.argv[1:]\nspec=importlib.util.spec_from_file_location('delivered_codec',loader)\nmodule=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)\nresult=getattr(module,operation)(pathlib.Path(source).read_bytes())\nwith open(output,'xb') as stream:stream.write(result)\nprint(json.dumps(dict(output_bytes=len(result),cpu_seconds=time.process_time()-cpu,\n elapsed_seconds=time.monotonic()-begin,peak_process_rss_kib=resource.getrusage(resource.RUSAGE_SELF).ru_maxrss)))\n",
+    "pass"
+  ],
+  "requiredOptionBytes": 642,
+  "totalPackageBytes": 5746,
+  "dependencies": [
+    {
+      "counted": true,
+      "kind": "bundled",
+      "license": "LicenseRef-Gamma-Source-Notice-Closure-Unresolved",
+      "name": "Unchanged codec packed source",
+      "provider": "p"
+    },
+    {
+      "counted": true,
+      "kind": "bundled",
+      "license": "LicenseRef-Gamma-Source-Notice-Closure-Unresolved",
+      "name": "Unchanged Python loader",
+      "provider": "program.py"
+    },
+    {
+      "counted": false,
+      "kind": "runtime",
+      "license": "LicenseRef-Python-Runtime-Closure-Unresolved",
+      "name": "Python interpreter, standard modules and transitive native providers",
+      "provider": "/usr/bin/python3"
+    }
+  ],
+  "complete": false,
+  "missing": [
+    "Declared launcher option union is not verified official option accounting; archive/decoder multiplicities remain unresolved.",
+    "Existing clean-room tool mounts all /usr and does not prove minimal runtime closure.",
+    "No counted package license notice; Gamma repository notice applicability and required dependency notices remain to be delivered.",
+    "Python interpreter and transitive runtime availability/counting are unresolved; runtime171 is observation inventory, not minimal closure.",
+    "Python standard-library and native liblzma/libm/provider license closure is not certified.",
+    "Source ZIP lacks an executable-producing Makefile; delivered public entry/build form remains unresolved.",
+    "operator did not declare dependency closure complete"
+  ],
+  "generatedUtc": "2026-09-09T16:39:30+00:00"
+}
