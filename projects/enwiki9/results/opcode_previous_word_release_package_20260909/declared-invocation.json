@@ -1,0 +1,50 @@
+{
+  "accounting_scope": "Literal option union counted by dependency materializer; official option treatment unresolved.",
+  "build_scope": "No-op for already materialized source; not an executable-producing Makefile.",
+  "command_source": "Exact earlier isolated launcher; only path placeholders and operation arguments adapted.",
+  "commands": {
+    "build": [
+      "/usr/bin/python3",
+      "-I",
+      "-S",
+      "-B",
+      "-c",
+      "pass"
+    ],
+    "compress": [
+      "/usr/bin/python3",
+      "-I",
+      "-S",
+      "-B",
+      "-c",
+      "import importlib.util,json,pathlib,resource,sys,time\nbegin,cpu=time.monotonic(),time.process_time()\nloader,operation,source,output=sys.argv[1:]\nspec=importlib.util.spec_from_file_location('delivered_codec',loader)\nmodule=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)\nresult=getattr(module,operation)(pathlib.Path(source).read_bytes())\nwith open(output,'xb') as stream:stream.write(result)\nprint(json.dumps(dict(output_bytes=len(result),cpu_seconds=time.process_time()-cpu,\n elapsed_seconds=time.monotonic()-begin,peak_process_rss_kib=resource.getrusage(resource.RUSAGE_SELF).ru_maxrss)))\n",
+      "{entry_point}",
+      "compress",
+      "{corpus}",
+      "{archive}"
+    ],
+    "decompress": [
+      "/usr/bin/python3",
+      "-I",
+      "-S",
+      "-B",
+      "-c",
+      "import importlib.util,json,pathlib,resource,sys,time\nbegin,cpu=time.monotonic(),time.process_time()\nloader,operation,source,output=sys.argv[1:]\nspec=importlib.util.spec_from_file_location('delivered_codec',loader)\nmodule=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)\nresult=getattr(module,operation)(pathlib.Path(source).read_bytes())\nwith open(output,'xb') as stream:stream.write(result)\nprint(json.dumps(dict(output_bytes=len(result),cpu_seconds=time.process_time()-cpu,\n elapsed_seconds=time.monotonic()-begin,peak_process_rss_kib=resource.getrusage(resource.RUSAGE_SELF).ru_maxrss)))\n",
+      "{entry_point}",
+      "decompress",
+      "{archive}",
+      "{restored}"
+    ]
+  },
+  "executed_here": false,
+  "required_options": [
+    "-I",
+    "-S",
+    "-B",
+    "-c",
+    "import importlib.util,json,pathlib,resource,sys,time\nbegin,cpu=time.monotonic(),time.process_time()\nloader,operation,source,output=sys.argv[1:]\nspec=importlib.util.spec_from_file_location('delivered_codec',loader)\nmodule=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)\nresult=getattr(module,operation)(pathlib.Path(source).read_bytes())\nwith open(output,'xb') as stream:stream.write(result)\nprint(json.dumps(dict(output_bytes=len(result),cpu_seconds=time.process_time()-cpu,\n elapsed_seconds=time.monotonic()-begin,peak_process_rss_kib=resource.getrusage(resource.RUSAGE_SELF).ru_maxrss)))\n",
+    "compress",
+    "decompress",
+    "pass"
+  ]
+}
