@@ -60,6 +60,12 @@ finite probability quantization, coding termination and software cost still coun
   motivates evaluating predictive distributions as code lengths. Its results
   do not supply a small self-contained decoder for this candidate.
 
+- [EntityNLM (Ji et al., 2017)](https://arxiv.org/abs/1708.00781) already
+  models entities and updates their representations dynamically. Entity-aware
+  prediction itself is prior art. The open implementation question here is a
+  small deterministic alias-tying mechanism that pays on a strong lossless
+  compressor; this review does not establish a new scientific family.
+
 These are primary sources. Their implementations and weights are not imported;
 there is no new external code license or model dependency in the prototype.
 The literature search is not exhaustive and cannot certify global novelty.
@@ -118,3 +124,34 @@ natural-text opportunity/cost study against the actual stronger parent, with
 matching frontend coordinates, article-local definition scope, ambiguity and
 alias-redefinition tests. It must show residual value after source cost before
 any larger comparison. The previous cold 1MB word experiment remains separate.
+
+## Closed synthetic result
+
+The [terminal receipt](../operations/provenance/alias_context_fixture_terminal_20260912.json)
+and [validated reflection](../operations/adaptive/reflections/20260912T212344Z_0ed06d3b87.json)
+close job `20260912T212344Z_0ed06d3b87` with all 48 independent phases.
+
+| Fixture | Raw bytes | P/K archive | D archive | S archive | P minus D | S minus D |
+|---|---:|---:|---:|---:|---:|---:|
+| Constructed transfer | 3508 | 2051 | 1839 | 2068 | 212 | 229 |
+| Wrong relation | 3508 | 2051 | 2068 | 1839 | -17 | -229 |
+| No definitions | 3360 | 1938 | 1938 | 1938 | 0 | 0 |
+| Arbitrary bytes | 512 | 414 | 414 | 414 | 0 | 0 |
+
+Exact inverses, independent repeats, byte-boundary state/probability witnesses
+and P/K control identities pass. Guard flags are clear and all discovery
+measurements complete; cgroup peak is 29,265,920 bytes and scratch allocated peak
+is 6,483,968 bytes. The job closed normally and resource cleanup completed.
+These are diagnostic resource observations, not a prize qualification.
+
+The two Python source files total 14,128 bytes. This is neither a final package
+measurement nor an incremental source comparison against a delivered baseline.
+The 212-byte gain does not establish package profit. The decoy regression is a
+valid compression loss on that synthetic input, distinct from the preceding
+word experiment's resource interruption.
+
+Decision: **retain as synthetic feasibility evidence; hold corpus promotion**.
+The leading research question is whether explicit entity equivalences expose
+residual predictive information after the strong parent's existing word and
+match models. A positive answer must come from natural text and counted costs.
+No best-compressor, global-novelty, full-corpus or prize claim follows.
