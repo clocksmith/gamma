@@ -1,0 +1,94 @@
+{
+  "attribution": {
+    "causalConfidence": "high",
+    "controlsEquivalent": null,
+    "failureClass": "infrastructure-failure",
+    "localizedCause": "Host filesystem exhausted while publishing guard.json; this execution fails resource compliance and lacks final guard evidence."
+  },
+  "candidateId": "opcode_previous_word_confirmation1m_q0_v3",
+  "candidateRevision": {
+    "candidateId": "opcode_previous_word_confirmation1m_q0_v3",
+    "candidateTreeSha256": "sha256:82b9f15d37fd3383603ea2eecafb7e27774819497ed8b53b3eec411f255882ed",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/opcode_previous_word_confirmation1m_q0_v3/20260912T213557942218Z_82b9f15d37fd.json",
+      "sha256": "sha256:39e8f3f629c6fd050cf17f5b6e1aa09d7956cb3c2980b5361642b01fb3671061"
+    }
+  },
+  "decision": {
+    "killPredicatesPass": null,
+    "nextGateBytes": null,
+    "promotionPredicatesPass": null,
+    "rationale": "Close as resource failure with incomplete evidence. Require a filesystem independent of exhausted root before another unchanged retry; no predictor rejection or promotion.",
+    "verdict": "hold"
+  },
+  "evidence": [
+    {
+      "path": "operations/provenance/opcode_previous_word_confirmation1m_v3_admission_20260912.json",
+      "sha256": "sha256:f0bf9418c0895f1da1a2193bf46a88aa7153a6a19a2e7242491d574d24b020c2"
+    },
+    {
+      "path": "operations/provenance/opcode_previous_word_confirmation_v3_terminal_20260912.json",
+      "sha256": "sha256:689b78e79489bcb710d5e723a8d890750f8db742c0d8c6148cc3be0e1b694992"
+    },
+    {
+      "path": "operations/provenance/opcode_previous_word_confirmation_v3_terminal_20260912/index.json",
+      "sha256": "sha256:976205f0a496cd792ee0fd2447a2d257041a60cad1ff278f316c0ab38bc73a06"
+    },
+    {
+      "path": "operations/provenance/opcode_word_v3_enospc_reconciliation_20260912.json",
+      "sha256": "sha256:a8fba7e71007cb931877e1ad687e1fa56599e0047ea13108d0a48f7ea2cc1e87"
+    }
+  ],
+  "experiment": {
+    "path": "operations/adaptive/experiments/opcode_previous_word_confirmation1m_q0_v3.json",
+    "sha256": "sha256:101c7ab139de093228ab0ad64fc42fc6ae6fdc47a69adaf5f5e594205795cbbf"
+  },
+  "generatedUtc": "2026-09-12T21:59:48+00:00",
+  "hypothesis": {
+    "rationale": "P and K archives and authoritative states match, but D and S never ran; compression gains remain unknown.",
+    "verdict": "inconclusive"
+  },
+  "job": {
+    "path": "operations/adaptive/failed/919_20260912T213632Z_3ebb7f46fa.json",
+    "sha256": "sha256:29b97d6218d93a33271a9a6f04044ea11567d367fc3e944c39298ae5a157ef07"
+  },
+  "knowledge": {
+    "retiredDimensions": [],
+    "transferableLessons": [
+      "Sampled shared filesystem headroom does not isolate the admitted execution from unrelated writes; retain five completed phases without imputing treatment outcomes."
+    ],
+    "uncertainties": [
+      "g_P, g_S, historical n_1 and n_2, released-D parity, complete repeatability, final resource peaks, and final packaging remain unknown."
+    ]
+  },
+  "measurementAssertions": [],
+  "measurements": {
+    "idealBitsSaved": null,
+    "memoryRatio": null,
+    "minimumPartitionIdealBitsSaved": null,
+    "netBytesSaved": null,
+    "positiveSegmentFraction": null,
+    "runtimeRatio": null,
+    "scopeBytes": null,
+    "scopeSymbols": null,
+    "sourceBytesDelta": null,
+    "transferRetention": null
+  },
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:e91ff20e92c3cac8acb0cbe5c79fc8e8a3b427d7e151245c8eecc52b1c32fa00",
+    "objectiveId": "gamma-enwiki9-hutter-90m-v3",
+    "objectivePath": "contracts/research/v3/objective-contract.json",
+    "targetScoreBytes": 90000000
+  },
+  "reflectionId": "r-20260912t213632z_3ebb7f46fa",
+  "schema": "gamma.enwiki9.reflection-receipt.v1",
+  "validity": {
+    "classification": "infrastructure-failure",
+    "reasons": [
+      "Shared root ENOSPC interrupted the guard during K-repeat. Five phases completed; guard retained only a nonterminal snapshot. Canonical job closure confirms residual-process termination and cgroup cleanup."
+    ],
+    "valid": false
+  }
+}

@@ -1,0 +1,244 @@
+<!DOCTYPE HTML>
+<HTML LANG="en">
+<HEAD>
+  <META CHARSET="utf-8"/>
+  <META NAME="Author" CONTENT="Marcus Hutter">
+  <META NAME="Description" CONTENT="500'000&euro; Prize for Compressing Human Knowledge by Marcus Hutter">
+  <META NAME="KeyWords" CONTENT="Lossless Compression; Artificial Intelligence, Kolmogorov Complexity, Hutter Prize">
+  <META NAME="robots" CONTENT="follow">
+  <TITLE>Human Knowledge Compression Contest: Detailed Rules for Participation</TITLE>
+
+<STYLE TYPE="text/css">
+    h3 { color:blue;  }
+    a.extern { color:black;  }
+    a:hover { color:#00C000; }
+    a.foot { color:black; text-decoration:none; } /* FONT-FAMILY: sans-serif,Helvetica,Arial; font-weight:bold; */
+    a.foot:hover { color:black; background-color:yellow; }
+    a.foot:active { color:black; background-color:yellow; }
+    p { text-align:justify }   p { alignment:justify }
+  </STYLE>
+  </HEAD>
+
+  <BODY BACKGROUND="back.gif">
+    <TABLE BORDER="1" RULES="rows" WIDTH="100%" CELLPADDING="0"
+    CELLSPACING="0" BGCOLOR="#FFFF60">
+      <TR>
+        <TD ALIGN="center"><FONT FACE="Arial" COLOR="blue" SIZE="+2"><B><I>
+        Human Knowledge Compression Contest</I><BR>
+         Detailed Rules for Participation</B></FONT></TD>
+      </TR>
+    </TABLE>
+    <CENTER><FONT FACE="Arial" SIZE="-1">[<A HREF="index.htm">back to the
+      prize page</A>]</FONT></CENTER>
+
+      <A HREF="index.htm"><IMG ALIGN="left" SRC="hmedals.gif" BORDER="0" ALT="Prize Medal" WIDTH="64" HEIGHT="64"></A>
+      <A HREF="index.htm"><IMG ALIGN="right" SRC="hmedals.gif" BORDER="0" ALT="Prize Medal" WIDTH="64" HEIGHT="64"></A> <BR>
+    <CENTER><B>Compress the 1GB file <TT>enwik9</TT> to less than the
+    current record of about 116MB</B></CENTER>
+
+    <BR CLEAR="all"><BR>
+
+<!-- ============================== -->
+<!--<a name="faq"><h3>Contents</h3></a> -->
+<!-- ============================== -->
+
+<!-- <img src="../ai/uc.gif" border="0" ALT="under construction" align="right"></a> -->
+
+<!-- ============================== -->
+<A NAME="rules"><H3>Rules</H3></A>
+<!-- ============================== -->
+
+    <UL>
+      <LI>Publish a compression program <TT>comp9.exe</TT> that outputs <TT>archive9.exe</TT> given input <TT>enwik9</TT>. </LI>
+      <LI>If <TT>archive9.exe</TT> is run with no input, it reproduces 10<SUP>9</SUP> byte file <TT>data9</TT> that
+        is identical to <TT>enwik9</TT>. </LI>
+      <LI><a href="hfaq.htm#adddecomp">Total size</a> is measured as <I><font color="#C00000">S</font></I> := length(<TT>comp9.exe/zip</TT>)+length(<TT>archive9.exe</TT>).</LI>
+      <LI>Programs must be Windows or Linux (x86 32bit or 64bit) executables. </LI>
+      <LI>Programs must run without input from other sources (files, network,
+        dictionaries, etc.) under Windows or Linux without additional
+        installations.<BR> Use of standard libraries as for file I/O are allowed.
+      </LI>
+      <LI>Each program must run in less than 70'000/<i>T</i> hours on a machine using at most 10GB RAM and 100GB HDD for temporary files, 
+        where <i>T</i> is the machine's <a class="extern" href="https://www.geekbench.com/legacy/">Geekbench5</a> score. No GPU usage.<BR>
+        In particular they must run on our current test machines, which are as of 2021 (but may change without notice)
+        a Lenovo 82HT Intel Core i7-1165G7 2.79GHz (Windows)
+        with <a class="extern" href="https://browser.geekbench.com/v5/cpu/search?q=Lenovo+82HT%2C+core+i7-1165G7"><i>T</i>&asymp;1427 (1 core)  and <i>T</i>&asymp;4667 (4 cores)</a>
+        and an AMD Ryzen 7 3.6GHz (Linux)
+        with <a class="extern" href="https://browser.geekbench.com/v5/cpu/2890998"><i>T</i>=1310 (1 core) and <i>T</i>=8228 (8 cores)</a>
+  <!-- 5Aug22 James Bowery wrote that he has two new test machines Geekbenched, 
+        A T~1648 single core performance Ryzen 9 5900X 64GB Ubuntu system.
+        A Windows 11 laptop with T~1265 12GB Windows.
+        Pro. -->
+  <!--     <LI>Each program must run on 1 core in less than 100 hours on our test machines with 10GB RAM and 100GB free HD for temporary files. No GPU usage.<BR>
+        This roughly corresponds to 50'000/<i>T</i> hours real time <href="http://browser.primatelabs.com/geekbench5/search">on a machine</a>
+        with <a class="extern" href="http://www.geekbench.com/">Geekbench5</a> score of <i>T</i>.
+        Our current machines (as of 2020, which may change without notice) are 
+        a Dell Latitude E6510 Intel Core i7-620M 2667MHz
+        with <a class="extern" href="http://browser.geekbench.com/v5/cpu/819544"><i>T</i>&asymp;500 (1 core)  and <i>T</i>&asymp;1000 (2 cores)</a>
+        and AMD Ryzen 7 3GHz
+        with <a class="extern" href="http://browser.geekbench.com/v5/cpu/1230962"><i>T</i>&asymp;800 (1 core) and <i>T</i>=5000 (8 cores)</a> -->
+    </UL>
+
+<!-- ============================== -->
+<A NAME="relax"><H3>Relaxations</H3></A>
+<!-- ============================== -->
+
+    <UL>
+      <LI>In lieu of <TT>comp9.exe</TT>,
+        a compressor <TT>comp9a.exe</TT> producing <TT>archive9.bhm</TT> from <TT>enwik9</TT>, 
+        and a decompressor <TT>decomp9.exe</TT> producing <TT>data9</TT> from <TT>archive9.bhm</TT> may be submitted.
+        In this case, <a href="hfaq.htm#addcomp">total size</a> is measured as 
+        <I><font color="#C00000">S</font></I> := length(<TT>comp9a.exe/zip</TT>)+2&times;length(<TT>decomp9.exe/zip</TT>)+length(<TT>archive9.bhm</TT>).
+        If <TT>comp9a.exe</TT>=<TT>decomp9.exe</TT>, the 2&times; can be reduced to 1&times;</LI> (<a href="hfaq.htm#addcomp">rationale</a>).
+<!--      <LI>In lieu of a self-extracting archive, a decompressor program <TT>decomp9.exe</TT>
+        plus a compressed file <TT>archive9.bhm</TT> may be submitted</LI> -->
+      <LI>Resource restrictions for all executables are the same. </LI>
+      <LI>In lieu of executables <TT>X.exe</TT> (X=comp9/comp9a/decomp), 
+        zip-files <TT>X.zip</TT> containing the source code and makefile,
+        which create <TT>X.exe</TT> may be submitted.
+        C++, Python, and Assembler are accepted. We may also consider other languages if
+        we can easily compile and run and verify the code for compliance with the other rules.</LI>
+      <LI>If command-line options for execution or compilation are necessary, their length is added to <I>S</I>.</LI>
+<!--      <LI>In lieu of <TT>archive9</TT>, a compressor <TT>comp9.exe</TT> may
+        be published, together with the size of <TT>archive9</TT> (and possible
+        options used to create it), which creates <TT>archive9</TT> from <TT>enwik9</TT>.</LI> -->
+<!--  <LI>The used filenames (except enwik9) are just for illustration. </LI> -->
+      <LI>If your contribution violates some of the rules, you may still be
+        eligible for the Large Compression Benchmark (see below). </LI>
+    </UL>
+
+<!-- ============================== -->
+<A NAME="part"><H3>Participation</H3></A>
+<!-- ============================== -->
+
+    Anyone may participate at this contest by emailing the following
+    numbered itemized list of information to 
+    &lt;<A HREF="mailto:mattmahoneyfl@gmail.com?subject=H-Prize Submission&body=Dear Matt,%0DPlease find attached/linked my submission and documentation for consideration of the H-Prize.%0DKind regards,%0D">mattmahoneyfl@gmail.com</A>&gt; and
+    &lt;<A HREF="mailto:jabowery@gmail.com?subject=H-Prize Submission&body=Dear Jim,%0DPlease find attached/linked my submission and documentation for consideration of the H-Prize.%0DKind regards,%0D">jabowery@gmail.com</A>&gt; and
+    &lt;<A HREF="mailto:marcus.hutter@gmx.net?subject=H-Prize Submission&body=Dear Marcus,%0DPlease find attached/linked my submission and documentation for consideration of the H-Prize.%0DKind regards,%0D">marcus.hutter@gmx.net</A>&gt;:
+    <OL>
+      <LI>A direct link to a self-extracting archive <tt>archive9.exe</tt> (or <tt>decomp9.exe</tt>+<tt>archive9.bhm</tt>)</LI>
+      <LI>A single line of instruction how to execute it (long/complicated instructions are inadmissable)</LI>
+      <LI>Names of all involved program(s), version, and used options if any</LI>
+      <LI>Sizes of <TT>(de)comp9(a)</TT> and most important <TT>archive9.exe/bhm</TT></LI>
+      <LI>Approximate (de)compression time and maximal main and HDD memory used</LI>
+      <LI>Description of the test machine (processor, memory, operating system, Geekbench5 score)</LI>
+      <LI>Links where all files can be downloaded:<BR>
+          Executables (or zipped source) and <i>well-documented source code</i> 
+          under some <a href="hfaq.htm#license">OSI license</a> of (de)compressor and all other relevant files</LI>
+      <LI>A (link to a) document explaining the (algorithmic) ideas that led to or are incorporated into the algorithms and their inner working</LI>
+      <LI>Usage/compilation instructions</LI>
+      <LI>Any additional information is welcome</LI>
+    </OL>
+
+ <!-- ============================== -->
+<!-- <A NAME="deadline"><H3>Deadline</H3></A> -->
+<!-- ============================== -->
+<!-- 
+<UL>
+  <LI>There is no deadline. I intend to fund the contest even beyond my death.<BR>
+  <LI>All submissions before 14.April 2020 (anywhere in the world) will be evaluated in April
+      and the smallest decompressor+archive will win, provided the advance is at least 1%.</LI>
+  <LI>From 14.April 2020 onwards, contributions are dealt with in the order of their submission.</LI>
+</UL>
+-->
+
+<!-- ============================== -->
+<A NAME="award"><H3>Award</H3></A>
+<!-- ============================== -->
+
+    The prize is awarded as follows:
+    <UL>
+      <LI>Award = Z&times;(<I>L</I>-<I>S</I>)/<I>L</I>, where <BR>
+        <I>S</I> = new record (size of <TT>comp9.exe</TT>+<TT>archive9.exe</TT> or alternatives above),<BR>
+        <I>L</I> = previous record for<I> S</I><!--<a href="hfaq.htm#ddisc">plus 5'000×(number of days that have passed since 1.1.2021)</a> -->,<BR> 
+        <I>Z</I> = amount in prize fund (<a href="hfaq.htm#money">500'000&euro;</a>)<BR>
+         Update: <I>L</I> := <I>S</I>, while <a href="hfaq.htm#money"><I>Z</I> itself does not get reduced</a>.</LI>
+      <LI>Minimum award is 1% of <I>Z</I>. </LI>
+      <LI>Contributions are dealt with in the order of their submission. </LI>
+      <LI>The contribution is subject to public comments for a period of at
+        least 30 days before the prize is awarded.
+
+<!--  <LI>The contribution is subject to public comments for a period of at least 30 days       before the winner will be determined.   <LI>The winner should publish documentation and source if possible, before       the prize money is paid. -->
+
+         </LI>
+    </UL>
+
+<!-- ============================== -->
+<A NAME="more"><H3>More Information</H3></A>
+<!-- ============================== -->
+
+    <UL>
+      <LI>Compressors/decompressors do not have to be general purpose. They may
+        be tuned specifically to this benchmark and are allowed to reject or
+        fail on any input other than enwik9/archive9.bhm. </LI>
+      <LI>Only the version and combination of options submitted is eligible for
+        the prize. </LI>
+      <LI>If an author breaks his own record within 30 days,
+        the older submission is regarded as withdrawn.
+      <LI>If a submission fails to meet the criteria for the prize, the entrant
+        will be informed, and the submission henceforth be ignored. In
+        particular a miss of the 1% criterion will not diminish the prize (<I>L</I>
+        remains unchanged). </LI>
+      <LI>If your compressor beats the current record, but violates some of the
+        constraints regarding operating system, used dll's, used programming
+        language, etc, Matt Mahoney may be willing to assist you in satisfying
+        them. For instance if you send portable C code he can compile it under
+        Windows for you. </LI>
+      <LI>You can run some of the previous records on your system, and by
+        comparing your runtime with the displayed runtime, you can estimate
+        whether your algorithm will meet the time constraint on our machine.
+      </LI>
+      <LI>Members of the prize committee are not eligible for prize money. 
+        Committee members can publish (de)compressors but only when no 
+        (other) submissions are pending verification.
+        <I>L</I> is updated as for regular submissions, but no money is paid. </LI>
+      <LI>The above formula currently amounts to 1&euro; for every ~230 byte
+        improvement, with a minimum improvement of ~1MB. </LI>
+      <LI>If a decompressor has multiple authors, then a submission must
+        include instructions for dividing the prize money. All authors must
+        agree on this distribution before any money can be awarded. </LI>
+      <LI>There will be a waiting period of at least 30 days after submission
+        to allow for public comment and verification. Comments should be made to
+        the <a href="http://groups.google.com/group/Hutter-Prize/about?hl=en">Hutter
+          Prize Discussion Forum</A> or by email to members of the
+        <a href="http://prize.hutter1.net/#committee">Prize committee</A>. </LI>
+      <LI>The programs and/or data files must be available on the Internet for
+        free download and testing. </LI>
+      <LI>Documented source code must be made publicly available under some
+        OSI-approved <a href="hfaq.htm#license">license</a> before the prize money will paid out. </LI>
+        <LI>The (virtual) prize fund (<I>Z</I>) is constant. It is not decreased
+        after awarding a prize. It may increase if additional sponsors
+        contribute to it. (Please contact
+        <A HREF="mailto:marcus@hutter1.net?subject=H-Prize&body=Dear Marcus,%0DI would like to donate ???,- for the Human Knowledge Compression Prize.%0DPlease send me more information.%0DKind regards,%0D">Marcus
+          Hutter</A> if you wish to contribute). </LI>
+      <LI>The prize will be paid if the solution reflects the spirit of the
+        contest. In particular decompressors (secretely) receiving any kind of &quot;outside&quot;
+        information are forbidden. Also in order to verify your claim we need to
+        be able to run your executable on our machines. Payment of the prize
+        cannot be legally enforced. Marcus Hutter will make the final decision
+        whether to recognize a record, award a prize, and the amount. </LI>
+      <LI>Rules may change at any time without notice to meet the goals of
+        fairness, accuracy, fostering progress and public participation, and recognizing
+        existing practice.</LI>
+<!-- <LI> Note that the rules for the Hutter Prize are different (more strict) than for listing in Matt Mahoney's benchmark. -->
+      <LI>These rules are intensifications of Matt Mahoney's
+        <a href="http://mattmahoney.net/dc/textrules.html">Large
+          Compression Benchmark rules</A>. </LI>
+    </UL>
+
+    <BR CLEAR="all">
+    <TABLE RULES="rows" WIDTH="100%" BGCOLOR="silver" CELLPADDING="0"
+    CELLSPACING="0">
+      <TR>
+        <TD ALIGN="left"><FONT SIZE="-1">&nbsp;&copy; 2000 by ...</FONT></TD>
+        <TD ALIGN="center"><A CLASS="foot" HREF="http://www.hutter1.net/index.htm" TARGET="_top">[home]</A>
+        <A CLASS="foot" HREF="http://www.hutter1.net/search.htm">[search]</A> <A CLASS="foot" HREF="../official/index.htm" TARGET="_top">[science]</A>
+        <A CLASS="foot" HREF="http://www.hutter1.net/official/contact.htm">[contact]</A>
+        <A CLASS="foot" HREF="index.htm" TARGET="_top">[up]</A>
+        <A CLASS="foot" HREF="index.htm">[prize]</A> </TD>
+        <TD ALIGN="right"><FONT SIZE="-1">... Marcus Hutter&nbsp;</FONT></TD>
+      </TR>
+    </TABLE>
+  </BODY>
+</HTML>
