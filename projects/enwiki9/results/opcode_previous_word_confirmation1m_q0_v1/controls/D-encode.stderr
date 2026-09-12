@@ -1,0 +1,31 @@
+Traceback (most recent call last):
+  File "/home/x/deco/gamma/projects/enwiki9/tools/opcode_previous_word_confirmation_corpus_v1.py", line 18, in <module>
+    main()
+    ~~~~^^
+  File "/home/x/deco/gamma/projects/enwiki9/tools/opcode_previous_word_corpus_v1.py", line 52, in main
+    output, audit = execute(load(args.candidate_root / 'program.py'), args.operation,
+                    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                            args.input.read_bytes(), args.arm, args.audit is not None)
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/x/deco/gamma/projects/enwiki9/tools/opcode_previous_word_corpus_v1.py", line 31, in execute
+    output, audit = observe_execute(module, operation, data, arm, observed)
+                    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/x/deco/gamma/projects/enwiki9/tools/opcode_previous_word_compact_observe_v1.py", line 29, in execute
+    out = ns['compress' if operation == 'encode' else 'decompress'](data)
+  File "<packed-codec>", line 443, in compress
+  File "<packed-codec>", line 362, in compress_inner
+  File "<packed-codec>", line 436, in _finish
+  File "/home/x/deco/gamma/projects/enwiki9/tools/opcode_field_compact_observe_v1.py", line 92, in capture
+    captured['audit'] = audit.finish(ns, coder if coder.shadow is None else coder.shadow,
+                        ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                                     literal, state, tokens, chains, history)
+                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/x/deco/gamma/projects/enwiki9/tools/opcode_previous_word_observe_v1.py", line 62, in finish
+    parent = super().finish(ns, coder, literal, state, tokens, chains, reconstructed)
+  File "/home/x/deco/gamma/projects/enwiki9/tools/opcode_field_repair_cli_v1.py", line 96, in finish
+    table_hash(terminal, ('literal', i), table, tuple)
+    ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/x/deco/gamma/projects/enwiki9/tools/opcode_field_repair_cli_v1.py", line 36, in table_hash
+    for key in sorted(table, key=packed):
+               ~~~~~~^^^^^^^^^^^^^^^^^^^
+MemoryError
