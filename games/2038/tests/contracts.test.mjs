@@ -857,7 +857,9 @@ test("the selected lore inventory is complete and preserves era placement", asyn
 
   assert.match(clinic.newswire, /adaptive cybernetics/i);
   assert.match(clinic.newswire, /prescribed microbiomes/i);
-  assert.match(hazardShift.newswire, /gridlock streets, lifts, loading docks, pipes/i);
+  assert.match(hazardShift.newswire, /robotic maintenance operations.*dangerous human shifts/i);
+  assert.match(hazardShift.newswire, /responsibility for their failures.*operator/i);
+  assert.doesNotMatch(hazardShift.newswire, /Last Plumber Boom/i);
   assert.match(capacityCompact.flavorText, /governments remain at war/i);
   assert.match(regionalCapacity.flavorText, /algae reactors, fungal utility meshes/i);
   assert.match(mindTrust.newswire, /engineered roots, utility pipes, microbial sensors/i);

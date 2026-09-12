@@ -587,6 +587,16 @@ export class CoreEconomyMatch {
     if (piece) piece.tileId = parameters.destinationId;
   }
 
+  applyTrainingPermanentEffect(player, effect) {
+    if (effect.type === "scrutiny") this.addScrutiny(player, effect.amount);
+    else if (effect.type === "runway") this.spendRunway(player, effect.amount, {
+      cause: "research_training",
+      conversionEligible: true
+    });
+    else if (effect.type === "trust") this.addResource(player, "trust", effect.amount);
+    else throw new RangeError(`Unknown Training effect: ${effect.type}`);
+  }
+
   applyResolution(seat, decision) {
     const player = this.players[seat];
     const parameters = decision.parameters || {};
@@ -612,13 +622,15 @@ export class CoreEconomyMatch {
       const result = parameters.trainingResult ||
         this.resolveTrainingRun(seat, player, parameters);
       player.lastTrainingResult = result;
+      if (!result.permanentEffectsApplied) {
+        const effects = result.permanentEffects ?? [
+          { type: "trust", amount: result.trust },
+          { type: "runway", amount: result.runwaySpent || Number(result.protection === "scientific_method") },
+          { type: "scrutiny", amount: result.scrutiny }
+        ];
+        for (const effect of effects) this.applyTrainingPermanentEffect(player, effect);
+      }
       this.addResource(player, "capability", result.capability);
-      this.addResource(player, "trust", result.trust);
-      this.spendRunway(player, result.runwaySpent, {
-        cause: "research_training",
-        conversionEligible: true
-      });
-      this.addScrutiny(player, result.scrutiny);
       player.metrics.researchCapability.push(result.capability);
     } else if (decision.actionId === "build") {
       if (parameters.buildMode === "facility") {

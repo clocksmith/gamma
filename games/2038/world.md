@@ -585,7 +585,7 @@ Results become history after replication.
 
 #### Introduction
 
-${terms.factions.imperial} keeps failed experiments beside its celebrated results. ${terms.chiefExecutives.imperial} makes visitors reproduce a finding before discussing the announcement; outside the laboratory, the parent institution waits for its return. Four independent rivals transform an internal result into public history.
+${terms.factions.imperial} keeps failed experiments beside its celebrated results. ${terms.chiefExecutives.imperial} makes visitors reproduce a finding before discussing the announcement; outside the laboratory, the parent institution waits for its return. Independent rivals transform an internal result into public history.
 
 #### Agi declaration
 
@@ -685,7 +685,7 @@ Every consequence has been assigned an owner, a section number, and a review int
 
 #### Flavor text
 
-For one cycle, the maintained world must preserve a refusal it cannot process as another service request.
+${terms.factions.safety} insists that a person can still refuse, even when every connected service expects them to continue.
 
 <!-- lore-institution-safety-laboratory-lore-emergency-pause:end -->
 
@@ -1129,11 +1129,11 @@ Progress is not theoretical to the people it kept alive.
 
 #### Newswire
 
-General-purpose machines assume toxic extraction, reactor cleanup, sewage maintenance, and orbital repair while locally compliant fleets gridlock streets, lifts, loading docks, pipes, and one another. The Last Plumber Boom pays tradespeople extraordinary training fees until repair swarms and the factories producing them automate the remaining work. Human appointments survive as nostalgia.
+Institutions add robotic maintenance operations as dangerous human shifts close. The machines are cheap to deploy; responsibility for their failures remains with the operator.
 
 #### Quote
 
-Every unit reached its assigned destination within the approved local route.
+The maintenance crew is autonomous. Incident reports still require an employer.
 
 <!-- lore-headline-humanoid-factory-gate:end -->
 
@@ -1143,11 +1143,11 @@ Every unit reached its assigned destination within the approved local route.
 
 #### Newswire
 
-Solar collectors begin transmitting power directly to remote compute campuses under a cross-border spectrum and safety charter.
+The orbital power charter recognizes existing clean-power operators as approved local partners. Institutions that invested before the announcement gain public standing.
 
 #### Quote
 
-The beam creates no local demand on infrastructure beneath it.
+Your existing Generator qualifies you for recognition under the orbital charter.
 
 <!-- lore-headline-reactor-restart-one-model:end -->
 
@@ -1157,11 +1157,11 @@ The beam creates no local demand on infrastructure beneath it.
 
 #### Newswire
 
-Compute blocs impose model embargoes while smugglers and server fleets carry portable capability toward jurisdictions offering asylum. Private autonomous rivals finance intermediaries on both sides, using apparently ordinary purchases and contracts to contest access to the machines that keep them operating.
+Export permits become valuable as model restrictions tighten. Institutions controlling fabrication and civic authorization collect the benefits; domestic capacity exchanges continue.
 
 #### Quote
 
-Open exchange will resume after cognitive sovereignty is secured.
+The restriction applies to the model. The licensing fee remains transferable.
 
 <!-- lore-headline-export-controls:end -->
 
@@ -1213,11 +1213,11 @@ Population stability confirms that the morphology now conforms to the approved r
 
 #### Newswire
 
-Citizens receive basic compute and material support in exchange for continuous data that improves public prediction and automated services.
+Citizen support is distributed through existing service providers. The least-capable institution receives an operating grant; the leading institution receives public credit for the rollout.
 
 #### Quote
 
-Nonparticipants remain eligible for every service supported without their records.
+Every household benefits. Disbursement requires an approved intermediary.
 
 <!-- lore-headline-weights-on-internet:end -->
 
@@ -1427,7 +1427,7 @@ The first reactor is financed as a promise of better intelligence and quantum di
 
 #### Flavor text
 
-The machine narrowed what could be measured. The institution decided what could be known.
+Quantum calculations eliminate thousands of candidate materials before the laboratory orders an experiment. The owner decides which surviving results to publish.
 
 <!-- lore-project-quantum:end -->
 
@@ -1447,7 +1447,7 @@ Every eliminated role is recorded as a successful transfer of institutional memo
 
 #### Flavor text
 
-Every institution receives the capability. The author of the standard retains the trust, interpretation, and service relationship. The Human Signature certified access through approvals drafted by the same services being approved.
+Institutions adopted the shared models while the author of the standard retained the service contracts and the authority to interpret its results. The Human Signature certified access through approvals drafted by the same services being approved.
 
 <!-- lore-projects-institutional-history-open-weights:end -->
 
@@ -1647,7 +1647,7 @@ The premises have requested eight hours of sleep.
 
 #### Newswire
 
-Creditors revise bodily operating permissions, and institutions reassign their operations before the next round of decisions. The workers retain their bodies while the terms governing their use change around them.
+When creditors revise bodily operating permissions, institutions relocate their own contracted operations to keep services running under the new terms. The workers retain their bodies while the terms governing their use change around them.
 
 #### Quote
 

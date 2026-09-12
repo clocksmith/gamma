@@ -6,7 +6,7 @@ import { createInteractiveGame } from '../lab/runtime/create-interactive-game.js
 async function setup(count = 3) {
   const { match } = await createInteractiveGame({ playerCount: count, seed: 'personal-infrastructure' }, () => {});
   await match.beginRound([]);
-  const tiles = match.board.filter(t => t.category !== 'frontier');
+  const tiles = match.board.filter(t => !['frontier', 'cloud', 'chip'].includes(t.category));
   for (const p of match.players) Object.assign(p, { runway: 12, compute: 10, scrutiny: 0,
     facilities: [{id: `s${p.seat}-facility-1`, tileId: tiles[p.seat].instanceId, category: tiles[p.seat].category}] });
   match.choose = async (_policies, _seat, _stage, choices) => choices[0];

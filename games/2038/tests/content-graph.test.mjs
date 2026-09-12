@@ -341,7 +341,16 @@ test("Era overviews retain institutions and scenarios alongside authorized mecha
     const old = previous.contentGraph["components/factions.json"].factions.find(row => row.id === faction.id);
     assert.deepEqual(faction.ceo, old.ceo, "CEO remains the same faction character");
     assert.equal(faction.abilities.length, 1);
-    for (const ability of old.abilities) assert.ok([...faction.abilities, ...faction.lore].some(row => row.flavorText === ability.flavorText), "institutional fiction is preserved");
+    for (const ability of old.abilities) {
+      if (faction.id === "safety_laboratory" && ability.id === "emergency_pause") {
+        const historical = faction.lore.find(row => row.id === ability.id);
+        assert.ok(historical, "the historical refusal fiction is retained");
+        assert.match(historical.flavorText, /person can still refuse/);
+        assert.doesNotMatch(historical.flavorText, /For one cycle/);
+      } else {
+        assert.ok([...faction.abilities, ...faction.lore].some(row => row.flavorText === ability.flavorText), "unrevised institutional fiction is preserved");
+      }
+    }
   }
 });
 

@@ -273,7 +273,6 @@ test("Scrutiny overflow and Audit apply the same automatic Runway/Trust penalty"
   player.runway = 2;
   player.trust = 2;
   match.addScrutiny(player, 1);
-  await match.settlePendingScrutinyOverflow([], "scrutiny_overflow_test");
   assert.equal(player.runway, 1);
   assert.equal(player.trust, 2);
 
