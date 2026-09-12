@@ -71,3 +71,37 @@ Intent: preserved.
 Acceptance evidence: baseline observations, focused regressions, and captured check logs.
 Boundary effects: action legality/payment, Research effect order, Venture operation,
 and generated player instructions and selected lore.
+
+## Retained output receipts, 2026-09-12
+
+The source review of `6938d662` found that Gamma's global `*.log` ignore rule
+excluded the captured outputs from the published acceptance directory. The six
+original files survived locally. The project ignore rules now explicitly allow
+these six receipts to be included in the next commit and push; their bytes have
+not been changed or replaced with a reconstructed run.
+
+[Receipt index and SHA-256 checksums](receipts.json) records byte lengths,
+reported results, and provenance limits for each file:
+
+| Original output | Historical result |
+| --- | --- |
+| [Build](build.log) | Content, docs, and gallery generation completed |
+| [Focused regression tests](focused-tests.log) | 54 passed, 0 failed |
+| [Compatibility tests](compatibility-tests.log) | 3 passed, 0 failed |
+| [Initial full-suite attempt](full-tests.log) | 320 passed, 9 failed; retained, not acceptance |
+| [Final full-suite run](full-tests-final.log) | 329 passed, 0 failed |
+| [Project checks](project-check.log) | Content and project checks completed |
+
+The original logs carry the old `0.20.4` executable label where npm prints a
+package version. They do not embed a contemporaneous commit and complete tested
+source-tree fingerprint. The independently reviewed commit `6938d662` is a
+review reference, not a retroactively proven historical test identity. These
+checksums bind the retained output bytes, not those outputs to an immutable
+release. No test was rerun during this packaging repair.
+
+Release preparation remains open: declare a new identity under the semantic
+version rules in `docs/playtesting-and-evidence.md`, generate new executable and
+physical-candidate artifacts without overwriting historical versions, and
+exercise the four scenarios through the browser with that identity captured.
+The current September 8 declaration must not stand in for a sealed September 12
+release. Receipt packaging changes no mechanics and performs no deployment.

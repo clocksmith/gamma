@@ -1,0 +1,81 @@
+{
+  "schemaVersion": 1,
+  "artifactKind": "historical-validation-log-index",
+  "packagedDate": "2026-09-12",
+  "hashAlgorithm": "sha256",
+  "pathBase": ".",
+  "sourceIdentity": {
+    "independentlyReviewedCommit": "6938d662",
+    "reviewAuthority": "User-supplied source review",
+    "testedCommit": null,
+    "testedTreeFingerprint": null,
+    "limitation": "The retained logs do not contain a contemporaneous identity of the complete tested source tree. The reviewed commit is not asserted to be that historical test identity. Checksums identify the retained output bytes only."
+  },
+  "historicalReleaseLabels": {
+    "gameVersion": "0.20.4",
+    "rulesCandidateVersion": "0.12.0-rc.5-test"
+  },
+  "packagingScope": {
+    "originalLogBytesChanged": false,
+    "testsRerun": false,
+    "mechanicsChanged": false,
+    "newReleaseSealed": false,
+    "browserScenariosExercised": false,
+    "deployed": false
+  },
+  "artifacts": [
+    {
+      "path": "build.log",
+      "bytes": 562,
+      "sha256": "7d4596b9043427342688f724a6c2f08a13180a4512e4536f4f84daa6fa41e668",
+      "command": "npm run build:all",
+      "disposition": "reported-pass"
+    },
+    {
+      "path": "compatibility-tests.log",
+      "bytes": 780,
+      "sha256": "2cf08507263bafba1fd9738bffb663500a58ccd2429538f68c4ea1885745da64",
+      "disposition": "reported-pass",
+      "tests": 3,
+      "passed": 3,
+      "failed": 0
+    },
+    {
+      "path": "focused-tests.log",
+      "bytes": 11887,
+      "sha256": "555bc816aa5ae7a7d8a0a44082b1a26d271a4846849b2b6e852276626f5a040c",
+      "command": "node --test tests/rule-boundaries.test.mjs tests/gameplay-audit.test.mjs tests/infrastructure-progression.test.mjs tests/rules-review.test.mjs tests/engine.test.mjs",
+      "disposition": "reported-pass",
+      "tests": 54,
+      "passed": 54,
+      "failed": 0
+    },
+    {
+      "path": "full-tests.log",
+      "bytes": 82375,
+      "sha256": "8dd428331f6eac4610234ce0eb3470a79128a43bd3f2f3aeea660ce93bdc194d",
+      "command": "npm test",
+      "disposition": "retained-failed-attempt-not-acceptance",
+      "tests": 329,
+      "passed": 320,
+      "failed": 9
+    },
+    {
+      "path": "full-tests-final.log",
+      "bytes": 72034,
+      "sha256": "6ce3a4446a460cc850c727c88985f9fc97025702a4bb4a54ae5f6e26e357699f",
+      "command": "npm test",
+      "disposition": "reported-pass",
+      "tests": 329,
+      "passed": 329,
+      "failed": 0
+    },
+    {
+      "path": "project-check.log",
+      "bytes": 1460,
+      "sha256": "b6d38c96239f5d5347c421c4d8d63ef311a5a33868e2a00cad57b12f2d46fa94",
+      "command": "npm run check",
+      "disposition": "reported-pass"
+    }
+  ]
+}
