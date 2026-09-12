@@ -12,8 +12,8 @@ Unknown package cost stays unknown. Local subtotals are not complete submission 
 Populations are grouped by raw-input SHA256; compare matched controls in each receipt.
 ```
 
-- Result JSON files scanned: `345`
-- Roundtrip-passing rows: `145`
+- Result JSON files scanned: `350`
+- Roundtrip-passing rows: `147`
 - Active target score: `90,000,000` bytes (`9.0000000%`)
 
 ## Scope `1,000,000,000` Bytes
@@ -65,7 +65,7 @@ No roundtrip-passing result JSONs are present for this scope in this checkout.
 |---|---|---:|---:|---:|---:|---|---|
 | `opcode_event_parse_confirmation1m_q0_v1:K` | syntax opcode preprocessor | unknown | 259,468 | unknown | 2.075744 | true | `operations/provenance/opcode_event_parse_confirmation_terminal_20260909/K.json` |
 | `opcode_event_parse_confirmation1m_q0_v1:P` | syntax opcode preprocessor | unknown | 259,468 | unknown | 2.075744 | true | `operations/provenance/opcode_event_parse_confirmation_terminal_20260909/P.json` |
-| `opcode_event_parse_confirmation1m_q0_v1:D` | syntax opcode preprocessor | unknown | 259,540 | unknown | 2.07632 | true | `operations/provenance/opcode_event_parse_confirmation_terminal_20260909/D.json` |
+| `opcode_previous_word_confirmation1m_q0_v1:K` | syntax opcode preprocessor | unknown | 259,468 | unknown | 2.075744 | true | `operations/provenance/opcode_previous_word_confirmation_terminal_20260912/K.json` |
 
 
 ## Scope `250,000` Bytes
