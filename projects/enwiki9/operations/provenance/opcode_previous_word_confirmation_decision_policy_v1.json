@@ -1,0 +1,82 @@
+{
+  "arms": [
+    "P",
+    "K",
+    "D",
+    "S",
+    "release-D"
+  ],
+  "clarification_of": "Previous-word 1MB comparison decision rule; replaces conflated failure verdict before execution.",
+  "codec_change": false,
+  "dimensions": [
+    "compression",
+    "correctness_and_controls",
+    "repeatability",
+    "resource_compliance"
+  ],
+  "identity": "A_P = A_K byte for byte. Equal lengths alone never establish identity.",
+  "metrics": {
+    "final_packaging_delta": null,
+    "g_P": "len(A_P)-len(A_D)",
+    "g_S": "len(A_S)-len(A_D)",
+    "n_1": "g_P-110",
+    "n_2": "g_P-220",
+    "sensitivity_label": "historical source-cost sensitivities"
+  },
+  "missing": "Keep unknown results null. Retain complete measurements and all failed-attempt artifacts. A resource violation fails that execution resource gate without proving compression loss. Repeatability failure is recorded separately and blocks confirmation.",
+  "outcomes": [
+    {
+      "record": "Predictive confirmation on this cold 1MB sample.",
+      "when": "All required checks pass; g_P > 0 and g_S > 0"
+    },
+    {
+      "record": "No archive improvement.",
+      "when": "Valid complete comparison; g_P = 0"
+    },
+    {
+      "record": "Archive regression.",
+      "when": "Valid complete comparison; g_P < 0"
+    },
+    {
+      "record": "Parent improvement observed, but advantage over the delayed control is unconfirmed.",
+      "when": "Valid complete comparison; g_P > 0 and g_S <= 0"
+    },
+    {
+      "record": "Correctness or control failure; the affected compression inference is invalid.",
+      "when": "Inversion, synchronization, P/K identity or released-D parity fails"
+    },
+    {
+      "record": "Resource failure or incomplete execution; no complete confirmation verdict.",
+      "when": "Timeout, memory stop or missing required evidence"
+    }
+  ],
+  "owner": "root_confirmation",
+  "population": {
+    "bytes": 1000000,
+    "end_exclusive": 820000000,
+    "initialization": "cold",
+    "interval": "[819000000, 820000000)",
+    "offset": 819000000,
+    "prior_exposure": "Previously used by event-parse and parent mechanisms; separate from previous-word development and validation, not globally unseen."
+  },
+  "retained_files": {
+    "input": {
+      "bytes": 1000000,
+      "path": "operations/evidence/fixtures/opcode_event_parse_confirmation1m_v1.raw",
+      "sha256": "851329174ac0763701a0364fed26b58ba7c6847a3c0b8a737d2c5b88a24785d4"
+    },
+    "parent_archive": {
+      "bytes": 259468,
+      "path": "results/opcode_event_parse_confirmation1m_q0_v1/P.arc",
+      "sha256": "fe15e711394d7832f7deed1c597c0302b2078d612d62a5e3f2ef31c32aca1a0f"
+    },
+    "parent_audit": {
+      "bytes": 94857,
+      "path": "results/opcode_event_parse_confirmation1m_q0_v1/P-decode.audit.json",
+      "sha256": "76ca2e2059a564fdeaf2624537601c4df703bef2929d749fdc1c085d04dcc9f4"
+    }
+  },
+  "schema": "gamma.enwiki9.opcode-word-decision-policy.v1",
+  "state": "Compare authoritative predictive state at every declared boundary: parent pre-truth probability and transition streams, 4096-byte checkpoints, terminal tables/state, parse and update counts; within K/D/S also every reconstructed-byte word-history update and terminal words. P/K compare the parent projection; discarded K bookkeeping need not equal nonexistent P bookkeeping. Experimental/released D compare all state affecting future predictions, with matching complete available witnesses. These are hash witnesses, not full intermediate snapshots.",
+  "version": 1
+}
