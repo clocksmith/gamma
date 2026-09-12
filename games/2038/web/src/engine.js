@@ -209,6 +209,8 @@ export function simulateTrainingRun(config, seed, options = {}) {
   let capability = 0;
   let trust = 0;
   let scrutiny = 0;
+  let runwaySpent = 0;
+  const permanentEffects = [];
   let protectedDuplicate = false;
   let crashProtectable = false;
   const ordinaryDomains = new Set();
@@ -235,20 +237,28 @@ export function simulateTrainingRun(config, seed, options = {}) {
     } else if (card.type === "benchmark_leak") {
       capability += 2;
       scrutiny += 1;
+      permanentEffects.push({ type: "scrutiny", amount: 1 });
     } else if (card.type === "human_evaluation") {
       trust += 1;
+      permanentEffects.push({ type: "trust", amount: 1 });
       outcome = "human-evaluation";
       break;
     }
 
     if (duplicate) {
       crashProtectable = true;
-      if (options.scientificMethod) {
+      const overflow = Math.max(0,
+        scrutiny - (options.scrutinyHeadroom ?? config.playerSupply.scrutinyCubes));
+      const canPay = options.runway === undefined || options.runway - overflow >= 1;
+      if (options.scientificMethod && canPay) {
         protectedDuplicate = true;
+        runwaySpent = 1;
+        permanentEffects.push({ type: "runway", amount: 1 });
         outcome = "scientific-method-banked";
       } else {
         capability = Math.min(capability, Number(options.crashRetain || 0));
         scrutiny += 1;
+        permanentEffects.push({ type: "scrutiny", amount: 1 });
         outcome = "crashed";
       }
       break;
@@ -267,7 +277,8 @@ export function simulateTrainingRun(config, seed, options = {}) {
     capability: capability + (outcome === "crashed" ? 0 : Number(options.bankBonus || 0)),
     trust,
     scrutiny,
-    runwaySpent: 0,
+    runwaySpent,
+    permanentEffects,
     protection: protectedDuplicate ? "scientific_method" : null,
     protectedDuplicate,
     crashProtectable,
@@ -455,9 +466,12 @@ function resolveCore(config, state, actionId, destination, options) {
       bankBonus: Number(destination.category === "research"),
       crashRetain: player.factionId === "safety_laboratory" ? 1 : 0
     });
+    for (const effect of result.permanentEffects) {
+      if (effect.type === "scrutiny") addScrutiny(config, player, effect.amount);
+      else if (effect.type === "runway") player.runway -= effect.amount;
+      else addResource(config, player, effect.type, effect.amount);
+    }
     addResource(config, player, "capability", result.capability);
-    addResource(config, player, "trust", result.trust);
-    addScrutiny(config, player, result.scrutiny);
     state.metrics.researchCapabilityGains.push({
       round: state.round,
       cycle: state.cycle,

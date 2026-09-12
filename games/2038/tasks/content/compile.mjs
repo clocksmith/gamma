@@ -5,6 +5,7 @@ import { documentSection, documentSections, omitDocumentSections, playerContent,
 import { buildScenarioIndex } from "./scenario-index.mjs";
 import { assertNoReferences, resolveString, resolveValue } from "./references.mjs";
 import { readWorldDocument, parseComponentLore, worldPassages } from "./world-parser.mjs";
+import { deriveEraUnlocks } from "./era-unlocks.mjs";
 
 const projectRoot = resolve(import.meta.dirname, "../..");
 const args = process.argv.slice(2);
@@ -102,6 +103,7 @@ for (const [name, descriptor] of Object.entries(graph.contexts || {})) {
     )
   };
 }
+rawContexts.gameConfig = deriveEraUnlocks(rawContexts.gameConfig, rawContexts.projects.projects);
 variables = { ...variables, content: rawContexts };
 
 const excerpts = {};
@@ -181,8 +183,10 @@ for (const artifact of graph.artifacts) {
       const { worldCopy } = await readWorldDocument(sourcePath);
       resolved = resolveValue(playerContent(worldCopy), variables, [], trace);
     } else {
+      const raw = playerContent(await readJson(sourcePath));
       resolved = resolveValue(
-        playerContent(await readJson(sourcePath)),
+        artifact.source === graph.contexts.gameConfig.path
+          ? deriveEraUnlocks(raw, rawContexts.projects.projects) : raw,
         variables, [], trace
       );
     }

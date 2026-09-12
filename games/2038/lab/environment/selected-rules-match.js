@@ -181,8 +181,6 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
       )
       : [];
     this.tacticDiscard = [];
-    this.scrutinyChoicesEnabled = false;
-    this.pendingScrutinyOverflow = [];
     this.roundInitialized = false;
     this.firstAgiSeat = null;
 
@@ -464,12 +462,6 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
   }
 
   addScrutiny(player, amount) {
-    if (!this.scrutinyChoicesEnabled) {
-      const before = player.metrics.scrutinyAdded;
-      super.addScrutiny(player, amount);
-      player.history.cumulativeScrutiny += player.metrics.scrutinyAdded - before;
-      return;
-    }
     const before = player.metrics.scrutinyAdded;
     const added = Math.min(
       Math.max(0, amount),
@@ -478,26 +470,10 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
     player.scrutiny += added;
     player.metrics.scrutinyAdded += added;
     const overflow = Math.max(0, amount - added);
-    if (overflow) {
-      this.pendingScrutinyOverflow.push({
-        seat: player.seat,
-        count: overflow,
-        round: this.round,
-        cycle: this.cycle
-      });
+    for (let index = 0; index < overflow; index += 1) {
+      this.applyAutomaticPenalty(player, "scrutiny_overflow");
     }
     player.history.cumulativeScrutiny += player.metrics.scrutinyAdded - before;
-  }
-
-  async settlePendingScrutinyOverflow(policies, stage = "scrutiny_overflow") {
-    void policies;
-    while (this.pendingScrutinyOverflow.length) {
-      const pending = this.pendingScrutinyOverflow.shift();
-      const player = this.players[pending.seat];
-      for (let index = 0; index < pending.count; index += 1) {
-        this.applyAutomaticPenalty(player, stage);
-      }
-    }
   }
 
   prepareTrainingDrawPile() {
@@ -526,6 +502,8 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
         bankBonus: Number(parameters.destinationCategory === "research"),
         crashRetain: this.hasFactionAbility(player, "crash_retention") ? 1 : 0,
         scientificMethod: this.scientificMethodAvailable(player),
+        runway: player.runway,
+        scrutinyHeadroom: this.config.playerSupply.scrutinyCubes - player.scrutiny,
         domainGain: 1
       }
     );
@@ -546,6 +524,8 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
           bankBonus: Number(parameters.destinationCategory === "research"),
         crashRetain: this.hasFactionAbility(player, "crash_retention") ? 1 : 0,
         scientificMethod: this.scientificMethodAvailable(player),
+        runway: player.runway,
+        scrutinyHeadroom: this.config.playerSupply.scrutinyCubes - player.scrutiny,
         domainGain: 1
         }
       );
@@ -571,12 +551,20 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
 
   async resolveTrainingRunWithPolicies(policies, seat, parameters) {
     const player = this.players[seat];
+    const scrutinyBefore = player.scrutiny;
+    const permanentEffects = [];
+    const applyPermanentEffect = (type, amount) => {
+      const effect = { type, amount };
+      permanentEffects.push(effect);
+      this.applyTrainingPermanentEffect(player, effect);
+    };
     const ordinaryDomains = new Set();
     const revealedCards = [];
     const revealed = [];
     let provisionalCapability = 0;
     let trust = 0;
     let scrutiny = 0;
+    let runwaySpent = 0;
     let outcome = "banked";
     let protection = null;
     let crashProtectable = false;
@@ -618,8 +606,10 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
       } else if (card.type === "benchmark_leak") {
         provisionalCapability += 2;
         scrutiny += 1;
+        applyPermanentEffect("scrutiny", 1);
       } else if (card.type === "human_evaluation") {
         trust += 1;
+        applyPermanentEffect("trust", 1);
         outcome = "human-evaluation-banked";
         break;
       }
@@ -665,10 +655,15 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
           this.consumeTactic(player, "emergency_pause");
           player.tacticPlayedCycleKey = `${this.round}:${this.cycle}`;
         } else if (protection) {
+          if (protection === "scientific_method") {
+            applyPermanentEffect("runway", 1);
+            runwaySpent += 1;
+          }
           outcome = `${protection}-banked`;
         } else {
           provisionalCapability = Math.min(provisionalCapability, this.hasFactionAbility(player, "crash_retention") ? 1 : 0);
           scrutiny += 1;
+          applyPermanentEffect("scrutiny", 1);
           outcome = "crashed";
         }
         break;
@@ -701,7 +696,10 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
       capability: provisionalCapability + (outcome === "crashed" ? 0 : Number(parameters.destinationCategory === "research")),
       trust,
       scrutiny,
-      runwaySpent: 0,
+      runwaySpent,
+      scrutinyBefore,
+      permanentEffects,
+      permanentEffectsApplied: true,
       protectedDuplicate: Boolean(protection),
       protection,
       crashProtectable,
@@ -985,7 +983,6 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
   }
 
   async setup(policies) {
-    this.scrutinyChoicesEnabled = true;
     if (!this.rulesVariant.tacticsEnabled) return;
     for (const player of this.players) this.dealTactic(player);
   }
@@ -1587,14 +1584,10 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
         }
         const contractChoices = [];
         for (const rival of this.players.filter((candidate) => candidate.seat !== seat)) {
-          const range = 1;
           for (const left of player.facilities.filter((facility) =>
             facility.tileId === destination.instanceId
           )) for (const right of rival.facilities) {
-            const leftTile = this.board.find((tile) => tile.instanceId === left.tileId);
-            const rightTile = this.board.find((tile) => tile.instanceId === right.tileId);
-            const distance = axialDistance(leftTile, rightTile);
-            if (distance < 1 || distance > range) continue;
+            if (!this.areAdjacent(left.tileId, right.tileId)) continue;
             const base = {
               pieceId: piece.id,
               destinationId: destination.instanceId,
@@ -1668,10 +1661,26 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
     }
     if (result.actionId === "research") result.parameters.actualComputeCost = category === "cloud" ? 0 : 1;
     if (result.actionId === "deploy") result.parameters.computeCost = category === "consumer" || player.tacticModifiers.api_price_cut ? 0 : this.rulesVariant.deployComputeCost;
-    if (result.actionId === "build") {
-      result.parameters.actualRunwayCost = Math.max(0, this.rulesVariant.facilityCost - Number(category === "chip") - Number(this.hasFactionAbility(player, "industrial_velocity")));
-    }
     return result;
+  }
+
+  effectiveBuildCost(player, destination, facility, project) {
+    const baseFacilityCost = facility
+      ? Math.max(0, this.rulesVariant.facilityCost - Number(this.hasFactionAbility(player, "industrial_velocity")))
+      : 0;
+    const districtDiscount = Number(destination.category === "chip");
+    const facilityCost = Math.max(0, baseFacilityCost - districtDiscount);
+    const remainingDiscount = Math.max(0, districtDiscount - baseFacilityCost);
+    const effectiveProject = project ? {
+      ...project,
+      runway: Math.max(0, project.runway - remainingDiscount),
+      compute: Math.max(0, project.compute - Number(destination.category === "cloud"))
+    } : null;
+    return {
+      facilityCost,
+      project: effectiveProject,
+      actualRunwayCost: facilityCost + (effectiveProject?.runway || 0)
+    };
   }
 
   legalBuildResolutions(seat) {
@@ -1683,12 +1692,10 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
       const facilityChoice = facilityChoices
         .find(choice => choice.parameters.buildMode === "facility" &&
           choice.parameters.pieceId === piece.id && choice.parameters.destinationId === destination.instanceId);
-      const facilityCost = facilityChoice
-        ? this.adjustDecision(player, facilityChoice).parameters.actualRunwayCost : null;
       const decisions = [];
       for (const facility of [false, true]) {
-        if (facility && (facilityCost === null || player.runway < facilityCost)) continue;
-        const preview = { ...player, facilities: [...player.facilities], runway: player.runway - (facility ? facilityCost : 0) };
+        if (facility && !facilityChoice) continue;
+        const preview = { ...player, facilities: [...player.facilities] };
         const newFacility = { id: `s${seat}-facility-${player.facilities.length + 1}`,
           tileId: destination.instanceId, category: destination.category, powered: false };
         if (facility) preview.facilities.push(newFacility);
@@ -1706,15 +1713,16 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
             projects.push({ id: definition.id, hostId: host.id, runway: cost.runway, compute: cost.compute });
           }
         }
-        for (const project of projects) {
-          if (!facility && !project) continue;
-          const runway = (facility ? facilityCost : 0) + (project?.runway || 0);
+        for (const candidate of projects) {
+          if (!facility && !candidate) continue;
+          const cost = this.effectiveBuildCost(player, destination, facility, candidate);
+          const { project, actualRunwayCost: runway } = cost;
           if (runway > player.runway || (project?.compute || 0) > player.compute) continue;
           const parts = [facility ? "Facility" : null, project ? (project.id === "generator" ? this.config.powerSources.find(source => source.id === project.sourceId).name : this.projectDocument.projects.find(item => item.id === project.id).name) : null].filter(Boolean);
           decisions.push({
             decisionId: `build_${facility ? `facility_${destination.category}` : project?.id === "generator" ? `generator_${project.sourceId}` : project?.id}_${project?.id || "none"}_${project?.hostId || ""}_${piece.id}_${destination.instanceId}`,
             label: `Assign ${piece.id} to ${destination.name}: construct ${parts.join(" + ")} (${runway} Runway${project?.compute ? `, ${project.compute} Compute` : ""})`,
-            actionId: "build", parameters: { ...base, buildMode: "construction", facility, project, facilityCost: facility ? facilityCost : 0, actualRunwayCost: runway },
+            actionId: "build", parameters: { ...base, buildMode: "construction", facility, ...cost },
             consequences: { runway: -runway, compute: -(project?.compute || 0), ...(facility ? { facility: destination.category } : {}), ...(project ? { project: project.id, connectsLocalFacilities: ["generator", "fusion_demonstrator"].includes(project.id) } : {}) }
           });
         }
@@ -1767,14 +1775,7 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
   }
 
   canFormPartnership(left, right) {
-    const range = left.factionId === "coalition_lab" && this.round >= 3 ? 2 : 1;
-    return left.facilities.some((a) =>
-      right.facilities.some((b) => {
-        const leftTile = this.board.find((tile) => tile.instanceId === a.tileId);
-        const rightTile = this.board.find((tile) => tile.instanceId === b.tileId);
-        return axialDistance(leftTile, rightTile) <= range;
-      })
-    );
+    return this.hasAdjacentFacilities(left, right);
   }
 
   async negotiate(policies, seat, decision) {
@@ -1913,7 +1914,8 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
       decision = { ...decision, parameters: { ...decision.parameters,
         trainingResult: this.resolveTrainingRun(seat, player, decision.parameters || {}) } };
     }
-    const before = { runway: player.runway, scrutiny: player.scrutiny };
+    const before = { runway: player.runway,
+      scrutiny: decision.parameters?.trainingResult?.scrutinyBefore ?? player.scrutiny };
     this.beginRunwayConversionContext(player, decision);
     super.applyResolution(seat, decision);
     if (decision.actionId === "fund") {
@@ -1924,7 +1926,6 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
     if (decision.actionId === "research") {
       player.compute += 1 - (decision.parameters.actualComputeCost ?? 1);
       if (player.lastTrainingResult?.protection === "scientific_method") {
-        this.spendRunway(player, 1, { cause: "scientific_method", conversionEligible: true });
         this.recordFactionAbility(player, "scientific_method", { runwaySpent: 1, duplicatesProtected: 1, capabilityPreserved: player.lastTrainingResult.capability });
       }
       if (player.lastTrainingResult?.outcome === "crashed" && this.hasFactionAbility(player, "crash_retention")) {
@@ -1949,15 +1950,20 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
     const decision = clone(selectedDecision);
     if (decision.actionId === "research" && !decision.consequences?.noOp) {
       decision.parameters ||= {};
-      this.assignAgent(this.players[seat], decision.parameters);
-      decision.parameters.trainingResult = await this.resolveTrainingRunWithPolicies(
-        policies,
-        seat,
-        decision.parameters
-      );
+      const player = this.players[seat];
+      this.assignAgent(player, decision.parameters);
+      this.beginRunwayConversionContext(player, decision);
+      try {
+        decision.parameters.trainingResult = await this.resolveTrainingRunWithPolicies(
+          policies, seat, decision.parameters
+        );
+        this.applyResolution(seat, decision);
+      } finally {
+        this.endRunwayConversionContext(player);
+      }
+    } else {
+      this.applyResolution(seat, decision);
     }
-    this.applyResolution(seat, decision);
-    await this.settlePendingScrutinyOverflow(policies, "action_scrutiny_overflow");
     return decision;
   }
 
@@ -2168,7 +2174,6 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
       }
       for (const facility of player.facilities) facility.powered = state.locallyEligible.has(facility.id);
     }
-    await this.settlePendingScrutinyOverflow(policies, "production_generator_scrutiny_overflow");
 
     // Produce box: Facilities for every player, then Customer income, then
     // personal host upgrades. Initiative orders each sub-step.
@@ -2216,11 +2221,8 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
       const right = rightPlayer.facilities.find(
         (facility) => facility.id === contract.right.facilityId
       );
-      const range = 1;
       if (!left?.powered || !right?.powered) continue;
-      const leftTile = this.board.find((tile) => tile.instanceId === left.tileId);
-      const rightTile = this.board.find((tile) => tile.instanceId === right.tileId);
-      if (axialDistance(leftTile, rightTile) > range) continue;
+      if (!this.areAdjacent(left.tileId, right.tileId)) continue;
       const leftResource = this.facilityContractResource(right);
       const rightResource = this.facilityContractResource(left);
       if (leftResource) {
@@ -2238,11 +2240,6 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
           (rightPlayer.roundMetrics.activeNewJointVentures || 0) + 1;
       }
     }
-
-    await this.settlePendingScrutinyOverflow(
-      policies,
-      "production_scrutiny_overflow"
-    );
 
     for (const player of this.players) {
       const poweredFacilityIds = player.facilities
@@ -2558,14 +2555,10 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
     }
     const player = this.players[seat];
     const selectedAction = player.selectedAction;
-    const selectedActionId = selectedAction;
     const selectedCurrentlyResolvable = selectedAction
       ? this.selectedActionResolutions(seat).length > 0
       : true;
-    const offers = this.immediateTradeOffers(seat, timing).filter((offer) =>
-      !selectedActionId ||
-      this.provisionalTradeResolvesSelection(seat, offer, selectedActionId)
-    );
+    const offers = this.immediateTradeOffers(seat, timing);
     const decisions = [{
       decisionId: "trade_none",
       label: decisionLabel("tradeNone"),
@@ -2576,6 +2569,11 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
       }
     }];
     for (const offer of offers) {
+      const resolvesAfterTrade = !selectedAction ||
+        this.provisionalTradeResolvesSelection(seat, offer, selectedAction);
+      const blockedWarning = resolvesAfterTrade ? "" : ` ${decisionLabel("tradeActionRemainsBlocked", {
+        action: this.config.actions.find(action => action.id === selectedAction).name
+      })}`;
       decisions.push({
         decisionId: [
           "trade_offer",
@@ -2593,12 +2591,14 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
           partner: this.players[offer.partnerSeat].factionName,
           receiveAmount: offer.receiveAmount,
           receiveResource: offer.receiveResource
-        }),
+        }) + blockedWarning,
         actionId: "trade",
         parameters: offer,
         consequences: {
           timing,
-          enablesSelectedAction: !selectedCurrentlyResolvable
+          selectedActionCurrentlyResolvable: selectedCurrentlyResolvable,
+          selectedActionResolvableAfterTrade: resolvesAfterTrade,
+          enablesSelectedAction: !selectedCurrentlyResolvable && resolvesAfterTrade
         }
       });
     }
@@ -2622,6 +2622,7 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
     const allowedResources = new Set(["runway", "compute"]);
     if (
       !partner ||
+      partnerSeat === seat ||
       offer?.timing !== "before" ||
       !allowedResources.has(offer.giveResource) ||
       !allowedResources.has(offer.receiveResource) ||
@@ -2638,10 +2639,7 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
     ) && this.immediateTradeReceiveAmounts(seat, partner, offer.receiveResource).includes(
       offer.receiveAmount
     );
-    if (!resourcesAvailable) return false;
-    const selectedAction = this.players[seat].selectedAction;
-    if (!selectedAction) return resourcesAvailable;
-    return this.provisionalTradeResolvesSelection(seat, offer, selectedAction);
+    return resourcesAvailable;
   }
 
   completeImmediateTrade(seat, partnerSeat, offer) {
@@ -2783,7 +2781,6 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
     await this.produceAll(policies);
     applyAgiDeclarationScenario(this);
     await this.declareAgiAchievements(policies);
-    await this.settlePendingScrutinyOverflow(policies, "agi_scrutiny_overflow");
     await this.audit(policies);
     this.scoreMandate();
 
@@ -2809,9 +2806,6 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
   async playCycle(policies) {
     if (!this.roundInitialized) await this.beginRound(policies);
     await this.prepareHeadline(policies);
-    await this.settlePendingScrutinyOverflow(policies, "headline_scrutiny_overflow");
-    await this.settlePendingScrutinyOverflow(policies, "headline_choice_scrutiny_overflow");
-    await this.settlePendingScrutinyOverflow(policies, "faction_scrutiny_overflow");
 
     const selectionPackets = this.players.map((player) =>
       this.packet(player.seat, "select", this.legalActionSelections(player.seat))
@@ -2842,7 +2836,6 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
 
     for (const [turnInCycle, seat] of this.initiativeOrder().entries()) {
       await this.resolveSelectedSeat(policies, seat);
-      await this.settlePendingScrutinyOverflow(policies, "turn_scrutiny_overflow");
       this.reportProgress("turn", {
         completedSeat: seat,
         turnNumber: (this.config.rounds

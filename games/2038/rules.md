@@ -146,8 +146,10 @@ its chip explains the effect.
 - **${terms.resources.runway}:** money available to your institution.
 - **${terms.resources.compute}:** processing capacity spent on Research, Deployment, and projects.
 - **${terms.infrastructure.power}:** electricity supply that keeps Facilities operating; it is a local connection condition, never currency.
-- **${terms.playerTracks.capability}:** permanent model quality that unlocks Deployments and
-  ${terms.systems.agi}; spend it only when instructed.
+- **${terms.playerTracks.capability}:** performance your institution has established and can
+  deploy or present as evidence. Some gains reflect better systems; others reflect
+  results accepted before their limitations become clear. Banked Capability stays
+  on your track and unlocks Deployments and ${terms.systems.agi}; spend it only when instructed.
 
 ### ${terms.playerTracks.customers}
 
@@ -155,8 +157,10 @@ Each ${terms.playerTracks.customer} produces one ${terms.resources.runway} durin
 
 ### ${terms.playerTracks.trust}
 
-A zero-to-six track affecting regulation, Joint Ventures, safety, and whether
-the shared World Ending is Open. Zero ${terms.playerTracks.trust} does not
+A zero-to-six track that earns permanent Mandate at printed thresholds, meets
+Headline and recognized AGI requirements, breaks final-score ties, absorbs
+penalties when Runway is empty, and contributes to whether the shared World
+Ending is Open. Zero ${terms.playerTracks.trust} does not
 eliminate a player.
 
 **${terms.playerTracks.mandate}** is the score used to determine the winner (victory points).
@@ -315,8 +319,8 @@ ${terms.playerTracks.capability} earned during ${terms.actions.research} is **pr
 ${terms.playerTracks.scrutiny}, ${terms.playerTracks.trust}, and ${terms.resources.runway} changes resolved before a crash are not reversed.
 All revealed cards enter the discard pile after the run.
 
-A duplicate loses the provisional Capability, adds one Scrutiny, and ends the
-run.
+A repeated domain represents a run that has become too narrowly concentrated
+to support its claimed progress.
 Mirevanta's printed Scientific Method may pay Runway to bank a duplicate instead;
 charge only when that exception is used. Orisonix retains one revealed provisional
 Capability on a crash. A Research district grants one additional Capability on a
@@ -547,7 +551,7 @@ At the beginning of each cycle:
 4. **Observe:** apply the consequences and exhaust the action, even if no legal effect was possible. Observation adds no separate decision or reward.
 5. After everyone has acted, pass Initiative clockwise.
 
-#### Immediate resource trade
+#### Resource exchange: fixed one-for-one
 
 Immediately before resolving the selected Action, the active player may make
 one offer to one rival: give exactly one ${terms.resources.runway} for one
@@ -558,10 +562,11 @@ third-party claims are not legal. Adjust both players' track cubes
 immediately after acceptance.
 
 The selected Action remains committed whether the offer is accepted or rejected.
-Check affordability and targets after the trade; a successful trade may make a speculative selection resolvable. There is no post-action trade window.
+Check affordability and targets after the trade; a successful trade may make a speculative selection resolvable. The exchange is permitted even if the selected Action remains blocked and resolves only as an Agent assignment. There is no post-action trade window.
 
-Immediate resource trades require no ${terms.actions.influence} Action. Only ${terms.actions.influence} creates
-persistent Joint Ventures, lobbying effects, or ${terms.playerTracks.trust} manipulation.
+Resource exchanges require no ${terms.actions.influence} Action. ${terms.actions.influence}
+offers lobbying effects and is the only Core Action that creates persistent
+Joint Ventures. Other actions and Headlines can also change ${terms.playerTracks.trust}.
 
 ### Negotiation and paced play
 
@@ -607,8 +612,7 @@ continue directly to the Audit; there is no end-of-Era AGI bookkeeping.
 Risky actions add player-colored ${terms.playerTracks.scrutiny} to the opaque Audit bag. Each
 player has ten cubes. For each required cube when all ten are already in the
 bag, immediately lose one ${terms.resources.runway}; if none remains, lose one
-${terms.playerTracks.trust}. If neither remains, suffer no further loss. A depleted supply
-never makes a risky action free.
+${terms.playerTracks.trust}. If neither remains, suffer no further loss.
 
 The four-player base draws are two, three, four, and five. For other player
 counts, calculate each Era’s draw count as:
@@ -928,7 +932,7 @@ on the two faces. The eighteen chips are three per faction, not shuffled cards.
 ### Defined markers and effects
 
 - **Remove Scrutiny:** return up to the stated number of your cubes from the Audit bag.
-- **Connected/powered:** Facility 1, or an own Generator on the same or an adjacent district, evaluated on the current board.
+- **Connected/powered:** ${content.gameConfig.board.startingGridConnection.rule} Evaluate connections on the current board.
 - **Current Mandate:** keep the objective card visible. For a history-dependent objective, reset and use its printed cube record. Evaluate current-state objectives directly from visible pieces.
 - **Recognized AGI:** move that institution’s recognition cube to Recognized after payment. It remains there through Audit.
 - **Offline recovery:** an infrastructure change can immediately reconnect a Facility. Facilities never flip.
