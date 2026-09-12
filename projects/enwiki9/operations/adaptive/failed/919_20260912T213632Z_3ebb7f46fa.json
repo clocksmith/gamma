@@ -5,27 +5,66 @@
     "sha256": "sha256:39e8f3f629c6fd050cf17f5b6e1aa09d7956cb3c2980b5361642b01fb3671061"
   },
   "candidate_tree_sha256": "sha256:82b9f15d37fd3383603ea2eecafb7e27774819497ed8b53b3eec411f255882ed",
+  "elapsed_seconds": 963.93,
   "execution_guard": {
     "path": "tools/run_with_resource_guard_v3.py",
     "sha256": "sha256:044147f7ffe6922ea8dafd52fc3d4426077b20958adbcd421245ad41adcfc1e4"
   },
   "execution_mode": "discovery",
+  "execution_resources": {
+    "boot_id": "3ce46712-27bc-4199-8e48-e2b3d23926cb",
+    "budget": {
+      "cgroup_parent": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice",
+      "cpus": [
+        2
+      ],
+      "memory_bytes": 4294967296,
+      "scratch_bytes": 1073741824,
+      "swap_bytes": 0,
+      "wall_seconds": 4200
+    },
+    "cgroup_inode": 303898,
+    "cgroup_path": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/gamma-enwiki9-20260912T213632Z_3ebb7f46fa",
+    "cleanup_complete": true,
+    "cpu_enforcement": "taskset-and-sampled-affinity-guard",
+    "groups": [
+      {
+        "created": true,
+        "inode": 303898,
+        "kernel_cpuset": false,
+        "memory_bytes": 4294967296,
+        "path": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/gamma-enwiki9-20260912T213632Z_3ebb7f46fa"
+      }
+    ],
+    "guard_command_sha256": "e7b2e656a9477adf464b0279202a824d3c12e63f6d01b71477a1f789010eb7dc",
+    "guard_path": "run_logs/adaptive/20260912T213632Z_3ebb7f46fa.resources/guard.json",
+    "missing_diagnostics": [
+      "kernel cpuset controller is not delegated; taskset assignment and existing affinity guard remain active"
+    ],
+    "timing_authority": "diagnostic"
+  },
   "experiment": {
     "path": "operations/adaptive/experiments/opcode_previous_word_confirmation1m_q0_v3.json",
     "sha256": "sha256:101c7ab139de093228ab0ad64fc42fc6ae6fdc47a69adaf5f5e594205795cbbf"
   },
+  "finished_at": "2026-09-12T21:53:56+00:00",
   "gate_size": 1000000,
-  "held": true,
+  "held": false,
   "held_at": "2026-09-12T21:36:33+00:00",
   "hold_history": [
     {
       "at": "2026-09-12T21:36:33+00:00",
       "held": true,
       "reason": "Await publication and fresh admission for unchanged post-ENOSPC retry."
+    },
+    {
+      "at": "2026-09-12T21:37:52+00:00",
+      "held": false,
+      "reason": "Published source and fresh admission verified: operations/provenance/opcode_previous_word_confirmation1m_v3_admission_20260912.json"
     }
   ],
-  "hold_reason": "Await publication and fresh admission for unchanged post-ENOSPC retry.",
   "job_id": "20260912T213632Z_3ebb7f46fa",
+  "log_path": "run_logs/adaptive/20260912T213632Z_3ebb7f46fa.log",
   "priority": 80,
   "proposal": {
     "path": "operations/adaptive/proposals/developed/949_opcode_previous_word_confirmation1m_q0_v3.json",
@@ -33,6 +72,8 @@
   },
   "proposal_id": "opcode_previous_word_confirmation1m_q0_v3",
   "purpose": "diagnostic",
+  "released_at": "2026-09-12T21:37:52+00:00",
+  "residual_processes_terminated": true,
   "resource_budget": {
     "cgroup_parent": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice",
     "cpus": [
@@ -43,6 +84,7 @@
     "swap_bytes": 0,
     "wall_seconds": 4200
   },
+  "returncode": 1,
   "runner": {
     "path": "tools/opcode_previous_word_bounded_gate_v2.py",
     "sha256": "sha256:5b60da7d065e0a77139e34346acc0b609855f73436154ea5c84dfd8e46ed8491"
@@ -51,10 +93,14 @@
   "scratch_directories": [
     "results/opcode_previous_word_confirmation1m_q0_v3"
   ],
-  "state": "pending",
+  "started_at": "2026-09-12T21:37:52+00:00",
+  "state": "failed",
   "submitted_at": "2026-09-12T21:36:32+00:00",
   "tags": [],
   "timing_authority": "diagnostic",
   "tool": "tools/opcode_previous_word_bounded_gate_v2.py",
-  "tool_args": []
+  "tool_args": [],
+  "worker_pid": 2412057,
+  "worker_proc_start_ticks": 234521047,
+  "worker_started_at": "2026-09-12T21:37:52+00:00"
 }
