@@ -12,13 +12,14 @@ Reusable artifact helpers for new tools: [lib/artifacts.py](../lib/artifacts.py)
 The LibNC initializer teacher launcher exits before the first forward, gradient, update, or coded symbol; its source-bound experiment defines that boundary.
 The delayed-status helper's `enwiki9_delayed_status_latest.log` pointer is operational history, not present-host occupancy proof.
 
-Coverage: **1152 files** (33 .c, 76 .cpp, 1 .gdb, 1 .h, 1 .hpp, 1 .html, 1036 .py, 3 .sh).
+Coverage: **1154 files** (33 .c, 76 .cpp, 1 .gdb, 1 .h, 1 .hpp, 1 .html, 1038 .py, 3 .sh).
 
 | Tool | Purpose | Referenced contracts |
 |---|---|---|
 | [`tools/acs_prover_weighted_monoid.py`](../tools/acs_prover_weighted_monoid.py) | Exact weighted-summary monoid pilot for a finite XML lexical transducer. | none found |
 | [`tools/acs_prover_xml_state_endpoint_shadow.cpp`](../tools/acs_prover_xml_state_endpoint_shadow.cpp) | unknown; inspect source and the selected experiment | none found |
 | [`tools/acs_prover_xml_state_endpoint_shadow.py`](../tools/acs_prover_xml_state_endpoint_shadow.py) | Run the exact ACS-PROVER XML-state endpoint calibration shadow. | none found |
+| [`tools/alias_context_fixture_gate_v1.py`](../tools/alias_context_fixture_gate_v1.py) | Four-arm exact synthetic alias transfer, with independent process replay. | none found |
 | [`tools/amortized_block_fiber_gate.cpp`](../tools/amortized_block_fiber_gate.cpp) | unknown; inspect source and the selected experiment | none found |
 | [`tools/analyze_binary_weight_quantization.py`](../tools/analyze_binary_weight_quantization.py) | Measure row-wise binary and low-bit quantization of endpoint428 weights. | none found |
 | [`tools/analyze_kronecker_recurrent.py`](../tools/analyze_kronecker_recurrent.py) | Measure structured approximation spectra of exact endpoint428 weights. | none found |
@@ -934,6 +935,7 @@ Coverage: **1152 files** (33 .c, 76 .cpp, 1 .gdb, 1 .h, 1 .hpp, 1 .html, 1036 .p
 | [`tools/opcode_previous_word_bounded_gate_v1.py`](../tools/opcode_previous_word_bounded_gate_v1.py) | Frozen cold-population word transfer, with independent compact release replay. | [1](../operations/adaptive/experiments/opcode_previous_word_confirmation1m_q0_v2.json) |
 | [`tools/opcode_previous_word_bounded_observe_v1.py`](../tools/opcode_previous_word_bounded_observe_v1.py) | Isolated original word observer using the canonical bounded-memory audit. | [1](../operations/adaptive/experiments/opcode_previous_word_confirmation1m_q0_v2.json) |
 | [`tools/opcode_previous_word_bounded_release_corpus_v1.py`](../tools/opcode_previous_word_bounded_release_corpus_v1.py) | Fixed 1MB bounds around the unchanged previous-word codec and observer. | [1](../operations/adaptive/experiments/opcode_previous_word_confirmation1m_q0_v2.json) |
+| [`tools/opcode_previous_word_bounded_terminal_v1.py`](../tools/opcode_previous_word_bounded_terminal_v1.py) | Close the fixed confirmation from retained evidence; never execute a codec. | none found |
 | [`tools/opcode_previous_word_build_v1.py`](../tools/opcode_previous_word_build_v1.py) | Build a deterministic standalone previous-word literal package. | [5](../operations/adaptive/experiments/opcode_previous_word250k_q0_v1.json) |
 | [`tools/opcode_previous_word_compact_build_v1.py`](../tools/opcode_previous_word_compact_build_v1.py) | Materialize a new source-integrated realization of the measured word predictor. | [4](../operations/adaptive/experiments/opcode_previous_word_confirmation1m_q0_v1.json) |
 | [`tools/opcode_previous_word_compact_corpus_v1.py`](../tools/opcode_previous_word_compact_corpus_v1.py) | Reuse the bounded corpus CLI with the source-integrated P/K/D/S observer. | [3](../operations/adaptive/experiments/opcode_previous_word_confirmation1m_q0_v1.json) |
