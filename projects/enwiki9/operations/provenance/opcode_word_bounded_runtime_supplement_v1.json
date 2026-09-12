@@ -1,0 +1,23 @@
+{
+  "schema": "gamma.enwiki9.runtime-supplement.v1",
+  "candidate_id": "opcode_previous_word_confirmation1m_q0_v2",
+  "base_manifest": {
+    "path": "operations/provenance/opcode_previous_word_confirmation1m_v2_inputs.json",
+    "bytes": 51089,
+    "sha256": "54fbb4a29285b88900ebb7b6c85df0296d128f191e28fe592d2ca35dcb4bfbf6"
+  },
+  "additional_runtime_files": [
+    {
+      "path": "/usr/lib/python3.14/__pycache__/heapq.cpython-314.pyc",
+      "bytes": 18597,
+      "sha256": "1ca5940333268b77ade6e66a7c43c4b2ebc927d33653902d17dffc10eb2f091a"
+    },
+    {
+      "path": "/usr/lib/python3.14/heapq.py",
+      "bytes": 23440,
+      "sha256": "f2d644de141a488db66fc13608a794ef5f2d33162299f6751ea92c3cb0b4c9ea"
+    }
+  ],
+  "reason": "New audit helper imports heapq; explicitly freeze every additional observed standard-library file before admission. Built-in modules are part of the already bound interpreter.",
+  "codec_executed": false
+}
