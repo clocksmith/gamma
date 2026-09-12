@@ -1,0 +1,45 @@
+{
+  "candidate_id": "opcode_previous_word_confirmation1m_q0_v3",
+  "claimed_at": "2026-09-12T21:35:57+00:00",
+  "created_at": "2026-09-12T21:35:56+00:00",
+  "developed_at": "2026-09-12T21:35:57+00:00",
+  "evidence": [
+    {
+      "path": "operations/provenance/opcode_previous_word_bounded_terminal_20260912.json",
+      "sha256": "sha256:0b9011efe80c2206face82b8382a6b654f6791d12a7dc455bc1ae9e25c1e45ad"
+    }
+  ],
+  "expected_savings_bytes": 0,
+  "experiment": {
+    "path": "operations/adaptive/experiments/opcode_previous_word_confirmation1m_q0_v3.json",
+    "sha256": "sha256:101c7ab139de093228ab0ad64fc42fc6ae6fdc47a69adaf5f5e594205795cbbf"
+  },
+  "hypothesis": "The unchanged previous-word D improves P and delayed S on the fixed cold 1MB sample with exact reconstruction, state synchronization, repeatability and released-D parity.",
+  "interfaces_exposed": [
+    "Unchanged bounded audit and codec under a fresh output identity."
+  ],
+  "kill_condition": "Apply decision-policy v1: only valid complete archive comparisons establish no improvement or regression. Correctness/control failures invalidate affected inference; resource stops or missing evidence leave execution incomplete. Historical source-cost sensitivities do not gate predictive confirmation.",
+  "max_program_bytes": 110,
+  "mechanism_change": "other",
+  "mechanism_change_bonus": 0,
+  "mechanism_class": "endpoint",
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:e91ff20e92c3cac8acb0cbe5c79fc8e8a3b427d7e151245c8eecc52b1c32fa00",
+    "objectiveId": "gamma-enwiki9-hutter-90m-v3",
+    "objectivePath": "contracts/research/v3/objective-contract.json",
+    "targetScoreBytes": 90000000
+  },
+  "owner": "root_confirmation_retry",
+  "parent": "opcode_previous_word_confirmation1m_q0_v2",
+  "parent_proposal_id": null,
+  "priority": 50,
+  "promotion_condition": "Decision policy v1: all required checks and g_P>0,g_S>0 establish predictive confirmation only; n_1,n_2 are historical source-cost sensitivities.",
+  "proposal_id": "opcode_previous_word_confirmation1m_q0_v3",
+  "retired_neighborhoods": [],
+  "schema": "gamma.enwiki9.algorithm-proposal.v2",
+  "search_priority": 50,
+  "state": "developed",
+  "title": "Unchanged cold word comparison after host storage interruption"
+}
