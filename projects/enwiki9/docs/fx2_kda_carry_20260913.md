@@ -54,3 +54,28 @@ Final packaging remains unmeasured; historical `n_1` and `n_2` from the distinct
 previous-word study are not transplanted here. Full-corpus score is unknown,
 target 90,000,000 bytes (9.0000000%), retained counted forecast 109,389,323 bytes,
 distance +19,389,323 bytes. This gate grants zero full-corpus credit.
+
+The [closed result](../operations/provenance/fx2_kda_carry_terminal_20260913.json)
+records P/K = 33,429 bytes, D = 33,432 and S = 33,443. Thus `g_P=-3` and
+`g_S=11`: an archive regression against P, with a separate advantage over S.
+All four exact inverses, independent archive repeats, coder records and 98
+authoritative KDA reset-boundary comparisons per phase pass. P/K archives and
+states are byte-identical, and P matches the retained released parent archive
+and coder trace. Both native builds are byte-identical on this host and path.
+
+The closed guard reports all measurements complete and no violations, with
+6,890,565,632 peak memory bytes, 1,045,168,128 allocated scratch bytes and
+15,721,428,734 logical scratch bytes. All 15 phases finish and child cleanup
+completes. The [copy receipt](../operations/provenance/fx2_kda_carry_copies_20260913.json)
+verifies 241 retained files containing 1,041,916,697 bytes. The original compiler
+quota failure remains a separate infrastructure result.
+
+The scoped source/binary/options inventory adds 4,915 + 4,096 + 21 = 9,032
+bytes, yielding a local inventory delta of -9,035 bytes including archive loss.
+These are raw inventory costs, not a measured final submission package.
+The [validated reflection](../operations/adaptive/reflections/20260913T033732Z_ce8762eb52.json)
+retires only this fixed realization and records four native diagnostic ledger
+rows. Beating the rotated control does not establish an improvement over P.
+No retention sweep, larger gate, or full-corpus score credit follows.
+The [coordinate clarification](../operations/provenance/fx2_kda_carry_coordinate_clarification_v1.json)
+distinguishes the reflection's raw-byte measurement from modeled WRT symbols.
