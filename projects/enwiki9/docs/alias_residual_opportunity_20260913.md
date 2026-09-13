@@ -78,3 +78,45 @@ it supplies no native-integration or larger-run result. There is no RSI claim:
 this does not compare two research systems under matched search budgets.
 Full-corpus score remains unknown, forecast 109,389,323 bytes, target 90,000,000
 bytes and debt +19,389,323. Every observer result receives zero objective credit.
+
+## Closed census
+
+The [terminal receipt](../operations/provenance/alias_residual_opportunity_terminal_20260913.json)
+closes job `20260913T030121Z_133266cde6`. The parser encounters 172 page resets,
+11 recognized definitions, 10 installations, one duplicate and 29 mentions.
+There are no ambiguity or capacity rejections on this sample.
+
+| Observation | D: declared edges | S: rotated edges |
+| --- | ---: | ---: |
+| Eligible windows | 8 | 10 |
+| Distinct WRT bytes in window union | 64 | 80 |
+| Parent ideal bits in union | 191.547799 | 230.498901 |
+| Exact eight-byte donor matches | 0 | 0 |
+| Matching prefix bytes summed over windows | 0 | 3 |
+
+These are different opportunity sets, not g_P or g_S comparisons. D's available
+parent cost is only 23.943475 ideal bytes. Even perfect prediction confined to
+its union cannot save more ideal payload than that; no finite-archive bound or
+full-corpus extrapolation follows. Every D donor disagrees at the first byte.
+The fixed copy-continuation rule therefore has little support for integration.
+This does not reject more general semantic effects, broader definition coverage
+or transfer after a different declared history.
+
+Both independent census receipts match byte for byte, the WRT inverse equals
+the bound 1MB input, and all donor windows precede their targets. The guard has
+complete measurements, no violations and completed cleanup: peak memory
+171,896,832 bytes, peak scratch 86,016 bytes and elapsed 2.0321 seconds.
+Thirteen copied terminal artifacts match exactly. The retained parent archives
+and traces were read and verified; no new native compressor was run.
+
+The [validated reflection](../operations/adaptive/reflections/20260913T030121Z_133266cde6.json)
+supports the existence hypothesis and holds further integration on the small
+available opportunity and absent copied continuations. Its nonzero-opportunity
+predicate authorizes only pricing, not codec promotion. Two terminal-index rows
+retain D/S diagnostics. No actual archive saving, predictor gain, package size,
+search-system improvement or full-corpus result has been measured by this census.
+
+The isolated checkout's automatic report refresh encountered the historical
+release-symlink boundary already documented for the suffix completion. The
+canonical refresh subsequently returned zero for candidate audit and receipt
+normalization; this reporting issue changes no census or guard measurement.
