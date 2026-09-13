@@ -78,3 +78,40 @@ zero swap and a 900-second elapsed stop govern this separate execution. The
 native settings and population remain unchanged. Completed control evidence may
 close the archive comparison across executions, but cannot restore v2's missing
 terminal resource observations or establish internal predictive-state parity.
+
+The [completed evidence](../operations/provenance/wrt_suffix_alphabet_completed_evidence_20260912.json)
+now closes the two missing checks. All four archives reconstruct the input;
+independent repeats match byte for byte, and P/K archives are identical.
+
+| Arm | Archive bytes | Exact inverse | Independent byte repeat |
+| --- | ---: | --- | --- |
+| P | 44,958 | pass | pass |
+| K | 44,958 | pass | pass |
+| D | 46,123 | pass | pass |
+| S | 46,400 | pass in completion job | pass in completion job |
+
+Thus g_P=-1165 and g_S=277. This fixed suffix alphabet regresses against the
+original dictionary even before additional packaging costs; beating a shuffled
+alphabet is insufficient. The sorting helper is 875 source bytes, with final
+integrated package cost unmeasured. Historical source-cost sensitivities n_1
+and n_2 belong to the separate cold 1MB experiment and are not transferred here.
+
+The completion guard closes with all measurements present and no violations:
+9,232,740,352 peak memory bytes, 1,220,608 peak scratch bytes and 323.8687 elapsed
+seconds. Thirteen copied terminal artifacts match exactly. The original v2
+execution still has a resource failure and no terminal resource certificate.
+This combined archive evidence does not establish internal predictive-state
+parity, full package costs, resource qualification or a full-corpus score.
+
+The [validated completion reflection](../operations/adaptive/reflections/20260913T023359Z_eed9388d7c.json)
+holds promotion and rules out scaling this fixed alphabet based on the observed
+archive regression. Four original partial-execution ledger rows and one closed
+completion row keep the two resource histories separate. No further candidate
+is launched. The research lesson is to test information gain remaining after
+the strongest parent, while charging representation changes and their costs.
+
+The isolated checkout's automatic report refresh failed after the successful
+job because a historical release symlink resolved outside that checkout.
+Canonical `enwiki9_lab.py refresh` subsequently returned zero for both candidate
+audit and receipt normalization. This reporting failure changes no archive or
+resource measurement and does not replace the original ENOSPC history.

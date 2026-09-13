@@ -93,7 +93,7 @@ Gamma implementations. In particular:
 - A resource stop fails its execution gate. A state or inversion failure invalidates
   the affected compression inference. Neither supplies missing compression results.
 
-The active [suffix alphabet experiment](wrt_suffix_alphabet_20260912.md) tests
+The [suffix alphabet experiment](wrt_suffix_alphabet_20260912.md) tests
 concepts 18 and 45 while retaining the strong backend. Its original-dictionary
 pretraining control was fixed before execution. Exact archive/inverse/repeat
 checks are a bounded black-box screen; internal state witnesses and complete
@@ -114,3 +114,9 @@ not alter that frozen experiment or the previously closed cold 1MB comparison.
 [12]: https://arxiv.org/abs/2502.02631 "ParetoQ: Improving Scaling Laws in Extremely Low-bit LLM Quantization"
 [13]: https://www.microsoft.com/en-us/research/publication/logarithmic-regret-algorithms-online-convex-optimization/ "Logarithmic Regret Algorithms for Online Convex Optimization"
 [14]: https://pure.tue.nl/ws/portalfiles/portal/1383848/Metis122608.pdf "The Context-Tree Weighting Method: Basic Properties"
+
+The suffix screen has now closed its archive checks across two executions:
+g_P=-1165 and g_S=277 on the exposed opening250k. Its original filesystem failure
+remains separate from the successful control-completion resource gate. This is
+an observed loss for the fixed alphabet, not a rejection of morphological
+factorization or the other concepts. See the [completed evidence](../operations/provenance/wrt_suffix_alphabet_completed_evidence_20260912.json).
