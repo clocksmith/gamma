@@ -44,6 +44,10 @@ independent work. Carry the action to a recorded result or evidence-backed hando
 
 ## Creative discovery
 
+The user's [fifty compression research concepts](../docs/research_concepts_50.md)
+provide additional context for selecting and testing mechanisms. Use their source
+and evidence distinctions; they create no launch permission or score credit.
+
 Use this cycle when the [decision rules](../ADAPTIVE_WORKFLOW.md#choose-testing-mutation-or-exploration)
 call for exploration. These are design perspectives an agent can combine in its
 own reasoning. They do not require separate agents or external models. The role

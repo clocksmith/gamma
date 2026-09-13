@@ -20,6 +20,7 @@ python3 tools/enwiki9_lab.py start
 | [Ledger](ledger/README.md) · [browser](ledger/index.html) | Algorithms, mixes, lineage, jobs, results, and source links |
 | [Workbench](workbench/README.md) · [task prompts](workbench/PROMPTS.md) | Choose a concrete task or begin with “go” |
 | [Tool catalogue](docs/tooling_inventory.md) | Discover existing implementations and utilities |
+| [Research concepts](docs/research_concepts_50.md) | Fifty user-supplied concepts, source links and evidence boundaries |
 
 ```text
 programs/     candidate implementations and metadata
