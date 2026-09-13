@@ -1,0 +1,87 @@
+{
+  "schema": "gamma.enwiki9.exact-source-adapter-multi.v1",
+  "files": [
+    {
+      "source_path": "cpp_infer/src/opt/model_opt.cpp",
+      "source_sha256": "b49493ece5a3a135baa24eeef00d6aaf56335324d0c6355b7283e46736c9df8e",
+      "source_bytes": 18026,
+      "patched_sha256": "8f72bfabe734e419aa2dee784aed2700bfcedf362558af3d107b9bfbb2181d37",
+      "patched_bytes": 18168,
+      "replacements": [
+        {
+          "before": "#include \"model_opt.h\"",
+          "after": "#include \"model_opt.h\"\n#include \"gamma-kda-carry.h\""
+        },
+        {
+          "before": "  void begin(int64_t rope_position_offset) {\n    for (int i = 0; i < 9; i++) kda_layer_reset(kst[i]);",
+          "after": "  void begin(int64_t rope_position_offset) {\n    const char selected = gamma_kda_carry::arm();\n    for (int i = 0; i < 9; i++) gamma_kda_carry::reset(kst[i], selected);"
+        },
+        {
+          "before": "    rope_off = rope_position_offset;\n  }",
+          "after": "    rope_off = rope_position_offset;\n    gamma_kda_carry::audit(kst, t, rope_off);\n  }"
+        }
+      ]
+    },
+    {
+      "source_path": "src/coder/encoder.cpp",
+      "source_sha256": "ecd9a2f4f39553e3864c8e9c96c7b512edca46a6fbb3197beaccaf47b0a8fdce",
+      "source_bytes": 914,
+      "patched_sha256": "e1586dca62d959dff81f156512d37a22a5e2abbb332c77962e0e8a0a0c646d29",
+      "patched_bytes": 1108,
+      "replacements": [
+        {
+          "before": "#include \"encoder.h\"",
+          "after": "#include \"encoder.h\"\n#include \"gamma-coder-trace.h\""
+        },
+        {
+          "before": "  const unsigned int p = Discretize(p_->Predict());",
+          "after": "  const float gamma_probability = p_->Predict();\n  const unsigned int p = Discretize(gamma_probability);\n  gamma_fx2_trace::Record gamma_record(gamma_probability, p, x1_, x2_);"
+        },
+        {
+          "before": "    x2_ = (x2_ << 8) + 255;\n  }\n}\n\nvoid Encoder::Flush()",
+          "after": "    x2_ = (x2_ << 8) + 255;\n  }\n  gamma_record.Finish(bit, x1_, x2_);\n}\n\nvoid Encoder::Flush()"
+        }
+      ]
+    },
+    {
+      "source_path": "src/coder/decoder.cpp",
+      "source_sha256": "1bae2c108906625fb124f3fc602d1d59d814e5a415d963ab74246bf474e8bae9",
+      "source_bytes": 832,
+      "patched_sha256": "cfed5d718bc6d1e797bb7c22be769040a7407086baf7918fcb522fd558c25258",
+      "patched_bytes": 1026,
+      "replacements": [
+        {
+          "before": "#include \"decoder.h\"",
+          "after": "#include \"decoder.h\"\n#include \"gamma-coder-trace.h\""
+        },
+        {
+          "before": "  const unsigned int p = Discretize(p_->Predict());",
+          "after": "  const float gamma_probability = p_->Predict();\n  const unsigned int p = Discretize(gamma_probability);\n  gamma_fx2_trace::Record gamma_record(gamma_probability, p, x1_, x2_);"
+        },
+        {
+          "before": "  return bit;",
+          "after": "  gamma_record.Finish(bit, x1_, x2_);\n  return bit;"
+        }
+      ]
+    }
+  ],
+  "added_files": [
+    {
+      "source": {
+        "path": "lib/fx2_kda_carry_v1.hpp",
+        "bytes": 2026,
+        "sha256": "a854d51f135769a8365ef39feeb479838812b40e9d81f83b9dd8d254549b77fe"
+      },
+      "target": "cpp_infer/src/opt/gamma-kda-carry.h"
+    },
+    {
+      "source": {
+        "path": "tools/fx2_coder_trace_v1.hpp",
+        "bytes": 2359,
+        "sha256": "d72dfa104668e2f3138e41e7bdfd54c8ad634d00d64338a627dbf1835656a11b"
+      },
+      "target": "src/coder/gamma-coder-trace.h"
+    }
+  ],
+  "scope": "Only KDA article/piece reset law changes. All other model updates, weights, frontend and coder remain fixed."
+}
