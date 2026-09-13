@@ -12,7 +12,7 @@ Reusable artifact helpers for new tools: [lib/artifacts.py](../lib/artifacts.py)
 The LibNC initializer teacher launcher exits before the first forward, gradient, update, or coded symbol; its source-bound experiment defines that boundary.
 The delayed-status helper's `enwiki9_delayed_status_latest.log` pointer is operational history, not present-host occupancy proof.
 
-Coverage: **1166 files** (33 .c, 76 .cpp, 1 .gdb, 1 .h, 1 .hpp, 1 .html, 1050 .py, 3 .sh).
+Coverage: **1168 files** (33 .c, 76 .cpp, 1 .gdb, 1 .h, 1 .hpp, 1 .html, 1052 .py, 3 .sh).
 
 | Tool | Purpose | Referenced contracts |
 |---|---|---|
@@ -20,6 +20,8 @@ Coverage: **1166 files** (33 .c, 76 .cpp, 1 .gdb, 1 .h, 1 .hpp, 1 .html, 1050 .p
 | [`tools/acs_prover_xml_state_endpoint_shadow.cpp`](../tools/acs_prover_xml_state_endpoint_shadow.cpp) | unknown; inspect source and the selected experiment | none found |
 | [`tools/acs_prover_xml_state_endpoint_shadow.py`](../tools/acs_prover_xml_state_endpoint_shadow.py) | Run the exact ACS-PROVER XML-state endpoint calibration shadow. | none found |
 | [`tools/alias_context_fixture_gate_v1.py`](../tools/alias_context_fixture_gate_v1.py) | Four-arm exact synthetic alias transfer, with independent process replay. | none found |
+| [`tools/alias_residual_opportunity_gate_v1.py`](../tools/alias_residual_opportunity_gate_v1.py) | Bounded repeated census over an existing exact strong-parent trace. | [1](../operations/adaptive/experiments/alias_residual_opportunity1m_q0_v1.json) |
+| [`tools/alias_residual_opportunity_v1.py`](../tools/alias_residual_opportunity_v1.py) | Article-local alias opportunity census; no changed predictor or codec claim. | [1](../operations/adaptive/experiments/alias_residual_opportunity1m_q0_v1.json) |
 | [`tools/amortized_block_fiber_gate.cpp`](../tools/amortized_block_fiber_gate.cpp) | unknown; inspect source and the selected experiment | none found |
 | [`tools/analyze_binary_weight_quantization.py`](../tools/analyze_binary_weight_quantization.py) | Measure row-wise binary and low-bit quantization of endpoint428 weights. | none found |
 | [`tools/analyze_kronecker_recurrent.py`](../tools/analyze_kronecker_recurrent.py) | Measure structured approximation spectra of exact endpoint428 weights. | none found |
@@ -1150,7 +1152,7 @@ Coverage: **1166 files** (33 .c, 76 .cpp, 1 .gdb, 1 .h, 1 .hpp, 1 .html, 1050 .p
 | [`tools/wrt_epoch_frozen_endpoint.cpp`](../tools/wrt_epoch_frozen_endpoint.cpp) | Emit fixed post-warmup byte-context endpoints derived from causal WRT history. | none found |
 | [`tools/wrt_event_context_tree_residual_screen.cpp`](../tools/wrt_event_context_tree_residual_screen.cpp) | Causal residual context tree over completed WRT events and an exact P1 stream. | none found |
 | [`tools/wrt_event_srstc_trace.py`](../tools/wrt_event_srstc_trace.py) | Emit a causal semantic-retrieval endpoint over exact WRT events. Each completed WRT event is indexed under a compact sketch of the raw bytes and Wiki state that preceded it. At a later event, an identical decoder-rebuilt sketch retrieves prior encoded continuations. The candidate probability uses only their already-decoded prefixes and is paired with the frozen endpoint428 probability stream for exact downstream replay. | none found |
-| [`tools/wrt_exact.py`](../tools/wrt_exact.py) | Exact decoder for FX2/CMIX21 WRT text-segment stores. The parser emits one event only after all stored bytes for that event are available. Consumers may therefore replay events causally by releasing an event at its ``end`` stream offset. | [5](../operations/adaptive/experiments/fx2_causal_field_opportunity_q0_v1.json) |
+| [`tools/wrt_exact.py`](../tools/wrt_exact.py) | Exact decoder for FX2/CMIX21 WRT text-segment stores. The parser emits one event only after all stored bytes for that event are available. Consumers may therefore replay events causally by releasing an event at its ``end`` stream offset. | [6](../operations/adaptive/experiments/alias_residual_opportunity1m_q0_v1.json) |
 | [`tools/wrt_explicit_copy_mdl_screen.py`](../tools/wrt_explicit_copy_mdl_screen.py) | Upper-bound MDL screen for causal explicit copies in an exact WRT stream. | none found |
 | [`tools/wrt_hashed_residual_online_screen.cpp`](../tools/wrt_hashed_residual_online_screen.cpp) | Causal payload-free hashed residual SSE over exact FX2 probabilities. | none found |
 | [`tools/wrt_hierarchical_phase_residual_screen.cpp`](../tools/wrt_hierarchical_phase_residual_screen.cpp) | Causal hierarchical WRT event-phase residual SSE over exact FX2 probabilities. | none found |
