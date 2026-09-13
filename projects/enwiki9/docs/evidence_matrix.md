@@ -14,8 +14,8 @@ Compare identical population hashes; equal input sizes alone do not define match
 
 ## Proof Boundary
 
-- Result JSON files scanned: `351`
-- Roundtrip-passing rows: `147`
+- Result JSON files scanned: `357`
+- Roundtrip-passing rows: `152`
 - Verified full `1G` rows in this checkout: `0`
 - Active target score: `90,000,000` bytes (`9.0000000%`)
 - `9.0000000%` target reached by this matrix: `False`
@@ -56,9 +56,9 @@ Compare identical population hashes; equal input sizes alone do not define match
 | `opcode_field_confirmation1m_q0_v1:D` | `20b4d8d7e140` | syntax opcode preprocessor | 1,000,000 | unknown | 255,828 | unknown | 2.046624 | true | `operations/provenance/opcode_field_confirmation_terminal_20260908/D.json` |
 | `opcode_field_confirmation1m_q0_v1:K` | `20b4d8d7e140` | syntax opcode preprocessor | 1,000,000 | unknown | 257,369 | unknown | 2.058952 | true | `operations/provenance/opcode_field_confirmation_terminal_20260908/K.json` |
 | `opcode_field_confirmation1m_q0_v1:P` | `20b4d8d7e140` | syntax opcode preprocessor | 1,000,000 | unknown | 257,369 | unknown | 2.058952 | true | `operations/provenance/opcode_field_confirmation_terminal_20260908/P.json` |
-| `opcode_event_parse_confirmation1m_q0_v1:K` | `851329174ac0` | syntax opcode preprocessor | 1,000,000 | unknown | 259,468 | unknown | 2.075744 | true | `operations/provenance/opcode_event_parse_confirmation_terminal_20260909/K.json` |
-| `opcode_event_parse_confirmation1m_q0_v1:P` | `851329174ac0` | syntax opcode preprocessor | 1,000,000 | unknown | 259,468 | unknown | 2.075744 | true | `operations/provenance/opcode_event_parse_confirmation_terminal_20260909/P.json` |
-| `opcode_previous_word_confirmation1m_q0_v1:K` | `851329174ac0` | syntax opcode preprocessor | 1,000,000 | unknown | 259,468 | unknown | 2.075744 | true | `operations/provenance/opcode_previous_word_confirmation_terminal_20260912/K.json` |
+| `opcode_previous_word_confirmation1m_q0_v4:D` | `851329174ac0` | syntax opcode preprocessor | 1,000,000 | unknown | 258,731 | unknown | 2.069848 | true | `operations/provenance/opcode_previous_word_confirmation_v4_terminal_20260912/D.json` |
+| `opcode_previous_word_confirmation1m_q0_v4:release-D` | `851329174ac0` | syntax opcode preprocessor | 1,000,000 | unknown | 258,731 | unknown | 2.069848 | true | `operations/provenance/opcode_previous_word_confirmation_v4_terminal_20260912/release-D.json` |
+| `opcode_previous_word_confirmation1m_q0_v4:S` | `851329174ac0` | syntax opcode preprocessor | 1,000,000 | unknown | 259,044 | unknown | 2.072352 | true | `operations/provenance/opcode_previous_word_confirmation_v4_terminal_20260912/S.json` |
 
 ## Top Score Rows At 250,000 Bytes
 

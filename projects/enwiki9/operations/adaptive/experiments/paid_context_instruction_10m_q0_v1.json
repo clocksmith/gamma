@@ -1,0 +1,164 @@
+{
+  "schema": "gamma.enwiki9.adaptive-experiment-contract.v1",
+  "objective": {
+    "objectiveId": "gamma-enwiki9-hutter-90m-v3",
+    "objectiveDigest": "sha256:e91ff20e92c3cac8acb0cbe5c79fc8e8a3b427d7e151245c8eecc52b1c32fa00",
+    "objectivePath": "contracts/research/v3/objective-contract.json",
+    "targetScoreBytes": 90000000,
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc"
+  },
+  "experimentId": "paid_context_instruction_10m_q0_v1",
+  "proposalId": "paid_context_instruction_10m_q0_v1",
+  "status": "frozen",
+  "registrationTiming": "prospective",
+  "evidenceClass": "diagnostic",
+  "objectiveCreditBytes": 0,
+  "parent": null,
+  "hypothesis": {
+    "claim": "A shared global distribution plus paid per-context favored-byte instructions can overcome the model-description cost that defeated the retained two-pass count tables on opening10M.",
+    "falsification": "Reject this fixed representation if even priced ideal payload plus actual model bytes exceeds the retained counted parent, with candidate program/frontend costs set optimistically to zero. Passing requires a finite codec next; this screen never establishes archive gain."
+  },
+  "changedMechanism": "Order-six implicit context keys reconstructed on first decoded occurrence; transmit a one-bit instruction flag, then favored byte and four-bit mixture coefficient when active, instead of transmitting independent context count tables.",
+  "invariants": [
+    "Lenses 1 and 10 deliberately selected: shared byte-generating probability instructions and exact model-description compression.",
+    "One fixed order6, add-one global distribution, and k/16 spike coefficients k=1..15; no corpus-dependent parameter search beyond explicitly charged per-context instructions.",
+    "Model selection may use the complete input because every selected instruction is transmitted before its prediction is used; context keys are reconstructed from already decoded symbols.",
+    "Charge actual packed descriptor bytes, global frequencies, raw length and descriptor length. Exclude finite entropy termination and source/frontend only to form an explicitly optimistic diagnostic.",
+    "Exactly two independent replays; same numeric and model hashes required. No new corpus, large model, or dependency installation. No full-score credit."
+  ],
+  "controls": [
+    {
+      "id": "P",
+      "role": "comparator",
+      "definition": "Retained same-opening10M strong parent: archive1634500 and counted program261125, total1895625; no cold1MB research parent."
+    },
+    {
+      "id": "U",
+      "role": "comparator",
+      "definition": "Same global add-one byte distribution without context instructions."
+    },
+    {
+      "id": "D",
+      "role": "treatment",
+      "definition": "Paid first-encounter context instructions, independently model-roundtripped."
+    },
+    {
+      "id": "S",
+      "role": "negative",
+      "definition": "Rotate the chosen favored byte by one modulo256 with identical instruction costs."
+    }
+  ],
+  "population": {
+    "unit": "retained WRT byte",
+    "scopeBytes": 10000000,
+    "scopeSymbols": 6251857,
+    "selection": "Complete already-exposed opening10M retained transform, including five-byte store header; development diagnostic, no heldout claim.",
+    "coordinate": "Raw [0, 10000000); encoded store [0, 6251857)."
+  },
+  "causalBoundary": {
+    "availableInformation": [
+      "Already decoded context keys; transmitted global counts and first-occurrence instructions."
+    ],
+    "forbiddenInformation": [
+      "Free per-context oracle choices, omitted dictionary/source in any claimed complete score, raw future bytes supplied to the decoder."
+    ]
+  },
+  "inputs": [
+    {
+      "id": "bound-0",
+      "path": "tools/paid_context_instruction_screen_v1.py",
+      "sha256": "sha256:04f120bf35217c6cf94c2b46835933454bb125c658b393caf056bf88441a43aa"
+    },
+    {
+      "id": "bound-1",
+      "path": "tools/paid_context_instruction_gate_v1.py",
+      "sha256": "sha256:8bc3eb709e774c97ec5330acde5080b6805a4f0912f1375cfa0d8f7c70df8d1e"
+    },
+    {
+      "id": "bound-2",
+      "path": "results/endpoint428_pair_layer0_online_native_trace_10m_v1/wrt_store.bin",
+      "sha256": "sha256:867c23e652052268017d4bda543ea86c6b6af7efdaa0d87175997e7fb19a3a5b"
+    },
+    {
+      "id": "bound-3",
+      "path": "results/endpoint428_pair_layer0_runtime_successor_minified_package_v1/receipt.json",
+      "sha256": "sha256:1eef5aabab15e62a792d5428a54bc593f18894df8c66d4cfc69867158fe123b0"
+    },
+    {
+      "id": "bound-4",
+      "path": "results/endpoint428_pair_layer0_runtime_successor_10m_v1/receipt.json",
+      "sha256": "sha256:27689e5c6849dc986c997f7509636cd3c60dca352598afa275328b9c7170b18d"
+    },
+    {
+      "id": "bound-5",
+      "path": "results/parallel_mdl_block_oracle_10m_v1/decision.json",
+      "sha256": "sha256:1283f357363e19705d6142799446286ecba455511909fcd3e2c2ec96721d07cc"
+    },
+    {
+      "id": "bound-6",
+      "path": "results/parallel_mdl_context_tree_oracle_10m_v1/decision.json",
+      "sha256": "sha256:6fa00ae022e41eecaed66c60ad9ec18093b496c622bb520d72cf6438d35beeaa"
+    },
+    {
+      "id": "bound-7",
+      "path": "operations/adaptive/exclusions/parallel_mdl_model_description_v1.json",
+      "sha256": "sha256:404b281c4911806846a497969421bd0ce25043cbd9bf24364ecd748b3b70eefe"
+    }
+  ],
+  "budget": {
+    "expectedGrossSavingsBytes": 0,
+    "maximumAddedPackageBytes": 32768,
+    "expectedNetSavingsBytes": -32768
+  },
+  "search": {
+    "expectedTransferRetention": 0,
+    "expectedRuntimeRatio": 1,
+    "expectedMemoryRatio": 1,
+    "uncertaintyRisk": 1,
+    "interactionRisk": 1
+  },
+  "measurements": [
+    {
+      "id": "optimistic_gain_over_counted_parent",
+      "unit": "bytes",
+      "definition": "1895625 minus priced ideal payload and actual packed model bytes; excluded costs remain explicit."
+    },
+    {
+      "id": "repeatability_pass",
+      "unit": "boolean",
+      "definition": "Two independent result and model files are byte-identical."
+    }
+  ],
+  "promotionPredicates": [
+    {
+      "id": "target-density-screen",
+      "measurement": "optimistic_gain_over_counted_parent",
+      "operator": "gt",
+      "threshold": 193893.23
+    },
+    {
+      "id": "repeatability",
+      "measurement": "repeatability_pass",
+      "operator": "eq",
+      "threshold": true
+    }
+  ],
+  "killPredicates": [
+    {
+      "id": "nonpaying-even-free-code",
+      "measurement": "optimistic_gain_over_counted_parent",
+      "operator": "lt",
+      "threshold": 0
+    }
+  ],
+  "outputs": [
+    "results/paid_context_instruction_10m_q0_v1/decision.json",
+    "results/paid_context_instruction_10m_q0_v1/first.json",
+    "results/paid_context_instruction_10m_q0_v1/repeat.json",
+    "results/paid_context_instruction_10m_q0_v1/first.model",
+    "results/paid_context_instruction_10m_q0_v1/repeat.model"
+  ],
+  "outputManifestPolicy": "complete-result-artifacts-v1",
+  "generatedUtc": "2026-09-13T00:16:42.680642+00:00"
+}

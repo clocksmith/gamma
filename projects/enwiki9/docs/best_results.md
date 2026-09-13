@@ -12,8 +12,8 @@ Unknown package cost stays unknown. Local subtotals are not complete submission 
 Populations are grouped by raw-input SHA256; compare matched controls in each receipt.
 ```
 
-- Result JSON files scanned: `351`
-- Roundtrip-passing rows: `147`
+- Result JSON files scanned: `357`
+- Roundtrip-passing rows: `152`
 - Active target score: `90,000,000` bytes (`9.0000000%`)
 
 ## Scope `1,000,000,000` Bytes
@@ -63,9 +63,9 @@ No roundtrip-passing result JSONs are present for this scope in this checkout.
 
 | Program / arm | Mechanism | Local subtotal | Archive | Program bytes | b/B | Determinism | Result |
 |---|---|---:|---:|---:|---:|---|---|
-| `opcode_event_parse_confirmation1m_q0_v1:K` | syntax opcode preprocessor | unknown | 259,468 | unknown | 2.075744 | true | `operations/provenance/opcode_event_parse_confirmation_terminal_20260909/K.json` |
-| `opcode_event_parse_confirmation1m_q0_v1:P` | syntax opcode preprocessor | unknown | 259,468 | unknown | 2.075744 | true | `operations/provenance/opcode_event_parse_confirmation_terminal_20260909/P.json` |
-| `opcode_previous_word_confirmation1m_q0_v1:K` | syntax opcode preprocessor | unknown | 259,468 | unknown | 2.075744 | true | `operations/provenance/opcode_previous_word_confirmation_terminal_20260912/K.json` |
+| `opcode_previous_word_confirmation1m_q0_v4:D` | syntax opcode preprocessor | unknown | 258,731 | unknown | 2.069848 | true | `operations/provenance/opcode_previous_word_confirmation_v4_terminal_20260912/D.json` |
+| `opcode_previous_word_confirmation1m_q0_v4:release-D` | syntax opcode preprocessor | unknown | 258,731 | unknown | 2.069848 | true | `operations/provenance/opcode_previous_word_confirmation_v4_terminal_20260912/release-D.json` |
+| `opcode_previous_word_confirmation1m_q0_v4:S` | syntax opcode preprocessor | unknown | 259,044 | unknown | 2.072352 | true | `operations/provenance/opcode_previous_word_confirmation_v4_terminal_20260912/S.json` |
 
 
 ## Scope `250,000` Bytes
