@@ -1,0 +1,225 @@
+{
+  "schema": "gamma.enwiki9.adaptive-experiment-contract.v1",
+  "objective": {
+    "objectiveId": "gamma-enwiki9-hutter-90m-v3",
+    "objectiveDigest": "sha256:e91ff20e92c3cac8acb0cbe5c79fc8e8a3b427d7e151245c8eecc52b1c32fa00",
+    "objectivePath": "contracts/research/v3/objective-contract.json",
+    "targetScoreBytes": 90000000,
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc"
+  },
+  "experimentId": "wrt_suffix_control_completion250k_q0_v1",
+  "proposalId": "wrt_suffix_control_completion250k_q0_v1",
+  "status": "frozen",
+  "registrationTiming": "prospective",
+  "evidenceClass": "diagnostic",
+  "objectiveCreditBytes": 0,
+  "parent": null,
+  "hypothesis": {
+    "claim": "The retained shuffled control archive exactly reconstructs the fixed input and is byte-identical to a fresh encode under the unchanged v2 native settings.",
+    "falsification": "Any inverse or repeat mismatch invalidates the shuffled comparison; resource failure leaves required checks incomplete."
+  },
+  "changedMechanism": "Evidence completion only: decode and repeat the retained S archive on independent temporary storage. Codec, dictionaries, population and all comparison arms remain unchanged.",
+  "invariants": [
+    "Original v2 resource failure remains failed/incomplete; new execution cannot retroactively repair it.",
+    "Retain and recheck P/K/D completed inverses and repeats; do not rerun or impute completed results.",
+    "Same binary, original pretraining dictionary, allocator mode0, thread1 and cold fresh native processes as v2.",
+    "Two phases only: S-decode and S-repeat. Compare full bytes, not lengths.",
+    "No internal predictive-state witness, final integrated package, qualification or full-corpus score claim."
+  ],
+  "controls": [
+    {
+      "id": "D",
+      "role": "treatment",
+      "definition": "Unchanged completed suffix-sorted treatment retained from v2, rechecked through exact inverse and repeat artifacts."
+    },
+    {
+      "id": "S",
+      "role": "comparator",
+      "definition": "Previously encoded fixed shuffled dictionary archive; exact input and fresh repeat are matched witnesses."
+    }
+  ],
+  "population": {
+    "unit": "raw byte",
+    "scopeBytes": 250000,
+    "scopeSymbols": null,
+    "selection": "Unchanged already exposed opening prefix; no new selection or fitting.",
+    "coordinate": "Raw [0,250000)."
+  },
+  "causalBoundary": {
+    "availableInformation": [
+      "Hash-bound retained original input, executable, dictionaries and completed archives."
+    ],
+    "forbiddenInformation": [
+      "Changed dictionary, new predictor, invented missing resource measurements."
+    ]
+  },
+  "inputs": [
+    {
+      "id": "bound-0",
+      "path": "tools/wrt_suffix_control_completion_v1.py",
+      "sha256": "sha256:cc182c77cf06601319ae5b79caa9b1c5e5ac85cb296df71bdd826c2f82f02313"
+    },
+    {
+      "id": "bound-1",
+      "path": "operations/evidence/wrt_suffix_alphabet_v1/cmix.bin",
+      "sha256": "sha256:d1066630f0d58894e69bd84519ec7d0f608b9e2fce67ab9ebedde65c58eca194"
+    },
+    {
+      "id": "bound-2",
+      "path": "operations/evidence/wrt_suffix_alphabet_v1/english.dic",
+      "sha256": "sha256:4c8568cca9343b9a6212477880f56f8efd162f8784224a25edd043097d36215a"
+    },
+    {
+      "id": "bound-3",
+      "path": "operations/evidence/fixtures/dualstream_opening250k_v1.raw",
+      "sha256": "sha256:665fc689441b68462d88f82dc33212abe9c4824be095d03a556c9b55a2829fd3"
+    },
+    {
+      "id": "bound-4",
+      "path": "operations/provenance/wrt_suffix_alphabet_v2_partial_20260912.json",
+      "sha256": "sha256:ea1cb8b72592420f222484ab6d70b561f30893b1153741fdbe099db6d8a519bb"
+    },
+    {
+      "id": "bound-5",
+      "path": "operations/provenance/wrt_suffix_alphabet_v2_enospc_20260912.json",
+      "sha256": "sha256:66bf0d01ebfad8b05dae1864a3b28b11824a1b32d46b178734f5cbf768680829"
+    },
+    {
+      "id": "bound-6",
+      "path": "operations/adaptive/reflections/20260913T015312Z_af905b12d5.json",
+      "sha256": "sha256:63ac6b61d4a28985314d5549ff8e45ae7f883533d6e314b37c5c628ea7039e64"
+    },
+    {
+      "id": "bound-7",
+      "path": "operations/adaptive/experiments/wrt_suffix_alphabet250k_q0_v2.json",
+      "sha256": "sha256:09140738ba57219c9e746a9273ba616d65856d0f9f1b7fec4e69093280d8a09c"
+    },
+    {
+      "id": "bound-8",
+      "path": "run_logs/adaptive/20260913T015312Z_af905b12d5.resources/guard.json",
+      "sha256": "sha256:188d00cede2bdf88050b144eb3171a9fe945249407f62dbd4e0f445fcb7adff5"
+    },
+    {
+      "id": "bound-9",
+      "path": "results/wrt_suffix_alphabet250k_q0_v2/P.arc",
+      "sha256": "sha256:8159fad519e0d409dbda296b3f6bbe348a541e59a090a5001b18b8bfe655ca0d"
+    },
+    {
+      "id": "bound-10",
+      "path": "results/wrt_suffix_alphabet250k_q0_v2/P.raw",
+      "sha256": "sha256:665fc689441b68462d88f82dc33212abe9c4824be095d03a556c9b55a2829fd3"
+    },
+    {
+      "id": "bound-11",
+      "path": "results/wrt_suffix_alphabet250k_q0_v2/P.repeat.arc",
+      "sha256": "sha256:8159fad519e0d409dbda296b3f6bbe348a541e59a090a5001b18b8bfe655ca0d"
+    },
+    {
+      "id": "bound-12",
+      "path": "results/wrt_suffix_alphabet250k_q0_v2/P.dic",
+      "sha256": "sha256:4c8568cca9343b9a6212477880f56f8efd162f8784224a25edd043097d36215a"
+    },
+    {
+      "id": "bound-13",
+      "path": "results/wrt_suffix_alphabet250k_q0_v2/K.arc",
+      "sha256": "sha256:8159fad519e0d409dbda296b3f6bbe348a541e59a090a5001b18b8bfe655ca0d"
+    },
+    {
+      "id": "bound-14",
+      "path": "results/wrt_suffix_alphabet250k_q0_v2/K.raw",
+      "sha256": "sha256:665fc689441b68462d88f82dc33212abe9c4824be095d03a556c9b55a2829fd3"
+    },
+    {
+      "id": "bound-15",
+      "path": "results/wrt_suffix_alphabet250k_q0_v2/K.repeat.arc",
+      "sha256": "sha256:8159fad519e0d409dbda296b3f6bbe348a541e59a090a5001b18b8bfe655ca0d"
+    },
+    {
+      "id": "bound-16",
+      "path": "results/wrt_suffix_alphabet250k_q0_v2/K.dic",
+      "sha256": "sha256:4c8568cca9343b9a6212477880f56f8efd162f8784224a25edd043097d36215a"
+    },
+    {
+      "id": "bound-17",
+      "path": "results/wrt_suffix_alphabet250k_q0_v2/D.arc",
+      "sha256": "sha256:7ba78a1508f94d1c01742a2f9ac49d301052cecd311b0eea3ae9ac61a472d9cc"
+    },
+    {
+      "id": "bound-18",
+      "path": "results/wrt_suffix_alphabet250k_q0_v2/D.raw",
+      "sha256": "sha256:665fc689441b68462d88f82dc33212abe9c4824be095d03a556c9b55a2829fd3"
+    },
+    {
+      "id": "bound-19",
+      "path": "results/wrt_suffix_alphabet250k_q0_v2/D.repeat.arc",
+      "sha256": "sha256:7ba78a1508f94d1c01742a2f9ac49d301052cecd311b0eea3ae9ac61a472d9cc"
+    },
+    {
+      "id": "bound-20",
+      "path": "results/wrt_suffix_alphabet250k_q0_v2/D.dic",
+      "sha256": "sha256:80b4bceb9c2f3919f1a949bc43ba69b7de30b96df79691166873d9b5ad8e88e7"
+    },
+    {
+      "id": "bound-21",
+      "path": "results/wrt_suffix_alphabet250k_q0_v2/S.arc",
+      "sha256": "sha256:94eff2a785c70d6ae794764e062557a278703f2516a45986eb97df676e3ae504"
+    },
+    {
+      "id": "bound-22",
+      "path": "results/wrt_suffix_alphabet250k_q0_v2/S.dic",
+      "sha256": "sha256:4868506e20179a07aa86331a228e61f3f525658356fcface6010d3e5be4ad241"
+    }
+  ],
+  "budget": {
+    "expectedGrossSavingsBytes": 0,
+    "maximumAddedPackageBytes": 0,
+    "expectedNetSavingsBytes": 0
+  },
+  "search": {
+    "expectedTransferRetention": 0,
+    "expectedRuntimeRatio": 1,
+    "expectedMemoryRatio": 1,
+    "uncertaintyRisk": 1,
+    "interactionRisk": 1
+  },
+  "measurements": [
+    {
+      "id": "g_P",
+      "unit": "bytes",
+      "definition": "Retained P archive minus D archive on exact opening250k; separate original resource failure."
+    },
+    {
+      "id": "g_S",
+      "unit": "bytes",
+      "definition": "Retained S archive minus D archive only after missing S inverse and repeat pass."
+    }
+  ],
+  "promotionPredicates": [
+    {
+      "id": "parent-gain",
+      "measurement": "g_P",
+      "operator": "gt",
+      "threshold": 0
+    },
+    {
+      "id": "association-gain",
+      "measurement": "g_S",
+      "operator": "gt",
+      "threshold": 0
+    }
+  ],
+  "killPredicates": [
+    {
+      "id": "no-parent-gain",
+      "measurement": "g_P",
+      "operator": "lte",
+      "threshold": 0
+    }
+  ],
+  "outputs": [
+    "results/wrt_suffix_control_completion250k_q0_v1/decision.json"
+  ],
+  "outputManifestPolicy": "complete-result-artifacts-v1",
+  "generatedUtc": "2026-09-13T02:33:57.970485+00:00"
+}

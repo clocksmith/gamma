@@ -1,0 +1,95 @@
+{
+  "attribution": {
+    "causalConfidence": "high",
+    "controlsEquivalent": null,
+    "failureClass": "infrastructure-failure",
+    "localizedCause": "Shared root filesystem reached zero available bytes despite8.25GB free at admission; guard and controller writes failed."
+  },
+  "candidateId": "wrt_suffix_alphabet250k_q0_v2",
+  "candidateRevision": {
+    "candidateId": "wrt_suffix_alphabet250k_q0_v2",
+    "candidateTreeSha256": "sha256:b0db5bc97f699a91d0ad7907fa3c0b4326d47fa303ac2d77a2dcacfad1f2975c",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/wrt_suffix_alphabet250k_q0_v2/20260913T015312563860Z_b0db5bc97f69.json",
+      "sha256": "sha256:5fbee2b69acc93d39142cbe7c752a5aa472077825765742e1174ba42b8e8b9f0"
+    }
+  },
+  "decision": {
+    "killPredicatesPass": null,
+    "nextGateBytes": null,
+    "promotionPredicatesPass": null,
+    "rationale": "Original execution remains resource-failed/incomplete. A separately identified evidence-completion gate may replay only missing S checks against hash-bound retained artifacts; it cannot retroactively repair this guard.",
+    "verdict": "hold"
+  },
+  "evidence": [
+    {
+      "path": "operations/provenance/wrt_suffix_alphabet_v2_enospc_20260912.json",
+      "sha256": "sha256:66bf0d01ebfad8b05dae1864a3b28b11824a1b32d46b178734f5cbf768680829"
+    },
+    {
+      "path": "operations/provenance/wrt_suffix_alphabet_v2_partial_20260912.json",
+      "sha256": "sha256:ea1cb8b72592420f222484ab6d70b561f30893b1153741fdbe099db6d8a519bb"
+    }
+  ],
+  "experiment": {
+    "path": "operations/adaptive/experiments/wrt_suffix_alphabet250k_q0_v2.json",
+    "sha256": "sha256:09140738ba57219c9e746a9273ba616d65856d0f9f1b7fec4e69093280d8a09c"
+  },
+  "generatedUtc": "2026-09-13T02:28:45+00:00",
+  "hypothesis": {
+    "rationale": "P/K/D complete inverses and repeats preserve a1165-byte D archive increase. Sencode46400 exists, but S inverse/repeat and full resource evidence are incomplete. No complete confirmation verdict.",
+    "verdict": "inconclusive"
+  },
+  "job": {
+    "path": "operations/adaptive/cancelled/919_20260913T015312Z_af905b12d5.json",
+    "sha256": "sha256:648197e1d7748b1bb8d842bbdba0184bf62bd23ddc6f7a7349717a68a2b61a00"
+  },
+  "knowledge": {
+    "retiredDimensions": [],
+    "transferableLessons": [
+      "Retain valid completed compression observations after resource failure. Complete missing control evidence on independent storage without inventing final resource measurements for the failed execution."
+    ],
+    "uncertainties": [
+      "S inverse and repeat and original execution terminal resource evidence are missing; internal predictor state and complete package remain unmeasured."
+    ]
+  },
+  "measurementAssertions": [
+    {
+      "field": "netBytesSaved",
+      "pointer": "/g_P",
+      "source": {
+        "path": "operations/provenance/wrt_suffix_alphabet_v2_partial_20260912.json",
+        "sha256": "sha256:ea1cb8b72592420f222484ab6d70b561f30893b1153741fdbe099db6d8a519bb"
+      }
+    }
+  ],
+  "measurements": {
+    "idealBitsSaved": null,
+    "memoryRatio": null,
+    "minimumPartitionIdealBitsSaved": null,
+    "netBytesSaved": -1165,
+    "positiveSegmentFraction": null,
+    "runtimeRatio": null,
+    "scopeBytes": null,
+    "scopeSymbols": null,
+    "sourceBytesDelta": null,
+    "transferRetention": null
+  },
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:e91ff20e92c3cac8acb0cbe5c79fc8e8a3b427d7e151245c8eecc52b1c32fa00",
+    "objectiveId": "gamma-enwiki9-hutter-90m-v3",
+    "objectivePath": "contracts/research/v3/objective-contract.json",
+    "targetScoreBytes": 90000000
+  },
+  "reflectionId": "r-20260913t015312z_af905b12d5",
+  "schema": "gamma.enwiki9.reflection-receipt.v1",
+  "validity": {
+    "classification": "infrastructure-failure",
+    "reasons": [
+      "Root ENOSPC stopped guard observation and terminal recording during S-decode. Exact frozen running receipt and nonterminal guard remain retained; observed worker/process identities and cgroup are absent."
+    ],
+    "valid": false
+  }
+}
