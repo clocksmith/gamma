@@ -12,7 +12,7 @@ Reusable artifact helpers for new tools: [lib/artifacts.py](../lib/artifacts.py)
 The LibNC initializer teacher launcher exits before the first forward, gradient, update, or coded symbol; its source-bound experiment defines that boundary.
 The delayed-status helper's `enwiki9_delayed_status_latest.log` pointer is operational history, not present-host occupancy proof.
 
-Coverage: **1160 files** (33 .c, 76 .cpp, 1 .gdb, 1 .h, 1 .hpp, 1 .html, 1044 .py, 3 .sh).
+Coverage: **1162 files** (33 .c, 76 .cpp, 1 .gdb, 1 .h, 1 .hpp, 1 .html, 1046 .py, 3 .sh).
 
 | Tool | Purpose | Referenced contracts |
 |---|---|---|
@@ -972,6 +972,8 @@ Coverage: **1160 files** (33 .c, 76 .cpp, 1 .gdb, 1 .h, 1 .hpp, 1 .html, 1044 .p
 | [`tools/page_order_screen.py`](../tools/page_order_screen.py) | Screens page ordering rules. | none found |
 | [`tools/paid_block_vector_codebook.py`](../tools/paid_block_vector_codebook.py) | Fit and exactly replay a paid blockwise vector correction codebook. | none found |
 | [`tools/paid_conditional_multinomial_gate.cpp`](../tools/paid_conditional_multinomial_gate.cpp) | unknown; inspect source and the selected experiment | none found |
+| [`tools/paid_context_instruction_gate_v1.py`](../tools/paid_context_instruction_gate_v1.py) | Run two independently priced replays of the frozen context-instruction screen. | [1](../operations/adaptive/experiments/paid_context_instruction_10m_q0_v1.json) |
+| [`tools/paid_context_instruction_screen_v1.py`](../tools/paid_context_instruction_screen_v1.py) | Price a fixed hindsight context-instruction family; this is not a codec. | [1](../operations/adaptive/experiments/paid_context_instruction_10m_q0_v1.json) |
 | [`tools/paid_type_interval_gate.cpp`](../tools/paid_type_interval_gate.cpp) | unknown; inspect source and the selected experiment | none found |
 | [`tools/parallel_mdl_block_oracle.cpp`](../tools/parallel_mdl_block_oracle.cpp) | Zero-credit two-pass block MDL feasibility oracle for WRT bytes. | none found |
 | [`tools/parallel_mdl_context_tree_oracle.cpp`](../tools/parallel_mdl_context_tree_oracle.cpp) | Sparse two-pass context-tree MDL bound with bottom-up paid splitting. | none found |
