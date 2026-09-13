@@ -1,0 +1,111 @@
+{
+  "schema": "gamma.enwiki9.kda-carry-publication-checks.v1",
+  "candidate_id": "fx2_kda_carry_opening250k_v1",
+  "all_ten_checks_pass": true,
+  "checks": [
+    {
+      "command": [
+        "python3",
+        "projects/enwiki9/tools/hutter_run_ledger.py",
+        "--check"
+      ],
+      "returncode": 0
+    },
+    {
+      "command": [
+        "python3",
+        "projects/enwiki9/tools/enwiki9_release_receipts.py",
+        "--check"
+      ],
+      "returncode": 0
+    },
+    {
+      "command": [
+        "python3",
+        "projects/enwiki9/tools/enwiki9_evidence_matrix.py",
+        "--check"
+      ],
+      "returncode": 0
+    },
+    {
+      "command": [
+        "python3",
+        "projects/enwiki9/tools/enwiki9_best_results.py",
+        "--check"
+      ],
+      "returncode": 0
+    },
+    {
+      "command": [
+        "python3",
+        "projects/enwiki9/tools/enwiki9_status_receipt.py",
+        "--check"
+      ],
+      "returncode": 0
+    },
+    {
+      "command": [
+        "python3",
+        "projects/enwiki9/tools/enwiki9_doc_lint.py"
+      ],
+      "returncode": 0
+    },
+    {
+      "command": [
+        "python3",
+        "-m",
+        "json.tool",
+        "projects/enwiki9/upper_bound_certificate.json"
+      ],
+      "returncode": 0
+    },
+    {
+      "command": [
+        "python3",
+        "-m",
+        "json.tool",
+        "projects/enwiki9/docs/status_receipt.json"
+      ],
+      "returncode": 0
+    },
+    {
+      "command": [
+        "python3",
+        "projects/enwiki9/tools/backfill_run_ledger.py",
+        "--check"
+      ],
+      "returncode": 0
+    },
+    {
+      "command": [
+        "python3",
+        "projects/enwiki9/tools/enwiki9_tool_catalogue.py",
+        "--check"
+      ],
+      "returncode": 0
+    }
+  ],
+  "canonical_refresh": {
+    "candidate_audit.py": 0,
+    "enwiki9_normalize_receipts.py": 0
+  },
+  "isolated_post_run_refresh": "Release index rejected historical result symlinks outside isolated project; native job and guard already completed successfully. Canonical refresh and all checks pass after copying exact evidence.",
+  "logs": [
+    {
+      "path": "run_logs/manual/fx2_kda_carry_final_refresh_20260913.log",
+      "bytes": 1884,
+      "sha256": "f542823133808a6df354689c741b6fa30ad5916d3e1aff6d1b7602dffa316ad2"
+    },
+    {
+      "path": "run_logs/manual/fx2_kda_carry_final_checks_20260913.log",
+      "bytes": 37229,
+      "sha256": "519959f6414db4f7bca9e893ddb15542a1db26066a0c4937953a8b6cab939b9d"
+    },
+    {
+      "path": "run_logs/manual/fx2_kda_carry_isolated_coordinator_20260913.log",
+      "bytes": 5693,
+      "sha256": "bb17b65528b2f404afbb37a42e43fbe038777cdff57c6708977c6ba533632fc8"
+    }
+  ],
+  "scope": "Publication consistency only; no new archive or prize gain."
+}

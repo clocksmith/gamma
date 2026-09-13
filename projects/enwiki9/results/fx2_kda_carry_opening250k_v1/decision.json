@@ -1,0 +1,594 @@
+{
+  "PK_archive_byte_identity": true,
+  "PK_boundary_state_byte_identity": true,
+  "added_local_component_bytes": 9032,
+  "arms": {
+    "D": {
+      "archive": {
+        "bytes": 33432,
+        "path": "results/fx2_kda_carry_opening250k_v1/work/native/D-encode.arc",
+        "sha256": "4e702278842472c350b57d049b6973be7c83db2c8a17c876e36c48b3b02b1b84"
+      },
+      "archive_bytes": 33432,
+      "archive_repeat_byte_equal": true,
+      "boundary_state_byte_equal": true,
+      "coder_trace_byte_equal": true,
+      "exact_inverse": true,
+      "repeat": {
+        "bytes": 33432,
+        "path": "results/fx2_kda_carry_opening250k_v1/work/native/D-repeat.arc",
+        "sha256": "4e702278842472c350b57d049b6973be7c83db2c8a17c876e36c48b3b02b1b84"
+      },
+      "reset_boundaries": 98,
+      "restored": {
+        "bytes": 250000,
+        "path": "results/fx2_kda_carry_opening250k_v1/work/native/D-decode.raw",
+        "sha256": "665fc689441b68462d88f82dc33212abe9c4824be095d03a556c9b55a2829fd3"
+      }
+    },
+    "K": {
+      "archive": {
+        "bytes": 33429,
+        "path": "results/fx2_kda_carry_opening250k_v1/work/native/K-encode.arc",
+        "sha256": "70325310e96b83b48677d76d53141e69ddb47519b4cdffd1c85f51fe2c444dbe"
+      },
+      "archive_bytes": 33429,
+      "archive_repeat_byte_equal": true,
+      "boundary_state_byte_equal": true,
+      "coder_trace_byte_equal": true,
+      "exact_inverse": true,
+      "repeat": {
+        "bytes": 33429,
+        "path": "results/fx2_kda_carry_opening250k_v1/work/native/K-repeat.arc",
+        "sha256": "70325310e96b83b48677d76d53141e69ddb47519b4cdffd1c85f51fe2c444dbe"
+      },
+      "reset_boundaries": 98,
+      "restored": {
+        "bytes": 250000,
+        "path": "results/fx2_kda_carry_opening250k_v1/work/native/K-decode.raw",
+        "sha256": "665fc689441b68462d88f82dc33212abe9c4824be095d03a556c9b55a2829fd3"
+      }
+    },
+    "P": {
+      "archive": {
+        "bytes": 33429,
+        "path": "results/fx2_kda_carry_opening250k_v1/work/native/P-encode.arc",
+        "sha256": "70325310e96b83b48677d76d53141e69ddb47519b4cdffd1c85f51fe2c444dbe"
+      },
+      "archive_bytes": 33429,
+      "archive_repeat_byte_equal": true,
+      "boundary_state_byte_equal": true,
+      "coder_trace_byte_equal": true,
+      "exact_inverse": true,
+      "repeat": {
+        "bytes": 33429,
+        "path": "results/fx2_kda_carry_opening250k_v1/work/native/P-repeat.arc",
+        "sha256": "70325310e96b83b48677d76d53141e69ddb47519b4cdffd1c85f51fe2c444dbe"
+      },
+      "reset_boundaries": 98,
+      "restored": {
+        "bytes": 250000,
+        "path": "results/fx2_kda_carry_opening250k_v1/work/native/P-decode.raw",
+        "sha256": "665fc689441b68462d88f82dc33212abe9c4824be095d03a556c9b55a2829fd3"
+      }
+    },
+    "S": {
+      "archive": {
+        "bytes": 33443,
+        "path": "results/fx2_kda_carry_opening250k_v1/work/native/S-encode.arc",
+        "sha256": "bcac18139ec26cb065608a19bc8b7601fee9e1e4dfaa207d4650f867a067cd2d"
+      },
+      "archive_bytes": 33443,
+      "archive_repeat_byte_equal": true,
+      "boundary_state_byte_equal": true,
+      "coder_trace_byte_equal": true,
+      "exact_inverse": true,
+      "repeat": {
+        "bytes": 33443,
+        "path": "results/fx2_kda_carry_opening250k_v1/work/native/S-repeat.arc",
+        "sha256": "bcac18139ec26cb065608a19bc8b7601fee9e1e4dfaa207d4650f867a067cd2d"
+      },
+      "reset_boundaries": 98,
+      "restored": {
+        "bytes": 250000,
+        "path": "results/fx2_kda_carry_opening250k_v1/work/native/S-decode.raw",
+        "sha256": "665fc689441b68462d88f82dc33212abe9c4824be095d03a556c9b55a2829fd3"
+      }
+    }
+  },
+  "artifacts": {
+    "bytes": 47720,
+    "path": "results/fx2_kda_carry_opening250k_v1/artifacts.json",
+    "sha256": "37fd00fd05c413d3c6696ccfc6e210a26bc3eb8b94bb817996e1ee18473d7a3d"
+  },
+  "candidate_id": "fx2_kda_carry_opening250k_v1",
+  "changed_state_audit": "All nine KDA matrices, convolution rings and clocks at every reset; KV invalidated at t=0. Other native state follows unchanged source and the identical observed bits/probabilities.",
+  "child_closure_ok": true,
+  "commands": [
+    {
+      "accepted_returncodes": [
+        0
+      ],
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "360",
+        "/usr/bin/make",
+        "-j1",
+        "cmix",
+        "CC=/usr/bin/g++",
+        "CPPFLAGS_PART-THAT-SHOULD-BE-FAST=-DSEED=923 -DUPDATE_LIMIT=3000 -m64 -Wall -std=c++17 -include cstdint -fno-fast-math -fno-math-errno -fno-exceptions -fno-threadsafe-statics -march=x86-64-v3 -mtune=generic -mrecip=none -fdata-sections -ffunction-sections -O3",
+        "CPPFLAGS_PART-THAT-CAN-BE-SLOW=-DSEED=923 -DUPDATE_LIMIT=3000 -m64 -Wall -std=c++17 -include cstdint -fno-fast-math -fno-math-errno -fno-exceptions -fno-threadsafe-statics -march=x86-64-v3 -mtune=generic -mrecip=none -fdata-sections -ffunction-sections -Os"
+      ],
+      "elapsed_cap_seconds": 360,
+      "elapsed_seconds": 14.321973679587245,
+      "environment": {},
+      "launch_error": null,
+      "missing_diagnostics": [],
+      "phase": "compile",
+      "returncode": 0,
+      "system_cpu_seconds": 1.129574,
+      "timing_authority": "shared-host diagnostic",
+      "user_cpu_seconds": 12.957691
+    },
+    {
+      "accepted_returncodes": [
+        0
+      ],
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "360",
+        "/usr/bin/make",
+        "-j1",
+        "cmix",
+        "CC=/usr/bin/g++",
+        "CPPFLAGS_PART-THAT-SHOULD-BE-FAST=-DSEED=923 -DUPDATE_LIMIT=3000 -m64 -Wall -std=c++17 -include cstdint -fno-fast-math -fno-math-errno -fno-exceptions -fno-threadsafe-statics -march=x86-64-v3 -mtune=generic -mrecip=none -fdata-sections -ffunction-sections -O3",
+        "CPPFLAGS_PART-THAT-CAN-BE-SLOW=-DSEED=923 -DUPDATE_LIMIT=3000 -m64 -Wall -std=c++17 -include cstdint -fno-fast-math -fno-math-errno -fno-exceptions -fno-threadsafe-statics -march=x86-64-v3 -mtune=generic -mrecip=none -fdata-sections -ffunction-sections -Os"
+      ],
+      "elapsed_cap_seconds": 360,
+      "elapsed_seconds": 14.216020319145173,
+      "environment": {},
+      "launch_error": null,
+      "missing_diagnostics": [],
+      "phase": "compile-repeat",
+      "returncode": 0,
+      "system_cpu_seconds": 1.12028,
+      "timing_authority": "shared-host diagnostic",
+      "user_cpu_seconds": 12.982077999999998
+    },
+    {
+      "accepted_returncodes": [
+        0
+      ],
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "180",
+        "/run/user/1000/kda-carry/deco/gamma/projects/enwiki9/results/fx2_kda_carry_opening250k_v1/work/native/cmix",
+        "-s",
+        "dictionary/english.dic",
+        "population.raw",
+        "population.stored"
+      ],
+      "elapsed_cap_seconds": 180,
+      "elapsed_seconds": 0.10215029073879123,
+      "environment": {},
+      "launch_error": null,
+      "missing_diagnostics": [],
+      "phase": "preprocess",
+      "returncode": 0,
+      "system_cpu_seconds": 0.0027520000000000877,
+      "timing_authority": "shared-host diagnostic",
+      "user_cpu_seconds": 0.007448000000000121
+    },
+    {
+      "accepted_returncodes": [
+        0
+      ],
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "180",
+        "/run/user/1000/kda-carry/deco/gamma/projects/enwiki9/results/fx2_kda_carry_opening250k_v1/work/native/cmix",
+        "-c",
+        "dictionary/english.dic",
+        "population.raw",
+        "P-encode.arc",
+        "--transformer",
+        "models/6m-q4-fp32.tfwc2"
+      ],
+      "elapsed_cap_seconds": 180,
+      "elapsed_seconds": 37.03531031124294,
+      "environment": {
+        "GAMMA_FX2_CODER_TRACE": "/run/user/1000/kda-carry/deco/gamma/projects/enwiki9/results/fx2_kda_carry_opening250k_v1/work/native/P-encode.coder",
+        "GAMMA_FX2_KDA_ARM": "P",
+        "GAMMA_FX2_KDA_TRACE": "/run/user/1000/kda-carry/deco/gamma/projects/enwiki9/results/fx2_kda_carry_opening250k_v1/work/native/P-encode.state"
+      },
+      "launch_error": null,
+      "missing_diagnostics": [],
+      "phase": "P-encode",
+      "returncode": 0,
+      "system_cpu_seconds": 1.673644,
+      "timing_authority": "shared-host diagnostic",
+      "user_cpu_seconds": 34.632076
+    },
+    {
+      "accepted_returncodes": [
+        0
+      ],
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "180",
+        "/run/user/1000/kda-carry/deco/gamma/projects/enwiki9/results/fx2_kda_carry_opening250k_v1/work/native/cmix",
+        "-d",
+        "dictionary/english.dic",
+        "P-encode.arc",
+        "P-decode.raw",
+        "--transformer",
+        "models/6m-q4-fp32.tfwc2"
+      ],
+      "elapsed_cap_seconds": 180,
+      "elapsed_seconds": 38.43843156611547,
+      "environment": {
+        "GAMMA_FX2_CODER_TRACE": "/run/user/1000/kda-carry/deco/gamma/projects/enwiki9/results/fx2_kda_carry_opening250k_v1/work/native/P-decode.coder",
+        "GAMMA_FX2_KDA_ARM": "P",
+        "GAMMA_FX2_KDA_TRACE": "/run/user/1000/kda-carry/deco/gamma/projects/enwiki9/results/fx2_kda_carry_opening250k_v1/work/native/P-decode.state"
+      },
+      "launch_error": null,
+      "missing_diagnostics": [],
+      "phase": "P-decode",
+      "returncode": 0,
+      "system_cpu_seconds": 1.7269039999999998,
+      "timing_authority": "shared-host diagnostic",
+      "user_cpu_seconds": 36.467127999999995
+    },
+    {
+      "accepted_returncodes": [
+        0
+      ],
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "180",
+        "/run/user/1000/kda-carry/deco/gamma/projects/enwiki9/results/fx2_kda_carry_opening250k_v1/work/native/cmix",
+        "-c",
+        "dictionary/english.dic",
+        "P-decode.raw",
+        "P-repeat.arc",
+        "--transformer",
+        "models/6m-q4-fp32.tfwc2"
+      ],
+      "elapsed_cap_seconds": 180,
+      "elapsed_seconds": 38.74061620887369,
+      "environment": {
+        "GAMMA_FX2_CODER_TRACE": "/run/user/1000/kda-carry/deco/gamma/projects/enwiki9/results/fx2_kda_carry_opening250k_v1/work/native/P-repeat.coder",
+        "GAMMA_FX2_KDA_ARM": "P",
+        "GAMMA_FX2_KDA_TRACE": "/run/user/1000/kda-carry/deco/gamma/projects/enwiki9/results/fx2_kda_carry_opening250k_v1/work/native/P-repeat.state"
+      },
+      "launch_error": null,
+      "missing_diagnostics": [],
+      "phase": "P-repeat",
+      "returncode": 0,
+      "system_cpu_seconds": 1.7668240000000006,
+      "timing_authority": "shared-host diagnostic",
+      "user_cpu_seconds": 36.739373000000015
+    },
+    {
+      "accepted_returncodes": [
+        0
+      ],
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "180",
+        "/run/user/1000/kda-carry/deco/gamma/projects/enwiki9/results/fx2_kda_carry_opening250k_v1/work/native/cmix",
+        "-c",
+        "dictionary/english.dic",
+        "population.raw",
+        "K-encode.arc",
+        "--transformer",
+        "models/6m-q4-fp32.tfwc2"
+      ],
+      "elapsed_cap_seconds": 180,
+      "elapsed_seconds": 39.04197072889656,
+      "environment": {
+        "GAMMA_FX2_CODER_TRACE": "/run/user/1000/kda-carry/deco/gamma/projects/enwiki9/results/fx2_kda_carry_opening250k_v1/work/native/K-encode.coder",
+        "GAMMA_FX2_KDA_ARM": "K",
+        "GAMMA_FX2_KDA_TRACE": "/run/user/1000/kda-carry/deco/gamma/projects/enwiki9/results/fx2_kda_carry_opening250k_v1/work/native/K-encode.state"
+      },
+      "launch_error": null,
+      "missing_diagnostics": [],
+      "phase": "K-encode",
+      "returncode": 0,
+      "system_cpu_seconds": 1.7472560000000001,
+      "timing_authority": "shared-host diagnostic",
+      "user_cpu_seconds": 37.054475999999994
+    },
+    {
+      "accepted_returncodes": [
+        0
+      ],
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "180",
+        "/run/user/1000/kda-carry/deco/gamma/projects/enwiki9/results/fx2_kda_carry_opening250k_v1/work/native/cmix",
+        "-d",
+        "dictionary/english.dic",
+        "K-encode.arc",
+        "K-decode.raw",
+        "--transformer",
+        "models/6m-q4-fp32.tfwc2"
+      ],
+      "elapsed_cap_seconds": 180,
+      "elapsed_seconds": 39.54271137388423,
+      "environment": {
+        "GAMMA_FX2_CODER_TRACE": "/run/user/1000/kda-carry/deco/gamma/projects/enwiki9/results/fx2_kda_carry_opening250k_v1/work/native/K-decode.coder",
+        "GAMMA_FX2_KDA_ARM": "K",
+        "GAMMA_FX2_KDA_TRACE": "/run/user/1000/kda-carry/deco/gamma/projects/enwiki9/results/fx2_kda_carry_opening250k_v1/work/native/K-decode.state"
+      },
+      "launch_error": null,
+      "missing_diagnostics": [],
+      "phase": "K-decode",
+      "returncode": 0,
+      "system_cpu_seconds": 1.8343689999999988,
+      "timing_authority": "shared-host diagnostic",
+      "user_cpu_seconds": 37.44407699999999
+    },
+    {
+      "accepted_returncodes": [
+        0
+      ],
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "180",
+        "/run/user/1000/kda-carry/deco/gamma/projects/enwiki9/results/fx2_kda_carry_opening250k_v1/work/native/cmix",
+        "-c",
+        "dictionary/english.dic",
+        "K-decode.raw",
+        "K-repeat.arc",
+        "--transformer",
+        "models/6m-q4-fp32.tfwc2"
+      ],
+      "elapsed_cap_seconds": 180,
+      "elapsed_seconds": 40.64429783029482,
+      "environment": {
+        "GAMMA_FX2_CODER_TRACE": "/run/user/1000/kda-carry/deco/gamma/projects/enwiki9/results/fx2_kda_carry_opening250k_v1/work/native/K-repeat.coder",
+        "GAMMA_FX2_KDA_ARM": "K",
+        "GAMMA_FX2_KDA_TRACE": "/run/user/1000/kda-carry/deco/gamma/projects/enwiki9/results/fx2_kda_carry_opening250k_v1/work/native/K-repeat.state"
+      },
+      "launch_error": null,
+      "missing_diagnostics": [],
+      "phase": "K-repeat",
+      "returncode": 0,
+      "system_cpu_seconds": 1.992954000000001,
+      "timing_authority": "shared-host diagnostic",
+      "user_cpu_seconds": 38.328851000000014
+    },
+    {
+      "accepted_returncodes": [
+        0
+      ],
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "180",
+        "/run/user/1000/kda-carry/deco/gamma/projects/enwiki9/results/fx2_kda_carry_opening250k_v1/work/native/cmix",
+        "-c",
+        "dictionary/english.dic",
+        "population.raw",
+        "D-encode.arc",
+        "--transformer",
+        "models/6m-q4-fp32.tfwc2"
+      ],
+      "elapsed_cap_seconds": 180,
+      "elapsed_seconds": 36.53385613113642,
+      "environment": {
+        "GAMMA_FX2_CODER_TRACE": "/run/user/1000/kda-carry/deco/gamma/projects/enwiki9/results/fx2_kda_carry_opening250k_v1/work/native/D-encode.coder",
+        "GAMMA_FX2_KDA_ARM": "D",
+        "GAMMA_FX2_KDA_TRACE": "/run/user/1000/kda-carry/deco/gamma/projects/enwiki9/results/fx2_kda_carry_opening250k_v1/work/native/D-encode.state"
+      },
+      "launch_error": null,
+      "missing_diagnostics": [],
+      "phase": "D-encode",
+      "returncode": 0,
+      "system_cpu_seconds": 1.7334560000000003,
+      "timing_authority": "shared-host diagnostic",
+      "user_cpu_seconds": 34.51036399999998
+    },
+    {
+      "accepted_returncodes": [
+        0
+      ],
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "180",
+        "/run/user/1000/kda-carry/deco/gamma/projects/enwiki9/results/fx2_kda_carry_opening250k_v1/work/native/cmix",
+        "-d",
+        "dictionary/english.dic",
+        "D-encode.arc",
+        "D-decode.raw",
+        "--transformer",
+        "models/6m-q4-fp32.tfwc2"
+      ],
+      "elapsed_cap_seconds": 180,
+      "elapsed_seconds": 38.13920107297599,
+      "environment": {
+        "GAMMA_FX2_CODER_TRACE": "/run/user/1000/kda-carry/deco/gamma/projects/enwiki9/results/fx2_kda_carry_opening250k_v1/work/native/D-decode.coder",
+        "GAMMA_FX2_KDA_ARM": "D",
+        "GAMMA_FX2_KDA_TRACE": "/run/user/1000/kda-carry/deco/gamma/projects/enwiki9/results/fx2_kda_carry_opening250k_v1/work/native/D-decode.state"
+      },
+      "launch_error": null,
+      "missing_diagnostics": [],
+      "phase": "D-decode",
+      "returncode": 0,
+      "system_cpu_seconds": 1.8814399999999978,
+      "timing_authority": "shared-host diagnostic",
+      "user_cpu_seconds": 36.02104300000002
+    },
+    {
+      "accepted_returncodes": [
+        0
+      ],
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "180",
+        "/run/user/1000/kda-carry/deco/gamma/projects/enwiki9/results/fx2_kda_carry_opening250k_v1/work/native/cmix",
+        "-c",
+        "dictionary/english.dic",
+        "D-decode.raw",
+        "D-repeat.arc",
+        "--transformer",
+        "models/6m-q4-fp32.tfwc2"
+      ],
+      "elapsed_cap_seconds": 180,
+      "elapsed_seconds": 39.63731454499066,
+      "environment": {
+        "GAMMA_FX2_CODER_TRACE": "/run/user/1000/kda-carry/deco/gamma/projects/enwiki9/results/fx2_kda_carry_opening250k_v1/work/native/D-repeat.coder",
+        "GAMMA_FX2_KDA_ARM": "D",
+        "GAMMA_FX2_KDA_TRACE": "/run/user/1000/kda-carry/deco/gamma/projects/enwiki9/results/fx2_kda_carry_opening250k_v1/work/native/D-repeat.state"
+      },
+      "launch_error": null,
+      "missing_diagnostics": [],
+      "phase": "D-repeat",
+      "returncode": 0,
+      "system_cpu_seconds": 1.9935640000000028,
+      "timing_authority": "shared-host diagnostic",
+      "user_cpu_seconds": 37.401365999999996
+    },
+    {
+      "accepted_returncodes": [
+        0
+      ],
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "180",
+        "/run/user/1000/kda-carry/deco/gamma/projects/enwiki9/results/fx2_kda_carry_opening250k_v1/work/native/cmix",
+        "-c",
+        "dictionary/english.dic",
+        "population.raw",
+        "S-encode.arc",
+        "--transformer",
+        "models/6m-q4-fp32.tfwc2"
+      ],
+      "elapsed_cap_seconds": 180,
+      "elapsed_seconds": 39.83885032031685,
+      "environment": {
+        "GAMMA_FX2_CODER_TRACE": "/run/user/1000/kda-carry/deco/gamma/projects/enwiki9/results/fx2_kda_carry_opening250k_v1/work/native/S-encode.coder",
+        "GAMMA_FX2_KDA_ARM": "S",
+        "GAMMA_FX2_KDA_TRACE": "/run/user/1000/kda-carry/deco/gamma/projects/enwiki9/results/fx2_kda_carry_opening250k_v1/work/native/S-encode.state"
+      },
+      "launch_error": null,
+      "missing_diagnostics": [],
+      "phase": "S-encode",
+      "returncode": 0,
+      "system_cpu_seconds": 1.955171,
+      "timing_authority": "shared-host diagnostic",
+      "user_cpu_seconds": 37.626698999999974
+    },
+    {
+      "accepted_returncodes": [
+        0
+      ],
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "180",
+        "/run/user/1000/kda-carry/deco/gamma/projects/enwiki9/results/fx2_kda_carry_opening250k_v1/work/native/cmix",
+        "-d",
+        "dictionary/english.dic",
+        "S-encode.arc",
+        "S-decode.raw",
+        "--transformer",
+        "models/6m-q4-fp32.tfwc2"
+      ],
+      "elapsed_cap_seconds": 180,
+      "elapsed_seconds": 41.04235868807882,
+      "environment": {
+        "GAMMA_FX2_CODER_TRACE": "/run/user/1000/kda-carry/deco/gamma/projects/enwiki9/results/fx2_kda_carry_opening250k_v1/work/native/S-decode.coder",
+        "GAMMA_FX2_KDA_ARM": "S",
+        "GAMMA_FX2_KDA_TRACE": "/run/user/1000/kda-carry/deco/gamma/projects/enwiki9/results/fx2_kda_carry_opening250k_v1/work/native/S-decode.state"
+      },
+      "launch_error": null,
+      "missing_diagnostics": [],
+      "phase": "S-decode",
+      "returncode": 0,
+      "system_cpu_seconds": 1.9671129999999977,
+      "timing_authority": "shared-host diagnostic",
+      "user_cpu_seconds": 38.765444
+    },
+    {
+      "accepted_returncodes": [
+        0
+      ],
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "180",
+        "/run/user/1000/kda-carry/deco/gamma/projects/enwiki9/results/fx2_kda_carry_opening250k_v1/work/native/cmix",
+        "-c",
+        "dictionary/english.dic",
+        "S-decode.raw",
+        "S-repeat.arc",
+        "--transformer",
+        "models/6m-q4-fp32.tfwc2"
+      ],
+      "elapsed_cap_seconds": 180,
+      "elapsed_seconds": 41.74642192805186,
+      "environment": {
+        "GAMMA_FX2_CODER_TRACE": "/run/user/1000/kda-carry/deco/gamma/projects/enwiki9/results/fx2_kda_carry_opening250k_v1/work/native/S-repeat.coder",
+        "GAMMA_FX2_KDA_ARM": "S",
+        "GAMMA_FX2_KDA_TRACE": "/run/user/1000/kda-carry/deco/gamma/projects/enwiki9/results/fx2_kda_carry_opening250k_v1/work/native/S-repeat.state"
+      },
+      "launch_error": null,
+      "missing_diagnostics": [],
+      "phase": "S-repeat",
+      "returncode": 0,
+      "system_cpu_seconds": 2.021976000000002,
+      "timing_authority": "shared-host diagnostic",
+      "user_cpu_seconds": 39.37055700000002
+    }
+  ],
+  "complete_package_bytes": null,
+  "diagnostic_local_net_bytes": -9035,
+  "experiment": {
+    "path": "operations/adaptive/experiments/fx2_kda_carry_opening250k_v1.json",
+    "sha256": "sha256:c093058fda20e3368701f66776fc465b583dbb34f35027c086ca72a29c3606a7"
+  },
+  "full_corpus_score_bytes": null,
+  "full_native_state_serialized": false,
+  "g_P": -3,
+  "g_S": 11,
+  "historical_source_cost_sensitivities": "Prior cold1MB n1/n2 do not belong to this experiment.",
+  "larger_gate_authorized": false,
+  "n_1": null,
+  "n_2": null,
+  "objective_credit_bytes": 0,
+  "raw_bytes": 250000,
+  "raw_population": "[0,250000)",
+  "released_parent_archive_and_coder_parity": true,
+  "schema": "gamma.enwiki9.kda-carry-native-terminal.v1",
+  "scientific_verdict": "Archive regression.",
+  "status": "passed"
+}

@@ -1,0 +1,113 @@
+{
+  "attribution": {
+    "causalConfidence": "high",
+    "controlsEquivalent": true,
+    "failureClass": "algorithmic-loss",
+    "localizedCause": "Fixed1/16 KDA carry at all original reset boundaries does not improve the pretrained native FX2 archive on this development prefix."
+  },
+  "candidateId": "fx2_kda_carry_opening250k_v1",
+  "candidateRevision": {
+    "candidateId": "fx2_kda_carry_opening250k_v1",
+    "candidateTreeSha256": "sha256:757cf6bda23104fa4f64d981cd6cde02bd7c68733700160ab01b78996a125f87",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/fx2_kda_carry_opening250k_v1/20260913T033732383944Z_757cf6bda231.json",
+      "sha256": "sha256:d37e9aaffa36d52d6d19a52c911858508ad11c138be9a3c92b2f451211357823"
+    }
+  },
+  "decision": {
+    "killPredicatesPass": true,
+    "nextGateBytes": null,
+    "promotionPredicatesPass": false,
+    "rationale": "Frozen g_P<=0 stop applies; retire only this fixed realization. Preserve g_S=11, correctness/repeatability/resource passes and zero full-corpus credit.",
+    "verdict": "retire"
+  },
+  "evidence": [
+    {
+      "path": "operations/provenance/fx2_kda_carry_state_scope_review_20260913.json",
+      "sha256": "sha256:3acaaa9075b1a9c3270f1e9c9bbe53856f690f32ade582470e07a578ffb9b13f"
+    },
+    {
+      "path": "operations/provenance/fx2_kda_carry_terminal_20260913.json",
+      "sha256": "sha256:ca0792817379fcf6f06d77b619800a59a134f5d430235e682b8720a4063e3b76"
+    },
+    {
+      "path": "results/fx2_kda_carry_opening250k_v1/decision.json",
+      "sha256": "sha256:8e429e21eda1ee19bba688f098b921f9d9b3a7897e754f33932dfc2c266ec673"
+    },
+    {
+      "path": "results/fx2_kda_carry_opening250k_v1/terminal-index.json",
+      "sha256": "sha256:5685fd2db4a7251bde69bf7179c93c52beafa5d8b4bf8efcfbd4c99799cd144b"
+    }
+  ],
+  "experiment": {
+    "path": "operations/adaptive/experiments/fx2_kda_carry_opening250k_v1.json",
+    "sha256": "sha256:c093058fda20e3368701f66776fc465b583dbb34f35027c086ca72a29c3606a7"
+  },
+  "generatedUtc": "2026-09-13T03:51:21+00:00",
+  "hypothesis": {
+    "rationale": "D33432 exceeds P/K33429 by3 bytes, although D beats S33443 by11. The fixed positive-parent-gain predicate fails.",
+    "verdict": "refuted"
+  },
+  "job": {
+    "path": "operations/adaptive/completed/919_20260913T033732Z_ce8762eb52.json",
+    "sha256": "sha256:dddd51555616e2401239b2193cd8fba0ffa12c585d4d4004a518196ea2436533"
+  },
+  "knowledge": {
+    "retiredDimensions": [
+      "Only fixed1/16 carry of all nine KDA matrices at every existing reset on exposed opening250KB, with original conv/KV reset and pinned weights; no retention/control tuning."
+    ],
+    "transferableLessons": [
+      "Semantic carry beats rotated values but fails the unchanged native parent. Control separation alone is insufficient; reset behavior matching training cannot be called a bug."
+    ],
+    "uncertainties": [
+      "Final package, broader or mature-history transfer, full native memory serialization and cross-architecture qualification remain unmeasured."
+    ]
+  },
+  "measurementAssertions": [
+    {
+      "field": "netBytesSaved",
+      "pointer": "/g_P",
+      "source": {
+        "path": "operations/provenance/fx2_kda_carry_terminal_20260913.json",
+        "sha256": "sha256:ca0792817379fcf6f06d77b619800a59a134f5d430235e682b8720a4063e3b76"
+      }
+    },
+    {
+      "field": "scopeSymbols",
+      "pointer": "/raw_bytes",
+      "source": {
+        "path": "results/fx2_kda_carry_opening250k_v1/decision.json",
+        "sha256": "sha256:8e429e21eda1ee19bba688f098b921f9d9b3a7897e754f33932dfc2c266ec673"
+      }
+    }
+  ],
+  "measurements": {
+    "idealBitsSaved": null,
+    "memoryRatio": null,
+    "minimumPartitionIdealBitsSaved": null,
+    "netBytesSaved": -3,
+    "positiveSegmentFraction": null,
+    "runtimeRatio": null,
+    "scopeBytes": null,
+    "scopeSymbols": 250000,
+    "sourceBytesDelta": null,
+    "transferRetention": null
+  },
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:e91ff20e92c3cac8acb0cbe5c79fc8e8a3b427d7e151245c8eecc52b1c32fa00",
+    "objectiveId": "gamma-enwiki9-hutter-90m-v3",
+    "objectivePath": "contracts/research/v3/objective-contract.json",
+    "targetScoreBytes": 90000000
+  },
+  "reflectionId": "r-20260913t033732z_ce8762eb52",
+  "schema": "gamma.enwiki9.reflection-receipt.v1",
+  "validity": {
+    "classification": "valid",
+    "reasons": [
+      "All15 phases closed under a complete guard; four exact inverses/archive repeats, coder/reset-state identity, byte-identical P/K and released-parent parity pass on identical exposed raw bytes."
+    ],
+    "valid": true
+  }
+}

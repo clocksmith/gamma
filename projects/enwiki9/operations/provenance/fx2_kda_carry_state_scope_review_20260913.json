@@ -1,0 +1,63 @@
+{
+  "schema": "gamma.enwiki9.kda-carry-state-scope-review.v1",
+  "candidate_id": "fx2_kda_carry_opening250k_v1",
+  "reviewer": "root implementation self-review, not independent replication",
+  "files": [
+    {
+      "path": "results/fx2_cmix_transformer_static_vocab_fixture50051_q0_v1/work/cpp_infer/src/opt/model_opt.cpp",
+      "bytes": 18026,
+      "sha256": "b49493ece5a3a135baa24eeef00d6aaf56335324d0c6355b7283e46736c9df8e"
+    },
+    {
+      "path": "results/fx2_cmix_transformer_static_vocab_fixture50051_q0_v1/work/cpp_infer/src/opt/model_opt.h",
+      "bytes": 2672,
+      "sha256": "cff755873e9539fe215335649aceefda9bc2ceef08d47bed8813469e2ea82035"
+    },
+    {
+      "path": "results/fx2_cmix_transformer_static_vocab_fixture50051_q0_v1/work/cpp_infer/src/opt/attn.h",
+      "bytes": 7778,
+      "sha256": "b8c728e30fb0ef5781e46970ee59e157bdfb53cb557383dc0677fe8c20e40048"
+    },
+    {
+      "path": "results/fx2_cmix_transformer_static_vocab_fixture50051_q0_v1/work/cpp_infer/src/opt/attn.cpp",
+      "bytes": 24937,
+      "sha256": "9991e1d1b2814ef0f41b0e1f37b6f273002f98777bee5d7fa5206f90cc03db11"
+    },
+    {
+      "path": "results/fx2_cmix_transformer_static_vocab_fixture50051_q0_v1/work/cpp_infer/src/opt/kda.h",
+      "bytes": 5814,
+      "sha256": "f878aac685e32e249323def8e28838f8c11069a5e557fa0725aad97f59615820"
+    },
+    {
+      "path": "results/fx2_cmix_transformer_static_vocab_fixture50051_q0_v1/work/cpp_infer/src/opt/kda.cpp",
+      "bytes": 18835,
+      "sha256": "06c66e4518720872a6b8597da36fcbe04fb4a5df6966655c39bea44272d14dcd"
+    },
+    {
+      "path": "results/fx2_cmix_transformer_static_vocab_fixture50051_q0_v1/work/src/predictor.cpp",
+      "bytes": 27424,
+      "sha256": "0b79f43644daee942c9cb6da18fa464f0eb0185b6fc7ffc43cde703808fe537e"
+    },
+    {
+      "path": "lib/fx2_kda_carry_v1.hpp",
+      "bytes": 2026,
+      "sha256": "a854d51f135769a8365ef39feeb479838812b40e9d81f83b9dd8d254549b77fe"
+    },
+    {
+      "path": "operations/provenance/fx2_kda_carry_adapter_v1.json",
+      "bytes": 3637,
+      "sha256": "4f0669bb9de4d10b2270e61b314c6ed144776cb61ef4caa9d9cd748967cd71be"
+    }
+  ],
+  "findings": [
+    "AttnKV and AttnKVF32 contain only key/value arrays; validity comes from transformer t. The next token overwrites slot0 before attention consumes prefix[0,1); each subsequent valid slot is overwritten before first use. Old KV bytes therefore need not match at reset.",
+    "Each KdaState has S, ring, pos and padding. Boundary serialization includes every S/ring/pos value; padding is excluded. All rings and pos reset to zero in every arm.",
+    "The six per-token skip_store rows are each overwritten in layers0..5 before corresponding reads in layers6..11 of the same token; they carry no authoritative inter-token history.",
+    "The next step refreshes prior_f32 from the same causal PPM distribution, zeros its pads, and overwrites token/layer scratch before use; immutable weights are separately hash-bound.",
+    "Only the reset method and diagnostic coder instrumentation change. Other native models keep original deterministic initialization and decoded-bit update order. Their equality is a source-based induction argument plus full probability/coder evidence, not a complete native-memory serialization.",
+    "No corpus outcome is inferred by this source review. Native encode/decode/repeat and guard evidence remain required."
+  ],
+  "complete_native_state_serialized": false,
+  "cross_architecture_proof": false,
+  "objective_credit_bytes": 0
+}
