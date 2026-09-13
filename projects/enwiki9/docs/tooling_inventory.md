@@ -12,7 +12,7 @@ Reusable artifact helpers for new tools: [lib/artifacts.py](../lib/artifacts.py)
 The LibNC initializer teacher launcher exits before the first forward, gradient, update, or coded symbol; its source-bound experiment defines that boundary.
 The delayed-status helper's `enwiki9_delayed_status_latest.log` pointer is operational history, not present-host occupancy proof.
 
-Coverage: **1159 files** (33 .c, 76 .cpp, 1 .gdb, 1 .h, 1 .hpp, 1 .html, 1043 .py, 3 .sh).
+Coverage: **1160 files** (33 .c, 76 .cpp, 1 .gdb, 1 .h, 1 .hpp, 1 .html, 1044 .py, 3 .sh).
 
 | Tool | Purpose | Referenced contracts |
 |---|---|---|
@@ -941,6 +941,7 @@ Coverage: **1159 files** (33 .c, 76 .cpp, 1 .gdb, 1 .h, 1 .hpp, 1 .html, 1043 .p
 | [`tools/opcode_previous_word_bounded_release_corpus_v1.py`](../tools/opcode_previous_word_bounded_release_corpus_v1.py) | Fixed 1MB bounds around the unchanged previous-word codec and observer. | [3](../operations/adaptive/experiments/opcode_previous_word_confirmation1m_q0_v2.json) |
 | [`tools/opcode_previous_word_bounded_terminal_v1.py`](../tools/opcode_previous_word_bounded_terminal_v1.py) | Close the fixed confirmation from retained evidence; never execute a codec. | none found |
 | [`tools/opcode_previous_word_bounded_terminal_v2.py`](../tools/opcode_previous_word_bounded_terminal_v2.py) | Close the fixed confirmation from retained evidence; never execute a codec. | none found |
+| [`tools/opcode_previous_word_bounded_terminal_v3.py`](../tools/opcode_previous_word_bounded_terminal_v3.py) | Close the fixed confirmation from retained evidence; never execute a codec. | none found |
 | [`tools/opcode_previous_word_build_v1.py`](../tools/opcode_previous_word_build_v1.py) | Build a deterministic standalone previous-word literal package. | [7](../operations/adaptive/experiments/opcode_previous_word250k_q0_v1.json) |
 | [`tools/opcode_previous_word_compact_build_v1.py`](../tools/opcode_previous_word_compact_build_v1.py) | Materialize a new source-integrated realization of the measured word predictor. | [6](../operations/adaptive/experiments/opcode_previous_word_confirmation1m_q0_v1.json) |
 | [`tools/opcode_previous_word_compact_corpus_v1.py`](../tools/opcode_previous_word_compact_corpus_v1.py) | Reuse the bounded corpus CLI with the source-integrated P/K/D/S observer. | [5](../operations/adaptive/experiments/opcode_previous_word_confirmation1m_q0_v1.json) |
