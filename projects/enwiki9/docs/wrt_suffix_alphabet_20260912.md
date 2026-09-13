@@ -11,6 +11,12 @@ remain unchanged. Every word keeps its code length; vocabulary, word spelling
 and the native backend remain identical. There is no corpus fitting or learned
 permutation. A decoder can derive the mapping from the existing dictionary.
 
+The hypothesis is that early code bytes can expose a word-ending family before
+the exact word identity. This changes what the finite predictor learns first
+without rearranging raw text or transmitting a learned class table. A bijection
+does not itself eliminate information: the native archive must demonstrate that
+the existing model uses this representation more effectively.
+
 Class-based word prediction is established prior art; [Brown et al.](https://aclanthology.org/J92-4003/)
 learn word classes from co-occurrence. This fixed spelling-based alphabet does
 not implement that clustering algorithm and carries no global novelty claim.
