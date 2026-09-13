@@ -12,7 +12,7 @@ Reusable artifact helpers for new tools: [lib/artifacts.py](../lib/artifacts.py)
 The LibNC initializer teacher launcher exits before the first forward, gradient, update, or coded symbol; its source-bound experiment defines that boundary.
 The delayed-status helper's `enwiki9_delayed_status_latest.log` pointer is operational history, not present-host occupancy proof.
 
-Coverage: **1165 files** (33 .c, 76 .cpp, 1 .gdb, 1 .h, 1 .hpp, 1 .html, 1049 .py, 3 .sh).
+Coverage: **1166 files** (33 .c, 76 .cpp, 1 .gdb, 1 .h, 1 .hpp, 1 .html, 1050 .py, 3 .sh).
 
 | Tool | Purpose | Referenced contracts |
 |---|---|---|
@@ -1172,6 +1172,7 @@ Coverage: **1165 files** (33 .c, 76 .cpp, 1 .gdb, 1 .h, 1 .hpp, 1 .html, 1049 .p
 | [`tools/wrt_suffix_alphabet_gate_v1.py`](../tools/wrt_suffix_alphabet_gate_v1.py) | Exact bounded strong-codec comparison of a fixed dictionary alphabet. | [1](../operations/adaptive/experiments/wrt_suffix_alphabet250k_q0_v1.json) |
 | [`tools/wrt_suffix_alphabet_gate_v2.py`](../tools/wrt_suffix_alphabet_gate_v2.py) | Exact bounded strong-codec comparison of a fixed dictionary alphabet. | [1](../operations/adaptive/experiments/wrt_suffix_alphabet250k_q0_v2.json) |
 | [`tools/wrt_suffix_alphabet_v1.py`](../tools/wrt_suffix_alphabet_v1.py) | Fixed dictionary-only word alphabet; no corpus fitting or new vocabulary. | [2](../operations/adaptive/experiments/wrt_suffix_alphabet250k_q0_v1.json) |
+| [`tools/wrt_suffix_control_completion_v1.py`](../tools/wrt_suffix_control_completion_v1.py) | Complete two missing control checks without replacing failed resource evidence. | [1](../operations/adaptive/experiments/wrt_suffix_control_completion250k_q0_v1.json) |
 | [`tools/wrt_symmetry_orbit_oracle.py`](../tools/wrt_symmetry_orbit_oracle.py) | Screen reversible surface-symmetry factorizations with causal MDL codes. This is a zero-credit feasibility oracle over raw spans corresponding to WRT-relevant realizations. It compares a causal exact-surface code with a causal representative-plus-action code. It does not claim endpoint archive gain and does not authorize a native transform by itself. | none found |
 | [`tools/wrt_title_support_backoff.py`](../tools/wrt_title_support_backoff.py) | Score a support-backed, contrastive WRT title endpoint. The current page title and previous page title each define a hierarchy of token-transition distributions. The endpoint interpolates those distributions from short to long contexts, then either applies the current distribution or its contrast against the previous-title control. All state is rebuilt from completed WRT events and all arithmetic affecting probabilities is integer. | none found |
 | [`tools/wrt_title_token_automaton.py`](../tools/wrt_title_token_automaton.py) | Score a causal WRT title-token endpoint against compact FX2 probabilities. The compact trace contains only FX2's pre-bit probability and the true bit. This tool reconstructs the exact WRT byte stream, tokenizes it with the same dictionary code contract, rebuilds current and previous page titles, and scores title-token predictions without rewriting the stream. | none found |
