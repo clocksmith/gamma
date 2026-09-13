@@ -1,0 +1,82 @@
+{
+  "attribution": {
+    "causalConfidence": "high",
+    "controlsEquivalent": null,
+    "failureClass": "invalid-experiment",
+    "localizedCause": "Pretraining reads dictionary order unless CMIX_PRETRAIN_FILE explicitly names the fixed original dictionary."
+  },
+  "candidateId": "wrt_suffix_alphabet250k_q0_v1",
+  "candidateRevision": {
+    "candidateId": "wrt_suffix_alphabet250k_q0_v1",
+    "candidateTreeSha256": "sha256:9a9a07eb8a5de4215137aa0080012e63bab00bfb2d3a2609c5da9f180d979d5b",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/wrt_suffix_alphabet250k_q0_v1/20260913T015218285921Z_9a9a07eb8a5d.json",
+      "sha256": "sha256:9b105b19245109f8b37b5372530a8f5d9b12c760231716e80ed36240d5cf0881"
+    }
+  },
+  "decision": {
+    "killPredicatesPass": null,
+    "nextGateBytes": null,
+    "promotionPredicatesPass": null,
+    "rationale": "Preserve the cancelled identity without an algorithmic verdict; separately published v2 fixes pretraining before execution.",
+    "verdict": "hold"
+  },
+  "evidence": [
+    {
+      "path": "operations/provenance/wrt_suffix_alphabet_custody_20260912.json",
+      "sha256": "sha256:6ecac7b7d3f750ddd7411ee3b4ed9e4c3bf87ac6f38d9ee9df64237573ef1c9a"
+    }
+  ],
+  "experiment": {
+    "path": "operations/adaptive/experiments/wrt_suffix_alphabet250k_q0_v1.json",
+    "sha256": "sha256:8ac0aa7090357fe56e8433999ee62bbcc538aa67765d5aabe73bd09e4be7a248"
+  },
+  "generatedUtc": "2026-09-13T02:01:50+00:00",
+  "hypothesis": {
+    "rationale": "No corpus process or archive was produced by this job.",
+    "verdict": "not-tested"
+  },
+  "job": {
+    "path": "operations/adaptive/cancelled/919_20260913T015218Z_dfe5c2df02.json",
+    "sha256": "sha256:5f617cd8242a05bf64967130dafe17632d3da76e9e6804efe1ad2df852cf4936"
+  },
+  "knowledge": {
+    "retiredDimensions": [],
+    "transferableLessons": [
+      "Hold pretraining input order fixed when testing a coding dictionary permutation."
+    ],
+    "uncertainties": [
+      "No compression, inversion, repeatability or resource measurements exist for this unexecuted identity."
+    ]
+  },
+  "measurementAssertions": [],
+  "measurements": {
+    "idealBitsSaved": null,
+    "memoryRatio": null,
+    "minimumPartitionIdealBitsSaved": null,
+    "netBytesSaved": null,
+    "positiveSegmentFraction": null,
+    "runtimeRatio": null,
+    "scopeBytes": null,
+    "scopeSymbols": null,
+    "sourceBytesDelta": null,
+    "transferRetention": null
+  },
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:e91ff20e92c3cac8acb0cbe5c79fc8e8a3b427d7e151245c8eecc52b1c32fa00",
+    "objectiveId": "gamma-enwiki9-hutter-90m-v3",
+    "objectivePath": "contracts/research/v3/objective-contract.json",
+    "targetScoreBytes": 90000000
+  },
+  "reflectionId": "r-20260913t015218z_dfe5c2df02",
+  "schema": "gamma.enwiki9.reflection-receipt.v1",
+  "validity": {
+    "classification": "invalid-experiment",
+    "reasons": [
+      "Cancelled before any execution: source inspection showed that the original runner allowed dictionary permutation to change both coding and predictor-pretraining order."
+    ],
+    "valid": false
+  }
+}
