@@ -63,3 +63,18 @@ score remains unknown against the 90,000,000-byte (9.0000000%) target.
 
 See the [frozen experiment](../operations/adaptive/experiments/wrt_suffix_alphabet250k_q0_v2.json)
 and [dictionary checks](../operations/provenance/wrt_suffix_alphabet_unit_20260912.json).
+
+The v2 execution reached ten completed phases. P/K archives are 44,958 bytes;
+D is 46,123 bytes, with exact inverses and byte-identical repeats for all three.
+S encoded to 46,400 bytes, but root ENOSPC interrupted its decode and resource
+recording. The [partial receipt](../operations/provenance/wrt_suffix_alphabet_v2_partial_20260912.json)
+retains g_P=-1165; confirmed g_S is missing. No original resource pass is claimed.
+
+Candidate `wrt_suffix_control_completion250k_q0_v1` completes only S decode and
+repeat on an independent temporary filesystem. Its frozen inputs bind the
+retained archives, inverses, repeats, original dictionary, executable and v2
+failure evidence. CPU 2, 10,000,000,000 memory bytes, 67,108,864 scratch bytes,
+zero swap and a 900-second elapsed stop govern this separate execution. The
+native settings and population remain unchanged. Completed control evidence may
+close the archive comparison across executions, but cannot restore v2's missing
+terminal resource observations or establish internal predictive-state parity.

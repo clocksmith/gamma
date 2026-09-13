@@ -10,21 +10,56 @@
     "sha256": "sha256:044147f7ffe6922ea8dafd52fc3d4426077b20958adbcd421245ad41adcfc1e4"
   },
   "execution_mode": "discovery",
+  "execution_resources": {
+    "boot_id": "3ce46712-27bc-4199-8e48-e2b3d23926cb",
+    "budget": {
+      "cgroup_parent": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice",
+      "cpus": [
+        2
+      ],
+      "memory_bytes": 10000000000,
+      "scratch_bytes": 67108864,
+      "swap_bytes": 0,
+      "wall_seconds": 3600
+    },
+    "cgroup_inode": 306207,
+    "cgroup_path": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/gamma-enwiki9-20260913T015312Z_af905b12d5",
+    "cpu_enforcement": "taskset-and-sampled-affinity-guard",
+    "groups": [
+      {
+        "created": true,
+        "inode": 306207,
+        "kernel_cpuset": false,
+        "memory_bytes": 10000000000,
+        "path": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/gamma-enwiki9-20260913T015312Z_af905b12d5"
+      }
+    ],
+    "guard_command_sha256": "078da559b99beda94d1e0ad99ca09b05bc675f18da64b3b4ada59d138bc92931",
+    "guard_path": "run_logs/adaptive/20260913T015312Z_af905b12d5.resources/guard.json",
+    "missing_diagnostics": [
+      "kernel cpuset controller is not delegated; taskset assignment and existing affinity guard remain active"
+    ],
+    "timing_authority": "diagnostic"
+  },
   "experiment": {
     "path": "operations/adaptive/experiments/wrt_suffix_alphabet250k_q0_v2.json",
     "sha256": "sha256:09140738ba57219c9e746a9273ba616d65856d0f9f1b7fec4e69093280d8a09c"
   },
   "gate_size": 250000,
-  "held": true,
+  "held": false,
   "held_at": "2026-09-13T01:53:13+00:00",
   "hold_history": [
     {
       "at": "2026-09-13T01:53:13+00:00",
       "held": true,
       "reason": "Await source and ownership publication plus fresh bounded resource admission."
+    },
+    {
+      "at": "2026-09-13T01:55:17+00:00",
+      "held": false,
+      "reason": "Source and ownership published at19141ca8f. Fresh startup records CPU2 idle,77.3GB available memory,8.25GB scratch, no live corpus worker and no exclusive lease. Admit fixed one-CPU,10GB memory,64MiB scratch,3600s diagnostic with file-backed allocations disabled and retained-parent parity mandatory."
     }
   ],
-  "hold_reason": "Await source and ownership publication plus fresh bounded resource admission.",
   "job_id": "20260913T015312Z_af905b12d5",
   "priority": 80,
   "proposal": {
@@ -33,6 +68,7 @@
   },
   "proposal_id": "wrt_suffix_alphabet250k_q0_v2",
   "purpose": "diagnostic",
+  "released_at": "2026-09-13T01:55:17+00:00",
   "resource_budget": {
     "cgroup_parent": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice",
     "cpus": [
@@ -51,10 +87,14 @@
   "scratch_directories": [
     "results/wrt_suffix_alphabet250k_q0_v2"
   ],
-  "state": "pending",
+  "started_at": "2026-09-13T01:55:18+00:00",
+  "state": "running",
   "submitted_at": "2026-09-13T01:53:12+00:00",
   "tags": [],
   "timing_authority": "diagnostic",
   "tool": "tools/wrt_suffix_alphabet_gate_v2.py",
-  "tool_args": []
+  "tool_args": [],
+  "worker_pid": 997020,
+  "worker_proc_start_ticks": 236065598,
+  "worker_started_at": "2026-09-13T01:55:18+00:00"
 }

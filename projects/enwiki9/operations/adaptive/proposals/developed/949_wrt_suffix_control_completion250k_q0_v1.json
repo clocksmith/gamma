@@ -1,0 +1,45 @@
+{
+  "candidate_id": "wrt_suffix_control_completion250k_q0_v1",
+  "claimed_at": "2026-09-13T02:33:58+00:00",
+  "created_at": "2026-09-13T02:33:58+00:00",
+  "developed_at": "2026-09-13T02:33:58+00:00",
+  "evidence": [
+    {
+      "path": "results/wrt_suffix_alphabet250k_q0_v2/S.dic",
+      "sha256": "sha256:4868506e20179a07aa86331a228e61f3f525658356fcface6010d3e5be4ad241"
+    }
+  ],
+  "expected_savings_bytes": 0,
+  "experiment": {
+    "path": "operations/adaptive/experiments/wrt_suffix_control_completion250k_q0_v1.json",
+    "sha256": "sha256:9d99f185d2d8e624c95211ef70f336b39d824b02c608b4808ff8760708c73593"
+  },
+  "hypothesis": "The retained shuffled control archive exactly reconstructs the fixed input and is byte-identical to a fresh encode under the unchanged v2 native settings.",
+  "interfaces_exposed": [
+    "Evidence completion only: decode and repeat the retained S archive on independent temporary storage. Codec, dictionaries, population and all comparison arms remain unchanged."
+  ],
+  "kill_condition": "Any inverse or repeat mismatch invalidates the shuffled comparison; resource failure leaves required checks incomplete.",
+  "max_program_bytes": 0,
+  "mechanism_change": "other",
+  "mechanism_change_bonus": 0,
+  "mechanism_class": "representation",
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:e91ff20e92c3cac8acb0cbe5c79fc8e8a3b427d7e151245c8eecc52b1c32fa00",
+    "objectiveId": "gamma-enwiki9-hutter-90m-v3",
+    "objectivePath": "contracts/research/v3/objective-contract.json",
+    "targetScoreBytes": 90000000
+  },
+  "owner": "root_alphabet",
+  "parent": null,
+  "parent_proposal_id": null,
+  "priority": 50,
+  "promotion_condition": "Actual parent and shuffled-control archive gains followed by complete packaging and fresh confirmation.",
+  "proposal_id": "wrt_suffix_control_completion250k_q0_v1",
+  "retired_neighborhoods": [],
+  "schema": "gamma.enwiki9.algorithm-proposal.v2",
+  "search_priority": 50,
+  "state": "developed",
+  "title": "Complete retained shuffled control evidence after root ENOSPC"
+}

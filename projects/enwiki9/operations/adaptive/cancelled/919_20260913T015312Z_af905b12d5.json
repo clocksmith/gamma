@@ -1,0 +1,117 @@
+{
+  "administrative_only": true,
+  "cancellation_reason": "Root ENOSPC interrupted the guard and controller; all observed process identities and cgroup are absent. Original execution return code and complete final resource evidence remain unknown.",
+  "cancelled_at": "2026-09-13T02:28:45.203733+00:00",
+  "candidate_id": "wrt_suffix_alphabet250k_q0_v2",
+  "candidate_revision": {
+    "path": "operations/adaptive/candidate-revisions/wrt_suffix_alphabet250k_q0_v2/20260913T015312563860Z_b0db5bc97f69.json",
+    "sha256": "sha256:5fbee2b69acc93d39142cbe7c752a5aa472077825765742e1174ba42b8e8b9f0"
+  },
+  "candidate_tree_sha256": "sha256:b0db5bc97f699a91d0ad7907fa3c0b4326d47fa303ac2d77a2dcacfad1f2975c",
+  "execution_guard": {
+    "path": "tools/run_with_resource_guard_v3.py",
+    "sha256": "sha256:044147f7ffe6922ea8dafd52fc3d4426077b20958adbcd421245ad41adcfc1e4"
+  },
+  "execution_mode": "discovery",
+  "execution_resources": {
+    "boot_id": "3ce46712-27bc-4199-8e48-e2b3d23926cb",
+    "budget": {
+      "cgroup_parent": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice",
+      "cpus": [
+        2
+      ],
+      "memory_bytes": 10000000000,
+      "scratch_bytes": 67108864,
+      "swap_bytes": 0,
+      "wall_seconds": 3600
+    },
+    "cgroup_inode": 306207,
+    "cgroup_path": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/gamma-enwiki9-20260913T015312Z_af905b12d5",
+    "cpu_enforcement": "taskset-and-sampled-affinity-guard",
+    "groups": [
+      {
+        "created": true,
+        "inode": 306207,
+        "kernel_cpuset": false,
+        "memory_bytes": 10000000000,
+        "path": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/gamma-enwiki9-20260913T015312Z_af905b12d5"
+      }
+    ],
+    "guard_command_sha256": "078da559b99beda94d1e0ad99ca09b05bc675f18da64b3b4ada59d138bc92931",
+    "guard_path": "run_logs/adaptive/20260913T015312Z_af905b12d5.resources/guard.json",
+    "missing_diagnostics": [
+      "kernel cpuset controller is not delegated; taskset assignment and existing affinity guard remain active"
+    ],
+    "timing_authority": "diagnostic"
+  },
+  "experiment": {
+    "path": "operations/adaptive/experiments/wrt_suffix_alphabet250k_q0_v2.json",
+    "sha256": "sha256:09140738ba57219c9e746a9273ba616d65856d0f9f1b7fec4e69093280d8a09c"
+  },
+  "finished_at": "2026-09-13T02:28:45.203733+00:00",
+  "finished_at_scope": "administrative closure; execution end time unknown",
+  "gate_size": 250000,
+  "held": false,
+  "held_at": "2026-09-13T01:53:13+00:00",
+  "hold_history": [
+    {
+      "at": "2026-09-13T01:53:13+00:00",
+      "held": true,
+      "reason": "Await source and ownership publication plus fresh bounded resource admission."
+    },
+    {
+      "at": "2026-09-13T01:55:17+00:00",
+      "held": false,
+      "reason": "Source and ownership published at19141ca8f. Fresh startup records CPU2 idle,77.3GB available memory,8.25GB scratch, no live corpus worker and no exclusive lease. Admit fixed one-CPU,10GB memory,64MiB scratch,3600s diagnostic with file-backed allocations disabled and retained-parent parity mandatory."
+    }
+  ],
+  "job_id": "20260913T015312Z_af905b12d5",
+  "preserved_frozen_running_record": {
+    "bytes": 3980,
+    "path": "operations/evidence/wrt_suffix_alphabet_v2_frozen_running.json",
+    "sha256": "66f2ae69c8d5df88b1a96818b4887ab1fc03cff5bb222ed6f5e598ad221e1b98"
+  },
+  "priority": 80,
+  "proposal": {
+    "path": "operations/adaptive/proposals/developed/929_wrt_suffix_alphabet250k_q0_v2.json",
+    "sha256": "sha256:abc3dfa70f2577d0c589cfb2ab1744cbb68a26bea6d03814593e3df55a92fd62"
+  },
+  "proposal_id": "wrt_suffix_alphabet250k_q0_v2",
+  "purpose": "diagnostic",
+  "reconciliation": {
+    "bytes": 15561,
+    "path": "operations/provenance/wrt_suffix_alphabet_v2_enospc_20260912.json",
+    "sha256": "66bf0d01ebfad8b05dae1864a3b28b11824a1b32d46b178734f5cbf768680829"
+  },
+  "released_at": "2026-09-13T01:55:17+00:00",
+  "resource_budget": {
+    "cgroup_parent": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice",
+    "cpus": [
+      2
+    ],
+    "memory_bytes": 10000000000,
+    "scratch_bytes": 67108864,
+    "swap_bytes": 0,
+    "wall_seconds": 3600
+  },
+  "runner": {
+    "path": "tools/wrt_suffix_alphabet_gate_v2.py",
+    "sha256": "sha256:ccfc765f996227bee4e5dce91f6104a8d20fa893a9733f82e651ca28bd0f00df"
+  },
+  "schema": "gamma.enwiki9.adaptive-job.v3",
+  "scratch_directories": [
+    "results/wrt_suffix_alphabet250k_q0_v2"
+  ],
+  "stale_running_reconciled": true,
+  "started_at": "2026-09-13T01:55:18+00:00",
+  "state": "cancelled",
+  "state_before_cancel": "running",
+  "submitted_at": "2026-09-13T01:53:12+00:00",
+  "tags": [],
+  "timing_authority": "diagnostic",
+  "tool": "tools/wrt_suffix_alphabet_gate_v2.py",
+  "tool_args": [],
+  "worker_pid": 997020,
+  "worker_proc_start_ticks": 236065598,
+  "worker_started_at": "2026-09-13T01:55:18+00:00"
+}
