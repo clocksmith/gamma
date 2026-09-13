@@ -1,0 +1,56 @@
+{
+  "candidateId": "fx2_kda_carry_opening250k_v1",
+  "candidateTreeSha256": "sha256:757cf6bda23104fa4f64d981cd6cde02bd7c68733700160ab01b78996a125f87",
+  "change": {
+    "evidence": [
+      "operations/adaptive/experiments/fx2_kda_carry_opening250k_v1.json"
+    ],
+    "hypothesis": "Fixed one-sixteenth causal KDA memory carryover at existing resets reduces the native FX2 archive versus original reset and a rotated-value control on exposed opening250KB.",
+    "kind": "implementation",
+    "replacements": [],
+    "summary": [
+      "Only KDA reset law changes: D retains1/16 of decoded-history matrices, S rotates each retained64-column value row by one, K computes and discards carry, P original zero reset. All conv/KV resets, weights, frontend, coder and other models unchanged."
+    ]
+  },
+  "files": [
+    {
+      "blobPath": "operations/adaptive/candidate-blobs/sha256/40/40c739c82c4c3b2816a8a8172f532741c9fca4305d948984765fe12636d806f8",
+      "bytes": 1073,
+      "normalization": "semantic-meta-v1",
+      "path": "meta.json",
+      "sha256": "40c739c82c4c3b2816a8a8172f532741c9fca4305d948984765fe12636d806f8"
+    },
+    {
+      "blobPath": "operations/adaptive/candidate-blobs/sha256/b8/b8beaba2eadd7a738c8a44d68bff032fbf46105b8dd9f71a5a147c423831e849",
+      "bytes": 10111,
+      "normalization": "verbatim",
+      "path": "program.py",
+      "sha256": "b8beaba2eadd7a738c8a44d68bff032fbf46105b8dd9f71a5a147c423831e849"
+    }
+  ],
+  "generatedUtc": "2026-09-13T03:37:32+00:00",
+  "immutableBlobsComplete": true,
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:e91ff20e92c3cac8acb0cbe5c79fc8e8a3b427d7e151245c8eecc52b1c32fa00",
+    "objectiveId": "gamma-enwiki9-hutter-90m-v3",
+    "objectivePath": "contracts/research/v3/objective-contract.json",
+    "targetScoreBytes": 90000000
+  },
+  "parentRevision": {
+    "candidateId": "fx2_cmix_transformer_static_vocab_fixture50051_q0_v1",
+    "candidateTreeSha256": "sha256:c34d07a6c86181c0c998d250e4fa69de351212ad9cce4537d563ee9c71017d07",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/fx2_cmix_transformer_static_vocab_fixture50051_q0_v1/20260905T194245889420Z_c34d07a6c861.json",
+      "sha256": "sha256:20cc2bdcc672b351b693bf7e348fc0f58675a686127571249a07b769d279c564"
+    }
+  },
+  "previousRevision": {
+    "path": "operations/adaptive/candidate-revisions/fx2_kda_carry_opening250k_v1/20260913T033731988296Z_f8dd3da98087.json",
+    "sha256": "sha256:c799e3213e5c685801666cd67bd58bb4505c8e649e3e33ba2b121e324c980db0"
+  },
+  "provenanceClass": "native",
+  "schema": "gamma.enwiki9.candidate-revision.v1",
+  "treeDigestAlgorithm": "sha256-canonical-counted-files-v1"
+}

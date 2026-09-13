@@ -1,0 +1,49 @@
+{
+  "candidate_id": "fx2_kda_carry_opening250k_v1",
+  "claimed_at": "2026-09-13T03:37:31+00:00",
+  "created_at": "2026-09-13T03:37:30+00:00",
+  "developed_at": "2026-09-13T03:37:32+00:00",
+  "evidence": [
+    {
+      "path": "operations/provenance/fx2_xml_word_opening250k_v1_terminal.json",
+      "sha256": "sha256:1a659d7570c5900d3b064813eed2d0bcf526bcff8c576e7ada4f26b38ad717a5"
+    },
+    {
+      "path": "results/fx2_kda_carry_v1_unit/attempt02/receipt.json",
+      "sha256": "sha256:c3bfa23dc4d47073d4937171c70ef7c3fa4047246cafb96b6f52cef645bfd35c"
+    }
+  ],
+  "expected_savings_bytes": 0,
+  "experiment": {
+    "path": "operations/adaptive/experiments/fx2_kda_carry_opening250k_v1.json",
+    "sha256": "sha256:c093058fda20e3368701f66776fc465b583dbb34f35027c086ca72a29c3606a7"
+  },
+  "hypothesis": "Fixed one-sixteenth causal KDA memory carryover at existing resets reduces the native FX2 archive versus original reset and a rotated-value control on exposed opening250KB.",
+  "interfaces_exposed": [
+    "Only KDA reset law changes: D retains1/16 of decoded-history matrices, S rotates each retained64-column value row by one, K computes and discards carry, P original zero reset. All conv/KV resets, weights, frontend, coder and other models unchanged."
+  ],
+  "kill_condition": "A valid g_P<=0 or g_S<=0 stops this fixed development realization. Correctness/control divergence, resource failure and missing required evidence invalidate the affected inference and never establish a compression loss.",
+  "max_program_bytes": 65536,
+  "mechanism_change": "change_update_schedule",
+  "mechanism_change_bonus": 15,
+  "mechanism_class": "endpoint",
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:e91ff20e92c3cac8acb0cbe5c79fc8e8a3b427d7e151245c8eecc52b1c32fa00",
+    "objectiveId": "gamma-enwiki9-hutter-90m-v3",
+    "objectivePath": "contracts/research/v3/objective-contract.json",
+    "targetScoreBytes": 90000000
+  },
+  "owner": "root_kda_carry",
+  "parent": "fx2_cmix_transformer_static_vocab_fixture50051_q0_v1",
+  "parent_proposal_id": null,
+  "priority": 50,
+  "promotion_condition": "Positive g_P and g_S and measured local net; any larger gate separately frozen.",
+  "proposal_id": "fx2_kda_carry_opening250k_v1",
+  "retired_neighborhoods": [],
+  "schema": "gamma.enwiki9.algorithm-proposal.v2",
+  "search_priority": 65,
+  "state": "developed",
+  "title": "Causal recurrent memory across native FX2 article resets"
+}

@@ -1,0 +1,123 @@
+{
+  "schema": "gamma.enwiki9.kda-carry-unit.v1",
+  "status": "passed",
+  "cpu_set": [
+    2
+  ],
+  "address_space_bytes": 536870912,
+  "source": [
+    {
+      "path": "lib/fx2_kda_carry_v1.hpp",
+      "bytes": 2026,
+      "sha256": "a854d51f135769a8365ef39feeb479838812b40e9d81f83b9dd8d254549b77fe"
+    },
+    {
+      "path": "tests/test_fx2_kda_carry_v1.cpp",
+      "bytes": 1439,
+      "sha256": "90d5de74b1baa6099d4786a5222a1d29839cdf28c96ad3bbc1599f2210646016"
+    }
+  ],
+  "commands": [
+    {
+      "name": "optimized-compile",
+      "command": [
+        "/usr/bin/g++",
+        "-std=c++17",
+        "-Wall",
+        "-Wextra",
+        "-O3",
+        "tests/test_fx2_kda_carry_v1.cpp",
+        "-o",
+        "results/fx2_kda_carry_v1_unit/attempt02/optimized"
+      ],
+      "returncode": 0,
+      "elapsed_seconds": 0.11929996870458126
+    },
+    {
+      "name": "optimized-run",
+      "command": [
+        "results/fx2_kda_carry_v1_unit/attempt02/optimized"
+      ],
+      "returncode": 0,
+      "elapsed_seconds": 0.002446203026920557
+    },
+    {
+      "name": "ubsan-compile",
+      "command": [
+        "/usr/bin/g++",
+        "-std=c++17",
+        "-Wall",
+        "-Wextra",
+        "-O1",
+        "-fsanitize=undefined",
+        "-fno-sanitize-recover=all",
+        "tests/test_fx2_kda_carry_v1.cpp",
+        "-o",
+        "results/fx2_kda_carry_v1_unit/attempt02/ubsan"
+      ],
+      "returncode": 0,
+      "elapsed_seconds": 0.12460010219365358
+    },
+    {
+      "name": "ubsan-run",
+      "command": [
+        "results/fx2_kda_carry_v1_unit/attempt02/ubsan"
+      ],
+      "returncode": 0,
+      "elapsed_seconds": 0.0026477319188416004
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "results/fx2_kda_carry_v1_unit/attempt02/optimized",
+      "bytes": 16432,
+      "sha256": "8014e36bcc9ddabe644fbea000d388d6b5d6a8db18608e963659fe612ce5c03e"
+    },
+    {
+      "path": "results/fx2_kda_carry_v1_unit/attempt02/optimized-compile.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "results/fx2_kda_carry_v1_unit/attempt02/optimized-compile.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "results/fx2_kda_carry_v1_unit/attempt02/optimized-run.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "results/fx2_kda_carry_v1_unit/attempt02/optimized-run.stdout",
+      "bytes": 119,
+      "sha256": "02c5f7e346bdc2adb6ea0913d6dabff00eeebe91629ffac51e7d3d30bcaf8a27"
+    },
+    {
+      "path": "results/fx2_kda_carry_v1_unit/attempt02/ubsan",
+      "bytes": 17816,
+      "sha256": "a80e7f6b71e325b757e030eceeec6ca0f44463a9cdde266107ca9fd6df52fe80"
+    },
+    {
+      "path": "results/fx2_kda_carry_v1_unit/attempt02/ubsan-compile.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "results/fx2_kda_carry_v1_unit/attempt02/ubsan-compile.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "results/fx2_kda_carry_v1_unit/attempt02/ubsan-run.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "results/fx2_kda_carry_v1_unit/attempt02/ubsan-run.stdout",
+      "bytes": 119,
+      "sha256": "02c5f7e346bdc2adb6ea0913d6dabff00eeebe91629ffac51e7d3d30bcaf8a27"
+    }
+  ],
+  "scope": "Synthetic reset semantics only; no corpus or native compression."
+}
