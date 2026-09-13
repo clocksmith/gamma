@@ -93,6 +93,41 @@ Gamma implementations. In particular:
 - A resource stop fails its execution gate. A state or inversion failure invalidates
   the affected compression inference. Neither supplies missing compression results.
 
+## Discovery machinery and reproduction
+
+The user's follow-up distinguishes three claims: a package reproduces exact
+bytes; a descendant improves the counted compressor result under matched
+conditions; and improved research machinery actually helps produce a better
+descendant. The third requires matched search budgets and frozen confirmation,
+including evidence that the changed generator, analyzer or selector was used.
+An unchanged model proposing another candidate does not establish recursive
+improvement. This context creates no additional framework or experiment queue.
+
+Reploid could present proposals and evidence, but native jobs remain behind
+`tools/enwiki9_lab.py`. No authenticated Reploid job adapter is established by
+the evidence cited here. Peer coordination can support independent experiments
+and reproduction; it does not prove distributed adaptive decoding or isolated
+timing qualification. Doppler could assist permitted development analysis or
+teacher proposals, subject to model and execution authority. Neither tool's
+existence establishes useful residual information or compressor improvement.
+
+Any final predictor needs decoder-available information and identical coding
+probabilities. Quantization alone is not a synchronization proof. The
+[competition rules](https://hutter1.net/prize/hrules.htm), checked 2026-09-13,
+charge software and archives according to the submitted arrangement, restrict
+external inputs and installations, and prohibit GPU use in the submitted runs.
+Development tooling does not make required models or choices free.
+
+Quines motivate explicit reconstruction dependencies, not compulsory replication.
+A generator's recipe, seed, runtime and execution costs remain relevant. The
+[sign/magnitude package receipt](../operations/provenance/fx2_weight_sign_magnitude_zip_v1_terminal.json)
+records a scoped 456-byte package improvement and withholds full-corpus credit.
+The [cold 1MB receipt](../operations/provenance/opcode_previous_word_confirmation_v4_terminal_20260912.json)
+records g_P=737 and g_S=313, with n_1=627 and n_2=517 as historical source-cost
+sensitivities; final packaging is unknown. These retained receipts were read,
+not rerun for this context addition. The cold comparator differs from the
+strongest counted forecast backend, so its savings do not transfer to that score.
+
 The [suffix alphabet experiment](wrt_suffix_alphabet_20260912.md) tests
 concepts 18 and 45 while retaining the strong backend. Its original-dictionary
 pretraining control was fixed before execution. Exact archive/inverse/repeat
