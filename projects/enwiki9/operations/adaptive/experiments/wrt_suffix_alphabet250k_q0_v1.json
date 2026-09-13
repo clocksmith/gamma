@@ -1,0 +1,167 @@
+{
+  "schema": "gamma.enwiki9.adaptive-experiment-contract.v1",
+  "objective": {
+    "objectiveId": "gamma-enwiki9-hutter-90m-v3",
+    "objectiveDigest": "sha256:e91ff20e92c3cac8acb0cbe5c79fc8e8a3b427d7e151245c8eecc52b1c32fa00",
+    "objectivePath": "contracts/research/v3/objective-contract.json",
+    "targetScoreBytes": 90000000,
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc"
+  },
+  "experimentId": "wrt_suffix_alphabet250k_q0_v1",
+  "proposalId": "wrt_suffix_alphabet250k_q0_v1",
+  "status": "frozen",
+  "registrationTiming": "prospective",
+  "evidenceClass": "diagnostic",
+  "objectiveCreditBytes": 0,
+  "parent": null,
+  "hypothesis": {
+    "claim": "Grouping dictionary words by reversed spelling within unchanged WRT code-length bands improves the retained strongest forecast codec by sharing code prefixes across morphological suffix families.",
+    "falsification": "Reject this fixed alphabet on opening250k if it fails to reduce the actual native archive versus the exact original dictionary; a positive parent gain must also beat shuffled ordering and eventually pay complete package costs."
+  },
+  "changedMechanism": "Deterministic colexicographic dictionary permutation within slots80..3919 and3920..end; first80 words unchanged. Native backend bytes, vocabulary and each word code length unchanged. No corpus fitting or probability calibration.",
+  "invariants": [
+    "Deliberately select lenses2/6: structural equivalence in the coding alphabet rather than a replacement weak predictor.",
+    "Apply last reflection lesson: preserve the strong native predictor and compare actual matched archives.",
+    "Same retained d1066630 backend for all arms; original dictionary retained and P must reproduce archive44958 SHA8159fad519e0d409dbda296b3f6bbe348a541e59a090a5001b18b8bfe655ca0d.",
+    "All twelve subprocess phases run cold on identical exposed opening250k; no heldout or full-corpus inference.",
+    "P/K dictionaries and archives byte-identical; D/S each invert to exact raw input and repeat archives byte for byte.",
+    "No internal-state instrumentation; this is a black-box finite archive screen, not state-boundary confirmation. No model downloads, source compilation or new dependencies.",
+    "Memory allocator mode0 and one OpenMP thread apply equally to every arm; retained P archive parity is mandatory."
+  ],
+  "controls": [
+    {
+      "id": "P",
+      "role": "comparator",
+      "definition": "Original dictionary and retained best-forecast native backend."
+    },
+    {
+      "id": "K",
+      "role": "comparator",
+      "definition": "Reconstruct original canonical dictionary through same transform interface; identical dictionary and archive bytes required."
+    },
+    {
+      "id": "D",
+      "role": "treatment",
+      "definition": "Sort each noninitial code-length band by reversed spelling."
+    },
+    {
+      "id": "S",
+      "role": "negative",
+      "definition": "Sort identical bands by SHA256 of fixed domain and word bytes, retaining the first80 words and code lengths."
+    }
+  ],
+  "population": {
+    "unit": "raw byte",
+    "scopeBytes": 250000,
+    "scopeSymbols": null,
+    "selection": "Entire already exposed opening250k; fixed before execution, no fitting or selection search.",
+    "coordinate": "Raw [0, 250000)."
+  },
+  "causalBoundary": {
+    "availableInformation": [
+      "Existing counted static dictionary, fixed code-order rule, previously decoded native predictor state."
+    ],
+    "forbiddenInformation": [
+      "Uncounted learned semantic labels, corpus-fitted permutation, state reuse from another arm or future truth."
+    ]
+  },
+  "inputs": [
+    {
+      "id": "bound-0",
+      "path": "tools/wrt_suffix_alphabet_v1.py",
+      "sha256": "sha256:4ee4cb274e0c98474b08d8dd34ee70fd1dd12241dbda292b01ed74714db88c2f"
+    },
+    {
+      "id": "bound-1",
+      "path": "tools/wrt_suffix_alphabet_gate_v1.py",
+      "sha256": "sha256:41b867e70f955a18cc6ac97e9ab97c2b0efb069a40ff5775b122ecfe1cbbc84b"
+    },
+    {
+      "id": "bound-2",
+      "path": "operations/evidence/wrt_suffix_alphabet_v1/cmix.bin",
+      "sha256": "sha256:d1066630f0d58894e69bd84519ec7d0f608b9e2fce67ab9ebedde65c58eca194"
+    },
+    {
+      "id": "bound-3",
+      "path": "operations/evidence/wrt_suffix_alphabet_v1/english.dic",
+      "sha256": "sha256:4c8568cca9343b9a6212477880f56f8efd162f8784224a25edd043097d36215a"
+    },
+    {
+      "id": "bound-4",
+      "path": "operations/evidence/fixtures/dualstream_opening250k_v1.raw",
+      "sha256": "sha256:665fc689441b68462d88f82dc33212abe9c4824be095d03a556c9b55a2829fd3"
+    },
+    {
+      "id": "bound-5",
+      "path": "operations/provenance/wrt_suffix_alphabet_unit_20260912.json",
+      "sha256": "sha256:1d5a2bf58ecfc376df3fc63fa4555316d98fc9f9d5dfab1d8969d3cb5d5b972b"
+    },
+    {
+      "id": "bound-6",
+      "path": "results/endpoint428_pair_layer0_runtime_successors_250k_v1/receipt.json",
+      "sha256": "sha256:c3de2d7849fe29e93595eea65da6815d651641a0fa67aab53408c520939052df"
+    },
+    {
+      "id": "bound-7",
+      "path": "results/endpoint428_pair_layer0_runtime_successor_minified_package_v1/receipt.json",
+      "sha256": "sha256:1eef5aabab15e62a792d5428a54bc593f18894df8c66d4cfc69867158fe123b0"
+    },
+    {
+      "id": "bound-8",
+      "path": "operations/adaptive/reflections/20260913T001644Z_a8f55fe2f3.json",
+      "sha256": "sha256:911eb4b34ed435b451925ea3f3babafdd3d5d1d695c5754bca8e51cdae2647e1"
+    }
+  ],
+  "budget": {
+    "expectedGrossSavingsBytes": 0,
+    "maximumAddedPackageBytes": 4096,
+    "expectedNetSavingsBytes": -4096
+  },
+  "search": {
+    "expectedTransferRetention": 0,
+    "expectedRuntimeRatio": 1,
+    "expectedMemoryRatio": 1,
+    "uncertaintyRisk": 1,
+    "interactionRisk": 1
+  },
+  "measurements": [
+    {
+      "id": "g_P",
+      "unit": "bytes",
+      "definition": "P archive bytes minus D archive bytes on exact opening250k."
+    },
+    {
+      "id": "g_S",
+      "unit": "bytes",
+      "definition": "S archive bytes minus D archive bytes on exact opening250k."
+    }
+  ],
+  "promotionPredicates": [
+    {
+      "id": "parent-gain",
+      "measurement": "g_P",
+      "operator": "gt",
+      "threshold": 0
+    },
+    {
+      "id": "association-gain",
+      "measurement": "g_S",
+      "operator": "gt",
+      "threshold": 0
+    }
+  ],
+  "killPredicates": [
+    {
+      "id": "no-parent-gain",
+      "measurement": "g_P",
+      "operator": "lte",
+      "threshold": 0
+    }
+  ],
+  "outputs": [
+    "results/wrt_suffix_alphabet250k_q0_v1/decision.json"
+  ],
+  "outputManifestPolicy": "complete-result-artifacts-v1",
+  "generatedUtc": "2026-09-13T01:52:17.264766+00:00"
+}
