@@ -45,3 +45,22 @@ objective credit is zero. A positive paid ideal lower bound authorizes pricing a
 finite coder and shared implementation only. A nonpositive upper bound rejects
 this fixed family's ideal-plus-table economics on this population. Neither
 outcome settles other correction families, native feedback changes or 90M.
+
+The [closed result](../operations/provenance/fx2_paid_odds_terminal_20260914.json)
+and [validated reflection](../operations/adaptive/reflections/20260914T204448Z_da9938b6c6.json)
+reject this fixed ideal-plus-table configuration. All 128 contexts are populated;
+42 select a nonidentity correction. Gross ideal savings are 144.259853 bits
+(18.032482 ideal bytes), while the table costs 384 bits (48 bytes). The exact
+paid ideal bound is [-262,-220] bits; the floating diagnostic is -239.740147 bits.
+Consequently even the exact best choice cannot pay the declared table under this
+ideal objective. This is not a finite-archive bound or a rejection of all
+calibration, differently encoded tables, contexts or feedback mechanisms.
+
+Both independent fits produce byte-identical JSON and policy files. All 22 input
+bindings, retained P/K archive/coder identities, 1209680 truth bits and exact WRT
+inversion pass. The closed resource guard reports no violations, peak cgroup
+memory 97624064 bytes, allocated scratch 143360 bytes, and completed cleanup.
+One diagnostic ledger row retains this result; no native integration or larger
+run is authorized. The selector remains available for a separately justified
+family. It is the corpus pricing tool requested by the supplied audit, and its
+negative result demonstrates why exact selection alone cannot guarantee gain.
