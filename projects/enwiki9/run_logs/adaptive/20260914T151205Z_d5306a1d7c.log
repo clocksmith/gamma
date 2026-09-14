@@ -1,0 +1,430 @@
+{"command": ["/usr/bin/python3", "/home/x/deco/gamma/projects/enwiki9/tools/run_with_resource_guard_v3.py", "--limit-kib", "1048576", "--official-decimal-limit-kib", "1048576", "--limit-mode", "tree", "--cgroup-path", "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/gamma-enwiki9-20260914T151205Z_d5306a1d7c", "--cgroup-memory-max-bytes", "1073741824", "--temporary-disk-limit-bytes", "16777216", "--phase-marker-path", "/home/x/deco/gamma/projects/enwiki9/run_logs/adaptive/20260914T151205Z_d5306a1d7c.resources/phases.jsonl", "--max-logical-cpus", "1", "--guard-json", "/home/x/deco/gamma/projects/enwiki9/run_logs/adaptive/20260914T151205Z_d5306a1d7c.resources/guard.json", "--label", "20260914T151205Z_d5306a1d7c", "--phase", "diagnostic", "--scratch-path", "/home/x/deco/gamma/projects/enwiki9/results/fx2_kda_conditional_cost250k_v1", "--scratch-path", "/home/x/deco/gamma/projects/enwiki9/run_logs/adaptive/20260914T151205Z_d5306a1d7c.log", "--scratch-path", "/home/x/deco/gamma/projects/enwiki9/run_logs/adaptive/20260914T151205Z_d5306a1d7c.resources", "--scratch-path", "/tmp/gamma-enwiki9-20260914T151205Z_d5306a1d7c-lq5vurn0/fx2_kda_conditional_cost250k_v1", "--", "/usr/bin/taskset", "--cpu-list", "2", "/bin/sh", "-c", "printf '%s\\n' '{\"phase\":\"diagnostic\",\"event\":\"worker_start\",\"detail\":\"operational envelope only; no codec phase credit\"}' >> \"$GAMMA_RESOURCE_PHASE_MARKERS\" || exit 125; exec \"$@\"", "enwiki9-discovery-envelope", "/usr/bin/python3", "/home/x/deco/gamma/projects/enwiki9/tools/fx2_kda_conditional_cost_gate_v1.py"], "job": {"candidate_id": "fx2_kda_conditional_cost250k_v1", "candidate_revision": {"path": "operations/adaptive/candidate-revisions/fx2_kda_conditional_cost250k_v1/20260914T151204199736Z_45710d765737.json", "sha256": "sha256:5f33c77d0813a1fcee450c58c1721caf7130ac19229f2eb71ec6c4f3a7852bb6"}, "candidate_tree_sha256": "sha256:45710d765737ef31a41fc6426f932ad603edb2caa87b019de67cc58f4e30b894", "execution_guard": {"path": "tools/run_with_resource_guard_v3.py", "sha256": "sha256:044147f7ffe6922ea8dafd52fc3d4426077b20958adbcd421245ad41adcfc1e4"}, "execution_mode": "discovery", "execution_resources": {"boot_id": "3ce46712-27bc-4199-8e48-e2b3d23926cb", "budget": {"cgroup_parent": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice", "cpus": [2], "memory_bytes": 1073741824, "scratch_bytes": 16777216, "swap_bytes": 0, "wall_seconds": 300}, "cgroup_inode": 321364, "cgroup_path": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/gamma-enwiki9-20260914T151205Z_d5306a1d7c", "cpu_enforcement": "taskset-and-sampled-affinity-guard", "groups": [{"created": true, "inode": 321364, "kernel_cpuset": false, "memory_bytes": 1073741824, "path": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/gamma-enwiki9-20260914T151205Z_d5306a1d7c"}], "guard_command_sha256": "8c3fe98ee66484707c5e91e368c2c3da067f7a1f7145ecdb0d85ffc9c7b5c5db", "guard_path": "run_logs/adaptive/20260914T151205Z_d5306a1d7c.resources/guard.json", "missing_diagnostics": ["kernel cpuset controller is not delegated; taskset assignment and existing affinity guard remain active"], "timing_authority": "diagnostic"}, "experiment": {"path": "operations/adaptive/experiments/fx2_kda_conditional_cost250k_v1.json", "sha256": "sha256:4e0277ccb791b6929fdfc713f93ba4b8a195727621e661404d541e0181b22b30"}, "gate_size": 250000, "held": false, "held_at": "2026-09-14T15:12:06+00:00", "hold_history": [{"at": "2026-09-14T15:12:06+00:00", "held": true, "reason": "Await source/ownership publication and fresh canonical resource admission."}, {"at": "2026-09-14T15:15:22+00:00", "held": false, "reason": "Published source9a0acb114 and admission354b0528b;38 input Git blobs verified, CPU2 available, no live exclusive lease, bounded trace-only attribution."}], "job_id": "20260914T151205Z_d5306a1d7c", "priority": 80, "proposal": {"path": "operations/adaptive/proposals/developed/949_fx2_kda_conditional_cost250k_v1.json", "sha256": "sha256:96136c7cc20a0b92887e358b06e3dd09e388a7e72328ba3fec66c26e5b08aa3f"}, "proposal_id": "fx2_kda_conditional_cost250k_v1", "purpose": "diagnostic", "released_at": "2026-09-14T15:15:22+00:00", "resource_budget": {"cgroup_parent": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice", "cpus": [2], "memory_bytes": 1073741824, "scratch_bytes": 16777216, "swap_bytes": 0, "wall_seconds": 300}, "runner": {"path": "tools/fx2_kda_conditional_cost_gate_v1.py", "sha256": "sha256:3d4e3a47bebc0899f76ab26c2d0cf7dc11aab2107831fa10ff8e10c28ca54fcc"}, "schema": "gamma.enwiki9.adaptive-job.v3", "scratch_directories": ["results/fx2_kda_conditional_cost250k_v1"], "started_at": "2026-09-14T15:15:22+00:00", "state": "running", "submitted_at": "2026-09-14T15:12:05+00:00", "tags": [], "timing_authority": "diagnostic", "tool": "tools/fx2_kda_conditional_cost_gate_v1.py", "tool_args": []}}
+{"ideal_bits_saved": {"D": -29.467963596197755, "S": -118.71448346177243}, "positive_D_pieces": 45, "PD_certificate": {"ceiling_bits": 6962, "chunks": [{"ceiling_bits": 64, "events": 4096}, {"ceiling_bits": 82, "events": 4096}, {"ceiling_bits": 85, "events": 4096}, {"ceiling_bits": 86, "events": 4096}, {"ceiling_bits": 92, "events": 4096}, {"ceiling_bits": 82, "events": 4096}, {"ceiling_bits": 84, "events": 4096}, {"ceiling_bits": 87, "events": 4096}, {"ceiling_bits": 80, "events": 4096}, {"ceiling_bits": 80, "events": 4096}, {"ceiling_bits": 83, "events": 4096}, {"ceiling_bits": 83, "events": 4096}, {"ceiling_bits": 76, "events": 4096}, {"ceiling_bits": 70, "events": 4096}, {"ceiling_bits": 63, "events": 4096}, {"ceiling_bits": 79, "events": 4096}, {"ceiling_bits": 68, "events": 4096}, {"ceiling_bits": 77, "events": 4096}, {"ceiling_bits": 78, "events": 4096}, {"ceiling_bits": 74, "events": 4096}, {"ceiling_bits": 73, "events": 4096}, {"ceiling_bits": 77, "events": 4096}, {"ceiling_bits": 51, "events": 4096}, {"ceiling_bits": 73, "events": 4096}, {"ceiling_bits": 50, "events": 4096}, {"ceiling_bits": 61, "events": 4096}, {"ceiling_bits": 86, "events": 4096}, {"ceiling_bits": 83, "events": 4096}, {"ceiling_bits": 93, "events": 4096}, {"ceiling_bits": 92, "events": 4096}, {"ceiling_bits": 92, "events": 4096}, {"ceiling_bits": 95, "events": 4096}, {"ceiling_bits": 81, "events": 4096}, {"ceiling_bits": 83, "events": 4096}, {"ceiling_bits": 76, "events": 4096}, {"ceiling_bits": 92, "events": 4096}, {"ceiling_bits": 89, "events": 4096}, {"ceiling_bits": 76, "events": 4096}, {"ceiling_bits": 83, "events": 4096}, {"ceiling_bits": 73, "events": 4096}, {"ceiling_bits": 72, "events": 4096}, {"ceiling_bits": 52, "events": 4096}, {"ceiling_bits": 59, "events": 4096}, {"ceiling_bits": 68, "events": 4096}, {"ceiling_bits": 43, "events": 4096}, {"ceiling_bits": 88, "events": 4096}, {"ceiling_bits": 94, "events": 4096}, {"ceiling_bits": 89, "events": 4096}, {"ceiling_bits": 54, "events": 4096}, {"ceiling_bits": 77, "events": 4096}, {"ceiling_bits": 78, "events": 4096}, {"ceiling_bits": 75, "events": 4096}, {"ceiling_bits": 75, "events": 4096}, {"ceiling_bits": 50, "events": 4096}, {"ceiling_bits": 37, "events": 4096}, {"ceiling_bits": 42, "events": 4096}, {"ceiling_bits": 33, "events": 4096}, {"ceiling_bits": 34, "events": 4096}, {"ceiling_bits": 38, "events": 4096}, {"ceiling_bits": 77, "events": 4096}, {"ceiling_bits": 66, "events": 4096}, {"ceiling_bits": 66, "events": 4096}, {"ceiling_bits": 82, "events": 4096}, {"ceiling_bits": 72, "events": 4096}, {"ceiling_bits": 38, "events": 4096}, {"ceiling_bits": 73, "events": 4096}, {"ceiling_bits": 72, "events": 4096}, {"ceiling_bits": 89, "events": 4096}, {"ceiling_bits": 98, "events": 4096}, {"ceiling_bits": 64, "events": 4096}, {"ceiling_bits": 51, "events": 4096}, {"ceiling_bits": 52, "events": 4096}, {"ceiling_bits": 71, "events": 4096}, {"ceiling_bits": 59, "events": 4096}, {"ceiling_bits": 84, "events": 4096}, {"ceiling_bits": 89, "events": 4096}, {"ceiling_bits": 87, "events": 4096}, {"ceiling_bits": 101, "events": 4096}, {"ceiling_bits": 91, "events": 4096}, {"ceiling_bits": 89, "events": 4096}, {"ceiling_bits": 74, "events": 4096}, {"ceiling_bits": 62, "events": 4096}, {"ceiling_bits": 69, "events": 4096}, {"ceiling_bits": 102, "events": 4096}, {"ceiling_bits": 103, "events": 4096}, {"ceiling_bits": 96, "events": 4096}, {"ceiling_bits": 102, "events": 4096}, {"ceiling_bits": 80, "events": 4096}, {"ceiling_bits": 71, "events": 4096}, {"ceiling_bits": 95, "events": 4096}, {"ceiling_bits": 84, "events": 4096}, {"ceiling_bits": 74, "events": 4096}, {"ceiling_bits": 69, "events": 2852}]}, "PDS_certificate": {"ceiling_bits": 10629, "chunks": [{"ceiling_bits": 90, "events": 4096}, {"ceiling_bits": 70, "events": 4096}, {"ceiling_bits": 94, "events": 4096}, {"ceiling_bits": 93, "events": 4096}, {"ceiling_bits": 93, "events": 4096}, {"ceiling_bits": 101, "events": 4096}, {"ceiling_bits": 100, "events": 4096}, {"ceiling_bits": 86, "events": 4096}, {"ceiling_bits": 100, "events": 4096}, {"ceiling_bits": 92, "events": 4096}, {"ceiling_bits": 93, "events": 4096}, {"ceiling_bits": 89, "events": 4096}, {"ceiling_bits": 91, "events": 4096}, {"ceiling_bits": 100, "events": 4096}, {"ceiling_bits": 92, "events": 4096}, {"ceiling_bits": 89, "events": 4096}, {"ceiling_bits": 89, "events": 4096}, {"ceiling_bits": 86, "events": 4096}, {"ceiling_bits": 83, "events": 4096}, {"ceiling_bits": 68, "events": 4096}, {"ceiling_bits": 80, "events": 4096}, {"ceiling_bits": 82, "events": 4096}, {"ceiling_bits": 77, "events": 4096}, {"ceiling_bits": 87, "events": 4096}, {"ceiling_bits": 87, "events": 4096}, {"ceiling_bits": 87, "events": 4096}, {"ceiling_bits": 84, "events": 4096}, {"ceiling_bits": 82, "events": 4096}, {"ceiling_bits": 79, "events": 4096}, {"ceiling_bits": 88, "events": 4096}, {"ceiling_bits": 59, "events": 4096}, {"ceiling_bits": 70, "events": 4096}, {"ceiling_bits": 67, "events": 4096}, {"ceiling_bits": 55, "events": 4096}, {"ceiling_bits": 47, "events": 4096}, {"ceiling_bits": 66, "events": 4096}, {"ceiling_bits": 108, "events": 4096}, {"ceiling_bits": 88, "events": 4096}, {"ceiling_bits": 94, "events": 4096}, {"ceiling_bits": 109, "events": 4096}, {"ceiling_bits": 108, "events": 4096}, {"ceiling_bits": 98, "events": 4096}, {"ceiling_bits": 104, "events": 4096}, {"ceiling_bits": 103, "events": 4096}, {"ceiling_bits": 92, "events": 4096}, {"ceiling_bits": 98, "events": 4096}, {"ceiling_bits": 84, "events": 4096}, {"ceiling_bits": 86, "events": 4096}, {"ceiling_bits": 100, "events": 4096}, {"ceiling_bits": 101, "events": 4096}, {"ceiling_bits": 94, "events": 4096}, {"ceiling_bits": 88, "events": 4096}, {"ceiling_bits": 92, "events": 4096}, {"ceiling_bits": 84, "events": 4096}, {"ceiling_bits": 72, "events": 4096}, {"ceiling_bits": 69, "events": 4096}, {"ceiling_bits": 71, "events": 4096}, {"ceiling_bits": 50, "events": 4096}, {"ceiling_bits": 62, "events": 4096}, {"ceiling_bits": 73, "events": 4096}, {"ceiling_bits": 64, "events": 4096}, {"ceiling_bits": 47, "events": 4096}, {"ceiling_bits": 98, "events": 4096}, {"ceiling_bits": 110, "events": 4096}, {"ceiling_bits": 95, "events": 4096}, {"ceiling_bits": 92, "events": 4096}, {"ceiling_bits": 80, "events": 4096}, {"ceiling_bits": 62, "events": 4096}, {"ceiling_bits": 96, "events": 4096}, {"ceiling_bits": 94, "events": 4096}, {"ceiling_bits": 83, "events": 4096}, {"ceiling_bits": 75, "events": 4096}, {"ceiling_bits": 90, "events": 4096}, {"ceiling_bits": 65, "events": 4096}, {"ceiling_bits": 52, "events": 4096}, {"ceiling_bits": 42, "events": 4096}, {"ceiling_bits": 51, "events": 4096}, {"ceiling_bits": 44, "events": 4096}, {"ceiling_bits": 41, "events": 4096}, {"ceiling_bits": 39, "events": 4096}, {"ceiling_bits": 41, "events": 4096}, {"ceiling_bits": 71, "events": 4096}, {"ceiling_bits": 92, "events": 4096}, {"ceiling_bits": 69, "events": 4096}, {"ceiling_bits": 77, "events": 4096}, {"ceiling_bits": 85, "events": 4096}, {"ceiling_bits": 93, "events": 4096}, {"ceiling_bits": 83, "events": 4096}, {"ceiling_bits": 39, "events": 4096}, {"ceiling_bits": 73, "events": 4096}, {"ceiling_bits": 83, "events": 4096}, {"ceiling_bits": 81, "events": 4096}, {"ceiling_bits": 90, "events": 4096}, {"ceiling_bits": 100, "events": 4096}, {"ceiling_bits": 105, "events": 4096}, {"ceiling_bits": 89, "events": 4096}, {"ceiling_bits": 48, "events": 4096}, {"ceiling_bits": 51, "events": 4096}, {"ceiling_bits": 57, "events": 4096}, {"ceiling_bits": 72, "events": 4096}, {"ceiling_bits": 74, "events": 4096}, {"ceiling_bits": 63, "events": 4096}, {"ceiling_bits": 81, "events": 4096}, {"ceiling_bits": 114, "events": 4096}, {"ceiling_bits": 92, "events": 4096}, {"ceiling_bits": 97, "events": 4096}, {"ceiling_bits": 110, "events": 4096}, {"ceiling_bits": 99, "events": 4096}, {"ceiling_bits": 102, "events": 4096}, {"ceiling_bits": 99, "events": 4096}, {"ceiling_bits": 93, "events": 4096}, {"ceiling_bits": 70, "events": 4096}, {"ceiling_bits": 75, "events": 4096}, {"ceiling_bits": 75, "events": 4096}, {"ceiling_bits": 84, "events": 4096}, {"ceiling_bits": 113, "events": 4096}, {"ceiling_bits": 122, "events": 4096}, {"ceiling_bits": 97, "events": 4096}, {"ceiling_bits": 97, "events": 4096}, {"ceiling_bits": 115, "events": 4096}, {"ceiling_bits": 102, "events": 4096}, {"ceiling_bits": 61, "events": 4096}, {"ceiling_bits": 109, "events": 4096}, {"ceiling_bits": 101, "events": 4096}, {"ceiling_bits": 94, "events": 4096}, {"ceiling_bits": 96, "events": 4096}, {"ceiling_bits": 89, "events": 4096}, {"ceiling_bits": 62, "events": 2361}]}, "fixed_trajectory_selector_headroom_pass": true}
+{
+  "resource_guard": {
+    "cgroup": {
+      "inode": 321364,
+      "joined_before_exec": true,
+      "memory_max_bytes": 1073741824,
+      "memory_max_rounding_bytes": 0,
+      "memory_peak_reset": true,
+      "path": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/gamma-enwiki9-20260914T151205Z_d5306a1d7c",
+      "previous_memory_max": "1073741824",
+      "requested_memory_max_bytes": 1073741824
+    },
+    "cgroup_events": {
+      "baseline": {
+        "high": 0,
+        "low": 0,
+        "max": 0,
+        "oom": 0,
+        "oom_group_kill": 0,
+        "oom_kill": 0,
+        "sock_throttled": 0
+      },
+      "delta": {
+        "high": 0,
+        "low": 0,
+        "max": 0,
+        "oom": 0,
+        "oom_group_kill": 0,
+        "oom_kill": 0,
+        "sock_throttled": 0
+      },
+      "final": {
+        "high": 0,
+        "low": 0,
+        "max": 0,
+        "oom": 0,
+        "oom_group_kill": 0,
+        "oom_kill": 0,
+        "sock_throttled": 0
+      }
+    },
+    "command": [
+      "/usr/bin/taskset",
+      "--cpu-list",
+      "2",
+      "/bin/sh",
+      "-c",
+      "printf '%s\\n' '{\"phase\":\"diagnostic\",\"event\":\"worker_start\",\"detail\":\"operational envelope only; no codec phase credit\"}' >> \"$GAMMA_RESOURCE_PHASE_MARKERS\" || exit 125; exec \"$@\"",
+      "enwiki9-discovery-envelope",
+      "/usr/bin/python3",
+      "/home/x/deco/gamma/projects/enwiki9/tools/fx2_kda_conditional_cost_gate_v1.py"
+    ],
+    "command_sha256": "f5c0b1ff3343782af1cb3930ad6092486996847230bb3805088a9c909d860821",
+    "elapsed_s": 6.5543,
+    "geekbench5_single_core_score": null,
+    "guards": {
+      "cgroup_memory_guard_exceeded": false,
+      "logical_cpu_guard_exceeded": false,
+      "measurement_incomplete": false,
+      "official_decimal_memory_exceeded": false,
+      "phase_marker_invalid": false,
+      "rss_guard_exceeded": false,
+      "temporary_disk_guard_exceeded": false,
+      "wall_time_guard_exceeded": false
+    },
+    "label": "20260914T151205Z_d5306a1d7c",
+    "latest_sample": {
+      "allowed_cpu_union": [],
+      "cgroup_current_bytes": 475136,
+      "elapsed_s": 6.5536,
+      "max_single_rss_kib": 0,
+      "persistent_status_misses": [],
+      "processes": [],
+      "scratch_allocated_bytes": 233472,
+      "scratch_file_count": 14,
+      "scratch_logical_bytes": 200182,
+      "scratch_race_count": 0,
+      "tree_live_threads": 0,
+      "tree_rss_kib": 0,
+      "tree_runnable_threads": 0
+    },
+    "limit_kib": 1048576,
+    "limit_mode": "tree",
+    "max_logical_cpus": 1,
+    "measurements": {
+      "affinity_complete": true,
+      "cgroup_v2_complete": true,
+      "per_process_vmhwm_sampled": true,
+      "phase_markers_complete": true,
+      "process_tree_rss_complete": true,
+      "scratch_logical_and_allocated_complete": true,
+      "smaps_rollup_complete": true
+    },
+    "objective": {
+      "corpusBytes": 1000000000,
+      "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+      "objectiveDigest": "sha256:e91ff20e92c3cac8acb0cbe5c79fc8e8a3b427d7e151245c8eecc52b1c32fa00",
+      "objectiveId": "gamma-enwiki9-hutter-90m-v3",
+      "objectivePath": "contracts/research/v3/objective-contract.json",
+      "targetScoreBytes": 90000000
+    },
+    "official_decimal_limit_kib": 1048576,
+    "peak_process_vmhwm": {
+      "comm": "python3",
+      "observed_elapsed_s": 3.5348,
+      "pid": 3332571,
+      "start_ticks": 249506225,
+      "vmhwm_kib": 189756
+    },
+    "peak_sample": {
+      "allowed_cpu_union": [
+        2
+      ],
+      "cgroup_current_bytes": 194482176,
+      "elapsed_s": 3.5348,
+      "max_single_rss_kib": 189756,
+      "persistent_status_misses": [],
+      "processes": [
+        {
+          "allowed_cpus": [
+            2
+          ],
+          "comm": "python3",
+          "live_threads": 1,
+          "pid": 3332444,
+          "rss_kib": 18524,
+          "runnable_threads": 0,
+          "start_ticks": 249506155,
+          "vmhwm_kib": 18524
+        },
+        {
+          "allowed_cpus": [
+            2
+          ],
+          "comm": "python3",
+          "live_threads": 1,
+          "pid": 3332571,
+          "rss_kib": 189756,
+          "runnable_threads": 1,
+          "start_ticks": 249506225,
+          "vmhwm_kib": 189756
+        }
+      ],
+      "scratch_allocated_bytes": 45056,
+      "scratch_file_count": 7,
+      "scratch_logical_bytes": 23232,
+      "scratch_race_count": 0,
+      "tree_live_threads": 2,
+      "tree_rss_kib": 208280,
+      "tree_runnable_threads": 1
+    },
+    "peak_tree_sample": {
+      "allowed_cpu_union": [
+        2
+      ],
+      "cgroup_current_bytes": 194482176,
+      "elapsed_s": 3.5348,
+      "max_single_rss_kib": 189756,
+      "persistent_status_misses": [],
+      "processes": [
+        {
+          "allowed_cpus": [
+            2
+          ],
+          "comm": "python3",
+          "live_threads": 1,
+          "pid": 3332444,
+          "rss_kib": 18524,
+          "runnable_threads": 0,
+          "start_ticks": 249506155,
+          "vmhwm_kib": 18524
+        },
+        {
+          "allowed_cpus": [
+            2
+          ],
+          "comm": "python3",
+          "live_threads": 1,
+          "pid": 3332571,
+          "rss_kib": 189756,
+          "runnable_threads": 1,
+          "start_ticks": 249506225,
+          "vmhwm_kib": 189756
+        }
+      ],
+      "scratch_allocated_bytes": 45056,
+      "scratch_file_count": 7,
+      "scratch_logical_bytes": 23232,
+      "scratch_race_count": 0,
+      "tree_live_threads": 2,
+      "tree_rss_kib": 208280,
+      "tree_runnable_threads": 1
+    },
+    "peaks": {
+      "cgroup_memory_peak_bytes": 197799936,
+      "max_observed_process_vmhwm_kib": 189756,
+      "max_sampled_allowed_cpu_count": 1,
+      "max_sampled_cgroup_current_bytes": 194482176,
+      "max_sampled_scratch_allocated_bytes": 233472,
+      "max_sampled_scratch_logical_bytes": 200182,
+      "max_sampled_single_rss_kib": 189756,
+      "max_sampled_tree_live_threads": 2,
+      "max_sampled_tree_rss_kib": 208280,
+      "max_sampled_tree_runnable_threads": 1
+    },
+    "phase": "diagnostic",
+    "phase_marker_path": "/home/x/deco/gamma/projects/enwiki9/run_logs/adaptive/20260914T151205Z_d5306a1d7c.resources/phases.jsonl",
+    "phase_markers": [
+      {
+        "detail": "operational envelope only; no codec phase credit",
+        "event": "worker_start",
+        "observed_elapsed_s": 0.0238,
+        "phase": "diagnostic",
+        "source_line": 1
+      },
+      {
+        "detail": null,
+        "event": "start",
+        "observed_elapsed_s": 1.0249,
+        "phase": "first",
+        "source_line": 2
+      },
+      {
+        "detail": null,
+        "event": "end",
+        "observed_elapsed_s": 4.046,
+        "phase": "first",
+        "source_line": 3
+      },
+      {
+        "detail": null,
+        "event": "start",
+        "observed_elapsed_s": 4.046,
+        "phase": "repeat",
+        "source_line": 4
+      },
+      {
+        "detail": null,
+        "event": "end",
+        "observed_elapsed_s": 6.5536,
+        "phase": "repeat",
+        "source_line": 5
+      }
+    ],
+    "returncode": 0,
+    "sample_count": 14,
+    "sample_interval_seconds": 0.5,
+    "schema": "gamma.enwiki9.resource-guard-receipt.v3",
+    "scratch_paths": [
+      "/home/x/deco/gamma/projects/enwiki9/results/fx2_kda_conditional_cost250k_v1",
+      "/home/x/deco/gamma/projects/enwiki9/run_logs/adaptive/20260914T151205Z_d5306a1d7c.log",
+      "/home/x/deco/gamma/projects/enwiki9/run_logs/adaptive/20260914T151205Z_d5306a1d7c.resources",
+      "/tmp/gamma-enwiki9-20260914T151205Z_d5306a1d7c-lq5vurn0/fx2_kda_conditional_cost250k_v1"
+    ],
+    "smaps_rollup_checkpoints": [
+      {
+        "elapsed_s": 0.0238,
+        "processes": [
+          {
+            "pid": 3332444,
+            "rollup_kib": {
+              "AnonHugePages": 0,
+              "Anonymous": 1952,
+              "FilePmdMapped": 0,
+              "KSM": 0,
+              "LazyFree": 0,
+              "Locked": 0,
+              "Private_Clean": 36,
+              "Private_Dirty": 1952,
+              "Private_Hugetlb": 0,
+              "Pss": 3110,
+              "Pss_Anon": 1952,
+              "Pss_Dirty": 1952,
+              "Pss_File": 1158,
+              "Pss_Shmem": 0,
+              "Referenced": 7592,
+              "Rss": 7592,
+              "Shared_Clean": 5604,
+              "Shared_Dirty": 0,
+              "Shared_Hugetlb": 0,
+              "ShmemPmdMapped": 0,
+              "Swap": 0,
+              "SwapPss": 0
+            },
+            "start_ticks": 249506155
+          }
+        ],
+        "reason": "initial+phase_marker+rss_growth",
+        "tree_rss_kib": 7592
+      },
+      {
+        "elapsed_s": 1.0249,
+        "processes": [
+          {
+            "pid": 3332444,
+            "rollup_kib": {
+              "AnonHugePages": 0,
+              "Anonymous": 7108,
+              "FilePmdMapped": 0,
+              "KSM": 0,
+              "LazyFree": 0,
+              "Locked": 0,
+              "Private_Clean": 12,
+              "Private_Dirty": 7108,
+              "Private_Hugetlb": 0,
+              "Pss": 8812,
+              "Pss_Anon": 7108,
+              "Pss_Dirty": 7108,
+              "Pss_File": 1704,
+              "Pss_Shmem": 0,
+              "Referenced": 18524,
+              "Rss": 18524,
+              "Shared_Clean": 11404,
+              "Shared_Dirty": 0,
+              "Shared_Hugetlb": 0,
+              "ShmemPmdMapped": 0,
+              "Swap": 0,
+              "SwapPss": 0
+            },
+            "start_ticks": 249506155
+          },
+          {
+            "pid": 3332571,
+            "rollup_kib": {
+              "AnonHugePages": 0,
+              "Anonymous": 135908,
+              "FilePmdMapped": 0,
+              "KSM": 0,
+              "LazyFree": 0,
+              "Locked": 0,
+              "Private_Clean": 124,
+              "Private_Dirty": 135908,
+              "Private_Hugetlb": 0,
+              "Pss": 137443,
+              "Pss_Anon": 135908,
+              "Pss_Dirty": 135908,
+              "Pss_File": 1535,
+              "Pss_Shmem": 0,
+              "Referenced": 143532,
+              "Rss": 143532,
+              "Shared_Clean": 7500,
+              "Shared_Dirty": 0,
+              "Shared_Hugetlb": 0,
+              "ShmemPmdMapped": 0,
+              "Swap": 0,
+              "SwapPss": 0
+            },
+            "start_ticks": 249506225
+          }
+        ],
+        "reason": "phase_marker",
+        "tree_rss_kib": 162056
+      },
+      {
+        "elapsed_s": 4.046,
+        "processes": [
+          {
+            "pid": 3332444,
+            "rollup_kib": {
+              "AnonHugePages": 0,
+              "Anonymous": 7108,
+              "FilePmdMapped": 0,
+              "KSM": 0,
+              "LazyFree": 0,
+              "Locked": 0,
+              "Private_Clean": 12,
+              "Private_Dirty": 7108,
+              "Private_Hugetlb": 0,
+              "Pss": 8826,
+              "Pss_Anon": 7108,
+              "Pss_Dirty": 7108,
+              "Pss_File": 1718,
+              "Pss_Shmem": 0,
+              "Referenced": 18588,
+              "Rss": 18588,
+              "Shared_Clean": 11468,
+              "Shared_Dirty": 0,
+              "Shared_Hugetlb": 0,
+              "ShmemPmdMapped": 0,
+              "Swap": 0,
+              "SwapPss": 0
+            },
+            "start_ticks": 249506155
+          },
+          {
+            "pid": 3333094,
+            "rollup_kib": {
+              "AnonHugePages": 0,
+              "Anonymous": 137684,
+              "FilePmdMapped": 0,
+              "KSM": 0,
+              "LazyFree": 0,
+              "Locked": 0,
+              "Private_Clean": 80,
+              "Private_Dirty": 137684,
+              "Private_Hugetlb": 0,
+              "Pss": 139187,
+              "Pss_Anon": 137684,
+              "Pss_Dirty": 137684,
+              "Pss_File": 1503,
+              "Pss_Shmem": 0,
+              "Referenced": 145348,
+              "Rss": 145348,
+              "Shared_Clean": 7584,
+              "Shared_Dirty": 0,
+              "Shared_Hugetlb": 0,
+              "ShmemPmdMapped": 0,
+              "Swap": 0,
+              "SwapPss": 0
+            },
+            "start_ticks": 249506517
+          }
+        ],
+        "reason": "phase_marker",
+        "tree_rss_kib": 163936
+      },
+      {
+        "elapsed_s": 6.5536,
+        "processes": [],
+        "reason": "phase_marker+terminal",
+        "tree_rss_kib": 0
+      }
+    ],
+    "status": "complete",
+    "temporary_disk_limit_bytes": 16777216,
+    "wall_time_limit_seconds": null
+  }
+}
