@@ -1,0 +1,105 @@
+{
+  "schema": "gamma.enwiki9.kda-conditional-publication-checks.v1",
+  "candidate_id": "fx2_kda_conditional_cost250k_v1",
+  "all_ten_checks_pass": true,
+  "checks": [
+    {
+      "command": [
+        "python3",
+        "projects/enwiki9/tools/hutter_run_ledger.py",
+        "--check"
+      ],
+      "returncode": 0
+    },
+    {
+      "command": [
+        "python3",
+        "projects/enwiki9/tools/enwiki9_release_receipts.py",
+        "--check"
+      ],
+      "returncode": 0
+    },
+    {
+      "command": [
+        "python3",
+        "projects/enwiki9/tools/enwiki9_evidence_matrix.py",
+        "--check"
+      ],
+      "returncode": 0
+    },
+    {
+      "command": [
+        "python3",
+        "projects/enwiki9/tools/enwiki9_best_results.py",
+        "--check"
+      ],
+      "returncode": 0
+    },
+    {
+      "command": [
+        "python3",
+        "projects/enwiki9/tools/enwiki9_status_receipt.py",
+        "--check"
+      ],
+      "returncode": 0
+    },
+    {
+      "command": [
+        "python3",
+        "projects/enwiki9/tools/enwiki9_doc_lint.py"
+      ],
+      "returncode": 0
+    },
+    {
+      "command": [
+        "python3",
+        "-m",
+        "json.tool",
+        "projects/enwiki9/upper_bound_certificate.json"
+      ],
+      "returncode": 0
+    },
+    {
+      "command": [
+        "python3",
+        "-m",
+        "json.tool",
+        "projects/enwiki9/docs/status_receipt.json"
+      ],
+      "returncode": 0
+    },
+    {
+      "command": [
+        "python3",
+        "projects/enwiki9/tools/backfill_run_ledger.py",
+        "--check"
+      ],
+      "returncode": 0
+    },
+    {
+      "command": [
+        "python3",
+        "projects/enwiki9/tools/enwiki9_tool_catalogue.py",
+        "--check"
+      ],
+      "returncode": 0
+    }
+  ],
+  "logs": [
+    {
+      "path": "run_logs/manual/kda_conditional_final_refresh_20260914.log",
+      "bytes": 1884,
+      "sha256": "88fef09c16565b70d90910461088bbbbbc5fd34bcc0c2e4efbadb81eaf20b145"
+    },
+    {
+      "path": "run_logs/manual/kda_conditional_final_checks_20260914.log",
+      "bytes": 37229,
+      "sha256": "a744d2fba8444133ec237bdebd07da75b158165bf65cfb83becce48d32f63db3"
+    }
+  ],
+  "canonical_refresh": {
+    "candidate_audit": 0,
+    "normalization": 0
+  },
+  "scope": "Publication consistency; no new codec measurement or prize credit."
+}
