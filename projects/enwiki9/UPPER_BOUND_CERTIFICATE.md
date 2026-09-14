@@ -37,7 +37,7 @@ No verified full-corpus result JSON is present in this workspace.
 | data_size | program | score | archive | program_size | percent | result |
 |---:|---|---:|---:|---:|---:|---|
 | 10,000 | `nncp_compact5_preprocessed_cqq_x86xzopt_nodebug_t4_tarslack_v1` | 240,248 | 6,229 | 234,019 | 2402.48 | `results/nncp_compact5_preprocessed_cqq_x86xzopt_nodebug_t4_tarslack_v1/2026-07-27T213234.json` |
-| 250,000 | `fx2_kda_carry_opening250k_v1` | 33,429 | 33,429 | 0 | 13.3716 | `results/fx2_kda_carry_opening250k_v1/K.driver.json` |
+| 250,000 | `fx2_expert_mix_opening250k_v1` | 33,395 | 33,395 | 0 | 13.358 | `results/fx2_expert_mix_opening250k_v1/D.driver.json` |
 | 1,000,000 | `sleeping_trie_global4_selector_raw_v1` | 494,499 | 473,912 | 20,587 | 49.4499 | `results/sleeping_trie_global4_selector_raw_v1/2026-08-01T193730.json` |
 | 10,000,000 | `endpoint428_pair_layer0_runtime_successor_minified_package_v1` | 1,895,625 | 1,634,500 | 261,125 | 18.95625 | `results/endpoint428_pair_layer0_runtime_successor_minified_package_v1/receipt.json` |
 
@@ -46,7 +46,7 @@ No verified full-corpus result JSON is present in this workspace.
 | data_size | program | archive | score | program_size | archive_bpb | result |
 |---:|---|---:|---:|---:|---:|---|
 | 10,000 | `nncp_compact5_preprocessed_cqq_x86xzopt_nodebug_t4_tarslack_v1` | 6,229 | 240,248 | 234,019 | 4.9832 | `results/nncp_compact5_preprocessed_cqq_x86xzopt_nodebug_t4_tarslack_v1/2026-07-27T213234.json` |
-| 250,000 | `fx2_kda_carry_opening250k_v1` | 33,429 | 33,429 | 0 | 1.069728 | `results/fx2_kda_carry_opening250k_v1/K.driver.json` |
+| 250,000 | `fx2_expert_mix_opening250k_v1` | 33,395 | 33,395 | 0 | 1.06864 | `results/fx2_expert_mix_opening250k_v1/D.driver.json` |
 | 1,000,000 | `sleeping_trie_global4_selector_raw_v1` | 473,912 | 494,499 | 20,587 | 3.791296 | `results/sleeping_trie_global4_selector_raw_v1/2026-08-01T193730.json` |
 | 10,000,000 | `endpoint428_pair_layer0_runtime_successor_10m_v1` | 1,634,500 | 1,914,647 | 280,147 | 1.3076 | `results/endpoint428_pair_layer0_runtime_successor_10m_v1/receipt.json` |
 
