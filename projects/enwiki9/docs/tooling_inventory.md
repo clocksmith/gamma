@@ -12,7 +12,7 @@ Reusable artifact helpers for new tools: [lib/artifacts.py](../lib/artifacts.py)
 The LibNC initializer teacher launcher exits before the first forward, gradient, update, or coded symbol; its source-bound experiment defines that boundary.
 The delayed-status helper's `enwiki9_delayed_status_latest.log` pointer is operational history, not present-host occupancy proof.
 
-Coverage: **1170 files** (33 .c, 76 .cpp, 1 .gdb, 1 .h, 1 .hpp, 1 .html, 1054 .py, 3 .sh).
+Coverage: **1172 files** (33 .c, 76 .cpp, 1 .gdb, 1 .h, 1 .hpp, 1 .html, 1056 .py, 3 .sh).
 
 | Tool | Purpose | Referenced contracts |
 |---|---|---|
@@ -363,6 +363,8 @@ Coverage: **1170 files** (33 .c, 76 .cpp, 1 .gdb, 1 .h, 1 .hpp, 1 .html, 1054 .p
 | [`tools/fx2_issa_shadow_search.py`](../tools/fx2_issa_shadow_search.py) | Offline I-SSA shadow search over fx2 residual logs. This tests the Integer State-Space Attractor idea without running a compressor. It consumes existing per-bit fx2 residual rows, keeps a tiny deterministic integer state vector derived only from prior decoded bits/fields, and measures whether that state improves an exact binary arithmetic shadow coder. The correction is deliberately conservative: a causal residual-bias table keyed by p_bucket, bit_pos, and the attractor bucke | none found |
 | [`tools/fx2_kda_carry_adapter_v1.py`](../tools/fx2_kda_carry_adapter_v1.py) | Create an exact source adapter for one fixed KDA reset experiment. | [1](../operations/adaptive/experiments/fx2_kda_carry_opening250k_v1.json) |
 | [`tools/fx2_kda_carry_opening250k_v1.py`](../tools/fx2_kda_carry_opening250k_v1.py) | One bounded native comparison of fixed causal KDA memory carryover. | [1](../operations/adaptive/experiments/fx2_kda_carry_opening250k_v1.json) |
+| [`tools/fx2_kda_conditional_cost_gate_v1.py`](../tools/fx2_kda_conditional_cost_gate_v1.py) | Bounded repeated conditional attribution of retained native KDA trajectories. | [1](../operations/adaptive/experiments/fx2_kda_conditional_cost250k_v1.json) |
+| [`tools/fx2_kda_conditional_cost_v1.py`](../tools/fx2_kda_conditional_cost_v1.py) | Attribute fixed native trajectories; no new codec or free trace dependency. | [1](../operations/adaptive/experiments/fx2_kda_conditional_cost250k_v1.json) |
 | [`tools/fx2_loss_ledger.py`](../tools/fx2_loss_ledger.py) | Aggregate FX2_LOSS_LEDGER rows from an fx2-cmix stderr log. | none found |
 | [`tools/fx2_loss_probe.py`](../tools/fx2_loss_probe.py) | Build and run a reproducible fx2-cmix coder-side loss ledger probe. | none found |
 | [`tools/fx2_loss_sample_summary.py`](../tools/fx2_loss_sample_summary.py) | Summarize deterministically sampled FX2_LOSS_LEDGER rows. | none found |
@@ -1154,7 +1156,7 @@ Coverage: **1170 files** (33 .c, 76 .cpp, 1 .gdb, 1 .h, 1 .hpp, 1 .html, 1054 .p
 | [`tools/wrt_epoch_frozen_endpoint.cpp`](../tools/wrt_epoch_frozen_endpoint.cpp) | Emit fixed post-warmup byte-context endpoints derived from causal WRT history. | none found |
 | [`tools/wrt_event_context_tree_residual_screen.cpp`](../tools/wrt_event_context_tree_residual_screen.cpp) | Causal residual context tree over completed WRT events and an exact P1 stream. | none found |
 | [`tools/wrt_event_srstc_trace.py`](../tools/wrt_event_srstc_trace.py) | Emit a causal semantic-retrieval endpoint over exact WRT events. Each completed WRT event is indexed under a compact sketch of the raw bytes and Wiki state that preceded it. At a later event, an identical decoder-rebuilt sketch retrieves prior encoded continuations. The candidate probability uses only their already-decoded prefixes and is paired with the frozen endpoint428 probability stream for exact downstream replay. | none found |
-| [`tools/wrt_exact.py`](../tools/wrt_exact.py) | Exact decoder for FX2/CMIX21 WRT text-segment stores. The parser emits one event only after all stored bytes for that event are available. Consumers may therefore replay events causally by releasing an event at its ``end`` stream offset. | [6](../operations/adaptive/experiments/alias_residual_opportunity1m_q0_v1.json) |
+| [`tools/wrt_exact.py`](../tools/wrt_exact.py) | Exact decoder for FX2/CMIX21 WRT text-segment stores. The parser emits one event only after all stored bytes for that event are available. Consumers may therefore replay events causally by releasing an event at its ``end`` stream offset. | [7](../operations/adaptive/experiments/alias_residual_opportunity1m_q0_v1.json) |
 | [`tools/wrt_explicit_copy_mdl_screen.py`](../tools/wrt_explicit_copy_mdl_screen.py) | Upper-bound MDL screen for causal explicit copies in an exact WRT stream. | none found |
 | [`tools/wrt_hashed_residual_online_screen.cpp`](../tools/wrt_hashed_residual_online_screen.cpp) | Causal payload-free hashed residual SSE over exact FX2 probabilities. | none found |
 | [`tools/wrt_hierarchical_phase_residual_screen.cpp`](../tools/wrt_hierarchical_phase_residual_screen.cpp) | Causal hierarchical WRT event-phase residual SSE over exact FX2 probabilities. | none found |
