@@ -1,0 +1,41 @@
+{
+  "schema": "gamma.enwiki9.expert-mixture-plan.v1",
+  "id": "fx2_expert_mix_opening250k_v1",
+  "owner": "root_expert_mix",
+  "caps": {
+    "cpus": [
+      2
+    ],
+    "memory_bytes": 9999998976,
+    "swap_bytes": 0,
+    "scratch_bytes": 24000000000,
+    "wall_seconds": 1800
+  },
+  "phase_elapsed_seconds": 180,
+  "compile_command": [
+    "/usr/bin/make",
+    "-j1",
+    "cmix",
+    "CC=/usr/bin/g++",
+    "CPPFLAGS_PART-THAT-SHOULD-BE-FAST=-DSEED=923 -DUPDATE_LIMIT=3000 -m64 -Wall -std=c++17 -include cstdint -fno-fast-math -fno-math-errno -fno-exceptions -fno-threadsafe-statics -march=x86-64-v3 -mtune=generic -mrecip=none -fdata-sections -ffunction-sections -O3",
+    "CPPFLAGS_PART-THAT-CAN-BE-SLOW=-DSEED=923 -DUPDATE_LIMIT=3000 -m64 -Wall -std=c++17 -include cstdint -fno-fast-math -fno-math-errno -fno-exceptions -fno-threadsafe-statics -march=x86-64-v3 -mtune=generic -mrecip=none -fdata-sections -ffunction-sections -Os"
+  ],
+  "development_configurations": 1,
+  "raw_population": "[0,250000)",
+  "raw_bytes": 250000,
+  "prior_exposure": "Already examined development prefix",
+  "initialization": "Unchanged native cold start and dictionary pretraining; zero delayed histories and fixed posterior prior.",
+  "confirmation": "Unopened; separate frozen design required",
+  "decision_policy": "A valid g_P<=0 or g_S<=0 stops this fixed development realization. Correctness/control divergence, resource failure and missing required evidence invalidate the affected inference and never establish a compression loss.",
+  "source": "operations/provenance/fx2_expert_mix_adapter_v1.json",
+  "unit": "operations/provenance/fx2_expert_mix_unit_20260914.json",
+  "accounting": {
+    "maximum_added_local_component_bytes": 65536,
+    "final_package": null,
+    "objective_credit_bytes": 0
+  },
+  "mechanism": "64contexts: bit_position*8 plus three expert>parent indicator bits. Four components: unchanged parent and three quarter-step probability mixtures toward PPMd, neural byte mixer and final FXCM output. Posterior updated from decoded truths; no parent feedback.",
+  "control": "K computes aligned posterior but emits P counts; S delays each expert by eight bit events. First delayed byte uses parent features. Forced byte-mixer overrides remain unchanged.",
+  "arithmetic": "Q65536 counts. Component (3*p+expert+2)//4. Posterior sum W=2**32; prior [W-3*(W//6),W//6,W//6,W//6]. Rounded posterior min1 with largest remainders and lowest-index ties; __uint128 intermediates. No ideal-regret bound asserted for finite rounding.",
+  "state": "All64*4 weights, eight delayed triples and bit clock serialized at2048bit intervals and termination. K=D adapter states; all arms parent float predictions and observed truths identical."
+}

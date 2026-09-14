@@ -1,0 +1,95 @@
+{
+  "schema": "gamma.enwiki9.exact-source-adapter-multi.v1",
+  "files": [
+    {
+      "source_path": "src/predictor.cpp",
+      "source_sha256": "0b79f43644daee942c9cb6da18fa464f0eb0185b6fc7ffc43cde703808fe537e",
+      "source_bytes": 27424,
+      "patched_sha256": "549a02c32f2206ce61f9cbb731340958cba0d5a3fdbfb626cdf524c35ea2d0ad",
+      "patched_bytes": 27624,
+      "replacements": [
+        {
+          "before": "#include \"predictor.h\"",
+          "after": "#include \"predictor.h\"\n#include \"gamma-expert-mix.h\""
+        },
+        {
+          "before": "  layers_[0].SetInput(input_index++,\n      byte_model_ ? byte_model_->Predict()[0] : 0.5f);",
+          "after": "  const float gamma_ppm = byte_model_ ? byte_model_->Predict()[0] : 0.5f;\n  layers_[0].SetInput(input_index++, gamma_ppm);"
+        },
+        {
+          "before": "  p = sse_.Predict(p);",
+          "after": "  p = sse_.Predict(p);\n  gamma_expert_mix::capture(gamma_ppm, byte_mixer_output,\n      fxcm_model_outputs[fxcm_model_outputs.size()-1], byte_mixer_override < 0);"
+        }
+      ]
+    },
+    {
+      "source_path": "src/coder/encoder.cpp",
+      "source_sha256": "ecd9a2f4f39553e3864c8e9c96c7b512edca46a6fbb3197beaccaf47b0a8fdce",
+      "source_bytes": 914,
+      "patched_sha256": "7aca0319ea2ab5296ac4700ecec96d37568985e4790911c4638cafa7338062db",
+      "patched_bytes": 1202,
+      "replacements": [
+        {
+          "before": "#include \"encoder.h\"",
+          "after": "#include \"encoder.h\"\n#include \"gamma-coder-trace.h\"\n#include \"../gamma-expert-mix.h\""
+        },
+        {
+          "before": "  const unsigned int p = Discretize(p_->Predict());",
+          "after": "  const float gamma_probability = p_->Predict();\n  const unsigned int p = gamma_expert_mix::predict(Discretize(gamma_probability));\n  gamma_fx2_trace::Record gamma_record(gamma_probability, p, x1_, x2_);"
+        },
+        {
+          "before": "    x2_ = (x2_ << 8) + 255;\n  }\n}\n\nvoid Encoder::Flush()",
+          "after": "    x2_ = (x2_ << 8) + 255;\n  }\n  gamma_record.Finish(bit, x1_, x2_);\n}\n\nvoid Encoder::Flush()"
+        },
+        {
+          "before": "  p_->Perceive(bit);",
+          "after": "  gamma_expert_mix::observe(bit);\n  p_->Perceive(bit);"
+        }
+      ]
+    },
+    {
+      "source_path": "src/coder/decoder.cpp",
+      "source_sha256": "1bae2c108906625fb124f3fc602d1d59d814e5a415d963ab74246bf474e8bae9",
+      "source_bytes": 832,
+      "patched_sha256": "c9e86abb078b39c0bd1f847a25d5c85ac5216f8edfeca1a596089500aa2c15cb",
+      "patched_bytes": 1120,
+      "replacements": [
+        {
+          "before": "#include \"decoder.h\"",
+          "after": "#include \"decoder.h\"\n#include \"gamma-coder-trace.h\"\n#include \"../gamma-expert-mix.h\""
+        },
+        {
+          "before": "  const unsigned int p = Discretize(p_->Predict());",
+          "after": "  const float gamma_probability = p_->Predict();\n  const unsigned int p = gamma_expert_mix::predict(Discretize(gamma_probability));\n  gamma_fx2_trace::Record gamma_record(gamma_probability, p, x1_, x2_);"
+        },
+        {
+          "before": "  return bit;",
+          "after": "  gamma_record.Finish(bit, x1_, x2_);\n  return bit;"
+        },
+        {
+          "before": "  p_->Perceive(bit);",
+          "after": "  gamma_expert_mix::observe(bit);\n  p_->Perceive(bit);"
+        }
+      ]
+    }
+  ],
+  "added_files": [
+    {
+      "source": {
+        "path": "lib/fx2_expert_mix_v1.hpp",
+        "bytes": 4372,
+        "sha256": "b49890cc20ed6282f7bcbbf90d1aad823af45255bb795f82af0597a9bfa248d8"
+      },
+      "target": "src/gamma-expert-mix.h"
+    },
+    {
+      "source": {
+        "path": "tools/fx2_coder_trace_v1.hpp",
+        "bytes": 2359,
+        "sha256": "d72dfa104668e2f3138e41e7bdfd54c8ad634d00d64338a627dbf1835656a11b"
+      },
+      "target": "src/coder/gamma-coder-trace.h"
+    }
+  ],
+  "scope": "Preserve every parent prediction and update. Only the integer count used by the coder changes; no new calls to parent experts."
+}
