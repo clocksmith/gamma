@@ -1,0 +1,57 @@
+{
+  "schema": "gamma.enwiki9.considered-direction.v1",
+  "status": "unimplemented-unmeasured",
+  "owner": "root",
+  "synthesis_lenses": [
+    5,
+    9
+  ],
+  "selection": "Deliberate: final-output correction families have failed; inspect additional causal information inside the mature predictor.",
+  "premise": "The three native attention layers have a1024-token runtime ring. A single2048-token inference-window mutation could expose older keys/values while retaining trained weights and the existing final mixer. Nine KDA layers already retain history; extra attention could be redundant or harmful.",
+  "source_evidence": [
+    {
+      "path": "results/fx2_expert_release250k_v3/work/native/cpp_infer/src/opt/model_opt.cpp",
+      "bytes": 18026,
+      "sha256": "b49493ece5a3a135baa24eeef00d6aaf56335324d0c6355b7283e46736c9df8e"
+    },
+    {
+      "path": "results/fx2_expert_release250k_v3/work/native/cpp_infer/src/opt/attn.h",
+      "bytes": 7778,
+      "sha256": "b8c728e30fb0ef5781e46970ee59e157bdfb53cb557383dc0677fe8c20e40048"
+    },
+    {
+      "path": "results/fx2_expert_release250k_v3/work/native/cpp_infer/src/opt/attn.cpp",
+      "bytes": 24937,
+      "sha256": "9991e1d1b2814ef0f41b0e1f37b6f273002f98777bee5d7fa5206f90cc03db11"
+    },
+    {
+      "path": "results/fx2_expert_release250k_v3/work/native/cpp_infer/src/model.cpp",
+      "bytes": 19539,
+      "sha256": "c4f613a7ed3f7ca4f4fa8936a63351b4c2c01bd13645e5c2b092ec49975d48b8"
+    },
+    {
+      "path": "results/fx2_residual_features250k_v3/closure/feature_validity.json",
+      "bytes": 1606,
+      "sha256": "b70ca991791e6d4a18902a6576744d116e4715abee66de592c2c822ecba82c87"
+    }
+  ],
+  "derived_opportunity": {
+    "method": "For each reset interval L from the retained validity audit, sum max(0,L-1025). This counts possible query positions after more than1024 preceding inputs; it does not quantify information or compression.",
+    "reset_intervals": 98,
+    "intervals_above1025": 8,
+    "positions_beyond1024": 117352,
+    "modeled_bytes": 151210,
+    "maximum_interval": 34044
+  },
+  "implementation_boundary": "Optimized inference WIN and ATTN_WIN must agree. The original model metadata and weights describe trained1024-window parameters and must remain byte-identical; do not rewrite a model header to pretend retraining. Some literal1024 offsets in attn.cpp are matrix-block byte strides and must not be replaced. Freeze a new source child with controlled runtime-window constants only.",
+  "required_checks": [
+    "Reproduce the trimmed parent from identical source/package/toolchain",
+    "Synthetic attention checks around1023/1024/1025 and2047/2048/2049 positions",
+    "Independent native compression/decompression/repeat with canonical raw equality",
+    "Record meaningful extra-context exposure and first neural-state divergence; persistent mixer trajectory is intentionally allowed to change",
+    "Count actual child binary/source/model/options and measured runtime/memory before promotion"
+  ],
+  "search": "No matching2048-window or longer-attention candidate found in current proposal/register/provenance text; recheck ownership before implementation.",
+  "not_a_claim": "No predicted saving, novelty theorem, launch authority, complete score, or native implementation. This is a candidate information source to investigate after the valid cache rejection.",
+  "objective_credit_bytes": 0
+}
