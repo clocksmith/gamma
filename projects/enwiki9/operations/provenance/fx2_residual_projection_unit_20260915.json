@@ -1,0 +1,84 @@
+{
+  "candidate_id": "fx2_residual_features250k_v1",
+  "corpus_evidence": false,
+  "cross_language_vectors": 63,
+  "environment": {
+    "TMPDIR": "/run/user/1000"
+  },
+  "logs": [
+    {
+      "bytes": 1231,
+      "path": "run_logs/manual/residual_projection_python_unit_20260915.log",
+      "sha256": "f627e79f479542a7b37d31ae668cef9a0fea2163d4768cea3e77abe3531f8923"
+    },
+    {
+      "bytes": 0,
+      "path": "run_logs/manual/residual_projection_unit_compile_final_20260915.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 88,
+      "path": "run_logs/manual/residual_projection_native_unit_final_20260915.log",
+      "sha256": "8637454ffa069f71a3ad769b7ee81f31ffecab3a4a6df881cabb59a3b35d91d5"
+    },
+    {
+      "bytes": 2978,
+      "path": "run_logs/manual/residual_projection_cross_language_20260915.json",
+      "sha256": "6eb4d216fd4af852e250081e1c66ffe636d126473e94d5678988cf758c3610d1"
+    }
+  ],
+  "native_compile": [
+    "taskset",
+    "-c",
+    "3",
+    "g++",
+    "-std=c++17",
+    "-O2",
+    "-Wall",
+    "-Wextra",
+    "-Ilib",
+    "tests/test_fx2_residual_projection_v1.cpp",
+    "-o",
+    "/run/user/1000/fx2_residual_projection_unit"
+  ],
+  "native_execution": [
+    "taskset",
+    "-c",
+    "3",
+    "/run/user/1000/fx2_residual_projection_unit"
+  ],
+  "passed": true,
+  "python_command": [
+    "python3",
+    "-m",
+    "unittest",
+    "tests.test_fx2_residual_projection_v1",
+    "-v"
+  ],
+  "python_tests": 9,
+  "schema": "gamma.enwiki9.synthetic-checks.v1",
+  "sources": [
+    {
+      "bytes": 4500,
+      "path": "lib/fx2_residual_projection_v1.py",
+      "sha256": "235a77bd668fed61f21db0647022ae8ae2f170071a333da2305f4d4e7289cfd0"
+    },
+    {
+      "bytes": 2754,
+      "path": "lib/fx2_residual_projection_v1.hpp",
+      "sha256": "68dd764bbaa547d157dac0175e5e68909fcf41acd398f23555f9c532e65facea"
+    },
+    {
+      "bytes": 3301,
+      "path": "tests/test_fx2_residual_projection_v1.py",
+      "sha256": "165205a1524c352b3d959c8ce675740b157623a8492f437289c8532e4595b823"
+    },
+    {
+      "bytes": 998,
+      "path": "tests/test_fx2_residual_projection_v1.cpp",
+      "sha256": "529251f77c749a134dc32ec05b694483c27609a83fa0a24a224f10750c2b5ba1"
+    }
+  ],
+  "wide_integer_comparisons": 327675,
+  "zero_identity_counts": 65535
+}
