@@ -1,0 +1,137 @@
+{
+  "schema": "gamma.enwiki9.exact-source-adapter-multi.v1",
+  "files": [
+    {
+      "source_path": "src/predictor.cpp",
+      "source_sha256": "0b79f43644daee942c9cb6da18fa464f0eb0185b6fc7ffc43cde703808fe537e",
+      "source_bytes": 27424,
+      "patched_sha256": "bd3284b3c398349e9ae2d0f8fedce21c77165616cd7379b30119a09ff5aa73c3",
+      "patched_bytes": 27465,
+      "replacements": [
+        {
+          "before": "  memmove(separator_window_, separator_window_ + 1,",
+          "after": "  transformer_->observe((uint8_t)token);\n  memmove(separator_window_, separator_window_ + 1,"
+        }
+      ]
+    },
+    {
+      "source_path": "cpp_infer/src/opt/model_opt.h",
+      "source_sha256": "cff755873e9539fe215335649aceefda9bc2ceef08d47bed8813469e2ea82035",
+      "source_bytes": 2672,
+      "patched_sha256": "897c23131019bf60582fa92b9bf4fb52e26197ec5500e3dd1502b95f70b1601d",
+      "patched_bytes": 2783,
+      "replacements": [
+        {
+          "before": "  void begin_article(int64_t rope_position_offset = 0);",
+          "after": "  void begin_article(int64_t rope_position_offset = 0);\n  // Consume decoded truth before separator/reset logic, including last tokens.\n  void observe(uint8_t token);"
+        }
+      ]
+    },
+    {
+      "source_path": "cpp_infer/src/opt/model_opt.cpp",
+      "source_sha256": "b49493ece5a3a135baa24eeef00d6aaf56335324d0c6355b7283e46736c9df8e",
+      "source_bytes": 18026,
+      "patched_sha256": "a92b52ba51729cfb2a30322faf9b9ae0a1fc2b865d0f3fca90793796090d99b9",
+      "patched_bytes": 18413,
+      "replacements": [
+        {
+          "before": "#include \"model_opt.h\"",
+          "after": "#include \"model_opt.h\"\n#include \"gamma-online-head.h\"\n#include \"gamma-online-head-audit.h\""
+        },
+        {
+          "before": "struct TransformerOptImpl {",
+          "after": "struct TransformerOptImpl {\n  gamma_online_head::Model head{gamma_online_head::configured_arm()};\n  gamma_online_head::Audit audit{head};"
+        },
+        {
+          "before": "  void begin(int64_t rope_position_offset) {",
+          "after": "  void begin(int64_t rope_position_offset) {\n    head.reset();"
+        },
+        {
+          "before": "      head_softcap_softmax(logits, probs208);",
+          "after": "      head_softcap_softmax(logits, probs208);\n      audit.base(xn, logits);\n      head.predict(xn, logits, probs208, probs208);"
+        },
+        {
+          "before": "TransformerOpt::~TransformerOpt() = default;",
+          "after": "TransformerOpt::~TransformerOpt() = default;\n\nvoid TransformerOpt::observe(uint8_t token) {\n  impl->head.observe(token);\n  impl->audit.after_observe();\n}"
+        }
+      ]
+    },
+    {
+      "source_path": "src/coder/encoder.cpp",
+      "source_sha256": "ecd9a2f4f39553e3864c8e9c96c7b512edca46a6fbb3197beaccaf47b0a8fdce",
+      "source_bytes": 914,
+      "patched_sha256": "e1586dca62d959dff81f156512d37a22a5e2abbb332c77962e0e8a0a0c646d29",
+      "patched_bytes": 1108,
+      "replacements": [
+        {
+          "before": "#include \"encoder.h\"",
+          "after": "#include \"encoder.h\"\n#include \"gamma-coder-trace.h\""
+        },
+        {
+          "before": "  const unsigned int p = Discretize(p_->Predict());",
+          "after": "  const float gamma_probability = p_->Predict();\n  const unsigned int p = Discretize(gamma_probability);\n  gamma_fx2_trace::Record gamma_record(gamma_probability, p, x1_, x2_);"
+        },
+        {
+          "before": "    x2_ = (x2_ << 8) + 255;\n  }\n}\n\nvoid Encoder::Flush()",
+          "after": "    x2_ = (x2_ << 8) + 255;\n  }\n  gamma_record.Finish(bit, x1_, x2_);\n}\n\nvoid Encoder::Flush()"
+        }
+      ]
+    },
+    {
+      "source_path": "src/coder/decoder.cpp",
+      "source_sha256": "1bae2c108906625fb124f3fc602d1d59d814e5a415d963ab74246bf474e8bae9",
+      "source_bytes": 832,
+      "patched_sha256": "cfed5d718bc6d1e797bb7c22be769040a7407086baf7918fcb522fd558c25258",
+      "patched_bytes": 1026,
+      "replacements": [
+        {
+          "before": "#include \"decoder.h\"",
+          "after": "#include \"decoder.h\"\n#include \"gamma-coder-trace.h\""
+        },
+        {
+          "before": "  const unsigned int p = Discretize(p_->Predict());",
+          "after": "  const float gamma_probability = p_->Predict();\n  const unsigned int p = Discretize(gamma_probability);\n  gamma_fx2_trace::Record gamma_record(gamma_probability, p, x1_, x2_);"
+        },
+        {
+          "before": "  return bit;",
+          "after": "  gamma_record.Finish(bit, x1_, x2_);\n  return bit;"
+        }
+      ]
+    }
+  ],
+  "added_files": [
+    {
+      "source": {
+        "path": "lib/fx2_online_head_v1.hpp",
+        "bytes": 3590,
+        "sha256": "c7c4d2d7bda5ff40becf3c28f50da317b7a6806f829f7cacbf7f7daffa7674ae"
+      },
+      "target": "cpp_infer/src/opt/gamma-online-head.h"
+    },
+    {
+      "source": {
+        "path": "lib/fx2_online_head_audit_v1.hpp",
+        "bytes": 2580,
+        "sha256": "383a83b4e5a1143da710b7b27fbd6b8eb2b4988d060f383a3c315805284c7225"
+      },
+      "target": "cpp_infer/src/opt/gamma-online-head-audit.h"
+    },
+    {
+      "source": {
+        "path": "operations/provenance/sources/2026-09-06/sha256-x86-d03795497f3e.c",
+        "bytes": 11042,
+        "sha256": "8e476fea360db2d3df0d381fe371c60aeda2d40df36d25ff91c6d4fb0e81636a"
+      },
+      "target": "cpp_infer/src/opt/gamma-observer-sha.c"
+    },
+    {
+      "source": {
+        "path": "tools/fx2_coder_trace_v1.hpp",
+        "bytes": 2359,
+        "sha256": "d72dfa104668e2f3138e41e7bdfd54c8ad634d00d64338a627dbf1835656a11b"
+      },
+      "target": "src/coder/gamma-coder-trace.h"
+    }
+  ],
+  "scope": "Zero-initialized192x205 head learns decoded next-token labels, projects to Frobenius radius4 and resets with original article pieces. Frozen deep features remain unchanged; downstream CMIX probabilities and learning may change. No teacher trace required."
+}

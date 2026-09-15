@@ -1,0 +1,37 @@
+{
+  "candidate_id": "fx2_online_head_opening250k_v1",
+  "checks": [
+    "1200 causal events K/D/repeat complete-state identity",
+    "P/K output identity",
+    "600 forced-projection updates",
+    "independent first-step formula",
+    "reset and absent predecessor",
+    "wrong-truth control separation"
+  ],
+  "command": "TMPDIR=/run/user/1000 taskset -c3 g++ -std=c++17 -O2 -Wall -Wextra -Ilib tests/test_fx2_online_head_v1.cpp -o /run/user/1000/fx2_online_head_unit",
+  "corpus_evidence": false,
+  "execution": "taskset -c3 /run/user/1000/fx2_online_head_unit",
+  "log": {
+    "bytes": 158,
+    "path": "run_logs/manual/online_head_unit_final_20260915.log",
+    "sha256": "2f38e71625c958d26eb26d5f34024c13814b63ca547e1abda002dd688bb56b29"
+  },
+  "passed": true,
+  "pre_seal_failures": [
+    "Initial compiler temporary file hit the existing /tmp quota; owned TMPDIR successor passed.",
+    "First source-only syntax invocation omitted UPDATE_LIMIT; corrected to the actual native compile definitions before sealing."
+  ],
+  "schema": "gamma.enwiki9.synthetic-checks.v1",
+  "sources": [
+    {
+      "bytes": 3590,
+      "path": "lib/fx2_online_head_v1.hpp",
+      "sha256": "c7c4d2d7bda5ff40becf3c28f50da317b7a6806f829f7cacbf7f7daffa7674ae"
+    },
+    {
+      "bytes": 2195,
+      "path": "tests/test_fx2_online_head_v1.cpp",
+      "sha256": "2b31db58b12073113d20d49c495758197f9c8baed516f7d453e47e1415d6e7ca"
+    }
+  ]
+}

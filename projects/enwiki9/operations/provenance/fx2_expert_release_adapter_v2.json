@@ -1,0 +1,153 @@
+{
+  "schema": "gamma.enwiki9.exact-source-adapter-multi.v1",
+  "files": [
+    {
+      "source_path": "src/mixer/byte-mixer.cpp",
+      "source_sha256": "0a371b43cd41ac4e8710131a60da0beff2c6f9239925bed7c6087f1e2856e506",
+      "source_bytes": 1250,
+      "patched_sha256": "0d12b00f2acecf960b4b943c9feb5cb345ca1292564167cd043c114cff7451e4",
+      "patched_bytes": 345,
+      "replacements": [
+        {
+          "before": "#include \"byte-mixer.h\"\n\nByteMixer::ByteMixer(unsigned int num_models, const unsigned int& bit_context,\n    const std::vector<bool>& vocab, unsigned int vocab_size, Lstm* lstm) :\n    ByteModel(vocab), lstm_(lstm), byte_(bit_context), byte_map_(0, 256),\n    inputs_(0.0, vocab_size), num_models_(num_models), vocab_size_(vocab_size),\n    offset_(0) {\n  for (int i = 0; i < 256; ++i) {\n    byte_map_[i] = offset_;\n    if (vocab_[i]) ++offset_;\n  }\n  offset_ = 0;\n}\n\nvoid ByteMixer::SetInput(int index, float val) {\n  if (!vocab_[index]) return;\n  inputs_[offset_] += val;\n  ++offset_;\n  if (offset_ == vocab_size_) offset_ = 0;\n}\n\nvoid ByteMixer::SetProbs(const float* vocab_probs) {\n  unsigned int k = 0;\n  for (int i = 0; i < 256; ++i) {\n    if (vocab_[i]) {\n      probs_[i] = vocab_probs[k];\n      ++k;\n    } else {\n      probs_[i] = 0;\n    }\n  }\n  ByteModel::ByteUpdate();\n}\n\nvoid ByteMixer::ByteUpdate() {\n  inputs_ *= 2 / num_models_;\n  lstm_->SetInput(inputs_);\n  inputs_ = 0;\n  const auto& output = lstm_->Perceive(byte_map_[byte_]);\n  offset_ = 0;\n  for (int i = 0; i < 256; ++i) {\n    if (vocab_[i]) {\n      probs_[i] = output[offset_];\n      ++offset_;\n    } else {\n      probs_[i] = 0;\n    }\n  }\n  offset_ = 0;\n  ByteModel::ByteUpdate();\n}\n",
+          "after": "#include \"byte-mixer.h\"\nByteMixer::ByteMixer(const std::vector<bool>& vocab):ByteModel(vocab){}\nvoid ByteMixer::SetProbs(const float* vocab_probs) {\n  unsigned int k = 0;\n  for (int i = 0; i < 256; ++i) {\n    if (vocab_[i]) {\n      probs_[i] = vocab_probs[k];\n      ++k;\n    } else {\n      probs_[i] = 0;\n    }\n  }\n  ByteModel::ByteUpdate();\n}\n\n"
+        }
+      ]
+    },
+    {
+      "source_path": "src/mixer/byte-mixer.h",
+      "source_sha256": "3ffbec9d3efc847136d9339a9df388153411419f0449c9ec0d549a7a9ee09f0a",
+      "source_bytes": 770,
+      "patched_sha256": "0d2fa4926aca11f7e0769267b6528584ea3c81b03274d7f7796470f7ad96c161",
+      "patched_bytes": 227,
+      "replacements": [
+        {
+          "before": "#ifndef BYTE_MIXER_H\n#define BYTE_MIXER_H\n\n#include <vector>\n#include <memory>\n\n#include \"../models/byte-model.h\"\n#include \"lstm.h\"\n\nclass ByteMixer : public ByteModel {\n public:\n  ByteMixer(unsigned int num_models, const unsigned int& bit_context,\n      const std::vector<bool>& vocab, unsigned int vocab_size, Lstm* lstm);\n  void SetInput(int index, float val);\n  void ByteUpdate();\n  // Sets the byte-level probability distribution directly (one float per\n  // vocabulary byte, in vocabulary order) instead of running the lstm.\n  void SetProbs(const float* vocab_probs);\n\n private:\n  std::unique_ptr<Lstm> lstm_;\n  const unsigned int& byte_;\n  std::valarray<int> byte_map_;\n  std::valarray<float> inputs_;\n  unsigned int num_models_, vocab_size_, offset_;\n};\n\n#endif\n",
+          "after": "#ifndef BYTE_MIXER_H\n#define BYTE_MIXER_H\n#include \"../models/byte-model.h\"\nclass ByteMixer:public ByteModel {\n public:\n  explicit ByteMixer(const std::vector<bool>& vocab);\n  void SetProbs(const float* vocab_probs);\n};\n#endif\n"
+        }
+      ]
+    },
+    {
+      "source_path": "src/predictor.cpp",
+      "source_sha256": "0b79f43644daee942c9cb6da18fa464f0eb0185b6fc7ffc43cde703808fe537e",
+      "source_bytes": 27424,
+      "patched_sha256": "719e2a2bfc2a061630e69085737314598f4903bca420f8973242ab480c4949b1",
+      "patched_bytes": 27542,
+      "replacements": [
+        {
+          "before": "#include \"predictor.h\"",
+          "after": "#include \"predictor.h\"\n#ifdef GAMMA_EXPERT_RELEASE\n#include \"gamma-expert-release.h\"\n#endif"
+        },
+        {
+          "before": "  byte_mixer_.emplace(1, manager_.bit_context_, vocab_,\n      vocab_size, transformer_ ? nullptr :\n      new Lstm(vocab_size, vocab_size, 200, 1, 128, 0.03, 10));",
+          "after": "  if (!transformer_) Fail(\"this build requires the native transformer profile\");\n  byte_mixer_.emplace(vocab_);"
+        },
+        {
+          "before": "        const std::valarray<float>& p = byte_model_->BytePredict();\n        for (unsigned int j = 0; j < 256; ++j) {\n          byte_mixer_->SetInput(j,p[j]);\n        }\n\n        byte_mixer_->ByteUpdate();",
+          "after": "      Fail(\"LSTM fallback is absent from this fixed transformer profile\");"
+        },
+        {
+          "before": "  layers_[0].SetInput(input_index++,\n      byte_model_ ? byte_model_->Predict()[0] : 0.5f);",
+          "after": "  const float gamma_ppm = byte_model_ ? byte_model_->Predict()[0] : 0.5f;\n  layers_[0].SetInput(input_index++, gamma_ppm);"
+        },
+        {
+          "before": "  p = sse_.Predict(p);",
+          "after": "  p = sse_.Predict(p);\n#ifdef GAMMA_EXPERT_RELEASE\n  gamma_expert_release::capture(gamma_ppm, byte_mixer_output,\n      fxcm_model_outputs[fxcm_model_outputs.size()-1], byte_mixer_override < 0);\n#endif"
+        },
+        {
+          "before": "#include <vector>",
+          "after": "#include <vector>\n#include <iostream>"
+        }
+      ]
+    },
+    {
+      "source_path": "src/coder/encoder.cpp",
+      "source_sha256": "ecd9a2f4f39553e3864c8e9c96c7b512edca46a6fbb3197beaccaf47b0a8fdce",
+      "source_bytes": 914,
+      "patched_sha256": "01c43deb487706c80438bbf2187587bdb22ed56974d0c500d1ab5a6eced9a9fb",
+      "patched_bytes": 1129,
+      "replacements": [
+        {
+          "before": "#include \"encoder.h\"",
+          "after": "#include \"encoder.h\"\n#ifdef GAMMA_EXPERT_RELEASE\n#include \"../gamma-expert-release.h\"\n#endif"
+        },
+        {
+          "before": "  const unsigned int p = Discretize(p_->Predict());",
+          "after": "  unsigned int p = Discretize(p_->Predict());\n#ifdef GAMMA_EXPERT_RELEASE\n  p = gamma_expert_release::predict(p);\n#endif"
+        },
+        {
+          "before": "  p_->Perceive(bit);",
+          "after": "\n#ifdef GAMMA_EXPERT_RELEASE\n  gamma_expert_release::observe(bit);\n#endif\n  p_->Perceive(bit);"
+        }
+      ]
+    },
+    {
+      "source_path": "src/coder/decoder.cpp",
+      "source_sha256": "1bae2c108906625fb124f3fc602d1d59d814e5a415d963ab74246bf474e8bae9",
+      "source_bytes": 832,
+      "patched_sha256": "9565ac7a3d73ee04a46e7c802581fab6be1e950f99c9c73536053a354d2c6860",
+      "patched_bytes": 1047,
+      "replacements": [
+        {
+          "before": "#include \"decoder.h\"",
+          "after": "#include \"decoder.h\"\n#ifdef GAMMA_EXPERT_RELEASE\n#include \"../gamma-expert-release.h\"\n#endif"
+        },
+        {
+          "before": "  const unsigned int p = Discretize(p_->Predict());",
+          "after": "  unsigned int p = Discretize(p_->Predict());\n#ifdef GAMMA_EXPERT_RELEASE\n  p = gamma_expert_release::predict(p);\n#endif"
+        },
+        {
+          "before": "  p_->Perceive(bit);",
+          "after": "\n#ifdef GAMMA_EXPERT_RELEASE\n  gamma_expert_release::observe(bit);\n#endif\n  p_->Perceive(bit);"
+        }
+      ]
+    },
+    {
+      "source_path": "src/predictor.h",
+      "source_sha256": "348d3924fc4e1f4890d0332b0f33ba9591afa6ee06971b9a9bdeaa376b41f458",
+      "source_bytes": 7136,
+      "patched_sha256": "46a2118fd2e8b01d60668faae0c0c381845cda44015e10f1ca921b0df8611040",
+      "patched_bytes": 7112,
+      "replacements": [
+        {
+          "before": "#include \"mixer/lstm.h\"\n",
+          "after": ""
+        }
+      ]
+    },
+    {
+      "source_path": "makefile",
+      "source_sha256": "6e0566ae0af8f5622571e2a52358f943bcedd086a562301badc94c6ac5aafce2",
+      "source_bytes": 7922,
+      "patched_sha256": "32f60399838b075254ba709c73f24cedf64a01aa524fe5da4a115624b03ba1b7",
+      "patched_bytes": 7882,
+      "replacements": [
+        {
+          "before": " src/mixer/lstm-layer.h",
+          "after": ""
+        },
+        {
+          "before": " src/mixer/lstm.h",
+          "after": ""
+        }
+      ]
+    }
+  ],
+  "added_files": [
+    {
+      "source": {
+        "path": "lib/fx2_expert_release_v1.hpp",
+        "bytes": 2532,
+        "sha256": "6f29931c5316236dfb653472942c1e36a7b75c8d7c47dc97994db5f2c0a736c7"
+      },
+      "target": "src/gamma-expert-release.h"
+    }
+  ],
+  "omitted_source_members": [
+    "src/mixer/lstm.h",
+    "src/mixer/lstm.hpp",
+    "src/mixer/lstm-layer.h",
+    "src/mixer/lstm-layer.hpp"
+  ],
+  "scope": "Fixed native transformer profile. Remove unreachable LSTM fallback. Macro selects the exact compact aligned mixture; no arm selector, delayed features or tracing."
+}

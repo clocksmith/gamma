@@ -1,0 +1,84 @@
+{
+  "attribution": {
+    "causalConfidence": "high",
+    "controlsEquivalent": null,
+    "failureClass": "implementation-failure",
+    "localizedCause": "The makefile fast target retained two removed LSTM header prerequisites."
+  },
+  "candidateId": "fx2_expert_release250k_v1",
+  "candidateRevision": {
+    "candidateId": "fx2_expert_release250k_v1",
+    "candidateTreeSha256": "sha256:266909c2f785c510a070501a218bbf6b37c5f958e05333a9a5ef3c47e5b1ec7f",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/fx2_expert_release250k_v1/20260915T014549342993Z_266909c2f785.json",
+      "sha256": "sha256:33b0b4a484901a5857a66af41c14cfb5704533b440f1c4200b9acbf08f7301ae"
+    }
+  },
+  "decision": {
+    "killPredicatesPass": false,
+    "nextGateBytes": null,
+    "promotionPredicatesPass": false,
+    "rationale": "Correction-only successor removes those stale prerequisites; no scientific changes.",
+    "verdict": "retry"
+  },
+  "evidence": [
+    {
+      "path": "operations/provenance/fx2_expert_release_failure_20260915.json",
+      "sha256": "sha256:ba1165c89b4334d4922118e2027d643eda5effdb313bb5015d1f9884fe384d19"
+    },
+    {
+      "path": "results/fx2_expert_release250k_v1/terminal-index.json",
+      "sha256": "sha256:eea7df11245fc31bdeb0b7caa8930e2031f0209bd55630c08749ddf205824880"
+    }
+  ],
+  "experiment": {
+    "path": "operations/adaptive/experiments/fx2_expert_release250k_v1.json",
+    "sha256": "sha256:a7fa89d5d5c8bf2b0302aca6f80e0bc81cd07935a6c009efe41ff7c84c9bd9ad"
+  },
+  "generatedUtc": "2026-09-15T01:53:06+00:00",
+  "hypothesis": {
+    "rationale": "No archive exists.",
+    "verdict": "not-tested"
+  },
+  "job": {
+    "path": "operations/adaptive/failed/919_20260915T014549Z_e06aeb4ee3.json",
+    "sha256": "sha256:6fd420302a31dc4842223df4e4f6d0499a5ce5b6a21640a3862e3373a309fb9e"
+  },
+  "knowledge": {
+    "retiredDimensions": [],
+    "transferableLessons": [
+      "Source deletion must update the build dependency graph; preflight make targets before freezing."
+    ],
+    "uncertainties": []
+  },
+  "measurementAssertions": [],
+  "measurements": {
+    "idealBitsSaved": null,
+    "memoryRatio": null,
+    "minimumPartitionIdealBitsSaved": null,
+    "netBytesSaved": null,
+    "positiveSegmentFraction": null,
+    "runtimeRatio": null,
+    "scopeBytes": null,
+    "scopeSymbols": null,
+    "sourceBytesDelta": null,
+    "transferRetention": null
+  },
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:e91ff20e92c3cac8acb0cbe5c79fc8e8a3b427d7e151245c8eecc52b1c32fa00",
+    "objectiveId": "gamma-enwiki9-hutter-90m-v3",
+    "objectivePath": "contracts/research/v3/objective-contract.json",
+    "targetScoreBytes": 90000000
+  },
+  "reflectionId": "r-20260915t014549z_e06aeb4ee3",
+  "schema": "gamma.enwiki9.reflection-receipt.v1",
+  "validity": {
+    "classification": "implementation-failure",
+    "reasons": [
+      "Make stopped at a removed-header prerequisite before compiler or corpus execution."
+    ],
+    "valid": false
+  }
+}

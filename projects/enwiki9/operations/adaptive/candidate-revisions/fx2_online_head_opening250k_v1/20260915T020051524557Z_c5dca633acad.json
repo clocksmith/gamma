@@ -1,0 +1,56 @@
+{
+  "candidateId": "fx2_online_head_opening250k_v1",
+  "candidateTreeSha256": "sha256:c5dca633acad1f796d95f9bf78e7d4757d3b4b5e6a0a0cb669577c8172a7cbd6",
+  "change": {
+    "evidence": [
+      "operations/adaptive/experiments/fx2_online_head_opening250k_v1.json"
+    ],
+    "hypothesis": "Causal article-local learning on the frozen transformer hidden features reduces the full native archive relative to parent and wrong-truth control on exposed opening250KB.",
+    "kind": "implementation",
+    "replacements": [],
+    "summary": [
+      "Projected online multinomial head on frozen192dimensional transformer features. Matrix205x192 starts atzero and resets at original piece boundaries. phi=xn/sqrt(1+sum(xn^2)). q=softmax(capped_base_logits+Aphi). First prediction after reset preserves native base probabilities exactly. Update A+=0.25*(onehot(truth)-q)*phi^T; project Frobenius norm to3.999999 when norm exceeds4. All observations are decoded tokens, including piece-final tokens; PPM-only first tokens have no pending head prediction."
+    ]
+  },
+  "files": [
+    {
+      "blobPath": "operations/adaptive/candidate-blobs/sha256/c0/c070814ffec488a632476bc180ebed4d434d74903e7c2a1949132a2fba53f52d",
+      "bytes": 1309,
+      "normalization": "semantic-meta-v1",
+      "path": "meta.json",
+      "sha256": "c070814ffec488a632476bc180ebed4d434d74903e7c2a1949132a2fba53f52d"
+    },
+    {
+      "blobPath": "operations/adaptive/candidate-blobs/sha256/21/21892699c64864697730fe862220ae85f9f28eada60707d74a27b98d8657b827",
+      "bytes": 11517,
+      "normalization": "verbatim",
+      "path": "program.py",
+      "sha256": "21892699c64864697730fe862220ae85f9f28eada60707d74a27b98d8657b827"
+    }
+  ],
+  "generatedUtc": "2026-09-15T02:00:51+00:00",
+  "immutableBlobsComplete": true,
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:e91ff20e92c3cac8acb0cbe5c79fc8e8a3b427d7e151245c8eecc52b1c32fa00",
+    "objectiveId": "gamma-enwiki9-hutter-90m-v3",
+    "objectivePath": "contracts/research/v3/objective-contract.json",
+    "targetScoreBytes": 90000000
+  },
+  "parentRevision": {
+    "candidateId": "fx2_cmix_transformer_static_vocab_fixture50051_q0_v1",
+    "candidateTreeSha256": "sha256:c34d07a6c86181c0c998d250e4fa69de351212ad9cce4537d563ee9c71017d07",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/fx2_cmix_transformer_static_vocab_fixture50051_q0_v1/20260905T194245889420Z_c34d07a6c861.json",
+      "sha256": "sha256:20cc2bdcc672b351b693bf7e348fc0f58675a686127571249a07b769d279c564"
+    }
+  },
+  "previousRevision": {
+    "path": "operations/adaptive/candidate-revisions/fx2_online_head_opening250k_v1/20260915T020051087812Z_2c8d3652f957.json",
+    "sha256": "sha256:7f2b9379ba154804a642ba284440c4f54863d0ba4b261cbaabd00dffcf46e35b"
+  },
+  "provenanceClass": "native",
+  "schema": "gamma.enwiki9.candidate-revision.v1",
+  "treeDigestAlgorithm": "sha256-canonical-counted-files-v1"
+}

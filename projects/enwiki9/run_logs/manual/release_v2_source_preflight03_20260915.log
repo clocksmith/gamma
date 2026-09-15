@@ -1,0 +1,262 @@
+["/usr/bin/make", "-n", "cmix", "CC=/usr/bin/g++"]
+portable AVX2 baseline (x86-64-v3) used
+/usr/bin/g++  -m64 -Wall -std=c++17 -ffp-model=fast -fno-exceptions -fno-threadsafe-statics -Wno-unknown-escape-sequence -Wno-unused-variable -ffp-model=fast -fno-exceptions -fno-threadsafe-statics -Wno-unneeded-internal-declaration -Wno-unused-but-set-variable -Wno-format  -march=x86-64-v3 -mtune=generic -mrecip=none -O3 -fdata-sections -ffunction-sections src/coder/decoder.cpp src/coder/encoder.cpp src/context-manager.cpp src/contexts/bit-context.cpp src/contexts/bracket-context.cpp src/contexts/combined-context.cpp src/contexts/context-hash.cpp src/contexts/indirect-hash.cpp src/contexts/interval-hash.cpp src/contexts/interval.cpp src/contexts/sparse.cpp src/models/bracket.cpp src/models/byte-model.cpp src/models/direct-hash.cpp src/models/direct.cpp src/models/indirect.cpp src/models/match.cpp src/models/fxcmv1.cpp src/models/ppmd.cpp src/states/nonstationary.cpp src/states/run-map.cpp src/mixer/byte-mixer.cpp src/mixer/mixer-input.cpp src/mixer/mixer.cpp src/mixer/sigmoid.cpp src/mixer/sse.cpp -c src/predictor.cpp src/runner.cpp
+/usr/bin/g++  -m64 -Wall -std=c++17 -ffp-model=fast -fno-exceptions -fno-threadsafe-statics -Wno-unknown-escape-sequence -Wno-unused-variable -ffp-model=fast -fno-exceptions -fno-threadsafe-statics -Wno-unneeded-internal-declaration -Wno-unused-but-set-variable -Wno-format  -march=x86-64-v3 -mtune=generic -mrecip=none -Os -fdata-sections -ffunction-sections src/preprocess/preprocessor.cpp src/preprocess/dictionary.cpp -c 
+/usr/bin/g++ -m64 -O3 -std=c++17 -Wall -Wextra -fno-math-errno -fdata-sections -ffunction-sections -march=x86-64-v3 -mtune=generic -mrecip=none -c cpp_infer/src/weights_io.cpp -o tf_weights_io.o
+/usr/bin/g++ -m64 -std=c++17 -Wall -Wextra -fno-math-errno -fdata-sections -ffunction-sections -march=x86-64-v3 -mtune=generic -mrecip=none -Os -c cpp_infer/src/weights_io_compressed.cpp -o tf_weights_io_compressed.o
+/usr/bin/g++ -m64 -O3 -std=c++17 -Wall -Wextra -fno-math-errno -fdata-sections -ffunction-sections -march=x86-64-v3 -mtune=generic -mrecip=none -c cpp_infer/src/opt/qmat_dense.cpp -o tf_qmat_dense.o
+/usr/bin/g++ -m64 -O3 -std=c++17 -Wall -Wextra -fno-math-errno -fdata-sections -ffunction-sections -march=x86-64-v3 -mtune=generic -mrecip=none -c cpp_infer/src/opt/qmat_sparse.cpp -o tf_qmat_sparse.o
+/usr/bin/g++ -m64 -O3 -std=c++17 -Wall -Wextra -fno-math-errno -fdata-sections -ffunction-sections -march=x86-64-v3 -mtune=generic -mrecip=none -c cpp_infer/src/opt/attn.cpp -o tf_attn.o
+/usr/bin/g++ -m64 -O3 -std=c++17 -Wall -Wextra -fno-math-errno -fdata-sections -ffunction-sections -march=x86-64-v3 -mtune=generic -mrecip=none -c cpp_infer/src/opt/kda.cpp -o tf_kda.o
+/usr/bin/g++ -m64 -O3 -std=c++17 -Wall -Wextra -fno-math-errno -fdata-sections -ffunction-sections -march=x86-64-v3 -mtune=generic -mrecip=none -c cpp_infer/src/opt/glue.cpp -o tf_glue.o
+/usr/bin/g++ -m64 -O3 -std=c++17 -Wall -Wextra -fno-math-errno -fdata-sections -ffunction-sections -march=x86-64-v3 -mtune=generic -mrecip=none -c cpp_infer/src/opt/arena_build.cpp -o tf_arena_build.o
+/usr/bin/g++ -m64 -O3 -std=c++17 -Wall -Wextra -fno-math-errno -fdata-sections -ffunction-sections -march=x86-64-v3 -mtune=generic -mrecip=none -c cpp_infer/src/opt/model_opt.cpp -o tf_model_opt.o
+/usr/bin/g++ -m64 -Wl,--gc-sections -std=c++17 bit-context.o bracket-context.o bracket.o byte-mixer.o byte-model.o combined-context.o context-hash.o context-manager.o decoder.o dictionary.o direct-hash.o direct.o encoder.o indirect-hash.o indirect.o interval-hash.o interval.o match.o mixer-input.o mixer.o nonstationary.o fxcmv1.o ppmd.o predictor.o preprocessor.o run-map.o runner.o sigmoid.o sparse.o sse.o tf_weights_io.o tf_weights_io_compressed.o tf_qmat_dense.o tf_qmat_sparse.o tf_attn.o tf_kda.o tf_glue.o tf_arena_build.o tf_model_opt.o -s -o cmix
+rm -f *.o
+["/usr/bin/g++", "-std=c++17", "-march=x86-64-v3", "-mrecip=none", "-include", "cstdint", "-Wall", "-Wextra", "-fsyntax-only", "-DGAMMA_EXPERT_RELEASE", "src/predictor.cpp"]
+In file included from src/mixer/../models/byte-model.h:4,
+                 from src/mixer/byte-mixer.h:3,
+                 from src/predictor.h:7,
+                 from src/predictor.cpp:1:
+src/mixer/../models/model.h: In member function ‘void Model::Perceive(int)’:
+src/mixer/../models/model.h:13:21: warning: unused parameter ‘bit’ [-Wunused-parameter]
+   13 |   void Perceive(int bit) {}
+      |                 ~~~~^~~
+In file included from src/states/nonstationary.h:4,
+                 from src/context-manager.h:4,
+                 from src/predictor.h:11:
+src/states/state.h: In member function ‘float State::InitProbability(int) const’:
+src/states/state.h:7:29: warning: unused parameter ‘state’ [-Wunused-parameter]
+    7 |   float InitProbability(int state) const { return 0.5; }
+      |                         ~~~~^~~~~
+src/states/state.h: In member function ‘int State::Next(int, int) const’:
+src/states/state.h:8:16: warning: unused parameter ‘state’ [-Wunused-parameter]
+    8 |   int Next(int state, int bit) const { return 0; }
+      |            ~~~~^~~~~
+src/states/state.h:8:27: warning: unused parameter ‘bit’ [-Wunused-parameter]
+    8 |   int Next(int state, int bit) const { return 0; }
+      |                       ~~~~^~~
+In file included from src/context-manager.h:6:
+src/contexts/context.h: In member function ‘bool Context::IsEqual(Context*)’:
+src/contexts/context.h:7:25: warning: unused parameter ‘c’ [-Wunused-parameter]
+    7 |   bool IsEqual(Context* c) { return false; }
+      |                ~~~~~~~~~^
+In file included from src/ds/SmallVector.h:1462,
+                 from src/context-manager.h:18:
+src/ds/SmallVector.hpp: In instantiation of ‘size_t getNewCapacity(size_t, size_t, size_t) [with Size_T = unsigned int; size_t = long unsigned int]’:
+src/ds/SmallVector.hpp:108:39:   required from ‘void* llvm::SmallVectorBase<Size_T>::mallocForGrow(size_t, size_t, size_t&) [with Size_T = unsigned int; size_t = long unsigned int]’
+  108 |   NewCapacity = getNewCapacity<Size_T>(MinSize, TSize, this->capacity());
+      |                 ~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+src/ds/SmallVector.hpp:147:22:   required from here
+  147 | template class llvm::SmallVectorBase<uint32_t>;
+      |                      ^~~~~~~~~~~~~~~~~~~~~~~~~
+src/ds/SmallVector.hpp:81:53: warning: unused parameter ‘TSize’ [-Wunused-parameter]
+   81 | static size_t getNewCapacity(size_t MinSize, size_t TSize, size_t OldCapacity) {
+      |                                              ~~~~~~~^~~~~
+src/ds/SmallVector.hpp: In instantiation of ‘size_t getNewCapacity(size_t, size_t, size_t) [with Size_T = long unsigned int; size_t = long unsigned int]’:
+src/ds/SmallVector.hpp:108:39:   required from ‘void* llvm::SmallVectorBase<Size_T>::mallocForGrow(size_t, size_t, size_t&) [with Size_T = long unsigned int; size_t = long unsigned int]’
+  108 |   NewCapacity = getNewCapacity<Size_T>(MinSize, TSize, this->capacity());
+      |                 ~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+src/ds/SmallVector.hpp:154:22:   required from here
+  154 | template class llvm::SmallVectorBase<uint64_t>;
+      |                      ^~~~~~~~~~~~~~~~~~~~~~~~~
+src/ds/SmallVector.hpp:81:53: warning: unused parameter ‘TSize’ [-Wunused-parameter]
+   81 | static size_t getNewCapacity(size_t MinSize, size_t TSize, size_t OldCapacity) {
+      |                                              ~~~~~~~^~~~~
+In file included from src/mixer/mixer.h:6,
+                 from src/predictor.h:6:
+src/mixer/../ds/emhash_map.hpp: In instantiation of ‘void emhash6::HashMap<KeyT, ValueT, HashT, EqT>::rehash(uint64_t) [with KeyT = unsigned int; ValueT = ContextData; HashT = std::hash<unsigned int>; EqT = std::equal_to<unsigned int>; uint64_t = long unsigned int]’:
+src/mixer/../ds/emhash_map.hpp:449:9:   required from ‘void emhash6::HashMap<KeyT, ValueT, HashT, EqT>::init(emhash6::size_type, float) [with KeyT = unsigned int; ValueT = ContextData; HashT = std::hash<unsigned int>; EqT = std::equal_to<unsigned int>; emhash6::size_type = unsigned int]’
+  449 |         rehash(bucket);
+      |         ^~~~~~
+src/mixer/../ds/emhash_map.hpp:477:9:   required from ‘emhash6::HashMap<KeyT, ValueT, HashT, EqT>::HashMap(emhash6::HashMap<KeyT, ValueT, HashT, EqT>&&) [with KeyT = unsigned int; ValueT = ContextData; HashT = std::hash<unsigned int>; EqT = std::equal_to<unsigned int>]’
+  477 |         init(4);
+      |         ^~~~
+src/mixer/mixer.h:20:7:   required from ‘void std::_Construct(_Tp*, _Args&& ...) [with _Tp = Mixer; _Args = {Mixer}]’
+   20 | class Mixer {
+      |       ^~~~~
+/usr/include/c++/15/bits/stl_uninitialized.h:145:17:   required from ‘_ForwardIterator std::__do_uninit_copy(_InputIterator, _Sentinel, _ForwardIterator) [with _InputIterator = move_iterator<Mixer*>; _Sentinel = move_iterator<Mixer*>; _ForwardIterator = Mixer*]’
+  145 |         std::_Construct(std::__addressof(*__result), *__first);
+      |         ~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/usr/include/c++/15/bits/stl_uninitialized.h:266:30:   required from ‘_ForwardIterator std::uninitialized_copy(_InputIterator, _InputIterator, _ForwardIterator) [with _InputIterator = move_iterator<Mixer*>; _ForwardIterator = Mixer*]’
+  266 |         return std::__do_uninit_copy(__first, __last, __result);
+      |                ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~
+src/ds/SmallVector.h:397:28:   required from ‘static void llvm::SmallVectorTemplateBase<T, <anonymous> >::uninitialized_move(It1, It1, It2) [with It1 = Mixer*; It2 = Mixer*; T = Mixer; bool <anonymous> = false]’
+  397 |     std::uninitialized_copy(
+      |     ~~~~~~~~~~~~~~~~~~~~~~~^
+  398 |         std::make_move_iterator(I), std::make_move_iterator(E), Dest);
+      |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+src/ds/SmallVector.h:502:27:   required from ‘void llvm::SmallVectorTemplateBase<T, <anonymous> >::moveElementsForGrow(T*) [with T = Mixer; bool <anonymous> = false]’
+  502 |   this->uninitialized_move(this->begin(), this->end(), NewElts);
+      |   ~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+src/ds/SmallVector.h:463:5:   required from ‘T& llvm::SmallVectorTemplateBase<T, <anonymous> >::growAndEmplaceBack(ArgTypes&& ...) [with ArgTypes = {const std::valarray<float>&, const std::valarray<float>&, const long long unsigned int&, float&, long unsigned int}; T = Mixer; bool <anonymous> = false]’
+  463 |     moveElementsForGrow(NewElts);
+      |     ^~~~~~~~~~~~~~~~~~~
+src/ds/SmallVector.h:1011:38:   required from ‘llvm::SmallVectorImpl<T>::reference llvm::SmallVectorImpl<T>::emplace_back(ArgTypes&& ...) [with ArgTypes = {const std::valarray<float>&, const std::valarray<float>&, const long long unsigned int&, float&, long unsigned int}; T = Mixer; reference = Mixer&]’
+ 1011 |       return this->growAndEmplaceBack(std::forward<ArgTypes>(Args)...);
+      |              ~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+src/predictor.cpp:286:26:   required from here
+  286 |     mixer_0_.emplace_back(
+      |     ~~~~~~~~~~~~~~~~~~~~~^
+  287 |         layers_[layer].Inputs(), layers_[layer].ExtraInputs(), context,
+      |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  288 |       learning_rate, mixer_0_.size());
+      |       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+src/mixer/../ds/emhash_map.hpp:1271:15: warning: ‘void* memset(void*, int, size_t)’ writing to an object of type ‘emhash6::HashMap<unsigned int, ContextData>::PairT’ {aka ‘struct emhash6::entry<unsigned int, ContextData>’} with no trivial copy-assignment [-Wclass-memaccess]
+ 1271 |         memset(_pairs, -1, sizeof(_pairs[0]) * num_buckets);
+      |         ~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+src/mixer/../ds/emhash_map.hpp:160:8: note: ‘emhash6::HashMap<unsigned int, ContextData>::PairT’ {aka ‘struct emhash6::entry<unsigned int, ContextData>’} declared here
+  160 | struct entry {
+      |        ^~~~~
+src/mixer/../ds/emhash_map.hpp: In instantiation of ‘void emhash6::HashMap<KeyT, ValueT, HashT, EqT>::rehash(uint64_t) [with KeyT = unsigned char; ValueT = unsigned char; HashT = std::hash<unsigned char>; EqT = std::equal_to<unsigned char>; uint64_t = long unsigned int]’:
+src/mixer/../ds/emhash_map.hpp:449:9:   required from ‘void emhash6::HashMap<KeyT, ValueT, HashT, EqT>::init(emhash6::size_type, float) [with KeyT = unsigned char; ValueT = unsigned char; HashT = std::hash<unsigned char>; EqT = std::equal_to<unsigned char>; emhash6::size_type = unsigned int]’
+  449 |         rehash(bucket);
+      |         ^~~~~~
+src/mixer/../ds/emhash_map.hpp:477:9:   required from ‘emhash6::HashMap<KeyT, ValueT, HashT, EqT>::HashMap(emhash6::HashMap<KeyT, ValueT, HashT, EqT>&&) [with KeyT = unsigned char; ValueT = unsigned char; HashT = std::hash<unsigned char>; EqT = std::equal_to<unsigned char>]’
+  477 |         init(4);
+      |         ^~~~
+src/contexts/bracket-context.h:9:7:   required from ‘void std::_Construct(_Tp*, _Args&& ...) [with _Tp = BracketContext; _Args = {BracketContext}]’
+    9 | class BracketContext : public Context {
+      |       ^~~~~~~~~~~~~~
+/usr/include/c++/15/bits/stl_uninitialized.h:145:17:   required from ‘_ForwardIterator std::__do_uninit_copy(_InputIterator, _Sentinel, _ForwardIterator) [with _InputIterator = move_iterator<BracketContext*>; _Sentinel = move_iterator<BracketContext*>; _ForwardIterator = BracketContext*]’
+  145 |         std::_Construct(std::__addressof(*__result), *__first);
+      |         ~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/usr/include/c++/15/bits/stl_uninitialized.h:266:30:   required from ‘_ForwardIterator std::uninitialized_copy(_InputIterator, _InputIterator, _ForwardIterator) [with _InputIterator = move_iterator<BracketContext*>; _ForwardIterator = BracketContext*]’
+  266 |         return std::__do_uninit_copy(__first, __last, __result);
+      |                ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~
+src/ds/SmallVector.h:397:28:   required from ‘static void llvm::SmallVectorTemplateBase<T, <anonymous> >::uninitialized_move(It1, It1, It2) [with It1 = BracketContext*; It2 = BracketContext*; T = BracketContext; bool <anonymous> = false]’
+  397 |     std::uninitialized_copy(
+      |     ~~~~~~~~~~~~~~~~~~~~~~~^
+  398 |         std::make_move_iterator(I), std::make_move_iterator(E), Dest);
+      |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+src/ds/SmallVector.h:502:27:   required from ‘void llvm::SmallVectorTemplateBase<T, <anonymous> >::moveElementsForGrow(T*) [with T = BracketContext; bool <anonymous> = false]’
+  502 |   this->uninitialized_move(this->begin(), this->end(), NewElts);
+      |   ~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+src/ds/SmallVector.h:463:5:   required from ‘T& llvm::SmallVectorTemplateBase<T, <anonymous> >::growAndEmplaceBack(ArgTypes&& ...) [with ArgTypes = {unsigned int&, int, int}; T = BracketContext; bool <anonymous> = false]’
+  463 |     moveElementsForGrow(NewElts);
+      |     ^~~~~~~~~~~~~~~~~~~
+src/ds/SmallVector.h:1011:38:   required from ‘llvm::SmallVectorImpl<T>::reference llvm::SmallVectorImpl<T>::emplace_back(ArgTypes&& ...) [with ArgTypes = {unsigned int&, int, int}; T = BracketContext; reference = BracketContext&]’
+ 1011 |       return this->growAndEmplaceBack(std::forward<ArgTypes>(Args)...);
+      |              ~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+src/context-manager.h:31:35:   required from ‘const BracketContext& ContextManager::AddBracketContext(Args&& ...) [with Args = {unsigned int&, int, int}]’
+   31 |     bracket_contexts_.emplace_back(std::forward<Args>(args)...);
+      |     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+src/predictor.cpp:298:54:   required from here
+  298 |   const Context& context = manager_.AddBracketContext(manager_.bit_context_, 256, 15);
+      |                            ~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+src/mixer/../ds/emhash_map.hpp:1271:15: warning: ‘void* memset(void*, int, size_t)’ writing to an object of type ‘emhash6::HashMap<unsigned char, unsigned char>::PairT’ {aka ‘struct emhash6::entry<unsigned char, unsigned char>’} with no trivial copy-assignment [-Wclass-memaccess]
+ 1271 |         memset(_pairs, -1, sizeof(_pairs[0]) * num_buckets);
+      |         ~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+src/mixer/../ds/emhash_map.hpp:160:8: note: ‘emhash6::HashMap<unsigned char, unsigned char>::PairT’ {aka ‘struct emhash6::entry<unsigned char, unsigned char>’} declared here
+  160 | struct entry {
+      |        ^~~~~
+["/usr/bin/g++", "-std=c++17", "-march=x86-64-v3", "-mrecip=none", "-include", "cstdint", "-Wall", "-Wextra", "-fsyntax-only", "-DGAMMA_EXPERT_RELEASE", "src/mixer/byte-mixer.cpp"]
+In file included from src/mixer/../models/byte-model.h:4,
+                 from src/mixer/byte-mixer.h:3,
+                 from src/mixer/byte-mixer.cpp:1:
+src/mixer/../models/model.h: In member function ‘void Model::Perceive(int)’:
+src/mixer/../models/model.h:13:21: warning: unused parameter ‘bit’ [-Wunused-parameter]
+   13 |   void Perceive(int bit) {}
+      |                 ~~~~^~~
+["/usr/bin/g++", "-std=c++17", "-march=x86-64-v3", "-mrecip=none", "-include", "cstdint", "-Wall", "-Wextra", "-fsyntax-only", "-DGAMMA_EXPERT_RELEASE", "src/coder/encoder.cpp"]
+In file included from src/coder/../mixer/../models/byte-model.h:4,
+                 from src/coder/../mixer/byte-mixer.h:3,
+                 from src/coder/../predictor.h:7,
+                 from src/coder/encoder.h:7,
+                 from src/coder/encoder.cpp:1:
+src/coder/../mixer/../models/model.h: In member function ‘void Model::Perceive(int)’:
+src/coder/../mixer/../models/model.h:13:21: warning: unused parameter ‘bit’ [-Wunused-parameter]
+   13 |   void Perceive(int bit) {}
+      |                 ~~~~^~~
+In file included from src/coder/../states/nonstationary.h:4,
+                 from src/coder/../context-manager.h:4,
+                 from src/coder/../predictor.h:11:
+src/coder/../states/state.h: In member function ‘float State::InitProbability(int) const’:
+src/coder/../states/state.h:7:29: warning: unused parameter ‘state’ [-Wunused-parameter]
+    7 |   float InitProbability(int state) const { return 0.5; }
+      |                         ~~~~^~~~~
+src/coder/../states/state.h: In member function ‘int State::Next(int, int) const’:
+src/coder/../states/state.h:8:16: warning: unused parameter ‘state’ [-Wunused-parameter]
+    8 |   int Next(int state, int bit) const { return 0; }
+      |            ~~~~^~~~~
+src/coder/../states/state.h:8:27: warning: unused parameter ‘bit’ [-Wunused-parameter]
+    8 |   int Next(int state, int bit) const { return 0; }
+      |                       ~~~~^~~
+In file included from src/coder/../context-manager.h:6:
+src/coder/../contexts/context.h: In member function ‘bool Context::IsEqual(Context*)’:
+src/coder/../contexts/context.h:7:25: warning: unused parameter ‘c’ [-Wunused-parameter]
+    7 |   bool IsEqual(Context* c) { return false; }
+      |                ~~~~~~~~~^
+In file included from src/coder/../ds/SmallVector.h:1462,
+                 from src/coder/../context-manager.h:18:
+src/coder/../ds/SmallVector.hpp: In instantiation of ‘size_t getNewCapacity(size_t, size_t, size_t) [with Size_T = unsigned int; size_t = long unsigned int]’:
+src/coder/../ds/SmallVector.hpp:108:39:   required from ‘void* llvm::SmallVectorBase<Size_T>::mallocForGrow(size_t, size_t, size_t&) [with Size_T = unsigned int; size_t = long unsigned int]’
+  108 |   NewCapacity = getNewCapacity<Size_T>(MinSize, TSize, this->capacity());
+      |                 ~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+src/coder/../ds/SmallVector.hpp:147:22:   required from here
+  147 | template class llvm::SmallVectorBase<uint32_t>;
+      |                      ^~~~~~~~~~~~~~~~~~~~~~~~~
+src/coder/../ds/SmallVector.hpp:81:53: warning: unused parameter ‘TSize’ [-Wunused-parameter]
+   81 | static size_t getNewCapacity(size_t MinSize, size_t TSize, size_t OldCapacity) {
+      |                                              ~~~~~~~^~~~~
+src/coder/../ds/SmallVector.hpp: In instantiation of ‘size_t getNewCapacity(size_t, size_t, size_t) [with Size_T = long unsigned int; size_t = long unsigned int]’:
+src/coder/../ds/SmallVector.hpp:108:39:   required from ‘void* llvm::SmallVectorBase<Size_T>::mallocForGrow(size_t, size_t, size_t&) [with Size_T = long unsigned int; size_t = long unsigned int]’
+  108 |   NewCapacity = getNewCapacity<Size_T>(MinSize, TSize, this->capacity());
+      |                 ~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+src/coder/../ds/SmallVector.hpp:154:22:   required from here
+  154 | template class llvm::SmallVectorBase<uint64_t>;
+      |                      ^~~~~~~~~~~~~~~~~~~~~~~~~
+src/coder/../ds/SmallVector.hpp:81:53: warning: unused parameter ‘TSize’ [-Wunused-parameter]
+   81 | static size_t getNewCapacity(size_t MinSize, size_t TSize, size_t OldCapacity) {
+      |                                              ~~~~~~~^~~~~
+["/usr/bin/g++", "-std=c++17", "-march=x86-64-v3", "-mrecip=none", "-include", "cstdint", "-Wall", "-Wextra", "-fsyntax-only", "-DGAMMA_EXPERT_RELEASE", "src/coder/decoder.cpp"]
+In file included from src/coder/../mixer/../models/byte-model.h:4,
+                 from src/coder/../mixer/byte-mixer.h:3,
+                 from src/coder/../predictor.h:7,
+                 from src/coder/decoder.h:6,
+                 from src/coder/decoder.cpp:1:
+src/coder/../mixer/../models/model.h: In member function ‘void Model::Perceive(int)’:
+src/coder/../mixer/../models/model.h:13:21: warning: unused parameter ‘bit’ [-Wunused-parameter]
+   13 |   void Perceive(int bit) {}
+      |                 ~~~~^~~
+In file included from src/coder/../states/nonstationary.h:4,
+                 from src/coder/../context-manager.h:4,
+                 from src/coder/../predictor.h:11:
+src/coder/../states/state.h: In member function ‘float State::InitProbability(int) const’:
+src/coder/../states/state.h:7:29: warning: unused parameter ‘state’ [-Wunused-parameter]
+    7 |   float InitProbability(int state) const { return 0.5; }
+      |                         ~~~~^~~~~
+src/coder/../states/state.h: In member function ‘int State::Next(int, int) const’:
+src/coder/../states/state.h:8:16: warning: unused parameter ‘state’ [-Wunused-parameter]
+    8 |   int Next(int state, int bit) const { return 0; }
+      |            ~~~~^~~~~
+src/coder/../states/state.h:8:27: warning: unused parameter ‘bit’ [-Wunused-parameter]
+    8 |   int Next(int state, int bit) const { return 0; }
+      |                       ~~~~^~~
+In file included from src/coder/../context-manager.h:6:
+src/coder/../contexts/context.h: In member function ‘bool Context::IsEqual(Context*)’:
+src/coder/../contexts/context.h:7:25: warning: unused parameter ‘c’ [-Wunused-parameter]
+    7 |   bool IsEqual(Context* c) { return false; }
+      |                ~~~~~~~~~^
+In file included from src/coder/../ds/SmallVector.h:1462,
+                 from src/coder/../context-manager.h:18:
+src/coder/../ds/SmallVector.hpp: In instantiation of ‘size_t getNewCapacity(size_t, size_t, size_t) [with Size_T = unsigned int; size_t = long unsigned int]’:
+src/coder/../ds/SmallVector.hpp:108:39:   required from ‘void* llvm::SmallVectorBase<Size_T>::mallocForGrow(size_t, size_t, size_t&) [with Size_T = unsigned int; size_t = long unsigned int]’
+  108 |   NewCapacity = getNewCapacity<Size_T>(MinSize, TSize, this->capacity());
+      |                 ~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+src/coder/../ds/SmallVector.hpp:147:22:   required from here
+  147 | template class llvm::SmallVectorBase<uint32_t>;
+      |                      ^~~~~~~~~~~~~~~~~~~~~~~~~
+src/coder/../ds/SmallVector.hpp:81:53: warning: unused parameter ‘TSize’ [-Wunused-parameter]
+   81 | static size_t getNewCapacity(size_t MinSize, size_t TSize, size_t OldCapacity) {
+      |                                              ~~~~~~~^~~~~
+src/coder/../ds/SmallVector.hpp: In instantiation of ‘size_t getNewCapacity(size_t, size_t, size_t) [with Size_T = long unsigned int; size_t = long unsigned int]’:
+src/coder/../ds/SmallVector.hpp:108:39:   required from ‘void* llvm::SmallVectorBase<Size_T>::mallocForGrow(size_t, size_t, size_t&) [with Size_T = long unsigned int; size_t = long unsigned int]’
+  108 |   NewCapacity = getNewCapacity<Size_T>(MinSize, TSize, this->capacity());
+      |                 ~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+src/coder/../ds/SmallVector.hpp:154:22:   required from here
+  154 | template class llvm::SmallVectorBase<uint64_t>;
+      |                      ^~~~~~~~~~~~~~~~~~~~~~~~~
+src/coder/../ds/SmallVector.hpp:81:53: warning: unused parameter ‘TSize’ [-Wunused-parameter]
+   81 | static size_t getNewCapacity(size_t MinSize, size_t TSize, size_t OldCapacity) {
+      |                                              ~~~~~~~^~~~~
