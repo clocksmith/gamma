@@ -1,0 +1,82 @@
+{
+  "attribution": {
+    "causalConfidence": "high",
+    "controlsEquivalent": null,
+    "failureClass": "infrastructure-failure",
+    "localizedCause": "CPU affinity applied inside sampled child rather than inherited from controller."
+  },
+  "candidateId": "fx2_wrt_elision250k_v1",
+  "candidateRevision": {
+    "candidateId": "fx2_wrt_elision250k_v1",
+    "candidateTreeSha256": "sha256:188d37fdecae3f91cb1aa6680bbb3d6e4891efea8ef7e6c2c3619810d10bcd20",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/fx2_wrt_elision250k_v1/20260915T215448207586Z_188d37fdecae.json",
+      "sha256": "sha256:4996aeb7e47fae67c94dd983d4817844f0d7408af641fd3d34339b79ad8ac10c"
+    }
+  },
+  "decision": {
+    "killPredicatesPass": null,
+    "nextGateBytes": null,
+    "promotionPredicatesPass": null,
+    "rationale": "Identical science and caps, new result identity, controller inherits CPU3 before guard startup.",
+    "verdict": "retry"
+  },
+  "evidence": [
+    {
+      "path": "operations/provenance/fx2_wrt_elision_affinity_failure_20260915.json",
+      "sha256": "sha256:b7dfcc88b553583cfac4d3d42e4b33a4bb7936cda40b196bd2e3a179760e69a2"
+    }
+  ],
+  "experiment": {
+    "path": "operations/adaptive/experiments/fx2_wrt_elision250k_v1.json",
+    "sha256": "sha256:20771a4b754a72fd34226b2b3d35aae8a38639dc12f8a349a85497e6b7126a00"
+  },
+  "generatedUtc": "2026-09-15T22:00:49+00:00",
+  "hypothesis": {
+    "rationale": "No corpus prediction or coding executed.",
+    "verdict": "not-tested"
+  },
+  "job": {
+    "path": "operations/adaptive/failed/919_20260915T215448Z_41b98f1f73.json",
+    "sha256": "sha256:6f46c24210c3d52c2c6df8e533376d2c5dcf433fd89dabfc9f7d659d9224e2ee"
+  },
+  "knowledge": {
+    "retiredDimensions": [],
+    "transferableLessons": [
+      "Pin the canonical lab controller before spawning the guarded child; retain strict affinity validation from first sample."
+    ],
+    "uncertainties": [
+      "All compression measurements remain unknown."
+    ]
+  },
+  "measurementAssertions": [],
+  "measurements": {
+    "idealBitsSaved": null,
+    "memoryRatio": null,
+    "minimumPartitionIdealBitsSaved": null,
+    "netBytesSaved": null,
+    "positiveSegmentFraction": null,
+    "runtimeRatio": null,
+    "scopeBytes": null,
+    "scopeSymbols": null,
+    "sourceBytesDelta": null,
+    "transferRetention": null
+  },
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:e91ff20e92c3cac8acb0cbe5c79fc8e8a3b427d7e151245c8eecc52b1c32fa00",
+    "objectiveId": "gamma-enwiki9-hutter-90m-v3",
+    "objectivePath": "contracts/research/v3/objective-contract.json",
+    "targetScoreBytes": 90000000
+  },
+  "reflectionId": "r-20260915t215448z_41b98f1f73",
+  "schema": "gamma.enwiki9.reflection-receipt.v1",
+  "validity": {
+    "classification": "infrastructure-failure",
+    "reasons": [
+      "Initial sample caught unrestricted taskset before exec; no experiment marker or phase. Result directory empty, process absent and cgroup cleaned."
+    ],
+    "valid": false
+  }
+}
