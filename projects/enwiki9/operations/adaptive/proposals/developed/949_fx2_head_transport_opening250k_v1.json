@@ -1,0 +1,45 @@
+{
+  "candidate_id": "fx2_head_transport_opening250k_v1",
+  "claimed_at": "2026-09-15T02:42:32+00:00",
+  "created_at": "2026-09-15T02:42:32+00:00",
+  "developed_at": "2026-09-15T02:42:33+00:00",
+  "evidence": [
+    {
+      "path": "operations/provenance/fx2_online_head_terminal_20260915.json",
+      "sha256": "sha256:1263540ea9c8ee4dc5ddbf39d924bc22adb7eda6fe496b2f5c4cc97d5ae057da"
+    }
+  ],
+  "expected_savings_bytes": 0,
+  "experiment": {
+    "path": "operations/adaptive/experiments/fx2_head_transport_opening250k_v1.json",
+    "sha256": "sha256:3b8b2d5552a1642178cd2925e92a938fc32d166861450112d2f1af5ed3fac7e2"
+  },
+  "hypothesis": "The unchanged learned head improves the final native archive when its odds correction is optional and every original predictor update remains authoritative.",
+  "interfaces_exposed": [
+    "Keep the exact previous projected learner. Preserve all original parent neural outputs and training. Compute adapted and original bit distributions through the same native FP16 conversion, floor, vocabulary mapping and float accumulation. Transport the learned odds ratio to the original final Q16 coder count with exact uint128 intermediates. Mix parent and transported count using eight bit-position posteriors initialized half/half at total2^32; train on decoded truths only. Posterior uses minimum1 and largest remainders, low-index tie; it persists across original article resets. Forced native overrides bypass correction and posterior learning."
+  ],
+  "kill_condition": "A valid nonpositive P-D or S-D rejects this one parent-preserving integration; implementation, control or resource failures invalidate affected inference.",
+  "max_program_bytes": 98304,
+  "mechanism_change": "other",
+  "mechanism_change_bonus": 0,
+  "mechanism_class": "endpoint",
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:e91ff20e92c3cac8acb0cbe5c79fc8e8a3b427d7e151245c8eecc52b1c32fa00",
+    "objectiveId": "gamma-enwiki9-hutter-90m-v3",
+    "objectivePath": "contracts/research/v3/objective-contract.json",
+    "targetScoreBytes": 90000000
+  },
+  "owner": "root_head_transport",
+  "parent": "fx2_cmix_transformer_static_vocab_fixture50051_q0_v1",
+  "parent_proposal_id": null,
+  "priority": 50,
+  "promotion_condition": "Positive P-D and S-D, exact native state/inverses, unchanged learner and parent trajectory, priced delivery; no automatic scale.",
+  "proposal_id": "fx2_head_transport_opening250k_v1",
+  "retired_neighborhoods": [],
+  "schema": "gamma.enwiki9.algorithm-proposal.v2",
+  "search_priority": 50,
+  "state": "developed",
+  "title": "Optional learned-head odds with unchanged parent learning"
+}

@@ -14,8 +14,8 @@ Compare identical population hashes; equal input sizes alone do not define match
 
 ## Proof Boundary
 
-- Result JSON files scanned: `394`
-- Roundtrip-passing rows: `168`
+- Result JSON files scanned: `397`
+- Roundtrip-passing rows: `170`
 - Verified full `1G` rows in this checkout: `0`
 - Active target score: `90,000,000` bytes (`9.0000000%`)
 - `9.0000000%` target reached by this matrix: `False`
@@ -81,7 +81,7 @@ Compare identical population hashes; equal input sizes alone do not define match
 | `fx2_weight_sign_magnitude_transfer250k_q0_v1:distant-K` | `f0d01801279f` | custom candidate | 250,000 | unknown | 9,499 | 4,909,022 | 0.303968 | true | `operations/provenance/fx2_weight_sign_magnitude_transfer250k_v1_terminal/distant-K.json` |
 | `fx2_weight_sign_magnitude_transfer250k_q0_v1:distant-P` | `f0d01801279f` | custom candidate | 250,000 | unknown | 9,499 | 4,909,022 | 0.303968 | true | `operations/provenance/fx2_weight_sign_magnitude_transfer250k_v1_terminal/distant-P.json` |
 | `fx2_expert_mix_opening250k_v1:D` | `665fc689441b` | custom candidate | 250,000 | unknown | 33,395 | unknown | 1.06864 | true | `results/fx2_expert_mix_opening250k_v1/D.driver.json` |
-| `fx2_final_counts_opening250k_q0_v1:D` | `665fc689441b` | custom candidate | 250,000 | unknown | 33,427 | 2,885,214 | 1.069664 | true | `operations/provenance/fx2_final_counts_opening250k_v1_terminal/D.json` |
+| `fx2_expert_release250k_v3:D` | `665fc689441b` | custom candidate | 250,000 | unknown | 33,395 | unknown | 1.06864 | true | `results/fx2_expert_release250k_v3/D.driver.json` |
 
 ## Unavailable terminal evidence
 
