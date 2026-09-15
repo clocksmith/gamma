@@ -67,3 +67,9 @@ gain or executable reduction is inherited without a matched delivered child.
 Target90000000 complete bytes; verified full1G unknown. Historical109389323
 forecast remains planning evidence only. Objective credit0; complete package,
 runtime qualification and official submission result remain unproved.
+
+V1 stopped before compilation on an exclusive copy of a model already included
+in the source ZIP. V2 verifies exact existing model/dictionary bytes and copies
+only absent assets; four synthetic materialization tests pass. All feature,
+probability,population and decision parameters remain unchanged. The failed
+receipt and validated reflection are retained; no corpus conclusion follows.

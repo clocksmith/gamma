@@ -1,0 +1,252 @@
+{"command": ["/usr/bin/python3", "/home/x/deco/gamma/projects/enwiki9/tools/run_with_resource_guard_v3.py", "--limit-kib", "9765624", "--official-decimal-limit-kib", "9765624", "--limit-mode", "tree", "--cgroup-path", "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/gamma-enwiki9-20260915T184855Z_d505edae34", "--cgroup-memory-max-bytes", "9999998976", "--temporary-disk-limit-bytes", "24000000000", "--phase-marker-path", "/home/x/deco/gamma/projects/enwiki9/run_logs/adaptive/20260915T184855Z_d505edae34.resources/phases.jsonl", "--max-logical-cpus", "1", "--guard-json", "/home/x/deco/gamma/projects/enwiki9/run_logs/adaptive/20260915T184855Z_d505edae34.resources/guard.json", "--label", "20260915T184855Z_d505edae34", "--phase", "diagnostic", "--scratch-path", "/home/x/deco/gamma/projects/enwiki9/results/fx2_residual_features250k_v1", "--scratch-path", "/home/x/deco/gamma/projects/enwiki9/run_logs/adaptive/20260915T184855Z_d505edae34.log", "--scratch-path", "/home/x/deco/gamma/projects/enwiki9/run_logs/adaptive/20260915T184855Z_d505edae34.resources", "--scratch-path", "/tmp/gamma-enwiki9-20260915T184855Z_d505edae34-64ju3buy/fx2_residual_features250k_v1", "--", "/usr/bin/taskset", "--cpu-list", "2", "/bin/sh", "-c", "printf '%s\\n' '{\"phase\":\"diagnostic\",\"event\":\"worker_start\",\"detail\":\"operational envelope only; no codec phase credit\"}' >> \"$GAMMA_RESOURCE_PHASE_MARKERS\" || exit 125; exec \"$@\"", "enwiki9-discovery-envelope", "/usr/bin/python3", "/home/x/deco/gamma/projects/enwiki9/tools/fx2_residual_features250k_v1.py"], "job": {"candidate_id": "fx2_residual_features250k_v1", "candidate_revision": {"path": "operations/adaptive/candidate-revisions/fx2_residual_features250k_v1/20260915T184854933029Z_5bc7db5df32a.json", "sha256": "sha256:3a3e0cfd1b1d69bb756f44edf6f8b0a7ab97a09e872d86b73eda9c2b7b41313d"}, "candidate_tree_sha256": "sha256:5bc7db5df32a659c573e783bcfe84b3f90e8f1669d9ca022c06d341094d17642", "execution_guard": {"path": "tools/run_with_resource_guard_v3.py", "sha256": "sha256:044147f7ffe6922ea8dafd52fc3d4426077b20958adbcd421245ad41adcfc1e4"}, "execution_mode": "discovery", "execution_resources": {"boot_id": "3ce46712-27bc-4199-8e48-e2b3d23926cb", "budget": {"cgroup_parent": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice", "cpus": [2], "memory_bytes": 9999998976, "scratch_bytes": 24000000000, "swap_bytes": 0, "wall_seconds": 1800}, "cgroup_inode": 334275, "cgroup_path": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/gamma-enwiki9-20260915T184855Z_d505edae34", "cpu_enforcement": "taskset-and-sampled-affinity-guard", "groups": [{"created": true, "inode": 334275, "kernel_cpuset": false, "memory_bytes": 9999998976, "path": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/gamma-enwiki9-20260915T184855Z_d505edae34"}], "guard_command_sha256": "f1fcd6cf58b0b838e0adf50527bf86d08149d1fa7a8b0657fcfc101b5c793dd3", "guard_path": "run_logs/adaptive/20260915T184855Z_d505edae34.resources/guard.json", "missing_diagnostics": ["kernel cpuset controller is not delegated; taskset assignment and existing affinity guard remain active"], "timing_authority": "diagnostic"}, "experiment": {"path": "operations/adaptive/experiments/fx2_residual_features250k_v1.json", "sha256": "sha256:ae0132496a47644f7000e9c001d30047597ce41437e6c638ff1f125d968640d5"}, "gate_size": 250000, "held": false, "held_at": "2026-09-15T18:48:55+00:00", "hold_history": [{"at": "2026-09-15T18:48:55+00:00", "held": true, "reason": "Publish frozen observer source/ownership then fresh CPU2 resource admission."}, {"at": "2026-09-15T18:50:05+00:00", "held": false, "reason": "Published 016f33f38, all29 input blobs verified, fresh CPU2 admission and no live conflicting job."}], "job_id": "20260915T184855Z_d505edae34", "priority": 80, "proposal": {"path": "operations/adaptive/proposals/developed/949_fx2_residual_features250k_v1.json", "sha256": "sha256:b38981679afdafa5ad11f1cddafb0fe5e9c4f7652f5d6b33ca9fb64f347442f9"}, "proposal_id": "fx2_residual_features250k_v1", "purpose": "diagnostic", "released_at": "2026-09-15T18:50:05+00:00", "resource_budget": {"cgroup_parent": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice", "cpus": [2], "memory_bytes": 9999998976, "scratch_bytes": 24000000000, "swap_bytes": 0, "wall_seconds": 1800}, "runner": {"path": "tools/fx2_residual_features250k_v1.py", "sha256": "sha256:6a206440d7b4877423bf16169e8cd7723b3ac5517e560a6c5ff7dc0fbfaf7177"}, "schema": "gamma.enwiki9.adaptive-job.v3", "scratch_directories": ["results/fx2_residual_features250k_v1"], "started_at": "2026-09-15T18:50:06+00:00", "state": "running", "submitted_at": "2026-09-15T18:48:55+00:00", "tags": [], "timing_authority": "diagnostic", "tool": "tools/fx2_residual_features250k_v1.py", "tool_args": []}}
+{"status": "execution_failed", "scientific_verdict": "Incomplete residual measurement; no complete scientific verdict.", "error": "[Errno 17] File exists: '/home/x/deco/gamma/projects/enwiki9/results/fx2_residual_features250k_v1/work/native/models/6m-q4-fp32.tfwc2'"}
+{
+  "resource_guard": {
+    "cgroup": {
+      "inode": 334275,
+      "joined_before_exec": true,
+      "memory_max_bytes": 9999998976,
+      "memory_max_rounding_bytes": 0,
+      "memory_peak_reset": true,
+      "path": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/gamma-enwiki9-20260915T184855Z_d505edae34",
+      "previous_memory_max": "9999998976",
+      "requested_memory_max_bytes": 9999998976
+    },
+    "cgroup_events": {
+      "baseline": {
+        "high": 0,
+        "low": 0,
+        "max": 0,
+        "oom": 0,
+        "oom_group_kill": 0,
+        "oom_kill": 0,
+        "sock_throttled": 0
+      },
+      "delta": {
+        "high": 0,
+        "low": 0,
+        "max": 0,
+        "oom": 0,
+        "oom_group_kill": 0,
+        "oom_kill": 0,
+        "sock_throttled": 0
+      },
+      "final": {
+        "high": 0,
+        "low": 0,
+        "max": 0,
+        "oom": 0,
+        "oom_group_kill": 0,
+        "oom_kill": 0,
+        "sock_throttled": 0
+      }
+    },
+    "command": [
+      "/usr/bin/taskset",
+      "--cpu-list",
+      "2",
+      "/bin/sh",
+      "-c",
+      "printf '%s\\n' '{\"phase\":\"diagnostic\",\"event\":\"worker_start\",\"detail\":\"operational envelope only; no codec phase credit\"}' >> \"$GAMMA_RESOURCE_PHASE_MARKERS\" || exit 125; exec \"$@\"",
+      "enwiki9-discovery-envelope",
+      "/usr/bin/python3",
+      "/home/x/deco/gamma/projects/enwiki9/tools/fx2_residual_features250k_v1.py"
+    ],
+    "command_sha256": "a5538842e0be156c2eb26a1c211f2f4350de24abb1f243e2f8c6aee8ffe94ce9",
+    "elapsed_s": 0.5155,
+    "geekbench5_single_core_score": null,
+    "guards": {
+      "cgroup_memory_guard_exceeded": false,
+      "logical_cpu_guard_exceeded": false,
+      "measurement_incomplete": false,
+      "official_decimal_memory_exceeded": false,
+      "phase_marker_invalid": false,
+      "rss_guard_exceeded": false,
+      "temporary_disk_guard_exceeded": false,
+      "wall_time_guard_exceeded": false
+    },
+    "label": "20260915T184855Z_d505edae34",
+    "latest_sample": {
+      "allowed_cpu_union": [],
+      "cgroup_current_bytes": 6705152,
+      "elapsed_s": 0.5139,
+      "max_single_rss_kib": 0,
+      "persistent_status_misses": [],
+      "processes": [],
+      "scratch_allocated_bytes": 6078464,
+      "scratch_file_count": 138,
+      "scratch_logical_bytes": 5624650,
+      "scratch_race_count": 0,
+      "tree_live_threads": 0,
+      "tree_rss_kib": 0,
+      "tree_runnable_threads": 0
+    },
+    "limit_kib": 9765624,
+    "limit_mode": "tree",
+    "max_logical_cpus": 1,
+    "measurements": {
+      "affinity_complete": true,
+      "cgroup_v2_complete": true,
+      "per_process_vmhwm_sampled": true,
+      "phase_markers_complete": true,
+      "process_tree_rss_complete": true,
+      "scratch_logical_and_allocated_complete": true,
+      "smaps_rollup_complete": true
+    },
+    "objective": {
+      "corpusBytes": 1000000000,
+      "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+      "objectiveDigest": "sha256:e91ff20e92c3cac8acb0cbe5c79fc8e8a3b427d7e151245c8eecc52b1c32fa00",
+      "objectiveId": "gamma-enwiki9-hutter-90m-v3",
+      "objectivePath": "contracts/research/v3/objective-contract.json",
+      "targetScoreBytes": 90000000
+    },
+    "official_decimal_limit_kib": 9765624,
+    "peak_process_vmhwm": {
+      "comm": "python3",
+      "observed_elapsed_s": 0.0125,
+      "pid": 3964225,
+      "start_ticks": 259434437,
+      "vmhwm_kib": 4604
+    },
+    "peak_sample": {
+      "allowed_cpu_union": [
+        2
+      ],
+      "cgroup_current_bytes": 1859584,
+      "elapsed_s": 0.0125,
+      "max_single_rss_kib": 4604,
+      "persistent_status_misses": [],
+      "processes": [
+        {
+          "allowed_cpus": [
+            2
+          ],
+          "comm": "python3",
+          "live_threads": 1,
+          "pid": 3964225,
+          "rss_kib": 4604,
+          "runnable_threads": 1,
+          "start_ticks": 259434437,
+          "vmhwm_kib": 4604
+        }
+      ],
+      "scratch_allocated_bytes": 32768,
+      "scratch_file_count": 4,
+      "scratch_logical_bytes": 13336,
+      "scratch_race_count": 0,
+      "tree_live_threads": 1,
+      "tree_rss_kib": 4604,
+      "tree_runnable_threads": 1
+    },
+    "peak_tree_sample": {
+      "allowed_cpu_union": [
+        2
+      ],
+      "cgroup_current_bytes": 1859584,
+      "elapsed_s": 0.0125,
+      "max_single_rss_kib": 4604,
+      "persistent_status_misses": [],
+      "processes": [
+        {
+          "allowed_cpus": [
+            2
+          ],
+          "comm": "python3",
+          "live_threads": 1,
+          "pid": 3964225,
+          "rss_kib": 4604,
+          "runnable_threads": 1,
+          "start_ticks": 259434437,
+          "vmhwm_kib": 4604
+        }
+      ],
+      "scratch_allocated_bytes": 32768,
+      "scratch_file_count": 4,
+      "scratch_logical_bytes": 13336,
+      "scratch_race_count": 0,
+      "tree_live_threads": 1,
+      "tree_rss_kib": 4604,
+      "tree_runnable_threads": 1
+    },
+    "peaks": {
+      "cgroup_memory_peak_bytes": 61796352,
+      "max_observed_process_vmhwm_kib": 4604,
+      "max_sampled_allowed_cpu_count": 1,
+      "max_sampled_cgroup_current_bytes": 6705152,
+      "max_sampled_scratch_allocated_bytes": 6078464,
+      "max_sampled_scratch_logical_bytes": 5624650,
+      "max_sampled_single_rss_kib": 4604,
+      "max_sampled_tree_live_threads": 1,
+      "max_sampled_tree_rss_kib": 4604,
+      "max_sampled_tree_runnable_threads": 1
+    },
+    "phase": "diagnostic",
+    "phase_marker_path": "/home/x/deco/gamma/projects/enwiki9/run_logs/adaptive/20260915T184855Z_d505edae34.resources/phases.jsonl",
+    "phase_markers": [
+      {
+        "detail": "operational envelope only; no codec phase credit",
+        "event": "worker_start",
+        "observed_elapsed_s": 0.0125,
+        "phase": "diagnostic",
+        "source_line": 1
+      }
+    ],
+    "returncode": 1,
+    "sample_count": 2,
+    "sample_interval_seconds": 0.5,
+    "schema": "gamma.enwiki9.resource-guard-receipt.v3",
+    "scratch_paths": [
+      "/home/x/deco/gamma/projects/enwiki9/results/fx2_residual_features250k_v1",
+      "/home/x/deco/gamma/projects/enwiki9/run_logs/adaptive/20260915T184855Z_d505edae34.log",
+      "/home/x/deco/gamma/projects/enwiki9/run_logs/adaptive/20260915T184855Z_d505edae34.resources",
+      "/tmp/gamma-enwiki9-20260915T184855Z_d505edae34-64ju3buy/fx2_residual_features250k_v1"
+    ],
+    "smaps_rollup_checkpoints": [
+      {
+        "elapsed_s": 0.0125,
+        "processes": [
+          {
+            "pid": 3964225,
+            "rollup_kib": {
+              "AnonHugePages": 0,
+              "Anonymous": 1436,
+              "FilePmdMapped": 0,
+              "KSM": 0,
+              "LazyFree": 0,
+              "Locked": 0,
+              "Private_Clean": 24,
+              "Private_Dirty": 1436,
+              "Private_Hugetlb": 0,
+              "Pss": 2323,
+              "Pss_Anon": 1436,
+              "Pss_Dirty": 1436,
+              "Pss_File": 887,
+              "Pss_Shmem": 0,
+              "Referenced": 6504,
+              "Rss": 6504,
+              "Shared_Clean": 5044,
+              "Shared_Dirty": 0,
+              "Shared_Hugetlb": 0,
+              "ShmemPmdMapped": 0,
+              "Swap": 0,
+              "SwapPss": 0
+            },
+            "start_ticks": 259434437
+          }
+        ],
+        "reason": "initial+phase_marker+rss_growth",
+        "tree_rss_kib": 4604
+      },
+      {
+        "elapsed_s": 0.5139,
+        "processes": [],
+        "reason": "terminal",
+        "tree_rss_kib": 0
+      }
+    ],
+    "status": "complete",
+    "temporary_disk_limit_bytes": 24000000000,
+    "wall_time_limit_seconds": null
+  }
+}
