@@ -1,0 +1,84 @@
+{
+  "attribution": {
+    "causalConfidence": "high",
+    "controlsEquivalent": null,
+    "failureClass": "implementation-failure",
+    "localizedCause": "Uninitialized original byte_mixer_output is0 while the initial ByteModel CDF is uniform; equality becomes meaningful after the first Perceive."
+  },
+  "candidateId": "fx2_head_transport_opening250k_v1",
+  "candidateRevision": {
+    "candidateId": "fx2_head_transport_opening250k_v1",
+    "candidateTreeSha256": "sha256:556bf58e24c13f298776d6cd854131411125f2d0623bf33dbc5289da45736113",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/fx2_head_transport_opening250k_v1/20260915T024233715996Z_556bf58e24c1.json",
+      "sha256": "sha256:cbfb4196101595d12949fb71b2949e20071a6fbe5efb7a8babc5ffbbe207c79c"
+    }
+  },
+  "decision": {
+    "killPredicatesPass": false,
+    "nextGateBytes": null,
+    "promotionPredicatesPass": false,
+    "rationale": "Correction-only successor preserves forced first count1 and keeps every subsequent equality check; no scientific parameters change.",
+    "verdict": "retry"
+  },
+  "evidence": [
+    {
+      "path": "operations/provenance/fx2_head_transport_failure_20260915.json",
+      "sha256": "sha256:bff54d3be5f2387f8001312c7102f88f1cb95fcf13a283eccfc45ef5fa386adf"
+    },
+    {
+      "path": "results/fx2_head_transport_opening250k_v1/terminal-index.json",
+      "sha256": "sha256:938f529e00e0de1e110d058ebae0a66c29ec6d27d9eca3ba4156c3eb53df0217"
+    }
+  ],
+  "experiment": {
+    "path": "operations/adaptive/experiments/fx2_head_transport_opening250k_v1.json",
+    "sha256": "sha256:3b8b2d5552a1642178cd2925e92a938fc32d166861450112d2f1af5ed3fac7e2"
+  },
+  "generatedUtc": "2026-09-15T02:52:10+00:00",
+  "hypothesis": {
+    "rationale": "No complete archive exists.",
+    "verdict": "not-tested"
+  },
+  "job": {
+    "path": "operations/adaptive/failed/919_20260915T024234Z_19a30c5f78.json",
+    "sha256": "sha256:107f08346d6e35b21b446304278d17c50b1fbbacea19402f57b563edcf6b93ab"
+  },
+  "knowledge": {
+    "retiredDimensions": [],
+    "transferableLessons": [
+      "Test original caller initialization as well as isolated ByteModel arithmetic. Preserve native forced startup and require strict equality afterward."
+    ],
+    "uncertainties": []
+  },
+  "measurementAssertions": [],
+  "measurements": {
+    "idealBitsSaved": null,
+    "memoryRatio": null,
+    "minimumPartitionIdealBitsSaved": null,
+    "netBytesSaved": null,
+    "positiveSegmentFraction": null,
+    "runtimeRatio": null,
+    "scopeBytes": null,
+    "scopeSymbols": null,
+    "sourceBytesDelta": null,
+    "transferRetention": null
+  },
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:e91ff20e92c3cac8acb0cbe5c79fc8e8a3b427d7e151245c8eecc52b1c32fa00",
+    "objectiveId": "gamma-enwiki9-hutter-90m-v3",
+    "objectivePath": "contracts/research/v3/objective-contract.json",
+    "targetScoreBytes": 90000000
+  },
+  "reflectionId": "r-20260915t024234z_19a30c5f78",
+  "schema": "gamma.enwiki9.reflection-receipt.v1",
+  "validity": {
+    "classification": "implementation-failure",
+    "reasons": [
+      "P encode aborted before first coder record; original ByteModel startup differs from the global forced-zero sentinel."
+    ],
+    "valid": false
+  }
+}

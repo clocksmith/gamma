@@ -1,0 +1,71 @@
+{
+  "candidate_id": "fx2_head_transport_opening250k_v2",
+  "checks": [
+    "Original forced startup count1 in all four arms",
+    "Seven following native ByteModel prefix updates in all arms",
+    "65535 identity counts",
+    "100000 independent odds comparisons",
+    "8000 native ByteModel prefix comparisons",
+    "K/D full state and posterior invariants"
+  ],
+  "command": [
+    "taskset",
+    "-c",
+    "3",
+    "g++",
+    "-std=c++17",
+    "-O2",
+    "-Wall",
+    "-Wextra",
+    "-Ilib",
+    "tests/test_fx2_head_transport_v2.cpp",
+    "results/fx2_cmix_transformer_static_vocab_fixture50051_q0_v1/work/src/models/byte-model.cpp",
+    "-o",
+    "/run/user/1000/fx2_head_transport_unit_v2"
+  ],
+  "command_spelling_erratum": "Descriptive commands using -c3 in the earlier unit receipt should use taskset -c 3. The v2 first compile reproduced that CLI error; this explicit argv and linked native ByteModel implementation passed. Prior result logs remain unchanged.",
+  "compile_log": {
+    "bytes": 1146,
+    "path": "run_logs/manual/head_transport_unit_v2_compile_retry_20260915.log",
+    "sha256": "6128e54e3183c6504475714ce38a6bf8c6daf70b74bb7f888959545f5be293b1"
+  },
+  "corpus_evidence": false,
+  "environment": {
+    "TMPDIR": "/run/user/1000"
+  },
+  "execution": [
+    "taskset",
+    "-c",
+    "3",
+    "/run/user/1000/fx2_head_transport_unit_v2"
+  ],
+  "failed_compile_log": {
+    "bytes": 74,
+    "path": "run_logs/manual/head_transport_unit_v2_compile_20260915.log",
+    "sha256": "944fdbc64af27a6e1c03b145d9039495c1959c145e557a36bef90f72b513d38a"
+  },
+  "failure_reproducer": {
+    "bytes": 399,
+    "path": "run_logs/manual/head_transport_startup_reproducer_20260915.log",
+    "sha256": "c76873e0411686d248e6cc93d15cea2c80cdb5bfc6220a87a807eb979b0325ad"
+  },
+  "log": {
+    "bytes": 237,
+    "path": "run_logs/manual/head_transport_unit_v2_retry_20260915.log",
+    "sha256": "7983728acdf18f76364c81160624fd6b4df53ddf4811713c34a15c2dc56d011b"
+  },
+  "passed": true,
+  "schema": "gamma.enwiki9.synthetic-checks.v1",
+  "sources": [
+    {
+      "bytes": 4591,
+      "path": "lib/fx2_head_transport_v2.hpp",
+      "sha256": "29390bad29b265ab9beecb7ff26f3611106a13818e27b841e0178f235d9fe007"
+    },
+    {
+      "bytes": 2728,
+      "path": "tests/test_fx2_head_transport_v2.cpp",
+      "sha256": "233317e564213f0e9b3948731eeb1c747aa7e39f4279cd983a92f9a536ae0cc9"
+    }
+  ]
+}

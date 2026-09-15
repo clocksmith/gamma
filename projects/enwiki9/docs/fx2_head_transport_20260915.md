@@ -70,3 +70,26 @@ budget. A positive result still needs priced delivery and confirmation. The
 [Contract](../operations/adaptive/experiments/fx2_head_transport_opening250k_v1.json)
 [Plan](../operations/provenance/fx2_head_transport_opening250k_v1_plan.json)
 [Core](../lib/fx2_head_transport_v1.hpp)
+
+## Startup correction
+
+Version 1 aborts before its first coded bit. The original global
+`byte_mixer_output` starts at zero, triggering a forced prediction; the initial
+ByteModel distribution is uniform. The synthetic comparison had tested the
+ByteModel operation without that caller initialization. A separate first-call
+reproducer confirms the original wrapper abort. No complete archive exists.
+
+Version 2 permits only position zero with an inactive correction and both native
+and parent count one. Every subsequent bit retains the strict native-count
+comparison. The learner, odds calculation, posterior, population and controls
+are unchanged. All four arms pass the corrected startup plus seven following
+native bit updates, alongside the full previous unit comparison. This is an
+implementation repair, not a parameter or hypothesis rescue.
+
+The v2 unit receipt also corrects an invocation spelling in earlier descriptive
+unit metadata: use `taskset -c 3`, not `taskset -c3`. The first erroneous v2
+invocation and successful successor logs are retained separately.
+
+[Failed execution](../operations/provenance/fx2_head_transport_failure_20260915.json)
+[Corrected contract](../operations/adaptive/experiments/fx2_head_transport_opening250k_v2.json)
+[Corrected core](../lib/fx2_head_transport_v2.hpp)
