@@ -1,0 +1,543 @@
+{
+  "arms": {
+    "D": {
+      "archive": {
+        "bytes": 34060,
+        "path": "results/fx2_attention_window250k_v2/work/native/D-encode.arc",
+        "sha256": "0229ecf2d1a5fb7334a61edc0305b9f21d83d28d34b53a18b918cc8a93ae4474"
+      },
+      "archive_bytes": 34060,
+      "archive_repeat_byte_equal": true,
+      "exact_inverse": true,
+      "neural_probability_repeat_byte_equal": true,
+      "probabilities": {
+        "bytes": 61996100,
+        "path": "results/fx2_attention_window250k_v2/work/native/D-encode.probs",
+        "sha256": "36fad240a8a0104385aa79d0b54936b3bcc73e6fe42d4099f8eb219e0bdb588e"
+      },
+      "probability_repeat": {
+        "bytes": 61996100,
+        "path": "results/fx2_attention_window250k_v2/work/native/D-repeat.probs",
+        "sha256": "36fad240a8a0104385aa79d0b54936b3bcc73e6fe42d4099f8eb219e0bdb588e"
+      },
+      "repeat": {
+        "bytes": 34060,
+        "path": "results/fx2_attention_window250k_v2/work/native/D-repeat.arc",
+        "sha256": "0229ecf2d1a5fb7334a61edc0305b9f21d83d28d34b53a18b918cc8a93ae4474"
+      },
+      "restored": {
+        "bytes": 250000,
+        "path": "results/fx2_attention_window250k_v2/work/native/D-decode.raw",
+        "sha256": "665fc689441b68462d88f82dc33212abe9c4824be095d03a556c9b55a2829fd3"
+      },
+      "traced_untraced_archive_identity": true
+    },
+    "P": {
+      "archive": {
+        "bytes": 33429,
+        "path": "results/fx2_attention_window250k_v2/work/native/P-encode.arc",
+        "sha256": "70325310e96b83b48677d76d53141e69ddb47519b4cdffd1c85f51fe2c444dbe"
+      },
+      "archive_bytes": 33429,
+      "archive_repeat_byte_equal": true,
+      "exact_inverse": true,
+      "neural_probability_repeat_byte_equal": true,
+      "probabilities": {
+        "bytes": 61996100,
+        "path": "results/fx2_attention_window250k_v2/work/native/P-encode.probs",
+        "sha256": "e1687688775c47cc71c2cedab9b6d98b4175268565ee5febcc8b51eacadd83c7"
+      },
+      "probability_repeat": {
+        "bytes": 61996100,
+        "path": "results/fx2_attention_window250k_v2/work/native/P-repeat.probs",
+        "sha256": "e1687688775c47cc71c2cedab9b6d98b4175268565ee5febcc8b51eacadd83c7"
+      },
+      "repeat": {
+        "bytes": 33429,
+        "path": "results/fx2_attention_window250k_v2/work/native/P-repeat.arc",
+        "sha256": "70325310e96b83b48677d76d53141e69ddb47519b4cdffd1c85f51fe2c444dbe"
+      },
+      "restored": {
+        "bytes": 250000,
+        "path": "results/fx2_attention_window250k_v2/work/native/P-decode.raw",
+        "sha256": "665fc689441b68462d88f82dc33212abe9c4824be095d03a556c9b55a2829fd3"
+      },
+      "traced_untraced_archive_identity": true
+    }
+  },
+  "artifacts": {
+    "bytes": 42298,
+    "path": "results/fx2_attention_window250k_v2/artifacts.json",
+    "sha256": "9b77a5e897389f2e7427a62fad25fee989a53b391604758c7fa9177ead013d8b"
+  },
+  "binary_component_net_bytes": -631,
+  "binary_increment_bytes": 0,
+  "candidate_id": "fx2_attention_window250k_v2",
+  "changed_source_members": [
+    "cpp_infer/src/opt/model_opt.cpp",
+    "cpp_infer/src/opt/attn.h"
+  ],
+  "child_closure_ok": true,
+  "commands": [
+    {
+      "accepted_returncodes": [
+        0
+      ],
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "360",
+        "/usr/bin/make",
+        "-j1",
+        "cmix",
+        "CC=/usr/bin/g++",
+        "CPPFLAGS_PART-THAT-SHOULD-BE-FAST=-DSEED=923 -DUPDATE_LIMIT=3000 -m64 -Wall -std=c++17 -include cstdint -fno-fast-math -fno-math-errno -fno-exceptions -fno-threadsafe-statics -march=x86-64-v3 -mtune=generic -mrecip=none -fdata-sections -ffunction-sections -O3",
+        "CPPFLAGS_PART-THAT-CAN-BE-SLOW=-DSEED=923 -DUPDATE_LIMIT=3000 -m64 -Wall -std=c++17 -include cstdint -fno-fast-math -fno-math-errno -fno-exceptions -fno-threadsafe-statics -march=x86-64-v3 -mtune=generic -mrecip=none -fdata-sections -ffunction-sections -Os"
+      ],
+      "elapsed_cap_seconds": 360,
+      "elapsed_seconds": 13.013144669122994,
+      "environment": {},
+      "launch_error": null,
+      "missing_diagnostics": [],
+      "phase": "P-compile",
+      "returncode": 0,
+      "system_cpu_seconds": 1.111416,
+      "timing_authority": "shared-host diagnostic",
+      "user_cpu_seconds": 11.809315
+    },
+    {
+      "accepted_returncodes": [
+        0
+      ],
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "30",
+        "/usr/bin/make",
+        "clean"
+      ],
+      "elapsed_cap_seconds": 30,
+      "elapsed_seconds": 0.1025964617729187,
+      "environment": {},
+      "launch_error": null,
+      "missing_diagnostics": [],
+      "phase": "P-clean-repeat",
+      "returncode": 0,
+      "system_cpu_seconds": 0.0010939999999999284,
+      "timing_authority": "shared-host diagnostic",
+      "user_cpu_seconds": 0.0034410000000004715
+    },
+    {
+      "accepted_returncodes": [
+        0
+      ],
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "360",
+        "/usr/bin/make",
+        "-j1",
+        "cmix",
+        "CC=/usr/bin/g++",
+        "CPPFLAGS_PART-THAT-SHOULD-BE-FAST=-DSEED=923 -DUPDATE_LIMIT=3000 -m64 -Wall -std=c++17 -include cstdint -fno-fast-math -fno-math-errno -fno-exceptions -fno-threadsafe-statics -march=x86-64-v3 -mtune=generic -mrecip=none -fdata-sections -ffunction-sections -O3",
+        "CPPFLAGS_PART-THAT-CAN-BE-SLOW=-DSEED=923 -DUPDATE_LIMIT=3000 -m64 -Wall -std=c++17 -include cstdint -fno-fast-math -fno-math-errno -fno-exceptions -fno-threadsafe-statics -march=x86-64-v3 -mtune=generic -mrecip=none -fdata-sections -ffunction-sections -Os"
+      ],
+      "elapsed_cap_seconds": 360,
+      "elapsed_seconds": 13.013023938052356,
+      "environment": {},
+      "launch_error": null,
+      "missing_diagnostics": [],
+      "phase": "P-compile-repeat",
+      "returncode": 0,
+      "system_cpu_seconds": 1.0802900000000002,
+      "timing_authority": "shared-host diagnostic",
+      "user_cpu_seconds": 11.847926999999999
+    },
+    {
+      "accepted_returncodes": [
+        0
+      ],
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "180",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_attention_window250k_v2/work/native/cmix-P",
+        "-s",
+        "dictionary/english.dic",
+        "population.raw",
+        "population.stored"
+      ],
+      "elapsed_cap_seconds": 180,
+      "elapsed_seconds": 0.1019826466217637,
+      "environment": {},
+      "launch_error": null,
+      "missing_diagnostics": [],
+      "phase": "preprocess",
+      "returncode": 0,
+      "system_cpu_seconds": 0.0018720000000000958,
+      "timing_authority": "shared-host diagnostic",
+      "user_cpu_seconds": 0.008310000000001594
+    },
+    {
+      "accepted_returncodes": [
+        0
+      ],
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "180",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_attention_window250k_v2/work/native/cmix-P",
+        "-c",
+        "dictionary/english.dic",
+        "population.raw",
+        "P-encode.arc",
+        "--transformer",
+        "models/6m-q4-fp32.tfwc2",
+        "--save-transformer-probs",
+        "P-encode.probs"
+      ],
+      "elapsed_cap_seconds": 180,
+      "elapsed_seconds": 36.033770381938666,
+      "environment": {},
+      "launch_error": null,
+      "missing_diagnostics": [],
+      "phase": "P-encode",
+      "returncode": 0,
+      "system_cpu_seconds": 1.6699669999999998,
+      "timing_authority": "shared-host diagnostic",
+      "user_cpu_seconds": 34.061236
+    },
+    {
+      "accepted_returncodes": [
+        0
+      ],
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "180",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_attention_window250k_v2/work/native/cmix-P",
+        "-d",
+        "dictionary/english.dic",
+        "P-encode.arc",
+        "P-decode.raw",
+        "--transformer",
+        "models/6m-q4-fp32.tfwc2"
+      ],
+      "elapsed_cap_seconds": 180,
+      "elapsed_seconds": 35.632923849858344,
+      "environment": {},
+      "launch_error": null,
+      "missing_diagnostics": [],
+      "phase": "P-decode",
+      "returncode": 0,
+      "system_cpu_seconds": 1.6753870000000002,
+      "timing_authority": "shared-host diagnostic",
+      "user_cpu_seconds": 33.860702999999994
+    },
+    {
+      "accepted_returncodes": [
+        0
+      ],
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "180",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_attention_window250k_v2/work/native/cmix-P",
+        "-c",
+        "dictionary/english.dic",
+        "P-decode.raw",
+        "P-repeat.arc",
+        "--transformer",
+        "models/6m-q4-fp32.tfwc2",
+        "--save-transformer-probs",
+        "P-repeat.probs"
+      ],
+      "elapsed_cap_seconds": 180,
+      "elapsed_seconds": 35.73241347912699,
+      "environment": {},
+      "launch_error": null,
+      "missing_diagnostics": [],
+      "phase": "P-repeat",
+      "returncode": 0,
+      "system_cpu_seconds": 1.6495730000000002,
+      "timing_authority": "shared-host diagnostic",
+      "user_cpu_seconds": 34.01093200000001
+    },
+    {
+      "accepted_returncodes": [
+        0
+      ],
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "180",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_attention_window250k_v2/work/native/cmix-P",
+        "-c",
+        "dictionary/english.dic",
+        "population.raw",
+        "P-untraced.arc",
+        "--transformer",
+        "models/6m-q4-fp32.tfwc2"
+      ],
+      "elapsed_cap_seconds": 180,
+      "elapsed_seconds": 35.63418487086892,
+      "environment": {},
+      "launch_error": null,
+      "missing_diagnostics": [],
+      "phase": "P-untraced",
+      "returncode": 0,
+      "system_cpu_seconds": 1.6641500000000002,
+      "timing_authority": "shared-host diagnostic",
+      "user_cpu_seconds": 33.84813199999999
+    },
+    {
+      "accepted_returncodes": [
+        0
+      ],
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "30",
+        "/usr/bin/make",
+        "clean"
+      ],
+      "elapsed_cap_seconds": 30,
+      "elapsed_seconds": 0.10265435138717294,
+      "environment": {},
+      "launch_error": null,
+      "missing_diagnostics": [],
+      "phase": "D-clean",
+      "returncode": 0,
+      "system_cpu_seconds": 0.00027699999999875047,
+      "timing_authority": "shared-host diagnostic",
+      "user_cpu_seconds": 0.004529999999988377
+    },
+    {
+      "accepted_returncodes": [
+        0
+      ],
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "360",
+        "/usr/bin/make",
+        "-j1",
+        "cmix",
+        "CC=/usr/bin/g++",
+        "CPPFLAGS_PART-THAT-SHOULD-BE-FAST=-DSEED=923 -DUPDATE_LIMIT=3000 -m64 -Wall -std=c++17 -include cstdint -fno-fast-math -fno-math-errno -fno-exceptions -fno-threadsafe-statics -march=x86-64-v3 -mtune=generic -mrecip=none -fdata-sections -ffunction-sections -O3",
+        "CPPFLAGS_PART-THAT-CAN-BE-SLOW=-DSEED=923 -DUPDATE_LIMIT=3000 -m64 -Wall -std=c++17 -include cstdint -fno-fast-math -fno-math-errno -fno-exceptions -fno-threadsafe-statics -march=x86-64-v3 -mtune=generic -mrecip=none -fdata-sections -ffunction-sections -Os"
+      ],
+      "elapsed_cap_seconds": 360,
+      "elapsed_seconds": 13.013237433042377,
+      "environment": {},
+      "launch_error": null,
+      "missing_diagnostics": [],
+      "phase": "D-compile",
+      "returncode": 0,
+      "system_cpu_seconds": 1.060174,
+      "timing_authority": "shared-host diagnostic",
+      "user_cpu_seconds": 11.851687000000027
+    },
+    {
+      "accepted_returncodes": [
+        0
+      ],
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "30",
+        "/usr/bin/make",
+        "clean"
+      ],
+      "elapsed_cap_seconds": 30,
+      "elapsed_seconds": 0.1021102056838572,
+      "environment": {},
+      "launch_error": null,
+      "missing_diagnostics": [],
+      "phase": "D-clean-repeat",
+      "returncode": 0,
+      "system_cpu_seconds": 0.00029700000000154603,
+      "timing_authority": "shared-host diagnostic",
+      "user_cpu_seconds": 0.0038389999999992597
+    },
+    {
+      "accepted_returncodes": [
+        0
+      ],
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "360",
+        "/usr/bin/make",
+        "-j1",
+        "cmix",
+        "CC=/usr/bin/g++",
+        "CPPFLAGS_PART-THAT-SHOULD-BE-FAST=-DSEED=923 -DUPDATE_LIMIT=3000 -m64 -Wall -std=c++17 -include cstdint -fno-fast-math -fno-math-errno -fno-exceptions -fno-threadsafe-statics -march=x86-64-v3 -mtune=generic -mrecip=none -fdata-sections -ffunction-sections -O3",
+        "CPPFLAGS_PART-THAT-CAN-BE-SLOW=-DSEED=923 -DUPDATE_LIMIT=3000 -m64 -Wall -std=c++17 -include cstdint -fno-fast-math -fno-math-errno -fno-exceptions -fno-threadsafe-statics -march=x86-64-v3 -mtune=generic -mrecip=none -fdata-sections -ffunction-sections -Os"
+      ],
+      "elapsed_cap_seconds": 360,
+      "elapsed_seconds": 12.91264554578811,
+      "environment": {},
+      "launch_error": null,
+      "missing_diagnostics": [],
+      "phase": "D-compile-repeat",
+      "returncode": 0,
+      "system_cpu_seconds": 1.0763679999999987,
+      "timing_authority": "shared-host diagnostic",
+      "user_cpu_seconds": 11.796093999999982
+    },
+    {
+      "accepted_returncodes": [
+        0
+      ],
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "180",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_attention_window250k_v2/work/native/cmix-D",
+        "-c",
+        "dictionary/english.dic",
+        "population.raw",
+        "D-encode.arc",
+        "--transformer",
+        "models/6m-q4-fp32.tfwc2",
+        "--save-transformer-probs",
+        "D-encode.probs"
+      ],
+      "elapsed_cap_seconds": 180,
+      "elapsed_seconds": 38.33697122288868,
+      "environment": {},
+      "launch_error": null,
+      "missing_diagnostics": [],
+      "phase": "D-encode",
+      "returncode": 0,
+      "system_cpu_seconds": 1.6325040000000008,
+      "timing_authority": "shared-host diagnostic",
+      "user_cpu_seconds": 36.59666200000001
+    },
+    {
+      "accepted_returncodes": [
+        0
+      ],
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "180",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_attention_window250k_v2/work/native/cmix-D",
+        "-d",
+        "dictionary/english.dic",
+        "D-encode.arc",
+        "D-decode.raw",
+        "--transformer",
+        "models/6m-q4-fp32.tfwc2"
+      ],
+      "elapsed_cap_seconds": 180,
+      "elapsed_seconds": 38.335148117970675,
+      "environment": {},
+      "launch_error": null,
+      "missing_diagnostics": [],
+      "phase": "D-decode",
+      "returncode": 0,
+      "system_cpu_seconds": 1.6288669999999996,
+      "timing_authority": "shared-host diagnostic",
+      "user_cpu_seconds": 36.63308599999999
+    },
+    {
+      "accepted_returncodes": [
+        0
+      ],
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "180",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_attention_window250k_v2/work/native/cmix-D",
+        "-c",
+        "dictionary/english.dic",
+        "D-decode.raw",
+        "D-repeat.arc",
+        "--transformer",
+        "models/6m-q4-fp32.tfwc2",
+        "--save-transformer-probs",
+        "D-repeat.probs"
+      ],
+      "elapsed_cap_seconds": 180,
+      "elapsed_seconds": 38.23435712698847,
+      "environment": {},
+      "launch_error": null,
+      "missing_diagnostics": [],
+      "phase": "D-repeat",
+      "returncode": 0,
+      "system_cpu_seconds": 1.6797109999999993,
+      "timing_authority": "shared-host diagnostic",
+      "user_cpu_seconds": 36.49956300000002
+    },
+    {
+      "accepted_returncodes": [
+        0
+      ],
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "180",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_attention_window250k_v2/work/native/cmix-D",
+        "-c",
+        "dictionary/english.dic",
+        "population.raw",
+        "D-untraced.arc",
+        "--transformer",
+        "models/6m-q4-fp32.tfwc2"
+      ],
+      "elapsed_cap_seconds": 180,
+      "elapsed_seconds": 38.43164369510487,
+      "environment": {},
+      "launch_error": null,
+      "missing_diagnostics": [],
+      "phase": "D-untraced",
+      "returncode": 0,
+      "system_cpu_seconds": 1.6940320000000018,
+      "timing_authority": "shared-host diagnostic",
+      "user_cpu_seconds": 36.59235100000001
+    }
+  ],
+  "complete_package_bytes": null,
+  "confirmation_authorized": false,
+  "experiment": {
+    "path": "operations/adaptive/experiments/fx2_attention_window250k_v2.json",
+    "sha256": "sha256:aaf7366c4715276ba2418a9360a1e74221059d5c1ff32a1a33b9b2557130b157"
+  },
+  "full_corpus_score_bytes": null,
+  "g_P": -631,
+  "larger_gate_authorized": false,
+  "neural_comparison": {
+    "bytes": 575,
+    "path": "results/fx2_attention_window250k_v2/neural-comparison.json",
+    "sha256": "3e1a1f65f80536a4779dfded4d30731ebc9581da07e2131a71a538b6c0aca8b8"
+  },
+  "objective_credit_bytes": 0,
+  "parent_binary_and_archive_identity": true,
+  "raw_bytes": 250000,
+  "raw_population": "[0,250000)",
+  "schema": "gamma.enwiki9.attention-window-terminal.v1",
+  "scientific_verdict": "This fixed2048-window mutation does not pass the native archive/source-component comparison.",
+  "source_component_net_bytes": -634,
+  "source_zip_increment_bytes": 3,
+  "state_boundary": "Kernel prefix and ring controls plus exact native neural pre-boundary rows and repeated neural streams. Full model/optimizer state and decoder neural stream are not serialized; native inverse, archive repeat and trace-off identity are required.",
+  "status": "passed",
+  "unchanged_model_and_dictionary": true
+}
