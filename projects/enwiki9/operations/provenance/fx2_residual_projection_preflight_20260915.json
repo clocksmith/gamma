@@ -1,0 +1,89 @@
+{
+  "schema": "gamma.enwiki9.source-preflight.v1",
+  "passed": true,
+  "checks": [
+    {
+      "command": [
+        "taskset",
+        "-c",
+        "3",
+        "g++",
+        "-std=c++17",
+        "-DSEED=923",
+        "-DUPDATE_LIMIT=3000",
+        "-include",
+        "cstdint",
+        "-march=x86-64-v3",
+        "-fno-fast-math",
+        "-fsyntax-only",
+        "cpp_infer/src/opt/model_opt.cpp"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "taskset",
+        "-c",
+        "3",
+        "g++",
+        "-std=c++17",
+        "-DSEED=923",
+        "-DUPDATE_LIMIT=3000",
+        "-include",
+        "cstdint",
+        "-march=x86-64-v3",
+        "-fno-fast-math",
+        "-fsyntax-only",
+        "src/predictor.cpp"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "taskset",
+        "-c",
+        "3",
+        "g++",
+        "-std=c++17",
+        "-DSEED=923",
+        "-DUPDATE_LIMIT=3000",
+        "-include",
+        "cstdint",
+        "-march=x86-64-v3",
+        "-fno-fast-math",
+        "-fsyntax-only",
+        "src/coder/encoder.cpp"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "taskset",
+        "-c",
+        "3",
+        "g++",
+        "-std=c++17",
+        "-DSEED=923",
+        "-DUPDATE_LIMIT=3000",
+        "-include",
+        "cstdint",
+        "-march=x86-64-v3",
+        "-fno-fast-math",
+        "-fsyntax-only",
+        "src/coder/decoder.cpp"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": ""
+    }
+  ],
+  "corpus_run": false,
+  "prototype": "External sandbox ZIP unavailable; independent implementation from supplied equations.",
+  "pre_seal_correction": "First adapter generation expected original const count spelling; changed to the actual trimmed P declaration before measurement."
+}
