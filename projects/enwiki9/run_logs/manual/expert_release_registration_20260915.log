@@ -1,0 +1,32 @@
+Traceback (most recent call last):
+  File "/run/user/1000/register_expert_release_20260915.py", line 32, in <module>
+    sys.path.insert(0,'tools');import research_contracts;research_contracts.validate_artifact(ep)
+                                                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^
+  File "/home/x/deco/gamma/projects/enwiki9/tools/research_contracts.py", line 3102, in validate_artifact
+    _validate_schema(value, SCHEMA_PATHS[schema_id])
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/x/deco/gamma/projects/enwiki9/tools/research_contracts.py", line 346, in _validate_schema
+    ).validate(value)
+      ~~~~~~~~^^^^^^^
+  File "/usr/lib/python3/dist-packages/jsonschema/validators.py", line 435, in validate
+    raise error
+jsonschema.exceptions.ValidationError: [] is too short
+
+Failed validating 'minItems' in schema['properties']['killPredicates']:
+    {'items': {'$ref': '#/$defs/predicate'}, 'minItems': 1, 'type': 'array'}
+
+On instance['killPredicates']:
+    []
+error: proposal and experiment parents differ
+Traceback (most recent call last):
+  File "/run/user/1000/register_expert_release_20260915.py", line 34, in <module>
+    run(['propose',cid,'--parent','fx2_expert_mix_opening250k_v1','--title','Production transformer and expert mixture package','--hypothesis',e['hypothesis']['claim'],'--mechanism-class','coder','--expected-savings-bytes','0','--max-program-bytes','65536','--promotion','Exact production equivalence and measured source and binary alternatives; final qualification unresolved.','--kill',e['hypothesis']['falsification'],'--experiment',str(ep),'--mechanism-change','delete_predictor_work','--interface',e['changedMechanism'],'--evidence','operations/provenance/fx2_expert_mix_terminal_20260914.json'])
+    ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/run/user/1000/register_expert_release_20260915.py", line 33, in run
+    def run(a):subprocess.run(['python3','tools/enwiki9_lab.py',*a],check=True,stdout=subprocess.DEVNULL)
+               ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.14/subprocess.py", line 578, in run
+    raise CalledProcessError(retcode, process.args,
+                             output=stdout, stderr=stderr)
+subprocess.CalledProcessError: Command '['python3', 'tools/enwiki9_lab.py', 'propose', 'fx2_expert_release250k_v1', '--parent', 'fx2_expert_mix_opening250k_v1', '--title', 'Production transformer and expert mixture package', '--hypothesis', 'Removing unused LSTM fallback and comparison-only mixture machinery preserves the frozen parent and aligned-mixture archives, reducing delivery components.', '--mechanism-class', 'coder', '--expected-savings-bytes', '0', '--max-program-bytes', '65536', '--promotion', 'Exact production equivalence and measured source and binary alternatives; final qualification unresolved.', '--kill', 'Any archive or build-repeat mismatch rejects exact release equivalence. Unpaid local costs hold package promotion, not predictive validity.', '--experiment', 'operations/adaptive/experiments/fx2_expert_release250k_v1.json', '--mechanism-change', 'delete_predictor_work', '--interface', 'Remove unused LSTM fallback in fixed transformer profile; replace comparison-only expert mixture with state-equivalent production implementation. Two same-path builds per P/D arm and six corpus phases,one frontend phase.', '--evidence', 'operations/provenance/fx2_expert_mix_terminal_20260914.json']' returned non-zero exit status 2.
+20260915T014549Z_e06aeb4ee3

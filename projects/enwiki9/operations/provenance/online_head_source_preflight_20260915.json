@@ -1,0 +1,64 @@
+{
+  "schema": "gamma.enwiki9.source-preflight.v1",
+  "adapter": {
+    "path": "operations/provenance/fx2_online_head_adapter_v1.json",
+    "sha256": "734107555854a503c567a5579c3f00add717224cc2f7986b3b45f574b35db57a"
+  },
+  "checks": [
+    {
+      "command": [
+        "/usr/bin/make",
+        "-n",
+        "cmix",
+        "CC=/usr/bin/g++"
+      ],
+      "returncode": 0
+    },
+    {
+      "command": [
+        "/usr/bin/g++",
+        "-DSEED=923",
+        "-DUPDATE_LIMIT=3000",
+        "-std=c++17",
+        "-march=x86-64-v3",
+        "-mrecip=none",
+        "-include",
+        "cstdint",
+        "-Wall",
+        "-Wextra",
+        "-fsyntax-only",
+        "src/predictor.cpp"
+      ],
+      "returncode": 0
+    },
+    {
+      "command": [
+        "/usr/bin/g++",
+        "-DSEED=923",
+        "-DUPDATE_LIMIT=3000",
+        "-std=c++17",
+        "-march=x86-64-v3",
+        "-mrecip=none",
+        "-include",
+        "cstdint",
+        "-Wall",
+        "-Wextra",
+        "-fsyntax-only",
+        "cpp_infer/src/opt/model_opt.cpp"
+      ],
+      "returncode": 0
+    },
+    {
+      "check": "observer SHA256 against independent Python hashlib1000003bytes",
+      "sha256": "09fbbdddbf49948300588aff62acf24f4506dd8b9c688326e802e2098b4ec161",
+      "returncode": 0
+    }
+  ],
+  "all_pass": true,
+  "corpus_executed": false,
+  "log": {
+    "path": "run_logs/manual/online_head_source_preflight04_20260915.log",
+    "bytes": 17313,
+    "sha256": "ddc08478715a9ac17927969812e3d22687076384fc5e2f11e6dc0bba7cced7dd"
+  }
+}

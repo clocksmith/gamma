@@ -1,0 +1,89 @@
+{
+  "schema": "gamma.enwiki9.source-preflight.v1",
+  "adapter": {
+    "path": "operations/provenance/fx2_expert_release_adapter_v2.json",
+    "sha256": "8dd04194638e0483ee76b3fcb5c430a20fe6f079e94b47af5829dbb67d6f0af2"
+  },
+  "checks": [
+    {
+      "command": [
+        "/usr/bin/make",
+        "-n",
+        "cmix",
+        "CC=/usr/bin/g++"
+      ],
+      "returncode": 0
+    },
+    {
+      "command": [
+        "/usr/bin/g++",
+        "-std=c++17",
+        "-march=x86-64-v3",
+        "-mrecip=none",
+        "-include",
+        "cstdint",
+        "-Wall",
+        "-Wextra",
+        "-fsyntax-only",
+        "-DGAMMA_EXPERT_RELEASE",
+        "src/predictor.cpp"
+      ],
+      "returncode": 0
+    },
+    {
+      "command": [
+        "/usr/bin/g++",
+        "-std=c++17",
+        "-march=x86-64-v3",
+        "-mrecip=none",
+        "-include",
+        "cstdint",
+        "-Wall",
+        "-Wextra",
+        "-fsyntax-only",
+        "-DGAMMA_EXPERT_RELEASE",
+        "src/mixer/byte-mixer.cpp"
+      ],
+      "returncode": 0
+    },
+    {
+      "command": [
+        "/usr/bin/g++",
+        "-std=c++17",
+        "-march=x86-64-v3",
+        "-mrecip=none",
+        "-include",
+        "cstdint",
+        "-Wall",
+        "-Wextra",
+        "-fsyntax-only",
+        "-DGAMMA_EXPERT_RELEASE",
+        "src/coder/encoder.cpp"
+      ],
+      "returncode": 0
+    },
+    {
+      "command": [
+        "/usr/bin/g++",
+        "-std=c++17",
+        "-march=x86-64-v3",
+        "-mrecip=none",
+        "-include",
+        "cstdint",
+        "-Wall",
+        "-Wextra",
+        "-fsyntax-only",
+        "-DGAMMA_EXPERT_RELEASE",
+        "src/coder/decoder.cpp"
+      ],
+      "returncode": 0
+    }
+  ],
+  "all_pass": true,
+  "corpus_executed": false,
+  "log": {
+    "path": "run_logs/manual/release_v2_source_preflight03_20260915.log",
+    "bytes": 25417,
+    "sha256": "76d5f76bbe61372c44eca0caf77ecabd81fa046e58bb19087d54060796f927e8"
+  }
+}
