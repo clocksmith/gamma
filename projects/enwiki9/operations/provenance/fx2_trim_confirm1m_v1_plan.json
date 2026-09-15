@@ -1,0 +1,34 @@
+{
+  "caps": {
+    "cpus": [
+      2
+    ],
+    "memory_bytes": 9999998976,
+    "scratch_bytes": 16000000000,
+    "swap_bytes": 0,
+    "wall_seconds": 3600
+  },
+  "compile_command": [
+    "/usr/bin/make",
+    "-j1",
+    "cmix",
+    "CC=/usr/bin/g++",
+    "CPPFLAGS_PART-THAT-SHOULD-BE-FAST=-DSEED=923 -DUPDATE_LIMIT=3000 -m64 -Wall -std=c++17 -include cstdint -fno-fast-math -fno-math-errno -fno-exceptions -fno-threadsafe-statics -march=x86-64-v3 -mtune=generic -mrecip=none -fdata-sections -ffunction-sections -O3",
+    "CPPFLAGS_PART-THAT-CAN-BE-SLOW=-DSEED=923 -DUPDATE_LIMIT=3000 -m64 -Wall -std=c++17 -include cstdint -fno-fast-math -fno-math-errno -fno-exceptions -fno-threadsafe-statics -march=x86-64-v3 -mtune=generic -mrecip=none -fdata-sections -ffunction-sections -Os"
+  ],
+  "controls": "Original P and frozen trim D; independent inverses,raw-derived repeat,clean-source build repeat and retained original archive identity.",
+  "decision": "Require byte-identical original/trimmed/reference archives,exact inverses/repeats/builds and guard/cleanup; source ZIP reduction5348 and executable reduction45056. No scoring projection. Correctness/resource failure is incomplete confirmation. Passing permits package closure and a separately frozen next scale, not automatic full1G.",
+  "design": "docs/fx2_trim_confirmation_20260915.md",
+  "development_budget": "No tuning; one frozen1MB confirmation. A changed implementation requires a new identity.",
+  "execution": "Fourteen native phases: four builds,two make-clean,two preprocess,six encode/decode/repeat operations. No conditional probability files or optional diagnostic streams.",
+  "id": "fx2_trim_confirm1m_v1",
+  "mechanism": "No new source mutation. Original and already-frozen trimmed P delivery differ only by the previously measured specialization removing unused LSTM and research paths.",
+  "objective_credit_bytes": 0,
+  "owner": "root_trim_confirmation",
+  "per_codec_stop_seconds": 600,
+  "population": "Cold raw[713000000,714000000), pre-existing1MB native comparator. Previously exposed to baselines, separate from trim development.",
+  "pricing": "Report archive gain and separate source-ZIP/executable reductions; shared model/dictionary and options remain counted. Full official packaging, notices/runtime and multiplicities unresolved.",
+  "schema": "gamma.enwiki9.trim-confirmation-plan.v1",
+  "selected": "operations/provenance/fx2_trim_confirmation_selected_20260915.json",
+  "unit": "operations/provenance/fx2_trim_confirmation_unit_20260915.json"
+}
