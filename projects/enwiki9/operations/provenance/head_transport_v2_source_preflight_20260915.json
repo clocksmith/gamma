@@ -1,0 +1,93 @@
+{
+  "schema": "gamma.enwiki9.source-preflight.v1",
+  "adapter": {
+    "path": "operations/provenance/fx2_head_transport_adapter_v2.json",
+    "sha256": "7c6358679d93a3f53d634419928bc093855d71674834a956f12da6b1a56f4751"
+  },
+  "checks": [
+    {
+      "command": [
+        "/usr/bin/make",
+        "-n",
+        "cmix",
+        "CC=/usr/bin/g++"
+      ],
+      "returncode": 0
+    },
+    {
+      "command": [
+        "/usr/bin/g++",
+        "-DSEED=923",
+        "-DUPDATE_LIMIT=3000",
+        "-std=c++17",
+        "-march=x86-64-v3",
+        "-mrecip=none",
+        "-include",
+        "cstdint",
+        "-Wall",
+        "-Wextra",
+        "-fsyntax-only",
+        "src/predictor.cpp"
+      ],
+      "returncode": 0
+    },
+    {
+      "command": [
+        "/usr/bin/g++",
+        "-DSEED=923",
+        "-DUPDATE_LIMIT=3000",
+        "-std=c++17",
+        "-march=x86-64-v3",
+        "-mrecip=none",
+        "-include",
+        "cstdint",
+        "-Wall",
+        "-Wextra",
+        "-fsyntax-only",
+        "cpp_infer/src/opt/model_opt.cpp"
+      ],
+      "returncode": 0
+    },
+    {
+      "command": [
+        "/usr/bin/g++",
+        "-DSEED=923",
+        "-DUPDATE_LIMIT=3000",
+        "-std=c++17",
+        "-march=x86-64-v3",
+        "-mrecip=none",
+        "-include",
+        "cstdint",
+        "-Wall",
+        "-Wextra",
+        "-fsyntax-only",
+        "src/coder/encoder.cpp"
+      ],
+      "returncode": 0
+    },
+    {
+      "command": [
+        "/usr/bin/g++",
+        "-DSEED=923",
+        "-DUPDATE_LIMIT=3000",
+        "-std=c++17",
+        "-march=x86-64-v3",
+        "-mrecip=none",
+        "-include",
+        "cstdint",
+        "-Wall",
+        "-Wextra",
+        "-fsyntax-only",
+        "src/coder/decoder.cpp"
+      ],
+      "returncode": 0
+    }
+  ],
+  "all_pass": true,
+  "corpus_executed": false,
+  "log": {
+    "path": "run_logs/manual/head_transport_v2_source_preflight05_20260915.log",
+    "bytes": 25533,
+    "sha256": "760798963bd82aa22bd9b7eace8208a4584dc4e392ea4093056b8d8d4c751489"
+  }
+}

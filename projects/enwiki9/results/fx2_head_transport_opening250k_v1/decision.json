@@ -1,0 +1,142 @@
+{
+  "artifacts": {
+    "bytes": 34181,
+    "path": "results/fx2_head_transport_opening250k_v1/artifacts.json",
+    "sha256": "d9d9115e9deaf56f18859d30d1ba4db9964ece97b2579789458b97209ff27059"
+  },
+  "candidate_id": "fx2_head_transport_opening250k_v1",
+  "child_closure_ok": true,
+  "commands": [
+    {
+      "accepted_returncodes": [
+        0
+      ],
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "360",
+        "/usr/bin/make",
+        "-j1",
+        "cmix",
+        "CC=/usr/bin/g++",
+        "CPPFLAGS_PART-THAT-SHOULD-BE-FAST=-DSEED=923 -DUPDATE_LIMIT=3000 -m64 -Wall -std=c++17 -include cstdint -fno-fast-math -fno-math-errno -fno-exceptions -fno-threadsafe-statics -march=x86-64-v3 -mtune=generic -mrecip=none -fdata-sections -ffunction-sections -O3",
+        "CPPFLAGS_PART-THAT-CAN-BE-SLOW=-DSEED=923 -DUPDATE_LIMIT=3000 -m64 -Wall -std=c++17 -include cstdint -fno-fast-math -fno-math-errno -fno-exceptions -fno-threadsafe-statics -march=x86-64-v3 -mtune=generic -mrecip=none -fdata-sections -ffunction-sections -Os"
+      ],
+      "elapsed_cap_seconds": 360,
+      "elapsed_seconds": 14.513728945981711,
+      "environment": {},
+      "launch_error": null,
+      "missing_diagnostics": [],
+      "phase": "compile",
+      "returncode": 0,
+      "system_cpu_seconds": 1.084543,
+      "timing_authority": "shared-host diagnostic",
+      "user_cpu_seconds": 13.377189
+    },
+    {
+      "accepted_returncodes": [
+        0
+      ],
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "360",
+        "/usr/bin/make",
+        "-j1",
+        "cmix",
+        "CC=/usr/bin/g++",
+        "CPPFLAGS_PART-THAT-SHOULD-BE-FAST=-DSEED=923 -DUPDATE_LIMIT=3000 -m64 -Wall -std=c++17 -include cstdint -fno-fast-math -fno-math-errno -fno-exceptions -fno-threadsafe-statics -march=x86-64-v3 -mtune=generic -mrecip=none -fdata-sections -ffunction-sections -O3",
+        "CPPFLAGS_PART-THAT-CAN-BE-SLOW=-DSEED=923 -DUPDATE_LIMIT=3000 -m64 -Wall -std=c++17 -include cstdint -fno-fast-math -fno-math-errno -fno-exceptions -fno-threadsafe-statics -march=x86-64-v3 -mtune=generic -mrecip=none -fdata-sections -ffunction-sections -Os"
+      ],
+      "elapsed_cap_seconds": 360,
+      "elapsed_seconds": 14.615421580616385,
+      "environment": {},
+      "launch_error": null,
+      "missing_diagnostics": [],
+      "phase": "compile-repeat",
+      "returncode": 0,
+      "system_cpu_seconds": 1.114027,
+      "timing_authority": "shared-host diagnostic",
+      "user_cpu_seconds": 13.447892999999999
+    },
+    {
+      "accepted_returncodes": [
+        0
+      ],
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "180",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_head_transport_opening250k_v1/work/native/cmix",
+        "-s",
+        "dictionary/english.dic",
+        "population.raw",
+        "population.stored"
+      ],
+      "elapsed_cap_seconds": 180,
+      "elapsed_seconds": 0.10211999295279384,
+      "environment": {
+        "GAMMA_FX2_HEAD_ARM": "P"
+      },
+      "launch_error": null,
+      "missing_diagnostics": [],
+      "phase": "preprocess",
+      "returncode": 0,
+      "system_cpu_seconds": 0.0016439999999997568,
+      "timing_authority": "shared-host diagnostic",
+      "user_cpu_seconds": 0.008638000000001256
+    },
+    {
+      "accepted_returncodes": [
+        0
+      ],
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "180",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_head_transport_opening250k_v1/work/native/cmix",
+        "-c",
+        "dictionary/english.dic",
+        "population.raw",
+        "P-encode.arc",
+        "--transformer",
+        "models/6m-q4-fp32.tfwc2"
+      ],
+      "elapsed_cap_seconds": 180,
+      "elapsed_seconds": 9.674183640163392,
+      "environment": {
+        "GAMMA_FX2_CODER_TRACE": "/home/x/deco/gamma/projects/enwiki9/results/fx2_head_transport_opening250k_v1/work/native/P-encode.coder",
+        "GAMMA_FX2_HEAD_ARM": "P",
+        "GAMMA_FX2_HEAD_BASE": "/home/x/deco/gamma/projects/enwiki9/results/fx2_head_transport_opening250k_v1/work/native/P-encode.base",
+        "GAMMA_FX2_HEAD_STATE": "/home/x/deco/gamma/projects/enwiki9/results/fx2_head_transport_opening250k_v1/work/native/P-encode.state",
+        "GAMMA_FX2_TRANSPORT_STATE": "/home/x/deco/gamma/projects/enwiki9/results/fx2_head_transport_opening250k_v1/work/native/P-encode.transport"
+      },
+      "launch_error": null,
+      "missing_diagnostics": [],
+      "phase": "P-encode",
+      "returncode": -6,
+      "system_cpu_seconds": 1.347835,
+      "timing_authority": "shared-host diagnostic",
+      "user_cpu_seconds": 8.100347
+    }
+  ],
+  "complete_package_bytes": null,
+  "error": "P-encode exited -6",
+  "experiment": {
+    "path": "operations/adaptive/experiments/fx2_head_transport_opening250k_v1.json",
+    "sha256": "sha256:3b8b2d5552a1642178cd2925e92a938fc32d166861450112d2f1af5ed3fac7e2"
+  },
+  "failure_class": "execution_failed",
+  "full_corpus_score_bytes": null,
+  "larger_gate_authorized": false,
+  "objective_credit_bytes": 0,
+  "raw_bytes": 250000,
+  "raw_population": "[0,250000)",
+  "schema": "gamma.enwiki9.head-transport-native-terminal.v1",
+  "scientific_verdict": "No complete confirmation verdict; preserve completed measurements.",
+  "status": "execution_failed"
+}

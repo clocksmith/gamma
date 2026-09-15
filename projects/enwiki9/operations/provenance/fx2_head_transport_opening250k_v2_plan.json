@@ -1,0 +1,44 @@
+{
+  "accounting": {
+    "final_package": null,
+    "maximum_added_local_component_bytes": 98304,
+    "objective_credit_bytes": 0
+  },
+  "arithmetic": "Learner source, eta1/4, radius4, resets, features and FP arithmetic unchanged. Odds count round-nearest/ties-up, clamped1..65535. Exact integer posterior sum2^32 and count conversion frozen in source. No future truth or feedback of modified counts into original predictor.",
+  "caps": {
+    "cpus": [
+      2
+    ],
+    "memory_bytes": 9999998976,
+    "scratch_bytes": 24000000000,
+    "swap_bytes": 0,
+    "wall_seconds": 1800
+  },
+  "compile_command": [
+    "/usr/bin/make",
+    "-j1",
+    "cmix",
+    "CC=/usr/bin/g++",
+    "CPPFLAGS_PART-THAT-SHOULD-BE-FAST=-DSEED=923 -DUPDATE_LIMIT=3000 -m64 -Wall -std=c++17 -include cstdint -fno-fast-math -fno-math-errno -fno-exceptions -fno-threadsafe-statics -march=x86-64-v3 -mtune=generic -mrecip=none -fdata-sections -ffunction-sections -O3",
+    "CPPFLAGS_PART-THAT-CAN-BE-SLOW=-DSEED=923 -DUPDATE_LIMIT=3000 -m64 -Wall -std=c++17 -include cstdint -fno-fast-math -fno-math-errno -fno-exceptions -fno-threadsafe-statics -march=x86-64-v3 -mtune=generic -mrecip=none -fdata-sections -ffunction-sections -Os"
+  ],
+  "confirmation": "Unopened; separate frozen design required",
+  "control": "P disables head/posterior learning and emits parent. K trains the aligned shadow head and posterior but emits parent. D emits aligned optional-mixture counts. S trains the same head on (truth+1)%205 and emits its optional mixture. Every original raw parent probability and truth must match across all four arms.",
+  "decision_policy": "One new integration test justified by the closed neural-component improvement and final-archive regression. Nonpositive g_P or g_S rejects this fixed integration. If rejected, park this tested learner/integration sequence; no further rate,rank,feature,scale or initialization rescue under this budget. Positive archives still need delivery and independent confirmation. Implementation/control/resource failures do not prove a compression loss.",
+  "development_configurations": 1,
+  "id": "fx2_head_transport_opening250k_v2",
+  "implementation_correction": "Original global byte_mixer_output is forced zero before first Perceive. Permit only position0,inactive,native count1,parent count1; every subsequent reconstructed native count must match. No learner,probability,posterior,parameter,scope or control change.",
+  "initialization": "Original cold initialization and dictionary pretraining. Original article-local head resets; all eight mixture priors start1/2 and persist through articles.",
+  "mechanism": "Keep the exact previous projected learner. Preserve all original parent neural outputs and training. Compute adapted and original bit distributions through the same native FP16 conversion, floor, vocabulary mapping and float accumulation. Transport the learned odds ratio to the original final Q16 coder count with exact uint128 intermediates. Mix parent and transported count using eight bit-position posteriors initialized half/half at total2^32; train on decoded truths only. Posterior uses minimum1 and largest remainders, low-index tie; it persists across original article resets. Forced native overrides bypass correction and posterior learning.",
+  "owner": "root_head_transport",
+  "phase_elapsed_seconds": 180,
+  "prior_evidence": "operations/provenance/fx2_online_head_terminal_20260915.json",
+  "prior_exposure": "Already examined development prefix",
+  "raw_bytes": 250000,
+  "raw_population": "[0,250000)",
+  "restricted_bound": "Ideal unrounded Bayesian mixture has at most eight prior bits of regret to the parent. Integer posterior flooring adds an ideal mixture bound N*log2(2^32/(2^32-2)); Q16 probability rounding, finite coding and package are outside that bound. No actual archive or winning-size guarantee.",
+  "schema": "gamma.enwiki9.expert-mixture-plan.v1",
+  "source": "operations/provenance/fx2_head_transport_adapter_v2.json",
+  "state": "Every head weight and pending state at2048decodedbytes. Every optional posterior/CDF/prefix/counter state at2048bits. All native raw float probabilities and truths equal across arms. Frozen hidden/logit SHA256 equal; K/D head and transport state equal. K head must also byte-match the prior closed native learner.",
+  "unit": "operations/provenance/fx2_head_transport_unit_v2_20260915.json"
+}
