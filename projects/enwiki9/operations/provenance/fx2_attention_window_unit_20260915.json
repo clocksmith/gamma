@@ -1,0 +1,58 @@
+{
+  "candidate_id": "fx2_attention_window250k_v1",
+  "checks": [
+    "Exactly two source members changed; model and other assets identical",
+    "Reconstructed source ZIP equals retained parent ZIP byte for byte",
+    "1023 random prefix kernel outputs exactly equal",
+    "Independent sliding averages through4100steps,fill andeviction",
+    "Independent repeated random2048-window trajectories",
+    "Native neural-stream comparison catches early divergence andnonfinite rows"
+  ],
+  "command": [
+    "taskset",
+    "-c",
+    "2",
+    "python3",
+    "-m",
+    "unittest",
+    "tests.test_fx2_attention_window_v1",
+    "-v"
+  ],
+  "corpus_evidence": false,
+  "failed_probe_log": {
+    "bytes": 681,
+    "path": "run_logs/manual/attention_window_unit_unaligned_probe_20260915.log",
+    "sha256": "e86951ac79c4fe7e4f50fd62b950c77ca49d136efd3ec9e510015b067df24ed1"
+  },
+  "failure_correction": "Probe passed an unaligned foreign output into an aligned-store kernel. Add probe-local aligned output and memcpy; final tests deliberately use unaligned foreign buffers. No corpus run or source-window mutation was changed.",
+  "log": {
+    "bytes": 928,
+    "path": "run_logs/manual/attention_window_unit_20260915.log",
+    "sha256": "dde857b8a7b8fffe748bab2950fe431a0a386d83853cb79636127f66153b3964"
+  },
+  "passed": true,
+  "schema": "gamma.enwiki9.synthetic-checks.v1",
+  "sources": [
+    {
+      "bytes": 899,
+      "path": "tools/fx2_attention_window_adapter_v1.py",
+      "sha256": "ea9f250887c159c0b94e7950f2658e348f09b478983ea9968f43e311c353c9aa"
+    },
+    {
+      "bytes": 1186,
+      "path": "tools/fx2_attention_window_probe_v1.cpp",
+      "sha256": "acf1530256af0b8f4ce69d01340b9be810e8dc2643fdea09cad4d1df5733728f"
+    },
+    {
+      "bytes": 10262,
+      "path": "tools/fx2_attention_window250k_v1.py",
+      "sha256": "a373937208c7e5b0ded604384525acad89cb5b9ac124f486eb991c1668a6e9be"
+    },
+    {
+      "bytes": 6225,
+      "path": "tests/test_fx2_attention_window_v1.py",
+      "sha256": "54261e5c05fee9a90302b9d8c7cd829dd77aee42c4ea0b1e4af5db96395b24a9"
+    }
+  ],
+  "tests": 6
+}
