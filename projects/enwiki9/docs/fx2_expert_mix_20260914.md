@@ -147,3 +147,13 @@ removed LSTM make prerequisites and lost transitive iostream includes. Neither
 ran a corpus comparison. Version 3 adds explicit includes and preserves the
 same production arithmetic. The exact release is held for independent
 confirmation and packaging; no larger launch follows automatically.
+
+The [delivery selection](../operations/provenance/fx2_release_delivery_selection_20260915.json)
+favors trimmed P under both measured component forms: 45,056 archive-plus-one-
+executable bytes saved against original, or 5,348 archive-plus-one-source-ZIP
+bytes. D saves 40,994 or 4,194 respectively. Thus adding the measured mixture
+makes this sample's complete measured component total worse than trimming alone.
+Prefer the immutable trimmed P for a separately frozen release confirmation;
+retain D as a local predictive result whose extra delivery is not yet paid.
+Neither alternative is a complete submission score, and neither transfers its
+savings to the rejected learned-head experiments.

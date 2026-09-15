@@ -93,3 +93,45 @@ invocation and successful successor logs are retained separately.
 [Failed execution](../operations/provenance/fx2_head_transport_failure_20260915.json)
 [Corrected contract](../operations/adaptive/experiments/fx2_head_transport_opening250k_v2.json)
 [Corrected core](../lib/fx2_head_transport_v2.hpp)
+
+## Closed native comparison
+
+[Terminal](../operations/provenance/fx2_head_transport_terminal_20260915.json)
+and [validated reflection](../operations/adaptive/reflections/20260915T025312Z_f55e6caa2e.json)
+close all 16 phases. P/K are 33,429 bytes; D/S are 33,430. Thus P-D=-1 and
+S-D=0. Independent inverses, repeat archives, untraced D, clean build repeats,
+all original pre-coder probabilities/truths, 74 learned-head state boundaries,
+591 optional-mixture state boundaries and frozen feature/logit hashes pass.
+The learner matches the prior experiment at every recorded state boundary.
+All discovery resource guards and cleanup pass. The configuration is retired.
+
+Equal D/S archive sizes do not imply equal predictions or equal archive bytes.
+Complete original model parameters, optimizer state and update counters were
+not separately serialized. The original pre-coder probability stream and
+frozen-feature digests are the protected observations actually measured.
+The newly introduced states have their own complete recorded witnesses.
+
+The separate production release's 40,994 component-byte improvement is not
+inherited here. This experiment adds 62,957 overlapping source/binary/option
+component bytes and loses one archive byte. Its diagnostic net is -62,958;
+complete official package accounting remains unresolved.
+
+A read-only comparison of the closed traces finds 42,413 changed Q16 events:
+24,360 improve the truth probability and 18,053 worsen it. Summed ideal saving
+is approximately -8.020055 bits, consistent with the one-byte archive loss.
+For any convex mixture of these two fixed final P/D streams, even selecting
+the better truth probability with future knowledge gives at most 404 ideal
+bits (50.5 bytes). That ceiling uses exact integer products and shifts.
+It does not cover the underlying unmixed expert, other learned states or
+populations, finite archive bytes, or arbitrary changes to the algorithm.
+See the [trace analysis](../results/fx2_head_transport_opening250k_v2/closure/trace_pair_analysis.json).
+
+Preserving the protected observations did not produce a paying correction.
+The comparison does not isolate the cause of the earlier 175-byte regression:
+optional mixing and integration placement changed together. No rate, feature,
+rank, calibration or reset rescue follows in this development sequence.
+Independent confirmation is not authorized for this rejected configuration.
+
+[Verified unit-command corrections](../operations/provenance/fx2_unit_command_errata_20260915.json)
+preserve the earlier receipts and provide successfully rerun, explicit compiler
+and execution argument lists for their unchanged test sources.
