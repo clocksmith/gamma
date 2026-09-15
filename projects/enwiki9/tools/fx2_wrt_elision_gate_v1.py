@@ -1,0 +1,97 @@
+#!/usr/bin/env python3
+"""Guarded conditional vocabulary/WRT elision comparison."""
+import hashlib
+import json
+import os
+from pathlib import Path
+import subprocess
+import sys
+import time
+
+ROOT=Path(__file__).resolve().parents[1]
+CID='fx2_wrt_elision250k_v1'
+
+
+def sha(p):
+    with p.open('rb') as f: return hashlib.file_digest(f,'sha256').hexdigest()
+
+
+def main():
+    out=ROOT/'results'/CID
+    ep=ROOT/'operations/adaptive/experiments'/(CID+'.json')
+    experiment=json.loads(ep.read_text()); phases=[]
+    env={**os.environ,'PYTHONPATH':str(ROOT)+os.pathsep+str(ROOT/'tools'),
+         'PYTHONDONTWRITEBYTECODE':'1','OMP_NUM_THREADS':'1','OPENBLAS_NUM_THREADS':'1',
+         'TMPDIR':str(out/'tmp'),'LC_ALL':'C'}
+    def verify():
+        for r in experiment['inputs']:
+            if sha(ROOT/r['path'])!=r['sha256'].removeprefix('sha256:'):
+                raise ValueError('input differs: '+r['path'])
+    def run(label, command):
+        marker=Path(os.environ['GAMMA_RESOURCE_PHASE_MARKERS'])
+        with marker.open('a') as f:f.write(json.dumps(dict(phase=label,event='start'))+'\n')
+        start=time.monotonic()
+        with (out/(label+'.stdout')).open('xb') as stdout,(out/(label+'.stderr')).open('xb') as stderr:
+            p=subprocess.run(command,cwd=ROOT,env=env,stdout=stdout,stderr=stderr,timeout=90)
+        row=dict(phase=label,command=command,returncode=p.returncode,elapsed_seconds=time.monotonic()-start)
+        phases.append(row);(out/(label+'.execution.json')).write_text(json.dumps(row,indent=2)+'\n')
+        with marker.open('a') as f:f.write(json.dumps(dict(phase=label,event='end'))+'\n')
+        if p.returncode:raise ValueError('phase failed: '+label)
+    result=dict(candidate_id=CID,status='execution_failed',objective_credit_bytes=0,
+                full_corpus_score_bytes=None,complete_package_bytes=None,standalone_decoder=False,
+                larger_gate_authorized=False)
+    try:
+        verify()
+        if os.sched_getaffinity(0)!={3}:raise ValueError('CPU3 required')
+        if json.loads(os.environ['GAMMA_ENWIKI9_EXPERIMENT_JSON'])!={'path':str(ep.relative_to(ROOT)),'sha256':'sha256:'+sha(ep)}:
+            raise ValueError('execution experiment differs')
+        snapshot=Path(os.environ['GAMMA_ENWIKI9_SNAPSHOT_CANDIDATE_ROOT'])
+        if (snapshot/'program.py').read_bytes()!=(ROOT/'tools/fx2_wrt_elision250k_v1.py').read_bytes():
+            raise ValueError('sealed program differs')
+        (out/'tmp').mkdir()
+        native=ROOT/'results/fx2_residual_features250k_v3/work/native'
+        for phase in ('decode','repeat'):
+            if sha(native/'encode.coder')!=sha(native/(phase+'.coder')):raise ValueError('retained coder repeat differs')
+        for phase in ('repeat','untraced'):
+            if sha(native/'encode.arc')!=sha(native/(phase+'.arc')):raise ValueError('retained archive differs')
+        command=[sys.executable,str(snapshot/'program.py'),str(ROOT),str(out)]
+        run('project',command+['project']);rows={}
+        for arm in ('K','V','D'):
+            for phase in ('encode','decode','repeat'):
+                run(arm+'-'+phase,command+[phase,arm])
+                rows[arm+'-'+phase]=json.loads((out/(arm+'-'+phase+'.json')).read_text())
+            reference=rows[arm+'-encode']
+            for phase in ('decode','repeat'):
+                other=rows[arm+'-'+phase]
+                for k in reference:
+                    if k!='operation' and reference[k]!=other[k]:raise ValueError('inverse/repeat differs: '+arm+' '+k)
+            if sha(out/(arm+'-encode.arc'))!=sha(out/(arm+'-repeat.arc')):raise ValueError('archive repeat differs')
+        if (out/'K-encode.arc').read_bytes()!=(native/'encode.arc').read_bytes():raise ValueError('P/K archive differs')
+        for a in ('V','D'):
+            for k in ('grammar_state_sha256','final_state_sha256'):
+                if rows['K-encode'][k]!=rows[a+'-encode'][k]:raise ValueError('common grammar state differs')
+        if rows['K-encode']['elided_events'] != 0 or rows['D-encode']['elided_events'] < rows['V-encode']['elided_events']:
+            raise ValueError('elision containment differs')
+        verify();projection=json.loads((out/'projection.json').read_text())
+        gain=projection['parent_archive_bytes']-rows['D-encode']['archive_bytes']
+        extra=rows['V-encode']['archive_bytes']-rows['D-encode']['archive_bytes']
+        result.update(status='passed',projection=projection,arms={a:rows[a+'-encode'] for a in ('K','V','D')},
+            exact_inverses=True,archive_repeats=True,state_and_action_repeats=True,
+            parent_bookkeeping_identity=True,common_grammar_state_identity=True,
+            kernel_source_bytes=(ROOT/'lib/fx2_wrt_elision_v1.py').stat().st_size,
+            gain_parent_bytes=gain,gain_vocabulary_control_bytes=extra,
+            native_pricing_authorized=gain>0 and extra>0,inputs_reverified=len(experiment['inputs']),
+            verdict='Conditional WRT elision gain warrants separately priced native integration.' if gain>0 and extra>0
+                    else 'Fixed WRT elision fails the conditional archive/vocabulary-control comparison.')
+    except Exception as exc:
+        result.update(error=str(exc),failure_class='implementation-resource-or-evidence',
+                      verdict='Incomplete comparison; no scientific compression decision.')
+    result['phases']=phases
+    files=[dict(path=str(p.relative_to(ROOT)),bytes=p.stat().st_size,sha256=sha(p)) for p in sorted(out.rglob('*')) if p.is_file()]
+    (out/'artifacts.json').write_text(json.dumps(dict(files=files),indent=2)+'\n')
+    (out/'decision.json').write_text(json.dumps(result,indent=2,sort_keys=True)+'\n')
+    print(json.dumps({k:result.get(k) for k in ('status','gain_parent_bytes','gain_vocabulary_control_bytes','error','verdict')}))
+    return 0 if result['status']=='passed' else 1
+
+
+if __name__=='__main__':raise SystemExit(main())
