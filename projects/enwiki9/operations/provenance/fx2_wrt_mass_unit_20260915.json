@@ -1,0 +1,67 @@
+{
+  "candidate_id": "fx2_wrt_mass250k_v1",
+  "checks": [
+    "Every15361 nonnegative binary16 value through1 and exact binary32 floor",
+    "All255 prefix branch sums",
+    "Exact Bayesian identity and131070 null count checks",
+    "5012 native unsigned128/Python vectors",
+    "Strict preceding-row coordinate and fixed label rotation",
+    "Nine independent inverse/repeat processes without source truth on decode"
+  ],
+  "command": [
+    "env",
+    "TMPDIR=/run/user/1000",
+    "taskset",
+    "-c",
+    "3",
+    "timeout",
+    "180",
+    "python3",
+    "-m",
+    "unittest",
+    "tests.test_fx2_wrt_mass_v1",
+    "-v"
+  ],
+  "corpus_evidence": false,
+  "correction": "Declare tools/ on the test import path for the retained sibling-import helper. No arithmetic or corpus changes.",
+  "initial_import_failure": {
+    "bytes": 1170,
+    "path": "run_logs/manual/wrt_mass_unit_20260915.log",
+    "sha256": "29090387983b63a93aa3ecc245fb656688573a00bff27e3ef9e265b1a3e6f374"
+  },
+  "log": {
+    "bytes": 892,
+    "path": "run_logs/manual/wrt_mass_unit_corrected_20260915.log",
+    "sha256": "dfc94d84d28968d8afea07ae1c2a7cd1e180c37decca5e3df31bc64ac7dbcae2"
+  },
+  "passed": true,
+  "schema": "gamma.enwiki9.synthetic-checks.v1",
+  "sources": [
+    {
+      "bytes": 2372,
+      "path": "lib/fx2_wrt_mass_v1.py",
+      "sha256": "b96f1ba2aa22c7f7cd71f2bc066529d05405a656917e811d1fd91e961718a3b8"
+    },
+    {
+      "bytes": 8449,
+      "path": "tools/fx2_wrt_mass250k_v1.py",
+      "sha256": "504ac643ea547bd3eca5a1a695735fd0fc575562ae40a31453704cbd47c4c996"
+    },
+    {
+      "bytes": 6906,
+      "path": "tools/fx2_wrt_mass_gate_v1.py",
+      "sha256": "ab4d008221066ef7ee3e7bb6d60adb5a6eb564afceb0b39ab628991c9a92e32e"
+    },
+    {
+      "bytes": 563,
+      "path": "tools/fx2_wrt_mass_probe_v1.cpp",
+      "sha256": "75fd023757948c1ef705a16e0422cdb0f7881b70d0128d71f087208f5126bbc8"
+    },
+    {
+      "bytes": 6854,
+      "path": "tests/test_fx2_wrt_mass_v1.py",
+      "sha256": "f86a3c9133d1688d1015a762407053a3dc2ddacc6dd29628ea4a6d56a93e98f3"
+    }
+  ],
+  "tests": 6
+}
