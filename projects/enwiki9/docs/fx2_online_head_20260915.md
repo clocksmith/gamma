@@ -52,3 +52,24 @@ verdict. The90,000,000-byte target and verified full-corpus score remain unprove
 [Contract](../operations/adaptive/experiments/fx2_online_head_opening250k_v1.json)
 [Plan](../operations/provenance/fx2_online_head_opening250k_v1_plan.json)
 [Core](../lib/fx2_online_head_v1.hpp)
+
+## Closed native comparison
+
+All16 phases pass. P/K33429,D33604,S33564 bytes: g_P=-175,g_S=-40.
+Native inverses/repeats,74 complete introduced-state boundaries per phase,
+P/K parent coder identity, K/D state identity, identical frozen-base digests,
+untraced D and both clean builds pass. This replacement configuration is retired.
+
+The native component log reports P1.302923,D1.299358,S1.325824 nats/token over
+151210 tokens. The P-D difference is about97.2 ideal component bytes, with
+about0.028byte uncertainty from displayed rounding. It earns no archive credit:
+the actual combined archive is175bytes larger. This separates improvement in
+one expert from improvement in the complete adaptive compressor.
+
+A separately budgeted integration comparison will preserve the same head learner
+and the entire original predictor trajectory, transporting only its probability
+correction to an optional final-coder mixture. No head rate,features,rank,reset,
+corpus or projection tuning is authorized by this negative result.
+
+[Terminal](../operations/provenance/fx2_online_head_terminal_20260915.json)
+[Reflection](../operations/adaptive/reflections/20260915T020052Z_df12e66092.json)

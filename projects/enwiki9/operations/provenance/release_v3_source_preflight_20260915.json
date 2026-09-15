@@ -1,0 +1,115 @@
+{
+  "schema": "gamma.enwiki9.source-preflight.v1",
+  "adapter": {
+    "path": "operations/provenance/fx2_expert_release_adapter_v3.json",
+    "sha256": "42158c0ce0c50bef5a9a192aae4161beec4930927731735daceb9fbfdf088c9a"
+  },
+  "checks": [
+    {
+      "command": [
+        "/usr/bin/make",
+        "-n",
+        "cmix",
+        "CC=/usr/bin/g++"
+      ],
+      "returncode": 0
+    },
+    {
+      "command": [
+        "/usr/bin/g++",
+        "-DSEED=923",
+        "-DUPDATE_LIMIT=3000",
+        "-std=c++17",
+        "-march=x86-64-v3",
+        "-mrecip=none",
+        "-include",
+        "cstdint",
+        "-Wall",
+        "-Wextra",
+        "-fsyntax-only",
+        "-DGAMMA_EXPERT_RELEASE",
+        "src/predictor.cpp"
+      ],
+      "returncode": 0
+    },
+    {
+      "command": [
+        "/usr/bin/g++",
+        "-DSEED=923",
+        "-DUPDATE_LIMIT=3000",
+        "-std=c++17",
+        "-march=x86-64-v3",
+        "-mrecip=none",
+        "-include",
+        "cstdint",
+        "-Wall",
+        "-Wextra",
+        "-fsyntax-only",
+        "-DGAMMA_EXPERT_RELEASE",
+        "src/mixer/byte-mixer.cpp"
+      ],
+      "returncode": 0
+    },
+    {
+      "command": [
+        "/usr/bin/g++",
+        "-DSEED=923",
+        "-DUPDATE_LIMIT=3000",
+        "-std=c++17",
+        "-march=x86-64-v3",
+        "-mrecip=none",
+        "-include",
+        "cstdint",
+        "-Wall",
+        "-Wextra",
+        "-fsyntax-only",
+        "-DGAMMA_EXPERT_RELEASE",
+        "src/coder/encoder.cpp"
+      ],
+      "returncode": 0
+    },
+    {
+      "command": [
+        "/usr/bin/g++",
+        "-DSEED=923",
+        "-DUPDATE_LIMIT=3000",
+        "-std=c++17",
+        "-march=x86-64-v3",
+        "-mrecip=none",
+        "-include",
+        "cstdint",
+        "-Wall",
+        "-Wextra",
+        "-fsyntax-only",
+        "-DGAMMA_EXPERT_RELEASE",
+        "src/coder/decoder.cpp"
+      ],
+      "returncode": 0
+    },
+    {
+      "command": [
+        "/usr/bin/g++",
+        "-DSEED=923",
+        "-DUPDATE_LIMIT=3000",
+        "-std=c++17",
+        "-march=x86-64-v3",
+        "-mrecip=none",
+        "-include",
+        "cstdint",
+        "-Wall",
+        "-Wextra",
+        "-fsyntax-only",
+        "-DGAMMA_EXPERT_RELEASE",
+        "src/runner.cpp"
+      ],
+      "returncode": 0
+    }
+  ],
+  "all_pass": true,
+  "corpus_executed": false,
+  "log": {
+    "path": "run_logs/manual/release_v3_source_preflight04_20260915.log",
+    "bytes": 33977,
+    "sha256": "fe169e9abbe28ae5159f87141ed2a8703fa7d0a850b4627dd20b21a0dadc7c82"
+  }
+}

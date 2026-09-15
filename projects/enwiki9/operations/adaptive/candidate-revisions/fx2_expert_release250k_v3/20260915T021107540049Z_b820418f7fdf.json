@@ -1,0 +1,56 @@
+{
+  "candidateId": "fx2_expert_release250k_v3",
+  "candidateTreeSha256": "sha256:b820418f7fdf8ee9853593711686504581902240e78dbf425c016ff1ff057528",
+  "change": {
+    "evidence": [
+      "operations/adaptive/experiments/fx2_expert_release250k_v3.json"
+    ],
+    "hypothesis": "Removing unused LSTM fallback and comparison-only mixture machinery preserves the frozen parent and aligned-mixture archives, reducing delivery components.",
+    "kind": "implementation",
+    "replacements": [],
+    "summary": [
+      "Remove unused LSTM fallback in fixed transformer profile; replace comparison-only expert mixture with state-equivalent production implementation. Two same-path builds per P/D arm and six corpus phases,one frontend phase. Build-only repair removes stale make prerequisites and unused LSTM include, adding the formerly transitive iostream include explicitly in both predictor and command-line runner. Source preflight passes; predictors and population unchanged."
+    ]
+  },
+  "files": [
+    {
+      "blobPath": "operations/adaptive/candidate-blobs/sha256/a6/a63f63fa75a7cd3ada9421f4f25a1ae11abb46abf9d825fab9e012a974487cc4",
+      "bytes": 1224,
+      "normalization": "semantic-meta-v1",
+      "path": "meta.json",
+      "sha256": "a63f63fa75a7cd3ada9421f4f25a1ae11abb46abf9d825fab9e012a974487cc4"
+    },
+    {
+      "blobPath": "operations/adaptive/candidate-blobs/sha256/28/28198c5f36c8cee24a2f359e6b2ab6bcdbb15bafc73236b6a6e0b61ea6fed111",
+      "bytes": 8556,
+      "normalization": "verbatim",
+      "path": "program.py",
+      "sha256": "28198c5f36c8cee24a2f359e6b2ab6bcdbb15bafc73236b6a6e0b61ea6fed111"
+    }
+  ],
+  "generatedUtc": "2026-09-15T02:11:07+00:00",
+  "immutableBlobsComplete": true,
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:e91ff20e92c3cac8acb0cbe5c79fc8e8a3b427d7e151245c8eecc52b1c32fa00",
+    "objectiveId": "gamma-enwiki9-hutter-90m-v3",
+    "objectivePath": "contracts/research/v3/objective-contract.json",
+    "targetScoreBytes": 90000000
+  },
+  "parentRevision": {
+    "candidateId": "fx2_expert_release250k_v2",
+    "candidateTreeSha256": "sha256:416ad8f7955c50f24dad45409a67994e41c729748370913b43cc35ef6cfb5e59",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/fx2_expert_release250k_v2/20260915T015929795254Z_416ad8f7955c.json",
+      "sha256": "sha256:985f3d4bb528e7e6cd2c366d6c67fbeab1aa7c6145751ce166a776cc4adc39fa"
+    }
+  },
+  "previousRevision": {
+    "path": "operations/adaptive/candidate-revisions/fx2_expert_release250k_v3/20260915T021107137230Z_7c5d0831d7e6.json",
+    "sha256": "sha256:cd02b9943765b3916b58281099f2ee5a8324fd3a421bc6da13cff1eff905fd00"
+  },
+  "provenanceClass": "native",
+  "schema": "gamma.enwiki9.candidate-revision.v1",
+  "treeDigestAlgorithm": "sha256-canonical-counted-files-v1"
+}
