@@ -80,3 +80,31 @@ after normalization. All counts,raw probabilities,truths andpreintervals match;
 normalizing the recorded postintervals recovers every retained record. V3 moves
 only coder Record.Finish to the retained boundary. Feature snapshot and write
 remain pre-truth and before Perceive respectively; source preflight passes.
+
+The [terminal result](../operations/provenance/fx2_residual_features_terminal_20260915.json)
+closes all five phases with exact parent archives, independent raw inversion,
+feature/coder repeats,35 bound inputs,guards and cleanup. The exact rational
+upper has diagnostic value1355.3425704621257 ideal bits; its conservative Q16
+rounding allowance gives1386.4279275203896bits, less than173.304byte-equivalents.
+The declared table alone costs4096bits. No fitted coefficients or new compression
+archive were produced. Retire this fixed table pricing on this population.
+The bound is not a finite-archive bound and gives no full-corpus result.
+
+An independent reconstruction of the original decoded-prefix separator clock
+also verifies all98 bytes where hidden features must be absent. Complete native
+model/optimizer serialization is still not claimed. Peak guarded cgroup memory
+was6012841984bytes; all resource predicates and cleanup passed.
+
+The next unrun question is a separately priced sparse family, not a successful
+reinterpretation of the512-byte configuration. Permit at most one coefficient
+per bit row, transmitting one version byte, eight presence bits and, per active
+row, five feature-index bits plus a signed16-bit coefficient. Thus the paid table
+is16+21*k bits, padded at the end, where k is the active-row count. Padding and
+implementation can only make the ideal-price bound less favorable.
+For one coordinate let G=sum(x), H=sum(x*x), |a|<=1/2. Since
+F''(a)<=-4*H/9, F(a)<=a*G-2*a*a*H/9. Maximize this quadratic at
+abs(a)=min(1/2,9*abs(G)/(4*H)), or use0 when H=0. This is an exact rational
+upper needing only first and second moments, with the earlier rounding allowance
+added separately. Summing the best paid row bounds can reject the entire declared
+sparse family before fitting. A positive upper would still not prove gain. This
+question has no execution or score authority until a new contract is registered.

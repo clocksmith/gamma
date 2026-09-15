@@ -1,0 +1,106 @@
+{
+  "schema": "gamma.enwiki9.synthetic-native-recorder-check.v1",
+  "passed": true,
+  "tests": 2,
+  "bits_per_native_process": 1024,
+  "source": "Actual measured v2/v3 coder translation units with a deterministic causal synthetic Predictor replacing the native model.",
+  "checks": [
+    "Native encode/decode archives,coder records andfeature records agree",
+    "Independent Python range coder matches emitted archive",
+    "V3 post-normalization records match independent reference at every bit",
+    "V2 reproduces earlier trace boundary mismatch with unchanged archive",
+    "Packed ternary feature state matches independently reconstructed decoded prefix before each truth"
+  ],
+  "command": [
+    "taskset",
+    "-c",
+    "3",
+    "python3",
+    "-m",
+    "unittest",
+    "tests.test_fx2_residual_recorder_v3",
+    "-v"
+  ],
+  "environment": {
+    "TMPDIR": "/run/user/1000"
+  },
+  "inputs": [
+    {
+      "path": "tests/test_fx2_residual_recorder_v3.py",
+      "bytes": 3639,
+      "sha256": "bbf213d9a44413b9d98a722b8b933dfb867d41460a0b05e519849161d368bc7d"
+    },
+    {
+      "path": "run_logs/manual/residual_recorder_causal_reference_unit_20260915.log",
+      "bytes": 442,
+      "sha256": "ae70a23dcdf9b6120cb837f56ce3a632af7ad66bea251df15bf79f672a77c3e2"
+    },
+    {
+      "path": "tools/causal_field_parent_coder_v1.py",
+      "bytes": 10266,
+      "sha256": "6c6f8311b6fda0bbf5fdbd0a45a52ea9f145ebc1fe9d506e1af1923478d5abb8"
+    },
+    {
+      "path": "results/fx2_residual_features250k_v2/work/native/src/coder/encoder.cpp",
+      "bytes": 1462,
+      "sha256": "db2784e131cb272d8b0ad37056cf8d1486ce3e93a093507ed79e659f2cd57aee"
+    },
+    {
+      "path": "results/fx2_residual_features250k_v2/work/native/src/coder/encoder.h",
+      "bytes": 440,
+      "sha256": "0697c4231e3d87771adfc96e5689e15337f224e62795085cd0f848c84badf813"
+    },
+    {
+      "path": "results/fx2_residual_features250k_v2/work/native/src/coder/decoder.cpp",
+      "bytes": 1380,
+      "sha256": "8f1416f45a402e32941b728597981a25b13d81182fa11191887cb06fef2630b5"
+    },
+    {
+      "path": "results/fx2_residual_features250k_v2/work/native/src/coder/decoder.h",
+      "bytes": 314,
+      "sha256": "5c2e452d5264b83782360711e88c68917159fdf9e0863f4d75cc36d4fe0d9237"
+    },
+    {
+      "path": "results/fx2_residual_features250k_v2/work/native/src/gamma-residual-projection.h",
+      "bytes": 2754,
+      "sha256": "68dd764bbaa547d157dac0175e5e68909fcf41acd398f23555f9c532e65facea"
+    },
+    {
+      "path": "results/fx2_residual_features250k_v2/work/native/src/gamma-coder-trace.h",
+      "bytes": 2359,
+      "sha256": "d72dfa104668e2f3138e41e7bdfd54c8ad634d00d64338a627dbf1835656a11b"
+    },
+    {
+      "path": "results/fx2_residual_features250k_v3/work/native/src/coder/encoder.cpp",
+      "bytes": 1462,
+      "sha256": "df047732585a94247adac2d566ddda16658145d943cf188b4d08874db1ae18da"
+    },
+    {
+      "path": "results/fx2_residual_features250k_v3/work/native/src/coder/encoder.h",
+      "bytes": 440,
+      "sha256": "0697c4231e3d87771adfc96e5689e15337f224e62795085cd0f848c84badf813"
+    },
+    {
+      "path": "results/fx2_residual_features250k_v3/work/native/src/coder/decoder.cpp",
+      "bytes": 1380,
+      "sha256": "e25248f1a6c3c1fa92b9646065abdad23df5e79fa776d96e0ddd2ff8eaf0213a"
+    },
+    {
+      "path": "results/fx2_residual_features250k_v3/work/native/src/coder/decoder.h",
+      "bytes": 314,
+      "sha256": "5c2e452d5264b83782360711e88c68917159fdf9e0863f4d75cc36d4fe0d9237"
+    },
+    {
+      "path": "results/fx2_residual_features250k_v3/work/native/src/gamma-residual-projection.h",
+      "bytes": 2754,
+      "sha256": "68dd764bbaa547d157dac0175e5e68909fcf41acd398f23555f9c532e65facea"
+    },
+    {
+      "path": "results/fx2_residual_features250k_v3/work/native/src/gamma-coder-trace.h",
+      "bytes": 2359,
+      "sha256": "d72dfa104668e2f3138e41e7bdfd54c8ad634d00d64338a627dbf1835656a11b"
+    }
+  ],
+  "corpus_evidence": false,
+  "objective_credit_bytes": 0
+}
