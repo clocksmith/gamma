@@ -1,0 +1,84 @@
+{
+  "attribution": {
+    "causalConfidence": "high",
+    "controlsEquivalent": null,
+    "failureClass": "implementation-failure",
+    "localizedCause": "Runtime asset presence was not handled when extracting the source delivery."
+  },
+  "candidateId": "fx2_residual_features250k_v1",
+  "candidateRevision": {
+    "candidateId": "fx2_residual_features250k_v1",
+    "candidateTreeSha256": "sha256:5bc7db5df32a659c573e783bcfe84b3f90e8f1669d9ca022c06d341094d17642",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/fx2_residual_features250k_v1/20260915T184854933029Z_5bc7db5df32a.json",
+      "sha256": "sha256:3a3e0cfd1b1d69bb756f44edf6f8b0a7ab97a09e872d86b73eda9c2b7b41313d"
+    }
+  },
+  "decision": {
+    "killPredicatesPass": false,
+    "nextGateBytes": null,
+    "promotionPredicatesPass": false,
+    "rationale": "Correction-only v2 checks existing assets; feature map,probabilities,population and controls stay unchanged.",
+    "verdict": "retry"
+  },
+  "evidence": [
+    {
+      "path": "operations/provenance/fx2_residual_features_failure_20260915.json",
+      "sha256": "sha256:b81420389275386f714a170a4970aec19ff3acf3ef2266114d573a84549a1366"
+    },
+    {
+      "path": "results/fx2_residual_features250k_v1/terminal-index.json",
+      "sha256": "sha256:697083121d2b018a59ee1ddef169f45eaf1aabda911dea935a9bf73b2be14629"
+    }
+  ],
+  "experiment": {
+    "path": "operations/adaptive/experiments/fx2_residual_features250k_v1.json",
+    "sha256": "sha256:ae0132496a47644f7000e9c001d30047597ce41437e6c638ff1f125d968640d5"
+  },
+  "generatedUtc": "2026-09-15T18:53:05+00:00",
+  "hypothesis": {
+    "rationale": "No feature records or complete archive were produced.",
+    "verdict": "not-tested"
+  },
+  "job": {
+    "path": "operations/adaptive/failed/919_20260915T184855Z_d505edae34.json",
+    "sha256": "sha256:c62da4ea64aed3d3f21849c2d603fa61d1652a5e1e224df60058a476a51713cc"
+  },
+  "knowledge": {
+    "retiredDimensions": [],
+    "transferableLessons": [
+      "Verify exact existing model and dictionary bytes instead of copying the same asset twice."
+    ],
+    "uncertainties": []
+  },
+  "measurementAssertions": [],
+  "measurements": {
+    "idealBitsSaved": null,
+    "memoryRatio": null,
+    "minimumPartitionIdealBitsSaved": null,
+    "netBytesSaved": null,
+    "positiveSegmentFraction": null,
+    "runtimeRatio": null,
+    "scopeBytes": null,
+    "scopeSymbols": null,
+    "sourceBytesDelta": null,
+    "transferRetention": null
+  },
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:e91ff20e92c3cac8acb0cbe5c79fc8e8a3b427d7e151245c8eecc52b1c32fa00",
+    "objectiveId": "gamma-enwiki9-hutter-90m-v3",
+    "objectivePath": "contracts/research/v3/objective-contract.json",
+    "targetScoreBytes": 90000000
+  },
+  "reflectionId": "r-20260915t184855z_d505edae34",
+  "schema": "gamma.enwiki9.reflection-receipt.v1",
+  "validity": {
+    "classification": "implementation-failure",
+    "reasons": [
+      "Released source ZIP already contains assets; duplicate exclusive copy failed before any corpus phase."
+    ],
+    "valid": false
+  }
+}
