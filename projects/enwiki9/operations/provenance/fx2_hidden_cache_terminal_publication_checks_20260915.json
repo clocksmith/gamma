@@ -1,0 +1,94 @@
+{
+  "schema": "gamma.enwiki9.publication-checks.v1",
+  "candidate_id": "fx2_hidden_cache250k_v1",
+  "checks": [
+    {
+      "command": [
+        "python3",
+        "projects/enwiki9/tools/hutter_run_ledger.py",
+        "--check"
+      ],
+      "returncode": 0
+    },
+    {
+      "command": [
+        "python3",
+        "projects/enwiki9/tools/enwiki9_release_receipts.py",
+        "--check"
+      ],
+      "returncode": 0
+    },
+    {
+      "command": [
+        "python3",
+        "projects/enwiki9/tools/enwiki9_evidence_matrix.py",
+        "--check"
+      ],
+      "returncode": 0
+    },
+    {
+      "command": [
+        "python3",
+        "projects/enwiki9/tools/enwiki9_best_results.py",
+        "--check"
+      ],
+      "returncode": 0
+    },
+    {
+      "command": [
+        "python3",
+        "projects/enwiki9/tools/enwiki9_status_receipt.py",
+        "--check"
+      ],
+      "returncode": 0
+    },
+    {
+      "command": [
+        "python3",
+        "projects/enwiki9/tools/enwiki9_doc_lint.py"
+      ],
+      "returncode": 0
+    },
+    {
+      "command": [
+        "python3",
+        "-m",
+        "json.tool",
+        "projects/enwiki9/upper_bound_certificate.json"
+      ],
+      "returncode": 0
+    },
+    {
+      "command": [
+        "python3",
+        "-m",
+        "json.tool",
+        "projects/enwiki9/docs/status_receipt.json"
+      ],
+      "returncode": 0
+    },
+    {
+      "command": [
+        "python3",
+        "projects/enwiki9/tools/backfill_run_ledger.py",
+        "--check"
+      ],
+      "returncode": 0
+    },
+    {
+      "command": [
+        "python3",
+        "projects/enwiki9/tools/enwiki9_tool_catalogue.py",
+        "--check"
+      ],
+      "returncode": 0
+    }
+  ],
+  "expected_check_count": 10,
+  "all_checks_pass": true,
+  "log": {
+    "path": "run_logs/manual/hidden_cache_terminal_checks_20260915.log",
+    "bytes": 36028,
+    "sha256": "a66dafabdf96f113bd6284cd95f213e3d4e551b4612fff926441e924fd032098"
+  }
+}
