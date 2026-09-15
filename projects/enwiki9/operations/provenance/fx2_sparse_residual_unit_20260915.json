@@ -1,0 +1,42 @@
+{
+  "candidate_id": "fx2_sparse_residual_cost250k_v1",
+  "checks": [
+    "5160 scalar objectives bounded by exact curvature majorant",
+    "All256 mask table inverses and domain endpoints",
+    "12800 joint subset cost comparisons",
+    "Byte padding and malformed table rejection",
+    "Zero information still pays16header bits"
+  ],
+  "command": [
+    "taskset",
+    "-c",
+    "3",
+    "python3",
+    "-m",
+    "unittest",
+    "tests.test_fx2_sparse_residual_v1",
+    "-v"
+  ],
+  "corpus_evidence": false,
+  "log": {
+    "bytes": 1011,
+    "path": "run_logs/manual/sparse_residual_unit_final_20260915.log",
+    "sha256": "1496214de29cf7889231edb2ac61697edf204c4b042c09d8ca46e9af9b15a62a"
+  },
+  "passed": true,
+  "pre_freeze_refinement": "Active coefficient0 is redundant with the presence mask. Encode sign and14bit magnitude-minus-one, making15bits per coefficient and20bits per entry. Final table2..22bytes; earlier unrun23-byte sketch is superseded, not a measured result.",
+  "schema": "gamma.enwiki9.synthetic-checks.v1",
+  "sources": [
+    {
+      "bytes": 5096,
+      "path": "lib/fx2_sparse_residual_v1.py",
+      "sha256": "e3a8a5949ac849fe9c057c3cdefbb0358cf7773a25164784bc1f1f1003bd93bb"
+    },
+    {
+      "bytes": 2682,
+      "path": "tests/test_fx2_sparse_residual_v1.py",
+      "sha256": "ddbbbda267c332f119cbef5831022f7961498e6a8b29111fed705fc39b8b4065"
+    }
+  ],
+  "tests": 7
+}
