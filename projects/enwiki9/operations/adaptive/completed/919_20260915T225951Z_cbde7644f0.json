@@ -5,27 +5,66 @@
     "sha256": "sha256:e05b7e8da7f67216bf716c147d13567c44810952c4cb29ec61fd1899d9f0d102"
   },
   "candidate_tree_sha256": "sha256:ed3b6d4d7fe730a932067ef1feccd7d60279a02135c0bf2af4e04ee5eadf7133",
+  "elapsed_seconds": 91.515,
   "execution_guard": {
     "path": "tools/run_with_resource_guard_v3.py",
     "sha256": "sha256:044147f7ffe6922ea8dafd52fc3d4426077b20958adbcd421245ad41adcfc1e4"
   },
   "execution_mode": "discovery",
+  "execution_resources": {
+    "boot_id": "3ce46712-27bc-4199-8e48-e2b3d23926cb",
+    "budget": {
+      "cgroup_parent": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice",
+      "cpus": [
+        3
+      ],
+      "memory_bytes": 1073741824,
+      "scratch_bytes": 268435456,
+      "swap_bytes": 0,
+      "wall_seconds": 900
+    },
+    "cgroup_inode": 336387,
+    "cgroup_path": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/gamma-enwiki9-20260915T225951Z_cbde7644f0",
+    "cleanup_complete": true,
+    "cpu_enforcement": "taskset-and-sampled-affinity-guard",
+    "groups": [
+      {
+        "created": true,
+        "inode": 336387,
+        "kernel_cpuset": false,
+        "memory_bytes": 1073741824,
+        "path": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/gamma-enwiki9-20260915T225951Z_cbde7644f0"
+      }
+    ],
+    "guard_command_sha256": "b806ce71b28487555945c359bfb43aec903cffe334382825c81f8a702cf2d385",
+    "guard_path": "run_logs/adaptive/20260915T225951Z_cbde7644f0.resources/guard.json",
+    "missing_diagnostics": [
+      "kernel cpuset controller is not delegated; taskset assignment and existing affinity guard remain active"
+    ],
+    "timing_authority": "diagnostic"
+  },
   "experiment": {
     "path": "operations/adaptive/experiments/fx2_wrt_mass250k_v1.json",
     "sha256": "sha256:016d7327cc3421bee1f0afa066ffd6fb52b72872c8edf7e3fa6fc16865f221a0"
   },
+  "finished_at": "2026-09-15T23:05:54+00:00",
   "gate_size": 250000,
-  "held": true,
+  "held": false,
   "held_at": "2026-09-15T22:59:51+00:00",
   "hold_history": [
     {
       "at": "2026-09-15T22:59:51+00:00",
       "held": true,
       "reason": "Publish fixed likelihood kernel, exact tests, causal alignment and ownership; fresh CPU3 admission with inherited controller affinity before launch."
+    },
+    {
+      "at": "2026-09-15T23:04:22+00:00",
+      "held": false,
+      "reason": "Published 8b09e57b5, frozen inputs verified from Git and disk; fresh CPU3 admission with inherited controller affinity; fixed K/M/S conditional comparison only."
     }
   ],
-  "hold_reason": "Publish fixed likelihood kernel, exact tests, causal alignment and ownership; fresh CPU3 admission with inherited controller affinity before launch.",
   "job_id": "20260915T225951Z_cbde7644f0",
+  "log_path": "run_logs/adaptive/20260915T225951Z_cbde7644f0.log",
   "priority": 80,
   "proposal": {
     "path": "operations/adaptive/proposals/developed/949_fx2_wrt_mass250k_v1.json",
@@ -33,6 +72,7 @@
   },
   "proposal_id": "fx2_wrt_mass250k_v1",
   "purpose": "diagnostic",
+  "released_at": "2026-09-15T23:04:22+00:00",
   "resource_budget": {
     "cgroup_parent": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice",
     "cpus": [
@@ -43,6 +83,7 @@
     "swap_bytes": 0,
     "wall_seconds": 900
   },
+  "returncode": 0,
   "runner": {
     "path": "tools/fx2_wrt_mass_gate_v1.py",
     "sha256": "sha256:ab4d008221066ef7ee3e7bb6d60adb5a6eb564afceb0b39ab628991c9a92e32e"
@@ -51,10 +92,14 @@
   "scratch_directories": [
     "results/fx2_wrt_mass250k_v1"
   ],
-  "state": "pending",
+  "started_at": "2026-09-15T23:04:22+00:00",
+  "state": "completed",
   "submitted_at": "2026-09-15T22:59:51+00:00",
   "tags": [],
   "timing_authority": "diagnostic",
   "tool": "tools/fx2_wrt_mass_gate_v1.py",
-  "tool_args": []
+  "tool_args": [],
+  "worker_pid": 2577257,
+  "worker_proc_start_ticks": 260960069,
+  "worker_started_at": "2026-09-15T23:04:22+00:00"
 }
