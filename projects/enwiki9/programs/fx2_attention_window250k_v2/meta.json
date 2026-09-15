@@ -6,6 +6,75 @@
   "family": "public_fx2_transformer",
   "hypothesis": "A2048-token native attention window improves opening250KB archive and source-component cost against the identical trained1024-window parent.",
   "id": "fx2_attention_window250k_v2",
+  "measured": {
+    "reflections": {
+      "20260915T212255Z_d36a2f7af1": {
+        "decision": "retire",
+        "path": "operations/adaptive/reflections/20260915T212255Z_d36a2f7af1.json",
+        "sha256": "sha256:fc11742ca26e2ef2e1dfc1482d45476eb6289ff241f51ab9687ad8262f5d22ba",
+        "valid": true
+      }
+    },
+    "terminal_results": {
+      "20260915T212255Z_d36a2f7af1": {
+        "index": {
+          "path": "results/fx2_attention_window250k_v2/terminal-index.json",
+          "sha256": "sha256:3f6dfe03512f72ebfe56e3b7ccfc4360e406bd2bd8dba8e3037b97e982785f57"
+        },
+        "reflection": {
+          "decision": "retire",
+          "path": "operations/adaptive/reflections/20260915T212255Z_d36a2f7af1.json",
+          "sha256": "sha256:fc11742ca26e2ef2e1dfc1482d45476eb6289ff241f51ab9687ad8262f5d22ba",
+          "valid": true
+        },
+        "guard_validation_mode": "discovery-budget-schema",
+        "qualification_authority": false,
+        "missing_diagnostics": [
+          "kernel cpuset controller is not delegated; taskset assignment and existing affinity guard remain active"
+        ],
+        "arms": {
+          "P": {
+            "result_path": "projects/enwiki9/results/fx2_attention_window250k_v2/P.driver.json",
+            "result_json_bytes": 2041,
+            "result_json_sha256": "c6fea2240456f61066beac120436eb728cd6f5075e29d0475e7d3595198e8ca6",
+            "data_size": 250000,
+            "data_md5": null,
+            "data_sha256": "665fc689441b68462d88f82dc33212abe9c4824be095d03a556c9b55a2829fd3",
+            "compressed_size": 33429,
+            "program_size": 438792,
+            "hutter_score": null,
+            "bits_per_byte": null,
+            "roundtrip_ok": true,
+            "determinism": true,
+            "compressed_sha256": "70325310e96b83b48677d76d53141e69ddb47519b4cdffd1c85f51fe2c444dbe",
+            "compress_time_s": null,
+            "decompress_time_s": null,
+            "missing_diagnostics": [],
+            "run_id": "fx2_attention_window250k_v2__20260915T212255Z_d36a2f7af1__P"
+          },
+          "D": {
+            "result_path": "projects/enwiki9/results/fx2_attention_window250k_v2/D.driver.json",
+            "result_json_bytes": 2041,
+            "result_json_sha256": "6b130a85119c20ddd6431291dc5c685d2359f45d6b7eb9f4e7fe6616fbe3b763",
+            "data_size": 250000,
+            "data_md5": null,
+            "data_sha256": "665fc689441b68462d88f82dc33212abe9c4824be095d03a556c9b55a2829fd3",
+            "compressed_size": 34060,
+            "program_size": 438792,
+            "hutter_score": null,
+            "bits_per_byte": null,
+            "roundtrip_ok": true,
+            "determinism": true,
+            "compressed_sha256": "0229ecf2d1a5fb7334a61edc0305b9f21d83d28d34b53a18b918cc8a93ae4474",
+            "compress_time_s": null,
+            "decompress_time_s": null,
+            "missing_diagnostics": [],
+            "run_id": "fx2_attention_window250k_v2__20260915T212255Z_d36a2f7af1__D"
+          }
+        }
+      }
+    }
+  },
   "omega": {
     "experiment": {
       "path": "operations/adaptive/experiments/fx2_attention_window250k_v2.json",
@@ -20,5 +89,6 @@
     "retired_neighborhoods": []
   },
   "parent": "fx2_attention_window250k_v1",
-  "status": "candidate"
+  "status": "retired",
+  "verdict": "This fixed2048-window mutation does not pass the native archive/source-component comparison."
 }
