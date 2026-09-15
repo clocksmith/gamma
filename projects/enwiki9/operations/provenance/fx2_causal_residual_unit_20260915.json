@@ -1,0 +1,42 @@
+{
+  "candidate_id": "fx2_causal_residual250k_v1",
+  "checks": [
+    "Aligned slope128 versus rotated slope-128 on synthetic fixture",
+    "All65535 zero-count identities plus180 exact rational boundary comparisons",
+    "Independent range-decoder and complete controller states",
+    "Second-half truth cannot alter within-block controller",
+    "Partial blocks and deterministic replay",
+    "Missing features and malformed records"
+  ],
+  "command": [
+    "taskset",
+    "-c",
+    "3",
+    "python3",
+    "-m",
+    "unittest",
+    "tests.test_fx2_causal_residual_v1",
+    "-v"
+  ],
+  "corpus_evidence": false,
+  "log": {
+    "bytes": 913,
+    "path": "run_logs/manual/causal_residual_unit_20260915.log",
+    "sha256": "21f3e1016b8ea3f50991640187cc59f5cc772e044234dfb0d082afe0a6df157c"
+  },
+  "passed": true,
+  "schema": "gamma.enwiki9.synthetic-checks.v1",
+  "sources": [
+    {
+      "bytes": 6229,
+      "path": "lib/fx2_causal_residual_v1.py",
+      "sha256": "8bc41533cba6214c7506acd13cb32376dafb17e67e29826ffe79404fbd815d07"
+    },
+    {
+      "bytes": 4862,
+      "path": "tests/test_fx2_causal_residual_v1.py",
+      "sha256": "a48a9476692918af327491d4fc826228e70b8d2c56f76b4e6aed6e211f8d733e"
+    }
+  ],
+  "tests": 7
+}
