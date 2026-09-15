@@ -118,3 +118,32 @@ to calibration, contexts or mixture strength is justified by this result alone.
 The conclusion is limited to this implemented native mixture and delayed
 control on exposed opening 250KB. It does not establish novelty, superiority on
 unseen data, cross-machine eligibility or a 90M full-corpus witness.
+
+## Compact production delivery
+
+The [production closure](../operations/provenance/fx2_expert_release_terminal_20260915.json)
+passes all 11 phases at `fx2_expert_release250k_v3`: two source builds per arm,
+preprocessing, independent P/D inverses and repeats. P remains 33,429 bytes;
+D remains 33,395 bytes, identical to the experimental mixture archive.
+No runtime arm selector or research observer is required by this delivery.
+
+Removing the unused LSTM implementation and reducing the mixture to its
+production operations changes the executable from 483,848 original bytes to
+438,792 for trimmed P or 442,888 for D. Against original delivery, D saves
+40,960 executable bytes plus the measured 34 archive bytes. Against an equally
+trimmed P, the mixture adds 4,096 executable bytes: its local component net is
+negative 4,062 bytes. Trimming and predictive improvement are separate effects.
+
+The complete source ZIP comparison is original 3,910,568, trimmed P 3,905,220,
+and D 3,906,387 bytes. D adds 1,167 over trimmed P plus 21 required compiler
+option bytes, yielding negative 1,154 local archive-plus-source bytes. Against
+original source delivery that same alternative saves 4,194 component bytes.
+ZIP and executable comparisons are alternatives, never summed together.
+Models, dictionary, licenses, dependencies, option closure and official
+multiplicities still require full package qualification. No full-corpus credit.
+
+Two earlier build-only failures are retained with validated reflections:
+removed LSTM make prerequisites and lost transitive iostream includes. Neither
+ran a corpus comparison. Version 3 adds explicit includes and preserves the
+same production arithmetic. The exact release is held for independent
+confirmation and packaging; no larger launch follows automatically.

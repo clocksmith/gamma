@@ -1,0 +1,123 @@
+{
+  "attribution": {
+    "causalConfidence": "high",
+    "controlsEquivalent": true,
+    "failureClass": "inconclusive",
+    "localizedCause": "Removing unused LSTM code and research-only mixture state preserves measured native archives and reduces delivery components. Mixture-only incremental cost still exceeds its local archive gain."
+  },
+  "candidateId": "fx2_expert_release250k_v3",
+  "candidateRevision": {
+    "candidateId": "fx2_expert_release250k_v3",
+    "candidateTreeSha256": "sha256:b820418f7fdf8ee9853593711686504581902240e78dbf425c016ff1ff057528",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/fx2_expert_release250k_v3/20260915T021107540049Z_b820418f7fdf.json",
+      "sha256": "sha256:06ce872e08f9c8ba78a0a36aff227f7ca43e8566939c0ec4c2553af7f9edddbf"
+    }
+  },
+  "decision": {
+    "killPredicatesPass": false,
+    "nextGateBytes": null,
+    "promotionPredicatesPass": false,
+    "rationale": "P33429,D33395 reproduce frozen archives. D executable 442888 versus original 483848; source ZIP 3906387 versus original 3910568. Mixture increments 1167 source ZIP plus 21 option bytes or 4096 executable bytes still exceed34 archive bytes on this prefix.",
+    "verdict": "hold"
+  },
+  "evidence": [
+    {
+      "path": "operations/provenance/fx2_expert_release_terminal_20260915.json",
+      "sha256": "sha256:d8afe26cbb4bb5c0da28c04aaf676867e6d41ff6de48e447e5601bcb36223ec1"
+    },
+    {
+      "path": "results/fx2_expert_release250k_v3/decision.json",
+      "sha256": "sha256:5d55a5eb26426e5ff5a2d48ebaa7a365db1fe3e2c0933aa846b288d454813dc2"
+    },
+    {
+      "path": "results/fx2_expert_release250k_v3/terminal-index.json",
+      "sha256": "sha256:0573d4e48b377f2be5e63d3b8302acd698f2cc194c9ef2b39dec69569a74d98e"
+    }
+  ],
+  "experiment": {
+    "path": "operations/adaptive/experiments/fx2_expert_release250k_v3.json",
+    "sha256": "sha256:5ce2d4b27f0173d7d6106b8127b52783a316c38387cfe76dccdfb58cd509cea9"
+  },
+  "generatedUtc": "2026-09-15T02:40:59+00:00",
+  "hypothesis": {
+    "rationale": "P33429,D33395 reproduce frozen archives. D executable 442888 versus original 483848; source ZIP 3906387 versus original 3910568. Mixture increments 1167 source ZIP plus 21 option bytes or 4096 executable bytes still exceed34 archive bytes on this prefix.",
+    "verdict": "supported"
+  },
+  "job": {
+    "path": "operations/adaptive/completed/919_20260915T021108Z_260ec199d7.json",
+    "sha256": "sha256:c088830468383093b87c37b961cf871da6510f244503990f57658115acb53c18"
+  },
+  "knowledge": {
+    "retiredDimensions": [],
+    "transferableLessons": [
+      "Price source and binary delivery separately; trimming unused code pays relative to original while adding the predictor can still lose against an equally trimmed parent."
+    ],
+    "uncertainties": [
+      "Alternative archive plus one source ZIP and required option increment, or archive plus one executable. They are not added together. Model, dictionary, runtime, license, final packaging multiplicities and official option closure remain unresolved."
+    ]
+  },
+  "measurementAssertions": [
+    {
+      "field": "scopeBytes",
+      "pointer": "/scopeBytes",
+      "source": {
+        "path": "operations/provenance/fx2_expert_release_terminal_20260915.json",
+        "sha256": "sha256:d8afe26cbb4bb5c0da28c04aaf676867e6d41ff6de48e447e5601bcb36223ec1"
+      }
+    },
+    {
+      "field": "scopeSymbols",
+      "pointer": "/scopeSymbols",
+      "source": {
+        "path": "operations/provenance/fx2_expert_release_terminal_20260915.json",
+        "sha256": "sha256:d8afe26cbb4bb5c0da28c04aaf676867e6d41ff6de48e447e5601bcb36223ec1"
+      }
+    },
+    {
+      "field": "netBytesSaved",
+      "pointer": "/g_P",
+      "source": {
+        "path": "operations/provenance/fx2_expert_release_terminal_20260915.json",
+        "sha256": "sha256:d8afe26cbb4bb5c0da28c04aaf676867e6d41ff6de48e447e5601bcb36223ec1"
+      }
+    },
+    {
+      "field": "sourceBytesDelta",
+      "pointer": "/source_delta_bytes",
+      "source": {
+        "path": "operations/provenance/fx2_expert_release_terminal_20260915.json",
+        "sha256": "sha256:d8afe26cbb4bb5c0da28c04aaf676867e6d41ff6de48e447e5601bcb36223ec1"
+      }
+    }
+  ],
+  "measurements": {
+    "idealBitsSaved": null,
+    "memoryRatio": null,
+    "minimumPartitionIdealBitsSaved": null,
+    "netBytesSaved": 34,
+    "positiveSegmentFraction": null,
+    "runtimeRatio": null,
+    "scopeBytes": 250000,
+    "scopeSymbols": 151210,
+    "sourceBytesDelta": 1167,
+    "transferRetention": null
+  },
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:e91ff20e92c3cac8acb0cbe5c79fc8e8a3b427d7e151245c8eecc52b1c32fa00",
+    "objectiveId": "gamma-enwiki9-hutter-90m-v3",
+    "objectivePath": "contracts/research/v3/objective-contract.json",
+    "targetScoreBytes": 90000000
+  },
+  "reflectionId": "r-20260915t021108z_260ec199d7",
+  "schema": "gamma.enwiki9.reflection-receipt.v1",
+  "validity": {
+    "classification": "valid",
+    "reasons": [
+      "All eleven native phases, independent inverses/repeats, original and mixture archive identities, two builds per arm, source/artifact rehash and discovery guards pass."
+    ],
+    "valid": true
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "candidate_id": "fx2_head_transport_opening250k_v1",
+  "checks": [
+    "65535 identity counts",
+    "100000 independent long-double odds comparisons",
+    "8000 retained native ByteModel prefix comparisons",
+    "K/D complete state equality",
+    "posterior positivity and exact total",
+    "forced-override identity"
+  ],
+  "command": "TMPDIR=/run/user/1000 taskset -c3 g++ -std=c++17 -O2 -Wall -Wextra -Ilib tests/test_fx2_head_transport_v1.cpp -o /run/user/1000/fx2_head_transport_unit",
+  "corpus_evidence": false,
+  "execution": "taskset -c3 /run/user/1000/fx2_head_transport_unit",
+  "log": {
+    "bytes": 175,
+    "path": "run_logs/manual/head_transport_unit_20260915.log",
+    "sha256": "bd69f3bd39a7d81911d5483cb7db7ccfe280f18a3cade5190ce99248e54d681b"
+  },
+  "passed": true,
+  "schema": "gamma.enwiki9.synthetic-checks.v1",
+  "sources": [
+    {
+      "bytes": 4265,
+      "path": "lib/fx2_head_transport_v1.hpp",
+      "sha256": "276dc7ceaf778b63111c8cc7ead1aa260f094b1c624c7237804b15a18e79083e"
+    },
+    {
+      "bytes": 2183,
+      "path": "tests/test_fx2_head_transport_v1.cpp",
+      "sha256": "5b1452d56bcfb2dc13b02ad88e53f166184131758dbb6b1b95e795207fbd5ace"
+    }
+  ]
+}

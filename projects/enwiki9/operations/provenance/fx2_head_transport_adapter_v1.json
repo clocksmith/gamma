@@ -1,0 +1,165 @@
+{
+  "schema": "gamma.enwiki9.exact-source-adapter-multi.v1",
+  "files": [
+    {
+      "source_path": "src/predictor.cpp",
+      "source_sha256": "0b79f43644daee942c9cb6da18fa464f0eb0185b6fc7ffc43cde703808fe537e",
+      "source_bytes": 27424,
+      "patched_sha256": "6286cef8a055828ab3db55bd6bcd2eeccc07a93b53691338eb8761bd108dabe1",
+      "patched_bytes": 28050,
+      "replacements": [
+        {
+          "before": "#include \"predictor.h\"",
+          "after": "#include \"predictor.h\"\n#include \"gamma-head-transport.h\""
+        },
+        {
+          "before": "  memmove(separator_window_, separator_window_ + 1,",
+          "after": "  transformer_->observe((uint8_t)token);\n  memmove(separator_window_, separator_window_ + 1,"
+        },
+        {
+          "before": "  p = sse_.Predict(p);",
+          "after": "  p = sse_.Predict(p);\n  gamma_head_transport::capture(byte_mixer_output, byte_mixer_override < 0);"
+        },
+        {
+          "before": "  if (byte_mixer_) byte_mixer_->SetProbs(probs_scratch_.data());",
+          "after": "  float gamma_adapted[205];\n  uint16_t gamma_halves[205];\n  if (last_of_piece) {\n    std::memcpy(gamma_adapted, probs_scratch_.data(), sizeof(gamma_adapted));\n  } else {\n    FloatsToHalves(transformer_->adapted_probabilities(), gamma_halves, 205);\n    HalvesToFloats(gamma_halves, gamma_adapted, 205);\n  }\n  for (unsigned i=0;i<205;++i) if (!(gamma_adapted[i]>=1e-6f)) gamma_adapted[i]=1e-6f;\n  gamma_head_transport::set(vocab_bytes_, probs_scratch_.data(), gamma_adapted);\n  if (byte_mixer_) byte_mixer_->SetProbs(probs_scratch_.data());"
+        }
+      ]
+    },
+    {
+      "source_path": "cpp_infer/src/opt/model_opt.h",
+      "source_sha256": "cff755873e9539fe215335649aceefda9bc2ceef08d47bed8813469e2ea82035",
+      "source_bytes": 2672,
+      "patched_sha256": "2990e5386af3b20e9ec9f81a397d94e30f882d80385511aa79c9c5dbda96fd98",
+      "patched_bytes": 2829,
+      "replacements": [
+        {
+          "before": "  void begin_article(int64_t rope_position_offset = 0);",
+          "after": "  const float* adapted_probabilities() const;\n  void begin_article(int64_t rope_position_offset = 0);\n  // Consume decoded truth before separator/reset logic, including last tokens.\n  void observe(uint8_t token);"
+        }
+      ]
+    },
+    {
+      "source_path": "cpp_infer/src/opt/model_opt.cpp",
+      "source_sha256": "b49493ece5a3a135baa24eeef00d6aaf56335324d0c6355b7283e46736c9df8e",
+      "source_bytes": 18026,
+      "patched_sha256": "e2d56e20eb02eb05ecbe0104eac360fbbdc97a67afb1d11c826ed56b022716db",
+      "patched_bytes": 18552,
+      "replacements": [
+        {
+          "before": "#include \"model_opt.h\"",
+          "after": "#include \"model_opt.h\"\n#include \"gamma-online-head.h\"\n#include \"gamma-online-head-audit.h\""
+        },
+        {
+          "before": "struct TransformerOptImpl {",
+          "after": "struct TransformerOptImpl {\n  gamma_online_head::Model head{gamma_online_head::configured_arm()};\n  gamma_online_head::Audit audit{head};"
+        },
+        {
+          "before": "  void begin(int64_t rope_position_offset) {",
+          "after": "  void begin(int64_t rope_position_offset) {\n    head.reset();"
+        },
+        {
+          "before": "      head_softcap_softmax(logits, probs208);",
+          "after": "      head_softcap_softmax(logits, probs208);\n      audit.base(xn, logits);\n      float gamma_shadow[205];\n      head.predict(xn, logits, probs208, gamma_shadow);"
+        },
+        {
+          "before": "TransformerOpt::~TransformerOpt() = default;",
+          "after": "TransformerOpt::~TransformerOpt() = default;\n\nconst float* TransformerOpt::adapted_probabilities() const { return impl->head.probabilities.data(); }\n\nvoid TransformerOpt::observe(uint8_t token) {\n  impl->head.observe(token);\n  impl->audit.after_observe();\n}"
+        }
+      ]
+    },
+    {
+      "source_path": "src/coder/encoder.cpp",
+      "source_sha256": "ecd9a2f4f39553e3864c8e9c96c7b512edca46a6fbb3197beaccaf47b0a8fdce",
+      "source_bytes": 914,
+      "patched_sha256": "ed8d67646209b414986f7be917370a9ace98162a2bd633f9fe375855214625af",
+      "patched_bytes": 1214,
+      "replacements": [
+        {
+          "before": "#include \"encoder.h\"",
+          "after": "#include \"encoder.h\"\n#include \"gamma-coder-trace.h\"\n#include \"../gamma-head-transport.h\""
+        },
+        {
+          "before": "  const unsigned int p = Discretize(p_->Predict());",
+          "after": "  const float gamma_probability = p_->Predict();\n  const unsigned int p = gamma_head_transport::predict(Discretize(gamma_probability));\n  gamma_fx2_trace::Record gamma_record(gamma_probability, p, x1_, x2_);"
+        },
+        {
+          "before": "    x2_ = (x2_ << 8) + 255;\n  }\n}\n\nvoid Encoder::Flush()",
+          "after": "    x2_ = (x2_ << 8) + 255;\n  }\n  gamma_record.Finish(bit, x1_, x2_);\n}\n\nvoid Encoder::Flush()"
+        },
+        {
+          "before": "  p_->Perceive(bit);",
+          "after": "  gamma_head_transport::observe(bit);\n  p_->Perceive(bit);"
+        }
+      ]
+    },
+    {
+      "source_path": "src/coder/decoder.cpp",
+      "source_sha256": "1bae2c108906625fb124f3fc602d1d59d814e5a415d963ab74246bf474e8bae9",
+      "source_bytes": 832,
+      "patched_sha256": "ed3f6e1bc3d3d962ec765ffff66c1236c75db1b34b8915515a219352e6cb5aab",
+      "patched_bytes": 1132,
+      "replacements": [
+        {
+          "before": "#include \"decoder.h\"",
+          "after": "#include \"decoder.h\"\n#include \"gamma-coder-trace.h\"\n#include \"../gamma-head-transport.h\""
+        },
+        {
+          "before": "  const unsigned int p = Discretize(p_->Predict());",
+          "after": "  const float gamma_probability = p_->Predict();\n  const unsigned int p = gamma_head_transport::predict(Discretize(gamma_probability));\n  gamma_fx2_trace::Record gamma_record(gamma_probability, p, x1_, x2_);"
+        },
+        {
+          "before": "  return bit;",
+          "after": "  gamma_record.Finish(bit, x1_, x2_);\n  return bit;"
+        },
+        {
+          "before": "  p_->Perceive(bit);",
+          "after": "  gamma_head_transport::observe(bit);\n  p_->Perceive(bit);"
+        }
+      ]
+    }
+  ],
+  "added_files": [
+    {
+      "source": {
+        "path": "lib/fx2_head_transport_v1.hpp",
+        "bytes": 4265,
+        "sha256": "276dc7ceaf778b63111c8cc7ead1aa260f094b1c624c7237804b15a18e79083e"
+      },
+      "target": "src/gamma-head-transport.h"
+    },
+    {
+      "source": {
+        "path": "lib/fx2_online_head_v1.hpp",
+        "bytes": 3590,
+        "sha256": "c7c4d2d7bda5ff40becf3c28f50da317b7a6806f829f7cacbf7f7daffa7674ae"
+      },
+      "target": "cpp_infer/src/opt/gamma-online-head.h"
+    },
+    {
+      "source": {
+        "path": "lib/fx2_online_head_audit_v1.hpp",
+        "bytes": 2580,
+        "sha256": "383a83b4e5a1143da710b7b27fbd6b8eb2b4988d060f383a3c315805284c7225"
+      },
+      "target": "cpp_infer/src/opt/gamma-online-head-audit.h"
+    },
+    {
+      "source": {
+        "path": "operations/provenance/sources/2026-09-06/sha256-x86-d03795497f3e.c",
+        "bytes": 11042,
+        "sha256": "8e476fea360db2d3df0d381fe371c60aeda2d40df36d25ff91c6d4fb0e81636a"
+      },
+      "target": "cpp_infer/src/opt/gamma-observer-sha.c"
+    },
+    {
+      "source": {
+        "path": "tools/fx2_coder_trace_v1.hpp",
+        "bytes": 2359,
+        "sha256": "d72dfa104668e2f3138e41e7bdfd54c8ad634d00d64338a627dbf1835656a11b"
+      },
+      "target": "src/coder/gamma-coder-trace.h"
+    }
+  ],
+  "scope": "Same frozen article-local head learner. Parent neural outputs, final raw probabilities and all parent learning remain unchanged. Only coder counts use an optional integer odds transport and two-component posterior; no teacher trace required."
+}

@@ -1,0 +1,243 @@
+{
+  "path": "operations/adaptive/reflections/20260915T021108Z_260ec199d7.json",
+  "reflection": {
+    "attribution": {
+      "causalConfidence": "high",
+      "controlsEquivalent": true,
+      "failureClass": "inconclusive",
+      "localizedCause": "Removing unused LSTM code and research-only mixture state preserves measured native archives and reduces delivery components. Mixture-only incremental cost still exceeds its local archive gain."
+    },
+    "candidateId": "fx2_expert_release250k_v3",
+    "candidateRevision": {
+      "candidateId": "fx2_expert_release250k_v3",
+      "candidateTreeSha256": "sha256:b820418f7fdf8ee9853593711686504581902240e78dbf425c016ff1ff057528",
+      "receipt": {
+        "path": "operations/adaptive/candidate-revisions/fx2_expert_release250k_v3/20260915T021107540049Z_b820418f7fdf.json",
+        "sha256": "sha256:06ce872e08f9c8ba78a0a36aff227f7ca43e8566939c0ec4c2553af7f9edddbf"
+      }
+    },
+    "decision": {
+      "killPredicatesPass": false,
+      "nextGateBytes": null,
+      "promotionPredicatesPass": false,
+      "rationale": "P33429,D33395 reproduce frozen archives. D executable 442888 versus original 483848; source ZIP 3906387 versus original 3910568. Mixture increments 1167 source ZIP plus 21 option bytes or 4096 executable bytes still exceed34 archive bytes on this prefix.",
+      "verdict": "hold"
+    },
+    "evidence": [
+      {
+        "path": "operations/provenance/fx2_expert_release_terminal_20260915.json",
+        "sha256": "sha256:d8afe26cbb4bb5c0da28c04aaf676867e6d41ff6de48e447e5601bcb36223ec1"
+      },
+      {
+        "path": "results/fx2_expert_release250k_v3/decision.json",
+        "sha256": "sha256:5d55a5eb26426e5ff5a2d48ebaa7a365db1fe3e2c0933aa846b288d454813dc2"
+      },
+      {
+        "path": "results/fx2_expert_release250k_v3/terminal-index.json",
+        "sha256": "sha256:0573d4e48b377f2be5e63d3b8302acd698f2cc194c9ef2b39dec69569a74d98e"
+      }
+    ],
+    "experiment": {
+      "path": "operations/adaptive/experiments/fx2_expert_release250k_v3.json",
+      "sha256": "sha256:5ce2d4b27f0173d7d6106b8127b52783a316c38387cfe76dccdfb58cd509cea9"
+    },
+    "generatedUtc": "2026-09-15T02:40:59+00:00",
+    "hypothesis": {
+      "rationale": "P33429,D33395 reproduce frozen archives. D executable 442888 versus original 483848; source ZIP 3906387 versus original 3910568. Mixture increments 1167 source ZIP plus 21 option bytes or 4096 executable bytes still exceed34 archive bytes on this prefix.",
+      "verdict": "supported"
+    },
+    "job": {
+      "path": "operations/adaptive/completed/919_20260915T021108Z_260ec199d7.json",
+      "sha256": "sha256:c088830468383093b87c37b961cf871da6510f244503990f57658115acb53c18"
+    },
+    "knowledge": {
+      "retiredDimensions": [],
+      "transferableLessons": [
+        "Price source and binary delivery separately; trimming unused code pays relative to original while adding the predictor can still lose against an equally trimmed parent."
+      ],
+      "uncertainties": [
+        "Alternative archive plus one source ZIP and required option increment, or archive plus one executable. They are not added together. Model, dictionary, runtime, license, final packaging multiplicities and official option closure remain unresolved."
+      ]
+    },
+    "measurementAssertions": [
+      {
+        "field": "scopeBytes",
+        "pointer": "/scopeBytes",
+        "source": {
+          "path": "operations/provenance/fx2_expert_release_terminal_20260915.json",
+          "sha256": "sha256:d8afe26cbb4bb5c0da28c04aaf676867e6d41ff6de48e447e5601bcb36223ec1"
+        }
+      },
+      {
+        "field": "scopeSymbols",
+        "pointer": "/scopeSymbols",
+        "source": {
+          "path": "operations/provenance/fx2_expert_release_terminal_20260915.json",
+          "sha256": "sha256:d8afe26cbb4bb5c0da28c04aaf676867e6d41ff6de48e447e5601bcb36223ec1"
+        }
+      },
+      {
+        "field": "netBytesSaved",
+        "pointer": "/g_P",
+        "source": {
+          "path": "operations/provenance/fx2_expert_release_terminal_20260915.json",
+          "sha256": "sha256:d8afe26cbb4bb5c0da28c04aaf676867e6d41ff6de48e447e5601bcb36223ec1"
+        }
+      },
+      {
+        "field": "sourceBytesDelta",
+        "pointer": "/source_delta_bytes",
+        "source": {
+          "path": "operations/provenance/fx2_expert_release_terminal_20260915.json",
+          "sha256": "sha256:d8afe26cbb4bb5c0da28c04aaf676867e6d41ff6de48e447e5601bcb36223ec1"
+        }
+      }
+    ],
+    "measurements": {
+      "idealBitsSaved": null,
+      "memoryRatio": null,
+      "minimumPartitionIdealBitsSaved": null,
+      "netBytesSaved": 34,
+      "positiveSegmentFraction": null,
+      "runtimeRatio": null,
+      "scopeBytes": 250000,
+      "scopeSymbols": 151210,
+      "sourceBytesDelta": 1167,
+      "transferRetention": null
+    },
+    "objective": {
+      "corpusBytes": 1000000000,
+      "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+      "objectiveDigest": "sha256:e91ff20e92c3cac8acb0cbe5c79fc8e8a3b427d7e151245c8eecc52b1c32fa00",
+      "objectiveId": "gamma-enwiki9-hutter-90m-v3",
+      "objectivePath": "contracts/research/v3/objective-contract.json",
+      "targetScoreBytes": 90000000
+    },
+    "reflectionId": "r-20260915t021108z_260ec199d7",
+    "schema": "gamma.enwiki9.reflection-receipt.v1",
+    "validity": {
+      "classification": "valid",
+      "reasons": [
+        "All eleven native phases, independent inverses/repeats, original and mixture archive identities, two builds per arm, source/artifact rehash and discovery guards pass."
+      ],
+      "valid": true
+    }
+  }
+}
+{
+  "job_id": "20260915T021108Z_260ec199d7",
+  "arms": 2,
+  "appended_rows": 2,
+  "metadata_updated": true,
+  "reflection": {
+    "decision": "hold",
+    "path": "operations/adaptive/reflections/20260915T021108Z_260ec199d7.json",
+    "sha256": "sha256:d6d5f68a14bb5e3ce8b86f5b1ae23b6339911b40478c8e6677b79072c08af037",
+    "valid": true
+  },
+  "local_process_check": "same-boot-identities-checked",
+  "publication": "recoverable-append-then-projection"
+}
+{
+  "schema": "gamma.enwiki9.native-production-equivalence-closed.v1",
+  "candidate_id": "fx2_expert_release250k_v3",
+  "job": {
+    "path": "operations/adaptive/completed/919_20260915T021108Z_260ec199d7.json",
+    "bytes": 3915,
+    "sha256": "c088830468383093b87c37b961cf871da6510f244503990f57658115acb53c18"
+  },
+  "guard": {
+    "path": "run_logs/adaptive/20260915T021108Z_260ec199d7.resources/guard.json",
+    "bytes": 68825,
+    "sha256": "10165dc763ae9977192cbe44848d319ef47c6f87a95199494d524f9de504c564"
+  },
+  "decision": {
+    "path": "results/fx2_expert_release250k_v3/decision.json",
+    "bytes": 13265,
+    "sha256": "5d55a5eb26426e5ff5a2d48ebaa7a365db1fe3e2c0933aa846b288d454813dc2"
+  },
+  "experiment": {
+    "path": "operations/adaptive/experiments/fx2_expert_release250k_v3.json",
+    "bytes": 42321,
+    "sha256": "5ce2d4b27f0173d7d6106b8127b52783a316c38387cfe76dccdfb58cd509cea9"
+  },
+  "package": {
+    "path": "results/fx2_expert_release250k_v3/package.json",
+    "bytes": 3737,
+    "sha256": "a9999c541374e901972a60edf12624451241f2ce5ed32e189898a2ace75ad2d3"
+  },
+  "population": "[0,250000)",
+  "scopeBytes": 250000,
+  "scopeSymbols": 151210,
+  "exposure": "exposed opening prefix; cold original initialization",
+  "archive_bytes": {
+    "P": 33429,
+    "D": 33395
+  },
+  "g_P": 34,
+  "source_delta_bytes": 1167,
+  "option_increment_bytes": 21,
+  "binary_bytes": {
+    "original": 483848,
+    "P": 438792,
+    "D": 442888
+  },
+  "source_zip_bytes": {
+    "original": 3910568,
+    "P": 3905220,
+    "D": 3906387
+  },
+  "source_component_net_vs_trimmed_parent": -1154,
+  "binary_component_net_vs_trimmed_parent": -4062,
+  "source_component_net_vs_original": 4194,
+  "binary_component_net_vs_original": 40994,
+  "accounting_boundary": "Alternative archive plus one source ZIP and required option increment, or archive plus one executable. They are not added together. Model, dictionary, runtime, license, final packaging multiplicities and official option closure remain unresolved.",
+  "all_inverses_exact": true,
+  "all_repeats_exact": true,
+  "frozen_archives_byte_identical": true,
+  "two_clean_builds_per_arm_identical": true,
+  "full_native_state_serialized": false,
+  "unit_state_evidence": {
+    "path": "operations/provenance/fx2_expert_release_unit_20260915.json",
+    "bytes": 1312,
+    "sha256": "a86354d4d60ba3e1a283e28f7087b718d419dc16e45b50254165684cab645755"
+  },
+  "phase_count": 11,
+  "frozen_inputs_rehashed": 162,
+  "closed_artifacts_rehashed": 186,
+  "resource_gate_pass": true,
+  "resource_guard_flags": {
+    "cgroup_memory_guard_exceeded": false,
+    "logical_cpu_guard_exceeded": false,
+    "measurement_incomplete": false,
+    "official_decimal_memory_exceeded": false,
+    "phase_marker_invalid": false,
+    "rss_guard_exceeded": false,
+    "temporary_disk_guard_exceeded": false,
+    "wall_time_guard_exceeded": false
+  },
+  "resource_peaks": {
+    "cgroup_memory_peak_bytes": 5883756544,
+    "max_observed_process_vmhwm_kib": 5650628,
+    "max_sampled_allowed_cpu_count": 1,
+    "max_sampled_cgroup_current_bytes": 5878759424,
+    "max_sampled_scratch_allocated_bytes": 28344320,
+    "max_sampled_scratch_logical_bytes": 14704618009,
+    "max_sampled_single_rss_kib": 5650628,
+    "max_sampled_tree_live_threads": 5,
+    "max_sampled_tree_rss_kib": 5726760,
+    "max_sampled_tree_runnable_threads": 2
+  },
+  "elapsed_seconds": 276.9585,
+  "terminal_cleanup_complete": true,
+  "verdict": "Production equivalence passes. Trimming unused LSTM code lowers alternative program components against original delivery; the mixture alone still loses at this sample after its incremental delivery cost.",
+  "next_action": "Hold this fixed release for independent confirmation and complete packaging. It earns no full-corpus credit and does not authorize a larger launch.",
+  "complete_package_bytes": null,
+  "full_corpus_score_bytes": null,
+  "target_bytes": 90000000,
+  "target_percent": "9.0000000%",
+  "best_counted_forecast_bytes": 109389323,
+  "target_distance_bytes": 19389323,
+  "objective_credit_bytes": 0,
+  "larger_gate_authorized": false
+}
