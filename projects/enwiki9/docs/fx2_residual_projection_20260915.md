@@ -73,3 +73,10 @@ in the source ZIP. V2 verifies exact existing model/dictionary bytes and copies
 only absent assets; four synthetic materialization tests pass. All feature,
 probability,population and decision parameters remain unchanged. The failed
 receipt and validated reflection are retained; no corpus conclusion follows.
+
+V2 produced the exact33429-byte parent archive. Its recorder saved the post-bit
+interval before normalization, whereas the retained trace uses the interval
+after normalization. All counts,raw probabilities,truths andpreintervals match;
+normalizing the recorded postintervals recovers every retained record. V3 moves
+only coder Record.Finish to the retained boundary. Feature snapshot and write
+remain pre-truth and before Perceive respectively; source preflight passes.

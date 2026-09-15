@@ -1,0 +1,101 @@
+{
+  "schema": "gamma.enwiki9.exact-source-adapter-multi.v1",
+  "source_zip": "results/fx2_expert_release250k_v3/P-source.zip",
+  "files": [
+    {
+      "source_path": "cpp_infer/src/opt/model_opt.cpp",
+      "source_sha256": "b49493ece5a3a135baa24eeef00d6aaf56335324d0c6355b7283e46736c9df8e",
+      "patched_sha256": "b5771da3598ed74a44d6f9dd3ec45f0b3c4ead219a9a87ae338969e68d414c33",
+      "replacements": [
+        {
+          "before": "#include \"model_opt.h\"",
+          "after": "#include \"model_opt.h\"\n#include \"../../../src/gamma-residual-projection.h\""
+        },
+        {
+          "before": "      head_softcap_softmax(logits, probs208);",
+          "after": "      gamma_residual::capture(xn);\n      head_softcap_softmax(logits, probs208);"
+        }
+      ]
+    },
+    {
+      "source_path": "src/predictor.cpp",
+      "source_sha256": "719e2a2bfc2a061630e69085737314598f4903bca420f8973242ab480c4949b1",
+      "patched_sha256": "a1490502201bcae94984c12d66306e2b265270ded220c839711af71759925d87",
+      "replacements": [
+        {
+          "before": "#include \"predictor.h\"",
+          "after": "#include \"predictor.h\"\n#include \"gamma-residual-projection.h\""
+        },
+        {
+          "before": "  if (last_of_piece) {",
+          "after": "  if (last_of_piece) {\n    gamma_residual::invalidate();"
+        }
+      ]
+    },
+    {
+      "source_path": "src/coder/encoder.cpp",
+      "source_sha256": "01c43deb487706c80438bbf2187587bdb22ed56974d0c500d1ab5a6eced9a9fb",
+      "patched_sha256": "df047732585a94247adac2d566ddda16658145d943cf188b4d08874db1ae18da",
+      "replacements": [
+        {
+          "before": "#include \"encoder.h\"",
+          "after": "#include \"encoder.h\"\n#include \"../gamma-residual-projection.h\"\n#include \"../gamma-coder-trace.h\""
+        },
+        {
+          "before": "  unsigned int p = Discretize(p_->Predict());",
+          "after": "  const float gamma_parent_probability = p_->Predict();\n  const unsigned int p = Discretize(gamma_parent_probability);\n  gamma_residual::Record gamma_features(p);\n  gamma_fx2_trace::Record gamma_coder(gamma_parent_probability,p,x1_,x2_);"
+        },
+        {
+          "before": "  p_->Perceive(bit);",
+          "after": "  gamma_features.finish(bit);\n  p_->Perceive(bit);"
+        },
+        {
+          "before": "    x2_ = (x2_ << 8) + 255;\n  }\n}",
+          "after": "    x2_ = (x2_ << 8) + 255;\n  }\n  gamma_coder.Finish(bit,x1_,x2_);\n}"
+        }
+      ]
+    },
+    {
+      "source_path": "src/coder/decoder.cpp",
+      "source_sha256": "9565ac7a3d73ee04a46e7c802581fab6be1e950f99c9c73536053a354d2c6860",
+      "patched_sha256": "e25248f1a6c3c1fa92b9646065abdad23df5e79fa776d96e0ddd2ff8eaf0213a",
+      "replacements": [
+        {
+          "before": "#include \"decoder.h\"",
+          "after": "#include \"decoder.h\"\n#include \"../gamma-residual-projection.h\"\n#include \"../gamma-coder-trace.h\""
+        },
+        {
+          "before": "  unsigned int p = Discretize(p_->Predict());",
+          "after": "  const float gamma_parent_probability = p_->Predict();\n  const unsigned int p = Discretize(gamma_parent_probability);\n  gamma_residual::Record gamma_features(p);\n  gamma_fx2_trace::Record gamma_coder(gamma_parent_probability,p,x1_,x2_);"
+        },
+        {
+          "before": "  p_->Perceive(bit);",
+          "after": "  gamma_features.finish(bit);\n  p_->Perceive(bit);"
+        },
+        {
+          "before": "  return bit;",
+          "after": "  gamma_coder.Finish(bit,x1_,x2_);\n  return bit;"
+        }
+      ]
+    }
+  ],
+  "added_files": [
+    {
+      "source": {
+        "path": "lib/fx2_residual_projection_v1.hpp",
+        "bytes": 2754,
+        "sha256": "68dd764bbaa547d157dac0175e5e68909fcf41acd398f23555f9c532e65facea"
+      },
+      "target": "src/gamma-residual-projection.h"
+    },
+    {
+      "source": {
+        "path": "tools/fx2_coder_trace_v1.hpp",
+        "bytes": 2359,
+        "sha256": "d72dfa104668e2f3138e41e7bdfd54c8ad634d00d64338a627dbf1835656a11b"
+      },
+      "target": "src/gamma-coder-trace.h"
+    }
+  ],
+  "scope": "Read-only ternary hidden features and actual coder counts; unchanged trimmed P probabilities and updates."
+}

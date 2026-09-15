@@ -1,0 +1,84 @@
+{
+  "attribution": {
+    "causalConfidence": "high",
+    "controlsEquivalent": null,
+    "failureClass": "implementation-failure",
+    "localizedCause": "Trace Finish was called before instead of after coder normalization."
+  },
+  "candidateId": "fx2_residual_features250k_v2",
+  "candidateRevision": {
+    "candidateId": "fx2_residual_features250k_v2",
+    "candidateTreeSha256": "sha256:ea4c76ba4554c625d2da31bdd39cbb654cdea7aa59ac37de5eb26db2babb638e",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/fx2_residual_features250k_v2/20260915T185330921100Z_ea4c76ba4554.json",
+      "sha256": "sha256:958282a0f4d2a20fb5b67edf9638550193b55fe1740c24a003d12b2424682c28"
+    }
+  },
+  "decision": {
+    "killPredicatesPass": false,
+    "nextGateBytes": null,
+    "promotionPredicatesPass": false,
+    "rationale": "Correction-only v3 moves the coder record after normalization; pre-truth features and all scientific parameters stay unchanged.",
+    "verdict": "retry"
+  },
+  "evidence": [
+    {
+      "path": "operations/provenance/fx2_residual_features_trace_failure_20260915.json",
+      "sha256": "sha256:9a685063ea364d1a25dbe2b81ff48a5b64ddb030211f743a18ae47aa99009003"
+    },
+    {
+      "path": "results/fx2_residual_features250k_v2/terminal-index.json",
+      "sha256": "sha256:87dfe86c5103b48c0d36b36ad27838ba1964d97dc02bb589752d7171a3111111"
+    }
+  ],
+  "experiment": {
+    "path": "operations/adaptive/experiments/fx2_residual_features250k_v2.json",
+    "sha256": "sha256:6f677603c678e8669659735e6dad863ed7c43ab8d80b61d565ec978e3a66825f"
+  },
+  "generatedUtc": "2026-09-15T18:59:01+00:00",
+  "hypothesis": {
+    "rationale": "A parent-identical encode exists; independent decoder,repeat andbound remain absent.",
+    "verdict": "not-tested"
+  },
+  "job": {
+    "path": "operations/adaptive/failed/919_20260915T185331Z_99b8999d98.json",
+    "sha256": "sha256:d18a5f07e491f377b9ac32df661ab045c91355d5709dc93afad4e5bf349aa76f"
+  },
+  "knowledge": {
+    "retiredDimensions": [],
+    "transferableLessons": [
+      "Preserve the retained interval observation point while snapshotting features before truth."
+    ],
+    "uncertainties": []
+  },
+  "measurementAssertions": [],
+  "measurements": {
+    "idealBitsSaved": null,
+    "memoryRatio": null,
+    "minimumPartitionIdealBitsSaved": null,
+    "netBytesSaved": null,
+    "positiveSegmentFraction": null,
+    "runtimeRatio": null,
+    "scopeBytes": null,
+    "scopeSymbols": null,
+    "sourceBytesDelta": null,
+    "transferRetention": null
+  },
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:e91ff20e92c3cac8acb0cbe5c79fc8e8a3b427d7e151245c8eecc52b1c32fa00",
+    "objectiveId": "gamma-enwiki9-hutter-90m-v3",
+    "objectivePath": "contracts/research/v3/objective-contract.json",
+    "targetScoreBytes": 90000000
+  },
+  "reflectionId": "r-20260915t185331z_99b8999d98",
+  "schema": "gamma.enwiki9.reflection-receipt.v1",
+  "validity": {
+    "classification": "implementation-failure",
+    "reasons": [
+      "Native encode is parent-identical but trace postinterval observation point differs. Independent normalization exactly recovers every retained record."
+    ],
+    "valid": false
+  }
+}
