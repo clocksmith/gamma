@@ -1,0 +1,318 @@
+{
+  "budget": {
+    "expectedGrossSavingsBytes": 0,
+    "expectedNetSavingsBytes": -16384,
+    "maximumAddedPackageBytes": 16384
+  },
+  "causalBoundary": {
+    "availableInformation": [
+      "Authenticated pre-truth parent count and signature; past decoded bytes and stored signature/label pairs.",
+      "Current decoded bit prefix, deterministic FIFO and mixture state."
+    ],
+    "forbiddenInformation": [
+      "Current truth before prediction or future byte labels.",
+      "Native parent-learning changes.",
+      "Free supplied count/signature files in a standalone submission."
+    ]
+  },
+  "changedMechanism": "4096 FIFO valid nonzero32ternary signatures and observed next-byte labels; nearest32 within Hamming distance8, weight9-distance, newest tie break. Prefix-conditional label count blended1/4 with3/4 parent, then eight causal two-expert posterior rows. Exact integer arithmetic; no transmitted learned table.",
+  "controls": [
+    {
+      "definition": "Authenticated trimmed native parent archive33429 bytes.",
+      "id": "P",
+      "role": "comparator"
+    },
+    {
+      "definition": "Full cache/controller but emit parent counts; no added archive header.",
+      "id": "K",
+      "role": "negative"
+    },
+    {
+      "definition": "4096 FIFO valid nonzero32ternary signatures and observed next-byte labels; nearest32 within Hamming distance8, weight9-distance, newest tie break. Prefix-conditional label count blended1/4 with3/4 parent, then eight causal two-expert posterior rows. Exact integer arithmetic; no transmitted learned table.",
+      "id": "D",
+      "role": "treatment"
+    },
+    {
+      "definition": "Same cache and arithmetic with delayed previous-byte labels.",
+      "id": "S",
+      "role": "negative"
+    }
+  ],
+  "evidenceClass": "diagnostic",
+  "experimentId": "fx2_hidden_cache250k_v1",
+  "generatedUtc": "2026-09-15T20:40:29.067547+00:00",
+  "hypothesis": {
+    "claim": "A bounded cache of similar earlier pre-truth hidden signatures and next-byte labels reduces actual final-coder archive bytes against the fixed trimmed parent and a delayed-label control on opening250KB.",
+    "falsification": "Actual D archive must beat both P and S with exact inverses/repeats and guards. This authorizes separately priced native integration only; no fullscore or larger scope. Loss retires this fixed configuration, not all cache models. No radius/capacity/mixture/label-shift rescue."
+  },
+  "inputs": [
+    {
+      "id": "input-0",
+      "path": "lib/fx2_hidden_cache_v1.hpp",
+      "sha256": "sha256:f13fddf04199d7ce19b642d91e82b9642704d0845f0f8b38c0c3a21b01ac9f27"
+    },
+    {
+      "id": "input-1",
+      "path": "lib/fx2_hidden_cache_v1.py",
+      "sha256": "sha256:54620723905c54d11a8ae67bd2c934fa88856ce9cd3a9ff5c59423493bcc06ed"
+    },
+    {
+      "id": "input-2",
+      "path": "tools/fx2_hidden_cache_bridge_v1.cpp",
+      "sha256": "sha256:d09ed3879137ee674663861222a72c410333afcce3029bac97a6bcfcbe451ac9"
+    },
+    {
+      "id": "input-3",
+      "path": "tools/fx2_hidden_cache250k_v1.py",
+      "sha256": "sha256:733bd90cf538b6b69f917c8a344b30f84338c245e76bc66f296865b90fec2cb2"
+    },
+    {
+      "id": "runner",
+      "path": "tools/fx2_hidden_cache_gate_v1.py",
+      "sha256": "sha256:64751d9b8bd09c978fb11d7a5a76583deb71a7741dbf9c5bb7d6a2972c56babd"
+    },
+    {
+      "id": "input-5",
+      "path": "lib/fx2_causal_residual_v1.py",
+      "sha256": "sha256:8bc41533cba6214c7506acd13cb32376dafb17e67e29826ffe79404fbd815d07"
+    },
+    {
+      "id": "input-6",
+      "path": "lib/fx2_residual_projection_v1.py",
+      "sha256": "sha256:235a77bd668fed61f21db0647022ae8ae2f170071a333da2305f4d4e7289cfd0"
+    },
+    {
+      "id": "input-7",
+      "path": "tools/wrt_exact.py",
+      "sha256": "sha256:ae08246ee8b4708904f78aa5f694111834d6420deece34957c61d6fea3a9797a"
+    },
+    {
+      "id": "input-8",
+      "path": "tools/fx2_final_counts_replay_v1.py",
+      "sha256": "sha256:4097c6b2e48dc53f105e26b4617d38604df9979b6a0ff0e5f18474129e5cf0b4"
+    },
+    {
+      "id": "input-9",
+      "path": "tools/causal_field_parent_coder_v1.py",
+      "sha256": "sha256:6c6f8311b6fda0bbf5fdbd0a45a52ea9f145ebc1fe9d506e1af1923478d5abb8"
+    },
+    {
+      "id": "input-10",
+      "path": "operations/provenance/fx2_kda_carry_toolchain_20260913.json",
+      "sha256": "sha256:4af230cc7fd16aa3daa7081e340f41ba9fa6fcf4750aee9295e6add466e33f58"
+    },
+    {
+      "id": "input-11",
+      "path": "operations/provenance/fx2_hidden_cache250k_v1_plan.json",
+      "sha256": "sha256:d01eafa443d963b691dce08328cf4fc8789619ef6bdaeee413e1059133786fb0"
+    },
+    {
+      "id": "input-12",
+      "path": "operations/provenance/fx2_hidden_cache_unit_20260915.json",
+      "sha256": "sha256:d3c3dbc4dae039c9bb10f48a314ec88fc4af38ce4fc883426150c1be76c4a502"
+    },
+    {
+      "id": "input-13",
+      "path": "docs/fx2_hidden_cache_20260915.md",
+      "sha256": "sha256:43a414a9a99e080ff7cdf319b4a65145b0d287a0aa23ca559426f18436f4c6b0"
+    },
+    {
+      "id": "input-14",
+      "path": "operations/provenance/fx2_hidden_cache_considered_20260915.json",
+      "sha256": "sha256:0dfb8850933d253fba89737d70dd5fd028ada3ef2686c7fa4e9760ee29a5c33a"
+    },
+    {
+      "id": "input-15",
+      "path": "operations/provenance/fx2_causal_residual_finite_terminal_20260915.json",
+      "sha256": "sha256:53f18fe9ee2f69032eb253be56d19e629bf4fa5bd2dd896203abf2b0044519cd"
+    },
+    {
+      "id": "input-16",
+      "path": "operations/adaptive/reflections/20260915T200555Z_a739562cd4.json",
+      "sha256": "sha256:22bff34baa865989821bc1f25b0762a22886e0e6d6a63c09974988b2a19a20ff"
+    },
+    {
+      "id": "input-17",
+      "path": "operations/provenance/fx2_residual_features_terminal_20260915.json",
+      "sha256": "sha256:10cf2343ddc5f4642e1984241bd0ed0bb135f608d0e447bbf2f14cc5e4743c36"
+    },
+    {
+      "id": "input-18",
+      "path": "operations/adaptive/reflections/20260915T185954Z_f82b5ab61a.json",
+      "sha256": "sha256:8833a3270c76e25c59a23f5839e0e544c1319a58e8de43ecc730c0b38ea79742"
+    },
+    {
+      "id": "input-19",
+      "path": "operations/adaptive/candidate-revisions/fx2_expert_release250k_v3/20260915T021107540049Z_b820418f7fdf.json",
+      "sha256": "sha256:06ce872e08f9c8ba78a0a36aff227f7ca43e8566939c0ec4c2553af7f9edddbf"
+    },
+    {
+      "id": "input-20",
+      "path": "results/fx2_residual_features250k_v3/bound.json",
+      "sha256": "sha256:fc2350778ea736f3dba5036fb6d0c5542dff9a7adb5eab002a2c6728aa69d86c"
+    },
+    {
+      "id": "input-21",
+      "path": "results/fx2_residual_features250k_v3/closure/feature_validity.json",
+      "sha256": "sha256:b70ca991791e6d4a18902a6576744d116e4715abee66de592c2c822ecba82c87"
+    },
+    {
+      "id": "input-22",
+      "path": "results/fx2_residual_features250k_v3/decision.json",
+      "sha256": "sha256:3559b29f5b2369a536f83d29775feb6f6c18070117b0cf8cbd7a4553202cba80"
+    },
+    {
+      "id": "input-23",
+      "path": "results/fx2_residual_features250k_v3/work/native/encode.features",
+      "sha256": "sha256:9bc8e571c3ef734083dcd07b5fcc118215e2e9f382e560bfafe68a632aed38b0"
+    },
+    {
+      "id": "input-24",
+      "path": "results/fx2_residual_features250k_v3/work/native/decode.features",
+      "sha256": "sha256:9bc8e571c3ef734083dcd07b5fcc118215e2e9f382e560bfafe68a632aed38b0"
+    },
+    {
+      "id": "input-25",
+      "path": "results/fx2_residual_features250k_v3/work/native/repeat.features",
+      "sha256": "sha256:9bc8e571c3ef734083dcd07b5fcc118215e2e9f382e560bfafe68a632aed38b0"
+    },
+    {
+      "id": "input-26",
+      "path": "results/fx2_residual_features250k_v3/work/native/encode.coder",
+      "sha256": "sha256:a5a0afbf0715a9c5371d5f097aaa1b478c1c6a2c030448c79b4ca70f1279c716"
+    },
+    {
+      "id": "input-27",
+      "path": "results/fx2_residual_features250k_v3/work/native/decode.coder",
+      "sha256": "sha256:a5a0afbf0715a9c5371d5f097aaa1b478c1c6a2c030448c79b4ca70f1279c716"
+    },
+    {
+      "id": "input-28",
+      "path": "results/fx2_residual_features250k_v3/work/native/repeat.coder",
+      "sha256": "sha256:a5a0afbf0715a9c5371d5f097aaa1b478c1c6a2c030448c79b4ca70f1279c716"
+    },
+    {
+      "id": "input-29",
+      "path": "results/fx2_residual_features250k_v3/work/native/encode.arc",
+      "sha256": "sha256:70325310e96b83b48677d76d53141e69ddb47519b4cdffd1c85f51fe2c444dbe"
+    },
+    {
+      "id": "input-30",
+      "path": "results/fx2_residual_features250k_v3/work/native/repeat.arc",
+      "sha256": "sha256:70325310e96b83b48677d76d53141e69ddb47519b4cdffd1c85f51fe2c444dbe"
+    },
+    {
+      "id": "input-31",
+      "path": "results/fx2_residual_features250k_v3/work/native/untraced.arc",
+      "sha256": "sha256:70325310e96b83b48677d76d53141e69ddb47519b4cdffd1c85f51fe2c444dbe"
+    },
+    {
+      "id": "input-32",
+      "path": "results/fx2_residual_features250k_v3/work/native/population.raw",
+      "sha256": "sha256:665fc689441b68462d88f82dc33212abe9c4824be095d03a556c9b55a2829fd3"
+    },
+    {
+      "id": "input-33",
+      "path": "results/fx2_residual_features250k_v3/work/native/decode.raw",
+      "sha256": "sha256:665fc689441b68462d88f82dc33212abe9c4824be095d03a556c9b55a2829fd3"
+    },
+    {
+      "id": "input-34",
+      "path": "results/fx2_residual_features250k_v3/work/native/dictionary/english.dic",
+      "sha256": "sha256:4c8568cca9343b9a6212477880f56f8efd162f8784224a25edd043097d36215a"
+    },
+    {
+      "id": "input-35",
+      "path": "results/fx2_weight_native_transfer250k_q0_v1/work/native/opening.stored",
+      "sha256": "sha256:9cc29963608bb990b820bc88e836532b4c2a1cfc1a5b633a14b1c3bad78765ab"
+    }
+  ],
+  "invariants": [
+    "Exposed opening raw[0,250000),151210 WRT bytes,1209680 bits; authenticated cold native parent with98 missing reset-byte features. No confirmation or fit.",
+    "4096 FIFO valid nonzero32ternary signatures and observed next-byte labels; nearest32 within Hamming distance8, weight9-distance, newest tie break. Prefix-conditional label count blended1/4 with3/4 parent, then eight causal two-expert posterior rows. Exact integer arithmetic; no transmitted learned table.",
+    "K executes same state and returns parent counts. S pairs current signature with previous decoded byte, first fallback current label. Same capacity/query/mixture.",
+    "Two repeat library builds; exact native parent replay and truth-free projection; K/D/S encode, independent decode, repeat from decoded modeled bytes. Twelve phases total.",
+    "Hash all probabilities and arithmetic intervals; complete controller initially/every2048bits/end. Require K/D controller equality, P/K count/archive identity and each arm encoder/decoder/repeat identity.",
+    "Actual D archive must beat both P and S with exact inverses/repeats and guards. This authorizes separately priced native integration only; no fullscore or larger scope. Loss retires this fixed configuration, not all cache models. No radius/capacity/mixture/label-shift rescue.",
+    "Report header+bridge source bytes and experimental .so bytes separately. No added archive header; code remains payable. Conditional observation files remain required. Complete native package unknown.",
+    "Candidate constants frozen before corpus access. No inherited MIDAS, expert-mixture, package or teacher gains.",
+    "Complete mutable cache/controller state explicitly serialized; parent observations are retained conditional dependencies, not free native predictions."
+  ],
+  "killPredicates": [
+    {
+      "id": "conditional-loss",
+      "measurement": "conditionalNetBytes",
+      "operator": "lte",
+      "threshold": 0
+    }
+  ],
+  "measurements": [
+    {
+      "definition": "Parent33429 minus D conditional archive; complete native source/runtime remains separately unresolved.",
+      "id": "conditionalNetBytes",
+      "unit": "bytes"
+    },
+    {
+      "definition": "S archive minus D archive.",
+      "id": "controlMarginBytes",
+      "unit": "bytes"
+    }
+  ],
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:e91ff20e92c3cac8acb0cbe5c79fc8e8a3b427d7e151245c8eecc52b1c32fa00",
+    "objectiveId": "gamma-enwiki9-hutter-90m-v3",
+    "objectivePath": "contracts/research/v3/objective-contract.json",
+    "targetScoreBytes": 90000000
+  },
+  "objectiveCreditBytes": 0,
+  "outputManifestPolicy": "complete-result-artifacts-v1",
+  "outputs": [
+    "results/fx2_hidden_cache250k_v1/projection.json",
+    "results/fx2_hidden_cache250k_v1/K-encode.json",
+    "results/fx2_hidden_cache250k_v1/D-encode.json",
+    "results/fx2_hidden_cache250k_v1/S-encode.json",
+    "results/fx2_hidden_cache250k_v1/decision.json",
+    "results/fx2_hidden_cache250k_v1/artifacts.json"
+  ],
+  "parent": {
+    "candidateId": "fx2_expert_release250k_v3",
+    "revision": {
+      "path": "operations/adaptive/candidate-revisions/fx2_expert_release250k_v3/20260915T021107540049Z_b820418f7fdf.json",
+      "sha256": "sha256:06ce872e08f9c8ba78a0a36aff227f7ca43e8566939c0ec4c2553af7f9edddbf"
+    }
+  },
+  "population": {
+    "coordinate": "Raw [0,250000);151220 stored file bytes;151210 modeled WRT bytes;1209680 MSB-first bit records;98 native reset pieces.",
+    "scopeBytes": 250000,
+    "scopeSymbols": 151210,
+    "selection": "Exposed opening raw[0,250000),151210 WRT bytes,1209680 bits; authenticated cold native parent with98 missing reset-byte features. No confirmation or fit.",
+    "unit": "raw byte"
+  },
+  "promotionPredicates": [
+    {
+      "id": "conditional-pays",
+      "measurement": "conditionalNetBytes",
+      "operator": "gt",
+      "threshold": 0
+    },
+    {
+      "id": "alignment-separates",
+      "measurement": "controlMarginBytes",
+      "operator": "gt",
+      "threshold": 0
+    }
+  ],
+  "proposalId": "fx2_hidden_cache250k_v1",
+  "registrationTiming": "prospective",
+  "schema": "gamma.enwiki9.adaptive-experiment-contract.v1",
+  "search": {
+    "expectedMemoryRatio": 1,
+    "expectedRuntimeRatio": 1,
+    "expectedTransferRetention": 0,
+    "interactionRisk": 1,
+    "uncertaintyRisk": 1
+  },
+  "status": "frozen"
+}
