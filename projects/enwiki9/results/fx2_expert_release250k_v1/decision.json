@@ -1,0 +1,53 @@
+{
+  "artifacts": {
+    "bytes": 27790,
+    "path": "results/fx2_expert_release250k_v1/artifacts.json",
+    "sha256": "cb0947aee0abf1badc568eb78d21334b55965b9110dab1cb1bed7078428b4da7"
+  },
+  "candidate_id": "fx2_expert_release250k_v1",
+  "child_closure_ok": true,
+  "commands": [
+    {
+      "accepted_returncodes": [
+        0
+      ],
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "360",
+        "/usr/bin/make",
+        "-j1",
+        "cmix",
+        "CC=/usr/bin/g++",
+        "CPPFLAGS_PART-THAT-SHOULD-BE-FAST=-DSEED=923 -DUPDATE_LIMIT=3000 -m64 -Wall -std=c++17 -include cstdint -fno-fast-math -fno-math-errno -fno-exceptions -fno-threadsafe-statics -march=x86-64-v3 -mtune=generic -mrecip=none -fdata-sections -ffunction-sections -O3",
+        "CPPFLAGS_PART-THAT-CAN-BE-SLOW=-DSEED=923 -DUPDATE_LIMIT=3000 -m64 -Wall -std=c++17 -include cstdint -fno-fast-math -fno-math-errno -fno-exceptions -fno-threadsafe-statics -march=x86-64-v3 -mtune=generic -mrecip=none -fdata-sections -ffunction-sections -Os"
+      ],
+      "elapsed_cap_seconds": 360,
+      "elapsed_seconds": 0.10362921934574842,
+      "environment": {},
+      "launch_error": null,
+      "missing_diagnostics": [],
+      "phase": "P-compile",
+      "returncode": 2,
+      "system_cpu_seconds": 0.002082,
+      "timing_authority": "shared-host diagnostic",
+      "user_cpu_seconds": 0.002188
+    }
+  ],
+  "complete_package_bytes": null,
+  "error": "P-compile exited 2",
+  "experiment": {
+    "path": "operations/adaptive/experiments/fx2_expert_release250k_v1.json",
+    "sha256": "sha256:a7fa89d5d5c8bf2b0302aca6f80e0bc81cd07935a6c009efe41ff7c84c9bd9ad"
+  },
+  "failure_class": "execution_failed",
+  "full_corpus_score_bytes": null,
+  "larger_gate_authorized": false,
+  "objective_credit_bytes": 0,
+  "raw_bytes": 250000,
+  "raw_population": "[0,250000)",
+  "schema": "gamma.enwiki9.expert-release-native-terminal.v1",
+  "scientific_verdict": "Incomplete release proof; preserve completed measurements.",
+  "status": "execution_failed"
+}
