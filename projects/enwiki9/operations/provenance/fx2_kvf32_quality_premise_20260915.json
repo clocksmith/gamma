@@ -1,0 +1,41 @@
+{
+  "conclusion": "Reject the prediction-quality premise for this switch. It changes storage/conversion placement, not the information stored. Do not launch a compression run under the claim that this switch restores value precision.",
+  "corpus_executions": 0,
+  "full_corpus_score_bytes": null,
+  "mechanism": "Change only AttnKind::KVI8 to the existing AttnKind::KVF32 as a supposed removal of lossy value-cache quantization.",
+  "members": [
+    {
+      "bytes": 7778,
+      "member": "cpp_infer/src/opt/attn.h",
+      "sha256": "b8c728e30fb0ef5781e46970ee59e157bdfb53cb557383dc0677fe8c20e40048"
+    },
+    {
+      "bytes": 24937,
+      "member": "cpp_infer/src/opt/attn.cpp",
+      "sha256": "9991e1d1b2814ef0f41b0e1f37b6f273002f98777bee5d7fa5206f90cc03db11"
+    },
+    {
+      "bytes": 2672,
+      "member": "cpp_infer/src/opt/model_opt.h",
+      "sha256": "cff755873e9539fe215335649aceefda9bc2ceef08d47bed8813469e2ea82035"
+    }
+  ],
+  "not_rejected": "A separately specified model retaining prequantization activations, retraining, or measured runtime-only layout optimization is a different hypothesis.",
+  "novelty_claim": false,
+  "objective_credit_bytes": 0,
+  "parent": "fx2_expert_release250k_v3",
+  "premise_test": "Both insert overloads receive already quantized int8 K and V. KVF32 sign-extends V to int32 then exactly converts those same integers to float32. It does not retain prequantization V or recover lost precision.",
+  "proof_scope": "All int8 values are exactly representable in float32. The two layouts retain the same discrete values; this source inspection does not independently certify bit-identical whole-model arithmetic or a runtime improvement.",
+  "schema": "gamma.enwiki9.considered-source-rejection.v1",
+  "self_checks": {
+    "int8_values_exactly_representable": 256,
+    "original_window_1024_verified": true,
+    "source_insert_signature_verified": true
+  },
+  "source_zip": {
+    "bytes": 3905220,
+    "path": "results/fx2_expert_release250k_v3/P-source.zip",
+    "sha256": "c44d941f95bd8504d63ed6ea5112af3ce15aeffb6874ebddb66596ce083c3cf6"
+  },
+  "status": "rejected-before-corpus-test"
+}

@@ -12,7 +12,7 @@ Reusable artifact helpers for new tools: [lib/artifacts.py](../lib/artifacts.py)
 The LibNC initializer teacher launcher exits before the first forward, gradient, update, or coded symbol; its source-bound experiment defines that boundary.
 The delayed-status helper's `enwiki9_delayed_status_latest.log` pointer is operational history, not present-host occupancy proof.
 
-Coverage: **1216 files** (33 .c, 79 .cpp, 1 .gdb, 1 .h, 2 .hpp, 1 .html, 1096 .py, 3 .sh).
+Coverage: **1217 files** (33 .c, 79 .cpp, 1 .gdb, 1 .h, 2 .hpp, 1 .html, 1097 .py, 3 .sh).
 
 | Tool | Purpose | Referenced contracts |
 |---|---|---|
@@ -487,6 +487,7 @@ Coverage: **1216 files** (33 .c, 79 .cpp, 1 .gdb, 1 .h, 2 .hpp, 1 .html, 1096 .p
 | [`tools/fx2_wrt_elision_gate_v1.py`](../tools/fx2_wrt_elision_gate_v1.py) | Guarded conditional vocabulary/WRT elision comparison. | [1](../operations/adaptive/experiments/fx2_wrt_elision250k_v1.json) |
 | [`tools/fx2_wrt_elision_gate_v2.py`](../tools/fx2_wrt_elision_gate_v2.py) | Guarded conditional vocabulary/WRT elision comparison. | [1](../operations/adaptive/experiments/fx2_wrt_elision250k_v2.json) |
 | [`tools/fx2_wrt_mass250k_v1.py`](../tools/fx2_wrt_mass250k_v1.py) | Conditional finite archives for expert legal-mass likelihood correction. | [1](../operations/adaptive/experiments/fx2_wrt_mass250k_v1.json) |
+| [`tools/fx2_wrt_mass_certificate_v1.py`](../tools/fx2_wrt_mass_certificate_v1.py) | Exact rational envelope for selectors among the already frozen streams. | none found |
 | [`tools/fx2_wrt_mass_gate_v1.py`](../tools/fx2_wrt_mass_gate_v1.py) | Guarded expert legal-mass correction on fixed native parent trajectories. | [1](../operations/adaptive/experiments/fx2_wrt_mass250k_v1.json) |
 | [`tools/fx2_wrt_mass_probe_v1.cpp`](../tools/fx2_wrt_mass_probe_v1.cpp) | Independent bounded integer reference for the prospective native kernel. | [1](../operations/adaptive/experiments/fx2_wrt_mass250k_v1.json) |
 | [`tools/fx2_wrt_native250k_v1.py`](../tools/fx2_wrt_native250k_v1.py) | Native WRT elision, exact conditional parity and measured component prices. | [1](../operations/adaptive/experiments/fx2_wrt_native250k_v1.json) |
