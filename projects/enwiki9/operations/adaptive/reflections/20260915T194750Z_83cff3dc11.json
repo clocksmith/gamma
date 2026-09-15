@@ -1,0 +1,103 @@
+{
+  "attribution": {
+    "causalConfidence": "high",
+    "controlsEquivalent": true,
+    "failureClass": "inconclusive",
+    "localizedCause": "Strictly negative exact derivative atzero and concavity preclude positive-amplitude smooth gain; rounding upper15.362006bits isbelow16header bits."
+  },
+  "candidateId": "fx2_causal_residual250k_v1",
+  "candidateRevision": {
+    "candidateId": "fx2_causal_residual250k_v1",
+    "candidateTreeSha256": "sha256:071cb9b4dca77ad6badf8335b1d436ff9bd59a1f373839b5e0f86e193801ee5a",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/fx2_causal_residual250k_v1/20260915T194749402546Z_071cb9b4dca7.json",
+      "sha256": "sha256:75a1188df79eec9c1052f22e8c14083a9bd17b812f2e3044a778f82ff86cf0da"
+    }
+  },
+  "decision": {
+    "killPredicatesPass": true,
+    "nextGateBytes": null,
+    "promotionPredicatesPass": false,
+    "rationale": "Aligned positive-amplitude family cannot pay its two-byte header in bounded ideal likelihood.",
+    "verdict": "retire"
+  },
+  "evidence": [
+    {
+      "path": "operations/provenance/fx2_causal_residual_terminal_20260915.json",
+      "sha256": "sha256:70b6a0a3ae85f45eb68f8be5cea31d624c0c89c77d78f264e9a6b2f80a5996ec"
+    },
+    {
+      "path": "results/fx2_causal_residual250k_v1/terminal-index.json",
+      "sha256": "sha256:3a9bfe888faea701f733d7a7bfa53f742eaab0f3b4115ff10a0907e7b3d2ed64"
+    }
+  ],
+  "experiment": {
+    "path": "operations/adaptive/experiments/fx2_causal_residual250k_v1.json",
+    "sha256": "sha256:df333d27ef78afbf15dc2c07fa60768be0804c3dee75ced4cb17773f4bc925b9"
+  },
+  "generatedUtc": "2026-09-15T19:58:32+00:00",
+  "hypothesis": {
+    "rationale": "Aligned positive-amplitude family cannot pay its two-byte header in bounded ideal likelihood.",
+    "verdict": "refuted"
+  },
+  "job": {
+    "path": "operations/adaptive/completed/919_20260915T194750Z_83cff3dc11.json",
+    "sha256": "sha256:343216121f2dc94cf519f994f361cdcb21af4a5163d1530b11eb5601332bfc30"
+  },
+  "knowledge": {
+    "retiredDimensions": [],
+    "transferableLessons": [
+      "Decoded local residuals are not automatically predictive. Test the signed causal derivative before learning or applying an episodic correction."
+    ],
+    "uncertainties": [
+      "This fixed feature/schedule positive-amplitude family only; no finite-archive bound,standalone integration,confirmation orfull-scoreclaim."
+    ]
+  },
+  "measurementAssertions": [
+    {
+      "field": "scopeBytes",
+      "pointer": "/scopeBytes",
+      "source": {
+        "path": "operations/provenance/fx2_causal_residual_terminal_20260915.json",
+        "sha256": "sha256:70b6a0a3ae85f45eb68f8be5cea31d624c0c89c77d78f264e9a6b2f80a5996ec"
+      }
+    },
+    {
+      "field": "scopeSymbols",
+      "pointer": "/scopeSymbols",
+      "source": {
+        "path": "operations/provenance/fx2_causal_residual_terminal_20260915.json",
+        "sha256": "sha256:70b6a0a3ae85f45eb68f8be5cea31d624c0c89c77d78f264e9a6b2f80a5996ec"
+      }
+    }
+  ],
+  "measurements": {
+    "idealBitsSaved": null,
+    "memoryRatio": null,
+    "minimumPartitionIdealBitsSaved": null,
+    "netBytesSaved": null,
+    "positiveSegmentFraction": null,
+    "runtimeRatio": null,
+    "scopeBytes": 250000,
+    "scopeSymbols": 151210,
+    "sourceBytesDelta": null,
+    "transferRetention": null
+  },
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:e91ff20e92c3cac8acb0cbe5c79fc8e8a3b427d7e151245c8eecc52b1c32fa00",
+    "objectiveId": "gamma-enwiki9-hutter-90m-v3",
+    "objectivePath": "contracts/research/v3/objective-contract.json",
+    "targetScoreBytes": 90000000
+  },
+  "reflectionId": "r-20260915t194750z_83cff3dc11",
+  "schema": "gamma.enwiki9.reflection-receipt.v1",
+  "validity": {
+    "classification": "valid",
+    "reasons": [
+      "31frozen inputs,exact retained parent arithmetic replay,WRT inverse,two identical complete bound artifacts andguard/cleanup pass."
+    ],
+    "valid": true
+  }
+}
