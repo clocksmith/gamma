@@ -12,7 +12,7 @@ Reusable artifact helpers for new tools: [lib/artifacts.py](../lib/artifacts.py)
 The LibNC initializer teacher launcher exits before the first forward, gradient, update, or coded symbol; its source-bound experiment defines that boundary.
 The delayed-status helper's `enwiki9_delayed_status_latest.log` pointer is operational history, not present-host occupancy proof.
 
-Coverage: **1182 files** (33 .c, 76 .cpp, 1 .gdb, 1 .h, 1 .hpp, 1 .html, 1066 .py, 3 .sh).
+Coverage: **1184 files** (33 .c, 76 .cpp, 1 .gdb, 1 .h, 1 .hpp, 1 .html, 1068 .py, 3 .sh).
 
 | Tool | Purpose | Referenced contracts |
 |---|---|---|
@@ -347,7 +347,7 @@ Coverage: **1182 files** (33 .c, 76 .cpp, 1 .gdb, 1 .h, 1 .hpp, 1 .html, 1066 .p
 | [`tools/fx2_cmix_transformer_static_vocab_fixture50051_q0_v1.py`](../tools/fx2_cmix_transformer_static_vocab_fixture50051_q0_v1.py) | Prospective GCC diagnostic on one immutable public profiling fixture. | [1](../operations/adaptive/experiments/fx2_cmix_transformer_static_vocab_fixture50051_q0_v1.json) |
 | [`tools/fx2_cmix_transformer_transfer250k_q0_v1.py`](../tools/fx2_cmix_transformer_transfer250k_q0_v1.py) | Frozen transfer diagnostic using the measured FX2 binary and existing driver. | [1](../operations/adaptive/experiments/fx2_cmix_transformer_transfer250k_q0_v1.json) |
 | [`tools/fx2_cmix_transformer_transfer250k_q0_v2.py`](../tools/fx2_cmix_transformer_transfer250k_q0_v2.py) | Frozen transfer diagnostic using the measured FX2 binary and existing driver. | [2](../operations/adaptive/experiments/fx2_cmix_transformer_transfer250k_q0_v2.json) |
-| [`tools/fx2_coder_trace_v1.hpp`](../tools/fx2_coder_trace_v1.hpp) | Gamma diagnostic instrumentation for the pinned public FX2 arithmetic coder. Records compare probabilities and coder intervals; they are not codec state serialization or a substitute for exact decoded output and archive repeats. | [18](../operations/adaptive/experiments/fx2_causal_field_wrt_replay250k_q0_v1.json) |
+| [`tools/fx2_coder_trace_v1.hpp`](../tools/fx2_coder_trace_v1.hpp) | Gamma diagnostic instrumentation for the pinned public FX2 arithmetic coder. Records compare probabilities and coder intervals; they are not codec state serialization or a substitute for exact decoded output and archive repeats. | [19](../operations/adaptive/experiments/fx2_causal_field_wrt_replay250k_q0_v1.json) |
 | [`tools/fx2_compact_complement_bound_v1.py`](../tools/fx2_compact_complement_bound_v1.py) | Exact ideal-cost ceilings for a frozen pair; not a finite codec certificate. | none found |
 | [`tools/fx2_compact_trace_window.py`](../tools/fx2_compact_trace_window.py) | Run a frozen random window through compact FX2 probability tracing. | none found |
 | [`tools/fx2_compact_v26_fixture50051_q0_v1.py`](../tools/fx2_compact_v26_fixture50051_q0_v1.py) | Guarded P/K/D native FXCM block comparison with the fixed FX2 transformer. | [4](../operations/adaptive/experiments/fx2_compact_v26_fixture50051_q0_v1.json) |
@@ -358,8 +358,10 @@ Coverage: **1182 files** (33 .c, 76 .cpp, 1 .gdb, 1 .h, 1 .hpp, 1 .html, 1066 .p
 | [`tools/fx2_expert_mix_opening250k_v1.py`](../tools/fx2_expert_mix_opening250k_v1.py) | One native archive test of a posterior mixture conditioned on expert disagreement. | [1](../operations/adaptive/experiments/fx2_expert_mix_opening250k_v1.json) |
 | [`tools/fx2_expert_release250k_v1.py`](../tools/fx2_expert_release250k_v1.py) | Production equivalence and component pricing for the frozen expert mixture. | [1](../operations/adaptive/experiments/fx2_expert_release250k_v1.json) |
 | [`tools/fx2_expert_release250k_v2.py`](../tools/fx2_expert_release250k_v2.py) | Production equivalence and component pricing for the frozen expert mixture. | [1](../operations/adaptive/experiments/fx2_expert_release250k_v2.json) |
+| [`tools/fx2_expert_release250k_v3.py`](../tools/fx2_expert_release250k_v3.py) | Production equivalence and component pricing for the frozen expert mixture. | [1](../operations/adaptive/experiments/fx2_expert_release250k_v3.json) |
 | [`tools/fx2_expert_release_adapter_v1.py`](../tools/fx2_expert_release_adapter_v1.py) | Bind the fixed transformer profile and compact aligned mixture to source. | [1](../operations/adaptive/experiments/fx2_expert_release250k_v1.json) |
 | [`tools/fx2_expert_release_adapter_v2.py`](../tools/fx2_expert_release_adapter_v2.py) | Bind the fixed transformer profile and compact aligned mixture to source. | [1](../operations/adaptive/experiments/fx2_expert_release250k_v2.json) |
+| [`tools/fx2_expert_release_adapter_v3.py`](../tools/fx2_expert_release_adapter_v3.py) | Bind the fixed transformer profile and compact aligned mixture to source. | [1](../operations/adaptive/experiments/fx2_expert_release250k_v3.json) |
 | [`tools/fx2_final_counts_opening250k_q0_v1.py`](../tools/fx2_final_counts_opening250k_q0_v1.py) | Canonical bounded comparison with a supplied parent and unchanged native counts. | [1](../operations/adaptive/experiments/fx2_final_counts_opening250k_q0_v1.json) |
 | [`tools/fx2_final_counts_replay_v1.py`](../tools/fx2_final_counts_replay_v1.py) | Exact conditional replay of final-parent residual counts; no native inference. | [1](../operations/adaptive/experiments/fx2_final_counts_opening250k_q0_v1.json) |
 | [`tools/fx2_final_direction_v1.py`](../tools/fx2_final_direction_v1.py) | Enclose the ideal derivative along a fixed recorded Q16 logit path. | none found |
