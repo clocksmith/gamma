@@ -1,0 +1,56 @@
+{
+  "candidateId": "fx2_attention_window250k_v1",
+  "candidateTreeSha256": "sha256:785ab1dedc19866c2e2aeb609120cfe55e45c6a187ea9cb60ebae91a2f29d7f0",
+  "change": {
+    "evidence": [
+      "operations/adaptive/experiments/fx2_attention_window250k_v1.json"
+    ],
+    "hypothesis": "A2048-token native attention window improves opening250KB archive and source-component cost against the identical trained1024-window parent.",
+    "kind": "implementation",
+    "replacements": [],
+    "summary": [
+      "Exactly two optimized attention runtime constants change1024to2048; trained model/header, RoPE, nine KDA layers, PPMd and mixer rules remain unchanged. New neural outputs may change downstream mixer state."
+    ]
+  },
+  "files": [
+    {
+      "blobPath": "operations/adaptive/candidate-blobs/sha256/7b/7bbf49c6b72a981f41a54bfce02ffcdce57644f62f03b9939f011102ea3e5aa8",
+      "bytes": 953,
+      "normalization": "semantic-meta-v1",
+      "path": "meta.json",
+      "sha256": "7bbf49c6b72a981f41a54bfce02ffcdce57644f62f03b9939f011102ea3e5aa8"
+    },
+    {
+      "blobPath": "operations/adaptive/candidate-blobs/sha256/a3/a373937208c7e5b0ded604384525acad89cb5b9ac124f486eb991c1668a6e9be",
+      "bytes": 10262,
+      "normalization": "verbatim",
+      "path": "program.py",
+      "sha256": "a373937208c7e5b0ded604384525acad89cb5b9ac124f486eb991c1668a6e9be"
+    }
+  ],
+  "generatedUtc": "2026-09-15T21:10:06+00:00",
+  "immutableBlobsComplete": true,
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:e91ff20e92c3cac8acb0cbe5c79fc8e8a3b427d7e151245c8eecc52b1c32fa00",
+    "objectiveId": "gamma-enwiki9-hutter-90m-v3",
+    "objectivePath": "contracts/research/v3/objective-contract.json",
+    "targetScoreBytes": 90000000
+  },
+  "parentRevision": {
+    "candidateId": "fx2_expert_release250k_v3",
+    "candidateTreeSha256": "sha256:b820418f7fdf8ee9853593711686504581902240e78dbf425c016ff1ff057528",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/fx2_expert_release250k_v3/20260915T021107540049Z_b820418f7fdf.json",
+      "sha256": "sha256:06ce872e08f9c8ba78a0a36aff227f7ca43e8566939c0ec4c2553af7f9edddbf"
+    }
+  },
+  "previousRevision": {
+    "path": "operations/adaptive/candidate-revisions/fx2_attention_window250k_v1/20260915T211005822235Z_9e867dbb1a9a.json",
+    "sha256": "sha256:9b71ab2675e0771465e423ac0b794e2aad26cca9841b64d838eb1134dae1dfa3"
+  },
+  "provenanceClass": "native",
+  "schema": "gamma.enwiki9.candidate-revision.v1",
+  "treeDigestAlgorithm": "sha256-canonical-counted-files-v1"
+}
