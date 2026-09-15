@@ -1,0 +1,21 @@
+test_causality_and_delayed_labels (tests.test_fx2_hidden_cache_v1.Tests.test_causality_and_delayed_labels) ... ok
+test_cli_separate_process_inverse_and_dependency_integrity (tests.test_fx2_hidden_cache_v1.Tests.test_cli_separate_process_inverse_and_dependency_integrity) ... FAIL
+test_independent_prediction_and_posterior (tests.test_fx2_hidden_cache_v1.Tests.test_independent_prediction_and_posterior) ... ok
+test_invalid_order_and_missing_features (tests.test_fx2_hidden_cache_v1.Tests.test_invalid_order_and_missing_features) ... ok
+test_k_d_state_and_independent_inverse (tests.test_fx2_hidden_cache_v1.Tests.test_k_d_state_and_independent_inverse) ... ok
+test_nearest_newest_ties_and_fifo (tests.test_fx2_hidden_cache_v1.Tests.test_nearest_newest_ties_and_fifo) ... ok
+test_ternary_distance (tests.test_fx2_hidden_cache_v1.Tests.test_ternary_distance) ... ok
+
+======================================================================
+FAIL: test_cli_separate_process_inverse_and_dependency_integrity (tests.test_fx2_hidden_cache_v1.Tests.test_cli_separate_process_inverse_and_dependency_integrity)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/x/deco/gamma/projects/enwiki9/tests/test_fx2_hidden_cache_v1.py", line 203, in test_cli_separate_process_inverse_and_dependency_integrity
+    self.assertIn('conditional input digest differs', run.stderr)
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'conditional input digest differs' not found in 'Traceback (most recent call last):\n  File "/home/x/deco/gamma/projects/enwiki9/tools/fx2_hidden_cache250k_v1.py", line 125, in <module>\n    if __name__ == \'__main__\': main()\n                               ~~~~^^\n  File "/home/x/deco/gamma/projects/enwiki9/tools/fx2_hidden_cache250k_v1.py", line 121, in main\n    replay(root, out, operation, sys.argv[4], Path(sys.argv[5]))\n    ~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File "/home/x/deco/gamma/projects/enwiki9/tools/fx2_hidden_cache250k_v1.py", line 102, in replay\n    else: write(out/(arm+\'-\'+operation+\'.arc\'), archive)\n          ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File "/home/x/deco/gamma/projects/enwiki9/tools/fx2_hidden_cache250k_v1.py", line 20, in write\n    with path.open(\'xb\') as f: f.write(data)\n         ~~~~~~~~~^^^^^^\n  File "/usr/lib/python3.14/pathlib/__init__.py", line 772, in open\n    return io.open(self, mode, buffering, encoding, errors, newline)\n           ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nFileExistsError: [Errno 17] File exists: \'/run/user/1000/hidden-cache-unit-gzj4uti1/tmpllf0zg87/out/D-encode.arc\'\n'
+
+----------------------------------------------------------------------
+Ran 7 tests in 1.137s
+
+FAILED (failures=1)

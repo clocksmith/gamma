@@ -1,0 +1,64 @@
+{
+  "candidate_id": "fx2_hidden_cache250k_v1",
+  "checks": [
+    "1000 ternary distances against scalar reference",
+    "3840 predictions and posterior states against independent Python model",
+    "4096 FIFO eviction and nearest/newest tie selection",
+    "K/D full-state identity and independent arithmetic inverse",
+    "Insert only after complete decoded byte and delayed-label control",
+    "Malformed calls and missing features",
+    "Nine separate CLI encode/decode/repeat processes, exact WRT inverse, corruption rejection"
+  ],
+  "command": [
+    "taskset",
+    "-c",
+    "3",
+    "python3",
+    "-m",
+    "unittest",
+    "tests.test_fx2_hidden_cache_v1",
+    "-v"
+  ],
+  "corpus_evidence": false,
+  "failed_fixture_log": {
+    "bytes": 2837,
+    "path": "run_logs/manual/hidden_cache_unit_fixture_failure_20260915.log",
+    "sha256": "8d33c5556c399837084b5fdcd71333f1bc296c93059acc80f136ca9c1eabe3d4"
+  },
+  "failure_correction": "Corruption fixture initially rewrote an identical zero byte; corrected to XOR one bit. Corpus and algorithm were not changed.",
+  "log": {
+    "bytes": 960,
+    "path": "run_logs/manual/hidden_cache_unit_20260915.log",
+    "sha256": "c792c28affff7ffd9fe12c0ad6bfe2d53a5c85f9ca5e28ed44b3e8b3e4d32974"
+  },
+  "passed": true,
+  "schema": "gamma.enwiki9.synthetic-checks.v1",
+  "sources": [
+    {
+      "bytes": 5686,
+      "path": "lib/fx2_hidden_cache_v1.hpp",
+      "sha256": "f13fddf04199d7ce19b642d91e82b9642704d0845f0f8b38c0c3a21b01ac9f27"
+    },
+    {
+      "bytes": 2230,
+      "path": "lib/fx2_hidden_cache_v1.py",
+      "sha256": "54620723905c54d11a8ae67bd2c934fa88856ce9cd3a9ff5c59423493bcc06ed"
+    },
+    {
+      "bytes": 903,
+      "path": "tools/fx2_hidden_cache_bridge_v1.cpp",
+      "sha256": "d09ed3879137ee674663861222a72c410333afcce3029bac97a6bcfcbe451ac9"
+    },
+    {
+      "bytes": 7380,
+      "path": "tools/fx2_hidden_cache250k_v1.py",
+      "sha256": "733bd90cf538b6b69f917c8a344b30f84338c245e76bc66f296865b90fec2cb2"
+    },
+    {
+      "bytes": 10681,
+      "path": "tests/test_fx2_hidden_cache_v1.py",
+      "sha256": "bfe358cf749396955255007140058d802400706074aeabc33700918e0306d31e"
+    }
+  ],
+  "tests": 7
+}
