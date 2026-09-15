@@ -12,8 +12,8 @@ Unknown package cost stays unknown. Local subtotals are not complete submission 
 Populations are grouped by raw-input SHA256; compare matched controls in each receipt.
 ```
 
-- Result JSON files scanned: `424`
-- Roundtrip-passing rows: `182`
+- Result JSON files scanned: `428`
+- Roundtrip-passing rows: `185`
 - Active target score: `90,000,000` bytes (`9.0000000%`)
 
 ## Scope `1,000,000,000` Bytes
@@ -96,7 +96,7 @@ No roundtrip-passing result JSONs are present for this scope in this checkout.
 |---|---|---:|---:|---:|---:|---|---|
 | `fx2_expert_mix_opening250k_v1:D` | custom candidate | unknown | 33,395 | unknown | 1.06864 | true | `results/fx2_expert_mix_opening250k_v1/D.driver.json` |
 | `fx2_expert_release250k_v3:D` | custom candidate | unknown | 33,395 | unknown | 1.06864 | true | `results/fx2_expert_release250k_v3/D.driver.json` |
-| `fx2_final_counts_opening250k_q0_v1:D` | custom candidate | unknown | 33,427 | 2,885,214 | 1.069664 | true | `operations/provenance/fx2_final_counts_opening250k_v1_terminal/D.json` |
+| `fx2_wrt_elision250k_v2:D` | custom candidate | unknown | 33,423 | unknown | 1.069536 | true | `results/fx2_wrt_elision250k_v2/D.driver.json` |
 
 ### Population `f0d01801279f29e353d1dd932a43133e191ea905da6626575b1ee174957717b8`
 
