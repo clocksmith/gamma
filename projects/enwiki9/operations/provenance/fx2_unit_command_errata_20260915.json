@@ -1,0 +1,113 @@
+{
+  "schema": "gamma.enwiki9.command-errata.v1",
+  "reason": "Earlier descriptive unit command strings used invalid taskset -c3. The transport command also omitted the native ByteModel translation unit required for linking. Immutable original receipts remain unchanged; these explicit argv commands reproduce the tests with unchanged source.",
+  "corrections": [
+    {
+      "previous_receipt": {
+        "path": "operations/provenance/fx2_online_head_unit_20260915.json",
+        "bytes": 1423,
+        "sha256": "f29ca2b616c9291b55e39ce9dbeba739c6413127fd5bd4bd6e7148f330b34d6e"
+      },
+      "corrected_compile_argv": [
+        "taskset",
+        "-c",
+        "3",
+        "g++",
+        "-std=c++17",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Ilib",
+        "tests/test_fx2_online_head_v1.cpp",
+        "-o",
+        "/run/user/1000/fx2_online_head_v1_command_verified"
+      ],
+      "corrected_execution_argv": [
+        "taskset",
+        "-c",
+        "3",
+        "/run/user/1000/fx2_online_head_v1_command_verified"
+      ],
+      "environment": {
+        "TMPDIR": "/run/user/1000"
+      },
+      "sources": [
+        {
+          "path": "tests/test_fx2_online_head_v1.cpp",
+          "bytes": 2195,
+          "sha256": "2b31db58b12073113d20d49c495758197f9c8baed516f7d453e47e1415d6e7ca"
+        },
+        {
+          "path": "lib/fx2_online_head_v1.hpp",
+          "bytes": 3590,
+          "sha256": "c7c4d2d7bda5ff40becf3c28f50da317b7a6806f829f7cacbf7f7daffa7674ae"
+        }
+      ],
+      "log": {
+        "path": "run_logs/manual/fx2_online_head_v1_command_verified_20260915.log",
+        "bytes": 412,
+        "sha256": "7958f3f7cf9eb98d6ad576f27cc560aec7008bf2c13cf13f1c29e87c1ec93403"
+      },
+      "compile_returncode": 0,
+      "execution_returncode": 0
+    },
+    {
+      "previous_receipt": {
+        "path": "operations/provenance/fx2_head_transport_unit_20260915.json",
+        "bytes": 1193,
+        "sha256": "32860b95727b3a6ad22bc54b16e27345916059436a38d658c735cd7af280039a"
+      },
+      "corrected_compile_argv": [
+        "taskset",
+        "-c",
+        "3",
+        "g++",
+        "-std=c++17",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Ilib",
+        "tests/test_fx2_head_transport_v1.cpp",
+        "results/fx2_cmix_transformer_static_vocab_fixture50051_q0_v1/work/src/models/byte-model.cpp",
+        "-o",
+        "/run/user/1000/fx2_head_transport_v1_command_verified"
+      ],
+      "corrected_execution_argv": [
+        "taskset",
+        "-c",
+        "3",
+        "/run/user/1000/fx2_head_transport_v1_command_verified"
+      ],
+      "environment": {
+        "TMPDIR": "/run/user/1000"
+      },
+      "sources": [
+        {
+          "path": "tests/test_fx2_head_transport_v1.cpp",
+          "bytes": 2183,
+          "sha256": "5b1452d56bcfb2dc13b02ad88e53f166184131758dbb6b1b95e795207fbd5ace"
+        },
+        {
+          "path": "lib/fx2_head_transport_v1.hpp",
+          "bytes": 4265,
+          "sha256": "276dc7ceaf778b63111c8cc7ead1aa260f094b1c624c7237804b15a18e79083e"
+        },
+        {
+          "path": "results/fx2_cmix_transformer_static_vocab_fixture50051_q0_v1/work/src/models/byte-model.cpp",
+          "bytes": 1057,
+          "sha256": "86340c1a0a2fc9d14c0ffd5fb93c011bb705678fdcc1c84839b4ec5a1e77197e"
+        }
+      ],
+      "log": {
+        "path": "run_logs/manual/fx2_head_transport_v1_command_verified_20260915.log",
+        "bytes": 1679,
+        "sha256": "35d88760474c3b8b49be4de4d35155a6639d314fab3497d6995a20d637f70461"
+      },
+      "compile_returncode": 0,
+      "execution_returncode": 0
+    }
+  ],
+  "all_checks_pass": true,
+  "corpus_executed": false,
+  "objective_credit_bytes": 0
+}

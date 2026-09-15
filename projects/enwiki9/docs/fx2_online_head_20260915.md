@@ -73,3 +73,7 @@ corpus or projection tuning is authorized by this negative result.
 
 [Terminal](../operations/provenance/fx2_online_head_terminal_20260915.json)
 [Reflection](../operations/adaptive/reflections/20260915T020052Z_df12e66092.json)
+
+[Verified unit-command corrections](../operations/provenance/fx2_unit_command_errata_20260915.json)
+preserve the earlier receipts and provide successfully rerun, explicit compiler
+and execution argument lists for their unchanged test sources.

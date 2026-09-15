@@ -1,0 +1,50 @@
+{
+  "schema": "gamma.enwiki9.closed-pair-oracle.v1",
+  "inputs": [
+    {
+      "path": "results/fx2_head_transport_opening250k_v2/work/native/P-encode.coder",
+      "bytes": 33871040,
+      "sha256": "a5a0afbf0715a9c5371d5f097aaa1b478c1c6a2c030448c79b4ca70f1279c716"
+    },
+    {
+      "path": "results/fx2_head_transport_opening250k_v2/work/native/D-encode.coder",
+      "bytes": 33871040,
+      "sha256": "0b9727441f049092b9f34078325e0c518ba602629bcb96be34ee63fdbe771ed7"
+    },
+    {
+      "path": "results/fx2_head_transport_opening250k_v2/decision.json",
+      "bytes": 26755,
+      "sha256": "c4063bda1db02b37d91924787ad248468ba2725485a773ac463091fb010a6762"
+    },
+    {
+      "path": "tools/fx2_compact_complement_bound_v1.py",
+      "bytes": 7064,
+      "sha256": "a493d681050653a596ee60d527f767219b0af580e4b79a1916ebd5e584abb2b1"
+    }
+  ],
+  "classification": "Posthoc read-only diagnostic of closed traces; no new corpus encode or prediction mutation.",
+  "analysis": {
+    "events": 1209680,
+    "changed_events": 42413,
+    "treatment_better_events": 24360,
+    "treatment_worse_events": 18053,
+    "all_treatment_ideal_gain_bits_approx": -8.02005475503244,
+    "clairvoyant_ideal_gain_bits_approx": 403.5653693755805,
+    "clairvoyant_ideal_gain_ceiling_bits": 404,
+    "fixed_block_oracles": [],
+    "floating_point_authority": "Diagnostic only; ceilings use exact integer products and shifts"
+  },
+  "proof": "For every event, every convex combination of these two fixed Q16 probability vectors assigns the actual truth at most max(P,D). Balanced exact integer products and shifts certify the ceiling of log2(product(max(P,D)/P)). This oracle sees future truth and is not a decoder.",
+  "limits": [
+    "Bound covers only the frozen final P and D streams, not alternative head states, underlying unmixed transported experts, other populations or changed trajectories.",
+    "It bounds ideal probability savings, not finite archive savings or a prize score.",
+    "Observed source/binary sum is an overlapping inventory sensitivity, not the cost of every hypothetical implementation."
+  ],
+  "objective_credit_bytes": 0,
+  "full_corpus_score_bytes": null,
+  "analysis_driver": {
+    "path": "results/fx2_head_transport_opening250k_v2/closure/trace_pair_analysis.py",
+    "bytes": 2061,
+    "sha256": "6b4867da789336e0b19235469b8d994b9f0f4611091d4e2c457972f860f9cdaf"
+  }
+}
