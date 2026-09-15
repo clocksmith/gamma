@@ -1,0 +1,84 @@
+{
+  "attribution": {
+    "causalConfidence": "high",
+    "controlsEquivalent": null,
+    "failureClass": "implementation-failure",
+    "localizedCause": "The runner consumed iostream transitively through the removed LSTM include."
+  },
+  "candidateId": "fx2_expert_release250k_v2",
+  "candidateRevision": {
+    "candidateId": "fx2_expert_release250k_v2",
+    "candidateTreeSha256": "sha256:416ad8f7955c50f24dad45409a67994e41c729748370913b43cc35ef6cfb5e59",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/fx2_expert_release250k_v2/20260915T015929795254Z_416ad8f7955c.json",
+      "sha256": "sha256:985f3d4bb528e7e6cd2c366d6c67fbeab1aa7c6145751ce166a776cc4adc39fa"
+    }
+  },
+  "decision": {
+    "killPredicatesPass": false,
+    "nextGateBytes": null,
+    "promotionPredicatesPass": false,
+    "rationale": "Correction-only successor adds the explicit runner include; no scientific changes.",
+    "verdict": "retry"
+  },
+  "evidence": [
+    {
+      "path": "operations/provenance/fx2_expert_release_retry_failure_20260915.json",
+      "sha256": "sha256:ddf61f4a0a7622afa48c0418dc45b247a23181cf514eb3090514131f6d70403a"
+    },
+    {
+      "path": "results/fx2_expert_release250k_v2/terminal-index.json",
+      "sha256": "sha256:559a7752af385eed75cc81c776c2e90774ff82cc9fe57aa5c4f665b829bbb9c0"
+    }
+  ],
+  "experiment": {
+    "path": "operations/adaptive/experiments/fx2_expert_release250k_v2.json",
+    "sha256": "sha256:8841e1ef849eb549306a4a62a70a5cd30faf8862102e8fc274f95a86f7c8f157"
+  },
+  "generatedUtc": "2026-09-15T02:08:12+00:00",
+  "hypothesis": {
+    "rationale": "No archive exists.",
+    "verdict": "not-tested"
+  },
+  "job": {
+    "path": "operations/adaptive/failed/919_20260915T015930Z_2e504bf5f1.json",
+    "sha256": "sha256:f4225244ff4a3ce3603012cbedc3a7bf3c446df3c3945894a8650d8d7fb2b5d8"
+  },
+  "knowledge": {
+    "retiredDimensions": [],
+    "transferableLessons": [
+      "Source deletion must preserve explicit includes in all translation units; include the CLI runner in source preflight."
+    ],
+    "uncertainties": []
+  },
+  "measurementAssertions": [],
+  "measurements": {
+    "idealBitsSaved": null,
+    "memoryRatio": null,
+    "minimumPartitionIdealBitsSaved": null,
+    "netBytesSaved": null,
+    "positiveSegmentFraction": null,
+    "runtimeRatio": null,
+    "scopeBytes": null,
+    "scopeSymbols": null,
+    "sourceBytesDelta": null,
+    "transferRetention": null
+  },
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:e91ff20e92c3cac8acb0cbe5c79fc8e8a3b427d7e151245c8eecc52b1c32fa00",
+    "objectiveId": "gamma-enwiki9-hutter-90m-v3",
+    "objectivePath": "contracts/research/v3/objective-contract.json",
+    "targetScoreBytes": 90000000
+  },
+  "reflectionId": "r-20260915t015930z_2e504bf5f1",
+  "schema": "gamma.enwiki9.reflection-receipt.v1",
+  "validity": {
+    "classification": "implementation-failure",
+    "reasons": [
+      "Compilation stopped on runner.cpp std::cout; no corpus phase ran."
+    ],
+    "valid": false
+  }
+}
