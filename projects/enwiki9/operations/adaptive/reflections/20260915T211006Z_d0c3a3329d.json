@@ -1,0 +1,82 @@
+{
+  "attribution": {
+    "causalConfidence": "high",
+    "controlsEquivalent": null,
+    "failureClass": "infrastructure-failure",
+    "localizedCause": "14680064001-byte sparse PPM file exceeds 12000000000 logical scratch limit."
+  },
+  "candidateId": "fx2_attention_window250k_v1",
+  "candidateRevision": {
+    "candidateId": "fx2_attention_window250k_v1",
+    "candidateTreeSha256": "sha256:785ab1dedc19866c2e2aeb609120cfe55e45c6a187ea9cb60ebae91a2f29d7f0",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/fx2_attention_window250k_v1/20260915T211006193649Z_785ab1dedc19.json",
+      "sha256": "sha256:7e8b88e66e8d66ad23fb2776d458a9ad58d50258cad64c1f20798097b49ba1a8"
+    }
+  },
+  "decision": {
+    "killPredicatesPass": null,
+    "nextGateBytes": null,
+    "promotionPredicatesPass": null,
+    "rationale": "Create correction-only v2 with 24000000000 logical scratch cap. Keep codec, weights, population, controls, phase limits and decision predicates unchanged; freshly admit physical scratch and memory.",
+    "verdict": "retry"
+  },
+  "evidence": [
+    {
+      "path": "operations/provenance/fx2_attention_window_resource_failure_20260915.json",
+      "sha256": "sha256:777a22fb0ad24aea4e9d70aba169eb67d66f9fc0a05d1995caaa500093213bf5"
+    }
+  ],
+  "experiment": {
+    "path": "operations/adaptive/experiments/fx2_attention_window250k_v1.json",
+    "sha256": "sha256:efa60dae3f72610fdc0cd3417087e8c0b605d8140cbe827dd62b20276175a083"
+  },
+  "generatedUtc": "2026-09-15T21:22:04+00:00",
+  "hypothesis": {
+    "rationale": "No complete parent archive and no treatment execution.",
+    "verdict": "not-tested"
+  },
+  "job": {
+    "path": "operations/adaptive/failed/919_20260915T211006Z_d0c3a3329d.json",
+    "sha256": "sha256:a41131aa77559b3b92c137de21d8d790fb4697ccca63abdc0d28cff8f6f9eb42"
+  },
+  "knowledge": {
+    "retiredDimensions": [],
+    "transferableLessons": [
+      "Admit sparse files by logical size as well as allocated disk; a small allocated footprint does not satisfy a smaller logical guard."
+    ],
+    "uncertainties": [
+      "Native P/D archive comparison remains unmeasured."
+    ]
+  },
+  "measurementAssertions": [],
+  "measurements": {
+    "idealBitsSaved": null,
+    "memoryRatio": null,
+    "minimumPartitionIdealBitsSaved": null,
+    "netBytesSaved": null,
+    "positiveSegmentFraction": null,
+    "runtimeRatio": null,
+    "scopeBytes": null,
+    "scopeSymbols": null,
+    "sourceBytesDelta": null,
+    "transferRetention": null
+  },
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:e91ff20e92c3cac8acb0cbe5c79fc8e8a3b427d7e151245c8eecc52b1c32fa00",
+    "objectiveId": "gamma-enwiki9-hutter-90m-v3",
+    "objectivePath": "contracts/research/v3/objective-contract.json",
+    "targetScoreBytes": 90000000
+  },
+  "reflectionId": "r-20260915t211006z_d0c3a3329d",
+  "schema": "gamma.enwiki9.reflection-receipt.v1",
+  "validity": {
+    "classification": "infrastructure-failure",
+    "reasons": [
+      "Logical scratch cap below source-required sparse PPM file; guard terminated P encode. Four setup phases completed and exact scratch/process cleanup is recorded."
+    ],
+    "valid": false
+  }
+}

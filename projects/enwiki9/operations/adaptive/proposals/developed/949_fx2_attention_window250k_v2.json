@@ -1,0 +1,45 @@
+{
+  "candidate_id": "fx2_attention_window250k_v2",
+  "claimed_at": "2026-09-15T21:22:53+00:00",
+  "created_at": "2026-09-15T21:22:53+00:00",
+  "developed_at": "2026-09-15T21:22:54+00:00",
+  "evidence": [
+    {
+      "path": "operations/provenance/fx2_attention_window_resource_failure_20260915.json",
+      "sha256": "sha256:777a22fb0ad24aea4e9d70aba169eb67d66f9fc0a05d1995caaa500093213bf5"
+    }
+  ],
+  "expected_savings_bytes": 0,
+  "experiment": {
+    "path": "operations/adaptive/experiments/fx2_attention_window250k_v2.json",
+    "sha256": "sha256:aaf7366c4715276ba2418a9360a1e74221059d5c1ff32a1a33b9b2557130b157"
+  },
+  "hypothesis": "A2048-token native attention window improves opening250KB archive and source-component cost against the identical trained1024-window parent.",
+  "interfaces_exposed": [
+    "Only candidate identity and scratch limit change: 12GB to 24GB. Source-bound parent PPM logical file is 14680064001 bytes. Source, controls, population, 16 phases and decision rules are inherited unchanged. Exactly two optimized attention runtime constants change1024to2048; trained model/header, RoPE, nine KDA layers, PPMd and mixer rules remain unchanged. New neural outputs may change downstream mixer state."
+  ],
+  "kill_condition": "Require g>0 andg-s>0 plus allchecks to authorize unchanged independent confirmation. Valid loss retires this exact2048window,no length/retraining rescue. Resource/evidence failure givesno compression inference.",
+  "max_program_bytes": 16384,
+  "mechanism_change": "other",
+  "mechanism_change_bonus": 0,
+  "mechanism_class": "endpoint",
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:e91ff20e92c3cac8acb0cbe5c79fc8e8a3b427d7e151245c8eecc52b1c32fa00",
+    "objectiveId": "gamma-enwiki9-hutter-90m-v3",
+    "objectivePath": "contracts/research/v3/objective-contract.json",
+    "targetScoreBytes": 90000000
+  },
+  "owner": "root_attention_window",
+  "parent": "fx2_attention_window250k_v1",
+  "parent_proposal_id": null,
+  "priority": 50,
+  "promotion_condition": "Require g>0 andg-s>0 plus allchecks to authorize unchanged independent confirmation. Valid loss retires this exact2048window,no length/retraining rescue. Resource/evidence failure givesno compression inference.",
+  "proposal_id": "fx2_attention_window250k_v2",
+  "retired_neighborhoods": [],
+  "schema": "gamma.enwiki9.algorithm-proposal.v2",
+  "search_priority": 50,
+  "state": "developed",
+  "title": "Native attention window resource correction"
+}
