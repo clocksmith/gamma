@@ -1,0 +1,60 @@
+{
+  "schema": "gamma.enwiki9.publication-checks.v1",
+  "candidate_id": "fx2_sparse_residual_cost250k_v1",
+  "checks": [
+    {
+      "command": [
+        "python3",
+        "projects/enwiki9/tools/hutter_run_ledger.py",
+        "--check"
+      ],
+      "returncode": 0
+    },
+    {
+      "command": [
+        "python3",
+        "projects/enwiki9/tools/enwiki9_release_receipts.py",
+        "--check"
+      ],
+      "returncode": 0
+    },
+    {
+      "command": [
+        "python3",
+        "projects/enwiki9/tools/enwiki9_evidence_matrix.py",
+        "--check"
+      ],
+      "returncode": 0
+    },
+    {
+      "command": [
+        "python3",
+        "projects/enwiki9/tools/enwiki9_best_results.py",
+        "--check"
+      ],
+      "returncode": 0
+    },
+    {
+      "command": [
+        "python3",
+        "projects/enwiki9/tools/enwiki9_status_receipt.py",
+        "--check"
+      ],
+      "returncode": 0
+    },
+    {
+      "command": [
+        "python3",
+        "projects/enwiki9/tools/enwiki9_doc_lint.py"
+      ],
+      "returncode": 1
+    }
+  ],
+  "expected_check_count": 10,
+  "all_checks_pass": false,
+  "log": {
+    "path": "run_logs/manual/sparse_residual_final_checks_20260915.log",
+    "bytes": 956,
+    "sha256": "4fa38c7aac8b455a1652c5e7a02ff52cefd314c85252c11a8b93c5157dc7a99e"
+  }
+}

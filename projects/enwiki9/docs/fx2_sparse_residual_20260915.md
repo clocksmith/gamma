@@ -62,3 +62,5 @@ must identify the information it adds and carry its own evidence and cost.
 
 The full objective remains90000000 complete bytes with exact canonical enwik9
 reconstruction and independent eligibility evidence. Full-corpus score is unknown.
+
+Terminal: both exact evaluations and retained inverse/observation checks passed. The best optimistic paid upper is -13.3076034171 bits (two active rows, seven table bytes). All permitted sparse tables fail this ideal-plus-table economic test, including the conservative Q16 rounding allowance. No fitting or native integration is authorized. This is not a finite-archive bound. See [terminal](../operations/provenance/fx2_sparse_residual_terminal_20260915.json).
