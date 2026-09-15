@@ -1,0 +1,94 @@
+{
+  "schema": "gamma.enwiki9.publication-checks.v1",
+  "candidate_id": "fx2_causal_residual250k_v1",
+  "checks": [
+    {
+      "command": [
+        "python3",
+        "projects/enwiki9/tools/hutter_run_ledger.py",
+        "--check"
+      ],
+      "returncode": 0
+    },
+    {
+      "command": [
+        "python3",
+        "projects/enwiki9/tools/enwiki9_release_receipts.py",
+        "--check"
+      ],
+      "returncode": 0
+    },
+    {
+      "command": [
+        "python3",
+        "projects/enwiki9/tools/enwiki9_evidence_matrix.py",
+        "--check"
+      ],
+      "returncode": 0
+    },
+    {
+      "command": [
+        "python3",
+        "projects/enwiki9/tools/enwiki9_best_results.py",
+        "--check"
+      ],
+      "returncode": 0
+    },
+    {
+      "command": [
+        "python3",
+        "projects/enwiki9/tools/enwiki9_status_receipt.py",
+        "--check"
+      ],
+      "returncode": 0
+    },
+    {
+      "command": [
+        "python3",
+        "projects/enwiki9/tools/enwiki9_doc_lint.py"
+      ],
+      "returncode": 0
+    },
+    {
+      "command": [
+        "python3",
+        "-m",
+        "json.tool",
+        "projects/enwiki9/upper_bound_certificate.json"
+      ],
+      "returncode": 0
+    },
+    {
+      "command": [
+        "python3",
+        "-m",
+        "json.tool",
+        "projects/enwiki9/docs/status_receipt.json"
+      ],
+      "returncode": 0
+    },
+    {
+      "command": [
+        "python3",
+        "projects/enwiki9/tools/backfill_run_ledger.py",
+        "--check"
+      ],
+      "returncode": 0
+    },
+    {
+      "command": [
+        "python3",
+        "projects/enwiki9/tools/enwiki9_tool_catalogue.py",
+        "--check"
+      ],
+      "returncode": 0
+    }
+  ],
+  "expected_check_count": 10,
+  "all_checks_pass": true,
+  "log": {
+    "path": "run_logs/manual/causal_residual_final_checks_20260915.log",
+    "bytes": 36028,
+    "sha256": "cac4164d6f66995020a347a14042832c8a7fb9a69f84c433e6d37779082433ba"
+  }
+}
