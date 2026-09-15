@@ -1,0 +1,56 @@
+{
+  "candidateId": "fx2_attention_window250k_v2",
+  "candidateTreeSha256": "sha256:79d43397ce9df45fb2ff4c04860ee8f7f24d452e6d16df7f2d515216a756e2ca",
+  "change": {
+    "evidence": [
+      "operations/adaptive/experiments/fx2_attention_window250k_v2.json"
+    ],
+    "hypothesis": "A2048-token native attention window improves opening250KB archive and source-component cost against the identical trained1024-window parent.",
+    "kind": "implementation",
+    "replacements": [],
+    "summary": [
+      "Only candidate identity and scratch limit change: 12GB to 24GB. Source-bound parent PPM logical file is 14680064001 bytes. Source, controls, population, 16 phases and decision rules are inherited unchanged. Exactly two optimized attention runtime constants change1024to2048; trained model/header, RoPE, nine KDA layers, PPMd and mixer rules remain unchanged. New neural outputs may change downstream mixer state."
+    ]
+  },
+  "files": [
+    {
+      "blobPath": "operations/adaptive/candidate-blobs/sha256/e8/e8ba77dcd3f9daf2124720d6779a8e72ac264208aa4267ad374fc106c62e7852",
+      "bytes": 1147,
+      "normalization": "semantic-meta-v1",
+      "path": "meta.json",
+      "sha256": "e8ba77dcd3f9daf2124720d6779a8e72ac264208aa4267ad374fc106c62e7852"
+    },
+    {
+      "blobPath": "operations/adaptive/candidate-blobs/sha256/86/86aa000ef2492f5396521d3bda7062407f072fc08ad1e72d52461aaf96728484",
+      "bytes": 10262,
+      "normalization": "verbatim",
+      "path": "program.py",
+      "sha256": "86aa000ef2492f5396521d3bda7062407f072fc08ad1e72d52461aaf96728484"
+    }
+  ],
+  "generatedUtc": "2026-09-15T21:22:54+00:00",
+  "immutableBlobsComplete": true,
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:e91ff20e92c3cac8acb0cbe5c79fc8e8a3b427d7e151245c8eecc52b1c32fa00",
+    "objectiveId": "gamma-enwiki9-hutter-90m-v3",
+    "objectivePath": "contracts/research/v3/objective-contract.json",
+    "targetScoreBytes": 90000000
+  },
+  "parentRevision": {
+    "candidateId": "fx2_attention_window250k_v1",
+    "candidateTreeSha256": "sha256:785ab1dedc19866c2e2aeb609120cfe55e45c6a187ea9cb60ebae91a2f29d7f0",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/fx2_attention_window250k_v1/20260915T211006193649Z_785ab1dedc19.json",
+      "sha256": "sha256:7e8b88e66e8d66ad23fb2776d458a9ad58d50258cad64c1f20798097b49ba1a8"
+    }
+  },
+  "previousRevision": {
+    "path": "operations/adaptive/candidate-revisions/fx2_attention_window250k_v2/20260915T212254256460Z_3e39fa543c43.json",
+    "sha256": "sha256:215796f6a0564f07cef25eddd13a372eadc73bb1ac8836fb523153a667776a14"
+  },
+  "provenanceClass": "native",
+  "schema": "gamma.enwiki9.candidate-revision.v1",
+  "treeDigestAlgorithm": "sha256-canonical-counted-files-v1"
+}

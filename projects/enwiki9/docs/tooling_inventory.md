@@ -12,7 +12,7 @@ Reusable artifact helpers for new tools: [lib/artifacts.py](../lib/artifacts.py)
 The LibNC initializer teacher launcher exits before the first forward, gradient, update, or coded symbol; its source-bound experiment defines that boundary.
 The delayed-status helper's `enwiki9_delayed_status_latest.log` pointer is operational history, not present-host occupancy proof.
 
-Coverage: **1205 files** (33 .c, 78 .cpp, 1 .gdb, 1 .h, 1 .hpp, 1 .html, 1087 .py, 3 .sh).
+Coverage: **1206 files** (33 .c, 78 .cpp, 1 .gdb, 1 .h, 1 .hpp, 1 .html, 1088 .py, 3 .sh).
 
 | Tool | Purpose | Referenced contracts |
 |---|---|---|
@@ -322,7 +322,8 @@ Coverage: **1205 files** (33 .c, 78 .cpp, 1 .gdb, 1 .h, 1 .hpp, 1 .html, 1087 .p
 | [`tools/fx2_adaptive_package_fixture50051_q0_v1.py`](../tools/fx2_adaptive_package_fixture50051_q0_v1.py) | Frozen independent native package rebuild and exact public-fixture replay. | [1](../operations/adaptive/experiments/fx2_adaptive_package_fixture50051_q0_v1.json) |
 | [`tools/fx2_arbitrage_report.py`](../tools/fx2_arbitrage_report.py) | Rank FX2 loss-ledger families against a concrete score gap. | none found |
 | [`tools/fx2_attention_window250k_v1.py`](../tools/fx2_attention_window250k_v1.py) | Native 1024/2048 attention-window comparison with unchanged paid weights. | [1](../operations/adaptive/experiments/fx2_attention_window250k_v1.json) |
-| [`tools/fx2_attention_window_adapter_v1.py`](../tools/fx2_attention_window_adapter_v1.py) | Exact two-constant runtime mutation; trained weight metadata is unchanged. | [1](../operations/adaptive/experiments/fx2_attention_window250k_v1.json) |
+| [`tools/fx2_attention_window250k_v2.py`](../tools/fx2_attention_window250k_v2.py) | Native 1024/2048 attention-window comparison with unchanged paid weights. | [1](../operations/adaptive/experiments/fx2_attention_window250k_v2.json) |
+| [`tools/fx2_attention_window_adapter_v1.py`](../tools/fx2_attention_window_adapter_v1.py) | Exact two-constant runtime mutation; trained weight metadata is unchanged. | [2](../operations/adaptive/experiments/fx2_attention_window250k_v1.json) |
 | [`tools/fx2_attention_window_probe_v1.cpp`](../tools/fx2_attention_window_probe_v1.cpp) | Synthetic kernel probe; excluded from the production source delivery. | none found |
 | [`tools/fx2_attribution_external_base_screen.py`](../tools/fx2_attribution_external_base_screen.py) | Screen exact FX2 components as fixed blends over an external causal base. The external base is typically the continuously evolved compact-CMIX endpoint. Endpoint and weight selection reads development rows only. Holdout and exact range-coder replay are evaluated only after the configuration is frozen. | none found |
 | [`tools/fx2_bytemodel_argmax_probe_v1.cpp`](../tools/fx2_bytemodel_argmax_probe_v1.cpp) | Prospective Gamma argmax unit gate; no codec or compression claim. Build with the exact adapter and an independently retained, unmodified parent. | [1](../operations/adaptive/experiments/fx2_bytemodel_argmax_unit_q0_v1.json) |
@@ -365,7 +366,7 @@ Coverage: **1205 files** (33 .c, 78 .cpp, 1 .gdb, 1 .h, 1 .hpp, 1 .html, 1087 .p
 | [`tools/fx2_expert_mix_opening250k_v1.py`](../tools/fx2_expert_mix_opening250k_v1.py) | One native archive test of a posterior mixture conditioned on expert disagreement. | [1](../operations/adaptive/experiments/fx2_expert_mix_opening250k_v1.json) |
 | [`tools/fx2_expert_release250k_v1.py`](../tools/fx2_expert_release250k_v1.py) | Production equivalence and component pricing for the frozen expert mixture. | [1](../operations/adaptive/experiments/fx2_expert_release250k_v1.json) |
 | [`tools/fx2_expert_release250k_v2.py`](../tools/fx2_expert_release250k_v2.py) | Production equivalence and component pricing for the frozen expert mixture. | [1](../operations/adaptive/experiments/fx2_expert_release250k_v2.json) |
-| [`tools/fx2_expert_release250k_v3.py`](../tools/fx2_expert_release250k_v3.py) | Production equivalence and component pricing for the frozen expert mixture. | [2](../operations/adaptive/experiments/fx2_attention_window250k_v1.json) |
+| [`tools/fx2_expert_release250k_v3.py`](../tools/fx2_expert_release250k_v3.py) | Production equivalence and component pricing for the frozen expert mixture. | [3](../operations/adaptive/experiments/fx2_attention_window250k_v1.json) |
 | [`tools/fx2_expert_release_adapter_v1.py`](../tools/fx2_expert_release_adapter_v1.py) | Bind the fixed transformer profile and compact aligned mixture to source. | [1](../operations/adaptive/experiments/fx2_expert_release250k_v1.json) |
 | [`tools/fx2_expert_release_adapter_v2.py`](../tools/fx2_expert_release_adapter_v2.py) | Bind the fixed transformer profile and compact aligned mixture to source. | [1](../operations/adaptive/experiments/fx2_expert_release250k_v2.json) |
 | [`tools/fx2_expert_release_adapter_v3.py`](../tools/fx2_expert_release_adapter_v3.py) | Bind the fixed transformer profile and compact aligned mixture to source. | [1](../operations/adaptive/experiments/fx2_expert_release250k_v3.json) |
