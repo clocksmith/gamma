@@ -5,27 +5,66 @@
     "sha256": "sha256:c7c4d6c61f2ddb54de52d36ccf0b7cbda7fe3b117617a3163a19e5c65d3add12"
   },
   "candidate_tree_sha256": "sha256:856a9634469254b08abf65c7338e9879e3a0717a7553f0526f2ab6503cb71771",
+  "elapsed_seconds": 13.683,
   "execution_guard": {
     "path": "tools/run_with_resource_guard_v3.py",
     "sha256": "sha256:044147f7ffe6922ea8dafd52fc3d4426077b20958adbcd421245ad41adcfc1e4"
   },
   "execution_mode": "discovery",
+  "execution_resources": {
+    "boot_id": "3ce46712-27bc-4199-8e48-e2b3d23926cb",
+    "budget": {
+      "cgroup_parent": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice",
+      "cpus": [
+        3
+      ],
+      "memory_bytes": 1073741824,
+      "scratch_bytes": 268435456,
+      "swap_bytes": 0,
+      "wall_seconds": 600
+    },
+    "cgroup_inode": 335903,
+    "cgroup_path": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/gamma-enwiki9-20260915T220051Z_42f1d80d99",
+    "cleanup_complete": true,
+    "cpu_enforcement": "taskset-and-sampled-affinity-guard",
+    "groups": [
+      {
+        "created": true,
+        "inode": 335903,
+        "kernel_cpuset": false,
+        "memory_bytes": 1073741824,
+        "path": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/gamma-enwiki9-20260915T220051Z_42f1d80d99"
+      }
+    ],
+    "guard_command_sha256": "72057d34f29a05c1c99695aea7144c0bb691e9dfe7856aee353d565f593e130f",
+    "guard_path": "run_logs/adaptive/20260915T220051Z_42f1d80d99.resources/guard.json",
+    "missing_diagnostics": [
+      "kernel cpuset controller is not delegated; taskset assignment and existing affinity guard remain active"
+    ],
+    "timing_authority": "diagnostic"
+  },
   "experiment": {
     "path": "operations/adaptive/experiments/fx2_wrt_elision250k_v2.json",
     "sha256": "sha256:05fb5fd136c94a8c7490a9a70ad24d6bb64d865aeb769d6506e4544320f07b35"
   },
+  "finished_at": "2026-09-15T22:02:47+00:00",
   "gate_size": 250000,
-  "held": true,
+  "held": false,
   "held_at": "2026-09-15T22:00:52+00:00",
   "hold_history": [
     {
       "at": "2026-09-15T22:00:52+00:00",
       "held": true,
       "reason": "Publish launch-only retry; fresh CPU3 admission and controller affinity required."
+    },
+    {
+      "at": "2026-09-15T22:02:33+00:00",
+      "held": false,
+      "reason": "Published 40153bcae; bindings rehashed; fresh resource admission. Canonical lab controller will inherit CPU3 before any guard child is spawned."
     }
   ],
-  "hold_reason": "Publish launch-only retry; fresh CPU3 admission and controller affinity required.",
   "job_id": "20260915T220051Z_42f1d80d99",
+  "log_path": "run_logs/adaptive/20260915T220051Z_42f1d80d99.log",
   "priority": 80,
   "proposal": {
     "path": "operations/adaptive/proposals/developed/949_fx2_wrt_elision250k_v2.json",
@@ -33,6 +72,7 @@
   },
   "proposal_id": "fx2_wrt_elision250k_v2",
   "purpose": "diagnostic",
+  "released_at": "2026-09-15T22:02:33+00:00",
   "resource_budget": {
     "cgroup_parent": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice",
     "cpus": [
@@ -43,6 +83,7 @@
     "swap_bytes": 0,
     "wall_seconds": 600
   },
+  "returncode": 0,
   "runner": {
     "path": "tools/fx2_wrt_elision_gate_v2.py",
     "sha256": "sha256:4e6ee8b9f8ebbabacb745b68b4cc35f38559747707b0b1eb68caf20b6ed60aca"
@@ -51,10 +92,14 @@
   "scratch_directories": [
     "results/fx2_wrt_elision250k_v2"
   ],
-  "state": "pending",
+  "started_at": "2026-09-15T22:02:33+00:00",
+  "state": "completed",
   "submitted_at": "2026-09-15T22:00:51+00:00",
   "tags": [],
   "timing_authority": "diagnostic",
   "tool": "tools/fx2_wrt_elision_gate_v2.py",
-  "tool_args": []
+  "tool_args": [],
+  "worker_pid": 1919869,
+  "worker_proc_start_ticks": 260589156,
+  "worker_started_at": "2026-09-15T22:02:33+00:00"
 }
