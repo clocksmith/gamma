@@ -1,0 +1,59 @@
+{
+  "candidate_id": "fx2_wrt_native250k_v1",
+  "command": [
+    "env",
+    "TMPDIR=/run/user/1000",
+    "taskset",
+    "-c",
+    "2",
+    "timeout",
+    "180",
+    "python3",
+    "-m",
+    "unittest",
+    "tests.test_fx2_wrt_native_v1",
+    "-v"
+  ],
+  "corpus_evidence": false,
+  "harness_correction": "Read ctypes output once instead of copying the complete buffer per bit. The first attempt was interrupted by the owner; no corpus or codec execution changed.",
+  "interrupted_harness_log": {
+    "bytes": 2555,
+    "path": "run_logs/manual/wrt_native_unit_20260915.log",
+    "sha256": "2431e63bd3a3b0560f39f1c83213ee1a7033a34f5420ce2f75bbe2e1091a2e5a"
+  },
+  "log": {
+    "bytes": 764,
+    "path": "run_logs/manual/wrt_native_unit_corrected_20260915.log",
+    "sha256": "6ae42ee50b349b26d26c87cd46e9d7483ca92f1c005141d538e8c9766b47f868"
+  },
+  "passed": true,
+  "schema": "gamma.enwiki9.synthetic-checks.v1",
+  "sources": [
+    {
+      "bytes": 3957,
+      "path": "lib/fx2_wrt_native_v1.hpp",
+      "sha256": "bd43a99f805a29705a72a620324c472eab380e1c20a006de51cfe7539c5ca314"
+    },
+    {
+      "bytes": 3123,
+      "path": "tools/fx2_wrt_native_adapter_v1.py",
+      "sha256": "0a74d4a72addc6528059ac0fddaf6d4936721abe94ee1323b87e2a09c8ad8a8c"
+    },
+    {
+      "bytes": 488,
+      "path": "tools/fx2_wrt_native_observer_v1.hpp",
+      "sha256": "c1b3e675efcaf99b601ae09271269f28d0906b4da63ee0cad24c2f1f76155cdf"
+    },
+    {
+      "bytes": 9391,
+      "path": "tools/fx2_wrt_native250k_v1.py",
+      "sha256": "0b697d0b3922511a2a588e7d8f663dc298dd143fc756d22b977c27764fb1b390"
+    },
+    {
+      "bytes": 6053,
+      "path": "tests/test_fx2_wrt_native_v1.py",
+      "sha256": "1d0e7ae22ce4c5734724184376ef355dda8fd0e541fd4654692e26f402a02716"
+    }
+  ],
+  "tests": 5
+}
