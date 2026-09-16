@@ -1,0 +1,76 @@
+{
+  "arms": {
+    "absent-A": {
+      "ambient_dictionary": false,
+      "exact_inverse": true,
+      "restored": {
+        "bytes": 250000,
+        "path": "results/fx2_ambient_dictionary_probe_v1/work/absent-A/restored.raw",
+        "sha256": "665fc689441b68462d88f82dc33212abe9c4824be095d03a556c9b55a2829fd3"
+      },
+      "returncode": 0
+    },
+    "absent-B": {
+      "ambient_dictionary": false,
+      "exact_inverse": true,
+      "restored": {
+        "bytes": 250000,
+        "path": "results/fx2_ambient_dictionary_probe_v1/work/absent-B/restored.raw",
+        "sha256": "665fc689441b68462d88f82dc33212abe9c4824be095d03a556c9b55a2829fd3"
+      },
+      "returncode": 0
+    },
+    "present": {
+      "ambient_dictionary": true,
+      "exact_inverse": false,
+      "restored": null,
+      "returncode": 139
+    }
+  },
+  "artifact_bytes_rehashed": 23389906,
+  "artifact_files_rehashed": 30,
+  "artifacts": {
+    "bytes": 5984,
+    "path": "results/fx2_ambient_dictionary_probe_v1/artifacts.json",
+    "sha256": "fc4d0c33d243fb91b94b0d2c89183121a23989387d5f708e2d5078ef7eb3ec7b"
+  },
+  "candidate_id": "fx2_ambient_dictionary_probe_v1",
+  "causal_conclusion": "Ambient dictionary presence changes correctness in the unchanged parent. Both absent-file decodes exactly reconstruct the same250KB; present reproduces139. Source constructor activates legacy reverse-dictionary state from .dict.",
+  "cleanup_complete": true,
+  "complete_package_bytes": null,
+  "controlled_difference": "Only present adds .dict containing the already explicit dictionary.bin bytes.",
+  "correction_authorized": true,
+  "decision": {
+    "bytes": 8582,
+    "path": "results/fx2_ambient_dictionary_probe_v1/decision.json",
+    "sha256": "8336040a6f2dbca94b76a9b985ed3bddfacfef27f925825cfa6682e7402fd6e8"
+  },
+  "full_corpus_score_bytes": null,
+  "guard": {
+    "bytes": 58345,
+    "path": "run_logs/adaptive/20260916T032712Z_00457376c7.resources/guard.json",
+    "sha256": "9ac4c7a741e647d092f414f2947be0be6180e44e6b0c37bd4e769f076471908e"
+  },
+  "job": {
+    "bytes": 4045,
+    "path": "operations/adaptive/completed/924_20260916T032712Z_00457376c7.json",
+    "sha256": "069ff3f86dd9c5e1eb217c5a22115f675575350f7384ee8a71376dca1137b65b"
+  },
+  "next_action": "Remove implicit FXCM dictionary initialization in both static-profile package arms; rerun unchanged auxiliary comparison under new identity with .dict retained in isolated decode.",
+  "objective_credit_bytes": 0,
+  "resource_gate_pass": true,
+  "resource_peaks": {
+    "cgroup_memory_peak_bytes": 5842882560,
+    "max_observed_process_vmhwm_kib": 5650032,
+    "max_sampled_allowed_cpu_count": 1,
+    "max_sampled_cgroup_current_bytes": 5836853248,
+    "max_sampled_scratch_allocated_bytes": 26689536,
+    "max_sampled_scratch_logical_bytes": 14703416922,
+    "max_sampled_single_rss_kib": 5650032,
+    "max_sampled_tree_live_threads": 5,
+    "max_sampled_tree_rss_kib": 5690648,
+    "max_sampled_tree_runnable_threads": 1
+  },
+  "schema": "gamma.enwiki9.ambient-dictionary-closed.v1",
+  "scopeBytes": 250000
+}
