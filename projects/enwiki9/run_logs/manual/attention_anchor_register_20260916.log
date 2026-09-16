@@ -1,0 +1,19 @@
+Traceback (most recent call last):
+  File "/run/user/1000/register_attention_anchor_20260916.py", line 58, in <module>
+    sys.path.insert(0,'tools');import research_contracts;research_contracts.validate_artifact(ep)
+                                                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^
+  File "/home/x/deco/gamma/projects/enwiki9/tools/research_contracts.py", line 3102, in validate_artifact
+    _validate_schema(value, SCHEMA_PATHS[schema_id])
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/x/deco/gamma/projects/enwiki9/tools/research_contracts.py", line 346, in _validate_schema
+    ).validate(value)
+      ~~~~~~~~^^^^^^^
+  File "/usr/lib/python3/dist-packages/jsonschema/validators.py", line 435, in validate
+    raise error
+jsonschema.exceptions.ValidationError: 'control' is not one of ['treatment', 'comparator', 'negative', 'shifted', 'replay']
+
+Failed validating 'enum' in schema['properties']['controls']['items']['properties']['role']:
+    {'enum': ['treatment', 'comparator', 'negative', 'shifted', 'replay']}
+
+On instance['controls'][1]['role']:
+    'control'
