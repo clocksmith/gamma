@@ -1,0 +1,325 @@
+{
+  "active_bytes": 2303,
+  "all_coder_counts_parent_identical": true,
+  "all_conditional_artifacts_repeat_identical": true,
+  "artifacts": {
+    "bytes": 39738,
+    "path": "results/fx2_match_gap_observation250k_v1/artifacts.json",
+    "sha256": "4a97afb671cb59e81a24c3d9a00baa39a4ace6b41ae2254ef2563bcdb70a17eb"
+  },
+  "candidate_id": "fx2_match_gap_observation250k_v1",
+  "child_closure_ok": true,
+  "commands": [
+    {
+      "accepted_returncodes": [
+        0
+      ],
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "360",
+        "/usr/bin/make",
+        "-j1",
+        "cmix",
+        "CC=/usr/bin/g++",
+        "CPPFLAGS_PART-THAT-SHOULD-BE-FAST=-DSEED=923 -DUPDATE_LIMIT=3000 -m64 -Wall -std=c++17 -include cstdint -fno-fast-math -fno-math-errno -fno-exceptions -fno-threadsafe-statics -march=x86-64-v3 -mtune=generic -mrecip=none -fdata-sections -ffunction-sections -O3",
+        "CPPFLAGS_PART-THAT-CAN-BE-SLOW=-DSEED=923 -DUPDATE_LIMIT=3000 -m64 -Wall -std=c++17 -include cstdint -fno-fast-math -fno-math-errno -fno-exceptions -fno-threadsafe-statics -march=x86-64-v3 -mtune=generic -mrecip=none -fdata-sections -ffunction-sections -Os"
+      ],
+      "elapsed_cap_seconds": 360,
+      "elapsed_seconds": 13.017580532003194,
+      "environment": {},
+      "launch_error": null,
+      "missing_diagnostics": [],
+      "phase": "compile",
+      "returncode": 0,
+      "system_cpu_seconds": 1.016553,
+      "timing_authority": "shared-host diagnostic",
+      "user_cpu_seconds": 11.881174
+    },
+    {
+      "accepted_returncodes": [
+        0
+      ],
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "30",
+        "/usr/bin/make",
+        "clean"
+      ],
+      "elapsed_cap_seconds": 30,
+      "elapsed_seconds": 0.10185479326173663,
+      "environment": {},
+      "launch_error": null,
+      "missing_diagnostics": [],
+      "phase": "clean-repeat",
+      "returncode": 0,
+      "system_cpu_seconds": 0.0027249999999998664,
+      "timing_authority": "shared-host diagnostic",
+      "user_cpu_seconds": 0.0012570000000007298
+    },
+    {
+      "accepted_returncodes": [
+        0
+      ],
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "360",
+        "/usr/bin/make",
+        "-j1",
+        "cmix",
+        "CC=/usr/bin/g++",
+        "CPPFLAGS_PART-THAT-SHOULD-BE-FAST=-DSEED=923 -DUPDATE_LIMIT=3000 -m64 -Wall -std=c++17 -include cstdint -fno-fast-math -fno-math-errno -fno-exceptions -fno-threadsafe-statics -march=x86-64-v3 -mtune=generic -mrecip=none -fdata-sections -ffunction-sections -O3",
+        "CPPFLAGS_PART-THAT-CAN-BE-SLOW=-DSEED=923 -DUPDATE_LIMIT=3000 -m64 -Wall -std=c++17 -include cstdint -fno-fast-math -fno-math-errno -fno-exceptions -fno-threadsafe-statics -march=x86-64-v3 -mtune=generic -mrecip=none -fdata-sections -ffunction-sections -Os"
+      ],
+      "elapsed_cap_seconds": 360,
+      "elapsed_seconds": 13.01374230766669,
+      "environment": {},
+      "launch_error": null,
+      "missing_diagnostics": [],
+      "phase": "compile-repeat",
+      "returncode": 0,
+      "system_cpu_seconds": 1.046736,
+      "timing_authority": "shared-host diagnostic",
+      "user_cpu_seconds": 11.847210999999998
+    },
+    {
+      "accepted_returncodes": [
+        0
+      ],
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "180",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_match_gap_observation250k_v1/work/native/cmix",
+        "-s",
+        "dictionary/english.dic",
+        "population.raw",
+        "population.stored"
+      ],
+      "elapsed_cap_seconds": 180,
+      "elapsed_seconds": 0.102592664770782,
+      "environment": {},
+      "launch_error": null,
+      "missing_diagnostics": [],
+      "phase": "preprocess",
+      "returncode": 0,
+      "system_cpu_seconds": 0.0020259999999998612,
+      "timing_authority": "shared-host diagnostic",
+      "user_cpu_seconds": 0.008546000000002607
+    },
+    {
+      "accepted_returncodes": [
+        0
+      ],
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "180",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_match_gap_observation250k_v1/work/native/cmix",
+        "-c",
+        "dictionary/english.dic",
+        "population.raw",
+        "encode.arc",
+        "--transformer",
+        "models/6m-q4-fp32.tfwc2"
+      ],
+      "elapsed_cap_seconds": 180,
+      "elapsed_seconds": 36.73871198669076,
+      "environment": {
+        "GAMMA_GAP_TRACE": "/home/x/deco/gamma/projects/enwiki9/results/fx2_match_gap_observation250k_v1/work/native/encode.gap"
+      },
+      "launch_error": null,
+      "missing_diagnostics": [],
+      "phase": "encode",
+      "returncode": 0,
+      "system_cpu_seconds": 1.6912250000000002,
+      "timing_authority": "shared-host diagnostic",
+      "user_cpu_seconds": 34.194427
+    },
+    {
+      "accepted_returncodes": [
+        0
+      ],
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "180",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_match_gap_observation250k_v1/work/native/cmix",
+        "-d",
+        "dictionary/english.dic",
+        "encode.arc",
+        "decode.raw",
+        "--transformer",
+        "models/6m-q4-fp32.tfwc2"
+      ],
+      "elapsed_cap_seconds": 180,
+      "elapsed_seconds": 35.93726296303794,
+      "environment": {
+        "GAMMA_GAP_TRACE": "/home/x/deco/gamma/projects/enwiki9/results/fx2_match_gap_observation250k_v1/work/native/decode.gap"
+      },
+      "launch_error": null,
+      "missing_diagnostics": [],
+      "phase": "decode",
+      "returncode": 0,
+      "system_cpu_seconds": 1.722601,
+      "timing_authority": "shared-host diagnostic",
+      "user_cpu_seconds": 33.94332800000001
+    },
+    {
+      "accepted_returncodes": [
+        0
+      ],
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "180",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_match_gap_observation250k_v1/work/native/cmix",
+        "-c",
+        "dictionary/english.dic",
+        "decode.raw",
+        "repeat.arc",
+        "--transformer",
+        "models/6m-q4-fp32.tfwc2"
+      ],
+      "elapsed_cap_seconds": 180,
+      "elapsed_seconds": 35.93733877502382,
+      "environment": {
+        "GAMMA_GAP_TRACE": "/home/x/deco/gamma/projects/enwiki9/results/fx2_match_gap_observation250k_v1/work/native/repeat.gap"
+      },
+      "launch_error": null,
+      "missing_diagnostics": [],
+      "phase": "repeat",
+      "returncode": 0,
+      "system_cpu_seconds": 1.6592019999999996,
+      "timing_authority": "shared-host diagnostic",
+      "user_cpu_seconds": 33.96896099999999
+    },
+    {
+      "accepted_returncodes": [
+        0
+      ],
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "180",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_match_gap_observation250k_v1/work/native/cmix",
+        "-c",
+        "dictionary/english.dic",
+        "population.raw",
+        "untraced.arc",
+        "--transformer",
+        "models/6m-q4-fp32.tfwc2"
+      ],
+      "elapsed_cap_seconds": 180,
+      "elapsed_seconds": 35.936419657897204,
+      "environment": {},
+      "launch_error": null,
+      "missing_diagnostics": [],
+      "phase": "untraced",
+      "returncode": 0,
+      "system_cpu_seconds": 1.67603,
+      "timing_authority": "shared-host diagnostic",
+      "user_cpu_seconds": 33.92609
+    },
+    {
+      "accepted_returncodes": [
+        0
+      ],
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "360",
+        "/usr/bin/python3",
+        "/home/x/deco/gamma/projects/enwiki9/tools/fx2_match_gap_replay_v1.py",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_match_gap_observation250k_v1/work/native/encode.gap",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_native_transfer250k_q0_v1/work/native/opening.stored",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_match_gap_observation250k_v1/work/native/population.raw",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_match_gap_observation250k_v1/work/native/dictionary/english.dic",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_match_gap_observation250k_v1/work/native/encode.arc",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_native_transfer250k_q0_v1/work/native/opening-P-encode.trace",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_match_gap_observation250k_v1/analysis"
+      ],
+      "elapsed_cap_seconds": 360,
+      "elapsed_seconds": 6.406856592278928,
+      "environment": {},
+      "launch_error": null,
+      "missing_diagnostics": [],
+      "phase": "analysis",
+      "returncode": 0,
+      "system_cpu_seconds": 0.08165699999999987,
+      "timing_authority": "shared-host diagnostic",
+      "user_cpu_seconds": 6.261594000000002
+    },
+    {
+      "accepted_returncodes": [
+        0
+      ],
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "360",
+        "/usr/bin/python3",
+        "/home/x/deco/gamma/projects/enwiki9/tools/fx2_match_gap_replay_v1.py",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_match_gap_observation250k_v1/work/native/encode.gap",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_native_transfer250k_q0_v1/work/native/opening.stored",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_match_gap_observation250k_v1/work/native/population.raw",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_match_gap_observation250k_v1/work/native/dictionary/english.dic",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_match_gap_observation250k_v1/work/native/encode.arc",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_weight_native_transfer250k_q0_v1/work/native/opening-P-encode.trace",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_match_gap_observation250k_v1/analysis-repeat"
+      ],
+      "elapsed_cap_seconds": 360,
+      "elapsed_seconds": 6.4074376337230206,
+      "environment": {},
+      "launch_error": null,
+      "missing_diagnostics": [],
+      "phase": "analysis-repeat",
+      "returncode": 0,
+      "system_cpu_seconds": 0.07635900000000007,
+      "timing_authority": "shared-host diagnostic",
+      "user_cpu_seconds": 6.221669999999989
+    }
+  ],
+  "complete_package_bytes": null,
+  "conditional_g_P": -1,
+  "conditional_g_S": 0,
+  "exact_inverse": true,
+  "experiment": {
+    "path": "operations/adaptive/experiments/fx2_match_gap_observation250k_v1.json",
+    "sha256": "sha256:6148c72afc7dfc24ed3217ca5b1c22a3595c5b399de4d643ee1f65066ce6e336"
+  },
+  "full_corpus_score_bytes": null,
+  "larger_gate_authorized": false,
+  "missing_state_audit": "Original native model/maps not fully serialized. Synthetic original Match state and predictions compare bytewise; native every coder count/truth,archive,donor/clock records and repeats match. Conditional decoder requires the counted trace; native correction remains unimplemented.",
+  "native_archive_bytes": 33429,
+  "native_mutation_test_authorized": false,
+  "new_standalone_compression_gain_bytes": 0,
+  "objective_credit_bytes": 0,
+  "observation_encode_decode_repeat_byte_identical": true,
+  "perfect_ideal_upper_bits_ceil": 3729,
+  "raw_bytes": 250000,
+  "raw_population": "[0,250000)",
+  "repeat_archive_byte_identical": true,
+  "report": {
+    "bytes": 2110,
+    "path": "results/fx2_match_gap_observation250k_v1/analysis/report.json",
+    "sha256": "a81f1fda67fd17ffd302ba8ee0bf9eca56d1f3284bae2269344fc0da67c15867"
+  },
+  "schema": "gamma.enwiki9.match-gap-observation-terminal.v1",
+  "scientific_verdict": "This fixed calibrated continuation does not beat parent and shifted control; no native correction integration.",
+  "status": "passed",
+  "trace_on_off_archive_identical": true,
+  "trimmed_parent_archive_byte_identical": true
+}
