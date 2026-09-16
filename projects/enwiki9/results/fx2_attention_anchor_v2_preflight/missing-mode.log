@@ -1,0 +1,17 @@
+In file included from tests/fx2_attention_anchor_v2.cpp:1:
+lib/fx2_attention_anchor_v2.h:8:2: error: #error "GAMMA_ANCHOR_MODE must reach the attention translation unit"
+    8 | #error "GAMMA_ANCHOR_MODE must reach the attention translation unit"
+      |  ^~~~~
+lib/fx2_attention_anchor_v2.h:10:15: error: ‘GAMMA_ANCHOR_MODE’ was not declared in this scope
+   10 | static_assert(GAMMA_ANCHOR_MODE >= 0 && GAMMA_ANCHOR_MODE <= 2, "anchor mode");
+      |               ^~~~~~~~~~~~~~~~~
+lib/fx2_attention_anchor_v2.h:10:41: error: ‘GAMMA_ANCHOR_MODE’ was not declared in this scope
+   10 | static_assert(GAMMA_ANCHOR_MODE >= 0 && GAMMA_ANCHOR_MODE <= 2, "anchor mode");
+      |                                         ^~~~~~~~~~~~~~~~~
+tests/fx2_attention_anchor_v2.cpp: In function ‘int main()’:
+tests/fx2_attention_anchor_v2.cpp:23:31: error: ‘GAMMA_ANCHOR_MODE’ was not declared in this scope
+   23 |             const bool pin = (GAMMA_ANCHOR_MODE == 1 && t < 4) ||
+      |                               ^~~~~~~~~~~~~~~~~
+tests/fx2_attention_anchor_v2.cpp:36:29: error: ‘GAMMA_ANCHOR_MODE’ was not declared in this scope
+   36 |     std::cout << "mode=" << GAMMA_ANCHOR_MODE << " checked_steps=" << steps << '\n';
+      |                             ^~~~~~~~~~~~~~~~~

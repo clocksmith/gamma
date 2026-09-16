@@ -13268,7 +13268,7 @@
       "results": {
         "best_valid_meta_evidence": null,
         "best_valid_result": null,
-        "result_files": 0,
+        "result_files": 55,
         "total_valid_evidence": 0,
         "valid_meta_evidence": 0,
         "valid_result_files": 0
@@ -13278,6 +13278,43 @@
         "proposal_path": "projects/enwiki9/operations/adaptive/proposals/developed/949_fx2_attention_anchor250k_v1.json",
         "proposal_status": "valid",
         "revision_path": "projects/enwiki9/operations/adaptive/candidate-revisions/fx2_attention_anchor250k_v1/20260916T041201510571Z_4616ffaada3c.json",
+        "revision_status": "current",
+        "successor_eligible": true,
+        "unreflected_terminal_jobs": []
+      },
+      "source_file_entries": 2,
+      "status": "candidate",
+      "tracked_source_file_entries": 2,
+      "untracked_source_files": []
+    },
+    {
+      "deps": [],
+      "description": "Deliver article-retention mode to transformer compilation",
+      "driver_program_size": 12039,
+      "has_meta_json": true,
+      "has_program_py": true,
+      "id": "fx2_attention_anchor250k_v2",
+      "meta_id": "fx2_attention_anchor250k_v2",
+      "meta_id_matches_directory": true,
+      "meta_status": "candidate",
+      "missing_payload_targets": [],
+      "reasons": [
+        "awaiting_lane0_measurement"
+      ],
+      "registered": true,
+      "results": {
+        "best_valid_meta_evidence": null,
+        "best_valid_result": null,
+        "result_files": 0,
+        "total_valid_evidence": 0,
+        "valid_meta_evidence": 0,
+        "valid_result_files": 0
+      },
+      "scientific_control": {
+        "proposal_id": "fx2_attention_anchor250k_v2",
+        "proposal_path": "projects/enwiki9/operations/adaptive/proposals/developed/949_fx2_attention_anchor250k_v2.json",
+        "proposal_status": "valid",
+        "revision_path": "projects/enwiki9/operations/adaptive/candidate-revisions/fx2_attention_anchor250k_v2/20260916T043722183843Z_2b5aeed6e09f.json",
         "revision_status": "current",
         "successor_eligible": true,
         "unreflected_terminal_jobs": []
@@ -43956,7 +43993,7 @@
       "untracked_source_files": []
     }
   ],
-  "generated_at": "2026-09-16T04:16:45+00:00",
+  "generated_at": "2026-09-16T04:39:57+00:00",
   "ignored_entries": [
     "projects/enwiki9/data/enwik9",
     "projects/enwiki9/external/fx2-cmix-transformer-v1/",
@@ -76636,6 +76673,7 @@
     "projects/enwiki9/run_logs/adaptive/20260909T065353Z_a016a11707.log",
     "projects/enwiki9/run_logs/adaptive/20260909T070542Z_73f3b61d2e.log",
     "projects/enwiki9/run_logs/adaptive/20260916T033628Z_f5a0e12a98.log",
+    "projects/enwiki9/run_logs/adaptive/20260916T041201Z_a5279c4c69.log",
     "projects/enwiki9/run_logs/archive/progress_legacy.log",
     "projects/enwiki9/run_logs/archive/status_live_20260721.json",
     "projects/enwiki9/run_logs/archive/status_snapshot_accidental_dash_20260721.json",
@@ -76727,8 +76765,10 @@
     "projects/enwiki9/run_logs/fx2cmix_recovered_gcc_o3_xz_minwrap_v1_run_20260720T194905Z.log",
     "projects/enwiki9/run_logs/fx2cmix_recovered_gcc_o3_xz_minwrap_v2_run_20260720T194905Z.log",
     "projects/enwiki9/run_logs/fx2cmix_recovered_gcc_o3_xz_minwrap_v3_run_20260720T194905Z.log",
-    "projects/enwiki9/run_logs/manual/anchor_catalogue_20260916.log",
-    "projects/enwiki9/run_logs/manual/auxiliary_anchor_refresh_20260916.log",
+    "projects/enwiki9/run_logs/manual/attention_anchor_launch_commit_20260916.log",
+    "projects/enwiki9/run_logs/manual/attention_anchor_v2_catalogue_20260916.log",
+    "projects/enwiki9/run_logs/manual/attention_anchor_v2_refresh_20260916.log",
+    "projects/enwiki9/run_logs/manual/auxiliary_anchor_commit_20260916.log",
     "projects/enwiki9/run_logs/manual/expert_release_admission_20260915.log",
     "projects/enwiki9/run_logs/manual/expert_release_build3_admission_20260915.log",
     "projects/enwiki9/run_logs/manual/expert_release_build3_registration_20260915.log",
@@ -77628,6 +77668,7 @@
     "projects/enwiki9/tools/__pycache__/frontier_target_report.cpython-314.pyc",
     "projects/enwiki9/tools/__pycache__/fx2_arbitrage_report.cpython-314.pyc",
     "projects/enwiki9/tools/__pycache__/fx2_attention_anchor250k_v1.cpython-314.pyc",
+    "projects/enwiki9/tools/__pycache__/fx2_attention_anchor250k_v2.cpython-314.pyc",
     "projects/enwiki9/tools/__pycache__/fx2_attention_window250k_v1.cpython-314.pyc",
     "projects/enwiki9/tools/__pycache__/fx2_attention_window_adapter_v1.cpython-314.pyc",
     "projects/enwiki9/tools/__pycache__/fx2_attribution_external_base_screen.cpython-314.pyc",
@@ -78210,42 +78251,38 @@
     "projects/enwiki9/tools/__pycache__/wrt_wiki_shell_residual_tree.cpython-314.pyc"
   ],
   "modified_tracked_entries": [
-    "projects/enwiki9/UPPER_BOUND_CERTIFICATE.md",
     "projects/enwiki9/docs/status_receipt.json",
     "projects/enwiki9/docs/status_receipt.md",
-    "projects/enwiki9/docs/tooling_inventory.md",
-    "projects/enwiki9/programs/fx2_trim_auxiliary_ppm_v2/meta.json",
-    "projects/enwiki9/results/run_ledger.jsonl",
-    "projects/enwiki9/upper_bound_certificate.json"
+    "projects/enwiki9/docs/tooling_inventory.md"
   ],
   "project_root": "projects/enwiki9",
   "summary": {
     "candidate_status_counts": {
       "active": 18,
       "blocked_dependency": 100,
-      "candidate": 266,
+      "candidate": 267,
       "measured_negative": 100,
       "retired": 591
     },
-    "directories": 9487,
-    "file_entries": 78914,
-    "ignored_entries": 34250,
-    "modified_tracked_entries": 7,
-    "program_directories": 1075,
+    "directories": 9535,
+    "file_entries": 79376,
+    "ignored_entries": 34254,
+    "modified_tracked_entries": 3,
+    "program_directories": 1076,
     "proposal_contract_status_counts": {
       "invalid": 125,
       "legacy-unstructured": 212,
       "orphaned": 9,
       "unclassified": 574,
-      "valid": 155
+      "valid": 156
     },
-    "registered_programs": 614,
+    "registered_programs": 615,
     "revision_status_counts": {
-      "current": 284,
+      "current": 285,
       "missing": 790,
       "mutable-drift": 1
     },
-    "successor_eligible_candidates": 154,
+    "successor_eligible_candidates": 155,
     "top_level_file_entries": {
       ".agents": 1,
       ".claude": 2,
@@ -78256,24 +78293,24 @@
       "agents": 5,
       "contracts": 177,
       "data": 7,
-      "docs": 504,
+      "docs": 505,
       "enwiki9_segment_bundle": 6,
       "external": 400,
       "ledger": 3,
-      "lib": 73,
-      "operations": 5573,
+      "lib": 74,
+      "operations": 5588,
       "patches": 41,
-      "programs": 3439,
-      "results": 56154,
+      "programs": 3441,
+      "results": 56582,
       "results_preserve": 9383,
-      "run_logs": 1410,
+      "run_logs": 1423,
       "scratch": 181,
       "skills": 5,
-      "tests": 293,
-      "tools": 1228,
+      "tests": 294,
+      "tools": 1229,
       "workbench": 3
     },
-    "tracked_entries": 45598,
+    "tracked_entries": 46057,
     "unreflected_terminal_candidates": 117,
     "untracked_nonignored_entries": 0
   },
