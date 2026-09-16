@@ -1,6 +1,6 @@
 {
   "schema": "gamma.enwiki9.competitive-frontier.v1",
-  "asOfDate": "2026-09-05",
+  "asOfDate": "2026-09-16",
   "sources": [
     {
       "url": "https://mattmahoney.net/dc/text.html",
@@ -22,6 +22,33 @@
       "path": "operations/provenance/sources/2026-09-05/hutter-rules.html",
       "bytes": 15907,
       "sha256": "e55d9f96b227e61ec0996adaf36304185d74db8c17093b403bb325240b2dc163"
+    },
+    {
+      "url": "https://mattmahoney.net/dc/text.html",
+      "resolved_url": "https://mattmahoney.net/dc/text.html",
+      "content_type": "text/html",
+      "retrievedUtc": "2026-09-16T01:38:00.216581+00:00",
+      "path": "operations/provenance/sources/2026-09-16/mahoney-text.html",
+      "bytes": 693875,
+      "sha256": "7ea13d26b7c8e67427361a333dfe0eae82981f4e24cf1b7fddeb6affaaf76866"
+    },
+    {
+      "url": "https://www.hutter1.net/prize/",
+      "resolved_url": "https://www.hutter1.net/prize/",
+      "content_type": "text/html",
+      "retrievedUtc": "2026-09-16T01:38:00.880289+00:00",
+      "path": "operations/provenance/sources/2026-09-16/hutter-prize.html",
+      "bytes": 48606,
+      "sha256": "065186dc3e6ef61f295aa30873c142bd6e4a2f6f310cfbd1d28ec09cbc6cbff7"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/Dharmesh2015/RATA-CMIX/main/README.md",
+      "resolved_url": "https://raw.githubusercontent.com/Dharmesh2015/RATA-CMIX/main/README.md",
+      "content_type": "text/plain; charset=utf-8",
+      "retrievedUtc": "2026-09-16T01:38:01.400572+00:00",
+      "path": "operations/provenance/sources/2026-09-16/rata-README.md",
+      "bytes": 12728,
+      "sha256": "0ab4e0ddb341d2ebfa5133dfab80c400056fb6e1e26e44f1dbd34e21247a327a"
     }
   ],
   "official": {
@@ -50,20 +77,21 @@
   ],
   "submittedVerificationStatus": "published benchmark figures; not evidence of an awarded prize or complete required-option accounting",
   "contingent": {
-    "referenceVersion": "August 21 2026 correction",
-    "referenceBytes": 100420830,
-    "maximumEligibleBytes": 99416621,
+    "referenceVersion": "zmix 1.0 published combined bytes",
+    "referenceBytes": 99312424,
+    "maximumEligibleBytes": 98319299,
     "formula": "floor(referenceBytes * 99 / 100)",
-    "condition": "committee accepts corrected submission and its accounting as reference"
+    "condition": "Committee accepts this exact score and accounting as the applicable reference; no acceptance inferred from benchmark listing."
   },
   "engineering": {
-    "objectivePath": "contracts/research/v2/objective-contract.json",
-    "targetCompleteBytes": 99000000,
-    "meaning": "provisional engineering target, not committee eligibility certification",
-    "historicalMilestoneBytes": 105000000,
+    "objectivePath": "contracts/research/v3/objective-contract.json",
+    "targetCompleteBytes": 90000000,
+    "meaning": "Active engineering objective, separate from official or conditional eligibility.",
     "endpoint428ForecastBytes": 109389323,
-    "endpoint428PlanningDebtBytes": 10389323,
-    "endpoint428DebtClass": "forecast-based planning debt, not a measured full-corpus deficit"
+    "endpoint428PlanningDebtBytes": 19389323,
+    "endpoint428DebtClass": "Historical forecast-based planning debt, not a measured score.",
+    "zmixPublishedDifferenceToTargetBytes": 9312424,
+    "zmixDifferenceClass": "Arithmetic gap from external reported combination; no Gamma inheritance or forecast."
   },
   "scoring": {
     "primary": "compressor_or_reproducible_source_package_bytes + self_extracting_archive_bytes + required_option_bytes",
@@ -73,13 +101,75 @@
     "alternativeSharedCompressorDecoder": "archive_bytes + compressor_package_bytes + shared_decoder_package_bytes + required_option_bytes (the separate decoder multiplier reduces from 2 to 1 when compressor and decoder are identical; ask committee about exact packaging)"
   },
   "committeeConfirmation": {
-    "status": "not sent",
+    "status": "not sent; no external message authorization used",
     "questions": [
-      "Which submitted or awarded reference will govern a Gamma submission, including the August fx2-cmix-transformer correction?",
+      "Which accepted reference governs Gamma, including the newly listed zmix submission and corrected FX2 submission?",
       "Which source/executable packaging form and command-line/compilation-option accounting apply to that reference and Gamma?",
       "How do submission order and the public-comment period affect the applicable threshold?"
     ],
     "draftPath": "workbench/committee-inquiry.eml",
     "deliveryBlocker": "No email-sending connector is available in this session; draft prepared, not sent."
+  },
+  "retrievalTimeBasis": "UTC",
+  "previousSnapshot": {
+    "path": "operations/provenance/competitive_frontier_before_20260916.json",
+    "sha256": "c91955ec3666a4f81589885ac469af1c87d5e58d0a412b39feef1c0e0558ba47",
+    "meaning": "Prior dated view retained exactly; historical experiment bindings and objective contracts unchanged."
+  },
+  "sourceRetrievalFailures": [
+    {
+      "url": "https://zmix.frostbyrne.io/v1.0/README.md",
+      "error": "<HTTPError 403: 'Forbidden'>"
+    },
+    {
+      "url": "https://zmix.frostbyrne.io/v1.0/writeup.md",
+      "error": "<HTTPError 403: 'Forbidden'>"
+    },
+    {
+      "url": "https://zmix.frostbyrne.io/v1.0/entry.env",
+      "error": "<HTTPError 403: 'Forbidden'>"
+    }
+  ],
+  "submittedVersionsMeaning": "Preserved historical FX2 versions; see publishedResults for newly observed entries.",
+  "publishedResults": [
+    {
+      "name": "zmix",
+      "version": "1.0",
+      "reportedSubmissionDate": "2026-09-14",
+      "archiveBytes": 96096261,
+      "compressorPackageBytes": 3216163,
+      "totalBytes": 99312424,
+      "sourceUrl": "https://mattmahoney.net/dc/text.html#0960",
+      "verificationStatus": "Published submission figures; benchmark says committee testing. No award or Gamma reproduction established.",
+      "requiredOptionsIndependentlyCounted": false,
+      "fullCorpusGammaCreditBytes": 0
+    },
+    {
+      "name": "RATA-CMIX",
+      "version": "1.0.0",
+      "archiveBytes": 96849689,
+      "compressorPackageBytes": 3369432,
+      "totalBytes": 100219121,
+      "sourceUrl": "https://github.com/Dharmesh2015/RATA-CMIX",
+      "verificationStatus": "Author-reported LTCB entry, not a Hutter Prize claim; current author README says decode is not yet executed and its timing is estimated.",
+      "requiredOptionsIndependentlyCounted": false,
+      "fullCorpusGammaCreditBytes": 0
+    }
+  ],
+  "historicalContingent": {
+    "referenceVersion": "August 21 2026 correction",
+    "referenceBytes": 100420830,
+    "maximumEligibleBytes": 99416621,
+    "formula": "floor(referenceBytes * 99 / 100)",
+    "condition": "committee accepts corrected submission and its accounting as reference"
+  },
+  "historicalEngineering": {
+    "objectivePath": "contracts/research/v2/objective-contract.json",
+    "targetCompleteBytes": 99000000,
+    "meaning": "provisional engineering target, not committee eligibility certification",
+    "historicalMilestoneBytes": 105000000,
+    "endpoint428ForecastBytes": 109389323,
+    "endpoint428PlanningDebtBytes": 10389323,
+    "endpoint428DebtClass": "forecast-based planning debt, not a measured full-corpus deficit"
   }
 }
