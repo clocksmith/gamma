@@ -1,0 +1,287 @@
+{
+  "budget": {
+    "expectedGrossSavingsBytes": 0,
+    "expectedNetSavingsBytes": -4096,
+    "maximumAddedPackageBytes": 4096
+  },
+  "causalBoundary": {
+    "availableInformation": [
+      "Explicit already-counted dictionary and model weights.",
+      "Decoded WRT byte prefix and existing FXCM/PPMd/transformer state; unchanged ordinary pretraining."
+    ],
+    "forbiddenInformation": [
+      "Future input",
+      "Retained observation files as runtime decoder dependencies",
+      "Inherited gains from other codecs or uncounted weights"
+    ]
+  },
+  "changedMechanism": "Explicit bound dictionary loaded after unchanged pretraining, before encode/decode; existing lexical spellings and partial-index contexts enabled. No ambient .dict, new dictionary, neural update, coder or frontend change.",
+  "controls": [
+    {
+      "definition": "Original trimmed parent, reference33429 bytes.",
+      "id": "P",
+      "role": "comparator"
+    },
+    {
+      "definition": "Same explicit dictionary loaded but all predictive dictionary globals disabled.",
+      "id": "K",
+      "role": "comparator"
+    },
+    {
+      "definition": "Correct word index-to-spelling and partial-index mapping.",
+      "id": "D",
+      "role": "treatment"
+    },
+    {
+      "definition": "One-position cyclic spelling shift, same partial-index map and dictionary capacity.",
+      "id": "S",
+      "role": "shifted"
+    },
+    {
+      "definition": "32 outer phases: eight builds,seven cleans,one preprocess,sixteen codec operations. Exact inverses/repeats/trace-off archives, complete shared encode/repeat neural streams, P/K archive identity and runtime dictionary counters.",
+      "id": "REPEAT",
+      "role": "replay"
+    }
+  ],
+  "evidenceClass": "diagnostic",
+  "experimentId": "fx2_explicit_lexical250k_v2",
+  "generatedUtc": "2026-09-16T05:14:07.399530+00:00",
+  "hypothesis": {
+    "claim": "Explicitly supplying the paid word dictionary to existing native FXCM lexical contexts produces a package-paying archive improvement over disabled lexical input and shifted spellings.",
+    "falsification": "Require gP>0,gS>0 andgP-sourceZIPincrement>0 for unchanged independent confirmation. Positive unpaid gain holds. Valid nonpositive parent/control gain retires this fixed realization; correctness/resource/evidence failure is incomplete."
+  },
+  "inputs": [
+    {
+      "id": "input-0",
+      "path": "lib/fx2_native_gate_v1.py",
+      "sha256": "sha256:b4c2c843d58932681d78720ff74f2d2bc4f36e88994bcd0a807ddbde4a5b5b3d"
+    },
+    {
+      "id": "input-1",
+      "path": "lib/artifacts.py",
+      "sha256": "sha256:9718dba85cab54a6e3ddfb9ce483b808d385453d22ff6d0675988e1b1acf3209"
+    },
+    {
+      "id": "input-2",
+      "path": "tools/fx2_expert_release250k_v3.py",
+      "sha256": "sha256:28198c5f36c8cee24a2f359e6b2ab6bcdbb15bafc73236b6a6e0b61ea6fed111"
+    },
+    {
+      "id": "input-3",
+      "path": "tools/fx2_trim_confirm1m_v1.py",
+      "sha256": "sha256:e5046f3cd13ee67cb9cf1dcd71fb24fa381ed0d2d907c4be28ef0bf5ecd2049c"
+    },
+    {
+      "id": "input-4",
+      "path": "operations/provenance/public_fx2_gcc15_toolchain_20260905.json",
+      "sha256": "sha256:53ac253310a9812ca31fc016870c2762ea50c8b001c56630da4545875670a3b1"
+    },
+    {
+      "id": "input-5",
+      "path": "operations/provenance/fx2_kda_carry_toolchain_20260913.json",
+      "sha256": "sha256:4af230cc7fd16aa3daa7081e340f41ba9fa6fcf4750aee9295e6add466e33f58"
+    },
+    {
+      "id": "input-6",
+      "path": "operations/adaptive/candidate-revisions/fx2_expert_release250k_v3/20260915T021107540049Z_b820418f7fdf.json",
+      "sha256": "sha256:06ce872e08f9c8ba78a0a36aff227f7ca43e8566939c0ec4c2553af7f9edddbf"
+    },
+    {
+      "id": "input-7",
+      "path": "results/fx2_expert_release250k_v3/P-source.zip",
+      "sha256": "sha256:c44d941f95bd8504d63ed6ea5112af3ce15aeffb6874ebddb66596ce083c3cf6"
+    },
+    {
+      "id": "input-8",
+      "path": "results/fx2_expert_release250k_v3/package.json",
+      "sha256": "sha256:a9999c541374e901972a60edf12624451241f2ce5ed32e189898a2ace75ad2d3"
+    },
+    {
+      "id": "input-9",
+      "path": "operations/provenance/fx2_expert_transfer_terminal_20260916.json",
+      "sha256": "sha256:9152d8b15fd03b1627465557481deb8435c48a7f91a21f8961cf8a87d0277d18"
+    },
+    {
+      "id": "input-10",
+      "path": "results/fx2_expert_release250k_v3/work/native/models/6m-q4-fp32.tfwc2",
+      "sha256": "sha256:7f4db6c8c843a7e6264b6a48ed4805e9e431f543df7a9a0ecb37a35a5e4b8860"
+    },
+    {
+      "id": "input-11",
+      "path": "results/fx2_expert_release250k_v3/work/native/dictionary/english.dic",
+      "sha256": "sha256:4c8568cca9343b9a6212477880f56f8efd162f8784224a25edd043097d36215a"
+    },
+    {
+      "id": "input-12",
+      "path": "results/fx2_weight_native_transfer250k_q0_v1/work/native/opening.raw",
+      "sha256": "sha256:665fc689441b68462d88f82dc33212abe9c4824be095d03a556c9b55a2829fd3"
+    },
+    {
+      "id": "input-13",
+      "path": "results/fx2_weight_native_transfer250k_q0_v1/work/native/opening.stored",
+      "sha256": "sha256:9cc29963608bb990b820bc88e836532b4c2a1cfc1a5b633a14b1c3bad78765ab"
+    },
+    {
+      "id": "input-14",
+      "path": "results/fx2_weight_native_transfer250k_q0_v1/opening/P/archive.bin",
+      "sha256": "sha256:70325310e96b83b48677d76d53141e69ddb47519b4cdffd1c85f51fe2c444dbe"
+    },
+    {
+      "id": "input-15",
+      "path": "operations/adaptive/reflections/20260916T041201Z_a5279c4c69.json",
+      "sha256": "sha256:185ac3eb72027b0b842d5d5613f329f7f8a1b36e0c91d8d45fb50f7c24b73244"
+    },
+    {
+      "id": "runner",
+      "path": "tools/fx2_explicit_lexical250k_v2.py",
+      "sha256": "sha256:9c807dff5e0bb1a67abbed241bc38592ac4dfbff67a65fdfc6bab02539fe7b9a"
+    },
+    {
+      "id": "input-17",
+      "path": "lib/fx2_explicit_lexical_v1.py",
+      "sha256": "sha256:8629f111032867a854055d3c8acde80ffb3603b49f8206f679ea8507ea9db7b1"
+    },
+    {
+      "id": "input-18",
+      "path": "tests/fx2_explicit_lexical_v1.cpp",
+      "sha256": "sha256:8dabb304312e28f45afc670072081255a5f800d6354917f06f32e3244ad51cf4"
+    },
+    {
+      "id": "input-19",
+      "path": "operations/provenance/fx2_explicit_lexical250k_v2_plan.json",
+      "sha256": "sha256:cad6cbd043d0a087d683f0b8a3ba2e1ea5119683a4a9980eaae44351a16be835"
+    },
+    {
+      "id": "input-20",
+      "path": "operations/provenance/fx2_explicit_lexical_unit_20260916.json",
+      "sha256": "sha256:83fa9d45e965c8d7eb8fd41969deb0f0edee5f61f5430a818bb6877dad5f7074"
+    },
+    {
+      "id": "input-21",
+      "path": "docs/fx2_explicit_lexical_20260916.md",
+      "sha256": "sha256:a54f848945eedca7b1bb1c46df8b71e8686286a49795fae59df461b6c127c68f"
+    },
+    {
+      "id": "input-22",
+      "path": "operations/provenance/fx2_attention_anchor_v2_terminal_20260916.json",
+      "sha256": "sha256:1830f1012c6a2840723d673ac370a3260d8d9ea6789f53e04c7b27314129478b"
+    },
+    {
+      "id": "input-23",
+      "path": "operations/adaptive/reflections/20260916T043722Z_97c24813c3.json",
+      "sha256": "sha256:ead8acda375eea27e7a8f430b5b5f7ff0ded9fd344ab0f2691d20d79eef8f308"
+    },
+    {
+      "id": "input-24",
+      "path": "operations/provenance/fx2_ambient_dictionary_terminal_20260916.json",
+      "sha256": "sha256:a2b93455e20f234dc0b7c4b0f0f3973c41afd32a72e6f3c9f4cee85096dc2f19"
+    },
+    {
+      "id": "input-25",
+      "path": "operations/provenance/fx2_explicit_lexical_prelaunch_correction_20260916.json",
+      "sha256": "sha256:6faad20f8cbb1a5baf5e19baea784ac29b35367d2468acbef4392d04a208e218"
+    },
+    {
+      "id": "input-26",
+      "path": "docs/fx2_explicit_lexical_repair_20260916.md",
+      "sha256": "sha256:e33a6559d744826a54bb50dd6aaa294089fb2b62054404de128649e60fca421c"
+    }
+  ],
+  "invariants": [
+    "Exposed cold opening raw[0,250000),151210 WRT bytes. No confirmation population read.",
+    "Explicit bound dictionary loaded after unchanged pretraining, before encode/decode; existing lexical spellings and partial-index contexts enabled. No ambient .dict, new dictionary, neural update, coder or frontend change.",
+    "P originaltrim; K validate/load but keep predictive dictionary globals disabled; D correct index-to-spelling; S cyclically shift spellings by one with same index mapping and capacity.",
+    "32 outer phases: eight builds,seven cleans,one preprocess,sixteen codec operations. Exact inverses/repeats/trace-off archives, complete shared encode/repeat neural streams, P/K archive identity and runtime dictionary counters.",
+    "Require gP>0,gS>0 andgP-sourceZIPincrement>0 for unchanged independent confirmation. Positive unpaid gain holds. Valid nonpositive parent/control gain retires this fixed realization; correctness/resource/evidence failure is incomplete.",
+    "Archive minus sourceZIP increment; executable increment is an alternative component. No added build or runtime flag. Dictionary/model fully retained; complete package unknown.",
+    "One correction-only successor; no codec,scientific parameter or decision threshold change. Only unsupported decoder observation removed before execution.",
+    "Full FXCM state serialization absent. All neural probabilities match P across arms and encoder/repeat. K predictive initialization unchanged by source; complete P/K archives equal. Valid and invalid lookup counts match within arm. Invalid completed indices produce empty lexical context and lastCW0, never alter raw inverse. Decoder neural stream is unsupported and absent; independent raw inverse and decoder lookup counters remain mandatory."
+  ],
+  "killPredicates": [
+    {
+      "id": "no-parent-gain",
+      "measurement": "gPBytes",
+      "operator": "lte",
+      "threshold": 0
+    }
+  ],
+  "measurements": [
+    {
+      "definition": "P archive minus D archive.",
+      "id": "gPBytes",
+      "unit": "bytes"
+    },
+    {
+      "definition": "S archive minus D archive.",
+      "id": "gSBytes",
+      "unit": "bytes"
+    },
+    {
+      "definition": "gP minus measured sourceZIP increment. No extra flags; not complete score.",
+      "id": "sourceNetBytes",
+      "unit": "bytes"
+    }
+  ],
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:e91ff20e92c3cac8acb0cbe5c79fc8e8a3b427d7e151245c8eecc52b1c32fa00",
+    "objectiveId": "gamma-enwiki9-hutter-90m-v3",
+    "objectivePath": "contracts/research/v3/objective-contract.json",
+    "targetScoreBytes": 90000000
+  },
+  "objectiveCreditBytes": 0,
+  "outputManifestPolicy": "complete-result-artifacts-v1",
+  "outputs": [
+    "results/fx2_explicit_lexical250k_v2/completed-arms.json",
+    "results/fx2_explicit_lexical250k_v2/package.json",
+    "results/fx2_explicit_lexical250k_v2/lexical-comparison.json",
+    "results/fx2_explicit_lexical250k_v2/decision.json",
+    "results/fx2_explicit_lexical250k_v2/artifacts.json"
+  ],
+  "parent": {
+    "candidateId": "fx2_expert_release250k_v3",
+    "revision": {
+      "path": "operations/adaptive/candidate-revisions/fx2_expert_release250k_v3/20260915T021106959477Z_410dd795d0fe.json",
+      "sha256": "sha256:1df16ad802c8ec35fde168cc9ef04ca4d500cb4ae8cb6ca6d2700415f7609cbb"
+    }
+  },
+  "population": {
+    "coordinate": "Raw [0,250000),151220 stored bytes,151210 modeled WRT bytes.",
+    "scopeBytes": 250000,
+    "scopeSymbols": 151210,
+    "selection": "Exposed cold opening raw[0,250000),151210 WRT bytes. No confirmation population read.",
+    "unit": "raw byte"
+  },
+  "promotionPredicates": [
+    {
+      "id": "parent-gain",
+      "measurement": "gPBytes",
+      "operator": "gt",
+      "threshold": 0
+    },
+    {
+      "id": "control-gain",
+      "measurement": "gSBytes",
+      "operator": "gt",
+      "threshold": 0
+    },
+    {
+      "id": "source-gain",
+      "measurement": "sourceNetBytes",
+      "operator": "gt",
+      "threshold": 0
+    }
+  ],
+  "proposalId": "fx2_explicit_lexical250k_v2",
+  "registrationTiming": "prospective",
+  "schema": "gamma.enwiki9.adaptive-experiment-contract.v1",
+  "search": {
+    "expectedMemoryRatio": 1,
+    "expectedRuntimeRatio": 1,
+    "expectedTransferRetention": 0,
+    "interactionRisk": 1,
+    "uncertaintyRisk": 1
+  },
+  "status": "frozen"
+}

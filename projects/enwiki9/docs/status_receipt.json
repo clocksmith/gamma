@@ -1,157 +1,24 @@
 {
-  "active_candidate": {
-    "active_source": "live_adaptive_tool_rss_guard",
-    "evidence": "current process, guard, and adaptive-job evidence identify this candidate",
-    "label": "active candidate",
-    "program_id": "fx2_attention_anchor250k_v2",
-    "scope_bytes": 250000,
-    "status": "running"
-  },
-  "active_candidate_recent_artifacts": [
-    {
-      "bytes": 91219,
-      "mtime_utc": "2026-09-16T04:43:55+00:00",
-      "path": "projects/enwiki9/results/fx2_attention_anchor250k_v2/P-decode.stderr"
-    },
-    {
-      "bytes": 14680064001,
-      "mtime_utc": "2026-09-16T04:43:51+00:00",
-      "path": "projects/enwiki9/results/fx2_attention_anchor250k_v2/work/native/ppm.temp"
-    },
-    {
-      "bytes": 0,
-      "mtime_utc": "2026-09-16T04:43:50+00:00",
-      "path": "projects/enwiki9/results/fx2_attention_anchor250k_v2/P-decode.stdout"
-    },
-    {
-      "bytes": 103,
-      "mtime_utc": "2026-09-16T04:43:50+00:00",
-      "path": "projects/enwiki9/results/fx2_attention_anchor250k_v2/P-encode-cleanup.json"
-    },
-    {
-      "bytes": 735,
-      "mtime_utc": "2026-09-16T04:43:50+00:00",
-      "path": "projects/enwiki9/results/fx2_attention_anchor250k_v2/P-encode.execution.json"
-    },
-    {
-      "bytes": 114,
-      "mtime_utc": "2026-09-16T04:43:50+00:00",
-      "path": "projects/enwiki9/results/fx2_attention_anchor250k_v2/P-encode.stdout"
-    },
-    {
-      "bytes": 742645,
-      "mtime_utc": "2026-09-16T04:43:50+00:00",
-      "path": "projects/enwiki9/results/fx2_attention_anchor250k_v2/P-encode.stderr"
-    },
-    {
-      "bytes": 61996100,
-      "mtime_utc": "2026-09-16T04:43:50+00:00",
-      "path": "projects/enwiki9/results/fx2_attention_anchor250k_v2/work/native/P-encode.probs"
-    },
-    {
-      "bytes": 33429,
-      "mtime_utc": "2026-09-16T04:43:50+00:00",
-      "path": "projects/enwiki9/results/fx2_attention_anchor250k_v2/work/native/P-encode.arc"
-    },
-    {
-      "bytes": 109832,
-      "mtime_utc": "2026-09-16T04:43:50+00:00",
-      "path": "projects/enwiki9/results/fx2_attention_anchor250k_v2/work/native/progress.log"
-    },
-    {
-      "bytes": 103,
-      "mtime_utc": "2026-09-16T04:43:14+00:00",
-      "path": "projects/enwiki9/results/fx2_attention_anchor250k_v2/preprocess-cleanup.json"
-    },
-    {
-      "bytes": 652,
-      "mtime_utc": "2026-09-16T04:43:14+00:00",
-      "path": "projects/enwiki9/results/fx2_attention_anchor250k_v2/preprocess.execution.json"
-    }
-  ],
-  "active_gate": {
-    "driver_result_json": "projects/enwiki9/results/fx2_attention_anchor250k_v2/decision.json",
-    "driver_result_json_present": false,
-    "evidence": "gate decision is running; wait for terminal receipts",
-    "gate_size": 250000,
-    "label": "active gate",
-    "next_action": "wait_for_gate_completion",
-    "program_id": "fx2_attention_anchor250k_v2",
-    "scope_bytes": 250000,
-    "scope_symbols": 151210,
-    "scope_unit": "raw byte",
-    "source": "live_adaptive_tool_rss_guard",
-    "status": "running"
-  },
+  "active_candidate": null,
+  "active_candidate_recent_artifacts": [],
+  "active_gate": null,
   "active_processes": {
-    "active_rows": [
-      {
-        "args": "/bin/bash -lc python3 /run/user/1000/admit_attention_anchor_v2_20260916.py python3 tools/enwiki9_lab.py release 20260916T043722Z_97c24813c3 --reason 'Published b6582b0b1 correction, validated inactive-build failure, native flag-delivery checks and fresh CPU2 admission.' > run_logs/manual/attention_anchor_v2_release_20260916.log 2>&1 taskset -c 2 python3 tools/enwiki9_lab.py run --candidate fx2_attention_anchor250k_v2 --max-workers 1 > run_logs/manual/attention_anchor_v2_lab_20260916.log 2>&1",
-        "pgid": 2056381,
-        "pid": 2056381,
-        "ppid": 472530,
-        "rss_kib": 4088,
-        "stat": "Ss"
-      },
-      {
-        "args": "python3 tools/enwiki9_lab.py run --candidate fx2_attention_anchor250k_v2 --max-workers 1",
-        "pgid": 2056381,
-        "pid": 2056574,
-        "ppid": 2056381,
-        "rss_kib": 43868,
-        "stat": "Sl"
-      },
-      {
-        "args": "/usr/bin/python3 /home/x/deco/gamma/projects/enwiki9/tools/run_with_resource_guard_v3.py --limit-kib 9765624 --official-decimal-limit-kib 9765624 --limit-mode tree --cgroup-path /sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/gamma-enwiki9-20260916T043722Z_97c24813c3 --cgroup-memory-max-bytes 9999998976 --temporary-disk-limit-bytes 16000000000 --phase-marker-path /home/x/deco/gamma/projects/enwiki9/run_logs/adaptive/20260916T043722Z_97c24813c3.resources/phases.jsonl --max-logical-cpus 1 --guard-json /home/x/deco/gamma/projects/enwiki9/run_logs/adaptive/20260916T043722Z_97c24813c3.resources/guard.json --label 20260916T043722Z_97c24813c3 --phase diagnostic --scratch-path /home/x/deco/gamma/projects/enwiki9/results/fx2_attention_anchor250k_v2 --scratch-path /home/x/deco/gamma/projects/enwiki9/run_logs/adaptive/20260916T043722Z_97c24813c3.log --scratch-path /home/x/deco/gamma/projects/enwiki9/run_logs/adaptive/20260916T043722Z_97c24813c3.resources --scratch-path /tmp/gamma-enwiki9-20260916T043722Z_97c24813c3-kmdxdvca/fx2_attention_anchor250k_v2 -- /usr/bin/taskset --cpu-list 2 /bin/sh -c printf '%s\\n' '{\"phase\":\"diagnostic\",\"event\":\"worker_start\",\"detail\":\"operational envelope only; no codec phase credit\"}' >> \"$GAMMA_RESOURCE_PHASE_MARKERS\" || exit 125; exec \"$@\" enwiki9-discovery-envelope /usr/bin/python3 /home/x/deco/gamma/projects/enwiki9/tools/fx2_attention_anchor250k_v2.py",
-        "pgid": 2056381,
-        "pid": 2056666,
-        "ppid": 2056574,
-        "rss_kib": 35624,
-        "stat": "S"
-      },
-      {
-        "args": "/usr/bin/python3 /home/x/deco/gamma/projects/enwiki9/tools/fx2_attention_anchor250k_v2.py",
-        "pgid": 2056679,
-        "pid": 2056679,
-        "ppid": 2056666,
-        "rss_kib": 41748,
-        "stat": "Ss"
-      },
-      {
-        "args": "/usr/bin/timeout --signal=TERM --kill-after=2 180 /home/x/deco/gamma/projects/enwiki9/results/fx2_attention_anchor250k_v2/work/native/cmix-P -d dictionary/english.dic P-encode.arc P-decode.raw --transformer models/6m-q4-fp32.tfwc2",
-        "pgid": 2068198,
-        "pid": 2068198,
-        "ppid": 2056679,
-        "rss_kib": 7756,
-        "stat": "S"
-      },
-      {
-        "args": "/home/x/deco/gamma/projects/enwiki9/results/fx2_attention_anchor250k_v2/work/native/cmix-P -d dictionary/english.dic P-encode.arc P-decode.raw --transformer models/6m-q4-fp32.tfwc2",
-        "pgid": 2068198,
-        "pid": 2068199,
-        "ppid": 2068198,
-        "rss_kib": 4526964,
-        "stat": "R"
-      }
-    ],
-    "active_scorer_observed": true,
-    "active_tree_decimal_10gb_margin_kib": 5105577,
-    "active_tree_margin_kib": 5825712,
-    "active_tree_rss_kib": 4660048,
+    "active_rows": [],
+    "active_scorer_observed": false,
     "cmix_rows": [],
     "controller_rows": [],
     "decimal_10gb_guard_kib": 9765625,
     "existing_observer_source_live": false,
     "max_cmix_process": null,
-    "recorded_running_job_count": 2,
+    "recorded_running_job_count": 1,
     "research_rows": [],
     "rss_guard_kib": 10485760
   },
   "adaptive_jobs": {
     "claimable_pending_job_count": 0,
-    "held_pending_job_count": 26,
-    "pending_job_count": 26,
-    "running_job_count": 2,
+    "held_pending_job_count": 27,
+    "pending_job_count": 27,
+    "running_job_count": 1,
     "running_jobs": [
       {
         "candidate_id": "endpoint428_horizon_retained_parent_trace_q0_v1",
@@ -170,33 +37,6 @@
         "timing_authority": "unverified",
         "worker_pid": 2878467,
         "worker_pid_live": false
-      },
-      {
-        "candidate_id": "fx2_attention_anchor250k_v2",
-        "execution_mode": "discovery",
-        "experiment": {
-          "path": "operations/adaptive/experiments/fx2_attention_anchor250k_v2.json",
-          "sha256": "sha256:5b115a0df1b712d5d6f63adbbdc0bf883f9fc1d07387cd0ca599011c2d170377"
-        },
-        "gate_size": 250000,
-        "job_id": "20260916T043722Z_97c24813c3",
-        "liveness": "live",
-        "path": "projects/enwiki9/operations/adaptive/running/929_20260916T043722Z_97c24813c3.json",
-        "resource_budget": {
-          "cgroup_parent": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice",
-          "cpus": [
-            2
-          ],
-          "memory_bytes": 9999998976,
-          "scratch_bytes": 16000000000,
-          "swap_bytes": 0,
-          "wall_seconds": 3600
-        },
-        "started_at": "2026-09-16T04:42:47+00:00",
-        "state": "running",
-        "timing_authority": "diagnostic",
-        "worker_pid": 2056666,
-        "worker_pid_live": true
       }
     ]
   },
@@ -283,45 +123,43 @@
     "scope_bytes": 1000000000,
     "status": "not verified"
   },
-  "blocker": {
-    "label": "blocker"
-  },
+  "blocker": null,
   "candidate_audit": {
-    "expected_sha256": "16f78a69aec662f058215a9622ea858747022f2e3ec43189316524479d9a7879",
+    "expected_sha256": "b654552d7eeef61469e7f070dfeca24c79f76d73e1b53285b25aecf14f7d7345",
     "freshness": "not_revalidated",
-    "generated_at": "2026-09-16T04:39:57+00:00",
+    "generated_at": "2026-09-16T05:16:38+00:00",
     "mode": "inventory_snapshot",
     "notice": "Snapshot identity is verified; inventory inputs were not rescanned. This is not live occupancy or launch authority.",
     "path": "/home/x/deco/gamma/projects/enwiki9/candidate_inventory.json",
     "returncode": 0,
-    "sha256": "16f78a69aec662f058215a9622ea858747022f2e3ec43189316524479d9a7879",
+    "sha256": "b654552d7eeef61469e7f070dfeca24c79f76d73e1b53285b25aecf14f7d7345",
     "summary": {
       "candidate_status_counts": {
         "active": 18,
         "blocked_dependency": 100,
-        "candidate": 267,
+        "candidate": 268,
         "measured_negative": 100,
-        "retired": 591
+        "retired": 592
       },
-      "directories": 9535,
-      "file_entries": 79376,
-      "ignored_entries": 34254,
-      "modified_tracked_entries": 3,
-      "program_directories": 1076,
+      "directories": 9640,
+      "file_entries": 80267,
+      "ignored_entries": 34774,
+      "modified_tracked_entries": 1,
+      "program_directories": 1078,
       "proposal_contract_status_counts": {
         "invalid": 125,
         "legacy-unstructured": 212,
         "orphaned": 9,
         "unclassified": 574,
-        "valid": 156
+        "valid": 158
       },
-      "registered_programs": 615,
+      "registered_programs": 617,
       "revision_status_counts": {
-        "current": 285,
+        "current": 287,
         "missing": 790,
         "mutable-drift": 1
       },
-      "successor_eligible_candidates": 155,
+      "successor_eligible_candidates": 156,
       "top_level_file_entries": {
         ".agents": 1,
         ".claude": 2,
@@ -332,25 +170,25 @@
         "agents": 5,
         "contracts": 177,
         "data": 7,
-        "docs": 505,
+        "docs": 507,
         "enwiki9_segment_bundle": 6,
         "external": 400,
         "ledger": 3,
-        "lib": 74,
-        "operations": 5588,
+        "lib": 75,
+        "operations": 5617,
         "patches": 41,
-        "programs": 3441,
-        "results": 56582,
+        "programs": 3445,
+        "results": 57412,
         "results_preserve": 9383,
-        "run_logs": 1423,
+        "run_logs": 1445,
         "scratch": 181,
         "skills": 5,
-        "tests": 294,
-        "tools": 1229,
+        "tests": 295,
+        "tools": 1231,
         "workbench": 3
       },
-      "tracked_entries": 46057,
-      "unreflected_terminal_candidates": 117,
+      "tracked_entries": 46430,
+      "unreflected_terminal_candidates": 118,
       "untracked_nonignored_entries": 0
     }
   },
@@ -371,82 +209,51 @@
     "objectivePath": "contracts/research/v3/objective-contract.json",
     "targetScoreBytes": 90000000
   },
-  "contingencies": {
-    "if_passes": {
-      "action": "record pass and inspect the frozen candidate promotion rule",
-      "next_scope_bytes": null,
-      "reason": "the generic scope ladder grants no candidate-specific authority; a larger scope requires an explicitly authorized successor gate"
-    },
-    "if_roundtrip_or_determinism_fails": {
-      "action": "record failure and do not promote",
-      "reason": "compression evidence is not a deterministic constructive upper-bound row"
-    },
-    "if_rss_fails": {
-      "action": "record RSS failure and retire or repackage this integration shape",
-      "lower_memory_suggestion": null
-    }
-  },
-  "gate_decision": {
-    "adaptive_job_id": "20260916T043722Z_97c24813c3",
-    "adaptive_job_path": "projects/enwiki9/operations/adaptive/running/929_20260916T043722Z_97c24813c3.json",
-    "adaptive_worker_pid": 2056666,
-    "candidate": "fx2_attention_anchor250k_v2",
-    "claim_rule": "A nested RSS guard inherits candidate and scope from its verified live adaptive worker; the guard supplies resource and terminal metrics only.",
-    "driver_result_json": "projects/enwiki9/results/fx2_attention_anchor250k_v2/decision.json",
-    "driver_result_json_present": false,
-    "gate_size": 250000,
-    "guard_inferred_scope_bytes": null,
-    "guard_label_candidate": "fx2_attention_anchor250k_v2",
-    "next_action": "wait_for_gate_completion",
-    "scope_bytes": 250000,
-    "scope_symbols": 151210,
-    "scope_unit": "raw byte",
-    "source": "live_adaptive_tool_rss_guard",
-    "verdict": "running"
-  },
+  "contingencies": null,
+  "gate_decision": null,
   "gate_evidence_status": {
     "claim_rule": "Only a terminal driver result with roundtrip evidence can become a benchmark row.",
     "claim_status": "awaiting_gate_receipts",
     "driver_result_terminal": false,
-    "live_gate": true,
+    "live_gate": false,
     "live_guard_only": false,
-    "liveness_classification": "live_observed_owner",
+    "liveness_classification": "not_persisted_running",
     "rss_guard_terminal": false,
     "scored_gate_result_present": false
   },
   "gate_liveness": {
-    "candidate": "fx2_attention_anchor250k_v2",
+    "candidate": null,
     "claim_rule": "A running receipt or registered adaptive job is live only with an exact driver, owning controller, matching live worker, or frozen adopted process identities.",
-    "classification": "live_observed_owner",
-    "gate_size": 250000,
-    "is_live": true,
-    "matching_adaptive_job_count": 1,
-    "matching_adaptive_worker_live": true,
+    "classification": "not_persisted_running",
+    "gate_size": null,
+    "is_live": false,
+    "matching_adaptive_job_count": 0,
+    "matching_adaptive_worker_live": false,
     "matching_adopted_source_live": false,
     "matching_controller_count": 0,
     "matching_driver_observed": false,
-    "persisted_running": true,
-    "receipt_running": true,
-    "scope_bytes": 250000,
-    "scope_symbols": 151210,
-    "scope_unit": "raw byte"
+    "persisted_running": false,
+    "receipt_running": false,
+    "scope_bytes": null,
+    "scope_symbols": null,
+    "scope_unit": null
   },
-  "generated_at_utc": "2026-09-16T04:43:55+00:00",
+  "generated_at_utc": "2026-09-16T05:16:59+00:00",
   "handoff": {
-    "active_scorer_observed": true,
-    "candidate": "fx2_attention_anchor250k_v2",
+    "active_scorer_observed": false,
+    "candidate": null,
     "claim_rule": "Only an exact full-corpus package can prove the active objective.",
     "command_source": "none while gate is non-terminal",
     "gate_mutation_allowed": false,
-    "gate_next_action": "wait_for_gate_completion",
-    "gate_size": 250000,
-    "gate_verdict": "running",
+    "gate_next_action": null,
+    "gate_size": null,
+    "gate_verdict": null,
     "has_10_95_constructive_upper_bound": false,
     "has_full_corpus_constructive_result": false,
-    "recommended_action": "wait_for_gate_receipts",
-    "scope_bytes": 250000,
-    "scope_symbols": 151210,
-    "scope_unit": "raw byte",
+    "recommended_action": "verify_recorded_running_jobs_on_host",
+    "scope_bytes": null,
+    "scope_symbols": null,
+    "scope_unit": null,
     "terminal_verdict_present": false
   },
   "has_10_95_constructive_upper_bound": false,
@@ -464,21 +271,21 @@
   "observed_controller_command": {
     "controller_process_count": 0,
     "controller_processes": [],
-    "expected_active_candidate": "fx2_attention_anchor250k_v2",
-    "expected_active_scope_bytes": 250000,
+    "expected_active_candidate": null,
+    "expected_active_scope_bytes": null,
     "scope_note": "Controller scope may be the completed parent gate that launched the active child; the observed driver command is authoritative for the active gate scope."
   },
   "observed_gate_command": {
     "active_gate_command_observed": false,
     "driver_process_count": 0,
     "driver_processes": [],
-    "expected_candidate": "fx2_attention_anchor250k_v2",
-    "expected_scope_bytes": 250000,
+    "expected_candidate": null,
+    "expected_scope_bytes": null,
     "mismatch_count": 0
   },
   "operator_action": {
-    "action": "wait_for_gate_receipts",
-    "reason": "the gate state is incomplete and cannot drive a mutation yet",
+    "action": "verify_recorded_running_jobs_on_host",
+    "reason": "Recorded running jobs must be attributed or reconciled before this status view can recommend a launch.",
     "safe_to_launch_gate": false
   },
   "operator_logs": {
@@ -488,27 +295,27 @@
   },
   "operator_summary": {
     "active_cmix_mode": null,
-    "active_process_tree_decimal_10gb_margin_kib": 5105577,
-    "active_process_tree_margin_kib": 5825712,
-    "active_process_tree_rss_kib": 4660048,
-    "active_scorer_observed": true,
+    "active_process_tree_decimal_10gb_margin_kib": null,
+    "active_process_tree_margin_kib": null,
+    "active_process_tree_rss_kib": null,
+    "active_scorer_observed": false,
     "active_stage": null,
     "binary_10gib_guard_kib": 10485760,
-    "candidate": "fx2_attention_anchor250k_v2",
+    "candidate": null,
     "claim_rule": "Only an exact full-corpus package can prove the active objective.",
     "claimable_pending_adaptive_jobs": 0,
     "codec_progress": null,
     "command_source": "none while gate is non-terminal",
     "decimal_10gb_guard_kib": 9765625,
-    "driver_result_json": "projects/enwiki9/results/fx2_attention_anchor250k_v2/decision.json",
-    "driver_result_present": false,
+    "driver_result_json": null,
+    "driver_result_present": null,
     "gate_mutation_allowed": false,
-    "gate_next_action": "wait_for_gate_completion",
-    "gate_size": 250000,
-    "gate_verdict": "running",
+    "gate_next_action": null,
+    "gate_size": null,
+    "gate_verdict": null,
     "has_10_95_constructive_upper_bound": false,
     "has_full_corpus_constructive_result": false,
-    "held_pending_adaptive_jobs": 26,
+    "held_pending_adaptive_jobs": 27,
     "latest_sample_single_decimal_10gb_margin_kib": null,
     "latest_sample_single_decimal_10gb_safe": null,
     "latest_sample_single_rss_kib": null,
@@ -524,8 +331,8 @@
     "observer_job_id": null,
     "observer_progress": null,
     "observer_worker_live": null,
-    "operator_action": "wait_for_gate_receipts",
-    "pending_adaptive_jobs": 26,
+    "operator_action": "verify_recorded_running_jobs_on_host",
+    "pending_adaptive_jobs": 27,
     "release_bundles": 4,
     "release_failed_attempts": 0,
     "release_run_receipts": 0,
@@ -536,9 +343,9 @@
     "rss_guard_status": null,
     "rss_samples": null,
     "safe_to_launch_gate": false,
-    "scope_bytes": 250000,
-    "scope_symbols": 151210,
-    "scope_unit": "raw byte",
+    "scope_bytes": null,
+    "scope_symbols": null,
+    "scope_unit": null,
     "single_rss_margin_kib": null,
     "source_processes_live": null,
     "terminal_verdict_present": false
@@ -579,6 +386,6 @@
   "view_refresh": {
     "historical_audits_requested": false,
     "notice": "Historical reports were not refreshed by this routine/status operation and may be stale. Use enwiki9_normalize_receipts.py --profile full for historical audits.",
-    "profile": "status-only"
+    "profile": "routine"
   }
 }
