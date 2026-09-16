@@ -1,0 +1,168 @@
+{
+  "schema": "gamma.enwiki9.final-bit-unit.v1",
+  "candidate_id": "fx2_final_bit_head250k_v1",
+  "inputs": [
+    {
+      "path": "lib/fx2_final_bit_head_v1.hpp",
+      "bytes": 4606,
+      "sha256": "3929f1cd3ee1e014370d4c87a61eb417b0c908e6a1c8145dcd86a536ff36b7fe"
+    },
+    {
+      "path": "lib/fx2_final_bit_head_audit_v1.hpp",
+      "bytes": 3277,
+      "sha256": "8266146fe7a273b2a73174c2601f2e652d769277a9ab19b71b455cbdb662c214"
+    },
+    {
+      "path": "tests/test_fx2_final_bit_head_v1.cpp",
+      "bytes": 3129,
+      "sha256": "edcfc757cbd7b4f794144c8299ddcf3dd404b528b75bf18d61450c80205f2dfd"
+    },
+    {
+      "path": "tests/test_fx2_final_bit_head_math_v1.py",
+      "bytes": 2142,
+      "sha256": "54995ca583656b517f956da43efdd6d5b5edeea541ee27bcc42c7afe04059190"
+    },
+    {
+      "path": "tools/fx2_final_bit_head250k_v1.py",
+      "bytes": 13234,
+      "sha256": "5c82149b03de838416f99a0ca1e4c62ddc12a940b956113d5c2384729a43f68d"
+    },
+    {
+      "path": "operations/provenance/fx2_final_bit_head_adapter_v1.json",
+      "bytes": 5213,
+      "sha256": "2b83bb6799a1fab87e5c387a9ab140b83d785913d54e57d551bb66a33c2f9026"
+    }
+  ],
+  "commands": [
+    {
+      "command": [
+        "taskset",
+        "-c",
+        "3",
+        "/usr/bin/g++",
+        "-std=c++17",
+        "-O2",
+        "-fno-fast-math",
+        "-ffp-contract=off",
+        "tests/test_fx2_final_bit_head_v1.cpp",
+        "-o",
+        "/run/user/1000/fx2_final_bit_head_unit_v1"
+      ],
+      "returncode": 0
+    },
+    {
+      "command": [
+        "taskset",
+        "-c",
+        "3",
+        "/run/user/1000/fx2_final_bit_head_unit_v1"
+      ],
+      "returncode": 0
+    },
+    {
+      "command": [
+        "taskset",
+        "-c",
+        "3",
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-p",
+        "test_fx2_final_bit_head_math_v1.py",
+        "-v"
+      ],
+      "returncode": 0
+    },
+    {
+      "command": [
+        "taskset",
+        "-c",
+        "3",
+        "/usr/bin/g++",
+        "-std=c++17",
+        "-DSEED=923",
+        "-DUPDATE_LIMIT=3000",
+        "-include",
+        "cstdint",
+        "-march=x86-64-v3",
+        "-fno-fast-math",
+        "-fsyntax-only",
+        "src/coder/encoder.cpp"
+      ],
+      "returncode": 0
+    },
+    {
+      "command": [
+        "taskset",
+        "-c",
+        "3",
+        "/usr/bin/g++",
+        "-std=c++17",
+        "-DSEED=923",
+        "-DUPDATE_LIMIT=3000",
+        "-include",
+        "cstdint",
+        "-march=x86-64-v3",
+        "-fno-fast-math",
+        "-fsyntax-only",
+        "src/coder/decoder.cpp"
+      ],
+      "returncode": 0
+    },
+    {
+      "command": [
+        "taskset",
+        "-c",
+        "3",
+        "/usr/bin/g++",
+        "-std=c++17",
+        "-DSEED=923",
+        "-DUPDATE_LIMIT=3000",
+        "-include",
+        "cstdint",
+        "-march=x86-64-v3",
+        "-fno-fast-math",
+        "-fsyntax-only",
+        "src/predictor.cpp"
+      ],
+      "returncode": 0
+    },
+    {
+      "command": [
+        "taskset",
+        "-c",
+        "3",
+        "/usr/bin/g++",
+        "-std=c++17",
+        "-DSEED=923",
+        "-DUPDATE_LIMIT=3000",
+        "-include",
+        "cstdint",
+        "-march=x86-64-v3",
+        "-fno-fast-math",
+        "-fsyntax-only",
+        "cpp_infer/src/opt/model_opt.cpp"
+      ],
+      "returncode": 0
+    }
+  ],
+  "all_checks_pass": true,
+  "log": {
+    "path": "run_logs/manual/fx2_final_bit_unit_20260916.log",
+    "bytes": 1930,
+    "sha256": "65eed9d840aab1e0675c6e3974542a4a36acee1a6c95cfd8daae933cfae1279a"
+  },
+  "checks": {
+    "zero_identity_counts": 65535,
+    "rounding_bound_cases": 458745,
+    "synthetic_bits": 32768,
+    "independent_calculus_tests": 4,
+    "materialized_translation_units": 4,
+    "runner_ast": true
+  },
+  "scope": "Synthetic count/state/calculus and source syntax only. No model or corpus executed; synthetic decoder receives supplied truths, not an arithmetic archive.",
+  "objective_credit_bytes": 0
+}

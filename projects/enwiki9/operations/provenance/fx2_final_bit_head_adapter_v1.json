@@ -1,0 +1,129 @@
+{
+  "schema": "gamma.enwiki9.exact-source-adapter-multi.v1",
+  "source_zip": "results/fx2_expert_release250k_v3/P-source.zip",
+  "files": [
+    {
+      "source_path": "cpp_infer/src/opt/model_opt.cpp",
+      "source_sha256": "b49493ece5a3a135baa24eeef00d6aaf56335324d0c6355b7283e46736c9df8e",
+      "patched_sha256": "2e83455c7873e7258c34f6d18250a5fdd2d71a4951f2a74282ab7a5091f2151e",
+      "replacements": [
+        {
+          "before": "#include \"model_opt.h\"",
+          "after": "#include \"model_opt.h\"\n#include \"../../../src/gamma-final-bit-head-audit.h\""
+        },
+        {
+          "before": "  void begin(int64_t rope_position_offset) {",
+          "after": "  void begin(int64_t rope_position_offset) {\n    gamma_final_bit_head::reset_article();"
+        },
+        {
+          "before": "      head_softcap_softmax(logits, probs208);",
+          "after": "      gamma_final_bit_head::capture(xn,logits);\n      head_softcap_softmax(logits, probs208);"
+        }
+      ],
+      "source_bytes": 18026,
+      "patched_bytes": 18170
+    },
+    {
+      "source_path": "src/predictor.cpp",
+      "source_sha256": "719e2a2bfc2a061630e69085737314598f4903bca420f8973242ab480c4949b1",
+      "patched_sha256": "63cfefbce052dc76783a23bba356dca60f19cbc8842c4dface42f31339c61fdf",
+      "replacements": [
+        {
+          "before": "#include \"predictor.h\"",
+          "after": "#include \"predictor.h\"\n#include \"gamma-final-bit-head-audit.h\""
+        },
+        {
+          "before": "  if (last_of_piece) {",
+          "after": "  if (last_of_piece) {\n    gamma_final_bit_head::invalidate();"
+        }
+      ],
+      "source_bytes": 27542,
+      "patched_bytes": 27622
+    },
+    {
+      "source_path": "src/coder/encoder.cpp",
+      "source_sha256": "01c43deb487706c80438bbf2187587bdb22ed56974d0c500d1ab5a6eced9a9fb",
+      "patched_sha256": "3c8a5ee470cb9f7ac43436a5b5a2adfe5f0cb30628e99efa1725a5e762c13f01",
+      "replacements": [
+        {
+          "before": "#include \"encoder.h\"",
+          "after": "#include \"encoder.h\"\n#include \"../gamma-final-bit-head-audit.h\"\n#include \"../gamma-coder-trace.h\""
+        },
+        {
+          "before": "  unsigned int p = Discretize(p_->Predict());",
+          "after": "  const float gamma_parent_probability = p_->Predict();\n  const unsigned int p = gamma_final_bit_head::predict(Discretize(gamma_parent_probability));\n  gamma_fx2_trace::Record gamma_coder(gamma_parent_probability,p,x1_,x2_);"
+        },
+        {
+          "before": "  p_->Perceive(bit);",
+          "after": "  gamma_final_bit_head::observe(bit);\n  p_->Perceive(bit);"
+        },
+        {
+          "before": "    x2_ = (x2_ << 8) + 255;\n  }\n}",
+          "after": "    x2_ = (x2_ << 8) + 255;\n  }\n  gamma_coder.Finish(bit,x1_,x2_);\n}"
+        }
+      ],
+      "source_bytes": 1129,
+      "patched_bytes": 1458
+    },
+    {
+      "source_path": "src/coder/decoder.cpp",
+      "source_sha256": "9565ac7a3d73ee04a46e7c802581fab6be1e950f99c9c73536053a354d2c6860",
+      "patched_sha256": "6f52b03708e7c00b94da8699e719d24938221c132f22dfe31584c344a3f19283",
+      "replacements": [
+        {
+          "before": "#include \"decoder.h\"",
+          "after": "#include \"decoder.h\"\n#include \"../gamma-final-bit-head-audit.h\"\n#include \"../gamma-coder-trace.h\""
+        },
+        {
+          "before": "  unsigned int p = Discretize(p_->Predict());",
+          "after": "  const float gamma_parent_probability = p_->Predict();\n  const unsigned int p = gamma_final_bit_head::predict(Discretize(gamma_parent_probability));\n  gamma_fx2_trace::Record gamma_coder(gamma_parent_probability,p,x1_,x2_);"
+        },
+        {
+          "before": "  p_->Perceive(bit);",
+          "after": "  gamma_final_bit_head::observe(bit);\n  p_->Perceive(bit);"
+        },
+        {
+          "before": "  return bit;",
+          "after": "  gamma_coder.Finish(bit,x1_,x2_);\n  return bit;"
+        }
+      ],
+      "source_bytes": 1047,
+      "patched_bytes": 1376
+    }
+  ],
+  "added_files": [
+    {
+      "source": {
+        "path": "lib/fx2_final_bit_head_v1.hpp",
+        "bytes": 4606,
+        "sha256": "3929f1cd3ee1e014370d4c87a61eb417b0c908e6a1c8145dcd86a536ff36b7fe"
+      },
+      "target": "src/gamma-final-bit-head.h"
+    },
+    {
+      "source": {
+        "path": "lib/fx2_final_bit_head_audit_v1.hpp",
+        "bytes": 3277,
+        "sha256": "8266146fe7a273b2a73174c2601f2e652d769277a9ab19b71b455cbdb662c214"
+      },
+      "target": "src/gamma-final-bit-head-audit.h"
+    },
+    {
+      "source": {
+        "path": "tools/fx2_coder_trace_v1.hpp",
+        "bytes": 2359,
+        "sha256": "d72dfa104668e2f3138e41e7bdfd54c8ad634d00d64338a627dbf1835656a11b"
+      },
+      "target": "src/gamma-coder-trace.h"
+    },
+    {
+      "source": {
+        "path": "operations/provenance/sources/2026-09-06/sha256-x86-d03795497f3e.c",
+        "bytes": 11042,
+        "sha256": "8e476fea360db2d3df0d381fe371c60aeda2d40df36d25ff91c6d4fb0e81636a"
+      },
+      "target": "src/gamma-observer-sha.c"
+    }
+  ],
+  "scope": "New final-bit training objective and binary-prefix rows; unchanged original predictor probabilities and updates. No inherited head/mixture gain."
+}

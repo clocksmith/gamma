@@ -1,0 +1,296 @@
+{
+  "budget": {
+    "expectedGrossSavingsBytes": 0,
+    "expectedNetSavingsBytes": -65536,
+    "maximumAddedPackageBytes": 65536
+  },
+  "causalBoundary": {
+    "availableInformation": [
+      "Already decoded truths, original parent counts, causal normalized hidden vector, binary prefix, online state."
+    ],
+    "forbiddenInformation": [
+      "Future truth, external model/teacher trace, transmitted uncounted weights, changed parent learning, inherited archive savings."
+    ]
+  },
+  "changedMechanism": "255 binary-prefix rows of192 hidden features; projected radius4, step0.25 from final Q16 residual, no original learning change.",
+  "controls": [
+    {
+      "definition": "Unchanged trimmed parent counts and original learning.",
+      "id": "P",
+      "role": "comparator"
+    },
+    {
+      "definition": "Identical aligned head as D, emit parent counts.",
+      "id": "K",
+      "role": "negative"
+    },
+    {
+      "definition": "Final-bit residual learning and corrected counts.",
+      "id": "D",
+      "role": "treatment"
+    },
+    {
+      "definition": "Identical capacity/update domain; previous decoded byte supplies training labels.",
+      "id": "S",
+      "role": "negative"
+    }
+  ],
+  "evidenceClass": "diagnostic",
+  "experimentId": "fx2_final_bit_head250k_v1",
+  "generatedUtc": "2026-09-16T07:45:43.522685+00:00",
+  "hypothesis": {
+    "claim": "A decoder-synchronized binary-prefix head trained on final coder errors reduces the exposed opening250KB archive against the unchanged parent and delayed-label control enough to pay its measured source component.",
+    "falsification": "Valid gP<=0 or gS<=0 retires this fixed realization. Both positive but sourceZIP+option net<=0 holds. Paying component may justify separately frozen confirmation only. Correctness/resource stop is incomplete."
+  },
+  "inputs": [
+    {
+      "id": "runner",
+      "path": "tools/fx2_final_bit_head250k_v1.py",
+      "sha256": "sha256:5c82149b03de838416f99a0ca1e4c62ddc12a940b956113d5c2384729a43f68d"
+    },
+    {
+      "id": "input-1",
+      "path": "lib/fx2_native_gate_v1.py",
+      "sha256": "sha256:b4c2c843d58932681d78720ff74f2d2bc4f36e88994bcd0a807ddbde4a5b5b3d"
+    },
+    {
+      "id": "input-2",
+      "path": "lib/artifacts.py",
+      "sha256": "sha256:9718dba85cab54a6e3ddfb9ce483b808d385453d22ff6d0675988e1b1acf3209"
+    },
+    {
+      "id": "input-3",
+      "path": "lib/fx2_final_bit_head_v1.hpp",
+      "sha256": "sha256:3929f1cd3ee1e014370d4c87a61eb417b0c908e6a1c8145dcd86a536ff36b7fe"
+    },
+    {
+      "id": "input-4",
+      "path": "lib/fx2_final_bit_head_audit_v1.hpp",
+      "sha256": "sha256:8266146fe7a273b2a73174c2601f2e652d769277a9ab19b71b455cbdb662c214"
+    },
+    {
+      "id": "input-5",
+      "path": "tests/test_fx2_final_bit_head_v1.cpp",
+      "sha256": "sha256:edcfc757cbd7b4f794144c8299ddcf3dd404b528b75bf18d61450c80205f2dfd"
+    },
+    {
+      "id": "input-6",
+      "path": "tests/test_fx2_final_bit_head_math_v1.py",
+      "sha256": "sha256:54995ca583656b517f956da43efdd6d5b5edeea541ee27bcc42c7afe04059190"
+    },
+    {
+      "id": "input-7",
+      "path": "tools/fx2_coder_trace_v1.hpp",
+      "sha256": "sha256:d72dfa104668e2f3138e41e7bdfd54c8ad634d00d64338a627dbf1835656a11b"
+    },
+    {
+      "id": "input-8",
+      "path": "operations/provenance/sources/2026-09-06/sha256-x86-d03795497f3e.c",
+      "sha256": "sha256:8e476fea360db2d3df0d381fe371c60aeda2d40df36d25ff91c6d4fb0e81636a"
+    },
+    {
+      "id": "input-9",
+      "path": "operations/provenance/fx2_final_bit_head_adapter_v1.json",
+      "sha256": "sha256:2b83bb6799a1fab87e5c387a9ab140b83d785913d54e57d551bb66a33c2f9026"
+    },
+    {
+      "id": "input-10",
+      "path": "operations/provenance/fx2_final_bit_unit_20260916.json",
+      "sha256": "sha256:500f22204ae92ae495b02eff6fc24d2c6fa835ece967be3eec46e164a2115630"
+    },
+    {
+      "id": "input-11",
+      "path": "operations/provenance/public_fx2_gcc15_toolchain_20260905.json",
+      "sha256": "sha256:53ac253310a9812ca31fc016870c2762ea50c8b001c56630da4545875670a3b1"
+    },
+    {
+      "id": "input-12",
+      "path": "operations/provenance/fx2_kda_carry_toolchain_20260913.json",
+      "sha256": "sha256:4af230cc7fd16aa3daa7081e340f41ba9fa6fcf4750aee9295e6add466e33f58"
+    },
+    {
+      "id": "input-13",
+      "path": "operations/provenance/fx2_final_bit_head250k_v1_plan.json",
+      "sha256": "sha256:f44ef31658869c1a70df04283d099486914da63524f82e89e203e77076b20aea"
+    },
+    {
+      "id": "input-14",
+      "path": "operations/provenance/fx2_final_bit_selected_20260916.json",
+      "sha256": "sha256:49d8b7cc19475008aebe9ff5a5a17bfd26b59f38a54bab71f0a2b5ae50781100"
+    },
+    {
+      "id": "input-15",
+      "path": "docs/fx2_final_bit_head_20260916.md",
+      "sha256": "sha256:83839a0aaaa37f3f03ff1d5e4f41e554a05ed158988052349bdafb3a0027a1e2"
+    },
+    {
+      "id": "input-16",
+      "path": "results/fx2_expert_release250k_v3/package.json",
+      "sha256": "sha256:a9999c541374e901972a60edf12624451241f2ce5ed32e189898a2ace75ad2d3"
+    },
+    {
+      "id": "input-17",
+      "path": "results/fx2_expert_release250k_v3/P-source.zip",
+      "sha256": "sha256:c44d941f95bd8504d63ed6ea5112af3ce15aeffb6874ebddb66596ce083c3cf6"
+    },
+    {
+      "id": "input-18",
+      "path": "results/fx2_weight_native_transfer250k_q0_v1/work/native/opening.raw",
+      "sha256": "sha256:665fc689441b68462d88f82dc33212abe9c4824be095d03a556c9b55a2829fd3"
+    },
+    {
+      "id": "input-19",
+      "path": "results/fx2_weight_native_transfer250k_q0_v1/work/native/opening.stored",
+      "sha256": "sha256:9cc29963608bb990b820bc88e836532b4c2a1cfc1a5b633a14b1c3bad78765ab"
+    },
+    {
+      "id": "input-20",
+      "path": "results/fx2_weight_native_transfer250k_q0_v1/opening/P/archive.bin",
+      "sha256": "sha256:70325310e96b83b48677d76d53141e69ddb47519b4cdffd1c85f51fe2c444dbe"
+    },
+    {
+      "id": "input-21",
+      "path": "results/fx2_weight_native_transfer250k_q0_v1/work/native/opening-P-encode.trace",
+      "sha256": "sha256:a5a0afbf0715a9c5371d5f097aaa1b478c1c6a2c030448c79b4ca70f1279c716"
+    },
+    {
+      "id": "input-22",
+      "path": "operations/provenance/fx2_head_transport_terminal_20260915.json",
+      "sha256": "sha256:0bae48fec8c7478ecc6b3202cd3490ddb6e03c1b3dffe5f32301db68556650a0"
+    },
+    {
+      "id": "input-23",
+      "path": "operations/provenance/fx2_expert_confirm_terminal_20260916.json",
+      "sha256": "sha256:7d15903a92a5d290208214509edf04bcd08104bfd2b77c7918e87300a8b88073"
+    },
+    {
+      "id": "input-24",
+      "path": "operations/provenance/fx2_match_gap_terminal_20260916.json",
+      "sha256": "sha256:d3482caa9b36944af0a29fe490ffc73c02b54432a438b205d832a5e4f02b6a7d"
+    },
+    {
+      "id": "input-25",
+      "path": "operations/adaptive/candidate-revisions/fx2_expert_release250k_v3/20260915T021107540049Z_b820418f7fdf.json",
+      "sha256": "sha256:06ce872e08f9c8ba78a0a36aff227f7ca43e8566939c0ec4c2553af7f9edddbf"
+    },
+    {
+      "id": "input-26",
+      "path": "operations/adaptive/reflections/20260915T025312Z_f55e6caa2e.json",
+      "sha256": "sha256:499c0151746585743948988f4aeb64df9decf339667e1f8311923a065cb12fe6"
+    },
+    {
+      "id": "input-27",
+      "path": "operations/adaptive/reflections/20260916T070413Z_94a8fa3430.json",
+      "sha256": "sha256:6f8814751ce49a193f5f0c2d3508b4d2869c3d2c809b4241612ea7c4c4951b36"
+    },
+    {
+      "id": "input-28",
+      "path": "operations/adaptive/reflections/20260916T064314Z_cde1ec14c6.json",
+      "sha256": "sha256:5968108190cfe2d0b8af52634015c6290ff706c536d4461a775f78efc7fa927f"
+    }
+  ],
+  "invariants": [
+    "P original; K full aligned bookkeeping but parent counts; D aligned update and corrected counts; S prior-byte bit labels with same update opportunity count.",
+    "17 phases: compile,clean,rebuild,preprocess,independent encode/decode/raw-repeat per P/K/D/S and untraced D.",
+    "Valid gP<=0 or gS<=0 retires this fixed realization. Both positive but sourceZIP+option net<=0 holds. Paying component may justify separately frozen confirmation only. Correctness/resource stop is incomplete.",
+    "One fixed250KB evaluation; no rates,radii,feature widths,row counts,reset policies or alternative samples in this development budget.",
+    "Matched reproducible source ZIPs and required option; alternative binary increment. Observer is included conservatively. Complete package and parent full1G unknown; no component or forecast inheritance.",
+    "Every original raw coder probability and truth plus hidden/logit digest is matched. Original full model/optimizer not serialized.",
+    "Both D/S skip updates until a previous byte and feature are available.",
+    "No derivative or concavity claim for discrete archive length; gradient rounding perturbation bounded by1/Q."
+  ],
+  "killPredicates": [
+    {
+      "id": "parent-loss",
+      "measurement": "g_P",
+      "operator": "lte",
+      "threshold": 0
+    },
+    {
+      "id": "control-loss",
+      "measurement": "g_S",
+      "operator": "lte",
+      "threshold": 0
+    }
+  ],
+  "measurements": [
+    {
+      "definition": "P minus D archive bytes.",
+      "id": "g_P",
+      "unit": "archive bytes"
+    },
+    {
+      "definition": "S minus D archive bytes.",
+      "id": "g_S",
+      "unit": "archive bytes"
+    },
+    {
+      "definition": "gP minus measured matched sourceZIP and required option increments; binary form is separate.",
+      "id": "sourceComponentNetBytes",
+      "unit": "bytes"
+    }
+  ],
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:e91ff20e92c3cac8acb0cbe5c79fc8e8a3b427d7e151245c8eecc52b1c32fa00",
+    "objectiveId": "gamma-enwiki9-hutter-90m-v3",
+    "objectivePath": "contracts/research/v3/objective-contract.json",
+    "targetScoreBytes": 90000000
+  },
+  "objectiveCreditBytes": 0,
+  "outputManifestPolicy": "complete-result-artifacts-v1",
+  "outputs": [
+    "results/fx2_final_bit_head250k_v1/decision.json",
+    "results/fx2_final_bit_head250k_v1/artifacts.json",
+    "results/fx2_final_bit_head250k_v1/package.json"
+  ],
+  "parent": {
+    "candidateId": "fx2_expert_release250k_v3",
+    "revision": {
+      "path": "operations/adaptive/candidate-revisions/fx2_expert_release250k_v3/20260915T021107540049Z_b820418f7fdf.json",
+      "sha256": "sha256:06ce872e08f9c8ba78a0a36aff227f7ca43e8566939c0ec4c2553af7f9edddbf"
+    }
+  },
+  "population": {
+    "coordinate": "Raw [0,250000);151220 stored bytes;151210 modeled WRT bytes; native MSB-first bits.",
+    "scopeBytes": 250000,
+    "scopeSymbols": 151210,
+    "selection": "Already exposed opening250KB; one fixed development configuration, no tuning or confirmation claim.",
+    "unit": "canonical enwik9 raw byte"
+  },
+  "promotionPredicates": [
+    {
+      "id": "parent",
+      "measurement": "g_P",
+      "operator": "gt",
+      "threshold": 0
+    },
+    {
+      "id": "control",
+      "measurement": "g_S",
+      "operator": "gt",
+      "threshold": 0
+    },
+    {
+      "id": "source-component",
+      "measurement": "sourceComponentNetBytes",
+      "operator": "gt",
+      "threshold": 0
+    }
+  ],
+  "proposalId": "fx2_final_bit_head250k_v1",
+  "pythonSourceClosureEntries": [
+    "runner"
+  ],
+  "registrationTiming": "prospective",
+  "schema": "gamma.enwiki9.adaptive-experiment-contract.v1",
+  "search": {
+    "expectedMemoryRatio": 1,
+    "expectedRuntimeRatio": 1,
+    "expectedTransferRetention": 0,
+    "interactionRisk": 1,
+    "uncertaintyRisk": 1
+  },
+  "status": "frozen"
+}
