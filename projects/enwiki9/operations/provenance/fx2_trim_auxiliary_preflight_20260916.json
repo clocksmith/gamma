@@ -1,0 +1,113 @@
+{
+  "schema": "gamma.enwiki9.synthetic-packaging-preflight.v1",
+  "id": "fx2_trim_auxiliary_preflight_v1",
+  "candidate_id": "fx2_trim_auxiliary_ppm_v1",
+  "scope": "Source materialization and extracted option-policy/header probes only.",
+  "inputs": [
+    {
+      "path": "lib/fx2_trim_auxiliary_ppm_v1.py",
+      "bytes": 2248,
+      "sha256": "060fe751afd8c30d3448c94c0c024b37efc779446cb505676f2cc481444bea32"
+    },
+    {
+      "path": "lib/fx2_trim_auxiliary_pack_v1.py",
+      "bytes": 4423,
+      "sha256": "3097c48b7376125d7baebb10a6d5b476aea507894ef94578397182783dbb6dc1"
+    },
+    {
+      "path": "tests/test_fx2_trim_auxiliary_ppm_v1.py",
+      "bytes": 6841,
+      "sha256": "6879a97067b51952c29d2e18e052a49a6d5b760e70f09dd31be073ee0b00a705"
+    },
+    {
+      "path": "tools/fx2_trim_auxiliary_preflight_v1.py",
+      "bytes": 4368,
+      "sha256": "8c5b74c97cc18d3c45276058aeb09ae62d07bb37d5e015ca6eb71dbeab8a350e"
+    },
+    {
+      "path": "results/fx2_expert_release250k_v3/P-source.zip",
+      "bytes": 3905220,
+      "sha256": "c44d941f95bd8504d63ed6ea5112af3ce15aeffb6874ebddb66596ce083c3cf6"
+    }
+  ],
+  "source_preimages": {
+    "src/runner.cpp": "e8b9bc757902006bf0d2b30e1461276b172c883cece6d3c9eb3df03c804924bf",
+    "src/readalike_prepr/self_extract.h": "f91619073e4e9aa1d292383c8f62d858ab6ec96a66b78a4acec8cc49ffe44607"
+  },
+  "changed_existing_members": [
+    "src/readalike_prepr/self_extract.h",
+    "src/runner.cpp"
+  ],
+  "added_members": [
+    "gamma_pack_auxiliary.py"
+  ],
+  "helper_commands": [
+    "./cmix -d .new_article_order.comp .new_article_order --ppmd-only",
+    "./cmix -d .dict.comp .dict --ppmd-only",
+    "./archive9 -d .dict.comp_decomp .dict --ppmd-only"
+  ],
+  "packages": {
+    "P": {
+      "path": "results/fx2_trim_auxiliary_preflight_v1/P-source.zip",
+      "bytes": 3905220,
+      "sha256": "c44d941f95bd8504d63ed6ea5112af3ce15aeffb6874ebddb66596ce083c3cf6"
+    },
+    "D": {
+      "path": "results/fx2_trim_auxiliary_preflight_v1/D-source.zip",
+      "bytes": 3907353,
+      "sha256": "a1034e90870c57061e14dc0b71be94ec1f9bf2e762aa87740ab26a8814fce6c5"
+    }
+  },
+  "source_zip_increment_bytes": 2133,
+  "materialization_repeat_byte_equal": true,
+  "unchanged_parent_zip_byte_equal": true,
+  "tests": {
+    "command": [
+      "/usr/bin/python3",
+      "-m",
+      "unittest",
+      "tests.test_fx2_trim_auxiliary_ppm_v1",
+      "-v"
+    ],
+    "returncode": 0,
+    "log": {
+      "path": "results/fx2_trim_auxiliary_preflight_v1/unit.log",
+      "bytes": 1050,
+      "sha256": "51e4903cbf3e8260c8474b7e2facc6e783bd0d948b2696adf2a3255b0538aa4d"
+    },
+    "compiler": {
+      "path": "/usr/bin/x86_64-linux-gnu-g++-15",
+      "bytes": 1305304,
+      "sha256": "e6718f7e0c7d057c3ff77b550c603da9bc4030e3ede3c053705acce1293dbe4d"
+    },
+    "python": {
+      "path": "/usr/bin/python3.14",
+      "bytes": 7477160,
+      "sha256": "52e0a13e60a981d8c4b6478be2ba5176f69da07948a056bf49cf6f077e30cb41"
+    },
+    "native_codec_executed": false,
+    "test_count": 6,
+    "policy_probe_readable_file_check": "stubbed; no file-availability claim"
+  },
+  "complete_submission_package": false,
+  "full_corpus_score_bytes": null,
+  "objective_credit": 0,
+  "auxiliary_compressed_sizes": null,
+  "native_binary_delta_bytes": null,
+  "remaining": [
+    "Fresh native clean builds and deterministic rebuilds.",
+    "Both exact auxiliary inverses and repeated compressed asset identities.",
+    "Actual self-extractor child invocations with no external assets.",
+    "Fresh main native archive/reconstruction parity for this new binary.",
+    "Complete counted package, option, license and platform closure."
+  ],
+  "all_preflight_checks_pass": true,
+  "retained_receipt": {
+    "path": "results/fx2_trim_auxiliary_preflight_v1/receipt.json",
+    "bytes": 3690,
+    "sha256": "31ec47e2e0e901a23d62949447ad7264b7359e6509a3466118f391483afbd6df"
+  },
+  "original_zip_bytes": 3910568,
+  "child_vs_original_source_component_reduction_bytes": 3215,
+  "evidence_scope": "Synthetic option/header/assembly and source-package repeat only; no native codec or corpus execution."
+}

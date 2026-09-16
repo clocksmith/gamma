@@ -12,7 +12,7 @@ Reusable artifact helpers for new tools: [lib/artifacts.py](../lib/artifacts.py)
 The LibNC initializer teacher launcher exits before the first forward, gradient, update, or coded symbol; its source-bound experiment defines that boundary.
 The delayed-status helper's `enwiki9_delayed_status_latest.log` pointer is operational history, not present-host occupancy proof.
 
-Coverage: **1221 files** (33 .c, 79 .cpp, 1 .gdb, 1 .h, 2 .hpp, 1 .html, 1101 .py, 3 .sh).
+Coverage: **1222 files** (33 .c, 79 .cpp, 1 .gdb, 1 .h, 2 .hpp, 1 .html, 1102 .py, 3 .sh).
 
 | Tool | Purpose | Referenced contracts |
 |---|---|---|
@@ -437,6 +437,7 @@ Coverage: **1221 files** (33 .c, 79 .cpp, 1 .gdb, 1 .h, 2 .hpp, 1 .html, 1101 .p
 | [`tools/fx2_sparse_residual_cost250k_v1.py`](../tools/fx2_sparse_residual_cost250k_v1.py) | Price one fixed sparse affine family from verified native feature records. | [1](../operations/adaptive/experiments/fx2_sparse_residual_cost250k_v1.json) |
 | [`tools/fx2_sparse_residual_cost_gate_v1.py`](../tools/fx2_sparse_residual_cost_gate_v1.py) | Guarded repeated sparse-family bounds; no native inference or coefficient fit. | [1](../operations/adaptive/experiments/fx2_sparse_residual_cost250k_v1.json) |
 | [`tools/fx2_transformer_kernel_probe_v1.cpp`](../tools/fx2_transformer_kernel_probe_v1.cpp) | Diagnostic kernel measurement of the pinned public model, not a codec score. The runner authenticates source/weights and enforces the memory/scratch guard. | [1](../operations/adaptive/experiments/fx2_cmix_transformer_static_vocab_fixture50051_q0_v1.json) |
+| [`tools/fx2_trim_auxiliary_preflight_v1.py`](../tools/fx2_trim_auxiliary_preflight_v1.py) | Materialize and test the separate PPM auxiliary packaging realization. No native codec, model, dictionary compression, or enwik9 prediction executes. The only compiled code is the extracted option-policy/header synthetic probe. | none found |
 | [`tools/fx2_trim_confirm1m_v1.py`](../tools/fx2_trim_confirm1m_v1.py) | Confirm frozen source trimming on an independently selected native population. | [2](../operations/adaptive/experiments/fx2_trim_confirm1m_v1.json) |
 | [`tools/fx2_trim_load_closure_v1.py`](../tools/fx2_trim_load_closure_v1.py) | Audit the frozen trimmed ELF's load-time closure without entering the codec. No corpus, model, compiler, full /usr mount, installation or network is used. This is a diagnostic receipt, not runtime, license or submission qualification. | none found |
 | [`tools/fx2_trim_scale10m_v1.py`](../tools/fx2_trim_scale10m_v1.py) | Confirm unchanged native trimming at the ten-million-byte scale. | [1](../operations/adaptive/experiments/fx2_trim_scale10m_v1.json) |
