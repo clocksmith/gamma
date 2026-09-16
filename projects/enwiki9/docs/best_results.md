@@ -12,8 +12,8 @@ Unknown package cost stays unknown. Local subtotals are not complete submission 
 Populations are grouped by raw-input SHA256; compare matched controls in each receipt.
 ```
 
-- Result JSON files scanned: `449`
-- Roundtrip-passing rows: `198`
+- Result JSON files scanned: `452`
+- Roundtrip-passing rows: `200`
 - Active target score: `90,000,000` bytes (`9.0000000%`)
 
 ## Scope `1,000,000,000` Bytes
@@ -111,9 +111,9 @@ No roundtrip-passing result JSONs are present for this scope in this checkout.
 
 | Program / arm | Mechanism | Local subtotal | Archive | Program bytes | b/B | Determinism | Result |
 |---|---|---:|---:|---:|---:|---|---|
+| `fx2_expert_transfer250k_v1:D` | custom candidate | unknown | 9,488 | unknown | 0.303616 | true | `results/fx2_expert_transfer250k_v1/D.driver.json` |
+| `fx2_expert_transfer250k_v1:P` | custom candidate | unknown | 9,499 | unknown | 0.303968 | true | `results/fx2_expert_transfer250k_v1/P.driver.json` |
 | `fx2_weight_adaptive_transfer250k_q0_v1:distant-D` | custom candidate | unknown | 9,499 | 4,907,384 | 0.303968 | true | `operations/provenance/fx2_weight_adaptive_transfer250k_v1_terminal/distant-D.json` |
-| `fx2_weight_adaptive_transfer250k_q0_v1:distant-K` | custom candidate | unknown | 9,499 | 4,913,426 | 0.303968 | true | `operations/provenance/fx2_weight_adaptive_transfer250k_v1_terminal/distant-K.json` |
-| `fx2_weight_adaptive_transfer250k_q0_v1:distant-P` | custom candidate | unknown | 9,499 | 4,913,426 | 0.303968 | true | `operations/provenance/fx2_weight_adaptive_transfer250k_v1_terminal/distant-P.json` |
 
 ### Population `ffb6c9e73f59dc3ee7109441aa05881d1980ff440f47db63120bf36822b765bf`
 

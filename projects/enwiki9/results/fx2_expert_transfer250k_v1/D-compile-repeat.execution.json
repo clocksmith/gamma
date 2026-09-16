@@ -1,0 +1,27 @@
+{
+  "accepted_returncodes": [
+    0
+  ],
+  "command": [
+    "/usr/bin/timeout",
+    "--signal=TERM",
+    "--kill-after=2",
+    "360",
+    "/usr/bin/make",
+    "-j1",
+    "cmix",
+    "CC=/usr/bin/g++",
+    "CPPFLAGS_PART-THAT-SHOULD-BE-FAST=-DSEED=923 -DUPDATE_LIMIT=3000 -m64 -Wall -std=c++17 -include cstdint -fno-fast-math -fno-math-errno -fno-exceptions -fno-threadsafe-statics -march=x86-64-v3 -mtune=generic -mrecip=none -fdata-sections -ffunction-sections -O3 -DGAMMA_EXPERT_RELEASE",
+    "CPPFLAGS_PART-THAT-CAN-BE-SLOW=-DSEED=923 -DUPDATE_LIMIT=3000 -m64 -Wall -std=c++17 -include cstdint -fno-fast-math -fno-math-errno -fno-exceptions -fno-threadsafe-statics -march=x86-64-v3 -mtune=generic -mrecip=none -fdata-sections -ffunction-sections -Os -DGAMMA_EXPERT_RELEASE"
+  ],
+  "elapsed_cap_seconds": 360,
+  "elapsed_seconds": 13.120202043093741,
+  "environment": {},
+  "launch_error": null,
+  "missing_diagnostics": [],
+  "phase": "D-compile-repeat",
+  "returncode": 0,
+  "system_cpu_seconds": 1.0552089999999996,
+  "timing_authority": "shared-host diagnostic",
+  "user_cpu_seconds": 11.928606000000002
+}
