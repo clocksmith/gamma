@@ -1,0 +1,99 @@
+{
+  "path": "operations/adaptive/reflections/20260916T032712Z_00457376c7.json",
+  "reflection": {
+    "attribution": {
+      "causalConfidence": "high",
+      "controlsEquivalent": true,
+      "failureClass": "causal-failure",
+      "localizedCause": "FXCM constructor calls dosym(), activating legacy reverse dictionary from working-directory .dict; static-profile reference encoded without it."
+    },
+    "candidateId": "fx2_ambient_dictionary_probe_v1",
+    "candidateRevision": {
+      "candidateId": "fx2_ambient_dictionary_probe_v1",
+      "candidateTreeSha256": "sha256:3095bde5ebcce0f428ea903d361e7ee14f657abe3b292b53c1a6f10f8663f326",
+      "receipt": {
+        "path": "operations/adaptive/candidate-revisions/fx2_ambient_dictionary_probe_v1/20260916T032711647500Z_3095bde5ebcc.json",
+        "sha256": "sha256:e4c2748b35713cf1abbd1084dda95bfe493a8e0bfb5acbcfed8be31ecaae8ba8"
+      }
+    },
+    "decision": {
+      "killPredicatesPass": false,
+      "nextGateBytes": null,
+      "promotionPredicatesPass": false,
+      "rationale": "Remove implicit FXCM dictionary initialization in both static-profile package arms; rerun unchanged auxiliary comparison under new identity with .dict retained in isolated decode.",
+      "verdict": "retry"
+    },
+    "evidence": [
+      {
+        "path": "operations/provenance/fx2_ambient_dictionary_terminal_20260916.json",
+        "sha256": "sha256:a2b93455e20f234dc0b7c4b0f0f3973c41afd32a72e6f3c9f4cee85096dc2f19"
+      },
+      {
+        "path": "results/fx2_ambient_dictionary_probe_v1/decision.json",
+        "sha256": "sha256:8336040a6f2dbca94b76a9b985ed3bddfacfef27f925825cfa6682e7402fd6e8"
+      }
+    ],
+    "experiment": {
+      "path": "operations/adaptive/experiments/fx2_ambient_dictionary_probe_v1.json",
+      "sha256": "sha256:ea9f7777ac9bd7ca926fa902cd47458476d2b0ce6dd43cc35dbdc9f29465d0dc"
+    },
+    "generatedUtc": "2026-09-16T03:36:15+00:00",
+    "hypothesis": {
+      "rationale": "Ambient dictionary presence changes correctness in the unchanged parent. Both absent-file decodes exactly reconstruct the same250KB; present reproduces139. Source constructor activates legacy reverse-dictionary state from .dict.",
+      "verdict": "supported"
+    },
+    "job": {
+      "path": "operations/adaptive/completed/924_20260916T032712Z_00457376c7.json",
+      "sha256": "sha256:069ff3f86dd9c5e1eb217c5a22115f675575350f7384ee8a71376dca1137b65b"
+    },
+    "knowledge": {
+      "retiredDimensions": [],
+      "transferableLessons": [
+        "Explicit input hashes are insufficient when an internal model consults an undeclared working-directory file. Remove that input dependence from the fixed profile and verify packaged inverse."
+      ],
+      "uncertainties": [
+        "No corrected executable has run yet; this proves cause rather than successful repair."
+      ]
+    },
+    "measurementAssertions": [
+      {
+        "field": "scopeBytes",
+        "pointer": "/scopeBytes",
+        "source": {
+          "path": "operations/provenance/fx2_ambient_dictionary_terminal_20260916.json",
+          "sha256": "sha256:a2b93455e20f234dc0b7c4b0f0f3973c41afd32a72e6f3c9f4cee85096dc2f19"
+        }
+      }
+    ],
+    "measurements": {
+      "idealBitsSaved": null,
+      "memoryRatio": null,
+      "minimumPartitionIdealBitsSaved": null,
+      "netBytesSaved": null,
+      "positiveSegmentFraction": null,
+      "runtimeRatio": null,
+      "scopeBytes": 250000,
+      "scopeSymbols": null,
+      "sourceBytesDelta": null,
+      "transferRetention": null
+    },
+    "objective": {
+      "corpusBytes": 1000000000,
+      "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+      "objectiveDigest": "sha256:e91ff20e92c3cac8acb0cbe5c79fc8e8a3b427d7e151245c8eecc52b1c32fa00",
+      "objectiveId": "gamma-enwiki9-hutter-90m-v3",
+      "objectivePath": "contracts/research/v3/objective-contract.json",
+      "targetScoreBytes": 90000000
+    },
+    "reflectionId": "r-20260916t032712z_00457376c7",
+    "schema": "gamma.enwiki9.reflection-receipt.v1",
+    "validity": {
+      "classification": "valid",
+      "reasons": [
+        "Same binary,assets,explicit dictionary path,sandbox and declared limits; only ambient dictionary presence differs. Absent inverses and repeat exact; presence reproduces139. Guard and closure pass."
+      ],
+      "valid": true
+    }
+  }
+}
+{"arms": {"absent-A": 0, "absent-B": 0, "present": 139}, "correction_authorized": true}
