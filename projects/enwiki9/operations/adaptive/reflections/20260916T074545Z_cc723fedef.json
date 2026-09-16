@@ -1,0 +1,86 @@
+{
+  "attribution": {
+    "causalConfidence": "high",
+    "controlsEquivalent": null,
+    "failureClass": "implementation-failure",
+    "localizedCause": "Observer SHA implementation included as a non-inline external function in four translation units; linker rejects duplicate definitions."
+  },
+  "candidateId": "fx2_final_bit_head250k_v1",
+  "candidateRevision": {
+    "candidateId": "fx2_final_bit_head250k_v1",
+    "candidateTreeSha256": "sha256:a3deadc3c534a59b4a31b378e4ad0c6d8d0e9a805a3fa13a4238a0fdfe55a6ac",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/fx2_final_bit_head250k_v1/20260916T074545080281Z_a3deadc3c534.json",
+      "sha256": "sha256:9343eb971113ca565c0dad88121eface82c7c1f549f27633e4f5d99927881cea"
+    }
+  },
+  "decision": {
+    "killPredicatesPass": null,
+    "nextGateBytes": null,
+    "promotionPredicatesPass": null,
+    "rationale": "Correction-only v2 inserts inline before the unique observer SHA function; all model,gradient,control,population andresource parameters remain unchanged.",
+    "verdict": "retry"
+  },
+  "evidence": [
+    {
+      "path": "operations/provenance/fx2_final_bit_build_failure_20260916.json",
+      "sha256": "sha256:f3675a7984c1e9ed4c59702a42632586f22660292e1a412d86be1a7e5c0f458e"
+    },
+    {
+      "path": "operations/provenance/fx2_final_bit_link_repair_20260916.json",
+      "sha256": "sha256:f5ab8433e8c71813f5a18845cdb337c6980bbdd4335d21d3e5e06f62a130461b"
+    }
+  ],
+  "experiment": {
+    "path": "operations/adaptive/experiments/fx2_final_bit_head250k_v1.json",
+    "sha256": "sha256:39bd4c60e7c2b0111b19cd1decdf156d94360b637c5af1dd92e3da4274374248"
+  },
+  "generatedUtc": "2026-09-16T07:55:34+00:00",
+  "hypothesis": {
+    "rationale": "No archive comparison exists.",
+    "verdict": "not-tested"
+  },
+  "job": {
+    "path": "operations/adaptive/failed/934_20260916T074545Z_cc723fedef.json",
+    "sha256": "sha256:e09e60622e5b544617b7e18f011044bff7c1f1b613a0850e101f5b753a987bd8"
+  },
+  "knowledge": {
+    "retiredDimensions": [],
+    "transferableLessons": [
+      "A header used by multiple translation units needs inline linkage for its included observer function; syntax-only compilation does not check linkage."
+    ],
+    "uncertainties": [
+      "Compression and source-component payoff remain unknown."
+    ]
+  },
+  "measurementAssertions": [],
+  "measurements": {
+    "idealBitsSaved": null,
+    "memoryRatio": null,
+    "minimumPartitionIdealBitsSaved": null,
+    "netBytesSaved": null,
+    "positiveSegmentFraction": null,
+    "runtimeRatio": null,
+    "scopeBytes": null,
+    "scopeSymbols": null,
+    "sourceBytesDelta": null,
+    "transferRetention": null
+  },
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:e91ff20e92c3cac8acb0cbe5c79fc8e8a3b427d7e151245c8eecc52b1c32fa00",
+    "objectiveId": "gamma-enwiki9-hutter-90m-v3",
+    "objectivePath": "contracts/research/v3/objective-contract.json",
+    "targetScoreBytes": 90000000
+  },
+  "reflectionId": "r-20260916t074545z_cc723fedef",
+  "schema": "gamma.enwiki9.reflection-receipt.v1",
+  "validity": {
+    "classification": "implementation-failure",
+    "reasons": [
+      "Compile/link stopped before preprocessing or any corpus coding; native artifacts and guard retained and independently rehashed."
+    ],
+    "valid": false
+  }
+}

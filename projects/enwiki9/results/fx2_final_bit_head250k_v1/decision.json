@@ -1,0 +1,53 @@
+{
+  "artifacts": {
+    "bytes": 36567,
+    "path": "results/fx2_final_bit_head250k_v1/artifacts.json",
+    "sha256": "21dbec0e02534c08f228274a62cf46d136382438322a8ad1a2e8fc0e33320eda"
+  },
+  "candidate_id": "fx2_final_bit_head250k_v1",
+  "child_closure_ok": true,
+  "commands": [
+    {
+      "accepted_returncodes": [
+        0
+      ],
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "360",
+        "/usr/bin/make",
+        "-j1",
+        "cmix",
+        "CC=/usr/bin/g++",
+        "CPPFLAGS_PART-THAT-SHOULD-BE-FAST=-DSEED=923 -DUPDATE_LIMIT=3000 -m64 -Wall -std=c++17 -include cstdint -fno-fast-math -fno-math-errno -fno-exceptions -fno-threadsafe-statics -march=x86-64-v3 -mtune=generic -mrecip=none -fdata-sections -ffunction-sections -O3",
+        "CPPFLAGS_PART-THAT-CAN-BE-SLOW=-DSEED=923 -DUPDATE_LIMIT=3000 -m64 -Wall -std=c++17 -include cstdint -fno-fast-math -fno-math-errno -fno-exceptions -fno-threadsafe-statics -march=x86-64-v3 -mtune=generic -mrecip=none -fdata-sections -ffunction-sections -Os"
+      ],
+      "elapsed_cap_seconds": 360,
+      "elapsed_seconds": 13.916879104916006,
+      "environment": {},
+      "launch_error": null,
+      "missing_diagnostics": [],
+      "phase": "compile",
+      "returncode": 2,
+      "system_cpu_seconds": 1.076109,
+      "timing_authority": "shared-host diagnostic",
+      "user_cpu_seconds": 12.664825
+    }
+  ],
+  "complete_package_bytes": null,
+  "error": "compile exited 2",
+  "experiment": {
+    "path": "operations/adaptive/experiments/fx2_final_bit_head250k_v1.json",
+    "sha256": "sha256:39bd4c60e7c2b0111b19cd1decdf156d94360b637c5af1dd92e3da4274374248"
+  },
+  "failure_class": "execution_failed",
+  "full_corpus_score_bytes": null,
+  "larger_gate_authorized": false,
+  "objective_credit_bytes": 0,
+  "raw_bytes": 250000,
+  "raw_population": "[0,250000)",
+  "schema": "gamma.enwiki9.final-bit-head-terminal.v1",
+  "scientific_verdict": "Incomplete execution; no compression verdict.",
+  "status": "execution_failed"
+}

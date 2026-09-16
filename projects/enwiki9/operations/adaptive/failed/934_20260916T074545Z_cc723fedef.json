@@ -5,27 +5,66 @@
     "sha256": "sha256:9343eb971113ca565c0dad88121eface82c7c1f549f27633e4f5d99927881cea"
   },
   "candidate_tree_sha256": "sha256:a3deadc3c534a59b4a31b378e4ad0c6d8d0e9a805a3fa13a4238a0fdfe55a6ac",
+  "elapsed_seconds": 15.24,
   "execution_guard": {
     "path": "tools/run_with_resource_guard_v3.py",
     "sha256": "sha256:044147f7ffe6922ea8dafd52fc3d4426077b20958adbcd421245ad41adcfc1e4"
   },
   "execution_mode": "discovery",
+  "execution_resources": {
+    "boot_id": "3ce46712-27bc-4199-8e48-e2b3d23926cb",
+    "budget": {
+      "cgroup_parent": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice",
+      "cpus": [
+        2
+      ],
+      "memory_bytes": 9999998976,
+      "scratch_bytes": 16000000000,
+      "swap_bytes": 0,
+      "wall_seconds": 3600
+    },
+    "cgroup_inode": 340391,
+    "cgroup_path": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/gamma-enwiki9-20260916T074545Z_cc723fedef",
+    "cleanup_complete": true,
+    "cpu_enforcement": "taskset-and-sampled-affinity-guard",
+    "groups": [
+      {
+        "created": true,
+        "inode": 340391,
+        "kernel_cpuset": false,
+        "memory_bytes": 9999998976,
+        "path": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/gamma-enwiki9-20260916T074545Z_cc723fedef"
+      }
+    ],
+    "guard_command_sha256": "fc1d2a0df59ce4aa6bf6f9a8c0ba88adb1a9f479ec1c614e2846d84ae05b97bf",
+    "guard_path": "run_logs/adaptive/20260916T074545Z_cc723fedef.resources/guard.json",
+    "missing_diagnostics": [
+      "kernel cpuset controller is not delegated; taskset assignment and existing affinity guard remain active"
+    ],
+    "timing_authority": "diagnostic"
+  },
   "experiment": {
     "path": "operations/adaptive/experiments/fx2_final_bit_head250k_v1.json",
     "sha256": "sha256:39bd4c60e7c2b0111b19cd1decdf156d94360b637c5af1dd92e3da4274374248"
   },
+  "finished_at": "2026-09-16T07:51:36+00:00",
   "gate_size": 250000,
-  "held": true,
+  "held": false,
   "held_at": "2026-09-16T07:45:45+00:00",
   "hold_history": [
     {
       "at": "2026-09-16T07:45:45+00:00",
       "held": true,
       "reason": "Publish tested source and ownership,then refresh CPU2 admission. Prior holds and exclusions unchanged."
+    },
+    {
+      "at": "2026-09-16T07:51:21+00:00",
+      "held": false,
+      "reason": "Published source0fc8904fa and ownership; unit/syntax plus ten publication checks pass. Fresh CPU2 resource admission, one fixed17phase final-bit learner gate only."
     }
   ],
-  "hold_reason": "Publish tested source and ownership,then refresh CPU2 admission. Prior holds and exclusions unchanged.",
   "job_id": "20260916T074545Z_cc723fedef",
+  "log_path": "run_logs/adaptive/20260916T074545Z_cc723fedef.log",
   "priority": 65,
   "proposal": {
     "path": "operations/adaptive/proposals/developed/949_fx2_final_bit_head250k_v1.json",
@@ -33,6 +72,7 @@
   },
   "proposal_id": "fx2_final_bit_head250k_v1",
   "purpose": "diagnostic",
+  "released_at": "2026-09-16T07:51:21+00:00",
   "resource_budget": {
     "cgroup_parent": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice",
     "cpus": [
@@ -43,6 +83,7 @@
     "swap_bytes": 0,
     "wall_seconds": 3600
   },
+  "returncode": 1,
   "runner": {
     "path": "tools/fx2_final_bit_head250k_v1.py",
     "sha256": "sha256:5c82149b03de838416f99a0ca1e4c62ddc12a940b956113d5c2384729a43f68d"
@@ -51,10 +92,14 @@
   "scratch_directories": [
     "results/fx2_final_bit_head250k_v1"
   ],
-  "state": "pending",
+  "started_at": "2026-09-16T07:51:21+00:00",
+  "state": "failed",
   "submitted_at": "2026-09-16T07:45:45+00:00",
   "tags": [],
   "timing_authority": "diagnostic",
   "tool": "tools/fx2_final_bit_head250k_v1.py",
-  "tool_args": []
+  "tool_args": [],
+  "worker_pid": 4083721,
+  "worker_proc_start_ticks": 264121935,
+  "worker_started_at": "2026-09-16T07:51:21+00:00"
 }
