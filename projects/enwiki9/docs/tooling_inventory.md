@@ -12,7 +12,7 @@ Reusable artifact helpers for new tools: [lib/artifacts.py](../lib/artifacts.py)
 The LibNC initializer teacher launcher exits before the first forward, gradient, update, or coded symbol; its source-bound experiment defines that boundary.
 The delayed-status helper's `enwiki9_delayed_status_latest.log` pointer is operational history, not present-host occupancy proof.
 
-Coverage: **1219 files** (33 .c, 79 .cpp, 1 .gdb, 1 .h, 2 .hpp, 1 .html, 1099 .py, 3 .sh).
+Coverage: **1220 files** (33 .c, 79 .cpp, 1 .gdb, 1 .h, 2 .hpp, 1 .html, 1100 .py, 3 .sh).
 
 | Tool | Purpose | Referenced contracts |
 |---|---|---|
@@ -355,7 +355,7 @@ Coverage: **1219 files** (33 .c, 79 .cpp, 1 .gdb, 1 .h, 2 .hpp, 1 .html, 1099 .p
 | [`tools/fx2_cmix_transformer_static_vocab_fixture50051_q0_v1.py`](../tools/fx2_cmix_transformer_static_vocab_fixture50051_q0_v1.py) | Prospective GCC diagnostic on one immutable public profiling fixture. | [1](../operations/adaptive/experiments/fx2_cmix_transformer_static_vocab_fixture50051_q0_v1.json) |
 | [`tools/fx2_cmix_transformer_transfer250k_q0_v1.py`](../tools/fx2_cmix_transformer_transfer250k_q0_v1.py) | Frozen transfer diagnostic using the measured FX2 binary and existing driver. | [1](../operations/adaptive/experiments/fx2_cmix_transformer_transfer250k_q0_v1.json) |
 | [`tools/fx2_cmix_transformer_transfer250k_q0_v2.py`](../tools/fx2_cmix_transformer_transfer250k_q0_v2.py) | Frozen transfer diagnostic using the measured FX2 binary and existing driver. | [2](../operations/adaptive/experiments/fx2_cmix_transformer_transfer250k_q0_v2.json) |
-| [`tools/fx2_coder_trace_v1.hpp`](../tools/fx2_coder_trace_v1.hpp) | Gamma diagnostic instrumentation for the pinned public FX2 arithmetic coder. Records compare probabilities and coder intervals; they are not codec state serialization or a substitute for exact decoded output and archive repeats. | [24](../operations/adaptive/experiments/fx2_causal_field_wrt_replay250k_q0_v1.json) |
+| [`tools/fx2_coder_trace_v1.hpp`](../tools/fx2_coder_trace_v1.hpp) | Gamma diagnostic instrumentation for the pinned public FX2 arithmetic coder. Records compare probabilities and coder intervals; they are not codec state serialization or a substitute for exact decoded output and archive repeats. | [25](../operations/adaptive/experiments/fx2_causal_field_wrt_replay250k_q0_v1.json) |
 | [`tools/fx2_compact_complement_bound_v1.py`](../tools/fx2_compact_complement_bound_v1.py) | Exact ideal-cost ceilings for a frozen pair; not a finite codec certificate. | none found |
 | [`tools/fx2_compact_trace_window.py`](../tools/fx2_compact_trace_window.py) | Run a frozen random window through compact FX2 probability tracing. | none found |
 | [`tools/fx2_compact_v26_fixture50051_q0_v1.py`](../tools/fx2_compact_v26_fixture50051_q0_v1.py) | Guarded P/K/D native FXCM block comparison with the fixed FX2 transformer. | [4](../operations/adaptive/experiments/fx2_compact_v26_fixture50051_q0_v1.json) |
@@ -366,7 +366,7 @@ Coverage: **1219 files** (33 .c, 79 .cpp, 1 .gdb, 1 .h, 2 .hpp, 1 .html, 1099 .p
 | [`tools/fx2_expert_mix_opening250k_v1.py`](../tools/fx2_expert_mix_opening250k_v1.py) | One native archive test of a posterior mixture conditioned on expert disagreement. | [1](../operations/adaptive/experiments/fx2_expert_mix_opening250k_v1.json) |
 | [`tools/fx2_expert_release250k_v1.py`](../tools/fx2_expert_release250k_v1.py) | Production equivalence and component pricing for the frozen expert mixture. | [1](../operations/adaptive/experiments/fx2_expert_release250k_v1.json) |
 | [`tools/fx2_expert_release250k_v2.py`](../tools/fx2_expert_release250k_v2.py) | Production equivalence and component pricing for the frozen expert mixture. | [1](../operations/adaptive/experiments/fx2_expert_release250k_v2.json) |
-| [`tools/fx2_expert_release250k_v3.py`](../tools/fx2_expert_release250k_v3.py) | Production equivalence and component pricing for the frozen expert mixture. | [6](../operations/adaptive/experiments/fx2_attention_window250k_v1.json) |
+| [`tools/fx2_expert_release250k_v3.py`](../tools/fx2_expert_release250k_v3.py) | Production equivalence and component pricing for the frozen expert mixture. | [7](../operations/adaptive/experiments/fx2_attention_window250k_v1.json) |
 | [`tools/fx2_expert_release_adapter_v1.py`](../tools/fx2_expert_release_adapter_v1.py) | Bind the fixed transformer profile and compact aligned mixture to source. | [1](../operations/adaptive/experiments/fx2_expert_release250k_v1.json) |
 | [`tools/fx2_expert_release_adapter_v2.py`](../tools/fx2_expert_release_adapter_v2.py) | Bind the fixed transformer profile and compact aligned mixture to source. | [1](../operations/adaptive/experiments/fx2_expert_release250k_v2.json) |
 | [`tools/fx2_expert_release_adapter_v3.py`](../tools/fx2_expert_release_adapter_v3.py) | Bind the fixed transformer profile and compact aligned mixture to source. | [1](../operations/adaptive/experiments/fx2_expert_release250k_v3.json) |
@@ -440,6 +440,7 @@ Coverage: **1219 files** (33 .c, 79 .cpp, 1 .gdb, 1 .h, 2 .hpp, 1 .html, 1099 .p
 | [`tools/fx2_trim_confirm1m_v1.py`](../tools/fx2_trim_confirm1m_v1.py) | Confirm frozen source trimming on an independently selected native population. | [2](../operations/adaptive/experiments/fx2_trim_confirm1m_v1.json) |
 | [`tools/fx2_trim_scale10m_v1.py`](../tools/fx2_trim_scale10m_v1.py) | Confirm unchanged native trimming at the ten-million-byte scale. | [1](../operations/adaptive/experiments/fx2_trim_scale10m_v1.json) |
 | [`tools/fx2_typed_anchor_soft_queue.py`](../tools/fx2_typed_anchor_soft_queue.py) | Build and gate native fx2 typed-anchor soft-state candidates. | none found |
+| [`tools/fx2_value_feedback250k_v1.py`](../tools/fx2_value_feedback250k_v1.py) | Bound native P/K/D/S archives for the fixed value-feedback realization. | [1](../operations/adaptive/experiments/fx2_value_feedback250k_v1.json) |
 | [`tools/fx2_weight_adaptive_dispatch_gate_v1.py`](../tools/fx2_weight_adaptive_dispatch_gate_v1.py) | Bounded production-entrypoint parity and native rebuild for adaptive packing. | none found |
 | [`tools/fx2_weight_adaptive_dispatch_gate_v2.py`](../tools/fx2_weight_adaptive_dispatch_gate_v2.py) | Bounded production-entrypoint parity and native rebuild for adaptive packing. | none found |
 | [`tools/fx2_weight_adaptive_dispatch_v1.py`](../tools/fx2_weight_adaptive_dispatch_v1.py) | Emit the production dispatch repair without changing retained native source. | [1](../operations/adaptive/experiments/fx2_weight_adaptive_fixture50051_q0_v2.json) |
