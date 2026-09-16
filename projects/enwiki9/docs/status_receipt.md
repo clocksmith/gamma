@@ -2,7 +2,7 @@
 
 Generated from the current certificate, gate receipts, resource guards, and process table.
 
-- Generated at UTC: `2026-09-16T00:29:23+00:00`
+- Generated at UTC: `2026-09-16T00:48:34+00:00`
 
 ## Target State
 
@@ -25,7 +25,7 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 - Active stage: `n/a`
 - Roundtrip arm: `n/a`
 - Active scorer observed: `true`
-- Active cmix mode: `compress`
+- Active cmix mode: `decode`
 - Driver result present: `false`
 - RSS guard status: `n/a`
 - RSS samples: `n/a`
@@ -131,7 +131,7 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 
 - Audit return code: `0`
 - Audit mode: `inventory_snapshot`
-- Inventory generated: `2026-09-16T00:29:01+00:00`
+- Inventory generated: `2026-09-16T00:48:13+00:00`
 - Snapshot identity is verified; inventory inputs were not rescanned. This is not live occupancy or launch authority.
 - Program directories: `1,069`
 - Registered programs: `608`
@@ -150,40 +150,40 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 |---|---:|---:|---:|---|
 | `process` | 3,421,289 | 472,530 | 4,028 | `/bin/bash -lc taskset -c 2 python3 tools/enwiki9_lab.py run --candidate fx2_trim_scale10m_v1 --max-workers 1 > run_logs/manual/trim_scale10m_lab_20...` |
 | `process` | 3,421,389 | 3,421,289 | 43,544 | `python3 tools/enwiki9_lab.py run --candidate fx2_trim_scale10m_v1 --max-workers 1` |
-| `resource_guard` | 3,421,475 | 3,421,389 | 36,968 | `/usr/bin/python3 /home/x/deco/gamma/projects/enwiki9/tools/run_with_resource_guard_v3.py --limit-kib 9765624 --official-decimal-limit-kib 9765624 -...` |
+| `resource_guard` | 3,421,475 | 3,421,389 | 92,080 | `/usr/bin/python3 /home/x/deco/gamma/projects/enwiki9/tools/run_with_resource_guard_v3.py --limit-kib 9765624 --official-decimal-limit-kib 9765624 -...` |
 | `process` | 3,421,488 | 3,421,475 | 57,676 | `/usr/bin/python3 /home/x/deco/gamma/projects/enwiki9/tools/fx2_trim_scale10m_v1.py` |
-| `process` | 3,427,012 | 3,421,488 | 7,724 | `/usr/bin/timeout --signal=TERM --kill-after=2 3600 /home/x/deco/gamma/projects/enwiki9/results/fx2_trim_scale10m_v1/work/P/cmix -c dictionary/engli...` |
-| `native_cmix` | 3,427,013 | 3,427,012 | 5,858,600 | `/home/x/deco/gamma/projects/enwiki9/results/fx2_trim_scale10m_v1/work/P/cmix -c dictionary/english.dic population.raw encode.arc --transformer mode...` |
+| `process` | 3,633,542 | 3,421,488 | 7,708 | `/usr/bin/timeout --signal=TERM --kill-after=2 3600 /home/x/deco/gamma/projects/enwiki9/results/fx2_trim_scale10m_v1/work/P/cmix -d dictionary/engli...` |
+| `native_cmix` | 3,633,543 | 3,633,542 | 5,857,200 | `/home/x/deco/gamma/projects/enwiki9/results/fx2_trim_scale10m_v1/work/P/cmix -d dictionary/english.dic encode.arc decoded.raw --transformer models/...` |
 
 ## Active Candidate Recent Artifacts
 
 | Path | Bytes | Modified UTC |
 |---|---:|---|
-| `projects/enwiki9/results/fx2_trim_scale10m_v1/work/P/ppm.temp` | 14,680,064,001 | `2026-09-16T00:29:23+00:00` |
-| `projects/enwiki9/results/fx2_trim_scale10m_v1/P-encode.stderr` | 369,869 | `2026-09-16T00:29:23+00:00` |
-| `projects/enwiki9/results/fx2_trim_scale10m_v1/work/P/progress.log` | 37,558 | `2026-09-16T00:29:23+00:00` |
-| `projects/enwiki9/results/fx2_trim_scale10m_v1/P-encode.stdout` | 74 | `2026-09-16T00:26:37+00:00` |
-| `projects/enwiki9/results/fx2_trim_scale10m_v1/work/P/encode.arc` | 0 | `2026-09-16T00:23:31+00:00` |
-| `projects/enwiki9/results/fx2_trim_scale10m_v1/work/P/encode.arc.cmix.temp` | 6,251,852 | `2026-09-16T00:23:31+00:00` |
+| `projects/enwiki9/results/fx2_trim_scale10m_v1/work/P/ppm.temp` | 14,680,064,001 | `2026-09-16T00:48:34+00:00` |
+| `projects/enwiki9/results/fx2_trim_scale10m_v1/P-decode.stderr` | 374,550 | `2026-09-16T00:48:34+00:00` |
+| `projects/enwiki9/results/fx2_trim_scale10m_v1/work/P/decoded.raw.cmix.temp` | 1,941,504 | `2026-09-16T00:48:34+00:00` |
+| `projects/enwiki9/results/fx2_trim_scale10m_v1/P-decode.stdout` | 73 | `2026-09-16T00:45:39+00:00` |
+| `projects/enwiki9/results/fx2_trim_scale10m_v1/P-encode-cleanup.json` | 103 | `2026-09-16T00:42:34+00:00` |
+| `projects/enwiki9/results/fx2_trim_scale10m_v1/P-encode.execution.json` | 677 | `2026-09-16T00:42:34+00:00` |
+| `projects/enwiki9/results/fx2_trim_scale10m_v1/P-encode.stdout` | 469 | `2026-09-16T00:42:33+00:00` |
+| `projects/enwiki9/results/fx2_trim_scale10m_v1/P-encode.stderr` | 774,111 | `2026-09-16T00:42:33+00:00` |
+| `projects/enwiki9/results/fx2_trim_scale10m_v1/work/P/encode.arc` | 1,305,268 | `2026-09-16T00:42:33+00:00` |
+| `projects/enwiki9/results/fx2_trim_scale10m_v1/work/P/progress.log` | 130,471 | `2026-09-16T00:42:33+00:00` |
 | `projects/enwiki9/results/fx2_trim_scale10m_v1/P-preprocess-cleanup.json` | 103 | `2026-09-16T00:23:31+00:00` |
 | `projects/enwiki9/results/fx2_trim_scale10m_v1/P-preprocess.execution.json` | 639 | `2026-09-16T00:23:31+00:00` |
-| `projects/enwiki9/results/fx2_trim_scale10m_v1/P-preprocess.stderr` | 89 | `2026-09-16T00:23:31+00:00` |
-| `projects/enwiki9/results/fx2_trim_scale10m_v1/P-preprocess.stdout` | 45 | `2026-09-16T00:23:31+00:00` |
-| `projects/enwiki9/results/fx2_trim_scale10m_v1/work/P/population.stored` | 6,251,857 | `2026-09-16T00:23:31+00:00` |
-| `projects/enwiki9/results/fx2_trim_scale10m_v1/P-compile-repeat.execution.json` | 1,065 | `2026-09-16T00:23:31+00:00` |
 
 ## Active RSS
 
-- Max cmix PID: `3427013`
-- Active cmix mode: `compress`
-- Max cmix RSS KiB: `5,858,600`
-- Active process tree RSS KiB: `6,008,540`
+- Max cmix PID: `3633543`
+- Active cmix mode: `decode`
+- Max cmix RSS KiB: `5,857,200`
+- Active process tree RSS KiB: `6,062,236`
 - Local binary `10GiB` guard KiB: `10,485,760`
 - Decimal `10GB` guard KiB: `9,765,625`
-- Single-process binary margin KiB: `4,627,160`
-- Single-process decimal margin KiB: `3,907,025`
-- Active process tree margin KiB (binary): `4,477,220`
-- Active process tree decimal margin KiB: `3,757,085`
+- Single-process binary margin KiB: `4,628,560`
+- Single-process decimal margin KiB: `3,908,425`
+- Active process tree margin KiB (binary): `4,423,524`
+- Active process tree decimal margin KiB: `3,703,389`
 - Temp input path: `/home/x/deco/gamma/projects/enwiki9/results/fx2_trim_scale10m_v1/work/P/--transformer`
 - Temp output path: `/home/x/deco/gamma/projects/enwiki9/results/fx2_trim_scale10m_v1/work/P/models/6m-q4-fp32.tfwc2`
 - Temp output staging path: `/home/x/deco/gamma/projects/enwiki9/results/fx2_trim_scale10m_v1/work/P/models/6m-q4-fp32.tfwc2.cmix.temp`
@@ -194,7 +194,9 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 - Temp output modified UTC: `2026-09-16T00:23:03+00:00`
 - Temp output staging modified UTC: `n/a`
 - Process read bytes: `0`
-- Process write bytes: `279,937,024`
+- Process write bytes: `270,737,408`
+- Decode scope progress: `2,930,652` / `10,000,000` bytes (`29.307%`)
+- Decode remaining scope bytes: `7,069,348`
 
 ## Contingencies
 
