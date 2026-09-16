@@ -1,0 +1,256 @@
+{
+  "candidate_id": "fx2_attention_anchor250k_v2",
+  "checks": [
+    {
+      "command": [
+        "taskset",
+        "-c",
+        "3",
+        "g++",
+        "-std=c++17",
+        "-O2",
+        "-Ilib",
+        "-DGAMMA_ANCHOR_MODE=0",
+        "tests/fx2_attention_anchor_v2.cpp",
+        "-o",
+        "results/fx2_attention_anchor_v2_preflight/mode0"
+      ],
+      "log": {
+        "bytes": 0,
+        "path": "results/fx2_attention_anchor_v2_preflight/0-build.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "returncode": 0
+    },
+    {
+      "command": [
+        "taskset",
+        "-c",
+        "3",
+        "timeout",
+        "120",
+        "results/fx2_attention_anchor_v2_preflight/mode0"
+      ],
+      "log": {
+        "bytes": 28,
+        "path": "results/fx2_attention_anchor_v2_preflight/0-check.log",
+        "sha256": "ec0fcad68d39d075f122c6d8e99145c28dd866e7a1eb6f8386c1baf78d54e298"
+      },
+      "returncode": 0
+    },
+    {
+      "command": [
+        "taskset",
+        "-c",
+        "3",
+        "g++",
+        "-std=c++17",
+        "-O2",
+        "-Ilib",
+        "-DGAMMA_ANCHOR_MODE=1",
+        "tests/fx2_attention_anchor_v2.cpp",
+        "-o",
+        "results/fx2_attention_anchor_v2_preflight/mode1"
+      ],
+      "log": {
+        "bytes": 0,
+        "path": "results/fx2_attention_anchor_v2_preflight/1-build.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "returncode": 0
+    },
+    {
+      "command": [
+        "taskset",
+        "-c",
+        "3",
+        "timeout",
+        "120",
+        "results/fx2_attention_anchor_v2_preflight/mode1"
+      ],
+      "log": {
+        "bytes": 28,
+        "path": "results/fx2_attention_anchor_v2_preflight/1-check.log",
+        "sha256": "980a840cc0696d427fab22a34a1f9b0ecdd9ddf686270ea83c82bfa750378eb6"
+      },
+      "returncode": 0
+    },
+    {
+      "command": [
+        "taskset",
+        "-c",
+        "3",
+        "g++",
+        "-std=c++17",
+        "-O2",
+        "-Ilib",
+        "-DGAMMA_ANCHOR_MODE=2",
+        "tests/fx2_attention_anchor_v2.cpp",
+        "-o",
+        "results/fx2_attention_anchor_v2_preflight/mode2"
+      ],
+      "log": {
+        "bytes": 0,
+        "path": "results/fx2_attention_anchor_v2_preflight/2-build.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "returncode": 0
+    },
+    {
+      "command": [
+        "taskset",
+        "-c",
+        "3",
+        "timeout",
+        "120",
+        "results/fx2_attention_anchor_v2_preflight/mode2"
+      ],
+      "log": {
+        "bytes": 28,
+        "path": "results/fx2_attention_anchor_v2_preflight/2-check.log",
+        "sha256": "bf53fbbf1016cc505c6e73431a5be6fd7442cc6e38d84bd699d1b7c8d6a81f3c"
+      },
+      "returncode": 0
+    },
+    {
+      "command": [
+        "taskset",
+        "-c",
+        "3",
+        "g++",
+        "-std=c++17",
+        "-O2",
+        "-Ilib",
+        "tests/fx2_attention_anchor_v2.cpp",
+        "-o",
+        "results/fx2_attention_anchor_v2_preflight/missing-mode"
+      ],
+      "expected_failure": true,
+      "log": {
+        "bytes": 1290,
+        "path": "results/fx2_attention_anchor_v2_preflight/missing-mode.log",
+        "sha256": "346d1ed77ba282f4a340290456816e10407a2f3f63320d48745a45cf7b236068"
+      },
+      "returncode": 1
+    },
+    {
+      "command": [
+        "/usr/bin/make",
+        "-n",
+        "-B",
+        "-j1",
+        "cmix",
+        "CC=/usr/bin/g++",
+        "CPPFLAGS_PART-THAT-SHOULD-BE-FAST=-DSEED=923 -DUPDATE_LIMIT=3000 -m64 -Wall -std=c++17 -include cstdint -fno-fast-math -fno-math-errno -fno-exceptions -fno-threadsafe-statics -march=x86-64-v3 -mtune=generic -mrecip=none -fdata-sections -ffunction-sections -O3",
+        "CPPFLAGS_PART-THAT-CAN-BE-SLOW=-DSEED=923 -DUPDATE_LIMIT=3000 -m64 -Wall -std=c++17 -include cstdint -fno-fast-math -fno-math-errno -fno-exceptions -fno-threadsafe-statics -march=x86-64-v3 -mtune=generic -mrecip=none -fdata-sections -ffunction-sections -Os"
+      ],
+      "cwd": "results/fx2_attention_anchor_v2_preflight/native",
+      "dry_run_only": true,
+      "log": {
+        "bytes": 3611,
+        "path": "results/fx2_attention_anchor_v2_preflight/P-make.stdout",
+        "sha256": "a4dfbf46b64001c1ca45ac9660c1ec397e8a86396590a0792aac4f904fa11fe7"
+      },
+      "returncode": 0
+    },
+    {
+      "command": [
+        "/usr/bin/make",
+        "-n",
+        "-B",
+        "-j1",
+        "cmix",
+        "CC=/usr/bin/g++",
+        "CPPFLAGS_PART-THAT-SHOULD-BE-FAST=-DSEED=923 -DUPDATE_LIMIT=3000 -m64 -Wall -std=c++17 -include cstdint -fno-fast-math -fno-math-errno -fno-exceptions -fno-threadsafe-statics -march=x86-64-v3 -mtune=generic -mrecip=none -fdata-sections -ffunction-sections -O3",
+        "CPPFLAGS_PART-THAT-CAN-BE-SLOW=-DSEED=923 -DUPDATE_LIMIT=3000 -m64 -Wall -std=c++17 -include cstdint -fno-fast-math -fno-math-errno -fno-exceptions -fno-threadsafe-statics -march=x86-64-v3 -mtune=generic -mrecip=none -fdata-sections -ffunction-sections -Os",
+        "CPPFLAGS_TRANSFORMER=-m64 -O3 -std=c++17 -Wall -Wextra -fno-math-errno -fdata-sections -ffunction-sections -march=x86-64-v3 -mtune=generic -mrecip=none -DGAMMA_ANCHOR_MODE=0"
+      ],
+      "cwd": "results/fx2_attention_anchor_v2_preflight/native",
+      "dry_run_only": true,
+      "log": {
+        "bytes": 3809,
+        "path": "results/fx2_attention_anchor_v2_preflight/K-make.stdout",
+        "sha256": "9a93daf7495619d6580336d029e9c05d7aae71cd995fb0f2b8974ceb38df4b5f"
+      },
+      "returncode": 0
+    },
+    {
+      "command": [
+        "/usr/bin/make",
+        "-n",
+        "-B",
+        "-j1",
+        "cmix",
+        "CC=/usr/bin/g++",
+        "CPPFLAGS_PART-THAT-SHOULD-BE-FAST=-DSEED=923 -DUPDATE_LIMIT=3000 -m64 -Wall -std=c++17 -include cstdint -fno-fast-math -fno-math-errno -fno-exceptions -fno-threadsafe-statics -march=x86-64-v3 -mtune=generic -mrecip=none -fdata-sections -ffunction-sections -O3",
+        "CPPFLAGS_PART-THAT-CAN-BE-SLOW=-DSEED=923 -DUPDATE_LIMIT=3000 -m64 -Wall -std=c++17 -include cstdint -fno-fast-math -fno-math-errno -fno-exceptions -fno-threadsafe-statics -march=x86-64-v3 -mtune=generic -mrecip=none -fdata-sections -ffunction-sections -Os",
+        "CPPFLAGS_TRANSFORMER=-m64 -O3 -std=c++17 -Wall -Wextra -fno-math-errno -fdata-sections -ffunction-sections -march=x86-64-v3 -mtune=generic -mrecip=none -DGAMMA_ANCHOR_MODE=1"
+      ],
+      "cwd": "results/fx2_attention_anchor_v2_preflight/native",
+      "dry_run_only": true,
+      "log": {
+        "bytes": 3809,
+        "path": "results/fx2_attention_anchor_v2_preflight/D-make.stdout",
+        "sha256": "03631c7e72d8843810e3a1e55639c77ca4bf0501d454f7be4e6304025f103670"
+      },
+      "returncode": 0
+    },
+    {
+      "command": [
+        "/usr/bin/make",
+        "-n",
+        "-B",
+        "-j1",
+        "cmix",
+        "CC=/usr/bin/g++",
+        "CPPFLAGS_PART-THAT-SHOULD-BE-FAST=-DSEED=923 -DUPDATE_LIMIT=3000 -m64 -Wall -std=c++17 -include cstdint -fno-fast-math -fno-math-errno -fno-exceptions -fno-threadsafe-statics -march=x86-64-v3 -mtune=generic -mrecip=none -fdata-sections -ffunction-sections -O3",
+        "CPPFLAGS_PART-THAT-CAN-BE-SLOW=-DSEED=923 -DUPDATE_LIMIT=3000 -m64 -Wall -std=c++17 -include cstdint -fno-fast-math -fno-math-errno -fno-exceptions -fno-threadsafe-statics -march=x86-64-v3 -mtune=generic -mrecip=none -fdata-sections -ffunction-sections -Os",
+        "CPPFLAGS_TRANSFORMER=-m64 -O3 -std=c++17 -Wall -Wextra -fno-math-errno -fdata-sections -ffunction-sections -march=x86-64-v3 -mtune=generic -mrecip=none -DGAMMA_ANCHOR_MODE=2"
+      ],
+      "cwd": "results/fx2_attention_anchor_v2_preflight/native",
+      "dry_run_only": true,
+      "log": {
+        "bytes": 3809,
+        "path": "results/fx2_attention_anchor_v2_preflight/S-make.stdout",
+        "sha256": "95411fe958dd0292043e25bf23c43891d9b041e700d1711f34c6a62ebc639a9d"
+      },
+      "returncode": 0
+    }
+  ],
+  "missing_mode_rejected": true,
+  "no_corpus_codec_executed": true,
+  "old_K_D_S_compile_logs_rejected": true,
+  "prospective_attention_flags_verified": true,
+  "schema": "gamma.enwiki9.attention-anchor-repair-unit.v1",
+  "source_inputs": [
+    {
+      "bytes": 818,
+      "path": "lib/fx2_attention_anchor_v2.h",
+      "sha256": "8b2f780dad67ff827ecd4d316d0ff99ddef7729141541364e95a7f15693febba"
+    },
+    {
+      "bytes": 1518,
+      "path": "tests/fx2_attention_anchor_v2.cpp",
+      "sha256": "e84de5e03d53434f99e559302ca3c4eb5d543a9b4ce852420c006c0116c49803"
+    },
+    {
+      "bytes": 12039,
+      "path": "tools/fx2_attention_anchor250k_v2.py",
+      "sha256": "02e12734e9c3f823d55a2747c6d774ef2433adde48a80eada054f8fdf033a0f2"
+    }
+  ],
+  "source_packages": {
+    "D": {
+      "bytes": 3905812,
+      "path": "results/fx2_attention_anchor_v2_preflight/D-source.zip",
+      "sha256": "ad0511a90a76189fa2ec47ea6a8a0ba264c03f42693aab632fe62d2407eb023b"
+    },
+    "P": {
+      "bytes": 3905220,
+      "path": "results/fx2_attention_anchor_v2_preflight/P-source.zip",
+      "sha256": "c44d941f95bd8504d63ed6ea5112af3ce15aeffb6874ebddb66596ce083c3cf6"
+    }
+  },
+  "steps_per_mode": 144395,
+  "total_steps": 433185
+}

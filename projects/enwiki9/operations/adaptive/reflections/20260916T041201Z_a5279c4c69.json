@@ -1,0 +1,95 @@
+{
+  "attribution": {
+    "causalConfidence": "high",
+    "controlsEquivalent": false,
+    "failureClass": "implementation-failure",
+    "localizedCause": "GAMMA_ANCHOR_MODE is present only in CPPFLAGS_PART-THAT-SHOULD-BE-FAST/SLOW. Transformer objects use independent CPPFLAGS_TRANSFORMER. Header default0 therefore compiled in every arm."
+  },
+  "candidateId": "fx2_attention_anchor250k_v1",
+  "candidateRevision": {
+    "candidateId": "fx2_attention_anchor250k_v1",
+    "candidateTreeSha256": "sha256:4616ffaada3c7c69a7c98b5676d2236adfd3329e2ab834ee24adee09ae1584c8",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/fx2_attention_anchor250k_v1/20260916T041201510571Z_4616ffaada3c.json",
+      "sha256": "sha256:7c1b8705875bd3359f967db3844ae37aff9d6f35dddaffebe007e3a3d380c9bb"
+    }
+  },
+  "decision": {
+    "killPredicatesPass": false,
+    "nextGateBytes": null,
+    "promotionPredicatesPass": false,
+    "rationale": "Add the mode to the exact existing CPPFLAGS_TRANSFORMER flags, require the macro in the header, verify actual compile commands and D/S executable difference before coding. Keep all scientific parameters,population,32 codec/build phases and guards unchanged. Reprice the actual required compile assignment.",
+    "verdict": "retry"
+  },
+  "evidence": [
+    {
+      "path": "operations/provenance/fx2_attention_anchor_build_failure_20260916.json",
+      "sha256": "sha256:13a9a6649ee367cc434a3e0b27a267c809184df34e4436c40aa44728acaa7275"
+    },
+    {
+      "path": "results/fx2_attention_anchor250k_v1/decision.json",
+      "sha256": "sha256:3a8f106260153fbea7a48e4961b1340326e9f63a2ff8ab7e5a936144450f46f2"
+    }
+  ],
+  "experiment": {
+    "path": "operations/adaptive/experiments/fx2_attention_anchor250k_v1.json",
+    "sha256": "sha256:22c623ba7f3ac0605359ba76a1405470b8d3ce816870c26a7c48860ac46aa215"
+  },
+  "generatedUtc": "2026-09-16T04:35:02+00:00",
+  "hypothesis": {
+    "rationale": "The retention hypothesis remains untested. Reported zero archive difference describes four parent-mode binaries.",
+    "verdict": "not-tested"
+  },
+  "job": {
+    "path": "operations/adaptive/completed/929_20260916T041201Z_a5279c4c69.json",
+    "sha256": "sha256:417d260a0d947aa25b57176690c1f2c9fc48b0b4be77a6b6bee538cfe3c4b9c6"
+  },
+  "knowledge": {
+    "retiredDimensions": [],
+    "transferableLessons": [
+      "Compile-time feature flags must reach the translation unit that consumes them. Synthetic tests with manually supplied flags cannot prove native build integration. Verify actual compiler commands and fail on missing mode."
+    ],
+    "uncertainties": [
+      "No active-retention corpus result exists."
+    ]
+  },
+  "measurementAssertions": [
+    {
+      "field": "scopeBytes",
+      "pointer": "/scopeBytes",
+      "source": {
+        "path": "operations/provenance/fx2_attention_anchor_build_failure_20260916.json",
+        "sha256": "sha256:13a9a6649ee367cc434a3e0b27a267c809184df34e4436c40aa44728acaa7275"
+      }
+    }
+  ],
+  "measurements": {
+    "idealBitsSaved": null,
+    "memoryRatio": null,
+    "minimumPartitionIdealBitsSaved": null,
+    "netBytesSaved": null,
+    "positiveSegmentFraction": null,
+    "runtimeRatio": null,
+    "scopeBytes": 250000,
+    "scopeSymbols": null,
+    "sourceBytesDelta": null,
+    "transferRetention": null
+  },
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:e91ff20e92c3cac8acb0cbe5c79fc8e8a3b427d7e151245c8eecc52b1c32fa00",
+    "objectiveId": "gamma-enwiki9-hutter-90m-v3",
+    "objectivePath": "contracts/research/v3/objective-contract.json",
+    "targetScoreBytes": 90000000
+  },
+  "reflectionId": "r-20260916t041201z_a5279c4c69",
+  "schema": "gamma.enwiki9.reflection-receipt.v1",
+  "validity": {
+    "classification": "implementation-failure",
+    "reasons": [
+      "Actual attention compiler commands lack the mode flag; P/K/D/S executables and neural outputs are byte-identical. All32 execution phases pass but neither intended D nor S compiled."
+    ],
+    "valid": false
+  }
+}
