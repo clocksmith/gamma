@@ -1,0 +1,100 @@
+{
+  "schema": "gamma.enwiki9.publication-checks.v1",
+  "audit_id": "fx2_expert_confirm_terminal_v1",
+  "checks": [
+    {
+      "command": [
+        "python3",
+        "projects/enwiki9/tools/hutter_run_ledger.py",
+        "--check"
+      ],
+      "returncode": 0
+    },
+    {
+      "command": [
+        "python3",
+        "projects/enwiki9/tools/enwiki9_release_receipts.py",
+        "--check"
+      ],
+      "returncode": 0
+    },
+    {
+      "command": [
+        "python3",
+        "projects/enwiki9/tools/enwiki9_evidence_matrix.py",
+        "--check"
+      ],
+      "returncode": 0
+    },
+    {
+      "command": [
+        "python3",
+        "projects/enwiki9/tools/enwiki9_best_results.py",
+        "--check"
+      ],
+      "returncode": 0
+    },
+    {
+      "command": [
+        "python3",
+        "projects/enwiki9/tools/enwiki9_status_receipt.py",
+        "--check",
+        "--candidate-audit-snapshot",
+        "/home/x/deco/gamma/projects/enwiki9/candidate_inventory.json",
+        "--candidate-audit-sha256",
+        "f78b0be83daf4e2c85b988e420be77445279a273dae93f73f3ccd7d8ae1f5f3e",
+        "--refresh-profile",
+        "routine"
+      ],
+      "returncode": 0
+    },
+    {
+      "command": [
+        "python3",
+        "projects/enwiki9/tools/enwiki9_doc_lint.py"
+      ],
+      "returncode": 0
+    },
+    {
+      "command": [
+        "python3",
+        "-m",
+        "json.tool",
+        "projects/enwiki9/upper_bound_certificate.json"
+      ],
+      "returncode": 0
+    },
+    {
+      "command": [
+        "python3",
+        "-m",
+        "json.tool",
+        "projects/enwiki9/docs/status_receipt.json"
+      ],
+      "returncode": 0
+    },
+    {
+      "command": [
+        "python3",
+        "projects/enwiki9/tools/backfill_run_ledger.py",
+        "--check"
+      ],
+      "returncode": 0
+    },
+    {
+      "command": [
+        "python3",
+        "projects/enwiki9/tools/enwiki9_tool_catalogue.py",
+        "--check"
+      ],
+      "returncode": 0
+    }
+  ],
+  "expected_check_count": 10,
+  "all_checks_pass": true,
+  "log": {
+    "path": "run_logs/manual/expert_confirm_terminal_publication_checks_20260916.log",
+    "bytes": 36178,
+    "sha256": "f41b65342930f963721e44230d5063fd86f978f2f59fbc96475bc4243bd49576"
+  }
+}
