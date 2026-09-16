@@ -2,7 +2,7 @@
 
 Generated from the current certificate, gate receipts, resource guards, and process table.
 
-- Generated at UTC: `2026-09-16T05:40:33+00:00`
+- Generated at UTC: `2026-09-16T06:02:06+00:00`
 
 ## Target State
 
@@ -39,8 +39,8 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 - Latest decimal single-process margin KiB: `n/a`
 - Safe to launch candidate gate: `false`
 - Terminal verdict present: `false`
-- Pending adaptive jobs: `26`
-- Held pending adaptive jobs: `26`
+- Pending adaptive jobs: `27`
+- Held pending adaptive jobs: `27`
 - Claimable pending adaptive jobs: `0`
 - Canonical release bundles: `4`
 - Validated release run receipts: `0`
@@ -131,13 +131,13 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 
 - Audit return code: `0`
 - Audit mode: `inventory_snapshot`
-- Inventory generated: `2026-09-16T05:40:13+00:00`
+- Inventory generated: `2026-09-16T06:01:45+00:00`
 - Snapshot identity is verified; inventory inputs were not rescanned. This is not live occupancy or launch authority.
-- Program directories: `1,078`
-- Registered programs: `617`
+- Program directories: `1,079`
+- Registered programs: `618`
 - Untracked nonignored entries: `0`
-- Modified tracked entries: `0`
-- Candidate statuses: `active=18, blocked_dependency=101, candidate=267, measured_negative=100, retired=592`
+- Modified tracked entries: `1`
+- Candidate statuses: `active=18, blocked_dependency=101, candidate=268, measured_negative=100, retired=592`
 
 ## View Refresh
 

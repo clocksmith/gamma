@@ -12,7 +12,7 @@ Reusable artifact helpers for new tools: [lib/artifacts.py](../lib/artifacts.py)
 The LibNC initializer teacher launcher exits before the first forward, gradient, update, or coded symbol; its source-bound experiment defines that boundary.
 The delayed-status helper's `enwiki9_delayed_status_latest.log` pointer is operational history, not present-host occupancy proof.
 
-Coverage: **1230 files** (33 .c, 79 .cpp, 1 .gdb, 1 .h, 2 .hpp, 1 .html, 1110 .py, 3 .sh).
+Coverage: **1233 files** (33 .c, 81 .cpp, 1 .gdb, 1 .h, 2 .hpp, 1 .html, 1111 .py, 3 .sh).
 
 | Tool | Purpose | Referenced contracts |
 |---|---|---|
@@ -369,7 +369,7 @@ Coverage: **1230 files** (33 .c, 79 .cpp, 1 .gdb, 1 .h, 2 .hpp, 1 .html, 1110 .p
 | [`tools/fx2_expert_mix_opening250k_v1.py`](../tools/fx2_expert_mix_opening250k_v1.py) | One native archive test of a posterior mixture conditioned on expert disagreement. | [1](../operations/adaptive/experiments/fx2_expert_mix_opening250k_v1.json) |
 | [`tools/fx2_expert_release250k_v1.py`](../tools/fx2_expert_release250k_v1.py) | Production equivalence and component pricing for the frozen expert mixture. | [1](../operations/adaptive/experiments/fx2_expert_release250k_v1.json) |
 | [`tools/fx2_expert_release250k_v2.py`](../tools/fx2_expert_release250k_v2.py) | Production equivalence and component pricing for the frozen expert mixture. | [1](../operations/adaptive/experiments/fx2_expert_release250k_v2.json) |
-| [`tools/fx2_expert_release250k_v3.py`](../tools/fx2_expert_release250k_v3.py) | Production equivalence and component pricing for the frozen expert mixture. | [15](../operations/adaptive/experiments/fx2_ambient_dictionary_probe_v1.json) |
+| [`tools/fx2_expert_release250k_v3.py`](../tools/fx2_expert_release250k_v3.py) | Production equivalence and component pricing for the frozen expert mixture. | [16](../operations/adaptive/experiments/fx2_ambient_dictionary_probe_v1.json) |
 | [`tools/fx2_expert_release_adapter_v1.py`](../tools/fx2_expert_release_adapter_v1.py) | Bind the fixed transformer profile and compact aligned mixture to source. | [1](../operations/adaptive/experiments/fx2_expert_release250k_v1.json) |
 | [`tools/fx2_expert_release_adapter_v2.py`](../tools/fx2_expert_release_adapter_v2.py) | Bind the fixed transformer profile and compact aligned mixture to source. | [1](../operations/adaptive/experiments/fx2_expert_release250k_v2.json) |
 | [`tools/fx2_expert_release_adapter_v3.py`](../tools/fx2_expert_release_adapter_v3.py) | Bind the fixed transformer profile and compact aligned mixture to source. | [1](../operations/adaptive/experiments/fx2_expert_release250k_v3.json) |
@@ -379,6 +379,9 @@ Coverage: **1230 files** (33 .c, 79 .cpp, 1 .gdb, 1 .h, 2 .hpp, 1 .html, 1110 .p
 | [`tools/fx2_final_counts_opening250k_q0_v1.py`](../tools/fx2_final_counts_opening250k_q0_v1.py) | Canonical bounded comparison with a supplied parent and unchanged native counts. | [1](../operations/adaptive/experiments/fx2_final_counts_opening250k_q0_v1.json) |
 | [`tools/fx2_final_counts_replay_v1.py`](../tools/fx2_final_counts_replay_v1.py) | Exact conditional replay of final-parent residual counts; no native inference. | [8](../operations/adaptive/experiments/fx2_causal_residual250k_v1.json) |
 | [`tools/fx2_final_direction_v1.py`](../tools/fx2_final_direction_v1.py) | Enclose the ideal derivative along a fixed recorded Q16 logit path. | none found |
+| [`tools/fx2_final_mlp_native_compare_v1.cpp`](../tools/fx2_final_mlp_native_compare_v1.cpp) | GPL-3.0-or-later. Independent validation through the original native loader. | [1](../operations/adaptive/experiments/fx2_final_mlp_zero250k_v1.json) |
+| [`tools/fx2_final_mlp_zero250k_v1.py`](../tools/fx2_final_mlp_zero250k_v1.py) | Native complete-cost comparison for one fixed final-MLP weight ablation. | [1](../operations/adaptive/experiments/fx2_final_mlp_zero250k_v1.json) |
+| [`tools/fx2_final_mlp_zero_v1.cpp`](../tools/fx2_final_mlp_zero_v1.cpp) | GPL-3.0-or-later. Preparation only; the unchanged native loader reads output. | [1](../operations/adaptive/experiments/fx2_final_mlp_zero250k_v1.json) |
 | [`tools/fx2_gepa_order_package.py`](../tools/fx2_gepa_order_package.py) | Package a self-contained fx2 candidate from a GEPA page-order key. | none found |
 | [`tools/fx2_half_tail_fixture50051_q0_v1.py`](../tools/fx2_half_tail_fixture50051_q0_v1.py) | Reuse the frozen native comparison machinery for one output-tail mutation. | [1](../operations/adaptive/experiments/fx2_half_tail_fixture50051_q0_v1.json) |
 | [`tools/fx2_half_tail_native_adapter_v1.py`](../tools/fx2_half_tail_native_adapter_v1.py) | Source-bound final-output correction, preserving native model input priors. | [1](../operations/adaptive/experiments/fx2_half_tail_fixture50051_q0_v1.json) |
