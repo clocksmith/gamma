@@ -1,0 +1,53 @@
+{
+  "schema": "gamma.enwiki9.exact-source-adapter-multi.v1",
+  "adapter_id": "fx2_value_feedback_coder_observer_v1",
+  "files": [
+    {
+      "source_path": "src/coder/encoder.cpp",
+      "source_sha256": "01c43deb487706c80438bbf2187587bdb22ed56974d0c500d1ab5a6eced9a9fb",
+      "patched_sha256": "ca707f5d52414f52888cfdb6a0aebeab0f1c3adf557c40e211584bc7a4d1b97c",
+      "replacements": [
+        {
+          "before": "#include \"encoder.h\"",
+          "after": "#include \"encoder.h\"\n#include \"gamma-coder-trace.h\""
+        },
+        {
+          "before": "  unsigned int p = Discretize(p_->Predict());",
+          "after": "  const float gamma_probability = p_->Predict();\n  unsigned int p = Discretize(gamma_probability);"
+        },
+        {
+          "before": "  const unsigned int xmid =",
+          "after": "  gamma_fx2_trace::Record gamma_record(gamma_probability, p, x1_, x2_);\n  const unsigned int xmid ="
+        },
+        {
+          "before": "    x2_ = (x2_ << 8) + 255;\n  }\n}\n\nvoid Encoder::Flush()",
+          "after": "    x2_ = (x2_ << 8) + 255;\n  }\n  gamma_record.Finish(bit, x1_, x2_);\n}\n\nvoid Encoder::Flush()"
+        }
+      ]
+    },
+    {
+      "source_path": "src/coder/decoder.cpp",
+      "source_sha256": "9565ac7a3d73ee04a46e7c802581fab6be1e950f99c9c73536053a354d2c6860",
+      "patched_sha256": "c5701ec6f7d6721525df55893098e4d9a642b736da1e3dbd1206f4511229c16f",
+      "replacements": [
+        {
+          "before": "#include \"decoder.h\"",
+          "after": "#include \"decoder.h\"\n#include \"gamma-coder-trace.h\""
+        },
+        {
+          "before": "  unsigned int p = Discretize(p_->Predict());",
+          "after": "  const float gamma_probability = p_->Predict();\n  unsigned int p = Discretize(gamma_probability);"
+        },
+        {
+          "before": "  const unsigned int xmid =",
+          "after": "  gamma_fx2_trace::Record gamma_record(gamma_probability, p, x1_, x2_);\n  const unsigned int xmid ="
+        },
+        {
+          "before": "  return bit;",
+          "after": "  gamma_record.Finish(bit, x1_, x2_);\n  return bit;"
+        }
+      ]
+    }
+  ],
+  "scope": "Observation only. Original Predict/Perceive and quantization order retained."
+}

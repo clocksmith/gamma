@@ -1,0 +1,304 @@
+{"status": "preflight_passed", "inputs": 34}
+{
+  "created_at": "2026-09-16T01:11:38+00:00",
+  "evidence": [
+    {
+      "path": "operations/provenance/fx2_value_feedback250k_selected_20260916.json",
+      "sha256": "sha256:9dc134370708655420f33b47a663b2b22e855a7dde3af670697bc55183492a91"
+    }
+  ],
+  "expected_savings_bytes": 0,
+  "experiment": {
+    "path": "operations/adaptive/experiments/fx2_value_feedback250k_v1.json",
+    "sha256": "sha256:dd1915eb0afb5f08424f1599fe0acd52264cd925966d553c55d496f58e84fd63"
+  },
+  "hypothesis": "Aligned causal value-rounding feedback improves final native archive bytes against the unchanged parent and shifted-residual control.",
+  "interfaces_exposed": [
+    "Exactly frozen Q16 error feedback on all three native attention V layers; 576 int32 residuals, reset per article. Original int8 cache, paid weights, Q/K quantization, learning code and schedule retained. D/S later predictions and learned mixer state may differ from P."
+  ],
+  "kill_condition": "Retire valid archive/control non-improvement; resource/evidence failure is not a measured compression loss.",
+  "max_program_bytes": 65536,
+  "mechanism_change": "other",
+  "mechanism_change_bonus": 0,
+  "mechanism_class": "endpoint",
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:e91ff20e92c3cac8acb0cbe5c79fc8e8a3b427d7e151245c8eecc52b1c32fa00",
+    "objectiveId": "gamma-enwiki9-hutter-90m-v3",
+    "objectivePath": "contracts/research/v3/objective-contract.json",
+    "targetScoreBytes": 90000000
+  },
+  "parent": "fx2_trim_confirm1m_v1",
+  "parent_proposal_id": null,
+  "priority": 50,
+  "promotion_condition": "All required checks and guards, gP>0, gS>0 and maximum source/binary component increment<=65536 authorize one unchanged same-size confirmation. Valid non-improvement retires this realization. Resource/correctness/evidence failure is incomplete execution, not compression rejection.",
+  "proposal_id": "fx2_value_feedback250k_v1",
+  "retired_neighborhoods": [],
+  "schema": "gamma.enwiki9.algorithm-proposal.v2",
+  "search_priority": 50,
+  "state": "proposed",
+  "title": "Causal value-rounding feedback in native transformer"
+}
+{
+  "claimed_at": "2026-09-16T01:11:38+00:00",
+  "created_at": "2026-09-16T01:11:38+00:00",
+  "evidence": [
+    {
+      "path": "operations/provenance/fx2_value_feedback250k_selected_20260916.json",
+      "sha256": "sha256:9dc134370708655420f33b47a663b2b22e855a7dde3af670697bc55183492a91"
+    }
+  ],
+  "expected_savings_bytes": 0,
+  "experiment": {
+    "path": "operations/adaptive/experiments/fx2_value_feedback250k_v1.json",
+    "sha256": "sha256:dd1915eb0afb5f08424f1599fe0acd52264cd925966d553c55d496f58e84fd63"
+  },
+  "hypothesis": "Aligned causal value-rounding feedback improves final native archive bytes against the unchanged parent and shifted-residual control.",
+  "interfaces_exposed": [
+    "Exactly frozen Q16 error feedback on all three native attention V layers; 576 int32 residuals, reset per article. Original int8 cache, paid weights, Q/K quantization, learning code and schedule retained. D/S later predictions and learned mixer state may differ from P."
+  ],
+  "kill_condition": "Retire valid archive/control non-improvement; resource/evidence failure is not a measured compression loss.",
+  "max_program_bytes": 65536,
+  "mechanism_change": "other",
+  "mechanism_change_bonus": 0,
+  "mechanism_class": "endpoint",
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:e91ff20e92c3cac8acb0cbe5c79fc8e8a3b427d7e151245c8eecc52b1c32fa00",
+    "objectiveId": "gamma-enwiki9-hutter-90m-v3",
+    "objectivePath": "contracts/research/v3/objective-contract.json",
+    "targetScoreBytes": 90000000
+  },
+  "owner": "root_value_feedback",
+  "parent": "fx2_trim_confirm1m_v1",
+  "parent_proposal_id": null,
+  "priority": 50,
+  "promotion_condition": "All required checks and guards, gP>0, gS>0 and maximum source/binary component increment<=65536 authorize one unchanged same-size confirmation. Valid non-improvement retires this realization. Resource/correctness/evidence failure is incomplete execution, not compression rejection.",
+  "proposal_id": "fx2_value_feedback250k_v1",
+  "retired_neighborhoods": [],
+  "schema": "gamma.enwiki9.algorithm-proposal.v2",
+  "search_priority": 50,
+  "state": "claimed",
+  "title": "Causal value-rounding feedback in native transformer"
+}
+{
+  "candidate_id": "fx2_value_feedback250k_v1",
+  "path": "programs/fx2_value_feedback250k_v1",
+  "proposal": {
+    "candidate_id": "fx2_value_feedback250k_v1",
+    "claimed_at": "2026-09-16T01:11:38+00:00",
+    "created_at": "2026-09-16T01:11:38+00:00",
+    "developed_at": "2026-09-16T01:11:39+00:00",
+    "evidence": [
+      {
+        "path": "operations/provenance/fx2_value_feedback250k_selected_20260916.json",
+        "sha256": "sha256:9dc134370708655420f33b47a663b2b22e855a7dde3af670697bc55183492a91"
+      }
+    ],
+    "expected_savings_bytes": 0,
+    "experiment": {
+      "path": "operations/adaptive/experiments/fx2_value_feedback250k_v1.json",
+      "sha256": "sha256:dd1915eb0afb5f08424f1599fe0acd52264cd925966d553c55d496f58e84fd63"
+    },
+    "hypothesis": "Aligned causal value-rounding feedback improves final native archive bytes against the unchanged parent and shifted-residual control.",
+    "interfaces_exposed": [
+      "Exactly frozen Q16 error feedback on all three native attention V layers; 576 int32 residuals, reset per article. Original int8 cache, paid weights, Q/K quantization, learning code and schedule retained. D/S later predictions and learned mixer state may differ from P."
+    ],
+    "kill_condition": "Retire valid archive/control non-improvement; resource/evidence failure is not a measured compression loss.",
+    "max_program_bytes": 65536,
+    "mechanism_change": "other",
+    "mechanism_change_bonus": 0,
+    "mechanism_class": "endpoint",
+    "objective": {
+      "corpusBytes": 1000000000,
+      "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+      "objectiveDigest": "sha256:e91ff20e92c3cac8acb0cbe5c79fc8e8a3b427d7e151245c8eecc52b1c32fa00",
+      "objectiveId": "gamma-enwiki9-hutter-90m-v3",
+      "objectivePath": "contracts/research/v3/objective-contract.json",
+      "targetScoreBytes": 90000000
+    },
+    "owner": "root_value_feedback",
+    "parent": "fx2_trim_confirm1m_v1",
+    "parent_proposal_id": null,
+    "priority": 50,
+    "promotion_condition": "All required checks and guards, gP>0, gS>0 and maximum source/binary component increment<=65536 authorize one unchanged same-size confirmation. Valid non-improvement retires this realization. Resource/correctness/evidence failure is incomplete execution, not compression rejection.",
+    "proposal_id": "fx2_value_feedback250k_v1",
+    "retired_neighborhoods": [],
+    "schema": "gamma.enwiki9.algorithm-proposal.v2",
+    "search_priority": 50,
+    "state": "developed",
+    "title": "Causal value-rounding feedback in native transformer"
+  }
+}
+{
+  "path": "operations/adaptive/candidate-revisions/fx2_value_feedback250k_v1/20260916T011139438833Z_ad935d920e8e.json",
+  "revision": {
+    "candidateId": "fx2_value_feedback250k_v1",
+    "candidateTreeSha256": "sha256:ad935d920e8ee9e30ef67261cb808529c2c60be62f2469987ed7518ec4396abb",
+    "change": {
+      "evidence": [
+        "operations/adaptive/experiments/fx2_value_feedback250k_v1.json"
+      ],
+      "hypothesis": "Aligned causal value-rounding feedback improves final native archive bytes against the unchanged parent and shifted-residual control.",
+      "kind": "implementation",
+      "replacements": [],
+      "summary": [
+        "Exactly frozen Q16 error feedback on all three native attention V layers; 576 int32 residuals, reset per article. Original int8 cache, paid weights, Q/K quantization, learning code and schedule retained. D/S later predictions and learned mixer state may differ from P."
+      ]
+    },
+    "files": [
+      {
+        "blobPath": "operations/adaptive/candidate-blobs/sha256/d1/d10f3251d6547ee8fa7e837b06c4c371a2e75ba4bd6477095eba03a1e6fed3a8",
+        "bytes": 993,
+        "normalization": "semantic-meta-v1",
+        "path": "meta.json",
+        "sha256": "d10f3251d6547ee8fa7e837b06c4c371a2e75ba4bd6477095eba03a1e6fed3a8"
+      },
+      {
+        "blobPath": "operations/adaptive/candidate-blobs/sha256/d6/d63ef9bc3af37105a2e4dfa3a95eee43347815a3e0e6643174321ae6aa08a38e",
+        "bytes": 14170,
+        "normalization": "verbatim",
+        "path": "program.py",
+        "sha256": "d63ef9bc3af37105a2e4dfa3a95eee43347815a3e0e6643174321ae6aa08a38e"
+      }
+    ],
+    "generatedUtc": "2026-09-16T01:11:39+00:00",
+    "immutableBlobsComplete": true,
+    "objective": {
+      "corpusBytes": 1000000000,
+      "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+      "objectiveDigest": "sha256:e91ff20e92c3cac8acb0cbe5c79fc8e8a3b427d7e151245c8eecc52b1c32fa00",
+      "objectiveId": "gamma-enwiki9-hutter-90m-v3",
+      "objectivePath": "contracts/research/v3/objective-contract.json",
+      "targetScoreBytes": 90000000
+    },
+    "parentRevision": {
+      "candidateId": "fx2_trim_confirm1m_v1",
+      "candidateTreeSha256": "sha256:7f68bd667bfd51a66975a36cc14cb9209dd2811832e2862e5f43f9fe74570307",
+      "receipt": {
+        "path": "operations/adaptive/candidate-revisions/fx2_trim_confirm1m_v1/20260915T233320249569Z_7f68bd667bfd.json",
+        "sha256": "sha256:d27b35ba2986418cfb68f2fa60414dc74f0acf120270ca759a8e49b80d099943"
+      }
+    },
+    "previousRevision": {
+      "path": "operations/adaptive/candidate-revisions/fx2_value_feedback250k_v1/20260916T011139069284Z_f92c493e22bd.json",
+      "sha256": "sha256:6617f6d44e42df780232634fa8c777202066df355f0ae7800f3a806cf67af74f"
+    },
+    "provenanceClass": "native",
+    "schema": "gamma.enwiki9.candidate-revision.v1",
+    "treeDigestAlgorithm": "sha256-canonical-counted-files-v1"
+  }
+}
+{
+  "candidate_id": "fx2_value_feedback250k_v1",
+  "candidate_revision": {
+    "path": "operations/adaptive/candidate-revisions/fx2_value_feedback250k_v1/20260916T011139438833Z_ad935d920e8e.json",
+    "sha256": "sha256:b9386b482305d9c38b972b637fd08f1af79484de356c17f98944c0ce9c23b236"
+  },
+  "candidate_tree_sha256": "sha256:ad935d920e8ee9e30ef67261cb808529c2c60be62f2469987ed7518ec4396abb",
+  "execution_guard": {
+    "path": "tools/run_with_resource_guard_v3.py",
+    "sha256": "sha256:044147f7ffe6922ea8dafd52fc3d4426077b20958adbcd421245ad41adcfc1e4"
+  },
+  "execution_mode": "discovery",
+  "experiment": {
+    "path": "operations/adaptive/experiments/fx2_value_feedback250k_v1.json",
+    "sha256": "sha256:dd1915eb0afb5f08424f1599fe0acd52264cd925966d553c55d496f58e84fd63"
+  },
+  "gate_size": 250000,
+  "job_id": "20260916T011139Z_5242a9a620",
+  "priority": 80,
+  "proposal": {
+    "path": "operations/adaptive/proposals/developed/949_fx2_value_feedback250k_v1.json",
+    "sha256": "sha256:36692f95a021c3c152d42a67769256f5202ff02abf0d683d406f389913abdd7b"
+  },
+  "proposal_id": "fx2_value_feedback250k_v1",
+  "purpose": "diagnostic",
+  "resource_budget": {
+    "cgroup_parent": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice",
+    "cpus": [
+      2
+    ],
+    "memory_bytes": 9999998976,
+    "scratch_bytes": 20000000000,
+    "swap_bytes": 0,
+    "wall_seconds": 7200
+  },
+  "runner": {
+    "path": "tools/fx2_value_feedback250k_v1.py",
+    "sha256": "sha256:d63ef9bc3af37105a2e4dfa3a95eee43347815a3e0e6643174321ae6aa08a38e"
+  },
+  "schema": "gamma.enwiki9.adaptive-job.v3",
+  "scratch_directories": [
+    "results/fx2_value_feedback250k_v1"
+  ],
+  "state": "pending",
+  "submitted_at": "2026-09-16T01:11:39+00:00",
+  "tags": [],
+  "timing_authority": "diagnostic",
+  "tool": "tools/fx2_value_feedback250k_v1.py",
+  "tool_args": []
+}
+{
+  "candidate_id": "fx2_value_feedback250k_v1",
+  "candidate_revision": {
+    "path": "operations/adaptive/candidate-revisions/fx2_value_feedback250k_v1/20260916T011139438833Z_ad935d920e8e.json",
+    "sha256": "sha256:b9386b482305d9c38b972b637fd08f1af79484de356c17f98944c0ce9c23b236"
+  },
+  "candidate_tree_sha256": "sha256:ad935d920e8ee9e30ef67261cb808529c2c60be62f2469987ed7518ec4396abb",
+  "execution_guard": {
+    "path": "tools/run_with_resource_guard_v3.py",
+    "sha256": "sha256:044147f7ffe6922ea8dafd52fc3d4426077b20958adbcd421245ad41adcfc1e4"
+  },
+  "execution_mode": "discovery",
+  "experiment": {
+    "path": "operations/adaptive/experiments/fx2_value_feedback250k_v1.json",
+    "sha256": "sha256:dd1915eb0afb5f08424f1599fe0acd52264cd925966d553c55d496f58e84fd63"
+  },
+  "gate_size": 250000,
+  "held": true,
+  "held_at": "2026-09-16T01:11:40+00:00",
+  "hold_history": [
+    {
+      "at": "2026-09-16T01:11:40+00:00",
+      "held": true,
+      "reason": "Publish frozen source/ownership and pass fresh resource admission. CPU2 and16GB scratch remain reserved by live fx2_trim_scale10m_v1; no concurrent launch."
+    }
+  ],
+  "hold_reason": "Publish frozen source/ownership and pass fresh resource admission. CPU2 and16GB scratch remain reserved by live fx2_trim_scale10m_v1; no concurrent launch.",
+  "job_id": "20260916T011139Z_5242a9a620",
+  "priority": 80,
+  "proposal": {
+    "path": "operations/adaptive/proposals/developed/949_fx2_value_feedback250k_v1.json",
+    "sha256": "sha256:36692f95a021c3c152d42a67769256f5202ff02abf0d683d406f389913abdd7b"
+  },
+  "proposal_id": "fx2_value_feedback250k_v1",
+  "purpose": "diagnostic",
+  "resource_budget": {
+    "cgroup_parent": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice",
+    "cpus": [
+      2
+    ],
+    "memory_bytes": 9999998976,
+    "scratch_bytes": 20000000000,
+    "swap_bytes": 0,
+    "wall_seconds": 7200
+  },
+  "runner": {
+    "path": "tools/fx2_value_feedback250k_v1.py",
+    "sha256": "sha256:d63ef9bc3af37105a2e4dfa3a95eee43347815a3e0e6643174321ae6aa08a38e"
+  },
+  "schema": "gamma.enwiki9.adaptive-job.v3",
+  "scratch_directories": [
+    "results/fx2_value_feedback250k_v1"
+  ],
+  "state": "pending",
+  "submitted_at": "2026-09-16T01:11:39+00:00",
+  "tags": [],
+  "timing_authority": "diagnostic",
+  "tool": "tools/fx2_value_feedback250k_v1.py",
+  "tool_args": []
+}
+HELD_JOB 20260916T011139Z_5242a9a620
