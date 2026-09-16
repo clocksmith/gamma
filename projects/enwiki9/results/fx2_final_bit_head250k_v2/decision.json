@@ -1,0 +1,656 @@
+{
+  "D_trace_on_off_identity": true,
+  "KD_introduced_state_identity": true,
+  "PK_archive_identity": true,
+  "arms": {
+    "D": {
+      "archive": {
+        "bytes": 33783,
+        "path": "results/fx2_final_bit_head250k_v2/work/native/D-encode.arc",
+        "sha256": "16bc9db79f6d77219ac80cb25a5c8977622c091fb601e693f4a271dc91f1d94d"
+      },
+      "archive_bytes": 33783,
+      "exact_inverse": true,
+      "feature_predictions": 151113,
+      "repeat": {
+        "bytes": 33783,
+        "path": "results/fx2_final_bit_head250k_v2/work/native/D-repeat.arc",
+        "sha256": "16bc9db79f6d77219ac80cb25a5c8977622c091fb601e693f4a271dc91f1d94d"
+      },
+      "repeat_byte_identical": true,
+      "restored": {
+        "bytes": 250000,
+        "path": "results/fx2_final_bit_head250k_v2/work/native/D-decode.raw",
+        "sha256": "665fc689441b68462d88f82dc33212abe9c4824be095d03a556c9b55a2829fd3"
+      },
+      "state_boundaries": 74
+    },
+    "K": {
+      "archive": {
+        "bytes": 33429,
+        "path": "results/fx2_final_bit_head250k_v2/work/native/K-encode.arc",
+        "sha256": "70325310e96b83b48677d76d53141e69ddb47519b4cdffd1c85f51fe2c444dbe"
+      },
+      "archive_bytes": 33429,
+      "exact_inverse": true,
+      "feature_predictions": 151113,
+      "repeat": {
+        "bytes": 33429,
+        "path": "results/fx2_final_bit_head250k_v2/work/native/K-repeat.arc",
+        "sha256": "70325310e96b83b48677d76d53141e69ddb47519b4cdffd1c85f51fe2c444dbe"
+      },
+      "repeat_byte_identical": true,
+      "restored": {
+        "bytes": 250000,
+        "path": "results/fx2_final_bit_head250k_v2/work/native/K-decode.raw",
+        "sha256": "665fc689441b68462d88f82dc33212abe9c4824be095d03a556c9b55a2829fd3"
+      },
+      "state_boundaries": 74
+    },
+    "P": {
+      "archive": {
+        "bytes": 33429,
+        "path": "results/fx2_final_bit_head250k_v2/work/native/P-encode.arc",
+        "sha256": "70325310e96b83b48677d76d53141e69ddb47519b4cdffd1c85f51fe2c444dbe"
+      },
+      "archive_bytes": 33429,
+      "exact_inverse": true,
+      "feature_predictions": 151113,
+      "repeat": {
+        "bytes": 33429,
+        "path": "results/fx2_final_bit_head250k_v2/work/native/P-repeat.arc",
+        "sha256": "70325310e96b83b48677d76d53141e69ddb47519b4cdffd1c85f51fe2c444dbe"
+      },
+      "repeat_byte_identical": true,
+      "restored": {
+        "bytes": 250000,
+        "path": "results/fx2_final_bit_head250k_v2/work/native/P-decode.raw",
+        "sha256": "665fc689441b68462d88f82dc33212abe9c4824be095d03a556c9b55a2829fd3"
+      },
+      "state_boundaries": 74
+    },
+    "S": {
+      "archive": {
+        "bytes": 47526,
+        "path": "results/fx2_final_bit_head250k_v2/work/native/S-encode.arc",
+        "sha256": "ea43a42c3317ad64d6231b29c702be01d38d4fb42f6645a1585cad30b6a48e49"
+      },
+      "archive_bytes": 47526,
+      "exact_inverse": true,
+      "feature_predictions": 151113,
+      "repeat": {
+        "bytes": 47526,
+        "path": "results/fx2_final_bit_head250k_v2/work/native/S-repeat.arc",
+        "sha256": "ea43a42c3317ad64d6231b29c702be01d38d4fb42f6645a1585cad30b6a48e49"
+      },
+      "repeat_byte_identical": true,
+      "restored": {
+        "bytes": 250000,
+        "path": "results/fx2_final_bit_head250k_v2/work/native/S-decode.raw",
+        "sha256": "665fc689441b68462d88f82dc33212abe9c4824be095d03a556c9b55a2829fd3"
+      },
+      "state_boundaries": 74
+    }
+  },
+  "artifacts": {
+    "bytes": 51244,
+    "path": "results/fx2_final_bit_head250k_v2/artifacts.json",
+    "sha256": "7545857615a22f2586f54ba9bbf95e34baec46dcafa12499e8f1482e5c486e48"
+  },
+  "binary_component_net_bytes": -16763,
+  "candidate_id": "fx2_final_bit_head250k_v2",
+  "child_closure_ok": true,
+  "commands": [
+    {
+      "accepted_returncodes": [
+        0
+      ],
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "360",
+        "/usr/bin/make",
+        "-j1",
+        "cmix",
+        "CC=/usr/bin/g++",
+        "CPPFLAGS_PART-THAT-SHOULD-BE-FAST=-DSEED=923 -DUPDATE_LIMIT=3000 -m64 -Wall -std=c++17 -include cstdint -fno-fast-math -fno-math-errno -fno-exceptions -fno-threadsafe-statics -march=x86-64-v3 -mtune=generic -mrecip=none -fdata-sections -ffunction-sections -O3",
+        "CPPFLAGS_PART-THAT-CAN-BE-SLOW=-DSEED=923 -DUPDATE_LIMIT=3000 -m64 -Wall -std=c++17 -include cstdint -fno-fast-math -fno-math-errno -fno-exceptions -fno-threadsafe-statics -march=x86-64-v3 -mtune=generic -mrecip=none -fdata-sections -ffunction-sections -Os"
+      ],
+      "elapsed_cap_seconds": 360,
+      "elapsed_seconds": 13.814136058092117,
+      "environment": {},
+      "launch_error": null,
+      "missing_diagnostics": [],
+      "phase": "compile",
+      "returncode": 0,
+      "system_cpu_seconds": 1.108267,
+      "timing_authority": "shared-host diagnostic",
+      "user_cpu_seconds": 12.586316
+    },
+    {
+      "accepted_returncodes": [
+        0
+      ],
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "30",
+        "/usr/bin/make",
+        "clean"
+      ],
+      "elapsed_cap_seconds": 30,
+      "elapsed_seconds": 0.10193277103826404,
+      "environment": {},
+      "launch_error": null,
+      "missing_diagnostics": [],
+      "phase": "clean-repeat",
+      "returncode": 0,
+      "system_cpu_seconds": 0.001000000000000112,
+      "timing_authority": "shared-host diagnostic",
+      "user_cpu_seconds": 0.0029529999999997614
+    },
+    {
+      "accepted_returncodes": [
+        0
+      ],
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "360",
+        "/usr/bin/make",
+        "-j1",
+        "cmix",
+        "CC=/usr/bin/g++",
+        "CPPFLAGS_PART-THAT-SHOULD-BE-FAST=-DSEED=923 -DUPDATE_LIMIT=3000 -m64 -Wall -std=c++17 -include cstdint -fno-fast-math -fno-math-errno -fno-exceptions -fno-threadsafe-statics -march=x86-64-v3 -mtune=generic -mrecip=none -fdata-sections -ffunction-sections -O3",
+        "CPPFLAGS_PART-THAT-CAN-BE-SLOW=-DSEED=923 -DUPDATE_LIMIT=3000 -m64 -Wall -std=c++17 -include cstdint -fno-fast-math -fno-math-errno -fno-exceptions -fno-threadsafe-statics -march=x86-64-v3 -mtune=generic -mrecip=none -fdata-sections -ffunction-sections -Os"
+      ],
+      "elapsed_cap_seconds": 360,
+      "elapsed_seconds": 13.913700649980456,
+      "environment": {},
+      "launch_error": null,
+      "missing_diagnostics": [],
+      "phase": "compile-repeat",
+      "returncode": 0,
+      "system_cpu_seconds": 1.1296300000000001,
+      "timing_authority": "shared-host diagnostic",
+      "user_cpu_seconds": 12.619726000000002
+    },
+    {
+      "accepted_returncodes": [
+        0
+      ],
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "180",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_final_bit_head250k_v2/work/native/cmix",
+        "-s",
+        "dictionary/english.dic",
+        "population.raw",
+        "population.stored"
+      ],
+      "elapsed_cap_seconds": 180,
+      "elapsed_seconds": 0.10225442098453641,
+      "environment": {
+        "GAMMA_FX2_FINAL_BIT_ARM": "P"
+      },
+      "launch_error": null,
+      "missing_diagnostics": [],
+      "phase": "preprocess",
+      "returncode": 0,
+      "system_cpu_seconds": 0.0027079999999997106,
+      "timing_authority": "shared-host diagnostic",
+      "user_cpu_seconds": 0.007660999999998808
+    },
+    {
+      "accepted_returncodes": [
+        0
+      ],
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "300",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_final_bit_head250k_v2/work/native/cmix",
+        "-c",
+        "dictionary/english.dic",
+        "population.raw",
+        "P-encode.arc",
+        "--transformer",
+        "models/6m-q4-fp32.tfwc2"
+      ],
+      "elapsed_cap_seconds": 300,
+      "elapsed_seconds": 36.63624412706122,
+      "environment": {
+        "GAMMA_FX2_CODER_TRACE": "/home/x/deco/gamma/projects/enwiki9/results/fx2_final_bit_head250k_v2/work/native/P-encode.coder",
+        "GAMMA_FX2_FINAL_BIT_ARM": "P",
+        "GAMMA_FX2_FINAL_BIT_BASE": "/home/x/deco/gamma/projects/enwiki9/results/fx2_final_bit_head250k_v2/work/native/P-encode.base",
+        "GAMMA_FX2_FINAL_BIT_STATE": "/home/x/deco/gamma/projects/enwiki9/results/fx2_final_bit_head250k_v2/work/native/P-encode.state"
+      },
+      "launch_error": null,
+      "missing_diagnostics": [],
+      "phase": "P-encode",
+      "returncode": 0,
+      "system_cpu_seconds": 1.675503,
+      "timing_authority": "shared-host diagnostic",
+      "user_cpu_seconds": 34.193625
+    },
+    {
+      "accepted_returncodes": [
+        0
+      ],
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "300",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_final_bit_head250k_v2/work/native/cmix",
+        "-d",
+        "dictionary/english.dic",
+        "P-encode.arc",
+        "P-decode.raw",
+        "--transformer",
+        "models/6m-q4-fp32.tfwc2"
+      ],
+      "elapsed_cap_seconds": 300,
+      "elapsed_seconds": 36.13502602791414,
+      "environment": {
+        "GAMMA_FX2_CODER_TRACE": "/home/x/deco/gamma/projects/enwiki9/results/fx2_final_bit_head250k_v2/work/native/P-decode.coder",
+        "GAMMA_FX2_FINAL_BIT_ARM": "P",
+        "GAMMA_FX2_FINAL_BIT_BASE": "/home/x/deco/gamma/projects/enwiki9/results/fx2_final_bit_head250k_v2/work/native/P-decode.base",
+        "GAMMA_FX2_FINAL_BIT_STATE": "/home/x/deco/gamma/projects/enwiki9/results/fx2_final_bit_head250k_v2/work/native/P-decode.state"
+      },
+      "launch_error": null,
+      "missing_diagnostics": [],
+      "phase": "P-decode",
+      "returncode": 0,
+      "system_cpu_seconds": 1.7341600000000001,
+      "timing_authority": "shared-host diagnostic",
+      "user_cpu_seconds": 34.182736000000006
+    },
+    {
+      "accepted_returncodes": [
+        0
+      ],
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "300",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_final_bit_head250k_v2/work/native/cmix",
+        "-c",
+        "dictionary/english.dic",
+        "P-decode.raw",
+        "P-repeat.arc",
+        "--transformer",
+        "models/6m-q4-fp32.tfwc2"
+      ],
+      "elapsed_cap_seconds": 300,
+      "elapsed_seconds": 36.13768331008032,
+      "environment": {
+        "GAMMA_FX2_CODER_TRACE": "/home/x/deco/gamma/projects/enwiki9/results/fx2_final_bit_head250k_v2/work/native/P-repeat.coder",
+        "GAMMA_FX2_FINAL_BIT_ARM": "P",
+        "GAMMA_FX2_FINAL_BIT_BASE": "/home/x/deco/gamma/projects/enwiki9/results/fx2_final_bit_head250k_v2/work/native/P-repeat.base",
+        "GAMMA_FX2_FINAL_BIT_STATE": "/home/x/deco/gamma/projects/enwiki9/results/fx2_final_bit_head250k_v2/work/native/P-repeat.state"
+      },
+      "launch_error": null,
+      "missing_diagnostics": [],
+      "phase": "P-repeat",
+      "returncode": 0,
+      "system_cpu_seconds": 1.7463119999999996,
+      "timing_authority": "shared-host diagnostic",
+      "user_cpu_seconds": 34.14944
+    },
+    {
+      "accepted_returncodes": [
+        0
+      ],
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "300",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_final_bit_head250k_v2/work/native/cmix",
+        "-c",
+        "dictionary/english.dic",
+        "population.raw",
+        "K-encode.arc",
+        "--transformer",
+        "models/6m-q4-fp32.tfwc2"
+      ],
+      "elapsed_cap_seconds": 300,
+      "elapsed_seconds": 36.3345725457184,
+      "environment": {
+        "GAMMA_FX2_CODER_TRACE": "/home/x/deco/gamma/projects/enwiki9/results/fx2_final_bit_head250k_v2/work/native/K-encode.coder",
+        "GAMMA_FX2_FINAL_BIT_ARM": "K",
+        "GAMMA_FX2_FINAL_BIT_BASE": "/home/x/deco/gamma/projects/enwiki9/results/fx2_final_bit_head250k_v2/work/native/K-encode.base",
+        "GAMMA_FX2_FINAL_BIT_STATE": "/home/x/deco/gamma/projects/enwiki9/results/fx2_final_bit_head250k_v2/work/native/K-encode.state"
+      },
+      "launch_error": null,
+      "missing_diagnostics": [],
+      "phase": "K-encode",
+      "returncode": 0,
+      "system_cpu_seconds": 1.7547829999999998,
+      "timing_authority": "shared-host diagnostic",
+      "user_cpu_seconds": 34.356198000000006
+    },
+    {
+      "accepted_returncodes": [
+        0
+      ],
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "300",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_final_bit_head250k_v2/work/native/cmix",
+        "-d",
+        "dictionary/english.dic",
+        "K-encode.arc",
+        "K-decode.raw",
+        "--transformer",
+        "models/6m-q4-fp32.tfwc2"
+      ],
+      "elapsed_cap_seconds": 300,
+      "elapsed_seconds": 36.433748212177306,
+      "environment": {
+        "GAMMA_FX2_CODER_TRACE": "/home/x/deco/gamma/projects/enwiki9/results/fx2_final_bit_head250k_v2/work/native/K-decode.coder",
+        "GAMMA_FX2_FINAL_BIT_ARM": "K",
+        "GAMMA_FX2_FINAL_BIT_BASE": "/home/x/deco/gamma/projects/enwiki9/results/fx2_final_bit_head250k_v2/work/native/K-decode.base",
+        "GAMMA_FX2_FINAL_BIT_STATE": "/home/x/deco/gamma/projects/enwiki9/results/fx2_final_bit_head250k_v2/work/native/K-decode.state"
+      },
+      "launch_error": null,
+      "missing_diagnostics": [],
+      "phase": "K-decode",
+      "returncode": 0,
+      "system_cpu_seconds": 1.7475680000000011,
+      "timing_authority": "shared-host diagnostic",
+      "user_cpu_seconds": 34.428053000000006
+    },
+    {
+      "accepted_returncodes": [
+        0
+      ],
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "300",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_final_bit_head250k_v2/work/native/cmix",
+        "-c",
+        "dictionary/english.dic",
+        "K-decode.raw",
+        "K-repeat.arc",
+        "--transformer",
+        "models/6m-q4-fp32.tfwc2"
+      ],
+      "elapsed_cap_seconds": 300,
+      "elapsed_seconds": 36.53592753689736,
+      "environment": {
+        "GAMMA_FX2_CODER_TRACE": "/home/x/deco/gamma/projects/enwiki9/results/fx2_final_bit_head250k_v2/work/native/K-repeat.coder",
+        "GAMMA_FX2_FINAL_BIT_ARM": "K",
+        "GAMMA_FX2_FINAL_BIT_BASE": "/home/x/deco/gamma/projects/enwiki9/results/fx2_final_bit_head250k_v2/work/native/K-repeat.base",
+        "GAMMA_FX2_FINAL_BIT_STATE": "/home/x/deco/gamma/projects/enwiki9/results/fx2_final_bit_head250k_v2/work/native/K-repeat.state"
+      },
+      "launch_error": null,
+      "missing_diagnostics": [],
+      "phase": "K-repeat",
+      "returncode": 0,
+      "system_cpu_seconds": 1.7098809999999993,
+      "timing_authority": "shared-host diagnostic",
+      "user_cpu_seconds": 34.54215599999998
+    },
+    {
+      "accepted_returncodes": [
+        0
+      ],
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "300",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_final_bit_head250k_v2/work/native/cmix",
+        "-c",
+        "dictionary/english.dic",
+        "population.raw",
+        "D-encode.arc",
+        "--transformer",
+        "models/6m-q4-fp32.tfwc2"
+      ],
+      "elapsed_cap_seconds": 300,
+      "elapsed_seconds": 36.43987027090043,
+      "environment": {
+        "GAMMA_FX2_CODER_TRACE": "/home/x/deco/gamma/projects/enwiki9/results/fx2_final_bit_head250k_v2/work/native/D-encode.coder",
+        "GAMMA_FX2_FINAL_BIT_ARM": "D",
+        "GAMMA_FX2_FINAL_BIT_BASE": "/home/x/deco/gamma/projects/enwiki9/results/fx2_final_bit_head250k_v2/work/native/D-encode.base",
+        "GAMMA_FX2_FINAL_BIT_STATE": "/home/x/deco/gamma/projects/enwiki9/results/fx2_final_bit_head250k_v2/work/native/D-encode.state"
+      },
+      "launch_error": null,
+      "missing_diagnostics": [],
+      "phase": "D-encode",
+      "returncode": 0,
+      "system_cpu_seconds": 1.7462669999999996,
+      "timing_authority": "shared-host diagnostic",
+      "user_cpu_seconds": 34.39229000000003
+    },
+    {
+      "accepted_returncodes": [
+        0
+      ],
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "300",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_final_bit_head250k_v2/work/native/cmix",
+        "-d",
+        "dictionary/english.dic",
+        "D-encode.arc",
+        "D-decode.raw",
+        "--transformer",
+        "models/6m-q4-fp32.tfwc2"
+      ],
+      "elapsed_cap_seconds": 300,
+      "elapsed_seconds": 36.635925214737654,
+      "environment": {
+        "GAMMA_FX2_CODER_TRACE": "/home/x/deco/gamma/projects/enwiki9/results/fx2_final_bit_head250k_v2/work/native/D-decode.coder",
+        "GAMMA_FX2_FINAL_BIT_ARM": "D",
+        "GAMMA_FX2_FINAL_BIT_BASE": "/home/x/deco/gamma/projects/enwiki9/results/fx2_final_bit_head250k_v2/work/native/D-decode.base",
+        "GAMMA_FX2_FINAL_BIT_STATE": "/home/x/deco/gamma/projects/enwiki9/results/fx2_final_bit_head250k_v2/work/native/D-decode.state"
+      },
+      "launch_error": null,
+      "missing_diagnostics": [],
+      "phase": "D-decode",
+      "returncode": 0,
+      "system_cpu_seconds": 1.7537090000000024,
+      "timing_authority": "shared-host diagnostic",
+      "user_cpu_seconds": 34.578190000000006
+    },
+    {
+      "accepted_returncodes": [
+        0
+      ],
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "300",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_final_bit_head250k_v2/work/native/cmix",
+        "-c",
+        "dictionary/english.dic",
+        "D-decode.raw",
+        "D-repeat.arc",
+        "--transformer",
+        "models/6m-q4-fp32.tfwc2"
+      ],
+      "elapsed_cap_seconds": 300,
+      "elapsed_seconds": 36.53999067377299,
+      "environment": {
+        "GAMMA_FX2_CODER_TRACE": "/home/x/deco/gamma/projects/enwiki9/results/fx2_final_bit_head250k_v2/work/native/D-repeat.coder",
+        "GAMMA_FX2_FINAL_BIT_ARM": "D",
+        "GAMMA_FX2_FINAL_BIT_BASE": "/home/x/deco/gamma/projects/enwiki9/results/fx2_final_bit_head250k_v2/work/native/D-repeat.base",
+        "GAMMA_FX2_FINAL_BIT_STATE": "/home/x/deco/gamma/projects/enwiki9/results/fx2_final_bit_head250k_v2/work/native/D-repeat.state"
+      },
+      "launch_error": null,
+      "missing_diagnostics": [],
+      "phase": "D-repeat",
+      "returncode": 0,
+      "system_cpu_seconds": 1.6561579999999978,
+      "timing_authority": "shared-host diagnostic",
+      "user_cpu_seconds": 34.552414999999996
+    },
+    {
+      "accepted_returncodes": [
+        0
+      ],
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "300",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_final_bit_head250k_v2/work/native/cmix",
+        "-c",
+        "dictionary/english.dic",
+        "population.raw",
+        "S-encode.arc",
+        "--transformer",
+        "models/6m-q4-fp32.tfwc2"
+      ],
+      "elapsed_cap_seconds": 300,
+      "elapsed_seconds": 36.43991696508601,
+      "environment": {
+        "GAMMA_FX2_CODER_TRACE": "/home/x/deco/gamma/projects/enwiki9/results/fx2_final_bit_head250k_v2/work/native/S-encode.coder",
+        "GAMMA_FX2_FINAL_BIT_ARM": "S",
+        "GAMMA_FX2_FINAL_BIT_BASE": "/home/x/deco/gamma/projects/enwiki9/results/fx2_final_bit_head250k_v2/work/native/S-encode.base",
+        "GAMMA_FX2_FINAL_BIT_STATE": "/home/x/deco/gamma/projects/enwiki9/results/fx2_final_bit_head250k_v2/work/native/S-encode.state"
+      },
+      "launch_error": null,
+      "missing_diagnostics": [],
+      "phase": "S-encode",
+      "returncode": 0,
+      "system_cpu_seconds": 1.680492000000001,
+      "timing_authority": "shared-host diagnostic",
+      "user_cpu_seconds": 34.46389199999999
+    },
+    {
+      "accepted_returncodes": [
+        0
+      ],
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "300",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_final_bit_head250k_v2/work/native/cmix",
+        "-d",
+        "dictionary/english.dic",
+        "S-encode.arc",
+        "S-decode.raw",
+        "--transformer",
+        "models/6m-q4-fp32.tfwc2"
+      ],
+      "elapsed_cap_seconds": 300,
+      "elapsed_seconds": 36.53831108426675,
+      "environment": {
+        "GAMMA_FX2_CODER_TRACE": "/home/x/deco/gamma/projects/enwiki9/results/fx2_final_bit_head250k_v2/work/native/S-decode.coder",
+        "GAMMA_FX2_FINAL_BIT_ARM": "S",
+        "GAMMA_FX2_FINAL_BIT_BASE": "/home/x/deco/gamma/projects/enwiki9/results/fx2_final_bit_head250k_v2/work/native/S-decode.base",
+        "GAMMA_FX2_FINAL_BIT_STATE": "/home/x/deco/gamma/projects/enwiki9/results/fx2_final_bit_head250k_v2/work/native/S-decode.state"
+      },
+      "launch_error": null,
+      "missing_diagnostics": [],
+      "phase": "S-decode",
+      "returncode": 0,
+      "system_cpu_seconds": 1.7560769999999977,
+      "timing_authority": "shared-host diagnostic",
+      "user_cpu_seconds": 34.49447399999997
+    },
+    {
+      "accepted_returncodes": [
+        0
+      ],
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "300",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_final_bit_head250k_v2/work/native/cmix",
+        "-c",
+        "dictionary/english.dic",
+        "S-decode.raw",
+        "S-repeat.arc",
+        "--transformer",
+        "models/6m-q4-fp32.tfwc2"
+      ],
+      "elapsed_cap_seconds": 300,
+      "elapsed_seconds": 36.43710280023515,
+      "environment": {
+        "GAMMA_FX2_CODER_TRACE": "/home/x/deco/gamma/projects/enwiki9/results/fx2_final_bit_head250k_v2/work/native/S-repeat.coder",
+        "GAMMA_FX2_FINAL_BIT_ARM": "S",
+        "GAMMA_FX2_FINAL_BIT_BASE": "/home/x/deco/gamma/projects/enwiki9/results/fx2_final_bit_head250k_v2/work/native/S-repeat.base",
+        "GAMMA_FX2_FINAL_BIT_STATE": "/home/x/deco/gamma/projects/enwiki9/results/fx2_final_bit_head250k_v2/work/native/S-repeat.state"
+      },
+      "launch_error": null,
+      "missing_diagnostics": [],
+      "phase": "S-repeat",
+      "returncode": 0,
+      "system_cpu_seconds": 1.7446190000000001,
+      "timing_authority": "shared-host diagnostic",
+      "user_cpu_seconds": 34.305740000000014
+    },
+    {
+      "accepted_returncodes": [
+        0
+      ],
+      "command": [
+        "/usr/bin/timeout",
+        "--signal=TERM",
+        "--kill-after=2",
+        "300",
+        "/home/x/deco/gamma/projects/enwiki9/results/fx2_final_bit_head250k_v2/work/native/cmix",
+        "-c",
+        "dictionary/english.dic",
+        "population.raw",
+        "D-untraced.arc",
+        "--transformer",
+        "models/6m-q4-fp32.tfwc2"
+      ],
+      "elapsed_cap_seconds": 300,
+      "elapsed_seconds": 36.13709037704393,
+      "environment": {
+        "GAMMA_FX2_FINAL_BIT_ARM": "D"
+      },
+      "launch_error": null,
+      "missing_diagnostics": [],
+      "phase": "D-untraced",
+      "returncode": 0,
+      "system_cpu_seconds": 1.7266050000000028,
+      "timing_authority": "shared-host diagnostic",
+      "user_cpu_seconds": 34.03618799999998
+    }
+  ],
+  "complete_package_bytes": null,
+  "experiment": {
+    "path": "operations/adaptive/experiments/fx2_final_bit_head250k_v2.json",
+    "sha256": "sha256:7f2e67a591cf06b25dce0c19ca563b992b4ae55bb967ce2a1850e5f206002ca6"
+  },
+  "frozen_hidden_logit_digests_equal": true,
+  "full_corpus_score_bytes": null,
+  "g_P": -354,
+  "g_S": 13743,
+  "larger_gate_authorized": false,
+  "objective_credit_bytes": 0,
+  "original_model_state_serialized": false,
+  "protected_parent_probability_truth_identity": true,
+  "raw_bytes": 250000,
+  "raw_population": "[0,250000)",
+  "schema": "gamma.enwiki9.final-bit-head-terminal.v1",
+  "scientific_verdict": "Retire fixed final-bit learner: required archive/control separation failed.",
+  "source_component_gate_pass": false,
+  "source_component_net_bytes": -7458,
+  "status": "passed"
+}
