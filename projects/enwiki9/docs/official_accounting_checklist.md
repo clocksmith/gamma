@@ -4,10 +4,12 @@ This checklist is for promoted `enwik9` candidates only. Prefix results,
 forecasts, local proxy scores, and shadow-coder simulations do not satisfy this
 checklist.
 
-The canonical Gamma objective is
-`contracts/research/v1/objective-contract.json`. This checklist expands its
-prize-facing accounting procedure; conflicting prose does not override the
-versioned contract.
+The active Gamma objective is
+`contracts/research/v3/objective-contract.json`: **90,000,000 complete bytes**.
+Historical v1 (105M) and v2 (99M) contracts and their receipts remain unchanged.
+This checklist expands the prize-facing accounting procedure; conflicting prose
+does not override the active versioned contract. Full-corpus success remains
+unproved until a complete executable witness and qualification receipts exist.
 
 ## Score Object
 
@@ -17,6 +19,15 @@ The official-facing score must be audited as:
 S = length(comp9.exe or source package) + length(archive9.exe)
 ```
 
+For a separate decoder, the rule is `S = C + 2D + A`, including required options.
+When compressor and decoder are identical, the decoder multiplier becomes one,
+giving `S = 2C + A` for the shared program. A submitted source ZIP must include
+a makefile producing the executable. Standard libraries are allowed; additional
+runtime installations are not. Required models, dictionaries and other assets
+must be present and charged under the chosen form. These rules do not certify
+the dependencies or portability of any particular Gamma build.
+[Official rules, checked September 15, 2026](https://www.hutter1.net/prize/hrules.htm).
+
 Local screening rows may use:
 
 ```text
@@ -25,25 +36,33 @@ S_local = program_proxy_bytes + archive_payload_bytes
 
 `S_local` is useful for search. It is not a submission score.
 
-## Active Local Budget
+## Active Objective And Historical Planning Reference
 
-The current source-bound frontier is endpoint428 with a counted minified source
-package of `261,125` bytes. Against the canonical target:
+The retained endpoint428 forecast uses a counted minified source package of
+`261,125` bytes. It is a historical planning reference, not a verified full-1G
+score or a score inherited by a different native predictor. Against the active
+target, its arithmetic is:
 
 ```text
-target_score_bytes                         105,000,000
+target_score_bytes                          90,000,000
 counted_minified_source_package_bytes          261,125
-maximum_full_corpus_archive_payload_bytes  104,738,875
+maximum_full_corpus_archive_payload_bytes   89,738,875
 best_counted_forecast                      109,389,323
-remaining_forecast_debt                      4,389,323
+remaining_forecast_debt                     19,389,323
 ```
 
 This is source-bound forecast accounting, not a full-corpus score. A child must
-save at least `4,389,323 + added_program_bytes + added_framing_bytes` at full
+save at least `19,389,323 + added_program_bytes + added_framing_bytes` at full
 scope relative to the forecast parent, with additional transfer safety before
-full-1G authorization.
+full-1G authorization. This conditional arithmetic is not earned savings or a
+measurement of a different codec's target distance.
 
-## `cmix-obias` Immediate-Candidate Ledger
+## Historical `cmix-obias` Candidate Ledger
+
+The following section preserves its August qualification snapshot and 105M
+milestone. Its job-status words are historical, not current liveness evidence.
+Use the exact linked terminal receipts and a fresh lab status for current
+qualification; these rows confer no Gamma authorship or full-corpus credit.
 
 The locally hash-bound external candidate uses the primary self-extracting
 submission form. Its currently claimed counted files are:
