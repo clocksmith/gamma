@@ -1,24 +1,196 @@
 {
-  "active_candidate": null,
-  "active_candidate_recent_artifacts": [],
-  "active_gate": null,
+  "active_candidate": {
+    "active_source": "live_adaptive_tool_rss_guard",
+    "evidence": "current process, guard, and adaptive-job evidence identify this candidate",
+    "label": "active candidate",
+    "program_id": "fx2_final_bit_head250k_v2",
+    "scope_bytes": 250000,
+    "status": "running"
+  },
+  "active_candidate_recent_artifacts": [
+    {
+      "bytes": 23494656,
+      "mtime_utc": "2026-09-16T08:03:40+00:00",
+      "path": "projects/enwiki9/results/fx2_final_bit_head250k_v2/work/native/P-decode.coder"
+    },
+    {
+      "bytes": 574574,
+      "mtime_utc": "2026-09-16T08:03:40+00:00",
+      "path": "projects/enwiki9/results/fx2_final_bit_head250k_v2/P-decode.stderr"
+    },
+    {
+      "bytes": 14680064001,
+      "mtime_utc": "2026-09-16T08:03:40+00:00",
+      "path": "projects/enwiki9/results/fx2_final_bit_head250k_v2/work/native/ppm.temp"
+    },
+    {
+      "bytes": 20054016,
+      "mtime_utc": "2026-09-16T08:03:40+00:00",
+      "path": "projects/enwiki9/results/fx2_final_bit_head250k_v2/work/native/P-decode.state"
+    },
+    {
+      "bytes": 98304,
+      "mtime_utc": "2026-09-16T08:03:39+00:00",
+      "path": "projects/enwiki9/results/fx2_final_bit_head250k_v2/work/native/P-decode.raw.cmix.temp"
+    },
+    {
+      "bytes": 0,
+      "mtime_utc": "2026-09-16T08:03:22+00:00",
+      "path": "projects/enwiki9/results/fx2_final_bit_head250k_v2/work/native/P-decode.base"
+    },
+    {
+      "bytes": 0,
+      "mtime_utc": "2026-09-16T08:03:13+00:00",
+      "path": "projects/enwiki9/results/fx2_final_bit_head250k_v2/P-decode.stdout"
+    },
+    {
+      "bytes": 78,
+      "mtime_utc": "2026-09-16T08:03:13+00:00",
+      "path": "projects/enwiki9/results/fx2_final_bit_head250k_v2/P-encode-cleanup.json"
+    },
+    {
+      "bytes": 1099,
+      "mtime_utc": "2026-09-16T08:03:13+00:00",
+      "path": "projects/enwiki9/results/fx2_final_bit_head250k_v2/P-encode.execution.json"
+    },
+    {
+      "bytes": 114,
+      "mtime_utc": "2026-09-16T08:03:12+00:00",
+      "path": "projects/enwiki9/results/fx2_final_bit_head250k_v2/P-encode.stdout"
+    },
+    {
+      "bytes": 29101758,
+      "mtime_utc": "2026-09-16T08:03:12+00:00",
+      "path": "projects/enwiki9/results/fx2_final_bit_head250k_v2/work/native/P-encode.state"
+    },
+    {
+      "bytes": 5920,
+      "mtime_utc": "2026-09-16T08:03:12+00:00",
+      "path": "projects/enwiki9/results/fx2_final_bit_head250k_v2/work/native/P-encode.base"
+    }
+  ],
+  "active_gate": {
+    "driver_result_json": "projects/enwiki9/results/fx2_final_bit_head250k_v2/decision.json",
+    "driver_result_json_present": false,
+    "evidence": "gate decision is running; wait for terminal receipts",
+    "gate_size": 250000,
+    "label": "active gate",
+    "next_action": "wait_for_gate_completion",
+    "program_id": "fx2_final_bit_head250k_v2",
+    "scope_bytes": 250000,
+    "scope_symbols": 151210,
+    "scope_unit": "canonical enwik9 raw byte",
+    "source": "live_adaptive_tool_rss_guard",
+    "status": "running"
+  },
   "active_processes": {
-    "active_rows": [],
-    "active_scorer_observed": false,
-    "cmix_rows": [],
+    "active_cmix_mode": "decode",
+    "active_decode_progress": {
+      "capped_output_bytes": 250000,
+      "remaining_scope_bytes": 0,
+      "scope_bytes": 250000,
+      "scope_fraction": 1.0,
+      "scope_percent": 100.0,
+      "staging_output_bytes": 2930652
+    },
+    "active_proc_io": {
+      "cancelled_write_bytes": 0,
+      "rchar": 3382481,
+      "read_bytes": 0,
+      "syscr": 120,
+      "syscw": 22151,
+      "wchar": 43703483,
+      "write_bytes": 45953024
+    },
+    "active_rows": [
+      {
+        "args": "python3 tools/enwiki9_lab.py run --candidate fx2_final_bit_head250k_v2 --max-workers 1",
+        "pgid": 8214,
+        "pid": 8214,
+        "ppid": 1,
+        "rss_kib": 43300,
+        "stat": "Ssl"
+      },
+      {
+        "args": "/usr/bin/python3 /home/x/deco/gamma/projects/enwiki9/tools/run_with_resource_guard_v3.py --limit-kib 9765624 --official-decimal-limit-kib 9765624 --limit-mode tree --cgroup-path /sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/gamma-enwiki9-20260916T075657Z_17152228fe --cgroup-memory-max-bytes 9999998976 --temporary-disk-limit-bytes 16000000000 --phase-marker-path /home/x/deco/gamma/projects/enwiki9/run_logs/adaptive/20260916T075657Z_17152228fe.resources/phases.jsonl --max-logical-cpus 1 --guard-json /home/x/deco/gamma/projects/enwiki9/run_logs/adaptive/20260916T075657Z_17152228fe.resources/guard.json --label 20260916T075657Z_17152228fe --phase diagnostic --scratch-path /home/x/deco/gamma/projects/enwiki9/results/fx2_final_bit_head250k_v2 --scratch-path /home/x/deco/gamma/projects/enwiki9/run_logs/adaptive/20260916T075657Z_17152228fe.log --scratch-path /home/x/deco/gamma/projects/enwiki9/run_logs/adaptive/20260916T075657Z_17152228fe.resources --scratch-path /tmp/gamma-enwiki9-20260916T075657Z_17152228fe-47w17uya/fx2_final_bit_head250k_v2 -- /usr/bin/taskset --cpu-list 2 /bin/sh -c printf '%s\\n' '{\"phase\":\"diagnostic\",\"event\":\"worker_start\",\"detail\":\"operational envelope only; no codec phase credit\"}' >> \"$GAMMA_RESOURCE_PHASE_MARKERS\" || exit 125; exec \"$@\" enwiki9-discovery-envelope /usr/bin/python3 /home/x/deco/gamma/projects/enwiki9/tools/fx2_final_bit_head250k_v2.py",
+        "pgid": 8214,
+        "pid": 8334,
+        "ppid": 8214,
+        "rss_kib": 35968,
+        "stat": "S"
+      },
+      {
+        "args": "/usr/bin/python3 /home/x/deco/gamma/projects/enwiki9/tools/fx2_final_bit_head250k_v2.py",
+        "pgid": 8347,
+        "pid": 8347,
+        "ppid": 8334,
+        "rss_kib": 75012,
+        "stat": "Ss"
+      },
+      {
+        "args": "/usr/bin/timeout --signal=TERM --kill-after=2 300 /home/x/deco/gamma/projects/enwiki9/results/fx2_final_bit_head250k_v2/work/native/cmix -d dictionary/english.dic P-encode.arc P-decode.raw --transformer models/6m-q4-fp32.tfwc2",
+        "pgid": 20972,
+        "pid": 20972,
+        "ppid": 8347,
+        "rss_kib": 7644,
+        "stat": "S"
+      },
+      {
+        "args": "/home/x/deco/gamma/projects/enwiki9/results/fx2_final_bit_head250k_v2/work/native/cmix -d dictionary/english.dic P-encode.arc P-decode.raw --transformer models/6m-q4-fp32.tfwc2",
+        "pgid": 20972,
+        "pid": 20973,
+        "ppid": 20972,
+        "rss_kib": 5589316,
+        "stat": "R"
+      }
+    ],
+    "active_scorer_observed": true,
+    "active_temp_io": {
+      "input_bytes": null,
+      "input_mtime_utc": null,
+      "input_path": "/home/x/deco/gamma/projects/enwiki9/results/fx2_final_bit_head250k_v2/work/native/--transformer",
+      "output_bytes": 2930652,
+      "output_mtime_utc": "2026-09-16T08:02:07+00:00",
+      "output_path": "/home/x/deco/gamma/projects/enwiki9/results/fx2_final_bit_head250k_v2/work/native/models/6m-q4-fp32.tfwc2",
+      "output_temp_bytes": null,
+      "output_temp_mtime_utc": null,
+      "output_temp_path": "/home/x/deco/gamma/projects/enwiki9/results/fx2_final_bit_head250k_v2/work/native/models/6m-q4-fp32.tfwc2.cmix.temp"
+    },
+    "active_tree_decimal_10gb_margin_kib": 4014385,
+    "active_tree_margin_kib": 4734520,
+    "active_tree_rss_kib": 5751240,
+    "cmix_rows": [
+      {
+        "args": "/home/x/deco/gamma/projects/enwiki9/results/fx2_final_bit_head250k_v2/work/native/cmix -d dictionary/english.dic P-encode.arc P-decode.raw --transformer models/6m-q4-fp32.tfwc2",
+        "pgid": 20972,
+        "pid": 20973,
+        "ppid": 20972,
+        "rss_kib": 5589316,
+        "stat": "R"
+      }
+    ],
     "controller_rows": [],
     "decimal_10gb_guard_kib": 9765625,
     "existing_observer_source_live": false,
-    "max_cmix_process": null,
-    "recorded_running_job_count": 1,
+    "max_cmix_process": {
+      "args": "/home/x/deco/gamma/projects/enwiki9/results/fx2_final_bit_head250k_v2/work/native/cmix -d dictionary/english.dic P-encode.arc P-decode.raw --transformer models/6m-q4-fp32.tfwc2",
+      "pgid": 20972,
+      "pid": 20973,
+      "ppid": 20972,
+      "rss_kib": 5589316,
+      "stat": "R"
+    },
+    "recorded_running_job_count": 2,
     "research_rows": [],
-    "rss_guard_kib": 10485760
+    "rss_guard_kib": 10485760,
+    "single_process_decimal_10gb_margin_kib": 4176309,
+    "single_process_margin_kib": 4896444
   },
   "adaptive_jobs": {
     "claimable_pending_job_count": 0,
-    "held_pending_job_count": 27,
-    "pending_job_count": 27,
-    "running_job_count": 1,
+    "held_pending_job_count": 26,
+    "pending_job_count": 26,
+    "running_job_count": 2,
     "running_jobs": [
       {
         "candidate_id": "endpoint428_horizon_retained_parent_trace_q0_v1",
@@ -37,6 +209,33 @@
         "timing_authority": "unverified",
         "worker_pid": 2878467,
         "worker_pid_live": false
+      },
+      {
+        "candidate_id": "fx2_final_bit_head250k_v2",
+        "execution_mode": "discovery",
+        "experiment": {
+          "path": "operations/adaptive/experiments/fx2_final_bit_head250k_v2.json",
+          "sha256": "sha256:7f2e67a591cf06b25dce0c19ca563b992b4ae55bb967ce2a1850e5f206002ca6"
+        },
+        "gate_size": 250000,
+        "job_id": "20260916T075657Z_17152228fe",
+        "liveness": "live",
+        "path": "projects/enwiki9/operations/adaptive/running/934_20260916T075657Z_17152228fe.json",
+        "resource_budget": {
+          "cgroup_parent": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice",
+          "cpus": [
+            2
+          ],
+          "memory_bytes": 9999998976,
+          "scratch_bytes": 16000000000,
+          "swap_bytes": 0,
+          "wall_seconds": 3600
+        },
+        "started_at": "2026-09-16T08:02:07+00:00",
+        "state": "running",
+        "timing_authority": "diagnostic",
+        "worker_pid": 8334,
+        "worker_pid_live": true
       }
     ]
   },
@@ -123,7 +322,9 @@
     "scope_bytes": 1000000000,
     "status": "not verified"
   },
-  "blocker": null,
+  "blocker": {
+    "label": "blocker"
+  },
   "candidate_audit": {
     "expected_sha256": "10b41ef270ddabad2a627a07d234890f9a06ed86026f6f312dececd245fe7f4d",
     "freshness": "not_revalidated",
@@ -209,51 +410,82 @@
     "objectivePath": "contracts/research/v3/objective-contract.json",
     "targetScoreBytes": 90000000
   },
-  "contingencies": null,
-  "gate_decision": null,
+  "contingencies": {
+    "if_passes": {
+      "action": "record pass and inspect the frozen candidate promotion rule",
+      "next_scope_bytes": null,
+      "reason": "the generic scope ladder grants no candidate-specific authority; a larger scope requires an explicitly authorized successor gate"
+    },
+    "if_roundtrip_or_determinism_fails": {
+      "action": "record failure and do not promote",
+      "reason": "compression evidence is not a deterministic constructive upper-bound row"
+    },
+    "if_rss_fails": {
+      "action": "record RSS failure and retire or repackage this integration shape",
+      "lower_memory_suggestion": null
+    }
+  },
+  "gate_decision": {
+    "adaptive_job_id": "20260916T075657Z_17152228fe",
+    "adaptive_job_path": "projects/enwiki9/operations/adaptive/running/934_20260916T075657Z_17152228fe.json",
+    "adaptive_worker_pid": 8334,
+    "candidate": "fx2_final_bit_head250k_v2",
+    "claim_rule": "A nested RSS guard inherits candidate and scope from its verified live adaptive worker; the guard supplies resource and terminal metrics only.",
+    "driver_result_json": "projects/enwiki9/results/fx2_final_bit_head250k_v2/decision.json",
+    "driver_result_json_present": false,
+    "gate_size": 250000,
+    "guard_inferred_scope_bytes": null,
+    "guard_label_candidate": "fx2_final_bit_head250k_v2",
+    "next_action": "wait_for_gate_completion",
+    "scope_bytes": 250000,
+    "scope_symbols": 151210,
+    "scope_unit": "canonical enwik9 raw byte",
+    "source": "live_adaptive_tool_rss_guard",
+    "verdict": "running"
+  },
   "gate_evidence_status": {
     "claim_rule": "Only a terminal driver result with roundtrip evidence can become a benchmark row.",
     "claim_status": "awaiting_gate_receipts",
     "driver_result_terminal": false,
-    "live_gate": false,
+    "live_gate": true,
     "live_guard_only": false,
-    "liveness_classification": "not_persisted_running",
+    "liveness_classification": "live_observed_owner",
     "rss_guard_terminal": false,
     "scored_gate_result_present": false
   },
   "gate_liveness": {
-    "candidate": null,
+    "candidate": "fx2_final_bit_head250k_v2",
     "claim_rule": "A running receipt or registered adaptive job is live only with an exact driver, owning controller, matching live worker, or frozen adopted process identities.",
-    "classification": "not_persisted_running",
-    "gate_size": null,
-    "is_live": false,
-    "matching_adaptive_job_count": 0,
-    "matching_adaptive_worker_live": false,
+    "classification": "live_observed_owner",
+    "gate_size": 250000,
+    "is_live": true,
+    "matching_adaptive_job_count": 1,
+    "matching_adaptive_worker_live": true,
     "matching_adopted_source_live": false,
     "matching_controller_count": 0,
     "matching_driver_observed": false,
-    "persisted_running": false,
-    "receipt_running": false,
-    "scope_bytes": null,
-    "scope_symbols": null,
-    "scope_unit": null
+    "persisted_running": true,
+    "receipt_running": true,
+    "scope_bytes": 250000,
+    "scope_symbols": 151210,
+    "scope_unit": "canonical enwik9 raw byte"
   },
-  "generated_at_utc": "2026-09-16T08:00:05+00:00",
+  "generated_at_utc": "2026-09-16T08:03:40+00:00",
   "handoff": {
-    "active_scorer_observed": false,
-    "candidate": null,
+    "active_scorer_observed": true,
+    "candidate": "fx2_final_bit_head250k_v2",
     "claim_rule": "Only an exact full-corpus package can prove the active objective.",
     "command_source": "none while gate is non-terminal",
     "gate_mutation_allowed": false,
-    "gate_next_action": null,
-    "gate_size": null,
-    "gate_verdict": null,
+    "gate_next_action": "wait_for_gate_completion",
+    "gate_size": 250000,
+    "gate_verdict": "running",
     "has_10_95_constructive_upper_bound": false,
     "has_full_corpus_constructive_result": false,
-    "recommended_action": "verify_recorded_running_jobs_on_host",
-    "scope_bytes": null,
-    "scope_symbols": null,
-    "scope_unit": null,
+    "recommended_action": "wait_for_gate_receipts",
+    "scope_bytes": 250000,
+    "scope_symbols": 151210,
+    "scope_unit": "canonical enwik9 raw byte",
     "terminal_verdict_present": false
   },
   "has_10_95_constructive_upper_bound": false,
@@ -271,21 +503,21 @@
   "observed_controller_command": {
     "controller_process_count": 0,
     "controller_processes": [],
-    "expected_active_candidate": null,
-    "expected_active_scope_bytes": null,
+    "expected_active_candidate": "fx2_final_bit_head250k_v2",
+    "expected_active_scope_bytes": 250000,
     "scope_note": "Controller scope may be the completed parent gate that launched the active child; the observed driver command is authoritative for the active gate scope."
   },
   "observed_gate_command": {
     "active_gate_command_observed": false,
     "driver_process_count": 0,
     "driver_processes": [],
-    "expected_candidate": null,
-    "expected_scope_bytes": null,
+    "expected_candidate": "fx2_final_bit_head250k_v2",
+    "expected_scope_bytes": 250000,
     "mismatch_count": 0
   },
   "operator_action": {
-    "action": "verify_recorded_running_jobs_on_host",
-    "reason": "Recorded running jobs must be attributed or reconciled before this status view can recommend a launch.",
+    "action": "wait_for_gate_receipts",
+    "reason": "the gate state is incomplete and cannot drive a mutation yet",
     "safe_to_launch_gate": false
   },
   "operator_logs": {
@@ -294,28 +526,32 @@
     "latest_delayed_status_log_resolved": "projects/enwiki9/run_logs/enwiki9_delayed_status_20260721T151206Z.log"
   },
   "operator_summary": {
-    "active_cmix_mode": null,
-    "active_process_tree_decimal_10gb_margin_kib": null,
-    "active_process_tree_margin_kib": null,
-    "active_process_tree_rss_kib": null,
-    "active_scorer_observed": false,
+    "active_cmix_decimal_10gb_margin_kib": 4176309,
+    "active_cmix_mode": "decode",
+    "active_cmix_pid": 20973,
+    "active_cmix_rss_kib": 5589316,
+    "active_cmix_single_process_margin_kib": 4896444,
+    "active_process_tree_decimal_10gb_margin_kib": 4014385,
+    "active_process_tree_margin_kib": 4734520,
+    "active_process_tree_rss_kib": 5751240,
+    "active_scorer_observed": true,
     "active_stage": null,
     "binary_10gib_guard_kib": 10485760,
-    "candidate": null,
+    "candidate": "fx2_final_bit_head250k_v2",
     "claim_rule": "Only an exact full-corpus package can prove the active objective.",
     "claimable_pending_adaptive_jobs": 0,
     "codec_progress": null,
     "command_source": "none while gate is non-terminal",
     "decimal_10gb_guard_kib": 9765625,
-    "driver_result_json": null,
-    "driver_result_present": null,
+    "driver_result_json": "projects/enwiki9/results/fx2_final_bit_head250k_v2/decision.json",
+    "driver_result_present": false,
     "gate_mutation_allowed": false,
-    "gate_next_action": null,
-    "gate_size": null,
-    "gate_verdict": null,
+    "gate_next_action": "wait_for_gate_completion",
+    "gate_size": 250000,
+    "gate_verdict": "running",
     "has_10_95_constructive_upper_bound": false,
     "has_full_corpus_constructive_result": false,
-    "held_pending_adaptive_jobs": 27,
+    "held_pending_adaptive_jobs": 26,
     "latest_sample_single_decimal_10gb_margin_kib": null,
     "latest_sample_single_decimal_10gb_safe": null,
     "latest_sample_single_rss_kib": null,
@@ -331,8 +567,8 @@
     "observer_job_id": null,
     "observer_progress": null,
     "observer_worker_live": null,
-    "operator_action": "verify_recorded_running_jobs_on_host",
-    "pending_adaptive_jobs": 27,
+    "operator_action": "wait_for_gate_receipts",
+    "pending_adaptive_jobs": 26,
     "release_bundles": 4,
     "release_failed_attempts": 0,
     "release_run_receipts": 0,
@@ -343,9 +579,9 @@
     "rss_guard_status": null,
     "rss_samples": null,
     "safe_to_launch_gate": false,
-    "scope_bytes": null,
-    "scope_symbols": null,
-    "scope_unit": null,
+    "scope_bytes": 250000,
+    "scope_symbols": 151210,
+    "scope_unit": "canonical enwik9 raw byte",
     "single_rss_margin_kib": null,
     "source_processes_live": null,
     "terminal_verdict_present": false
@@ -386,6 +622,6 @@
   "view_refresh": {
     "historical_audits_requested": false,
     "notice": "Historical reports were not refreshed by this routine/status operation and may be stale. Use enwiki9_normalize_receipts.py --profile full for historical audits.",
-    "profile": "routine"
+    "profile": "status-only"
   }
 }

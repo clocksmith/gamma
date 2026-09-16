@@ -10,21 +10,56 @@
     "sha256": "sha256:044147f7ffe6922ea8dafd52fc3d4426077b20958adbcd421245ad41adcfc1e4"
   },
   "execution_mode": "discovery",
+  "execution_resources": {
+    "boot_id": "3ce46712-27bc-4199-8e48-e2b3d23926cb",
+    "budget": {
+      "cgroup_parent": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice",
+      "cpus": [
+        2
+      ],
+      "memory_bytes": 9999998976,
+      "scratch_bytes": 16000000000,
+      "swap_bytes": 0,
+      "wall_seconds": 3600
+    },
+    "cgroup_inode": 340523,
+    "cgroup_path": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/gamma-enwiki9-20260916T075657Z_17152228fe",
+    "cpu_enforcement": "taskset-and-sampled-affinity-guard",
+    "groups": [
+      {
+        "created": true,
+        "inode": 340523,
+        "kernel_cpuset": false,
+        "memory_bytes": 9999998976,
+        "path": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/gamma-enwiki9-20260916T075657Z_17152228fe"
+      }
+    ],
+    "guard_command_sha256": "03750c953a5d83625cbf5f1dde9dba23d94d008af234a73d3d23254e5b73a04c",
+    "guard_path": "run_logs/adaptive/20260916T075657Z_17152228fe.resources/guard.json",
+    "missing_diagnostics": [
+      "kernel cpuset controller is not delegated; taskset assignment and existing affinity guard remain active"
+    ],
+    "timing_authority": "diagnostic"
+  },
   "experiment": {
     "path": "operations/adaptive/experiments/fx2_final_bit_head250k_v2.json",
     "sha256": "sha256:7f2e67a591cf06b25dce0c19ca563b992b4ae55bb967ce2a1850e5f206002ca6"
   },
   "gate_size": 250000,
-  "held": true,
+  "held": false,
   "held_at": "2026-09-16T07:56:58+00:00",
   "hold_history": [
     {
       "at": "2026-09-16T07:56:58+00:00",
       "held": true,
       "reason": "Publish failure,validated reflection and linkage-only successor,then fresh CPU2 resource admission. Scientific parameters unchanged."
+    },
+    {
+      "at": "2026-09-16T08:02:07+00:00",
+      "held": false,
+      "reason": "Published258dbb500 source, linkage repair and ownership; all ten checks and fresh CPU2 admission pass. Unchanged17phase scientific comparison."
     }
   ],
-  "hold_reason": "Publish failure,validated reflection and linkage-only successor,then fresh CPU2 resource admission. Scientific parameters unchanged.",
   "job_id": "20260916T075657Z_17152228fe",
   "priority": 65,
   "proposal": {
@@ -33,6 +68,7 @@
   },
   "proposal_id": "fx2_final_bit_head250k_v2",
   "purpose": "diagnostic",
+  "released_at": "2026-09-16T08:02:07+00:00",
   "resource_budget": {
     "cgroup_parent": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice",
     "cpus": [
@@ -51,10 +87,14 @@
   "scratch_directories": [
     "results/fx2_final_bit_head250k_v2"
   ],
-  "state": "pending",
+  "started_at": "2026-09-16T08:02:07+00:00",
+  "state": "running",
   "submitted_at": "2026-09-16T07:56:57+00:00",
   "tags": [],
   "timing_authority": "diagnostic",
   "tool": "tools/fx2_final_bit_head250k_v2.py",
-  "tool_args": []
+  "tool_args": [],
+  "worker_pid": 8334,
+  "worker_proc_start_ticks": 264186537,
+  "worker_started_at": "2026-09-16T08:02:07+00:00"
 }
