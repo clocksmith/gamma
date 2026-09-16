@@ -2,7 +2,7 @@
 
 Generated from the current certificate, gate receipts, resource guards, and process table.
 
-- Generated at UTC: `2026-09-16T01:15:43+00:00`
+- Generated at UTC: `2026-09-16T02:14:10+00:00`
 
 ## Target State
 
@@ -39,8 +39,8 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 - Latest decimal single-process margin KiB: `n/a`
 - Safe to launch candidate gate: `false`
 - Terminal verdict present: `false`
-- Pending adaptive jobs: `27`
-- Held pending adaptive jobs: `27`
+- Pending adaptive jobs: `28`
+- Held pending adaptive jobs: `28`
 - Claimable pending adaptive jobs: `0`
 - Canonical release bundles: `4`
 - Validated release run receipts: `0`
@@ -131,13 +131,13 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 
 - Audit return code: `0`
 - Audit mode: `inventory_snapshot`
-- Inventory generated: `2026-09-16T01:15:22+00:00`
+- Inventory generated: `2026-09-16T02:13:49+00:00`
 - Snapshot identity is verified; inventory inputs were not rescanned. This is not live occupancy or launch authority.
-- Program directories: `1,070`
-- Registered programs: `609`
+- Program directories: `1,071`
+- Registered programs: `610`
 - Untracked nonignored entries: `0`
-- Modified tracked entries: `0`
-- Candidate statuses: `active=18, blocked_dependency=98, candidate=264, measured_negative=100, retired=590`
+- Modified tracked entries: `1`
+- Candidate statuses: `active=18, blocked_dependency=98, candidate=265, measured_negative=100, retired=590`
 
 ## View Refresh
 
@@ -150,51 +150,51 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 |---|---:|---:|---:|---|
 | `process` | 3,421,289 | 472,530 | 4,028 | `/bin/bash -lc taskset -c 2 python3 tools/enwiki9_lab.py run --candidate fx2_trim_scale10m_v1 --max-workers 1 > run_logs/manual/trim_scale10m_lab_20...` |
 | `process` | 3,421,389 | 3,421,289 | 43,544 | `python3 tools/enwiki9_lab.py run --candidate fx2_trim_scale10m_v1 --max-workers 1` |
-| `resource_guard` | 3,421,475 | 3,421,389 | 101,060 | `/usr/bin/python3 /home/x/deco/gamma/projects/enwiki9/tools/run_with_resource_guard_v3.py --limit-kib 9765624 --official-decimal-limit-kib 9765624 -...` |
-| `process` | 3,421,488 | 3,421,475 | 57,676 | `/usr/bin/python3 /home/x/deco/gamma/projects/enwiki9/tools/fx2_trim_scale10m_v1.py` |
-| `process` | 3,840,596 | 3,421,488 | 7,692 | `/usr/bin/timeout --signal=TERM --kill-after=2 3600 /home/x/deco/gamma/projects/enwiki9/results/fx2_trim_scale10m_v1/work/P/cmix -c dictionary/engli...` |
-| `native_cmix` | 3,840,597 | 3,840,596 | 5,913,448 | `/home/x/deco/gamma/projects/enwiki9/results/fx2_trim_scale10m_v1/work/P/cmix -c dictionary/english.dic decoded.raw repeat.arc --transformer models/...` |
+| `resource_guard` | 3,421,475 | 3,421,389 | 82,056 | `/usr/bin/python3 /home/x/deco/gamma/projects/enwiki9/tools/run_with_resource_guard_v3.py --limit-kib 9765624 --official-decimal-limit-kib 9765624 -...` |
+| `process` | 3,421,488 | 3,421,475 | 57,680 | `/usr/bin/python3 /home/x/deco/gamma/projects/enwiki9/tools/fx2_trim_scale10m_v1.py` |
+| `process` | 280,008 | 3,421,488 | 7,880 | `/usr/bin/timeout --signal=TERM --kill-after=2 3600 /home/x/deco/gamma/projects/enwiki9/results/fx2_trim_scale10m_v1/work/D/cmix -c dictionary/engli...` |
+| `native_cmix` | 280,009 | 280,008 | 5,922,196 | `/home/x/deco/gamma/projects/enwiki9/results/fx2_trim_scale10m_v1/work/D/cmix -c dictionary/english.dic decoded.raw repeat.arc --transformer models/...` |
 
 ## Active Candidate Recent Artifacts
 
 | Path | Bytes | Modified UTC |
 |---|---:|---|
-| `projects/enwiki9/results/fx2_trim_scale10m_v1/work/P/ppm.temp` | 14,680,064,001 | `2026-09-16T01:15:43+00:00` |
-| `projects/enwiki9/results/fx2_trim_scale10m_v1/P-repeat.stderr` | 619,485 | `2026-09-16T01:15:43+00:00` |
-| `projects/enwiki9/results/fx2_trim_scale10m_v1/work/P/progress.log` | 93,458 | `2026-09-16T01:15:43+00:00` |
-| `projects/enwiki9/results/fx2_trim_scale10m_v1/P-repeat.stdout` | 248 | `2026-09-16T01:13:53+00:00` |
-| `projects/enwiki9/results/fx2_trim_scale10m_v1/work/P/repeat.arc` | 0 | `2026-09-16T01:01:38+00:00` |
-| `projects/enwiki9/results/fx2_trim_scale10m_v1/work/P/repeat.arc.cmix.temp` | 6,251,852 | `2026-09-16T01:01:38+00:00` |
-| `projects/enwiki9/results/fx2_trim_scale10m_v1/P-decode-cleanup.json` | 103 | `2026-09-16T01:01:38+00:00` |
-| `projects/enwiki9/results/fx2_trim_scale10m_v1/P-decode.execution.json` | 675 | `2026-09-16T01:01:38+00:00` |
-| `projects/enwiki9/results/fx2_trim_scale10m_v1/P-decode.stderr` | 774,094 | `2026-09-16T01:01:37+00:00` |
-| `projects/enwiki9/results/fx2_trim_scale10m_v1/P-decode.stdout` | 468 | `2026-09-16T01:01:37+00:00` |
-| `projects/enwiki9/results/fx2_trim_scale10m_v1/work/P/decoded.raw` | 10,000,000 | `2026-09-16T01:01:37+00:00` |
-| `projects/enwiki9/results/fx2_trim_scale10m_v1/P-encode-cleanup.json` | 103 | `2026-09-16T00:42:34+00:00` |
+| `projects/enwiki9/results/fx2_trim_scale10m_v1/work/D/ppm.temp` | 14,680,064,001 | `2026-09-16T02:14:10+00:00` |
+| `projects/enwiki9/results/fx2_trim_scale10m_v1/D-repeat.stderr` | 631,375 | `2026-09-16T02:14:10+00:00` |
+| `projects/enwiki9/results/fx2_trim_scale10m_v1/work/D/progress.log` | 96,123 | `2026-09-16T02:14:10+00:00` |
+| `projects/enwiki9/results/fx2_trim_scale10m_v1/D-repeat.stdout` | 248 | `2026-09-16T02:11:54+00:00` |
+| `projects/enwiki9/results/fx2_trim_scale10m_v1/work/D/repeat.arc` | 0 | `2026-09-16T01:59:35+00:00` |
+| `projects/enwiki9/results/fx2_trim_scale10m_v1/work/D/repeat.arc.cmix.temp` | 6,251,852 | `2026-09-16T01:59:35+00:00` |
+| `projects/enwiki9/results/fx2_trim_scale10m_v1/D-decode-cleanup.json` | 103 | `2026-09-16T01:59:35+00:00` |
+| `projects/enwiki9/results/fx2_trim_scale10m_v1/D-decode.execution.json` | 675 | `2026-09-16T01:59:35+00:00` |
+| `projects/enwiki9/results/fx2_trim_scale10m_v1/D-decode.stdout` | 468 | `2026-09-16T01:59:34+00:00` |
+| `projects/enwiki9/results/fx2_trim_scale10m_v1/D-decode.stderr` | 774,094 | `2026-09-16T01:59:34+00:00` |
+| `projects/enwiki9/results/fx2_trim_scale10m_v1/work/D/decoded.raw` | 10,000,000 | `2026-09-16T01:59:34+00:00` |
+| `projects/enwiki9/results/fx2_trim_scale10m_v1/D-encode-cleanup.json` | 103 | `2026-09-16T01:40:21+00:00` |
 
 ## Active RSS
 
-- Max cmix PID: `3840597`
+- Max cmix PID: `280009`
 - Active cmix mode: `compress`
-- Max cmix RSS KiB: `5,913,448`
-- Active process tree RSS KiB: `6,127,448`
+- Max cmix RSS KiB: `5,922,196`
+- Active process tree RSS KiB: `6,117,384`
 - Local binary `10GiB` guard KiB: `10,485,760`
 - Decimal `10GB` guard KiB: `9,765,625`
-- Single-process binary margin KiB: `4,572,312`
-- Single-process decimal margin KiB: `3,852,177`
-- Active process tree margin KiB (binary): `4,358,312`
-- Active process tree decimal margin KiB: `3,638,177`
-- Temp input path: `/home/x/deco/gamma/projects/enwiki9/results/fx2_trim_scale10m_v1/work/P/--transformer`
-- Temp output path: `/home/x/deco/gamma/projects/enwiki9/results/fx2_trim_scale10m_v1/work/P/models/6m-q4-fp32.tfwc2`
-- Temp output staging path: `/home/x/deco/gamma/projects/enwiki9/results/fx2_trim_scale10m_v1/work/P/models/6m-q4-fp32.tfwc2.cmix.temp`
+- Single-process binary margin KiB: `4,563,564`
+- Single-process decimal margin KiB: `3,843,429`
+- Active process tree margin KiB (binary): `4,368,376`
+- Active process tree decimal margin KiB: `3,648,241`
+- Temp input path: `/home/x/deco/gamma/projects/enwiki9/results/fx2_trim_scale10m_v1/work/D/--transformer`
+- Temp output path: `/home/x/deco/gamma/projects/enwiki9/results/fx2_trim_scale10m_v1/work/D/models/6m-q4-fp32.tfwc2`
+- Temp output staging path: `/home/x/deco/gamma/projects/enwiki9/results/fx2_trim_scale10m_v1/work/D/models/6m-q4-fp32.tfwc2.cmix.temp`
 - Temp input bytes: `n/a`
 - Temp output bytes: `2,930,652`
 - Temp output staging bytes: `n/a`
 - Temp input modified UTC: `n/a`
-- Temp output modified UTC: `2026-09-16T00:23:03+00:00`
+- Temp output modified UTC: `2026-09-16T01:20:51+00:00`
 - Temp output staging modified UTC: `n/a`
 - Process read bytes: `0`
-- Process write bytes: `2,154,737,664`
+- Process write bytes: `2,274,721,792`
 
 ## Contingencies
 
