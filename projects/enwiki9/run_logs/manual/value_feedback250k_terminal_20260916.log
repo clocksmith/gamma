@@ -1,0 +1,129 @@
+{
+  "path": "operations/adaptive/reflections/20260916T011139Z_5242a9a620.json",
+  "reflection": {
+    "attribution": {
+      "causalConfidence": "high",
+      "controlsEquivalent": true,
+      "failureClass": "algorithmic-loss",
+      "localizedCause": "The aligned rounding residual changes cached attention values; final native archives, not mean-preservation bounds, decide this fixed realization."
+    },
+    "candidateId": "fx2_value_feedback250k_v1",
+    "candidateRevision": {
+      "candidateId": "fx2_value_feedback250k_v1",
+      "candidateTreeSha256": "sha256:ad935d920e8ee9e30ef67261cb808529c2c60be62f2469987ed7518ec4396abb",
+      "receipt": {
+        "path": "operations/adaptive/candidate-revisions/fx2_value_feedback250k_v1/20260916T011139438833Z_ad935d920e8e.json",
+        "sha256": "sha256:b9386b482305d9c38b972b637fd08f1af79484de356c17f98944c0ce9c23b236"
+      }
+    },
+    "decision": {
+      "killPredicatesPass": true,
+      "nextGateBytes": null,
+      "promotionPredicatesPass": false,
+      "rationale": "Retire this exact feedback realization; preserve the narrower quantization theorem without claiming archive gain. Complete the separately frozen auxiliary-package gate.",
+      "verdict": "retire"
+    },
+    "evidence": [
+      {
+        "path": "operations/provenance/fx2_value_feedback_terminal_20260916.json",
+        "sha256": "sha256:cdeee07e762f38e83d6231aab051b806d7ab995ccb56706c765931d38014580c"
+      },
+      {
+        "path": "results/fx2_value_feedback250k_v1/terminal-index.json",
+        "sha256": "sha256:6cdf1ecf4f04f54a78356560be7bd466ebd753002c8bebd09e120635604fb33d"
+      }
+    ],
+    "experiment": {
+      "path": "operations/adaptive/experiments/fx2_value_feedback250k_v1.json",
+      "sha256": "sha256:dd1915eb0afb5f08424f1599fe0acd52264cd925966d553c55d496f58e84fd63"
+    },
+    "generatedUtc": "2026-09-16T02:53:27+00:00",
+    "hypothesis": {
+      "rationale": "This fixed feedback realization does not pass the native parent/control archive and component-ceiling comparison.",
+      "verdict": "refuted"
+    },
+    "job": {
+      "path": "operations/adaptive/completed/919_20260916T011139Z_5242a9a620.json",
+      "sha256": "sha256:e1f6091399386fc24aa27a5c3ab903c1da8ad07e8fd10769880711ea8cd937f1"
+    },
+    "knowledge": {
+      "retiredDimensions": [],
+      "transferableLessons": [
+        "A bounded quantization conservation identity does not imply useful probabilities; test actual native trajectories with equally priced misalignment controls."
+      ],
+      "uncertainties": [
+        "Cold exposed prefix only; full parent optimizer state is not serialized, complete package and full-corpus transfer remain unproved."
+      ]
+    },
+    "measurementAssertions": [
+      {
+        "field": "scopeBytes",
+        "pointer": "/scopeBytes",
+        "source": {
+          "path": "operations/provenance/fx2_value_feedback_terminal_20260916.json",
+          "sha256": "sha256:cdeee07e762f38e83d6231aab051b806d7ab995ccb56706c765931d38014580c"
+        }
+      },
+      {
+        "field": "scopeSymbols",
+        "pointer": "/scopeSymbols",
+        "source": {
+          "path": "operations/provenance/fx2_value_feedback_terminal_20260916.json",
+          "sha256": "sha256:cdeee07e762f38e83d6231aab051b806d7ab995ccb56706c765931d38014580c"
+        }
+      },
+      {
+        "field": "netBytesSaved",
+        "pointer": "/source_component_net_bytes",
+        "source": {
+          "path": "operations/provenance/fx2_value_feedback_terminal_20260916.json",
+          "sha256": "sha256:cdeee07e762f38e83d6231aab051b806d7ab995ccb56706c765931d38014580c"
+        }
+      }
+    ],
+    "measurements": {
+      "idealBitsSaved": null,
+      "memoryRatio": null,
+      "minimumPartitionIdealBitsSaved": null,
+      "netBytesSaved": -1507,
+      "positiveSegmentFraction": null,
+      "runtimeRatio": null,
+      "scopeBytes": 250000,
+      "scopeSymbols": 151210,
+      "sourceBytesDelta": null,
+      "transferRetention": null
+    },
+    "objective": {
+      "corpusBytes": 1000000000,
+      "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+      "objectiveDigest": "sha256:e91ff20e92c3cac8acb0cbe5c79fc8e8a3b427d7e151245c8eecc52b1c32fa00",
+      "objectiveId": "gamma-enwiki9-hutter-90m-v3",
+      "objectivePath": "contracts/research/v3/objective-contract.json",
+      "targetScoreBytes": 90000000
+    },
+    "reflectionId": "r-20260916t011139z_5242a9a620",
+    "schema": "gamma.enwiki9.reflection-receipt.v1",
+    "validity": {
+      "classification": "valid",
+      "reasons": [
+        "All44native phases, frozen bindings, clean builds, exact inverses, repeats, full residual traces, P/K coder identity and guard/cleanup pass."
+      ],
+      "valid": true
+    }
+  }
+}
+{
+  "job_id": "20260916T011139Z_5242a9a620",
+  "arms": 4,
+  "appended_rows": 4,
+  "metadata_updated": true,
+  "reflection": {
+    "decision": "retire",
+    "path": "operations/adaptive/reflections/20260916T011139Z_5242a9a620.json",
+    "sha256": "sha256:518669a871aae6c25d83a2338709992c1bcf1fb93c6ef19e1a5fb5d552dec635",
+    "valid": true
+  },
+  "local_process_check": "same-boot-identities-checked",
+  "publication": "recoverable-append-then-projection"
+}
+{"archives": {"P": 33429, "K": 33429, "D": 33438, "S": 33433}, "g_P": -9, "g_S": -5, "confirmation": false}
