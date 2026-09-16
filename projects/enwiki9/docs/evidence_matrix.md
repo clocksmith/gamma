@@ -14,8 +14,8 @@ Compare identical population hashes; equal input sizes alone do not define match
 
 ## Proof Boundary
 
-- Result JSON files scanned: `471`
-- Roundtrip-passing rows: `213`
+- Result JSON files scanned: `474`
+- Roundtrip-passing rows: `215`
 - Verified full `1G` rows in this checkout: `0`
 - Active target score: `90,000,000` bytes (`9.0000000%`)
 - `9.0000000%` target reached by this matrix: `False`
@@ -39,7 +39,7 @@ Compare identical population hashes; equal input sizes alone do not define match
 | `fx2_wrt_support_deploy_fixture_v1:D` | `890b3e1210a2` | custom candidate | 50,051 | 6,019,950 | 3,221 | 6,016,729 | 0.514834868 | true | `operations/provenance/fx2_wrt_support_deploy_terminal_20260908/D.json` |
 | `fx2_expert_transfer250k_v1:D` | `f0d01801279f` | custom candidate | 250,000 | unknown | 9,488 | unknown | 0.303616 | true | `results/fx2_expert_transfer250k_v1/D.driver.json` |
 | `fx2_prefix_dictionary_component_v1:K` | `4c8568cca934` | custom candidate | 411,996 | unknown | 100,098 | 483,848 | 1.94366936 | true | `operations/provenance/fx2_prefix_dictionary_component_v1_terminal/K.json` |
-| `matched_frontier_reserved_q0_v1:confirmation-FX2` | `20b4d8d7e140` | custom candidate | 1,000,000 | unknown | 131,238 | unknown | 1.049904 | true | `operations/provenance/matched_frontier_reserved_terminal_20260908/confirmation-FX2.json` |
+| `fx2_expert_confirm1m_v1:D` | `20b4d8d7e140` | custom candidate | 1,000,000 | unknown | 131,187 | unknown | 1.049496 | true | `results/fx2_expert_confirm1m_v1/D.driver.json` |
 | `fx2_trim_scale10m_v1:D` | `5985c81c39d9` | custom candidate | 10,000,000 | unknown | 1,305,268 | unknown | 1.0442144 | true | `results/fx2_trim_scale10m_v1/D.driver.json` |
 
 ## Top Archive Rows At 10,000,000 Bytes
@@ -59,14 +59,14 @@ Compare identical population hashes; equal input sizes alone do not define match
 
 | Program / arm | Population SHA256 | Mechanism | Scope | Local subtotal | Archive | Program | b/B | Determinism | Result |
 |---|---|---|---:|---:|---:|---:|---:|---|---|
+| `fx2_expert_confirm1m_v1:D` | `20b4d8d7e140` | custom candidate | 1,000,000 | unknown | 131,187 | unknown | 1.049496 | true | `results/fx2_expert_confirm1m_v1/D.driver.json` |
+| `fx2_expert_confirm1m_v1:P` | `20b4d8d7e140` | custom candidate | 1,000,000 | unknown | 131,238 | unknown | 1.049904 | true | `results/fx2_expert_confirm1m_v1/P.driver.json` |
 | `fx2_trim_confirm1m_v1:D` | `20b4d8d7e140` | custom candidate | 1,000,000 | unknown | 131,238 | unknown | 1.049904 | true | `results/fx2_trim_confirm1m_v1/D.driver.json` |
 | `fx2_trim_confirm1m_v1:P` | `20b4d8d7e140` | custom candidate | 1,000,000 | unknown | 131,238 | unknown | 1.049904 | true | `results/fx2_trim_confirm1m_v1/P.driver.json` |
 | `matched_frontier_reserved_q0_v1:confirmation-FX2` | `20b4d8d7e140` | custom candidate | 1,000,000 | unknown | 131,238 | unknown | 1.049904 | true | `operations/provenance/matched_frontier_reserved_terminal_20260908/confirmation-FX2.json` |
 | `opcode_field_compact_v1:confirmation` | `20b4d8d7e140` | syntax opcode preprocessor | 1,000,000 | unknown | 255,828 | unknown | 2.046624 | true | `operations/provenance/opcode_field_compact_terminal_20260908/confirmation.json` |
 | `opcode_field_confirmation1m_q0_v1:D` | `20b4d8d7e140` | syntax opcode preprocessor | 1,000,000 | unknown | 255,828 | unknown | 2.046624 | true | `operations/provenance/opcode_field_confirmation_terminal_20260908/D.json` |
 | `opcode_field_confirmation1m_q0_v1:K` | `20b4d8d7e140` | syntax opcode preprocessor | 1,000,000 | unknown | 257,369 | unknown | 2.058952 | true | `operations/provenance/opcode_field_confirmation_terminal_20260908/K.json` |
-| `opcode_field_confirmation1m_q0_v1:P` | `20b4d8d7e140` | syntax opcode preprocessor | 1,000,000 | unknown | 257,369 | unknown | 2.058952 | true | `operations/provenance/opcode_field_confirmation_terminal_20260908/P.json` |
-| `opcode_previous_word_confirmation1m_q0_v4:D` | `851329174ac0` | syntax opcode preprocessor | 1,000,000 | unknown | 258,731 | unknown | 2.069848 | true | `operations/provenance/opcode_previous_word_confirmation_v4_terminal_20260912/D.json` |
 
 ## Top Score Rows At 250,000 Bytes
 

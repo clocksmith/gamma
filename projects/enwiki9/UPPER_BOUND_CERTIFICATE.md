@@ -47,7 +47,7 @@ No verified full-corpus result JSON is present in this workspace.
 |---:|---|---:|---:|---:|---:|---|
 | 10,000 | `nncp_compact5_preprocessed_cqq_x86xzopt_nodebug_t4_tarslack_v1` | 6,229 | 240,248 | 234,019 | 4.9832 | `results/nncp_compact5_preprocessed_cqq_x86xzopt_nodebug_t4_tarslack_v1/2026-07-27T213234.json` |
 | 250,000 | `fx2_expert_transfer250k_v1` | 9,488 | unknown | unknown | 0.303616 | `results/fx2_expert_transfer250k_v1/D.driver.json` |
-| 1,000,000 | `fx2_trim_confirm1m_v1` | 131,238 | unknown | unknown | 1.049904 | `results/fx2_trim_confirm1m_v1/D.driver.json` |
+| 1,000,000 | `fx2_expert_confirm1m_v1` | 131,187 | unknown | unknown | 1.049496 | `results/fx2_expert_confirm1m_v1/D.driver.json` |
 | 10,000,000 | `fx2_trim_scale10m_v1` | 1,305,268 | unknown | unknown | 1.0442144 | `results/fx2_trim_scale10m_v1/D.driver.json` |
 
 ## Notes
