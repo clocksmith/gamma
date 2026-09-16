@@ -2,7 +2,7 @@
 
 Generated from the current certificate, gate receipts, resource guards, and process table.
 
-- Generated at UTC: `2026-09-16T06:05:24+00:00`
+- Generated at UTC: `2026-09-16T06:16:53+00:00`
 
 ## Target State
 
@@ -16,17 +16,17 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 
 ## Operator Summary
 
-- Candidate: `fx2_final_mlp_zero250k_v1`
-- Scope bytes: `250,000`
-- Scope symbols: `151,210`
-- Scope unit: `raw byte`
-- Gate verdict: `running`
-- Gate next action: `wait_for_gate_completion`
+- Candidate: `None`
+- Scope bytes: `n/a`
+- Scope symbols: `n/a`
+- Scope unit: `n/a`
+- Gate verdict: `None`
+- Gate next action: `None`
 - Active stage: `n/a`
 - Roundtrip arm: `n/a`
-- Active scorer observed: `true`
+- Active scorer observed: `false`
 - Active cmix mode: `n/a`
-- Driver result present: `false`
+- Driver result present: `unknown`
 - RSS guard status: `n/a`
 - RSS samples: `n/a`
 - Binary `10GiB` guard KiB: `10,485,760`
@@ -52,23 +52,23 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 
 ## Active Gate
 
-- Gate verdict: `running`
-- Next action: `wait_for_gate_completion`
-- Candidate: `fx2_final_mlp_zero250k_v1`
-- Scope bytes: `250,000`
-- Scope symbols: `151,210`
-- Scope unit: `raw byte`
+- Gate verdict: `unknown`
+- Next action: `unknown`
+- Candidate: `unknown`
+- Scope bytes: `n/a`
+- Scope symbols: `n/a`
+- Scope unit: `n/a`
 - Active stage: `n/a`
 - Roundtrip arm: `n/a`
 - Coordinator PID: `n/a`
-- Driver result JSON: `projects/enwiki9/results/fx2_final_mlp_zero250k_v1/decision.json`
-- Driver result present: `false`
+- Driver result JSON: `not present`
+- Driver result present: `unknown`
 - RSS guard JSON: `not present`
 - RSS guard present: `unknown`
-- Active scorer observed: `true`
-- Live gate: `true`
-- Liveness classification: `live_observed_owner`
-- Matching adaptive jobs: `1`
+- Active scorer observed: `false`
+- Live gate: `false`
+- Liveness classification: `not_persisted_running`
+- Matching adaptive jobs: `0`
 - Matching controllers: `0`
 - Matching driver observed: `false`
 - Liveness claim rule: `A running receipt or registered adaptive job is live only with an exact driver, owning controller, matching live worker, or frozen adopted process identities.`
@@ -84,8 +84,8 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 
 ## Observed Gate Command
 
-- Expected candidate: `fx2_final_mlp_zero250k_v1`
-- Expected scope bytes: `250,000`
+- Expected candidate: `None`
+- Expected scope bytes: `n/a`
 - Driver process count: `0`
 - Active gate command observed: `false`
 - Driver command mismatch count: `0`
@@ -96,8 +96,8 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 
 ## Observed Controller Command
 
-- Expected active candidate: `fx2_final_mlp_zero250k_v1`
-- Expected active scope bytes: `250,000`
+- Expected active candidate: `None`
+- Expected active scope bytes: `n/a`
 - Controller process count: `0`
 - Scope note: `Controller scope may be the completed parent gate that launched the active child; the observed driver command is authoritative for the active gate scope.`
 
@@ -108,8 +108,8 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 ## Operator Action
 
 - Safe to launch candidate gate: `false`
-- Action: `wait_for_gate_receipts`
-- Reason: `the gate state is incomplete and cannot drive a mutation yet`
+- Action: `verify_recorded_running_jobs_on_host`
+- Reason: `Recorded running jobs must be attributed or reconciled before this status view can recommend a launch.`
 - Allowed work: `n/a`
 - Forbidden work: `n/a`
 
@@ -117,7 +117,7 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 
 - Terminal verdict present: `false`
 - Gate mutation allowed: `false`
-- Recommended action: `wait_for_gate_receipts`
+- Recommended action: `verify_recorded_running_jobs_on_host`
 - Command source: `none while gate is non-terminal`
 - Claim rule: `Only an exact full-corpus package can prove the active objective.`
 
@@ -131,13 +131,13 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 
 - Audit return code: `0`
 - Audit mode: `inventory_snapshot`
-- Inventory generated: `2026-09-16T06:01:45+00:00`
+- Inventory generated: `2026-09-16T06:16:32+00:00`
 - Snapshot identity is verified; inventory inputs were not rescanned. This is not live occupancy or launch authority.
 - Program directories: `1,079`
 - Registered programs: `618`
 - Untracked nonignored entries: `0`
-- Modified tracked entries: `1`
-- Candidate statuses: `active=18, blocked_dependency=101, candidate=268, measured_negative=100, retired=592`
+- Modified tracked entries: `0`
+- Candidate statuses: `active=18, blocked_dependency=101, candidate=267, measured_negative=100, retired=593`
 
 ## View Refresh
 
@@ -148,50 +148,13 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 
 | Role | PID | PPID | RSS KiB | Command |
 |---|---:|---:|---:|---|
-| `process` | 2,938,199 | 1 | 42,244 | `python3 tools/enwiki9_lab.py run --candidate fx2_final_mlp_zero250k_v1 --max-workers 1 --poll-seconds 2` |
-| `resource_guard` | 2,938,307 | 2,938,199 | 35,800 | `/usr/bin/python3 /home/x/deco/gamma/projects/enwiki9/tools/run_with_resource_guard_v3.py --limit-kib 9765624 --official-decimal-limit-kib 9765624 -...` |
-| `process` | 2,938,320 | 2,938,307 | 44,236 | `/usr/bin/python3 /home/x/deco/gamma/projects/enwiki9/tools/fx2_final_mlp_zero250k_v1.py` |
-| `process` | 2,944,098 | 2,938,320 | 7,752 | `/usr/bin/timeout --signal=TERM --kill-after=2 180 /home/x/deco/gamma/projects/enwiki9/results/fx2_final_mlp_zero250k_v1/work/native/cmix-P -c dicti...` |
-| `process` | 2,944,100 | 2,944,098 | 4,872,712 | `/home/x/deco/gamma/projects/enwiki9/results/fx2_final_mlp_zero250k_v1/work/native/cmix-P -c dictionary/english.dic population.raw P-encode.arc --tr...` |
+| n/a | n/a | n/a | n/a | n/a |
 
 ## Active Candidate Recent Artifacts
 
 | Path | Bytes | Modified UTC |
 |---|---:|---|
-| `projects/enwiki9/results/fx2_final_mlp_zero250k_v1/P-encode.stderr` | 193,216 | `2026-09-16T06:05:24+00:00` |
-| `projects/enwiki9/results/fx2_final_mlp_zero250k_v1/work/native/ppm.temp` | 14,680,064,001 | `2026-09-16T06:05:15+00:00` |
-| `projects/enwiki9/results/fx2_final_mlp_zero250k_v1/work/native/P-encode.probs` | 0 | `2026-09-16T06:05:15+00:00` |
-| `projects/enwiki9/results/fx2_final_mlp_zero250k_v1/work/native/P-encode.arc` | 0 | `2026-09-16T06:05:15+00:00` |
-| `projects/enwiki9/results/fx2_final_mlp_zero250k_v1/work/native/P-encode.arc.cmix.temp` | 151,215 | `2026-09-16T06:05:15+00:00` |
-| `projects/enwiki9/results/fx2_final_mlp_zero250k_v1/P-encode.stdout` | 0 | `2026-09-16T06:05:15+00:00` |
-| `projects/enwiki9/results/fx2_final_mlp_zero250k_v1/preprocess-cleanup.json` | 103 | `2026-09-16T06:05:15+00:00` |
-| `projects/enwiki9/results/fx2_final_mlp_zero250k_v1/preprocess.execution.json` | 650 | `2026-09-16T06:05:15+00:00` |
-| `projects/enwiki9/results/fx2_final_mlp_zero250k_v1/preprocess.stderr` | 89 | `2026-09-16T06:05:15+00:00` |
-| `projects/enwiki9/results/fx2_final_mlp_zero250k_v1/preprocess.stdout` | 42 | `2026-09-16T06:05:15+00:00` |
-| `projects/enwiki9/results/fx2_final_mlp_zero250k_v1/work/native/population.stored` | 151,220 | `2026-09-16T06:05:15+00:00` |
-| `projects/enwiki9/results/fx2_final_mlp_zero250k_v1/work/native/cmix-P` | 438,792 | `2026-09-16T06:05:15+00:00` |
-
-## Active RSS
-
-- Max cmix PID: `n/a`
-- Active cmix mode: `n/a`
-- Max cmix RSS KiB: `n/a`
-- Active process tree RSS KiB: `5,002,744`
-- Local binary `10GiB` guard KiB: `10,485,760`
-- Decimal `10GB` guard KiB: `9,765,625`
-- Single-process binary margin KiB: `n/a`
-- Single-process decimal margin KiB: `n/a`
-- Active process tree margin KiB (binary): `5,483,016`
-- Active process tree decimal margin KiB: `4,762,881`
-
-## Contingencies
-
-- If current gate passes: `record pass and inspect the frozen candidate promotion rule`
-- Pass next scope: `n/a`
-- If RSS fails: `record RSS failure and retire or repackage this integration shape`
-- Lower candidate: `unknown`
-- Lower PPMD KiB: `n/a`
-- If roundtrip or determinism fails: `record failure and do not promote`
+| n/a | n/a | n/a |
 
 ## Proof Boundary
 

@@ -6,6 +6,75 @@
   "family": "public_fx2_transformer",
   "hypothesis": "Zeroing only final MLP matrices reduces the paid model and source package without increasing the native archive on the exposed opening250KB.",
   "id": "fx2_final_mlp_zero250k_v1",
+  "measured": {
+    "reflections": {
+      "20260916T055929Z_1fff71d5c9": {
+        "decision": "retire",
+        "path": "operations/adaptive/reflections/20260916T055929Z_1fff71d5c9.json",
+        "sha256": "sha256:e20ca6db46abdd77410e02ce73ee027fe8cb30dfa407b72aca177c31b57d3cb1",
+        "valid": true
+      }
+    },
+    "terminal_results": {
+      "20260916T055929Z_1fff71d5c9": {
+        "index": {
+          "path": "results/fx2_final_mlp_zero250k_v1/terminal-index.json",
+          "sha256": "sha256:4b190ad2f064121e12005ffa10715b821796cc2a945c77645c54bd5576268984"
+        },
+        "reflection": {
+          "decision": "retire",
+          "path": "operations/adaptive/reflections/20260916T055929Z_1fff71d5c9.json",
+          "sha256": "sha256:e20ca6db46abdd77410e02ce73ee027fe8cb30dfa407b72aca177c31b57d3cb1",
+          "valid": true
+        },
+        "guard_validation_mode": "discovery-budget-schema",
+        "qualification_authority": false,
+        "missing_diagnostics": [
+          "kernel cpuset controller is not delegated; taskset assignment and existing affinity guard remain active"
+        ],
+        "arms": {
+          "P": {
+            "result_path": "projects/enwiki9/results/fx2_final_mlp_zero250k_v1/P.driver.json",
+            "result_json_bytes": 1894,
+            "result_json_sha256": "04ff935a26af69970704df971b3e26fb349a8806ea434e17177c617fc93839ac",
+            "data_size": 250000,
+            "data_md5": null,
+            "data_sha256": "665fc689441b68462d88f82dc33212abe9c4824be095d03a556c9b55a2829fd3",
+            "compressed_size": 33429,
+            "program_size": null,
+            "hutter_score": null,
+            "bits_per_byte": null,
+            "roundtrip_ok": true,
+            "determinism": true,
+            "compressed_sha256": "70325310e96b83b48677d76d53141e69ddb47519b4cdffd1c85f51fe2c444dbe",
+            "compress_time_s": null,
+            "decompress_time_s": null,
+            "missing_diagnostics": [],
+            "run_id": "fx2_final_mlp_zero250k_v1__20260916T055929Z_1fff71d5c9__P"
+          },
+          "D": {
+            "result_path": "projects/enwiki9/results/fx2_final_mlp_zero250k_v1/D.driver.json",
+            "result_json_bytes": 1894,
+            "result_json_sha256": "1232def03824c03241f216200cfad0b1bc3b5ce2d08a9f0d5491be989ff6482d",
+            "data_size": 250000,
+            "data_md5": null,
+            "data_sha256": "665fc689441b68462d88f82dc33212abe9c4824be095d03a556c9b55a2829fd3",
+            "compressed_size": 35304,
+            "program_size": null,
+            "hutter_score": null,
+            "bits_per_byte": null,
+            "roundtrip_ok": true,
+            "determinism": true,
+            "compressed_sha256": "0d3076be865cda091e09b9dc22fa540dc30383837b8d22e1638b1eea21fdfbdb",
+            "compress_time_s": null,
+            "decompress_time_s": null,
+            "missing_diagnostics": [],
+            "run_id": "fx2_final_mlp_zero250k_v1__20260916T055929Z_1fff71d5c9__D"
+          }
+        }
+      }
+    }
+  },
   "omega": {
     "experiment": {
       "path": "operations/adaptive/experiments/fx2_final_mlp_zero250k_v1.json",
@@ -20,5 +89,6 @@
     "retired_neighborhoods": []
   },
   "parent": "fx2_expert_release250k_v3",
-  "status": "candidate"
+  "status": "retired",
+  "verdict": "Retire this fixed two-matrix ablation under its no-archive-regression budget; preserve actual paid-component savings or losses. No layer/scale/retraining rescue; no extrapolated full-corpus futility."
 }
