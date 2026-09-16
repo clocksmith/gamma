@@ -1,0 +1,8 @@
+Original multi-translation-unit reproducer: expected link failure
+/usr/bin/x86_64-linux-gnu-ld.bfd: /tmp/ccpzK4ue.o: in function `gamma_final_bit_head::sha_blocks::sha256_process_x86(unsigned int*, unsigned char const*, unsigned int)':
+b.cpp:(.text+0x0): multiple definition of `gamma_final_bit_head::sha_blocks::sha256_process_x86(unsigned int*, unsigned char const*, unsigned int)'; /tmp/ccAo0BPZ.o:a.cpp:(.text+0x0): first defined here
+/usr/bin/x86_64-linux-gnu-ld.bfd: /tmp/ccWBmxtZ.o: in function `gamma_final_bit_head::sha_blocks::sha256_process_x86(unsigned int*, unsigned char const*, unsigned int)':
+main.cpp:(.text+0x0): multiple definition of `gamma_final_bit_head::sha_blocks::sha256_process_x86(unsigned int*, unsigned char const*, unsigned int)'; /tmp/ccAo0BPZ.o:a.cpp:(.text+0x0): first defined here
+collect2: error: ld returned 1 exit status
+Inline correction: expected successful link
+ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad
