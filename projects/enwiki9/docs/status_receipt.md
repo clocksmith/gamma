@@ -2,7 +2,7 @@
 
 Generated from the current certificate, gate receipts, resource guards, and process table.
 
-- Generated at UTC: `2026-09-16T02:14:10+00:00`
+- Generated at UTC: `2026-09-16T02:38:00+00:00`
 
 ## Target State
 
@@ -16,16 +16,16 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 
 ## Operator Summary
 
-- Candidate: `fx2_trim_scale10m_v1`
-- Scope bytes: `10,000,000`
-- Scope symbols: `10,000,000`
+- Candidate: `fx2_value_feedback250k_v1`
+- Scope bytes: `250,000`
+- Scope symbols: `151,210`
 - Scope unit: `raw byte`
 - Gate verdict: `running`
 - Gate next action: `wait_for_gate_completion`
 - Active stage: `n/a`
 - Roundtrip arm: `n/a`
 - Active scorer observed: `true`
-- Active cmix mode: `compress`
+- Active cmix mode: `n/a`
 - Driver result present: `false`
 - RSS guard status: `n/a`
 - RSS samples: `n/a`
@@ -39,8 +39,8 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 - Latest decimal single-process margin KiB: `n/a`
 - Safe to launch candidate gate: `false`
 - Terminal verdict present: `false`
-- Pending adaptive jobs: `28`
-- Held pending adaptive jobs: `28`
+- Pending adaptive jobs: `27`
+- Held pending adaptive jobs: `27`
 - Claimable pending adaptive jobs: `0`
 - Canonical release bundles: `4`
 - Validated release run receipts: `0`
@@ -54,14 +54,14 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 
 - Gate verdict: `running`
 - Next action: `wait_for_gate_completion`
-- Candidate: `fx2_trim_scale10m_v1`
-- Scope bytes: `10,000,000`
-- Scope symbols: `10,000,000`
+- Candidate: `fx2_value_feedback250k_v1`
+- Scope bytes: `250,000`
+- Scope symbols: `151,210`
 - Scope unit: `raw byte`
 - Active stage: `n/a`
 - Roundtrip arm: `n/a`
 - Coordinator PID: `n/a`
-- Driver result JSON: `projects/enwiki9/results/fx2_trim_scale10m_v1/decision.json`
+- Driver result JSON: `projects/enwiki9/results/fx2_value_feedback250k_v1/decision.json`
 - Driver result present: `false`
 - RSS guard JSON: `not present`
 - RSS guard present: `unknown`
@@ -84,8 +84,8 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 
 ## Observed Gate Command
 
-- Expected candidate: `fx2_trim_scale10m_v1`
-- Expected scope bytes: `10,000,000`
+- Expected candidate: `fx2_value_feedback250k_v1`
+- Expected scope bytes: `250,000`
 - Driver process count: `0`
 - Active gate command observed: `false`
 - Driver command mismatch count: `0`
@@ -96,8 +96,8 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 
 ## Observed Controller Command
 
-- Expected active candidate: `fx2_trim_scale10m_v1`
-- Expected active scope bytes: `10,000,000`
+- Expected active candidate: `fx2_value_feedback250k_v1`
+- Expected active scope bytes: `250,000`
 - Controller process count: `0`
 - Scope note: `Controller scope may be the completed parent gate that launched the active child; the observed driver command is authoritative for the active gate scope.`
 
@@ -131,12 +131,12 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 
 - Audit return code: `0`
 - Audit mode: `inventory_snapshot`
-- Inventory generated: `2026-09-16T02:13:49+00:00`
+- Inventory generated: `2026-09-16T02:23:46+00:00`
 - Snapshot identity is verified; inventory inputs were not rescanned. This is not live occupancy or launch authority.
 - Program directories: `1,071`
 - Registered programs: `610`
-- Untracked nonignored entries: `0`
-- Modified tracked entries: `1`
+- Untracked nonignored entries: `3`
+- Modified tracked entries: `9`
 - Candidate statuses: `active=18, blocked_dependency=98, candidate=265, measured_negative=100, retired=590`
 
 ## View Refresh
@@ -148,53 +148,42 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 
 | Role | PID | PPID | RSS KiB | Command |
 |---|---:|---:|---:|---|
-| `process` | 3,421,289 | 472,530 | 4,028 | `/bin/bash -lc taskset -c 2 python3 tools/enwiki9_lab.py run --candidate fx2_trim_scale10m_v1 --max-workers 1 > run_logs/manual/trim_scale10m_lab_20...` |
-| `process` | 3,421,389 | 3,421,289 | 43,544 | `python3 tools/enwiki9_lab.py run --candidate fx2_trim_scale10m_v1 --max-workers 1` |
-| `resource_guard` | 3,421,475 | 3,421,389 | 82,056 | `/usr/bin/python3 /home/x/deco/gamma/projects/enwiki9/tools/run_with_resource_guard_v3.py --limit-kib 9765624 --official-decimal-limit-kib 9765624 -...` |
-| `process` | 3,421,488 | 3,421,475 | 57,680 | `/usr/bin/python3 /home/x/deco/gamma/projects/enwiki9/tools/fx2_trim_scale10m_v1.py` |
-| `process` | 280,008 | 3,421,488 | 7,880 | `/usr/bin/timeout --signal=TERM --kill-after=2 3600 /home/x/deco/gamma/projects/enwiki9/results/fx2_trim_scale10m_v1/work/D/cmix -c dictionary/engli...` |
-| `native_cmix` | 280,009 | 280,008 | 5,922,196 | `/home/x/deco/gamma/projects/enwiki9/results/fx2_trim_scale10m_v1/work/D/cmix -c dictionary/english.dic decoded.raw repeat.arc --transformer models/...` |
+| `process` | 650,764 | 472,530 | 4,064 | `/bin/bash -lc taskset -c 2 python3 tools/enwiki9_lab.py run --candidate fx2_value_feedback250k_v1 --max-workers 1 > run_logs/manual/value_feedback2...` |
+| `process` | 650,877 | 650,764 | 41,944 | `python3 tools/enwiki9_lab.py run --candidate fx2_value_feedback250k_v1 --max-workers 1` |
+| `resource_guard` | 650,971 | 650,877 | 37,808 | `/usr/bin/python3 /home/x/deco/gamma/projects/enwiki9/tools/run_with_resource_guard_v3.py --limit-kib 9765624 --official-decimal-limit-kib 9765624 -...` |
+| `process` | 650,990 | 650,971 | 54,164 | `/usr/bin/python3 /home/x/deco/gamma/projects/enwiki9/tools/fx2_value_feedback250k_v1.py` |
+| `process` | 698,814 | 650,990 | 7,588 | `/usr/bin/timeout --signal=TERM --kill-after=2 300 /home/x/deco/gamma/projects/enwiki9/results/fx2_value_feedback250k_v1/work/native/delivery-K -c d...` |
+| `process` | 698,815 | 698,814 | 4,680,468 | `/home/x/deco/gamma/projects/enwiki9/results/fx2_value_feedback250k_v1/work/native/delivery-K -c dictionary/english.dic population.raw K-clean-encod...` |
 
 ## Active Candidate Recent Artifacts
 
 | Path | Bytes | Modified UTC |
 |---|---:|---|
-| `projects/enwiki9/results/fx2_trim_scale10m_v1/work/D/ppm.temp` | 14,680,064,001 | `2026-09-16T02:14:10+00:00` |
-| `projects/enwiki9/results/fx2_trim_scale10m_v1/D-repeat.stderr` | 631,375 | `2026-09-16T02:14:10+00:00` |
-| `projects/enwiki9/results/fx2_trim_scale10m_v1/work/D/progress.log` | 96,123 | `2026-09-16T02:14:10+00:00` |
-| `projects/enwiki9/results/fx2_trim_scale10m_v1/D-repeat.stdout` | 248 | `2026-09-16T02:11:54+00:00` |
-| `projects/enwiki9/results/fx2_trim_scale10m_v1/work/D/repeat.arc` | 0 | `2026-09-16T01:59:35+00:00` |
-| `projects/enwiki9/results/fx2_trim_scale10m_v1/work/D/repeat.arc.cmix.temp` | 6,251,852 | `2026-09-16T01:59:35+00:00` |
-| `projects/enwiki9/results/fx2_trim_scale10m_v1/D-decode-cleanup.json` | 103 | `2026-09-16T01:59:35+00:00` |
-| `projects/enwiki9/results/fx2_trim_scale10m_v1/D-decode.execution.json` | 675 | `2026-09-16T01:59:35+00:00` |
-| `projects/enwiki9/results/fx2_trim_scale10m_v1/D-decode.stdout` | 468 | `2026-09-16T01:59:34+00:00` |
-| `projects/enwiki9/results/fx2_trim_scale10m_v1/D-decode.stderr` | 774,094 | `2026-09-16T01:59:34+00:00` |
-| `projects/enwiki9/results/fx2_trim_scale10m_v1/work/D/decoded.raw` | 10,000,000 | `2026-09-16T01:59:34+00:00` |
-| `projects/enwiki9/results/fx2_trim_scale10m_v1/D-encode-cleanup.json` | 103 | `2026-09-16T01:40:21+00:00` |
+| `projects/enwiki9/results/fx2_value_feedback250k_v1/K-clean-encode.stderr` | 123,136 | `2026-09-16T02:38:00+00:00` |
+| `projects/enwiki9/results/fx2_value_feedback250k_v1/work/native/ppm.temp` | 14,680,064,001 | `2026-09-16T02:37:55+00:00` |
+| `projects/enwiki9/results/fx2_value_feedback250k_v1/work/native/K-clean-encode.arc` | 0 | `2026-09-16T02:37:54+00:00` |
+| `projects/enwiki9/results/fx2_value_feedback250k_v1/work/native/K-clean-encode.arc.cmix.temp` | 151,215 | `2026-09-16T02:37:54+00:00` |
+| `projects/enwiki9/results/fx2_value_feedback250k_v1/K-clean-encode.stdout` | 0 | `2026-09-16T02:37:54+00:00` |
+| `projects/enwiki9/results/fx2_value_feedback250k_v1/work/native/delivery-K` | 438,792 | `2026-09-16T02:37:54+00:00` |
+| `projects/enwiki9/results/fx2_value_feedback250k_v1/K-compile-repeat.execution.json` | 1,066 | `2026-09-16T02:37:54+00:00` |
+| `projects/enwiki9/results/fx2_value_feedback250k_v1/K-compile-repeat.stdout` | 3,611 | `2026-09-16T02:37:54+00:00` |
+| `projects/enwiki9/results/fx2_value_feedback250k_v1/work/native/cmix` | 438,792 | `2026-09-16T02:37:54+00:00` |
+| `projects/enwiki9/results/fx2_value_feedback250k_v1/K-compile-repeat.stderr` | 30,935 | `2026-09-16T02:37:52+00:00` |
+| `projects/enwiki9/results/fx2_value_feedback250k_v1/K-clean-repeat.execution.json` | 504 | `2026-09-16T02:37:41+00:00` |
+| `projects/enwiki9/results/fx2_value_feedback250k_v1/K-clean-repeat.stdout` | 73 | `2026-09-16T02:37:41+00:00` |
 
 ## Active RSS
 
-- Max cmix PID: `280009`
-- Active cmix mode: `compress`
-- Max cmix RSS KiB: `5,922,196`
-- Active process tree RSS KiB: `6,117,384`
+- Max cmix PID: `n/a`
+- Active cmix mode: `n/a`
+- Max cmix RSS KiB: `n/a`
+- Active process tree RSS KiB: `4,826,036`
 - Local binary `10GiB` guard KiB: `10,485,760`
 - Decimal `10GB` guard KiB: `9,765,625`
-- Single-process binary margin KiB: `4,563,564`
-- Single-process decimal margin KiB: `3,843,429`
-- Active process tree margin KiB (binary): `4,368,376`
-- Active process tree decimal margin KiB: `3,648,241`
-- Temp input path: `/home/x/deco/gamma/projects/enwiki9/results/fx2_trim_scale10m_v1/work/D/--transformer`
-- Temp output path: `/home/x/deco/gamma/projects/enwiki9/results/fx2_trim_scale10m_v1/work/D/models/6m-q4-fp32.tfwc2`
-- Temp output staging path: `/home/x/deco/gamma/projects/enwiki9/results/fx2_trim_scale10m_v1/work/D/models/6m-q4-fp32.tfwc2.cmix.temp`
-- Temp input bytes: `n/a`
-- Temp output bytes: `2,930,652`
-- Temp output staging bytes: `n/a`
-- Temp input modified UTC: `n/a`
-- Temp output modified UTC: `2026-09-16T01:20:51+00:00`
-- Temp output staging modified UTC: `n/a`
-- Process read bytes: `0`
-- Process write bytes: `2,274,721,792`
+- Single-process binary margin KiB: `n/a`
+- Single-process decimal margin KiB: `n/a`
+- Active process tree margin KiB (binary): `5,659,724`
+- Active process tree decimal margin KiB: `4,939,589`
 
 ## Contingencies
 
@@ -208,7 +197,7 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 ## Proof Boundary
 
 - best_exact_10m: `endpoint428_pair_layer0_runtime_successor_minified_package_v1`; status `exact artifact-backed`; score `1,895,625`
-- best_exact_10m_archive: `endpoint428_pair_layer0_runtime_successor_10m_v1`; status `exact artifact-backed`; score `1,914,647`
+- best_exact_10m_archive: `fx2_trim_scale10m_v1`; status `exact artifact-backed`; score `n/a`
 - best_exact_100m: `fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1`; status `metadata-inherited`; score `15,040,789`
 - best_full_1g: `not verified`; status `not verified`; score `n/a`
 - best_forecast: `endpoint428_gate_dot_fuse_output_update_loop_v1`; status `source-bound-canonical-forecast`; score `109,389,323`

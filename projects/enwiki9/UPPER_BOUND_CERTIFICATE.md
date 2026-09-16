@@ -22,13 +22,11 @@ If roundtrip_ok is true for archive A and decoder D on target corpus x, then |A|
 | Claim | Program | Scope | Score | Evidence | Status |
 |---|---|---:|---:|---|---|
 | best exact 10M | `endpoint428_pair_layer0_runtime_successor_minified_package_v1` | 10,000,000 | 1,895,625 | exact result JSON with roundtrip_ok true | exact artifact-backed |
-| best exact 10M archive | `endpoint428_pair_layer0_runtime_successor_10m_v1` | 10,000,000 | 1,914,647 | exact result JSON with roundtrip_ok true; archive-slope reference only | exact artifact-backed |
+| best exact 10M archive | `fx2_trim_scale10m_v1` | 10,000,000 | n/a | exact result JSON with roundtrip_ok true; archive-slope reference only | exact artifact-backed |
 | best exact 100M | `fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1` | 100,000,000 | 15,040,789 | metadata-inherited from parent 100M geometry package; no result JSON for this row is present in this checkout | metadata-inherited |
 | best full 1G | `n/a` | 1,000,000,000 | n/a | no verified full-corpus result JSON is present in this checkout | not verified |
 | best forecast | `endpoint428_gate_dot_fuse_output_update_loop_v1` | 10,000,000 | 109,389,323 | canonical source-bound frontier selection backed by exact 10M codec replay and counted package evidence; forecast only, not a constructive full-corpus proof | source-bound-canonical-forecast |
-| active candidate | `fx2_trim_scale10m_v1` | 10,000,000 | n/a | active 10,000,000 byte replay is running; no constructive result is present for this candidate yet | running gate |
-| blocker | `n/a` | n/a | n/a | active 10,000,000 byte deterministic replay has not produced terminal driver and RSS receipts yet | open |
-| active gate | `fx2_trim_scale10m_v1` | 10,000,000 | n/a | unchanged 10,000,000 byte RSS-guarded determinism replay; wait for terminal receipts | pending |
+| active candidate | `n/a` | n/a | n/a | Recorded ownership remains unresolved; no launch permission is inferred. | unknown |
 
 ## Best Full-Corpus Result
 
@@ -39,8 +37,8 @@ No verified full-corpus result JSON is present in this workspace.
 | data_size | program | score | archive | program_size | percent | result |
 |---:|---|---:|---:|---:|---:|---|
 | 10,000 | `nncp_compact5_preprocessed_cqq_x86xzopt_nodebug_t4_tarslack_v1` | 240,248 | 6,229 | 234,019 | 2402.48 | `results/nncp_compact5_preprocessed_cqq_x86xzopt_nodebug_t4_tarslack_v1/2026-07-27T213234.json` |
-| 250,000 | `fx2_expert_mix_opening250k_v1` | 33,395 | 33,395 | 0 | 13.358 | `results/fx2_expert_mix_opening250k_v1/D.driver.json` |
-| 1,000,000 | `fx2_trim_confirm1m_v1` | 131,238 | 131,238 | 0 | 13.1238 | `results/fx2_trim_confirm1m_v1/D.driver.json` |
+| 250,000 | `opcode_typed_anchor_bitmix_v1` | 72,800 | 67,959 | 4,841 | 29.12 | `results/opcode_typed_anchor_bitmix_v1/2026-07-21T124407.json` |
+| 1,000,000 | `sleeping_trie_global4_selector_raw_v1` | 494,499 | 473,912 | 20,587 | 49.4499 | `results/sleeping_trie_global4_selector_raw_v1/2026-08-01T193730.json` |
 | 10,000,000 | `endpoint428_pair_layer0_runtime_successor_minified_package_v1` | 1,895,625 | 1,634,500 | 261,125 | 18.95625 | `results/endpoint428_pair_layer0_runtime_successor_minified_package_v1/receipt.json` |
 
 ## Best Exact Archive By Scope
@@ -48,13 +46,14 @@ No verified full-corpus result JSON is present in this workspace.
 | data_size | program | archive | score | program_size | archive_bpb | result |
 |---:|---|---:|---:|---:|---:|---|
 | 10,000 | `nncp_compact5_preprocessed_cqq_x86xzopt_nodebug_t4_tarslack_v1` | 6,229 | 240,248 | 234,019 | 4.9832 | `results/nncp_compact5_preprocessed_cqq_x86xzopt_nodebug_t4_tarslack_v1/2026-07-27T213234.json` |
-| 250,000 | `fx2_expert_mix_opening250k_v1` | 33,395 | 33,395 | 0 | 1.06864 | `results/fx2_expert_mix_opening250k_v1/D.driver.json` |
-| 1,000,000 | `fx2_trim_confirm1m_v1` | 131,238 | 131,238 | 0 | 1.049904 | `results/fx2_trim_confirm1m_v1/D.driver.json` |
-| 10,000,000 | `endpoint428_pair_layer0_runtime_successor_10m_v1` | 1,634,500 | 1,914,647 | 280,147 | 1.3076 | `results/endpoint428_pair_layer0_runtime_successor_10m_v1/receipt.json` |
+| 250,000 | `fx2_expert_mix_opening250k_v1` | 33,395 | unknown | unknown | 1.06864 | `results/fx2_expert_mix_opening250k_v1/D.driver.json` |
+| 1,000,000 | `fx2_trim_confirm1m_v1` | 131,238 | unknown | unknown | 1.049904 | `results/fx2_trim_confirm1m_v1/D.driver.json` |
+| 10,000,000 | `fx2_trim_scale10m_v1` | 1,305,268 | unknown | unknown | 1.0442144 | `results/fx2_trim_scale10m_v1/D.driver.json` |
 
 ## Notes
 
 - Prefix results prove upper bounds only for that prefix, not for enwik9.
+- Unknown program costs or explicitly unknown totals remain unknown; archive-only rows do not compete in counted-score rankings.
 - Projected 1GB scores are search evidence and are excluded from proof_status.
 - A 9.0000000% proof requires a full 1,000,000,000-byte result with score <= 90,000,000.
 - Canonical proof rows include only Git-tracked result JSON files; ignored host-local artifacts are noncanonical.
