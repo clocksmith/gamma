@@ -1,0 +1,100 @@
+{
+  "schema": "gamma.enwiki9.publication-checks.v1",
+  "audit_id": "fx2_explicit_lexical_v2_terminal_v1",
+  "checks": [
+    {
+      "command": [
+        "python3",
+        "projects/enwiki9/tools/hutter_run_ledger.py",
+        "--check"
+      ],
+      "returncode": 0
+    },
+    {
+      "command": [
+        "python3",
+        "projects/enwiki9/tools/enwiki9_release_receipts.py",
+        "--check"
+      ],
+      "returncode": 0
+    },
+    {
+      "command": [
+        "python3",
+        "projects/enwiki9/tools/enwiki9_evidence_matrix.py",
+        "--check"
+      ],
+      "returncode": 0
+    },
+    {
+      "command": [
+        "python3",
+        "projects/enwiki9/tools/enwiki9_best_results.py",
+        "--check"
+      ],
+      "returncode": 0
+    },
+    {
+      "command": [
+        "python3",
+        "projects/enwiki9/tools/enwiki9_status_receipt.py",
+        "--check",
+        "--candidate-audit-snapshot",
+        "/home/x/deco/gamma/projects/enwiki9/candidate_inventory.json",
+        "--candidate-audit-sha256",
+        "9063ed04acd62d249839828b0ef76dd0310da14773109e6b813fd0a9ce6c3dd9",
+        "--refresh-profile",
+        "routine"
+      ],
+      "returncode": 0
+    },
+    {
+      "command": [
+        "python3",
+        "projects/enwiki9/tools/enwiki9_doc_lint.py"
+      ],
+      "returncode": 0
+    },
+    {
+      "command": [
+        "python3",
+        "-m",
+        "json.tool",
+        "projects/enwiki9/upper_bound_certificate.json"
+      ],
+      "returncode": 0
+    },
+    {
+      "command": [
+        "python3",
+        "-m",
+        "json.tool",
+        "projects/enwiki9/docs/status_receipt.json"
+      ],
+      "returncode": 0
+    },
+    {
+      "command": [
+        "python3",
+        "projects/enwiki9/tools/backfill_run_ledger.py",
+        "--check"
+      ],
+      "returncode": 0
+    },
+    {
+      "command": [
+        "python3",
+        "projects/enwiki9/tools/enwiki9_tool_catalogue.py",
+        "--check"
+      ],
+      "returncode": 0
+    }
+  ],
+  "expected_check_count": 10,
+  "all_checks_pass": true,
+  "log": {
+    "path": "run_logs/manual/explicit_lexical_v2_terminal_publication_checks_20260916.log",
+    "bytes": 36174,
+    "sha256": "8c59550254aa9e013bd46763bb5cef36a85e361bebcb50ac47df4f4526f97f1d"
+  }
+}
