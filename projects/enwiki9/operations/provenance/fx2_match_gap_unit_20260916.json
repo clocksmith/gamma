@@ -1,0 +1,134 @@
+{
+  "schema": "gamma.enwiki9.match-gap-unit.v1",
+  "status": "passed",
+  "source_inputs": [
+    {
+      "path": "lib/fx2_match_gap_observer_v1.hpp",
+      "bytes": 2153,
+      "sha256": "4de7337235f5a90ed5c77b74d15f6d0de7d7dde08acc9f473fc353c4e80679e4"
+    },
+    {
+      "path": "tools/fx2_match_gap_adapter_v1.py",
+      "bytes": 3480,
+      "sha256": "d6aa280606d1780bc2faf35465bc5b96c63d22a14aaf9bde158c968db8fa264b"
+    },
+    {
+      "path": "tools/fx2_match_gap_probe_v1.cpp",
+      "bytes": 2531,
+      "sha256": "86d6397a2c76dc9031ede527ead28aa003e1d10b8a5c0f317ed4740f04bc0818"
+    },
+    {
+      "path": "operations/provenance/fx2_match_gap_adapter_v1.json",
+      "bytes": 5081,
+      "sha256": "8392fa9f9325b851f7b4b57172dc50c43d171ba6bcc0cebcdf332c9eda926b29"
+    }
+  ],
+  "commands": [
+    {
+      "arm": "P",
+      "phase": "build",
+      "command": [
+        "g++",
+        "-std=c++17",
+        "-O2",
+        "-fno-fast-math",
+        "-Iresults/fx2_match_gap_preflight_v1/P/src/models",
+        "-Iresults/fx2_match_gap_preflight_v1/P/src",
+        "tools/fx2_match_gap_probe_v1.cpp",
+        "results/fx2_match_gap_preflight_v1/P/src/models/match.cpp",
+        "-o",
+        "results/fx2_match_gap_preflight_v1/P/probe"
+      ],
+      "returncode": 0
+    },
+    {
+      "arm": "P",
+      "phase": "run",
+      "command": [
+        "results/fx2_match_gap_preflight_v1/P/probe"
+      ],
+      "returncode": 0
+    },
+    {
+      "arm": "K",
+      "phase": "build",
+      "command": [
+        "g++",
+        "-std=c++17",
+        "-O2",
+        "-fno-fast-math",
+        "-Iresults/fx2_match_gap_preflight_v1/K/src/models",
+        "-Iresults/fx2_match_gap_preflight_v1/K/src",
+        "tools/fx2_match_gap_probe_v1.cpp",
+        "results/fx2_match_gap_preflight_v1/K/src/models/match.cpp",
+        "-o",
+        "results/fx2_match_gap_preflight_v1/K/probe",
+        "-DGAP_OBSERVER"
+      ],
+      "returncode": 0
+    },
+    {
+      "arm": "K",
+      "phase": "run",
+      "command": [
+        "results/fx2_match_gap_preflight_v1/K/probe"
+      ],
+      "returncode": 0
+    }
+  ],
+  "synthetic_bytes": 384,
+  "protected_state_and_predictions_byte_equal": true,
+  "protected_state_bytes": 9532416,
+  "active_feature_events": 32,
+  "ring_guard_exhaustive": true,
+  "threshold_miss_and_stable_tie_checks": true,
+  "trace": {
+    "path": "results/fx2_match_gap_preflight_v1/K.trace",
+    "bytes": 24576,
+    "sha256": "18eac91ff9cf4d25d533c54f16cd51591f51b9a618865e5517d1ae4eff135281"
+  },
+  "outputs": [
+    {
+      "path": "results/fx2_match_gap_preflight_v1/K-build.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "results/fx2_match_gap_preflight_v1/K-run.stdout",
+      "bytes": 9532416,
+      "sha256": "14f0ed8b4ffdd46e7aee4b1462b877c1f6ba641833951494ce98d7fd855face9"
+    },
+    {
+      "path": "results/fx2_match_gap_preflight_v1/P-build.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "results/fx2_match_gap_preflight_v1/P-run.stdout",
+      "bytes": 9532416,
+      "sha256": "14f0ed8b4ffdd46e7aee4b1462b877c1f6ba641833951494ce98d7fd855face9"
+    },
+    {
+      "path": "results/fx2_match_gap_preflight_v1/K-build.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "results/fx2_match_gap_preflight_v1/K-run.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "results/fx2_match_gap_preflight_v1/P-build.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "results/fx2_match_gap_preflight_v1/P-run.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "corpus_read": false,
+  "objective_credit_bytes": 0
+}

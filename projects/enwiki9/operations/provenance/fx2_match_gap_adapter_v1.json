@@ -1,0 +1,119 @@
+{
+  "schema": "gamma.enwiki9.exact-source-adapter-multi.v1",
+  "source_zip": "results/fx2_expert_release250k_v3/P-source.zip",
+  "files": [
+    {
+      "source_path": "src/models/match.h",
+      "source_sha256": "5a66520946a0f9770696a72f80391d2e30ab500982d64b512e53f1087bf2e456",
+      "patched_sha256": "88d67fa569f6f4bfd8135298c4b3298c9b1474f38b0e5b4f660b7358b5d89b83",
+      "replacements": [
+        {
+          "before": "  const std::vector<unsigned char>& history_;",
+          "after": "  unsigned gamma_start_run_=0;\n  bool gamma_missed_=false;\n  const std::vector<unsigned char>& history_;"
+        }
+      ]
+    },
+    {
+      "source_path": "src/models/match.cpp",
+      "source_sha256": "e809d7f2665dacaca673eab675fa591b43f105b6dfef91c4625cdb51ada18b81",
+      "patched_sha256": "6d71201c09599a098059045ea1ce24cb8fc7b9e216ea61e4111f0a01bd583633",
+      "replacements": [
+        {
+          "before": "#include \"match.h\"",
+          "after": "#include \"match.h\"\n#include \"../gamma-gap-observer.h\""
+        },
+        {
+          "before": "void Match::Perceive(int bit) {",
+          "after": "void Match::Perceive(int bit) {\n  if(bit_pos_==128) { gamma_start_run_=match_length_; gamma_missed_=false; }\n  if(bit!=((cur_byte_ & bit_pos_)!=0)) gamma_missed_=true;"
+        },
+        {
+          "before": "void Match::ByteUpdate() {",
+          "after": "void Match::ByteUpdate() {\n  gamma_gap::consider(gamma_start_run_,gamma_missed_,cur_match_,history_pos_,history_);"
+        }
+      ]
+    },
+    {
+      "source_path": "src/predictor.cpp",
+      "source_sha256": "719e2a2bfc2a061630e69085737314598f4903bca420f8973242ab480c4949b1",
+      "patched_sha256": "b25ebe75968255b9a32bef480d2e17797a81e0f472d5bcf5ce64d88ffa29a06a",
+      "replacements": [
+        {
+          "before": "#include \"predictor.h\"",
+          "after": "#include \"predictor.h\"\n#include \"gamma-gap-observer.h\""
+        },
+        {
+          "before": "    if (print_transformer_loss_) AccumulateTransformerLoss();\n    bracket_model_->ByteUpdate();",
+          "after": "    gamma_gap::clear();\n    if (print_transformer_loss_) AccumulateTransformerLoss();\n    bracket_model_->ByteUpdate();"
+        }
+      ]
+    },
+    {
+      "source_path": "src/runner.cpp",
+      "source_sha256": "e8b9bc757902006bf0d2b30e1461276b172c883cece6d3c9eb3df03c804924bf",
+      "patched_sha256": "0c1a7802ed83c079ff117c871fb5a7cec2397065159dcf4afcb6b4c02b07d707",
+      "replacements": [
+        {
+          "before": "#include \"predictor.h\"",
+          "after": "#include \"predictor.h\"\n#include \"gamma-gap-observer.h\""
+        },
+        {
+          "before": "  Compress(temp_bytes, &temp_in, &data_out, output_bytes, &p);",
+          "after": "  gamma_gap::begin();\n  Compress(temp_bytes, &temp_in, &data_out, output_bytes, &p);\n  gamma_gap::finish();"
+        },
+        {
+          "before": "  Decompress(*output_bytes, &data_in, &temp_out, &p);",
+          "after": "  gamma_gap::begin();\n  Decompress(*output_bytes, &data_in, &temp_out, &p);\n  gamma_gap::finish();"
+        }
+      ]
+    },
+    {
+      "source_path": "src/coder/encoder.cpp",
+      "source_sha256": "01c43deb487706c80438bbf2187587bdb22ed56974d0c500d1ab5a6eced9a9fb",
+      "patched_sha256": "3de263352e3f6306f10928c3a0b0df4e87e0ec37cec75bc5f38d6f310a5da2b9",
+      "replacements": [
+        {
+          "before": "#include \"encoder.h\"",
+          "after": "#include \"encoder.h\"\n#include \"../gamma-gap-observer.h\""
+        },
+        {
+          "before": "  unsigned int p = Discretize(p_->Predict());",
+          "after": "  unsigned int p = Discretize(p_->Predict());\n  gamma_gap::Record gamma_record(p);"
+        },
+        {
+          "before": "  p_->Perceive(bit);",
+          "after": "  gamma_record.finish(bit);\n  p_->Perceive(bit);"
+        }
+      ]
+    },
+    {
+      "source_path": "src/coder/decoder.cpp",
+      "source_sha256": "9565ac7a3d73ee04a46e7c802581fab6be1e950f99c9c73536053a354d2c6860",
+      "patched_sha256": "c36707780c379729e38a9641d54c0668be9cd4b9a7220a397a16bd5bfc95a7e3",
+      "replacements": [
+        {
+          "before": "#include \"decoder.h\"",
+          "after": "#include \"decoder.h\"\n#include \"../gamma-gap-observer.h\""
+        },
+        {
+          "before": "  unsigned int p = Discretize(p_->Predict());",
+          "after": "  unsigned int p = Discretize(p_->Predict());\n  gamma_gap::Record gamma_record(p);"
+        },
+        {
+          "before": "  p_->Perceive(bit);",
+          "after": "  gamma_record.finish(bit);\n  p_->Perceive(bit);"
+        }
+      ]
+    }
+  ],
+  "added_files": [
+    {
+      "source": {
+        "path": "lib/fx2_match_gap_observer_v1.hpp",
+        "bytes": 2153,
+        "sha256": "4de7337235f5a90ed5c77b74d15f6d0de7d7dde08acc9f473fc353c4e80679e4"
+      },
+      "target": "src/gamma-gap-observer.h"
+    }
+  ],
+  "scope": "No predictions or learning change. Longest pre-byte match with one mismatching byte supplies historical next and shifted continuation for the following byte; before-truth final counts logged."
+}
