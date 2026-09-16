@@ -10,21 +10,56 @@
     "sha256": "sha256:044147f7ffe6922ea8dafd52fc3d4426077b20958adbcd421245ad41adcfc1e4"
   },
   "execution_mode": "discovery",
+  "execution_resources": {
+    "boot_id": "3ce46712-27bc-4199-8e48-e2b3d23926cb",
+    "budget": {
+      "cgroup_parent": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice",
+      "cpus": [
+        2
+      ],
+      "memory_bytes": 9999998976,
+      "scratch_bytes": 16000000000,
+      "swap_bytes": 0,
+      "wall_seconds": 3600
+    },
+    "cgroup_inode": 339423,
+    "cgroup_path": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/gamma-enwiki9-20260916T051409Z_5140177d05",
+    "cpu_enforcement": "taskset-and-sampled-affinity-guard",
+    "groups": [
+      {
+        "created": true,
+        "inode": 339423,
+        "kernel_cpuset": false,
+        "memory_bytes": 9999998976,
+        "path": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/gamma-enwiki9-20260916T051409Z_5140177d05"
+      }
+    ],
+    "guard_command_sha256": "598f45a55fd1cae0fb03f4c63b3b968ceaf409e17d1d6ae7365e3bf51a5ad12a",
+    "guard_path": "run_logs/adaptive/20260916T051409Z_5140177d05.resources/guard.json",
+    "missing_diagnostics": [
+      "kernel cpuset controller is not delegated; taskset assignment and existing affinity guard remain active"
+    ],
+    "timing_authority": "diagnostic"
+  },
   "experiment": {
     "path": "operations/adaptive/experiments/fx2_explicit_lexical250k_v2.json",
     "sha256": "sha256:83b709065a7b4e96484de55d0bfbe7ad1e8586d9b4589e8d256bf1fed2983dc3"
   },
   "gate_size": 250000,
-  "held": true,
+  "held": false,
   "held_at": "2026-09-16T05:14:09+00:00",
   "hold_history": [
     {
       "at": "2026-09-16T05:14:09+00:00",
       "held": true,
       "reason": "Publish source and pre-execution correction; fresh CPU2 admission before native comparison."
+    },
+    {
+      "at": "2026-09-16T05:20:31+00:00",
+      "held": false,
+      "reason": "Published 38c598be5 source and ownership; 27 input hashes verified, all ten publication checks pass, fresh CPU2 resource admission recorded."
     }
   ],
-  "hold_reason": "Publish source and pre-execution correction; fresh CPU2 admission before native comparison.",
   "job_id": "20260916T051409Z_5140177d05",
   "priority": 70,
   "proposal": {
@@ -33,6 +68,7 @@
   },
   "proposal_id": "fx2_explicit_lexical250k_v2",
   "purpose": "diagnostic",
+  "released_at": "2026-09-16T05:20:31+00:00",
   "resource_budget": {
     "cgroup_parent": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice",
     "cpus": [
@@ -51,10 +87,14 @@
   "scratch_directories": [
     "results/fx2_explicit_lexical250k_v2"
   ],
-  "state": "pending",
+  "started_at": "2026-09-16T05:20:31+00:00",
+  "state": "running",
   "submitted_at": "2026-09-16T05:14:09+00:00",
   "tags": [],
   "timing_authority": "diagnostic",
   "tool": "tools/fx2_explicit_lexical250k_v2.py",
-  "tool_args": []
+  "tool_args": [],
+  "worker_pid": 2464917,
+  "worker_proc_start_ticks": 263216925,
+  "worker_started_at": "2026-09-16T05:20:31+00:00"
 }
