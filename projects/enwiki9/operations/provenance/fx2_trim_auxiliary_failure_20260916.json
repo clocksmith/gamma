@@ -1,0 +1,64 @@
+{
+  "artifact_bytes_rehashed": 40136109,
+  "artifact_files_rehashed": 223,
+  "artifacts": {
+    "bytes": 44365,
+    "path": "results/fx2_trim_auxiliary_ppm_v1/artifacts.json",
+    "sha256": "1482fa4270b65add176b385817e397d6795514b78cced02923fc442ea28ae970"
+  },
+  "candidate_id": "fx2_trim_auxiliary_ppm_v1",
+  "cleanup_complete": true,
+  "complete_package_bytes": null,
+  "decision": {
+    "bytes": 18954,
+    "path": "results/fx2_trim_auxiliary_ppm_v1/decision.json",
+    "sha256": "04957a2666d08ecb1ddbcb043eb848011a81a2103a498efd994042c17731849e"
+  },
+  "embedded_assets_exact": true,
+  "failed_phase": "P-isolated-main-decode",
+  "frozen_inputs_rehashed": 26,
+  "full_corpus_score_bytes": null,
+  "guard": {
+    "bytes": 80949,
+    "path": "run_logs/adaptive/20260916T021120Z_00bf802163.resources/guard.json",
+    "sha256": "fb11bd8f4e427f8c4d979dc55df3e243393017f07fab809f6ccf92d03a43e152"
+  },
+  "job": {
+    "bytes": 4110,
+    "path": "operations/adaptive/failed/929_20260916T021120Z_00bf802163.json",
+    "sha256": "b518f0a91c9ae7940d4aafe207bcce6ad16e366736e99ab9448b4de9c966eb73"
+  },
+  "next_action": "Freeze bounded unchanged-binary presence/absence diagnostic before selecting a correction-only successor.",
+  "objective_credit_bytes": 0,
+  "parent_auxiliary_inverses_repeats": true,
+  "parent_main_archive_bytes": 33429,
+  "parent_native_inverse_repeat": true,
+  "resource_gate_pass": true,
+  "resource_peaks": {
+    "cgroup_memory_peak_bytes": 5843955712,
+    "max_observed_process_vmhwm_kib": 5655168,
+    "max_sampled_allowed_cpu_count": 1,
+    "max_sampled_cgroup_current_bytes": 5838249984,
+    "max_sampled_scratch_allocated_bytes": 51924992,
+    "max_sampled_scratch_logical_bytes": 14720302184,
+    "max_sampled_single_rss_kib": 5650104,
+    "max_sampled_tree_live_threads": 7,
+    "max_sampled_tree_rss_kib": 5699836,
+    "max_sampled_tree_runnable_threads": 2
+  },
+  "returncode": 139,
+  "schema": "gamma.enwiki9.auxiliary-failure-closed.v1",
+  "scientific_verdict": "Incomplete packaging comparison; no treatment or compression verdict.",
+  "scopeBytes": 250000,
+  "static_finding": {
+    "causal_status": "Static undeclared-input dependency proven; attribution of observed crash requires isolated replay.",
+    "finding": "FXCM constructor calls dosym, which reads ambient .dict and activates legacy reverse dictionary. The direct parent working directory has no .dict; isolated extraction creates it. The decoder also receives an explicit dictionary path.",
+    "source": {
+      "bytes": 166241,
+      "path": "results/fx2_trim_auxiliary_ppm_v1/work/P/src/models/fxcmv1.cpp",
+      "sha256": "b3de8853b1577ed9b6276abdb61e9b446fdf0b4bf42a3106c4aa98d3fea70b6c"
+    }
+  },
+  "successful_phases": 15,
+  "treatment_executed": false
+}
