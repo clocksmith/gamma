@@ -1,0 +1,159 @@
+{
+  "candidate_id": "fx2_attention_anchor250k_v1",
+  "checks": {
+    "all_other_members_identical": true,
+    "exact_changed_members": [
+      "cpp_infer/src/opt/model_opt.cpp",
+      "cpp_infer/src/opt/gamma_attention_anchor.h"
+    ],
+    "native_queue_identity": true,
+    "parent_zip_identity": true,
+    "source_preimage_fail_closed": true,
+    "steps_per_mode": 144395,
+    "total_steps": 433185
+  },
+  "commands": [
+    {
+      "command": [
+        "taskset",
+        "-c",
+        "3",
+        "g++",
+        "-std=c++17",
+        "-O2",
+        "-Ilib",
+        "-DGAMMA_ANCHOR_MODE=0",
+        "tests/fx2_attention_anchor_v1.cpp",
+        "-o",
+        "results/fx2_attention_anchor_preflight_v1/mode0"
+      ],
+      "log": {
+        "bytes": 0,
+        "path": "results/fx2_attention_anchor_preflight_v1/0-build.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "returncode": 0
+    },
+    {
+      "command": [
+        "taskset",
+        "-c",
+        "3",
+        "timeout",
+        "120",
+        "results/fx2_attention_anchor_preflight_v1/mode0"
+      ],
+      "log": {
+        "bytes": 28,
+        "path": "results/fx2_attention_anchor_preflight_v1/0-check.log",
+        "sha256": "ec0fcad68d39d075f122c6d8e99145c28dd866e7a1eb6f8386c1baf78d54e298"
+      },
+      "returncode": 0
+    },
+    {
+      "command": [
+        "taskset",
+        "-c",
+        "3",
+        "g++",
+        "-std=c++17",
+        "-O2",
+        "-Ilib",
+        "-DGAMMA_ANCHOR_MODE=1",
+        "tests/fx2_attention_anchor_v1.cpp",
+        "-o",
+        "results/fx2_attention_anchor_preflight_v1/mode1"
+      ],
+      "log": {
+        "bytes": 0,
+        "path": "results/fx2_attention_anchor_preflight_v1/1-build.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "returncode": 0
+    },
+    {
+      "command": [
+        "taskset",
+        "-c",
+        "3",
+        "timeout",
+        "120",
+        "results/fx2_attention_anchor_preflight_v1/mode1"
+      ],
+      "log": {
+        "bytes": 28,
+        "path": "results/fx2_attention_anchor_preflight_v1/1-check.log",
+        "sha256": "980a840cc0696d427fab22a34a1f9b0ecdd9ddf686270ea83c82bfa750378eb6"
+      },
+      "returncode": 0
+    },
+    {
+      "command": [
+        "taskset",
+        "-c",
+        "3",
+        "g++",
+        "-std=c++17",
+        "-O2",
+        "-Ilib",
+        "-DGAMMA_ANCHOR_MODE=2",
+        "tests/fx2_attention_anchor_v1.cpp",
+        "-o",
+        "results/fx2_attention_anchor_preflight_v1/mode2"
+      ],
+      "log": {
+        "bytes": 0,
+        "path": "results/fx2_attention_anchor_preflight_v1/2-build.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "returncode": 0
+    },
+    {
+      "command": [
+        "taskset",
+        "-c",
+        "3",
+        "timeout",
+        "120",
+        "results/fx2_attention_anchor_preflight_v1/mode2"
+      ],
+      "log": {
+        "bytes": 28,
+        "path": "results/fx2_attention_anchor_preflight_v1/2-check.log",
+        "sha256": "bf53fbbf1016cc505c6e73431a5be6fd7442cc6e38d84bd699d1b7c8d6a81f3c"
+      },
+      "returncode": 0
+    }
+  ],
+  "delivery": {
+    "D": {
+      "bytes": 3905788,
+      "path": "results/fx2_attention_anchor_preflight_v1/D-source.zip",
+      "sha256": "c96046e27c587f76befaf0d7a8b94d5e2bd913dc489829cc33c2e7e2348f45f5"
+    },
+    "P": {
+      "bytes": 3905220,
+      "path": "results/fx2_attention_anchor_preflight_v1/P-source.zip",
+      "sha256": "c44d941f95bd8504d63ed6ea5112af3ce15aeffb6874ebddb66596ce083c3cf6"
+    }
+  },
+  "inputs": [
+    {
+      "bytes": 777,
+      "path": "lib/fx2_attention_anchor_v1.h",
+      "sha256": "939a5ed2740714e32c5de2c2afd1c8ed4fe26fb1e2b1e0d155965c6c00b0c60d"
+    },
+    {
+      "bytes": 1001,
+      "path": "lib/fx2_attention_anchor_v1.py",
+      "sha256": "73acd4970e4458fa02091db841121834cdb2d9f52a685298302912506c4f7273"
+    },
+    {
+      "bytes": 1518,
+      "path": "tests/fx2_attention_anchor_v1.cpp",
+      "sha256": "ac4f61df9acfc9ddd9ff5ca1ef3a34707469d76a8ae9903a1004f180497dcfe5"
+    }
+  ],
+  "no_corpus_codec_executed": true,
+  "schema": "gamma.enwiki9.attention-anchor-unit.v1"
+}

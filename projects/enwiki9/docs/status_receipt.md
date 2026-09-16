@@ -2,7 +2,7 @@
 
 Generated from the current certificate, gate receipts, resource guards, and process table.
 
-- Generated at UTC: `2026-09-16T03:49:45+00:00`
+- Generated at UTC: `2026-09-16T04:17:05+00:00`
 
 ## Target State
 
@@ -16,17 +16,17 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 
 ## Operator Summary
 
-- Candidate: `fx2_trim_auxiliary_ppm_v2`
-- Scope bytes: `250,000`
-- Scope symbols: `250,000`
-- Scope unit: `raw byte`
-- Gate verdict: `running`
-- Gate next action: `wait_for_gate_completion`
+- Candidate: `None`
+- Scope bytes: `n/a`
+- Scope symbols: `n/a`
+- Scope unit: `n/a`
+- Gate verdict: `None`
+- Gate next action: `None`
 - Active stage: `n/a`
 - Roundtrip arm: `n/a`
-- Active scorer observed: `true`
-- Active cmix mode: `compress`
-- Driver result present: `false`
+- Active scorer observed: `false`
+- Active cmix mode: `n/a`
+- Driver result present: `unknown`
 - RSS guard status: `n/a`
 - RSS samples: `n/a`
 - Binary `10GiB` guard KiB: `10,485,760`
@@ -39,8 +39,8 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 - Latest decimal single-process margin KiB: `n/a`
 - Safe to launch candidate gate: `false`
 - Terminal verdict present: `false`
-- Pending adaptive jobs: `26`
-- Held pending adaptive jobs: `26`
+- Pending adaptive jobs: `27`
+- Held pending adaptive jobs: `27`
 - Claimable pending adaptive jobs: `0`
 - Canonical release bundles: `4`
 - Validated release run receipts: `0`
@@ -52,23 +52,23 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 
 ## Active Gate
 
-- Gate verdict: `running`
-- Next action: `wait_for_gate_completion`
-- Candidate: `fx2_trim_auxiliary_ppm_v2`
-- Scope bytes: `250,000`
-- Scope symbols: `250,000`
-- Scope unit: `raw byte`
+- Gate verdict: `unknown`
+- Next action: `unknown`
+- Candidate: `unknown`
+- Scope bytes: `n/a`
+- Scope symbols: `n/a`
+- Scope unit: `n/a`
 - Active stage: `n/a`
 - Roundtrip arm: `n/a`
 - Coordinator PID: `n/a`
-- Driver result JSON: `projects/enwiki9/results/fx2_trim_auxiliary_ppm_v2/decision.json`
-- Driver result present: `false`
+- Driver result JSON: `not present`
+- Driver result present: `unknown`
 - RSS guard JSON: `not present`
 - RSS guard present: `unknown`
-- Active scorer observed: `true`
-- Live gate: `true`
-- Liveness classification: `live_observed_owner`
-- Matching adaptive jobs: `1`
+- Active scorer observed: `false`
+- Live gate: `false`
+- Liveness classification: `not_persisted_running`
+- Matching adaptive jobs: `0`
 - Matching controllers: `0`
 - Matching driver observed: `false`
 - Liveness claim rule: `A running receipt or registered adaptive job is live only with an exact driver, owning controller, matching live worker, or frozen adopted process identities.`
@@ -84,8 +84,8 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 
 ## Observed Gate Command
 
-- Expected candidate: `fx2_trim_auxiliary_ppm_v2`
-- Expected scope bytes: `250,000`
+- Expected candidate: `None`
+- Expected scope bytes: `n/a`
 - Driver process count: `0`
 - Active gate command observed: `false`
 - Driver command mismatch count: `0`
@@ -96,8 +96,8 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 
 ## Observed Controller Command
 
-- Expected active candidate: `fx2_trim_auxiliary_ppm_v2`
-- Expected active scope bytes: `250,000`
+- Expected active candidate: `None`
+- Expected active scope bytes: `n/a`
 - Controller process count: `0`
 - Scope note: `Controller scope may be the completed parent gate that launched the active child; the observed driver command is authoritative for the active gate scope.`
 
@@ -108,8 +108,8 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 ## Operator Action
 
 - Safe to launch candidate gate: `false`
-- Action: `wait_for_gate_receipts`
-- Reason: `the gate state is incomplete and cannot drive a mutation yet`
+- Action: `verify_recorded_running_jobs_on_host`
+- Reason: `Recorded running jobs must be attributed or reconciled before this status view can recommend a launch.`
 - Allowed work: `n/a`
 - Forbidden work: `n/a`
 
@@ -117,7 +117,7 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 
 - Terminal verdict present: `false`
 - Gate mutation allowed: `false`
-- Recommended action: `wait_for_gate_receipts`
+- Recommended action: `verify_recorded_running_jobs_on_host`
 - Command source: `none while gate is non-terminal`
 - Claim rule: `Only an exact full-corpus package can prove the active objective.`
 
@@ -131,13 +131,13 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 
 - Audit return code: `0`
 - Audit mode: `inventory_snapshot`
-- Inventory generated: `2026-09-16T03:49:24+00:00`
+- Inventory generated: `2026-09-16T04:16:45+00:00`
 - Snapshot identity is verified; inventory inputs were not rescanned. This is not live occupancy or launch authority.
-- Program directories: `1,074`
-- Registered programs: `613`
+- Program directories: `1,075`
+- Registered programs: `614`
 - Untracked nonignored entries: `0`
-- Modified tracked entries: `0`
-- Candidate statuses: `active=18, blocked_dependency=99, candidate=266, measured_negative=100, retired=591`
+- Modified tracked entries: `7`
+- Candidate statuses: `active=18, blocked_dependency=100, candidate=266, measured_negative=100, retired=591`
 
 ## View Refresh
 
@@ -148,62 +148,13 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 
 | Role | PID | PPID | RSS KiB | Command |
 |---|---:|---:|---:|---|
-| `process` | 1,451,036 | 472,530 | 4,040 | `/bin/bash -lc taskset -c 2 python3 tools/enwiki9_lab.py run --candidate fx2_trim_auxiliary_ppm_v2 --max-workers 1 > run_logs/manual/auxiliary_v2_la...` |
-| `process` | 1,451,151 | 1,451,036 | 41,976 | `python3 tools/enwiki9_lab.py run --candidate fx2_trim_auxiliary_ppm_v2 --max-workers 1` |
-| `resource_guard` | 1,451,243 | 1,451,151 | 36,776 | `/usr/bin/python3 /home/x/deco/gamma/projects/enwiki9/tools/run_with_resource_guard_v3.py --limit-kib 9765624 --official-decimal-limit-kib 9765624 -...` |
-| `process` | 1,451,262 | 1,451,243 | 41,788 | `/usr/bin/python3 /home/x/deco/gamma/projects/enwiki9/tools/fx2_trim_auxiliary_ppm_v2.py` |
-| `process` | 1,477,585 | 1,451,262 | 7,832 | `/usr/bin/timeout --signal=TERM --kill-after=2 360 /home/x/deco/gamma/projects/enwiki9/results/fx2_trim_auxiliary_ppm_v2/work/P/cmix -c /home/x/deco...` |
-| `native_cmix` | 1,477,586 | 1,477,585 | 3,358,996 | `/home/x/deco/gamma/projects/enwiki9/results/fx2_trim_auxiliary_ppm_v2/work/P/cmix -c /home/x/deco/gamma/projects/enwiki9/results/fx2_trim_auxiliary...` |
+| n/a | n/a | n/a | n/a | n/a |
 
 ## Active Candidate Recent Artifacts
 
 | Path | Bytes | Modified UTC |
 |---|---:|---|
-| `projects/enwiki9/results/fx2_trim_auxiliary_ppm_v2/work/P/ppm.temp` | 14,680,064,001 | `2026-09-16T03:49:45+00:00` |
-| `projects/enwiki9/results/fx2_trim_auxiliary_ppm_v2/P-dict-encode.stderr` | 61,321 | `2026-09-16T03:49:45+00:00` |
-| `projects/enwiki9/results/fx2_trim_auxiliary_ppm_v2/work/P/progress.log` | 11,150 | `2026-09-16T03:49:45+00:00` |
-| `projects/enwiki9/results/fx2_trim_auxiliary_ppm_v2/work/P/assets/dict.comp` | 0 | `2026-09-16T03:49:36+00:00` |
-| `projects/enwiki9/results/fx2_trim_auxiliary_ppm_v2/work/P/assets/dict.comp.cmix.temp` | 412,001 | `2026-09-16T03:49:36+00:00` |
-| `projects/enwiki9/results/fx2_trim_auxiliary_ppm_v2/P-dict-encode.stdout` | 0 | `2026-09-16T03:49:36+00:00` |
-| `projects/enwiki9/results/fx2_trim_auxiliary_ppm_v2/P-main-repeat-cleanup.json` | 103 | `2026-09-16T03:49:36+00:00` |
-| `projects/enwiki9/results/fx2_trim_auxiliary_ppm_v2/P-main-repeat.execution.json` | 672 | `2026-09-16T03:49:36+00:00` |
-| `projects/enwiki9/results/fx2_trim_auxiliary_ppm_v2/P-main-repeat.stderr` | 742,645 | `2026-09-16T03:49:35+00:00` |
-| `projects/enwiki9/results/fx2_trim_auxiliary_ppm_v2/P-main-repeat.stdout` | 114 | `2026-09-16T03:49:35+00:00` |
-| `projects/enwiki9/results/fx2_trim_auxiliary_ppm_v2/work/P/repeat.arc` | 33,429 | `2026-09-16T03:49:35+00:00` |
-| `projects/enwiki9/results/fx2_trim_auxiliary_ppm_v2/P-main-decode-cleanup.json` | 103 | `2026-09-16T03:48:58+00:00` |
-
-## Active RSS
-
-- Max cmix PID: `1477586`
-- Active cmix mode: `compress`
-- Max cmix RSS KiB: `3,358,996`
-- Active process tree RSS KiB: `3,491,408`
-- Local binary `10GiB` guard KiB: `10,485,760`
-- Decimal `10GB` guard KiB: `9,765,625`
-- Single-process binary margin KiB: `7,126,764`
-- Single-process decimal margin KiB: `6,406,629`
-- Active process tree margin KiB (binary): `6,994,352`
-- Active process tree decimal margin KiB: `6,274,217`
-- Temp input path: `/home/x/deco/gamma/projects/enwiki9/results/fx2_trim_auxiliary_ppm_v2/work/P/dictionary/english.dic`
-- Temp output path: `/home/x/deco/gamma/projects/enwiki9/results/fx2_trim_auxiliary_ppm_v2/work/P/assets/dict.comp`
-- Temp output staging path: `/home/x/deco/gamma/projects/enwiki9/results/fx2_trim_auxiliary_ppm_v2/work/P/assets/dict.comp.cmix.temp`
-- Temp input bytes: `411,996`
-- Temp output bytes: `0`
-- Temp output staging bytes: `412,001`
-- Temp input modified UTC: `2026-09-16T03:47:12+00:00`
-- Temp output modified UTC: `2026-09-16T03:49:36+00:00`
-- Temp output staging modified UTC: `2026-09-16T03:49:36+00:00`
-- Process read bytes: `0`
-- Process write bytes: `1,388,544`
-
-## Contingencies
-
-- If current gate passes: `record pass and inspect the frozen candidate promotion rule`
-- Pass next scope: `n/a`
-- If RSS fails: `record RSS failure and retire or repackage this integration shape`
-- Lower candidate: `unknown`
-- Lower PPMD KiB: `n/a`
-- If roundtrip or determinism fails: `record failure and do not promote`
+| n/a | n/a | n/a |
 
 ## Proof Boundary
 

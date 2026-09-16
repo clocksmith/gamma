@@ -1,0 +1,64 @@
+{
+  "caps": {
+    "cpus": [
+      2
+    ],
+    "memory_bytes": 9999998976,
+    "scratch_bytes": 16000000000,
+    "swap_bytes": 0,
+    "wall_seconds": 3600
+  },
+  "compile_commands": {
+    "D": [
+      "/usr/bin/make",
+      "-j1",
+      "cmix",
+      "CC=/usr/bin/g++",
+      "CPPFLAGS_PART-THAT-SHOULD-BE-FAST=-DSEED=923 -DUPDATE_LIMIT=3000 -m64 -Wall -std=c++17 -include cstdint -fno-fast-math -fno-math-errno -fno-exceptions -fno-threadsafe-statics -march=x86-64-v3 -mtune=generic -mrecip=none -fdata-sections -ffunction-sections -O3 -DGAMMA_ANCHOR_MODE=1",
+      "CPPFLAGS_PART-THAT-CAN-BE-SLOW=-DSEED=923 -DUPDATE_LIMIT=3000 -m64 -Wall -std=c++17 -include cstdint -fno-fast-math -fno-math-errno -fno-exceptions -fno-threadsafe-statics -march=x86-64-v3 -mtune=generic -mrecip=none -fdata-sections -ffunction-sections -Os -DGAMMA_ANCHOR_MODE=1"
+    ],
+    "K": [
+      "/usr/bin/make",
+      "-j1",
+      "cmix",
+      "CC=/usr/bin/g++",
+      "CPPFLAGS_PART-THAT-SHOULD-BE-FAST=-DSEED=923 -DUPDATE_LIMIT=3000 -m64 -Wall -std=c++17 -include cstdint -fno-fast-math -fno-math-errno -fno-exceptions -fno-threadsafe-statics -march=x86-64-v3 -mtune=generic -mrecip=none -fdata-sections -ffunction-sections -O3 -DGAMMA_ANCHOR_MODE=0",
+      "CPPFLAGS_PART-THAT-CAN-BE-SLOW=-DSEED=923 -DUPDATE_LIMIT=3000 -m64 -Wall -std=c++17 -include cstdint -fno-fast-math -fno-math-errno -fno-exceptions -fno-threadsafe-statics -march=x86-64-v3 -mtune=generic -mrecip=none -fdata-sections -ffunction-sections -Os -DGAMMA_ANCHOR_MODE=0"
+    ],
+    "P": [
+      "/usr/bin/make",
+      "-j1",
+      "cmix",
+      "CC=/usr/bin/g++",
+      "CPPFLAGS_PART-THAT-SHOULD-BE-FAST=-DSEED=923 -DUPDATE_LIMIT=3000 -m64 -Wall -std=c++17 -include cstdint -fno-fast-math -fno-math-errno -fno-exceptions -fno-threadsafe-statics -march=x86-64-v3 -mtune=generic -mrecip=none -fdata-sections -ffunction-sections -O3",
+      "CPPFLAGS_PART-THAT-CAN-BE-SLOW=-DSEED=923 -DUPDATE_LIMIT=3000 -m64 -Wall -std=c++17 -include cstdint -fno-fast-math -fno-math-errno -fno-exceptions -fno-threadsafe-statics -march=x86-64-v3 -mtune=generic -mrecip=none -fdata-sections -ffunction-sections -Os"
+    ],
+    "S": [
+      "/usr/bin/make",
+      "-j1",
+      "cmix",
+      "CC=/usr/bin/g++",
+      "CPPFLAGS_PART-THAT-SHOULD-BE-FAST=-DSEED=923 -DUPDATE_LIMIT=3000 -m64 -Wall -std=c++17 -include cstdint -fno-fast-math -fno-math-errno -fno-exceptions -fno-threadsafe-statics -march=x86-64-v3 -mtune=generic -mrecip=none -fdata-sections -ffunction-sections -O3 -DGAMMA_ANCHOR_MODE=2",
+      "CPPFLAGS_PART-THAT-CAN-BE-SLOW=-DSEED=923 -DUPDATE_LIMIT=3000 -m64 -Wall -std=c++17 -include cstdint -fno-fast-math -fno-math-errno -fno-exceptions -fno-threadsafe-statics -march=x86-64-v3 -mtune=generic -mrecip=none -fdata-sections -ffunction-sections -Os -DGAMMA_ANCHOR_MODE=2"
+    ]
+  },
+  "controls": "P unchanged; K mode0 FIFO helper with full P/K archive/neural identity; D anchors0..3; S anchors4..7,samecapacity. All arms require inverse,repeat andtrace-off identity. Neural prefix before1024inputs perarticle equals P.",
+  "decision": "Require gP>0,gS>0 andgP-sourceZIPincrement-requiredflagbytes>0 with exactchecks for unchanged independentconfirmation. Positive unpaidgain holds; validnonpositivearchive/control margin retires this fixedrealization. Infrastructure/correctnessfailure is incomplete.",
+  "design": "docs/fx2_attention_anchor_20260916.md",
+  "development_budget": "One first4anchor realization,one fixed exposed250KB population,P/K/D/S. No count/window/RoPE/optimizer tuning. Separate held confirmation only after selection.",
+  "execution": "32 outer phases: eight builds,seven cleans,onepreprocess,sixteencodecoperations.",
+  "id": "fx2_attention_anchor250k_v1",
+  "lens_reason": "Deliberate: final-output corrections fail and window expansion regresses; test retention of different past states at unchanged capacity.",
+  "mechanism": "Only KV slot selection: preserve first4articleinputs, rotate1020remaining slots; unchanged absolute/post-RoPE representation,weights,attentionkernels,KDA,resets and downstream learning rules.",
+  "objective_credit_bytes": 0,
+  "owner": "root_attention_anchor",
+  "population": "Exposed cold opening raw[0,250000),151210 WRT bytes. No confirmation data read.",
+  "pricing": "gP=Parchive-Darchive,gS=Sarchive-Darchive. SourceZIPincrement plus required -DGAMMA_ANCHOR_MODE=1 bytes; alternative executableincrement. No inherited trim or mixturegain. Completepackage/officialform unresolved.",
+  "schema": "gamma.enwiki9.attention-anchor-plan.v1",
+  "state": "Full model/optimizer state anddecoder neural stream are not serialized. Full exported neural rows repeat; prefix equality across resets, rawinverse andarchives repeat. Final row predicts beyondsample.",
+  "synthesis_lenses": [
+    4,
+    9
+  ],
+  "unit": "operations/provenance/fx2_attention_anchor_unit_20260916.json"
+}
