@@ -1,0 +1,56 @@
+{
+  "candidateId": "fx2_final_mlp_zero250k_v1",
+  "candidateTreeSha256": "sha256:dcb1623c2dc4c355c99a94158054514a64b26d54bddf9799c26897fddbcd4e50",
+  "change": {
+    "evidence": [
+      "operations/adaptive/experiments/fx2_final_mlp_zero250k_v1.json"
+    ],
+    "hypothesis": "Zeroing only final MLP matrices reduces the paid model and source package without increasing the native archive on the exposed opening250KB.",
+    "kind": "implementation",
+    "replacements": [],
+    "summary": [
+      "Zero only final layer11 MLP up and down quantized weights,294912signed values; retain original container,loader,allscales,otherweights,RoPE,coder,frontend and update rules."
+    ]
+  },
+  "files": [
+    {
+      "blobPath": "operations/adaptive/candidate-blobs/sha256/b6/b689be0b21f363c759087de85a2a0ef6a7b279271ea2bc270f45bd8919252983",
+      "bytes": 888,
+      "normalization": "semantic-meta-v1",
+      "path": "meta.json",
+      "sha256": "b689be0b21f363c759087de85a2a0ef6a7b279271ea2bc270f45bd8919252983"
+    },
+    {
+      "blobPath": "operations/adaptive/candidate-blobs/sha256/b7/b7ce4655da52a76c642a4560a542b27d42f5380176787bda5f0ecd59bfb811c6",
+      "bytes": 10522,
+      "normalization": "verbatim",
+      "path": "program.py",
+      "sha256": "b7ce4655da52a76c642a4560a542b27d42f5380176787bda5f0ecd59bfb811c6"
+    }
+  ],
+  "generatedUtc": "2026-09-16T05:59:28+00:00",
+  "immutableBlobsComplete": true,
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:e91ff20e92c3cac8acb0cbe5c79fc8e8a3b427d7e151245c8eecc52b1c32fa00",
+    "objectiveId": "gamma-enwiki9-hutter-90m-v3",
+    "objectivePath": "contracts/research/v3/objective-contract.json",
+    "targetScoreBytes": 90000000
+  },
+  "parentRevision": {
+    "candidateId": "fx2_expert_release250k_v3",
+    "candidateTreeSha256": "sha256:b820418f7fdf8ee9853593711686504581902240e78dbf425c016ff1ff057528",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/fx2_expert_release250k_v3/20260915T021107540049Z_b820418f7fdf.json",
+      "sha256": "sha256:06ce872e08f9c8ba78a0a36aff227f7ca43e8566939c0ec4c2553af7f9edddbf"
+    }
+  },
+  "previousRevision": {
+    "path": "operations/adaptive/candidate-revisions/fx2_final_mlp_zero250k_v1/20260916T055928423266Z_1a6c4820daa8.json",
+    "sha256": "sha256:e2f67f32747804a30ed3161f4a5cd566afda0f48b4fdbd6fed3d670c805cb250"
+  },
+  "provenanceClass": "native",
+  "schema": "gamma.enwiki9.candidate-revision.v1",
+  "treeDigestAlgorithm": "sha256-canonical-counted-files-v1"
+}

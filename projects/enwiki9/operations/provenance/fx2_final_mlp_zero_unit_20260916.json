@@ -1,0 +1,57 @@
+{
+  "schema": "gamma.enwiki9.final-mlp-zero-unit.v1",
+  "status": "passed",
+  "synthetic_checks": {
+    "status": "passed",
+    "checks": 10,
+    "corpus_read": false
+  },
+  "source_inputs": [
+    {
+      "path": "tools/fx2_final_mlp_zero_v1.cpp",
+      "bytes": 4447,
+      "sha256": "7196d40305733d9392d519661461294d6ee946987ca139ff1dbd0facc0d4b729"
+    },
+    {
+      "path": "tools/fx2_final_mlp_native_compare_v1.cpp",
+      "bytes": 1958,
+      "sha256": "b94dbdf539a1dfc080be55e54b9689bd58792007fef16845f79e5d2626076004"
+    },
+    {
+      "path": "tools/fx2_final_mlp_zero250k_v1.py",
+      "bytes": 10522,
+      "sha256": "b7ce4655da52a76c642a4560a542b27d42f5380176787bda5f0ecd59bfb811c6"
+    },
+    {
+      "path": "lib/fx2_weight_format_v1.hpp",
+      "bytes": 20196,
+      "sha256": "aa615fc92b456bada499602888c2bf38ea8a98918694ce2cfd9691d384b2fa30"
+    }
+  ],
+  "logs": [
+    {
+      "path": "results/fx2_final_mlp_zero_preflight_v1/self-test.stdout",
+      "bytes": 52,
+      "sha256": "d0f82bfb36d45f4296781c3135d8c4ac8278894015beaa7b2e34905f701401d1"
+    },
+    {
+      "path": "results/fx2_final_mlp_zero_preflight_v1/self-test.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "preparation_build": [
+    "g++",
+    "-std=c++17",
+    "-O2",
+    "-Wall",
+    "-Wextra",
+    "tools/fx2_final_mlp_zero_v1.cpp",
+    "-o",
+    "results/fx2_final_mlp_zero_preflight_v1/prepare"
+  ],
+  "native_original_loader_compile": "Succeeded with original weights_io.cpp and weights_io_compressed.cpp; native tensor comparison will execute inside the admitted gate.",
+  "corpus_read": false,
+  "model_read": false,
+  "objective_credit_bytes": 0
+}
