@@ -14,8 +14,8 @@ Compare identical population hashes; equal input sizes alone do not define match
 
 ## Proof Boundary
 
-- Result JSON files scanned: `438`
-- Roundtrip-passing rows: `192`
+- Result JSON files scanned: `442`
+- Roundtrip-passing rows: `194`
 - Verified full `1G` rows in this checkout: `0`
 - Active target score: `90,000,000` bytes (`9.0000000%`)
 - `9.0000000%` target reached by this matrix: `False`
@@ -40,6 +40,14 @@ Compare identical population hashes; equal input sizes alone do not define match
 | `fx2_weight_adaptive_transfer250k_q0_v1:distant-D` | `f0d01801279f` | custom candidate | 250,000 | unknown | 9,499 | 4,907,384 | 0.303968 | true | `operations/provenance/fx2_weight_adaptive_transfer250k_v1_terminal/distant-D.json` |
 | `fx2_prefix_dictionary_component_v1:K` | `4c8568cca934` | custom candidate | 411,996 | unknown | 100,098 | 483,848 | 1.94366936 | true | `operations/provenance/fx2_prefix_dictionary_component_v1_terminal/K.json` |
 | `matched_frontier_reserved_q0_v1:confirmation-FX2` | `20b4d8d7e140` | custom candidate | 1,000,000 | unknown | 131,238 | unknown | 1.049904 | true | `operations/provenance/matched_frontier_reserved_terminal_20260908/confirmation-FX2.json` |
+| `fx2_trim_scale10m_v1:D` | `5985c81c39d9` | custom candidate | 10,000,000 | unknown | 1,305,268 | unknown | 1.0442144 | true | `results/fx2_trim_scale10m_v1/D.driver.json` |
+
+## Top Archive Rows At 10,000,000 Bytes
+
+| Program / arm | Population SHA256 | Mechanism | Scope | Local subtotal | Archive | Program | b/B | Determinism | Result |
+|---|---|---|---:|---:|---:|---:|---:|---|---|
+| `fx2_trim_scale10m_v1:D` | `5985c81c39d9` | custom candidate | 10,000,000 | unknown | 1,305,268 | unknown | 1.0442144 | true | `results/fx2_trim_scale10m_v1/D.driver.json` |
+| `fx2_trim_scale10m_v1:P` | `5985c81c39d9` | custom candidate | 10,000,000 | unknown | 1,305,268 | unknown | 1.0442144 | true | `results/fx2_trim_scale10m_v1/P.driver.json` |
 
 ## Top Score Rows At 1,000,000 Bytes
 

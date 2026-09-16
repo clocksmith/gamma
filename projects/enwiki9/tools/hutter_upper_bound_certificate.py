@@ -132,8 +132,8 @@ class Result:
     data_size: int
     data_sha256: str
     compressed_size: int
-    program_size: int
-    hutter_score: int
+    program_size: int | None
+    hutter_score: int | None
     roundtrip_ok: bool | None
     determinism_ok: bool | None
     timestamp: str
@@ -146,7 +146,9 @@ class Result:
     prize_claimable: bool = False
 
     @property
-    def percent(self) -> float:
+    def percent(self) -> float | None:
+        if self.hutter_score is None:
+            return None
         if self.data_size <= 0:
             return math.inf
         return 100.0 * self.hutter_score / self.data_size
@@ -162,9 +164,14 @@ class Result:
         return self.roundtrip_ok is True
 
     @property
+    def has_counted_score(self) -> bool:
+        return self.hutter_score is not None and self.hutter_score >= self.compressed_size
+
+    @property
     def is_full_corpus_proof(self) -> bool:
         return (
             self.is_constructive
+            and self.has_counted_score
             and self.determinism_ok is True
             and self.data_size == FULL_INPUT_BYTES
             and self.data_sha256 == OBJECTIVE_BINDING["corpusSha256"]
@@ -186,6 +193,19 @@ def as_int(data: dict[str, Any], key: str) -> int:
         return int(value)
     except (TypeError, ValueError):
         return 0
+
+
+def optional_bytes(data: dict[str, Any], key: str) -> int | None:
+    """Keep absent, explicitly unknown and malformed costs out of arithmetic."""
+    value = data.get(key)
+    if isinstance(value, int) and not isinstance(value, bool) and value >= 0:
+        return value
+    if isinstance(value, str) and value.strip().isdigit():
+        try:
+            return int(value.strip())
+        except ValueError:
+            return None
+    return None
 
 
 def determinism_ok(data: dict[str, Any]) -> bool | None:
@@ -334,10 +354,14 @@ def load_result(path: pathlib.Path) -> Result | None:
 
     data_size = as_int(data, "data_size")
     compressed_size = as_int(data, "compressed_size")
-    program_size = as_int(data, "program_size")
-    hutter_score = as_int(data, "hutter_score")
-    if hutter_score == 0 and (compressed_size or program_size):
+    program_size = optional_bytes(data, "program_size")
+    hutter_score = optional_bytes(data, "hutter_score")
+    # Legacy receipts can omit the subtotal while supplying both components.
+    # Explicit null means unresolved accounting and must remain unresolved.
+    if "hutter_score" not in data and program_size is not None:
         hutter_score = compressed_size + program_size
+    if hutter_score is not None and hutter_score < compressed_size:
+        hutter_score = None
 
     roundtrip = data.get("roundtrip_ok")
     if not isinstance(roundtrip, bool):
@@ -528,7 +552,7 @@ def iter_results(
 def best_by_size(rows: list[Result]) -> list[Result]:
     best: dict[int, Result] = {}
     for row in rows:
-        if not row.is_constructive:
+        if not row.is_constructive or not row.has_counted_score:
             continue
         current = best.get(row.data_size)
         if current is None or row.hutter_score < current.hutter_score:
@@ -556,7 +580,7 @@ def result_record(row: Result) -> dict[str, Any]:
         "compressed_size": row.compressed_size,
         "program_size": row.program_size,
         "hutter_score": row.hutter_score,
-        "score_percent": round(row.percent, 9),
+        "score_percent": round(row.percent, 9) if row.percent is not None else None,
         "archive_bpb": round(row.archive_bpb, 9),
         "roundtrip_ok": row.roundtrip_ok,
         "determinism_ok": row.determinism_ok,
@@ -1013,7 +1037,7 @@ def build_certificate(
         row for row in full_exact if row.hutter_score <= TARGET_10_95
     ]
     best_constructive = min(
-        (row for row in rows if row.is_constructive),
+        (row for row in rows if row.is_constructive and row.has_counted_score),
         key=lambda row: (row.hutter_score / max(1, row.data_size), row.hutter_score),
         default=None,
     )
@@ -1073,6 +1097,7 @@ def build_certificate(
         ],
         "notes": [
             "Prefix results prove upper bounds only for that prefix, not for enwik9.",
+            "Unknown program costs or explicitly unknown totals remain unknown; archive-only rows do not compete in counted-score rankings.",
             "Projected 1GB scores are search evidence and are excluded from proof_status.",
             f"A {100.0 * TARGET_10_95 / FULL_INPUT_BYTES:.7f}% proof requires a full "
             f"{FULL_INPUT_BYTES:,}-byte result with score <= {TARGET_10_95:,}.",
@@ -1087,6 +1112,9 @@ def build_certificate(
 
 
 def write_markdown(cert: dict[str, Any], path: pathlib.Path) -> None:
+    def byte_text(value: int | None) -> str:
+        return f"{value:,}" if value is not None else "unknown"
+
     target = cert["target"]
     status = cert["proof_status"]
     target_percent = 100.0 * target["target_score_10_95"] / target["input_size"]
@@ -1172,7 +1200,7 @@ def write_markdown(cert: dict[str, Any], path: pathlib.Path) -> None:
         lines.append(
             f"| {row['data_size']:,} | `{row['program_id']}` | "
             f"{row['hutter_score']:,} | {row['compressed_size']:,} | "
-            f"{row['program_size']:,} | {row['score_percent']} | "
+            f"{byte_text(row['program_size'])} | {row['score_percent']} | "
             f"`{row['result_path']}` |"
         )
     lines.extend(
@@ -1187,8 +1215,8 @@ def write_markdown(cert: dict[str, Any], path: pathlib.Path) -> None:
     for row in cert["best_exact_archive_by_scope"]:
         lines.append(
             f"| {row['data_size']:,} | `{row['program_id']}` | "
-            f"{row['compressed_size']:,} | {row['hutter_score']:,} | "
-            f"{row['program_size']:,} | {row['archive_bpb']} | "
+            f"{row['compressed_size']:,} | {byte_text(row['hutter_score'])} | "
+            f"{byte_text(row['program_size'])} | {row['archive_bpb']} | "
             f"`{row['result_path']}` |"
         )
     lines.extend(["", "## Notes", ""])

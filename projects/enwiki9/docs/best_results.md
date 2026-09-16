@@ -12,8 +12,8 @@ Unknown package cost stays unknown. Local subtotals are not complete submission 
 Populations are grouped by raw-input SHA256; compare matched controls in each receipt.
 ```
 
-- Result JSON files scanned: `438`
-- Roundtrip-passing rows: `192`
+- Result JSON files scanned: `442`
+- Roundtrip-passing rows: `194`
 - Active target score: `90,000,000` bytes (`9.0000000%`)
 
 ## Scope `1,000,000,000` Bytes
@@ -28,7 +28,14 @@ No roundtrip-passing result JSONs are present for this scope in this checkout.
 
 ## Scope `10,000,000` Bytes
 
-No roundtrip-passing result JSONs are present for this scope in this checkout.
+### Population `5985c81c39d927ae0e169625790ca4d9e7d1531270c8b09ad73176a375bb3d97`
+
+**Smallest archives (package cost reported separately)**
+
+| Program / arm | Mechanism | Local subtotal | Archive | Program bytes | b/B | Determinism | Result |
+|---|---|---:|---:|---:|---:|---|---|
+| `fx2_trim_scale10m_v1:D` | custom candidate | unknown | 1,305,268 | unknown | 1.0442144 | true | `results/fx2_trim_scale10m_v1/D.driver.json` |
+| `fx2_trim_scale10m_v1:P` | custom candidate | unknown | 1,305,268 | unknown | 1.0442144 | true | `results/fx2_trim_scale10m_v1/P.driver.json` |
 
 
 ## Scope `1,000,000` Bytes
