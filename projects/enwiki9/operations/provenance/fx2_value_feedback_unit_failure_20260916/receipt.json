@@ -1,0 +1,31 @@
+{
+  "schema": "gamma.enwiki9.synthetic-failure.v1",
+  "status": "unit_test_failed",
+  "tests_passed": 8,
+  "tests_failed": 1,
+  "log": {
+    "path": "run_logs/manual/value_feedback_unit_20260916.log",
+    "bytes": 2187,
+    "sha256": "63fedb0f2f41d8f196ed61a42d7bb23e10cb9b1859eccc236057d1ae7b9bcacb"
+  },
+  "sources": [
+    {
+      "path": "operations/provenance/fx2_value_feedback_unit_failure_20260916/fx2_value_feedback_v1.py.txt",
+      "bytes": 2546,
+      "sha256": "8fc279f0f82891b0020091b425103007a87d4e3a03a34a80d8fd6db4d653fb19"
+    },
+    {
+      "path": "operations/provenance/fx2_value_feedback_unit_failure_20260916/fx2_value_feedback_v1.h.txt",
+      "bytes": 1793,
+      "sha256": "bb0f5410aa7d317f9cd0e576b78acdc64ebca0a5f1bfc557f4a1def0bd8ac718"
+    },
+    {
+      "path": "operations/provenance/fx2_value_feedback_unit_failure_20260916/test_fx2_value_feedback_v1.py.txt",
+      "bytes": 6595,
+      "sha256": "0a3d59c0155a19d22ebcb77a3bc11c90accaed845110634a08309210ce72dc04"
+    }
+  ],
+  "cause": "The endpoint test incorrectly expected unchanged q=127 at normalized input127 and previous residual -1/2. Ties-to-even correctly yields q=126,residual+1/2. The independent rational reference and native kernel agree; the bounded-state and conservation claims are unchanged.",
+  "correction": "Correct the expected tie case, preserving kernel,domain,rounding and model hypothesis.",
+  "corpus_executed": false
+}
