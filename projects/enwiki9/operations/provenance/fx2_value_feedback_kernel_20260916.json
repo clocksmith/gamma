@@ -1,0 +1,136 @@
+{
+  "alternatives": [
+    {
+      "mechanism": "Full prequantization float V cache",
+      "reason": "Restores more information but adds a full float cache and changes arithmetic; more precision is not established as better final prediction.",
+      "status": "not selected"
+    },
+    {
+      "mechanism": "Exact paid-weight packing",
+      "reason": "It changes delivery cost, not the missing predictive signal; no savings are inherited here.",
+      "status": "separate retained lineage, not selected for this mutation"
+    }
+  ],
+  "choice": "independent bounded synthetic development alongside the frozen 10MB scale gate",
+  "corpus_executed": false,
+  "full_corpus_score_bytes": null,
+  "identity": "fx2_value_feedback_v1",
+  "lenses": [
+    8,
+    10
+  ],
+  "mathematical_scope": "Bounded integer remainder, exact telescoping weighted-error identity, Q16 input allowance, fixed-sequence/fixed-weight bounds and an explicit counterexample to universal prediction improvement.",
+  "measured_package_delta_bytes": null,
+  "model_table_bytes": 0,
+  "next_action": "Implement one native P/K/D/S realization with frozen Q16 remainder, all three value layers and per-model resets; establish source and codec parity before a separately admitted 250KB gate. Do not change the live10MB experiment.",
+  "not_proved": [
+    "Native encoder/decoder integration",
+    "FP32 attention-output error bound",
+    "Probability improvement",
+    "Archive savings",
+    "Complete package economics",
+    "Novelty of the general algorithm",
+    "Full-corpus score"
+  ],
+  "novelty": "Error feedback is established mathematics. No novelty or Hutter compression claim is made for the principle.",
+  "objective_credit_bytes": 0,
+  "owner": "root_value_feedback",
+  "planned_runtime_state_bytes": 2304,
+  "predecessors": [
+    {
+      "bytes": 2133,
+      "path": "operations/provenance/fx2_kvf32_quality_premise_20260915.json",
+      "sha256": "22d6cbbfae338583eedeebe762f2c0d84c0ab6aeea7f3a690a0398fd764e2395"
+    },
+    {
+      "bytes": 3821,
+      "path": "operations/provenance/fx2_attention_window_v2_terminal_20260915.json",
+      "sha256": "f25cd38ca6ef27a60ee39b71dae7da8888c5dfc600336556d416bdc701d7f3e1"
+    }
+  ],
+  "primary_sources": [
+    "https://arxiv.org/abs/1609.01383",
+    "https://arxiv.org/abs/1611.02024"
+  ],
+  "proposed_state_boundary": {
+    "D_S": "Each arm must synchronize its own encoder/decoder states. Changed neural, cache and mixer trajectories relative to P are intentional; existing learning code and update schedule are unchanged, not their resulting parameter values.",
+    "P_K": "All authoritative parent probabilities and states must match. K may retain discarded quantizer bookkeeping."
+  },
+  "queue_authority": false,
+  "schema": "gamma.enwiki9.kernel-proof-and-selection.v1",
+  "selection_reason": "Carry previously discarded value-rounding information in a bounded causal state, rather than claiming the existing float cache restores precision. The error-feedback identity makes the local approximation falsifiable; predictive gain still requires native archives.",
+  "source_members": [
+    {
+      "bytes": 18026,
+      "member": "cpp_infer/src/opt/model_opt.cpp",
+      "sha256": "b49493ece5a3a135baa24eeef00d6aaf56335324d0c6355b7283e46736c9df8e"
+    },
+    {
+      "bytes": 24937,
+      "member": "cpp_infer/src/opt/attn.cpp",
+      "sha256": "9991e1d1b2814ef0f41b0e1f37b6f273002f98777bee5d7fa5206f90cc03db11"
+    },
+    {
+      "bytes": 15704,
+      "member": "cpp_infer/src/opt/glue.cpp",
+      "sha256": "36f3b2f7ba64369373609a8ad454b90d58b899fb56bc7d4ba1a80cd15aafde72"
+    }
+  ],
+  "source_zip": {
+    "bytes": 3905220,
+    "path": "results/fx2_expert_release250k_v3/P-source.zip",
+    "sha256": "c44d941f95bd8504d63ed6ea5112af3ce15aeffb6874ebddb66596ce083c3cf6"
+  },
+  "sources": [
+    {
+      "bytes": 1793,
+      "path": "lib/fx2_value_feedback_v1.h",
+      "sha256": "bb0f5410aa7d317f9cd0e576b78acdc64ebca0a5f1bfc557f4a1def0bd8ac718"
+    },
+    {
+      "bytes": 2546,
+      "path": "lib/fx2_value_feedback_v1.py",
+      "sha256": "8fc279f0f82891b0020091b425103007a87d4e3a03a34a80d8fd6db4d653fb19"
+    },
+    {
+      "bytes": 6815,
+      "path": "tests/test_fx2_value_feedback_v1.py",
+      "sha256": "a91ba4c65537945603f2210684446c2e21f06b82e0c1d4af7bc4b842ff9d887f"
+    },
+    {
+      "bytes": 5135,
+      "path": "docs/fx2_value_feedback_20260916.md",
+      "sha256": "5cdc1e7a06f8dc51538175aa3b0751683062ce686010ae3d84cd155446309166"
+    }
+  ],
+  "target_bytes": 90000000,
+  "tests": {
+    "arbitrary_weighted_trajectories": 100,
+    "command": [
+      "env",
+      "TMPDIR=/run/user/1000",
+      "PYTHONDONTWRITEBYTECODE=1",
+      "taskset",
+      "-c",
+      "4",
+      "python3",
+      "-m",
+      "unittest",
+      "tests.test_fx2_value_feedback_v1",
+      "-v"
+    ],
+    "initial_failure": {
+      "bytes": 1429,
+      "path": "operations/provenance/fx2_value_feedback_unit_failure_20260916/receipt.json",
+      "sha256": "ab36834a97b1437153b9dd850d91140df341b5fa2fb45c32f4fa1e21e3e11836"
+    },
+    "log": {
+      "bytes": 1440,
+      "path": "run_logs/manual/value_feedback_unit_v2_20260916.log",
+      "sha256": "99f75cd6c92a8269f8744962d9dba047dcabaa72acbfaecbd867d69d9ba76380"
+    },
+    "native_reference_checks": 171174,
+    "passed": 9,
+    "uniform_intervals": 2080
+  }
+}

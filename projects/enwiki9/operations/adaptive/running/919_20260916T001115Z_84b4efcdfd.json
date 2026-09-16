@@ -10,21 +10,56 @@
     "sha256": "sha256:044147f7ffe6922ea8dafd52fc3d4426077b20958adbcd421245ad41adcfc1e4"
   },
   "execution_mode": "discovery",
+  "execution_resources": {
+    "boot_id": "3ce46712-27bc-4199-8e48-e2b3d23926cb",
+    "budget": {
+      "cgroup_parent": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice",
+      "cpus": [
+        2
+      ],
+      "memory_bytes": 9999998976,
+      "scratch_bytes": 16000000000,
+      "swap_bytes": 0,
+      "wall_seconds": 24000
+    },
+    "cgroup_inode": 336915,
+    "cgroup_path": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/gamma-enwiki9-20260916T001115Z_84b4efcdfd",
+    "cpu_enforcement": "taskset-and-sampled-affinity-guard",
+    "groups": [
+      {
+        "created": true,
+        "inode": 336915,
+        "kernel_cpuset": false,
+        "memory_bytes": 9999998976,
+        "path": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/gamma-enwiki9-20260916T001115Z_84b4efcdfd"
+      }
+    ],
+    "guard_command_sha256": "87b0b440dc65c5738f3cbb84447dbc077a97153c71b281ae8f80c5e1a9fe15ca",
+    "guard_path": "run_logs/adaptive/20260916T001115Z_84b4efcdfd.resources/guard.json",
+    "missing_diagnostics": [
+      "kernel cpuset controller is not delegated; taskset assignment and existing affinity guard remain active"
+    ],
+    "timing_authority": "diagnostic"
+  },
   "experiment": {
     "path": "operations/adaptive/experiments/fx2_trim_scale10m_v1.json",
     "sha256": "sha256:50c36f73237ae77373c2e37aae0f5032a910e906bdc4d0e002bd91a4f9aa26c0"
   },
   "gate_size": 10000000,
-  "held": true,
+  "held": false,
   "held_at": "2026-09-16T00:11:15+00:00",
   "hold_history": [
     {
       "at": "2026-09-16T00:11:15+00:00",
       "held": true,
       "reason": "Publish the frozen 10MB contract and ownership, then fresh CPU2 resource admission; no source or coefficient tuning."
+    },
+    {
+      "at": "2026-09-16T00:23:02+00:00",
+      "held": false,
+      "reason": "Published 70d78540c; all24 frozen inputs verified on disk and origin. Fresh CPU2/memory/scratch admission. Unchanged native original/trimmed opening10MB comparison only."
     }
   ],
-  "hold_reason": "Publish the frozen 10MB contract and ownership, then fresh CPU2 resource admission; no source or coefficient tuning.",
   "job_id": "20260916T001115Z_84b4efcdfd",
   "priority": 80,
   "proposal": {
@@ -33,6 +68,7 @@
   },
   "proposal_id": "fx2_trim_scale10m_v1",
   "purpose": "diagnostic",
+  "released_at": "2026-09-16T00:23:02+00:00",
   "resource_budget": {
     "cgroup_parent": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice",
     "cpus": [
@@ -51,10 +87,14 @@
   "scratch_directories": [
     "results/fx2_trim_scale10m_v1"
   ],
-  "state": "pending",
+  "started_at": "2026-09-16T00:23:02+00:00",
+  "state": "running",
   "submitted_at": "2026-09-16T00:11:15+00:00",
   "tags": [],
   "timing_authority": "diagnostic",
   "tool": "tools/fx2_trim_scale10m_v1.py",
-  "tool_args": []
+  "tool_args": [],
+  "worker_pid": 3421475,
+  "worker_proc_start_ticks": 261432062,
+  "worker_started_at": "2026-09-16T00:23:02+00:00"
 }

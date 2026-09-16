@@ -2,7 +2,7 @@
 
 Generated from the current certificate, gate receipts, resource guards, and process table.
 
-- Generated at UTC: `2026-09-16T00:14:59+00:00`
+- Generated at UTC: `2026-09-16T00:29:23+00:00`
 
 ## Target State
 
@@ -16,17 +16,17 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 
 ## Operator Summary
 
-- Candidate: `None`
-- Scope bytes: `n/a`
-- Scope symbols: `n/a`
-- Scope unit: `n/a`
-- Gate verdict: `None`
-- Gate next action: `None`
+- Candidate: `fx2_trim_scale10m_v1`
+- Scope bytes: `10,000,000`
+- Scope symbols: `10,000,000`
+- Scope unit: `raw byte`
+- Gate verdict: `running`
+- Gate next action: `wait_for_gate_completion`
 - Active stage: `n/a`
 - Roundtrip arm: `n/a`
-- Active scorer observed: `false`
-- Active cmix mode: `n/a`
-- Driver result present: `unknown`
+- Active scorer observed: `true`
+- Active cmix mode: `compress`
+- Driver result present: `false`
 - RSS guard status: `n/a`
 - RSS samples: `n/a`
 - Binary `10GiB` guard KiB: `10,485,760`
@@ -39,8 +39,8 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 - Latest decimal single-process margin KiB: `n/a`
 - Safe to launch candidate gate: `false`
 - Terminal verdict present: `false`
-- Pending adaptive jobs: `27`
-- Held pending adaptive jobs: `27`
+- Pending adaptive jobs: `26`
+- Held pending adaptive jobs: `26`
 - Claimable pending adaptive jobs: `0`
 - Canonical release bundles: `4`
 - Validated release run receipts: `0`
@@ -52,23 +52,23 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 
 ## Active Gate
 
-- Gate verdict: `unknown`
-- Next action: `unknown`
-- Candidate: `unknown`
-- Scope bytes: `n/a`
-- Scope symbols: `n/a`
-- Scope unit: `n/a`
+- Gate verdict: `running`
+- Next action: `wait_for_gate_completion`
+- Candidate: `fx2_trim_scale10m_v1`
+- Scope bytes: `10,000,000`
+- Scope symbols: `10,000,000`
+- Scope unit: `raw byte`
 - Active stage: `n/a`
 - Roundtrip arm: `n/a`
 - Coordinator PID: `n/a`
-- Driver result JSON: `not present`
-- Driver result present: `unknown`
+- Driver result JSON: `projects/enwiki9/results/fx2_trim_scale10m_v1/decision.json`
+- Driver result present: `false`
 - RSS guard JSON: `not present`
 - RSS guard present: `unknown`
-- Active scorer observed: `false`
-- Live gate: `false`
-- Liveness classification: `not_persisted_running`
-- Matching adaptive jobs: `0`
+- Active scorer observed: `true`
+- Live gate: `true`
+- Liveness classification: `live_observed_owner`
+- Matching adaptive jobs: `1`
 - Matching controllers: `0`
 - Matching driver observed: `false`
 - Liveness claim rule: `A running receipt or registered adaptive job is live only with an exact driver, owning controller, matching live worker, or frozen adopted process identities.`
@@ -84,8 +84,8 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 
 ## Observed Gate Command
 
-- Expected candidate: `None`
-- Expected scope bytes: `n/a`
+- Expected candidate: `fx2_trim_scale10m_v1`
+- Expected scope bytes: `10,000,000`
 - Driver process count: `0`
 - Active gate command observed: `false`
 - Driver command mismatch count: `0`
@@ -96,8 +96,8 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 
 ## Observed Controller Command
 
-- Expected active candidate: `None`
-- Expected active scope bytes: `n/a`
+- Expected active candidate: `fx2_trim_scale10m_v1`
+- Expected active scope bytes: `10,000,000`
 - Controller process count: `0`
 - Scope note: `Controller scope may be the completed parent gate that launched the active child; the observed driver command is authoritative for the active gate scope.`
 
@@ -108,8 +108,8 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 ## Operator Action
 
 - Safe to launch candidate gate: `false`
-- Action: `verify_recorded_running_jobs_on_host`
-- Reason: `Recorded running jobs must be attributed or reconciled before this status view can recommend a launch.`
+- Action: `wait_for_gate_receipts`
+- Reason: `the gate state is incomplete and cannot drive a mutation yet`
 - Allowed work: `n/a`
 - Forbidden work: `n/a`
 
@@ -117,7 +117,7 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 
 - Terminal verdict present: `false`
 - Gate mutation allowed: `false`
-- Recommended action: `verify_recorded_running_jobs_on_host`
+- Recommended action: `wait_for_gate_receipts`
 - Command source: `none while gate is non-terminal`
 - Claim rule: `Only an exact full-corpus package can prove the active objective.`
 
@@ -131,12 +131,12 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 
 - Audit return code: `0`
 - Audit mode: `inventory_snapshot`
-- Inventory generated: `2026-09-16T00:14:39+00:00`
+- Inventory generated: `2026-09-16T00:29:01+00:00`
 - Snapshot identity is verified; inventory inputs were not rescanned. This is not live occupancy or launch authority.
 - Program directories: `1,069`
 - Registered programs: `608`
 - Untracked nonignored entries: `0`
-- Modified tracked entries: `1`
+- Modified tracked entries: `0`
 - Candidate statuses: `active=18, blocked_dependency=98, candidate=263, measured_negative=100, retired=590`
 
 ## View Refresh
@@ -148,13 +148,62 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 
 | Role | PID | PPID | RSS KiB | Command |
 |---|---:|---:|---:|---|
-| n/a | n/a | n/a | n/a | n/a |
+| `process` | 3,421,289 | 472,530 | 4,028 | `/bin/bash -lc taskset -c 2 python3 tools/enwiki9_lab.py run --candidate fx2_trim_scale10m_v1 --max-workers 1 > run_logs/manual/trim_scale10m_lab_20...` |
+| `process` | 3,421,389 | 3,421,289 | 43,544 | `python3 tools/enwiki9_lab.py run --candidate fx2_trim_scale10m_v1 --max-workers 1` |
+| `resource_guard` | 3,421,475 | 3,421,389 | 36,968 | `/usr/bin/python3 /home/x/deco/gamma/projects/enwiki9/tools/run_with_resource_guard_v3.py --limit-kib 9765624 --official-decimal-limit-kib 9765624 -...` |
+| `process` | 3,421,488 | 3,421,475 | 57,676 | `/usr/bin/python3 /home/x/deco/gamma/projects/enwiki9/tools/fx2_trim_scale10m_v1.py` |
+| `process` | 3,427,012 | 3,421,488 | 7,724 | `/usr/bin/timeout --signal=TERM --kill-after=2 3600 /home/x/deco/gamma/projects/enwiki9/results/fx2_trim_scale10m_v1/work/P/cmix -c dictionary/engli...` |
+| `native_cmix` | 3,427,013 | 3,427,012 | 5,858,600 | `/home/x/deco/gamma/projects/enwiki9/results/fx2_trim_scale10m_v1/work/P/cmix -c dictionary/english.dic population.raw encode.arc --transformer mode...` |
 
 ## Active Candidate Recent Artifacts
 
 | Path | Bytes | Modified UTC |
 |---|---:|---|
-| n/a | n/a | n/a |
+| `projects/enwiki9/results/fx2_trim_scale10m_v1/work/P/ppm.temp` | 14,680,064,001 | `2026-09-16T00:29:23+00:00` |
+| `projects/enwiki9/results/fx2_trim_scale10m_v1/P-encode.stderr` | 369,869 | `2026-09-16T00:29:23+00:00` |
+| `projects/enwiki9/results/fx2_trim_scale10m_v1/work/P/progress.log` | 37,558 | `2026-09-16T00:29:23+00:00` |
+| `projects/enwiki9/results/fx2_trim_scale10m_v1/P-encode.stdout` | 74 | `2026-09-16T00:26:37+00:00` |
+| `projects/enwiki9/results/fx2_trim_scale10m_v1/work/P/encode.arc` | 0 | `2026-09-16T00:23:31+00:00` |
+| `projects/enwiki9/results/fx2_trim_scale10m_v1/work/P/encode.arc.cmix.temp` | 6,251,852 | `2026-09-16T00:23:31+00:00` |
+| `projects/enwiki9/results/fx2_trim_scale10m_v1/P-preprocess-cleanup.json` | 103 | `2026-09-16T00:23:31+00:00` |
+| `projects/enwiki9/results/fx2_trim_scale10m_v1/P-preprocess.execution.json` | 639 | `2026-09-16T00:23:31+00:00` |
+| `projects/enwiki9/results/fx2_trim_scale10m_v1/P-preprocess.stderr` | 89 | `2026-09-16T00:23:31+00:00` |
+| `projects/enwiki9/results/fx2_trim_scale10m_v1/P-preprocess.stdout` | 45 | `2026-09-16T00:23:31+00:00` |
+| `projects/enwiki9/results/fx2_trim_scale10m_v1/work/P/population.stored` | 6,251,857 | `2026-09-16T00:23:31+00:00` |
+| `projects/enwiki9/results/fx2_trim_scale10m_v1/P-compile-repeat.execution.json` | 1,065 | `2026-09-16T00:23:31+00:00` |
+
+## Active RSS
+
+- Max cmix PID: `3427013`
+- Active cmix mode: `compress`
+- Max cmix RSS KiB: `5,858,600`
+- Active process tree RSS KiB: `6,008,540`
+- Local binary `10GiB` guard KiB: `10,485,760`
+- Decimal `10GB` guard KiB: `9,765,625`
+- Single-process binary margin KiB: `4,627,160`
+- Single-process decimal margin KiB: `3,907,025`
+- Active process tree margin KiB (binary): `4,477,220`
+- Active process tree decimal margin KiB: `3,757,085`
+- Temp input path: `/home/x/deco/gamma/projects/enwiki9/results/fx2_trim_scale10m_v1/work/P/--transformer`
+- Temp output path: `/home/x/deco/gamma/projects/enwiki9/results/fx2_trim_scale10m_v1/work/P/models/6m-q4-fp32.tfwc2`
+- Temp output staging path: `/home/x/deco/gamma/projects/enwiki9/results/fx2_trim_scale10m_v1/work/P/models/6m-q4-fp32.tfwc2.cmix.temp`
+- Temp input bytes: `n/a`
+- Temp output bytes: `2,930,652`
+- Temp output staging bytes: `n/a`
+- Temp input modified UTC: `n/a`
+- Temp output modified UTC: `2026-09-16T00:23:03+00:00`
+- Temp output staging modified UTC: `n/a`
+- Process read bytes: `0`
+- Process write bytes: `279,937,024`
+
+## Contingencies
+
+- If current gate passes: `record pass and inspect the frozen candidate promotion rule`
+- Pass next scope: `n/a`
+- If RSS fails: `record RSS failure and retire or repackage this integration shape`
+- Lower candidate: `unknown`
+- Lower PPMD KiB: `n/a`
+- If roundtrip or determinism fails: `record failure and do not promote`
 
 ## Proof Boundary
 
