@@ -1,0 +1,113 @@
+{
+  "attribution": {
+    "causalConfidence": "high",
+    "controlsEquivalent": true,
+    "failureClass": "algorithmic-loss",
+    "localizedCause": "Only two finalMLP quantized matrices zeroed; original independent native loader verifies unchanged other tensors,including generated RoPE. Native archive measures resulting predictive cost."
+  },
+  "candidateId": "fx2_final_mlp_zero250k_v1",
+  "candidateRevision": {
+    "candidateId": "fx2_final_mlp_zero250k_v1",
+    "candidateTreeSha256": "sha256:dcb1623c2dc4c355c99a94158054514a64b26d54bddf9799c26897fddbcd4e50",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/fx2_final_mlp_zero250k_v1/20260916T055928761973Z_dcb1623c2dc4.json",
+      "sha256": "sha256:e4922d9183d5d2e745bc95d5390961c6ed9e239f6164655ad17f982b15adcffd"
+    }
+  },
+  "decision": {
+    "killPredicatesPass": true,
+    "nextGateBytes": null,
+    "promotionPredicatesPass": false,
+    "rationale": "Retire this fixed two-matrix ablation under its no-archive-regression budget; preserve actual paid-component savings or losses. No layer/scale/retraining rescue; no extrapolated full-corpus futility.",
+    "verdict": "retire"
+  },
+  "evidence": [
+    {
+      "path": "operations/provenance/fx2_final_mlp_zero_terminal_20260916.json",
+      "sha256": "sha256:25130f27e1eb803fa4c53a9b20cd83fb63682bbfcc0915866c5c20c78a75edaa"
+    },
+    {
+      "path": "results/fx2_final_mlp_zero250k_v1/terminal-index.json",
+      "sha256": "sha256:4b190ad2f064121e12005ffa10715b821796cc2a945c77645c54bd5576268984"
+    }
+  ],
+  "experiment": {
+    "path": "operations/adaptive/experiments/fx2_final_mlp_zero250k_v1.json",
+    "sha256": "sha256:841b7d21f7e89c36fafa11bc6fc372429072869403de311f56d5a328a37db76a"
+  },
+  "generatedUtc": "2026-09-16T06:13:23+00:00",
+  "hypothesis": {
+    "rationale": "Fixed ablation fails the predeclared no-archive-regression and paid-component gate; record actual component totals without extrapolation.",
+    "verdict": "refuted"
+  },
+  "job": {
+    "path": "operations/adaptive/completed/929_20260916T055929Z_1fff71d5c9.json",
+    "sha256": "sha256:dcfe9bb5b1b53939807da9c267ac51a4c26bd190ae4479223bacba0242583a27"
+  },
+  "knowledge": {
+    "retiredDimensions": [
+      "Exactly final layer11 up/down quantized matrices zeroed without retraining on cold opening250KB; no layer/scale/retraining rescue within this budget."
+    ],
+    "transferableLessons": [
+      "Paid model reduction and changed predictive loss must be measured jointly; source ZIP already includes model,so separate model bytes cannot be charged twice."
+    ],
+    "uncertainties": [
+      "One exposed cold sample,full recurrent state not serialized,downstream mixer may change,complete package and full1G unknown. No-archive-regression is a promotion budget,not full-corpus futility."
+    ]
+  },
+  "measurementAssertions": [
+    {
+      "field": "scopeBytes",
+      "pointer": "/scopeBytes",
+      "source": {
+        "path": "operations/provenance/fx2_final_mlp_zero_terminal_20260916.json",
+        "sha256": "sha256:25130f27e1eb803fa4c53a9b20cd83fb63682bbfcc0915866c5c20c78a75edaa"
+      }
+    },
+    {
+      "field": "scopeSymbols",
+      "pointer": "/scopeSymbols",
+      "source": {
+        "path": "operations/provenance/fx2_final_mlp_zero_terminal_20260916.json",
+        "sha256": "sha256:25130f27e1eb803fa4c53a9b20cd83fb63682bbfcc0915866c5c20c78a75edaa"
+      }
+    },
+    {
+      "field": "netBytesSaved",
+      "pointer": "/g_P",
+      "source": {
+        "path": "operations/provenance/fx2_final_mlp_zero_terminal_20260916.json",
+        "sha256": "sha256:25130f27e1eb803fa4c53a9b20cd83fb63682bbfcc0915866c5c20c78a75edaa"
+      }
+    }
+  ],
+  "measurements": {
+    "idealBitsSaved": null,
+    "memoryRatio": null,
+    "minimumPartitionIdealBitsSaved": null,
+    "netBytesSaved": -1875,
+    "positiveSegmentFraction": null,
+    "runtimeRatio": null,
+    "scopeBytes": 250000,
+    "scopeSymbols": 151210,
+    "sourceBytesDelta": null,
+    "transferRetention": null
+  },
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:e91ff20e92c3cac8acb0cbe5c79fc8e8a3b427d7e151245c8eecc52b1c32fa00",
+    "objectiveId": "gamma-enwiki9-hutter-90m-v3",
+    "objectivePath": "contracts/research/v3/objective-contract.json",
+    "targetScoreBytes": 90000000
+  },
+  "reflectionId": "r-20260916t055929z_1fff71d5c9",
+  "schema": "gamma.enwiki9.reflection-receipt.v1",
+  "validity": {
+    "classification": "valid",
+    "reasons": [
+      "All22 phases,canonical identity model,native exact changedtensor set,unchanged binary,clean repeated builds,inverses,repeats,trace-off archives,neural repeats,guards andcleanup pass; all artifacts rehashed."
+    ],
+    "valid": true
+  }
+}
