@@ -10,21 +10,56 @@
     "sha256": "sha256:044147f7ffe6922ea8dafd52fc3d4426077b20958adbcd421245ad41adcfc1e4"
   },
   "execution_mode": "discovery",
+  "execution_resources": {
+    "boot_id": "3ce46712-27bc-4199-8e48-e2b3d23926cb",
+    "budget": {
+      "cgroup_parent": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice",
+      "cpus": [
+        2
+      ],
+      "memory_bytes": 9999998976,
+      "scratch_bytes": 16000000000,
+      "swap_bytes": 0,
+      "wall_seconds": 3600
+    },
+    "cgroup_inode": 340127,
+    "cgroup_path": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/gamma-enwiki9-20260916T070413Z_94a8fa3430",
+    "cpu_enforcement": "taskset-and-sampled-affinity-guard",
+    "groups": [
+      {
+        "created": true,
+        "inode": 340127,
+        "kernel_cpuset": false,
+        "memory_bytes": 9999998976,
+        "path": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/gamma-enwiki9-20260916T070413Z_94a8fa3430"
+      }
+    ],
+    "guard_command_sha256": "c7a25993905f2267f4f4e27ce601b8d78332a75cd03c89d1e1f0323a700a8f22",
+    "guard_path": "run_logs/adaptive/20260916T070413Z_94a8fa3430.resources/guard.json",
+    "missing_diagnostics": [
+      "kernel cpuset controller is not delegated; taskset assignment and existing affinity guard remain active"
+    ],
+    "timing_authority": "diagnostic"
+  },
   "experiment": {
     "path": "operations/adaptive/experiments/fx2_expert_confirm1m_v1.json",
     "sha256": "sha256:50ce95f002dae9dd1b122d9a5ec0edc884f63ec3ba66d2f4927523ddd194cbff"
   },
   "gate_size": 1000000,
-  "held": true,
+  "held": false,
   "held_at": "2026-09-16T07:04:14+00:00",
   "hold_history": [
     {
       "at": "2026-09-16T07:04:14+00:00",
       "held": true,
       "reason": "Publish unchanged source and ownership,then fresh CPU2 resource admission. Existing complete-package hold preserved."
+    },
+    {
+      "at": "2026-09-16T07:11:40+00:00",
+      "held": false,
+      "reason": "Published 5b78186af source and ownership; all ten checks and fresh CPU2 admission pass. Unchanged released mixture1MB gate only."
     }
   ],
-  "hold_reason": "Publish unchanged source and ownership,then fresh CPU2 resource admission. Existing complete-package hold preserved.",
   "job_id": "20260916T070413Z_94a8fa3430",
   "priority": 65,
   "proposal": {
@@ -33,6 +68,7 @@
   },
   "proposal_id": "fx2_expert_confirm1m_v1",
   "purpose": "diagnostic",
+  "released_at": "2026-09-16T07:11:40+00:00",
   "resource_budget": {
     "cgroup_parent": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice",
     "cpus": [
@@ -51,10 +87,14 @@
   "scratch_directories": [
     "results/fx2_expert_confirm1m_v1"
   ],
-  "state": "pending",
+  "started_at": "2026-09-16T07:11:40+00:00",
+  "state": "running",
   "submitted_at": "2026-09-16T07:04:13+00:00",
   "tags": [],
   "timing_authority": "diagnostic",
   "tool": "tools/fx2_expert_confirm1m_v1.py",
-  "tool_args": []
+  "tool_args": [],
+  "worker_pid": 3656881,
+  "worker_proc_start_ticks": 263883888,
+  "worker_started_at": "2026-09-16T07:11:41+00:00"
 }
