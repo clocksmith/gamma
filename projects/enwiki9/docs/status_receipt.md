@@ -2,7 +2,7 @@
 
 Generated from the current certificate, gate receipts, resource guards, and process table.
 
-- Generated at UTC: `2026-09-16T02:38:00+00:00`
+- Generated at UTC: `2026-09-16T02:57:53+00:00`
 
 ## Target State
 
@@ -16,16 +16,16 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 
 ## Operator Summary
 
-- Candidate: `fx2_value_feedback250k_v1`
+- Candidate: `fx2_trim_auxiliary_ppm_v1`
 - Scope bytes: `250,000`
-- Scope symbols: `151,210`
+- Scope symbols: `250,000`
 - Scope unit: `raw byte`
 - Gate verdict: `running`
 - Gate next action: `wait_for_gate_completion`
 - Active stage: `n/a`
 - Roundtrip arm: `n/a`
 - Active scorer observed: `true`
-- Active cmix mode: `n/a`
+- Active cmix mode: `compress`
 - Driver result present: `false`
 - RSS guard status: `n/a`
 - RSS samples: `n/a`
@@ -39,8 +39,8 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 - Latest decimal single-process margin KiB: `n/a`
 - Safe to launch candidate gate: `false`
 - Terminal verdict present: `false`
-- Pending adaptive jobs: `27`
-- Held pending adaptive jobs: `27`
+- Pending adaptive jobs: `26`
+- Held pending adaptive jobs: `26`
 - Claimable pending adaptive jobs: `0`
 - Canonical release bundles: `4`
 - Validated release run receipts: `0`
@@ -54,14 +54,14 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 
 - Gate verdict: `running`
 - Next action: `wait_for_gate_completion`
-- Candidate: `fx2_value_feedback250k_v1`
+- Candidate: `fx2_trim_auxiliary_ppm_v1`
 - Scope bytes: `250,000`
-- Scope symbols: `151,210`
+- Scope symbols: `250,000`
 - Scope unit: `raw byte`
 - Active stage: `n/a`
 - Roundtrip arm: `n/a`
 - Coordinator PID: `n/a`
-- Driver result JSON: `projects/enwiki9/results/fx2_value_feedback250k_v1/decision.json`
+- Driver result JSON: `projects/enwiki9/results/fx2_trim_auxiliary_ppm_v1/decision.json`
 - Driver result present: `false`
 - RSS guard JSON: `not present`
 - RSS guard present: `unknown`
@@ -84,7 +84,7 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 
 ## Observed Gate Command
 
-- Expected candidate: `fx2_value_feedback250k_v1`
+- Expected candidate: `fx2_trim_auxiliary_ppm_v1`
 - Expected scope bytes: `250,000`
 - Driver process count: `0`
 - Active gate command observed: `false`
@@ -96,7 +96,7 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 
 ## Observed Controller Command
 
-- Expected active candidate: `fx2_value_feedback250k_v1`
+- Expected active candidate: `fx2_trim_auxiliary_ppm_v1`
 - Expected active scope bytes: `250,000`
 - Controller process count: `0`
 - Scope note: `Controller scope may be the completed parent gate that launched the active child; the observed driver command is authoritative for the active gate scope.`
@@ -131,13 +131,13 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 
 - Audit return code: `0`
 - Audit mode: `inventory_snapshot`
-- Inventory generated: `2026-09-16T02:23:46+00:00`
+- Inventory generated: `2026-09-16T02:57:32+00:00`
 - Snapshot identity is verified; inventory inputs were not rescanned. This is not live occupancy or launch authority.
 - Program directories: `1,071`
 - Registered programs: `610`
-- Untracked nonignored entries: `3`
-- Modified tracked entries: `9`
-- Candidate statuses: `active=18, blocked_dependency=98, candidate=265, measured_negative=100, retired=590`
+- Untracked nonignored entries: `0`
+- Modified tracked entries: `2`
+- Candidate statuses: `active=18, blocked_dependency=98, candidate=264, measured_negative=100, retired=591`
 
 ## View Refresh
 
@@ -148,42 +148,53 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 
 | Role | PID | PPID | RSS KiB | Command |
 |---|---:|---:|---:|---|
-| `process` | 650,764 | 472,530 | 4,064 | `/bin/bash -lc taskset -c 2 python3 tools/enwiki9_lab.py run --candidate fx2_value_feedback250k_v1 --max-workers 1 > run_logs/manual/value_feedback2...` |
-| `process` | 650,877 | 650,764 | 41,944 | `python3 tools/enwiki9_lab.py run --candidate fx2_value_feedback250k_v1 --max-workers 1` |
-| `resource_guard` | 650,971 | 650,877 | 37,808 | `/usr/bin/python3 /home/x/deco/gamma/projects/enwiki9/tools/run_with_resource_guard_v3.py --limit-kib 9765624 --official-decimal-limit-kib 9765624 -...` |
-| `process` | 650,990 | 650,971 | 54,164 | `/usr/bin/python3 /home/x/deco/gamma/projects/enwiki9/tools/fx2_value_feedback250k_v1.py` |
-| `process` | 698,814 | 650,990 | 7,588 | `/usr/bin/timeout --signal=TERM --kill-after=2 300 /home/x/deco/gamma/projects/enwiki9/results/fx2_value_feedback250k_v1/work/native/delivery-K -c d...` |
-| `process` | 698,815 | 698,814 | 4,680,468 | `/home/x/deco/gamma/projects/enwiki9/results/fx2_value_feedback250k_v1/work/native/delivery-K -c dictionary/english.dic population.raw K-clean-encod...` |
+| `process` | 883,577 | 472,530 | 4,040 | `/bin/bash -lc taskset -c 2 python3 tools/enwiki9_lab.py run --candidate fx2_trim_auxiliary_ppm_v1 --max-workers 1 > run_logs/manual/trim_auxiliary_...` |
+| `process` | 883,692 | 883,577 | 41,748 | `python3 tools/enwiki9_lab.py run --candidate fx2_trim_auxiliary_ppm_v1 --max-workers 1` |
+| `resource_guard` | 883,801 | 883,692 | 37,228 | `/usr/bin/python3 /home/x/deco/gamma/projects/enwiki9/tools/run_with_resource_guard_v3.py --limit-kib 9765624 --official-decimal-limit-kib 9765624 -...` |
+| `process` | 883,820 | 883,801 | 42,008 | `/usr/bin/python3 /home/x/deco/gamma/projects/enwiki9/tools/fx2_trim_auxiliary_ppm_v1.py` |
+| `process` | 910,400 | 883,820 | 7,844 | `/usr/bin/timeout --signal=TERM --kill-after=2 360 /home/x/deco/gamma/projects/enwiki9/results/fx2_trim_auxiliary_ppm_v1/work/P/cmix -c /home/x/deco...` |
+| `native_cmix` | 910,401 | 910,400 | 4,325,564 | `/home/x/deco/gamma/projects/enwiki9/results/fx2_trim_auxiliary_ppm_v1/work/P/cmix -c /home/x/deco/gamma/projects/enwiki9/results/fx2_trim_auxiliary...` |
 
 ## Active Candidate Recent Artifacts
 
 | Path | Bytes | Modified UTC |
 |---|---:|---|
-| `projects/enwiki9/results/fx2_value_feedback250k_v1/K-clean-encode.stderr` | 123,136 | `2026-09-16T02:38:00+00:00` |
-| `projects/enwiki9/results/fx2_value_feedback250k_v1/work/native/ppm.temp` | 14,680,064,001 | `2026-09-16T02:37:55+00:00` |
-| `projects/enwiki9/results/fx2_value_feedback250k_v1/work/native/K-clean-encode.arc` | 0 | `2026-09-16T02:37:54+00:00` |
-| `projects/enwiki9/results/fx2_value_feedback250k_v1/work/native/K-clean-encode.arc.cmix.temp` | 151,215 | `2026-09-16T02:37:54+00:00` |
-| `projects/enwiki9/results/fx2_value_feedback250k_v1/K-clean-encode.stdout` | 0 | `2026-09-16T02:37:54+00:00` |
-| `projects/enwiki9/results/fx2_value_feedback250k_v1/work/native/delivery-K` | 438,792 | `2026-09-16T02:37:54+00:00` |
-| `projects/enwiki9/results/fx2_value_feedback250k_v1/K-compile-repeat.execution.json` | 1,066 | `2026-09-16T02:37:54+00:00` |
-| `projects/enwiki9/results/fx2_value_feedback250k_v1/K-compile-repeat.stdout` | 3,611 | `2026-09-16T02:37:54+00:00` |
-| `projects/enwiki9/results/fx2_value_feedback250k_v1/work/native/cmix` | 438,792 | `2026-09-16T02:37:54+00:00` |
-| `projects/enwiki9/results/fx2_value_feedback250k_v1/K-compile-repeat.stderr` | 30,935 | `2026-09-16T02:37:52+00:00` |
-| `projects/enwiki9/results/fx2_value_feedback250k_v1/K-clean-repeat.execution.json` | 504 | `2026-09-16T02:37:41+00:00` |
-| `projects/enwiki9/results/fx2_value_feedback250k_v1/K-clean-repeat.stdout` | 73 | `2026-09-16T02:37:41+00:00` |
+| `projects/enwiki9/results/fx2_trim_auxiliary_ppm_v1/P-dict-encode.stderr` | 209,975 | `2026-09-16T02:57:53+00:00` |
+| `projects/enwiki9/results/fx2_trim_auxiliary_ppm_v1/work/P/progress.log` | 41,906 | `2026-09-16T02:57:53+00:00` |
+| `projects/enwiki9/results/fx2_trim_auxiliary_ppm_v1/work/P/ppm.temp` | 14,680,064,001 | `2026-09-16T02:57:53+00:00` |
+| `projects/enwiki9/results/fx2_trim_auxiliary_ppm_v1/work/P/assets/dict.comp` | 0 | `2026-09-16T02:57:23+00:00` |
+| `projects/enwiki9/results/fx2_trim_auxiliary_ppm_v1/work/P/assets/dict.comp.cmix.temp` | 412,001 | `2026-09-16T02:57:23+00:00` |
+| `projects/enwiki9/results/fx2_trim_auxiliary_ppm_v1/P-dict-encode.stdout` | 0 | `2026-09-16T02:57:23+00:00` |
+| `projects/enwiki9/results/fx2_trim_auxiliary_ppm_v1/P-main-repeat-cleanup.json` | 103 | `2026-09-16T02:57:23+00:00` |
+| `projects/enwiki9/results/fx2_trim_auxiliary_ppm_v1/P-main-repeat.execution.json` | 683 | `2026-09-16T02:57:23+00:00` |
+| `projects/enwiki9/results/fx2_trim_auxiliary_ppm_v1/P-main-repeat.stderr` | 742,645 | `2026-09-16T02:57:22+00:00` |
+| `projects/enwiki9/results/fx2_trim_auxiliary_ppm_v1/P-main-repeat.stdout` | 114 | `2026-09-16T02:57:22+00:00` |
+| `projects/enwiki9/results/fx2_trim_auxiliary_ppm_v1/work/P/repeat.arc` | 33,429 | `2026-09-16T02:57:22+00:00` |
+| `projects/enwiki9/results/fx2_trim_auxiliary_ppm_v1/P-main-decode-cleanup.json` | 103 | `2026-09-16T02:56:44+00:00` |
 
 ## Active RSS
 
-- Max cmix PID: `n/a`
-- Active cmix mode: `n/a`
-- Max cmix RSS KiB: `n/a`
-- Active process tree RSS KiB: `4,826,036`
+- Max cmix PID: `910401`
+- Active cmix mode: `compress`
+- Max cmix RSS KiB: `4,325,564`
+- Active process tree RSS KiB: `4,458,432`
 - Local binary `10GiB` guard KiB: `10,485,760`
 - Decimal `10GB` guard KiB: `9,765,625`
-- Single-process binary margin KiB: `n/a`
-- Single-process decimal margin KiB: `n/a`
-- Active process tree margin KiB (binary): `5,659,724`
-- Active process tree decimal margin KiB: `4,939,589`
+- Single-process binary margin KiB: `6,160,196`
+- Single-process decimal margin KiB: `5,440,061`
+- Active process tree margin KiB (binary): `6,027,328`
+- Active process tree decimal margin KiB: `5,307,193`
+- Temp input path: `/home/x/deco/gamma/projects/enwiki9/results/fx2_trim_auxiliary_ppm_v1/work/P/dictionary/english.dic`
+- Temp output path: `/home/x/deco/gamma/projects/enwiki9/results/fx2_trim_auxiliary_ppm_v1/work/P/assets/dict.comp`
+- Temp output staging path: `/home/x/deco/gamma/projects/enwiki9/results/fx2_trim_auxiliary_ppm_v1/work/P/assets/dict.comp.cmix.temp`
+- Temp input bytes: `411,996`
+- Temp output bytes: `0`
+- Temp output staging bytes: `412,001`
+- Temp input modified UTC: `2026-09-16T02:54:59+00:00`
+- Temp output modified UTC: `2026-09-16T02:57:23+00:00`
+- Temp output staging modified UTC: `2026-09-16T02:57:23+00:00`
+- Process read bytes: `0`
+- Process write bytes: `3,829,760`
 
 ## Contingencies
 
