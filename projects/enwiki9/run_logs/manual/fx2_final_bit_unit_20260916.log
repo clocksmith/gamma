@@ -1,0 +1,17 @@
+["taskset", "-c", "3", "/usr/bin/g++", "-std=c++17", "-O2", "-fno-fast-math", "-ffp-contract=off", "tests/test_fx2_final_bit_head_v1.cpp", "-o", "/run/user/1000/fx2_final_bit_head_unit_v1"]
+["taskset", "-c", "3", "/run/user/1000/fx2_final_bit_head_unit_v1"]
+{"status":"pass","zero_identity_counts":65535,"count_bound_checks":458745,"synthetic_bits":32768,"changed_counts":31611,"wrong_label_differences":31615,"introduced_state_bytes":393267}
+["taskset", "-c", "3", "python3", "-m", "unittest", "discover", "-s", "tests", "-p", "test_fx2_final_bit_head_math_v1.py", "-v"]
+test_binary_prefix_partition (test_fx2_final_bit_head_math_v1.FinalBitMath.test_binary_prefix_partition) ... ok
+test_gradient_matches_independent_difference (test_fx2_final_bit_head_math_v1.FinalBitMath.test_gradient_matches_independent_difference) ... ok
+test_hessian_and_supporting_plane (test_fx2_final_bit_head_math_v1.FinalBitMath.test_hessian_and_supporting_plane) ... ok
+test_likelihood_identity (test_fx2_final_bit_head_math_v1.FinalBitMath.test_likelihood_identity) ... ok
+
+----------------------------------------------------------------------
+Ran 4 tests in 0.000s
+
+OK
+["taskset", "-c", "3", "/usr/bin/g++", "-std=c++17", "-DSEED=923", "-DUPDATE_LIMIT=3000", "-include", "cstdint", "-march=x86-64-v3", "-fno-fast-math", "-fsyntax-only", "src/coder/encoder.cpp"]
+["taskset", "-c", "3", "/usr/bin/g++", "-std=c++17", "-DSEED=923", "-DUPDATE_LIMIT=3000", "-include", "cstdint", "-march=x86-64-v3", "-fno-fast-math", "-fsyntax-only", "src/coder/decoder.cpp"]
+["taskset", "-c", "3", "/usr/bin/g++", "-std=c++17", "-DSEED=923", "-DUPDATE_LIMIT=3000", "-include", "cstdint", "-march=x86-64-v3", "-fno-fast-math", "-fsyntax-only", "src/predictor.cpp"]
+["taskset", "-c", "3", "/usr/bin/g++", "-std=c++17", "-DSEED=923", "-DUPDATE_LIMIT=3000", "-include", "cstdint", "-march=x86-64-v3", "-fno-fast-math", "-fsyntax-only", "cpp_infer/src/opt/model_opt.cpp"]

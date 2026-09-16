@@ -1,0 +1,45 @@
+{
+  "candidate_id": "fx2_final_bit_head250k_v1",
+  "claimed_at": "2026-09-16T07:45:44+00:00",
+  "created_at": "2026-09-16T07:45:43+00:00",
+  "developed_at": "2026-09-16T07:45:44+00:00",
+  "evidence": [
+    {
+      "path": "operations/provenance/fx2_final_bit_selected_20260916.json",
+      "sha256": "sha256:49d8b7cc19475008aebe9ff5a5a17bfd26b59f38a54bab71f0a2b5ae50781100"
+    }
+  ],
+  "expected_savings_bytes": 0,
+  "experiment": {
+    "path": "operations/adaptive/experiments/fx2_final_bit_head250k_v1.json",
+    "sha256": "sha256:39bd4c60e7c2b0111b19cd1decdf156d94360b637c5af1dd92e3da4274374248"
+  },
+  "hypothesis": "A decoder-synchronized binary-prefix head trained on final coder errors reduces the exposed opening250KB archive against the unchanged parent and delayed-label control enough to pay its measured source component.",
+  "interfaces_exposed": [
+    "255 binary-prefix rows of192 hidden features; projected radius4, step0.25 from final Q16 residual, no original learning change."
+  ],
+  "kill_condition": "Valid gP<=0 or gS<=0 retires fixed realization without parameter rescue.",
+  "max_program_bytes": 65536,
+  "mechanism_change": "other",
+  "mechanism_change_bonus": 0,
+  "mechanism_class": "coder",
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:e91ff20e92c3cac8acb0cbe5c79fc8e8a3b427d7e151245c8eecc52b1c32fa00",
+    "objectiveId": "gamma-enwiki9-hutter-90m-v3",
+    "objectivePath": "contracts/research/v3/objective-contract.json",
+    "targetScoreBytes": 90000000
+  },
+  "owner": "root_final_bit_head",
+  "parent": "fx2_expert_release250k_v3",
+  "parent_proposal_id": null,
+  "priority": 50,
+  "promotion_condition": "Valid gP<=0 or gS<=0 retires this fixed realization. Both positive but sourceZIP+option net<=0 holds. Paying component may justify separately frozen confirmation only. Correctness/resource stop is incomplete.",
+  "proposal_id": "fx2_final_bit_head250k_v1",
+  "retired_neighborhoods": [],
+  "schema": "gamma.enwiki9.algorithm-proposal.v2",
+  "search_priority": 50,
+  "state": "developed",
+  "title": "Online final coded-bit residual head"
+}
