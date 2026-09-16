@@ -1,0 +1,100 @@
+{
+  "schema": "gamma.enwiki9.publication-checks.v1",
+  "audit_id": "fx2_ambient_probe_v1",
+  "checks": [
+    {
+      "command": [
+        "python3",
+        "projects/enwiki9/tools/hutter_run_ledger.py",
+        "--check"
+      ],
+      "returncode": 0
+    },
+    {
+      "command": [
+        "python3",
+        "projects/enwiki9/tools/enwiki9_release_receipts.py",
+        "--check"
+      ],
+      "returncode": 0
+    },
+    {
+      "command": [
+        "python3",
+        "projects/enwiki9/tools/enwiki9_evidence_matrix.py",
+        "--check"
+      ],
+      "returncode": 0
+    },
+    {
+      "command": [
+        "python3",
+        "projects/enwiki9/tools/enwiki9_best_results.py",
+        "--check"
+      ],
+      "returncode": 0
+    },
+    {
+      "command": [
+        "python3",
+        "projects/enwiki9/tools/enwiki9_status_receipt.py",
+        "--check",
+        "--candidate-audit-snapshot",
+        "/home/x/deco/gamma/projects/enwiki9/candidate_inventory.json",
+        "--candidate-audit-sha256",
+        "082834a4443dd8768fb28f95a79b85142df7ffcde878262a2b6299dce600e058",
+        "--refresh-profile",
+        "routine"
+      ],
+      "returncode": 0
+    },
+    {
+      "command": [
+        "python3",
+        "projects/enwiki9/tools/enwiki9_doc_lint.py"
+      ],
+      "returncode": 0
+    },
+    {
+      "command": [
+        "python3",
+        "-m",
+        "json.tool",
+        "projects/enwiki9/upper_bound_certificate.json"
+      ],
+      "returncode": 0
+    },
+    {
+      "command": [
+        "python3",
+        "-m",
+        "json.tool",
+        "projects/enwiki9/docs/status_receipt.json"
+      ],
+      "returncode": 0
+    },
+    {
+      "command": [
+        "python3",
+        "projects/enwiki9/tools/backfill_run_ledger.py",
+        "--check"
+      ],
+      "returncode": 0
+    },
+    {
+      "command": [
+        "python3",
+        "projects/enwiki9/tools/enwiki9_tool_catalogue.py",
+        "--check"
+      ],
+      "returncode": 0
+    }
+  ],
+  "expected_check_count": 10,
+  "all_checks_pass": true,
+  "log": {
+    "path": "run_logs/manual/ambient_probe_publication_checks_20260916.log",
+    "bytes": 36179,
+    "sha256": "555133d265bf22f3ea62a88126ba3dec92f59b4c31630f96d29f5173dc6ed390"
+  }
+}

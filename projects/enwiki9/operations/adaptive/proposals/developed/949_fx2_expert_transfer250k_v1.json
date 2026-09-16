@@ -1,0 +1,45 @@
+{
+  "candidate_id": "fx2_expert_transfer250k_v1",
+  "claimed_at": "2026-09-16T03:15:52+00:00",
+  "created_at": "2026-09-16T03:15:52+00:00",
+  "developed_at": "2026-09-16T03:15:53+00:00",
+  "evidence": [
+    {
+      "path": "operations/provenance/fx2_expert_transfer_selected_20260916.json",
+      "sha256": "sha256:a93ea83d043895a46dee228d2e5e2026dc8ff4e2b1905f10932d678add38eed2"
+    }
+  ],
+  "expected_savings_bytes": 0,
+  "experiment": {
+    "path": "operations/adaptive/experiments/fx2_expert_transfer250k_v1.json",
+    "sha256": "sha256:d166a0d84edef37b88551284be04ec46a57f0af3e72a34cf87103250fd3361d1"
+  },
+  "hypothesis": "The unchanged released expert mixture reduces the native archive on the fixed disjoint cold250KB population.",
+  "interfaces_exposed": [
+    "No source or parameter change. Compare immutable released P/D ZIPs and build flags on the fixed disjoint population, with exact released-binary identity."
+  ],
+  "kill_condition": "Valid nonpositive archive gain closes this fixed transfer; package hold persists even after positive predictive transfer.",
+  "max_program_bytes": 65536,
+  "mechanism_change": "other",
+  "mechanism_change_bonus": 0,
+  "mechanism_class": "coder",
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:e91ff20e92c3cac8acb0cbe5c79fc8e8a3b427d7e151245c8eecc52b1c32fa00",
+    "objectiveId": "gamma-enwiki9-hutter-90m-v3",
+    "objectivePath": "contracts/research/v3/objective-contract.json",
+    "targetScoreBytes": 90000000
+  },
+  "owner": "root_expert_transfer",
+  "parent": "fx2_expert_release250k_v3",
+  "parent_proposal_id": null,
+  "priority": 50,
+  "promotion_condition": "Valid g_P>0 supports only predictive transfer and consideration of a separately specified1MB design. Package hold remains and no automatic larger launch. Valid g_P<=0 closes this fixed transfer; source/state/resource/evidence failures are incomplete.",
+  "proposal_id": "fx2_expert_transfer250k_v1",
+  "retired_neighborhoods": [],
+  "schema": "gamma.enwiki9.algorithm-proposal.v2",
+  "search_priority": 50,
+  "state": "developed",
+  "title": "Confirm the unchanged released expert mixture on disjoint250KB"
+}
