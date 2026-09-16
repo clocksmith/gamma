@@ -1,0 +1,131 @@
+{
+  "path": "operations/adaptive/reflections/20260916T043722Z_97c24813c3.json",
+  "reflection": {
+    "attribution": {
+      "causalConfidence": "high",
+      "controlsEquivalent": true,
+      "failureClass": "algorithmic-loss",
+      "localizedCause": "Only1024-slot eviction changed. All fixed inputs,weights,RoPE and update rules bound; changed neural trajectories may change downstream mixer state."
+    },
+    "candidateId": "fx2_attention_anchor250k_v2",
+    "candidateRevision": {
+      "candidateId": "fx2_attention_anchor250k_v2",
+      "candidateTreeSha256": "sha256:2b5aeed6e09f9c9fc4b6adf6b59760856e521ca3ff715eecf8067ecc76aa7201",
+      "receipt": {
+        "path": "operations/adaptive/candidate-revisions/fx2_attention_anchor250k_v2/20260916T043722183843Z_2b5aeed6e09f.json",
+        "sha256": "sha256:96315600a159f40041c5e1787ed62bee4c6f94668826315f388bf79bd64bf206"
+      }
+    },
+    "decision": {
+      "killPredicatesPass": true,
+      "nextGateBytes": null,
+      "promotionPredicatesPass": false,
+      "rationale": "Retire this fixed first4-anchor realization; no count/window/position sweep or inherited paper gain. Perform one evidence-directed discovery cycle outside this retention sequence.",
+      "verdict": "retire"
+    },
+    "evidence": [
+      {
+        "path": "operations/provenance/fx2_attention_anchor_v2_terminal_20260916.json",
+        "sha256": "sha256:1830f1012c6a2840723d673ac370a3260d8d9ea6789f53e04c7b27314129478b"
+      },
+      {
+        "path": "results/fx2_attention_anchor250k_v2/terminal-index.json",
+        "sha256": "sha256:71546ab2bf2c5550f7dcb43e9bcb23713213e9a9b647394e886f1e1898d04d99"
+      }
+    ],
+    "experiment": {
+      "path": "operations/adaptive/experiments/fx2_attention_anchor250k_v2.json",
+      "sha256": "sha256:5b115a0df1b712d5d6f63adbbdc0bf883f9fc1d07387cd0ca599011c2d170377"
+    },
+    "generatedUtc": "2026-09-16T04:57:46+00:00",
+    "hypothesis": {
+      "rationale": "This fixed four-anchor retention does not pass every archive/control/source-component requirement.",
+      "verdict": "refuted"
+    },
+    "job": {
+      "path": "operations/adaptive/completed/929_20260916T043722Z_97c24813c3.json",
+      "sha256": "sha256:a804c2bdfd40f0eb3e98ac58130cde37fbf4eca649ff20fa7642007069dd37fc"
+    },
+    "knowledge": {
+      "retiredDimensions": [
+        "Fixed first4 per-article KV retention with unchanged original RoPE,1024capacity and existing paid weights on opening250KB; no anchor-count/window/position rescue sequence."
+      ],
+      "transferableLessons": [
+        "A memory-retention invariant and language-model precedent do not imply coded savings; keep source cost,matched capacity and final native archives decisive."
+      ],
+      "uncertainties": [
+        "One exposed cold sample. No attribution beyond the frozen first4-versus-later4 and FIFO comparison; no full model-state serialization."
+      ]
+    },
+    "measurementAssertions": [
+      {
+        "field": "scopeBytes",
+        "pointer": "/scopeBytes",
+        "source": {
+          "path": "operations/provenance/fx2_attention_anchor_v2_terminal_20260916.json",
+          "sha256": "sha256:1830f1012c6a2840723d673ac370a3260d8d9ea6789f53e04c7b27314129478b"
+        }
+      },
+      {
+        "field": "scopeSymbols",
+        "pointer": "/scopeSymbols",
+        "source": {
+          "path": "operations/provenance/fx2_attention_anchor_v2_terminal_20260916.json",
+          "sha256": "sha256:1830f1012c6a2840723d673ac370a3260d8d9ea6789f53e04c7b27314129478b"
+        }
+      },
+      {
+        "field": "netBytesSaved",
+        "pointer": "/g_P",
+        "source": {
+          "path": "operations/provenance/fx2_attention_anchor_v2_terminal_20260916.json",
+          "sha256": "sha256:1830f1012c6a2840723d673ac370a3260d8d9ea6789f53e04c7b27314129478b"
+        }
+      }
+    ],
+    "measurements": {
+      "idealBitsSaved": null,
+      "memoryRatio": null,
+      "minimumPartitionIdealBitsSaved": null,
+      "netBytesSaved": 0,
+      "positiveSegmentFraction": null,
+      "runtimeRatio": null,
+      "scopeBytes": 250000,
+      "scopeSymbols": 151210,
+      "sourceBytesDelta": null,
+      "transferRetention": null
+    },
+    "objective": {
+      "corpusBytes": 1000000000,
+      "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+      "objectiveDigest": "sha256:e91ff20e92c3cac8acb0cbe5c79fc8e8a3b427d7e151245c8eecc52b1c32fa00",
+      "objectiveId": "gamma-enwiki9-hutter-90m-v3",
+      "objectivePath": "contracts/research/v3/objective-contract.json",
+      "targetScoreBytes": 90000000
+    },
+    "reflectionId": "r-20260916t043722z_97c24813c3",
+    "schema": "gamma.enwiki9.reflection-receipt.v1",
+    "validity": {
+      "classification": "valid",
+      "reasons": [
+        "All32 phases,clean builds,independent inverses,repeats,trace-off archives,P/K identity,neural reset-prefix checks and complete guards/cleanup passed. Every retained artifact independently rehashed."
+      ],
+      "valid": true
+    }
+  }
+}
+{
+  "job_id": "20260916T043722Z_97c24813c3",
+  "arms": 4,
+  "appended_rows": 4,
+  "metadata_updated": true,
+  "reflection": {
+    "decision": "retire",
+    "path": "operations/adaptive/reflections/20260916T043722Z_97c24813c3.json",
+    "sha256": "sha256:ead8acda375eea27e7a8f430b5b5f7ff0ded9fd344ab0f2691d20d79eef8f308",
+    "valid": true
+  },
+  "local_process_check": "same-boot-identities-checked",
+  "publication": "recoverable-append-then-projection"
+}
+{"archives": {"P": 33429, "K": 33429, "D": 33429, "S": 33424}, "g_P": 0, "g_S": -5, "confirmation": false}

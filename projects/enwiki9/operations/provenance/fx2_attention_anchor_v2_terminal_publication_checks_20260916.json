@@ -1,0 +1,37 @@
+{
+  "schema": "gamma.enwiki9.publication-checks.v1",
+  "audit_id": "fx2_attention_anchor_v2_terminal_v1",
+  "checks": [
+    {
+      "command": [
+        "python3",
+        "projects/enwiki9/tools/hutter_run_ledger.py",
+        "--check"
+      ],
+      "returncode": 0
+    },
+    {
+      "command": [
+        "python3",
+        "projects/enwiki9/tools/enwiki9_release_receipts.py",
+        "--check"
+      ],
+      "returncode": 0
+    },
+    {
+      "command": [
+        "python3",
+        "projects/enwiki9/tools/enwiki9_evidence_matrix.py",
+        "--check"
+      ],
+      "returncode": 1
+    }
+  ],
+  "expected_check_count": 10,
+  "all_checks_pass": false,
+  "log": {
+    "path": "run_logs/manual/attention_anchor_v2_terminal_publication_checks_20260916.log",
+    "bytes": 546,
+    "sha256": "a05277733a2901f99445df4988adffa27d8aade66db5c5a2f1234e89aa8c56b8"
+  }
+}

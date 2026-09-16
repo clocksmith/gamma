@@ -12,7 +12,7 @@ Reusable artifact helpers for new tools: [lib/artifacts.py](../lib/artifacts.py)
 The LibNC initializer teacher launcher exits before the first forward, gradient, update, or coded symbol; its source-bound experiment defines that boundary.
 The delayed-status helper's `enwiki9_delayed_status_latest.log` pointer is operational history, not present-host occupancy proof.
 
-Coverage: **1228 files** (33 .c, 79 .cpp, 1 .gdb, 1 .h, 2 .hpp, 1 .html, 1108 .py, 3 .sh).
+Coverage: **1230 files** (33 .c, 79 .cpp, 1 .gdb, 1 .h, 2 .hpp, 1 .html, 1110 .py, 3 .sh).
 
 | Tool | Purpose | Referenced contracts |
 |---|---|---|
@@ -369,11 +369,13 @@ Coverage: **1228 files** (33 .c, 79 .cpp, 1 .gdb, 1 .h, 2 .hpp, 1 .html, 1108 .p
 | [`tools/fx2_expert_mix_opening250k_v1.py`](../tools/fx2_expert_mix_opening250k_v1.py) | One native archive test of a posterior mixture conditioned on expert disagreement. | [1](../operations/adaptive/experiments/fx2_expert_mix_opening250k_v1.json) |
 | [`tools/fx2_expert_release250k_v1.py`](../tools/fx2_expert_release250k_v1.py) | Production equivalence and component pricing for the frozen expert mixture. | [1](../operations/adaptive/experiments/fx2_expert_release250k_v1.json) |
 | [`tools/fx2_expert_release250k_v2.py`](../tools/fx2_expert_release250k_v2.py) | Production equivalence and component pricing for the frozen expert mixture. | [1](../operations/adaptive/experiments/fx2_expert_release250k_v2.json) |
-| [`tools/fx2_expert_release250k_v3.py`](../tools/fx2_expert_release250k_v3.py) | Production equivalence and component pricing for the frozen expert mixture. | [13](../operations/adaptive/experiments/fx2_ambient_dictionary_probe_v1.json) |
+| [`tools/fx2_expert_release250k_v3.py`](../tools/fx2_expert_release250k_v3.py) | Production equivalence and component pricing for the frozen expert mixture. | [15](../operations/adaptive/experiments/fx2_ambient_dictionary_probe_v1.json) |
 | [`tools/fx2_expert_release_adapter_v1.py`](../tools/fx2_expert_release_adapter_v1.py) | Bind the fixed transformer profile and compact aligned mixture to source. | [1](../operations/adaptive/experiments/fx2_expert_release250k_v1.json) |
 | [`tools/fx2_expert_release_adapter_v2.py`](../tools/fx2_expert_release_adapter_v2.py) | Bind the fixed transformer profile and compact aligned mixture to source. | [1](../operations/adaptive/experiments/fx2_expert_release250k_v2.json) |
 | [`tools/fx2_expert_release_adapter_v3.py`](../tools/fx2_expert_release_adapter_v3.py) | Bind the fixed transformer profile and compact aligned mixture to source. | [1](../operations/adaptive/experiments/fx2_expert_release250k_v3.json) |
 | [`tools/fx2_expert_transfer250k_v1.py`](../tools/fx2_expert_transfer250k_v1.py) | Transfer the unchanged released expert mixture, retaining its unpaid costs. | [1](../operations/adaptive/experiments/fx2_expert_transfer250k_v1.json) |
+| [`tools/fx2_explicit_lexical250k_v1.py`](../tools/fx2_explicit_lexical250k_v1.py) | Matched explicit dictionary input to the existing FXCM lexical predictor. | [1](../operations/adaptive/experiments/fx2_explicit_lexical250k_v1.json) |
+| [`tools/fx2_explicit_lexical250k_v2.py`](../tools/fx2_explicit_lexical250k_v2.py) | Matched explicit dictionary input to the existing FXCM lexical predictor. | [1](../operations/adaptive/experiments/fx2_explicit_lexical250k_v2.json) |
 | [`tools/fx2_final_counts_opening250k_q0_v1.py`](../tools/fx2_final_counts_opening250k_q0_v1.py) | Canonical bounded comparison with a supplied parent and unchanged native counts. | [1](../operations/adaptive/experiments/fx2_final_counts_opening250k_q0_v1.json) |
 | [`tools/fx2_final_counts_replay_v1.py`](../tools/fx2_final_counts_replay_v1.py) | Exact conditional replay of final-parent residual counts; no native inference. | [8](../operations/adaptive/experiments/fx2_causal_residual250k_v1.json) |
 | [`tools/fx2_final_direction_v1.py`](../tools/fx2_final_direction_v1.py) | Enclose the ideal derivative along a fixed recorded Q16 logit path. | none found |
@@ -444,7 +446,7 @@ Coverage: **1228 files** (33 .c, 79 .cpp, 1 .gdb, 1 .h, 2 .hpp, 1 .html, 1108 .p
 | [`tools/fx2_trim_auxiliary_ppm_v1.py`](../tools/fx2_trim_auxiliary_ppm_v1.py) | Compare original and repaired native auxiliary packages under a lab gate. This checks fixed auxiliary assets, actual extraction subprocesses, and a matched opening-prefix core archive. It does not execute the full enwik9 split/PHDA/reorder pipeline or establish a complete submission score. | [2](../operations/adaptive/experiments/fx2_ambient_dictionary_probe_v1.json) |
 | [`tools/fx2_trim_auxiliary_ppm_v2.py`](../tools/fx2_trim_auxiliary_ppm_v2.py) | Compare auxiliary packages after the shared ambient-input correction. This checks fixed auxiliary assets, actual extraction subprocesses, and a matched opening-prefix core archive. It does not execute the full enwik9 split/PHDA/reorder pipeline or establish a complete submission score. | [1](../operations/adaptive/experiments/fx2_trim_auxiliary_ppm_v2.json) |
 | [`tools/fx2_trim_auxiliary_preflight_v1.py`](../tools/fx2_trim_auxiliary_preflight_v1.py) | Materialize and test the separate PPM auxiliary packaging realization. No native codec, model, dictionary compression, or enwik9 prediction executes. The only compiled code is the extracted option-policy/header synthetic probe. | none found |
-| [`tools/fx2_trim_confirm1m_v1.py`](../tools/fx2_trim_confirm1m_v1.py) | Confirm frozen source trimming on an independently selected native population. | [6](../operations/adaptive/experiments/fx2_ambient_dictionary_probe_v1.json) |
+| [`tools/fx2_trim_confirm1m_v1.py`](../tools/fx2_trim_confirm1m_v1.py) | Confirm frozen source trimming on an independently selected native population. | [8](../operations/adaptive/experiments/fx2_ambient_dictionary_probe_v1.json) |
 | [`tools/fx2_trim_load_closure_v1.py`](../tools/fx2_trim_load_closure_v1.py) | Audit the frozen trimmed ELF's load-time closure without entering the codec. No corpus, model, compiler, full /usr mount, installation or network is used. This is a diagnostic receipt, not runtime, license or submission qualification. | none found |
 | [`tools/fx2_trim_scale10m_v1.py`](../tools/fx2_trim_scale10m_v1.py) | Confirm unchanged native trimming at the ten-million-byte scale. | [4](../operations/adaptive/experiments/fx2_ambient_dictionary_probe_v1.json) |
 | [`tools/fx2_typed_anchor_soft_queue.py`](../tools/fx2_typed_anchor_soft_queue.py) | Build and gate native fx2 typed-anchor soft-state candidates. | none found |
