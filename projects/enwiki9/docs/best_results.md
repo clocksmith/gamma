@@ -12,8 +12,8 @@ Unknown package cost stays unknown. Local subtotals are not complete submission 
 Populations are grouped by raw-input SHA256; compare matched controls in each receipt.
 ```
 
-- Result JSON files scanned: `435`
-- Roundtrip-passing rows: `190`
+- Result JSON files scanned: `438`
+- Roundtrip-passing rows: `192`
 - Active target score: `90,000,000` bytes (`9.0000000%`)
 
 ## Scope `1,000,000,000` Bytes
@@ -39,9 +39,9 @@ No roundtrip-passing result JSONs are present for this scope in this checkout.
 
 | Program / arm | Mechanism | Local subtotal | Archive | Program bytes | b/B | Determinism | Result |
 |---|---|---:|---:|---:|---:|---|---|
+| `fx2_trim_confirm1m_v1:D` | custom candidate | unknown | 131,238 | unknown | 1.049904 | true | `results/fx2_trim_confirm1m_v1/D.driver.json` |
+| `fx2_trim_confirm1m_v1:P` | custom candidate | unknown | 131,238 | unknown | 1.049904 | true | `results/fx2_trim_confirm1m_v1/P.driver.json` |
 | `matched_frontier_reserved_q0_v1:confirmation-FX2` | custom candidate | unknown | 131,238 | unknown | 1.049904 | true | `operations/provenance/matched_frontier_reserved_terminal_20260908/confirmation-FX2.json` |
-| `opcode_field_compact_v1:confirmation` | syntax opcode preprocessor | unknown | 255,828 | unknown | 2.046624 | true | `operations/provenance/opcode_field_compact_terminal_20260908/confirmation.json` |
-| `opcode_field_confirmation1m_q0_v1:D` | syntax opcode preprocessor | unknown | 255,828 | unknown | 2.046624 | true | `operations/provenance/opcode_field_confirmation_terminal_20260908/D.json` |
 
 ### Population `369b688978f649681136198fb96db14c1616756260c55fb4b65e9bc049552cad`
 
