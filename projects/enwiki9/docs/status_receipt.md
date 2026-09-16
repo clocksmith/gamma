@@ -2,7 +2,7 @@
 
 Generated from the current certificate, gate receipts, resource guards, and process table.
 
-- Generated at UTC: `2026-09-16T03:39:28+00:00`
+- Generated at UTC: `2026-09-16T03:49:45+00:00`
 
 ## Target State
 
@@ -16,10 +16,10 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 
 ## Operator Summary
 
-- Candidate: `fx2_expert_transfer250k_v1`
+- Candidate: `fx2_trim_auxiliary_ppm_v2`
 - Scope bytes: `250,000`
-- Scope symbols: `166,098`
-- Scope unit: `modeled byte`
+- Scope symbols: `250,000`
+- Scope unit: `raw byte`
 - Gate verdict: `running`
 - Gate next action: `wait_for_gate_completion`
 - Active stage: `n/a`
@@ -39,8 +39,8 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 - Latest decimal single-process margin KiB: `n/a`
 - Safe to launch candidate gate: `false`
 - Terminal verdict present: `false`
-- Pending adaptive jobs: `27`
-- Held pending adaptive jobs: `27`
+- Pending adaptive jobs: `26`
+- Held pending adaptive jobs: `26`
 - Claimable pending adaptive jobs: `0`
 - Canonical release bundles: `4`
 - Validated release run receipts: `0`
@@ -54,14 +54,14 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 
 - Gate verdict: `running`
 - Next action: `wait_for_gate_completion`
-- Candidate: `fx2_expert_transfer250k_v1`
+- Candidate: `fx2_trim_auxiliary_ppm_v2`
 - Scope bytes: `250,000`
-- Scope symbols: `166,098`
-- Scope unit: `modeled byte`
+- Scope symbols: `250,000`
+- Scope unit: `raw byte`
 - Active stage: `n/a`
 - Roundtrip arm: `n/a`
 - Coordinator PID: `n/a`
-- Driver result JSON: `projects/enwiki9/results/fx2_expert_transfer250k_v1/decision.json`
+- Driver result JSON: `projects/enwiki9/results/fx2_trim_auxiliary_ppm_v2/decision.json`
 - Driver result present: `false`
 - RSS guard JSON: `not present`
 - RSS guard present: `unknown`
@@ -84,7 +84,7 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 
 ## Observed Gate Command
 
-- Expected candidate: `fx2_expert_transfer250k_v1`
+- Expected candidate: `fx2_trim_auxiliary_ppm_v2`
 - Expected scope bytes: `250,000`
 - Driver process count: `0`
 - Active gate command observed: `false`
@@ -96,7 +96,7 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 
 ## Observed Controller Command
 
-- Expected active candidate: `fx2_expert_transfer250k_v1`
+- Expected active candidate: `fx2_trim_auxiliary_ppm_v2`
 - Expected active scope bytes: `250,000`
 - Controller process count: `0`
 - Scope note: `Controller scope may be the completed parent gate that launched the active child; the observed driver command is authoritative for the active gate scope.`
@@ -131,13 +131,13 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 
 - Audit return code: `0`
 - Audit mode: `inventory_snapshot`
-- Inventory generated: `2026-09-16T03:39:07+00:00`
+- Inventory generated: `2026-09-16T03:49:24+00:00`
 - Snapshot identity is verified; inventory inputs were not rescanned. This is not live occupancy or launch authority.
 - Program directories: `1,074`
 - Registered programs: `613`
 - Untracked nonignored entries: `0`
-- Modified tracked entries: `2`
-- Candidate statuses: `active=18, blocked_dependency=98, candidate=267, measured_negative=100, retired=591`
+- Modified tracked entries: `0`
+- Candidate statuses: `active=18, blocked_dependency=99, candidate=266, measured_negative=100, retired=591`
 
 ## View Refresh
 
@@ -148,53 +148,53 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 
 | Role | PID | PPID | RSS KiB | Command |
 |---|---:|---:|---:|---|
-| `process` | 1,360,041 | 472,530 | 4,048 | `/bin/bash -lc taskset -c 2 python3 tools/enwiki9_lab.py run --candidate fx2_expert_transfer250k_v1 --max-workers 1 > run_logs/manual/expert_transfe...` |
-| `process` | 1,360,154 | 1,360,041 | 41,960 | `python3 tools/enwiki9_lab.py run --candidate fx2_expert_transfer250k_v1 --max-workers 1` |
-| `resource_guard` | 1,360,224 | 1,360,154 | 34,888 | `/usr/bin/python3 /home/x/deco/gamma/projects/enwiki9/tools/run_with_resource_guard_v3.py --limit-kib 9765624 --official-decimal-limit-kib 9765624 -...` |
-| `process` | 1,360,243 | 1,360,224 | 48,252 | `/usr/bin/python3 /home/x/deco/gamma/projects/enwiki9/tools/fx2_expert_transfer250k_v1.py` |
-| `process` | 1,365,398 | 1,360,243 | 7,808 | `/usr/bin/timeout --signal=TERM --kill-after=2 300 /home/x/deco/gamma/projects/enwiki9/results/fx2_expert_transfer250k_v1/work/P/cmix -c dictionary/...` |
-| `native_cmix` | 1,365,401 | 1,365,398 | 4,537,956 | `/home/x/deco/gamma/projects/enwiki9/results/fx2_expert_transfer250k_v1/work/P/cmix -c dictionary/english.dic population.raw encode.arc --transforme...` |
+| `process` | 1,451,036 | 472,530 | 4,040 | `/bin/bash -lc taskset -c 2 python3 tools/enwiki9_lab.py run --candidate fx2_trim_auxiliary_ppm_v2 --max-workers 1 > run_logs/manual/auxiliary_v2_la...` |
+| `process` | 1,451,151 | 1,451,036 | 41,976 | `python3 tools/enwiki9_lab.py run --candidate fx2_trim_auxiliary_ppm_v2 --max-workers 1` |
+| `resource_guard` | 1,451,243 | 1,451,151 | 36,776 | `/usr/bin/python3 /home/x/deco/gamma/projects/enwiki9/tools/run_with_resource_guard_v3.py --limit-kib 9765624 --official-decimal-limit-kib 9765624 -...` |
+| `process` | 1,451,262 | 1,451,243 | 41,788 | `/usr/bin/python3 /home/x/deco/gamma/projects/enwiki9/tools/fx2_trim_auxiliary_ppm_v2.py` |
+| `process` | 1,477,585 | 1,451,262 | 7,832 | `/usr/bin/timeout --signal=TERM --kill-after=2 360 /home/x/deco/gamma/projects/enwiki9/results/fx2_trim_auxiliary_ppm_v2/work/P/cmix -c /home/x/deco...` |
+| `native_cmix` | 1,477,586 | 1,477,585 | 3,358,996 | `/home/x/deco/gamma/projects/enwiki9/results/fx2_trim_auxiliary_ppm_v2/work/P/cmix -c /home/x/deco/gamma/projects/enwiki9/results/fx2_trim_auxiliary...` |
 
 ## Active Candidate Recent Artifacts
 
 | Path | Bytes | Modified UTC |
 |---|---:|---|
-| `projects/enwiki9/results/fx2_expert_transfer250k_v1/P-encode.stderr` | 91,496 | `2026-09-16T03:39:28+00:00` |
-| `projects/enwiki9/results/fx2_expert_transfer250k_v1/work/P/ppm.temp` | 14,680,064,001 | `2026-09-16T03:39:23+00:00` |
-| `projects/enwiki9/results/fx2_expert_transfer250k_v1/work/P/encode.arc` | 0 | `2026-09-16T03:39:23+00:00` |
-| `projects/enwiki9/results/fx2_expert_transfer250k_v1/work/P/encode.arc.cmix.temp` | 166,103 | `2026-09-16T03:39:23+00:00` |
-| `projects/enwiki9/results/fx2_expert_transfer250k_v1/P-encode.stdout` | 0 | `2026-09-16T03:39:23+00:00` |
-| `projects/enwiki9/results/fx2_expert_transfer250k_v1/P-preprocess-cleanup.json` | 103 | `2026-09-16T03:39:23+00:00` |
-| `projects/enwiki9/results/fx2_expert_transfer250k_v1/P-preprocess.execution.json` | 646 | `2026-09-16T03:39:23+00:00` |
-| `projects/enwiki9/results/fx2_expert_transfer250k_v1/P-preprocess.stderr` | 89 | `2026-09-16T03:39:23+00:00` |
-| `projects/enwiki9/results/fx2_expert_transfer250k_v1/P-preprocess.stdout` | 42 | `2026-09-16T03:39:23+00:00` |
-| `projects/enwiki9/results/fx2_expert_transfer250k_v1/work/P/population.stored` | 166,108 | `2026-09-16T03:39:23+00:00` |
-| `projects/enwiki9/results/fx2_expert_transfer250k_v1/P-compile-repeat.execution.json` | 1,066 | `2026-09-16T03:39:23+00:00` |
-| `projects/enwiki9/results/fx2_expert_transfer250k_v1/P-compile-repeat.stdout` | 3,611 | `2026-09-16T03:39:23+00:00` |
+| `projects/enwiki9/results/fx2_trim_auxiliary_ppm_v2/work/P/ppm.temp` | 14,680,064,001 | `2026-09-16T03:49:45+00:00` |
+| `projects/enwiki9/results/fx2_trim_auxiliary_ppm_v2/P-dict-encode.stderr` | 61,321 | `2026-09-16T03:49:45+00:00` |
+| `projects/enwiki9/results/fx2_trim_auxiliary_ppm_v2/work/P/progress.log` | 11,150 | `2026-09-16T03:49:45+00:00` |
+| `projects/enwiki9/results/fx2_trim_auxiliary_ppm_v2/work/P/assets/dict.comp` | 0 | `2026-09-16T03:49:36+00:00` |
+| `projects/enwiki9/results/fx2_trim_auxiliary_ppm_v2/work/P/assets/dict.comp.cmix.temp` | 412,001 | `2026-09-16T03:49:36+00:00` |
+| `projects/enwiki9/results/fx2_trim_auxiliary_ppm_v2/P-dict-encode.stdout` | 0 | `2026-09-16T03:49:36+00:00` |
+| `projects/enwiki9/results/fx2_trim_auxiliary_ppm_v2/P-main-repeat-cleanup.json` | 103 | `2026-09-16T03:49:36+00:00` |
+| `projects/enwiki9/results/fx2_trim_auxiliary_ppm_v2/P-main-repeat.execution.json` | 672 | `2026-09-16T03:49:36+00:00` |
+| `projects/enwiki9/results/fx2_trim_auxiliary_ppm_v2/P-main-repeat.stderr` | 742,645 | `2026-09-16T03:49:35+00:00` |
+| `projects/enwiki9/results/fx2_trim_auxiliary_ppm_v2/P-main-repeat.stdout` | 114 | `2026-09-16T03:49:35+00:00` |
+| `projects/enwiki9/results/fx2_trim_auxiliary_ppm_v2/work/P/repeat.arc` | 33,429 | `2026-09-16T03:49:35+00:00` |
+| `projects/enwiki9/results/fx2_trim_auxiliary_ppm_v2/P-main-decode-cleanup.json` | 103 | `2026-09-16T03:48:58+00:00` |
 
 ## Active RSS
 
-- Max cmix PID: `1365401`
+- Max cmix PID: `1477586`
 - Active cmix mode: `compress`
-- Max cmix RSS KiB: `4,537,956`
-- Active process tree RSS KiB: `4,674,912`
+- Max cmix RSS KiB: `3,358,996`
+- Active process tree RSS KiB: `3,491,408`
 - Local binary `10GiB` guard KiB: `10,485,760`
 - Decimal `10GB` guard KiB: `9,765,625`
-- Single-process binary margin KiB: `5,947,804`
-- Single-process decimal margin KiB: `5,227,669`
-- Active process tree margin KiB (binary): `5,810,848`
-- Active process tree decimal margin KiB: `5,090,713`
-- Temp input path: `/home/x/deco/gamma/projects/enwiki9/results/fx2_expert_transfer250k_v1/work/P/--transformer`
-- Temp output path: `/home/x/deco/gamma/projects/enwiki9/results/fx2_expert_transfer250k_v1/work/P/models/6m-q4-fp32.tfwc2`
-- Temp output staging path: `/home/x/deco/gamma/projects/enwiki9/results/fx2_expert_transfer250k_v1/work/P/models/6m-q4-fp32.tfwc2.cmix.temp`
-- Temp input bytes: `n/a`
-- Temp output bytes: `2,930,652`
-- Temp output staging bytes: `n/a`
-- Temp input modified UTC: `n/a`
-- Temp output modified UTC: `2026-09-16T03:38:56+00:00`
-- Temp output staging modified UTC: `n/a`
+- Single-process binary margin KiB: `7,126,764`
+- Single-process decimal margin KiB: `6,406,629`
+- Active process tree margin KiB (binary): `6,994,352`
+- Active process tree decimal margin KiB: `6,274,217`
+- Temp input path: `/home/x/deco/gamma/projects/enwiki9/results/fx2_trim_auxiliary_ppm_v2/work/P/dictionary/english.dic`
+- Temp output path: `/home/x/deco/gamma/projects/enwiki9/results/fx2_trim_auxiliary_ppm_v2/work/P/assets/dict.comp`
+- Temp output staging path: `/home/x/deco/gamma/projects/enwiki9/results/fx2_trim_auxiliary_ppm_v2/work/P/assets/dict.comp.cmix.temp`
+- Temp input bytes: `411,996`
+- Temp output bytes: `0`
+- Temp output staging bytes: `412,001`
+- Temp input modified UTC: `2026-09-16T03:47:12+00:00`
+- Temp output modified UTC: `2026-09-16T03:49:36+00:00`
+- Temp output staging modified UTC: `2026-09-16T03:49:36+00:00`
 - Process read bytes: `0`
-- Process write bytes: `438,272`
+- Process write bytes: `1,388,544`
 
 ## Contingencies
 

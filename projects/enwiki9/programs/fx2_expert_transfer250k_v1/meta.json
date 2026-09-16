@@ -6,6 +6,75 @@
   "family": "public_fx2_transformer",
   "hypothesis": "The unchanged released expert mixture reduces the native archive on the fixed disjoint cold250KB population.",
   "id": "fx2_expert_transfer250k_v1",
+  "measured": {
+    "reflections": {
+      "20260916T031554Z_01d2cf2ede": {
+        "decision": "hold",
+        "path": "operations/adaptive/reflections/20260916T031554Z_01d2cf2ede.json",
+        "sha256": "sha256:ff46fae5603f3b28df854930ce554779ac179ad5a3f2525fa11cc0eb35ec86f1",
+        "valid": true
+      }
+    },
+    "terminal_results": {
+      "20260916T031554Z_01d2cf2ede": {
+        "index": {
+          "path": "results/fx2_expert_transfer250k_v1/terminal-index.json",
+          "sha256": "sha256:9307f1f3effb6780db8a7b10d3b3f0e2bc803834688985283055653693d78997"
+        },
+        "reflection": {
+          "decision": "hold",
+          "path": "operations/adaptive/reflections/20260916T031554Z_01d2cf2ede.json",
+          "sha256": "sha256:ff46fae5603f3b28df854930ce554779ac179ad5a3f2525fa11cc0eb35ec86f1",
+          "valid": true
+        },
+        "guard_validation_mode": "discovery-budget-schema",
+        "qualification_authority": false,
+        "missing_diagnostics": [
+          "kernel cpuset controller is not delegated; taskset assignment and existing affinity guard remain active"
+        ],
+        "arms": {
+          "P": {
+            "result_path": "projects/enwiki9/results/fx2_expert_transfer250k_v1/P.driver.json",
+            "result_json_bytes": 1937,
+            "result_json_sha256": "171e447600ea33814b913423223303365434dc430f502324c31568bd0b4356f5",
+            "data_size": 250000,
+            "data_md5": null,
+            "data_sha256": "f0d01801279f29e353d1dd932a43133e191ea905da6626575b1ee174957717b8",
+            "compressed_size": 9499,
+            "program_size": null,
+            "hutter_score": null,
+            "bits_per_byte": null,
+            "roundtrip_ok": true,
+            "determinism": true,
+            "compressed_sha256": "f92f4ea6f9bfe1d368609da6e6c889cd1b983a4b93ed1bb71c5221371b6a8c8e",
+            "compress_time_s": null,
+            "decompress_time_s": null,
+            "missing_diagnostics": [],
+            "run_id": "fx2_expert_transfer250k_v1__20260916T031554Z_01d2cf2ede__P"
+          },
+          "D": {
+            "result_path": "projects/enwiki9/results/fx2_expert_transfer250k_v1/D.driver.json",
+            "result_json_bytes": 1937,
+            "result_json_sha256": "c80d2cd3d8736814b0626add048a9237d53ce0f2cf654b37cfe59a8f7074789e",
+            "data_size": 250000,
+            "data_md5": null,
+            "data_sha256": "f0d01801279f29e353d1dd932a43133e191ea905da6626575b1ee174957717b8",
+            "compressed_size": 9488,
+            "program_size": null,
+            "hutter_score": null,
+            "bits_per_byte": null,
+            "roundtrip_ok": true,
+            "determinism": true,
+            "compressed_sha256": "bb9910b472724c6f3c709abf5c21a80054a79309b76044db68f9ff848b89a484",
+            "compress_time_s": null,
+            "decompress_time_s": null,
+            "missing_diagnostics": [],
+            "run_id": "fx2_expert_transfer250k_v1__20260916T031554Z_01d2cf2ede__D"
+          }
+        }
+      }
+    }
+  },
   "omega": {
     "experiment": {
       "path": "operations/adaptive/experiments/fx2_expert_transfer250k_v1.json",
@@ -20,5 +89,6 @@
     "retired_neighborhoods": []
   },
   "parent": "fx2_expert_release250k_v3",
-  "status": "candidate"
+  "status": "blocked_dependency",
+  "verdict": "Keep existing package hold. Only consider a separately priced1MB design with unchanged implementation; do not claim full-corpus retention."
 }

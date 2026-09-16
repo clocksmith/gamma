@@ -26,9 +26,9 @@ If roundtrip_ok is true for archive A and decoder D on target corpus x, then |A|
 | best exact 100M | `fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1` | 100,000,000 | 15,040,789 | metadata-inherited from parent 100M geometry package; no result JSON for this row is present in this checkout | metadata-inherited |
 | best full 1G | `n/a` | 1,000,000,000 | n/a | no verified full-corpus result JSON is present in this checkout | not verified |
 | best forecast | `endpoint428_gate_dot_fuse_output_update_loop_v1` | 10,000,000 | 109,389,323 | canonical source-bound frontier selection backed by exact 10M codec replay and counted package evidence; forecast only, not a constructive full-corpus proof | source-bound-canonical-forecast |
-| active candidate | `fx2_expert_transfer250k_v1` | 250,000 | n/a | active 250,000 byte replay is running; no constructive result is present for this candidate yet | running gate |
+| active candidate | `fx2_trim_auxiliary_ppm_v2` | 250,000 | n/a | active 250,000 byte replay is running; no constructive result is present for this candidate yet | running gate |
 | blocker | `n/a` | n/a | n/a | active 250,000 byte deterministic replay has not produced terminal driver and RSS receipts yet | open |
-| active gate | `fx2_expert_transfer250k_v1` | 250,000 | n/a | unchanged 250,000 byte RSS-guarded determinism replay; wait for terminal receipts | pending |
+| active gate | `fx2_trim_auxiliary_ppm_v2` | 250,000 | n/a | unchanged 250,000 byte RSS-guarded determinism replay; wait for terminal receipts | pending |
 
 ## Best Full-Corpus Result
 
@@ -48,7 +48,7 @@ No verified full-corpus result JSON is present in this workspace.
 | data_size | program | archive | score | program_size | archive_bpb | result |
 |---:|---|---:|---:|---:|---:|---|
 | 10,000 | `nncp_compact5_preprocessed_cqq_x86xzopt_nodebug_t4_tarslack_v1` | 6,229 | 240,248 | 234,019 | 4.9832 | `results/nncp_compact5_preprocessed_cqq_x86xzopt_nodebug_t4_tarslack_v1/2026-07-27T213234.json` |
-| 250,000 | `fx2_expert_mix_opening250k_v1` | 33,395 | unknown | unknown | 1.06864 | `results/fx2_expert_mix_opening250k_v1/D.driver.json` |
+| 250,000 | `fx2_expert_transfer250k_v1` | 9,488 | unknown | unknown | 0.303616 | `results/fx2_expert_transfer250k_v1/D.driver.json` |
 | 1,000,000 | `fx2_trim_confirm1m_v1` | 131,238 | unknown | unknown | 1.049904 | `results/fx2_trim_confirm1m_v1/D.driver.json` |
 | 10,000,000 | `fx2_trim_scale10m_v1` | 1,305,268 | unknown | unknown | 1.0442144 | `results/fx2_trim_scale10m_v1/D.driver.json` |
 
