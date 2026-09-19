@@ -1,0 +1,818 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gamma.local/contracts/research/v1/cmix-source-labelled-memory-attribution-receipt.schema.json",
+  "title": "CMIX Source-Labelled Memory Attribution Receipt",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "candidate_id",
+    "created_utc",
+    "identity",
+    "evidence",
+    "sequence",
+    "high_water",
+    "allocation_ranges",
+    "source_labels",
+    "invalidity",
+    "decision"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "cmix-source-labelled-memory-attribution-receipt.v1"
+    },
+    "candidate_id": {
+      "const": "cmix_obias_source_labelled_memory_attribution_q0_v1"
+    },
+    "created_utc": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "identity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "contract_sha256",
+        "source_integration_sha256",
+        "binary_sha256",
+        "command_sha256",
+        "environment_sha256",
+        "codec_pid",
+        "codec_proc_start_ticks"
+      ],
+      "properties": {
+        "contract_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "source_integration_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "binary_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "command_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "environment_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "codec_pid": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "codec_proc_start_ticks": {
+          "type": "integer",
+          "minimum": 1
+        }
+      }
+    },
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "allocation_marker_receipt_sha256",
+        "phase_attribution_receipt_sha256",
+        "resource_guard_v3_receipt_sha256",
+        "source_integration_receipt_sha256",
+        "sample_stream_sha256",
+        "pagemap_range_manifest_sha256",
+        "managed_lease_transition_log_sha256",
+        "managed_lease_verification_sha256",
+        "managed_lease_verification_pass",
+        "terminal_managed_lease_sha256"
+      ],
+      "properties": {
+        "allocation_marker_receipt_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "phase_attribution_receipt_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "resource_guard_v3_receipt_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "source_integration_receipt_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "sample_stream_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "pagemap_range_manifest_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "managed_lease_transition_log_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "managed_lease_verification_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "managed_lease_verification_pass": {
+          "type": "boolean"
+        },
+        "terminal_managed_lease_sha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    },
+    "sequence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "records",
+        "first_sequence",
+        "last_sequence",
+        "contiguous",
+        "registry_healthy",
+        "unmatched_releases"
+      ],
+      "properties": {
+        "records": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "first_sequence": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 1
+        },
+        "last_sequence": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 1
+        },
+        "contiguous": {
+          "type": "boolean"
+        },
+        "registry_healthy": {
+          "type": "boolean"
+        },
+        "unmatched_releases": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "high_water": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "continuous_peak_sample_index",
+        "attribution_checkpoint_index",
+        "checkpoint_trigger",
+        "phase",
+        "continuous_process_tree_peak_kib",
+        "checkpoint_process_tree_rss_kib",
+        "codec_rss_kib",
+        "codec_vmhwm_kib",
+        "cgroup_peak_bytes",
+        "official_limit_kib",
+        "engineering_target_kib",
+        "page_size_bytes",
+        "process_tree_stopped",
+        "marker_window_exact",
+        "pagemap_permission_pass",
+        "pagemap_read_one_sha256",
+        "pagemap_read_two_sha256",
+        "smaps_reconciled",
+        "coherent_checkpoint",
+        "labelled_resident_lower_bound_kib",
+        "labelled_resident_upper_bound_kib",
+        "unattributed_codec_rss_upper_bound_kib",
+        "continuous_peak_ownership_claimed"
+      ],
+      "properties": {
+        "continuous_peak_sample_index": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "attribution_checkpoint_index": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "checkpoint_trigger": {
+          "enum": [
+            "new_continuous_high",
+            "phase_transition",
+            "terminal_cleanup"
+          ]
+        },
+        "phase": {
+          "$ref": "#/$defs/nonempty"
+        },
+        "continuous_process_tree_peak_kib": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "checkpoint_process_tree_rss_kib": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "codec_rss_kib": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "codec_vmhwm_kib": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "cgroup_peak_bytes": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "official_limit_kib": {
+          "const": 9765625
+        },
+        "engineering_target_kib": {
+          "const": 9000000
+        },
+        "page_size_bytes": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "process_tree_stopped": {
+          "type": "boolean"
+        },
+        "marker_window_exact": {
+          "type": "boolean"
+        },
+        "pagemap_permission_pass": {
+          "type": "boolean"
+        },
+        "pagemap_read_one_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "pagemap_read_two_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "smaps_reconciled": {
+          "type": "boolean"
+        },
+        "coherent_checkpoint": {
+          "type": "boolean"
+        },
+        "labelled_resident_lower_bound_kib": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "labelled_resident_upper_bound_kib": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "unattributed_codec_rss_upper_bound_kib": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "continuous_peak_ownership_claimed": {
+          "const": false
+        }
+      }
+    },
+    "allocation_ranges": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/allocation_range"
+      }
+    },
+    "source_labels": {
+      "type": "array",
+      "minItems": 10,
+      "maxItems": 10,
+      "items": {
+        "$ref": "#/$defs/source_label"
+      },
+      "allOf": [
+        {
+          "contains": {
+            "properties": {
+              "label": {
+                "const": "fxcm_alloc"
+              }
+            },
+            "required": [
+              "label"
+            ]
+          },
+          "minContains": 1,
+          "maxContains": 1
+        },
+        {
+          "contains": {
+            "properties": {
+              "label": {
+                "const": "fxcm_aligned_alloc"
+              }
+            },
+            "required": [
+              "label"
+            ]
+          },
+          "minContains": 1,
+          "maxContains": 1
+        },
+        {
+          "contains": {
+            "properties": {
+              "label": {
+                "const": "context_history"
+              }
+            },
+            "required": [
+              "label"
+            ]
+          },
+          "minContains": 1,
+          "maxContains": 1
+        },
+        {
+          "contains": {
+            "properties": {
+              "label": {
+                "const": "context_shared_map"
+              }
+            },
+            "required": [
+              "label"
+            ]
+          },
+          "minContains": 1,
+          "maxContains": 1
+        },
+        {
+          "contains": {
+            "properties": {
+              "label": {
+                "const": "context_indirect_1"
+              }
+            },
+            "required": [
+              "label"
+            ]
+          },
+          "minContains": 1,
+          "maxContains": 1
+        },
+        {
+          "contains": {
+            "properties": {
+              "label": {
+                "const": "context_indirect_2"
+              }
+            },
+            "required": [
+              "label"
+            ]
+          },
+          "minContains": 1,
+          "maxContains": 1
+        },
+        {
+          "contains": {
+            "properties": {
+              "label": {
+                "const": "context_indirect_3"
+              }
+            },
+            "required": [
+              "label"
+            ]
+          },
+          "minContains": 1,
+          "maxContains": 1
+        },
+        {
+          "contains": {
+            "properties": {
+              "label": {
+                "const": "mixer_slab"
+              }
+            },
+            "required": [
+              "label"
+            ]
+          },
+          "minContains": 1,
+          "maxContains": 1
+        },
+        {
+          "contains": {
+            "properties": {
+              "label": {
+                "const": "ppm_anonymous_arena"
+              }
+            },
+            "required": [
+              "label"
+            ]
+          },
+          "minContains": 1,
+          "maxContains": 1
+        },
+        {
+          "contains": {
+            "properties": {
+              "label": {
+                "const": "ppm_file_backed_arena"
+              }
+            },
+            "required": [
+              "label"
+            ]
+          },
+          "minContains": 1,
+          "maxContains": 1
+        }
+      ]
+    },
+    "invalidity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "invalid",
+        "reason_codes"
+      ],
+      "properties": {
+        "invalid": {
+          "type": "boolean"
+        },
+        "reason_codes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/nonempty"
+          }
+        }
+      }
+    },
+    "decision": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "memory_eligibility_proved",
+        "successor_authorized",
+        "eligible_reclaimable_kib",
+        "required_reduction_kib",
+        "reason_codes"
+      ],
+      "properties": {
+        "status": {
+          "enum": [
+            "attributed",
+            "insufficient_attribution",
+            "invalid"
+          ]
+        },
+        "memory_eligibility_proved": {
+          "const": false
+        },
+        "successor_authorized": {
+          "enum": [
+            null,
+            "cmix_obias_filebacked_fxcm_allocator_strategy_q0_v1"
+          ]
+        },
+        "eligible_reclaimable_kib": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "required_reduction_kib": {
+          "const": 1472880
+        },
+        "reason_codes": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/nonempty"
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "nonempty": {
+      "type": "string",
+      "minLength": 1
+    },
+    "source_label": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "label",
+        "allocation_count",
+        "live_at_high_water_count",
+        "resident_lower_bound_at_checkpoint_kib",
+        "resident_upper_bound_at_checkpoint_kib",
+        "fully_contained_pages",
+        "allocation_bytes",
+        "conservative_range_bound_valid",
+        "eligible_for_memory_successor"
+      ],
+      "properties": {
+        "label": {
+          "enum": [
+            "fxcm_alloc",
+            "fxcm_aligned_alloc",
+            "context_history",
+            "context_shared_map",
+            "context_indirect_1",
+            "context_indirect_2",
+            "context_indirect_3",
+            "mixer_slab",
+            "ppm_anonymous_arena",
+            "ppm_file_backed_arena"
+          ]
+        },
+        "allocation_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "live_at_high_water_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "resident_lower_bound_at_checkpoint_kib": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "resident_upper_bound_at_checkpoint_kib": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "fully_contained_pages": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "allocation_bytes": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "conservative_range_bound_valid": {
+          "type": "boolean"
+        },
+        "eligible_for_memory_successor": {
+          "type": "boolean"
+        },
+        "not_allocated_reason": {
+          "$ref": "#/$defs/nonempty"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "allocation_count": {
+                "const": 0
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "not_allocated_reason"
+            ]
+          }
+        }
+      ]
+    },
+    "allocation_range": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "allocation_sequence",
+        "label",
+        "allocation_base",
+        "usable_pointer",
+        "allocation_bytes",
+        "usable_bytes",
+        "first_fully_contained_page",
+        "fully_contained_pages",
+        "present_read_one_pages",
+        "present_read_two_pages",
+        "present_intersection_pages",
+        "present_union_pages",
+        "resident_lower_bound_kib",
+        "resident_upper_bound_kib",
+        "live_at_checkpoint",
+        "vma_containment_pass",
+        "marker_window_exact",
+        "conservative_range_bound_valid",
+        "eligible_for_memory_successor"
+      ],
+      "properties": {
+        "allocation_sequence": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "label": {
+          "$ref": "#/$defs/allocation_label"
+        },
+        "allocation_base": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "usable_pointer": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "allocation_bytes": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "usable_bytes": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "first_fully_contained_page": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "fully_contained_pages": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "present_read_one_pages": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "present_read_two_pages": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "present_intersection_pages": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "present_union_pages": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "resident_lower_bound_kib": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "resident_upper_bound_kib": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "live_at_checkpoint": {
+          "type": "boolean"
+        },
+        "vma_containment_pass": {
+          "type": "boolean"
+        },
+        "marker_window_exact": {
+          "type": "boolean"
+        },
+        "conservative_range_bound_valid": {
+          "type": "boolean"
+        },
+        "eligible_for_memory_successor": {
+          "type": "boolean"
+        }
+      }
+    },
+    "allocation_label": {
+      "enum": [
+        "fxcm_alloc",
+        "fxcm_aligned_alloc",
+        "context_history",
+        "context_shared_map",
+        "context_indirect_1",
+        "context_indirect_2",
+        "context_indirect_3",
+        "mixer_slab",
+        "ppm_anonymous_arena",
+        "ppm_file_backed_arena"
+      ]
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "decision": {
+            "properties": {
+              "successor_authorized": {
+                "const": "cmix_obias_filebacked_fxcm_allocator_strategy_q0_v1"
+              }
+            }
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "evidence": {
+            "properties": {
+              "managed_lease_verification_pass": {
+                "const": true
+              }
+            }
+          },
+          "sequence": {
+            "properties": {
+              "contiguous": {
+                "const": true
+              },
+              "registry_healthy": {
+                "const": true
+              },
+              "unmatched_releases": {
+                "const": 0
+              }
+            }
+          },
+          "high_water": {
+            "properties": {
+              "process_tree_stopped": {
+                "const": true
+              },
+              "marker_window_exact": {
+                "const": true
+              },
+              "pagemap_permission_pass": {
+                "const": true
+              },
+              "smaps_reconciled": {
+                "const": true
+              },
+              "coherent_checkpoint": {
+                "const": true
+              }
+            }
+          },
+          "source_labels": {
+            "allOf": [
+              {
+                "contains": {
+                  "properties": {
+                    "label": {
+                      "const": "fxcm_alloc"
+                    },
+                    "conservative_range_bound_valid": {
+                      "const": true
+                    },
+                    "eligible_for_memory_successor": {
+                      "const": true
+                    }
+                  },
+                  "required": [
+                    "label",
+                    "conservative_range_bound_valid",
+                    "eligible_for_memory_successor"
+                  ]
+                },
+                "minContains": 1,
+                "maxContains": 1
+              },
+              {
+                "contains": {
+                  "properties": {
+                    "label": {
+                      "const": "fxcm_aligned_alloc"
+                    },
+                    "conservative_range_bound_valid": {
+                      "const": true
+                    },
+                    "eligible_for_memory_successor": {
+                      "const": true
+                    }
+                  },
+                  "required": [
+                    "label",
+                    "conservative_range_bound_valid",
+                    "eligible_for_memory_successor"
+                  ]
+                },
+                "minContains": 1,
+                "maxContains": 1
+              }
+            ]
+          },
+          "invalidity": {
+            "properties": {
+              "invalid": {
+                "const": false
+              }
+            }
+          },
+          "decision": {
+            "properties": {
+              "status": {
+                "const": "attributed"
+              },
+              "eligible_reclaimable_kib": {
+                "minimum": 1472880
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

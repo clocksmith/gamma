@@ -1,0 +1,280 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gamma.enwiki9.wiki-schema-vm-ceiling-decision.v1",
+  "title": "WIKI-SCHEMA-VM zero-credit opportunity-screen decision",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "candidate_id",
+    "operational_status",
+    "claim_boundary",
+    "claim_authority",
+    "population",
+    "bindings",
+    "exclusive_lease",
+    "compile_flags",
+    "compile",
+    "scanner",
+    "scan_a_command",
+    "scan_b_command",
+    "scan_a",
+    "scan_b",
+    "measurements",
+    "repeat_summary_byte_identity_pass",
+    "gates",
+    "scientific_verdict",
+    "promotion_authorized",
+    "next_authority",
+    "archive_authority",
+    "gamma_compression_credit_bytes",
+    "gamma_score_credit_bytes",
+    "error"
+  ],
+  "properties": {
+    "schema": {"const": "gamma.enwiki9.wiki-schema-vm-ceiling-decision.v1"},
+    "candidate_id": {"const": "wiki_schema_vm_ceiling_q0_v1"},
+    "operational_status": {
+      "enum": ["terminal", "terminal_infrastructure_failure"]
+    },
+    "claim_boundary": {"type": "string", "minLength": 1},
+    "claim_authority": {"const": "causal_shadow_opportunity_screen_only"},
+    "population": {"$ref": "#/$defs/artifact"},
+    "bindings": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "experiment",
+        "proposal",
+        "candidate_revision",
+        "interface_contract",
+        "scanner_source",
+        "planning_contract",
+        "planning_schema",
+        "scanner_schema",
+        "decision_schema",
+        "output_manifest_schema",
+        "parent_qualification_schema",
+        "parent_verification_schema",
+        "managed_lease_implementation",
+        "exclusive_lease_schema",
+        "parent_qualification_receipt",
+        "parent_qualification_verification",
+        "runner",
+        "compiler"
+      ],
+      "properties": {
+        "experiment": {"$ref": "#/$defs/artifact"},
+        "proposal": {"$ref": "#/$defs/artifact"},
+        "candidate_revision": {"$ref": "#/$defs/artifact"},
+        "interface_contract": {"$ref": "#/$defs/artifact"},
+        "scanner_source": {"$ref": "#/$defs/artifact"},
+        "planning_contract": {"$ref": "#/$defs/artifact"},
+        "planning_schema": {"$ref": "#/$defs/artifact"},
+        "scanner_schema": {"$ref": "#/$defs/artifact"},
+        "decision_schema": {"$ref": "#/$defs/artifact"},
+        "output_manifest_schema": {"$ref": "#/$defs/artifact"},
+        "parent_qualification_schema": {"$ref": "#/$defs/artifact"},
+        "parent_verification_schema": {"$ref": "#/$defs/artifact"},
+        "managed_lease_implementation": {"$ref": "#/$defs/artifact"},
+        "exclusive_lease_schema": {"$ref": "#/$defs/artifact"},
+        "parent_qualification_receipt": {"$ref": "#/$defs/artifact"},
+        "parent_qualification_verification": {"$ref": "#/$defs/artifact"},
+        "runner": {"$ref": "#/$defs/artifact"},
+        "compiler": {"$ref": "#/$defs/artifact"}
+      }
+    },
+    "exclusive_lease": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["lease_id", "release_pass", "evidence", "transitions"],
+      "properties": {
+        "lease_id": {"$ref": "#/$defs/sha256"},
+        "release_pass": {"type": "boolean"},
+        "evidence": {"$ref": "#/$defs/nullableArtifact"},
+        "transitions": {"$ref": "#/$defs/nullableArtifact"}
+      }
+    },
+    "compile_flags": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"type": "string", "minLength": 1}
+    },
+    "compile": {"$ref": "#/$defs/nullableCommand"},
+    "scanner": {"$ref": "#/$defs/nullableArtifact"},
+    "scan_a_command": {"$ref": "#/$defs/nullableCommand"},
+    "scan_b_command": {"$ref": "#/$defs/nullableCommand"},
+    "scan_a": {"$ref": "#/$defs/nullableArtifact"},
+    "scan_b": {"$ref": "#/$defs/nullableArtifact"},
+    "measurements": {
+      "oneOf": [
+        {"type": "null"},
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "scanned_bytes",
+            "opportunity_bytes",
+            "quantized_log_loss_upper_bound_bytes",
+            "treatment_correct_bytes",
+            "random_correct_bytes",
+            "shifted_correct_bytes",
+            "treatment_minus_random_correct_bytes",
+            "treatment_minus_shifted_correct_bytes",
+            "treatment_correct_by_third",
+            "minimum_third_treatment_correct_bytes",
+            "opportunity_fnv1a64",
+            "parser_fnv1a64",
+            "table_fnv1a64",
+            "bounded_state_pass"
+          ],
+          "properties": {
+            "scanned_bytes": {"$ref": "#/$defs/count"},
+            "opportunity_bytes": {"$ref": "#/$defs/count"},
+            "quantized_log_loss_upper_bound_bytes": {"$ref": "#/$defs/count"},
+            "treatment_correct_bytes": {"$ref": "#/$defs/count"},
+            "random_correct_bytes": {"$ref": "#/$defs/count"},
+            "shifted_correct_bytes": {"$ref": "#/$defs/count"},
+            "treatment_minus_random_correct_bytes": {"type": "integer"},
+            "treatment_minus_shifted_correct_bytes": {"type": "integer"},
+            "treatment_correct_by_third": {
+              "type": "array",
+              "minItems": 3,
+              "maxItems": 3,
+              "items": {"$ref": "#/$defs/count"}
+            },
+            "minimum_third_treatment_correct_bytes": {"$ref": "#/$defs/count"},
+            "opportunity_fnv1a64": {"$ref": "#/$defs/fnv64"},
+            "parser_fnv1a64": {"$ref": "#/$defs/fnv64"},
+            "table_fnv1a64": {"$ref": "#/$defs/fnv64"},
+            "bounded_state_pass": {"type": "boolean"}
+          }
+        }
+      ]
+    },
+    "repeat_summary_byte_identity_pass": {"type": ["boolean", "null"]},
+    "gates": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "full_population_pass",
+        "target_scale_quantized_log_loss_envelope_pass",
+        "one_byte_per_correct_volume_screen_pass",
+        "all_thirds_live_pass",
+        "beats_random_pass",
+        "beats_shifted_pass",
+        "repeat_identity_pass",
+        "bounded_state_pass",
+        "all_promotion_predicates_pass"
+      ],
+      "properties": {
+        "full_population_pass": {"type": ["boolean", "null"]},
+        "target_scale_quantized_log_loss_envelope_pass": {"type": ["boolean", "null"]},
+        "one_byte_per_correct_volume_screen_pass": {"type": ["boolean", "null"]},
+        "all_thirds_live_pass": {"type": ["boolean", "null"]},
+        "beats_random_pass": {"type": ["boolean", "null"]},
+        "beats_shifted_pass": {"type": ["boolean", "null"]},
+        "repeat_identity_pass": {"type": ["boolean", "null"]},
+        "bounded_state_pass": {"type": ["boolean", "null"]},
+        "all_promotion_predicates_pass": {"type": ["boolean", "null"]}
+      }
+    },
+    "scientific_verdict": {
+      "enum": [
+        "authorize_retained_parent_donor_surprise_trace_zero_credit",
+        "retire_exact_schema_program_information_source",
+        "none_infrastructure_failure"
+      ]
+    },
+    "promotion_authorized": {"const": false},
+    "next_authority": {
+      "enum": [
+        "retained_parent_donor_surprise_trace_only",
+        "one_materially_different_information_source",
+        "one_correction_only_runner_successor"
+      ]
+    },
+    "archive_authority": {"const": false},
+    "gamma_compression_credit_bytes": {"const": 0},
+    "gamma_score_credit_bytes": {"const": 0},
+    "error": {"type": ["string", "null"]}
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {"operational_status": {"const": "terminal"}},
+        "required": ["operational_status"]
+      },
+      "then": {
+        "properties": {
+          "exclusive_lease": {
+            "properties": {
+              "release_pass": {"const": true},
+              "evidence": {"$ref": "#/$defs/artifact"},
+              "transitions": {"$ref": "#/$defs/artifact"}
+            }
+          },
+          "error": {"const": null}
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "count": {"type": "integer", "minimum": 0},
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "fnv64": {"type": "string", "pattern": "^[0-9a-f]{16}$"},
+    "artifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "bytes", "sha256"],
+      "properties": {
+        "path": {"type": "string", "minLength": 1},
+        "bytes": {"type": "integer", "minimum": 0},
+        "sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "nullableArtifact": {
+      "oneOf": [
+        {"type": "null"},
+        {"$ref": "#/$defs/artifact"}
+      ]
+    },
+    "command": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "argv",
+        "cwd",
+        "environment",
+        "command_sha256",
+        "returncode",
+        "stdout",
+        "stderr"
+      ],
+      "properties": {
+        "id": {"type": "string", "minLength": 1},
+        "argv": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"type": "string"}
+        },
+        "cwd": {"type": "string", "minLength": 1},
+        "environment": {
+          "type": "object",
+          "additionalProperties": {"type": "string"}
+        },
+        "command_sha256": {"$ref": "#/$defs/sha256"},
+        "returncode": {"type": "integer"},
+        "stdout": {"$ref": "#/$defs/artifact"},
+        "stderr": {"$ref": "#/$defs/artifact"}
+      }
+    },
+    "nullableCommand": {
+      "oneOf": [
+        {"type": "null"},
+        {"$ref": "#/$defs/command"}
+      ]
+    }
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gamma.enwiki9.gamma-mechanism-ir-program-lock.v1",
+  "title": "Gamma Mechanism IR v3 program lock",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "program_id", "source_contract", "files", "artifact_set_sha256", "claim_authority", "execution_authority"],
+  "properties": {
+    "schema": {"const": "gamma.enwiki9.gamma-mechanism-ir-program-lock.v1"},
+    "program_id": {"const": "gamma_mechanism_ir_v3"},
+    "source_contract": {"$ref": "#/$defs/file"},
+    "files": {
+      "type": "array",
+      "minItems": 16,
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/file"}
+    },
+    "artifact_set_sha256": {"$ref": "#/$defs/sha256"},
+    "claim_authority": {"const": "none"},
+    "execution_authority": {"const": false}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "file": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "bytes", "sha256"],
+      "properties": {
+        "path": {"type": "string", "minLength": 1},
+        "bytes": {"type": "integer", "minimum": 1},
+        "sha256": {"$ref": "#/$defs/sha256"}
+      }
+    }
+  }
+}

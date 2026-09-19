@@ -1,0 +1,65 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gamma.enwiki9.cmix-memory-safe-parent-qualification-receipt.v2",
+  "title": "CMIX memory-safe parent artifact router v2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema", "candidate_id", "authoritative_parent_id", "objective",
+    "artifacts", "claim_boundary", "gamma_compression_credit_bytes",
+    "gamma_score_credit_bytes"
+  ],
+  "properties": {
+    "schema": {"const": "gamma.enwiki9.cmix-memory-safe-parent-qualification-receipt.v2"},
+    "candidate_id": {"const": "cmix_obias_memory_safe_parent_filebacked_q1_v1"},
+    "authoritative_parent_id": {"const": "cmix_obias_source_full1g_roundtrip_a_qm0_v1"},
+    "objective": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "sha256", "corpus_bytes", "corpus_sha256", "target_score_bytes"],
+      "properties": {
+        "id": {"const": "gamma-enwiki9-hutter-105m-v1"},
+        "sha256": {"$ref": "#/$defs/sha256"},
+        "corpus_bytes": {"const": 1000000000},
+        "corpus_sha256": {"const": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc"},
+        "target_score_bytes": {"const": 105000000}
+      }
+    },
+    "artifacts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "arm_a_receipt", "arm_a_verification", "arm_b_receipt",
+        "arm_b_verification", "full_identity_receipt",
+        "full_identity_verification", "runtime_receipt",
+        "runtime_verification", "dependency_closure"
+      ],
+      "properties": {
+        "arm_a_receipt": {"$ref": "#/$defs/file"},
+        "arm_a_verification": {"$ref": "#/$defs/file"},
+        "arm_b_receipt": {"$ref": "#/$defs/file"},
+        "arm_b_verification": {"$ref": "#/$defs/file"},
+        "full_identity_receipt": {"$ref": "#/$defs/file"},
+        "full_identity_verification": {"$ref": "#/$defs/file"},
+        "runtime_receipt": {"$ref": "#/$defs/file"},
+        "runtime_verification": {"$ref": "#/$defs/file"},
+        "dependency_closure": {"$ref": "#/$defs/file"}
+      }
+    },
+    "claim_boundary": {"type": "string", "minLength": 1},
+    "gamma_compression_credit_bytes": {"const": 0},
+    "gamma_score_credit_bytes": {"const": 0}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "file": {
+      "type": "object", "additionalProperties": false,
+      "required": ["path", "bytes", "sha256"],
+      "properties": {
+        "path": {"type": "string", "pattern": "^/"},
+        "bytes": {"type": "integer", "minimum": 1},
+        "sha256": {"$ref": "#/$defs/sha256"}
+      }
+    }
+  }
+}

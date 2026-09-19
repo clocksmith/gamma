@@ -164,7 +164,7 @@ class GateTests(unittest.TestCase):
     def test_forced_growth_remains_valid_measurement(self):
         rows = [json.loads((self.gold/(a+'.result.json')).read_text()) for a in ('P', 'K', 'D')]
         rows[2]['archive_bytes'] = rows[0]['archive_bytes']+1
-        with patch.object(gate, 'ROOT', self.root):
+        with patch.object(gate, 'ROOT', self.root), patch.object(gate.driver, 'ROOT', self.root):
             table = gate.comparison_table(rows, self.plan)
         self.assertEqual(table['p_minus_d_bytes'], -1)
         self.assertFalse(table['confirmation_eligible'])

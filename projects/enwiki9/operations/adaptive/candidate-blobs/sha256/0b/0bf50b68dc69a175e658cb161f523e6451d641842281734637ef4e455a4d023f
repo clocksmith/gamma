@@ -1,0 +1,31 @@
+{
+  "schema": "gamma.enwiki9.causal-wordcode-implementation-plan.v1",
+  "candidate_id": "causal_wordcode_fifo128_bz2_q0_v1",
+  "created_at": "2026-09-06T21:26:07+00:00",
+  "registration_timing": "prospective_before_implementation",
+  "owner": "ROOT/refresh_cleanup_review; implementation only by root assignment",
+  "status": "implementation_and_synthetic_validation_only",
+  "execution_authority": false,
+  "objective_complete_bytes": 99000000,
+  "hypothesis": "A decoder-learned bounded FIFO word dictionary can replace the whole-input word table while retaining the exact opcode transform and BZip2 backend, and pay for its complete representation and incremental local source on opening250KB.",
+  "diagnosed_premise": "Explicit dictionary representations can erase repeated-word savings. The preliminary causal sketch gained on a repeated synthetic vocabulary but lost on FIFO eviction; therefore capacity, word lengths and replacement are frozen, and both a reuse fixture and eviction-negative fixture are mandatory. This is independent of parameter-template selection and argument storage.",
+  "creative_lenses": {"selection": "deliberate from measured representation cost", "ids": [6, 10]},
+  "inputs": [
+    {"path": "programs/opcode_word_bz2_v1/program.py", "sha256": "105af140b519896047cafbc41827e073100782ff1b212573279fa38a39c8c6d0", "role": "immutable readable parent implementation"},
+    {"path": "programs/opcode_word_bz2_min_deflate_v1/program.py", "sha256": "d3546c964e0db2a46a7b07e443bb1f5247123d3bc35173dd3d8cb8f684eff83b", "role": "historical compact equivalent entry point"},
+    {"path": "results/opcode_word_bz2_min_deflate_v1/2026-07-21T124141.json", "sha256": "d02646730228f8774bc71a13fcc8ad5420031d32e7daced404cd511ce0dec20d", "role": "historical exact archive and package receipt"},
+    {"path": "operations/adaptive/reflections/20260906T204205Z_89a5d39e43.json", "sha256": "da54de88fd310213c78531fdf53d83697a1108bab55122ec9c3b8c72e0a64421", "role": "closed negative argument-token reflection; not a parent source dependency"}
+  ],
+  "historical_parent": {"archive_bytes": 71887, "program_bytes": 1448, "archive_sha256": "2302f0c966ba4b5e4edce5b9ce672898f5846d6d71016c9826c1dcdef20f781e", "roundtrip": true, "repeat": true, "revision_bound_reflection": null, "limitation": "Legacy receipt establishes scoped results only. The readable parent was retired for larger packaging, with identical archive bytes to the compact equivalent. This assignment neither selects a qualified parent nor resumes held legacy jobs. A newly frozen comparison must reproduce P."},
+  "configuration": {"evaluations": 1, "slots": 128, "replacement": "FIFO insertion; hits do not change order", "eligible_word": "complete maximal exact ASCII alphabetic run of 5 through 32 bytes", "word_escape_byte": 1, "literal_escape": [1, 0], "reference": "[1, slot+1], slot in 0..127, only an occupied slot at a whole-word boundary", "word_table_bytes": 0, "backend": "stdlib bz2 level9 unchanged", "opcode_transform": "exact immutable parent tok/untok mapping", "frames": "one bounded input frame, no cross-frame history"},
+  "arms": {"P": "unchanged parent archive; separately derived lexical diagnostics", "K": "same parent payload plus dictionary bookkeeping; P/K must be byte-identical", "T": "causal FIFO references over parent opcode bytes then unchanged BZip2", "L": "identical causal dictionary updates and literal escaping with references disabled"},
+  "codec_limits": {"raw_bytes": 250000, "archive_bytes": 8000000, "opcode_bytes": 500000, "packed_bytes": 1002113, "decoder_work": "bounded input scan, bounded BZip2 output, bounded word expansion, bounded opcode expansion; no recursion or unbounded rule graph"},
+  "synthetic_resources": {"cpus": [4], "threads": 1, "address_space_bytes": 536870912, "cpu_seconds": 30, "wall_seconds": 60, "install_dependencies": false},
+  "synthetic_requirements": ["P/K parent identity", "independent encode/decode/repeat with dictionary and transition digest agreement", "empty, arbitrary bytes, escaping, malformed markup and maximal word boundaries", "FIFO wrap and eviction-negative economic fixture", "unknown, adjacent and truncated reference rejection", "BZip2 truncation, concatenation, expansion and archive bounds", "new-output publication without overwriting existing targets"],
+  "proposed_corpus_gate": {"launch_authorized": false, "population": {"path": "operations/evidence/fixtures/dualstream_opening250k_v1.raw", "bytes": 250000, "sha256": "665fc689441b68462d88f82dc33212abe9c4824be095d03a556c9b55a2829fd3", "role": "previously examined development data"}, "arms": ["P", "K", "T", "L"], "cpus": [4], "threads": 1, "memory_bytes": 536870912, "scratch_bytes": 67108864, "cpu_seconds_per_phase": 60, "wall_seconds_per_phase": 180, "wall_seconds_total": 600, "requires": "Root review, frozen execution contract, canonical claim, publication, and fresh admission before any corpus execution"},
+  "package": {"maximum_incremental_local_source_bytes": 32768, "accounting": "Measure the exact new codec and required readable parent source plus any wrapper/options. Compare against the historically counted 1448-byte parent package. No compressed-source savings are assumed. Charge the measured nonnegative local-source increment against both P and L archive deltas as a conservative development screen.", "python_bz2_runtime_license_and_complete_dependency_closure": "unresolved", "complete_submission_bytes": null},
+  "acceptance": "All exact inverse, repeat, P/K identity, decoder-derived state and bounds checks pass. The complete T archive plus measured nonnegative incremental local source must be strictly smaller than complete P and complete L archives. Raw displaced bytes or synthetic savings never establish corpus gain.",
+  "stop_rule": "No tuning after opening250KB. A compression loss, nonpaying source increment or exhausted phase/job budget holds this realization without validation or scale launch. Correctness failures are implementation failures, not scientific rejection; preserve every failure. Validation and 1MB confirmation remain withheld until a separately frozen successor decision.",
+  "qualification_authority": false,
+  "score_credit_bytes": 0
+}

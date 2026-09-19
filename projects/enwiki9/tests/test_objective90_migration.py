@@ -10,13 +10,13 @@ import research_contracts as contracts
 
 
 class ObjectiveMigrationTests(unittest.TestCase):
-    def test_active_complete_budget(self):
-        binding = contracts.objective_binding()
+    def test_historical_90m_complete_budget(self):
+        binding = contracts.objective_binding(objective_path="contracts/research/v3/objective-contract.json")
         self.assertEqual(binding['objectiveId'], 'gamma-enwiki9-hutter-90m-v3')
         self.assertEqual(binding['targetScoreBytes'], 90000000)
         self.assertEqual(binding['corpusBytes'], 1000000000)
         self.assertEqual(binding['targetScoreBytes']*8, 720000000)
-        contracts.validate_artifact(contracts.OBJECTIVE_PATH)
+        contracts.validate_artifact(contracts.OBJECTIVE_PATHS["v3"])
 
     def test_historical_digests_preserved(self):
         cases = [('v1',105000000,'ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8'),
@@ -36,7 +36,7 @@ class ObjectiveMigrationTests(unittest.TestCase):
 
     def test_only_target_and_migration_change_obligations(self):
         old = contracts.validate_objective(objective_path='contracts/research/v2/objective-contract.json')
-        new = contracts.validate_objective()
+        new = contracts.validate_objective(objective_path="contracts/research/v3/objective-contract.json")
         for name in ('corpus','correctness','resources','distribution','evidence','epistemicPolicy','promotionLadders'):
             self.assertEqual(old[name],new[name],name)
         self.assertEqual(old['score']['formula'],new['score']['formula'])

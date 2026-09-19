@@ -1,0 +1,207 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gamma.enwiki9.cmix-safe-fork-native-transaction-receipt.v1",
+  "title": "SAFE-FORK MIDAS native materialization transaction receipt",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "transaction_id",
+    "candidate_id",
+    "input_lock",
+    "materialization",
+    "generated_controls",
+    "static_fixtures",
+    "resource_feasibility",
+    "decision"
+  ],
+  "properties": {
+    "schema": {"const": "gamma.enwiki9.cmix-safe-fork-native-transaction-receipt.v1"},
+    "transaction_id": {"const": "cmix_obias_safe_fork_midas64_native_transaction_q0_v1"},
+    "candidate_id": {"const": "cmix_obias_safe_fork_midas64_q0_v1"},
+    "input_lock": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "transaction_contract_sha256",
+        "mechanism_ir_sha256",
+        "mechanism_ir_schema_sha256",
+        "mechanism_ir_compiler_sha256",
+        "safe_mix_program_lock_sha256",
+        "safe_mix_terminal_receipt_sha256",
+        "memory_safe_parent_receipt_sha256",
+        "midpoint_oracle_receipt_sha256",
+        "persistence_attribution_receipt_sha256",
+        "adapted_branch_contract_sha256"
+        ,"verification_toolchain_manifest_sha256"
+      ],
+      "properties": {
+        "transaction_contract_sha256": {"$ref": "#/$defs/sha256"},
+        "mechanism_ir_sha256": {"$ref": "#/$defs/sha256"},
+        "mechanism_ir_schema_sha256": {"$ref": "#/$defs/sha256"},
+        "mechanism_ir_compiler_sha256": {"$ref": "#/$defs/sha256"},
+        "safe_mix_program_lock_sha256": {"$ref": "#/$defs/sha256"},
+        "safe_mix_terminal_receipt_sha256": {"$ref": "#/$defs/sha256"},
+        "memory_safe_parent_receipt_sha256": {"$ref": "#/$defs/sha256"},
+        "midpoint_oracle_receipt_sha256": {"$ref": "#/$defs/sha256"},
+        "persistence_attribution_receipt_sha256": {"$ref": "#/$defs/sha256"},
+        "adapted_branch_contract_sha256": {"$ref": "#/$defs/sha256"},
+        "verification_toolchain_manifest_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "materialization": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "parent_source_tree_sha256",
+        "integration_patch_sha256",
+        "generated_source_manifest_sha256",
+        "patched_source_tree_sha256",
+        "build_receipt_sha256",
+        "binary_sha256",
+        "runtime_root_manifest_sha256",
+        "union_package_manifest_sha256",
+        "source_closure_pass",
+        "build_pass",
+        "binary_identity_pass"
+        ,"source_closure_verification_sha256"
+        ,"build_verification_sha256"
+        ,"binary_identity_verification_sha256"
+        ,"runtime_root_verification_sha256"
+        ,"union_package_verification_sha256"
+      ],
+      "properties": {
+        "parent_source_tree_sha256": {"$ref": "#/$defs/sha256"},
+        "integration_patch_sha256": {"$ref": "#/$defs/sha256"},
+        "generated_source_manifest_sha256": {"$ref": "#/$defs/sha256"},
+        "patched_source_tree_sha256": {"$ref": "#/$defs/sha256"},
+        "build_receipt_sha256": {"$ref": "#/$defs/sha256"},
+        "binary_sha256": {"$ref": "#/$defs/sha256"},
+        "runtime_root_manifest_sha256": {"$ref": "#/$defs/sha256"},
+        "union_package_manifest_sha256": {"$ref": "#/$defs/sha256"},
+        "source_closure_pass": {"type": "boolean"},
+        "build_pass": {"type": "boolean"},
+        "binary_identity_pass": {"type": "boolean"},
+        "source_closure_verification_sha256": {"$ref": "#/$defs/sha256"},
+        "build_verification_sha256": {"$ref": "#/$defs/sha256"},
+        "binary_identity_verification_sha256": {"$ref": "#/$defs/sha256"},
+        "runtime_root_verification_sha256": {"$ref": "#/$defs/sha256"},
+        "union_package_verification_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "generated_controls": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "generation_receipt_sha256",
+        "arm_difference_manifest_sha256",
+        "state_access_manifest_sha256",
+        "P_K_zero_write_pass",
+        "R_matched_norm_pass",
+        "S_frozen_bijection_pass",
+        "single_semantic_axis_pass",
+        "manual_edit_absence_pass"
+        ,"generation_verification_sha256"
+        ,"arm_difference_verification_sha256"
+        ,"state_access_verification_sha256"
+      ],
+      "properties": {
+        "generation_receipt_sha256": {"$ref": "#/$defs/sha256"},
+        "arm_difference_manifest_sha256": {"$ref": "#/$defs/sha256"},
+        "state_access_manifest_sha256": {"$ref": "#/$defs/sha256"},
+        "P_K_zero_write_pass": {"type": "boolean"},
+        "R_matched_norm_pass": {"type": "boolean"},
+        "S_frozen_bijection_pass": {"type": "boolean"},
+        "single_semantic_axis_pass": {"type": "boolean"},
+        "manual_edit_absence_pass": {"type": "boolean"},
+        "generation_verification_sha256": {"$ref": "#/$defs/sha256"},
+        "arm_difference_verification_sha256": {"$ref": "#/$defs/sha256"},
+        "state_access_verification_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "static_fixtures": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "fixture_manifest_sha256",
+        "P_K_full_identity_pass",
+        "K_bookkeeping_live_pass",
+        "no_writable_alias_pass",
+        "sleeping_posterior_identity_pass",
+        "byte64_rejoin_identity_pass",
+        "discard_noninterference_pass",
+        "encoder_decoder_identity_pass",
+        "parent_update_cadence_identity_pass",
+        "archive_fallback_pass"
+        ,"fixture_verification_sha256"
+      ],
+      "properties": {
+        "fixture_manifest_sha256": {"$ref": "#/$defs/sha256"},
+        "P_K_full_identity_pass": {"type": "boolean"},
+        "K_bookkeeping_live_pass": {"type": "boolean"},
+        "no_writable_alias_pass": {"type": "boolean"},
+        "sleeping_posterior_identity_pass": {"type": "boolean"},
+        "byte64_rejoin_identity_pass": {"type": "boolean"},
+        "discard_noninterference_pass": {"type": "boolean"},
+        "encoder_decoder_identity_pass": {"type": "boolean"},
+        "parent_update_cadence_identity_pass": {"type": "boolean"},
+        "archive_fallback_pass": {"type": "boolean"},
+        "fixture_verification_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "resource_feasibility": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "static_allocation_manifest_sha256",
+        "maximum_added_live_memory_kib",
+        "projected_parent_plus_child_peak_kib",
+        "strict_limit_kib",
+        "static_memory_feasibility_pass",
+        "maximum_added_package_bytes",
+        "measured_added_package_bytes",
+        "package_feasibility_pass"
+        ,"static_allocation_verification_sha256"
+        ,"package_verification_sha256"
+      ],
+      "properties": {
+        "static_allocation_manifest_sha256": {"$ref": "#/$defs/sha256"},
+        "maximum_added_live_memory_kib": {"const": 524288},
+        "projected_parent_plus_child_peak_kib": {"type": "integer", "minimum": 0},
+        "strict_limit_kib": {"const": 9765625},
+        "static_memory_feasibility_pass": {"type": "boolean"},
+        "maximum_added_package_bytes": {"const": 65536},
+        "measured_added_package_bytes": {"type": "integer", "minimum": 0},
+        "package_feasibility_pass": {"type": "boolean"},
+        "static_allocation_verification_sha256": {"$ref": "#/$defs/sha256"},
+        "package_verification_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "decision": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["transaction_valid", "archive_execution_authorized", "failure_class", "authorized_successor"],
+      "properties": {
+        "transaction_valid": {"type": "boolean"},
+        "archive_execution_authorized": {"type": "boolean"},
+        "failure_class": {
+          "enum": [
+            "none",
+            "dependency",
+            "source_or_build",
+            "generated_control",
+            "state_isolation",
+            "synchronization",
+            "resource_feasibility",
+            "package_feasibility",
+            "invalid_receipt"
+          ]
+        },
+        "authorized_successor": {"enum": ["250k_archive_proof", "one_correction_only_transaction", "none"]}
+      }
+    }
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  }
+}

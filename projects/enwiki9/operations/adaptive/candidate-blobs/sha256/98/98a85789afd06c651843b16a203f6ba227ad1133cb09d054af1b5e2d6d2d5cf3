@@ -1,0 +1,174 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "q1-target-economics-activation-v1.schema.json",
+  "title": "q1 target economics activation receipt",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "receipt_id",
+    "objective",
+    "q1_authority",
+    "q1_score",
+    "engineering",
+    "denominators",
+    "gross_gates",
+    "verification",
+    "claim_boundary"
+  ],
+  "properties": {
+    "schema": {"const": "gamma.enwiki9.q1-target-economics-activation.v1"},
+    "receipt_id": {"const": "q1_target_economics_activation_v1"},
+    "objective": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["objective_id", "objective_sha256", "target_complete_counted_bytes"],
+      "properties": {
+        "objective_id": {"const": "gamma-enwik9-hutter-105m-v1"},
+        "objective_sha256": {"$ref": "#/$defs/sha256"},
+        "target_complete_counted_bytes": {"const": 105000000}
+      }
+    },
+    "q1_authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "arm_a_receipt_sha256",
+        "arm_b_receipt_sha256",
+        "qualification_receipt_sha256",
+        "qualification_verification_sha256",
+        "package_manifest_sha256"
+      ],
+      "properties": {
+        "arm_a_receipt_sha256": {"$ref": "#/$defs/sha256"},
+        "arm_b_receipt_sha256": {"$ref": "#/$defs/sha256"},
+        "qualification_receipt_sha256": {"$ref": "#/$defs/sha256"},
+        "qualification_verification_sha256": {"$ref": "#/$defs/sha256"},
+        "package_manifest_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "q1_score": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "archive_bytes",
+        "archive_sha256",
+        "complete_package_bytes",
+        "complete_counted_score_bytes",
+        "signed_target_distance_bytes",
+        "debt_bytes"
+      ],
+      "properties": {
+        "archive_bytes": {"type": "integer", "minimum": 0},
+        "archive_sha256": {"$ref": "#/$defs/sha256"},
+        "complete_package_bytes": {"type": "integer", "minimum": 0},
+        "complete_counted_score_bytes": {"type": "integer", "minimum": 0},
+        "signed_target_distance_bytes": {"type": "integer"},
+        "debt_bytes": {"type": "integer", "minimum": 0}
+      }
+    },
+    "engineering": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "selected_child_package_ceiling_bytes",
+        "engineering_reserve_bytes",
+        "gross_savings_required_bytes",
+        "selection_frozen_before_family_results"
+      ],
+      "properties": {
+        "selected_child_package_ceiling_bytes": {"type": "integer", "minimum": 0},
+        "engineering_reserve_bytes": {"type": "integer", "minimum": 0},
+        "gross_savings_required_bytes": {"type": "integer", "minimum": 0},
+        "selection_frozen_before_family_results": {"const": true}
+      }
+    },
+    "denominators": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "canonical_raw_bytes",
+        "canonical_raw_sha256",
+        "full_transformed_bytes",
+        "full_transformed_sha256",
+        "full_coder_bits",
+        "raw_to_transformed_receipt_sha256"
+      ],
+      "properties": {
+        "canonical_raw_bytes": {"const": 1000000000},
+        "canonical_raw_sha256": {"const": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc"},
+        "full_transformed_bytes": {"type": "integer", "minimum": 1},
+        "full_transformed_sha256": {"$ref": "#/$defs/sha256"},
+        "full_coder_bits": {"type": "integer", "minimum": 1},
+        "raw_to_transformed_receipt_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "gross_gates": {
+      "type": "array",
+      "minItems": 4,
+      "maxItems": 4,
+      "prefixItems": [
+        {"$ref": "#/$defs/gate1m"},
+        {"$ref": "#/$defs/gate10m"},
+        {"$ref": "#/$defs/gate100m"},
+        {"$ref": "#/$defs/gate1g"}
+      ],
+      "items": false
+    },
+    "verification": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["formula_verified", "package_sum_verified", "denominators_verified", "all_dependencies_reopened", "errors"],
+      "properties": {
+        "formula_verified": {"const": true},
+        "package_sum_verified": {"const": true},
+        "denominators_verified": {"const": true},
+        "all_dependencies_reopened": {"const": true},
+        "errors": {"type": "array", "maxItems": 0}
+      }
+    },
+    "claim_boundary": {
+      "type": "array",
+      "minItems": 3,
+      "items": {"type": "string", "minLength": 1}
+    }
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "gateBase": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["scope_id", "canonical_raw_bytes", "gross_savings_gate_bytes", "formula"],
+      "properties": {
+        "scope_id": {"type": "string"},
+        "canonical_raw_bytes": {"type": "integer"},
+        "gross_savings_gate_bytes": {"type": "integer", "minimum": 0},
+        "formula": {"const": "ceil(gross_savings_required_bytes * canonical_raw_bytes / 1000000000)"}
+      }
+    },
+    "gate1m": {
+      "allOf": [
+        {"$ref": "#/$defs/gateBase"},
+        {"properties": {"scope_id": {"const": "canonical-raw-1m"}, "canonical_raw_bytes": {"const": 1000000}}}
+      ]
+    },
+    "gate10m": {
+      "allOf": [
+        {"$ref": "#/$defs/gateBase"},
+        {"properties": {"scope_id": {"const": "canonical-raw-10m"}, "canonical_raw_bytes": {"const": 10000000}}}
+      ]
+    },
+    "gate100m": {
+      "allOf": [
+        {"$ref": "#/$defs/gateBase"},
+        {"properties": {"scope_id": {"const": "canonical-raw-100m"}, "canonical_raw_bytes": {"const": 100000000}}}
+      ]
+    },
+    "gate1g": {
+      "allOf": [
+        {"$ref": "#/$defs/gateBase"},
+        {"properties": {"scope_id": {"const": "canonical-raw-1g"}, "canonical_raw_bytes": {"const": 1000000000}}}
+      ]
+    }
+  }
+}

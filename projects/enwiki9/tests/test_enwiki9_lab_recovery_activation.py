@@ -60,9 +60,9 @@ def recovery_fixture(tmp_path: Path, monkeypatch: pytest.MonkeyPatch):
     write_json(reflection_path, reflection)
     monkeypatch.setattr(lab, "ROOT", tmp_path)
     monkeypatch.setattr(
-        lab.parent_qualification_v3,
+        lab.evidence_artifacts,
         "regular_file",
-        lambda path, _label: Path(path),
+        lambda path, _label, **kwargs: Path(path),
     )
     monkeypatch.setattr(
         lab.research_contracts, "validate_artifact", lambda _path: None

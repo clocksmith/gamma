@@ -54,3 +54,4 @@
 - [part-047.md: 2026-09-06 shared token-argument terminal comparison](part-047.md)
 - [part-048.md: 2026-09-06/07 field conditioning, word references and fixed-program attribution](part-048.md)
 - [part-049.md: 2026-09-08 standalone field-history development and validation](part-049.md)
+- [part-050.md: retained September 9-14 mechanism and package records before the 95M-96M objective](part-050.md)

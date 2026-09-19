@@ -1,0 +1,226 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gamma.enwiki9.cmix-memory-safe-parent-qualification-receipt.v1",
+  "title": "CMIX memory-safe parent qualification receipt v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "candidate_id",
+    "authoritative_parent_id",
+    "population",
+    "source_and_build",
+    "probability_identity",
+    "roundtrips",
+    "resources",
+    "package",
+    "decisions",
+    "claim_boundary",
+    "evidence"
+  ],
+  "properties": {
+    "schema": {"const": "gamma.enwiki9.cmix-memory-safe-parent-qualification-receipt.v1"},
+    "candidate_id": {"const": "cmix_obias_memory_safe_parent_filebacked_q1_v1"},
+    "authoritative_parent_id": {"type": "string", "minLength": 1},
+    "population": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "bytes", "sha256", "canonical_enwik9"],
+      "properties": {
+        "path": {"type": "string", "minLength": 1},
+        "bytes": {"const": 1000000000},
+        "sha256": {"const": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc"},
+        "canonical_enwik9": {"const": true}
+      }
+    },
+    "source_and_build": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source_closure_sha256",
+        "program_lock_sha256",
+        "build_a_receipt_sha256",
+        "build_b_receipt_sha256",
+        "build_verification_sha256",
+        "binary_a_sha256",
+        "binary_b_sha256",
+        "binary_identity_pass",
+        "command_contract_sha256",
+        "compiler_trace_controls_pass"
+      ],
+      "properties": {
+        "source_closure_sha256": {"$ref": "#/$defs/sha256"},
+        "program_lock_sha256": {"$ref": "#/$defs/sha256"},
+        "build_a_receipt_sha256": {"$ref": "#/$defs/sha256"},
+        "build_b_receipt_sha256": {"$ref": "#/$defs/sha256"},
+        "build_verification_sha256": {"$ref": "#/$defs/sha256"},
+        "binary_a_sha256": {"$ref": "#/$defs/sha256"},
+        "binary_b_sha256": {"$ref": "#/$defs/sha256"},
+        "binary_identity_pass": {"type": "boolean"},
+        "command_contract_sha256": {"$ref": "#/$defs/sha256"},
+        "compiler_trace_controls_pass": {"type": "boolean"}
+      }
+    },
+    "probability_identity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["scopes", "full_stream_parent_sha256", "full_stream_candidate_sha256", "full_stream_identity_pass", "persistent_state_identity_pass"],
+      "properties": {
+        "scopes": {
+          "type": "array",
+          "minItems": 3,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["offset", "bytes", "parent_integer_probability_sha256", "candidate_integer_probability_sha256", "identity_pass"],
+            "properties": {
+              "offset": {"type": "integer", "minimum": 0, "maximum": 999999999},
+              "bytes": {"type": "integer", "minimum": 1, "maximum": 1000000000},
+              "parent_integer_probability_sha256": {"$ref": "#/$defs/sha256"},
+              "candidate_integer_probability_sha256": {"$ref": "#/$defs/sha256"},
+              "identity_pass": {"type": "boolean"}
+            }
+          }
+        },
+        "full_stream_parent_sha256": {"$ref": "#/$defs/sha256"},
+        "full_stream_candidate_sha256": {"$ref": "#/$defs/sha256"},
+        "full_stream_identity_pass": {"type": "boolean"},
+        "persistent_state_identity_pass": {"type": "boolean"}
+      }
+    },
+    "roundtrips": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 2,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "arm",
+          "archive_bytes",
+          "archive_sha256",
+          "payload_sha256",
+          "encode_return_code",
+          "decode_return_code",
+          "decoded_bytes",
+          "decoded_sha256",
+          "bytewise_inverse_pass",
+          "cleanup_pass"
+        ],
+        "properties": {
+          "arm": {"enum": ["A", "B"]},
+          "archive_bytes": {"type": "integer", "minimum": 1},
+          "archive_sha256": {"$ref": "#/$defs/sha256"},
+          "payload_sha256": {"$ref": "#/$defs/sha256"},
+          "encode_return_code": {"type": "integer"},
+          "decode_return_code": {"type": "integer"},
+          "decoded_bytes": {"type": "integer", "minimum": 0},
+          "decoded_sha256": {"$ref": "#/$defs/sha256"},
+          "bytewise_inverse_pass": {"type": "boolean"},
+          "cleanup_pass": {"type": "boolean"}
+        }
+      }
+    },
+    "resources": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "process_tree_peak_rss_kib",
+        "largest_process_vmhwm_kib",
+        "cgroup_memory_peak_bytes",
+        "memory_events_oom",
+        "memory_events_oom_kill",
+        "maximum_logical_cpus",
+        "scratch_logical_peak_bytes",
+        "scratch_allocated_peak_bytes",
+        "scratch_after_cleanup_bytes",
+        "temporary_disk_pass",
+        "memory_pass",
+        "runtime_measured",
+        "runtime_eligible"
+      ],
+      "properties": {
+        "process_tree_peak_rss_kib": {"type": "integer", "minimum": 0},
+        "largest_process_vmhwm_kib": {"type": "integer", "minimum": 0},
+        "cgroup_memory_peak_bytes": {"type": "integer", "minimum": 0},
+        "memory_events_oom": {"type": "integer", "minimum": 0},
+        "memory_events_oom_kill": {"type": "integer", "minimum": 0},
+        "maximum_logical_cpus": {"type": "integer", "minimum": 1},
+        "scratch_logical_peak_bytes": {"type": "integer", "minimum": 0},
+        "scratch_allocated_peak_bytes": {"type": "integer", "minimum": 0},
+        "scratch_after_cleanup_bytes": {"type": "integer", "minimum": 0},
+        "temporary_disk_pass": {"type": "boolean"},
+        "memory_pass": {"type": "boolean"},
+        "runtime_measured": {"type": "boolean"},
+        "runtime_eligible": {"type": "boolean"}
+      }
+    },
+    "package": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["archive_bytes", "required_program_model_bytes", "other_counted_bytes", "complete_counted_bytes", "dependency_closure_pass", "license_closure_pass"],
+      "properties": {
+        "archive_bytes": {"type": "integer", "minimum": 1},
+        "required_program_model_bytes": {"type": "integer", "minimum": 0},
+        "other_counted_bytes": {"type": "integer", "minimum": 0},
+        "complete_counted_bytes": {"type": "integer", "minimum": 1},
+        "dependency_closure_pass": {"type": "boolean"},
+        "license_closure_pass": {"type": "boolean"}
+      }
+    },
+    "decisions": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "build_identity_pass",
+        "probability_identity_pass",
+        "payload_identity_pass",
+        "archive_identity_pass",
+        "two_run_determinism_pass",
+        "exact_inverse_pass",
+        "memory_pass",
+        "temporary_disk_pass",
+        "package_accounting_complete",
+        "memory_safe_parent_qualified",
+        "officially_verified",
+        "gamma_compression_credit_bytes",
+        "gamma_score_credit_bytes"
+      ],
+      "properties": {
+        "build_identity_pass": {"type": "boolean"},
+        "probability_identity_pass": {"type": "boolean"},
+        "payload_identity_pass": {"type": "boolean"},
+        "archive_identity_pass": {"type": "boolean"},
+        "two_run_determinism_pass": {"type": "boolean"},
+        "exact_inverse_pass": {"type": "boolean"},
+        "memory_pass": {"type": "boolean"},
+        "temporary_disk_pass": {"type": "boolean"},
+        "package_accounting_complete": {"type": "boolean"},
+        "memory_safe_parent_qualified": {"const": false},
+        "officially_verified": {"const": false},
+        "gamma_compression_credit_bytes": {"const": 0},
+        "gamma_score_credit_bytes": {"const": 0}
+      }
+    },
+    "claim_boundary": {"type": "string", "minLength": 1},
+    "evidence": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/file"}
+    }
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "file": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "bytes", "sha256"],
+      "properties": {
+        "path": {"type": "string", "minLength": 1},
+        "bytes": {"type": "integer", "minimum": 1},
+        "sha256": {"$ref": "#/$defs/sha256"}
+      }
+    }
+  }
+}

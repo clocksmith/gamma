@@ -56,8 +56,14 @@ except ModuleNotFoundError:
     import research_contracts
 
 
+def _codec_source(program_id: str):
+    sys.path.insert(0, str(ROOT / "src"))
+    from gamma_enwiki9.packaging.candidates import codec_entrypoint
+    return codec_entrypoint(_candidate_program_dir(program_id))
+
+
 def _load(program_id: str):
-    path = _candidate_program_dir(program_id) / "program.py"
+    path = _codec_source(program_id)
     if not path.exists():
         raise SystemExit(f"program not found: {path}")
     spec = importlib.util.spec_from_file_location(f"prog_{program_id}", path)
@@ -349,6 +355,7 @@ def _run_local(
     artifact_dir: pathlib.Path | None = None,
     mode: str = "discovery",
     package_inventory: tuple | None = None,
+    module_source: pathlib.Path | None = None,
 ) -> dict:
     run_started = time.perf_counter()
     objective = research_contracts.objective_binding()
@@ -363,7 +370,7 @@ def _run_local(
     normalized_tags = run_tags or []
     if mode not in {"discovery", "qualification"}:
         raise ValueError("unknown execution mode")
-    mod, src_path = _load(program_id) if module is None else (module, _candidate_program_dir(program_id) / "program.py")
+    mod, src_path = _load(program_id) if module is None else (module, module_source or _codec_source(program_id))
     compress = mod.compress if arm is None else lambda raw: mod.compress_arm(raw, arm)
     decompress = mod.decompress if arm is None else lambda archive: mod.decompress_arm(archive, arm)
     metadata = _load_program_metadata(program_id)
@@ -395,7 +402,7 @@ def _run_local(
         decompressed = decompress(compressed)
         t_decompress = time.perf_counter() - decompress_started
         ok = decompressed == raw
-    program_dir = src_path.parent
+    program_dir = _candidate_program_dir(program_id)
     program_files, package_accounting = package_inventory or _program_package_inventory(
         program_dir, metadata,
     )
@@ -531,9 +538,9 @@ def _run_local(
 
 
 
-def _comparison_source_closure(source: pathlib.Path) -> list[pathlib.Path]:
+def _comparison_source_closure(source: pathlib.Path, candidate_root: pathlib.Path | None = None) -> list[pathlib.Path]:
     """Collect local Python imports without executing candidate or tool code."""
-    program = source.parent.resolve()
+    program = (candidate_root or source.parent).resolve()
     paths = {source.resolve(), *[p.resolve() for p in (ROOT / "lib").glob("*.py")],
              *research_contracts.local_source_closure([ROOT / "tools/research_contracts.py"])}
     pending = [*paths, *program.rglob("*.py")]
@@ -547,12 +554,12 @@ def _comparison_source_closure(source: pathlib.Path) -> list[pathlib.Path]:
         for node in ast.walk(ast.parse(path.read_bytes(), filename=str(path))):
             if isinstance(node, ast.Import):
                 modules = [alias.name for alias in node.names]
-                bases = [path.parent, program, ROOT, ROOT / "lib", ROOT / "tools", ROOT.parents[1]]
+                bases = [path.parent, program, ROOT, ROOT / "lib", ROOT / "tools", ROOT / "src", ROOT.parents[1]]
             elif isinstance(node, ast.ImportFrom):
                 prefix = node.module or ""
                 modules = [prefix, *[f"{prefix}.{alias.name}".strip(".") for alias in node.names]]
                 bases = ([path.parents[node.level - 1]] if node.level
-                         else [path.parent, program, ROOT, ROOT / "lib", ROOT / "tools", ROOT.parents[1]])
+                         else [path.parent, program, ROOT, ROOT / "lib", ROOT / "tools", ROOT / "src", ROOT.parents[1]])
             else:
                 continue
             for module in modules:
@@ -571,17 +578,18 @@ def _freeze_comparison_build(program_id: str, source: pathlib.Path, output: path
                              *, inventory: tuple | None = None,
                              source_hashes: dict | None = None) -> dict:
     """Retain exact input bytes; every phase imports only these local sources."""
-    inventory = inventory or _program_package_inventory(source.parent, _load_program_metadata(program_id))
-    closure = _comparison_source_closure(source)
+    candidate_root = _candidate_program_dir(program_id)
+    inventory = inventory or _program_package_inventory(candidate_root, _load_program_metadata(program_id))
+    closure = _comparison_source_closure(source, candidate_root)
     inputs = {path: pathlib.Path("projects/enwiki9") / path.relative_to(ROOT)
-              for path in closure if path.is_relative_to(ROOT) and not path.is_relative_to(source.parent)}
+              for path in closure if path.is_relative_to(ROOT) and not path.is_relative_to(candidate_root)}
     for record in inventory[1]["counted_files"]:
-        path = source.parent / record["path"]
+        path = candidate_root / record["path"]
         inputs[path] = pathlib.Path("projects/enwiki9/programs") / program_id / record["path"]
-    if (source.parent / "meta.json").is_file():
-        inputs[source.parent / "meta.json"] = pathlib.Path("projects/enwiki9/programs") / program_id / "meta.json"
+    if (candidate_root / "meta.json").is_file():
+        inputs[candidate_root / "meta.json"] = pathlib.Path("projects/enwiki9/programs") / program_id / "meta.json"
     expected = {str(path): _sha256_file(path) for path in inputs}
-    expected.update({str(source.parent / record["path"]): record["sha256"]
+    expected.update({str(candidate_root / record["path"]): record["sha256"]
                      for record in inventory[1]["counted_files"]})
     expected.update(source_hashes or {})
     build_root = output / "build"
@@ -603,7 +611,7 @@ def _freeze_comparison_build(program_id: str, source: pathlib.Path, output: path
     _write_atomic(manifest_path, (json.dumps(manifest, indent=2) + "\n").encode())
     return {"root": build_root, "manifest_path": manifest_path, "manifest": manifest,
             "sha256": _sha256_file(manifest_path), "package_inventory": inventory,
-            "source": build_root / "projects/enwiki9/programs" / program_id / "program.py"}
+            "source": build_root / "projects/enwiki9/programs" / program_id / source.relative_to(candidate_root)}
 
 
 # This bootstrap is passed directly to Python. It verifies the frozen driver
@@ -743,7 +751,7 @@ def _run_independent_arm(local_arguments: tuple, local_options: dict, directory:
     build = local_options.pop("frozen_build", None)
     if build is None:
         build = _freeze_comparison_build(
-            program_id, _candidate_program_dir(program_id) / "program.py", directory,
+            program_id, _codec_source(program_id), directory,
         )
     source = build["source"]
     context = {"active_phase": None, "artifacts": {}, "phases": {}, "missing_diagnostics": []}
@@ -820,7 +828,7 @@ def _run_independent_arm(local_arguments: tuple, local_options: dict, directory:
     proxy.compress_arm = compress
     proxy.decompress_arm = lambda archive, _arm: phase("decode", archive)
     options = {**local_options, "module": proxy, "artifact_dir": None,
-               "package_inventory": build["package_inventory"]}
+               "package_inventory": build["package_inventory"], "module_source": source}
     try:
         result = _run_local(*local_arguments, **options)
         result["failed_phase"] = None
@@ -897,13 +905,13 @@ def compare(program_id: str, data_path: pathlib.Path, limit: int, specification:
         raise ValueError("comparison needs an explicit bounded input scope <=10MB")
     if record_ledger and not output.resolve().is_relative_to((ROOT / "results").resolve()):
         raise ValueError("canonical comparisons must retain artifacts under project results/")
-    source = _candidate_program_dir(program_id) / "program.py"
+    source = _codec_source(program_id)
     if not source.is_file():
         raise ValueError("candidate source is missing")
     metadata = _load_program_metadata(program_id)
-    package_inventory_before = _program_package_inventory(source.parent, metadata)
+    package_inventory_before = _program_package_inventory(_candidate_program_dir(program_id), metadata)
     inventory_before = package_inventory_before[1]["counted_files"]
-    implementation_paths = _comparison_source_closure(source)
+    implementation_paths = _comparison_source_closure(source, _candidate_program_dir(program_id))
     implementation_before = {str(path): _sha256_file(path) for path in implementation_paths}
     output.mkdir(parents=True, exist_ok=False)
     build = _freeze_comparison_build(program_id, source, output,
@@ -922,7 +930,7 @@ def compare(program_id: str, data_path: pathlib.Path, limit: int, specification:
         except Exception as exc:
             errors[role] = {"type": type(exc).__name__, "message": str(exc)}
     try:
-        source_stable = (inventory_before == _program_package_inventory(source.parent, metadata)[1]["counted_files"]
+        source_stable = (inventory_before == _program_package_inventory(_candidate_program_dir(program_id), metadata)[1]["counted_files"]
                          and implementation_before == {str(path): _sha256_file(path) for path in implementation_paths})
     except OSError as exc:
         source_stable = False

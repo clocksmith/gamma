@@ -4,39 +4,39 @@ Parent: [Gamma research projects](../CATSCAN.md)
 
 ## Target
 
-Produce a Gamma-authored, self-contained codec that exactly reconstructs canonical enwik9 with a fully counted score at or below 90,000,000 bytes and satisfies the bound prize-resource rules. Preserve the historical 105M and 99M objective contracts and frozen experiment bindings.
+Produce a Gamma-authored codec reconstructing enwik9 exactly with a counted score at or below 96,000,000 bytes and bound resource evidence. Preserve historical 105M/99M/90M contracts.
 
 ## Authority
 
-- Owns the enwiki9 objective, adaptive research state, candidate lineage, measurement contracts, and proof frontier.
-- Does not own live Hutter Prize rules or grant score credit to teachers, forecasts, traces, or external compressors.
-- `ledger/` is a generated browsing projection of canonical records; `workbench/` routes research actions through the adaptive workflow. Neither creates another registry, queue, or evidence authority.
-- `enwiki9_lab.py start` and `records` expose that projection to agents without creating jobs, ranking scientific claims, or granting launch authority. Benchmarks and simulations retain the existing queue and evidence contracts.
+Owns compression research, candidate lineage, measurement and proof. The lab is the operational entrance; `src/gamma_enwiki9/` owns maintained services. Execution, evidence, lifecycle, packaging and reporting have separate authority. `lib/coders/` owns pure codec semantics. Ledger/workbench remain projections, never queues or launch authority. Live prize rules belong to their publishers.
 
 ## Scope
 
-- Applies to the enwiki9 objective, adaptive state, candidate lineage, measurement contracts, and proof frontier.
+Candidates, source closures, experiments, execution, evidence and delivery.
 
 ## Contracts
 
-- Input: Canonical [objective contract](contracts/research/v3/objective-contract.json) and immutable, hash-bound experiment evidence.
-- Output: Candidate packages, exact receipts, reflections, ledgers, and ultimately one independently replayable full-corpus proof.
+- Input: [Objective](contracts/research/v4/objective-contract.json), frozen hypotheses and exact dependencies.
+- Output: Packages, receipts, reflections and independently replayable evidence.
 
 ## Invariants
 
-- Missing roundtrip, determinism, dependency, resource, or accounting evidence fails closed.
-- Measured candidates are immutable; every semantic edit creates a new identity.
-- Component gains require a new joint replay and are never added as forecasts.
+- Missing inversion, determinism, dependencies, resource or accounting evidence fails closed.
+- Measured candidates and bound hashes remain immutable; semantic mutations receive new identities.
+- Component gains require joint replay; forecasts are not additive score credit.
+- Admission locks runtime before queue; qualification reserves the queue before obtaining a lease. Cleanup removes only owned files, lease before lock.
+- Historical verification uses original immutable bytes; validity, compatibility and launch authority remain separate.
+- New candidates declare kinds/entrypoints; interrupted creation reconciles idempotently before use.
+- Projection is deterministic; host observations are explicit and timestamped.
 
 ## Acceptance
 
-- The objective validates, all gate antecedents resolve, and only exact full-1G package evidence receives objective credit.
-- Evidence: [contract validator](tools/research_contracts.py), [accounting checklist](docs/official_accounting_checklist.md), and [upper-bound certificate](UPPER_BOUND_CERTIFICATE.md).
+[Contract validator](tools/research_contracts.py), [architecture groups](tests/run_architecture_groups.py), and [accounting](docs/official_accounting_checklist.md). Only exact full-1G package evidence earns objective credit.
 
 ## Non-goals
 
-- Shipping LibNC, hidden teacher state, uncounted dependencies, or a forecast as the solution.
+Shipping LibNC, hidden teacher state, uncounted dependencies, or forecasts as solutions.
 
 ## Freedom
 
-Any mechanism is permitted if it preserves these boundaries and passes the acceptance evidence.
+Any mechanism preserving these evidence boundaries.

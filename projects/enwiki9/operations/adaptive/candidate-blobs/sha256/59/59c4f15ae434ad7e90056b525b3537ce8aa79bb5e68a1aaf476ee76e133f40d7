@@ -1,0 +1,85 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gamma.enwiki9.cmix-filebacked-fxcm-qm8-terminal-dispatch-recovery-finalization.v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema", "candidate_id", "transaction_id", "action", "branch",
+    "terminal_pass", "terminal_receipt", "recovery_contract", "completion",
+    "planning_lock", "full1g_lock", "lock_release_observations", "state",
+    "verifier_executed", "arm_b_authorized",
+    "memory_safe_parent_qualified", "gamma_compression_credit_bytes",
+    "gamma_score_credit_bytes"
+  ],
+  "properties": {
+    "schema": {"const": "gamma.enwiki9.cmix-filebacked-fxcm-qm8-terminal-dispatch-recovery-finalization.v1"},
+    "candidate_id": {"const": "cmix_filebacked_fxcm_full_a_qm8_v1"},
+    "transaction_id": {"$ref": "#/$defs/sha256"},
+    "action": {"enum": ["rollback_uncommitted_activation", "finalize_committed_activation"]},
+    "branch": {"enum": ["success", "failure"]},
+    "terminal_pass": {"type": "boolean"},
+    "terminal_receipt": {"$ref": "#/$defs/artifact"},
+    "recovery_contract": {"$ref": "#/$defs/artifact"},
+    "completion": {"$ref": "#/$defs/artifact"},
+    "planning_lock": {"$ref": "#/$defs/lock"},
+    "full1g_lock": {"$ref": "#/$defs/lock"},
+    "lock_release_observations": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 2,
+      "prefixItems": [
+        {"$ref": "#/$defs/release"},
+        {"$ref": "#/$defs/release"}
+      ],
+      "items": false
+    },
+    "state": {"const": "recovery_complete_locks_absent"},
+    "verifier_executed": {"const": false},
+    "arm_b_authorized": {"const": false},
+    "memory_safe_parent_qualified": {"const": false},
+    "gamma_compression_credit_bytes": {"const": 0},
+    "gamma_score_credit_bytes": {"const": 0}
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"branch": {"const": "success"}}, "required": ["branch"]},
+      "then": {"properties": {"terminal_pass": {"const": true}}},
+      "else": {"properties": {"terminal_pass": {"const": false}}}
+    }
+  ],
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "artifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "bytes", "sha256"],
+      "properties": {
+        "path": {"type": "string", "pattern": "^/"},
+        "bytes": {"type": "integer", "minimum": 1},
+        "sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "lock": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "device", "inode", "payload_sha256"],
+      "properties": {
+        "path": {"type": "string", "pattern": "^/"},
+        "device": {"type": "integer", "minimum": 0},
+        "inode": {"type": "integer", "minimum": 1},
+        "payload_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "release": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "device", "inode", "disposition"],
+      "properties": {
+        "path": {"type": "string", "pattern": "^/"},
+        "device": {"type": "integer", "minimum": 0},
+        "inode": {"type": "integer", "minimum": 1},
+        "disposition": {"enum": ["released_by_recovery", "already_absent_after_completion"]}
+      }
+    }
+  }
+}

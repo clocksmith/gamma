@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gamma.enwiki9.cmix-safe-fork-native-transaction-evidence-index.v1",
+  "title": "SAFE-FORK native transaction evidence index",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "candidate_id", "receipt_path", "receipt_sha256", "entries"],
+  "properties": {
+    "schema": {"const": "gamma.enwiki9.cmix-safe-fork-native-transaction-evidence-index.v1"},
+    "candidate_id": {"const": "cmix_obias_safe_fork_midas64_q0_v1"},
+    "receipt_path": {"$ref": "#/$defs/relativePath"},
+    "receipt_sha256": {"$ref": "#/$defs/sha256"},
+    "entries": {
+      "type": "array",
+      "minItems": 33,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["role", "path", "sha256"],
+        "properties": {
+          "role": {"type": "string", "minLength": 1},
+          "path": {"$ref": "#/$defs/relativePath"},
+          "sha256": {"$ref": "#/$defs/sha256"}
+        }
+      }
+    }
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "relativePath": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))(?!.*//).+$"
+    }
+  }
+}

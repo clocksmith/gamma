@@ -1,0 +1,99 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gamma.enwiki9.cmix-safe-fork-memory-admission-receipt.v1",
+  "title": "CMIX SAFE-FORK memory admission receipt v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "candidate_id", "parent", "phase_allocations", "arm_capacity_sha256", "forbidden_duplication_bytes", "measurements", "declared_decisions", "claim_authority", "execution_authority"],
+  "properties": {
+    "schema": {"const": "gamma.enwiki9.cmix-safe-fork-memory-admission-receipt.v1"},
+    "candidate_id": {"const": "cmix_obias_safe_fork_midas64_q0_v1"},
+    "parent": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["qualification_receipt_sha256", "qualification_verification_sha256", "process_tree_peak_bytes"],
+      "properties": {
+        "qualification_receipt_sha256": {"$ref": "#/$defs/sha256"},
+        "qualification_verification_sha256": {"$ref": "#/$defs/sha256"},
+        "process_tree_peak_bytes": {"type": "integer", "minimum": 0}
+      }
+    },
+    "phase_allocations": {
+      "type": "array",
+      "minItems": 5,
+      "maxItems": 5,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["phase", "recurrent_state_bytes", "selected_parameters_optimizer_bytes", "midpoint_scratch_bytes", "safe_mix_state_bytes", "audit_state_bytes", "total_incremental_bytes"],
+        "properties": {
+          "phase": {"enum": ["before_fork", "midpoint", "second_half_peak", "after_rejoin", "terminal"]},
+          "recurrent_state_bytes": {"type": "integer", "minimum": 0},
+          "selected_parameters_optimizer_bytes": {"type": "integer", "minimum": 0},
+          "midpoint_scratch_bytes": {"type": "integer", "minimum": 0},
+          "safe_mix_state_bytes": {"type": "integer", "minimum": 0},
+          "audit_state_bytes": {"type": "integer", "minimum": 0},
+          "total_incremental_bytes": {"type": "integer", "minimum": 0}
+        }
+      }
+    },
+    "arm_capacity_sha256": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["K", "D", "M", "R", "S"],
+      "properties": {
+        "K": {"$ref": "#/$defs/sha256"},
+        "D": {"$ref": "#/$defs/sha256"},
+        "M": {"$ref": "#/$defs/sha256"},
+        "R": {"$ref": "#/$defs/sha256"},
+        "S": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "forbidden_duplication_bytes": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["context_tables", "dictionary_order", "unproved_contexts", "coder_state", "input_archive_buffers", "complete_process_image", "unbounded_traces"],
+      "properties": {
+        "context_tables": {"type": "integer", "minimum": 0},
+        "dictionary_order": {"type": "integer", "minimum": 0},
+        "unproved_contexts": {"type": "integer", "minimum": 0},
+        "coder_state": {"type": "integer", "minimum": 0},
+        "input_archive_buffers": {"type": "integer", "minimum": 0},
+        "complete_process_image": {"type": "integer", "minimum": 0},
+        "unbounded_traces": {"type": "integer", "minimum": 0}
+      }
+    },
+    "measurements": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["process_tree_peak_bytes", "largest_process_vmhwm_bytes", "cgroup_memory_peak_bytes", "memory_events_oom", "memory_events_oom_kill", "p_k_probability_identity_pass", "p_k_state_identity_pass"],
+      "properties": {
+        "process_tree_peak_bytes": {"type": "integer", "minimum": 0},
+        "largest_process_vmhwm_bytes": {"type": "integer", "minimum": 0},
+        "cgroup_memory_peak_bytes": {"type": "integer", "minimum": 0},
+        "memory_events_oom": {"type": "integer", "minimum": 0},
+        "memory_events_oom_kill": {"type": "integer", "minimum": 0},
+        "p_k_probability_identity_pass": {"type": "boolean"},
+        "p_k_state_identity_pass": {"type": "boolean"}
+      }
+    },
+    "declared_decisions": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["parent_below_engineering_target", "allocation_arithmetic_pass", "arm_capacity_identity_pass", "forbidden_duplication_absent", "incremental_budget_pass", "resource_guard_pass", "p_k_identity_pass", "memory_admission_pass"],
+      "properties": {
+        "parent_below_engineering_target": {"type": "boolean"},
+        "allocation_arithmetic_pass": {"type": "boolean"},
+        "arm_capacity_identity_pass": {"type": "boolean"},
+        "forbidden_duplication_absent": {"type": "boolean"},
+        "incremental_budget_pass": {"type": "boolean"},
+        "resource_guard_pass": {"type": "boolean"},
+        "p_k_identity_pass": {"type": "boolean"},
+        "memory_admission_pass": {"type": "boolean"}
+      }
+    },
+    "claim_authority": {"const": "none"},
+    "execution_authority": {"const": false}
+  },
+  "$defs": {"sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}}
+}

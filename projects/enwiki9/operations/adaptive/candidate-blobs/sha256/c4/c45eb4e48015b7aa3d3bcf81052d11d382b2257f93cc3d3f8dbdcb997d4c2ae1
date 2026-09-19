@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gamma.enwiki9.cmix-memory-phase-attribution-observer-error.v1",
+  "title": "CMIX memory phase-attribution observer error receipt v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "mode",
+    "authority",
+    "terminal_classification",
+    "error_type",
+    "error",
+    "partial_evidence_preserved",
+    "partial_evidence_root",
+    "partial_artifact_paths",
+    "intended_receipt_path",
+    "root_pid",
+    "root_proc_start_ticks"
+  ],
+  "properties": {
+    "schema": {
+      "const": "gamma.enwiki9.cmix-memory-phase-attribution-observer-error.v1"
+    },
+    "mode": {"const": "observe"},
+    "authority": {"const": "diagnostic_only"},
+    "terminal_classification": {"const": "observer_failure"},
+    "error_type": {"type": "string", "minLength": 1},
+    "error": {"type": "string", "minLength": 1},
+    "partial_evidence_preserved": {"const": true},
+    "partial_evidence_root": {"type": "string", "minLength": 1},
+    "partial_artifact_paths": {
+      "type": "array",
+      "items": {"type": "string", "minLength": 1},
+      "uniqueItems": true
+    },
+    "intended_receipt_path": {"type": "string", "minLength": 1},
+    "root_pid": {"type": "integer", "minimum": 1},
+    "root_proc_start_ticks": {"type": "integer", "minimum": 1}
+  }
+}

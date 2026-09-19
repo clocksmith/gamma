@@ -1,0 +1,101 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gamma.dev/enwiki9/research/v1/release-receipt-index.schema.json",
+  "title": "gamma.enwiki9.release_receipt_index.v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "objective", "validationMode", "summary", "bundles"],
+  "properties": {
+    "schema": { "const": "gamma.enwiki9.release-receipt-index.v1" },
+    "objective": { "$ref": "#/$defs/objectiveBinding" },
+    "validationMode": { "const": "structure-only-router" },
+    "summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["bundles", "completeClosures", "runReceipts", "failedAttempts", "objectiveAchievedReceipts"],
+      "properties": {
+        "bundles": { "type": "integer", "minimum": 0 },
+        "completeClosures": { "type": "integer", "minimum": 0 },
+        "runReceipts": { "type": "integer", "minimum": 0 },
+        "failedAttempts": { "type": "integer", "minimum": 0 },
+        "objectiveAchievedReceipts": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "bundles": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["candidateId", "bundlePath", "manifest", "dependencyClosureComplete", "runReceipt", "failedAttempt"],
+        "properties": {
+          "candidateId": { "type": "string", "pattern": "^[a-zA-Z0-9._-]+$" },
+          "bundlePath": { "$ref": "#/$defs/relativePath" },
+          "manifest": { "$ref": "#/$defs/reference" },
+          "dependencyClosureComplete": { "type": "boolean" },
+          "runReceipt": {
+            "oneOf": [
+              {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["reference", "verdict", "officialScoreBytes", "targetDebtBytes", "objectiveCriteriaPass"],
+                "properties": {
+                  "reference": { "$ref": "#/$defs/reference" },
+                  "verdict": { "enum": ["diagnostic", "reject", "promote", "objective-achieved"] },
+                  "officialScoreBytes": { "type": "integer", "minimum": 1 },
+                  "targetDebtBytes": { "type": "integer" },
+                  "objectiveCriteriaPass": { "type": "boolean" }
+                }
+              },
+              { "type": "null" }
+            ]
+          },
+          "failedAttempt": {
+            "oneOf": [
+              {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["reference", "error", "scratchCleaned"],
+                "properties": {
+                  "reference": { "$ref": "#/$defs/reference" },
+                  "error": { "type": "string", "minLength": 1 },
+                  "scratchCleaned": { "type": "boolean" }
+                }
+              },
+              { "type": "null" }
+            ]
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "digest": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "relativePath": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$)).+$"
+    },
+    "objectiveBinding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["objectiveId", "objectiveDigest", "objectivePath", "targetScoreBytes", "corpusBytes", "corpusSha256"],
+      "properties": {
+        "objectiveId": { "type": "string", "minLength": 1 },
+        "objectiveDigest": { "$ref": "#/$defs/digest" },
+        "objectivePath": { "type": "string", "minLength": 1 },
+        "targetScoreBytes": { "type": "integer", "minimum": 1 },
+        "corpusBytes": { "type": "integer", "minimum": 1 },
+        "corpusSha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+      }
+    },
+    "reference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "sha256"],
+      "properties": {
+        "path": { "$ref": "#/$defs/relativePath" },
+        "sha256": { "$ref": "#/$defs/digest" }
+      }
+    }
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gamma.enwiki9.cmix-filebacked-fxcm-source-closure.v1",
+  "title": "CMIX file-backed FXCM build source closure",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "candidate_id", "entry_list_sha256", "source_root_identity_sha256", "entries"],
+  "properties": {
+    "schema": {"const": "gamma.enwiki9.cmix-filebacked-fxcm-source-closure.v1"},
+    "candidate_id": {"const": "cmix_obias_memory_safe_parent_filebacked_q1_v1"},
+    "entry_list_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "source_root_identity_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "entries": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["path", "bytes", "sha256", "role"],
+        "properties": {
+          "path": {"type": "string", "pattern": "^[A-Za-z0-9._+/-]+$"},
+          "bytes": {"type": "integer", "minimum": 0},
+          "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+          "role": {"enum": ["shared_allocator_header", "source", "build_input"]}
+        }
+      }
+    }
+  }
+}

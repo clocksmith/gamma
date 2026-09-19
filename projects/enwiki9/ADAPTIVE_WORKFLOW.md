@@ -5,21 +5,24 @@ for permissions and evidence invariants, and the [record map](ledger/README.md#r
 for canonical storage. Run commands from `gamma/projects/enwiki9/`. Uppercase
 names and angle-bracketed values are placeholders resolved from actual records.
 
-The [active objective](contracts/research/v3/objective-contract.json) is
-**90,000,000 complete bytes** with exact full-corpus reconstruction and independent
-resource compliance. Preserve historical v1 105M and v2 99M bindings;
+The [active objective](contracts/research/v4/objective-contract.json) is
+**96,000,000 complete bytes** with exact full-corpus reconstruction and independent
+resource compliance. Preserve historical v1 105M, v2 99M and v3 90M bindings;
 copied target values are not independent authority.
 
-For new work, prefer prediction improvements with decoder-reconstructed XML
-state and bounded phrase memory, tested against the identical predictor with
-each addition disabled. Add online adaptation only after its isolated comparison
-pays. Reuse builds and verified traces, retain bounded development outcomes, and
-freeze before confirmation. Cold and causally warmed inputs answer different
-questions. A tenfold increase in useful experiment throughput is an aspiration
-to measure, not a compression claim or permission to relax checks.
+For new work, prioritize the [XML/English stream research plan](docs/xml_english_cross_stream_20260919.md).
+The user-selected range is 95M-96M complete bytes: 96M acceptance ceiling and
+95M stretch target. Treat 25% XML / 75% English as a working decomposition to
+measure, not a fixed allocation or an established corpus fact. Compare compression
+within streams and information shared between them using exact reconstruction,
+decoder-available donors and matched controls. Study zmix's model/package tradeoffs
+without importing its unverified score or assuming it uses this stream design.
+Reuse historical probes and preserve their scoped negative results. Development
+and sealed confirmation populations stay distinct; a tenfold throughput aspiration
+never relaxes evidence or resource requirements.
 
 The complete witness is archive plus all charged package and option bytes at or
-below 90M. Package multiplicities follow the selected submission form; exact
+below 96M. Package multiplicities follow the selected submission form; exact
 inversion, deterministic replay, independent resource evidence and license
 closure remain necessary. Historical forecast debt is planning information.
 Complete the small matched gate and package economics before 10MB, then 100MB

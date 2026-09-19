@@ -1,0 +1,117 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gamma.enwiki9.cmix-filebacked-fxcm-qm8-terminal-dispatch-activation.v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema", "candidate_id", "branch", "terminal_pass", "terminal_receipt",
+    "dispatch_contract", "activation_intent", "activated_plan",
+    "displaced_dormant_plan",
+    "non_selected_plan", "closure_after_intent", "closure_after_publication",
+    "verifier_executed", "arm_b_authorized", "memory_safe_parent_qualified",
+    "gamma_compression_credit_bytes", "gamma_score_credit_bytes"
+  ],
+  "properties": {
+    "schema": {"const": "gamma.enwiki9.cmix-filebacked-fxcm-qm8-terminal-dispatch-activation.v1"},
+    "candidate_id": {"const": "cmix_filebacked_fxcm_full_a_qm8_v1"},
+    "branch": {"enum": ["success", "failure"]},
+    "terminal_pass": {"type": "boolean"},
+    "terminal_receipt": {"$ref": "#/$defs/artifact"},
+    "dispatch_contract": {"$ref": "#/$defs/artifact"},
+    "activation_intent": {"$ref": "#/$defs/artifact"},
+    "activated_plan": {"$ref": "#/$defs/artifact"},
+    "displaced_dormant_plan": {"$ref": "#/$defs/artifact"},
+    "non_selected_plan": {"$ref": "#/$defs/artifact"},
+    "closure_after_intent": {"$ref": "#/$defs/closure"},
+    "closure_after_publication": {"$ref": "#/$defs/closure"},
+    "verifier_executed": {"const": false},
+    "arm_b_authorized": {"const": false},
+    "memory_safe_parent_qualified": {"const": false},
+    "gamma_compression_credit_bytes": {"const": 0},
+    "gamma_score_credit_bytes": {"const": 0}
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"branch": {"const": "success"}}, "required": ["branch"]},
+      "then": {"properties": {"terminal_pass": {"const": true}}},
+      "else": {"properties": {"terminal_pass": {"const": false}}}
+    }
+  ],
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "artifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "bytes", "sha256"],
+      "properties": {
+        "path": {"type": "string", "pattern": "^/"},
+        "bytes": {"type": "integer", "minimum": 1},
+        "sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "identity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["role", "pid", "start_ticks"],
+      "properties": {
+        "role": {"enum": ["coordinator", "native_codec"]},
+        "pid": {"type": ["integer", "null"], "minimum": 1},
+        "start_ticks": {"type": ["integer", "null"], "minimum": 1}
+      }
+    },
+    "process": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["pid", "start_ticks", "reasons", "command_sha256"],
+      "properties": {
+        "pid": {"type": "integer", "minimum": 1},
+        "start_ticks": {"type": ["integer", "null"], "minimum": 1},
+        "reasons": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+        "command_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "closure": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "checks", "errors", "recorded_identities", "live_recorded_identities",
+        "matching_processes", "cgroup_path", "cgroup_present",
+        "cgroup_occupants", "lease_path", "lease_present",
+        "lease_candidate_id", "lease_owner_live", "terminal_pass"
+      ],
+      "properties": {
+        "checks": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "full1g_lock_owned", "recorded_identities_dead",
+            "qm8_process_scan_empty", "qm8_cgroup_unoccupied",
+            "current_lease_has_no_live_owner", "success_lease_absent",
+            "success_cgroup_absent"
+          ],
+          "properties": {
+            "full1g_lock_owned": {"const": true},
+            "recorded_identities_dead": {"const": true},
+            "qm8_process_scan_empty": {"const": true},
+            "qm8_cgroup_unoccupied": {"const": true},
+            "current_lease_has_no_live_owner": {"const": true},
+            "success_lease_absent": {"const": true},
+            "success_cgroup_absent": {"const": true}
+          }
+        },
+        "errors": {"type": "array", "maxItems": 0},
+        "recorded_identities": {"type": "array", "items": {"$ref": "#/$defs/identity"}},
+        "live_recorded_identities": {"type": "array", "maxItems": 0, "items": {"$ref": "#/$defs/identity"}},
+        "matching_processes": {"type": "array", "maxItems": 0, "items": {"$ref": "#/$defs/process"}},
+        "cgroup_path": {"type": "string", "pattern": "^/"},
+        "cgroup_present": {"type": "boolean"},
+        "cgroup_occupants": {"type": "array", "maxItems": 0, "items": {"type": "integer", "minimum": 1}},
+        "lease_path": {"type": "string", "pattern": "^/"},
+        "lease_present": {"type": "boolean"},
+        "lease_candidate_id": {"type": ["string", "null"]},
+        "lease_owner_live": {"const": false},
+        "terminal_pass": {"type": "boolean"}
+      }
+    }
+  }
+}

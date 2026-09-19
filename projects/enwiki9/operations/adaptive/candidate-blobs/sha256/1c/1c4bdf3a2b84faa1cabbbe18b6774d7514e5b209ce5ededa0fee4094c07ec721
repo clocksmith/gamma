@@ -1,0 +1,103 @@
+{
+  "schema": "gamma.enwiki9.causal-wordcode-execution-plan.v1",
+  "candidate_id": "causal_wordcode_fifo128_bz2_q0_v1",
+  "owner": "root_explore",
+  "implementation_owner": "ROOT/refresh_cleanup_review",
+  "objective_complete_bytes": 99000000,
+  "scope": "One previously examined opening250KB development comparison; no qualification or confirmation authority.",
+  "population": {
+    "path": "operations/evidence/fixtures/dualstream_opening250k_v1.raw",
+    "bytes": 250000,
+    "sha256": "665fc689441b68462d88f82dc33212abe9c4824be095d03a556c9b55a2829fd3"
+  },
+  "resources": {
+    "cpus": [
+      4
+    ],
+    "memory_bytes": 536870912,
+    "scratch_bytes": 67108864,
+    "swap_bytes": 0,
+    "wall_seconds": 600
+  },
+  "phase_limits": {
+    "cpu_seconds": 60,
+    "alarm_seconds": 180,
+    "address_space_bytes": 536870912,
+    "file_bytes": 33554432,
+    "threads": 1
+  },
+  "candidate_source": {
+    "path": "programs/causal_wordcode_fifo128_bz2_q0_v1/program.py",
+    "sha256": "f3768365e890a7aab83789478ccf8ca1537e63b75454a0150af55b8b166cc0b3",
+    "bytes": 515
+  },
+  "candidate_source_text": "import json\nimport signal\nfrom projects.enwiki9.tools import causal_wordcode_fifo128_bz2_v1 as codec\n\ndef compress_arm(data, arm):\n    signal.alarm(180)\n    try:\n        return codec.compress_arm(data, arm)\n    finally:\n        signal.alarm(0)\n\ndef decompress_arm(data, arm):\n    signal.alarm(180)\n    try:\n        raw = codec.decompress_arm(data, arm)\n        print(\"CAUSAL_WORDCODE_DECODE \" + json.dumps(codec.stats(), sort_keys=True))\n        return raw\n    finally:\n        signal.alarm(0)\n\nstats = codec.stats\n",
+  "runtime_files": [
+    {
+      "path": "/usr/bin/python3.14",
+      "bytes": 7481192,
+      "sha256": "b8d8288faefdd300201f43fcf00f6f539a27218eeed3a3dff5ab10b9c4c99700"
+    },
+    {
+      "path": "/usr/lib/python3.14/lib-dynload/_bz2.cpython-314-x86_64-linux-gnu.so",
+      "bytes": 32192,
+      "sha256": "a8efcaf8ba8c19a17920f72ee22a1cf0189c3e16ec47ca4772d2ce01c8b4de99"
+    },
+    {
+      "path": "/usr/lib/x86_64-linux-gnu/libbz2.so.1.0.4",
+      "bytes": 83120,
+      "sha256": "7138aeb748f73c150b1d34d67de69139a441910cd7b269076ba3c8b986dea9a7"
+    }
+  ],
+  "local_package_files": [
+    "programs/causal_wordcode_fifo128_bz2_q0_v1/program.py",
+    "tools/causal_wordcode_fifo128_bz2_v1.py",
+    "programs/opcode_word_bz2_v1/program.py"
+  ],
+  "historical_parent_program_bytes": 1448,
+  "maximum_added_local_package_bytes": 32768,
+  "specification": {
+    "hypothesis": "Replacing the paid whole-input word table with a decoder-learned FIFO128 dictionary reduces complete opening250KB archive bytes sufficiently to pay the measured added local source.",
+    "parent": "Unchanged opcode_word_bz2_v1 comparator. Historical compact equivalent archive71887 bytes with sha2562302f0c966ba4b5e4edce5b9ce672898f5846d6d71016c9826c1dcdef20f781e; local package1448. Legacy revision qualification is unknown; reproduce P afresh.",
+    "changed_mechanism": "One causal FIFO128 dictionary for maximal exact ASCII alphabetic words5..32 bytes over unchanged opcode bytes, followed by BZip2 level9. First occurrences are literal; occupied slots replace hits; hits do not refresh FIFO. No grammar template, model or specialist mixture.",
+    "development_budget": "Exactly one fixed configuration, four arms, twelve independent encode/decode/repeat processes. No retuning after opening250KB.",
+    "selection_population": "Previously examined raw enwik9 offsets0..249999; no WRT or NNCP coordinates. One bounded frame with empty initial dictionary; every dictionary transition is decoder-derived.",
+    "sealed_confirmation": "Raw offsets500000000..500249999 validation and750000000..750999999 confirmation remain unopened. No access or automatic scaling from this contract.",
+    "stop_rule": "Hold this realization if T plus measured nonnegative source increment does not beat both P and L, or mandatory evidence fails. Resource exhaustion is a budget decision; implementation/evidence failure is not scientific rejection. No full-corpus or complete-package claim.",
+    "arms": {
+      "parent": "P",
+      "bookkeeping": "K",
+      "treatment": "T",
+      "literal_control": "L"
+    }
+  },
+  "mandatory_evidence": [
+    "All arms independently reconstruct the exact raw hash and repeat their own archive bytes.",
+    "P reproduces the historical archive hash; K archive and parent projection equal P.",
+    "Encoder, independent decoder and repeat final dictionary state and rolling every-word transition digests match, including across arms.",
+    "The comparison retains the exact same candidate build, loaded source manifests, phase process identities and all artifacts before decisions are published.",
+    "Charge all five header bytes and the complete BZip2 member. Count exact core, required parent and shim source; unresolved interpreter/runtime/license closure receives no credit."
+  ],
+  "kernel_measurement": {
+    "path": "operations/evidence/20260906_causal_wordcode_fifo128_bz2_unit.json",
+    "sha256": "bf995205324e6ebaf9d0c42a7a3bbc530f908ec28e0637c3890cca85826fa5dc",
+    "phase_peak_rss_kib": 23196,
+    "codec_cpu_seconds_sum": 0.869043379,
+    "codec_wall_seconds_sum": 0.871045251,
+    "scope": "Eight synthetic arm runs,24 phases, shared-host diagnostic"
+  },
+  "limitations": [
+    "P and K both calculate lexical diagnostics; their timings do not isolate incremental bookkeeping.",
+    "Local source cost is a conservative development screen, not the complete interpreter, runtime, licenses or submission distribution.",
+    "Shared-host timings are diagnostic. HORIZON and MIDAS ownership and artifacts remain untouched."
+  ],
+  "failure_classes": [
+    "implementation-or-evidence-failure",
+    "budget-exhausted",
+    "held-nonpaying-realization"
+  ],
+  "full_corpus_score_bytes": null,
+  "complete_package_bytes": null,
+  "objective_credit_bytes": 0,
+  "promotion_authorized": false
+}

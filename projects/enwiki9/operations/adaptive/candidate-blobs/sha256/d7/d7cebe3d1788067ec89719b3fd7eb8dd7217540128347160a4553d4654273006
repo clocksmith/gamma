@@ -1,0 +1,141 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gamma.dev/enwiki9/research/v1/sealed-runtime-root-manifest.v2.schema.json",
+  "title": "gamma.enwiki9.sealed-runtime-root-manifest.v2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "rootId",
+    "candidateId",
+    "platform",
+    "discoveryEvidence",
+    "files",
+    "directories",
+    "writableMounts",
+    "kernelInterfaces",
+    "environment",
+    "command",
+    "complete",
+    "missing",
+    "rootTreeSha256"
+  ],
+  "properties": {
+    "schema": { "const": "gamma.enwiki9.sealed-runtime-root-manifest.v2" },
+    "rootId": { "type": "string", "pattern": "^[a-z0-9][a-z0-9._-]*$" },
+    "candidateId": { "type": "string", "minLength": 1 },
+    "platform": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["os", "architecture", "kernel"],
+      "properties": {
+        "os": { "const": "Linux" },
+        "architecture": { "enum": ["x86_64", "i386"] },
+        "kernel": { "type": "string", "minLength": 1 }
+      }
+    },
+    "discoveryEvidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "sha256", "terminal"],
+      "properties": {
+        "path": { "type": "string", "minLength": 1 },
+        "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+        "terminal": { "type": "boolean" }
+      }
+    },
+    "files": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "insidePath",
+          "sourcePath",
+          "bytes",
+          "sha256",
+          "role",
+          "providerClass",
+          "counted"
+        ],
+        "properties": {
+          "insidePath": {
+            "type": "string",
+            "pattern": "^/(?!.*(?:^|/)\.\.(?:/|$)).+$"
+          },
+          "sourcePath": { "type": "string", "minLength": 1 },
+          "bytes": { "type": "integer", "minimum": 0 },
+          "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+          "role": {
+            "enum": [
+              "submission_archive",
+              "dynamic_loader",
+              "dynamic_library",
+              "shell",
+              "utility",
+              "configuration",
+              "locale",
+              "runtime_support"
+            ]
+          },
+          "providerClass": {
+            "enum": [
+              "submitted",
+              "official_standard_library",
+              "counted_runtime_support"
+            ]
+          },
+          "counted": { "type": "boolean" }
+        }
+      }
+    },
+    "directories": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "type": "string", "pattern": "^/.+$" }
+    },
+    "writableMounts": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["insidePath", "purpose"],
+        "properties": {
+          "insidePath": { "type": "string", "pattern": "^/.+$" },
+          "purpose": { "enum": ["work", "temporary", "output"] }
+        }
+      }
+    },
+    "kernelInterfaces": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "proc_self",
+          "proc_process_tree",
+          "dev_null",
+          "dev_zero",
+          "dev_fd"
+        ]
+      }
+    },
+    "environment": {
+      "type": "object",
+      "additionalProperties": { "type": "string" }
+    },
+    "command": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "complete": { "type": "boolean" },
+    "missing": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "rootTreeSha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+  }
+}

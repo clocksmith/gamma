@@ -1,0 +1,887 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gamma.enwiki9.cmix-shadow-midpoint-oracle-v6-receipt.v1",
+  "title": "CMIX midpoint oracle v6 compositional joint finite-coder receipt",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "receipt_id",
+    "candidate_id",
+    "mode",
+    "abi",
+    "provenance",
+    "population",
+    "runs",
+    "comparisons",
+    "decision",
+    "authority"
+  ],
+  "properties": {
+    "schema": {
+      "const": "gamma.enwiki9.cmix-shadow-midpoint-oracle-v6-receipt.v1"
+    },
+    "receipt_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "candidate_id": {
+      "const": "cmix_obias_shadow_midpoint_oracle64_q0_v6"
+    },
+    "mode": {
+      "const": "native_finite_coder"
+    },
+    "abi": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "format_id",
+        "contract",
+        "layout",
+        "parse_schema",
+        "joint_receipt_schema",
+        "independent_parser",
+        "source_interface_audit",
+        "online_digest_hook_audit",
+        "component_layout_audit",
+        "mutation_control_receipt",
+        "neutrality_receipt"
+      ],
+      "properties": {
+        "format_id": {
+          "const": "gamma-midpoint-compositional-abi-v2"
+        },
+        "contract": {"$ref": "#/$defs/exactAbiArtifact"},
+        "layout": {"$ref": "#/$defs/exactLayoutArtifact"},
+        "parse_schema": {"$ref": "#/$defs/exactParseSchemaArtifact"},
+        "joint_receipt_schema": {"$ref": "#/$defs/nonemptyArtifact"},
+        "independent_parser": {"$ref": "#/$defs/nonemptyArtifact"},
+        "source_interface_audit": {"$ref": "#/$defs/nonemptyArtifact"},
+        "online_digest_hook_audit": {"$ref": "#/$defs/nonemptyArtifact"},
+        "component_layout_audit": {"$ref": "#/$defs/nonemptyArtifact"},
+        "mutation_control_receipt": {"$ref": "#/$defs/nonemptyArtifact"},
+        "neutrality_receipt": {"$ref": "#/$defs/nonemptyArtifact"}
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "q1_qualification_receipt",
+        "q1_qualification_verification",
+        "v4_materialization_receipt",
+        "v6_source_difference_manifest",
+        "mechanism_ir_compilation_verification",
+        "candidate_source_closure",
+        "build_a",
+        "build_b",
+        "independent_build_identity",
+        "binary",
+        "dependency_closure",
+        "sealed_runtime_root"
+      ],
+      "properties": {
+        "q1_qualification_receipt": {"$ref": "#/$defs/nonemptyArtifact"},
+        "q1_qualification_verification": {"$ref": "#/$defs/nonemptyArtifact"},
+        "v4_materialization_receipt": {"$ref": "#/$defs/nonemptyArtifact"},
+        "v6_source_difference_manifest": {"$ref": "#/$defs/nonemptyArtifact"},
+        "mechanism_ir_compilation_verification": {"$ref": "#/$defs/nonemptyArtifact"},
+        "candidate_source_closure": {"$ref": "#/$defs/nonemptyArtifact"},
+        "build_a": {"$ref": "#/$defs/nonemptyArtifact"},
+        "build_b": {"$ref": "#/$defs/nonemptyArtifact"},
+        "independent_build_identity": {"$ref": "#/$defs/nonemptyArtifact"},
+        "binary": {"$ref": "#/$defs/nonemptyArtifact"},
+        "dependency_closure": {"$ref": "#/$defs/nonemptyArtifact"},
+        "sealed_runtime_root": {"$ref": "#/$defs/nonemptyArtifact"}
+      }
+    },
+    "population": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "role",
+        "raw_input",
+        "modeled_stream",
+        "start_offset",
+        "end_offset_exclusive",
+        "modeled_events",
+        "coded_bits",
+        "segment_events",
+        "capture_events",
+        "scheduled_closures",
+        "required_gross_gain_bytes",
+        "chronological_thirds_required",
+        "complete_population_pass"
+      ],
+      "properties": {
+        "role": {
+          "enum": ["diagnostic_250k", "calibration_1m", "opening_10m"]
+        },
+        "raw_input": {"$ref": "#/$defs/nonemptyArtifact"},
+        "modeled_stream": {"$ref": "#/$defs/nonemptyArtifact"},
+        "start_offset": {"const": 0},
+        "end_offset_exclusive": {"type": "integer", "minimum": 250000},
+        "modeled_events": {"type": "integer", "minimum": 250000},
+        "coded_bits": {"type": "integer", "minimum": 2000000},
+        "segment_events": {"const": 64},
+        "capture_events": {"const": 32},
+        "scheduled_closures": {"type": "integer", "minimum": 3906},
+        "required_gross_gain_bytes": {"type": "integer", "minimum": 1},
+        "chronological_thirds_required": {"type": "boolean"},
+        "complete_population_pass": {"type": "boolean"}
+      }
+    },
+    "runs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["P", "K", "F_A", "F_B", "S_A", "S_B"],
+      "properties": {
+        "P": {
+          "allOf": [
+            {"$ref": "#/$defs/run"},
+            {"properties": {"arm": {"const": "P"}, "replicate": {"const": "A"}, "build_slot": {"const": "A"}, "committed_updates": {"const": 0}, "detached_updates": {"const": 0}, "k_dynamic_equal_updates": {"const": 0}}}
+          ]
+        },
+        "K": {
+          "allOf": [
+            {"$ref": "#/$defs/run"},
+            {"properties": {"arm": {"const": "K"}, "replicate": {"const": "A"}, "build_slot": {"const": "A"}, "committed_updates": {"const": 0}, "detached_updates": {"minimum": 1}, "k_dynamic_equal_updates": {"minimum": 1}}}
+          ]
+        },
+        "F_A": {
+          "allOf": [
+            {"$ref": "#/$defs/run"},
+            {"properties": {"arm": {"const": "F"}, "replicate": {"const": "A"}, "build_slot": {"const": "A"}, "committed_updates": {"minimum": 1}, "detached_updates": {"const": 0}, "k_dynamic_equal_updates": {"const": 0}}}
+          ]
+        },
+        "F_B": {
+          "allOf": [
+            {"$ref": "#/$defs/run"},
+            {"properties": {"arm": {"const": "F"}, "replicate": {"const": "B"}, "build_slot": {"const": "B"}, "committed_updates": {"minimum": 1}, "detached_updates": {"const": 0}, "k_dynamic_equal_updates": {"const": 0}}}
+          ]
+        },
+        "S_A": {
+          "allOf": [
+            {"$ref": "#/$defs/run"},
+            {"properties": {"arm": {"const": "S"}, "replicate": {"const": "A"}, "build_slot": {"const": "A"}, "committed_updates": {"minimum": 1}, "detached_updates": {"const": 0}, "k_dynamic_equal_updates": {"const": 0}}}
+          ]
+        },
+        "S_B": {
+          "allOf": [
+            {"$ref": "#/$defs/run"},
+            {"properties": {"arm": {"const": "S"}, "replicate": {"const": "B"}, "build_slot": {"const": "B"}, "committed_updates": {"minimum": 1}, "detached_updates": {"const": 0}, "k_dynamic_equal_updates": {"const": 0}}}
+          ]
+        }
+      }
+    },
+    "comparisons": {
+      "$ref": "#/$defs/comparisons"
+    },
+    "decision": {
+      "$ref": "#/$defs/decision"
+    },
+    "authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "claim_authority",
+        "archive_promotion_authority",
+        "persistence_attribution_authority",
+        "gamma_compression_credit_bytes",
+        "gamma_score_credit_bytes"
+      ],
+      "properties": {
+        "claim_authority": {
+          "const": "zero_credit_causal_midpoint_oracle_only"
+        },
+        "archive_promotion_authority": {
+          "const": false
+        },
+        "persistence_attribution_authority": {
+          "type": "boolean"
+        },
+        "gamma_compression_credit_bytes": {
+          "const": 0
+        },
+        "gamma_score_credit_bytes": {
+          "const": 0
+        }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {"population": {"properties": {"role": {"const": "diagnostic_250k"}}, "required": ["role"]}},
+        "required": ["population"]
+      },
+      "then": {
+        "properties": {
+          "population": {
+            "properties": {
+              "raw_input": {"properties": {"bytes": {"const": 250000}}},
+              "end_offset_exclusive": {"const": 250000},
+              "required_gross_gain_bytes": {"const": 1},
+              "chronological_thirds_required": {"const": false}
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {"population": {"properties": {"role": {"const": "calibration_1m"}}, "required": ["role"]}},
+        "required": ["population"]
+      },
+      "then": {
+        "properties": {
+          "population": {
+            "properties": {
+              "raw_input": {"properties": {"bytes": {"const": 1000000}}},
+              "end_offset_exclusive": {"const": 1000000},
+              "required_gross_gain_bytes": {"const": 4080},
+              "chronological_thirds_required": {"const": false}
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {"population": {"properties": {"role": {"const": "opening_10m"}}, "required": ["role"]}},
+        "required": ["population"]
+      },
+      "then": {
+        "properties": {
+          "population": {
+            "properties": {
+              "raw_input": {"properties": {"bytes": {"const": 10000000}}},
+              "end_offset_exclusive": {"const": 10000000},
+              "required_gross_gain_bytes": {"const": 40793},
+              "chronological_thirds_required": {"const": true}
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {"decision": {"properties": {"scientific_verdict": {"const": "pass"}}, "required": ["scientific_verdict"]}},
+        "required": ["decision"]
+      },
+      "then": {
+        "properties": {
+          "population": {"properties": {"complete_population_pass": {"const": true}}},
+          "runs": {
+            "properties": {
+              "P": {"$ref": "#/$defs/passingRun"},
+              "K": {"$ref": "#/$defs/passingRun"},
+              "F_A": {"$ref": "#/$defs/passingRun"},
+              "F_B": {"$ref": "#/$defs/passingRun"},
+              "S_A": {"$ref": "#/$defs/passingRun"},
+              "S_B": {"$ref": "#/$defs/passingRun"}
+            }
+          },
+          "comparisons": {"$ref": "#/$defs/passingComparisons"},
+          "decision": {"$ref": "#/$defs/passingDecision"}
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "population": {"properties": {"role": {"const": "opening_10m"}}, "required": ["role"]},
+          "decision": {"properties": {"scientific_verdict": {"const": "pass"}}, "required": ["scientific_verdict"]}
+        },
+        "required": ["population", "decision"]
+      },
+      "then": {
+        "properties": {
+          "comparisons": {
+            "properties": {
+              "F_gross_gain_bytes": {"minimum": 40793},
+              "chronological_thirds": {"$ref": "#/$defs/passingThirdComparisons"},
+              "all_chronological_thirds_F_better_than_P_and_S_pass": {"const": true}
+            }
+          },
+          "decision": {
+            "properties": {
+              "terminal_classification": {"const": "pass_target_scale_causal_midpoint_value"},
+              "authorized_successor": {"const": "cmix_obias_midpoint_persistence_attribution64_q0_v3"}
+            }
+          },
+          "authority": {"properties": {"persistence_attribution_authority": {"const": true}}}
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "population": {"properties": {"role": {"const": "calibration_1m"}}, "required": ["role"]},
+          "decision": {"properties": {"scientific_verdict": {"const": "pass"}}, "required": ["scientific_verdict"]}
+        },
+        "required": ["population", "decision"]
+      },
+      "then": {
+        "properties": {
+          "comparisons": {"properties": {"F_gross_gain_bytes": {"minimum": 4080}}}
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "population": {"properties": {"role": {"enum": ["diagnostic_250k", "calibration_1m"]}}, "required": ["role"]},
+          "decision": {"properties": {"scientific_verdict": {"const": "pass"}}, "required": ["scientific_verdict"]}
+        },
+        "required": ["population", "decision"]
+      },
+      "then": {
+        "properties": {
+          "decision": {
+            "properties": {
+              "terminal_classification": {"const": "pass_preregistered_smaller_scope"},
+              "authorized_successor": {"const": "next_preregistered_scope"}
+            }
+          },
+          "authority": {"properties": {"persistence_attribution_authority": {"const": false}}}
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {"authority": {"properties": {"persistence_attribution_authority": {"const": true}}, "required": ["persistence_attribution_authority"]}},
+        "required": ["authority"]
+      },
+      "then": {
+        "properties": {
+          "population": {"properties": {"role": {"const": "opening_10m"}}},
+          "decision": {
+            "properties": {
+              "scientific_verdict": {"const": "pass"},
+              "terminal_classification": {"const": "pass_target_scale_causal_midpoint_value"},
+              "authorized_successor": {"const": "cmix_obias_midpoint_persistence_attribution64_q0_v3"}
+            }
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "nonemptyArtifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "bytes", "sha256"],
+      "properties": {
+        "path": {"type": "string", "minLength": 1},
+        "bytes": {"type": "integer", "minimum": 1},
+        "sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "exactAbiArtifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "bytes", "sha256"],
+      "properties": {
+        "path": {"const": "operations/planning/cmix_obias_shadow_midpoint_oracle64_q0_v6_compositional_observability_abi_q0_v1.json"},
+        "bytes": {"const": 22882},
+        "sha256": {"const": "2eda40753506c2b8f1a9bb17124a24c75efa3dd60103533a079df60beafce813"}
+      }
+    },
+    "exactLayoutArtifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "bytes", "sha256"],
+      "properties": {
+        "path": {"const": "operations/planning/cmix_obias_shadow_midpoint_oracle64_q0_v6_source_layout_q0_v1.json"},
+        "bytes": {"const": 13726},
+        "sha256": {"const": "6dd5492cbe3f06de9f9a6d1c954ca7138ccead3b9139cc9139962013e40ec245"}
+      }
+    },
+    "exactParseSchemaArtifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "bytes", "sha256"],
+      "properties": {
+        "path": {"const": "contracts/research/v1/cmix-midpoint-compositional-parse-v2.schema.json"},
+        "bytes": {"const": 22070},
+        "sha256": {"const": "5f6db28dc08572d31af8275deead4a9d57c3d1467960a0916358f70614abdb7b"}
+      }
+    },
+    "checkpointArtifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "bytes", "sha256"],
+      "properties": {
+        "path": {"type": "string", "minLength": 1},
+        "bytes": {"const": 1472},
+        "sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "observation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "parse_receipt",
+        "checkpoint_stream",
+        "update_stream",
+        "checkpoint_records",
+        "probability_records",
+        "component_boundary_records",
+        "update_records",
+        "terminal_probability_sha256",
+        "terminal_component_boundary_sha256",
+        "terminal_payload_prefix_sha256",
+        "terminal_component_state_root_sha256",
+        "update_body_sha256",
+        "parse_pass"
+      ],
+      "properties": {
+        "parse_receipt": {"$ref": "#/$defs/nonemptyArtifact"},
+        "checkpoint_stream": {"$ref": "#/$defs/checkpointArtifact"},
+        "update_stream": {"$ref": "#/$defs/nonemptyArtifact"},
+        "checkpoint_records": {"const": 6},
+        "probability_records": {"type": "integer", "minimum": 2000000},
+        "component_boundary_records": {"type": "integer", "minimum": 2000000},
+        "update_records": {"type": "integer", "minimum": 0},
+        "terminal_probability_sha256": {"$ref": "#/$defs/sha256"},
+        "terminal_component_boundary_sha256": {"$ref": "#/$defs/sha256"},
+        "terminal_payload_prefix_sha256": {"$ref": "#/$defs/sha256"},
+        "terminal_component_state_root_sha256": {"$ref": "#/$defs/sha256"},
+        "update_body_sha256": {"$ref": "#/$defs/sha256"},
+        "parse_pass": {"type": "boolean"}
+      }
+    },
+    "thirdShadow": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "ordinal",
+        "raw_start",
+        "raw_end_exclusive",
+        "coded_bits",
+        "encode_payload",
+        "decode_payload",
+        "encode_return_code",
+        "decode_return_code",
+        "encode_clean_flush",
+        "decode_clean_flush",
+        "identity_pass"
+      ],
+      "properties": {
+        "ordinal": {"type": "integer", "minimum": 0, "maximum": 2},
+        "raw_start": {"type": "integer", "minimum": 0},
+        "raw_end_exclusive": {"type": "integer", "minimum": 1},
+        "coded_bits": {"type": "integer", "minimum": 1},
+        "encode_payload": {"$ref": "#/$defs/nonemptyArtifact"},
+        "decode_payload": {"$ref": "#/$defs/nonemptyArtifact"},
+        "encode_return_code": {"type": "integer"},
+        "decode_return_code": {"type": "integer"},
+        "encode_clean_flush": {"type": "boolean"},
+        "decode_clean_flush": {"type": "boolean"},
+        "identity_pass": {"type": "boolean"}
+      }
+    },
+    "thirdShadows": {
+      "type": "array",
+      "minItems": 3,
+      "maxItems": 3,
+      "prefixItems": [
+        {"allOf": [{"$ref": "#/$defs/thirdShadow"}, {"properties": {"ordinal": {"const": 0}}}]},
+        {"allOf": [{"$ref": "#/$defs/thirdShadow"}, {"properties": {"ordinal": {"const": 1}}}]},
+        {"allOf": [{"$ref": "#/$defs/thirdShadow"}, {"properties": {"ordinal": {"const": 2}}}]}
+      ],
+      "items": false
+    },
+    "resource": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "guard_receipt",
+        "process_tree_peak_rss_kib",
+        "process_peak_vmhwm_kib",
+        "cgroup_peak_bytes",
+        "cgroup_max_delta",
+        "cgroup_oom_delta",
+        "cgroup_oom_kill_delta",
+        "incremental_live_bytes",
+        "scratch_logical_bytes",
+        "scratch_allocated_bytes",
+        "maximum_logical_cpus",
+        "pass"
+      ],
+      "properties": {
+        "guard_receipt": {"$ref": "#/$defs/nonemptyArtifact"},
+        "process_tree_peak_rss_kib": {"type": "integer", "minimum": 0},
+        "process_peak_vmhwm_kib": {"type": "integer", "minimum": 0},
+        "cgroup_peak_bytes": {"type": "integer", "minimum": 0},
+        "cgroup_max_delta": {"type": "integer", "minimum": 0},
+        "cgroup_oom_delta": {"type": "integer", "minimum": 0},
+        "cgroup_oom_kill_delta": {"type": "integer", "minimum": 0},
+        "incremental_live_bytes": {"type": "integer", "minimum": 0},
+        "scratch_logical_bytes": {"type": "integer", "minimum": 0},
+        "scratch_allocated_bytes": {"type": "integer", "minimum": 0},
+        "maximum_logical_cpus": {"type": "integer", "minimum": 1},
+        "pass": {"type": "boolean"}
+      }
+    },
+    "package": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["manifest", "counted_bytes", "incremental_bytes", "pass"],
+      "properties": {
+        "manifest": {"$ref": "#/$defs/nonemptyArtifact"},
+        "counted_bytes": {"type": "integer", "minimum": 1},
+        "incremental_bytes": {"type": "integer", "minimum": 0},
+        "pass": {"type": "boolean"}
+      }
+    },
+    "run": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "run_id",
+        "arm",
+        "replicate",
+        "build_slot",
+        "command_sha256",
+        "environment_sha256",
+        "binary",
+        "encode_return_code",
+        "decode_return_code",
+        "encode_observation",
+        "decode_observation",
+        "scheduled_closures",
+        "committed_updates",
+        "detached_updates",
+        "k_dynamic_equal_updates",
+        "ideal_bits",
+        "payload",
+        "archive",
+        "decoded_modeled_stream",
+        "raw_inverse",
+        "modeled_roundtrip_pass",
+        "raw_inverse_pass",
+        "third_shadow_coders",
+        "resource",
+        "package",
+        "run_complete_pass"
+      ],
+      "properties": {
+        "run_id": {"type": "string", "minLength": 1},
+        "arm": {"enum": ["P", "K", "F", "S"]},
+        "replicate": {"enum": ["A", "B"]},
+        "build_slot": {"enum": ["A", "B"]},
+        "command_sha256": {"$ref": "#/$defs/sha256"},
+        "environment_sha256": {"$ref": "#/$defs/sha256"},
+        "binary": {"$ref": "#/$defs/nonemptyArtifact"},
+        "encode_return_code": {"type": "integer"},
+        "decode_return_code": {"type": "integer"},
+        "encode_observation": {"$ref": "#/$defs/observation"},
+        "decode_observation": {"$ref": "#/$defs/observation"},
+        "scheduled_closures": {"type": "integer", "minimum": 3906},
+        "committed_updates": {"type": "integer", "minimum": 0},
+        "detached_updates": {"type": "integer", "minimum": 0},
+        "k_dynamic_equal_updates": {"type": "integer", "minimum": 0},
+        "ideal_bits": {"type": "number", "minimum": 0},
+        "payload": {"$ref": "#/$defs/nonemptyArtifact"},
+        "archive": {"$ref": "#/$defs/nonemptyArtifact"},
+        "decoded_modeled_stream": {"$ref": "#/$defs/nonemptyArtifact"},
+        "raw_inverse": {"$ref": "#/$defs/nonemptyArtifact"},
+        "modeled_roundtrip_pass": {"type": "boolean"},
+        "raw_inverse_pass": {"type": "boolean"},
+        "third_shadow_coders": {"$ref": "#/$defs/thirdShadows"},
+        "resource": {"$ref": "#/$defs/resource"},
+        "package": {"$ref": "#/$defs/package"},
+        "run_complete_pass": {"type": "boolean"}
+      }
+    },
+    "passingObservation": {
+      "allOf": [
+        {"$ref": "#/$defs/observation"},
+        {"properties": {"parse_pass": {"const": true}}}
+      ]
+    },
+    "passingThirdShadow": {
+      "allOf": [
+        {"$ref": "#/$defs/thirdShadow"},
+        {"properties": {"encode_return_code": {"const": 0}, "decode_return_code": {"const": 0}, "encode_clean_flush": {"const": true}, "decode_clean_flush": {"const": true}, "identity_pass": {"const": true}}}
+      ]
+    },
+    "passingThirdShadows": {
+      "type": "array",
+      "minItems": 3,
+      "maxItems": 3,
+      "prefixItems": [
+        {"allOf": [{"$ref": "#/$defs/passingThirdShadow"}, {"properties": {"ordinal": {"const": 0}}}]},
+        {"allOf": [{"$ref": "#/$defs/passingThirdShadow"}, {"properties": {"ordinal": {"const": 1}}}]},
+        {"allOf": [{"$ref": "#/$defs/passingThirdShadow"}, {"properties": {"ordinal": {"const": 2}}}]}
+      ],
+      "items": false
+    },
+    "passingResource": {
+      "allOf": [
+        {"$ref": "#/$defs/resource"},
+        {"properties": {
+          "process_tree_peak_rss_kib": {"maximum": 9765625},
+          "process_peak_vmhwm_kib": {"maximum": 9765625},
+          "cgroup_peak_bytes": {"maximum": 10000000000},
+          "cgroup_max_delta": {"const": 0},
+          "cgroup_oom_delta": {"const": 0},
+          "cgroup_oom_kill_delta": {"const": 0},
+          "incremental_live_bytes": {"maximum": 268435456},
+          "maximum_logical_cpus": {"const": 1},
+          "pass": {"const": true}
+        }}
+      ]
+    },
+    "passingPackage": {
+      "allOf": [
+        {"$ref": "#/$defs/package"},
+        {"properties": {"incremental_bytes": {"maximum": 65536}, "pass": {"const": true}}}
+      ]
+    },
+    "passingRun": {
+      "allOf": [
+        {"$ref": "#/$defs/run"},
+        {"properties": {
+          "encode_return_code": {"const": 0},
+          "decode_return_code": {"const": 0},
+          "encode_observation": {"$ref": "#/$defs/passingObservation"},
+          "decode_observation": {"$ref": "#/$defs/passingObservation"},
+          "modeled_roundtrip_pass": {"const": true},
+          "raw_inverse_pass": {"const": true},
+          "third_shadow_coders": {"$ref": "#/$defs/passingThirdShadows"},
+          "resource": {"$ref": "#/$defs/passingResource"},
+          "package": {"$ref": "#/$defs/passingPackage"},
+          "run_complete_pass": {"const": true}
+        }}
+      ]
+    },
+    "thirdComparison": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["ordinal", "P_bytes", "F_bytes", "S_bytes", "F_gain_over_P_bytes", "F_gain_over_S_bytes", "F_better_than_P_and_S_pass"],
+      "properties": {
+        "ordinal": {"type": "integer", "minimum": 0, "maximum": 2},
+        "P_bytes": {"type": "integer", "minimum": 1},
+        "F_bytes": {"type": "integer", "minimum": 1},
+        "S_bytes": {"type": "integer", "minimum": 1},
+        "F_gain_over_P_bytes": {"type": "integer"},
+        "F_gain_over_S_bytes": {"type": "integer"},
+        "F_better_than_P_and_S_pass": {"type": "boolean"}
+      }
+    },
+    "thirdComparisons": {
+      "type": "array",
+      "minItems": 3,
+      "maxItems": 3,
+      "prefixItems": [
+        {"allOf": [{"$ref": "#/$defs/thirdComparison"}, {"properties": {"ordinal": {"const": 0}}}]},
+        {"allOf": [{"$ref": "#/$defs/thirdComparison"}, {"properties": {"ordinal": {"const": 1}}}]},
+        {"allOf": [{"$ref": "#/$defs/thirdComparison"}, {"properties": {"ordinal": {"const": 2}}}]}
+      ],
+      "items": false
+    },
+    "passingThirdComparison": {
+      "allOf": [
+        {"$ref": "#/$defs/thirdComparison"},
+        {"properties": {"F_gain_over_P_bytes": {"minimum": 1}, "F_gain_over_S_bytes": {"minimum": 1}, "F_better_than_P_and_S_pass": {"const": true}}}
+      ]
+    },
+    "passingThirdComparisons": {
+      "type": "array",
+      "minItems": 3,
+      "maxItems": 3,
+      "prefixItems": [
+        {"allOf": [{"$ref": "#/$defs/passingThirdComparison"}, {"properties": {"ordinal": {"const": 0}}}]},
+        {"allOf": [{"$ref": "#/$defs/passingThirdComparison"}, {"properties": {"ordinal": {"const": 1}}}]},
+        {"allOf": [{"$ref": "#/$defs/passingThirdComparison"}, {"properties": {"ordinal": {"const": 2}}}]}
+      ],
+      "items": false
+    },
+    "comparisons": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "P_q1_probability_identity_pass",
+        "P_q1_payload_identity_pass",
+        "P_q1_modeled_inverse_identity_pass",
+        "P_q1_raw_inverse_identity_pass",
+        "K_P_probability_identity_pass",
+        "K_P_component_boundary_identity_pass",
+        "K_P_sparse_component_root_identity_pass",
+        "K_P_payload_archive_inverse_identity_pass",
+        "all_K_dynamic_updates_equal_pass",
+        "all_arm_update_counts_match_schedule_pass",
+        "all_population_coordinate_formulas_pass",
+        "all_encode_decode_observations_synchronize_pass",
+        "F_repeat_identity_pass",
+        "S_repeat_identity_pass",
+        "F_S_only_target_rotation_pass",
+        "F_S_source_symbols_and_unrotated_targets_identity_pass",
+        "component_layout_closure_pass",
+        "source_interface_closure_pass",
+        "online_digest_hook_closure_pass",
+        "all_component_mutation_controls_pass",
+        "all_instrumentation_neutrality_pass",
+        "third_shadow_coordinate_and_isolation_pass",
+        "all_roundtrips_and_inverses_pass",
+        "all_resources_pass",
+        "all_packages_pass",
+        "F_gross_gain_bytes",
+        "S_gross_gain_bytes",
+        "F_minus_S_bytes",
+        "F_beats_P_pass",
+        "F_beats_S_pass",
+        "chronological_thirds",
+        "all_chronological_thirds_F_better_than_P_and_S_pass"
+      ],
+      "properties": {
+        "P_q1_probability_identity_pass": {"type": "boolean"},
+        "P_q1_payload_identity_pass": {"type": "boolean"},
+        "P_q1_modeled_inverse_identity_pass": {"type": "boolean"},
+        "P_q1_raw_inverse_identity_pass": {"type": "boolean"},
+        "K_P_probability_identity_pass": {"type": "boolean"},
+        "K_P_component_boundary_identity_pass": {"type": "boolean"},
+        "K_P_sparse_component_root_identity_pass": {"type": "boolean"},
+        "K_P_payload_archive_inverse_identity_pass": {"type": "boolean"},
+        "all_K_dynamic_updates_equal_pass": {"type": "boolean"},
+        "all_arm_update_counts_match_schedule_pass": {"type": "boolean"},
+        "all_population_coordinate_formulas_pass": {"type": "boolean"},
+        "all_encode_decode_observations_synchronize_pass": {"type": "boolean"},
+        "F_repeat_identity_pass": {"type": "boolean"},
+        "S_repeat_identity_pass": {"type": "boolean"},
+        "F_S_only_target_rotation_pass": {"type": "boolean"},
+        "F_S_source_symbols_and_unrotated_targets_identity_pass": {"type": "boolean"},
+        "component_layout_closure_pass": {"type": "boolean"},
+        "source_interface_closure_pass": {"type": "boolean"},
+        "online_digest_hook_closure_pass": {"type": "boolean"},
+        "all_component_mutation_controls_pass": {"type": "boolean"},
+        "all_instrumentation_neutrality_pass": {"type": "boolean"},
+        "third_shadow_coordinate_and_isolation_pass": {"type": "boolean"},
+        "all_roundtrips_and_inverses_pass": {"type": "boolean"},
+        "all_resources_pass": {"type": "boolean"},
+        "all_packages_pass": {"type": "boolean"},
+        "F_gross_gain_bytes": {"type": "integer"},
+        "S_gross_gain_bytes": {"type": "integer"},
+        "F_minus_S_bytes": {"type": "integer"},
+        "F_beats_P_pass": {"type": "boolean"},
+        "F_beats_S_pass": {"type": "boolean"},
+        "chronological_thirds": {"$ref": "#/$defs/thirdComparisons"},
+        "all_chronological_thirds_F_better_than_P_and_S_pass": {"type": "boolean"}
+      }
+    },
+    "passingComparisons": {
+      "allOf": [
+        {"$ref": "#/$defs/comparisons"},
+        {"properties": {
+          "P_q1_probability_identity_pass": {"const": true},
+          "P_q1_payload_identity_pass": {"const": true},
+          "P_q1_modeled_inverse_identity_pass": {"const": true},
+          "P_q1_raw_inverse_identity_pass": {"const": true},
+          "K_P_probability_identity_pass": {"const": true},
+          "K_P_component_boundary_identity_pass": {"const": true},
+          "K_P_sparse_component_root_identity_pass": {"const": true},
+          "K_P_payload_archive_inverse_identity_pass": {"const": true},
+          "all_K_dynamic_updates_equal_pass": {"const": true},
+          "all_arm_update_counts_match_schedule_pass": {"const": true},
+          "all_population_coordinate_formulas_pass": {"const": true},
+          "all_encode_decode_observations_synchronize_pass": {"const": true},
+          "F_repeat_identity_pass": {"const": true},
+          "S_repeat_identity_pass": {"const": true},
+          "F_S_only_target_rotation_pass": {"const": true},
+          "F_S_source_symbols_and_unrotated_targets_identity_pass": {"const": true},
+          "component_layout_closure_pass": {"const": true},
+          "source_interface_closure_pass": {"const": true},
+          "online_digest_hook_closure_pass": {"const": true},
+          "all_component_mutation_controls_pass": {"const": true},
+          "all_instrumentation_neutrality_pass": {"const": true},
+          "third_shadow_coordinate_and_isolation_pass": {"const": true},
+          "all_roundtrips_and_inverses_pass": {"const": true},
+          "all_resources_pass": {"const": true},
+          "all_packages_pass": {"const": true},
+          "F_gross_gain_bytes": {"minimum": 1},
+          "F_minus_S_bytes": {"minimum": 1},
+          "F_beats_P_pass": {"const": true},
+          "F_beats_S_pass": {"const": true}
+        }}
+      ]
+    },
+    "decision": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "evidence_complete_pass",
+        "implementation_closure_pass",
+        "exactness_pass",
+        "bookkeeping_control_pass",
+        "causal_control_pass",
+        "repeat_pass",
+        "resource_pass",
+        "package_pass",
+        "economic_gate_pass",
+        "terminal_classification",
+        "authorized_successor",
+        "scientific_verdict"
+      ],
+      "properties": {
+        "evidence_complete_pass": {"type": "boolean"},
+        "implementation_closure_pass": {"type": "boolean"},
+        "exactness_pass": {"type": "boolean"},
+        "bookkeeping_control_pass": {"type": "boolean"},
+        "causal_control_pass": {"type": "boolean"},
+        "repeat_pass": {"type": "boolean"},
+        "resource_pass": {"type": "boolean"},
+        "package_pass": {"type": "boolean"},
+        "economic_gate_pass": {"type": "boolean"},
+        "terminal_classification": {
+          "enum": [
+            "pass_target_scale_causal_midpoint_value",
+            "pass_preregistered_smaller_scope",
+            "fail_subscale_full_midpoint",
+            "fail_causal_alignment",
+            "fail_bookkeeping_identity",
+            "fail_encoder_decoder_synchronization",
+            "fail_repeat_identity",
+            "fail_archive_or_inverse",
+            "fail_resource_or_dependency",
+            "invalid_receipt"
+          ]
+        },
+        "authorized_successor": {
+          "enum": [
+            "next_preregistered_scope",
+            "cmix_obias_midpoint_persistence_attribution64_q0_v3",
+            "one_observability_only_correction",
+            "none_retire_cmix_midas"
+          ]
+        },
+        "scientific_verdict": {
+          "enum": ["pass", "fail", "invalid"]
+        }
+      }
+    },
+    "passingDecision": {
+      "allOf": [
+        {"$ref": "#/$defs/decision"},
+        {"properties": {
+          "evidence_complete_pass": {"const": true},
+          "implementation_closure_pass": {"const": true},
+          "exactness_pass": {"const": true},
+          "bookkeeping_control_pass": {"const": true},
+          "causal_control_pass": {"const": true},
+          "repeat_pass": {"const": true},
+          "resource_pass": {"const": true},
+          "package_pass": {"const": true},
+          "economic_gate_pass": {"const": true},
+          "scientific_verdict": {"const": "pass"}
+        }}
+      ]
+    }
+  }
+}

@@ -1,0 +1,99 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gamma.enwiki9.gamma-mechanism-ir-compilation-receipt.v2",
+  "title": "Gamma Mechanism IR closure-aware compilation receipt v2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "mechanism_id",
+    "operational_status",
+    "source_ir",
+    "causal_closure",
+    "tools",
+    "legacy_compilation",
+    "artifacts",
+    "artifact_set_sha256",
+    "validation",
+    "claim_authority",
+    "execution_authority",
+    "promotion_authority"
+  ],
+  "properties": {
+    "schema": {"const": "gamma.enwiki9.gamma-mechanism-ir-compilation-receipt.v2"},
+    "mechanism_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9._-]*$"},
+    "operational_status": {"const": "compiled_non_authoritative"},
+    "source_ir": {"$ref": "#/$defs/file"},
+    "causal_closure": {"$ref": "#/$defs/file"},
+    "tools": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["compiler_v2", "compiler_v1", "closure_verifier"],
+      "properties": {
+        "compiler_v2": {"$ref": "#/$defs/file"},
+        "compiler_v1": {"$ref": "#/$defs/file"},
+        "closure_verifier": {"$ref": "#/$defs/file"}
+      }
+    },
+    "legacy_compilation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["return_code", "stdout_sha256", "stderr_sha256", "receipt_sha256"],
+      "properties": {
+        "return_code": {"const": 0},
+        "stdout_sha256": {"$ref": "#/$defs/sha256"},
+        "stderr_sha256": {"$ref": "#/$defs/sha256"},
+        "receipt_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "artifacts": {
+      "type": "array",
+      "minItems": 13,
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/file"}
+    },
+    "artifact_set_sha256": {"$ref": "#/$defs/sha256"},
+    "validation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "closure_verification_pass",
+        "mechanism_identity_pass",
+        "arm_set_pass",
+        "per_arm_access_rewrite_pass",
+        "matched_control_access_pass",
+        "raw_treatment_posterior_isolation_pass",
+        "mixed_treatment_posterior_write_pass",
+        "artifact_closure_pass",
+        "canonical_render_pass"
+      ],
+      "properties": {
+        "closure_verification_pass": {"const": true},
+        "mechanism_identity_pass": {"const": true},
+        "arm_set_pass": {"const": true},
+        "per_arm_access_rewrite_pass": {"const": true},
+        "matched_control_access_pass": {"const": true},
+        "raw_treatment_posterior_isolation_pass": {"const": true},
+        "mixed_treatment_posterior_write_pass": {"const": true},
+        "artifact_closure_pass": {"const": true},
+        "canonical_render_pass": {"const": true}
+      }
+    },
+    "claim_authority": {"const": "none"},
+    "execution_authority": {"const": false},
+    "promotion_authority": {"const": false}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "file": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "bytes", "sha256"],
+      "properties": {
+        "path": {"type": "string", "minLength": 1},
+        "bytes": {"type": "integer", "minimum": 1},
+        "sha256": {"$ref": "#/$defs/sha256"}
+      }
+    }
+  }
+}

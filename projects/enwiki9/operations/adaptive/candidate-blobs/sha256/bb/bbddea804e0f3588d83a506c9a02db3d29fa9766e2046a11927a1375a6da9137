@@ -1,0 +1,227 @@
+{
+  "schema": "gamma.enwiki9.objective-contract.v2",
+  "version": 2,
+  "objectiveId": "gamma-enwiki9-hutter-99m-v2",
+  "status": "active",
+  "effectiveUtc": "2026-09-05T14:40:34.645798+00:00",
+  "corpus": {
+    "name": "enwik9",
+    "bytes": 1000000000,
+    "md5": "e206c3450ac99950df65bf70ef61a12d",
+    "sha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "repositoryPath": "projects/enwiki9/data/enwik9"
+  },
+  "score": {
+    "kind": "fully-counted-submission-score",
+    "targetBytes": 99000000,
+    "comparison": "<=",
+    "submissionForm": "self-extracting-archive",
+    "formula": "comp9_or_source_package_bytes + archive9_bytes + required_option_bytes",
+    "countedComponents": [
+      "compressor executable or reproducible source package",
+      "self-extracting archive",
+      "decompressor embedded in the archive",
+      "required command-line and compilation options",
+      "models and learned parameters",
+      "dictionaries tables codebooks and configuration",
+      "framing and reconstruction metadata",
+      "wrappers build files patches and runtime dependencies"
+    ],
+    "targetMeaning": "Provisional engineering target in complete submission bytes. Official and contingent competition thresholds are separate in competitive_frontier_v1.json; committee acceptance and accounting remain unconfirmed."
+  },
+  "correctness": {
+    "restoredBytes": 1000000000,
+    "restoredSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "exactRoundtripRequired": true,
+    "deterministicArchiveReplayRequired": true,
+    "independentDecodeRequired": true
+  },
+  "resources": {
+    "cpu": {
+      "maximumPhysicalCores": 1,
+      "gpuAllowed": false,
+      "networkAllowed": false,
+      "measurement": "continuous-process-tree"
+    },
+    "wallTime": {
+      "appliesIndependentlyTo": [
+        "compression",
+        "decompression"
+      ],
+      "geekbenchVersion": 5,
+      "scoreSymbol": "T_single_core",
+      "maximumHoursFormula": "70000 / T_single_core",
+      "maximumSecondsNumerator": 252000000,
+      "comparison": "<"
+    },
+    "memory": {
+      "maximumBytes": 10000000000,
+      "comparison": "<",
+      "linuxGuardKiB": 9765625,
+      "measurement": "continuous-process-tree-peak-rss"
+    },
+    "temporaryDisk": {
+      "maximumBytes": 100000000000,
+      "comparison": "<",
+      "measurement": "continuous-candidate-scratch-tree-peak"
+    }
+  },
+  "distribution": {
+    "selfContained": true,
+    "additionalInstallationsAllowed": false,
+    "completeDependencyClosureRequired": true,
+    "publicDocumentedSourceRequired": true,
+    "licenseClass": "OSI-approved",
+    "acceptedExecutableSystems": [
+      "linux-x86-32",
+      "linux-x86-64",
+      "windows-x86-32",
+      "windows-x86-64"
+    ]
+  },
+  "evidence": {
+    "requiredArtifacts": [
+      "objective contract digest",
+      "candidate tree and dependency-closure manifest",
+      "exact build and run commands",
+      "original corpus size and hashes",
+      "archive size and hash",
+      "restored corpus size and hashes",
+      "independent decoder receipt",
+      "deterministic replay archive hash",
+      "continuous process-tree CPU RSS and thread receipt",
+      "continuous temporary-disk receipt",
+      "counted submission package manifest",
+      "license and clean-room dependency audit"
+    ],
+    "referenceBinding": "sha256-canonical-json-v1",
+    "missingEvidenceDisposition": "fail-closed-no-promotion"
+  },
+  "epistemicPolicy": {
+    "objectiveCredit": "exact-full-corpus-self-contained-package-only",
+    "zeroCreditClasses": [
+      "forecast",
+      "prefix",
+      "partial archive",
+      "oracle",
+      "teacher",
+      "trace",
+      "external compressor"
+    ],
+    "compositionRule": "joint-replay-required-never-add-component-forecasts"
+  },
+  "promotionLadders": [
+    {
+      "id": "adaptive-exact-corpus",
+      "ordering": "all-prior-gates-required",
+      "gates": [
+        {
+          "id": "1k",
+          "population": "canonical opening 1,024 bytes",
+          "objectiveCredit": false
+        },
+        {
+          "id": "250k",
+          "population": "canonical opening 250,000 bytes",
+          "objectiveCredit": false
+        },
+        {
+          "id": "1m",
+          "population": "canonical opening 1,000,000 bytes",
+          "objectiveCredit": false
+        },
+        {
+          "id": "10m",
+          "population": "canonical opening 10,000,000 bytes",
+          "objectiveCredit": false
+        },
+        {
+          "id": "100m",
+          "population": "canonical opening 100,000,000 bytes",
+          "objectiveCredit": false
+        },
+        {
+          "id": "full-1g",
+          "population": "canonical full 1,000,000,000 bytes",
+          "objectiveCredit": true
+        }
+      ]
+    },
+    {
+      "id": "delta-midas-attribution",
+      "ordering": "all-prior-gates-required",
+      "gates": [
+        {
+          "id": "exact-65k",
+          "population": "frozen 65,536-symbol midpoint attribution population",
+          "objectiveCredit": false
+        },
+        {
+          "id": "mature",
+          "population": "preregistered mature continuous window bound by an experiment contract",
+          "objectiveCredit": false
+        },
+        {
+          "id": "canonical-10m",
+          "population": "canonical opening 10,000,000 bytes",
+          "objectiveCredit": false
+        },
+        {
+          "id": "distant-transfer",
+          "population": "preregistered disjoint distant window bound by an experiment contract",
+          "objectiveCredit": false
+        },
+        {
+          "id": "canonical-100m",
+          "population": "canonical opening 100,000,000 bytes",
+          "objectiveCredit": false
+        },
+        {
+          "id": "full-1g",
+          "population": "canonical full 1,000,000,000 bytes",
+          "objectiveCredit": true
+        }
+      ]
+    }
+  ],
+  "authorities": [
+    {
+      "url": "https://mattmahoney.net/dc/text.html",
+      "retrievedUtc": "2026-09-05T14:38:24.957608+00:00",
+      "bytes": 684800,
+      "sha256": "3191dc539073b94bd184f75596e669af975509329e4c2655042a9a01fc622972",
+      "locators": [
+        "fx2-cmix-transformer"
+      ]
+    },
+    {
+      "url": "https://www.hutter1.net/prize/",
+      "retrievedUtc": "2026-09-05T14:38:25.622311+00:00",
+      "bytes": 48606,
+      "sha256": "065186dc3e6ef61f295aa30873c142bd6e4a2f6f310cfbd1d28ec09cbc6cbff7",
+      "locators": [
+        "The Task / Rules / Submitting"
+      ]
+    },
+    {
+      "url": "https://www.hutter1.net/prize/hrules.htm",
+      "retrievedUtc": "2026-09-05T14:38:26.150757+00:00",
+      "bytes": 15907,
+      "sha256": "e55d9f96b227e61ec0996adaf36304185d74db8c17093b403bb325240b2dc163",
+      "locators": [
+        "The Task / Rules / Submitting"
+      ]
+    }
+  ],
+  "migrationPolicy": {
+    "ruleChangeAction": "create-new-version-and-revalidate-before-promotion",
+    "targetChangeAction": "create-new-objective-id",
+    "historicalReceiptPolicy": "retain-original-objective-digest"
+  },
+  "migration": {
+    "previousObjectivePath": "contracts/research/v1/objective-contract.json",
+    "previousObjectiveDigest": "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8",
+    "historicalMilestoneBytes": 105000000,
+    "competitiveFrontierPath": "operations/provenance/competitive_frontier_v1.json"
+  }
+}

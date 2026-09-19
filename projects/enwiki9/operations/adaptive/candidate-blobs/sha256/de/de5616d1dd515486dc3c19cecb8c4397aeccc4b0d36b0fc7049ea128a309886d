@@ -1,0 +1,77 @@
+{
+  "capabilities": [
+    "Exact arbitrary-byte tokenization and reconstruction.",
+    "Backward recursive phrases; parameter templates and repeated argument bindings.",
+    "Whole encoded frame cost selection; independently framed Deflate fallback.",
+    "Global decoder work/output bounds, corruption checks and argument consumption.",
+    "Separate bounded encode/decode worker processes and explicit development/confirmation policies."
+  ],
+  "complete_package_bytes": null,
+  "corpus_executed": false,
+  "full_corpus_score_bytes": null,
+  "id": "dualstream_grammar_v1_unit_20260906",
+  "limitations": [
+    "No enwik9 compression measured in these tests.",
+    "No nested parameter-template call inference.",
+    "Five entropy sections implement two logical streams; their overhead is counted.",
+    "Python/zlib complete package and resource qualification remain unresolved."
+  ],
+  "log": {
+    "bytes": 2950,
+    "path": "operations/evidence/20260906_dualstream_grammar_v1_unit.log",
+    "sha256": "46fca2713ad4b26b639cf341e6f01176d84d3c5ea2aa86fba92c6d05bc577f03"
+  },
+  "objective_credit_bytes": 0,
+  "origin": "New local implementation from the user specification; referenced sandbox ZIP unavailable and not imported.",
+  "owner": "root_explore",
+  "recorded_at": "2026-09-06T17:41:15.361450+00:00",
+  "runtime": {
+    "python": "3.14.4 (main, Jun 18 2026, 14:25:02) [GCC 15.2.0]",
+    "zlib": "1.3.1"
+  },
+  "schema": "enwiki9_implementation_evidence_v1",
+  "source_bindings": [
+    {
+      "bytes": 27806,
+      "path": "tools/dualstream_grammar_v1.py",
+      "sha256": "9f31a671610aeb2b0f753b13346a06cf1729a4b6b0ce92d2fd7590b3018023bd"
+    },
+    {
+      "bytes": 14343,
+      "path": "tools/dualstream_grammar_gate_v1.py",
+      "sha256": "7b30a36d4c28113d23d6b9cf475d1b2d48ba40853074c5003322b459af496902"
+    },
+    {
+      "bytes": 7136,
+      "path": "tests/test_dualstream_grammar_v1.py",
+      "sha256": "ca245a06c8e8319dddb05bbaefac24b123414069875976d1c41d0292dd08049a"
+    },
+    {
+      "bytes": 3982,
+      "path": "tests/test_dualstream_grammar_gate_v1.py",
+      "sha256": "001ececa6bdd11286736ae07e4f9ca832a51c5631c5b829349f51e88427c39b5"
+    }
+  ],
+  "validation": {
+    "codec_tests": 13,
+    "command": [
+      "taskset",
+      "-c",
+      "2",
+      "python3",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "tests",
+      "-p",
+      "test_dualstream_grammar*.py",
+      "-v"
+    ],
+    "elapsed_seconds_from_unittest": 0.32,
+    "native_synthetic_phases": 2,
+    "returncode": 0,
+    "runner_tests": 5,
+    "tests_passed": 18
+  }
+}

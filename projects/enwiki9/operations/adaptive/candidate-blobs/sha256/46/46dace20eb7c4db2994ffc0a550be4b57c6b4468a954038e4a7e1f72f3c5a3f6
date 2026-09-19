@@ -1,0 +1,319 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gamma.enwiki9.delta-midas-functional-jvp-receipt.v1",
+  "title": "Delta-MIDAS functional JVP receipt v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "receipt_id",
+    "candidate_id",
+    "input_lock",
+    "population",
+    "arithmetic",
+    "oracle",
+    "arms",
+    "controls",
+    "repeat",
+    "resources",
+    "decision",
+    "authority"
+  ],
+  "properties": {
+    "schema": {"const": "gamma.enwiki9.delta-midas-functional-jvp-receipt.v1"},
+    "receipt_id": {"type": "string", "minLength": 1},
+    "candidate_id": {"const": "delta_midas_functional_jvp_65536_q0_v1"},
+    "input_lock": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "planning_contract_sha256",
+        "experiment_contract_sha256",
+        "program_contract_sha256",
+        "integrated_replay_receipt_sha256",
+        "source_revision",
+        "build_receipt_sha256",
+        "binary_sha256",
+        "runtime_root_manifest_sha256",
+        "population_manifest_sha256",
+        "oracle_manifest_sha256",
+        "direction_manifest_sha256",
+        "permutation_manifest_sha256"
+      ],
+      "properties": {
+        "planning_contract_sha256": {"$ref": "#/$defs/sha256"},
+        "experiment_contract_sha256": {"$ref": "#/$defs/sha256"},
+        "program_contract_sha256": {"$ref": "#/$defs/sha256"},
+        "integrated_replay_receipt_sha256": {"$ref": "#/$defs/sha256"},
+        "source_revision": {"type": "string", "minLength": 1},
+        "build_receipt_sha256": {"$ref": "#/$defs/sha256"},
+        "binary_sha256": {"$ref": "#/$defs/sha256"},
+        "runtime_root_manifest_sha256": {"$ref": "#/$defs/sha256"},
+        "population_manifest_sha256": {"$ref": "#/$defs/sha256"},
+        "oracle_manifest_sha256": {"$ref": "#/$defs/sha256"},
+        "direction_manifest_sha256": {"$ref": "#/$defs/sha256"},
+        "permutation_manifest_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "population": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "event_count",
+        "segment_count",
+        "truth_sha256",
+        "segment_boundaries_sha256",
+        "event_order_sha256",
+        "complete_population_pass"
+      ],
+      "properties": {
+        "event_count": {"const": 65536},
+        "segment_count": {"type": "integer", "minimum": 1},
+        "truth_sha256": {"$ref": "#/$defs/sha256"},
+        "segment_boundaries_sha256": {"$ref": "#/$defs/sha256"},
+        "event_order_sha256": {"$ref": "#/$defs/sha256"},
+        "complete_population_pass": {"type": "boolean"}
+      }
+    },
+    "arithmetic": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "reference_mode",
+        "rounding_mode",
+        "fast_math",
+        "fma_contraction",
+        "ftz",
+        "daz",
+        "thread_count",
+        "reduction_order_sha256",
+        "logistic_evaluator_sha256",
+        "finite_pass"
+      ],
+      "properties": {
+        "reference_mode": {"const": "scalar_noncontracted"},
+        "rounding_mode": {"const": "FE_TONEAREST"},
+        "fast_math": {"const": false},
+        "fma_contraction": {"const": false},
+        "ftz": {"const": false},
+        "daz": {"const": false},
+        "thread_count": {"const": 1},
+        "reduction_order_sha256": {"$ref": "#/$defs/sha256"},
+        "logistic_evaluator_sha256": {"$ref": "#/$defs/sha256"},
+        "finite_pass": {"type": "boolean"}
+      }
+    },
+    "oracle": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "O_logits_sha256",
+        "F_logits_sha256",
+        "target_delta_logits_sha256",
+        "O_truth_path_ideal_bits",
+        "F_truth_path_ideal_bits",
+        "F_minus_O_truth_path_gain_bits",
+        "target_delta_energy",
+        "F_gain_by_third_bits",
+        "F_positive_segment_count",
+        "F_positive_segment_fraction",
+        "integrated_replay_exact_pass"
+      ],
+      "properties": {
+        "O_logits_sha256": {"$ref": "#/$defs/sha256"},
+        "F_logits_sha256": {"$ref": "#/$defs/sha256"},
+        "target_delta_logits_sha256": {"$ref": "#/$defs/sha256"},
+        "O_truth_path_ideal_bits": {"type": "number"},
+        "F_truth_path_ideal_bits": {"type": "number"},
+        "F_minus_O_truth_path_gain_bits": {"type": "number"},
+        "target_delta_energy": {"type": "number", "exclusiveMinimum": 0},
+        "F_gain_by_third_bits": {"$ref": "#/$defs/threeNumbers"},
+        "F_positive_segment_count": {"type": "integer", "minimum": 0},
+        "F_positive_segment_fraction": {"type": "number", "minimum": 0, "maximum": 1},
+        "integrated_replay_exact_pass": {"type": "boolean"}
+      }
+    },
+    "arms": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["parameter", "state", "joint", "shifted", "negated"],
+      "properties": {
+        "parameter": {"$ref": "#/$defs/armMetrics"},
+        "state": {"$ref": "#/$defs/armMetrics"},
+        "joint": {"$ref": "#/$defs/armMetrics"},
+        "shifted": {"$ref": "#/$defs/armMetrics"},
+        "negated": {"$ref": "#/$defs/armMetrics"}
+      }
+    },
+    "controls": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "no_fit_pass",
+        "unit_scale_pass",
+        "parameter_plus_state_equals_joint_input_pass",
+        "shift_permutation_pass",
+        "negation_pass",
+        "joint_beats_shifted_gain_pass",
+        "joint_beats_negated_gain_pass",
+        "joint_beats_shifted_energy_pass",
+        "joint_beats_negated_energy_pass"
+      ],
+      "properties": {
+        "no_fit_pass": {"type": "boolean"},
+        "unit_scale_pass": {"type": "boolean"},
+        "parameter_plus_state_equals_joint_input_pass": {"type": "boolean"},
+        "shift_permutation_pass": {"type": "boolean"},
+        "negation_pass": {"type": "boolean"},
+        "joint_beats_shifted_gain_pass": {"type": "boolean"},
+        "joint_beats_negated_gain_pass": {"type": "boolean"},
+        "joint_beats_shifted_energy_pass": {"type": "boolean"},
+        "joint_beats_negated_energy_pass": {"type": "boolean"}
+      }
+    },
+    "repeat": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "first_output_manifest_sha256",
+        "second_output_manifest_sha256",
+        "byte_identity_pass"
+      ],
+      "properties": {
+        "first_output_manifest_sha256": {"$ref": "#/$defs/sha256"},
+        "second_output_manifest_sha256": {"$ref": "#/$defs/sha256"},
+        "byte_identity_pass": {"type": "boolean"}
+      }
+    },
+    "resources": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "external_resource_receipt_sha256",
+        "resource_pass",
+        "dependency_closure_receipt_sha256",
+        "dependency_closure_pass",
+        "closed_runtime_absent_pass"
+      ],
+      "properties": {
+        "external_resource_receipt_sha256": {"$ref": "#/$defs/sha256"},
+        "resource_pass": {"type": "boolean"},
+        "dependency_closure_receipt_sha256": {"$ref": "#/$defs/sha256"},
+        "dependency_closure_pass": {"type": "boolean"},
+        "closed_runtime_absent_pass": {"type": "boolean"}
+      }
+    },
+    "decision": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "joint_gain_recovery_threshold",
+        "joint_gain_recovery_pass",
+        "joint_positive_all_thirds_pass",
+        "joint_positive_segment_majority_pass",
+        "controls_pass",
+        "terminal_classification",
+        "authorized_successor",
+        "scientific_verdict"
+      ],
+      "properties": {
+        "joint_gain_recovery_threshold": {"const": 0.5},
+        "joint_gain_recovery_pass": {"type": "boolean"},
+        "joint_positive_all_thirds_pass": {"type": "boolean"},
+        "joint_positive_segment_majority_pass": {"type": "boolean"},
+        "controls_pass": {"type": "boolean"},
+        "terminal_classification": {
+          "enum": [
+            "pass_parameter_dominant_functional_tangent",
+            "pass_state_dominant_functional_tangent",
+            "pass_joint_functional_tangent",
+            "fail_tangent_subscale_with_state_signal",
+            "fail_tangent_subscale_without_state_signal",
+            "fail_causal_controls",
+            "fail_integrated_replay",
+            "fail_repeat_identity",
+            "fail_resource_or_dependency",
+            "invalid_receipt"
+          ]
+        },
+        "authorized_successor": {
+          "enum": [
+            "compact_tied_parameter_adapter",
+            "stateful_decay_or_retention_adapter",
+            "joint_parameter_state_adapter",
+            "compact_open_student",
+            "one_correction_only_implementation_successor",
+            "none_retire_family_interface"
+          ]
+        },
+        "scientific_verdict": {"enum": ["pass", "fail", "invalid"]},
+        "notes": {"type": "array", "items": {"type": "string"}}
+      }
+    },
+    "authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "compression_credit_bytes",
+        "promotion_to_archive_authority",
+        "package_score_authority",
+        "claim"
+      ],
+      "properties": {
+        "compression_credit_bytes": {"const": 0},
+        "promotion_to_archive_authority": {"const": false},
+        "package_score_authority": {"const": false},
+        "claim": {"const": "functional_tangent_diagnostic_only"}
+      }
+    }
+  },
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "threeNumbers": {
+      "type": "array",
+      "prefixItems": [
+        {"type": "number"},
+        {"type": "number"},
+        {"type": "number"}
+      ],
+      "items": false,
+      "minItems": 3,
+      "maxItems": 3
+    },
+    "armMetrics": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "jvp_logits_sha256",
+        "surrogate_logits_sha256",
+        "truth_path_ideal_bits",
+        "truth_path_gain_bits",
+        "truth_path_gain_recovery_fraction",
+        "logit_residual_squared_error",
+        "logit_energy_recovery_fraction",
+        "cosine_alignment",
+        "gain_by_third_bits",
+        "positive_segment_count",
+        "positive_segment_fraction",
+        "finite_pass"
+      ],
+      "properties": {
+        "jvp_logits_sha256": {"$ref": "#/$defs/sha256"},
+        "surrogate_logits_sha256": {"$ref": "#/$defs/sha256"},
+        "truth_path_ideal_bits": {"type": "number"},
+        "truth_path_gain_bits": {"type": "number"},
+        "truth_path_gain_recovery_fraction": {"type": "number"},
+        "logit_residual_squared_error": {"type": "number", "minimum": 0},
+        "logit_energy_recovery_fraction": {"type": "number"},
+        "cosine_alignment": {"type": "number", "minimum": -1, "maximum": 1},
+        "gain_by_third_bits": {"$ref": "#/$defs/threeNumbers"},
+        "positive_segment_count": {"type": "integer", "minimum": 0},
+        "positive_segment_fraction": {"type": "number", "minimum": 0, "maximum": 1},
+        "finite_pass": {"type": "boolean"}
+      }
+    }
+  }
+}

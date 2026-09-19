@@ -1,0 +1,131 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gamma.enwiki9.cmix-filebacked-fxcm-100m-identity-resource-verification.v1",
+  "title": "Independent CMIX q1 opening-100M identity/resource verification",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "candidate_id",
+    "verified",
+    "passed",
+    "errors",
+    "receipt_sha256",
+    "artifact_checks",
+    "derived_comparisons",
+    "derived_resources",
+    "derived_decisions",
+    "claim_authority",
+    "promotion_authority",
+    "gamma_compression_credit_bytes",
+    "gamma_score_credit_bytes"
+  ],
+  "properties": {
+    "schema": {
+      "const": "gamma.enwiki9.cmix-filebacked-fxcm-100m-identity-resource-verification.v1"
+    },
+    "candidate_id": {"const": "cmix_obias_memory_safe_parent_filebacked_q1_v1"},
+    "verified": {"type": "boolean"},
+    "passed": {"type": "boolean"},
+    "errors": {
+      "type": "array",
+      "items": {"type": "string", "minLength": 1}
+    },
+    "receipt_sha256": {"$ref": "#/$defs/sha256"},
+    "artifact_checks": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "population_prefix_identity_pass",
+        "required_artifact_count",
+        "verified_artifact_count",
+        "all_artifacts_pass"
+      ],
+      "properties": {
+        "population_prefix_identity_pass": {"type": "boolean"},
+        "required_artifact_count": {"type": "integer", "minimum": 0},
+        "verified_artifact_count": {"type": "integer", "minimum": 0},
+        "all_artifacts_pass": {"type": "boolean"}
+      }
+    },
+    "derived_comparisons": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "observer_calibration_antecedent_pass",
+        "post_head_probability_identity_pass",
+        "coder_checkpoint_identity_pass",
+        "persistent_state_checkpoint_identity_pass",
+        "arithmetic_payload_identity_pass",
+        "decoded_transformed_identity_pass",
+        "all_raw_inverses_pass",
+        "parent_q1_self_extracting_archive_identity_expected",
+        "identity_gate_pass"
+      ],
+      "properties": {
+        "observer_calibration_antecedent_pass": {"type": "boolean"},
+        "post_head_probability_identity_pass": {"type": "boolean"},
+        "coder_checkpoint_identity_pass": {"type": "boolean"},
+        "persistent_state_checkpoint_identity_pass": {"type": "boolean"},
+        "arithmetic_payload_identity_pass": {"type": "boolean"},
+        "decoded_transformed_identity_pass": {"type": "boolean"},
+        "all_raw_inverses_pass": {"type": "boolean"},
+        "parent_q1_self_extracting_archive_identity_expected": {"const": false},
+        "identity_gate_pass": {"type": "boolean"}
+      }
+    },
+    "derived_resources": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "engineering_headroom_pass",
+        "official_memory_pass",
+        "temporary_disk_pass",
+        "cpu_pass",
+        "phase_measurement_pass",
+        "cleanup_pass",
+        "resource_gate_pass"
+      ],
+      "properties": {
+        "engineering_headroom_pass": {"type": "boolean"},
+        "official_memory_pass": {"type": "boolean"},
+        "temporary_disk_pass": {"type": "boolean"},
+        "cpu_pass": {"type": "boolean"},
+        "phase_measurement_pass": {"type": "boolean"},
+        "cleanup_pass": {"type": "boolean"},
+        "resource_gate_pass": {"type": "boolean"}
+      }
+    },
+    "derived_decisions": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "population_identity_pass",
+        "identity_gate_pass",
+        "resource_gate_pass",
+        "opening_100m_gate_pass",
+        "authorize_unchanged_full1g_q1",
+        "memory_safe_parent_qualified",
+        "gamma_compression_credit_bytes",
+        "gamma_score_credit_bytes"
+      ],
+      "properties": {
+        "population_identity_pass": {"type": "boolean"},
+        "identity_gate_pass": {"type": "boolean"},
+        "resource_gate_pass": {"type": "boolean"},
+        "opening_100m_gate_pass": {"type": "boolean"},
+        "authorize_unchanged_full1g_q1": {"type": "boolean"},
+        "memory_safe_parent_qualified": {"const": false},
+        "gamma_compression_credit_bytes": {"const": 0},
+        "gamma_score_credit_bytes": {"const": 0}
+      }
+    },
+    "claim_authority": {"const": "none"},
+    "promotion_authority": {"const": false},
+    "gamma_compression_credit_bytes": {"const": 0},
+    "gamma_score_credit_bytes": {"const": 0}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  }
+}

@@ -376,6 +376,26 @@ def test_post_spawn_bookkeeping_failure_cleans_up_before_snapshot_removal(tmp_pa
     assert not observed["snapshot"].exists()
 
 
+@pytest.mark.parametrize("failure", ["lease", "record", "spawn"])
+def test_startup_failure_cleans_owned_envelope_before_releasing_admission(tmp_path, monkeypatch, failure):
+    job, path, observed = execution_fixture(tmp_path, monkeypatch, mode="qualification")
+    order = []
+    monkeypatch.setattr(lab.linux_execution, "cleanup_unstarted", lambda handles: order.append("cleanup"))
+    def fail(*args, **kwargs):
+        raise OSError("injected startup failure")
+    if failure == "lease":
+        monkeypatch.setattr(lab.managed_exclusive_lease.ManagedExclusiveLease, "acquire", fail)
+    elif failure == "record":
+        monkeypatch.setattr(lab, "atomic_json", fail)
+    else:
+        monkeypatch.setattr(lab.subprocess, "Popen", fail)
+    with pytest.raises(OSError, match="startup failure"):
+        lab._execute_job(path, job)
+    assert order == ["cleanup"]
+    assert len(observed["releases"]) == (0 if failure == "lease" else 1)
+    assert not observed["snapshot"].exists()
+
+
 @pytest.mark.parametrize("failure", ["read", "kill"])
 def test_cleanup_attempts_every_owned_group_after_one_failure(tmp_path: Path, monkeypatch: pytest.MonkeyPatch, failure: str) -> None:
     from types import SimpleNamespace

@@ -1,0 +1,112 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gamma.dev/enwiki9/research/v1/mechanism-graph.schema.json",
+  "title": "gamma.enwiki9.mechanism-graph.v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema", "objective", "graphId", "scope", "components", "interactions",
+    "composition", "conclusion", "generatedUtc"
+  ],
+  "properties": {
+    "schema": { "const": "gamma.enwiki9.mechanism-graph.v1" },
+    "objective": { "$ref": "#/$defs/objectiveBinding" },
+    "graphId": { "$ref": "#/$defs/id" },
+    "scope": { "type": "string", "minLength": 1 },
+    "components": {
+      "type": "array", "minItems": 1, "uniqueItems": true,
+      "items": {
+        "type": "object", "additionalProperties": false,
+        "required": [
+          "id", "role", "state", "probabilityBoundary", "causalInputs",
+          "outputs", "closedTeacherDependency", "scoreCreditBytes", "evidence"
+        ],
+        "properties": {
+          "id": { "$ref": "#/$defs/id" },
+          "role": { "enum": ["open-codec", "closed-teacher", "trace", "causal-shadow", "control", "forecast"] },
+          "state": { "enum": ["active", "retired", "blocked", "evidence-only"] },
+          "probabilityBoundary": { "type": "string", "minLength": 1 },
+          "causalInputs": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "type": "string", "minLength": 1 } },
+          "outputs": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "type": "string", "minLength": 1 } },
+          "closedTeacherDependency": { "type": "boolean" },
+          "scoreCreditBytes": { "type": "integer", "minimum": 0 },
+          "evidence": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "$ref": "#/$defs/reference" } }
+        }
+      }
+    },
+    "interactions": {
+      "type": "array", "uniqueItems": true,
+      "items": {
+        "type": "object", "additionalProperties": false,
+        "required": [
+          "id", "components", "sharedProbabilityBoundary", "overlappingCost",
+          "causalCompatibility", "jointReplayRequired", "disposition"
+        ],
+        "properties": {
+          "id": { "$ref": "#/$defs/id" },
+          "components": {
+            "type": "array", "minItems": 2, "maxItems": 2, "uniqueItems": true,
+            "items": { "$ref": "#/$defs/id" }
+          },
+          "sharedProbabilityBoundary": { "type": "boolean" },
+          "overlappingCost": { "type": "boolean" },
+          "causalCompatibility": { "enum": ["compatible", "incompatible", "unproven"] },
+          "jointReplayRequired": { "type": "boolean" },
+          "disposition": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+    "composition": {
+      "type": "object", "additionalProperties": false,
+      "required": [
+        "candidateId", "componentIds", "status", "componentForecastsAdded",
+        "jointReplay", "requiredEvidence"
+      ],
+      "properties": {
+        "candidateId": { "type": ["string", "null"], "pattern": "^[a-z0-9][a-z0-9._-]*$" },
+        "componentIds": { "type": "array", "uniqueItems": true, "items": { "$ref": "#/$defs/id" } },
+        "status": { "enum": ["prohibited", "requires-joint-replay", "exact-replay-present"] },
+        "componentForecastsAdded": { "const": false },
+        "jointReplay": {
+          "oneOf": [
+            { "type": "null" },
+            { "$ref": "#/$defs/reference" }
+          ]
+        },
+        "requiredEvidence": {
+          "type": "array", "minItems": 1, "uniqueItems": true,
+          "items": {
+            "enum": [
+              "exact-joint-archive", "exact-roundtrip", "deterministic-replay",
+              "dependency-closure", "counted-package", "process-tree-resources",
+              "independent-decode", "full-corpus-objective-replay"
+            ]
+          }
+        }
+      }
+    },
+    "conclusion": { "type": "string", "minLength": 1 },
+    "generatedUtc": { "type": "string", "format": "date-time" }
+  },
+  "$defs": {
+    "digest": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "id": { "type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]*$" },
+    "relativePath": { "type": "string", "minLength": 1, "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$)).+$" },
+    "reference": {
+      "type": "object", "additionalProperties": false, "required": ["path", "sha256"],
+      "properties": { "path": { "$ref": "#/$defs/relativePath" }, "sha256": { "$ref": "#/$defs/digest" } }
+    },
+    "objectiveBinding": {
+      "type": "object", "additionalProperties": false,
+      "required": ["objectiveId", "objectiveDigest", "objectivePath", "targetScoreBytes", "corpusBytes", "corpusSha256"],
+      "properties": {
+        "objectiveId": { "type": "string", "minLength": 1 },
+        "objectiveDigest": { "$ref": "#/$defs/digest" },
+        "objectivePath": { "type": "string", "minLength": 1 },
+        "targetScoreBytes": { "type": "integer", "minimum": 1 },
+        "corpusBytes": { "type": "integer", "minimum": 1 },
+        "corpusSha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+      }
+    }
+  }
+}

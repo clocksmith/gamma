@@ -1,0 +1,100 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gamma.enwiki9.cmix-filebacked-fxcm-build-receipt.v1",
+  "title": "CMIX file-backed FXCM content-addressed build receipt",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "candidate_id",
+    "build_role",
+    "build_id",
+    "build_root_identity_sha256",
+    "capture_tool_sha256",
+    "compiler_proxy_sha256",
+    "command_manifest_sha256",
+    "stage_executable_manifest_sha256",
+    "compiler_invocation_manifest_sha256",
+    "compiler_invocation_count",
+    "macro_boundary_trace_pass",
+    "binary_sha256",
+    "shared_allocator_header_sha256",
+    "source_closure_sha256",
+    "source_closure",
+    "compiler_binary_sha256",
+    "linker_binary_sha256",
+    "prepare_argv",
+    "compile_argv",
+    "link_argv",
+    "compile_definitions",
+    "environment_sha256",
+    "build_log_sha256",
+    "prepare_return_code",
+    "compile_return_code",
+    "link_return_code",
+    "clean_build_root_pass",
+    "build_succeeded"
+  ],
+  "properties": {
+    "schema": {"const": "gamma.enwiki9.cmix-filebacked-fxcm-build-receipt.v1"},
+    "candidate_id": {"const": "cmix_obias_memory_safe_parent_filebacked_q1_v1"},
+    "build_role": {"enum": ["release", "harness"]},
+    "build_id": {"type": "string", "minLength": 1},
+    "build_root_identity_sha256": {"$ref": "#/$defs/sha256"},
+    "capture_tool_sha256": {"$ref": "#/$defs/sha256"},
+    "compiler_proxy_sha256": {"$ref": "#/$defs/sha256"},
+    "command_manifest_sha256": {"$ref": "#/$defs/sha256"},
+    "stage_executable_manifest_sha256": {"$ref": "#/$defs/sha256"},
+    "compiler_invocation_manifest_sha256": {"$ref": "#/$defs/sha256"},
+    "compiler_invocation_count": {"type": "integer", "minimum": 1},
+    "macro_boundary_trace_pass": {"const": true},
+    "binary_sha256": {"$ref": "#/$defs/sha256"},
+    "shared_allocator_header_sha256": {"$ref": "#/$defs/sha256"},
+    "source_closure_sha256": {"$ref": "#/$defs/sha256"},
+    "source_closure": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["path", "bytes", "sha256", "role"],
+        "properties": {
+          "path": {"type": "string", "minLength": 1},
+          "bytes": {"type": "integer", "minimum": 0},
+          "sha256": {"$ref": "#/$defs/sha256"},
+          "role": {"enum": ["shared_allocator_header", "source", "build_input"]}
+        }
+      }
+    },
+    "compiler_binary_sha256": {"$ref": "#/$defs/sha256"},
+    "linker_binary_sha256": {"$ref": "#/$defs/sha256"},
+    "prepare_argv": {
+      "oneOf": [
+        {"$ref": "#/$defs/argv"},
+        {"type": "null"}
+      ]
+    },
+    "compile_argv": {"$ref": "#/$defs/argv"},
+    "link_argv": {"$ref": "#/$defs/argv"},
+    "compile_definitions": {
+      "type": "array",
+      "items": {"type": "string", "minLength": 1},
+      "uniqueItems": true
+    },
+    "environment_sha256": {"$ref": "#/$defs/sha256"},
+    "build_log_sha256": {"$ref": "#/$defs/sha256"},
+    "prepare_return_code": {"const": 0},
+    "compile_return_code": {"const": 0},
+    "link_return_code": {"const": 0},
+    "clean_build_root_pass": {"const": true},
+    "build_succeeded": {"const": true}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "argv": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"type": "string"}
+    }
+  }
+}

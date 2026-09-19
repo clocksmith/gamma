@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gamma.enwiki9.safe-mix-program-lock.v1",
+  "title": "SAFE-MIX content-addressed program lock v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "candidate_id", "operational_status", "hash_status", "pending_lock_sha256", "materializer_sha256", "declared_file_count", "files", "all_files_regular_no_symlink_pass", "all_file_digests_materialized_pass", "execution_authority", "archive_authority", "score_credit_bytes"],
+  "properties": {
+    "schema": {"const": "gamma.enwiki9.safe-mix-program-lock.v1"},
+    "candidate_id": {"const": "gamma_safe_mix_v1"},
+    "operational_status": {"const": "dormant_dependency"},
+    "hash_status": {"const": "content_addressed"},
+    "pending_lock_sha256": {"$ref": "#/$defs/sha256"},
+    "materializer_sha256": {"$ref": "#/$defs/sha256"},
+    "declared_file_count": {"type": "integer", "minimum": 1},
+    "files": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["path", "sha256"],
+        "properties": {
+          "path": {"type": "string", "minLength": 1},
+          "sha256": {"$ref": "#/$defs/sha256"}
+        }
+      }
+    },
+    "all_files_regular_no_symlink_pass": {"const": true},
+    "all_file_digests_materialized_pass": {"const": true},
+    "execution_authority": {"const": false},
+    "archive_authority": {"const": false},
+    "score_credit_bytes": {"const": 0}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  }
+}

@@ -1,0 +1,93 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gamma.dev/enwiki9/research/v1/submission-package-receipt.schema.json",
+  "title": "gamma.enwiki9.submission-package-receipt.v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "packageId",
+    "selectedFormula",
+    "manifest",
+    "physicalArtifacts",
+    "embeddedComponents",
+    "countedText",
+    "scores",
+    "evidence",
+    "authority",
+    "generatedUtc"
+  ],
+  "properties": {
+    "schema": { "const": "gamma.enwiki9.submission-package-receipt.v1" },
+    "packageId": { "type": "string", "minLength": 1 },
+    "selectedFormula": { "type": "string", "minLength": 1 },
+    "manifest": { "type": "object" },
+    "physicalArtifacts": { "type": "array" },
+    "embeddedComponents": { "type": "array" },
+    "countedText": { "type": "array" },
+    "scores": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "officialPhysicalBytes",
+        "officialCountedTextBytes",
+        "officialTotalBytes",
+        "gammaPhysicalClosureBytes",
+        "gammaCountedTextBytes",
+        "gammaExpandedClosureBytes",
+        "recordImprovingBySize",
+        "minimumAwardEligibleBySize",
+        "gammaTargetMetBySize"
+      ],
+      "properties": {
+        "officialPhysicalBytes": { "type": "integer", "minimum": 0 },
+        "officialCountedTextBytes": { "type": "integer", "minimum": 0 },
+        "officialTotalBytes": { "type": "integer", "minimum": 0 },
+        "gammaPhysicalClosureBytes": { "type": "integer", "minimum": 0 },
+        "gammaCountedTextBytes": { "type": "integer", "minimum": 0 },
+        "gammaExpandedClosureBytes": { "type": "integer", "minimum": 0 },
+        "recordImprovingBySize": { "type": "boolean" },
+        "minimumAwardEligibleBySize": { "type": "boolean" },
+        "gammaTargetMetBySize": { "type": "boolean" }
+      }
+    },
+    "evidence": { "type": "array" },
+    "authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "artifactIdentityPass",
+        "embeddedInventoryPass",
+        "formulaShapePass",
+        "requiredEvidenceKinds",
+        "terminalEvidenceKinds",
+        "submissionAuthority",
+        "gammaCompletionAuthority",
+        "reasons"
+      ],
+      "properties": {
+        "artifactIdentityPass": { "type": "boolean" },
+        "embeddedInventoryPass": { "type": "boolean" },
+        "formulaShapePass": { "type": "boolean" },
+        "requiredEvidenceKinds": {
+          "type": "array",
+          "items": { "type": "string" },
+          "uniqueItems": true
+        },
+        "terminalEvidenceKinds": {
+          "type": "array",
+          "items": { "type": "string" },
+          "uniqueItems": true
+        },
+        "submissionAuthority": { "type": "boolean" },
+        "gammaCompletionAuthority": { "type": "boolean" },
+        "reasons": {
+          "type": "array",
+          "items": { "type": "string" },
+          "uniqueItems": true
+        }
+      }
+    },
+    "generatedUtc": { "type": "string", "format": "date-time" }
+  }
+}

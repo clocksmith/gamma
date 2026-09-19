@@ -1,0 +1,62 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gamma.enwiki9.wiki-pda-output-authority-manifest.v1",
+  "title": "WIKI-PDA cross-arm output authority manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "candidate_id",
+    "receipt_path",
+    "receipt_sha256",
+    "arm_output_verifier_path",
+    "arm_output_verifier_sha256",
+    "arms"
+  ],
+  "properties": {
+    "schema": {"const": "gamma.enwiki9.wiki-pda-output-authority-manifest.v1"},
+    "candidate_id": {"const": "wiki_pda_structural_replay_q0_v2"},
+    "receipt_path": {"$ref": "#/$defs/relativePath"},
+    "receipt_sha256": {"$ref": "#/$defs/sha256"},
+    "arm_output_verifier_path": {"$ref": "#/$defs/relativePath"},
+    "arm_output_verifier_sha256": {"$ref": "#/$defs/sha256"},
+    "arms": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["P", "K", "D", "R", "S"],
+      "properties": {
+        "P": {"$ref": "#/$defs/armEvidence"},
+        "K": {"$ref": "#/$defs/armEvidence"},
+        "D": {"$ref": "#/$defs/armEvidence"},
+        "R": {"$ref": "#/$defs/armEvidence"},
+        "S": {"$ref": "#/$defs/armEvidence"}
+      }
+    }
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "relativePath": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))(?!.*//).+$"
+    },
+    "armEvidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "output_manifest_path",
+        "output_manifest_sha256",
+        "artifacts_root",
+        "output_verification_path",
+        "output_verification_sha256"
+      ],
+      "properties": {
+        "output_manifest_path": {"$ref": "#/$defs/relativePath"},
+        "output_manifest_sha256": {"$ref": "#/$defs/sha256"},
+        "artifacts_root": {"$ref": "#/$defs/relativePath"},
+        "output_verification_path": {"$ref": "#/$defs/relativePath"},
+        "output_verification_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    }
+  }
+}

@@ -1,92 +1,53 @@
 #!/usr/bin/env python3
-"""Resolve and hash the project-local Python import closure for an entry tool."""
-
+"""Compatibility CLI for explicit, declared-root Python dependency closure."""
 from __future__ import annotations
-
 import argparse
-import ast
-import hashlib
 import json
 from pathlib import Path
-from typing import Iterable
-
+try:
+    from . import _enwiki9_bootstrap
+except ImportError:
+    import _enwiki9_bootstrap
+from gamma_enwiki9.evidence.source_closure import resolve_closure
 
 ROOT = Path(__file__).resolve().parents[1]
 TOOLS = ROOT / "tools"
-CONTRACT_ROOT = ROOT / "contracts" / "research" / "v1"
-RESEARCH_CONTRACTS = TOOLS / "research_contracts.py"
 
 
-def imported_modules(path: Path) -> set[str]:
-    tree = ast.parse(path.read_text(), filename=str(path))
-    modules: set[str] = set()
-    for node in ast.walk(tree):
-        if isinstance(node, ast.Import):
-            modules.update(alias.name for alias in node.names)
-        elif isinstance(node, ast.ImportFrom) and node.level == 0:
-            if node.module:
-                modules.add(node.module)
-                if node.module.endswith(".tools"):
-                    modules.update(alias.name for alias in node.names)
-    return modules
+def local_source_closure(entries, *, root=None, import_roots=None, schemas=(), assets=(),
+                         dynamic_dependencies=None, external_modules=("jsonschema",)):
+    root = ROOT if root is None else Path(root)
+    report = resolve_closure(entries, root=root,
+        import_roots=import_roots or (root, root / "tools", root / "src"),
+        schemas=schemas, assets=assets, dynamic_dependencies=dynamic_dependencies,
+        external_modules=external_modules, package_aliases={"projects.enwiki9": root})
+    # Legacy list callers never represented completeness. New launchers consume
+    # the structured report and require explicit declarations for every gap.
+    return sorted(root / row["path"] for row in
+                  (*report.sources, *report.schemas, *report.non_source_dependencies))
 
 
-def resolve_local_module(module: str) -> Path | None:
-    parts = module.split(".")
-    candidates = (
-        TOOLS.joinpath(*parts).with_suffix(".py"),
-        TOOLS.joinpath(*parts, "__init__.py"),
-        TOOLS / f"{parts[0]}.py",
-    )
-    for candidate in candidates:
-        if candidate.is_file():
-            return candidate.resolve()
-    return None
-
-
-def local_source_closure(entries: Iterable[Path]) -> list[Path]:
-    pending = [path.resolve() for path in entries]
-    closure: set[Path] = set()
-    while pending:
-        path = pending.pop()
-        if path in closure:
-            continue
-        if path != TOOLS and TOOLS.resolve() not in path.parents:
-            raise ValueError(f"Python closure entry escapes tools: {path}")
-        if not path.is_file():
-            raise FileNotFoundError(f"Python closure entry is missing: {path}")
-        closure.add(path)
-        for module in imported_modules(path):
-            dependency = resolve_local_module(module)
-            if dependency is not None and dependency not in closure:
-                pending.append(dependency)
-    if RESEARCH_CONTRACTS.resolve() in closure:
-        closure.update(path.resolve() for path in CONTRACT_ROOT.glob("*.json"))
-        closure.update(path.resolve() for path in (CONTRACT_ROOT.parent / "v2").glob("*.json"))
-    return sorted(closure, key=lambda path: path.relative_to(ROOT).as_posix())
-
-
-def sha256(path: Path) -> str:
-    digest = hashlib.sha256()
-    with path.open("rb") as stream:
-        for chunk in iter(lambda: stream.read(1 << 20), b""):
-            digest.update(chunk)
-    return digest.hexdigest()
-
-
-def main() -> int:
-    parser = argparse.ArgumentParser()
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("entry", nargs="+", type=Path)
+    parser.add_argument("--root", type=Path, default=ROOT)
+    parser.add_argument("--import-root", action="append", type=Path)
+    parser.add_argument("--schema", action="append", type=Path, default=[])
+    parser.add_argument("--asset", action="append", type=Path, default=[])
+    parser.add_argument("--external-module", action="append", default=[])
+    parser.add_argument("--dynamic-dependencies", type=Path)
+    parser.add_argument("--report", action="store_true")
+    parser.add_argument("--require-complete", action="store_true")
     args = parser.parse_args()
-    rows = [
-        {
-            "path": path.relative_to(ROOT).as_posix(),
-            "sha256": f"sha256:{sha256(path)}",
-        }
-        for path in local_source_closure(args.entry)
-    ]
-    print(json.dumps(rows, indent=2))
-    return 0
+    report = resolve_closure(args.entry, root=args.root,
+        import_roots=args.import_root or (args.root, args.root / "tools", args.root / "src"),
+        schemas=args.schema, assets=args.asset, external_modules=args.external_module,
+        dynamic_dependencies=json.loads(args.dynamic_dependencies.read_text()) if args.dynamic_dependencies else {},
+        package_aliases={"projects.enwiki9": args.root})
+    rows = [{"path": r["path"], "sha256": "sha256:" + r["sha256"]}
+            for r in (*report.sources, *report.schemas, *report.non_source_dependencies)]
+    print(json.dumps(report.to_dict() if args.report else rows, indent=2))
+    return int(args.require_complete and not report.complete)
 
 
 if __name__ == "__main__":

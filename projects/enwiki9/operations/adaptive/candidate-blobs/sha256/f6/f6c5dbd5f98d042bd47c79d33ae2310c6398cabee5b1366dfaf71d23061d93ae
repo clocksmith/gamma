@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gamma.enwiki9.safe-mix-program-lock-verification.v1",
+  "title": "SAFE-MIX program-lock verification v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "candidate_id", "program_lock_sha256", "pending_lock_sha256", "verifier_sha256", "python_executable_sha256", "declared_file_count", "current_manifest_sha256", "pending_declaration_identity_pass", "all_current_file_digests_pass", "non_circular_lock_pass", "materializer_identity_pass", "terminal_pass", "execution_authority", "archive_authority", "score_credit_bytes"],
+  "properties": {
+    "schema": {"const": "gamma.enwiki9.safe-mix-program-lock-verification.v1"},
+    "candidate_id": {"const": "gamma_safe_mix_v1"},
+    "program_lock_sha256": {"$ref": "#/$defs/sha256"},
+    "pending_lock_sha256": {"$ref": "#/$defs/sha256"},
+    "verifier_sha256": {"$ref": "#/$defs/sha256"},
+    "python_executable_sha256": {"$ref": "#/$defs/sha256"},
+    "declared_file_count": {"type": "integer", "minimum": 1},
+    "current_manifest_sha256": {"$ref": "#/$defs/sha256"},
+    "pending_declaration_identity_pass": {"const": true},
+    "all_current_file_digests_pass": {"const": true},
+    "non_circular_lock_pass": {"const": true},
+    "materializer_identity_pass": {"const": true},
+    "terminal_pass": {"const": true},
+    "execution_authority": {"const": false},
+    "archive_authority": {"const": false},
+    "score_credit_bytes": {"const": 0}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  }
+}

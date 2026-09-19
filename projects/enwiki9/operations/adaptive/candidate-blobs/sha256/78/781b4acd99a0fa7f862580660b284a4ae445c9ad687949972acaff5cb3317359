@@ -1,0 +1,59 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gamma.enwiki9.gamma-mechanism-causal-closure-verification.v1",
+  "title": "Gamma Mechanism IR causal closure verification v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "mechanism_id",
+    "verified",
+    "errors",
+    "mechanism_ir_sha256",
+    "closure_sha256",
+    "checks",
+    "claim_authority",
+    "execution_authority",
+    "promotion_authority"
+  ],
+  "properties": {
+    "schema": {"const": "gamma.enwiki9.gamma-mechanism-causal-closure-verification.v1"},
+    "mechanism_id": {"type": "string", "minLength": 1},
+    "verified": {"type": "boolean"},
+    "errors": {"type": "array", "items": {"type": "string"}},
+    "mechanism_ir_sha256": {"$ref": "#/$defs/sha256"},
+    "closure_sha256": {"$ref": "#/$defs/sha256"},
+    "checks": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "identity_pass",
+        "event_order_pass",
+        "source_closure_pass",
+        "state_closure_pass",
+        "arm_authority_pass",
+        "causal_use_pass",
+        "matched_control_access_pass",
+        "raw_treatment_posterior_isolation_pass",
+        "join_closure_pass"
+      ],
+      "properties": {
+        "identity_pass": {"type": "boolean"},
+        "event_order_pass": {"type": "boolean"},
+        "source_closure_pass": {"type": "boolean"},
+        "state_closure_pass": {"type": "boolean"},
+        "arm_authority_pass": {"type": "boolean"},
+        "causal_use_pass": {"type": "boolean"},
+        "matched_control_access_pass": {"type": "boolean"},
+        "raw_treatment_posterior_isolation_pass": {"type": "boolean"},
+        "join_closure_pass": {"type": "boolean"}
+      }
+    },
+    "claim_authority": {"const": "none"},
+    "execution_authority": {"const": false},
+    "promotion_authority": {"const": false}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  }
+}

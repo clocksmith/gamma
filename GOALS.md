@@ -26,8 +26,12 @@ and reports. Architecture decisions belong in design documents. Component
 authority and invariants belong in the applicable `CATSCAN.md` chain.
 
 For enwiki9, the active end-to-end objective is the versioned
-[90M complete-byte witness](projects/enwiki9/contracts/research/v3/objective-contract.json):
+[96M complete-byte witness](projects/enwiki9/contracts/research/v4/objective-contract.json):
 an exact deterministic full-corpus archive, complete counted package, independent
 resource verification, source/license closure and reproducible submission.
 The lane's adaptive workflow governs bounded implementation, prediction research,
-confirmation and scale decisions; historical 105M and 99M evidence stays intact.
+confirmation and scale decisions; historical 105M, 99M and 90M evidence stays intact.
+
+The active enwiki9 research direction is XML/English stream compression and
+causal information sharing between streams, with a 95M stretch target. The
+working 25%/75% decomposition is a measurement hypothesis, not a byte budget.

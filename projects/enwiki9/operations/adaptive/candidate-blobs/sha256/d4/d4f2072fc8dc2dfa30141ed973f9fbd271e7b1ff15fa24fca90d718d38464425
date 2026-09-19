@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gamma.enwiki9.safe-mix-independent-build-verification.v1",
+  "title": "SAFE-MIX independent-build verification v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "candidate_id", "build_a_receipt_sha256", "build_b_receipt_sha256", "verifier_sha256", "python_executable_sha256", "input_lock_identity_pass", "environment_identity_pass", "source_identity_pass", "tool_probe_identity_pass", "command_receipt_identity_pass", "artifact_identity", "all_artifacts_byte_identity_pass", "terminal_pass", "execution_authority", "archive_authority", "score_credit_bytes"],
+  "properties": {
+    "schema": {"const": "gamma.enwiki9.safe-mix-independent-build-verification.v1"},
+    "candidate_id": {"const": "gamma_safe_mix_v1"},
+    "build_a_receipt_sha256": {"$ref": "#/$defs/sha256"},
+    "build_b_receipt_sha256": {"$ref": "#/$defs/sha256"},
+    "verifier_sha256": {"$ref": "#/$defs/sha256"},
+    "python_executable_sha256": {"$ref": "#/$defs/sha256"},
+    "input_lock_identity_pass": {"const": true},
+    "environment_identity_pass": {"const": true},
+    "source_identity_pass": {"const": true},
+    "tool_probe_identity_pass": {"const": true},
+    "command_receipt_identity_pass": {"const": true},
+    "artifact_identity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["safe_mix_object", "trace_object", "negative_controls_object", "native_trace_binary", "negative_controls_binary"],
+      "properties": {
+        "safe_mix_object": {"const": true},
+        "trace_object": {"const": true},
+        "negative_controls_object": {"const": true},
+        "native_trace_binary": {"const": true},
+        "negative_controls_binary": {"const": true}
+      }
+    },
+    "all_artifacts_byte_identity_pass": {"const": true},
+    "terminal_pass": {"const": true},
+    "execution_authority": {"const": false},
+    "archive_authority": {"const": false},
+    "score_credit_bytes": {"const": 0}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  }
+}
