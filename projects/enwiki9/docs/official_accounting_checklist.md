@@ -5,8 +5,8 @@ forecasts, local proxy scores, and shadow-coder simulations do not satisfy this
 checklist.
 
 The active Gamma objective is
-`contracts/research/v3/objective-contract.json`: **90,000,000 complete bytes**.
-Historical v1 (105M) and v2 (99M) contracts and their receipts remain unchanged.
+`contracts/research/v4/objective-contract.json`: **96,000,000 complete bytes**.
+Historical v1 (105M), v2 (99M) and v3 (90M) contracts and their receipts remain unchanged.
 This checklist expands the prize-facing accounting procedure; conflicting prose
 does not override the active versioned contract. Full-corpus success remains
 unproved until a complete executable witness and qualification receipts exist.
@@ -44,15 +44,15 @@ score or a score inherited by a different native predictor. Against the active
 target, its arithmetic is:
 
 ```text
-target_score_bytes                          90,000,000
+target_score_bytes                          96,000,000
 counted_minified_source_package_bytes          261,125
-maximum_full_corpus_archive_payload_bytes   89,738,875
+maximum_full_corpus_archive_payload_bytes   95,738,875
 best_counted_forecast                      109,389,323
-remaining_forecast_debt                     19,389,323
+remaining_forecast_debt                     13,389,323
 ```
 
 This is source-bound forecast accounting, not a full-corpus score. A child must
-save at least `19,389,323 + added_program_bytes + added_framing_bytes` at full
+save at least `13,389,323 + added_program_bytes + added_framing_bytes` at full
 scope relative to the forecast parent, with additional transfer safety before
 full-1G authorization. This conditional arithmetic is not earned savings or a
 measurement of a different codec's target distance.
@@ -277,10 +277,10 @@ needs a package-level audit of the exact submitted compressor/archive path.
 
 ## Claim Rule
 
-Do not write that a candidate hits `10.5000000%` unless:
+Do not write that a candidate meets the active `9.6000000%` ceiling unless:
 
 ```text
 scope_bytes == 1,000,000,000
 roundtrip_ok == true
-official_score_bytes <= 105,000,000
+official_score_bytes <= 96,000,000
 ```

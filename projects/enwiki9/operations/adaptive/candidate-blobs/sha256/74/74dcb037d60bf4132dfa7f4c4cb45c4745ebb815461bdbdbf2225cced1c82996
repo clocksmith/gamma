@@ -1,0 +1,169 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gamma.dev/enwiki9/research/v1/reflection-receipt.schema.json",
+  "title": "gamma.enwiki9.reflection_receipt.v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "objective",
+    "reflectionId",
+    "candidateId",
+    "candidateRevision",
+    "job",
+    "experiment",
+    "evidence",
+    "validity",
+    "hypothesis",
+    "attribution",
+    "measurements",
+    "measurementAssertions",
+    "knowledge",
+    "decision",
+    "generatedUtc"
+  ],
+  "properties": {
+    "schema": { "const": "gamma.enwiki9.reflection-receipt.v1" },
+    "objective": { "$ref": "#/$defs/objectiveBinding" },
+    "reflectionId": { "type": "string", "pattern": "^[a-z0-9][a-z0-9._-]*$" },
+    "candidateId": { "type": "string", "pattern": "^[a-z0-9][a-z0-9._-]*$" },
+    "candidateRevision": { "$ref": "#/$defs/candidateReference" },
+    "job": { "$ref": "#/$defs/reference" },
+    "experiment": { "$ref": "#/$defs/reference" },
+    "evidence": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/reference" }
+    },
+    "validity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["valid", "classification", "reasons"],
+      "properties": {
+        "valid": { "type": "boolean" },
+        "classification": {
+          "enum": ["valid", "implementation-failure", "infrastructure-failure", "invalid-experiment", "incomplete-evidence"]
+        },
+        "reasons": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+    "hypothesis": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["verdict", "rationale"],
+      "properties": {
+        "verdict": { "enum": ["supported", "refuted", "inconclusive", "not-tested"] },
+        "rationale": { "type": "string", "minLength": 1 }
+      }
+    },
+    "attribution": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["failureClass", "localizedCause", "causalConfidence", "controlsEquivalent"],
+      "properties": {
+        "failureClass": {
+          "enum": ["algorithmic-gain", "algorithmic-loss", "causal-failure", "transfer-failure", "accounting-failure", "implementation-failure", "infrastructure-failure", "invalid-experiment", "inconclusive"]
+        },
+        "localizedCause": { "type": "string", "minLength": 1 },
+        "causalConfidence": { "enum": ["high", "medium", "low", "none"] },
+        "controlsEquivalent": { "type": ["boolean", "null"] }
+      }
+    },
+    "measurements": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["scopeBytes", "scopeSymbols", "netBytesSaved", "idealBitsSaved", "sourceBytesDelta", "runtimeRatio", "memoryRatio", "transferRetention", "positiveSegmentFraction", "minimumPartitionIdealBitsSaved"],
+      "properties": {
+        "scopeBytes": { "type": ["integer", "null"], "minimum": 1 },
+        "scopeSymbols": { "type": ["integer", "null"], "minimum": 1 },
+        "netBytesSaved": { "type": ["number", "null"] },
+        "idealBitsSaved": { "type": ["number", "null"] },
+        "sourceBytesDelta": { "type": ["number", "null"] },
+        "runtimeRatio": { "type": ["number", "null"], "exclusiveMinimum": 0 },
+        "memoryRatio": { "type": ["number", "null"], "exclusiveMinimum": 0 },
+        "transferRetention": { "type": ["number", "null"], "minimum": 0 },
+        "positiveSegmentFraction": { "type": ["number", "null"], "minimum": 0, "maximum": 1 },
+        "minimumPartitionIdealBitsSaved": { "type": ["number", "null"] }
+      }
+    },
+    "measurementAssertions": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/measurementAssertion" }
+    },
+    "knowledge": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["transferableLessons", "retiredDimensions", "uncertainties"],
+      "properties": {
+        "transferableLessons": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "type": "string", "minLength": 1 } },
+        "retiredDimensions": { "type": "array", "uniqueItems": true, "items": { "type": "string", "minLength": 1 } },
+        "uncertainties": { "type": "array", "uniqueItems": true, "items": { "type": "string", "minLength": 1 } }
+      }
+    },
+    "decision": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["verdict", "promotionPredicatesPass", "killPredicatesPass", "nextGateBytes", "rationale"],
+      "properties": {
+        "verdict": { "enum": ["promote", "retire", "retry", "mutate", "next-gate", "hold"] },
+        "promotionPredicatesPass": { "type": ["boolean", "null"] },
+        "killPredicatesPass": { "type": ["boolean", "null"] },
+        "nextGateBytes": { "type": ["integer", "null"], "minimum": 1 },
+        "rationale": { "type": "string", "minLength": 1 }
+      }
+    },
+    "generatedUtc": { "type": "string", "format": "date-time" }
+  },
+  "$defs": {
+    "digest": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "objectiveBinding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["objectiveId", "objectiveDigest", "objectivePath", "targetScoreBytes", "corpusBytes", "corpusSha256"],
+      "properties": {
+        "objectiveId": { "type": "string", "minLength": 1 },
+        "objectiveDigest": { "$ref": "#/$defs/digest" },
+        "objectivePath": { "type": "string", "minLength": 1 },
+        "targetScoreBytes": { "type": "integer", "minimum": 1 },
+        "corpusBytes": { "type": "integer", "minimum": 1 },
+        "corpusSha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+      }
+    },
+    "relativePath": { "type": "string", "minLength": 1, "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$)).+$" },
+    "reference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "sha256"],
+      "properties": {
+        "path": { "$ref": "#/$defs/relativePath" },
+        "sha256": { "$ref": "#/$defs/digest" }
+      }
+    },
+    "candidateReference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["candidateId", "candidateTreeSha256", "receipt"],
+      "properties": {
+        "candidateId": { "type": "string", "pattern": "^[a-z0-9][a-z0-9._-]*$" },
+        "candidateTreeSha256": { "$ref": "#/$defs/digest" },
+        "receipt": { "$ref": "#/$defs/reference" }
+      }
+    },
+    "measurementAssertion": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["field", "source", "pointer"],
+      "properties": {
+        "field": { "enum": ["scopeBytes", "scopeSymbols", "netBytesSaved", "idealBitsSaved", "sourceBytesDelta", "runtimeRatio", "memoryRatio", "transferRetention", "positiveSegmentFraction", "minimumPartitionIdealBitsSaved"] },
+        "source": { "$ref": "#/$defs/reference" },
+        "pointer": { "type": "string", "pattern": "^/" }
+      }
+    }
+  }
+}

@@ -1,0 +1,88 @@
+{
+  "attribution": {
+    "causalConfidence": "high",
+    "controlsEquivalent": true,
+    "failureClass": "implementation-failure",
+    "localizedCause": "xml_history_comparison.py reads zlib.__file__ unconditionally."
+  },
+  "candidateId": "xml_history250k_q0_v1",
+  "candidateRevision": {
+    "candidateId": "xml_history250k_q0_v1",
+    "candidateTreeSha256": "sha256:e81b546c2261b9edfa858b231047d43766adb4e791a6e0be30ba2f53e4bc2d6f",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/xml_history250k_q0_v1/20260919T205811703045Z_e81b546c2261.json",
+      "sha256": "sha256:ad8620bab27c94f5cf1f65b88a505c0fa54a9acff8f7557c7f3154cbe58aa7cc"
+    }
+  },
+  "decision": {
+    "killPredicatesPass": null,
+    "nextGateBytes": null,
+    "promotionPredicatesPass": null,
+    "rationale": "New runner revision only; codec bytes and all numerical parameters remain unchanged.",
+    "verdict": "retry"
+  },
+  "evidence": [
+    {
+      "path": "results/xml_history250k_q0_v1/census.json",
+      "sha256": "sha256:7e6b25d1067a4ca52493445078557061ff2fdce69b6596e99d1adae5de9eff0c"
+    },
+    {
+      "path": "run_logs/adaptive/20260919T205853Z_08cac39226.log",
+      "sha256": "sha256:2a775e5a8826fc3a8751dbbe32a8ec8c5e1f4a0551a5c8f375f9bd2909683ea6"
+    },
+    {
+      "path": "run_logs/adaptive/20260919T205853Z_08cac39226.resources/guard.json",
+      "sha256": "sha256:f686a885c8682966ad08e8689d4741ac52d3dee7ae656d4a552839dd877bc766"
+    }
+  ],
+  "experiment": {
+    "path": "operations/adaptive/experiments/xml_history250k_q0_v1.json",
+    "sha256": "sha256:2e4d86a3aa5620b90cbd4d8c7b7d35af34140066803b51ace3c956c2674829d7"
+  },
+  "generatedUtc": "2026-09-19T21:00:30+00:00",
+  "hypothesis": {
+    "rationale": "Preserve all codec artifacts; do not promote an incompletely published gate. Retry the identical fixed codec after correcting runtime provenance.",
+    "verdict": "inconclusive"
+  },
+  "job": {
+    "path": "operations/adaptive/failed/909_20260919T205853Z_08cac39226.json",
+    "sha256": "sha256:fbcd9acfca45e3185eabb036a2a59f089e681115a2c8b2c4215ff579f492ad32"
+  },
+  "knowledge": {
+    "retiredDimensions": [],
+    "transferableLessons": [
+      "Runtime identity must support built-in as well as file-backed native modules."
+    ],
+    "uncertainties": []
+  },
+  "measurementAssertions": [],
+  "measurements": {
+    "idealBitsSaved": null,
+    "memoryRatio": null,
+    "minimumPartitionIdealBitsSaved": null,
+    "netBytesSaved": null,
+    "positiveSegmentFraction": null,
+    "runtimeRatio": null,
+    "scopeBytes": null,
+    "scopeSymbols": null,
+    "sourceBytesDelta": null,
+    "transferRetention": null
+  },
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:409b70547f901a3ac5fffd7fd7a1e1d77b05fb44d9e9d889be1337bd153706d7",
+    "objectiveId": "gamma-enwiki9-hutter-96m-v4",
+    "objectivePath": "contracts/research/v4/objective-contract.json",
+    "targetScoreBytes": 96000000
+  },
+  "reflectionId": "r-20260919t205853z_08cac39226",
+  "schema": "gamma.enwiki9.reflection-receipt.v1",
+  "validity": {
+    "classification": "implementation-failure",
+    "reasons": [
+      "All21 codec phases completed, but runtime inventory assumes zlib is a file-backed extension; this interpreter embeds it, so final report publication failed."
+    ],
+    "valid": false
+  }
+}

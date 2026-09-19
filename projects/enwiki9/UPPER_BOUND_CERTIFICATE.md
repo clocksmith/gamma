@@ -7,15 +7,15 @@ If roundtrip_ok is true for archive A and decoder D on target corpus x, then |A|
 ## Target
 
 - Full input bytes: `1,000,000,000`
-- 9.0000000% target score: `90,000,000`
+- 9.6000000% target score: `96,000,000`
 - Calibrated baseline score: `110,181,114`
-- Required net gain from calibrated baseline: `20,181,114` bytes
-- Required archive slope before program cost: `0.161448912` bits/byte
+- Required net gain from calibrated baseline: `14,181,114` bytes
+- Required archive slope before program cost: `0.113448912` bits/byte
 
 ## Proof Status
 
 - Full-corpus constructive result present: `False`
-- 9.0000000% constructive upper bound present: `False`
+- 9.6000000% constructive upper bound present: `False`
 
 ## Top Status
 
@@ -55,5 +55,5 @@ No verified full-corpus result JSON is present in this workspace.
 - Prefix results prove upper bounds only for that prefix, not for enwik9.
 - Unknown program costs or explicitly unknown totals remain unknown; archive-only rows do not compete in counted-score rankings.
 - Projected 1GB scores are search evidence and are excluded from proof_status.
-- A 9.0000000% proof requires a full 1,000,000,000-byte result with score <= 90,000,000.
+- A 9.6000000% proof requires a full 1,000,000,000-byte result with score <= 96,000,000.
 - Canonical proof rows include only Git-tracked result JSON files; ignored host-local artifacts are noncanonical.

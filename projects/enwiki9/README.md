@@ -1,10 +1,13 @@
 # enwiki9
 
 Compression research toward exact reconstruction of canonical enwik9's
-1,000,000,000 bytes with a fully counted score at or below 90,000,000 bytes.
-The [active objective](contracts/research/v3/objective-contract.json) defines the
-proof. This is a provisional engineering target; the unchanged 105M and 99M
-objectives remain historical. [Competitive provenance](operations/provenance/competitive_frontier_v1.json)
+1,000,000,000 bytes with a fully counted score at or below 96,000,000 bytes.
+The stretch target is 95,000,000 complete bytes. Research prioritizes exact XML
+and English stream representations and decoder-available information shared
+between streams; the working 25%/75% split requires corpus measurement.
+The [active objective](contracts/research/v4/objective-contract.json) defines the
+proof. This is a provisional engineering target; the unchanged 105M, 99M and 90M
+objectives remain historical. [Competitive provenance](operations/provenance/competitive_frontier_20260919.json)
 separates published submissions, the official record, and contingent thresholds.
 
 From `gamma/projects/enwiki9/`, begin with:
@@ -30,6 +33,7 @@ docs/         research decisions, portfolios, generated reports, and references
 contracts/    objective, experiment, measurement, and evidence definitions
 lib/          reusable predictor and measurement interfaces
 tools/        execution, research, and reporting utilities
+src/gamma_enwiki9/  maintained framework services behind the lab CLI
 ledger/       generated browser and JSON projection of canonical records
 workbench/    reusable task prompts and workflow pointers
 ```
@@ -38,3 +42,7 @@ Read the [algorithm guide](ALGORITHMS.md), [research register](docs/research_reg
 or [historical technical reference](docs/reference/project_manual.md) as needed.
 Current status and results belong in linked records and generated views. The
 [component charter](CATSCAN.md) defines the project's authority and proof boundary.
+
+The [architecture guide](docs/architecture/README.md) describes maintained source
+roles, explicit closure resolution, historical verification, and the separate
+project-local CI groups.

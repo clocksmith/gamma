@@ -14,11 +14,13 @@ import pathlib
 from typing import Any
 
 import forecast_frontier
+from research_contracts import objective_binding
 
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 OUT_DEFAULT = ROOT / "results" / "frontier_target"
-DEFAULT_TARGET_PERCENT = 10.5
+OBJECTIVE = objective_binding()
+DEFAULT_TARGET_PERCENT = 100 * OBJECTIVE["targetScoreBytes"] / OBJECTIVE["corpusBytes"]
 HUTTER_RECORD_TARGET = 109_685_197
 
 
@@ -124,7 +126,7 @@ def write_report(rows: list[dict[str, Any]], out_dir: pathlib.Path, target_perce
         "# Frontier Target Report",
         "",
         f"Target: S <= {target_bytes} ({target_percent:.3f}% of enwik9).",
-        f"Hutter prize threshold reference: S < {HUTTER_RECORD_TARGET}.",
+        f"Displayed historical prize threshold reference: S < {HUTTER_RECORD_TARGET}; pending entries may supersede it. Committee acceptance is required.",
         "",
         "| rank | program | basis | quality | tier | max scope | projected S | percent | gap to target | archive | program | prize gap | measured points |",
         "|---:|---|---|---:|---|---:|---:|---:|---:|---:|---:|---:|---|",

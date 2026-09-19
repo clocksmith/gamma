@@ -342,7 +342,8 @@ class ObjectiveTests(unittest.TestCase):
         old = r.objective_binding(objective_path="contracts/research/v1/objective-contract.json")
         self.assertEqual(old["objectiveDigest"], "sha256:ce4c435c0f398caf65a09050c8518d9c5ea63239f9156048ea2aaaf9b8ffa7e8")
         r._validate_objective_binding(old, "historical")
-        self.assertEqual(r.objective_binding()["targetScoreBytes"], 99_000_000)
+        self.assertEqual(r.objective_binding(objective_path="contracts/research/v2/objective-contract.json")["targetScoreBytes"], 99_000_000)
+        self.assertEqual(r.objective_binding()["targetScoreBytes"], 96_000_000)
         old["targetScoreBytes"] = 99_000_000
         with self.assertRaisesRegex(ValueError, "immutable objective"):
             r._validate_objective_binding(old, "forged")

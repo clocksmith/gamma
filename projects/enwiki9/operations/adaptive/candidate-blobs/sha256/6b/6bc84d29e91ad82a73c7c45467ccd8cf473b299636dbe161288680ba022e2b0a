@@ -1,0 +1,21 @@
+{
+  "schema": "gamma.enwiki9.dualstream-argtokens-unit.v2",
+  "date": "2026-09-06",
+  "tests_passed": 43,
+  "command": "taskset -c 2 python3 -m unittest discover -s tests -p 'test_dualstream_grammar*py' -v",
+  "source_sha256": {
+    "tools/dualstream_grammar_argtokens_v2.py": "f2e4627780a4b9ea89691ed8a9c06f7407cbc0cadb19a987fb6813dafa0061b2",
+    "tools/dualstream_grammar_argtokens_gate_v2.py": "1812f2d807fbe9237c8df4a6aa573a64938e87001d9d06264c16f216396c933a",
+    "tests/test_dualstream_grammar_argtokens_v2.py": "169d19552d56c04a3e583f20aa8c1c0300a6ea93f5f95fa452acf27125b8bd37",
+    "tests/test_dualstream_grammar_argtokens_gate_v2.py": "a441b8134e29feb8897bcf00235e5ae2ae3d4fc343861ccf5741a42f9d18dd4c",
+    "tools/dualstream_grammar_v1.py": "9f31a671610aeb2b0f753b13346a06cf1729a4b6b0ce92d2fd7590b3018023bd",
+    "tools/dualstream_grammar_gate_v1.py": "7b30a36d4c28113d23d6b9cf475d1b2d48ba40853074c5003322b459af496902"
+  },
+  "scope": "Synthetic only; no corpus or confirmation input opened.",
+  "mechanism": "Supply arguments through exact literal-token references; preserve v1 file, independent v1 imports, discovery policy, frame policy, and zlib9 backend. D2GRAM02 rejects silent v1 interchange.",
+  "limitations": [
+    "Both adapter and unchanged v1 source are required decoder dependencies.",
+    "Interpreter adaptation currently decompresses and recompresses dictionary/argument sections; measured decoder cost must include this work.",
+    "No compression gain or package qualification established."
+  ]
+}

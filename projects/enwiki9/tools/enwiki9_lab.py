@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import concurrent.futures
+from contextlib import ExitStack
 import copy
 import datetime as dt
 import fcntl
@@ -34,9 +35,13 @@ from enwiki9_omega import (
 import enwiki9_candidate_revisions as candidate_revisions
 import enwiki9_reflections
 import enwiki9_worker_identity as worker_identity
-import cmix_memory_safe_parent_qualification_verify_v3 as parent_qualification_v3
 import research_contracts
 import managed_exclusive_lease
+from gamma_enwiki9.execution import linux as linux_execution
+from gamma_enwiki9.evidence import artifacts as evidence_artifacts
+from gamma_enwiki9.research import transactions
+from gamma_enwiki9.packaging.candidates import scaffold_spec
+from gamma_enwiki9.execution.admission import AdmissionBusy, admission_guard, require_qualification_reservation
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 PROGRAMS = ROOT / "programs"
@@ -127,7 +132,8 @@ def get_exclusive_lease() -> dict[str, Any] | None:
 
 def exclusive_lease_state() -> dict[str, Any]:
     lease = get_exclusive_lease()
-    present = EXCLUSIVE_FULL1G_PATH.exists() or EXCLUSIVE_FULL1G_PATH.is_symlink()
+    lock = EXCLUSIVE_FULL1G_PATH.with_name(EXCLUSIVE_FULL1G_PATH.name + ".lock")
+    present = any(p.exists() or p.is_symlink() for p in (EXCLUSIVE_FULL1G_PATH, lock))
     return {"state": "live" if lease is not None else "unknown" if present else "absent",
             "path": str(EXCLUSIVE_FULL1G_PATH), "lease": lease}
 
@@ -138,7 +144,8 @@ def require_no_exclusive_lease() -> None:
         raise ValueError(
             f"machine-wide exclusive lease active for candidate={lease.get('candidate_id')} (PID {lease.get('pid')})"
         )
-    if EXCLUSIVE_FULL1G_PATH.exists() or EXCLUSIVE_FULL1G_PATH.is_symlink():
+    lock = EXCLUSIVE_FULL1G_PATH.with_name(EXCLUSIVE_FULL1G_PATH.name + ".lock")
+    if any(p.exists() or p.is_symlink() for p in (EXCLUSIVE_FULL1G_PATH, lock)):
         raise ValueError(
             "machine-wide exclusive lease file exists but its process identity "
             "cannot be validated; resolve it explicitly before launching work"
@@ -221,6 +228,7 @@ def candidate_path(candidate_id: str) -> pathlib.Path:
 
 
 def candidate_meta(candidate_id: str) -> dict[str, Any]:
+    transactions.require_committed(candidate_path(candidate_id))
     path = candidate_path(candidate_id) / "meta.json"
     if not path.is_file():
         raise FileNotFoundError(f"candidate metadata not found: {path}")
@@ -380,6 +388,10 @@ def create_candidate(
     hypothesis: str,
     description: str | None,
     replacements: list[str],
+    kind: str | None = None,
+    codec: dict | None = None,
+    upstream: dict | None = None,
+    transformations: list | None = None,
 ) -> pathlib.Path:
     destination = candidate_path(candidate_id)
     if destination.exists():
@@ -392,7 +404,8 @@ def create_candidate(
             "deps": [],
             "description": description or hypothesis,
         }
-        (destination / "program.py").write_text(scaffold_program())
+        (destination / "program.py").write_text(scaffold_program() if kind in (None, "standalone_codec")
+            else 'def main():\n    raise NotImplementedError("implement declared entrypoint")\n')
     else:
         source = candidate_path(parent)
         if not source.is_dir():
@@ -401,7 +414,7 @@ def create_candidate(
         shutil.copytree(
             source,
             destination,
-            ignore=shutil.ignore_patterns("__pycache__", "*.pyc", "*.pyo"),
+            ignore=shutil.ignore_patterns("__pycache__", "*.pyc", "*.pyo", ".creation-*.json"),
         )
         source_meta = candidate_meta(parent)
 
@@ -439,33 +452,43 @@ def create_candidate(
             }
             for row in applied
         ]
-        candidate_revisions.record_revision(
-            candidate_id=candidate_id,
-            kind="mutate" if parent is not None else "create",
-            hypothesis=hypothesis,
-            summary=[
-                "Cloned and changed the declared parent candidate."
-                if parent is not None
-                else "Created the candidate scaffold."
-            ],
-            replacements=revision_replacements,
-            parent_id=parent,
-        )
-        append_jsonl(
-            MUTATION_LOG,
-            {
-                "candidate_id": candidate_id,
-                "created_at": utc_now(),
-                "hypothesis": hypothesis,
-                "parent": parent,
-                "program_replacements": applied,
-            },
-        )
-        register_candidate(candidate_id)
-    except Exception:
-        shutil.rmtree(destination)
+        kind = kind or source_meta.get("kind", "standalone_codec")
+        meta["kind"] = kind
+        if codec is not None:
+            meta["codec"] = codec
+        if upstream is not None:
+            meta["upstream"] = upstream
+            meta["transformations"] = transformations
+        atomic_json(destination / "meta.json", meta)
+        # A successor gets its own manifest; no historical metadata is changed.
+        atomic_json(destination / "candidate.json", scaffold_spec(destination, kind=kind,
+            codec=codec or source_meta.get("codec"), upstream=upstream or source_meta.get("upstream"),
+            transformations=transformations or source_meta.get("transformations")))
+        intent = {"transaction_id": uuid.uuid4().hex, "candidate_id": candidate_id,
+            "created_at": utc_now(), "hypothesis": hypothesis, "parent": parent,
+            "program_replacements": applied, "revision_replacements": revision_replacements}
+        transactions.begin(destination, intent)
+        reconcile_candidate_creation(candidate_id)
+    except BaseException:
+        if not (destination / ".creation-intent.json").exists():
+            shutil.rmtree(destination)
         raise
     return destination
+
+
+def reconcile_candidate_creation(candidate_id):
+    def revision(intent):
+        candidate_revisions.record_revision(candidate_id=candidate_id,
+            kind="mutate" if intent["parent"] else "create", hypothesis=intent["hypothesis"],
+            summary=["Cloned and changed the declared parent candidate." if intent["parent"]
+                     else "Created the candidate scaffold."],
+            replacements=intent["revision_replacements"], parent_id=intent["parent"])
+    def mutation(intent):
+        evidence_artifacts.append_canonical_event(MUTATION_LOG,
+            {k: intent[k] for k in ("candidate_id", "created_at", "hypothesis", "parent", "program_replacements")},
+            event_id=intent["transaction_id"])
+    transactions.reconcile(candidate_path(candidate_id), revision=revision,
+        mutation=mutation, register=lambda intent: register_candidate(candidate_id))
 
 
 def proposal_path(proposal_id: str) -> tuple[str, pathlib.Path] | None:
@@ -718,7 +741,7 @@ def _activation_project_file(path_text: str, label: str) -> pathlib.Path:
     if project_root not in candidate.parents:
         raise ValueError(f"required {label} escapes project: {path_text}")
     try:
-        return parent_qualification_v3.regular_file(candidate, label)
+        return evidence_artifacts.regular_file(candidate, label, root=ROOT)
     except (OSError, ValueError) as error:
         raise ValueError(f"required {label} is unavailable: {path_text}") from error
 
@@ -751,7 +774,7 @@ def _activation_artifact_record_matches(record: Any, label: str) -> pathlib.Path
     ):
         raise ValueError(f"malformed {label} artifact record")
     try:
-        path = parent_qualification_v3.regular_file(pathlib.Path(path_text), label)
+        path = evidence_artifacts.regular_file(pathlib.Path(path_text), label, root=ROOT)
     except (OSError, ValueError) as error:
         raise ValueError(
             f"required {label} artifact is unavailable: {path_text}"
@@ -761,120 +784,13 @@ def _activation_artifact_record_matches(record: Any, label: str) -> pathlib.Path
     return path
 
 
-def _verify_parent_qualification_v3_activation(
-    requirement: dict[str, Any],
-    evidence_set: set[str],
-) -> dict[str, Any]:
-    candidate_id = requirement.get("candidate_id")
-    verification_text = requirement.get("verification_path")
-    receipt_text = requirement.get("qualification_receipt_path")
-    schema_text = requirement.get("verification_schema_path")
-    schema_sha256 = requirement.get("verification_schema_sha256")
-    verifier_text = requirement.get("verifier_path")
-    verifier_sha256 = requirement.get("verifier_sha256")
-    expected_claim = requirement.get("expected_claim_authority")
-    minimum_revision = requirement.get("minimum_policy_revision")
-    if (
-        not isinstance(candidate_id, str)
-        or not isinstance(verification_text, str)
-        or not isinstance(receipt_text, str)
-        or not isinstance(schema_text, str)
-        or not isinstance(schema_sha256, str)
-        or not isinstance(verifier_text, str)
-        or not isinstance(verifier_sha256, str)
-        or not isinstance(expected_claim, str)
-        or not isinstance(minimum_revision, int)
-        or minimum_revision < 7
-    ):
-        raise ValueError("malformed v3 parent-qualification activation requirement")
-    missing = sorted({verification_text, receipt_text} - evidence_set)
-    if missing:
-        raise ValueError(
-            "activation evidence must include required v3 parent qualification "
-            f"artifacts: {', '.join(missing)}"
-        )
-
-    verification_path = _activation_project_file(
-        verification_text, "v3 parent-qualification verification"
-    )
-    receipt_path = _activation_project_file(
-        receipt_text, "v3 parent-qualification receipt"
-    )
-    schema_path = _activation_bound_project_file(
-        schema_text, schema_sha256, "v3 parent-qualification verification schema"
-    )
-    verifier_path = _activation_bound_project_file(
-        verifier_text, verifier_sha256, "v3 parent-qualification verifier"
-    )
-    if verifier_path != pathlib.Path(parent_qualification_v3.__file__).resolve():
-        raise ValueError("bound v3 parent-qualification verifier is not the loaded verifier")
-
-    verification = load_json(verification_path)
-    schema = load_json(schema_path)
-    jsonschema.Draft202012Validator.check_schema(schema)
-    jsonschema.Draft202012Validator(schema).validate(verification)
-    authority = verification.get("authority")
-    checks = verification.get("checks")
-    evidence_checks = verification.get("evidence_checks")
-    if not isinstance(authority, dict):
-        raise ValueError("v3 parent-qualification authority is malformed")
-    policy_path = _activation_artifact_record_matches(
-        authority.get("authority_policy"), "v3 parent-qualification policy"
-    )
-    plan_path = _activation_artifact_record_matches(
-        authority.get("activated_full_identity_plan"),
-        "v3 activated full-identity plan",
-    )
-    artifact_sha256 = verification.get("artifact_sha256")
-    if not isinstance(artifact_sha256, dict):
-        raise ValueError("v3 parent-qualification artifact digests are malformed")
-    if (
-        artifact_sha256.get("authority_policy") != _file_sha256(policy_path)
-        or artifact_sha256.get("activated_full_identity_plan")
-        != _file_sha256(plan_path)
-        or verification.get("receipt_sha256") != _file_sha256(receipt_path)
-    ):
-        raise ValueError("v3 parent-qualification embedded artifact digest differs")
-
-    regenerated, regenerated_verified = parent_qualification_v3.verify(
-        receipt_path,
-        policy_path,
-        EXCLUSIVE_FULL1G_PATH,
-    )
-    if not regenerated_verified or regenerated != verification:
-        raise ValueError(
-            "v3 parent-qualification verification does not equal an exact fresh replay"
-        )
-    if (
-        verification.get("candidate_id") != candidate_id
-        or verification.get("verified") is not True
-        or verification.get("qualified") is not True
-        or verification.get("errors") != []
-        or verification.get("qualification_failures") != []
-        or not isinstance(checks, dict)
-        or not checks
-        or any(value is not True for value in checks.values())
-        or not isinstance(evidence_checks, dict)
-        or not evidence_checks
-        or any(value is not True for value in evidence_checks.values())
-        or verification.get("claim_authority") != expected_claim
-        or verification.get("promotion_authority") is not True
-        or verification.get("gamma_compression_credit_bytes") != 0
-        or verification.get("gamma_score_credit_bytes") != 0
-        or authority.get("policy_revision", 0) < minimum_revision
-    ):
-        raise ValueError("v3 parent qualification does not grant the required authority")
-    return {
-        "kind": "terminal_parent_qualification_v3",
-        "candidate_id": candidate_id,
-        "qualification_receipt_path": receipt_text,
-        "qualification_receipt_sha256": _file_sha256(receipt_path),
-        "verification_path": verification_text,
-        "verification_sha256": _file_sha256(verification_path),
-        "policy_revision": authority["policy_revision"],
-        "claim_authority": verification["claim_authority"],
-        "qualified": True,
-    }
+def _verify_parent_qualification_v3_activation(requirement, evidence_set):
+    from gamma_enwiki9.adapters.cmix_qualification import verify_activation
+    import cmix_memory_safe_parent_qualification_verify_v3 as verifier
+    return verify_activation(requirement, evidence_set, verifier=verifier,
+        lease_path=EXCLUSIVE_FULL1G_PATH, project_file=_activation_project_file,
+        bound_project_file=_activation_bound_project_file,
+        artifact_record_matches=_activation_artifact_record_matches, file_sha256=_file_sha256)
 
 
 def _verify_reflected_terminal_recovery_activation(
@@ -1242,60 +1158,12 @@ def materialize_job_scratch_directories(job: dict[str, Any]) -> None:
             raise ValueError(f"scratch directory is not a directory: {relative}")
 
 
-def validate_execution_budget(job: dict[str, Any]) -> dict[str, Any]:
-    mode = job.get("execution_mode")
-    budget = job.get("resource_budget")
-    if mode not in {"discovery", "qualification"} or not isinstance(budget, dict):
-        raise ValueError("explicit discovery/qualification mode and resource budget are required")
-    cpus = budget.get("cpus")
-    if (not isinstance(cpus, list) or not cpus
-            or any(not isinstance(cpu, int) or isinstance(cpu, bool) or cpu < 0 for cpu in cpus)
-            or len(set(cpus)) != len(cpus)):
-        raise ValueError("resource budget requires a unique explicit CPU set")
-    for key in ("memory_bytes", "scratch_bytes", "wall_seconds"):
-        value = budget.get(key)
-        if not isinstance(value, int) or isinstance(value, bool) or value <= 0:
-            raise ValueError(f"resource budget requires positive {key}")
-    if budget["memory_bytes"] < 1024 or budget.get("swap_bytes") != 0:
-        raise ValueError("resource budget requires at least 1024 memory bytes and zero swap")
-    parent = pathlib.Path(str(budget.get("cgroup_parent", "")))
-    if not parent.is_absolute() or not parent.is_relative_to("/sys/fs/cgroup"):
-        raise ValueError("cgroup parent must be an absolute delegated cgroup-v2 directory")
-    existing = budget.get("existing_guard")
-    if existing is not None:
-        if not isinstance(existing, dict):
-            raise ValueError("existing guard declaration must be an object")
-        path = pathlib.Path(str(existing.get("path", "")))
-        memory = existing.get("memory_bytes")
-        if (path.parent != parent or not isinstance(existing.get("inode"), int)
-                or not isinstance(memory, int) or memory <= 0 or memory % 1024
-                or budget["memory_bytes"] - memory < 16 * 1024 * 1024):
-            raise ValueError("existing guard requires one sibling cgroup and a separate coordinator memory budget")
-        if mode != "discovery":
-            raise ValueError("existing nested guard adoption currently supports diagnostic discovery only")
-    if mode == "qualification":
-        if not isinstance(budget.get("calibration"), dict):
-            raise ValueError("qualification requires source-bound verified host calibration")
-        objective = research_contracts.validate_objective()
-        if len(cpus) != 1:
-            raise ValueError("qualification requires one assigned CPU")
-        if (budget["memory_bytes"] > objective["resources"]["memory"]["maximumBytes"]
-                or budget["scratch_bytes"] > objective["resources"]["temporaryDisk"]["maximumBytes"]):
-            raise ValueError("qualification budget exceeds the active objective resource limits")
-    return budget
+def validate_execution_budget(job):
+    objective = research_contracts.validate_objective() if job.get("execution_mode") == "qualification" else None
+    return linux_execution.validate_execution_budget(job, objective=objective)
 
 
-def parse_cpu_set(value: str) -> set[int]:
-    result: set[int] = set()
-    for part in value.strip().split(","):
-        bounds = part.split("-")
-        if len(bounds) == 1:
-            result.add(int(bounds[0]))
-        elif len(bounds) == 2 and int(bounds[0]) <= int(bounds[1]):
-            result.update(range(int(bounds[0]), int(bounds[1]) + 1))
-        else:
-            raise ValueError("invalid CPU set")
-    return result
+parse_cpu_set = linux_execution.parse_cpu_set
 
 
 def execution_options(args: argparse.Namespace) -> dict[str, Any]:
@@ -1508,14 +1376,19 @@ def existing_observer_live_jobs(running: list[dict[str, Any]]) -> tuple[set[str]
 def claim_jobs(
     limit: int, candidate_ids: set[str] | None = None
 ) -> list[tuple[pathlib.Path, dict[str, Any]]]:
-    # Directory locking serializes claims without introducing another queue file.
-    directory_fd = os.open(QUEUE_DIRS["running"], os.O_RDONLY | os.O_DIRECTORY)
+    # Lock order: runtime admission directory, then queue directory. A claimed
+    # qualification record excludes discoveries until the owned lease is held.
     try:
-        fcntl.flock(directory_fd, fcntl.LOCK_EX)
-        require_no_exclusive_lease()
-        return _claim_jobs_locked(limit, candidate_ids)
-    finally:
-        os.close(directory_fd)
+        with admission_guard(EXCLUSIVE_FULL1G_PATH.parent):
+            directory_fd = os.open(QUEUE_DIRS["running"], os.O_RDONLY | os.O_DIRECTORY)
+            try:
+                fcntl.flock(directory_fd, fcntl.LOCK_EX)
+                require_no_exclusive_lease()
+                return _claim_jobs_locked(limit, candidate_ids)
+            finally:
+                os.close(directory_fd)
+    except AdmissionBusy:
+        return []
 
 
 def _claim_jobs_locked(
@@ -1616,182 +1489,25 @@ def validate_qualification_calibration(job: dict[str, Any]) -> dict[str, Any]:
     return verification
 
 
-def _group_write(descriptor: int, name: str, value: str) -> None:
-    fd = os.open(name, os.O_WRONLY | os.O_NOFOLLOW, dir_fd=descriptor)
-    try:
-        os.write(fd, value.encode())
-    finally:
-        os.close(fd)
+_group_write = linux_execution._group_write
 
 
-def _group_read(descriptor: int, name: str) -> str:
-    fd = os.open(name, os.O_RDONLY | os.O_NOFOLLOW, dir_fd=descriptor)
-    try:
-        with os.fdopen(fd) as stream:
-            return stream.read()
-    except BaseException:
-        raise
+_group_read = linux_execution._group_read
 
 
-def _group_populated(descriptor: int) -> bool:
-    return dict(line.split() for line in _group_read(descriptor, "cgroup.events").splitlines()).get("populated") != "0"
+_group_populated = linux_execution._group_populated
 
 
-def prepare_execution_envelope(job: dict[str, Any], command: list[str], snapshot: pathlib.Path) -> tuple[list[str], list[dict[str, Any]]]:
-    budget = validate_execution_budget(job)
-    guard = ROOT / "tools/run_with_resource_guard_v3.py"
-    if artifact_reference(guard) != job.get("execution_guard"):
-        raise ValueError("execution guard source differs from queued binding")
-    if not set(budget["cpus"]).issubset(os.sched_getaffinity(0)):
-        raise ValueError("assigned CPU set is unavailable to this worker")
-    parent = pathlib.Path(budget["cgroup_parent"])
-    if parent.is_symlink() or parent.resolve() != parent or not parent.is_dir():
-        raise ValueError("delegated cgroup parent is unavailable or redirected")
-    group = parent / f"gamma-enwiki9-{job['job_id']}"
-    existing = budget.get("existing_guard")
-    memory = budget["memory_bytes"] // 1024 * 1024
-    coordinator_memory = memory - (existing["memory_bytes"] if existing else 0)
-    handles: list[dict[str, Any]] = []
-    try:
-        if existing:
-            existing_path = pathlib.Path(existing["path"])
-            if existing_path.is_symlink() or existing_path.resolve() != existing_path:
-                raise ValueError("declared existing guard cgroup was redirected")
-            descriptor = os.open(existing_path, os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW)
-            handles.append({"path": str(existing_path), "descriptor": descriptor, "created": False,
-                            "inode": os.fstat(descriptor).st_ino, "memory_bytes": existing["memory_bytes"]})
-            if os.fstat(descriptor).st_ino != existing["inode"] or _group_populated(descriptor):
-                raise ValueError("declared existing guard cgroup changed or is occupied")
-        group.mkdir()
-        descriptor = os.open(group, os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW)
-        handles.append({"path": str(group), "descriptor": descriptor, "created": True,
-                        "inode": os.fstat(descriptor).st_ino, "memory_bytes": coordinator_memory})
-        for handle in handles:
-            fd = handle["descriptor"]
-            _group_write(fd, "memory.swap.max", "0\n")
-            handle["kernel_cpuset"] = (parent / "cpuset.mems.effective").is_file()
-            if handle["kernel_cpuset"]:
-                _group_write(fd, "cpuset.mems", (parent / "cpuset.mems.effective").read_text())
-                _group_write(fd, "cpuset.cpus", ",".join(map(str, budget["cpus"])) + "\n")
-            _group_write(fd, "memory.max", str(handle["memory_bytes"]) + "\n")
-            # Open the kill interface before launching; lack of termination authority fails admission.
-            kill_fd = os.open("cgroup.kill", os.O_WRONLY | os.O_NOFOLLOW, dir_fd=fd)
-            os.close(kill_fd)
-        resources = RUN_LOGS / f"{job['job_id']}.resources"
-        resources.mkdir()
-        marker = resources / "phases.jsonl"
-        marker.touch(exist_ok=False)
-        receipt = resources / "guard.json"
-        scratch = ROOT / "results" / job["candidate_id"]
-        scratch.mkdir(parents=True, exist_ok=True)
-        limit_kib = coordinator_memory // 1024
-        wrapped = [sys.executable, str(guard), "--limit-kib", str(limit_kib),
-                   "--official-decimal-limit-kib", str(limit_kib), "--limit-mode", "tree",
-                   "--cgroup-path", str(group), "--cgroup-memory-max-bytes", str(limit_kib * 1024),
-                   "--temporary-disk-limit-bytes", str(budget["scratch_bytes"]),
-                   "--phase-marker-path", str(marker), "--max-logical-cpus", str(len(budget["cpus"])),
-                   "--guard-json", str(receipt), "--label", job["job_id"], "--phase", "diagnostic"]
-        log_path = RUN_LOGS / f"{job['job_id']}.log"
-        log_path.touch(exist_ok=False)
-        for path in sorted({scratch, snapshot, resources, log_path}):
-            wrapped.extend(["--scratch-path", str(path)])
-        marker_script = 'printf \'%s\\n\' \'{"phase":"diagnostic","event":"worker_start","detail":"operational envelope only; no codec phase credit"}\' >> "$GAMMA_RESOURCE_PHASE_MARKERS" || exit 125; exec "$@"'
-        wrapped.extend(["--", "/usr/bin/taskset", "--cpu-list", ",".join(map(str, budget["cpus"])),
-                        "/bin/sh", "-c", marker_script, "enwiki9-discovery-envelope", *command])
-        job["execution_resources"] = {"cgroup_path": str(group), "cgroup_inode": handles[-1]["inode"],
-                                      "groups": [{k: v for k, v in h.items() if k != "descriptor"} for h in handles],
-                                      "guard_path": str(receipt.relative_to(ROOT)),
-                                      "guard_command_sha256": hashlib.sha256(b"\0".join(os.fsencode(x) for x in wrapped)).hexdigest(),
-                                      "boot_id": pathlib.Path("/proc/sys/kernel/random/boot_id").read_text().strip(),
-                                      "cpu_enforcement": "kernel-cpuset-and-taskset" if all(h["kernel_cpuset"] for h in handles) else "taskset-and-sampled-affinity-guard",
-                                      "missing_diagnostics": [] if all(h["kernel_cpuset"] for h in handles) else ["kernel cpuset controller is not delegated; taskset assignment and existing affinity guard remain active"],
-                                      "budget": budget, "timing_authority": job.get("timing_authority")}
-        return wrapped, handles
-    except BaseException:
-        for handle in reversed(handles):
-            os.close(handle["descriptor"])
-            if handle["created"]:
-                pathlib.Path(handle["path"]).rmdir()
-        raise
+def prepare_execution_envelope(job, command, snapshot):
+    return linux_execution.prepare_execution_envelope(job, command, snapshot,
+        root=ROOT, run_logs=RUN_LOGS, artifact_reference=artifact_reference,
+        objective=research_contracts.validate_objective() if job.get("execution_mode") == "qualification" else None)
 
 
-def wait_for_budgeted_worker(process: subprocess.Popen[Any], job: dict[str, Any], handles: list[dict[str, Any]], *, abort_reason: str | None = None) -> int:
-    deadline = time.monotonic() + job["resource_budget"]["wall_seconds"]
-    returncode = 125 if abort_reason is not None else None
-    if abort_reason is not None:
-        job["execution_resources"]["abort_reason"] = abort_reason
-    try:
-        while returncode is None:
-            for handle in handles:
-                descriptor = handle["descriptor"]
-                maximum = _group_read(descriptor, "memory.max").strip()
-                if (maximum == "max" or int(maximum) > handle["memory_bytes"]
-                        or _group_read(descriptor, "memory.swap.max").strip() != "0"
-                        or (handle.get("kernel_cpuset") and parse_cpu_set(_group_read(descriptor, "cpuset.cpus")) != set(job["resource_budget"]["cpus"]))):
-                    raise ValueError("owned cgroup memory or swap budget changed")
-            remaining = deadline - time.monotonic()
-            if remaining <= 0:
-                job["wall_budget_exceeded"] = True
-                returncode = 124
-                break
-            try:
-                returncode = process.wait(timeout=min(0.25, remaining))
-            except subprocess.TimeoutExpired:
-                continue
-    finally:
-        # A root process exit does not prove all descendants exited. Kill residuals
-        # through already-open, inode-bound directories before recording terminal state.
-        errors = []
-        for handle in handles:
-            populated = True
-            try:
-                populated = _group_populated(handle["descriptor"])
-            except Exception as exc:
-                errors.append(f"{handle['path']}: read population: {exc}")
-            if populated:
-                job["residual_processes_terminated"] = True
-                try:
-                    _group_write(handle["descriptor"], "cgroup.kill", "1\n")
-                except Exception as exc:
-                    errors.append(f"{handle['path']}: terminate group: {exc}")
-        try:
-            if process.poll() is None:
-                try:
-                    process.wait(timeout=5)
-                except subprocess.TimeoutExpired:
-                    process.terminate()
-                    try:
-                        process.wait(timeout=5)
-                    except subprocess.TimeoutExpired:
-                        process.kill()
-                        process.wait(timeout=5)
-        except Exception as exc:
-            errors.append(f"worker termination: {exc}")
-        cleanup_deadline = time.monotonic() + 5
-        for handle in reversed(handles):
-            try:
-                while _group_populated(handle["descriptor"]) and time.monotonic() < cleanup_deadline:
-                    time.sleep(0.05)
-                if _group_populated(handle["descriptor"]):
-                    raise RuntimeError("owned group still has live members")
-                path = pathlib.Path(handle["path"])
-                if path.stat().st_ino != handle["inode"]:
-                    raise RuntimeError("owned cgroup identity changed")
-                path.rmdir()
-            except Exception as exc:
-                errors.append(f"{handle['path']}: remove group: {exc}")
-            finally:
-                try:
-                    os.close(handle["descriptor"])
-                except Exception as exc:
-                    errors.append(f"{handle['path']}: close handle: {exc}")
-        job["execution_resources"]["cleanup_complete"] = not errors
-        if errors:
-            job["execution_resources"]["cleanup_errors"] = errors
-            raise RuntimeError("owned execution cleanup incomplete: " + "; ".join(errors))
-    if returncode == 0 and job.get("residual_processes_terminated"):
-        return 125
-    return int(returncode)
+def wait_for_budgeted_worker(process, job, handles, *, abort_reason=None):
+    return linux_execution.wait_for_budgeted_worker(process, job, handles,
+        abort_reason=abort_reason, read_group=_group_read, write_group=_group_write,
+        group_populated=_group_populated)
 
 
 def execute_job(running_path: pathlib.Path, job: dict[str, Any]) -> dict[str, Any]:
@@ -1914,27 +1630,34 @@ def _execute_job(running_path: pathlib.Path, job: dict[str, Any]) -> dict[str, A
             snapshot_root
         )
         command, execution_handles = prepare_execution_envelope(job, command, snapshot_root)
-        process_environment["TMPDIR"] = str(RUN_LOGS / f"{job_id}.resources")
-        lease = None
-        if job["execution_mode"] == "qualification":
-            resources_dir = RUN_LOGS / f"{job_id}.resources"
-            lease = managed_exclusive_lease.ManagedExclusiveLease.acquire(
-                lease_path=EXCLUSIVE_FULL1G_PATH, transition_path=resources_dir / "lease-transitions.json",
-                candidate_id=candidate_id,
-                command_sha256=hashlib.sha256(pathlib.Path("/proc/self/cmdline").read_bytes().rstrip(b"\0")).hexdigest(),
-                runner_sha256=artifact_reference(pathlib.Path(__file__))["sha256"].removeprefix("sha256:"),
-                guard_path=job["execution_resources"]["guard_path"],
-                result_path=str(ROOT / "results" / candidate_id), scratch_path=str(snapshot_root),
-                claim_boundary="isolated qualification measurement; no automatic resource or score certification")
-            job["exclusive_lease"] = {"path": str(EXCLUSIVE_FULL1G_PATH), "lease_id": lease.record["lease_id"]}
+        with ExitStack() as startup:
+            lease = None
+            def rollback_startup():
+                linux_execution.cleanup_unstarted(execution_handles)
+                if lease is not None:
+                    lease.release(evidence_path=resources_dir / "lease-terminal.json")
+            startup.callback(rollback_startup)
+            process_environment["TMPDIR"] = str(RUN_LOGS / f"{job_id}.resources")
+            lease = None
+            if job["execution_mode"] == "qualification":
+                resources_dir = RUN_LOGS / f"{job_id}.resources"
+                lease = managed_exclusive_lease.ManagedExclusiveLease.acquire(
+                    admission_check=lambda: require_qualification_reservation(QUEUE_DIRS["running"], job_id),
+                    lease_path=EXCLUSIVE_FULL1G_PATH, transition_path=resources_dir / "lease-transitions.json",
+                    candidate_id=candidate_id,
+                    command_sha256=hashlib.sha256(pathlib.Path("/proc/self/cmdline").read_bytes().rstrip(b"\0")).hexdigest(),
+                    runner_sha256=artifact_reference(pathlib.Path(__file__))["sha256"].removeprefix("sha256:"),
+                    guard_path=job["execution_resources"]["guard_path"],
+                    result_path=str(ROOT / "results" / candidate_id), scratch_path=str(snapshot_root),
+                    claim_boundary="isolated qualification measurement; no automatic resource or score certification")
+                job["exclusive_lease"] = {"path": str(EXCLUSIVE_FULL1G_PATH), "lease_id": lease.record["lease_id"]}
 
-        atomic_json(running_path, job)
-        with log_path.open("w") as log:
-            log.write(
-                json.dumps({"job": job, "command": command}, sort_keys=True) + "\n"
-            )
-            log.flush()
-            try:
+            atomic_json(running_path, job)
+            with log_path.open("w") as log:
+                log.write(
+                    json.dumps({"job": job, "command": command}, sort_keys=True) + "\n"
+                )
+                log.flush()
                 process = subprocess.Popen(
                     command,
                     cwd=ROOT,
@@ -1942,32 +1665,24 @@ def _execute_job(running_path: pathlib.Path, job: dict[str, Any]) -> dict[str, A
                     stdout=log,
                     stderr=subprocess.STDOUT,
                 )
-            except BaseException:
-                for handle in reversed(execution_handles):
-                    os.close(handle["descriptor"])
-                    path = pathlib.Path(handle["path"])
-                    if path.stat().st_ino == handle["inode"]:
-                        path.rmdir()
-                if lease is not None:
-                    lease.release(evidence_path=resources_dir / "lease-terminal.json")
-                raise
-            try:
+                startup.pop_all()
                 try:
-                    job["worker_pid"] = process.pid
-                    worker_proc_start_ticks = _proc_start_ticks(process.pid)
-                    if worker_proc_start_ticks is not None:
-                        job["worker_proc_start_ticks"] = worker_proc_start_ticks
-                    job["worker_started_at"] = utc_now()
-                    atomic_json(running_path, job)
-                except BaseException:
-                    wait_for_budgeted_worker(process, job, execution_handles,
-                                             abort_reason="worker-bookkeeping-failure")
-                    raise
-                else:
-                    returncode = wait_for_budgeted_worker(process, job, execution_handles)
-            finally:
-                if lease is not None and job["execution_resources"].get("cleanup_complete") is True:
-                    lease.release(evidence_path=resources_dir / "lease-terminal.json")
+                    try:
+                        job["worker_pid"] = process.pid
+                        worker_proc_start_ticks = _proc_start_ticks(process.pid)
+                        if worker_proc_start_ticks is not None:
+                            job["worker_proc_start_ticks"] = worker_proc_start_ticks
+                        job["worker_started_at"] = utc_now()
+                        atomic_json(running_path, job)
+                    except BaseException:
+                        wait_for_budgeted_worker(process, job, execution_handles,
+                                                 abort_reason="worker-bookkeeping-failure")
+                        raise
+                    else:
+                        returncode = wait_for_budgeted_worker(process, job, execution_handles)
+                finally:
+                    if lease is not None and job["execution_resources"].get("cleanup_complete") is True:
+                        lease.release(evidence_path=resources_dir / "lease-terminal.json")
     elapsed = round(time.monotonic() - started, 3)
     final_state = "completed" if returncode == 0 else "failed"
     job.update(
@@ -2258,6 +1973,16 @@ def build_parser() -> argparse.ArgumentParser:
     )
     subparsers = parser.add_subparsers(dest="command", required=True)
 
+    recovery = subparsers.add_parser("reconcile-candidate", help="finish an interrupted candidate creation transaction")
+    recovery.add_argument("candidate_id")
+    history = subparsers.add_parser("verify-history", help="validate original immutable evidence in a read-only workspace")
+    history.add_argument("manifest", type=pathlib.Path)
+    history.add_argument("--output", type=pathlib.Path, required=True)
+    capture = subparsers.add_parser("freeze-history", help="retain exact historical verification references without rewriting evidence")
+    capture.add_argument("artifact", type=pathlib.Path)
+    capture.add_argument("--framework-closure", type=pathlib.Path, required=True)
+    capture.add_argument("--output", type=pathlib.Path, required=True)
+
     subparsers.add_parser("start", help="orient an agent: records, ownership, prerequisites, and next commands; read-only")
     records_parser = subparsers.add_parser("records", help="search canonical research records or inspect candidate history; read-only")
     from enwiki9_ledger import record_options
@@ -2341,6 +2066,10 @@ def build_parser() -> argparse.ArgumentParser:
     new.add_argument("candidate_id")
     new.add_argument("--hypothesis", required=True)
     new.add_argument("--description")
+    new.add_argument("--kind", choices=("standalone_codec", "experiment_recipe", "analysis_only", "external_adapter"), default="standalone_codec")
+    new.add_argument("--codec", type=json.loads, help="recipe codec identity as JSON")
+    new.add_argument("--upstream", type=json.loads, help="external adapter provenance as JSON")
+    new.add_argument("--transformation", type=json.loads, action="append", default=[])
     new.add_argument("--enqueue", action="store_true")
     add_enqueue_options(new)
 
@@ -2349,6 +2078,10 @@ def build_parser() -> argparse.ArgumentParser:
     mutate.add_argument("candidate_id")
     mutate.add_argument("--hypothesis", required=True)
     mutate.add_argument("--description")
+    mutate.add_argument("--kind", choices=("standalone_codec", "experiment_recipe", "analysis_only", "external_adapter"))
+    mutate.add_argument("--codec", type=json.loads, help="recipe codec identity as JSON")
+    mutate.add_argument("--upstream", type=json.loads, help="external adapter provenance as JSON")
+    mutate.add_argument("--transformation", type=json.loads, action="append", default=[])
     mutate.add_argument(
         "--replace",
         action="append",
@@ -2533,10 +2266,28 @@ def build_parser() -> argparse.ArgumentParser:
 def main() -> int:
     parser = build_parser()
     args = parser.parse_args()
+    if args.command == "freeze-history":
+        from gamma_enwiki9.evidence.history import freeze_verification
+        artifact = args.artifact.resolve().relative_to(ROOT).as_posix()
+        manifest = freeze_verification(ROOT, artifact,
+            framework_manifest=load_json(args.framework_closure.resolve()),
+            destination=args.output.resolve(), repository=ROOT.parents[1])
+        print(json.dumps({"closure_sha256": manifest["closure_sha256"], "files": len(manifest["files"]),
+                          "new_execution_authorized": False}, indent=2))
+        return 0
+    if args.command == "verify-history":
+        from gamma_enwiki9.research.history_verification import verify
+        report = verify(ROOT, args.manifest.resolve(), args.output.resolve())
+        print(json.dumps(report, indent=2))
+        return int(report["state"]["evidence_state"] != "verified under original closure")
+    if args.command == "reconcile-candidate":
+        reconcile_candidate_creation(args.candidate_id)
+        print(json.dumps({"candidate_id": args.candidate_id, "creation_committed": True}))
+        return 0
     if args.command in {"start", "records"}:
         from enwiki9_ledger import build, record_query, start_payload
         try:
-            data = build(ROOT)
+            data = build(ROOT, observe=args.command == "start")
             result = start_payload(data, ROOT) if args.command == "start" else record_query(data, args)
         except ValueError as exc:
             parser.error(str(exc))
@@ -2647,6 +2398,10 @@ def main() -> int:
                 hypothesis=args.hypothesis,
                 description=args.description,
                 replacements=replacements,
+                kind=args.kind,
+                codec=args.codec,
+                upstream=args.upstream,
+                transformations=args.transformation,
             )
             result: dict[str, Any] = {
                 "candidate_id": args.candidate_id,

@@ -1,0 +1,653 @@
+# Research Register Archive - part 050
+
+[Current register](../../research_register.md) | [Register index](../README.md) | [Archive index](README.md)
+
+Candidate `fx2_paid_odds_cost250k_v1`, owner `root_paid_odds`, closes [paid odds selection](../../fx2_paid_odds_20260914.md) against unchanged native FX2 on exposed raw [0,250000), 151210 modeled bytes. Deliberate lenses 7/9 combine exact finite selection and paid parent-preserving correction. Seven fixed odds choices in 128 causal contexts cost 48 transmitted bytes. Exact selection over 7**128 policies gains only 144.259853 ideal bits before the 384-bit table; exact paid bounds [-262,-220] bits reject this fixed ideal-plus-table family. All contexts are populated; 42 choose nonidentity. Seven tests cover 5488 exhaustive synthetic joint policies, serialization, bounds and alignment. Two corpus fits are byte-identical; all 22 bound inputs, 1209680 truth bits, retained P/K archive/coder identity and WRT inversion pass. The [terminal](../../../operations/provenance/fx2_paid_odds_terminal_20260914.json) has a complete guard, no flags, 97624064 peak cgroup memory bytes and cleanup. The [validated reflection](../../../operations/adaptive/reflections/20260914T204448Z_da9938b6c6.json) retires this realization and binds one diagnostic ledger row. This is development fitting, not a finite-archive loss, confirmation, universal calibration bound or a new native codec. Shared implementation costs remain unmeasured; g_P/g_S/n1/n2 and full score unknown, objective credit zero. No larger run or native integration follows; retain the selector for a separately evidenced residual premise.
+Candidate `fx2_kda_conditional_cost250k_v1`, owner `root_kda_attribution`, closes [conditional cost attribution](../../fx2_kda_conditional_cost_20260914.md) over the fixed native P/D/S trajectories on raw [0,250000). D helps45 pieces, hurts52 and leaves one unchanged; global ideal gain is-29.467964bits, S-118.714483. Hindsight whole-piece selection yields90.732972 ideal bits and favorable age-bin selection8.687226. Pointwise P/D and P/D/S oracle gains6917.505203/10562.953633 ideal bits have exact integer ceilings6962/10629, passing the prospective4096-bit floor. This supports headroom only: no finite-archive bound, causal selector, changed-feedback or full-corpus gain follows. Two attribution subprocesses produce byte-identical receipts;38 bound inputs,1209680 truth records, original P/K byte/state identity and WRT inversion pass. Guard closes with197799936 peak memory bytes,233472 scratch bytes and no flags. The [validated reflection](../../../operations/adaptive/reflections/20260914T151205Z_d5306a1d7c.json) holds native integration and records two diagnostic ledger rows. Residual-error/complementarity lenses9/12 preserve conditional effects without reviving the retired carry codec. Next uncertainty is causal bit-selectability and joint-state cost; no age-window/retention sweep or larger launch. Prior archive g_P=-3,g_S=11 unchanged. Full score unknown; forecast109389323, target90000000, debt+19389323, objective credit zero.
+
+Candidate `fx2_kda_carry_opening250k_v1`, owner `root_kda_carry`, closes the [native recurrent-memory comparison](../../fx2_kda_carry_20260913.md) on exposed raw [0,250000). Fixed1/16 carry at existing KDA resets gives P/K33429, D33432 and rotated-value S33443 archive bytes: g_P=-3, g_S=11. All four inverses/archive repeats, full coder records,98 authoritative KDA reset-state boundaries per phase, P/K byte identity and released-parent archive/coder parity pass. Fifteen native/build/preprocess phases finish under a complete guard with no flags,6890565632 peak memory bytes and1045168128 allocated scratch bytes. All241 copied files match. Source/binary/options increment9032 yields local inventory net-9035; final packaging is unknown. The [validated reflection](../../../operations/adaptive/reflections/20260913T033732Z_ce8762eb52.json) retires only this fixed realization and records four native diagnostic ledger rows; semantic-control separation cannot rescue an archive regression against P. The [coordinate clarification](../../../operations/provenance/fx2_kda_carry_coordinate_clarification_v1.json) distinguishes raw250000 from modeled151210 symbols. Optimized/UBSan fixtures and repeated builds pass; initial compiler quota failure remains infrastructure-only. Memory/state-transfer lenses3/4 motivated the mutation; reset matches training and is not a bug. No retention sweep or larger launch follows. Full score unknown, forecast109389323, target90000000, debt+19389323, objective credit zero.
+
+Candidate `alias_residual_opportunity1m_q0_v1`, owner `root_alias_residual`, closes the [natural abbreviation opportunity study](../../alias_residual_opportunity_20260913.md) using lenses2/9 and the exact strongest-parent opening1M trace. The fixed article-local parser installs10 definitions, recognizes29 mentions and exposes8 D windows spanning64 WRT bytes; their union contains191.547799 ideal parent bits, only23.943475 ideal bytes even with perfect prediction confined there. Every D donor differs at the first target byte. Rotated S has10 windows,230.498901 ideal bits and3 matching prefix bytes; these differing opportunity sets are not scored as g_S. Two census subprocesses yield byte-identical receipts, exact WRT inversion and causal donor boundaries; five fixture tests pass. The [closed terminal](../../../operations/provenance/alias_residual_opportunity_terminal_20260913.json) and [validated reflection](../../../operations/adaptive/reflections/20260913T030121Z_133266cde6.json) hold integration, retain two diagnostic ledger rows and pass the bounded guard at171896832 peak memory bytes. This measures available opportunity, not achieved savings, an archive regression, a universal futility bound or RSI improvement. No new expert or native compression run is selected. The [context](../../research_concepts_50.md) separates reproduction, counted descendant improvement and matched-search machinery improvement; Reploid/Doppler roles and quine accounting stay within existing lab authority. Full-corpus score remains unknown; forecast109389323, target90000000, debt+19389323, objective credit zero.
+
+The [50 research concepts](../../research_concepts_50.md) now inform Gamma exploration without guaranteeing gains. The [suffix alphabet screen](../../wrt_suffix_alphabet_20260912.md) preserves the strongest retained native predictor and changes only dictionary order within unchanged code-length bands. Candidate `wrt_suffix_alphabet250k_q0_v1` was cancelled before execution after pretraining review; `wrt_suffix_alphabet250k_q0_v2` fixes original-dictionary pretraining. On exposed [0,250000), P/K are44958 and D46123 bytes with exact inverses/repeats; root ENOSPC left S46400 encode-only and the original guard nonterminal. The immutable [partial evidence](../../../operations/provenance/wrt_suffix_alphabet_v2_partial_20260912.json) retains g_P=-1165 and missing g_S. Candidate `wrt_suffix_control_completion250k_q0_v1` subsequently completes only S inverse/repeat on independent runtime storage. The [completed evidence](../../../operations/provenance/wrt_suffix_alphabet_completed_evidence_20260912.json) closes g_P=-1165 and g_S=277 across executions, with all archive inverses/repeats and P/K byte identity. Its separate guard passes at9232740352 peak memory bytes and1220608 scratch bytes; original resource failure remains. Four partial-execution rows plus one validated completion terminal-index row preserve attribution. The fixed suffix alphabet loses before extra package costs and receives no larger gate. Internal predictive states and final package remain unmeasured; all50 concepts remain hypotheses to prioritize by strong-parent residual gain and counted cost. Full score unknown, forecast109389323, target90000000, debt+19389323, objective credit zero.
+
+Owner `root_outside` closes candidate `paid_context_instruction_10m_q0_v1` in the [paid context instruction screen](../../paid_context_instruction_20260912.md), selected through lenses1/10 from the retained MDL model-description exclusion. Fixed order6 contexts pay a flag plus favored-byte/coefficient instructions instead of independent count tables. On exposed raw [0, 10000000), two complete replays yield identical numeric receipts and788184-byte models: ideal payload3384073.8304 plus model totals4172257.8304 versus matched strong-parent archive/program1895625. Optimistic gain=-2276632.8304 bytes even with candidate source/frontend/termination free. Rotated control payload5739859.8775 confirms association specificity without strong-parent competitiveness. The [closed terminal](../../../operations/provenance/paid_context_instruction_terminal_20260912.json) passes instruction reconstruction/repeatability and all bounded resource checks; three diagnostic ledger rows and the [validated reflection](../../../operations/adaptive/reflections/20260913T001644Z_a8f55fe2f3.json) reject only this fixed replacement. Even payload alone loses, so cheaper instructions cannot rescue its lost predictive strength. This is priced likelihood, not an archive regression or a universal bound. Strong-parent residual instructions remain an untested question; no successor launched. The unrelated737-byte cold1MB gain cannot be credited to the109389323-byte forecast. Full score remains unknown and objective credit zero.
+
+The [2026-09-12 alias-context research](../../alias_context_research_20260912.md) compares quines/paid prompts, acronym-equivalence prediction and sparse attention against primary literature and prior local failures. Owner `root_alias_research` closes [synthetic candidate alias_context_fixture_q0_v1](../../../operations/provenance/alias_context_fixture_terminal_20260912.json): all48 phases, exact inverses/repeats, P/K byte and authoritative-state identity and byte-boundary witnesses pass; the guard closes at29265920 peak memory bytes. On the constructed3508-byte transfer case P/K2051,D1839,S2068, g_P=212 and g_S=229; the wrong-relation case D2068 loses17 versusP2051 whileS1839 wins. No-definition and binary controls tie. Source files total14128 bytes, with incremental/final packaging unknown. [Reflection](../../../operations/adaptive/reflections/20260912T212344Z_0ed06d3b87.json) supports synthetic transfer and holds corpus promotion; natural-text opportunity and strong-parent residual gain remain unknown. Acronym coding and entity-aware language modeling are prior art; global novelty and best-compressor claims are unproved. This changes context equivalence using completed definitions rather than reviving generic continuation retrieval or scalar calibration. Sixteen terminal-index ledger rows retain all fixture/arm outcomes; no corpus or prize credit.
+Independent [opcode opportunity review](../../../operations/provenance/opcode_event_opportunity_source_review_v1.json)
+led to [closed v2 observation](../../../operations/provenance/opcode_event_opportunity_decode250k_v2_terminal.json): 182,582 events (179,924 literal, 1,844 raw-copy, 814 chain-copy), 37 contexts and 47 independently verified integer chunks bound ideal parent-event cost by 17,576 bits on the fixed development parse. P/K/K-repeat inverses and parent audits match exactly; repeated event records match and the CPU3 guard closes cleanly. This component ceiling excludes literal prediction and establishes neither finite archive savings nor previous-event predictive value. The [validated reflection](../../../operations/adaptive/reflections/20260909T140149Z_274c03e2c0.json) holds compression attribution inconclusive; a separately frozen causal conditional-loss comparison remains a question, with no successor launched. Owner `next_prediction_gate_review` preserves the [v1 preflight failure](../../../operations/evidence/20260909_opcode_event_opportunity_preflight_v1.json); score credit remains zero. Owner `root_explore` next implements [previous-completed-word literal conditioning](../../opcode_previous_word_v1.md), replacing only family11 while retaining twelve tables, the parent parser and calibration. Its [ten-test synthetic receipt](../../../operations/provenance/opcode_previous_word_v1_synthetic_terminal.json) preserves P/K archive/projection identity, all-arm parse equality, independent inversion/repeats and complete word-history witnesses, including copied bytes; twelve fresh processes verify relocated decoding. Source bundle7023bytes adds1277 local bytes. Fixtures tie or lose; corpus value is unproved. The [closed opening250KB comparison](../../../operations/provenance/opcode_previous_word_terminal_20260909.json) completes all13 phases: P/K67658,D67511,S67555 bytes, saving147 versus parent and44 versus delayed control. Independent audit verifies42 inputs,171 runtime references,64 artifacts, exact inverses/repeats, P/K parent projections, all-arm parsing and K/D/S word histories; guards close cleanly. D peak RSS751388KiB versus P498904KiB shows state cost increased despite twelve tables. Raw local source adds1277 bytes, losing1130 with the archive. The [matched source ZIP diagnostic](../../../operations/provenance/opcode_previous_word_source_zip_20260909.json) verifies exact extraction/repeats but adds1176 bytes, still losing1029 with the archive. Retain the scoped predictive gain; assess one separately identified compact implementation preserving probabilities before deciding fresh confirmation. Complete package and full-corpus score remain unknown. Owner `root_explore` implements [compact integration](../../opcode_previous_word_compact_v1.md): [six tests pass](../../../operations/provenance/opcode_previous_word_compact_unit_20260909.json), preserving all-arm archive/full-audit parity on1173 synthetic bytes; source5961 versus7023. The separate [treatment release](../../opcode_previous_word_release_v1.md) is5856 bytes,110 above originalP; [five tests](../../../operations/provenance/opcode_previous_word_release_unit_20260909.json) include18 isolated relocated codec phases. Its [eight runner tests](../../../operations/provenance/opcode_previous_word_release_gate_unit_20260909.json) pass on120 synthetic bytes. The [closed corpus release](../../../operations/provenance/opcode_previous_word_release_terminal_20260909.json) completes four exact phases:67511-byte archive, independent250000-byte inverse, repeat and full retained treatment audit parity. Source5856 bytes saves1167 against the adapter. Against originalP, archive plus one local source copy saves37 bytes; two-copy sensitivity loses73. Guard peak memory772694016 bytes, all flags clear and cgroup removed. No new predictive gain or complete score; next decide a separately frozen reserved250KB comparison with explicit multiplicities before1MB. Independent [FX2 word-context review](../../../operations/provenance/opcode_word_fx2_context_review_20260909.json) finds previous/current-word combinations already in native models and WRT spelling reconstruction; the exact standalone tuple differs, but frontend alignment and distinct information must be demonstrated synthetically before native transfer. No native corpus launch follows that source review. The unchanged word [transfer runner](../../opcode_previous_word_transfer_v1.md), after [nine synthetic tests](../../../operations/provenance/opcode_previous_word_transfer_gate_unit_20260909.json), completed its [frozen reserved250KB comparison](../../../operations/adaptive/experiments/opcode_previous_word_validation250k_q0_v1.json): P/K68981, D/releasedD68830, delayedS68879. All17 phases, exact inverses/repeats, complete state witnesses and release parity pass; root and independent review rehashed83 artifacts. D saves151 versusP and49 versusS, with one-copy local source surplus41 and two-copy deficit69; guard peak803201024 bytes, all flags clear. Job20260909T162704Z_5b79bb281d closed normally; no qualification or full score. The [fixed source ZIP measurement](../../../operations/provenance/opcode_previous_word_release_package_20260909.json) gives P5815/D5925, the same110-byte increment, with both dependency manifests explicitly incomplete and common declared invocation separate. Next: a separately frozen1MB confirmation research gate, with exact population, resource bounds and package multiplicities; no automatic launch or tuning on validation. [Preparation failures](../../../operations/evidence/20260909_opcode_previous_word_transfer_preflight.json) remain retained. On 2026-09-12, owner `root_confirmation` published [decision policy v1](../../../operations/provenance/opcode_previous_word_confirmation_decision_policy_v1.json) and ran the unchanged cold `[819000000, 820000000)` comparison with prior exposure preserved. The [terminal receipt](../../../operations/provenance/opcode_previous_word_confirmation_terminal_20260912.json) verifies P/K archives at 259468 bytes, byte identity, exact inverses, repeats and authoritative state equality. D terminal audit `sorted(table, key=packed)` raised `MemoryError` under the 2147483648-byte phase address-space cap before archive/audit retention; S and release-D did not execute. Aggregate cgroup peak2126069760 stayed below4294967296, but the phase resource gate failed. Verdict: **Resource failure or incomplete execution; no complete confirmation verdict.** Compression and remaining correctness/repeatability are unresolved. `g_P`, `g_S`, `n_1` and `n_2` are separately unknown; the latter two are **historical source-cost sensitivities**, not final package measurements. The [validated reflection](../../../operations/adaptive/reflections/20260912T185533Z_97ef262f1a.json) holds the incomplete execution without compression rejection or automatic relaunch; the [arm index](../../../operations/provenance/opcode_previous_word_confirmation_terminal_20260912/index.json) preserves completed P/K evidence and missing-arm states. The [audit-only bounded-sort retry](../../../operations/adaptive/experiments/opcode_previous_word_confirmation1m_q0_v2.json) leaves codec, population, arms and limits unchanged; four targeted tests and a synthetic seventeen-phase comparison pass. Its [closed partial receipt](../../../operations/provenance/opcode_previous_word_bounded_terminal_20260912.json) retains P259468, exact inversion, encode/decode state identity and retained-parent byte/state identity. Host ENOSPC interrupted P-repeat after two completed phases despite7332802560 bytes free at admission; K/D/S/releasedD are missing. The [administrative reconciliation](../../../operations/provenance/opcode_word_bounded_enospc_reconciliation_20260912.json) proves observed processes/cgroup absent, preserving the nonterminal guard and original running record without inventing an exit code or final resource evidence. The [validated reflection](../../../operations/adaptive/reflections/20260912T194714Z_32ce808ab6.json) holds this resource failure/incomplete execution; compression and remaining correctness/repeatability are unresolved. g_P, g_S and historical source-cost sensitivities n_1/n_2 remain separately unknown. Five ordinary diagnostic ledger rows preserve partial observations; terminal-index publication is unavailable because the guard never closed. Further corpus admission is blocked by shared-host storage capacity; no score or algorithmic-loss credit follows. The [v3 unchanged retry](../../../operations/provenance/opcode_previous_word_confirmation_v3_terminal_20260912.json) was admitted with11704836096 free bytes but shared root ENOSPC recurred during K-repeat. Five phases completed: P passes inverse/repeat/state, K passes inverse and encode/decode state, and P/K archives and authoritative predictions are identical at259468 bytes. The canonical worker closed failed and cleaned residual processes/cgroup; the guard remains nonterminal. D/S/releasedD and all four gain figures remain unknown. The [validated infrastructure-failure reflection](../../../operations/adaptive/reflections/20260912T213632Z_3ebb7f46fa.json) requires independent storage before another unchanged retry. The [v4 closed confirmation](../../../operations/provenance/opcode_previous_word_confirmation_v4_terminal_20260912.json) executes the unchanged 17 phases in an isolated temporary-filesystem checkout: P/K 259468, D/released D 258731, S 259044 bytes. g_P=737 and g_S=313; historical source-cost sensitivities n_1=627 and n_2=517. All inverses, independent byte/state repeats, authoritative boundary witnesses, P/K byte identity, observer parity and released-D parity pass. The closed guard has complete measurements, no flags, memory peak 2250203136 bytes and scratch peak 202657792 bytes under the unchanged caps. All 89 copied artifacts match byte for byte. The [validated reflection](../../../operations/adaptive/reflections/20260912T220257Z_b591d391ac.json) supports predictive confirmation on this cold 1MB sample; five terminal-index arm rows preserve the comparison. Final packaging and full-corpus score remain unknown; there is no larger launch or objective score credit.
+## 2026-09-09 - Direct sign/magnitude native loader
+Owner `root_explore` implements [direct loading](../../fx2_weight_sign_magnitude_loader_v1.md)
+to price the 416-byte model saving without the losing separate converter.
+The immutable adaptive loader and production dispatcher gain explicit GFX2SMG1
+admission. Before native execution, four source-adapter tests passed.
+The [bounded synthetic plan](../../../operations/provenance/fx2_weight_sign_magnitude_loader_unit_v1_plan.json)
+binds exact inputs, CPU3,512MiB address space,128MiB scratch and180 elapsed seconds.
+It tests native tensor inversion, older formats, rescaling and invalid streams;
+it authorizes no trained-model or corpus execution and grants no score credit.
+
+Published source `f1d979c69` passes all seven
+[native synthetic tests](../../../operations/provenance/fx2_weight_sign_magnitude_loader_unit_v1_terminal.json),
+including exact raw tensor parity, ADM compatibility, independent sign/magnitude
+rescaling, reset and malformed-stream rejection. Three bounded phases complete;
+all26 inputs remain unchanged. The production dispatcher and trained model
+remain unexecuted. Next freeze actual production parity and binary/source cost;
+416 model bytes saved per copy remain a component result, not package credit.
+
+The [production gate](../../../operations/provenance/fx2_weight_sign_magnitude_production_v1_terminal.json)
+now verifies434 native tensors and six exact production probability/logit traces.
+Binary delta0, model delta-416/copy, raw source delta+1638: runtime pair saves832,
+raw-source-plus-decoder grows806. Frozen both-negative gate fails; no corpus run.
+Next separately measure actual source/assets ZIP accounting and relocated build,
+an explicit rules-permitted representation, preserving this raw-source failure.
+
+The [measured ZIP realization](../../../operations/provenance/fx2_weight_sign_magnitude_zip_v1_terminal.json)
+saves40 source/assets ZIP bytes and456 bytes including the separate decoder.
+Both130-member ZIP repeats, exact extraction and relocated binary rebuilds pass. The [independent dependency audit](../../../operations/provenance/fx2_sign_magnitude_dependency_audit_20260909.json) verifies49 files and260 ZIP members; model permission/provenance, copied-header lineage, libdevice transcription permission and resolved runtime/toolchain closure remain incomplete. Existing baseline closure is not a qualified D closure; unsupported license-checker identifiers do not establish incompatibility.
+The [native fixture passes](../../../operations/provenance/fx2_weight_sign_magnitude_fixture50051_v1_terminal.json): three exact3223-byte archives, inverses/repeats and nine parent coder traces; guarded peak RAM5,531,414,528 bytes. Package delta-456 remains scoped. The [opening/distant transfer also passes](../../../operations/provenance/fx2_weight_sign_magnitude_transfer250k_v1_terminal.json): six exact parent archives/inverses/repeats,18 coder traces and20 closed phases; opening33429 bytes,distant9499 bytes for every arm. Independent audit verifies367 inputs and420 artifacts; guard peak RAM6,354,259,968 bytes,scratch15,350,819,100 bytes. Validated reflection retains one fixed package delta-456 with zero archive saving; runtime-832 and failed raw-source+806 alternatives remain separate. No full-corpus score or automatic larger launch.
+
+## 2026-09-09 - Exact weight magnitude and shared-sign factorization
+
+Owner `root_explore` selects lenses10/3 deliberately: exact model representation
+and shared statistical state. The [new component](../../fx2_weight_sign_magnitude_v1.md)
+shares nonzero sign counts across magnitudes within each tensor, resetting both
+rows per tensor. It keeps the range coder and all weight bits. This differs from the rejected neighbor and width-carry policies. Independent source review agrees
+on the coding law and flags transitive helper closure, supplied in a separate prospective execution manifest without changing the frozen algorithm contract.
+The [synthetic contract](../../../operations/adaptive/experiments/fx2_weight_sign_magnitude_v1.json)
+requires P/K/parent identity, exact inverses, repeats, every pre-weight count boundary, exact Q11 vectors, and malformed-stream rejection. One fixed policy,
+CPU3,512MiB address space,128MiB scratch and300 aggregate elapsed seconds; publish ownership and source before execution. No trained-model access or gain.
+
+Published source `dec598d53` passes the [synthetic execution](../../../operations/evidence/20260909_fx2_weight_sign_magnitude_v1_unit.json):
+eight tests, optimized/UBSan exact-vector fixtures and three existing-runner
+compatibility tests. All P/K/parent identities, original-container inverses,
+repeats and 30,000 retained pre-weight states agree. The independent-sign fixture
+is P13,618 versus D13,614 bytes; magnitude-dependent signs lose3,687 bytes.
+Independent review verifies19 input bindings and74 artifact bindings. Comparison
+executables are107,792/129,104 bytes; the21,312-byte increment is not native loader
+cost. Source/toolchain identities remain unchanged. The verified transport ZIP
+retains exact source, binaries, traces and logs. No trained model has executed.
+Next freeze all434 trained tensors with the retained executables and explicit
+complete-model inverse/repeat and cost accounting. Do not trace every model
+weight into the32MiB fixture buffer; this stage tests full model reconstruction,
+while native probability identity and deployment cost remain separate gates.
+
+The [complete-model plan](../../../operations/provenance/fx2_weight_sign_magnitude_model_v1_plan.json)
+now freezes retained P/D executables, original and adaptive model hashes, all434
+tensors and ten independent P/K/D inverse/repeat phases. The separately named
+runner preserves the tested procedure with new plan/schema identifiers; three
+synthetic adapter tests pass. CPU3,512MiB,128MiB scratch and120 aggregate elapsed
+seconds derive from earlier model measurements. Publish and freshly admit the
+complete input closure before any trained-model execution. No model gain yet.
+
+Published at `faca94e14`, the [complete-model result](../../../operations/provenance/fx2_weight_sign_magnitude_model_v1_terminal.json)
+passes all ten phases: P/K2,902,287 versus D2,901,871 bytes, saving416 model bytes.
+All original-container inverses, repeats and independent parent comparisons match.
+Independent review verifies39 inputs and ten model references; no codec remains
+live. Recorded child peak RSS is52,832KiB, with no native inference or qualifying
+resource claim. The comparison executable adds21,312 bytes, losing20,896 combined
+bytes as a separate converter. Retain the exact representation; reject that
+packaging. The next bounded gate is direct native-loader initialization parity
+and measured source/binary accounting, not a corpus launch or projected score.
+All32 closed artifacts remain directly retained; Git reuses identical model and
+repeat blobs instead of creating another duplicate transport ZIP. Full score unknown.
+
+## 2026-09-09 - Closing names are correct but leave little parent surprise
+
+The [closed audit](../../../results/fx2_closing_cost_opening250k_v3/stage-decision.json)
+finds 2,087 active bytes, all correct donors, on opening250KB. D saves 48.209189
+ideal bits; R/S lose 194.323761/194.318895. All chronological thirds are positive;
+K changes no probabilities. Exact WRT inversion and separate scanner repeats pass.
+[Independent review](../../../operations/provenance/fx2_closing_cost_opening250k_v3_independent_review.json)
+verifies 26 inputs, 18 artifacts and 1,209,680 truth records. Exact integer chunk
+ceilings [146,15,3,10,1] sum to 175 ideal bits, below the frozen 32,768-bit
+integration-budget floor. Even perfect predictions on these opportunities leave
+little gain; this is not a finite-archive bound or universal XML impossibility.
+The [validated reflection](../../../operations/adaptive/reflections/20260909T112210Z_11c2ea587b.json)
+retires this fixed development realization while preserving positive control
+separation. No native compression or archive ledger row is claimed. All resource
+flags pass; memory peaks at 292,990,976 bytes and the owned cgroup is removed.
+Complete package and full-corpus score remain unknown. Do not tune this mixture
+or launch confirmation under the failed predicate.
+Discovery seed `post_closing_cost_discovery_20260909_v1` draws lenses9/6:
+regime-conditioned specialists and reversible field views. The historical
+[TWINSTREAM decision](../../../results/twinstream_raw_wrt_dual_reconstruction_v1/decision.json)
+preserves a positive raw-history aggregate but rejects shared-state constructions.
+[Subsequent delayed-raw and heading tests](part-003.md)
+record losses of 2,693 and 1,409 archive bytes; a Bayesian heading switch loses two.
+Independent review rejects reviving those exact configurations from the earlier
+positive observation. These are historical exclusions, not fresh FX2 measurements.
+No successor candidate or corpus run is selected; a distinct causal mechanism and
+its smallest falsifying fixture are required before further implementation.
+
+## 2026-09-09 - Freeze closing-name opportunity cost before native integration
+
+Owner `root_explore` freezes [execution v3](../../../operations/adaptive/experiments/fx2_closing_cost_opening250k_v3.json)
+with26 explicit inputs and the unchanged closing-name component. It compares
+fixed15:1 byte-mixture D against unchanged K, previous-byte R and donor-plus-one S.
+Every active byte is charged, including the first wrong prediction. Exact
+integer products bound perfect-Q16 ideal gains in4096-event chunks; the32768-bit
+integration-budget floor is not a package lower bound or a full-corpus theorem.
+[Five cost/scanner fixtures](../../../results/fx2_closing_cost_v1_unit/attempt01/receipt.json)
+pass; [eight current-runtime tests](../../../results/fx2_closing_cost_v1_unit/runtime02/receipt.json)
+include last-bit mismatch, chunk rollover and malformed records. V1 preflight
+detected a changed Python executable. V2 source review found three imports
+missed by automatic tool-directory closure; v3 explicitly binds them. Historical
+source/contracts remain unchanged; v2 is operationally superseded, never launched.
+The held job `20260909T112210Z_11c2ea587b` uses CPU2,512MiB memory,64MiB scratch
+and180 elapsed seconds, with no native compression or compiler invocation.
+Publication verification and fresh admission precede scoring. No gain is claimed.
+
+## 2026-09-09 - Closing-name replay enters causal synthetic testing
+
+Owner `root_explore` selects lenses5/6 after the native XML coordinate's
+zero-gain result. The [new component](../../fx2_closing_replay_v1.md) retains decoded
+opening-name spellings and predicts stored closing-name bytes only after the
+closing slash. It changes neither the retired context key nor historical q1
+WIKI-PDA contracts. No transition table, pretrained model or future truth is used.
+The hypothesis is useful residual name information beyond FX2's delimiter model;
+its corpus opportunity frequency and parent surprise remain unmeasured.
+[Seven synthetic tests](../../../results/fx2_closing_replay_v1_unit/attempt01/receipt.json)
+pass optimized/UBSan builds and repeats, including prediction-before-observe,
+nested names, attributes, mismatches, overflow and stored multibyte spellings.
+All mutable state is serialized in1124 bytes; source preimages and binaries remain.
+Next freeze one independently bounded opportunity-cost gate on the exact
+retained native parent. No corpus access, archive saving or promotion occurs here.
+Independent source review found no blocking defect. Four additional
+[boundary groups](../../../results/fx2_closing_replay_v1_unit/boundaries01/receipt.json)
+pass optimized/UBSan builds and repeats without changing the measured component.
+
+## 2026-09-09 - Native XML field coordinate is active but does not pay
+
+The [closed opening250KB comparison](../../../operations/provenance/fx2_xml_word_opening250k_v1_terminal.json)
+produces33,429 bytes in each P/K/D/S arm. All inverses and repeats pass;
+P/K payloads and probabilities agree. D/S payloads differ despite equal lengths.
+Treatment changes452,749 probabilities and loses2.525 ideal bits post hoc;
+the delayed control changes438,369 and loses2.779. Neither has archive savings.
+The valid control has37,714 field disagreements and130,203 delayed-active bytes.
+Added local source/binary/options total37,901 bytes; complete package remains unknown.
+[Independent review](../../../operations/provenance/fx2_xml_word_opening250k_v1_review.json)
+verifies264 bindings,13 closed phases and complete observer/ring/context state.
+The controller owns the1800-second aggregate deadline; the separate guard's
+null wall-limit field is not its enforcement record. Execution is diagnostic.
+[Trace retention](../../../results/fx2_xml_word_opening250k_v1_retention/receipt.json)
+reconstructs all21 traces from six unique streams and preserves original files.
+The [validated reflection](../../../operations/adaptive/reflections/20260909T102756Z_82a65eed5d.json)
+retires this fixed coordinate under its zero-gain stop, not XML information.
+No confirmation, context/delay sweep or larger run follows this result.
+Next select a distinct measured dependence through the creative discovery cycle;
+collision, calibration and observation-fragmentation attribution remain unknown.
+
+## 2026-09-09 - Native causal field observer prepares a prediction transfer
+
+Owner `root_explore` selects lenses6/9 after BPD1's native archive loss.
+The [source-reviewed direction](../../fx2_xml_field_observer_v1.md) tests explicit
+six-field conditioning inside one existing FX2 base predictor. Standalone
+field repair's301/71/1541-byte gains are confirmed but not transferred to FX2.
+Native FXCM already tracks some XML/wiki state; this is a missing-coordinate
+hypothesis, not a claim that its parser has the standalone bug. History-bank
+routing, another final-calibration sweep and dictionary integration rescue are
+unselected under their existing negative or unpaid evidence.
+
+The [new native observer](../../../lib/fx2_xml_field_observer_v1.hpp) reconstructs exact
+WRT events before updating raw XML field state. Seven optimized/UBSan tests
+pass in the [unit receipt](../../../results/fx2_xml_field_observer_v1_unit/attempt02/receipt.json).
+The first failed test attempt is retained; longest-marker storage and an invalid
+synthetic escape were repaired. Independent review rehashed all5 source and11
+artifact bindings and checked parity with the retained WRT inverse and exact
+opcode marker table. No native inference or corpus run occurred.
+Next implement one dedicated context scalar without changing shared Sparse
+contexts or constructor order, exclude observer pretraining, and compare P/K/D
+against a fixed4096-modeled-byte delayed-field control. Freeze and publish the
+native runner and inputs before execution. No prize or archive credit yet.
+
+The [native context component](../../../lib/fx2_xml_word_context_v1.hpp) and
+[source adapter](../../../tools/fx2_xml_word_native_adapter_v1.py) now implement that
+one-model change. Synthetic optimized/UBSan checks preserve parent/bookkeeping
+probabilities and map state through the actual Sparse/Indirect templates; six
+adapter tests pass. The [native build](../../../results/fx2_xml_word_native_build_v1/attempt02/receipt.json)
+passes at504,328 executable bytes,20,480 above the original. Early unsupported
+frontend rejection was added before freezing; historical source preimages and
+receipts are retained. The opening250KB runner is under implementation; no
+corpus result, package gain or model-prediction transfer is established yet.
+
+The [opening comparison](../../../operations/adaptive/experiments/fx2_xml_word_opening250k_q0_v1.json)
+now freezes351 inputs under owner `root_explore`, held job
+`20260909T102756Z_82a65eed5d`. Seven runner fixtures pass, including package
+limits, exact state checks, physical decoded-input repeats and cleanup rejection.
+The13 native phases use CPU2,10GB memory,zero swap,32GB scratch and1800 elapsed
+seconds,180 per phase. G aliases K rather than duplicating a native run.
+Publication verification and fresh admission remain necessary before execution.
+
+## 2026-09-09 - Native inverse prepares a fixed dictionary representation test
+
+`root_explore` selects lenses10/1 deliberately after the valid but unpaid
+two-byte final-count gain. Fixed adjacent-prefix dictionary coding addresses
+stored package cost. A transformer recurrent-reset mutation remains unselected:
+reset behavior matches training and useful retained-history opportunity is
+unmeasured. No further final-count parameter sweep is selected.
+The [native inverse](../../../lib/fx2_prefix_dictionary_v1.hpp) passes optimized and
+UBSan [synthetic fixtures](../../../results/fx2_prefix_dictionary_v1_unit/attempt01/receipt.json).
+It bounds input, output and word lengths, rejects malformed references and
+truncation, and preserves the caller's output on format rejection. CPU3,
+512MiB address space,64MiB scratch,120-second aggregate stop; no corpus run.
+The [public containers](../../../operations/provenance/public_fx2_container_pair_20260905.json)
+already store a100,096-byte dictionary each. The older B2/LZMA prefix-code gain
+cannot transfer to FX2 accounting. Next: freeze one matched P/K/D dictionary
+comparison using the pinned auxiliary compressor, exact inverse and repeats;
+count both compressed copies and actual restoration code. The caller must verify
+restored dictionary size/hash: whole-record truncation is syntactically valid.
+Preserve the held B2 job. Implementation ownership grants no launch or score credit.
+
+The [frozen component gate](../../../operations/adaptive/experiments/fx2_prefix_dictionary_component_v1.json)
+now binds371 inputs and the original GCC auxiliary executable. `root_explore`
+owns held job `20260909T092825Z_5e9dade1e8` pending publication and fresh CPU2
+admission. Six runner fixtures and three helper rejection tests pass; helper
+tests pass optimized and UBSan. The helper is14,560 bytes, with3,700 restoration
+source bytes. The declared two-container subtotal needs16,411 compressed bytes
+saved per copy to pay. This is a measured cost threshold, not a gain forecast.
+P/K/D independently decode and repeat the411,996-byte dictionary; K runs the
+prefix transform and native inverse before unchanged auxiliary compression.
+All arms retain public online-LSTM auxiliary mode without transformer weights.
+Bounds are10GB memory,zero swap,16GB scratch,3600 seconds aggregate and360 per
+phase. Retain sparse-file cleanup evidence; never hash transient `ppm.temp`.
+No corpus, native inference identity, integrated package or prize score is tested.
+
+The [closed comparison](../../../operations/provenance/fx2_prefix_dictionary_component_v1_terminal.json)
+rejects this realization: P/K100,098 bytes, D113,945, a13,847-byte loss per copy.
+All inverses/repeats and native rejection controls pass;277 artifacts and15 phases
+were independently rechecked. Diagnostic two-copy net is-60,514 bytes. Even zero
+helper/source cost leaves27,694 extra stream bytes, so the source-reviewed
+in-process restoration alternative is not selected to rescue this prefix format.
+The guard closes cleanly:679.1036 seconds,5,283,262,464 peak cgroup bytes,
+14,695,204,691 logical and22,638,592 allocated scratch bytes; owned group removed.
+The validated reflection retires fixed BPD1 on this dictionary and backend.
+The prior B2/LZMA gain does not transfer. Predictor-specific cause is unmeasured;
+no general dictionary-packing impossibility or full-corpus score is claimed.
+
+## 2026-09-09 - Freeze the final-parent count comparison
+
+`root_explore` owns `fx2_final_counts_opening250k_q0_v1`, held job
+`20260909T085323Z_f36bf2c2cf`. Its [frozen plan](../../../operations/provenance/fx2_final_counts_opening250k_v1_plan.json)
+uses CPU2,1GiB memory,256MiB scratch,900 seconds aggregate and120 per phase.
+The [runner](../../../tools/fx2_final_counts_opening250k_q0_v1.py) reuses the existing
+range coder, WRT inverse and source-bound native residual component. Four replay
+fixtures pass. A failed corruption assertion led to explicit expected-raw-digest
+validation; both failed and repaired unit logs are retained. Decoder receives
+no truth trace. External Q16, dictionary, local code/library and options remain
+counted; native parent reconstruction and complete packaging are unresolved.
+Publish ownership/source and refresh admission before the opening250KB P/K/D/S
+comparison. No larger run, confirmation or new trained model is authorized.
+
+The [terminal comparison](../../../operations/provenance/fx2_final_counts_opening250k_v1_terminal.json)
+is valid: P/K33429, D33427, S39985 bytes. D saves2 archive bytes; its25,390-byte
+overlapping component subtotal remains unpaid (net-25,388). All13 phases,
+independent raw inverses, repeats and2,419,360 complete model-state boundaries
+per phase pass. Supplied Q16 and dictionary cost2,831,356 bytes. Peak cgroup
+memory110,460,928 bytes, elapsed146.5727 seconds, all guards clear and cleanup
+complete. The validated reflection holds this positive but unpaid diagnostic.
+No confirmation, native parent reconstruction, full score or scale credit.
+
+## 2026-09-09 - Test causal residual learning against the final parent
+
+Owner `root_explore` selected discovery lenses 8 and 9 after expert-level
+correction improved expert loss but hurt final coding. The [synthetic-stage
+successor](../../fx2_final_residual_counts_v1.md) accumulates final-parent expected
+counts and observed decoded labels per binary byte prefix. It transmits no
+schedule and changes no trained model, grammar, frontend or parent update.
+Historical additive XML residuals, paid KAIROS/PBVC schedules and the positive
+model-packing lane were reviewed; this fixed law tests a different training
+objective, not a claim of novel calibration or inherited compression savings.
+
+The [unit receipt](../../../results/fx2_final_residual_counts_v1_unit/attempt01/receipt.json)
+records five tests passing under both optimized and undefined-behavior-sanitized
+builds. Exact rational predictions, every serialized boundary, K/D learned-state
+identity, pending checkpoint replay, invalid calls and decay are covered.
+The component has 4,612 serialized state bytes. No corpus archive exists for it.
+Next freeze and publish one bounded opening comparison before execution; measure
+archive effects and supplied-parent dependencies separately. No confirmation,
+native integration or complete score is authorized by synthetic correctness.
+
+The independent review of the preceding derivative certificate found no defect,
+reproduced integer interval sums, checked 29 artifact bindings and passed six
+tests. It did not regenerate corpus coefficients. The exclusion remains limited
+to the recorded Q16 analytic path; it proves neither 90M nor all-family futility.
+
+## 2026-09-09 - Bound the direction of the recorded final probability correction
+
+Owner `root_explore` froze the [fixed-path derivative check](../../../operations/provenance/fx2_final_direction_v1_plan.json)
+after expert/delivery attribution. It aggregates exact integer log coefficients
+from P/D and P/S counts, encloses logarithms and certifies the sign at the parent.
+The [argument and scope](../../fx2_final_direction_v1.md) cover unrounded logit paths
+between recorded Q16 endpoints, not every native weakening or finite archive.
+Six synthetic tests pass. Source, runtime hashes and ownership publish before
+the two bounded closed-trace computations; no coefficient search or codec launch.
+
+The [repeated certificate](../../../operations/provenance/fx2_final_direction_v1_terminal.json)
+encloses D's derivative strictly below zero (approximately-35.053867351 bits per
+unit alpha). Concavity excludes positive-alpha ideal gains on this fixed D path.
+S has a positive initial derivative (approximately450.791479476 bits per unit),
+despite its full-strength loss. All coefficient/log-interval witnesses repeat
+exactly. This is no finite-archive bound or claim about the original pre-rounding
+native law. Next investigate final-parent residual learning and controls rather
+than blindly attenuating D or relabeling S as an eligible treatment.
+
+## 2026-09-09 - Locate expert versus final-coder loss on retained opening traces
+
+Owner `root_explore` froze a [closed-trace attribution check](../../../operations/provenance/fx2_ratio_delivery_loss_attribution_v1_plan.json)
+after the opening rejection. It replays the unchanged native Ratio library
+against every recorded GRR1 state and corrected cached mass for D and S.
+Expert normalization and final coder loss remain separate, with exact vocabulary,
+stored-population alignment and explicit first/unconsumed-last prediction rules.
+Five synthetic tests pass, including expected causal loss, full state replay and
+rejection of altered predictions, masses, state and truncation. The published
+source/bindings precede actual trace replay. CPU3,512MiB address space,240 seconds
+per phase,480 seconds aggregate and64MiB output scratch are diagnostic bounds.
+No parameter search, native corpus encode, archive credit or revival is authorized.
+
+The [repeated attribution](../../../operations/provenance/fx2_ratio_delivery_loss_attribution_v1_terminal.json)
+is exact: D saves242.031200583 ideal expert bits but loses81.151414044 final-coder
+bits; all expert thirds improve and all coder thirds worsen. S loses3518.630
+expert bits and3535.293 coder bits. Each arm reproduces302420 native states
+and151210 exact corrected rows. The first symbol is unscored by the expert and
+the last prediction unconsumed; these thirds use modeled-byte boundaries.
+The result identifies a delivery/objective mismatch, not its detailed cause.
+Next distinguish excessive fixed strength from an unhelpful correction direction
+relative to the final parent before a new mechanism; retain the archive rejection.
+
+## 2026-09-09 - Frozen final-coder ratio opening development comparison
+
+Owner `root_explore` bound [opening250KB](../../../operations/adaptive/experiments/fx2_ratio_coder_opening250k_q0_v1.json)
+to the identical fixture executable, original dictionary, stored population,
+parent archive and trace. No native semantic change or model-packing composition.
+The [runner](../../../tools/fx2_ratio_coder_opening250k_q0_v1.py) passes nine synthetic
+tests, including a full250KB driver inverse/repeat and owned-cache handling.
+Job `20260909T073614Z_92f9e13b9e` is held until publication and fresh admission.
+CPU2,9999998976 memory bytes,40GB scratch and1200 elapsed seconds are explicit
+discovery limits. P/K/D/S require original parent identity, independent inverses,
+repeats and every introduced state/coder boundary. The fixture's one-byte gain
+did not pay its32568-byte local component increment. This development gate has
+no confirmation or full-corpus authority; no native result exists at registration.
+
+The [terminal comparison](../../../operations/provenance/fx2_ratio_coder_opening250k_v1_terminal.json)
+is a valid rejection: P/K33429,D33439,S33871 bytes. D loses10 archive bytes
+and81.151414 ideal bits across731400 changed events; all chronological thirds
+lose. Every original parent projection and introduced-state comparison passes,
+including302420 complete K/D boundaries. All22 phases close with clean guards,
+7797497856 peak cgroup bytes and709.7693 elapsed seconds. Added local components
+cost32568 bytes; conservative adjusted saving is-32578, with complete package
+qualification still unknown. The [reflection](../../../operations/adaptive/reflections/20260909T073614Z_92f9e13b9e.json)
+retires this fixed development realization, not causal calibration generally.
+Seven unique traces are retained in exactly reconstructible compressed chunks.
+Next: reuse closed cached masses and truth traces to distinguish normalized
+expert loss from final-coder delivery loss before another mechanism or corpus run.
+
+## 2026-09-09 - Preserve parent learning while changing ratio delivery
+
+Owner `root_explore` claimed [coder-boundary delivery](../../../operations/adaptive/experiments/fx2_ratio_coder_delivery_v1.json)
+after the retained diagnostic. It keeps the existing ratio policy and original
+expert/mixer learning; only the final discretized coding probability changes.
+The [stateless integer kernel](../../../lib/fx2_ratio_coder_delivery_v1.hpp) derives
+conditional prefix odds and rounds Q16 through bounded128-bit division steps.
+The synthetic gate compares independent arbitrary-precision rationals, neutral
+parents, sparse support, extreme masses and ties. No native integration or
+corpus archive exists yet. Publish ownership and source before bounded tests.
+
+The [bounded kernel result](../../../operations/evidence/20260909_fx2_ratio_coder_delivery_unit.json)
+passes seven tests in both optimized and UBSan builds. All65535 parent counts
+preserve neutral/proportional identity;2000 seeded prefix cases and extreme
+products match exact rational rounding. Float-unit conversion, sparse support,
+ties and malformed-input rejection pass. The2630-byte kernel is stateless;
+it supplies no standalone codec or native parent-state witness. Next freeze
+its delivery comparison and adapter with P/K/D/S, unchanged parent updates,
+complete cached-row/ratio state, exact inverses, repeats and package accounting.
+
+The [native state validation](../../../operations/evidence/20260909_fx2_ratio_coder_state_unit.json)
+passes six tests in optimized and UBSan builds, including257 rows across decay,
+independent exact references, unchanged expert inputs, update-order rejection,
+and K/D state equality after arm-tag normalization. The5971-byte state contains
+all introduced masses, vocabulary and ratio state. Native predictor/encoder/decoder
+syntax passes with original build defines; the initial missing-UPDATE_LIMIT
+invocation is preserved. Added source totals16162 bytes, exceeding the unchanged
+8192-byte prototype allowance. A native comparison needs a separately frozen
+package budget and source identity. No native archive, model execution, or
+compression gain was measured. The155-file bundle retains both attempts.
+
+The [native delivery comparison](../../../operations/adaptive/experiments/fx2_ratio_coder_fixture50051_q0_v1.json)
+passed six runner tests, but job20260909T065353Z_a016a11707 stopped at the cgroup
+memory boundary during S-repeat. Its [resource receipt](../../../operations/provenance/fx2_ratio_coder_fixture_v1_resource_stop.json)
+and validated retry reflection preserve the incomplete result; no scientific verdict.
+The retry flushes and releases only closed owned trace pages after native phases.
+Four cache tests pass. Native executable identity and all scientific predicates
+must remain unchanged; CPU2,10GB memory,24GB scratch and1200 elapsed limits persist.
+
+The [terminal retry](../../../operations/provenance/fx2_ratio_coder_fixture_v2_terminal.json)
+passes all22 phases with the identical native executable: P/K3223, D3222, S3269.
+Every original float/truth projection and cached original row matches across arms;
+K/D complete states match after arm-tag normalization. Inverses and repeats pass.
+D saves9.399339965 ideal bits across81551 changed events; thirds are
++6.206525/-0.714471/+3.907286. One archive byte does not pay32568 added overlapping
+local component bytes. The guard is clean at6652698624 peak cgroup bytes and
+283.5448 elapsed seconds, with verified cleanup. The282-file manifest rehashes;
+24 traces deduplicate to seven verified gzip objects. Four canonical rows and
+the validated reflection retain a scoped positive fixture result, holding any
+larger launch for separately frozen actual enwik9 inputs and bounded trace storage.
+
+## 2026-09-09 - Locate residual-ratio prediction loss before another mutation
+
+Owner `root_explore` now follows the prior residual-ratio loss attribution request.
+The [frozen replay diagnostic](../../../operations/provenance/fx2_ratio_loss_attribution_v1_plan.json)
+reuses the unchanged native calibration library and closed half/coder/state traces
+to separate transformer-output loss from final mixer loss. Five synthetic alignment
+checks pass. All64956 calibration states and the exact shared parent trajectory
+must match before interpreting loss. No policy mutation, native rerun, model or
+corpus installation is included. CPU3/512MiB/64MiB scratch/120 elapsed seconds;
+publish source and ownership, then refresh admission before the retained-trace replay.
+
+The [closed attribution](../../../operations/provenance/fx2_ratio_loss_attribution_v1_terminal.json)
+matches all64956 native calibration states and shared parent coder bytes.
+Across32477 scored symbols, corrected expert loss improves51.5203783783 ideal bits;
+its chronological thirds gain2.954120243/12.578361181/35.987896954 bits. This boundary
+includes85 prescribed PPM fallback rows. Final coder loss still worsens1.7474386862
+bits, reproducing64583 changed Q16 events and the prior zero-byte archive gain.
+The correction improves measured expert loss but that gain does not
+transfer through this integration. Mixer redundancy, learning and SSE effects
+are not separately identified. Next test delivery while preserving original
+parent learning; first synthetic prefix/rounding checks, then a fresh native
+comparison. The old integration remains rejected and receives no new credit.
+
+## 2026-09-09 - Carry exact-model counts across decoded tensor widths
+
+Owner `root_explore` selects lenses3/10: bounded shared state and exact model
+representation. The [frozen synthetic experiment](../../../operations/adaptive/experiments/fx2_weight_width_carry_v1.json)
+changes only reset-per-tensor INT4 counts into a bank keyed by decoded row width.
+No preceding-symbol model, quantization, native prediction or entropy coder changes.
+The [source adapter](../../../tools/fx2_weight_width_carry_v1.py) authenticates the sealed
+parent before materializing a separate header. P/K preserve parent bytes; D
+must independently invert and repeat with every pre-truth count row identical.
+One fixed synthetic policy covers matching/opposing distributions, width changes,
+empty tensors, rescaling and malformed inputs. Trained-model access requires its
+own published inputs and admission. No compression or package gain exists yet.
+
+The [synthetic result](../../../operations/evidence/20260909_fx2_weight_width_carry_v1_unit.json)
+passes seven tests, including every recorded INT4 pre-truth count row, independent
+inversion, repeats and original-parent/P/K identity. The initial compile failure
+and entrypoint-only repair remain retained. A150670-byte ZIP preserves23 files;
+test-local count traces are assertion-checked, not retained corpus evidence.
+Comparison executables are107792/129824 bytes; their22032-byte difference is
+not a native loader estimate. Next freeze a complete-model size/inverse audit;
+no trained parameter or corpus execution has occurred for this candidate.
+
+The [complete-model audit](../../../operations/provenance/fx2_weight_width_carry_model_v1_plan.json)
+is now frozen with cached executables,434 tensors, ten independent phases and
+CPU3/512MiB/128MiB scratch/120 elapsed seconds. Three synthetic runner tests pass.
+It reuses the existing phase guard, retains exact2902287-byte adaptive parent
+identity and charges comparison executables separately. Publish these inputs
+and refresh admission before trained-model execution; no inference is included.
+
+The [terminal model comparison](../../../operations/provenance/fx2_weight_width_carry_model_v1_terminal.json)
+passes all ten phases but loses1250 model bytes: P/K2902287, D2903537.
+All complete original-model inverses, repeats and independent parent checks pass.
+The comparison executable adds22032 bytes, producing23282 bytes of combined loss;
+that executable inventory is separate from a native package estimate. The
+33-member retained ZIP replays exact files. Measured child CPU sums6.403115 seconds
+and cumulative child peak RSS is52808KiB; these are diagnostic source-audit bounds,
+not continuous corpus qualification. Proposal and scoped exclusion retain the
+rejection. No native integration follows from this losing representation.
+
+The existing Scalar-MIDAS64 v2 proposal was inspected as a possible independent
+prediction route. Its parent remains `candidate_unexecuted` and is explicitly
+superseded by `cmix_obias_ppm_disk_joint_q0_v3` in its developed proposal. The
+[historical dependency finding](part-022.md) remains
+relevant: a proposed label is not terminal parent evidence. No claim or launch
+was made for that route; no scalar-MIDAS hypothesis was scientifically rejected.
+
+## 2026-09-09 - Freeze independent adaptive FX2 package fixture execution
+
+Owner `root_explore` binds [the native package fixture](../../../operations/adaptive/experiments/fx2_adaptive_package_fixture50051_q0_v1.json)
+after validated opening/distant transfer. The existing materializer creates
+129 counted source/model/dictionary/notice files, totaling 4,530,782 bytes plus
+58 uniquely declared option bytes. Relocation preserves the manifest exactly;
+the temporary staging duplicate is removed after comparing every supplied file.
+The [manifest](../../../operations/provenance/fx2_adaptive_package_fixture_v1/bundle/dependency-closure.json)
+remains incomplete for runtime, licensing and prize accounting. The runner's
+321-input preflight passes. Frozen CPU 2 discovery permits three independent
+builds and three codec phases, requiring the retained 496,136-byte executable,
+3,223-byte fixture archive, exact inverse/repeat and all 259,824 coder records.
+Publish held ownership before fresh admission; no native run or new saving is
+claimed by preparation. Preserve all previous science and qualification limits.
+The [first launch](../../../operations/provenance/fx2_adaptive_package_fixture_v1_launch_terminal.json)
+terminated before any build or worker phase: the initial guard sample saw the
+`taskset` launcher inheriting 32 CPUs before narrowing affinity. Cleanup is
+complete and the result directory is empty. The validated infrastructure-failure
+reflection permits an unchanged retry with the coordinator itself pre-pinned to
+CPU 2. No codec inference or scientific rejection occurred in this attempt.
+The unchanged [retry passes](../../../operations/provenance/fx2_adaptive_package_fixture_v1_terminal.json):
+three independent isolated builds reproduce the same 496,136-byte executable;
+two encodes retain the 3,223-byte archive and the independent decoder reconstructs
+all 50,051 input bytes without that input mounted. All three 259,824-record traces
+match. Six phases close with no guard violations, 5,488,873,472 peak cgroup bytes
+and verified cleanup; 663 artifacts rehash. The retained source package and
+license limitations remain explicit. No new archive saving or full-score credit.
+Terminal recording initially rejected a hostname string where its ledger schema
+requires an object. The recorder now converts only that projection, preserving
+sealed result/index/reflection bytes. All 23 recorder tests pass, including
+immutable evidence and idempotent hostname conversion; an initial `/tmp` quota
+failure is retained and the unchanged tests pass with owned `TMPDIR` storage.
+The validated reflection and exact package run are recorded in the existing ledger.
+
+## 2026-09-09 - Native package replay reuses existing isolation and resource guards
+
+Owner `root_explore` implements the [native package replay helper](../../../tools/enwiki9_native_package_replay_v1.py)
+after exact adaptive-model transfer. It consumes frozen dependency manifests
+and uses existing sandbox mounts and `NativeGate` execution to require three
+independent builds, exact archives/inverses/repeats and retained coder traces.
+It reports unresolved licenses and dependencies without inventing release or
+score credit. [Synthetic validation](../../../operations/evidence/20260909_native_package_replay_v1_unit.json)
+covers tampering, missing inputs, decoder isolation, explicit bounds and refusing
+existing outputs; the existing release-canary regressions also pass. No native
+codec or corpus ran in these tests. Next freeze an actual adaptive-model package
+and its fixture through the canonical lifecycle, then measure independent replay.
+
+## 2026-09-09 - Transfer exact adaptive packing to opening and distant 250KB
+
+Owner `root_explore` freezes [the two-population native comparison](../../../operations/adaptive/experiments/fx2_weight_adaptive_transfer250k_q0_v1.json)
+after validated fixture parity. The same repaired binary, models and dictionary
+must preserve opening 33,429-byte and distant 9,499-byte archives, exact inverses,
+repeats and all eighteen coder traces. These previously examined cold slices
+test fresh execution, not statistical holdout or mature history. Thirteen
+regression tests and the 337-input preflight pass. Retain CPU 2, 10GB-class
+memory, 16GB scratch and the prior 1,100-second transfer budget. Publish held
+ownership before fresh admission. Package alternatives and zero archive savings
+remain separate; no new codec mechanism, compilation or full-score credit.
+
+The [closed transfer](../../../operations/provenance/fx2_weight_adaptive_transfer250k_v1_terminal.json)
+passes all twenty phases: every P/K/D opening archive is 33,429 bytes and every
+distant archive is 9,499 bytes, each with independent inverse and repeat.
+All eighteen native coder traces match their retained parent; 530 artifacts
+rehash and seven retention bundles preserve every result file. The canonical
+guard reports no violations, 6,346,084,352 peak cgroup bytes and complete cleanup.
+Archive saving is zero; the fixed package alternatives remain 12,084 and 11,170
+bytes smaller and must not be summed across populations. The validated
+[reflection](../../../operations/adaptive/reflections/20260909T043012Z_39a4f8a2a9.json)
+permits separately identified package integration, not an automatic larger run.
+
+Read-only inspection identifies the next executable boundary. The retained
+FX2 `src/runner.cpp` self-extracting entry invokes corpus-specific split,
+reorder and PHDA preprocessing; native cold-slice parity does not exercise it.
+The existing [clean-room replay](../../../tools/enwiki9_clean_room_replay.py) synthetic
+canary caps memory at 256 MiB, below this codec's measured footprint. Preserve
+that canary and qualification contracts; a bounded native package diagnostic
+needs explicit resource bounds and must report unresolved licenses rather than
+claiming a release pass. Reuse the existing
+[dependency inventory](../../../operations/provenance/fx2_native_dependency_closure_v1/receipt.json)
+and replay machinery. Do not run full-corpus preprocessing merely to test model
+packaging. Full-corpus score and complete package qualification remain unknown.
+
+## 2026-09-09 - Replay the native fixture after production dispatch repair
+
+Owner `root_explore` uses the canonical implementation-retry freezer for
+[`fx2_weight_adaptive_fixture50051_q0_v2`](../../../operations/adaptive/experiments/fx2_weight_adaptive_fixture50051_q0_v2.json).
+The repaired native build and 324 inputs bind the unchanged 50,051-byte
+population, P/K/D, parent archive and all native coder records. Fourteen routing,
+antecedent and failure-path tests pass. The dispatch adds 62 source bytes to
+the failed implementation; report 914 total added source bytes and the measured
+11,170-byte source-plus-decoder saving separately from inherited estimates.
+Publish the held job and source before fresh CPU 2 admission. No larger gate.
+Published at `034564595`, the [native retry passes](../../../operations/provenance/fx2_weight_adaptive_fixture50051_v2_terminal.json):
+all ten phases close; P/K/D each retain the original 3,223-byte archive with
+independent exact inverses and repeats. All nine traces match 259,824 retained
+native bit records each. All guards pass and 455 artifacts rehash. Archive
+saving is zero; measured component alternatives remain 12,084 and 11,170 bytes
+smaller. The validated reflection permits a separately frozen opening/distant
+250KB transfer, not a full-corpus or complete-package claim.
+
+## 2026-09-09 - Repair production model dispatch and exercise native initialization
+
+Owner `root_explore` implements the [separate dispatch repair](../../../tools/fx2_weight_adaptive_dispatch_v1.py)
+after the validated fixture failure. Only `OptModel::load` format admission
+changes; measured model bytes, neural kernels and old source remain untouched.
+The [frozen source gate](../../../operations/provenance/fx2_weight_adaptive_dispatch_gate_v1_plan.json)
+rebuilds P/D and links a probe against their actual transformer objects. Compare
+64 synthetic symbols through production `TransformerOpt`, including two article
+resets; old dispatch must reproduce the failure. All original/fixed/adaptive
+positive controls must match exact probability/logit bytes. Five patch and
+phase-guard tests pass. Publish, freshly admit CPU 3, then measure executable
+and source increments before preparing another corpus gate. No score credit.
+The [first attempt](../../../operations/provenance/fx2_weight_adaptive_dispatch_gate_v1_terminal.json)
+stops after P builds: upstream deletes objects after linking. No model executes.
+The [separate v2 runner](../../../tools/fx2_weight_adaptive_dispatch_gate_v2.py) builds
+the objects and links the probe before CMIX consumes them; codec source,
+controls, populations and bounds remain fixed. Publish before fresh admission.
+Published at `56303d030`, [v2 passes all 16 phases](../../../operations/provenance/fx2_weight_adaptive_dispatch_gate_v2_terminal.json).
+All six production probability/logit outputs match exactly; the old dispatch
+failure reproduces. Both native binaries are 496,136 bytes. Adaptive packing
+saves 6,042 model bytes per copy; 914 added raw source bytes leave scoped
+runtime-pair and source-plus-decoder savings of 12,084 and 11,170 bytes.
+Only the tensor loader and production dispatcher differ among 125 native
+sources. Preserve the failed fixture and freeze a new native archive retry;
+synthetic entrypoint agreement supplies no corpus or full-score credit.
+
+## 2026-09-09 - Verify adaptive packing through native fixture archives
+
+Owner `root_explore` has developed `fx2_weight_adaptive_fixture50051_q0_v1`.
+The [frozen experiment](../../../operations/adaptive/experiments/fx2_weight_adaptive_fixture50051_q0_v1.json)
+binds 316 inputs and the retained 50,051-byte public fixture. P/K use the fixed
+model; D uses adaptive packing with the same cached native binary. Require
+original-parent archive and probability identity, independent inverses, repeats,
+and unchanged preprocessing. The fixture is reused correctness evidence, not a
+fresh enwik9 confirmation population. Eleven routing and failure-path tests
+pass in the [synthetic execution receipt](../../../results/fx2_weight_adaptive_fixture_v1_unit/attempt01/execution.json).
+Publish ownership, then freshly admit CPU 2 with 9,999,998,976 memory bytes,
+16,000,000,000 scratch bytes and a 900-second elapsed stop before execution.
+The measured 6,042-byte model reduction per copy and alternative component
+costs remain separate from archive savings and full-corpus score credit.
+Published source `892767eeb` and job `1166ec554` produced a
+[terminal implementation failure](../../../operations/provenance/fx2_weight_adaptive_fixture50051_v1_terminal.json).
+P/K each reconstruct and repeat their exact 3,223-byte parent archive. D exits
+before prediction: production `OptModel::load` omits `GFX2ADM1` from compressed
+format dispatch and calls the raw loader. Direct tensor tests bypassed this
+entrypoint. All resource flags remain false, child/scratch cleanup completes,
+and 436 retained artifacts verify. Missing D evidence blocks promotion; this
+does not reject adaptive model packing. The validated reflection selects a
+separate dispatch repair, production-entrypoint test and rebuild/repricing
+before another frozen native comparison.

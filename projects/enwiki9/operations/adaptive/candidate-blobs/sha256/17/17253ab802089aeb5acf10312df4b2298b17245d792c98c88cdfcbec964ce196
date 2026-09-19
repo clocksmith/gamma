@@ -1,0 +1,87 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "semantic-route-tape-receipt-v1.schema.json",
+  "title": "Semantic route tape repeated-build receipt",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "receipt_id",
+    "scope_manifest_sha256",
+    "source_identity",
+    "format",
+    "build_a",
+    "build_b",
+    "comparison",
+    "resources",
+    "claim_boundary"
+  ],
+  "properties": {
+    "schema": {"const": "gamma.enwiki9.semantic-route-tape-receipt.v1"},
+    "receipt_id": {"const": "semantic_route_tape_q0_v1"},
+    "scope_manifest_sha256": {"$ref": "#/$defs/sha256"},
+    "source_identity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["parser_source_sha256", "frontend_source_sha256", "record_abi_sha256", "descriptor_hash_spec_sha256"],
+      "properties": {
+        "parser_source_sha256": {"$ref": "#/$defs/sha256"},
+        "frontend_source_sha256": {"$ref": "#/$defs/sha256"},
+        "record_abi_sha256": {"$ref": "#/$defs/sha256"},
+        "descriptor_hash_spec_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "format": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["record_bytes", "endianness", "record_count"],
+      "properties": {
+        "record_bytes": {"const": 64},
+        "endianness": {"const": "little"},
+        "record_count": {"type": "integer", "minimum": 1}
+      }
+    },
+    "build_a": {"$ref": "#/$defs/build"},
+    "build_b": {"$ref": "#/$defs/build"},
+    "comparison": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["tape_byte_identical", "descriptor_sidecar_byte_identical", "summary_byte_identical", "coordinate_monotone", "descriptor_alias_count", "errors"],
+      "properties": {
+        "tape_byte_identical": {"const": true},
+        "descriptor_sidecar_byte_identical": {"const": true},
+        "summary_byte_identical": {"const": true},
+        "coordinate_monotone": {"const": true},
+        "descriptor_alias_count": {"const": 0},
+        "errors": {"type": "array", "maxItems": 0}
+      }
+    },
+    "resources": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["tree_peak_rss_kib", "scratch_peak_bytes", "memory_events_oom", "memory_events_oom_kill"],
+      "properties": {
+        "tree_peak_rss_kib": {"type": "integer", "minimum": 0},
+        "scratch_peak_bytes": {"type": "integer", "minimum": 0},
+        "memory_events_oom": {"const": 0},
+        "memory_events_oom_kill": {"const": 0}
+      }
+    },
+    "claim_boundary": {"type": "array", "minItems": 3, "items": {"type": "string", "minLength": 1}}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "build": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["tape_bytes", "tape_sha256", "descriptor_sidecar_bytes", "descriptor_sidecar_sha256", "summary_sha256"],
+      "properties": {
+        "tape_bytes": {"type": "integer", "minimum": 64, "multipleOf": 64},
+        "tape_sha256": {"$ref": "#/$defs/sha256"},
+        "descriptor_sidecar_bytes": {"type": "integer", "minimum": 0},
+        "descriptor_sidecar_sha256": {"$ref": "#/$defs/sha256"},
+        "summary_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    }
+  }
+}

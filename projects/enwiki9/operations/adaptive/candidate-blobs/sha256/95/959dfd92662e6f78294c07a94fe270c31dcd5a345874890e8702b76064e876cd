@@ -1,0 +1,143 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gamma.enwiki9.cmix-memory-safe-parent-qualification-verification.v3",
+  "title": "CMIX memory-safe parent policy-bound independent qualification v3",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema", "candidate_id", "verified", "qualified", "errors",
+    "qualification_failures", "receipt_sha256", "artifact_sha256",
+    "checks", "evidence_checks", "derived", "authority",
+    "claim_authority", "promotion_authority",
+    "gamma_compression_credit_bytes", "gamma_score_credit_bytes"
+  ],
+  "properties": {
+    "schema": {"const": "gamma.enwiki9.cmix-memory-safe-parent-qualification-verification.v3"},
+    "candidate_id": {"const": "cmix_obias_memory_safe_parent_filebacked_q1_v1"},
+    "verified": {"type": "boolean"},
+    "qualified": {"type": "boolean"},
+    "errors": {"type": "array", "items": {"type": "string", "minLength": 1}},
+    "qualification_failures": {"type": "array", "items": {"type": "string", "minLength": 1}},
+    "receipt_sha256": {"$ref": "#/$defs/sha256"},
+    "artifact_sha256": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["evidence_router", "authority_policy", "activated_full_identity_plan"],
+      "properties": {
+        "evidence_router": {"$ref": "#/$defs/sha256"},
+        "authority_policy": {"$ref": "#/$defs/sha256"},
+        "activated_full_identity_plan": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "checks": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "router_schema_pass", "objective_binding_pass", "artifact_closure_pass",
+        "v2_evidence_reopened_pass", "policy_schema_pass",
+        "policy_activation_pass", "policy_evidence_binding_pass",
+        "policy_source_binding_pass", "authority_source_closure_pass",
+        "activated_plan_binding_pass",
+        "exclusive_namespace_pass"
+      ],
+      "properties": {
+        "router_schema_pass": {"type": "boolean"},
+        "objective_binding_pass": {"type": "boolean"},
+        "artifact_closure_pass": {"type": "boolean"},
+        "v2_evidence_reopened_pass": {"type": "boolean"},
+        "policy_schema_pass": {"type": "boolean"},
+        "policy_activation_pass": {"type": "boolean"},
+        "policy_evidence_binding_pass": {"type": "boolean"},
+        "policy_source_binding_pass": {"type": "boolean"},
+        "authority_source_closure_pass": {"type": "boolean"},
+        "activated_plan_binding_pass": {"type": "boolean"},
+        "exclusive_namespace_pass": {"type": "boolean"}
+      }
+    },
+    "evidence_checks": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": {"type": "boolean"}
+    },
+    "derived": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "payload_bytes", "archive_bytes", "program_bytes", "required_option_bytes",
+        "complete_counted_bytes", "target_distance_bytes", "maximum_tree_rss_kib",
+        "maximum_cgroup_memory_bytes", "geekbench5_single_core_score",
+        "runtime_limit_seconds"
+      ],
+      "properties": {
+        "payload_bytes": {"type": "integer", "minimum": 1},
+        "archive_bytes": {"type": "integer", "minimum": 1},
+        "program_bytes": {"type": "integer", "minimum": 1},
+        "required_option_bytes": {"type": "integer", "minimum": 0},
+        "complete_counted_bytes": {"type": "integer", "minimum": 1},
+        "target_distance_bytes": {"type": "integer"},
+        "maximum_tree_rss_kib": {"type": "integer", "minimum": 0},
+        "maximum_cgroup_memory_bytes": {"type": "integer", "minimum": 0},
+        "geekbench5_single_core_score": {"type": "number", "exclusiveMinimum": 0},
+        "runtime_limit_seconds": {"type": "number", "exclusiveMinimum": 0}
+      }
+    },
+    "authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "policy_artifact_id", "policy_revision", "authority_policy",
+        "activated_full_identity_plan"
+      ],
+      "properties": {
+        "policy_artifact_id": {
+          "type": "string",
+          "pattern": "^cmix_obias_memory_safe_parent_filebacked_q1_qualification_policy_v(?:[7-9]|[1-9][0-9]+)$"
+        },
+        "policy_revision": {"type": "integer", "minimum": 7},
+        "authority_policy": {"$ref": "#/$defs/file"},
+        "activated_full_identity_plan": {"$ref": "#/$defs/file"}
+      }
+    },
+    "claim_authority": {"enum": ["none", "memory_safe_external_parent_only"]},
+    "promotion_authority": {"type": "boolean"},
+    "gamma_compression_credit_bytes": {"const": 0},
+    "gamma_score_credit_bytes": {"const": 0}
+  },
+  "allOf": [{
+    "if": {"properties": {"qualified": {"const": true}}},
+    "then": {"properties": {
+      "verified": {"const": true},
+      "errors": {"maxItems": 0},
+      "qualification_failures": {"maxItems": 0},
+      "checks": {"properties": {
+        "router_schema_pass": {"const": true},
+        "objective_binding_pass": {"const": true},
+        "artifact_closure_pass": {"const": true},
+        "v2_evidence_reopened_pass": {"const": true},
+        "policy_schema_pass": {"const": true},
+        "policy_activation_pass": {"const": true},
+        "policy_evidence_binding_pass": {"const": true},
+        "policy_source_binding_pass": {"const": true},
+        "authority_source_closure_pass": {"const": true},
+        "activated_plan_binding_pass": {"const": true},
+        "exclusive_namespace_pass": {"const": true}
+      }},
+      "evidence_checks": {"additionalProperties": {"const": true}},
+      "claim_authority": {"const": "memory_safe_external_parent_only"},
+      "promotion_authority": {"const": true}
+    }}
+  }],
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "file": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "bytes", "sha256"],
+      "properties": {
+        "path": {"type": "string", "pattern": "^/"},
+        "bytes": {"type": "integer", "minimum": 1},
+        "sha256": {"$ref": "#/$defs/sha256"}
+      }
+    }
+  }
+}

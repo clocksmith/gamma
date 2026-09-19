@@ -1,2 +1,8 @@
 # Generated CSV artifacts use RFC 4180 CRLF record endings.
 *.csv whitespace=cr-at-eol
+
+# Evidence hashes bind exact bytes, including original corpus whitespace.
+projects/enwiki9/results/** -text
+projects/enwiki9/results/**/*.raw -diff
+projects/enwiki9/operations/evidence/fixtures/*.raw -text -diff
+projects/enwiki9/operations/adaptive/candidate-blobs/** -text -diff

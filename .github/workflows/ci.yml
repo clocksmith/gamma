@@ -1,6 +1,13 @@
 name: CI
 
 on:
+  workflow_dispatch:
+    inputs:
+      enwiki9_linux_resources:
+        description: Run on the separately provisioned enwiki9 cgroup runner
+        required: false
+        default: false
+        type: boolean
   pull_request:
   push:
     branches:
@@ -11,6 +18,38 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  enwiki9:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        group: [pure, codec, native, historical]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Provision fixture dependencies
+        run: |
+          python -m pip install pytest jsonschema
+          sudo apt-get update
+          sudo apt-get install -y bubblewrap gcc
+          if [ -e /proc/sys/kernel/apparmor_restrict_unprivileged_userns ]; then
+            sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0
+          fi
+      - name: Explicit project-local acceptance group
+        run: python projects/enwiki9/tests/run_architecture_groups.py ${{ matrix.group }}
+
+  enwiki9_linux_resources:
+    if: github.event_name == 'workflow_dispatch' && inputs.enwiki9_linux_resources
+    runs-on: [self-hosted, linux, enwiki9-cgroup]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Require provisioned resource delegation
+        run: test -n "$GAMMA_ENWIKI9_TEST_CGROUP_PARENT"
+      - name: Owned Linux resource integration
+        run: python3 projects/enwiki9/tests/run_architecture_groups.py linux
+
   lint:
     runs-on: ubuntu-latest
     steps:

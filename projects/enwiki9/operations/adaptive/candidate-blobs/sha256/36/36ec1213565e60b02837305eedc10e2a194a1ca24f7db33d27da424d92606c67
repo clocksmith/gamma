@@ -1,0 +1,77 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gamma.enwiki9.safe-mix-oracle-suite-receipt.v1",
+  "title": "SAFE-MIX native/reference oracle-suite receipt v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "candidate_id", "input_lock", "populations", "exclusive_lease_absent_pass", "all_populations_pass", "execution_authority", "archive_authority", "score_credit_bytes"],
+  "properties": {
+    "schema": {"const": "gamma.enwiki9.safe-mix-oracle-suite-receipt.v1"},
+    "candidate_id": {"const": "gamma_safe_mix_v1"},
+    "input_lock": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["suite_contract_sha256", "program_lock_sha256", "population_generator_sha256", "native_binary_sha256", "native_build_receipt_sha256", "independent_build_verification_sha256", "reference_sha256", "negative_controls_receipt_sha256", "python_executable_sha256", "environment_sha256"],
+      "properties": {
+        "suite_contract_sha256": {"$ref": "#/$defs/sha256"},
+        "program_lock_sha256": {"$ref": "#/$defs/sha256"},
+        "population_generator_sha256": {"$ref": "#/$defs/sha256"},
+        "native_binary_sha256": {"$ref": "#/$defs/sha256"},
+        "native_build_receipt_sha256": {"$ref": "#/$defs/sha256"},
+        "independent_build_verification_sha256": {"$ref": "#/$defs/sha256"},
+        "reference_sha256": {"$ref": "#/$defs/sha256"},
+        "negative_controls_receipt_sha256": {"$ref": "#/$defs/sha256"},
+        "python_executable_sha256": {"$ref": "#/$defs/sha256"},
+        "environment_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "populations": {
+      "type": "array",
+      "minItems": 5,
+      "maxItems": 5,
+      "prefixItems": [
+        {"allOf": [{"$ref": "#/$defs/population"}, {"properties": {"population_id": {"const": "exhaustive_scale17"}, "scale": {"const": 17}, "event_count": {"const": 512}}}]},
+        {"allOf": [{"$ref": "#/$defs/population"}, {"properties": {"population_id": {"const": "boundary_scale3"}, "scale": {"const": 3}, "event_count": {"const": 8}}}]},
+        {"allOf": [{"$ref": "#/$defs/population"}, {"properties": {"population_id": {"const": "boundary_scale4096"}, "scale": {"const": 4096}, "event_count": {"const": 72}}}]},
+        {"allOf": [{"$ref": "#/$defs/population"}, {"properties": {"population_id": {"const": "boundary_scale4294967295"}, "scale": {"const": 4294967295}, "event_count": {"const": 72}}}]},
+        {"allOf": [{"$ref": "#/$defs/population"}, {"properties": {"population_id": {"const": "trajectory_scale4096"}, "scale": {"const": 4096}, "event_count": {"const": 65536}}}]}
+      ],
+      "items": false
+    },
+    "exclusive_lease_absent_pass": {"const": true},
+    "all_populations_pass": {"const": true},
+    "execution_authority": {"const": false},
+    "archive_authority": {"const": false},
+    "score_credit_bytes": {"const": 0}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "population": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["population_id", "scale", "event_count", "input_sha256", "native_trace_sha256", "reference_receipt_sha256", "generator_command_sha256", "native_command_sha256", "reference_command_sha256", "generator_stdout_sha256", "generator_stderr_sha256", "native_stderr_sha256", "reference_stdout_sha256", "reference_stderr_sha256", "generator_return_code", "native_return_code", "reference_return_code", "complete_population_pass", "native_reference_identity_pass", "terminal_pass"],
+      "properties": {
+        "population_id": {"enum": ["exhaustive_scale17", "boundary_scale3", "boundary_scale4096", "boundary_scale4294967295", "trajectory_scale4096"]},
+        "scale": {"type": "integer", "minimum": 3, "maximum": 4294967295},
+        "event_count": {"type": "integer", "minimum": 1, "maximum": 65536},
+        "input_sha256": {"$ref": "#/$defs/sha256"},
+        "native_trace_sha256": {"$ref": "#/$defs/sha256"},
+        "reference_receipt_sha256": {"$ref": "#/$defs/sha256"},
+        "generator_command_sha256": {"$ref": "#/$defs/sha256"},
+        "native_command_sha256": {"$ref": "#/$defs/sha256"},
+        "reference_command_sha256": {"$ref": "#/$defs/sha256"},
+        "generator_stdout_sha256": {"$ref": "#/$defs/sha256"},
+        "generator_stderr_sha256": {"$ref": "#/$defs/sha256"},
+        "native_stderr_sha256": {"$ref": "#/$defs/sha256"},
+        "reference_stdout_sha256": {"$ref": "#/$defs/sha256"},
+        "reference_stderr_sha256": {"$ref": "#/$defs/sha256"},
+        "generator_return_code": {"const": 0},
+        "native_return_code": {"const": 0},
+        "reference_return_code": {"const": 0},
+        "complete_population_pass": {"const": true},
+        "native_reference_identity_pass": {"const": true},
+        "terminal_pass": {"const": true}
+      }
+    }
+  }
+}
