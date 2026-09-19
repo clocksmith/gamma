@@ -1,29 +1,44 @@
-# Gamma goals
+# Gamma Goals
 
-Gamma's mission is to make model and algorithm behavior inspectable, comparable,
-and reproducible under named evaluation contracts.
+## Mission & Thesis
 
-Its durable goals are:
+Gamma delivers an empirical workbench and research laboratory for machine learning model evaluation, distillation, multi-backend comparison, and capability-transfer research.
 
-1. Provide one coherent workbench for interactive token prediction, model
-   comparison, runtime benchmarking, multi-model coordination, and controlled
-   capability-transfer research.
-2. Keep every result attached to the exact model, dataset, prompt, runtime,
-   metric, resource boundary, and replay evidence needed to audit it.
-3. Preserve clear authority between reusable product surfaces and domain
-   research lanes so an experimental result cannot silently become a broad
-   product claim.
-4. Make failures, unsupported capabilities, missing evidence, and fallback
-   behavior explicit and fail closed at promotion boundaries.
-5. Permit broad algorithmic invention inside stable component contracts while
-   retaining matched controls, deterministic state, and independently
-   inspectable artifacts.
-6. Convert successful research into maintained, usable capabilities only after
-   the relevant correctness, fairness, resource, and replication gates pass.
+**Model behavior is verifiable science, not opaque intuition.**
 
-Current measurements and project status belong in tests, registries, receipts,
-and reports. Architecture decisions belong in design documents. Component
-authority and invariants belong in the applicable `CATSCAN.md` chain.
+Evaluating and transferring capabilities across compact language models, translation systems, and algorithmic reasoning engines requires strict experimental controls. Gamma makes token prediction, distillation pipelines, and hardware execution head-to-head comparable by anchoring every trial to an explicit run contract, frozen evaluation datasets, and reproducible scoreboards.
+
+## Intended Beneficiaries
+
+1. **Model Optimization & Distillation Researchers**: Engineers creating compact student models (e.g., `TranslateGemma-4B -> Gemma-3-1B`) who require verified translation loss, latency, and parameter audits.
+2. **Evaluation & Benchmark Analysts**: Teams comparing model families across heterogeneous backends (ROCm, CUDA, WebGPU) with tamper-proof scorecards.
+3. **Autonomous Agent Systems (Reploid)**: Upstream consumers utilizing SAME-R capability transfer and empirical validation matrices to guide model selection.
+
+## Desired Outcomes
+
+1. **Named Run Contracts**: Every evaluation and training execution binds to an explicit `[run-contract]` capturing dataset, schedule, hyperparameters, and device identity.
+2. **Decoupled Reporting**: Rebuilding reports, manifests, and scoreboards operates strictly asynchronously and cannot corrupt or deadlock active in-flight jobs.
+3. **Reproducible Distillation**: Distillation pipelines produce verifiable student weights, layer patterns, and quantization receipts that pass reference test oracles.
+4. **Fail-Closed Gate Promotion**: Candidate models, evaluation metrics, or heuristic estimators fail closed at promotion boundaries if required baseline evidence or compute probes fail.
+
+## Operating Loops
+
+1. **Empirical Evaluation Loop**:
+   ```text
+   Ingest Checkpoint -> Run Hardware Probe -> Execute Fixed Evaluation Corpus -> Calculate Scoreboard -> Emit Run Manifest & Receipt
+   ```
+2. **Capability Transfer Loop (SAME-R)**:
+   ```text
+   Select Teacher / Student Pair -> Execute Supervised Distillation -> Run Distractor Suites -> Verify Generalization -> Package Artifact
+   ```
+
+## Strategic Constraints
+
+- Empirical integrity: Research claims must be backed by exact dataset hashes, seed configurations, and reproducible artifacts.
+- Proven hardware probe: An explicit compute probe on ROCm/CUDA must succeed before launching heavy training or evaluation sweeps.
+- Independent authority: Gamma does not invent claims for downstream runtimes; Doppler and Doe independently govern their execution environments.
+
+## Lossless Compression Research
 
 For enwiki9, the active end-to-end objective is the versioned
 [96M complete-byte witness](projects/enwiki9/contracts/research/v4/objective-contract.json):
@@ -35,3 +50,13 @@ confirmation and scale decisions; historical 105M, 99M and 90M evidence stays in
 The active enwiki9 research direction is XML/English stream compression and
 causal information sharing between streams, with a 95M stretch target. The
 working 25%/75% decomposition is a measurement hypothesis, not a byte budget.
+
+## Explicit Exclusions
+
+Gamma does not build production end-user applications, client-facing chat widgets, cloud multi-tenant inference services, or unverified marketing benchmarks.
+
+---
+
+Links:
+- Strategic intent links to local invariants in [INTENT.md](INTENT.md).
+- Technical boundaries and owned authority are chartered in [CATSCAN.md](CATSCAN.md).
