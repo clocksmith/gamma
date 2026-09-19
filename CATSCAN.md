@@ -22,6 +22,8 @@ Provide an empirical workbench for model evaluation, translation distillation (`
 
 ## Contracts
 
+- Input: [Strategic goals](GOALS.md)
+- Input: [System intent and invariants](INTENT.md)
 - Input: Hugging Face / GGUF / local model weights, training pairs, and evaluation datasets.
 - Output: Standardized run contracts, `manifest.jsonl`, `scoreboard.md`, and normalized translation results bundles.
 
@@ -36,6 +38,7 @@ Provide an empirical workbench for model evaluation, translation distillation (`
 - Run index and results bundle rebuilds execute cleanly:
   - `python3 projects/distillation/translation/pipeline/build_run_index.py`
   - `python3 projects/distillation/translation/pipeline/rebuild_translation_results_bundle.py`
+- Acceptance evidence verifies that [INTENT.md](INTENT.md) and [GOALS.md](GOALS.md) remain supported.
 
 ## Non-goals
 
