@@ -1,0 +1,313 @@
+{"command": ["/tmp/gamma-architecture-tests/bin/python", "/home/x/deco/gamma/projects/enwiki9/tools/run_with_resource_guard_v3.py", "--limit-kib", "1048576", "--official-decimal-limit-kib", "1048576", "--limit-mode", "tree", "--cgroup-path", "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/gamma-enwiki9-20260920T185146Z_aebb847936", "--cgroup-memory-max-bytes", "1073741824", "--temporary-disk-limit-bytes", "134217728", "--phase-marker-path", "/home/x/deco/gamma/projects/enwiki9/run_logs/adaptive/20260920T185146Z_aebb847936.resources/phases.jsonl", "--max-logical-cpus", "1", "--guard-json", "/home/x/deco/gamma/projects/enwiki9/run_logs/adaptive/20260920T185146Z_aebb847936.resources/guard.json", "--label", "20260920T185146Z_aebb847936", "--phase", "diagnostic", "--scratch-path", "/home/x/deco/gamma/projects/enwiki9/results/fx2_donor_coverage250k_q0_v1", "--scratch-path", "/home/x/deco/gamma/projects/enwiki9/run_logs/adaptive/20260920T185146Z_aebb847936.log", "--scratch-path", "/home/x/deco/gamma/projects/enwiki9/run_logs/adaptive/20260920T185146Z_aebb847936.resources", "--scratch-path", "/tmp/gamma-enwiki9-20260920T185146Z_aebb847936-gza8gw5_/fx2_donor_coverage250k_q0_v1", "--", "/usr/bin/taskset", "--cpu-list", "2", "/bin/sh", "-c", "printf '%s\\n' '{\"phase\":\"diagnostic\",\"event\":\"worker_start\",\"detail\":\"operational envelope only; no codec phase credit\"}' >> \"$GAMMA_RESOURCE_PHASE_MARKERS\" || exit 125; exec \"$@\"", "enwiki9-discovery-envelope", "/tmp/gamma-architecture-tests/bin/python", "/home/x/deco/gamma/projects/enwiki9/tools/fx2_donor_coverage_v1.py", "--root", "/home/x/deco/gamma/projects/enwiki9", "--output", "/home/x/deco/gamma/projects/enwiki9/results/fx2_donor_coverage250k_q0_v1", "--experiment", "/home/x/deco/gamma/projects/enwiki9/operations/adaptive/experiments/fx2_donor_coverage250k_q0_v1.json", "--closure", "/home/x/deco/gamma/projects/enwiki9/operations/provenance/fx2_donor_coverage250k_q0_v1_closure.json", "--plan", "/home/x/deco/gamma/projects/enwiki9/operations/provenance/fx2_donor_coverage250k_q0_v1_plan.json"], "job": {"candidate_id": "fx2_donor_coverage250k_q0_v1", "candidate_revision": {"path": "operations/adaptive/candidate-revisions/fx2_donor_coverage250k_q0_v1/20260920T185146474354Z_4ac46064b79f.json", "sha256": "sha256:6953adf9d09973108d287d7f56b96fe9a82a23bc1f591614c9a243c90542753e"}, "candidate_tree_sha256": "sha256:4ac46064b79f5fffcb3ae20dd586a0e58f82cd54f2b1c466b2f2286e647934ca", "execution_guard": {"path": "tools/run_with_resource_guard_v3.py", "sha256": "sha256:044147f7ffe6922ea8dafd52fc3d4426077b20958adbcd421245ad41adcfc1e4"}, "execution_mode": "discovery", "execution_resources": {"boot_id": "3ce46712-27bc-4199-8e48-e2b3d23926cb", "budget": {"cgroup_parent": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice", "cpus": [2], "memory_bytes": 1073741824, "scratch_bytes": 134217728, "swap_bytes": 0, "wall_seconds": 240}, "cgroup_inode": 385581, "cgroup_path": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/gamma-enwiki9-20260920T185146Z_aebb847936", "cpu_enforcement": "taskset-and-sampled-affinity-guard", "groups": [{"created": true, "inode": 385581, "kernel_cpuset": false, "memory_bytes": 1073741824, "path": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/gamma-enwiki9-20260920T185146Z_aebb847936"}], "guard_command_sha256": "368553da5a35ff043f92f8c387cdebea65486a5524a759adca3a516dc31f6771", "guard_path": "run_logs/adaptive/20260920T185146Z_aebb847936.resources/guard.json", "missing_diagnostics": ["kernel cpuset controller is not delegated; taskset assignment and existing affinity guard remain active"], "timing_authority": "diagnostic"}, "experiment": {"path": "operations/adaptive/experiments/fx2_donor_coverage250k_q0_v1.json", "sha256": "sha256:1de5f0a8121d082c2af5f6b79fc640e3faaf4f445880d9d032a3adf90968911f"}, "gate_size": 250000, "job_id": "20260920T185146Z_aebb847936", "priority": 90, "proposal": {"path": "operations/adaptive/proposals/developed/939_fx2_donor_coverage250k_q0_v1.json", "sha256": "sha256:98e5b6fd3de5db1ce7570db7f369f2bf210390f91450b9ebbe69029d3316da17"}, "proposal_id": "fx2_donor_coverage250k_q0_v1", "purpose": "diagnostic", "resource_budget": {"cgroup_parent": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice", "cpus": [2], "memory_bytes": 1073741824, "scratch_bytes": 134217728, "swap_bytes": 0, "wall_seconds": 240}, "runner": {"path": "tools/fx2_donor_coverage_v1.py", "sha256": "sha256:8dc7ecd252b6333b10e596cdfd1f607d4484b2d045ac28e50fcc00acb47bd419"}, "schema": "gamma.enwiki9.adaptive-job.v3", "scratch_directories": ["results/fx2_donor_coverage250k_q0_v1"], "started_at": "2026-09-20T18:52:19+00:00", "state": "running", "submitted_at": "2026-09-20T18:51:46+00:00", "tags": [], "timing_authority": "diagnostic", "tool": "tools/fx2_donor_coverage_v1.py", "tool_args": ["--root", "/home/x/deco/gamma/projects/enwiki9", "--output", "/home/x/deco/gamma/projects/enwiki9/results/fx2_donor_coverage250k_q0_v1", "--experiment", "/home/x/deco/gamma/projects/enwiki9/operations/adaptive/experiments/fx2_donor_coverage250k_q0_v1.json", "--closure", "/home/x/deco/gamma/projects/enwiki9/operations/provenance/fx2_donor_coverage250k_q0_v1_closure.json", "--plan", "/home/x/deco/gamma/projects/enwiki9/operations/provenance/fx2_donor_coverage250k_q0_v1_plan.json"]}}
+{"phase": "build", "elapsed_seconds": 1.5336362621746957}
+{"phase": "replay", "elapsed_seconds": 1.6314341062679887}
+{"phase": "repeat", "elapsed_seconds": 1.620850894600153}
+{"transfer_supported": false}
+{
+  "resource_guard": {
+    "cgroup": {
+      "inode": 385581,
+      "joined_before_exec": true,
+      "memory_max_bytes": 1073741824,
+      "memory_max_rounding_bytes": 0,
+      "memory_peak_reset": true,
+      "path": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/gamma-enwiki9-20260920T185146Z_aebb847936",
+      "previous_memory_max": "1073741824",
+      "requested_memory_max_bytes": 1073741824
+    },
+    "cgroup_events": {
+      "baseline": {
+        "high": 0,
+        "low": 0,
+        "max": 0,
+        "oom": 0,
+        "oom_group_kill": 0,
+        "oom_kill": 0,
+        "sock_throttled": 0
+      },
+      "delta": {
+        "high": 0,
+        "low": 0,
+        "max": 0,
+        "oom": 0,
+        "oom_group_kill": 0,
+        "oom_kill": 0,
+        "sock_throttled": 0
+      },
+      "final": {
+        "high": 0,
+        "low": 0,
+        "max": 0,
+        "oom": 0,
+        "oom_group_kill": 0,
+        "oom_kill": 0,
+        "sock_throttled": 0
+      }
+    },
+    "command": [
+      "/usr/bin/taskset",
+      "--cpu-list",
+      "2",
+      "/bin/sh",
+      "-c",
+      "printf '%s\\n' '{\"phase\":\"diagnostic\",\"event\":\"worker_start\",\"detail\":\"operational envelope only; no codec phase credit\"}' >> \"$GAMMA_RESOURCE_PHASE_MARKERS\" || exit 125; exec \"$@\"",
+      "enwiki9-discovery-envelope",
+      "/tmp/gamma-architecture-tests/bin/python",
+      "/home/x/deco/gamma/projects/enwiki9/tools/fx2_donor_coverage_v1.py",
+      "--root",
+      "/home/x/deco/gamma/projects/enwiki9",
+      "--output",
+      "/home/x/deco/gamma/projects/enwiki9/results/fx2_donor_coverage250k_q0_v1",
+      "--experiment",
+      "/home/x/deco/gamma/projects/enwiki9/operations/adaptive/experiments/fx2_donor_coverage250k_q0_v1.json",
+      "--closure",
+      "/home/x/deco/gamma/projects/enwiki9/operations/provenance/fx2_donor_coverage250k_q0_v1_closure.json",
+      "--plan",
+      "/home/x/deco/gamma/projects/enwiki9/operations/provenance/fx2_donor_coverage250k_q0_v1_plan.json"
+    ],
+    "command_sha256": "292760fa592224fc06dc643c20b43873cc5512e99c531a2ac9de3432c0fc94e4",
+    "elapsed_s": 5.0385,
+    "geekbench5_single_core_score": null,
+    "guards": {
+      "cgroup_memory_guard_exceeded": false,
+      "logical_cpu_guard_exceeded": false,
+      "measurement_incomplete": false,
+      "official_decimal_memory_exceeded": false,
+      "phase_marker_invalid": false,
+      "rss_guard_exceeded": false,
+      "temporary_disk_guard_exceeded": false,
+      "wall_time_guard_exceeded": false
+    },
+    "label": "20260920T185146Z_aebb847936",
+    "latest_sample": {
+      "allowed_cpu_union": [],
+      "cgroup_current_bytes": 6246400,
+      "elapsed_s": 5.0371,
+      "max_single_rss_kib": 0,
+      "persistent_status_misses": [],
+      "processes": [],
+      "scratch_allocated_bytes": 5545984,
+      "scratch_file_count": 53,
+      "scratch_logical_bytes": 5318016,
+      "scratch_race_count": 0,
+      "tree_live_threads": 0,
+      "tree_rss_kib": 0,
+      "tree_runnable_threads": 0
+    },
+    "limit_kib": 1048576,
+    "limit_mode": "tree",
+    "max_logical_cpus": 1,
+    "measurements": {
+      "affinity_complete": true,
+      "cgroup_v2_complete": true,
+      "per_process_vmhwm_sampled": true,
+      "phase_markers_complete": true,
+      "process_tree_rss_complete": true,
+      "scratch_logical_and_allocated_complete": true,
+      "smaps_rollup_complete": true
+    },
+    "objective": {
+      "corpusBytes": 1000000000,
+      "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+      "objectiveDigest": "sha256:409b70547f901a3ac5fffd7fd7a1e1d77b05fb44d9e9d889be1337bd153706d7",
+      "objectiveId": "gamma-enwiki9-hutter-96m-v4",
+      "objectivePath": "contracts/research/v4/objective-contract.json",
+      "targetScoreBytes": 96000000
+    },
+    "official_decimal_limit_kib": 1048576,
+    "peak_process_vmhwm": {
+      "comm": "cc1plus",
+      "observed_elapsed_s": 1.5272,
+      "pid": 390222,
+      "start_ticks": 302647747,
+      "vmhwm_kib": 229584
+    },
+    "peak_sample": {
+      "allowed_cpu_union": [
+        2
+      ],
+      "cgroup_current_bytes": 224030720,
+      "elapsed_s": 1.5272,
+      "max_single_rss_kib": 229584,
+      "persistent_status_misses": [],
+      "processes": [
+        {
+          "allowed_cpus": [
+            2
+          ],
+          "comm": "python",
+          "live_threads": 1,
+          "pid": 390206,
+          "rss_kib": 23200,
+          "runnable_threads": 0,
+          "start_ticks": 302647740,
+          "vmhwm_kib": 29772
+        },
+        {
+          "allowed_cpus": [
+            2
+          ],
+          "comm": "g++",
+          "live_threads": 1,
+          "pid": 390221,
+          "rss_kib": 3188,
+          "runnable_threads": 0,
+          "start_ticks": 302647747,
+          "vmhwm_kib": 3188
+        },
+        {
+          "allowed_cpus": [
+            2
+          ],
+          "comm": "cc1plus",
+          "live_threads": 1,
+          "pid": 390222,
+          "rss_kib": 229584,
+          "runnable_threads": 1,
+          "start_ticks": 302647747,
+          "vmhwm_kib": 229584
+        }
+      ],
+      "scratch_allocated_bytes": 5345280,
+      "scratch_file_count": 35,
+      "scratch_logical_bytes": 5160744,
+      "scratch_race_count": 0,
+      "tree_live_threads": 3,
+      "tree_rss_kib": 255972,
+      "tree_runnable_threads": 1
+    },
+    "peak_tree_sample": {
+      "allowed_cpu_union": [
+        2
+      ],
+      "cgroup_current_bytes": 224030720,
+      "elapsed_s": 1.5272,
+      "max_single_rss_kib": 229584,
+      "persistent_status_misses": [],
+      "processes": [
+        {
+          "allowed_cpus": [
+            2
+          ],
+          "comm": "python",
+          "live_threads": 1,
+          "pid": 390206,
+          "rss_kib": 23200,
+          "runnable_threads": 0,
+          "start_ticks": 302647740,
+          "vmhwm_kib": 29772
+        },
+        {
+          "allowed_cpus": [
+            2
+          ],
+          "comm": "g++",
+          "live_threads": 1,
+          "pid": 390221,
+          "rss_kib": 3188,
+          "runnable_threads": 0,
+          "start_ticks": 302647747,
+          "vmhwm_kib": 3188
+        },
+        {
+          "allowed_cpus": [
+            2
+          ],
+          "comm": "cc1plus",
+          "live_threads": 1,
+          "pid": 390222,
+          "rss_kib": 229584,
+          "runnable_threads": 1,
+          "start_ticks": 302647747,
+          "vmhwm_kib": 229584
+        }
+      ],
+      "scratch_allocated_bytes": 5345280,
+      "scratch_file_count": 35,
+      "scratch_logical_bytes": 5160744,
+      "scratch_race_count": 0,
+      "tree_live_threads": 3,
+      "tree_rss_kib": 255972,
+      "tree_runnable_threads": 1
+    },
+    "peaks": {
+      "cgroup_memory_peak_bytes": 224030720,
+      "max_observed_process_vmhwm_kib": 229584,
+      "max_sampled_allowed_cpu_count": 1,
+      "max_sampled_cgroup_current_bytes": 224030720,
+      "max_sampled_scratch_allocated_bytes": 5545984,
+      "max_sampled_scratch_logical_bytes": 5318016,
+      "max_sampled_single_rss_kib": 229584,
+      "max_sampled_tree_live_threads": 3,
+      "max_sampled_tree_rss_kib": 255972,
+      "max_sampled_tree_runnable_threads": 1
+    },
+    "phase": "diagnostic",
+    "phase_marker_path": "/home/x/deco/gamma/projects/enwiki9/run_logs/adaptive/20260920T185146Z_aebb847936.resources/phases.jsonl",
+    "phase_markers": [
+      {
+        "detail": "operational envelope only; no codec phase credit",
+        "event": "worker_start",
+        "observed_elapsed_s": 0.0223,
+        "phase": "diagnostic",
+        "source_line": 1
+      }
+    ],
+    "returncode": 0,
+    "sample_count": 11,
+    "sample_interval_seconds": 0.5,
+    "schema": "gamma.enwiki9.resource-guard-receipt.v3",
+    "scratch_paths": [
+      "/home/x/deco/gamma/projects/enwiki9/results/fx2_donor_coverage250k_q0_v1",
+      "/home/x/deco/gamma/projects/enwiki9/run_logs/adaptive/20260920T185146Z_aebb847936.log",
+      "/home/x/deco/gamma/projects/enwiki9/run_logs/adaptive/20260920T185146Z_aebb847936.resources",
+      "/tmp/gamma-enwiki9-20260920T185146Z_aebb847936-gza8gw5_/fx2_donor_coverage250k_q0_v1"
+    ],
+    "smaps_rollup_checkpoints": [
+      {
+        "elapsed_s": 0.0223,
+        "processes": [
+          {
+            "pid": 390206,
+            "rollup_kib": {
+              "AnonHugePages": 0,
+              "Anonymous": 2188,
+              "FilePmdMapped": 0,
+              "KSM": 0,
+              "LazyFree": 0,
+              "Locked": 0,
+              "Private_Clean": 32,
+              "Private_Dirty": 2188,
+              "Private_Hugetlb": 0,
+              "Pss": 3381,
+              "Pss_Anon": 2188,
+              "Pss_Dirty": 2188,
+              "Pss_File": 1193,
+              "Pss_Shmem": 0,
+              "Referenced": 8016,
+              "Rss": 8016,
+              "Shared_Clean": 5796,
+              "Shared_Dirty": 0,
+              "Shared_Hugetlb": 0,
+              "ShmemPmdMapped": 0,
+              "Swap": 0,
+              "SwapPss": 0
+            },
+            "start_ticks": 302647740
+          }
+        ],
+        "reason": "initial+phase_marker+rss_growth",
+        "tree_rss_kib": 7572
+      },
+      {
+        "elapsed_s": 5.0371,
+        "processes": [],
+        "reason": "terminal",
+        "tree_rss_kib": 0
+      }
+    ],
+    "status": "complete",
+    "temporary_disk_limit_bytes": 134217728,
+    "wall_time_limit_seconds": null
+  }
+}
