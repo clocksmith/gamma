@@ -1,0 +1,92 @@
+{
+  "schema": "gamma.enwiki9.joint-training-preflight.v1",
+  "generated_utc": "2026-09-20T00:35:07.031885+00:00",
+  "scope": "synthetic implementation checks and terminal250KB development, not a full-corpus result",
+  "runtime": {
+    "training_python": "/usr/bin/python3.14",
+    "torch": "2.11.0+cu130",
+    "device": "cpu",
+    "test_python": "/tmp/gamma-architecture-tests/bin/python",
+    "installations_this_change": [],
+    "gpu_probe_observations": {
+      "normal_rocm": "real compute failed: HIP invalid device function",
+      "gfx11_override": "real compute failed: no kernel image is available",
+      "gpu_training_launched": false
+    }
+  },
+  "checks": [
+    {
+      "command": "PYTHONPATH=projects/enwiki9/src taskset -c4 /usr/bin/python3 -m unittest discover -s projects/enwiki9/tests -p test_fx2_training_reference.py -v",
+      "result": "10 passed;434 native parent tensors match,429 finite parameter gradients, quantization/capture/source checks"
+    },
+    {
+      "command": "PYTHONPATH=projects/enwiki9/src taskset -c4 /usr/bin/python3 -m unittest discover -s projects/enwiki9/tests -p test_fx2_title_conditioning.py -v",
+      "result": "2 passed; zero equality, gain gradients, future feature causality and counted metadata geometry"
+    },
+    {
+      "command": "taskset -c4 /tmp/gamma-architecture-tests/bin/python projects/enwiki9/tests/run_architecture_groups.py pure",
+      "result": "143 passed,1 deselected,54 subtests passed"
+    },
+    {
+      "command": "GAMMA_ENWIKI9_TEST_CGROUP_PARENT=/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice taskset -c4 /tmp/gamma-architecture-tests/bin/python -m pytest -q projects/enwiki9/tests/architecture/test_memory.py projects/enwiki9/tests/architecture/test_linux_resources.py projects/enwiki9/tests/architecture/test_migration.py projects/enwiki9/tests/architecture/test_boundaries.py",
+      "result": "14 passed; real256MiB sparse mapping under64MiB resident cgroup"
+    },
+    {
+      "command": "taskset -c4 /tmp/gamma-architecture-tests/bin/python -m pytest -q projects/enwiki9/tests/architecture/test_migration.py projects/enwiki9/tests/architecture/test_original_inputs.py projects/enwiki9/tests/architecture/test_history.py projects/enwiki9/tests/test_fx2_title_memory_v1.py",
+      "result": "9 passed, including UBSan title memory fixture"
+    },
+    {
+      "command": "python3 -m py_compile gamma.py; explicit changed-package imports",
+      "result": "passed"
+    },
+    {
+      "check": "Rehash all artifacts in the P/E v2 and title v1 manifests",
+      "result": "490 file identities passed"
+    }
+  ],
+  "results": [
+    {
+      "path": "results/fx2_entropy_train250k_q0_v2/comparison.json",
+      "sha256": "cc7d51f328b0f91df7ac6de33b5d877f6c6e4af3867e80439b3ee571c2a65225",
+      "bytes": 9645
+    },
+    {
+      "path": "results/fx2_title_train250k_q0_v1/comparison.json",
+      "sha256": "f0d29804efb63275236f0c8628ecad890c262d55e60f17656ade8e742a51700b",
+      "bytes": 20742
+    },
+    {
+      "path": "results/fx2_title_train250k_q0_v1/terminal-index.json",
+      "sha256": "57dcf75017eacd344acf127479691df3dffd7a7d89cca263f416d0748ecffeea",
+      "bytes": 3401
+    }
+  ],
+  "interpretations": [
+    {
+      "path": "operations/adaptive/reflections/20260919T234053Z_f45f995b34.json",
+      "sha256": "58aabc81dba566427ccdf6a408db66ea64ade676804111018bc2d3b76336b9f1",
+      "bytes": 3575
+    },
+    {
+      "path": "operations/adaptive/reflections/20260919T235340Z_dfd8692458.json",
+      "sha256": "ceac4b6adca47d10b17e0c19d16ee7922c792b62d70b000da109982a0fc04950",
+      "bytes": 3417
+    },
+    {
+      "path": "operations/adaptive/reflections/20260920T001912Z_ad57d1ee71.json",
+      "sha256": "a1197b9ce8f7a9e55a367574fa28c54a27b2bf0973722e0cd92140c7a9ddba15",
+      "bytes": 4176
+    }
+  ],
+  "next_execution": {
+    "path": "operations/adaptive/experiments/fx2_joint_replay1m_q0_v1.json",
+    "sha256": "aa0c67c0cf3274ff7ae77bcd6fa24d522bc94c30200b6c6923d0bd5d6eba1cb4",
+    "bytes": 9520
+  },
+  "limitations": [
+    "ROCm remains unusable for training; CPU surrogate differs from fused upstream CUDA.",
+    "250KB per-arm RSS unavailable; aggregate guard peak retained.1MB adds maximum-process RSS separately from aggregate cgroup peak.",
+    "Complete native parent-state witness, complete self-extracting package and full-corpus score are unavailable."
+  ],
+  "objective_credit_bytes": 0
+}

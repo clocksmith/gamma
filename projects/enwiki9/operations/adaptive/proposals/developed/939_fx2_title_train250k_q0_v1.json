@@ -1,0 +1,45 @@
+{
+  "candidate_id": "fx2_title_train250k_q0_v1",
+  "claimed_at": "2026-09-20T00:18:25+00:00",
+  "created_at": "2026-09-20T00:18:24+00:00",
+  "developed_at": "2026-09-20T00:18:42+00:00",
+  "evidence": [
+    {
+      "path": "operations/adaptive/reflections/20260919T235340Z_dfd8692458.json",
+      "sha256": "sha256:ceac4b6adca47d10b17e0c19d16ee7922c792b62d70b000da109982a0fc04950"
+    }
+  ],
+  "expected_savings_bytes": 0,
+  "experiment": {
+    "path": "operations/adaptive/experiments/fx2_title_train250k_q0_v1.json",
+    "sha256": "sha256:8d41af71d2d3ae9576dab72bb6a21db1041b7584f0aa8901c8d1898b8c28b735"
+  },
+  "hypothesis": "Matched full-model retraining with decoder-visible completed-title conditioning improves actual final-coder archive and packed-model economics over entropy retraining alone and a causal wrong-title control on the exposed opening250k population.",
+  "interfaces_exposed": [
+    "decoder-built title memory into shared neural embeddings"
+  ],
+  "kill_condition": "M must beat E after actual two-copy weights and separately measured two-executable planning cost, and beat S archive; K must preserve E exactly. Fail closed on feature/PPMD/token alignment, exports, inverse or repeat. No full-score extrapolation.",
+  "max_program_bytes": 65536,
+  "mechanism_change": "add_state_coordinate",
+  "mechanism_change_bonus": 10,
+  "mechanism_class": "substrate",
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:409b70547f901a3ac5fffd7fd7a1e1d77b05fb44d9e9d889be1337bd153706d7",
+    "objectiveId": "gamma-enwiki9-hutter-96m-v4",
+    "objectivePath": "contracts/research/v4/objective-contract.json",
+    "targetScoreBytes": 96000000
+  },
+  "owner": "codex-joint-training-20260919",
+  "parent": "fx2_entropy_train250k_q0_v2",
+  "parent_proposal_id": null,
+  "priority": 50,
+  "promotion_condition": "No full-score promotion; separate 1MB replay after complete P/E/K/M/S evidence.",
+  "proposal_id": "fx2_title_train250k_q0_v1",
+  "retired_neighborhoods": [],
+  "schema": "gamma.enwiki9.algorithm-proposal.v2",
+  "search_priority": 60,
+  "state": "developed",
+  "title": "Joint full-model title conditioning with matched causal wrong donor"
+}

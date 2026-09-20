@@ -1,5 +1,11 @@
 # XML, English and information shared between streams
 
+**Research selection superseded:** the next primary comparison is
+[joint model/weight training with in-model metadata](fx2_joint_training_20260919.md).
+The stream design below is retained as the original diagnostic plan, not the
+next execution. Removing framing alone would leave J's 21,684-byte payload
+deficit against P; J also loses 5,565 bytes to the split baseline B.
+
 The [bounded census and first causal-history comparison](xml_history_census_20260919.md)
 is complete: the exposed opening250k has 14.96% outer XML/metadata and 85.04%
 article-body bytes. Joint Deflate history beats shifted donors by473 bytes but

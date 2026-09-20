@@ -1,6 +1,26 @@
 # Research Register
 [Record index](research_register/README.md) | [Earlier records](research_register/archive/README.md)
 
+## 2026-09-19 - Train the full FX2 predictor for data and model cost
+
+Owner `codex-joint-training-20260919` prioritizes the [joint-training comparison](fx2_joint_training_20260919.md)
+under the 96M complete-byte target and 95M stretch. The earlier XML census and
+losing split remain evidence, without score credit. The CPU full-model P/E gate
+now produces a [trained checkpoint and native archives](../results/fx2_entropy_train250k_q0_v2/comparison.json):
+P33,429 and E39,639 archive bytes; E packs to2,903,502 versus P2,930,652 bytes.
+All16 updates and independent inverses/repeats pass. The48,090-byte sample plus
+two-copy-model difference is not a full-corpus result; the6,210-byte payload loss
+is retained. The [terminal reflection](../operations/adaptive/reflections/20260919T235340Z_dfd8692458.json)
+holds E. A separately frozen title-conditioned M/S comparison uses identical
+training budgets and a zero-gain E control, followed by a separate1MB replay.
+The completed title result is negative: M39,768 loses129 archive bytes to E and
+419 to the matched wrong-title S39,349; M adds877 packed bytes per copy and20,480
+executable bytes. K, introduced-state witnesses, independent inverses and repeats
+pass. The locally unfavorable models are held for the predeclared1MB transfer
+audit with no fitting or promotion. GPU compute failed in both ROCm modes;
+no GPU training or installation occurred.
+
+
 ## 2026-09-09 - Decode adaptive model counts directly in the native loader
 
 Owner `root_explore` follows the6042-byte complete-model saving and rejects the

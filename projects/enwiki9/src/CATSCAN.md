@@ -4,7 +4,7 @@ Parent: [enwiki9](../CATSCAN.md)
 
 ## Target
 
-Provide one maintained namespace for execution, evidence, lifecycle, packaging and reporting while preserving historical bytes.
+Maintain execution, evidence, lifecycle, packaging and reporting services while preserving historical bytes.
 
 ## Authority
 
@@ -17,19 +17,21 @@ Provide one maintained namespace for execution, evidence, lifecycle, packaging a
 
 ## Scope
 
-Maintained Python framework services under `gamma_enwiki9/`.
+Python services under `gamma_enwiki9/`.
 
 ## Contracts
 
-- Input: Explicit identities, roots, populations, budgets, build profiles and dependencies.
-- Output: Separate execution outcomes, evidence reports, scientific decisions and package inventories.
+- Input: Identities, roots, populations, budgets, build profiles and dependencies.
+- Output: Execution outcomes, evidence reports, scientific decisions and package inventories.
 
 ## Invariants
 
 - Services never import the lab or research application.
 - Evidence never imports reporting, execution or experiment adapters.
 - Pure projection never reads procfs, samples CPU state or mutates records.
-- Static closure completeness is relative to declarations; dynamic loading and external runtimes require explicit dependencies and restricted replay.
+- Static closure is relative to declarations; dynamic loading requires explicit dependencies and restricted replay.
+- Terminal interpretation resolves original input identities; launches require current bindings. Original-validator replay remains separate.
+- Virtual address limits exceed resident budgets only with an identity-bound inherited memory cgroup.
 - Immutable publication, derived replacement and canonical append remain distinct operations.
 - Process success never grants score credit.
 
@@ -43,4 +45,4 @@ Moving all historical runners, changing algorithms during extraction, replacing 
 
 ## Freedom
 
-Internal algorithms may change while these boundaries and evidence contracts hold.
+Algorithms may change within these evidence boundaries.
