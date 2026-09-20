@@ -18,23 +18,26 @@ all 757 artifacts rehash, both reflections validate, and all eleven terminal
 ledger rows are present. These checks are a review of retained evidence, not
 another training or codec run.
 
-The outstanding question is **why native training-window gains fail to improve
-native archives**. A improves the 512 training positions by 969.204046 bits but
-adds 7,109 development archive bytes. J improves those positions by 971.884752
-bits but adds 6,288 development archive bytes and 23,683 confirmation archive
-bytes. J removes 24,715 packed bytes per model copy. These are different
-populations and different costs; the neural bit gains cannot be subtracted from
-archive byte losses as a causal decomposition.
+The [fixed P/A/J complete-trajectory attribution](fx2_training_trajectory_20260920.md)
+is now closed on exposed development250KB. All 512 trained-target probabilities
+per checkpoint match the retained native window evaluation bit for bit, and all
+complete PPM prior streams agree. Training gains survive at both measurement
+levels: A/J save 969.204046/971.884752 neural bits and 766.044168/776.226103 final
+coder bits on those positions.
 
-The retained receipts do not separate off-window prediction regression, the
-whole-reference surrogate Jacobian, or downstream mixer behavior. Before choosing
-another optimizer profile, the useful next discriminator is fixed-checkpoint
-P/A/J attribution of native neural and final-coder costs on matched development
-coordinates, partitioned into the already declared training positions and their
-complement. Use authentic reset/warmup schedules and fresh native trajectories
-where affected; compare each level separately and do not reuse a stale trajectory
-as a child result. This is an unresolved research question, not a newly admitted
-experiment or authorization to reopen confirmation for tuning.
+The other 150,600 eligible targets lose 196,792.152708/140,684.718681 neural bits
+and 57,639.393829/51,084.498364 final-coder bits. Those losses overwhelm the
+trained-position gains. Another 98 targets have no preceding neural prediction;
+their final-coder costs remain accounted separately. All observed archives equal
+the original archives and repeat exactly. The measured archive-minus-final-cost
+residuals are -3.009952/-5.079686 bits. These residuals are not universal bounds.
+
+This narrows the next research question to coverage or preservation of useful
+predictions outside the training windows. It does not prove that the surrogate
+Jacobian caused the damage or establish a causal mixer defect; subtracting costs
+of the two different distributions cannot provide that attribution. Do not
+repeat the completed native-forward, matched-training or fixed-trajectory stages
+as unfinished work. No new training profile or remedy has been selected.
 
 No new checkpoint, training budget, metadata feature or donor mechanism is
 selected by this handoff. A later training candidate must begin from preserved P,

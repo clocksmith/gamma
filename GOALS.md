@@ -61,10 +61,14 @@ passes fixed P/E agreement. The [matched training comparison](projects/enwiki9/d
 already records a smaller model but larger native payload. The requested forward
 correction and data-only versus joint-cost comparison are complete; do not repeat
 them as unfinished work. Preserve their bounded component gain without scaling
-that training profile or extending its metadata head. The remaining evidence gap
-is why improved native loss on the training windows fails to improve archives;
-off-window prediction, the surrogate gradient and downstream mixing are not yet
-separately attributed. A new training profile needs a distinct frozen hypothesis.
+that training profile or extending its metadata head. The
+[complete-trajectory attribution](projects/enwiki9/docs/fx2_training_trajectory_20260920.md)
+now shows that trained-position gains survive exactly, while off-window neural
+and final-coder losses overwhelm them. This closes fixed P/A/J attribution;
+do not repeat it as unfinished parity work. Investigate coverage or preservation
+of the parent's off-window predictions before choosing another training profile.
+The result does not prove a causal mixer defect or surrogate-gradient cause.
+A new training profile needs a distinct frozen hypothesis.
 The separately frozen [relational design](projects/enwiki9/operations/adaptive/experiments/fx2_relational_binding_design_q0_v1.json)
 tests a new bounded latent binding mechanism against independent bindings and
 different causal donors, with the original model preserved. Its
