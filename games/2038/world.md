@@ -1171,7 +1171,7 @@ The restriction applies to the model. The licensing fee remains transferable.
 
 #### Newswire
 
-Emergency generator operators receive priority authorization to run supplemental computation for the casino's predictive clearinghouses. The burst throughput provides immediate computing power to eligible facilities while drawing heightened public scrutiny to their emissions and grid strain.
+Emergency operators receive permission to run extra computing for the casino. The additional capacity comes with emissions complaints and closer inspection.
 
 #### Quote
 
@@ -1227,7 +1227,7 @@ Every household benefits. Disbursement requires an approved intermediary.
 
 #### Newswire
 
-Millions of residents join engineered roots, utility pipes, microbial sensors, and civic utility networks under an incorporated metropolitan intelligence. The institution maintaining physical presence across the greatest number of districts secures the public coordination contract, collecting immediate operating funds while assuming direct accountability for civic failures.
+Millions of residents join engineered roots, utility pipes, microbial sensors, and civic utility networks under an incorporated metropolitan intelligence. The institution controlling the most districts secures the public coordination contract, gaining operating funds and responsibility for the network’s failures.
 
 #### Quote
 

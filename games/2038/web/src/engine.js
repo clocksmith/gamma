@@ -454,11 +454,12 @@ function resolveCore(config, state, actionId, destination, options) {
   const player = state.player;
   if (actionId === "fund") {
     const venture = options.fundMode === "venture";
-    addResource(config, player, "runway", venture ? 4 : 2);
+    const amount = (venture ? 4 : 2) + Number(destination.category === "capital");
+    addResource(config, player, "runway", amount);
     if (venture) {
       addScrutiny(config, player, 2);
     }
-    return venture ? "Venture funding: +4 Runway, +2 Scrutiny." : "Conservative funding: +2 Runway.";
+    return venture ? `Venture funding: +${amount} Runway, +2 Scrutiny.` : `Conservative funding: +${amount} Runway.`;
   }
 
   if (actionId === "research") {

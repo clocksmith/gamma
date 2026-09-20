@@ -39,7 +39,7 @@ unique Fusion piece are needed.
 | Face | Required information |
 | --- | --- |
 | Available | Name, unlock Era, connected owned-host requirement, common construction cost |
-| Built | Operating benefit, host attachment, no immediate reward |
+| Built | Operating benefit, activation timing, and host attachment. Distinguish immediate Power connections from Production yields. |
 
 Flip and place a chip beside its host after legal Build. Different upgrades can
 share a host. Move attached chips with the Facility if relocated. Their Built
