@@ -1,0 +1,61 @@
+{
+  "native_source_zip": "results/fx2_expert_release250k_v3/P-source.zip",
+  "upstream": "external/fx2-cmix-transformer-v1",
+  "checkpoints": {
+    "P": {
+      "checkpoint": "external/fx2-cmix-transformer-v1/models/6m-q4-fp32.tch",
+      "packed": "external/fx2-cmix-transformer-v1/models/6m-q4-fp32.tfwc2"
+    },
+    "E": {
+      "checkpoint": "results/fx2_entropy_train250k_q0_v2/native/E/checkpoint.tch",
+      "packed": "results/fx2_entropy_train250k_q0_v2/native/E/weights.tfwc2"
+    }
+  },
+  "build_tools": [
+    [
+      "/usr/bin/python3.14",
+      "52e0a13e60a981d8c4b6478be2ba5176f69da07948a056bf49cf6f077e30cb41"
+    ],
+    [
+      "/usr/bin/x86_64-linux-gnu-g++-15",
+      "e6718f7e0c7d057c3ff77b550c603da9bc4030e3ede3c053705acce1293dbe4d"
+    ]
+  ],
+  "address_space_bytes": 34359738368,
+  "caps": {
+    "cpus": [
+      3
+    ],
+    "memory_bytes": 4000000000,
+    "scratch_bytes": 1000000000,
+    "swap_bytes": 0,
+    "wall_seconds": 1800
+  },
+  "target_complete_bytes": 96000000,
+  "stretch_complete_bytes": 95000000,
+  "schema": "gamma.enwiki9.fx2-native-forward-plan.v1",
+  "id": "fx2_native_forward2048_q0_v1",
+  "owner": "codex-native-forward-20260919",
+  "baseline": "results/fx2_numeric_attribution2048_q0_v1/numeric",
+  "fixtures": [
+    "synthetic",
+    "native_prefix2048"
+  ],
+  "harness": "tests/fx2_native_forward.cpp",
+  "compiler": "/usr/bin/x86_64-linux-gnu-g++-15",
+  "worker_command": [
+    "/usr/bin/python3.14",
+    "-m",
+    "gamma_enwiki9.adapters.fx2_forward_validation"
+  ],
+  "training_updates": 0,
+  "checkpoint_order": [
+    "P",
+    "E",
+    "P-repeat"
+  ],
+  "gradient_check": "synthetic P/E only; one backward per checkpoint, finite nonzero routing, no optimizer or parameter updates",
+  "acceptance": "All logits and probabilities bitwise equal to frozen native P/E on both populations and repeat; all 434 freshly exported tensors match decoded identities. Scalar FP64 loss summation differs by at most 1e-10 bits; no tolerance on forward values.",
+  "selection": "Same fixed 8 synthetic and 2048 retained real rows, including exact original reset schedule. No larger population, metadata, selection or training.",
+  "semantics": "Native forward from freshly exported current model tensors; whole-reference surrogate Jacobian only. No captured values enter the native forward boundary; expected values are read by validation afterward."
+}
