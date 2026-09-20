@@ -1,0 +1,57 @@
+{
+  "id": "fx2_numeric_attribution2048_q0_v1",
+  "native_source_zip": "results/fx2_expert_release250k_v3/P-source.zip",
+  "upstream": "external/fx2-cmix-transformer-v1",
+  "captured_tokens": "results/fx2_entropy_train250k_q0_v2/native/priors.f16.tokens",
+  "captured_priors": "results/fx2_entropy_train250k_q0_v2/native/priors.f16",
+  "fixtures": [
+    "synthetic",
+    "native_prefix2048"
+  ],
+  "trace_rows": 64,
+  "value_interventions": 3,
+  "integer_interventions": 8,
+  "checkpoints": {
+    "P": {
+      "checkpoint": "external/fx2-cmix-transformer-v1/models/6m-q4-fp32.tch",
+      "packed": "external/fx2-cmix-transformer-v1/models/6m-q4-fp32.tfwc2"
+    },
+    "E": {
+      "checkpoint": "results/fx2_entropy_train250k_q0_v2/native/E/checkpoint.tch",
+      "packed": "results/fx2_entropy_train250k_q0_v2/native/E/weights.tfwc2"
+    }
+  },
+  "caps": {
+    "cpus": [
+      3
+    ],
+    "memory_bytes": 4000000000,
+    "scratch_bytes": 1500000000,
+    "swap_bytes": 0,
+    "wall_seconds": 1800
+  },
+  "address_space_bytes": 34359738368,
+  "target_complete_bytes": 96000000,
+  "stretch_complete_bytes": 95000000,
+  "training_updates": 0,
+  "selection": "Fixed first 2048 previously retained native capture rows; no fitting, sample replacement, or checkpoint selection. First 64 rows traced; actual reset markers preserve cold piece initialization.",
+  "intervention_rule": "Separate cumulative first-value vector and first-integer scalar substitutions in captured native order; at most 3 and 8 respectively, with full unchanged fixture replay after each. Residual mismatches stay explicit.",
+  "loss": "FP64 log2 and math.fsum of actual FP32 neural truth probabilities; exclude piece-ending rows and final unpaired row. Neural head only, no final mixer or archive attribution.",
+  "worker_command": [
+    "/usr/bin/python3.14",
+    "-m",
+    "gamma_enwiki9.adapters.fx2_numeric_attribution"
+  ],
+  "build_tools": [
+    [
+      "/usr/bin/python3.14",
+      "52e0a13e60a981d8c4b6478be2ba5176f69da07948a056bf49cf6f077e30cb41"
+    ],
+    [
+      "/usr/bin/x86_64-linux-gnu-g++-15",
+      "e6718f7e0c7d057c3ff77b550c603da9bc4030e3ede3c053705acce1293dbe4d"
+    ]
+  ],
+  "owner": "codex-numeric-attribution-20260919",
+  "schema": "gamma.enwiki9.fx2-numeric-attribution-plan.v1"
+}
