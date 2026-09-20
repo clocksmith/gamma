@@ -76,6 +76,13 @@ and the [creative prompts](workbench/PROMPTS.md#creative-discovery) when changin
   Preserve P/E/A/J and retired metadata checkpoints. The native forward remains
   authoritative and its backward remains an explicitly approximate reference
   Jacobian. Any new checkpoint needs fresh native archives and actual packing.
+- The [fixed P/A/J trajectory attribution](docs/fx2_training_trajectory_20260920.md)
+  is also closed. All 512 trained-target probabilities per checkpoint match the
+  retained native window evaluations; off-window neural and final-coder losses
+  overwhelm the trained-position gains. Do not repeat this as unfinished parity
+  or attribution work. Coverage or preservation of parent behavior is the next
+  research question, without selecting a remedy or increasing this profile's
+  budget. No causal mixer defect or surrogate-Jacobian cause is established.
 - The counted core delivery has a no-argument restricted inverse on its declared
   fixture. It is not the unexecuted full-enwik9 split/reorder package or a prize
   qualification. Keep its measured alternatives, licenses and calibration gaps

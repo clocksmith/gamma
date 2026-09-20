@@ -1,0 +1,141 @@
+{
+  "attribution": {
+    "causalConfidence": "high",
+    "controlsEquivalent": true,
+    "failureClass": "algorithmic-loss",
+    "localizedCause": "A/J trained gains survive exactly: DeltaN=-969.204046/-971.884752 bits and DeltaF=-766.044168/-776.226103 bits. Other-neural targets lose196792.152708/140684.718681 neural bits and57639.393829/51084.498364 final bits. Those off-window losses dominate; no-neural final deltas are1.660291/0.807425 bits. Archive residuals are-3.009952/-5.079686 bits."
+  },
+  "candidateId": "fx2_training_trajectory250k_q0_v1",
+  "candidateRevision": {
+    "candidateId": "fx2_training_trajectory250k_q0_v1",
+    "candidateTreeSha256": "sha256:845689b4fca7f1c839d2076d5188885915d85eccce4925cab424ec32ee245f62",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/fx2_training_trajectory250k_q0_v1/20260920T211446702473Z_845689b4fca7.json",
+      "sha256": "sha256:e4d92231e201b1ba727b6524ed69afbe7aa25d7418eca27a29870729fb285a88"
+    }
+  },
+  "decision": {
+    "killPredicatesPass": false,
+    "nextGateBytes": null,
+    "promotionPredicatesPass": true,
+    "rationale": "The frozen promotion predicate means diagnostic attribution complete only. Close attribution, retain P as scale comparator, preserve J complete-fixture/model savings, and require a distinct frozen hypothesis before any new training profile.",
+    "verdict": "hold"
+  },
+  "evidence": [
+    {
+      "path": "results/fx2_training_trajectory250k_q0_v1/A.driver.json",
+      "sha256": "sha256:720bf40ea1fd892d9eb77a8a0771d372286aef9f1c7ffe08c6fe160372cc7de6"
+    },
+    {
+      "path": "results/fx2_training_trajectory250k_q0_v1/J.driver.json",
+      "sha256": "sha256:2d373a11b290afe4732834470c85d819f1e2a8a1cdb25da30237a5fdbc62d64c"
+    },
+    {
+      "path": "results/fx2_training_trajectory250k_q0_v1/P.driver.json",
+      "sha256": "sha256:b4b2dc526d3b6f126553da4f1302ea0ef323f74d2f6cb0e5b45a9b5703197085"
+    },
+    {
+      "path": "results/fx2_training_trajectory250k_q0_v1/artifacts.json",
+      "sha256": "sha256:ae0a47f894d8ef33d7e10d9bd6731a622aa10d992cade9a6a49f91b9fa9f6d21"
+    },
+    {
+      "path": "results/fx2_training_trajectory250k_q0_v1/comparison.json",
+      "sha256": "sha256:45a69436b4e38b09882c35998637e9de3a734ca3ff9f30ec29b94279a31430ed"
+    },
+    {
+      "path": "results/fx2_training_trajectory250k_q0_v1/mask.json",
+      "sha256": "sha256:e0dbeaf7425e868fe1143e64c13f090cce0c623ad523f32965aa5690487b0426"
+    },
+    {
+      "path": "results/fx2_training_trajectory250k_q0_v1/terminal-index.json",
+      "sha256": "sha256:b0c60bc86800c3e571dd712a54d7155cd1fef405cc15de269ee9513de1196f51"
+    },
+    {
+      "path": "results/fx2_training_trajectory250k_q0_v1/terminal.json",
+      "sha256": "sha256:35916d5371926281a80e3953323286a65fe7cafe18b0bf7676773b4d8ac7c844"
+    },
+    {
+      "path": "results/fx2_training_trajectory250k_q0_v1/verification.json",
+      "sha256": "sha256:f0690c3e48fdff80a8cc08e05223cfb8554540367b6ffe94216274ec9c0ac736"
+    },
+    {
+      "path": "results/fx2_training_trajectory250k_q0_v1/verification_source.py",
+      "sha256": "sha256:f160967e3cb22ef668663ea31e2f00ac0076175389ff85144401d0225bcfa8b3"
+    },
+    {
+      "path": "run_logs/adaptive/20260920T211447Z_85cfcf79b5.resources/guard.json",
+      "sha256": "sha256:40362d07223138e73ca32e43ace9235cc6c4cd97f1b5b49f46b8e26c5350761d"
+    }
+  ],
+  "experiment": {
+    "path": "operations/adaptive/experiments/fx2_training_trajectory250k_q0_v1.json",
+    "sha256": "sha256:27d6f73028fad13ff2f33032a968000b743c473cbdb99ebfb95526cf96d641d4"
+  },
+  "generatedUtc": "2026-09-20T21:22:38+00:00",
+  "hypothesis": {
+    "rationale": "The unchanged P/A/J complete trajectories yield disjoint trained512,other-neural150600,no-neural98 partitions and reconcile all actual archive differences. This supports diagnostic closure only, not a new compression mechanism.",
+    "verdict": "supported"
+  },
+  "job": {
+    "path": "operations/adaptive/completed/909_20260920T211447Z_85cfcf79b5.json",
+    "sha256": "sha256:264a25a0d27624c8599e7536d6a9b4e4ebc7fb64fb4f1a5d2dc4087050a90d8f"
+  },
+  "knowledge": {
+    "retiredDimensions": [
+      "Repeating parity work or blaming the regression solely on weight-description penalty or disappearance of the trained-window gains for these fixed P/A/J checkpoints."
+    ],
+    "transferableLessons": [
+      "Training gains persist in deployed history at both measurement levels, but these checkpoints damage off-window predictions enough to reverse the complete-population result. The matched trained-window alignment or a lost exported improvement does not explain this regression."
+    ],
+    "uncertainties": [
+      "This localizes the population loss, not a causal mixer defect or surrogate-Jacobian cause. Coverage and preservation deserve investigation, but no remedy, optimizer budget, new checkpoint, metadata mechanism or larger population is selected. Full-corpus behavior remains unknown."
+    ]
+  },
+  "measurementAssertions": [
+    {
+      "field": "scopeSymbols",
+      "pointer": "/modeled_targets_per_arm",
+      "source": {
+        "path": "results/fx2_training_trajectory250k_q0_v1/verification.json",
+        "sha256": "sha256:f0690c3e48fdff80a8cc08e05223cfb8554540367b6ffe94216274ec9c0ac736"
+      }
+    },
+    {
+      "field": "scopeBytes",
+      "pointer": "/data_size",
+      "source": {
+        "path": "results/fx2_training_trajectory250k_q0_v1/P.driver.json",
+        "sha256": "sha256:b4b2dc526d3b6f126553da4f1302ea0ef323f74d2f6cb0e5b45a9b5703197085"
+      }
+    }
+  ],
+  "measurements": {
+    "idealBitsSaved": null,
+    "memoryRatio": null,
+    "minimumPartitionIdealBitsSaved": null,
+    "netBytesSaved": null,
+    "positiveSegmentFraction": null,
+    "runtimeRatio": null,
+    "scopeBytes": 250000,
+    "scopeSymbols": 151210,
+    "sourceBytesDelta": null,
+    "transferRetention": null
+  },
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:409b70547f901a3ac5fffd7fd7a1e1d77b05fb44d9e9d889be1337bd153706d7",
+    "objectiveId": "gamma-enwiki9-hutter-96m-v4",
+    "objectivePath": "contracts/research/v4/objective-contract.json",
+    "targetScoreBytes": 96000000
+  },
+  "reflectionId": "r-20260920t211447z_85cfcf79b5",
+  "schema": "gamma.enwiki9.reflection-receipt.v1",
+  "validity": {
+    "classification": "valid",
+    "reasons": [
+      "All three observed archives equal their retained original archives; independent inverses, repeat archives and all four traces match exactly. Tokens/reset/next-target geometry verifies, all512 window truth probabilities agree per checkpoint, prior streams agree, and guard/cleanup close without violations. Independent cost reduction and285 artifact hashes pass."
+    ],
+    "valid": true
+  }
+}

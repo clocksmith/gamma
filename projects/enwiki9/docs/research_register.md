@@ -1,6 +1,29 @@
 # Research Register
 [Record index](research_register/README.md) | [Earlier records](research_register/archive/README.md)
 
+## 2026-09-20 - Fixed P/A/J complete native trajectory attribution
+
+The [matched attribution](fx2_training_trajectory_20260920.md) closes
+`fx2_training_trajectory250k_q0_v1`, job `20260920T211447Z_85cfcf79b5`, with
+valid evidence and decision hold. No new training or confirmation access.
+All 512 trained-target probabilities per checkpoint match the retained native
+window evaluations exactly; complete PPM prior streams agree. A/J trained
+neural deltas are -969.204046/-971.884752 bits and final-coder deltas are
+-766.044168/-776.226103 bits. Off-window neural losses of
+196,792.152708/140,684.718681 bits and final losses of
+57,639.393829/51,084.498364 bits overwhelm those gains. The 98 targets without
+neural predictions remain separately accounted. Archive losses remain 7,109/6,288
+bytes; residuals against final probability cost are -3.009952/-5.079686 bits.
+
+All original archive identities, independent inverses, repeats and four captured
+streams agree. Independent cost reduction and 285 artifact hashes pass; 19 native
+group tests pass. Guard and cleanup close, and three reflected terminal rows are
+recorded. The next question concerns coverage or preserving parent behavior off
+window, without selecting a remedy. No causal mixer defect or surrogate-Jacobian
+cause is proved. Preserve P as scale comparator and J's 43,142-byte complete
+fixture improvement and 25,747-byte 1MB component saving; full-corpus score remains
+unknown. Execution/evidence/adapter authority and historical bytes are preserved.
+
 ## 2026-09-20 - Reconcile completed native-forward and matched-training stages
 
 The requested native-forward correction and data-only/joint-cost comparison
