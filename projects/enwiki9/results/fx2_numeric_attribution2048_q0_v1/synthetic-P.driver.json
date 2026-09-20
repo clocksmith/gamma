@@ -1,0 +1,215 @@
+{
+  "program_id": "fx2_numeric_attribution2048_q0_v1",
+  "program_name": "Fixed P/E numerical attribution",
+  "arm": "synthetic-P",
+  "candidate_revision": {
+    "candidateId": "fx2_numeric_attribution2048_q0_v1",
+    "candidateTreeSha256": "sha256:b958c66ee90cee4d6a29c89d7edc1739aba7c040f036ab7c5a9ba6367287ebef",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/fx2_numeric_attribution2048_q0_v1/20260920T023219371728Z_b958c66ee90c.json",
+      "sha256": "sha256:d088b3ea9955a1acd5b916d9aee67cb583adc082d35733432fe21085fbd93ff5"
+    }
+  },
+  "timestamp": "2026-09-20T02:34:31+00:00",
+  "run_source": "operations/adaptive/completed/959_20260920T023220Z_bded1a9e05.json",
+  "run_purpose": "diagnostic",
+  "run_scope_label": "synthetic-modeled-token-rows",
+  "run_context": "Fixed neural head replay; no optimizer, codec archive, inverse or full-corpus score. Both implementations use identical tokens, priors and resets.",
+  "run_tags": [
+    "fixed-checkpoint",
+    "numeric-attribution",
+    "zero-score-credit"
+  ],
+  "data_size": null,
+  "compressed_size": null,
+  "roundtrip_ok": null,
+  "determinism": null,
+  "hutter_score": null,
+  "scope_symbols": 8,
+  "prediction_count": 7,
+  "measurements": {
+    "baseline_differences": {
+      "compared_elements": 1329264,
+      "floating_elements_different": 440433,
+      "integer_elements_different": 22294
+    },
+    "decoded_tensors_equal": 434,
+    "first_compared_bit_difference": {
+      "coordinate": 0,
+      "key": "embedding.normalized",
+      "native": 0.4663049876689911,
+      "reference": 0.46630504727363586,
+      "row": 0
+    },
+    "first_integer_difference": {
+      "coordinate": 634,
+      "input": {
+        "native": 0.09442134946584702,
+        "reference": 0.09442138671875
+      },
+      "key": "blocks.3.mlp.down.quantize_activation.integer",
+      "native": 3.0,
+      "reference": 4.0,
+      "row": 5,
+      "scale": {
+        "native": 0.0269775390625,
+        "reference": 0.0269775390625
+      },
+      "scaled": {
+        "native": 3.4999985694885254,
+        "reference": 3.5
+      }
+    },
+    "interventions": {
+      "integer": {
+        "remaining_compared_difference": null,
+        "steps": [
+          {
+            "next_compared_difference": null,
+            "reference_loss_after": {
+              "bits": 104.8814775378584,
+              "predictions": 7
+            },
+            "remaining_logit_max": 5.7220458984375e-06,
+            "substituted_elements": 1,
+            "substitution": {
+              "coordinate": 634,
+              "input": {
+                "native": 0.09442134946584702,
+                "reference": 0.09442138671875
+              },
+              "key": "blocks.3.mlp.down.quantize_activation.integer",
+              "native": 3.0,
+              "reference": 4.0,
+              "row": 5,
+              "scale": {
+                "native": 0.0269775390625,
+                "reference": 0.0269775390625
+              },
+              "scaled": {
+                "native": 3.4999985694885254,
+                "reference": 3.5
+              }
+            },
+            "trace_differences": {
+              "compared_elements": 1329264,
+              "floating_elements_different": 334753,
+              "integer_elements_different": 0
+            }
+          }
+        ],
+        "stopped_at_declared_limit": false
+      },
+      "value": {
+        "remaining_compared_difference": {
+          "coordinate": 0,
+          "key": "blocks.0.attention.value_projection.output",
+          "native": 0.6602689623832703,
+          "reference": 0.6602689027786255,
+          "row": 0
+        },
+        "steps": [
+          {
+            "next_compared_difference": {
+              "coordinate": 1,
+              "key": "blocks.0.attention.query_projection.output",
+              "native": -0.49339383840560913,
+              "reference": -0.4933937191963196,
+              "row": 0
+            },
+            "reference_loss_after": {
+              "bits": 104.28971600657755,
+              "predictions": 7
+            },
+            "remaining_logit_max": 0.7682136297225952,
+            "substituted_elements": 192,
+            "substitution": {
+              "coordinate": 0,
+              "key": "embedding.normalized",
+              "native": 0.4663049876689911,
+              "reference": 0.46630504727363586,
+              "row": 0
+            },
+            "trace_differences": {
+              "compared_elements": 1329264,
+              "floating_elements_different": 439816,
+              "integer_elements_different": 22294
+            }
+          },
+          {
+            "next_compared_difference": {
+              "coordinate": 3,
+              "key": "blocks.0.attention.key_projection.output",
+              "native": -2.160534381866455,
+              "reference": -2.160533905029297,
+              "row": 0
+            },
+            "reference_loss_after": {
+              "bits": 104.28971600657755,
+              "predictions": 7
+            },
+            "remaining_logit_max": 0.7682136297225952,
+            "substituted_elements": 192,
+            "substitution": {
+              "coordinate": 1,
+              "key": "blocks.0.attention.query_projection.output",
+              "native": -0.49339383840560913,
+              "reference": -0.4933937191963196,
+              "row": 0
+            },
+            "trace_differences": {
+              "compared_elements": 1329264,
+              "floating_elements_different": 439771,
+              "integer_elements_different": 22294
+            }
+          },
+          {
+            "next_compared_difference": {
+              "coordinate": 0,
+              "key": "blocks.0.attention.value_projection.output",
+              "native": 0.6602689623832703,
+              "reference": 0.6602689027786255,
+              "row": 0
+            },
+            "reference_loss_after": {
+              "bits": 104.28971600657755,
+              "predictions": 7
+            },
+            "remaining_logit_max": 0.7682136297225952,
+            "substituted_elements": 192,
+            "substitution": {
+              "coordinate": 3,
+              "key": "blocks.0.attention.key_projection.output",
+              "native": -2.160534381866455,
+              "reference": -2.160533905029297,
+              "row": 0
+            },
+            "trace_differences": {
+              "compared_elements": 1329264,
+              "floating_elements_different": 439692,
+              "integer_elements_different": 22294
+            }
+          }
+        ],
+        "stopped_at_declared_limit": true
+      }
+    },
+    "loss_gap_bits": 0.5917613660804903,
+    "native_loss": {
+      "bits": 104.88147737265804,
+      "predictions": 7
+    },
+    "native_observation_bitwise_equal": true,
+    "parameters_unchanged": true,
+    "reference_loss": {
+      "bits": 104.28971600657755,
+      "predictions": 7
+    },
+    "reference_observation_bitwise_equal": true
+  },
+  "missing_diagnostics": [
+    "No final-mixer or archive measurement",
+    "No whole-fixture numerical parity; only first 64 rows traced",
+    "No complete package or full corpus score"
+  ]
+}

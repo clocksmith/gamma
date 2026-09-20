@@ -225,3 +225,26 @@ missing-schema attempt is retained. Next: a parent-preserving title/metadata-wor
 specialist with conditional attribution, after verifying the native parent's
 original closure. No automatic scale, sample rescue or broad rejection of
 cross-stream information.
+
+
+## 2026-09-19 - Fixed P/E numerical attribution
+
+`fx2_numeric_attribution2048_q0_v1`, owner `codex-numeric-attribution-20260919`,
+closes the user-selected fixed-checkpoint diagnostic without training or metadata.
+On 2,043 truth predictions from 2,048 retained native rows, reference/native
+E-minus-P loss is +1418.472146/+1394.933194 bits; mismatch contributes -23.538952
+bits. Both implementations find E worse. On seven synthetic predictions the
+corresponding deltas are +7.457933/+6.327739, mismatch -1.130195 bits.
+434 decoded tensors agree per checkpoint; parameters and native deployment source
+remain unchanged; both observer controls pass bitwise. Synthetic P has equal
+integer dot1300 but differing rescaling before ReLU squared and the bin boundary.
+One synthetic integer substitution per checkpoint clears remaining traced bins.
+Real P needs two and E three substitutions within the first64 rows; later logit
+gaps remain, so full parity is not established. Guard and cleanup pass;405
+artifacts rehashed;four diagnostic rows enter the existing ledger with null
+archive/score fields. [Report](fx2_numeric_attribution_20260919.md),
+[analysis](../results/fx2_numeric_attribution2048_q0_v1/analysis.json),
+[reflection](../operations/adaptive/reflections/20260920T023220Z_bded1a9e05.json).
+Hold training until a separately frozen forward-semantics correction passes
+fixed-checkpoint native agreement. No final-mixer, previous1MB archive, or
+full-corpus attribution; no extrapolation or96M score credit.
