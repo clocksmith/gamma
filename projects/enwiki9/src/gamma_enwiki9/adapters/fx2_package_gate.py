@@ -12,6 +12,7 @@ from gamma_enwiki9.execution.commands import CommandExecutor, PhaseLimits
 from gamma_enwiki9.execution.memory import CgroupMemoryGuard
 from gamma_enwiki9.types import BuildProfile, ExecutionContext, ResourceBudget
 from .fx2_training_capture import source_members
+from gamma_enwiki9.packaging.fx2_envelope import assemble
 
 
 def write(p,v):publish_immutable_artifact(p,canonical_bytes(v)+b'\n')
@@ -120,6 +121,29 @@ def run(root,output,experiment_path,closure_path,plan_path):
             'eligibility_complete':False,'gaps':['Full1GB archive not produced','This measured core frontend is not the upstream split/reorder submission frontend',
                 'Weights permission and CUDA-derived math license unresolved','Committee runtime-library exemption/accounting unconfirmed',
                 'No isolated machine calibration or full-corpus resource certificate']}
+        # Price the unchanged P under the identical delivery layout, without
+        # adding wrapper or dictionary savings to an unrelated trajectory.
+        if plan['selected_checkpoint'] != 'P':
+            parent_plan={**plan,'weights':plan['parent_weights']}
+            source_package(snapshot,parent_plan,output/'P-comp9.zip')
+            baseline=output/'parent-encode';baseline.mkdir()
+            assemble(native/'envelope',native/'native/cmix',native/'native/dictionary/english.dic',
+                     snapshot/plan['parent_weights'],baseline/'comp9')
+            phase('parent-isolated-encode',sandbox(runtime,baseline,['./comp9','/input'],raw))
+            inverse=output/'parent-decode';inverse.mkdir()
+            shutil.copyfile(baseline/'archive9',inverse/'archive9');(inverse/'archive9').chmod(0o755)
+            phase('parent-isolated-decode',sandbox(runtime,inverse,['./archive9']))
+            if (inverse/'enwik9').read_bytes()!=raw.read_bytes():raise ValueError('parent package inverse differs')
+            parent_archive=(baseline/'archive9').read_bytes();ph=struct.unpack('<8s8Q',parent_archive[-72:])[1:]
+            if parent_archive[sum(ph[1:5]):sum(ph[1:6])]!=(snapshot/plan['parent_archive']).read_bytes():raise ValueError('parent payload differs')
+            result['parent']={'source_zip':fingerprint(output/'P-comp9.zip',root),
+                'compressor':fingerprint(baseline/'comp9',root),'archive':fingerprint(baseline/'archive9',root),
+                'executable_form_bytes':(baseline/'comp9').stat().st_size+len(parent_archive),
+                'source_zip_form_bytes':(output/'P-comp9.zip').stat().st_size+len(parent_archive),
+                'no_argument_inverse_exact':True,'native_payload_unchanged':True}
+            result['gains_over_same_layout_P']={form:result['parent'][form]-result[form]
+                for form in ('executable_form_bytes','source_zip_form_bytes')}
+        else:result['gains_over_same_layout_P']={'executable_form_bytes':0,'source_zip_form_bytes':0}
         write(output/'comparison.json',result)
     write(output/'artifacts.json',{'artifacts':[fingerprint(p,root) for p in sorted(output.rglob('*')) if p.is_file()]})
     return result
