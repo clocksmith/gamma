@@ -2,9 +2,10 @@
 
 Compression research toward exact reconstruction of canonical enwik9's
 1,000,000,000 bytes with a fully counted score at or below 96,000,000 bytes.
-The stretch target is 95,000,000 complete bytes. Research prioritizes exact XML
-and English stream representations and decoder-available information shared
-between streams; the working 25%/75% split requires corpus measurement.
+The stretch target is 95,000,000 complete bytes. Research prioritizes
+[causal relational bindings](docs/causal_relational_grammar_20260920.md) between
+decoder-built structure and content histories, with one native coding sequence.
+The earlier 25%/75% working split is not an established composition or savings claim.
 The [active objective](contracts/research/v4/objective-contract.json) defines the
 proof. This is a provisional engineering target; the unchanged 105M, 99M and 90M
 objectives remain historical. [Competitive provenance](operations/provenance/competitive_frontier_20260919.json)
