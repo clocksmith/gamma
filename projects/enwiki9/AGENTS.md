@@ -52,9 +52,10 @@ and the [creative prompts](workbench/PROMPTS.md#creative-discovery) when changin
   [competitive provenance](operations/provenance/competitive_frontier_20260919.json)
   before treating engineering economics as an accepted prize threshold.
 - The stretch target is 95,000,000 complete bytes. Prioritize the
-  [XML/English cross-stream plan](docs/xml_english_cross_stream_20260919.md):
-  measure the working 25%/75% decomposition and compare within-stream models
-  with decoder-visible references between streams.
+  [joint model/weight comparison](docs/fx2_joint_training_20260919.md): retain a
+  competitive single-stream codec, retrain for data plus packed-model cost,
+  then measure causal metadata conditioning inside that model. Preserve the
+  census and retired split-stream result; raw shares are not savings forecasts.
 - Every semantic mutation gets a new candidate. Never edit running, sealed, or
   measured source in place. Use the canonical lifecycle, not ad hoc launchers.
 - Freeze hypothesis, parent, changed mechanism, development budget, selection

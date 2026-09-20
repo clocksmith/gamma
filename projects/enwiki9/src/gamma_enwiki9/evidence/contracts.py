@@ -10,6 +10,7 @@ import json
 import math
 import re
 import sys
+from contextlib import nullcontext
 from pathlib import Path, PurePosixPath
 from typing import Any
 
@@ -17,13 +18,15 @@ import jsonschema
 
 from .artifacts import canonical_bytes
 from .source_closure import resolve_closure
+from .history import original_input_sources
 
 
-def local_source_closure(entries):
-    report = resolve_closure(entries, root=PROJECT_ROOT,
-        import_roots=(PROJECT_ROOT, PROJECT_ROOT / "tools", PROJECT_ROOT / "src"),
-        package_aliases={"projects.enwiki9": PROJECT_ROOT}, external_modules=("jsonschema",))
-    return [PROJECT_ROOT / row["path"] for row in report.sources]
+def local_source_closure(entries, *, root=None):
+    root = PROJECT_ROOT if root is None else root
+    report = resolve_closure(entries, root=root,
+        import_roots=(root, root / "tools", root / "src"),
+        package_aliases={"projects.enwiki9": root}, external_modules=("jsonschema",))
+    return [root / row["path"] for row in report.sources]
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[3]
@@ -629,7 +632,9 @@ def _validate_reflection_receipt(
         },
         f"{artifact_path}: experiment has an unsupported schema",
     )
-    validate_artifact(experiment_path)
+    # This job is already terminal. Interpret its bound original source inputs;
+    # launcher/proposal validation continues to require current input bytes.
+    validate_artifact(experiment_path, original_experiment_inputs=True)
     if job.get("schema") == "gamma.enwiki9.adaptive-job.v3":
         _require(
             job.get("experiment") == value["experiment"],
@@ -849,6 +854,7 @@ def _validate_endpoint428_horizon_output_closure(
 def _validate_adaptive_experiment_contract(
     value: dict[str, Any],
     artifact_path: Path,
+    *, original_inputs: bool = False,
 ) -> dict[str, Any]:
     _validate_objective_binding(value["objective"], str(artifact_path))
     parent = value["parent"]
@@ -867,32 +873,31 @@ def _validate_adaptive_experiment_contract(
         len(input_ids) == len(set(input_ids)),
         f"{artifact_path}: duplicate input identity",
     )
-    for item in value["inputs"]:
-        _project_file_reference(item, f"{artifact_path}: input {item['id']}")
+    if not original_inputs:
+        for item in value["inputs"]:
+            _project_file_reference(item, f"{artifact_path}: input {item['id']}")
     input_paths = [item["path"] for item in value["inputs"]]
     _require(
         len(input_paths) == len(set(input_paths)),
         f"{artifact_path}: distinct input identities alias one path",
     )
-    closure_entries = value.get("pythonSourceClosureEntries")
-    if closure_entries is not None:
-        inputs_by_id = {item["id"]: item for item in value["inputs"]}
-        _require(
-            all(identifier in inputs_by_id for identifier in closure_entries),
-            f"{artifact_path}: Python closure entry is not a declared input",
-        )
-        entry_paths = [
-            PROJECT_ROOT / inputs_by_id[identifier]["path"]
-            for identifier in closure_entries
-        ]
-        closure_paths = {
-            path.relative_to(PROJECT_ROOT).as_posix()
-            for path in local_source_closure(entry_paths)
-        }
-        _require(
-            closure_paths.issubset(set(input_paths)),
-            f"{artifact_path}: declared inputs omit project-local runtime source dependencies",
-        )
+    source_context = (original_input_sources(PROJECT_ROOT, value["inputs"])
+                      if original_inputs else nullcontext(PROJECT_ROOT))
+    with source_context as source_root:
+        closure_entries = value.get("pythonSourceClosureEntries")
+        if closure_entries is not None:
+            inputs_by_id = {item["id"]: item for item in value["inputs"]}
+            _require(
+                all(identifier in inputs_by_id for identifier in closure_entries),
+                f"{artifact_path}: Python closure entry is not a declared input",
+            )
+            entry_paths = [source_root / inputs_by_id[identifier]["path"] for identifier in closure_entries]
+            closure_paths = {path.relative_to(source_root).as_posix()
+                             for path in local_source_closure(entry_paths, root=source_root)}
+            _require(
+                closure_paths.issubset(set(input_paths)),
+                f"{artifact_path}: declared inputs omit project-local runtime source dependencies",
+            )
     control_ids = [item["id"] for item in value["controls"]]
     _require(
         len(control_ids) == len(set(control_ids)),
@@ -2988,7 +2993,7 @@ def _validate_run_receipt(
     }
 
 
-def validate_artifact(path: Path, verify_files: bool = True) -> dict[str, Any]:
+def validate_artifact(path: Path, verify_files: bool = True, *, original_experiment_inputs: bool = False) -> dict[str, Any]:
     artifact_path = path.resolve()
     value = load_json(artifact_path)
     _require(isinstance(value, dict), f"{artifact_path}: artifact must be an object")
@@ -2999,7 +3004,8 @@ def validate_artifact(path: Path, verify_files: bool = True) -> dict[str, Any]:
     )
     _validate_schema(value, SCHEMA_PATHS[schema_id])
     if schema_id == "gamma.enwiki9.adaptive-experiment-contract.v1":
-        result = _validate_adaptive_experiment_contract(value, artifact_path)
+        result = _validate_adaptive_experiment_contract(value, artifact_path,
+                                                       original_inputs=original_experiment_inputs)
     elif schema_id == "gamma.enwiki9.adaptive-experiment-result.v1":
         result = _validate_adaptive_experiment_result(value, artifact_path)
     elif schema_id == "gamma.enwiki9.adaptive-job.v3":

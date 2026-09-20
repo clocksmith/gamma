@@ -1,0 +1,86 @@
+{
+  "attribution": {
+    "causalConfidence": "high",
+    "controlsEquivalent": true,
+    "failureClass": "inconclusive",
+    "localizedCause": "Actual quantized model changes trade a smaller description for worse final-coder payload on this development prefix."
+  },
+  "candidateId": "fx2_entropy_train250k_q0_v2",
+  "candidateRevision": {
+    "candidateId": "fx2_entropy_train250k_q0_v2",
+    "candidateTreeSha256": "sha256:2fa745963cec51beb9cd7f77e1aadaa935366a7b495b0183a1e72c43acf0583d",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/fx2_entropy_train250k_q0_v2/20260919T235302911995Z_2fa745963cec.json",
+      "sha256": "sha256:00b88f7afac56d84fcdeb174e9d0c4dc697dd6fa699e2f5edcc9fdfc1fc89295"
+    }
+  },
+  "decision": {
+    "killPredicatesPass": null,
+    "nextGateBytes": null,
+    "promotionPredicatesPass": false,
+    "rationale": "Preserve P/E and compare a separately frozen metadata model and wrong-donor control before selection.",
+    "verdict": "hold"
+  },
+  "evidence": [
+    {
+      "path": "results/fx2_entropy_train250k_q0_v2/comparison.json",
+      "sha256": "sha256:cc7d51f328b0f91df7ac6de33b5d877f6c6e4af3867e80439b3ee571c2a65225"
+    },
+    {
+      "path": "results/fx2_entropy_train250k_q0_v2/native/E/training.json",
+      "sha256": "sha256:eb3c71c58bf02e4b40c528695163ffb9b1749a29c811926d34e05261d0f37e2a"
+    }
+  ],
+  "experiment": {
+    "path": "operations/adaptive/experiments/fx2_entropy_train250k_q0_v2.json",
+    "sha256": "sha256:910f81f690a47f663c81f36fe9be33fb82ab768ad0ab7fd08b249c1e09a359c3"
+  },
+  "generatedUtc": "2026-09-20T00:09:26+00:00",
+  "hypothesis": {
+    "rationale": "Packed weights shrink 27150 bytes per copy but the exposed 250KB archive grows 6210 bytes; this does not establish a joint full-corpus improvement.",
+    "verdict": "inconclusive"
+  },
+  "job": {
+    "path": "operations/adaptive/completed/909_20260919T235340Z_dfd8692458.json",
+    "sha256": "sha256:8bc0de3e70454050c16075909f273284fb3c5269a7f2d202b678cb1402e5b659"
+  },
+  "knowledge": {
+    "retiredDimensions": [],
+    "transferableLessons": [
+      "Use actual packing and fresh final-coder replay; a positive local sample-plus-fixed-weight delta cannot certify full-corpus savings."
+    ],
+    "uncertainties": [
+      "Matched metadata arms, 1MB behavior and complete delivery score remain unmeasured."
+    ]
+  },
+  "measurementAssertions": [],
+  "measurements": {
+    "idealBitsSaved": null,
+    "memoryRatio": null,
+    "minimumPartitionIdealBitsSaved": null,
+    "netBytesSaved": null,
+    "positiveSegmentFraction": null,
+    "runtimeRatio": null,
+    "scopeBytes": null,
+    "scopeSymbols": null,
+    "sourceBytesDelta": null,
+    "transferRetention": null
+  },
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:409b70547f901a3ac5fffd7fd7a1e1d77b05fb44d9e9d889be1337bd153706d7",
+    "objectiveId": "gamma-enwiki9-hutter-96m-v4",
+    "objectivePath": "contracts/research/v4/objective-contract.json",
+    "targetScoreBytes": 96000000
+  },
+  "reflectionId": "r-20260919t235340z_dfd8692458",
+  "schema": "gamma.enwiki9.reflection-receipt.v1",
+  "validity": {
+    "classification": "valid",
+    "reasons": [
+      "Native P identity and E independent inverse/repeat passed; CPU training completed all 16 frozen updates."
+    ],
+    "valid": true
+  }
+}

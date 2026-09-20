@@ -2,16 +2,55 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from contextlib import contextmanager
 import hashlib
 import json
 import os
 from pathlib import Path
 import shutil
 import subprocess
+import tempfile
 
 from .artifacts import canonical_bytes, fingerprint, publish_immutable_artifact
 
 BLOB_ROOT = Path("operations/adaptive/candidate-blobs/sha256")
+
+
+@contextmanager
+def original_input_sources(root: Path, references: list[dict]):
+    """Verify original input identities and reconstruct Python import geometry.
+
+For terminal interpretation only. Current checkout bytes or the existing blob
+store must supply each exact declared digest. No hashes are repaired, no Git or
+network recovery occurs, and this does not verify the original validator or
+authorize a new execution. Only Python sources need a temporary tree for static
+import analysis; all data identities are still checked.
+"""
+    with tempfile.TemporaryDirectory(prefix="gamma-original-inputs-") as directory:
+        destination = Path(directory)
+        for reference in references:
+            name = safe_relative(reference["path"])
+            expected = reference["sha256"].removeprefix("sha256:")
+            # Validate digest syntax even when the current checkout matches.
+            blob = blob_path(root, expected)
+            source = root / name
+            try:
+                matches = fingerprint(source, root)["sha256"] == expected
+            except (OSError, ValueError):
+                matches = False
+            if not matches:
+                source = blob
+            identity = fingerprint(source, root)
+            if identity["sha256"] != expected or ("bytes" in reference and identity["bytes"] != reference["bytes"]):
+                raise ValueError("missing or corrupt original input: " + str(name))
+            if name.suffix == ".py":
+                target = destination / name
+                target.parent.mkdir(parents=True, exist_ok=True)
+                shutil.copyfile(source, target)
+                if hashlib.sha256(target.read_bytes()).hexdigest() != expected:
+                    raise ValueError("original source changed while resolving: " + str(name))
+                target.chmod(0o444)
+        yield destination
 
 
 def blob_path(root: Path, digest: str) -> Path:

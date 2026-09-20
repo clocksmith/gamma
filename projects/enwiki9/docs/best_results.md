@@ -12,8 +12,8 @@ Unknown package cost stays unknown. Local subtotals are not complete submission 
 Populations are grouped by raw-input SHA256; compare matched controls in each receipt.
 ```
 
-- Result JSON files scanned: `411`
-- Roundtrip-passing rows: `150`
+- Result JSON files scanned: `506`
+- Roundtrip-passing rows: `237`
 - Active target score: `96,000,000` bytes (`9.6000000%`)
 
 ## Scope `1,000,000,000` Bytes
@@ -70,9 +70,9 @@ No roundtrip-passing result JSONs are present for this scope in this checkout.
 
 | Program / arm | Mechanism | Local subtotal | Archive | Program bytes | b/B | Determinism | Result |
 |---|---|---:|---:|---:|---:|---|---|
-| `opcode_event_parse_confirmation1m_q0_v1:K` | syntax opcode preprocessor | unknown | 259,468 | unknown | 2.075744 | true | `operations/provenance/opcode_event_parse_confirmation_terminal_20260909/K.json` |
-| `opcode_event_parse_confirmation1m_q0_v1:P` | syntax opcode preprocessor | unknown | 259,468 | unknown | 2.075744 | true | `operations/provenance/opcode_event_parse_confirmation_terminal_20260909/P.json` |
-| `opcode_event_parse_confirmation1m_q0_v1:D` | syntax opcode preprocessor | unknown | 259,540 | unknown | 2.07632 | true | `operations/provenance/opcode_event_parse_confirmation_terminal_20260909/D.json` |
+| `opcode_previous_word_confirmation1m_q0_v4:D` | syntax opcode preprocessor | unknown | 258,731 | unknown | 2.069848 | true | `operations/provenance/opcode_previous_word_confirmation_v4_terminal_20260912/D.json` |
+| `opcode_previous_word_confirmation1m_q0_v4:release-D` | syntax opcode preprocessor | unknown | 258,731 | unknown | 2.069848 | true | `operations/provenance/opcode_previous_word_confirmation_v4_terminal_20260912/release-D.json` |
+| `opcode_previous_word_confirmation1m_q0_v4:S` | syntax opcode preprocessor | unknown | 259,044 | unknown | 2.072352 | true | `operations/provenance/opcode_previous_word_confirmation_v4_terminal_20260912/S.json` |
 
 
 ## Scope `250,000` Bytes
@@ -83,9 +83,9 @@ No roundtrip-passing result JSONs are present for this scope in this checkout.
 
 | Program / arm | Mechanism | Local subtotal | Archive | Program bytes | b/B | Determinism | Result |
 |---|---|---:|---:|---:|---:|---|---|
+| `matched_frontier_reserved_q0_v1:validation-FX2` | custom candidate | unknown | 35,464 | unknown | 1.134848 | true | `operations/provenance/matched_frontier_reserved_terminal_20260908/validation-FX2.json` |
 | `opcode_field_history_validation250k_q0_v1:S` | syntax opcode preprocessor | unknown | 71,669 | unknown | 2.293408 | true | `operations/provenance/opcode_field_history_validation_terminal_20260908/S.json` |
 | `opcode_field_history_validation250k_q0_v1:D` | syntax opcode preprocessor | unknown | 71,673 | unknown | 2.293536 | true | `operations/provenance/opcode_field_history_validation_terminal_20260908/D.json` |
-| `opcode_field_history_validation250k_q0_v1:G` | syntax opcode preprocessor | unknown | 71,676 | unknown | 2.293632 | true | `operations/provenance/opcode_field_history_validation_terminal_20260908/G.json` |
 
 ### Population `665fc689441b68462d88f82dc33212abe9c4824be095d03a556c9b55a2829fd3`
 
@@ -113,6 +113,7 @@ No roundtrip-passing result JSONs are present for this scope in this checkout.
 |---|---|---:|---:|---:|---:|---|---|
 | `fx2_expert_transfer250k_v1:D` | custom candidate | unknown | 9,488 | unknown | 0.303616 | true | `results/fx2_expert_transfer250k_v1/D.driver.json` |
 | `fx2_expert_transfer250k_v1:P` | custom candidate | unknown | 9,499 | unknown | 0.303968 | true | `results/fx2_expert_transfer250k_v1/P.driver.json` |
+| `fx2_weight_adaptive_transfer250k_q0_v1:distant-D` | custom candidate | unknown | 9,499 | 4,907,384 | 0.303968 | true | `operations/provenance/fx2_weight_adaptive_transfer250k_v1_terminal/distant-D.json` |
 
 ### Population `ffb6c9e73f59dc3ee7109441aa05881d1980ff440f47db63120bf36822b765bf`
 
@@ -127,28 +128,5 @@ No roundtrip-passing result JSONs are present for this scope in this checkout.
 
 ## Unavailable terminal evidence
 
-- operations/provenance/fx2_adaptive_package_fixture_v1_terminal/index.json: /home/x/deco/gamma/projects/enwiki9/operations/adaptive/experiments/fx2_adaptive_package_fixture50051_q0_v1.json: input input-318: referenced evidence digest differs: /home/x/deco/gamma/projects/enwiki9/tools/enwiki9_python_source_closure.py
-- operations/provenance/fx2_causal_field_wrt_terminal_20260907/index.json: /home/x/deco/gamma/projects/enwiki9/operations/adaptive/experiments/fx2_causal_field_wrt_replay250k_q0_v1.json: input frozen-input-167: referenced evidence digest differs: /home/x/deco/gamma/projects/enwiki9/lib/driver.py
-- operations/provenance/fx2_causal_preceding_terminal_20260907/index.json: /home/x/deco/gamma/projects/enwiki9/operations/adaptive/experiments/fx2_causal_preceding_wrt250k_q0_v1.json: input frozen-input-167: referenced evidence digest differs: /home/x/deco/gamma/projects/enwiki9/lib/driver.py
-- operations/provenance/fx2_compact_v26_terminal_20260908/index.json: /home/x/deco/gamma/projects/enwiki9/operations/adaptive/experiments/fx2_compact_v26_fixture50051_q0_v1.json: declared inputs omit project-local runtime source dependencies
-- operations/provenance/fx2_final_counts_opening250k_v1_terminal/index.json: /home/x/deco/gamma/projects/enwiki9/operations/adaptive/experiments/fx2_final_counts_opening250k_q0_v1.json: input input-170: referenced evidence digest differs: /home/x/deco/gamma/projects/enwiki9/lib/driver.py
-- operations/provenance/fx2_prefix_dictionary_component_v1_terminal/index.json: /home/x/deco/gamma/projects/enwiki9/operations/adaptive/experiments/fx2_prefix_dictionary_component_v1.json: input input-169: referenced evidence digest differs: /home/x/deco/gamma/projects/enwiki9/lib/driver.py
-- operations/provenance/fx2_ratio_coder_fixture_v2_terminal/index.json: /home/x/deco/gamma/projects/enwiki9/operations/adaptive/experiments/fx2_ratio_coder_fixture50051_q0_v2.json: input input-314: referenced evidence digest differs: /home/x/deco/gamma/projects/enwiki9/tools/enwiki9_python_source_closure.py
-- operations/provenance/fx2_ratio_coder_opening250k_v1_terminal/index.json: /home/x/deco/gamma/projects/enwiki9/operations/adaptive/experiments/fx2_ratio_coder_opening250k_q0_v1.json: input input-314: referenced evidence digest differs: /home/x/deco/gamma/projects/enwiki9/tools/enwiki9_python_source_closure.py
-- operations/provenance/fx2_ratio_fixture_failure_20260908/index.json: /home/x/deco/gamma/projects/enwiki9/operations/adaptive/experiments/fx2_residual_ratio_fixture50051_q0_v1.json: input input-166: referenced evidence digest differs: /home/x/deco/gamma/projects/enwiki9/lib/driver.py
-- operations/provenance/fx2_ratio_fixture_terminal_20260908/index.json: /home/x/deco/gamma/projects/enwiki9/operations/adaptive/experiments/fx2_residual_ratio_fixture50051_q0_v3.json: input input-166: referenced evidence digest differs: /home/x/deco/gamma/projects/enwiki9/lib/driver.py
-- operations/provenance/fx2_weight_adaptive_fixture50051_v1_terminal/index.json: /home/x/deco/gamma/projects/enwiki9/operations/adaptive/experiments/fx2_weight_adaptive_fixture50051_q0_v1.json: input input-167: referenced evidence digest differs: /home/x/deco/gamma/projects/enwiki9/lib/driver.py
-- operations/provenance/fx2_weight_adaptive_fixture50051_v2_terminal/index.json: /home/x/deco/gamma/projects/enwiki9/operations/adaptive/experiments/fx2_weight_adaptive_fixture50051_q0_v2.json: input input-167: referenced evidence digest differs: /home/x/deco/gamma/projects/enwiki9/lib/driver.py
-- operations/provenance/fx2_weight_adaptive_transfer250k_v1_terminal/index.json: /home/x/deco/gamma/projects/enwiki9/operations/adaptive/experiments/fx2_weight_adaptive_transfer250k_q0_v1.json: input input-167: referenced evidence digest differs: /home/x/deco/gamma/projects/enwiki9/lib/driver.py
-- operations/provenance/fx2_weight_sign_magnitude_fixture50051_v1_terminal/index.json: /home/x/deco/gamma/projects/enwiki9/operations/adaptive/experiments/fx2_weight_sign_magnitude_fixture50051_q0_v1.json: input input-167: referenced evidence digest differs: /home/x/deco/gamma/projects/enwiki9/lib/driver.py
-- operations/provenance/fx2_weight_sign_magnitude_transfer250k_v1_terminal/index.json: /home/x/deco/gamma/projects/enwiki9/operations/adaptive/experiments/fx2_weight_sign_magnitude_transfer250k_q0_v1.json: input input-167: referenced evidence digest differs: /home/x/deco/gamma/projects/enwiki9/lib/driver.py
-- operations/provenance/fx2_xml_word_opening250k_v1_terminal/index.json: /home/x/deco/gamma/projects/enwiki9/operations/adaptive/experiments/fx2_xml_word_opening250k_q0_v1.json: input input-169: referenced evidence digest differs: /home/x/deco/gamma/projects/enwiki9/lib/driver.py
-- operations/provenance/matched_frontier_reserved_terminal_20260908/index.json: /home/x/deco/gamma/projects/enwiki9/operations/adaptive/experiments/matched_frontier_reserved_q0_v1.json: input input-8: referenced evidence digest differs: /home/x/deco/gamma/projects/enwiki9/lib/driver.py
-- operations/provenance/midas_open_observed_sha_opening250k_terminal_20260907/index.json: /home/x/deco/gamma/projects/enwiki9/operations/adaptive/experiments/midas_open_observed_sha_opening250k_q0_v1.json: input input-215: referenced evidence digest differs: /home/x/deco/gamma/projects/enwiki9/tools/enwiki9_lab.py
-- operations/provenance/opcode_literal_sse_terminal_20260909/index.json: /home/x/deco/gamma/projects/enwiki9/operations/adaptive/experiments/opcode_literal_sse250k_q0_v1.json: input input-24: referenced evidence digest differs: /home/x/deco/gamma/projects/enwiki9/tools/research_contracts.py
-- operations/provenance/opcode_previous_word_confirmation_terminal_20260912/index.json: /home/x/deco/gamma/projects/enwiki9/operations/adaptive/experiments/opcode_previous_word_confirmation1m_q0_v1.json: input input-61: referenced evidence digest differs: /home/x/deco/gamma/projects/enwiki9/tools/enwiki9_lab.py
-- operations/provenance/opcode_previous_word_confirmation_v4_terminal_20260912/index.json: /home/x/deco/gamma/projects/enwiki9/operations/adaptive/experiments/opcode_previous_word_confirmation1m_q0_v4.json: input input-61: referenced evidence digest differs: /home/x/deco/gamma/projects/enwiki9/tools/enwiki9_lab.py
-- operations/provenance/opcode_previous_word_release_terminal_20260909/index.json: /home/x/deco/gamma/projects/enwiki9/operations/adaptive/experiments/opcode_previous_word_release250k_q0_v1.json: input input-10: referenced evidence digest differs: /home/x/deco/gamma/projects/enwiki9/tools/enwiki9_lab.py
-- operations/provenance/opcode_previous_word_terminal_20260909/index.json: /home/x/deco/gamma/projects/enwiki9/operations/adaptive/experiments/opcode_previous_word250k_q0_v1.json: input input-7: referenced evidence digest differs: /home/x/deco/gamma/projects/enwiki9/tools/enwiki9_lab.py
-- operations/provenance/opcode_previous_word_validation_terminal_20260909/index.json: /home/x/deco/gamma/projects/enwiki9/operations/adaptive/experiments/opcode_previous_word_validation250k_q0_v1.json: input input-51: referenced evidence digest differs: /home/x/deco/gamma/projects/enwiki9/tools/enwiki9_lab.py
-- operations/provenance/raw_reverse_bz2_terminal_20260907/index.json: /home/x/deco/gamma/projects/enwiki9/operations/adaptive/experiments/raw_reverse_bz2250k_q0_v1.json: input bound-2: referenced evidence digest differs: /home/x/deco/gamma/projects/enwiki9/tests/test_raw_reverse_bz2_gate_v1.py
+- operations/provenance/fx2_ratio_fixture_failure_20260908/index.json: result differs from the reflected candidate revision
+- operations/provenance/opcode_previous_word_validation_terminal_20260909/index.json: terminal arm is not recorded in the canonical ledger

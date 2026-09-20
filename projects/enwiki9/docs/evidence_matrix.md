@@ -14,8 +14,8 @@ Compare identical population hashes; equal input sizes alone do not define match
 
 ## Proof Boundary
 
-- Result JSON files scanned: `411`
-- Roundtrip-passing rows: `150`
+- Result JSON files scanned: `506`
+- Roundtrip-passing rows: `237`
 - Verified full `1G` rows in this checkout: `0`
 - Active target score: `96,000,000` bytes (`9.6000000%`)
 - `9.6000000%` target reached by this matrix: `False`
@@ -38,6 +38,7 @@ Compare identical population hashes; equal input sizes alone do not define match
 | `nncp_compact5_preprocessed_cqq_x86xzopt_nodebug_t4_tarslack_v1` | `321868b6f37a` | custom candidate | 10,000 | 240,248 | 6,229 | 234,019 | 4.9832 | true | `results/nncp_compact5_preprocessed_cqq_x86xzopt_nodebug_t4_tarslack_v1/2026-07-27T213234.json` |
 | `fx2_wrt_support_deploy_fixture_v1:D` | `890b3e1210a2` | custom candidate | 50,051 | 6,019,950 | 3,221 | 6,016,729 | 0.514834868 | true | `operations/provenance/fx2_wrt_support_deploy_terminal_20260908/D.json` |
 | `fx2_expert_transfer250k_v1:D` | `f0d01801279f` | custom candidate | 250,000 | unknown | 9,488 | unknown | 0.303616 | true | `results/fx2_expert_transfer250k_v1/D.driver.json` |
+| `fx2_prefix_dictionary_component_v1:K` | `4c8568cca934` | custom candidate | 411,996 | unknown | 100,098 | 483,848 | 1.94366936 | true | `operations/provenance/fx2_prefix_dictionary_component_v1_terminal/K.json` |
 | `fx2_expert_confirm1m_v1:D` | `20b4d8d7e140` | custom candidate | 1,000,000 | unknown | 131,187 | unknown | 1.049496 | true | `results/fx2_expert_confirm1m_v1/D.driver.json` |
 | `fx2_trim_scale10m_v1:D` | `5985c81c39d9` | custom candidate | 10,000,000 | unknown | 1,305,268 | unknown | 1.0442144 | true | `results/fx2_trim_scale10m_v1/D.driver.json` |
 
@@ -62,10 +63,10 @@ Compare identical population hashes; equal input sizes alone do not define match
 | `fx2_expert_confirm1m_v1:P` | `20b4d8d7e140` | custom candidate | 1,000,000 | unknown | 131,238 | unknown | 1.049904 | true | `results/fx2_expert_confirm1m_v1/P.driver.json` |
 | `fx2_trim_confirm1m_v1:D` | `20b4d8d7e140` | custom candidate | 1,000,000 | unknown | 131,238 | unknown | 1.049904 | true | `results/fx2_trim_confirm1m_v1/D.driver.json` |
 | `fx2_trim_confirm1m_v1:P` | `20b4d8d7e140` | custom candidate | 1,000,000 | unknown | 131,238 | unknown | 1.049904 | true | `results/fx2_trim_confirm1m_v1/P.driver.json` |
+| `matched_frontier_reserved_q0_v1:confirmation-FX2` | `20b4d8d7e140` | custom candidate | 1,000,000 | unknown | 131,238 | unknown | 1.049904 | true | `operations/provenance/matched_frontier_reserved_terminal_20260908/confirmation-FX2.json` |
 | `opcode_field_compact_v1:confirmation` | `20b4d8d7e140` | syntax opcode preprocessor | 1,000,000 | unknown | 255,828 | unknown | 2.046624 | true | `operations/provenance/opcode_field_compact_terminal_20260908/confirmation.json` |
 | `opcode_field_confirmation1m_q0_v1:D` | `20b4d8d7e140` | syntax opcode preprocessor | 1,000,000 | unknown | 255,828 | unknown | 2.046624 | true | `operations/provenance/opcode_field_confirmation_terminal_20260908/D.json` |
 | `opcode_field_confirmation1m_q0_v1:K` | `20b4d8d7e140` | syntax opcode preprocessor | 1,000,000 | unknown | 257,369 | unknown | 2.058952 | true | `operations/provenance/opcode_field_confirmation_terminal_20260908/K.json` |
-| `opcode_field_confirmation1m_q0_v1:P` | `20b4d8d7e140` | syntax opcode preprocessor | 1,000,000 | unknown | 257,369 | unknown | 2.058952 | true | `operations/provenance/opcode_field_confirmation_terminal_20260908/P.json` |
 
 ## Top Score Rows At 250,000 Bytes
 
@@ -74,8 +75,11 @@ Compare identical population hashes; equal input sizes alone do not define match
 | `opcode_typed_anchor_bitmix_v1` | `665fc689441b` | syntax opcode preprocessor | 250,000 | 72,800 | 67,959 | 4,841 | 2.174688 | true | `results/opcode_typed_anchor_bitmix_v1/2026-07-21T124407.json` |
 | `opcode_word_bz2_min_deflate_v1` | `665fc689441b` | syntax opcode preprocessor | 250,000 | 73,335 | 71,887 | 1,448 | 2.300384 | true | `results/opcode_word_bz2_min_deflate_v1/2026-07-21T124141.json` |
 | `trigger_receipt_copy_lzma_v0` | `665fc689441b` | LZMA/LZMA2 baseline or preprocessor | 250,000 | 82,940 | 75,561 | 7,379 | 2.417952 | true | `results/trigger_receipt_copy_lzma_v0/2026-08-01T194211.json` |
-| `sleeping_trie_global4_selector_raw_v1` | `665fc689441b` | custom candidate | 250,000 | 139,970 | 119,383 | 20,587 | 3.820256 | true | `results/sleeping_trie_global4_selector_raw_v1/2026-08-01T193328.json` |
-| `typed_event_sleeping_trie_raw_v0` | `665fc689441b` | custom candidate | 250,000 | 140,272 | 119,692 | 20,580 | 3.830144 | true | `results/typed_event_sleeping_trie_raw_v0/2026-08-01T192928.json` |
+| `fx2_causal_field_wrt_replay250k_q0_v1:K` | `665fc689441b` | custom candidate | 250,000 | 99,483 | 33,429 | 66,054 | 1.069728 | true | `operations/provenance/fx2_causal_field_wrt_terminal_20260907/normalized/K.json` |
+| `fx2_causal_field_wrt_replay250k_q0_v1:P` | `665fc689441b` | custom candidate | 250,000 | 99,483 | 33,429 | 66,054 | 1.069728 | true | `operations/provenance/fx2_causal_field_wrt_terminal_20260907/normalized/P.json` |
+| `fx2_causal_field_wrt_replay250k_q0_v1:S` | `665fc689441b` | custom candidate | 250,000 | 99,483 | 33,429 | 66,054 | 1.069728 | true | `operations/provenance/fx2_causal_field_wrt_terminal_20260907/normalized/S.json` |
+| `fx2_causal_field_wrt_replay250k_q0_v1:T` | `665fc689441b` | custom candidate | 250,000 | 99,483 | 33,429 | 66,054 | 1.069728 | true | `operations/provenance/fx2_causal_field_wrt_terminal_20260907/normalized/T.json` |
+| `fx2_causal_field_wrt_replay250k_q0_v1:R` | `665fc689441b` | custom candidate | 250,000 | 99,487 | 33,433 | 66,054 | 1.069856 | true | `operations/provenance/fx2_causal_field_wrt_terminal_20260907/normalized/R.json` |
 
 ## Top Archive Rows At 250,000 Bytes
 
@@ -83,37 +87,14 @@ Compare identical population hashes; equal input sizes alone do not define match
 |---|---|---|---:|---:|---:|---:|---:|---|---|
 | `fx2_expert_transfer250k_v1:D` | `f0d01801279f` | custom candidate | 250,000 | unknown | 9,488 | unknown | 0.303616 | true | `results/fx2_expert_transfer250k_v1/D.driver.json` |
 | `fx2_expert_transfer250k_v1:P` | `f0d01801279f` | custom candidate | 250,000 | unknown | 9,499 | unknown | 0.303968 | true | `results/fx2_expert_transfer250k_v1/P.driver.json` |
-| `fx2_expert_mix_opening250k_v1:D` | `665fc689441b` | custom candidate | 250,000 | unknown | 33,395 | unknown | 1.06864 | true | `results/fx2_expert_mix_opening250k_v1/D.driver.json` |
-| `fx2_expert_release250k_v3:D` | `665fc689441b` | custom candidate | 250,000 | unknown | 33,395 | unknown | 1.06864 | true | `results/fx2_expert_release250k_v3/D.driver.json` |
-| `fx2_explicit_lexical250k_v2:D` | `665fc689441b` | custom candidate | 250,000 | unknown | 33,416 | unknown | 1.069312 | true | `results/fx2_explicit_lexical250k_v2/D.driver.json` |
-| `fx2_explicit_lexical250k_v2:S` | `665fc689441b` | custom candidate | 250,000 | unknown | 33,423 | unknown | 1.069536 | true | `results/fx2_explicit_lexical250k_v2/S.driver.json` |
-| `fx2_wrt_elision250k_v2:D` | `665fc689441b` | custom candidate | 250,000 | unknown | 33,423 | unknown | 1.069536 | true | `results/fx2_wrt_elision250k_v2/D.driver.json` |
-| `fx2_wrt_mass250k_v1:K` | `665fc689441b` | custom candidate | 250,000 | unknown | 33,423 | unknown | 1.069536 | true | `results/fx2_wrt_mass250k_v1/K.driver.json` |
+| `fx2_weight_adaptive_transfer250k_q0_v1:distant-D` | `f0d01801279f` | custom candidate | 250,000 | unknown | 9,499 | 4,907,384 | 0.303968 | true | `operations/provenance/fx2_weight_adaptive_transfer250k_v1_terminal/distant-D.json` |
+| `fx2_weight_adaptive_transfer250k_q0_v1:distant-K` | `f0d01801279f` | custom candidate | 250,000 | unknown | 9,499 | 4,913,426 | 0.303968 | true | `operations/provenance/fx2_weight_adaptive_transfer250k_v1_terminal/distant-K.json` |
+| `fx2_weight_adaptive_transfer250k_q0_v1:distant-P` | `f0d01801279f` | custom candidate | 250,000 | unknown | 9,499 | 4,913,426 | 0.303968 | true | `operations/provenance/fx2_weight_adaptive_transfer250k_v1_terminal/distant-P.json` |
+| `fx2_weight_sign_magnitude_transfer250k_q0_v1:distant-D` | `f0d01801279f` | custom candidate | 250,000 | unknown | 9,499 | 4,908,606 | 0.303968 | true | `operations/provenance/fx2_weight_sign_magnitude_transfer250k_v1_terminal/distant-D.json` |
+| `fx2_weight_sign_magnitude_transfer250k_q0_v1:distant-K` | `f0d01801279f` | custom candidate | 250,000 | unknown | 9,499 | 4,909,022 | 0.303968 | true | `operations/provenance/fx2_weight_sign_magnitude_transfer250k_v1_terminal/distant-K.json` |
+| `fx2_weight_sign_magnitude_transfer250k_q0_v1:distant-P` | `f0d01801279f` | custom candidate | 250,000 | unknown | 9,499 | 4,909,022 | 0.303968 | true | `operations/provenance/fx2_weight_sign_magnitude_transfer250k_v1_terminal/distant-P.json` |
 
 ## Unavailable terminal evidence
 
-- operations/provenance/fx2_adaptive_package_fixture_v1_terminal/index.json: /home/x/deco/gamma/projects/enwiki9/operations/adaptive/experiments/fx2_adaptive_package_fixture50051_q0_v1.json: input input-318: referenced evidence digest differs: /home/x/deco/gamma/projects/enwiki9/tools/enwiki9_python_source_closure.py
-- operations/provenance/fx2_causal_field_wrt_terminal_20260907/index.json: /home/x/deco/gamma/projects/enwiki9/operations/adaptive/experiments/fx2_causal_field_wrt_replay250k_q0_v1.json: input frozen-input-167: referenced evidence digest differs: /home/x/deco/gamma/projects/enwiki9/lib/driver.py
-- operations/provenance/fx2_causal_preceding_terminal_20260907/index.json: /home/x/deco/gamma/projects/enwiki9/operations/adaptive/experiments/fx2_causal_preceding_wrt250k_q0_v1.json: input frozen-input-167: referenced evidence digest differs: /home/x/deco/gamma/projects/enwiki9/lib/driver.py
-- operations/provenance/fx2_compact_v26_terminal_20260908/index.json: /home/x/deco/gamma/projects/enwiki9/operations/adaptive/experiments/fx2_compact_v26_fixture50051_q0_v1.json: declared inputs omit project-local runtime source dependencies
-- operations/provenance/fx2_final_counts_opening250k_v1_terminal/index.json: /home/x/deco/gamma/projects/enwiki9/operations/adaptive/experiments/fx2_final_counts_opening250k_q0_v1.json: input input-170: referenced evidence digest differs: /home/x/deco/gamma/projects/enwiki9/lib/driver.py
-- operations/provenance/fx2_prefix_dictionary_component_v1_terminal/index.json: /home/x/deco/gamma/projects/enwiki9/operations/adaptive/experiments/fx2_prefix_dictionary_component_v1.json: input input-169: referenced evidence digest differs: /home/x/deco/gamma/projects/enwiki9/lib/driver.py
-- operations/provenance/fx2_ratio_coder_fixture_v2_terminal/index.json: /home/x/deco/gamma/projects/enwiki9/operations/adaptive/experiments/fx2_ratio_coder_fixture50051_q0_v2.json: input input-314: referenced evidence digest differs: /home/x/deco/gamma/projects/enwiki9/tools/enwiki9_python_source_closure.py
-- operations/provenance/fx2_ratio_coder_opening250k_v1_terminal/index.json: /home/x/deco/gamma/projects/enwiki9/operations/adaptive/experiments/fx2_ratio_coder_opening250k_q0_v1.json: input input-314: referenced evidence digest differs: /home/x/deco/gamma/projects/enwiki9/tools/enwiki9_python_source_closure.py
-- operations/provenance/fx2_ratio_fixture_failure_20260908/index.json: /home/x/deco/gamma/projects/enwiki9/operations/adaptive/experiments/fx2_residual_ratio_fixture50051_q0_v1.json: input input-166: referenced evidence digest differs: /home/x/deco/gamma/projects/enwiki9/lib/driver.py
-- operations/provenance/fx2_ratio_fixture_terminal_20260908/index.json: /home/x/deco/gamma/projects/enwiki9/operations/adaptive/experiments/fx2_residual_ratio_fixture50051_q0_v3.json: input input-166: referenced evidence digest differs: /home/x/deco/gamma/projects/enwiki9/lib/driver.py
-- operations/provenance/fx2_weight_adaptive_fixture50051_v1_terminal/index.json: /home/x/deco/gamma/projects/enwiki9/operations/adaptive/experiments/fx2_weight_adaptive_fixture50051_q0_v1.json: input input-167: referenced evidence digest differs: /home/x/deco/gamma/projects/enwiki9/lib/driver.py
-- operations/provenance/fx2_weight_adaptive_fixture50051_v2_terminal/index.json: /home/x/deco/gamma/projects/enwiki9/operations/adaptive/experiments/fx2_weight_adaptive_fixture50051_q0_v2.json: input input-167: referenced evidence digest differs: /home/x/deco/gamma/projects/enwiki9/lib/driver.py
-- operations/provenance/fx2_weight_adaptive_transfer250k_v1_terminal/index.json: /home/x/deco/gamma/projects/enwiki9/operations/adaptive/experiments/fx2_weight_adaptive_transfer250k_q0_v1.json: input input-167: referenced evidence digest differs: /home/x/deco/gamma/projects/enwiki9/lib/driver.py
-- operations/provenance/fx2_weight_sign_magnitude_fixture50051_v1_terminal/index.json: /home/x/deco/gamma/projects/enwiki9/operations/adaptive/experiments/fx2_weight_sign_magnitude_fixture50051_q0_v1.json: input input-167: referenced evidence digest differs: /home/x/deco/gamma/projects/enwiki9/lib/driver.py
-- operations/provenance/fx2_weight_sign_magnitude_transfer250k_v1_terminal/index.json: /home/x/deco/gamma/projects/enwiki9/operations/adaptive/experiments/fx2_weight_sign_magnitude_transfer250k_q0_v1.json: input input-167: referenced evidence digest differs: /home/x/deco/gamma/projects/enwiki9/lib/driver.py
-- operations/provenance/fx2_xml_word_opening250k_v1_terminal/index.json: /home/x/deco/gamma/projects/enwiki9/operations/adaptive/experiments/fx2_xml_word_opening250k_q0_v1.json: input input-169: referenced evidence digest differs: /home/x/deco/gamma/projects/enwiki9/lib/driver.py
-- operations/provenance/matched_frontier_reserved_terminal_20260908/index.json: /home/x/deco/gamma/projects/enwiki9/operations/adaptive/experiments/matched_frontier_reserved_q0_v1.json: input input-8: referenced evidence digest differs: /home/x/deco/gamma/projects/enwiki9/lib/driver.py
-- operations/provenance/midas_open_observed_sha_opening250k_terminal_20260907/index.json: /home/x/deco/gamma/projects/enwiki9/operations/adaptive/experiments/midas_open_observed_sha_opening250k_q0_v1.json: input input-215: referenced evidence digest differs: /home/x/deco/gamma/projects/enwiki9/tools/enwiki9_lab.py
-- operations/provenance/opcode_literal_sse_terminal_20260909/index.json: /home/x/deco/gamma/projects/enwiki9/operations/adaptive/experiments/opcode_literal_sse250k_q0_v1.json: input input-24: referenced evidence digest differs: /home/x/deco/gamma/projects/enwiki9/tools/research_contracts.py
-- operations/provenance/opcode_previous_word_confirmation_terminal_20260912/index.json: /home/x/deco/gamma/projects/enwiki9/operations/adaptive/experiments/opcode_previous_word_confirmation1m_q0_v1.json: input input-61: referenced evidence digest differs: /home/x/deco/gamma/projects/enwiki9/tools/enwiki9_lab.py
-- operations/provenance/opcode_previous_word_confirmation_v4_terminal_20260912/index.json: /home/x/deco/gamma/projects/enwiki9/operations/adaptive/experiments/opcode_previous_word_confirmation1m_q0_v4.json: input input-61: referenced evidence digest differs: /home/x/deco/gamma/projects/enwiki9/tools/enwiki9_lab.py
-- operations/provenance/opcode_previous_word_release_terminal_20260909/index.json: /home/x/deco/gamma/projects/enwiki9/operations/adaptive/experiments/opcode_previous_word_release250k_q0_v1.json: input input-10: referenced evidence digest differs: /home/x/deco/gamma/projects/enwiki9/tools/enwiki9_lab.py
-- operations/provenance/opcode_previous_word_terminal_20260909/index.json: /home/x/deco/gamma/projects/enwiki9/operations/adaptive/experiments/opcode_previous_word250k_q0_v1.json: input input-7: referenced evidence digest differs: /home/x/deco/gamma/projects/enwiki9/tools/enwiki9_lab.py
-- operations/provenance/opcode_previous_word_validation_terminal_20260909/index.json: /home/x/deco/gamma/projects/enwiki9/operations/adaptive/experiments/opcode_previous_word_validation250k_q0_v1.json: input input-51: referenced evidence digest differs: /home/x/deco/gamma/projects/enwiki9/tools/enwiki9_lab.py
-- operations/provenance/raw_reverse_bz2_terminal_20260907/index.json: /home/x/deco/gamma/projects/enwiki9/operations/adaptive/experiments/raw_reverse_bz2250k_q0_v1.json: input bound-2: referenced evidence digest differs: /home/x/deco/gamma/projects/enwiki9/tests/test_raw_reverse_bz2_gate_v1.py
+- operations/provenance/fx2_ratio_fixture_failure_20260908/index.json: result differs from the reflected candidate revision
+- operations/provenance/opcode_previous_word_validation_terminal_20260909/index.json: terminal arm is not recorded in the canonical ledger

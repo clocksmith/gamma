@@ -47,9 +47,11 @@ resource verification, source/license closure and reproducible submission.
 The lane's adaptive workflow governs bounded implementation, prediction research,
 confirmation and scale decisions; historical 105M, 99M and 90M evidence stays intact.
 
-The active enwiki9 research direction is XML/English stream compression and
-causal information sharing between streams, with a 95M stretch target. The
-working 25%/75% decomposition is a measurement hypothesis, not a byte budget.
+The primary enwiki9 direction is joint optimization of a competitive
+single-stream predictor's data and packed-weight cost, with decoder-visible
+metadata conditioning inside that model and a 95M stretch target. Preserve the
+XML/English census and negative split-stream evidence. Raw category shares and
+causal donor availability are measurement inputs, not achievable savings.
 
 ## Explicit Exclusions
 

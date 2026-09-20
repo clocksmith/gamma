@@ -11,6 +11,7 @@ import time
 
 from gamma_enwiki9.evidence.artifacts import replace_derived_view
 from gamma_enwiki9.types import ExecutionContext, RunOutcome
+from gamma_enwiki9.execution.memory import CgroupMemoryGuard
 
 
 @dataclass(frozen=True)
@@ -26,8 +27,9 @@ class PhaseLimits:
 
 
 class CommandExecutor:
-    def __init__(self, context: ExecutionContext):
+    def __init__(self, context: ExecutionContext, *, resident_guard: CgroupMemoryGuard | None = None):
         self.context = context
+        self.resident_guard = resident_guard
         self.started = time.monotonic()
         self.phases = set()
 
@@ -41,16 +43,25 @@ class CommandExecutor:
         remaining = ctx.budget.wall_seconds - (time.monotonic() - self.started)
         if remaining <= 0:
             return RunOutcome(None, "budget_exhausted", True), {"phase": name, "argv": argv}
+        guard = self.resident_guard
+        memory_observation = guard.verify(ctx.budget.memory_bytes) if guard else None
+        # Without an inherited resident-memory guard, retain the conservative
+        # address cap. A verified cgroup permits sparse file mappings larger
+        # than the resident budget without increasing that resident budget.
+        address_limit = (limits.address_bytes if guard else
+                         min(limits.address_bytes, ctx.budget.memory_bytes))
 
         def child_limits():
             os.sched_setaffinity(0, ctx.budget.cpus)
             resource.setrlimit(resource.RLIMIT_CPU, (limits.cpu_seconds, limits.cpu_seconds))
-            memory = min(limits.address_bytes, ctx.budget.memory_bytes)
-            resource.setrlimit(resource.RLIMIT_AS, (memory, memory))
+            if guard:
+                guard.verify(ctx.budget.memory_bytes)
+            resource.setrlimit(resource.RLIMIT_AS, (address_limit, address_limit))
             file_limit = min(limits.file_bytes, ctx.budget.scratch_bytes)
             resource.setrlimit(resource.RLIMIT_FSIZE, (file_limit, file_limit))
 
-        row = {"phase": name, "argv": argv, "returncode": None, "timeout": False, "error": None}
+        row = {"phase": name, "argv": argv, "returncode": None, "timeout": False, "error": None,
+               "address_limit_bytes": address_limit, "resident_memory_guard": memory_observation}
         started = time.monotonic()
         before = resource.getrusage(resource.RUSAGE_CHILDREN)
         child = None
@@ -58,7 +69,8 @@ class CommandExecutor:
         try:
             with (ctx.workspace / (name + ".stdout")).open("xb") as out, (ctx.workspace / (name + ".stderr")).open("xb") as err:
                 child = subprocess.Popen(argv, cwd=ctx.workspace, stdout=out, stderr=err,
-                    env=dict(ctx.environment), preexec_fn=child_limits, start_new_session=True)
+                    env=dict(ctx.environment), preexec_fn=child_limits, start_new_session=True,
+                    pass_fds=(guard.descriptor,) if guard else ())
                 deadline = time.monotonic() + min(limits.wall_seconds, remaining)
                 # Keep the leader unreaped until group cleanup. WNOWAIT prevents
                 # PID/PGID reuse between observing exit and owned cancellation.
@@ -85,6 +97,11 @@ class CommandExecutor:
                 child.wait()
                 row["returncode"] = child.returncode
             after = resource.getrusage(resource.RUSAGE_CHILDREN)
+            if guard:
+                try:
+                    guard.verify(ctx.budget.memory_bytes)
+                except (OSError, ValueError) as exc:
+                    row["error"] = str(exc)
             row.update(elapsed_seconds=time.monotonic() - started,
                 user_cpu_seconds=after.ru_utime - before.ru_utime,
                 system_cpu_seconds=after.ru_stime - before.ru_stime,
