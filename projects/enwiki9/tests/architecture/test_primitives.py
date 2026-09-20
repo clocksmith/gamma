@@ -129,3 +129,25 @@ def test_driver_uses_declared_nested_codec_entrypoint(tmp_path, monkeypatch):
     frozen = driver._freeze_comparison_build("example", source, output)
     assert frozen["source"].relative_to(frozen["root"]).as_posix() == "projects/enwiki9/programs/example/codec/implementation.py"
     assert frozen["source"].read_bytes() == source.read_bytes()
+
+
+def test_seal_and_tool_admission_reject_missing_recipe_codec(tmp_path, monkeypatch):
+    import sys
+    import enwiki9_lab as lab
+    candidate=tmp_path/'programs/fixture';candidate.mkdir(parents=True)
+    (candidate/'program.py').write_text('def main(): pass\n')
+    spec=scaffold_spec(candidate,kind='experiment_recipe',codec={'candidate_id':'native','revision':'f'*64})
+    del spec['codec']
+    (candidate/'candidate.json').write_text(json.dumps(spec))
+    monkeypatch.setattr(lab,'PROGRAMS',tmp_path/'programs')
+    monkeypatch.setattr(lab,'ensure_layout',lambda:None)
+    monkeypatch.setattr(lab,'require_no_exclusive_lease',lambda:None)
+    monkeypatch.setattr(sys,'argv',['lab','seal','fixture','--hypothesis','fixture','--change','fixture'])
+    assert lab.main()==2
+    with pytest.raises(ValueError,match='recipe must reference a codec'):
+        lab.enqueue_job(candidate_id='fixture',gate_size=1,priority=None,archive_ceiling=None,
+                        purpose='diagnostic',force=False,tags=[],experiment=None,
+                        tool_fields={'tool':'tools/fixture.py'})
+    spec['codec']={'candidate_id':'native','revision':'f'*64}
+    (candidate/'candidate.json').write_text(json.dumps(spec))
+    lab.validate_declared_candidate('fixture')

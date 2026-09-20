@@ -5,17 +5,52 @@
     "sha256": "sha256:d8350aa93d4d4b52175fd356b850e4f63beeeb9581b5e287cee4a7310f1136a8"
   },
   "candidate_tree_sha256": "sha256:7109cd1f4ab79fcece97629889c1c9c76d6fcfbdf8e6b28c21931a0bc7de7f78",
+  "elapsed_seconds": 0.625,
   "execution_guard": {
     "path": "tools/run_with_resource_guard_v3.py",
     "sha256": "sha256:044147f7ffe6922ea8dafd52fc3d4426077b20958adbcd421245ad41adcfc1e4"
   },
   "execution_mode": "discovery",
+  "execution_resources": {
+    "boot_id": "3ce46712-27bc-4199-8e48-e2b3d23926cb",
+    "budget": {
+      "cgroup_parent": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice",
+      "cpus": [
+        4
+      ],
+      "memory_bytes": 9999998976,
+      "scratch_bytes": 24000000000,
+      "swap_bytes": 0,
+      "wall_seconds": 1800
+    },
+    "cgroup_inode": 378279,
+    "cgroup_path": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/gamma-enwiki9-20260920T032828Z_0b59dc04ba",
+    "cleanup_complete": true,
+    "cpu_enforcement": "taskset-and-sampled-affinity-guard",
+    "groups": [
+      {
+        "created": true,
+        "inode": 378279,
+        "kernel_cpuset": false,
+        "memory_bytes": 9999998976,
+        "path": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/gamma-enwiki9-20260920T032828Z_0b59dc04ba"
+      }
+    ],
+    "guard_command_sha256": "605e0bef91dba31fb1bbf5599a821d684aa6e80a1c298a40c2f0af383c80fa98",
+    "guard_path": "run_logs/adaptive/20260920T032828Z_0b59dc04ba.resources/guard.json",
+    "missing_diagnostics": [
+      "kernel cpuset controller is not delegated; taskset assignment and existing affinity guard remain active"
+    ],
+    "timing_authority": "diagnostic"
+  },
   "experiment": {
     "path": "operations/adaptive/experiments/fx2_core_delivery250k_q0_v1.json",
     "sha256": "sha256:26659e8df0d39d504aaf28c1a55e1e57d5026fde5b2fdbd1748bf0f478ec9ca6"
   },
+  "finished_at": "2026-09-20T03:29:17+00:00",
   "gate_size": 250000,
   "job_id": "20260920T032828Z_0b59dc04ba",
+  "log_path": "run_logs/adaptive/20260920T032828Z_0b59dc04ba.log",
   "priority": 90,
   "proposal": {
     "path": "operations/adaptive/proposals/developed/949_fx2_core_delivery250k_q0_v1.json",
@@ -33,6 +68,7 @@
     "swap_bytes": 0,
     "wall_seconds": 1800
   },
+  "returncode": 1,
   "runner": {
     "path": "tools/fx2_core_delivery_v1.py",
     "sha256": "sha256:4e802ad969b534f70743bca016a0c6bd51c0c40fd5f617c5b6c11eb7e703bc51"
@@ -41,7 +77,8 @@
   "scratch_directories": [
     "results/fx2_core_delivery250k_q0_v1"
   ],
-  "state": "pending",
+  "started_at": "2026-09-20T03:29:16+00:00",
+  "state": "failed",
   "submitted_at": "2026-09-20T03:28:28+00:00",
   "tags": [],
   "timing_authority": "diagnostic",
@@ -57,5 +94,8 @@
     "/home/x/deco/gamma/projects/enwiki9/operations/provenance/fx2_core_delivery250k_q0_v1_closure.json",
     "--plan",
     "/home/x/deco/gamma/projects/enwiki9/operations/provenance/fx2_core_delivery250k_q0_v1_plan.json"
-  ]
+  ],
+  "worker_pid": 3083594,
+  "worker_proc_start_ticks": 297109442,
+  "worker_started_at": "2026-09-20T03:29:16+00:00"
 }

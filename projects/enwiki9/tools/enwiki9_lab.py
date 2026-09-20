@@ -40,7 +40,7 @@ import managed_exclusive_lease
 from gamma_enwiki9.execution import linux as linux_execution
 from gamma_enwiki9.evidence import artifacts as evidence_artifacts
 from gamma_enwiki9.research import transactions
-from gamma_enwiki9.packaging.candidates import scaffold_spec
+from gamma_enwiki9.packaging.candidates import scaffold_spec, validate_candidate
 from gamma_enwiki9.execution.admission import AdmissionBusy, admission_guard, require_qualification_reservation
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
@@ -980,6 +980,18 @@ def iter_jobs(states: tuple[str, ...] = QUEUE_STATES) -> list[tuple[str, pathlib
     return rows
 
 
+def validate_declared_candidate(candidate_id: str) -> None:
+    """Check an explicit interface before sealing or granting new admission.
+
+    Historical manifest-free tool recipes remain readable. A declared manifest
+    cannot bypass kind/dependency/source checks merely by using tool execution.
+    """
+    root = candidate_path(candidate_id)
+    manifest = root / "candidate.json"
+    if manifest.exists():
+        validate_candidate(root, load_json(manifest))
+
+
 def known_job_keys() -> set[tuple[str, int]]:
     keys: set[tuple[str, int]] = set()
     for _state, _path, job in iter_jobs():
@@ -1014,6 +1026,7 @@ def enqueue_job(
 ) -> dict[str, Any]:
     ensure_layout()
     require_no_exclusive_lease()
+    validate_declared_candidate(candidate_id)
     candidate_meta(candidate_id)
     require_terminal_reflections(candidate_id, "enter another gate")
     proposal_path_value, proposal = candidate_proposal(candidate_id)
@@ -2437,6 +2450,7 @@ def main() -> int:
             print(json.dumps(job, indent=2, sort_keys=True))
             return 0
         if args.command == "seal":
+            validate_declared_candidate(args.candidate_id)
             revision_path, revision = candidate_revisions.seal_candidate(
                 args.candidate_id,
                 hypothesis=args.hypothesis,
