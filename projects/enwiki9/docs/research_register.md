@@ -20,6 +20,18 @@ pass. The locally unfavorable models are held for the predeclared1MB transfer
 audit with no fitting or promotion. GPU compute failed in both ROCm modes;
 no GPU training or installation occurred.
 
+The [completed no-fitting 1MB audit](../results/fx2_joint_replay1m_q0_v1/comparison.json)
+records P 131,238, E/K 154,176, M 154,695 and S 153,231 bytes. P/E/M/S fresh
+inverses and repeats pass; K's fresh encode equals E. M loses 519 payload bytes
+to E and 1,464 to S; its two-copy weights add another 1,754 bytes. The validated
+reflection retires this fixed configuration with zero full-corpus credit. E's
+smaller packed model remains a tradeoff against worse payload, not a measured
+full-corpus gain. A retained synthetic diagnostic localizes one CPU/native
+rounding mismatch (3.5 to bin 4 versus 3.49999857 to bin 3). Establish a
+native-aligned training forward objective before a separately frozen successor;
+do not promote these checkpoints or reinterpret this failure as a general
+rejection of joint training or causal metadata.
+
 
 ## 2026-09-09 - Decode adaptive model counts directly in the native loader
 

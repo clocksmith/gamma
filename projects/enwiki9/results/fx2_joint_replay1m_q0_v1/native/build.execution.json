@@ -1,0 +1,32 @@
+{
+  "address_limit_bytes": 34359738368,
+  "argv": [
+    "/usr/bin/time",
+    "-f",
+    "{\"maximum_process_rss_kib\":%M,\"user_seconds\":%U,\"system_seconds\":%S,\"exit_status\":%x}",
+    "-o",
+    "/home/x/deco/gamma/projects/enwiki9/results/fx2_joint_replay1m_q0_v1/native/build.rusage.json",
+    "/usr/bin/make",
+    "-j1",
+    "cmix",
+    "CC=/usr/bin/g++",
+    "CPPFLAGS_PART-THAT-SHOULD-BE-FAST=-DSEED=923 -DUPDATE_LIMIT=3000 -m64 -Wall -std=c++17 -include cstdint -fno-fast-math -fno-math-errno -fno-exceptions -fno-threadsafe-statics -march=x86-64-v3 -mtune=generic -mrecip=none -fdata-sections -ffunction-sections -O3",
+    "CPPFLAGS_PART-THAT-CAN-BE-SLOW=-DSEED=923 -DUPDATE_LIMIT=3000 -m64 -Wall -std=c++17 -include cstdint -fno-fast-math -fno-math-errno -fno-exceptions -fno-threadsafe-statics -march=x86-64-v3 -mtune=generic -mrecip=none -fdata-sections -ffunction-sections -Os"
+  ],
+  "cleanup_complete": true,
+  "elapsed_seconds": 13.455336741171777,
+  "error": null,
+  "phase": "build",
+  "resident_memory_guard": {
+    "device": 30,
+    "inode": 377047,
+    "memory_max_bytes": 9999998976,
+    "path": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/gamma-enwiki9-20260920T003339Z_270e77a7ca",
+    "swap_max_bytes": 0
+  },
+  "returncode": 0,
+  "system_cpu_seconds": 1.110882,
+  "timeout": false,
+  "timing_authority": "shared-host diagnostic",
+  "user_cpu_seconds": 12.235965
+}
