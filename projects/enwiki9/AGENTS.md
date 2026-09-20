@@ -62,6 +62,11 @@ and the [creative prompts](workbench/PROMPTS.md#creative-discovery) when changin
   identify a specific unresolved cause supported by its terminal attribution.
   Preserve the broader cross-history hypothesis, census and retired split-stream
   result; raw shares are not savings forecasts.
+  The [development donor-coverage diagnostic](docs/fx2_donor_coverage_20260920.md)
+  is also closed: additional prefix-selected donors expose only 210.390918 parent
+  bits and their tested normalized distribution loses. Do not build or scale this
+  exact stored-spelling transfer from that result; keep its conditional event
+  costs and the distinction between four-slot capacity and pair eligibility.
 - The [matched native-forward comparison](docs/fx2_matched_training_20260920.md)
   is closed: J saves fixed model bytes but worsens native payload. Do not scale
   this 16-update profile, increase its budget, or introduce metadata from that result.

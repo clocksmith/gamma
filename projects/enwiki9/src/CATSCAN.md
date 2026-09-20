@@ -17,7 +17,9 @@ Maintain execution, evidence, lifecycle, packaging and reporting services while 
 
 ## Scope
 
-Python services under `gamma_enwiki9/`.
+Python services and experiment-specific native diagnostic sources under
+`gamma_enwiki9/`. Native diagnostic sources belong to adapters; the existing
+execution services retain process and resource authority.
 
 ## Contracts
 
@@ -34,6 +36,8 @@ Python services under `gamma_enwiki9/`.
 - Virtual address limits exceed resident budgets only with an identity-bound inherited memory cgroup.
 - Immutable publication, derived replacement and canonical append remain distinct operations.
 - Process success never grants score credit.
+- Adapter-owned native diagnostics receive explicit inputs and emit measurements;
+  they do not launch experiments, mutate lifecycle records or grant promotion.
 
 ## Acceptance
 

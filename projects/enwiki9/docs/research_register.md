@@ -1,6 +1,23 @@
 # Research Register
 [Record index](research_register/README.md) | [Earlier records](research_register/archive/README.md)
 
+## 2026-09-20 - Prefix donor coverage on the unchanged retained FX2 parent
+
+The [development-only comparison](fx2_donor_coverage_20260920.md) closes candidate
+`fx2_donor_coverage250k_q0_v1` with valid negative evidence and decision hold.
+Same histories, epoch schedule, prefix filter and normalized emission: early four
+paired donors versus all paired donors versus all retained donors. Additional
+coverage totals 379 donor discoveries on 1,178 prospective modeled bits, with
+only 210.390918 bits of parent cost (26.298865 ideal-byte ceiling). The full-pool
+expert loses 71.401761 bits on those events and 79.523118 bits over the complete
+development population. Cap-only expansion exposes 444 events and 64.182211
+parent bits; removing pair eligibility is a separate effect. Both chronological
+directions lose on their additional events. Original inverse/state witnesses
+match, repeats agree, guard completes, and a diagnostic ledger row carries no
+archive or score credit. Stop this exact transfer before another native codec;
+preserve cross-history hypotheses and immutable imports. No confirmation,
+recursion, retraining or successor mechanism was selected.
+
 ## 2026-09-20 - Read and check the supplied standalone CRG bundles
 
 Read all seven supplied sources/documents at `679b0a721` and preserve their exact

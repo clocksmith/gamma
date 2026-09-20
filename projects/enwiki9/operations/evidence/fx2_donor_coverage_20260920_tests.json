@@ -1,0 +1,55 @@
+{
+  "additional_checks": [
+    "Python adapter import",
+    "gamma.py and adapter py_compile",
+    "git diff --check",
+    "Imports byte-identical to679b0a721",
+    "Terminal recorder check reports missing_rows=0"
+  ],
+  "candidate_id": "fx2_donor_coverage250k_q0_v1",
+  "commands": [
+    {
+      "argv": [
+        "/tmp/gamma-architecture-tests/bin/python",
+        "-m",
+        "pytest",
+        "-q",
+        "projects/enwiki9/tests/test_donor_coverage_v1.py",
+        "projects/enwiki9/tests/test_causal_relational_v2.py"
+      ],
+      "passed": 4
+    },
+    {
+      "argv": [
+        "/tmp/gamma-architecture-tests/bin/python",
+        "projects/enwiki9/tests/run_architecture_groups.py",
+        "native"
+      ],
+      "passed": 14
+    }
+  ],
+  "limits": "Synthetic implementation and publication checks only; no additional corpus population or finite archive.",
+  "schema": "gamma.enwiki9.development-checks.v1",
+  "sources": [
+    {
+      "path": "tests/run_architecture_groups.py",
+      "sha256": "93149c81722849e9e5508dda9c40e92fba1b71929c48e4db5b4cf6c658425628"
+    },
+    {
+      "path": "tests/test_donor_coverage_v1.py",
+      "sha256": "cedcc5ff6784d31b75795e56f1fb9a3cf120ebf1c1859024c83440f80a04dfa3"
+    },
+    {
+      "path": "tests/donor_coverage_fixture_v1.cpp",
+      "sha256": "74fe42ba9957c0540a21ac9ec08f79294b6753134f0d0e58ba41f7d7e28c7347"
+    },
+    {
+      "path": "src/gamma_enwiki9/adapters/fx2_donor_coverage_v1.cpp",
+      "sha256": "e7cd6063b5c15a8016c4c02d7efa04559c7562aeb887868b36f69f52b2273901"
+    },
+    {
+      "path": "src/gamma_enwiki9/adapters/fx2_donor_coverage_v1.py",
+      "sha256": "cda3ffd61bc50f38db497f2cfd1cbdc127f502f2e688a485fb1c9b6b586c28f6"
+    }
+  ]
+}
