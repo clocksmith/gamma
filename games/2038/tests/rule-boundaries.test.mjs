@@ -298,3 +298,123 @@ test("Deploy honors Compute Estate and Human Access discounts, handles caps, and
   assert.deepEqual([webState.player.compute, webState.player.customers, webState.player.scrutiny], [0, 1, 1]);
 });
 
+test("Fund accounting credits gross runway once, handles Scrutiny overflow penalties separately, and records credited income accurately", async () => {
+  const match = await fixture();
+  const player = match.players[0];
+  match.roundMandate = match.mandateDocument.mandates.find(x => x.id === "markets_prefer_destiny");
+  player.roundMetrics = { fundRunway: 0 };
+
+  // 1. Zero Runway, full Scrutiny (10 cubes), Venture mode at normal district:
+  // Gross runway = 4. Runway increases 0 -> 4 (+4 credited). Scrutiny overflows by 2 -> pays 2 Runway (Runway 4 -> 2).
+  // Credited income is 4, so fundRunway is 4.
+  Object.assign(player, { runway: 0, scrutiny: 10 });
+  const ventureNormal = match.legalResolutions(0, "fund").find(choice =>
+    choice.parameters.mode === "venture" && choice.parameters.destinationCategory !== "capital"
+  );
+  assert.ok(ventureNormal, "Venture fund at normal district");
+  match.applyResolution(0, ventureNormal);
+  assert.equal(player.runway, 2, "Net runway is 2 after 2 scrutiny overflow penalties");
+  assert.equal(player.roundMetrics.fundRunway, 4, "Gross credited runway is 4");
+  assert.deepEqual(match.objectiveRecord(player), { kind: "Runway gained through Fund", value: 4 });
+
+  // 2. Near-cap balance (11 Runway), full Scrutiny at Allocation Exchange (capital):
+  // Gross runway = 4 + 1 = 5. Adding 5 to 11 caps at 12 (+1 credited, 4 discarded).
+  // Then 2 scrutiny overflow: pays 2 Runway (Runway 12 -> 10).
+  // Credited income is 1, so fundRunway increases by 1 (4 -> 5).
+  player.runway = 11;
+  player.scrutiny = 10;
+  const ventureCapital = match.legalResolutions(0, "fund").find(choice =>
+    choice.parameters.mode === "venture" && choice.parameters.destinationCategory === "capital"
+  );
+  assert.ok(ventureCapital, "Venture fund at capital");
+  match.applyResolution(0, ventureCapital);
+  assert.equal(player.runway, 10, "Net runway is 10 (11 + 5 = 12 capped, minus 2 overflow penalties)");
+  assert.equal(player.roundMetrics.fundRunway, 5, "Credited runway was 1 (over-cap discarded)");
+  assert.deepEqual(match.objectiveRecord(player), { kind: "Runway gained through Fund", value: 5 });
+
+  // 3. Conservative mode at Allocation Exchange (capital):
+  // Gross runway = 2 + 1 = 3. Room in supply. Zero scrutiny added.
+  player.runway = 0;
+  player.scrutiny = 0;
+  const conservativeCapital = match.legalResolutions(0, "fund").find(choice =>
+    choice.parameters.mode === "conservative" && choice.parameters.destinationCategory === "capital"
+  );
+  assert.ok(conservativeCapital, "Conservative fund at capital");
+  match.applyResolution(0, conservativeCapital);
+  assert.equal(player.runway, 3);
+  assert.equal(player.roundMetrics.fundRunway, 8, "5 + 3 = 8 credited fund runway");
+
+  // 4. Web engine browser execution matches displayed summary and balances:
+  const configDoc = JSON.parse(await readFile(new URL("../dist/runtime/game-config.json", import.meta.url)));
+  const factionsDoc = JSON.parse(await readFile(new URL("../dist/runtime/factions.json", import.meta.url)));
+  const headlinesDoc = JSON.parse(await readFile(new URL("../dist/runtime/headlines.json", import.meta.url)));
+  const webState = createGame(configDoc, factionsDoc, headlinesDoc, "fund-test-seed", "platform_empire", 4);
+  const webCapitalTile = webState.board.find(tile => tile.category === "capital");
+  Object.assign(webState.player, {
+    runway: 0,
+    scrutiny: 10,
+    auditBag: Array.from({ length: 10 }, () => webState.player.factionId)
+  });
+  commitAction(webState, "fund");
+  resolveSelectedAction(configDoc, headlinesDoc, webState, webState.player.pieces[0].id, webCapitalTile.instanceId, { fundMode: "venture" });
+  assert.equal(webState.player.runway, 3, "Web engine: 0 + 5 = 5 gross Runway, minus 2 overflow penalties = 3");
+  assert.match(webState.log[0], /\+5 Runway, \+2 Scrutiny/);
+});
+
+test("Fusion immediately connects nearby Facilities upon construction, and Quantum produces Capability before Era IV AGI recognition", async () => {
+  const match = await fixture();
+  const player = match.players[0];
+  match.round = 4;
+  match.choose = async (_policies, _seat, _stage, choices) => choices.find(c => c.decisionId === "agi_declare") || choices[0];
+
+  // 1. Fusion immediate connection upon construction:
+  // Place Facility 1 on Frontier (always powered).
+  // Place Facility 2 on an adjacent Energy district (currently unpowered because no Generator).
+  const frontier = match.board.find(t => t.id === "frontier");
+  const energyTile = match.board.find(t => t.category === "energy" && match.areAdjacent(t.instanceId, frontier.instanceId));
+  player.facilities = [
+    { id: "s0-facility-1", tileId: frontier.instanceId, category: "frontier", powered: true },
+    { id: "s0-facility-2", tileId: energyTile.instanceId, category: "energy", powered: false }
+  ];
+  player.generators = [];
+  player.projects = [];
+  assert.deepEqual(match.latestPoweredFacilities(player).map(f => f.id), ["s0-facility-1"]);
+
+  // Construct Fusion Demonstrator on Facility 1
+  Object.assign(player, { runway: 10, compute: 5, scrutiny: 0 });
+  const fusionPlan = match.legalBuildResolutions(0).find(choice =>
+    !choice.parameters.facility &&
+    choice.parameters.project?.id === "fusion_demonstrator" &&
+    choice.parameters.project?.hostId === "s0-facility-1"
+  );
+  assert.ok(fusionPlan, "Fusion build plan on Facility 1");
+  match.applyBuild(0, fusionPlan);
+
+  // Immediately, Fusion on Facility 1 powers adjacent Facility 2!
+  assert.deepEqual(match.latestPoweredFacilities(player).map(f => f.id).sort(), ["s0-facility-1", "s0-facility-2"]);
+
+  // 2. Quantum Core produces Capability before Era IV AGI recognition:
+  // Facility 2 is now powered, so it can legally host Quantum!
+  const quantumPlan = match.legalBuildResolutions(0).find(choice =>
+    !choice.parameters.facility &&
+    choice.parameters.project?.id === "quantum" &&
+    choice.parameters.project?.hostId === "s0-facility-2"
+  );
+  assert.ok(quantumPlan, "Quantum build plan on Facility 2");
+  match.applyBuild(0, quantumPlan);
+
+  // Set player to meet all AGI requirements except Capability is 8 (need 9):
+  Object.assign(player, { capability: 8, trust: 4, compute: 3 });
+  assert.equal(match.declarationReadiness(player).ready, false, "Not ready before Production: Capability 8 < 9");
+  assert.equal(match.declarationReadiness(player).failingRequirement, "capability");
+
+  // Step 3: Production resolves first (Quantum yields +1 Capability -> 8 + 1 = 9)
+  match.initiativeSeat = 0;
+  await match.produceAll([]);
+  assert.equal(player.capability, 9, "Quantum produced +1 Capability during Production");
+  assert.equal(match.declarationReadiness(player).ready, true, "Ready for AGI recognition after Quantum production");
+
+  // Step 4: AGI recognition follows Production
+  await match.declareAgiAchievements([]);
+  assert.equal(player.agiDeclared, true, "AGI recognized after qualifying via Quantum");
+});

@@ -265,9 +265,20 @@ try {
     await send("Page.navigate", { url: `${base}/__browser/runner.html` });
     report.boundaries = await waitFor("window.__mandateBoundaryResults");
     await screenshot("boundary-regressions.png");
-    assert.equal(report.boundaries.length, 12, "All twelve boundary regressions must load.");
+    assert.equal(report.boundaries.length, 14, "All fourteen boundary regressions must load.");
     assert.ok(report.boundaries.every((entry) => entry.status === "passed"), JSON.stringify(report.boundaries));
     process.stdout.write(`browser: ${report.boundaries.length} boundary regressions passed\n`);
+
+    const coreRulesResponse = await fetch(`${base}/docs/core-rules.html`);
+    assert.equal(coreRulesResponse.status, 200, "Core rules must be accessible.");
+    const coreRulesHtml = await coreRulesResponse.text();
+    assert.match(coreRulesHtml, /Before selection:.*Reveal a Headline/s, "Turn overview must include Before selection Headline phase.");
+    assert.match(coreRulesHtml, /In Initiative order, each player may make the permitted resource exchange, assigns one Agent, and resolves the selected action/, "Turn overview must place permitted resource exchange before action resolution.");
+
+    const cardsSource = JSON.parse(await readFile(resolve(projectRoot, "components/reference-cards.json"), "utf8"));
+    const frontTexts = (cardsSource.playerReferences || []).flatMap((card) => card.frontText || []);
+    assert.ok(frontTexts.some((text) => text.includes("Mega-Clusters and Quantum")), "Player aid must include Quantum alongside Mega-Clusters in Production.");
+    assert.ok(frontTexts.some((text) => text.includes("Fusion host powers itself")), "Player aid must include Fusion host self-power in spatial power rule.");
   }
   for (const viewport of [
     { name: "desktop", width: 1440, height: 1000, mobile: false },
