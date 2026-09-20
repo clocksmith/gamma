@@ -6,6 +6,13 @@ and executes the unchanged pinned predictor. No training or parameter update
 occurred. This corrects the values entering the objective; it is not a compression
 gain or a proof about the backward approximation.
 
+**Follow-through completed:** the
+[matched data-only/joint-cost experiment](fx2_matched_training_20260920.md)
+already used this boundary. Native training-window loss improved, but native
+archives worsened. Its selected joint-cost checkpoint saves fixed model bytes
+and remains below scale admission. The earlier next-comparison recommendation
+has been fulfilled; no repeat is implied by this report.
+
 | Fixture | Scored positions | P loss, bits | E loss, bits | E minus P, bits | Corrected/native discrepancy |
 | --- | ---: | ---: | ---: | ---: | ---: |
 | Synthetic, 8 input rows | 7 | 104.881477 | 111.209216 | +6.327739 | 0 |
@@ -86,16 +93,17 @@ Peak cgroup memory was 1,469,566,976 bytes; sampled peak allocated scratch was
 The architecture group passed 143 tests and 54 subtests; both focused forward/
 adjoint tests passed. Compilation and module import checks passed.
 
-## Next comparison
+## Completed next comparison
 
 The forward-value prerequisite is satisfied for this profile and fixed P/E
-population. The next experiment should freeze matched data-only versus joint
-model-cost development training using this native forward and explicitly
-approximate backward, without metadata. Declare the same parent, windows,
-initialization, update budget, normalization and selection rules for both arms.
-New checkpoint exports still require fresh native evaluation. Measure actual
-packed files and finite native archives; do not equate the weight histogram
-surrogate or a small-sample loss with complete-package savings.
+population. Candidate `fx2_matched_train250k_q0_v1` subsequently compared data-only
+and joint model-cost development training with the same parent, windows,
+initialization, update budget, normalization and selection rules, without metadata.
+Its fresh packed checkpoints and finite archives are retained in the linked
+report. Neither the histogram surrogate nor training-window loss supplied a
+full-corpus gain. New checkpoint exports still require fresh native evaluation;
+the [remaining question](fx2_matched_training_20260920.md#current-research-priority)
+is the failure of measured training-window gains to improve archives.
 
 P/E and retired metadata checkpoints remain intact. The 96,000,000-byte target
 and 95,000,000-byte stretch remain unchanged; this gate earns zero score credit.

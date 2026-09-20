@@ -1,6 +1,21 @@
 # Research Register
 [Record index](research_register/README.md) | [Earlier records](research_register/archive/README.md)
 
+## 2026-09-20 - Reconcile completed native-forward and matched-training stages
+
+The requested native-forward correction and data-only/joint-cost comparison
+already completed before donor coverage closed. The
+[current training handoff](fx2_matched_training_20260920.md#current-research-priority)
+now links the complete sequence and replaces stale prospective recommendations
+in the earlier numerical reports. Rechecked 160 forward and 597 training artifacts,
+both validated reflections and eleven complete terminal ledger rows. Native
+forward agrees on the declared P/E fixtures; A/J improve native training-window
+loss but worsen actual archives. J's paid fixture benefit is fixed model storage,
+not an established full-corpus gain. Exported-model improvement is again the
+research priority, with metadata excluded and cross-history work parked. The
+remaining question is matched P/A/J off-window neural versus final-coder behavior;
+no new experiment, checkpoint, optimizer budget or confirmation selection occurred.
+
 ## 2026-09-20 - Prefix donor coverage on the unchanged retained FX2 parent
 
 The [development-only comparison](fx2_donor_coverage_20260920.md) closes candidate

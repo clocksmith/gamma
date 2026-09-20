@@ -7,6 +7,43 @@ measured checkpoints. No metadata, extra optimizer updates, or unrelated codec
 was introduced. The objective remains **96,000,000 complete bytes**, with
 95,000,000 stretch; Gamma's verified full-corpus score remains **unknown**.
 
+## Current research priority
+
+As of the follow-up to the donor-coverage closure, exported-model improvement is
+again the primary research direction; cross-history work remains parked. The
+requested native-forward correction and matched data-only/joint-cost comparison
+are already complete. Their closures were rechecked in the
+[reconciliation receipt](../operations/evidence/fx2_training_handoff_20260920.json):
+all 757 artifacts rehash, both reflections validate, and all eleven terminal
+ledger rows are present. These checks are a review of retained evidence, not
+another training or codec run.
+
+The outstanding question is **why native training-window gains fail to improve
+native archives**. A improves the 512 training positions by 969.204046 bits but
+adds 7,109 development archive bytes. J improves those positions by 971.884752
+bits but adds 6,288 development archive bytes and 23,683 confirmation archive
+bytes. J removes 24,715 packed bytes per model copy. These are different
+populations and different costs; the neural bit gains cannot be subtracted from
+archive byte losses as a causal decomposition.
+
+The retained receipts do not separate off-window prediction regression, the
+whole-reference surrogate Jacobian, or downstream mixer behavior. Before choosing
+another optimizer profile, the useful next discriminator is fixed-checkpoint
+P/A/J attribution of native neural and final-coder costs on matched development
+coordinates, partitioned into the already declared training positions and their
+complement. Use authentic reset/warmup schedules and fresh native trajectories
+where affected; compare each level separately and do not reuse a stale trajectory
+as a child result. This is an unresolved research question, not a newly admitted
+experiment or authorization to reopen confirmation for tuning.
+
+No new checkpoint, training budget, metadata feature or donor mechanism is
+selected by this handoff. A later training candidate must begin from preserved P,
+state a distinct hypothesis, and bind its population, budget and selection rule.
+Continue using the native forward boundary; universal floating-point identity of
+the old Torch internals is not a prerequisite for a forward that already invokes
+native code. Its approximate gradient still needs to prove useful through exported
+checkpoints, actual packed files and native archives.
+
 ## Training result
 
 [The closed receipt](../results/fx2_matched_train250k_q0_v1/terminal.json)
