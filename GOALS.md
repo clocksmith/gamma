@@ -52,6 +52,9 @@ single-stream predictor's data and packed-weight cost, with decoder-visible
 metadata conditioning inside that model and a 95M stretch target. Preserve the
 XML/English census and negative split-stream evidence. Raw category shares and
 causal donor availability are measurement inputs, not achievable savings.
+Deployment-matched forward computation and fixed-checkpoint numerical attribution
+are prerequisites for further enwiki9 training; see the
+[numerical comparison](projects/enwiki9/docs/fx2_numeric_attribution_20260919.md).
 
 ## Explicit Exclusions
 

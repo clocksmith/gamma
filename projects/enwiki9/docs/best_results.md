@@ -12,7 +12,7 @@ Unknown package cost stays unknown. Local subtotals are not complete submission 
 Populations are grouped by raw-input SHA256; compare matched controls in each receipt.
 ```
 
-- Result JSON files scanned: `512`
+- Result JSON files scanned: `516`
 - Roundtrip-passing rows: `241`
 - Active target score: `96,000,000` bytes (`9.6000000%`)
 

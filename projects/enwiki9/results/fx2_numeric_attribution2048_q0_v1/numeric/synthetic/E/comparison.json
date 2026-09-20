@@ -1,0 +1,180 @@
+{
+  "native_loss": {
+    "bits": 111.20921588114243,
+    "predictions": 7
+  },
+  "reference_loss": {
+    "bits": 111.74764910965548,
+    "predictions": 7
+  },
+  "loss_gap_bits": -0.5384332285130569,
+  "native_observation_bitwise_equal": true,
+  "reference_observation_bitwise_equal": true,
+  "decoded_tensors_equal": 434,
+  "first_compared_bit_difference": {
+    "row": 0,
+    "key": "embedding.normalized",
+    "coordinate": 0,
+    "native": 0.4663049876689911,
+    "reference": 0.46630504727363586
+  },
+  "first_integer_difference": {
+    "row": 3,
+    "key": "blocks.10.attention.forget_gate_projection.up.quantize_activation.integer",
+    "coordinate": 97,
+    "native": 2.0,
+    "reference": 1.0,
+    "input": {
+      "native": 0.0443115234375,
+      "reference": 0.04431135579943657
+    },
+    "scaled": {
+      "native": 1.5,
+      "reference": 1.4999942779541016
+    },
+    "scale": {
+      "native": 0.029541015625,
+      "reference": 0.029541015625
+    }
+  },
+  "baseline_differences": {
+    "floating_elements_different": 352144,
+    "integer_elements_different": 1957,
+    "compared_elements": 1329264
+  },
+  "interventions": {
+    "value": {
+      "steps": [
+        {
+          "substitution": {
+            "row": 0,
+            "key": "embedding.normalized",
+            "coordinate": 0,
+            "native": 0.4663049876689911,
+            "reference": 0.46630504727363586
+          },
+          "substituted_elements": 192,
+          "reference_loss_after": {
+            "bits": 111.74764910965548,
+            "predictions": 7
+          },
+          "remaining_logit_max": 0.3254575729370117,
+          "next_compared_difference": {
+            "row": 0,
+            "key": "blocks.0.attention.query_projection.output",
+            "coordinate": 0,
+            "native": 0.5147961378097534,
+            "reference": 0.5147960782051086
+          },
+          "trace_differences": {
+            "floating_elements_different": 350206,
+            "integer_elements_different": 1957,
+            "compared_elements": 1329264
+          }
+        },
+        {
+          "substitution": {
+            "row": 0,
+            "key": "blocks.0.attention.query_projection.output",
+            "coordinate": 0,
+            "native": 0.5147961378097534,
+            "reference": 0.5147960782051086
+          },
+          "substituted_elements": 192,
+          "reference_loss_after": {
+            "bits": 111.74764910965548,
+            "predictions": 7
+          },
+          "remaining_logit_max": 0.3254575729370117,
+          "next_compared_difference": {
+            "row": 0,
+            "key": "blocks.0.attention.key_projection.output",
+            "coordinate": 0,
+            "native": 0.026348546147346497,
+            "reference": 0.02634844183921814
+          },
+          "trace_differences": {
+            "floating_elements_different": 350095,
+            "integer_elements_different": 1957,
+            "compared_elements": 1329264
+          }
+        },
+        {
+          "substitution": {
+            "row": 0,
+            "key": "blocks.0.attention.key_projection.output",
+            "coordinate": 0,
+            "native": 0.026348546147346497,
+            "reference": 0.02634844183921814
+          },
+          "substituted_elements": 192,
+          "reference_loss_after": {
+            "bits": 111.74764910965548,
+            "predictions": 7
+          },
+          "remaining_logit_max": 0.3254575729370117,
+          "next_compared_difference": {
+            "row": 0,
+            "key": "blocks.0.attention.value_projection.output",
+            "coordinate": 1,
+            "native": -0.8381438255310059,
+            "reference": -0.838144063949585
+          },
+          "trace_differences": {
+            "floating_elements_different": 349939,
+            "integer_elements_different": 1957,
+            "compared_elements": 1329264
+          }
+        }
+      ],
+      "stopped_at_declared_limit": true,
+      "remaining_compared_difference": {
+        "row": 0,
+        "key": "blocks.0.attention.value_projection.output",
+        "coordinate": 1,
+        "native": -0.8381438255310059,
+        "reference": -0.838144063949585
+      }
+    },
+    "integer": {
+      "steps": [
+        {
+          "substitution": {
+            "row": 3,
+            "key": "blocks.10.attention.forget_gate_projection.up.quantize_activation.integer",
+            "coordinate": 97,
+            "native": 2.0,
+            "reference": 1.0,
+            "input": {
+              "native": 0.0443115234375,
+              "reference": 0.04431135579943657
+            },
+            "scaled": {
+              "native": 1.5,
+              "reference": 1.4999942779541016
+            },
+            "scale": {
+              "native": 0.029541015625,
+              "reference": 0.029541015625
+            }
+          },
+          "substituted_elements": 1,
+          "reference_loss_after": {
+            "bits": 111.20922363406967,
+            "predictions": 7
+          },
+          "remaining_logit_max": 4.76837158203125e-06,
+          "next_compared_difference": null,
+          "trace_differences": {
+            "floating_elements_different": 332837,
+            "integer_elements_different": 0,
+            "compared_elements": 1329264
+          }
+        }
+      ],
+      "stopped_at_declared_limit": false,
+      "remaining_compared_difference": null
+    }
+  },
+  "parameters_unchanged": true
+}

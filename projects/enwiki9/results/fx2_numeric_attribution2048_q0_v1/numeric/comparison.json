@@ -1,0 +1,1067 @@
+{
+  "schema": "gamma.enwiki9.fx2-numeric-attribution.v1",
+  "plan": {
+    "id": "fx2_numeric_attribution2048_q0_v1",
+    "native_source_zip": "results/fx2_expert_release250k_v3/P-source.zip",
+    "upstream": "external/fx2-cmix-transformer-v1",
+    "captured_tokens": "results/fx2_entropy_train250k_q0_v2/native/priors.f16.tokens",
+    "captured_priors": "results/fx2_entropy_train250k_q0_v2/native/priors.f16",
+    "fixtures": [
+      "synthetic",
+      "native_prefix2048"
+    ],
+    "trace_rows": 64,
+    "value_interventions": 3,
+    "integer_interventions": 8,
+    "checkpoints": {
+      "P": {
+        "checkpoint": "external/fx2-cmix-transformer-v1/models/6m-q4-fp32.tch",
+        "packed": "external/fx2-cmix-transformer-v1/models/6m-q4-fp32.tfwc2"
+      },
+      "E": {
+        "checkpoint": "results/fx2_entropy_train250k_q0_v2/native/E/checkpoint.tch",
+        "packed": "results/fx2_entropy_train250k_q0_v2/native/E/weights.tfwc2"
+      }
+    },
+    "caps": {
+      "cpus": [
+        3
+      ],
+      "memory_bytes": 4000000000,
+      "scratch_bytes": 1500000000,
+      "swap_bytes": 0,
+      "wall_seconds": 1800
+    },
+    "address_space_bytes": 34359738368,
+    "target_complete_bytes": 96000000,
+    "stretch_complete_bytes": 95000000,
+    "training_updates": 0,
+    "selection": "Fixed first 2048 previously retained native capture rows; no fitting, sample replacement, or checkpoint selection. First 64 rows traced; actual reset markers preserve cold piece initialization.",
+    "intervention_rule": "Separate cumulative first-value vector and first-integer scalar substitutions in captured native order; at most 3 and 8 respectively, with full unchanged fixture replay after each. Residual mismatches stay explicit.",
+    "loss": "FP64 log2 and math.fsum of actual FP32 neural truth probabilities; exclude piece-ending rows and final unpaired row. Neural head only, no final mixer or archive attribution.",
+    "worker_command": [
+      "/usr/bin/python3.14",
+      "-m",
+      "gamma_enwiki9.adapters.fx2_numeric_attribution"
+    ],
+    "build_tools": [
+      [
+        "/usr/bin/python3.14",
+        "52e0a13e60a981d8c4b6478be2ba5176f69da07948a056bf49cf6f077e30cb41"
+      ],
+      [
+        "/usr/bin/x86_64-linux-gnu-g++-15",
+        "e6718f7e0c7d057c3ff77b550c603da9bc4030e3ede3c053705acce1293dbe4d"
+      ]
+    ],
+    "owner": "codex-numeric-attribution-20260919",
+    "schema": "gamma.enwiki9.fx2-numeric-attribution-plan.v1"
+  },
+  "runtime": {
+    "torch": "2.11.0+cu130",
+    "device": "cpu",
+    "threads": 1
+  },
+  "native_adaptation": {
+    "path": "cpp_infer/src/opt/model_opt.cpp",
+    "preimage_sha256": "b49493ece5a3a135baa24eeef00d6aaf56335324d0c6355b7283e46736c9df8e",
+    "postimage_sha256": "f6b394ed87c10ded6193f83a20157b33a7705f981752825faa844d93b1e7bfb3"
+  },
+  "build_commands": [
+    [
+      "/usr/bin/g++",
+      "-std=c++17",
+      "-O3",
+      "-march=x86-64-v3",
+      "-mrecip=none",
+      "-fno-math-errno",
+      "-I",
+      "/home/x/deco/gamma/projects/enwiki9/results/fx2_numeric_attribution2048_q0_v1/numeric/base",
+      "-I",
+      "/home/x/deco/gamma/projects/enwiki9/results/fx2_numeric_attribution2048_q0_v1/snapshot/tests",
+      "/home/x/deco/gamma/projects/enwiki9/results/fx2_numeric_attribution2048_q0_v1/snapshot/tests/fx2_numeric_replay.cpp",
+      "/home/x/deco/gamma/projects/enwiki9/results/fx2_numeric_attribution2048_q0_v1/numeric/base/cpp_infer/src/weights_io.cpp",
+      "/home/x/deco/gamma/projects/enwiki9/results/fx2_numeric_attribution2048_q0_v1/numeric/base/cpp_infer/src/weights_io_compressed.cpp",
+      "/home/x/deco/gamma/projects/enwiki9/results/fx2_numeric_attribution2048_q0_v1/numeric/base/cpp_infer/src/opt/qmat_dense.cpp",
+      "/home/x/deco/gamma/projects/enwiki9/results/fx2_numeric_attribution2048_q0_v1/numeric/base/cpp_infer/src/opt/qmat_sparse.cpp",
+      "/home/x/deco/gamma/projects/enwiki9/results/fx2_numeric_attribution2048_q0_v1/numeric/base/cpp_infer/src/opt/attn.cpp",
+      "/home/x/deco/gamma/projects/enwiki9/results/fx2_numeric_attribution2048_q0_v1/numeric/base/cpp_infer/src/opt/kda.cpp",
+      "/home/x/deco/gamma/projects/enwiki9/results/fx2_numeric_attribution2048_q0_v1/numeric/base/cpp_infer/src/opt/glue.cpp",
+      "/home/x/deco/gamma/projects/enwiki9/results/fx2_numeric_attribution2048_q0_v1/numeric/base/cpp_infer/src/opt/arena_build.cpp",
+      "/home/x/deco/gamma/projects/enwiki9/results/fx2_numeric_attribution2048_q0_v1/numeric/base/cpp_infer/src/opt/model_opt.cpp",
+      "-o",
+      "/home/x/deco/gamma/projects/enwiki9/results/fx2_numeric_attribution2048_q0_v1/numeric/base/numeric-replay"
+    ],
+    [
+      "/usr/bin/g++",
+      "-std=c++17",
+      "-O3",
+      "-march=x86-64-v3",
+      "-mrecip=none",
+      "-fno-math-errno",
+      "-I",
+      "/home/x/deco/gamma/projects/enwiki9/results/fx2_numeric_attribution2048_q0_v1/numeric/observed",
+      "-I",
+      "/home/x/deco/gamma/projects/enwiki9/results/fx2_numeric_attribution2048_q0_v1/snapshot/tests",
+      "/home/x/deco/gamma/projects/enwiki9/results/fx2_numeric_attribution2048_q0_v1/snapshot/tests/fx2_numeric_replay.cpp",
+      "/home/x/deco/gamma/projects/enwiki9/results/fx2_numeric_attribution2048_q0_v1/numeric/observed/cpp_infer/src/weights_io.cpp",
+      "/home/x/deco/gamma/projects/enwiki9/results/fx2_numeric_attribution2048_q0_v1/numeric/observed/cpp_infer/src/weights_io_compressed.cpp",
+      "/home/x/deco/gamma/projects/enwiki9/results/fx2_numeric_attribution2048_q0_v1/numeric/observed/cpp_infer/src/opt/qmat_dense.cpp",
+      "/home/x/deco/gamma/projects/enwiki9/results/fx2_numeric_attribution2048_q0_v1/numeric/observed/cpp_infer/src/opt/qmat_sparse.cpp",
+      "/home/x/deco/gamma/projects/enwiki9/results/fx2_numeric_attribution2048_q0_v1/numeric/observed/cpp_infer/src/opt/attn.cpp",
+      "/home/x/deco/gamma/projects/enwiki9/results/fx2_numeric_attribution2048_q0_v1/numeric/observed/cpp_infer/src/opt/kda.cpp",
+      "/home/x/deco/gamma/projects/enwiki9/results/fx2_numeric_attribution2048_q0_v1/numeric/observed/cpp_infer/src/opt/glue.cpp",
+      "/home/x/deco/gamma/projects/enwiki9/results/fx2_numeric_attribution2048_q0_v1/numeric/observed/cpp_infer/src/opt/arena_build.cpp",
+      "/home/x/deco/gamma/projects/enwiki9/results/fx2_numeric_attribution2048_q0_v1/numeric/observed/cpp_infer/src/opt/model_opt.cpp",
+      "-o",
+      "/home/x/deco/gamma/projects/enwiki9/results/fx2_numeric_attribution2048_q0_v1/numeric/observed/numeric-replay"
+    ]
+  ],
+  "native_binaries": {
+    "base": {
+      "bytes": 213400,
+      "sha256": "0e525b828b7eafc5339b7e2e3d5ecd160ee959d900e812609b1a366e2a0610aa"
+    },
+    "observed": {
+      "bytes": 259224,
+      "sha256": "6ddaded61e39ddd78e3313e32987be7378219ec74be5b3378f0e6067bab7e5ca"
+    }
+  },
+  "fixtures": {
+    "synthetic": {
+      "rows": 8,
+      "piece_end_rows": [],
+      "reset_rows": [
+        0
+      ],
+      "inputs": {
+        "tokens-markers.bin": {
+          "bytes": 16,
+          "sha256": "fff1a113e7fd3c37193191f4c4ca40a89e9b485e4d3d37b4c9848053a4830b60"
+        },
+        "priors.f16": {
+          "bytes": 3280,
+          "sha256": "a0a0307e69da747f9528c6898f5c1712078302bdfa0d88d82df33a6151966e3e"
+        }
+      },
+      "arms": {
+        "P": {
+          "native_loss": {
+            "bits": 104.88147737265804,
+            "predictions": 7
+          },
+          "reference_loss": {
+            "bits": 104.28971600657755,
+            "predictions": 7
+          },
+          "loss_gap_bits": 0.5917613660804903,
+          "native_observation_bitwise_equal": true,
+          "reference_observation_bitwise_equal": true,
+          "decoded_tensors_equal": 434,
+          "first_compared_bit_difference": {
+            "row": 0,
+            "key": "embedding.normalized",
+            "coordinate": 0,
+            "native": 0.4663049876689911,
+            "reference": 0.46630504727363586
+          },
+          "first_integer_difference": {
+            "row": 5,
+            "key": "blocks.3.mlp.down.quantize_activation.integer",
+            "coordinate": 634,
+            "native": 3.0,
+            "reference": 4.0,
+            "input": {
+              "native": 0.09442134946584702,
+              "reference": 0.09442138671875
+            },
+            "scaled": {
+              "native": 3.4999985694885254,
+              "reference": 3.5
+            },
+            "scale": {
+              "native": 0.0269775390625,
+              "reference": 0.0269775390625
+            }
+          },
+          "baseline_differences": {
+            "floating_elements_different": 440433,
+            "integer_elements_different": 22294,
+            "compared_elements": 1329264
+          },
+          "interventions": {
+            "value": {
+              "steps": [
+                {
+                  "substitution": {
+                    "row": 0,
+                    "key": "embedding.normalized",
+                    "coordinate": 0,
+                    "native": 0.4663049876689911,
+                    "reference": 0.46630504727363586
+                  },
+                  "substituted_elements": 192,
+                  "reference_loss_after": {
+                    "bits": 104.28971600657755,
+                    "predictions": 7
+                  },
+                  "remaining_logit_max": 0.7682136297225952,
+                  "next_compared_difference": {
+                    "row": 0,
+                    "key": "blocks.0.attention.query_projection.output",
+                    "coordinate": 1,
+                    "native": -0.49339383840560913,
+                    "reference": -0.4933937191963196
+                  },
+                  "trace_differences": {
+                    "floating_elements_different": 439816,
+                    "integer_elements_different": 22294,
+                    "compared_elements": 1329264
+                  }
+                },
+                {
+                  "substitution": {
+                    "row": 0,
+                    "key": "blocks.0.attention.query_projection.output",
+                    "coordinate": 1,
+                    "native": -0.49339383840560913,
+                    "reference": -0.4933937191963196
+                  },
+                  "substituted_elements": 192,
+                  "reference_loss_after": {
+                    "bits": 104.28971600657755,
+                    "predictions": 7
+                  },
+                  "remaining_logit_max": 0.7682136297225952,
+                  "next_compared_difference": {
+                    "row": 0,
+                    "key": "blocks.0.attention.key_projection.output",
+                    "coordinate": 3,
+                    "native": -2.160534381866455,
+                    "reference": -2.160533905029297
+                  },
+                  "trace_differences": {
+                    "floating_elements_different": 439771,
+                    "integer_elements_different": 22294,
+                    "compared_elements": 1329264
+                  }
+                },
+                {
+                  "substitution": {
+                    "row": 0,
+                    "key": "blocks.0.attention.key_projection.output",
+                    "coordinate": 3,
+                    "native": -2.160534381866455,
+                    "reference": -2.160533905029297
+                  },
+                  "substituted_elements": 192,
+                  "reference_loss_after": {
+                    "bits": 104.28971600657755,
+                    "predictions": 7
+                  },
+                  "remaining_logit_max": 0.7682136297225952,
+                  "next_compared_difference": {
+                    "row": 0,
+                    "key": "blocks.0.attention.value_projection.output",
+                    "coordinate": 0,
+                    "native": 0.6602689623832703,
+                    "reference": 0.6602689027786255
+                  },
+                  "trace_differences": {
+                    "floating_elements_different": 439692,
+                    "integer_elements_different": 22294,
+                    "compared_elements": 1329264
+                  }
+                }
+              ],
+              "stopped_at_declared_limit": true,
+              "remaining_compared_difference": {
+                "row": 0,
+                "key": "blocks.0.attention.value_projection.output",
+                "coordinate": 0,
+                "native": 0.6602689623832703,
+                "reference": 0.6602689027786255
+              }
+            },
+            "integer": {
+              "steps": [
+                {
+                  "substitution": {
+                    "row": 5,
+                    "key": "blocks.3.mlp.down.quantize_activation.integer",
+                    "coordinate": 634,
+                    "native": 3.0,
+                    "reference": 4.0,
+                    "input": {
+                      "native": 0.09442134946584702,
+                      "reference": 0.09442138671875
+                    },
+                    "scaled": {
+                      "native": 3.4999985694885254,
+                      "reference": 3.5
+                    },
+                    "scale": {
+                      "native": 0.0269775390625,
+                      "reference": 0.0269775390625
+                    }
+                  },
+                  "substituted_elements": 1,
+                  "reference_loss_after": {
+                    "bits": 104.8814775378584,
+                    "predictions": 7
+                  },
+                  "remaining_logit_max": 5.7220458984375e-06,
+                  "next_compared_difference": null,
+                  "trace_differences": {
+                    "floating_elements_different": 334753,
+                    "integer_elements_different": 0,
+                    "compared_elements": 1329264
+                  }
+                }
+              ],
+              "stopped_at_declared_limit": false,
+              "remaining_compared_difference": null
+            }
+          },
+          "parameters_unchanged": true
+        },
+        "E": {
+          "native_loss": {
+            "bits": 111.20921588114243,
+            "predictions": 7
+          },
+          "reference_loss": {
+            "bits": 111.74764910965548,
+            "predictions": 7
+          },
+          "loss_gap_bits": -0.5384332285130569,
+          "native_observation_bitwise_equal": true,
+          "reference_observation_bitwise_equal": true,
+          "decoded_tensors_equal": 434,
+          "first_compared_bit_difference": {
+            "row": 0,
+            "key": "embedding.normalized",
+            "coordinate": 0,
+            "native": 0.4663049876689911,
+            "reference": 0.46630504727363586
+          },
+          "first_integer_difference": {
+            "row": 3,
+            "key": "blocks.10.attention.forget_gate_projection.up.quantize_activation.integer",
+            "coordinate": 97,
+            "native": 2.0,
+            "reference": 1.0,
+            "input": {
+              "native": 0.0443115234375,
+              "reference": 0.04431135579943657
+            },
+            "scaled": {
+              "native": 1.5,
+              "reference": 1.4999942779541016
+            },
+            "scale": {
+              "native": 0.029541015625,
+              "reference": 0.029541015625
+            }
+          },
+          "baseline_differences": {
+            "floating_elements_different": 352144,
+            "integer_elements_different": 1957,
+            "compared_elements": 1329264
+          },
+          "interventions": {
+            "value": {
+              "steps": [
+                {
+                  "substitution": {
+                    "row": 0,
+                    "key": "embedding.normalized",
+                    "coordinate": 0,
+                    "native": 0.4663049876689911,
+                    "reference": 0.46630504727363586
+                  },
+                  "substituted_elements": 192,
+                  "reference_loss_after": {
+                    "bits": 111.74764910965548,
+                    "predictions": 7
+                  },
+                  "remaining_logit_max": 0.3254575729370117,
+                  "next_compared_difference": {
+                    "row": 0,
+                    "key": "blocks.0.attention.query_projection.output",
+                    "coordinate": 0,
+                    "native": 0.5147961378097534,
+                    "reference": 0.5147960782051086
+                  },
+                  "trace_differences": {
+                    "floating_elements_different": 350206,
+                    "integer_elements_different": 1957,
+                    "compared_elements": 1329264
+                  }
+                },
+                {
+                  "substitution": {
+                    "row": 0,
+                    "key": "blocks.0.attention.query_projection.output",
+                    "coordinate": 0,
+                    "native": 0.5147961378097534,
+                    "reference": 0.5147960782051086
+                  },
+                  "substituted_elements": 192,
+                  "reference_loss_after": {
+                    "bits": 111.74764910965548,
+                    "predictions": 7
+                  },
+                  "remaining_logit_max": 0.3254575729370117,
+                  "next_compared_difference": {
+                    "row": 0,
+                    "key": "blocks.0.attention.key_projection.output",
+                    "coordinate": 0,
+                    "native": 0.026348546147346497,
+                    "reference": 0.02634844183921814
+                  },
+                  "trace_differences": {
+                    "floating_elements_different": 350095,
+                    "integer_elements_different": 1957,
+                    "compared_elements": 1329264
+                  }
+                },
+                {
+                  "substitution": {
+                    "row": 0,
+                    "key": "blocks.0.attention.key_projection.output",
+                    "coordinate": 0,
+                    "native": 0.026348546147346497,
+                    "reference": 0.02634844183921814
+                  },
+                  "substituted_elements": 192,
+                  "reference_loss_after": {
+                    "bits": 111.74764910965548,
+                    "predictions": 7
+                  },
+                  "remaining_logit_max": 0.3254575729370117,
+                  "next_compared_difference": {
+                    "row": 0,
+                    "key": "blocks.0.attention.value_projection.output",
+                    "coordinate": 1,
+                    "native": -0.8381438255310059,
+                    "reference": -0.838144063949585
+                  },
+                  "trace_differences": {
+                    "floating_elements_different": 349939,
+                    "integer_elements_different": 1957,
+                    "compared_elements": 1329264
+                  }
+                }
+              ],
+              "stopped_at_declared_limit": true,
+              "remaining_compared_difference": {
+                "row": 0,
+                "key": "blocks.0.attention.value_projection.output",
+                "coordinate": 1,
+                "native": -0.8381438255310059,
+                "reference": -0.838144063949585
+              }
+            },
+            "integer": {
+              "steps": [
+                {
+                  "substitution": {
+                    "row": 3,
+                    "key": "blocks.10.attention.forget_gate_projection.up.quantize_activation.integer",
+                    "coordinate": 97,
+                    "native": 2.0,
+                    "reference": 1.0,
+                    "input": {
+                      "native": 0.0443115234375,
+                      "reference": 0.04431135579943657
+                    },
+                    "scaled": {
+                      "native": 1.5,
+                      "reference": 1.4999942779541016
+                    },
+                    "scale": {
+                      "native": 0.029541015625,
+                      "reference": 0.029541015625
+                    }
+                  },
+                  "substituted_elements": 1,
+                  "reference_loss_after": {
+                    "bits": 111.20922363406967,
+                    "predictions": 7
+                  },
+                  "remaining_logit_max": 4.76837158203125e-06,
+                  "next_compared_difference": null,
+                  "trace_differences": {
+                    "floating_elements_different": 332837,
+                    "integer_elements_different": 0,
+                    "compared_elements": 1329264
+                  }
+                }
+              ],
+              "stopped_at_declared_limit": false,
+              "remaining_compared_difference": null
+            }
+          },
+          "parameters_unchanged": true
+        }
+      },
+      "delta_reference_bits": 7.457933103077934,
+      "delta_native_bits": 6.327738508484387,
+      "delta_mismatch_bits": -1.1301945945935472
+    },
+    "native_prefix2048": {
+      "rows": 2048,
+      "piece_end_rows": [
+        934,
+        1179,
+        1494,
+        1813
+      ],
+      "reset_rows": [
+        0,
+        935,
+        1180,
+        1495,
+        1814
+      ],
+      "inputs": {
+        "tokens-markers.bin": {
+          "bytes": 4096,
+          "sha256": "f5abd3cad3f76819a98f0252995f9f119e44aea2a49d5ce4d12d85bad6e3aafa"
+        },
+        "priors.f16": {
+          "bytes": 839680,
+          "sha256": "a181158086d4997f4f3f2dd1d1c1ef592eadf8a67fda6c8d13a74f965c134867"
+        }
+      },
+      "arms": {
+        "P": {
+          "native_loss": {
+            "bits": 3329.616041720797,
+            "predictions": 2043
+          },
+          "reference_loss": {
+            "bits": 3319.942111601467,
+            "predictions": 2043
+          },
+          "loss_gap_bits": 9.67393011933018,
+          "native_observation_bitwise_equal": true,
+          "reference_observation_bitwise_equal": true,
+          "decoded_tensors_equal": 434,
+          "first_compared_bit_difference": {
+            "row": 0,
+            "key": "embedding.normalized",
+            "coordinate": 2,
+            "native": 0.80253005027771,
+            "reference": 0.8025301098823547
+          },
+          "first_integer_difference": {
+            "row": 3,
+            "key": "blocks.3.attention.value_projection.quantize_activation.integer",
+            "coordinate": 112,
+            "native": 21.0,
+            "reference": 22.0,
+            "input": {
+              "native": 0.5983886122703552,
+              "reference": 0.598388671875
+            },
+            "scaled": {
+              "native": 21.499998092651367,
+              "reference": 21.5
+            },
+            "scale": {
+              "native": 0.02783203125,
+              "reference": 0.02783203125
+            }
+          },
+          "baseline_differences": {
+            "floating_elements_different": 4876701,
+            "integer_elements_different": 464322,
+            "compared_elements": 10634112
+          },
+          "interventions": {
+            "value": {
+              "steps": [
+                {
+                  "substitution": {
+                    "row": 0,
+                    "key": "embedding.normalized",
+                    "coordinate": 2,
+                    "native": 0.80253005027771,
+                    "reference": 0.8025301098823547
+                  },
+                  "substituted_elements": 192,
+                  "reference_loss_after": {
+                    "bits": 3319.942111601467,
+                    "predictions": 2043
+                  },
+                  "remaining_logit_max": 1.7710587978363037,
+                  "next_compared_difference": {
+                    "row": 0,
+                    "key": "prior_embedding.output",
+                    "coordinate": 28,
+                    "native": -0.1288018524646759,
+                    "reference": -0.1288018375635147
+                  },
+                  "trace_differences": {
+                    "floating_elements_different": 4875590,
+                    "integer_elements_different": 464322,
+                    "compared_elements": 10634112
+                  }
+                },
+                {
+                  "substitution": {
+                    "row": 0,
+                    "key": "prior_embedding.output",
+                    "coordinate": 28,
+                    "native": -0.1288018524646759,
+                    "reference": -0.1288018375635147
+                  },
+                  "substituted_elements": 192,
+                  "reference_loss_after": {
+                    "bits": 3319.942111601467,
+                    "predictions": 2043
+                  },
+                  "remaining_logit_max": 1.7710587978363037,
+                  "next_compared_difference": {
+                    "row": 0,
+                    "key": "blocks.0.attention.query_projection.output",
+                    "coordinate": 0,
+                    "native": -0.23944541811943054,
+                    "reference": -0.23944538831710815
+                  },
+                  "trace_differences": {
+                    "floating_elements_different": 4875573,
+                    "integer_elements_different": 464322,
+                    "compared_elements": 10634112
+                  }
+                },
+                {
+                  "substitution": {
+                    "row": 0,
+                    "key": "blocks.0.attention.query_projection.output",
+                    "coordinate": 0,
+                    "native": -0.23944541811943054,
+                    "reference": -0.23944538831710815
+                  },
+                  "substituted_elements": 192,
+                  "reference_loss_after": {
+                    "bits": 3319.942111601467,
+                    "predictions": 2043
+                  },
+                  "remaining_logit_max": 1.7710587978363037,
+                  "next_compared_difference": {
+                    "row": 0,
+                    "key": "blocks.0.attention.key_projection.output",
+                    "coordinate": 0,
+                    "native": 0.5072821378707886,
+                    "reference": 0.507282018661499
+                  },
+                  "trace_differences": {
+                    "floating_elements_different": 4875488,
+                    "integer_elements_different": 464322,
+                    "compared_elements": 10634112
+                  }
+                }
+              ],
+              "stopped_at_declared_limit": true,
+              "remaining_compared_difference": {
+                "row": 0,
+                "key": "blocks.0.attention.key_projection.output",
+                "coordinate": 0,
+                "native": 0.5072821378707886,
+                "reference": 0.507282018661499
+              }
+            },
+            "integer": {
+              "steps": [
+                {
+                  "substitution": {
+                    "row": 3,
+                    "key": "blocks.3.attention.value_projection.quantize_activation.integer",
+                    "coordinate": 112,
+                    "native": 21.0,
+                    "reference": 22.0,
+                    "input": {
+                      "native": 0.5983886122703552,
+                      "reference": 0.598388671875
+                    },
+                    "scaled": {
+                      "native": 21.499998092651367,
+                      "reference": 21.5
+                    },
+                    "scale": {
+                      "native": 0.02783203125,
+                      "reference": 0.02783203125
+                    }
+                  },
+                  "substituted_elements": 1,
+                  "reference_loss_after": {
+                    "bits": 3322.730123810825,
+                    "predictions": 2043
+                  },
+                  "remaining_logit_max": 1.7710587978363037,
+                  "next_compared_difference": {
+                    "row": 56,
+                    "key": "blocks.3.mlp.down.quantize_activation.integer",
+                    "coordinate": 658,
+                    "native": 3.0,
+                    "reference": 4.0,
+                    "input": {
+                      "native": 0.09442134946584702,
+                      "reference": 0.09442138671875
+                    },
+                    "scaled": {
+                      "native": 3.4999985694885254,
+                      "reference": 3.5
+                    },
+                    "scale": {
+                      "native": 0.0269775390625,
+                      "reference": 0.0269775390625
+                    }
+                  },
+                  "trace_differences": {
+                    "floating_elements_different": 2946805,
+                    "integer_elements_different": 53116,
+                    "compared_elements": 10634112
+                  }
+                },
+                {
+                  "substitution": {
+                    "row": 56,
+                    "key": "blocks.3.mlp.down.quantize_activation.integer",
+                    "coordinate": 658,
+                    "native": 3.0,
+                    "reference": 4.0,
+                    "input": {
+                      "native": 0.09442134946584702,
+                      "reference": 0.09442138671875
+                    },
+                    "scaled": {
+                      "native": 3.4999985694885254,
+                      "reference": 3.5
+                    },
+                    "scale": {
+                      "native": 0.0269775390625,
+                      "reference": 0.0269775390625
+                    }
+                  },
+                  "substituted_elements": 1,
+                  "reference_loss_after": {
+                    "bits": 3323.0831164215174,
+                    "predictions": 2043
+                  },
+                  "remaining_logit_max": 1.7710587978363037,
+                  "next_compared_difference": null,
+                  "trace_differences": {
+                    "floating_elements_different": 2679667,
+                    "integer_elements_different": 0,
+                    "compared_elements": 10634112
+                  }
+                }
+              ],
+              "stopped_at_declared_limit": false,
+              "remaining_compared_difference": null
+            }
+          },
+          "parameters_unchanged": true
+        },
+        "E": {
+          "native_loss": {
+            "bits": 4724.549235222581,
+            "predictions": 2043
+          },
+          "reference_loss": {
+            "bits": 4738.414257413089,
+            "predictions": 2043
+          },
+          "loss_gap_bits": -13.86502219050817,
+          "native_observation_bitwise_equal": true,
+          "reference_observation_bitwise_equal": true,
+          "decoded_tensors_equal": 434,
+          "first_compared_bit_difference": {
+            "row": 0,
+            "key": "embedding.normalized",
+            "coordinate": 26,
+            "native": 0.0,
+            "reference": -0.0
+          },
+          "first_integer_difference": {
+            "row": 27,
+            "key": "blocks.8.mlp.up.quantize_activation.integer",
+            "coordinate": 17,
+            "native": -71.0,
+            "reference": -70.0,
+            "input": {
+              "native": -1.9965821504592896,
+              "reference": -1.996581792831421
+            },
+            "scaled": {
+              "native": -70.50000762939453,
+              "reference": -70.49999237060547
+            },
+            "scale": {
+              "native": 0.0283203125,
+              "reference": 0.0283203125
+            }
+          },
+          "baseline_differences": {
+            "floating_elements_different": 3069338,
+            "integer_elements_different": 63723,
+            "compared_elements": 10634112
+          },
+          "interventions": {
+            "value": {
+              "steps": [
+                {
+                  "substitution": {
+                    "row": 0,
+                    "key": "embedding.normalized",
+                    "coordinate": 26,
+                    "native": 0.0,
+                    "reference": -0.0
+                  },
+                  "substituted_elements": 192,
+                  "reference_loss_after": {
+                    "bits": 4738.414257413089,
+                    "predictions": 2043
+                  },
+                  "remaining_logit_max": 2.888627529144287,
+                  "next_compared_difference": {
+                    "row": 0,
+                    "key": "blocks.0.attention.query_projection.output",
+                    "coordinate": 1,
+                    "native": 0.24145424365997314,
+                    "reference": 0.24145421385765076
+                  },
+                  "trace_differences": {
+                    "floating_elements_different": 3069328,
+                    "integer_elements_different": 63723,
+                    "compared_elements": 10634112
+                  }
+                },
+                {
+                  "substitution": {
+                    "row": 0,
+                    "key": "blocks.0.attention.query_projection.output",
+                    "coordinate": 1,
+                    "native": 0.24145424365997314,
+                    "reference": 0.24145421385765076
+                  },
+                  "substituted_elements": 192,
+                  "reference_loss_after": {
+                    "bits": 4738.414257413089,
+                    "predictions": 2043
+                  },
+                  "remaining_logit_max": 2.888627529144287,
+                  "next_compared_difference": {
+                    "row": 0,
+                    "key": "blocks.0.attention.key_projection.output",
+                    "coordinate": 1,
+                    "native": 0.8258166313171387,
+                    "reference": 0.8258164525032043
+                  },
+                  "trace_differences": {
+                    "floating_elements_different": 3069162,
+                    "integer_elements_different": 63723,
+                    "compared_elements": 10634112
+                  }
+                },
+                {
+                  "substitution": {
+                    "row": 0,
+                    "key": "blocks.0.attention.key_projection.output",
+                    "coordinate": 1,
+                    "native": 0.8258166313171387,
+                    "reference": 0.8258164525032043
+                  },
+                  "substituted_elements": 192,
+                  "reference_loss_after": {
+                    "bits": 4738.414257413089,
+                    "predictions": 2043
+                  },
+                  "remaining_logit_max": 2.888627529144287,
+                  "next_compared_difference": {
+                    "row": 0,
+                    "key": "blocks.0.attention.value_projection.output",
+                    "coordinate": 0,
+                    "native": 0.8606330752372742,
+                    "reference": 0.8606329560279846
+                  },
+                  "trace_differences": {
+                    "floating_elements_different": 3069073,
+                    "integer_elements_different": 63723,
+                    "compared_elements": 10634112
+                  }
+                }
+              ],
+              "stopped_at_declared_limit": true,
+              "remaining_compared_difference": {
+                "row": 0,
+                "key": "blocks.0.attention.value_projection.output",
+                "coordinate": 0,
+                "native": 0.8606330752372742,
+                "reference": 0.8606329560279846
+              }
+            },
+            "integer": {
+              "steps": [
+                {
+                  "substitution": {
+                    "row": 27,
+                    "key": "blocks.8.mlp.up.quantize_activation.integer",
+                    "coordinate": 17,
+                    "native": -71.0,
+                    "reference": -70.0,
+                    "input": {
+                      "native": -1.9965821504592896,
+                      "reference": -1.996581792831421
+                    },
+                    "scaled": {
+                      "native": -70.50000762939453,
+                      "reference": -70.49999237060547
+                    },
+                    "scale": {
+                      "native": 0.0283203125,
+                      "reference": 0.0283203125
+                    }
+                  },
+                  "substituted_elements": 1,
+                  "reference_loss_after": {
+                    "bits": 4737.0445941543085,
+                    "predictions": 2043
+                  },
+                  "remaining_logit_max": 2.888627529144287,
+                  "next_compared_difference": {
+                    "row": 53,
+                    "key": "blocks.9.attention.output_gate_projection.up.quantize_activation.integer",
+                    "coordinate": 144,
+                    "native": 22.0,
+                    "reference": 21.0,
+                    "input": {
+                      "native": 0.64825439453125,
+                      "reference": 0.6482543349266052
+                    },
+                    "scaled": {
+                      "native": 21.5,
+                      "reference": 21.499998092651367
+                    },
+                    "scale": {
+                      "native": 0.0301513671875,
+                      "reference": 0.0301513671875
+                    }
+                  },
+                  "trace_differences": {
+                    "floating_elements_different": 2872775,
+                    "integer_elements_different": 38432,
+                    "compared_elements": 10634112
+                  }
+                },
+                {
+                  "substitution": {
+                    "row": 53,
+                    "key": "blocks.9.attention.output_gate_projection.up.quantize_activation.integer",
+                    "coordinate": 144,
+                    "native": 22.0,
+                    "reference": 21.0,
+                    "input": {
+                      "native": 0.64825439453125,
+                      "reference": 0.6482543349266052
+                    },
+                    "scaled": {
+                      "native": 21.5,
+                      "reference": 21.499998092651367
+                    },
+                    "scale": {
+                      "native": 0.0301513671875,
+                      "reference": 0.0301513671875
+                    }
+                  },
+                  "substituted_elements": 1,
+                  "reference_loss_after": {
+                    "bits": 4735.708650824822,
+                    "predictions": 2043
+                  },
+                  "remaining_logit_max": 2.888627529144287,
+                  "next_compared_difference": {
+                    "row": 60,
+                    "key": "blocks.2.attention.output_projection.quantize_activation.integer",
+                    "coordinate": 187,
+                    "native": -10.0,
+                    "reference": -11.0,
+                    "input": {
+                      "native": -0.094207763671875,
+                      "reference": -0.0942077711224556
+                    },
+                    "scaled": {
+                      "native": -10.5,
+                      "reference": -10.500000953674316
+                    },
+                    "scale": {
+                      "native": 0.00897216796875,
+                      "reference": 0.00897216796875
+                    }
+                  },
+                  "trace_differences": {
+                    "floating_elements_different": 2836756,
+                    "integer_elements_different": 34033,
+                    "compared_elements": 10634112
+                  }
+                },
+                {
+                  "substitution": {
+                    "row": 60,
+                    "key": "blocks.2.attention.output_projection.quantize_activation.integer",
+                    "coordinate": 187,
+                    "native": -10.0,
+                    "reference": -11.0,
+                    "input": {
+                      "native": -0.094207763671875,
+                      "reference": -0.0942077711224556
+                    },
+                    "scaled": {
+                      "native": -10.5,
+                      "reference": -10.500000953674316
+                    },
+                    "scale": {
+                      "native": 0.00897216796875,
+                      "reference": 0.00897216796875
+                    }
+                  },
+                  "substituted_elements": 1,
+                  "reference_loss_after": {
+                    "bits": 4726.728774956033,
+                    "predictions": 2043
+                  },
+                  "remaining_logit_max": 2.888627529144287,
+                  "next_compared_difference": null,
+                  "trace_differences": {
+                    "floating_elements_different": 2683076,
+                    "integer_elements_different": 0,
+                    "compared_elements": 10634112
+                  }
+                }
+              ],
+              "stopped_at_declared_limit": false,
+              "remaining_compared_difference": null
+            }
+          },
+          "parameters_unchanged": true
+        }
+      },
+      "delta_reference_bits": 1418.4721458116223,
+      "delta_native_bits": 1394.933193501784,
+      "delta_mismatch_bits": -23.53895230983835
+    }
+  },
+  "weights": {},
+  "objective_credit_bytes": 0,
+  "training_performed": false,
+  "full_corpus_score_bytes": null,
+  "trace_scope": "All quantized linear inputs and integer dots, vanilla Q/K/V quantizers, normalized embedding and block boundaries within first 64 input rows; not complete parent state.",
+  "accumulator_scope": "Native integer dots are queried from the same arena. Reference integer dots are reconstructed from its actual quantized inputs/weights; Torch itself accumulates dequantized FP32 products.",
+  "intervention_scope": "Diagnostic-only substitutions: at most 8 successive first-integer scalar changes and 3 first-value full-vector changes at one row/operation per checkpoint/fixture. No deployment or training.",
+  "comparison_complete": true,
+  "promotion_authorized": false
+}
