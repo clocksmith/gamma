@@ -47,9 +47,9 @@ resource verification, source/license closure and reproducible submission.
 The lane's adaptive workflow governs bounded implementation, prediction research,
 confirmation and scale decisions; historical 105M, 99M and 90M evidence stays intact.
 
-The primary enwiki9 direction is joint optimization of a competitive
-single-stream predictor's data and packed-weight cost, with decoder-visible
-metadata conditioning inside that model and a 95M stretch target. Preserve the
+The primary enwiki9 direction is causal relational grammar: two decoder-built
+histories with persistent shared argument bindings and one native coding sequence,
+under the 96M target and 95M stretch. Preserve the
 XML/English census and negative split-stream evidence. Raw category shares and
 causal donor availability are measurement inputs, not achievable savings.
 Deployment-matched forward computation and fixed-checkpoint numerical attribution
@@ -58,7 +58,10 @@ are prerequisites for further enwiki9 training; see the
 The [native forward boundary](projects/enwiki9/docs/fx2_native_forward_20260919.md)
 passes fixed P/E agreement. The [matched training comparison](projects/enwiki9/docs/fx2_matched_training_20260920.md)
 now records a smaller model but larger native payload. Preserve its bounded
-component gain without scaling that profile or introducing metadata. Complete
+component gain without scaling that training profile or extending its metadata head.
+The separately frozen [relational design](projects/enwiki9/operations/adaptive/experiments/fx2_relational_binding_design_q0_v1.json)
+tests a new bounded latent binding mechanism against independent bindings and
+different causal donors, with the original model preserved. Complete
 core delivery and full-corpus prize qualification remain distinct evidence targets.
 
 ## Explicit Exclusions
