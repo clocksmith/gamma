@@ -27,6 +27,10 @@ Maintained predictor and decoder-built memory components.
 
 [Title-memory fixtures](../../tests/test_fx2_title_memory_v1.py) check causality,
 bounded retention, controls and deterministic state without a corpus run.
+Relational binding fixtures additionally compare fixed-point posterior updates
+with an exact reference, persistent versus independent arguments, distinct donor
+controls, and completed-emission coordinates. One coding sequence is retained;
+predictors neither select experiments nor publish results.
 
 ## Non-goals
 

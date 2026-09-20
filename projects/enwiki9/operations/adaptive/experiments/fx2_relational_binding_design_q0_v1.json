@@ -1,0 +1,146 @@
+{
+  "budget": {
+    "expectedGrossSavingsBytes": 0,
+    "maximumAddedPackageBytes": 65536,
+    "expectedNetSavingsBytes": 0
+  },
+  "causalBoundary": {
+    "availableInformation": [
+      "Completed decoded WRT emissions",
+      "Frozen matched donor inventory at epoch start",
+      "Parent current binary probability and previous decoded bits"
+    ],
+    "forbiddenInformation": [
+      "Current target before predict",
+      "Encoder-only raw lookahead",
+      "Future donor records",
+      "Changing donor inventory during epoch",
+      "Permutation-only wrong-donor control"
+    ]
+  },
+  "changedMechanism": "New persistent relational predictor, not retraining: complete WRT emissions form title-word/body-word records; exact stored spellings, role-conditioned backward donors, finite latent state, shared versus independently reset binding; one original coder.",
+  "controls": [
+    {
+      "id": "P",
+      "role": "comparator",
+      "definition": "Original native parent."
+    },
+    {
+      "id": "K",
+      "role": "comparator",
+      "definition": "Bookkeeping-only shared state, parent output."
+    },
+    {
+      "id": "I",
+      "role": "comparator",
+      "definition": "Independent binding at each decoder-known mention opportunity."
+    },
+    {
+      "id": "S",
+      "role": "treatment",
+      "definition": "Persistent donor posterior across mentions within epoch."
+    },
+    {
+      "id": "W",
+      "role": "negative",
+      "definition": "Older distinct completed spellings matched to donor lengths; equal slots and opportunities."
+    },
+    {
+      "id": "R",
+      "role": "replay",
+      "definition": "Independent inverse and deterministic repeat; parent trajectory and introduced-state witnesses."
+    }
+  ],
+  "evidenceClass": "diagnostic",
+  "experimentId": "fx2_relational_binding_design_q0_v1",
+  "generatedUtc": "2026-09-20T13:33:24.225086+00:00",
+  "hypothesis": {
+    "claim": "A causal bounded latent donor binding can persist across predetermined mentions, pay donor uncertainty once, and synchronize integer prediction and state without looking at the target. Subsequent native P/K/I/S/W comparison tests corpus economics.",
+    "falsification": "Any exact-reference, causal-prefix, bound, inverse, or synchronization failure blocks corpus launch. No synthetic fixture grants corpus credit."
+  },
+  "inputs": [
+    {
+      "id": "input-0",
+      "path": "contracts/research/v4/objective-contract.json",
+      "sha256": "sha256:371fad8c77e82b7eb0e2788f5c27e3f6a19f00d86bfdfa8eda004b774f7c7559"
+    },
+    {
+      "id": "input-1",
+      "path": "results/fx2_expert_release250k_v3/package.json",
+      "sha256": "sha256:a9999c541374e901972a60edf12624451241f2ce5ed32e189898a2ace75ad2d3"
+    },
+    {
+      "id": "input-2",
+      "path": "results/fx2_matched_train250k_q0_v1/comparison.json",
+      "sha256": "sha256:3728f6985fbb84a59b6e7cb6b89208f122b2d519dacf309d572ef23546308640"
+    },
+    {
+      "id": "input-3",
+      "path": "lib/fx2_xml_field_observer_v1.hpp",
+      "sha256": "sha256:19ed1422036e7bb45afa5b602f67f88f662c61788f9ded295aee61def4ed0e09"
+    }
+  ],
+  "invariants": [
+    "No training or alteration of original FX2 prediction state, frontend or arithmetic coder.",
+    "Each immutable donor spelling is admitted only after its complete inverse emission and word delimiter; references strictly backward.",
+    "Fixed 64-record reservoirs per source role; at most four donor pairs, at most32 stored bytes and64 raw bytes per word. No beam pruning.",
+    "Freeze donors and reset posteriors every4096 modeled bytes; start a candidate mention only after a decoded raw nonletter boundary.",
+    "P original; K computes shared state but returns parent probability; I resets donor posterior at each mention; S persists; W uses different earlier length-matched donor spellings.",
+    "One fixed configuration; no tuning after confirmation.",
+    "Exact rational short-fixture oracle and Q48 integer implementation; rounding loss measured, no finite one-bit package promise."
+  ],
+  "killPredicates": [
+    {
+      "id": "invalid",
+      "measurement": "synthetic_pass",
+      "operator": "eq",
+      "threshold": false
+    }
+  ],
+  "measurements": [
+    {
+      "id": "synthetic_pass",
+      "unit": "boolean",
+      "definition": "All exact-reference, causality, synchronization and resource-bound tests pass."
+    }
+  ],
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:409b70547f901a3ac5fffd7fd7a1e1d77b05fb44d9e9d889be1337bd153706d7",
+    "objectiveId": "gamma-enwiki9-hutter-96m-v4",
+    "objectivePath": "contracts/research/v4/objective-contract.json",
+    "targetScoreBytes": 96000000
+  },
+  "objectiveCreditBytes": 0,
+  "outputs": [
+    "results/fx2_relational_binding_design_q0_v1/synthetic.json"
+  ],
+  "parent": null,
+  "population": {
+    "unit": "synthetic symbols before native corpus comparison",
+    "scopeBytes": null,
+    "scopeSymbols": 128,
+    "selection": "Constructed shared-donor, independent-donor, wrong-donor, malformed/raw controls; no corpus access in synthetic tests. Native development raw[0,250000), validation retained opcode_field_validation250k_v1.raw and confirmation retained opcode_field_confirmation1m_v1.raw only in separately source-bound execution contract.",
+    "coordinate": "Native modeled stored bytes, bit positions MSB first; raw positions only through completed WRT inverse emissions."
+  },
+  "promotionPredicates": [
+    {
+      "id": "implementation",
+      "measurement": "synthetic_pass",
+      "operator": "eq",
+      "threshold": true
+    }
+  ],
+  "proposalId": "fx2_relational_binding_design_q0_v1",
+  "registrationTiming": "prospective",
+  "schema": "gamma.enwiki9.adaptive-experiment-contract.v1",
+  "search": {
+    "expectedMemoryRatio": 1,
+    "expectedRuntimeRatio": 1,
+    "expectedTransferRetention": 0,
+    "interactionRisk": 1,
+    "uncertaintyRisk": 1
+  },
+  "status": "frozen"
+}

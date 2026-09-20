@@ -1,6 +1,19 @@
 # Research Register
 [Record index](research_register/README.md) | [Earlier records](research_register/archive/README.md)
 
+## 2026-09-20 - Persistent causal relational bindings, one native stream
+
+User direction supersedes further training with a distinct relational grammar
+hypothesis. [The first native binding experiment](causal_relational_grammar_20260920.md)
+freezes P/K/I/S/W on development250KB, separate250KB and1MB. Three synthetic tests
+pass, including exact-rational posterior comparison and actual fixed-point
+shared-binding advantage on a constructed fixture. Native measurements remain
+pending. Earlier split/training failures and the96M/95M target remain unchanged.
+One depth-one title-word/body-word implementation is tested; full recursive grammar
+and global novelty are not claimed. Owner `codex-relational-20260920` uses the
+existing lab queue and bounded CPU2 job; no separate research queue is added.
+
+
 ## 2026-09-19 - Train the full FX2 predictor for data and model cost
 
 Owner `codex-joint-training-20260919` prioritizes the [joint-training comparison](fx2_joint_training_20260919.md)
