@@ -3,22 +3,29 @@
 
 ## 2026-09-20 - Persistent causal relational bindings, one native stream
 
-User direction supersedes further training with a distinct relational grammar
-hypothesis. [The first native binding experiment](causal_relational_grammar_20260920.md)
-freezes P/K/I/S/W on development250KB, separate250KB and1MB. Three synthetic tests
-pass, including exact-rational posterior comparison and actual fixed-point
-shared-binding advantage on a constructed fixture. The first attempt was
-interrupted for closing-tag contamination and reflected as implementation-failure.
-The separately sealed v2 repair excludes tag interiors and passes its regression;
-native comparison is active, without a final scientific verdict. Earlier split/training failures and the96M/95M target remain unchanged.
-One depth-one title-word/body-word implementation is tested; full recursive grammar
-and global novelty are not claimed. Owner `codex-relational-20260920` uses the
-existing lab queue and bounded CPU2 job; no separate research queue is added.
-An added synthetic integration check exercises both chronological directions
-through the unchanged v2 Model, with shared reuse beating independent and wrong
-donors against a uniform parent. Exact inverse and P/K/S state parity pass; all
-13 native CI tests pass. This verifies the mechanism's integrated operation,
-not its advantage over native FX2. The corpus comparison remains pending.
+The [closed fixed comparison](causal_relational_grammar_20260920.md) records all
+P/K/I/S/W arms on development250KB, separate250KB and1MB. S loses 4, 5 and 19
+archive bytes to P before its 49,038-byte fixed implementation increment. I/S/W
+have equal archive sizes within each population. The shared expert beats both
+controls on the two smaller populations, but loses to them on 1MB; it loses
+32,929, 36,617 and 189,630 modeled log-cost bits to native FX2. The fallback
+reduces those deficits to approximately 36, 39 and 156 modeled bits. These are
+whole-population diagnostics, not matched gains from different active subsets.
+
+The [validated reflection](../operations/adaptive/reflections/20260920T135211Z_9ec3228a93.json)
+parks this realization as a valid algorithmic loss. All51 phases and15 arm rows
+are closed;661 retained artifacts, inverse/repeat and state checks pass, with
+clean diagnostic resource guards. The earlier implementation-failure retry and
+its exact bytes remain preserved. No reset-specific cause is proved and no
+successor mechanism or larger gate is selected. The broader cross-history
+hypothesis and96M/95M objective remain intact; full-corpus score is unknown.
+
+The four-donor exact-word implementation is narrower than a recursive grammar.
+All13 native synthetic tests pass, including integrated shared reuse in both
+chronological directions against a uniform parent. That proves constructed
+behavior, not predictive value beyond FX2 or global novelty. Owner
+`codex-relational-20260920` used the existing lab queue and bounded CPU2 job;
+scientific intent and component authority are preserved.
 
 
 ## 2026-09-19 - Train the full FX2 predictor for data and model cost
