@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
-import { createInteractiveGame } from "../lab/runtime/create-interactive-game.js";
+import { createBrowserInteractiveGame as createInteractiveGame } from "../lab/runtime/create-browser-interactive-game.js";
 import { deriveEraUnlocks } from "../tasks/content/era-unlocks.mjs";
 import { calculateDeployComputeCost } from "../lab/rules/deploy-costs.js";
 import { commitAction, createGame, resolveSelectedAction } from "../web/src/engine.js";
