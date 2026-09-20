@@ -159,8 +159,9 @@ train in each M/S model;384 unique loss rows have active title features. M packs
 to2,904,379 bytes and S to2,904,419. M therefore loses129 archive bytes to E and
 419 to the wrong-title control, while adding877 packed bytes per copy over E.
 The adapted executable adds20,480 bytes; the same deterministic source-only ZIP
-representation adds6,234 bytes. These are separately priced alternatives, not
-an assembled submission package. Even before code cost, M loses1,883 bytes in
+representation adds6,234 bytes. The declared option-byte delta is zero: metadata mode and gains are in the
+counted weights. These are separately priced alternatives, not an assembled
+submission package. Even before code cost, M loses1,883 bytes in
 the local archive-plus-two-copy-weight comparison against E.
 
 K/M/S independent inverses, raw repeats, introduced-state traces, causal feature
@@ -181,6 +182,81 @@ encode/decode/repeat; K receives an encode-equality check, retaining its250KB
 inverse/repeat evidence. Per-phase maximum process RSS and aggregate job cgroup
 peak are distinct observations. The audit does not promote the unfavorable
 local model or authorize10MB,100MB or full-corpus execution.
+
+## Completed 1MB replay
+
+The [closed comparison](../results/fx2_joint_replay1m_q0_v1/comparison.json) supplies
+fresh native archives without any additional fitting. All P/E/M/S inverses and
+raw-input repeats pass. K encodes identically to E; its inverse/repeat evidence
+remains the separately recorded 250KB check. The native rebuild and P archive
+match their exact retained baselines. Introduced metadata state, features and
+raw reconstruction agree across all seven captured phases.
+
+| Arm | 250KB archive | 1MB archive | Packed model per copy |
+| --- | ---: | ---: | ---: |
+| P | 33,429 | 131,238 | 2,930,652 |
+| E | 39,639 | 154,176 | 2,903,502 |
+| K | 39,639 | 154,176 | 2,903,607 |
+| M | 39,768 | 154,695 | 2,904,379 |
+| S | 39,349 | 153,231 | 2,904,419 |
+
+M loses 519 archive bytes to E and 1,464 to S. With two copies of its additional
+877 model bytes, it loses 2,273 bytes before code; the inherited two-executable
+planning comparison loses 43,233 bytes. The [validated reflection](../operations/adaptive/reflections/20260920T003339Z_270e77a7ca.json)
+retires this fixed title configuration. It does not reject metadata in general.
+
+E saves 27,150 packed bytes per copy and loses 22,938 payload bytes here. The
+31,362-byte difference for this sample plus two model copies is component
+arithmetic, not a full-corpus gain. No complete delivery or full-corpus score
+has been measured; the target remains 96M, stretch 95M, with zero earned credit.
+
+| Arm | Encode seconds | Decode seconds | Encode maximum process RSS (KiB) |
+| --- | ---: | ---: | ---: |
+| P | 127.84 | 127.49 | 5,809,336 |
+| E | 138.64 | 143.91 | 5,809,332 |
+| K | 147.02 | not repeated | 5,810,676 |
+| M | 154.17 | 146.62 | 5,810,680 |
+| S | 137.27 | 138.63 | 5,810,672 |
+
+Timings are shared-host diagnostics. The outer guard closed with return code
+zero, 6,730,424,320 bytes of aggregate cgroup peak memory and completed cleanup.
+This differs from the per-process RSS observations above and grants no contest
+resource qualification. The existing recorder published five [arm receipts](../results/fx2_joint_replay1m_q0_v1/terminal-index.json).
+All 724 files across the three successful experiment manifests were rehashed;
+all six retained gzip witnesses reconstruct their recorded logical identities.
+No 10MB, 100MB or full-corpus run was launched.
+
+The [final handoff receipt](../operations/provenance/fx2_joint_training_final_20260919.json)
+binds validation, runtime limitations, component boundaries and the next
+experiment prerequisite to the retained evidence.
+
+## Measured CPU/native numerical gap
+
+The [synthetic reference diagnostic](../operations/evidence/fx2_reference_synthetic_20260919/report.json)
+feeds tokens 0 through 7, a constant binary16 prior and one cold reset into both
+implementations. P's first five outputs agree within 0.000006 in absolute
+post-softcap logit value. Later differences reach 0.768214; E reaches 0.325458.
+These are observations for eight synthetic tokens, not universal error bounds.
+Native E and zero-title K remain bitwise identical on this fixture.
+
+The [quantization diagnostic](../operations/evidence/fx2_quantization_synthetic_20260919/report.json)
+localizes P's first observed block divergence to block 3's MLP down-projection
+input at token index 5, coordinate 634. All nine inspected quantization stages
+in that block agree except this one bin: native's scaled value is
+3.4999985694885254 and rounds to 3, while the CPU reference's value is exactly
+3.5 and rounds to 4. This demonstrates a rounding discontinuity between the
+native folded integer computation and the CPU fake-quantized FP32 computation.
+It does not establish how much of the measured archive regression it causes or
+exclude additional numerical differences elsewhere.
+
+Both diagnostics have retained inputs, source adaptation identities, binary
+observations and explicit synthetic replay scripts under `tests/`. They do not
+read corpus data or update parameters. The training profile already declares
+native prediction parity unestablished; the new evidence measures that gap.
+The trained archives remain valid observations of that profile. Before another
+training comparison, establish a native-aligned forward objective or explicitly
+measure and control its mismatch. Preserve these checkpoints and receipts;
+do not reinterpret surrogate loss as final-coder improvement.
 
 ## External evidence
 

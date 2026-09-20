@@ -12,8 +12,8 @@ Unknown package cost stays unknown. Local subtotals are not complete submission 
 Populations are grouped by raw-input SHA256; compare matched controls in each receipt.
 ```
 
-- Result JSON files scanned: `506`
-- Roundtrip-passing rows: `237`
+- Result JSON files scanned: `512`
+- Roundtrip-passing rows: `241`
 - Active target score: `96,000,000` bytes (`9.6000000%`)
 
 ## Scope `1,000,000,000` Bytes
@@ -48,7 +48,7 @@ No roundtrip-passing result JSONs are present for this scope in this checkout.
 |---|---|---:|---:|---:|---:|---|---|
 | `fx2_expert_confirm1m_v1:D` | custom candidate | unknown | 131,187 | unknown | 1.049496 | true | `results/fx2_expert_confirm1m_v1/D.driver.json` |
 | `fx2_expert_confirm1m_v1:P` | custom candidate | unknown | 131,238 | unknown | 1.049904 | true | `results/fx2_expert_confirm1m_v1/P.driver.json` |
-| `fx2_trim_confirm1m_v1:D` | custom candidate | unknown | 131,238 | unknown | 1.049904 | true | `results/fx2_trim_confirm1m_v1/D.driver.json` |
+| `fx2_joint_replay1m_q0_v1:P` | custom candidate | unknown | 131,238 | unknown | 1.049904 | true | `results/fx2_joint_replay1m_q0_v1/P.driver.json` |
 
 ### Population `369b688978f649681136198fb96db14c1616756260c55fb4b65e9bc049552cad`
 
