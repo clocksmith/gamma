@@ -87,3 +87,30 @@ Relevant established machinery: [stochastic string transduction](https://arxiv.o
 and [Bayesian sequence prediction](https://arxiv.org/abs/cs/0301014).
 These support the foundations, not a claim that this particular mechanism is
 new globally or achieves the corpus target.
+
+## Implementation repair before interpretation
+
+The first native job was interrupted after source review reproduced a parser
+classification defect: `title` and `text` from closing tags entered the word
+reservoirs. [The executable probe and failure record](../results/fx2_relational_binding250k_q0_v1/failure.json)
+retain the exact original source, input, observed records, partial native output,
+and clean process termination. The validated reflection is implementation-failure
+and inconclusive, not a scientific rejection.
+
+The [v2 retry](../operations/adaptive/experiments/fx2_relational_binding250k_q0_v2.json)
+is created by the canonical implementation-retry freezer. It inherits the
+hypothesis, populations, controls and predicates. The new predictor tracks XML
+tag interiors and excludes them from donor collection and mention starts. A
+regression checks that tag and attribute names cannot enter either reservoir.
+The three v2 synthetic tests pass, including exact posterior and repeated-donor
+checks. Original v1 bytes remain preserved. The runtime now explicitly visits
+development, validation, then confirmation rather than depending on JSON key
+order; no tuning or selection between populations is permitted.
+
+Accounting interpretation: the diagnostic v1 build added 48,983 bytes in its
+smaller source-plus-executable alternative, including observer code. That fixed
+increment already exceeds the parent development payload. The inherited paid
+fixture predicate is therefore stricter than testing the binding mechanism.
+The terminal interpretation must separately report S-versus-P/I/W actual payload
+deltas and added code; failure to amortize code on a small fixture cannot reject
+cross-history dependence. No stripped-release or full-corpus saving is assumed.
