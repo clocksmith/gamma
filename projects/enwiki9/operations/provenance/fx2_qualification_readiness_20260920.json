@@ -1,0 +1,92 @@
+{
+  "schema": "gamma.enwiki9.fx2-qualification-readiness.v1",
+  "observed_utc": "2026-09-20T03:35:56.862123+00:00",
+  "target_complete_bytes": 96000000,
+  "stretch_bytes": 95000000,
+  "verified_full_corpus_score_bytes": null,
+  "geekbench_preflight": {
+    "geekbench": {
+      "launcher": {
+        "path": "/home/x/enwiki9-nonproof/geekbench5-5.5.1-linux-authority-v1/extracted/Geekbench-5.5.1-Linux/geekbench5",
+        "present": true,
+        "expected_sha256": "06e19139fd73fb36f0941c0d80a08ca783f7f5ff0fb69a2018bfa97ded19c8a6",
+        "observed_sha256": "06e19139fd73fb36f0941c0d80a08ca783f7f5ff0fb69a2018bfa97ded19c8a6"
+      },
+      "worker": {
+        "path": "/home/x/enwiki9-nonproof/geekbench5-5.5.1-linux-authority-v1/extracted/Geekbench-5.5.1-Linux/geekbench_x86_64",
+        "present": true,
+        "expected_sha256": "bb0c4bc97fc09f823f03c834ccfd4160426ccd8b373b6e2229a644928d6e38d7",
+        "observed_sha256": "bb0c4bc97fc09f823f03c834ccfd4160426ccd8b373b6e2229a644928d6e38d7"
+      },
+      "data": {
+        "path": "/home/x/enwiki9-nonproof/geekbench5-5.5.1-linux-authority-v1/extracted/Geekbench-5.5.1-Linux/geekbench.plar",
+        "present": true,
+        "expected_sha256": "de749e1333d31fe099732ca9f6507649df08a7973a0f5e172571dd5ca45d210b",
+        "observed_sha256": "de749e1333d31fe099732ca9f6507649df08a7973a0f5e172571dd5ca45d210b"
+      }
+    },
+    "system_tools": {
+      "python": {
+        "path": "/usr/bin/python3.14",
+        "present": true,
+        "expected_sha256": "b8d8288faefdd300201f43fcf00f6f539a27218eeed3a3dff5ab10b9c4c99700",
+        "observed_sha256": "52e0a13e60a981d8c4b6478be2ba5176f69da07948a056bf49cf6f077e30cb41"
+      },
+      "unshare": {
+        "path": "/usr/bin/unshare",
+        "present": true,
+        "expected_sha256": "41c65e55107cbbb1a1f6994784a938dd7dbbe255d1fea6b7a58ec96eabe382ef",
+        "observed_sha256": "41c65e55107cbbb1a1f6994784a938dd7dbbe255d1fea6b7a58ec96eabe382ef"
+      }
+    },
+    "implementation": {
+      "producer": {
+        "path": "projects/enwiki9/tools/geekbench5_tryout_calibration_q0_v1.py",
+        "present": true,
+        "expected_sha256": "e2c4456c8ee3243453d8c77b55c7cbfaf77e8c5d41add1384a5e182702c166d6",
+        "observed_sha256": "e2c4456c8ee3243453d8c77b55c7cbfaf77e8c5d41add1384a5e182702c166d6"
+      },
+      "worker": {
+        "path": "projects/enwiki9/tools/geekbench5_tryout_calibration_worker_q0_v1.py",
+        "present": true,
+        "expected_sha256": "fc1901c7c130b62e1172e5d73c9aa9d3abc2790c38724caed6009666ca048dc0",
+        "observed_sha256": "fc1901c7c130b62e1172e5d73c9aa9d3abc2790c38724caed6009666ca048dc0"
+      },
+      "verifier": {
+        "path": "projects/enwiki9/tools/geekbench5_tryout_calibration_verify_q0_v1.py",
+        "present": true,
+        "expected_sha256": "a6483b41625d1b751c8ada3b9660802285806f864cc8d396a207e98e77501b9f",
+        "observed_sha256": "a6483b41625d1b751c8ada3b9660802285806f864cc8d396a207e98e77501b9f"
+      },
+      "managed_lease": {
+        "path": "projects/enwiki9/tools/managed_exclusive_lease.py",
+        "present": true,
+        "expected_sha256": "c3cedd46af3c3cbe8969ae9961e4b16b2d6df5873cd0a761c54b5d53ffd053b1",
+        "observed_sha256": "9f302ee8fd799e75859f2b4cb16d237e6fcf8089e432dcd5041e3f2853c11d29"
+      },
+      "lease_verifier": {
+        "path": "projects/enwiki9/tools/managed_exclusive_lease_verify.py",
+        "present": true,
+        "expected_sha256": "68ab6f91181e616c7e4991d3c6c76979e06aa4936add62e23c96d92e8bbb29d1",
+        "observed_sha256": "68ab6f91181e616c7e4991d3c6c76979e06aa4936add62e23c96d92e8bbb29d1"
+      }
+    }
+  },
+  "calibration_status": "Not executed. Existing Geekbench assets match; old calibration plan binds obsolete Python and lease implementation. Independent non-Gamma workloads observed on host during current diagnostic gates.",
+  "calibration_next_action": "Freeze a new calibration plan/closure using the current repaired lease and Python, then acquire isolated admission and verify quiescence before three vendor runs. Preserve original plan and vendor assets; do not substitute hashes inside old evidence.",
+  "current_authority": "Shared-host diagnostic only; no runtime allowance issued.",
+  "licenses": {
+    "source_license": "Preserved upstream GPL text and original source notices",
+    "gamma_envelope": "Gamma MIT text included in source delivery",
+    "notices": "Retained LLVM and CUDA notice texts included, not permission determinations",
+    "unresolved": [
+      "Published FX2 checkpoint permission clarification",
+      "CUDA-derived math transcription licensing",
+      "Applicable committee standard-runtime exemption"
+    ]
+  },
+  "committee_inquiry": "docs/hutter_committee_inquiry_20260919.md",
+  "committee_inquiry_sent": false,
+  "communication_blocker": "No connected email sender; prepared inquiry awaiting a usable account connection.",
+  "full_corpus_execution_authorized_by_this_record": false
+}

@@ -2,7 +2,7 @@
 
 Generated from the current certificate, gate receipts, resource guards, and process table.
 
-- Generated at UTC: `2026-09-20T03:32:25+00:00`
+- Generated at UTC: `2026-09-20T03:39:01+00:00`
 
 ## Target State
 
@@ -16,17 +16,17 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 
 ## Operator Summary
 
-- Candidate: `fx2_matched_train250k_q0_v1`
-- Scope bytes: `250,000`
-- Scope symbols: `151,210`
-- Scope unit: `raw bytes; native modeled rows tracked separately`
-- Gate verdict: `running`
-- Gate next action: `wait_for_gate_completion`
+- Candidate: `None`
+- Scope bytes: `n/a`
+- Scope symbols: `n/a`
+- Scope unit: `n/a`
+- Gate verdict: `None`
+- Gate next action: `None`
 - Active stage: `n/a`
 - Roundtrip arm: `n/a`
-- Active scorer observed: `true`
-- Active cmix mode: `compress`
-- Driver result present: `false`
+- Active scorer observed: `false`
+- Active cmix mode: `n/a`
+- Driver result present: `unknown`
 - RSS guard status: `n/a`
 - RSS samples: `n/a`
 - Binary `10GiB` guard KiB: `10,485,760`
@@ -39,9 +39,9 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 - Latest decimal single-process margin KiB: `n/a`
 - Safe to launch candidate gate: `false`
 - Terminal verdict present: `false`
-- Pending adaptive jobs: `27`
+- Pending adaptive jobs: `26`
 - Held pending adaptive jobs: `26`
-- Claimable pending adaptive jobs: `1`
+- Claimable pending adaptive jobs: `0`
 - Canonical release bundles: `4`
 - Validated release run receipts: `0`
 - Validated failed release attempts: `0`
@@ -52,23 +52,23 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 
 ## Active Gate
 
-- Gate verdict: `running`
-- Next action: `wait_for_gate_completion`
-- Candidate: `fx2_matched_train250k_q0_v1`
-- Scope bytes: `250,000`
-- Scope symbols: `151,210`
-- Scope unit: `raw bytes; native modeled rows tracked separately`
+- Gate verdict: `unknown`
+- Next action: `unknown`
+- Candidate: `unknown`
+- Scope bytes: `n/a`
+- Scope symbols: `n/a`
+- Scope unit: `n/a`
 - Active stage: `n/a`
 - Roundtrip arm: `n/a`
 - Coordinator PID: `n/a`
-- Driver result JSON: `projects/enwiki9/results/fx2_matched_train250k_q0_v1/decision.json`
-- Driver result present: `false`
+- Driver result JSON: `not present`
+- Driver result present: `unknown`
 - RSS guard JSON: `not present`
 - RSS guard present: `unknown`
-- Active scorer observed: `true`
-- Live gate: `true`
-- Liveness classification: `live_observed_owner`
-- Matching adaptive jobs: `1`
+- Active scorer observed: `false`
+- Live gate: `false`
+- Liveness classification: `not_persisted_running`
+- Matching adaptive jobs: `0`
 - Matching controllers: `0`
 - Matching driver observed: `false`
 - Liveness claim rule: `A running receipt or registered adaptive job is live only with an exact driver, owning controller, matching live worker, or frozen adopted process identities.`
@@ -84,8 +84,8 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 
 ## Observed Gate Command
 
-- Expected candidate: `fx2_matched_train250k_q0_v1`
-- Expected scope bytes: `250,000`
+- Expected candidate: `None`
+- Expected scope bytes: `n/a`
 - Driver process count: `0`
 - Active gate command observed: `false`
 - Driver command mismatch count: `0`
@@ -96,8 +96,8 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 
 ## Observed Controller Command
 
-- Expected active candidate: `fx2_matched_train250k_q0_v1`
-- Expected active scope bytes: `250,000`
+- Expected active candidate: `None`
+- Expected active scope bytes: `n/a`
 - Controller process count: `0`
 - Scope note: `Controller scope may be the completed parent gate that launched the active child; the observed driver command is authoritative for the active gate scope.`
 
@@ -108,8 +108,8 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 ## Operator Action
 
 - Safe to launch candidate gate: `false`
-- Action: `wait_for_gate_receipts`
-- Reason: `the gate state is incomplete and cannot drive a mutation yet`
+- Action: `verify_recorded_running_jobs_on_host`
+- Reason: `Recorded running jobs must be attributed or reconciled before this status view can recommend a launch.`
 - Allowed work: `n/a`
 - Forbidden work: `n/a`
 
@@ -117,7 +117,7 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 
 - Terminal verdict present: `false`
 - Gate mutation allowed: `false`
-- Recommended action: `wait_for_gate_receipts`
+- Recommended action: `verify_recorded_running_jobs_on_host`
 - Command source: `none while gate is non-terminal`
 - Claim rule: `Only an exact full-corpus package can prove the active objective.`
 
@@ -131,13 +131,13 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 
 - Audit return code: `0`
 - Audit mode: `inventory_snapshot`
-- Inventory generated: `2026-09-20T03:31:58+00:00`
+- Inventory generated: `2026-09-20T03:38:34+00:00`
 - Snapshot identity is verified; inventory inputs were not rescanned. This is not live occupancy or launch authority.
-- Program directories: `1,094`
-- Registered programs: `633`
-- Untracked nonignored entries: `3`
+- Program directories: `1,095`
+- Registered programs: `634`
+- Untracked nonignored entries: `2`
 - Modified tracked entries: `1`
-- Candidate statuses: `active=18, blocked_dependency=107, candidate=272, measured_negative=100, retired=597`
+- Candidate statuses: `active=18, blocked_dependency=108, candidate=272, measured_negative=100, retired=597`
 
 ## View Refresh
 
@@ -148,62 +148,13 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 
 | Role | PID | PPID | RSS KiB | Command |
 |---|---:|---:|---:|---|
-| `process` | 2,895,844 | 522,086 | 4,032 | `/bin/bash -lc python3 - <<'PY' import json p=json.load(open('/tmp/fx2-matched-prelaunch.json'));print(p['resources']['cpu_usage'][3],p['resources']...` |
-| `process` | 2,895,960 | 2,895,844 | 39,116 | `/tmp/gamma-architecture-tests/bin/python projects/enwiki9/tools/enwiki9_lab.py run --candidate fx2_matched_train250k_q0_v1 --max-workers 1` |
-| `resource_guard` | 2,896,077 | 2,895,960 | 75,032 | `/tmp/gamma-architecture-tests/bin/python /home/x/deco/gamma/projects/enwiki9/tools/run_with_resource_guard_v3.py --limit-kib 9765624 --official-dec...` |
-| `process` | 2,896,096 | 2,896,077 | 36,820 | `/tmp/gamma-architecture-tests/bin/python /home/x/deco/gamma/projects/enwiki9/tools/fx2_matched_training_v1.py --root /home/x/deco/gamma/projects/en...` |
-| `process` | 3,108,053 | 2,896,096 | 1,828 | `/usr/bin/time -f {"maximum_process_rss_kib":%M,"user_seconds":%U,"system_seconds":%S,"exit_status":%x} -o /home/x/deco/gamma/projects/enwiki9/resul...` |
-| `native_cmix` | 3,108,054 | 3,108,053 | 5,713,828 | `/home/x/deco/gamma/projects/enwiki9/results/fx2_matched_train250k_q0_v1/native/cmix -c /home/x/deco/gamma/projects/enwiki9/results/fx2_matched_trai...` |
+| n/a | n/a | n/a | n/a | n/a |
 
 ## Active Candidate Recent Artifacts
 
 | Path | Bytes | Modified UTC |
 |---|---:|---|
-| `projects/enwiki9/results/fx2_matched_train250k_q0_v1/native/ppm.temp` | 14,680,064,001 | `2026-09-20T03:32:25+00:00` |
-| `projects/enwiki9/results/fx2_matched_train250k_q0_v1/native/progress.log` | 41,328 | `2026-09-20T03:32:25+00:00` |
-| `projects/enwiki9/results/fx2_matched_train250k_q0_v1/native/confirmation-J-encode.stderr` | 401,358 | `2026-09-20T03:32:25+00:00` |
-| `projects/enwiki9/results/fx2_matched_train250k_q0_v1/native/confirmation-J.arc` | 0 | `2026-09-20T03:31:23+00:00` |
-| `projects/enwiki9/results/fx2_matched_train250k_q0_v1/native/confirmation-J.arc.cmix.temp` | 653,301 | `2026-09-20T03:31:23+00:00` |
-| `projects/enwiki9/results/fx2_matched_train250k_q0_v1/native/confirmation-J-encode.rusage.json` | 0 | `2026-09-20T03:31:23+00:00` |
-| `projects/enwiki9/results/fx2_matched_train250k_q0_v1/native/confirmation-J-encode.stdout` | 0 | `2026-09-20T03:31:23+00:00` |
-| `projects/enwiki9/results/fx2_matched_train250k_q0_v1/native/confirmation-P-repeat.execution.json` | 1,465 | `2026-09-20T03:31:23+00:00` |
-| `projects/enwiki9/results/fx2_matched_train250k_q0_v1/native/confirmation-P-repeat.rusage.json` | 96 | `2026-09-20T03:31:23+00:00` |
-| `projects/enwiki9/results/fx2_matched_train250k_q0_v1/native/confirmation-P-repeat.stdout` | 117 | `2026-09-20T03:31:23+00:00` |
-| `projects/enwiki9/results/fx2_matched_train250k_q0_v1/native/confirmation-P-repeat.stderr` | 768,585 | `2026-09-20T03:31:23+00:00` |
-| `projects/enwiki9/results/fx2_matched_train250k_q0_v1/native/confirmation-P.repeat.arc` | 131,238 | `2026-09-20T03:31:22+00:00` |
-
-## Active RSS
-
-- Max cmix PID: `3108054`
-- Active cmix mode: `compress`
-- Max cmix RSS KiB: `5,713,828`
-- Active process tree RSS KiB: `5,870,656`
-- Local binary `10GiB` guard KiB: `10,485,760`
-- Decimal `10GB` guard KiB: `9,765,625`
-- Single-process binary margin KiB: `4,771,932`
-- Single-process decimal margin KiB: `4,051,797`
-- Active process tree margin KiB (binary): `4,615,104`
-- Active process tree decimal margin KiB: `3,894,969`
-- Temp input path: `/home/x/deco/gamma/projects/enwiki9/results/fx2_matched_train250k_q0_v1/native/--transformer`
-- Temp output path: `/home/x/deco/gamma/projects/enwiki9/results/fx2_matched_train250k_q0_v1/training/J/weights.tfwc2`
-- Temp output staging path: `/home/x/deco/gamma/projects/enwiki9/results/fx2_matched_train250k_q0_v1/training/J/weights.tfwc2.cmix.temp`
-- Temp input bytes: `n/a`
-- Temp output bytes: `2,905,937`
-- Temp output staging bytes: `n/a`
-- Temp input modified UTC: `n/a`
-- Temp output modified UTC: `2026-09-20T03:17:39+00:00`
-- Temp output staging modified UTC: `n/a`
-- Process read bytes: `0`
-- Process write bytes: `8,966,144`
-
-## Contingencies
-
-- If current gate passes: `record pass and inspect the frozen candidate promotion rule`
-- Pass next scope: `n/a`
-- If RSS fails: `record RSS failure and retire or repackage this integration shape`
-- Lower candidate: `unknown`
-- Lower PPMD KiB: `n/a`
-- If roundtrip or determinism fails: `record failure and do not promote`
+| n/a | n/a | n/a |
 
 ## Proof Boundary
 
