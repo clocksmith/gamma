@@ -10,15 +10,9 @@ Keep the printed cards, boards, and player aids beside it during play.
 
 ## How to Play
 
-The game lasts four Eras. The institution with the most
-${terms.playerTracks.mandate} wins. Every qualifying institution may score the public
-${terms.systems.agi} achievement before the final Audit. Resolve
-the institutional winner and shared World Ending separately. Follow the
-numbered sections in order.
-
 ### Object of the Game
 
-Institutions race across four Eras to construct infrastructure, deploy automated services, conduct research, and secure public authority. The institution with the highest final Mandate wins. Qualifying institutions may score recognized AGI for substantial Mandate, while collective Trust and Systemic Risk resolve a separate, shared World Ending.
+Institutions race across four Eras to build infrastructure, deploy automated services, conduct research, and secure public authority. The institution with the most ${terms.playerTracks.mandate} wins. Qualifying institutions may score recognized ${terms.systems.agi} before the final Audit. Resolve the institutional winner and shared World Ending separately. Follow the numbered sections in order.
 
 ### Turn Overview: ReAct
 
@@ -63,11 +57,9 @@ Between action cycles, institutions may execute fixed one-for-one resource excha
 ### Modular hex board
 
 The board is one jurisdiction whose districts represent physical and
-institutional dependencies rather than ordinary distance. The shuffled map
+operational proximity rather than ordinary distance. The shuffled map
 remains fixed for all four Eras. Rival pieces coexist; there is no combat
 or player elimination.
-
-The following sections explain map setup, district effects, and control.
 
 <!-- map:start -->
 ### Build the jurisdiction
@@ -238,21 +230,15 @@ unused until the next Era.
 5. **Observe:** apply and inspect the consequences, then exhaust the Core Action. After all players resolve, pass Initiative
    clockwise and begin the next cycle using the changed world.
 
-Observe adds no event draw, award, negotiation window, speech, or extra phase.
-ReAct means reasoning and acting with feedback from the world.
-
 ### Agents as persistent assignments
 
-An Agent is an operation carrying out your institution's instructions. Its position token
-shows where you commit attention and influence. Each contributes one presence
-and remains until reassigned. Rival Agents may coexist. Agents have no paths,
-movement allowance, intermediate districts, or exhaustion rule. Any Agent can
-act again on a later turn. Recruiting expands persistent presence, never turns.
+An Agent represents committed presence and influence, remaining until reassigned.
+Rival Agents may coexist. Agents have no paths, movement allowance, or exhaustion rule.
+Any Agent can act on later turns. Recruiting expands presence, never actions.
 
 Each faction starts with two Agents and has four in total. The CEO is a character
 on the faction board, with no separate playing piece or executive powers.
-Facilities and Generators cannot act. Their geography remains physical: placement,
-space limits, local connections, and partnership adjacency still apply.
+Facilities and Generators cannot act; their placement and local connections still apply.
 
 ### Effect precedence
 
@@ -267,10 +253,10 @@ Systems are inactive before their printed Era panel lists them under **New this 
 Read that strip aloud before revealing the Mandate. All Era panels, personal project chips,
 and Faction abilities are open information.
 
-Progress teaches ordinary institutional work;
-Capacity unlocks Generators and Mega-Clusters; Authority unlocks Joint Ventures and Fusion;
-Continuity unlocks Quantum and optional public AGI recognition. Later Eras retain previously unlocked systems
-unless a printed effect says otherwise.
+Era I (Progress) covers baseline actions; Era II (Capacity) unlocks Generators
+and Mega-Clusters; Era III (Authority) unlocks Joint Ventures and Fusion; Era IV
+(Continuity) unlocks Quantum and optional public AGI recognition. Unlocked systems
+remain active.
 
 ### Universal tie rule
 
@@ -374,17 +360,17 @@ may receive its first unlocked upgrade in that same Build.
 
 #### ${terms.infrastructure.power} connections and delivery
 
-All local Power in Mandate 2038 is positional, spatial, and immediate. There are no power points, transmission budgets, or allocation tokens. A Facility is either connected (powered) or offline based on the current board state:
+All local Power in Mandate 2038 is positional, spatial, and immediate. There are no power points, transmission budgets, or allocation tokens. No Power is assigned, spent, or marked. A Facility is either connected (powered) or offline based on the current board state:
 
-1. **Facility 1 (Starting Grid):** Your Facility 1 carries an integrated connection to the civic grid and is **always powered**, including after relocation.
+1. **Facility 1 (Starting Grid):** Facility 1 carries an integrated civic connection and is **always powered**, including after relocation.
 2. **Generators:** Each player may construct one ordinary Generator (unlocks in Era II on an Energy hex). A Generator powers all Facilities you own on its own district and on all directly adjacent districts. Rival Generators never power your Facilities.
-3. **Fusion Demonstrator:** In Era III, attaching the Fusion upgrade turns that host Facility into an independent local power source. It powers itself and any other Facilities you own in the same or adjacent districts, without consuming a Generator slot.
+3. **Fusion Demonstrator:** In Era III, attaching the Fusion upgrade turns that host Facility into an independent local power source. It powers itself and your Facilities in the same or adjacent districts, without consuming a Generator slot.
 4. **Adjacency and Relocation:** Power status is checked continuously on the current board whenever an action, Production, Headline, Joint Venture, Mega-Cluster, or scoring effect refers to “powered” or “connected.” Relocating a Facility into or out of an energy corridor changes its connection status immediately. Only Fusion-upgraded Facilities transmit Power; other Facilities do not.
 
 **Worked placement example:**
 Suppose you own an emergency Generator on the Grid district:
-- **Connected:** Your Facility 2 placed on the Grid district (same hex) or on any district sharing an edge with the Grid district is **connected** and produces during Production.
-- **Offline:** Your Facility 3 placed two hexes away (not touching the Grid district or another owned power source) is **offline**. It produces nothing during Production and cannot host a Mega-Cluster until a Generator or Fusion host becomes adjacent.
+- **Connected:** Facility 2 placed on Grid (same hex) or on any adjacent district is **connected** and produces during Production.
+- **Offline:** Facility 3 two hexes away (not touching your Generator or Fusion host) is **offline**, producing nothing and unable to host a Mega-Cluster.
 - **Relocation:** If Organize relocates Facility 3 into an adjacent district, it becomes **connected immediately** for all subsequent actions, Production, and scoring.
 
 A Mega-Cluster operates only while its host Facility remains connected. Joint Ventures require both partner hosts to remain currently connected.
