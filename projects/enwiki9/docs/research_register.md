@@ -248,3 +248,28 @@ archive/score fields. [Report](fx2_numeric_attribution_20260919.md),
 Hold training until a separately frozen forward-semantics correction passes
 fixed-checkpoint native agreement. No final-mixer, previous1MB archive, or
 full-corpus attribution; no extrapolation or96M score credit.
+
+
+## 2026-09-19 - Exact native forward with explicit surrogate backward
+
+`fx2_native_forward2048_q0_v1`, owner `codex-native-forward-20260919`,
+replaces forward evaluation at the objective boundary with unchanged native
+execution on freshly exported current tensors. The whole CPU-reference Jacobian
+remains an explicitly approximate backward. No captured intermediates enter
+the predictor; no optimizer or parameter update occurs.
+All 2,528,880 float32 values in P/E/P calls match the retained native replay
+bitwise across eight synthetic and2,048 retained native rows. All434 exported
+tensors match per call;P repeats after E with identical weights and outputs.
+Both synthetic backward checks reach429 finite nonzero gradient tensors.
+Corrected/native P/E loss discrepancies are exactly zero;E still loses
+6.327739 synthetic and1,394.933194 real-input neural bits against P.
+160 artifacts rehashed;guards/cleanup pass;peak cgroup1,469,566,976B. Six
+diagnostic ledger rows carry null archive/full-score fields.
+[Report](fx2_native_forward_20260919.md),
+[terminal](../results/fx2_native_forward2048_q0_v1/terminal.json),
+[reflection](../operations/adaptive/reflections/20260920T025512Z_a4dd4d31c3.json).
+Next freeze matched data-only versus joint-cost development training using this
+forward and documented surrogate;measure actual packed weights and native
+archives. Exact forward values do not establish native gradients, internal Torch
+state parity, useful optimization or compression gain. Preserve P/E/M/S;zero
+objective credit and no full-corpus claim.

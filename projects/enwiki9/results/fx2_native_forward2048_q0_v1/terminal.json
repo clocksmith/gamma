@@ -1,0 +1,126 @@
+{
+  "schema": "gamma.enwiki9.native-forward-terminal.v1",
+  "comparison": {
+    "path": "results/fx2_native_forward2048_q0_v1/comparison.json",
+    "sha256": "sha256:2980ba4c41464f844e0aa9dd9ee8a424e97172940c2e7833dc60db0832ea17b2"
+  },
+  "verified_artifacts": 160,
+  "job": {
+    "path": "operations/adaptive/completed/959_20260920T025512Z_a4dd4d31c3.json",
+    "sha256": "sha256:358798ba0a7baa18f34a8eeeb2579ac62283a1d98ee86b88338e8b5ff6c7c637"
+  },
+  "guard": {
+    "path": "run_logs/adaptive/20260920T025512Z_a4dd4d31c3.resources/guard.json",
+    "sha256": "sha256:7750c47a36230856e48d583a22f7eeac29edf47aae8aec6a5725f6edbe1df285"
+  },
+  "all_forward_values_bitwise_native": true,
+  "training_performed": false,
+  "optimizer_updates": 0,
+  "gradient_native_exact": false,
+  "internal_torch_state_parity_established": false,
+  "objective_credit_bytes": 0,
+  "fixtures": {
+    "native_prefix2048": {
+      "rows": 2048,
+      "arms": {
+        "E": {
+          "loss_bits": 4724.549235222581,
+          "predictions": 2043,
+          "all_forward_values_bitwise_equal": true,
+          "fresh_weight_sha256": "1b43475964d55c870c7bb4511a8e4c7e601652c3fd5a2ee005e1b17213e776bd",
+          "gradients": {
+            "performed": false
+          },
+          "parameters_unchanged": true,
+          "exported_tensors_equal": 434
+        },
+        "P": {
+          "loss_bits": 3329.616041720797,
+          "predictions": 2043,
+          "all_forward_values_bitwise_equal": true,
+          "fresh_weight_sha256": "761f160c35506cb94f7d7050664bd242968c6f83f3bc19c3258c867bc7d3c54d",
+          "gradients": {
+            "performed": false
+          },
+          "parameters_unchanged": true,
+          "exported_tensors_equal": 434
+        },
+        "P-repeat": {
+          "loss_bits": 3329.616041720797,
+          "predictions": 2043,
+          "all_forward_values_bitwise_equal": true,
+          "fresh_weight_sha256": "761f160c35506cb94f7d7050664bd242968c6f83f3bc19c3258c867bc7d3c54d",
+          "gradients": {
+            "performed": false
+          },
+          "parameters_unchanged": true,
+          "exported_tensors_equal": 434
+        }
+      },
+      "verified_float32_values": 2519040,
+      "weight_identity_switch_P_E_P": true,
+      "delta_native_bits": 1394.933193501784,
+      "delta_corrected_bits": 1394.933193501784,
+      "delta_mismatch_bits": 0.0
+    },
+    "synthetic": {
+      "rows": 8,
+      "arms": {
+        "E": {
+          "loss_bits": 111.20921588114243,
+          "predictions": 7,
+          "all_forward_values_bitwise_equal": true,
+          "fresh_weight_sha256": "1b43475964d55c870c7bb4511a8e4c7e601652c3fd5a2ee005e1b17213e776bd",
+          "gradients": {
+            "all_finite": true,
+            "nonzero_parameter_tensors": 429,
+            "optimizer_updates": 0,
+            "participating_parameter_tensors": 429,
+            "performed": true
+          },
+          "parameters_unchanged": true,
+          "exported_tensors_equal": 434
+        },
+        "P": {
+          "loss_bits": 104.88147737265804,
+          "predictions": 7,
+          "all_forward_values_bitwise_equal": true,
+          "fresh_weight_sha256": "761f160c35506cb94f7d7050664bd242968c6f83f3bc19c3258c867bc7d3c54d",
+          "gradients": {
+            "all_finite": true,
+            "nonzero_parameter_tensors": 429,
+            "optimizer_updates": 0,
+            "participating_parameter_tensors": 429,
+            "performed": true
+          },
+          "parameters_unchanged": true,
+          "exported_tensors_equal": 434
+        },
+        "P-repeat": {
+          "loss_bits": 104.88147737265804,
+          "predictions": 7,
+          "all_forward_values_bitwise_equal": true,
+          "fresh_weight_sha256": "761f160c35506cb94f7d7050664bd242968c6f83f3bc19c3258c867bc7d3c54d",
+          "gradients": {
+            "performed": false
+          },
+          "parameters_unchanged": true,
+          "exported_tensors_equal": 434
+        }
+      },
+      "verified_float32_values": 9840,
+      "weight_identity_switch_P_E_P": true,
+      "delta_native_bits": 6.327738508484387,
+      "delta_corrected_bits": 6.327738508484387,
+      "delta_mismatch_bits": 0.0
+    }
+  },
+  "resources": {
+    "elapsed_seconds": 38.3005,
+    "peak_cgroup_bytes": 1469566976,
+    "peak_scratch_allocated_bytes": 318197760,
+    "cleanup_complete": true,
+    "timing_authority": "diagnostic"
+  },
+  "next_action": "Separately freeze matched data-only versus joint-cost training using this native forward and explicitly approximate backward; judge actual packed files and native archives. This result does not establish useful gradients or compression gain."
+}

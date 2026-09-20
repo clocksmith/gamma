@@ -56,9 +56,11 @@ and the [creative prompts](workbench/PROMPTS.md#creative-discovery) when changin
   competitive single-stream codec, retrain for data plus packed-model cost,
   then measure causal metadata conditioning inside that model. Preserve the
   census and retired split-stream result; raw shares are not savings forecasts.
-- Establish [deployment-matched numerical computation](docs/fx2_numeric_attribution_20260919.md)
-  before further training. Preserve fixed P/E and retired metadata checkpoints;
-  parity tests precede a separately frozen data-only versus joint-cost comparison.
+- Use the [validated native forward boundary](docs/fx2_native_forward_20260919.md)
+  for the next separately frozen data-only versus joint-cost training comparison.
+  Its backward is a whole-reference surrogate, not exact native differentiation.
+  Preserve fixed P/E and retired metadata checkpoints; every new checkpoint needs
+  fresh native evaluation and actual packed/archive accounting.
 - Every semantic mutation gets a new candidate. Never edit running, sealed, or
   measured source in place. Use the canonical lifecycle, not ad hoc launchers.
 - Freeze hypothesis, parent, changed mechanism, development budget, selection
