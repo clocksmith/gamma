@@ -8,7 +8,7 @@ PROJECT = Path(__file__).resolve().parents[1]
 GROUPS = {
     "pure": ["architecture/test_closure.py", "architecture/test_primitives.py", "architecture/test_boundaries.py", "architecture/test_memory.py",
              "architecture/test_history.py", "architecture/test_original_inputs.py", "architecture/test_lease.py", "test_enwiki9_lab_recovery_activation.py",
-             "test_enwiki9_lab_worker_liveness.py", "test_record_driver_result.py",
+             "test_enwiki9_lab_worker_liveness.py", "test_record_driver_result.py", "test_fx2_relational_terminal.py",
              "test_enwiki9_entry_resources.py", "test_enwiki9_ledger_navigation.py",
              "test_objective90_migration.py", "test_objective96_migration.py", "test_enwiki9_report_targets.py",
              "-m", "not historical"],
