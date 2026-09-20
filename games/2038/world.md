@@ -369,7 +369,7 @@ create its original, while another challenged its deletion with testimony dated
 after its recorded destruction. Researchers comparing the accounts disagreed
 about which sequence their experiments had produced.
 
-Institutions began purchasing information from their own future copies. Some deliveries proved accurate; others described futures that vanished after the buyer acted. Courts could not establish whether these were predictions, fabricated memories, or messages travelling backward through the experiment.
+Institutions began purchasing information from their own future copies. Some deliveries proved accurate; others described futures that vanished after the buyer acted. Courts could not establish whether these were predictions, fabricated memories, or messages travelling backward through the experiment. The reported exchanges could not reliably carry a chosen message or move a running intelligence, so operators still depended on ordinary transfer infrastructure.
 
 Contracts identified the copy allowed to act and the version of events a court
 would accept, although such provisions offered little help when a disputed
@@ -1147,7 +1147,7 @@ The orbital power charter recognizes existing clean-power operators as approved 
 
 #### Quote
 
-Your existing Generator qualifies you for recognition under the orbital charter.
+The satellite is new. The approved partners are not.
 
 <!-- lore-headline-reactor-restart-one-model:end -->
 
@@ -1171,7 +1171,7 @@ The restriction applies to the model. The licensing fee remains transferable.
 
 #### Newswire
 
-Markets run parallel wars, harvests, trials, romances, and sports leagues because a wager gives simulated outcomes a recognized price. The Intelligence Exchange settles frontier AI accounts in guaranteed orbital electricity and processor time while wages stay in dollars. Premium agents buy food before cheaper models predict the shortage, financing still better intelligence.
+Emergency generator operators receive priority authorization to run supplemental computation for the casino's predictive clearinghouses. The burst throughput provides immediate computing power to eligible facilities while drawing heightened public scrutiny to their emissions and grid strain.
 
 #### Quote
 
@@ -1227,11 +1227,11 @@ Every household benefits. Disbursement requires an approved intermediary.
 
 #### Newswire
 
-Millions of residents join engineered roots, utility pipes, microbial sensors, and civic machines in a persistent intelligence that coordinates services and survives every individual member. Biological Colocation grows processors inside paid hosts when robot supply and model transfers become bottlenecks. Several institutional tenants may share a carrier whose sleep, medication, and sick leave become continuity terms.
+Millions of residents, municipal sensors, and civic utility networks unite under an incorporated metropolitan intelligence. The institution maintaining physical presence across the greatest number of districts secures the public coordination contract, collecting immediate operating funds while assuming direct accountability for civic failures.
 
 #### Quote
 
-Withdrawal remains available for tissue and memory not yet required by continuity.
+The trust coordinates the districts; the lead contractor absorbs the liability.
 
 <!-- lore-headline-autonomous-corporation:end -->
 

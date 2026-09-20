@@ -16,6 +16,20 @@ ${terms.systems.agi} achievement before the final Audit. Resolve
 the institutional winner and shared World Ending separately. Follow the
 numbered sections in order.
 
+### Object of the Game
+
+Institutions race across four Eras to construct infrastructure, deploy automated services, conduct research, and secure public authority. The institution with the highest final Mandate wins. Qualifying institutions may score recognized AGI for substantial Mandate, while collective Trust and Systemic Risk resolve a separate, shared World Ending.
+
+### Turn Overview: ReAct
+
+Each Era consists of three action cycles played simultaneously using the ReAct loop:
+
+1. **Reason:** Secretly choose one available Core Action from your hand.
+2. **Act:** Reveal selections simultaneously. In Initiative order, assign an Agent to any district and resolve that Action's effects at the destination.
+3. **Observe:** Apply district visit bonuses, pay costs, collect yields and Scrutiny, and exhaust the chosen Action card.
+
+Between action cycles, institutions may execute fixed one-for-one resource exchanges. After three action cycles, players resolve Era Production, optional AGI recognition (Era IV only), the Public Audit, and Era Mandate scoring.
+
 ## 1. Setup
 
 1. Unfold the Governance Board. Build the nineteen-tile map in its wells as described in **Modular hex board**:
@@ -358,27 +372,22 @@ plan you can fully afford when Build resolves. A newly built connected Facility
 may receive its first unlocked upgrade in that same Build.
 <!-- construction:end -->
 
-#### ${terms.infrastructure.power} connections
+#### ${terms.infrastructure.power} connections and delivery
 
-Facility 1 is always powered, including after relocation. Every other Facility
-is powered when it shares a district with, or is adjacent to, one of its owner's
-Generators or Fusion hosts. This condition is checked on the current board whenever an effect
-uses “powered” or “connected.” Other players' Generators do not connect yours.
-Only Fusion-upgraded Facilities transmit Power; other Facilities do not. No Power is assigned, spent, or marked.
+All local Power in Mandate 2038 is positional, spatial, and immediate. There are no power points, transmission budgets, or allocation tokens. A Facility is either connected (powered) or offline based on the current board state:
 
-A Generator has no numeric capacity. A cheap emergency Generator adds its
-printed recurring Scrutiny during Production when it serves a Facility. A clean
-Generator costs more and grants its printed Trust on construction.
+1. **Facility 1 (Starting Grid):** Your Facility 1 carries an integrated connection to the civic grid and is **always powered**, including after relocation.
+2. **Generators:** Each player may construct one ordinary Generator (unlocks in Era II on an Energy hex). A Generator powers all Facilities you own on its own district and on all directly adjacent districts. Rival Generators never power your Facilities.
+3. **Fusion Demonstrator:** In Era III, attaching the Fusion upgrade turns that host Facility into an independent local power source. It powers itself and any other Facilities you own in the same or adjacent districts, without consuming a Generator slot.
+4. **Adjacency and Relocation:** Power status is checked continuously on the current board whenever an action, Production, Headline, Joint Venture, Mega-Cluster, or scoring effect refers to “powered” or “connected.” Relocating a Facility into or out of an energy corridor changes its connection status immediately. Only Fusion-upgraded Facilities transmit Power; other Facilities do not.
 
-#### ${terms.infrastructure.power} delivery
+**Worked placement example:**
+Suppose you own an emergency Generator on the Grid district:
+- **Connected:** Your Facility 2 placed on the Grid district (same hex) or on any district sharing an edge with the Grid district is **connected** and produces during Production.
+- **Offline:** Your Facility 3 placed two hexes away (not touching the Grid district or another owned power source) is **offline**. It produces nothing during Production and cannot host a Mega-Cluster until a Generator or Fusion host becomes adjacent.
+- **Relocation:** If Organize relocates Facility 3 into an adjacent district, it becomes **connected immediately** for all subsequent actions, Production, and scoring.
 
-Use the same current-board connection rule for Production, Headlines, Mandates,
-Joint Ventures, Mega-Clusters, AGI recognition, and final offline penalties.
-A Facility can become connected or offline immediately after infrastructure
-moves or is built. No prior Production allocation remains authoritative.
-
-A Mega-Cluster operates only while its host Facility remains connected. It has no additional Power demand. Joint Ventures retain their printed
-host, range, and resource requirements; both hosts must currently be connected.
+A Mega-Cluster operates only while its host Facility remains connected. Joint Ventures require both partner hosts to remain currently connected.
 
 #### Construct a Facility
 
@@ -407,11 +416,6 @@ tile always constructs ${terms.technology.cleanInfrastructure}. Fusion's effect 
 cards are used. Each player has one ordinary Generator, and each Energy hex
 still has three shared slots.
 <!-- power-contracts:end -->
-
-An ordinary Generator connects your Facilities on its own or adjacent hexes.
-Power has no numeric capacity and is never allocated. An emergency Generator
-adds its operating penalty only when it serves at least one of your Facilities
-at Production, including a first Facility already supplied by the starting grid.
 
 ##### ${terms.technology.cleanInfrastructure}
 
@@ -530,7 +534,7 @@ ${terms.actions.influence} effect.
 
 ## 5. Era sequence
 
-### A. Begin the quarter
+### A. Begin the Era
 
 - Move the Current Era chip to Era I; in later Eras, advance one panel.
 - Read that Era’s **New this Era** strip aloud. Those systems are now active.

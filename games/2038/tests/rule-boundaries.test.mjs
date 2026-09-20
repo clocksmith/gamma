@@ -3,6 +3,8 @@ import { readFile } from "node:fs/promises";
 import test from "node:test";
 import { createInteractiveGame } from "../lab/runtime/create-interactive-game.js";
 import { deriveEraUnlocks } from "../tasks/content/era-unlocks.mjs";
+import { calculateDeployComputeCost } from "../lab/rules/deploy-costs.js";
+import { commitAction, createGame, resolveSelectedAction } from "../web/src/engine.js";
 
 const seed = "rule-audit-20260912";
 const card = (type, kind = "special") => ({ id: type, type, kind });
@@ -223,3 +225,76 @@ test("compiled instructions agree with project unlocks, shared risk, and Fusion 
   assert.match(config.board.startingGridConnection.rule, /Generator or Fusion host/);
   assert.doesNotMatch(config.board.startingGridConnection.restrictions, /demand/);
 });
+
+test("Deploy honors Compute Estate and Human Access discounts, handles caps, and matches browser execution", async () => {
+  const match = await fixture();
+  const player = match.players[0];
+  const cloudTile = match.board.find(tile => tile.category === "cloud");
+  const consumerTile = match.board.find(tile => tile.category === "consumer");
+  const chipTile = match.board.find(tile => tile.category === "chip");
+
+  // 1. Compute Estate: Capability >= 2, Compute = 0 -> Deploy is legal, costs 0, gives 1 Customer, adds 1 Scrutiny
+  Object.assign(player, { capability: 2, compute: 0, customers: 0, scrutiny: 0 });
+  const cloudPlan = match.legalResolutions(0, "deploy").find(choice => choice.parameters.destinationCategory === "cloud");
+  assert.ok(cloudPlan, "Deploy at Compute Estate must be legal with 0 Compute");
+  assert.equal(cloudPlan.parameters.computeCost, 0);
+  assert.equal(cloudPlan.consequences.compute, 0);
+  match.applyResolution(0, cloudPlan);
+  assert.deepEqual([player.compute, player.customers, player.scrutiny], [0, 1, 1]);
+
+  // 2. Human Access: Capability >= 4 (for customer 2), Compute = 0 -> costs 0 via location waiver
+  Object.assign(player, { capability: 4, compute: 0, scrutiny: 0 });
+  const consumerPlan = match.legalResolutions(0, "deploy").find(choice => choice.parameters.destinationCategory === "consumer");
+  assert.ok(consumerPlan, "Deploy at Human Access must be legal with 0 Compute");
+  assert.equal(consumerPlan.parameters.computeCost, 0);
+  assert.equal(consumerPlan.consequences.compute, 0);
+  match.applyResolution(0, consumerPlan);
+  assert.deepEqual([player.compute, player.customers, player.scrutiny], [0, 2, 1]);
+
+  // 3. Ordinary district (Chip): Capability >= 6 (for customer 3), Compute = 0 -> blocked
+  Object.assign(player, { capability: 6, compute: 0 });
+  const chipPlanNoCompute = match.legalResolutions(0, "deploy").find(choice => choice.parameters.destinationCategory === "chip");
+  assert.equal(chipPlanNoCompute, undefined, "Deploy at ordinary district blocked with 0 Compute");
+
+  // With Compute = 1, ordinary district is legal and spends 1 Compute
+  player.compute = 1;
+  const chipPlan = match.legalResolutions(0, "deploy").find(choice => choice.parameters.destinationCategory === "chip");
+  assert.ok(chipPlan, "Deploy at ordinary district legal with 1 Compute");
+  assert.equal(chipPlan.parameters.computeCost, 1);
+  assert.equal(chipPlan.consequences.compute, -1);
+  match.applyResolution(0, chipPlan);
+  assert.deepEqual([player.compute, player.customers], [0, 3]);
+
+  // 4. Insufficient Capability: Capability < 8 (for customer 4) -> blocked even with plenty of Compute
+  Object.assign(player, { capability: 5, compute: 10 });
+  assert.equal(match.legalResolutions(0, "deploy").length, 0, "Deploy blocked when Capability is insufficient");
+
+  // 5. Customer Cap: when customers == 5 -> blocked
+  Object.assign(player, { capability: 10, compute: 10, customers: 5 });
+  assert.equal(match.legalResolutions(0, "deploy").length, 0, "Deploy blocked when Customer cap (5) is reached");
+
+  // 6. Higher base cost: calculateDeployComputeCost subtracts 1, floored at 0 (does not waive every cost)
+  assert.equal(calculateDeployComputeCost(cloudTile, { baseCost: 2 }), 1);
+  assert.equal(calculateDeployComputeCost(cloudTile, { baseCost: 1 }), 0);
+  assert.equal(calculateDeployComputeCost(cloudTile, { baseCost: 0 }), 0);
+  assert.equal(calculateDeployComputeCost(consumerTile, { baseCost: 2 }), 0);
+  assert.equal(calculateDeployComputeCost(chipTile, { baseCost: 2 }), 2);
+
+  // 7. Tactical price cut & waiver interaction / no double discount
+  assert.equal(calculateDeployComputeCost(cloudTile, { baseCost: 2, tacticPriceCut: true }), 0);
+  assert.equal(calculateDeployComputeCost(consumerTile, { baseCost: 1, tacticPriceCut: true }), 0);
+  assert.equal(calculateDeployComputeCost("cloud", { baseCost: 1 }), 0);
+
+  // 8. Exercise web engine executeAction: browser actual selection and resolution flow
+  const configDoc = JSON.parse(await readFile(new URL("../dist/runtime/game-config.json", import.meta.url)));
+  const factionsDoc = JSON.parse(await readFile(new URL("../dist/runtime/factions.json", import.meta.url)));
+  const headlinesDoc = JSON.parse(await readFile(new URL("../dist/runtime/headlines.json", import.meta.url)));
+  const webState = createGame(configDoc, factionsDoc, headlinesDoc, "deploy-test-seed", "platform_empire", 4);
+  const webCloudTile = webState.board.find(tile => tile.category === "cloud");
+  Object.assign(webState.player, { capability: 2, compute: 0, customers: 0, scrutiny: 0 });
+  const agentPiece = webState.player.pieces[0];
+  commitAction(webState, "deploy");
+  resolveSelectedAction(configDoc, headlinesDoc, webState, agentPiece.id, webCloudTile.instanceId);
+  assert.deepEqual([webState.player.compute, webState.player.customers, webState.player.scrutiny], [0, 1, 1]);
+});
+

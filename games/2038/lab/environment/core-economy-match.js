@@ -11,6 +11,7 @@ import {
   renderSimulationCopy,
   simulationCopy
 } from "../content/simulation-copy.js";
+import { calculateDeployComputeCost } from "../rules/deploy-costs.js";
 
 export const CORE_ECONOMY_COVERAGE = simulationCopy.coverage.coreEconomy;
 
@@ -488,7 +489,7 @@ export class CoreEconomyMatch {
       }
 
       if (actionId === "deploy" && this.canDeploy(player)) {
-        const computeCost = destination.category === "consumer" ? 0 : 1;
+        const computeCost = calculateDeployComputeCost(destination, { baseCost: 1 });
         return [{
           decisionId: `deploy_${destination.category}_${suffix}`,
           label: renderSimulationCopy(simulationCopy.decisions.moveAndDeploy, {
@@ -498,7 +499,7 @@ export class CoreEconomyMatch {
           }),
           actionId,
           parameters: { ...base, computeCost },
-          consequences: { compute: -computeCost, customers: 1, scrutiny: 1 }
+          consequences: { compute: -computeCost || 0, customers: 1, scrutiny: 1 }
         }];
       }
 

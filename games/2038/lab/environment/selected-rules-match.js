@@ -20,6 +20,7 @@ import {
   renderSimulationCopy,
   simulationCopy
 } from "../content/simulation-copy.js";
+import { calculateDeployComputeCost } from "../rules/deploy-costs.js";
 import { throwIfAborted } from "../cancellation.js";
 
 export const SELECTED_RULES_COVERAGE = simulationCopy.coverage.selectedRules;
@@ -1550,7 +1551,10 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
     ) {
       const baseRequirement = this.customerRequirement(player.customers);
       decisions = this.assignmentVariants(player, (piece, destination) => {
-        const computeCost = destination.category === "consumer" ? 0 : this.rulesVariant.deployComputeCost;
+        const computeCost = calculateDeployComputeCost(destination, {
+          baseCost: this.rulesVariant.deployComputeCost,
+          tacticPriceCut: Boolean(player.tacticModifiers?.api_price_cut)
+        });
         const requirement = baseRequirement;
         if (player.capability < requirement) return [];
         return [{
@@ -1569,7 +1573,7 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
             computeCost
           },
           consequences: {
-            compute: -computeCost,
+            compute: -computeCost || 0,
             customers: 1,
             scrutiny: 1
           }
@@ -1660,7 +1664,12 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
       result.parameters.actualRunway = (result.parameters.mode === "venture" ? this.rulesVariant.fundVenture : this.rulesVariant.fundConservative) + Number(category === "capital");
     }
     if (result.actionId === "research") result.parameters.actualComputeCost = category === "cloud" ? 0 : 1;
-    if (result.actionId === "deploy") result.parameters.computeCost = category === "consumer" || player.tacticModifiers.api_price_cut ? 0 : this.rulesVariant.deployComputeCost;
+    if (result.actionId === "deploy") {
+      result.parameters.computeCost = calculateDeployComputeCost(category, {
+        baseCost: this.rulesVariant.deployComputeCost,
+        tacticPriceCut: Boolean(player.tacticModifiers?.api_price_cut)
+      });
+    }
     return result;
   }
 

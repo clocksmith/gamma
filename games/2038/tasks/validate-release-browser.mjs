@@ -265,7 +265,7 @@ try {
     await send("Page.navigate", { url: `${base}/__browser/runner.html` });
     report.boundaries = await waitFor("window.__mandateBoundaryResults");
     await screenshot("boundary-regressions.png");
-    assert.equal(report.boundaries.length, 11, "All eleven boundary regressions must load.");
+    assert.equal(report.boundaries.length, 12, "All twelve boundary regressions must load.");
     assert.ok(report.boundaries.every((entry) => entry.status === "passed"), JSON.stringify(report.boundaries));
     process.stdout.write(`browser: ${report.boundaries.length} boundary regressions passed\n`);
   }
