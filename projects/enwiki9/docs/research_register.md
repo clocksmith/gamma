@@ -1,6 +1,25 @@
 # Research Register
 [Record index](research_register/README.md) | [Earlier records](research_register/archive/README.md)
 
+## 2026-09-20 - Read and check the supplied standalone CRG bundles
+
+Read all seven supplied sources/documents at `679b0a721` and preserve their exact
+bytes. [The import review](crg_import_review_20260920.md) distinguishes the
+optimized order-6 context parent with optional four-donor bindings from the block
+codec's prefix-matched word-history expert and per-block codec selection. Neither
+is FX2; block history has no persistent latent argument bindings. Optimized auto
+excludes the relational arm. Their supplied measurements credit the stronger
+parent or generic backends and do not establish a controlled relational gain.
+
+The [independent synthetic receipt](../operations/evidence/crg_import_review_20260920.json)
+records 76 passing checks: sanitized compilation, Python/native archive equality,
+inversion after original-input removal, repeats, block boundaries and corruption/
+output-limit rejection. The original referenced suites and benchmark artifacts
+were not supplied; these checks do not reproduce their reported measurements.
+No corpus run, installation or successor mechanism is selected. The parked FX2
+decision and broader cross-history hypothesis remain intact. Source, execution
+and evidence boundaries are preserved; objective score credit is zero.
+
 ## 2026-09-20 - Persistent causal relational bindings, one native stream
 
 The [closed fixed comparison](causal_relational_grammar_20260920.md) records all
