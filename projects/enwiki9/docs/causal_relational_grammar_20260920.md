@@ -142,3 +142,29 @@ transition or launch a codec. Review the actual payload/control deltas, then use
 after that reflection should `record_driver_result.py --terminal-index` append
 the closed arm set. On failure, preserve the failed execution and reflect its
 actual failure class instead. No automatic full-corpus promotion is authorized.
+
+## Terminal verification review
+
+The separately maintained terminal interpreter now requires all 51 distinct
+successful command phases and matches each to its retained command record. It
+checks manifest membership and exact references for the evidence it consumes,
+matches the job and candidate identities, compares P/K/S introduced state, and
+recomputes the frozen paid predicate from archive sizes and actual code costs.
+Parent accounting resolves the authenticated binary in the original snapshot;
+an unrelated change to the current checkout cannot change that baseline.
+The running v2 predictor, adapter, recipe and frozen experiment remain unchanged.
+
+The terminal retains internal expert log-cost attribution separately from finite
+archive deltas: shared versus independent bindings, shared versus wrong donors,
+and shared versus parent, plus the final mixture cost. Native summaries must match
+their retained artifacts. Those log costs cover the same complete modeled
+population; prediction-active subsets can differ between arms and are not a
+matched-subset estimate. A better internal expert can still lose to the parent
+and supply no archive gain. No internal saving is added to the measured archive.
+
+Twelve synthetic terminal tests exercise successful publication, idempotent
+replay despite a changed checkout parent, and rejection of incomplete or corrupt
+bundles before publication. The explicit pure CI group passes 156 tests and 54
+subtests, with one historical test deselected. Compilation and imports pass.
+These checks validate the evidence interpreter, not the still-running native
+comparison. Its terminal, reflection and driver ledger rows remain pending.
