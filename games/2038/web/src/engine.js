@@ -1,4 +1,5 @@
 import { connectedFacilityIds } from "../../lab/rules/local-power-connections.js";
+import { calculateDeployComputeCost } from "../../lab/rules/deploy-costs.js";
 export function seedToUint32(value) {
   let hash = 2166136261;
   for (const character of String(value)) {
@@ -552,7 +553,7 @@ function resolveCore(config, state, actionId, destination, options) {
 
   if (actionId === "deploy") {
     const requirement = [2, 4, 6, 8, 10][player.customers] ?? Infinity;
-    const computeCost = destination.category === "consumer" ? 0 : 1;
+    const computeCost = calculateDeployComputeCost(destination, { baseCost: 1 });
     if (player.capability < requirement || player.compute < computeCost || player.customers >= 5) {
       return `Deploy failed: Customer ${player.customers + 1} needs Capability ${requirement} and ${computeCost} Compute.`;
     }
