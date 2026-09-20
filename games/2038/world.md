@@ -1227,7 +1227,7 @@ Every household benefits. Disbursement requires an approved intermediary.
 
 #### Newswire
 
-Millions of residents, municipal sensors, and civic utility networks unite under an incorporated metropolitan intelligence. The institution maintaining physical presence across the greatest number of districts secures the public coordination contract, collecting immediate operating funds while assuming direct accountability for civic failures.
+Millions of residents join engineered roots, utility pipes, microbial sensors, and civic utility networks under an incorporated metropolitan intelligence. The institution maintaining physical presence across the greatest number of districts secures the public coordination contract, collecting immediate operating funds while assuming direct accountability for civic failures.
 
 #### Quote
 
