@@ -1,197 +1,24 @@
 {
-  "active_candidate": {
-    "active_source": "live_adaptive_tool_rss_guard",
-    "evidence": "current process, guard, and adaptive-job evidence identify this candidate",
-    "label": "active candidate",
-    "program_id": "fx2_matched_train250k_q0_v1",
-    "scope_bytes": 250000,
-    "status": "running"
-  },
-  "active_candidate_recent_artifacts": [
-    {
-      "bytes": 14680064001,
-      "mtime_utc": "2026-09-20T03:32:25+00:00",
-      "path": "projects/enwiki9/results/fx2_matched_train250k_q0_v1/native/ppm.temp"
-    },
-    {
-      "bytes": 41328,
-      "mtime_utc": "2026-09-20T03:32:25+00:00",
-      "path": "projects/enwiki9/results/fx2_matched_train250k_q0_v1/native/progress.log"
-    },
-    {
-      "bytes": 401358,
-      "mtime_utc": "2026-09-20T03:32:25+00:00",
-      "path": "projects/enwiki9/results/fx2_matched_train250k_q0_v1/native/confirmation-J-encode.stderr"
-    },
-    {
-      "bytes": 0,
-      "mtime_utc": "2026-09-20T03:31:23+00:00",
-      "path": "projects/enwiki9/results/fx2_matched_train250k_q0_v1/native/confirmation-J.arc"
-    },
-    {
-      "bytes": 653301,
-      "mtime_utc": "2026-09-20T03:31:23+00:00",
-      "path": "projects/enwiki9/results/fx2_matched_train250k_q0_v1/native/confirmation-J.arc.cmix.temp"
-    },
-    {
-      "bytes": 0,
-      "mtime_utc": "2026-09-20T03:31:23+00:00",
-      "path": "projects/enwiki9/results/fx2_matched_train250k_q0_v1/native/confirmation-J-encode.rusage.json"
-    },
-    {
-      "bytes": 0,
-      "mtime_utc": "2026-09-20T03:31:23+00:00",
-      "path": "projects/enwiki9/results/fx2_matched_train250k_q0_v1/native/confirmation-J-encode.stdout"
-    },
-    {
-      "bytes": 1465,
-      "mtime_utc": "2026-09-20T03:31:23+00:00",
-      "path": "projects/enwiki9/results/fx2_matched_train250k_q0_v1/native/confirmation-P-repeat.execution.json"
-    },
-    {
-      "bytes": 96,
-      "mtime_utc": "2026-09-20T03:31:23+00:00",
-      "path": "projects/enwiki9/results/fx2_matched_train250k_q0_v1/native/confirmation-P-repeat.rusage.json"
-    },
-    {
-      "bytes": 117,
-      "mtime_utc": "2026-09-20T03:31:23+00:00",
-      "path": "projects/enwiki9/results/fx2_matched_train250k_q0_v1/native/confirmation-P-repeat.stdout"
-    },
-    {
-      "bytes": 768585,
-      "mtime_utc": "2026-09-20T03:31:23+00:00",
-      "path": "projects/enwiki9/results/fx2_matched_train250k_q0_v1/native/confirmation-P-repeat.stderr"
-    },
-    {
-      "bytes": 131238,
-      "mtime_utc": "2026-09-20T03:31:22+00:00",
-      "path": "projects/enwiki9/results/fx2_matched_train250k_q0_v1/native/confirmation-P.repeat.arc"
-    }
-  ],
-  "active_gate": {
-    "active_source": "live adaptive worker receipt: operations/adaptive/running/909_20260920T031533Z_600d9d3b8d.json",
-    "driver_result_json": "projects/enwiki9/results/fx2_matched_train250k_q0_v1/decision.json",
-    "driver_result_json_present": false,
-    "evidence": "gate decision is running; wait for terminal receipts",
-    "gate_size": 250000,
-    "label": "active gate",
-    "next_action": "wait_for_gate_completion",
-    "program_id": "fx2_matched_train250k_q0_v1",
-    "scope_bytes": 250000,
-    "scope_symbols": 151210,
-    "scope_unit": "raw bytes; native modeled rows tracked separately",
-    "source": "live_adaptive_tool_rss_guard",
-    "status": "running"
-  },
+  "active_candidate": null,
+  "active_candidate_recent_artifacts": [],
+  "active_gate": null,
   "active_processes": {
-    "active_cmix_mode": "compress",
-    "active_proc_io": {
-      "cancelled_write_bytes": 655360,
-      "rchar": 7316762,
-      "read_bytes": 0,
-      "syscr": 951,
-      "syscw": 17251,
-      "wchar": 1748513,
-      "write_bytes": 8966144
-    },
-    "active_rows": [
-      {
-        "args": "/bin/bash -lc python3 - <<'PY' import json p=json.load(open('/tmp/fx2-matched-prelaunch.json'));print(p['resources']['cpu_usage'][3],p['resources']['scratch_available_bytes'],p['records']['running'],p['queue']) PY taskset -c 3 /tmp/gamma-architecture-tests/bin/python projects/enwiki9/tools/enwiki9_lab.py run --candidate fx2_matched_train250k_q0_v1 --max-workers 1 > /tmp/fx2-matched-run.log 2>&1",
-        "pgid": 2895844,
-        "pid": 2895844,
-        "ppid": 522086,
-        "rss_kib": 4032,
-        "stat": "Ss"
-      },
-      {
-        "args": "/tmp/gamma-architecture-tests/bin/python projects/enwiki9/tools/enwiki9_lab.py run --candidate fx2_matched_train250k_q0_v1 --max-workers 1",
-        "pgid": 2895844,
-        "pid": 2895960,
-        "ppid": 2895844,
-        "rss_kib": 39116,
-        "stat": "Sl"
-      },
-      {
-        "args": "/tmp/gamma-architecture-tests/bin/python /home/x/deco/gamma/projects/enwiki9/tools/run_with_resource_guard_v3.py --limit-kib 9765624 --official-decimal-limit-kib 9765624 --limit-mode tree --cgroup-path /sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/gamma-enwiki9-20260920T031533Z_600d9d3b8d --cgroup-memory-max-bytes 9999998976 --temporary-disk-limit-bytes 24000000000 --phase-marker-path /home/x/deco/gamma/projects/enwiki9/run_logs/adaptive/20260920T031533Z_600d9d3b8d.resources/phases.jsonl --max-logical-cpus 1 --guard-json /home/x/deco/gamma/projects/enwiki9/run_logs/adaptive/20260920T031533Z_600d9d3b8d.resources/guard.json --label 20260920T031533Z_600d9d3b8d --phase diagnostic --scratch-path /home/x/deco/gamma/projects/enwiki9/results/fx2_matched_train250k_q0_v1 --scratch-path /home/x/deco/gamma/projects/enwiki9/run_logs/adaptive/20260920T031533Z_600d9d3b8d.log --scratch-path /home/x/deco/gamma/projects/enwiki9/run_logs/adaptive/20260920T031533Z_600d9d3b8d.resources --scratch-path /tmp/gamma-enwiki9-20260920T031533Z_600d9d3b8d-emjy23wa/fx2_matched_train250k_q0_v1 -- /usr/bin/taskset --cpu-list 3 /bin/sh -c printf '%s\\n' '{\"phase\":\"diagnostic\",\"event\":\"worker_start\",\"detail\":\"operational envelope only; no codec phase credit\"}' >> \"$GAMMA_RESOURCE_PHASE_MARKERS\" || exit 125; exec \"$@\" enwiki9-discovery-envelope /tmp/gamma-architecture-tests/bin/python /home/x/deco/gamma/projects/enwiki9/tools/fx2_matched_training_v1.py --root /home/x/deco/gamma/projects/enwiki9 --output /home/x/deco/gamma/projects/enwiki9/results/fx2_matched_train250k_q0_v1 --experiment /home/x/deco/gamma/projects/enwiki9/operations/adaptive/experiments/fx2_matched_train250k_q0_v1.json --closure /home/x/deco/gamma/projects/enwiki9/operations/provenance/fx2_matched_train250k_q0_v1_closure.json --plan /home/x/deco/gamma/projects/enwiki9/operations/provenance/fx2_matched_train250k_q0_v1_plan.json",
-        "pgid": 2895844,
-        "pid": 2896077,
-        "ppid": 2895960,
-        "rss_kib": 75032,
-        "stat": "S"
-      },
-      {
-        "args": "/tmp/gamma-architecture-tests/bin/python /home/x/deco/gamma/projects/enwiki9/tools/fx2_matched_training_v1.py --root /home/x/deco/gamma/projects/enwiki9 --output /home/x/deco/gamma/projects/enwiki9/results/fx2_matched_train250k_q0_v1 --experiment /home/x/deco/gamma/projects/enwiki9/operations/adaptive/experiments/fx2_matched_train250k_q0_v1.json --closure /home/x/deco/gamma/projects/enwiki9/operations/provenance/fx2_matched_train250k_q0_v1_closure.json --plan /home/x/deco/gamma/projects/enwiki9/operations/provenance/fx2_matched_train250k_q0_v1_plan.json",
-        "pgid": 2896096,
-        "pid": 2896096,
-        "ppid": 2896077,
-        "rss_kib": 36820,
-        "stat": "Ss"
-      },
-      {
-        "args": "/usr/bin/time -f {\"maximum_process_rss_kib\":%M,\"user_seconds\":%U,\"system_seconds\":%S,\"exit_status\":%x} -o /home/x/deco/gamma/projects/enwiki9/results/fx2_matched_train250k_q0_v1/native/confirmation-J-encode.rusage.json /home/x/deco/gamma/projects/enwiki9/results/fx2_matched_train250k_q0_v1/native/cmix -c /home/x/deco/gamma/projects/enwiki9/results/fx2_matched_train250k_q0_v1/native/dictionary/english.dic /home/x/deco/gamma/projects/enwiki9/results/fx2_matched_train250k_q0_v1/snapshot/operations/evidence/fixtures/opcode_field_confirmation1m_v1.raw /home/x/deco/gamma/projects/enwiki9/results/fx2_matched_train250k_q0_v1/native/confirmation-J.arc --transformer /home/x/deco/gamma/projects/enwiki9/results/fx2_matched_train250k_q0_v1/training/J/weights.tfwc2",
-        "pgid": 3108053,
-        "pid": 3108053,
-        "ppid": 2896096,
-        "rss_kib": 1828,
-        "stat": "Ss"
-      },
-      {
-        "args": "/home/x/deco/gamma/projects/enwiki9/results/fx2_matched_train250k_q0_v1/native/cmix -c /home/x/deco/gamma/projects/enwiki9/results/fx2_matched_train250k_q0_v1/native/dictionary/english.dic /home/x/deco/gamma/projects/enwiki9/results/fx2_matched_train250k_q0_v1/snapshot/operations/evidence/fixtures/opcode_field_confirmation1m_v1.raw /home/x/deco/gamma/projects/enwiki9/results/fx2_matched_train250k_q0_v1/native/confirmation-J.arc --transformer /home/x/deco/gamma/projects/enwiki9/results/fx2_matched_train250k_q0_v1/training/J/weights.tfwc2",
-        "pgid": 3108053,
-        "pid": 3108054,
-        "ppid": 3108053,
-        "rss_kib": 5713828,
-        "stat": "R"
-      }
-    ],
-    "active_scorer_observed": true,
-    "active_temp_io": {
-      "input_bytes": null,
-      "input_mtime_utc": null,
-      "input_path": "/home/x/deco/gamma/projects/enwiki9/results/fx2_matched_train250k_q0_v1/native/--transformer",
-      "output_bytes": 2905937,
-      "output_mtime_utc": "2026-09-20T03:17:39+00:00",
-      "output_path": "/home/x/deco/gamma/projects/enwiki9/results/fx2_matched_train250k_q0_v1/training/J/weights.tfwc2",
-      "output_temp_bytes": null,
-      "output_temp_mtime_utc": null,
-      "output_temp_path": "/home/x/deco/gamma/projects/enwiki9/results/fx2_matched_train250k_q0_v1/training/J/weights.tfwc2.cmix.temp"
-    },
-    "active_tree_decimal_10gb_margin_kib": 3894969,
-    "active_tree_margin_kib": 4615104,
-    "active_tree_rss_kib": 5870656,
-    "cmix_rows": [
-      {
-        "args": "/home/x/deco/gamma/projects/enwiki9/results/fx2_matched_train250k_q0_v1/native/cmix -c /home/x/deco/gamma/projects/enwiki9/results/fx2_matched_train250k_q0_v1/native/dictionary/english.dic /home/x/deco/gamma/projects/enwiki9/results/fx2_matched_train250k_q0_v1/snapshot/operations/evidence/fixtures/opcode_field_confirmation1m_v1.raw /home/x/deco/gamma/projects/enwiki9/results/fx2_matched_train250k_q0_v1/native/confirmation-J.arc --transformer /home/x/deco/gamma/projects/enwiki9/results/fx2_matched_train250k_q0_v1/training/J/weights.tfwc2",
-        "pgid": 3108053,
-        "pid": 3108054,
-        "ppid": 3108053,
-        "rss_kib": 5713828,
-        "stat": "R"
-      }
-    ],
+    "active_rows": [],
+    "active_scorer_observed": false,
+    "cmix_rows": [],
     "controller_rows": [],
     "decimal_10gb_guard_kib": 9765625,
     "existing_observer_source_live": false,
-    "max_cmix_process": {
-      "args": "/home/x/deco/gamma/projects/enwiki9/results/fx2_matched_train250k_q0_v1/native/cmix -c /home/x/deco/gamma/projects/enwiki9/results/fx2_matched_train250k_q0_v1/native/dictionary/english.dic /home/x/deco/gamma/projects/enwiki9/results/fx2_matched_train250k_q0_v1/snapshot/operations/evidence/fixtures/opcode_field_confirmation1m_v1.raw /home/x/deco/gamma/projects/enwiki9/results/fx2_matched_train250k_q0_v1/native/confirmation-J.arc --transformer /home/x/deco/gamma/projects/enwiki9/results/fx2_matched_train250k_q0_v1/training/J/weights.tfwc2",
-      "pgid": 3108053,
-      "pid": 3108054,
-      "ppid": 3108053,
-      "rss_kib": 5713828,
-      "stat": "R"
-    },
-    "recorded_running_job_count": 2,
+    "max_cmix_process": null,
+    "recorded_running_job_count": 1,
     "research_rows": [],
-    "rss_guard_kib": 10485760,
-    "single_process_decimal_10gb_margin_kib": 4051797,
-    "single_process_margin_kib": 4771932
+    "rss_guard_kib": 10485760
   },
   "adaptive_jobs": {
-    "claimable_pending_job_count": 1,
+    "claimable_pending_job_count": 0,
     "held_pending_job_count": 26,
-    "pending_job_count": 27,
-    "running_job_count": 2,
+    "pending_job_count": 26,
+    "running_job_count": 1,
     "running_jobs": [
       {
         "candidate_id": "endpoint428_horizon_retained_parent_trace_q0_v1",
@@ -210,33 +37,6 @@
         "timing_authority": "unverified",
         "worker_pid": 2878467,
         "worker_pid_live": false
-      },
-      {
-        "candidate_id": "fx2_matched_train250k_q0_v1",
-        "execution_mode": "discovery",
-        "experiment": {
-          "path": "operations/adaptive/experiments/fx2_matched_train250k_q0_v1.json",
-          "sha256": "sha256:670fa7650f1422c8751a9bfc73bd3188da79e084f874fa2f9838328324ec4e38"
-        },
-        "gate_size": 250000,
-        "job_id": "20260920T031533Z_600d9d3b8d",
-        "liveness": "live",
-        "path": "projects/enwiki9/operations/adaptive/running/909_20260920T031533Z_600d9d3b8d.json",
-        "resource_budget": {
-          "cgroup_parent": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice",
-          "cpus": [
-            3
-          ],
-          "memory_bytes": 9999998976,
-          "scratch_bytes": 24000000000,
-          "swap_bytes": 0,
-          "wall_seconds": 3600
-        },
-        "started_at": "2026-09-20T03:16:01+00:00",
-        "state": "running",
-        "timing_authority": "diagnostic",
-        "worker_pid": 2896077,
-        "worker_pid_live": true
       }
     ]
   },
@@ -323,47 +123,43 @@
     "scope_bytes": 1000000000,
     "status": "not verified"
   },
-  "blocker": {
-    "evidence": "active 250,000 byte deterministic replay has not produced terminal driver and RSS receipts yet",
-    "label": "blocker",
-    "status": "open"
-  },
+  "blocker": null,
   "candidate_audit": {
-    "expected_sha256": "04ee82b574b0bab4b90f6f11bb7d265afaf3f8e31076b08fec4bd5ea6d3d5c73",
+    "expected_sha256": "45bb4662151c72b18ccf1f66fda969afc9660d990b30503f84757b505fa1ad84",
     "freshness": "not_revalidated",
-    "generated_at": "2026-09-20T03:31:58+00:00",
+    "generated_at": "2026-09-20T03:38:34+00:00",
     "mode": "inventory_snapshot",
     "notice": "Snapshot identity is verified; inventory inputs were not rescanned. This is not live occupancy or launch authority.",
     "path": "/home/x/deco/gamma/projects/enwiki9/candidate_inventory.json",
     "returncode": 0,
-    "sha256": "04ee82b574b0bab4b90f6f11bb7d265afaf3f8e31076b08fec4bd5ea6d3d5c73",
+    "sha256": "45bb4662151c72b18ccf1f66fda969afc9660d990b30503f84757b505fa1ad84",
     "summary": {
       "candidate_status_counts": {
         "active": 18,
-        "blocked_dependency": 107,
+        "blocked_dependency": 108,
         "candidate": 272,
         "measured_negative": 100,
         "retired": 597
       },
-      "directories": 10428,
-      "file_entries": 85632,
-      "ignored_entries": 35509,
+      "directories": 10487,
+      "file_entries": 85851,
+      "ignored_entries": 35690,
       "modified_tracked_entries": 1,
-      "program_directories": 1094,
+      "program_directories": 1095,
       "proposal_contract_status_counts": {
         "invalid": 158,
         "legacy-unstructured": 212,
         "orphaned": 9,
         "unclassified": 574,
-        "valid": 141
+        "valid": 142
       },
-      "registered_programs": 633,
+      "registered_programs": 634,
       "revision_status_counts": {
-        "current": 303,
+        "current": 304,
         "missing": 790,
         "mutable-drift": 1
       },
-      "successor_eligible_candidates": 138,
+      "successor_eligible_candidates": 139,
       "top_level_file_entries": {
         ".agents": 1,
         ".claude": 2,
@@ -379,12 +175,12 @@
         "external": 400,
         "ledger": 3,
         "lib": 87,
-        "operations": 6745,
+        "operations": 6747,
         "patches": 41,
         "programs": 3545,
-        "results": 61334,
+        "results": 61545,
         "results_preserve": 9383,
-        "run_logs": 1526,
+        "run_logs": 1529,
         "scratch": 181,
         "skills": 5,
         "src": 51,
@@ -392,32 +188,20 @@
         "tools": 1254,
         "workbench": 3
       },
-      "tracked_entries": 51123,
+      "tracked_entries": 51185,
       "unreflected_terminal_candidates": 102,
-      "untracked_nonignored_entries": 3
+      "untracked_nonignored_entries": 2
     }
   },
   "certificate_active_candidate": {
-    "active_source": "live adaptive worker receipt: operations/adaptive/running/909_20260920T031533Z_600d9d3b8d.json",
-    "evidence": "active 250,000 byte replay is running; no constructive result is present for this candidate yet",
+    "active_source": "recorded jobs have unknown host liveness",
+    "evidence": "Recorded ownership remains unresolved; no launch permission is inferred.",
     "label": "active candidate",
-    "program_id": "fx2_matched_train250k_q0_v1",
-    "scope_bytes": 250000,
-    "status": "running gate"
+    "program_id": null,
+    "status": "unknown"
   },
-  "certificate_active_gate": {
-    "active_source": "live adaptive worker receipt: operations/adaptive/running/909_20260920T031533Z_600d9d3b8d.json",
-    "evidence": "unchanged 250,000 byte RSS-guarded determinism replay; wait for terminal receipts",
-    "label": "active gate",
-    "program_id": "fx2_matched_train250k_q0_v1",
-    "scope_bytes": 250000,
-    "status": "pending"
-  },
-  "certificate_blocker": {
-    "evidence": "active 250,000 byte deterministic replay has not produced terminal driver and RSS receipts yet",
-    "label": "blocker",
-    "status": "open"
-  },
+  "certificate_active_gate": null,
+  "certificate_blocker": null,
   "certificate_objective": {
     "corpusBytes": 1000000000,
     "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
@@ -426,95 +210,57 @@
     "objectivePath": "contracts/research/v4/objective-contract.json",
     "targetScoreBytes": 96000000
   },
-  "contingencies": {
-    "if_passes": {
-      "action": "record pass and inspect the frozen candidate promotion rule",
-      "next_scope_bytes": null,
-      "reason": "the generic scope ladder grants no candidate-specific authority; a larger scope requires an explicitly authorized successor gate"
-    },
-    "if_roundtrip_or_determinism_fails": {
-      "action": "record failure and do not promote",
-      "reason": "compression evidence is not a deterministic constructive upper-bound row"
-    },
-    "if_rss_fails": {
-      "action": "record RSS failure and retire or repackage this integration shape",
-      "lower_memory_suggestion": null
-    }
-  },
-  "gate_decision": {
-    "adaptive_job_id": "20260920T031533Z_600d9d3b8d",
-    "adaptive_job_path": "projects/enwiki9/operations/adaptive/running/909_20260920T031533Z_600d9d3b8d.json",
-    "adaptive_worker_pid": 2896077,
-    "candidate": "fx2_matched_train250k_q0_v1",
-    "claim_rule": "A nested RSS guard inherits candidate and scope from its verified live adaptive worker; the guard supplies resource and terminal metrics only.",
-    "driver_result_json": "projects/enwiki9/results/fx2_matched_train250k_q0_v1/decision.json",
-    "driver_result_json_present": false,
-    "gate_size": 250000,
-    "guard_inferred_scope_bytes": null,
-    "guard_label_candidate": "fx2_matched_train250k_q0_v1",
-    "next_action": "wait_for_gate_completion",
-    "scope_bytes": 250000,
-    "scope_symbols": 151210,
-    "scope_unit": "raw bytes; native modeled rows tracked separately",
-    "source": "live_adaptive_tool_rss_guard",
-    "verdict": "running"
-  },
+  "contingencies": null,
+  "gate_decision": null,
   "gate_evidence_status": {
     "claim_rule": "Only a terminal driver result with roundtrip evidence can become a benchmark row.",
     "claim_status": "awaiting_gate_receipts",
     "driver_result_terminal": false,
-    "live_gate": true,
+    "live_gate": false,
     "live_guard_only": false,
-    "liveness_classification": "live_observed_owner",
+    "liveness_classification": "not_persisted_running",
     "rss_guard_terminal": false,
     "scored_gate_result_present": false
   },
   "gate_liveness": {
-    "candidate": "fx2_matched_train250k_q0_v1",
+    "candidate": null,
     "claim_rule": "A running receipt or registered adaptive job is live only with an exact driver, owning controller, matching live worker, or frozen adopted process identities.",
-    "classification": "live_observed_owner",
-    "gate_size": 250000,
-    "is_live": true,
-    "matching_adaptive_job_count": 1,
-    "matching_adaptive_worker_live": true,
+    "classification": "not_persisted_running",
+    "gate_size": null,
+    "is_live": false,
+    "matching_adaptive_job_count": 0,
+    "matching_adaptive_worker_live": false,
     "matching_adopted_source_live": false,
     "matching_controller_count": 0,
     "matching_driver_observed": false,
-    "persisted_running": true,
-    "receipt_running": true,
-    "scope_bytes": 250000,
-    "scope_symbols": 151210,
-    "scope_unit": "raw bytes; native modeled rows tracked separately"
+    "persisted_running": false,
+    "receipt_running": false,
+    "scope_bytes": null,
+    "scope_symbols": null,
+    "scope_unit": null
   },
-  "generated_at_utc": "2026-09-20T03:32:25+00:00",
+  "generated_at_utc": "2026-09-20T03:39:01+00:00",
   "handoff": {
-    "active_scorer_observed": true,
-    "candidate": "fx2_matched_train250k_q0_v1",
+    "active_scorer_observed": false,
+    "candidate": null,
     "claim_rule": "Only an exact full-corpus package can prove the active objective.",
     "command_source": "none while gate is non-terminal",
     "gate_mutation_allowed": false,
-    "gate_next_action": "wait_for_gate_completion",
-    "gate_size": 250000,
-    "gate_verdict": "running",
+    "gate_next_action": null,
+    "gate_size": null,
+    "gate_verdict": null,
     "has_10_95_constructive_upper_bound": false,
     "has_full_corpus_constructive_result": false,
-    "recommended_action": "wait_for_gate_receipts",
-    "scope_bytes": 250000,
-    "scope_symbols": 151210,
-    "scope_unit": "raw bytes; native modeled rows tracked separately",
+    "recommended_action": "verify_recorded_running_jobs_on_host",
+    "scope_bytes": null,
+    "scope_symbols": null,
+    "scope_unit": null,
     "terminal_verdict_present": false
   },
   "has_10_95_constructive_upper_bound": false,
   "has_current_objective_constructive_upper_bound": false,
   "has_full_corpus_constructive_result": false,
-  "next_gate": {
-    "active_source": "live adaptive worker receipt: operations/adaptive/running/909_20260920T031533Z_600d9d3b8d.json",
-    "evidence": "unchanged 250,000 byte RSS-guarded determinism replay; wait for terminal receipts",
-    "label": "active gate",
-    "program_id": "fx2_matched_train250k_q0_v1",
-    "scope_bytes": 250000,
-    "status": "pending"
-  },
+  "next_gate": null,
   "objective": {
     "corpusBytes": 1000000000,
     "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
@@ -526,21 +272,21 @@
   "observed_controller_command": {
     "controller_process_count": 0,
     "controller_processes": [],
-    "expected_active_candidate": "fx2_matched_train250k_q0_v1",
-    "expected_active_scope_bytes": 250000,
+    "expected_active_candidate": null,
+    "expected_active_scope_bytes": null,
     "scope_note": "Controller scope may be the completed parent gate that launched the active child; the observed driver command is authoritative for the active gate scope."
   },
   "observed_gate_command": {
     "active_gate_command_observed": false,
     "driver_process_count": 0,
     "driver_processes": [],
-    "expected_candidate": "fx2_matched_train250k_q0_v1",
-    "expected_scope_bytes": 250000,
+    "expected_candidate": null,
+    "expected_scope_bytes": null,
     "mismatch_count": 0
   },
   "operator_action": {
-    "action": "wait_for_gate_receipts",
-    "reason": "the gate state is incomplete and cannot drive a mutation yet",
+    "action": "verify_recorded_running_jobs_on_host",
+    "reason": "Recorded running jobs must be attributed or reconciled before this status view can recommend a launch.",
     "safe_to_launch_gate": false
   },
   "operator_logs": {
@@ -549,29 +295,25 @@
     "latest_delayed_status_log_resolved": "projects/enwiki9/run_logs/enwiki9_delayed_status_20260721T151206Z.log"
   },
   "operator_summary": {
-    "active_cmix_decimal_10gb_margin_kib": 4051797,
-    "active_cmix_mode": "compress",
-    "active_cmix_pid": 3108054,
-    "active_cmix_rss_kib": 5713828,
-    "active_cmix_single_process_margin_kib": 4771932,
-    "active_process_tree_decimal_10gb_margin_kib": 3894969,
-    "active_process_tree_margin_kib": 4615104,
-    "active_process_tree_rss_kib": 5870656,
-    "active_scorer_observed": true,
+    "active_cmix_mode": null,
+    "active_process_tree_decimal_10gb_margin_kib": null,
+    "active_process_tree_margin_kib": null,
+    "active_process_tree_rss_kib": null,
+    "active_scorer_observed": false,
     "active_stage": null,
     "binary_10gib_guard_kib": 10485760,
-    "candidate": "fx2_matched_train250k_q0_v1",
+    "candidate": null,
     "claim_rule": "Only an exact full-corpus package can prove the active objective.",
-    "claimable_pending_adaptive_jobs": 1,
+    "claimable_pending_adaptive_jobs": 0,
     "codec_progress": null,
     "command_source": "none while gate is non-terminal",
     "decimal_10gb_guard_kib": 9765625,
-    "driver_result_json": "projects/enwiki9/results/fx2_matched_train250k_q0_v1/decision.json",
-    "driver_result_present": false,
+    "driver_result_json": null,
+    "driver_result_present": null,
     "gate_mutation_allowed": false,
-    "gate_next_action": "wait_for_gate_completion",
-    "gate_size": 250000,
-    "gate_verdict": "running",
+    "gate_next_action": null,
+    "gate_size": null,
+    "gate_verdict": null,
     "has_10_95_constructive_upper_bound": false,
     "has_full_corpus_constructive_result": false,
     "held_pending_adaptive_jobs": 26,
@@ -590,8 +332,8 @@
     "observer_job_id": null,
     "observer_progress": null,
     "observer_worker_live": null,
-    "operator_action": "wait_for_gate_receipts",
-    "pending_adaptive_jobs": 27,
+    "operator_action": "verify_recorded_running_jobs_on_host",
+    "pending_adaptive_jobs": 26,
     "release_bundles": 4,
     "release_failed_attempts": 0,
     "release_run_receipts": 0,
@@ -602,9 +344,9 @@
     "rss_guard_status": null,
     "rss_samples": null,
     "safe_to_launch_gate": false,
-    "scope_bytes": 250000,
-    "scope_symbols": 151210,
-    "scope_unit": "raw bytes; native modeled rows tracked separately",
+    "scope_bytes": null,
+    "scope_symbols": null,
+    "scope_unit": null,
     "single_rss_margin_kib": null,
     "source_processes_live": null,
     "terminal_verdict_present": false
