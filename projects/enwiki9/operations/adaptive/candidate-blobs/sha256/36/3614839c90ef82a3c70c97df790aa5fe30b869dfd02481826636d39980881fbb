@@ -1,0 +1,109 @@
+{
+  "attribution": {
+    "causalConfidence": "high",
+    "controlsEquivalent": true,
+    "failureClass": "inconclusive",
+    "localizedCause": "Synthetic P has identical integer dot 1300 but native/reference rescaling 0.307280570268631/0.30728062987327576 before ReLU squared and the block-3 down-projection bin boundary. Real P first bin differs at row3 block3 value input112; E at row27 block8 MLP input17. Floating differences appear earlier at normalization/linear boundaries."
+  },
+  "candidateId": "fx2_numeric_attribution2048_q0_v1",
+  "candidateRevision": {
+    "candidateId": "fx2_numeric_attribution2048_q0_v1",
+    "candidateTreeSha256": "sha256:b958c66ee90cee4d6a29c89d7edc1739aba7c040f036ab7c5a9ba6367287ebef",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/fx2_numeric_attribution2048_q0_v1/20260920T023219371728Z_b958c66ee90c.json",
+      "sha256": "sha256:d088b3ea9955a1acd5b916d9aee67cb583adc082d35733432fe21085fbd93ff5"
+    }
+  },
+  "decision": {
+    "killPredicatesPass": false,
+    "nextGateBytes": null,
+    "promotionPredicatesPass": false,
+    "rationale": "Fixed-checkpoint attribution complete. Preserve P/E/M/S; no new training, model selection or larger gate. A separately frozen deployment-matched forward correction and parity check must precede a data-only versus joint-cost training comparison.",
+    "verdict": "hold"
+  },
+  "evidence": [
+    {
+      "path": "results/fx2_numeric_attribution2048_q0_v1/analysis-source.py",
+      "sha256": "sha256:577e9aef34a42d1104eeb73fee422dcb7c9f9227d9c76fe5c720c72703238f5c"
+    },
+    {
+      "path": "results/fx2_numeric_attribution2048_q0_v1/analysis.json",
+      "sha256": "sha256:c07cf7c0558ec925f216f8dc5e257642eff6409f32f2c4438a181b3d19b2f5c9"
+    },
+    {
+      "path": "results/fx2_numeric_attribution2048_q0_v1/artifacts.json",
+      "sha256": "sha256:9169dd2ce163833ee395a950c4d1ccf37c3469e7826f4cbb141c629af0724c54"
+    },
+    {
+      "path": "results/fx2_numeric_attribution2048_q0_v1/comparison.json",
+      "sha256": "sha256:1a120d8b230156ad248054a304cb09d377d73b38379847e2dbcd0f754198d8c8"
+    },
+    {
+      "path": "results/fx2_numeric_attribution2048_q0_v1/terminal-index.json",
+      "sha256": "sha256:0da83851e3c8c6f3de490da40f1f329e3b08727e2f011537f5cb5dfbd33cfe25"
+    }
+  ],
+  "experiment": {
+    "path": "operations/adaptive/experiments/fx2_numeric_attribution2048_q0_v1.json",
+    "sha256": "sha256:acddcfcbaad0b6d84bbd49956cc9d3b8fcead0b1bb3d8e90ced9d72d11d8d507"
+  },
+  "generatedUtc": "2026-09-20T02:38:38+00:00",
+  "hypothesis": {
+    "rationale": "On 2043 real truth positions Delta_R=1418.4721458116223 bits, Delta_N=1394.933193501784 bits, Delta_mismatch=-23.53895230983835 bits. Both say E is worse. Separate interventions localize integer-bin propagation in the first 64 rows; later differences remain.",
+    "verdict": "supported"
+  },
+  "job": {
+    "path": "operations/adaptive/completed/959_20260920T023220Z_bded1a9e05.json",
+    "sha256": "sha256:cb91be0e303a6f0ffa716d28a51e9ddc8394e6268a3908c17ae6746c67c8d03f"
+  },
+  "knowledge": {
+    "retiredDimensions": [],
+    "transferableLessons": [
+      "Both reference and native losses worsen here, so parity alone cannot rescue this checkpoint on these populations.",
+      "Fixed checkpoint loss must be compared under the actual deployment forward semantics before optimizing a surrogate."
+    ],
+    "uncertainties": [
+      "First 64 input rows traced; full-fixture max logit gaps remain after all traced integer mismatches clear. No final mixer, archive or full-corpus attribution.",
+      "The real fixture overlaps development exposure and does not cover all original training windows."
+    ]
+  },
+  "measurementAssertions": [
+    {
+      "field": "scopeSymbols",
+      "pointer": "/fixtures/native_prefix2048/rows",
+      "source": {
+        "path": "results/fx2_numeric_attribution2048_q0_v1/analysis.json",
+        "sha256": "sha256:c07cf7c0558ec925f216f8dc5e257642eff6409f32f2c4438a181b3d19b2f5c9"
+      }
+    }
+  ],
+  "measurements": {
+    "idealBitsSaved": null,
+    "memoryRatio": null,
+    "minimumPartitionIdealBitsSaved": null,
+    "netBytesSaved": null,
+    "positiveSegmentFraction": null,
+    "runtimeRatio": null,
+    "scopeBytes": null,
+    "scopeSymbols": 2048,
+    "sourceBytesDelta": null,
+    "transferRetention": null
+  },
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:409b70547f901a3ac5fffd7fd7a1e1d77b05fb44d9e9d889be1337bd153706d7",
+    "objectiveId": "gamma-enwiki9-hutter-96m-v4",
+    "objectivePath": "contracts/research/v4/objective-contract.json",
+    "targetScoreBytes": 96000000
+  },
+  "reflectionId": "r-20260920t023220z_bded1a9e05",
+  "schema": "gamma.enwiki9.reflection-receipt.v1",
+  "validity": {
+    "classification": "valid",
+    "reasons": [
+      "405 artifacts verified; 434 decoded tensors per checkpoint agree; native/reference observation controls are bitwise identical; parameters unchanged, matched inputs and resets, closed guard and owned cleanup."
+    ],
+    "valid": true
+  }
+}
