@@ -16,13 +16,14 @@ Institutions race across four Eras to build infrastructure, deploy automated ser
 
 ### Turn Overview: ReAct
 
-Each Era consists of three action cycles played simultaneously using the ReAct loop:
+Each Era consists of three action cycles with simultaneous selection followed by resolution in Initiative order:
 
-1. **Reason:** Secretly choose one available Core Action from your hand.
-2. **Act:** Reveal selections simultaneously. In Initiative order, assign an Agent to any district and resolve that Action's effects at the destination.
-3. **Observe:** Apply district visit bonuses, pay costs, collect yields and Scrutiny, and exhaust the chosen Action card.
+- **Before selection:** Reveal a Headline and finish its instructions.
+- **Reason:** Everyone secretly chooses an available Core Action, then reveals.
+- **Act:** In Initiative order, each player may make the permitted resource exchange, assigns one Agent, and resolves the selected action. Apply discounts, payments, rewards, and penalties at their specified times.
+- **Observe:** Inspect the changed board and exhaust the action. After everyone resolves, pass Initiative.
 
-Between action cycles, institutions may execute fixed one-for-one resource exchanges. After three action cycles, players resolve Era Production, optional AGI recognition (Era IV only), the Public Audit, and Era Mandate scoring.
+After three action cycles, players resolve Era Production, optional AGI recognition (Era IV only), the Public Audit, and Era Mandate scoring.
 
 ## 1. Setup
 

@@ -328,13 +328,14 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
   }
 
   addResource(player, key, amount) {
-    super.addResource(player, key, amount);
+    const credited = super.addResource(player, key, amount);
     if (
       (key === "capability" || key === "trust") &&
       !this.deferredPublicMandateSeats?.has(player.seat)
     ) {
       this.synchronizePublicMandate(player, `${key}_threshold`);
     }
+    return credited;
   }
 
   beginRunwayConversionContext(player, decision, kind = "action") {
@@ -1919,6 +1920,9 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
       this.markAction(player, "influence", decision.label);
       return;
     }
+    if (decision.actionId === "fund" && decision.parameters?.actualRunway === undefined) {
+      decision = this.adjustDecision(player, decision);
+    }
     if (decision.actionId === "research" && !decision.parameters?.trainingResult) {
       decision = { ...decision, parameters: { ...decision.parameters,
         trainingResult: this.resolveTrainingRun(seat, player, decision.parameters || {}) } };
@@ -1928,9 +1932,7 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
     this.beginRunwayConversionContext(player, decision);
     super.applyResolution(seat, decision);
     if (decision.actionId === "fund") {
-      const expected = decision.parameters.mode === "venture" ? 4 : 2;
-      this.addResource(player, "runway", (decision.parameters.actualRunway ?? expected) - expected);
-      player.roundMetrics.fundRunway += Math.max(0, player.runway - before.runway);
+      player.roundMetrics.fundRunway += decision.parameters.creditedRunway ?? 0;
     }
     if (decision.actionId === "research") {
       player.compute += 1 - (decision.parameters.actualComputeCost ?? 1);
