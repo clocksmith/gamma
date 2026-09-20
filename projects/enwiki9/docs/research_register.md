@@ -7,8 +7,10 @@ User direction supersedes further training with a distinct relational grammar
 hypothesis. [The first native binding experiment](causal_relational_grammar_20260920.md)
 freezes P/K/I/S/W on development250KB, separate250KB and1MB. Three synthetic tests
 pass, including exact-rational posterior comparison and actual fixed-point
-shared-binding advantage on a constructed fixture. Native measurements remain
-pending. Earlier split/training failures and the96M/95M target remain unchanged.
+shared-binding advantage on a constructed fixture. The first attempt was
+interrupted for closing-tag contamination and reflected as implementation-failure.
+The separately sealed v2 repair excludes tag interiors and passes its regression;
+native comparison is active, without a final scientific verdict. Earlier split/training failures and the96M/95M target remain unchanged.
 One depth-one title-word/body-word implementation is tested; full recursive grammar
 and global novelty are not claimed. Owner `codex-relational-20260920` uses the
 existing lab queue and bounded CPU2 job; no separate research queue is added.

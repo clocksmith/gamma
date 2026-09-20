@@ -114,3 +114,31 @@ fixture predicate is therefore stricter than testing the binding mechanism.
 The terminal interpretation must separately report S-versus-P/I/W actual payload
 deltas and added code; failure to amortize code on a small fixture cannot reject
 cross-history dependence. No stripped-release or full-corpus saving is assumed.
+
+## Execution handoff
+
+Retry job `20260920T135211Z_9ec3228a93` uses the published source at `022117dcd`.
+The first independently built P archive, native P inverse and P repeat have
+completed on the opening250KB; the job remains active at this handoff. No S/I/W
+comparison or final scientific verdict is available yet. Consult the canonical
+job and guard for current state rather than treating this paragraph as liveness.
+All12 native tests and144 pure tests with54 subtests pass. The new terminal
+interpreter compiles and imports; it has not yet consumed a complete native run.
+
+Once the job is terminal, from the repository root:
+
+```bash
+PYTHONPATH=projects/enwiki9/src python3 -m gamma_enwiki9.adapters.fx2_relational_terminal \
+  projects/enwiki9 fx2_relational_binding250k_q0_v2 20260920T135211Z_9ec3228a93
+```
+
+This independently checks all retained artifact identities, bound raw inputs,
+archive byte counts, P/K equivalence, complete inverse emissions, parent
+probability/truth trajectories, introduced-state repeat witnesses and incremental
+package arithmetic. It requires all51 command records. It publishes an immutable
+terminal plus15 driver rows and their index; it does not grant a scientific
+transition or launch a codec. Review the actual payload/control deltas, then use
+`enwiki9_lab.py reflect` with the terminal and terminal-index as evidence. Only
+after that reflection should `record_driver_result.py --terminal-index` append
+the closed arm set. On failure, preserve the failed execution and reflect its
+actual failure class instead. No automatic full-corpus promotion is authorized.
