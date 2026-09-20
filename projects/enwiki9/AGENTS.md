@@ -51,14 +51,17 @@ and the [creative prompts](workbench/PROMPTS.md#creative-discovery) when changin
   and experiment bindings, including the v1 105M, v2 99M and v3 90M milestones. Consult
   [competitive provenance](operations/provenance/competitive_frontier_20260919.json)
   before treating engineering economics as an accepted prize threshold.
-- The stretch target is 95,000,000 complete bytes. Prioritize the
-  [causal relational binding design](operations/adaptive/experiments/fx2_relational_binding_design_q0_v1.json):
-  retain the competitive parent and one coding sequence, and compare persistent
-  decoder-built relational bindings with independent bindings and causal wrong
-  donors. This supersedes retraining as the active direction. The
+- The stretch target is 95,000,000 complete bytes. The current priority is a better
+  exported compact model from preserved P, without metadata, judged by native
+  archives and separately measured packed-model costs. Native-forward correction
+  and one matched data-only/joint-cost comparison are already complete; follow
+  the [current training handoff](docs/fx2_matched_training_20260920.md#current-research-priority).
+  Keep the [causal relational binding design](operations/adaptive/experiments/fx2_relational_binding_design_q0_v1.json)
+  and broader cross-history hypothesis parked until a proposal identifies a
+  different decoder-available source of information. The
   [first fixed realization](docs/causal_relational_grammar_20260920.md) is now
   parked after valid losses on all three declared populations. Do not add a
-  mechanism, alter resets, resume training or scale this realization; first
+  mechanism, alter resets or scale this realization; first
   identify a specific unresolved cause supported by its terminal attribution.
   Preserve the broader cross-history hypothesis, census and retired split-stream
   result; raw shares are not savings forecasts.

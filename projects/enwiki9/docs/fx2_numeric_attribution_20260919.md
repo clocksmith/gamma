@@ -5,6 +5,15 @@ numerical mismatch changes the size of the regression but does not reverse it.
 No training, checkpoint selection, metadata addition or parameter update occurred.
 The complete-byte target remains 96,000,000; this diagnostic earns zero score credit.
 
+**Current follow-through:** the recommended
+[native-forward correction](fx2_native_forward_20260919.md) and
+[matched data-only/joint-cost training](fx2_matched_training_20260920.md) have
+already completed. The forward boundary matches pinned native outputs on its
+fixtures. A/J improve native training-window loss but worsen measured archives;
+J reduces fixed model bytes. Their approximate backward remains explicit.
+The attribution below describes the earlier P/E diagnostic, not an outstanding
+instruction to repeat those stages.
+
 | Population | Scored predictions | Reference E minus P, bits | Native E minus P, bits | Native minus reference change, bits |
 | --- | ---: | ---: | ---: | ---: |
 | Synthetic tokens 0..7 | 7 | +7.457933 | +6.327739 | -1.130195 |
@@ -116,11 +125,12 @@ Job `20260920T023220Z_bded1a9e05` completed under CPU3, a 4GB resident cap,
 All 405 execution artifacts were rehashed. The architecture pure group passed
 143 tests and 54 subtests; the focused loss/comparator suite passed two tests.
 
-Hold further training. The next implementation is a separately frozen correction
-of the reference forward computation to pinned native normalization, rescaling
-and state-update semantics, followed by fixed-checkpoint parity validation.
-Do not change the competitive native parent, rounding rules, epsilon or tolerance
-to conceal disagreement. Only then compare matched data-only and joint-cost
-training without metadata, documenting any approximate backward rule as a
-surrogate gradient and measuring actual packed files. Preserve P/E/M/S and the
-prior measured archives throughout.
+The original next step was a separately frozen native-forward correction, followed
+by fixed-checkpoint parity and matched data-only/joint-cost training without
+metadata. Those stages are now closed in the linked reports. They reused the
+pinned native implementation without changing its rounding, epsilon or tolerance;
+the backward is still an explicitly approximate reference Jacobian. Preserve
+P/E/A/J, retired metadata checkpoints and all measured archives. The
+[current handoff](fx2_matched_training_20260920.md#current-research-priority)
+identifies the remaining training-window versus archive gap; this earlier
+numerical discrepancy does not justify another run of the closed profile.

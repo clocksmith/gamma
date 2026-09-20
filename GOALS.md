@@ -47,25 +47,34 @@ resource verification, source/license closure and reproducible submission.
 The lane's adaptive workflow governs bounded implementation, prediction research,
 confirmation and scale decisions; historical 105M, 99M and 90M evidence stays intact.
 
-The primary enwiki9 direction is causal relational grammar: two decoder-built
-histories with persistent shared argument bindings and one native coding sequence,
-under the 96M target and 95M stretch. Preserve the
-XML/English census and negative split-stream evidence. Raw category shares and
-causal donor availability are measurement inputs, not achievable savings.
+The current enwiki9 priority is a better exported compact model from the preserved
+competitive parent, under the 96M target and 95M stretch. Judge actual native
+archives and packed-model costs separately before combining the counted total;
+keep metadata out of the next training comparison. Preserve the XML/English
+census and negative split-stream evidence. Raw category shares and causal donor
+availability are measurement inputs, not achievable savings.
 Deployment-matched forward computation and fixed-checkpoint numerical attribution
 are prerequisites for further enwiki9 training; see the
 [numerical comparison](projects/enwiki9/docs/fx2_numeric_attribution_20260919.md).
 The [native forward boundary](projects/enwiki9/docs/fx2_native_forward_20260919.md)
 passes fixed P/E agreement. The [matched training comparison](projects/enwiki9/docs/fx2_matched_training_20260920.md)
-now records a smaller model but larger native payload. Preserve its bounded
-component gain without scaling that training profile or extending its metadata head.
+already records a smaller model but larger native payload. The requested forward
+correction and data-only versus joint-cost comparison are complete; do not repeat
+them as unfinished work. Preserve their bounded component gain without scaling
+that training profile or extending its metadata head. The remaining evidence gap
+is why improved native loss on the training windows fails to improve archives;
+off-window prediction, the surrogate gradient and downstream mixing are not yet
+separately attributed. A new training profile needs a distinct frozen hypothesis.
 The separately frozen [relational design](projects/enwiki9/operations/adaptive/experiments/fx2_relational_binding_design_q0_v1.json)
 tests a new bounded latent binding mechanism against independent bindings and
 different causal donors, with the original model preserved. Its
 [closed first realization](projects/enwiki9/docs/causal_relational_grammar_20260920.md)
-is parked after losses on all three declared populations. Preserve the broader
-hypothesis; no successor mechanism is selected without a specific unresolved
-cause supported by the terminal attribution. Complete core delivery and full-corpus prize qualification remain distinct evidence targets.
+is parked after losses on all three declared populations. The
+[donor-coverage comparison](projects/enwiki9/docs/fx2_donor_coverage_20260920.md)
+also rejects the tested prefix-transfer realization. Keep cross-history work
+parked until a proposal identifies a different decoder-available information
+source. Preserve the broader hypothesis without reopening either closed profile.
+Complete core delivery and full-corpus prize qualification remain distinct evidence targets.
 
 ## Explicit Exclusions
 
