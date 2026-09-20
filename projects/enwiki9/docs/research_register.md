@@ -14,6 +14,11 @@ native comparison is active, without a final scientific verdict. Earlier split/t
 One depth-one title-word/body-word implementation is tested; full recursive grammar
 and global novelty are not claimed. Owner `codex-relational-20260920` uses the
 existing lab queue and bounded CPU2 job; no separate research queue is added.
+An added synthetic integration check exercises both chronological directions
+through the unchanged v2 Model, with shared reuse beating independent and wrong
+donors against a uniform parent. Exact inverse and P/K/S state parity pass; all
+13 native CI tests pass. This verifies the mechanism's integrated operation,
+not its advantage over native FX2. The corpus comparison remains pending.
 
 
 ## 2026-09-19 - Train the full FX2 predictor for data and model cost
