@@ -15,7 +15,7 @@ GROUPS = {
     "codec": ["architecture/test_migration.py", "test_enwiki9_predictor_driver.py", "test_raw_reverse_bz2_v1.py",
               "test_raw_reverse_bz2_gate_v1.py", "test_xml_history_deflate_v1.py",
               "test_xml_history_runtime_identity.py", "-m", "not native"],
-    "native": ["architecture/test_migration.py", "test_fx2_title_memory_v1.py", "test_fx2_envelope.py", "test_causal_relational_v1.py", "test_causal_relational_v2.py"],
+    "native": ["architecture/test_migration.py", "test_fx2_title_memory_v1.py", "test_fx2_envelope.py", "test_causal_relational_v1.py", "test_causal_relational_v2.py", "test_causal_relational_integration.py"],
     "historical": ["architecture/test_history.py", "-m", "historical"],
     "linux": ["architecture/test_linux_resources.py", "architecture/test_lease.py"],
 }

@@ -168,3 +168,22 @@ bundles before publication. The explicit pure CI group passes 156 tests and 54
 subtests, with one historical test deselected. Compilation and imports pass.
 These checks validate the evidence interpreter, not the still-running native
 comparison. Its terminal, reflection and driver ledger rows remain pending.
+
+## Integrated synthetic binding checks
+
+The [integration fixture](../tests/causal_relational_integration_fixture.cpp)
+passes both title-to-content and content-to-link sequences through the complete
+sealed v2 WRT inverse, field parser, donor reservoirs, binding updates and outer
+mixture. Four distinct completed words precede the declared epoch boundary;
+180 subsequent mentions reuse one donor. The parent is an explicitly uniform
+bit predictor. This constructed source is separate from the corpus populations.
+
+In both directions, S has lower returned-probability log cost than P, I and W.
+P and K preserve every parent probability; P/K/S introduced state agrees at each
+modeled-byte boundary. Every arm reconstructs the exact input and stays within
+the existing synthetic state bound. Undefined-behavior sanitization passes.
+The fixture makes no finite-archive or complete-package claim. It closes the
+integration gap between the earlier isolated Binding-kernel gain and a complete
+Model path; it does not establish improvement over competitive FX2 predictions.
+No sealed candidate source or parameter changed for this check. The explicit
+native CI group passes all 13 tests, including this integration fixture.
