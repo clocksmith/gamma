@@ -61,8 +61,11 @@ now records a smaller model but larger native payload. Preserve its bounded
 component gain without scaling that training profile or extending its metadata head.
 The separately frozen [relational design](projects/enwiki9/operations/adaptive/experiments/fx2_relational_binding_design_q0_v1.json)
 tests a new bounded latent binding mechanism against independent bindings and
-different causal donors, with the original model preserved. Complete
-core delivery and full-corpus prize qualification remain distinct evidence targets.
+different causal donors, with the original model preserved. Its
+[closed first realization](projects/enwiki9/docs/causal_relational_grammar_20260920.md)
+is parked after losses on all three declared populations. Preserve the broader
+hypothesis; no successor mechanism is selected without a specific unresolved
+cause supported by the terminal attribution. Complete core delivery and full-corpus prize qualification remain distinct evidence targets.
 
 ## Explicit Exclusions
 

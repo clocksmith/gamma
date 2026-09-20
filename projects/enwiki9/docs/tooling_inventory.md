@@ -12,11 +12,11 @@ Reusable artifact helpers for new tools: [lib/artifacts.py](../lib/artifacts.py)
 The LibNC initializer teacher launcher exits before the first forward, gradient, update, or coded symbol; its source-bound experiment defines that boundary.
 The delayed-status helper's `enwiki9_delayed_status_latest.log` pointer is operational history, not present-host occupancy proof.
 
-Coverage: **1249 files** (33 .c, 82 .cpp, 1 .gdb, 1 .h, 2 .hpp, 1 .html, 1126 .py, 3 .sh).
+Coverage: **1255 files** (33 .c, 82 .cpp, 1 .gdb, 1 .h, 2 .hpp, 1 .html, 1132 .py, 3 .sh).
 
 | Tool | Purpose | Referenced contracts |
 |---|---|---|
-| [`tools/_enwiki9_bootstrap.py`](../tools/_enwiki9_bootstrap.py) | Import the maintained namespace for compatibility entrypoints. | [6](../operations/adaptive/experiments/fx2_entropy_train250k_q0_v1.json) |
+| [`tools/_enwiki9_bootstrap.py`](../tools/_enwiki9_bootstrap.py) | Import the maintained namespace for compatibility entrypoints. | [14](../operations/adaptive/experiments/fx2_core_delivery250k_q0_v1.json) |
 | [`tools/acs_prover_weighted_monoid.py`](../tools/acs_prover_weighted_monoid.py) | Exact weighted-summary monoid pilot for a finite XML lexical transducer. | none found |
 | [`tools/acs_prover_xml_state_endpoint_shadow.cpp`](../tools/acs_prover_xml_state_endpoint_shadow.cpp) | unknown; inspect source and the selected experiment | none found |
 | [`tools/acs_prover_xml_state_endpoint_shadow.py`](../tools/acs_prover_xml_state_endpoint_shadow.py) | Run the exact ACS-PROVER XML-state endpoint calibration shadow. | none found |
@@ -364,6 +364,7 @@ Coverage: **1249 files** (33 .c, 82 .cpp, 1 .gdb, 1 .h, 2 .hpp, 1 .html, 1126 .p
 | [`tools/fx2_compact_trace_window.py`](../tools/fx2_compact_trace_window.py) | Run a frozen random window through compact FX2 probability tracing. | none found |
 | [`tools/fx2_compact_v26_fixture50051_q0_v1.py`](../tools/fx2_compact_v26_fixture50051_q0_v1.py) | Guarded P/K/D native FXCM block comparison with the fixed FX2 transformer. | [4](../operations/adaptive/experiments/fx2_compact_v26_fixture50051_q0_v1.json) |
 | [`tools/fx2_compact_v26_native_adapter_v1.py`](../tools/fx2_compact_v26_native_adapter_v1.py) | Exact source adapter selecting original, copy-control or compact FXCM. | [1](../operations/adaptive/experiments/fx2_compact_v26_fixture50051_q0_v1.json) |
+| [`tools/fx2_core_delivery_v1.py`](../tools/fx2_core_delivery_v1.py) | Lab entrypoint for the explicitly counted FX2 core delivery comparison. | [3](../operations/adaptive/experiments/fx2_core_delivery250k_q0_v1.json) |
 | [`tools/fx2_core_tune_package.py`](../tools/fx2_core_tune_package.py) | Build and package an fx2 core-tuning candidate. This creates a score-honest candidate by rebuilding the local fx2-cmix source with compile-time predictor knobs, compressing the resulting executable, and dropping it into an existing wrapper template. | none found |
 | [`tools/fx2_core_tune_queue.py`](../tools/fx2_core_tune_queue.py) | Build and gate fx2 core-tuning candidates through one serialized lane. | none found |
 | [`tools/fx2_entropy_gate_v1.py`](../tools/fx2_entropy_gate_v1.py) | Compatibility entrypoint for the source-pinned FX2 entropy-training recipe. | [1](../operations/adaptive/experiments/fx2_entropy_train250k_q0_v1.json) |
@@ -416,7 +417,10 @@ Coverage: **1249 files** (33 .c, 82 .cpp, 1 .gdb, 1 .h, 2 .hpp, 1 .html, 1126 .p
 | [`tools/fx2_match_gap_observation250k_v1.py`](../tools/fx2_match_gap_observation250k_v1.py) | Read-only native interrupted-match opportunities and fixed finite replay. | [1](../operations/adaptive/experiments/fx2_match_gap_observation250k_v1.json) |
 | [`tools/fx2_match_gap_probe_v1.cpp`](../tools/fx2_match_gap_probe_v1.cpp) | GPL-3.0-or-later. Differential original-Match state fixture. | [1](../operations/adaptive/experiments/fx2_match_gap_observation250k_v1.json) |
 | [`tools/fx2_match_gap_replay_v1.py`](../tools/fx2_match_gap_replay_v1.py) | Validate bound observations, exact opportunity ceiling and finite replay. | [1](../operations/adaptive/experiments/fx2_match_gap_observation250k_v1.json) |
+| [`tools/fx2_matched_training_v1.py`](../tools/fx2_matched_training_v1.py) | Run the frozen matched FX2 objective comparison through the lab. | [1](../operations/adaptive/experiments/fx2_matched_train250k_q0_v1.json) |
 | [`tools/fx2_mwcc_router_shadow.py`](../tools/fx2_mwcc_router_shadow.py) | Causal MWCC/router exact-shadow test over fx2 residual rows. MWCC here means a deterministic mixture-of-weak-causal-corrections router. Each expert is a tiny residual-bias table keyed by causal row fields. The router tracks each expert's prior online loss and picks the currently best expert for the next bit. All experts update only after the bit is encoded. | none found |
+| [`tools/fx2_native_forward_v1.py`](../tools/fx2_native_forward_v1.py) | Use the existing bounded numerical gate for fixed native-forward validation. | [1](../operations/adaptive/experiments/fx2_native_forward2048_q0_v1.json) |
+| [`tools/fx2_numeric_attribution_v1.py`](../tools/fx2_numeric_attribution_v1.py) | Compatibility entrypoint for fixed-checkpoint numerical attribution. | [1](../operations/adaptive/experiments/fx2_numeric_attribution2048_q0_v1.json) |
 | [`tools/fx2_online_head_adapter_v1.py`](../tools/fx2_online_head_adapter_v1.py) | Authenticate one causal projected head update on the fixed FX2 transformer. | [3](../operations/adaptive/experiments/fx2_head_transport_opening250k_v1.json) |
 | [`tools/fx2_online_head_opening250k_v1.py`](../tools/fx2_online_head_opening250k_v1.py) | Native projected output-head learning on frozen transformer features. | [1](../operations/adaptive/experiments/fx2_online_head_opening250k_v1.json) |
 | [`tools/fx2_paid_odds_cost250k_v1.py`](../tools/fx2_paid_odds_cost250k_v1.py) | Price a fixed paid odds-correction family on retained native development counts. | [1](../operations/adaptive/experiments/fx2_paid_odds_cost250k_v1.json) |
@@ -433,6 +437,8 @@ Coverage: **1249 files** (33 .c, 82 .cpp, 1 .gdb, 1 .h, 2 .hpp, 1 .html, 1126 .p
 | [`tools/fx2_ratio_delivery_loss_attribution_v1.py`](../tools/fx2_ratio_delivery_loss_attribution_v1.py) | Attribute closed GRD2 delivery losses using exact cached rows and native replay. | none found |
 | [`tools/fx2_ratio_loss_attribution_v1.py`](../tools/fx2_ratio_loss_attribution_v1.py) | Replay a closed ratio experiment; no predictor mutation or corpus launch. | none found |
 | [`tools/fx2_rdo_feasibility.py`](../tools/fx2_rdo_feasibility.py) | Estimate copy-style RDO headroom from FX2_LOSS_LEDGER rows. | none found |
+| [`tools/fx2_relational_binding_v1.py`](../tools/fx2_relational_binding_v1.py) | Run the frozen causal relational comparison through the existing lab. | [2](../operations/adaptive/experiments/fx2_relational_binding250k_q0_v1.json) |
+| [`tools/fx2_relational_binding_v2.py`](../tools/fx2_relational_binding_v2.py) | Run the frozen causal relational comparison through the existing lab. | [1](../operations/adaptive/experiments/fx2_relational_binding250k_q0_v2.json) |
 | [`tools/fx2_reorder_dictionary.py`](../tools/fx2_reorder_dictionary.py) | Reorder/dictionary experiments. | none found |
 | [`tools/fx2_residual_apm_score.py`](../tools/fx2_residual_apm_score.py) | Score a tiny causal residual APM on FX2_RESIDUAL_ROW logs. The input is produced by fx2 builds compiled with FX2_RESIDUAL_LOG. This tool does not use future bits: it predicts from current counts, emits corrected loss, then updates the count table with the observed bit. | none found |
 | [`tools/fx2_residual_cache.py`](../tools/fx2_residual_cache.py) | Build a compact TSV cache from FX2_RESIDUAL_ROW logs. The residual probe logs are useful but noisy: they mix progress output with per-bit rows. This tool extracts just the numeric causal fields needed by offline shadow tools. The emitted TSV is accepted by fx2_shadow_residual_coder's row parser and can be reused by I-SSA/MWCC searches without rescanning stderr. | none found |
@@ -1070,7 +1076,7 @@ Coverage: **1249 files** (33 .c, 82 .cpp, 1 .gdb, 1 .h, 2 .hpp, 1 .html, 1126 .p
 | [`tools/raw_reverse_bz2_v1.py`](../tools/raw_reverse_bz2_v1.py) | Bounded raw forward/reverse blocks with unchanged standard-library BZip2. | [1](../operations/adaptive/experiments/raw_reverse_bz2250k_q0_v1.json) |
 | [`tools/record_driver_result.py`](../tools/record_driver_result.py) | Record driver results; --terminal-index records reviewed, closed arm sets. The terminal index is an ordinary evidence file, created before reflection: {"schema": "gamma.enwiki9.terminal-result-index.v1", "job": {"path": ..., "sha256": ...}, "guard": {"path": ..., "sha256": ...}, "arms": [{"arm": "P", "result": {...}, "artifacts": {"archive": {...}, "restored": {...}, "repeat": {...}}}], "evidence": []} References are project-relative and hash-bound. The validated reflection m | none found |
 | [`tools/renewal_hazard_gate.cpp`](../tools/renewal_hazard_gate.cpp) | unknown; inspect source and the selected experiment | none found |
-| [`tools/research_contracts.py`](../tools/research_contracts.py) | Compatibility validation entrance. Historical bytes resolve by closure ID. | [143](../operations/adaptive/experiments/causal_wordcode_fifo128_bz2_q0_v1.json) |
+| [`tools/research_contracts.py`](../tools/research_contracts.py) | Compatibility validation entrance. Historical bytes resolve by closure ID. | [151](../operations/adaptive/experiments/causal_wordcode_fifo128_bz2_q0_v1.json) |
 | [`tools/residual_odds_tree_gate.cpp`](../tools/residual_odds_tree_gate.cpp) | unknown; inspect source and the selected experiment | none found |
 | [`tools/revlog_slot_bypass_oracle.py`](../tools/revlog_slot_bypass_oracle.py) | Measure REVLOG relational headroom on exact outer-XML WRT slots. | none found |
 | [`tools/route_d_timestamp_microblock_gate.py`](../tools/route_d_timestamp_microblock_gate.py) | Run the zero-credit Route D timestamp structural-microblock Q0 gate. | none found |

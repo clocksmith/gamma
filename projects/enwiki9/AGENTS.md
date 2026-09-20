@@ -55,8 +55,13 @@ and the [creative prompts](workbench/PROMPTS.md#creative-discovery) when changin
   [causal relational binding design](operations/adaptive/experiments/fx2_relational_binding_design_q0_v1.json):
   retain the competitive parent and one coding sequence, and compare persistent
   decoder-built relational bindings with independent bindings and causal wrong
-  donors. This supersedes retraining as the active direction. Preserve the
-  census and retired split-stream result; raw shares are not savings forecasts.
+  donors. This supersedes retraining as the active direction. The
+  [first fixed realization](docs/causal_relational_grammar_20260920.md) is now
+  parked after valid losses on all three declared populations. Do not add a
+  mechanism, alter resets, resume training or scale this realization; first
+  identify a specific unresolved cause supported by its terminal attribution.
+  Preserve the broader cross-history hypothesis, census and retired split-stream
+  result; raw shares are not savings forecasts.
 - The [matched native-forward comparison](docs/fx2_matched_training_20260920.md)
   is closed: J saves fixed model bytes but worsens native payload. Do not scale
   this 16-update profile, increase its budget, or introduce metadata from that result.

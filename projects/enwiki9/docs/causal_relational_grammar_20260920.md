@@ -5,6 +5,75 @@ across structure and content histories, with one existing FX2 coding sequence.
 The target remains 96,000,000 complete bytes, 95,000,000 stretch; verified full
 corpus score is unknown. The earlier split and retraining losses remain intact.
 
+## Closed result: fixed realization parked
+
+The unchanged v2 comparison completed all 51 phases on 2026-09-20. The
+[independent terminal](../results/fx2_relational_binding250k_q0_v2/terminal.json)
+verified 661 retained artifacts. The validated
+[reflection](../operations/adaptive/reflections/20260920T135211Z_9ec3228a93.json)
+records a valid negative result and holds this realization. All 15 arm rows are
+recorded through the [terminal index](../results/fx2_relational_binding250k_q0_v2/terminal-index.json);
+the recorder's check reports zero missing rows. No successor is selected.
+
+| Raw population | P / K archive bytes | I / S / W archive bytes | S minus P |
+| --- | ---: | ---: | ---: |
+| Development 250KB | 33,429 | 33,433 | +4 |
+| Separate validation 250KB | 35,464 | 35,469 | +5 |
+| Confirmation 1MB | 131,238 | 131,257 | +19 |
+
+The following are native floating log-cost differences on each complete modeled
+population. Positive values in the first two columns favor shared bindings;
+positive values in the last two columns are losses against FX2. These are not
+archive bytes and do not compare differently selected active subsets.
+
+| Population | I minus S expert bits | W minus S expert bits | S expert minus P bits | Final mixture minus P bits |
+| --- | ---: | ---: | ---: | ---: |
+| Development | +3,891.790 | +68.245 | +32,929.145 | +35.998 |
+| Validation | +4,506.705 | +97.011 | +36,617.350 | +38.995 |
+| Confirmation | -3,586.827 | -278.254 | +189,629.966 | +156.016 |
+
+Persistent identity helps this expert on the two 250KB populations, but that
+advantage reverses on 1MB, including against the wrong-donor control. The expert
+loses substantially to FX2 on all three populations. The final mixture protects
+the parent from most of that loss; it does not hide a demonstrated net advantage
+of the expert over FX2. Equal I/S/W archive sizes do not mean equal internal
+predictions or identical archives.
+
+The populations span 37, 40 and 160 declared mixture epochs, respectively. Small
+mixture losses alongside a much larger expert deficit are consistent with
+fallback protection and repeated restarts. Aggregate measurements do not isolate
+reset policy from Q48/Q16 effects, and no epoch-level or numerical intervention
+was run. The finite archive differences are 32, 40 and 152 bits; subtracting the
+native mixture log-cost differences leaves -3.998, +1.005 and -4.016 bits. This
+observed finite-coder length difference is not a bound on posterior rounding or
+a reason to change resets. The expert's lack of competitive value is already
+visible before that issue.
+
+The [package record](../results/fx2_relational_binding250k_q0_v2/package.json)
+counts a 49,038-byte implementation increment in the smaller alternative:
+8,056 added source-ZIP bytes, 40,960 added decoder-executable bytes and 22 option
+bytes. The alternative with two executables adds 81,942 bytes. The model,
+dictionary and frontend are unchanged. Observer code is conservatively included;
+no stripped-release reduction is claimed. A delivery counts its fixed increment
+once, not once per research sample, and the alternative representations are not
+added together. Every measured sample already loses before this increment.
+
+All independent inverses, deterministic archive repeats, original-parent
+probability/truth comparisons and P/K/S introduced-state checks pass. The bound
+diagnostic job on one logical CPU (CPU2) completed in 3,694.923 seconds, peaked at
+6,462,992,384 cgroup bytes, 470,904,832 allocated scratch bytes and
+15,133,469,865 logical scratch bytes, and finished with every guard flag false
+and cleanup complete. The [guard](../run_logs/adaptive/20260920T135211Z_9ec3228a93.resources/guard.json)
+provides diagnostic resource evidence, not independent prize qualification.
+
+Park this four-donor, exact-spelling, 4,096-modeled-byte-epoch realization. Preserve
+the broader cross-history hypothesis and all original artifacts. No new mechanism,
+reset change, training run or larger gate follows. A successor requires a specific
+unresolved cause grounded in the terminal attribution. The complete full-corpus
+score remains unknown and the objective receives zero score credit.
+
+## Frozen implementation and original design
+
 The [prospective design](../operations/adaptive/experiments/fx2_relational_binding_design_q0_v1.json)
 precedes implementation. The [source-bound experiment](../operations/adaptive/experiments/fx2_relational_binding250k_q0_v1.json)
 then freezes one implementation, zero tuning trials, three populations and all
@@ -79,8 +148,8 @@ A failure rejects this fixed implementation, not all cross-history dependence.
 
 Ownership: `codex-relational-20260920`, canonical job
 `20260920T134229Z_f0a6290a0b`, CPU2, resident cap 9,999,998,976 bytes, logical
-scratch cap 16GB, elapsed stop 7200 seconds. Native execution remains pending
-until publication and fresh admission. Current host timing is diagnostic.
+scratch cap 16GB, elapsed stop 7200 seconds. This original attempt was interrupted
+as described below; the separately owned retry is now closed. Timing is diagnostic.
 
 Relevant established machinery: [stochastic string transduction](https://arxiv.org/abs/cmp-lg/9610005),
 [XMLPPM's shared arithmetic coder and causal structural contexts](https://xmlppm.sourceforge.net/paper/node6.html),
@@ -115,33 +184,23 @@ The terminal interpretation must separately report S-versus-P/I/W actual payload
 deltas and added code; failure to amortize code on a small fixture cannot reject
 cross-history dependence. No stripped-release or full-corpus saving is assumed.
 
-## Execution handoff
+## Closed execution and replay
 
-Retry job `20260920T135211Z_9ec3228a93` uses the published source at `022117dcd`.
-The first independently built P archive, native P inverse and P repeat have
-completed on the opening250KB; the job remains active at this handoff. No S/I/W
-comparison or final scientific verdict is available yet. Consult the canonical
-job and guard for current state rather than treating this paragraph as liveness.
-All12 native tests and144 pure tests with54 subtests pass. The new terminal
-interpreter compiles and imports; it has not yet consumed a complete native run.
-
-Once the job is terminal, from the repository root:
+Retry job `20260920T135211Z_9ec3228a93` used published source `022117dcd` and
+completed unchanged. The terminal and canonical reflection now bind its final
+result. To rerun the independently maintained terminal verification from the
+repository root:
 
 ```bash
 PYTHONPATH=projects/enwiki9/src python3 -m gamma_enwiki9.adapters.fx2_relational_terminal \
   projects/enwiki9 fx2_relational_binding250k_q0_v2 20260920T135211Z_9ec3228a93
 ```
 
-This independently checks all retained artifact identities, bound raw inputs,
-archive byte counts, P/K equivalence, complete inverse emissions, parent
-probability/truth trajectories, introduced-state repeat witnesses and incremental
-package arithmetic. It requires all51 command records. It publishes an immutable
-terminal plus15 driver rows and their index; it does not grant a scientific
-transition or launch a codec. Review the actual payload/control deltas, then use
-`enwiki9_lab.py reflect` with the terminal and terminal-index as evidence. Only
-after that reflection should `record_driver_result.py --terminal-index` append
-the closed arm set. On failure, preserve the failed execution and reflect its
-actual failure class instead. No automatic full-corpus promotion is authorized.
+Identical publication is idempotent. The terminal checks retained artifacts,
+bound raw inputs, original P/K archives, complete inverse emissions, parent
+probability/truth trajectories, introduced-state witnesses and incremental
+package arithmetic. Reflection precedes the closed arm-set ledger append.
+All fifteen rows are recorded; no additional launch is needed to close this run.
 
 ## Terminal verification review
 
@@ -152,7 +211,7 @@ matches the job and candidate identities, compares P/K/S introduced state, and
 recomputes the frozen paid predicate from archive sizes and actual code costs.
 Parent accounting resolves the authenticated binary in the original snapshot;
 an unrelated change to the current checkout cannot change that baseline.
-The running v2 predictor, adapter, recipe and frozen experiment remain unchanged.
+The measured v2 predictor, adapter, recipe and frozen experiment remain unchanged.
 
 The terminal retains internal expert log-cost attribution separately from finite
 archive deltas: shared versus independent bindings, shared versus wrong donors,
@@ -166,8 +225,8 @@ Twelve synthetic terminal tests exercise successful publication, idempotent
 replay despite a changed checkout parent, and rejection of incomplete or corrupt
 bundles before publication. The explicit pure CI group passes 156 tests and 54
 subtests, with one historical test deselected. Compilation and imports pass.
-These checks validate the evidence interpreter, not the still-running native
-comparison. Its terminal, reflection and driver ledger rows remain pending.
+These synthetic checks validate the evidence interpreter; the separate complete
+native comparison supplies the scientific result above.
 
 ## Integrated synthetic binding checks
 
