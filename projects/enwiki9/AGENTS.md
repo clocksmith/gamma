@@ -56,11 +56,16 @@ and the [creative prompts](workbench/PROMPTS.md#creative-discovery) when changin
   competitive single-stream codec, retrain for data plus packed-model cost,
   then measure causal metadata conditioning inside that model. Preserve the
   census and retired split-stream result; raw shares are not savings forecasts.
-- Use the [validated native forward boundary](docs/fx2_native_forward_20260919.md)
-  for the next separately frozen data-only versus joint-cost training comparison.
-  Its backward is a whole-reference surrogate, not exact native differentiation.
-  Preserve fixed P/E and retired metadata checkpoints; every new checkpoint needs
-  fresh native evaluation and actual packed/archive accounting.
+- The [matched native-forward comparison](docs/fx2_matched_training_20260920.md)
+  is closed: J saves fixed model bytes but worsens native payload. Do not scale
+  this 16-update profile, increase its budget, or introduce metadata from that result.
+  Preserve P/E/A/J and retired metadata checkpoints. The native forward remains
+  authoritative and its backward remains an explicitly approximate reference
+  Jacobian. Any new checkpoint needs fresh native archives and actual packing.
+- The counted core delivery has a no-argument restricted inverse on its declared
+  fixture. It is not the unexecuted full-enwik9 split/reorder package or a prize
+  qualification. Keep its measured alternatives, licenses and calibration gaps
+  separate from full-corpus score authority.
 - Every semantic mutation gets a new candidate. Never edit running, sealed, or
   measured source in place. Use the canonical lifecycle, not ad hoc launchers.
 - Freeze hypothesis, parent, changed mechanism, development budget, selection

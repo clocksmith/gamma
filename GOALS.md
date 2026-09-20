@@ -56,9 +56,10 @@ Deployment-matched forward computation and fixed-checkpoint numerical attributio
 are prerequisites for further enwiki9 training; see the
 [numerical comparison](projects/enwiki9/docs/fx2_numeric_attribution_20260919.md).
 The [native forward boundary](projects/enwiki9/docs/fx2_native_forward_20260919.md)
-now passes fixed P/E agreement; the next controlled comparison is data-only versus
-joint-cost retraining with an explicitly approximate backward and fresh native
-checkpoint/archive evaluation.
+passes fixed P/E agreement. The [matched training comparison](projects/enwiki9/docs/fx2_matched_training_20260920.md)
+now records a smaller model but larger native payload. Preserve its bounded
+component gain without scaling that profile or introducing metadata. Complete
+core delivery and full-corpus prize qualification remain distinct evidence targets.
 
 ## Explicit Exclusions
 

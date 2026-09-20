@@ -19,6 +19,62 @@
   "hypothesis": "The frozen selected J checkpoint retains a positive fully counted package delta against P under the same delivery layout, with unchanged native payload and restricted no-argument reconstruction.",
   "id": "fx2_joint_delivery250k_q0_v1",
   "kind": "experiment_recipe",
+  "measured": {
+    "reflections": {
+      "20260920T033951Z_3560358dea": {
+        "decision": "hold",
+        "path": "operations/adaptive/reflections/20260920T033951Z_3560358dea.json",
+        "sha256": "sha256:71e013d93ad1c36454c49db1290107e28308a54b320ca981130f7877946da769",
+        "valid": true
+      }
+    },
+    "terminal_results": {
+      "20260920T033951Z_3560358dea": {
+        "index": {
+          "path": "results/fx2_joint_delivery250k_q0_v1/terminal-index.json",
+          "sha256": "sha256:99aaef4564c82e5ab0e51c8533d89be66bb92be2e8256dc936202a243d07b24d"
+        },
+        "reflection": {
+          "decision": "hold",
+          "path": "operations/adaptive/reflections/20260920T033951Z_3560358dea.json",
+          "sha256": "sha256:71e013d93ad1c36454c49db1290107e28308a54b320ca981130f7877946da769",
+          "valid": true
+        },
+        "guard_validation_mode": "discovery-budget-schema",
+        "qualification_authority": false,
+        "missing_diagnostics": [
+          "kernel cpuset controller is not delegated; taskset assignment and existing affinity guard remain active"
+        ],
+        "arms": {
+          "J": {
+            "result_path": "projects/enwiki9/results/fx2_joint_delivery250k_q0_v1/J.driver.json",
+            "result_json_bytes": 2474,
+            "result_json_sha256": "21b494d593a08ad4a3c8c263b6b494822e96f6750c2f1eb5c262c5f2425ed262",
+            "data_size": 250000,
+            "data_md5": null,
+            "data_sha256": "665fc689441b68462d88f82dc33212abe9c4824be095d03a556c9b55a2829fd3",
+            "compressed_size": 3819346,
+            "program_size": 3779629,
+            "hutter_score": null,
+            "bits_per_byte": null,
+            "roundtrip_ok": true,
+            "determinism": true,
+            "compressed_sha256": "3befd21fc2c3e08452b967f393acbaf375c02cbf3057b1dcadf3173c685c0198",
+            "compress_time_s": 41.756988890934736,
+            "decompress_time_s": 40.999640435446054,
+            "missing_diagnostics": [
+              "Full1GB archive not produced",
+              "This measured core frontend is not the upstream split/reorder submission frontend",
+              "Weights permission and CUDA-derived math license unresolved",
+              "Committee runtime-library exemption/accounting unconfirmed",
+              "No isolated machine calibration or full-corpus resource certificate"
+            ],
+            "run_id": "fx2_joint_delivery250k_q0_v1__20260920T033951Z_3560358dea__J"
+          }
+        }
+      }
+    }
+  },
   "omega": {
     "experiment": {
       "path": "operations/adaptive/experiments/fx2_joint_delivery250k_q0_v1.json",
@@ -31,5 +87,6 @@
     "retired_neighborhoods": []
   },
   "parent": "fx2_matched_train250k_q0_v1",
-  "status": "candidate"
+  "status": "blocked_dependency",
+  "verdict": "Retain fully counted P/J core packages and the selected trained weights. No scale-up of this payload-losing profile or prize submission."
 }
