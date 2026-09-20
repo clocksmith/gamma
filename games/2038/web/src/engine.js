@@ -397,7 +397,9 @@ function cap(value, definition) {
 }
 
 function addResource(config, player, key, amount) {
+  const before = player[key];
   player[key] = cap(player[key] + amount, config.resources[key]);
+  return player[key] - before;
 }
 
 function synchronizePublicMandate(config, state, source) {

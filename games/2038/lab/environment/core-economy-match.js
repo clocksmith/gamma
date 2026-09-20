@@ -169,7 +169,9 @@ export class CoreEconomyMatch {
 
   addResource(player, key, amount) {
     const definition = this.config.resources[key];
+    const before = player[key];
     player[key] = clamp(player[key] + amount, definition.min, definition.cap);
+    return player[key] - before;
   }
 
   spendRunway(player, amount) {
@@ -616,7 +618,11 @@ export class CoreEconomyMatch {
     this.assignAgent(player, parameters);
 
     if (decision.actionId === "fund") {
-      this.addResource(player, "runway", parameters.mode === "venture" ? 4 : 2);
+      decision.parameters ||= {};
+      const grossRunway = parameters.actualRunway ?? (
+        (parameters.mode === "venture" ? 4 : 2) + Number(parameters.destinationCategory === "capital")
+      );
+      decision.parameters.creditedRunway = this.addResource(player, "runway", grossRunway);
       if (parameters.mode === "venture") this.addScrutiny(player, 2);
     } else if (decision.actionId === "research") {
       player.compute -= 1;
