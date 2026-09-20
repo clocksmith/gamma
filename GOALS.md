@@ -55,6 +55,10 @@ causal donor availability are measurement inputs, not achievable savings.
 Deployment-matched forward computation and fixed-checkpoint numerical attribution
 are prerequisites for further enwiki9 training; see the
 [numerical comparison](projects/enwiki9/docs/fx2_numeric_attribution_20260919.md).
+The [native forward boundary](projects/enwiki9/docs/fx2_native_forward_20260919.md)
+now passes fixed P/E agreement; the next controlled comparison is data-only versus
+joint-cost retraining with an explicitly approximate backward and fresh native
+checkpoint/archive evaluation.
 
 ## Explicit Exclusions
 

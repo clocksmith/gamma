@@ -1,57 +1,101 @@
 # Native forward boundary for fixed P/E
 
-The next correction uses the unchanged pinned native predictor as the forward
-implementation, freshly exporting current model tensors on every call. This
-removes the separate Torch forward computation from the values used to evaluate
-the training objective. Both logits and probabilities come from native execution.
-No recorded native intermediates are inputs, and no predictor source is modified.
+**The new forward boundary matches every retained native logit and probability
+bit-for-bit on both declared fixtures.** It freshly exports current model tensors
+and executes the unchanged pinned predictor. No training or parameter update
+occurred. This corrects the values entering the objective; it is not a compression
+gain or a proof about the backward approximation.
 
-The backward path is deliberately separate: the existing CPU reference supplies
-a whole-model surrogate Jacobian. Torch's softmax Jacobian is evaluated at native
-logits, while forward probability values remain the actual native probabilities.
+| Fixture | Scored positions | P loss, bits | E loss, bits | E minus P, bits | Corrected/native discrepancy |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| Synthetic, 8 input rows | 7 | 104.881477 | 111.209216 | +6.327739 | 0 |
+| Retained native, 2,048 input rows | 2,043 | 3,329.616042 | 4,724.549235 | +1,394.933194 | 0 |
+
+P was re-exported and rerun after E on each fixture. All 2,528,880 float32 values
+across the six calls match the earlier independent native replay. Each call's
+434 exported tensor identities match the original native decoder. P's exported
+weight identity repeats exactly and differs from E's, excluding stale checkpoint
+reuse in these calls. Every call starts with fresh native recurrent state and
+preserves the fixture's actual reset markers.
+
+E still has worse neural loss than P. The previous attribution's -23.538952-bit
+real-input discrepancy is eliminated at the new forward boundary; it has not
+become an archive saving. The earlier Torch reference and measured archives remain
+unchanged historical evidence. No final-mixer or full-corpus measurement occurs.
+
+## Implementation and gradient boundary
+
+[NativeForward](../src/gamma_enwiki9/adapters/fx2_native_forward.py) receives an
+explicit native binary identity, workspace, current model, export template,
+tokens, reset markers and FP16 priors. It exports the current tensors on every
+call, then runs a fresh bounded native child. Its inputs do not include captured
+predictions or intermediate values. The validator reads expected outputs only
+after the forward call. Original native sources are authenticated and unmodified.
+
+Both logits and probabilities come from native execution. The loss uses actual
+native truth probabilities, excludes piece-ending and final unpaired rows, and
+rejects a different token population. This is a neural-head loss, not the final
+mixer or a rounded archive-size objective. Bitwise equality is required for all
+forward values. An absolute 1e-10-bit allowance applies only to FP64 summation
+order; the measured P/E discrepancy is exactly zero here.
+
+The backward path remains deliberately separate. The existing CPU reference
+supplies a **whole-model surrogate Jacobian**. Torch's softmax Jacobian is evaluated
+at native logits; forward probability values remain the actual native probabilities.
+The custom autograd function returns native values directly and routes only the
+adjoint into the surrogate. Subtracting and re-adding values could lose forward
+bits through cancellation; focused tests cover that case and signed zero.
+
 This is an approximate gradient, not native differentiation, an exact derivative
-of quantization/archive size, or a claim that Torch's internal states now match.
-Its quality for optimization remains empirical. No optimizer is constructed here.
+of quantization/archive size, or a claim that internal Torch states now match.
+Two synthetic backward checks reach 429 finite, nonzero parameter-gradient tensors
+for each of P and E. State hashes remain unchanged; there are zero optimizer
+updates. Real-input evaluation performs no backward pass. Gradient usefulness
+for subsequent optimization is unmeasured.
 
-`NativeForward` takes an explicit binary identity, workspace, current model,
-export template, tokens, reset markers and FP16 priors. A new child reloads freshly
-exported tensors and cold state every call. A custom autograd function returns
-native bytes directly and routes only the adjoint into the surrogate; subtraction
-and re-addition would risk floating cancellation. Loss rejects a different token
-population and excludes piece-end and final unpaired positions.
+## Frozen scope and evidence
 
-[Plan](../operations/provenance/fx2_native_forward2048_q0_v1_plan.json),
+Candidate `fx2_native_forward2048_q0_v1`, owner `codex-native-forward-20260919`,
+was published before execution at `276eb1a37`. The
+[plan](../operations/provenance/fx2_native_forward2048_q0_v1_plan.json),
 [experiment](../operations/adaptive/experiments/fx2_native_forward2048_q0_v1.json),
 [closure](../operations/provenance/fx2_native_forward2048_q0_v1_closure.json), and
 [synthetic preflight](../operations/provenance/fx2_native_forward_synthetic_20260919.json)
-bind the correction. The candidate is `fx2_native_forward2048_q0_v1`, owner
-`codex-native-forward-20260919`. Reuse the existing bounded numerical gate;
-the new tool remains a thin compatibility entrypoint.
+bind the correction. The real population is the same exposed 2,048 modeled-token
+rows as the earlier attribution, with 2,043 paired truth positions. It is not
+2,048 raw corpus bytes, an unseen confirmation, or a larger population.
 
-The preflight compares P, E and P again on eight synthetic tokens. Every one of
-the 410 output values per input row is bit-identical to the previous independent
-native replay. All434 freshly exported tensors match the decoded native identities.
-Each P/E backward check yields429 finite, nonzero parameter-gradient tensors and
-leaves parameters unchanged. Two focused exact-value/adjoint tests and the143-test
-architecture group pass. This establishes neither gradient quality nor native
-agreement on the full retained-input fixture yet.
+The [validator](../src/gamma_enwiki9/adapters/fx2_forward_validation.py) uses the
+existing bounded numerical gate and a thin tool entrypoint. Execution, evidence,
+and scientific authority remain separate. This implementation preserves the
+component intent and changes no codec, framework authority, or prize target.
 
-The frozen gate repeats this on the same2,048 retained native input rows as the
-previous attribution, with actual reset markers and2,043 scored positions. It
-compares every forward value, rather than only the first64 traced rows. Run P/E/P
-in that order to detect checkpoint or recurrent-state reuse. Expected outputs
-enter the validator only after the native forward call. Two synthetic backward
-checks occur, with zero updates; real-input evaluation does no backward pass.
+[Comparison](../results/fx2_native_forward2048_q0_v1/comparison.json),
+[terminal analysis](../results/fx2_native_forward2048_q0_v1/terminal.json),
+[artifact manifest](../results/fx2_native_forward2048_q0_v1/artifacts.json),
+[terminal arm index](../results/fx2_native_forward2048_q0_v1/terminal-index.json), and
+[validated reflection](../operations/adaptive/reflections/20260920T025512Z_a4dd4d31c3.json)
+retain the result. All 160 execution artifacts were rehashed. Six diagnostic
+rows are recorded in the existing run ledger, with archive, inversion and
+full-score fields null. No second registry or queue was created.
 
-Acceptance requires bitwise equality of logits/probabilities, all434 tensor
-identities, exact P repeat, unchanged parameters and finite nonzero synthetic
-gradients. There is no tolerance for forward values. Only the final FP64 loss
-summation order allows an absolute1e-10-bit difference. A failure stops without
-training, checkpoint selection, feature additions or population expansion.
-CPU3,4GB resident memory,1GB scratch,no swap and1,800-second wall stop bound the
-job. The96M complete-byte target remains unchanged, with zero score credit here.
+Job `20260920T025512Z_a4dd4d31c3` completed in 38.3005 seconds under CPU 3,
+a 4 GB resident cap, 1 GB scratch cap, no swap and a 1,800-second wall stop.
+Peak cgroup memory was 1,469,566,976 bytes; sampled peak allocated scratch was
+318,197,760 bytes. All guards and owned cleanup passed. Timing is diagnostic.
+The architecture group passed 143 tests and 54 subtests; both focused forward/
+adjoint tests passed. Compilation and module import checks passed.
 
-After the gate closes, record the exact parity result, guard, reflection and
-canonical diagnostic rows. A subsequent data-only versus joint-cost training
-comparison needs its own matched-window budget and frozen selection rules;
-finite native archives and packed files remain authoritative.
+## Next comparison
+
+The forward-value prerequisite is satisfied for this profile and fixed P/E
+population. The next experiment should freeze matched data-only versus joint
+model-cost development training using this native forward and explicitly
+approximate backward, without metadata. Declare the same parent, windows,
+initialization, update budget, normalization and selection rules for both arms.
+New checkpoint exports still require fresh native evaluation. Measure actual
+packed files and finite native archives; do not equate the weight histogram
+surrogate or a small-sample loss with complete-package savings.
+
+P/E and retired metadata checkpoints remain intact. The 96,000,000-byte target
+and 95,000,000-byte stretch remain unchanged; this gate earns zero score credit.

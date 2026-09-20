@@ -1,0 +1,109 @@
+{
+  "attribution": {
+    "causalConfidence": "high",
+    "controlsEquivalent": true,
+    "failureClass": "inconclusive",
+    "localizedCause": "The old CPU-reference forward is replaced at the objective boundary by actual unchanged native computation from freshly exported current tensors. Reference computation supplies only an explicit approximate Jacobian. Captured native intermediates never enter the predictor."
+  },
+  "candidateId": "fx2_native_forward2048_q0_v1",
+  "candidateRevision": {
+    "candidateId": "fx2_native_forward2048_q0_v1",
+    "candidateTreeSha256": "sha256:f24a3c10ed10aa7f92b88d51192b21231913c6aeb37d121eeaa5976e3566fb0d",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/fx2_native_forward2048_q0_v1/20260920T025512316302Z_f24a3c10ed10.json",
+      "sha256": "sha256:b437a267d48a2eee1ee5e968761a582739d7c0d1423ca8d954b667c8b3b4281d"
+    }
+  },
+  "decision": {
+    "killPredicatesPass": false,
+    "nextGateBytes": null,
+    "promotionPredicatesPass": false,
+    "rationale": "Forward boundary validation complete. Preserve P/E and old metadata checkpoints. Next freeze a matched data-only versus joint-cost development comparison using the validated native forward, explicit surrogate backward and actual packed/native archive measurements; no optimizer launch in this diagnostic.",
+    "verdict": "hold"
+  },
+  "evidence": [
+    {
+      "path": "results/fx2_native_forward2048_q0_v1/artifacts.json",
+      "sha256": "sha256:96fb94937fcc19e30fd8355611361e6ab78ccbc58d3428ef1cb7b41eb4ddec80"
+    },
+    {
+      "path": "results/fx2_native_forward2048_q0_v1/comparison.json",
+      "sha256": "sha256:2980ba4c41464f844e0aa9dd9ee8a424e97172940c2e7833dc60db0832ea17b2"
+    },
+    {
+      "path": "results/fx2_native_forward2048_q0_v1/terminal-analysis-source.py",
+      "sha256": "sha256:ecf0fcc1384c11b85a76885d07d094a41026057804ff31875f03a64a8f41a776"
+    },
+    {
+      "path": "results/fx2_native_forward2048_q0_v1/terminal-index.json",
+      "sha256": "sha256:0a5afe6856f1c69f755c23338dee479e9e7a9dbcb8143055712e28d7d2d39c31"
+    },
+    {
+      "path": "results/fx2_native_forward2048_q0_v1/terminal.json",
+      "sha256": "sha256:fe0fbe139fae4177b6b2a928c2271c9c894b4cea4911ded1e9ac6bf118941ce9"
+    }
+  ],
+  "experiment": {
+    "path": "operations/adaptive/experiments/fx2_native_forward2048_q0_v1.json",
+    "sha256": "sha256:05685c1d2f9e41e6e1a60a47946be7e71c3ef4f09be8a71f600166c03b9b585d"
+  },
+  "generatedUtc": "2026-09-20T02:58:13+00:00",
+  "hypothesis": {
+    "rationale": "The new current-model forward boundary matches native logits and probabilities exactly on8synthetic and2048retained real rows, with zero P/E loss discrepancy. Synthetic backward reaches429 finite nonzero parameter-gradient tensors for both P/E without updates.",
+    "verdict": "supported"
+  },
+  "job": {
+    "path": "operations/adaptive/completed/959_20260920T025512Z_a4dd4d31c3.json",
+    "sha256": "sha256:358798ba0a7baa18f34a8eeeb2579ac62283a1d98ee86b88338e8b5ff6c7c637"
+  },
+  "knowledge": {
+    "retiredDimensions": [],
+    "transferableLessons": [
+      "Exact forward agreement does not establish exact native gradients, useful optimization, finite archive gain or prize eligibility.",
+      "Use actual native logits and probabilities as forward values; an autograd identity adjoint can attach a separately declared surrogate without floating cancellation."
+    ],
+    "uncertainties": [
+      "Only fixed P/E and declared populations tested; new updated checkpoints need fresh native evaluation.",
+      "Whole-reference surrogate Jacobian and Torch softmax backward remain approximate; internal Torch states are not made numerically identical."
+    ]
+  },
+  "measurementAssertions": [
+    {
+      "field": "scopeSymbols",
+      "pointer": "/fixtures/native_prefix2048/rows",
+      "source": {
+        "path": "results/fx2_native_forward2048_q0_v1/terminal.json",
+        "sha256": "sha256:fe0fbe139fae4177b6b2a928c2271c9c894b4cea4911ded1e9ac6bf118941ce9"
+      }
+    }
+  ],
+  "measurements": {
+    "idealBitsSaved": null,
+    "memoryRatio": null,
+    "minimumPartitionIdealBitsSaved": null,
+    "netBytesSaved": null,
+    "positiveSegmentFraction": null,
+    "runtimeRatio": null,
+    "scopeBytes": null,
+    "scopeSymbols": 2048,
+    "sourceBytesDelta": null,
+    "transferRetention": null
+  },
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:409b70547f901a3ac5fffd7fd7a1e1d77b05fb44d9e9d889be1337bd153706d7",
+    "objectiveId": "gamma-enwiki9-hutter-96m-v4",
+    "objectivePath": "contracts/research/v4/objective-contract.json",
+    "targetScoreBytes": 96000000
+  },
+  "reflectionId": "r-20260920t025512z_a4dd4d31c3",
+  "schema": "gamma.enwiki9.reflection-receipt.v1",
+  "validity": {
+    "classification": "valid",
+    "reasons": [
+      "All160 execution artifacts rehashed;2,528,880 float32 values match retained native baselines bitwise;434 freshly exported tensors match per call;P/E/P weight identity switches and P repeats;parameters unchanged;guard and cleanup pass."
+    ],
+    "valid": true
+  }
+}

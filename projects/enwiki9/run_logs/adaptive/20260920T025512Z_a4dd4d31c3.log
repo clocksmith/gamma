@@ -1,0 +1,531 @@
+{"command": ["/tmp/gamma-architecture-tests/bin/python", "/home/x/deco/gamma/projects/enwiki9/tools/run_with_resource_guard_v3.py", "--limit-kib", "3906250", "--official-decimal-limit-kib", "3906250", "--limit-mode", "tree", "--cgroup-path", "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/gamma-enwiki9-20260920T025512Z_a4dd4d31c3", "--cgroup-memory-max-bytes", "4000000000", "--temporary-disk-limit-bytes", "1000000000", "--phase-marker-path", "/home/x/deco/gamma/projects/enwiki9/run_logs/adaptive/20260920T025512Z_a4dd4d31c3.resources/phases.jsonl", "--max-logical-cpus", "1", "--guard-json", "/home/x/deco/gamma/projects/enwiki9/run_logs/adaptive/20260920T025512Z_a4dd4d31c3.resources/guard.json", "--label", "20260920T025512Z_a4dd4d31c3", "--phase", "diagnostic", "--scratch-path", "/home/x/deco/gamma/projects/enwiki9/results/fx2_native_forward2048_q0_v1", "--scratch-path", "/home/x/deco/gamma/projects/enwiki9/run_logs/adaptive/20260920T025512Z_a4dd4d31c3.log", "--scratch-path", "/home/x/deco/gamma/projects/enwiki9/run_logs/adaptive/20260920T025512Z_a4dd4d31c3.resources", "--scratch-path", "/tmp/gamma-enwiki9-20260920T025512Z_a4dd4d31c3-7nwpk394/fx2_native_forward2048_q0_v1", "--", "/usr/bin/taskset", "--cpu-list", "3", "/bin/sh", "-c", "printf '%s\\n' '{\"phase\":\"diagnostic\",\"event\":\"worker_start\",\"detail\":\"operational envelope only; no codec phase credit\"}' >> \"$GAMMA_RESOURCE_PHASE_MARKERS\" || exit 125; exec \"$@\"", "enwiki9-discovery-envelope", "/tmp/gamma-architecture-tests/bin/python", "/home/x/deco/gamma/projects/enwiki9/tools/fx2_native_forward_v1.py", "--root", "/home/x/deco/gamma/projects/enwiki9", "--output", "/home/x/deco/gamma/projects/enwiki9/results/fx2_native_forward2048_q0_v1", "--experiment", "/home/x/deco/gamma/projects/enwiki9/operations/adaptive/experiments/fx2_native_forward2048_q0_v1.json", "--closure", "/home/x/deco/gamma/projects/enwiki9/operations/provenance/fx2_native_forward2048_q0_v1_closure.json", "--plan", "/home/x/deco/gamma/projects/enwiki9/operations/provenance/fx2_native_forward2048_q0_v1_plan.json"], "job": {"candidate_id": "fx2_native_forward2048_q0_v1", "candidate_revision": {"path": "operations/adaptive/candidate-revisions/fx2_native_forward2048_q0_v1/20260920T025512316302Z_f24a3c10ed10.json", "sha256": "sha256:b437a267d48a2eee1ee5e968761a582739d7c0d1423ca8d954b667c8b3b4281d"}, "candidate_tree_sha256": "sha256:f24a3c10ed10aa7f92b88d51192b21231913c6aeb37d121eeaa5976e3566fb0d", "execution_guard": {"path": "tools/run_with_resource_guard_v3.py", "sha256": "sha256:044147f7ffe6922ea8dafd52fc3d4426077b20958adbcd421245ad41adcfc1e4"}, "execution_mode": "discovery", "execution_resources": {"boot_id": "3ce46712-27bc-4199-8e48-e2b3d23926cb", "budget": {"cgroup_parent": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice", "cpus": [3], "memory_bytes": 4000000000, "scratch_bytes": 1000000000, "swap_bytes": 0, "wall_seconds": 1800}, "cgroup_inode": 378015, "cgroup_path": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/gamma-enwiki9-20260920T025512Z_a4dd4d31c3", "cpu_enforcement": "taskset-and-sampled-affinity-guard", "groups": [{"created": true, "inode": 378015, "kernel_cpuset": false, "memory_bytes": 4000000000, "path": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/gamma-enwiki9-20260920T025512Z_a4dd4d31c3"}], "guard_command_sha256": "319d879dec8d68fc63b17b9b235e56e3cf4e15e0546d922a71130a9fe2de9ffa", "guard_path": "run_logs/adaptive/20260920T025512Z_a4dd4d31c3.resources/guard.json", "missing_diagnostics": ["kernel cpuset controller is not delegated; taskset assignment and existing affinity guard remain active"], "timing_authority": "diagnostic"}, "experiment": {"path": "operations/adaptive/experiments/fx2_native_forward2048_q0_v1.json", "sha256": "sha256:05685c1d2f9e41e6e1a60a47946be7e71c3ef4f09be8a71f600166c03b9b585d"}, "gate_size": 2048, "job_id": "20260920T025512Z_a4dd4d31c3", "priority": 40, "proposal": {"path": "operations/adaptive/proposals/developed/959_fx2_native_forward2048_q0_v1.json", "sha256": "sha256:a121cfa9dc89f2070e3c12cb9af3a0b2c58e67feb9521980b95f6007381da752"}, "proposal_id": "fx2_native_forward2048_q0_v1", "purpose": "diagnostic", "resource_budget": {"cgroup_parent": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice", "cpus": [3], "memory_bytes": 4000000000, "scratch_bytes": 1000000000, "swap_bytes": 0, "wall_seconds": 1800}, "runner": {"path": "tools/fx2_native_forward_v1.py", "sha256": "sha256:b57c0397efc1a19e19abf4439de8c77a612103774a6e12fb12145663ac5560ee"}, "schema": "gamma.enwiki9.adaptive-job.v3", "scratch_directories": ["results/fx2_native_forward2048_q0_v1"], "started_at": "2026-09-20T02:56:13+00:00", "state": "running", "submitted_at": "2026-09-20T02:55:12+00:00", "tags": [], "timing_authority": "diagnostic", "tool": "tools/fx2_native_forward_v1.py", "tool_args": ["--root", "/home/x/deco/gamma/projects/enwiki9", "--output", "/home/x/deco/gamma/projects/enwiki9/results/fx2_native_forward2048_q0_v1", "--experiment", "/home/x/deco/gamma/projects/enwiki9/operations/adaptive/experiments/fx2_native_forward2048_q0_v1.json", "--closure", "/home/x/deco/gamma/projects/enwiki9/operations/provenance/fx2_native_forward2048_q0_v1_closure.json", "--plan", "/home/x/deco/gamma/projects/enwiki9/operations/provenance/fx2_native_forward2048_q0_v1_plan.json"]}}
+{"synthetic": {"delta_reference_bits": 6.327738508484387, "delta_native_bits": 6.327738508484387, "delta_mismatch_bits": 0.0}, "native_prefix2048": {"delta_reference_bits": 1394.933193501784, "delta_native_bits": 1394.933193501784, "delta_mismatch_bits": 0.0}}
+{
+  "resource_guard": {
+    "cgroup": {
+      "inode": 378015,
+      "joined_before_exec": true,
+      "memory_max_bytes": 3999997952,
+      "memory_max_rounding_bytes": 2048,
+      "memory_peak_reset": true,
+      "path": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/gamma-enwiki9-20260920T025512Z_a4dd4d31c3",
+      "previous_memory_max": "3999997952",
+      "requested_memory_max_bytes": 4000000000
+    },
+    "cgroup_events": {
+      "baseline": {
+        "high": 0,
+        "low": 0,
+        "max": 0,
+        "oom": 0,
+        "oom_group_kill": 0,
+        "oom_kill": 0,
+        "sock_throttled": 0
+      },
+      "delta": {
+        "high": 0,
+        "low": 0,
+        "max": 0,
+        "oom": 0,
+        "oom_group_kill": 0,
+        "oom_kill": 0,
+        "sock_throttled": 0
+      },
+      "final": {
+        "high": 0,
+        "low": 0,
+        "max": 0,
+        "oom": 0,
+        "oom_group_kill": 0,
+        "oom_kill": 0,
+        "sock_throttled": 0
+      }
+    },
+    "command": [
+      "/usr/bin/taskset",
+      "--cpu-list",
+      "3",
+      "/bin/sh",
+      "-c",
+      "printf '%s\\n' '{\"phase\":\"diagnostic\",\"event\":\"worker_start\",\"detail\":\"operational envelope only; no codec phase credit\"}' >> \"$GAMMA_RESOURCE_PHASE_MARKERS\" || exit 125; exec \"$@\"",
+      "enwiki9-discovery-envelope",
+      "/tmp/gamma-architecture-tests/bin/python",
+      "/home/x/deco/gamma/projects/enwiki9/tools/fx2_native_forward_v1.py",
+      "--root",
+      "/home/x/deco/gamma/projects/enwiki9",
+      "--output",
+      "/home/x/deco/gamma/projects/enwiki9/results/fx2_native_forward2048_q0_v1",
+      "--experiment",
+      "/home/x/deco/gamma/projects/enwiki9/operations/adaptive/experiments/fx2_native_forward2048_q0_v1.json",
+      "--closure",
+      "/home/x/deco/gamma/projects/enwiki9/operations/provenance/fx2_native_forward2048_q0_v1_closure.json",
+      "--plan",
+      "/home/x/deco/gamma/projects/enwiki9/operations/provenance/fx2_native_forward2048_q0_v1_plan.json"
+    ],
+    "command_sha256": "0f031a17e998cc8cd94d59c31c566920eaef3bbc5b517e85c1c67a10adc0081f",
+    "elapsed_s": 38.3005,
+    "geekbench5_single_core_score": null,
+    "guards": {
+      "cgroup_memory_guard_exceeded": false,
+      "logical_cpu_guard_exceeded": false,
+      "measurement_incomplete": false,
+      "official_decimal_memory_exceeded": false,
+      "phase_marker_invalid": false,
+      "rss_guard_exceeded": false,
+      "temporary_disk_guard_exceeded": false,
+      "wall_time_guard_exceeded": false
+    },
+    "label": "20260920T025512Z_a4dd4d31c3",
+    "latest_sample": {
+      "allowed_cpu_union": [],
+      "cgroup_current_bytes": 327671808,
+      "elapsed_s": 38.2985,
+      "max_single_rss_kib": 0,
+      "persistent_status_misses": [],
+      "processes": [],
+      "scratch_allocated_bytes": 318197760,
+      "scratch_file_count": 167,
+      "scratch_logical_bytes": 317693253,
+      "scratch_race_count": 0,
+      "tree_live_threads": 0,
+      "tree_rss_kib": 0,
+      "tree_runnable_threads": 0
+    },
+    "limit_kib": 3906250,
+    "limit_mode": "tree",
+    "max_logical_cpus": 1,
+    "measurements": {
+      "affinity_complete": true,
+      "cgroup_v2_complete": true,
+      "per_process_vmhwm_sampled": true,
+      "phase_markers_complete": true,
+      "process_tree_rss_complete": true,
+      "scratch_logical_and_allocated_complete": true,
+      "smaps_rollup_complete": true
+    },
+    "objective": {
+      "corpusBytes": 1000000000,
+      "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+      "objectiveDigest": "sha256:409b70547f901a3ac5fffd7fd7a1e1d77b05fb44d9e9d889be1337bd153706d7",
+      "objectiveId": "gamma-enwiki9-hutter-96m-v4",
+      "objectivePath": "contracts/research/v4/objective-contract.json",
+      "targetScoreBytes": 96000000
+    },
+    "official_decimal_limit_kib": 3906250,
+    "peak_process_vmhwm": {
+      "comm": "python3.14",
+      "observed_elapsed_s": 35.7878,
+      "pid": 2634995,
+      "start_ticks": 296911192,
+      "vmhwm_kib": 1394416
+    },
+    "peak_sample": {
+      "allowed_cpu_union": [
+        3
+      ],
+      "cgroup_current_bytes": 1434656768,
+      "elapsed_s": 36.2897,
+      "max_single_rss_kib": 1360680,
+      "persistent_status_misses": [],
+      "processes": [
+        {
+          "allowed_cpus": [
+            3
+          ],
+          "comm": "python",
+          "live_threads": 1,
+          "pid": 2634966,
+          "rss_kib": 24236,
+          "runnable_threads": 0,
+          "start_ticks": 296911176,
+          "vmhwm_kib": 29940
+        },
+        {
+          "allowed_cpus": [
+            3
+          ],
+          "comm": "python3.14",
+          "live_threads": 1,
+          "pid": 2634995,
+          "rss_kib": 1360680,
+          "runnable_threads": 1,
+          "start_ticks": 296911192,
+          "vmhwm_kib": 1394416
+        }
+      ],
+      "scratch_allocated_bytes": 274206720,
+      "scratch_file_count": 156,
+      "scratch_logical_bytes": 273720684,
+      "scratch_race_count": 0,
+      "tree_live_threads": 2,
+      "tree_rss_kib": 1384916,
+      "tree_runnable_threads": 1
+    },
+    "peak_tree_sample": {
+      "allowed_cpu_union": [
+        3
+      ],
+      "cgroup_current_bytes": 1434656768,
+      "elapsed_s": 36.2897,
+      "max_single_rss_kib": 1360680,
+      "persistent_status_misses": [],
+      "processes": [
+        {
+          "allowed_cpus": [
+            3
+          ],
+          "comm": "python",
+          "live_threads": 1,
+          "pid": 2634966,
+          "rss_kib": 24236,
+          "runnable_threads": 0,
+          "start_ticks": 296911176,
+          "vmhwm_kib": 29940
+        },
+        {
+          "allowed_cpus": [
+            3
+          ],
+          "comm": "python3.14",
+          "live_threads": 1,
+          "pid": 2634995,
+          "rss_kib": 1360680,
+          "runnable_threads": 1,
+          "start_ticks": 296911192,
+          "vmhwm_kib": 1394416
+        }
+      ],
+      "scratch_allocated_bytes": 274206720,
+      "scratch_file_count": 156,
+      "scratch_logical_bytes": 273720684,
+      "scratch_race_count": 0,
+      "tree_live_threads": 2,
+      "tree_rss_kib": 1384916,
+      "tree_runnable_threads": 1
+    },
+    "peaks": {
+      "cgroup_memory_peak_bytes": 1469566976,
+      "max_observed_process_vmhwm_kib": 1394416,
+      "max_sampled_allowed_cpu_count": 1,
+      "max_sampled_cgroup_current_bytes": 1434656768,
+      "max_sampled_scratch_allocated_bytes": 318197760,
+      "max_sampled_scratch_logical_bytes": 317693253,
+      "max_sampled_single_rss_kib": 1360680,
+      "max_sampled_tree_live_threads": 4,
+      "max_sampled_tree_rss_kib": 1384916,
+      "max_sampled_tree_runnable_threads": 2
+    },
+    "phase": "diagnostic",
+    "phase_marker_path": "/home/x/deco/gamma/projects/enwiki9/run_logs/adaptive/20260920T025512Z_a4dd4d31c3.resources/phases.jsonl",
+    "phase_markers": [
+      {
+        "detail": "operational envelope only; no codec phase credit",
+        "event": "worker_start",
+        "observed_elapsed_s": 0.0229,
+        "phase": "diagnostic",
+        "source_line": 1
+      }
+    ],
+    "returncode": 0,
+    "sample_count": 77,
+    "sample_interval_seconds": 0.5,
+    "schema": "gamma.enwiki9.resource-guard-receipt.v3",
+    "scratch_paths": [
+      "/home/x/deco/gamma/projects/enwiki9/results/fx2_native_forward2048_q0_v1",
+      "/home/x/deco/gamma/projects/enwiki9/run_logs/adaptive/20260920T025512Z_a4dd4d31c3.log",
+      "/home/x/deco/gamma/projects/enwiki9/run_logs/adaptive/20260920T025512Z_a4dd4d31c3.resources",
+      "/tmp/gamma-enwiki9-20260920T025512Z_a4dd4d31c3-7nwpk394/fx2_native_forward2048_q0_v1"
+    ],
+    "smaps_rollup_checkpoints": [
+      {
+        "elapsed_s": 0.0229,
+        "processes": [
+          {
+            "pid": 2634966,
+            "rollup_kib": {
+              "AnonHugePages": 0,
+              "Anonymous": 4740,
+              "FilePmdMapped": 0,
+              "KSM": 0,
+              "LazyFree": 0,
+              "Locked": 0,
+              "Private_Clean": 76,
+              "Private_Dirty": 4740,
+              "Private_Hugetlb": 0,
+              "Pss": 6297,
+              "Pss_Anon": 4740,
+              "Pss_Dirty": 4740,
+              "Pss_File": 1557,
+              "Pss_Shmem": 0,
+              "Referenced": 11628,
+              "Rss": 11628,
+              "Shared_Clean": 6812,
+              "Shared_Dirty": 0,
+              "Shared_Hugetlb": 0,
+              "ShmemPmdMapped": 0,
+              "Swap": 0,
+              "SwapPss": 0
+            },
+            "start_ticks": 296911176
+          }
+        ],
+        "reason": "initial+phase_marker+rss_growth",
+        "tree_rss_kib": 11628
+      },
+      {
+        "elapsed_s": 0.5238,
+        "processes": [
+          {
+            "pid": 2634966,
+            "rollup_kib": {
+              "AnonHugePages": 0,
+              "Anonymous": 11840,
+              "FilePmdMapped": 0,
+              "KSM": 0,
+              "LazyFree": 0,
+              "Locked": 0,
+              "Private_Clean": 40,
+              "Private_Dirty": 11840,
+              "Private_Hugetlb": 0,
+              "Pss": 13487,
+              "Pss_Anon": 11840,
+              "Pss_Dirty": 11840,
+              "Pss_File": 1647,
+              "Pss_Shmem": 0,
+              "Referenced": 24236,
+              "Rss": 24236,
+              "Shared_Clean": 12356,
+              "Shared_Dirty": 0,
+              "Shared_Hugetlb": 0,
+              "ShmemPmdMapped": 0,
+              "Swap": 0,
+              "SwapPss": 0
+            },
+            "start_ticks": 296911176
+          },
+          {
+            "pid": 2634995,
+            "rollup_kib": {
+              "AnonHugePages": 0,
+              "Anonymous": 251200,
+              "FilePmdMapped": 0,
+              "KSM": 0,
+              "LazyFree": 0,
+              "Locked": 0,
+              "Private_Clean": 76416,
+              "Private_Dirty": 251200,
+              "Private_Hugetlb": 0,
+              "Pss": 383913,
+              "Pss_Anon": 251200,
+              "Pss_Dirty": 251200,
+              "Pss_File": 132713,
+              "Pss_Shmem": 0,
+              "Referenced": 450964,
+              "Rss": 450964,
+              "Shared_Clean": 123348,
+              "Shared_Dirty": 0,
+              "Shared_Hugetlb": 0,
+              "ShmemPmdMapped": 0,
+              "Swap": 0,
+              "SwapPss": 0
+            },
+            "start_ticks": 296911192
+          }
+        ],
+        "reason": "rss_growth",
+        "tree_rss_kib": 475008
+      },
+      {
+        "elapsed_s": 2.0448,
+        "processes": [
+          {
+            "pid": 2634966,
+            "rollup_kib": {
+              "AnonHugePages": 0,
+              "Anonymous": 11840,
+              "FilePmdMapped": 0,
+              "KSM": 0,
+              "LazyFree": 0,
+              "Locked": 0,
+              "Private_Clean": 44,
+              "Private_Dirty": 11840,
+              "Private_Hugetlb": 0,
+              "Pss": 13654,
+              "Pss_Anon": 11840,
+              "Pss_Dirty": 11840,
+              "Pss_File": 1814,
+              "Pss_Shmem": 0,
+              "Referenced": 24236,
+              "Rss": 24236,
+              "Shared_Clean": 12352,
+              "Shared_Dirty": 0,
+              "Shared_Hugetlb": 0,
+              "ShmemPmdMapped": 0,
+              "Swap": 0,
+              "SwapPss": 0
+            },
+            "start_ticks": 296911176
+          },
+          {
+            "pid": 2634995,
+            "rollup_kib": {
+              "AnonHugePages": 0,
+              "Anonymous": 361140,
+              "FilePmdMapped": 0,
+              "KSM": 0,
+              "LazyFree": 0,
+              "Locked": 0,
+              "Private_Clean": 227600,
+              "Private_Dirty": 361140,
+              "Private_Hugetlb": 0,
+              "Pss": 591077,
+              "Pss_Anon": 361140,
+              "Pss_Dirty": 361140,
+              "Pss_File": 229937,
+              "Pss_Shmem": 0,
+              "Referenced": 603924,
+              "Rss": 603924,
+              "Shared_Clean": 15184,
+              "Shared_Dirty": 0,
+              "Shared_Hugetlb": 0,
+              "ShmemPmdMapped": 0,
+              "Swap": 0,
+              "SwapPss": 0
+            },
+            "start_ticks": 296911192
+          },
+          {
+            "pid": 2635230,
+            "rollup_kib": {
+              "AnonHugePages": 0,
+              "Anonymous": 288,
+              "FilePmdMapped": 0,
+              "KSM": 0,
+              "LazyFree": 0,
+              "Locked": 0,
+              "Private_Clean": 1004,
+              "Private_Dirty": 288,
+              "Private_Hugetlb": 0,
+              "Pss": 1338,
+              "Pss_Anon": 288,
+              "Pss_Dirty": 288,
+              "Pss_File": 1050,
+              "Pss_Shmem": 0,
+              "Referenced": 3136,
+              "Rss": 3136,
+              "Shared_Clean": 1844,
+              "Shared_Dirty": 0,
+              "Shared_Hugetlb": 0,
+              "ShmemPmdMapped": 0,
+              "Swap": 0,
+              "SwapPss": 0
+            },
+            "start_ticks": 296911283
+          },
+          {
+            "pid": 2635469,
+            "rollup_kib": {
+              "AnonHugePages": 0,
+              "Anonymous": 128220,
+              "FilePmdMapped": 0,
+              "KSM": 0,
+              "LazyFree": 0,
+              "Locked": 0,
+              "Private_Clean": 12380,
+              "Private_Dirty": 128220,
+              "Private_Hugetlb": 0,
+              "Pss": 140817,
+              "Pss_Anon": 128220,
+              "Pss_Dirty": 128220,
+              "Pss_File": 12597,
+              "Pss_Shmem": 0,
+              "Referenced": 143536,
+              "Rss": 143536,
+              "Shared_Clean": 2936,
+              "Shared_Dirty": 0,
+              "Shared_Hugetlb": 0,
+              "ShmemPmdMapped": 0,
+              "Swap": 0,
+              "SwapPss": 0
+            },
+            "start_ticks": 296911360
+          }
+        ],
+        "reason": "rss_growth",
+        "tree_rss_kib": 768896
+      },
+      {
+        "elapsed_s": 9.6058,
+        "processes": [
+          {
+            "pid": 2634966,
+            "rollup_kib": {
+              "AnonHugePages": 0,
+              "Anonymous": 11840,
+              "FilePmdMapped": 0,
+              "KSM": 0,
+              "LazyFree": 0,
+              "Locked": 0,
+              "Private_Clean": 28,
+              "Private_Dirty": 11840,
+              "Private_Hugetlb": 0,
+              "Pss": 13639,
+              "Pss_Anon": 11840,
+              "Pss_Dirty": 11840,
+              "Pss_File": 1799,
+              "Pss_Shmem": 0,
+              "Referenced": 24236,
+              "Rss": 24236,
+              "Shared_Clean": 12368,
+              "Shared_Dirty": 0,
+              "Shared_Hugetlb": 0,
+              "ShmemPmdMapped": 0,
+              "Swap": 0,
+              "SwapPss": 0
+            },
+            "start_ticks": 296911176
+          },
+          {
+            "pid": 2634995,
+            "rollup_kib": {
+              "AnonHugePages": 495616,
+              "Anonymous": 945532,
+              "FilePmdMapped": 0,
+              "KSM": 0,
+              "LazyFree": 0,
+              "Locked": 0,
+              "Private_Clean": 235268,
+              "Private_Dirty": 945532,
+              "Private_Hugetlb": 0,
+              "Pss": 1183132,
+              "Pss_Anon": 945532,
+              "Pss_Dirty": 945532,
+              "Pss_File": 237600,
+              "Pss_Shmem": 0,
+              "Referenced": 1195984,
+              "Rss": 1195984,
+              "Shared_Clean": 15184,
+              "Shared_Dirty": 0,
+              "Shared_Hugetlb": 0,
+              "ShmemPmdMapped": 0,
+              "Swap": 0,
+              "SwapPss": 0
+            },
+            "start_ticks": 296911192
+          }
+        ],
+        "reason": "rss_growth",
+        "tree_rss_kib": 1192336
+      },
+      {
+        "elapsed_s": 38.2985,
+        "processes": [],
+        "reason": "terminal",
+        "tree_rss_kib": 0
+      }
+    ],
+    "status": "complete",
+    "temporary_disk_limit_bytes": 1000000000,
+    "wall_time_limit_seconds": null
+  }
+}
