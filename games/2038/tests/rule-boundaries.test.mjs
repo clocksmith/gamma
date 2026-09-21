@@ -364,46 +364,64 @@ test("Fund accounting credits gross runway once, handles Scrutiny overflow penal
 test("Fusion immediately connects nearby Facilities upon construction, and Quantum produces Capability before Era IV AGI recognition", async () => {
   const match = await fixture();
   const player = match.players[0];
-  match.round = 4;
-  match.choose = async (_policies, _seat, _stage, choices) => choices.find(c => c.decisionId === "agi_declare") || choices[0];
 
-  // 1. Fusion immediate connection upon construction:
-  // Place Facility 1 on Frontier (always powered).
-  // Place Facility 2 on an adjacent Energy district (currently unpowered because no Generator).
-  const frontier = match.board.find(t => t.id === "frontier");
-  const energyTile = match.board.find(t => t.category === "energy" && match.areAdjacent(t.instanceId, frontier.instanceId));
+  // 1. Era III setup on legal non-Frontier districts:
+  // Find two adjacent non-Frontier districts for legal Facility placement.
+  const nonFrontierTiles = match.board.filter(tile => tile.category !== "frontier");
+  let districtA = null;
+  let districtB = null;
+  for (const t1 of nonFrontierTiles) {
+    const t2 = nonFrontierTiles.find(candidate => candidate.instanceId !== t1.instanceId && match.areAdjacent(t1.instanceId, candidate.instanceId));
+    if (t2) {
+      districtA = t1;
+      districtB = t2;
+      break;
+    }
+  }
+  assert.ok(districtA && districtB, "Two adjacent non-Frontier districts must exist");
+
+  // Place Facility 1 on districtA (powered by civic starting grid).
+  // Place Facility 2 on adjacent districtB (unpowered; no Generator yet).
   player.facilities = [
-    { id: "s0-facility-1", tileId: frontier.instanceId, category: "frontier", powered: true },
-    { id: "s0-facility-2", tileId: energyTile.instanceId, category: "energy", powered: false }
+    { id: "s0-facility-1", tileId: districtA.instanceId, category: districtA.category, powered: true },
+    { id: "s0-facility-2", tileId: districtB.instanceId, category: districtB.category, powered: false }
   ];
   player.generators = [];
   player.projects = [];
-  assert.deepEqual(match.latestPoweredFacilities(player).map(f => f.id), ["s0-facility-1"]);
 
-  // Construct Fusion Demonstrator on Facility 1
+  // In Era III: only Facility 1 is powered; Quantum is locked until Era IV.
+  match.round = 3;
+  assert.deepEqual(match.latestPoweredFacilities(player).map(f => f.id), ["s0-facility-1"]);
+  const quantumInEra3 = match.legalBuildResolutions(0).find(choice => choice.parameters.project?.id === "quantum");
+  assert.equal(quantumInEra3, undefined, "Quantum must not be legal to build in Era III");
+
+  // Build Fusion Demonstrator on Facility 1 in Era III
   Object.assign(player, { runway: 10, compute: 5, scrutiny: 0 });
   const fusionPlan = match.legalBuildResolutions(0).find(choice =>
     !choice.parameters.facility &&
     choice.parameters.project?.id === "fusion_demonstrator" &&
     choice.parameters.project?.hostId === "s0-facility-1"
   );
-  assert.ok(fusionPlan, "Fusion build plan on Facility 1");
+  assert.ok(fusionPlan, "Fusion build plan on Facility 1 in Era III");
   match.applyBuild(0, fusionPlan);
 
-  // Immediately, Fusion on Facility 1 powers adjacent Facility 2!
+  // Fusion on Facility 1 immediately connects host and powers adjacent Facility 2 in Era III
   assert.deepEqual(match.latestPoweredFacilities(player).map(f => f.id).sort(), ["s0-facility-1", "s0-facility-2"]);
 
-  // 2. Quantum Core produces Capability before Era IV AGI recognition:
-  // Facility 2 is now powered, so it can legally host Quantum!
+  // 2. Era IV: advance round to Era IV where Quantum unlocks
+  match.round = 4;
+  match.choose = async (_policies, _seat, _stage, choices) => choices.find(c => c.decisionId === "agi_declare") || choices[0];
+
+  // Facility 2 is powered, so it can legally host Quantum in Era IV
   const quantumPlan = match.legalBuildResolutions(0).find(choice =>
     !choice.parameters.facility &&
     choice.parameters.project?.id === "quantum" &&
     choice.parameters.project?.hostId === "s0-facility-2"
   );
-  assert.ok(quantumPlan, "Quantum build plan on Facility 2");
+  assert.ok(quantumPlan, "Quantum build plan on Facility 2 in Era IV");
   match.applyBuild(0, quantumPlan);
 
-  // Set player to meet all AGI requirements except Capability is 8 (need 9):
+  // Set player to meet all AGI requirements except Capability is 8 (need 9)
   Object.assign(player, { capability: 8, trust: 4, compute: 3 });
   assert.equal(match.declarationReadiness(player).ready, false, "Not ready before Production: Capability 8 < 9");
   assert.equal(match.declarationReadiness(player).failingRequirement, "capability");
