@@ -364,64 +364,74 @@ test("Fund accounting credits gross runway once, handles Scrutiny overflow penal
 test("Fusion immediately connects nearby Facilities upon construction, and Quantum produces Capability before Era IV AGI recognition", async () => {
   const match = await fixture();
   const player = match.players[0];
+  const availableBuild = () => match.legalActionSelections(0).some(choice => choice.actionId === "build");
+  const build = plan => {
+    assert.ok(availableBuild(), `Build is available in Era ${match.round}`);
+    assert.ok(plan, `Legal Build plan exists in Era ${match.round}`);
+    match.applyResolution(0, plan);
+    assert.equal(availableBuild(), false, "Build exhausts for the Era");
+  };
+  const fund = () => {
+    const plan = match.legalResolutions(0, "fund").find(choice => choice.parameters.mode === "conservative");
+    assert.ok(match.legalActionSelections(0).some(choice => choice.actionId === "fund"));
+    assert.ok(plan);
+    match.applyResolution(0, plan);
+  };
+  const nextEra = async era => {
+    match.round = era;
+    await match.beginRound([]);
+    assert.ok(availableBuild(), `Build refreshes in Era ${era}`);
+  };
 
-  // 1. Era III setup on legal non-Frontier districts:
-  // Find two adjacent non-Frontier districts for legal Facility placement.
-  const nonFrontierTiles = match.board.filter(tile => tile.category !== "frontier");
-  let districtA = null;
-  let districtB = null;
-  for (const t1 of nonFrontierTiles) {
-    const t2 = nonFrontierTiles.find(candidate => candidate.instanceId !== t1.instanceId && match.areAdjacent(t1.instanceId, candidate.instanceId));
-    if (t2) {
-      districtA = t1;
-      districtB = t2;
-      break;
-    }
-  }
-  assert.ok(districtA && districtB, "Two adjacent non-Frontier districts must exist");
+  // Construct both numbered Facilities through ordinary Build resolutions.
+  await nextEra(1);
+  const first = match.legalBuildResolutions(0).find(choice =>
+    choice.parameters.facility && !choice.parameters.project &&
+    !["frontier", "research"].includes(choice.parameters.destinationCategory) &&
+    match.board.some(tile => tile.category !== "frontier" && tile.category !== "research" &&
+      match.areAdjacent(choice.parameters.destinationId, tile.instanceId))
+  );
+  build(first);
+  fund();
+  await nextEra(2);
+  const second = match.legalBuildResolutions(0).find(choice =>
+    choice.parameters.facility && !choice.parameters.project &&
+    choice.parameters.destinationCategory !== "research" &&
+    match.areAdjacent(player.facilities[0].tileId, choice.parameters.destinationId)
+  );
+  build(second);
+  assert.equal(player.facilities.length, 2);
+  assert.ok(player.facilities.every(facility => facility.category !== "frontier"));
 
-  // Place Facility 1 on districtA (powered by civic starting grid).
-  // Place Facility 2 on adjacent districtB (unpowered; no Generator yet).
-  player.facilities = [
-    { id: "s0-facility-1", tileId: districtA.instanceId, category: districtA.category, powered: true },
-    { id: "s0-facility-2", tileId: districtB.instanceId, category: districtB.category, powered: false }
-  ];
-  player.generators = [];
-  player.projects = [];
-
-  // In Era III: only Facility 1 is powered; Quantum is locked until Era IV.
-  match.round = 3;
+  await nextEra(3);
+  fund();
   assert.deepEqual(match.latestPoweredFacilities(player).map(f => f.id), ["s0-facility-1"]);
   const quantumInEra3 = match.legalBuildResolutions(0).find(choice => choice.parameters.project?.id === "quantum");
   assert.equal(quantumInEra3, undefined, "Quantum must not be legal to build in Era III");
 
-  // Build Fusion Demonstrator on Facility 1 in Era III
-  Object.assign(player, { runway: 10, compute: 5, scrutiny: 0 });
   const fusionPlan = match.legalBuildResolutions(0).find(choice =>
     !choice.parameters.facility &&
     choice.parameters.project?.id === "fusion_demonstrator" &&
     choice.parameters.project?.hostId === "s0-facility-1"
   );
-  assert.ok(fusionPlan, "Fusion build plan on Facility 1 in Era III");
-  match.applyBuild(0, fusionPlan);
+  build(fusionPlan);
 
-  // Fusion on Facility 1 immediately connects host and powers adjacent Facility 2 in Era III
   assert.deepEqual(match.latestPoweredFacilities(player).map(f => f.id).sort(), ["s0-facility-1", "s0-facility-2"]);
 
-  // 2. Era IV: advance round to Era IV where Quantum unlocks
-  match.round = 4;
+  await nextEra(4);
+  fund();
   match.choose = async (_policies, _seat, _stage, choices) => choices.find(c => c.decisionId === "agi_declare") || choices[0];
 
-  // Facility 2 is powered, so it can legally host Quantum in Era IV
   const quantumPlan = match.legalBuildResolutions(0).find(choice =>
     !choice.parameters.facility &&
     choice.parameters.project?.id === "quantum" &&
     choice.parameters.project?.hostId === "s0-facility-2"
   );
-  assert.ok(quantumPlan, "Quantum build plan on Facility 2 in Era IV");
-  match.applyBuild(0, quantumPlan);
+  build(quantumPlan);
+  assert.deepEqual(player.projects.map(project => [project.projectId, project.builtEra]),
+    [["fusion_demonstrator", 3], ["quantum", 4]]);
 
-  // Set player to meet all AGI requirements except Capability is 8 (need 9)
+  // Isolate the AGI threshold after proving the construction sequence.
   Object.assign(player, { capability: 8, trust: 4, compute: 3 });
   assert.equal(match.declarationReadiness(player).ready, false, "Not ready before Production: Capability 8 < 9");
   assert.equal(match.declarationReadiness(player).failingRequirement, "capability");
