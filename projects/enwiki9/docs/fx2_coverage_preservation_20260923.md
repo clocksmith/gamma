@@ -1,6 +1,27 @@
 # Frozen coverage and full-distribution preservation comparison
 
-Status: prospectively frozen and queued; no outcome reported yet.
+Status: implemented, tested and prospectively frozen; queued job is held before
+launch because ownership publication failed. No training, native corpus replay,
+new checkpoint or experimental outcome has occurred.
+
+Source commit `ec1134868` is local only. GitHub rejects the configured SSH key
+with `Permission denied (publickey)`; both `rdpush` and direct Git authentication
+checks fail. The authenticated GitHub connector has repository push permission,
+but the tree API returns `GitRPC::SymlinkDisallowed` when combining the exact
+experiment subtree with the existing repository tree. No branch was changed;
+only unreachable tree objects were created during that publication attempt.
+The repository's existing contents were preserved. This is an infrastructure
+hold, not scientific rejection.
+[Agent rules](../AGENTS.md) require: "Publish ownership before launching a
+resource-intensive gate." Job `20260923T150924Z_f1ccb40191` is canonically held
+so workers cannot claim it before publication.
+
+After authorized GitHub push access is restored, publish the source and hold
+record with `rdpush gamma`, inspect current host occupancy and other ownership,
+release this exact job through the lab with the publication reason, publish the
+release, and execute only this candidate under its unchanged frozen budget.
+No new experiment identity or retuning is needed for this prelaunch auth hold.
+The terminal deliverable remains the closed comparison and measured artifacts.
 The question is whether broader supervision, preservation of P's distribution,
 or their combination prevents the off-window damage measured in the
 [closed attribution](fx2_training_trajectory_20260920.md).
