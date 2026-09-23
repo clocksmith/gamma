@@ -1,0 +1,30 @@
+
+> mandate-2038@0.21.2 publish:firebase:build
+> npm run build:all && npm run gallery:baseline && node tasks/build-firebase-site.mjs --profile public-playtest
+
+
+> mandate-2038@0.21.2 build:all
+> npm run content:build && npm run docs:html && npm run gallery:html
+
+
+> mandate-2038@0.21.2 content:build
+> node tasks/content/validate-era-situation-ledger.mjs && node tasks/content/compile.mjs
+
+era-situation-ledger: verified 4 Eras, 53 scenarios, and 64 game surfaces
+content-graph: generated 28 artifacts
+
+> mandate-2038@0.21.2 docs:html
+> node tasks/render-docs.mjs
+
+docs-html: rendered 21 player and review pages
+
+> mandate-2038@0.21.2 gallery:html
+> node tasks/render-gallery.mjs
+
+gallery: rendered dist/site/gallery.html
+
+> mandate-2038@0.21.2 gallery:baseline
+> node tasks/render-gallery.mjs --baseline
+
+gallery: rendered dist/site/gallery-baseline.html
+firebase-site: rendered public-playtest with 6 HTML surfaces to /Users/xyz/deco/gamma/games/2038/dist/firebase/public
