@@ -6,6 +6,7 @@ import sys
 
 PROJECT = Path(__file__).resolve().parents[1]
 GROUPS = {
+    "training": ["architecture/test_boundaries.py", "test_fx2_native_forward.py", "test_fx2_matched_training.py", "test_fx2_coverage_preservation_v1.py"],
     "pure": ["architecture/test_closure.py", "architecture/test_primitives.py", "architecture/test_boundaries.py", "architecture/test_memory.py",
              "architecture/test_history.py", "architecture/test_original_inputs.py", "architecture/test_lease.py", "test_enwiki9_lab_recovery_activation.py",
              "test_enwiki9_lab_worker_liveness.py", "test_record_driver_result.py", "test_fx2_relational_terminal.py",
