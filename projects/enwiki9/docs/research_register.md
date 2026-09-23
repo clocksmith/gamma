@@ -1,6 +1,30 @@
 # Research Register
 [Record index](research_register/README.md) | [Earlier records](research_register/archive/README.md)
 
+## 2026-09-23 - Implement coverage/preservation comparison; hold before launch
+
+The user-requested [four-arm comparison](fx2_coverage_preservation_20260923.md)
+is implemented, prospectively frozen and tested, but **has no measured outcome**.
+All N/B/R/BR children will start from P with sixteen updates and 2,048 supervised
+exposures. Broader supervision uses 1,024 distinct targets instead of 512;
+preservation adds full205-token KL(P||child) on fixed replay contexts, detached
+teacher outputs and explicit additional computation. Common native evaluation
+partitions account for all overlaps and retain no-neural events. Every child
+requires its own packed model, native archive, inverse, repeat and unobserved
+encode control. Previously exposed1MB remains development only.
+
+Thirteen targeted training/boundary checks pass using existing dependencies.
+Candidate `fx2_coverage_preservation250k_q0_v1`, owner
+`codex-coverage-preservation-20260923`, job `20260923T150924Z_f1ccb40191` is held
+before launch: SSH publication fails with `Permission denied (publickey)`.
+Authenticated connector publication also fails at the existing repository tree
+with `GitRPC::SymlinkDisallowed`. No remote branch, source identity, model,
+training checkpoint or scientific result was changed by the publication attempts.
+Restore Git push access, publish ownership, release and publish this exact job,
+refresh host occupancy, then execute its unchanged frozen contract. Preserve P
+if no child improves both native payload and archive-plus-two-model cost; no
+coefficient sweep, confirmation tuning, metadata or larger run is selected.
+
 ## 2026-09-20 - Fixed P/A/J complete native trajectory attribution
 
 The [matched attribution](fx2_training_trajectory_20260920.md) closes
