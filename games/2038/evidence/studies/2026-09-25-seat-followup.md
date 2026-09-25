@@ -35,7 +35,10 @@ It records the complete run contract, identity, every pair, and the paths and
 hashes of all 192 archived reports. The tracked [result index](2026-09-25-seat-followup-results.json)
 retains each paired score and report hash. All 192 raw report files passed their
 recorded SHA-256 checks after the run. All 192 stored focal scores and win
-shares also matched their archived report summaries.
+shares also matched their archived report summaries. A tracked
+[raw bundle](2026-09-25-seat-followup-raw.tar.gz) contains the aggregate and
+all 192 archived reports; its SHA-256 is
+`71e557ec956e73637f93f926388b61a5fd0c280dff50ceb254da4a27f3147183`.
 
 ## Observed paired Mandate differences
 
