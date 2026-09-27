@@ -2,6 +2,18 @@
 
 These instructions apply to the entire Mandate 2038 project.
 
+## Git workflow: direct to main
+
+- Work and commit directly on the owning repository's `main` branch, then push
+  directly to its existing `origin/main` remote branch.
+- Do not create feature/task branches, branch-backed worktrees, or GitHub pull
+  requests. Do not use a branch/PR workflow unless the user explicitly requests it.
+- If the checkout is on another branch, preserve its work and move the task to
+  `main` safely; never discard changes to switch branches.
+- Stage only task-related changes, run the applicable checks, and integrate remote
+  updates without overwriting unrelated work. Never force-push `main`.
+- Report the pushed commit or the concrete blocker. A local commit is not a push.
+
 ## Component Intent
 
 Before modifying a file, read the `CATSCAN.md` chain from the repository root
@@ -172,7 +184,8 @@ common-seed comparison for any proposed rule delta, and explicit user approval.
 
 ## Git And Publication
 
-- Work on `main`.
+- Apply the direct-to-main workflow in the owning Gamma repository; this does
+  not create an independent publication target for this game.
 - Preserve unrelated work.
 - This project is not publishable through `rdpush` until it has an explicit
   remote and is added to the canonical Deco workspace registry.

@@ -13,6 +13,18 @@ to a recorded result, and continue independent work when one gate is held.
 At each decision boundary, use the manual's [test/mutate/explore rules](ADAPTIVE_WORKFLOW.md#choose-testing-mutation-or-exploration)
 and the [creative prompts](workbench/PROMPTS.md#creative-discovery) when changing direction.
 
+## Git workflow: direct to main
+
+- Work and commit directly on the owning repository's `main` branch, then push
+  directly to its existing `origin/main` remote branch.
+- Do not create feature/task branches, branch-backed worktrees, or GitHub pull
+  requests. Do not use a branch/PR workflow unless the user explicitly requests it.
+- If the checkout is on another branch, preserve its work and move the task to
+  `main` safely; never discard changes to switch branches.
+- Stage only task-related changes, run the applicable checks, and integrate remote
+  updates without overwriting unrelated work. Never force-push `main`.
+- Report the pushed commit or the concrete blocker. A local commit is not a push.
+
 ## Authority and permissions
 
 - Standing permission covers source inspection, research, synthetic fixtures,
