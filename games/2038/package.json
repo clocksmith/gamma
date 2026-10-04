@@ -1,6 +1,6 @@
 {
   "name": "mandate-2038",
-  "version": "0.21.2",
+  "version": "0.21.3",
   "private": true,
   "type": "module",
   "description": "Deterministic browser and physical-playtest game for Mandate 2038.",
@@ -22,8 +22,8 @@
     "gallery:html": "node tasks/render-gallery.mjs",
     "gallery:baseline": "node tasks/render-gallery.mjs --baseline",
     "build:all": "npm run content:build && npm run docs:html && npm run gallery:html",
-    "publish:firebase:build": "npm run build:all && npm run gallery:baseline && node tasks/build-firebase-site.mjs --profile public-playtest",
-    "publish:firebase:deploy": "npm run publish:firebase:build && firebase deploy --config firebase.json --project canvascontext-9da05 --only hosting",
+    "publish:firebase:build": "npm run build:all && npm run gallery:baseline && node tasks/build-firebase-site.mjs --profile public-playtest --base-path /mandate-2038",
+    "publish:firebase:deploy": "npm --prefix ../../../simulatte run deploy:hosting:world",
     "review:site:build": "npm run build:all && npm run gallery:baseline && node tasks/build-firebase-site.mjs --profile internal-review",
     "dev": "npm run build:all && npm start",
     "check": "npm run content:check && npm run content:check:boundaries && npm run content:validate && npm run content:validate:lore && npm run content:lint:provenance && node tasks/check-project.mjs",
