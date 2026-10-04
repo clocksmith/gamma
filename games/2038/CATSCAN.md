@@ -102,3 +102,5 @@ Deliver a coherent, replayable institutional strategy game whose authored rules,
 ## Freedom
 
 Any mechanism is permitted if it preserves these boundaries and passes the acceptance evidence.
+
+Public hosting is owned by m3t4 at `https://m3t4.ai/mandate-2038/`. Gamma owns the build allowlist and all game sources.

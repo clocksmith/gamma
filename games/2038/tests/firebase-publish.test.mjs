@@ -107,7 +107,7 @@ test("site index presents one flat list of titles without subtitles", () => {
 test("deployment delegates to the Simulatte World owner", async () => {
   const { scripts } = JSON.parse(await readFile(resolve(projectRoot, "package.json"), "utf8"));
   assert.match(scripts["publish:firebase:build"], /--base-path \/mandate-2038$/);
-  assert.equal(scripts["publish:firebase:deploy"], "npm --prefix ../../../simulatte run deploy:hosting:world");
+  assert.equal(scripts["publish:firebase:deploy"], "npm --prefix ../../../m3t4 run deploy:hosting");
 });
 
 test("public playtest publication is an allowlist with release identity and feedback", async () => {
