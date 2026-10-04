@@ -33,7 +33,7 @@ const localOrigins = new Set([
 const remoteOrigins = new Set(
   (
     process.env.FRONTIER_BRIDGE_ORIGINS ||
-    "https://simulatte.world"
+    "https://m3t4.ai"
   ).split(",").map((origin) => origin.trim()).filter(Boolean)
 );
 const allowedOrigins = new Set([...localOrigins, ...remoteOrigins]);
