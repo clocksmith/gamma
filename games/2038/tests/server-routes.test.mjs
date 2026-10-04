@@ -10,7 +10,7 @@ const root = new URL("../", import.meta.url);
 
 async function startServer(port, {
   bridgeToken = "test-bridge-token",
-  bridgeOrigins = "https://canvascontext.com"
+  bridgeOrigins = "https://simulatte.world"
 } = {}) {
   await execute(process.execPath, ["tasks/render-docs.mjs"], { cwd: root });
   const child = spawn(process.execPath, ["tasks/serve.mjs"], {
@@ -181,7 +181,7 @@ test("local simulation archives can be listed and loaded through the Lab API", a
 test("deployed UI can pair with the token-gated localhost bridge", async () => {
   const port = 30_001 + (process.pid % 10_000);
   const bridgeToken = "exact-test-token";
-  const origin = "https://canvascontext.com";
+  const origin = "https://simulatte.world";
   const server = await startServer(port, { bridgeToken });
   const request = (path, options = {}) =>
     fetch(`http://127.0.0.1:${port}${path}`, options);

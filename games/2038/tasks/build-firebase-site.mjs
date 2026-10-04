@@ -219,8 +219,10 @@ function argumentValue(values, name) {
 
 function parseArguments(values) {
   const outputRoot = argumentValue(values, "--output-root");
+  const basePath = argumentValue(values, "--base-path") || "";
   return {
     profileId: argumentValue(values, "--profile") || defaultProfileId,
+    basePath,
     ...(outputRoot ? { outputRoot: resolve(outputRoot) } : {})
   };
 }
@@ -235,7 +237,26 @@ async function copyWebSurface(outputRoot, profile) {
   }
 }
 
-export async function buildFirebaseSite({ outputRoot, profileId = defaultProfileId } = {}) {
+export function prefixPublishedPaths(source, basePath) {
+  if (!basePath) return source;
+  if (!/^\/[a-z0-9-]+$/.test(basePath)) throw new TypeError("Invalid publication base path.");
+  // Only static publication routes move. Loopback /api requests retain their origin.
+  return source.replace(/(["'(])\/(web\/|docs\/|dist\/runtime\/|lab\/|first-game-guide\.html|gallery-baseline\.html)/g,
+    (_, delimiter, route) => `${delimiter}${basePath}/${route}`);
+}
+
+async function prefixPublishedTree(directory, basePath) {
+  for (const entry of await readdir(directory, { withFileTypes: true })) {
+    const file = resolve(directory, entry.name);
+    if (entry.isDirectory()) await prefixPublishedTree(file, basePath);
+    else if (/\.(html|js|css)$/.test(entry.name)) {
+      await writeFile(file, prefixPublishedPaths(await readFile(file, "utf8"), basePath));
+    }
+  }
+}
+
+export async function buildFirebaseSite({ outputRoot, profileId = defaultProfileId, basePath = "" } = {}) {
+  prefixPublishedPaths("", basePath);
   const graph = JSON.parse(await readFile(resolve(projectRoot, "content/graph.json"), "utf8"));
   const ledger = await loadEraSituationLedger();
   const profile = ledger.deploymentProfiles[profileId];
@@ -379,13 +400,13 @@ export async function buildFirebaseSite({ outputRoot, profileId = defaultProfile
       : "internal-review-site",
     deploymentProfile: profileId,
     deployable: profile.deployable,
-    publicBase,
+    publicBase: basePath,
     identity,
     feedbackUrl: profile.feedbackUrl,
     crawlerPolicy: {
       accessControlled: profile.accessControlled,
       robotsPath: "/robots.txt",
-      disallowPath: `${publicBase}/`,
+      disallowPath: `${basePath}/`,
       xRobotsTag: "noindex, nofollow, noarchive, nosnippet, noimageindex",
       limitation: "Crawler directives are voluntary and do not prevent hostile scraping."
     },
@@ -403,6 +424,7 @@ export async function buildFirebaseSite({ outputRoot, profileId = defaultProfile
     resolve(outputRoot, "site-manifest.json"),
     `${JSON.stringify(manifest, null, 2)}\n`
   );
+  await prefixPublishedTree(outputRoot, basePath);
   return { outputRoot, manifest };
 }
 

@@ -120,13 +120,16 @@ the canonical server:
 by authoring checks. On a clean checkout, use `npm run dev`; if generated views
 are already current, `npm start` serves them without rebuilding.
 
-The public playtest interface at `https://canvascontext.com/` contains only the
+The public playtest interface at `https://simulatte.world/mandate-2038/` contains only the
 playable game, First Game Guide, required play references, World and
 Institutions, baseline gallery, release identity, and feedback route. It plays
 weighted and greedy opponents entirely in the browser with no Node server. The
 Simulation Lab, internal design and evidence records, manufacturing research,
 complete gallery, and deferred modules are excluded. Crawler directives do not
 provide access control.
+
+Simulatte owns deployment at `/mandate-2038/`; its World packager builds this
+allowlist without changing the Simulatte homepage. Canvas Context hosts Doppler.
 
 Build the exact Firebase allowlist with `npm run publish:firebase:build`. Build
 the complete, explicitly non-deployable local review artifact with

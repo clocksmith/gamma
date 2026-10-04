@@ -6,6 +6,7 @@ import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import {
   buildFirebaseSite,
+  prefixPublishedPaths,
   buildIndexHtml,
   protectHtml,
   rewritePrototypeHtml,
@@ -103,12 +104,10 @@ test("site index presents one flat list of titles without subtitles", () => {
   assert.doesNotMatch(html, /Controlled physical-candidate review/);
 });
 
-test("Firebase deployment uses the Mandate project's root-hosting contract", async () => {
-  const firebase = JSON.parse(
-    await readFile(resolve(projectRoot, "firebase.json"), "utf8")
-  );
-  assert.equal(firebase.hosting.public, "dist/firebase/public");
-  assert.equal(firebase.hosting.cleanUrls, undefined);
+test("deployment delegates to the Simulatte World owner", async () => {
+  const { scripts } = JSON.parse(await readFile(resolve(projectRoot, "package.json"), "utf8"));
+  assert.match(scripts["publish:firebase:build"], /--base-path \/mandate-2038$/);
+  assert.equal(scripts["publish:firebase:deploy"], "npm --prefix ../../../simulatte run deploy:hosting:world");
 });
 
 test("public playtest publication is an allowlist with release identity and feedback", async () => {
@@ -290,4 +289,15 @@ test("homepage puts public source links below finished materials", () => {
   assert.ok(html.indexOf('href="web/index.html"') < html.indexOf('id="sources-title"'));
   assert.ok(html.indexOf('id="sources-title"') < html.indexOf('href="sources/rules.md"'));
   assert.doesNotMatch(html, /world\.md|design-decisions/);
+});
+
+
+test("subpath publication preserves remote and bridge URLs", () => {
+  const source = '<script src="/web/app.js"></script> url("/web/bg.svg") fetch("/dist/runtime/game.json"); import x from "/lab/game.js"; fetch("/api/bridge"); "https://example.com/web/a"';
+  const output = prefixPublishedPaths(source, "/mandate-2038");
+  for (const route of ["web/app.js", "web/bg.svg", "dist/runtime/game.json", "lab/game.js"]) assert.ok(output.includes(`/mandate-2038/${route}`));
+  assert.ok(output.includes('fetch("/api/bridge")'));
+  assert.ok(output.includes('https://example.com/web/a'));
+  assert.equal(prefixPublishedPaths(output, "/mandate-2038"), output);
+  assert.throws(() => prefixPublishedPaths(source, "../escape"), /Invalid/);
 });
