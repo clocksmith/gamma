@@ -362,7 +362,7 @@ try {
   ]) {
     await send("Emulation.setDeviceMetricsOverride", { width: viewport.width, height: viewport.height, deviceScaleFactor: 1, mobile: viewport.mobile });
     await send("Page.navigate", { url: releaseResourceUrl(base, "first-game-guide.html") });
-    await waitFor("location.search === '?guide=first-game' && document.querySelector('#phase')?.innerText === 'waiting'");
+    await waitFor("location.search === '?guide=first-game' && document.querySelector('#phase')?.textContent.trim() === 'waiting'");
     const tutorial = await evaluate("({url:location.href,setupHidden:document.querySelector('#setup').hidden,seed:document.querySelector('#seed').value,actions:[...document.querySelectorAll('.decision-card')].map(node=>node.innerText)})");
     assert.ok(tutorial.setupHidden && tutorial.seed === 'mandate-2038-first-game', 'The guide must start its configured tutorial match.');
     await screenshot(`${viewport.name}-tutorial.png`);
@@ -385,8 +385,8 @@ try {
       const observations=[];
       const pause=()=>new Promise(resolve=>setTimeout(resolve,40));
       for(let step=0;step<400;step++) {
-        for(let poll=0;poll<750 && !['waiting','complete','failed'].includes(document.querySelector('#phase').innerText);poll++)await pause();
-        const phase=document.querySelector('#phase').innerText;
+        for(let poll=0;poll<750 && !['waiting','complete','failed'].includes(document.querySelector('#phase').textContent.trim());poll++)await pause();
+        const phase=document.querySelector('#phase').textContent.trim();
         if(phase==='failed')throw new Error(document.querySelector('#game-status').innerText);
         if(phase==='complete')return {observations,summary:document.querySelector('#decision-context').innerText,title:document.querySelector('#decision-title').innerText,viewportWidth:innerWidth,documentWidth:document.documentElement.scrollWidth};
         const buttons=[...document.querySelectorAll('#decisions button')].filter(button=>!button.disabled);
