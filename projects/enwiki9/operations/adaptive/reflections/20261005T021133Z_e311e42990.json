@@ -1,0 +1,84 @@
+{
+  "attribution": {
+    "causalConfidence": "high",
+    "controlsEquivalent": true,
+    "failureClass": "inconclusive",
+    "localizedCause": "GPU runtime failure resolved in isolated userspace; full causal prior storage and fresh updated-checkpoint exports remain distinct missing training evidence."
+  },
+  "candidateId": "lexth11c_gpu_runtime_q0_v2",
+  "candidateRevision": {
+    "candidateId": "lexth11c_gpu_runtime_q0_v2",
+    "candidateTreeSha256": "sha256:0b04a890efc95dafe43be4e99e95b9ef5e4b34509fc6124f54c8b7a27e5dca85",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/lexth11c_gpu_runtime_q0_v2/20261005T021106751807Z_0b04a890efc9.json",
+      "sha256": "sha256:2f97c3b02e20098986151aa57319eda079b1ad1698ae0e1e44155c28f28a5475"
+    }
+  },
+  "decision": {
+    "killPredicatesPass": false,
+    "nextGateBytes": null,
+    "promotionPredicatesPass": true,
+    "rationale": "Runtime operations pass; preserve OS-matrix mismatch and training prerequisites, no full-data launch or qualification from8 synthetic tokens.",
+    "verdict": "hold"
+  },
+  "evidence": [
+    {
+      "path": "results/lexth11c_gpu_runtime_q0_v2/operations.json",
+      "sha256": "sha256:55999e00d6cb3746f3a16842f81259d1774ed08eb08369d366716890c56833f5"
+    },
+    {
+      "path": "results/lexth11c_gpu_runtime_q0_v2/result.json",
+      "sha256": "sha256:79e43f0b070f7a44552bb133cf6097ac65d1630475758849e32ab9f4c736a144"
+    }
+  ],
+  "experiment": {
+    "path": "operations/adaptive/experiments/lexth11c_gpu_runtime_q0_v2.json",
+    "sha256": "sha256:8fd4e75407acc77d0f319659eecfe80f88d1e58f15a7349435c9b5dc3b4e3757"
+  },
+  "generatedUtc": "2026-10-05T02:13:42+00:00",
+  "hypothesis": {
+    "rationale": "GPU operations receipt proves loaded7.2 userspace,gfx1151,finite gradients and parameter change. It does not certify historical training or full-data readiness.",
+    "verdict": "supported"
+  },
+  "job": {
+    "path": "operations/adaptive/completed/959_20261005T021133Z_e311e42990.json",
+    "sha256": "sha256:d53a7ec88a252e43519d0dd00f6fd04ed958e9fd03538ffd7006dc764d7b3af2"
+  },
+  "knowledge": {
+    "retiredDimensions": [],
+    "transferableLessons": [
+      "HostROCm6.3 failure did not establish local GPU impossibility; separate native forward correctness from approximate backward and official OS support."
+    ],
+    "uncertainties": []
+  },
+  "measurementAssertions": [],
+  "measurements": {
+    "idealBitsSaved": null,
+    "memoryRatio": null,
+    "minimumPartitionIdealBitsSaved": null,
+    "netBytesSaved": null,
+    "positiveSegmentFraction": null,
+    "runtimeRatio": null,
+    "scopeBytes": null,
+    "scopeSymbols": null,
+    "sourceBytesDelta": null,
+    "transferRetention": null
+  },
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:409b70547f901a3ac5fffd7fd7a1e1d77b05fb44d9e9d889be1337bd153706d7",
+    "objectiveId": "gamma-enwiki9-hutter-96m-v4",
+    "objectivePath": "contracts/research/v4/objective-contract.json",
+    "targetScoreBytes": 96000000
+  },
+  "reflectionId": "r-20261005t021133z_e311e42990",
+  "schema": "gamma.enwiki9.reflection-receipt.v1",
+  "validity": {
+    "classification": "valid",
+    "reasons": [
+      "Isolated Python3.12/PyTorch2.9.1/ROCm7.2.1 executes all12 released-model layers, original codebook and8-bit indices, dynamic activation quantization, exact native forward values with declared approximate GPU-reference Jacobian, finite backward and fresh AdamW step."
+    ],
+    "valid": true
+  }
+}

@@ -1,0 +1,47 @@
+{
+  "candidate_id": "lexth11c_gpu_native_domain_q0_v1",
+  "claimed_at": "2026-10-05T02:18:50+00:00",
+  "created_at": "2026-10-05T02:18:50+00:00",
+  "developed_at": "2026-10-05T02:18:51+00:00",
+  "evidence": [
+    {
+      "path": "operations/adaptive/reflections/20261005T021133Z_e311e42990.json",
+      "sha256": "sha256:9b7fa72ebc5a567d24b03f63471336ea50af113cb845d52f9859244ebdd9ff98"
+    }
+  ],
+  "expected_savings_bytes": 0,
+  "experiment": {
+    "path": "operations/adaptive/experiments/lexth11c_gpu_native_domain_q0_v1.json",
+    "sha256": "sha256:5b5652e0661737a967dab8f2689e7b24b27796e54733855426175e1c5f8532e1"
+  },
+  "hypothesis": "GPU integer-domain W4/W8/A8 dot products with donor row-then-token scaling reduce the1.562758207321167 native-reference maximum logit discrepancy below0.01 on the same released-model8-token fixture while retaining unchanged indices,finite backward and fresh optimizer step.",
+  "interfaces_exposed": [
+    "Measured native numerical agreement and explicit approximate GPU adjoint"
+  ],
+  "kill_condition": "Any tensor/runtime failure or maximum logit gap>=0.01 holds numerical-reference readiness; no full-training launch.",
+  "max_program_bytes": 0,
+  "mechanism_change": "replace_representation",
+  "mechanism_change_bonus": 18,
+  "mechanism_class": "representation",
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:409b70547f901a3ac5fffd7fd7a1e1d77b05fb44d9e9d889be1337bd153706d7",
+    "objectiveId": "gamma-enwiki9-hutter-96m-v4",
+    "objectivePath": "contracts/research/v4/objective-contract.json",
+    "targetScoreBytes": 96000000
+  },
+  "owner": "codex-lexth11c-campaign-host128",
+  "parent": null,
+  "parent_proposal_id": null,
+  "priority": 50,
+  "promotion_condition": "Max native-reference logit gap below0.01 and all runtime controls pass",
+  "proposal_id": "lexth11c_gpu_native_domain_q0_v1",
+  "retired_neighborhoods": [
+    "No historical16-update retraining or hidden forward substitution"
+  ],
+  "schema": "gamma.enwiki9.algorithm-proposal.v2",
+  "search_priority": 68,
+  "state": "developed",
+  "title": "Correct donor integer-domain GPU forward"
+}
