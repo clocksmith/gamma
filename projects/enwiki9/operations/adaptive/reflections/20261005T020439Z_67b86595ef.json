@@ -1,0 +1,80 @@
+{
+  "attribution": {
+    "causalConfidence": "high",
+    "controlsEquivalent": null,
+    "failureClass": "implementation-failure",
+    "localizedCause": "Native harness bind lost its .cpp extension; clang routed it to linker."
+  },
+  "candidateId": "lexth11c_gpu_runtime_q0_v1",
+  "candidateRevision": {
+    "candidateId": "lexth11c_gpu_runtime_q0_v1",
+    "candidateTreeSha256": "sha256:9c37d3df881e45376d3625e7c9e81e6b2d03196f3f7e19c74b3a5892530aaa7b",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/lexth11c_gpu_runtime_q0_v1/20261005T020438916685Z_9c37d3df881e.json",
+      "sha256": "sha256:054168d052d0f53c89875b8513395c9266cfeba7860716c8ae29fcadad13af57"
+    }
+  },
+  "decision": {
+    "killPredicatesPass": null,
+    "nextGateBytes": null,
+    "promotionPredicatesPass": null,
+    "rationale": "New probe candidate binds /harness.cpp and reruns unchanged GPU reference.",
+    "verdict": "retry"
+  },
+  "evidence": [
+    {
+      "path": "results/lexth11c_gpu_runtime_q0_v1/result.json",
+      "sha256": "sha256:20f7a860bf351453a471d8cf08a42014a16b809c3e4597a303cebd5a831f31c0"
+    }
+  ],
+  "experiment": {
+    "path": "operations/adaptive/experiments/lexth11c_gpu_runtime_q0_v1.json",
+    "sha256": "sha256:85060753e8209b3aa826c7991287529bf1c9816bd259d16a22ddb32851555139"
+  },
+  "generatedUtc": "2026-10-05T02:09:26+00:00",
+  "hypothesis": {
+    "rationale": "No donor GPU forward/backward/optimizer data from this job.",
+    "verdict": "not-tested"
+  },
+  "job": {
+    "path": "operations/adaptive/failed/959_20261005T020439Z_67b86595ef.json",
+    "sha256": "sha256:7248a49ffe85ded8351f1cb936877280b684f52affbbbeb088512a002f620ae8"
+  },
+  "knowledge": {
+    "retiredDimensions": [],
+    "transferableLessons": [
+      "Preserve the compilation language in sandbox binding names."
+    ],
+    "uncertainties": []
+  },
+  "measurementAssertions": [],
+  "measurements": {
+    "idealBitsSaved": null,
+    "memoryRatio": null,
+    "minimumPartitionIdealBitsSaved": null,
+    "netBytesSaved": null,
+    "positiveSegmentFraction": null,
+    "runtimeRatio": null,
+    "scopeBytes": null,
+    "scopeSymbols": null,
+    "sourceBytesDelta": null,
+    "transferRetention": null
+  },
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:409b70547f901a3ac5fffd7fd7a1e1d77b05fb44d9e9d889be1337bd153706d7",
+    "objectiveId": "gamma-enwiki9-hutter-96m-v4",
+    "objectivePath": "contracts/research/v4/objective-contract.json",
+    "targetScoreBytes": 96000000
+  },
+  "reflectionId": "r-20261005t020439z_67b86595ef",
+  "schema": "gamma.enwiki9.reflection-receipt.v1",
+  "validity": {
+    "classification": "implementation-failure",
+    "reasons": [
+      "Native compiler treated extensionless /harness as linker input; GPU operations were not reached."
+    ],
+    "valid": false
+  }
+}

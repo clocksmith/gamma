@@ -5,17 +5,53 @@
     "sha256": "sha256:054168d052d0f53c89875b8513395c9266cfeba7860716c8ae29fcadad13af57"
   },
   "candidate_tree_sha256": "sha256:9c37d3df881e45376d3625e7c9e81e6b2d03196f3f7e19c74b3a5892530aaa7b",
+  "elapsed_seconds": 4.171,
   "execution_guard": {
     "path": "tools/run_with_resource_guard_v3.py",
     "sha256": "sha256:044147f7ffe6922ea8dafd52fc3d4426077b20958adbcd421245ad41adcfc1e4"
   },
   "execution_mode": "discovery",
+  "execution_resources": {
+    "boot_id": "3ce46712-27bc-4199-8e48-e2b3d23926cb",
+    "budget": {
+      "cgroup_parent": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice",
+      "cpus": [
+        7,
+        8
+      ],
+      "memory_bytes": 12884901888,
+      "scratch_bytes": 3000000000,
+      "swap_bytes": 0,
+      "wall_seconds": 3600
+    },
+    "cgroup_inode": 534637,
+    "cgroup_path": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/gamma-enwiki9-20261005T020439Z_67b86595ef",
+    "cleanup_complete": true,
+    "cpu_enforcement": "taskset-and-sampled-affinity-guard",
+    "groups": [
+      {
+        "created": true,
+        "inode": 534637,
+        "kernel_cpuset": false,
+        "memory_bytes": 12884901888,
+        "path": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/gamma-enwiki9-20261005T020439Z_67b86595ef"
+      }
+    ],
+    "guard_command_sha256": "5c2de9bccb79fb585de488f0a0128899de97d135677aa3109ab5ce806c7b4507",
+    "guard_path": "run_logs/adaptive/20261005T020439Z_67b86595ef.resources/guard.json",
+    "missing_diagnostics": [
+      "kernel cpuset controller is not delegated; taskset assignment and existing affinity guard remain active"
+    ],
+    "timing_authority": "diagnostic"
+  },
   "experiment": {
     "path": "operations/adaptive/experiments/lexth11c_gpu_runtime_q0_v1.json",
     "sha256": "sha256:85060753e8209b3aa826c7991287529bf1c9816bd259d16a22ddb32851555139"
   },
+  "finished_at": "2026-10-05T02:07:54+00:00",
   "gate_size": 8,
   "job_id": "20261005T020439Z_67b86595ef",
+  "log_path": "run_logs/adaptive/20261005T020439Z_67b86595ef.log",
   "priority": 40,
   "proposal": {
     "path": "operations/adaptive/proposals/developed/931_lexth11c_gpu_runtime_q0_v1.json",
@@ -34,6 +70,7 @@
     "swap_bytes": 0,
     "wall_seconds": 3600
   },
+  "returncode": 1,
   "runner": {
     "path": "tools/lexth11c_gpu_probe_v1.py",
     "sha256": "sha256:351bc6aeb703e5dc9bd5f83f68b7f4441cea6f3556c0835c6a7c4d5c9dc79cb0"
@@ -42,7 +79,8 @@
   "scratch_directories": [
     "results/lexth11c_gpu_runtime_q0_v1"
   ],
-  "state": "pending",
+  "started_at": "2026-10-05T02:07:50+00:00",
+  "state": "failed",
   "submitted_at": "2026-10-05T02:04:39+00:00",
   "tags": [],
   "timing_authority": "diagnostic",
@@ -56,5 +94,8 @@
     "/home/x/deco/gamma/projects/enwiki9/operations/adaptive/experiments/lexth11c_gpu_runtime_q0_v1.json",
     "--raw",
     "/home/x/deco/gamma/projects/enwiki9/results/lexth11c_lossless_repack_q0_v1/work/original.raw"
-  ]
+  ],
+  "worker_pid": 2556768,
+  "worker_proc_start_ticks": 426220823,
+  "worker_started_at": "2026-10-05T02:07:50+00:00"
 }
