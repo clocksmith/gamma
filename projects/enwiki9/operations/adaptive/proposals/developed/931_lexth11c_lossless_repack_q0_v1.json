@@ -1,0 +1,47 @@
+{
+  "candidate_id": "lexth11c_lossless_repack_q0_v1",
+  "claimed_at": "2026-10-05T01:54:37+00:00",
+  "created_at": "2026-10-05T01:54:37+00:00",
+  "developed_at": "2026-10-05T01:54:38+00:00",
+  "evidence": [
+    {
+      "path": "operations/adaptive/reflections/20261005T014605Z_532ec64beb.json",
+      "sha256": "sha256:ecd506b763ad96140d8d158762cda3bbfbc1e2963500c55a67439421d9dfb0c3"
+    }
+  ],
+  "expected_savings_bytes": 0,
+  "experiment": {
+    "path": "operations/adaptive/experiments/lexth11c_lossless_repack_q0_v1.json",
+    "sha256": "sha256:28bd011f4a07a17dff4ea9480fa9c10984c93eaa1d33dfecd440284172d4551b"
+  },
+  "hypothesis": "Continuous role-conditioned adaptive symbol counts reduce packed bytes for all original tensors while preserving every tensor bit and native predictions.",
+  "interfaces_exposed": [
+    "Bit-identical original tensors plus measured two-copy packed weight and stub costs"
+  ],
+  "kill_condition": "Any tensor/native mismatch or produced nonpositive paid gain",
+  "max_program_bytes": 200000,
+  "mechanism_change": "replace_representation",
+  "mechanism_change_bonus": 18,
+  "mechanism_class": "representation",
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:409b70547f901a3ac5fffd7fd7a1e1d77b05fb44d9e9d889be1337bd153706d7",
+    "objectiveId": "gamma-enwiki9-hutter-96m-v4",
+    "objectivePath": "contracts/research/v4/objective-contract.json",
+    "targetScoreBytes": 96000000
+  },
+  "owner": "codex-lexth11c-campaign-host128",
+  "parent": null,
+  "parent_proposal_id": null,
+  "priority": 50,
+  "promotion_condition": "All native controls and produced net component gain greater than zero; no full score credit",
+  "proposal_id": "lexth11c_lossless_repack_q0_v1",
+  "retired_neighborhoods": [
+    "No BF16 rounding; no prediction changes; no miniature training"
+  ],
+  "schema": "gamma.enwiki9.algorithm-proposal.v2",
+  "search_priority": 68,
+  "state": "developed",
+  "title": "Lossless class-conditioned lexth11c weight repacking"
+}
