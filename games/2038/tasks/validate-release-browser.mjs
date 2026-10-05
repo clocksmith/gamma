@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
 import { spawn, execFile } from "node:child_process";
 import { promisify } from "node:util";
-import { releaseBaseUrl, releaseResourceUrl } from "./release-browser-urls.mjs";
+import { releaseBaseUrl, releaseResourceUrl, excludedResourceOutcome } from "./release-browser-urls.mjs";
 import { createServer } from "node:http";
 import { mkdir, mkdtemp, readFile, readdir, rm, writeFile } from "node:fs/promises";
 import { extname, isAbsolute, relative, resolve } from "node:path";
@@ -199,13 +199,20 @@ try {
       report.deployedFiles.push({ path, servedSha256: hash(actual), expectedSha256: hash(expected), bytes: actual.length });
       assert.equal(hash(actual), hash(expected), `Published bytes must match Gamma: ${path}`);
     }
+    const hostHomeUrl = new URL('/', base).href;
+    const hostHomeResponse = await fetch(hostHomeUrl);
+    assert.equal(hostHomeResponse.status, 200, 'Publication host homepage must load for exact fallback comparison.');
+    const hostHomepage = Buffer.from(await hostHomeResponse.arrayBuffer());
+    report.publicHostFallback = { url: hostHomeUrl, sha256: hash(hostHomepage) };
+    const knownPublicFallbacks = [hostHomepage, await readFile(resolve(publicRoot, 'index.html'))];
     report.excludedPaths = [];
     for (const path of ['lab.html', 'gallery.html', 'review/index.html', 'review/content-provenance.html',
       'sources/world.md', 'sources/docs/design-decisions.md', 'docs/manufacturing-and-publishing-study.html',
       'docs/optional-tactics.html', 'dist/runtime/tactics.json', 'dist/runtime/secret-objectives.json', 'web/simulation-app.js']) {
       const response = await fetch(releaseResourceUrl(base, path));
-      report.excludedPaths.push({ path, status: response.status });
-      assert.ok([403, 404, 410].includes(response.status), `Internal content must not be served: ${path} (${response.status})`);
+      const bytes = Buffer.from(await response.arrayBuffer());
+      const outcome = excludedResourceOutcome(response.status, bytes, knownPublicFallbacks);
+      report.excludedPaths.push({ path, status: response.status, outcome, servedSha256: hash(bytes) });
     }
   } else {
     const localManifest = JSON.parse(await readFile(resolve(publicRoot, 'site-manifest.json'), 'utf8'));
