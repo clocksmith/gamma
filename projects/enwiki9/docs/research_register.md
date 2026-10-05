@@ -451,3 +451,41 @@ fails normally and with the mandated gfx override. No training launches.
 Reporting now projects fresh resource receipts only from an identity-verified
 registered worker with matching job/cgroup identity. Discovery timing and its
 12GiB envelope remain explicit; they grant no official qualification.
+
+## 2026-10-05: donor rebuild, paid executable gain and GPU export control
+
+The [campaign results](lexth11c_campaign_rebuild_20261005.md) supersede the
+installation and failed-existing-runtime holds above, preserving their original
+evidence. User-authorized campaign-local LLVM17/GCC12/UPX5.1.1 rebuild produces
+3,477,188 bytes, 51 more than release, with identical causal control native
+streams, archives, repeat and inverse. The first incomplete shared-library
+dependency closure selected static libstdc++; a separate pinned generation
+repairs it without changing tagged source or codec math.
+
+The separately tested lossless role-conditioned continuous-count repacker
+preserves tensor and native bits but loses 4,714 counted component bytes. Retire
+that one configuration; preserve the broader coding and size-training questions.
+Separate diagnostic CLI specialization saves 940 bytes per executable copy,
+1,880 component bytes total, while model/dictionary/order and native controls
+match. Retain the component pending complete replay; no full score credit.
+[Specialization result](../results/lexth11c_executable_specialize_q0_v1/result.json).
+
+Isolated Python3.12/PyTorch2.9.1/ROCm7.2.1 executes the complete released model,
+quantization, finite backward and fresh optimizer step on native gfx1151. The
+integer-domain reference restores numerical agreement after a valid but
+inaccurate FP16 reference. All435 original typed tensors export unchanged and
+independent native outputs match exactly before updates.
+[Export control](../results/lexth11c_gpu_export_control_q0_v1/result.json).
+The new explicitly proposed matched resumed schedule has fresh optimizer state
+and a fully specified size penalty; it is not historical run11 or Zmix
+reproduction. Actual full causal priors, measured storage and updated-checkpoint
+native controls still gate training. Preserve the old frozen schedules.
+
+Released full decode continues under its original CPU2 owner. The separately
+published CPU12 full rebuilt replay checks its pinned runtime, encodes the
+billion bytes twice and independently inverses the produced self-extractor.
+Regular corpus staging, inherited controller affinity and private cgroup-charged
+temporary storage repair its recorded pre-payload execution-boundary failures. Its12GiB diagnostic limit does not establish the
+official10-billion-byte certificate. No qualified package or locally verified
+full1G score exists yet. Full donor replay and specialized joint replay are the
+next score-bearing evidence; storage/alignment work remains independent.
