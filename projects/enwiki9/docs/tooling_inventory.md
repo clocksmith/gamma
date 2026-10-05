@@ -12,7 +12,7 @@ Reusable artifact helpers for new tools: [lib/artifacts.py](../lib/artifacts.py)
 The LibNC initializer teacher launcher exits before the first forward, gradient, update, or coded symbol; its source-bound experiment defines that boundary.
 The delayed-status helper's `enwiki9_delayed_status_latest.log` pointer is operational history, not present-host occupancy proof.
 
-Coverage: **1259 files** (33 .c, 82 .cpp, 1 .gdb, 1 .h, 2 .hpp, 1 .html, 1136 .py, 3 .sh).
+Coverage: **1272 files** (33 .c, 82 .cpp, 1 .gdb, 1 .h, 2 .hpp, 1 .html, 1149 .py, 3 .sh).
 
 | Tool | Purpose | Referenced contracts |
 |---|---|---|
@@ -604,7 +604,20 @@ Coverage: **1259 files** (33 .c, 82 .cpp, 1 .gdb, 1 .h, 2 .hpp, 1 .html, 1136 .p
 | [`tools/kairos108_final_head_dyadic_qm2.py`](../tools/kairos108_final_head_dyadic_qm2.py) | Run frozen KAIROS with the existing pinned Clang 17 toolchain. | none found |
 | [`tools/kairos108_final_head_dyadic_qm3.py`](../tools/kairos108_final_head_dyadic_qm3.py) | Run frozen KAIROS with pinned Clang 17 and the available BFD linker. | none found |
 | [`tools/kairos108_final_head_dyadic_qm4.py`](../tools/kairos108_final_head_dyadic_qm4.py) | Run frozen KAIROS with the donor-bundled LLD 17 linker. | none found |
+| [`tools/lexth11c_build_v1.py`](../tools/lexth11c_build_v1.py) | Run an offline lexth11c rebuild through the registered lab infrastructure gate. | [1](../operations/adaptive/experiments/lexth11c_rebuild_control_q0_v1.json) |
+| [`tools/lexth11c_build_v3.py`](../tools/lexth11c_build_v3.py) | Run an offline lexth11c rebuild through the registered lab infrastructure gate. | [1](../operations/adaptive/experiments/lexth11c_rebuild_control_q0_v3.json) |
+| [`tools/lexth11c_control_v2.py`](../tools/lexth11c_control_v2.py) | Run an offline lexth11c rebuild through the registered lab infrastructure gate. | [1](../operations/adaptive/experiments/lexth11c_rebuild_control_q0_v2.json) |
+| [`tools/lexth11c_full_control_v1.py`](../tools/lexth11c_full_control_v1.py) | Reproduce the full corpus with a pinned rebuilt donor through the lab. | [3](../operations/adaptive/experiments/lexth11c_recompress_full1g_q0_v1.json) |
+| [`tools/lexth11c_full_control_v2.py`](../tools/lexth11c_full_control_v2.py) | Reproduce the full corpus with a pinned rebuilt donor through the lab. | [1](../operations/adaptive/experiments/lexth11c_recompress_full1g_q0_v4.json) |
+| [`tools/lexth11c_gpu_export_control_v1.py`](../tools/lexth11c_gpu_export_control_v1.py) | Run the registered isolated donor GPU diagnostic. | [1](../operations/adaptive/experiments/lexth11c_gpu_export_control_q0_v1.json) |
+| [`tools/lexth11c_gpu_native_domain_v1.py`](../tools/lexth11c_gpu_native_domain_v1.py) | Run the registered isolated donor GPU diagnostic. | [1](../operations/adaptive/experiments/lexth11c_gpu_native_domain_q0_v1.json) |
+| [`tools/lexth11c_gpu_native_domain_v2.py`](../tools/lexth11c_gpu_native_domain_v2.py) | Run the registered isolated donor GPU diagnostic. | [1](../operations/adaptive/experiments/lexth11c_gpu_native_domain_q0_v2.json) |
+| [`tools/lexth11c_gpu_probe_v1.py`](../tools/lexth11c_gpu_probe_v1.py) | Run the registered isolated donor GPU diagnostic. | [1](../operations/adaptive/experiments/lexth11c_gpu_runtime_q0_v1.json) |
+| [`tools/lexth11c_gpu_probe_v2.py`](../tools/lexth11c_gpu_probe_v2.py) | Run the registered isolated donor GPU diagnostic. | [1](../operations/adaptive/experiments/lexth11c_gpu_runtime_q0_v2.json) |
+| [`tools/lexth11c_provision_local_v1.py`](../tools/lexth11c_provision_local_v1.py) | Extract hash-pinned campaign dependencies without changing host packages. | none found |
+| [`tools/lexth11c_repack_v1.py`](../tools/lexth11c_repack_v1.py) | Execute the registered lossless lexth11c repacking diagnostic. | [1](../operations/adaptive/experiments/lexth11c_lossless_repack_q0_v1.json) |
 | [`tools/lexth11c_reproduction_v1.py`](../tools/lexth11c_reproduction_v1.py) | Pinned donor reproduction entrance; ownership and guards belong to the lab. | [1](../operations/adaptive/experiments/lexth11c_decode_full1g_q0_v1.json) |
+| [`tools/lexth11c_specialize_v1.py`](../tools/lexth11c_specialize_v1.py) | Measure an offline lexth11c executable specialization through the lab. | [1](../operations/adaptive/experiments/lexth11c_executable_specialize_q0_v1.json) |
 | [`tools/lstm_gate_runtime_probe.cpp`](../tools/lstm_gate_runtime_probe.cpp) | Runtime probe for stream-preserving LSTM gate scheduling alternatives. | none found |
 | [`tools/macro_residual_package.py`](../tools/macro_residual_package.py) | Create a Lane B macro-residual LZMA candidate from a parent token table. | none found |
 | [`tools/macro_token_search.py`](../tools/macro_token_search.py) | Search macro-residual token additions with an isolated output receipt. This is a Lane B helper for the XML scaffold macro candidates. It evaluates candidate token additions against a parent program that exposes a module-level S token list and reports archive-size deltas for the transformed LZMA stream. | none found |

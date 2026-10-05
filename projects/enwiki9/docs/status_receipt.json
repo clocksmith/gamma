@@ -9,18 +9,18 @@
   },
   "active_candidate_recent_artifacts": [
     {
-      "bytes": 5496832,
-      "mtime_utc": "2026-10-05T01:06:10+00:00",
+      "bytes": 52330496,
+      "mtime_utc": "2026-10-05T03:18:15+00:00",
       "path": "projects/enwiki9/results/lexth11c_decode_full1g_q0_v1/decode/.cmix.temp"
     },
     {
-      "bytes": 769428,
-      "mtime_utc": "2026-10-05T01:06:04+00:00",
+      "bytes": 818298,
+      "mtime_utc": "2026-10-05T03:18:12+00:00",
       "path": "projects/enwiki9/results/lexth11c_decode_full1g_q0_v1/decode.stderr"
     },
     {
-      "bytes": 416,
-      "mtime_utc": "2026-10-05T01:04:48+00:00",
+      "bytes": 3199,
+      "mtime_utc": "2026-10-05T03:17:22+00:00",
       "path": "projects/enwiki9/results/lexth11c_decode_full1g_q0_v1/decode.stdout"
     },
     {
@@ -80,20 +80,20 @@
       "oom_kill": 0,
       "sock_throttled": 0
     },
-    "cgroup_memory_peak_bytes": 6488760320,
+    "cgroup_memory_peak_bytes": 7056596992,
     "driver_result_json": "projects/enwiki9/results/lexth11c_decode_full1g_q0_v1/decision.json",
     "driver_result_json_present": false,
     "evidence": "gate decision is running; wait for terminal receipts",
     "execution_mode": "discovery",
     "gate_size": 1000000000,
     "label": "active gate",
-    "latest_cgroup_current_bytes": 6488760320,
-    "latest_sample_max_single_rss_kib": 6017992,
-    "latest_sample_single_rss_margin_kib": 4467768,
-    "latest_sample_tree_rss_kib": 6145624,
-    "latest_sample_tree_rss_margin_kib": 4340136,
-    "max_sampled_single_rss_kib": 6017992,
-    "max_sampled_tree_rss_kib": 6145624,
+    "latest_cgroup_current_bytes": 7056596992,
+    "latest_sample_max_single_rss_kib": 6708672,
+    "latest_sample_single_rss_margin_kib": 3777088,
+    "latest_sample_tree_rss_kib": 6836240,
+    "latest_sample_tree_rss_margin_kib": 3649520,
+    "max_sampled_single_rss_kib": 6708672,
+    "max_sampled_tree_rss_kib": 6836240,
     "next_action": "wait_for_gate_completion",
     "program_id": "lexth11c_decode_full1g_q0_v1",
     "resource_budget": {
@@ -119,30 +119,40 @@
     },
     "returncode": null,
     "rss_guard_json": "projects/enwiki9/run_logs/adaptive/20261005T004723Z_accb851c38.resources/guard.json",
-    "rss_guard_json_bytes": 69404,
-    "rss_guard_json_mtime_utc": "2026-10-05T01:06:10+00:00",
+    "rss_guard_json_bytes": 75891,
+    "rss_guard_json_mtime_utc": "2026-10-05T03:18:15+00:00",
     "rss_guard_json_present": true,
-    "rss_guard_json_sha256": "67c9eb48cd46c5c96a4ef3cf4fc104145f97c8a8969b5528034f790f071899b6",
+    "rss_guard_json_sha256": "7c60febd9889f61e351c3b8c55b73bb644c9f20c70fec272898de8d061d5fa13",
     "rss_guard_status": "running",
-    "sample_count": 1860,
+    "sample_count": 17609,
     "scope_bytes": 1000000000,
     "scope_symbols": 1000000000,
     "scope_unit": "raw byte",
-    "single_rss_margin_kib": 4467768,
+    "single_rss_margin_kib": 3777088,
     "source": "live_adaptive_resource_guard",
     "status": "running",
     "terminal_authority": "Adaptive terminal receipt and reflection; resource observations grant no score or qualification.",
     "timing_authority": "diagnostic",
-    "tree_rss_margin_kib": 4340136
+    "tree_rss_margin_kib": 3649520
   },
   "active_processes": {
+    "active_cmix_mode": "encode",
+    "active_proc_io": {
+      "cancelled_write_bytes": 694894592,
+      "rchar": 9549134044,
+      "read_bytes": 16384,
+      "syscr": 1992350,
+      "syscw": 1498668,
+      "wchar": 6610489859,
+      "write_bytes": 6571327488
+    },
     "active_rows": [
       {
         "args": "/usr/bin/python3 /home/x/deco/gamma/projects/enwiki9/tools/enwiki9_lab.py run --candidate lexth11c_decode_full1g_q0_v1 --max-workers 1",
         "pgid": 1669332,
         "pid": 1669332,
         "ppid": 332888,
-        "rss_kib": 42468,
+        "rss_kib": 42388,
         "stat": "Ssl+"
       },
       {
@@ -150,7 +160,31 @@
         "pgid": 1669332,
         "pid": 1669431,
         "ppid": 1669332,
-        "rss_kib": 39228,
+        "rss_kib": 54880,
+        "stat": "S+"
+      },
+      {
+        "args": "bash -c cd /home/x/deco/gamma/projects/enwiki9 && /usr/bin/taskset --cpu-list 12 python3 tools/enwiki9_lab.py run --candidate lexth11c_recompress_full1g_q0_v4 --max-workers 1 --min-free-mib 16384 --max-load 16 > run_logs/lexth11c-full-rebuild-v4-controller-20261005.log 2>&1",
+        "pgid": 3326473,
+        "pid": 3326473,
+        "ppid": 332888,
+        "rss_kib": 4048,
+        "stat": "Ss+"
+      },
+      {
+        "args": "python3 tools/enwiki9_lab.py run --candidate lexth11c_recompress_full1g_q0_v4 --max-workers 1 --min-free-mib 16384 --max-load 16",
+        "pgid": 3326473,
+        "pid": 3326474,
+        "ppid": 3326473,
+        "rss_kib": 44028,
+        "stat": "Sl+"
+      },
+      {
+        "args": "/usr/bin/python3 /home/x/deco/gamma/projects/enwiki9/tools/run_with_resource_guard_v3.py --limit-kib 12582912 --official-decimal-limit-kib 12582912 --limit-mode tree --cgroup-path /sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/gamma-enwiki9-20261005T031028Z_c293e04960 --cgroup-memory-max-bytes 12884901888 --temporary-disk-limit-bytes 32000000000 --phase-marker-path /home/x/deco/gamma/projects/enwiki9/run_logs/adaptive/20261005T031028Z_c293e04960.resources/phases.jsonl --max-logical-cpus 1 --guard-json /home/x/deco/gamma/projects/enwiki9/run_logs/adaptive/20261005T031028Z_c293e04960.resources/guard.json --label 20261005T031028Z_c293e04960 --phase diagnostic --scratch-path /home/x/deco/gamma/projects/enwiki9/results/lexth11c_recompress_full1g_q0_v4 --scratch-path /home/x/deco/gamma/projects/enwiki9/run_logs/adaptive/20261005T031028Z_c293e04960.log --scratch-path /home/x/deco/gamma/projects/enwiki9/run_logs/adaptive/20261005T031028Z_c293e04960.resources --scratch-path /tmp/gamma-enwiki9-20261005T031028Z_c293e04960-qg9mwb8c/lexth11c_recompress_full1g_q0_v4 -- /usr/bin/taskset --cpu-list 12 /bin/sh -c printf '%s\\n' '{\"phase\":\"diagnostic\",\"event\":\"worker_start\",\"detail\":\"operational envelope only; no codec phase credit\"}' >> \"$GAMMA_RESOURCE_PHASE_MARKERS\" || exit 125; exec \"$@\" enwiki9-discovery-envelope /usr/bin/python3 /home/x/deco/gamma/projects/enwiki9/tools/lexth11c_full_control_v2.py --root . --output results/lexth11c_recompress_full1g_q0_v4 --experiment operations/adaptive/experiments/lexth11c_recompress_full1g_q0_v4.json --plan operations/planning/lexth11c_full_recompression_v4_20261005.json",
+        "pgid": 3326473,
+        "pid": 3326760,
+        "ppid": 3326474,
+        "rss_kib": 34696,
         "stat": "S+"
       },
       {
@@ -158,7 +192,7 @@
         "pgid": 1669450,
         "pid": 1669450,
         "ppid": 1669431,
-        "rss_kib": 123812,
+        "rss_kib": 123748,
         "stat": "Ss"
       },
       {
@@ -182,28 +216,92 @@
         "pgid": 1669524,
         "pid": 1669525,
         "ppid": 1669524,
-        "rss_kib": 6018012,
+        "rss_kib": 6708664,
+        "stat": "R"
+      },
+      {
+        "args": "/usr/bin/python3 /home/x/deco/gamma/projects/enwiki9/tools/lexth11c_full_control_v2.py --root . --output results/lexth11c_recompress_full1g_q0_v4 --experiment operations/adaptive/experiments/lexth11c_recompress_full1g_q0_v4.json --plan operations/planning/lexth11c_full_recompression_v4_20261005.json",
+        "pgid": 3326774,
+        "pid": 3326774,
+        "ppid": 3326760,
+        "rss_kib": 24220,
+        "stat": "Ss"
+      },
+      {
+        "args": "/usr/bin/bwrap --unshare-all --die-with-parent --new-session --clearenv --dir /runtime --dir /runtime/lib --dir /lib64 --proc /proc --dev /dev --bind /home/x/deco/gamma/projects/enwiki9/results/lexth11c_recompress_full1g_q0_v4/encode /work --setenv LD_LIBRARY_PATH /runtime/lib --setenv LC_ALL C --chdir /work --ro-bind /usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2 /runtime/lib/ld-linux-x86-64.so.2 --ro-bind /usr/lib/x86_64-linux-gnu/libc.so.6 /runtime/lib/libc.so.6 --ro-bind /usr/lib/x86_64-linux-gnu/libgcc_s.so.1 /runtime/lib/libgcc_s.so.1 --ro-bind /usr/lib/x86_64-linux-gnu/libm.so.6 /runtime/lib/libm.so.6 --ro-bind /home/x/deco/gamma/projects/enwiki9/external/lexth11c-campaign/toolchain-v2/usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.30 /runtime/lib/libstdc++.so.6 --symlink /runtime/lib/ld-linux-x86-64.so.2 /lib64/ld-linux-x86-64.so.2 --ro-bind /home/x/deco/gamma/projects/enwiki9/external/lexth11c-campaign/corpus/enwik9 /input --dir /bin --ro-bind /usr/bin/dash /bin/sh --tmpfs /tmp -- ./cmix -e /input o",
+        "pgid": 3328455,
+        "pid": 3328455,
+        "ppid": 3326774,
+        "rss_kib": 2388,
+        "stat": "Ss"
+      },
+      {
+        "args": "/usr/bin/bwrap --unshare-all --die-with-parent --new-session --clearenv --dir /runtime --dir /runtime/lib --dir /lib64 --proc /proc --dev /dev --bind /home/x/deco/gamma/projects/enwiki9/results/lexth11c_recompress_full1g_q0_v4/encode /work --setenv LD_LIBRARY_PATH /runtime/lib --setenv LC_ALL C --chdir /work --ro-bind /usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2 /runtime/lib/ld-linux-x86-64.so.2 --ro-bind /usr/lib/x86_64-linux-gnu/libc.so.6 /runtime/lib/libc.so.6 --ro-bind /usr/lib/x86_64-linux-gnu/libgcc_s.so.1 /runtime/lib/libgcc_s.so.1 --ro-bind /usr/lib/x86_64-linux-gnu/libm.so.6 /runtime/lib/libm.so.6 --ro-bind /home/x/deco/gamma/projects/enwiki9/external/lexth11c-campaign/toolchain-v2/usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.30 /runtime/lib/libstdc++.so.6 --symlink /runtime/lib/ld-linux-x86-64.so.2 /lib64/ld-linux-x86-64.so.2 --ro-bind /home/x/deco/gamma/projects/enwiki9/external/lexth11c-campaign/corpus/enwik9 /input --dir /bin --ro-bind /usr/bin/dash /bin/sh --tmpfs /tmp -- ./cmix -e /input o",
+        "pgid": 3328457,
+        "pid": 3328457,
+        "ppid": 3328455,
+        "rss_kib": 1456,
+        "stat": "Ss"
+      },
+      {
+        "args": "./cmix -e /input o",
+        "pgid": 3328457,
+        "pid": 3328459,
+        "ppid": 3328457,
+        "rss_kib": 6007324,
         "stat": "R"
       }
     ],
     "active_scorer_observed": true,
-    "active_tree_decimal_10gb_margin_kib": 3538285,
-    "active_tree_margin_kib": 4258420,
-    "active_tree_rss_kib": 6227340,
-    "cmix_rows": [],
+    "active_temp_io": {
+      "input_bytes": null,
+      "input_mtime_utc": null,
+      "input_path": "/input",
+      "output_bytes": null,
+      "output_mtime_utc": null,
+      "output_path": "/work/o",
+      "output_temp_bytes": null,
+      "output_temp_mtime_utc": null,
+      "output_temp_path": "/work/o.cmix.temp"
+    },
+    "active_tree_decimal_10gb_margin_kib": -3286035,
+    "active_tree_decimal_10gb_over_kib": 3286035,
+    "active_tree_margin_kib": -2565900,
+    "active_tree_rss_kib": 13051660,
+    "active_tree_rss_over_guard_kib": 2565900,
+    "active_tree_rss_warning": "active process tree RSS crossed the local numeric guard; the running kill guard is single-process",
+    "cmix_rows": [
+      {
+        "args": "./cmix -e /input o",
+        "pgid": 3328457,
+        "pid": 3328459,
+        "ppid": 3328457,
+        "rss_kib": 6007324,
+        "stat": "R"
+      }
+    ],
     "controller_rows": [],
     "decimal_10gb_guard_kib": 9765625,
     "existing_observer_source_live": false,
-    "max_cmix_process": null,
-    "recorded_running_job_count": 2,
+    "max_cmix_process": {
+      "args": "./cmix -e /input o",
+      "pgid": 3328457,
+      "pid": 3328459,
+      "ppid": 3328457,
+      "rss_kib": 6007324,
+      "stat": "R"
+    },
+    "recorded_running_job_count": 3,
     "research_rows": [],
-    "rss_guard_kib": 10485760
+    "rss_guard_kib": 10485760,
+    "single_process_decimal_10gb_margin_kib": 3758301,
+    "single_process_margin_kib": 4478436
   },
   "adaptive_jobs": {
     "claimable_pending_job_count": 1,
     "held_pending_job_count": 26,
     "pending_job_count": 27,
-    "running_job_count": 2,
+    "running_job_count": 3,
     "running_jobs": [
       {
         "candidate_id": "endpoint428_horizon_retained_parent_trace_q0_v1",
@@ -280,6 +378,64 @@
         "state": "running",
         "timing_authority": "diagnostic",
         "worker_pid": 1669431,
+        "worker_pid_live": true
+      },
+      {
+        "candidate_id": "lexth11c_recompress_full1g_q0_v4",
+        "execution_mode": "discovery",
+        "execution_resources": {
+          "boot_id": "3ce46712-27bc-4199-8e48-e2b3d23926cb",
+          "budget": {
+            "cgroup_parent": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice",
+            "cpus": [
+              12
+            ],
+            "memory_bytes": 12884901888,
+            "scratch_bytes": 32000000000,
+            "swap_bytes": 0,
+            "wall_seconds": 360600
+          },
+          "cgroup_inode": 535473,
+          "cgroup_path": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/gamma-enwiki9-20261005T031028Z_c293e04960",
+          "cpu_enforcement": "taskset-and-sampled-affinity-guard",
+          "groups": [
+            {
+              "created": true,
+              "inode": 535473,
+              "kernel_cpuset": false,
+              "memory_bytes": 12884901888,
+              "path": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/gamma-enwiki9-20261005T031028Z_c293e04960"
+            }
+          ],
+          "guard_command_sha256": "fba52debfb317bf4ec7523cfc73bc1e2259e86991b4ee1db016532d5e83a0cfe",
+          "guard_path": "run_logs/adaptive/20261005T031028Z_c293e04960.resources/guard.json",
+          "missing_diagnostics": [
+            "kernel cpuset controller is not delegated; taskset assignment and existing affinity guard remain active"
+          ],
+          "timing_authority": "diagnostic"
+        },
+        "experiment": {
+          "path": "operations/adaptive/experiments/lexth11c_recompress_full1g_q0_v4.json",
+          "sha256": "sha256:a2020ab8573a972140694940b30e6b6a98f86bf855cd1a7e082076a5de7fa956"
+        },
+        "gate_size": 1000000000,
+        "job_id": "20261005T031028Z_c293e04960",
+        "liveness": "live",
+        "path": "projects/enwiki9/operations/adaptive/running/949_20261005T031028Z_c293e04960.json",
+        "resource_budget": {
+          "cgroup_parent": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice",
+          "cpus": [
+            12
+          ],
+          "memory_bytes": 12884901888,
+          "scratch_bytes": 32000000000,
+          "swap_bytes": 0,
+          "wall_seconds": 360600
+        },
+        "started_at": "2026-10-05T03:11:30+00:00",
+        "state": "running",
+        "timing_authority": "diagnostic",
+        "worker_pid": 3326760,
         "worker_pid_live": true
       }
     ]
@@ -373,41 +529,41 @@
     "status": "open"
   },
   "candidate_audit": {
-    "expected_sha256": "08367f03ea57c983ed7e38f5b06f183695f1b597c6647f1572983ad24b77f7c0",
+    "expected_sha256": "1f7937e3f7d8c19a2e1dd9af909ca575097ba47ae9b86050d0642bedd2e664eb",
     "freshness": "not_revalidated",
-    "generated_at": "2026-10-05T01:00:11+00:00",
+    "generated_at": "2026-10-05T03:09:01+00:00",
     "mode": "inventory_snapshot",
     "notice": "Snapshot identity is verified; inventory inputs were not rescanned. This is not live occupancy or launch authority.",
     "path": "/home/x/deco/gamma/projects/enwiki9/candidate_inventory.json",
     "returncode": 0,
-    "sha256": "08367f03ea57c983ed7e38f5b06f183695f1b597c6647f1572983ad24b77f7c0",
+    "sha256": "1f7937e3f7d8c19a2e1dd9af909ca575097ba47ae9b86050d0642bedd2e664eb",
     "summary": {
       "candidate_status_counts": {
         "active": 18,
-        "blocked_dependency": 113,
-        "candidate": 274,
+        "blocked_dependency": 118,
+        "candidate": 281,
         "measured_negative": 100,
-        "retired": 597
+        "retired": 598
       },
-      "directories": 10815,
-      "file_entries": 87887,
-      "ignored_entries": 35122,
-      "modified_tracked_entries": 6,
-      "program_directories": 1102,
+      "directories": 14441,
+      "file_entries": 141890,
+      "ignored_entries": 97240,
+      "modified_tracked_entries": 5,
+      "program_directories": 1115,
       "proposal_contract_status_counts": {
         "invalid": 158,
         "legacy-unstructured": 212,
         "orphaned": 9,
         "unclassified": 574,
-        "valid": 149
+        "valid": 162
       },
-      "registered_programs": 641,
+      "registered_programs": 654,
       "revision_status_counts": {
-        "current": 311,
+        "current": 324,
         "missing": 790,
         "mutable-drift": 1
       },
-      "successor_eligible_candidates": 147,
+      "successor_eligible_candidates": 159,
       "top_level_file_entries": {
         ".agents": 1,
         ".claude": 2,
@@ -418,27 +574,27 @@
         "agents": 5,
         "contracts": 179,
         "data": 7,
-        "docs": 529,
+        "docs": 530,
         "enwiki9_segment_bundle": 6,
-        "external": 627,
+        "external": 53022,
         "ledger": 3,
         "lib": 89,
-        "operations": 6954,
+        "operations": 7083,
         "patches": 41,
-        "programs": 3601,
-        "results": 63029,
+        "programs": 3705,
+        "results": 64322,
         "results_preserve": 9383,
-        "run_logs": 1548,
+        "run_logs": 1601,
         "scratch": 181,
         "skills": 5,
-        "src": 66,
+        "src": 82,
         "tests": 342,
-        "tools": 1260,
+        "tools": 1272,
         "workbench": 3
       },
-      "tracked_entries": 53612,
+      "tracked_entries": 53904,
       "unreflected_terminal_candidates": 101,
-      "untracked_nonignored_entries": 0
+      "untracked_nonignored_entries": 2
     }
   },
   "certificate_active_candidate": {
@@ -499,7 +655,7 @@
       "oom_kill": 0,
       "sock_throttled": 0
     },
-    "cgroup_memory_peak_bytes": 6488760320,
+    "cgroup_memory_peak_bytes": 7056596992,
     "claim_rule": "A nested RSS guard inherits candidate and scope from its verified live adaptive worker; the guard supplies resource and terminal metrics only.",
     "driver_result_json": "projects/enwiki9/results/lexth11c_decode_full1g_q0_v1/decision.json",
     "driver_result_json_present": false,
@@ -507,13 +663,13 @@
     "gate_size": 1000000000,
     "guard_inferred_scope_bytes": null,
     "guard_label_candidate": "lexth11c_decode_full1g_q0_v1",
-    "latest_cgroup_current_bytes": 6488760320,
-    "latest_sample_max_single_rss_kib": 6017992,
-    "latest_sample_single_rss_margin_kib": 4467768,
-    "latest_sample_tree_rss_kib": 6145624,
-    "latest_sample_tree_rss_margin_kib": 4340136,
-    "max_sampled_single_rss_kib": 6017992,
-    "max_sampled_tree_rss_kib": 6145624,
+    "latest_cgroup_current_bytes": 7056596992,
+    "latest_sample_max_single_rss_kib": 6708672,
+    "latest_sample_single_rss_margin_kib": 3777088,
+    "latest_sample_tree_rss_kib": 6836240,
+    "latest_sample_tree_rss_margin_kib": 3649520,
+    "max_sampled_single_rss_kib": 6708672,
+    "max_sampled_tree_rss_kib": 6836240,
     "next_action": "wait_for_gate_completion",
     "resource_budget": {
       "cgroup_parent": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice",
@@ -538,20 +694,20 @@
     },
     "returncode": null,
     "rss_guard_json": "projects/enwiki9/run_logs/adaptive/20261005T004723Z_accb851c38.resources/guard.json",
-    "rss_guard_json_bytes": 69404,
-    "rss_guard_json_mtime_utc": "2026-10-05T01:06:10+00:00",
+    "rss_guard_json_bytes": 75891,
+    "rss_guard_json_mtime_utc": "2026-10-05T03:18:15+00:00",
     "rss_guard_json_present": true,
-    "rss_guard_json_sha256": "67c9eb48cd46c5c96a4ef3cf4fc104145f97c8a8969b5528034f790f071899b6",
+    "rss_guard_json_sha256": "7c60febd9889f61e351c3b8c55b73bb644c9f20c70fec272898de8d061d5fa13",
     "rss_guard_status": "running",
-    "sample_count": 1860,
+    "sample_count": 17609,
     "scope_bytes": 1000000000,
     "scope_symbols": 1000000000,
     "scope_unit": "raw byte",
-    "single_rss_margin_kib": 4467768,
+    "single_rss_margin_kib": 3777088,
     "source": "live_adaptive_resource_guard",
     "terminal_authority": "Adaptive terminal receipt and reflection; resource observations grant no score or qualification.",
     "timing_authority": "diagnostic",
-    "tree_rss_margin_kib": 4340136,
+    "tree_rss_margin_kib": 3649520,
     "verdict": "running"
   },
   "gate_evidence_status": {
@@ -581,7 +737,7 @@
     "scope_symbols": 1000000000,
     "scope_unit": "raw byte"
   },
-  "generated_at_utc": "2026-10-05T01:06:11+00:00",
+  "generated_at_utc": "2026-10-05T03:18:15+00:00",
   "handoff": {
     "active_scorer_observed": true,
     "candidate": "lexth11c_decode_full1g_q0_v1",
@@ -644,10 +800,14 @@
     "latest_delayed_status_log_resolved": "projects/enwiki9/run_logs/enwiki9_delayed_status_20260721T151206Z.log"
   },
   "operator_summary": {
-    "active_cmix_mode": null,
-    "active_process_tree_decimal_10gb_margin_kib": 3538285,
-    "active_process_tree_margin_kib": 4258420,
-    "active_process_tree_rss_kib": 6227340,
+    "active_cmix_decimal_10gb_margin_kib": 3758301,
+    "active_cmix_mode": "encode",
+    "active_cmix_pid": 3328459,
+    "active_cmix_rss_kib": 6007324,
+    "active_cmix_single_process_margin_kib": 4478436,
+    "active_process_tree_decimal_10gb_margin_kib": -3286035,
+    "active_process_tree_margin_kib": -2565900,
+    "active_process_tree_rss_kib": 13051660,
     "active_scorer_observed": true,
     "active_stage": null,
     "binary_10gib_guard_kib": 10485760,
@@ -666,16 +826,16 @@
     "has_10_95_constructive_upper_bound": false,
     "has_full_corpus_constructive_result": false,
     "held_pending_adaptive_jobs": 26,
-    "latest_sample_single_decimal_10gb_margin_kib": 3747633,
+    "latest_sample_single_decimal_10gb_margin_kib": 3056953,
     "latest_sample_single_decimal_10gb_safe": true,
-    "latest_sample_single_rss_kib": 6017992,
-    "latest_sample_single_rss_margin_kib": 4467768,
-    "latest_sample_tree_decimal_10gb_margin_kib": 3620001,
+    "latest_sample_single_rss_kib": 6708672,
+    "latest_sample_single_rss_margin_kib": 3777088,
+    "latest_sample_tree_decimal_10gb_margin_kib": 2929385,
     "latest_sample_tree_decimal_10gb_safe": true,
-    "max_sampled_single_decimal_10gb_margin_kib": 3747633,
+    "max_sampled_single_decimal_10gb_margin_kib": 3056953,
     "max_sampled_single_decimal_10gb_safe": true,
-    "max_sampled_single_rss_kib": 6017992,
-    "max_sampled_tree_decimal_10gb_margin_kib": 3620001,
+    "max_sampled_single_rss_kib": 6708672,
+    "max_sampled_tree_decimal_10gb_margin_kib": 2929385,
     "max_sampled_tree_decimal_10gb_safe": true,
     "objective_achieved_receipts": 0,
     "observer_job_id": null,
@@ -688,15 +848,15 @@
     "release_run_receipts": 0,
     "roundtrip_arm": null,
     "rss_guard_json": "projects/enwiki9/run_logs/adaptive/20261005T004723Z_accb851c38.resources/guard.json",
-    "rss_guard_json_sha256": "67c9eb48cd46c5c96a4ef3cf4fc104145f97c8a8969b5528034f790f071899b6",
+    "rss_guard_json_sha256": "7c60febd9889f61e351c3b8c55b73bb644c9f20c70fec272898de8d061d5fa13",
     "rss_guard_present": true,
     "rss_guard_status": "running",
-    "rss_samples": 1860,
+    "rss_samples": 17609,
     "safe_to_launch_gate": false,
     "scope_bytes": 1000000000,
     "scope_symbols": 1000000000,
     "scope_unit": "raw byte",
-    "single_rss_margin_kib": 4467768,
+    "single_rss_margin_kib": 3777088,
     "source_processes_live": null,
     "terminal_verdict_present": false
   },
