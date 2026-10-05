@@ -9,6 +9,7 @@ import {
   prefixPublishedPaths,
   buildIndexHtml,
   protectHtml,
+  publicDocumentHtml,
   rewritePrototypeHtml,
   rewritePrototypeModule
 } from "../tasks/build-firebase-site.mjs";
@@ -147,6 +148,11 @@ test("public playtest publication is an allowlist with release identity and feed
     assert.doesNotMatch(rootIndex, /turning cheap intelligence into infrastructure, authority/);
     assert.doesNotMatch(rootIndex, /href="docs\/(card-reference|map-reference|component-reference)\.html"/);
     assert.match(rootIndex, /href="docs\/world-and-institutions\.html"/);
+    for (const name of ['core-rules', 'world-and-institutions']) {
+      const page = await readFile(resolve(outputRoot, `docs/${name}.html`), 'utf8');
+      assert.match(page, /href="\.\.\/index\.html"/);
+      assert.doesNotMatch(page, /href="index\.html"/);
+    }
     const publishedWorld = await readFile(resolve(outputRoot, "docs/world-and-institutions.html"), "utf8");
     for (const era of ["Progress", "Capacity", "Authority", "Continuity"]) assert.ok(publishedWorld.includes(era));
     assert.doesNotMatch(publishedWorld, /Research provenance|scenario-backlog|Master Scenario Canon|Writing contracts|world-guide/);
@@ -300,4 +306,10 @@ test("subpath publication preserves remote and bridge URLs", () => {
   assert.ok(output.includes('https://example.com/web/a'));
   assert.equal(prefixPublishedPaths(output, "/mandate-2038"), output);
   assert.throws(() => prefixPublishedPaths(source, "../escape"), /Invalid/);
+});
+
+
+test("public player documents link to the published overview rather than an excluded docs index", () => {
+  const html = '<a href="index.html">Overview</a><a href="core-rules.html#production">Rules</a>';
+  assert.equal(publicDocumentHtml(html), '<a href="../index.html">Overview</a><a href="core-rules.html#production">Rules</a>');
 });

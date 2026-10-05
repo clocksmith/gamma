@@ -172,8 +172,13 @@ async function sourceIdentity() {
   };
 }
 
-async function copyProtectedHtml(source, target) {
-  const html = await readFile(source, "utf8");
+export function publicDocumentHtml(html) {
+  return html.replace(/href="index\.html"/g, 'href="../index.html"');
+}
+
+async function copyProtectedHtml(source, target, publicDocument = false) {
+  let html = await readFile(source, "utf8");
+  if (publicDocument) html = publicDocumentHtml(html);
   await mkdir(dirname(target), { recursive: true });
   await writeFile(target, `${protectHtml(html)}\n`);
 }
@@ -290,7 +295,7 @@ export async function buildFirebaseSite({ outputRoot, profileId = defaultProfile
     const sourceRoot = resolve(projectRoot, group.target);
     for (const name of await htmlFiles(sourceRoot)) {
       if (!includeAllDocuments && !profile.documents.includes(name)) continue;
-      await copyProtectedHtml(resolve(sourceRoot, name), resolve(outputRoot, prefix, name));
+      await copyProtectedHtml(resolve(sourceRoot, name), resolve(outputRoot, prefix, name), profileId === "public-playtest");
       pages.push({group:group.audience === "player" ? "Required Play Kit" : "Development and evidence",
         kind:name === "index.html" ? "Index" : "Document",
         title:name.replace(/\.html$/, "").split("-").map(word => word[0].toUpperCase()+word.slice(1)).join(" "),
