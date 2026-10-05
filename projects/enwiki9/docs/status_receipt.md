@@ -2,7 +2,7 @@
 
 Generated from the current certificate, gate receipts, resource guards, and process table.
 
-- Generated at UTC: `2026-10-05T03:18:15+00:00`
+- Generated at UTC: `2026-10-05T05:31:26+00:00`
 
 ## Target State
 
@@ -25,18 +25,18 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 - Active stage: `n/a`
 - Roundtrip arm: `n/a`
 - Active scorer observed: `true`
-- Active cmix mode: `encode`
+- Active cmix mode: `n/a`
 - Driver result present: `false`
 - RSS guard status: `running`
-- RSS samples: `17,609`
+- RSS samples: `33,497`
 - Binary `10GiB` guard KiB: `10,485,760`
 - Decimal `10GB` guard KiB: `9,765,625`
-- Max sampled single RSS KiB: `6,708,672`
-- Latest sampled single RSS KiB: `6,708,672`
-- Tightest binary single-process margin KiB: `3,777,088`
-- Tightest decimal single-process margin KiB: `3,056,953`
-- Latest binary single-process margin KiB: `3,777,088`
-- Latest decimal single-process margin KiB: `3,056,953`
+- Max sampled single RSS KiB: `7,355,304`
+- Latest sampled single RSS KiB: `7,355,304`
+- Tightest binary single-process margin KiB: `3,130,456`
+- Tightest decimal single-process margin KiB: `2,410,321`
+- Latest binary single-process margin KiB: `3,130,456`
+- Latest decimal single-process margin KiB: `2,410,321`
 - Safe to launch candidate gate: `false`
 - Terminal verdict present: `false`
 - Pending adaptive jobs: `27`
@@ -76,24 +76,24 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 - Matching driver observed: `false`
 - Liveness claim rule: `A running receipt or registered adaptive job is live only with an exact driver, owning controller, matching live worker, or frozen adopted process identities.`
 - RSS guard status: `running`
-- RSS guard JSON bytes: `75,891`
-- RSS guard JSON modified UTC: `2026-10-05T03:18:15+00:00`
-- RSS guard JSON SHA-256: `7c60febd9889f61e351c3b8c55b73bb644c9f20c70fec272898de8d061d5fa13`
-- RSS samples: `17,609`
-- Max sampled single RSS KiB: `6,708,672`
-- Max sampled tree RSS KiB: `6,836,240`
-- Single-process RSS margin KiB: `3,777,088`
-- Single-process decimal `10GB` margin KiB: `3,056,953`
-- Tree RSS margin KiB: `3,649,520`
-- Tree decimal `10GB` margin KiB: `2,929,385`
-- Latest sampled single RSS KiB: `6,708,672`
-- Latest sampled tree RSS KiB: `6,836,240`
-- Latest sampled single-process margin KiB: `3,777,088`
-- Latest sampled single-process decimal `10GB` margin KiB: `3,056,953`
-- Latest sampled tree margin KiB: `3,649,520`
-- Latest sampled tree decimal `10GB` margin KiB: `2,929,385`
-- Cgroup memory peak bytes: `7,056,596,992`
-- Latest cgroup current bytes: `7,056,596,992`
+- RSS guard JSON bytes: `85,621`
+- RSS guard JSON modified UTC: `2026-10-05T05:31:25+00:00`
+- RSS guard JSON SHA-256: `155be2de1df9456897572b037e7ef6bb06cfe54b0fe19e3c7576254fd7f325ee`
+- RSS samples: `33,497`
+- Max sampled single RSS KiB: `7,355,304`
+- Max sampled tree RSS KiB: `7,482,872`
+- Single-process RSS margin KiB: `3,130,456`
+- Single-process decimal `10GB` margin KiB: `2,410,321`
+- Tree RSS margin KiB: `3,002,888`
+- Tree decimal `10GB` margin KiB: `2,282,753`
+- Latest sampled single RSS KiB: `7,355,304`
+- Latest sampled tree RSS KiB: `7,482,872`
+- Latest sampled single-process margin KiB: `3,130,456`
+- Latest sampled single-process decimal `10GB` margin KiB: `2,410,321`
+- Latest sampled tree margin KiB: `3,002,888`
+- Latest sampled tree decimal `10GB` margin KiB: `2,282,753`
+- Cgroup memory peak bytes: `7,789,027,328`
+- Latest cgroup current bytes: `7,789,027,328`
 - Cgroup event deltas: `{'high': 0, 'low': 0, 'max': 0, 'oom': 0, 'oom_group_kill': 0, 'oom_kill': 0, 'sock_throttled': 0}`
 
 ## Gate Evidence Status
@@ -154,13 +154,13 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 
 - Audit return code: `0`
 - Audit mode: `inventory_snapshot`
-- Inventory generated: `2026-10-05T03:09:01+00:00`
+- Inventory generated: `2026-10-05T05:30:58+00:00`
 - Snapshot identity is verified; inventory inputs were not rescanned. This is not live occupancy or launch authority.
-- Program directories: `1,115`
-- Registered programs: `654`
-- Untracked nonignored entries: `2`
-- Modified tracked entries: `5`
-- Candidate statuses: `active=18, blocked_dependency=118, candidate=281, measured_negative=100, retired=598`
+- Program directories: `1,116`
+- Registered programs: `655`
+- Untracked nonignored entries: `1`
+- Modified tracked entries: `1`
+- Candidate statuses: `active=18, blocked_dependency=118, candidate=282, measured_negative=100, retired=598`
 
 ## View Refresh
 
@@ -172,26 +172,19 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 | Role | PID | PPID | RSS KiB | Command |
 |---|---:|---:|---:|---|
 | `process` | 1,669,332 | 332,888 | 42,388 | `/usr/bin/python3 /home/x/deco/gamma/projects/enwiki9/tools/enwiki9_lab.py run --candidate lexth11c_decode_full1g_q0_v1 --max-workers 1` |
-| `resource_guard` | 1,669,431 | 1,669,332 | 54,880 | `/usr/bin/python3 /home/x/deco/gamma/projects/enwiki9/tools/run_with_resource_guard_v3.py --limit-kib 12582912 --official-decimal-limit-kib 12582912...` |
-| `process` | 3,326,473 | 332,888 | 4,048 | `bash -c cd /home/x/deco/gamma/projects/enwiki9 && /usr/bin/taskset --cpu-list 12 python3 tools/enwiki9_lab.py run --candidate lexth11c_recompress_f...` |
-| `process` | 3,326,474 | 3,326,473 | 44,028 | `python3 tools/enwiki9_lab.py run --candidate lexth11c_recompress_full1g_q0_v4 --max-workers 1 --min-free-mib 16384 --max-load 16` |
-| `resource_guard` | 3,326,760 | 3,326,474 | 34,696 | `/usr/bin/python3 /home/x/deco/gamma/projects/enwiki9/tools/run_with_resource_guard_v3.py --limit-kib 12582912 --official-decimal-limit-kib 12582912...` |
+| `resource_guard` | 1,669,431 | 1,669,332 | 57,912 | `/usr/bin/python3 /home/x/deco/gamma/projects/enwiki9/tools/run_with_resource_guard_v3.py --limit-kib 12582912 --official-decimal-limit-kib 12582912...` |
 | `process` | 1,669,450 | 1,669,431 | 123,748 | `/usr/bin/python3 /home/x/deco/gamma/projects/enwiki9/tools/lexth11c_reproduction_v1.py --root /home/x/deco/gamma/projects/enwiki9 --output /home/x/...` |
 | `process` | 1,669,523 | 1,669,450 | 2,364 | `/usr/bin/bwrap --unshare-all --die-with-parent --new-session --clearenv --dir /runtime --dir /runtime/lib --dir /lib64 --proc /proc --dev /dev --bi...` |
 | `process` | 1,669,524 | 1,669,523 | 1,456 | `/usr/bin/bwrap --unshare-all --die-with-parent --new-session --clearenv --dir /runtime --dir /runtime/lib --dir /lib64 --proc /proc --dev /dev --bi...` |
-| `process` | 1,669,525 | 1,669,524 | 6,708,664 | `./archive9` |
-| `process` | 3,326,774 | 3,326,760 | 24,220 | `/usr/bin/python3 /home/x/deco/gamma/projects/enwiki9/tools/lexth11c_full_control_v2.py --root . --output results/lexth11c_recompress_full1g_q0_v4 -...` |
-| `process` | 3,328,455 | 3,326,774 | 2,388 | `/usr/bin/bwrap --unshare-all --die-with-parent --new-session --clearenv --dir /runtime --dir /runtime/lib --dir /lib64 --proc /proc --dev /dev --bi...` |
-| `process` | 3,328,457 | 3,328,455 | 1,456 | `/usr/bin/bwrap --unshare-all --die-with-parent --new-session --clearenv --dir /runtime --dir /runtime/lib --dir /lib64 --proc /proc --dev /dev --bi...` |
-| `native_cmix` | 3,328,459 | 3,328,457 | 6,007,324 | `./cmix -e /input o` |
+| `process` | 1,669,525 | 1,669,524 | 7,355,328 | `./archive9` |
 
 ## Active Candidate Recent Artifacts
 
 | Path | Bytes | Modified UTC |
 |---|---:|---|
-| `projects/enwiki9/results/lexth11c_decode_full1g_q0_v1/decode/.cmix.temp` | 52,330,496 | `2026-10-05T03:18:15+00:00` |
-| `projects/enwiki9/results/lexth11c_decode_full1g_q0_v1/decode.stderr` | 818,298 | `2026-10-05T03:18:12+00:00` |
-| `projects/enwiki9/results/lexth11c_decode_full1g_q0_v1/decode.stdout` | 3,199 | `2026-10-05T03:17:22+00:00` |
+| `projects/enwiki9/results/lexth11c_decode_full1g_q0_v1/decode/.cmix.temp` | 99,221,504 | `2026-10-05T05:31:25+00:00` |
+| `projects/enwiki9/results/lexth11c_decode_full1g_q0_v1/decode.stderr` | 867,858 | `2026-10-05T05:31:16+00:00` |
+| `projects/enwiki9/results/lexth11c_decode_full1g_q0_v1/decode.stdout` | 5,972 | `2026-10-05T05:30:47+00:00` |
 | `projects/enwiki9/results/lexth11c_decode_full1g_q0_v1/decode/.ready4cmix_decomp` | 92,559,456 | `2026-10-05T00:51:13+00:00` |
 | `projects/enwiki9/results/lexth11c_decode_full1g_q0_v1/decode/.tfweights` | 2,978,039 | `2026-10-05T00:51:13+00:00` |
 | `projects/enwiki9/results/lexth11c_decode_full1g_q0_v1/decode/.dict` | 411,996 | `2026-10-05T00:51:13+00:00` |
@@ -204,28 +197,16 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 
 ## Active RSS
 
-- Max cmix PID: `3328459`
-- Active cmix mode: `encode`
-- Max cmix RSS KiB: `6,007,324`
-- Active process tree RSS KiB: `13,051,660`
+- Max cmix PID: `n/a`
+- Active cmix mode: `n/a`
+- Max cmix RSS KiB: `n/a`
+- Active process tree RSS KiB: `7,583,196`
 - Local binary `10GiB` guard KiB: `10,485,760`
 - Decimal `10GB` guard KiB: `9,765,625`
-- Single-process binary margin KiB: `4,478,436`
-- Single-process decimal margin KiB: `3,758,301`
-- Active process tree margin KiB (binary): `-2,565,900`
-- Active process tree decimal margin KiB: `-3,286,035`
-- Temp input path: `/input`
-- Temp output path: `/work/o`
-- Temp output staging path: `/work/o.cmix.temp`
-- Temp input bytes: `n/a`
-- Temp output bytes: `n/a`
-- Temp output staging bytes: `n/a`
-- Temp input modified UTC: `n/a`
-- Temp output modified UTC: `n/a`
-- Temp output staging modified UTC: `n/a`
-- Process read bytes: `16,384`
-- Process write bytes: `6,571,327,488`
-- Active process tree warning: `active process tree RSS crossed the local numeric guard; the running kill guard is single-process`
+- Single-process binary margin KiB: `n/a`
+- Single-process decimal margin KiB: `n/a`
+- Active process tree margin KiB (binary): `2,902,564`
+- Active process tree decimal margin KiB: `2,182,429`
 
 ## Contingencies
 
