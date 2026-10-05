@@ -27,6 +27,13 @@ const verify = arguments_.includes("--verify");
 const versionDocument = JSON.parse(
   await readFile(resolve(projectRoot, "versions/current-release.json"), "utf8")
 );
+const variables = JSON.parse(await readFile(resolve(projectRoot, "content/data/variables.json"), "utf8"));
+const packageDocument = JSON.parse(await readFile(resolve(projectRoot, "package.json"), "utf8"));
+if (variables.game.executableVersion !== versionDocument.gameVersion ||
+    packageDocument.version !== versionDocument.gameVersion ||
+    variables.game.rulesVersion !== versionDocument.rulesCandidate.version) {
+  throw new Error("Player version labels and package version must match the release declaration before sealing.");
+}
 const config = JSON.parse(
   await readFile(resolve(projectRoot, "dist/runtime/game-config.json"), "utf8")
 );
