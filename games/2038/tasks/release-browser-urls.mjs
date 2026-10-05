@@ -18,3 +18,12 @@ export function releaseResourceUrl(base, path) {
   }
   return url.href;
 }
+
+/** A static-host fallback is exclusion only when it is exact known public HTML. */
+export function excludedResourceOutcome(status, bytes, publicFallbacks = []) {
+  if ([403, 404, 410].includes(status)) return 'http-exclusion';
+  if (status === 200 && publicFallbacks.some(fallback => bytes.equals(fallback))) {
+    return 'public-host-fallback';
+  }
+  throw new Error(`Internal resource unexpectedly served (HTTP ${status}).`);
+}

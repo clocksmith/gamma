@@ -36,3 +36,12 @@ test('root deployments work and release-relative paths cannot escape', () => {
   assert.throws(() => releaseResourceUrl('https://example.test/mandate-2038/', '../private.html'), /escapes/);
   assert.throws(() => releaseBaseUrl('file:///tmp/game'), /HTTP/);
 });
+
+test('exclusion probes distinguish known host fallbacks from leaked internal content', async () => {
+  const { excludedResourceOutcome } = await import('../tasks/release-browser-urls.mjs');
+  const homepage = Buffer.from('<title>Public home</title>');
+  assert.equal(excludedResourceOutcome(404, Buffer.from('missing')), 'http-exclusion');
+  assert.equal(excludedResourceOutcome(200, homepage, [homepage]), 'public-host-fallback');
+  assert.throws(() => excludedResourceOutcome(200, Buffer.from('<title>Internal review</title>'), [homepage]), /unexpectedly served/);
+  assert.throws(() => excludedResourceOutcome(200, homepage), /unexpectedly served/);
+});
