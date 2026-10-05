@@ -316,7 +316,18 @@ try {
     if (value.exceptionDetails) throw new Error(JSON.stringify(value.exceptionDetails));
     return value.result.value;
   };
-  const waitFor = (condition) => evaluate(`new Promise((resolve,reject)=>{const began=Date.now();const poll=()=>{try{const value=(${condition});if(value)return resolve(value);}catch(error){return reject(error);}if(Date.now()-began>30000)return reject(new Error('Browser condition timed out: '+${JSON.stringify(condition)}));setTimeout(poll,100);};poll();})`);
+  const waitFor = async (condition) => {
+    const began = Date.now();
+    while (true) {
+      try {
+        return await evaluate(`new Promise((resolve,reject)=>{const began=Date.now();const poll=()=>{try{const value=(${condition});if(value)return resolve(value);}catch(error){return reject(error);}if(Date.now()-began>30000)return reject(new Error('Browser condition timed out: '+${JSON.stringify(condition)}));setTimeout(poll,100);};poll();})`);
+      } catch (error) {
+        // The tutorial intentionally redirects; its old JS context disappears.
+        if (!/Execution context was destroyed|Cannot find context|Inspected target navigated/.test(error.message) || Date.now() - began > 30000) throw error;
+        await new Promise(resolve => setTimeout(resolve, 100));
+      }
+    }
+  };
   const screenshot = async (name) => {
     const result = await send("Page.captureScreenshot", { format: "png", captureBeyondViewport: false });
     await writeFile(resolve(output, name), Buffer.from(result.data, "base64"));
@@ -356,7 +367,7 @@ try {
     assert.ok(tutorial.setupHidden && tutorial.seed === 'mandate-2038-first-game', 'The guide must start its configured tutorial match.');
     await screenshot(`${viewport.name}-tutorial.png`);
     await send("Page.navigate", { url: releaseResourceUrl(base, "web/index.html") });
-    await waitFor("document.querySelector('#faction')?.options.length === 6 && document.querySelector('#start-game') && !document.querySelector('#start-game').disabled");
+    await waitFor("location.search === '' && document.querySelector('#faction')?.options.length === 6 && document.querySelector('#start-game') && !document.querySelector('#start-game').disabled");
     const setup = await evaluate(`(()=>{const players=document.querySelector('#player-count');players.value='4';players.dispatchEvent(new Event('change',{bubbles:true}));return {factionCount:document.querySelector('#faction').options.length,playerCount:players.value,versionVisible:document.body.innerText.includes(${JSON.stringify(identity.game.version)})};})()`);
     assert.equal(setup.versionVisible, true, "The UI must show the sealed executable version.");
     await evaluate("document.querySelector('#start-game').click()");
@@ -411,7 +422,7 @@ try {
     await writeFile(resolve(output, `${viewport.name}-export.json`), exportText);
     for (const path of ['docs/core-rules.html', 'docs/world-and-institutions.html', 'gallery-baseline.html']) {
       await send('Page.navigate', { url: releaseResourceUrl(base, path) });
-      await waitFor("document.readyState === 'complete' && document.body.innerText.length > 100");
+      await waitFor(`location.href === ${JSON.stringify(releaseResourceUrl(base, path))} && document.readyState === 'complete' && document.body.innerText.length > 100`);
       const links = await evaluate("[...document.querySelectorAll('a[href]')].map(node=>node.href).filter(url=>url.startsWith(location.origin))");
       for (const url of [...new Set(links)].filter(url=>!url.includes('#'))) {
         const response = await fetch(url);
