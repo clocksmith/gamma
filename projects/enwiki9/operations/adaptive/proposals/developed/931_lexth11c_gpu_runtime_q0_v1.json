@@ -1,0 +1,47 @@
+{
+  "candidate_id": "lexth11c_gpu_runtime_q0_v1",
+  "claimed_at": "2026-10-05T02:04:38+00:00",
+  "created_at": "2026-10-05T02:04:38+00:00",
+  "developed_at": "2026-10-05T02:04:39+00:00",
+  "evidence": [
+    {
+      "path": "operations/provenance/lexth11c_gpu_environment_20261005.json",
+      "sha256": "sha256:d952cf9a3801893058b8ab31de91b1ec70b20f64960553159fd660274bffab7c"
+    }
+  ],
+  "expected_savings_bytes": 0,
+  "experiment": {
+    "path": "operations/adaptive/experiments/lexth11c_gpu_runtime_q0_v1.json",
+    "sha256": "sha256:85060753e8209b3aa826c7991287529bf1c9816bd259d16a22ddb32851555139"
+  },
+  "hypothesis": "Isolated PyTorch2.9.1 ROCm7.2.1 Python3.12 executes the imported released12-layer donor, nonuniform and8-bit quantizers, native-value forward with approximate reference backward, and a fresh optimizer step in FP16 GEMM/FP32 master precision.",
+  "interfaces_exposed": [
+    "Full architecture quantizer/backward/optimizer runtime evidence"
+  ],
+  "kill_condition": "Any import,quantizer identity,forward,gradient,optimizer or resource failure holds training runtime; no support or full-training certificate.",
+  "max_program_bytes": 0,
+  "mechanism_change": "replace_representation",
+  "mechanism_change_bonus": 18,
+  "mechanism_class": "representation",
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:409b70547f901a3ac5fffd7fd7a1e1d77b05fb44d9e9d889be1337bd153706d7",
+    "objectiveId": "gamma-enwiki9-hutter-96m-v4",
+    "objectivePath": "contracts/research/v4/objective-contract.json",
+    "targetScoreBytes": 96000000
+  },
+  "owner": "codex-lexth11c-campaign-host128",
+  "parent": null,
+  "parent_proposal_id": null,
+  "priority": 50,
+  "promotion_condition": "All GPU operations pass; no full-training or matrix certification",
+  "proposal_id": "lexth11c_gpu_runtime_q0_v1",
+  "retired_neighborhoods": [
+    "No host driver changes; no historical16-update profile"
+  ],
+  "schema": "gamma.enwiki9.algorithm-proposal.v2",
+  "search_priority": 68,
+  "state": "developed",
+  "title": "Isolated released-donor GPU runtime diagnostic"
+}

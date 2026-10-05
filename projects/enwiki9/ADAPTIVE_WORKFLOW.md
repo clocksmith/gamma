@@ -16,8 +16,15 @@ reproduce the pinned `lexth11c` release before prediction changes, adapt license
 package mechanisms separately, and prepare a distinct full-data matched training
 contract. Keep 98M as an intermediate qualification target and 96M as the active
 objective. The [new training contract](operations/planning/lexth11c_full_data_training_contract_20261004.json)
-is held until the exact donor recipe, prior alignment and assigned compute are
-resolved; it does not extend any historical miniature training budget.
+preserves exact historical run11 reproduction and stays held until that recipe,
+prior alignment and assigned compute are resolved. The separate
+[resumed-training proposal](operations/planning/lexth11c_resumed_training_contract_20261005.json)
+starts from released weights with fresh optimizer state and a new matched
+schedule. Missing historical recipes do not hold donor rebuilding, lossless
+package adaptations, isolated GPU diagnostics, or this new proposal. Each
+training launch still requires its own frozen source, native export control,
+causal prior/storage evidence and admitted resources; neither contract extends
+the historical miniature training budget.
 Preserve the [XML/English stream research plan](docs/xml_english_cross_stream_20260919.md)
 and its scoped results as historical evidence.
 The user-selected range is 95M-96M complete bytes: 96M acceptance ceiling and

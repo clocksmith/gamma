@@ -1,0 +1,95 @@
+{
+  "schema": "gamma.enwiki9.resumed-training-proposal.v1",
+  "status": "proposed_not_launched",
+  "owner": "codex-lexth11c-campaign-host128",
+  "generated_utc": "2026-10-05T02:05:46.881985+00:00",
+  "objective": {
+    "target_complete_bytes": 96000000,
+    "intermediate_complete_bytes": 98000000
+  },
+  "authority": "User explicitly requests a separate resumed-training experiment from released weights. Dependency and GPU diagnostic provisioning authorized; launch only through frozen adaptive contract and admitted resources.",
+  "initialization": {
+    "tag": "lexth11c",
+    "packed_model_sha256": "948847d9649251796f100d5353bd42859767ed5614e5e316e2c3a1c35a62ef71",
+    "optimizer_state": "fresh; no historical optimizer restoration",
+    "master_parameters": "FP32 dequantized released codebook centers and bit-exact BF16-expanded raw tensors",
+    "import_export_gate": "All original typed tensors reconstructed bit-identically, original nonuniform index choices and BF16 scales unchanged; native forward on same causal rows before any update."
+  },
+  "historical_reproduction": {
+    "run11_recipe_reproduced": false,
+    "zmix_recipe_reproduced": false,
+    "preserve_contract": "operations/planning/lexth11c_full_data_training_contract_20261004.json",
+    "meaning": "This is a new schedule, not run11 or Zmix reproduction."
+  },
+  "matched_arms": {
+    "A": {
+      "loss": "mean_native_cross_entropy_nats_per_valid_target + 0 * same_size_proxy",
+      "size_coefficient": 0
+    },
+    "J": {
+      "loss": "mean_native_cross_entropy_nats_per_valid_target + (2*ln(2)/N)*B_hat_bits",
+      "size_coefficient": 1
+    },
+    "common": "Same initial model, source, seed49, causal row order, masks, batch exposure, optimizer update count, precision and computed penalty graph. Both compute size proxy; A multiplies by zero."
+  },
+  "data": {
+    "source": "Full1000000000-byte enwik9 after original tagged ordering and lexical frontend",
+    "ppmd": "Original3500MB pruned deployed PPMD; actual post-byte float16 priors captured and205-vocabulary projection authenticated",
+    "causality": "Preserve article/OOV/131072-token resets and prior-row coordinates. Carry native decoder-available state through1024-token optimization chunks; detach carried differentiable state between chunks, never create an artificial decoder reset.",
+    "coverage": "One complete pass over all actual valid neural prediction targets; N is measured eligible target count, not available rows.",
+    "batch": "Accumulate1024-token causal chunks to32768 valid targets per optimizer update; final update uses remaining valid targets; no dropped remainder.",
+    "alignment_gate": "Each capture shard has raw/transformed coordinate range, reset markers, predecessor-state identity, row count, map/prior hashes and bit-exact decompression witness."
+  },
+  "schedule": {
+    "epochs": 1,
+    "epoch_definition": "One complete eligible-target pass over full transformed corpus",
+    "optimizer": "AdamW",
+    "betas": [
+      0.9,
+      0.95
+    ],
+    "epsilon": 1e-08,
+    "weight_decay": 0,
+    "gradient_clip_l2": 1.0,
+    "updates": "U=ceil(N/32768); same U and target exposures both arms",
+    "learning_rate": "For update u=1..min(100,U),1e-5*u/min(100,U); remaining cosine from1e-5 to1e-6 over U-min(100,U) updates. If U<=100, warmup only.",
+    "selection": "Only terminal checkpoint per arm; no validation-based early stopping or hyperparameter rescue."
+  },
+  "precision": {
+    "gemm": "FP16 inputs/products with FP32 residual/norm/recurrence and master parameters; native CPU forward values authoritative",
+    "low_precision_simulation": "Original nonuniform four-bit codebook indices and grid0.25, original BF16 row scales, small int8 tables, dynamic per-token max(abs(x),1e-12)/127 activation scales, ties-to-even int8 rounding/clamp[-128,127], original static Q/K/V quantizers.",
+    "backward": "Approximate whole-reference Jacobian is explicitly declared. No claim of exact native kernel derivative."
+  },
+  "size_penalty": {
+    "kind": "New fully specified soft code histogram objective; not asserted to reproduce Zmix",
+    "classes": "Tensor role with decimal layer-index runs replaced by #, paired with alphabet.",
+    "four_bit": "For normalized master z=w/BF16(scale),p_ij=softmax_j(-(z_i-grid*codebook_j)^2/0.25),15 original levels.",
+    "eight_bit": "Same rule over integer levels[-127,127] for8-bit tables, no codebook grid.",
+    "counts": "For class g, n_gj=sum_i p_ij; L_g=sum_j n_gj; f_gj=(n_gj+1)/(L_g+K_g).",
+    "B_hat_bits": "-sum_g sum_j n_gj*log2(f_gj); metadata,raw float/codebook/scale costs outside proxy are measured separately.",
+    "objective_units": "2*ln(2)*B_hat_bits/N is paid two-copy nats per full-corpus valid target.",
+    "selection_authority": "Produced native payload and actual packed model/stub/options. Soft entropy and training loss receive no score credit."
+  },
+  "storage": {
+    "dense_prior_bytes_at256_columns": 300615078912,
+    "dense_prior_bytes_at205_columns": 240726918660,
+    "policy": "Sharding preserves total. Measure a lossless prior coding on position-matched deployed rows, verify decompression bitwise and record actual bytes and throughput. If capacity insufficient, stop before capture; no storage credit from a projection or shard count."
+  },
+  "gates": [
+    "Full donor inverse and local complete accounting before prediction adaptation qualifies",
+    "Imported unchanged-weight typed/native export control",
+    "GPU full architecture,quantization,backward,optimizer diagnostic",
+    "Fresh native exported forward before updates and each chosen checkpoint",
+    "Actual full causal PPMD capture and storage admission",
+    "Prospectively frozen source/compute/resources for both matched arms",
+    "Position-matched development native archives; fresh joint full1G replay for package selection",
+    "Separate official10-billion-byte memory,isolated single-core timing,Intel/AMD and offline reconstruction certificates"
+  ],
+  "launch_blockers": [
+    "Full causal prior capture/storage manifest unresolved",
+    "Fresh export and native validation for updated checkpoints not implemented",
+    "Full-data compute budgets not yet admitted"
+  ],
+  "qualification": false,
+  "objective_credit_bytes": 0
+}
