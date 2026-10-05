@@ -1,0 +1,47 @@
+{
+  "candidate_id": "lexth11c_gpu_export_control_q0_v1",
+  "claimed_at": "2026-10-05T02:28:22+00:00",
+  "created_at": "2026-10-05T02:28:22+00:00",
+  "developed_at": "2026-10-05T02:28:23+00:00",
+  "evidence": [
+    {
+      "path": "operations/adaptive/reflections/20261005T022256Z_56f421cfca.json",
+      "sha256": "sha256:70c99ada2919851cd80637112bcfed69e9235aed0567a77784065d95d7a0ef8e"
+    }
+  ],
+  "expected_savings_bytes": 0,
+  "experiment": {
+    "path": "operations/adaptive/experiments/lexth11c_gpu_export_control_q0_v1.json",
+    "sha256": "sha256:907184f05fded33ba6a2ea7a7083d9e6e25170d740a0e30822a558be9b5ace03"
+  },
+  "hypothesis": "Released GPU-imported tensors export byte-identically before updates; packed original and exported raw tensors give identical native forward values on the same8-token fixture, with validated GPU integer-domain forward/backward/optimizer runtime.",
+  "interfaces_exposed": [
+    "Unchanged released-model export and native/GPU runtime receipt"
+  ],
+  "kill_condition": "Any typed tensor,raw byte,native forward,numerical or runtime mismatch holds training import/export control.",
+  "max_program_bytes": 0,
+  "mechanism_change": "replace_representation",
+  "mechanism_change_bonus": 18,
+  "mechanism_class": "representation",
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:409b70547f901a3ac5fffd7fd7a1e1d77b05fb44d9e9d889be1337bd153706d7",
+    "objectiveId": "gamma-enwiki9-hutter-96m-v4",
+    "objectivePath": "contracts/research/v4/objective-contract.json",
+    "targetScoreBytes": 96000000
+  },
+  "owner": "codex-lexth11c-campaign-host128",
+  "parent": null,
+  "parent_proposal_id": null,
+  "priority": 50,
+  "promotion_condition": "435 typed tensors and native forwards bit-identical; GPU numerical/runtime gates pass",
+  "proposal_id": "lexth11c_gpu_export_control_q0_v1",
+  "retired_neighborhoods": [
+    "No updates before import/export control; no historical16-update profile"
+  ],
+  "schema": "gamma.enwiki9.algorithm-proposal.v2",
+  "search_priority": 68,
+  "state": "developed",
+  "title": "Bit-exact released-weight GPU import/export and native control"
+}
