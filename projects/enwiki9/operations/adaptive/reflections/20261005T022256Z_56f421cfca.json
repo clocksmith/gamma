@@ -1,0 +1,84 @@
+{
+  "attribution": {
+    "causalConfidence": "high",
+    "controlsEquivalent": true,
+    "failureClass": "inconclusive",
+    "localizedCause": "Dequantized FP16 matmul changed quantized dot/scaling semantics; integer-domain dot plus original scale order restores numerical agreement."
+  },
+  "candidateId": "lexth11c_gpu_native_domain_q0_v2",
+  "candidateRevision": {
+    "candidateId": "lexth11c_gpu_native_domain_q0_v2",
+    "candidateTreeSha256": "sha256:8c043c48d028922831505a4c15caf4c9091f1b0feec290a89757c2f5bf826c12",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/lexth11c_gpu_native_domain_q0_v2/20261005T022255265472Z_8c043c48d028.json",
+      "sha256": "sha256:132ff8a43537d1d42a1811cb7f2fe344ded5d5b28c5fd0f1f3459dfcd5f21686"
+    }
+  },
+  "decision": {
+    "killPredicatesPass": false,
+    "nextGateBytes": null,
+    "promotionPredicatesPass": true,
+    "rationale": "Numerical runtime control passes on8 synthetic tokens; require unchanged typed/native export and real causal prior/storage contracts before training.",
+    "verdict": "hold"
+  },
+  "evidence": [
+    {
+      "path": "results/lexth11c_gpu_native_domain_q0_v2/operations.json",
+      "sha256": "sha256:049ec03aad27308760fbcf7710ca10653aa1ff308f932c7ad092482a08db4ef0"
+    },
+    {
+      "path": "results/lexth11c_gpu_native_domain_q0_v2/result.json",
+      "sha256": "sha256:8a5a76fcb3140d0b9bcb488fe626f369432e6138bc17a5ea6aa6007a71a6b072"
+    }
+  ],
+  "experiment": {
+    "path": "operations/adaptive/experiments/lexth11c_gpu_native_domain_q0_v2.json",
+    "sha256": "sha256:d03a05bae90793221e5a94d3d9ce72197334752c7bb7722170fcdfbdde2dcd6d"
+  },
+  "generatedUtc": "2026-10-05T02:28:21+00:00",
+  "hypothesis": {
+    "rationale": "Maximum logit error2.86102294921875e-6 and probability error4.172325134277344e-7; declared0.01 numerical gate passes.",
+    "verdict": "supported"
+  },
+  "job": {
+    "path": "operations/adaptive/completed/959_20261005T022256Z_56f421cfca.json",
+    "sha256": "sha256:df288e1b329e82d1f457d8eec69b9864b316468e028b92bf8d0e20b9b9592646"
+  },
+  "knowledge": {
+    "retiredDimensions": [],
+    "transferableLessons": [
+      "Preserve integer dot products and row-then-token FP32 scaling when simulating W4/W8/A8; GPU visibility and FP16 matmul alone are insufficient."
+    ],
+    "uncertainties": []
+  },
+  "measurementAssertions": [],
+  "measurements": {
+    "idealBitsSaved": null,
+    "memoryRatio": null,
+    "minimumPartitionIdealBitsSaved": null,
+    "netBytesSaved": null,
+    "positiveSegmentFraction": null,
+    "runtimeRatio": null,
+    "scopeBytes": null,
+    "scopeSymbols": null,
+    "sourceBytesDelta": null,
+    "transferRetention": null
+  },
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:409b70547f901a3ac5fffd7fd7a1e1d77b05fb44d9e9d889be1337bd153706d7",
+    "objectiveId": "gamma-enwiki9-hutter-96m-v4",
+    "objectivePath": "contracts/research/v4/objective-contract.json",
+    "targetScoreBytes": 96000000
+  },
+  "reflectionId": "r-20261005t022256z_56f421cfca",
+  "schema": "gamma.enwiki9.reflection-receipt.v1",
+  "validity": {
+    "classification": "valid",
+    "reasons": [
+      "Correct current inner entrypoint; unchanged released indices; same8-token native/reference fixture; full integer-domain GPU forward,finite backward and fresh optimizer step."
+    ],
+    "valid": true
+  }
+}
