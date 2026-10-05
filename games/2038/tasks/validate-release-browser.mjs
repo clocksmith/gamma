@@ -1,8 +1,10 @@
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
-import { spawn } from "node:child_process";
+import { spawn, execFile } from "node:child_process";
+import { promisify } from "node:util";
+import { releaseBaseUrl, releaseResourceUrl } from "./release-browser-urls.mjs";
 import { createServer } from "node:http";
-import { mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
+import { mkdir, mkdtemp, readFile, readdir, rm, writeFile } from "node:fs/promises";
 import { extname, isAbsolute, relative, resolve } from "node:path";
 import { tmpdir } from "node:os";
 import { loadGameIdentity, projectRoot } from "../lab/versioning/game-identity.js";
@@ -17,12 +19,14 @@ const argument = (name) => {
   return args[index + 1];
 };
 for (let index = 0; index < args.length; index += 2) {
-  assert.ok(["--output", "--origin"].includes(args[index]), `Unknown argument: ${args[index]}`);
+  assert.ok(["--output", "--origin", "--source-commit", "--build-root"].includes(args[index]), `Unknown argument: ${args[index]}`);
 }
 const outputArgument = argument("--output");
 assert.ok(outputArgument, "Use --output with a directory outside the source worktree.");
 const output = resolve(outputArgument);
 const deployedOrigin = argument("--origin");
+const expectedSourceCommit = argument("--source-commit");
+const publicRoot = resolve(argument("--build-root") || resolve(projectRoot, "dist/firebase/public"));
 const within = (root, target) => {
   const path = relative(root, target);
   return path === "" || (!path.startsWith("..") && !isAbsolute(path));
@@ -145,19 +149,71 @@ let base;
 const served = new Map();
 try {
   if (deployedOrigin) {
-    base = new URL(deployedOrigin).origin;
-    const response = await fetch(`${base}/release-identity.json?release=${identity.game.version}`);
+    base = releaseBaseUrl(deployedOrigin);
+    const response = await fetch(releaseResourceUrl(base, `release-identity.json?release=${identity.game.version}`));
     assert.equal(response.status, 200, "Live release identity must be retrievable.");
     report.deployedIdentity = await response.json();
     assert.equal(report.deployedIdentity.executableVersion, identity.game.version);
-    assert.equal(report.deployedIdentity.sourceCommit, identity.provenance.sourceCommit);
+    if (expectedSourceCommit) {
+      assert.match(expectedSourceCommit, /^[a-f0-9]{40}$/, "Use the full sealed publication source commit.");
+      const git = promisify(execFile);
+      const pointerPath = 'games/2038/versions/current.json';
+      const { stdout } = await git('git', ['show', `${expectedSourceCommit}:${pointerPath}`], { cwd: projectRoot });
+      const pointer = JSON.parse(stdout);
+      assert.equal(pointer.gameVersion, identity.game.version);
+      const currentPointer = JSON.parse(await readFile(resolve(projectRoot, 'versions/current.json'), 'utf8'));
+      for (const path of [pointer.manifest, pointer.rulesCandidate.manifest]) {
+        const { stdout: sealed } = await git('git', ['show', `${expectedSourceCommit}:games/2038/${path}`], { cwd: projectRoot });
+        assert.equal(sealed, await readFile(resolve(projectRoot, path), 'utf8'), `Published source must carry the identical sealed manifest: ${path}`);
+      }
+      assert.deepEqual(pointer, currentPointer, 'Published source must name the identical sealed release.');
+    }
+    assert.equal(report.deployedIdentity.sourceCommit, expectedSourceCommit || identity.provenance.sourceCommit);
     assert.equal(report.deployedIdentity.sourceDirty, false);
     assert.equal(report.deployedIdentity.rulesetFingerprint, identity.game.rulesetFingerprint);
+    const expectedIdentity = JSON.parse(await readFile(resolve(publicRoot, 'release-identity.json'), 'utf8'));
+    report.expectedBuildIdentity = { ...expectedIdentity };
+    report.expectedPublicationSourceCommit = expectedSourceCommit || identity.provenance.sourceCommit;
+    expectedIdentity.sourceCommit = expectedSourceCommit || identity.provenance.sourceCommit;
+    assert.deepEqual(report.deployedIdentity, expectedIdentity, 'Served identity must match the sealed Gamma build.');
+    const inventory = async (directory, prefix = '') => {
+      const files = [];
+      for (const entry of await readdir(directory, { withFileTypes: true })) {
+        const path = `${prefix}${entry.name}`;
+        if (entry.isDirectory()) files.push(...await inventory(resolve(directory, entry.name), `${path}/`));
+        else files.push(path);
+      }
+      return files.sort();
+    };
+    report.deployedFiles = [];
+    for (const path of await inventory(publicRoot)) {
+      const response = await fetch(releaseResourceUrl(base, path));
+      assert.equal(response.status, 200, `Published file is retrievable: ${path}`);
+      const actual = Buffer.from(await response.arrayBuffer());
+      let expected = await readFile(resolve(publicRoot, path));
+      if (path === 'release-identity.json' || path === 'site-manifest.json') {
+        const document = JSON.parse(expected);
+        (path === 'site-manifest.json' ? document.identity : document).sourceCommit = expectedIdentity.sourceCommit;
+        expected = Buffer.from(`${JSON.stringify(document, null, 2)}\n`);
+      }
+      report.deployedFiles.push({ path, servedSha256: hash(actual), expectedSha256: hash(expected), bytes: actual.length });
+      assert.equal(hash(actual), hash(expected), `Published bytes must match Gamma: ${path}`);
+    }
+    report.excludedPaths = [];
+    for (const path of ['lab.html', 'gallery.html', 'review/index.html', 'review/content-provenance.html',
+      'sources/world.md', 'sources/docs/design-decisions.md', 'docs/manufacturing-and-publishing-study.html',
+      'docs/optional-tactics.html', 'dist/runtime/tactics.json', 'dist/runtime/secret-objectives.json', 'web/simulation-app.js']) {
+      const response = await fetch(releaseResourceUrl(base, path));
+      report.excludedPaths.push({ path, status: response.status });
+      assert.ok([403, 404, 410].includes(response.status), `Internal content must not be served: ${path} (${response.status})`);
+    }
   } else {
-    const publicRoot = resolve(projectRoot, "dist/firebase/public");
+    const localManifest = JSON.parse(await readFile(resolve(publicRoot, 'site-manifest.json'), 'utf8'));
+    const mountPath = localManifest.publicBase || '';
     server = createServer(async (request, response) => {
       try {
-        const pathname = decodeURIComponent(new URL(request.url, "http://localhost").pathname);
+        let pathname = decodeURIComponent(new URL(request.url, "http://localhost").pathname);
+        if (mountPath && pathname.startsWith(`${mountPath}/`)) pathname = pathname.slice(mountPath.length);
         if (pathname === "/favicon.ico") return response.writeHead(204).end();
         if (pathname === "/__browser/runner.html") {
           response.setHeader("Content-Type", "text/html");
@@ -196,9 +252,10 @@ try {
       server.once("error", reject);
       server.listen(0, "127.0.0.1", resolveListen);
     });
-    base = `http://127.0.0.1:${server.address().port}`;
+    base = releaseBaseUrl(`http://127.0.0.1:${server.address().port}${mountPath}`);
   }
-  report.origin = base;
+  report.origin = new URL(base).origin;
+  report.baseUrl = base;
   profile = await mkdtemp(resolve(tmpdir(), "mandate-release-chrome-"));
   const executable = process.env.CHROME_BIN || "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome";
   chrome = spawn(executable, [
@@ -261,15 +318,16 @@ try {
   await send("Runtime.enable");
   await send("Network.enable");
   await send("Network.setCacheDisabled", { cacheDisabled: true });
+  await send("Page.setDownloadBehavior", { behavior: 'allow', downloadPath: output });
   if (!deployedOrigin) {
-    await send("Page.navigate", { url: `${base}/__browser/runner.html` });
+    await send("Page.navigate", { url: releaseResourceUrl(base, "__browser/runner.html") });
     report.boundaries = await waitFor("window.__mandateBoundaryResults");
     await screenshot("boundary-regressions.png");
     assert.equal(report.boundaries.length, 14, "All fourteen boundary regressions must load.");
     assert.ok(report.boundaries.every((entry) => entry.status === "passed"), JSON.stringify(report.boundaries));
     process.stdout.write(`browser: ${report.boundaries.length} boundary regressions passed\n`);
 
-    const coreRulesResponse = await fetch(`${base}/docs/core-rules.html`);
+    const coreRulesResponse = await fetch(releaseResourceUrl(base, "docs/core-rules.html"));
     assert.equal(coreRulesResponse.status, 200, "Core rules must be accessible.");
     const coreRulesHtml = await coreRulesResponse.text();
     assert.match(coreRulesHtml, /Before selection:.*Reveal a Headline/s, "Turn overview must include Before selection Headline phase.");
@@ -285,7 +343,12 @@ try {
     { name: "mobile", width: 390, height: 844, mobile: true }
   ]) {
     await send("Emulation.setDeviceMetricsOverride", { width: viewport.width, height: viewport.height, deviceScaleFactor: 1, mobile: viewport.mobile });
-    await send("Page.navigate", { url: `${base}/web/index.html` });
+    await send("Page.navigate", { url: releaseResourceUrl(base, "first-game-guide.html") });
+    await waitFor("location.search === '?guide=first-game' && document.querySelector('#phase')?.innerText === 'waiting'");
+    const tutorial = await evaluate("({url:location.href,setupHidden:document.querySelector('#setup').hidden,seed:document.querySelector('#seed').value,actions:[...document.querySelectorAll('.decision-card')].map(node=>node.innerText)})");
+    assert.ok(tutorial.setupHidden && tutorial.seed === 'mandate-2038-first-game', 'The guide must start its configured tutorial match.');
+    await screenshot(`${viewport.name}-tutorial.png`);
+    await send("Page.navigate", { url: releaseResourceUrl(base, "web/index.html") });
     await waitFor("document.querySelector('#faction')?.options.length === 6 && document.querySelector('#start-game') && !document.querySelector('#start-game').disabled");
     const setup = await evaluate(`(()=>{const players=document.querySelector('#player-count');players.value='4';players.dispatchEvent(new Event('change',{bubbles:true}));return {factionCount:document.querySelector('#faction').options.length,playerCount:players.value,versionVisible:document.body.innerText.includes(${JSON.stringify(identity.game.version)})};})()`);
     assert.equal(setup.versionVisible, true, "The UI must show the sealed executable version.");
@@ -300,8 +363,60 @@ try {
     assert.equal(speculativeSelection.exportEnabled, true);
     assert.ok(speculativeSelection.choices.some((choice) => !choice.disabled), "Speculative Deploy must leave an actionable browser decision.");
     await screenshot(`${viewport.name}-speculative-deploy.png`);
-    report.ui.push({ viewport, setup, actions, speculativeSelection });
-    process.stdout.write(`browser: ${viewport.name} setup, six actions, and speculative Deploy passed\n`);
+    const journey = await evaluate(`(async()=>{
+      const observations=[];
+      const pause=()=>new Promise(resolve=>setTimeout(resolve,40));
+      for(let step=0;step<400;step++) {
+        for(let poll=0;poll<750 && !['waiting','complete','failed'].includes(document.querySelector('#phase').innerText);poll++)await pause();
+        const phase=document.querySelector('#phase').innerText;
+        if(phase==='failed')throw new Error(document.querySelector('#game-status').innerText);
+        if(phase==='complete')return {observations,summary:document.querySelector('#decision-context').innerText,title:document.querySelector('#decision-title').innerText,viewportWidth:innerWidth,documentWidth:document.documentElement.scrollWidth};
+        const buttons=[...document.querySelectorAll('#decisions button')].filter(button=>!button.disabled);
+        const choice=buttons.find(button=>button.innerText.includes('Select Fund')) || buttons.find(button=>/Skip|Decline|Confirm assignment/.test(button.innerText)) || buttons[0];
+        if(!choice)throw new Error('Waiting without an actionable decision');
+        observations.push({round:document.querySelector('#round-title').innerText,stage:document.querySelector('#decision-title').innerText,headline:document.querySelector('#headline-name').innerText,consequence:document.querySelector('#headline-consequence').innerText,choice:choice.innerText});
+        choice.click();await pause();
+      }
+      throw new Error('Match exceeded the bounded UI decision limit');
+    })()`);
+    await screenshot(`${viewport.name}-completed-game.png`);
+    await evaluate("window.__exportBlob=null;const original=URL.createObjectURL.bind(URL);URL.createObjectURL=(blob)=>{window.__exportBlob=blob;return original(blob);};document.querySelector('#export').click();");
+    const exportText = await evaluate("window.__exportBlob.text()");
+    const exported = JSON.parse(exportText);
+    let downloadedPath;
+    for (let attempt = 0; attempt < 50; attempt++) {
+      const candidates = (await readdir(output)).filter(name => name.includes(exported.id) && name.endsWith('.json'));
+      if (candidates.length) { downloadedPath = candidates[0]; break; }
+      await new Promise(resolve => setTimeout(resolve, 100));
+    }
+    assert.ok(downloadedPath, 'Export must produce an actual browser download.');
+    assert.equal(hash(await readFile(resolve(output, downloadedPath))), hash(Buffer.from(exportText)), 'Downloaded bytes must match the exported receipt.');
+    assert.equal(exported.status, 'complete');
+    assert.equal(exported.result.standings.length, 4);
+    assert.equal(exported.result.winnerSeats.length > 0, true);
+    assert.equal(exported.result.standings.every(row => Number.isFinite(row.score)), true);
+    assert.equal(exported.executionMode, 'client');
+    assert.deepEqual([...new Set(exported.replay.filter(event=>event.round>0).map(event=>event.round))].sort(), [1,2,3,4]);
+    const headlines = [...new Set(journey.observations.map(row=>row.headline).filter(Boolean))];
+    assert.equal(headlines.length, 12, 'Three Headlines in each of four Eras must appear.');
+    assert.ok(journey.summary.includes(String(exported.result.standings[0].score)), 'Visible scoring must match the export.');
+    assert.ok(journey.title.includes(exported.result.worldEnding.name), 'The displayed ending must match the export.');
+    await writeFile(resolve(output, `${viewport.name}-export.json`), exportText);
+    for (const path of ['docs/core-rules.html', 'docs/world-and-institutions.html', 'gallery-baseline.html']) {
+      await send('Page.navigate', { url: releaseResourceUrl(base, path) });
+      await waitFor("document.readyState === 'complete' && document.body.innerText.length > 100");
+      const links = await evaluate("[...document.querySelectorAll('a[href]')].map(node=>node.href).filter(url=>url.startsWith(location.origin))");
+      for (const url of [...new Set(links)].filter(url=>!url.includes('#'))) {
+        const response = await fetch(url);
+        assert.equal(response.status, 200, `Document link must resolve: ${url}`);
+        assert.ok(url.startsWith(base), `Document link must preserve deployment directory: ${url}`);
+      }
+      await screenshot(`${viewport.name}-${path.split('/').at(-1).replace('.html','')}.png`);
+    }
+    report.ui.push({ viewport, tutorial, setup, actions, speculativeSelection, journey,
+      export: { path: `${viewport.name}-export.json`, browserDownloadPath: downloadedPath, sha256: hash(Buffer.from(exportText)), status: exported.status,
+        rounds: [1,2,3,4], headlineCount: headlines.length, standings: exported.result.standings, worldEnding: exported.result.worldEnding } });
+    process.stdout.write(`browser: ${viewport.name} tutorial, complete match, scoring, Headlines, documents, and export passed\n`);
   }
   assert.equal(report.requests.filter((entry) => entry.status >= 400).length, 0, "All requested game and harness resources must load.");
   assert.equal(report.browserErrors.length, 0, "No uncaught browser exceptions are permitted.");
