@@ -7,6 +7,16 @@
   "hypothesis": "Released GPU-imported tensors export byte-identically before updates; packed original and exported raw tensors give identical native forward values on the same8-token fixture, with validated GPU integer-domain forward/backward/optimizer runtime.",
   "id": "lexth11c_gpu_export_control_q0_v1",
   "kind": "standalone_codec",
+  "measured": {
+    "reflections": {
+      "20261005T022823Z_561ee1c5b6": {
+        "decision": "hold",
+        "path": "operations/adaptive/reflections/20261005T022823Z_561ee1c5b6.json",
+        "sha256": "sha256:cee8eeeaa3c6c0223a45c7c18be429411944a00e647cf23ca66fea17aca54da1",
+        "valid": true
+      }
+    }
+  },
   "omega": {
     "experiment": {
       "path": "operations/adaptive/experiments/lexth11c_gpu_export_control_q0_v1.json",
@@ -22,5 +32,6 @@
       "No updates before import/export control; no historical16-update profile"
     ]
   },
-  "status": "candidate"
+  "status": "blocked_dependency",
+  "verdict": "Runtime and unchanged export controls pass; full causal prior alignment, compressed storage and updated-checkpoint native validation remain prerequisites for the proposed new training schedule."
 }
