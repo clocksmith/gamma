@@ -5,17 +5,52 @@
     "sha256": "sha256:b6fbc7912764c40756dd2cc2f82b1485dda1825f47a75f0d8c955e6f69b2bd97"
   },
   "candidate_tree_sha256": "sha256:725688e620faaa2b1a8468bb1b7d85a37acd920fdcdd92e629b4da2f3cefe812",
+  "elapsed_seconds": 0.667,
   "execution_guard": {
     "path": "tools/run_with_resource_guard_v3.py",
     "sha256": "sha256:044147f7ffe6922ea8dafd52fc3d4426077b20958adbcd421245ad41adcfc1e4"
   },
   "execution_mode": "discovery",
+  "execution_resources": {
+    "boot_id": "3ce46712-27bc-4199-8e48-e2b3d23926cb",
+    "budget": {
+      "cgroup_parent": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice",
+      "cpus": [
+        12
+      ],
+      "memory_bytes": 12884901888,
+      "scratch_bytes": 32000000000,
+      "swap_bytes": 0,
+      "wall_seconds": 360600
+    },
+    "cgroup_inode": 535209,
+    "cgroup_path": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/gamma-enwiki9-20261005T025330Z_75faf9fce7",
+    "cleanup_complete": true,
+    "cpu_enforcement": "taskset-and-sampled-affinity-guard",
+    "groups": [
+      {
+        "created": true,
+        "inode": 535209,
+        "kernel_cpuset": false,
+        "memory_bytes": 12884901888,
+        "path": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/gamma-enwiki9-20261005T025330Z_75faf9fce7"
+      }
+    ],
+    "guard_command_sha256": "b16fd4b922e3970b68bc74fee5f6c912fc8192f003af101a555ee893f29cc85c",
+    "guard_path": "run_logs/adaptive/20261005T025330Z_75faf9fce7.resources/guard.json",
+    "missing_diagnostics": [
+      "kernel cpuset controller is not delegated; taskset assignment and existing affinity guard remain active"
+    ],
+    "timing_authority": "diagnostic"
+  },
   "experiment": {
     "path": "operations/adaptive/experiments/lexth11c_recompress_full1g_q0_v1.json",
     "sha256": "sha256:ea2a3c091b083917eb90bfe448dfe089c54e61d18a15a1d13c6991049df02d06"
   },
+  "finished_at": "2026-10-05T02:54:16+00:00",
   "gate_size": 1000000000,
   "job_id": "20261005T025330Z_75faf9fce7",
+  "log_path": "run_logs/adaptive/20261005T025330Z_75faf9fce7.log",
   "priority": 50,
   "proposal": {
     "path": "operations/adaptive/proposals/developed/949_lexth11c_recompress_full1g_q0_v1.json",
@@ -33,6 +68,7 @@
     "swap_bytes": 0,
     "wall_seconds": 360600
   },
+  "returncode": 1,
   "runner": {
     "path": "tools/lexth11c_full_control_v1.py",
     "sha256": "sha256:672deec885fe71359cd55d0a5325f1110cc420306e58422de68ad3117ad75214"
@@ -41,7 +77,8 @@
   "scratch_directories": [
     "results/lexth11c_recompress_full1g_q0_v1"
   ],
-  "state": "pending",
+  "started_at": "2026-10-05T02:54:14+00:00",
+  "state": "failed",
   "submitted_at": "2026-10-05T02:53:30+00:00",
   "tags": [],
   "timing_authority": "diagnostic",
@@ -55,5 +92,8 @@
     "operations/adaptive/experiments/lexth11c_recompress_full1g_q0_v1.json",
     "--plan",
     "operations/planning/lexth11c_full_recompression_20261005.json"
-  ]
+  ],
+  "worker_pid": 3133900,
+  "worker_proc_start_ticks": 426499361,
+  "worker_started_at": "2026-10-05T02:54:15+00:00"
 }
