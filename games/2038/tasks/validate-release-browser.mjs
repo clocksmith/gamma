@@ -424,10 +424,18 @@ try {
       await send('Page.navigate', { url: releaseResourceUrl(base, path) });
       await waitFor(`location.href === ${JSON.stringify(releaseResourceUrl(base, path))} && document.readyState === 'complete' && document.body.innerText.length > 100`);
       const links = await evaluate("[...document.querySelectorAll('a[href]')].map(node=>node.href).filter(url=>url.startsWith(location.origin))");
-      for (const url of [...new Set(links)].filter(url=>!url.includes('#'))) {
+      for (const href of [...new Set(links)]) {
+        const destination = new URL(href);
+        destination.hash = '';
+        destination.search = '';
+        const url = destination.href;
+        assert.ok(url.startsWith(base), `Document link must preserve deployment directory: ${url}`);
+        const path = decodeURIComponent(url.slice(base.length)) || 'index.html';
+        const expected = await readFile(resolve(publicRoot, path));
         const response = await fetch(url);
         assert.equal(response.status, 200, `Document link must resolve: ${url}`);
-        assert.ok(url.startsWith(base), `Document link must preserve deployment directory: ${url}`);
+        const actual = Buffer.from(await response.arrayBuffer());
+        assert.equal(hash(actual), hash(expected), `Document link must serve the named Gamma artifact, not a host fallback: ${url}`);
       }
       await screenshot(`${viewport.name}-${path.split('/').at(-1).replace('.html','')}.png`);
     }
