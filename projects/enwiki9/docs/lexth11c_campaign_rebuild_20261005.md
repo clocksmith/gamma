@@ -13,7 +13,7 @@ verified full-1G score is claimed.
 | Released downloaded compressor plus archive plus 12 option bytes | 99,313,762 bytes | [Original accounting](../operations/provenance/lexth11c_accounting_20261004.json) |
 | Corrected offline rebuilt compressor | 3,477,188 bytes; 51 more than release | [Rebuild control](../results/lexth11c_rebuild_control_q0_v3/result.json) |
 | Corrected rebuilt executable stub | 198,288 bytes; 52 more than release | [Full replay plan](../operations/planning/lexth11c_full_recompression_v4_20261005.json) |
-| Lossless role-conditioned adaptive weight repacking | 509 more bytes per weight copy; 3,696 added implementation bytes; net saving **−4,714 bytes** | [Retired comparison](../results/lexth11c_lossless_repack_q0_v1/result.json) |
+| Lossless repacking against the preserved first-toolchain parent | 509 more bytes per weight copy; 3,696 added implementation bytes; net saving **−4,714 bytes** | [Retired comparison](../results/lexth11c_lossless_repack_q0_v1/result.json) |
 | Separate diagnostic CLI specialization | 197,348-byte stub; 940 saved per copy; **1,880 counted component bytes saved** | [Specialization comparison](../results/lexth11c_executable_specialize_q0_v1/result.json) |
 
 The corrected donor, released binary and deterministic repeat produce identical
@@ -33,7 +33,8 @@ The repacking comparison preserves all 435 raw typed and native-promoted tensors
 bit for bit, including floating-point tensors. It excludes Zmix's lossy
 `ENC_BF16_F32` conversion. Parent, treatment and repeat prediction streams and
 archives match, and inverse is exact. Its one declared continuous-count
-configuration is retired after the negative paid result. This does not reject
+configuration, measured against its matched first-toolchain parent, is retired
+after the negative paid result. This does not reject
 all class-conditioned representations or compressed-size training objectives.
 
 Specialization changes only `runner.cpp` diagnostic long-option dispatch and
@@ -67,8 +68,8 @@ bit for bit. An independent native pass over the exported raw file is
 bit-identical to the released packed-model native pass.
 [Export result](../results/lexth11c_gpu_export_control_q0_v1/result.json).
 These are runtime and unchanged-model controls, not full-training readiness.
-Ubuntu 26.04 is outside AMD's published native Linux OS matrix, whose framework
-validation is FP16. Successful local execution remains diagnostic evidence.
+Ubuntu 26.04 is outside [AMD's published native Linux OS matrix](https://rocm.docs.amd.com/projects/radeon-ryzen/en/latest/docs/compatibility/compatibilityryz/native_linux/native_linux_compatibility.html),
+whose framework validation is FP16. Successful local execution remains diagnostic evidence.
 
 The [separate resumed-training proposal](../operations/planning/lexth11c_resumed_training_contract_20261005.json)
 initializes released weights with fresh optimizer state, defines a new schedule,
@@ -101,6 +102,9 @@ the aggregate memory cgroup. These failures are execution-boundary defects;
 the donor predictor and existing released decode remain preserved.
 
 Retain the 96,000,000-byte objective and 98,000,000-byte intermediate target.
+The diagnostic encode has an observed aggregate cgroup peak above 10 billion
+bytes; its native process RSS and aggregate usage are different measurements.
+Qualification must replay under its own decimal limit and complete certificate.
 Full score, specialized full replay, Intel/AMD agreement, independent repeated
 reconstruction, isolated single-core calibration, and measured memory within
 10,000,000,000 bytes remain open. A 12 GiB diagnostic envelope is not that memory

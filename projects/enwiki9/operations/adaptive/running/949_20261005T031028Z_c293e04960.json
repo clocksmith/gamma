@@ -10,6 +10,37 @@
     "sha256": "sha256:044147f7ffe6922ea8dafd52fc3d4426077b20958adbcd421245ad41adcfc1e4"
   },
   "execution_mode": "discovery",
+  "execution_resources": {
+    "boot_id": "3ce46712-27bc-4199-8e48-e2b3d23926cb",
+    "budget": {
+      "cgroup_parent": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice",
+      "cpus": [
+        12
+      ],
+      "memory_bytes": 12884901888,
+      "scratch_bytes": 32000000000,
+      "swap_bytes": 0,
+      "wall_seconds": 360600
+    },
+    "cgroup_inode": 535473,
+    "cgroup_path": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/gamma-enwiki9-20261005T031028Z_c293e04960",
+    "cpu_enforcement": "taskset-and-sampled-affinity-guard",
+    "groups": [
+      {
+        "created": true,
+        "inode": 535473,
+        "kernel_cpuset": false,
+        "memory_bytes": 12884901888,
+        "path": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/gamma-enwiki9-20261005T031028Z_c293e04960"
+      }
+    ],
+    "guard_command_sha256": "fba52debfb317bf4ec7523cfc73bc1e2259e86991b4ee1db016532d5e83a0cfe",
+    "guard_path": "run_logs/adaptive/20261005T031028Z_c293e04960.resources/guard.json",
+    "missing_diagnostics": [
+      "kernel cpuset controller is not delegated; taskset assignment and existing affinity guard remain active"
+    ],
+    "timing_authority": "diagnostic"
+  },
   "experiment": {
     "path": "operations/adaptive/experiments/lexth11c_recompress_full1g_q0_v4.json",
     "sha256": "sha256:a2020ab8573a972140694940b30e6b6a98f86bf855cd1a7e082076a5de7fa956"
@@ -41,7 +72,8 @@
   "scratch_directories": [
     "results/lexth11c_recompress_full1g_q0_v4"
   ],
-  "state": "pending",
+  "started_at": "2026-10-05T03:11:30+00:00",
+  "state": "running",
   "submitted_at": "2026-10-05T03:10:28+00:00",
   "tags": [],
   "timing_authority": "diagnostic",
@@ -55,5 +87,8 @@
     "operations/adaptive/experiments/lexth11c_recompress_full1g_q0_v4.json",
     "--plan",
     "operations/planning/lexth11c_full_recompression_v4_20261005.json"
-  ]
+  ],
+  "worker_pid": 3326760,
+  "worker_proc_start_ticks": 426602926,
+  "worker_started_at": "2026-10-05T03:11:31+00:00"
 }
