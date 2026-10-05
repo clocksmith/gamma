@@ -1,0 +1,33 @@
+{
+  "schema": "gamma.enwiki9.candidate-design.v1",
+  "candidate": "lexth11c_lossless_repack_q0_v1",
+  "owner": "codex-lexth11c-campaign-host128",
+  "generated_utc": "2026-10-05T01:48:37.528715+00:00",
+  "hypothesis": "Continuous role-conditioned adaptive symbol counts reduce packed bytes for all original tensors while preserving every tensor bit and native predictions.",
+  "parent": "released lexth11c FX2TFWC3 948847d9649251796f100d5353bd42859767ed5614e5e316e2c3a1c35a62ef71",
+  "changed_mechanism": "New FX2TFWC4 integer symbol model only: class is name with decimal runs replaced by # plus qmax; initial flat counts one, update+1, halve rounding up after total8192. Original metadata/bf16/f32/rope encodings retained.",
+  "license": "Original lexth11c GPLv3; Zmix GPLv3+ compatible, class continuity concept independently adapted; preserve upstream attribution.",
+  "forbidden": "ENC_BF16_F32 rounding or any float conversion beyond original native loader",
+  "controls": [
+    "Every raw typed tensor name/dtype/shape/data identical after decode",
+    "Native promoted tensor identity",
+    "Original-weight import/export identity",
+    "Same causal profiling fixture native probabilities, archive, repeat and inverse"
+  ],
+  "budget": {
+    "cpus": [
+      9,
+      10,
+      11,
+      12
+    ],
+    "memory_bytes": 17179869184,
+    "scratch_bytes": 10000000000,
+    "wall_seconds": 14400,
+    "tuning_variants": 1
+  },
+  "promotion": "Native controls pass and 2*(parentW-childW)-2*(childStub-parentStub)>0 on produced files. Full1G joint replay required for score credit.",
+  "kill": "Any bit/native/control mismatch; nonpositive paid gain parks this configuration.",
+  "qualification": false,
+  "objective_credit_bytes": 0
+}
