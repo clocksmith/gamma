@@ -53,7 +53,7 @@ def write_fixture(tmp_path: Path) -> tuple[Path, dict, dict]:
     operational = {
         "objective": MODULE.research_contracts.objective_binding(),
         "certificate_objective": ledger["objective"],
-        "target_score_bytes": 99_000_000,
+        "target_score_bytes": MODULE.research_contracts.objective_binding()["targetScoreBytes"],
         "target_score_10_95": 105_000_000,
         "best_forecast": {"projected_score": 109_557_404},
         "best_full_1g": {"status": "not verified"},
@@ -71,17 +71,17 @@ def test_normalizes_margin_and_preserves_proof_boundary(tmp_path: Path) -> None:
 
     assert errors == []
     assert status["official"]["verified_full_corpus_result"] is False
-    assert status["canonical_forecast"]["forecast_margin_bytes"] == -10_557_404
+    assert status["canonical_forecast"]["forecast_margin_bytes"] == -13_557_404
     assert status["canonical_forecast"]["source_forecast_margin_bytes"] == -4_557_404
     assert status["source_target"] == ledger["target"]
     assert status["source_objective"] == ledger["objective"]
     markdown = MODULE.render_markdown(status)
-    assert "Target score: `99,000,000` bytes (`9.9000000%`)" in markdown
+    assert "Target score: `96,000,000` bytes (`9.6000000%`)" in markdown
     assert "Historical frontier target: `105,000,000` bytes" in markdown
     assert "Verified official full-1G score: `unknown`" in markdown
     assert "Best counted forecast: `109,557,404` (`10.9557404%`)" in markdown
-    assert "distance above target `10,557,404`" in markdown
-    assert "`1.0557404 percentage points`" in markdown
+    assert "distance above target `13,557,404`" in markdown
+    assert "`1.3557404 percentage points`" in markdown
     assert "Active candidate provisional projection: `109,557,404` (`10.9557404%`)" in markdown
     assert "## Recorded Frontier State" in markdown
     assert "Verified target state: `not won`" in markdown
@@ -196,14 +196,14 @@ def test_present_optional_assertion_source_still_detects_drift(
 
 def test_under_target_forecast_renders_margin_below_target(tmp_path: Path) -> None:
     _, ledger, operational = write_fixture(tmp_path)
-    ledger["candidates"][0]["forecast_score"] = 98_908_345
-    operational["best_forecast"]["projected_score"] = 98_908_345
+    ledger["candidates"][0]["forecast_score"] = 95_908_345
+    operational["best_forecast"]["projected_score"] = 95_908_345
 
     status, errors = MODULE.validate_and_normalize(tmp_path, ledger, operational)
     markdown = MODULE.render_markdown(status)
 
     assert errors == []
-    assert "Best counted forecast: `98,908,345` (`9.8908345%`)" in markdown
+    assert "Best counted forecast: `95,908,345` (`9.5908345%`)" in markdown
     assert "margin below target `91,655` bytes" in markdown
     assert "distance above target `0`" not in markdown
 
@@ -243,9 +243,9 @@ def write_complete_proof(tmp_path: Path, operational: dict) -> dict:
         "program_id": "candidate",
         "data_size": objective["corpusBytes"],
         "data_sha256": objective["corpusSha256"],
-        "compressed_size": 98_000_000,
+        "compressed_size": objective["targetScoreBytes"] - 1_000_000,
         "program_size": 999_999,
-        "hutter_score": 98_999_999,
+        "hutter_score": objective["targetScoreBytes"] - 1,
         "roundtrip_ok": True,
         "determinism": {"single_host_byte_equal": True},
         "objective": objective,
@@ -272,7 +272,7 @@ def test_historical_target_cannot_override_active_economics(tmp_path: Path) -> N
     _, ledger, operational = write_fixture(tmp_path)
     source = write_complete_proof(tmp_path, operational)
     source["hutter_score"] = 104_999_999
-    source["program_size"] = 6_999_999
+    source["program_size"] = source["hutter_score"] - source["compressed_size"]
     (tmp_path / "full-result.json").write_text(json.dumps(source) + "\n")
     operational["best_full_1g"]["hutter_score"] = 104_999_999
     operational["has_10_95_constructive_upper_bound"] = True
@@ -283,7 +283,7 @@ def test_historical_target_cannot_override_active_economics(tmp_path: Path) -> N
     assert errors == []
     assert status["official"]["verified_full_corpus_result"] is True
     assert status["official"]["won"] is False
-    assert status["official"]["distance_bytes"] == 5_999_999
+    assert status["official"]["distance_bytes"] == 8_999_999
 
 
 def test_roundtrip_alone_cannot_establish_a_win(tmp_path: Path) -> None:

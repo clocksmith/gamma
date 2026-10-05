@@ -35,8 +35,45 @@ def test_enveloped_job_views_reuse_exact_guard_identity(tmp_path, monkeypatch):
     state = status_receipt.adaptive_running_jobs_state()
     assert state["running_jobs"][0]["liveness"] == "live"
     assert state["running_jobs"][0]["resource_budget"] == {"cpus": [2]}
+    assert state["running_jobs"][0]["execution_resources"] == job["execution_resources"]
     assert ledger.live_job(job, tmp_path)["state"] == "live"
     assert seen == [job, job]
+
+
+@pytest.mark.parametrize("failure", [None, "stale", "label", "cgroup", "terminal", "unverified", "escape"])
+def test_live_resource_receipt_requires_registered_owner(tmp_path, monkeypatch, failure):
+    monkeypatch.setattr(status_receipt, "ROOT", tmp_path)
+    monkeypatch.setattr(status_receipt, "REPO_ROOT", tmp_path)
+    path = tmp_path / "guard.json"
+    guard = {"schema": "gamma.enwiki9.resource-guard-receipt.v3", "status": "running",
+             "label": "job", "cgroup": {"inode": 7, "path": "/cgroup/job", "requested_memory_max_bytes": 12884901888},
+             "peaks": {"max_sampled_single_rss_kib": 6000000},
+             "guards": {"rss_guard_exceeded": False}, "sample_count": 11}
+    job = {"candidate_id": "donor", "job_id": "job", "worker_pid_live": True,
+           "execution_mode": "discovery", "timing_authority": "diagnostic",
+           "execution_resources": {"guard_path": "guard.json", "cgroup_inode": 7, "cgroup_path": "/cgroup/job"}}
+    if failure == "label": guard["label"] = "unrelated-job"
+    if failure == "cgroup": guard["cgroup"]["inode"] = 8
+    if failure == "terminal": guard["status"] = "completed"
+    if failure == "unverified": job["worker_pid_live"] = False
+    if failure == "escape": job["execution_resources"]["guard_path"] = "../guard.json"
+    path.write_text(json.dumps(guard))
+    if failure == "stale":
+        import os
+        os.utime(path, (1, 1))
+    gate = status_receipt.live_adaptive_resource_gate(job)
+    assert gate["verdict"] == "running"
+    assert "no score or qualification" in gate["terminal_authority"]
+    assert gate["timing_authority"] == "diagnostic"
+    if failure is None:
+        assert gate["rss_guard_status"] == "running"
+        assert gate["sample_count"] == 11
+        assert gate["max_sampled_single_rss_kib"] == 6000000
+        assert gate["resource_guard_declared_limit_bytes"] == 12884901888
+        assert gate["rss_guard_json_sha256"] == hashlib.sha256(path.read_bytes()).hexdigest()
+    else:
+        assert "rss_guard_status" not in gate
+        assert "max_sampled_single_rss_kib" not in gate
 
 
 def test_adaptive_status_reuses_managed_worker_identity(

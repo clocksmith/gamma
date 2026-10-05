@@ -12,11 +12,11 @@ Reusable artifact helpers for new tools: [lib/artifacts.py](../lib/artifacts.py)
 The LibNC initializer teacher launcher exits before the first forward, gradient, update, or coded symbol; its source-bound experiment defines that boundary.
 The delayed-status helper's `enwiki9_delayed_status_latest.log` pointer is operational history, not present-host occupancy proof.
 
-Coverage: **1255 files** (33 .c, 82 .cpp, 1 .gdb, 1 .h, 2 .hpp, 1 .html, 1132 .py, 3 .sh).
+Coverage: **1259 files** (33 .c, 82 .cpp, 1 .gdb, 1 .h, 2 .hpp, 1 .html, 1136 .py, 3 .sh).
 
 | Tool | Purpose | Referenced contracts |
 |---|---|---|
-| [`tools/_enwiki9_bootstrap.py`](../tools/_enwiki9_bootstrap.py) | Import the maintained namespace for compatibility entrypoints. | [14](../operations/adaptive/experiments/fx2_core_delivery250k_q0_v1.json) |
+| [`tools/_enwiki9_bootstrap.py`](../tools/_enwiki9_bootstrap.py) | Import the maintained namespace for compatibility entrypoints. | [18](../operations/adaptive/experiments/fx2_core_delivery250k_q0_v1.json) |
 | [`tools/acs_prover_weighted_monoid.py`](../tools/acs_prover_weighted_monoid.py) | Exact weighted-summary monoid pilot for a finite XML lexical transducer. | none found |
 | [`tools/acs_prover_xml_state_endpoint_shadow.cpp`](../tools/acs_prover_xml_state_endpoint_shadow.cpp) | unknown; inspect source and the selected experiment | none found |
 | [`tools/acs_prover_xml_state_endpoint_shadow.py`](../tools/acs_prover_xml_state_endpoint_shadow.py) | Run the exact ACS-PROVER XML-state endpoint calibration shadow. | none found |
@@ -367,6 +367,8 @@ Coverage: **1255 files** (33 .c, 82 .cpp, 1 .gdb, 1 .h, 2 .hpp, 1 .html, 1132 .p
 | [`tools/fx2_core_delivery_v1.py`](../tools/fx2_core_delivery_v1.py) | Lab entrypoint for the explicitly counted FX2 core delivery comparison. | [3](../operations/adaptive/experiments/fx2_core_delivery250k_q0_v1.json) |
 | [`tools/fx2_core_tune_package.py`](../tools/fx2_core_tune_package.py) | Build and package an fx2 core-tuning candidate. This creates a score-honest candidate by rebuilding the local fx2-cmix source with compile-time predictor knobs, compressing the resulting executable, and dropping it into an existing wrapper template. | none found |
 | [`tools/fx2_core_tune_queue.py`](../tools/fx2_core_tune_queue.py) | Build and gate fx2 core-tuning candidates through one serialized lane. | none found |
+| [`tools/fx2_coverage_preservation_v1.py`](../tools/fx2_coverage_preservation_v1.py) | Canonical lab entrypoint for frozen coverage/preservation comparison. | [1](../operations/adaptive/experiments/fx2_coverage_preservation250k_q0_v1.json) |
+| [`tools/fx2_donor_coverage_v1.py`](../tools/fx2_donor_coverage_v1.py) | Lab entrypoint for the frozen development-only coverage diagnostic. | [1](../operations/adaptive/experiments/fx2_donor_coverage250k_q0_v1.json) |
 | [`tools/fx2_entropy_gate_v1.py`](../tools/fx2_entropy_gate_v1.py) | Compatibility entrypoint for the source-pinned FX2 entropy-training recipe. | [1](../operations/adaptive/experiments/fx2_entropy_train250k_q0_v1.json) |
 | [`tools/fx2_entropy_gate_v2.py`](../tools/fx2_entropy_gate_v2.py) | Compatibility entrypoint for the guarded FX2 entropy-training recipe. | [1](../operations/adaptive/experiments/fx2_entropy_train250k_q0_v2.json) |
 | [`tools/fx2_expert_confirm1m_v1.py`](../tools/fx2_expert_confirm1m_v1.py) | Confirm the unchanged released mixture on the reserved native one-million-byte population. | [1](../operations/adaptive/experiments/fx2_expert_confirm1m_v1.json) |
@@ -465,6 +467,7 @@ Coverage: **1255 files** (33 .c, 82 .cpp, 1 .gdb, 1 .h, 2 .hpp, 1 .html, 1132 .p
 | [`tools/fx2_sparse_residual_cost250k_v1.py`](../tools/fx2_sparse_residual_cost250k_v1.py) | Price one fixed sparse affine family from verified native feature records. | [1](../operations/adaptive/experiments/fx2_sparse_residual_cost250k_v1.json) |
 | [`tools/fx2_sparse_residual_cost_gate_v1.py`](../tools/fx2_sparse_residual_cost_gate_v1.py) | Guarded repeated sparse-family bounds; no native inference or coefficient fit. | [1](../operations/adaptive/experiments/fx2_sparse_residual_cost250k_v1.json) |
 | [`tools/fx2_title_gate_v1.py`](../tools/fx2_title_gate_v1.py) | Compatibility entrypoint for the frozen matched title-training recipe. | [1](../operations/adaptive/experiments/fx2_title_train250k_q0_v1.json) |
+| [`tools/fx2_trajectory_attribution_v1.py`](../tools/fx2_trajectory_attribution_v1.py) | Run fixed P/A/J attribution through the existing lab. | [1](../operations/adaptive/experiments/fx2_training_trajectory250k_q0_v1.json) |
 | [`tools/fx2_transformer_kernel_probe_v1.cpp`](../tools/fx2_transformer_kernel_probe_v1.cpp) | Diagnostic kernel measurement of the pinned public model, not a codec score. The runner authenticates source/weights and enforces the memory/scratch guard. | [1](../operations/adaptive/experiments/fx2_cmix_transformer_static_vocab_fixture50051_q0_v1.json) |
 | [`tools/fx2_trim_auxiliary_ppm_v1.py`](../tools/fx2_trim_auxiliary_ppm_v1.py) | Compare original and repaired native auxiliary packages under a lab gate. This checks fixed auxiliary assets, actual extraction subprocesses, and a matched opening-prefix core archive. It does not execute the full enwik9 split/PHDA/reorder pipeline or establish a complete submission score. | [2](../operations/adaptive/experiments/fx2_ambient_dictionary_probe_v1.json) |
 | [`tools/fx2_trim_auxiliary_ppm_v2.py`](../tools/fx2_trim_auxiliary_ppm_v2.py) | Compare auxiliary packages after the shared ambient-input correction. This checks fixed auxiliary assets, actual extraction subprocesses, and a matched opening-prefix core archive. It does not execute the full enwik9 split/PHDA/reorder pipeline or establish a complete submission score. | [1](../operations/adaptive/experiments/fx2_trim_auxiliary_ppm_v2.json) |
@@ -601,6 +604,7 @@ Coverage: **1255 files** (33 .c, 82 .cpp, 1 .gdb, 1 .h, 2 .hpp, 1 .html, 1132 .p
 | [`tools/kairos108_final_head_dyadic_qm2.py`](../tools/kairos108_final_head_dyadic_qm2.py) | Run frozen KAIROS with the existing pinned Clang 17 toolchain. | none found |
 | [`tools/kairos108_final_head_dyadic_qm3.py`](../tools/kairos108_final_head_dyadic_qm3.py) | Run frozen KAIROS with pinned Clang 17 and the available BFD linker. | none found |
 | [`tools/kairos108_final_head_dyadic_qm4.py`](../tools/kairos108_final_head_dyadic_qm4.py) | Run frozen KAIROS with the donor-bundled LLD 17 linker. | none found |
+| [`tools/lexth11c_reproduction_v1.py`](../tools/lexth11c_reproduction_v1.py) | Pinned donor reproduction entrance; ownership and guards belong to the lab. | [1](../operations/adaptive/experiments/lexth11c_decode_full1g_q0_v1.json) |
 | [`tools/lstm_gate_runtime_probe.cpp`](../tools/lstm_gate_runtime_probe.cpp) | Runtime probe for stream-preserving LSTM gate scheduling alternatives. | none found |
 | [`tools/macro_residual_package.py`](../tools/macro_residual_package.py) | Create a Lane B macro-residual LZMA candidate from a parent token table. | none found |
 | [`tools/macro_token_search.py`](../tools/macro_token_search.py) | Search macro-residual token additions with an isolated output receipt. This is a Lane B helper for the XML scaffold macro candidates. It evaluates candidate token additions against a parent program that exposes a module-level S token list and reports archive-size deltas for the transformed LZMA stream. | none found |

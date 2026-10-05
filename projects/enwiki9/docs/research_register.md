@@ -435,3 +435,19 @@ paths remain separate hypotheses behind donor reproduction; no Zig rewrite.
 Retain96M objective,95M stretch and98M intermediate gate. Full-corpus
 selection uses produced files, independently reconstructed outputs, repeat
 archives, vendor checks, isolated calibration and complete source/license closure.
+
+The [live handoff](../operations/evidence/lexth11c_live_handoff_20261004.json)
+records the independently observed decoder worker, declared diagnostic guard,
+native transformed-stream progress and unresolved qualification evidence.
+The archive header declares 587,138,826 transformed bytes and a 256-value
+vocabulary; dense float16 prior capture would occupy 300,615,078,912 bytes.
+This is header metadata, not a verified reconstruction or capture measurement.
+The [source rebuild review](../operations/planning/lexth11c_source_rebuild_review_20261004.json)
+binds the unchanged tagged build and dependency recipes for the pending
+campaign-local toolchain provisioning decision. No dependencies were installed.
+The [existing-runtime probe](../operations/evidence/lexth11c_training_runtime_preflight_20261004.json)
+imports torch/transformers with provisioned Python 3.13, but actual GPU matmul
+fails normally and with the mandated gfx override. No training launches.
+Reporting now projects fresh resource receipts only from an identity-verified
+registered worker with matching job/cgroup identity. Discovery timing and its
+12GiB envelope remain explicit; they grant no official qualification.

@@ -1255,6 +1255,7 @@ def adaptive_running_jobs_state() -> dict[str, Any]:
                 "liveness": "live" if worker_pid_live else "unknown",
                 "execution_mode": job.get("execution_mode", "legacy"),
                 "resource_budget": job.get("resource_budget"),
+                "execution_resources": job.get("execution_resources"),
                 "timing_authority": job.get("timing_authority", "unverified"),
                 "experiment": job.get("experiment"),
                 "path": logical_rel(path),
@@ -1280,6 +1281,58 @@ def adaptive_running_jobs_state() -> dict[str, Any]:
         "held_pending_job_count": held_pending_count,
         "claimable_pending_job_count": pending_count - held_pending_count,
     }
+
+
+def live_adaptive_resource_gate(job: dict[str, Any]) -> dict[str, Any]:
+    """Project the registered live worker's resource receipt, without promotion."""
+    gate = bind_guard_to_adaptive_job({
+        "candidate": job.get("candidate_id"), "verdict": "running",
+        "next_action": "wait_for_gate_completion",
+        "driver_result_json_present": False,
+    }, job)
+    gate.update({"source": "live_adaptive_job",
+                 "execution_mode": job.get("execution_mode"),
+                 "timing_authority": job.get("timing_authority"),
+                 "resource_budget": job.get("resource_budget"),
+                 "terminal_authority": "Adaptive terminal receipt and reflection; resource observations grant no score or qualification."})
+    resources = job.get("execution_resources") or {}
+    if not isinstance(resources, dict):
+        return gate
+    name = resources.get("guard_path")
+    if job.get("worker_pid_live") is not True or not isinstance(name, str):
+        return gate
+    path = (ROOT / name).resolve()
+    if not path.is_relative_to(ROOT.resolve()):
+        return gate
+    try:
+        stat = path.stat()
+        age = dt.datetime.now(dt.timezone.utc).timestamp() - stat.st_mtime
+        guard_bytes = path.read_bytes()
+        guard = json.loads(guard_bytes)
+    except (OSError, json.JSONDecodeError):
+        return gate
+    if not isinstance(guard, dict):
+        return gate
+    cgroup = guard.get("cgroup") or {}
+    if not isinstance(cgroup, dict):
+        return gate
+    if not (0 <= age <= 120 and guard.get("label") == job.get("job_id")
+            and guard.get("schema") == "gamma.enwiki9.resource-guard-receipt.v3"
+            and guard.get("status") == "running"
+            and isinstance(resources.get("cgroup_inode"), int)
+            and cgroup.get("inode") == resources["cgroup_inode"]
+            and cgroup.get("path") == resources.get("cgroup_path")):
+        return gate
+    gate.update(resource_guard_metrics(guard))
+    gate.update({"rss_guard_json": logical_rel(path),
+                 "rss_guard_json_present": True,
+                 "rss_guard_json_bytes": len(guard_bytes),
+                 "rss_guard_json_mtime_utc": dt.datetime.fromtimestamp(stat.st_mtime, dt.timezone.utc).replace(microsecond=0).isoformat(),
+                 "rss_guard_json_sha256": hashlib.sha256(guard_bytes).hexdigest(),
+                 "resource_guard_flags": guard.get("guards"),
+                 "resource_guard_declared_limit_bytes": cgroup.get("requested_memory_max_bytes"),
+                 "source": "live_adaptive_resource_guard"})
+    return gate
 
 
 def bound_status_json(reference: dict[str, Any]) -> dict[str, Any]:
@@ -1636,6 +1689,11 @@ def active_gate_status_state(
         "source_processes_live",
         "observer_progress",
         "terminal_authority",
+        "execution_mode",
+        "timing_authority",
+        "resource_budget",
+        "resource_guard_flags",
+        "resource_guard_declared_limit_bytes",
     ):
         if key in gate:
             row[key] = gate.get(key)
@@ -2254,16 +2312,7 @@ def receipt(
                 live_job = live_jobs[0]
                 candidate = live_job.get("candidate_id")
                 scope = live_job.get("gate_size")
-                gate = bind_guard_to_adaptive_job(
-                    {
-                        "candidate": candidate,
-                        "verdict": "running",
-                        "next_action": "wait_for_gate_completion",
-                        "source": "live_adaptive_job",
-                        "driver_result_json_present": False,
-                    },
-                    live_job,
-                )
+                gate = live_adaptive_resource_gate(live_job)
             else:
                 candidate = None
                 scope = None
@@ -2534,6 +2583,9 @@ def render_md(data: dict[str, Any]) -> str:
         f"- Driver result present: `{fmt_bool(gate.get('driver_result_json_present'))}`",
         f"- RSS guard JSON: `{gate.get('rss_guard_json') or 'not present'}`",
         f"- RSS guard present: `{fmt_bool(gate.get('rss_guard_json_present'))}`",
+        f"- Execution mode: `{gate.get('execution_mode') or 'unverified'}`",
+        f"- Timing authority: `{gate.get('timing_authority') or 'unverified'}`",
+        f"- Declared memory envelope bytes: `{fmt_int(gate.get('resource_guard_declared_limit_bytes'))}`",
         f"- Active scorer observed: `{fmt_bool(proc_state.get('active_scorer_observed'))}`",
     ]
     codec_progress = (
