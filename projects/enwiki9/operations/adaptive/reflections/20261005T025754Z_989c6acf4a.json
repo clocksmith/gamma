@@ -1,0 +1,80 @@
+{
+  "attribution": {
+    "causalConfidence": "high",
+    "controlsEquivalent": null,
+    "failureClass": "infrastructure-failure",
+    "localizedCause": "First guard sample observed taskset before it narrowed child affinity to assignedCPU12."
+  },
+  "candidateId": "lexth11c_recompress_full1g_q0_v2",
+  "candidateRevision": {
+    "candidateId": "lexth11c_recompress_full1g_q0_v2",
+    "candidateTreeSha256": "sha256:4416d7118b1c4c7bf084aae547442f3345b3a784e48e4ee676f9b8af43dd8ba0",
+    "receipt": {
+      "path": "operations/adaptive/candidate-revisions/lexth11c_recompress_full1g_q0_v2/20261005T025751428004Z_4416d7118b1c.json",
+      "sha256": "sha256:1931a09451f37b87cc9dc52a4dfea2f49102c74b0ecd7cd11b6494a3605cd6d1"
+    }
+  },
+  "decision": {
+    "killPredicatesPass": false,
+    "nextGateBytes": null,
+    "promotionPredicatesPass": false,
+    "rationale": "Repeat as a new prospective candidate with identical native source and staged data; pin controllerCPU12 before spawning any owned worker.",
+    "verdict": "retry"
+  },
+  "evidence": [
+    {
+      "path": "run_logs/adaptive/20261005T025754Z_989c6acf4a.resources/guard.json",
+      "sha256": "sha256:91e4ab7bdf3f76d2a03ea087b6435fe872269560ba2878cbba479f404bb18a9d"
+    }
+  ],
+  "experiment": {
+    "path": "operations/adaptive/experiments/lexth11c_recompress_full1g_q0_v2.json",
+    "sha256": "sha256:1ffe3915adf7372412325c2d9ec897b3bc0ec49db2d87a7bf89a29d8b254b935"
+  },
+  "generatedUtc": "2026-10-05T03:01:23+00:00",
+  "hypothesis": {
+    "rationale": "Codec and canary never executed.",
+    "verdict": "not-tested"
+  },
+  "job": {
+    "path": "operations/adaptive/failed/949_20261005T025754Z_989c6acf4a.json",
+    "sha256": "sha256:2321ac921c470890faae694fe9c9653a4c9aeb2be2d4b264f7850381ff7ee08d"
+  },
+  "knowledge": {
+    "retiredDimensions": [],
+    "transferableLessons": [
+      "Pin the admission controller itself to the assigned CPU before it spawns the guard, so every descendant inherits the correct affinity from birth."
+    ],
+    "uncertainties": []
+  },
+  "measurementAssertions": [],
+  "measurements": {
+    "idealBitsSaved": null,
+    "memoryRatio": null,
+    "minimumPartitionIdealBitsSaved": null,
+    "netBytesSaved": null,
+    "positiveSegmentFraction": null,
+    "runtimeRatio": null,
+    "scopeBytes": null,
+    "scopeSymbols": null,
+    "sourceBytesDelta": null,
+    "transferRetention": null
+  },
+  "objective": {
+    "corpusBytes": 1000000000,
+    "corpusSha256": "159b85351e5f76e60cbe32e04c677847a9ecba3adc79addab6f4c6c7aa3744bc",
+    "objectiveDigest": "sha256:409b70547f901a3ac5fffd7fd7a1e1d77b05fb44d9e9d889be1337bd153706d7",
+    "objectiveId": "gamma-enwiki9-hutter-96m-v4",
+    "objectivePath": "contracts/research/v4/objective-contract.json",
+    "targetScoreBytes": 96000000
+  },
+  "reflectionId": "r-20261005t025754z_989c6acf4a",
+  "schema": "gamma.enwiki9.reflection-receipt.v1",
+  "validity": {
+    "classification": "infrastructure-failure",
+    "reasons": [
+      "Guard killed taskset during its initial inherited32-CPU affinity window before the adapter or codec executed; no donor measurement."
+    ],
+    "valid": false
+  }
+}
