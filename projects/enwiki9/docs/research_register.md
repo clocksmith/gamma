@@ -398,3 +398,40 @@ forward and documented surrogate;measure actual packed weights and native
 archives. Exact forward values do not establish native gradients, internal Torch
 state parity, useful optimization or compression gain. Preserve P/E/M/S;zero
 objective credit and no full-corpus claim.
+
+
+## 2026-10-04: user-directed competitive donor campaign
+
+Pinned Neel49/cmix-lex-transformer `lexth11c` at
+`653f64e5083e430503fbe3d885def946891e7ed0`, preserving GPLv3 and upstream
+attribution. All four released assets match GitHub SHA256/size metadata; all
+163 regular source-package members match the tag except its README. The
+released source tar, rather than earlier design notes, governs the rebuild.
+[Import](../operations/provenance/lexth11c_import_20261004.json).
+Downloaded files total99,313,750B; the12B argument file makes Gamma
+file-plus-option accounting99,313,762B. Actual payload92,559,456B and
+2,978,039B weights per copy satisfy S=A+2W+C. No locally reproduced score,
+rebuild, full inverse, repeat, timing qualification or objective credit yet.
+[Accounting](../operations/provenance/lexth11c_accounting_20261004.json).
+
+The independently claimed released-archive full1G decode is infrastructure
+evidence only: CPU2,12GiB cgroup/no swap,8GB scratch,360600s aggregate
+stop, restricted offline runtime with no source or canonical corpus mounted.
+[Experiment](../operations/adaptive/experiments/lexth11c_decode_full1g_q0_v1.json).
+Rebuild awaits provisioned clang/LLVM/lld17, GCC12 headers andUPX5.1.1;
+dependency-install authorization was requested explicitly under repository rules.
+The tag does not ship `train_lex.py`, `modal_train.py` or the exact run11 training
+schedule. Its1280-epoch statement is not assumed to mean1280 full-corpus passes.
+The new full-data training contract must resolve data coverage, prior alignment,
+optimizer/QAT schedule, deployed forward parity and assigned GPU resources
+before launch. Preserve all closed512-target and16-update contracts unchanged.
+
+Licensed Zmix source inspection identifies class-frequency weight coding and
+compact metadata as separate packaging adaptations. Its loader assumes
+uniform int4 values and includes lossy f32-to-bf16 conversion, so it is not a
+drop-in lossless recoder for this donor. Weight recoding and dead executable
+paths remain separate hypotheses behind donor reproduction; no Zig rewrite.
+[Inspection](../operations/provenance/zmix_source_inspection_20261004.json).
+Retain96M objective,95M stretch and98M intermediate gate. Full-corpus
+selection uses produced files, independently reconstructed outputs, repeat
+archives, vendor checks, isolated calibration and complete source/license closure.
