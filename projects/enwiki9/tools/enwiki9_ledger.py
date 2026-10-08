@@ -194,9 +194,14 @@ def start_payload(data, root):
         issues.append({"path": "docs/status_receipt.json", "reason": "operator receipt reports idle or safe launch while live or unverified jobs exist; inspect its timestamp and the existing observer before scheduling"})
     keys = ("id", "candidate_id", "state", "purpose", "scope", "source", "liveness", "progress",
             "execution_mode", "resource_budget", "timing_authority", "timeline")
+    project_status_path = "operations/runtime/project_status.json"
+    project_status = records.read(project_status_path) if (root / project_status_path).exists() else {"status": "active"}
+    archived = project_status.get("status") == "archived"
     return {"schema": "enwiki9_agent_start_v1", "generated_at": data["generated_at"], "host": data["host"],
         "project_root": str(root.resolve()), "objective": data["objective"],
-        "go": "Inspect evidence and ownership, choose one justified experiment or research question, use the adaptive workflow, record its outcome, and continue from the evidence.",
+        "project_status": project_status,
+        "go": ("Project archived by user decision. Preserve evidence; do not research, release queued jobs, or launch compute without explicit user reopening."
+               if archived else "Inspect evidence and ownership, choose one justified experiment or research question, use the adaptive workflow, record its outcome, and continue from the evidence."),
         "entry_points": {"instructions": "AGENTS.md", "workbench": "workbench/README.md",
             "prompts": "workbench/PROMPTS.md", "workflow": "ADAPTIVE_WORKFLOW.md", "record_map": "ledger/README.md",
             "tool_catalogue": "docs/tooling_inventory.md"},

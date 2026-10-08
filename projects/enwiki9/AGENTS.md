@@ -1,5 +1,19 @@
 # enwiki9 agent rules
 
+## Project archived by user decision (2026-10-08)
+
+The user stopped the entire project. The current authority is
+[project status](operations/runtime/project_status.json). Do not continue the
+donor campaign, autonomous research, training, compression, downloads, dependency
+installation, or queued execution. Earlier standing permissions and prospective
+handoffs below are historical and do not authorize work while archived.
+Read-only inspection, evidence preservation and explicitly requested archive
+maintenance remain available. Reopening requires a new explicit user instruction;
+generic "go", queue release, another device, or a historical contract is insufficient.
+Preserve all source, contracts, weights, results, licenses and failures. Do not
+delete artifacts as part of stopping. The objective was not achieved, and this
+resource decision does not establish scientific impossibility.
+
 Applies throughout `projects/enwiki9/`, including `ledger/` and `workbench/`.
 Obey [Gamma's instructions](../../AGENTS.md) and the applicable `CATSCAN.md`
 chain; a nearer instruction file may narrow these rules. Boundary changes

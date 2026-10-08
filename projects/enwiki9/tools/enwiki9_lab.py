@@ -2279,6 +2279,25 @@ def build_parser() -> argparse.ArgumentParser:
 def main() -> int:
     parser = build_parser()
     args = parser.parse_args()
+    project_status_path = ROOT / "operations/runtime/project_status.json"
+    if project_status_path.exists():
+        try:
+            project_status = load_json(project_status_path)
+            if project_status.get("status") not in {"active", "archived"}:
+                raise ValueError("invalid project status")
+        except (OSError, ValueError, AttributeError) as exc:
+            parser.error(f"cannot establish project execution authority: {exc}")
+        archive_commands = {
+            "start", "records", "status", "proposals", "exclusions", "productivity",
+            "hold", "cancel", "reflect", "sync-reflection-exclusions", "refresh",
+            "freeze-history",
+        }
+        if project_status["status"] == "archived" and args.command not in archive_commands:
+            parser.error(
+                "enwiki9 is archived by user decision; new research, queue release, "
+                "and execution require explicit user reopening. "
+                "See operations/runtime/project_status.json."
+            )
     if args.command == "freeze-history":
         from gamma_enwiki9.evidence.history import freeze_verification
         artifact = args.artifact.resolve().relative_to(ROOT).as_posix()

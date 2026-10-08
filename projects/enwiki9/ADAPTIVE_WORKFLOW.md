@@ -1,5 +1,12 @@
 # enwiki9 Adaptive Workflow
 
+**Project archived on 2026-10-08 by user instruction.** This manual now describes
+historical operations. [Project status](operations/runtime/project_status.json)
+overrides all launch, tuning, discovery and continuation instructions below.
+All pending jobs are held. The lab blocks new research, queue release and
+execution; inspection, holds, cancellation and preservation remain available.
+No work resumes without explicit user reopening, including work on another device.
+
 This is the command manual for enwiki9 research. Follow [AGENTS.md](AGENTS.md)
 for permissions and evidence invariants, and the [record map](ledger/README.md#record-map)
 for canonical storage. Run commands from `gamma/projects/enwiki9/`. Uppercase

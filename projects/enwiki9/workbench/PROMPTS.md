@@ -1,5 +1,9 @@
 # Workbench prompts
 
+These prompts are historical: the user archived the entire project on 2026-10-08.
+They must not restart research or compute. Explicit user reopening is required;
+see [project status](../operations/runtime/project_status.json).
+
 Use the system prompt with one task. Replace bracketed names with actual
 candidates or questions. Commands run from `gamma/projects/enwiki9/`.
 

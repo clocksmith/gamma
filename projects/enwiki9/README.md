@@ -1,5 +1,13 @@
 # enwiki9
 
+**Archived by user decision on 2026-10-08.** Active research and compute are
+stopped. All 27 pending jobs are held; the lab refuses new research, queue release
+and execution while archived. Source and evidence remain available for inspection.
+Reopening requires explicit user authorization. See the
+[retirement record](operations/runtime/project_status.json) and
+[research register](docs/research_register.md). The descriptions below preserve
+the historical objective and workbench; they are not instructions to resume.
+
 Compression research toward exact reconstruction of canonical enwik9's
 1,000,000,000 bytes with a fully counted score at or below 96,000,000 bytes.
 The stretch target is 95,000,000 complete bytes. Research prioritizes

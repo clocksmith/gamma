@@ -4,7 +4,10 @@ Parent: [Gamma research projects](../CATSCAN.md)
 
 ## Target
 
-Produce a Gamma-authored codec reconstructing enwik9 exactly with a counted score at or below 96,000,000 bytes and bound resource evidence. Preserve historical 105M/99M/90M contracts.
+Preserve the archived research and its evidence after the user's 2026-10-08
+retirement decision. The unachieved historical target remains a Gamma-authored
+codec reconstructing enwik9 exactly at or below 96,000,000 counted bytes with
+bound resource evidence. Preserve all 105M/99M/90M/96M contracts.
 
 ## Authority
 
@@ -21,6 +24,11 @@ Candidates, source closures, experiments, execution, evidence and delivery.
 
 ## Invariants
 
+- [Project status](operations/runtime/project_status.json) withdraws research and
+  execution authority while archived. The lab rejects research, queue release and
+  execution before side effects; inspection and archive maintenance remain available.
+- Reopening requires explicit user authorization; historical handoffs and contracts
+  cannot restart the project. Retirement earns no score credit or impossibility claim.
 - Missing inversion, determinism, dependencies, resource or accounting evidence fails closed.
 - Measured candidates and bound hashes remain immutable; semantic mutations receive new identities.
 - Component gains require joint replay; forecasts are not additive score credit.
