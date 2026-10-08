@@ -1,5 +1,10 @@
 # Research workbench
 
+**Archived on 2026-10-08.** The user stopped the entire project. Historical task
+prompts and "go" instructions below do not authorize research or compute. Follow
+the [retirement record](../operations/runtime/project_status.json); reopening
+requires explicit user authorization.
+
 Use [AGENTS.md](../AGENTS.md) for rules and permissions and
 [ADAPTIVE_WORKFLOW.md](../ADAPTIVE_WORKFLOW.md) for all commands. Run them from
 `gamma/projects/enwiki9/`. [PROMPTS.md](PROMPTS.md) supplies copyable task wording.

@@ -2,7 +2,7 @@
 
 Generated from the current certificate, gate receipts, resource guards, and process table.
 
-- Generated at UTC: `2026-10-06T07:37:58+00:00`
+- Generated at UTC: `2026-10-08T15:01:47+00:00`
 
 ## Target State
 
@@ -40,8 +40,8 @@ Generated from the current certificate, gate receipts, resource guards, and proc
 - Safe to launch candidate gate: `false`
 - Terminal verdict present: `false`
 - Pending adaptive jobs: `27`
-- Held pending adaptive jobs: `26`
-- Claimable pending adaptive jobs: `1`
+- Held pending adaptive jobs: `27`
+- Claimable pending adaptive jobs: `0`
 - Canonical release bundles: `4`
 - Validated release run receipts: `0`
 - Validated failed release attempts: `0`

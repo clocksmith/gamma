@@ -33,6 +33,9 @@ Provide a workbench for model evaluation, translation distillation, SAME-R capab
 - Training/evaluation logs `[run-contract]` with dataset, schedule and device; compression freezes its lane's experiment contract.
 - Reporting rebuilds are strictly decoupled from raw training/eval execution and safe against in-flight jobs.
 - Compression preserves original bytes, complete accounting and separate diagnostic/qualification authority.
+- The enwiki9 lane is archived by user decision on 2026-10-08. Its project status
+  withdraws research and execution authority until explicit user reopening;
+  historical objectives and evidence remain intact.
 
 ## Acceptance
 

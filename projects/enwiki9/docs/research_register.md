@@ -1,6 +1,22 @@
 # Research Register
 [Record index](research_register/README.md) | [Earlier records](research_register/archive/README.md)
 
+## 2026-10-08 - Retire the entire project as active research
+
+The user explicitly stopped the whole enwiki9 project after reviewing its resource
+cost and lack of verified full-corpus achievement. This is a resource-allocation
+decision, not a scientific rejection of every algorithm or an impossibility proof.
+The [project status](../operations/runtime/project_status.json) records current
+authority, retained evidence and the host inspection. No compute worker was live
+on host 128; all 27 pending jobs are now held. The historical terminal HORIZON
+receipt remains preserved. The released donor decode failed encoded-tail
+restoration and earned no full-corpus score; the rebuilt full replay exceeded
+its diagnostic memory envelope. Neither failed attempt becomes a result by
+retirement. Source, licenses, weights, contracts, results and failures remain
+intact. The lab rejects research, queue release and execution while archived;
+read-only queries and preservation remain available. Only explicit user reopening
+can restore research authority. Earlier next-action instructions are historical.
+
 ## 2026-09-23 - Implement coverage/preservation comparison; hold before launch
 
 The user-requested [four-arm comparison](fx2_coverage_preservation_20260923.md)

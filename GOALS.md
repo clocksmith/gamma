@@ -40,14 +40,21 @@ Evaluating and transferring capabilities across compact language models, transla
 
 ## Lossless Compression Research
 
-For enwiki9, the active end-to-end objective is the versioned
+**The user retired the entire enwiki9 project on 2026-10-08.** Preserve its source,
+contracts and evidence as an archive; stop autonomous research and compute.
+[Project status](projects/enwiki9/operations/runtime/project_status.json) is the
+current operational authority. Explicit user reopening is required before new
+work. The historical objectives and handoffs below remain evidence, not launch
+permission. Retirement does not claim objective achievement or impossibility.
+
+For enwiki9, the preserved end-to-end objective is the versioned
 [96M complete-byte witness](projects/enwiki9/contracts/research/v4/objective-contract.json):
 an exact deterministic full-corpus archive, complete counted package, independent
 resource verification, source/license closure and reproducible submission.
 The lane's adaptive workflow governs bounded implementation, prediction research,
 confirmation and scale decisions; historical 105M, 99M and 90M evidence stays intact.
 
-The current enwiki9 priority is a better exported compact model from the preserved
+Before retirement, the enwiki9 priority was a better exported compact model from the preserved
 competitive parent, under the 96M target and 95M stretch. Judge actual native
 archives and packed-model costs separately before combining the counted total;
 keep metadata out of the next training comparison. Preserve the XML/English
