@@ -1,114 +1,12 @@
-const SINGLE_GENERATOR_POLICIES = Object.freeze({
-  delivery: "own-or-adjacent-facilities",
-  slotContention: "initiative-order-no-reservations"
-});
-
-function validateSingleGeneratorRule(config, rule) {
-  if (rule === undefined || rule === null) throw new TypeError("The local single-Generator rule is required.");
-  if (!rule || typeof rule !== "object" || Array.isArray(rule)) {
-    throw new TypeError("singleGeneratorRule must be an object.");
-  }
-  if (rule.id !== "single-generator-default") {
-    throw new RangeError("singleGeneratorRule.id must be single-generator-default.");
-  }
-  if (rule.ordinaryGeneratorLimit !== 1) {
-    throw new RangeError("single-generator-default requires exactly one ordinary Generator.");
-  }
-  const expectedLocations = ["grid_reactor", "renewable_basin"];
-  if (
-    !rule.locations ||
-    typeof rule.locations !== "object" ||
-    Array.isArray(rule.locations) ||
-    Object.keys(rule.locations).sort().join(",") !== expectedLocations.join(",")
-  ) {
-    throw new RangeError(
-      "single-generator-default requires exact grid_reactor and renewable_basin location rules."
-    );
-  }
-  const sourceIds = new Set(config.powerSources.map((source) => source.id));
-  for (const [locationId, location] of Object.entries(rule.locations)) {
-    if (!sourceIds.has(location.sourceId)) {
-      throw new RangeError(
-        `single-generator-default location ${locationId} has unknown source ${location.sourceId}.`
-      );
-    }
-    if (!Number.isInteger(location.constructionCost) || location.constructionCost < 0) {
-      throw new RangeError(
-        `single-generator-default location ${locationId} requires a non-negative constructionCost.`
-      );
-    }
-  }
-  for (const [field, expected] of [
-    ["localDelivery", SINGLE_GENERATOR_POLICIES.delivery],
-    ["slotContention", SINGLE_GENERATOR_POLICIES.slotContention]
-  ]) {
-    if (rule[field] !== expected) {
-      throw new RangeError(`single-generator-default ${field} must be ${expected}.`);
-    }
-  }
-  return structuredClone(rule);
-}
-
 export function canonicalRulesVariant(config) {
-  const lateCapabilityThreshold =
-    config.scoring.capabilityThresholds.find((entry) => entry.value >= 9);
-  return {
-    ...config.playRules,
-    singleGeneratorRule: structuredClone(config.singleGeneratorRule),
-    auditMultiplier: 1,
-    fundConservative: 2,
-    fundVenture: 4,
-    ventureScrutiny: 2,
-    facilityCost: 2,
-    deployComputeCost: 1,
-    customerMandate: config.scoring.customerMandate,
-    customerMandateSchedule: structuredClone(
-      config.scoring.customerMandateSchedule
-    ),
-    capabilityThresholdMandate: null,
-    lateCapabilityThresholdMandate: lateCapabilityThreshold?.mandate ?? 2,
-    agiAchievement: structuredClone(config.agiAchievement),
-    finalPoweredFacilityMandate: 0,
-    customerCapabilityOffset: 0,
-    startingAgentsDeployed: config.playerSupply.startingAgents,
-    coalitionStartingRunway: null,
-    imperialStartingCompute: null,
-    verticalStartingCompute: null,
-    foundryStartingCompute: config.factionRules.foundry.startingCompute,
-    safetyStartingTrust: null,
-    tacticsEnabled: false,
-    // Simulation-only intervention surface. Each entry names the canonical
-    // faction and ability suppressed for the entire match.
-    pausedFactionAbilities: []
-  };
+  if(config.board.layout !== 'shared-action-areas')throw new Error('Only the six-area rules are current.');
+  return {kind:'six-area-four-track-v1',pausedFactionAbilities:[]};
 }
-
-export const legacyPrePromotionRulesOverlay = Object.freeze({
-  customerMandateSchedule: null,
-});
-
-export function effectiveRulesVariant(config, overlay = {}) {
-  const canonical = canonicalRulesVariant(config);
-  for (const key of Object.keys(overlay)) {
-    if (!Object.hasOwn(canonical, key)) {
-      throw new RangeError(`Unsupported rules option: ${key}.`);
-    }
-  }
-  const effective = {
-    ...canonical,
-    ...overlay
-  };
-  if (
-    Object.hasOwn(overlay, "customerMandate") &&
-    !Object.hasOwn(overlay, "customerMandateSchedule")
-  ) {
-    effective.customerMandateSchedule = null;
-  }
-  if (Object.hasOwn(effective, "singleGeneratorRule")) {
-    effective.singleGeneratorRule = validateSingleGeneratorRule(
-      config,
-      effective.singleGeneratorRule
-    );
-  }
-  return effective;
+export function effectiveRulesVariant(config,overlay={}) {
+  if(!overlay||typeof overlay!=='object'||Array.isArray(overlay))throw new TypeError('rulesVariant must be an object');
+  const current=canonicalRulesVariant(config);
+  for(const key of Object.keys(overlay))if(!Object.hasOwn(current,key))throw new RangeError(`Unsupported rules option: ${key}`);
+  if(overlay.kind!==undefined&&overlay.kind!==current.kind)throw new RangeError('Alternate rules modes are unavailable.');
+  if(overlay.pausedFactionAbilities!==undefined&&!Array.isArray(overlay.pausedFactionAbilities))throw new TypeError('pausedFactionAbilities must be an array');
+  return {...current,...structuredClone(overlay)};
 }
