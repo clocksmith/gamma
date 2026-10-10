@@ -48,7 +48,7 @@ real people. Do not force every scene into the same dystopian conclusion.
   passages and compiled ending fields for the player companion. The selected companion is published as an optional narrative at
   `/docs/world-and-institutions.html`; it is not required in the physical kit.
   The whole bible is never a player document. Internal means audience, not access control.
-- The game has one ruleset: a static map, local Power, and the twenty-four current
+- The game has one ruleset: six shared action areas, always-operating Facilities, and the twenty-four current
   Headlines. There is no selectable rules profile, connected Network, Link,
   Power market, Realignment, or Volatility module. Simulation parameter research
   must not reintroduce retired modes through unchecked options.
@@ -99,8 +99,7 @@ real people. Do not force every scene into the same dystopian conclusion.
 - The user-selected simplification candidate replaces personnel movement with
   persistent Agent assignments, removes Research Protection and numeric Power
   allocation, and scores recognized AGI within ordinary Mandate. Preserve the
-  six Core Actions, simultaneous selection, fictional institutions, infrastructure
-  geography, four Eras, and separate World Ending.
+  six Core Actions, simultaneous selection, fictional institutions, competition for limited Facility spaces, four Eras, and separate World Ending.
 - `web/` owns the browser implementation.
 - `tests/` owns contract, determinism, and probability checks.
 - `evidence/playtests/` owns observed sessions and receipts. Never present a simulated
@@ -191,3 +190,5 @@ common-seed comparison for any proposed rule delta, and explicit user approval.
   remote and is added to the canonical Deco workspace registry.
 - Do not invent a remote, deployment target, crowdfunding status, quote, or
   manufacturing commitment.
+
+User-selected 2026-10-09 smaller prototype supersedes earlier Power, hex geography, Trust milestones, and per-Era scoring provisions. Four tracks are Runway, Compute, Capability, and Reputation. All four revealed objectives score once from final holdings. Old sealed releases and evidence remain unchanged.

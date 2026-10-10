@@ -229,8 +229,8 @@ function leaderPredictability(outcomes) {
         (entry) => entry.round === round
       );
       if (!snapshot?.scores?.length) continue;
-      const high = Math.max(...snapshot.scores.map((entry) => entry.mandate));
-      const leaders = snapshot.scores.filter((entry) => entry.mandate === high);
+      const high = Math.max(...snapshot.players.map((entry) => entry.projectedScore));
+      const leaders = snapshot.players.filter((entry) => entry.projectedScore === high);
       numerator += leaders.filter((entry) => outcome.winnerSeats.includes(entry.seat)).length /
         leaders.length;
       denominator += 1;
@@ -265,14 +265,14 @@ function integritySummary(outcomes) {
       requiredTradeAcceptances += entry.metrics.requiredTradeAcceptances || 0;
       requiredTradeFailures += entry.metrics.requiredTradeFailures || 0;
       blockedAfterCommitment += entry.metrics.blockedAfterCommitment || 0;
-      for (const key of ["score", "trust", "customers", "compute", "capability", "facilities"]) {
+      for (const key of ["score", "reputation", "customers", "compute", "capability", "facilities"]) {
         if (!Number.isFinite(entry[key]) || entry[key] < 0) {
           details.push({ matchIndex, seat: entry.seat, id: `invalid_${key}`, value: entry[key] });
         }
       }
       const actionCount = Object.values(entry.metrics.actions || {})
         .reduce((sum, value) => sum + value, 0);
-      if (actionCount > 24) details.push({ matchIndex, seat: entry.seat, id: "action_amplification", value: actionCount });
+      if (actionCount !== 12) details.push({ matchIndex, seat: entry.seat, id: "action_amplification", value: actionCount });
     }
     if (seats.size !== outcome.standings.length) details.push({ matchIndex, id: "duplicate_seat" });
   }
@@ -584,7 +584,7 @@ function compactObservation(outcome, matchIndex) {
       capability: entry.capability,
       facilities: entry.facilities,
       customers: entry.customers,
-      trust: entry.trust,
+      reputation: entry.reputation,
       agiDeclared: entry.agiDeclared,
       openingActions: entry.metrics.openingActions,
       actions: entry.metrics.actions,
@@ -730,13 +730,13 @@ class BatchAccumulator {
       this.integrity.requiredTradeFailures += entry.metrics.requiredTradeFailures || 0;
       this.integrity.blockedAfterCommitment +=
         entry.metrics.blockedAfterCommitment || 0;
-      for (const key of ["score", "trust", "customers", "compute", "capability", "facilities"]) {
+      for (const key of ["score", "reputation", "customers", "compute", "capability", "facilities"]) {
         if (!Number.isFinite(entry[key]) || entry[key] < 0) {
           this.integrity.details.push({ matchIndex, seat: entry.seat, id: `invalid_${key}`, value: entry[key] });
         }
       }
       const actionCount = Object.values(entry.metrics.actions || {}).reduce((sum, value) => sum + value, 0);
-      if (actionCount > 24) this.integrity.details.push({ matchIndex, seat: entry.seat, id: "action_amplification", value: actionCount });
+      if (actionCount !== 12) this.integrity.details.push({ matchIndex, seat: entry.seat, id: "action_amplification", value: actionCount });
     }
     if (seenSeats.size !== outcome.standings.length) this.integrity.details.push({ matchIndex, id: "duplicate_seat" });
     for (const left of outcome.standings) {
@@ -755,8 +755,8 @@ class BatchAccumulator {
     }
     for (const snapshot of outcome.matchMetrics?.productionSnapshots || []) {
       if (!snapshot?.scores?.length) continue;
-      const high = Math.max(...snapshot.scores.map((entry) => entry.mandate));
-      const leaders = snapshot.scores.filter((entry) => entry.mandate === high);
+      const high = Math.max(...snapshot.players.map((entry) => entry.projectedScore));
+      const leaders = snapshot.players.filter((entry) => entry.projectedScore === high);
       const row = this.roundLeaders.get(snapshot.round) || { numerator: 0, denominator: 0 };
       row.numerator += leaders.filter((entry) => winningSeats.has(entry.seat)).length / leaders.length;
       row.denominator += 1;

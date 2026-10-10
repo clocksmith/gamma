@@ -382,8 +382,8 @@ if (packageDocument.version !== gameVersion.gameVersion) {
   );
 }
 if (
-  gameVersion.contracts?.reportSchemaVersion !== 7 ||
-  gameVersion.contracts?.replaySchemaVersion !== 3 ||
+  gameVersion.contracts?.reportSchemaVersion !== 8 ||
+  gameVersion.contracts?.replaySchemaVersion !== 4 ||
   gameVersion.contracts?.decisionSchemaVersion !== 2
 ) {
   throw new Error("Current report, replay, and decision contract versions are inconsistent.");
@@ -411,5 +411,5 @@ for (const path of proceduralCandidateDocuments) {
 }
 
 process.stdout.write(
-  `check-project: ${required.length} required files, ${jsonCount} authored JSON files, executable game ${gameVersion.gameVersion}, physical candidate ${gameVersion.rulesCandidate.version}, report schema 7, unified strategic-unsolvability contract, 40-card Training contract, structurally complete thematic manifest\n`
+  `check-project: ${required.length} required files, ${jsonCount} authored JSON files, executable game ${gameVersion.gameVersion}, physical candidate ${gameVersion.rulesCandidate.version}, report schema 8, unified strategic-unsolvability contract, 40-card Training contract, structurally complete thematic manifest\n`
 );

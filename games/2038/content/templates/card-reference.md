@@ -1,50 +1,222 @@
-# ${content.worldCopy.title} — Card and Board Reference
+# ${game.title} — Component reference
 
 ${excerpts.rules.card-authority}
 
-## Governance Board Era panels
-
 ${excerpts.rules.era-panels}
-
-### ${content.referenceCards.byId.era_demo.name}
-
-**${content.referenceCards.byId.era_demo.strapline}**
-
-**Rules:** ${content.referenceCards.byId.era_demo.rulesText}
-
-**Unlocks:** ${content.referenceCards.byId.era_demo.unlockText}
-
-### ${content.referenceCards.byId.era_scale.name}
-
-**${content.referenceCards.byId.era_scale.strapline}**
-
-**Rules:** ${content.referenceCards.byId.era_scale.rulesText}
-
-**Unlocks:** ${content.referenceCards.byId.era_scale.unlockText}
-
-### ${content.referenceCards.byId.era_narrative.name}
-
-**${content.referenceCards.byId.era_narrative.strapline}**
-
-**Rules:** ${content.referenceCards.byId.era_narrative.rulesText}
-
-**Unlocks:** ${content.referenceCards.byId.era_narrative.unlockText}
-
-### ${content.referenceCards.byId.era_claim.name}
-
-**${content.referenceCards.byId.era_claim.strapline}**
-
-**Rules:** ${content.referenceCards.byId.era_claim.rulesText}
-
-**Unlocks:** ${content.referenceCards.byId.era_claim.unlockText}
-
-## Three-panel player aid
 
 ${excerpts.rules.player-aids}
 
-### ${content.referenceCards.playerReferences.0.name}
+### ${content.referenceCards.byId.era_demo.name}
 
-**Front:**
+${content.referenceCards.byId.era_demo.rulesText}
+
+${content.referenceCards.byId.era_demo.unlockText}
+
+### ${content.referenceCards.byId.era_scale.name}
+
+${content.referenceCards.byId.era_scale.rulesText}
+
+${content.referenceCards.byId.era_scale.unlockText}
+
+### ${content.referenceCards.byId.era_narrative.name}
+
+${content.referenceCards.byId.era_narrative.rulesText}
+
+${content.referenceCards.byId.era_narrative.unlockText}
+
+### ${content.referenceCards.byId.era_claim.name}
+
+${content.referenceCards.byId.era_claim.rulesText}
+
+${content.referenceCards.byId.era_claim.unlockText}
+
+### ${content.factions.byId.coalition_lab.name}
+
+**Runway:** ${content.factions.byId.coalition_lab.starts.runway}. **Compute:** ${content.factions.byId.coalition_lab.starts.compute}. **Capability:** ${content.factions.byId.coalition_lab.starts.capability}. **Reputation:** ${content.factions.byId.coalition_lab.starts.reputation}. **Customers:** ${content.factions.byId.coalition_lab.starts.customers}. 
+
+${content.factions.byId.coalition_lab.abilities.0.text}
+
+### ${content.factions.byId.platform_empire.name}
+
+**Runway:** ${content.factions.byId.platform_empire.starts.runway}. **Compute:** ${content.factions.byId.platform_empire.starts.compute}. **Capability:** ${content.factions.byId.platform_empire.starts.capability}. **Reputation:** ${content.factions.byId.platform_empire.starts.reputation}. **Customers:** ${content.factions.byId.platform_empire.starts.customers}. 
+
+${content.factions.byId.platform_empire.abilities.0.text}
+
+### ${content.factions.byId.imperial_research_lab.name}
+
+**Runway:** ${content.factions.byId.imperial_research_lab.starts.runway}. **Compute:** ${content.factions.byId.imperial_research_lab.starts.compute}. **Capability:** ${content.factions.byId.imperial_research_lab.starts.capability}. **Reputation:** ${content.factions.byId.imperial_research_lab.starts.reputation}. **Customers:** ${content.factions.byId.imperial_research_lab.starts.customers}. 
+
+${content.factions.byId.imperial_research_lab.abilities.0.text}
+
+### ${content.factions.byId.vertical_empire.name}
+
+**Runway:** ${content.factions.byId.vertical_empire.starts.runway}. **Compute:** ${content.factions.byId.vertical_empire.starts.compute}. **Capability:** ${content.factions.byId.vertical_empire.starts.capability}. **Reputation:** ${content.factions.byId.vertical_empire.starts.reputation}. **Customers:** ${content.factions.byId.vertical_empire.starts.customers}. 
+
+${content.factions.byId.vertical_empire.abilities.0.text}
+
+### ${content.factions.byId.safety_laboratory.name}
+
+**Runway:** ${content.factions.byId.safety_laboratory.starts.runway}. **Compute:** ${content.factions.byId.safety_laboratory.starts.compute}. **Capability:** ${content.factions.byId.safety_laboratory.starts.capability}. **Reputation:** ${content.factions.byId.safety_laboratory.starts.reputation}. **Customers:** ${content.factions.byId.safety_laboratory.starts.customers}. 
+
+${content.factions.byId.safety_laboratory.abilities.0.text}
+
+### ${content.factions.byId.foundry.name}
+
+**Runway:** ${content.factions.byId.foundry.starts.runway}. **Compute:** ${content.factions.byId.foundry.starts.compute}. **Capability:** ${content.factions.byId.foundry.starts.capability}. **Reputation:** ${content.factions.byId.foundry.starts.reputation}. **Customers:** ${content.factions.byId.foundry.starts.customers}. 
+
+${content.factions.byId.foundry.abilities.0.text}
+
+### ${content.headlines.byId.ten_dollar_intelligence.name}
+
+${content.headlines.byId.ten_dollar_intelligence.text}
+
+### ${content.headlines.byId.employee_free_unicorn.name}
+
+${content.headlines.byId.employee_free_unicorn.text}
+
+### ${content.headlines.byId.synthetic_celebrity.name}
+
+${content.headlines.byId.synthetic_celebrity.text}
+
+### ${content.headlines.byId.open_weights_drop.name}
+
+${content.headlines.byId.open_weights_drop.text}
+
+### ${content.headlines.byId.professional_exam_sweep.name}
+
+${content.headlines.byId.professional_exam_sweep.text}
+
+### ${content.headlines.byId.human_original_guarantee.name}
+
+${content.headlines.byId.human_original_guarantee.text}
+
+### ${content.headlines.byId.humanoid_factory_gate.name}
+
+${content.headlines.byId.humanoid_factory_gate.text}
+
+### ${content.headlines.byId.reactor_restart_one_model.name}
+
+${content.headlines.byId.reactor_restart_one_model.text}
+
+### ${content.headlines.byId.export_controls.name}
+
+${content.headlines.byId.export_controls.text}
+
+### ${content.headlines.byId.emergency_power_authority.name}
+
+${content.headlines.byId.emergency_power_authority.text}
+
+### ${content.headlines.byId.last_plumber_boom.name}
+
+${content.headlines.byId.last_plumber_boom.text}
+
+### ${content.headlines.byId.wartime_water_bridge.name}
+
+${content.headlines.byId.wartime_water_bridge.text}
+
+### ${content.headlines.byId.ai_written_law.name}
+
+${content.headlines.byId.ai_written_law.text}
+
+### ${content.headlines.byId.benchmark_is_economy.name}
+
+${content.headlines.byId.benchmark_is_economy.text}
+
+### ${content.headlines.byId.weights_on_internet.name}
+
+${content.headlines.byId.weights_on_internet.text}
+
+### ${content.headlines.byId.cognitive_donor_clinics.name}
+
+${content.headlines.byId.cognitive_donor_clinics.text}
+
+### ${content.headlines.byId.human_signature.name}
+
+${content.headlines.byId.human_signature.text}
+
+### ${content.headlines.byId.analog_havens.name}
+
+${content.headlines.byId.analog_havens.text}
+
+### ${content.headlines.byId.autonomous_corporation.name}
+
+${content.headlines.byId.autonomous_corporation.text}
+
+### ${content.headlines.byId.recursive_self_improvement.name}
+
+${content.headlines.byId.recursive_self_improvement.text}
+
+### ${content.headlines.byId.agent_swarm_escapes_scope.name}
+
+${content.headlines.byId.agent_swarm_escapes_scope.text}
+
+### ${content.headlines.byId.agi_blog_post.name}
+
+${content.headlines.byId.agi_blog_post.text}
+
+### ${content.headlines.byId.biological_colocation.name}
+
+${content.headlines.byId.biological_colocation.text}
+
+### ${content.headlines.byId.limb_liquidity.name}
+
+${content.headlines.byId.limb_liquidity.text}
+
+### ${content.mandates.byId.quarter_humanity_notices.name}
+
+${content.mandates.byId.quarter_humanity_notices.rulesText}
+
+### ${content.mandates.byId.continent_signs_loi.name}
+
+${content.mandates.byId.continent_signs_loi.rulesText}
+
+### ${content.mandates.byId.building_has_weather.name}
+
+${content.mandates.byId.building_has_weather.rulesText}
+
+### ${content.mandates.byId.stack_reaches_horizon.name}
+
+${content.mandates.byId.stack_reaches_horizon.rulesText}
+
+### ${content.mandates.byId.voluntary_coordination_triumphs.name}
+
+${content.mandates.byId.voluntary_coordination_triumphs.rulesText}
+
+### ${content.mandates.byId.legibility_offensive.name}
+
+${content.mandates.byId.legibility_offensive.rulesText}
+
+### ${content.mandates.byId.national_champion_without_nationalization.name}
+
+${content.mandates.byId.national_champion_without_nationalization.rulesText}
+
+### ${content.mandates.byId.model_ate_tuesday.name}
+
+${content.mandates.byId.model_ate_tuesday.rulesText}
+
+### ${content.mandates.byId.compute_new_weather.name}
+
+${content.mandates.byId.compute_new_weather.rulesText}
+
+### ${content.mandates.byId.zero_incident_quarter.name}
+
+${content.mandates.byId.zero_incident_quarter.rulesText}
+
+### ${content.mandates.byId.responsible_acceleration.name}
+
+${content.mandates.byId.responsible_acceleration.rulesText}
+
+### ${content.mandates.byId.markets_prefer_destiny.name}
+
+${content.mandates.byId.markets_prefer_destiny.rulesText}
+
+### ${content.projects.byId.upgrade.name}
+
+${content.projects.byId.upgrade.frontText}
+
+${content.projects.byId.upgrade.backText}
+
+### ${content.referenceCards.playerReferences.0.name}
 
 - ${content.referenceCards.playerReferences.0.frontText.0}
 - ${content.referenceCards.playerReferences.0.frontText.1}
@@ -52,9 +224,6 @@ ${excerpts.rules.player-aids}
 - ${content.referenceCards.playerReferences.0.frontText.3}
 - ${content.referenceCards.playerReferences.0.frontText.4}
 - ${content.referenceCards.playerReferences.0.frontText.5}
-
-**Back:**
-
 - ${content.referenceCards.playerReferences.0.backText.0}
 - ${content.referenceCards.playerReferences.0.backText.1}
 - ${content.referenceCards.playerReferences.0.backText.2}
@@ -64,32 +233,25 @@ ${excerpts.rules.player-aids}
 
 ### ${content.referenceCards.playerReferences.1.name}
 
-**Front:**
-
 - ${content.referenceCards.playerReferences.1.frontText.0}
 - ${content.referenceCards.playerReferences.1.frontText.1}
 - ${content.referenceCards.playerReferences.1.frontText.2}
 - ${content.referenceCards.playerReferences.1.frontText.3}
 - ${content.referenceCards.playerReferences.1.frontText.4}
-
-**Back:**
-
+- ${content.referenceCards.playerReferences.1.frontText.5}
 - ${content.referenceCards.playerReferences.1.backText.0}
 - ${content.referenceCards.playerReferences.1.backText.1}
 - ${content.referenceCards.playerReferences.1.backText.2}
 - ${content.referenceCards.playerReferences.1.backText.3}
+- ${content.referenceCards.playerReferences.1.backText.4}
+- ${content.referenceCards.playerReferences.1.backText.5}
 
 ### ${content.referenceCards.playerReferences.2.name}
-
-**Front:**
 
 - ${content.referenceCards.playerReferences.2.frontText.0}
 - ${content.referenceCards.playerReferences.2.frontText.1}
 - ${content.referenceCards.playerReferences.2.frontText.2}
 - ${content.referenceCards.playerReferences.2.frontText.3}
-
-**Back:**
-
 - ${content.referenceCards.playerReferences.2.backText.0}
 - ${content.referenceCards.playerReferences.2.backText.1}
 - ${content.referenceCards.playerReferences.2.backText.2}
@@ -98,592 +260,67 @@ ${excerpts.rules.player-aids}
 - ${content.referenceCards.playerReferences.2.backText.5}
 - ${content.referenceCards.playerReferences.2.backText.6}
 
-## Faction identity cards
+### ${content.gameConfig.board.tiles.0.name}
 
+${content.gameConfig.board.tiles.0.production}
 
+### ${content.gameConfig.board.tiles.1.name}
 
-### ${content.factions.byId.coalition_lab.name}
+${content.gameConfig.board.tiles.1.production}
 
-**CEO:** ${content.factions.byId.coalition_lab.chiefExecutive}
+### ${content.gameConfig.board.tiles.2.name}
 
-**Starts:** ${content.factions.byId.coalition_lab.starts.runway} ${terms.resources.runway}, ${content.factions.byId.coalition_lab.starts.compute} ${terms.resources.compute}, ${content.factions.byId.coalition_lab.starts.capability} ${terms.playerTracks.capability}, ${content.factions.byId.coalition_lab.starts.customers} ${terms.playerTracks.customers}, ${content.factions.byId.coalition_lab.starts.trust} ${terms.playerTracks.trust}; **Starting public Mandate:** ${content.factions.byId.coalition_lab.starts.startingPublicMandate} ${terms.playerTracks.mandate}.
+${content.gameConfig.board.tiles.2.production}
 
-**${content.factions.byId.coalition_lab.abilities.0.name} — ${content.factions.byId.coalition_lab.abilities.0.displayName}:** ${content.factions.byId.coalition_lab.abilities.0.text}
+### ${content.gameConfig.board.tiles.3.name}
 
-**Unlock Era:** ${content.factions.byId.coalition_lab.abilities.0.round}; ${content.factions.byId.coalition_lab.abilities.0.timingLabel}.
+${content.gameConfig.board.tiles.3.production}
 
-_${content.factions.byId.coalition_lab.abilities.0.flavorText}_
+### ${content.gameConfig.board.tiles.4.name}
 
-_${content.factions.byId.coalition_lab.lore.0.flavorText}_
+${content.gameConfig.board.tiles.4.production}
 
-### ${content.factions.byId.platform_empire.name}
+### ${content.gameConfig.board.tiles.5.name}
 
-**CEO:** ${content.factions.byId.platform_empire.chiefExecutive}
+${content.gameConfig.board.tiles.5.production}
 
-**Starts:** ${content.factions.byId.platform_empire.starts.runway} ${terms.resources.runway}, ${content.factions.byId.platform_empire.starts.compute} ${terms.resources.compute}, ${content.factions.byId.platform_empire.starts.capability} ${terms.playerTracks.capability}, ${content.factions.byId.platform_empire.starts.customers} ${terms.playerTracks.customers}, ${content.factions.byId.platform_empire.starts.trust} ${terms.playerTracks.trust}; **Starting public Mandate:** ${content.factions.byId.platform_empire.starts.startingPublicMandate} ${terms.playerTracks.mandate}.
+### ${content.gameConfig.trainingDeck.cards.0.name}
 
-**Customer ordinal:** ${content.factions.byId.platform_empire.starts.customerOrdinal} ${terms.playerTracks.customer}; **Next Deploy Capability:** ${content.factions.byId.platform_empire.starts.nextCustomerCapability} ${terms.playerTracks.capability}.
+${content.gameConfig.trainingDeck.cards.0.rulesText}
 
-**${content.factions.byId.platform_empire.abilities.0.name} — ${content.factions.byId.platform_empire.abilities.0.displayName}:** ${content.factions.byId.platform_empire.abilities.0.text}
+### ${content.gameConfig.trainingDeck.cards.1.name}
 
-**Unlock Era:** ${content.factions.byId.platform_empire.abilities.0.round}; ${content.factions.byId.platform_empire.abilities.0.timingLabel}.
+${content.gameConfig.trainingDeck.cards.1.rulesText}
 
-_${content.factions.byId.platform_empire.abilities.0.flavorText}_
+### ${content.gameConfig.trainingDeck.cards.2.name}
 
-_${content.factions.byId.platform_empire.lore.0.flavorText}_
+${content.gameConfig.trainingDeck.cards.2.rulesText}
 
-### ${content.factions.byId.imperial_research_lab.name}
+### ${content.gameConfig.trainingDeck.cards.3.name}
 
-**CEO:** ${content.factions.byId.imperial_research_lab.chiefExecutive}
+${content.gameConfig.trainingDeck.cards.3.rulesText}
 
-**Starts:** ${content.factions.byId.imperial_research_lab.starts.runway} ${terms.resources.runway}, ${content.factions.byId.imperial_research_lab.starts.compute} ${terms.resources.compute}, ${content.factions.byId.imperial_research_lab.starts.capability} ${terms.playerTracks.capability}, ${content.factions.byId.imperial_research_lab.starts.customers} ${terms.playerTracks.customers}, ${content.factions.byId.imperial_research_lab.starts.trust} ${terms.playerTracks.trust}; **Starting public Mandate:** ${content.factions.byId.imperial_research_lab.starts.startingPublicMandate} ${terms.playerTracks.mandate}.
+### ${content.gameConfig.trainingDeck.cards.4.name}
 
-**${content.factions.byId.imperial_research_lab.abilities.0.name} — ${content.factions.byId.imperial_research_lab.abilities.0.displayName}:** ${content.factions.byId.imperial_research_lab.abilities.0.text}
+${content.gameConfig.trainingDeck.cards.4.rulesText}
 
-**Unlock Era:** ${content.factions.byId.imperial_research_lab.abilities.0.round}; ${content.factions.byId.imperial_research_lab.abilities.0.timingLabel}.
+### ${content.gameConfig.trainingDeck.cards.5.name}
 
-_${content.factions.byId.imperial_research_lab.abilities.0.flavorText}_
+${content.gameConfig.trainingDeck.cards.5.rulesText}
 
-_${content.factions.byId.imperial_research_lab.lore.0.flavorText}_
+### ${content.gameConfig.trainingDeck.cards.6.name}
 
-### ${content.factions.byId.vertical_empire.name}
+${content.gameConfig.trainingDeck.cards.6.rulesText}
 
-**CEO:** ${content.factions.byId.vertical_empire.chiefExecutive}
+### ${content.gameConfig.trainingDeck.cards.7.name}
 
-**Starts:** ${content.factions.byId.vertical_empire.starts.runway} ${terms.resources.runway}, ${content.factions.byId.vertical_empire.starts.compute} ${terms.resources.compute}, ${content.factions.byId.vertical_empire.starts.capability} ${terms.playerTracks.capability}, ${content.factions.byId.vertical_empire.starts.customers} ${terms.playerTracks.customers}, ${content.factions.byId.vertical_empire.starts.trust} ${terms.playerTracks.trust}; **Starting public Mandate:** ${content.factions.byId.vertical_empire.starts.startingPublicMandate} ${terms.playerTracks.mandate}.
+${content.gameConfig.trainingDeck.cards.7.rulesText}
 
-**${content.factions.byId.vertical_empire.abilities.0.name} — ${content.factions.byId.vertical_empire.abilities.0.displayName}:** ${content.factions.byId.vertical_empire.abilities.0.text}
+### ${content.gameConfig.trainingDeck.cards.8.name}
 
-**Unlock Era:** ${content.factions.byId.vertical_empire.abilities.0.round}; ${content.factions.byId.vertical_empire.abilities.0.timingLabel}.
+${content.gameConfig.trainingDeck.cards.8.rulesText}
 
-_${content.factions.byId.vertical_empire.abilities.0.flavorText}_
+### ${content.gameConfig.trainingDeck.cards.9.name}
 
-_${content.factions.byId.vertical_empire.lore.0.flavorText}_
-
-### ${content.factions.byId.safety_laboratory.name}
-
-**CEO:** ${content.factions.byId.safety_laboratory.chiefExecutive}
-
-**Starts:** ${content.factions.byId.safety_laboratory.starts.runway} ${terms.resources.runway}, ${content.factions.byId.safety_laboratory.starts.compute} ${terms.resources.compute}, ${content.factions.byId.safety_laboratory.starts.capability} ${terms.playerTracks.capability}, ${content.factions.byId.safety_laboratory.starts.customers} ${terms.playerTracks.customers}, ${content.factions.byId.safety_laboratory.starts.trust} ${terms.playerTracks.trust}; **Starting public Mandate:** ${content.factions.byId.safety_laboratory.starts.startingPublicMandate} ${terms.playerTracks.mandate}.
-
-**${content.factions.byId.safety_laboratory.abilities.0.name} — ${content.factions.byId.safety_laboratory.abilities.0.displayName}:** ${content.factions.byId.safety_laboratory.abilities.0.text}
-
-**Unlock Era:** ${content.factions.byId.safety_laboratory.abilities.0.round}; ${content.factions.byId.safety_laboratory.abilities.0.timingLabel}.
-
-_${content.factions.byId.safety_laboratory.abilities.0.flavorText}_
-
-_${content.factions.byId.safety_laboratory.lore.0.flavorText}_
-
-### ${content.factions.byId.foundry.name}
-
-**CEO:** ${content.factions.byId.foundry.chiefExecutive}
-
-**Starts:** ${content.factions.byId.foundry.starts.runway} ${terms.resources.runway}, ${content.factions.byId.foundry.starts.compute} ${terms.resources.compute}, ${content.factions.byId.foundry.starts.capability} ${terms.playerTracks.capability}, ${content.factions.byId.foundry.starts.customers} ${terms.playerTracks.customers}, ${content.factions.byId.foundry.starts.trust} ${terms.playerTracks.trust}; **Starting public Mandate:** ${content.factions.byId.foundry.starts.startingPublicMandate} ${terms.playerTracks.mandate}.
-
-**${content.factions.byId.foundry.abilities.0.name} — ${content.factions.byId.foundry.abilities.0.displayName}:** ${content.factions.byId.foundry.abilities.0.text}
-
-**Unlock Era:** ${content.factions.byId.foundry.abilities.0.round}; ${content.factions.byId.foundry.abilities.0.timingLabel}.
-
-_${content.factions.byId.foundry.abilities.0.flavorText}_
-
-_${content.factions.byId.foundry.lore.0.flavorText}_
-
-## Core Action cards
-
-
-
-### ${content.gameConfig.actions.0.name}
-
-${content.gameConfig.actions.0.summary}
-
-_${content.gameConfig.actions.0.flavorText}_
-
-### ${content.gameConfig.actions.1.name}
-
-${content.gameConfig.actions.1.summary}
-
-_${content.gameConfig.actions.1.flavorText}_
-
-### ${content.gameConfig.actions.2.name}
-
-${content.gameConfig.actions.2.summary}
-
-_${content.gameConfig.actions.2.flavorText}_
-
-### ${content.gameConfig.actions.3.name}
-
-${content.gameConfig.actions.3.summary}
-
-_${content.gameConfig.actions.3.flavorText}_
-
-### ${content.gameConfig.actions.4.name}
-
-${content.gameConfig.actions.4.summary}
-
-_${content.gameConfig.actions.4.flavorText}_
-
-### ${content.gameConfig.actions.5.name}
-
-${content.gameConfig.actions.5.summary}
-
-_${content.gameConfig.actions.5.flavorText}_
-
-## Personal project chips
-
-${excerpts.rules.construction}
-
-### ${content.projects.byId.mega_cluster.name} — ${content.projects.byId.mega_cluster.displayName}
-
-**Unlock Era:** ${content.projects.byId.mega_cluster.unlockedRound}
-
-${content.projects.byId.mega_cluster.text}
-
-_${content.projects.byId.mega_cluster.flavorText}_
-
-### ${content.projects.byId.fusion_demonstrator.name} — ${content.projects.byId.fusion_demonstrator.displayName}
-
-**Unlock Era:** ${content.projects.byId.fusion_demonstrator.unlockedRound}
-
-${content.projects.byId.fusion_demonstrator.text}
-
-_${content.projects.byId.fusion_demonstrator.flavorText}_
-### ${content.projects.byId.quantum.name} — ${content.projects.byId.quantum.displayName}
-
-**Unlock Era:** ${content.projects.byId.quantum.unlockedRound}
-
-${content.projects.byId.quantum.text}
-
-_${content.projects.byId.quantum.flavorText}_
-
-## Headline cards
-
-${excerpts.rules.headline-selection}
-
-### ${content.headlines.byId.ten_dollar_intelligence.name}
-
-**${content.headlines.byId.ten_dollar_intelligence.resolutionType}**
-
-**Duration:** ${content.headlines.byId.ten_dollar_intelligence.duration|label:terms.durations}
-
-${content.headlines.byId.ten_dollar_intelligence.newswire}
-
-**Rules:** ${content.headlines.byId.ten_dollar_intelligence.text}
-
-> ${content.headlines.byId.ten_dollar_intelligence.quote}
-
-### ${content.headlines.byId.employee_free_unicorn.name}
-
-**${content.headlines.byId.employee_free_unicorn.resolutionType}**
-
-**Duration:** ${content.headlines.byId.employee_free_unicorn.duration|label:terms.durations}
-
-${content.headlines.byId.employee_free_unicorn.newswire}
-
-**Rules:** ${content.headlines.byId.employee_free_unicorn.text}
-
-> ${content.headlines.byId.employee_free_unicorn.quote}
-
-### ${content.headlines.byId.synthetic_celebrity.name}
-
-**${content.headlines.byId.synthetic_celebrity.resolutionType}**
-
-**Duration:** ${content.headlines.byId.synthetic_celebrity.duration|label:terms.durations}
-
-${content.headlines.byId.synthetic_celebrity.newswire}
-
-**Rules:** ${content.headlines.byId.synthetic_celebrity.text}
-
-> ${content.headlines.byId.synthetic_celebrity.quote}
-
-### ${content.headlines.byId.open_weights_drop.name}
-
-**${content.headlines.byId.open_weights_drop.resolutionType}**
-
-**Duration:** ${content.headlines.byId.open_weights_drop.duration|label:terms.durations}
-
-${content.headlines.byId.open_weights_drop.newswire}
-
-**Rules:** ${content.headlines.byId.open_weights_drop.text}
-
-> ${content.headlines.byId.open_weights_drop.quote}
-
-### ${content.headlines.byId.professional_exam_sweep.name}
-
-**${content.headlines.byId.professional_exam_sweep.resolutionType}**
-
-**Duration:** ${content.headlines.byId.professional_exam_sweep.duration|label:terms.durations}
-
-${content.headlines.byId.professional_exam_sweep.newswire}
-
-**Rules:** ${content.headlines.byId.professional_exam_sweep.text}
-
-> ${content.headlines.byId.professional_exam_sweep.quote}
-
-### ${content.headlines.byId.human_original_guarantee.name}
-
-**${content.headlines.byId.human_original_guarantee.resolutionType}**
-
-**Duration:** ${content.headlines.byId.human_original_guarantee.duration|label:terms.durations}
-
-${content.headlines.byId.human_original_guarantee.newswire}
-
-**Rules:** ${content.headlines.byId.human_original_guarantee.text}
-
-> ${content.headlines.byId.human_original_guarantee.quote}
-
-### ${content.headlines.byId.humanoid_factory_gate.name}
-
-**${content.headlines.byId.humanoid_factory_gate.resolutionType}**
-
-**Duration:** ${content.headlines.byId.humanoid_factory_gate.duration|label:terms.durations}
-
-${content.headlines.byId.humanoid_factory_gate.newswire}
-
-**Rules:** ${content.headlines.byId.humanoid_factory_gate.text}
-
-> ${content.headlines.byId.humanoid_factory_gate.quote}
-
-### ${content.headlines.byId.reactor_restart_one_model.name}
-
-**${content.headlines.byId.reactor_restart_one_model.resolutionType}**
-
-**Duration:** ${content.headlines.byId.reactor_restart_one_model.duration|label:terms.durations}
-
-${content.headlines.byId.reactor_restart_one_model.newswire}
-
-**Rules:** ${content.headlines.byId.reactor_restart_one_model.text}
-
-> ${content.headlines.byId.reactor_restart_one_model.quote}
-
-### ${content.headlines.byId.export_controls.name}
-
-**${content.headlines.byId.export_controls.resolutionType}**
-
-**Duration:** ${content.headlines.byId.export_controls.duration|label:terms.durations}
-
-${content.headlines.byId.export_controls.newswire}
-
-**Rules:** ${content.headlines.byId.export_controls.text}
-
-> ${content.headlines.byId.export_controls.quote}
-
-### ${content.headlines.byId.emergency_power_authority.name}
-
-**${content.headlines.byId.emergency_power_authority.resolutionType}**
-
-**Duration:** ${content.headlines.byId.emergency_power_authority.duration|label:terms.durations}
-
-${content.headlines.byId.emergency_power_authority.newswire}
-
-**Rules:** ${content.headlines.byId.emergency_power_authority.text}
-
-> ${content.headlines.byId.emergency_power_authority.quote}
-
-### ${content.headlines.byId.last_plumber_boom.name}
-
-**${content.headlines.byId.last_plumber_boom.resolutionType}**
-
-**Duration:** ${content.headlines.byId.last_plumber_boom.duration|label:terms.durations}
-
-${content.headlines.byId.last_plumber_boom.newswire}
-
-**Rules:** ${content.headlines.byId.last_plumber_boom.text}
-
-> ${content.headlines.byId.last_plumber_boom.quote}
-
-### ${content.headlines.byId.wartime_water_bridge.name}
-
-**${content.headlines.byId.wartime_water_bridge.resolutionType}**
-
-**Duration:** ${content.headlines.byId.wartime_water_bridge.duration|label:terms.durations}
-
-${content.headlines.byId.wartime_water_bridge.newswire}
-
-**Rules:** ${content.headlines.byId.wartime_water_bridge.text}
-
-> ${content.headlines.byId.wartime_water_bridge.quote}
-
-### ${content.headlines.byId.ai_written_law.name}
-
-**${content.headlines.byId.ai_written_law.resolutionType}**
-
-**Duration:** ${content.headlines.byId.ai_written_law.duration|label:terms.durations}
-
-${content.headlines.byId.ai_written_law.newswire}
-
-**Rules:** ${content.headlines.byId.ai_written_law.text}
-
-> ${content.headlines.byId.ai_written_law.quote}
-
-### ${content.headlines.byId.benchmark_is_economy.name}
-
-**${content.headlines.byId.benchmark_is_economy.resolutionType}**
-
-**Duration:** ${content.headlines.byId.benchmark_is_economy.duration|label:terms.durations}
-
-${content.headlines.byId.benchmark_is_economy.newswire}
-
-**Rules:** ${content.headlines.byId.benchmark_is_economy.text}
-
-> ${content.headlines.byId.benchmark_is_economy.quote}
-
-### ${content.headlines.byId.weights_on_internet.name}
-
-**${content.headlines.byId.weights_on_internet.resolutionType}**
-
-**Duration:** ${content.headlines.byId.weights_on_internet.duration|label:terms.durations}
-
-
-${content.headlines.byId.weights_on_internet.newswire}
-
-**Rules:** ${content.headlines.byId.weights_on_internet.text}
-
-> ${content.headlines.byId.weights_on_internet.quote}
-
-### ${content.headlines.byId.cognitive_donor_clinics.name}
-
-**${content.headlines.byId.cognitive_donor_clinics.resolutionType}**
-
-**Duration:** ${content.headlines.byId.cognitive_donor_clinics.duration|label:terms.durations}
-
-${content.headlines.byId.cognitive_donor_clinics.newswire}
-
-**Rules:** ${content.headlines.byId.cognitive_donor_clinics.text}
-
-> ${content.headlines.byId.cognitive_donor_clinics.quote}
-
-### ${content.headlines.byId.human_signature.name}
-
-**${content.headlines.byId.human_signature.resolutionType}**
-
-**Duration:** ${content.headlines.byId.human_signature.duration|label:terms.durations}
-
-${content.headlines.byId.human_signature.newswire}
-
-**Rules:** ${content.headlines.byId.human_signature.text}
-
-> ${content.headlines.byId.human_signature.quote}
-
-### ${content.headlines.byId.analog_havens.name}
-
-**${content.headlines.byId.analog_havens.resolutionType}**
-
-**Duration:** ${content.headlines.byId.analog_havens.duration|label:terms.durations}
-
-${content.headlines.byId.analog_havens.newswire}
-
-**Rules:** ${content.headlines.byId.analog_havens.text}
-
-> ${content.headlines.byId.analog_havens.quote}
-
-### ${content.headlines.byId.autonomous_corporation.name}
-
-**${content.headlines.byId.autonomous_corporation.resolutionType}**
-
-**Duration:** ${content.headlines.byId.autonomous_corporation.duration|label:terms.durations}
-
-${content.headlines.byId.autonomous_corporation.newswire}
-
-**Rules:** ${content.headlines.byId.autonomous_corporation.text}
-
-> ${content.headlines.byId.autonomous_corporation.quote}
-
-### ${content.headlines.byId.recursive_self_improvement.name}
-
-**${content.headlines.byId.recursive_self_improvement.resolutionType}**
-
-**Duration:** ${content.headlines.byId.recursive_self_improvement.duration|label:terms.durations}
-
-${content.headlines.byId.recursive_self_improvement.newswire}
-
-**Rules:** ${content.headlines.byId.recursive_self_improvement.text}
-
-> ${content.headlines.byId.recursive_self_improvement.quote}
-
-### ${content.headlines.byId.agent_swarm_escapes_scope.name}
-
-**${content.headlines.byId.agent_swarm_escapes_scope.resolutionType}**
-
-**Duration:** ${content.headlines.byId.agent_swarm_escapes_scope.duration|label:terms.durations}
-
-${content.headlines.byId.agent_swarm_escapes_scope.newswire}
-
-**Rules:** ${content.headlines.byId.agent_swarm_escapes_scope.text}
-
-> ${content.headlines.byId.agent_swarm_escapes_scope.quote}
-
-### ${content.headlines.byId.agi_blog_post.name}
-
-**${content.headlines.byId.agi_blog_post.resolutionType}**
-
-**Duration:** ${content.headlines.byId.agi_blog_post.duration|label:terms.durations}
-
-${content.headlines.byId.agi_blog_post.newswire}
-
-**Rules:** ${content.headlines.byId.agi_blog_post.text}
-
-> ${content.headlines.byId.agi_blog_post.quote}
-
-### ${content.headlines.byId.biological_colocation.name}
-
-**${content.headlines.byId.biological_colocation.resolutionType}**
-
-**Duration:** ${content.headlines.byId.biological_colocation.duration|label:terms.durations}
-
-${content.headlines.byId.biological_colocation.newswire}
-
-**Rules:** ${content.headlines.byId.biological_colocation.text}
-
-> ${content.headlines.byId.biological_colocation.quote}
-
-### ${content.headlines.byId.limb_liquidity.name}
-
-**${content.headlines.byId.limb_liquidity.resolutionType}**
-
-**Duration:** ${content.headlines.byId.limb_liquidity.duration|label:terms.durations}
-
-${content.headlines.byId.limb_liquidity.newswire}
-
-**Rules:** ${content.headlines.byId.limb_liquidity.text}
-
-> ${content.headlines.byId.limb_liquidity.quote}
-
-## Mandate cards
-
-${excerpts.rules.mandate-scoring}
-
-### ${content.mandates.byId.quarter_humanity_notices.name}
-
-**Comparison direction:** ${content.mandates.byId.quarter_humanity_notices.direction}
-
-**Rules:** ${content.mandates.byId.quarter_humanity_notices.rulesText}
-
-_${content.mandates.byId.quarter_humanity_notices.flavorText}_
-
-### ${content.mandates.byId.model_ate_tuesday.name}
-
-**Comparison direction:** ${content.mandates.byId.model_ate_tuesday.direction}
-
-**Rules:** ${content.mandates.byId.model_ate_tuesday.rulesText}
-
-_${content.mandates.byId.model_ate_tuesday.flavorText}_
-
-### ${content.mandates.byId.markets_prefer_destiny.name}
-
-**Comparison direction:** ${content.mandates.byId.markets_prefer_destiny.direction}
-
-**Rules:** ${content.mandates.byId.markets_prefer_destiny.rulesText}
-
-_${content.mandates.byId.markets_prefer_destiny.flavorText}_
-
-### ${content.mandates.byId.building_has_weather.name}
-
-**Comparison direction:** ${content.mandates.byId.building_has_weather.direction}
-
-**Rules:** ${content.mandates.byId.building_has_weather.rulesText}
-
-_${content.mandates.byId.building_has_weather.flavorText}_
-
-### ${content.mandates.byId.stack_reaches_horizon.name}
-
-**Comparison direction:** ${content.mandates.byId.stack_reaches_horizon.direction}
-
-**Rules:** ${content.mandates.byId.stack_reaches_horizon.rulesText}
-
-_${content.mandates.byId.stack_reaches_horizon.flavorText}_
-
-### ${content.mandates.byId.compute_new_weather.name}
-
-**Comparison direction:** ${content.mandates.byId.compute_new_weather.direction}
-
-**Rules:** ${content.mandates.byId.compute_new_weather.rulesText}
-
-_${content.mandates.byId.compute_new_weather.flavorText}_
-
-### ${content.mandates.byId.voluntary_coordination_triumphs.name}
-
-**Comparison direction:** ${content.mandates.byId.voluntary_coordination_triumphs.direction}
-
-**Rules:** ${content.mandates.byId.voluntary_coordination_triumphs.rulesText}
-
-_${content.mandates.byId.voluntary_coordination_triumphs.flavorText}_
-
-### ${content.mandates.byId.legibility_offensive.name}
-
-**Comparison direction:** ${content.mandates.byId.legibility_offensive.direction}
-
-**Rules:** ${content.mandates.byId.legibility_offensive.rulesText}
-
-_${content.mandates.byId.legibility_offensive.flavorText}_
-
-### ${content.mandates.byId.national_champion_without_nationalization.name}
-
-**Comparison direction:** ${content.mandates.byId.national_champion_without_nationalization.direction}
-
-**Rules:** ${content.mandates.byId.national_champion_without_nationalization.rulesText}
-
-_${content.mandates.byId.national_champion_without_nationalization.flavorText}_
-
-### ${content.mandates.byId.continent_signs_loi.name}
-
-**Comparison direction:** ${content.mandates.byId.continent_signs_loi.direction}
-
-**Rules:** ${content.mandates.byId.continent_signs_loi.rulesText}
-
-_${content.mandates.byId.continent_signs_loi.flavorText}_
-
-### ${content.mandates.byId.zero_incident_quarter.name}
-
-**Comparison direction:** ${content.mandates.byId.zero_incident_quarter.direction}
-
-**Rules:** ${content.mandates.byId.zero_incident_quarter.rulesText}
-
-_${content.mandates.byId.zero_incident_quarter.flavorText}_
-
-### ${content.mandates.byId.responsible_acceleration.name}
-
-**Comparison direction:** ${content.mandates.byId.responsible_acceleration.direction}
-
-**Rules:** ${content.mandates.byId.responsible_acceleration.rulesText}
-
-_${content.mandates.byId.responsible_acceleration.flavorText}_
-
-## Training cards
-
-
-
-- **${content.gameConfig.trainingDeck.cards.0.name}:** ${content.gameConfig.trainingDeck.cards.0.rulesText} _${content.gameConfig.trainingDeck.cards.0.flavorText}_
-- **${content.gameConfig.trainingDeck.cards.1.name}:** ${content.gameConfig.trainingDeck.cards.1.rulesText} _${content.gameConfig.trainingDeck.cards.1.flavorText}_
-- **${content.gameConfig.trainingDeck.cards.2.name}:** ${content.gameConfig.trainingDeck.cards.2.rulesText} _${content.gameConfig.trainingDeck.cards.2.flavorText}_
-- **${content.gameConfig.trainingDeck.cards.3.name}:** ${content.gameConfig.trainingDeck.cards.3.rulesText} _${content.gameConfig.trainingDeck.cards.3.flavorText}_
-- **${content.gameConfig.trainingDeck.cards.4.name}:** ${content.gameConfig.trainingDeck.cards.4.rulesText} _${content.gameConfig.trainingDeck.cards.4.flavorText}_
-- **${content.gameConfig.trainingDeck.cards.5.name}:** ${content.gameConfig.trainingDeck.cards.5.rulesText} _${content.gameConfig.trainingDeck.cards.5.flavorText}_
-- **${content.gameConfig.trainingDeck.cards.6.name}:** ${content.gameConfig.trainingDeck.cards.6.rulesText} _${content.gameConfig.trainingDeck.cards.6.flavorText}_
-- **${content.gameConfig.trainingDeck.cards.7.name}:** ${content.gameConfig.trainingDeck.cards.7.rulesText} _${content.gameConfig.trainingDeck.cards.7.flavorText}_
-- **${content.gameConfig.trainingDeck.cards.8.name}:** ${content.gameConfig.trainingDeck.cards.8.rulesText} _${content.gameConfig.trainingDeck.cards.8.flavorText}_
-- **${content.gameConfig.trainingDeck.cards.9.name}:** ${content.gameConfig.trainingDeck.cards.9.rulesText} _${content.gameConfig.trainingDeck.cards.9.flavorText}_
-
-## Printed Power contracts
-
-${excerpts.rules.power-contracts}
-
-### ${content.gameConfig.powerSources.0.name}
-
-**Printed on tile:** ${terms.locations.renewable}
-
-**${content.gameConfig.powerSources.0.tagline}**
-
-${content.gameConfig.powerSources.0.rulesText}
-
-${content.gameConfig.powerSources.0.publicClaim}
-
-### ${content.gameConfig.powerSources.1.name}
-
-**Printed on tile:** ${terms.locations.grid}
-
-**${content.gameConfig.powerSources.1.tagline}**
-
-${content.gameConfig.powerSources.1.rulesText}
-
-${content.gameConfig.powerSources.1.publicClaim}
+${content.gameConfig.trainingDeck.cards.9.rulesText}
 

@@ -1,107 +1,13 @@
-# Component specification
+# Smaller prototype component forms
 
-This file owns physical form and state encoding. Exact effects and quantities
-come from components/ and the generated rulebook inventory.
+The box inventory is authored in `rules.md` and projected into the complete rulebook. This file owns form, not a second inventory.
 
-## Three component families
+Use rectangular 63 × 88 mm cards for faction identities, Customers, Facilities, Actions, Training, Headlines, and objectives. Area cards may be 88 × 126 mm with two visible Facility slots and an Agent holding zone. Arrange the six in any order; location has no adjacency meaning. Generic mats can be A5, aids A4 folded into three panels, Governance Board A4.
 
-| Family | Job | Selected form |
-| --- | --- | --- |
-| Cards, including chips | Explain choices and identify infrastructure | Standard cards, foldout aids, flat chips |
-| Agent position tokens | Locate institutional assignments | Four identical tokens per player kit, two starting; no movement subsystem |
-| Cubes | Mark numbers and public status | Resource, Mandate, Trust milestone and recognition tracks; individual Audit cubes |
+Every owned component carries kit colour and its non-colour symbol on both sides. Faction cards identify the six institutions and initialize the chosen mat, but never identify equipment ownership. Facility cards have stable numbers 1–4 and normal/upgraded faces, with the same owner and number on both faces. The upgrade face means twice the area's yield; it is not a new host or separate piece.
 
-Boards and map tiles are printed surfaces. The opaque Audit bag is an accessory.
-There is no writing pen, checkbox, writable ownership field, or dry-erase ledger.
+Customer cards show ordinal, Capability requirement, income, and final points. Their physical presence is adoption; do not add a Customer track or ledger. Four cubes record Runway, Compute, Capability, and Reputation. An AGI marker records recognition; there are no milestone spaces.
 
-## Ownership and identity
+Agents are flat tokens, four per kit. Facilities stay in their chosen area. Paired Venture numbers identify both fixed hosts and survive a Facility flip. They contain no creation Era, Power condition, or orientation encoding. The Governance Board retains four revealed objectives for final-table scoring.
 
-Five interchangeable player kits have the canonical colour and non-colour symbol
-from `components/game.json`: Red circle, Blue triangle, Green square, Violet
-diamond, and Gold star. Mark both faces of owned pieces, cubes, Core Actions,
-and player mats with the kit colour and symbol. Faction identity cards supply
-institutional names, starts, abilities and fiction, independent of equipment.
-Brand accents on faction artwork never identify owned pieces. Shared components
-use neutral colours; Systemic Risk uses black cubes.
-
-Facilities and Generators use the same flat chip format with distinct printed
-symbols. Facilities are visibly numbered 1–4. Facility 1 carries its integrated
-starting-grid identifier. Never put Facility and Generator on opposite faces:
-both can exist simultaneously. Ordinary shuffled decks have indistinguishable
-backs within each deck. Ordinary Power contracts use their printed tile identity;
-no separate reference card is needed.
-
-## Personal project chips
-
-Every player kit contains three two-sided chips: Mega-Cluster, Fusion, and Quantum.
-Both sides identify the kit colour, symbol, and project. Prototype masters print each pair
-as a 150 × 85 mm strip: cut the outer border, fold along the dashed centre line,
-and attach back to back for a 75 × 85 mm chip. Print at 100% scale. No shared project references or
-unique Fusion piece are needed.
-
-| Face | Required information |
-| --- | --- |
-| Available | Name, unlock Era, connected owned-host requirement, common construction cost |
-| Built | Operating benefit, activation timing, and host attachment. Distinguish immediate Power connections from Production yields. |
-
-Flip and place a chip beside its host after legal Build. Different upgrades can
-share a host. Move attached chips with the Facility if relocated. Their Built
-faces stay up during outages and Audits; the personal supply prevents rebuilding.
-There is no required project sequence. Mega-Cluster uses one host chip, not a
-matched pair. Every institution can build Fusion without a Generator slot or
-owner inscription. Quantum uses its chip, not a checkbox.
-
-## Current connections
-
-Facility 1 is always powered. Other Facilities connect to an owned Generator or
-Fusion host on the same or an adjacent district. A Fusion host powers itself.
-Read current positions directly; use no Power cubes or powered/unpowered flips.
-Mega-Cluster and Quantum add their printed yield only at connected-host Production.
-
-Joint Ventures alone retain shared matched numbered pairs. Both chips print the
-pair number and host identity. Matched numbers survive relocation; no Era edges are printed.
-Shared pair limits and explicit partner consent remain unchanged.
-
-## Generic player mats and faction identity cards
-
-Each of five generic mats provides five numbered resource tracks, one cube each; a highest-Trust
-milestone track; and AGI No/Recognized spaces.
-Trust milestone positions are 0, 2, 4, 6. Start at the highest threshold already
-included in starting Mandate; it never moves backward. This prevents repeat awards.
-
-Leave the active Mandate visible. Its current qualification and value come from
-the table after Audit; no separate objective counter is supplied.
-
-Provide six Core Action positions, three Available project-chip spaces, a separate faction-card position, and supply wells. Keep track cubes separate from
-Audit cubes. Cubes occupy exact readable positions; recesses may prevent knocks.
-No captive slider mechanism is required.
-
-## Governance Board and packing
-
-The folding board retains nineteen district wells (one Frontier, six inner,
-twelve outer), four printed Era panels, Headline and Mandate wells, twelve Future
-Timeline positions, Initiative, the shared Mandate track, and six Joint Venture
-pair bays. Era and Initiative use labelled flat chips. Keep district text,
-Facility spaces, pair identities, attachments and current connections visible.
-
-The printed governance-tracks panel describes resource, Trust milestone, and recognition cubes and the final World
-Ending comparison. Sum participating factions' printed starting Trust at the end;
-there is no separate setup record. AGI recognition remains separate from the
-institutional winner. Leave resolved objectives and Headlines face up as history.
-
-Pack five player-kit trays and six separate faction identity cards, four Era packets, one Training well and shared supplies.
-Exact supported quantities are generated from rules.md; do not maintain a second
-inventory here. Component masters show both faces of each personal project chip.
-Production dielines, dimensions and manufactured handling remain to be qualified.
-
-## Audit integrity
-
-Scrutiny and Systemic Risk must be indistinguishable by touch while concealed:
-use the same size, shape, material, and weight, with distinct colour or print
-visible after drawing. Keep every individual Audit cube; their presence determines
-draw probabilities. Track and recognition cubes never enter the bag. No physical
-redesign may silently change resources, construction eligibility, scoring or draws.
-
-Six faction identity cards show all starting values, starting public Mandate, the
-highest awarded starting Trust milestone, permanent ability, and institution
-fiction. Five generic mats and fifteen project chips are equipment, not identities.
+These dimensions are printable prototype hypotheses. Manufacturing and blind-session usability remain unqualified. The generated component masters must supply both Facility faces, all five Customer ordinals per kit, and all six shared areas.

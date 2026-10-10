@@ -3,24 +3,16 @@
   "prototype": {
     "terms": {
       "facility": "Facility",
-      "generator": "Generator",
-      "powered": "powered",
-      "offline": "offline",
-      "link": "Link",
-      "links": "Links"
+      "upgraded": "upgraded"
     },
     "tracks": {
       "runway": "${terms.resources.runway}",
       "compute": "${terms.resources.compute}",
       "capability": "${terms.playerTracks.capability}",
-      "customers": "${terms.playerTracks.customers}",
-      "trust": "${terms.playerTracks.trust}",
-      "power": "${terms.infrastructure.power}",
-      "scrutiny": "${terms.playerTracks.scrutiny}",
-      "mandate": "${terms.playerTracks.mandate}"
+      "reputation": "Reputation"
     },
     "resolution": {
-      "move": "{action} is revealed. Assign an Agent to a district and resolve the Action there.",
+      "move": "{action} is revealed. Assign an Agent to its shared area and resolve.",
       "complete": "The four-Era contest is complete. Read the Future Timeline, resolve the World Ending, then export the receipt or reset.",
       "select": "REASON: select an available Action. ACT: assign an Agent and resolve it. OBSERVE: inspect the consequences.",
       "rejectedPrefix": "Resolution rejected"
@@ -56,7 +48,7 @@
       "gameComplete": "Game complete · {ending}",
       "otherInstitutionsResolving": "Other institutions are resolving",
       "startGame": "Start a game",
-      "completeContext": "{winners} won with {score} final Mandate. Shared World Ending: {ending}.",
+      "completeContext": "{winners} won with {score} final points. Shared World Ending: {ending}.",
       "waitingContext": "Watch the other institutions. Your next choice appears here.",
       "decisionContext": "Era {round}, cycle {cycle}. Resolve your choice against the current board.",
       "legalChoices": "{count} legal choice{plural}",
@@ -64,7 +56,7 @@
       "bridgeRequesting": "Requesting access to the local bridge…",
       "bridgeConnected": "Connected · {maximum} maximum LLM decisions per opponent.",
       "connectedNow": "connected now",
-      "agiGridReady": "Qualified for AGI recognition after Era IV Production",
+      "agiGridReady": "Qualified for AGI recognition after Era IV Reputation Review",
       "agiRecognized": "AGI recognized",
       "stages": {
         "select": "Reason — choose an Action",
@@ -72,19 +64,23 @@
         "training_continue": "Research — bank or continue",
         "training_duplicate": "Research — duplicate revealed",
         "agi_achievement": "Declare recognized AGI",
-        "talent_assignment": "Talent: reassign one Agent"
+        "talent_assignment": "Talent: reassign one Agent",
+        "research_continue": "Research — bank or draw",
+        "research_duplicate": "Research — duplicate",
+        "agi_recognition": "AGI recognition",
+        "immediate_trade": "Trade — optional offer",
+        "trade_response": "Trade — accept or reject",
+        "agreement_response": "Joint Venture — accept or reject",
+        "headline_choice": "Headline — choose"
       },
       "selectContext": "Read the Headline and board, then choose an available Action. Everyone reveals together; choose your Agent, destination, and payment when you act.",
-      "resolveContext": "Assign an Agent to a district and resolve your committed Action. It remains there as presence until reassigned. Observe the consequences before your next choice.",
+      "resolveContext": "Assign an Agent to the area for your committed Core Action, then resolve it. Facilities stay where built.",
       "requirements": {
         "capability": "Capability",
-        "poweredFacilities": "connected Facilities",
-        "trust": "Trust",
+        "reputation": "Reputation",
         "compute": "Compute"
       },
       "talentAssignmentHint": "Choose an Agent and any district, or leave it in place. Update presence without resolving an Action or visit bonus.",
-      "personalProjects": "Personal projects",
-      "trustMilestone": "Highest Trust milestone awarded",
       "objectiveProgress": "Current Era objective",
       "playerKit": "Player kit",
       "kitSetup": "Choose an institution and a player kit independently. Kit colour and symbol identify ownership; the faction card supplies starting values and ability.",
@@ -96,22 +92,18 @@
         "customers": "Customers",
         "capability": "Capability",
         "runway": "Runway",
-        "trust": "Trust",
-        "scrutiny": "Scrutiny",
+        "compute": "Compute",
+        "reputation": "Reputation",
         "facilities": "Facilities",
-        "connected_facilities": "Connected Facilities",
-        "connected_infrastructure": "Connected Facilities and Mega-Clusters",
-        "active_ventures": "Active Joint Ventures",
-        "controlled_categories": "Controlled categories",
+        "upgraded_facilities": "Upgraded Facilities",
+        "active_ventures": "Active Ventures",
+        "controlled_areas": "Controlled areas",
         "compute_capacity": "Nominal Compute capacity"
       },
-      "jointVentureOfferContext": "{proposer} proposes a Joint Venture between {leftHost} and {rightHost}. Each Production you receive 1 {ownResource}; they receive 1 {theirResource}, while both hosts remain connected and adjacent. Hosts currently: {powerStatus}."
-    },
-    "power": {
-      "title": "Local Power",
-      "summary": "{online}/{facilities} Facilities connected",
-      "detail": "Facility 1 is always powered. A Fusion host powers itself. Your Generators and Fusion hosts power your Facilities on the same or adjacent districts. Other Facilities do not transmit Power.",
-      "reminder": "Facility 1 is always powered. A Fusion host powers itself. Your Generators and Fusion hosts power your Facilities on the same or adjacent districts. Other Facilities do not transmit Power."
+      "jointVentureOfferContext": "{proposer} proposes a Joint Venture between {leftHost} and {rightHost}. Each Production you receive 1 {ownResource}; they receive 1 {theirResource}. Each Facility may host only one Venture; either participant may terminate it with Influence.",
+      "facilityUpgrade": "Facility upgrade",
+      "customers": "Customer cards",
+      "finalScore": "Final score"
     },
     "metrics": {
       "auditProfile": "Audit profile",
@@ -130,7 +122,7 @@
       "moveAct": "ACT: assign → resolve",
       "secretVote": "Secret vote",
       "select": "SELECT",
-      "unknownLocation": "unmapped district",
+      "unknownLocation": "Unassigned",
       "motionAdopted": "{motion} was adopted in Era {round}; the jurisdiction has been reorganized."
     }
   },
@@ -259,7 +251,8 @@
       "score": "Score",
       "scoreHistogram": "Score histogram for seat {seat}",
       "automated": "Automated",
-      "excluded": "Excluded"
+      "excluded": "Excluded",
+      "reputation": "Reputation"
     },
     "notes": {
       "playerProfile": "{players}-player profile",

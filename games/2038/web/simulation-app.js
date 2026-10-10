@@ -1053,8 +1053,9 @@ function renderReplay() {
 
   for (const tile of event.state.board) {
     const hex = document.createElement("div");
-    const position = replayPosition(tile);
-    hex.className = `hex ${tile.category}`;
+    const currentAreas = tile.actionId !== undefined;
+    const position = currentAreas ? {left:(tile.order % 3)*210,top:Math.floor(tile.order/3)*160,size:190} : replayPosition(tile);
+    hex.className = tile.actionId ? "replay-area" : `hex ${tile.category}`;
     hex.style.left = `${position.left}px`;
     hex.style.top = `${position.top}px`;
     hex.style.width = `${position.size}px`;
@@ -1076,7 +1077,7 @@ function renderReplay() {
           }"></i>`
         );
       }
-      for (const generator of player.generators.filter((item) => item.tileId === tile.instanceId)) {
+      for (const generator of (player.generators || []).filter((item) => item.tileId === tile.instanceId)) {
         markers.push(
           `<i class="replay-marker generator" style="--seat-color:${color}" title="${
             interpolate(copy.replay.marker, { seat: player.seat + 1, kind: copy.labels.generator })
@@ -1102,8 +1103,7 @@ function renderReplay() {
         <dt>${copy.labels.compute}</dt><dd>${player.compute}</dd>
         <dt>${copy.labels.capability}</dt><dd>${player.capability}</dd>
         <dt>${copy.labels.customers}</dt><dd>${player.customers}</dd>
-        <dt>${copy.labels.trust}</dt><dd>${player.trust}</dd>
-        <dt>${copy.labels.scrutiny}</dt><dd>${player.scrutiny}</dd>
+        ${player.reputation !== undefined ? `<dt>${copy.labels.reputation}</dt><dd>${player.reputation}</dd>` : `<dt>${copy.labels.trust}</dt><dd>${player.trust}</dd><dt>${copy.labels.scrutiny}</dt><dd>${player.scrutiny}</dd>`}
         <dt>${copy.labels.facilities}</dt><dd>${player.facilities.length}</dd>
       </dl>
     </article>

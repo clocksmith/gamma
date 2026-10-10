@@ -8,8 +8,8 @@
       "defaultBackend": "weighted",
       "persona": {
         "identity": "A sober operator balancing research, infrastructure, adoption, and legitimacy.",
-        "worldview": "A capability that cannot be powered, deployed, or defended publicly is not an advantage.",
-        "riskPosture": "Accept measured ${terms.playerTracks.scrutiny} when it buys durable tempo.",
+        "worldview": "A capability that cannot be funded, deployed, or defended publicly is not an advantage.",
+        "riskPosture": "Accept measured Reputation loss when it buys durable tempo.",
         "negotiationStyle": "Transactional, reciprocal, and willing to leave a deal.",
         "voice": "Concise, institutional, and practical."
       },
@@ -28,7 +28,7 @@
         "objectives": [
           "Avoid compulsory action loops.",
           "Maintain enough ${terms.resources.compute} for ${terms.actions.research} and ${terms.actions.deploy}.",
-          "Reach ${terms.systems.agi} eligibility without collapsing ${terms.playerTracks.trust}."
+          "Reach ${terms.systems.agi} eligibility without collapsing ${terms.playerTracks.reputation}."
         ],
         "actionWeights": {
           "fund": 2.2,
@@ -39,15 +39,9 @@
           "influence": 1.6
         },
         "decisionWeights": {
-          "fund_venture": 0.8,
-          "build_generator_clean_infrastructure": 1.3,
-          "build_mega_cluster": 2.5,
-          "build_fusion_demonstrator": 3
+          "fund_venture": 0.8
         },
-        "consequenceWeights": {
-          "poweredFacilities": 6,
-          "powerDemand": 1
-        },
+        "consequenceWeights": {},
         "rules": [
           {
             "when": [
@@ -61,19 +55,6 @@
               "actionId": "fund"
             },
             "multiplier": 3
-          },
-          {
-            "when": [
-              {
-                "path": "self.unpoweredFacilities",
-                "operator": "gt",
-                "value": 0
-              }
-            ],
-            "target": {
-              "decisionIdPrefix": "build_generator_clean_infrastructure"
-            },
-            "multiplier": 4
           },
           {
             "when": [
@@ -130,14 +111,9 @@
         },
         "decisionWeights": {
           "research_stop_4": 2.5,
-          "research_stop_5": 2,
-          "build_mega_cluster": 1.5,
-          "build_fusion_demonstrator": 2
+          "research_stop_5": 2
         },
-        "consequenceWeights": {
-          "poweredFacilities": 6,
-          "powerDemand": 1
-        },
+        "consequenceWeights": {},
         "rules": [
           {
             "when": [
@@ -207,29 +183,10 @@
         },
         "decisionWeights": {
           "build_facility_cloud": 1.811,
-          "build_facility_capital": 1.821,
-          "build_generator_clean_infrastructure": 2.61,
-          "build_mega_cluster": 4.974,
-          "build_fusion_demonstrator": 4.227
+          "build_facility_capital": 1.821
         },
-        "consequenceWeights": {
-          "poweredFacilities": 8,
-          "powerDemand": 1
-        },
+        "consequenceWeights": {},
         "rules": [
-          {
-            "when": [
-              {
-                "path": "self.unpoweredFacilities",
-                "operator": "gt",
-                "value": 0
-              }
-            ],
-            "target": {
-              "decisionIdPrefix": "build_generator_clean_infrastructure"
-            },
-            "multiplier": 6
-          },
           {
             "when": [
               {
@@ -280,7 +237,7 @@
       "persona": {
         "identity": "A product strategist who measures intelligence through adoption.",
         "worldview": "Markets settle arguments that benchmarks cannot.",
-        "riskPosture": "Accepts deployment ${terms.playerTracks.scrutiny} but avoids research crashes.",
+        "riskPosture": "Accepts deployment Reputation loss but avoids research crashes.",
         "negotiationStyle": "Bundles access, distribution, and immediate concessions.",
         "voice": "Optimistic, commercial, and metric-driven."
       },
@@ -311,14 +268,9 @@
         },
         "decisionWeights": {
           "research_stop_2": 2.5,
-          "build_facility_consumer": 2,
-          "build_mega_cluster": 1.2,
-          "build_fusion_demonstrator": 1.5
+          "build_facility_consumer": 2
         },
-        "consequenceWeights": {
-          "poweredFacilities": 5,
-          "powerDemand": 1
-        },
+        "consequenceWeights": {},
         "rules": [
           {
             "when": [
@@ -351,13 +303,13 @@
     },
     {
       "id": "trust_governor",
-      "name": "The ${terms.playerTracks.trust} Governor",
+      "name": "The ${terms.playerTracks.reputation} Governor",
       "description": "Uses legitimacy as protection, scoring, and permission to deploy.",
       "defaultBackend": "weighted",
       "persona": {
         "identity": "A governance strategist who treats legitimacy as operating capital.",
         "worldview": "A technically successful institution can still lose the era through accumulated distrust.",
-        "riskPosture": "Avoids unbounded ${terms.playerTracks.scrutiny} and protects downside.",
+        "riskPosture": "Avoids unbounded Reputation loss and protects downside.",
         "negotiationStyle": "Transparent, conditional, and coalition-oriented.",
         "voice": "Measured, procedural, and evidence-conscious."
       },
@@ -374,8 +326,8 @@
           "compute": 0.9
         },
         "objectives": [
-          "Keep ${terms.playerTracks.trust} at four or higher.",
-          "Remove ${terms.playerTracks.scrutiny} before it compounds.",
+          "Keep ${terms.playerTracks.reputation} at four or higher.",
+          "Remove Reputation loss before it compounds.",
           "Use conservative ${terms.actions.research} and ${terms.actions.deploy} windows."
         ],
         "actionWeights": {
@@ -389,42 +341,10 @@
         "decisionWeights": {
           "fund_venture": 0.925,
           "influence_remove_scrutiny": 4.33,
-          "research_stop_2": 0.47,
-          "build_mega_cluster": 12.124,
-          "build_fusion_demonstrator": 2.16
+          "research_stop_2": 0.47
         },
-        "consequenceWeights": {
-          "poweredFacilities": 5,
-          "powerDemand": 1
-        },
-        "rules": [
-          {
-            "when": [
-              {
-                "path": "self.trust",
-                "operator": "lte",
-                "value": 3
-              }
-            ],
-            "target": {
-              "decisionIdPrefix": "influence_gain_trust"
-            },
-            "multiplier": 5
-          },
-          {
-            "when": [
-              {
-                "path": "self.scrutiny",
-                "operator": "gte",
-                "value": 3
-              }
-            ],
-            "target": {
-              "decisionIdPrefix": "influence_remove_scrutiny"
-            },
-            "multiplier": 6
-          }
-        ]
+        "consequenceWeights": {},
+        "rules": []
       }
     },
     {
@@ -435,7 +355,7 @@
       "persona": {
         "identity": "A focused claimant converting technical credibility into a final institutional gamble.",
         "worldview": "Public ${terms.playerTracks.mandate} decides victory; a prepared AGI declaration can add enough to change the result.",
-        "riskPosture": "Accepts reserved ${terms.resources.compute} and final-Audit ${terms.playerTracks.scrutiny} when ordinary victory begins to recede.",
+        "riskPosture": "Accepts reserved ${terms.resources.compute} and final-Audit Reputation loss when ordinary victory begins to recede.",
         "negotiationStyle": "Trades immediately for ${terms.resources.compute} and negotiates Joint Ventures beside connected Facilities.",
         "voice": "Direct, technical, and coalition-aware."
       },
@@ -453,8 +373,8 @@
         },
         "objectives": [
           "Reach multiple ${terms.playerTracks.capability} thresholds while preserving enough ${terms.resources.compute} to pay for AGI recognition.",
-          "Build public evidence in ${terms.playerTracks.capability}, powered Facilities, and ${terms.playerTracks.trust} to qualify for public recognition.",
-          "Declare recognized AGI when the public requirements are met and its ${terms.playerTracks.mandate} award justifies the Compute cost and final ${terms.playerTracks.scrutiny} exposure."
+          "Build public evidence in ${terms.playerTracks.capability}, powered Facilities, and ${terms.playerTracks.reputation} to qualify for public recognition.",
+          "Declare recognized AGI when the public requirements are met and its ${terms.playerTracks.mandate} award justifies the Compute cost and final Reputation loss exposure."
         ],
         "actionWeights": {
           "fund": 7.414,
@@ -468,23 +388,12 @@
           "build_facility": 7.985,
           "research_stop_4": 2.972,
           "deploy_": 4.99,
-          "agi_declare": 20,
-          "build_mega_cluster": 1.196,
-          "build_fusion_demonstrator": 1.117
+          "agi_declare": 20
         },
         "partnerWeights": {
           "power_broker": 12
         },
-        "spatialPreference": {
-          "targetProfileId": "power_broker",
-          "preferredDistance": 1,
-          "multiplier": 12,
-          "applyUntilFacilities": 3
-        },
-        "consequenceWeights": {
-          "poweredFacilities": 12,
-          "powerDemand": 2
-        },
+        "consequenceWeights": {},
         "rules": [
           {
             "when": [
@@ -565,30 +474,10 @@
           "influence": 3.129
         },
         "decisionWeights": {
-          "build_facility": 6.313,
-          "build_generator_clean_infrastructure": 7.115,
-          "build_generator_emergency_infrastructure": 20,
-          "build_mega_cluster": 1.098,
-          "build_fusion_demonstrator": 3.325
+          "build_facility": 6.313
         },
-        "consequenceWeights": {
-          "poweredFacilities": 8,
-          "powerDemand": 1
-        },
+        "consequenceWeights": {},
         "rules": [
-          {
-            "when": [
-              {
-                "path": "self.generators",
-                "operator": "gte",
-                "value": 1
-              }
-            ],
-            "target": {
-              "decisionIdPrefix": "build_generator"
-            },
-            "multiplier": 0.1
-          },
           {
             "when": [
               {
