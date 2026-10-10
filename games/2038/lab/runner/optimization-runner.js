@@ -4,29 +4,9 @@ import { loadPlayerProfiles, validatePlayerProfile } from "../personas/player-pr
 import { createSimulation } from "../runtime/create-simulation.js";
 import { createReportIdentity } from "../versioning/game-identity.js";
 
-const RULE_BOUNDS = {
-  auditMultiplier: [0.6, 1.5, 0.1],
-  fundConservative: [1, 4, 1],
-  fundVenture: [3, 7, 1],
-  ventureScrutiny: [1, 4, 1],
-  facilityCost: [1, 4, 1],
-  deployComputeCost: [0, 3, 1],
-  customerMandate: [1, 4, 1],
-  customerCapabilityOffset: [-2, 2, 1],
-  startingAgentsDeployed: [2, 4, 1]
-};
-
-const DEFAULT_RULE_VARIANT = {
-  auditMultiplier: 1,
-  fundConservative: 2,
-  fundVenture: 4,
-  ventureScrutiny: 2,
-  facilityCost: 2,
-  deployComputeCost: 1,
-  customerMandate: 2,
-  customerCapabilityOffset: 0,
-  startingAgentsDeployed: 2
-};
+import {CURRENT_RULE_BOUNDS} from '../environment/rules-variant.js';
+const RULE_BOUNDS = CURRENT_RULE_BOUNDS;
+const DEFAULT_RULE_VARIANT = {fundConservative:2,fundVenture:4,ventureReputationLoss:1,facilityCost:2,deployComputeCost:1,customerPoints:2,reviewRunwayPenalty:2,startingAgentsDeployed:2};
 
 function clamp(value, minimum, maximum) {
   return Math.min(maximum, Math.max(minimum, value));

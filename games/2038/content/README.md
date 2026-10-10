@@ -174,3 +174,5 @@ and starting values are authored in `components/factions.json`. Generic mats
 and kit-owned chips never derive ownership colours from faction artwork.
 
 Era objective definitions belong to `components/mandates.json`; `lab/rules/era-mandates.js` evaluates their explicit metric, qualification, and direction from current state. Kit definitions remain in `components/game.json`, faction identity in `components/factions.json`.
+
+Current ownership: `components/game.json` owns five player kits, six areas and supplies; `components/factions.json` owns six identities; `components/mandates.json` owns final-state criteria; `lab/rules/era-mandates.js` evaluates them for every runtime. No palette or scoring copy belongs in a publication repository.

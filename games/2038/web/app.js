@@ -430,75 +430,15 @@ function renderTradeBuilder(offers, { heading, timing: selectedTiming = null, on
   elements.decisions.append(builder);
 }
 
-function renderTradeTimingChoices(offers, emptyDecision) {
-  const chooser = document.createElement("section");
-  chooser.className = "trade-builder trade-timing";
-  chooser.innerHTML = "<h3>Trade this action?</h3><p>Choose when to settle an offer, or continue without one.</p>";
-  const actions = document.createElement("div");
-  actions.className = "trade-actions";
-  const addChoice = (label, timing) => {
-    const button = document.createElement("button");
-    button.type = "button";
-    button.className = "trade-timing-button";
-    button.textContent = label;
-    const matchingOffers = offers.filter((decision) => decision.parameters.timing === timing);
-    button.disabled = matchingOffers.length === 0;
-    button.addEventListener("click", () => {
-      elements.decisions.replaceChildren();
-      renderTradeBuilder(matchingOffers, {
-        heading: label,
-        timing,
-        onBack: () => {
-          elements.decisions.replaceChildren();
-          renderTradeTimingChoices(offers, emptyDecision);
-        }
-      });
-    });
-    actions.append(button);
-  };
-  const noTrade = document.createElement("button");
-  noTrade.type = "button";
-  noTrade.className = "trade-pass";
-  noTrade.textContent = "No trade";
-  noTrade.disabled = !emptyDecision;
-  noTrade.addEventListener("click", () => submitDecision(emptyDecision.decisionId).catch((error) => {
-    elements["game-status"].textContent = error.message;
-    renderDecisions();
-  }));
-  actions.append(noTrade);
-  addChoice("Trade before action", "before");
-  addChoice("Trade after action", "after");
-  chooser.append(actions);
-  elements.decisions.append(chooser);
-}
-
 function renderTradeDecisions(packet, stage) {
-  const decisions = packet.legalDecisions;
-  const offers = decisions.filter((decision) => decision.parameters?.partnerSeat !== undefined);
-  if (!offers.length) return false;
-  if (stage === "immediate_trade") {
-    renderTradeTimingChoices(
-      offers,
-      decisions.find((decision) => decision.decisionId === "trade_none")
-    );
-    return true;
-  }
-  if (stage === "immediate_trade_response") {
-    const response = document.createElement("section");
-    response.className = "trade-response";
-    const offer = decisions.find((decision) => decision.decisionId === "trade_accept");
-    response.innerHTML = `<h3>Offer received</h3><p>${escapeHtml(offer?.label || "Review the proposed trade.")}</p>`;
-    const controls = document.createElement("div");
-    controls.className = "trade-actions";
-    for (const decision of decisions.filter((decision) =>
-      decision.decisionId === "trade_accept" || decision.decisionId === "trade_reject"
-    )) controls.append(decisionButton(decision, 0, "trade-response-button"));
-    response.append(controls);
-    elements.decisions.append(response);
-    renderTradeBuilder(offers, { heading: "Counteroffer" });
-    return true;
-  }
-  return false;
+  if (!["immediate_trade", "trade_response"].includes(stage)) return false;
+  const heading = document.createElement("p");
+  heading.textContent = stage === "immediate_trade"
+    ? "Optional trade before your Action: offer one Runway for one Compute, or continue."
+    : "Accept or refuse the printed one-for-one trade.";
+  elements.decisions.append(heading);
+  packet.legalDecisions.forEach((decision, index) => elements.decisions.append(decisionButton(decision, index)));
+  return true;
 }
 
 function pieceName(pieceId) {
@@ -519,7 +459,7 @@ function renderAssignmentDecisions(packet, stage) {
 
   const builder = document.createElement("section");
   builder.className = "move-builder";
-  builder.innerHTML = "<h3>Assign an Agent</h3><p>Choose an Agent, district, and action effect. The Agent remains as presence until reassigned.</p>";
+  builder.innerHTML = "<h3>Assign an Agent</h3><p>Choose an Agent and action effect. It goes to the matching shared area.</p>";
   if (stage === "talent_assignment") builder.querySelector("p").textContent = copy.browser.talentAssignmentHint;
   const fields = document.createElement("div");
   fields.className = "trade-fields";
@@ -533,7 +473,7 @@ function renderAssignmentDecisions(packet, stage) {
     fields.append(field);
   };
   addField("Agent", piece);
-  addField("To district", destination);
+  destination.hidden = true;
   if (stage !== "talent_assignment") addField("Action", outcome);
 
   const summary = document.createElement("p");

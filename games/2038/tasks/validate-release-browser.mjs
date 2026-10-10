@@ -348,19 +348,22 @@ try {
     const coreRulesResponse = await fetch(releaseResourceUrl(base, "docs/core-rules.html"));
     assert.equal(coreRulesResponse.status, 200, "Core rules must be accessible.");
     const coreRulesHtml = await coreRulesResponse.text();
-    assert.match(coreRulesHtml, /Before selection:.*Reveal a Headline/s, "Turn overview must include Before selection Headline phase.");
-    assert.match(coreRulesHtml, /In Initiative order, each player may make the permitted resource exchange, assigns one Agent, and resolves the selected action/, "Turn overview must place permitted resource exchange before action resolution.");
+    assert.match(coreRulesHtml, /Reveal one Headline.*?selection/s, "Headline effects finish before selection.");
+    assert.match(coreRulesHtml, /optionally trade, then choose an Agent/, "Trade precedes action resolution.");
 
     const cardsSource = JSON.parse(await readFile(resolve(projectRoot, "components/reference-cards.json"), "utf8"));
     const frontTexts = (cardsSource.playerReferences || []).flatMap((card) => card.frontText || []);
-    assert.ok(frontTexts.some((text) => text.includes("Mega-Clusters and Quantum")), "Player aid must include Quantum alongside Mega-Clusters in Production.");
-    assert.ok(frontTexts.some((text) => text.includes("Fusion host powers itself")), "Player aid must include Fusion host self-power in spatial power rule.");
+    assert.ok(frontTexts.some(text => text.includes("Customer")), "Player aid explains Customer cards.");
+    assert.ok(frontTexts.some(text => text.includes("final")), "Player aid explains final-table scoring.");
   }
   const mastersResponse = await fetch(releaseResourceUrl(base, "gallery-baseline.html"));
   assert.equal(mastersResponse.status, 200);
   const masters = await mastersResponse.text();
   assert.equal((masters.match(/class="card player-mat"/g) || []).length, 5);
-  assert.equal((masters.match(/class="card project-chip"/g) || []).length, 15);
+  assert.equal((masters.match(/class="card project-chip"/g) || []).length, 0);
+  assert.equal((masters.match(/class="card customer-card"/g) || []).length, 25);
+  assert.equal((masters.match(/class="card facility-card"/g) || []).length, 20);
+  assert.equal((masters.match(/data-facility-face="upgraded"/g) || []).length, 20);
   assert.equal((masters.match(/class="card core-action"/g) || []).length, 30);
   const factionSection = masters.match(/<section id="factions"[\s\S]*?<\/section>/)?.[0] || '';
   assert.equal((factionSection.match(/class="card"/g) || []).length, 6);
@@ -391,12 +394,16 @@ try {
     assert.equal(kitSetup.kitId, 'kit-violet', 'Faction selection must not change the selected kit');
     assert.equal(kitSetup.factions, 6);
     await evaluate("document.querySelector('#start-game').click()");
+    await waitFor("document.querySelector('#phase')?.textContent.trim() === 'waiting'");
+    await evaluate(`(async()=>{for(let i=0;i<12;i++){if(document.querySelector('#decision-title').textContent.includes('Reason'))return;const buttons=[...document.querySelectorAll('#decisions button')].filter(b=>!b.disabled);(buttons.find(b=>b.innerText==='Pass')||buttons[0])?.click();await new Promise(r=>setTimeout(r,80));}throw new Error('Selection did not open after Headlines');})()`);
     await waitFor("document.querySelectorAll('.decision-card').length === 6");
     const actions = await evaluate("[...document.querySelectorAll('.decision-card')].map(node=>node.innerText)");
     assert.ok(["Fund", "Research", "Build", "Organize", "Deploy", "Influence"].every((name) => actions.some((text) => text.includes(name))));
-    const ownedMarkers = await evaluate("[...document.querySelectorAll('.dot.agent')].map(node=>({symbol:node.textContent.trim(),title:node.title}))");
-    assert.ok(ownedMarkers.length > 0);
-    assert.ok(ownedMarkers.every(marker=>marker.symbol.length === 1 && marker.title.includes('kit')));
+    const owners = await evaluate("[...document.querySelectorAll('.kit-identity')].map(n=>n.innerText)");
+    assert.equal(owners.length,4);
+    assert.ok(owners[0].includes('Violet'));
+    assert.equal(await evaluate("document.querySelectorAll('.action-area').length"),6);
+    assert.equal(await evaluate("document.body.innerText.includes('undefined')"),false);
     await screenshot(`${viewport.name}-action-selection.png`);
     await evaluate("[...document.querySelectorAll('.decision-card')].find(node=>node.innerText.includes('Select Deploy')).click()");
     await waitFor("document.querySelectorAll('.decision-card').length > 0 && ![...document.querySelectorAll('.decision-card')].some(node=>node.innerText.includes('Select Fund'))");

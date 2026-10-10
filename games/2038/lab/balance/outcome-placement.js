@@ -1,8 +1,8 @@
-const TIEBREAK_FIELDS = ["score", "trust", "customers", "compute"];
+const TIEBREAK_FIELDS = ["score", "reputation", "customers", "compute"];
 
 function compareMerit(left, right) {
   for (const field of TIEBREAK_FIELDS) {
-    const difference = Number(left?.[field] || 0) - Number(right?.[field] || 0);
+    const difference = Number((field === "reputation" ? left?.reputation ?? left?.trust : left?.[field]) || 0) - Number((field === "reputation" ? right?.reputation ?? right?.trust : right?.[field]) || 0);
     if (difference !== 0) return Math.sign(difference);
   }
   return 0;

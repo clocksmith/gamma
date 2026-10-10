@@ -1,448 +1,308 @@
 import assert from "node:assert/strict";
-import { readFile } from "node:fs/promises";
 import test from "node:test";
-import { createBrowserInteractiveGame as createInteractiveGame } from "../lab/runtime/create-browser-interactive-game.js";
-import { deriveEraUnlocks } from "../tasks/content/era-unlocks.mjs";
-import { calculateDeployComputeCost } from "../lab/rules/deploy-costs.js";
-import { commitAction, createGame, resolveSelectedAction } from "../web/src/engine.js";
-
-const seed = "rule-audit-20260912";
-const card = (type, kind = "special") => ({ id: type, type, kind });
-
+import { createBrowserInteractiveGame } from "../lab/runtime/create-browser-interactive-game.js";
+import {
+  evaluateEraMandate,
+  nominalComputeCapacity,
+} from "../lab/rules/era-mandates.js";
 async function fixture(options = {}) {
-  const runtime = await createInteractiveGame({ playerCount: 4, seed,
-    factionId: "platform_empire", ...options }, () => {});
-  const { match } = runtime;
-  await match.setup(runtime.policies);
-  await match.beginRound([]);
-  match.round = 4;
-  match.choose = async (_policies, _seat, _stage, choices) =>
-    choices.find(choice => choice.decisionId === "training_continue") ||
-    choices.find(choice => choice.decisionId === "training_protect_scientific_method") ||
-    choices[0];
-  return match;
+  return (
+    await createBrowserInteractiveGame({
+      playerCount: 4,
+      seed: "small-browser-boundary",
+      ...options,
+    })
+  ).match;
 }
-
-function host(player, tile) {
-  player.facilities = [{ id: `s${player.seat}-facility-1`,
-    tileId: tile.instanceId, category: tile.category }];
+function policies(m, select) {
+  return m.players.map(() => ({
+    async decide(packet) {
+      return {
+        decision: {
+          decisionId: (select?.(packet) || packet.legalDecisions[0]).decisionId,
+          rationale: "Boundary fixture",
+        },
+        receipt: { provider: "fixture" },
+      };
+    },
+  }));
 }
-
-test("district discounts make each project affordable and determine the actual payment", async () => {
-  for (const factionId of ["platform_empire", "vertical_empire"]) {
-    for (const [category, runway, compute] of [["cloud", 3, 0], ["chip", 2, 1]]) {
-      for (const projectId of ["mega_cluster", "fusion_demonstrator", "quantum"]) {
-        const match = await fixture({ factionId }), player = match.players[0];
-        host(player, match.board.find(tile => tile.category === category));
-        Object.assign(player, { runway, compute, scrutiny: 0 });
-        const plan = match.legalBuildResolutions(0).find(choice =>
-          !choice.parameters.facility && choice.parameters.project?.id === projectId);
-        assert.ok(plan, `${factionId}: ${projectId} at ${category}`);
-        assert.equal(plan.parameters.actualRunwayCost, runway);
-        assert.equal(plan.parameters.project.compute, compute);
-        match.applyBuild(0, plan);
-        assert.deepEqual([player.runway, player.compute, player.scrutiny], [0, 0, 1]);
-      }
-    }
-  }
-});
-
-test("a combined Build applies the district discount once and the faction discount only to its Facility", async () => {
-  for (const [factionId, industrial] of [["platform_empire", false], ["vertical_empire", true]]) {
-    for (const [category, baseRunway, compute] of [["chip", 4, 1], ["cloud", 5, 0]]) {
-      const match = await fixture({ factionId }), player = match.players[0];
-      assert.equal(match.hasFactionAbility(player, "industrial_velocity"), industrial);
-      const runway = baseRunway - Number(industrial);
-      Object.assign(player, { runway, compute, facilities: [], scrutiny: 0 });
-      const plan = match.legalBuildResolutions(0).find(choice => choice.parameters.facility &&
-        choice.parameters.destinationCategory === category && choice.parameters.project?.id === "mega_cluster");
-      assert.ok(plan);
-      assert.equal(plan.parameters.actualRunwayCost, runway);
-      assert.equal(plan.parameters.facilityCost + plan.parameters.project.runway, runway);
-      match.applyBuild(0, plan);
-      assert.deepEqual([player.runway, player.compute], [0, 0]);
-      assert.equal(player.projects[0].hostId, player.facilities[0].id);
-    }
-  }
-});
-
-test("an exchange is legal before a blocked action and does not falsely promise to enable it", async () => {
-  const match = await fixture(), player = match.players[0], partner = match.players[1];
-  Object.assign(player, { selectedAction: "deploy", capability: 0, runway: 1, compute: 0 });
-  Object.assign(partner, { runway: 0, compute: 1 });
-  const choice = match.immediateTradeDecisions(0).find(choice => choice.parameters?.partnerSeat === 1);
-  assert.ok(choice);
-  assert.equal(choice.consequences.selectedActionCurrentlyResolvable, false);
-  assert.equal(choice.consequences.selectedActionResolvableAfterTrade, false);
-  assert.equal(choice.consequences.enablesSelectedAction, false);
-  assert.match(choice.label, /remains blocked/);
-  assert.equal(match.completeImmediateTrade(0, 1, choice.parameters), true);
-  assert.deepEqual([player.runway, player.compute, partner.runway, partner.compute], [0, 1, 1, 0]);
-  assert.equal(match.legalResolutions(0, "deploy").length, 0);
-  const customers = player.customers;
-  match.applyResolution(0, match.assignmentOnlyDecisions(player, "deploy")[0]);
-  assert.equal(player.customers, customers);
-  assert.ok(player.actionsUsed.includes("deploy"));
-});
-
-test("an exchange may leave a previously affordable Build blocked, while fixed-rate and cap limits remain enforced", async () => {
-  const match = await fixture(), player = match.players[0], partner = match.players[1];
-  Object.assign(player, { selectedAction: "build", runway: 1, compute: 0, facilities: [] });
-  Object.assign(partner, { runway: 0, compute: 1 });
-  const choice = match.immediateTradeDecisions(0).find(choice => choice.parameters?.partnerSeat === 1);
-  assert.ok(choice);
-  assert.equal(choice.consequences.selectedActionCurrentlyResolvable, true);
-  assert.equal(choice.consequences.selectedActionResolvableAfterTrade, false);
-  assert.equal(choice.consequences.enablesSelectedAction, false);
-  assert.match(choice.label, /remains blocked/);
-  const offer = choice.parameters;
-  for (const change of [{ giveAmount: 2 }, { receiveAmount: 2 }, { giveAmount: 0 },
-    { receiveResource: "runway" }, { giveResource: "trust" }, { timing: "after" }]) {
-    assert.equal(match.canCompleteImmediateTrade(0, 1, { ...offer, ...change }), false);
-  }
-  assert.equal(match.canCompleteImmediateTrade(0, 0, { ...offer, partnerSeat: 0 }), false);
-  partner.runway = match.factionResourceCap(partner, "runway");
-  assert.equal(match.canCompleteImmediateTrade(0, 1, offer), false);
-});
-
-test("The Dead Remain on Shift pays excess Scrutiny before its Facility produces", async () => {
-  const match = await fixture(), player = match.players[0];
-  host(player, match.board.find(tile => tile.category === "capital"));
-  Object.assign(player, { scrutiny: 10, runway: 0, trust: 3 });
-  match.headlineDecks[4][match.cycle - 1] = match.headlineDocument.headlines.find(
-    headline => headline.id === "agent_swarm_escapes_scope");
-  match.choose = async (_policies, _seat, _stage, choices) =>
-    choices.find(choice => choice.parameters?.facilityId) || choices[0];
-  await match.prepareHeadline([]);
-  assert.deepEqual([player.runway, player.trust, player.scrutiny], [2, 2, 10]);
-});
-
-test("overflow exhausts Runway, then Trust, without a pending settlement", async () => {
-  const match = await fixture(), player = match.players[0];
-  Object.assign(player, { scrutiny: 10, runway: 1, trust: 1 });
-  match.addScrutiny(player, 4);
-  assert.deepEqual([player.runway, player.trust, player.scrutiny], [0, 0, 10]);
-  match.addResource(player, "runway", 2);
-  assert.equal(player.runway, 2);
-});
-
-test("both Research paths settle Benchmark Leak before deciding whether Scientific Method is affordable", async () => {
-  for (const mode of ["synchronous", "policy"]) {
-    for (const [scrutiny, runway, protectedDuplicate, trust] of [
-      [10, 1, false, 2], [9, 1, true, 3], [10, 2, true, 3]
-    ]) {
-      const match = await fixture({ factionId: "imperial_research_lab" });
-      const player = match.players[0];
-      Object.assign(player, { scrutiny, runway, trust: 3, capability: 0, compute: 1 });
-      match.trainingDrawPile = [card("code", "domain"), card("benchmark_leak"), card("code", "domain")];
-      match.trainingDiscard = [];
-      const decision = match.legalResolutions(0, "research").find(choice => choice.parameters.destinationCategory === "cloud");
-      decision.parameters.stopAt = 7;
-      if (mode === "policy") await match.applyResolutionWithPolicies([], 0, decision);
-      else match.applyResolution(0, decision);
-      assert.equal(player.lastTrainingResult.protectedDuplicate, protectedDuplicate, `${mode}: ${scrutiny}/${runway}`);
-      assert.equal(player.lastTrainingResult.protection, protectedDuplicate ? "scientific_method" : null);
-      assert.equal(player.lastTrainingResult.runwaySpent, Number(protectedDuplicate));
-      assert.deepEqual([player.runway, player.trust, player.scrutiny, player.capability],
-        [0, trust, 10, protectedDuplicate ? 3 : 0]);
-      assert.equal(match.runwayConversionContexts.length, 0);
-    }
-  }
-});
-
-test("a later Human Evaluation cannot retroactively fund a penalty or earn a transient Trust award", async () => {
-  for (const mode of ["synchronous", "policy"]) {
-    const match = await fixture(), player = match.players[0];
-    const threshold = match.config.scoring.trustThresholds.find(threshold => threshold.value > 0).value;
-    Object.assign(player, { scrutiny: 10, runway: 0, trust: threshold - 1, capability: 0,
-      customers: 0, compute: 1, mandate: 0, mandateAwards: [] });
-    match.synchronizePublicMandate(player, "fixture");
-    match.trainingDrawPile = [card("benchmark_leak"), card("human_evaluation")];
-    match.trainingDiscard = [];
-    const decision = match.legalResolutions(0, "research").find(choice => choice.parameters.destinationCategory === "cloud");
-    decision.parameters.stopAt = 7;
-    if (mode === "policy") await match.applyResolutionWithPolicies([], 0, decision);
-    else match.applyResolution(0, decision);
-    assert.equal(player.trust, threshold - 1);
-    assert.ok(!player.mandateAwards.some(award => award.id === `trust-${threshold}`), mode);
-    assert.deepEqual(player.lastTrainingResult.permanentEffects,
-      [{ type: "scrutiny", amount: 1 }, { type: "trust", amount: 1 }]);
-  }
-});
-
-async function ventureYield(keepContract, relocate) {
-  const match = await fixture();
-  for (const player of match.players) Object.assign(player, { factionId: "platform_empire",
-    runway: 0, compute: 0, customers: 0, facilities: [], generators: [], projects: [] });
-  const leftTile = match.board.find(tile => tile.category === "cloud");
-  const rightTile = match.board.find(tile => ["cloud", "research", "capital", "consumer", "chip"].includes(tile.category) &&
-    match.areAdjacent(leftTile.instanceId, tile.instanceId));
-  host(match.players[0], leftTile);
-  host(match.players[1], rightTile);
-  const proposal = match.legalResolutions(0, "influence").find(choice =>
-    choice.parameters?.mode === "joint_venture" && choice.parameters.targetSeat === 1);
-  assert.ok(proposal);
-  assert.equal(await match.negotiate([], 0, proposal), true);
-  if (relocate) {
-    const relocation = match.legalResolutions(1, "organize").find(choice =>
-      choice.parameters.mode === "relocate" && choice.parameters.facilityDestinationId === leftTile.instanceId);
-    assert.ok(relocation);
-    match.applyResolution(1, relocation);
-    assert.equal(match.canFormPartnership(match.players[0], match.players[1]), false);
-    assert.ok(!match.legalResolutions(0, "influence").some(choice =>
-      choice.parameters?.mode === "joint_venture" && choice.parameters.targetSeat === 1));
-  }
-  if (!keepContract) match.contracts = [];
-  await match.produceAll([]);
-  assert.equal(match.contracts.length, Number(keepContract));
-  return match.players[1].compute;
+function host(m, s, area = "build") {
+  const f = {
+    id: `s${s}-facility-${m.players[s].facilities.length + 1}`,
+    tileId: area,
+    category: m.board.find((a) => a.instanceId === area).category,
+    upgraded: false,
+  };
+  m.players[s].facilities.push(f);
+  return f;
 }
-
-test("a Venture survives relocation as a contract but produces only between adjacent districts", async () => {
-  assert.equal((await ventureYield(true, false)) - (await ventureYield(false, false)), 1);
-  assert.equal((await ventureYield(true, true)) - (await ventureYield(false, true)), 0);
+const find = (m, s, a, pred = () => true) => {
+  const d = m.legalResolutions(s, a).find(pred);
+  assert.ok(d);
+  return d;
+};
+test("four tracks and six areas form the browser engine state", async () => {
+  const m = await fixture();
+  assert.equal(m.board.length, 6);
+  assert.deepEqual(Object.keys(m.config.resources), [
+    "runway",
+    "compute",
+    "capability",
+    "reputation",
+  ]);
+  assert.equal(m.players[0].customerCards.length, m.players[0].customers);
 });
-
-test("Era summaries move with project unlock data and do not mutate authored inputs", () => {
-  const game = { rounds: [1, 2, 3, 4].map(number => ({ number, newThisEra: [] })) };
-  const projects = [{ id: "fusion_demonstrator", unlockedRound: 3 }];
-  const ref = "${content.projects.byId.fusion_demonstrator.name}";
-  assert.deepEqual(deriveEraUnlocks(game, projects).rounds.map(round => round.newThisEra), [[], [], [ref], []]);
-  projects[0].unlockedRound = 2;
-  assert.deepEqual(deriveEraUnlocks(game, projects).rounds.map(round => round.newThisEra), [[], [ref], [], []]);
-  assert.deepEqual(game.rounds.map(round => round.newThisEra), [[], [], [], []]);
+test("Fund caps income and preserves the Reputation cost", async () => {
+  const m = await fixture();
+  const p = m.players[0];
+  p.runway = 11;
+  p.reputation = 3;
+  m.applyResolution(
+    0,
+    find(m, 0, "fund", (d) => d.parameters.mode === "venture"),
+  );
+  assert.equal(p.runway, 12);
+  assert.equal(p.reputation, 2);
 });
-
-test("compiled instructions agree with project unlocks, shared risk, and Fusion connections", async () => {
-  const config = JSON.parse(await readFile(new URL("../dist/runtime/game-config.json", import.meta.url)));
-  const projects = JSON.parse(await readFile(new URL("../dist/runtime/projects.json", import.meta.url)));
-  for (const project of projects.projects) {
-    for (const round of config.rounds) {
-      assert.equal(round.newThisEra.includes(project.name), round.number === project.unlockedRound);
-    }
+test("Build limited slots reject a rival after two reservations", async () => {
+  const m = await fixture();
+  m.players[0].runway = 12;
+  host(m, 1);
+  host(m, 2);
+  assert.ok(
+    !m
+      .legalResolutions(0, "build")
+      .some((d) => d.parameters.hostAreaId === "build"),
+  );
+});
+test("single upgrade flips the host and doubles its yield", async () => {
+  const m = await fixture();
+  m.round = 2;
+  const p = m.players[0];
+  p.runway = 12;
+  p.compute = 0;
+  const f = host(m, 0);
+  p.compute = 1;
+  m.applyResolution(
+    0,
+    find(m, 0, "build", (d) => d.parameters.upgradeHostId === f.id),
+  );
+  assert.equal(f.upgraded, true);
+  assert.equal(p.runway, 9);
+  assert.equal(p.compute, 0);
+  await m.produceAll();
+  assert.equal(p.compute, 4);
+});
+test("Deploy takes a card, charges Compute and Reputation, triggers only its faction", async () => {
+  const m = await fixture({ factionId: "platform_empire" });
+  const p = m.players[0];
+  p.customerCards = [];
+  p.capability = 2;
+  p.compute = 2;
+  p.reputation = 3;
+  p.runway = 4;
+  m.applyResolution(0, find(m, 0, "deploy"));
+  assert.equal(p.customers, 1);
+  assert.equal(p.customerCards[0].ordinal, 1);
+  assert.equal(p.compute, 1);
+  assert.equal(p.reputation, 2);
+  assert.equal(p.runway, 5);
+  assert.ok(!m.legalResolutions(0, "deploy").length);
+});
+test("Research bank and duplicate crash retain separate Reputation consequences", async () => {
+  const m = await fixture({ factionId: "platform_empire" });
+  const p = m.players[0];
+  p.capability = 0;
+  p.compute = 1;
+  p.reputation = 3;
+  m.trainingDrawPile = [
+    { id: "l", type: "benchmark_leak", kind: "special" },
+    { id: "a", type: "code", kind: "domain" },
+    { id: "b", type: "code", kind: "domain" },
+  ];
+  await m.research(
+    policies(m, (p) =>
+      p.legalDecisions.find((d) => d.decisionId === "research_continue"),
+    ),
+    0,
+    find(m, 0, "research"),
+  );
+  assert.equal(p.capability, 0);
+  assert.equal(p.reputation, 2);
+  assert.equal(m.trainingRun, null);
+});
+test("trade rejects wrong quantities and credits both sides atomically", async () => {
+  const m = await fixture({ factionId: "platform_empire" });
+  Object.assign(m.players[0], { runway: 3, compute: 1 });
+  Object.assign(m.players[1], { runway: 2, compute: 3 });
+  const o = m
+    .immediateTradeDecisions(0)
+    .find(
+      (d) =>
+        d.parameters.partnerSeat === 1 &&
+        d.parameters.giveResource === "runway",
+    ).parameters;
+  const before = m.snapshot();
+  assert.equal(
+    m.completeImmediateTrade(0, 1, { ...o, receiveAmount: 0 }),
+    false,
+  );
+  assert.deepEqual(m.snapshot(), before);
+  assert.equal(m.completeImmediateTrade(0, 1, o), true);
+  assert.deepEqual(
+    m.players.slice(0, 2).map((p) => [p.runway, p.compute]),
+    [
+      [2, 2],
+      [3, 2],
+    ],
+  );
+});
+test("Venture responder receives fixed public hosts and both nominal incomes", async () => {
+  const m = await fixture();
+  m.round = 3;
+  const f = host(m, 0, "fund"),
+    r = host(m, 1, "build");
+  let packet;
+  await m.negotiate(
+    policies(m, (p) => {
+      packet = p;
+      return p.legalDecisions.find((d) => d.decisionId === "agreement_accept");
+    }),
+    0,
+    find(
+      m,
+      0,
+      "influence",
+      (d) => d.parameters.leftId === f.id && d.parameters.rightId === r.id,
+    ),
+  );
+  const v = packet.observation.publicTable.pendingJointVenture;
+  assert.equal(v.proposerSeat, 0);
+  assert.equal(v.left.facilityId, f.id);
+  assert.deepEqual(v.income, [
+    { seat: 0, resource: "compute", amount: 1 },
+    { seat: 1, resource: "runway", amount: 1 },
+  ]);
+  assert.equal(m.contracts.length, 1);
+  assert.equal(m.pendingJointVenture, null);
+  assert.ok(
+    !m
+      .legalResolutions(0, "influence")
+      .some((d) => d.parameters.mode === "venture"),
+  );
+});
+test("Venture refusal and provider failure clear terms and award nothing", async () => {
+  for (const fail of [false, true]) {
+    const m = await fixture();
+    m.round = 3;
+    host(m, 0);
+    host(m, 1, "fund");
+    const d = find(m, 0, "influence", (d) => d.parameters.mode === "venture");
+    const ps = policies(m, (p) => {
+      if (fail) throw new Error("provider unavailable");
+      return p.legalDecisions.find((d) => d.decisionId === "agreement_reject");
+    });
+    if (fail)
+      await assert.rejects(m.negotiate(ps, 0, d), /provider unavailable/);
+    else await m.negotiate(ps, 0, d);
+    assert.equal(m.pendingJointVenture, null);
+    assert.equal(m.contracts.length, 0);
   }
-  assert.ok(config.actions.find(action => action.id === "build").turnContract.risk.includes(`${projects.constructionCost.scrutiny} Scrutiny`));
-  assert.match(config.board.startingGridConnection.rule, /Generator or Fusion host/);
-  assert.doesNotMatch(config.board.startingGridConnection.restrictions, /demand/);
 });
-
-test("Deploy honors Compute Estate and Human Access discounts, handles caps, and matches browser execution", async () => {
-  const match = await fixture();
-  const player = match.players[0];
-  const cloudTile = match.board.find(tile => tile.category === "cloud");
-  const consumerTile = match.board.find(tile => tile.category === "consumer");
-  const chipTile = match.board.find(tile => tile.category === "chip");
-
-  // 1. Compute Estate: Capability >= 2, Compute = 0 -> Deploy is legal, costs 0, gives 1 Customer, adds 1 Scrutiny
-  Object.assign(player, { capability: 2, compute: 0, customers: 0, scrutiny: 0 });
-  const cloudPlan = match.legalResolutions(0, "deploy").find(choice => choice.parameters.destinationCategory === "cloud");
-  assert.ok(cloudPlan, "Deploy at Compute Estate must be legal with 0 Compute");
-  assert.equal(cloudPlan.parameters.computeCost, 0);
-  assert.equal(cloudPlan.consequences.compute, 0);
-  match.applyResolution(0, cloudPlan);
-  assert.deepEqual([player.compute, player.customers, player.scrutiny], [0, 1, 1]);
-
-  // 2. Human Access: Capability >= 4 (for customer 2), Compute = 0 -> costs 0 via location waiver
-  Object.assign(player, { capability: 4, compute: 0, scrutiny: 0 });
-  const consumerPlan = match.legalResolutions(0, "deploy").find(choice => choice.parameters.destinationCategory === "consumer");
-  assert.ok(consumerPlan, "Deploy at Human Access must be legal with 0 Compute");
-  assert.equal(consumerPlan.parameters.computeCost, 0);
-  assert.equal(consumerPlan.consequences.compute, 0);
-  match.applyResolution(0, consumerPlan);
-  assert.deepEqual([player.compute, player.customers, player.scrutiny], [0, 2, 1]);
-
-  // 3. Ordinary district (Chip): Capability >= 6 (for customer 3), Compute = 0 -> blocked
-  Object.assign(player, { capability: 6, compute: 0 });
-  const chipPlanNoCompute = match.legalResolutions(0, "deploy").find(choice => choice.parameters.destinationCategory === "chip");
-  assert.equal(chipPlanNoCompute, undefined, "Deploy at ordinary district blocked with 0 Compute");
-
-  // With Compute = 1, ordinary district is legal and spends 1 Compute
-  player.compute = 1;
-  const chipPlan = match.legalResolutions(0, "deploy").find(choice => choice.parameters.destinationCategory === "chip");
-  assert.ok(chipPlan, "Deploy at ordinary district legal with 1 Compute");
-  assert.equal(chipPlan.parameters.computeCost, 1);
-  assert.equal(chipPlan.consequences.compute, -1);
-  match.applyResolution(0, chipPlan);
-  assert.deepEqual([player.compute, player.customers], [0, 3]);
-
-  // 4. Insufficient Capability: Capability < 8 (for customer 4) -> blocked even with plenty of Compute
-  Object.assign(player, { capability: 5, compute: 10 });
-  assert.equal(match.legalResolutions(0, "deploy").length, 0, "Deploy blocked when Capability is insufficient");
-
-  // 5. Customer Cap: when customers == 5 -> blocked
-  Object.assign(player, { capability: 10, compute: 10, customers: 5 });
-  assert.equal(match.legalResolutions(0, "deploy").length, 0, "Deploy blocked when Customer cap (5) is reached");
-
-  // 6. Higher base cost: calculateDeployComputeCost subtracts 1, floored at 0 (does not waive every cost)
-  assert.equal(calculateDeployComputeCost(cloudTile, { baseCost: 2 }), 1);
-  assert.equal(calculateDeployComputeCost(cloudTile, { baseCost: 1 }), 0);
-  assert.equal(calculateDeployComputeCost(cloudTile, { baseCost: 0 }), 0);
-  assert.equal(calculateDeployComputeCost(consumerTile, { baseCost: 2 }), 0);
-  assert.equal(calculateDeployComputeCost(chipTile, { baseCost: 2 }), 2);
-
-  // 7. Tactical price cut & waiver interaction / no double discount
-  assert.equal(calculateDeployComputeCost(cloudTile, { baseCost: 2, tacticPriceCut: true }), 0);
-  assert.equal(calculateDeployComputeCost(consumerTile, { baseCost: 1, tacticPriceCut: true }), 0);
-  assert.equal(calculateDeployComputeCost("cloud", { baseCost: 1 }), 0);
-
-  // 8. Exercise web engine executeAction: browser actual selection and resolution flow
-  const configDoc = JSON.parse(await readFile(new URL("../dist/runtime/game-config.json", import.meta.url)));
-  const factionsDoc = JSON.parse(await readFile(new URL("../dist/runtime/factions.json", import.meta.url)));
-  const headlinesDoc = JSON.parse(await readFile(new URL("../dist/runtime/headlines.json", import.meta.url)));
-  const webState = createGame(configDoc, factionsDoc, headlinesDoc, "deploy-test-seed", "platform_empire", 4);
-  const webCloudTile = webState.board.find(tile => tile.category === "cloud");
-  Object.assign(webState.player, { capability: 2, compute: 0, customers: 0, scrutiny: 0 });
-  const agentPiece = webState.player.pieces[0];
-  commitAction(webState, "deploy");
-  resolveSelectedAction(configDoc, headlinesDoc, webState, agentPiece.id, webCloudTile.instanceId);
-  assert.deepEqual([webState.player.compute, webState.player.customers, webState.player.scrutiny], [0, 1, 1]);
+test("nominal capacity is read-only, uncapped, and current-host dependent", async () => {
+  const m = await fixture();
+  const f = host(m, 0),
+    r = host(m, 1, "research");
+  f.upgraded = true;
+  m.contracts = [
+    {
+      id: 1,
+      kind: "joint_venture",
+      left: { seat: 0, facilityId: f.id },
+      right: { seat: 1, facilityId: r.id },
+    },
+  ];
+  m.players[0].compute = 10;
+  const before = m.snapshot();
+  assert.equal(nominalComputeCapacity(m, m.players[0]), 5);
+  assert.deepEqual(m.snapshot(), before);
+  m.players[1].facilities = [];
+  assert.equal(nominalComputeCapacity(m, m.players[0]), 4);
 });
-
-test("Fund accounting credits gross runway once, handles Scrutiny overflow penalties separately, and records credited income accurately", async () => {
-  const match = await fixture();
-  const player = match.players[0];
-  match.roundMandate = match.mandateDocument.mandates.find(x => x.id === "markets_prefer_destiny");
-  player.roundMetrics = { fundRunway: 0 };
-
-  // 1. Zero Runway, full Scrutiny (10 cubes), Venture mode at normal district:
-  // Gross runway = 4. Runway increases 0 -> 4 (+4 credited). Scrutiny overflows by 2 -> pays 2 Runway (Runway 4 -> 2).
-  // Credited income is 4, so fundRunway is 4.
-  Object.assign(player, { runway: 0, scrutiny: 10 });
-  const ventureNormal = match.legalResolutions(0, "fund").find(choice =>
-    choice.parameters.mode === "venture" && choice.parameters.destinationCategory !== "capital"
+test("Review follows income and recognition follows Review", async () => {
+  const m = await fixture();
+  const p = m.players[0];
+  p.runway = 0;
+  p.reputation = 1;
+  host(m, 0, "fund");
+  await m.produceAll();
+  assert.equal(p.runway, 2);
+  await m.audit();
+  assert.equal(p.runway, 0);
+  m.round = 4;
+  p.capability = 9;
+  p.reputation = 4;
+  p.compute = 3;
+  await m.declareAgiAchievements(policies(m));
+  assert.equal(p.agiDeclared, true);
+  assert.equal(p.compute, 0);
+  assert.equal(
+    m.currentScore(p),
+    17 +
+      m
+        .finalObjectives()
+        .reduce((n, c) => n + c.standings.find((s) => s.seat === 0).points, 0),
   );
-  assert.ok(ventureNormal, "Venture fund at normal district");
-  match.applyResolution(0, ventureNormal);
-  assert.equal(player.runway, 2, "Net runway is 2 after 2 scrutiny overflow penalties");
-  assert.equal(player.roundMetrics.fundRunway, 4, "Gross credited runway is 4");
-  assert.equal(match.currentEraObjective(player).value, player.runway);
-
-  // 2. Near-cap balance (11 Runway), full Scrutiny at Allocation Exchange (capital):
-  // Gross runway = 4 + 1 = 5. Adding 5 to 11 caps at 12 (+1 credited, 4 discarded).
-  // Then 2 scrutiny overflow: pays 2 Runway (Runway 12 -> 10).
-  // Credited income is 1, so fundRunway increases by 1 (4 -> 5).
-  player.runway = 11;
-  player.scrutiny = 10;
-  const ventureCapital = match.legalResolutions(0, "fund").find(choice =>
-    choice.parameters.mode === "venture" && choice.parameters.destinationCategory === "capital"
-  );
-  assert.ok(ventureCapital, "Venture fund at capital");
-  match.applyResolution(0, ventureCapital);
-  assert.equal(player.runway, 10, "Net runway is 10 (11 + 5 = 12 capped, minus 2 overflow penalties)");
-  assert.equal(player.roundMetrics.fundRunway, 5, "Credited runway was 1 (over-cap discarded)");
-  assert.equal(match.currentEraObjective(player).value, player.runway);
-
-  // 3. Conservative mode at Allocation Exchange (capital):
-  // Gross runway = 2 + 1 = 3. Room in supply. Zero scrutiny added.
-  player.runway = 0;
-  player.scrutiny = 0;
-  const conservativeCapital = match.legalResolutions(0, "fund").find(choice =>
-    choice.parameters.mode === "conservative" && choice.parameters.destinationCategory === "capital"
-  );
-  assert.ok(conservativeCapital, "Conservative fund at capital");
-  match.applyResolution(0, conservativeCapital);
-  assert.equal(player.runway, 3);
-  assert.equal(player.roundMetrics.fundRunway, 8, "5 + 3 = 8 credited fund runway");
-
-  // 4. Web engine browser execution matches displayed summary and balances:
-  const configDoc = JSON.parse(await readFile(new URL("../dist/runtime/game-config.json", import.meta.url)));
-  const factionsDoc = JSON.parse(await readFile(new URL("../dist/runtime/factions.json", import.meta.url)));
-  const headlinesDoc = JSON.parse(await readFile(new URL("../dist/runtime/headlines.json", import.meta.url)));
-  const webState = createGame(configDoc, factionsDoc, headlinesDoc, "fund-test-seed", "platform_empire", 4);
-  const webCapitalTile = webState.board.find(tile => tile.category === "capital");
-  Object.assign(webState.player, {
-    runway: 0,
-    scrutiny: 10,
-    auditBag: Array.from({ length: 10 }, () => webState.player.factionId)
-  });
-  commitAction(webState, "fund");
-  resolveSelectedAction(configDoc, headlinesDoc, webState, webState.player.pieces[0].id, webCapitalTile.instanceId, { fundMode: "venture" });
-  assert.equal(webState.player.runway, 3, "Web engine: 0 + 5 = 5 gross Runway, minus 2 overflow penalties = 3");
-  assert.match(webState.log[0], /\+5 Runway, \+2 Scrutiny/);
 });
-
-test("Fusion immediately connects nearby Facilities upon construction, and Quantum produces Capability before Era IV AGI recognition", async () => {
-  const match = await fixture();
-  const player = match.players[0];
-  const availableBuild = () => match.legalActionSelections(0).some(choice => choice.actionId === "build");
-  const build = plan => {
-    assert.ok(availableBuild(), `Build is available in Era ${match.round}`);
-    assert.ok(plan, `Legal Build plan exists in Era ${match.round}`);
-    match.applyResolution(0, plan);
-    assert.equal(availableBuild(), false, "Build exhausts for the Era");
-  };
-  const fund = () => {
-    const plan = match.legalResolutions(0, "fund").find(choice => choice.parameters.mode === "conservative");
-    assert.ok(match.legalActionSelections(0).some(choice => choice.actionId === "fund"));
-    assert.ok(plan);
-    match.applyResolution(0, plan);
-  };
-  const nextEra = async era => {
-    match.round = era;
-    await match.beginRound([]);
-    assert.ok(availableBuild(), `Build refreshes in Era ${era}`);
-  };
-
-  // Construct both numbered Facilities through ordinary Build resolutions.
-  await nextEra(1);
-  const first = match.legalBuildResolutions(0).find(choice =>
-    choice.parameters.facility && !choice.parameters.project &&
-    !["frontier", "research"].includes(choice.parameters.destinationCategory) &&
-    match.board.some(tile => tile.category !== "frontier" && tile.category !== "research" &&
-      match.areAdjacent(choice.parameters.destinationId, tile.instanceId))
+test("zero qualifies in pure comparisons and different histories never change standings", async () => {
+  const m = await fixture();
+  const p = m.players[0];
+  p.reputation = 0;
+  const c = { metric: "reputation", direction: "min", qualification: [] };
+  const before = evaluateEraMandate(c, m, p);
+  p.history = { startingReputation: 99 };
+  p.metrics.researchCapability = [{ gained: 90 }];
+  assert.deepEqual(evaluateEraMandate(c, m, p), before);
+  assert.equal(before.qualified, true);
+  assert.equal(before.value, 0);
+});
+test("all four objectives settle only at the final table", async () => {
+  const m = await fixture();
+  for (let r = 1; r <= 4; r++) {
+    m.round = r;
+    await m.beginRound();
+    assert.equal(m.matchMetrics.eraMandateScores.length, 0);
+  }
+  assert.equal(m.revealedMandates.length, 4);
+  m.complete = true;
+  m.scoreMandate();
+  assert.equal(m.matchMetrics.eraMandateScores.length, 4);
+  assert.equal(
+    m.snapshot().players[0].finalScore,
+    m.currentScore(m.players[0]),
   );
-  build(first);
-  fund();
-  await nextEra(2);
-  const second = match.legalBuildResolutions(0).find(choice =>
-    choice.parameters.facility && !choice.parameters.project &&
-    choice.parameters.destinationCategory !== "research" &&
-    match.areAdjacent(player.facilities[0].tileId, choice.parameters.destinationId)
+});
+test("complete browser-native game respects action exhaustion, phases and hidden draw state", async () => {
+  const m = await fixture();
+  const r = await m.play(
+    policies(m, (p) =>
+      p.legalDecisions.find((d) => d.decisionId === "trade_none"),
+    ),
   );
-  build(second);
-  assert.equal(player.facilities.length, 2);
-  assert.ok(player.facilities.every(facility => facility.category !== "frontier"));
-
-  await nextEra(3);
-  fund();
-  assert.deepEqual(match.latestPoweredFacilities(player).map(f => f.id), ["s0-facility-1"]);
-  const quantumInEra3 = match.legalBuildResolutions(0).find(choice => choice.parameters.project?.id === "quantum");
-  assert.equal(quantumInEra3, undefined, "Quantum must not be legal to build in Era III");
-
-  const fusionPlan = match.legalBuildResolutions(0).find(choice =>
-    !choice.parameters.facility &&
-    choice.parameters.project?.id === "fusion_demonstrator" &&
-    choice.parameters.project?.hostId === "s0-facility-1"
-  );
-  build(fusionPlan);
-
-  assert.deepEqual(match.latestPoweredFacilities(player).map(f => f.id).sort(), ["s0-facility-1", "s0-facility-2"]);
-
-  await nextEra(4);
-  fund();
-  match.choose = async (_policies, _seat, _stage, choices) => choices.find(c => c.decisionId === "agi_declare") || choices[0];
-
-  const quantumPlan = match.legalBuildResolutions(0).find(choice =>
-    !choice.parameters.facility &&
-    choice.parameters.project?.id === "quantum" &&
-    choice.parameters.project?.hostId === "s0-facility-2"
-  );
-  build(quantumPlan);
-  assert.deepEqual(player.projects.map(project => [project.projectId, project.builtEra]),
-    [["fusion_demonstrator", 3], ["quantum", 4]]);
-
-  // Isolate the AGI threshold after proving the construction sequence.
-  Object.assign(player, { capability: 8, trust: 4, compute: 3 });
-  assert.equal(match.declarationReadiness(player).ready, false, "Not ready before Production: Capability 8 < 9");
-  assert.equal(match.declarationReadiness(player).failingRequirement, "capability");
-
-  // Step 3: Production resolves first (Quantum yields +1 Capability -> 8 + 1 = 9)
-  match.initiativeSeat = 0;
-  await match.produceAll([]);
-  assert.equal(player.capability, 9, "Quantum produced +1 Capability during Production");
-  assert.equal(match.declarationReadiness(player).ready, true, "Ready for AGI recognition after Quantum production");
-
-  // Step 4: AGI recognition follows Production
-  await match.declareAgiAchievements([]);
-  assert.equal(player.agiDeclared, true, "AGI recognized after qualifying via Quantum");
+  assert.equal(m.complete, true);
+  assert.equal(r.matchMetrics.productionSnapshots.length, 4);
+  assert.equal(r.futureTimeline.length, 12);
+  assert.equal(r.matchMetrics.eraMandateScores.length, 4);
+  for (const p of m.players) {
+    assert.equal(p.actionsUsed.length, 3);
+    assert.equal(new Set(p.actionsUsed).size, 3);
+    assert.equal(
+      Object.values(p.metrics.actions).reduce((n, v) => n + v, 0),
+      12,
+    );
+    assert.equal(p.mandate, undefined);
+  }
+  assert.equal(m.publicObservation(0).trainingDrawPile, undefined);
+  assert.ok(r.standings.every((p) => Number.isFinite(p.score)));
 });

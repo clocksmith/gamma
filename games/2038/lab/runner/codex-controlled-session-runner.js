@@ -323,7 +323,7 @@ export async function loadKit(kitManifestPath) {
   const rulebook = documents.find(document => document.id === "core-rules");
   const inventory = legacyInventory || {
     ...rulebook,
-    contents: rulebook?.contents.split("\n## 9. Map and component reference\n")[1]?.split("\n## ")[0]
+    contents: rulebook?.contents.split("\n## Components\n")[1]?.split("\n## ")[0] || rulebook?.contents.split("\n## 9. Map and component reference\n")[1]?.split("\n## ")[0]
   };
   if (!inventory.contents) throw new Error("Frozen kit has no component inventory section.");
   return { root, manifestPath, manifest, documents, readingDocuments, inventory };

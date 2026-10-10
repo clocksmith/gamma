@@ -791,13 +791,13 @@ Build the permission, alliances, and official legitimacy required for your prefe
 
 ### Frontier
 
-<!-- lore-game-board-tiles-frontier:start -->
+
 
 #### Flavor text
 
 The jurisdiction’s standing civic exception: new systems are authorized as temporary, beneficial, and voluntary before society must organize around them.
 
-<!-- lore-game-board-tiles-frontier:end -->
+
 
 ### Research Commons
 
@@ -831,13 +831,13 @@ Every resident may opt out through the account settings of the service they requ
 
 ### Fabrication Corridor
 
-<!-- lore-game-board-tiles-foundry:start -->
+
 
 #### Flavor text
 
 Yield, water, labor, and export priority are negotiated at the same loading gate.
 
-<!-- lore-game-board-tiles-foundry:end -->
+
 
 ### Allocation Exchange
 
@@ -861,13 +861,13 @@ Every transition program includes an exit path for the work it was created to pr
 
 ### Consensus Network
 
-<!-- lore-game-board-tiles-media:start -->
+
 
 #### Flavor text
 
 A public is assembled from attention, verification, and the version of events that arrives on time.
 
-<!-- lore-game-board-tiles-media:end -->
+
 
 ### Civic Permission Authority
 
@@ -881,23 +881,23 @@ A temporary authorization remains voluntary until every essential service requir
 
 ### Power Corridor
 
-<!-- lore-game-board-tiles-grid-reactor:start -->
+
 
 #### Flavor text
 
 Every promised future submits one more request for transmission, cooling, and priority.
 
-<!-- lore-game-board-tiles-grid-reactor:end -->
+
 
 ### Thermal and Water Basin
 
-<!-- lore-game-board-tiles-renewable-basin:start -->
+
 
 #### Flavor text
 
 Clean power, water, and thermal relief become one indivisible public ledger.
 
-<!-- lore-game-board-tiles-renewable-basin:end -->
+
 
 ### Code
 
@@ -1001,7 +1001,7 @@ People retain judgment by negotiating what judgment is permitted to mean.
 
 ### Civic Heat Battery
 
-<!-- lore-game-power-sources-clean-infrastructure:start -->
+
 
 #### Public claim
 
@@ -1011,11 +1011,11 @@ Electricity supply connecting nearby Facilities.
 
 Public capacity, maintained at grid scale.
 
-<!-- lore-game-power-sources-clean-infrastructure:end -->
+
 
 ### Emergency Power Complex
 
-<!-- lore-game-power-sources-emergency-infrastructure:start -->
+
 
 #### Public claim
 
@@ -1025,7 +1025,7 @@ Electricity supply connecting nearby Facilities.
 
 Exceptional capacity under continuous renewal.
 
-<!-- lore-game-power-sources-emergency-infrastructure:end -->
+
 
 ### Fusion Demonstrator
 
