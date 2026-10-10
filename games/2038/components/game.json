@@ -42,11 +42,9 @@
       "cycles": 3,
       "name": "${content.referenceCards.byId.era_scale.name}",
       "newThisEra": [
-        "Facility upgrades"
+        "A new Headline packet and objective"
       ],
-      "unlocks": [
-        "upgrade"
-      ]
+      "unlocks": []
     },
     {
       "number": 3,
@@ -54,7 +52,7 @@
       "cycles": 3,
       "name": "${content.referenceCards.byId.era_narrative.name}",
       "newThisEra": [
-        "Joint Ventures"
+        "A new Headline packet and objective"
       ],
       "unlocks": []
     },
@@ -103,11 +101,11 @@
     {
       "id": "build",
       "name": "${terms.actions.build}",
-      "summary": "Build one Facility in an open area for 2 Runway, or upgrade one for 3 Runway and 1 Compute from Era II.",
+      "summary": "Pay 2 Runway to equip one of your Orgs. Flip it: it produces twice its hex’s yield.",
       "turnContract": {
         "cost": "Printed on this action",
         "modes": [
-          "Build one Facility in an open area for 2 Runway, or upgrade one for 3 Runway and 1 Compute from Era II."
+          "Pay 2 Runway to equip one of your Orgs. Flip it: it produces twice its hex’s yield."
         ],
         "risk": "Apply the printed Reputation change"
       },
@@ -118,11 +116,11 @@
     {
       "id": "organize",
       "name": "${terms.actions.organize}",
-      "summary": "Pay 2 Runway to establish an Org, or reassign another Org to any area.",
+      "summary": "Pay 2 Runway to establish an Org on this hex, or reassign another Org to any hex.",
       "turnContract": {
         "cost": "Printed on this action",
         "modes": [
-          "Pay 2 Runway to establish an Org, or reassign another Org to any area."
+          "Pay 2 Runway to establish an Org on this hex, or reassign another Org to any hex."
         ],
         "risk": "Apply the printed Reputation change"
       },
@@ -133,11 +131,11 @@
     {
       "id": "deploy",
       "name": "${terms.actions.deploy}",
-      "summary": "Pay 1 Compute to take your next Customer card if Capability meets its requirement; lose 1 Reputation.",
+      "summary": "Pay 1 Compute to gain 1 Customer if Capability meets the next requirement; lose 1 Reputation.",
       "turnContract": {
         "cost": "Printed on this action",
         "modes": [
-          "Pay 1 Compute to take your next Customer card if Capability meets its requirement; lose 1 Reputation."
+          "Pay 1 Compute to gain 1 Customer if Capability meets the next requirement; lose 1 Reputation."
         ],
         "risk": "Apply the printed Reputation change"
       },
@@ -148,11 +146,11 @@
     {
       "id": "influence",
       "name": "${terms.actions.influence}",
-      "summary": "Gain 2 Reputation, or propose/terminate a Joint Venture from Era III.",
+      "summary": "Gain 2 Reputation.",
       "turnContract": {
         "cost": "Printed on this action",
         "modes": [
-          "Gain 2 Reputation, or propose/terminate a Joint Venture from Era III."
+          "Gain 2 Reputation."
         ],
         "risk": "Apply the printed Reputation change"
       },
@@ -185,38 +183,36 @@
       "cap": 6,
       "name": "Reputation",
       "microcopy": "Public standing. Risky choices reduce it; Influence restores it."
+    },
+    "customers": {
+      "min": 0,
+      "cap": 5,
+      "name": "Customers",
+      "microcopy": "Adoption: one Runway per Customer at Production and two final Mandate each."
     }
   },
   "playerSupply": {
-    "facilities": 4,
     "agents": 4,
     "startingAgents": 2,
-    "coreActionCards": 6,
-    "resourceTrackCubes": 4,
-    "customerCards": 5,
-    "agiRecognitionCubes": 1,
-    "facilityConstructionOrder": [
-      1,
-      2,
-      3,
-      4
-    ]
+    "resourceTrackCubes": 5,
+    "coreActionCards": 0,
+    "customerCards": 0,
+    "facilities": 0,
+    "agiRecognitionCubes": 0
   },
   "sharedSupply": {
-    "jointVenturePairs": 6,
-    "governanceBoards": 1,
-    "governanceBoardEraPanels": 4,
+    "hexTiles": 7,
     "currentEraMarkers": 1,
-    "playerAidFoldouts": 5,
+    "initiativeMarkers": 1,
     "playerMats": 5,
     "factionIdentityCards": 6,
-    "initiativeMarkers": 1
+    "pencils": 1,
+    "jointVenturePairs": 0
   },
   "board": {
-    "layout": "shared-action-areas",
+    "layout": "shared-hex-ring",
     "selectedTileCount": 6,
     "prototypeTileCount": 6,
-    "facilitySpacesPerArea": 2,
     "tiles": [
       {
         "id": "fund",
@@ -224,15 +220,15 @@
         "category": "capital",
         "count": 1,
         "name": "Allocation Exchange",
-        "facilitySpaces": 2,
-        "visit": "Resolve the selected Core Action. No separate visit bonus.",
-        "production": "Gain 2 Runway per Facility, doubled when upgraded.",
+        "visit": "Stay or move one edge, then resolve this hex’s Action.",
+        "production": "Gain 2 Runway per Org, doubled when equipped.",
         "yield": {
           "resource": "runway",
           "amount": 2
         },
-        "contractResource": "runway",
-        "loreRef": "game-board-tiles-capital"
+        "loreRef": "game-board-tiles-capital",
+        "q": 0,
+        "r": -1
       },
       {
         "id": "research",
@@ -240,15 +236,15 @@
         "category": "research",
         "count": 1,
         "name": "Research Commons",
-        "facilitySpaces": 2,
-        "visit": "Resolve the selected Core Action. No separate visit bonus.",
-        "production": "Gain 1 Compute per Facility, doubled when upgraded.",
+        "visit": "Stay or move one edge, then resolve this hex’s Action.",
+        "production": "Gain 1 Compute per Org, doubled when equipped.",
         "yield": {
           "resource": "compute",
           "amount": 1
         },
-        "contractResource": "compute",
-        "loreRef": "game-board-tiles-research"
+        "loreRef": "game-board-tiles-research",
+        "q": 1,
+        "r": -1
       },
       {
         "id": "build",
@@ -256,15 +252,15 @@
         "category": "cloud",
         "count": 1,
         "name": "Compute Estate",
-        "facilitySpaces": 2,
-        "visit": "Resolve the selected Core Action. No separate visit bonus.",
-        "production": "Gain 2 Compute per Facility, doubled when upgraded.",
+        "visit": "Stay or move one edge, then resolve this hex’s Action.",
+        "production": "Gain 2 Compute per Org, doubled when equipped.",
         "yield": {
           "resource": "compute",
           "amount": 2
         },
-        "contractResource": "compute",
-        "loreRef": "game-board-tiles-cloud"
+        "loreRef": "game-board-tiles-cloud",
+        "q": 1,
+        "r": 0
       },
       {
         "id": "organize",
@@ -272,15 +268,15 @@
         "category": "talent",
         "count": 1,
         "name": "Workforce Transition",
-        "facilitySpaces": 2,
-        "visit": "Resolve the selected Core Action. No separate visit bonus.",
-        "production": "Gain 1 Runway per Facility, doubled when upgraded.",
+        "visit": "Stay or move one edge, then resolve this hex’s Action.",
+        "production": "Gain 1 Runway per Org, doubled when equipped.",
         "yield": {
           "resource": "runway",
           "amount": 1
         },
-        "contractResource": "runway",
-        "loreRef": "game-board-tiles-talent"
+        "loreRef": "game-board-tiles-talent",
+        "q": 0,
+        "r": 1
       },
       {
         "id": "deploy",
@@ -288,15 +284,15 @@
         "category": "consumer",
         "count": 1,
         "name": "Human Access",
-        "facilitySpaces": 2,
-        "visit": "Resolve the selected Core Action. No separate visit bonus.",
-        "production": "Gain 1 Runway per Facility, doubled when upgraded.",
+        "visit": "Stay or move one edge, then resolve this hex’s Action.",
+        "production": "Gain 1 Runway per Org, doubled when equipped.",
         "yield": {
           "resource": "runway",
           "amount": 1
         },
-        "contractResource": "runway",
-        "loreRef": "game-board-tiles-consumer"
+        "loreRef": "game-board-tiles-consumer",
+        "q": -1,
+        "r": 1
       },
       {
         "id": "influence",
@@ -304,17 +300,24 @@
         "category": "government",
         "count": 1,
         "name": "Public Standing",
-        "facilitySpaces": 2,
-        "visit": "Resolve the selected Core Action. No separate visit bonus.",
-        "production": "Gain 1 Reputation per Facility, doubled when upgraded.",
+        "visit": "Stay or move one edge, then resolve this hex’s Action.",
+        "production": "Gain 1 Reputation per Org, doubled when equipped.",
         "yield": {
           "resource": "reputation",
           "amount": 1
         },
-        "contractResource": "runway",
-        "loreRef": "game-board-tiles-government"
+        "loreRef": "game-board-tiles-government",
+        "q": -1,
+        "r": 0
       }
-    ]
+    ],
+    "centralTile": {
+      "id": "era",
+      "name": "The Eras",
+      "q": 0,
+      "r": 0,
+      "playable": false
+    }
   },
   "trainingDeck": {
     "reshuffleWhenEmpty": true,
@@ -322,7 +325,7 @@
       {
         "id": "code",
         "kind": "domain",
-        "count": 4,
+        "count": 2,
         "name": "Code",
         "rulesText": "First Code this run: add 1 provisional ${terms.playerTracks.capability}. A later Code is a duplicate.",
         "loreRef": "game-training-deck-cards-code"
@@ -330,7 +333,7 @@
       {
         "id": "science",
         "kind": "domain",
-        "count": 4,
+        "count": 2,
         "name": "Science",
         "rulesText": "First Science this run: add 1 provisional ${terms.playerTracks.capability}. A later Science is a duplicate.",
         "loreRef": "game-training-deck-cards-science"
@@ -338,7 +341,7 @@
       {
         "id": "web",
         "kind": "domain",
-        "count": 4,
+        "count": 2,
         "name": "The Web",
         "rulesText": "First Web this run: add 1 provisional ${terms.playerTracks.capability}. A later Web is a duplicate.",
         "loreRef": "game-training-deck-cards-web"
@@ -346,7 +349,7 @@
       {
         "id": "books",
         "kind": "domain",
-        "count": 4,
+        "count": 2,
         "name": "Books",
         "rulesText": "First Books this run: add 1 provisional ${terms.playerTracks.capability}. A later Books is a duplicate.",
         "loreRef": "game-training-deck-cards-books"
@@ -354,7 +357,7 @@
       {
         "id": "images",
         "kind": "domain",
-        "count": 4,
+        "count": 2,
         "name": "Images",
         "rulesText": "First Images this run: add 1 provisional ${terms.playerTracks.capability}. A later Images is a duplicate.",
         "loreRef": "game-training-deck-cards-images"
@@ -362,7 +365,7 @@
       {
         "id": "video",
         "kind": "domain",
-        "count": 4,
+        "count": 2,
         "name": "Video",
         "rulesText": "First Video this run: add 1 provisional ${terms.playerTracks.capability}. A later Video is a duplicate.",
         "loreRef": "game-training-deck-cards-video"
@@ -370,7 +373,7 @@
       {
         "id": "synthetic",
         "kind": "domain",
-        "count": 4,
+        "count": 2,
         "name": "Synthetic",
         "rulesText": "First Synthetic this run: add 1 provisional ${terms.playerTracks.capability}. A later Synthetic is a duplicate.",
         "loreRef": "game-training-deck-cards-synthetic"
@@ -378,7 +381,7 @@
       {
         "id": "curated_corpus",
         "kind": "special",
-        "count": 4,
+        "count": 2,
         "name": "Curated Corpus",
         "rulesText": "Choose one ordinary domain not yet revealed; this counts as that domain and adds 1 provisional ${terms.playerTracks.capability}. If all seven ordinary domains are present, this is a duplicate.",
         "loreRef": "game-training-deck-cards-curated-corpus"
@@ -386,7 +389,7 @@
       {
         "id": "benchmark_leak",
         "kind": "special",
-        "count": 4,
+        "count": 2,
         "name": "Benchmark Leak",
         "rulesText": "Add 2 provisional Capability and lose 1 Reputation. This is not a domain.",
         "loreRef": "game-training-deck-cards-benchmark-leak"
@@ -394,12 +397,14 @@
       {
         "id": "human_evaluation",
         "kind": "special",
-        "count": 4,
+        "count": 2,
         "name": "Human Evaluation",
         "rulesText": "Gain 1 Reputation, bank all provisional Capability, and end the run.",
         "loreRef": "game-training-deck-cards-human-evaluation"
       }
-    ]
+    ],
+    "runDrawLimit": 20,
+    "resetAfterRun": true
   },
   "scoring": {
     "mode": "final-current-state",
@@ -449,71 +454,47 @@
     "loreRef": "game-agi-achievement"
   },
   "construction": {
-    "maximumFacilities": 1,
-    "maximumProjects": 1,
-    "exclusive": true,
-    "facilityCost": 2,
-    "upgradeCost": {
-      "runway": 3,
-      "compute": 1
-    },
-    "upgradeUnlockEra": 2,
-    "assignment": "build-area",
-    "projects": [
-      "upgrade"
-    ]
+    "orgEquipmentCost": 2,
+    "assignment": "build-hex",
+    "productionMultiplier": 2
   },
   "playerKits": [
     {
       "id": "kit-red",
       "colorName": "Red",
       "color": "#b53d45",
-      "symbol": "\u25cf",
+      "symbol": "●",
       "symbolName": "circle"
     },
     {
       "id": "kit-blue",
       "colorName": "Blue",
       "color": "#3267ac",
-      "symbol": "\u25b2",
+      "symbol": "▲",
       "symbolName": "triangle"
     },
     {
       "id": "kit-green",
       "colorName": "Green",
       "color": "#33785a",
-      "symbol": "\u25a0",
+      "symbol": "■",
       "symbolName": "square"
     },
     {
       "id": "kit-violet",
       "colorName": "Violet",
       "color": "#8058a4",
-      "symbol": "\u25c6",
+      "symbol": "◆",
       "symbolName": "diamond"
     },
     {
       "id": "kit-gold",
       "colorName": "Gold",
       "color": "#9a741b",
-      "symbol": "\u2605",
+      "symbol": "★",
       "symbolName": "star"
     }
   ],
-  "customerCards": {
-    "perPlayer": 5,
-    "requirements": [
-      2,
-      4,
-      6,
-      8,
-      10
-    ],
-    "production": {
-      "resource": "runway",
-      "amount": 1
-    }
-  },
   "reputationReview": {
     "atMost": 1,
     "runwayPenalty": 2,
@@ -538,5 +519,25 @@
     "organize": {
       "recruitCost": 2
     }
+  },
+  "scoreDisplay": {
+    "name": "Mandate",
+    "mode": "derived",
+    "maximum": 48,
+    "description": "Capability + 2 × Customers + Reputation + recognized AGI + revealed objectives. Recount at game end."
+  },
+  "adoption": {
+    "requirements": [
+      2,
+      4,
+      6,
+      8,
+      10
+    ],
+    "production": {
+      "resource": "runway",
+      "amount": 1
+    },
+    "maximum": 5
   }
 }
