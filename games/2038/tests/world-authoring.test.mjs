@@ -91,18 +91,18 @@ test("historical world releases retain their first committed bytes", async () =>
   }
 });
 
-test("current teaching materials declare four tracks and fixed Reputation Review", async () => {
+test("current teaching materials declare five holdings and fixed Reputation Review", async () => {
   const readme = await read("README.md");
   const protocol = await read("docs/playtesting-and-evidence.md");
   assert.match(readme, /versions\/current-release\.json/);
   assert.match(protocol.split("\n\n")[1], /versions\/current-release\.json/);
   const config = JSON.parse(await read("dist/runtime/game-config.json"));
   assert.deepEqual(config.players.playableCounts, [2, 3, 4, 5]);
-  assert.deepEqual(Object.keys(config.resources), ["runway", "compute", "capability", "reputation"]);
+  assert.deepEqual(Object.keys(config.resources), ["runway", "compute", "capability", "reputation", "customers"]);
   for (const path of ["rules.md", "dist/docs/core-rules.md"]) {
     const source = await read(path);
     assert.match(source, /Reputation Review/);
-    assert.match(source, /two through five/);
+    assert.match(source, /two through five/i);
     assert.match(source, /Reputation.*(?:1|one).*(?:2|two) Runway/);
     assert.doesNotMatch(source, /\| Era \| 2 players/);
   }

@@ -143,15 +143,15 @@ test("Scientific Method offers affordable paid bank; Safety retains only one on 
     assert.equal(p.runway, id === "safety_laboratory" ? 3 : 2);
   }
 });
-test("Customer cards independently give income; Production clipping never creates extra cards", async () => {
+test("Customers give capped income without changing their count", async () => {
   const m = fixture({ factionId: "platform_empire" });
   const p = m.players[0];
   p.runway = 11;
-  p.customerCards = [];
+  p.customers = 0;
   m.gainCustomer(p);
   m.gainCustomer(p);
   await m.produceAll();
   assert.equal(p.runway, 12);
   assert.equal(p.customers, 2);
-  assert.equal(p.customerCards[1].ordinal, 2);
+  assert.equal(p.customerCards, undefined);
 });

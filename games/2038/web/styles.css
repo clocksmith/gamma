@@ -1074,5 +1074,21 @@ footer {
   }
 }
 
-@media(max-width:680px){.board{grid-template-columns:repeat(2,minmax(0,1fr));min-height:0;height:auto;overflow:visible}.board-window{overflow:visible}.action-area{padding:8px}}
-@media(max-width:400px){.board{grid-template-columns:1fr}}
+/* Axial coordinates determine both movement and the visible shared map. */
+.board-window { overflow: visible; padding: 6px; }
+.board { position: relative; display: block; width: 100%; min-width: 0; height: auto;
+  aspect-ratio: 1230 / 1300; padding: 0; container-type: inline-size; }
+.action-area, .era-hex { position: absolute; width: 24%; height: 19.7%; box-sizing: border-box;
+  left: calc(50% + var(--hex-x, 0) * 18.2927% - 12%);
+  top: calc(50% + var(--hex-y, 0) * 20% - 9.85%);
+  clip-path: polygon(25% 0,75% 0,100% 50%,75% 100%,25% 100%,0 50%);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 2px; padding: 2% 3%; border: 0; border-radius: 0; box-shadow: none;
+  background: #f4f1e8; color: #111; text-align: center; overflow: hidden;
+  font: inherit; font-size: clamp(9px, 2.5cqw, 17px); line-height: 1.1; }
+.action-area small { font-size: .7em; }
+.action-area:hover, .action-area:focus-visible, .action-area[aria-pressed="true"] { background: #f6d782; color: #111; }
+.era-hex { background: #222; color: #fff; }
+.hex-orgs { display: flex; flex-wrap: wrap; justify-content: center; gap: 2px; min-height: 1em; }
+.hex-org { color: var(--kit-color); font-size: .9em; }
+.board-note { min-height: 4.5em; }

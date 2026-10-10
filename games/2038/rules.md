@@ -3,26 +3,30 @@
 **Rules version:** ${game.rulesVersion}
 **Executable version:** ${game.executableVersion}
 
-A smaller institutional strategy prototype for two through five players, across four Eras. Six institutions compete through research, engine building, customers, and negotiation. Costs and scoring values are a test candidate; balance and blind usability are unqualified.
+Two through five institutions compete across four Eras. One shared hex map, Orgs, a player mat, and lore cards carry the game. These newly selected mechanics require fresh balance and human-play evidence.
 
-An Org is a major operating branch of your institution, encompassing people, AI systems, and automated operations. Its internal scale grows across the Eras. You start with two Orgs and may establish up to four; additional Orgs increase presence, not the number of turns.
+An Org is a major operating branch encompassing people, AI systems, and automated operations. Its internal scale grows across the Eras. Start with two Orgs; four is the maximum. More Orgs increase presence and production, never the number of turns.
 
 ## Setup
 
-Choose an institution and a colour-and-symbol player kit independently. The faction identity card gives your starting Runway, Compute, Capability, Reputation, and Customer cards, plus one permanent ability. Place four cubes on the generic player mat. Take two Orgs into play, initially unassigned, and leave two in supply. Leave your four numbered Facilities unbuilt, five Customer cards in order, and six Core Action cards available. An institution never determines piece colour. Seat identifies ownership in the engine.
+Choose an institution and one of five colour-and-symbol player kits independently. Your identity card supplies starting Runway, Compute, Capability, Reputation, Customers, and one permanent ability. Mark these five holdings on your mat. Mandate is the sixth value: a calculated score, not another currency.
 
-Lay out the six shared areas, the four-Era Governance Board, and the shuffled shared forty-card Training deck. Split Headlines by Era and shuffle each six-card packet. Split objectives by Era. Choose Initiative randomly before the game; the executable uses seat zero. Initiative advances clockwise after every cycle. All resource holdings and components are public; selected Actions remain secret until everyone has selected. Unrevealed cards and Training draw order remain hidden.
+Place the Era hex in the middle, then fill two rings with the eighteen Action hexes according to their printed coordinates. Each of the six Action types has three hexes; the inner ring runs Fund, Research, Build, Organize, Deploy, Influence clockwise from the top. Give each player two normal-side Orgs, initially off the map; leave two in reserve. No other player pieces go on the map.
+
+Separate the twenty-four Headlines into four six-card Era packets and objectives into four three-card packets. Shuffle each packet. The Training deck contains forty cards: four copies of each of ten designs. Choose Initiative randomly; it moves clockwise after every cycle. All holdings are public; unrevealed cards remain hidden.
 
 <!-- map:start -->
-## Six shared areas
+## Shared hex map
 
-There is one area per Core Action: Fund, Research, Build, Organize, Deploy, and Influence. Each has two shared Facility spaces. Orgs do not consume these spaces. Area order has no mechanical effect. There is no adjacency, distance, movement cost, Facility relocation, Generator, or Power eligibility.
+Eighteen playable Action hexes surround the central Era hex. Hexes sharing an edge are neighbors. The center records the Era and is not traversable. There is no wraparound or movement across corners.
 
-An acting Org goes to the area matching its Core Action and stays there until reassigned. Build may place a Facility in any area with an open space. Orgs and Facilities each count as one presence. You control an area only if you have strictly more presence than every rival; tied areas are uncontrolled. Control matters only when a printed objective asks for it.
+On your turn choose one Org. It may stay on its hex or move to one neighboring hex, then perform that hex's Action. An off-map Org may enter any playable hex. Multiple players may share a hex; there is no occupancy limit. If you cannot afford an Action, choose another reachable Action or spend the turn doing nothing. An unresolvable Action does not move the Org.
 
-Each Facility always produces its area's printed yield. Upgraded Facilities double that yield. The six yields are printed on the areas:
+Each Org counts as one presence, equipped or not. You control a hex only if you have more Orgs there than every rival. Ties leave it uncontrolled. Control matters when an objective asks for it.
 
-| Action area | Yield per Facility |
+At Production, every placed Org earns its hex's printed yield. An equipped Org earns twice that yield. Unplaced Orgs produce nothing. Equipment travels with its Org.
+
+| Hex | Production per Org |
 |---|---|
 | Fund | ${content.gameConfig.board.tiles.0.production} |
 | Research | ${content.gameConfig.board.tiles.1.production} |
@@ -32,101 +36,97 @@ Each Facility always produces its area's printed yield. Upgraded Facilities doub
 | Influence | ${content.gameConfig.board.tiles.5.production} |
 <!-- map:end -->
 
-## Four tracks and Customer cards
+## Six values on one mat
 
-Runway is money; Compute pays for Research, Deployment, upgrades, and AGI recognition. Capability represents demonstrated intelligence. Reputation represents public standing. Apply costs before gains; a cost must be affordable in full. Gains stop at the printed cap, and losses stop at zero: Runway 12, Compute 10, Capability 12, Reputation 6. Reputation losses are consequences and may occur at zero; a printed Reputation payment must be affordable.
+Runway buys equipment and Orgs. Compute pays for Research, Deployment, and AGI recognition. Capability is demonstrated intelligence. Reputation is public standing. Customers are adoption and income. Mandate is your calculated score.
 
-Customers are cards, not a fifth numerical track. The five cards require Capability 2, 4, 6, 8, and 10 respectively. Take the next card in order; never more than five. Each held Customer provides one Runway at Production and two points at game end. Read Customer count from the cards. There is no historical deployment counter or remembered customer threshold.
+Holding caps are Runway 12, Compute 10, Capability 12, Reputation 6, Customers 5. Costs must be affordable in full; gains stop at the cap and losses at zero. Consequential Reputation losses may occur at zero. A printed Reputation payment must be affordable.
+
+Each Customer provides one Runway at Production and two Mandate at game end. To gain your next Customer through Deploy requires Capability 2, 4, 6, 8, or 10 respectively. There are no Customer cards or remembered deployment thresholds.
 
 ## Era and cycle
 
-At the start of each Era, ready all six Actions. Reveal one of that Era's three objective cards and retain it face up. It will score from the final table, not now. Play three cycles:
+Reveal one objective at the beginning of each Era and keep it face up for final scoring. Each Era has three cycles:
 
-1. Reveal one Headline from this Era's packet and resolve its immediate effects and choices in Initiative order. Keep it in the timeline; it leaves no continuing modifier.
-2. Each institution secretly selects one unused Core Action, even if it currently cannot afford a resolution. Reveal together.
-3. Resolve in Initiative order. You may offer one immediate trade, then choose an Org, assign it to the matching area, pay the cost, and resolve one legal mode of your selected Action. If no legal resolution exists after trading, the Action does nothing and is still used.
-4. Exhaust the selected card. Advance Initiative clockwise.
+1. Reveal one Headline from the current Era packet and resolve its immediate instructions in Initiative order.
+2. In Initiative order, each institution may offer one immediate trade, then chooses one reachable Action, assigns one Org, and resolves it. Actions may repeat; there are no hands, simultaneous commitments, or exhausted cards.
+3. Pass Initiative clockwise. After the third cycle, resolve Production and Reputation Review, then advance the Era.
 
-No Action may be selected twice in one Era. After the third cycle, resolve Production and Reputation Review. Advance the Era; in Era IV proceed to AGI recognition and final scoring instead.
+After Era IV Production and Review, resolve optional AGI recognition, score the final table, and read the World Ending. Every institution receives twelve turns, regardless of Org count.
 
 ## Six Core Actions
 
-**Fund:** Gain two Runway, or gain four Runway and lose one Reputation. Credit the actual income after caps.
+**Fund:** Gain two Runway, or gain four Runway and lose one Reputation.
 
-**Research:** Pay one Compute and begin a Training Run. Draw one card, resolve it, then bank or draw again when permitted. Ordinary domains add one provisional Capability the first time they appear. Repeating a domain crashes the run and loses all provisional Capability. Banking adds the provisional amount to your track, subject to its cap. Revealed cards enter the shared discard pile; when the deck empties, shuffle the discard as a new draw pile. There is no private Research deck.
+**Research:** Pay one Compute. Use the shared forty-card draw pile. Shuffle it at setup and reshuffle the discard pile whenever it runs out. Draw a card, resolve it, then bank or draw again. Keep drawn cards face up for this run. The first appearance of each ordinary domain adds one provisional Capability; a repeated domain crashes the run and loses its provisional Capability. Banking adds the provisional total to your Capability, up to its cap. Revealed cards enter the shared discard; finish after at most forty draws. Retain the current run’s visible domain record if a reshuffle is needed.
 
-Curated Corpus counts as the first absent ordinary domain in printed deck order (Code, Science, Web, Books, Images, Video, Synthetic), adding one provisional Capability; with all seven present it crashes. Benchmark Leak adds two provisional Capability and loses one Reputation; its loss stays even if the run later crashes. Human Evaluation gains one Reputation and automatically banks the run. Neither special card is an ordinary domain. Resolve Scientific Method or crash retention exactly as the chosen faction card states.
+Curated Corpus counts as the first absent domain in this order: Code, Science, Web, Books, Images, Video, Synthetic. It adds one provisional Capability; with all seven present it crashes. Benchmark Leak adds two provisional Capability and loses one Reputation, even if the run later crashes. Human Evaluation gains one Reputation and immediately banks the run. Resolve Scientific Method or crash retention as printed on the institution card.
 
 <!-- construction:start -->
-**Build:** Build one numbered Facility in any area with an open Facility space for two Runway, or from Era II upgrade one of your existing unupgraded Facilities for three Runway and one Compute. These are exclusive choices. Use Facilities in numerical order. Flip an upgraded Facility; it doubles its printed area yield permanently. Each Facility can be upgraded once. No separate upgrade chips or types exist. Industrial Velocity discounts only the Facility construction price by one Runway.
+**Build:** Pay two Runway to equip any one of your normal-side Orgs. Flip its token. It now earns twice its hex's yield at Production. An Org can be equipped once. The acting Org moves to Build; the equipped Org may be that Org or another one you own. Industrial Velocity reduces the price by one Runway. No Facility cards, building pieces, or separate upgrade markers exist.
 <!-- construction:end -->
 
-**Organize:** Pay two Runway to establish one Org from supply into the Organize area, or reassign one other Org to any area. First assign the acting Org to Organize. You may have at most four Orgs. Reassignment has no cost or distance restriction and does not resolve another Action.
+**Organize:** Pay two Runway to establish one reserve Org, normal side up, on the Organize hex; or reassign one other Org to any playable hex for free. First move or keep the acting Org on Organize. Reassignment is Organize's explicit exception to one-edge movement and does not trigger another Action.
 
-**Deploy:** If your Capability meets the next Customer card's requirement, pay one Compute, take that card, and lose one Reputation. Installed Base gives one Runway on this Deploy; gaining a Customer from a Headline does not trigger it.
+**Deploy:** If you meet the next Customer's Capability requirement, pay one Compute, increase Customers by one, and lose one Reputation. Installed Base grants one Runway on this Action, but not when a Headline grants a Customer.
 
-**Influence:** Gain two Reputation. From Era III you may instead propose one Joint Venture or terminate one you participate in.
+**Influence:** Gain two Reputation.
 
-## Immediate trading and Joint Ventures
+## Immediate trading
 
-On your resolution turn, you may offer one Runway for one Compute, or one Compute for one Runway, to one named rival. Both must possess the payment and have space under the receiving cap. They may accept or refuse. An accepted trade exchanges both resources atomically, then triggers your Deal Flow if applicable. No counteroffers, third-party transfers, credit, or promises are rules effects. Refusal does not prevent resolving your Action. You cannot trade Capability, Reputation, Customers, recognition, or ownership.
-
-Joint Ventures pair one Facility you own with one rival-owned Facility, regardless of area. Each Facility may host at most one Venture; there are six shared numbered pairs. Public terms identify both hosts and both reciprocal incomes. The rival must consent. Either participant may terminate the Venture using Influence. A Venture is active while both named hosts exist under their recorded owners. At each Production, each participant receives one of the other host's printed contract resource: Compute from Research or Build; Runway from the other four areas. An upgrade does not increase Venture income. No retroactive Production occurs when a Venture is signed. Keep matching Venture numbers on the hosts; no Era markings are needed.
+Before your Action, offer one Runway for one Compute, or one Compute for one Runway, to one named rival. They may accept or refuse. Both must afford the payment and have room under the receiving cap. An accepted exchange happens atomically and triggers Deal Flow where applicable. There are no counteroffers, credit, promises, or persistent Venture contracts. Refusal does not cost your Action.
 
 ## Production and Reputation Review
 
-In Initiative order, each institution resolves its supplier ability, then all its Facility yields, then one Runway per Customer card. Next resolve active Ventures in agreement order. Apply caps to every credit; nominal capacity for an objective ignores caps but never credits income or triggers abilities. The Shovels pays one Runway per rival owning any Facility, to a maximum of two.
+In Initiative order resolve each institution's supplier ability, its placed Org yields, then one Runway per Customer. The Shovels grants one Runway per rival with at least one equipped Org, to a maximum of two. Apply caps to each credit.
 
-After Production, each institution with Reputation one or less loses two Runway, floored at zero. This fixed Reputation Review replaces the risk bag and Audit draws. There are no Scrutiny or Systemic Risk cubes. No fallback penalty consumes Compute or Capability.
+After Production, each institution at Reputation one or less loses two Runway, floored at zero. No risk bag or Audit pieces are needed.
 
 ## Final AGI recognition
 
-After Era IV Production and Reputation Review, every institution with at least nine Capability, four Reputation, and three Compute may pay three Compute to take its AGI recognition marker. Resolve optional declarations in Initiative order. Recognition requires no specific Facility. It is a final holding worth four points and does not override the winner.
+After Era IV Production and Reputation Review, an institution with at least nine Capability, four Reputation, and three Compute may pay three Compute to mark recognized AGI on its mat. Resolve in Initiative order. Recognition grants four final Mandate; it does not override the winner.
 
 <!-- mandate-scoring:start -->
 ## Score the final table once
 
-Final points equal Capability + twice the number of Customer cards + Reputation + four for recognized AGI + awards from all four revealed objectives. Score objectives only now. No immediate points, score track, Trust milestones, or remembered gains remain.
+Mandate equals Capability + twice Customers + Reputation + four for recognized AGI + awards from the four revealed objectives. Count it from the final table and write the total on your mat. Do not accumulate a second historical score.
 
-Each revealed objective specifies its current metric and qualification. The best qualified value earns two points; tied qualified leaders each earn one. If nobody qualifies, nobody scores. Qualification is separate from comparison, including a valid zero when a card permits it. Changing past history without changing final holdings must change no score. Nominal Compute capacity uses the same current Facility and Venture eligibility as Production, without spending, producing, applying caps, or firing abilities.
+For each objective, the best qualified value receives two Mandate; tied qualified leaders receive one each. If nobody qualifies, nobody scores. Count Orgs, equipped Orgs, control, neighboring rival institutions, and nominal Compute production directly from the map. A neighboring rival counts once even if several of its Orgs border yours; sharing your hex alone is not adjacency. Nominal Compute production ignores caps without actually producing or triggering abilities.
 
-Break final score ties by Reputation, then Customer cards, then Compute. If all are tied, share victory. The separate World Ending uses whether any AGI is recognized and whether average final Reputation is at least three: recognized/open gives The Singularity; recognized/closed gives The Closed Loop; unrecognized/open gives The Plural Future; unrecognized/closed gives Assured Continuity.
+Break ties by Reputation, then Customers, then Compute; otherwise share victory. The separate World Ending uses recognized AGI and average final Reputation: recognized/at least three gives The Singularity; recognized/below three gives The Closed Loop; unrecognized/at least three gives The Plural Future; unrecognized/below three gives Assured Continuity.
 <!-- mandate-scoring:end -->
 
 <!-- card-authority:start -->
 ## Printed component authority
 
-Component records own exact Action, Headline, faction, Training, upgrade, and objective effects. This rulebook owns procedures and the box inventory. Reference aids project those owners. Fiction does not introduce extra requirements.
+Component records own exact effects; this rulebook owns procedures and inventory. Actions and their lore are printed on hexes. Unique institutional, Headline, objective, Training, and historical lore is preserved. Historical technology lore remains reference content, not extra equipment or an additional subsystem.
 <!-- card-authority:end -->
 <!-- era-panels:start -->
-Four Governance Board panels show the Era sequence and unlocks. Upgrades unlock in Era II, Ventures in Era III, and recognition in Era IV. Earlier effects remain available.
+The central hex displays all four Eras and the current cycle. Each Era brings its own Headlines and objective. Equipment is available from the start; AGI recognition occurs only after Era IV. There are no Venture or upgrade unlocks to remember.
 <!-- era-panels:end -->
 <!-- player-aids:start -->
-Each kit has a three-panel foldout summarizing turns, Actions, Production, Review, negotiation, and final scoring. The player mat has four resource tracks and one recognition space. Customer and Facility states are visible on cards.
+Each player mat includes five holding tracks, a final Mandate box, an AGI checkbox, the six Action summaries, and the turn and scoring reference. No separate player aid is required.
 <!-- player-aids:end -->
 <!-- headline-selection:start -->
-Twenty-four Headlines are organized as six per Era. Shuffle each packet and reveal three, one before each cycle. Resolve only the printed immediate instruction. Lowest/highest ties target the first tied institution in Initiative order unless an effect applies to everyone.
+Keep all twenty-four Headlines: six per Era, three revealed per Era. Their effects finish before turns begin. Unless an effect applies to everyone, tied lowest/highest targets resolve to the first tied institution in Initiative order.
 <!-- headline-selection:end -->
 <!-- components:start -->
 ## Components
 
-Five interchangeable kits serve up to five players; six institutions are independent choices. Mark every owned item with kit colour and symbol. Facilities are numbered and have normal/upgraded faces. Customer cards stay in ordinal order. Org location and matching Venture host numbers are the only shared-area encodings.
+Five kits use colour and a non-colour symbol. Each kit's four Orgs have numbered normal/equipped faces, with the same owner and number on both sides. Hex positions show presence; token faces show equipment. Five cubes show holdings, while recognition and final Mandate are written on the mat.
 
 <!-- inventory:start -->
 ### Box inventory
 
-- Six shared action-area cards, each with two Facility spaces.
-- One Governance Board with four Era panels, one Era marker, one Initiative marker, and four objective holding spaces.
-- Six faction identity cards; five generic player mats and five three-panel player aids.
-- Thirty Core Action cards: six in each kit.
-- Twenty Orgs: four per kit, two initially in play.
-- Twenty two-sided numbered Facility cards: four per kit; the reverse shows the single upgrade.
-- Twenty-five Customer cards: five ordered cards per kit.
-- Twenty resource-track cubes: four per kit; five AGI recognition markers.
-- Twelve paired Venture host markers: six matching numbered pairs.
-- Forty shared Training cards: four copies of seven ordinary domains and three special types.
-- Twenty-four Headlines: six per Era; twelve objectives: three per Era, four revealed per game.
+- Nineteen shared hex tiles: three copies of each of six Action types and one central Era/cycle hex.
+- Five player mats with integrated references; twenty-five holding-track cubes.
+- Twenty double-sided Org tokens: four per kit, two initially available.
+- Six institution identity cards.
+- Forty Training cards: four copies of all ten existing designs.
+- Twenty-four Headline cards: six per Era.
+- Twelve objective cards: three per Era, four revealed per game.
+- One Era/cycle marker, one Initiative marker, and one shared pencil.
 
-No hex tiles, Generators, Power contracts, upgrade chips, Audit bag, risk cubes, score cubes, or milestone markers belong to this prototype. Deferred Tactics and secret objectives are excluded.
+The playing kit has eighty-two cards. Unique historical technology lore remains in the existing reference collection; it has no mandatory pieces. Action lore is printed on the eighteen Action hexes and Era lore on the center. No separate Action, Customer, or Facility cards; no Venture, equipment, recognition, or scoring tokens; no separate Governance Board or foldout aids. Deferred Tactics and secret objectives remain excluded.
 <!-- inventory:end -->
 <!-- components:end -->

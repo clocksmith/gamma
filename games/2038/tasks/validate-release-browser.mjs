@@ -353,7 +353,7 @@ try {
 
     const cardsSource = JSON.parse(await readFile(resolve(projectRoot, "components/reference-cards.json"), "utf8"));
     const aidTexts = (cardsSource.playerReferences || []).flatMap((card) => [...(card.frontText || []), ...(card.backText || [])]);
-    assert.ok(aidTexts.some(text => text.includes("Customer")), "Player aid explains Customer cards.");
+    assert.ok(aidTexts.some(text => text.includes("Customer")), "Player aid explains Customers.");
     assert.ok(aidTexts.some(text => /final/i.test(text)), "Player aid explains final-table scoring.");
   }
   const mastersResponse = await fetch(releaseResourceUrl(base, "gallery-baseline.html"));
@@ -361,10 +361,10 @@ try {
   const masters = await mastersResponse.text();
   assert.equal((masters.match(/class="card player-mat"/g) || []).length, 5);
   assert.equal((masters.match(/class="card project-chip"/g) || []).length, 0);
-  assert.equal((masters.match(/class="card customer-card"/g) || []).length, 25);
-  assert.equal((masters.match(/class="card facility-card"/g) || []).length, 20);
-  assert.equal((masters.match(/data-facility-face="upgraded"/g) || []).length, 20);
-  assert.equal((masters.match(/class="card core-action"/g) || []).length, 30);
+  assert.equal((masters.match(/class="card customer-card"/g) || []).length, 0);
+  assert.equal((masters.match(/class="card facility-card"/g) || []).length, 0);
+  assert.equal((masters.match(/data-org-face="equipped"/g) || []).length, 20);
+  assert.equal((masters.match(/class="card core-action"/g) || []).length, 0);
   const factionSection = masters.match(/<section id="factions"[\s\S]*?<\/section>/)?.[0] || '';
   assert.equal((factionSection.match(/class="card"/g) || []).length, 6);
   assert.doesNotMatch(masters, /objective-panel|objective-track|data-objective-value|construction Era|I–IV edges|Cube record/);
@@ -402,7 +402,7 @@ try {
     const owners = await evaluate("[...document.querySelectorAll('.kit-identity')].map(n=>n.innerText)");
     assert.equal(owners.length,4);
     assert.ok(owners[0].includes('Violet'));
-    assert.equal(await evaluate("document.querySelectorAll('.action-area').length"),6);
+    assert.equal(await evaluate("document.querySelectorAll('.action-area').length"),18);
     assert.equal(await evaluate("document.body.innerText.includes('undefined')"),false);
     await screenshot(`${viewport.name}-action-selection.png`);
     await evaluate("[...document.querySelectorAll('.decision-card')].find(node=>node.innerText.includes('Select Deploy')).click()");

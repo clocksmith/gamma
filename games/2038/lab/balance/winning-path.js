@@ -16,7 +16,7 @@ export function winningLaneScores(entry) {
   const actions = entry.actions || entry.metrics?.actions || {};
   return {
     research: (actions.research || 0) + (entry.capability || 0) / 3,
-    infrastructure: (actions.build || 0) + (entry.facilities || 0),
+    infrastructure: (actions.build || 0) + (entry.equippedOrgs ?? entry.facilities ?? 0),
     adoption: (actions.deploy || 0) + (entry.customers || 0),
     legitimacy: (actions.influence || 0) + (entry.reputation ?? entry.trust ?? 0) / 2,
     capital: actions.fund || 0,

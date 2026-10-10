@@ -10,15 +10,15 @@ export const CURRENT_RULE_BOUNDS = Object.freeze({
   startingAgentsDeployed: [2, 4, 1],
 });
 export function canonicalRulesVariant(config) {
-  if (config.board.layout !== "shared-action-areas")
-    throw new Error("Only the six-area rules are current.");
+  if (config.board.layout !== "shared-hex-radius-two")
+    throw new Error("Only the shared-hex rules are current.");
   return {
-    kind: "six-area-four-track-v1",
+    kind: "shared-hex-orgs-v1",
     pausedFactionAbilities: [],
     fundConservative: config.actionEffects.fund.conservative,
     fundVenture: config.actionEffects.fund.venture,
     ventureReputationLoss: config.actionEffects.fund.reputationLoss,
-    facilityCost: config.construction.facilityCost,
+    facilityCost: config.construction.orgEquipmentCost,
     deployComputeCost: config.actionEffects.deploy.computeCost,
     customerPoints: config.scoring.customer,
     reviewRunwayPenalty: config.reputationReview.runwayPenalty,

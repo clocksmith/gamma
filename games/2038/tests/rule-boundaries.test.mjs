@@ -27,31 +27,28 @@ function policies(m, select) {
     },
   }));
 }
-function host(m, s, area = "build") {
-  const f = {
-    id: `s${s}-facility-${m.players[s].facilities.length + 1}`,
-    tileId: area,
-    category: m.board.find((a) => a.instanceId === area).category,
-    upgraded: false,
-  };
-  m.players[s].facilities.push(f);
-  return f;
+function host(m, seat, area = "build", equipped = false) {
+  const org = m.players[seat].pieces.find(p => !p.tileId);
+  assert.ok(org, "Fixture needs an unassigned Org");
+  Object.assign(org, {tileId: area, equipped});
+  return org;
 }
 const find = (m, s, a, pred = () => true) => {
   const d = m.legalResolutions(s, a).find(pred);
   assert.ok(d);
   return d;
 };
-test("four tracks and six areas form the browser engine state", async () => {
+test("five tracks and eighteen playable hexes form the browser engine state", async () => {
   const m = await fixture();
-  assert.equal(m.board.length, 6);
+  assert.equal(m.board.length, 18);
   assert.deepEqual(Object.keys(m.config.resources), [
     "runway",
     "compute",
     "capability",
     "reputation",
+    "customers",
   ]);
-  assert.equal(m.players[0].customerCards.length, m.players[0].customers);
+  assert.equal(m.players[0].customerCards, undefined);
 });
 test("Fund caps income and preserves the Reputation cost", async () => {
   const m = await fixture();
@@ -65,46 +62,27 @@ test("Fund caps income and preserves the Reputation cost", async () => {
   assert.equal(p.runway, 12);
   assert.equal(p.reputation, 2);
 });
-test("Build limited slots reject a rival after two reservations", async () => {
-  const m = await fixture();
-  m.players[0].runway = 12;
-  host(m, 1);
-  host(m, 2);
-  assert.ok(
-    !m
-      .legalResolutions(0, "build")
-      .some((d) => d.parameters.hostAreaId === "build"),
-  );
-});
-test("single upgrade flips the host and doubles its yield", async () => {
-  const m = await fixture();
-  m.round = 2;
-  const p = m.players[0];
-  p.runway = 12;
-  p.compute = 0;
-  const f = host(m, 0);
-  p.compute = 1;
-  m.applyResolution(
-    0,
-    find(m, 0, "build", (d) => d.parameters.upgradeHostId === f.id),
-  );
-  assert.equal(f.upgraded, true);
-  assert.equal(p.runway, 9);
+test("equipment flips an owned Org from setup and doubles its yield", async () => {
+  const m = await fixture({ factionId: "platform_empire" });
+  const p = m.players[0]; p.runway = 12; p.compute = 0;
+  const org = host(m, 0);
+  m.applyResolution(0, find(m, 0, "build", d => d.parameters.equipOrgId === org.id));
+  assert.equal(org.equipped, true);
+  assert.equal(p.runway, 10);
   assert.equal(p.compute, 0);
   await m.produceAll();
   assert.equal(p.compute, 4);
 });
-test("Deploy takes a card, charges Compute and Reputation, triggers only its faction", async () => {
+test("Deploy increments Customers, charges Compute and Reputation, triggers only its faction", async () => {
   const m = await fixture({ factionId: "platform_empire" });
   const p = m.players[0];
-  p.customerCards = [];
+  p.customers = 0;
   p.capability = 2;
   p.compute = 2;
   p.reputation = 3;
   p.runway = 4;
   m.applyResolution(0, find(m, 0, "deploy"));
   assert.equal(p.customers, 1);
-  assert.equal(p.customerCards[0].ordinal, 1);
   assert.equal(p.compute, 1);
   assert.equal(p.reputation, 2);
   assert.equal(p.runway, 5);
@@ -158,77 +136,21 @@ test("trade rejects wrong quantities and credits both sides atomically", async (
     ],
   );
 });
-test("Venture responder receives fixed public hosts and both nominal incomes", async () => {
-  const m = await fixture();
-  m.round = 3;
-  const f = host(m, 0, "fund"),
-    r = host(m, 1, "build");
-  let packet;
-  await m.negotiate(
-    policies(m, (p) => {
-      packet = p;
-      return p.legalDecisions.find((d) => d.decisionId === "agreement_accept");
-    }),
-    0,
-    find(
-      m,
-      0,
-      "influence",
-      (d) => d.parameters.leftId === f.id && d.parameters.rightId === r.id,
-    ),
-  );
-  const v = packet.observation.publicTable.pendingJointVenture;
-  assert.equal(v.proposerSeat, 0);
-  assert.equal(v.left.facilityId, f.id);
-  assert.deepEqual(v.income, [
-    { seat: 0, resource: "compute", amount: 1 },
-    { seat: 1, resource: "runway", amount: 1 },
-  ]);
-  assert.equal(m.contracts.length, 1);
-  assert.equal(m.pendingJointVenture, null);
-  assert.ok(
-    !m
-      .legalResolutions(0, "influence")
-      .some((d) => d.parameters.mode === "venture"),
-  );
+test("Influence has no hidden Venture or agreement subsystem", async () => {
+  const m = await fixture(); m.round = 3;
+  assert.ok(m.legalResolutions(0, "influence").every(d => !d.parameters.leftId && !d.parameters.rightId));
+  assert.equal(m.contracts, undefined);
+  assert.equal(m.publicObservation(0).publicTable.pendingJointVenture, undefined);
 });
-test("Venture refusal and provider failure clear terms and award nothing", async () => {
-  for (const fail of [false, true]) {
-    const m = await fixture();
-    m.round = 3;
-    host(m, 0);
-    host(m, 1, "fund");
-    const d = find(m, 0, "influence", (d) => d.parameters.mode === "venture");
-    const ps = policies(m, (p) => {
-      if (fail) throw new Error("provider unavailable");
-      return p.legalDecisions.find((d) => d.decisionId === "agreement_reject");
-    });
-    if (fail)
-      await assert.rejects(m.negotiate(ps, 0, d), /provider unavailable/);
-    else await m.negotiate(ps, 0, d);
-    assert.equal(m.pendingJointVenture, null);
-    assert.equal(m.contracts.length, 0);
-  }
-});
-test("nominal capacity is read-only, uncapped, and current-host dependent", async () => {
+test("nominal capacity is read-only and current-location dependent", async () => {
   const m = await fixture();
-  const f = host(m, 0),
-    r = host(m, 1, "research");
-  f.upgraded = true;
-  m.contracts = [
-    {
-      id: 1,
-      kind: "joint_venture",
-      left: { seat: 0, facilityId: f.id },
-      right: { seat: 1, facilityId: r.id },
-    },
-  ];
+  const org = host(m, 0, "build", true);
   m.players[0].compute = 10;
   const before = m.snapshot();
-  assert.equal(nominalComputeCapacity(m, m.players[0]), 5);
-  assert.deepEqual(m.snapshot(), before);
-  m.players[1].facilities = [];
   assert.equal(nominalComputeCapacity(m, m.players[0]), 4);
+  assert.deepEqual(m.snapshot(), before);
+  org.tileId = "fund";
+  assert.equal(nominalComputeCapacity(m, m.players[0]), 0);
 });
 test("Review follows income and recognition follows Review", async () => {
   const m = await fixture();
@@ -283,7 +205,7 @@ test("all four objectives settle only at the final table", async () => {
     m.currentScore(m.players[0]),
   );
 });
-test("complete browser-native game respects action exhaustion, phases and hidden draw state", async () => {
+test("complete browser-native game allows repeat Actions, preserves phases and hidden draw state", async () => {
   const m = await fixture();
   const r = await m.play(
     policies(m, (p) =>
@@ -296,7 +218,7 @@ test("complete browser-native game respects action exhaustion, phases and hidden
   assert.equal(r.matchMetrics.eraMandateScores.length, 4);
   for (const p of m.players) {
     assert.equal(p.actionsUsed.length, 3);
-    assert.equal(new Set(p.actionsUsed).size, 3);
+    assert.ok(p.actionsUsed.every(a => m.config.actions.some(c => c.id === a)));
     assert.equal(
       Object.values(p.metrics.actions).reduce((n, v) => n + v, 0),
       12,

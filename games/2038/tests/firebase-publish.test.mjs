@@ -131,10 +131,10 @@ test("public playtest publication is an allowlist with release identity and feed
     const authority = JSON.parse(
       await readFile(resolve(fixture.root, "dist/runtime/reference-cards.json"), "utf8")
     ).eraCards.find((era) => era.id === "era_narrative");
-    assert.match(authority.unlockText, /Joint Venture/);
+    assert.match(authority.unlockText, /Equipment is available from setup/);
     assert.doesNotMatch(authority.unlockText, /Open Weights/i);
     const baseline = await readFile(resolve(outputRoot, "gallery-baseline.html"), "utf8");
-    assert.match(baseline, /Joint Venture/);
+    assert.match(baseline, /Equipped ×2/);
     assert.doesNotMatch(baseline, /undefined escalation|Escalation actions|>Promise<|>Anxiety</);
     const { eraCards } = JSON.parse(await readFile(resolve(fixture.root, "dist/runtime/reference-cards.json"), "utf8"));
     for (const era of eraCards) assert.ok(baseline.includes(era.rulesText), `${era.id} prints its canonical rules`);

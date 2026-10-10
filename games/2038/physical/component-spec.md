@@ -1,13 +1,28 @@
-# Smaller prototype component forms
+# Shared-hex prototype component forms
 
-The box inventory is authored in `rules.md` and projected into the complete rulebook. This file owns form, not a second inventory.
+The box inventory is authored in `rules.md`; this file owns physical form.
 
-Use rectangular 63 × 88 mm cards for faction identities, Customers, Facilities, Actions, Training, Headlines, and objectives. Area cards may be 88 × 126 mm with two visible Facility slots and an Org holding zone. Arrange the six in any order; location has no adjacency meaning. Generic mats can be A5, aids A4 folded into three panels, Governance Board A4.
+Use nineteen flat hex tiles, eighteen playable plus one Era/cycle center. Print
+coordinates and Action names on every playable tile. Three copies of each of the
+six Action types fill two rings. Print each Action’s cost, effect, production,
+on the front; retain the existing lore on its back. The center carries the four
+Eras and cycle positions on the front, with their epigraphs on the back.
+Provisional tile size is 110 mm across flats. The board is shared by all players.
 
-Every owned component carries kit colour and its non-colour symbol on both sides. Faction cards identify the six institutions and initialize the chosen mat, but never identify equipment ownership. Facility cards have stable numbers 1–4 and normal/upgraded faces, with the same owner and number on both faces. The upgrade face means twice the area's yield; it is not a new host or separate piece.
+Use 63 × 88 mm cards for the six institutions, forty Training cards, twenty-four
+Headlines, and twelve objectives. Preserve their lore. Training has four copies
+of all ten designs. Historical technology lore remains in the reference gallery.
+There are no mandatory Action, Customer, Facility, or upgrade reference cards.
 
-Customer cards show ordinal, Capability requirement, income, and final points. Their physical presence is adoption; do not add a Customer track or ledger. Four cubes record Runway, Compute, Capability, and Reputation. An AGI marker records recognition; there are no milestone spaces.
+Each kit has four numbered, two-sided flat Org tokens, provisionally 24 mm across.
+Every owned component carries kit colour and its non-colour symbol on both sides.
+Normal/equipped faces mean one/two times the current hex yield. Flipping never
+changes ownership or presence. There are no additional player pieces on the map.
 
-Orgs are flat tokens, four per kit. Facilities stay in their chosen area. Paired Venture numbers identify both fixed hosts and survive a Facility flip. They contain no creation Era, Power condition, or orientation encoding. The Governance Board retains four revealed objectives for final-table scoring.
+One A5 mat per player contains five cube tracks, a writable Mandate box, an AGI
+checkbox, and the complete action/turn/scoring reference. Use five ordinary cubes
+per player. One shared pencil records final scoring and recognition. No historical
+ledger or separate foldout is required. Era/cycle and Initiative use one marker
+each. Keep the four revealed objectives beside the board.
 
-These dimensions are printable prototype hypotheses. Manufacturing and blind-session usability remain unqualified. The generated component masters must supply both Facility faces, all five Customer ordinals per kit, and all six shared areas.
+Dimensions and materials are prototype choices, not manufacturing qualification.

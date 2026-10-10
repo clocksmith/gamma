@@ -6,11 +6,14 @@
 // Output lands in dist/site/ (gitignored) and is served at /gallery by
 // tasks/serve.mjs.
 
+import { generateBoard } from "../web/src/engine.js";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { resolve } from "node:path";
 
 const projectRoot = resolve(import.meta.dirname, "..");
-const graph = JSON.parse(await readFile(resolve(projectRoot, "content/graph.json"), "utf8"));
+const graph = JSON.parse(
+  await readFile(resolve(projectRoot, "content/graph.json"), "utf8"),
+);
 const consumedInputs = new Set();
 const outDir = resolve(projectRoot, "dist/site");
 const checkOnly = process.argv.slice(2).includes("--check");
@@ -49,7 +52,9 @@ function textRows(rows) {
     .filter((row) => row && row.text)
     .map((row) => {
       const cls = row.kind ? ` class="${row.kind}"` : "";
-      const label = row.label ? `<span class="field-label">${escapeHtml(row.label)}</span>` : "";
+      const label = row.label
+        ? `<span class="field-label">${escapeHtml(row.label)}</span>`
+        : "";
       return `<p${cls}>${label}${escapeHtml(row.text)}</p>`;
     })
     .join("");
@@ -62,7 +67,14 @@ function listRows(label, lines) {
     .join("")}</ul></div>`;
 }
 
-function card({ accent, title, subtitle, badgeList = [], bodyHtml = "", tagList }) {
+function card({
+  accent,
+  title,
+  subtitle,
+  badgeList = [],
+  bodyHtml = "",
+  tagList,
+}) {
   const accentStyle = accent ? ` style="--accent:${escapeHtml(accent)}"` : "";
   return `<article class="card"${accentStyle}>
 <div class="card-body">
@@ -92,7 +104,14 @@ const timingBadge = (t) => (t ? t.replace(/_/g, " ") : "");
 function buildFactions(data, config) {
   const cards = data.factions
     .map((f) => {
-      const stats = `<dl class="stats">${Object.entries(f.starts).map(([key, value]) => `<div><dt>${escapeHtml(key)}</dt><dd>${escapeHtml(value)}</dd></div>`).join("")}</dl><p>Initialize the four tracks and Customer cards from this identity. Choose a kit separately.</p>`;
+      const stats = `<dl class="stats">${Object.entries(f.starts)
+        .map(
+          ([key, value]) =>
+            `<div><dt>${escapeHtml(key)}</dt><dd>${escapeHtml(value)}</dd></div>`,
+        )
+        .join(
+          "",
+        )}</dl><p>Initialize the five holdings from this identity. Choose a kit separately.</p>`;
       const abilities = (f.abilities || [])
         .map(
           (a) => `<div class="ability">
@@ -100,7 +119,7 @@ function buildFactions(data, config) {
 ${a.displayName && a.displayName !== a.name ? `<p class="mech-name">${escapeHtml(a.name)}</p>` : ""}
 <p class="rules">${escapeHtml(a.text)}</p>
 ${a.flavorText ? `<p class="flavor">${escapeHtml(a.flavorText)}</p>` : ""}
-</div>`
+</div>`,
         )
         .join("");
       const scoringRule = f.scoringRule
@@ -111,9 +130,7 @@ ${f.scoringRule.flavorText ? `<p class="flavor">${escapeHtml(f.scoringRule.flavo
 </div>`
         : "";
       const body = `${f.motto ? `<p class="flavor motto">“${escapeHtml(f.motto)}”</p>` : ""}
-${textRows([
-        { text: f.introduction }
-      ])}
+${textRows([{ text: f.introduction }])}
 ${stats}
 ${scoringRule}
 <div class="abilities"><span class="field-label">Abilities</span>${abilities}</div>`;
@@ -122,67 +139,181 @@ ${scoringRule}
         title: f.name,
         subtitle: f.chiefExecutive,
         badgeList: [f.brandColor ? "faction" : ""],
-        bodyHtml: body
+        bodyHtml: body,
       });
     })
     .join("");
-  return section("factions", "Faction identity cards", data.factions.length, cards, "Asymmetric institutions with starting values and one permanent ability. Equipment is selected separately.");
+  return section(
+    "factions",
+    "Faction identity cards",
+    data.factions.length,
+    cards,
+    "Asymmetric institutions with starting values and one permanent ability. Equipment is selected separately.",
+  );
 }
 
 function buildPlayerMats(config) {
-  const mats = config.playerKits.map(kit => `<article class="card player-mat" data-kit="${escapeHtml(kit.id)}" style="--accent:${escapeHtml(kit.color)}"><h3>${escapeHtml(kit.symbol)} ${escapeHtml(kit.colorName)} · ${escapeHtml(kit.symbolName)}</h3><p>Initialize from your faction identity card.</p>${Object.entries(config.resources).map(([key,track]) => `<div class="resource-track" data-resource="${key}"><strong>${escapeHtml(track.name)}</strong> ${Array.from({length:track.cap+1},(_,n)=>n).join(" · ")}</div>`).join("")}<p class="recognition-track">AGI: No · Recognized</p><p>Customers: cards · Facilities: normal/upgraded · Score final holdings once.</p></article>`).join("");
-  return section("player-mats", "Player mats", config.playerKits.length, mats, "Five kits; four resource tracks each.");
+  const mats = config.playerKits
+    .map(
+      (kit) =>
+        `<article class="card player-mat" data-kit="${kit.id}" style="--accent:${kit.color}"><h3>${kit.symbol} ${kit.colorName} · ${kit.symbolName}</h3><p>Initialize from your institution card.</p>${Object.entries(
+          config.resources,
+        )
+          .map(
+            ([key, t]) =>
+              `<div class="resource-track" data-resource="${key}"><strong>${escapeHtml(t.name)}</strong> ${Array.from({ length: t.cap + 1 }, (_, n) => n).join(" · ")}</div>`,
+          )
+          .join(
+            "",
+          )}<p>Final Mandate: ______ · AGI recognized: □</p><p>Mandate = Capability + 2 × Customers + Reputation + 4 for AGI + objectives.</p><p>One turn: optional trade, stay/move one edge, perform that hex’s Action. Three cycles per Era; twelve turns total. Orgs produce their hex yield; equipped Orgs produce twice.</p>${config.actions.map((a) => `<p><strong>${escapeHtml(a.name)}</strong> ${escapeHtml(a.summary)}</p>`).join("")}</article>`,
+    )
+    .join("");
+  return section(
+    "player-mats",
+    "Player mats",
+    5,
+    mats,
+    "Five holding tracks, calculated Mandate, and the reference in one place.",
+  );
 }
-
 function formatTurnContract(tc) {
   if (!tc || typeof tc !== "object") return tc || "";
   const parts = [];
   if (tc.cost) parts.push(`Cost: ${tc.cost}`);
-  if (Array.isArray(tc.modes) && tc.modes.length) parts.push(`Modes: ${tc.modes.join(", ")}`);
+  if (Array.isArray(tc.modes) && tc.modes.length)
+    parts.push(`Modes: ${tc.modes.join(", ")}`);
   if (tc.risk) parts.push(`Risk: ${tc.risk}`);
   return parts.join(" · ");
 }
 
 function buildActions(config) {
-  const cards = config.playerKits.flatMap(kit => config.actions.map(action =>
-    card({accent: kit.color, title: `${kit.symbol} ${action.name}`, subtitle: `${kit.colorName} · ${kit.symbolName} kit`,
-      badgeList: ["Core Action", action.initiativeName ? `Initiative: ${action.initiativeName}` : ""],
-      bodyHtml: textRows([{text:action.summary},{label:"Turn contract",text:formatTurnContract(action.turnContract)},{text:action.flavorText,kind:"flavor"}])})
-      .replace('<article class="card"', `<article class="card core-action" data-kit="${escapeHtml(kit.id)}"`)
-  )).join("");
-  return section("actions", "Core Actions", config.playerKits.length * config.actions.length, cards, "Thirty cards: six designs in each of five kits; each player uses three per Era.");
+  const cards = config.playerKits
+    .flatMap((kit) =>
+      config.actions.map((action) =>
+        card({
+          accent: kit.color,
+          title: `${kit.symbol} ${action.name}`,
+          subtitle: `${kit.colorName} · ${kit.symbolName} kit`,
+          badgeList: [
+            "Core Action",
+            action.initiativeName ? `Initiative: ${action.initiativeName}` : "",
+          ],
+          bodyHtml: textRows([
+            { text: action.summary },
+            {
+              label: "Turn contract",
+              text: formatTurnContract(action.turnContract),
+            },
+            { text: action.flavorText, kind: "flavor" },
+          ]),
+        }).replace(
+          '<article class="card"',
+          `<article class="card core-action" data-kit="${escapeHtml(kit.id)}"`,
+        ),
+      ),
+    )
+    .join("");
+  return section(
+    "actions",
+    "Core Actions",
+    config.playerKits.length * config.actions.length,
+    cards,
+    "Optional review copies only. Play uses the shared Action hexes, not Action cards.",
+  );
 }
 
 function buildEquipment(config) {
-  const cards=config.playerKits.flatMap(kit=>[
-    ...Array.from({length:config.playerSupply.agents},(_,i)=>`<article class="card agent-token" data-kit="${kit.id}" style="--accent:${kit.color}"><h3>${kit.symbol} Org ${i+1}</h3><p>${kit.colorName} · ${kit.symbolName}</p></article>`),
-    ...Array.from({length:config.playerSupply.facilities},(_,i)=>`<article class="card facility-card" data-kit="${kit.id}" style="--accent:${kit.color}">${[false,true].map(upgraded=>`<div class="chip-face" data-facility-face="${upgraded?'upgraded':'normal'}"><h3>${kit.symbol} Facility ${i+1}</h3><p>${kit.colorName} · ${kit.symbolName}</p><strong>${upgraded?'Upgraded':'Normal'}</strong><p>${upgraded?'Twice':'Once'} the area yield at every Production.</p></div>`).join("")}</article>`),
-    ...Array.from({length:config.customerCards.perPlayer},(_,i)=>`<article class="card customer-card" data-kit="${kit.id}" data-customer="${i+1}" style="--accent:${kit.color}"><h3>${kit.symbol} Customer ${i+1}</h3><p>${kit.colorName} · ${kit.symbolName}</p><p>Requires ${config.customerCards.requirements[i]} Capability. ${config.customerCards.production.amount} Runway per Production; ${config.scoring.customer} final points.</p></article>`)
-  ]).join("");
-  return section("equipment","Kit-owned equipment",config.playerKits.length*(config.playerSupply.agents+config.playerSupply.facilities+config.customerCards.perPlayer),cards,"Org tokens, two-sided Facilities, and ordered Customer cards. Kit symbols identify ownership.");
+  const tokens = config.playerKits
+    .flatMap((kit) =>
+      Array.from(
+        { length: config.playerSupply.agents },
+        (_, i) =>
+          `<article class="card agent-token" data-kit="${kit.id}" style="--accent:${kit.color}">${[false, true].map((equipped) => `<div class="chip-face" data-org-face="${equipped ? "equipped" : "normal"}"><h3>${kit.symbol} Org ${i + 1}</h3><p>${kit.colorName} · ${kit.symbolName}</p><strong>${equipped ? "Equipped ×2" : "Normal ×1"}</strong></div>`).join("")}</article>`,
+      ),
+    )
+    .join("");
+  return section(
+    "equipment",
+    "Orgs",
+    20,
+    tokens,
+    "Four two-sided tokens per player. Two start available; two remain in reserve.",
+  );
 }
-function buildAreas(config) {
-  return section("areas","Shared action areas",config.board.tiles.length,config.board.tiles.map(a=>card({title:config.actions.find(x=>x.id===a.actionId).name,subtitle:a.name,bodyHtml:`<p>${escapeHtml(a.production)}</p><p>${a.facilitySpaces} shared Facility spaces</p><p>Venture contract resource: ${a.contractResource}</p>`})).join(""),"Arrange freely. No adjacency or Power condition.");
+function buildAreas(config, reference) {
+  const face = (side, title, body) =>
+    `<div class="hex-face" data-hex-face="${side}"><div><h3>${escapeHtml(title)}</h3>${body}</div></div>`;
+  const hexes = generateBoard(config)
+    .map((tile) => {
+      const action = config.actions.find((a) => a.id === tile.actionId);
+      const coordinates = `<p>(${tile.q}, ${tile.r})</p>`;
+      return `<article class="card hex-tile">${face("front", action.name, coordinates + textRows([{ text: action.summary }, { text: tile.production }]))}${face(
+        "back",
+        tile.name,
+        coordinates +
+          textRows([
+            { text: action.flavorText, kind: "flavor" },
+            { text: tile.flavorText, kind: "flavor" },
+          ]),
+      )}</article>`;
+    })
+    .join("");
+  const eras = reference.eraCards;
+  const center = `<article class="card hex-tile era-tile">${face("front", "The Eras", eras.map((e) => `<p><strong>${e.round}. ${escapeHtml(e.name)}</strong> · 1 · 2 · 3</p>`).join("") + `<p>${escapeHtml(eras[0].rulesText)}</p>`)}${face("back", "The Eras", eras.map((e) => `<p><strong>${escapeHtml(e.name)}</strong><br>${escapeHtml(e.strapline)}</p>`).join(""))}</article>`;
+  return section(
+    "areas",
+    "Shared hex board",
+    19,
+    hexes + center,
+    "Front and back of each tile. Eighteen Action hexes in two rings around the Era center. Assemble by coordinates; only shared edges connect.",
+  );
 }
-
+function buildTraining(config) {
+  const cards = config.trainingDeck.cards
+    .flatMap((c) =>
+      Array.from({ length: c.count }, () =>
+        card({
+          title: c.name,
+          bodyHtml: textRows([
+            { text: c.rulesText },
+            { text: c.flavorText, kind: "flavor" },
+          ]),
+        }).replace('class="card"', 'class="card training-card"'),
+      ),
+    )
+    .join("");
+  return section(
+    "training",
+    "Training",
+    40,
+    cards,
+    "Four copies of every design. Shared draw pile; reshuffle discards only when it empties.",
+  );
+}
 function buildRounds(config, reference) {
-  const erasByRound = new Map((reference.eraCards || []).map((era) => [era.round, era]));
+  const erasByRound = new Map(
+    (reference.eraCards || []).map((era) => [era.round, era]),
+  );
   const cards = config.rounds
     .map((r) => {
       const era = erasByRound.get(r.number);
-      return (
-      card({
+      return card({
         title: `${roman[r.number] || r.number}. ${era?.name || r.name}`,
         subtitle: era?.strapline,
         bodyHtml: textRows([
           { text: era.rulesText, kind: "rules" },
-          { label: "Unlocks", text: era.unlockText }
-        ])
-      })
-      );
+          { label: "Unlocks", text: era.unlockText },
+        ]),
+      });
     })
     .join("");
-  return section("rounds", "Eras", config.rounds.length, cards, "The four-Era escalation from Progress to Continuity.");
+  return section(
+    "rounds",
+    "Eras",
+    config.rounds.length,
+    cards,
+    "The four-Era escalation from Progress to Continuity.",
+  );
 }
 
 function buildHeadlines(data) {
@@ -190,18 +321,22 @@ function buildHeadlines(data) {
     .map((h) =>
       card({
         title: h.name,
-        badgeList: [
-          roundBadge(h.round),
-        ],
+        badgeList: [roundBadge(h.round)],
         bodyHtml: `${textRows([
           { text: h.newswire, kind: "flavor" },
           { text: h.text, kind: "rules" },
-          { text: h.quote ? `“${h.quote}”` : "", kind: "flavor quote" }
+          { text: h.quote ? `“${h.quote}”` : "", kind: "flavor quote" },
         ])}`,
-      })
+      }),
     )
     .join("");
-  return section("headlines", "Headlines", data.headlines.length, cards, `Era packets: ${[1, 2, 3, 4].map(era => data.headlines.filter(card => card.round === era).length).join(" / ")}. Reveal three per Era.`);
+  return section(
+    "headlines",
+    "Headlines",
+    data.headlines.length,
+    cards,
+    `Era packets: ${[1, 2, 3, 4].map((era) => data.headlines.filter((card) => card.round === era).length).join(" / ")}. Reveal three per Era.`,
+  );
 }
 
 function buildMandates(data) {
@@ -212,34 +347,65 @@ function buildMandates(data) {
         badgeList: [eraBadge(m.era), m.direction === "min" ? "fewest" : "most"],
         bodyHtml: textRows([
           { text: m.rulesText, kind: "rules" },
-          { text: m.flavorText, kind: "flavor" }
+          { text: m.flavorText, kind: "flavor" },
         ]),
-        tagList: m.mechanicalTags
-      })
+        tagList: m.mechanicalTags,
+      }),
     )
     .join("");
-  return section("mandates", "Era Mandates", data.mandates.length, cards, "Reveal one per Era; score all four from the final table.");
+  return section(
+    "mandates",
+    "Era Mandates",
+    data.mandates.length,
+    cards,
+    "Reveal one per Era; score all four from the final table.",
+  );
 }
 
 function buildProjects(data, config) {
-  return section("projects","Single Facility upgrade rule",data.projects.length,data.projects.map(project=>card({title:project.name,bodyHtml:textRows([{text:project.frontText},{text:project.backText}])})).join(""),data.constructionRule);
+  const entries = [...data.projects, ...data.institutionalHistory];
+  return section(
+    "projects",
+    "Retained technology lore",
+    entries.length,
+    entries
+      .map((p) =>
+        card({
+          title: p.displayName || p.name,
+          bodyHtml: textRows([
+            { text: p.flavorText, kind: "flavor" },
+            { text: p.quote, kind: "flavor" },
+            { text: p.publicClaim, kind: "flavor" },
+            { text: p.tagline, kind: "flavor" },
+          ]),
+        }),
+      )
+      .join(""),
+    "All technology lore retained; these references add no pieces or subsystems to the playing kit.",
+  );
 }
-
 function buildTactics(data) {
   const cards = data.tactics
     .map((t) =>
       card({
         title: t.displayName || t.name,
-        subtitle: t.displayName && t.displayName !== t.name ? t.name : t.technology,
+        subtitle:
+          t.displayName && t.displayName !== t.name ? t.name : t.technology,
         badgeList: ["Deferred module"],
         bodyHtml: textRows([
           { text: t.text, kind: "rules" },
-          { text: t.flavorText, kind: "flavor" }
-        ])
-      })
+          { text: t.flavorText, kind: "flavor" },
+        ]),
+      }),
     )
     .join("");
-  return section("tactics", "Tactics (deferred)", data.tactics.length, cards, "Optional development module; excluded from baseline balance.");
+  return section(
+    "tactics",
+    "Tactics (deferred)",
+    data.tactics.length,
+    cards,
+    "Optional development module; excluded from baseline balance.",
+  );
 }
 
 function buildSpecialists(data) {
@@ -249,13 +415,17 @@ function buildSpecialists(data) {
         title: s.name,
         subtitle: s.title,
         badgeList: ["Reserve"],
-        bodyHtml: textRows([
-          { text: s.flavorText, kind: "flavor" }
-        ])
-      })
+        bodyHtml: textRows([{ text: s.flavorText, kind: "flavor" }]),
+      }),
     )
     .join("");
-  return section("specialists", "Reserve Specialists", data.specialists.length, cards, "Design-reserve identities not promoted to full factions.");
+  return section(
+    "specialists",
+    "Reserve Specialists",
+    data.specialists.length,
+    cards,
+    "Design-reserve identities not promoted to full factions.",
+  );
 }
 
 function buildObjectives(data) {
@@ -266,13 +436,19 @@ function buildObjectives(data) {
         badgeList: ["Deferred module"],
         bodyHtml: textRows([
           { text: o.rulesText, kind: "rules" },
-          { text: o.flavorText, kind: "flavor" }
+          { text: o.flavorText, kind: "flavor" },
         ]),
-        tagList: o.mechanicalTags
-      })
+        tagList: o.mechanicalTags,
+      }),
     )
     .join("");
-  return section("objectives", "Secret Objectives (deferred)", data.objectives.length, cards, "Optional module; not used in baseline scoring.");
+  return section(
+    "objectives",
+    "Secret Objectives (deferred)",
+    data.objectives.length,
+    cards,
+    "Optional module; not used in baseline scoring.",
+  );
 }
 
 function buildReferenceCards(data) {
@@ -283,24 +459,31 @@ function buildReferenceCards(data) {
       badgeList: [roundBadge(c.round), "Governance Board panel"],
       bodyHtml: textRows([
         { text: c.rulesText, kind: "rules" },
-        { label: "Unlocks", text: c.unlockText }
-      ])
-    })
+        { label: "Unlocks", text: c.unlockText },
+      ]),
+    }),
   );
   const refs = (data.playerReferences || []).map((c) =>
     card({
       title: c.name,
       badgeList: ["Player aid"],
-      bodyHtml: `${listRows("Front", c.frontText)}${listRows("Back", c.backText)}`
-    })
+      bodyHtml: `${listRows("Front", c.frontText)}${listRows("Back", c.backText)}`,
+    }),
   );
   const all = [...eras, ...refs].join("");
-  return section("reference", "Board Panels and Player Aids", eras.length + refs.length, all, "Four printed Era panels and the four topics repeated on each foldout player aid.");
+  return section(
+    "reference",
+    "Board Panels and Player Aids",
+    eras.length + refs.length,
+    all,
+    "Four printed Era panels and the four topics repeated on each foldout player aid.",
+  );
 }
 
 // --- page assembly -----------------------------------------------------------
 
-const STYLE = `:root { color-scheme: light dark; --accent: #64748b; }
+const STYLE = `
+:root { color-scheme: light dark; --accent: #64748b; }
 * { box-sizing: border-box; }
 body { margin: 0; font: 15px/1.55 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; color: #1a1a1a; background: #ececea; }
 .layout { display: grid; grid-template-columns: 240px minmax(0,1fr); }
@@ -339,6 +522,22 @@ main { padding: 1.8rem clamp(1rem, 3vw, 2.4rem); }
 .chip-face + .chip-face { border-left: 2px dashed var(--accent); }
 .chip-face h3 { margin: 0; }
 .chip-owner { font-weight: 600; color: var(--accent); }
+#areas .grid { grid-template-columns: repeat(auto-fit, minmax(min(100%, 440px), 1fr)); }
+.card.hex-tile { background: transparent; border: 0; overflow: visible; gap: 16px; }
+.hex-face { width: 100%; aspect-ratio: 1.1547; display: flex; align-items: center; justify-content: center;
+  clip-path: polygon(25% 0,75% 0,100% 50%,75% 100%,25% 100%,0 50%);
+  background: #fff; color: #111; container-type: inline-size; }
+.hex-face > div { width: 52%; font-size: 3.1cqw; line-height: 1.35; }
+.hex-face h3 { margin: 0 0 .5em; font-size: 4.2cqw; }
+.hex-face p { margin: .5em 0; }
+.hex-face .flavor { font-size: inherit; }
+@media print {
+  nav.sidebar, .page-head, .cat-head { display: none; }
+  .layout { display: block; } main { padding: 0; }
+  #areas .grid { display: block; }
+  .hex-face { width: 127.02mm; height: 110mm; break-inside: avoid; print-color-adjust: exact; }
+  .card.hex-tile { break-inside: auto; margin: 0; }
+}
 @media print {
   #projects .grid { display: block; }
   .project-chip { width: 150mm; height: 85mm; margin-bottom: 5mm; border: 1px solid #333; border-radius: 0; box-sizing: border-box; break-inside: avoid; }
@@ -377,42 +576,130 @@ search.addEventListener('input', () => {
 });`;
 
 async function build() {
-  const [factions, config, headlines, mandates, escalation, tactics, specialists, objectives, reference] =
-    await Promise.all([
-      readData("factions"),
-      readData("game-config"),
-      readData("headlines"),
-      readData("mandates"),
-      readData("projects"),
-      readData("tactics"),
-      readData("reserve-specialists"),
-      readData("secret-objectives"),
-      readData("reference-cards")
-    ]);
+  const [
+    factions,
+    config,
+    headlines,
+    mandates,
+    escalation,
+    tactics,
+    specialists,
+    objectives,
+    reference,
+  ] = await Promise.all([
+    readData("factions"),
+    readData("game-config"),
+    readData("headlines"),
+    readData("mandates"),
+    readData("projects"),
+    readData("tactics"),
+    readData("reserve-specialists"),
+    readData("secret-objectives"),
+    readData("reference-cards"),
+  ]);
 
   const allSections = [
-    { id: "player-mats", label: "Player mats", html: buildPlayerMats(config), n: config.playerKits.length },
-    { id: "factions", label: "Factions", html: buildFactions(factions, config), n: factions.factions.length },
-    { id: "equipment", label: "Kit-owned equipment", html: buildEquipment(config), n: config.playerKits.length * (config.playerSupply.agents + config.playerSupply.facilities + config.customerCards.perPlayer) },
-    { id: "actions", label: "Core Actions", html: buildActions(config), n: config.playerKits.length * config.actions.length },
-    { id: "rounds", label: "Eras", html: buildRounds(config, reference), n: config.rounds.length },
-    { id: "headlines", label: "Headlines", html: buildHeadlines(headlines), n: headlines.headlines.length },
-    { id: "mandates", label: "Era Mandates", html: buildMandates(mandates), n: mandates.mandates.length },
-    { id: "projects", label: "Facility upgrade rule", html: buildProjects(escalation, config), n: escalation.projects.length },
-    { id: "areas", label: "Shared action areas", html: buildAreas(config), n: config.board.tiles.length },
-    { id: "reference", label: "Board Panels and Player Aids", html: buildReferenceCards(reference), n: (reference.eraCards || []).length + (reference.playerReferences || []).length },
-    { id: "tactics", label: "Tactics", html: buildTactics(tactics), n: tactics.tactics.length },
-    { id: "objectives", label: "Secret Objectives", html: buildObjectives(objectives), n: objectives.objectives.length },
-    { id: "specialists", label: "Reserve Specialists", html: buildSpecialists(specialists), n: specialists.specialists.length }
+    {
+      id: "player-mats",
+      label: "Player mats",
+      html: buildPlayerMats(config),
+      n: config.playerKits.length,
+    },
+    {
+      id: "factions",
+      label: "Factions",
+      html: buildFactions(factions, config),
+      n: factions.factions.length,
+    },
+    {
+      id: "equipment",
+      label: "Kit-owned equipment",
+      html: buildEquipment(config),
+      n: config.playerKits.length * config.playerSupply.agents,
+    },
+    {
+      id: "actions",
+      label: "Core Actions",
+      html: buildActions(config),
+      n: config.playerKits.length * config.actions.length,
+    },
+    {
+      id: "rounds",
+      label: "Eras",
+      html: buildRounds(config, reference),
+      n: config.rounds.length,
+    },
+    { id: "training", label: "Training", html: buildTraining(config), n: 40 },
+    {
+      id: "headlines",
+      label: "Headlines",
+      html: buildHeadlines(headlines),
+      n: headlines.headlines.length,
+    },
+    {
+      id: "mandates",
+      label: "Era Mandates",
+      html: buildMandates(mandates),
+      n: mandates.mandates.length,
+    },
+    {
+      id: "projects",
+      label: "Retained technology lore",
+      html: buildProjects(escalation, config),
+      n: escalation.projects.length,
+    },
+    {
+      id: "areas",
+      label: "Shared action areas",
+      html: buildAreas(config, reference),
+      n: 19,
+    },
+    {
+      id: "reference",
+      label: "Board Panels and Player Aids",
+      html: buildReferenceCards(reference),
+      n:
+        (reference.eraCards || []).length +
+        (reference.playerReferences || []).length,
+    },
+    {
+      id: "tactics",
+      label: "Tactics",
+      html: buildTactics(tactics),
+      n: tactics.tactics.length,
+    },
+    {
+      id: "objectives",
+      label: "Secret Objectives",
+      html: buildObjectives(objectives),
+      n: objectives.objectives.length,
+    },
+    {
+      id: "specialists",
+      label: "Reserve Specialists",
+      html: buildSpecialists(specialists),
+      n: specialists.specialists.length,
+    },
   ];
-  const deferredIds = new Set(["tactics", "objectives", "specialists"]);
+  const deferredIds = new Set([
+    "tactics",
+    "objectives",
+    "specialists",
+    "actions",
+    "rounds",
+    "reference",
+    "projects",
+  ]);
   const sections = baselineOnly
     ? allSections.filter((section) => !deferredIds.has(section.id))
     : allSections;
 
   const total = sections.reduce((sum, s) => sum + s.n, 0);
   const navLinks = sections
-    .map((s) => `<a href="#${s.id}">${escapeHtml(s.label)}<span class="n">${s.n}</span></a>`)
+    .map(
+      (s) =>
+        `<a href="#${s.id}">${escapeHtml(s.label)}<span class="n">${s.n}</span></a>`,
+    )
     .join("\n");
 
   return `<!doctype html>
@@ -446,8 +733,11 @@ ${sections.map((s) => s.html).join("\n")}
 }
 
 const html = await build();
-if (consumedInputs.size !== Object.keys(graph.galleryRendering.inputs).length) throw new Error("Unused gallery input declaration.");
-const outName = graph.galleryRendering.outputs[baselineOnly ? "baseline" : "complete"].target.replace(/^dist\/site\//, "");
+if (consumedInputs.size !== Object.keys(graph.galleryRendering.inputs).length)
+  throw new Error("Unused gallery input declaration.");
+const outName = graph.galleryRendering.outputs[
+  baselineOnly ? "baseline" : "complete"
+].target.replace(/^dist\/site\//, "");
 const outPath = resolve(outDir, outName);
 
 if (checkOnly) {
@@ -455,11 +745,15 @@ if (checkOnly) {
   try {
     actual = await readFile(outPath, "utf8");
   } catch {
-    process.stderr.write(`gallery: dist/site/${outName} missing. Run the matching gallery build.\n`);
+    process.stderr.write(
+      `gallery: dist/site/${outName} missing. Run the matching gallery build.\n`,
+    );
     process.exit(1);
   }
   if (actual !== html) {
-    process.stderr.write(`gallery: dist/site/${outName} is stale. Run the matching gallery build.\n`);
+    process.stderr.write(
+      `gallery: dist/site/${outName} is stale. Run the matching gallery build.\n`,
+    );
     process.exit(1);
   }
   process.stdout.write(`gallery: verified dist/site/${outName}\n`);

@@ -14,9 +14,18 @@ Four players is the primary balance test configuration. Three- and
 five-player games are fully supported configurations with their own evidence
 gates; they are not shortened or extended afterthoughts.
 
-The game lasts four Eras with three simultaneous Core Action selections per player per Era. Six shared areas each have two Facility slots. Four numerical tracks are Runway, Compute, Capability, and Reputation. Customers are cards. Facilities always produce, and one upgrade flips them to double their yield. Players research with push-your-luck, build an engine, deploy, trade, negotiate Joint Ventures, and respond to twenty-four immediate Headlines.
+The game lasts four Eras with three turns per player per Era. A nineteen-hex board
+uses six familiar Action types: Fund, Research, Build, Organize, Deploy, Influence.
+Stay or move one Org one edge, then resolve that hex’s Action. Orgs are the only
+player pieces on the map; Build flips one to equipped for double Production.
+Five holding tracks show Runway, Compute, Capability, Reputation, and Customers;
+Mandate is calculated from the visible position. Immediate trades remain; separate
+Action hands, Facilities, Customer cards, and persistent Ventures are removed.
 
-Score final holdings and all four revealed objectives once at game end. No hex adjacency, Facility relocation, Power system, Generators, risk bag, overlapping risk tracks, immediate points, or Trust milestones remain. The six institutions retain one permanent ability each and equipment identity remains independent. Numerical balance and human usability need fresh evidence.
+Keep the complete forty-card push-your-luck Training deck, twenty-four Headlines,
+twelve objectives, six institutions, and all unique lore. Each game reveals twelve
+Headlines and four objectives. This selected redesign is implemented as a new
+prototype, not evidence of balance or a proof of computational hardness.
 
 ## Status
 
@@ -67,16 +76,10 @@ This repository is a **prototype**, not a manufactured or published product.
 - Balance, counter-strategy, exploitability, and promotion gates are defined in
   [`docs/balance-and-exploitability.md`](docs/balance-and-exploitability.md).
 
-The [release declaration](versions/current-release.json) names the current executable
-and synchronized physical rules candidate. The candidate remains under controlled
-review; the executable implements it under
-`react-agent-assignments-v1`, including direct Org assignments,
-current local Power connections, Research without universal Protection, one
-optional pre-resolution 1-for-1 trade, and scored public AGI recognition.
-CEOs remain faction characters; each faction has two
-starting Orgs and four available in total. Synchronization means
-the browser and simulator execute the selected contract; it does not claim
-physical teachability, numerical balance, or that the AGI coda is enjoyable.
+The [release declaration](versions/current-release.json) identifies the last frozen
+release. Current authoring uses the user-selected `shared-hex-orgs-v1` redesign;
+historical releases and reports retain their original identity. Source checks and
+browser runs establish implementation, not human teachability or strategic depth.
 
 ## Folder Map
 
@@ -227,6 +230,9 @@ The selected tone is solemn institutional absurdity: each Era becomes more
 extreme, while every institution describes the impossible as a responsible
 quarterly initiative.
 
-Era objectives use current public state after Audit. The current-state scoring package is a balance-test candidate; earlier balance receipts do not qualify it.
+Era objectives use final public state after Reputation Review. The current-state scoring package is a balance-test candidate; earlier balance receipts do not qualify it.
 
-The current smaller prototype uses six shared action areas and four tracks (Runway, Compute, Capability, Reputation), five independent player kits, and six institutions. Customers are cards; Facilities always operate and have one upgrade face. All points and four revealed objectives score from final holdings. This redesign is a test candidate with fresh balance and human usability evidence still required. Build from authored sources; never edit `dist/` directly.
+The current prototype uses nineteen hexes, two-sided Orgs and five holding tracks.
+All points and four revealed objectives score from final holdings. Fresh balance
+and human usability evidence is still required. Build from authored sources;
+never edit `dist/` directly.

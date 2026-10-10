@@ -516,3 +516,12 @@ For the next physical session, check every Mandate using only the table after Au
 ## Smaller prototype physical preparation — 2026-10-09
 
 Use only the freshly frozen six-area/four-track kit. Choose institution and kit independently; verify both Facility faces and every Customer ordinal. Ask players to identify owned components by symbols, explain limited Facility slots, flip an upgrade, negotiate a fixed-host Venture, and score the final table without referring to previous turns. Record learning errors and actual observations; do not prefill successful results. Earlier kits and their observations keep their historical identity. The new candidate needs separate facilitated and blind sessions; automated checks establish implementation consistency only.
+
+## Shared-hex prototype (2026-10-10)
+
+The current user-selected prototype supersedes the six-area kit protocol above.
+Use nineteen shared hexes, two-sided Orgs, five holding tracks and derived Mandate.
+Observe one-edge movement, repeated Actions, equipping, the full forty-card Training
+deck, immediate trades, final scoring and colour-independent ownership. Preserve
+all earlier observations under their original rules identity. No human session or
+balance acceptance is established by the implementation checks.

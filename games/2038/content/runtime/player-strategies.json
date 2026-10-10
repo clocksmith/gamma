@@ -147,7 +147,7 @@
     {
       "id": "infrastructure_compounder",
       "name": "The Infrastructure Compounder",
-      "description": "Builds a compact Facility engine, then converts it into public thresholds and late ${terms.playerTracks.customers}.",
+      "description": "Equips a compact set of Orgs, then converts it into public thresholds and late ${terms.playerTracks.customers}.",
       "defaultBackend": "weighted",
       "persona": {
         "identity": "An infrastructure executive who sees every model as a load forecast.",
@@ -169,9 +169,9 @@
           "compute": 1
         },
         "objectives": [
-          "Establish two Facilities without overbuilding.",
+          "Equip two Orgs without neglecting research.",
           "Use the engine to cross ${terms.playerTracks.capability} and ${terms.playerTracks.customer} ${terms.playerTracks.mandate} thresholds.",
-          "Keep enough late tempo and ${terms.resources.compute} for Fusion or scored ${terms.systems.agi} recognition."
+          "Keep enough late tempo and ${terms.resources.compute} for scored ${terms.systems.agi} recognition."
         ],
         "actionWeights": {
           "fund": 2.993,
@@ -182,15 +182,14 @@
           "influence": 0.851
         },
         "decisionWeights": {
-          "build_facility_cloud": 1.811,
-          "build_facility_capital": 1.821
+          "build_equip": 1.821
         },
         "consequenceWeights": {},
         "rules": [
           {
             "when": [
               {
-                "path": "self.facilities",
+                "path": "self.equippedOrgs",
                 "operator": "gte",
                 "value": 2
               }
@@ -203,7 +202,7 @@
           {
             "when": [
               {
-                "path": "self.facilities",
+                "path": "self.equippedOrgs",
                 "operator": "gte",
                 "value": 2
               }
@@ -268,7 +267,7 @@
         },
         "decisionWeights": {
           "research_stop_2": 2.5,
-          "build_facility_consumer": 2
+          "build_equip": 2
         },
         "consequenceWeights": {},
         "rules": [
@@ -355,7 +354,7 @@
         "identity": "A focused claimant converting technical credibility into a final institutional gamble.",
         "worldview": "Public ${terms.playerTracks.mandate} decides victory; a prepared AGI declaration can add enough to change the result.",
         "riskPosture": "Reserves ${terms.resources.compute} for final AGI recognition.",
-        "negotiationStyle": "Trades immediately for ${terms.resources.compute} and negotiates Joint Ventures between fixed Facility hosts.",
+        "negotiationStyle": "Trades immediately for ${terms.resources.compute} with consenting rivals.",
         "voice": "Direct, technical, and coalition-aware."
       },
       "strategy": {
@@ -384,7 +383,7 @@
           "influence": 1.526
         },
         "decisionWeights": {
-          "build_facility": 7.985,
+          "build_equip": 7.985,
           "research_stop_4": 2.972,
           "deploy_": 4.99,
           "agi_declare": 20
@@ -397,7 +396,7 @@
           {
             "when": [
               {
-                "path": "self.facilities",
+                "path": "self.equippedOrgs",
                 "operator": "gte",
                 "value": 3
               }
@@ -439,13 +438,13 @@
     {
       "id": "power_broker",
       "name": "The Capacity Operator",
-      "description": "Builds dependable Facility production, then converts it into ${terms.actions.research}, ${terms.actions.deploy}, and upgrades.",
+      "description": "Builds dependable Org production, then converts it into ${terms.actions.research}, ${terms.actions.deploy}, and equipment.",
       "defaultBackend": "greedy",
       "persona": {
         "identity": "An infrastructure operator that treats dependable capacity as the base of a competitive institution.",
         "worldview": "Production matters when it supports capability and useful deployment.",
         "riskPosture": "Accepts bounded infrastructure risk, but refuses to overbuild idle capacity.",
-        "negotiationStyle": "Concrete and focused on immediate resource trades and useful Joint Ventures.",
+        "negotiationStyle": "Concrete and focused on immediate resource trades.",
         "voice": "Measured, contractual, and operational."
       },
       "strategy": {
@@ -461,8 +460,8 @@
           "compute": 1.2
         },
         "objectives": [
-          "Construct a productive Facility without overbuilding.",
-          "Convert production into ${terms.playerTracks.capability}, ${terms.playerTracks.customers}, and a useful Facility upgrade."
+          "Equip a productive Org without overinvesting.",
+          "Convert production into ${terms.playerTracks.capability}, ${terms.playerTracks.customers}, and useful Org equipment."
         ],
         "actionWeights": {
           "fund": 1.249,
@@ -473,7 +472,7 @@
           "influence": 3.129
         },
         "decisionWeights": {
-          "build_facility": 6.313
+          "build_equip": 6.313
         },
         "consequenceWeights": {},
         "rules": [

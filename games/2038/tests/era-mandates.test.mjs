@@ -5,7 +5,7 @@ import {
   evaluateEraMandate,
   finalObjectiveStandings,
   nominalComputeCapacity,
-  activeJointVenture,
+  neighboringRivals,
 } from "../lab/rules/era-mandates.js";
 for (const card of mandates.mandates)
   test(`final objective ${card.id} evaluates current state without history or mutation`, () => {
@@ -32,7 +32,7 @@ test("qualification is separate from max/min, ties, and valid zero", () => {
   const m = fixture();
   m.players.forEach((p) => {
     p.reputation = 0;
-    p.customerCards = [];
+    p.customers = 0;
   });
   const card = {
     metric: "reputation",
@@ -59,22 +59,17 @@ test("qualification is separate from max/min, ties, and valid zero", () => {
     [0, 2, 0, 0],
   );
 });
-test("capacity uses current normal/upgraded Facilities and active fixed hosts, ignoring caps", () => {
+test("capacity reads equipped Org locations; neighboring rivals need an actual edge", () => {
   const m = fixture();
-  const f = host(m, 0, "build", true),
-    r = host(m, 1, "research");
-  const v = {
-    kind: "joint_venture",
-    left: { seat: 0, facilityId: f.id },
-    right: { seat: 1, facilityId: r.id },
-  };
-  m.contracts = [v];
+  const org = host(m, 0, "build", true);
+  host(m, 1, "research");
   m.players[0].compute = 10;
-  assert.equal(nominalComputeCapacity(m, m.players[0]), 5);
-  assert.equal(activeJointVenture(m, v), true);
-  m.players[1].facilities = [];
-  assert.equal(activeJointVenture(m, v), false);
   assert.equal(nominalComputeCapacity(m, m.players[0]), 4);
+  assert.equal(neighboringRivals(m, m.players[0]), 1);
+  org.tileId = "fund";
+  assert.equal(nominalComputeCapacity(m, m.players[0]), 0);
+  m.players[1].pieces.forEach(p => p.tileId = null);
+  assert.equal(neighboringRivals(m, m.players[0]), 0);
 });
 test("all four revealed objectives use final holdings, no early earned points", async () => {
   const m = fixture();
@@ -100,7 +95,7 @@ test("final score and World Ending depend only on final holdings", () => {
   const p = m.players[0];
   p.capability = 9;
   p.reputation = 4;
-  p.customerCards = [];
+  p.customers = 0;
   m.gainCustomer(p);
   p.agiDeclared = true;
   assert.equal(m.currentScore(p), 19);
