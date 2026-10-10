@@ -70,11 +70,11 @@ This repository is a **prototype**, not a manufactured or published product.
 The [release declaration](versions/current-release.json) names the current executable
 and synchronized physical rules candidate. The candidate remains under controlled
 review; the executable implements it under
-`react-agent-assignments-v1`, including direct Agent assignments,
+`react-agent-assignments-v1`, including direct Org assignments,
 current local Power connections, Research without universal Protection, one
 optional pre-resolution 1-for-1 trade, and scored public AGI recognition.
 CEOs remain faction characters; each faction has two
-starting Agents and four available in total. Synchronization means
+starting Orgs and four available in total. Synchronization means
 the browser and simulator execute the selected contract; it does not claim
 physical teachability, numerical balance, or that the AGI coda is enjoyable.
 

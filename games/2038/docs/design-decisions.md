@@ -12,6 +12,20 @@ five selected proposals were implemented. Earlier 19-tile, every-Era
 map-motion, transmission, Tactic, secret-objective, and endgame-scoring
 assumptions are historical only.
 
+## Org terminology (2026-10-10)
+
+The user selected Org (singular) and Orgs (plural) for the institution's major
+operating branches, replacing Agent and Pod as piece names. Players assign,
+establish, and reassign Orgs. Each branch includes people, AI systems, and
+automated operations; its internal scale grows across the Eras.
+
+This is a terminology change only: two starting Orgs, four maximum, unchanged
+costs, presence, and action economy. Saved-game IDs and engine fields retain
+`agent` for compatibility. Actual AI agents in the fiction remain AI agents.
+Rules, card copy, browser controls, physical specifications, and generated
+materials use the selected piece names. Historical releases and playtest
+receipts retain their original wording.
+
 ## Personal infrastructure and no-writing play
 
 The user selected a mechanical replacement for the earlier project forms.

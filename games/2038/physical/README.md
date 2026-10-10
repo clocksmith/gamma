@@ -4,7 +4,7 @@
 encoding, and dimensions. It is neither player-facing copy nor
 machine-enforced game data.
 
-The selected forms are Customer cards, double-sided Facility cards, Agent tokens,
+The selected forms are Customer cards, double-sided Facility cards, Org tokens,
 faction identity cards, six shared action areas, and five interchangeable player
 mats. Kit colour and symbol identify ownership independently of faction.
 Four numerical tracks use cubes. The Governance Board retains four objectives

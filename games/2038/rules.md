@@ -5,18 +5,20 @@
 
 A smaller institutional strategy prototype for two through five players, across four Eras. Six institutions compete through research, engine building, customers, and negotiation. Costs and scoring values are a test candidate; balance and blind usability are unqualified.
 
+An Org is a major operating branch of your institution, encompassing people, AI systems, and automated operations. Its internal scale grows across the Eras. You start with two Orgs and may establish up to four; additional Orgs increase presence, not the number of turns.
+
 ## Setup
 
-Choose an institution and a colour-and-symbol player kit independently. The faction identity card gives your starting Runway, Compute, Capability, Reputation, and Customer cards, plus one permanent ability. Place four cubes on the generic player mat. Take two Agents into play, initially unassigned, and leave two in supply. Leave your four numbered Facilities unbuilt, five Customer cards in order, and six Core Action cards available. An institution never determines piece colour. Seat identifies ownership in the engine.
+Choose an institution and a colour-and-symbol player kit independently. The faction identity card gives your starting Runway, Compute, Capability, Reputation, and Customer cards, plus one permanent ability. Place four cubes on the generic player mat. Take two Orgs into play, initially unassigned, and leave two in supply. Leave your four numbered Facilities unbuilt, five Customer cards in order, and six Core Action cards available. An institution never determines piece colour. Seat identifies ownership in the engine.
 
 Lay out the six shared areas, the four-Era Governance Board, and the shuffled shared forty-card Training deck. Split Headlines by Era and shuffle each six-card packet. Split objectives by Era. Choose Initiative randomly before the game; the executable uses seat zero. Initiative advances clockwise after every cycle. All resource holdings and components are public; selected Actions remain secret until everyone has selected. Unrevealed cards and Training draw order remain hidden.
 
 <!-- map:start -->
 ## Six shared areas
 
-There is one area per Core Action: Fund, Research, Build, Organize, Deploy, and Influence. Each has two shared Facility spaces. Agents do not consume these spaces. Area order has no mechanical effect. There is no adjacency, distance, movement cost, Facility relocation, Generator, or Power eligibility.
+There is one area per Core Action: Fund, Research, Build, Organize, Deploy, and Influence. Each has two shared Facility spaces. Orgs do not consume these spaces. Area order has no mechanical effect. There is no adjacency, distance, movement cost, Facility relocation, Generator, or Power eligibility.
 
-An acting Agent goes to the area matching its Core Action and stays there until reassigned. Build may place a Facility in any area with an open space. Agents and Facilities each count as one presence. You control an area only if you have strictly more presence than every rival; tied areas are uncontrolled. Control matters only when a printed objective asks for it.
+An acting Org goes to the area matching its Core Action and stays there until reassigned. Build may place a Facility in any area with an open space. Orgs and Facilities each count as one presence. You control an area only if you have strictly more presence than every rival; tied areas are uncontrolled. Control matters only when a printed objective asks for it.
 
 Each Facility always produces its area's printed yield. Upgraded Facilities double that yield. The six yields are printed on the areas:
 
@@ -42,7 +44,7 @@ At the start of each Era, ready all six Actions. Reveal one of that Era's three 
 
 1. Reveal one Headline from this Era's packet and resolve its immediate effects and choices in Initiative order. Keep it in the timeline; it leaves no continuing modifier.
 2. Each institution secretly selects one unused Core Action, even if it currently cannot afford a resolution. Reveal together.
-3. Resolve in Initiative order. You may offer one immediate trade, then choose an Agent, assign it to the matching area, pay the cost, and resolve one legal mode of your selected Action. If no legal resolution exists after trading, the Action does nothing and is still used.
+3. Resolve in Initiative order. You may offer one immediate trade, then choose an Org, assign it to the matching area, pay the cost, and resolve one legal mode of your selected Action. If no legal resolution exists after trading, the Action does nothing and is still used.
 4. Exhaust the selected card. Advance Initiative clockwise.
 
 No Action may be selected twice in one Era. After the third cycle, resolve Production and Reputation Review. Advance the Era; in Era IV proceed to AGI recognition and final scoring instead.
@@ -59,7 +61,7 @@ Curated Corpus counts as the first absent ordinary domain in printed deck order 
 **Build:** Build one numbered Facility in any area with an open Facility space for two Runway, or from Era II upgrade one of your existing unupgraded Facilities for three Runway and one Compute. These are exclusive choices. Use Facilities in numerical order. Flip an upgraded Facility; it doubles its printed area yield permanently. Each Facility can be upgraded once. No separate upgrade chips or types exist. Industrial Velocity discounts only the Facility construction price by one Runway.
 <!-- construction:end -->
 
-**Organize:** Pay two Runway to recruit one Agent from supply into the Organize area, or reassign one other Agent to any area. First assign the acting Agent to Organize. You may have at most four Agents. Reassignment has no cost or distance restriction and does not resolve another Action.
+**Organize:** Pay two Runway to establish one Org from supply into the Organize area, or reassign one other Org to any area. First assign the acting Org to Organize. You may have at most four Orgs. Reassignment has no cost or distance restriction and does not resolve another Action.
 
 **Deploy:** If your Capability meets the next Customer card's requirement, pay one Compute, take that card, and lose one Reputation. Installed Base gives one Runway on this Deploy; gaining a Customer from a Headline does not trigger it.
 
@@ -108,7 +110,7 @@ Twenty-four Headlines are organized as six per Era. Shuffle each packet and reve
 <!-- components:start -->
 ## Components
 
-Five interchangeable kits serve up to five players; six institutions are independent choices. Mark every owned item with kit colour and symbol. Facilities are numbered and have normal/upgraded faces. Customer cards stay in ordinal order. Agent location and matching Venture host numbers are the only shared-area encodings.
+Five interchangeable kits serve up to five players; six institutions are independent choices. Mark every owned item with kit colour and symbol. Facilities are numbered and have normal/upgraded faces. Customer cards stay in ordinal order. Org location and matching Venture host numbers are the only shared-area encodings.
 
 <!-- inventory:start -->
 ### Box inventory
@@ -117,7 +119,7 @@ Five interchangeable kits serve up to five players; six institutions are indepen
 - One Governance Board with four Era panels, one Era marker, one Initiative marker, and four objective holding spaces.
 - Six faction identity cards; five generic player mats and five three-panel player aids.
 - Thirty Core Action cards: six in each kit.
-- Twenty Agents: four per kit, two initially in play.
+- Twenty Orgs: four per kit, two initially in play.
 - Twenty two-sided numbered Facility cards: four per kit; the reverse shows the single upgrade.
 - Twenty-five Customer cards: five ordered cards per kit.
 - Twenty resource-track cubes: four per kit; five AGI recognition markers.

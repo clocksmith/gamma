@@ -172,7 +172,7 @@ function renderBoard(state) {
         const entry=facilities[i];
         return entry ? `<div class="facility-slot" style="--kit-color:${kitColor(entry.player)}">${escapeHtml(owner(entry.player))}<br>${escapeHtml(entry.facility.id)} · ${entry.facility.upgraded ? "Upgraded ×2" : "Normal"}</div>` : '<div class="facility-slot empty">Open Facility space</div>';
       }).join("")}</div>
-      <p class="area-agents">Agents: ${agents.map(e => escapeHtml(owner(e.player))).join(" · ") || "None"}</p>`;
+      <p class="area-agents">Orgs: ${agents.map(e => escapeHtml(owner(e.player))).join(" · ") || "None"}</p>`;
     elements.board.append(card);
   }
 }
@@ -443,7 +443,7 @@ function renderTradeDecisions(packet, stage) {
 
 function pieceName(pieceId) {
   const number = pieceId?.match(/agent-(\d+)$/)?.[1];
-  return number ? `Agent ${number}` : pieceId;
+  return number ? `Org ${number}` : pieceId;
 }
 
 function tileName(tileId) {
@@ -459,7 +459,7 @@ function renderAssignmentDecisions(packet, stage) {
 
   const builder = document.createElement("section");
   builder.className = "move-builder";
-  builder.innerHTML = "<h3>Assign an Agent</h3><p>Choose an Agent and action effect. It goes to the matching shared area.</p>";
+  builder.innerHTML = "<h3>Assign an Org</h3><p>Choose an Org and action effect. It goes to the matching shared area.</p>";
   if (stage === "talent_assignment") builder.querySelector("p").textContent = copy.browser.talentAssignmentHint;
   const fields = document.createElement("div");
   fields.className = "trade-fields";
@@ -472,7 +472,7 @@ function renderAssignmentDecisions(packet, stage) {
     field.append(control);
     fields.append(field);
   };
-  addField("Agent", piece);
+  addField("Org", piece);
   destination.hidden = true;
   if (stage !== "talent_assignment") addField("Action", outcome);
 

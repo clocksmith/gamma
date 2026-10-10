@@ -1,4 +1,4 @@
-# Mandate 2038 Agent Instructions
+# Mandate 2038 Org Instructions
 
 These instructions apply to the entire Mandate 2038 project.
 
@@ -97,7 +97,7 @@ real people. Do not force every scene into the same dystopian conclusion.
   counter-strategy, and promotion contract. Its machine authority is
   `lab/contracts/balance-contract.json`.
 - The user-selected simplification candidate replaces personnel movement with
-  persistent Agent assignments, removes Research Protection and numeric Power
+  persistent Org assignments, removes Research Protection and numeric Power
   allocation, and scores recognized AGI within ordinary Mandate. Preserve the
   six Core Actions, simultaneous selection, fictional institutions, competition for limited Facility spaces, four Eras, and separate World Ending.
 - `web/` owns the browser implementation.

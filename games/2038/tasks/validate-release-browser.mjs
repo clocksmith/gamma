@@ -349,7 +349,7 @@ try {
     assert.equal(coreRulesResponse.status, 200, "Core rules must be accessible.");
     const coreRulesHtml = await coreRulesResponse.text();
     assert.match(coreRulesHtml, /Reveal one Headline.*?secretly selects/s, "Headline effects finish before selection.");
-    assert.match(coreRulesHtml, /offer one immediate trade, then choose an Agent/, "Trade precedes action resolution.");
+    assert.match(coreRulesHtml, /offer one immediate trade, then choose an Org/, "Trade precedes action resolution.");
 
     const cardsSource = JSON.parse(await readFile(resolve(projectRoot, "components/reference-cards.json"), "utf8"));
     const aidTexts = (cardsSource.playerReferences || []).flatMap((card) => [...(card.frontText || []), ...(card.backText || [])]);

@@ -513,7 +513,7 @@ export class SelectedRulesMatch {
           decisions.push(
             choice(
               "organize_recruit",
-              "Recruit an Agent (2 Runway)",
+              "Establish an Org (2 Runway)",
               "organize",
               { mode: "recruit" },
               { runway: -2, agents: 1 },
@@ -525,7 +525,7 @@ export class SelectedRulesMatch {
               decisions.push(
                 choice(
                   `organize_assign_${other.id}_${area.instanceId}`,
-                  `Reassign ${other.id} to ${area.name}`,
+                  `Reassign Org ${p.pieces.indexOf(other) + 1} to ${area.name}`,
                   "organize",
                   {
                     mode: "reassign",
@@ -601,7 +601,7 @@ export class SelectedRulesMatch {
       !agent ||
       !this.board.some((a) => a.instanceId === parameters.destinationId)
     )
-      throw new RangeError("Invalid Agent assignment.");
+      throw new RangeError("Invalid Org assignment.");
     agent.tileId = parameters.destinationId;
   }
   applyResolution(seat, decision) {
