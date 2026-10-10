@@ -1,3 +1,4 @@
+import { resolvePlayerKits } from "../../lab/rules/player-kits.js";
 import { connectedFacilityIds } from "../../lab/rules/local-power-connections.js";
 import { calculateDeployComputeCost } from "../../lab/rules/deploy-costs.js";
 export function seedToUint32(value) {
@@ -292,12 +293,15 @@ export function simulateTrainingRun(config, seed, options = {}) {
   };
 }
 
-export function createPlayer(config, faction, frontierTileId, playerCount = 4) {
+export function createPlayer(config, faction, frontierTileId, playerCount = 4, kitId = config.playerKits[0].id) {
+  const kit = resolvePlayerKits(config, 1, [kitId])[0];
   const startingScrutiny = Math.min(
     faction.starts.scrutiny || 0,
     config.playerSupply.scrutinyCubes
   );
   return {
+    seat: 0,
+    kitId: kit.id,
     factionId: faction.id,
     playerCount,
     ...structuredClone(faction.starts),
@@ -306,7 +310,7 @@ export function createPlayer(config, faction, frontierTileId, playerCount = 4) {
     actionsUsed: [],
     pieces: [
       ...Array.from({ length: config.playerSupply.startingAgents }, (_, index) => ({
-        id: `agent-${index + 1}`,
+        id: `s0-agent-${index + 1}`,
         name: `Agent ${index + 1}`,
         kind: "agent",
         tileId: frontierTileId
@@ -332,7 +336,7 @@ export function createGame(
   options = {}
 ) {
   const board = generateBoard(config, seed);
-  if (Object.keys(options).length) throw new Error("Game setup does not accept alternate rules options.");
+  if (Object.keys(options).some(key => key !== "kitAssignments")) throw new Error("Game setup does not accept alternate rules options.");
   const faction = factions.factions.find((entry) => entry.id === factionId) || factions.factions[0];
   const frontier = board.find((tile) => tile.id === "frontier");
   const boundedPlayerCount = Number(playerCount);
@@ -344,6 +348,7 @@ export function createGame(
       `playerCount must be one of ${config.players.playableCounts.join(", ")}.`
     );
   }
+  const kits = resolvePlayerKits(config, boundedPlayerCount, options.kitAssignments);
   const state = {
     seed: String(seed),
     playerCount: boundedPlayerCount,
@@ -356,7 +361,7 @@ export function createGame(
     selectedPieceId: null,
     selectedTileId: null,
     board,
-    player: createPlayer(config, faction, frontier.instanceId, boundedPlayerCount),
+    player: createPlayer(config, faction, frontier.instanceId, boundedPlayerCount, kits[0].id),
     headlines: shuffle(
       availableHeadlines(headlines, 1),
       createRng(`${seed}:headlines:1`)

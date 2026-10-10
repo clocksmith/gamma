@@ -168,3 +168,7 @@ Run `npm run build:all` to resolve runtime JSON, books, and gallery cards. Chang
 copy once and rebuild to update every consumer. `npm test` exercises propagation,
 missing references, override rejection, and exclusion of internal sentinel text.
 Historical release bundles remain evidence of their original source layout.
+
+Player-kit identity is authored in `components/game.json`; faction identities
+and starting values are authored in `components/factions.json`. Generic mats
+and kit-owned chips never derive ownership colours from faction artwork.

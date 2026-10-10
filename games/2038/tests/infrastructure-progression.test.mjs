@@ -17,7 +17,7 @@ const alone = (m, seat, id) => choices(m, seat, id).find(c => !c.parameters.faci
 
 test('personal chips preserve II / III / IV and all earlier unlocks', async () => {
   const data=JSON.parse(await readFile(new URL('../dist/runtime/projects.json',import.meta.url)));
-  assert.equal(data.chipsPerFaction,3);
+  assert.equal(data.chipsPerPlayer,3);
   assert.deepEqual(data.projects.map(p=>[p.id,p.unlockedRound]),[['mega_cluster',2],['fusion_demonstrator',3],['quantum',4]]);
   for(const era of [1,2,3,4]) {
     const m=await setup(); m.round=era;

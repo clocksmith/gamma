@@ -79,6 +79,7 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
     config,
     factions,
     profiles,
+    kitAssignments,
     backends = [],
     models = [],
     reasoningEfforts = [],
@@ -103,6 +104,7 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
       config,
       factions,
       profiles,
+      kitAssignments,
       backends,
       models,
       reasoningEfforts,
@@ -2279,7 +2281,8 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
       round: this.round,
       scores: this.players.map((player) => ({
         seat: player.seat,
-        factionId: player.factionId,
+        kitId: player.kitId,
+      factionId: player.factionId,
         mandate: this.currentScore(player),
         poweredFacilities: player.latestProductionSnapshot.poweredFacilityIds.length
       })),
@@ -2971,7 +2974,8 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
       } = this.finalMandate(player);
       return {
         seat: player.seat,
-        factionId: player.factionId,
+        kitId: player.kitId,
+      factionId: player.factionId,
         factionName: player.factionName,
         profileId: player.profileId,
         backendId: player.backendId,

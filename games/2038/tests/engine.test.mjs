@@ -183,7 +183,7 @@ test("action identity locks before piece and destination", async () => {
   assert.equal(state.selectedAction.id, "fund");
   assert.equal(state.selectedPieceId, null);
   assert.equal(state.selectedTileId, null);
-  assert.ok(legalDestinations(state, "agent-1").length > 1);
+  assert.ok(legalDestinations(state, "s0-agent-1").length > 1);
 });
 
 test("three different Core Actions advance exactly one era on the fixed map", async () => {
@@ -192,7 +192,7 @@ test("three different Core Actions advance exactly one era on the fixed map", as
   const frontier = state.board.find((tile) => tile.id === "frontier");
   for (const action of ["fund", "influence", "organize"]) {
     commitAction(state, action);
-    resolveSelectedAction(config, headlines, state, "agent-1", frontier.instanceId);
+    resolveSelectedAction(config, headlines, state, "s0-agent-1", frontier.instanceId);
   }
   assert.equal(state.phase, "select");
   assert.equal(state.round, 2);
@@ -213,7 +213,7 @@ test("the first Facility is powered by the basic starting grid connection", asyn
 
   for (const action of ["build", "fund", "influence"]) {
     commitAction(state, action);
-    resolveSelectedAction(config, headlines, state, "agent-1", buildTile.instanceId, {
+    resolveSelectedAction(config, headlines, state, "s0-agent-1", buildTile.instanceId, {
       buildMode: "facility"
     });
   }
@@ -245,7 +245,7 @@ test("Loopfold AI's starting Customer is Customer one", async () => {
   state.player.capability = 3;
 
   commitAction(state, "deploy");
-  resolveSelectedAction(config, headlines, state, "agent-1", consumer.instanceId);
+  resolveSelectedAction(config, headlines, state, "s0-agent-1", consumer.instanceId);
 
   assert.equal(state.player.customers, 1);
   assert.ok(state.log.some((entry) => /Customer 2 needs Capability 4/.test(entry)));
@@ -298,7 +298,7 @@ test("Customer, Capability, and Trust Mandate are visible and awarded once", asy
   const frontier = state.board.find((tile) => tile.id === "frontier");
   state.player.capability = 3;
   commitAction(state, "fund");
-  resolveSelectedAction(config, headlines, state, "agent-1", frontier.instanceId);
+  resolveSelectedAction(config, headlines, state, "s0-agent-1", frontier.instanceId);
   assert.equal(state.player.mandate, 6);
   assert.equal(
     state.player.mandateAwards.filter((award) => award.id === "capability-3").length,

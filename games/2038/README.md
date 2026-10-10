@@ -4,6 +4,9 @@
 Start with the [creative writer's review guide](components/README.md), which
 leads through the world, Eras, factions, Headlines, endings, and play instructions.
 
+Five interchangeable player kits and six independently selectable institutions.
+Equipment colour and symbol identify the player; faction cards supply starts and abilities.
+
 A 2–5 player strategy game about building, deploying, regulating, and
 plausibly declaring AGI.
 

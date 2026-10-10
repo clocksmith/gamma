@@ -228,7 +228,8 @@ const manifest = {
     "Build projects",
     "Local Power contracts",
     "Reference Cards",
-    "Faction boards",
+    "Faction identity cards",
+    "Player mats",
     "Training deck contract",
     "Map and token contracts"
   ],

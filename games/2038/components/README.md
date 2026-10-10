@@ -19,3 +19,6 @@ audience; it does not mean access restrictions.
 placement. Their usage and surface paths are derived from the component records.
 Both are stripped from playable data, as is the resolved `loreRef`.
 The [editing map](../content/README.md) gives the exact syntax and commands.
+
+Review player mats separately from faction identity cards: verify five equipment
+kits, six selectable institutions, and colour plus symbol on every owned piece.

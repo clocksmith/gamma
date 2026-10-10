@@ -16,12 +16,26 @@
     "facilitatorInterventions"
   ],
   "properties": {
-    "schemaVersion": { "const": 1 },
-    "evidenceType": {
-      "enum": ["facilitated_playtest", "blind_playtest"]
+    "schemaVersion": {
+      "enum": [
+        1,
+        2
+      ]
     },
-    "sessionId": { "type": "string", "minLength": 1 },
-    "playedAt": { "type": "string", "format": "date-time" },
+    "evidenceType": {
+      "enum": [
+        "facilitated_playtest",
+        "blind_playtest"
+      ]
+    },
+    "sessionId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "playedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
     "game": {
       "type": "object",
       "additionalProperties": false,
@@ -34,8 +48,12 @@
         "variantFingerprint"
       ],
       "properties": {
-        "version": { "type": "string" },
-        "executableVersion": { "type": "string" },
+        "version": {
+          "type": "string"
+        },
+        "executableVersion": {
+          "type": "string"
+        },
         "sourceCommit": {
           "type": "string",
           "pattern": "^[a-f0-9]{40}$"
@@ -56,32 +74,65 @@
     },
     "physicalKit": {
       "type": "object",
-      "required": ["kitId", "componentRevision", "executableRevision", "sourceCommit", "label", "mixedRevisions"],
+      "required": [
+        "kitId",
+        "componentRevision",
+        "executableRevision",
+        "sourceCommit",
+        "label",
+        "mixedRevisions"
+      ],
       "properties": {
-        "kitId": { "type": "string", "minLength": 1 },
-        "componentRevision": { "type": "string" },
-        "executableRevision": { "type": "string" },
+        "kitId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "componentRevision": {
+          "type": "string"
+        },
+        "executableRevision": {
+          "type": "string"
+        },
         "sourceCommit": {
           "type": "string",
           "pattern": "^[a-f0-9]{40}$"
         },
-        "label": { "type": "string", "minLength": 1 },
-        "mixedRevisions": { "type": "boolean" },
+        "label": {
+          "type": "string",
+          "minLength": 1
+        },
+        "mixedRevisions": {
+          "type": "boolean"
+        },
         "exceptions": {
           "type": "array",
-          "items": { "type": "string" }
+          "items": {
+            "type": "string"
+          }
         }
       }
     },
     "configuration": {
       "type": "object",
-      "required": ["playerCount", "boardSeed", "factions"],
+      "required": [
+        "playerCount",
+        "boardSeed",
+        "factions"
+      ],
       "properties": {
-        "playerCount": { "type": "integer", "minimum": 2, "maximum": 6 },
-        "boardSeed": { "type": "string" },
+        "playerCount": {
+          "type": "integer",
+          "minimum": 2,
+          "maximum": 6
+        },
+        "boardSeed": {
+          "type": "string"
+        },
         "factions": {
           "type": "array",
-          "items": { "type": "string" },
+          "items": {
+            "type": "string"
+          },
           "minItems": 2,
           "maxItems": 6
         }
@@ -89,13 +140,148 @@
     },
     "rulesDeviations": {
       "type": "array",
-      "items": { "type": "string" }
+      "items": {
+        "type": "string"
+      }
     },
     "facilitatorInterventions": {
       "type": "array",
-      "items": { "type": "string" }
+      "items": {
+        "type": "string"
+      }
     },
-    "notesFile": { "type": "string" },
-    "scoresFile": { "type": "string" }
-  }
+    "notesFile": {
+      "type": "string"
+    },
+    "scoresFile": {
+      "type": "string"
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "schemaVersion": {
+            "const": 2
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "configuration": {
+            "required": [
+              "kitAssignments"
+            ],
+            "properties": {
+              "playerCount": {
+                "maximum": 5
+              },
+              "factions": {
+                "maxItems": 5
+              },
+              "kitAssignments": {
+                "type": "array",
+                "items": {
+                  "enum": [
+                    "kit-red",
+                    "kit-blue",
+                    "kit-green",
+                    "kit-violet",
+                    "kit-gold"
+                  ]
+                },
+                "uniqueItems": true
+              }
+            },
+            "allOf": [
+              {
+                "if": {
+                  "properties": {
+                    "playerCount": {
+                      "const": 2
+                    }
+                  }
+                },
+                "then": {
+                  "properties": {
+                    "factions": {
+                      "minItems": 2,
+                      "maxItems": 2
+                    },
+                    "kitAssignments": {
+                      "minItems": 2,
+                      "maxItems": 2
+                    }
+                  }
+                }
+              },
+              {
+                "if": {
+                  "properties": {
+                    "playerCount": {
+                      "const": 3
+                    }
+                  }
+                },
+                "then": {
+                  "properties": {
+                    "factions": {
+                      "minItems": 3,
+                      "maxItems": 3
+                    },
+                    "kitAssignments": {
+                      "minItems": 3,
+                      "maxItems": 3
+                    }
+                  }
+                }
+              },
+              {
+                "if": {
+                  "properties": {
+                    "playerCount": {
+                      "const": 4
+                    }
+                  }
+                },
+                "then": {
+                  "properties": {
+                    "factions": {
+                      "minItems": 4,
+                      "maxItems": 4
+                    },
+                    "kitAssignments": {
+                      "minItems": 4,
+                      "maxItems": 4
+                    }
+                  }
+                }
+              },
+              {
+                "if": {
+                  "properties": {
+                    "playerCount": {
+                      "const": 5
+                    }
+                  }
+                },
+                "then": {
+                  "properties": {
+                    "factions": {
+                      "minItems": 5,
+                      "maxItems": 5
+                    },
+                    "kitAssignments": {
+                      "minItems": 5,
+                      "maxItems": 5
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        }
+      }
+    }
+  ]
 }

@@ -36,21 +36,21 @@ After three action cycles, players resolve Era Production, optional AGI recognit
 3. Shuffle the Training deck. Separate the twelve Era ${terms.playerTracks.mandate} cards into
    four three-card Era decks. Shuffle each deck and place it beside its Era
    panel.
-4. Stage the shared supplies. Ordinary Power contracts are printed on the
-   Energy tiles. Each faction takes its three personal project chips, Available
+4. Each player chooses a distinct kit and a faction card independently. Stage the shared supplies. Ordinary Power contracts are printed on the
+   Energy tiles. Take the kit’s three personal project chips, Available
    side up; no shared project reference or unique Fusion supply is needed.
-5. Set each faction's track cubes to its printed starts. Put its Trust milestone
+5. Initialize each generic player mat from the chosen faction card’s printed starts. Put its Trust milestone
    cube at the highest threshold already awarded by starting Mandate, its AGI
    recognition cube at No, and its objective cube at zero.
 6. Place two Agents per player at ${terms.locations.frontier}. Keep the other two Agents in
    supply. Keep all four Facilities and the Generator in supply; no Facility
    begins on the board. Facilities must be constructed in printed number order:
-   Facility 1 first, then 2, 3, and 4. Facility 1 carries that Faction's
+   Facility 1 first, then 2, 3, and 4. Facility 1 carries that player’s
    integrated starting-grid identifier. Set each Faction’s ${terms.resources.runway}, ${terms.resources.compute}, ${terms.playerTracks.capability}, ${terms.playerTracks.customers}, ${terms.playerTracks.trust}. Set each to its printed starting value.
 7. Place each Faction’s already-earned public ${terms.playerTracks.mandate} on the shared track as
-   printed on its Faction board. Put every player’s ten ${terms.playerTracks.scrutiny}
+   printed on its faction card. Put every player’s ten ${terms.playerTracks.scrutiny}
    cubes outside the bag; the bag begins empty.
-8. Keep participating faction boards visible: their printed starting Trust
+8. Keep participating faction cards visible: their printed starting Trust
    determines Setup Collective Trust when resolving the World Ending.
 9. Choose Initiative randomly and give that player the Initiative chip.
    Begin Era I.
@@ -736,7 +736,7 @@ The institutional winner and the civilization's outcome are distinct.
 ## 8. Printed card authorities
 
 <!-- card-authority:start -->
-Faction boards, Governance Board Era panels, map-tile Power contracts, Core
+faction cards, Governance Board Era panels, map-tile Power contracts, Core
 Action cards, personal project chips, Mandate cards, Training cards, player aids, and
 Headline cards are rules components. Resolve the text printed on the matching
 card, board, or player aid. Printed text changes only the field or timing it
@@ -750,9 +750,9 @@ signature ability. It modifies one familiar action or Production. It requires
 no separate use marker, frequency record, or refresh. Every faction uses the
 same public Mandate scoring.
 
-During setup, use each Faction board’s printed starts and place its already
+During setup, use each faction card’s printed starts and place its already
 earned public ${terms.playerTracks.mandate}. Award that ${terms.playerTracks.mandate} once; never score it
-again. The Faction board is authoritative if a summary elsewhere differs.
+again. The faction card is authoritative if a summary elsewhere differs.
 
 A Headline is revealed before secret action selection. Finish every printed
 instruction and choice, including any immediate production, before selecting
@@ -791,7 +791,7 @@ Pack three component families in the labelled trays and Era packets:
 | Family | Job |
 | --- | --- |
 | Cards, including flat chips | Explain rules; identify infrastructure and projects |
-| Agent position tokens | Locate assignments; one shape in each faction colour |
+| Agent position tokens | Locate assignments; one token shape with each kit’s colour and symbol |
 | Cubes | Mark numerical tracks; supply individual Audit draws |
 
 Chips are small durable cards. Maps and boards are printed surfaces; the bag
@@ -816,13 +816,13 @@ It provides:
 The Grid and Renewable tiles print ordinary Power contracts. Fusion's effect is printed on each personal chip. Tile wells retain pieces but create no
 extra rules state.
 
-### One prepacked faction tray per player
+### Five reusable player kits and six faction identity cards
 
-Each of the six trays contains:
+Each of the five kits contains:
 
-- 1 faction board with five numbered tracks: Runway, Compute, Capability,
+- 1 generic player mat with five numbered tracks: Runway, Compute, Capability,
   Customers, and Trust; a highest-Trust-milestone track, objective track, and AGI recognition spaces
-- ${content.gameConfig.playerSupply.factionBoardTrackCubes} faction-coloured track cubes, one per numbered faction track
+- ${content.gameConfig.playerSupply.resourceTrackCubes} kit-coloured and symbol-marked track cubes, one per resource track
 - ${content.gameConfig.playerSupply.agents} Agents (position tokens)
 - ${content.gameConfig.playerSupply.facilities} Facilities as flat chips, numbered 1–${content.gameConfig.playerSupply.facilities}
 - ${content.gameConfig.playerSupply.generators} Generator chip
@@ -852,31 +852,29 @@ Generators do not count against the Facility limit.
 - 1 opaque Audit bag
 - 1 Initiative chip
 
-The six faction trays supply six Mandate cubes and six player aids.
-Choose two through five factions for a game; leave every unchosen tray in the box.
+Six faction identity cards supply starts, abilities and fiction. Unused kits and cards stay boxed.
 
-Each institution has its own projects. Only Joint Ventures draw from a shared
+Each player kit has its own projects. Ownership follows the seat, not institutional artwork. Only Joint Ventures draw from a shared
 pair supply. Personal project chips are never reserved for another institution.
 
 ### Setup packaging
 
-The insert provides six labelled faction trays, four labelled Era packets, one
+The insert provides five kit trays and a six-card identity well, four labelled Era packets, one
 Training well and one shared contract well. Era packets
 contain `6 / 6 / 6 / 6` Headlines plus three Mandates each.
 
 ### Standard cards and foldout count
 
-The game contains 112 standard cards plus 6 foldout player aids:
+The game contains 112 standard cards plus 5 foldout player aids:
 
-- 36 Core Actions
+- 30 Core Actions
+- 6 faction identity cards
 - 24 Headlines
 - 12 Mandates
 - 40 Training cards
-- 6 foldout player aids
+- 5 foldout player aids
 
-The chip quantities are listed in the faction and shared inventories above;
-chips are not additional standard deck cards. Printed Era panels and Power
-contracts are part of the Governance Board, tiles, and personal project chips.
+Chip quantities appear above. Era panels and Power contracts are printed on boards, tiles and personal chips.
 
 ### Excluded deferred content
 
@@ -889,7 +887,7 @@ Use one cube per numbered resource or score track, never in the Audit bag.
 Scrutiny and Systemic Risk retain individual cubes to preserve draw probabilities.
 
 Facilities and Generators use separate flat chips with distinct symbols and
-faction identities. Read Power from Generator adjacency and Facility 1's
+kit colours and symbols. Read Power from Generator adjacency and Facility 1's
 starting-grid identifier; no Power cubes, allocation surface, or powered/unpowered
 flipping is required.
 Board dimensions, fold pattern, material and retention
@@ -918,7 +916,7 @@ up in its Era row to form the twelve-card ${terms.systems.futureTimeline}.
 
 Keep unbuilt personal chips Available side up. Build flips one to Built and
 attaches it to its host. Requirements are common; costs and benefits are printed
-on the two faces. The eighteen chips are three per faction, not shuffled cards.
+on the two faces. The fifteen chips are three per player kit, not shuffled cards.
 
 ### Defined markers and effects
 

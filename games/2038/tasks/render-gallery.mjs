@@ -92,14 +92,7 @@ const timingBadge = (t) => (t ? t.replace(/_/g, " ") : "");
 function buildFactions(data, config) {
   const cards = data.factions
     .map((f) => {
-      const stats = f.starts
-        ? `<dl class="stats">${Object.entries(f.starts)
-            .map(([k, v]) => `<div><dt>${escapeHtml(k)}</dt><dd>${escapeHtml(v)}${k === "trust"
-              ? `<span class="trust-milestone-track" aria-label="Highest Trust milestone awarded"><small>Highest Trust milestone awarded</small> ${[0, ...config.scoring.trustThresholds.map(t => t.value)]
-                .map(value => `<span data-trust-threshold="${value}" data-start="${value === Math.max(0, ...config.scoring.trustThresholds.filter(t => v >= t.value).map(t => t.value))}">${value}</span>`).join(" · ")}</span>`
-              : ""}</dd></div>`)
-            .join("")}</dl><p class="recognition-track">AGI recognition: <span>No</span> <span>Recognized</span></p><details class="objective-panel" open><summary>Era objective · one cube</summary><div class="objective-track" aria-label="Era objective count, 0 through 99">${Array.from({length: 100}, (_, value) => `<span data-objective-value="${value}">${value}</span>`).join("")}</div></details>`
-        : "";
+      const stats = `<dl class="stats">${Object.entries(f.starts).map(([key, value]) => `<div><dt>${escapeHtml(key)}</dt><dd>${escapeHtml(value)}</dd></div>`).join("")}</dl><p>Initialize the player mat from this card. Highest Trust milestone starts at ${Math.max(0, ...config.scoring.trustThresholds.filter(t => f.starts.trust >= t.value).map(t => t.value))}; starting public Mandate: ${f.starts.startingPublicMandate}.</p>`;
       const abilities = (f.abilities || [])
         .map(
           (a) => `<div class="ability">
@@ -125,15 +118,20 @@ ${stats}
 ${scoringRule}
 <div class="abilities"><span class="field-label">Abilities</span>${abilities}</div>`;
       return card({
-        accent: f.color,
+        accent: f.brandColor,
         title: f.name,
         subtitle: f.chiefExecutive,
-        badgeList: [f.color ? "faction" : ""],
+        badgeList: [f.brandColor ? "faction" : ""],
         bodyHtml: body
       });
     })
     .join("");
-  return section("factions", "Factions", data.factions.length, cards, "Asymmetric institutions with starting resources and per-Era abilities.");
+  return section("factions", "Faction identity cards", data.factions.length, cards, "Asymmetric institutions with starting values and one permanent ability. Equipment is selected separately.");
+}
+
+function buildPlayerMats(config) {
+  const mats = config.playerKits.map(kit => `<article class="card player-mat" data-kit="${escapeHtml(kit.id)}" style="--accent:${escapeHtml(kit.color)}"><h3>${escapeHtml(kit.symbol)} ${escapeHtml(kit.colorName)} player kit · ${escapeHtml(kit.symbolName)}</h3><p>Initialize from your chosen faction identity card. All pieces belong to this player kit.</p>${["runway", "compute", "capability", "customers", "trust"].map(key => `<div class="resource-track"><strong>${escapeHtml(key)}</strong> ${Array.from({length: config.resources[key].cap + 1}, (_, value) => `<span>${value}</span>`).join(" · ")}</div>`).join("")}<div class="trust-milestone-track">Highest Trust milestone awarded: ${[0, ...config.scoring.trustThresholds.map(t => t.value)].map(value => `<span data-trust-threshold="${value}">${value}</span>`).join(" · ")}</div><p class="recognition-track">AGI recognition: No · Recognized</p><details class="objective-panel" open><summary>Era objective · one cube</summary><div class="objective-track">${Array.from({length:100},(_,value)=>`<span data-objective-value="${value}">${value}</span>`).join("")}</div></details><p>Available / Exhausted Core Actions · Available / Built projects · ten Scrutiny cubes</p></article>`).join("");
+  return section("player-mats", "Player mats", config.playerKits.length, mats, "Five interchangeable kits; choose any faction identity separately.");
 }
 
 function formatTurnContract(tc) {
@@ -146,21 +144,22 @@ function formatTurnContract(tc) {
 }
 
 function buildActions(config) {
-  const cards = config.actions
-    .map((a) =>
-      card({
-        title: a.name,
-        subtitle: a.slogan,
-        badgeList: ["Core Action", a.initiativeName ? `Initiative: ${a.initiativeName}` : ""],
-        bodyHtml: textRows([
-          { text: a.summary },
-          { label: "Turn contract", text: formatTurnContract(a.turnContract) },
-          { text: a.flavorText, kind: "flavor" }
-        ])
-      })
-    )
-    .join("");
-  return section("actions", "Core Actions", config.actions.length, cards, "The six institutional functions; each player uses three per Era.");
+  const cards = config.playerKits.flatMap(kit => config.actions.map(action =>
+    card({accent: kit.color, title: `${kit.symbol} ${action.name}`, subtitle: `${kit.colorName} · ${kit.symbolName} kit`,
+      badgeList: ["Core Action", action.initiativeName ? `Initiative: ${action.initiativeName}` : ""],
+      bodyHtml: textRows([{text:action.summary},{label:"Turn contract",text:formatTurnContract(action.turnContract)},{text:action.flavorText,kind:"flavor"}])})
+      .replace('<article class="card"', `<article class="card core-action" data-kit="${escapeHtml(kit.id)}"`)
+  )).join("");
+  return section("actions", "Core Actions", config.playerKits.length * config.actions.length, cards, "Thirty cards: six designs in each of five kits; each player uses three per Era.");
+}
+
+function buildEquipment(config) {
+  const pieces = config.playerKits.flatMap(kit => [
+    ...Array.from({length:config.playerSupply.agents}, (_,i) => ["Agent",i+1]),
+    ...Array.from({length:config.playerSupply.facilities}, (_,i) => ["Facility",i+1]),
+    ["Generator",1]
+  ].map(([type,number]) => `<article class="card equipment-chip" data-kit="${escapeHtml(kit.id)}" style="--accent:${escapeHtml(kit.color)}"><h3>${escapeHtml(kit.symbol)} ${type} ${number}</h3><p>${escapeHtml(kit.colorName)} · ${escapeHtml(kit.symbolName)} kit</p>${type === "Facility" && number === 1 ? `<p>Starting-grid identifier · ${escapeHtml(config.board.startingGridConnection.rule)}</p>` : ""}</article>`)).join("");
+  return section("equipment", "Kit-owned equipment", config.playerKits.length * (config.playerSupply.agents + config.playerSupply.facilities + config.playerSupply.generators), pieces, "All equipment uses kit colour and symbol. Facility numbers preserve construction order.");
 }
 
 function buildRounds(config, reference) {
@@ -219,14 +218,14 @@ function buildMandates(data) {
   return section("mandates", "Era Mandates", data.mandates.length, cards, "Per-Era scoring races; the qualifying leader scores.");
 }
 
-function buildProjects(data, factions) {
-  const chips = factions.factions.flatMap(faction => data.projects.map(project =>
-    `<article class="card project-chip" style="--accent:${escapeHtml(faction.color)}" data-project="${escapeHtml(project.id)}" data-faction="${escapeHtml(faction.id)}">
+function buildProjects(data, config) {
+  const chips = config.playerKits.flatMap(kit => data.projects.map(project =>
+    `<article class="card project-chip" style="--accent:${escapeHtml(kit.color)}" data-project="${escapeHtml(project.id)}" data-kit="${escapeHtml(kit.id)}">
 ${[['Available', project.frontText], ['Built', project.backText]].map(([state, text]) =>
-  `<div class="chip-face" data-chip-state="${state.toLowerCase()}"><h3>${escapeHtml(project.name)}</h3><p class="chip-owner">${escapeHtml(faction.name)}</p><strong>${state}</strong><p>${escapeHtml(text)}</p></div>`).join('')}
+  `<div class="chip-face" data-chip-state="${state.toLowerCase()}"><h3>${escapeHtml(project.name)}</h3><p class="chip-owner">${escapeHtml(`${kit.symbol} ${kit.colorName} · ${kit.symbolName}`)}</p><strong>${state}</strong><p>${escapeHtml(text)}</p></div>`).join('')}
 </article>`
   )).join("");
-  return section("projects", "Personal project chips", factions.factions.length * data.chipsPerFaction,
+  return section("projects", "Personal project chips", config.playerKits.length * data.chipsPerPlayer,
     chips, data.constructionRule);
 }
 
@@ -430,12 +429,14 @@ async function build() {
     ]);
 
   const allSections = [
+    { id: "player-mats", label: "Player mats", html: buildPlayerMats(config), n: config.playerKits.length },
     { id: "factions", label: "Factions", html: buildFactions(factions, config), n: factions.factions.length },
-    { id: "actions", label: "Core Actions", html: buildActions(config), n: config.actions.length },
+    { id: "equipment", label: "Kit-owned equipment", html: buildEquipment(config), n: config.playerKits.length * (config.playerSupply.agents + config.playerSupply.facilities + config.playerSupply.generators) },
+    { id: "actions", label: "Core Actions", html: buildActions(config), n: config.playerKits.length * config.actions.length },
     { id: "rounds", label: "Eras", html: buildRounds(config, reference), n: config.rounds.length },
     { id: "headlines", label: "Headlines", html: buildHeadlines(headlines), n: headlines.headlines.length },
     { id: "mandates", label: "Era Mandates", html: buildMandates(mandates), n: mandates.mandates.length },
-    { id: "projects", label: "Infrastructure projects", html: buildProjects(escalation, factions), n: factions.factions.length * escalation.chipsPerFaction },
+    { id: "projects", label: "Infrastructure projects", html: buildProjects(escalation, config), n: config.playerKits.length * escalation.chipsPerPlayer },
     { id: "power", label: "Embedded Power Contracts", html: buildPowerSources(config), n: config.powerSources.length },
     { id: "reference", label: "Board Panels and Player Aids", html: buildReferenceCards(reference), n: (reference.eraCards || []).length + (reference.playerReferences || []).length },
     { id: "tactics", label: "Tactics", html: buildTactics(tactics), n: tactics.tactics.length },

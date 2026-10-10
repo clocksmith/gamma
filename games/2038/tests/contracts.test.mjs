@@ -52,12 +52,12 @@ test("physical authority defines one inventory and preserves automatic blind Aud
   assert.match(spec, /use no Power cubes/);
   assert.doesNotMatch(spec, /Temporary Compute/);
 
-  assert.match(inventory, /## One prepacked faction tray per player/);
+  assert.match(inventory, /## Five reusable player kits and six faction identity cards/);
 
   assert.match(inventory, /five numbered tracks/);
   assert.match(inventory, /3 two-sided personal project chips/);
   assert.doesNotMatch(inventory, /Program markers/);
-  assert.match(inventory, /6 foldout player aids/);
+  assert.match(inventory, /5 foldout player aids/);
   assert.match(inventory, /4 Agents/);
   assert.doesNotMatch(inventory, /Temporary Compute/);
   assert.doesNotMatch(inventory, /final production copy count remains open/);
@@ -91,7 +91,7 @@ test("physical authority defines one inventory and preserves automatic blind Aud
   assert.equal(governanceLedgerSurface.physicalCopies, 1);
   assert.equal(
     manifest.surfaces.find((surface) => surface.id === "player_aid_panels").physicalCopies,
-    6
+    5
   );
 });
 
@@ -259,8 +259,8 @@ test("selected deck contracts have exact physical counts", async () => {
   assert.equal(tactics.tactics.length * tactics.copiesPerCard, 36);
   assert.equal(escalation.projects.length, 3);
   assert.equal(escalation.cardsPerPlayer, undefined);
-  assert.equal(escalation.chipsPerFaction, 3);
-  assert.equal(config.playerSupply.projectChips * factions.factions.length, 18);
+  assert.equal(escalation.chipsPerPlayer, 3);
+  assert.equal(config.playerSupply.projectChips * config.playerKits.length, 15);
   assert.equal(escalation.sharedCardCount, undefined);
   const defaultHeadlineCount = headlines.headlines.filter(
     (headline) => !headline.requiredRuleModules?.length
@@ -274,13 +274,14 @@ test("selected deck contracts have exact physical counts", async () => {
     [6, 6, 6, 6]
   );
   const defaultStandardCards =
-    config.playerSupply.coreActionCards * factions.factions.length +
+    config.playerSupply.coreActionCards * config.playerKits.length +
+    config.sharedSupply.factionIdentityCards +
     defaultHeadlineCount +
     mandates.mandates.length +
     trainingCount;
   const defaultPrintedPieces = defaultStandardCards + config.sharedSupply.playerAidFoldouts;
   assert.equal(defaultStandardCards, 112);
-  assert.equal(defaultPrintedPieces, 118);
+  assert.equal(defaultPrintedPieces, 117);
   assert.deepEqual(
     config.powerSources.filter((source) => source.id !== "fusion_demonstrator").map((source) => source.id),
     ["clean_infrastructure", "emergency_infrastructure"]
@@ -314,11 +315,11 @@ test("selected deck contracts have exact physical counts", async () => {
     {
       governanceBoardEraPanels: 4,
       currentEraMarkers: 1,
-      playerAidFoldouts: 6,
+      playerAidFoldouts: 5,
       governanceTrackPanels: 1,
       sharedDryEraseMarkers: undefined,
       temporaryComputeTokens: undefined,
-      mandateMarkers: 6
+      mandateMarkers: 5
     }
   );
 });
@@ -348,7 +349,7 @@ test("factions and player supplies match the selected limits", async () => {
       generators: config.playerSupply.generators,
       influenceCubes: config.playerSupply.influenceCubes,
       scrutinyCubes: config.playerSupply.scrutinyCubes,
-      factionBoardTrackCubes: config.playerSupply.factionBoardTrackCubes,
+      resourceTrackCubes: config.playerSupply.resourceTrackCubes,
       programMarkers: config.playerSupply.programMarkers,
       startingGridIdentifiers: config.playerSupply.startingGridIdentifiers
     },
@@ -359,7 +360,7 @@ test("factions and player supplies match the selected limits", async () => {
       generators: 1,
       influenceCubes: 0,
       scrutinyCubes: 10,
-      factionBoardTrackCubes: 5,
+      resourceTrackCubes: 5,
       programMarkers: undefined,
       startingGridIdentifiers: 1
     }
@@ -453,7 +454,7 @@ test("Faction boards project into Card and Board Reference without duplicating t
   }
 
   assert.match(rules, /one persistent institutional identity and one\s+signature ability/);
-  assert.match(rules, /use each Faction board’s printed starts/);
+  assert.match(rules, /use each faction card’s printed starts/);
   assert.doesNotMatch(rules, /Scientific Method:/);
   assert.doesNotMatch(rules, /Industrial Velocity:/);
 });
@@ -481,7 +482,7 @@ test("headline and board boundaries remain explicit", async () => {
   assert.ok(!('playProfiles' in config));
   assert.ok(!('playRuleModules' in config));
   assert.ok(!('realignment' in config.board));
-  assert.equal(config.playerSupply.factionBoardTrackCubes, 5);
+  assert.equal(config.playerSupply.resourceTrackCubes, 5);
   assert.equal(config.playerSupply.programMarkers, undefined);
   assert.deepEqual(
     Object.fromEntries(config.board.tiles.map((tile) => [tile.id, tile.name])),

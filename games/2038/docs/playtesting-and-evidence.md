@@ -501,3 +501,10 @@ never overwrites its input checkpoint. A collector or runtime identity change
 requires a fresh run rather than pooling incompatible results. The initial v1
 collection stopped on ENOSPC; v2 uses a new seed and retains v1 as rejected,
 incomplete evidence. Neither run changes the candidate's mechanics.
+
+## Reusable player-kit preparation
+
+Choose five equipment kits independently of six faction identity cards. Record
+both assignments by seat. Check ownership using symbols as well as colours, and
+initialize mats from faction starts. Facilitation and blind evidence remain
+separate; no generated session template is an observed playtest.
