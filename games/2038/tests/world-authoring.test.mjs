@@ -91,19 +91,20 @@ test("historical world releases retain their first committed bytes", async () =>
   }
 });
 
-test("current teaching materials follow the release declaration and supported Audit counts", async () => {
+test("current teaching materials declare four tracks and fixed Reputation Review", async () => {
   const readme = await read("README.md");
   const protocol = await read("docs/playtesting-and-evidence.md");
   assert.match(readme, /versions\/current-release\.json/);
   assert.match(protocol.split("\n\n")[1], /versions\/current-release\.json/);
-  assert.doesNotMatch(readme, /0\.19\.1|0\.11\.0-rc\.3-test/);
+  const config = JSON.parse(await read("dist/runtime/game-config.json"));
+  assert.deepEqual(config.players.playableCounts, [2, 3, 4, 5]);
+  assert.deepEqual(Object.keys(config.resources), ["runway", "compute", "capability", "reputation"]);
   for (const path of ["rules.md", "dist/docs/core-rules.md"]) {
     const source = await read(path);
-    const table = source.match(/^\| Era \| 2 players[^\n]*\n(?:\|[^\n]*\n){5}/m)?.[0];
-    assert.ok(table, `${path} includes the Audit table`);
-    assert.doesNotMatch(table, /6 players/);
-    assert.equal(table.split("\n")[0], "| Era | 2 players | 3 players | 4 players | 5 players |");
-    assert.ok(table.includes("| IV | 3 | 4 | 5 | 6 |"));
+    assert.match(source, /Reputation Review/);
+    assert.match(source, /two through five/);
+    assert.match(source, /Reputation.*(?:1|one).*(?:2|two) Runway/);
+    assert.doesNotMatch(source, /\| Era \| 2 players/);
   }
 });
 

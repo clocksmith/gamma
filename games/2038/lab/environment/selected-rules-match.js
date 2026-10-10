@@ -157,6 +157,8 @@ export class SelectedRulesMatch {
       mandates: {},
       projects: {},
       declarations: 0,
+      agiFunnel: [],
+      trades: { offers: 0, accepted: 0, refused: 0 },
       productionSnapshots: [],
       projectProduction: [],
       futureTimeline: [],
@@ -870,6 +872,7 @@ export class SelectedRulesMatch {
     other[offer.giveResource]++;
     if (this.hasFactionAbility(p, "deal_flow"))
       this.addResource(p, "runway", 1);
+    this.matchMetrics.trades.accepted++;
     return true;
   }
   async trade(policies, seat) {
@@ -881,6 +884,7 @@ export class SelectedRulesMatch {
       this.immediateTradeDecisions(seat),
     );
     if (offered.decisionId === "trade_none") return;
+    this.matchMetrics.trades.offers++;
     const v = offered.parameters;
     this.immediateTradePackets++;
     const answer = await this.choose(
@@ -899,14 +903,7 @@ export class SelectedRulesMatch {
     );
     if (answer.decisionId === "trade_accept")
       this.completeImmediateTrade(seat, v.partnerSeat, v);
-  }
-  recordEligibility(p, timing) {
-    if (!p.metrics.earliestAgiEligibility && this.declarationReadiness(p).ready)
-      p.metrics.earliestAgiEligibility = {
-        round: this.round,
-        cycle: this.cycle,
-        timing,
-      };
+    else this.matchMetrics.trades.refused++;
   }
   recordEligibility(p, stage) {
     if (!p.metrics.earliestAgiEligibility && this.declarationReadiness(p).ready)
@@ -931,7 +928,26 @@ export class SelectedRulesMatch {
   async declareAgiAchievements(policies) {
     for (const seat of this.initiativeOrder()) {
       const p = this.players[seat];
-      if (p.agiDeclared || !this.declarationReadiness(p).ready) continue;
+      const readiness = this.declarationReadiness(p);
+      const requirements = this.config.agiAchievement;
+      const entry = {
+        seat,
+        factionId: p.factionId,
+        coreRequirementsMet:
+          p.capability >= requirements.capability &&
+          p.reputation >= requirements.reputation,
+        legalDeclarationWindow: readiness.ready,
+        failingRequirement: readiness.failingRequirement,
+        claimRegistered: p.agiDeclared,
+        emergenceTriggered: p.agiDeclared,
+        declared: p.agiDeclared,
+      };
+      this.matchMetrics.agiFunnel = this.matchMetrics.agiFunnel.filter(
+        (row) => row.seat !== seat,
+      );
+      this.matchMetrics.agiFunnel.push(entry);
+      this.recordEligibility(p, "final_recognition");
+      if (p.agiDeclared || !readiness.ready) continue;
       const d = await this.choose(policies, seat, "agi_recognition", [
         choice(
           "agi_declare",
@@ -944,6 +960,10 @@ export class SelectedRulesMatch {
         this.addResource(p, "compute", -this.config.agiAchievement.computeCost);
         p.agiDeclared = true;
         this.matchMetrics.declarations++;
+        entry.claimRegistered =
+          entry.emergenceTriggered =
+          entry.declared =
+            true;
       }
     }
   }
@@ -1267,7 +1287,12 @@ export class SelectedRulesMatch {
       seed: this.seed,
       playerCount: this.playerCount,
       rulesVariant: clone(this.rulesVariant),
-      matchMetrics: clone(this.matchMetrics),
+      matchMetrics: {
+        ...clone(this.matchMetrics),
+        activeVentures: this.contracts.filter((c) =>
+          activeJointVenture(this, c),
+        ).length,
+      },
       decisionProtocol: {
         immediateTradePackets: this.immediateTradePackets,
         immediateTradePacketCeiling: this.immediateTradePacketCeiling,

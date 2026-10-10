@@ -190,7 +190,7 @@ test("public playtest publication is an allowlist with release identity and feed
     assert.match(game, /turning cheap intelligence into infrastructure, authority/);
     assert.doesNotMatch(game, /href="\/lab\.html"/);
     assert.ok(
-      (await stat(resolve(outputRoot, "lab/rules/local-power-connections.js"))).isFile(),
+      (await stat(resolve(outputRoot, "lab/rules/era-mandates.js"))).isFile(),
       "the published game includes the selected-rules browser module closure"
     );
     await assert.rejects(stat(resolve(outputRoot, "docs/lore-scratchpad.html")), {

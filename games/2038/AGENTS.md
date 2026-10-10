@@ -26,8 +26,8 @@ with the implementation; algorithms remain free inside those constraints.
 
 Mandate 2038 is a 2–5 player medium-weight strategy board game about
 institutions racing to build, deploy, regulate, and plausibly declare AGI.
-It combines spatial engine building, push-your-luck research, asymmetric
-institutions, negotiation, and shared public scrutiny.
+It combines engine building, push-your-luck research, asymmetric
+institutions, negotiation, and public Reputation.
 
 The writing contract in `world.md` owns tone and Era placement. Ground the
 setting in concrete situations, with wonder, opportunity, absurdity, and danger.
