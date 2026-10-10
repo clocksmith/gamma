@@ -362,7 +362,7 @@ try {
   assert.equal((masters.match(/class="card player-mat"/g) || []).length, 5);
   assert.equal((masters.match(/class="card project-chip"/g) || []).length, 15);
   assert.equal((masters.match(/class="card core-action"/g) || []).length, 30);
-  const factionSection = masters.slice(masters.indexOf('id="factions"'), masters.indexOf('id="player-mats"'));
+  const factionSection = masters.match(/<section id="factions"[\s\S]*?<\/section>/)?.[0] || '';
   assert.equal((factionSection.match(/class="card"/g) || []).length, 6);
   assert.doesNotMatch(masters, /objective-panel|objective-track|data-objective-value|construction Era|I–IV edges|Cube record/);
   for (const viewport of [

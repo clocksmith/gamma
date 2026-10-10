@@ -1,0 +1,7390 @@
+{
+  "date": "2026-10-09",
+  "evidenceType": "simulation",
+  "hypothesis": "Current-state objectives preserve completion while changing incentives; eligibility and concentration require fresh testing.",
+  "preregistration": "2026-10-09-current-state-objectives-preregistration.md",
+  "candidateSourceCommit": "43f0058aba06aeb68f5868000690197a6b7fdb82",
+  "baselineCommit": "daf5bbd14",
+  "candidateVersion": "0.22.1",
+  "rulesVersion": "0.12.0-rc.15-test",
+  "runCount": 432,
+  "matchedPairs": 216,
+  "backends": [
+    "weighted",
+    "greedy"
+  ],
+  "playerCounts": [
+    4,
+    3,
+    5
+  ],
+  "profiles": "canonical profiles rotated identically",
+  "rulesVariant": "eight-card current-state package",
+  "auditedSurfaces": {
+    "rules": "current-state scoring after Audit; ordinary actions unchanged",
+    "components": "eight redesigned cards; objective cube removed",
+    "simulator": "pure evaluator and shared production predicate",
+    "browser": "current qualification/value and independent kits",
+    "referencePlayerAids": "current-state scoring reminder",
+    "tests": "all metrics, history independence, no-double-production, kit permutations",
+    "playtestDocumentation": "current-state and ownership observation checks",
+    "policies": "no change",
+    "costsAndFactionStarts": "no change"
+  },
+  "archive": "evidence/studies/simulation/2026-10-09-current-state-objectives-raw.json",
+  "archiveSha256": "a8ae71911109ee2b66b46eaef9a3e9caedd83bf4663b777b38bbd60ce9f4b4cb",
+  "inputs": [
+    {
+      "releaseIdentity": {
+        "gameVersion": "0.21.7",
+        "rulesVersion": "0.12.0-rc.13-test",
+        "engineFingerprint": "sha256:4e792fbd9452b75210fb4bd7f1afb6edfa3d8fbbd31f7e227178364b14f3efaf",
+        "mechanicsFingerprint": "sha256:8625733e82859272b4f84ba826f8fa8ad7f3749d56128ca565b3845d5c08720e"
+      },
+      "inputHashes": {
+        "game-config": "3a9752d01ecb9382c9ad1a31260778baf4ee26a383f4cd304ca0be19113dba14",
+        "factions": "7d1ce2d44b25ec58642fbfb4ca49467ac6cedfb1e11b7bf06321df7d532b379c",
+        "headlines": "51116a1208ea4128acde66d83b274b50751c6c4bec958a99a7bff70a537cee64",
+        "projects": "6982f72f7c2cde9c9e78e4b3c61bb526089a0ce1059c917085816db97898f94b",
+        "tactics": "b4b8d92c17523ee4f43ef2b14927194b848b02f3abe88cf0f91a039f7489bf5e",
+        "mandates": "07e98a73d14467b808087fbac0b6239ac39d2c3e71e086cd44a743f6fcc1f7c4",
+        "secret-objectives": "a7668f4cf69b7f203de12d097447d31ab778e49bd30a14ec0e7fb5e9dd70f551",
+        "player-strategies": "4e7af3eb4c854377f598672e774fb2cd7b085b1a054e2ede7248b0977f8eb36d"
+      },
+      "policyHash": "c711430b38d3281dfd30871c8da995fd34202eff2f882d4cfdfa9bae0b21b52d"
+    },
+    {
+      "releaseIdentity": {
+        "gameVersion": "0.22.1",
+        "rulesVersion": "0.12.0-rc.15-test",
+        "engineFingerprint": "sha256:3628ba277babc81b4c0225c510819b861fdc2d95d0acb568673684cbdfcac586",
+        "mechanicsFingerprint": "sha256:094c86fc67ec085eb9d3e0f9bba6cce9030cc7f5441ee07e304ef0f40ca43914"
+      },
+      "inputHashes": {
+        "game-config": "ba0ec7724a274d8d636bd129d9f685dcbbb1f34c80ffc482de7d6aa7f2c33bc2",
+        "factions": "7d1ce2d44b25ec58642fbfb4ca49467ac6cedfb1e11b7bf06321df7d532b379c",
+        "headlines": "51116a1208ea4128acde66d83b274b50751c6c4bec958a99a7bff70a537cee64",
+        "projects": "6982f72f7c2cde9c9e78e4b3c61bb526089a0ce1059c917085816db97898f94b",
+        "tactics": "b4b8d92c17523ee4f43ef2b14927194b848b02f3abe88cf0f91a039f7489bf5e",
+        "mandates": "14febdd88ba1c6687af261ca80037b5543afcaf3dd7188faf63817a91640e5c6",
+        "secret-objectives": "a7668f4cf69b7f203de12d097447d31ab778e49bd30a14ec0e7fb5e9dd70f551",
+        "player-strategies": "4e7af3eb4c854377f598672e774fb2cd7b085b1a054e2ede7248b0977f8eb36d"
+      },
+      "policyHash": "c711430b38d3281dfd30871c8da995fd34202eff2f882d4cfdfa9bae0b21b52d"
+    }
+  ],
+  "summary": {
+    "baseline": {
+      "counts": {
+        "3": {
+          "games": 36,
+          "score": 1684,
+          "runway": 944,
+          "customers": 266,
+          "players": 108
+        },
+        "4": {
+          "games": 144,
+          "score": 9053,
+          "runway": 5146,
+          "customers": 1475,
+          "players": 576
+        },
+        "5": {
+          "games": 36,
+          "score": 2728,
+          "runway": 1582,
+          "customers": 457,
+          "players": 180
+        }
+      },
+      "objectives": {
+        "4p/quarter_humanity_notices": {
+          "games": 48,
+          "qualified": 179,
+          "opportunities": 192,
+          "noQualifier": 0,
+          "points": 99,
+          "zeroWinners": 0,
+          "factionPoints": {
+            "coalition_lab": 17,
+            "platform_empire": 11,
+            "imperial_research_lab": 27,
+            "vertical_empire": 14,
+            "foundry": 13,
+            "safety_laboratory": 17
+          },
+          "seatPoints": {
+            "0": 27,
+            "1": 23,
+            "2": 35,
+            "3": 14
+          }
+        },
+        "4p/building_has_weather": {
+          "games": 48,
+          "qualified": 134,
+          "opportunities": 192,
+          "noQualifier": 0,
+          "points": 130,
+          "zeroWinners": 0,
+          "factionPoints": {
+            "coalition_lab": 23,
+            "platform_empire": 21,
+            "imperial_research_lab": 18,
+            "vertical_empire": 15,
+            "foundry": 31,
+            "safety_laboratory": 22
+          },
+          "seatPoints": {
+            "0": 29,
+            "1": 40,
+            "2": 31,
+            "3": 30
+          }
+        },
+        "4p/voluntary_coordination_triumphs": {
+          "games": 48,
+          "qualified": 2,
+          "opportunities": 192,
+          "noQualifier": 47,
+          "points": 2,
+          "zeroWinners": 0,
+          "factionPoints": {
+            "coalition_lab": 0,
+            "platform_empire": 1,
+            "imperial_research_lab": 0,
+            "vertical_empire": 0,
+            "foundry": 0,
+            "safety_laboratory": 1
+          },
+          "seatPoints": {
+            "0": 1,
+            "1": 0,
+            "2": 0,
+            "3": 1
+          }
+        },
+        "4p/continent_signs_loi": {
+          "games": 48,
+          "qualified": 138,
+          "opportunities": 192,
+          "noQualifier": 0,
+          "points": 141,
+          "zeroWinners": 0,
+          "factionPoints": {
+            "coalition_lab": 22,
+            "platform_empire": 23,
+            "imperial_research_lab": 23,
+            "vertical_empire": 24,
+            "foundry": 22,
+            "safety_laboratory": 27
+          },
+          "seatPoints": {
+            "0": 32,
+            "1": 37,
+            "2": 37,
+            "3": 35
+          }
+        },
+        "4p/model_ate_tuesday": {
+          "games": 48,
+          "qualified": 134,
+          "opportunities": 192,
+          "noQualifier": 0,
+          "points": 108,
+          "zeroWinners": 0,
+          "factionPoints": {
+            "coalition_lab": 26,
+            "platform_empire": 21,
+            "imperial_research_lab": 15,
+            "vertical_empire": 15,
+            "foundry": 20,
+            "safety_laboratory": 11
+          },
+          "seatPoints": {
+            "0": 25,
+            "1": 33,
+            "2": 25,
+            "3": 25
+          }
+        },
+        "4p/stack_reaches_horizon": {
+          "games": 48,
+          "qualified": 32,
+          "opportunities": 192,
+          "noQualifier": 21,
+          "points": 54,
+          "zeroWinners": 0,
+          "factionPoints": {
+            "coalition_lab": 10,
+            "platform_empire": 8,
+            "imperial_research_lab": 8,
+            "vertical_empire": 6,
+            "foundry": 17,
+            "safety_laboratory": 5
+          },
+          "seatPoints": {
+            "0": 13,
+            "1": 9,
+            "2": 22,
+            "3": 10
+          }
+        },
+        "4p/legibility_offensive": {
+          "games": 48,
+          "qualified": 128,
+          "opportunities": 192,
+          "noQualifier": 0,
+          "points": 102,
+          "zeroWinners": 0,
+          "factionPoints": {
+            "coalition_lab": 20,
+            "platform_empire": 9,
+            "imperial_research_lab": 13,
+            "vertical_empire": 13,
+            "foundry": 15,
+            "safety_laboratory": 32
+          },
+          "seatPoints": {
+            "0": 25,
+            "1": 24,
+            "2": 23,
+            "3": 30
+          }
+        },
+        "4p/zero_incident_quarter": {
+          "games": 48,
+          "qualified": 176,
+          "opportunities": 192,
+          "noQualifier": 0,
+          "points": 98,
+          "zeroWinners": 0,
+          "factionPoints": {
+            "coalition_lab": 17,
+            "platform_empire": 17,
+            "imperial_research_lab": 18,
+            "vertical_empire": 24,
+            "foundry": 9,
+            "safety_laboratory": 13
+          },
+          "seatPoints": {
+            "0": 22,
+            "1": 16,
+            "2": 25,
+            "3": 35
+          }
+        },
+        "4p/markets_prefer_destiny": {
+          "games": 48,
+          "qualified": 121,
+          "opportunities": 192,
+          "noQualifier": 1,
+          "points": 102,
+          "zeroWinners": 0,
+          "factionPoints": {
+            "coalition_lab": 18,
+            "platform_empire": 25,
+            "imperial_research_lab": 12,
+            "vertical_empire": 21,
+            "foundry": 13,
+            "safety_laboratory": 13
+          },
+          "seatPoints": {
+            "0": 25,
+            "1": 27,
+            "2": 20,
+            "3": 30
+          }
+        },
+        "4p/compute_new_weather": {
+          "games": 48,
+          "qualified": 64,
+          "opportunities": 192,
+          "noQualifier": 7,
+          "points": 83,
+          "zeroWinners": 0,
+          "factionPoints": {
+            "coalition_lab": 11,
+            "platform_empire": 5,
+            "imperial_research_lab": 17,
+            "vertical_empire": 13,
+            "foundry": 26,
+            "safety_laboratory": 11
+          },
+          "seatPoints": {
+            "0": 23,
+            "1": 20,
+            "2": 28,
+            "3": 12
+          }
+        },
+        "4p/national_champion_without_nationalization": {
+          "games": 48,
+          "qualified": 178,
+          "opportunities": 192,
+          "noQualifier": 0,
+          "points": 107,
+          "zeroWinners": 0,
+          "factionPoints": {
+            "coalition_lab": 15,
+            "platform_empire": 16,
+            "imperial_research_lab": 21,
+            "vertical_empire": 17,
+            "foundry": 21,
+            "safety_laboratory": 17
+          },
+          "seatPoints": {
+            "0": 21,
+            "1": 28,
+            "2": 38,
+            "3": 20
+          }
+        },
+        "4p/responsible_acceleration": {
+          "games": 48,
+          "qualified": 170,
+          "opportunities": 192,
+          "noQualifier": 0,
+          "points": 97,
+          "zeroWinners": 0,
+          "factionPoints": {
+            "coalition_lab": 10,
+            "platform_empire": 22,
+            "imperial_research_lab": 14,
+            "vertical_empire": 7,
+            "foundry": 15,
+            "safety_laboratory": 29
+          },
+          "seatPoints": {
+            "0": 17,
+            "1": 25,
+            "2": 29,
+            "3": 26
+          }
+        },
+        "3p/quarter_humanity_notices": {
+          "games": 12,
+          "qualified": 33,
+          "opportunities": 36,
+          "noQualifier": 0,
+          "points": 24,
+          "zeroWinners": 0,
+          "factionPoints": {
+            "coalition_lab": 2,
+            "platform_empire": 4,
+            "imperial_research_lab": 4,
+            "vertical_empire": 5,
+            "safety_laboratory": 0,
+            "foundry": 9
+          },
+          "seatPoints": {
+            "0": 7,
+            "1": 10,
+            "2": 7
+          }
+        },
+        "3p/building_has_weather": {
+          "games": 12,
+          "qualified": 28,
+          "opportunities": 36,
+          "noQualifier": 0,
+          "points": 30,
+          "zeroWinners": 0,
+          "factionPoints": {
+            "coalition_lab": 5,
+            "platform_empire": 5,
+            "imperial_research_lab": 8,
+            "vertical_empire": 2,
+            "safety_laboratory": 2,
+            "foundry": 8
+          },
+          "seatPoints": {
+            "0": 13,
+            "1": 8,
+            "2": 9
+          }
+        },
+        "3p/voluntary_coordination_triumphs": {
+          "games": 12,
+          "qualified": 0,
+          "opportunities": 36,
+          "noQualifier": 12,
+          "points": 0,
+          "zeroWinners": 0,
+          "factionPoints": {
+            "coalition_lab": 0,
+            "platform_empire": 0,
+            "imperial_research_lab": 0,
+            "vertical_empire": 0,
+            "safety_laboratory": 0,
+            "foundry": 0
+          },
+          "seatPoints": {
+            "0": 0,
+            "1": 0,
+            "2": 0
+          }
+        },
+        "3p/continent_signs_loi": {
+          "games": 12,
+          "qualified": 27,
+          "opportunities": 36,
+          "noQualifier": 0,
+          "points": 28,
+          "zeroWinners": 0,
+          "factionPoints": {
+            "coalition_lab": 5,
+            "platform_empire": 4,
+            "imperial_research_lab": 3,
+            "vertical_empire": 3,
+            "safety_laboratory": 6,
+            "foundry": 7
+          },
+          "seatPoints": {
+            "0": 11,
+            "1": 8,
+            "2": 9
+          }
+        },
+        "3p/model_ate_tuesday": {
+          "games": 12,
+          "qualified": 29,
+          "opportunities": 36,
+          "noQualifier": 0,
+          "points": 25,
+          "zeroWinners": 0,
+          "factionPoints": {
+            "coalition_lab": 7,
+            "platform_empire": 2,
+            "imperial_research_lab": 5,
+            "vertical_empire": 6,
+            "safety_laboratory": 4,
+            "foundry": 1
+          },
+          "seatPoints": {
+            "0": 7,
+            "1": 11,
+            "2": 7
+          }
+        },
+        "3p/stack_reaches_horizon": {
+          "games": 12,
+          "qualified": 4,
+          "opportunities": 36,
+          "noQualifier": 8,
+          "points": 8,
+          "zeroWinners": 0,
+          "factionPoints": {
+            "coalition_lab": 0,
+            "platform_empire": 2,
+            "imperial_research_lab": 6,
+            "vertical_empire": 0,
+            "safety_laboratory": 0,
+            "foundry": 0
+          },
+          "seatPoints": {
+            "0": 2,
+            "1": 2,
+            "2": 4
+          }
+        },
+        "3p/legibility_offensive": {
+          "games": 12,
+          "qualified": 20,
+          "opportunities": 36,
+          "noQualifier": 2,
+          "points": 20,
+          "zeroWinners": 0,
+          "factionPoints": {
+            "coalition_lab": 6,
+            "platform_empire": 0,
+            "imperial_research_lab": 0,
+            "vertical_empire": 4,
+            "safety_laboratory": 8,
+            "foundry": 2
+          },
+          "seatPoints": {
+            "0": 6,
+            "1": 8,
+            "2": 6
+          }
+        },
+        "3p/zero_incident_quarter": {
+          "games": 12,
+          "qualified": 33,
+          "opportunities": 36,
+          "noQualifier": 0,
+          "points": 26,
+          "zeroWinners": 0,
+          "factionPoints": {
+            "coalition_lab": 4,
+            "platform_empire": 6,
+            "imperial_research_lab": 3,
+            "vertical_empire": 2,
+            "safety_laboratory": 8,
+            "foundry": 3
+          },
+          "seatPoints": {
+            "0": 7,
+            "1": 9,
+            "2": 10
+          }
+        },
+        "3p/markets_prefer_destiny": {
+          "games": 12,
+          "qualified": 20,
+          "opportunities": 36,
+          "noQualifier": 0,
+          "points": 25,
+          "zeroWinners": 0,
+          "factionPoints": {
+            "coalition_lab": 0,
+            "platform_empire": 5,
+            "imperial_research_lab": 6,
+            "vertical_empire": 8,
+            "safety_laboratory": 2,
+            "foundry": 4
+          },
+          "seatPoints": {
+            "0": 11,
+            "1": 8,
+            "2": 6
+          }
+        },
+        "3p/compute_new_weather": {
+          "games": 12,
+          "qualified": 14,
+          "opportunities": 36,
+          "noQualifier": 4,
+          "points": 16,
+          "zeroWinners": 0,
+          "factionPoints": {
+            "coalition_lab": 1,
+            "platform_empire": 7,
+            "imperial_research_lab": 6,
+            "vertical_empire": 0,
+            "safety_laboratory": 0,
+            "foundry": 2
+          },
+          "seatPoints": {
+            "0": 4,
+            "1": 5,
+            "2": 7
+          }
+        },
+        "3p/national_champion_without_nationalization": {
+          "games": 12,
+          "qualified": 35,
+          "opportunities": 36,
+          "noQualifier": 0,
+          "points": 26,
+          "zeroWinners": 0,
+          "factionPoints": {
+            "coalition_lab": 3,
+            "platform_empire": 4,
+            "imperial_research_lab": 6,
+            "vertical_empire": 3,
+            "safety_laboratory": 2,
+            "foundry": 8
+          },
+          "seatPoints": {
+            "0": 11,
+            "1": 8,
+            "2": 7
+          }
+        },
+        "3p/responsible_acceleration": {
+          "games": 12,
+          "qualified": 33,
+          "opportunities": 36,
+          "noQualifier": 0,
+          "points": 24,
+          "zeroWinners": 0,
+          "factionPoints": {
+            "coalition_lab": 4,
+            "platform_empire": 3,
+            "imperial_research_lab": 2,
+            "vertical_empire": 3,
+            "safety_laboratory": 5,
+            "foundry": 7
+          },
+          "seatPoints": {
+            "0": 8,
+            "1": 9,
+            "2": 7
+          }
+        },
+        "5p/quarter_humanity_notices": {
+          "games": 12,
+          "qualified": 57,
+          "opportunities": 60,
+          "noQualifier": 0,
+          "points": 30,
+          "zeroWinners": 0,
+          "factionPoints": {
+            "coalition_lab": 5,
+            "platform_empire": 1,
+            "imperial_research_lab": 7,
+            "vertical_empire": 3,
+            "safety_laboratory": 7,
+            "foundry": 7
+          },
+          "seatPoints": {
+            "0": 4,
+            "1": 11,
+            "2": 7,
+            "3": 6,
+            "4": 2
+          }
+        },
+        "5p/building_has_weather": {
+          "games": 12,
+          "qualified": 45,
+          "opportunities": 60,
+          "noQualifier": 0,
+          "points": 40,
+          "zeroWinners": 0,
+          "factionPoints": {
+            "coalition_lab": 8,
+            "platform_empire": 7,
+            "imperial_research_lab": 7,
+            "vertical_empire": 5,
+            "safety_laboratory": 1,
+            "foundry": 12
+          },
+          "seatPoints": {
+            "0": 5,
+            "1": 7,
+            "2": 8,
+            "3": 10,
+            "4": 10
+          }
+        },
+        "5p/voluntary_coordination_triumphs": {
+          "games": 12,
+          "qualified": 0,
+          "opportunities": 60,
+          "noQualifier": 12,
+          "points": 0,
+          "zeroWinners": 0,
+          "factionPoints": {
+            "coalition_lab": 0,
+            "platform_empire": 0,
+            "imperial_research_lab": 0,
+            "vertical_empire": 0,
+            "safety_laboratory": 0,
+            "foundry": 0
+          },
+          "seatPoints": {
+            "0": 0,
+            "1": 0,
+            "2": 0,
+            "3": 0,
+            "4": 0
+          }
+        },
+        "5p/continent_signs_loi": {
+          "games": 12,
+          "qualified": 45,
+          "opportunities": 60,
+          "noQualifier": 0,
+          "points": 45,
+          "zeroWinners": 0,
+          "factionPoints": {
+            "coalition_lab": 8,
+            "platform_empire": 8,
+            "imperial_research_lab": 6,
+            "vertical_empire": 8,
+            "safety_laboratory": 7,
+            "foundry": 8
+          },
+          "seatPoints": {
+            "0": 9,
+            "1": 11,
+            "2": 9,
+            "3": 8,
+            "4": 8
+          }
+        },
+        "5p/model_ate_tuesday": {
+          "games": 12,
+          "qualified": 46,
+          "opportunities": 60,
+          "noQualifier": 0,
+          "points": 29,
+          "zeroWinners": 0,
+          "factionPoints": {
+            "coalition_lab": 6,
+            "platform_empire": 2,
+            "imperial_research_lab": 3,
+            "vertical_empire": 7,
+            "safety_laboratory": 6,
+            "foundry": 5
+          },
+          "seatPoints": {
+            "0": 10,
+            "1": 4,
+            "2": 6,
+            "3": 3,
+            "4": 6
+          }
+        },
+        "5p/stack_reaches_horizon": {
+          "games": 12,
+          "qualified": 8,
+          "opportunities": 60,
+          "noQualifier": 6,
+          "points": 12,
+          "zeroWinners": 0,
+          "factionPoints": {
+            "coalition_lab": 1,
+            "platform_empire": 5,
+            "imperial_research_lab": 5,
+            "vertical_empire": 1,
+            "safety_laboratory": 0,
+            "foundry": 0
+          },
+          "seatPoints": {
+            "0": 3,
+            "1": 2,
+            "2": 4,
+            "3": 0,
+            "4": 3
+          }
+        },
+        "5p/legibility_offensive": {
+          "games": 12,
+          "qualified": 39,
+          "opportunities": 60,
+          "noQualifier": 0,
+          "points": 31,
+          "zeroWinners": 0,
+          "factionPoints": {
+            "coalition_lab": 6,
+            "platform_empire": 2,
+            "imperial_research_lab": 4,
+            "vertical_empire": 2,
+            "safety_laboratory": 12,
+            "foundry": 5
+          },
+          "seatPoints": {
+            "0": 6,
+            "1": 6,
+            "2": 4,
+            "3": 7,
+            "4": 8
+          }
+        },
+        "5p/zero_incident_quarter": {
+          "games": 12,
+          "qualified": 52,
+          "opportunities": 60,
+          "noQualifier": 0,
+          "points": 27,
+          "zeroWinners": 0,
+          "factionPoints": {
+            "coalition_lab": 7,
+            "platform_empire": 1,
+            "imperial_research_lab": 6,
+            "vertical_empire": 3,
+            "safety_laboratory": 6,
+            "foundry": 4
+          },
+          "seatPoints": {
+            "0": 2,
+            "1": 10,
+            "2": 2,
+            "3": 5,
+            "4": 8
+          }
+        },
+        "5p/markets_prefer_destiny": {
+          "games": 12,
+          "qualified": 35,
+          "opportunities": 60,
+          "noQualifier": 0,
+          "points": 28,
+          "zeroWinners": 0,
+          "factionPoints": {
+            "coalition_lab": 1,
+            "platform_empire": 7,
+            "imperial_research_lab": 9,
+            "vertical_empire": 3,
+            "safety_laboratory": 4,
+            "foundry": 4
+          },
+          "seatPoints": {
+            "0": 6,
+            "1": 5,
+            "2": 4,
+            "3": 7,
+            "4": 6
+          }
+        },
+        "5p/compute_new_weather": {
+          "games": 12,
+          "qualified": 23,
+          "opportunities": 60,
+          "noQualifier": 1,
+          "points": 22,
+          "zeroWinners": 0,
+          "factionPoints": {
+            "coalition_lab": 1,
+            "platform_empire": 9,
+            "imperial_research_lab": 7,
+            "vertical_empire": 3,
+            "safety_laboratory": 1,
+            "foundry": 1
+          },
+          "seatPoints": {
+            "0": 10,
+            "1": 4,
+            "2": 2,
+            "3": 1,
+            "4": 5
+          }
+        },
+        "5p/national_champion_without_nationalization": {
+          "games": 12,
+          "qualified": 53,
+          "opportunities": 60,
+          "noQualifier": 0,
+          "points": 28,
+          "zeroWinners": 0,
+          "factionPoints": {
+            "coalition_lab": 4,
+            "platform_empire": 5,
+            "imperial_research_lab": 2,
+            "vertical_empire": 7,
+            "safety_laboratory": 1,
+            "foundry": 9
+          },
+          "seatPoints": {
+            "0": 6,
+            "1": 6,
+            "2": 5,
+            "3": 7,
+            "4": 4
+          }
+        },
+        "5p/responsible_acceleration": {
+          "games": 12,
+          "qualified": 56,
+          "opportunities": 60,
+          "noQualifier": 0,
+          "points": 24,
+          "zeroWinners": 0,
+          "factionPoints": {
+            "coalition_lab": 0,
+            "platform_empire": 3,
+            "imperial_research_lab": 6,
+            "vertical_empire": 7,
+            "safety_laboratory": 5,
+            "foundry": 3
+          },
+          "seatPoints": {
+            "0": 3,
+            "1": 5,
+            "2": 9,
+            "3": 4,
+            "4": 3
+          }
+        }
+      },
+      "factions": {
+        "4p/imperial_research_lab/seat2": {
+          "games": 24,
+          "wins": 7,
+          "score": 381
+        },
+        "4p/vertical_empire/seat3": {
+          "games": 24,
+          "wins": 5,
+          "score": 329
+        },
+        "4p/platform_empire/seat1": {
+          "games": 24,
+          "wins": 6,
+          "score": 366
+        },
+        "4p/coalition_lab/seat0": {
+          "games": 24,
+          "wins": 6,
+          "score": 363
+        },
+        "4p/platform_empire/seat2": {
+          "games": 24,
+          "wins": 6,
+          "score": 366
+        },
+        "4p/imperial_research_lab/seat3": {
+          "games": 24,
+          "wins": 6,
+          "score": 383
+        },
+        "4p/foundry/seat0": {
+          "games": 24,
+          "wins": 4,
+          "score": 352
+        },
+        "4p/coalition_lab/seat1": {
+          "games": 24,
+          "wins": 8,
+          "score": 363
+        },
+        "4p/platform_empire/seat3": {
+          "games": 24,
+          "wins": 4,
+          "score": 396
+        },
+        "4p/foundry/seat1": {
+          "games": 24,
+          "wins": 8,
+          "score": 382
+        },
+        "4p/coalition_lab/seat2": {
+          "games": 24,
+          "wins": 7,
+          "score": 394
+        },
+        "4p/safety_laboratory/seat0": {
+          "games": 24,
+          "wins": 5,
+          "score": 409
+        },
+        "4p/foundry/seat2": {
+          "games": 24,
+          "wins": 5,
+          "score": 375
+        },
+        "4p/safety_laboratory/seat1": {
+          "games": 24,
+          "wins": 11,
+          "score": 423
+        },
+        "4p/coalition_lab/seat3": {
+          "games": 24,
+          "wins": 4,
+          "score": 353
+        },
+        "4p/vertical_empire/seat0": {
+          "games": 24,
+          "wins": 4,
+          "score": 349
+        },
+        "4p/vertical_empire/seat2": {
+          "games": 24,
+          "wins": 11.5,
+          "score": 422
+        },
+        "4p/safety_laboratory/seat3": {
+          "games": 24,
+          "wins": 4.5,
+          "score": 404
+        },
+        "4p/imperial_research_lab/seat1": {
+          "games": 24,
+          "wins": 3,
+          "score": 359
+        },
+        "4p/platform_empire/seat0": {
+          "games": 24,
+          "wins": 5,
+          "score": 358
+        },
+        "4p/safety_laboratory/seat2": {
+          "games": 24,
+          "wins": 14.5,
+          "score": 427
+        },
+        "4p/imperial_research_lab/seat0": {
+          "games": 24,
+          "wins": 1,
+          "score": 353
+        },
+        "4p/vertical_empire/seat1": {
+          "games": 24,
+          "wins": 2.5,
+          "score": 370
+        },
+        "4p/foundry/seat3": {
+          "games": 24,
+          "wins": 6,
+          "score": 376
+        },
+        "3p/imperial_research_lab/seat2": {
+          "games": 6,
+          "wins": 4,
+          "score": 93
+        },
+        "3p/coalition_lab/seat0": {
+          "games": 6,
+          "wins": 2,
+          "score": 77
+        },
+        "3p/platform_empire/seat1": {
+          "games": 6,
+          "wins": 0,
+          "score": 75
+        },
+        "3p/platform_empire/seat0": {
+          "games": 6,
+          "wins": 4,
+          "score": 92
+        },
+        "3p/imperial_research_lab/seat1": {
+          "games": 6,
+          "wins": 1,
+          "score": 76
+        },
+        "3p/vertical_empire/seat2": {
+          "games": 6,
+          "wins": 1,
+          "score": 87
+        },
+        "3p/safety_laboratory/seat2": {
+          "games": 6,
+          "wins": 2.5,
+          "score": 107
+        },
+        "3p/imperial_research_lab/seat0": {
+          "games": 6,
+          "wins": 0,
+          "score": 72
+        },
+        "3p/vertical_empire/seat1": {
+          "games": 6,
+          "wins": 3.5,
+          "score": 112
+        },
+        "3p/foundry/seat2": {
+          "games": 6,
+          "wins": 2,
+          "score": 90
+        },
+        "3p/safety_laboratory/seat1": {
+          "games": 6,
+          "wins": 3,
+          "score": 105
+        },
+        "3p/vertical_empire/seat0": {
+          "games": 6,
+          "wins": 1,
+          "score": 84
+        },
+        "3p/safety_laboratory/seat0": {
+          "games": 6,
+          "wins": 3,
+          "score": 117
+        },
+        "3p/foundry/seat1": {
+          "games": 6,
+          "wins": 1,
+          "score": 87
+        },
+        "3p/coalition_lab/seat2": {
+          "games": 6,
+          "wins": 2,
+          "score": 96
+        },
+        "3p/coalition_lab/seat1": {
+          "games": 6,
+          "wins": 2,
+          "score": 111
+        },
+        "3p/platform_empire/seat2": {
+          "games": 6,
+          "wins": 0,
+          "score": 90
+        },
+        "3p/foundry/seat0": {
+          "games": 6,
+          "wins": 4,
+          "score": 113
+        },
+        "5p/vertical_empire/seat3": {
+          "games": 6,
+          "wins": 1,
+          "score": 81
+        },
+        "5p/safety_laboratory/seat4": {
+          "games": 6,
+          "wins": 3,
+          "score": 107
+        },
+        "5p/platform_empire/seat1": {
+          "games": 6,
+          "wins": 1,
+          "score": 90
+        },
+        "5p/imperial_research_lab/seat2": {
+          "games": 6,
+          "wins": 0,
+          "score": 74
+        },
+        "5p/coalition_lab/seat0": {
+          "games": 6,
+          "wins": 1,
+          "score": 79
+        },
+        "5p/safety_laboratory/seat3": {
+          "games": 6,
+          "wins": 1,
+          "score": 90
+        },
+        "5p/vertical_empire/seat2": {
+          "games": 6,
+          "wins": 2,
+          "score": 96
+        },
+        "5p/platform_empire/seat0": {
+          "games": 6,
+          "wins": 1,
+          "score": 83
+        },
+        "5p/imperial_research_lab/seat1": {
+          "games": 6,
+          "wins": 0,
+          "score": 79
+        },
+        "5p/foundry/seat4": {
+          "games": 6,
+          "wins": 2,
+          "score": 87
+        },
+        "5p/safety_laboratory/seat2": {
+          "games": 6,
+          "wins": 3,
+          "score": 98
+        },
+        "5p/foundry/seat3": {
+          "games": 6,
+          "wins": 2,
+          "score": 105
+        },
+        "5p/imperial_research_lab/seat0": {
+          "games": 6,
+          "wins": 0,
+          "score": 78
+        },
+        "5p/vertical_empire/seat1": {
+          "games": 6,
+          "wins": 1,
+          "score": 79
+        },
+        "5p/coalition_lab/seat4": {
+          "games": 6,
+          "wins": 0,
+          "score": 87
+        },
+        "5p/safety_laboratory/seat1": {
+          "games": 6,
+          "wins": 2,
+          "score": 117
+        },
+        "5p/foundry/seat2": {
+          "games": 6,
+          "wins": 1,
+          "score": 89
+        },
+        "5p/platform_empire/seat4": {
+          "games": 6,
+          "wins": 1,
+          "score": 95
+        },
+        "5p/vertical_empire/seat0": {
+          "games": 6,
+          "wins": 1,
+          "score": 97
+        },
+        "5p/coalition_lab/seat3": {
+          "games": 6,
+          "wins": 1,
+          "score": 99
+        },
+        "5p/foundry/seat1": {
+          "games": 6,
+          "wins": 2,
+          "score": 92
+        },
+        "5p/safety_laboratory/seat0": {
+          "games": 6,
+          "wins": 3,
+          "score": 106
+        },
+        "5p/imperial_research_lab/seat4": {
+          "games": 6,
+          "wins": 0,
+          "score": 102
+        },
+        "5p/coalition_lab/seat2": {
+          "games": 6,
+          "wins": 1,
+          "score": 100
+        },
+        "5p/platform_empire/seat3": {
+          "games": 6,
+          "wins": 0,
+          "score": 69
+        },
+        "5p/coalition_lab/seat1": {
+          "games": 6,
+          "wins": 3,
+          "score": 115
+        },
+        "5p/vertical_empire/seat4": {
+          "games": 6,
+          "wins": 0,
+          "score": 80
+        },
+        "5p/imperial_research_lab/seat3": {
+          "games": 6,
+          "wins": 2,
+          "score": 96
+        },
+        "5p/foundry/seat0": {
+          "games": 6,
+          "wins": 0,
+          "score": 77
+        },
+        "5p/platform_empire/seat2": {
+          "games": 6,
+          "wins": 1,
+          "score": 81
+        }
+      },
+      "winningPaths": {
+        "agi_declaration": 9,
+        "research": 36,
+        "research_adoption_hybrid": 126,
+        "adoption": 11,
+        "research_infrastructure_hybrid": 14,
+        "infrastructure_legitimacy_hybrid": 1,
+        "adoption_legitimacy_hybrid": 5,
+        "research_legitimacy_hybrid": 11,
+        "infrastructure_adoption_hybrid": 3,
+        "legitimacy": 2,
+        "infrastructure": 1
+      },
+      "repeatedCustomerWinnerGames": 58,
+      "repeatedCustomerComparableGames": 72
+    },
+    "candidate": {
+      "counts": {
+        "3": {
+          "games": 36,
+          "score": 1677,
+          "runway": 944,
+          "customers": 266,
+          "players": 108
+        },
+        "4": {
+          "games": 144,
+          "score": 9029,
+          "runway": 5146,
+          "customers": 1475,
+          "players": 576
+        },
+        "5": {
+          "games": 36,
+          "score": 2711,
+          "runway": 1582,
+          "customers": 457,
+          "players": 180
+        }
+      },
+      "objectives": {
+        "4p/quarter_humanity_notices": {
+          "games": 48,
+          "qualified": 121,
+          "opportunities": 192,
+          "noQualifier": 1,
+          "points": 124,
+          "zeroWinners": 0,
+          "factionPoints": {
+            "coalition_lab": 14,
+            "platform_empire": 36,
+            "imperial_research_lab": 21,
+            "vertical_empire": 20,
+            "foundry": 13,
+            "safety_laboratory": 20
+          },
+          "seatPoints": {
+            "0": 29,
+            "1": 30,
+            "2": 36,
+            "3": 29
+          }
+        },
+        "4p/building_has_weather": {
+          "games": 48,
+          "qualified": 134,
+          "opportunities": 192,
+          "noQualifier": 0,
+          "points": 130,
+          "zeroWinners": 0,
+          "factionPoints": {
+            "coalition_lab": 23,
+            "platform_empire": 21,
+            "imperial_research_lab": 18,
+            "vertical_empire": 15,
+            "foundry": 31,
+            "safety_laboratory": 22
+          },
+          "seatPoints": {
+            "0": 29,
+            "1": 40,
+            "2": 31,
+            "3": 30
+          }
+        },
+        "4p/voluntary_coordination_triumphs": {
+          "games": 48,
+          "qualified": 2,
+          "opportunities": 192,
+          "noQualifier": 47,
+          "points": 2,
+          "zeroWinners": 0,
+          "factionPoints": {
+            "coalition_lab": 0,
+            "platform_empire": 1,
+            "imperial_research_lab": 0,
+            "vertical_empire": 0,
+            "foundry": 0,
+            "safety_laboratory": 1
+          },
+          "seatPoints": {
+            "0": 1,
+            "1": 0,
+            "2": 0,
+            "3": 1
+          }
+        },
+        "4p/continent_signs_loi": {
+          "games": 48,
+          "qualified": 185,
+          "opportunities": 192,
+          "noQualifier": 0,
+          "points": 104,
+          "zeroWinners": 0,
+          "factionPoints": {
+            "coalition_lab": 11,
+            "platform_empire": 25,
+            "imperial_research_lab": 18,
+            "vertical_empire": 21,
+            "foundry": 9,
+            "safety_laboratory": 20
+          },
+          "seatPoints": {
+            "0": 20,
+            "1": 26,
+            "2": 35,
+            "3": 23
+          }
+        },
+        "4p/model_ate_tuesday": {
+          "games": 48,
+          "qualified": 178,
+          "opportunities": 192,
+          "noQualifier": 0,
+          "points": 99,
+          "zeroWinners": 0,
+          "factionPoints": {
+            "coalition_lab": 18,
+            "platform_empire": 21,
+            "imperial_research_lab": 10,
+            "vertical_empire": 15,
+            "foundry": 22,
+            "safety_laboratory": 13
+          },
+          "seatPoints": {
+            "0": 21,
+            "1": 26,
+            "2": 25,
+            "3": 27
+          }
+        },
+        "4p/stack_reaches_horizon": {
+          "games": 48,
+          "qualified": 32,
+          "opportunities": 192,
+          "noQualifier": 21,
+          "points": 54,
+          "zeroWinners": 0,
+          "factionPoints": {
+            "coalition_lab": 10,
+            "platform_empire": 8,
+            "imperial_research_lab": 8,
+            "vertical_empire": 6,
+            "foundry": 17,
+            "safety_laboratory": 5
+          },
+          "seatPoints": {
+            "0": 13,
+            "1": 9,
+            "2": 22,
+            "3": 10
+          }
+        },
+        "4p/legibility_offensive": {
+          "games": 48,
+          "qualified": 179,
+          "opportunities": 192,
+          "noQualifier": 0,
+          "points": 109,
+          "zeroWinners": 0,
+          "factionPoints": {
+            "coalition_lab": 19,
+            "platform_empire": 14,
+            "imperial_research_lab": 13,
+            "vertical_empire": 7,
+            "foundry": 16,
+            "safety_laboratory": 40
+          },
+          "seatPoints": {
+            "0": 24,
+            "1": 24,
+            "2": 31,
+            "3": 30
+          }
+        },
+        "4p/zero_incident_quarter": {
+          "games": 48,
+          "qualified": 108,
+          "opportunities": 192,
+          "noQualifier": 2,
+          "points": 93,
+          "zeroWinners": 24,
+          "factionPoints": {
+            "coalition_lab": 19,
+            "platform_empire": 18,
+            "imperial_research_lab": 7,
+            "vertical_empire": 21,
+            "foundry": 13,
+            "safety_laboratory": 15
+          },
+          "seatPoints": {
+            "0": 25,
+            "1": 26,
+            "2": 19,
+            "3": 23
+          }
+        },
+        "4p/markets_prefer_destiny": {
+          "games": 48,
+          "qualified": 115,
+          "opportunities": 192,
+          "noQualifier": 0,
+          "points": 97,
+          "zeroWinners": 0,
+          "factionPoints": {
+            "coalition_lab": 16,
+            "platform_empire": 26,
+            "imperial_research_lab": 8,
+            "vertical_empire": 19,
+            "foundry": 22,
+            "safety_laboratory": 6
+          },
+          "seatPoints": {
+            "0": 30,
+            "1": 23,
+            "2": 24,
+            "3": 20
+          }
+        },
+        "4p/compute_new_weather": {
+          "games": 48,
+          "qualified": 64,
+          "opportunities": 192,
+          "noQualifier": 7,
+          "points": 83,
+          "zeroWinners": 0,
+          "factionPoints": {
+            "coalition_lab": 11,
+            "platform_empire": 5,
+            "imperial_research_lab": 17,
+            "vertical_empire": 13,
+            "foundry": 26,
+            "safety_laboratory": 11
+          },
+          "seatPoints": {
+            "0": 23,
+            "1": 20,
+            "2": 28,
+            "3": 12
+          }
+        },
+        "4p/national_champion_without_nationalization": {
+          "games": 48,
+          "qualified": 178,
+          "opportunities": 192,
+          "noQualifier": 0,
+          "points": 107,
+          "zeroWinners": 0,
+          "factionPoints": {
+            "coalition_lab": 15,
+            "platform_empire": 16,
+            "imperial_research_lab": 21,
+            "vertical_empire": 17,
+            "foundry": 21,
+            "safety_laboratory": 17
+          },
+          "seatPoints": {
+            "0": 21,
+            "1": 28,
+            "2": 38,
+            "3": 20
+          }
+        },
+        "4p/responsible_acceleration": {
+          "games": 48,
+          "qualified": 170,
+          "opportunities": 192,
+          "noQualifier": 0,
+          "points": 97,
+          "zeroWinners": 0,
+          "factionPoints": {
+            "coalition_lab": 10,
+            "platform_empire": 22,
+            "imperial_research_lab": 14,
+            "vertical_empire": 7,
+            "foundry": 15,
+            "safety_laboratory": 29
+          },
+          "seatPoints": {
+            "0": 17,
+            "1": 25,
+            "2": 29,
+            "3": 26
+          }
+        },
+        "3p/quarter_humanity_notices": {
+          "games": 12,
+          "qualified": 17,
+          "opportunities": 36,
+          "noQualifier": 1,
+          "points": 23,
+          "zeroWinners": 0,
+          "factionPoints": {
+            "coalition_lab": 2,
+            "platform_empire": 10,
+            "imperial_research_lab": 1,
+            "vertical_empire": 4,
+            "safety_laboratory": 1,
+            "foundry": 5
+          },
+          "seatPoints": {
+            "0": 6,
+            "1": 9,
+            "2": 8
+          }
+        },
+        "3p/building_has_weather": {
+          "games": 12,
+          "qualified": 28,
+          "opportunities": 36,
+          "noQualifier": 0,
+          "points": 30,
+          "zeroWinners": 0,
+          "factionPoints": {
+            "coalition_lab": 5,
+            "platform_empire": 5,
+            "imperial_research_lab": 8,
+            "vertical_empire": 2,
+            "safety_laboratory": 2,
+            "foundry": 8
+          },
+          "seatPoints": {
+            "0": 13,
+            "1": 8,
+            "2": 9
+          }
+        },
+        "3p/voluntary_coordination_triumphs": {
+          "games": 12,
+          "qualified": 0,
+          "opportunities": 36,
+          "noQualifier": 12,
+          "points": 0,
+          "zeroWinners": 0,
+          "factionPoints": {
+            "coalition_lab": 0,
+            "platform_empire": 0,
+            "imperial_research_lab": 0,
+            "vertical_empire": 0,
+            "safety_laboratory": 0,
+            "foundry": 0
+          },
+          "seatPoints": {
+            "0": 0,
+            "1": 0,
+            "2": 0
+          }
+        },
+        "3p/continent_signs_loi": {
+          "games": 12,
+          "qualified": 33,
+          "opportunities": 36,
+          "noQualifier": 0,
+          "points": 25,
+          "zeroWinners": 0,
+          "factionPoints": {
+            "coalition_lab": 3,
+            "platform_empire": 5,
+            "imperial_research_lab": 2,
+            "vertical_empire": 4,
+            "safety_laboratory": 4,
+            "foundry": 7
+          },
+          "seatPoints": {
+            "0": 8,
+            "1": 7,
+            "2": 10
+          }
+        },
+        "3p/model_ate_tuesday": {
+          "games": 12,
+          "qualified": 33,
+          "opportunities": 36,
+          "noQualifier": 0,
+          "points": 25,
+          "zeroWinners": 0,
+          "factionPoints": {
+            "coalition_lab": 4,
+            "platform_empire": 1,
+            "imperial_research_lab": 7,
+            "vertical_empire": 5,
+            "safety_laboratory": 6,
+            "foundry": 2
+          },
+          "seatPoints": {
+            "0": 9,
+            "1": 12,
+            "2": 4
+          }
+        },
+        "3p/stack_reaches_horizon": {
+          "games": 12,
+          "qualified": 4,
+          "opportunities": 36,
+          "noQualifier": 8,
+          "points": 8,
+          "zeroWinners": 0,
+          "factionPoints": {
+            "coalition_lab": 0,
+            "platform_empire": 2,
+            "imperial_research_lab": 6,
+            "vertical_empire": 0,
+            "safety_laboratory": 0,
+            "foundry": 0
+          },
+          "seatPoints": {
+            "0": 2,
+            "1": 2,
+            "2": 4
+          }
+        },
+        "3p/legibility_offensive": {
+          "games": 12,
+          "qualified": 29,
+          "opportunities": 36,
+          "noQualifier": 0,
+          "points": 24,
+          "zeroWinners": 0,
+          "factionPoints": {
+            "coalition_lab": 6,
+            "platform_empire": 5,
+            "imperial_research_lab": 0,
+            "vertical_empire": 3,
+            "safety_laboratory": 8,
+            "foundry": 2
+          },
+          "seatPoints": {
+            "0": 9,
+            "1": 10,
+            "2": 5
+          }
+        },
+        "3p/zero_incident_quarter": {
+          "games": 12,
+          "qualified": 15,
+          "opportunities": 36,
+          "noQualifier": 2,
+          "points": 20,
+          "zeroWinners": 4,
+          "factionPoints": {
+            "coalition_lab": 4,
+            "platform_empire": 0,
+            "imperial_research_lab": 0,
+            "vertical_empire": 6,
+            "safety_laboratory": 8,
+            "foundry": 2
+          },
+          "seatPoints": {
+            "0": 10,
+            "1": 6,
+            "2": 4
+          }
+        },
+        "3p/markets_prefer_destiny": {
+          "games": 12,
+          "qualified": 22,
+          "opportunities": 36,
+          "noQualifier": 0,
+          "points": 24,
+          "zeroWinners": 0,
+          "factionPoints": {
+            "coalition_lab": 1,
+            "platform_empire": 4,
+            "imperial_research_lab": 8,
+            "vertical_empire": 4,
+            "safety_laboratory": 0,
+            "foundry": 7
+          },
+          "seatPoints": {
+            "0": 8,
+            "1": 7,
+            "2": 9
+          }
+        },
+        "3p/compute_new_weather": {
+          "games": 12,
+          "qualified": 14,
+          "opportunities": 36,
+          "noQualifier": 4,
+          "points": 16,
+          "zeroWinners": 0,
+          "factionPoints": {
+            "coalition_lab": 1,
+            "platform_empire": 7,
+            "imperial_research_lab": 6,
+            "vertical_empire": 0,
+            "safety_laboratory": 0,
+            "foundry": 2
+          },
+          "seatPoints": {
+            "0": 4,
+            "1": 5,
+            "2": 7
+          }
+        },
+        "3p/national_champion_without_nationalization": {
+          "games": 12,
+          "qualified": 35,
+          "opportunities": 36,
+          "noQualifier": 0,
+          "points": 26,
+          "zeroWinners": 0,
+          "factionPoints": {
+            "coalition_lab": 3,
+            "platform_empire": 4,
+            "imperial_research_lab": 6,
+            "vertical_empire": 3,
+            "safety_laboratory": 2,
+            "foundry": 8
+          },
+          "seatPoints": {
+            "0": 11,
+            "1": 8,
+            "2": 7
+          }
+        },
+        "3p/responsible_acceleration": {
+          "games": 12,
+          "qualified": 33,
+          "opportunities": 36,
+          "noQualifier": 0,
+          "points": 24,
+          "zeroWinners": 0,
+          "factionPoints": {
+            "coalition_lab": 4,
+            "platform_empire": 3,
+            "imperial_research_lab": 2,
+            "vertical_empire": 3,
+            "safety_laboratory": 5,
+            "foundry": 7
+          },
+          "seatPoints": {
+            "0": 8,
+            "1": 9,
+            "2": 7
+          }
+        },
+        "5p/quarter_humanity_notices": {
+          "games": 12,
+          "qualified": 42,
+          "opportunities": 60,
+          "noQualifier": 0,
+          "points": 39,
+          "zeroWinners": 0,
+          "factionPoints": {
+            "coalition_lab": 9,
+            "platform_empire": 9,
+            "imperial_research_lab": 5,
+            "vertical_empire": 5,
+            "safety_laboratory": 6,
+            "foundry": 5
+          },
+          "seatPoints": {
+            "0": 9,
+            "1": 8,
+            "2": 7,
+            "3": 10,
+            "4": 5
+          }
+        },
+        "5p/building_has_weather": {
+          "games": 12,
+          "qualified": 45,
+          "opportunities": 60,
+          "noQualifier": 0,
+          "points": 40,
+          "zeroWinners": 0,
+          "factionPoints": {
+            "coalition_lab": 8,
+            "platform_empire": 7,
+            "imperial_research_lab": 7,
+            "vertical_empire": 5,
+            "safety_laboratory": 1,
+            "foundry": 12
+          },
+          "seatPoints": {
+            "0": 5,
+            "1": 7,
+            "2": 8,
+            "3": 10,
+            "4": 10
+          }
+        },
+        "5p/voluntary_coordination_triumphs": {
+          "games": 12,
+          "qualified": 0,
+          "opportunities": 60,
+          "noQualifier": 12,
+          "points": 0,
+          "zeroWinners": 0,
+          "factionPoints": {
+            "coalition_lab": 0,
+            "platform_empire": 0,
+            "imperial_research_lab": 0,
+            "vertical_empire": 0,
+            "safety_laboratory": 0,
+            "foundry": 0
+          },
+          "seatPoints": {
+            "0": 0,
+            "1": 0,
+            "2": 0,
+            "3": 0,
+            "4": 0
+          }
+        },
+        "5p/continent_signs_loi": {
+          "games": 12,
+          "qualified": 57,
+          "opportunities": 60,
+          "noQualifier": 0,
+          "points": 26,
+          "zeroWinners": 0,
+          "factionPoints": {
+            "coalition_lab": 5,
+            "platform_empire": 6,
+            "imperial_research_lab": 3,
+            "vertical_empire": 3,
+            "safety_laboratory": 4,
+            "foundry": 5
+          },
+          "seatPoints": {
+            "0": 7,
+            "1": 11,
+            "2": 2,
+            "3": 3,
+            "4": 3
+          }
+        },
+        "5p/model_ate_tuesday": {
+          "games": 12,
+          "qualified": 59,
+          "opportunities": 60,
+          "noQualifier": 0,
+          "points": 25,
+          "zeroWinners": 0,
+          "factionPoints": {
+            "coalition_lab": 3,
+            "platform_empire": 6,
+            "imperial_research_lab": 2,
+            "vertical_empire": 4,
+            "safety_laboratory": 5,
+            "foundry": 5
+          },
+          "seatPoints": {
+            "0": 9,
+            "1": 5,
+            "2": 2,
+            "3": 2,
+            "4": 7
+          }
+        },
+        "5p/stack_reaches_horizon": {
+          "games": 12,
+          "qualified": 8,
+          "opportunities": 60,
+          "noQualifier": 6,
+          "points": 12,
+          "zeroWinners": 0,
+          "factionPoints": {
+            "coalition_lab": 1,
+            "platform_empire": 5,
+            "imperial_research_lab": 5,
+            "vertical_empire": 1,
+            "safety_laboratory": 0,
+            "foundry": 0
+          },
+          "seatPoints": {
+            "0": 3,
+            "1": 2,
+            "2": 4,
+            "3": 0,
+            "4": 3
+          }
+        },
+        "5p/legibility_offensive": {
+          "games": 12,
+          "qualified": 55,
+          "opportunities": 60,
+          "noQualifier": 0,
+          "points": 36,
+          "zeroWinners": 0,
+          "factionPoints": {
+            "coalition_lab": 5,
+            "platform_empire": 4,
+            "imperial_research_lab": 5,
+            "vertical_empire": 3,
+            "safety_laboratory": 13,
+            "foundry": 6
+          },
+          "seatPoints": {
+            "0": 7,
+            "1": 8,
+            "2": 5,
+            "3": 7,
+            "4": 9
+          }
+        },
+        "5p/zero_incident_quarter": {
+          "games": 12,
+          "qualified": 33,
+          "opportunities": 60,
+          "noQualifier": 1,
+          "points": 23,
+          "zeroWinners": 7,
+          "factionPoints": {
+            "coalition_lab": 4,
+            "platform_empire": 4,
+            "imperial_research_lab": 2,
+            "vertical_empire": 3,
+            "safety_laboratory": 7,
+            "foundry": 3
+          },
+          "seatPoints": {
+            "0": 2,
+            "1": 7,
+            "2": 3,
+            "3": 7,
+            "4": 4
+          }
+        },
+        "5p/markets_prefer_destiny": {
+          "games": 12,
+          "qualified": 41,
+          "opportunities": 60,
+          "noQualifier": 0,
+          "points": 24,
+          "zeroWinners": 0,
+          "factionPoints": {
+            "coalition_lab": 0,
+            "platform_empire": 5,
+            "imperial_research_lab": 2,
+            "vertical_empire": 9,
+            "safety_laboratory": 0,
+            "foundry": 8
+          },
+          "seatPoints": {
+            "0": 5,
+            "1": 4,
+            "2": 3,
+            "3": 6,
+            "4": 6
+          }
+        },
+        "5p/compute_new_weather": {
+          "games": 12,
+          "qualified": 23,
+          "opportunities": 60,
+          "noQualifier": 1,
+          "points": 22,
+          "zeroWinners": 0,
+          "factionPoints": {
+            "coalition_lab": 1,
+            "platform_empire": 9,
+            "imperial_research_lab": 7,
+            "vertical_empire": 3,
+            "safety_laboratory": 1,
+            "foundry": 1
+          },
+          "seatPoints": {
+            "0": 10,
+            "1": 4,
+            "2": 2,
+            "3": 1,
+            "4": 5
+          }
+        },
+        "5p/national_champion_without_nationalization": {
+          "games": 12,
+          "qualified": 53,
+          "opportunities": 60,
+          "noQualifier": 0,
+          "points": 28,
+          "zeroWinners": 0,
+          "factionPoints": {
+            "coalition_lab": 4,
+            "platform_empire": 5,
+            "imperial_research_lab": 2,
+            "vertical_empire": 7,
+            "safety_laboratory": 1,
+            "foundry": 9
+          },
+          "seatPoints": {
+            "0": 6,
+            "1": 6,
+            "2": 5,
+            "3": 7,
+            "4": 4
+          }
+        },
+        "5p/responsible_acceleration": {
+          "games": 12,
+          "qualified": 56,
+          "opportunities": 60,
+          "noQualifier": 0,
+          "points": 24,
+          "zeroWinners": 0,
+          "factionPoints": {
+            "coalition_lab": 0,
+            "platform_empire": 3,
+            "imperial_research_lab": 6,
+            "vertical_empire": 7,
+            "safety_laboratory": 5,
+            "foundry": 3
+          },
+          "seatPoints": {
+            "0": 3,
+            "1": 5,
+            "2": 9,
+            "3": 4,
+            "4": 3
+          }
+        }
+      },
+      "factions": {
+        "4p/imperial_research_lab/seat2": {
+          "games": 24,
+          "wins": 7,
+          "score": 371
+        },
+        "4p/vertical_empire/seat3": {
+          "games": 24,
+          "wins": 4,
+          "score": 331
+        },
+        "4p/platform_empire/seat1": {
+          "games": 24,
+          "wins": 9,
+          "score": 375
+        },
+        "4p/coalition_lab/seat0": {
+          "games": 24,
+          "wins": 4,
+          "score": 360
+        },
+        "4p/platform_empire/seat2": {
+          "games": 24,
+          "wins": 7.333333333333333,
+          "score": 376
+        },
+        "4p/imperial_research_lab/seat3": {
+          "games": 24,
+          "wins": 6.333333333333333,
+          "score": 372
+        },
+        "4p/foundry/seat0": {
+          "games": 24,
+          "wins": 3,
+          "score": 351
+        },
+        "4p/coalition_lab/seat1": {
+          "games": 24,
+          "wins": 7.333333333333333,
+          "score": 355
+        },
+        "4p/platform_empire/seat3": {
+          "games": 24,
+          "wins": 5,
+          "score": 402
+        },
+        "4p/foundry/seat1": {
+          "games": 24,
+          "wins": 6,
+          "score": 384
+        },
+        "4p/coalition_lab/seat2": {
+          "games": 24,
+          "wins": 7,
+          "score": 389
+        },
+        "4p/safety_laboratory/seat0": {
+          "games": 24,
+          "wins": 6,
+          "score": 404
+        },
+        "4p/safety_laboratory/seat1": {
+          "games": 24,
+          "wins": 12,
+          "score": 423
+        },
+        "4p/coalition_lab/seat3": {
+          "games": 24,
+          "wins": 2,
+          "score": 346
+        },
+        "4p/vertical_empire/seat0": {
+          "games": 24,
+          "wins": 4,
+          "score": 347
+        },
+        "4p/foundry/seat2": {
+          "games": 24,
+          "wins": 6,
+          "score": 381
+        },
+        "4p/vertical_empire/seat2": {
+          "games": 24,
+          "wins": 9,
+          "score": 417
+        },
+        "4p/safety_laboratory/seat3": {
+          "games": 24,
+          "wins": 5,
+          "score": 401
+        },
+        "4p/imperial_research_lab/seat1": {
+          "games": 24,
+          "wins": 3.5,
+          "score": 354
+        },
+        "4p/platform_empire/seat0": {
+          "games": 24,
+          "wins": 6.5,
+          "score": 367
+        },
+        "4p/safety_laboratory/seat2": {
+          "games": 24,
+          "wins": 11,
+          "score": 436
+        },
+        "4p/imperial_research_lab/seat0": {
+          "games": 24,
+          "wins": 1,
+          "score": 348
+        },
+        "4p/vertical_empire/seat1": {
+          "games": 24,
+          "wins": 6,
+          "score": 367
+        },
+        "4p/foundry/seat3": {
+          "games": 24,
+          "wins": 6,
+          "score": 372
+        },
+        "3p/imperial_research_lab/seat2": {
+          "games": 6,
+          "wins": 2,
+          "score": 90
+        },
+        "3p/coalition_lab/seat0": {
+          "games": 6,
+          "wins": 3,
+          "score": 79
+        },
+        "3p/platform_empire/seat1": {
+          "games": 6,
+          "wins": 1,
+          "score": 77
+        },
+        "3p/platform_empire/seat0": {
+          "games": 6,
+          "wins": 3,
+          "score": 92
+        },
+        "3p/imperial_research_lab/seat1": {
+          "games": 6,
+          "wins": 1,
+          "score": 75
+        },
+        "3p/vertical_empire/seat2": {
+          "games": 6,
+          "wins": 2,
+          "score": 86
+        },
+        "3p/safety_laboratory/seat2": {
+          "games": 6,
+          "wins": 2.5,
+          "score": 107
+        },
+        "3p/imperial_research_lab/seat0": {
+          "games": 6,
+          "wins": 0,
+          "score": 73
+        },
+        "3p/vertical_empire/seat1": {
+          "games": 6,
+          "wins": 3.5,
+          "score": 111
+        },
+        "3p/foundry/seat2": {
+          "games": 6,
+          "wins": 2,
+          "score": 92
+        },
+        "3p/safety_laboratory/seat1": {
+          "games": 6,
+          "wins": 3,
+          "score": 103
+        },
+        "3p/vertical_empire/seat0": {
+          "games": 6,
+          "wins": 1,
+          "score": 84
+        },
+        "3p/safety_laboratory/seat0": {
+          "games": 6,
+          "wins": 2.5,
+          "score": 118
+        },
+        "3p/foundry/seat1": {
+          "games": 6,
+          "wins": 1.5,
+          "score": 87
+        },
+        "3p/coalition_lab/seat2": {
+          "games": 6,
+          "wins": 2,
+          "score": 91
+        },
+        "3p/coalition_lab/seat1": {
+          "games": 6,
+          "wins": 2,
+          "score": 110
+        },
+        "3p/platform_empire/seat2": {
+          "games": 6,
+          "wins": 1,
+          "score": 92
+        },
+        "3p/foundry/seat0": {
+          "games": 6,
+          "wins": 3,
+          "score": 110
+        },
+        "5p/vertical_empire/seat3": {
+          "games": 6,
+          "wins": 1,
+          "score": 81
+        },
+        "5p/safety_laboratory/seat4": {
+          "games": 6,
+          "wins": 3,
+          "score": 108
+        },
+        "5p/platform_empire/seat1": {
+          "games": 6,
+          "wins": 1,
+          "score": 93
+        },
+        "5p/imperial_research_lab/seat2": {
+          "games": 6,
+          "wins": 0,
+          "score": 71
+        },
+        "5p/coalition_lab/seat0": {
+          "games": 6,
+          "wins": 1,
+          "score": 76
+        },
+        "5p/platform_empire/seat0": {
+          "games": 6,
+          "wins": 2,
+          "score": 88
+        },
+        "5p/safety_laboratory/seat3": {
+          "games": 6,
+          "wins": 0,
+          "score": 87
+        },
+        "5p/vertical_empire/seat2": {
+          "games": 6,
+          "wins": 2,
+          "score": 96
+        },
+        "5p/imperial_research_lab/seat1": {
+          "games": 6,
+          "wins": 0,
+          "score": 71
+        },
+        "5p/foundry/seat4": {
+          "games": 6,
+          "wins": 2,
+          "score": 90
+        },
+        "5p/imperial_research_lab/seat0": {
+          "games": 6,
+          "wins": 1,
+          "score": 77
+        },
+        "5p/safety_laboratory/seat2": {
+          "games": 6,
+          "wins": 3,
+          "score": 97
+        },
+        "5p/foundry/seat3": {
+          "games": 6,
+          "wins": 2,
+          "score": 103
+        },
+        "5p/coalition_lab/seat4": {
+          "games": 6,
+          "wins": 0,
+          "score": 85
+        },
+        "5p/vertical_empire/seat1": {
+          "games": 6,
+          "wins": 0,
+          "score": 79
+        },
+        "5p/safety_laboratory/seat1": {
+          "games": 6,
+          "wins": 3,
+          "score": 117
+        },
+        "5p/foundry/seat2": {
+          "games": 6,
+          "wins": 1,
+          "score": 88
+        },
+        "5p/platform_empire/seat4": {
+          "games": 6,
+          "wins": 0,
+          "score": 93
+        },
+        "5p/vertical_empire/seat0": {
+          "games": 6,
+          "wins": 1,
+          "score": 101
+        },
+        "5p/coalition_lab/seat3": {
+          "games": 6,
+          "wins": 1,
+          "score": 98
+        },
+        "5p/foundry/seat1": {
+          "games": 6,
+          "wins": 2,
+          "score": 90
+        },
+        "5p/imperial_research_lab/seat4": {
+          "games": 6,
+          "wins": 1,
+          "score": 101
+        },
+        "5p/safety_laboratory/seat0": {
+          "games": 6,
+          "wins": 2,
+          "score": 102
+        },
+        "5p/platform_empire/seat3": {
+          "games": 6,
+          "wins": 0,
+          "score": 77
+        },
+        "5p/coalition_lab/seat2": {
+          "games": 6,
+          "wins": 1,
+          "score": 96
+        },
+        "5p/coalition_lab/seat1": {
+          "games": 6,
+          "wins": 3,
+          "score": 118
+        },
+        "5p/vertical_empire/seat4": {
+          "games": 6,
+          "wins": 0,
+          "score": 77
+        },
+        "5p/platform_empire/seat2": {
+          "games": 6,
+          "wins": 1,
+          "score": 80
+        },
+        "5p/imperial_research_lab/seat3": {
+          "games": 6,
+          "wins": 2,
+          "score": 93
+        },
+        "5p/foundry/seat0": {
+          "games": 6,
+          "wins": 0,
+          "score": 78
+        }
+      },
+      "winningPaths": {
+        "agi_declaration": 9,
+        "research": 34,
+        "research_adoption_hybrid": 126,
+        "adoption": 14,
+        "research_infrastructure_hybrid": 16,
+        "research_legitimacy_hybrid": 11,
+        "adoption_legitimacy_hybrid": 6,
+        "infrastructure_adoption_hybrid": 3,
+        "infrastructure": 1,
+        "legitimacy": 1
+      },
+      "repeatedCustomerWinnerGames": 67,
+      "repeatedCustomerComparableGames": 72
+    }
+  },
+  "pairedScoreDeltas": [
+    {
+      "seed": "current-era-4-0-0-weighted-0",
+      "playerCount": 4,
+      "scoreBySeat": [
+        {
+          "seat": 2,
+          "delta": -1
+        },
+        {
+          "seat": 3,
+          "delta": 0
+        },
+        {
+          "seat": 1,
+          "delta": 0
+        },
+        {
+          "seat": 0,
+          "delta": 1
+        }
+      ]
+    },
+    {
+      "seed": "current-era-4-0-0-weighted-1",
+      "playerCount": 4,
+      "scoreBySeat": [
+        {
+          "seat": 1,
+          "delta": 3
+        },
+        {
+          "seat": 0,
+          "delta": -1
+        },
+        {
+          "seat": 2,
+          "delta": -1
+        },
+        {
+          "seat": 3,
+          "delta": 0
+        }
+      ]
+    },
+    {
+      "seed": "current-era-4-0-0-weighted-2",
+      "playerCount": 4,
+      "scoreBySeat": [
+        {
+          "seat": 1,
+          "delta": 0
+        },
+        {
+          "seat": 0,
+          "delta": 0
+        },
+        {
+          "seat": 2,
+          "delta": 0
+        },
+        {
+          "seat": 3,
+          "delta": 0
+        }
+      ]
+    },
+    {
+      "seed": "current-era-4-0-0-greedy-0",
+      "playerCount": 4,
+      "scoreBySeat": [
+        {
+          "seat": 1,
+          "delta": 1
+        },
+        {
+          "seat": 0,
+          "delta": -1
+        },
+        {
+          "seat": 2,
+          "delta": 0
+        },
+        {
+          "seat": 3,
+          "delta": 0
+        }
+      ]
+    },
+    {
+      "seed": "current-era-4-0-0-greedy-1",
+      "playerCount": 4,
+      "scoreBySeat": [
+        {
+          "seat": 0,
+          "delta": 1
+        },
+        {
+          "seat": 2,
+          "delta": -1
+        },
+        {
+          "seat": 1,
+          "delta": 1
+        },
+        {
+          "seat": 3,
+          "delta": 0
+        }
+      ]
+    },
+    {
+      "seed": "current-era-4-0-0-greedy-2",
+      "playerCount": 4,
+      "scoreBySeat": [
+        {
+          "seat": 2,
+          "delta": -1
+        },
+        {
+          "seat": 1,
+          "delta": 1
+        },
+        {
+          "seat": 3,
+          "delta": 0
+        },
+        {
+          "seat": 0,
+          "delta": 1
+        }
+      ]
+    },
+    {
+      "seed": "current-era-4-0-1-weighted-0",
+      "playerCount": 4,
+      "scoreBySeat": [
+        {
+          "seat": 2,
+          "delta": 1
+        },
+        {
+          "seat": 3,
+          "delta": -1
+        },
+        {
+          "seat": 0,
+          "delta": 0
+        },
+        {
+          "seat": 1,
+          "delta": -1
+        }
+      ]
+    },
+    {
+      "seed": "current-era-4-0-1-weighted-1",
+      "playerCount": 4,
+      "scoreBySeat": [
+        {
+          "seat": 1,
+          "delta": 2
+        },
+        {
+          "seat": 0,
+          "delta": 1
+        },
+        {
+          "seat": 3,
+          "delta": -1
+        },
+        {
+          "seat": 2,
+          "delta": -2
+        }
+      ]
+    },
+    {
+      "seed": "current-era-4-0-1-weighted-2",
+      "playerCount": 4,
+      "scoreBySeat": [
+        {
+          "seat": 3,
+          "delta": 0
+        },
+        {
+          "seat": 2,
+          "delta": 1
+        },
+        {
+          "seat": 1,
+          "delta": 0
+        },
+        {
+          "seat": 0,
+          "delta": -1
+        }
+      ]
+    },
+    {
+      "seed": "current-era-4-0-1-greedy-0",
+      "playerCount": 4,
+      "scoreBySeat": [
+        {
+          "seat": 3,
+          "delta": 0
+        },
+        {
+          "seat": 1,
+          "delta": 0
+        },
+        {
+          "seat": 0,
+          "delta": 0
+        },
+        {
+          "seat": 2,
+          "delta": 1
+        }
+      ]
+    },
+    {
+      "seed": "current-era-4-0-1-greedy-1",
+      "playerCount": 4,
+      "scoreBySeat": [
+        {
+          "seat": 1,
+          "delta": -1
+        },
+        {
+          "seat": 0,
+          "delta": 1
+        },
+        {
+          "seat": 3,
+          "delta": 0
+        },
+        {
+          "seat": 2,
+          "delta": 0
+        }
+      ]
+    },
+    {
+      "seed": "current-era-4-0-1-greedy-2",
+      "playerCount": 4,
+      "scoreBySeat": [
+        {
+          "seat": 3,
+          "delta": 0
+        },
+        {
+          "seat": 0,
+          "delta": 0
+        },
+        {
+          "seat": 2,
+          "delta": 1
+        },
+        {
+          "seat": 1,
+          "delta": -1
+        }
+      ]
+    },
+    {
+      "seed": "current-era-4-0-2-weighted-0",
+      "playerCount": 4,
+      "scoreBySeat": [
+        {
+          "seat": 3,
+          "delta": 3
+        },
+        {
+          "seat": 1,
+          "delta": -1
+        },
+        {
+          "seat": 2,
+          "delta": -2
+        },
+        {
+          "seat": 0,
+          "delta": -1
+        }
+      ]
+    },
+    {
+      "seed": "current-era-4-0-2-weighted-1",
+      "playerCount": 4,
+      "scoreBySeat": [
+        {
+          "seat": 1,
+          "delta": 2
+        },
+        {
+          "seat": 3,
+          "delta": -1
+        },
+        {
+          "seat": 0,
+          "delta": -1
+        },
+        {
+          "seat": 2,
+          "delta": 1
+        }
+      ]
+    },
+    {
+      "seed": "current-era-4-0-2-weighted-2",
+      "playerCount": 4,
+      "scoreBySeat": [
+        {
+          "seat": 3,
+          "delta": 0
+        },
+        {
+          "seat": 0,
+          "delta": 0
+        },
+        {
+          "seat": 1,
+          "delta": 0
+        },
+        {
+          "seat": 2,
+          "delta": 0
+        }
+      ]
+    },
+    {
+      "seed": "current-era-4-0-2-greedy-0",
+      "playerCount": 4,
+      "scoreBySeat": [
+        {
+          "seat": 3,
+          "delta": 2
+        },
+        {
+          "seat": 0,
+          "delta": 0
+        },
+        {
+          "seat": 1,
+          "delta": 0
+        },
+        {
+          "seat": 2,
+          "delta": -2
+        }
+      ]
+    },
+    {
+      "seed": "current-era-4-0-2-greedy-1",
+      "playerCount": 4,
+      "scoreBySeat": [
+        {
+          "seat": 1,
+          "delta": 1
+        },
+        {
+          "seat": 0,
+          "delta": 2
+        },
+        {
+          "seat": 3,
+          "delta": -1
+        },
+        {
+          "seat": 2,
+          "delta": -2
+        }
+      ]
+    },
+    {
+      "seed": "current-era-4-0-2-greedy-2",
+      "playerCount": 4,
+      "scoreBySeat": [
+        {
+          "seat": 0,
+          "delta": 0
+        },
+        {
+          "seat": 1,
+          "delta": 0
+        },
+        {
+          "seat": 2,
+          "delta": 1
+        },
+        {
+          "seat": 3,
+          "delta": -1
+        }
+      ]
+    },
+    {
+      "seed": "current-era-4-0-3-weighted-0",
+      "playerCount": 4,
+      "scoreBySeat": [
+        {
+          "seat": 1,
+          "delta": 2
+        },
+        {
+          "seat": 3,
+          "delta": 1
+        },
+        {
+          "seat": 0,
+          "delta": 1
+        },
+        {
+          "seat": 2,
+          "delta": -2
+        }
+      ]
+    },
+    {
+      "seed": "current-era-4-0-3-weighted-1",
+      "playerCount": 4,
+      "scoreBySeat": [
+        {
+          "seat": 3,
+          "delta": 1
+        },
+        {
+          "seat": 1,
+          "delta": 1
+        },
+        {
+          "seat": 2,
+          "delta": -1
+        },
+        {
+          "seat": 0,
+          "delta": -1
+        }
+      ]
+    },
+    {
+      "seed": "current-era-4-0-3-weighted-2",
+      "playerCount": 4,
+      "scoreBySeat": [
+        {
+          "seat": 1,
+          "delta": -1
+        },
+        {
+          "seat": 3,
+          "delta": 2
+        },
+        {
+          "seat": 2,
+          "delta": -1
+        },
+        {
+          "seat": 0,
+          "delta": 0
+        }
+      ]
+    },
+    {
+      "seed": "current-era-4-0-3-greedy-0",
+      "playerCount": 4,
+      "scoreBySeat": [
+        {
+          "seat": 1,
+          "delta": 1
+        },
+        {
+          "seat": 0,
+          "delta": 0
+        },
+        {
+          "seat": 3,
+          "delta": 2
+        },
+        {
+          "seat": 2,
+          "delta": -1
+        }
+      ]
+    },
+    {
+      "seed": "current-era-4-0-3-greedy-1",
+      "playerCount": 4,
+      "scoreBySeat": [
+        {
+          "seat": 1,
+          "delta": -1
+        },
+        {
+          "seat": 2,
+          "delta": 1
+        },
+        {
+          "seat": 3,
+          "delta": 2
+        },
+        {
+          "seat": 0,
+          "delta": -2
+        }
+      ]
+    },
+    {
+      "seed": "current-era-4-0-3-greedy-2",
+      "playerCount": 4,
+      "scoreBySeat": [
+        {
+          "seat": 1,
+          "delta": 0
+        },
+        {
+          "seat": 2,
+          "delta": 2
+        },
+        {
+          "seat": 0,
+          "delta": 0
+        },
+        {
+          "seat": 3,
+          "delta": -2
+        }
+      ]
+    },
+    {
+      "seed": "current-era-4-1-0-weighted-0",
+      "playerCount": 4,
+      "scoreBySeat": [
+        {
+          "seat": 2,
+          "delta": 0
+        },
+        {
+          "seat": 3,
+          "delta": 0
+        },
+        {
+          "seat": 1,
+          "delta": -1
+        },
+        {
+          "seat": 0,
+          "delta": 1
+        }
+      ]
+    },
+    {
+      "seed": "current-era-4-1-0-weighted-1",
+      "playerCount": 4,
+      "scoreBySeat": [
+        {
+          "seat": 3,
+          "delta": 1
+        },
+        {
+          "seat": 2,
+          "delta": -2
+        },
+        {
+          "seat": 1,
+          "delta": 0
+        },
+        {
+          "seat": 0,
+          "delta": -1
+        }
+      ]
+    },
+    {
+      "seed": "current-era-4-1-0-weighted-2",
+      "playerCount": 4,
+      "scoreBySeat": [
+        {
+          "seat": 1,
+          "delta": 2
+        },
+        {
+          "seat": 3,
+          "delta": 0
+        },
+        {
+          "seat": 2,
+          "delta": -2
+        },
+        {
+          "seat": 0,
+          "delta": 0
+        }
+      ]
+    },
+    {
+      "seed": "current-era-4-1-0-greedy-0",
+      "playerCount": 4,
+      "scoreBySeat": [
+        {
+          "seat": 2,
+          "delta": 2
+        },
+        {
+          "seat": 3,
+          "delta": 0
+        },
+        {
+          "seat": 1,
+          "delta": -2
+        },
+        {
+          "seat": 0,
+          "delta": 0
+        }
+      ]
+    },
+    {
+      "seed": "current-era-4-1-0-greedy-1",
+      "playerCount": 4,
+      "scoreBySeat": [
+        {
+          "seat": 3,
+          "delta": 2
+        },
+        {
+          "seat": 2,
+          "delta": -1
+        },
+        {
+          "seat": 0,
+          "delta": -1
+        },
+        {
+          "seat": 1,
+          "delta": 0
+        }
+      ]
+    },
+    {
+      "seed": "current-era-4-1-0-greedy-2",
+      "playerCount": 4,
+      "scoreBySeat": [
+        {
+          "seat": 3,
+          "delta": 0
+        },
+        {
+          "seat": 2,
+          "delta": -1
+        },
+        {
+          "seat": 0,
+          "delta": 0
+        },
+        {
+          "seat": 1,
+          "delta": 1
+        }
+      ]
+    },
+    {
+      "seed": "current-era-4-1-1-weighted-0",
+      "playerCount": 4,
+      "scoreBySeat": [
+        {
+          "seat": 2,
+          "delta": 0
+        },
+        {
+          "seat": 3,
+          "delta": 0
+        },
+        {
+          "seat": 1,
+          "delta": 1
+        },
+        {
+          "seat": 0,
+          "delta": -2
+        }
+      ]
+    },
+    {
+      "seed": "current-era-4-1-1-weighted-1",
+      "playerCount": 4,
+      "scoreBySeat": [
+        {
+          "seat": 0,
+          "delta": 0
+        },
+        {
+          "seat": 3,
+          "delta": 0
+        },
+        {
+          "seat": 2,
+          "delta": 0
+        },
+        {
+          "seat": 1,
+          "delta": -1
+        }
+      ]
+    },
+    {
+      "seed": "current-era-4-1-1-weighted-2",
+      "playerCount": 4,
+      "scoreBySeat": [
+        {
+          "seat": 0,
+          "delta": 0
+        },
+        {
+          "seat": 2,
+          "delta": 0
+        },
+        {
+          "seat": 1,
+          "delta": 2
+        },
+        {
+          "seat": 3,
+          "delta": -2
+        }
+      ]
+    },
+    {
+      "seed": "current-era-4-1-1-greedy-0",
+      "playerCount": 4,
+      "scoreBySeat": [
+        {
+          "seat": 2,
+          "delta": 0
+        },
+        {
+          "seat": 0,
+          "delta": -1
+        },
+        {
+          "seat": 3,
+          "delta": 0
+        },
+        {
+          "seat": 1,
+          "delta": 0
+        }
+      ]
+    },
+    {
+      "seed": "current-era-4-1-1-greedy-1",
+      "playerCount": 4,
+      "scoreBySeat": [
+        {
+          "seat": 3,
+          "delta": 1
+        },
+        {
+          "seat": 0,
+          "delta": 0
+        },
+        {
+          "seat": 1,
+          "delta": -1
+        },
+        {
+          "seat": 2,
+          "delta": 0
+        }
+      ]
+    },
+    {
+      "seed": "current-era-4-1-1-greedy-2",
+      "playerCount": 4,
+      "scoreBySeat": [
+        {
+          "seat": 1,
+          "delta": 1
+        },
+        {
+          "seat": 0,
+          "delta": -1
+        },
+        {
+          "seat": 3,
+          "delta": 0
+        },
+        {
+          "seat": 2,
+          "delta": 0
+        }
+      ]
+    },
+    {
+      "seed": "current-era-4-1-2-weighted-0",
+      "playerCount": 4,
+      "scoreBySeat": [
+        {
+          "seat": 3,
+          "delta": 0
+        },
+        {
+          "seat": 2,
+          "delta": 0
+        },
+        {
+          "seat": 0,
+          "delta": 0
+        },
+        {
+          "seat": 1,
+          "delta": -1
+        }
+      ]
+    },
+    {
+      "seed": "current-era-4-1-2-weighted-1",
+      "playerCount": 4,
+      "scoreBySeat": [
+        {
+          "seat": 0,
+          "delta": 2
+        },
+        {
+          "seat": 3,
+          "delta": -2
+        },
+        {
+          "seat": 1,
+          "delta": 0
+        },
+        {
+          "seat": 2,
+          "delta": 0
+        }
+      ]
+    },
+    {
+      "seed": "current-era-4-1-2-weighted-2",
+      "playerCount": 4,
+      "scoreBySeat": [
+        {
+          "seat": 1,
+          "delta": 0
+        },
+        {
+          "seat": 3,
+          "delta": 0
+        },
+        {
+          "seat": 2,
+          "delta": 0
+        },
+        {
+          "seat": 0,
+          "delta": 0
+        }
+      ]
+    },
+    {
+      "seed": "current-era-4-1-2-greedy-0",
+      "playerCount": 4,
+      "scoreBySeat": [
+        {
+          "seat": 3,
+          "delta": 1
+        },
+        {
+          "seat": 0,
+          "delta": 0
+        },
+        {
+          "seat": 1,
+          "delta": -1
+        },
+        {
+          "seat": 2,
+          "delta": -1
+        }
+      ]
+    },
+    {
+      "seed": "current-era-4-1-2-greedy-1",
+      "playerCount": 4,
+      "scoreBySeat": [
+        {
+          "seat": 1,
+          "delta": 0
+        },
+        {
+          "seat": 0,
+          "delta": 0
+        },
+        {
+          "seat": 3,
+          "delta": -1
+        },
+        {
+          "seat": 2,
+          "delta": 1
+        }
+      ]
+    },
+    {
+      "seed": "current-era-4-1-2-greedy-2",
+      "playerCount": 4,
+      "scoreBySeat": [
+        {
+          "seat": 2,
+          "delta": 0
+        },
+        {
+          "seat": 0,
+          "delta": -1
+        },
+        {
+          "seat": 3,
+          "delta": 0
+        },
+        {
+          "seat": 1,
+          "delta": 1
+        }
+      ]
+    },
+    {
+      "seed": "current-era-4-1-3-weighted-0",
+      "playerCount": 4,
+      "scoreBySeat": [
+        {
+          "seat": 2,
+          "delta": 1
+        },
+        {
+          "seat": 0,
+          "delta": -2
+        },
+        {
+          "seat": 3,
+          "delta": 1
+        },
+        {
+          "seat": 1,
+          "delta": 0
+        }
+      ]
+    },
+    {
+      "seed": "current-era-4-1-3-weighted-1",
+      "playerCount": 4,
+      "scoreBySeat": [
+        {
+          "seat": 0,
+          "delta": 1
+        },
+        {
+          "seat": 2,
+          "delta": -2
+        },
+        {
+          "seat": 1,
+          "delta": -1
+        },
+        {
+          "seat": 3,
+          "delta": 0
+        }
+      ]
+    },
+    {
+      "seed": "current-era-4-1-3-weighted-2",
+      "playerCount": 4,
+      "scoreBySeat": [
+        {
+          "seat": 0,
+          "delta": 0
+        },
+        {
+          "seat": 3,
+          "delta": -2
+        },
+        {
+          "seat": 1,
+          "delta": 2
+        },
+        {
+          "seat": 2,
+          "delta": 0
+        }
+      ]
+    },
+    {
+      "seed": "current-era-4-1-3-greedy-0",
+      "playerCount": 4,
+      "scoreBySeat": [
+        {
+          "seat": 0,
+          "delta": 0
+        },
+        {
+          "seat": 3,
+          "delta": 2
+        },
+        {
+          "seat": 2,
+          "delta": 1
+        },
+        {
+          "seat": 1,
+          "delta": -2
+        }
+      ]
+    },
+    {
+      "seed": "current-era-4-1-3-greedy-1",
+      "playerCount": 4,
+      "scoreBySeat": [
+        {
+          "seat": 3,
+          "delta": 3
+        },
+        {
+          "seat": 1,
+          "delta": 0
+        },
+        {
+          "seat": 0,
+          "delta": -2
+        },
+        {
+          "seat": 2,
+          "delta": -1
+        }
+      ]
+    },
+    {
+      "seed": "current-era-4-1-3-greedy-2",
+      "playerCount": 4,
+      "scoreBySeat": [
+        {
+          "seat": 2,
+          "delta": -2
+        },
+        {
+          "seat": 3,
+          "delta": 0
+        },
+        {
+          "seat": 0,
+          "delta": 0
+        },
+        {
+          "seat": 1,
+          "delta": 2
+        }
+      ]
+    },
+    {
+      "seed": "current-era-4-2-0-weighted-0",
+      "playerCount": 4,
+      "scoreBySeat": [
+        {
+          "seat": 2,
+          "delta": 2
+        },
+        {
+          "seat": 0,
+          "delta": -1
+        },
+        {
+          "seat": 1,
+          "delta": -1
+        },
+        {
+          "seat": 3,
+          "delta": 0
+        }
+      ]
+    },
+    {
+      "seed": "current-era-4-2-0-weighted-1",
+      "playerCount": 4,
+      "scoreBySeat": [
+        {
+          "seat": 1,
+          "delta": 1
+        },
+        {
+          "seat": 2,
+          "delta": -1
+        },
+        {
+          "seat": 3,
+          "delta": 0
+        },
+        {
+          "seat": 0,
+          "delta": -1
+        }
+      ]
+    },
+    {
+      "seed": "current-era-4-2-0-weighted-2",
+      "playerCount": 4,
+      "scoreBySeat": [
+        {
+          "seat": 3,
+          "delta": -2
+        },
+        {
+          "seat": 2,
+          "delta": 0
+        },
+        {
+          "seat": 0,
+          "delta": 2
+        },
+        {
+          "seat": 1,
+          "delta": 0
+        }
+      ]
+    },
+    {
+      "seed": "current-era-4-2-0-greedy-0",
+      "playerCount": 4,
+      "scoreBySeat": [
+        {
+          "seat": 1,
+          "delta": 1
+        },
+        {
+          "seat": 2,
+          "delta": 0
+        },
+        {
+          "seat": 3,
+          "delta": -1
+        },
+        {
+          "seat": 0,
+          "delta": 0
+        }
+      ]
+    },
+    {
+      "seed": "current-era-4-2-0-greedy-1",
+      "playerCount": 4,
+      "scoreBySeat": [
+        {
+          "seat": 2,
+          "delta": 2
+        },
+        {
+          "seat": 1,
+          "delta": -1
+        },
+        {
+          "seat": 3,
+          "delta": -1
+        },
+        {
+          "seat": 0,
+          "delta": 0
+        }
+      ]
+    },
+    {
+      "seed": "current-era-4-2-0-greedy-2",
+      "playerCount": 4,
+      "scoreBySeat": [
+        {
+          "seat": 3,
+          "delta": 0
+        },
+        {
+          "seat": 2,
+          "delta": 0
+        },
+        {
+          "seat": 1,
+          "delta": 0
+        },
+        {
+          "seat": 0,
+          "delta": 0
+        }
+      ]
+    },
+    {
+      "seed": "current-era-4-2-1-weighted-0",
+      "playerCount": 4,
+      "scoreBySeat": [
+        {
+          "seat": 2,
+          "delta": 0
+        },
+        {
+          "seat": 0,
+          "delta": 0
+        },
+        {
+          "seat": 3,
+          "delta": -1
+        },
+        {
+          "seat": 1,
+          "delta": 1
+        }
+      ]
+    },
+    {
+      "seed": "current-era-4-2-1-weighted-1",
+      "playerCount": 4,
+      "scoreBySeat": [
+        {
+          "seat": 1,
+          "delta": -1
+        },
+        {
+          "seat": 3,
+          "delta": 2
+        },
+        {
+          "seat": 2,
+          "delta": -1
+        },
+        {
+          "seat": 0,
+          "delta": 0
+        }
+      ]
+    },
+    {
+      "seed": "current-era-4-2-1-weighted-2",
+      "playerCount": 4,
+      "scoreBySeat": [
+        {
+          "seat": 2,
+          "delta": 0
+        },
+        {
+          "seat": 1,
+          "delta": -1
+        },
+        {
+          "seat": 3,
+          "delta": -1
+        },
+        {
+          "seat": 0,
+          "delta": 2
+        }
+      ]
+    },
+    {
+      "seed": "current-era-4-2-1-greedy-0",
+      "playerCount": 4,
+      "scoreBySeat": [
+        {
+          "seat": 2,
+          "delta": 0
+        },
+        {
+          "seat": 3,
+          "delta": 0
+        },
+        {
+          "seat": 1,
+          "delta": 1
+        },
+        {
+          "seat": 0,
+          "delta": 1
+        }
+      ]
+    },
+    {
+      "seed": "current-era-4-2-1-greedy-1",
+      "playerCount": 4,
+      "scoreBySeat": [
+        {
+          "seat": 2,
+          "delta": 0
+        },
+        {
+          "seat": 3,
+          "delta": -1
+        },
+        {
+          "seat": 1,
+          "delta": -1
+        },
+        {
+          "seat": 0,
+          "delta": 2
+        }
+      ]
+    },
+    {
+      "seed": "current-era-4-2-1-greedy-2",
+      "playerCount": 4,
+      "scoreBySeat": [
+        {
+          "seat": 2,
+          "delta": 0
+        },
+        {
+          "seat": 0,
+          "delta": 2
+        },
+        {
+          "seat": 1,
+          "delta": -1
+        },
+        {
+          "seat": 3,
+          "delta": -1
+        }
+      ]
+    },
+    {
+      "seed": "current-era-4-2-2-weighted-0",
+      "playerCount": 4,
+      "scoreBySeat": [
+        {
+          "seat": 1,
+          "delta": 2
+        },
+        {
+          "seat": 2,
+          "delta": 1
+        },
+        {
+          "seat": 0,
+          "delta": -2
+        },
+        {
+          "seat": 3,
+          "delta": -1
+        }
+      ]
+    },
+    {
+      "seed": "current-era-4-2-2-weighted-1",
+      "playerCount": 4,
+      "scoreBySeat": [
+        {
+          "seat": 0,
+          "delta": 2
+        },
+        {
+          "seat": 2,
+          "delta": -1
+        },
+        {
+          "seat": 1,
+          "delta": -1
+        },
+        {
+          "seat": 3,
+          "delta": 0
+        }
+      ]
+    },
+    {
+      "seed": "current-era-4-2-2-weighted-2",
+      "playerCount": 4,
+      "scoreBySeat": [
+        {
+          "seat": 1,
+          "delta": -1
+        },
+        {
+          "seat": 2,
+          "delta": 0
+        },
+        {
+          "seat": 0,
+          "delta": 2
+        },
+        {
+          "seat": 3,
+          "delta": -1
+        }
+      ]
+    },
+    {
+      "seed": "current-era-4-2-2-greedy-0",
+      "playerCount": 4,
+      "scoreBySeat": [
+        {
+          "seat": 3,
+          "delta": 0
+        },
+        {
+          "seat": 1,
+          "delta": 0
+        },
+        {
+          "seat": 2,
+          "delta": -1
+        },
+        {
+          "seat": 0,
+          "delta": 0
+        }
+      ]
+    },
+    {
+      "seed": "current-era-4-2-2-greedy-1",
+      "playerCount": 4,
+      "scoreBySeat": [
+        {
+          "seat": 3,
+          "delta": 2
+        },
+        {
+          "seat": 2,
+          "delta": 0
+        },
+        {
+          "seat": 0,
+          "delta": -2
+        },
+        {
+          "seat": 1,
+          "delta": 0
+        }
+      ]
+    },
+    {
+      "seed": "current-era-4-2-2-greedy-2",
+      "playerCount": 4,
+      "scoreBySeat": [
+        {
+          "seat": 2,
+          "delta": 0
+        },
+        {
+          "seat": 3,
+          "delta": 0
+        },
+        {
+          "seat": 0,
+          "delta": 2
+        },
+        {
+          "seat": 1,
+          "delta": -2
+        }
+      ]
+    },
+    {
+      "seed": "current-era-4-2-3-weighted-0",
+      "playerCount": 4,
+      "scoreBySeat": [
+        {
+          "seat": 2,
+          "delta": 1
+        },
+        {
+          "seat": 3,
+          "delta": -1
+        },
+        {
+          "seat": 0,
+          "delta": -1
+        },
+        {
+          "seat": 1,
+          "delta": -1
+        }
+      ]
+    },
+    {
+      "seed": "current-era-4-2-3-weighted-1",
+      "playerCount": 4,
+      "scoreBySeat": [
+        {
+          "seat": 0,
+          "delta": 2
+        },
+        {
+          "seat": 2,
+          "delta": 1
+        },
+        {
+          "seat": 3,
+          "delta": -2
+        },
+        {
+          "seat": 1,
+          "delta": -1
+        }
+      ]
+    },
+    {
+      "seed": "current-era-4-2-3-weighted-2",
+      "playerCount": 4,
+      "scoreBySeat": [
+        {
+          "seat": 2,
+          "delta": -1
+        },
+        {
+          "seat": 1,
+          "delta": 0
+        },
+        {
+          "seat": 0,
+          "delta": 1
+        },
+        {
+          "seat": 3,
+          "delta": -1
+        }
+      ]
+    },
+    {
+      "seed": "current-era-4-2-3-greedy-0",
+      "playerCount": 4,
+      "scoreBySeat": [
+        {
+          "seat": 3,
+          "delta": 1
+        },
+        {
+          "seat": 1,
+          "delta": -1
+        },
+        {
+          "seat": 0,
+          "delta": -2
+        },
+        {
+          "seat": 2,
+          "delta": 2
+        }
+      ]
+    },
+    {
+      "seed": "current-era-4-2-3-greedy-1",
+      "playerCount": 4,
+      "scoreBySeat": [
+        {
+          "seat": 2,
+          "delta": 2
+        },
+        {
+          "seat": 3,
+          "delta": -2
+        },
+        {
+          "seat": 1,
+          "delta": -1
+        },
+        {
+          "seat": 0,
+          "delta": -1
+        }
+      ]
+    },
+    {
+      "seed": "current-era-4-2-3-greedy-2",
+      "playerCount": 4,
+      "scoreBySeat": [
+        {
+          "seat": 1,
+          "delta": -1
+        },
+        {
+          "seat": 2,
+          "delta": 0
+        },
+        {
+          "seat": 3,
+          "delta": 0
+        },
+        {
+          "seat": 0,
+          "delta": 1
+        }
+      ]
+    },
+    {
+      "seed": "current-era-4-3-0-weighted-0",
+      "playerCount": 4,
+      "scoreBySeat": [
+        {
+          "seat": 0,
+          "delta": 1
+        },
+        {
+          "seat": 1,
+          "delta": -1
+        },
+        {
+          "seat": 3,
+          "delta": -1
+        },
+        {
+          "seat": 2,
+          "delta": -1
+        }
+      ]
+    },
+    {
+      "seed": "current-era-4-3-0-weighted-1",
+      "playerCount": 4,
+      "scoreBySeat": [
+        {
+          "seat": 3,
+          "delta": -2
+        },
+        {
+          "seat": 0,
+          "delta": 2
+        },
+        {
+          "seat": 1,
+          "delta": 0
+        },
+        {
+          "seat": 2,
+          "delta": 0
+        }
+      ]
+    },
+    {
+      "seed": "current-era-4-3-0-weighted-2",
+      "playerCount": 4,
+      "scoreBySeat": [
+        {
+          "seat": 1,
+          "delta": 0
+        },
+        {
+          "seat": 2,
+          "delta": 0
+        },
+        {
+          "seat": 3,
+          "delta": 0
+        },
+        {
+          "seat": 0,
+          "delta": 0
+        }
+      ]
+    },
+    {
+      "seed": "current-era-4-3-0-greedy-0",
+      "playerCount": 4,
+      "scoreBySeat": [
+        {
+          "seat": 2,
+          "delta": 1
+        },
+        {
+          "seat": 1,
+          "delta": 1
+        },
+        {
+          "seat": 3,
+          "delta": -1
+        },
+        {
+          "seat": 0,
+          "delta": 0
+        }
+      ]
+    },
+    {
+      "seed": "current-era-4-3-0-greedy-1",
+      "playerCount": 4,
+      "scoreBySeat": [
+        {
+          "seat": 1,
+          "delta": 0
+        },
+        {
+          "seat": 3,
+          "delta": 0
+        },
+        {
+          "seat": 2,
+          "delta": 1
+        },
+        {
+          "seat": 0,
+          "delta": 0
+        }
+      ]
+    },
+    {
+      "seed": "current-era-4-3-0-greedy-2",
+      "playerCount": 4,
+      "scoreBySeat": [
+        {
+          "seat": 1,
+          "delta": 0
+        },
+        {
+          "seat": 0,
+          "delta": 0
+        },
+        {
+          "seat": 3,
+          "delta": 0
+        },
+        {
+          "seat": 2,
+          "delta": 0
+        }
+      ]
+    },
+    {
+      "seed": "current-era-4-3-1-weighted-0",
+      "playerCount": 4,
+      "scoreBySeat": [
+        {
+          "seat": 1,
+          "delta": 1
+        },
+        {
+          "seat": 0,
+          "delta": -3
+        },
+        {
+          "seat": 2,
+          "delta": -1
+        },
+        {
+          "seat": 3,
+          "delta": 0
+        }
+      ]
+    },
+    {
+      "seed": "current-era-4-3-1-weighted-1",
+      "playerCount": 4,
+      "scoreBySeat": [
+        {
+          "seat": 1,
+          "delta": 2
+        },
+        {
+          "seat": 2,
+          "delta": 0
+        },
+        {
+          "seat": 3,
+          "delta": 0
+        },
+        {
+          "seat": 0,
+          "delta": -1
+        }
+      ]
+    },
+    {
+      "seed": "current-era-4-3-1-weighted-2",
+      "playerCount": 4,
+      "scoreBySeat": [
+        {
+          "seat": 2,
+          "delta": 0
+        },
+        {
+          "seat": 0,
+          "delta": 0
+        },
+        {
+          "seat": 1,
+          "delta": -2
+        },
+        {
+          "seat": 3,
+          "delta": 2
+        }
+      ]
+    },
+    {
+      "seed": "current-era-4-3-1-greedy-0",
+      "playerCount": 4,
+      "scoreBySeat": [
+        {
+          "seat": 2,
+          "delta": 0
+        },
+        {
+          "seat": 0,
+          "delta": 0
+        },
+        {
+          "seat": 3,
+          "delta": 1
+        },
+        {
+          "seat": 1,
+          "delta": 1
+        }
+      ]
+    },
+    {
+      "seed": "current-era-4-3-1-greedy-1",
+      "playerCount": 4,
+      "scoreBySeat": [
+        {
+          "seat": 3,
+          "delta": -2
+        },
+        {
+          "seat": 1,
+          "delta": 1
+        },
+        {
+          "seat": 0,
+          "delta": -1
+        },
+        {
+          "seat": 2,
+          "delta": 2
+        }
+      ]
+    },
+    {
+      "seed": "current-era-4-3-1-greedy-2",
+      "playerCount": 4,
+      "scoreBySeat": [
+        {
+          "seat": 2,
+          "delta": 0
+        },
+        {
+          "seat": 0,
+          "delta": 0
+        },
+        {
+          "seat": 3,
+          "delta": 2
+        },
+        {
+          "seat": 1,
+          "delta": -2
+        }
+      ]
+    },
+    {
+      "seed": "current-era-4-3-2-weighted-0",
+      "playerCount": 4,
+      "scoreBySeat": [
+        {
+          "seat": 0,
+          "delta": 1
+        },
+        {
+          "seat": 1,
+          "delta": 1
+        },
+        {
+          "seat": 3,
+          "delta": 0
+        },
+        {
+          "seat": 2,
+          "delta": -3
+        }
+      ]
+    },
+    {
+      "seed": "current-era-4-3-2-weighted-1",
+      "playerCount": 4,
+      "scoreBySeat": [
+        {
+          "seat": 0,
+          "delta": 2
+        },
+        {
+          "seat": 2,
+          "delta": 0
+        },
+        {
+          "seat": 3,
+          "delta": -1
+        },
+        {
+          "seat": 1,
+          "delta": -1
+        }
+      ]
+    },
+    {
+      "seed": "current-era-4-3-2-weighted-2",
+      "playerCount": 4,
+      "scoreBySeat": [
+        {
+          "seat": 3,
+          "delta": 1
+        },
+        {
+          "seat": 2,
+          "delta": 1
+        },
+        {
+          "seat": 1,
+          "delta": -1
+        },
+        {
+          "seat": 0,
+          "delta": -1
+        }
+      ]
+    },
+    {
+      "seed": "current-era-4-3-2-greedy-0",
+      "playerCount": 4,
+      "scoreBySeat": [
+        {
+          "seat": 2,
+          "delta": 0
+        },
+        {
+          "seat": 3,
+          "delta": 0
+        },
+        {
+          "seat": 0,
+          "delta": 0
+        },
+        {
+          "seat": 1,
+          "delta": 0
+        }
+      ]
+    },
+    {
+      "seed": "current-era-4-3-2-greedy-1",
+      "playerCount": 4,
+      "scoreBySeat": [
+        {
+          "seat": 1,
+          "delta": 2
+        },
+        {
+          "seat": 0,
+          "delta": -1
+        },
+        {
+          "seat": 3,
+          "delta": -1
+        },
+        {
+          "seat": 2,
+          "delta": 0
+        }
+      ]
+    },
+    {
+      "seed": "current-era-4-3-2-greedy-2",
+      "playerCount": 4,
+      "scoreBySeat": [
+        {
+          "seat": 0,
+          "delta": -1
+        },
+        {
+          "seat": 3,
+          "delta": 0
+        },
+        {
+          "seat": 1,
+          "delta": 0
+        },
+        {
+          "seat": 2,
+          "delta": 1
+        }
+      ]
+    },
+    {
+      "seed": "current-era-4-3-3-weighted-0",
+      "playerCount": 4,
+      "scoreBySeat": [
+        {
+          "seat": 1,
+          "delta": 1
+        },
+        {
+          "seat": 2,
+          "delta": -1
+        },
+        {
+          "seat": 0,
+          "delta": -1
+        },
+        {
+          "seat": 3,
+          "delta": 0
+        }
+      ]
+    },
+    {
+      "seed": "current-era-4-3-3-weighted-1",
+      "playerCount": 4,
+      "scoreBySeat": [
+        {
+          "seat": 3,
+          "delta": 1
+        },
+        {
+          "seat": 2,
+          "delta": -1
+        },
+        {
+          "seat": 1,
+          "delta": 1
+        },
+        {
+          "seat": 0,
+          "delta": 0
+        }
+      ]
+    },
+    {
+      "seed": "current-era-4-3-3-weighted-2",
+      "playerCount": 4,
+      "scoreBySeat": [
+        {
+          "seat": 1,
+          "delta": 2
+        },
+        {
+          "seat": 3,
+          "delta": -1
+        },
+        {
+          "seat": 0,
+          "delta": -1
+        },
+        {
+          "seat": 2,
+          "delta": -1
+        }
+      ]
+    },
+    {
+      "seed": "current-era-4-3-3-greedy-0",
+      "playerCount": 4,
+      "scoreBySeat": [
+        {
+          "seat": 2,
+          "delta": -1
+        },
+        {
+          "seat": 1,
+          "delta": 0
+        },
+        {
+          "seat": 0,
+          "delta": 1
+        },
+        {
+          "seat": 3,
+          "delta": 0
+        }
+      ]
+    },
+    {
+      "seed": "current-era-4-3-3-greedy-1",
+      "playerCount": 4,
+      "scoreBySeat": [
+        {
+          "seat": 2,
+          "delta": -1
+        },
+        {
+          "seat": 3,
+          "delta": 1
+        },
+        {
+          "seat": 0,
+          "delta": 0
+        },
+        {
+          "seat": 1,
+          "delta": 0
+        }
+      ]
+    },
+    {
+      "seed": "current-era-4-3-3-greedy-2",
+      "playerCount": 4,
+      "scoreBySeat": [
+        {
+          "seat": 1,
+          "delta": -1
+        },
+        {
+          "seat": 2,
+          "delta": 0
+        },
+        {
+          "seat": 0,
+          "delta": -1
+        },
+        {
+          "seat": 3,
+          "delta": 2
+        }
+      ]
+    },
+    {
+      "seed": "current-era-4-4-0-weighted-0",
+      "playerCount": 4,
+      "scoreBySeat": [
+        {
+          "seat": 2,
+          "delta": 2
+        },
+        {
+          "seat": 3,
+          "delta": 0
+        },
+        {
+          "seat": 1,
+          "delta": -2
+        },
+        {
+          "seat": 0,
+          "delta": -2
+        }
+      ]
+    },
+    {
+      "seed": "current-era-4-4-0-weighted-1",
+      "playerCount": 4,
+      "scoreBySeat": [
+        {
+          "seat": 2,
+          "delta": 3
+        },
+        {
+          "seat": 0,
+          "delta": 0
+        },
+        {
+          "seat": 3,
+          "delta": -2
+        },
+        {
+          "seat": 1,
+          "delta": 0
+        }
+      ]
+    },
+    {
+      "seed": "current-era-4-4-0-weighted-2",
+      "playerCount": 4,
+      "scoreBySeat": [
+        {
+          "seat": 2,
+          "delta": -1
+        },
+        {
+          "seat": 0,
+          "delta": 0
+        },
+        {
+          "seat": 1,
+          "delta": -1
+        },
+        {
+          "seat": 3,
+          "delta": 1
+        }
+      ]
+    },
+    {
+      "seed": "current-era-4-4-0-greedy-0",
+      "playerCount": 4,
+      "scoreBySeat": [
+        {
+          "seat": 1,
+          "delta": 1
+        },
+        {
+          "seat": 3,
+          "delta": 0
+        },
+        {
+          "seat": 2,
+          "delta": -1
+        },
+        {
+          "seat": 0,
+          "delta": 0
+        }
+      ]
+    },
+    {
+      "seed": "current-era-4-4-0-greedy-1",
+      "playerCount": 4,
+      "scoreBySeat": [
+        {
+          "seat": 2,
+          "delta": 0
+        },
+        {
+          "seat": 0,
+          "delta": 0
+        },
+        {
+          "seat": 3,
+          "delta": 0
+        },
+        {
+          "seat": 1,
+          "delta": 0
+        }
+      ]
+    },
+    {
+      "seed": "current-era-4-4-0-greedy-2",
+      "playerCount": 4,
+      "scoreBySeat": [
+        {
+          "seat": 0,
+          "delta": 0
+        },
+        {
+          "seat": 3,
+          "delta": 0
+        },
+        {
+          "seat": 1,
+          "delta": 0
+        },
+        {
+          "seat": 2,
+          "delta": 0
+        }
+      ]
+    },
+    {
+      "seed": "current-era-4-4-1-weighted-0",
+      "playerCount": 4,
+      "scoreBySeat": [
+        {
+          "seat": 1,
+          "delta": -1
+        },
+        {
+          "seat": 2,
+          "delta": 0
+        },
+        {
+          "seat": 0,
+          "delta": 1
+        },
+        {
+          "seat": 3,
+          "delta": 0
+        }
+      ]
+    },
+    {
+      "seed": "current-era-4-4-1-weighted-1",
+      "playerCount": 4,
+      "scoreBySeat": [
+        {
+          "seat": 2,
+          "delta": 2
+        },
+        {
+          "seat": 3,
+          "delta": 0
+        },
+        {
+          "seat": 0,
+          "delta": -3
+        },
+        {
+          "seat": 1,
+          "delta": 0
+        }
+      ]
+    },
+    {
+      "seed": "current-era-4-4-1-weighted-2",
+      "playerCount": 4,
+      "scoreBySeat": [
+        {
+          "seat": 0,
+          "delta": 1
+        },
+        {
+          "seat": 1,
+          "delta": 0
+        },
+        {
+          "seat": 2,
+          "delta": 0
+        },
+        {
+          "seat": 3,
+          "delta": -1
+        }
+      ]
+    },
+    {
+      "seed": "current-era-4-4-1-greedy-0",
+      "playerCount": 4,
+      "scoreBySeat": [
+        {
+          "seat": 0,
+          "delta": 1
+        },
+        {
+          "seat": 3,
+          "delta": -1
+        },
+        {
+          "seat": 2,
+          "delta": 0
+        },
+        {
+          "seat": 1,
+          "delta": 0
+        }
+      ]
+    },
+    {
+      "seed": "current-era-4-4-1-greedy-1",
+      "playerCount": 4,
+      "scoreBySeat": [
+        {
+          "seat": 0,
+          "delta": 0
+        },
+        {
+          "seat": 1,
+          "delta": 1
+        },
+        {
+          "seat": 2,
+          "delta": -1
+        },
+        {
+          "seat": 3,
+          "delta": -1
+        }
+      ]
+    },
+    {
+      "seed": "current-era-4-4-1-greedy-2",
+      "playerCount": 4,
+      "scoreBySeat": [
+        {
+          "seat": 2,
+          "delta": 2
+        },
+        {
+          "seat": 0,
+          "delta": 0
+        },
+        {
+          "seat": 1,
+          "delta": 0
+        },
+        {
+          "seat": 3,
+          "delta": 0
+        }
+      ]
+    },
+    {
+      "seed": "current-era-4-4-2-weighted-0",
+      "playerCount": 4,
+      "scoreBySeat": [
+        {
+          "seat": 2,
+          "delta": 1
+        },
+        {
+          "seat": 0,
+          "delta": -1
+        },
+        {
+          "seat": 3,
+          "delta": -1
+        },
+        {
+          "seat": 1,
+          "delta": -1
+        }
+      ]
+    },
+    {
+      "seed": "current-era-4-4-2-weighted-1",
+      "playerCount": 4,
+      "scoreBySeat": [
+        {
+          "seat": 2,
+          "delta": 0
+        },
+        {
+          "seat": 0,
+          "delta": 1
+        },
+        {
+          "seat": 1,
+          "delta": -2
+        },
+        {
+          "seat": 3,
+          "delta": -1
+        }
+      ]
+    },
+    {
+      "seed": "current-era-4-4-2-weighted-2",
+      "playerCount": 4,
+      "scoreBySeat": [
+        {
+          "seat": 2,
+          "delta": 0
+        },
+        {
+          "seat": 3,
+          "delta": -1
+        },
+        {
+          "seat": 0,
+          "delta": 0
+        },
+        {
+          "seat": 1,
+          "delta": 1
+        }
+      ]
+    },
+    {
+      "seed": "current-era-4-4-2-greedy-0",
+      "playerCount": 4,
+      "scoreBySeat": [
+        {
+          "seat": 1,
+          "delta": 1
+        },
+        {
+          "seat": 0,
+          "delta": -1
+        },
+        {
+          "seat": 2,
+          "delta": 1
+        },
+        {
+          "seat": 3,
+          "delta": 0
+        }
+      ]
+    },
+    {
+      "seed": "current-era-4-4-2-greedy-1",
+      "playerCount": 4,
+      "scoreBySeat": [
+        {
+          "seat": 3,
+          "delta": 0
+        },
+        {
+          "seat": 2,
+          "delta": 1
+        },
+        {
+          "seat": 0,
+          "delta": 0
+        },
+        {
+          "seat": 1,
+          "delta": -1
+        }
+      ]
+    },
+    {
+      "seed": "current-era-4-4-2-greedy-2",
+      "playerCount": 4,
+      "scoreBySeat": [
+        {
+          "seat": 2,
+          "delta": 0
+        },
+        {
+          "seat": 3,
+          "delta": 0
+        },
+        {
+          "seat": 0,
+          "delta": 0
+        },
+        {
+          "seat": 1,
+          "delta": 0
+        }
+      ]
+    },
+    {
+      "seed": "current-era-4-4-3-weighted-0",
+      "playerCount": 4,
+      "scoreBySeat": [
+        {
+          "seat": 0,
+          "delta": 4
+        },
+        {
+          "seat": 2,
+          "delta": -1
+        },
+        {
+          "seat": 3,
+          "delta": -3
+        },
+        {
+          "seat": 1,
+          "delta": -1
+        }
+      ]
+    },
+    {
+      "seed": "current-era-4-4-3-weighted-1",
+      "playerCount": 4,
+      "scoreBySeat": [
+        {
+          "seat": 0,
+          "delta": 0
+        },
+        {
+          "seat": 2,
+          "delta": -1
+        },
+        {
+          "seat": 3,
+          "delta": 1
+        },
+        {
+          "seat": 1,
+          "delta": 0
+        }
+      ]
+    },
+    {
+      "seed": "current-era-4-4-3-weighted-2",
+      "playerCount": 4,
+      "scoreBySeat": [
+        {
+          "seat": 0,
+          "delta": 0
+        },
+        {
+          "seat": 3,
+          "delta": 0
+        },
+        {
+          "seat": 1,
+          "delta": 0
+        },
+        {
+          "seat": 2,
+          "delta": 0
+        }
+      ]
+    },
+    {
+      "seed": "current-era-4-4-3-greedy-0",
+      "playerCount": 4,
+      "scoreBySeat": [
+        {
+          "seat": 2,
+          "delta": 2
+        },
+        {
+          "seat": 3,
+          "delta": -1
+        },
+        {
+          "seat": 0,
+          "delta": 0
+        },
+        {
+          "seat": 1,
+          "delta": -2
+        }
+      ]
+    },
+    {
+      "seed": "current-era-4-4-3-greedy-1",
+      "playerCount": 4,
+      "scoreBySeat": [
+        {
+          "seat": 3,
+          "delta": 1
+        },
+        {
+          "seat": 0,
+          "delta": 0
+        },
+        {
+          "seat": 1,
+          "delta": 0
+        },
+        {
+          "seat": 2,
+          "delta": -1
+        }
+      ]
+    },
+    {
+      "seed": "current-era-4-4-3-greedy-2",
+      "playerCount": 4,
+      "scoreBySeat": [
+        {
+          "seat": 0,
+          "delta": -1
+        },
+        {
+          "seat": 2,
+          "delta": 2
+        },
+        {
+          "seat": 3,
+          "delta": -1
+        },
+        {
+          "seat": 1,
+          "delta": -1
+        }
+      ]
+    },
+    {
+      "seed": "current-era-4-5-0-weighted-0",
+      "playerCount": 4,
+      "scoreBySeat": [
+        {
+          "seat": 1,
+          "delta": -1
+        },
+        {
+          "seat": 3,
+          "delta": 0
+        },
+        {
+          "seat": 2,
+          "delta": 1
+        },
+        {
+          "seat": 0,
+          "delta": 0
+        }
+      ]
+    },
+    {
+      "seed": "current-era-4-5-0-weighted-1",
+      "playerCount": 4,
+      "scoreBySeat": [
+        {
+          "seat": 2,
+          "delta": 2
+        },
+        {
+          "seat": 0,
+          "delta": -1
+        },
+        {
+          "seat": 1,
+          "delta": 0
+        },
+        {
+          "seat": 3,
+          "delta": 0
+        }
+      ]
+    },
+    {
+      "seed": "current-era-4-5-0-weighted-2",
+      "playerCount": 4,
+      "scoreBySeat": [
+        {
+          "seat": 0,
+          "delta": 0
+        },
+        {
+          "seat": 3,
+          "delta": 0
+        },
+        {
+          "seat": 2,
+          "delta": 0
+        },
+        {
+          "seat": 1,
+          "delta": 0
+        }
+      ]
+    },
+    {
+      "seed": "current-era-4-5-0-greedy-0",
+      "playerCount": 4,
+      "scoreBySeat": [
+        {
+          "seat": 2,
+          "delta": 0
+        },
+        {
+          "seat": 3,
+          "delta": 0
+        },
+        {
+          "seat": 1,
+          "delta": -1
+        },
+        {
+          "seat": 0,
+          "delta": -1
+        }
+      ]
+    },
+    {
+      "seed": "current-era-4-5-0-greedy-1",
+      "playerCount": 4,
+      "scoreBySeat": [
+        {
+          "seat": 1,
+          "delta": 1
+        },
+        {
+          "seat": 0,
+          "delta": -1
+        },
+        {
+          "seat": 2,
+          "delta": 0
+        },
+        {
+          "seat": 3,
+          "delta": -1
+        }
+      ]
+    },
+    {
+      "seed": "current-era-4-5-0-greedy-2",
+      "playerCount": 4,
+      "scoreBySeat": [
+        {
+          "seat": 1,
+          "delta": 0
+        },
+        {
+          "seat": 3,
+          "delta": -1
+        },
+        {
+          "seat": 2,
+          "delta": 0
+        },
+        {
+          "seat": 0,
+          "delta": 0
+        }
+      ]
+    },
+    {
+      "seed": "current-era-4-5-1-weighted-0",
+      "playerCount": 4,
+      "scoreBySeat": [
+        {
+          "seat": 1,
+          "delta": 0
+        },
+        {
+          "seat": 3,
+          "delta": 1
+        },
+        {
+          "seat": 0,
+          "delta": 0
+        },
+        {
+          "seat": 2,
+          "delta": 0
+        }
+      ]
+    },
+    {
+      "seed": "current-era-4-5-1-weighted-1",
+      "playerCount": 4,
+      "scoreBySeat": [
+        {
+          "seat": 1,
+          "delta": 2
+        },
+        {
+          "seat": 2,
+          "delta": -2
+        },
+        {
+          "seat": 3,
+          "delta": 0
+        },
+        {
+          "seat": 0,
+          "delta": 0
+        }
+      ]
+    },
+    {
+      "seed": "current-era-4-5-1-weighted-2",
+      "playerCount": 4,
+      "scoreBySeat": [
+        {
+          "seat": 0,
+          "delta": -1
+        },
+        {
+          "seat": 3,
+          "delta": -1
+        },
+        {
+          "seat": 1,
+          "delta": 0
+        },
+        {
+          "seat": 2,
+          "delta": 1
+        }
+      ]
+    },
+    {
+      "seed": "current-era-4-5-1-greedy-0",
+      "playerCount": 4,
+      "scoreBySeat": [
+        {
+          "seat": 3,
+          "delta": 1
+        },
+        {
+          "seat": 1,
+          "delta": -1
+        },
+        {
+          "seat": 0,
+          "delta": 1
+        },
+        {
+          "seat": 2,
+          "delta": 0
+        }
+      ]
+    },
+    {
+      "seed": "current-era-4-5-1-greedy-1",
+      "playerCount": 4,
+      "scoreBySeat": [
+        {
+          "seat": 1,
+          "delta": 0
+        },
+        {
+          "seat": 2,
+          "delta": 0
+        },
+        {
+          "seat": 3,
+          "delta": 0
+        },
+        {
+          "seat": 0,
+          "delta": 0
+        }
+      ]
+    },
+    {
+      "seed": "current-era-4-5-1-greedy-2",
+      "playerCount": 4,
+      "scoreBySeat": [
+        {
+          "seat": 2,
+          "delta": 0
+        },
+        {
+          "seat": 3,
+          "delta": 0
+        },
+        {
+          "seat": 0,
+          "delta": 0
+        },
+        {
+          "seat": 1,
+          "delta": 0
+        }
+      ]
+    },
+    {
+      "seed": "current-era-4-5-2-weighted-0",
+      "playerCount": 4,
+      "scoreBySeat": [
+        {
+          "seat": 1,
+          "delta": 1
+        },
+        {
+          "seat": 0,
+          "delta": -2
+        },
+        {
+          "seat": 3,
+          "delta": -1
+        },
+        {
+          "seat": 2,
+          "delta": -1
+        }
+      ]
+    },
+    {
+      "seed": "current-era-4-5-2-weighted-1",
+      "playerCount": 4,
+      "scoreBySeat": [
+        {
+          "seat": 2,
+          "delta": 2
+        },
+        {
+          "seat": 1,
+          "delta": -1
+        },
+        {
+          "seat": 3,
+          "delta": -1
+        },
+        {
+          "seat": 0,
+          "delta": 0
+        }
+      ]
+    },
+    {
+      "seed": "current-era-4-5-2-weighted-2",
+      "playerCount": 4,
+      "scoreBySeat": [
+        {
+          "seat": 2,
+          "delta": 2
+        },
+        {
+          "seat": 1,
+          "delta": -2
+        },
+        {
+          "seat": 3,
+          "delta": 0
+        },
+        {
+          "seat": 0,
+          "delta": 0
+        }
+      ]
+    },
+    {
+      "seed": "current-era-4-5-2-greedy-0",
+      "playerCount": 4,
+      "scoreBySeat": [
+        {
+          "seat": 1,
+          "delta": 0
+        },
+        {
+          "seat": 2,
+          "delta": 0
+        },
+        {
+          "seat": 0,
+          "delta": -1
+        },
+        {
+          "seat": 3,
+          "delta": 0
+        }
+      ]
+    },
+    {
+      "seed": "current-era-4-5-2-greedy-1",
+      "playerCount": 4,
+      "scoreBySeat": [
+        {
+          "seat": 1,
+          "delta": 1
+        },
+        {
+          "seat": 2,
+          "delta": 1
+        },
+        {
+          "seat": 3,
+          "delta": -3
+        },
+        {
+          "seat": 0,
+          "delta": -1
+        }
+      ]
+    },
+    {
+      "seed": "current-era-4-5-2-greedy-2",
+      "playerCount": 4,
+      "scoreBySeat": [
+        {
+          "seat": 2,
+          "delta": 0
+        },
+        {
+          "seat": 1,
+          "delta": -1
+        },
+        {
+          "seat": 3,
+          "delta": -1
+        },
+        {
+          "seat": 0,
+          "delta": 1
+        }
+      ]
+    },
+    {
+      "seed": "current-era-4-5-3-weighted-0",
+      "playerCount": 4,
+      "scoreBySeat": [
+        {
+          "seat": 2,
+          "delta": 0
+        },
+        {
+          "seat": 1,
+          "delta": 0
+        },
+        {
+          "seat": 3,
+          "delta": 1
+        },
+        {
+          "seat": 0,
+          "delta": 0
+        }
+      ]
+    },
+    {
+      "seed": "current-era-4-5-3-weighted-1",
+      "playerCount": 4,
+      "scoreBySeat": [
+        {
+          "seat": 1,
+          "delta": -2
+        },
+        {
+          "seat": 2,
+          "delta": 2
+        },
+        {
+          "seat": 0,
+          "delta": 0
+        },
+        {
+          "seat": 3,
+          "delta": 0
+        }
+      ]
+    },
+    {
+      "seed": "current-era-4-5-3-weighted-2",
+      "playerCount": 4,
+      "scoreBySeat": [
+        {
+          "seat": 3,
+          "delta": 1
+        },
+        {
+          "seat": 1,
+          "delta": -1
+        },
+        {
+          "seat": 0,
+          "delta": 0
+        },
+        {
+          "seat": 2,
+          "delta": 0
+        }
+      ]
+    },
+    {
+      "seed": "current-era-4-5-3-greedy-0",
+      "playerCount": 4,
+      "scoreBySeat": [
+        {
+          "seat": 0,
+          "delta": 1
+        },
+        {
+          "seat": 2,
+          "delta": -1
+        },
+        {
+          "seat": 1,
+          "delta": 1
+        },
+        {
+          "seat": 3,
+          "delta": 0
+        }
+      ]
+    },
+    {
+      "seed": "current-era-4-5-3-greedy-1",
+      "playerCount": 4,
+      "scoreBySeat": [
+        {
+          "seat": 2,
+          "delta": 1
+        },
+        {
+          "seat": 0,
+          "delta": 1
+        },
+        {
+          "seat": 3,
+          "delta": -1
+        },
+        {
+          "seat": 1,
+          "delta": -1
+        }
+      ]
+    },
+    {
+      "seed": "current-era-4-5-3-greedy-2",
+      "playerCount": 4,
+      "scoreBySeat": [
+        {
+          "seat": 3,
+          "delta": -1
+        },
+        {
+          "seat": 2,
+          "delta": 0
+        },
+        {
+          "seat": 1,
+          "delta": 1
+        },
+        {
+          "seat": 0,
+          "delta": -1
+        }
+      ]
+    },
+    {
+      "seed": "current-era-3-0-0-weighted-0",
+      "playerCount": 3,
+      "scoreBySeat": [
+        {
+          "seat": 2,
+          "delta": -1
+        },
+        {
+          "seat": 0,
+          "delta": -1
+        },
+        {
+          "seat": 1,
+          "delta": 2
+        }
+      ]
+    },
+    {
+      "seed": "current-era-3-0-0-weighted-1",
+      "playerCount": 3,
+      "scoreBySeat": [
+        {
+          "seat": 2,
+          "delta": 0
+        },
+        {
+          "seat": 1,
+          "delta": 0
+        },
+        {
+          "seat": 0,
+          "delta": 0
+        }
+      ]
+    },
+    {
+      "seed": "current-era-3-0-0-weighted-2",
+      "playerCount": 3,
+      "scoreBySeat": [
+        {
+          "seat": 1,
+          "delta": 1
+        },
+        {
+          "seat": 2,
+          "delta": -1
+        },
+        {
+          "seat": 0,
+          "delta": 0
+        }
+      ]
+    },
+    {
+      "seed": "current-era-3-0-0-greedy-0",
+      "playerCount": 3,
+      "scoreBySeat": [
+        {
+          "seat": 0,
+          "delta": 2
+        },
+        {
+          "seat": 2,
+          "delta": -1
+        },
+        {
+          "seat": 1,
+          "delta": 0
+        }
+      ]
+    },
+    {
+      "seed": "current-era-3-0-0-greedy-1",
+      "playerCount": 3,
+      "scoreBySeat": [
+        {
+          "seat": 0,
+          "delta": 1
+        },
+        {
+          "seat": 1,
+          "delta": -1
+        },
+        {
+          "seat": 2,
+          "delta": 0
+        }
+      ]
+    },
+    {
+      "seed": "current-era-3-0-0-greedy-2",
+      "playerCount": 3,
+      "scoreBySeat": [
+        {
+          "seat": 0,
+          "delta": 0
+        },
+        {
+          "seat": 1,
+          "delta": 0
+        },
+        {
+          "seat": 2,
+          "delta": 0
+        }
+      ]
+    },
+    {
+      "seed": "current-era-3-1-0-weighted-0",
+      "playerCount": 3,
+      "scoreBySeat": [
+        {
+          "seat": 0,
+          "delta": 1
+        },
+        {
+          "seat": 1,
+          "delta": -1
+        },
+        {
+          "seat": 2,
+          "delta": 0
+        }
+      ]
+    },
+    {
+      "seed": "current-era-3-1-0-weighted-1",
+      "playerCount": 3,
+      "scoreBySeat": [
+        {
+          "seat": 2,
+          "delta": 0
+        },
+        {
+          "seat": 1,
+          "delta": 0
+        },
+        {
+          "seat": 0,
+          "delta": 0
+        }
+      ]
+    },
+    {
+      "seed": "current-era-3-1-0-weighted-2",
+      "playerCount": 3,
+      "scoreBySeat": [
+        {
+          "seat": 0,
+          "delta": -1
+        },
+        {
+          "seat": 2,
+          "delta": 0
+        },
+        {
+          "seat": 1,
+          "delta": 1
+        }
+      ]
+    },
+    {
+      "seed": "current-era-3-1-0-greedy-0",
+      "playerCount": 3,
+      "scoreBySeat": [
+        {
+          "seat": 0,
+          "delta": 0
+        },
+        {
+          "seat": 2,
+          "delta": 0
+        },
+        {
+          "seat": 1,
+          "delta": 0
+        }
+      ]
+    },
+    {
+      "seed": "current-era-3-1-0-greedy-1",
+      "playerCount": 3,
+      "scoreBySeat": [
+        {
+          "seat": 1,
+          "delta": 0
+        },
+        {
+          "seat": 0,
+          "delta": 1
+        },
+        {
+          "seat": 2,
+          "delta": -2
+        }
+      ]
+    },
+    {
+      "seed": "current-era-3-1-0-greedy-2",
+      "playerCount": 3,
+      "scoreBySeat": [
+        {
+          "seat": 2,
+          "delta": 1
+        },
+        {
+          "seat": 0,
+          "delta": -1
+        },
+        {
+          "seat": 1,
+          "delta": -1
+        }
+      ]
+    },
+    {
+      "seed": "current-era-3-2-0-weighted-0",
+      "playerCount": 3,
+      "scoreBySeat": [
+        {
+          "seat": 2,
+          "delta": 2
+        },
+        {
+          "seat": 0,
+          "delta": -1
+        },
+        {
+          "seat": 1,
+          "delta": -1
+        }
+      ]
+    },
+    {
+      "seed": "current-era-3-2-0-weighted-1",
+      "playerCount": 3,
+      "scoreBySeat": [
+        {
+          "seat": 1,
+          "delta": 2
+        },
+        {
+          "seat": 2,
+          "delta": -1
+        },
+        {
+          "seat": 0,
+          "delta": -1
+        }
+      ]
+    },
+    {
+      "seed": "current-era-3-2-0-weighted-2",
+      "playerCount": 3,
+      "scoreBySeat": [
+        {
+          "seat": 2,
+          "delta": 0
+        },
+        {
+          "seat": 1,
+          "delta": -2
+        },
+        {
+          "seat": 0,
+          "delta": 2
+        }
+      ]
+    },
+    {
+      "seed": "current-era-3-2-0-greedy-0",
+      "playerCount": 3,
+      "scoreBySeat": [
+        {
+          "seat": 1,
+          "delta": 1
+        },
+        {
+          "seat": 2,
+          "delta": -1
+        },
+        {
+          "seat": 0,
+          "delta": 0
+        }
+      ]
+    },
+    {
+      "seed": "current-era-3-2-0-greedy-1",
+      "playerCount": 3,
+      "scoreBySeat": [
+        {
+          "seat": 1,
+          "delta": 0
+        },
+        {
+          "seat": 2,
+          "delta": 0
+        },
+        {
+          "seat": 0,
+          "delta": 0
+        }
+      ]
+    },
+    {
+      "seed": "current-era-3-2-0-greedy-2",
+      "playerCount": 3,
+      "scoreBySeat": [
+        {
+          "seat": 1,
+          "delta": -1
+        },
+        {
+          "seat": 2,
+          "delta": 0
+        },
+        {
+          "seat": 0,
+          "delta": 1
+        }
+      ]
+    },
+    {
+      "seed": "current-era-3-3-0-weighted-0",
+      "playerCount": 3,
+      "scoreBySeat": [
+        {
+          "seat": 2,
+          "delta": 1
+        },
+        {
+          "seat": 1,
+          "delta": -1
+        },
+        {
+          "seat": 0,
+          "delta": -1
+        }
+      ]
+    },
+    {
+      "seed": "current-era-3-3-0-weighted-1",
+      "playerCount": 3,
+      "scoreBySeat": [
+        {
+          "seat": 0,
+          "delta": 2
+        },
+        {
+          "seat": 1,
+          "delta": -1
+        },
+        {
+          "seat": 2,
+          "delta": -1
+        }
+      ]
+    },
+    {
+      "seed": "current-era-3-3-0-weighted-2",
+      "playerCount": 3,
+      "scoreBySeat": [
+        {
+          "seat": 1,
+          "delta": 0
+        },
+        {
+          "seat": 0,
+          "delta": 0
+        },
+        {
+          "seat": 2,
+          "delta": 0
+        }
+      ]
+    },
+    {
+      "seed": "current-era-3-3-0-greedy-0",
+      "playerCount": 3,
+      "scoreBySeat": [
+        {
+          "seat": 1,
+          "delta": 0
+        },
+        {
+          "seat": 2,
+          "delta": 0
+        },
+        {
+          "seat": 0,
+          "delta": 1
+        }
+      ]
+    },
+    {
+      "seed": "current-era-3-3-0-greedy-1",
+      "playerCount": 3,
+      "scoreBySeat": [
+        {
+          "seat": 1,
+          "delta": 0
+        },
+        {
+          "seat": 0,
+          "delta": 0
+        },
+        {
+          "seat": 2,
+          "delta": 0
+        }
+      ]
+    },
+    {
+      "seed": "current-era-3-3-0-greedy-2",
+      "playerCount": 3,
+      "scoreBySeat": [
+        {
+          "seat": 2,
+          "delta": 2
+        },
+        {
+          "seat": 1,
+          "delta": 0
+        },
+        {
+          "seat": 0,
+          "delta": -2
+        }
+      ]
+    },
+    {
+      "seed": "current-era-3-4-0-weighted-0",
+      "playerCount": 3,
+      "scoreBySeat": [
+        {
+          "seat": 0,
+          "delta": 0
+        },
+        {
+          "seat": 1,
+          "delta": -2
+        },
+        {
+          "seat": 2,
+          "delta": -1
+        }
+      ]
+    },
+    {
+      "seed": "current-era-3-4-0-weighted-1",
+      "playerCount": 3,
+      "scoreBySeat": [
+        {
+          "seat": 0,
+          "delta": 1
+        },
+        {
+          "seat": 2,
+          "delta": -1
+        },
+        {
+          "seat": 1,
+          "delta": 0
+        }
+      ]
+    },
+    {
+      "seed": "current-era-3-4-0-weighted-2",
+      "playerCount": 3,
+      "scoreBySeat": [
+        {
+          "seat": 2,
+          "delta": 0
+        },
+        {
+          "seat": 0,
+          "delta": 0
+        },
+        {
+          "seat": 1,
+          "delta": 0
+        }
+      ]
+    },
+    {
+      "seed": "current-era-3-4-0-greedy-0",
+      "playerCount": 3,
+      "scoreBySeat": [
+        {
+          "seat": 1,
+          "delta": 1
+        },
+        {
+          "seat": 2,
+          "delta": -1
+        },
+        {
+          "seat": 0,
+          "delta": -1
+        }
+      ]
+    },
+    {
+      "seed": "current-era-3-4-0-greedy-1",
+      "playerCount": 3,
+      "scoreBySeat": [
+        {
+          "seat": 2,
+          "delta": -3
+        },
+        {
+          "seat": 0,
+          "delta": 3
+        },
+        {
+          "seat": 1,
+          "delta": 0
+        }
+      ]
+    },
+    {
+      "seed": "current-era-3-4-0-greedy-2",
+      "playerCount": 3,
+      "scoreBySeat": [
+        {
+          "seat": 0,
+          "delta": -2
+        },
+        {
+          "seat": 1,
+          "delta": 1
+        },
+        {
+          "seat": 2,
+          "delta": 1
+        }
+      ]
+    },
+    {
+      "seed": "current-era-3-5-0-weighted-0",
+      "playerCount": 3,
+      "scoreBySeat": [
+        {
+          "seat": 1,
+          "delta": -1
+        },
+        {
+          "seat": 2,
+          "delta": 1
+        },
+        {
+          "seat": 0,
+          "delta": -1
+        }
+      ]
+    },
+    {
+      "seed": "current-era-3-5-0-weighted-1",
+      "playerCount": 3,
+      "scoreBySeat": [
+        {
+          "seat": 1,
+          "delta": 1
+        },
+        {
+          "seat": 0,
+          "delta": -1
+        },
+        {
+          "seat": 2,
+          "delta": -1
+        }
+      ]
+    },
+    {
+      "seed": "current-era-3-5-0-weighted-2",
+      "playerCount": 3,
+      "scoreBySeat": [
+        {
+          "seat": 0,
+          "delta": 0
+        },
+        {
+          "seat": 1,
+          "delta": 0
+        },
+        {
+          "seat": 2,
+          "delta": 0
+        }
+      ]
+    },
+    {
+      "seed": "current-era-3-5-0-greedy-0",
+      "playerCount": 3,
+      "scoreBySeat": [
+        {
+          "seat": 2,
+          "delta": 3
+        },
+        {
+          "seat": 0,
+          "delta": -3
+        },
+        {
+          "seat": 1,
+          "delta": 0
+        }
+      ]
+    },
+    {
+      "seed": "current-era-3-5-0-greedy-1",
+      "playerCount": 3,
+      "scoreBySeat": [
+        {
+          "seat": 0,
+          "delta": 2
+        },
+        {
+          "seat": 2,
+          "delta": -1
+        },
+        {
+          "seat": 1,
+          "delta": -1
+        }
+      ]
+    },
+    {
+      "seed": "current-era-3-5-0-greedy-2",
+      "playerCount": 3,
+      "scoreBySeat": [
+        {
+          "seat": 0,
+          "delta": 0
+        },
+        {
+          "seat": 1,
+          "delta": 0
+        },
+        {
+          "seat": 2,
+          "delta": 0
+        }
+      ]
+    },
+    {
+      "seed": "current-era-5-0-0-weighted-0",
+      "playerCount": 5,
+      "scoreBySeat": [
+        {
+          "seat": 3,
+          "delta": 1
+        },
+        {
+          "seat": 4,
+          "delta": 1
+        },
+        {
+          "seat": 1,
+          "delta": 0
+        },
+        {
+          "seat": 2,
+          "delta": -2
+        },
+        {
+          "seat": 0,
+          "delta": 1
+        }
+      ]
+    },
+    {
+      "seed": "current-era-5-0-0-weighted-1",
+      "playerCount": 5,
+      "scoreBySeat": [
+        {
+          "seat": 4,
+          "delta": 0
+        },
+        {
+          "seat": 1,
+          "delta": 1
+        },
+        {
+          "seat": 2,
+          "delta": 0
+        },
+        {
+          "seat": 0,
+          "delta": 0
+        },
+        {
+          "seat": 3,
+          "delta": -1
+        }
+      ]
+    },
+    {
+      "seed": "current-era-5-0-0-weighted-2",
+      "playerCount": 5,
+      "scoreBySeat": [
+        {
+          "seat": 4,
+          "delta": 0
+        },
+        {
+          "seat": 3,
+          "delta": 0
+        },
+        {
+          "seat": 2,
+          "delta": 1
+        },
+        {
+          "seat": 0,
+          "delta": -1
+        },
+        {
+          "seat": 1,
+          "delta": -1
+        }
+      ]
+    },
+    {
+      "seed": "current-era-5-0-0-greedy-0",
+      "playerCount": 5,
+      "scoreBySeat": [
+        {
+          "seat": 0,
+          "delta": -1
+        },
+        {
+          "seat": 1,
+          "delta": 1
+        },
+        {
+          "seat": 4,
+          "delta": -1
+        },
+        {
+          "seat": 2,
+          "delta": 0
+        },
+        {
+          "seat": 3,
+          "delta": -1
+        }
+      ]
+    },
+    {
+      "seed": "current-era-5-0-0-greedy-1",
+      "playerCount": 5,
+      "scoreBySeat": [
+        {
+          "seat": 4,
+          "delta": 1
+        },
+        {
+          "seat": 3,
+          "delta": 0
+        },
+        {
+          "seat": 0,
+          "delta": -2
+        },
+        {
+          "seat": 1,
+          "delta": 2
+        },
+        {
+          "seat": 2,
+          "delta": -1
+        }
+      ]
+    },
+    {
+      "seed": "current-era-5-0-0-greedy-2",
+      "playerCount": 5,
+      "scoreBySeat": [
+        {
+          "seat": 1,
+          "delta": 0
+        },
+        {
+          "seat": 4,
+          "delta": 0
+        },
+        {
+          "seat": 0,
+          "delta": 0
+        },
+        {
+          "seat": 3,
+          "delta": 1
+        },
+        {
+          "seat": 2,
+          "delta": -1
+        }
+      ]
+    },
+    {
+      "seed": "current-era-5-1-0-weighted-0",
+      "playerCount": 5,
+      "scoreBySeat": [
+        {
+          "seat": 0,
+          "delta": 2
+        },
+        {
+          "seat": 3,
+          "delta": -1
+        },
+        {
+          "seat": 2,
+          "delta": -1
+        },
+        {
+          "seat": 1,
+          "delta": -1
+        },
+        {
+          "seat": 4,
+          "delta": 0
+        }
+      ]
+    },
+    {
+      "seed": "current-era-5-1-0-weighted-1",
+      "playerCount": 5,
+      "scoreBySeat": [
+        {
+          "seat": 4,
+          "delta": 0
+        },
+        {
+          "seat": 1,
+          "delta": -2
+        },
+        {
+          "seat": 2,
+          "delta": 1
+        },
+        {
+          "seat": 3,
+          "delta": 0
+        },
+        {
+          "seat": 0,
+          "delta": 0
+        }
+      ]
+    },
+    {
+      "seed": "current-era-5-1-0-weighted-2",
+      "playerCount": 5,
+      "scoreBySeat": [
+        {
+          "seat": 2,
+          "delta": 0
+        },
+        {
+          "seat": 3,
+          "delta": -2
+        },
+        {
+          "seat": 4,
+          "delta": 2
+        },
+        {
+          "seat": 0,
+          "delta": 0
+        },
+        {
+          "seat": 1,
+          "delta": 0
+        }
+      ]
+    },
+    {
+      "seed": "current-era-5-1-0-greedy-0",
+      "playerCount": 5,
+      "scoreBySeat": [
+        {
+          "seat": 4,
+          "delta": 0
+        },
+        {
+          "seat": 0,
+          "delta": 1
+        },
+        {
+          "seat": 3,
+          "delta": 0
+        },
+        {
+          "seat": 1,
+          "delta": -2
+        },
+        {
+          "seat": 2,
+          "delta": 1
+        }
+      ]
+    },
+    {
+      "seed": "current-era-5-1-0-greedy-1",
+      "playerCount": 5,
+      "scoreBySeat": [
+        {
+          "seat": 0,
+          "delta": 2
+        },
+        {
+          "seat": 4,
+          "delta": -1
+        },
+        {
+          "seat": 1,
+          "delta": -2
+        },
+        {
+          "seat": 3,
+          "delta": 0
+        },
+        {
+          "seat": 2,
+          "delta": 0
+        }
+      ]
+    },
+    {
+      "seed": "current-era-5-1-0-greedy-2",
+      "playerCount": 5,
+      "scoreBySeat": [
+        {
+          "seat": 2,
+          "delta": -1
+        },
+        {
+          "seat": 4,
+          "delta": 2
+        },
+        {
+          "seat": 3,
+          "delta": 0
+        },
+        {
+          "seat": 0,
+          "delta": 0
+        },
+        {
+          "seat": 1,
+          "delta": -1
+        }
+      ]
+    },
+    {
+      "seed": "current-era-5-2-0-weighted-0",
+      "playerCount": 5,
+      "scoreBySeat": [
+        {
+          "seat": 0,
+          "delta": 2
+        },
+        {
+          "seat": 2,
+          "delta": -1
+        },
+        {
+          "seat": 3,
+          "delta": -1
+        },
+        {
+          "seat": 4,
+          "delta": 1
+        },
+        {
+          "seat": 1,
+          "delta": -2
+        }
+      ]
+    },
+    {
+      "seed": "current-era-5-2-0-weighted-1",
+      "playerCount": 5,
+      "scoreBySeat": [
+        {
+          "seat": 2,
+          "delta": 1
+        },
+        {
+          "seat": 1,
+          "delta": 0
+        },
+        {
+          "seat": 4,
+          "delta": -1
+        },
+        {
+          "seat": 3,
+          "delta": 1
+        },
+        {
+          "seat": 0,
+          "delta": 0
+        }
+      ]
+    },
+    {
+      "seed": "current-era-5-2-0-weighted-2",
+      "playerCount": 5,
+      "scoreBySeat": [
+        {
+          "seat": 2,
+          "delta": 0
+        },
+        {
+          "seat": 3,
+          "delta": 0
+        },
+        {
+          "seat": 1,
+          "delta": 0
+        },
+        {
+          "seat": 4,
+          "delta": 0
+        },
+        {
+          "seat": 0,
+          "delta": 0
+        }
+      ]
+    },
+    {
+      "seed": "current-era-5-2-0-greedy-0",
+      "playerCount": 5,
+      "scoreBySeat": [
+        {
+          "seat": 3,
+          "delta": 0
+        },
+        {
+          "seat": 1,
+          "delta": 0
+        },
+        {
+          "seat": 0,
+          "delta": 0
+        },
+        {
+          "seat": 4,
+          "delta": -1
+        },
+        {
+          "seat": 2,
+          "delta": 0
+        }
+      ]
+    },
+    {
+      "seed": "current-era-5-2-0-greedy-1",
+      "playerCount": 5,
+      "scoreBySeat": [
+        {
+          "seat": 2,
+          "delta": -1
+        },
+        {
+          "seat": 4,
+          "delta": -1
+        },
+        {
+          "seat": 0,
+          "delta": -1
+        },
+        {
+          "seat": 3,
+          "delta": -2
+        },
+        {
+          "seat": 1,
+          "delta": 0
+        }
+      ]
+    },
+    {
+      "seed": "current-era-5-2-0-greedy-2",
+      "playerCount": 5,
+      "scoreBySeat": [
+        {
+          "seat": 3,
+          "delta": 0
+        },
+        {
+          "seat": 4,
+          "delta": 0
+        },
+        {
+          "seat": 0,
+          "delta": -2
+        },
+        {
+          "seat": 2,
+          "delta": 0
+        },
+        {
+          "seat": 1,
+          "delta": 2
+        }
+      ]
+    },
+    {
+      "seed": "current-era-5-3-0-weighted-0",
+      "playerCount": 5,
+      "scoreBySeat": [
+        {
+          "seat": 1,
+          "delta": 1
+        },
+        {
+          "seat": 2,
+          "delta": -1
+        },
+        {
+          "seat": 4,
+          "delta": 0
+        },
+        {
+          "seat": 0,
+          "delta": 0
+        },
+        {
+          "seat": 3,
+          "delta": 0
+        }
+      ]
+    },
+    {
+      "seed": "current-era-5-3-0-weighted-1",
+      "playerCount": 5,
+      "scoreBySeat": [
+        {
+          "seat": 0,
+          "delta": 0
+        },
+        {
+          "seat": 3,
+          "delta": 0
+        },
+        {
+          "seat": 1,
+          "delta": 0
+        },
+        {
+          "seat": 4,
+          "delta": 1
+        },
+        {
+          "seat": 2,
+          "delta": 0
+        }
+      ]
+    },
+    {
+      "seed": "current-era-5-3-0-weighted-2",
+      "playerCount": 5,
+      "scoreBySeat": [
+        {
+          "seat": 1,
+          "delta": 0
+        },
+        {
+          "seat": 4,
+          "delta": -2
+        },
+        {
+          "seat": 0,
+          "delta": 2
+        },
+        {
+          "seat": 2,
+          "delta": 0
+        },
+        {
+          "seat": 3,
+          "delta": 0
+        }
+      ]
+    },
+    {
+      "seed": "current-era-5-3-0-greedy-0",
+      "playerCount": 5,
+      "scoreBySeat": [
+        {
+          "seat": 1,
+          "delta": -1
+        },
+        {
+          "seat": 3,
+          "delta": 0
+        },
+        {
+          "seat": 0,
+          "delta": 1
+        },
+        {
+          "seat": 2,
+          "delta": 0
+        },
+        {
+          "seat": 4,
+          "delta": 0
+        }
+      ]
+    },
+    {
+      "seed": "current-era-5-3-0-greedy-1",
+      "playerCount": 5,
+      "scoreBySeat": [
+        {
+          "seat": 3,
+          "delta": -1
+        },
+        {
+          "seat": 1,
+          "delta": 1
+        },
+        {
+          "seat": 4,
+          "delta": 0
+        },
+        {
+          "seat": 0,
+          "delta": 0
+        },
+        {
+          "seat": 2,
+          "delta": 0
+        }
+      ]
+    },
+    {
+      "seed": "current-era-5-3-0-greedy-2",
+      "playerCount": 5,
+      "scoreBySeat": [
+        {
+          "seat": 2,
+          "delta": 0
+        },
+        {
+          "seat": 0,
+          "delta": 1
+        },
+        {
+          "seat": 3,
+          "delta": 0
+        },
+        {
+          "seat": 1,
+          "delta": -1
+        },
+        {
+          "seat": 4,
+          "delta": -1
+        }
+      ]
+    },
+    {
+      "seed": "current-era-5-4-0-weighted-0",
+      "playerCount": 5,
+      "scoreBySeat": [
+        {
+          "seat": 1,
+          "delta": 0
+        },
+        {
+          "seat": 4,
+          "delta": 1
+        },
+        {
+          "seat": 0,
+          "delta": -1
+        },
+        {
+          "seat": 3,
+          "delta": 1
+        },
+        {
+          "seat": 2,
+          "delta": -1
+        }
+      ]
+    },
+    {
+      "seed": "current-era-5-4-0-weighted-1",
+      "playerCount": 5,
+      "scoreBySeat": [
+        {
+          "seat": 0,
+          "delta": -1
+        },
+        {
+          "seat": 4,
+          "delta": 0
+        },
+        {
+          "seat": 1,
+          "delta": 2
+        },
+        {
+          "seat": 2,
+          "delta": 0
+        },
+        {
+          "seat": 3,
+          "delta": 0
+        }
+      ]
+    },
+    {
+      "seed": "current-era-5-4-0-weighted-2",
+      "playerCount": 5,
+      "scoreBySeat": [
+        {
+          "seat": 4,
+          "delta": 0
+        },
+        {
+          "seat": 0,
+          "delta": -1
+        },
+        {
+          "seat": 2,
+          "delta": 0
+        },
+        {
+          "seat": 3,
+          "delta": 1
+        },
+        {
+          "seat": 1,
+          "delta": -1
+        }
+      ]
+    },
+    {
+      "seed": "current-era-5-4-0-greedy-0",
+      "playerCount": 5,
+      "scoreBySeat": [
+        {
+          "seat": 0,
+          "delta": -1
+        },
+        {
+          "seat": 2,
+          "delta": -1
+        },
+        {
+          "seat": 3,
+          "delta": 2
+        },
+        {
+          "seat": 4,
+          "delta": -1
+        },
+        {
+          "seat": 1,
+          "delta": -2
+        }
+      ]
+    },
+    {
+      "seed": "current-era-5-4-0-greedy-1",
+      "playerCount": 5,
+      "scoreBySeat": [
+        {
+          "seat": 2,
+          "delta": -2
+        },
+        {
+          "seat": 4,
+          "delta": 1
+        },
+        {
+          "seat": 0,
+          "delta": 0
+        },
+        {
+          "seat": 3,
+          "delta": 3
+        },
+        {
+          "seat": 1,
+          "delta": -2
+        }
+      ]
+    },
+    {
+      "seed": "current-era-5-4-0-greedy-2",
+      "playerCount": 5,
+      "scoreBySeat": [
+        {
+          "seat": 1,
+          "delta": 1
+        },
+        {
+          "seat": 4,
+          "delta": -2
+        },
+        {
+          "seat": 0,
+          "delta": 0
+        },
+        {
+          "seat": 2,
+          "delta": 0
+        },
+        {
+          "seat": 3,
+          "delta": 1
+        }
+      ]
+    },
+    {
+      "seed": "current-era-5-5-0-weighted-0",
+      "playerCount": 5,
+      "scoreBySeat": [
+        {
+          "seat": 1,
+          "delta": 1
+        },
+        {
+          "seat": 4,
+          "delta": -1
+        },
+        {
+          "seat": 2,
+          "delta": 0
+        },
+        {
+          "seat": 3,
+          "delta": -1
+        },
+        {
+          "seat": 0,
+          "delta": -1
+        }
+      ]
+    },
+    {
+      "seed": "current-era-5-5-0-weighted-1",
+      "playerCount": 5,
+      "scoreBySeat": [
+        {
+          "seat": 1,
+          "delta": -1
+        },
+        {
+          "seat": 0,
+          "delta": 2
+        },
+        {
+          "seat": 3,
+          "delta": 1
+        },
+        {
+          "seat": 4,
+          "delta": -1
+        },
+        {
+          "seat": 2,
+          "delta": 0
+        }
+      ]
+    },
+    {
+      "seed": "current-era-5-5-0-weighted-2",
+      "playerCount": 5,
+      "scoreBySeat": [
+        {
+          "seat": 3,
+          "delta": -1
+        },
+        {
+          "seat": 1,
+          "delta": 0
+        },
+        {
+          "seat": 2,
+          "delta": 0
+        },
+        {
+          "seat": 4,
+          "delta": 0
+        },
+        {
+          "seat": 0,
+          "delta": 0
+        }
+      ]
+    },
+    {
+      "seed": "current-era-5-5-0-greedy-0",
+      "playerCount": 5,
+      "scoreBySeat": [
+        {
+          "seat": 1,
+          "delta": 2
+        },
+        {
+          "seat": 2,
+          "delta": -1
+        },
+        {
+          "seat": 3,
+          "delta": -1
+        },
+        {
+          "seat": 0,
+          "delta": 0
+        },
+        {
+          "seat": 4,
+          "delta": -1
+        }
+      ]
+    },
+    {
+      "seed": "current-era-5-5-0-greedy-1",
+      "playerCount": 5,
+      "scoreBySeat": [
+        {
+          "seat": 3,
+          "delta": 0
+        },
+        {
+          "seat": 0,
+          "delta": 0
+        },
+        {
+          "seat": 1,
+          "delta": 1
+        },
+        {
+          "seat": 4,
+          "delta": -1
+        },
+        {
+          "seat": 2,
+          "delta": 0
+        }
+      ]
+    },
+    {
+      "seed": "current-era-5-5-0-greedy-2",
+      "playerCount": 5,
+      "scoreBySeat": [
+        {
+          "seat": 2,
+          "delta": 0
+        },
+        {
+          "seat": 1,
+          "delta": 0
+        },
+        {
+          "seat": 0,
+          "delta": 0
+        },
+        {
+          "seat": 3,
+          "delta": -1
+        },
+        {
+          "seat": 4,
+          "delta": 1
+        }
+      ]
+    }
+  ],
+  "limits": [
+    "No human playtest. No policy retuning. Package-level descriptive comparison; no isolated causal starting-value conclusion. No balance promotion. New thresholds remain hypotheses."
+  ],
+  "unifiedAudit": {
+    "archive": "evidence/studies/simulation/20261010T011518409Z-unified-matrix-audit-0-22-1-94ecd4a3222c-current-era-unified-2026-10-09-480x4-unified-matrix-cli-95c590cd-d026-45da-b02b-587ece03d973.json",
+    "sha256": "c3c0aded90d3aa603bf3d30da6dc3e2d65950b34a626af67eb53f52f388ee75e",
+    "seed": "current-era-unified-2026-10-09",
+    "runs": 480,
+    "playerCounts": [
+      3,
+      4,
+      5
+    ],
+    "profiles": {
+      "fingerprint": "sha256:f83683e75f47096f1f11a10f1265a6d2d5d3a807b3f07ccdd85da38ae995457c",
+      "profiles": [
+        {
+          "id": "balanced_operator",
+          "fingerprint": "sha256:90492d5b95fed9985ff756c11bd07a45617a5ea1766187ef81ee998ae6d21c1c"
+        },
+        {
+          "id": "capability_rusher",
+          "fingerprint": "sha256:83b54b541c1a4b887537ad5cf56286fa2fc5d4afa539f8f8f1bf3182d7786658"
+        },
+        {
+          "id": "infrastructure_compounder",
+          "fingerprint": "sha256:3e2ff074cd432e7d287fc0fcd352977d10e350df8b8ec4bae28aa5d80aca2d8a"
+        },
+        {
+          "id": "market_maximalist",
+          "fingerprint": "sha256:09644b09ad14caec66da9a321d40d507bd9e7333624d71e5b69e4ad22b0f8297"
+        },
+        {
+          "id": "trust_governor",
+          "fingerprint": "sha256:984dc54ef058522146f1ea1eda0b2fcc1e01e1f78e737851e5fce5e51e6a262a"
+        },
+        {
+          "id": "agi_candidate",
+          "fingerprint": "sha256:fd4d17f1195a8948e37b87b4d68d9288d3f4ada344e9ce972b6d2edb576ed5fd"
+        },
+        {
+          "id": "power_broker",
+          "fingerprint": "sha256:1ebfe2398506ffbd20164fcad788f0de67f5bd2696f2009e86d7a0f0f6a7d257"
+        }
+      ],
+      "backends": [
+        "weighted",
+        "greedy"
+      ],
+      "model": null
+    },
+    "backends": "registered weighted/greedy homogeneous and alternating regimes",
+    "rulesVariant": "canonical current-state candidate",
+    "sourceCommit": "43f0058aba06aeb68f5868000690197a6b7fdb82",
+    "sourceDirty": false,
+    "balanceStatus": "outside_provisional_bounds",
+    "failedChecks": [
+      {
+        "id": "canonical:p3:seat_win_share_range",
+        "configurationId": "canonical",
+        "playerCount": 3,
+        "value": 0.16964285714285715,
+        "operator": "max",
+        "threshold": 0.1,
+        "evidence": "observed_configuration_player_count",
+        "passed": false
+      },
+      {
+        "id": "canonical:p3:faction_win_share_range",
+        "configurationId": "canonical",
+        "playerCount": 3,
+        "value": 0.17857142857142858,
+        "operator": "max",
+        "threshold": 0.15,
+        "evidence": "observed_configuration_player_count",
+        "passed": false
+      },
+      {
+        "id": "canonical:p3:profile_win_share_range",
+        "configurationId": "canonical",
+        "playerCount": 3,
+        "value": 0.45833333333333337,
+        "operator": "max",
+        "threshold": 0.18,
+        "evidence": "observed_configuration_player_count",
+        "passed": false
+      },
+      {
+        "id": "canonical:p3:winning_path_top_share",
+        "configurationId": "canonical",
+        "playerCount": 3,
+        "value": 0.5982142857142857,
+        "operator": "max",
+        "threshold": 0.55,
+        "evidence": "observed_configuration_player_count",
+        "passed": false
+      },
+      {
+        "id": "canonical:p4:faction_win_share_range",
+        "configurationId": "canonical",
+        "playerCount": 4,
+        "value": 0.2645687645687646,
+        "operator": "max",
+        "threshold": 0.15,
+        "evidence": "observed_configuration_player_count",
+        "passed": false
+      },
+      {
+        "id": "canonical:p4:profile_win_share_range",
+        "configurationId": "canonical",
+        "playerCount": 4,
+        "value": 0.3616161616161616,
+        "operator": "max",
+        "threshold": 0.18,
+        "evidence": "observed_configuration_player_count",
+        "passed": false
+      },
+      {
+        "id": "canonical:p4:winning_path_top_share",
+        "configurationId": "canonical",
+        "playerCount": 4,
+        "value": 0.5507246376811594,
+        "operator": "max",
+        "threshold": 0.55,
+        "evidence": "observed_configuration_player_count",
+        "passed": false
+      },
+      {
+        "id": "canonical:p5:profile_win_share_range",
+        "configurationId": "canonical",
+        "playerCount": 5,
+        "value": 0.3229166666666667,
+        "operator": "max",
+        "threshold": 0.18,
+        "evidence": "observed_configuration_player_count",
+        "passed": false
+      },
+      {
+        "id": "canonical:p5:winning_path_top_share",
+        "configurationId": "canonical",
+        "playerCount": 5,
+        "value": 0.58125,
+        "operator": "max",
+        "threshold": 0.55,
+        "evidence": "observed_configuration_player_count",
+        "passed": false
+      }
+    ],
+    "precisionReached": false,
+    "promotionGate": {
+      "eligible": false,
+      "automatedPass": false,
+      "sourceClean": true,
+      "trackedReceipt": false,
+      "humanApproval": false,
+      "verdict": "provisional_bounds_failed",
+      "reasons": [
+        "9 configuration-by-player-count diversity, faction-range, fallback, or forced-no-op checks failed.",
+        "The registered precision target was not reached.",
+        "A tracked receipt and explicit human approval remain mandatory."
+      ]
+    },
+    "integrity": {
+      "violations": 0,
+      "details": []
+    }
+  }
+}
