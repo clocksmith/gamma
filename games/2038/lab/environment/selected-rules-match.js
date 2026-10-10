@@ -1066,6 +1066,13 @@ export class SelectedRulesMatch {
       activeHeadline: this.activeHeadline ? clone(this.activeHeadline) : null,
       roundMandate: this.roundMandate?.id || null,
       revealedMandates: clone(this.revealedMandates),
+      revealedHeadlines: this.matchMetrics.futureTimeline.map(event => clone(this.headlineDocument.headlines.find(card => card.id === event.id))),
+      trainingRun: this.trainingRun ? clone(this.trainingRun) : null,
+      trainingDeck: {
+        drawCount: this.trainingDrawPile.length,
+        discardCount: this.trainingDiscard.length,
+        topDiscard: this.trainingDiscard.at(-1)?.type || null,
+      },
       players: this.players.map((p) => ({
         ...this.publicPlayerState(p),
         agiReadiness: this.declarationReadiness(p),

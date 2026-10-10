@@ -86,6 +86,15 @@ Deliver a coherent, replayable institutional strategy game whose authored rules,
   consent and available resources. No lasting contracts or hidden Venture state.
 - Canonical rule changes update every affected authority and evidence surface together.
 
+## Browser presentation boundary
+
+`web/components/` renders the shared board, Org faces, player mats, holding cubes,
+and card table from public match snapshots. Setup constructs the same match without
+playing it. Views never draw cards, change holdings, or choose hidden deck order.
+`web/app.js` owns lifecycle and legal decision submission; components own stable DOM
+updates. Board/token and card proportions follow `physical/component-spec.md`;
+responsive player mats prioritize readable tracks rather than screen millimeters.
+
 ## Acceptance
 
 - Content, runtime, deterministic simulation, balance, and generated projections pass the package checks.
