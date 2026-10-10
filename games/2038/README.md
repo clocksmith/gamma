@@ -232,3 +232,5 @@ Commercial publication should still receive appropriate legal review.
 The selected tone is solemn institutional absurdity: each Era becomes more
 extreme, while every institution describes the impossible as a responsible
 quarterly initiative.
+
+Era objectives use current public state after Audit. The current-state scoring package is a balance-test candidate; earlier balance receipts do not qualify it.

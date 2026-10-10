@@ -107,3 +107,5 @@ Public hosting is owned by m3t4 at `https://m3t4.ai/mandate-2038/`. Gamma owns t
 
 Player equipment belongs to one of five colour-and-symbol kits independently of
 six faction identities. Seat-based mechanical ownership remains authoritative.
+
+- Era Mandates score current public state after Audit through the shared pure evaluator; history cannot affect their qualification or value. No live objective counter or Venture-age marking remains. Trust milestones and diagnostic telemetry are separate.

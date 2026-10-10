@@ -410,12 +410,12 @@ test("retained signature abilities project concrete continuity institutions", as
   assert.equal(mandates.continent_signs_loi.name, "Successor Accounts Recognized");
   assert.equal(mandates.zero_incident_quarter.name, "Maintained Reality Is Certified");
   assert.equal(mandates.responsible_acceleration.name, "Contestability Standard Maintained");
-  assert.match(mandates.continent_signs_loi.rulesText, /most Customers/);
+  assert.match(mandates.continent_signs_loi.rulesText, /[Mm]ost Customers/);
   assert.equal(
     mandates.continent_signs_loi.flavorText,
-    "The institution registers the most new service identities, successor agents, or continuing accounts."
+    "The institution serves the largest current population of service identities, successor agents, or continuing accounts."
   );
-  assert.match(mandates.zero_incident_quarter.rulesText, /fewest Scrutiny/);
+  assert.match(mandates.zero_incident_quarter.rulesText, /[Ff]ewest current Scrutiny/);
   assert.match(mandates.responsible_acceleration.rulesText, /at least 4 Trust/);
   for (const concept of [
     "Instance Quorum",
@@ -487,7 +487,7 @@ test("Core Rules are compact while every moved authority has one table surface",
   assert.match(mandateReference.backText.join("\n"), /Highest final Mandate wins/);
   assert.doesNotMatch(mandateReference.backText.join("\n"), /Draw two without replacement/);
   assert.match(mandateReference.backText.join("\n"), /The Singularity.*The Closed Loop.*The Plural Future.*Assured Continuity/);
-  assert.match(cardReference, /Minimum qualification:\*\* 2/);
+  assert.match(cardReference, /at least 2 combined required/);
   assert.match(cardReference, /Deal Flow[\s\S]*Unlock Era:\*\* 1; permanent/);
   assert.doesNotMatch(cardReference, /Advanced Play/);
   assert.match(cardReference, /Each Faction has one permanent ability available from setup/);

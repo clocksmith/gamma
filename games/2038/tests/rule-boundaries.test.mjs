@@ -315,7 +315,7 @@ test("Fund accounting credits gross runway once, handles Scrutiny overflow penal
   match.applyResolution(0, ventureNormal);
   assert.equal(player.runway, 2, "Net runway is 2 after 2 scrutiny overflow penalties");
   assert.equal(player.roundMetrics.fundRunway, 4, "Gross credited runway is 4");
-  assert.deepEqual(match.objectiveRecord(player), { kind: "Runway gained through Fund", value: 4 });
+  assert.equal(match.currentEraObjective(player).value, player.runway);
 
   // 2. Near-cap balance (11 Runway), full Scrutiny at Allocation Exchange (capital):
   // Gross runway = 4 + 1 = 5. Adding 5 to 11 caps at 12 (+1 credited, 4 discarded).
@@ -330,7 +330,7 @@ test("Fund accounting credits gross runway once, handles Scrutiny overflow penal
   match.applyResolution(0, ventureCapital);
   assert.equal(player.runway, 10, "Net runway is 10 (11 + 5 = 12 capped, minus 2 overflow penalties)");
   assert.equal(player.roundMetrics.fundRunway, 5, "Credited runway was 1 (over-cap discarded)");
-  assert.deepEqual(match.objectiveRecord(player), { kind: "Runway gained through Fund", value: 5 });
+  assert.equal(match.currentEraObjective(player).value, player.runway);
 
   // 3. Conservative mode at Allocation Exchange (capital):
   // Gross runway = 2 + 1 = 3. Room in supply. Zero scrutiny added.

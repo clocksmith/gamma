@@ -105,15 +105,15 @@ test('host outages pause yields without resetting chips; Quantum caps and thresh
  const projects=structuredClone(p.projects);p.scrutiny=0;await m.audit([]);assert.deepEqual(p.projects,projects);
 });
 
-test('Trust milestone and objective records use existing scoring history without handwriting',async()=>{
+test('Trust milestone retains awarded history while Era objectives read current state',async()=>{
  const m=await setup();const p=m.players[0];
  assert.equal(m.highestTrustMilestone(p),Math.max(0,...m.config.scoring.trustThresholds.filter(t=>p.trust>=t.value).map(t=>t.value)));
  m.addResource(p,'trust',6);const high=m.highestTrustMilestone(p);const score=p.mandate;
  m.addResource(p,'trust',-2);m.addResource(p,'trust',2);assert.equal(p.mandate,score);assert.equal(m.highestTrustMilestone(p),high);
  m.roundMandate=m.mandateDocument.mandates.find(x=>x.id==='markets_prefer_destiny');p.roundMetrics.fundRunway=7;
- assert.deepEqual(m.objectiveRecord(p),{kind:'Runway gained through Fund',value:7});
- assert.deepEqual(m.snapshot().players[0].objectiveRecord,m.objectiveRecord(p));
- m.roundMandate=m.mandateDocument.mandates.find(x=>x.id==='building_has_weather');assert.equal(m.objectiveRecord(p),null);
+ assert.equal(m.currentEraObjective(p).value,p.runway); assert.equal(m.currentEraObjective(p).qualified,true);
+ assert.deepEqual(m.snapshot().players[0].currentEraObjective,m.currentEraObjective(p));
+ m.roundMandate=m.mandateDocument.mandates.find(x=>x.id==='building_has_weather');assert.equal(m.currentEraObjective(p).value,m.infrastructureState(p).locallyEligible.size);
 });
 
 test('a nonstarting Fusion host remains a Power source after its ordinary Generator is removed', async()=>{

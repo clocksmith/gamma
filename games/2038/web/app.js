@@ -214,7 +214,7 @@ function contentsForTile(tile, players, priorMarkerKeys = new Set()) {
       if (piece.tileId !== tile.instanceId) continue;
       const arrivalClass = priorMarkerKeys.has(markerKey(player, "piece", piece, index)) ? "" : " arrival";
       marks.push(`<i class="dot ${piece.kind}${arrivalClass}" style="--seat:${player.seat};--kit-color:${kitColor(player)}" ` +
-        `title="${escapeHtml(playerKit(player)?.colorName)} ${escapeHtml(playerKit(player)?.symbolName)} kit · ${escapeHtml(player.factionName)} ${piece.kind}">>${escapeHtml(playerKit(player)?.symbol || "")}</i>`);
+        `role="img" aria-label="${escapeHtml(playerKit(player)?.colorName)} ${escapeHtml(playerKit(player)?.symbolName)} kit · ${escapeHtml(player.factionName)}" title="${escapeHtml(playerKit(player)?.colorName)} ${escapeHtml(playerKit(player)?.symbolName)} kit · ${escapeHtml(player.factionName)} ${piece.kind}">${escapeHtml(playerKit(player)?.symbol || "")}</i>`);
     }
     for (const [index, facility] of player.facilities.entries()) {
       if (facility.tileId !== tile.instanceId) continue;
@@ -222,13 +222,13 @@ function contentsForTile(tile, players, priorMarkerKeys = new Set()) {
       const status = facility.powered ? copy.browser.connectedNow : copy.browser.offline;
       marks.push(`<i class="dot facility ${facility.powered ? "powered" : "offline"}${arrivalClass} ` +
         `" style="--seat:${player.seat};--kit-color:${kitColor(player)}" ` +
-        `title="${escapeHtml(playerKit(player)?.colorName)} ${escapeHtml(playerKit(player)?.symbolName)} kit · ${escapeHtml(player.factionName)} Facility — ${status}">>${escapeHtml(playerKit(player)?.symbol || "")}</i>`);
+        `role="img" aria-label="${escapeHtml(playerKit(player)?.colorName)} ${escapeHtml(playerKit(player)?.symbolName)} kit · ${escapeHtml(player.factionName)}" title="${escapeHtml(playerKit(player)?.colorName)} ${escapeHtml(playerKit(player)?.symbolName)} kit · ${escapeHtml(player.factionName)} Facility — ${status}">${escapeHtml(playerKit(player)?.symbol || "")}</i>`);
     }
     for (const [index, generator] of player.generators.entries()) {
       if (generator.tileId !== tile.instanceId) continue;
       const arrivalClass = priorMarkerKeys.has(markerKey(player, "generator", generator, index)) ? "" : " arrival";
       marks.push(`<i class="dot generator${arrivalClass}" style="--seat:${player.seat};--kit-color:${kitColor(player)}" ` +
-        `title="${escapeHtml(playerKit(player)?.colorName)} ${escapeHtml(playerKit(player)?.symbolName)} kit · ${escapeHtml(player.factionName)} ${escapeHtml(generator.sourceId)}">>${escapeHtml(playerKit(player)?.symbol || "")}</i>`);
+        `role="img" aria-label="${escapeHtml(playerKit(player)?.colorName)} ${escapeHtml(playerKit(player)?.symbolName)} kit · ${escapeHtml(player.factionName)}" title="${escapeHtml(playerKit(player)?.colorName)} ${escapeHtml(playerKit(player)?.symbolName)} kit · ${escapeHtml(player.factionName)} ${escapeHtml(generator.sourceId)}">${escapeHtml(playerKit(player)?.symbol || "")}</i>`);
     }
   }
   return marks.join("");
@@ -311,7 +311,7 @@ function renderPlayers(state) {
         <dt>${copy.tracks.scrutiny}</dt><dd>${player.scrutiny}</dd>
         <dt>${escapeHtml(copy.browser.personalProjects)}</dt><dd>${(player.projects || []).map(project => `${escapeHtml(config.personalProjects.definitions.find(definition => definition.id === project.projectId)?.name || project.projectId)}: ${escapeHtml(project.hostId)}`).join("; ") || "None"}</dd>
         <dt>${escapeHtml(copy.browser.trustMilestone)}</dt><dd>${player.highestTrustMilestone ?? 0}</dd>
-        <dt>${escapeHtml(copy.browser.objectiveProgress)}</dt><dd>${player.objectiveRecord ? `${escapeHtml(player.objectiveRecord.kind)}: ${player.objectiveRecord.value}` : "—"}</dd>
+        <dt>${escapeHtml(copy.browser.objectiveProgress)}</dt><dd>${player.currentEraObjective ? `${escapeHtml(copy.browser.objectiveMetrics[player.currentEraObjective.metric])}: ${player.currentEraObjective.value} · ${escapeHtml(player.currentEraObjective.qualified ? copy.browser.objectiveQualified : copy.browser.objectiveUnqualified)} · ${escapeHtml(player.currentEraObjective.direction === "min" ? copy.browser.objectiveMin : copy.browser.objectiveMax)}` : "—"}</dd>
         <dt>AGI recognized</dt><dd>${player.agiDeclared ? "Yes" : "No"}</dd>
       </dl>
     `;

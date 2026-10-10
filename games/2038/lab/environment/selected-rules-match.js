@@ -21,6 +21,7 @@ import {
   simulationCopy
 } from "../content/simulation-copy.js";
 import { calculateDeployComputeCost } from "../rules/deploy-costs.js";
+import { evaluateEraMandate, activeJointVenture, facilityComputeCapacity, facilityContractResource } from '../rules/era-mandates.js';
 import { throwIfAborted } from "../cancellation.js";
 
 export const SELECTED_RULES_COVERAGE = simulationCopy.coverage.selectedRules;
@@ -879,7 +880,7 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
         jointVentures: player.jointVentures.length,
         projects: clone(player.projects || []),
         highestTrustMilestone: this.highestTrustMilestone(player),
-        objectiveRecord: this.objectiveRecord(player),
+        currentEraObjective: this.currentEraObjective(player),
           agiDeclared: player.agiDeclared,
         agiReadiness: this.declarationReadiness(player),
         dealFlowConversion: {
@@ -910,7 +911,7 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
           jointVentures: this.copyPublic(candidate.jointVentures),
           projects: this.copyPublic(candidate.projects || []),
           highestTrustMilestone: this.highestTrustMilestone(candidate),
-          objectiveRecord: this.objectiveRecord(candidate),
+          currentEraObjective: this.currentEraObjective(candidate),
           agiDeclared: candidate.agiDeclared,
           agiReadiness: this.declarationReadiness(candidate),
           currentScore: this.currentScore(candidate)
@@ -1007,9 +1008,6 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
 
       player.tacticModifiers = {};
       player.roundMetrics = {
-        capabilityStart: player.capability,
-        customersStart: player.customers,
-        scrutinyStart: player.metrics.scrutinyAdded,
         fundRunway: 0,
         computeProduced: 0,
         bestTrainingDomains: 0,
@@ -2108,31 +2106,20 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
   }
 
   facilityContractResource(facility) {
-    const tile = this.board.find((candidate) => candidate.instanceId === facility.tileId);
-    if (!tile) return null;
-    if (["research", "cloud", "chip"].includes(tile.category)) return "compute";
-    if (tile.id === "grid_reactor") return "compute";
-    if (["consumer", "capital", "talent", "media", "government"].includes(tile.category)) {
-      return "runway";
-    }
-    if (tile.id === "renewable_basin") return "runway";
-    return null;
+    return facilityContractResource(this.board, facility);
   }
 
   async produceFacility(policies, player, facility, stage = "facility_production") {
     const countsForProduction = stage === "facility_production";
-    if (facility.category === "cloud") {
-      this.addResource(player, "compute", 2);
-      if (countsForProduction) player.roundMetrics.computeProduced += 2;
-    } else if (facility.category === "research") {
-      this.addResource(player, "compute", 1);
-      if (countsForProduction) player.roundMetrics.computeProduced += 1;
-    } else if (facility.category === "consumer") {
+    const compute = facilityComputeCapacity(this.board, facility) - (facility.customSilicon ? 1 : 0);
+    if (compute) {
+      this.addResource(player, "compute", compute);
+      if (countsForProduction) player.roundMetrics.computeProduced += compute;
+    }
+    if (facility.category === "consumer") {
       this.addResource(player, "runway", 1);
     } else if (facility.category === "chip") {
-      this.addResource(player, "compute", 1);
       this.addResource(player, "runway", 1);
-      if (countsForProduction) player.roundMetrics.computeProduced += 1;
     } else if (facility.category === "capital") {
       this.addResource(player, "runway", 2);
     } else if (facility.category === "talent") {
@@ -2152,10 +2139,7 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
       this.addResource(player, "trust", 1);
     } else if (facility.category === "energy") {
       const tile = this.board.find((candidate) => candidate.instanceId === facility.tileId);
-      if (tile?.id === "grid_reactor") {
-        this.addResource(player, "compute", 1);
-        if (countsForProduction) player.roundMetrics.computeProduced += 1;
-      } else {
+      if (tile?.id !== "grid_reactor") {
         this.removeScrutiny(player, 1);
       }
     }
@@ -2234,8 +2218,7 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
       const right = rightPlayer.facilities.find(
         (facility) => facility.id === contract.right.facilityId
       );
-      if (!left?.powered || !right?.powered) continue;
-      if (!this.areAdjacent(left.tileId, right.tileId)) continue;
+      if (!activeJointVenture(this, contract)) continue;
       const leftResource = this.facilityContractResource(right);
       const rightResource = this.facilityContractResource(left);
       if (leftResource) {
@@ -2246,12 +2229,7 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
         this.addResource(rightPlayer, rightResource, 1);
         if (rightResource === "compute") rightPlayer.roundMetrics.computeProduced += 1;
       }
-      if (contract.createdRound === this.round) {
-        leftPlayer.roundMetrics.activeNewJointVentures =
-          (leftPlayer.roundMetrics.activeNewJointVentures || 0) + 1;
-        rightPlayer.roundMetrics.activeNewJointVentures =
-          (rightPlayer.roundMetrics.activeNewJointVentures || 0) + 1;
-      }
+
     }
 
     for (const player of this.players) {
@@ -2355,56 +2333,34 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
     }
   }
 
-  objectiveRecord(player) {
-    const record = this.roundMandate?.record;
-    if (!record || !player.roundMetrics) return null;
-    const value = record.field === "scrutinyAdded"
-      ? player.metrics.scrutinyAdded - player.roundMetrics.scrutinyStart
-      : Number(player.roundMetrics[record.field] || 0);
-    return { kind: record.label, value };
+  currentEraObjective(player) {
+    if (!this.roundMandate) return null;
+    return { id: this.roundMandate.id, metric: this.roundMandate.metric,
+      ...evaluateEraMandate(this.roundMandate, this, player) };
   }
 
   mandateValue(player) {
-    const id = this.roundMandate.id;
-      if (id === "quarter_humanity_notices") return player.capability - player.roundMetrics.capabilityStart;
-      if (id === "continent_signs_loi") return player.customers - player.roundMetrics.customersStart;
-      if (id === "building_has_weather") return this.latestPoweredFacilities(player).length;
-      if (id === "stack_reaches_horizon") return this.latestPoweredFacilities(player).length + this.operatingProjects(player).filter(p => p.projectId === "mega_cluster").length;
-      if (id === "voluntary_coordination_triumphs") return player.roundMetrics.activeNewJointVentures || 0;
-      if (id === "legibility_offensive") return player.roundMetrics.deployed ? player.trust : -1;
-      if (id === "national_champion_without_nationalization") return this.controlledCategories(player).size;
-      if (id === "model_ate_tuesday") return player.roundMetrics.bestTrainingDomains;
-      if (id === "compute_new_weather") return player.roundMetrics.computeProduced;
-      if (id === "zero_incident_quarter") {
-        const added = player.metrics.scrutinyAdded - player.roundMetrics.scrutinyStart;
-        return -added;
-      }
-      if (id === "responsible_acceleration") return player.trust >= 4 ? player.capability : -1;
-      if (id === "markets_prefer_destiny") return player.roundMetrics.fundRunway;
-      return 0;
+    return evaluateEraMandate(this.roundMandate, this, player).value;
   }
 
   scoreMandate() {
     const id = this.roundMandate.id;
-    const values = this.players.map(player => this.mandateValue(player));
-    const minimum = this.roundMandate.minimumQualification ?? 1;
-    const qualificationValues = id === "zero_incident_quarter"
-      ? this.players.map((player) =>
-        player.metrics.scrutinyAdded - player.roundMetrics.scrutinyStart
-      )
-      : values;
-    const qualifiedValues = values.map((value, index) =>
-      qualificationValues[index] >= minimum ? value : -Infinity
-    );
-    const maximum = Math.max(...qualifiedValues);
+    const standings = this.players.map(player => ({seat:player.seat,
+      ...evaluateEraMandate(this.roundMandate, this, player)}));
+    const eligible = standings.filter(s => s.qualified);
+    const best = this.roundMandate.direction === 'min'
+      ? Math.min(...eligible.map(s => s.value)) : Math.max(...eligible.map(s => s.value));
+    const winners = eligible.filter(s => s.value === best);
     increment(this.matchMetrics.mandates, id);
-    if (!Number.isFinite(maximum)) return;
-    const winners = qualifiedValues.map((value, seat) => value === maximum ? seat : null)
-      .filter((seat) => seat !== null);
-    for (const seat of winners) {
-      const points = winners.length === 1 ? this.mandateDocument.points.winner : this.mandateDocument.points.tied;
-      this.awardMandate(this.players[seat], points, `round_mandate:${id}`);
-      this.players[seat].metrics.mandatesWon[id] = points;
+    const receipt = {round:this.round, id, direction:this.roundMandate.direction,
+      standings:standings.map(s => ({...s, points:winners.some(w => w.seat === s.seat)
+        ? winners.length === 1 ? this.mandateDocument.points.winner : this.mandateDocument.points.tied : 0}))};
+    (this.matchMetrics.eraMandateScores ||= []).push(receipt);
+    for (const standing of receipt.standings) {
+      if (!standing.points) continue;
+      const player = this.players.find(p => p.seat === standing.seat);
+      this.awardMandate(player, standing.points, `round_mandate:${id}`);
+      player.metrics.mandatesWon[id] = standing.points;
     }
   }
 
@@ -2945,7 +2901,7 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
           jointVentures: clone(player.jointVentures || []),
           projects: clone(player.projects || []),
         highestTrustMilestone: this.highestTrustMilestone(player),
-        objectiveRecord: this.objectiveRecord(player),
+        currentEraObjective: this.currentEraObjective(player),
           agiDeclared: player.agiDeclared,
           agiClaimed: player.agiClaimed,
           agiReadiness: this.declarationReadiness(player),
@@ -2991,7 +2947,7 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
         offlinePenalty,
         projects: clone(player.projects || []),
         highestTrustMilestone: this.highestTrustMilestone(player),
-        objectiveRecord: this.objectiveRecord(player),
+        currentEraObjective: this.currentEraObjective(player),
           agiDeclared: player.agiDeclared,
         agiClaimed: player.agiClaimed,
         agiReadiness: this.declarationReadiness(player),

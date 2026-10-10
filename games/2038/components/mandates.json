@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "status": "provisional_playtest_content",
-  "selection": "Reveal one at the beginning of each round. Score it at the end of that round.",
+  "selection": "Reveal one at the beginning of each Era. Score current public state after Audit.",
   "points": {
     "winner": 2,
     "tied": 1
@@ -10,216 +10,282 @@
     {
       "id": "quarter_humanity_notices",
       "era": 1,
-      "minimumQualification": 1,
       "mechanicalTags": [
         "capability",
-        "research"
+        "research",
+        "customers"
       ],
       "name": "Intelligence Enters the Price",
-      "rulesText": "The player who gained the most ${terms.playerTracks.capability} this Era scores 2 ${terms.playerTracks.mandate}. Cube record: Starting Capability.",
+      "rulesText": "Most Customers; at least 1 Customer required. Score 2 ${terms.playerTracks.mandate}; tied leaders each score 1. Read current public state after Audit.",
       "$scenario": {
         "ref": "cheap-token-rebound"
       },
       "loreRef": "mandate-quarter-humanity-notices",
-      "record": {
-        "field": "capabilityStart",
-        "label": "Starting Capability"
-      }
+      "metric": "customers",
+      "qualification": [
+        {
+          "metric": "customers",
+          "minimum": 1
+        }
+      ],
+      "direction": "max"
     },
     {
       "id": "continent_signs_loi",
       "era": 4,
-      "minimumQualification": 1,
       "mechanicalTags": [
         "customers",
         "deploy"
       ],
       "name": "Successor Accounts Recognized",
-      "rulesText": "The player who gained the most ${terms.playerTracks.customers} this Era scores 2 ${terms.playerTracks.mandate}. Cube record: Starting Customers.",
+      "rulesText": "Most Customers; at least 1 Customer required. Score 2 ${terms.playerTracks.mandate}; tied leaders each score 1. Read current public state after Audit.",
       "$scenario": {
         "ref": "metropolitan-mind-trust"
       },
       "loreRef": "mandate-continent-signs-loi",
-      "record": {
-        "field": "customersStart",
-        "label": "Starting Customers"
-      }
+      "metric": "customers",
+      "qualification": [
+        {
+          "metric": "customers",
+          "minimum": 1
+        }
+      ],
+      "direction": "max"
     },
     {
       "id": "building_has_weather",
       "era": 2,
-      "minimumQualification": 1,
       "mechanicalTags": [
         "facilities",
-        "power"
+        "power",
+        "connected_facilities"
       ],
       "name": "The Campus Becomes a Climate",
-      "rulesText": "The player with the most powered Facilities scores 2 ${terms.playerTracks.mandate}.",
+      "rulesText": "Most currently connected Facilities; at least 1 required. Score 2 ${terms.playerTracks.mandate}; tied leaders each score 1. Read current public state after Audit.",
       "$scenario": {
         "ref": "liability-custodians"
       },
       "loreRef": "mandate-building-has-weather",
-      "record": null
+      "metric": "connected_facilities",
+      "qualification": [
+        {
+          "metric": "connected_facilities",
+          "minimum": 1
+        }
+      ],
+      "direction": "max"
     },
     {
       "id": "stack_reaches_horizon",
       "era": 2,
-      "minimumQualification": 2,
       "mechanicalTags": [
         "infrastructure",
-        "facilities"
+        "facilities",
+        "connected_infrastructure"
       ],
       "name": "The Grid Borrows Tomorrow",
-      "rulesText": "The player with the most connected Facilities plus operating Mega-Clusters scores 2 ${terms.playerTracks.mandate}; minimum combined count 2. Check current connections at scoring.",
+      "rulesText": "Most currently connected Facilities plus operating Mega-Clusters; at least 2 combined required. Score 2 ${terms.playerTracks.mandate}; tied leaders each score 1. Read current public state after Audit.",
       "$scenario": {
         "ref": "utility-capture"
       },
       "loreRef": "mandate-stack-reaches-horizon",
-      "record": null
+      "metric": "connected_infrastructure",
+      "qualification": [
+        {
+          "metric": "connected_infrastructure",
+          "minimum": 2
+        }
+      ],
+      "direction": "max"
     },
     {
       "id": "voluntary_coordination_triumphs",
       "era": 3,
-      "minimumQualification": 1,
       "mechanicalTags": [
         "joint_venture",
-        "negotiation"
+        "negotiation",
+        "active_ventures"
       ],
       "name": "Supported Meaning Becomes Law",
-      "rulesText": "The player who created the most new Joint Ventures this Era that are active during Production scores 2 ${terms.playerTracks.mandate}; minimum 1.",
+      "rulesText": "Most currently active Joint Ventures; at least 1 required. Count each agreement for each partner, regardless of creation Era. Fixed hosts must still exist, belong to their partners, remain adjacent, and be connected. Score 2 ${terms.playerTracks.mandate}; tied leaders each score 1. Read current public state after Audit.",
       "$scenario": {
         "ref": "semantic-court-mandate"
       },
       "loreRef": "mandate-voluntary-coordination-triumphs",
-      "record": null
+      "metric": "active_ventures",
+      "qualification": [
+        {
+          "metric": "active_ventures",
+          "minimum": 1
+        }
+      ],
+      "direction": "max"
     },
     {
       "id": "legibility_offensive",
       "era": 3,
-      "minimumQualification": 1,
       "mechanicalTags": [
         "trust",
         "deploy"
       ],
       "name": "Refusal Remains Legible",
-      "rulesText": "Among players who completed a ${terms.actions.deploy} this Era, the player with the most ${terms.playerTracks.trust} scores 2 ${terms.playerTracks.mandate}. Cube record: Deployed this Era: 0 No, 1 Yes.",
+      "rulesText": "Most Trust among institutions with at least 1 Customer. Zero Trust can qualify. Score 2 ${terms.playerTracks.mandate}; tied leaders each score 1. Read current public state after Audit.",
       "$scenario": {
         "ref": "billion-instance-bloom"
       },
       "loreRef": "mandate-legibility-offensive",
-      "record": {
-        "field": "deployed",
-        "label": "Deployed this Era: 0 No, 1 Yes"
-      }
+      "metric": "trust",
+      "qualification": [
+        {
+          "metric": "customers",
+          "minimum": 1
+        }
+      ],
+      "direction": "max"
     },
     {
       "id": "national_champion_without_nationalization",
       "era": 3,
-      "minimumQualification": 1,
       "mechanicalTags": [
         "control",
-        "map"
+        "map",
+        "controlled_categories"
       ],
       "name": "The Jurisdiction Becomes a Platform",
-      "rulesText": "The player controlling the most different non-${terms.locations.frontier} hex categories\u2014${terms.locations.research}, ${terms.locations.cloud}, ${terms.locations.consumer}, ${terms.locations.chip}, ${terms.locations.capital}, ${terms.locations.talent}, ${terms.locations.media}, ${terms.locations.government}, and Energy\u2014scores 2 ${terms.playerTracks.mandate}. ${terms.locations.frontier} is never controlled and never counts as a category.",
+      "rulesText": "Most different controlled non-Frontier hex categories; at least 1 required. Frontier never counts; tied presence does not control a hex. Score 2 ${terms.playerTracks.mandate}; tied leaders each score 1. Read current public state after Audit.",
       "$scenario": {
         "ref": "cognitive-donor-clinics"
       },
       "loreRef": "mandate-national-champion-without-nationalization",
-      "record": null
+      "metric": "controlled_categories",
+      "qualification": [
+        {
+          "metric": "controlled_categories",
+          "minimum": 1
+        }
+      ],
+      "direction": "max"
     },
     {
       "id": "model_ate_tuesday",
       "era": 1,
-      "minimumQualification": 1,
       "mechanicalTags": [
         "research",
-        "training"
+        "training",
+        "capability"
       ],
       "name": "The Public Result Holds",
-      "rulesText": "The player whose best successful ${terms.systems.trainingRun} contained the most unique domains scores 2 ${terms.playerTracks.mandate}. Cube record: Best successful unique domains.",
+      "rulesText": "Most Capability among institutions with at least 2 Trust and at least 1 Capability. Score 2 ${terms.playerTracks.mandate}; tied leaders each score 1. Read current public state after Audit.",
       "$scenario": {
         "ref": "bankruptcy-data-estates"
       },
       "loreRef": "mandate-model-ate-tuesday",
-      "record": {
-        "field": "bestTrainingDomains",
-        "label": "Best successful unique domains"
-      }
+      "metric": "capability",
+      "qualification": [
+        {
+          "metric": "trust",
+          "minimum": 2
+        },
+        {
+          "metric": "capability",
+          "minimum": 1
+        }
+      ],
+      "direction": "max"
     },
     {
       "id": "compute_new_weather",
       "era": 2,
-      "minimumQualification": 1,
       "mechanicalTags": [
         "compute",
-        "production"
+        "production",
+        "compute_capacity"
       ],
       "name": "${terms.resources.compute} Becomes Public Weather",
-      "rulesText": "The player who produced the most ${terms.resources.compute} during Production scores 2 ${terms.playerTracks.mandate}. Cube record: Compute produced.",
+      "rulesText": "Highest current nominal Compute production capacity from connected Facilities, operating Mega-Clusters, and active Joint Ventures; at least 1 required. Ignore resource caps. Do not run Production or faction abilities again. Score 2 ${terms.playerTracks.mandate}; tied leaders each score 1. Read current public state after Audit.",
       "$scenario": {
         "ref": "autonomy-queue-collapse"
       },
       "loreRef": "mandate-compute-new-weather",
-      "record": {
-        "field": "computeProduced",
-        "label": "Compute produced"
-      }
+      "metric": "compute_capacity",
+      "qualification": [
+        {
+          "metric": "compute_capacity",
+          "minimum": 1
+        }
+      ],
+      "direction": "max"
     },
     {
       "id": "zero_incident_quarter",
       "era": 4,
-      "minimumQualification": 1,
       "mechanicalTags": [
         "scrutiny",
         "risk"
       ],
       "name": "Maintained Reality Is Certified",
-      "rulesText": "Among players who added at least 1 ${terms.playerTracks.scrutiny} this Era, the player who added the fewest ${terms.playerTracks.scrutiny} scores 2 ${terms.playerTracks.mandate}. Cube record: Scrutiny added this Era.",
+      "rulesText": "Fewest current Scrutiny among institutions with at least 3 Customers. Zero Scrutiny can win. Score 2 ${terms.playerTracks.mandate}; tied leaders each score 1. Read current public state after Audit.",
       "$scenario": {
         "ref": "matter-compiler"
       },
       "loreRef": "mandate-zero-incident-quarter",
-      "record": {
-        "field": "scrutinyAdded",
-        "label": "Scrutiny added this Era"
-      }
+      "metric": "scrutiny",
+      "qualification": [
+        {
+          "metric": "customers",
+          "minimum": 3
+        }
+      ],
+      "direction": "min"
     },
     {
       "id": "responsible_acceleration",
       "era": 4,
-      "minimumQualification": 1,
       "mechanicalTags": [
         "capability",
         "trust"
       ],
       "name": "Contestability Standard Maintained",
-      "rulesText": "The player with the most ${terms.playerTracks.capability} among players with at least 4 ${terms.playerTracks.trust} scores 2 ${terms.playerTracks.mandate}.",
+      "rulesText": "Most Capability among institutions with at least 4 Trust and at least 1 Capability. Score 2 ${terms.playerTracks.mandate}; tied leaders each score 1. Read current public state after Audit.",
       "$scenario": {
         "ref": "posthumous-labor",
         "eraRelation": "later-expression"
       },
       "loreRef": "mandate-responsible-acceleration",
-      "record": null
+      "metric": "capability",
+      "qualification": [
+        {
+          "metric": "trust",
+          "minimum": 4
+        },
+        {
+          "metric": "capability",
+          "minimum": 1
+        }
+      ],
+      "direction": "max"
     },
     {
       "id": "markets_prefer_destiny",
       "era": 1,
-      "minimumQualification": 1,
       "mechanicalTags": [
         "fund",
         "runway"
       ],
       "name": "Capital Finds the Default",
-      "rulesText": "The player who gained the most ${terms.resources.runway} through ${terms.actions.fund} actions this Era scores 2 ${terms.playerTracks.mandate}. Credited income counts toward this record; discarded over-cap income and subsequent Scrutiny penalties do not. Cube record: Runway gained through Fund.",
+      "rulesText": "Most current Runway among institutions owning at least 1 Facility. Zero Runway can qualify. Score 2 ${terms.playerTracks.mandate}; tied leaders each score 1. Read current public state after Audit.",
       "$scenario": {
         "ref": "supervised-autonomy-homes"
       },
       "loreRef": "mandate-markets-prefer-destiny",
-      "record": {
-        "field": "fundRunway",
-        "label": "Runway gained through Fund"
-      }
+      "metric": "runway",
+      "qualification": [
+        {
+          "metric": "facilities",
+          "minimum": 1
+        }
+      ],
+      "direction": "max"
     }
   ],
   "tieRule": "Tied leaders each score 1 ${terms.playerTracks.mandate} unless the card says otherwise."

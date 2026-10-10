@@ -508,3 +508,7 @@ Choose five equipment kits independently of six faction identity cards. Record
 both assignments by seat. Check ownership using symbols as well as colours, and
 initialize mats from faction starts. Facilitation and blind evidence remain
 separate; no generated session template is an observed playtest.
+
+## Current-state objective candidate — 2026-10-09
+
+For the next physical session, check every Mandate using only the table after Audit. Record questions about prior turns, ownership identification by kit symbol, valid zero values, Venture hosts and current connections, cap-independent Compute capacity, and ties. Preserve the distinction between a facilitated session and a blind session; any supplied answer makes it facilitated. Simulation and generated-kit checks are not observed human playtests.

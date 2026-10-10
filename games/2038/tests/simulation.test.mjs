@@ -2477,9 +2477,9 @@ test("Monte Carlo pipeline is deterministic and carries sampled replays", async 
   assert.deepEqual(first.samples, second.samples);
   assert.equal(first.scope.id, "react-agent-assignments-v1");
   assert.ok(first.scope.excluded.includes("the deferred Tactic module"));
-  assert.equal(first.schemaVersion, 6);
-  assert.equal(first.reportSchemaVersion, 6);
-  assert.equal(first.replaySchemaVersion, 2);
+  assert.equal(first.schemaVersion, 7);
+  assert.equal(first.reportSchemaVersion, 7);
+  assert.equal(first.replaySchemaVersion, 3);
   assert.equal(first.decisionSchemaVersion, 2);
   assert.equal(first.game.version, currentRelease.gameVersion);
   assert.match(first.game.rulesetFingerprint, /^sha256:[a-f0-9]{64}$/);
@@ -3390,7 +3390,7 @@ test("legacy reports migrate for viewing without gaining false attribution", () 
   const before = structuredClone(legacy);
   const migrated = normalizeSimulationReport(legacy);
   assert.deepEqual(legacy, before);
-  assert.equal(migrated.reportSchemaVersion, 6);
+  assert.equal(migrated.reportSchemaVersion, 7);
   assert.equal(migrated.game.version, "unknown");
   assert.equal(migrated.migration.attribution, "legacy_unattributed");
   assert.equal(
@@ -3481,4 +3481,18 @@ test("report comparison separates exact, controlled-rules, and descriptive evide
     classifyReportComparison(baseline, mixed).classification,
     "descriptive_historical"
   );
+});
+
+
+test("schema-six viewing preserves historical objectives without recomputing or mutating", async () => {
+  const current = await createSimulation({runs:1, playerCount:3,seed:"legacy-objective-envelope",backends:["weighted"],sampleReplays:0});
+  const old = {...current, schemaVersion:6,reportSchemaVersion:6,replaySchemaVersion:2,
+    samples:[{players:[{seat:0,objectiveRecord:{kind:"Starting Capability",value:9}}]}]};
+  const before = structuredClone(old);
+  const viewed = normalizeSimulationReport(old);
+  assert.deepEqual(old,before);
+  assert.equal(viewed.reportSchemaVersion,7);
+  assert.equal(viewed.replaySchemaVersion,2);
+  assert.deepEqual(viewed.samples,old.samples);
+  assert.equal(viewed.samples[0].players[0].currentEraObjective,undefined);
 });

@@ -9,7 +9,7 @@ come from components/ and the generated rulebook inventory.
 | --- | --- | --- |
 | Cards, including chips | Explain choices and identify infrastructure | Standard cards, foldout aids, flat chips |
 | Agent position tokens | Locate institutional assignments | Four identical tokens per player kit, two starting; no movement subsystem |
-| Cubes | Mark numbers and public status | Resource, Mandate, Trust milestone, objective and recognition tracks; individual Audit cubes |
+| Cubes | Mark numbers and public status | Resource, Mandate, Trust milestone and recognition tracks; individual Audit cubes |
 
 Boards and map tiles are printed surfaces. The opaque Audit bag is an accessory.
 There is no writing pen, checkbox, writable ownership field, or dry-erase ledger.
@@ -59,23 +59,20 @@ Read current positions directly; use no Power cubes or powered/unpowered flips.
 Mega-Cluster and Quantum add their printed yield only at connected-host Production.
 
 Joint Ventures alone retain shared matched numbered pairs. Both chips print the
-pair number and I–IV edges. Orient the construction Era toward the host label.
-This records new-versus-old ventures without writing and survives relocation.
+pair number and host identity. Matched numbers survive relocation; no Era edges are printed.
 Shared pair limits and explicit partner consent remain unchanged.
 
 ## Generic player mats and faction identity cards
 
 Each of five generic mats provides five numbered resource tracks, one cube each; a highest-Trust
-milestone track; one reusable objective track; and AGI No/Recognized spaces.
+milestone track; and AGI No/Recognized spaces.
 Trust milestone positions are 0, 2, 4, 6. Start at the highest threshold already
 included in starting Mandate; it never moves backward. This prevents repeat awards.
 
-Print all objective integers 0–99, plus the reminder to follow the active card's
-record. Some cards retain the starting resource; others count events or best
-successful domains. Current-state objectives require no duplicate counter.
-The public observation and browser display expose the same record.
+Leave the active Mandate visible. Its current qualification and value come from
+the table after Audit; no separate objective counter is supplied.
 
-Provide six Core Action positions, three Available project-chip spaces, a separate faction-card position, and supply wells. Keep record cubes separate from
+Provide six Core Action positions, three Available project-chip spaces, a separate faction-card position, and supply wells. Keep track cubes separate from
 Audit cubes. Cubes occupy exact readable positions; recesses may prevent knocks.
 No captive slider mechanism is required.
 
@@ -87,7 +84,7 @@ Timeline positions, Initiative, the shared Mandate track, and six Joint Venture
 pair bays. Era and Initiative use labelled flat chips. Keep district text,
 Facility spaces, pair identities, attachments and current connections visible.
 
-The printed governance-tracks panel describes cube records and the final World
+The printed governance-tracks panel describes resource, Trust milestone, and recognition cubes and the final World
 Ending comparison. Sum participating factions' printed starting Trust at the end;
 there is no separate setup record. AGI recognition remains separate from the
 institutional winner. Leave resolved objectives and Headlines face up as history.

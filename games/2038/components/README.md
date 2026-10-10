@@ -22,3 +22,5 @@ The [editing map](../content/README.md) gives the exact syntax and commands.
 
 Review player mats separately from faction identity cards: verify five equipment
 kits, six selectable institutions, and colour plus symbol on every owned piece.
+
+Review each Era objective: can a player determine eligibility and value from the visible table after Audit, with no question about earlier turns? Preserve the separate highest-awarded Trust milestone and AGI recognition.

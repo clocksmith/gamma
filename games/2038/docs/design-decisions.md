@@ -953,3 +953,9 @@ Five kits are independent of six institutions. Colour and symbol identify the
 player, while the faction card supplies unchanged starts and abilities. Seat
 ownership, supplies, RNG, action legality and historical Era scoring are unchanged
 in this equipment increment. Trust milestone and AGI cubes remain.
+
+## Current-state Era objectives — 2026-10-09
+
+The user selected a separate eight-card scoring redesign after the mechanically equivalent kit change. All twelve Mandates now declare current metrics, qualifications and comparison directions. This supersedes live objective counters and Venture Era markings. Trust milestone cubes stay because highest-awarded thresholds prevent repeat awards; AGI recognition and action/project faces stay. Costs, starts, actions, ordinary Production and Audit, diagnostic Research/Fund/production telemetry, and deferred secret-objective logic remain unchanged. Thresholds remain hypotheses pending fresh balance evidence.
+
+Report schema 7 and replay schema 3 record kit identity and current Era standings. Schema-six viewing preserves historical objective records and replay versions without rescoring or changing retained files. Decision schema 2 keeps its legal-decision envelope; executable fingerprints identify the changed observation fields. The final candidate also corrects standalone seat IDs and kit-glyph rendering; the earlier sealed rc.14/0.22.0 preparation artifacts remain immutable.

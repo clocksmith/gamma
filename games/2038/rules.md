@@ -41,7 +41,7 @@ After three action cycles, players resolve Era Production, optional AGI recognit
    side up; no shared project reference or unique Fusion supply is needed.
 5. Initialize each generic player mat from the chosen faction card’s printed starts. Put its Trust milestone
    cube at the highest threshold already awarded by starting Mandate, its AGI
-   recognition cube at No, and its objective cube at zero.
+   recognition cube at No.
 6. Place two Agents per player at ${terms.locations.frontier}. Keep the other two Agents in
    supply. Keep all four Facilities and the Generator in supply; no Facility
    begins on the board. Facilities must be constructed in printed number order:
@@ -238,7 +238,7 @@ Rival Agents may coexist. Agents have no paths, movement allowance, or exhaustio
 Any Agent can act on later turns. Recruiting expands presence, never actions.
 
 Each faction starts with two Agents and has four in total. The CEO is a character
-on the faction board, with no separate playing piece or executive powers.
+on the player mat, with no separate playing piece or executive powers.
 Facilities and Generators cannot act; their placement and local connections still apply.
 
 ### Effect precedence
@@ -483,8 +483,7 @@ The ${terms.actions.influence} Action creates no separate presence piece.
 #### Contract hosts
 
 Joint Ventures use shared matched chip pairs, one numbered half on each host.
-Each pair shows its construction Era by orienting the printed I–IV edge toward
-the host label. This preserves the current-Era objective without writing.
+Match the pair numbers and identify each fixed host. No Era marking is needed.
 A Facility may host multiple Joint Ventures, including between the same two
 Facilities, and any of its owner's personal upgrades. Each venture resolves
 independently; the shared Joint Venture pair supply remains its limit.
@@ -527,9 +526,7 @@ ${terms.actions.influence} effect.
 - Read that Era’s **New this Era** strip aloud. Those systems are now active.
 - Reveal one ${terms.playerTracks.mandate} from the current Era’s three-card deck. Return the other
   two cards in that deck to the box unseen.
-- Keep the Mandate visible. Set its cube record to the printed starting resource
-  value when requested, otherwise zero. Update only the named historical value;
-  evaluate current-state objectives directly from the board at scoring.
+- Keep the Mandate visible. Score its current public-state criterion after Audit.
 - Ready all six Core Actions.
 
 ### B. Three action cycles
@@ -636,17 +633,18 @@ remaining at game end are unresolved Systemic Risk.
 ### F. Score the ${terms.playerTracks.mandate}
 
 <!-- mandate-scoring:start -->
-Each Era ${terms.playerTracks.mandate} has a minimum qualification. If nobody qualifies, nobody
-scores it. Otherwise the qualifying leader scores two ${terms.playerTracks.mandate}; tied qualifying
-leaders score one ${terms.playerTracks.mandate} each.
+Each Era ${terms.playerTracks.mandate} specifies its qualification and comparison direction.
+After Audit, read current public state. If nobody qualifies, nobody scores.
+The qualifying leader scores two ${terms.playerTracks.mandate}; tied qualifying leaders score one each.
+Zero is valid when the card permits it, including zero Scrutiny.
 
-Compare only the revealed Mandate’s printed criterion. Resources, control, and
-public score do not break its tie. Leave the scored card beside its Era as part
-of the table’s public history. Reset the objective cube when the next Mandate
-is revealed. A starting-resource record stays fixed: compare the final resource
-with that starting value. Other history records track the named total, best run,
-or Yes/No status. For new active Joint Ventures, inspect their printed Era edges
-and current connections during Production; no additional record is needed.
+Compare only the revealed card’s criterion. Resources, control, and public score
+do not break its tie. Leave the scored card beside its Era as public history.
+No starting snapshots, accumulated gains, best Research runs, or Venture ages count.
+Compute capacity means nominal current output from connected Facilities, operating
+Mega-Clusters, and active Joint Ventures: ignore caps and do not run Production again.
+An active Venture’s fixed hosts must exist, belong to the correct partners,
+remain adjacent, and be connected. Count each active agreement for each partner.
 
 The revealed Mandate card is the exact qualification and scoring authority.
 <!-- mandate-scoring:end -->
@@ -808,7 +806,7 @@ It provides:
   nineteen district tiles;
 - four printed Era panels, Headline wells, Mandate wells, a Current Era path,
   and twelve Future Timeline positions;
-- a shared Mandate track, Initiative position, and reusable objective tracks;
+- a shared Mandate track and Initiative position;
 - printed AGI recognition spaces and the World Ending comparison;
 - six numbered Joint Venture pair bays; and
 - staging for the Audit bag, Scrutiny, Systemic Risk, and unused contract pairs.
@@ -821,7 +819,7 @@ extra rules state.
 Each of the five kits contains:
 
 - 1 generic player mat with five numbered tracks: Runway, Compute, Capability,
-  Customers, and Trust; a highest-Trust-milestone track, objective track, and AGI recognition spaces
+  Customers, and Trust; a highest-Trust-milestone track and AGI recognition spaces
 - ${content.gameConfig.playerSupply.resourceTrackCubes} kit-coloured and symbol-marked track cubes, one per resource track
 - ${content.gameConfig.playerSupply.agents} Agents (position tokens)
 - ${content.gameConfig.playerSupply.facilities} Facilities as flat chips, numbered 1–${content.gameConfig.playerSupply.facilities}
@@ -831,7 +829,6 @@ Each of the five kits contains:
 - ${content.gameConfig.playerSupply.scrutinyCubes} ${terms.playerTracks.scrutiny} cubes
 - 1 Mandate cube
 - ${content.gameConfig.playerSupply.trustMilestoneCubes} Trust milestone cube
-- ${content.gameConfig.playerSupply.objectiveProgressCubes} objective progress cube
 - ${content.gameConfig.playerSupply.agiRecognitionCubes} AGI recognition cube
 - ${content.gameConfig.playerSupply.projectChips} two-sided personal project chips: Mega-Cluster, Fusion, Quantum
 - ${content.gameConfig.playerSupply.coreActionCards} Core Action cards
@@ -922,7 +919,7 @@ on the two faces. The fifteen chips are three per player kit, not shuffled cards
 
 - **Remove Scrutiny:** return up to the stated number of your cubes from the Audit bag.
 - **Connected/powered:** ${content.gameConfig.board.startingGridConnection.rule} Evaluate connections on the current board.
-- **Current Mandate:** keep the objective card visible. For a history-dependent objective, reset and use its printed cube record. Evaluate current-state objectives directly from visible pieces.
+- **Current Mandate:** keep the card visible; read its qualification and value from current public state after Audit.
 - **Recognized AGI:** move that institution’s recognition cube to Recognized after payment. It remains there through Audit.
 - **Offline recovery:** an infrastructure change can immediately reconnect a Facility. Facilities never flip.
 

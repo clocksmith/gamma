@@ -507,7 +507,7 @@ function resolveCore(config, state, actionId, destination, options) {
       if (occupied >= capacity) return "Facility failed: no open Facility space.";
       player.runway -= 2;
       player.facilities.push({
-        id: `facility-${player.facilities.length + 1}`,
+        id: `s0-facility-${player.facilities.length + 1}`,
         tileId: destination.instanceId,
         powered: false
       });
@@ -532,7 +532,7 @@ function resolveCore(config, state, actionId, destination, options) {
       addResource(config, player, "trust", source.trust || 0);
       addScrutiny(config, player, source.scrutinyOnBuild || 0);
       player.generators.push({
-        id: `generator-${player.generators.length + 1}`,
+        id: `s0-generator-${player.generators.length + 1}`,
         tileId: destination.instanceId,
         sourceId: source.id
       });
@@ -555,7 +555,7 @@ function resolveCore(config, state, actionId, destination, options) {
     const number = Array.from({ length: config.playerSupply.agents }, (_, index) => index + 1)
       .find((value) => !player.pieces.some((piece) => piece.id === `agent-${value}`));
     player.runway -= cost;
-    player.pieces.push({ id: `agent-${number}`, name: `Agent ${number}`, kind: "agent", tileId: destination.instanceId });
+    player.pieces.push({ id: `s0-agent-${number}`, name: `Agent ${number}`, kind: "agent", tileId: destination.instanceId });
     return "An Agent joins the assignment; no additional action is granted.";
   }
 
