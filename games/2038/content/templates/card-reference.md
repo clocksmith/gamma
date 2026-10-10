@@ -98,7 +98,7 @@ ${excerpts.rules.player-aids}
 - ${content.referenceCards.playerReferences.2.backText.5}
 - ${content.referenceCards.playerReferences.2.backText.6}
 
-## Faction boards
+## Faction identity cards
 
 
 

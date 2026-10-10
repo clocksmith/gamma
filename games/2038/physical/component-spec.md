@@ -8,7 +8,7 @@ come from components/ and the generated rulebook inventory.
 | Family | Job | Selected form |
 | --- | --- | --- |
 | Cards, including chips | Explain choices and identify infrastructure | Standard cards, foldout aids, flat chips |
-| Agent position tokens | Locate institutional assignments | Four identical tokens per faction, two starting; no movement subsystem |
+| Agent position tokens | Locate institutional assignments | Four identical tokens per player kit, two starting; no movement subsystem |
 | Cubes | Mark numbers and public status | Resource, Mandate, Trust milestone, objective and recognition tracks; individual Audit cubes |
 
 Boards and map tiles are printed surfaces. The opaque Audit bag is an accessory.
@@ -16,10 +16,13 @@ There is no writing pen, checkbox, writable ownership field, or dry-erase ledger
 
 ## Ownership and identity
 
-Faction colours remain Dovetalis red #ff003c, Loopfold blue #0066ff, Mirevanta
-green #00e676, Kestralyn magenta #ff00d4, Orisonix cyan #00e5ff, and Corthaven
-yellow #ffea00. Print faction identity as well as colour; never rely on colour
-alone. Shared components use neutral colours. Systemic Risk uses black cubes.
+Five interchangeable player kits have the canonical colour and non-colour symbol
+from `components/game.json`: Red circle, Blue triangle, Green square, Violet
+diamond, and Gold star. Mark both faces of owned pieces, cubes, Core Actions,
+and player mats with the kit colour and symbol. Faction identity cards supply
+institutional names, starts, abilities and fiction, independent of equipment.
+Brand accents on faction artwork never identify owned pieces. Shared components
+use neutral colours; Systemic Risk uses black cubes.
 
 Facilities and Generators use the same flat chip format with distinct printed
 symbols. Facilities are visibly numbered 1–4. Facility 1 carries its integrated
@@ -30,8 +33,8 @@ no separate reference card is needed.
 
 ## Personal project chips
 
-Every faction receives three two-sided chips: Mega-Cluster, Fusion, and Quantum.
-Both sides identify the faction and project. Prototype masters print each pair
+Every player kit contains three two-sided chips: Mega-Cluster, Fusion, and Quantum.
+Both sides identify the kit colour, symbol, and project. Prototype masters print each pair
 as a 150 × 85 mm strip: cut the outer border, fold along the dashed centre line,
 and attach back to back for a 75 × 85 mm chip. Print at 100% scale. No shared project references or
 unique Fusion piece are needed.
@@ -60,9 +63,9 @@ pair number and I–IV edges. Orient the construction Era toward the host label.
 This records new-versus-old ventures without writing and survives relocation.
 Shared pair limits and explicit partner consent remain unchanged.
 
-## Faction boards
+## Generic player mats and faction identity cards
 
-Each board provides five numbered resource tracks, one cube each; a highest-Trust
+Each of five generic mats provides five numbered resource tracks, one cube each; a highest-Trust
 milestone track; one reusable objective track; and AGI No/Recognized spaces.
 Trust milestone positions are 0, 2, 4, 6. Start at the highest threshold already
 included in starting Mandate; it never moves backward. This prevents repeat awards.
@@ -72,8 +75,7 @@ record. Some cards retain the starting resource; others count events or best
 successful domains. Current-state objectives require no duplicate counter.
 The public observation and browser display expose the same record.
 
-Provide six Core Action positions, three Available project-chip spaces, faction
-ability and printed starts, and supply wells. Keep record cubes separate from
+Provide six Core Action positions, three Available project-chip spaces, a separate faction-card position, and supply wells. Keep record cubes separate from
 Audit cubes. Cubes occupy exact readable positions; recesses may prevent knocks.
 No captive slider mechanism is required.
 
@@ -90,7 +92,7 @@ Ending comparison. Sum participating factions' printed starting Trust at the end
 there is no separate setup record. AGI recognition remains separate from the
 institutional winner. Leave resolved objectives and Headlines face up as history.
 
-Pack six faction trays, four Era packets, one Training well and shared supplies.
+Pack five player-kit trays and six separate faction identity cards, four Era packets, one Training well and shared supplies.
 Exact supported quantities are generated from rules.md; do not maintain a second
 inventory here. Component masters show both faces of each personal project chip.
 Production dielines, dimensions and manufactured handling remain to be qualified.
@@ -102,3 +104,7 @@ use the same size, shape, material, and weight, with distinct colour or print
 visible after drawing. Keep every individual Audit cube; their presence determines
 draw probabilities. Track and recognition cubes never enter the bag. No physical
 redesign may silently change resources, construction eligibility, scoring or draws.
+
+Six faction identity cards show all starting values, starting public Mandate, the
+highest awarded starting Trust milestone, permanent ability, and institution
+fiction. Five generic mats and fifteen project chips are equipment, not identities.

@@ -168,6 +168,7 @@ export function createInteractiveGameCore({
   const match = new SelectedRulesMatch({
     config,
     factions: roster,
+    kitAssignments: options.kitAssignments,
     profiles: selectedProfiles,
     headlines,
     projects,

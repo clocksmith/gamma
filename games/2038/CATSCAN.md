@@ -104,3 +104,6 @@ Deliver a coherent, replayable institutional strategy game whose authored rules,
 Any mechanism is permitted if it preserves these boundaries and passes the acceptance evidence.
 
 Public hosting is owned by m3t4 at `https://m3t4.ai/mandate-2038/`. Gamma owns the build allowlist and all game sources.
+
+Player equipment belongs to one of five colour-and-symbol kits independently of
+six faction identities. Seat-based mechanical ownership remains authoritative.

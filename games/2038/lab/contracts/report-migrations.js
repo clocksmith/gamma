@@ -283,3 +283,16 @@ export function classifyReportComparison(leftInput, rightInput) {
     reason: "Multiple experimental dimensions differ."
   };
 }
+
+/** View-only fallback: retained reports and their historical scoring are untouched. */
+export function displayPlayerKit(config, player) {
+  if (player.kitId) {
+    const recorded = config.playerKits.find(kit => kit.id === player.kitId);
+    if (!recorded) throw new TypeError(`Unknown recorded player kit: ${player.kitId}.`);
+    return { ...recorded };
+  }
+  const seat = Number(player.seat ?? 0);
+  const kit = config.playerKits[seat];
+  return kit ? { ...kit, legacyDisplayFallback: true }
+    : { id: `legacy-seat-${seat}`, colorName: `Historical seat ${seat + 1}`, color: "#666666", symbol: String(seat + 1), symbolName: "seat number", legacyDisplayFallback: true };
+}

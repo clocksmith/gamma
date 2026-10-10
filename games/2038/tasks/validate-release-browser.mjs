@@ -370,6 +370,17 @@ try {
     await waitFor("location.search === '' && document.querySelector('#faction')?.options.length === 6 && document.querySelector('#start-game') && !document.querySelector('#start-game').disabled");
     const setup = await evaluate(`(()=>{const players=document.querySelector('#player-count');players.value='4';players.dispatchEvent(new Event('change',{bubbles:true}));return {factionCount:document.querySelector('#faction').options.length,playerCount:players.value,versionVisible:document.body.innerText.includes(${JSON.stringify(identity.game.version)})};})()`);
     assert.equal(setup.versionVisible, true, "The UI must show the sealed executable version.");
+    const kitSetup = await evaluate(`(() => {
+      const kit = document.querySelector('#kit');
+      if (!kit || kit.options.length !== 5) throw new Error('Five independent kits required');
+      kit.value = 'kit-violet';
+      const faction = document.querySelector('#faction');
+      faction.value = faction.options[1].value;
+      faction.dispatchEvent(new Event('change', {bubbles:true}));
+      return {kitId:kit.value, factions:faction.options.length};
+    })()`);
+    assert.equal(kitSetup.kitId, 'kit-violet', 'Faction selection must not change the selected kit');
+    assert.equal(kitSetup.factions, 6);
     await evaluate("document.querySelector('#start-game').click()");
     await waitFor("document.querySelectorAll('.decision-card').length === 6");
     const actions = await evaluate("[...document.querySelectorAll('.decision-card')].map(node=>node.innerText)");
@@ -401,6 +412,7 @@ try {
     await evaluate("window.__exportBlob=null;const original=URL.createObjectURL.bind(URL);URL.createObjectURL=(blob)=>{window.__exportBlob=blob;return original(blob);};document.querySelector('#export').click();");
     const exportText = await evaluate("window.__exportBlob.text()");
     const exported = JSON.parse(exportText);
+    assert.equal(exported.state.players[0].kitId, "kit-violet", "Export retains independently chosen kit");
     let downloadedPath;
     for (let attempt = 0; attempt < 50; attempt++) {
       const candidates = (await readdir(output)).filter(name => name.includes(exported.id) && name.endsWith('.json'));

@@ -11,6 +11,7 @@ import {
   renderSimulationCopy,
   simulationCopy
 } from "../content/simulation-copy.js";
+import { resolvePlayerKits } from "../rules/player-kits.js";
 import { calculateDeployComputeCost } from "../rules/deploy-costs.js";
 
 export const CORE_ECONOMY_COVERAGE = simulationCopy.coverage.coreEconomy;
@@ -121,6 +122,7 @@ export class CoreEconomyMatch {
     config,
     factions,
     profiles,
+    kitAssignments,
     backends = [],
     models = [],
     reasoningEfforts = [],
@@ -133,6 +135,7 @@ export class CoreEconomyMatch {
     if (!Number.isInteger(playerCount) || playerCount < config.players.min || playerCount > config.players.max) {
       throw new RangeError(`playerCount must be ${config.players.min}–${config.players.max}.`);
     }
+    this.kitAssignments = resolvePlayerKits(config, playerCount, kitAssignments);
     this.config = config;
     this.seed = String(seed);
     this.playerCount = playerCount;
@@ -164,6 +167,7 @@ export class CoreEconomyMatch {
         playerCount
       )
     );
+    this.players.forEach((player, seat) => { player.kitId = this.kitAssignments[seat].id; });
     this.recordEvent("match_started", null, simulationCopy.events.coreMatchStarted);
   }
 
@@ -229,6 +233,7 @@ export class CoreEconomyMatch {
   publicPlayerState(player) {
     return {
       seat: player.seat,
+      kitId: player.kitId,
       factionId: player.factionId,
       factionName: player.factionName,
       runway: player.runway,
@@ -319,6 +324,7 @@ export class CoreEconomyMatch {
       requestId: `${this.publicMatchId}:r${this.round}:c${this.cycle}:s${seat}:${stage}`,
       matchId: this.publicMatchId,
       seat,
+      kitId: player.kitId,
       factionId: player.factionId,
       round: this.round,
       cycle: this.cycle,
@@ -879,7 +885,8 @@ export class CoreEconomyMatch {
       })),
       players: this.players.map((player) => ({
         seat: player.seat,
-        factionId: player.factionId,
+        kitId: player.kitId,
+      factionId: player.factionId,
         factionName: player.factionName,
         profileId: player.profileId,
         backendId: player.backendId,
@@ -937,7 +944,8 @@ export class CoreEconomyMatch {
     const standings = this.players
       .map((player) => ({
         seat: player.seat,
-        factionId: player.factionId,
+        kitId: player.kitId,
+      factionId: player.factionId,
         factionName: player.factionName,
         profileId: player.profileId,
         score: finalMandate(this.config, this.board, player),

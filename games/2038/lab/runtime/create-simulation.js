@@ -1,3 +1,4 @@
+import { resolvePlayerKits } from "../rules/player-kits.js";
 import { readFile } from "node:fs/promises";
 import { execFile } from "node:child_process";
 import { promisify } from "node:util";
@@ -481,6 +482,7 @@ export async function createSimulation(options = {}, onProgress) {
       new SelectedRulesMatch({
         config,
         factions: rotatedFactions,
+        kitAssignments: options.kitAssignments,
         profiles: rotatedProfiles,
         backends: rotatedBackends,
         models: rotatedModels,
@@ -572,6 +574,7 @@ export async function createSimulation(options = {}, onProgress) {
         reasoningEffort: reasoningEfforts[seat]
       })),
       playerCountStatus,
+      kitAssignments: resolvePlayerKits(config, playerCount, options.kitAssignments).map(kit => kit.id),
       factionPoolIds: factions.map((faction) => faction.id),
       factionIds: explicitFactions?.map((faction) => faction.id) || null,
       mandateMode: options.mandateMode || "variable",

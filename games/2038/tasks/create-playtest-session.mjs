@@ -28,6 +28,7 @@ function slug(value) {
 }
 
 const input = argumentsFrom(process.argv.slice(2));
+const config = JSON.parse(await readFile(resolve(projectRoot, "dist/runtime/game-config.json"), "utf8"));
 const playerCount = Number(input.players || 4);
 if (!Number.isInteger(playerCount) || playerCount < 2 || playerCount > 5) {
   throw new RangeError("--players must be an integer from 2 to 5.");
@@ -123,6 +124,7 @@ const receipt = {
   configuration: {
     playerCount,
     boardSeed,
+    kitAssignments: config.playerKits.slice(0, playerCount).map(kit => kit.id),
     factions: Array.from(
       { length: playerCount },
       (_, seat) => `seat_${seat + 1}_unassigned`

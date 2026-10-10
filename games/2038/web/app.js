@@ -15,9 +15,18 @@ const [factions, config, profilesDocument, uiCopy] = await Promise.all([
 ]);
 const profiles = profilesDocument.profiles;
 const copy = uiCopy.prototype;
-const factionColors = new Map(
-  factions.factions.map((faction) => [faction.id, faction.color])
-);
+const kitsById = new Map(config.playerKits.map(kit => [kit.id, kit]));
+const kitSelect = document.createElement("select");
+kitSelect.id = "kit";
+kitSelect.setAttribute("aria-label", copy.browser.playerKit);
+for (const kit of config.playerKits) kitSelect.add(new Option(`${kit.symbol} ${kit.colorName} · ${kit.symbolName}`, kit.id));
+const kitLabel = document.createElement("label");
+kitLabel.textContent = copy.browser.playerKit;
+kitLabel.append(kitSelect);
+const kitGuidance = document.createElement("small");
+kitGuidance.textContent = copy.browser.kitSetup;
+kitLabel.append(kitGuidance);
+
 const firstGameGuideMode = new URLSearchParams(window.location.search).get("guide") === "first-game";
 
 const $ = (id) => document.getElementById(id);
@@ -33,6 +42,8 @@ const elements = Object.fromEntries([
 for (const faction of factions.factions) {
   elements.faction.add(new Option(`${faction.name} — ${faction.motto}`, faction.id));
 }
+
+elements.setup.append(kitLabel);
 
 let game = null;
 let pollTimer = null;
@@ -55,9 +66,8 @@ function formatCopy(template, values = {}) {
   return template.replace(/\{(\w+)\}/g, (_, key) => String(values[key] ?? ""));
 }
 
-function factionColor(player) {
-  return factionColors.get(player.factionId) || "#000000";
-}
+function playerKit(player) { return kitsById.get(player.kitId); }
+function kitColor(player) { return playerKit(player)?.color || "#000000"; }
 
 function backendOptions() {
   return [
@@ -203,22 +213,22 @@ function contentsForTile(tile, players, priorMarkerKeys = new Set()) {
     for (const [index, piece] of player.pieces.entries()) {
       if (piece.tileId !== tile.instanceId) continue;
       const arrivalClass = priorMarkerKeys.has(markerKey(player, "piece", piece, index)) ? "" : " arrival";
-      marks.push(`<i class="dot ${piece.kind}${arrivalClass}" style="--seat:${player.seat};--faction-color:${factionColor(player)}" ` +
-        `title="${escapeHtml(player.factionName)} ${piece.kind}"></i>`);
+      marks.push(`<i class="dot ${piece.kind}${arrivalClass}" style="--seat:${player.seat};--kit-color:${kitColor(player)}" ` +
+        `title="${escapeHtml(playerKit(player)?.colorName)} ${escapeHtml(playerKit(player)?.symbolName)} kit · ${escapeHtml(player.factionName)} ${piece.kind}">>${escapeHtml(playerKit(player)?.symbol || "")}</i>`);
     }
     for (const [index, facility] of player.facilities.entries()) {
       if (facility.tileId !== tile.instanceId) continue;
       const arrivalClass = priorMarkerKeys.has(markerKey(player, "facility", facility, index)) ? "" : " arrival";
       const status = facility.powered ? copy.browser.connectedNow : copy.browser.offline;
       marks.push(`<i class="dot facility ${facility.powered ? "powered" : "offline"}${arrivalClass} ` +
-        `" style="--seat:${player.seat};--faction-color:${factionColor(player)}" ` +
-        `title="${escapeHtml(player.factionName)} Facility — ${status}"></i>`);
+        `" style="--seat:${player.seat};--kit-color:${kitColor(player)}" ` +
+        `title="${escapeHtml(playerKit(player)?.colorName)} ${escapeHtml(playerKit(player)?.symbolName)} kit · ${escapeHtml(player.factionName)} Facility — ${status}">>${escapeHtml(playerKit(player)?.symbol || "")}</i>`);
     }
     for (const [index, generator] of player.generators.entries()) {
       if (generator.tileId !== tile.instanceId) continue;
       const arrivalClass = priorMarkerKeys.has(markerKey(player, "generator", generator, index)) ? "" : " arrival";
-      marks.push(`<i class="dot generator${arrivalClass}" style="--seat:${player.seat};--faction-color:${factionColor(player)}" ` +
-        `title="${escapeHtml(player.factionName)} ${escapeHtml(generator.sourceId)}"></i>`);
+      marks.push(`<i class="dot generator${arrivalClass}" style="--seat:${player.seat};--kit-color:${kitColor(player)}" ` +
+        `title="${escapeHtml(playerKit(player)?.colorName)} ${escapeHtml(playerKit(player)?.symbolName)} kit · ${escapeHtml(player.factionName)} ${escapeHtml(generator.sourceId)}">>${escapeHtml(playerKit(player)?.symbol || "")}</i>`);
     }
   }
   return marks.join("");
@@ -270,10 +280,11 @@ function renderPlayers(state) {
     const card = document.createElement("article");
     card.className = `public-player ${player.seat === 0 ? "human" : ""}`;
     card.style.setProperty("--seat", player.seat);
-    card.style.setProperty("--faction-color", factionColor(player));
+    card.style.setProperty("--kit-color", kitColor(player));
     card.innerHTML = `
       <p class="eyebrow">${formatCopy(copy.browser.seat, { seat: player.seat + 1 })}${player.seat === 0 ? ` · ${copy.browser.you}` : ""}</p>
       <h3>${escapeHtml(player.factionName)}</h3>
+      <p class="kit-identity">${escapeHtml(playerKit(player)?.symbol)} ${escapeHtml(playerKit(player)?.colorName)} · ${escapeHtml(playerKit(player)?.symbolName)} kit</p>
       ${opponent ? `<p class="readiness">${
         escapeHtml(opponent.profileName)
       } · ${escapeHtml(opponent.backend)}${
@@ -768,6 +779,7 @@ elements["start-game"].addEventListener("click", async () => {
     const opponents = opponentOptions();
     const options = {
       factionId: elements.faction.value,
+      kitAssignments: [kitSelect.value, ...config.playerKits.filter(kit => kit.id !== kitSelect.value).slice(0, Number(elements["player-count"].value) - 1).map(kit => kit.id)],
       playerCount: Number(elements["player-count"].value),
       seed: elements.seed.value,
       ...opponents

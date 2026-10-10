@@ -36,7 +36,7 @@ test("removed Build choices fail without moving pieces or spending resources", a
   const state = createGame(config, factions, headlines, "invalid-build", "coalition_lab");
   commitAction(state, "build");
   const before = structuredClone(state);
-  assert.throws(() => resolveSelectedAction(config, headlines, state, "agent-1", "frontier-1", {buildMode: "link"}), /Unknown build mode|no longer legal/);
+  assert.throws(() => resolveSelectedAction(config, headlines, state, "s0-agent-1", "frontier-1", {buildMode: "link"}), /Unknown build mode|no longer legal/);
   assert.deepEqual(state, before);
   const {match} = await createInteractiveGame({seed: "invalid-build"}, () => {});
   const snapshot = structuredClone(match.players);

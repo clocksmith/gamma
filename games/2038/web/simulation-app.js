@@ -1,4 +1,5 @@
 import {
+  displayPlayerKit,
   normalizeSimulationReport
 } from "/lab/contracts/report-migrations.js";
 import {
@@ -18,10 +19,11 @@ import {
 } from "./api-client.js";
 import { pointyTopAxialPosition } from "./src/hex-layout.js";
 
-const seatColors = ["#a45137", "#536e73", "#a98c3f", "#7a657d", "#607d70", "#6c7a89"];
-const [profilesDocument, uiCopy] = await Promise.all([
+
+const [profilesDocument, uiCopy, kitConfig] = await Promise.all([
   fetch("/dist/runtime/player-strategies.json").then((response) => response.json()),
-  fetch("/dist/runtime/ui-copy.json").then((response) => response.json())
+  fetch("/dist/runtime/ui-copy.json").then((response) => response.json()),
+  fetch("/dist/runtime/game-config.json").then((response) => response.json())
 ]);
 const profiles = profilesDocument.profiles;
 const copy = uiCopy.simulation;
@@ -923,7 +925,7 @@ function renderExperimentReport() {
 
 function renderSeatResults() {
   const aggregateCard = (entry, label, index) => `
-    <article class="seat-result" style="--seat-color:${seatColors[index % seatColors.length]}">
+    <article class="seat-result" style="--seat-color:${displayPlayerKit(kitConfig, entry).color}">
       <p class="eyebrow">${label}</p>
       <h3>${entry.factionId || entry.profileId}</h3>
       <dl>
@@ -947,7 +949,7 @@ function renderSeatResults() {
     .map((entry, index) => aggregateCard(entry, copy.labels.persona, index))
     .join("");
   elements["seat-results"].innerHTML = report.seats.map((seat) => `
-    <article class="seat-result" style="--seat-color:${seatColors[seat.seat]}">
+    <article class="seat-result" style="--seat-color:${displayPlayerKit(kitConfig, seat).color}">
       <p class="eyebrow">Seat ${seat.seat + 1} · rotating factions</p>
       <h3>${
         seat.profileIds?.length > 1
@@ -975,7 +977,7 @@ function renderDistributions() {
       .sort((left, right) => left[0] - right[0]);
     const maximum = Math.max(...entries.map((entry) => entry[1]));
     return `
-      <div class="distribution" style="--seat-color:${seatColors[seat.seat]}">
+      <div class="distribution" style="--seat-color:${displayPlayerKit(kitConfig, seat).color}">
         <div>
           <p class="eyebrow">Seat ${seat.seat + 1}</p>
           <h3>${
@@ -1059,7 +1061,7 @@ function renderReplay() {
     hex.style.height = `${position.size * 0.87}px`;
     const markers = [];
     for (const player of event.state.players) {
-      const color = seatColors[player.seat];
+      const color = displayPlayerKit(kitConfig, player).color;
       for (const piece of player.pieces.filter((item) => item.tileId === tile.instanceId)) {
         markers.push(
           `<i class="replay-marker" style="--seat-color:${color}" title="${
@@ -1091,7 +1093,7 @@ function renderReplay() {
   }
 
   elements["replay-players"].innerHTML = event.state.players.map((player) => `
-    <article class="replay-player" style="--seat-color:${seatColors[player.seat]}">
+    <article class="replay-player" style="--seat-color:${displayPlayerKit(kitConfig, player).color}">
       <p class="eyebrow">Seat ${player.seat + 1} · ${player.profileId}</p>
       <h3>${player.factionName}</h3>
       <p class="muted">${escapeHtml(player.backendId)} · ${escapeHtml(player.model || "provider default")} · ${escapeHtml(player.reasoningEffort || "default effort")}</p>

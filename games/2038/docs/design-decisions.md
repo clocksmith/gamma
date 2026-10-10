@@ -946,3 +946,10 @@ Customer requirements, resource caps, spent Trust awards, Agent presence, and
 unchanged action usage. A seeded game completes with three reveals per Era.
 No simulation result is a balance claim. Human review must still establish
 whether each new effect is understandable and worth its additional reading.
+
+## 2026-10-09 — Reusable equipment
+
+Five kits are independent of six institutions. Colour and symbol identify the
+player, while the faction card supplies unchanged starts and abilities. Seat
+ownership, supplies, RNG, action legality and historical Era scoring are unchanged
+in this equipment increment. Trust milestone and AGI cubes remain.
