@@ -1,4 +1,4 @@
-export const CURRENT_REPORT_SCHEMA_VERSION = 7;
+export const CURRENT_REPORT_SCHEMA_VERSION = 8;
 
 function clone(value) {
   return structuredClone(value);
@@ -194,7 +194,7 @@ export function normalizeSimulationReport(rawReport) {
   if (version === 3) return migrateV5ToV6(migrateV4ToV5(migrateV3ToV4(rawReport)));
   if (version === 4) return migrateV5ToV6(migrateV4ToV5(rawReport));
   if (version === 5) return migrateV5ToV6(rawReport);
-  if (![6, CURRENT_REPORT_SCHEMA_VERSION].includes(version)) {
+  if (![6, 7, CURRENT_REPORT_SCHEMA_VERSION].includes(version)) {
     throw new TypeError(`Unsupported simulation report schema ${version || "unknown"}.`);
   }
   const incompleteMatchArchive = rawReport.launchIdentity?.rng &&
@@ -225,10 +225,10 @@ export function normalizeSimulationReport(rawReport) {
       throw new TypeError(`Simulation report schema ${version} requires ${key}.`);
     }
   }
-  if (version === 6) {
+  if (version === 6 || version === 7) {
     report.schemaVersion = CURRENT_REPORT_SCHEMA_VERSION;
     report.reportSchemaVersion = CURRENT_REPORT_SCHEMA_VERSION;
-    report.migration ||= {migratedFromReportSchemaVersion:6,
+    report.migration ||= {migratedFromReportSchemaVersion:version,
       attribution:'historical_objectives_preserved',
       warning:'Display envelope only. Historical objectives and replay schema are retained without rescoring.'};
   }

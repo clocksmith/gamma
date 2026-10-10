@@ -92,7 +92,7 @@ const timingBadge = (t) => (t ? t.replace(/_/g, " ") : "");
 function buildFactions(data, config) {
   const cards = data.factions
     .map((f) => {
-      const stats = `<dl class="stats">${Object.entries(f.starts).map(([key, value]) => `<div><dt>${escapeHtml(key)}</dt><dd>${escapeHtml(value)}</dd></div>`).join("")}</dl><p>Initialize the player mat from this card. Highest Trust milestone starts at ${Math.max(0, ...config.scoring.trustThresholds.filter(t => f.starts.trust >= t.value).map(t => t.value))}; starting public Mandate: ${f.starts.startingPublicMandate}.</p>`;
+      const stats = `<dl class="stats">${Object.entries(f.starts).map(([key, value]) => `<div><dt>${escapeHtml(key)}</dt><dd>${escapeHtml(value)}</dd></div>`).join("")}</dl><p>Initialize the four tracks and Customer cards from this identity. Choose a kit separately.</p>`;
       const abilities = (f.abilities || [])
         .map(
           (a) => `<div class="ability">
@@ -130,8 +130,8 @@ ${scoringRule}
 }
 
 function buildPlayerMats(config) {
-  const mats = config.playerKits.map(kit => `<article class="card player-mat" data-kit="${escapeHtml(kit.id)}" style="--accent:${escapeHtml(kit.color)}"><h3>${escapeHtml(kit.symbol)} ${escapeHtml(kit.colorName)} player kit · ${escapeHtml(kit.symbolName)}</h3><p>Initialize from your chosen faction identity card. All pieces belong to this player kit.</p>${["runway", "compute", "capability", "customers", "trust"].map(key => `<div class="resource-track"><strong>${escapeHtml(key)}</strong> ${Array.from({length: config.resources[key].cap + 1}, (_, value) => `<span>${value}</span>`).join(" · ")}</div>`).join("")}<div class="trust-milestone-track">Highest Trust milestone awarded: ${[0, ...config.scoring.trustThresholds.map(t => t.value)].map(value => `<span data-trust-threshold="${value}">${value}</span>`).join(" · ")}</div><p class="recognition-track">AGI recognition: No · Recognized</p><p>Current Era objective: read qualification and value from the table after Audit.</p><p>Available / Exhausted Core Actions · Available / Built projects · ten Scrutiny cubes</p></article>`).join("");
-  return section("player-mats", "Player mats", config.playerKits.length, mats, "Five interchangeable kits; choose any faction identity separately.");
+  const mats = config.playerKits.map(kit => `<article class="card player-mat" data-kit="${escapeHtml(kit.id)}" style="--accent:${escapeHtml(kit.color)}"><h3>${escapeHtml(kit.symbol)} ${escapeHtml(kit.colorName)} · ${escapeHtml(kit.symbolName)}</h3><p>Initialize from your faction identity card.</p>${Object.entries(config.resources).map(([key,track]) => `<div class="resource-track" data-resource="${key}"><strong>${escapeHtml(track.name)}</strong> ${Array.from({length:track.cap+1},(_,n)=>n).join(" · ")}</div>`).join("")}<p class="recognition-track">AGI: No · Recognized</p><p>Customers: cards · Facilities: normal/upgraded · Score final holdings once.</p></article>`).join("");
+  return section("player-mats", "Player mats", config.playerKits.length, mats, "Five kits; four resource tracks each.");
 }
 
 function formatTurnContract(tc) {
@@ -154,12 +154,15 @@ function buildActions(config) {
 }
 
 function buildEquipment(config) {
-  const pieces = config.playerKits.flatMap(kit => [
-    ...Array.from({length:config.playerSupply.agents}, (_,i) => ["Agent",i+1]),
-    ...Array.from({length:config.playerSupply.facilities}, (_,i) => ["Facility",i+1]),
-    ["Generator",1]
-  ].map(([type,number]) => `<article class="card equipment-chip" data-kit="${escapeHtml(kit.id)}" style="--accent:${escapeHtml(kit.color)}"><h3>${escapeHtml(kit.symbol)} ${type} ${number}</h3><p>${escapeHtml(kit.colorName)} · ${escapeHtml(kit.symbolName)} kit</p>${type === "Facility" && number === 1 ? `<p>Starting-grid identifier · ${escapeHtml(config.board.startingGridConnection.rule)}</p>` : ""}</article>`)).join("");
-  return section("equipment", "Kit-owned equipment", config.playerKits.length * (config.playerSupply.agents + config.playerSupply.facilities + config.playerSupply.generators), pieces, "All equipment uses kit colour and symbol. Facility numbers preserve construction order.");
+  const cards=config.playerKits.flatMap(kit=>[
+    ...Array.from({length:config.playerSupply.agents},(_,i)=>`<article class="card agent-token" data-kit="${kit.id}" style="--accent:${kit.color}"><h3>${kit.symbol} Agent ${i+1}</h3><p>${kit.colorName} · ${kit.symbolName}</p></article>`),
+    ...Array.from({length:config.playerSupply.facilities},(_,i)=>`<article class="card facility-card" data-kit="${kit.id}" style="--accent:${kit.color}">${[false,true].map(upgraded=>`<div class="chip-face" data-facility-face="${upgraded?'upgraded':'normal'}"><h3>${kit.symbol} Facility ${i+1}</h3><p>${kit.colorName} · ${kit.symbolName}</p><strong>${upgraded?'Upgraded':'Normal'}</strong><p>${upgraded?'Twice':'Once'} the area yield at every Production.</p></div>`).join("")}</article>`),
+    ...Array.from({length:config.customerCards.perPlayer},(_,i)=>`<article class="card customer-card" data-kit="${kit.id}" data-customer="${i+1}" style="--accent:${kit.color}"><h3>${kit.symbol} Customer ${i+1}</h3><p>${kit.colorName} · ${kit.symbolName}</p><p>Requires ${config.customerCards.requirements[i]} Capability. ${config.customerCards.production.amount} Runway per Production; ${config.scoring.customer} final points.</p></article>`)
+  ]).join("");
+  return section("equipment","Kit-owned equipment",config.playerKits.length*(config.playerSupply.agents+config.playerSupply.facilities+config.customerCards.perPlayer),cards,"Agent tokens, two-sided Facilities, and ordered Customer cards. Kit symbols identify ownership.");
+}
+function buildAreas(config) {
+  return section("areas","Shared action areas",config.board.tiles.length,config.board.tiles.map(a=>card({title:config.actions.find(x=>x.id===a.actionId).name,subtitle:a.name,bodyHtml:`<p>${escapeHtml(a.production)}</p><p>${a.facilitySpaces} shared Facility spaces</p><p>Venture contract resource: ${a.contractResource}</p>`})).join(""),"Arrange freely. No adjacency or Power condition.");
 }
 
 function buildRounds(config, reference) {
@@ -215,45 +218,11 @@ function buildMandates(data) {
       })
     )
     .join("");
-  return section("mandates", "Era Mandates", data.mandates.length, cards, "Per-Era scoring races; the qualifying leader scores.");
+  return section("mandates", "Era Mandates", data.mandates.length, cards, "Reveal one per Era; score all four from the final table.");
 }
 
 function buildProjects(data, config) {
-  const chips = config.playerKits.flatMap(kit => data.projects.map(project =>
-    `<article class="card project-chip" style="--accent:${escapeHtml(kit.color)}" data-project="${escapeHtml(project.id)}" data-kit="${escapeHtml(kit.id)}">
-${[['Available', project.frontText], ['Built', project.backText]].map(([state, text]) =>
-  `<div class="chip-face" data-chip-state="${state.toLowerCase()}"><h3>${escapeHtml(project.name)}</h3><p class="chip-owner">${escapeHtml(`${kit.symbol} ${kit.colorName} · ${kit.symbolName}`)}</p><strong>${state}</strong><p>${escapeHtml(text)}</p></div>`).join('')}
-</article>`
-  )).join("");
-  return section("projects", "Personal project chips", config.playerKits.length * data.chipsPerPlayer,
-    chips, data.constructionRule);
-}
-
-function buildPowerSources(config) {
-  const cards = config.powerSources
-    .map((p) =>
-      card({
-        title: p.name,
-        subtitle: p.tagline,
-        badgeList: [
-          p.round ? roundBadge(p.round) : "",
-          p.id === "clean_infrastructure"
-            ? "Renewable tile"
-            : p.id === "emergency_infrastructure"
-              ? "Grid tile"
-              : "Fusion project",
-          `${p.runwayCost} Runway`,
-          "Connects own and adjacent districts"
-        ],
-        bodyHtml: textRows([
-          { text: p.rulesText, kind: "rules" },
-          { label: "Public claim", text: p.publicClaim },
-          { text: [p.scrutinyPerUse ? `Scrutiny/Production: ${p.scrutinyPerUse}` : "", p.trust ? `Trust: ${p.trust}` : ""].filter(Boolean).join(" · ") }
-        ])
-      })
-    )
-    .join("");
-  return section("power", "Embedded Power Contracts", config.powerSources.length, cards, "Printed on the two Energy tiles and the Fusion project; no separate reference cards.");
+  return section("projects","Single Facility upgrade rule",data.projects.length,data.projects.map(project=>card({title:project.name,bodyHtml:textRows([{text:project.frontText},{text:project.backText}])})).join(""),data.constructionRule);
 }
 
 function buildTactics(data) {
@@ -380,10 +349,6 @@ main { padding: 1.8rem clamp(1rem, 3vw, 2.4rem); }
 .stats div { background: #f4f4f2; border-radius: 6px; padding: 0.2rem 0.45rem; text-align: center; min-width: 3.4rem; }
 .stats dt { font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.05em; color: #9aa3ad; margin: 0; }
 .stats dd { margin: 0; font-weight: 700; font-size: 0.95rem; }
-.trust-milestone-track { display: block; margin-top: .3rem; }
-.trust-milestone-track small { display: block; font-weight: 400; }
-.trust-milestone-track span, .recognition-track span { display: inline-block; padding: .35rem; border: 1px solid currentColor; }
-.trust-milestone-track [data-start="true"] { outline: 2px solid currentColor; }
 .abilities { display: flex; flex-direction: column; gap: 0.5rem; }
 .ability { border-left: 3px solid color-mix(in srgb, var(--accent) 45%, #d7d7d2); padding-left: 0.6rem; }
 .ability-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.4rem; }
@@ -428,13 +393,13 @@ async function build() {
   const allSections = [
     { id: "player-mats", label: "Player mats", html: buildPlayerMats(config), n: config.playerKits.length },
     { id: "factions", label: "Factions", html: buildFactions(factions, config), n: factions.factions.length },
-    { id: "equipment", label: "Kit-owned equipment", html: buildEquipment(config), n: config.playerKits.length * (config.playerSupply.agents + config.playerSupply.facilities + config.playerSupply.generators) },
+    { id: "equipment", label: "Kit-owned equipment", html: buildEquipment(config), n: config.playerKits.length * (config.playerSupply.agents + config.playerSupply.facilities + config.customerCards.perPlayer) },
     { id: "actions", label: "Core Actions", html: buildActions(config), n: config.playerKits.length * config.actions.length },
     { id: "rounds", label: "Eras", html: buildRounds(config, reference), n: config.rounds.length },
     { id: "headlines", label: "Headlines", html: buildHeadlines(headlines), n: headlines.headlines.length },
     { id: "mandates", label: "Era Mandates", html: buildMandates(mandates), n: mandates.mandates.length },
-    { id: "projects", label: "Infrastructure projects", html: buildProjects(escalation, config), n: config.playerKits.length * escalation.chipsPerPlayer },
-    { id: "power", label: "Embedded Power Contracts", html: buildPowerSources(config), n: config.powerSources.length },
+    { id: "projects", label: "Facility upgrade rule", html: buildProjects(escalation, config), n: escalation.projects.length },
+    { id: "areas", label: "Shared action areas", html: buildAreas(config), n: config.board.tiles.length },
     { id: "reference", label: "Board Panels and Player Aids", html: buildReferenceCards(reference), n: (reference.eraCards || []).length + (reference.playerReferences || []).length },
     { id: "tactics", label: "Tactics", html: buildTactics(tactics), n: tactics.tactics.length },
     { id: "objectives", label: "Secret Objectives", html: buildObjectives(objectives), n: objectives.objectives.length },

@@ -1,934 +1,130 @@
-# ${content.worldCopy.title}
-## A strategy game about institutions turning reliable AI capability into contested public authority as they build, deploy, regulate, and make rival claims on ${terms.systems.agi}
-
-**Players:** ${game.playerRange} · **Suggested player count:** ${game.suggestedPlayerRange}
-
-Use the browser **First Game Guide** for a guided introduction.
-
-This rulebook contains setup, map instructions, component usage, and inventory.
-Keep the printed cards, boards, and player aids beside it during play.
-
-## How to Play
-
-### Object of the Game
-
-Institutions race across four Eras to build infrastructure, deploy automated services, conduct research, and secure public authority. The institution with the most ${terms.playerTracks.mandate} wins. Qualifying institutions may score recognized ${terms.systems.agi} before the final Audit. Resolve the institutional winner and shared World Ending separately. Follow the numbered sections in order.
-
-### Turn Overview: ReAct
-
-Each Era consists of three action cycles with simultaneous selection followed by resolution in Initiative order:
-
-- **Before selection:** Reveal a Headline and finish its instructions.
-- **Reason:** Everyone secretly chooses an available Core Action, then reveals.
-- **Act:** In Initiative order, each player may make the permitted resource exchange, assigns one Agent, and resolves the selected action. Apply discounts, payments, rewards, and penalties at their specified times.
-- **Observe:** Inspect the changed board and exhaust the action. After everyone resolves, pass Initiative.
-
-After three action cycles, players resolve Era Production, optional AGI recognition (Era IV only), the Public Audit, and Era Mandate scoring.
-
-## 1. Setup
-
-1. Unfold the Governance Board. Build the nineteen-tile map in its wells as described in **Modular hex board**:
-   ${terms.locations.frontier} in the center, the shuffled six-tile operational ring around it,
-   and the shuffled twelve-tile public ring around the complete outer edge.
-2. Separate the twenty-four ${terms.systems.headline} cards by Era. Shuffle
-   each deck into its printed Era panel's Headline well. Each Era uses three
-   ${terms.systems.headlines}. Place the Current Era chip in its Start bay.
-3. Shuffle the Training deck. Separate the twelve Era ${terms.playerTracks.mandate} cards into
-   four three-card Era decks. Shuffle each deck and place it beside its Era
-   panel.
-4. Each player chooses a distinct kit and a faction card independently. Stage the shared supplies. Ordinary Power contracts are printed on the
-   Energy tiles. Take the kit’s three personal project chips, Available
-   side up; no shared project reference or unique Fusion supply is needed.
-5. Initialize each generic player mat from the chosen faction card’s printed starts. Put its Trust milestone
-   cube at the highest threshold already awarded by starting Mandate, its AGI
-   recognition cube at No.
-6. Place two Agents per player at ${terms.locations.frontier}. Keep the other two Agents in
-   supply. Keep all four Facilities and the Generator in supply; no Facility
-   begins on the board. Facilities must be constructed in printed number order:
-   Facility 1 first, then 2, 3, and 4. Facility 1 carries that player’s
-   integrated starting-grid identifier. Set each Faction’s ${terms.resources.runway}, ${terms.resources.compute}, ${terms.playerTracks.capability}, ${terms.playerTracks.customers}, ${terms.playerTracks.trust}. Set each to its printed starting value.
-7. Place each Faction’s already-earned public ${terms.playerTracks.mandate} on the shared track as
-   printed on its faction card. Put every player’s ten ${terms.playerTracks.scrutiny}
-   cubes outside the bag; the bag begins empty.
-8. Keep participating faction cards visible: their printed starting Trust
-   determines Setup Collective Trust when resolving the World Ending.
-9. Choose Initiative randomly and give that player the Initiative chip.
-   Begin Era I.
-
-### Modular hex board
-
-The board is one jurisdiction whose districts represent physical and
-operational proximity rather than ordinary distance. The shuffled map
-remains fixed for all four Eras. Rival pieces coexist; there is no combat
-or player elimination.
-
-<!-- map:start -->
-### Build the jurisdiction
-
-Use nineteen tiles in a complete radius-two hexagon:
-
-- One ${terms.locations.frontier}
-- Three ${terms.locations.research}
-- Three ${terms.locations.cloud}
-- Two each of ${terms.locations.consumer}, ${terms.locations.media},
-  ${terms.locations.government}, and ${terms.locations.renewable}
-- One each of ${terms.locations.chip}, ${terms.locations.capital},
-  ${terms.locations.talent}, and ${terms.locations.grid}
-
-Place ${terms.locations.frontier} at the center. Six operational districts form
-the complete inner ring. Twelve public districts form the complete outer ring.
-Every outer district touches its two outer neighbors and either one or two
-inner districts according to the printed wells. Adjacency governs infrastructure;
-Agent assignments do not trace paths.
-
-Shuffle this operational ring around ${terms.locations.frontier}:
-
-- One ${terms.locations.research}
-- One ${terms.locations.cloud}
-- One ${terms.locations.chip}
-- One ${terms.locations.capital}
-- One ${terms.locations.talent}
-- The ${terms.locations.grid}
-
-Shuffle this public ring among the twelve outer positions:
-
-- Two ${terms.locations.research}
-- Two ${terms.locations.cloud}
-- Two ${terms.locations.consumer}
-- Two ${terms.locations.media}
-- Two ${terms.locations.government}
-- Two ${terms.locations.renewable}
-
-These ring pools are fixed; shuffle tiles only within their listed ring.
-All copies of one named district are mechanically identical. Names, art, and
-flavor may distinguish copies, but visit effects, production, Facility spaces,
-and contract icons must remain identical.
-
-Every piece placed on the board during setup begins at ${terms.locations.frontier}, the jurisdiction’s
-standing civic exception rather than property to be controlled. Agents may be reassigned directly to any district.
-
-Every non-${terms.locations.frontier} hex has a visit bonus, two Facility spaces, Facility
-production, and a control value used by Headlines and Mandates. ${terms.locations.frontier} has
-no Facility spaces and is never controlled. It is not a category for the hex-category
-Mandate. Once pieces leave it, positioning, Agents, local Power, and negotiated adjacency
-matter.
-
-### Presence and control
-
-- Agent or Facility: one presence
-
-The player with the most presence controls each non-${terms.locations.frontier} hex. Ties mean
-nobody controls it. ${terms.locations.frontier} has no controller regardless of presence.
-
-### District effects
-
-| Location | Visit bonus | Facility production | Contract icon |
-| --- | --- | --- | --- |
-| ${content.gameConfig.board.tiles.0.name} | ${content.gameConfig.board.tiles.0.visit} | ${content.gameConfig.board.tiles.0.production} | None |
-| ${content.gameConfig.board.tiles.1.name} | ${content.gameConfig.board.tiles.1.visit} | ${content.gameConfig.board.tiles.1.production} | ${terms.resources.compute} |
-| ${content.gameConfig.board.tiles.2.name} | ${content.gameConfig.board.tiles.2.visit} | ${content.gameConfig.board.tiles.2.production} | ${terms.resources.compute} |
-| ${content.gameConfig.board.tiles.3.name} | ${content.gameConfig.board.tiles.3.visit} | ${content.gameConfig.board.tiles.3.production} | ${terms.resources.runway} |
-| ${content.gameConfig.board.tiles.4.name} | ${content.gameConfig.board.tiles.4.visit} | ${content.gameConfig.board.tiles.4.production} | ${terms.resources.compute} |
-| ${content.gameConfig.board.tiles.5.name} | ${content.gameConfig.board.tiles.5.visit} | ${content.gameConfig.board.tiles.5.production} | ${terms.resources.runway} |
-| ${content.gameConfig.board.tiles.6.name} | ${content.gameConfig.board.tiles.6.visit} | ${content.gameConfig.board.tiles.6.production} | ${terms.resources.runway} |
-| ${content.gameConfig.board.tiles.7.name} | ${content.gameConfig.board.tiles.7.visit} | ${content.gameConfig.board.tiles.7.production} | ${terms.resources.runway} |
-| ${content.gameConfig.board.tiles.8.name} | ${content.gameConfig.board.tiles.8.visit} | ${content.gameConfig.board.tiles.8.production} | ${terms.resources.runway} |
-| ${content.gameConfig.board.tiles.9.name} | ${content.gameConfig.board.tiles.9.visit} | ${content.gameConfig.board.tiles.9.production} | ${terms.resources.compute} |
-| ${content.gameConfig.board.tiles.10.name} | ${content.gameConfig.board.tiles.10.visit} | ${content.gameConfig.board.tiles.10.production} | ${terms.resources.runway} |
-
-Resolve ${terms.locations.frontier}’s optional ${terms.resources.runway} after the Action, once per acting player
-assigned there. It does not modify the Action or create production
-or ${terms.playerTracks.mandate}.
-
-The two Energy-tile visit boxes are the complete ordinary Generator contracts.
-No separate Power Source reference cards are used. Each player may construct
-only one ordinary Generator. A Fusion-upgraded Facility is also a local Power source;
-its chip explains the effect.
-<!-- map:end -->
-
-## 2. Resources
-
-### ${terms.resources.runway}, ${terms.resources.compute}, and ${terms.playerTracks.capability}
-
-- **${terms.resources.runway}:** money available to your institution.
-- **${terms.resources.compute}:** processing capacity spent on Research, Deployment, and projects.
-- **${terms.infrastructure.power}:** electricity supply that keeps Facilities operating; it is a local connection condition, never currency.
-- **${terms.playerTracks.capability}:** performance your institution has established and can
-  deploy or present as evidence. Some gains reflect better systems; others reflect
-  results accepted before their limitations become clear. Banked Capability stays
-  on your track and unlocks Deployments and ${terms.systems.agi}; spend it only when instructed.
-
-### ${terms.playerTracks.customers}
-
-Each ${terms.playerTracks.customer} produces one ${terms.resources.runway} during Production. Customers #1–3 immediately score two public ${terms.playerTracks.mandate}; Customers #4–5 score one each. Customers also increase public exposure.
-
-### ${terms.playerTracks.trust}
-
-A zero-to-six track that earns permanent Mandate at printed thresholds, meets
-Headline and recognized AGI requirements, breaks final-score ties, absorbs
-penalties when Runway is empty, and contributes to whether the shared World
-Ending is Open. Zero ${terms.playerTracks.trust} does not
-eliminate a player.
-
-**${terms.playerTracks.mandate}** is the score used to determine the winner (victory points).
-It is the public authority you have gained to define outcomes.
-It represents the recognized right to shape the future: credibility in Progress,
-capacity in Capacity, authority in Authority, and historical legitimacy in
-Continuity.
-
-${terms.playerTracks.mandate} is normally scored immediately on one public track:
-
-- Two when ${terms.playerTracks.customer} #1, #2, or #3 is gained; one when #4 or #5 is gained.
-- Two the first time ${terms.playerTracks.capability} reaches three, six, nine, and twelve.
-- Two the first time ${terms.playerTracks.trust} reaches two, four, and six.
-- Printed ${terms.playerTracks.mandate} from ${terms.systems.headlines}, Era Mandates and faction abilities.
-
-Threshold awards are permanent; later losses do not reverse them. Move the Trust
-milestone cube forward when a new threshold scores, never backward. Regaining a
-threshold at or below that cube scores nothing. Its starting position includes
-thresholds already awarded in starting Mandate.
-
-There is no hidden or deferred conversion of Facilities, controlled hexes,
-stored resources, or unused cards into ${terms.playerTracks.mandate}. If an effect scores ${terms.playerTracks.mandate}, move
-the Mandate cube when that effect resolves.
-
-### Universal costs and caps
-
-Apply resource caps immediately after any gain or trade:
-
-- ${terms.resources.runway}: twelve
-- ${terms.resources.compute}: ten
-
-Return excess. A trade cannot move resources through a player above a cap.
-
-When effects change a cost, apply replacements and waivers first, then
-surcharges, then discounts. The final cost cannot fall below zero.
-
-## 3. Central loop
-
-Each player has six Core Action cards but takes only three turns per Era.
-Once played, a Core Action remains exhausted until the next Era:
-
-- ${terms.actions.fund}
-- ${terms.actions.research}
-- ${terms.actions.build}
-- ${terms.actions.organize}
-- ${terms.actions.deploy}
-- ${terms.actions.influence}
-
-Choose three of six Actions each Era, in any order. The other three remain
-unused until the next Era.
-
-### The complete ordinary turn: ReAct — Reason → Act → Observe
-
-1. Reveal one ${terms.systems.headline} and finish all its instructions and choices before selection.
-2. **Reason:** everyone secretly selects an available, unlocked Core Action. Check card availability and
-   Era unlocks only; costs and targets need not be legal yet.
-3. Reveal selections simultaneously and resolve clockwise from Initiative.
-4. **Act:** after the optional permitted trade, assign one of your Agents to
-   any district, or leave it where it is. Choose the selected Action's mode,
-   target, and payment using the current board, and resolve it there.
-5. **Observe:** apply and inspect the consequences, then exhaust the Core Action. After all players resolve, pass Initiative
-   clockwise and begin the next cycle using the changed world.
-
-### Agents as persistent assignments
-
-An Agent represents committed presence and influence, remaining until reassigned.
-Rival Agents may coexist. Agents have no paths, movement allowance, or exhaustion rule.
-Any Agent can act on later turns. Recruiting expands presence, never actions.
-
-Each faction starts with two Agents and has four in total. The CEO is a character
-on the player mat, with no separate playing piece or executive powers.
-Facilities and Generators cannot act; their placement and local connections still apply.
-
-### Effect precedence
-
-The Era panel states which systems are unlocked. Resolve the Headline completely
-before selection. During an action, apply its effect, the destination bonus, and
-your faction's single permanent ability when applicable. No effect readies or
-resolves another Core Action. Build's two construction steps are one action.
-
-### What an Era teaches
-
-Systems are inactive before their printed Era panel lists them under **New this Era**.
-Read that strip aloud before revealing the Mandate. All Era panels, personal project chips,
-and Faction abilities are open information.
-
-Era I (Progress) covers baseline actions; Era II (Capacity) unlocks Generators
-and Mega-Clusters; Era III (Authority) unlocks Joint Ventures and Fusion; Era IV
-(Continuity) unlocks Quantum and optional public AGI recognition. Unlocked systems
-remain active.
-
-### Universal tie rule
-
-Whenever an effect targets the player with the lowest, highest, or most of
-something and multiple players tie, target the tied player nearest Initiative
-clockwise. An effect that explicitly applies to everyone, or explicitly awards
-all tied players, overrides this rule.
-
-Initiative is an order, not a resource. Passing it after each cycle changes who
-resolves first and who wins unresolved ties; it cannot be traded or retained.
-
-### A committed Action that becomes blocked
-
-Selection commits only the Action. At resolution, choose a legal Agent,
-district, mode, target, and payment after the optional pre-resolution trade.
-The selected card cannot be replaced. An earlier player may consume the space,
-contract pair, or other target you expected to use; adapt within the same Action.
-
-If no legal effect remains, assign an Agent normally and exhaust the Action
-without effect or compensation. A speculative selection
-may therefore become only an assignment; it still consumes one of the Era's
-three action selections.
-
-## 4. Core Actions
-
-### ${terms.actions.fund}
-
-Choose:
-
-- **Conservative funding:** gain two ${terms.resources.runway}.
-- **Venture funding:** gain four ${terms.resources.runway} and add two ${terms.playerTracks.scrutiny}.
-
-${terms.locations.capital} provides one additional ${terms.resources.runway}.
-
-### ${terms.actions.research}
-
-Spend one ${terms.resources.compute} and conduct a ${terms.systems.trainingRun}.
-
-The Training deck contains seven data domains:
-
-- Code
-- Science
-- Web
-- Books
-- Images
-- Video
-- Synthetic
-
-${terms.playerTracks.capability} earned during ${terms.actions.research} is **provisional until banked**:
-
-1. Begin with zero provisional ${terms.playerTracks.capability} and no revealed domains.
-2. Draw and fully resolve one card at a time.
-3. The first card from each ordinary domain adds one provisional ${terms.playerTracks.capability}.
-4. After resolving any non-duplicate card, either stop and bank or continue.
-5. Banking adds all provisional ${terms.playerTracks.capability} to the player’s permanent
-   ${terms.playerTracks.capability} track and ends the run.
-6. A duplicate crashes the run. Lose all provisional ${terms.playerTracks.capability},
-   add one ${terms.playerTracks.scrutiny}, and end the run.
-
-${terms.playerTracks.scrutiny}, ${terms.playerTracks.trust}, and ${terms.resources.runway} changes resolved before a crash are not reversed.
-All revealed cards enter the discard pile after the run.
-
-A repeated domain represents a run that has become too narrowly concentrated
-to support its claimed progress.
-Mirevanta's printed Scientific Method may pay Runway to bank a duplicate instead;
-charge only when that exception is used. Orisonix retains one revealed provisional
-Capability on a crash. A Research district grants one additional Capability on a
-successful bank, including Human Evaluation or Scientific Method banking; it
-grants none on a crash.
-
-Special cards:
-
-- **Curated Corpus:** choose one ordinary domain not yet revealed this run. It
-  counts as that domain and adds one provisional ${terms.playerTracks.capability}. If every ordinary
-  domain is already present, it is a duplicate.
-- **Benchmark Leak:** add two provisional ${terms.playerTracks.capability} and one ${terms.playerTracks.scrutiny}. It is
-  not a domain. Its ${terms.playerTracks.capability} is lost if the run later crashes.
-- **Human Evaluation:** gain one ${terms.playerTracks.trust}, immediately bank all provisional
-  ${terms.playerTracks.capability}, and end the run.
-
-When a Mandate, Faction ability, or Headline counts **unique domains**, count
-only the seven ordinary domains listed above that were banked successfully.
-Benchmark Leak and Human Evaluation never count unless an effect names them
-explicitly.
-
-### ${terms.actions.build}
-
-<!-- construction:start -->
-Construct up to one Facility, then up to one unlocked infrastructure project,
-paying each cost. Both use the acting Agent's district. A project is an ordinary
-Generator, Mega-Cluster, Fusion, or Quantum. Recheck requirements after placing the
-Facility. You may omit either step; resolve at least one construction if able.
-Exhaust Build once after completing both steps. There is no extra action,
-assignment, trade, or destination bonus between them.
-
-Facility spaces, Generator slots, numbered Facility order, unlocked Eras,
-connected personal hosts, and ordinary Generator slots still apply. Choose a
-plan you can fully afford when Build resolves. A newly built connected Facility
-may receive its first unlocked upgrade in that same Build.
-<!-- construction:end -->
-
-#### ${terms.infrastructure.power} connections and delivery
-
-All local Power in Mandate 2038 is positional, spatial, and immediate. There are no power points, transmission budgets, or allocation tokens. No Power is assigned, spent, or marked. A Facility is either connected (powered) or offline based on the current board state:
-
-1. **Facility 1 (Starting Grid):** Facility 1 carries an integrated civic connection and is **always powered**, including after relocation.
-2. **Generators:** Each player may construct one ordinary Generator (unlocks in Era II on an Energy hex). A Generator powers all Facilities you own on its own district and on all directly adjacent districts. Rival Generators never power your Facilities.
-3. **Fusion Demonstrator:** In Era III, attaching the Fusion upgrade turns that host Facility into an independent local power source. It powers itself and your Facilities in the same or adjacent districts, without consuming a Generator slot.
-4. **Adjacency and Relocation:** Power status is checked continuously on the current board whenever an action, Production, Headline, Joint Venture, Mega-Cluster, or scoring effect refers to “powered” or “connected.” Relocating a Facility into or out of an energy corridor changes its connection status immediately. Only Fusion-upgraded Facilities transmit Power; other Facilities do not.
-
-**Worked placement example:**
-Suppose you own an emergency Generator on the Grid district:
-- **Connected:** Facility 2 placed on Grid (same hex) or on any adjacent district is **connected** and produces during Production.
-- **Offline:** Facility 3 two hexes away (not touching your Generator or Fusion host) is **offline**, producing nothing and unable to host a Mega-Cluster.
-- **Relocation:** If Organize relocates Facility 3 into an adjacent district, it becomes **connected immediately** for all subsequent actions, Production, and scoring.
-
-A Mega-Cluster operates only while its host Facility remains connected. Joint Ventures require both partner hosts to remain currently connected.
-
-#### Construct a Facility
-
-Pay two ${terms.resources.runway} and place your lowest-numbered unbuilt Facility on the acting
-piece’s hex. Facility 1 must be built first, followed by Facilities 2, 3, and 4.
-It produces while connected by the local Power rule. Each non-${terms.locations.frontier} hex has only two Facility spaces;
-${terms.locations.frontier} has none and is never a legal Facility destination. Facilities cannot
-be destroyed by rivals.
-
-#### Construct a Generator
-
-The acting piece must be on an Energy hex. Each player may construct one
-ordinary Generator. On ${terms.locations.grid}, pay one ${terms.resources.runway} and place it as
-${terms.technology.emergencyInfrastructure}. On ${terms.locations.renewable}, pay two
-${terms.resources.runway} and place it as ${terms.technology.cleanInfrastructure}. The Energy
-location determines the source; there is no separate source choice. This mode unlocks in Era II.
-Each Energy hex has three Generator slots shared by all players. A Generator
-does not use a Facility space, but it cannot be built when all three Generator
-slots on that Energy hex are occupied.
-
-<!-- power-contracts:start -->
-The two ordinary contracts are printed at their point of use. The
-${terms.locations.grid} tile always constructs
-${terms.technology.emergencyInfrastructure}; the ${terms.locations.renewable}
-tile always constructs ${terms.technology.cleanInfrastructure}. Fusion's effect is printed on its personal chip. No separate Power Source
-cards are used. Each player has one ordinary Generator, and each Energy hex
-still has three shared slots.
-<!-- power-contracts:end -->
-
-##### ${terms.technology.cleanInfrastructure}
-
-- Location: ${terms.locations.renewable}
-- Cost: two ${terms.resources.runway}
-- Connection: your Facilities on this hex or an adjacent hex
-- Gain one ${terms.playerTracks.trust} when constructed
-- No recurring penalty
-
-##### ${terms.technology.emergencyInfrastructure}
-
-- Location: ${terms.locations.grid}
-- Cost: one ${terms.resources.runway}
-- Connection: your Facilities on this hex or an adjacent hex
-- Add one ${terms.playerTracks.scrutiny} at Production only when serving at least one of your Facilities
-
-#### Personal infrastructure upgrades
-
-${content.projects.constructionRule}
-
-| Project | Unlock | Operating benefit |
-| --- | --- | --- |
-| ${content.projects.byId.mega_cluster.name} | Era II | ${content.projects.byId.mega_cluster.backText} |
-| ${content.projects.byId.fusion_demonstrator.name} | Era III | ${content.projects.byId.fusion_demonstrator.backText} |
-| ${content.projects.byId.quantum.name} | Era IV | ${content.projects.byId.quantum.backText} |
-
-A Facility built earlier in the same Build can qualify. Distinct upgrades may
-share one host. Recheck cost, connection, ownership, unlock, and personal chip
-availability at resolution. Each project can be built once per institution;
-its Built chip remains attached through Audit or an outage. Move every attached
-chip when its Facility relocates. Fusion has no global limit, fixed location,
-Generator slot, or owner inscription. No project requires another project.
-
-### ${terms.actions.organize}
-
-After assigning an Agent, choose one mode:
-
-- **Recruit:** pay two Runway to deploy one Agent from supply to the acting
-  Agent's district. Recruiting in Talent costs one less Runway. You may have no
-  more than four deployed Agents. Recruitment grants no extra action or assignment.
-- **Relocate:** move one of your Facilities from the acting Agent's district to
-  an adjacent non-Frontier district with a legal open Facility space. It keeps
-  its attachments and starting-grid designation. Recheck connections and contracts
-  immediately. This mode costs no Runway.
-
-Agents have no additional movement procedure.
-
-### ${terms.actions.deploy}
-
-The next ${terms.playerTracks.customer} requires:
-
-| ${terms.playerTracks.customer} | ${terms.playerTracks.capability} required |
-| ---: | ---: |
-| 1 | 2 |
-| 2 | 4 |
-| 3 | 6 |
-| 4 | 8 |
-| 5 | 10 |
-
-Spend one ${terms.resources.compute} and gain one ${terms.playerTracks.customer}. ${terms.locations.consumer} waives the ${terms.resources.compute} cost.
-Every ${terms.actions.deploy} adds one ${terms.playerTracks.scrutiny}.
-
-### ${terms.actions.influence}
-
-Assign an Agent, then choose one legal effect:
-
-- On ${terms.locations.media}, ${terms.locations.government}, or ${terms.locations.capital}, gain one
-  ${terms.playerTracks.trust} or remove one ${terms.playerTracks.scrutiny}. ${terms.locations.media}
-  removes one additional ${terms.playerTracks.scrutiny}; ${terms.locations.government} gains one
-  additional ${terms.playerTracks.trust}.
-- At one of your Facilities, create a Joint Venture using that Facility and an
-  eligible rival Facility, or terminate one named Joint Venture you share.
-
-Political control uses Agents and Facilities already on the board.
-The ${terms.actions.influence} Action creates no separate presence piece.
-
-
-#### Contract hosts
-
-Joint Ventures use shared matched chip pairs, one numbered half on each host.
-Match the pair numbers and identify each fixed host. No Era marking is needed.
-A Facility may host multiple Joint Ventures, including between the same two
-Facilities, and any of its owner's personal upgrades. Each venture resolves
-independently; the shared Joint Venture pair supply remains its limit.
-
-A contract remains owned but is active only while its fixed hosts meet its
-requirements. Tokens travel with their Facilities.
-
-Every cross-player contract or jointly funded project requires the explicit
-consent of every participant. Facilities sharing one hex are **co-located**.
-Adjacent host Facilities occupy hexes that share an edge.
-
-Consent applies to the named project only. It does not grant control of a host,
-create a general trading right, or authorize another contract. A contract’s
-matched number preserves its identity when a host moves.
-
-#### Joint Venture
-
-${terms.actions.influence} may create a Joint Venture between two adjacent Facilities owned by
-different players, unless a Faction ability explicitly changes that range.
-Both host Facilities must be powered during Production for the contract to
-produce.
-
-Each partner gains the resource shown by the **contract icon on the other
-host tile**. Do not copy full tile production or multiply it with Facility
-effects.
-
-During ${terms.actions.influence}, make one complete proposal naming both eligible hosts and
-the partner. Acceptance creates it. Rejection, pass, or no response uses that
-effect; do not choose another partner or ${terms.actions.influence} effect.
-
-Either participant may instead use ${terms.actions.influence} to terminate one shared Joint
-Venture. Return its pair. Termination cannot be combined with another
-${terms.actions.influence} effect.
-
-## 5. Era sequence
-
-### A. Begin the Era
-
-- Move the Current Era chip to Era I; in later Eras, advance one panel.
-- Read that Era’s **New this Era** strip aloud. Those systems are now active.
-- Reveal one ${terms.playerTracks.mandate} from the current Era’s three-card deck. Return the other
-  two cards in that deck to the box unseen.
-- Keep the Mandate visible. Score its current public-state criterion after Audit.
-- Ready all six Core Actions.
-
-### B. Three action cycles
-
-At the beginning of each cycle:
-
-1. Reveal a ${terms.systems.headline}, resolve all its instructions and choices, and place it in the current Era’s ${terms.systems.futureTimeline} row. Its effect is finished.
-2. **Reason:** everyone secretly selects one available, unlocked Core Action. Reveal simultaneously.
-3. **Act:** resolve clockwise from Initiative. After the optional immediate trade, assign one Agent to any district or leave it in place. Choose legal targets and pay costs using the current board, then resolve the selected action.
-4. **Observe:** apply the consequences and exhaust the action, even if no legal effect was possible. Observation adds no separate decision or reward.
-5. After everyone has acted, pass Initiative clockwise.
-
-#### Resource exchange: fixed one-for-one
-
-Immediately before resolving the selected Action, the active player may make
-one offer to one rival: give exactly one ${terms.resources.runway} for one
-${terms.resources.compute}, or one ${terms.resources.compute} for one
-${terms.resources.runway}. The named rival accepts or rejects. Gifts, bundles,
-same-resource exchanges, unequal amounts, counteroffers, redirects, and
-third-party claims are not legal. Adjust both players' track cubes
-immediately after acceptance.
-
-The selected Action remains committed whether the offer is accepted or rejected.
-Check affordability and targets after the trade; a successful trade may make a speculative selection resolvable. The exchange is permitted even if the selected Action remains blocked and resolves only as an Agent assignment. There is no post-action trade window.
-
-Resource exchanges require no ${terms.actions.influence} Action. ${terms.actions.influence}
-offers lobbying effects and is the only Core Action that creates persistent
-Joint Ventures. Other actions and Headlines can also change ${terms.playerTracks.trust}.
-
-### Negotiation and paced play
-
-Discussion creates no game state, obligation, or Action. Promises about later
-turns remain non-binding. Apply formal choices only in their printed windows;
-missing responses are rejection or pass.
-
-**Paced Play** is an optional table rule. Before play, the group may assign one
-shared sand timer to each negotiation window. When it expires, discussion ends
-and the normal rejection or pass fallback applies. Expiry never
-creates consent or forces a deal.
-
-### C. Production
-
-Apply any permanent faction Production ability first.
-Use the current board's visible connections; no allocation choices or Power cubes
-are needed. Resolve each step for all players before continuing, in Initiative
-order unless specified otherwise:
-
-1. Apply recurring Scrutiny for each emergency Generator serving at least one
-   Facility.
-2. Produce each connected Facility, then Customer income, then active
-   connected personal upgrades. Apply caps after each gain.
-3. Produce active Joint Ventures in ascending contract-number order.
-
-An Era Mandate counting Compute produced counts printed output before the cap,
-including Facilities, personal upgrades, and Joint Ventures. Immediate Facility
-production outside this sequence does not count toward that Production total.
-
-When Talent produces, reassign one of your Agents using the normal assignment
-rule: choose any district or leave it in place. Update presence immediately.
-This resolves no Action or visit bonus and exhausts nothing. A Joint Venture
-still grants only its host's printed contract icon, not that host's full production.
-
-### D. Optional AGI recognition, Era IV only
-
-Offer the public qualification and payment described under **Recognized AGI** to
-every institution. Add declaration Scrutiny before the final Audit. In Eras I–III,
-continue directly to the Audit; there is no end-of-Era AGI bookkeeping.
-
-### E. ${terms.systems.publicAudit}
-
-Risky actions add player-colored ${terms.playerTracks.scrutiny} to the opaque Audit bag. Each
-player has ten cubes. For each required cube when all ten are already in the
-bag, immediately lose one ${terms.resources.runway}; if none remains, lose one
-${terms.playerTracks.trust}. If neither remains, suffer no further loss.
-
-The four-player base draws are two, three, four, and five. For other player
-counts, calculate each Era’s draw count as:
-
-> round(base draws × player count ÷ 4), minimum one
-
-Round halves upward. The resulting Audit profiles are:
-
-| Era | 2 players | 3 players | 4 players | 5 players |
-| --- | ---: | ---: | ---: | ---: |
-| I | 1 | 2 | 2 | 3 |
-| II | 2 | 2 | 3 | 4 |
-| III | 2 | 3 | 4 | 5 |
-| IV | 3 | 4 | 5 | 6 |
-
-Draw the listed number of cubes or stop when the bag is empty.
-
-In every Era, each colored cube makes its owner lose one
-${terms.resources.runway}; if none remains, lose one ${terms.playerTracks.trust}.
-If neither remains, suffer no further loss. This is automatic, not a choice.
-
-Drawn player-colored cubes return to the owner’s supply; undrawn cubes remain
-in the bag.
-
-${terms.locations.media} Facilities may remove cubes before the draw. A drawn black Systemic
-Risk cube gives every player with at least three ${terms.playerTracks.customers} the current Era’s
-penalty, then returns to supply. Black cubes
-remaining at game end are unresolved Systemic Risk.
-
-### F. Score the ${terms.playerTracks.mandate}
-
-<!-- mandate-scoring:start -->
-Each Era ${terms.playerTracks.mandate} specifies its qualification and comparison direction.
-After Audit, read current public state. If nobody qualifies, nobody scores.
-The qualifying leader scores two ${terms.playerTracks.mandate}; tied qualifying leaders score one each.
-Zero is valid when the card permits it, including zero Scrutiny.
-
-Compare only the revealed card’s criterion. Resources, control, and public score
-do not break its tie. Leave the scored card beside its Era as public history.
-No starting snapshots, accumulated gains, best Research runs, or Venture ages count.
-Compute capacity means nominal current output from connected Facilities, operating
-Mega-Clusters, and active Joint Ventures: ignore caps and do not run Production again.
-An active Venture’s fixed hosts must exist, belong to the correct partners,
-remain adjacent, and be connected. Count each active agreement for each partner.
-
-The revealed Mandate card is the exact qualification and scoring authority.
-<!-- mandate-scoring:end -->
-
-## 6. Four-Era progression
-
-### Era I — ${terms.eras.demo}
-
-- Three turns per player
-- Only Core Actions
-- Beneficial or mildly disruptive ${terms.systems.headlines}
-
-Era I activates Agent assignment, Core Actions, Training, the starting grid,
-Facilities, Customers, and Scrutiny.
-
-### Era II — ${terms.eras.scale}
-
-Build now also permits:
-
-- Generators
-- Mega-Clusters
-
-### Era III — ${terms.eras.narrative}
-
-Joint Ventures and Fusion now enter play. Previously unlocked infrastructure remains available.
-
-### Era IV — ${terms.eras.claim}
-
-Build may construct Quantum. Earlier projects remain available. Public AGI recognition is offered after Production.
-All factions retain the same permanent ability they had at setup.
-
-#### Recognized ${terms.systems.agi}
-
-After Era IV Production, before the final Audit, each institution with at least
-${content.gameConfig.agiAchievement.capability} Capability,
-${content.gameConfig.agiAchievement.poweredFacilities} currently powered Facilities,
-and ${content.gameConfig.agiAchievement.trust} Trust may pay
-${content.gameConfig.agiAchievement.computeCost} Compute to declare recognized AGI.
-It immediately gains ${content.gameConfig.agiAchievement.mandate} Mandate and adds
-${content.gameConfig.agiAchievement.scrutiny} Scrutiny before the Audit.
-
-Every qualifying institution may declare once, in Initiative order, or decline.
-This uses no Action and creates no deferred payment. Recognition remains recorded
-if the subsequent Audit reduces Trust. The fixed award does not vary by Headline.
-
-“Recognized AGI” means the world accepts an institutional claim under the game's
-public criteria. It does not decide whether general intelligence metaphysically
-exists. Recognition sets one axis of the separate World Ending.
-
-## 7. Final scoring
-
-Earned Mandate, including any AGI award, is already on the public track. Do not
-score it again. After the final Audit and Era Mandate:
-
-1. Read the twelve Headlines in the Future Timeline, Era by Era.
-2. Lose one Mandate per currently offline Facility, to a minimum score of zero.
-3. The institution with the most final Mandate wins. Break ties by higher Trust,
-   then more Customers, then more Compute. A complete tie is a joint victory.
-4. Determine and read the separate shared World Ending.
-
-There is no second winner procedure. Facilities and control give no additional
-endgame score unless a printed effect already awarded it.
-
-### The shared World Ending
-
-Use two independent public results:
-
-- **Recognized AGI:** at least one institution paid for AGI recognition after
-  Era IV Production. Audit losses do not revoke it.
-- **Open continuity:** final Collective Trust is at least Setup Collective Trust
-  plus the player count, and unresolved Systemic Risk after the final Audit is
-  strictly lower than the player count. Both conditions must hold.
-
-If either continuity condition fails, the ending is Closed. Recognition does
-not itself make continuity Open. The four endings describe accepted claims and
-institutional continuity, not a hidden verdict on whether intelligence exists.
-
-| | Open | Closed |
-| --- | --- | --- |
-| AGI recognized | **The Singularity** | **The Closed Loop** |
-| No AGI recognized | **The Plural Future** | **Assured Continuity** |
-
-The institutional winner and the civilization's outcome are distinct.
-
-## Rules Reference
-
-## 8. Printed card authorities
-
-<!-- card-authority:start -->
-faction cards, Governance Board Era panels, map-tile Power contracts, Core
-Action cards, personal project chips, Mandate cards, Training cards, player aids, and
-Headline cards are rules components. Resolve the text printed on the matching
-card, board, or player aid. Printed text changes only the field or timing it
-names; it does not create an unprinted phase or additional Action.
-Each Faction has one permanent ability available from setup.
-<!-- card-authority:end -->
-
-All Factions and CEOs are fictional and imply no real-world claim or
-endorsement. Every Faction has one persistent institutional identity and one
-signature ability. It modifies one familiar action or Production. It requires
-no separate use marker, frequency record, or refresh. Every faction uses the
-same public Mandate scoring.
-
-During setup, use each faction card’s printed starts and place its already
-earned public ${terms.playerTracks.mandate}. Award that ${terms.playerTracks.mandate} once; never score it
-again. The faction card is authoritative if a summary elsewhere differs.
-
-A Headline is revealed before secret action selection. Finish every printed
-instruction and choice, including any immediate production, before selecting
-actions. Resolve choices in Initiative order unless the card says otherwise.
-Then leave it face up in its Era row as history, with no continuing rules effect.
-Three per Era form the twelve-card **${terms.systems.futureTimeline}**.
-
-When a Headline resolves a Facility's printed production, resolve only that
-currently connected Facility. Talent uses its normal immediate Agent reassignment.
-Do not produce Customers, Generators, personal upgrades, Joint Ventures, or faction
-Production income unless explicitly instructed. No Core Action resolves.
-
-<!-- era-panels:start -->
-These four panels are printed on the Governance Board. Move the Current Era
-chip between them; no separate Era cards are used. The board prints the
-Era name, epigraph, rules, and unlock text.
-<!-- era-panels:end -->
-
-<!-- player-aids:start -->
-Each player receives one foldout containing the following three panels: the turn sequence, local Power, and public Mandate.
-<!-- player-aids:end -->
-
-<!-- headline-selection:start -->
-Use all twenty-four Headlines in their printed Era decks. Resolve the listed procedure and rules text.
-<!-- headline-selection:end -->
-
-## 9. Map and component reference
-
-The following sections list the supported inventory, deck contracts, and
-component states. Exact effects appear on the cards and boards.
-
-<!-- components:start -->
-<!-- inventory:start -->
-Pack three component families in the labelled trays and Era packets:
-
-| Family | Job |
-| --- | --- |
-| Cards, including flat chips | Explain rules; identify infrastructure and projects |
-| Agent position tokens | Locate assignments; one token shape with each kit’s colour and symbol |
-| Cubes | Mark numerical tracks; supply individual Audit draws |
-
-Chips are small durable cards. Maps and boards are printed surfaces; the bag
-is an accessory. Trust milestones and AGI recognition use cubes; projects flip.
-
-### Shared Governance Board
-
-The box includes one rigid folding Governance Board. It is the public table
-organizer and modular-map frame, not a fixed printed map.
-
-It provides:
-
-- one center well, six inner-ring wells, and twelve outer-ring wells for the
-  nineteen district tiles;
-- four printed Era panels, Headline wells, Mandate wells, a Current Era path,
-  and twelve Future Timeline positions;
-- a shared Mandate track and Initiative position;
-- printed AGI recognition spaces and the World Ending comparison;
-- six numbered Joint Venture pair bays; and
-- staging for the Audit bag, Scrutiny, Systemic Risk, and unused contract pairs.
-
-The Grid and Renewable tiles print ordinary Power contracts. Fusion's effect is printed on each personal chip. Tile wells retain pieces but create no
-extra rules state.
-
-### Five reusable player kits and six faction identity cards
-
-Each of the five kits contains:
-
-- 1 generic player mat with five numbered tracks: Runway, Compute, Capability,
-  Customers, and Trust; a highest-Trust-milestone track and AGI recognition spaces
-- ${content.gameConfig.playerSupply.resourceTrackCubes} kit-coloured and symbol-marked track cubes, one per resource track
-- ${content.gameConfig.playerSupply.agents} Agents (position tokens)
-- ${content.gameConfig.playerSupply.facilities} Facilities as flat chips, numbered 1–${content.gameConfig.playerSupply.facilities}
-- ${content.gameConfig.playerSupply.generators} Generator chip
-- ${content.gameConfig.playerSupply.startingGridIdentifiers} integrated starting-grid identifier on Facility 1; Facilities are
-  constructed in number order
-- ${content.gameConfig.playerSupply.scrutinyCubes} ${terms.playerTracks.scrutiny} cubes
-- 1 Mandate cube
-- ${content.gameConfig.playerSupply.trustMilestoneCubes} Trust milestone cube
-- ${content.gameConfig.playerSupply.agiRecognitionCubes} AGI recognition cube
-- ${content.gameConfig.playerSupply.projectChips} two-sided personal project chips: Mega-Cluster, Fusion, Quantum
-- ${content.gameConfig.playerSupply.coreActionCards} Core Action cards
-- 1 three-panel foldout player aid
-
-Generators do not count against the Facility limit.
-
-### Shared components
-
-- ${content.gameConfig.sharedSupply.governanceBoards} Governance Board
-- ${content.gameConfig.board.selectedTileCount} district tiles: Frontier, six operational, and twelve public
-- ${content.gameConfig.sharedSupply.currentEraMarkers} Current Era chip
-- 24 Headline cards; reveal 12 per game
-- 12 Mandate cards; reveal 4 per game
-- 40 Training cards
-- ${content.gameConfig.sharedSupply.jointVenturePairs} matched Joint Venture chip pairs
-- ${content.gameConfig.sharedSupply.systemicRiskCubes} Systemic Risk cubes, tactually identical to Scrutiny while concealed
-- 1 opaque Audit bag
-- 1 Initiative chip
-
-Six faction identity cards supply starts, abilities and fiction. Unused kits and cards stay boxed.
-
-Each player kit has its own projects. Ownership follows the seat, not institutional artwork. Only Joint Ventures draw from a shared
-pair supply. Personal project chips are never reserved for another institution.
-
-### Setup packaging
-
-The insert provides five kit trays and a six-card identity well, four labelled Era packets, one
-Training well and one shared contract well. Era packets
-contain `6 / 6 / 6 / 6` Headlines plus three Mandates each.
-
-### Standard cards and foldout count
-
-The game contains 112 standard cards plus 5 foldout player aids:
-
-- 30 Core Actions
-- 6 faction identity cards
-- 24 Headlines
-- 12 Mandates
-- 40 Training cards
-- 5 foldout player aids
-
-Chip quantities appear above. Era panels and Power contracts are printed on boards, tiles and personal chips.
-
-### Excluded deferred content
-
-The supported box does not require Tactics, Secret Objectives, Specialists, or
-Patrons.
-
-### Production form
-
-Use one cube per numbered resource or score track, never in the Audit bag.
-Scrutiny and Systemic Risk retain individual cubes to preserve draw probabilities.
-
-Facilities and Generators use separate flat chips with distinct symbols and
-kit colours and symbols. Read Power from Generator adjacency and Facility 1's
-starting-grid identifier; no Power cubes, allocation surface, or powered/unpowered
-flipping is required.
-Board dimensions, fold pattern, material and retention
-tolerances remain manufacturing decisions.
-
-<!-- inventory:end -->
-
-### Deck contracts
-
-#### Training deck: 40 cards
-
-- Four copies of each of seven domains: 28
-- Four Curated Corpus
-- Four Benchmark Leak
-- Four Human Evaluation
-
-Discard every revealed card after a run. If the deck empties, resolve the
-current card, shuffle the discard, and continue.
-
-#### Headline decks
-
-Each Era deck contains every card for that Era. Reveal three each Era. Leave every resolved card face
-up in its Era row to form the twelve-card ${terms.systems.futureTimeline}.
-
-#### Personal project chips
-
-Keep unbuilt personal chips Available side up. Build flips one to Built and
-attaches it to its host. Requirements are common; costs and benefits are printed
-on the two faces. The fifteen chips are three per player kit, not shuffled cards.
-
-### Defined markers and effects
-
-- **Remove Scrutiny:** return up to the stated number of your cubes from the Audit bag.
-- **Connected/powered:** ${content.gameConfig.board.startingGridConnection.rule} Evaluate connections on the current board.
-- **Current Mandate:** keep the card visible; read its qualification and value from current public state after Audit.
-- **Recognized AGI:** move that institution’s recognition cube to Recognized after payment. It remains there through Audit.
-- **Offline recovery:** an infrastructure change can immediately reconnect a Facility. Facilities never flip.
-
-<!-- components:end -->
-
-## Document record
+# ${game.title} — Core Rules
 
 **Rules version:** ${game.rulesVersion}
-**Design-baseline date:** July 26, 2026
-**Status:** Controlled playtest candidate; synchronized with executable game ${game.executableVersion}
-**Provisional time:** ${game.physicalTestDuration} at four players; three- and five-player durations require their own blind tests
-**Standard game:** ${facts.shared.roundsWord | capitalize} Eras, ${facts.shared.cyclesPerRoundWord} turns per player per Era
+**Executable version:** ${game.executableVersion}
+
+A smaller institutional strategy prototype for two through five players, across four Eras. Six institutions compete through research, engine building, customers, and negotiation. Costs and scoring values are a test candidate; balance and blind usability are unqualified.
+
+## Setup
+
+Choose an institution and a colour-and-symbol player kit independently. The faction identity card gives your starting Runway, Compute, Capability, Reputation, and Customer cards, plus one permanent ability. Place four cubes on the generic player mat. Take two Agents into play, initially unassigned, and leave two in supply. Leave your four numbered Facilities unbuilt, five Customer cards in order, and six Core Action cards available. An institution never determines piece colour. Seat identifies ownership in the engine.
+
+Lay out the six shared areas, the four-Era Governance Board, and the shuffled shared forty-card Training deck. Split Headlines by Era and shuffle each six-card packet. Split objectives by Era. Choose Initiative randomly before the game; the executable uses seat zero. Initiative advances clockwise after every cycle. All resource holdings and components are public; selected Actions remain secret until everyone has selected. Unrevealed cards and Training draw order remain hidden.
+
+<!-- map:start -->
+## Six shared areas
+
+There is one area per Core Action: Fund, Research, Build, Organize, Deploy, and Influence. Each has two shared Facility spaces. Agents do not consume these spaces. Area order has no mechanical effect. There is no adjacency, distance, movement cost, Facility relocation, Generator, or Power eligibility.
+
+An acting Agent goes to the area matching its Core Action and stays there until reassigned. Build may place a Facility in any area with an open space. Agents and Facilities each count as one presence. You control an area only if you have strictly more presence than every rival; tied areas are uncontrolled. Control matters only when a printed objective asks for it.
+
+Each Facility always produces its area's printed yield. Upgraded Facilities double that yield. The six yields are printed on the areas:
+
+| Action area | Yield per Facility |
+|---|---|
+| Fund | ${content.gameConfig.board.tiles.0.production} |
+| Research | ${content.gameConfig.board.tiles.1.production} |
+| Build | ${content.gameConfig.board.tiles.2.production} |
+| Organize | ${content.gameConfig.board.tiles.3.production} |
+| Deploy | ${content.gameConfig.board.tiles.4.production} |
+| Influence | ${content.gameConfig.board.tiles.5.production} |
+<!-- map:end -->
+
+## Four tracks and Customer cards
+
+Runway is money; Compute pays for Research, Deployment, upgrades, and AGI recognition. Capability represents demonstrated intelligence. Reputation represents public standing. Apply costs before gains; a cost must be affordable in full. Gains stop at the printed cap, and losses stop at zero: Runway 12, Compute 10, Capability 12, Reputation 6. Reputation losses are consequences and may occur at zero; a printed Reputation payment must be affordable.
+
+Customers are cards, not a fifth numerical track. The five cards require Capability 2, 4, 6, 8, and 10 respectively. Take the next card in order; never more than five. Each held Customer provides one Runway at Production and two points at game end. Read Customer count from the cards. There is no historical deployment counter or remembered customer threshold.
+
+## Era and cycle
+
+At the start of each Era, ready all six Actions. Reveal one of that Era's three objective cards and retain it face up. It will score from the final table, not now. Play three cycles:
+
+1. Reveal one Headline from this Era's packet and resolve its immediate effects and choices in Initiative order. Keep it in the timeline; it leaves no continuing modifier.
+2. Each institution secretly selects one unused Core Action, even if it currently cannot afford a resolution. Reveal together.
+3. Resolve in Initiative order. You may offer one immediate trade, then choose an Agent, assign it to the matching area, pay the cost, and resolve one legal mode of your selected Action. If no legal resolution exists after trading, the Action does nothing and is still used.
+4. Exhaust the selected card. Advance Initiative clockwise.
+
+No Action may be selected twice in one Era. After the third cycle, resolve Production and Reputation Review. Advance the Era; in Era IV proceed to AGI recognition and final scoring instead.
+
+## Six Core Actions
+
+**Fund:** Gain two Runway, or gain four Runway and lose one Reputation. Credit the actual income after caps.
+
+**Research:** Pay one Compute and begin a Training Run. Draw one card, resolve it, then bank or draw again when permitted. Ordinary domains add one provisional Capability the first time they appear. Repeating a domain crashes the run and loses all provisional Capability. Banking adds the provisional amount to your track, subject to its cap. Revealed cards enter the shared discard pile; when the deck empties, shuffle the discard as a new draw pile. There is no private Research deck.
+
+Curated Corpus counts as the first absent ordinary domain in printed deck order (Code, Science, Web, Books, Images, Video, Synthetic), adding one provisional Capability; with all seven present it crashes. Benchmark Leak adds two provisional Capability and loses one Reputation; its loss stays even if the run later crashes. Human Evaluation gains one Reputation and automatically banks the run. Neither special card is an ordinary domain. Resolve Scientific Method or crash retention exactly as the chosen faction card states.
+
+<!-- construction:start -->
+**Build:** Build one numbered Facility in any area with an open Facility space for two Runway, or from Era II upgrade one of your existing unupgraded Facilities for three Runway and one Compute. These are exclusive choices. Use Facilities in numerical order. Flip an upgraded Facility; it doubles its printed area yield permanently. Each Facility can be upgraded once. No separate upgrade chips or types exist. Industrial Velocity discounts only the Facility construction price by one Runway.
+<!-- construction:end -->
+
+**Organize:** Pay two Runway to recruit one Agent from supply into the Organize area, or reassign one other Agent to any area. First assign the acting Agent to Organize. You may have at most four Agents. Reassignment has no cost or distance restriction and does not resolve another Action.
+
+**Deploy:** If your Capability meets the next Customer card's requirement, pay one Compute, take that card, and lose one Reputation. Installed Base gives one Runway on this Deploy; gaining a Customer from a Headline does not trigger it.
+
+**Influence:** Gain two Reputation. From Era III you may instead propose one Joint Venture or terminate one you participate in.
+
+## Immediate trading and Joint Ventures
+
+On your resolution turn, you may offer one Runway for one Compute, or one Compute for one Runway, to one named rival. Both must possess the payment and have space under the receiving cap. They may accept or refuse. An accepted trade exchanges both resources atomically, then triggers your Deal Flow if applicable. No counteroffers, third-party transfers, credit, or promises are rules effects. Refusal does not prevent resolving your Action. You cannot trade Capability, Reputation, Customers, recognition, or ownership.
+
+Joint Ventures pair one Facility you own with one rival-owned Facility, regardless of area. Each Facility may host at most one Venture; there are six shared numbered pairs. Public terms identify both hosts and both reciprocal incomes. The rival must consent. Either participant may terminate the Venture using Influence. A Venture is active while both named hosts exist under their recorded owners. At each Production, each participant receives one of the other host's printed contract resource: Compute from Research or Build; Runway from the other four areas. An upgrade does not increase Venture income. No retroactive Production occurs when a Venture is signed. Keep matching Venture numbers on the hosts; no Era markings are needed.
+
+## Production and Reputation Review
+
+In Initiative order, each institution resolves its supplier ability, then all its Facility yields, then one Runway per Customer card. Next resolve active Ventures in agreement order. Apply caps to every credit; nominal capacity for an objective ignores caps but never credits income or triggers abilities. The Shovels pays one Runway per rival owning any Facility, to a maximum of two.
+
+After Production, each institution with Reputation one or less loses two Runway, floored at zero. This fixed Reputation Review replaces the risk bag and Audit draws. There are no Scrutiny or Systemic Risk cubes. No fallback penalty consumes Compute or Capability.
+
+## Final AGI recognition
+
+After Era IV Production and Reputation Review, every institution with at least nine Capability, four Reputation, and three Compute may pay three Compute to take its AGI recognition marker. Resolve optional declarations in Initiative order. Recognition requires no specific Facility. It is a final holding worth four points and does not override the winner.
+
+<!-- mandate-scoring:start -->
+## Score the final table once
+
+Final points equal Capability + twice the number of Customer cards + Reputation + four for recognized AGI + awards from all four revealed objectives. Score objectives only now. No immediate points, score track, Trust milestones, or remembered gains remain.
+
+Each revealed objective specifies its current metric and qualification. The best qualified value earns two points; tied qualified leaders each earn one. If nobody qualifies, nobody scores. Qualification is separate from comparison, including a valid zero when a card permits it. Changing past history without changing final holdings must change no score. Nominal Compute capacity uses the same current Facility and Venture eligibility as Production, without spending, producing, applying caps, or firing abilities.
+
+Break final score ties by Reputation, then Customer cards, then Compute. If all are tied, share victory. The separate World Ending uses whether any AGI is recognized and whether average final Reputation is at least three: recognized/open gives The Singularity; recognized/closed gives The Closed Loop; unrecognized/open gives The Plural Future; unrecognized/closed gives Assured Continuity.
+<!-- mandate-scoring:end -->
+
+<!-- card-authority:start -->
+## Printed component authority
+
+Component records own exact Action, Headline, faction, Training, upgrade, and objective effects. This rulebook owns procedures and the box inventory. Reference aids project those owners. Fiction does not introduce extra requirements.
+<!-- card-authority:end -->
+<!-- era-panels:start -->
+Four Governance Board panels show the Era sequence and unlocks. Upgrades unlock in Era II, Ventures in Era III, and recognition in Era IV. Earlier effects remain available.
+<!-- era-panels:end -->
+<!-- player-aids:start -->
+Each kit has a three-panel foldout summarizing turns, Actions, Production, Review, negotiation, and final scoring. The player mat has four resource tracks and one recognition space. Customer and Facility states are visible on cards.
+<!-- player-aids:end -->
+<!-- headline-selection:start -->
+Twenty-four Headlines are organized as six per Era. Shuffle each packet and reveal three, one before each cycle. Resolve only the printed immediate instruction. Lowest/highest ties target the first tied institution in Initiative order unless an effect applies to everyone.
+<!-- headline-selection:end -->
+<!-- components:start -->
+## Components
+
+Five interchangeable kits serve up to five players; six institutions are independent choices. Mark every owned item with kit colour and symbol. Facilities are numbered and have normal/upgraded faces. Customer cards stay in ordinal order. Agent location and matching Venture host numbers are the only shared-area encodings.
+
+<!-- inventory:start -->
+### Box inventory
+
+- Six shared action-area cards, each with two Facility spaces.
+- One Governance Board with four Era panels, one Era marker, one Initiative marker, and four objective holding spaces.
+- Six faction identity cards; five generic player mats and five three-panel player aids.
+- Thirty Core Action cards: six in each kit.
+- Twenty Agents: four per kit, two initially in play.
+- Twenty two-sided numbered Facility cards: four per kit; the reverse shows the single upgrade.
+- Twenty-five Customer cards: five ordered cards per kit.
+- Twenty resource-track cubes: four per kit; five AGI recognition markers.
+- Twelve paired Venture host markers: six matching numbered pairs.
+- Forty shared Training cards: four copies of seven ordinary domains and three special types.
+- Twenty-four Headlines: six per Era; twelve objectives: three per Era, four revealed per game.
+
+No hex tiles, Generators, Power contracts, upgrade chips, Audit bag, risk cubes, score cubes, or milestone markers belong to this prototype. Deferred Tactics and secret objectives are excluded.
+<!-- inventory:end -->
+<!-- components:end -->

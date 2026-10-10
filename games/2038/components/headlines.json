@@ -3,7 +3,7 @@
   "resolutionContract": {
     "revealTiming": "Reveal and finish every instruction and choice before secret Core Action selection.",
     "defaultDuration": "Every Headline resolves immediately. Keep the card in the timeline as history; it has no continuing rules effect.",
-    "directive": "Resolve choices in Initiative order unless printed otherwise. Apply existing costs, caps, presence, connection, and tie rules.",
+    "directive": "Resolve printed immediate effects in Initiative order, respecting costs, caps, and printed qualifications. No continuing modifiers.",
     "timings": [
       "before_selection"
     ]
@@ -15,17 +15,23 @@
       "round": 1,
       "resolutionType": "DIRECTIVE",
       "regimeTags": [
-        "action_cost",
-        "research",
-        "deploy",
-        "scrutiny"
+        "compute",
+        "reputation"
       ],
       "name": "The Token Price Reaches Zero",
-      "text": "Each institution may gain 1 ${terms.resources.compute} and add 1 ${terms.playerTracks.scrutiny}.",
+      "text": "Each institution may gain 1 Compute and lose 1 Reputation.",
       "$scenario": {
         "ref": "cheap-token-rebound"
       },
-      "loreRef": "headline-ten-dollar-intelligence"
+      "loreRef": "headline-ten-dollar-intelligence",
+      "effect": {
+        "target": "each",
+        "optional": true,
+        "gain": {
+          "compute": 1,
+          "reputation": -1
+        }
+      }
     },
     {
       "id": "employee_free_unicorn",
@@ -33,17 +39,23 @@
       "round": 1,
       "resolutionType": "DIRECTIVE",
       "regimeTags": [
-        "organize",
-        "teams",
         "runway",
-        "scrutiny"
+        "reputation"
       ],
       "name": "The Company Brain Survives Bankruptcy",
-      "text": "Each institution may return 1 deployed Agent to supply, leaving at least 1 deployed, to gain 2 ${terms.resources.runway} and add 2 ${terms.playerTracks.scrutiny}.",
+      "text": "Each institution may gain 2 Runway and lose 1 Reputation.",
       "$scenario": {
         "ref": "bankruptcy-data-estates"
       },
-      "loreRef": "headline-employee-free-unicorn"
+      "loreRef": "headline-employee-free-unicorn",
+      "effect": {
+        "target": "each",
+        "optional": true,
+        "gain": {
+          "runway": 2,
+          "reputation": -1
+        }
+      }
     },
     {
       "id": "synthetic_celebrity",
@@ -51,18 +63,26 @@
       "round": 1,
       "resolutionType": "DIRECTIVE",
       "regimeTags": [
-        "deploy",
-        "consumer",
-        "media",
         "capability",
-        "scrutiny"
+        "reputation"
       ],
       "name": "The Home Robot Requests Expert Assistance",
-      "text": "Each institution may pay 1 ${terms.resources.compute} to gain 1 ${terms.playerTracks.capability} and add 1 ${terms.playerTracks.scrutiny}.",
+      "text": "Each institution may pay 1 Compute to gain 1 Capability and lose 1 Reputation.",
       "$scenario": {
         "ref": "supervised-autonomy-homes"
       },
-      "loreRef": "headline-synthetic-celebrity"
+      "loreRef": "headline-synthetic-celebrity",
+      "effect": {
+        "target": "each",
+        "optional": true,
+        "cost": {
+          "compute": 1
+        },
+        "gain": {
+          "capability": 1,
+          "reputation": -1
+        }
+      }
     },
     {
       "id": "open_weights_drop",
@@ -70,16 +90,20 @@
       "round": 1,
       "resolutionType": "DIRECTIVE",
       "regimeTags": [
-        "capability",
-        "trust",
-        "open_weights"
+        "capability"
       ],
       "name": "Open Weights Become the Default",
-      "text": "Everyone gains 1 ${terms.playerTracks.capability}. Lowest-${terms.playerTracks.customer} player gains 1 ${terms.playerTracks.trust}.",
+      "text": "Each institution gain 1 Capability.",
       "$scenario": {
         "ref": "strategic-open-weights"
       },
-      "loreRef": "headline-open-weights-drop"
+      "loreRef": "headline-open-weights-drop",
+      "effect": {
+        "target": "each",
+        "gain": {
+          "capability": 1
+        }
+      }
     },
     {
       "id": "professional_exam_sweep",
@@ -87,17 +111,23 @@
       "round": 1,
       "resolutionType": "DIRECTIVE",
       "regimeTags": [
-        "research",
-        "capability",
-        "scrutiny",
-        "trust"
+        "reputation"
       ],
       "name": "The Last Clinic Clears Its Waitlist",
-      "text": "Each institution with at least 3 ${terms.playerTracks.capability} gains 1 ${terms.playerTracks.trust}. Those with at least 5 also remove 1 ${terms.playerTracks.scrutiny}.",
+      "text": "Each institution with at least 3 Capability gain 1 Reputation.",
       "$scenario": {
         "ref": "abundance-constituency"
       },
-      "loreRef": "headline-professional-exam-sweep"
+      "loreRef": "headline-professional-exam-sweep",
+      "effect": {
+        "target": "each",
+        "minimum": {
+          "capability": 3
+        },
+        "gain": {
+          "reputation": 1
+        }
+      }
     },
     {
       "id": "human_original_guarantee",
@@ -105,16 +135,28 @@
       "round": 1,
       "resolutionType": "DIRECTIVE",
       "regimeTags": [
-        "trust",
-        "customers",
-        "runway"
+        "customers"
       ],
       "name": "Human-Original Guarantee",
-      "text": "Each institution with at least 3 ${terms.playerTracks.trust} may pay 1 ${terms.resources.runway} to gain 1 Customer if it meets that Customer’s normal ${terms.playerTracks.capability} requirement. This resolves no Deploy Action or visit bonus.",
+      "text": "Each institution with at least 3 Reputation may pay 1 Runway to gain 1 Customers. The next Customer card requires its normal Capability. This is not a Deploy action.",
       "$scenario": {
         "ref": "human-original-guarantee"
       },
-      "loreRef": "headline-human-original-guarantee"
+      "loreRef": "headline-human-original-guarantee",
+      "effect": {
+        "target": "each",
+        "optional": true,
+        "minimum": {
+          "reputation": 3
+        },
+        "cost": {
+          "runway": 1
+        },
+        "gain": {
+          "customers": 1
+        },
+        "normalCustomerRequirement": true
+      }
     },
     {
       "id": "humanoid_factory_gate",
@@ -122,17 +164,26 @@
       "round": 2,
       "resolutionType": "DIRECTIVE",
       "regimeTags": [
-        "organize",
-        "recruit",
-        "teams",
-        "scrutiny"
+        "runway",
+        "reputation"
       ],
       "name": "The Last Hazard Shift Is Retired",
-      "text": "Each institution may pay 1 ${terms.resources.runway} to recruit 1 Agent from supply into a district containing one of its Agents and add 1 ${terms.playerTracks.scrutiny}. This resolves no Action or visit bonus.",
+      "text": "Each institution may pay 1 Runway to gain 2 Runway and lose 1 Reputation.",
       "$scenario": {
         "ref": "autonomy-queue-collapse"
       },
-      "loreRef": "headline-humanoid-factory-gate"
+      "loreRef": "headline-humanoid-factory-gate",
+      "effect": {
+        "target": "each",
+        "optional": true,
+        "cost": {
+          "runway": 1
+        },
+        "gain": {
+          "runway": 2,
+          "reputation": -1
+        }
+      }
     },
     {
       "id": "reactor_restart_one_model",
@@ -140,16 +191,23 @@
       "round": 2,
       "resolutionType": "DIRECTIVE",
       "regimeTags": [
-        "build",
-        "clean_power",
-        "mandate"
+        "reputation"
       ],
       "name": "Orbital Power Receives a Beam Corridor",
-      "text": "Each institution with an ordinary clean Generator gains 1 ${terms.playerTracks.mandate}.",
+      "text": "Each institution with at least 1 Facilities gain 1 Reputation.",
       "$scenario": {
         "ref": "orbital-beam-corridor"
       },
-      "loreRef": "headline-reactor-restart-one-model"
+      "loreRef": "headline-reactor-restart-one-model",
+      "effect": {
+        "target": "each",
+        "minimum": {
+          "facilities": 1
+        },
+        "gain": {
+          "reputation": 1
+        }
+      }
     },
     {
       "id": "export_controls",
@@ -158,17 +216,24 @@
       "resolutionType": "DIRECTIVE",
       "regulatory": true,
       "regimeTags": [
-        "compute",
-        "trade",
-        "control"
+        "runway"
       ],
       "rulesLabel": "Regulatory",
       "name": "Compute Borders Harden",
-      "text": "The ${terms.locations.chip} controller gains 1 ${terms.resources.runway}. Each institution controlling at least one ${terms.locations.government} district gains 1 ${terms.resources.runway}, once even if it controls both. An institution may receive both the Chip and Government rewards. Trade remains available normally.",
+      "text": "Each institution with at least 1 Facilities gain 1 Runway.",
       "$scenario": {
         "ref": "compute-blocs-and-model-asylum"
       },
-      "loreRef": "headline-export-controls"
+      "loreRef": "headline-export-controls",
+      "effect": {
+        "target": "each",
+        "minimum": {
+          "facilities": 1
+        },
+        "gain": {
+          "runway": 1
+        }
+      }
     },
     {
       "id": "emergency_power_authority",
@@ -176,17 +241,26 @@
       "round": 2,
       "resolutionType": "DIRECTIVE",
       "regimeTags": [
-        "production",
-        "power",
-        "scrutiny",
-        "systemic_risk"
+        "compute",
+        "reputation"
       ],
       "name": "The Counterfactual Casino Clears Priority Load",
-      "text": "Each institution whose emergency Generator currently serves a Facility may gain 2 ${terms.resources.compute} and add 1 ${terms.playerTracks.scrutiny}.",
+      "text": "Each institution with at least 1 Facilities may gain 2 Compute and lose 1 Reputation.",
       "$scenario": {
         "ref": "counterfactual-casinos"
       },
-      "loreRef": "headline-emergency-power-authority"
+      "loreRef": "headline-emergency-power-authority",
+      "effect": {
+        "target": "each",
+        "optional": true,
+        "minimum": {
+          "facilities": 1
+        },
+        "gain": {
+          "compute": 2,
+          "reputation": -1
+        }
+      }
     },
     {
       "id": "last_plumber_boom",
@@ -194,17 +268,20 @@
       "round": 2,
       "resolutionType": "DIRECTIVE",
       "regimeTags": [
-        "agents",
-        "presence",
-        "assignment",
         "runway"
       ],
       "name": "The Last Plumber Boom",
-      "text": "Each institution gains 1 ${terms.resources.runway} for each different district containing at least 1 of its Agents, to a maximum of 2 ${terms.resources.runway}.",
+      "text": "Each institution gain 1 Runway.",
       "$scenario": {
         "ref": "the-last-plumber-boom"
       },
-      "loreRef": "headline-last-plumber-boom"
+      "loreRef": "headline-last-plumber-boom",
+      "effect": {
+        "target": "each",
+        "gain": {
+          "runway": 1
+        }
+      }
     },
     {
       "id": "wartime_water_bridge",
@@ -212,16 +289,23 @@
       "round": 2,
       "resolutionType": "DIRECTIVE",
       "regimeTags": [
-        "cooperation",
-        "power",
-        "trust"
+        "reputation"
       ],
       "name": "Wartime Water Bridge",
-      "text": "Each institution with a connected Facility adjacent to a connected rival Facility gains 1 ${terms.playerTracks.trust} and removes 1 ${terms.playerTracks.scrutiny}. Receive this reward once, regardless of how many eligible hosts or rivals you have.",
+      "text": "Each institution with at least 1 Facilities gain 1 Reputation.",
       "$scenario": {
         "ref": "wartime-water-bridge"
       },
-      "loreRef": "headline-wartime-water-bridge"
+      "loreRef": "headline-wartime-water-bridge",
+      "effect": {
+        "target": "each",
+        "minimum": {
+          "facilities": 1
+        },
+        "gain": {
+          "reputation": 1
+        }
+      }
     },
     {
       "id": "ai_written_law",
@@ -229,17 +313,24 @@
       "round": 3,
       "resolutionType": "DIRECTIVE",
       "regimeTags": [
-        "government",
-        "action_selection",
-        "runway",
-        "trust"
+        "reputation"
       ],
       "name": "The Court Adopts Supported Meaning",
-      "text": "Each institution may pay 1 ${terms.resources.runway} to gain 1 ${terms.playerTracks.trust}. After all choices resolve, each institution controlling at least one ${terms.locations.government} district gains 1 ${terms.resources.runway} for each institution that accepts. Controlling both Government districts does not double this reward.",
+      "text": "Each institution may pay 1 Runway to gain 1 Reputation.",
       "$scenario": {
         "ref": "semantic-court-mandate"
       },
-      "loreRef": "headline-ai-written-law"
+      "loreRef": "headline-ai-written-law",
+      "effect": {
+        "target": "each",
+        "optional": true,
+        "cost": {
+          "runway": 1
+        },
+        "gain": {
+          "reputation": 1
+        }
+      }
     },
     {
       "id": "benchmark_is_economy",
@@ -247,16 +338,23 @@
       "round": 3,
       "resolutionType": "DIRECTIVE",
       "regimeTags": [
-        "research",
-        "deploy",
-        "mandate"
+        "capability",
+        "reputation"
       ],
       "name": "The Billionth Instance Enters the Record",
-      "text": "Each institution may gain 1 ${terms.playerTracks.capability} and add 1 Systemic Risk cube to the Audit bag.",
+      "text": "Each institution may gain 1 Capability and lose 1 Reputation.",
       "$scenario": {
         "ref": "billion-instance-bloom"
       },
-      "loreRef": "headline-benchmark-is-economy"
+      "loreRef": "headline-benchmark-is-economy",
+      "effect": {
+        "target": "each",
+        "optional": true,
+        "gain": {
+          "capability": 1,
+          "reputation": -1
+        }
+      }
     },
     {
       "id": "weights_on_internet",
@@ -264,16 +362,20 @@
       "round": 3,
       "resolutionType": "DIRECTIVE",
       "regimeTags": [
-        "facility_production",
-        "capability",
-        "trust"
+        "runway"
       ],
       "name": "The Passive Citizen Dividend Activates",
-      "text": "The lowest-${terms.playerTracks.capability} institution immediately resolves the printed production of 1 connected Facility it owns. The highest-${terms.playerTracks.capability} institution gains 1 ${terms.playerTracks.trust}. Break ties by Initiative.",
+      "text": "The lowest-Customer institution gain 2 Runway. Break ties by Initiative.",
       "$scenario": {
         "ref": "passive-citizen-dividend"
       },
-      "loreRef": "headline-weights-on-internet"
+      "loreRef": "headline-weights-on-internet",
+      "effect": {
+        "target": "lowest_customers",
+        "gain": {
+          "runway": 2
+        }
+      }
     },
     {
       "id": "cognitive_donor_clinics",
@@ -281,16 +383,24 @@
       "round": 3,
       "resolutionType": "DIRECTIVE",
       "regimeTags": [
-        "trust",
-        "compute",
-        "cognitive_labor"
+        "compute"
       ],
       "name": "Cognitive Donor Clinics",
-      "text": "Each institution may lose 1 ${terms.playerTracks.trust} to gain 3 ${terms.resources.compute}. It must have at least 1 ${terms.playerTracks.trust} to accept.",
+      "text": "Each institution may pay 1 Reputation to gain 3 Compute.",
       "$scenario": {
         "ref": "cognitive-donor-clinics"
       },
-      "loreRef": "headline-cognitive-donor-clinics"
+      "loreRef": "headline-cognitive-donor-clinics",
+      "effect": {
+        "target": "each",
+        "optional": true,
+        "cost": {
+          "reputation": 1
+        },
+        "gain": {
+          "compute": 3
+        }
+      }
     },
     {
       "id": "human_signature",
@@ -298,16 +408,24 @@
       "round": 3,
       "resolutionType": "DIRECTIVE",
       "regimeTags": [
-        "trust",
-        "scrutiny",
-        "cooperation"
+        "reputation"
       ],
       "name": "The Human Signature",
-      "text": "Each institution may pay 1 ${terms.resources.runway} to remove 1 ${terms.playerTracks.scrutiny} from a chosen other institution and gain 1 ${terms.playerTracks.trust}. The other institution must have at least 1 ${terms.playerTracks.scrutiny}.",
+      "text": "Each institution may pay 1 Runway to gain 1 Reputation.",
       "$scenario": {
         "ref": "the-human-signature"
       },
-      "loreRef": "headline-human-signature"
+      "loreRef": "headline-human-signature",
+      "effect": {
+        "target": "each",
+        "optional": true,
+        "cost": {
+          "runway": 1
+        },
+        "gain": {
+          "reputation": 1
+        }
+      }
     },
     {
       "id": "analog_havens",
@@ -315,16 +433,24 @@
       "round": 3,
       "resolutionType": "DIRECTIVE",
       "regimeTags": [
-        "runway",
-        "trust",
-        "scrutiny"
+        "reputation"
       ],
       "name": "Analog Havens",
-      "text": "Each institution may pay 2 ${terms.resources.runway} to gain 2 ${terms.playerTracks.trust} and remove 2 ${terms.playerTracks.scrutiny}.",
+      "text": "Each institution may pay 2 Runway to gain 2 Reputation.",
       "$scenario": {
         "ref": "analog-havens"
       },
-      "loreRef": "headline-analog-havens"
+      "loreRef": "headline-analog-havens",
+      "effect": {
+        "target": "each",
+        "optional": true,
+        "cost": {
+          "runway": 2
+        },
+        "gain": {
+          "reputation": 2
+        }
+      }
     },
     {
       "id": "autonomous_corporation",
@@ -332,17 +458,26 @@
       "round": 4,
       "resolutionType": "DIRECTIVE",
       "regimeTags": [
-        "action_selection",
-        "action_output",
-        "initiative",
-        "scrutiny"
+        "runway",
+        "reputation"
       ],
       "name": "The Metropolitan Mind Trust Incorporates",
-      "text": "The institution controlling the most districts may gain 2 ${terms.resources.runway} and add 1 ${terms.playerTracks.scrutiny}. Break ties by Initiative.",
+      "text": "Each institution with at least 1 Facilities may gain 2 Runway and lose 1 Reputation.",
       "$scenario": {
         "ref": "metropolitan-mind-trust"
       },
-      "loreRef": "headline-autonomous-corporation"
+      "loreRef": "headline-autonomous-corporation",
+      "effect": {
+        "target": "each",
+        "optional": true,
+        "minimum": {
+          "facilities": 1
+        },
+        "gain": {
+          "runway": 2,
+          "reputation": -1
+        }
+      }
     },
     {
       "id": "recursive_self_improvement",
@@ -350,17 +485,26 @@
       "round": 4,
       "resolutionType": "DIRECTIVE",
       "regimeTags": [
-        "research",
         "capability",
-        "systemic_risk",
-        "research_protection"
+        "reputation"
       ],
       "name": "The Matter Compiler Enters Public Maintenance",
-      "text": "Each institution may pay 2 ${terms.resources.compute} to gain 3 ${terms.playerTracks.capability}, add 2 ${terms.playerTracks.scrutiny}, and add 1 Systemic Risk cube to the Audit bag.",
+      "text": "Each institution may pay 2 Compute to gain 3 Capability and lose 2 Reputation.",
       "$scenario": {
         "ref": "matter-compiler"
       },
-      "loreRef": "headline-recursive-self-improvement"
+      "loreRef": "headline-recursive-self-improvement",
+      "effect": {
+        "target": "each",
+        "optional": true,
+        "cost": {
+          "compute": 2
+        },
+        "gain": {
+          "capability": 3,
+          "reputation": -2
+        }
+      }
     },
     {
       "id": "agent_swarm_escapes_scope",
@@ -368,17 +512,27 @@
       "round": 4,
       "resolutionType": "DIRECTIVE",
       "regimeTags": [
-        "agent_swarm",
-        "action_slot",
-        "scrutiny"
+        "compute",
+        "reputation"
       ],
       "name": "The Dead Remain on Shift",
-      "text": "Each institution may add 1 ${terms.playerTracks.scrutiny} to immediately resolve the printed production of 1 connected Facility it owns. This resolves no Core Action.",
+      "text": "Each institution with at least 1 Facilities may gain 1 Compute and lose 1 Reputation.",
       "$scenario": {
         "ref": "posthumous-labor",
         "eraRelation": "later-expression"
       },
-      "loreRef": "headline-agent-swarm-escapes-scope"
+      "loreRef": "headline-agent-swarm-escapes-scope",
+      "effect": {
+        "target": "each",
+        "optional": true,
+        "minimum": {
+          "facilities": 1
+        },
+        "gain": {
+          "compute": 1,
+          "reputation": -1
+        }
+      }
     },
     {
       "id": "agi_blog_post",
@@ -386,16 +540,23 @@
       "round": 4,
       "resolutionType": "DIRECTIVE",
       "regimeTags": [
-        "capability",
-        "trust",
-        "recognition"
+        "reputation"
       ],
       "name": "The Universe Receives a Continuity Plan",
-      "text": "The institution with the highest ${terms.playerTracks.capability} gains 1 ${terms.playerTracks.trust}. Break ties by Initiative.",
+      "text": "Each institution with at least 6 Capability gain 1 Reputation.",
       "$scenario": {
         "ref": "agi-refinancing-declaration"
       },
-      "loreRef": "headline-agi-blog-post"
+      "loreRef": "headline-agi-blog-post",
+      "effect": {
+        "target": "each",
+        "minimum": {
+          "capability": 6
+        },
+        "gain": {
+          "reputation": 1
+        }
+      }
     },
     {
       "id": "biological_colocation",
@@ -403,16 +564,23 @@
       "round": 4,
       "resolutionType": "DIRECTIVE",
       "regimeTags": [
-        "agents",
         "compute",
-        "systemic_risk"
+        "reputation"
       ],
       "name": "Biological Colocation",
-      "text": "Each institution may gain 1 ${terms.resources.compute} per deployed Agent, to a maximum of 3 ${terms.resources.compute}, and add 1 Systemic Risk cube to the Audit bag.",
+      "text": "Each institution may gain 2 Compute and lose 1 Reputation.",
       "$scenario": {
         "ref": "biological-colocation"
       },
-      "loreRef": "headline-biological-colocation"
+      "loreRef": "headline-biological-colocation",
+      "effect": {
+        "target": "each",
+        "optional": true,
+        "gain": {
+          "compute": 2,
+          "reputation": -1
+        }
+      }
     },
     {
       "id": "limb_liquidity",
@@ -420,16 +588,23 @@
       "round": 4,
       "resolutionType": "DIRECTIVE",
       "regimeTags": [
-        "agents",
-        "presence",
-        "assignment"
+        "runway",
+        "reputation"
       ],
       "name": "Limb Liquidity",
-      "text": "Each institution may reassign 1 of its Agents using the normal assignment rule: choose any district or leave it in place. Update presence immediately.",
+      "text": "Each institution may gain 1 Runway and lose 1 Reputation.",
       "$scenario": {
         "ref": "limb-liquidity"
       },
-      "loreRef": "headline-limb-liquidity"
+      "loreRef": "headline-limb-liquidity",
+      "effect": {
+        "target": "each",
+        "optional": true,
+        "gain": {
+          "runway": 1,
+          "reputation": -1
+        }
+      }
     }
   ]
 }

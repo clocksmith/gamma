@@ -22,19 +22,15 @@ Deliver a coherent, replayable institutional strategy game whose authored rules,
 
 ## Invariants
 
-- Mandate 2038 has one ruleset. The map stays fixed; Power eligibility is local.
-  Setup, components, references, runtime options, and publication expose no
-  alternate rules mode. Retired mode selectors and module overrides are rejected.
+- Mandate 2038 has one ruleset: six shared action areas, four resource tracks, always-operating Facilities, Customer cards, one Facility upgrade, and final-current-state scoring. Setup and publication expose no alternate rules mode. Retired mode selectors and module overrides are rejected.
 - The current candidate uses four identical Agents per faction, two starting.
   Agents are persistent district assignments; CEOs remain characters, not pieces.
 - Core selections commit available cards without advance affordability proofs.
   ReAct is Reason, Act, Observe; assignment is part of Act.
-- Research has no universal Protection quantity. Power is a current-board local
-  connection condition. Recognized AGI is a fixed Mandate achievement before the
-  final Audit; it never overrides the Mandate winner. The World Ending remains separate.
+- Research retains push-your-luck. Reputation replaces Trust, Scrutiny, and Systemic Risk. Recognized AGI is a final holding after Era IV Production and Reputation Review. The World Ending remains separate.
 - User-selected mechanic revisions retain scenario placement and require an
   explicit design-decision receipt; they must not be labelled retained mechanics.
-- The six Core Actions are the only selections. Build places up to one Facility, then one project from one assignment. Programs and use records are retired.
+- The six Core Actions are the only selections. Build places one Facility OR upgrades one Facility; these are exclusive resolutions. Programs and use records are retired.
 - The deck contains six Headlines per Era and reveals three per Era. Headlines finish all choices before selection and leave no continuing modifiers.
 - Each faction has one permanent ability and common scoring. Former abilities and Programs retain their fiction in lore-only records projected into the existing companion and references.
 - Generated graph targets are never hand-edited. Authoring checks validate current
@@ -69,10 +65,7 @@ Deliver a coherent, replayable institutional strategy game whose authored rules,
   excluded. Release identity remains in build receipts.
 - Physical specifications own form and state encoding; supported inventory
   prose is projected from the rulebook, not maintained in a second physical file.
-  Movable pieces use cards/chips, Agent position tokens, and cubes. Each institution owns one
-  hosted Mega-Cluster, Fusion, and Quantum chip. All share construction and
-  recording rules; no unique Fusion supply, paired Mega-Cluster, or Quantum
-  checkbox remains. Cube tracks replace handwriting; Audit probabilities stay intact.
+  Pieces use Customer and two-sided Facility cards, Agent tokens, four resource cubes, and an AGI recognition marker. No Generator, Power, project-chip, risk-bag, or milestone system remains.
 - Every admitted lore situation has one structured Era placement, and every
   governed lore surface is bound exactly once with copy and mechanic receipts.
 - World Markdown owns all scenario definitions and shared qualification policies.
@@ -88,8 +81,7 @@ Deliver a coherent, replayable institutional strategy game whose authored rules,
   artifacts remain local evidence.
 - Playable counts are two through five. Six factions remain available choices; six-player requests are rejected. Historical evidence retains its original identity.
 - Fictional identities remain fictional and simulated sessions remain labeled.
-- Venture response packets expose the public proposer, fixed hosts, current
-  connection status and reciprocal nominal income. Pending terms clear on
+- Venture response packets expose the public proposer, fixed hosts, current host availability and reciprocal nominal income. Pending terms clear on
   acceptance, rejection or policy failure; hidden decks remain unavailable.
 - Canonical rule changes update every affected authority and evidence surface together.
 
@@ -111,4 +103,6 @@ Public hosting is owned by m3t4 at `https://m3t4.ai/mandate-2038/`. Gamma owns t
 Player equipment belongs to one of five colour-and-symbol kits independently of
 six faction identities. Seat-based mechanical ownership remains authoritative.
 
-- Era Mandates score current public state after Audit through the shared pure evaluator; history cannot affect their qualification or value. No live objective counter or Venture-age marking remains. Trust milestones and diagnostic telemetry are separate.
+- One objective is revealed each Era; all four score from the final public table after Era IV Production, Reputation Review, and AGI recognition. History never affects scoring. Diagnostic telemetry is separate.
+
+User-selected 2026-10-09 smaller prototype supersedes earlier Power, hex geography, Trust milestones, and per-Era scoring provisions. Four tracks are Runway, Compute, Capability, and Reputation. All four revealed objectives score once from final holdings. Old sealed releases and evidence remain unchanged.

@@ -234,3 +234,5 @@ extreme, while every institution describes the impossible as a responsible
 quarterly initiative.
 
 Era objectives use current public state after Audit. The current-state scoring package is a balance-test candidate; earlier balance receipts do not qualify it.
+
+The current smaller prototype uses six shared action areas and four tracks (Runway, Compute, Capability, Reputation), five independent player kits, and six institutions. Customers are cards; Facilities always operate and have one upgrade face. All points and four revealed objectives score from final holdings. This redesign is a test candidate with fresh balance and human usability evidence still required. Build from authored sources; never edit `dist/` directly.

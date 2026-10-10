@@ -6,8 +6,8 @@ const root = resolve(import.meta.dirname, "../..");
 const ENDING_IDS = ["singularity", "closed_loop", "plural_future", "assured_continuity"];
 const TOKENS = new Map([
   ["Runway", "runway"], ["Compute", "compute"], ["Capability", "capability"],
-  ["Customers", "customers"], ["Trust", "trust"], ["Scrutiny", "scrutiny"],
-  ["Mandate", "mandate"], ["Systemic Risk", "systemic_risk"]
+  ["Customers", "customers"], ["Reputation", "reputation"],
+  ["Mandate", "mandate"]
 ]);
 const BOX_FIELDS = new Map([
   ["Front strapline", "frontStrapline"], ["Back copy", "backCopy"],

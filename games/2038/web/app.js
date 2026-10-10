@@ -5,7 +5,6 @@ import {
   getBridgeToken
 } from "./api-client.js";
 import { createBrowserInteractiveGame } from "../lab/runtime/create-browser-interactive-game.js";
-import { pointyTopAxialPosition } from "./src/hex-layout.js";
 
 const [factions, config, profilesDocument, uiCopy] = await Promise.all([
   fetch("/dist/runtime/factions.json").then((response) => response.json()),
@@ -156,119 +155,28 @@ function showBridgeState(message, connected = false) {
   elements["bridge-status"].classList.toggle("connected", connected);
 }
 
-function tilePosition(tile) {
-  const compact = window.innerWidth <= 680;
-  const hexWidth = compact ? 100 : 144;
-  const hexHeight = compact ? 87 : 125;
-  const originX = elements.board.clientWidth / 2;
-  const originY = elements.board.clientHeight / 2;
-  return pointyTopAxialPosition(tile, {
-    width: hexWidth,
-    height: hexHeight,
-    originX,
-    originY
-  });
-}
-
-function markerKey(player, type, marker, index) {
-  return `${player.seat}:${type}:${marker.id || marker.sourceId || marker.tileId || index}`;
-}
-
-function markerState(tile, players) {
-  const markers = [];
-  for (const player of players) {
-    for (const [index, piece] of player.pieces.entries()) {
-      if (piece.tileId !== tile.instanceId) continue;
-      markers.push({
-        key: markerKey(player, "piece", piece, index),
-        signature: `piece:${piece.kind}`
-      });
-    }
-    for (const [index, facility] of player.facilities.entries()) {
-      if (facility.tileId !== tile.instanceId) continue;
-      markers.push({
-        key: markerKey(player, "facility", facility, index),
-        signature: `facility:${facility.powered}`
-      });
-    }
-    for (const [index, generator] of player.generators.entries()) {
-      if (generator.tileId !== tile.instanceId) continue;
-      markers.push({
-        key: markerKey(player, "generator", generator, index),
-        signature: `generator:${generator.sourceId}`
-      });
-    }
-  }
-  return markers;
-}
-
-function tileSignature(tile, markers) {
-  const position = `${tile.instanceId}:${tile.name}:${tile.category}:${tile.q}:${tile.r}`;
-  return `${position}|${markers.map((marker) => `${marker.key}:${marker.signature}`).sort().join("|")}`;
-}
-
-function contentsForTile(tile, players, priorMarkerKeys = new Set()) {
-  const marks = [];
-  for (const player of players) {
-    for (const [index, piece] of player.pieces.entries()) {
-      if (piece.tileId !== tile.instanceId) continue;
-      const arrivalClass = priorMarkerKeys.has(markerKey(player, "piece", piece, index)) ? "" : " arrival";
-      marks.push(`<i class="dot ${piece.kind}${arrivalClass}" style="--seat:${player.seat};--kit-color:${kitColor(player)}" ` +
-        `role="img" aria-label="${escapeHtml(playerKit(player)?.colorName)} ${escapeHtml(playerKit(player)?.symbolName)} kit · ${escapeHtml(player.factionName)}" title="${escapeHtml(playerKit(player)?.colorName)} ${escapeHtml(playerKit(player)?.symbolName)} kit · ${escapeHtml(player.factionName)} ${piece.kind}">${escapeHtml(playerKit(player)?.symbol || "")}</i>`);
-    }
-    for (const [index, facility] of player.facilities.entries()) {
-      if (facility.tileId !== tile.instanceId) continue;
-      const arrivalClass = priorMarkerKeys.has(markerKey(player, "facility", facility, index)) ? "" : " arrival";
-      const status = facility.powered ? copy.browser.connectedNow : copy.browser.offline;
-      marks.push(`<i class="dot facility ${facility.powered ? "powered" : "offline"}${arrivalClass} ` +
-        `" style="--seat:${player.seat};--kit-color:${kitColor(player)}" ` +
-        `role="img" aria-label="${escapeHtml(playerKit(player)?.colorName)} ${escapeHtml(playerKit(player)?.symbolName)} kit · ${escapeHtml(player.factionName)}" title="${escapeHtml(playerKit(player)?.colorName)} ${escapeHtml(playerKit(player)?.symbolName)} kit · ${escapeHtml(player.factionName)} Facility — ${status}">${escapeHtml(playerKit(player)?.symbol || "")}</i>`);
-    }
-    for (const [index, generator] of player.generators.entries()) {
-      if (generator.tileId !== tile.instanceId) continue;
-      const arrivalClass = priorMarkerKeys.has(markerKey(player, "generator", generator, index)) ? "" : " arrival";
-      marks.push(`<i class="dot generator${arrivalClass}" style="--seat:${player.seat};--kit-color:${kitColor(player)}" ` +
-        `role="img" aria-label="${escapeHtml(playerKit(player)?.colorName)} ${escapeHtml(playerKit(player)?.symbolName)} kit · ${escapeHtml(player.factionName)}" title="${escapeHtml(playerKit(player)?.colorName)} ${escapeHtml(playerKit(player)?.symbolName)} kit · ${escapeHtml(player.factionName)} ${escapeHtml(generator.sourceId)}">${escapeHtml(playerKit(player)?.symbol || "")}</i>`);
-    }
-  }
-  return marks.join("");
-}
-
 function renderBoard(state) {
   elements.board.replaceChildren();
-  if (!state) {
-    renderedTileStates = new Map();
-    return;
+  if (!state) return;
+  for (const area of state.board) {
+    const card = document.createElement("article");
+    card.className = "action-area";
+    const facilities = state.players.flatMap(player => player.facilities
+      .filter(f => f.tileId === area.instanceId).map(f => ({player, facility:f})));
+    const agents = state.players.flatMap(player => player.pieces
+      .filter(a => a.tileId === area.instanceId).map(a => ({player, agent:a})));
+    const owner = player => `${playerKit(player)?.symbol || ""} ${player.factionName}`;
+    card.innerHTML = `<h3>${escapeHtml(config.actions.find(a => a.id === area.actionId)?.name)}</h3>
+      <p>${escapeHtml(area.name)}</p><p>${escapeHtml(area.production)}</p>
+      <div class="facility-slots">${Array.from({length:area.facilitySpaces}, (_,i) => {
+        const entry=facilities[i];
+        return entry ? `<div class="facility-slot" style="--kit-color:${kitColor(entry.player)}">${escapeHtml(owner(entry.player))}<br>${escapeHtml(entry.facility.id)} · ${entry.facility.upgraded ? "Upgraded ×2" : "Normal"}</div>` : '<div class="facility-slot empty">Open Facility space</div>';
+      }).join("")}</div>
+      <p class="area-agents">Agents: ${agents.map(e => escapeHtml(owner(e.player))).join(" · ") || "None"}</p>`;
+    elements.board.append(card);
   }
-  const nextTileStates = new Map();
-  const hasPriorBoard = renderedTileStates.size > 0;
-  for (const tile of state.board) {
-    const hex = document.createElement("div");
-    const position = tilePosition(tile);
-    const markers = markerState(tile, state.players);
-    const signature = tileSignature(tile, markers);
-    const priorState = renderedTileStates.get(tile.instanceId);
-    const changed = hasPriorBoard && priorState?.signature !== signature;
-    nextTileStates.set(tile.instanceId, {
-      signature,
-      markerKeys: new Set(markers.map((marker) => marker.key))
-    });
-    hex.className = `hex ${tile.category}${changed ? " state-shift" : ""}`;
-    hex.style.left = `${position.left}px`;
-    hex.style.top = `${position.top}px`;
-    hex.innerHTML = `
-      <span class="hex-name">${escapeHtml(tile.name)}</span>
-      <span class="hex-type">${escapeHtml(tile.category)}</span>
-      <span class="hex-pieces">${contentsForTile(tile, state.players, hasPriorBoard ? priorState?.markerKeys : undefined)}</span>
-    `;
-    elements.board.append(hex);
-  }
-  renderedTileStates = nextTileStates;
 }
-
-function resetBoardTransitions() {
-  renderedTileStates = new Map();
-}
+function resetBoardTransitions() { renderedTileStates = new Map(); }
 
 function renderPlayers(state) {
   elements.players.replaceChildren();
@@ -302,18 +210,14 @@ function renderPlayers(state) {
           })}
       </p>
       <dl>
-        <dt>${copy.tracks.mandate}</dt><dd>${player.mandate}</dd>
-        <dt>${copy.tracks.runway}</dt><dd>${player.runway}</dd>
-        <dt>${copy.tracks.compute}</dt><dd>${player.compute}</dd>
-        <dt>${copy.tracks.capability}</dt><dd>${player.capability}</dd>
-        <dt>${copy.tracks.customers}</dt><dd>${player.customers}</dd>
-        <dt>${copy.tracks.trust}</dt><dd>${player.trust}</dd>
-        <dt>${copy.tracks.scrutiny}</dt><dd>${player.scrutiny}</dd>
-        <dt>${escapeHtml(copy.browser.personalProjects)}</dt><dd>${(player.projects || []).map(project => `${escapeHtml(config.personalProjects.definitions.find(definition => definition.id === project.projectId)?.name || project.projectId)}: ${escapeHtml(project.hostId)}`).join("; ") || "None"}</dd>
-        <dt>${escapeHtml(copy.browser.trustMilestone)}</dt><dd>${player.highestTrustMilestone ?? 0}</dd>
-        <dt>${escapeHtml(copy.browser.objectiveProgress)}</dt><dd>${player.currentEraObjective ? `${escapeHtml(copy.browser.objectiveMetrics[player.currentEraObjective.metric])}: ${player.currentEraObjective.value} · ${escapeHtml(player.currentEraObjective.qualified ? copy.browser.objectiveQualified : copy.browser.objectiveUnqualified)} · ${escapeHtml(player.currentEraObjective.direction === "min" ? copy.browser.objectiveMin : copy.browser.objectiveMax)}` : "—"}</dd>
+        ${Object.entries(config.resources).map(([key, track]) => `<dt>${escapeHtml(track.name)}</dt><dd>${player[key]}</dd>`).join("")}
+        <dt>${escapeHtml(copy.browser.customers)}</dt><dd class="customer-cards">${player.customerCards.map(c => `<span class="customer-card">Customer ${c.ordinal}</span>`).join(" ") || "None"}</dd>
+        <dt>Facilities</dt><dd>${player.facilities.length} (${player.facilities.filter(f => f.upgraded).length} upgraded)</dd>
         <dt>AGI recognized</dt><dd>${player.agiDeclared ? "Yes" : "No"}</dd>
+        ${state.complete ? `<dt>${escapeHtml(copy.browser.finalScore)}</dt><dd>${player.finalScore}</dd>` : ""}
       </dl>
+      <p>${escapeHtml(copy.browser.objectiveProgress)}: ${player.currentEraObjective ? `${escapeHtml(copy.browser.objectiveMetrics[player.currentEraObjective.metric])} ${player.currentEraObjective.value} · ${player.currentEraObjective.qualified ? "Qualifies" : "Does not qualify"}` : "—"}. Scores at game end.</p>
+
     `;
     elements.players.append(card);
   }
@@ -706,8 +610,7 @@ function renderDecisions() {
       leftHost: offer.left.facilityId,
       rightHost: offer.right.facilityId,
       ownResource: copy.tracks[ownIncome.resource],
-      theirResource: copy.tracks[theirIncome.resource],
-      powerStatus: offer.left.powered && offer.right.powered ? copy.terms.powered : copy.terms.offline
+      theirResource: copy.tracks[theirIncome.resource]
     });
   }
   elements["decision-count"].textContent =

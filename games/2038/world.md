@@ -2323,12 +2323,10 @@ decisions they were trying to change.
 
 * **Runway**: Money available to your institution. Capitalized permission to survive the next contradiction.
 * **Compute**: Processing capacity spent on Research, Deployment, and projects. Every request has a queue behind it.
+* **Reputation**: Public standing that risky choices spend and Influence restores.
 * **Capability**: What the system can do before anyone agrees what it means.
 * **Customers**: People, institutions, and successors that now rely on the service.
-* **Trust**: Public permission that must be earned again after every consequence.
-* **Scrutiny**: The part of public attention that survives the press release.
 * **Mandate**: Public authority to shape a future other institutions can still contest.
-* **Systemic Risk**: A private externality that has acquired public entanglements.
 
 ## Box copy
 

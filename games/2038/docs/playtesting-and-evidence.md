@@ -512,3 +512,7 @@ separate; no generated session template is an observed playtest.
 ## Current-state objective candidate — 2026-10-09
 
 For the next physical session, check every Mandate using only the table after Audit. Record questions about prior turns, ownership identification by kit symbol, valid zero values, Venture hosts and current connections, cap-independent Compute capacity, and ties. Preserve the distinction between a facilitated session and a blind session; any supplied answer makes it facilitated. Simulation and generated-kit checks are not observed human playtests.
+
+## Smaller prototype physical preparation — 2026-10-09
+
+Use only the freshly frozen six-area/four-track kit. Choose institution and kit independently; verify both Facility faces and every Customer ordinal. Ask players to identify owned components by symbols, explain limited Facility slots, flip an upgrade, negotiate a fixed-host Venture, and score the final table without referring to previous turns. Record learning errors and actual observations; do not prefill successful results. Earlier kits and their observations keep their historical identity. The new candidate needs separate facilitated and blind sessions; automated checks establish implementation consistency only.
