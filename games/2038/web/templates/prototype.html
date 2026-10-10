@@ -7,6 +7,7 @@
     <title>${content.worldCopy.title} — Prototype</title>
     <link rel="icon" href="/web/favicon.svg" type="image/svg+xml">
     <link rel="stylesheet" href="/web/styles.css">
+    <link rel="stylesheet" href="/web/components/table.css">
   </head>
   <body>
     <header class="masthead">
@@ -45,6 +46,7 @@
           </label>
           <button id="start-game" type="button">Start complete game</button>
         </div>
+        <p id="setup-inventory" class="setup-inventory"></p>
         <p id="game-status">Choose personas and start immediately with deterministic browser opponents. A local bridge is optional for Claude or Codex.</p>
       </section>
 
@@ -54,6 +56,7 @@
             <div><p class="eyebrow">${content.uiCopy.prototype.browser.boardHeading}</p><h2 id="round-title">The board</h2></div>
             <span class="status" id="phase">Ready</span>
           </div>
+          <p id="setup-preview-label" class="setup-preview-label">${content.uiCopy.prototype.table.preview}</p>
           <div class="board-window">
             <div id="board" class="board" aria-label="Hex board"></div>
           </div>
@@ -68,13 +71,6 @@
             <span class="table-mark">LIVE</span>
           </div>
           <div id="players" class="player-roster"></div>
-          <div class="headline">
-            <p class="eyebrow" id="headline-label">Current ${terms.systems.headline}</p>
-            <h3 id="headline-name">Not revealed</h3>
-            <p id="headline-newswire" class="headline-news"></p>
-            <p id="headline-consequence" class="headline-consequence"></p>
-            <p id="headline-quote" class="headline-quote"></p>
-          </div>
         </aside>
 
         <section class="panel decision-console">
@@ -94,6 +90,8 @@
           <ol id="log" class="log"></ol>
         </section>
       </section>
+
+      <section id="shared-cards" class="panel shared-cards" aria-label="Cards on the table"></section>
 
       <details id="provider-controls" class="panel llm-controls">
         <summary>Local CLI opponents</summary>

@@ -422,7 +422,7 @@ try {
         const buttons=[...document.querySelectorAll('#decisions button')].filter(button=>!button.disabled);
         const choice=buttons.find(button=>button.innerText.includes('Select Fund')) || buttons.find(button=>/Skip|Decline|Confirm assignment/.test(button.innerText)) || buttons[0];
         if(!choice)throw new Error('Waiting without an actionable decision');
-        observations.push({round:document.querySelector('#round-title').innerText,stage:document.querySelector('#decision-title').innerText,headline:document.querySelector('#headline-name').innerText,consequence:document.querySelector('#headline-consequence').innerText,choice:choice.innerText});
+        observations.push({round:document.querySelector('#round-title').innerText,stage:document.querySelector('#decision-title').innerText,headline:document.querySelector('.headlines-section .table-card strong')?.innerText || '',consequence:document.querySelector('.headlines-section .table-card')?.record?.text || '',choice:choice.innerText});
         choice.click();await pause();
       }
       throw new Error('Match exceeded the bounded UI decision limit');

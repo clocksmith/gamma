@@ -312,7 +312,9 @@ for (const id of [
   "players",
   "decisions",
   "decision-context",
-  "headline-name",
+  "shared-cards",
+  "setup-preview-label",
+  "setup-inventory",
   "log",
   "start-game",
   "export"

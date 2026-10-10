@@ -2,23 +2,34 @@ import {
   apiFetch,
   bridgeRequired,
   connectBridge,
-  getBridgeToken
+  getBridgeToken,
 } from "./api-client.js";
 import { createBrowserInteractiveGame } from "../lab/runtime/create-browser-interactive-game.js";
 
-const [factions, config, profilesDocument, uiCopy] = await Promise.all([
-  fetch("/dist/runtime/factions.json").then((response) => response.json()),
-  fetch("/dist/runtime/game-config.json").then((response) => response.json()),
-  fetch("/dist/runtime/player-strategies.json").then((response) => response.json()),
-  fetch("/dist/runtime/ui-copy.json").then((response) => response.json())
-]);
+import { createBoard } from "./components/board.js";
+import { createPlayerMats } from "./components/player-mats.js";
+import { createCardTable } from "./components/card-table.js";
+
+const [factions, config, profilesDocument, uiCopy, headlines, mandates] =
+  await Promise.all([
+    fetch("/dist/runtime/factions.json").then((response) => response.json()),
+    fetch("/dist/runtime/game-config.json").then((response) => response.json()),
+    fetch("/dist/runtime/player-strategies.json").then((response) =>
+      response.json(),
+    ),
+    fetch("/dist/runtime/ui-copy.json").then((response) => response.json()),
+    fetch("/dist/runtime/headlines.json").then((response) => response.json()),
+    fetch("/dist/runtime/mandates.json").then((response) => response.json()),
+  ]);
 const profiles = profilesDocument.profiles;
 const copy = uiCopy.prototype;
-const kitsById = new Map(config.playerKits.map(kit => [kit.id, kit]));
 const kitSelect = document.createElement("select");
 kitSelect.id = "kit";
 kitSelect.setAttribute("aria-label", copy.browser.playerKit);
-for (const kit of config.playerKits) kitSelect.add(new Option(`${kit.symbol} ${kit.colorName} · ${kit.symbolName}`, kit.id));
+for (const kit of config.playerKits)
+  kitSelect.add(
+    new Option(`${kit.symbol} ${kit.colorName} · ${kit.symbolName}`, kit.id),
+  );
 const kitLabel = document.createElement("label");
 kitLabel.textContent = copy.browser.playerKit;
 kitLabel.append(kitSelect);
@@ -26,47 +37,142 @@ const kitGuidance = document.createElement("small");
 kitGuidance.textContent = copy.browser.kitSetup;
 kitLabel.append(kitGuidance);
 
-const firstGameGuideMode = new URLSearchParams(window.location.search).get("guide") === "first-game";
+const firstGameGuideMode =
+  new URLSearchParams(window.location.search).get("guide") === "first-game";
 
 const $ = (id) => document.getElementById(id);
-const elements = Object.fromEntries([
-  "provider-controls", "allow-llm", "board", "bridge-panel", "bridge-status", "bridge-token",
-  "connect-bridge", "decision-context", "decision-count", "decision-title",
-  "decisions", "export", "faction", "game-status", "headline-consequence",
-  "headline-label", "headline-name", "headline-newswire", "headline-quote",
-  "log", "max-llm-decisions", "model", "opponent-config",
-  "phase", "player-count", "players", "round-title", "seed", "setup", "start-game"
-].map((id) => [id, $(id)]));
+const elements = Object.fromEntries(
+  [
+    "provider-controls",
+    "allow-llm",
+    "board",
+    "bridge-panel",
+    "bridge-status",
+    "bridge-token",
+    "connect-bridge",
+    "decision-context",
+    "decision-count",
+    "decision-title",
+    "decisions",
+    "export",
+    "faction",
+    "game-status",
+    "log",
+    "max-llm-decisions",
+    "model",
+    "opponent-config",
+    "phase",
+    "player-count",
+    "players",
+    "round-title",
+    "seed",
+    "setup",
+    "start-game",
+  ].map((id) => [id, $(id)]),
+);
 
 for (const faction of factions.factions) {
-  elements.faction.add(new Option(`${faction.name} — ${faction.motto}`, faction.id));
+  elements.faction.add(
+    new Option(`${faction.name} — ${faction.motto}`, faction.id),
+  );
 }
 
-elements.setup.append(kitLabel);
+elements.setup
+  .querySelector(".command-fields")
+  .insertBefore(kitLabel, elements["start-game"]);
 
 let game = null;
 let pollTimer = null;
 let bridgeConnected = !bridgeRequired;
-let renderedTileStates = new Map();
+let previewState = null;
+let previewSerial = 0;
+const boardView = createBoard(
+  elements.board,
+  document.querySelector(".board-note"),
+  config,
+  copy.table,
+);
+const matView = createPlayerMats(
+  elements.players,
+  config,
+  factions,
+  copy.table,
+);
+const cardsView = createCardTable(
+  $("shared-cards"),
+  config,
+  factions,
+  headlines,
+  mandates,
+  copy.table,
+  elements.decisions,
+);
+
+function tableOptions() {
+  const playerCount = Number(elements["player-count"].value);
+  return {
+    factionId: elements.faction.value,
+    playerCount,
+    seed: elements.seed.value,
+    kitAssignments: [
+      kitSelect.value,
+      ...config.playerKits
+        .filter((kit) => kit.id !== kitSelect.value)
+        .slice(0, playerCount - 1)
+        .map((kit) => kit.id),
+    ],
+    ...opponentOptions(),
+  };
+}
+async function previewSetup() {
+  if (game) return;
+  const serial = ++previewSerial;
+  // Construct the authoritative initial match without playing or contacting a provider.
+  const options = tableOptions();
+  options.opponentBackends = Array(options.playerCount - 1).fill("weighted");
+  const runtime = await createBrowserInteractiveGame(options, () => {});
+  if (serial !== previewSerial || game) return;
+  previewState = runtime.match.snapshot();
+  $("setup-inventory").textContent = formatCopy(copy.table.setupInventory, {
+    players: options.playerCount,
+    orgs: options.playerCount * config.playerSupply.agents,
+    cubes: options.playerCount * config.playerSupply.resourceTrackCubes,
+    hexes: config.sharedSupply.hexTiles,
+    cards:
+      config.trainingDeck.cards.reduce((sum, card) => sum + card.count, 0) +
+      headlines.headlines.length +
+      mandates.mandates.length +
+      factions.factions.length,
+    markers:
+      config.sharedSupply.currentEraMarkers +
+      config.sharedSupply.initiativeMarkers,
+  });
+  render();
+}
 const llmBackends = new Set([
   "claude",
   "codex",
   "hybrid-claude",
-  "hybrid-codex"
+  "hybrid-codex",
 ]);
 
 function escapeHtml(value) {
-  return String(value).replace(/[&<>"']/g, (character) => ({
-    "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
-  })[character]);
+  return String(value).replace(
+    /[&<>"']/g,
+    (character) =>
+      ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;",
+      })[character],
+  );
 }
 
 function formatCopy(template, values = {}) {
   return template.replace(/\{(\w+)\}/g, (_, key) => String(values[key] ?? ""));
 }
-
-function playerKit(player) { return kitsById.get(player.kitId); }
-function kitColor(player) { return playerKit(player)?.color || "#000000"; }
 
 function backendOptions() {
   return [
@@ -75,7 +181,7 @@ function backendOptions() {
     ["claude", copy.browser.claude],
     ["codex", copy.browser.codex],
     ["hybrid-claude", copy.browser.hybridClaude],
-    ["hybrid-codex", copy.browser.hybridCodex]
+    ["hybrid-codex", copy.browser.hybridCodex],
   ];
 }
 
@@ -90,35 +196,45 @@ function renderOpponents() {
     row.innerHTML = `
       <strong>${formatCopy(copy.browser.seat, { seat: index + 2 })}</strong>
       <select class="profile-select" aria-label="${formatCopy(copy.browser.persona, { seat: index + 2 })}">
-        ${profiles.map((candidate) => `
+        ${profiles
+          .map(
+            (candidate) => `
           <option value="${escapeHtml(candidate.id)}" ${
             candidate.id === profile.id ? "selected" : ""
           }>${escapeHtml(candidate.name)}</option>
-        `).join("")}
+        `,
+          )
+          .join("")}
       </select>
       <select class="backend-select" aria-label="${formatCopy(copy.browser.backend, { seat: index + 2 })}">
-        ${backendOptions().map(([value, label]) =>
-          `<option value="${value}">${escapeHtml(label)}</option>`
-        ).join("")}
+        ${backendOptions()
+          .map(
+            ([value, label]) =>
+              `<option value="${value}">${escapeHtml(label)}</option>`,
+          )
+          .join("")}
       </select>
       <p class="persona-summary">${escapeHtml(profile.persona.identity)}</p>
     `;
     row.querySelector(".profile-select").addEventListener("change", (event) => {
-      const selected = profiles.find((candidate) => candidate.id === event.target.value);
-      row.querySelector(".persona-summary").textContent = selected.persona.identity;
+      const selected = profiles.find(
+        (candidate) => candidate.id === event.target.value,
+      );
+      row.querySelector(".persona-summary").textContent =
+        selected.persona.identity;
     });
-    row.querySelector(".backend-select").addEventListener(
-      "change",
-      updateStartAvailability
-    );
+    row
+      .querySelector(".backend-select")
+      .addEventListener("change", updateStartAvailability);
     elements["opponent-config"].append(row);
   }
   updateStartAvailability();
 }
 
 function selectedBackends() {
-  return [...elements["opponent-config"].querySelectorAll(".backend-select")]
-    .map((select) => select.value);
+  return [
+    ...elements["opponent-config"].querySelectorAll(".backend-select"),
+  ].map((select) => select.value);
 }
 
 function llmRequested() {
@@ -126,17 +242,19 @@ function llmRequested() {
 }
 
 function opponentOptions() {
-  const rows = [...elements["opponent-config"].querySelectorAll(".opponent-row")];
+  const rows = [
+    ...elements["opponent-config"].querySelectorAll(".opponent-row"),
+  ];
   return {
-    opponentProfileIds: rows.map((row) =>
-      row.querySelector(".profile-select").value
+    opponentProfileIds: rows.map(
+      (row) => row.querySelector(".profile-select").value,
     ),
-    opponentBackends: rows.map((row) =>
-      row.querySelector(".backend-select").value
+    opponentBackends: rows.map(
+      (row) => row.querySelector(".backend-select").value,
     ),
     allowLlm: elements["allow-llm"].checked,
     maxLlmDecisions: Number(elements["max-llm-decisions"].value),
-    model: elements.model.value || undefined
+    model: elements.model.value || undefined,
   };
 }
 
@@ -146,90 +264,13 @@ function updateStartAvailability() {
   elements["bridge-panel"].hidden = !needsRemoteBridge;
   if (needsRemoteBridge) elements["provider-controls"].open = true;
   elements["start-game"].disabled = Boolean(
-    needsLlm && (!elements["allow-llm"].checked || !bridgeConnected)
+    needsLlm && (!elements["allow-llm"].checked || !bridgeConnected),
   );
 }
 
 function showBridgeState(message, connected = false) {
   elements["bridge-status"].textContent = message;
   elements["bridge-status"].classList.toggle("connected", connected);
-}
-
-let inspectedHex = null;
-function renderBoard(state) {
-  elements.board.replaceChildren();
-  if (!state) return;
-  const note = document.querySelector(".board-note");
-  const center = document.createElement("article");
-  center.className = "era-hex";
-  center.innerHTML = `<strong>Era ${state.round}</strong><span>${state.cycle}/3</span><span>${escapeHtml(playerKit(state.players[state.initiativeSeat])?.symbol)}</span>`;
-  elements.board.append(center);
-  for (const tile of state.board) {
-    const card = document.createElement("button");
-    card.type = "button";
-    card.className = "action-area";
-    card.style.setProperty("--hex-x", String(tile.q));
-    card.style.setProperty("--hex-y", String(tile.r + tile.q / 2));
-    const action = config.actions.find(a => a.id === tile.actionId);
-    const orgs = state.players.flatMap(player => player.pieces.filter(o => o.tileId === tile.instanceId).map(org => ({player, org})));
-    const detail = `${action.name} (${tile.q}, ${tile.r}): ${action.summary} Production: ${tile.production}`;
-    card.setAttribute("aria-label", detail);
-    card.setAttribute("aria-pressed", String(inspectedHex === tile.instanceId));
-    card.innerHTML = `<strong>${escapeHtml(action.name)}</strong><small>${tile.q}, ${tile.r}</small><span class="hex-orgs">${orgs.map(({player, org}) => `<span class="hex-org" style="--kit-color:${kitColor(player)}" title="${escapeHtml(player.factionName)} · ${org.id}${org.equipped ? ' · equipped' : ''}">${escapeHtml(playerKit(player)?.symbol)}${org.equipped ? '²' : ''}</span>`).join("")}</span>`;
-    card.onclick = () => {
-      inspectedHex = tile.instanceId;
-      for (const button of elements.board.querySelectorAll("button")) button.setAttribute("aria-pressed", String(button === card));
-      note.textContent = detail;
-    };
-    if (inspectedHex === tile.instanceId) note.textContent = detail;
-    elements.board.append(card);
-  }
-}
-
-function resetBoardTransitions() { renderedTileStates = new Map(); }
-
-function renderPlayers(state) {
-  elements.players.replaceChildren();
-  if (!state) return;
-  for (const player of state.players) {
-    const opponent = game?.opponents?.find((candidate) =>
-      candidate.seat === player.seat
-    );
-    const card = document.createElement("article");
-    card.className = `public-player ${player.seat === 0 ? "human" : ""}`;
-    card.style.setProperty("--seat", player.seat);
-    card.style.setProperty("--kit-color", kitColor(player));
-    card.innerHTML = `
-      <p class="eyebrow">${formatCopy(copy.browser.seat, { seat: player.seat + 1 })}${player.seat === 0 ? ` · ${copy.browser.you}` : ""}</p>
-      <h3>${escapeHtml(player.factionName)}</h3>
-      <p class="kit-identity">${escapeHtml(playerKit(player)?.symbol)} ${escapeHtml(playerKit(player)?.colorName)} · ${escapeHtml(playerKit(player)?.symbolName)} kit</p>
-      ${opponent ? `<p class="readiness">${
-        escapeHtml(opponent.profileName)
-      } · ${escapeHtml(opponent.backend)}${
-        opponent.remainingLlmDecisions === null
-          ? ""
-          : ` · ${formatCopy(copy.browser.llmCallsLeft, { count: opponent.remainingLlmDecisions })}`
-      }</p>` : ""}
-      <p class="readiness ${player.agiReadiness.ready ? "ready" : ""}">
-        ${player.agiDeclared
-          ? copy.browser.agiRecognized
-          : player.agiReadiness.ready
-          ? copy.browser.agiGridReady
-          : formatCopy(copy.browser.agiBlocked, {
-            requirement: escapeHtml(copy.browser.requirements[player.agiReadiness.failingRequirement])
-          })}
-      </p>
-      <dl>
-        ${Object.entries(config.resources).map(([key, track]) => `<dt>${escapeHtml(track.name)}</dt><dd>${player[key]}</dd>`).join("")}
-        <dt>Orgs</dt><dd>${player.pieces.length} (${player.pieces.filter(o=>o.equipped).length} equipped)</dd>
-        <dt>AGI recognized</dt><dd>${player.agiDeclared ? "Yes" : "No"}</dd>
-        <dt>Mandate${state.complete?"":" if scored now"}</dt><dd>${player.mandate}</dd>
-      </dl>
-      <p>${escapeHtml(copy.browser.objectiveProgress)}: ${player.currentEraObjective ? `${escapeHtml(copy.browser.objectiveMetrics[player.currentEraObjective.metric])} ${player.currentEraObjective.value} · ${player.currentEraObjective.qualified ? "Qualifies" : "Does not qualify"}` : "—"}. Scores at game end.</p>
-
-    `;
-    elements.players.append(card);
-  }
 }
 
 function decisionStage(packet, state) {
@@ -247,7 +288,7 @@ function syncClientGame(clientGame = game) {
     profileId: opponent.profile.id,
     profileName: opponent.profile.name,
     backend: opponent.backend,
-    remainingLlmDecisions: null
+    remainingLlmDecisions: null,
   }));
   clientGame.updatedAt = Date.now();
 }
@@ -264,7 +305,7 @@ async function startClientGame(options) {
     replay: [],
     opponents: [],
     result: null,
-    error: null
+    error: null,
   };
   clientGame.runtime = await createBrowserInteractiveGame(options, (packet) => {
     clientGame.pending = packet;
@@ -275,7 +316,8 @@ async function startClientGame(options) {
   game = clientGame;
   clientGame.status = "running";
   syncClientGame(clientGame);
-  clientGame.execution = clientGame.runtime.match.play(clientGame.runtime.policies)
+  clientGame.execution = clientGame.runtime.match
+    .play(clientGame.runtime.policies)
     .then((result) => {
       clientGame.result = result;
       clientGame.pending = null;
@@ -309,7 +351,7 @@ async function submitDecision(decisionId) {
   const response = await apiFetch(`/api/games/${game.id}/decisions`, {
     method: "POST",
     headers: { "content-type": "application/json" },
-    body: JSON.stringify({ requestId: packet.requestId, decisionId })
+    body: JSON.stringify({ requestId: packet.requestId, decisionId }),
   });
   const next = await response.json();
   if (!response.ok) throw new Error(next.error || "Decision failed.");
@@ -341,18 +383,24 @@ function optionLabel(resource, amount) {
 
 function replaceOptions(select, choices, label) {
   const previous = select.value;
-  select.replaceChildren(...choices.map((choice) =>
-    new Option(label(choice), String(choice))
-  ));
-  if (choices.some((choice) => String(choice) === previous)) select.value = previous;
+  select.replaceChildren(
+    ...choices.map((choice) => new Option(label(choice), String(choice))),
+  );
+  if (choices.some((choice) => String(choice) === previous))
+    select.value = previous;
 }
 
 function factionName(seat) {
-  return game?.state?.players?.find((player) => player.seat === Number(seat))?.factionName ||
-    formatCopy(copy.browser.seat, { seat: Number(seat) + 1 });
+  return (
+    game?.state?.players?.find((player) => player.seat === Number(seat))
+      ?.factionName || formatCopy(copy.browser.seat, { seat: Number(seat) + 1 })
+  );
 }
 
-function renderTradeBuilder(offers, { heading, timing: selectedTiming = null, onBack = null } = {}) {
+function renderTradeBuilder(
+  offers,
+  { heading, timing: selectedTiming = null, onBack = null } = {},
+) {
   const builder = document.createElement("section");
   builder.className = "trade-builder";
   const title = document.createElement("h3");
@@ -390,45 +438,63 @@ function renderTradeBuilder(offers, { heading, timing: selectedTiming = null, on
   }
 
   const refresh = () => {
-    const partners = [...new Set(offers.map((decision) => decision.parameters.partnerSeat))];
+    const partners = [
+      ...new Set(offers.map((decision) => decision.parameters.partnerSeat)),
+    ];
     replaceOptions(partner, partners, factionName);
-    const forPartner = offers.filter((decision) =>
-      decision.parameters.partnerSeat === Number(partner.value)
+    const forPartner = offers.filter(
+      (decision) => decision.parameters.partnerSeat === Number(partner.value),
     );
-    const gifts = [...new Set(forPartner.map((decision) =>
-      `${decision.parameters.giveResource}:${decision.parameters.giveAmount}`
-    ))];
+    const gifts = [
+      ...new Set(
+        forPartner.map(
+          (decision) =>
+            `${decision.parameters.giveResource}:${decision.parameters.giveAmount}`,
+        ),
+      ),
+    ];
     replaceOptions(give, gifts, (choice) => {
       const [resource, amount] = choice.split(":");
       return optionLabel(resource, amount);
     });
     const [giveResource, giveAmount] = give.value.split(":");
-    const afterGift = forPartner.filter((decision) =>
-      decision.parameters.giveResource === giveResource &&
-      decision.parameters.giveAmount === Number(giveAmount)
+    const afterGift = forPartner.filter(
+      (decision) =>
+        decision.parameters.giveResource === giveResource &&
+        decision.parameters.giveAmount === Number(giveAmount),
     );
-    const requests = [...new Set(afterGift.map((decision) =>
-      `${decision.parameters.receiveResource}:${decision.parameters.receiveAmount}`
-    ))];
+    const requests = [
+      ...new Set(
+        afterGift.map(
+          (decision) =>
+            `${decision.parameters.receiveResource}:${decision.parameters.receiveAmount}`,
+        ),
+      ),
+    ];
     replaceOptions(receive, requests, (choice) => {
       const [resource, amount] = choice.split(":");
       return optionLabel(resource, amount);
     });
     const [receiveResource, receiveAmount] = receive.value.split(":");
-    const afterRequest = afterGift.filter((decision) =>
-      decision.parameters.receiveResource === receiveResource &&
-      decision.parameters.receiveAmount === Number(receiveAmount)
+    const afterRequest = afterGift.filter(
+      (decision) =>
+        decision.parameters.receiveResource === receiveResource &&
+        decision.parameters.receiveAmount === Number(receiveAmount),
     );
-    const selected = afterRequest.find((decision) =>
-      !selectedTiming || decision.parameters.timing === selectedTiming
+    const selected = afterRequest.find(
+      (decision) =>
+        !selectedTiming || decision.parameters.timing === selectedTiming,
     );
     submit.disabled = !selected;
-    summary.textContent = selected ? selected.label : "No legal offer matches this combination.";
+    summary.textContent = selected
+      ? selected.label
+      : "No legal offer matches this combination.";
     submit.onclick = selected
-      ? () => submitDecision(selected.decisionId).catch((error) => {
-        elements["game-status"].textContent = error.message;
-        renderDecisions();
-      })
+      ? () =>
+          submitDecision(selected.decisionId).catch((error) => {
+            elements["game-status"].textContent = error.message;
+            renderDecisions();
+          })
       : null;
   };
   for (const control of [partner, give, receive]) {
@@ -442,11 +508,14 @@ function renderTradeBuilder(offers, { heading, timing: selectedTiming = null, on
 function renderTradeDecisions(packet, stage) {
   if (!["immediate_trade", "trade_response"].includes(stage)) return false;
   const heading = document.createElement("p");
-  heading.textContent = stage === "immediate_trade"
-    ? "Optional trade before your Action: offer one Runway for one Compute, or continue."
-    : "Accept or refuse the printed one-for-one trade.";
+  heading.textContent =
+    stage === "immediate_trade"
+      ? "Optional trade before your Action: offer one Runway for one Compute, or continue."
+      : "Accept or refuse the printed one-for-one trade.";
   elements.decisions.append(heading);
-  packet.legalDecisions.forEach((decision, index) => elements.decisions.append(decisionButton(decision, index)));
+  packet.legalDecisions.forEach((decision, index) =>
+    elements.decisions.append(decisionButton(decision, index)),
+  );
   return true;
 }
 
@@ -456,21 +525,28 @@ function pieceName(pieceId) {
 }
 
 function tileName(tileId) {
-  const tile=game?.state?.board?.find(t=>t.instanceId===tileId);
+  const tile = game?.state?.board?.find((t) => t.instanceId === tileId);
   return tile ? `${tile.name} (${tile.q}, ${tile.r})` : tileId;
 }
 
 function renderAssignmentDecisions(packet, stage) {
   if (stage !== "resolve" && stage !== "talent_assignment") return false;
   const decisions = packet.legalDecisions;
-  if (!decisions.length || !decisions.every((decision) =>
-    decision.parameters?.pieceId && decision.parameters?.destinationId
-  )) return false;
+  if (
+    !decisions.length ||
+    !decisions.every(
+      (decision) =>
+        decision.parameters?.pieceId && decision.parameters?.destinationId,
+    )
+  )
+    return false;
 
   const builder = document.createElement("section");
   builder.className = "move-builder";
-  builder.innerHTML = "<h3>Assign an Org</h3><p>Stay or move one edge to the selected hex, then resolve its Action.</p>";
-  if (stage === "talent_assignment") builder.querySelector("p").textContent = copy.browser.talentAssignmentHint;
+  builder.innerHTML =
+    "<h3>Assign an Org</h3><p>Stay or move one edge to the selected hex, then resolve its Action.</p>";
+  if (stage === "talent_assignment")
+    builder.querySelector("p").textContent = copy.browser.talentAssignmentHint;
   const fields = document.createElement("div");
   fields.className = "trade-fields";
   const piece = document.createElement("select");
@@ -496,25 +572,39 @@ function renderAssignmentDecisions(packet, stage) {
   actions.append(submit);
 
   const refresh = () => {
-    const pieces = [...new Set(decisions.map((decision) => decision.parameters.pieceId))];
+    const pieces = [
+      ...new Set(decisions.map((decision) => decision.parameters.pieceId)),
+    ];
     replaceOptions(piece, pieces, pieceName);
-    const forPiece = decisions.filter((decision) => decision.parameters.pieceId === piece.value);
-    const destinations = [...new Set(forPiece.map((decision) => decision.parameters.destinationId))];
+    const forPiece = decisions.filter(
+      (decision) => decision.parameters.pieceId === piece.value,
+    );
+    const destinations = [
+      ...new Set(forPiece.map((decision) => decision.parameters.destinationId)),
+    ];
     replaceOptions(destination, destinations, tileName);
-    const atDestination = forPiece.filter((decision) =>
-      decision.parameters.destinationId === destination.value
+    const atDestination = forPiece.filter(
+      (decision) => decision.parameters.destinationId === destination.value,
     );
-    replaceOptions(outcome, atDestination.map((decision) => decision.decisionId), (id) =>
-      atDestination.find((decision) => decision.decisionId === id)?.label || id
+    replaceOptions(
+      outcome,
+      atDestination.map((decision) => decision.decisionId),
+      (id) =>
+        atDestination.find((decision) => decision.decisionId === id)?.label ||
+        id,
     );
-    const selected = atDestination.find((decision) => decision.decisionId === outcome.value);
+    const selected = atDestination.find(
+      (decision) => decision.decisionId === outcome.value,
+    );
     submit.disabled = !selected;
-    summary.textContent = selected?.label || "No legal action matches this assignment.";
+    summary.textContent =
+      selected?.label || "No legal action matches this assignment.";
     submit.onclick = selected
-      ? () => submitDecision(selected.decisionId).catch((error) => {
-        elements["game-status"].textContent = error.message;
-        renderDecisions();
-      })
+      ? () =>
+          submitDecision(selected.decisionId).catch((error) => {
+            elements["game-status"].textContent = error.message;
+            renderDecisions();
+          })
       : null;
   };
   for (const control of [piece, destination, outcome]) {
@@ -530,31 +620,50 @@ function renderDecisions() {
   elements.decisions.replaceChildren();
   const packet = game?.pending;
   if (!packet) {
-    elements["decision-title"].textContent = game?.status === "complete"
-      ? formatCopy(copy.browser.gameComplete, { ending: game.result.worldEnding.name })
-      : game ? copy.browser.otherInstitutionsResolving : copy.browser.startGame;
-    elements["decision-context"].textContent = game?.status === "complete"
-      ? formatCopy(copy.browser.completeContext, {
-        winners: game.result.standings.filter(row => game.result.winnerSeats.includes(row.seat)).map(row => row.factionName).join(" and "),
-        score: game.result.standings[0].score, ending: game.result.worldEnding.name
-      })
-      : copy.browser.waitingContext;
-    elements["decision-count"].textContent = formatCopy(copy.browser.legalChoices, {
-      count: 0,
-      plural: "s"
-    });
+    elements["decision-title"].textContent =
+      game?.status === "complete"
+        ? formatCopy(copy.browser.gameComplete, {
+            ending: game.result.worldEnding.name,
+          })
+        : game
+          ? copy.browser.otherInstitutionsResolving
+          : copy.browser.startGame;
+    elements["decision-context"].textContent =
+      game?.status === "complete"
+        ? formatCopy(copy.browser.completeContext, {
+            winners: game.result.standings
+              .filter((row) => game.result.winnerSeats.includes(row.seat))
+              .map((row) => row.factionName)
+              .join(" and "),
+            score: game.result.standings[0].score,
+            ending: game.result.worldEnding.name,
+          })
+        : game
+          ? copy.browser.waitingContext
+          : copy.table.preview;
+    elements["decision-count"].textContent = formatCopy(
+      copy.browser.legalChoices,
+      {
+        count: 0,
+        plural: "s",
+      },
+    );
     return;
   }
   elements["decision-title"].textContent = decisionStage(packet, game?.state);
   elements["decision-context"].textContent =
-    packet.requestId.split(":").at(-2) === "select" ? copy.browser.selectContext
-      : packet.requestId.split(":").at(-2) === "resolve" ? copy.browser.resolveContext
-      : formatCopy(copy.browser.decisionContext, packet);
-  elements["decision-count"].textContent =
-    formatCopy(copy.browser.legalChoices, {
+    packet.requestId.split(":").at(-2) === "select"
+      ? copy.browser.selectContext
+      : packet.requestId.split(":").at(-2) === "resolve"
+        ? copy.browser.resolveContext
+        : formatCopy(copy.browser.decisionContext, packet);
+  elements["decision-count"].textContent = formatCopy(
+    copy.browser.legalChoices,
+    {
       count: packet.legalDecisions.length,
-      plural: packet.legalDecisions.length === 1 ? "" : "s"
-    });
+      plural: packet.legalDecisions.length === 1 ? "" : "s",
+    },
+  );
   const stage = packet.requestId?.split(":").at(-2);
   if (renderTradeDecisions(packet, stage)) return;
   if (renderAssignmentDecisions(packet, stage)) return;
@@ -565,42 +674,42 @@ function renderDecisions() {
 
 function renderLedger() {
   const replay = game?.replay || [];
-  elements.log.innerHTML = replay.slice().reverse().map((event, index) =>
-    `<li class="${index === 0 ? "latest-event" : ""}"><strong>E${event.round}C${event.cycle}</strong> ${escapeHtml(event.summary)}</li>`
-  ).join("");
+  elements.log.innerHTML = replay
+    .slice()
+    .reverse()
+    .map(
+      (event, index) =>
+        `<li class="${index === 0 ? "latest-event" : ""}"><strong>E${event.round}C${event.cycle}</strong> ${escapeHtml(event.summary)}</li>`,
+    )
+    .join("");
 }
 
 function render() {
-  const state = game?.state;
+  const state = game?.state || previewState;
   // The setup controls are only relevant before the first match is created.
   // Keep the live board and decisions at the top once play begins.
   elements.setup.hidden = Boolean(game);
   elements.phase.textContent = game?.status || copy.browser.ready;
-  elements["game-status"].textContent = game?.error ||
-    (game ? formatCopy(copy.browser.gameStatus, {
-      mode: game.executionMode === "client" ? copy.browser.browserNative : copy.browser.localBridge,
-      id: game.id.slice(0, 8),
-      status: game.status
-    }) :
-      copy.browser.startingStatus);
+  elements["game-status"].textContent =
+    game?.error ||
+    (game
+      ? formatCopy(copy.browser.gameStatus, {
+          mode:
+            game.executionMode === "client"
+              ? copy.browser.browserNative
+              : copy.browser.localBridge,
+          id: game.id.slice(0, 8),
+          status: game.status,
+        })
+      : copy.browser.startingStatus);
   elements["round-title"].textContent = state
     ? formatCopy(copy.browser.roundCycle, state)
     : copy.browser.board;
-  const headline = state?.activeHeadline;
-  elements["headline-label"].textContent = headline
-    ? copy.headline.current
-    : copy.headline.unrevealed;
-  elements["headline-name"].textContent = headline?.name || "";
-  elements["headline-newswire"].textContent = headline?.newswire || "";
-  elements["headline-consequence"].textContent = headline
-    ? `${copy.headline.consequence}: ${headline.text}`
-    : "";
-  elements["headline-quote"].textContent = headline?.quote
-    ? `“${headline.quote}”`
-    : "";
   elements.export.disabled = !game;
-  renderBoard(state);
-  renderPlayers(state);
+  boardView.update(state);
+  matView.update(state);
+  cardsView.update(state);
+  $("setup-preview-label").hidden = Boolean(game);
   renderDecisions();
   renderLedger();
 }
@@ -628,24 +737,19 @@ function schedulePoll() {
 elements["start-game"].addEventListener("click", async () => {
   clearTimeout(pollTimer);
   elements["start-game"].disabled = true;
-  resetBoardTransitions();
   try {
     const opponents = opponentOptions();
-    const options = {
-      factionId: elements.faction.value,
-      kitAssignments: [kitSelect.value, ...config.playerKits.filter(kit => kit.id !== kitSelect.value).slice(0, Number(elements["player-count"].value) - 1).map(kit => kit.id)],
-      playerCount: Number(elements["player-count"].value),
-      seed: elements.seed.value,
-      ...opponents
-    };
-    if (!opponents.opponentBackends.some((backend) => llmBackends.has(backend))) {
+    const options = tableOptions();
+    if (
+      !opponents.opponentBackends.some((backend) => llmBackends.has(backend))
+    ) {
       await startClientGame(options);
       return;
     }
     const response = await apiFetch("/api/games", {
       method: "POST",
       headers: { "content-type": "application/json" },
-      body: JSON.stringify(options)
+      body: JSON.stringify(options),
     });
     game = await response.json();
     game.executionMode = "server";
@@ -673,9 +777,9 @@ if (bridgeRequired) {
       bridgeConnected = true;
       showBridgeState(
         formatCopy(copy.browser.bridgeConnected, {
-          maximum: status.maximumLlmDecisionsPerOpponent
+          maximum: status.maximumLlmDecisionsPerOpponent,
         }),
-        true
+        true,
       );
     } catch (error) {
       bridgeConnected = false;
@@ -692,25 +796,25 @@ elements["allow-llm"].addEventListener("change", updateStartAvailability);
 elements.export.addEventListener("click", () => {
   if (!game) return;
   syncClientGame();
-  const receipt = game.executionMode === "client"
-    ? {
-        id: game.id,
-        executionMode: game.executionMode,
-        status: game.status,
-        createdAt: game.createdAt,
-        updatedAt: game.updatedAt,
-        pending: game.pending,
-        state: game.state,
-        replay: game.replay,
-        opponents: game.opponents,
-        result: game.result,
-        error: game.error
-      }
-    : game;
-  const blob = new Blob(
-    [JSON.stringify(receipt, null, 2)],
-    { type: "application/json" }
-  );
+  const receipt =
+    game.executionMode === "client"
+      ? {
+          id: game.id,
+          executionMode: game.executionMode,
+          status: game.status,
+          createdAt: game.createdAt,
+          updatedAt: game.updatedAt,
+          pending: game.pending,
+          state: game.state,
+          replay: game.replay,
+          opponents: game.opponents,
+          result: game.result,
+          error: game.error,
+        }
+      : game;
+  const blob = new Blob([JSON.stringify(receipt, null, 2)], {
+    type: "application/json",
+  });
   const link = document.createElement("a");
   link.href = URL.createObjectURL(blob);
   link.download = formatCopy(copy.browser.downloadFile, { id: game.id });
@@ -718,10 +822,22 @@ elements.export.addEventListener("click", () => {
   URL.revokeObjectURL(link.href);
 });
 
-window.addEventListener("resize", () => renderBoard(game?.state));
+for (const control of [
+  elements.faction,
+  kitSelect,
+  elements["player-count"],
+  elements.seed,
+]) {
+  control.addEventListener("change", () =>
+    previewSetup().catch((error) => {
+      elements["game-status"].textContent = error.message;
+    }),
+  );
+}
 renderOpponents();
 updateStartAvailability();
 render();
+await previewSetup();
 if (firstGameGuideMode) {
   elements.setup.hidden = true;
   document.querySelector(".opponent-setup").hidden = true;
