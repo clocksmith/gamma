@@ -356,6 +356,15 @@ try {
     assert.ok(frontTexts.some((text) => text.includes("Mega-Clusters and Quantum")), "Player aid must include Quantum alongside Mega-Clusters in Production.");
     assert.ok(frontTexts.some((text) => text.includes("Fusion host powers itself")), "Player aid must include Fusion host self-power in spatial power rule.");
   }
+  const mastersResponse = await fetch(releaseResourceUrl(base, "gallery-baseline.html"));
+  assert.equal(mastersResponse.status, 200);
+  const masters = await mastersResponse.text();
+  assert.equal((masters.match(/class="card player-mat"/g) || []).length, 5);
+  assert.equal((masters.match(/class="card project-chip"/g) || []).length, 15);
+  assert.equal((masters.match(/class="card core-action"/g) || []).length, 30);
+  const factionSection = masters.slice(masters.indexOf('id="factions"'), masters.indexOf('id="player-mats"'));
+  assert.equal((factionSection.match(/class="card"/g) || []).length, 6);
+  assert.doesNotMatch(masters, /objective-panel|objective-track|data-objective-value|construction Era|I–IV edges|Cube record/);
   for (const viewport of [
     { name: "desktop", width: 1440, height: 1000, mobile: false },
     { name: "mobile", width: 390, height: 844, mobile: true }
@@ -385,6 +394,9 @@ try {
     await waitFor("document.querySelectorAll('.decision-card').length === 6");
     const actions = await evaluate("[...document.querySelectorAll('.decision-card')].map(node=>node.innerText)");
     assert.ok(["Fund", "Research", "Build", "Organize", "Deploy", "Influence"].every((name) => actions.some((text) => text.includes(name))));
+    const ownedMarkers = await evaluate("[...document.querySelectorAll('.dot.agent')].map(node=>({symbol:node.textContent.trim(),title:node.title}))");
+    assert.ok(ownedMarkers.length > 0);
+    assert.ok(ownedMarkers.every(marker=>marker.symbol.length === 1 && marker.title.includes('kit')));
     await screenshot(`${viewport.name}-action-selection.png`);
     await evaluate("[...document.querySelectorAll('.decision-card')].find(node=>node.innerText.includes('Select Deploy')).click()");
     await waitFor("document.querySelectorAll('.decision-card').length > 0 && ![...document.querySelectorAll('.decision-card')].some(node=>node.innerText.includes('Select Fund'))");
@@ -413,6 +425,15 @@ try {
     const exportText = await evaluate("window.__exportBlob.text()");
     const exported = JSON.parse(exportText);
     assert.equal(exported.state.players[0].kitId, "kit-violet", "Export retains independently chosen kit");
+    const eraScores = exported.result.matchMetrics.eraMandateScores;
+    assert.equal(eraScores.length, 4);
+    for (const player of exported.state.players) {
+      const standing = eraScores.at(-1).standings.find(s => s.seat === player.seat);
+      assert.equal(player.currentEraObjective.value, standing.value);
+      assert.equal(player.currentEraObjective.qualified, standing.qualified);
+      assert.equal(player.currentEraObjective.direction, standing.direction);
+      assert.equal(player.objectiveRecord, undefined);
+    }
     let downloadedPath;
     for (let attempt = 0; attempt < 50; attempt++) {
       const candidates = (await readdir(output)).filter(name => name.includes(exported.id) && name.endsWith('.json'));

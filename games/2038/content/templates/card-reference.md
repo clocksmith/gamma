@@ -554,7 +554,7 @@ ${excerpts.rules.mandate-scoring}
 
 ### ${content.mandates.byId.quarter_humanity_notices.name}
 
-**Minimum qualification:** ${content.mandates.byId.quarter_humanity_notices.minimumQualification}
+**Comparison direction:** ${content.mandates.byId.quarter_humanity_notices.direction}
 
 **Rules:** ${content.mandates.byId.quarter_humanity_notices.rulesText}
 
@@ -562,7 +562,7 @@ _${content.mandates.byId.quarter_humanity_notices.flavorText}_
 
 ### ${content.mandates.byId.model_ate_tuesday.name}
 
-**Minimum qualification:** ${content.mandates.byId.model_ate_tuesday.minimumQualification}
+**Comparison direction:** ${content.mandates.byId.model_ate_tuesday.direction}
 
 **Rules:** ${content.mandates.byId.model_ate_tuesday.rulesText}
 
@@ -570,7 +570,7 @@ _${content.mandates.byId.model_ate_tuesday.flavorText}_
 
 ### ${content.mandates.byId.markets_prefer_destiny.name}
 
-**Minimum qualification:** ${content.mandates.byId.markets_prefer_destiny.minimumQualification}
+**Comparison direction:** ${content.mandates.byId.markets_prefer_destiny.direction}
 
 **Rules:** ${content.mandates.byId.markets_prefer_destiny.rulesText}
 
@@ -578,7 +578,7 @@ _${content.mandates.byId.markets_prefer_destiny.flavorText}_
 
 ### ${content.mandates.byId.building_has_weather.name}
 
-**Minimum qualification:** ${content.mandates.byId.building_has_weather.minimumQualification}
+**Comparison direction:** ${content.mandates.byId.building_has_weather.direction}
 
 **Rules:** ${content.mandates.byId.building_has_weather.rulesText}
 
@@ -586,7 +586,7 @@ _${content.mandates.byId.building_has_weather.flavorText}_
 
 ### ${content.mandates.byId.stack_reaches_horizon.name}
 
-**Minimum qualification:** ${content.mandates.byId.stack_reaches_horizon.minimumQualification}
+**Comparison direction:** ${content.mandates.byId.stack_reaches_horizon.direction}
 
 **Rules:** ${content.mandates.byId.stack_reaches_horizon.rulesText}
 
@@ -594,7 +594,7 @@ _${content.mandates.byId.stack_reaches_horizon.flavorText}_
 
 ### ${content.mandates.byId.compute_new_weather.name}
 
-**Minimum qualification:** ${content.mandates.byId.compute_new_weather.minimumQualification}
+**Comparison direction:** ${content.mandates.byId.compute_new_weather.direction}
 
 **Rules:** ${content.mandates.byId.compute_new_weather.rulesText}
 
@@ -602,7 +602,7 @@ _${content.mandates.byId.compute_new_weather.flavorText}_
 
 ### ${content.mandates.byId.voluntary_coordination_triumphs.name}
 
-**Minimum qualification:** ${content.mandates.byId.voluntary_coordination_triumphs.minimumQualification}
+**Comparison direction:** ${content.mandates.byId.voluntary_coordination_triumphs.direction}
 
 **Rules:** ${content.mandates.byId.voluntary_coordination_triumphs.rulesText}
 
@@ -610,7 +610,7 @@ _${content.mandates.byId.voluntary_coordination_triumphs.flavorText}_
 
 ### ${content.mandates.byId.legibility_offensive.name}
 
-**Minimum qualification:** ${content.mandates.byId.legibility_offensive.minimumQualification}
+**Comparison direction:** ${content.mandates.byId.legibility_offensive.direction}
 
 **Rules:** ${content.mandates.byId.legibility_offensive.rulesText}
 
@@ -618,7 +618,7 @@ _${content.mandates.byId.legibility_offensive.flavorText}_
 
 ### ${content.mandates.byId.national_champion_without_nationalization.name}
 
-**Minimum qualification:** ${content.mandates.byId.national_champion_without_nationalization.minimumQualification}
+**Comparison direction:** ${content.mandates.byId.national_champion_without_nationalization.direction}
 
 **Rules:** ${content.mandates.byId.national_champion_without_nationalization.rulesText}
 
@@ -626,7 +626,7 @@ _${content.mandates.byId.national_champion_without_nationalization.flavorText}_
 
 ### ${content.mandates.byId.continent_signs_loi.name}
 
-**Minimum qualification:** ${content.mandates.byId.continent_signs_loi.minimumQualification}
+**Comparison direction:** ${content.mandates.byId.continent_signs_loi.direction}
 
 **Rules:** ${content.mandates.byId.continent_signs_loi.rulesText}
 
@@ -634,7 +634,7 @@ _${content.mandates.byId.continent_signs_loi.flavorText}_
 
 ### ${content.mandates.byId.zero_incident_quarter.name}
 
-**Minimum qualification:** ${content.mandates.byId.zero_incident_quarter.minimumQualification}
+**Comparison direction:** ${content.mandates.byId.zero_incident_quarter.direction}
 
 **Rules:** ${content.mandates.byId.zero_incident_quarter.rulesText}
 
@@ -642,7 +642,7 @@ _${content.mandates.byId.zero_incident_quarter.flavorText}_
 
 ### ${content.mandates.byId.responsible_acceleration.name}
 
-**Minimum qualification:** ${content.mandates.byId.responsible_acceleration.minimumQualification}
+**Comparison direction:** ${content.mandates.byId.responsible_acceleration.direction}
 
 **Rules:** ${content.mandates.byId.responsible_acceleration.rulesText}
 

@@ -134,8 +134,8 @@ test("player documents teach actions early and preserve permanent physical state
   }
   assert.doesNotMatch(rules, /Dossier|universal Protection|Safety currency|faction scoring rule|quantum record disputes|Era halves upward/);
   const gallery = await read("dist/site/gallery.html");
-  assert.equal((gallery.match(/data-objective-value="99"/g) || []).length, 5);
-  assert.equal((gallery.match(/data-objective-value=/g) || []).length, 500);
+  assert.equal((gallery.match(/data-objective-value="99"/g) || []).length, 0);
+  assert.equal((gallery.match(/data-objective-value=/g) || []).length, 0);
   assert.equal((gallery.match(/class="recognition-track"/g) || []).length, 5);
   assert.doesNotMatch(gallery, /class="trust-award-record"|quantum-completion/);
   const spec = await read("physical/component-spec.md");

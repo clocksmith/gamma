@@ -6,7 +6,7 @@ machine-enforced game data.
 
 The selected forms are cards (including flat chips), Agent position tokens,
 and cubes. Boards remain printed surfaces; the bag is an accessory. Each faction owns three personal project chips; flipping and host placement
-record construction. Numerical tracks use cubes rather than sliders.
+identify matched Venture hosts. Numerical tracks use cubes rather than sliders.
 
 ## Ownership
 

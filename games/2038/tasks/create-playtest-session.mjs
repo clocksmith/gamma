@@ -193,7 +193,7 @@ For ordinary assignments, use the board at resolution. Record only legal alterna
 | --- | --- | --- | --- | --- | --- |
 | | | | | | |
 
-Fusion connects Facilities without a construction award. Record newly connected Facilities and their output separately from Mega-Cluster Compute and Quantum Capability. Record cap clipping, the alternative action declined, stacked-chip visibility, relocation, missed Production, and every attempted handwritten record.
+Fusion connects Facilities without a construction award. Record newly connected Facilities and their output separately from Mega-Cluster Compute and Quantum Capability. Record cap clipping, the alternative action declined, stacked-chip visibility, relocation, missed Production, and every attempted handwritten record. For each Era Mandate, check current qualification and value after Audit without referring to previous turns; record ownership confusion and ties, including zero Scrutiny.
 
 ## Postgame explanation
 

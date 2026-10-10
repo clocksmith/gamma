@@ -366,8 +366,8 @@ export async function createSimulation(options = {}, onProgress) {
     ? async ({ runIndex, outcome }) => {
       const immediateReport = await createReportIdentity({
         report: {
-          schemaVersion: 6,
-          reportSchemaVersion: 6,
+          schemaVersion: 7,
+          reportSchemaVersion: 7,
           reportType: "tournament",
           evidenceLabel: "simulation",
           evidenceType: "simulation",

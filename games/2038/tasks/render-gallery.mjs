@@ -130,7 +130,7 @@ ${scoringRule}
 }
 
 function buildPlayerMats(config) {
-  const mats = config.playerKits.map(kit => `<article class="card player-mat" data-kit="${escapeHtml(kit.id)}" style="--accent:${escapeHtml(kit.color)}"><h3>${escapeHtml(kit.symbol)} ${escapeHtml(kit.colorName)} player kit · ${escapeHtml(kit.symbolName)}</h3><p>Initialize from your chosen faction identity card. All pieces belong to this player kit.</p>${["runway", "compute", "capability", "customers", "trust"].map(key => `<div class="resource-track"><strong>${escapeHtml(key)}</strong> ${Array.from({length: config.resources[key].cap + 1}, (_, value) => `<span>${value}</span>`).join(" · ")}</div>`).join("")}<div class="trust-milestone-track">Highest Trust milestone awarded: ${[0, ...config.scoring.trustThresholds.map(t => t.value)].map(value => `<span data-trust-threshold="${value}">${value}</span>`).join(" · ")}</div><p class="recognition-track">AGI recognition: No · Recognized</p><details class="objective-panel" open><summary>Era objective · one cube</summary><div class="objective-track">${Array.from({length:100},(_,value)=>`<span data-objective-value="${value}">${value}</span>`).join("")}</div></details><p>Available / Exhausted Core Actions · Available / Built projects · ten Scrutiny cubes</p></article>`).join("");
+  const mats = config.playerKits.map(kit => `<article class="card player-mat" data-kit="${escapeHtml(kit.id)}" style="--accent:${escapeHtml(kit.color)}"><h3>${escapeHtml(kit.symbol)} ${escapeHtml(kit.colorName)} player kit · ${escapeHtml(kit.symbolName)}</h3><p>Initialize from your chosen faction identity card. All pieces belong to this player kit.</p>${["runway", "compute", "capability", "customers", "trust"].map(key => `<div class="resource-track"><strong>${escapeHtml(key)}</strong> ${Array.from({length: config.resources[key].cap + 1}, (_, value) => `<span>${value}</span>`).join(" · ")}</div>`).join("")}<div class="trust-milestone-track">Highest Trust milestone awarded: ${[0, ...config.scoring.trustThresholds.map(t => t.value)].map(value => `<span data-trust-threshold="${value}">${value}</span>`).join(" · ")}</div><p class="recognition-track">AGI recognition: No · Recognized</p><p>Current Era objective: read qualification and value from the table after Audit.</p><p>Available / Exhausted Core Actions · Available / Built projects · ten Scrutiny cubes</p></article>`).join("");
   return section("player-mats", "Player mats", config.playerKits.length, mats, "Five interchangeable kits; choose any faction identity separately.");
 }
 
@@ -206,7 +206,7 @@ function buildMandates(data) {
     .map((m) =>
       card({
         title: m.name,
-        badgeList: [eraBadge(m.era), `min ${m.minimumQualification}`],
+        badgeList: [eraBadge(m.era), m.direction === "min" ? "fewest" : "most"],
         bodyHtml: textRows([
           { text: m.rulesText, kind: "rules" },
           { text: m.flavorText, kind: "flavor" }
@@ -384,9 +384,6 @@ main { padding: 1.8rem clamp(1rem, 3vw, 2.4rem); }
 .trust-milestone-track small { display: block; font-weight: 400; }
 .trust-milestone-track span, .recognition-track span { display: inline-block; padding: .35rem; border: 1px solid currentColor; }
 .trust-milestone-track [data-start="true"] { outline: 2px solid currentColor; }
-.objective-track { display: grid; grid-template-columns: repeat(10, minmax(0, 1fr)); margin-top: .5rem; }
-.objective-track span { border: 1px solid #9aa3ad; text-align: center; padding: .3rem 0; font-variant-numeric: tabular-nums; }
-@media print { .objective-track span { min-width: 7mm; min-height: 7mm; } }
 .abilities { display: flex; flex-direction: column; gap: 0.5rem; }
 .ability { border-left: 3px solid color-mix(in srgb, var(--accent) 45%, #d7d7d2); padding-left: 0.6rem; }
 .ability-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.4rem; }

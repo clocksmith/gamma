@@ -401,3 +401,26 @@ test("the forty-card Training deck preserves its exact special-card contracts", 
   assert.equal(benchmarkThenHuman.trust, 1);
   assert.deepEqual(benchmarkThenHuman.revealed, ["benchmark_leak", "human_evaluation"]);
 });
+
+
+test("standalone kit permutations preserve legal destinations, action effects and seat ownership", async () => {
+  const [config, factions, headlines] = await load();
+  const kitIds = config.playerKits.map(k => k.id);
+  for(const actionId of ["fund","build","organize","deploy","influence","research"]) {
+    let expected;
+    for(let offset=0;offset<5;offset++) {
+      const state=createGame(config,factions,headlines,"standalone-kit-actions","coalition_lab",4,
+        {kitAssignments:kitIds.slice(offset).concat(kitIds.slice(0,offset)).slice(0,4)});
+      Object.assign(state.player,{runway:12,compute:8,capability:4,trust:4});
+      const piece=state.player.pieces[0];
+      const destinations=legalDestinations(state,piece.id).map(t=>t.instanceId);
+      commitAction(state,actionId);
+      const tile=state.board.find(t=>t.category==="cloud");
+      resolveSelectedAction(config,headlines,state,piece.id,tile.instanceId);
+      const observed={destinations,resources:[state.player.runway,state.player.compute,state.player.capability,state.player.customers,state.player.trust,state.player.scrutiny],
+        pieces:state.player.pieces,facilities:state.player.facilities,generators:state.player.generators};
+      for(const p of [...state.player.pieces,...state.player.facilities,...state.player.generators])assert.match(p.id,/^s0-/);
+      if(expected)assert.deepEqual(observed,expected);else expected=observed;
+    }
+  }
+});

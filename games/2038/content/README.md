@@ -172,3 +172,5 @@ Historical release bundles remain evidence of their original source layout.
 Player-kit identity is authored in `components/game.json`; faction identities
 and starting values are authored in `components/factions.json`. Generic mats
 and kit-owned chips never derive ownership colours from faction artwork.
+
+Era objective definitions belong to `components/mandates.json`; `lab/rules/era-mandates.js` evaluates their explicit metric, qualification, and direction from current state. Kit definitions remain in `components/game.json`, faction identity in `components/factions.json`.

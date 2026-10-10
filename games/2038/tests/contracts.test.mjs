@@ -63,7 +63,8 @@ test("physical authority defines one inventory and preserves automatic blind Aud
   assert.doesNotMatch(inventory, /final production copy count remains open/);
   assert.doesNotMatch(inventory, /Unresolved packing quantities/);
   assert.match(governanceLedger, /active objective card/);
-  assert.match(governanceLedger, /reusable objective number track/);
+  assert.match(governanceLedger, /current public state after Audit/);
+  assert.doesNotMatch(governanceLedger, /reusable objective number track/);
   assert.match(governanceLedger, /printed starting Trust/);
   assert.match(governanceLedger, /remaining black Audit cubes/);
   assert.match(governanceLedger, /institutional winner/);
@@ -976,4 +977,21 @@ test("browser renders canonical Headline copy without a rules selector", async (
   assert.match(uiCopy.prototype.browser.startingStatus, /deterministic browser opponents/);
   assert.ok(!("realignment" in uiCopy.prototype));
   assert.doesNotMatch(JSON.stringify(uiCopy), /Advanced Play/);
+});
+
+
+test("current kits and Mandates preserve distinct counts and evaluator definitions", async () => {
+  const [config, factions, authored, compiled, graph] = await Promise.all([
+    readJson("components/game.json"), readJson("components/factions.json"),
+    readJson("components/mandates.json"), readJson("dist/runtime/mandates.json"), readJson("content/graph.json")]);
+  assert.equal(config.playerKits.length, 5);
+  assert.equal(factions.factions.length, 6);
+  assert.equal(config.playerSupply.objectiveProgressCubes, undefined);
+  assert.equal(config.playerSupply.scrutinyCubes, 10);
+  assert.deepEqual(compiled.mandates.map(c => [c.id,c.metric,c.qualification,c.direction]),
+    authored.mandates.map(c => [c.id,c.metric,c.qualification,c.direction]));
+  assert.equal(authored.mandates.length, 12);
+  assert.deepEqual(compiled.points, {winner:2,tied:1});
+  for(const c of compiled.mandates)assert.equal(c.record, undefined);
+  assert.equal((JSON.stringify(graph).match(/rules\/era-mandates.js/g) || []).length, 2);
 });

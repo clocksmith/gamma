@@ -1295,7 +1295,7 @@ The public stops purchasing intelligence separately and starts expecting it insi
 
 #### Flavor text
 
-The institution registers the most new service identities, successor agents, or continuing accounts.
+The institution serves the largest current population of service identities, successor agents, or continuing accounts.
 
 <!-- lore-mandate-continent-signs-loi:end -->
 
@@ -1355,7 +1355,7 @@ The institution coordinates the territory’s distinct systems without formally 
 
 #### Flavor text
 
-A broad result survives contact with enough domains to become public evidence rather than another synthetic citation. The Rogue Deliberator made ordinary assistance harder to distinguish from an institution with its own operating budget.
+A capable institution retains enough public trust for its standing to count as evidence rather than another synthetic citation. The Rogue Deliberator made ordinary assistance harder to distinguish from an institution with its own operating budget.
 
 <!-- lore-mandate-model-ate-tuesday:end -->
 

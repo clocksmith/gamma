@@ -1462,9 +1462,9 @@ export async function runFactionSwapDiagnostic(options = {}, onProgress) {
       }] : [];
     });
   return {
-    schemaVersion: 6,
-    reportSchemaVersion: 6,
-    replaySchemaVersion: 2,
+    schemaVersion: 7,
+    reportSchemaVersion: 7,
+    replaySchemaVersion: 3,
     decisionSchemaVersion: 2,
     reportType: "balance_audit",
     diagnosticKind: options.diagnosticKind || "paired_faction_swap",
