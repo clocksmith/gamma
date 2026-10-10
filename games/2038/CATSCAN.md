@@ -88,6 +88,9 @@ Deliver a coherent, replayable institutional strategy game whose authored rules,
   artifacts remain local evidence.
 - Playable counts are two through five. Six factions remain available choices; six-player requests are rejected. Historical evidence retains its original identity.
 - Fictional identities remain fictional and simulated sessions remain labeled.
+- Venture response packets expose the public proposer, fixed hosts, current
+  connection status and reciprocal nominal income. Pending terms clear on
+  acceptance, rejection or policy failure; hidden decks remain unavailable.
 - Canonical rule changes update every affected authority and evidence surface together.
 
 ## Acceptance
