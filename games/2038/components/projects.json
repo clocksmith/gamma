@@ -1,16 +1,16 @@
 {
   "schemaVersion": 4,
-  "constructionRule": "From Era II, Build may upgrade one Facility you own for 3 Runway and 1 Compute. Flip its card. Its printed Production doubles. Build constructs OR upgrades, never both.",
+  "constructionRule": "Pay 2 Runway to equip one of your Orgs. Flip it: it produces twice its hex’s yield.",
   "projects": [
     {
       "id": "upgrade",
-      "unlockedRound": 2,
+      "unlockedRound": 1,
       "timing": "during_action",
-      "name": "Facility upgrade",
-      "displayName": "Facility upgrade",
+      "name": "Org equipment",
+      "displayName": "Org equipment",
       "text": "${content.projects.constructionRule}",
-      "frontText": "Standard Facility: printed Production.",
-      "backText": "Upgraded Facility: double printed Production.",
+      "frontText": "Org: printed hex yield.",
+      "backText": "Equipped Org: double printed hex yield.",
       "productionMultiplier": 2,
       "loreRef": "project-mega-cluster",
       "$scenario": {
@@ -89,9 +89,8 @@
     }
   ],
   "constructionCost": {
-    "runway": 3,
-    "compute": 1
+    "runway": 2
   },
-  "completionLimit": "once-per-facility",
+  "completionLimit": "once-per-org",
   "chipsPerPlayer": 0
 }

@@ -106,3 +106,15 @@ six faction identities. Seat-based mechanical ownership remains authoritative.
 - One objective is revealed each Era; all four score from the final public table after Era IV Production, Reputation Review, and AGI recognition. History never affects scoring. Diagnostic telemetry is separate.
 
 User-selected 2026-10-09 smaller prototype supersedes earlier Power, hex geography, Trust milestones, and per-Era scoring provisions. Four tracks are Runway, Compute, Capability, and Reputation. All four revealed objectives score once from final holdings. Old sealed releases and evidence remain unchanged.
+
+## Selected shared-hex simplification (2026-10-10)
+
+The user selected a shared hex board and fewer components. This supersedes earlier
+six-area, separate Facility, Customer-card, Action-card, Venture and simultaneous
+selection requirements. Six playable hexes surround one Era hex. Orgs stay or move
+one edge, then perform the destination Action, in Initiative order; Actions may
+repeat. All Orgs produce; Build equips an Org by flipping its token. No separate
+Facilities, upgrades, Ventures or Customer cards remain. Customers are numeric;
+Mandate is calculated from visible state. Twenty Training cards retain all ten
+designs with two copies each; shuffle the full deck before each Research run.
+Keep all unique lore and fictional institutions. Old releases remain immutable.
