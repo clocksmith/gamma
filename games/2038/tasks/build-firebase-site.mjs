@@ -125,7 +125,7 @@ export function buildIndexHtml({
   <style>
     :root { color-scheme: light; }
     * { box-sizing: border-box; }
-    body { margin:0; background:#fff url("/web/hex-background.svg") repeat; color:#111; font:18px/1.6 system-ui,sans-serif; }
+    body { margin:0; background:#fff; color:#111; font:18px/1.6 system-ui,sans-serif; }
     main { max-width:42rem; margin:0 auto; padding:clamp(1.5rem,6vw,4rem) 1.25rem; }
     h1 { margin:0 0 1.5rem; font-size:clamp(1.8rem,6vw,2.4rem); line-height:1.2; }
     h2 { margin:2.5rem 0 .75rem; font-size:1.15rem; }

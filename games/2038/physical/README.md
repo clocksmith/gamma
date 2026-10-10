@@ -4,10 +4,11 @@
 encoding, and dimensions. It is neither player-facing copy nor
 machine-enforced game data.
 
-The selected forms are cards (including flat chips), Agent position tokens,
-and cubes. Boards remain printed surfaces; the bag is an accessory. Each faction owns three personal project chips; flipping and host placement
-identify matched Venture hosts. Numerical tracks use cubes rather than sliders.
-
+The selected forms are Customer cards, double-sided Facility cards, Agent tokens,
+faction identity cards, six shared action areas, and five interchangeable player
+mats. Kit colour and symbol identify ownership independently of faction.
+Four numerical tracks use cubes. The Governance Board retains four objectives
+for final scoring and an AGI recognition space.
 ## Ownership
 
 - `component-spec.md` defines what each component physically is, how a player
@@ -20,8 +21,7 @@ identify matched Venture hosts. Numerical tracks use cubes rather than sliders.
   requirements and deferred content. Edit the rulebook or
   its referenced component records, then build; there is no second authored inventory here.
 - `governance-tracks.md` specifies the printed cube-track panel for the
-  current Mandate, Setup Collective Trust, and
-  final public resolution. Read Power directly from current infrastructure positions.
+  four resource tracks, AGI recognition, and final public resolution.
 - `production/` is reserved for printer-ready specifications, dielines, and
   vendor-facing files once those are deliberately approved.
 

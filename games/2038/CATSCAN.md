@@ -24,7 +24,7 @@ Deliver a coherent, replayable institutional strategy game whose authored rules,
 
 - Mandate 2038 has one ruleset: six shared action areas, four resource tracks, always-operating Facilities, Customer cards, one Facility upgrade, and final-current-state scoring. Setup and publication expose no alternate rules mode. Retired mode selectors and module overrides are rejected.
 - The current candidate uses four identical Agents per faction, two starting.
-  Agents are persistent district assignments; CEOs remain characters, not pieces.
+  Agents are persistent shared-area assignments; CEOs remain characters, not pieces.
 - Core selections commit available cards without advance affordability proofs.
   ReAct is Reason, Act, Observe; assignment is part of Act.
 - Research retains push-your-luck. Reputation replaces Trust, Scrutiny, and Systemic Risk. Recognized AGI is a final holding after Era IV Production and Reputation Review. The World Ending remains separate.

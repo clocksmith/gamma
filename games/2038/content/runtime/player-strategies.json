@@ -147,11 +147,11 @@
     {
       "id": "infrastructure_compounder",
       "name": "The Infrastructure Compounder",
-      "description": "Builds a compact powered engine, then converts it into public thresholds and late ${terms.playerTracks.customers}.",
+      "description": "Builds a compact Facility engine, then converts it into public thresholds and late ${terms.playerTracks.customers}.",
       "defaultBackend": "weighted",
       "persona": {
         "identity": "An infrastructure executive who sees every model as a load forecast.",
-        "worldview": "Unpowered ambition is theater; durable capacity wins long contests.",
+        "worldview": "Durable production supports research and deployment.",
         "riskPosture": "Prefers capital risk to research risk.",
         "negotiationStyle": "Offers capacity from strength and dislikes dependency.",
         "voice": "Concrete, logistical, and systems-minded."
@@ -169,7 +169,7 @@
           "compute": 1
         },
         "objectives": [
-          "Establish two connected, powered Facilities without overbuilding.",
+          "Establish two Facilities without overbuilding.",
           "Use the engine to cross ${terms.playerTracks.capability} and ${terms.playerTracks.customer} ${terms.playerTracks.mandate} thresholds.",
           "Keep enough late tempo and ${terms.resources.compute} for Fusion or scored ${terms.systems.agi} recognition."
         ],
@@ -340,7 +340,6 @@
         },
         "decisionWeights": {
           "fund_venture": 0.925,
-          "influence_remove_scrutiny": 4.33,
           "research_stop_2": 0.47
         },
         "consequenceWeights": {},
@@ -350,13 +349,13 @@
     {
       "id": "agi_candidate",
       "name": "The AGI Candidate",
-      "description": "Builds Capability, connected Facilities, and Trust to qualify for scored AGI recognition.",
+      "description": "Builds Capability and Reputation, reserving Compute for final AGI recognition.",
       "defaultBackend": "greedy",
       "persona": {
         "identity": "A focused claimant converting technical credibility into a final institutional gamble.",
         "worldview": "Public ${terms.playerTracks.mandate} decides victory; a prepared AGI declaration can add enough to change the result.",
-        "riskPosture": "Accepts reserved ${terms.resources.compute} and final-Audit Reputation loss when ordinary victory begins to recede.",
-        "negotiationStyle": "Trades immediately for ${terms.resources.compute} and negotiates Joint Ventures beside connected Facilities.",
+        "riskPosture": "Reserves ${terms.resources.compute} for final AGI recognition.",
+        "negotiationStyle": "Trades immediately for ${terms.resources.compute} and negotiates Joint Ventures between fixed Facility hosts.",
         "voice": "Direct, technical, and coalition-aware."
       },
       "strategy": {
@@ -373,7 +372,7 @@
         },
         "objectives": [
           "Reach multiple ${terms.playerTracks.capability} thresholds while preserving enough ${terms.resources.compute} to pay for AGI recognition.",
-          "Build public evidence in ${terms.playerTracks.capability}, powered Facilities, and ${terms.playerTracks.reputation} to qualify for public recognition.",
+          "Build ${terms.playerTracks.capability} and ${terms.playerTracks.reputation}, reserving Compute for final recognition.",
           "Declare recognized AGI when the public requirements are met and its ${terms.playerTracks.mandate} award justifies the Compute cost and final Reputation loss exposure."
         ],
         "actionWeights": {
@@ -440,11 +439,11 @@
     {
       "id": "power_broker",
       "name": "The Capacity Operator",
-      "description": "Builds one dependable local Power base, then converts it into ${terms.actions.research}, ${terms.actions.deploy}, and late projects.",
+      "description": "Builds dependable Facility production, then converts it into ${terms.actions.research}, ${terms.actions.deploy}, and upgrades.",
       "defaultBackend": "greedy",
       "persona": {
         "identity": "An infrastructure operator that treats dependable capacity as the base of a competitive institution.",
-        "worldview": "Power matters when it turns an operating plan into public capability and useful deployment.",
+        "worldview": "Production matters when it supports capability and useful deployment.",
         "riskPosture": "Accepts bounded infrastructure risk, but refuses to overbuild idle capacity.",
         "negotiationStyle": "Concrete and focused on immediate resource trades and useful Joint Ventures.",
         "voice": "Measured, contractual, and operational."
@@ -462,8 +461,8 @@
           "compute": 1.2
         },
         "objectives": [
-          "Construct one Facility and one locally useful Generator without overbuilding.",
-          "Convert powered capacity into ${terms.playerTracks.capability}, ${terms.playerTracks.customers}, and a competitive late project."
+          "Construct a productive Facility without overbuilding.",
+          "Convert production into ${terms.playerTracks.capability}, ${terms.playerTracks.customers}, and a useful Facility upgrade."
         ],
         "actionWeights": {
           "fund": 1.249,
@@ -478,24 +477,6 @@
         },
         "consequenceWeights": {},
         "rules": [
-          {
-            "when": [
-              {
-                "path": "self.facilities",
-                "operator": "gte",
-                "value": 1
-              },
-              {
-                "path": "self.generators",
-                "operator": "gte",
-                "value": 1
-              }
-            ],
-            "target": {
-              "actionId": "build"
-            },
-            "multiplier": 0.08
-          },
           {
             "when": [
               {

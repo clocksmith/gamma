@@ -46,6 +46,7 @@ test("accepted trade is bilateral and only fixed quantities are valid", () => {
   assert.equal(m.players[1].compute, 3);
   assert.equal(m.players[0].runway, 3);
   assert.equal(m.players[1].runway, 3);
+  assert.equal(m.matchMetrics.trades.accepted, 1);
 });
 test("recipient cap prevents a transfer and refusal changes neither account", async () => {
   const m = fixture();

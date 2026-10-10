@@ -306,3 +306,22 @@ test("complete browser-native game respects action exhaustion, phases and hidden
   assert.equal(m.publicObservation(0).trainingDrawPile, undefined);
   assert.ok(r.standings.every((p) => Number.isFinite(p.score)));
 });
+
+test("AGI diagnostics record one final opportunity per player with actual readiness and acceptance", async () => {
+  const m = await fixture();
+  m.players[0].capability = 9;
+  m.players[0].reputation = 4;
+  m.players[0].compute = 3;
+  m.players[1].capability = 9;
+  m.players[1].reputation = 4;
+  m.players[1].compute = 2;
+  await m.declareAgiAchievements(policies(m));
+  const rows = m.matchMetrics.agiFunnel;
+  assert.equal(rows.length, m.players.length);
+  assert.equal(rows.find(r => r.seat === 0).declared, true);
+  assert.equal(rows.find(r => r.seat === 1).coreRequirementsMet, true);
+  assert.equal(rows.find(r => r.seat === 1).legalDeclarationWindow, false);
+  assert.equal(rows.find(r => r.seat === 1).failingRequirement, "compute");
+  await m.declareAgiAchievements(policies(m));
+  assert.equal(m.matchMetrics.agiFunnel.length, m.players.length);
+});

@@ -298,7 +298,7 @@ test("one-lever matrices preserve rules arms in inference and common-seed pairs"
       {
         id: "probe",
         overlay: {
-          foundryStartingCompute: 4
+          facilityCost: 3
         }
       }
     ],
@@ -369,8 +369,8 @@ test("one-lever matrices preserve rules arms in inference and common-seed pairs"
 
 test("package interaction matrices require and record multiple selected levers", async () => {
   const packageOverlay = {
-    coalitionStartingRunway: 6,
-    foundryStartingCompute: 3
+    facilityCost: 3,
+    reviewRunwayPenalty: 3
   };
   await assert.rejects(
     runUnifiedMatrix({
