@@ -2479,10 +2479,10 @@ user-approved voice pass revises their prose along with the surrounding
 overviews, preserving their named situations and Era placement. Component
 titles, epigraphs, and effects remain intact. Historical institutional entries
 remain in their authored records rather than interrupting the Era narrative
-with standalone quotations. Short additions to existing Headline newswires, Mandate flavor, and Program flavor connect the situations to play; component scenario notes record their placement. Biological hosts are one fictional embodiment of institutional Agents, not a new piece type. Orbital credits, bodily leases, and forecast markets introduce no additional game resources or procedures.
+with standalone quotations. Short additions to existing Headline newswires, Mandate flavor, and Program flavor connect the situations to play; component scenario notes record their placement. Biological hosts are one fictional embodiment of AI systems within an Org, not a new piece type. Orbital credits, bodily leases, and forecast markets introduce no additional game resources or procedures.
 
 The 2026-09-06 review clarification connects labor, intelligence access, modeled approval, and bodily operating rights across these same scenes. Those stories remained verbatim through that integration; the subsequent
-voice revision preserves their concepts and assigned Eras with revised wording. Agent embodiment changes without changing its presence rule. Live-state migration and installed neural interfaces constrain biological hosting even with matter compilers; rival forecasts remain probabilistic. The replacement-liver example makes the existing exposure and inheritance evidence concrete.
+voice revision preserves their concepts and assigned Eras with revised wording. An Org’s internal mix of people and AI systems changes without changing its presence rule. Live-state migration and installed neural interfaces constrain biological hosting even with matter compilers; rival forecasts remain probabilistic. The replacement-liver example makes the existing exposure and inheritance evidence concrete.
 
 ## Research provenance
 

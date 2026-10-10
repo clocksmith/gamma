@@ -155,11 +155,11 @@ function buildActions(config) {
 
 function buildEquipment(config) {
   const cards=config.playerKits.flatMap(kit=>[
-    ...Array.from({length:config.playerSupply.agents},(_,i)=>`<article class="card agent-token" data-kit="${kit.id}" style="--accent:${kit.color}"><h3>${kit.symbol} Agent ${i+1}</h3><p>${kit.colorName} · ${kit.symbolName}</p></article>`),
+    ...Array.from({length:config.playerSupply.agents},(_,i)=>`<article class="card agent-token" data-kit="${kit.id}" style="--accent:${kit.color}"><h3>${kit.symbol} Org ${i+1}</h3><p>${kit.colorName} · ${kit.symbolName}</p></article>`),
     ...Array.from({length:config.playerSupply.facilities},(_,i)=>`<article class="card facility-card" data-kit="${kit.id}" style="--accent:${kit.color}">${[false,true].map(upgraded=>`<div class="chip-face" data-facility-face="${upgraded?'upgraded':'normal'}"><h3>${kit.symbol} Facility ${i+1}</h3><p>${kit.colorName} · ${kit.symbolName}</p><strong>${upgraded?'Upgraded':'Normal'}</strong><p>${upgraded?'Twice':'Once'} the area yield at every Production.</p></div>`).join("")}</article>`),
     ...Array.from({length:config.customerCards.perPlayer},(_,i)=>`<article class="card customer-card" data-kit="${kit.id}" data-customer="${i+1}" style="--accent:${kit.color}"><h3>${kit.symbol} Customer ${i+1}</h3><p>${kit.colorName} · ${kit.symbolName}</p><p>Requires ${config.customerCards.requirements[i]} Capability. ${config.customerCards.production.amount} Runway per Production; ${config.scoring.customer} final points.</p></article>`)
   ]).join("");
-  return section("equipment","Kit-owned equipment",config.playerKits.length*(config.playerSupply.agents+config.playerSupply.facilities+config.customerCards.perPlayer),cards,"Agent tokens, two-sided Facilities, and ordered Customer cards. Kit symbols identify ownership.");
+  return section("equipment","Kit-owned equipment",config.playerKits.length*(config.playerSupply.agents+config.playerSupply.facilities+config.customerCards.perPlayer),cards,"Org tokens, two-sided Facilities, and ordered Customer cards. Kit symbols identify ownership.");
 }
 function buildAreas(config) {
   return section("areas","Shared action areas",config.board.tiles.length,config.board.tiles.map(a=>card({title:config.actions.find(x=>x.id===a.actionId).name,subtitle:a.name,bodyHtml:`<p>${escapeHtml(a.production)}</p><p>${a.facilitySpaces} shared Facility spaces</p><p>Venture contract resource: ${a.contractResource}</p>`})).join(""),"Arrange freely. No adjacency or Power condition.");

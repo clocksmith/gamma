@@ -23,8 +23,8 @@ Deliver a coherent, replayable institutional strategy game whose authored rules,
 ## Invariants
 
 - Mandate 2038 has one ruleset: six shared action areas, four resource tracks, always-operating Facilities, Customer cards, one Facility upgrade, and final-current-state scoring. Setup and publication expose no alternate rules mode. Retired mode selectors and module overrides are rejected.
-- The current candidate uses four identical Agents per faction, two starting.
-  Agents are persistent shared-area assignments; CEOs remain characters, not pieces.
+- The current candidate uses four identical Orgs per faction, two starting.
+  Orgs are persistent shared-area assignments; CEOs remain characters, not pieces.
 - Core selections commit available cards without advance affordability proofs.
   ReAct is Reason, Act, Observe; assignment is part of Act.
 - Research retains push-your-luck. Reputation replaces Trust, Scrutiny, and Systemic Risk. Recognized AGI is a final holding after Era IV Production and Reputation Review. The World Ending remains separate.
@@ -65,7 +65,7 @@ Deliver a coherent, replayable institutional strategy game whose authored rules,
   excluded. Release identity remains in build receipts.
 - Physical specifications own form and state encoding; supported inventory
   prose is projected from the rulebook, not maintained in a second physical file.
-  Pieces use Customer and two-sided Facility cards, Agent tokens, four resource cubes, and an AGI recognition marker. No Generator, Power, project-chip, risk-bag, or milestone system remains.
+  Pieces use Customer and two-sided Facility cards, Org tokens, four resource cubes, and an AGI recognition marker. No Generator, Power, project-chip, risk-bag, or milestone system remains.
 - Every admitted lore situation has one structured Era placement, and every
   governed lore surface is bound exactly once with copy and mechanic receipts.
 - World Markdown owns all scenario definitions and shared qualification policies.
