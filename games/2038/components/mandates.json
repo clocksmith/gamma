@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "status": "provisional_playtest_content",
-  "selection": "Reveal one at the beginning of each Era. Score current public state after Audit.",
+  "selection": "Reveal one per Era. Keep all four visible. Evaluate all four from the final table, once, at game end.",
   "points": {
     "winner": 2,
     "tied": 1
@@ -11,12 +11,11 @@
       "id": "quarter_humanity_notices",
       "era": 1,
       "mechanicalTags": [
-        "capability",
-        "research",
-        "customers"
+        "customers",
+        "final_state"
       ],
       "name": "Intelligence Enters the Price",
-      "rulesText": "Most Customers; at least 1 Customer required. Score 2 ${terms.playerTracks.mandate}; tied leaders each score 1. Read current public state after Audit.",
+      "rulesText": "Most Customer cards, among institutions with at least 1 customers. Compare current holdings at game end. Leader scores 2; tied leaders each score 1. No qualified institution means no points.",
       "$scenario": {
         "ref": "cheap-token-rebound"
       },
@@ -35,10 +34,10 @@
       "era": 4,
       "mechanicalTags": [
         "customers",
-        "deploy"
+        "final_state"
       ],
       "name": "Successor Accounts Recognized",
-      "rulesText": "Most Customers; at least 1 Customer required. Score 2 ${terms.playerTracks.mandate}; tied leaders each score 1. Read current public state after Audit.",
+      "rulesText": "Most Customer cards, among institutions with at least 1 customers. Compare current holdings at game end. Leader scores 2; tied leaders each score 1. No qualified institution means no points.",
       "$scenario": {
         "ref": "metropolitan-mind-trust"
       },
@@ -57,19 +56,18 @@
       "era": 2,
       "mechanicalTags": [
         "facilities",
-        "power",
-        "connected_facilities"
+        "final_state"
       ],
       "name": "The Campus Becomes a Climate",
-      "rulesText": "Most currently connected Facilities; at least 1 required. Score 2 ${terms.playerTracks.mandate}; tied leaders each score 1. Read current public state after Audit.",
+      "rulesText": "Most Facilities, among institutions with at least 1 facilities. Compare current holdings at game end. Leader scores 2; tied leaders each score 1. No qualified institution means no points.",
       "$scenario": {
         "ref": "liability-custodians"
       },
       "loreRef": "mandate-building-has-weather",
-      "metric": "connected_facilities",
+      "metric": "facilities",
       "qualification": [
         {
-          "metric": "connected_facilities",
+          "metric": "facilities",
           "minimum": 1
         }
       ],
@@ -79,21 +77,20 @@
       "id": "stack_reaches_horizon",
       "era": 2,
       "mechanicalTags": [
-        "infrastructure",
-        "facilities",
-        "connected_infrastructure"
+        "upgraded_facilities",
+        "final_state"
       ],
       "name": "The Grid Borrows Tomorrow",
-      "rulesText": "Most currently connected Facilities plus operating Mega-Clusters; at least 2 combined required. Score 2 ${terms.playerTracks.mandate}; tied leaders each score 1. Read current public state after Audit.",
+      "rulesText": "Most upgraded Facilities, among institutions with at least 1 upgraded facilities. Compare current holdings at game end. Leader scores 2; tied leaders each score 1. No qualified institution means no points.",
       "$scenario": {
         "ref": "utility-capture"
       },
       "loreRef": "mandate-stack-reaches-horizon",
-      "metric": "connected_infrastructure",
+      "metric": "upgraded_facilities",
       "qualification": [
         {
-          "metric": "connected_infrastructure",
-          "minimum": 2
+          "metric": "upgraded_facilities",
+          "minimum": 1
         }
       ],
       "direction": "max"
@@ -102,12 +99,11 @@
       "id": "voluntary_coordination_triumphs",
       "era": 3,
       "mechanicalTags": [
-        "joint_venture",
-        "negotiation",
-        "active_ventures"
+        "active_ventures",
+        "final_state"
       ],
       "name": "Supported Meaning Becomes Law",
-      "rulesText": "Most currently active Joint Ventures; at least 1 required. Count each agreement for each partner, regardless of creation Era. Fixed hosts must still exist, belong to their partners, remain adjacent, and be connected. Score 2 ${terms.playerTracks.mandate}; tied leaders each score 1. Read current public state after Audit.",
+      "rulesText": "Most active Joint Ventures, among institutions with at least 1 active ventures. Compare current holdings at game end. Leader scores 2; tied leaders each score 1. No qualified institution means no points.",
       "$scenario": {
         "ref": "semantic-court-mandate"
       },
@@ -125,16 +121,16 @@
       "id": "legibility_offensive",
       "era": 3,
       "mechanicalTags": [
-        "trust",
-        "deploy"
+        "reputation",
+        "final_state"
       ],
       "name": "Refusal Remains Legible",
-      "rulesText": "Most Trust among institutions with at least 1 Customer. Zero Trust can qualify. Score 2 ${terms.playerTracks.mandate}; tied leaders each score 1. Read current public state after Audit.",
+      "rulesText": "Most Reputation, among institutions with at least 1 customers. Compare current holdings at game end. Leader scores 2; tied leaders each score 1. No qualified institution means no points.",
       "$scenario": {
         "ref": "billion-instance-bloom"
       },
       "loreRef": "mandate-legibility-offensive",
-      "metric": "trust",
+      "metric": "reputation",
       "qualification": [
         {
           "metric": "customers",
@@ -147,20 +143,19 @@
       "id": "national_champion_without_nationalization",
       "era": 3,
       "mechanicalTags": [
-        "control",
-        "map",
-        "controlled_categories"
+        "controlled_areas",
+        "final_state"
       ],
       "name": "The Jurisdiction Becomes a Platform",
-      "rulesText": "Most different controlled non-Frontier hex categories; at least 1 required. Frontier never counts; tied presence does not control a hex. Score 2 ${terms.playerTracks.mandate}; tied leaders each score 1. Read current public state after Audit.",
+      "rulesText": "Most controlled areas, among institutions with at least 1 controlled areas. Compare current holdings at game end. Leader scores 2; tied leaders each score 1. No qualified institution means no points.",
       "$scenario": {
         "ref": "cognitive-donor-clinics"
       },
       "loreRef": "mandate-national-champion-without-nationalization",
-      "metric": "controlled_categories",
+      "metric": "controlled_areas",
       "qualification": [
         {
-          "metric": "controlled_categories",
+          "metric": "controlled_areas",
           "minimum": 1
         }
       ],
@@ -170,12 +165,11 @@
       "id": "model_ate_tuesday",
       "era": 1,
       "mechanicalTags": [
-        "research",
-        "training",
-        "capability"
+        "capability",
+        "final_state"
       ],
       "name": "The Public Result Holds",
-      "rulesText": "Most Capability among institutions with at least 2 Trust and at least 1 Capability. Score 2 ${terms.playerTracks.mandate}; tied leaders each score 1. Read current public state after Audit.",
+      "rulesText": "Most Capability, among institutions with at least 2 reputation, 1 capability. Compare current holdings at game end. Leader scores 2; tied leaders each score 1. No qualified institution means no points.",
       "$scenario": {
         "ref": "bankruptcy-data-estates"
       },
@@ -183,7 +177,7 @@
       "metric": "capability",
       "qualification": [
         {
-          "metric": "trust",
+          "metric": "reputation",
           "minimum": 2
         },
         {
@@ -197,12 +191,11 @@
       "id": "compute_new_weather",
       "era": 2,
       "mechanicalTags": [
-        "compute",
-        "production",
-        "compute_capacity"
+        "compute_capacity",
+        "final_state"
       ],
       "name": "${terms.resources.compute} Becomes Public Weather",
-      "rulesText": "Highest current nominal Compute production capacity from connected Facilities, operating Mega-Clusters, and active Joint Ventures; at least 1 required. Ignore resource caps. Do not run Production or faction abilities again. Score 2 ${terms.playerTracks.mandate}; tied leaders each score 1. Read current public state after Audit.",
+      "rulesText": "Most nominal Compute production capacity, among institutions with at least 1 compute capacity. Compare current holdings at game end. Leader scores 2; tied leaders each score 1. No qualified institution means no points.",
       "$scenario": {
         "ref": "autonomy-queue-collapse"
       },
@@ -220,33 +213,33 @@
       "id": "zero_incident_quarter",
       "era": 4,
       "mechanicalTags": [
-        "scrutiny",
-        "risk"
+        "reputation",
+        "final_state"
       ],
       "name": "Maintained Reality Is Certified",
-      "rulesText": "Fewest current Scrutiny among institutions with at least 3 Customers. Zero Scrutiny can win. Score 2 ${terms.playerTracks.mandate}; tied leaders each score 1. Read current public state after Audit.",
+      "rulesText": "Most Reputation, among institutions with at least 3 customers. Compare current holdings at game end. Leader scores 2; tied leaders each score 1. No qualified institution means no points.",
       "$scenario": {
         "ref": "matter-compiler"
       },
       "loreRef": "mandate-zero-incident-quarter",
-      "metric": "scrutiny",
+      "metric": "reputation",
       "qualification": [
         {
           "metric": "customers",
           "minimum": 3
         }
       ],
-      "direction": "min"
+      "direction": "max"
     },
     {
       "id": "responsible_acceleration",
       "era": 4,
       "mechanicalTags": [
         "capability",
-        "trust"
+        "final_state"
       ],
       "name": "Contestability Standard Maintained",
-      "rulesText": "Most Capability among institutions with at least 4 Trust and at least 1 Capability. Score 2 ${terms.playerTracks.mandate}; tied leaders each score 1. Read current public state after Audit.",
+      "rulesText": "Most Capability, among institutions with at least 4 reputation, 1 capability. Compare current holdings at game end. Leader scores 2; tied leaders each score 1. No qualified institution means no points.",
       "$scenario": {
         "ref": "posthumous-labor",
         "eraRelation": "later-expression"
@@ -255,7 +248,7 @@
       "metric": "capability",
       "qualification": [
         {
-          "metric": "trust",
+          "metric": "reputation",
           "minimum": 4
         },
         {
@@ -269,11 +262,11 @@
       "id": "markets_prefer_destiny",
       "era": 1,
       "mechanicalTags": [
-        "fund",
-        "runway"
+        "runway",
+        "final_state"
       ],
       "name": "Capital Finds the Default",
-      "rulesText": "Most current Runway among institutions owning at least 1 Facility. Zero Runway can qualify. Score 2 ${terms.playerTracks.mandate}; tied leaders each score 1. Read current public state after Audit.",
+      "rulesText": "Most Runway, among institutions with at least 1 facilities. Compare current holdings at game end. Leader scores 2; tied leaders each score 1. No qualified institution means no points.",
       "$scenario": {
         "ref": "supervised-autonomy-homes"
       },
@@ -288,5 +281,5 @@
       "direction": "max"
     }
   ],
-  "tieRule": "Tied leaders each score 1 ${terms.playerTracks.mandate} unless the card says otherwise."
+  "tieRule": "Tied qualified leaders each score 1 at game end."
 }

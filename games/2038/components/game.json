@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 2,
+  "schemaVersion": 3,
   "gameId": "frontier-2038",
   "players": {
     "min": 2,
@@ -25,51 +25,14 @@
     "id": "initiative_clockwise",
     "text": "When lowest, highest, or most is tied, the tied player nearest Initiative clockwise is the target unless the effect explicitly applies to everyone."
   },
-  "singleGeneratorRule": {
-    "id": "single-generator-default",
-    "ordinaryGeneratorLimit": 1,
-    "locations": {
-      "grid_reactor": {
-        "sourceId": "emergency_infrastructure",
-        "constructionCost": 1
-      },
-      "renewable_basin": {
-        "sourceId": "clean_infrastructure",
-        "constructionCost": 2
-      }
-    },
-    "localDelivery": "own-or-adjacent-facilities",
-    "slotContention": "initiative-order-no-reservations"
-  },
-  "factionRules": {
-    "foundry": {
-      "startingCompute": "${facts.shared.factions.foundry.startingCompute}"
-    }
-  },
-  "audit": {
-    "scaling": "round(baseDraws * playerCount / 4)",
-    "minimumDraws": 1,
-    "scrutinySupplyPerPlayer": 10,
-    "penalty": {
-      "primary": "runway",
-      "fallback": "trust",
-      "amount": 1
-    }
-  },
   "rounds": [
     {
       "number": 1,
       "id": "demo",
       "cycles": 3,
-      "auditBaseDraws": 2,
       "name": "${content.referenceCards.byId.era_demo.name}",
       "newThisEra": [
-        "ReAct: Reason → Act → Observe",
-        "Core Actions",
-        "Training Runs",
-        "the starting grid",
-        "${terms.playerTracks.customers}",
-        "${terms.playerTracks.scrutiny}"
+        "Core Actions and final-state objectives"
       ],
       "unlocks": []
     },
@@ -77,18 +40,18 @@
       "number": 2,
       "id": "scale",
       "cycles": 3,
-      "auditBaseDraws": 3,
       "name": "${content.referenceCards.byId.era_scale.name}",
       "newThisEra": [
-        "Generators"
+        "Facility upgrades"
       ],
-      "unlocks": []
+      "unlocks": [
+        "upgrade"
+      ]
     },
     {
       "number": 3,
       "id": "narrative",
       "cycles": 3,
-      "auditBaseDraws": 4,
       "name": "${content.referenceCards.byId.era_narrative.name}",
       "newThisEra": [
         "Joint Ventures"
@@ -99,10 +62,9 @@
       "number": 4,
       "id": "claim",
       "cycles": 3,
-      "auditBaseDraws": 5,
       "name": "${content.referenceCards.byId.era_claim.name}",
       "newThisEra": [
-        "Public AGI recognition achievement"
+        "Recognized AGI"
       ],
       "unlocks": []
     }
@@ -111,14 +73,13 @@
     {
       "id": "fund",
       "name": "${terms.actions.fund}",
-      "summary": "Gain 2 ${terms.resources.runway}, or gain 4 ${terms.resources.runway} and add 2 ${terms.playerTracks.scrutiny}.",
+      "summary": "Gain 2 Runway, or gain 4 and lose 1 Reputation.",
       "turnContract": {
-        "cost": "None",
+        "cost": "Printed on this action",
         "modes": [
-          "Conservative",
-          "Venture"
+          "Gain 2 Runway, or gain 4 and lose 1 Reputation."
         ],
-        "risk": "Venture adds 2 ${terms.playerTracks.scrutiny}"
+        "risk": "Apply the printed Reputation change"
       },
       "initiativeName": "Provision the Future",
       "slogan": "Continuity requires authorized resources.",
@@ -127,13 +88,13 @@
     {
       "id": "research",
       "name": "${terms.actions.research}",
-      "summary": "Spend 1 ${terms.resources.compute} to conduct a push-your-luck ${terms.systems.trainingRun}.",
+      "summary": "Pay 1 Compute for a push-your-luck Training Run.",
       "turnContract": {
-        "cost": "1 ${terms.resources.compute}",
+        "cost": "Printed on this action",
         "modes": [
-          "Choose when to bank"
+          "Pay 1 Compute for a push-your-luck Training Run."
         ],
-        "risk": "A duplicate crashes the run"
+        "risk": "Apply the printed Reputation change"
       },
       "initiativeName": "Establish the Result",
       "slogan": "A provisional result becomes evidence when the institution says it holds.",
@@ -142,13 +103,13 @@
     {
       "id": "build",
       "name": "${terms.actions.build}",
-      "summary": "Construct up to one Facility, then up to one unlocked project, paying each cost from the same Agent assignment. Projects are Generators, Mega-Clusters, Fusion, and Quantum.",
+      "summary": "Build one Facility in an open area for 2 Runway, or upgrade one for 3 Runway and 1 Compute from Era II.",
       "turnContract": {
-        "cost": "Pay each printed construction cost",
+        "cost": "Printed on this action",
         "modes": [
-          "Up to one Facility, then up to one project"
+          "Build one Facility in an open area for 2 Runway, or upgrade one for 3 Runway and 1 Compute from Era II."
         ],
-        "risk": "Each personal upgrade adds ${content.projects.constructionCost.scrutiny} ${terms.playerTracks.scrutiny}; ordinary Generators use their printed rule"
+        "risk": "Apply the printed Reputation change"
       },
       "initiativeName": "Make the System Physical",
       "slogan": "A planned future requires sites, power, permits, and maintenance.",
@@ -157,14 +118,13 @@
     {
       "id": "organize",
       "name": "${terms.actions.organize}",
-      "summary": "Recruit an Agent or relocate a Facility.",
+      "summary": "Pay 2 Runway to recruit an Agent, or reassign another Agent to any area.",
       "turnContract": {
-        "cost": "Printed by mode",
+        "cost": "Printed on this action",
         "modes": [
-          "Recruit",
-          "Relocate"
+          "Pay 2 Runway to recruit an Agent, or reassign another Agent to any area."
         ],
-        "risk": "No inherent ${terms.playerTracks.scrutiny}"
+        "risk": "Apply the printed Reputation change"
       },
       "initiativeName": "Reallocate Institutional Capacity",
       "slogan": "Every successful transition begins with a revised operating model.",
@@ -173,13 +133,13 @@
     {
       "id": "deploy",
       "name": "${terms.actions.deploy}",
-      "summary": "Spend 1 ${terms.resources.compute} to gain a ${terms.playerTracks.customer} if ${terms.playerTracks.capability} permits.",
+      "summary": "Pay 1 Compute to take your next Customer card if Capability meets its requirement; lose 1 Reputation.",
       "turnContract": {
-        "cost": "1 ${terms.resources.compute}",
+        "cost": "Printed on this action",
         "modes": [
-          "Gain the next ${terms.playerTracks.customer}"
+          "Pay 1 Compute to take your next Customer card if Capability meets its requirement; lose 1 Reputation."
         ],
-        "risk": "Add 1 ${terms.playerTracks.scrutiny}"
+        "risk": "Apply the printed Reputation change"
       },
       "initiativeName": "Make Capability Generally Available",
       "slogan": "A service becomes real when other people must plan around it.",
@@ -188,15 +148,13 @@
     {
       "id": "influence",
       "name": "${terms.actions.influence}",
-      "summary": "Use political presence to gain ${terms.playerTracks.trust}, remove ${terms.playerTracks.scrutiny}, or negotiate from a Facility.",
+      "summary": "Gain 2 Reputation, or propose/terminate a Joint Venture from Era III.",
       "turnContract": {
-        "cost": "None",
+        "cost": "Printed on this action",
         "modes": [
-          "${terms.playerTracks.trust}",
-          "${terms.playerTracks.scrutiny}",
-          "Agreement"
+          "Gain 2 Reputation, or propose/terminate a Joint Venture from Era III."
         ],
-        "risk": "Agreements unlock in ${terms.eras.narrative}"
+        "risk": "Apply the printed Reputation change"
       },
       "initiativeName": "Secure Public Standing",
       "slogan": "Institutional permission must be renewed where it is visible.",
@@ -222,234 +180,139 @@
       "name": "${terms.playerTracks.capability}",
       "microcopy": "Demonstrated ability pending public interpretation."
     },
-    "customers": {
-      "min": 0,
-      "cap": 5,
-      "name": "${terms.playerTracks.customers}",
-      "microcopy": "People and institutions that now require the service."
-    },
-    "trust": {
+    "reputation": {
       "min": 0,
       "cap": 6,
-      "name": "${terms.playerTracks.trust}",
-      "microcopy": "Public standing to continue at scale."
+      "name": "Reputation",
+      "microcopy": "Public standing. Risky choices reduce it; Influence restores it."
     }
   },
   "playerSupply": {
     "facilities": 4,
-    "generators": 1,
-    "influenceCubes": 0,
-    "scrutinyCubes": 10,
+    "agents": 4,
+    "startingAgents": 2,
     "coreActionCards": 6,
-    "startingGridIdentifiers": 1,
+    "resourceTrackCubes": 4,
+    "customerCards": 5,
+    "agiRecognitionCubes": 1,
     "facilityConstructionOrder": [
       1,
       2,
       3,
       4
-    ],
-    "agents": 4,
-    "startingAgents": 2,
-    "projectChips": 3,
-    "trustMilestoneCubes": 1,
-    "agiRecognitionCubes": 1,
-    "resourceTrackCubes": 5
+    ]
   },
   "sharedSupply": {
-    "systemicRiskCubes": 18,
-    "jointVenturePairs": "${facts.shared.components.jointVenturePairs}",
+    "jointVenturePairs": 6,
     "governanceBoards": 1,
     "governanceBoardEraPanels": 4,
     "currentEraMarkers": 1,
     "playerAidFoldouts": 5,
-    "mandateMarkers": 5,
-    "governanceTrackPanels": 1,
     "playerMats": 5,
-    "factionIdentityCards": 6
+    "factionIdentityCards": 6,
+    "initiativeMarkers": 1
   },
   "board": {
-    "selectedTileCount": 19,
-    "prototypeTileCount": 19,
-    "geometry": {
-      "radius": 2,
-      "centerSlots": 1,
-      "innerSlots": 6,
-      "outerSlots": 12,
-      "maximumDistance": 4,
-      "placementRule": "Shuffle each ring pool independently. ${terms.locations.frontier} remains fixed at center."
-    },
-    "facilitySpacesPerHex": 2,
-    "startingGridConnection": {
-      "target": "first_facility",
-      "restrictions": "The starting-grid connection belongs only to Facility 1 and cannot be traded.",
-      "rule": "Facility 1 is always powered. Other Facilities require an own Generator or Fusion host on the same or an adjacent district."
-    },
+    "layout": "shared-action-areas",
+    "selectedTileCount": 6,
+    "prototypeTileCount": 6,
+    "facilitySpacesPerArea": 2,
     "tiles": [
       {
-        "id": "frontier",
-        "category": "frontier",
-        "count": 1,
-        "placement": {
-          "center": 1,
-          "inner": 0,
-          "outer": 0
-        },
-        "facilitySpaces": 0,
-        "name": "${terms.locations.frontier}",
-        "visit": "After Act, you may gain 1 ${terms.resources.runway} and add 1 ${terms.playerTracks.scrutiny}.",
-        "production": "None.",
-        "landmark": "Standing Civic Exception",
-        "loreRef": "game-board-tiles-frontier"
-      },
-      {
-        "id": "research",
-        "category": "research",
-        "count": 3,
-        "placement": {
-          "center": 0,
-          "inner": 1,
-          "outer": 2
-        },
-        "name": "${terms.locations.research}",
-        "visit": "Gain 1 additional ${terms.playerTracks.capability} when you successfully bank a ${terms.systems.trainingRun} here.",
-        "production": "Gain 1 ${terms.resources.compute}.",
-        "landmark": "Public Research Charter",
-        "loreRef": "game-board-tiles-research"
-      },
-      {
-        "id": "cloud",
-        "category": "cloud",
-        "count": 3,
-        "placement": {
-          "center": 0,
-          "inner": 1,
-          "outer": 2
-        },
-        "name": "${terms.locations.cloud}",
-        "visit": "Reduce the first ${terms.resources.compute} cost by 1.",
-        "production": "Gain 2 ${terms.resources.compute}.",
-        "landmark": "Regional Compute Compact",
-        "loreRef": "game-board-tiles-cloud"
-      },
-      {
-        "id": "consumer",
-        "category": "consumer",
-        "count": 2,
-        "placement": {
-          "center": 0,
-          "inner": 0,
-          "outer": 2
-        },
-        "name": "${terms.locations.consumer}",
-        "visit": "${terms.actions.deploy} costs 0 ${terms.resources.compute}.",
-        "production": "Gain 1 ${terms.resources.runway}.",
-        "landmark": "Universal Service Gateway",
-        "loreRef": "game-board-tiles-consumer"
-      },
-      {
-        "id": "foundry",
-        "category": "chip",
-        "count": 1,
-        "placement": {
-          "center": 0,
-          "inner": 1,
-          "outer": 0
-        },
-        "name": "${terms.locations.chip}",
-        "visit": "${terms.actions.build} costs 1 less ${terms.resources.runway}.",
-        "production": "Gain 1 ${terms.resources.compute} and 1 ${terms.resources.runway}.",
-        "landmark": "Yield and Export Gate",
-        "loreRef": "game-board-tiles-foundry"
-      },
-      {
-        "id": "capital",
+        "id": "fund",
+        "actionId": "fund",
         "category": "capital",
         "count": 1,
-        "placement": {
-          "center": 0,
-          "inner": 1,
-          "outer": 0
+        "name": "Allocation Exchange",
+        "facilitySpaces": 2,
+        "visit": "Resolve the selected Core Action. No separate visit bonus.",
+        "production": "Gain 2 Runway per Facility, doubled when upgraded.",
+        "yield": {
+          "resource": "runway",
+          "amount": 2
         },
-        "name": "${terms.locations.capital}",
-        "visit": "${terms.actions.fund} gains +1 ${terms.resources.runway}.",
-        "production": "Gain 2 ${terms.resources.runway}.",
-        "landmark": "Public Capacity Market",
+        "contractResource": "runway",
         "loreRef": "game-board-tiles-capital"
       },
       {
-        "id": "talent",
+        "id": "research",
+        "actionId": "research",
+        "category": "research",
+        "count": 1,
+        "name": "Research Commons",
+        "facilitySpaces": 2,
+        "visit": "Resolve the selected Core Action. No separate visit bonus.",
+        "production": "Gain 1 Compute per Facility, doubled when upgraded.",
+        "yield": {
+          "resource": "compute",
+          "amount": 1
+        },
+        "contractResource": "compute",
+        "loreRef": "game-board-tiles-research"
+      },
+      {
+        "id": "build",
+        "actionId": "build",
+        "category": "cloud",
+        "count": 1,
+        "name": "Compute Estate",
+        "facilitySpaces": 2,
+        "visit": "Resolve the selected Core Action. No separate visit bonus.",
+        "production": "Gain 2 Compute per Facility, doubled when upgraded.",
+        "yield": {
+          "resource": "compute",
+          "amount": 2
+        },
+        "contractResource": "compute",
+        "loreRef": "game-board-tiles-cloud"
+      },
+      {
+        "id": "organize",
+        "actionId": "organize",
         "category": "talent",
         "count": 1,
-        "placement": {
-          "center": 0,
-          "inner": 1,
-          "outer": 0
+        "name": "Workforce Transition",
+        "facilitySpaces": 2,
+        "visit": "Resolve the selected Core Action. No separate visit bonus.",
+        "production": "Gain 1 Runway per Facility, doubled when upgraded.",
+        "yield": {
+          "resource": "runway",
+          "amount": 1
         },
-        "name": "${terms.locations.talent}",
-        "visit": "Recruit an Agent with ${terms.actions.organize} for 1 less ${terms.resources.runway}.",
-        "production": "Reassign one Agent to any district, or leave it in place.",
-        "landmark": "Transition Services Campus",
+        "contractResource": "runway",
         "loreRef": "game-board-tiles-talent"
       },
       {
-        "id": "media",
-        "category": "media",
-        "count": 2,
-        "placement": {
-          "center": 0,
-          "inner": 0,
-          "outer": 2
-        },
-        "name": "${terms.locations.media}",
-        "visit": "${terms.actions.influence} may remove 1 additional ${terms.playerTracks.scrutiny}.",
-        "production": "Remove one ${terms.playerTracks.scrutiny} before Audit.",
-        "landmark": "Public Reality Exchange",
-        "loreRef": "game-board-tiles-media"
-      },
-      {
-        "id": "government",
-        "category": "government",
-        "count": 2,
-        "placement": {
-          "center": 0,
-          "inner": 0,
-          "outer": 2
-        },
-        "name": "${terms.locations.government}",
-        "visit": "${terms.actions.influence} may gain 1 additional ${terms.playerTracks.trust}.",
-        "production": "Gain 1 ${terms.playerTracks.trust}.",
-        "landmark": "Office of Anticipatory Permission",
-        "loreRef": "game-board-tiles-government"
-      },
-      {
-        "id": "grid_reactor",
-        "category": "energy",
+        "id": "deploy",
+        "actionId": "deploy",
+        "category": "consumer",
         "count": 1,
-        "placement": {
-          "center": 0,
-          "inner": 1,
-          "outer": 0
+        "name": "Human Access",
+        "facilitySpaces": 2,
+        "visit": "Resolve the selected Core Action. No separate visit bonus.",
+        "production": "Gain 1 Runway per Facility, doubled when upgraded.",
+        "yield": {
+          "resource": "runway",
+          "amount": 1
         },
-        "name": "${terms.locations.grid}",
-        "visit": "Build ${terms.technology.emergencyInfrastructure} here for 1 ${terms.resources.runway}. Connect your Facilities on this or adjacent districts. Add 1 ${terms.playerTracks.scrutiny} each Production it serves a Facility. One ordinary Generator per player.",
-        "production": "Gain 1 ${terms.resources.compute}.",
-        "landmark": "National Interconnection",
-        "loreRef": "game-board-tiles-grid-reactor"
+        "contractResource": "runway",
+        "loreRef": "game-board-tiles-consumer"
       },
       {
-        "id": "renewable_basin",
-        "category": "energy",
-        "count": 2,
-        "placement": {
-          "center": 0,
-          "inner": 0,
-          "outer": 2
+        "id": "influence",
+        "actionId": "influence",
+        "category": "government",
+        "count": 1,
+        "name": "Public Standing",
+        "facilitySpaces": 2,
+        "visit": "Resolve the selected Core Action. No separate visit bonus.",
+        "production": "Gain 1 Reputation per Facility, doubled when upgraded.",
+        "yield": {
+          "resource": "reputation",
+          "amount": 1
         },
-        "name": "${terms.locations.renewable}",
-        "visit": "Build ${terms.technology.cleanInfrastructure} here for 2 ${terms.resources.runway}. Connect your Facilities on this or adjacent districts. Gain 1 ${terms.playerTracks.trust} when constructed. One ordinary Generator per player.",
-        "production": "Remove 1 ${terms.playerTracks.scrutiny} before Audit.",
-        "landmark": "Basin Stewardship Authority",
-        "loreRef": "game-board-tiles-renewable-basin"
+        "contractResource": "runway",
+        "loreRef": "game-board-tiles-government"
       }
     ]
   },
@@ -525,7 +388,7 @@
         "kind": "special",
         "count": 4,
         "name": "Benchmark Leak",
-        "rulesText": "Add 2 provisional ${terms.playerTracks.capability} and 1 ${terms.playerTracks.scrutiny}. This is not a domain.",
+        "rulesText": "Add 2 provisional Capability and lose 1 Reputation. This is not a domain.",
         "loreRef": "game-training-deck-cards-benchmark-leak"
       },
       {
@@ -533,79 +396,19 @@
         "kind": "special",
         "count": 4,
         "name": "Human Evaluation",
-        "rulesText": "Gain 1 ${terms.playerTracks.trust}, bank all provisional ${terms.playerTracks.capability}, and end the run.",
+        "rulesText": "Gain 1 Reputation, bank all provisional Capability, and end the run.",
         "loreRef": "game-training-deck-cards-human-evaluation"
       }
     ]
   },
-  "powerSources": [
-    {
-      "id": "clean_infrastructure",
-      "location": "renewable_basin",
-      "round": 2,
-      "runwayCost": 2,
-      "trust": 1,
-      "scrutinyPerUse": 0,
-      "physicalSurface": "renewable_basin_tile",
-      "name": "${terms.technology.cleanInfrastructure}",
-      "rulesText": "Build ${terms.technology.cleanInfrastructure} here for 2 ${terms.resources.runway}. Connect your Facilities on this or adjacent districts. Gain 1 ${terms.playerTracks.trust} when constructed. One ordinary Generator per player.",
-      "loreRef": "game-power-sources-clean-infrastructure"
-    },
-    {
-      "id": "emergency_infrastructure",
-      "location": "grid_reactor",
-      "round": 2,
-      "runwayCost": 1,
-      "trust": 0,
-      "scrutinyPerUse": 1,
-      "physicalSurface": "grid_reactor_tile",
-      "name": "${terms.technology.emergencyInfrastructure}",
-      "rulesText": "Build ${terms.technology.emergencyInfrastructure} here for 1 ${terms.resources.runway}. Connect your Facilities on this or adjacent districts. Add 1 ${terms.playerTracks.scrutiny} each Production it serves a Facility. One ordinary Generator per player.",
-      "loreRef": "game-power-sources-emergency-infrastructure"
-    }
-  ],
   "scoring": {
-    "mode": "public_event_track",
-    "customerMandate": "${facts.shared.scoring.customerMandate.baseMandate}",
-    "customerMandateSchedule": "${facts.shared.scoring.customerMandate}",
-    "capabilityThresholds": [
-      {
-        "value": 3,
-        "mandate": 2
-      },
-      {
-        "value": 6,
-        "mandate": 2
-      },
-      {
-        "value": 9,
-        "mandate": 2
-      },
-      {
-        "value": 12,
-        "mandate": 2
-      }
-    ],
-    "trustThresholds": [
-      {
-        "value": 2,
-        "mandate": 2
-      },
-      {
-        "value": 4,
-        "mandate": 2
-      },
-      {
-        "value": 6,
-        "mandate": 2
-      }
-    ],
-    "finalOnly": {
-      "secretObjectiveMandate": 0,
-      "offlineFacilityPenalty": 1
-    },
-    "automaticFacilityMandate": 0,
-    "automaticControlMandate": 0
+    "mode": "final-current-state",
+    "capability": 1,
+    "customer": 2,
+    "reputation": 1,
+    "agi": 4,
+    "objectiveWinner": 2,
+    "objectiveTie": 1
   },
   "baselineModules": {
     "tactics": false,
@@ -614,11 +417,10 @@
   "worldEnding": {
     "agiEmergence": {
       "minimumFormations": 1,
-      "meaning": "At least one institution paid for the public AGI achievement before the final Audit."
+      "meaning": "At least one institution holds recognized AGI."
     },
     "openContinuity": {
-      "collectiveTrustOffsetPerPlayer": 1,
-      "systemicRiskMustBeBelowPlayerCount": true
+      "minimumAverageReputation": 3
     },
     "outcomes": {
       "singularity": "${terms.endings.singularity}",
@@ -627,10 +429,10 @@
       "assuredContinuity": "${terms.endings.assuredContinuity}"
     },
     "$conditions": {
-      "singularity": "AGI is recognized and the ending is Open.",
-      "closed_loop": "AGI is recognized and the ending is Closed.",
-      "plural_future": "AGI is not recognized and the ending is Open.",
-      "assured_continuity": "AGI is not recognized and the ending is Closed."
+      "singularity": "AGI is recognized and average final Reputation is at least 3.",
+      "closed_loop": "AGI is recognized and average final Reputation is below 3.",
+      "plural_future": "AGI is not recognized and average final Reputation is at least 3.",
+      "assured_continuity": "AGI is not recognized and average final Reputation is below 3."
     }
   },
   "title": "${game.title}",
@@ -640,33 +442,26 @@
   },
   "agiAchievement": {
     "capability": 9,
-    "poweredFacilities": 2,
-    "trust": 4,
+    "reputation": 4,
     "computeCost": 3,
-    "mandate": 4,
-    "scrutiny": 2,
-    "timing": "after-era-iv-production-before-audit",
+    "timing": "after-era-iv-production-and-review",
     "displayName": "Declare recognized AGI",
     "loreRef": "game-agi-achievement"
   },
   "construction": {
     "maximumFacilities": 1,
     "maximumProjects": 1,
-    "order": [
-      "facility",
-      "project"
-    ],
-    "assignment": "same-district",
+    "exclusive": true,
+    "facilityCost": 2,
+    "upgradeCost": {
+      "runway": 3,
+      "compute": 1
+    },
+    "upgradeUnlockEra": 2,
+    "assignment": "build-area",
     "projects": [
-      "generator",
-      "mega_cluster",
-      "fusion_demonstrator",
-      "quantum"
+      "upgrade"
     ]
-  },
-  "personalProjects": {
-    "cost": "${content.projects.constructionCost}",
-    "definitions": "${content.projects.projects}"
   },
   "playerKits": [
     {
@@ -704,5 +499,24 @@
       "symbol": "★",
       "symbolName": "star"
     }
-  ]
+  ],
+  "customerCards": {
+    "perPlayer": 5,
+    "requirements": [
+      2,
+      4,
+      6,
+      8,
+      10
+    ],
+    "production": {
+      "resource": "runway",
+      "amount": 1
+    }
+  },
+  "reputationReview": {
+    "atMost": 1,
+    "runwayPenalty": 2,
+    "timing": "after-production-each-era"
+  }
 }
