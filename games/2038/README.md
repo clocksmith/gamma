@@ -10,19 +10,13 @@ Equipment colour and symbol identify the player; faction cards supply starts and
 A 2–5 player strategy game about building, deploying, regulating, and
 plausibly declaring AGI.
 
-The game is designed and balanced first at four players. Three- and
+Four players is the primary balance test configuration. Three- and
 five-player games are fully supported configurations with their own evidence
 gates; they are not shortened or extended afterthoughts.
 
-The standard game lasts four rounds with three simultaneous action selections
-per player per round. Players build institutions across a complete nineteen-tile
-radius-two hex
-economy, push risky Training Runs, negotiate shared infrastructure, and manage
-public scrutiny without direct combat or elimination. Each Faction has one permanent ability. Headlines finish before selection,
-and Build constructs up to one Facility and one project. Each player
-has one location-defined Generator, and political control
-uses visible Agent and Facility presence rather than Influence cubes.
-The jurisdiction stays fixed throughout the game, and Power eligibility is local.
+The game lasts four Eras with three simultaneous Core Action selections per player per Era. Six shared areas each have two Facility slots. Four numerical tracks are Runway, Compute, Capability, and Reputation. Customers are cards. Facilities always produce, and one upgrade flips them to double their yield. Players research with push-your-luck, build an engine, deploy, trade, negotiate Joint Ventures, and respond to twenty-four immediate Headlines.
+
+Score final holdings and all four revealed objectives once at game end. No hex adjacency, Facility relocation, Power system, Generators, risk bag, overlapping risk tracks, immediate points, or Trust milestones remain. The six institutions retain one permanent ability each and equipment identity remains independent. Numerical balance and human usability need fresh evidence.
 
 ## Status
 

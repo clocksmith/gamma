@@ -5,7 +5,6 @@ import { resolvePlayerKits } from "../lab/rules/player-kits.js";
 import { displayPlayerKit } from "../lab/contracts/report-migrations.js";
 import { createInteractiveGame } from "../lab/runtime/create-interactive-game.js";
 import { createPlayerPolicy } from "../lab/policies/policy-factory.js";
-import { createGame } from "../web/src/engine.js";
 const json = async name => JSON.parse(await readFile(new URL(`../dist/runtime/${name}.json`, import.meta.url), "utf8"));
 const config = await json("game-config");
 const factions = await json("factions");
@@ -22,12 +21,10 @@ test("six faction identities accept every equipment kit without changing starts,
     const { match } = await createInteractiveGame({ factionId: faction.id, kitAssignments: assignments, seed: "kits" });
     assert.equal(match.players[0].kitId, kitId);
     assert.equal(match.players[0].factionId, faction.id);
-    for (const key of ["runway", "compute", "capability", "customers", "trust", "scrutiny"]) assert.equal(match.players[0][key], faction.starts[key]);
+    for (const key of ["runway", "compute", "capability", "customers", "reputation"]) assert.equal(match.players[0][key], faction.starts[key]);
     assert.deepEqual(match.factions[0].abilities, faction.abilities);
     assert.equal(new Set(match.players.flatMap(p => p.pieces.map(piece => piece.id))).size, 8);
-    const standalone = createGame(config, factions, headlines, "kits", faction.id, 4, {kitAssignments: assignments});
-    assert.equal(standalone.player.kitId, kitId);
-    assert.equal(standalone.player.pieces[0].id, "s0-agent-1");
+
   }
 });
 test("invalid, duplicate and incorrectly sized assignments fail before a game starts", () => {

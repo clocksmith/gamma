@@ -129,8 +129,8 @@ test("fresh kit freezes one complete rulebook and component faces and the reader
     const kit = await loadKit(resolve(kitRoot, "physical-kit-manifest.json"));
     assert.deepEqual(kit.manifest.playerDocuments, ["core-rules.md"]);
     assert.deepEqual(kit.documents.map(document => document.id), ["core-rules", "component-masters"]);
-    assert.match(kit.documents[0].contents, /Build the jurisdiction/);
-    assert.match(kit.inventory.contents, /Shared Governance Board/);
+    assert.match(kit.documents[0].contents, /Six shared areas/);
+    assert.match(kit.inventory.contents, /Governance Board/);
     assert.doesNotMatch(kit.inventory.contents, /## 4. Core Actions/);
     assert.match(kit.documents[1].contents, /<article/);
     assert.doesNotMatch(kit.documents[1].contents, /<style/);

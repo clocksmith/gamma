@@ -170,30 +170,17 @@ Record every answer or correction in \`receipt.json\` as well.
 
 - 
 
-## Agent presence and destination benefits
+## Ownership and current-table checks
 
-For ordinary assignments, use the board at resolution. Record only legal alternatives and compare the selected action's immediate benefits. Ask the player's reason after resolution; do not infer deliberate sacrifice from position alone. Record Talent Production assignments separately.
+Record observed confusion between institution identity and kit ownership, Customer ordinals, Facility faces, shared slot limits, and Venture hosts.
 
-| Era / cycle | Player / Agent | Action or Talent production | Origin → chosen district | Better legal destination and benefit | Benefit forgone | Presence/control preserved or surrendered | Player's stated reason |
-| --- | --- | --- | --- | --- | --- | --- | --- |
-| | | | | | | | |
-
-- Eligible ordinary assignments with a superior immediate alternative:
-- Deliberate presence sacrifices among those assignments:
-- No superior alternative / incomparable benefits / mistakes / no-effect commitments:
-- Later consequence of the preserved presence:
-
-## Reminders and production
-
-| Era / cycle | Rule question or reminder, in the player's words | Surface consulted | Resolved without intervention? | Intervention or unresolved gap |
+| Era / cycle | Player | Component or rule | Actual observation | Intervention |
 | --- | --- | --- | --- | --- |
 | | | | | |
 
-| Institution | Project | Era built | First Era actually operating | Actual production received | Why build, delay, or decline? |
-| --- | --- | --- | --- | --- | --- |
-| | | | | | |
+## Production, Review and final scoring
 
-Fusion connects Facilities without a construction award. Record newly connected Facilities and their output separately from Mega-Cluster Compute and Quantum Capability. Record cap clipping, the alternative action declined, stacked-chip visibility, relocation, missed Production, and every attempted handwritten record. For each Era Mandate, check current qualification and value after Audit without referring to previous turns; record ownership confusion and ties, including zero Scrutiny.
+Record actual income, cap clipping, upgrade use, consent/refusal, low-Reputation penalties, and whether players can score all four revealed objectives from final holdings without consulting earlier turns. Do not prefill observations. No writing, risk bag, or milestone record is required by gameplay.
 
 ## Postgame explanation
 

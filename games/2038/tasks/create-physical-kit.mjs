@@ -71,8 +71,8 @@ function labeledGallery(html, identity) {
 }
 
 function protocol(identity, source) {
-  const section = source.slice(source.indexOf("## Construction comparison and next blind teach"));
-  if (!section.startsWith("## Construction comparison")) throw new Error("Missing canonical blind-teach protocol.");
+  const section = source.slice(source.indexOf("## Smaller prototype physical preparation"));
+  if (!section.startsWith("## Smaller prototype physical preparation")) throw new Error("Missing canonical blind-teach protocol.");
   return `# Physical-test preparation — human session pending
 
 Rules ${identity.rulesVersion} · Executable ${identity.executableVersion}
@@ -225,13 +225,13 @@ const manifest = {
     "Eras",
     "Headlines",
     "Era Mandates",
-    "Build projects",
-    "Local Power contracts",
+    "Facility upgrade",
+    "Customer cards",
     "Reference Cards",
     "Faction identity cards",
     "Player mats",
     "Training deck contract",
-    "Map and token contracts"
+    "Shared areas and kit symbols"
   ],
   excludedModules: [
     "Tactics",

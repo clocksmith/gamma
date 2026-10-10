@@ -58,7 +58,7 @@ test("map, component and inventory readers reuse the rulebook's owned passages",
   const graph = JSON.parse(rawGraph);
   assert.equal(graph.artifacts.find(a => a.target === "dist/docs/core-rules.md").excludeSections, undefined);
   const core = await read("dist/docs/core-rules.md");
-  assert.match(core, /Build the jurisdiction/);
+  assert.match(core, /Six shared areas/);
   assert.ok(core.includes(stripSectionMarkers(resolveString(documentSection(source, "inventory"), context)).trim()), "Core Rules include the owned inventory");
   assert.doesNotMatch(core, /<!--|\/docs\/(map-reference|component-reference|card-reference)\.html/);
   assert.deepEqual(graph.deploymentProfiles["public-playtest"].documents, ["core-rules.html", "world-and-institutions.html"]);
@@ -66,7 +66,7 @@ test("map, component and inventory readers reuse the rulebook's owned passages",
   const {headlines} = JSON.parse(await read("dist/runtime/headlines.json"));
   for (const card of headlines) {
     const section = cardReference.split(`### ${card.name}\n`)[1]?.split("\n### ")[0];
-    assert.ok(section?.includes(`**Duration:** ${variables.terms.durations[card.duration]}`), `${card.id} owns its duration`);
+    assert.ok(section?.includes(card.text), `${card.id} owns its immediate effect`);
   }
 });
 

@@ -106,11 +106,11 @@ test("public deployment profile must close over browser imports and runtime data
   const missingModule = clone(await loadEraSituationLedger());
   missingModule.deploymentProfiles["public-playtest"].labModules =
     missingModule.deploymentProfiles["public-playtest"].labModules.filter(
-      (target) => target !== "environment/core-economy-match.js"
+      (target) => target !== "environment/selected-rules-match.js"
     );
   await assert.rejects(
     validateEraSituationLedger(missingModule),
-    /omits imported lab module environment\/core-economy-match\.js/
+    /omits imported lab module environment\/selected-rules-match\.js/
   );
 });
 

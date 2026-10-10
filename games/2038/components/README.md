@@ -24,3 +24,5 @@ Review player mats separately from faction identity cards: verify five equipment
 kits, six selectable institutions, and colour plus symbol on every owned piece.
 
 Review each Era objective: can a player determine eligibility and value from the visible table after Audit, with no question about earlier turns? Preserve the separate highest-awarded Trust milestone and AGI recognition.
+
+For the smaller prototype, review faction cards separately from four-track player mats. Confirm every owned item shows kit colour and symbol, every Facility flip uses the one upgrade rule, and every revealed objective is scorable from the final public table. Old Power and risk fiction supplies no current mechanical requirement.

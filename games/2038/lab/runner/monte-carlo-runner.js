@@ -228,7 +228,7 @@ function leaderPredictability(outcomes) {
       const snapshot = outcome.matchMetrics?.productionSnapshots?.find(
         (entry) => entry.round === round
       );
-      if (!snapshot?.scores?.length) continue;
+      if (!snapshot?.players?.length) continue;
       const high = Math.max(...snapshot.players.map((entry) => entry.projectedScore));
       const leaders = snapshot.players.filter((entry) => entry.projectedScore === high);
       numerator += leaders.filter((entry) => outcome.winnerSeats.includes(entry.seat)).length /
@@ -754,7 +754,7 @@ class BatchAccumulator {
       }
     }
     for (const snapshot of outcome.matchMetrics?.productionSnapshots || []) {
-      if (!snapshot?.scores?.length) continue;
+      if (!snapshot?.players?.length) continue;
       const high = Math.max(...snapshot.players.map((entry) => entry.projectedScore));
       const leaders = snapshot.players.filter((entry) => entry.projectedScore === high);
       const row = this.roundLeaders.get(snapshot.round) || { numerator: 0, denominator: 0 };
