@@ -43,7 +43,7 @@ for (const playerCount of preregistration.playerCounts) {
   );
   const scores = [];
   const negotiation = { offers: 0, accepted: 0, refused: 0, activeVentures: 0 };
-  for (const result of outcomes) {
+  for (const { outcome: result } of outcomes) {
     for (const key of ["offers", "accepted", "refused"])
       negotiation[key] += result.matchMetrics.trades[key];
     negotiation.activeVentures += result.matchMetrics.activeVentures;
@@ -85,13 +85,18 @@ for (const playerCount of preregistration.playerCounts) {
     configuration: report.configuration,
     source: report.provenance,
     game: report.game,
-    engine: report.engine,
+    engine: {
+      id: report.engine.id,
+      version: report.engine.version,
+      coverageId: report.engine.coverageId,
+      fingerprint: report.engine.fingerprint,
+    },
     archive: archive.relativePath,
     sha256: createHash("sha256").update(bytes).digest("hex"),
     scoreRange: [Math.min(...scores), Math.max(...scores)],
     negotiation,
     diagnostics: report.diagnostics,
-    outcomes: report.outcomes,
+    agiFunnel: report.matchMetrics.agiFunnel,
     objectives,
   });
   process.stdout.write(
@@ -102,6 +107,11 @@ const receipt = {
   schemaVersion: 1,
   generatedAt: new Date().toISOString(),
   preregistration: registrationPath,
+  command:
+    "node evidence/studies/simulation/2026-10-09-smaller-prototype-study.mjs",
+  runnerSha256: createHash("sha256")
+    .update(await readFile(new URL(import.meta.url)))
+    .digest("hex"),
   evidenceLabel: "simulation",
   status: "completed",
   balancePromotion: false,
