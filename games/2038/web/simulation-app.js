@@ -933,7 +933,7 @@ function renderSeatResults() {
         <dt>${copy.labels.meanMandate}</dt><dd>${entry.meanScore.toFixed(2)}</dd>
         <dt>${copy.labels.capability}</dt><dd>${entry.meanCapability.toFixed(2)}</dd>
         <dt>${copy.labels.customers}</dt><dd>${entry.meanCustomers.toFixed(2)}</dd>
-        <dt>${copy.labels.facilities}</dt><dd>${entry.meanFacilities.toFixed(2)}</dd>
+        <dt>${entry.meanEquippedOrgs !== undefined ? copy.labels.equippedOrgs : copy.labels.facilities}</dt><dd>${(entry.meanEquippedOrgs ?? entry.meanFacilities ?? 0).toFixed(2)}</dd>
         <dt>${copy.labels.auditHits}</dt><dd>${entry.meanAuditHits.toFixed(2)}</dd>
         <dt>${copy.labels.agiDeclared}</dt><dd>${formatPercent(entry.agiDeclarationRate)}</dd>
         <dt>${copy.labels.shovelsIncome}</dt><dd>${entry.meanShovelsIncome.toFixed(2)}</dd>
@@ -961,7 +961,7 @@ function renderSeatResults() {
         <dt>${copy.labels.meanMandate}</dt><dd>${seat.meanScore.toFixed(2)}</dd>
         <dt>${copy.labels.capability}</dt><dd>${seat.meanCapability.toFixed(2)}</dd>
         <dt>${copy.labels.customers}</dt><dd>${seat.meanCustomers.toFixed(2)}</dd>
-        <dt>${copy.labels.facilities}</dt><dd>${seat.meanFacilities.toFixed(2)}</dd>
+        <dt>${seat.meanEquippedOrgs !== undefined ? copy.labels.equippedOrgs : copy.labels.facilities}</dt><dd>${(seat.meanEquippedOrgs ?? seat.meanFacilities ?? 0).toFixed(2)}</dd>
         <dt>${copy.labels.auditHits}</dt><dd>${seat.meanAuditHits.toFixed(2)}</dd>
         <dt>${copy.labels.agiEligible}</dt><dd>${formatPercent(seat.agiEligibilityRate)}</dd>
         <dt>${copy.labels.fallbacks}</dt><dd>${seat.policyFallbacks}</dd>
@@ -1053,7 +1053,7 @@ function renderReplay() {
 
   for (const tile of event.state.board) {
     const hex = document.createElement("div");
-    const currentAreas = tile.actionId !== undefined;
+    const currentAreas = tile.actionId !== undefined && tile.q === undefined;
     const position = currentAreas ? {left:(tile.order % 3)*210,top:Math.floor(tile.order/3)*160,size:190} : replayPosition(tile);
     hex.className = tile.actionId ? "replay-area" : `hex ${tile.category}`;
     hex.style.left = `${position.left}px`;
@@ -1070,7 +1070,7 @@ function renderReplay() {
           }"></i>`
         );
       }
-      for (const facility of player.facilities.filter((item) => item.tileId === tile.instanceId)) {
+      for (const facility of (player.facilities || []).filter((item) => item.tileId === tile.instanceId)) {
         markers.push(
           `<i class="replay-marker facility" style="--seat-color:${color}" title="${
             interpolate(copy.replay.marker, { seat: player.seat + 1, kind: copy.labels.facility })
@@ -1104,7 +1104,7 @@ function renderReplay() {
         <dt>${copy.labels.capability}</dt><dd>${player.capability}</dd>
         <dt>${copy.labels.customers}</dt><dd>${player.customers}</dd>
         ${player.reputation !== undefined ? `<dt>${copy.labels.reputation}</dt><dd>${player.reputation}</dd>` : `<dt>${copy.labels.trust}</dt><dd>${player.trust}</dd><dt>${copy.labels.scrutiny}</dt><dd>${player.scrutiny}</dd>`}
-        <dt>${copy.labels.facilities}</dt><dd>${player.facilities.length}</dd>
+        <dt>${player.facilities ? copy.labels.facilities : copy.labels.equippedOrgs}</dt><dd>${player.facilities ? player.facilities.length : player.pieces.filter(p => p.equipped).length}</dd>
       </dl>
     </article>
   `).join("");

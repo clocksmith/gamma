@@ -40,7 +40,7 @@ test("Monte Carlo executes current game and records current report/replay identi
   assert.equal(r.schemaVersion, 8);
   assert.equal(r.reportSchemaVersion, 8);
   assert.equal(r.replaySchemaVersion, 4);
-  assert.equal(r.scope.id, "six-area-four-track-v1");
+  assert.equal(r.scope.id, "shared-hex-orgs-v1");
   assert.equal(r.runs, 3);
   assert.ok(r.samples.length);
   assert.ok(r.diagnostics);
@@ -101,7 +101,7 @@ test("frozen launch identity rejects changed numerical or strategic sources", as
     /identity|fingerprint/i,
   );
 });
-test("decision packets reveal public cards and fixed hosts, not hidden deck or others selections", () => {
+test("decision packets reveal public Org positions, not the hidden deck", () => {
   const m = fixture();
   m.players[1].selectedAction = "research";
   const p = m.packet(0, "select", m.legalActionSelections(0));
@@ -109,7 +109,7 @@ test("decision packets reveal public cards and fixed hosts, not hidden deck or o
   assert.equal(p.observation.opponents[0].selectedAction, undefined);
   assert.equal(p.observation.trainingDrawPile, undefined);
   assert.equal(p.observation.self.kitId, m.players[0].kitId);
-  assert.equal(p.observation.board.length, 6);
+  assert.equal(p.observation.board.length, 18);
 });
 test("weighted decisions are deterministic on equivalent legal packets", async () => {
   const m = fixture();

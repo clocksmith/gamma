@@ -96,7 +96,7 @@ function summarizeEntries(entries, wins) {
     scoreDistribution: histogram(entries.map((entry) => entry.score)),
     meanCapability: mean(entries.map((entry) => entry.capability)),
     meanCustomers: mean(entries.map((entry) => entry.customers)),
-    meanFacilities: mean(entries.map((entry) => entry.facilities)),
+    meanEquippedOrgs: mean(entries.map((entry) => entry.equippedOrgs)),
     meanAuditHits: auditHits / entries.length,
     agiEligibilityRate: eligibilityCount / entries.length,
     agiDeclarationRate: declarations / entries.length,
@@ -265,7 +265,7 @@ function integritySummary(outcomes) {
       requiredTradeAcceptances += entry.metrics.requiredTradeAcceptances || 0;
       requiredTradeFailures += entry.metrics.requiredTradeFailures || 0;
       blockedAfterCommitment += entry.metrics.blockedAfterCommitment || 0;
-      for (const key of ["score", "reputation", "customers", "compute", "capability", "facilities"]) {
+      for (const key of ["score", "reputation", "customers", "compute", "capability", "equippedOrgs"]) {
         if (!Number.isFinite(entry[key]) || entry[key] < 0) {
           details.push({ matchIndex, seat: entry.seat, id: `invalid_${key}`, value: entry[key] });
         }
@@ -500,7 +500,7 @@ function createSummaryAccumulator() {
     scores: [],
     capability: 0,
     customers: 0,
-    facilities: 0,
+    equippedOrgs: 0,
     auditHits: 0,
     eligibilityCount: 0,
     eligibilityRoundTotal: 0,
@@ -523,7 +523,7 @@ function addSummaryEntry(accumulator, entry, winCredit) {
   accumulator.scores.push(entry.score);
   accumulator.capability += entry.capability;
   accumulator.customers += entry.customers;
-  accumulator.facilities += entry.facilities;
+  accumulator.equippedOrgs += entry.equippedOrgs;
   accumulator.auditHits += entry.metrics.auditHits;
   accumulator.policyFallbacks += entry.metrics.policyFallbacks;
   accumulator.declarations += Number(entry.agiDeclared);
@@ -551,7 +551,7 @@ function summarizeAccumulator(accumulator) {
     scoreDistribution: histogram(accumulator.scores),
     meanCapability: appearances ? accumulator.capability / appearances : 0,
     meanCustomers: appearances ? accumulator.customers / appearances : 0,
-    meanFacilities: appearances ? accumulator.facilities / appearances : 0,
+    meanEquippedOrgs: appearances ? accumulator.equippedOrgs / appearances : 0,
     meanAuditHits: appearances ? accumulator.auditHits / appearances : 0,
     agiEligibilityRate: appearances ? accumulator.eligibilityCount / appearances : 0,
     agiDeclarationRate: appearances ? accumulator.declarations / appearances : 0,
@@ -582,7 +582,7 @@ function compactObservation(outcome, matchIndex) {
       backendId: entry.backendId,
       score: entry.score,
       capability: entry.capability,
-      facilities: entry.facilities,
+      equippedOrgs: entry.equippedOrgs,
       customers: entry.customers,
       reputation: entry.reputation,
       agiDeclared: entry.agiDeclared,
@@ -730,7 +730,7 @@ class BatchAccumulator {
       this.integrity.requiredTradeFailures += entry.metrics.requiredTradeFailures || 0;
       this.integrity.blockedAfterCommitment +=
         entry.metrics.blockedAfterCommitment || 0;
-      for (const key of ["score", "reputation", "customers", "compute", "capability", "facilities"]) {
+      for (const key of ["score", "reputation", "customers", "compute", "capability", "equippedOrgs"]) {
         if (!Number.isFinite(entry[key]) || entry[key] < 0) {
           this.integrity.details.push({ matchIndex, seat: entry.seat, id: `invalid_${key}`, value: entry[key] });
         }

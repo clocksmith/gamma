@@ -58,7 +58,7 @@ test("map, component and inventory readers reuse the rulebook's owned passages",
   const graph = JSON.parse(rawGraph);
   assert.equal(graph.artifacts.find(a => a.target === "dist/docs/core-rules.md").excludeSections, undefined);
   const core = await read("dist/docs/core-rules.md");
-  assert.match(core, /Six shared areas/);
+  assert.match(core, /Eighteen playable Action hexes/);
   assert.ok(core.includes(stripSectionMarkers(resolveString(documentSection(source, "inventory"), context)).trim()), "Core Rules include the owned inventory");
   assert.doesNotMatch(core, /<!--|\/docs\/(map-reference|component-reference|card-reference)\.html/);
   assert.deepEqual(graph.deploymentProfiles["public-playtest"].documents, ["core-rules.html", "world-and-institutions.html"]);

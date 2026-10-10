@@ -5,10 +5,10 @@
     {
       "id": "era_demo",
       "round": 1,
-      "physicalSurface": "governance_board",
+      "physicalSurface": "central_era_hex",
       "name": "${terms.eras.demo}",
-      "rulesText": "Ready all six Core Actions. Play three cycles, then Production and Reputation Review.",
-      "unlockText": "Research, Facilities, Customer cards, Reputation, and final-state objectives.",
+      "rulesText": "Play three cycles in Initiative order, then Production and Reputation Review.",
+      "unlockText": "Use this Era’s Headlines and objective. Equipment is available from setup.",
       "$scenario": {
         "ref": "cheap-token-rebound"
       },
@@ -37,10 +37,10 @@
     {
       "id": "era_scale",
       "round": 2,
-      "physicalSurface": "governance_board",
+      "physicalSurface": "central_era_hex",
       "name": "${terms.eras.scale}",
-      "rulesText": "Ready all six Core Actions. Play three cycles, then Production and Reputation Review.",
-      "unlockText": "Build may upgrade a Facility by flipping it; double its printed Production.",
+      "rulesText": "Play three cycles in Initiative order, then Production and Reputation Review.",
+      "unlockText": "Use this Era’s Headlines and objective. Equipment is available from setup.",
       "$scenario": {
         "ref": "liability-custodians"
       },
@@ -69,10 +69,10 @@
     {
       "id": "era_narrative",
       "round": 3,
-      "physicalSurface": "governance_board",
+      "physicalSurface": "central_era_hex",
       "name": "${terms.eras.narrative}",
-      "rulesText": "Ready all six Core Actions. Play three cycles, then Production and Reputation Review.",
-      "unlockText": "Influence may propose or terminate a Joint Venture.",
+      "rulesText": "Play three cycles in Initiative order, then Production and Reputation Review.",
+      "unlockText": "Use this Era’s Headlines and objective. Equipment is available from setup.",
       "$scenario": {
         "ref": "semantic-court-mandate"
       },
@@ -101,10 +101,10 @@
     {
       "id": "era_claim",
       "round": 4,
-      "physicalSurface": "governance_board",
+      "physicalSurface": "central_era_hex",
       "name": "${terms.eras.claim}",
-      "rulesText": "Ready all six Core Actions. Play three cycles, then Production and Reputation Review.",
-      "unlockText": "After Production and Reputation Review, offer AGI recognition, then score final holdings and all four revealed objectives.",
+      "rulesText": "Play three cycles in Initiative order, then Production and Reputation Review.",
+      "unlockText": "After final Production and Review, resolve optional AGI recognition and final Mandate.",
       "$scenario": {
         "ref": "metropolitan-mind-trust"
       },
@@ -138,39 +138,36 @@
   "playerReferences": [
     {
       "id": "quarter_sequence",
-      "physicalSurface": "foldout_player_aid",
+      "physicalSurface": "player_mat",
       "panel": 1,
       "name": "A Perfectly Governed Quarter",
       "frontText": [
-        "Choose a player kit and a faction separately. Initialize four tracks from the faction card.",
-        "Reveal one objective per Era and retain it until game end.",
-        "Reveal a Headline and finish all choices before selection.",
-        "Select an unused Core Action secretly; reveal together.",
-        "In Initiative order, optionally trade, then assign an Org and resolve.",
-        "After three cycles, Production, Reputation Review, then advance the Era."
+        "Choose an institution and a player kit. Initialize five holdings from the identity card.",
+        "Reveal one objective per Era and one Headline per cycle.",
+        "In Initiative order, optionally trade, then choose a reachable Action.",
+        "Stay or move one Org one edge, then resolve that hex’s Action. Actions may repeat.",
+        "Three cycles per Era; Production and Review after each Era."
       ],
       "backText": [
-        "There are six shared areas and two Facility spaces per area.",
-        "An acting Org goes to the area for its Core Action.",
-        "Orgs and Facilities identify ownership using kit colour and symbol.",
-        "Facilities remain where built and always operate.",
-        "Build one Facility OR upgrade one, never both.",
-        "Customers are cards; each provides income and final points."
+        "Nineteen shared hexes: eighteen playable and one Era center.",
+        "Orgs are the only player pieces on the map. Ownership uses colour and symbol.",
+        "All placed Orgs produce; equipped Orgs produce twice their hex yield.",
+        "Customers are a numeric holding; Mandate is calculated from the final table."
       ],
       "loreRef": "reference-cards-player-references-quarter-sequence"
     },
     {
       "id": "production_audit",
-      "physicalSurface": "foldout_player_aid",
+      "physicalSurface": "player_mat",
       "panel": 2,
       "name": "Infrastructure and Accountability",
       "frontText": [
         "Gain 2 Runway, or gain 4 and lose 1 Reputation.",
         "Pay 1 Compute for a push-your-luck Training Run.",
-        "Build one Facility in an open area for 2 Runway, or upgrade one for 3 Runway and 1 Compute from Era II.",
-        "Pay 2 Runway to establish an Org, or reassign another Org to any area.",
-        "Pay 1 Compute to take your next Customer card if Capability meets its requirement; lose 1 Reputation.",
-        "Gain 2 Reputation, or propose/terminate a Joint Venture from Era III."
+        "Pay 2 Runway to equip one of your Orgs. Flip it: it produces twice its hex’s yield.",
+        "Pay 2 Runway to establish an Org on this hex, or reassign another Org to any hex.",
+        "Pay 1 Compute to gain 1 Customer if Capability meets the next requirement; lose 1 Reputation.",
+        "Gain 2 Reputation."
       ],
       "backText": [
         "Research costs one Compute. First ordinary domain adds one provisional Capability.",
@@ -184,18 +181,17 @@
     },
     {
       "id": "public_mandate",
-      "physicalSurface": "foldout_player_aid",
+      "physicalSurface": "player_mat",
       "panel": 3,
       "name": "History Is a Public Track",
       "frontText": [
-        "One Runway for one Compute; both parties must consent.",
-        "From Era III, propose a Joint Venture between two rival-owned Facilities.",
-        "Each host can join only one Venture. Both receive one resource printed by the other host.",
-        "Either participant may terminate a Venture with Influence."
+        "Offer one Runway for one Compute or vice versa to one rival.",
+        "Both must consent and have room under the resource caps.",
+        "No lasting contracts, Venture pieces, counteroffers, credit, or future promises."
       ],
       "backText": [
-        "At each Era end, produce from Facilities, Customer cards, and active Ventures.",
-        "Upgraded Facilities double their area yield. Apply resource caps normally.",
+        "At each Era end, produce from placed Orgs, then gain one Runway per Customer.",
+        "Equipped Orgs double their hex yield. Apply resource caps normally.",
         "After Production, Reputation of one or less loses two Runway, floored at zero.",
         "After Era IV Review: nine Capability, four Reputation, and three Compute qualify for optional AGI recognition.",
         "Final score: Capability + twice Customers + Reputation + four for AGI, plus all four revealed objectives.",

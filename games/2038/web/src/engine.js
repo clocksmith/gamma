@@ -27,17 +27,57 @@ export function shuffle(values, rng) {
   return copy;
 }
 
+export function hexDistance(a, b) {
+  return Math.max(
+    Math.abs(a.q - b.q),
+    Math.abs(a.r - b.r),
+    Math.abs(a.q + a.r - b.q - b.r),
+  );
+}
 export function generateBoard(config) {
   if (
-    config.board.layout !== "shared-action-areas" ||
-    config.board.tiles.length !== 6
+    config.board.layout !== "shared-hex-radius-two" ||
+    config.board.tiles.length !== 6 ||
+    config.board.tiles.some((t) => t.count !== 3)
   )
-    throw new Error("Six shared action areas are required.");
-  return config.board.tiles.map((area, index) => ({
-    ...structuredClone(area),
-    instanceId: area.id,
-    order: index,
-  }));
+    throw new Error("Six Action types with three hexes each are required.");
+  const outer = [
+    [0, -2],
+    [1, -2],
+    [2, -2],
+    [2, -1],
+    [2, 0],
+    [1, 1],
+    [0, 2],
+    [-1, 2],
+    [-2, 2],
+    [-2, 1],
+    [-2, 0],
+    [-1, -1],
+  ];
+  const tiles = config.board.tiles.flatMap((tile, index) =>
+    [[tile.q, tile.r], outer[index * 2], outer[index * 2 + 1]].map(
+      ([q, r], copy) => ({
+        ...structuredClone(tile),
+        q,
+        r,
+        instanceId: copy ? `${tile.id}-${copy + 1}` : tile.id,
+        order: index * 3 + copy,
+      }),
+    ),
+  );
+  if (
+    new Set(tiles.map((t) => `${t.q},${t.r}`)).size !== 18 ||
+    tiles.some(
+      (t) =>
+        hexDistance(t, { q: 0, r: 0 }) < 1 ||
+        hexDistance(t, { q: 0, r: 0 }) > 2,
+    )
+  )
+    throw new Error(
+      "The eighteen playable hexes must fill the two rings around the Era center.",
+    );
+  return tiles;
 }
 export function resolveTieByInitiative(seats, order, index = 0) {
   for (let n = 0; n < order.length; n++) {

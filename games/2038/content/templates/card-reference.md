@@ -355,13 +355,10 @@ ${content.projects.byId.upgrade.backText}
 - ${content.referenceCards.playerReferences.0.frontText.2}
 - ${content.referenceCards.playerReferences.0.frontText.3}
 - ${content.referenceCards.playerReferences.0.frontText.4}
-- ${content.referenceCards.playerReferences.0.frontText.5}
 - ${content.referenceCards.playerReferences.0.backText.0}
 - ${content.referenceCards.playerReferences.0.backText.1}
 - ${content.referenceCards.playerReferences.0.backText.2}
 - ${content.referenceCards.playerReferences.0.backText.3}
-- ${content.referenceCards.playerReferences.0.backText.4}
-- ${content.referenceCards.playerReferences.0.backText.5}
 
 ### ${content.referenceCards.playerReferences.1.name}
 
@@ -383,7 +380,6 @@ ${content.projects.byId.upgrade.backText}
 - ${content.referenceCards.playerReferences.2.frontText.0}
 - ${content.referenceCards.playerReferences.2.frontText.1}
 - ${content.referenceCards.playerReferences.2.frontText.2}
-- ${content.referenceCards.playerReferences.2.frontText.3}
 - ${content.referenceCards.playerReferences.2.backText.0}
 - ${content.referenceCards.playerReferences.2.backText.1}
 - ${content.referenceCards.playerReferences.2.backText.2}

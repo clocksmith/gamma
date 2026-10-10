@@ -10,7 +10,7 @@ for (const card of headlines.headlines)
     for (const p of m.players) {
       Object.assign(p, { runway: 5, compute: 5, capability: 6, reputation: 4 });
       host(m, p.seat);
-      p.customerCards = [];
+      p.customers = 0;
     }
     const before = m.players.map((p) => ({
       runway: p.runway,
@@ -55,7 +55,7 @@ test("Customer Headline requires next Capability and never triggers Installed Ba
   p.capability = 0;
   p.reputation = 4;
   p.runway = 5;
-  p.customerCards = [];
+  p.customers = 0;
   m.eraHeadlines = [
     headlines.headlines.find((h) => h.id === "human_original_guarantee"),
   ];

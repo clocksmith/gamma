@@ -22,15 +22,16 @@ Deliver a coherent, replayable institutional strategy game whose authored rules,
 
 ## Invariants
 
-- Mandate 2038 has one ruleset: six shared action areas, four resource tracks, always-operating Facilities, Customer cards, one Facility upgrade, and final-current-state scoring. Setup and publication expose no alternate rules mode. Retired mode selectors and module overrides are rejected.
-- The current candidate uses four identical Orgs per faction, two starting.
-  Orgs are persistent shared-area assignments; CEOs remain characters, not pieces.
-- Core selections commit available cards without advance affordability proofs.
-  ReAct is Reason, Act, Observe; assignment is part of Act.
+- One ruleset uses nineteen shared hexes (eighteen playable), five holding tracks,
+  normal/equipped Orgs, numeric Customers and final-current-state Mandate. No
+  selectable retired module or rules profile is exposed.
+- Four Orgs per player kit, two starting; one stay or edge move and destination
+  Action per turn. Turns resolve sequentially and Actions may repeat. CEOs are
+  characters, not pieces. Unsupported Actions may consume a turn without moving.
 - Research retains push-your-luck. Reputation replaces Trust, Scrutiny, and Systemic Risk. Recognized AGI is a final holding after Era IV Production and Reputation Review. The World Ending remains separate.
 - User-selected mechanic revisions retain scenario placement and require an
   explicit design-decision receipt; they must not be labelled retained mechanics.
-- The six Core Actions are the only selections. Build places one Facility OR upgrades one Facility; these are exclusive resolutions. Programs and use records are retired.
+- The six Core Actions are the only selections. Build equips exactly one owned Org; equipment travels with it and doubles production. Programs and use records are retired.
 - The deck contains six Headlines per Era and reveals three per Era. Headlines finish all choices before selection and leave no continuing modifiers.
 - Each faction has one permanent ability and common scoring. Former abilities and Programs retain their fiction in lore-only records projected into the existing companion and references.
 - Generated graph targets are never hand-edited. Authoring checks validate current
@@ -65,7 +66,7 @@ Deliver a coherent, replayable institutional strategy game whose authored rules,
   excluded. Release identity remains in build receipts.
 - Physical specifications own form and state encoding; supported inventory
   prose is projected from the rulebook, not maintained in a second physical file.
-  Pieces use Customer and two-sided Facility cards, Org tokens, four resource cubes, and an AGI recognition marker. No Generator, Power, project-chip, risk-bag, or milestone system remains.
+  Physical state uses two-sided Org tokens, five holding cubes per player, nineteen hexes, cards and mats. AGI and final Mandate are marked on the mat. No separate Facility, Customer, Generator, Venture or equipment pieces remain.
 - Every admitted lore situation has one structured Era placement, and every
   governed lore surface is bound exactly once with copy and mechanic receipts.
 - World Markdown owns all scenario definitions and shared qualification policies.
@@ -81,8 +82,8 @@ Deliver a coherent, replayable institutional strategy game whose authored rules,
   artifacts remain local evidence.
 - Playable counts are two through five. Six factions remain available choices; six-player requests are rejected. Historical evidence retains its original identity.
 - Fictional identities remain fictional and simulated sessions remain labeled.
-- Venture response packets expose the public proposer, fixed hosts, current host availability and reciprocal nominal income. Pending terms clear on
-  acceptance, rejection or policy failure; hidden decks remain unavailable.
+- Trading is an immediate, fixed-rate exchange requiring both participants’
+  consent and available resources. No lasting contracts or hidden Venture state.
 - Canonical rule changes update every affected authority and evidence surface together.
 
 ## Acceptance
@@ -111,10 +112,10 @@ User-selected 2026-10-09 smaller prototype supersedes earlier Power, hex geograp
 
 The user selected a shared hex board and fewer components. This supersedes earlier
 six-area, separate Facility, Customer-card, Action-card, Venture and simultaneous
-selection requirements. Six playable hexes surround one Era hex. Orgs stay or move
+selection requirements. Eighteen playable hexes surround one Era hex. Orgs stay or move
 one edge, then perform the destination Action, in Initiative order; Actions may
 repeat. All Orgs produce; Build equips an Org by flipping its token. No separate
 Facilities, upgrades, Ventures or Customer cards remain. Customers are numeric;
-Mandate is calculated from visible state. Twenty Training cards retain all ten
-designs with two copies each; shuffle the full deck before each Research run.
+Mandate is calculated from visible state. Forty Training cards retain all ten
+designs with four copies each and the existing shared draw/discard lifecycle.
 Keep all unique lore and fictional institutions. Old releases remain immutable.

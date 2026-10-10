@@ -201,7 +201,7 @@
     "agiRecognitionCubes": 0
   },
   "sharedSupply": {
-    "hexTiles": 7,
+    "hexTiles": 19,
     "currentEraMarkers": 1,
     "initiativeMarkers": 1,
     "playerMats": 5,
@@ -210,15 +210,15 @@
     "jointVenturePairs": 0
   },
   "board": {
-    "layout": "shared-hex-ring",
-    "selectedTileCount": 6,
-    "prototypeTileCount": 6,
+    "layout": "shared-hex-radius-two",
+    "selectedTileCount": 19,
+    "prototypeTileCount": 19,
     "tiles": [
       {
         "id": "fund",
         "actionId": "fund",
         "category": "capital",
-        "count": 1,
+        "count": 3,
         "name": "Allocation Exchange",
         "visit": "Stay or move one edge, then resolve this hex’s Action.",
         "production": "Gain 2 Runway per Org, doubled when equipped.",
@@ -234,7 +234,7 @@
         "id": "research",
         "actionId": "research",
         "category": "research",
-        "count": 1,
+        "count": 3,
         "name": "Research Commons",
         "visit": "Stay or move one edge, then resolve this hex’s Action.",
         "production": "Gain 1 Compute per Org, doubled when equipped.",
@@ -250,7 +250,7 @@
         "id": "build",
         "actionId": "build",
         "category": "cloud",
-        "count": 1,
+        "count": 3,
         "name": "Compute Estate",
         "visit": "Stay or move one edge, then resolve this hex’s Action.",
         "production": "Gain 2 Compute per Org, doubled when equipped.",
@@ -266,7 +266,7 @@
         "id": "organize",
         "actionId": "organize",
         "category": "talent",
-        "count": 1,
+        "count": 3,
         "name": "Workforce Transition",
         "visit": "Stay or move one edge, then resolve this hex’s Action.",
         "production": "Gain 1 Runway per Org, doubled when equipped.",
@@ -282,7 +282,7 @@
         "id": "deploy",
         "actionId": "deploy",
         "category": "consumer",
-        "count": 1,
+        "count": 3,
         "name": "Human Access",
         "visit": "Stay or move one edge, then resolve this hex’s Action.",
         "production": "Gain 1 Runway per Org, doubled when equipped.",
@@ -298,7 +298,7 @@
         "id": "influence",
         "actionId": "influence",
         "category": "government",
-        "count": 1,
+        "count": 3,
         "name": "Public Standing",
         "visit": "Stay or move one edge, then resolve this hex’s Action.",
         "production": "Gain 1 Reputation per Org, doubled when equipped.",
@@ -325,7 +325,7 @@
       {
         "id": "code",
         "kind": "domain",
-        "count": 2,
+        "count": 4,
         "name": "Code",
         "rulesText": "First Code this run: add 1 provisional ${terms.playerTracks.capability}. A later Code is a duplicate.",
         "loreRef": "game-training-deck-cards-code"
@@ -333,7 +333,7 @@
       {
         "id": "science",
         "kind": "domain",
-        "count": 2,
+        "count": 4,
         "name": "Science",
         "rulesText": "First Science this run: add 1 provisional ${terms.playerTracks.capability}. A later Science is a duplicate.",
         "loreRef": "game-training-deck-cards-science"
@@ -341,7 +341,7 @@
       {
         "id": "web",
         "kind": "domain",
-        "count": 2,
+        "count": 4,
         "name": "The Web",
         "rulesText": "First Web this run: add 1 provisional ${terms.playerTracks.capability}. A later Web is a duplicate.",
         "loreRef": "game-training-deck-cards-web"
@@ -349,7 +349,7 @@
       {
         "id": "books",
         "kind": "domain",
-        "count": 2,
+        "count": 4,
         "name": "Books",
         "rulesText": "First Books this run: add 1 provisional ${terms.playerTracks.capability}. A later Books is a duplicate.",
         "loreRef": "game-training-deck-cards-books"
@@ -357,7 +357,7 @@
       {
         "id": "images",
         "kind": "domain",
-        "count": 2,
+        "count": 4,
         "name": "Images",
         "rulesText": "First Images this run: add 1 provisional ${terms.playerTracks.capability}. A later Images is a duplicate.",
         "loreRef": "game-training-deck-cards-images"
@@ -365,7 +365,7 @@
       {
         "id": "video",
         "kind": "domain",
-        "count": 2,
+        "count": 4,
         "name": "Video",
         "rulesText": "First Video this run: add 1 provisional ${terms.playerTracks.capability}. A later Video is a duplicate.",
         "loreRef": "game-training-deck-cards-video"
@@ -373,7 +373,7 @@
       {
         "id": "synthetic",
         "kind": "domain",
-        "count": 2,
+        "count": 4,
         "name": "Synthetic",
         "rulesText": "First Synthetic this run: add 1 provisional ${terms.playerTracks.capability}. A later Synthetic is a duplicate.",
         "loreRef": "game-training-deck-cards-synthetic"
@@ -381,7 +381,7 @@
       {
         "id": "curated_corpus",
         "kind": "special",
-        "count": 2,
+        "count": 4,
         "name": "Curated Corpus",
         "rulesText": "Choose one ordinary domain not yet revealed; this counts as that domain and adds 1 provisional ${terms.playerTracks.capability}. If all seven ordinary domains are present, this is a duplicate.",
         "loreRef": "game-training-deck-cards-curated-corpus"
@@ -389,7 +389,7 @@
       {
         "id": "benchmark_leak",
         "kind": "special",
-        "count": 2,
+        "count": 4,
         "name": "Benchmark Leak",
         "rulesText": "Add 2 provisional Capability and lose 1 Reputation. This is not a domain.",
         "loreRef": "game-training-deck-cards-benchmark-leak"
@@ -397,14 +397,13 @@
       {
         "id": "human_evaluation",
         "kind": "special",
-        "count": 2,
+        "count": 4,
         "name": "Human Evaluation",
         "rulesText": "Gain 1 Reputation, bank all provisional Capability, and end the run.",
         "loreRef": "game-training-deck-cards-human-evaluation"
       }
     ],
-    "runDrawLimit": 20,
-    "resetAfterRun": true
+    "runDrawLimit": 40
   },
   "scoring": {
     "mode": "final-current-state",
@@ -523,7 +522,7 @@
   "scoreDisplay": {
     "name": "Mandate",
     "mode": "derived",
-    "maximum": 48,
+    "maximum": 40,
     "description": "Capability + 2 × Customers + Reputation + recognized AGI + revealed objectives. Recount at game end."
   },
   "adoption": {

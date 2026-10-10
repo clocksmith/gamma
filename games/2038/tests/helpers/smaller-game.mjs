@@ -45,17 +45,12 @@ export function policy(select) {
   };
 }
 export const policies = (m, select) => m.players.map(() => policy(select));
-export function host(m, seat, area = "build", upgraded = false) {
+export function host(m, seat, area = "build", equipped = false) {
   const p = m.players[seat];
-  const a = m.board.find((a) => a.instanceId === area);
-  const f = {
-    id: `s${seat}-facility-${p.facilities.length + 1}`,
-    tileId: area,
-    category: a.category,
-    upgraded,
-  };
-  p.facilities.push(f);
-  return f;
+  const org = p.pieces.find(a => !a.tileId);
+  if (!org) throw new Error("Fixture needs an unassigned Org");
+  Object.assign(org, { tileId: area, equipped });
+  return org;
 }
 export function action(m, seat, id, predicate = () => true) {
   const d = m.legalResolutions(seat, id).find(predicate);

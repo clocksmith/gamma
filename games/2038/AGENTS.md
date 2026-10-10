@@ -48,7 +48,7 @@ real people. Do not force every scene into the same dystopian conclusion.
   passages and compiled ending fields for the player companion. The selected companion is published as an optional narrative at
   `/docs/world-and-institutions.html`; it is not required in the physical kit.
   The whole bible is never a player document. Internal means audience, not access control.
-- The game has one ruleset: six shared action areas, always-operating Facilities, and the twenty-four current
+- The game has one ruleset: eighteen shared Action hexes, producing Orgs, and the twenty-four current
   Headlines. There is no selectable rules profile, connected Network, Link,
   Power market, Realignment, or Volatility module. Simulation parameter research
   must not reintroduce retired modes through unchecked options.
@@ -96,10 +96,10 @@ real people. Do not force every scene into the same dystopian conclusion.
 - `docs/balance-and-exploitability.md` owns the human-readable balance,
   counter-strategy, and promotion contract. Its machine authority is
   `lab/contracts/balance-contract.json`.
-- The user-selected simplification candidate replaces personnel movement with
-  persistent Org assignments, removes Research Protection and numeric Power
-  allocation, and scores recognized AGI within ordinary Mandate. Preserve the
-  six Core Actions, simultaneous selection, fictional institutions, competition for limited Facility spaces, four Eras, and separate World Ending.
+- The user-selected simplification uses one-edge movement, two-sided Orgs,
+  sequential turns, five holdings and derived final Mandate. Preserve the six
+  Core Actions, push-your-luck Training, fictional institutions, four Eras and
+  separate World Ending. More Orgs increase presence and production, not turns.
 - `web/` owns the browser implementation.
 - `tests/` owns contract, determinism, and probability checks.
 - `evidence/playtests/` owns observed sessions and receipts. Never present a simulated
@@ -197,10 +197,10 @@ User-selected 2026-10-09 smaller prototype supersedes earlier Power, hex geograp
 
 The user selected a shared hex board and fewer components. This supersedes earlier
 six-area, separate Facility, Customer-card, Action-card, Venture and simultaneous
-selection requirements. Six playable hexes surround one Era hex. Orgs stay or move
+selection requirements. Eighteen playable hexes surround one Era hex. Orgs stay or move
 one edge, then perform the destination Action, in Initiative order; Actions may
 repeat. All Orgs produce; Build equips an Org by flipping its token. No separate
 Facilities, upgrades, Ventures or Customer cards remain. Customers are numeric;
-Mandate is calculated from visible state. Twenty Training cards retain all ten
-designs with two copies each; shuffle the full deck before each Research run.
+Mandate is calculated from visible state. Forty Training cards retain all ten
+designs with four copies each and the existing shared draw/discard lifecycle.
 Keep all unique lore and fictional institutions. Old releases remain immutable.

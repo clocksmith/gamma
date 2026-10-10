@@ -2,6 +2,7 @@ import {
   createRng,
   shuffle,
   generateBoard,
+  hexDistance,
   buildTrainingDeck,
   TRAINING_DOMAINS,
 } from "../../web/src/engine.js";
@@ -11,8 +12,6 @@ import { validateDecisionResponse } from "../contracts/decision-contract.js";
 import {
   evaluateEraMandate,
   finalObjectiveStandings,
-  activeJointVenture,
-  facilityContractResource,
   controlledAreas,
 } from "../rules/era-mandates.js";
 import { throwIfAborted } from "../cancellation.js";
@@ -21,15 +20,14 @@ const increment = (target, key, n = 1) => {
   target[key] = (target[key] || 0) + n;
 };
 export const SELECTED_RULES_COVERAGE = {
-  id: "six-area-four-track-v1",
-  verdictBoundary:
-    "Six-area four-track prototype; implementation evidence only.",
+  id: "shared-hex-orgs-v1",
+  verdictBoundary: "Shared-hex Org prototype; implementation evidence only.",
   automated: [
     "Six Core Actions",
     "Shared Training deck",
-    "Limited Facility spaces and one upgrade",
-    "Customer cards",
-    "Bilateral trades and fixed-host Ventures",
+    "Hex adjacency and two-sided Orgs",
+    "Customer track",
+    "Bilateral immediate trades",
     "Final-state scoring",
   ],
   excluded: [
@@ -140,12 +138,9 @@ export class SelectedRulesMatch {
     this.complete = false;
     this.roundInitialized = false;
     this.decisionSerial = 0;
-    this.contractSerial = 0;
-    this.contracts = [];
     this.revealedMandates = [];
     this.replay = [];
     this.publicHistory = [];
-    this.pendingJointVenture = null;
     this.immediateTradePackets = 0;
     this.immediateTradePacketCeiling = immediateTradePacketCeiling(playerCount);
     this.trainingDrawPile = buildTrainingDeck(config, `${seed}:training:0`);
@@ -183,19 +178,16 @@ export class SelectedRulesMatch {
         compute: faction.starts.compute,
         capability: faction.starts.capability,
         reputation: faction.starts.reputation,
-        customerCards: Array.from(
-          { length: faction.starts.customers || 0 },
-          (_, i) => ({ id: `s${seat}-customer-${i + 1}`, ordinal: i + 1 }),
-        ),
+        customers: faction.starts.customers || 0,
         pieces: Array.from(
           { length: this.rulesVariant.startingAgentsDeployed },
           (_, i) => ({
             id: `s${seat}-agent-${i + 1}`,
             kind: "agent",
             tileId: null,
+            equipped: false,
           }),
         ),
-        facilities: [],
         actionsUsed: [],
         selectedAction: null,
         agiDeclared: false,
@@ -203,15 +195,13 @@ export class SelectedRulesMatch {
           config.playerSupply.agents - this.rulesVariant.startingAgentsDeployed,
         metrics: metrics(),
       };
-      Object.defineProperty(p, "customers", {
-        get() {
-          return this.customerCards.length;
-        },
-        enumerable: true,
-      });
       return p;
     });
-    this.recordEvent("match_started", null, "Six shared areas; four tracks.");
+    this.recordEvent(
+      "match_started",
+      null,
+      "Eighteen playable hexes; Orgs and five holding tracks; Mandate is derived.",
+    );
   }
   hasFactionAbility(player, id) {
     return (
@@ -238,25 +228,20 @@ export class SelectedRulesMatch {
     return amount;
   }
   gainCustomer(player) {
-    if (player.customers >= this.config.customerCards.perPlayer) return false;
-    player.customerCards.push({
-      id: `s${player.seat}-customer-${player.customers + 1}`,
-      ordinal: player.customers + 1,
-    });
+    if (player.customers >= this.config.adoption.maximum) return false;
+    this.addResource(player, "customers", 1);
     return true;
   }
   canDeploy(player) {
     return (
-      player.customers < this.config.customerCards.perPlayer &&
-      player.capability >=
-        this.config.customerCards.requirements[player.customers]
+      player.customers < this.config.adoption.maximum &&
+      player.capability >= this.config.adoption.requirements[player.customers]
     );
   }
-  tileOccupancy(id) {
-    return this.players.reduce(
-      (n, p) => n + p.facilities.filter((f) => f.tileId === id).length,
-      0,
-    );
+  canReach(org, destination) {
+    if (!org.tileId) return true;
+    const from = this.board.find((t) => t.instanceId === org.tileId);
+    return Boolean(from && hexDistance(from, destination) <= 1);
   }
   initiativeOrder() {
     return Array.from(
@@ -274,11 +259,9 @@ export class SelectedRulesMatch {
       compute: p.compute,
       capability: p.capability,
       reputation: p.reputation,
-      customerCards: p.customerCards,
       customers: p.customers,
       actionsUsed: p.actionsUsed,
       pieces: p.pieces,
-      facilities: p.facilities,
       agentsInSupply: p.agentsInSupply,
       agiDeclared: p.agiDeclared,
     });
@@ -287,15 +270,11 @@ export class SelectedRulesMatch {
     return this.board.map((a) => ({
       ...clone(a),
       tileId: a.instanceId,
-      facilitySpacesOpen: a.facilitySpaces - this.tileOccupancy(a.instanceId),
-      components: this.players.flatMap((p) => [
-        ...p.pieces
+      components: this.players.flatMap((p) =>
+        p.pieces
           .filter((x) => x.tileId === a.instanceId)
           .map((x) => ({ type: "piece", ownerSeat: p.seat, ...clone(x) })),
-        ...p.facilities
-          .filter((x) => x.tileId === a.instanceId)
-          .map((x) => ({ type: "facility", ownerSeat: p.seat, ...clone(x) })),
-      ]),
+      ),
     }));
   }
   currentEraObjective(p) {
@@ -318,10 +297,7 @@ export class SelectedRulesMatch {
       revealedMandates: clone(this.revealedMandates),
       self: {
         ...this.publicPlayerState(p),
-        facilities: p.facilities.length,
-        jointVentures: this.contracts.filter((c) =>
-          [c.left.seat, c.right.seat].includes(seat),
-        ).length,
+        equippedOrgs: p.pieces.filter((o) => o.equipped).length,
         canDeploy: this.canDeploy(p),
         agiReadiness: this.declarationReadiness(p),
         currentEraObjective: this.currentEraObjective(p),
@@ -330,14 +306,12 @@ export class SelectedRulesMatch {
         .filter((x) => x.seat !== seat)
         .map((x) => ({
           ...this.publicPlayerState(x),
-          facilities: x.facilities.length,
+          equippedOrgs: x.pieces.filter((o) => o.equipped).length,
         })),
       board: this.publicBoardState(),
       trainingRun: this.trainingRun ? clone(this.trainingRun) : null,
       publicTable: {
-        pendingJointVenture: clone(this.pendingJointVenture),
         players: this.players.map((x) => this.publicPlayerState(x)),
-        contracts: clone(this.contracts),
       },
     };
   }
@@ -388,7 +362,13 @@ export class SelectedRulesMatch {
   legalActionSelections(seat) {
     const p = this.players[seat];
     return this.config.actions
-      .filter((a) => !p.actionsUsed.includes(a.id))
+      .filter((a) =>
+        this.board.some(
+          (t) =>
+            t.actionId === a.id &&
+            p.pieces.some((org) => this.canReach(org, t)),
+        ),
+      )
       .map((a) =>
         choice(
           `select_${a.id}`,
@@ -405,201 +385,138 @@ export class SelectedRulesMatch {
   }
   legalResolutions(seat, actionId) {
     const p = this.players[seat];
-    const a = this.board.find((a) => a.actionId === actionId);
-    if (!a) return [];
-    return p.pieces.flatMap((agent) => {
-      const base = {
-        pieceId: agent.id,
-        destinationId: a.instanceId,
-        destinationCategory: a.category,
-      };
-      let decisions = [];
-      if (actionId === "fund")
-        decisions = [
-          choice(
-            "fund_conservative",
-            `Gain ${this.rulesVariant.fundConservative} Runway`,
-            "fund",
-            { mode: "conservative" },
-            { runway: this.rulesVariant.fundConservative },
-          ),
-          choice(
-            "fund_venture",
-            `Gain ${this.rulesVariant.fundVenture} Runway; lose ${this.rulesVariant.ventureReputationLoss} Reputation`,
-            "fund",
-            { mode: "venture" },
-            {
-              runway: this.rulesVariant.fundVenture,
-              reputation: -this.rulesVariant.ventureReputationLoss,
-            },
-          ),
-        ];
-      if (actionId === "research" && p.compute >= 1)
-        decisions = [
-          choice(
-            "research_run",
-            "Pay 1 Compute; begin Training Run",
-            "research",
-            {},
-            { compute: -1 },
-          ),
-        ];
-      if (
-        actionId === "deploy" &&
-        p.compute >= this.rulesVariant.deployComputeCost &&
-        this.canDeploy(p)
-      )
-        decisions = [
-          choice(
-            "deploy_customer",
-            `Pay ${this.rulesVariant.deployComputeCost} Compute; take Customer ${p.customers + 1}; lose 1 Reputation`,
-            "deploy",
-            {},
-            {
-              compute: -this.rulesVariant.deployComputeCost,
-              customers: 1,
-              reputation: -1,
-            },
-          ),
-        ];
-      if (actionId === "build") {
-        const price = Math.max(
-          0,
-          this.rulesVariant.facilityCost -
-            (this.hasFactionAbility(p, "industrial_velocity") ? 1 : 0),
-        );
-        if (
-          p.facilities.length < this.config.playerSupply.facilities &&
-          p.runway >= price
-        )
-          for (const area of this.board)
-            if (this.tileOccupancy(area.instanceId) < area.facilitySpaces)
-              decisions.push(
+    return this.board
+      .filter((a) => a.actionId === actionId)
+      .flatMap((a) =>
+        p.pieces
+          .filter((org) => this.canReach(org, a))
+          .flatMap((agent) => {
+            const base = {
+              pieceId: agent.id,
+              destinationId: a.instanceId,
+              destinationCategory: a.category,
+            };
+            let decisions = [];
+            if (actionId === "fund")
+              decisions = [
                 choice(
-                  `build_facility_${area.instanceId}`,
-                  `Build Facility in ${area.name} (${price} Runway)`,
-                  "build",
-                  {
-                    facility: true,
-                    hostAreaId: area.instanceId,
-                    actualRunwayCost: price,
-                  },
-                  { runway: -price, facility: 1 },
+                  "fund_conservative",
+                  `Gain ${this.rulesVariant.fundConservative} Runway`,
+                  "fund",
+                  { mode: "conservative" },
+                  { runway: this.rulesVariant.fundConservative },
                 ),
-              );
-        const cost = this.config.construction.upgradeCost;
-        if (
-          this.round >= this.config.construction.upgradeUnlockEra &&
-          p.runway >= cost.runway &&
-          p.compute >= cost.compute
-        )
-          for (const f of p.facilities.filter((f) => !f.upgraded))
-            decisions.push(
-              choice(
-                `build_upgrade_${f.id}`,
-                `Upgrade ${f.id}: double Production (${cost.runway} Runway, ${cost.compute} Compute)`,
-                "build",
-                { upgradeHostId: f.id, actualRunwayCost: cost.runway },
-                {
-                  runway: -cost.runway,
-                  compute: -cost.compute,
-                  project: "upgrade",
-                },
-              ),
-            );
-      }
-      if (actionId === "organize") {
-        if (p.agentsInSupply > 0 && p.runway >= 2)
-          decisions.push(
-            choice(
-              "organize_recruit",
-              "Establish an Org (2 Runway)",
-              "organize",
-              { mode: "recruit" },
-              { runway: -2, agents: 1 },
-            ),
-          );
-        for (const other of p.pieces.filter((x) => x.id !== agent.id))
-          for (const area of this.board)
-            if (other.tileId !== area.instanceId)
-              decisions.push(
                 choice(
-                  `organize_assign_${other.id}_${area.instanceId}`,
-                  `Reassign Org ${p.pieces.indexOf(other) + 1} to ${area.name}`,
-                  "organize",
+                  "fund_venture",
+                  `Gain ${this.rulesVariant.fundVenture} Runway; lose ${this.rulesVariant.ventureReputationLoss} Reputation`,
+                  "fund",
+                  { mode: "venture" },
                   {
-                    mode: "reassign",
-                    otherAgentId: other.id,
-                    otherAreaId: area.instanceId,
+                    runway: this.rulesVariant.fundVenture,
+                    reputation: -this.rulesVariant.ventureReputationLoss,
                   },
                 ),
+              ];
+            if (actionId === "research" && p.compute >= 1)
+              decisions = [
+                choice(
+                  "research_run",
+                  "Pay 1 Compute; begin Training Run",
+                  "research",
+                  {},
+                  { compute: -1 },
+                ),
+              ];
+            if (
+              actionId === "deploy" &&
+              p.compute >= this.rulesVariant.deployComputeCost &&
+              this.canDeploy(p)
+            )
+              decisions = [
+                choice(
+                  "deploy_customer",
+                  `Pay ${this.rulesVariant.deployComputeCost} Compute; gain Customer ${p.customers + 1}; lose 1 Reputation`,
+                  "deploy",
+                  {},
+                  {
+                    compute: -this.rulesVariant.deployComputeCost,
+                    customers: 1,
+                    reputation: -1,
+                  },
+                ),
+              ];
+            if (actionId === "build") {
+              const price = Math.max(
+                0,
+                this.rulesVariant.facilityCost -
+                  (this.hasFactionAbility(p, "industrial_velocity") ? 1 : 0),
               );
-      }
-      if (actionId === "influence") {
-        decisions.push(
-          choice(
-            "influence_reputation",
-            "Gain 2 Reputation",
-            "influence",
-            { mode: "reputation" },
-            { reputation: 2 },
-          ),
-        );
-        if (
-          this.round >= 3 &&
-          this.contracts.length < this.config.sharedSupply.jointVenturePairs
-        )
-          for (const left of p.facilities)
-            for (const other of this.players.filter((x) => x.seat !== seat))
-              for (const right of other.facilities)
-                if (
-                  !this.contracts.some(
-                    (c) =>
-                      [c.left.facilityId, c.right.facilityId].includes(
-                        left.id,
-                      ) ||
-                      [c.left.facilityId, c.right.facilityId].includes(
-                        right.id,
-                      ),
-                  )
-                )
+              if (p.runway >= price)
+                for (const org of p.pieces.filter((o) => !o.equipped))
                   decisions.push(
                     choice(
-                      `influence_venture_${left.id}_${right.id}`,
-                      `Propose Joint Venture: ${left.id} + ${right.id}`,
-                      "influence",
-                      {
-                        mode: "venture",
-                        leftId: left.id,
-                        rightId: right.id,
-                        targetSeat: other.seat,
-                      },
+                      `build_equip_${org.id}`,
+                      `Equip Org ${p.pieces.indexOf(org) + 1} (${price} Runway): double its hex yield`,
+                      "build",
+                      { equipOrgId: org.id, actualRunwayCost: price },
+                      { runway: -price, project: "upgrade" },
                     ),
                   );
-        for (const c of this.contracts.filter((c) =>
-          [c.left.seat, c.right.seat].includes(seat),
-        ))
-          decisions.push(
-            choice(
-              `influence_end_${c.id}`,
-              `Terminate Joint Venture ${c.id}`,
-              "influence",
-              { mode: "terminate", contractId: c.id },
-            ),
-          );
-      }
-      return decisions.map((d) => ({
-        ...d,
-        decisionId: `${d.decisionId}_${agent.id}`,
-        parameters: { ...base, ...d.parameters },
-      }));
-    });
+            }
+            if (actionId === "organize") {
+              if (p.agentsInSupply > 0 && p.runway >= 2)
+                decisions.push(
+                  choice(
+                    "organize_recruit",
+                    "Establish an Org (2 Runway)",
+                    "organize",
+                    { mode: "recruit" },
+                    { runway: -2, agents: 1 },
+                  ),
+                );
+              for (const other of p.pieces.filter((x) => x.id !== agent.id))
+                for (const area of this.board)
+                  if (other.tileId !== area.instanceId)
+                    decisions.push(
+                      choice(
+                        `organize_assign_${other.id}_${area.instanceId}`,
+                        `Reassign Org ${p.pieces.indexOf(other) + 1} to ${area.name}`,
+                        "organize",
+                        {
+                          mode: "reassign",
+                          otherAgentId: other.id,
+                          otherAreaId: area.instanceId,
+                        },
+                      ),
+                    );
+            }
+            if (actionId === "influence") {
+              decisions.push(
+                choice(
+                  "influence_reputation",
+                  "Gain 2 Reputation",
+                  "influence",
+                  { mode: "reputation" },
+                  { reputation: 2 },
+                ),
+              );
+            }
+            return decisions.map((d) => ({
+              ...d,
+              decisionId: `${d.decisionId}_${agent.id}_${a.instanceId}`,
+              parameters: { ...base, ...d.parameters },
+            }));
+          }),
+      );
   }
   assignAgent(p, parameters) {
     const agent = p.pieces.find((x) => x.id === parameters.pieceId);
     if (
       !agent ||
-      !this.board.some((a) => a.instanceId === parameters.destinationId)
+      !this.board.some(
+        (a) =>
+          a.instanceId === parameters.destinationId && this.canReach(agent, a),
+      )
     )
       throw new RangeError("Invalid Org assignment.");
     agent.tileId = parameters.destinationId;
@@ -637,24 +554,9 @@ export class SelectedRulesMatch {
         break;
       case "build":
         this.spendRunway(p, a.actualRunwayCost);
-        if (a.facility) {
-          const area = this.board.find((x) => x.instanceId === a.hostAreaId);
-          p.facilities.push({
-            id: `s${seat}-facility-${p.facilities.length + 1}`,
-            tileId: area.instanceId,
-            category: area.category,
-            upgraded: false,
-          });
-        } else {
-          this.addResource(
-            p,
-            "compute",
-            -this.config.construction.upgradeCost.compute,
-          );
-          p.facilities.find((f) => f.id === a.upgradeHostId).upgraded = true;
-          increment(p.metrics.projects, "upgrade");
-          increment(this.matchMetrics.projects, "upgrade");
-        }
+        p.pieces.find((org) => org.id === a.equipOrgId).equipped = true;
+        increment(p.metrics.projects, "upgrade");
+        increment(this.matchMetrics.projects, "upgrade");
         break;
       case "organize":
         if (a.mode === "recruit") {
@@ -663,16 +565,18 @@ export class SelectedRulesMatch {
             id: `s${seat}-agent-${p.pieces.length + 1}`,
             kind: "agent",
             tileId: a.destinationId,
+            equipped: false,
           });
           p.agentsInSupply--;
         } else
           p.pieces.find((x) => x.id === a.otherAgentId).tileId = a.otherAreaId;
         break;
       case "influence":
-        if (a.mode === "reputation") this.addResource(p, "reputation", 2);
-        else if (a.mode === "terminate")
-          this.contracts = this.contracts.filter((c) => c.id !== a.contractId);
-        else throw new Error("Venture requires a responder.");
+        this.addResource(
+          p,
+          "reputation",
+          this.config.actionEffects.influence.reputationGain,
+        );
         break;
       default:
         throw new Error("Research requires its interactive draw sequence.");
@@ -701,7 +605,11 @@ export class SelectedRulesMatch {
       revealed = [];
     let outcome = "banked";
     try {
-      for (let draws = 0; draws < 40; draws++) {
+      for (
+        let draws = 0;
+        draws < this.config.trainingDeck.runDrawLimit;
+        draws++
+      ) {
         const card = this.drawTrainingCard();
         revealed.push(card.type);
         let duplicate = false;
@@ -776,53 +684,6 @@ export class SelectedRulesMatch {
       );
     } finally {
       this.trainingRun = null;
-    }
-  }
-  async negotiate(policies, seat, decision) {
-    const p = this.players[seat],
-      v = decision.parameters;
-    this.assignAgent(p, v);
-    const left = p.facilities.find((f) => f.id === v.leftId),
-      other = this.players[v.targetSeat],
-      right = other.facilities.find((f) => f.id === v.rightId);
-    if (!left || !right) throw new Error("Missing Venture host.");
-    this.pendingJointVenture = {
-      proposerSeat: seat,
-      responderSeat: other.seat,
-      left: { seat, facilityId: left.id, tileId: left.tileId },
-      right: { seat: other.seat, facilityId: right.id, tileId: right.tileId },
-      income: [
-        {
-          seat,
-          resource: facilityContractResource(this.board, right),
-          amount: 1,
-        },
-        {
-          seat: other.seat,
-          resource: facilityContractResource(this.board, left),
-          amount: 1,
-        },
-      ],
-    };
-    try {
-      const answer = await this.choose(
-        policies,
-        other.seat,
-        "agreement_response",
-        [
-          choice("agreement_accept", "Accept Joint Venture", "influence"),
-          choice("agreement_reject", "Reject Joint Venture", "influence"),
-        ],
-      );
-      if (answer.decisionId === "agreement_accept")
-        this.contracts.push({
-          id: ++this.contractSerial,
-          kind: "joint_venture",
-          left: { seat, facilityId: left.id },
-          right: { seat: other.seat, facilityId: right.id },
-        });
-    } finally {
-      this.pendingJointVenture = null;
     }
   }
   immediateTradeDecisions(seat) {
@@ -973,35 +834,22 @@ export class SelectedRulesMatch {
       if (this.hasFactionAbility(p, "the_shovels")) {
         const income = Math.min(
           2,
-          this.players.filter((x) => x.seat !== seat && x.facilities.length)
-            .length,
+          this.players.filter(
+            (x) => x.seat !== seat && x.pieces.some((o) => o.equipped),
+          ).length,
         );
         p.metrics.shovelsIncome += this.addResource(p, "runway", income);
       }
-      for (const f of p.facilities) {
+      for (const f of p.pieces.filter((o) => o.tileId)) {
         const area = this.board.find((a) => a.instanceId === f.tileId);
         this.addResource(
           p,
           area.yield.resource,
-          area.yield.amount * (f.upgraded ? 2 : 1),
+          area.yield.amount * (f.equipped ? 2 : 1),
         );
       }
       this.addResource(p, "runway", p.customers);
     }
-    for (const c of this.contracts.filter((c) => activeJointVenture(this, c)))
-      for (const [own, other] of [
-        [c.left, c.right],
-        [c.right, c.left],
-      ]) {
-        const host = this.players[other.seat].facilities.find(
-          (f) => f.id === other.facilityId,
-        );
-        this.addResource(
-          this.players[own.seat],
-          facilityContractResource(this.board, host),
-          1,
-        );
-      }
     this.matchMetrics.productionSnapshots.push({
       round: this.round,
       players: this.players.map((p) => ({
@@ -1051,8 +899,7 @@ export class SelectedRulesMatch {
       const p = this.players[seat];
       if (
         Object.entries(effect.minimum || {}).some(
-          ([key, n]) =>
-            (key === "facilities" ? p.facilities.length : p[key]) < n,
+          ([key, n]) => (key === "orgs" ? p.pieces.length : p[key]) < n,
         )
       )
         continue;
@@ -1106,29 +953,20 @@ export class SelectedRulesMatch {
     throwIfAborted(this.signal);
     if (!this.roundInitialized) await this.beginRound();
     await this.prepareHeadline(policies);
-    const committed = await Promise.all(
-      this.players.map((p) =>
-        this.choose(
-          policies,
-          p.seat,
-          "select",
-          this.legalActionSelections(p.seat),
-        ),
-      ),
-    );
-    committed.forEach((d, s) => {
-      this.players[s].selectedAction = d.actionId;
-    });
     for (const seat of this.initiativeOrder()) {
-      const p = this.players[seat],
-        id = p.selectedAction;
+      const p = this.players[seat];
       await this.trade(policies, seat);
+      const selected = await this.choose(
+        policies,
+        seat,
+        "select",
+        this.legalActionSelections(seat),
+      );
+      const id = (p.selectedAction = selected.actionId);
       const legal = this.legalResolutions(seat, id);
       if (legal.length) {
         const d = await this.choose(policies, seat, "resolve", legal);
         if (id === "research") await this.research(policies, seat, d);
-        else if (id === "influence" && d.parameters.mode === "venture")
-          await this.negotiate(policies, seat, d);
         else this.applyResolution(seat, d);
       } else {
         p.metrics.forcedNoOps++;
@@ -1228,11 +1066,11 @@ export class SelectedRulesMatch {
       activeHeadline: this.activeHeadline ? clone(this.activeHeadline) : null,
       roundMandate: this.roundMandate?.id || null,
       revealedMandates: clone(this.revealedMandates),
-      contracts: clone(this.contracts),
       players: this.players.map((p) => ({
         ...this.publicPlayerState(p),
         agiReadiness: this.declarationReadiness(p),
         currentEraObjective: this.currentEraObjective(p),
+        mandate: this.currentScore(p),
         ...(this.complete ? { finalScore: this.currentScore(p) } : {}),
       })),
     };
@@ -1244,7 +1082,7 @@ export class SelectedRulesMatch {
         profileId: p.profileId,
         backendId: p.backendId,
         score: this.currentScore(p),
-        facilities: p.facilities.length,
+        equippedOrgs: p.pieces.filter((o) => o.equipped).length,
         metrics: clone(p.metrics),
         agiReadiness: this.declarationReadiness(p),
       }))
@@ -1289,9 +1127,7 @@ export class SelectedRulesMatch {
       rulesVariant: clone(this.rulesVariant),
       matchMetrics: {
         ...clone(this.matchMetrics),
-        activeVentures: this.contracts.filter((c) =>
-          activeJointVenture(this, c),
-        ).length,
+        activeVentures: 0, // Historical report field; Ventures are absent from play.
       },
       decisionProtocol: {
         immediateTradePackets: this.immediateTradePackets,

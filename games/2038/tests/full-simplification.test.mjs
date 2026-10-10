@@ -33,7 +33,7 @@ for (const count of [2, 3, 4, 5])
       );
       for (const [k, c] of Object.entries(m.config.resources))
         assert.ok(p[k] >= c.min && p[k] <= c.cap);
-      assert.ok(p.facilities.length <= 4 && p.customers <= 5);
+      assert.ok(p.pieces.length <= 4 && p.customers <= 5);
     }
     assert.ok(
       r.decisionProtocol.immediateTradePackets <=

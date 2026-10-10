@@ -1,9 +1,14 @@
-# Player mats and Governance Board
+# Player mats and Era center
 
-Initialize the generic mat from the selected faction identity card. Kit colour and symbol identify ownership independently of institution.
+Initialize five tracks from the chosen institution: Runway 0–12, Compute 0–10,
+Capability 0–12, Reputation 0–6, and Customers 0–5. Mandate is the sixth displayed
+value: write its calculated final total, rather than maintaining another resource.
+Include an AGI recognition checkbox and the six Action summaries on each mat.
 
-Use four cube tracks: Runway 0–12, Compute 0–10, Capability 0–12, Reputation 0–6. Customer holdings are ordered cards and Facility upgrades are card flips. Mark AGI recognition in its single space. No objective counter, Trust milestone, score track, risk bag, or historical record is required.
+The center hex shows four Eras with three cycle positions each. One marker records
+both Era and cycle; pass the Initiative marker clockwise after every cycle.
+Place revealed objectives beside the board. No separate Governance Board,
+Customer supply, Venture pair, Facility piece, or upgrade marker is required.
 
-The Governance Board shows four Eras, one current-Era marker, Initiative, the Headline timeline, and four revealed-objective spaces. Score all four objectives from the final table after Era IV Production, Reputation Review, and optional AGI recognition.
-
-The World Ending is separate from victory. Any recognized AGI establishes emergence; average final Reputation of at least three establishes open continuity. Use the four ending combinations printed in the rulebook. No starting-resource snapshot is needed.
+After Era IV Production and Reputation Review, resolve recognition and all four
+objectives from the final table. The World Ending remains separate from victory.

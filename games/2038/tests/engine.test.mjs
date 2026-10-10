@@ -8,18 +8,13 @@ import {
   simulateTrainingRun,
 } from "../web/src/engine.js";
 import { config, fixture } from "./helpers/smaller-game.mjs";
-test("six unique action areas have fixed layout independent of seed or geometry", () => {
-  const a = generateBoard(config, "one"),
-    b = generateBoard(config, "two");
-  assert.deepEqual(a, b);
-  assert.deepEqual(
-    a.map((a) => a.actionId),
-    config.actions.map((a) => a.id),
-  );
-  assert.equal(a.length, 6);
-  assert.ok(
-    a.every((a) => a.facilitySpaces === 2 && !("q" in a) && !("r" in a)),
-  );
+test("eighteen playable hexes surround the Era center and share six Actions", () => {
+  const a = generateBoard(config, "one");
+  assert.deepEqual(a, generateBoard(config, "two"));
+  assert.equal(a.length, 18);
+  assert.equal(new Set(a.map(h => `${h.q},${h.r}`)).size, 18);
+  assert.ok(a.every(h => h.q !== 0 || h.r !== 0));
+  for (const action of config.actions) assert.equal(a.filter(h => h.actionId === action.id).length, 3);
   a[0].yield.amount = 999;
   assert.equal(config.board.tiles[0].yield.amount, 2);
 });
@@ -49,19 +44,20 @@ test("pure Research simulation retains Reputation effects through duplicate cras
   assert.equal(r.reputation, -1);
   assert.equal(r.outcome, "crashed");
 });
-test("numeric resource state is exactly four tracks; Customers derive from cards", () => {
+test("numeric resource state is five tracks; Mandate is derived", () => {
   const m = fixture();
   assert.deepEqual(Object.keys(config.resources), [
     "runway",
     "compute",
     "capability",
     "reputation",
+    "customers",
   ]);
   const p = m.players[0];
   const n = p.customers;
   m.gainCustomer(p);
   assert.equal(p.customers, n + 1);
-  assert.equal(p.customerCards.length, p.customers);
+  assert.equal(p.customerCards, undefined);
   for (const key of [
     "trust",
     "scrutiny",

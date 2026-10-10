@@ -155,27 +155,37 @@ function showBridgeState(message, connected = false) {
   elements["bridge-status"].classList.toggle("connected", connected);
 }
 
+let inspectedHex = null;
 function renderBoard(state) {
   elements.board.replaceChildren();
   if (!state) return;
-  for (const area of state.board) {
-    const card = document.createElement("article");
+  const note = document.querySelector(".board-note");
+  const center = document.createElement("article");
+  center.className = "era-hex";
+  center.innerHTML = `<strong>Era ${state.round}</strong><span>${state.cycle}/3</span><span>${escapeHtml(playerKit(state.players[state.initiativeSeat])?.symbol)}</span>`;
+  elements.board.append(center);
+  for (const tile of state.board) {
+    const card = document.createElement("button");
+    card.type = "button";
     card.className = "action-area";
-    const facilities = state.players.flatMap(player => player.facilities
-      .filter(f => f.tileId === area.instanceId).map(f => ({player, facility:f})));
-    const agents = state.players.flatMap(player => player.pieces
-      .filter(a => a.tileId === area.instanceId).map(a => ({player, agent:a})));
-    const owner = player => `${playerKit(player)?.symbol || ""} ${player.factionName}`;
-    card.innerHTML = `<h3>${escapeHtml(config.actions.find(a => a.id === area.actionId)?.name)}</h3>
-      <p>${escapeHtml(area.name)}</p><p>${escapeHtml(area.production)}</p>
-      <div class="facility-slots">${Array.from({length:area.facilitySpaces}, (_,i) => {
-        const entry=facilities[i];
-        return entry ? `<div class="facility-slot" style="--kit-color:${kitColor(entry.player)}">${escapeHtml(owner(entry.player))}<br>${escapeHtml(entry.facility.id)} · ${entry.facility.upgraded ? "Upgraded ×2" : "Normal"}</div>` : '<div class="facility-slot empty">Open Facility space</div>';
-      }).join("")}</div>
-      <p class="area-agents">Orgs: ${agents.map(e => escapeHtml(owner(e.player))).join(" · ") || "None"}</p>`;
+    card.style.setProperty("--hex-x", String(tile.q));
+    card.style.setProperty("--hex-y", String(tile.r + tile.q / 2));
+    const action = config.actions.find(a => a.id === tile.actionId);
+    const orgs = state.players.flatMap(player => player.pieces.filter(o => o.tileId === tile.instanceId).map(org => ({player, org})));
+    const detail = `${action.name} (${tile.q}, ${tile.r}): ${action.summary} Production: ${tile.production}`;
+    card.setAttribute("aria-label", detail);
+    card.setAttribute("aria-pressed", String(inspectedHex === tile.instanceId));
+    card.innerHTML = `<strong>${escapeHtml(action.name)}</strong><small>${tile.q}, ${tile.r}</small><span class="hex-orgs">${orgs.map(({player, org}) => `<span class="hex-org" style="--kit-color:${kitColor(player)}" title="${escapeHtml(player.factionName)} · ${org.id}${org.equipped ? ' · equipped' : ''}">${escapeHtml(playerKit(player)?.symbol)}${org.equipped ? '²' : ''}</span>`).join("")}</span>`;
+    card.onclick = () => {
+      inspectedHex = tile.instanceId;
+      for (const button of elements.board.querySelectorAll("button")) button.setAttribute("aria-pressed", String(button === card));
+      note.textContent = detail;
+    };
+    if (inspectedHex === tile.instanceId) note.textContent = detail;
     elements.board.append(card);
   }
 }
+
 function resetBoardTransitions() { renderedTileStates = new Map(); }
 
 function renderPlayers(state) {
@@ -211,10 +221,9 @@ function renderPlayers(state) {
       </p>
       <dl>
         ${Object.entries(config.resources).map(([key, track]) => `<dt>${escapeHtml(track.name)}</dt><dd>${player[key]}</dd>`).join("")}
-        <dt>${escapeHtml(copy.browser.customers)}</dt><dd class="customer-cards">${player.customerCards.map(c => `<span class="customer-card">Customer ${c.ordinal}</span>`).join(" ") || "None"}</dd>
-        <dt>Facilities</dt><dd>${player.facilities.length} (${player.facilities.filter(f => f.upgraded).length} upgraded)</dd>
+        <dt>Orgs</dt><dd>${player.pieces.length} (${player.pieces.filter(o=>o.equipped).length} equipped)</dd>
         <dt>AGI recognized</dt><dd>${player.agiDeclared ? "Yes" : "No"}</dd>
-        ${state.complete ? `<dt>${escapeHtml(copy.browser.finalScore)}</dt><dd>${player.finalScore}</dd>` : ""}
+        <dt>Mandate${state.complete?"":" if scored now"}</dt><dd>${player.mandate}</dd>
       </dl>
       <p>${escapeHtml(copy.browser.objectiveProgress)}: ${player.currentEraObjective ? `${escapeHtml(copy.browser.objectiveMetrics[player.currentEraObjective.metric])} ${player.currentEraObjective.value} · ${player.currentEraObjective.qualified ? "Qualifies" : "Does not qualify"}` : "—"}. Scores at game end.</p>
 
@@ -447,7 +456,8 @@ function pieceName(pieceId) {
 }
 
 function tileName(tileId) {
-  return game?.state?.board?.find((tile) => tile.instanceId === tileId)?.name || tileId;
+  const tile=game?.state?.board?.find(t=>t.instanceId===tileId);
+  return tile ? `${tile.name} (${tile.q}, ${tile.r})` : tileId;
 }
 
 function renderAssignmentDecisions(packet, stage) {
@@ -459,7 +469,7 @@ function renderAssignmentDecisions(packet, stage) {
 
   const builder = document.createElement("section");
   builder.className = "move-builder";
-  builder.innerHTML = "<h3>Assign an Org</h3><p>Choose an Org and action effect. It goes to the matching shared area.</p>";
+  builder.innerHTML = "<h3>Assign an Org</h3><p>Stay or move one edge to the selected hex, then resolve its Action.</p>";
   if (stage === "talent_assignment") builder.querySelector("p").textContent = copy.browser.talentAssignmentHint;
   const fields = document.createElement("div");
   fields.className = "trade-fields";
@@ -473,7 +483,7 @@ function renderAssignmentDecisions(packet, stage) {
     fields.append(field);
   };
   addField("Org", piece);
-  destination.hidden = true;
+  addField("Hex", destination);
   if (stage !== "talent_assignment") addField("Action", outcome);
 
   const summary = document.createElement("p");
@@ -540,19 +550,6 @@ function renderDecisions() {
     packet.requestId.split(":").at(-2) === "select" ? copy.browser.selectContext
       : packet.requestId.split(":").at(-2) === "resolve" ? copy.browser.resolveContext
       : formatCopy(copy.browser.decisionContext, packet);
-  const offer = packet.observation.publicTable.pendingJointVenture;
-  if (offer) {
-    const proposer = packet.observation.publicTable.players.find(p => p.seat === offer.proposerSeat);
-    const ownIncome = offer.income.find(p => p.seat === packet.seat);
-    const theirIncome = offer.income.find(p => p.seat === offer.proposerSeat);
-    elements["decision-context"].textContent = formatCopy(copy.browser.jointVentureOfferContext, {
-      proposer: proposer.factionName,
-      leftHost: offer.left.facilityId,
-      rightHost: offer.right.facilityId,
-      ownResource: copy.tracks[ownIncome.resource],
-      theirResource: copy.tracks[theirIncome.resource]
-    });
-  }
   elements["decision-count"].textContent =
     formatCopy(copy.browser.legalChoices, {
       count: packet.legalDecisions.length,

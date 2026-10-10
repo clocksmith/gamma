@@ -2,7 +2,7 @@
 
 The current engine is `lab/environment/selected-rules-match.js`. Browser, server, and simulation callers use it; `core-economy-match.js` reexports that engine. `web/src/engine.js` contains deterministic RNG, deck, and pure Training utilities, without a second gameplay implementation.
 
-The engine models the six-area/four-track candidate: limited Facility spaces, one upgrade, ordered Customer cards, Reputation Review, push-your-luck Research, immediate Headlines, faction abilities, fixed-rate consented trades, and fixed-host Ventures. All four revealed objectives and final holdings score at game end. The separate World Ending uses recognition and average final Reputation. Historical diagnostic fields never influence scoring.
+The engine models eighteen Action hexes around an Era center, one-edge Org movement, Org equipment, five holding tracks, Reputation Review, push-your-luck Research, immediate Headlines, faction abilities, and fixed-rate consented trades. Turns resolve sequentially. All four revealed objectives and final holdings score at game end. The separate World Ending uses recognition and average final Reputation. Historical diagnostic fields never influence scoring. Existing strategy weights are unqualified starting policies for this redesigned game; earlier balance findings do not transfer.
 
 Run `npm run simulate:monte-carlo -- --help` for the active CLI. `createSimulation()` accepts explicit seeds, player count, profiles, deterministic backends, kit assignments, and record/replay configuration. Four players is the primary balance configuration; three and five need separate evidence and two remains exploratory. Six-player requests are rejected. Rich and batch projections preserve mechanical outcomes.
 

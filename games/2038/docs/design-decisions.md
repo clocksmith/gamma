@@ -12,6 +12,29 @@ five selected proposals were implemented. Earlier 19-tile, every-Era
 map-motion, transmission, Tactic, secret-objective, and endgame-scoring
 assumptions are historical only.
 
+## Shared-hex simplification (2026-10-10)
+
+The user explicitly selected a major component reduction while preserving all
+lore and push-your-luck Research. The nineteen-hex board maps directly to the six
+Actions and their resource flows. Two rings of three hexes per Action surround an
+Era center. Only edge-adjacent movement is ordinary; Organize can reassign another
+Org freely. Orgs produce and can be equipped by flipping the same token.
+
+Deliberate changes: sequential turns, repeatable Actions, numeric Customers,
+Org-based production and equipment, no separate Facilities or Venture contracts.
+Five holdings plus calculated Mandate share one mat. The forty-card Training deck,
+its exact composition and shared draw/discard procedure remain intact. All unique
+lore remains; Action/Era lore moves onto hexes instead of requiring duplicate cards.
+
+The mandatory kit falls from 163 cards to 82: 40 Training, 24 Headlines, 12
+objectives, 6 institutions. It uses 19 hexes, 20 two-sided Orgs, 5 mats, 25 cubes,
+2 shared markers and 1 pencil: 154 playing components, versus 233 previously.
+Historical technology lore remains printable in the reference collection. Its Era II
+placement does not gate the generic Org equipment action. No
+historical balance result qualifies this design. The revised adjacency, resource
+loop, repeated Actions and Org production require new comparative and human tests.
+Strategic choice is a design target; no NP-hardness theorem is claimed.
+
 ## Org terminology (2026-10-10)
 
 The user selected Org (singular) and Orgs (plural) for the institution's major
