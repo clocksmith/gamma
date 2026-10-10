@@ -696,6 +696,20 @@ function renderDecisions() {
     packet.requestId.split(":").at(-2) === "select" ? copy.browser.selectContext
       : packet.requestId.split(":").at(-2) === "resolve" ? copy.browser.resolveContext
       : formatCopy(copy.browser.decisionContext, packet);
+  const offer = packet.observation.publicTable.pendingJointVenture;
+  if (offer) {
+    const proposer = packet.observation.publicTable.players.find(p => p.seat === offer.proposerSeat);
+    const ownIncome = offer.income.find(p => p.seat === packet.seat);
+    const theirIncome = offer.income.find(p => p.seat === offer.proposerSeat);
+    elements["decision-context"].textContent = formatCopy(copy.browser.jointVentureOfferContext, {
+      proposer: proposer.factionName,
+      leftHost: offer.left.facilityId,
+      rightHost: offer.right.facilityId,
+      ownResource: copy.tracks[ownIncome.resource],
+      theirResource: copy.tracks[theirIncome.resource],
+      powerStatus: offer.left.powered && offer.right.powered ? copy.terms.powered : copy.terms.offline
+    });
+  }
   elements["decision-count"].textContent =
     formatCopy(copy.browser.legalChoices, {
       count: packet.legalDecisions.length,

@@ -904,6 +904,7 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
         };
       }),
       publicTable: {
+        pendingJointVenture: this.pendingJointVenture ? this.copyPublic(this.pendingJointVenture) : null,
         players: this.players.map((candidate) => ({
           ...this.publicPlayerState(candidate),
           factionAbilityUsed: this.copyPublic(candidate.factionAbilityUsed || {}),
@@ -1794,7 +1795,25 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
       !this.jointVentureSupplyAvailable()
     ) return false;
     const targetSeat = decision.parameters.targetSeat;
-    const response = await this.choose(policies, targetSeat, "negotiation_response", [
+    const proposer = this.players[seat];
+    const responder = this.players[targetSeat];
+    const leftHost = proposer.facilities.find(host => host.id === decision.parameters.leftFacilityId);
+    const rightHost = responder.facilities.find(host => host.id === decision.parameters.rightFacilityId);
+    this.pendingJointVenture = {
+      proposerSeat: seat,
+      responderSeat: targetSeat,
+      left: { seat, facilityId: leftHost.id, tileId: leftHost.tileId,
+        powered: this.infrastructureState(proposer).locallyEligible.has(leftHost.id) },
+      right: { seat: targetSeat, facilityId: rightHost.id, tileId: rightHost.tileId,
+        powered: this.infrastructureState(responder).locallyEligible.has(rightHost.id) },
+      income: [
+        { seat, resource: facilityContractResource(this.board, rightHost), amount: 1 },
+        { seat: targetSeat, resource: facilityContractResource(this.board, leftHost), amount: 1 }
+      ]
+    };
+    let response;
+    try {
+      response = await this.choose(policies, targetSeat, "negotiation_response", [
       {
         decisionId: "agreement_accept",
         label: decisionLabel("agreementAccept"),
@@ -1805,7 +1824,10 @@ export class SelectedRulesMatch extends CoreEconomyMatch {
         label: decisionLabel("agreementReject"),
         actionId: "influence"
       }
-    ]);
+      ]);
+    } finally {
+      this.pendingJointVenture = null;
+    }
     if (response.decisionId === "agreement_reject") return false;
     const player = this.players[seat];
     const target = this.players[targetSeat];
