@@ -14,6 +14,7 @@ export function canonicalRulesVariant(config) {
     throw new Error("Only the shared-hex rules are current.");
   return {
     kind: "shared-hex-orgs-v1",
+    organizeProduction: config.board.tiles.find(tile => tile.id === "organize").yield.resource,
     pausedFactionAbilities: [],
     fundConservative: config.actionEffects.fund.conservative,
     fundVenture: config.actionEffects.fund.venture,
@@ -55,6 +56,8 @@ export function effectiveRulesVariant(config, overlay = {}) {
         overlay[key] > max)
     )
       throw new RangeError(`Invalid current-rule value: ${key}`);
+  if (overlay.organizeProduction !== undefined && !["runway", "compute"].includes(overlay.organizeProduction))
+    throw new RangeError("Invalid Organize production resource");
   const result = { ...current, ...structuredClone(overlay) };
   if (result.fundVenture <= result.fundConservative)
     throw new RangeError("Venture Fund must exceed conservative Fund.");

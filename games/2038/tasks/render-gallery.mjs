@@ -102,79 +102,33 @@ const timingBadge = (t) => (t ? t.replace(/_/g, " ") : "");
 // --- category builders -------------------------------------------------------
 
 function buildFactions(data, config) {
-  const cards = data.factions
-    .map((f) => {
-      const stats = `<dl class="stats">${Object.entries(f.starts)
-        .map(
-          ([key, value]) =>
-            `<div><dt>${escapeHtml(key)}</dt><dd>${escapeHtml(value)}</dd></div>`,
-        )
-        .join(
-          "",
-        )}</dl><p>Initialize the five holdings from this identity. Choose a kit separately.</p>`;
-      const abilities = (f.abilities || [])
-        .map(
-          (a) => `<div class="ability">
-<div class="ability-head"><strong>${escapeHtml(a.displayName || a.name)}</strong>${badges([roundBadge(a.round), timingBadge(a.timing)])}</div>
-${a.displayName && a.displayName !== a.name ? `<p class="mech-name">${escapeHtml(a.name)}</p>` : ""}
-<p class="rules">${escapeHtml(a.text)}</p>
-${a.flavorText ? `<p class="flavor">${escapeHtml(a.flavorText)}</p>` : ""}
-</div>`,
-        )
-        .join("");
-      const scoringRule = f.scoringRule
-        ? `<div class="ability scoring-contract">
-<div class="ability-head"><strong>${escapeHtml(f.scoringRule.name)}</strong>${badges(["scoring contract", timingBadge(f.scoringRule.timing)])}</div>
-<p class="rules">${escapeHtml(f.scoringRule.text)}</p>
-${f.scoringRule.flavorText ? `<p class="flavor">${escapeHtml(f.scoringRule.flavorText)}</p>` : ""}
-</div>`
-        : "";
-      const body = `${f.motto ? `<p class="flavor motto">“${escapeHtml(f.motto)}”</p>` : ""}
-${textRows([{ text: f.introduction }])}
-${stats}
-${scoringRule}
-<div class="abilities"><span class="field-label">Abilities</span>${abilities}</div>`;
-      return card({
-        accent: f.brandColor,
-        title: f.name,
-        subtitle: f.chiefExecutive,
-        badgeList: [f.brandColor ? "faction" : ""],
-        bodyHtml: body,
-      });
-    })
-    .join("");
-  return section(
-    "factions",
-    "Faction identity cards",
-    data.factions.length,
-    cards,
-    "Asymmetric institutions with starting values and one permanent ability. Equipment is selected separately.",
-  );
+  const cards = data.factions.map(f => {
+    const stats = Object.entries(f.starts).map(([key,value]) =>
+      `<div><dt>${escapeHtml(config.resources[key]?.name || key)}</dt><dd>${value}</dd></div>`).join('');
+    const ability = f.abilities.map(a => `<p><strong>${escapeHtml(a.displayName || a.name)}</strong><br>${escapeHtml(a.text)}</p>`).join('');
+    const lore = [f.motto, f.introduction, ...f.abilities.map(a => a.flavorText), f.scoringRule?.flavorText].filter(Boolean);
+    return `<article class="identity-pair" style="--accent:${escapeHtml(f.brandColor)}">
+      <div class="card identity-face identity-front">
+        <div class="identity-pointer pointer-top">▲ ${escapeHtml(config.scoreDisplay.unrecognizedLabel)}</div>
+        <div class="card-body"><h3>${escapeHtml(f.name)}</h3><p>${escapeHtml(f.chiefExecutive)}</p><dl class="stats">${stats}</dl>${ability}</div>
+        <div class="identity-pointer pointer-bottom">▲ ${escapeHtml(config.scoreDisplay.recognizedLabel)}</div>
+      </div>
+      <div class="card identity-face identity-back"><div class="card-body"><h3>${escapeHtml(f.name)}</h3>${lore.map(t=>`<p class="flavor">${escapeHtml(t)}</p>`).join('')}</div></div>
+    </article>`;
+  }).join('');
+  return section('factions', 'Faction identity cards', data.factions.length, cards, config.scoreDisplay.instructions);
 }
 
 function buildPlayerMats(config) {
-  const mats = config.playerKits
-    .map(
-      (kit) =>
-        `<article class="card player-mat" data-kit="${kit.id}" style="--accent:${kit.color}"><h3>${kit.symbol} ${kit.colorName} · ${kit.symbolName}</h3><p>Initialize from your institution card.</p>${Object.entries(
-          config.resources,
-        )
-          .map(
-            ([key, t]) =>
-              `<div class="resource-track" data-resource="${key}"><strong>${escapeHtml(t.name)}</strong> ${Array.from({ length: t.cap + 1 }, (_, n) => n).join(" · ")}</div>`,
-          )
-          .join(
-            "",
-          )}<p>Final Mandate: ______ · AGI recognized: □</p><p>Mandate = Capability + 2 × Customers + Reputation + 4 for AGI + objectives.</p><p>One turn: optional trade, stay/move one edge, perform that hex’s Action. Three cycles per Era; twelve turns total. Orgs produce their hex yield; equipped Orgs produce twice.</p>${config.actions.map((a) => `<p><strong>${escapeHtml(a.name)}</strong> ${escapeHtml(a.summary)}</p>`).join("")}</article>`,
-    )
-    .join("");
-  return section(
-    "player-mats",
-    "Player mats",
-    5,
-    mats,
-    "Five holding tracks, calculated Mandate, and the reference in one place.",
-  );
+  const mats = config.playerKits.map(kit => `<article class="card player-mat" data-kit="${kit.id}" style="--accent:${kit.color}">
+    <h3>${kit.symbol} ${kit.colorName} · ${kit.symbolName}</h3>
+    <div class="mat-holdings">${Object.entries(config.resources).map(([key,t]) =>
+      `<div class="resource-track" data-resource="${key}"><strong>${escapeHtml(t.name)}</strong><div>${Array.from({length:t.cap+1},(_,n)=>`<span>${n}</span>`).join('')}</div></div>`).join('')}</div>
+    <div class="mat-actions">${config.actions.map(a=>`<p><strong>${escapeHtml(a.name)}</strong> ${escapeHtml(a.summary)}</p>`).join('')}</div>
+    <p>${escapeHtml(config.scoreDisplay.description)}</p><p>${escapeHtml(config.scoreDisplay.instructions)}</p>
+    <div class="final-score-scale" aria-label="Final Mandate">${Array.from({length:config.scoreDisplay.maximum+1},(_,n)=>`<span data-score="${n}">${n}</span>`).join('')}</div>
+  </article>`).join('');
+  return section('player-mats', 'Player mats', config.playerKits.length, mats, 'Five holding tracks and an identity-card pointer for final Mandate.');
 }
 function formatTurnContract(tc) {
   if (!tc || typeof tc !== "object") return tc || "";
@@ -561,6 +515,46 @@ main { padding: 1.8rem clamp(1rem, 3vw, 2.4rem); }
   .stats div { background: #1e2530; }
   .tag { background: #1e2530; color: #94a3b8; }
 }
+
+#player-mats .grid { grid-template-columns: repeat(auto-fit,minmax(min(100%,680px),1fr)); }
+.player-mat { padding: 18px; gap: 9px; }
+.player-mat h3 { margin: 0; }
+.mat-holdings { display: grid; gap: 6px; }
+.resource-track { display: grid; grid-template-columns: 100px 1fr; gap: 8px; }
+.resource-track > div { display: flex; gap: 3px; }
+.resource-track span { flex: 0 0 6.1%; text-align: center; border: 1px solid #666; }
+.mat-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 14px; }
+.final-score-scale { display: flex; justify-content: space-between; margin-top: auto; border-bottom: 1px solid; }
+.final-score-scale span { flex: 1; text-align: center; font-size: 9px; border-bottom: 6px solid transparent; position: relative; }
+.final-score-scale span::after { content: ''; position: absolute; width: 1px; height: 5px; background: currentColor; bottom: -6px; left: 50%; }
+.identity-pair { display: grid; gap: 16px; }
+.identity-face { position: relative; }
+.identity-front { min-height: 350px; padding-block: 24px; }
+.identity-pointer { position: absolute; left: 0; width: 100%; text-align: center; font-size: 10px; font-weight: bold; }
+.pointer-top { top: 0; } .pointer-bottom { bottom: 0; transform: rotate(180deg); }
+@media print {
+  body { background: white; color: black; }
+  #player-mats .grid { display: block; }
+  .card.player-mat { width: 210mm; height: 148mm; padding: 5mm; gap: 2mm; font: 9pt/1.2 sans-serif; border-radius: 0; break-inside: avoid; break-after: page; overflow: visible; }
+  .resource-track { grid-template-columns: 25mm 1fr; gap: 2mm; }
+  .resource-track span { height: 6mm; line-height: 6mm; }
+  .mat-holdings { gap: 1mm; }
+  .mat-actions { gap: 2mm; }
+  .final-score-scale span { font-size: 6.5pt; }
+  #factions .grid { display: block; }
+  .identity-pair { display: flex; gap: 4mm; break-inside: avoid; margin-bottom: 4mm; }
+  .card.identity-face { width: 63mm; height: 88mm; min-height: 0; border-radius: 0; background: white; color: black; }
+  .identity-front { padding-block: 5mm; }
+  .identity-face .card-body { padding: 3mm; gap: 2mm; font: 8pt/1.25 sans-serif; }
+  .identity-face h3 { font-size: 11pt; margin: 0; }
+  .identity-face .flavor { font-size: 7.5pt; color: black; }
+  .identity-face .stats { gap: 1mm; }
+  .identity-face .stats div { min-width: 0; padding: 1mm; flex: 1; }
+  .identity-face .stats dt { font-size: 5.5pt; letter-spacing: 0; }
+  .identity-face .stats dd { font-size: 9pt; }
+  .identity-pointer { font-size: 6pt; }
+}
+
 @media (max-width: 760px) { .layout { grid-template-columns: 1fr; } nav.sidebar { position: static; height: auto; } }`;
 
 const SCRIPT = `const search = document.getElementById('q');

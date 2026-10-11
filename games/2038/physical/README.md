@@ -6,7 +6,7 @@ machine-enforced game data.
 
 The selected forms are shared hex tiles, double-sided Org tokens, institution and
 lore cards, five player mats, and five holding cubes per player. Mandate and AGI
-recognition use the writable fields on each mat. Kit colour and symbol identify
+recognition use the identity card’s edge pointer and orientation. No writing is required. Kit colour and symbol identify
 ownership independently of institution.
 ## Ownership
 

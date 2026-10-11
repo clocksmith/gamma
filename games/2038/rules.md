@@ -9,7 +9,7 @@ An Org is a major operating branch encompassing people, AI systems, and automate
 
 ## Setup
 
-Choose an institution and one of five colour-and-symbol player kits independently. Your identity card supplies starting Runway, Compute, Capability, Reputation, Customers, and one permanent ability. Mark these five holdings on your mat. Mandate is the sixth value: a calculated score, not another currency.
+Choose an institution and one of five colour-and-symbol player kits independently. Your identity card supplies starting Runway, Compute, Capability, Reputation, Customers, and one permanent ability. Place a cube on each of these five holdings on your mat. Keep your identity card upright. Mandate is the sixth value: a calculated score, not another currency.
 
 Place the Era hex in the middle, then fill two rings with the eighteen Action hexes according to their printed coordinates. Each of the six Action types has three hexes; the inner ring runs Fund, Research, Build, Organize, Deploy, Influence clockwise from the top. Give each player two normal-side Orgs, initially off the map; leave two in reserve. No other player pieces go on the map.
 
@@ -84,12 +84,12 @@ After Production, each institution at Reputation one or less loses two Runway, f
 
 ## Final AGI recognition
 
-After Era IV Production and Reputation Review, an institution with at least nine Capability, four Reputation, and three Compute may pay three Compute to mark recognized AGI on its mat. Resolve in Initiative order. Recognition grants four final Mandate; it does not override the winner.
+After Era IV Production and Reputation Review, an institution with at least nine Capability, four Reputation, and three Compute may pay three Compute to recognize AGI; rotate its identity card half a turn. Resolve in Initiative order. Recognition grants four final Mandate; it does not override the winner.
 
 <!-- mandate-scoring:start -->
 ## Score the final table once
 
-Mandate equals Capability + twice Customers + Reputation + four for recognized AGI + awards from the four revealed objectives. Count it from the final table and write the total on your mat. Do not accumulate a second historical score.
+Mandate equals Capability + twice Customers + Reputation + four for recognized AGI + awards from the four revealed objectives. Count it from the final table. ${content.gameConfig.scoreDisplay.instructions} Do not accumulate a second historical score.
 
 For each objective, the best qualified value receives two Mandate; tied qualified leaders receive one each. If nobody qualifies, nobody scores. Count Orgs, equipped Orgs, control, neighboring rival institutions, and nominal Compute production directly from the map. A neighboring rival counts once even if several of its Orgs border yours; sharing your hex alone is not adjacency. Nominal Compute production ignores caps without actually producing or triggering abilities.
 
@@ -105,7 +105,7 @@ Component records own exact effects; this rulebook owns procedures and inventory
 The central hex displays all four Eras and the current cycle. Each Era brings its own Headlines and objective. Equipment is available from the start; AGI recognition occurs only after Era IV. There are no Venture or upgrade unlocks to remember.
 <!-- era-panels:end -->
 <!-- player-aids:start -->
-Each player mat includes five holding tracks, a final Mandate box, an AGI checkbox, the six Action summaries, and the turn and scoring reference. No separate player aid is required.
+Each player mat includes five holding tracks, a final Mandate scale along its lower edge, the six Action summaries, and the turn and scoring reference. No separate player aid is required.
 <!-- player-aids:end -->
 <!-- headline-selection:start -->
 Keep all twenty-four Headlines: six per Era, three revealed per Era. Their effects finish before turns begin. Unless an effect applies to everyone, tied lowest/highest targets resolve to the first tied institution in Initiative order.
@@ -113,7 +113,7 @@ Keep all twenty-four Headlines: six per Era, three revealed per Era. Their effec
 <!-- components:start -->
 ## Components
 
-Five kits use colour and a non-colour symbol. Each kit's four Orgs have numbered normal/equipped faces, with the same owner and number on both sides. Hex positions show presence; token faces show equipment. Five cubes show holdings, while recognition and final Mandate are written on the mat.
+Five kits use colour and a non-colour symbol. Each kit's four Orgs have numbered normal/equipped faces, with the same owner and number on both sides. Hex positions show presence; token faces show equipment. Five cubes show holdings, while identity-card orientation shows recognition and its upper-edge pointer marks final Mandate on the mat’s lower scale.
 
 <!-- inventory:start -->
 ### Box inventory
@@ -125,8 +125,8 @@ Five kits use colour and a non-colour symbol. Each kit's four Orgs have numbered
 - Forty Training cards: four copies of all ten existing designs.
 - Twenty-four Headline cards: six per Era.
 - Twelve objective cards: three per Era, four revealed per game.
-- One Era/cycle marker, one Initiative marker, and one shared pencil.
+- One Era/cycle marker and one Initiative marker.
 
-The playing kit has eighty-two cards. Unique historical technology lore remains in the existing reference collection; it has no mandatory pieces. Action lore is printed on the eighteen Action hexes and Era lore on the center. No separate Action, Customer, or Facility cards; no Venture, equipment, recognition, or scoring tokens; no separate Governance Board or foldout aids. Deferred Tactics and secret objectives remain excluded.
+The playing kit has eighty-two cards and 153 items in total. No writing or pencil is required. Unique historical technology lore remains in the existing reference collection; it has no mandatory pieces. Action lore is printed on the eighteen Action hexes and Era lore on the center. No separate Action, Customer, or Facility cards; no Venture, equipment, recognition, or scoring tokens; no separate Governance Board or foldout aids. Deferred Tactics and secret objectives remain excluded.
 <!-- inventory:end -->
 <!-- components:end -->

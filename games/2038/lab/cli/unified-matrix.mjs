@@ -5,11 +5,18 @@ import { runUnifiedMatrix } from "../runner/unified-matrix-runner.js";
 import { archiveSimulationReport } from "../report-archive.js";
 import { projectRoot } from "../versioning/game-identity.js";
 
+const allowed = new Set('runs maximum-matches initial-runs batch-size player-counts mandate-modes rules-configurations comparison-kind profile-override-reports seed pre-registration-id projection workers chunk-size output'.split(' '));
+if (process.argv.includes('--help')) {
+  console.log('Options (each takes a value): ' + [...allowed].map(key => '--' + key).join(', '));
+  process.exit(0);
+}
 function argumentsMap(argv) {
   const result = {};
   for (let index = 0; index < argv.length; index += 1) {
-    if (!argv[index].startsWith("--")) continue;
+    if (!argv[index].startsWith("--")) throw new TypeError(`Unexpected argument: ${argv[index]}`);
     const key = argv[index].slice(2);
+    if (!allowed.has(key)) throw new TypeError(`Unknown option: --${key}`);
+    if (!argv[index + 1] || argv[index + 1].startsWith("--")) throw new TypeError(`Missing value: --${key}`);
     result[key] = argv[index + 1]?.startsWith("--") ? true : argv[++index] ?? true;
   }
   return result;
