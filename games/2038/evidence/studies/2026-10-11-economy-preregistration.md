@@ -82,3 +82,12 @@ empirical Bernstein intervals, range [-1,1], Bonferroni family of six effects
 Do not interpret equal persona win shares as intrinsically desirable. For guard
 counts, reject a credible new concentration or faction/seat dominance regression;
 retain unresolved precision explicitly. Inspect raw matched examples as well.
+
+Equipment stress control: if equipment3 survives trained-field confirmation, run
+`2026-10-11-equipment-recruitment.mjs` before adoption. Reuse the prior recruitment
+plan with independent `equipment-recruit-stress-20261011` seeds, every prior
+scenario restricted to repeat zero: 360/480/300 scenarios at 3/4/5, four arms
+(cost 2 or 3 x parent or recruitment plan), 4,560 games. Compare recruitment minus
+parent within each price, then the change in that gain; preserve legal setup
+fallbacks and all outcomes. This tests the known capital-investment path under
+both prices, not a newly selected stronger policy. No automatic promotion.
