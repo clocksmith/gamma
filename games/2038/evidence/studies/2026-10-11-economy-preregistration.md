@@ -56,3 +56,29 @@ under `evidence/studies/simulation/` and a tracked result with hashes and comman
 Audit rulebook, components, simulator, browser, references/player aids, physical
 score encoding, tests and playtest documentation together. Record no-change
 surfaces explicitly. Keep historical versions immutable. No deployment implied.
+
+## Trained-field confirmation (specified before screening results)
+
+Runner: `2026-10-11-economy-field.mjs`; frozen prior selected profiles in
+`2026-10-11-economy-profiles.json`, with original selection hashes. No new training
+or choice of opponents after outcomes. Four profiles in each homogeneous backend.
+Three-player rosters rotate omission; five-player rosters rotate the duplicate.
+Cross every institution subset, both objective modes, four policy rotations and
+all institution rotations. Use two repeats at three players and four at four/five:
+960 / 1,920 / 960 paired scenarios per backend; 15,360 games across both backends
+and two rules arms. Independent seeds include rotations. Shards partition these
+scenarios exactly, never extend them. Smoke seeds are separate and check rich/batch
+parity. Retain complete per-player final outcomes, Actions, score sources and
+winner credit, with input, profiles, source and protocol identities.
+
+Primary descriptive target: reduce winning Research Action share at four players
+in each homogeneous field, without replacing it with an equally concentrated
+single Action. Report normalized six-Action entropy, winning-path distribution,
+profile/faction/seat winner shares, no-ops, AGI, trades and recruitment. To quantify
+the primary contrast, average each game's winners' Research fraction (split winner
+credit), then calculate candidate-minus-canonical per scenario. Use fixed-look
+empirical Bernstein intervals, range [-1,1], Bonferroni family of six effects
+(3 counts x 2 backends), alpha .05. Independence is between scenarios only.
+Do not interpret equal persona win shares as intrinsically desirable. For guard
+counts, reject a credible new concentration or faction/seat dominance regression;
+retain unresolved precision explicitly. Inspect raw matched examples as well.
