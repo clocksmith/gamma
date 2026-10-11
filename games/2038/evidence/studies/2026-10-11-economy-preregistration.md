@@ -125,3 +125,27 @@ execution; the old 0.24.3 manifest is preserved and is not claimed to qualify ne
 code. The field runner marks `sourceCandidate: true` and does not describe a
 historical release verification as qualification of this implementation. Seal
 one new release only after the chosen source/rules and all projections agree.
+
+## Affordability defect and corrected-policy confirmation
+
+The first Research-cost trained field completed all 15,360 games and met the
+registered Research-share improvement target in both four-player backends.
+It FAILS the .03 no-op bound: weighted outcomes are about .039. Retain this failure;
+do not present it as passing or widen the limit. Passive replay of the first 100
+weighted four-player shard-zero candidate games matches every archived outcome:
+4,800 selections, 189 avoidable blocked turns, nine genuinely stranded turns.
+The policy's small positive blocked-choice weight permits unusable Actions even
+when an affordable choice exists. A high-preference regression fails for both
+backend selectors. Fix this policy boundary, preserving legal human choices,
+trade-enabled choices and genuinely forced passes. Do not retune profile weights.
+
+Recompare ONE- versus TWO-Compute Research with the SAME corrected policy on
+fresh seeds. Unified frame: `economy-20261011-research-legal-v1`, 6,000-match cap,
+eight initial runs/cell, batches 24, all counts/modes/backend regimes and the
+existing bounded adversarial slice. Trained frame uses the exact earlier 15,360-
+game allocation and frozen profile bytes, new root
+`economy-20261011-research2-legal-v1`. Primary target and six-effect intervals remain
+unchanged. The separate policy correction is common to both arms, not a benefit
+credited only to the two-Compute arm. Retain the earlier failed raw outcomes and
+source identity; this is a new corrected-policy comparison, not an extension of
+its sample. No further sampling or parameter tuning in this comparison.

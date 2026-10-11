@@ -204,7 +204,16 @@ export class WeightedPlayerPolicy {
 
   rank(packet) {
     validateDecisionPacket(packet);
-    return packet.legalDecisions
+    // A small positive penalty still lets sampling (or a large preference)
+    // choose a known blocked Action. Preserve genuine forced passes and
+    // explicitly trade-enabled selections, but prefer executable choices.
+    const executable = packet.legalDecisions.filter((decision) =>
+      decision.consequences?.stage !== "action_selection" ||
+      decision.consequences.resolvableWithoutTrade !== false ||
+      decision.consequences.status === "trade_required"
+    );
+    const choices = executable.length ? executable : packet.legalDecisions;
+    return choices
       .map((decision) => ({ decision, weight: this.score(packet, decision) }))
       .sort((left, right) =>
         right.weight - left.weight ||
