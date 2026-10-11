@@ -341,15 +341,18 @@ try {
     await send("Page.navigate", { url: releaseResourceUrl(base, "__browser/runner.html") });
     report.boundaries = await waitFor("window.__mandateBoundaryResults");
     await screenshot("boundary-regressions.png");
-    assert.equal(report.boundaries.length, 15, "All fifteen boundary regressions must load.");
+    const boundarySource = await readFile(resolve(projectRoot, "tests/rule-boundaries.test.mjs"), "utf8");
+    const boundaryNames = [...boundarySource.matchAll(/^test\("([^"]+)"/gm)].map(match => match[1]);
+    assert.ok(boundaryNames.length > 0, "The current boundary suite must declare tests.");
+    assert.deepEqual(report.boundaries.map(entry => entry.name), boundaryNames, "Every current boundary regression must load in order.");
     assert.ok(report.boundaries.every((entry) => entry.status === "passed"), JSON.stringify(report.boundaries));
     process.stdout.write(`browser: ${report.boundaries.length} boundary regressions passed\n`);
 
     const coreRulesResponse = await fetch(releaseResourceUrl(base, "docs/core-rules.html"));
     assert.equal(coreRulesResponse.status, 200, "Core rules must be accessible.");
     const coreRulesHtml = await coreRulesResponse.text();
-    assert.match(coreRulesHtml, /Reveal one Headline.*?secretly selects/s, "Headline effects finish before selection.");
-    assert.match(coreRulesHtml, /offer one immediate trade, then choose an Org/, "Trade precedes action resolution.");
+    assert.match(coreRulesHtml, /Reveal one Headline.*?resolve its immediate instructions in Initiative order.*?In Initiative order/s, "Headline effects finish before selection.");
+    assert.match(coreRulesHtml, /offer one immediate trade, then chooses one reachable Action, assigns one Org/, "Trade precedes action resolution.");
 
     const cardsSource = JSON.parse(await readFile(resolve(projectRoot, "components/reference-cards.json"), "utf8"));
     const aidTexts = (cardsSource.playerReferences || []).flatMap((card) => [...(card.frontText || []), ...(card.backText || [])]);
