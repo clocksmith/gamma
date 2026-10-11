@@ -36,10 +36,11 @@ export function summarize(rows){
 }
 export async function analyze(files){
  const reports=await Promise.all(files.map(async path=>{const bytes=await readFile(path);return {path,sha256:sha256(bytes),report:JSON.parse(bytes)};}));
- const groups={};let candidate=null,identity=null;
+ const groups={};let candidate=null,identity=null,root=null;
  for(const {report:r} of reports){
   if(r.status!=='complete') throw new Error('Incomplete or smoke report');
   const c=r.options.experimentConfiguration;
+  root??=c.root;if(root!==c.root) throw new Error('Mixed seed namespaces');
   candidate??=c.candidate;if(candidate!==c.candidate) throw new Error('Mixed candidates');
   const frozen=JSON.stringify({game:r.identity.game,engine:r.identity.engine,files:r.fileHashes,inputs:r.inputHashes});
   identity??=frozen;if(identity!==frozen) throw new Error('Mixed source/input identities');
@@ -47,7 +48,7 @@ export async function analyze(files){
  }
  const summaries={};
  for(const [key,rows] of Object.entries(groups)){
-  const [backend,count]=key.split('/');const expected=scenarios(Number(count),backend).map(b=>b.seed).sort();
+  const [backend,count]=key.split('/');const expected=scenarios(Number(count),backend,false,root).map(b=>b.seed).sort();
   if(JSON.stringify(rows.map(r=>r.block.seed).sort())!==JSON.stringify(expected)) throw new Error(`Missing/repeated scenarios: ${key}`);
   summaries[key]=summarize(rows);
  }

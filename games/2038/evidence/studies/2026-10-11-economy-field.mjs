@@ -11,20 +11,20 @@ import {subsets} from './2026-10-11-seat-diversity.mjs';
 import {assertOutcome} from './2026-10-11-capacity-counterplay.mjs';
 import {summarizeOutcome} from './2026-10-11-plan-traces.mjs';
 
-export const CANDIDATES = {customers3: {customerPoints: 3}, equipment3: {facilityCost: 3}};
+export const CANDIDATES = {customers3: {customerPoints: 3}, equipment3: {facilityCost: 3}, research2: {researchComputeCost: 2}};
 const ROOT = 'economy-20261011-trained-v1';
 const FILES = ['2026-10-11-economy-field.mjs', '2026-10-11-economy-profiles.json',
   '2026-10-11-economy-preregistration.md'];
 const INPUTS = ['game-config', 'factions', 'headlines', 'projects', 'mandates'];
 const rotate = (xs, n) => xs.map((_, i) => xs[(i + n) % xs.length]);
 
-export function scenarios(count, backend, smoke = false) {
+export function scenarios(count, backend, smoke = false, root = ROOT) {
   if (![3,4,5].includes(count) || !['greedy','weighted'].includes(backend)) throw new RangeError('Unsupported cohort');
   const rows = [];
   for (const [subset, ids] of subsets([0,1,2,3,4,5], count).entries())
     for (const mode of ['fixed','variable'])
       for (let repeat=0; repeat < (count === 3 ? 2 : 4); repeat++) {
-        const prefix = `${ROOT}:${smoke ? 'smoke' : 'holdout'}:${backend}:${count}:${subset}:${mode}:${repeat}`;
+        const prefix = `${root}:${smoke ? 'smoke' : 'holdout'}:${backend}:${count}:${subset}:${mode}:${repeat}`;
         const order = shuffle(ids, createRng(`${prefix}:institutions`));
         for (let policyRotation=0; policyRotation<4; policyRotation++)
           for (let rotation=0; rotation<count; rotation++) {
@@ -61,14 +61,18 @@ export async function run({count,backend,candidate,shard=0,shards=1,smoke=false}
   if (!Object.hasOwn(CANDIDATES,candidate) || !Number.isInteger(shard) || !Number.isInteger(shards) ||
       shards<1 || shard<0 || shard>=shards) throw new RangeError('Invalid candidate/shard');
   if (execFileSync('git',['status','--porcelain'],{encoding:'utf8'}).trim()) throw new Error('Clean source required');
-  await verifyRelease(process.cwd());
+  // The new cost-dispatch implementation is tested before sealing its release.
+  // This arm is explicitly source evidence; release acceptance follows adoption.
+  const sourceCandidate = candidate === 'research2';
+  if (!sourceCandidate) await verifyRelease(process.cwd());
+  const root = sourceCandidate ? 'economy-20261011-research2-v1' : ROOT;
   const allProfiles=JSON.parse(await readFile(`evidence/studies/${FILES[1]}`)), profiles=allProfiles[backend].profiles;
   const input=Object.fromEntries(await Promise.all(INPUTS.map(async n=>[n,JSON.parse(await readFile(`dist/runtime/${n}.json`))])));
   const fileHashes=Object.fromEntries(await Promise.all(FILES.map(async f=>[f,sha256(await readFile(`evidence/studies/${f}`))])));
   const options={profiles,backends:[backend],policyProjection:'batch',experimentKind:'economy_trained_field',
-    experimentConfiguration:{root:ROOT,count,backend,candidate,shard,shards,smoke}};
+    experimentConfiguration:{root,sourceCandidate,count,backend,candidate,shard,shards,smoke}};
   const identity=await loadGameIdentity(options);
-  const blocks=scenarios(count,backend,smoke).filter((_,i)=>i%shards===shard);
+  const blocks=scenarios(count,backend,smoke,root).filter((_,i)=>i%shards===shard);
   const output=`evidence/studies/simulation/2026-10-11-economy-${candidate}-${backend}-${count}-${shard}${smoke?'-smoke':''}.json`;
   const raw={status:'running',evidenceType:'simulation',identity,fileHashes,options,profiles,
     inputHashes:Object.fromEntries(await Promise.all(INPUTS.map(async n=>[n,sha256(await readFile(`dist/runtime/${n}.json`))]))),rows:[]};
