@@ -4,7 +4,7 @@ Component: Mandate 2038 economy, shared execution engine and computer policies. 
 
 ## Decision
 
-Adopt two-Compute Research as the user-authorized **0.24.4 playtest candidate**, subject to final build/release checks. Equipment remains two Runway; Customers remain two points. All factions, Training cards, 19 hexes, 12 turns per player and the 82-card / 153-item kit remain unchanged. Higher equipment cost and higher Customer scoring were rejected. This is an improvement under the tested policies, **not full balance qualification**.
+Adopt two-Compute Research as the user-authorized **0.24.4 playtest candidate**. Equipment remains two Runway; Customers remain two points. All factions, Training cards, 19 hexes, 12 turns per player and the 82-card / 153-item kit remain unchanged. Higher equipment cost and higher Customer scoring were rejected. This is an improvement under the tested policies, **not full balance qualification**.
 
 The final broad audit completed **5,974 games** with zero integrity failures,
 zero policy fallbacks and no statistically qualified dominance finding. At four
@@ -14,8 +14,7 @@ entropy **0.787 → 0.881**. Candidate seat range is **1.13 pp**, faction range
 Action/path diversity and no-op point checks pass in this frame. Persona ranges
 still fail: **24.57 / 23.78 / 19.67 pp** at three/four/five players against 18.
 The audit therefore remains `outside_provisional_bounds`, with precision not
-reached. This does not override the trained-field failures below. Release/browser
-validation is pending at this receipt revision.
+reached. This does not override the trained-field failures below.
 
 ## Actual corrections
 
@@ -71,6 +70,34 @@ Every original field smoke used separate seeds: three scenarios per backend, bot
 | Playtest documentation | This receipt records unresolved fairness and required ordinary-rules human observation. Shared historical protocols remain intact. |
 | Release | One new 0.24.4 / rules 0.14.0-rc.5-test / engine 0.27.4; historical bundles immutable. |
 | Deployment | No deployment. |
+
+## Final implementation and package checks
+
+- All **258 tests passed**, with zero skips or failures, followed by all content,
+  boundary, provenance and accounting checks. The first final suite found one
+  crash fixture still assuming the old price; its starting Compute now uses the
+  declared cost plus one, preserving its original remaining-resource assertion.
+  That failed run is retained alongside the passing rerun.
+- **96 complete archived candidate games** (16 per backend/player-count cohort,
+  selected by seed hash) replayed with exact outcome matches through ordinary
+  cost-two execution, without a study rules overlay. The rules and engine
+  fingerprints match the sealed package. These are replay controls, not new
+  independent balance observations.
+- Sealed **0.24.4 / rules 0.14.0-rc.5-test / engine 0.27.4**. Release verification
+  passed; historical releases were not changed.
+- Built the public-playtest package at clean commit `1916e8072`. Chrome passed
+  **13 shipped-engine boundary checks**, then complete desktop (1440×1000) and
+  mobile-emulated (390×844) games: tutorial, all four Eras and twelve Headlines,
+  scoring, World Ending, actual downloaded export, and linked rules/components.
+  No uncaught browser errors or failed requested resources occurred.
+- Separate table checks passed full desktop/mobile games, prototype component
+  dimensions, and a crowded board with all 20 Orgs and 25 holding cubes.
+- No physical-phone or human session occurred. No deployment occurred. The
+  remote simulation jobs have finished; existing services were left alone.
+
+Validation logs, browser receipts, exports and screenshots are retained locally
+under `evidence/studies/simulation/2026-10-11-final-validation/`. The ordinary
+runtime replay is `simulation/2026-10-11-final-runtime-replay.json`.
 
 ## Reproduction and retained artifacts
 
@@ -150,3 +177,9 @@ Raw archive (local `evidence/studies/simulation/`), hashes below. Analysis-sourc
 | `2026-10-11-research-screen.json` | `e07f03348a98e6b5d4d6d4174a790668307e36731717577dc3b6762c3cc734ea` |
 | `2026-10-11-research-trained-analysis.json` | `ec5ff5d2082ccd3fb4088904217a4f28803de3fd5045e5c3ae43e01074cabbf2` |
 | `2026-10-11-research-legal-audit.json` | `b2540d08d95f53916497d7ea2eb24f0c764c0c7f1188bf4b46a1ac573d369936` |
+| `2026-10-11-final-runtime-replay.json` | `6f22ce5111c6dbe285e98eed7e1588d48b6f0549341375f68cc02a723f59f25b` |
+| `2026-10-11-final-validation/browser/browser-receipt.json` | `77f61c33cd105664efa8dd81491c8893fce663866cf3368291a239846f4c2a33` |
+| `2026-10-11-final-validation/tests.log` | `bc375e4dd7ea0aef00d5211b27dbc88222ade0ebbc0826add9a6586ef4f7b812` |
+| `2026-10-11-final-validation/content-check.log` | `f836dc6c0e598f0b9a966b51a3b2b1594bc499a374802a242c0e61cfe81d9041` |
+| `2026-10-11-final-validation/table-browser.log` | `438758284fd1e95e62058b73505a3c006cad04eb3dd901448792d5358b190814` |
+| `2026-10-11-final-validation/tests-before-fixture-fix.log` | `eda035444065ac6d1824f38ead4ff023275ff64e27aaca799e08e78f40ba58aa` |
