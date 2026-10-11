@@ -121,6 +121,8 @@ export class SelectedRulesMatch {
     this.playerCount = playerCount;
     this.board = generateBoard(config);
     this.rulesVariant = effectiveRulesVariant(config, rulesVariant);
+    for (const tile of this.board.filter(tile => tile.actionId === "organize"))
+      tile.yield = {...tile.yield, resource: this.rulesVariant.organizeProduction};
     this.projection = projection;
     this.recordReplay = recordReplay;
     this.decisionContext = decisionContext;
@@ -464,14 +466,14 @@ export class SelectedRulesMatch {
                   );
             }
             if (actionId === "organize") {
-              if (p.agentsInSupply > 0 && p.runway >= 2)
+              if (p.agentsInSupply > 0 && p.runway >= this.config.actionEffects.organize.recruitCost)
                 decisions.push(
                   choice(
                     "organize_recruit",
-                    "Establish an Org (2 Runway)",
+                    `Establish an Org (${this.config.actionEffects.organize.recruitCost} Runway)`,
                     "organize",
                     { mode: "recruit" },
-                    { runway: -2, agents: 1 },
+                    { runway: -this.config.actionEffects.organize.recruitCost, agents: 1 },
                   ),
                 );
               for (const other of p.pieces.filter((x) => x.id !== agent.id))
@@ -560,7 +562,7 @@ export class SelectedRulesMatch {
         break;
       case "organize":
         if (a.mode === "recruit") {
-          this.spendRunway(p, 2);
+          this.spendRunway(p, this.config.actionEffects.organize.recruitCost);
           p.pieces.push({
             id: `s${seat}-agent-${p.pieces.length + 1}`,
             kind: "agent",

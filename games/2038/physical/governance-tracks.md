@@ -2,8 +2,10 @@
 
 Initialize five tracks from the chosen institution: Runway 0–12, Compute 0–10,
 Capability 0–12, Reputation 0–6, and Customers 0–5. Mandate is the sixth displayed
-value: write its calculated final total, rather than maintaining another resource.
-Include an AGI recognition checkbox and the six Action summaries on each mat.
+value: align the identity card’s upper-edge pointer with its calculated final
+total on the mat’s lower scale. Upright means unrecognized; rotated half a turn
+means recognized AGI. Do not move holdings or Orgs to record the score. Include
+the six Action summaries on each mat.
 
 The center hex shows four Eras with three cycle positions each. One marker records
 both Era and cycle; pass the Initiative marker clockwise after every cycle.

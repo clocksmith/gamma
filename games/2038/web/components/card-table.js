@@ -70,9 +70,11 @@ export function createCardTable(
       (card, record) => {
         card.record = record;
         card.classList.toggle("card-back", Boolean(record.back));
+        card.classList.toggle("recognized-identity", Boolean(record.agiDeclared));
+        card.dataset.orientation = record.agiDeclared ? "180" : "0";
         text(card.children[0], record.kindLabel);
         text(card.children[1], record.name);
-        text(card.children[2], record.caption || copy.readCard);
+        text(card.children[2], (record.caption || copy.readCard) + (record.agiDeclared ? ` · ${config.scoreDisplay.recognizedLabel}` : ""));
         card.setAttribute(
           "aria-label",
           `${record.kindLabel}: ${record.name}. ${record.caption || copy.readDetails}`,
@@ -170,6 +172,7 @@ export function createCardTable(
         factions.factions.map((card) => ({
           ...card,
           kindLabel: copy.institution,
+          agiDeclared: Boolean(state.players.find(player => player.factionId === card.id)?.agiDeclared),
           caption: state.players.find((player) => player.factionId === card.id)
             ? format(copy.seat, {
                 seat:
