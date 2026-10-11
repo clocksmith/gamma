@@ -65,7 +65,7 @@ export async function run({count,backend,candidate,shard=0,shards=1,smoke=false}
   // This arm is explicitly source evidence; release acceptance follows adoption.
   const sourceCandidate = candidate === 'research2';
   if (!sourceCandidate) await verifyRelease(process.cwd());
-  const root = sourceCandidate ? 'economy-20261011-research2-v1' : ROOT;
+  const root = sourceCandidate ? 'economy-20261011-research2-legal-v1' : ROOT;
   const allProfiles=JSON.parse(await readFile(`evidence/studies/${FILES[1]}`)), profiles=allProfiles[backend].profiles;
   const input=Object.fromEntries(await Promise.all(INPUTS.map(async n=>[n,JSON.parse(await readFile(`dist/runtime/${n}.json`))])));
   const fileHashes=Object.fromEntries(await Promise.all(FILES.map(async f=>[f,sha256(await readFile(`evidence/studies/${f}`))])));
@@ -73,7 +73,7 @@ export async function run({count,backend,candidate,shard=0,shards=1,smoke=false}
     experimentConfiguration:{root,sourceCandidate,count,backend,candidate,shard,shards,smoke}};
   const identity=await loadGameIdentity(options);
   const blocks=scenarios(count,backend,smoke,root).filter((_,i)=>i%shards===shard);
-  const output=`evidence/studies/simulation/2026-10-11-economy-${candidate}-${backend}-${count}-${shard}${smoke?'-smoke':''}.json`;
+  const output=`evidence/studies/simulation/2026-10-11-economy-${sourceCandidate ? candidate + "-legal" : candidate}-${backend}-${count}-${shard}${smoke?'-smoke':''}.json`;
   const raw={status:'running',evidenceType:'simulation',identity,fileHashes,options,profiles,
     inputHashes:Object.fromEntries(await Promise.all(INPUTS.map(async n=>[n,sha256(await readFile(`dist/runtime/${n}.json`))]))),rows:[]};
   await writeFile(output,JSON.stringify({status:'running',identity})+'\n',{flag:'wx'});
