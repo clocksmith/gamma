@@ -1,13 +1,13 @@
 # SAME-R Selector And Saturation Contract
 
 This document specifies automatic, cross-domain, multi-model, and recursive
-SAME-R selection. It is a design contract. [`selector.py`](selector.py) implements
-a prototype registry, selector, and saturation evaluator; it does not implement
-the complete contract or recursive evaluator described here.
+SAME-R selection. It is a design contract; implementation and qualification
+status lives in the [README](README.md#what-is-implemented).
 
 The [outer-method specification](SPEC.md) owns the outer method. The
 [causal and evidence contract](CAUSAL_AND_EVIDENCE_CONTRACTS.md) owns each
 trial. Machine-readable objects live under [`contracts/`](contracts/README.md).
+Object sketches below are conceptual; the canonical schema owns serialized fields.
 
 ## Selector Claim Boundary
 
@@ -55,7 +55,9 @@ remain eligible for translation. A revision change creates a new entry.
 
 ## Typed Trial History
 
-History uses separate collections:
+Each registry-history revision uses disjoint collections. A trial ID occurs
+in only one current disposition collection; prior snapshots and receipts retain
+its earlier dispositions. History uses:
 
 - `accepted`: trial passed its declared causal stage;
 - `rejected`: valid trial produced a terminal negative result;
@@ -252,7 +254,11 @@ selector output.
 
 ## Search Budget
 
-The budget is a typed vector, not one scalar:
+The budget is a typed vector, not one scalar. The following is conceptual
+accounting coverage; serialized counters live in the canonical `budgetVector`
+and causal/search objects. Record the adaptive policy and state hash, blocked
+and invalidated trial costs, and refund/dispute evidence with the search lineage.
+Do not add conceptual fields to an existing serialized schema version:
 
 ```text
 search_budget = {
@@ -333,6 +339,12 @@ function is_saturated(history, budget):
     if promotion_rule_passed(history):
         return decision(true, "promotion_achieved")
 
+    if domain_owner_stop_receipt_exists(history):
+        return decision(true, "domain_owner_stop")
+
+    if predeclared_diminishing_returns_rule_passed(history, budget):
+        return decision(true, "predeclared_diminishing_returns_rule_met")
+
     eligible = eligible_untried_approaches(history, budget.registry)
     if eligible is not empty and budget_can_fund_any(eligible, budget):
         return decision(false, "eligible_candidates_remain", eligible)
@@ -343,18 +355,23 @@ function is_saturated(history, budget):
     if eligible is empty and all_eligible_trials_terminal(history):
         return decision(true, "eligible_registry_exhausted")
 
-    if predeclared_diminishing_returns_rule_passed(history, budget):
-        return decision(true, "predeclared_diminishing_returns_rule_met")
-
-    if domain_owner_stop_receipt_exists(history):
-        return decision(true, "domain_owner_stop")
-
     return decision(false, "budget_or_evidence_unresolved")
 ```
 
+A recorded owner stop or a passed diminishing-returns rule can terminate a
+scope even when untried approaches remain. Both follow the pending-evidence
+check; neither silently abandons required evaluations. An owner stop records
+a terminal no-promotion decision.
+
 ### Saturation decision
 
-The receipt records:
+Terminal reason codes and serialized fields are defined by the canonical
+`saturationDecision` schema. Conceptual policy examples above do not define an
+alternative wire format. Adding an approach, changing the population, or
+increasing the budget opens a new contract and saturation scope.
+
+A diminishing-returns predicate freezes effect, uncertainty, and no-improvement
+window requirements before execution. The receipt records:
 
 - saturated boolean and reason code;
 - capability, population, contract, registry, history, and budget scope;

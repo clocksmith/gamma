@@ -1,6 +1,9 @@
 # SAME-R Machine-Readable Contracts
 
-This directory turns the SAME-R documentation into validation targets.
+This directory owns canonical serialized object shapes for SAME-R.
+Use the schema and synthetic fixture below rather than copying payload shapes
+into prose. The [specification ownership map](../SPEC.md#specification-ownership)
+identifies the authoritative owner of each policy topic.
 
 ## Files
 
@@ -30,7 +33,7 @@ The validator checks:
 - schema and example are valid JSON;
 - exact contract field sets;
 - identifier, revision, and SHA-256 shapes;
-- disjoint accepted/rejected/blocked/invalidated/saturated histories;
+- disjoint accepted/rejected/blocked/invalidated/saturated/promoted histories;
 - participant-role and scoped-label-authority references;
 - exact model, base-checkpoint, tokenizer, adapter-initialization, initial
   parameter, and trainable-parameter lineage;
@@ -46,7 +49,10 @@ The validator checks:
 ## Artifact Granularity
 
 The checked-in example is a bundle so cross-object references can be tested in
-one command. A production system SHOULD store each object separately and bind
+one command. It represents completed evidence: actual consumption and
+checkpoint/item outcomes are known. Pre-execution plans remain retained
+separately; the fixture is not a format for predicting future results.
+A production system SHOULD store each object separately and bind
 it by repository revision, path, and SHA-256. A production bundle may assemble
 those immutable pointers for replay.
 
