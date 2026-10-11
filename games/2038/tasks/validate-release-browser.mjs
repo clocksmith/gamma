@@ -404,7 +404,7 @@ try {
     await waitFor("document.querySelectorAll('.decision-card').length === 6");
     const actions = await evaluate("[...document.querySelectorAll('.decision-card')].map(node=>node.innerText)");
     assert.ok(["Fund", "Research", "Build", "Organize", "Deploy", "Influence"].every((name) => actions.some((text) => text.includes(name))));
-    const owners = await evaluate("[...document.querySelectorAll('.kit-identity')].map(n=>n.innerText)");
+    const owners = await evaluate("[...document.querySelectorAll('.player-mat .eyebrow')].map(n=>n.innerText)");
     assert.equal(owners.length,4);
     assert.ok(owners[0].includes('Violet'));
     assert.equal(await evaluate("document.querySelectorAll('.action-area').length"),18);
