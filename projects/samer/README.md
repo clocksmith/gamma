@@ -8,8 +8,10 @@ The approach can change. The objective, controls, evaluation population, success
 metric, guardrails, and replication policy stay fixed. Results belong to the
 specific workload and contract that produced them.
 
-This README is the overview. The [full specification](SPEC.md) retains the
-algorithm, detailed procedures, artifact examples, and historical evidence.
+This README owns the overview, current implementation status, and commands.
+The [full specification](SPEC.md) retains the method, application profiles, and
+historical evidence. Its [ownership map](SPEC.md#specification-ownership) links
+each detailed rule to one authoritative document.
 
 ## How a comparison works
 

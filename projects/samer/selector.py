@@ -1,7 +1,8 @@
-"""SAME-R Approach Selector and Saturation Engine.
+"""Prototype SAME-R selector, registry, history, and saturation mechanics.
 
-Implements the canonical selector, saturation evaluator, approach registry,
-and selection-receipt generation according to SELECTOR_AND_SATURATION.md.
+SELECTOR_AND_SATURATION.md owns the complete design contract. README.md owns
+implementation and qualification status. These dataclasses are not the
+canonical serialized objects defined under contracts/.
 """
 
 from __future__ import annotations

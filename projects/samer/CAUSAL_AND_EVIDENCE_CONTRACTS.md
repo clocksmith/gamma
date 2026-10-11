@@ -164,7 +164,19 @@ contract.
 
 ## Run Contract And Exact Lineage
 
-Every lane and seed emits a run contract before execution.
+Every lane and seed freezes its planned identities, policies, and expected
+denominators before execution. The human-readable contract line summarizes
+that plan; it is not a serialized contract definition:
+
+```text
+[run-contract] experiment_id=<id> lane=<anchor|targeted|random_control> run_name=<name> teacher=<id|none> student=<id> base_revision=<hash> adapter=<targets/rank/alpha/dropout|none> dataset=<manifest> dataset_rows=<n> order_hash=<sha256> evals=<paths> evaluator=<id/hash> decode=<policy> optimizer=<type> schedule=<id> seed=<n> dtype=<dtype> device=<device> resume_from=<path|none> sweep_mode=<live|after_train>
+```
+
+Actual consumed rows, final checkpoint hashes, and evaluation outcomes are
+completion evidence. Emit them after execution and retain the pre-execution
+plan and every attempt; do not overwrite a hashed plan to fill in results.
+The [canonical suite](contracts/README.md#artifact-granularity) is a completed
+evidence bundle, not a demand to know execution outcomes before launch.
 
 ### Model and adapter identity
 
@@ -254,6 +266,7 @@ Teacher quality is not global. Each label-authority receipt binds:
 - teacher, curator, or adjudicator identity and immutable revision;
 - qualification corpus, gold, instruction, wrapper, decode, retry, evaluator,
   and threshold hashes;
+- qualification command and CLI/runtime version;
 - domain, capability, population, language, category, task shape, input shape,
   and output envelope;
 - allowed actions: positive label, negative label, abstention, correction,
@@ -341,7 +354,18 @@ cadence. The evaluation receipt reports:
 
 The final checkpoint has no privilege. A failed or omitted checkpoint remains
 in the denominator and scoreboard. A selected checkpoint MUST be the winner
-under the predeclared lexicographic rule after all blocking gates.
+under the predeclared lexicographic rule after all blocking gates. For the
+capability-transfer profile, that rule is:
+
+1. reject contract, safety, contamination, and policy failures;
+2. reject required category or regression guardrail failures;
+3. rank by the declared external capability metric;
+4. use declared secondary metrics only for ties; and
+5. retain losing checkpoints and failure rows.
+
+Checkpoint-selection and sealed promotion populations are distinct. Sealed
+promotion items MUST NOT be reused to choose a checkpoint; final access follows
+the frozen holdout and evaluator-look policy.
 
 ## Typed Metric Evidence And Adjudication
 
@@ -365,6 +389,12 @@ Metric evidence has independent measurement and adjudication axes.
 - `human_and_machine_adjudicated`.
 
 ### Required metric fields
+
+The serialized `decisionRole` values are defined in the canonical schema.
+Examples distinguish a primary score, a blocking guardrail, supporting evidence,
+and a diagnostic; measurement type and adjudication type remain independent.
+A deterministic result may have machine adjudication, while an AI-judged result
+may also receive human adjudication. Neither changes the measurement's origin.
 
 Every primary, guardrail, supporting, and diagnostic metric records:
 
@@ -430,13 +460,16 @@ shows the old contract was false.
 ### Invalidation receipt
 
 Record old contract hash, trigger code, discovering participant, discovery
-event, affected trials and claims, budget disposition, replacement contract
-hash, and whether artifacts remain usable for a narrower claim.
+event and timestamp, affected trials and claims, budget disposition,
+replacement contract hash, and whether artifacts remain usable for a narrower claim.
 
-Invalidated runs remain in accepted/rejected/blocked history with
-`invalidated=true`. They cannot count toward selection, seed confirmation,
+Retain the original receipts and append the invalidation receipt. In the new
+registry-history revision, affected trial IDs occur only in the `invalidated`
+collection, and their current trial receipts set `invalidated=true`. Earlier
+history snapshots preserve the former disposition; they are not rewritten.
+Invalidated evidence cannot count toward selection, seed confirmation,
 saturation, or promotion. Re-running under a corrected contract creates new
-trial IDs.
+trial IDs. This follows the [disjoint history contract](SELECTOR_AND_SATURATION.md#typed-trial-history).
 
 ## Promotion Completeness
 
@@ -453,6 +486,11 @@ Promotion requires:
 - selection and saturation receipts when automatic selection was used;
 - deployment/package constraints and runtime parity where applicable; and
 - named human or policy review status.
+
+The domain promotion receipt binds the selected checkpoint and artifact hashes,
+claim and claim boundary, the evidence chain above, and the deployment decision.
+Its domain-owned format is distinct from the canonical suite's trial and
+selection receipts.
 
 Missing evidence is represented as missing and blocks promotion. It is never
 inferred from a README, aggregate score, provider reputation, or consensus.

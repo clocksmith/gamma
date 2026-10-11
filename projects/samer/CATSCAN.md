@@ -9,6 +9,7 @@ Attribute outcome differences to swappable approaches under matched evaluation a
 ## Authority
 
 - Owns SAME-R contract schemas, experiment registration, selector rules, and replication evidence.
+- Uses the [specification ownership map](SPEC.md#specification-ownership) for authoritative rules and documentation changes.
 - Does not declare a benchmark valid or a result general beyond its contract.
 
 ## Scope
