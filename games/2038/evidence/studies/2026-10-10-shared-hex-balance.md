@@ -76,3 +76,21 @@ results. Improved recruit-first performance alone cannot qualify the change.
 - `hex-opening-results.json`: `39bc69d490ff315e8799bd78b92a228dffcc67033401bef8da56de29546ad33b`
 - `hex-opening-study.mjs`: `9c1f019be01107ab306e7e6d7caf7890c7f3d3f09984a1d7a390f5b5acb31594`
 - `mandate-balance-baseline.json`: `d2b8bbeef2b176d2c22450bb0d07dd0d5bd9236610fe65c296560587522830ee` (automatic simulation archive also retained).
+
+## Execution amendment before a result — larger batches
+
+The first paired matrix was stopped during adaptive sampling after initial
+coverage; no final result or numerical selection was accepted. Its progress log
+is retained locally as `/tmp/hex-matrix-interrupted.log`. Repeated two-game
+batch setup dominated runtime. Restart with explicit `--batch-size 24`, the same
+1,920-match ceiling, paired seed `shared-hex-20261011-confirmation`, four workers,
+all registered axes and unchanged thresholds. Batch allocation is therefore
+amended before examining final outcomes; the interrupted run is not evidence.
+
+The repaired policy regression now passes all supported counts plus exploratory
+two-player play. The 225-test run had 224 passes and one source-identity failure
+because external workspace sync created `95823e180` during execution. The failed
+worker-determinism test passed unchanged when rerun against that stable commit.
+Browser desktop/mobile complete games passed without page errors. A print check
+confirmed A5 mats and 63 × 88 mm identity cards without overflow. Pointer centering,
+full turn reference and the remaining card/token print dimensions were then refined.

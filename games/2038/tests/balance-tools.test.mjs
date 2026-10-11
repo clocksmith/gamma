@@ -24,3 +24,18 @@ test('Organize production comparison changes all three copies without mutating s
   assert.throws(()=>fixture({rulesVariant:{organizeProduction:'capability'}}),/Invalid Organize/);
   assert.equal(config.board.tiles.find(t=>t.id==='organize').yield.resource,'runway');
 });
+
+test('recruitment availability, preview and payment use the same configured cost', () => {
+  const cfg=structuredClone(config);
+  cfg.actionEffects.organize.recruitCost=3;
+  const m=fixture({config:cfg});
+  const p=m.players[0];
+  p.runway=2;
+  assert.ok(!m.legalResolutions(0,'organize').some(d=>d.parameters.mode==='recruit'));
+  p.runway=3;
+  const d=m.legalResolutions(0,'organize').find(d=>d.parameters.mode==='recruit');
+  assert.equal(d.consequences.runway,-3);
+  m.applyResolution(0,d);
+  assert.equal(p.runway,0);
+  assert.equal(p.pieces.length,3);
+});
