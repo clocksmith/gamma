@@ -26,3 +26,16 @@ test('one-lever arms preserve complete games and rich/batch outcomes',async()=>{
     assert.ok(a.players.every(p=>Object.values(p.actions).reduce((x,y)=>x+y,0)===12));
   }
 });
+
+test('analysis preserves pairing and rejects out-of-range winner fractions',async()=>{
+  const {interval,summarize}=await import('../evidence/studies/2026-10-11-economy-analysis.mjs');
+  assert.throws(()=>interval([0,2]),RangeError);
+  assert.throws(()=>interval([0]),RangeError);
+  assert.equal(interval([0,0]).mean,0);
+  const block={...scenarios(4,'greedy',true)[0],seed:'economy-analysis-test'};
+  const outcome=await play(input,profiles.slice(0,4),block);
+  const summary=summarize([{arms:{canonical:outcome,candidate:outcome}},{arms:{canonical:outcome,candidate:outcome}}]);
+  assert.equal(summary.researchEffect.mean,0);
+  assert.deepEqual(summary.arms.canonical,summary.arms.candidate);
+  assert.ok(Math.abs(Object.values(summary.arms.canonical.winnerActions).reduce((a,b)=>a+b,0)-1)<1e-12);
+});
