@@ -421,14 +421,14 @@ export class SelectedRulesMatch {
                   },
                 ),
               ];
-            if (actionId === "research" && p.compute >= 1)
+            if (actionId === "research" && p.compute >= this.rulesVariant.researchComputeCost)
               decisions = [
                 choice(
                   "research_run",
-                  "Pay 1 Compute; begin Training Run",
+                  `Pay ${this.rulesVariant.researchComputeCost} Compute; begin Training Run`,
                   "research",
                   {},
-                  { compute: -1 },
+                  { compute: -this.rulesVariant.researchComputeCost },
                 ),
               ];
             if (
@@ -603,7 +603,7 @@ export class SelectedRulesMatch {
   async research(policies, seat, decision) {
     const p = this.players[seat];
     this.assignAgent(p, decision.parameters);
-    this.addResource(p, "compute", -1);
+    this.addResource(p, "compute", -this.rulesVariant.researchComputeCost);
     let provisional = 0;
     const domains = new Set(),
       revealed = [];

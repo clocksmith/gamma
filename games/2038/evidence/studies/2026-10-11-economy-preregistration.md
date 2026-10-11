@@ -91,3 +91,37 @@ scenario restricted to repeat zero: 360/480/300 scenarios at 3/4/5, four arms
 parent within each price, then the change in that gain; preserve legal setup
 fallbacks and all outcomes. This tests the known capital-investment path under
 both prices, not a newly selected stronger policy. No automatic promotion.
+
+## Closed first comparison and Research-cost follow-up
+
+The equipment screen/confirmation and trained field are complete. Reject cost 3:
+trained four-player winning Research share changed only -0.90 pp greedy and
+-0.15 pp weighted, intervals include zero; both five-player fields increased.
+Customer points 3 were rejected in screening. Neither changes canonical numbers.
+The conditional recruitment stress test is therefore not launched.
+
+A failing regression now establishes that Research's declared cost is ignored in
+legality, preview and debit: the engine hard-codes one. Fix this owning boundary;
+keep declared cost one while comparing the corrected source against cost two.
+This correction alone preserves ordinary one-Compute play. It does not establish
+that two is balanced. The extra Compute may make an uninterrupted Research plan
+need more production/investment, while preserving the Training deck and stopping
+choices. Test one lever, not a combined equipment/Research package.
+
+New independent namespaces: `economy-20261011-research-screen-v1` and
+`economy-20261011-research-confirm-v1`, each 6,000-match unified-audit cap, eight
+initial games per cell, 24-game batches, both modes/backends and 3/4/5 players.
+Trained confirmation keeps the frozen fields and exact allocation above, but
+uses `economy-20261011-research2-v1`: 15,360 games, no outcomes from earlier seeds.
+Primary target: reduce four-player winning Research share by at least three
+percentage points in BOTH backends, with each registered interval below zero.
+Keep the existing integrity, no-op and faction/seat/diversity checks, showing
+remaining uncertainty. Reject a new compulsory opening or materially increased
+concentration. No threshold changes, no hand-selected favorable seeds.
+
+These runs evaluate an explicitly unreleased source change. Their live engine
+hash and clean Git revision, inputs, profiles and matching final identities bind
+execution; the old 0.24.3 manifest is preserved and is not claimed to qualify new
+code. The field runner marks `sourceCandidate: true` and does not describe a
+historical release verification as qualification of this implementation. Seal
+one new release only after the chosen source/rules and all projections agree.
