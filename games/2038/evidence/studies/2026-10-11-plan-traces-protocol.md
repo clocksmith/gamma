@@ -4,6 +4,26 @@ Component: Mandate 2038 evidence. Intent preserved. Economy, policies, threshold
 engine, release and deployment remain unchanged. No human participants are
 available to this agent; no human discoverability or enjoyment claim follows.
 
+## Ordinary-rules human observation when participants are available
+
+This study follows the evidence labels and identity requirements of
+[Playtesting and evidence](../../docs/playtesting-and-evidence.md). Give unfamiliar
+players the ordinary rulebook and components. Do not teach an opening, recommend
+Capacity or a counter, or coach Research, recruitment or scoring choices. Record
+rules questions and any facilitator intervention; an intervened session is
+facilitated, not blind.
+
+At four players, record every player's chosen plan in their own words after play,
+the twelve Actions and Org assignments, repeated Actions, Research stopping and
+crashes, recruitment opportunities/use, equipment, Production and final score
+components. Preserve the before/after state and legal alternatives for decisions
+players later identify as meaningful, compulsory, irrelevant or frustrating.
+Ask open questions after the game, including what changed their plan and what
+they would try differently. Do not infer frustration from a repeated Action alone.
+Rotate institutions and seats in subsequent observed sessions; three/five players
+remain separate supported-count checks. This turn executes only the simulated
+trace diagnosis below, not a human session.
+
 ## Question and source
 
 Where do successful plans converge, and what consequential alternatives are
