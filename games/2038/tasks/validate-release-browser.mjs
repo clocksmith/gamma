@@ -369,7 +369,9 @@ try {
   assert.equal((masters.match(/data-org-face="equipped"/g) || []).length, 20);
   assert.equal((masters.match(/class="card core-action"/g) || []).length, 0);
   const factionSection = masters.match(/<section id="factions"[\s\S]*?<\/section>/)?.[0] || '';
-  assert.equal((factionSection.match(/class="card"/g) || []).length, 6);
+  assert.equal((factionSection.match(/class="identity-pair"/g) || []).length, 6);
+  assert.equal((factionSection.match(/class="card identity-face identity-front"/g) || []).length, 6);
+  assert.equal((factionSection.match(/class="card identity-face identity-back"/g) || []).length, 6);
   assert.doesNotMatch(masters, /objective-panel|objective-track|data-objective-value|construction Era|I–IV edges|Cube record/);
   for (const viewport of [
     { name: "desktop", width: 1440, height: 1000, mobile: false },
