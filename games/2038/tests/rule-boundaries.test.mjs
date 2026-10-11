@@ -92,7 +92,7 @@ test("Research bank and duplicate crash retain separate Reputation consequences"
   const m = await fixture({ factionId: "platform_empire" });
   const p = m.players[0];
   p.capability = 0;
-  p.compute = 1;
+  p.compute = m.config.actionEffects.research.computeCost;
   p.reputation = 3;
   m.trainingDrawPile = [
     { id: "l", type: "benchmark_leak", kind: "special" },

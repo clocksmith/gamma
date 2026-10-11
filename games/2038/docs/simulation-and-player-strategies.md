@@ -15,3 +15,12 @@ Decision packets enumerate legal choices and public state, and withhold other un
 Claude/Codex policies use the shared decision contract and require explicit LLM authorization. This redesign's acceptance uses deterministic policies only and makes no remote-provider performance claim.
 
 Retain raw simulation reports in the local ignored studies archive and tracked dated receipts with seed, configuration, source/fingerprint identity, hashes, and limits. Automated consistency is distinct from numerical balance and human physical play. Old spatial and balance receipts qualify their frozen releases only. No current redesign number inherits their promotion status.
+
+The 0.24.4 policy correction filters known unresolvable Action selections when
+an executable choice exists; a positive weight penalty previously still sampled
+them. It retains genuine forced passes, explicitly trade-enabled choices, and
+all non-selection decisions. Human legal choices are unchanged. Research
+availability, preview and debit use the same declared Compute cost; bounded
+`researchComputeCost` overlays are internal simulation parameters. The
+[economy study](../evidence/studies/2026-10-11-economy-results.md) compares costs
+with identical corrected policies rather than crediting the bot fix to one arm.
