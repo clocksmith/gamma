@@ -1026,3 +1026,23 @@ Intent deliberately changes from a geographic infrastructure game to six shared 
 The implementation interprets limited-space competition as shared Facility slots; Agents contribute only public area presence. Actions assign the acting Agent to their matching area. Build may choose any open area. One objective is revealed per Era; all four score from final holdings. This timing removes repeated scoring and makes final history irrelevant. Fixed low-Reputation Review replaces probabilistic Audit. Recognition remains a final holding and the World Ending stays separate.
 
 The printed production yields, Reputation cap/penalty, Customer thresholds, upgrade cost, recognition threshold, final score weights, and simplified Headline effects are provisional numerical hypotheses. Old spatial and balance studies do not qualify this redesign. New deterministic completion and implementation checks establish consistency only. A separate balance and blind physical session must examine repeated Customer objectives, unequal starting resources, area scarcity, upgrade value, negotiation, and winning-path diversity before promotion.
+
+## 2026-10-11 — Research investment and executable bot choices
+
+The user requested a better-balanced game and authorized implementing the
+supported revision. Research costs two Compute instead of one. Equipment still
+costs two Runway, Customers still score two, and all institutions, Training faces,
+turns, production, objectives and component counts remain unchanged. This is a
+playtest rule change, not a claim of completed human balance qualification.
+
+The [matched economy study](../evidence/studies/2026-10-11-economy-results.md)
+rejects higher equipment cost and higher Customer scoring. Its corrected-policy
+confirmation shows materially less concentration in Research and more varied
+winning Actions at three, four and five players. Some faction/seat/profile bounds
+and statistical precision remain unresolved; preserve those failures.
+
+Research legality, preview and payment now read its declared cost together.
+Computer policies exclude known unresolvable Actions when an executable choice
+exists. This corrects observed wasted turns without changing human legal choices,
+profile weights, trade permissions or genuinely forced passes. Both price arms
+were retested using the same correction on disjoint seeds.
