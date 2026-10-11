@@ -121,8 +121,10 @@ export class SelectedRulesMatch {
     this.playerCount = playerCount;
     this.board = generateBoard(config);
     this.rulesVariant = effectiveRulesVariant(config, rulesVariant);
-    for (const tile of this.board.filter(tile => tile.actionId === "organize"))
+    for (const tile of this.board.filter(tile => tile.actionId === "organize")) {
       tile.yield = {...tile.yield, resource: this.rulesVariant.organizeProduction};
+      tile.production = `Gain ${tile.yield.amount} ${config.resources[tile.yield.resource].name} per Org, doubled when equipped.`;
+    }
     this.projection = projection;
     this.recordReplay = recordReplay;
     this.decisionContext = decisionContext;

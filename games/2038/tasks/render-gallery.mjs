@@ -109,9 +109,9 @@ function buildFactions(data, config) {
     const lore = [f.motto, f.introduction, ...f.abilities.map(a => a.flavorText), f.scoringRule?.flavorText].filter(Boolean);
     return `<article class="identity-pair" style="--accent:${escapeHtml(f.brandColor)}">
       <div class="card identity-face identity-front">
-        <div class="identity-pointer pointer-top">▲ ${escapeHtml(config.scoreDisplay.unrecognizedLabel)}</div>
+        <div class="identity-pointer pointer-top"><span>▲</span>${escapeHtml(config.scoreDisplay.unrecognizedLabel)}</div>
         <div class="card-body"><h3>${escapeHtml(f.name)}</h3><p>${escapeHtml(f.chiefExecutive)}</p><dl class="stats">${stats}</dl>${ability}</div>
-        <div class="identity-pointer pointer-bottom">▲ ${escapeHtml(config.scoreDisplay.recognizedLabel)}</div>
+        <div class="identity-pointer pointer-bottom"><span>▲</span>${escapeHtml(config.scoreDisplay.recognizedLabel)}</div>
       </div>
       <div class="card identity-face identity-back"><div class="card-body"><h3>${escapeHtml(f.name)}</h3>${lore.map(t=>`<p class="flavor">${escapeHtml(t)}</p>`).join('')}</div></div>
     </article>`;
@@ -125,7 +125,7 @@ function buildPlayerMats(config) {
     <div class="mat-holdings">${Object.entries(config.resources).map(([key,t]) =>
       `<div class="resource-track" data-resource="${key}"><strong>${escapeHtml(t.name)}</strong><div>${Array.from({length:t.cap+1},(_,n)=>`<span>${n}</span>`).join('')}</div></div>`).join('')}</div>
     <div class="mat-actions">${config.actions.map(a=>`<p><strong>${escapeHtml(a.name)}</strong> ${escapeHtml(a.summary)}</p>`).join('')}</div>
-    <p>${escapeHtml(config.scoreDisplay.description)}</p><p>${escapeHtml(config.scoreDisplay.instructions)}</p>
+    <p>${escapeHtml(config.turnReference)}</p><p>${escapeHtml(config.scoreDisplay.description)}</p><p>${escapeHtml(config.scoreDisplay.instructions)}</p>
     <div class="final-score-scale" aria-label="Final Mandate">${Array.from({length:config.scoreDisplay.maximum+1},(_,n)=>`<span data-score="${n}">${n}</span>`).join('')}</div>
   </article>`).join('');
   return section('player-mats', 'Player mats', config.playerKits.length, mats, 'Five holding tracks and an identity-card pointer for final Mandate.');
@@ -531,11 +531,12 @@ main { padding: 1.8rem clamp(1rem, 3vw, 2.4rem); }
 .identity-face { position: relative; }
 .identity-front { min-height: 350px; padding-block: 24px; }
 .identity-pointer { position: absolute; left: 0; width: 100%; text-align: center; font-size: 10px; font-weight: bold; }
+.identity-pointer > span { display: block; line-height: 1; }
 .pointer-top { top: 0; } .pointer-bottom { bottom: 0; transform: rotate(180deg); }
 @media print {
   body { background: white; color: black; }
   #player-mats .grid { display: block; }
-  .card.player-mat { width: 210mm; height: 148mm; padding: 5mm; gap: 2mm; font: 9pt/1.2 sans-serif; border-radius: 0; break-inside: avoid; break-after: page; overflow: visible; }
+  .card.player-mat { width: 210mm; height: 148mm; padding: 5mm; gap: 2mm; font: 10pt/1.25 sans-serif; border-radius: 0; break-inside: avoid; break-after: page; overflow: visible; }
   .resource-track { grid-template-columns: 25mm 1fr; gap: 2mm; }
   .resource-track span { height: 6mm; line-height: 6mm; }
   .mat-holdings { gap: 1mm; }
@@ -544,17 +545,30 @@ main { padding: 1.8rem clamp(1rem, 3vw, 2.4rem); }
   #factions .grid { display: block; }
   .identity-pair { display: flex; gap: 4mm; break-inside: avoid; margin-bottom: 4mm; }
   .card.identity-face { width: 63mm; height: 88mm; min-height: 0; border-radius: 0; background: white; color: black; }
-  .identity-front { padding-block: 5mm; }
+  .identity-front { padding-block: 7mm; }
   .identity-face .card-body { padding: 3mm; gap: 2mm; font: 8pt/1.25 sans-serif; }
   .identity-face h3 { font-size: 11pt; margin: 0; }
   .identity-face .flavor { font-size: 7.5pt; color: black; }
-  .identity-face .stats { gap: 1mm; }
+  .identity-face .stats { display: grid; grid-template-columns: repeat(3,1fr); gap: 1mm; }
   .identity-face .stats div { min-width: 0; padding: 1mm; flex: 1; }
-  .identity-face .stats dt { font-size: 5.5pt; letter-spacing: 0; }
+  .identity-face .stats dt { font-size: 6pt; letter-spacing: 0; color: #333; }
   .identity-face .stats dd { font-size: 9pt; }
   .identity-pointer { font-size: 6pt; }
 }
 
+@media print {
+  #training .grid, #headlines .grid, #mandates .grid { display: flex; flex-wrap: wrap; gap: 4mm; }
+  #training .card, #headlines .card, #mandates .card { width: 63mm; height: 88mm; border-radius: 0; break-inside: avoid; background: white; color: black; }
+  #training .card-body, #headlines .card-body, #mandates .card-body { padding: 3mm; gap: 2mm; font: 8pt/1.2 sans-serif; }
+  #training .card-title, #headlines .card-title, #mandates .card-title { font-size: 10pt; }
+  #training p, #headlines p, #mandates p { font-size: 8pt; color: black; }
+  #mandates .tags { display: none; }
+  #equipment .grid { display: flex; flex-wrap: wrap; gap: 3mm; }
+  .card.agent-token { display: flex; flex-direction: row; gap: 2mm; border: 0; overflow: visible; break-inside: avoid; }
+  .agent-token .chip-face { width: 24mm; height: 24mm; padding: 3mm 1mm; border: 1px solid var(--accent); border-radius: 50%; text-align: center; font: 7pt/1.4 sans-serif; background: white; color: black; }
+  .agent-token .chip-face h3 { font-size: 9pt; }
+  .agent-token .chip-face p { display: none; }
+}
 @media (max-width: 760px) { .layout { grid-template-columns: 1fr; } nav.sidebar { position: static; height: auto; } }`;
 
 const SCRIPT = `const search = document.getElementById('q');
