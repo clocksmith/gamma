@@ -33,31 +33,6 @@ remains unproven and must be measured independently.
 A simulation finding is never a human observation. A visually complete replay
 is never proof that the physical rules are teachable.
 
-## Current shared-hex plan observation
-
-For the current shared-hex executable, give unfamiliar players the ordinary
-rulebook and components. Do not teach an opening, recommend Capacity or a counter,
-or coach Research, recruitment or scoring choices. Record rules questions and any
-facilitator intervention; an intervened session is facilitated, not blind.
-
-At four players, record every player's chosen plan in their own words after play,
-the twelve Actions and Org assignments, repeated Actions, Research stopping and
-crashes, recruitment opportunities/use, equipment, Production and final score
-components. Preserve the before/after state and legal alternatives for decisions
-players later identify as meaningful, compulsory, irrelevant or frustrating.
-Ask open questions after the game, including what changed their plan and what
-they would try differently. Do not infer frustration from a repeated Action alone.
-Rotate institutions and seats in subsequent observed sessions; three/five players
-remain separate supported-count checks.
-
-When participants are unavailable, inspect complete simulated traces under the
-[current trace protocol](../evidence/studies/2026-10-11-plan-traces-protocol.md).
-Separate actual legal alternatives and observed consequences from counterfactual
-final-score claims. The [seat/diversity results](../evidence/studies/2026-10-11-seat-diversity-results.md)
-remain the performance evidence; purposively selected traces cannot qualify
-human discoverability, enjoyment or a new balance claim. Older mechanic-specific
-observation procedures below retain their historical scope.
-
 Current selected automated evidence:
 
 - [`Selection, trade, and persona contract correction`](../evidence/studies/simulation/2026-08-09-selection-persona-contract-correction.md):
