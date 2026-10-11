@@ -41,7 +41,9 @@ The live identity now names executable **0.24.4**, rules
   checkout; no passing post-deploy sibling-source freshness claim follows.
 
 The browser screenshots and original replay JSON downloads are retained beside
-each receipt. These are browser implementation and publication checks, not
+each receipt. Replays use `.json.gz` archives; decompressing them reproduces the
+original bytes and SHA-256 recorded in each receipt, including the actual browser
+download. These are browser implementation and publication checks, not
 new balance observations or human sessions.
 
 ## Matching physical materials
