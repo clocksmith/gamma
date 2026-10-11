@@ -2,7 +2,7 @@
 
 This document is normative for per-intervention causality, run lineage,
 evaluation evidence, contamination, invalidation, and promotion under SAME-R.
-The [canonical SAME-R README](README.md) owns the outer algorithm. The
+The [outer-method specification](SPEC.md) owns the outer algorithm. The
 [selector contract](SELECTOR_AND_SATURATION.md) owns automatic, multi-model,
 cross-domain, and recursive selection. Machine-readable definitions live in
 [`contracts/`](contracts/README.md).

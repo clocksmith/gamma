@@ -53,4 +53,4 @@ Owner contracts:
 - input schema: `evaluation-input.schema.json`;
 - evaluator: `evaluate.py`;
 - Doppler profile: `tinker_peft_browser_adapter` in the trainer artifact bridge;
-- outer method: `projects/samer/README.md`.
+- outer method: [SAME-R specification](../../SPEC.md).
