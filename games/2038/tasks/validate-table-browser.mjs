@@ -237,6 +237,22 @@ try {
     .locator("#areas")
     .screenshot({ path: resolve(output, "mandate-components-print.png") });
   console.log("Printable inventory: 40 Training, 19 hexes, 20 two-sided Orgs.");
+  await page.emulateMedia({media: "print"});
+  const printDimensions = await page.evaluate(() => [...document.querySelectorAll(
+    '.player-mat,.identity-face,#training .card,#headlines .card,#mandates .card,.agent-token .chip-face'
+  )].map(e => ({kind:e.className, width:e.getBoundingClientRect().width,
+    height:e.getBoundingClientRect().height, scroll:e.scrollHeight, client:e.clientHeight})));
+  assert.equal(printDimensions.length, 5 + 12 + 40 + 24 + 12 + 40);
+  for (const d of printDimensions) {
+    const size = d.kind.includes('player-mat') ? [210,148] : d.kind.includes('chip-face') ? [24,24] : [63,88];
+    assert.ok(Math.abs(d.width-size[0]*96/25.4)<1, `${d.kind} width`);
+    assert.ok(Math.abs(d.height-size[1]*96/25.4)<1, `${d.kind} height`);
+    assert.ok(d.scroll<=d.client+2, `${d.kind} clips printed text`);
+  }
+  await page.locator('.player-mat').first().screenshot({path:resolve(output,'mandate-mat-print.png')});
+  await page.emulateMedia({media:"screen"});
+  console.log('All physical mats, cards and Org faces fit their prototype print dimensions.');
+
   await page.goto("http://127.0.0.1:8138/");
   await page.waitForFunction(
     () => document.querySelectorAll(".player-mat").length === 4,

@@ -94,3 +94,51 @@ worker-determinism test passed unchanged when rerun against that stable commit.
 Browser desktop/mobile complete games passed without page errors. A print check
 confirmed A5 mats and 63 × 88 mm identity cards without overflow. Pointer centering,
 full turn reference and the remaining card/token print dimensions were then refined.
+
+## Paired audit result and decision
+
+Completed **1,894 games** within the 1,920 ceiling: 912 matched pairs (1,824
+ordinary games), 70 adversarial games. Clean commit `4a5e751c3`; batch size 24,
+four workers, seed and axes as registered. Zero integrity violations, zero
+unmatched pairs, zero standing mismatches. The runner stops when no remaining
+registered allocation fits; 1,920 is a ceiling, not a fabricated completed count.
+
+**Reject the Compute production change. Keep canonical Organize at 1 Runway.**
+Although it helped the forced recruitment opening and reduced the four-player
+faction range, it failed the three-player seat and faction observed bounds.
+The canonical arm passed all configuration-by-player-count observed checks in
+this audit. No confidence-qualified dominance was detected in either arm;
+precision remains insufficient for promotion. Earlier unfavorable baseline
+observations remain retained; this later pass does not erase them.
+
+| Measure | Canonical Runway | Compute candidate | Bound |
+|---|---:|---:|---:|
+| 3-player seat win-share range | 0.172414 | 0.142241 | 0.10 |
+| 3-player faction win-share range | 0.154370 | 0.183333 | 0.15 |
+| 4-player faction win-share range | 0.104303 | 0.067402 | 0.15 |
+| 5-player faction win-share range | 0.067797 | 0.069248 | 0.15 |
+
+No faction ability, initial holding, Action price, scoring coefficient, Training
+card or canonical production yield changes. Repeated recruitment is not established
+as dominant. The one-resource experimental overlay remains available to reproduce
+the rejected candidate; it is not an ordinary-game option.
+
+The raw automatic archive is
+`simulation/20261011T001208572Z-unified-matrix-audit-0-24-2-1233df087b38-shared-hex-20261011-confirmation-1894x4-unified-matrix-cli-4179c395-d281-44dc-96ff-736568cd55f3.json`.
+SHA-256 of `/tmp/hex-matrix-confirmation.json`: `8155582eabce1c8a8522f4f093ee64eb5ea5d04d78e4ac2ba6048c9fc33e7532`.
+
+All completed studies total **8,470 simulated games**, including exploratory and
+rejected arms; they are not 8,470 independent observations of the final rules.
+No human or LLM holdout sessions were run. Balance remains provisional.
+
+## Final source acceptance
+
+Executable **0.24.3**, rules **0.14.0-rc.4-test**, engine **0.27.3**.
+All **228 tests pass** in the final uninterrupted run; `npm run check` and
+`git diff --check` pass. `validate:table:browser` completes desktop and mobile
+games with no page errors, setup at 2–5 players, crowded-map updates and focus
+preservation. Print-media checks verify five A5 mats, all card faces at 63 × 88 mm,
+and forty Org faces at 24 mm, with no clipped content. They verify dimensions and
+rendering, not printed manufacture or human readability under table conditions.
+Logs are retained locally under `simulation/shared-hex-20261010/`.
+No deployment or human balance qualification is included.
