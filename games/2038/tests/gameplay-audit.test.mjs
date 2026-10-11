@@ -74,7 +74,7 @@ test("recipient cap prevents a transfer and refusal changes neither account", as
 test("shared Research duplicate loses provisional Capability but retains Leak consequence", async () => {
   const m = fixture({ factionId: "platform_empire" });
   const p = m.players[0];
-  p.compute = 2;
+  p.compute = m.config.actionEffects.research.computeCost + 1;
   p.capability = 0;
   p.reputation = 3;
   m.trainingDrawPile = [
