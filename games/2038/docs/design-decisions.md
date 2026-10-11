@@ -12,6 +12,28 @@ five selected proposals were implemented. Earlier 19-tile, every-Era
 map-motion, transmission, Tactic, secret-objective, and endgame-scoring
 assumptions are historical only.
 
+## Shared-hex reliability and balance review (2026-10-10)
+
+The [paired study](../evidence/studies/2026-10-10-shared-hex-balance.md) tests the
+new economy without assuming that recruiting or equipping early is dominant.
+Keep canonical prices, yields, faction abilities and scoring. Changing Organize
+from Runway to Compute improved the recruitment opening but failed three-player
+seat/faction bounds in the broader paired audit; it is rejected. Doubling its
+Runway yield and increasing objective awards were also not selected. The retained
+baseline passed the later audit's observed checks, but statistical precision and
+human play remain insufficient to call the game balanced.
+
+The initial shared-hex writing requirement below is superseded. Keep the existing
+institution card upright for no AGI, rotate it half a turn for recognition, and
+use its upper-edge pointer on the final-score scale. All holdings and map state
+remain intact for scoring. Removing the pencil gives **82 cards / 153 items**.
+Identity fronts carry starting values and ability; their backs retain the lore.
+Mats, cards and Org faces have explicit prototype print dimensions.
+
+Repair the stale Research/Deploy diagnostic policy's retired Facility/project
+reads, enforce the configured recruitment cost, and reject invalid audit flags
+before starting work. These fixes do not change the canonical economic values.
+
 ## Shared-hex simplification (2026-10-10)
 
 The user explicitly selected a major component reduction while preserving all
