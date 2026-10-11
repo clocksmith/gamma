@@ -25,8 +25,8 @@ Run:
 python projects/samer/experiments/validate_experiment_register.py
 ```
 
-See [`SAME-R`](../README.md) for swappable approaches, matched
-evaluation, detailed trial stages, and their mapping to the register's coarse
-statuses. See
+See the [SAME-R overview](../README.md) for swappable approaches and matched
+evaluation, and the [trial-stage specification](../SPEC.md#trial-stages) for
+detailed stages and their mapping to the register's coarse statuses. See
 [`docs/VERIFIER_GUIDED_LEARNING.md`](../../../docs/VERIFIER_GUIDED_LEARNING.md)
 for optimizer, reward, and RLVR terminology.

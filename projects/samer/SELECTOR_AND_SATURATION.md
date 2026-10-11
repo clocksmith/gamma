@@ -1,10 +1,11 @@
 # SAME-R Selector And Saturation Contract
 
 This document specifies automatic, cross-domain, multi-model, and recursive
-SAME-R selection. It is a design contract. Gamma does not yet implement the
-shared registry, selector, or recursive evaluator described here.
+SAME-R selection. It is a design contract. [`selector.py`](selector.py) implements
+a prototype registry, selector, and saturation evaluator; it does not implement
+the complete contract or recursive evaluator described here.
 
-The [canonical README](README.md) owns the outer method. The
+The [outer-method specification](SPEC.md) owns the outer method. The
 [causal and evidence contract](CAUSAL_AND_EVIDENCE_CONTRACTS.md) owns each
 trial. Machine-readable objects live under [`contracts/`](contracts/README.md).
 

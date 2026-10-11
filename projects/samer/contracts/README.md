@@ -13,7 +13,7 @@ This directory turns the SAME-R documentation into validation targets.
 
 The normative prose is in:
 
-- [`../README.md`](../README.md);
+- [`../SPEC.md`](../SPEC.md);
 - [`../CAUSAL_AND_EVIDENCE_CONTRACTS.md`](../CAUSAL_AND_EVIDENCE_CONTRACTS.md);
   and
 - [`../SELECTOR_AND_SATURATION.md`](../SELECTOR_AND_SATURATION.md).
