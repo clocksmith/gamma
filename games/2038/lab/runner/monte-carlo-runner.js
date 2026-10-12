@@ -244,6 +244,7 @@ function integritySummary(outcomes) {
   const details = [];
   let policyFallbacks = 0;
   let forcedNoOps = 0;
+  let deliberateSkips = 0;
   let tradeRequiredSelections = 0;
   let requiredTradeOffers = 0;
   let requiredTradeAcceptances = 0;
@@ -260,6 +261,7 @@ function integritySummary(outcomes) {
       seats.add(entry.seat);
       policyFallbacks += entry.metrics.policyFallbacks || 0;
       forcedNoOps += entry.metrics.forcedNoOps || 0;
+      deliberateSkips += entry.metrics.deliberateSkips || 0;
       tradeRequiredSelections += entry.metrics.selectionAvailability?.tradeRequired || 0;
       requiredTradeOffers += entry.metrics.requiredTradeOffers || 0;
       requiredTradeAcceptances += entry.metrics.requiredTradeAcceptances || 0;
@@ -272,7 +274,11 @@ function integritySummary(outcomes) {
       }
       const actionCount = Object.values(entry.metrics.actions || {})
         .reduce((sum, value) => sum + value, 0);
-      if (actionCount !== 12) details.push({ matchIndex, seat: entry.seat, id: "action_amplification", value: actionCount });
+      const turnCount = entry.metrics.turns ?? actionCount;
+      if (turnCount !== 12) details.push({ matchIndex, seat: entry.seat, id: "turn_amplification", value: turnCount });
+      if (entry.metrics.turns !== undefined &&
+          actionCount + (entry.metrics.deliberateSkips || 0) + (entry.metrics.forcedNoOps || 0) !== turnCount)
+        details.push({ matchIndex, seat: entry.seat, id: "turn_accounting" });
     }
     if (seats.size !== outcome.standings.length) details.push({ matchIndex, id: "duplicate_seat" });
   }
@@ -281,6 +287,8 @@ function integritySummary(outcomes) {
     details: details.slice(0, 100),
     policyFallbacks,
     forcedNoOps,
+    deliberateSkips,
+    deliberateSkipRate: actionOpportunities ? deliberateSkips / actionOpportunities : 0,
     forcedNoOpRate: actionOpportunities ? forcedNoOps / actionOpportunities : 0,
     tradeRequiredSelections,
     requiredTradeOffers,
@@ -588,6 +596,9 @@ function compactObservation(outcome, matchIndex) {
       agiDeclared: entry.agiDeclared,
       openingActions: entry.metrics.openingActions,
       actions: entry.metrics.actions,
+      turns: entry.metrics.turns,
+      deliberateSkips: entry.metrics.deliberateSkips,
+      skippedActions: entry.metrics.skippedActions,
       forcedNoOps: entry.metrics.forcedNoOps,
       selectionAvailability: entry.metrics.selectionAvailability,
       requiredTradeOffers: entry.metrics.requiredTradeOffers,
@@ -639,6 +650,7 @@ class BatchAccumulator {
       details: [],
       policyFallbacks: 0,
       forcedNoOps: 0,
+      deliberateSkips: 0,
       actionOpportunities: 0,
       tradeRequiredSelections: 0,
       requiredTradeOffers: 0,
@@ -722,6 +734,7 @@ class BatchAccumulator {
       if (credit) increment(this.winningPathCounts, classifyWinningPath(entry), credit);
       this.integrity.policyFallbacks += entry.metrics.policyFallbacks || 0;
       this.integrity.forcedNoOps += entry.metrics.forcedNoOps || 0;
+      this.integrity.deliberateSkips += entry.metrics.deliberateSkips || 0;
       this.integrity.tradeRequiredSelections +=
         entry.metrics.selectionAvailability?.tradeRequired || 0;
       this.integrity.requiredTradeOffers += entry.metrics.requiredTradeOffers || 0;
@@ -736,7 +749,11 @@ class BatchAccumulator {
         }
       }
       const actionCount = Object.values(entry.metrics.actions || {}).reduce((sum, value) => sum + value, 0);
-      if (actionCount !== 12) this.integrity.details.push({ matchIndex, seat: entry.seat, id: "action_amplification", value: actionCount });
+      const turnCount = entry.metrics.turns ?? actionCount;
+      if (turnCount !== 12) this.integrity.details.push({ matchIndex, seat: entry.seat, id: "turn_amplification", value: turnCount });
+      if (entry.metrics.turns !== undefined &&
+          actionCount + (entry.metrics.deliberateSkips || 0) + (entry.metrics.forcedNoOps || 0) !== turnCount)
+        this.integrity.details.push({ matchIndex, seat: entry.seat, id: "turn_accounting" });
     }
     if (seenSeats.size !== outcome.standings.length) this.integrity.details.push({ matchIndex, id: "duplicate_seat" });
     for (const left of outcome.standings) {
@@ -898,6 +915,9 @@ class BatchAccumulator {
       details: this.integrity.details.slice(0, 100),
       policyFallbacks: this.integrity.policyFallbacks,
       forcedNoOps: this.integrity.forcedNoOps,
+      deliberateSkips: this.integrity.deliberateSkips,
+      deliberateSkipRate: this.integrity.actionOpportunities
+        ? this.integrity.deliberateSkips / this.integrity.actionOpportunities : 0,
       forcedNoOpRate: this.integrity.actionOpportunities
         ? this.integrity.forcedNoOps / this.integrity.actionOpportunities
         : 0,

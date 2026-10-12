@@ -25,14 +25,17 @@ Deliver a coherent, replayable institutional strategy game whose authored rules,
 - One ruleset uses nineteen shared hexes (eighteen playable), five holding tracks,
   normal/equipped Orgs, numeric Customers and final-current-state Mandate. No
   selectable retired module or rules profile is exposed.
-- Four Orgs per player kit, two starting; one stay or edge move and destination
-  Action per turn. Turns resolve sequentially and Actions may repeat. CEOs are
-  characters, not pieces. Unsupported Actions may consume a turn without moving.
+- Four Orgs per player kit, two starting; after an optional trade, choose one
+  Org to stay or move one edge, then perform or deliberately skip the destination
+  Action, even when affordable. Movement is independent of Action affordability.
+  Skipping applies no Action costs, rewards, or Action-specific ability; placement,
+  equipment, presence and ordinary Production remain. Turns resolve sequentially
+  and Actions may repeat. CEOs are characters, not pieces.
 - Research retains push-your-luck. Reputation replaces Trust, Scrutiny, and Systemic Risk. Recognized AGI is a final holding after Era IV Production and Reputation Review. The World Ending remains separate.
 - User-selected mechanic revisions retain scenario placement and require an
   explicit design-decision receipt; they must not be labelled retained mechanics.
-- The six Core Actions are the only selections. Build equips exactly one owned Org; equipment travels with it and doubles production. Programs and use records are retired.
-- The deck contains six Headlines per Era and reveals three per Era. Headlines finish all choices before selection and leave no continuing modifiers.
+- The six Core Actions are the only Actions; a deliberate skip is not a seventh Action. Build equips exactly one owned Org; equipment travels with it and doubles production. Programs and use records are retired.
+- The deck contains six Headlines per Era and reveals three per Era. Headlines finish all choices before sequential turns and leave no continuing modifiers.
 - Each faction has one permanent ability and common scoring. Former abilities and Programs retain their fiction in lore-only records projected into the existing companion and references.
 - Generated graph targets are never hand-edited. Authoring checks validate current
   sources; publication and kit freezing additionally verify immutable release identity.
@@ -113,18 +116,34 @@ Public hosting is owned by m3t4 at `https://m3t4.ai/mandate-2038/`. Gamma owns t
 Player equipment belongs to one of five colour-and-symbol kits independently of
 six faction identities. Seat-based mechanical ownership remains authoritative.
 
-- One objective is revealed each Era; all four score from the final public table after Era IV Production, Reputation Review, and AGI recognition. History never affects scoring. Diagnostic telemetry is separate.
+- Reveal one objective from each Era packet at setup before the first Headline. All four remain visible without Era-by-Era replacement and score once from the final public table after Era IV Production, Reputation Review, and AGI recognition. History never affects scoring. Diagnostic telemetry is separate.
 
-User-selected 2026-10-09 smaller prototype supersedes earlier Power, hex geography, Trust milestones, and per-Era scoring provisions. Four tracks are Runway, Compute, Capability, and Reputation. All four revealed objectives score once from final holdings. Old sealed releases and evidence remain unchanged.
+The historical 2026-10-09 smaller prototype retired Power, Trust milestones, and per-Era scoring. The shared-hex and 2026-10-12 selections below own the current movement, component, and objective-timing boundaries. Old sealed releases and evidence remain unchanged.
 
 ## Selected shared-hex simplification (2026-10-10)
 
 The user selected a shared hex board and fewer components. This supersedes earlier
 six-area, separate Facility, Customer-card, Action-card, Venture and simultaneous
 selection requirements. Eighteen playable hexes surround one Era hex. Orgs stay or move
-one edge, then perform the destination Action, in Initiative order; Actions may
-repeat. All Orgs produce; Build equips an Org by flipping its token. No separate
+one edge, then perform or deliberately skip the destination Action, in Initiative
+order; Actions may repeat. All Orgs produce; Build equips an Org by flipping its token. No separate
 Facilities, upgrades, Ventures or Customer cards remain. Customers are numeric;
 Mandate is calculated from visible state. Forty Training cards retain all ten
 designs with four copies each and the existing shared draw/discard lifecycle.
 Keep all unique lore and fictional institutions. Old releases remain immutable.
+
+## Selected movement and setup-objective candidate (2026-10-12)
+
+This selection deliberately supersedes mandatory destination Actions, movement
+blocked by Action affordability, and one objective revealed at each Era start.
+Resolve an optional trade, choose one Org and a legal stay or edge move, then
+perform or deliberately skip the destination Action. Off-map entry and Organize’s
+second-Org reassignment keep their existing exceptions. Skips do not grant an
+Action or trigger Action-specific abilities; ordinary Production and equipment
+remain intact. Reveal all four objectives at setup, one from each Era packet
+before the first Headline; keep them visible and score each once from final state.
+
+No control-income bonus is introduced. Research remains two Compute; all prices,
+yields, faction abilities, lore, Initiative, eighty-two cards and 153 components
+remain unchanged. The dated design decision records this new candidate, which
+requires fresh balance and human-play evidence. No publication is authorized.

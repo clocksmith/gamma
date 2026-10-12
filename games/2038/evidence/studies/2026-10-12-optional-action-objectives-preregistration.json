@@ -1,0 +1,26 @@
+{
+  "studyId": "2026-10-12-optional-action-public-objectives-v1",
+  "evidenceType": "simulation",
+  "claimBoundary": "Bounded implementation and policy-field diagnostics. No balance promotion, human-planning, usability, enjoyment, or physical-play claim.",
+  "sourceCommit": "aba758ac6f4b6eb597856c553d91d3d157d9e884",
+  "baselineVersion": "0.24.4",
+  "rootSeed": "mandate-20261012-optional-action-objectives-v1",
+  "counts": [3,4,5],
+  "backends": ["greedy","weighted"],
+  "mandateModes": ["fixed","variable"],
+  "fields": ["mixed_authored","identical_balanced"],
+  "schedule": "For each cell, all six circular faction-window starts and every player-count seat rotation. Mixed profiles use all seven authored profiles in a circular window indexed by faction start plus six times seat rotation; identical field repeats balanced_operator. Seed includes complete cell and rotation identity; all four arms reuse it.",
+  "matchedScenarios": 576,
+  "gameExecutions": 2304,
+  "arms": ["baseline_0_24_4","objectives_only","optional_action_only","combined_candidate"],
+  "frozenHypotheses": [
+    "All arms complete exactly four Eras, twelve turns per player, and four Productions without resource or scoring integrity failures.",
+    "Objective-only reveal changes public information but does not change final outcomes or actions under authored objective-ignorant deterministic profiles.",
+    "Optional Action introduces legal relocation/stay-and-skip choices; report uptake, blocked turns, production, seat results, and final scoring without a directional balance claim.",
+    "Combined candidate is checked for interactions; isolated evidence is retained separately."
+  ],
+  "policyControl": "Use the same candidate-integrated deterministic policy implementation in all four arms, with frozen baseline authored profile bytes. Establish baseline compatibility against original policies on separate smoke seeds. Do not call a policy integration improvement a game-rule effect.",
+  "collectedMetrics": ["completion", "turns", "policyFallbacks", "blockedTurns", "voluntarySkips", "seatWinnerCredit", "finalHoldings", "finalOrgs", "scoreParts", "finalObjectives", "worldEnding", "actualProductionDeltas", "productionGrossYield", "productionCapClipping"],
+  "analysis": "Descriptive cell means and matched within-scenario deltas. Four-player primary; three/five integrity guards. No statistical promotion or significance claim; sparse seat and faction ranges are diagnostics only.",
+  "limits": ["Only seven authored deterministic profiles; no paid or unpaid LLM policy calls.","Profiles do not inspect objectives, so this cannot estimate the strategic or experiential value of early public objectives.","Circular faction windows do not cover all institution subsets.","Same seeded decision streams can diverge after treatment changes legal choices or decision counts; branches remain seed-coupled, not identical counterfactual draw histories.","Isolated external source snapshots are fingerprinted; they are not sealed or clean committed candidate releases."]
+}

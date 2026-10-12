@@ -16,16 +16,18 @@ gates; they are not shortened or extended afterthoughts.
 
 The game lasts four Eras with three turns per player per Era. A nineteen-hex board
 uses six familiar Action types: Fund, Research, Build, Organize, Deploy, Influence.
-Stay or move one Org one edge, then resolve that hex’s Action. Orgs are the only
-player pieces on the map; Build flips one to equipped for double Production.
+After an optional trade, stay or move one Org one edge, then perform or deliberately
+skip the destination Action, even when affordable. Movement is independent of
+Action affordability. Orgs are the only player pieces on the map; Build flips one to equipped for double Production.
 Five holding tracks show Runway, Compute, Capability, Reputation, and Customers;
 Mandate is calculated from the visible position. Immediate trades remain; separate
 Action hands, Facilities, Customer cards, and persistent Ventures are removed.
 
 Keep the complete forty-card push-your-luck Training deck, twenty-four Headlines,
 twelve objectives, six institutions, and all unique lore. Each game reveals twelve
-Headlines and four objectives. This selected redesign is implemented as a new
-prototype, not evidence of balance or a proof of computational hardness.
+Headlines and four objectives. Reveal one objective from each Era packet at setup,
+before the first Headline; keep all four visible and score each once from the final
+table. This selected redesign is implemented as a new prototype, not evidence of balance or a proof of computational hardness.
 
 ## Status
 
@@ -233,6 +235,6 @@ quarterly initiative.
 Era objectives use final public state after Reputation Review. The current-state scoring package is a balance-test candidate; earlier balance receipts do not qualify it.
 
 The current prototype uses nineteen hexes, two-sided Orgs and five holding tracks.
-All points and four revealed objectives score from final holdings. Fresh balance
+All points and the four setup objectives score once from final holdings. Fresh balance
 and human usability evidence is still required. Build from authored sources;
 never edit `dist/` directly.

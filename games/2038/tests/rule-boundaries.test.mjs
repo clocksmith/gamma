@@ -86,7 +86,7 @@ test("Deploy increments Customers, charges Compute and Reputation, triggers only
   assert.equal(p.compute, 1);
   assert.equal(p.reputation, 2);
   assert.equal(p.runway, 5);
-  assert.ok(!m.legalResolutions(0, "deploy").length);
+  assert.ok(!m.legalResolutions(0, "deploy").some(d => !d.parameters.skipAction));
 });
 test("Research bank and duplicate crash retain separate Reputation consequences", async () => {
   const m = await fixture({ factionId: "platform_empire" });
@@ -220,7 +220,7 @@ test("complete browser-native game allows repeat Actions, preserves phases and h
     assert.equal(p.actionsUsed.length, 3);
     assert.ok(p.actionsUsed.every(a => m.config.actions.some(c => c.id === a)));
     assert.equal(
-      Object.values(p.metrics.actions).reduce((n, v) => n + v, 0),
+      p.metrics.turns,
       12,
     );
     assert.equal(p.mandate, undefined);

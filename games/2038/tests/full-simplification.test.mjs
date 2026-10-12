@@ -3,7 +3,7 @@ import test from "node:test";
 import { fixture, policies, profiles } from "./helpers/smaller-game.mjs";
 import { WeightedPlayerPolicy } from "../lab/policies/weighted-policy.js";
 for (const count of [2, 3, 4, 5])
-  test(`${count}-player games complete deterministically with exactly twelve actions each`, async () => {
+  test(`${count}-player games complete deterministically with exactly twelve turns each`, async () => {
     const run = async () => {
       const m = fixture({
         playerCount: count,
@@ -28,7 +28,7 @@ for (const count of [2, 3, 4, 5])
     assert.ok(r.winnerSeats.length);
     for (const p of m.players) {
       assert.equal(
-        Object.values(p.metrics.actions).reduce((n, v) => n + v, 0),
+        p.metrics.turns,
         12,
       );
       for (const [k, c] of Object.entries(m.config.resources))
@@ -40,7 +40,7 @@ for (const count of [2, 3, 4, 5])
         r.decisionProtocol.immediateTradePacketCeiling,
     );
   });
-test("zero resources do not deadlock speculative commitments; blocked action is exhausted", async () => {
+test("zero resources permit movement to Research and an intentional skip", async () => {
   const m = fixture({ headlines: { headlines: [] } });
   m.players.forEach((p) => {
     p.compute = 0;
@@ -50,13 +50,14 @@ test("zero resources do not deadlock speculative commitments; blocked action is 
     policies(
       m,
       (p) =>
-        p.legalDecisions.find((d) => d.decisionId === "select_research") ||
+        p.legalDecisions.find((d) => d.actionId === "research") ||
         p.legalDecisions.find((d) => d.decisionId === "trade_none"),
     ),
   );
   assert.ok(
     m.players.every(
-      (p) => p.actionsUsed.includes("research") && p.metrics.forcedNoOps === 1,
+      (p) => p.metrics.deliberateSkips === 1 && p.metrics.forcedNoOps === 0 &&
+        p.metrics.turns === 1 && p.pieces.some(org => org.tileId?.startsWith("research")),
     ),
   );
 });

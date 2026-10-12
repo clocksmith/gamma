@@ -98,7 +98,9 @@ export class RecruitmentPlan {
         }
       }
       if (this.pending) {
-        selected = packet.legalDecisions.find(d => d.actionId === this.pending.decision.actionId);
+        selected = packet.legalDecisions.find(d => d.actionId === this.pending.decision.actionId &&
+          (!d.parameters?.pieceId || (d.parameters.pieceId === this.pending.decision.parameters.pieceId &&
+            d.parameters.destinationId === this.pending.decision.parameters.destinationId)));
         if (!selected) throw new Error('Planned resolution has no legal Action selection.');
         reason = this.pending.reason;
       }

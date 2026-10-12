@@ -23,7 +23,7 @@ test("setup snapshot accounts for every kit piece and hides unrevealed deck orde
       topDiscard: null,
     });
     assert.deepEqual(state.revealedHeadlines, []);
-    assert.deepEqual(state.revealedMandates, []);
+    assert.equal(state.revealedMandates.length, 4);
     assert.equal(state.trainingRun, null);
     assert.equal("trainingDrawPile" in state, false);
     assert.equal("eraHeadlines" in state, false);
@@ -66,11 +66,11 @@ test("visible Training state follows draw, bank, and reshuffle without a second 
   assert.equal(match.trainingShuffle, 1);
 });
 
-test("Headline and objective faces become public only when revealed and stay independent", async () => {
+test("Headlines reveal during play; all setup objectives remain independent", async () => {
   const match = fixture();
   await match.beginRound();
   let state = match.snapshot();
-  assert.equal(state.revealedMandates.length, 1);
+  assert.equal(state.revealedMandates.length, 4);
   assert.equal(state.revealedHeadlines.length, 0);
   await match.prepareHeadline(policies(match));
   state = match.snapshot();

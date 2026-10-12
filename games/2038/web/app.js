@@ -530,7 +530,7 @@ function tileName(tileId) {
 }
 
 function renderAssignmentDecisions(packet, stage) {
-  if (stage !== "resolve" && stage !== "talent_assignment") return false;
+  if (stage !== "select" && stage !== "talent_assignment") return false;
   const decisions = packet.legalDecisions;
   if (
     !decisions.length ||
@@ -543,8 +543,9 @@ function renderAssignmentDecisions(packet, stage) {
 
   const builder = document.createElement("section");
   builder.className = "move-builder";
-  builder.innerHTML =
-    "<h3>Assign an Org</h3><p>Stay or move one edge to the selected hex, then resolve its Action.</p>";
+  builder.innerHTML = "<h3></h3><p></p>";
+  builder.querySelector("h3").textContent = copy.browser.stages.select;
+  builder.querySelector("p").textContent = copy.browser.selectContext;
   if (stage === "talent_assignment")
     builder.querySelector("p").textContent = copy.browser.talentAssignmentHint;
   const fields = document.createElement("div");
@@ -560,7 +561,7 @@ function renderAssignmentDecisions(packet, stage) {
   };
   addField("Org", piece);
   addField("Hex", destination);
-  if (stage !== "talent_assignment") addField("Action", outcome);
+  // The destination Action is chosen only after this movement is committed.
 
   const summary = document.createElement("p");
   summary.className = "trade-summary";
