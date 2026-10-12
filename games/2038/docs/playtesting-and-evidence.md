@@ -115,7 +115,7 @@ rules variant, seed, and content hashes. There is one playable ruleset. Earlier
 results qualify only their frozen sources; implementation proof does not
 transfer simulation outcomes into human-play evidence.
 
-The current candidate has only six Core Actions, Facility-then-project Build, immediate Headlines, and one permanent ability per faction. It retains direct Agent assignment, unprotected ordinary Research, current local Power connections, and scored public AGI recognition. Talent now produces one reassignment instead of the interim Runway gain. Its primary human evidence question is whether preserving presence is worth forgoing an immediate district benefit; the observation procedure below records that decision. The earlier protected-Research and Dossier results do not qualify this candidate.
+The current candidate uses nineteen shared hexes, six Core Actions, two-sided Orgs, five holding tracks, immediate Headlines, and one permanent ability per faction. After an optional trade, choose one Org to stay or move one edge, then perform or deliberately skip the destination Action, even when affordable. Movement no longer depends on Action affordability. All four objectives are revealed at setup, one from each Era packet before the first Headline, remain visible, and score once from final state. Research costs two Compute; other prices, production, equipment, faction abilities, Initiative and the 82-card/153-item inventory are unchanged. The primary new evidence questions concern useful positional skips and advance planning around visible final objectives. Earlier candidates’ observations do not qualify this selection.
 
 ### Historical version boundaries
 
@@ -525,3 +525,32 @@ Observe one-edge movement, repeated Actions, equipping, the full forty-card Trai
 deck, immediate trades, final scoring and colour-independent ownership. Preserve
 all earlier observations under their original rules identity. No human session or
 balance acceptance is established by the implementation checks.
+
+## Movement and setup-objective candidate (2026-10-12)
+
+Use the new candidate’s attributed rulebook and component masters; keep earlier
+shared-hex results under their original identities. A controlled physical test
+should record the following actual observations without prefilling successes:
+
+- Whether players reveal exactly one objective from each Era packet before the
+  first Headline, keep all four visible, and avoid replacement draws at Era changes.
+- Whether players complete the optional trade before choosing the acting Org and
+  destination, and distinguish edge movement from Organize’s second-Org reassignment.
+- Whether an off-map Org can enter, or a placed Org can move, when the destination
+  Action is unaffordable; record deliberate skips of affordable Actions too.
+- Whether skips avoid Action costs, rewards and Action-specific abilities while
+  preserving equipment, presence and later Production. Record any mistaken
+  control-income bonus or accidental extra turn.
+- Why a player chose to skip, with neutral questions about intended position,
+  production and visible objectives rather than hints toward a preferred move.
+- Whether all four objectives are reconstructed once from the final table after
+  Era IV Production, Reputation Review and optional AGI recognition, without
+  using earlier holdings or turn history.
+- Whether Headline Org qualifications and sequential timing agree with the
+  printed effects; retain all six Headlines in each Era packet.
+
+Record rules questions, interventions, misunderstood abilities, Production errors
+and postgame explanations under the existing evidence labels. Any supplied rules
+answer makes a human session facilitated. Deterministic regression, browser
+walkthroughs and simulation can test implementation and generate balance
+hypotheses; none supplies blind-play, enjoyment or balance acceptance.

@@ -7,7 +7,7 @@ for (const cost of [2,3]) for (const factionId of ['platform_empire','vertical_e
     const m=fixture({factionId,rulesVariant:{facilityCost:cost}}),p=m.players[0];
     const price=cost-(factionId==='vertical_empire'?1:0);
     p.runway=price-1;
-    assert.equal(m.legalResolutions(0,'build').length,0);
+    assert.equal(m.legalResolutions(0,'build').filter(d=>!d.parameters.skipAction).length,0);
     p.runway=price;
     const d=action(m,0,'build',d=>d.parameters.equipOrgId===d.parameters.pieceId);
     assert.equal(d.parameters.actualRunwayCost,price);

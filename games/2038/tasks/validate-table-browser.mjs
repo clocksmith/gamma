@@ -70,6 +70,10 @@ try {
       Math.abs(geometry - 2 / Math.sqrt(3)) < 0.002,
       `regular hex at ${viewport.width}px: ${geometry}`,
     );
+    // Keep this walkthrough deterministic: the first three turns exercise an
+    // affordable skip, paid Research, and a move to unaffordable Research.
+    await page.fill("#seed", "movement-setup-browser");
+    await page.dispatchEvent("#seed", "change");
     await page.selectOption("#kit", "kit-blue");
     await page.waitForFunction(() =>
       document
@@ -90,6 +94,13 @@ try {
           '.player-mat [data-resource="compute"] .holding-cube',
         ).textContent === "2",
     );
+    const setupObjectives = await page.evaluate(() =>
+      [...document.querySelectorAll(".objectives-section .table-card")]
+        .map((card) => ({ id: card.record.id, era: card.record.era })),
+    );
+    assert.equal(setupObjectives.length, 4, "All objectives are visible before Start");
+    assert.deepEqual(setupObjectives.map((card) => card.era).sort(), [1, 2, 3, 4]);
+    assert.equal(await page.locator(".headlines-section .table-card").count(), 0);
     await page.locator(".identities-section .table-card").first().click();
     assert.equal(await page.locator(".card-dialog[open]").count(), 1);
     await page.keyboard.press("Escape");
@@ -112,10 +123,13 @@ try {
       .first()
       .click();
     assert.match(await page.locator(".board-note").innerText(), /Compute/);
-    const result = await page.evaluate(async () => {
+    const result = await page.evaluate(async (objectives) => {
       const steps = [];
       let selection = 0;
       let trainingChecks = 0;
+      let affordableSkipChecks = 0;
+      let unaffordableSkipChecks = 0;
+      let pendingDestination = null;
       const delay = () => new Promise((r) => setTimeout(r, 35));
       for (let i = 0; i < 600; i++) {
         for (
@@ -134,6 +148,9 @@ try {
           return {
             steps,
             trainingChecks,
+            affordableSkipChecks,
+            unaffordableSkipChecks,
+            selections: selection,
             summary: document.querySelector("#decision-context").textContent,
             overflow: document.documentElement.scrollWidth > innerWidth,
           };
@@ -141,32 +158,60 @@ try {
           ...document.querySelectorAll("#decisions button"),
         ].filter((b) => !b.disabled);
         if (!buttons.length) throw new Error("No decision controls");
-        const actions = buttons.filter((b) =>
-          b.textContent.includes("Select "),
-        );
-        const names = [
-          "Build",
-          "Research",
-          "Organize",
-          "Fund",
-          "Deploy",
-          "Influence",
-        ];
-        const select = actions.length
-          ? actions.find((b) =>
-              b.textContent.includes(
-                `Select ${names[selection++ % names.length]}`,
-              ),
-            ) || actions[0]
-          : null;
-        const target =
-          select ||
-          buttons.find((b) =>
-            /Continue without|Pass$|Confirm assignment|Bank/.test(
-              b.textContent,
-            ),
-          ) ||
-          buttons[0];
+        const currentObjectives = [
+          ...document.querySelectorAll(".objectives-section .table-card"),
+        ].map((card) => ({ id: card.record.id, era: card.record.era }));
+        if (JSON.stringify(currentObjectives) !== JSON.stringify(objectives))
+          throw new Error("Setup objectives changed during play");
+
+        const builder = document.querySelector("#decisions .move-builder");
+        let target;
+        if (builder) {
+          const controls = builder.querySelectorAll("select");
+          if (controls.length !== 2)
+            throw new Error("Movement must choose only an Org and destination");
+          const [piece, destination] = controls;
+          piece.value = "s0-agent-1";
+          piece.dispatchEvent(new Event("change", { bubbles: true }));
+          pendingDestination = ["fund", "research", "research-2"][selection] || "research-2";
+          destination.value = pendingDestination;
+          if (destination.value !== pendingDestination)
+            throw new Error(`Missing legal destination: ${pendingDestination}`);
+          destination.dispatchEvent(new Event("change", { bubbles: true }));
+          selection++;
+          target = builder.querySelector("button");
+        } else if (pendingDestination) {
+          // The physical token must already have moved, and there is no second
+          // Org/destination selector at the Action resolution stage.
+          if (!document.querySelector(
+            `.action-area[data-key="${pendingDestination}"] .org-token[data-org="s0-agent-1"]`,
+          )) throw new Error("Movement was not committed before Action resolution");
+          if (document.querySelector("#decisions select"))
+            throw new Error("Resolution offered a second Org/destination choice");
+          const skip = buttons.find((button) => button.textContent.includes("Skip the destination Action"));
+          if (!skip) throw new Error("Every destination must allow a deliberate skip");
+          const perform = buttons.find((button) => button !== skip);
+          if (selection === 1) {
+            if (!perform) throw new Error("Fund should remain affordable when skipped");
+            target = skip;
+            affordableSkipChecks++;
+          } else if (selection === 3) {
+            const compute = document.querySelector(
+              '.player-mat [data-resource="compute"] .holding-cube',
+            ).textContent;
+            if (compute !== "0" || perform)
+              throw new Error("Expected a compute-zero Research destination with skip only");
+            target = skip;
+            unaffordableSkipChecks++;
+          } else {
+            target = perform || skip;
+          }
+          pendingDestination = null;
+        } else {
+          target = buttons.find((button) =>
+            /Continue without|Reject trade|Pass|Bank/.test(button.querySelector("strong")?.textContent || button.textContent),
+          ) || buttons[0];
+        }
         if (target.textContent.includes("Bank")) {
           const draws = document.querySelectorAll(
             ".training-section .table-card",
@@ -190,9 +235,16 @@ try {
         await delay();
       }
       throw new Error("Unbounded decision loop");
-    });
+    }, setupObjectives);
     assert.equal(result.overflow, false);
+    assert.equal(result.selections, 12);
+    assert.equal(result.affordableSkipChecks, 1);
+    assert.equal(result.unaffordableSkipChecks, 1);
     assert.ok(result.trainingChecks > 0);
+    assert.deepEqual(await page.evaluate(() =>
+      [...document.querySelectorAll(".objectives-section .table-card")]
+        .map((card) => ({ id: card.record.id, era: card.record.era })),
+    ), setupObjectives);
     assert.equal(
       await page.evaluate(
         () => window.testHex === document.querySelector(".action-area"),
@@ -219,6 +271,9 @@ try {
       JSON.stringify({
         viewport,
         decisions: result.steps.length,
+        affordableSkipChecks: result.affordableSkipChecks,
+        unaffordableSkipChecks: result.unaffordableSkipChecks,
+        trainingChecks: result.trainingChecks,
         stages: [...new Set(result.steps.map((s) => s.title))],
         summary: result.summary,
         errors,

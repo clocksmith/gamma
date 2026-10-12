@@ -131,7 +131,7 @@ test("public playtest publication is an allowlist with release identity and feed
     const authority = JSON.parse(
       await readFile(resolve(fixture.root, "dist/runtime/reference-cards.json"), "utf8")
     ).eraCards.find((era) => era.id === "era_narrative");
-    assert.match(authority.unlockText, /Equipment is available from setup/);
+    assert.match(authority.unlockText, /[Ee]quipment is available from setup/);
     assert.doesNotMatch(authority.unlockText, /Open Weights/i);
     const baseline = await readFile(resolve(outputRoot, "gallery-baseline.html"), "utf8");
     assert.match(baseline, /Equipped ×2/);

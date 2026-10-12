@@ -126,6 +126,9 @@ export class WeightedPlayerPolicy {
   }
 
   score(packet, decision) {
+    // A skip remains a valid choice even when an Action can be performed.
+    // Give it positive but low preference instead of inheriting Action rewards.
+    if (decision.parameters?.skipAction) return 0.05;
     const planned = constructionStudyScore(packet, decision, this.treatment);
     if (planned !== null) return planned;
     if (decision.decisionId === "agi_declare") return 4;
@@ -204,12 +207,12 @@ export class WeightedPlayerPolicy {
 
   rank(packet) {
     validateDecisionPacket(packet);
-    // A small positive penalty still lets sampling (or a large preference)
-    // choose a known blocked Action. Preserve genuine forced passes and
-    // explicitly trade-enabled selections, but prefer executable choices.
+    // Repositioning is legal independently of affordability. Older packets
+    // without a movement choice retain their historical affordability guard.
     const executable = packet.legalDecisions.filter((decision) =>
       decision.consequences?.stage !== "action_selection" ||
       decision.consequences.resolvableWithoutTrade !== false ||
+      decision.consequences.canReposition === true ||
       decision.consequences.status === "trade_required"
     );
     const choices = executable.length ? executable : packet.legalDecisions;

@@ -96,8 +96,14 @@ real people. Do not force every scene into the same dystopian conclusion.
 - `docs/balance-and-exploitability.md` owns the human-readable balance,
   counter-strategy, and promotion contract. Its machine authority is
   `lab/contracts/balance-contract.json`.
-- The user-selected simplification uses one-edge movement, two-sided Orgs,
-  sequential turns, five holdings and derived final Mandate. Preserve the six
+- The user-selected simplification uses optional trading followed by choosing
+  one Org to stay or move one edge, then performing or deliberately skipping its
+  destination Action even when affordable. Movement is independent of Action
+  affordability; a skip applies no Action costs, rewards, or Action-specific ability.
+  Two-sided Orgs retain equipment, presence, and ordinary Production. Turns are
+  sequential, with five holdings and derived final Mandate. All four objectives
+  are revealed at setup, one per Era packet before the first Headline, kept visible,
+  and scored once from final state without Era-by-Era replacement. Preserve the six
   Core Actions, push-your-luck Training, fictional institutions, four Eras and
   separate World Ending. More Orgs increase presence and production, not turns.
 - `web/` owns the browser implementation.
@@ -191,16 +197,32 @@ common-seed comparison for any proposed rule delta, and explicit user approval.
 - Do not invent a remote, deployment target, crowdfunding status, quote, or
   manufacturing commitment.
 
-User-selected 2026-10-09 smaller prototype supersedes earlier Power, hex geography, Trust milestones, and per-Era scoring provisions. Four tracks are Runway, Compute, Capability, and Reputation. All four revealed objectives score once from final holdings. Old sealed releases and evidence remain unchanged.
+The historical 2026-10-09 smaller prototype retired Power, Trust milestones, and per-Era scoring. The shared-hex and 2026-10-12 selections below own the current movement, component, and objective-timing boundaries. Old sealed releases and evidence remain unchanged.
 
 ## Selected shared-hex simplification (2026-10-10)
 
 The user selected a shared hex board and fewer components. This supersedes earlier
 six-area, separate Facility, Customer-card, Action-card, Venture and simultaneous
 selection requirements. Eighteen playable hexes surround one Era hex. Orgs stay or move
-one edge, then perform the destination Action, in Initiative order; Actions may
-repeat. All Orgs produce; Build equips an Org by flipping its token. No separate
+one edge, then perform or deliberately skip the destination Action, in Initiative
+order; Actions may repeat. All Orgs produce; Build equips an Org by flipping its token. No separate
 Facilities, upgrades, Ventures or Customer cards remain. Customers are numeric;
 Mandate is calculated from visible state. Forty Training cards retain all ten
 designs with four copies each and the existing shared draw/discard lifecycle.
 Keep all unique lore and fictional institutions. Old releases remain immutable.
+
+## Selected movement and setup-objective candidate (2026-10-12)
+
+This selection deliberately supersedes mandatory destination Actions, movement
+blocked by Action affordability, and one objective revealed at each Era start.
+Resolve an optional trade, choose one Org and a legal stay or edge move, then
+perform or deliberately skip the destination Action. Off-map entry and Organize’s
+second-Org reassignment keep their existing exceptions. Skips do not grant an
+Action or trigger Action-specific abilities; ordinary Production and equipment
+remain intact. Reveal all four objectives at setup, one from each Era packet
+before the first Headline; keep them visible and score each once from final state.
+
+No control-income bonus is introduced. Research remains two Compute; all prices,
+yields, faction abilities, lore, Initiative, eighty-two cards and 153 components
+remain unchanged. The dated design decision records this new candidate, which
+requires fresh balance and human-play evidence. No publication is authorized.

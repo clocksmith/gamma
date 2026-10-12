@@ -352,7 +352,7 @@ try {
     assert.equal(coreRulesResponse.status, 200, "Core rules must be accessible.");
     const coreRulesHtml = await coreRulesResponse.text();
     assert.match(coreRulesHtml, /Reveal one Headline.*?resolve its immediate instructions in Initiative order.*?In Initiative order/s, "Headline effects finish before selection.");
-    assert.match(coreRulesHtml, /offer one immediate trade, then chooses one reachable Action, assigns one Org/, "Trade precedes action resolution.");
+    assert.match(coreRulesHtml, /offer one immediate trade, then chooses one Org to stay or move one edge/, "Trade precedes Org movement and Action resolution.");
 
     const cardsSource = JSON.parse(await readFile(resolve(projectRoot, "components/reference-cards.json"), "utf8"));
     const aidTexts = (cardsSource.playerReferences || []).flatMap((card) => [...(card.frontText || []), ...(card.backText || [])]);
@@ -398,20 +398,22 @@ try {
     })()`);
     assert.equal(kitSetup.kitId, 'kit-violet', 'Faction selection must not change the selected kit');
     assert.equal(kitSetup.factions, 6);
+    await waitFor("document.querySelectorAll('.objectives-section .table-card').length === 4");
+    assert.equal(await evaluate("document.querySelectorAll('.headlines-section .table-card').length"), 0);
     await evaluate("document.querySelector('#start-game').click()");
     await waitFor("document.querySelector('#phase')?.textContent.trim() === 'waiting'");
-    await evaluate(`(async()=>{for(let i=0;i<12;i++){if(document.querySelector('#decision-title').textContent.includes('Reason'))return;const buttons=[...document.querySelectorAll('#decisions button')].filter(b=>!b.disabled);(buttons.find(b=>b.innerText==='Pass')||buttons[0])?.click();await new Promise(r=>setTimeout(r,80));}throw new Error('Selection did not open after Headlines');})()`);
-    await waitFor("document.querySelectorAll('.decision-card').length === 6");
-    const actions = await evaluate("[...document.querySelectorAll('.decision-card')].map(node=>node.innerText)");
-    assert.ok(["Fund", "Research", "Build", "Organize", "Deploy", "Influence"].every((name) => actions.some((text) => text.includes(name))));
+    await evaluate(`(async()=>{for(let i=0;i<12;i++){if(document.querySelector('.move-builder'))return;const buttons=[...document.querySelectorAll('#decisions button')].filter(b=>!b.disabled);(buttons.find(b=>b.innerText==='Pass')||buttons[0])?.click();await new Promise(r=>setTimeout(r,80));}throw new Error('Movement selection did not open after Headlines');})()`);
+    await waitFor("document.querySelectorAll('.move-builder select').length === 2");
+    const actions = await evaluate("[...document.querySelectorAll('.move-builder select')[1].options].map(node=>node.value)");
+    assert.ok(["fund", "research", "build", "organize", "deploy", "influence"].every((id) => actions.includes(id)));
     const owners = await evaluate("[...document.querySelectorAll('.player-mat .eyebrow')].map(n=>n.innerText)");
     assert.equal(owners.length,4);
     assert.match(owners[0], /\bviolet\b/i, "The first player mat retains the selected Violet kit.");
     assert.equal(await evaluate("document.querySelectorAll('.action-area').length"),18);
     assert.equal(await evaluate("document.body.innerText.includes('undefined')"),false);
     await screenshot(`${viewport.name}-action-selection.png`);
-    await evaluate("[...document.querySelectorAll('.decision-card')].find(node=>node.innerText.includes('Select Deploy')).click()");
-    await waitFor("document.querySelectorAll('.decision-card').length > 0 && ![...document.querySelectorAll('.decision-card')].some(node=>node.innerText.includes('Select Fund'))");
+    await evaluate(`(()=>{const hex=document.querySelectorAll('.move-builder select')[1];hex.value='deploy';hex.dispatchEvent(new Event('change',{bubbles:true}));document.querySelector('.move-builder button').click();})()`);
+    await waitFor("!document.querySelector('.move-builder') && [...document.querySelectorAll('.decision-card')].some(node=>node.innerText.includes('Skip the destination Action'))");
     const speculativeSelection = await evaluate("({choices:[...document.querySelectorAll('.decision-card')].map(node=>({text:node.innerText,disabled:node.disabled})),body:document.body.innerText,exportEnabled:!document.querySelector('#export').disabled,viewportWidth:innerWidth,documentWidth:document.documentElement.scrollWidth})");
     assert.equal(speculativeSelection.exportEnabled, true);
     assert.ok(speculativeSelection.choices.some((choice) => !choice.disabled), "Speculative Deploy must leave an actionable browser decision.");
@@ -425,7 +427,7 @@ try {
         if(phase==='failed')throw new Error(document.querySelector('#game-status').innerText);
         if(phase==='complete')return {observations,summary:document.querySelector('#decision-context').innerText,title:document.querySelector('#decision-title').innerText,viewportWidth:innerWidth,documentWidth:document.documentElement.scrollWidth};
         const buttons=[...document.querySelectorAll('#decisions button')].filter(button=>!button.disabled);
-        const choice=buttons.find(button=>button.innerText.includes('Select Fund')) || buttons.find(button=>/Skip|Decline|Confirm assignment/.test(button.innerText)) || buttons[0];
+        const choice=buttons.find(button=>/Skip|Decline|Confirm assignment/.test(button.innerText)) || buttons[0];
         if(!choice)throw new Error('Waiting without an actionable decision');
         observations.push({round:document.querySelector('#round-title').innerText,stage:document.querySelector('#decision-title').innerText,headline:document.querySelector('.headlines-section .table-card strong')?.innerText || '',consequence:document.querySelector('.headlines-section .table-card')?.record?.text || '',choice:choice.innerText});
         choice.click();await pause();

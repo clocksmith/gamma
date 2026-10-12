@@ -13,16 +13,18 @@ Choose an institution and one of five colour-and-symbol player kits independentl
 
 Place the Era hex in the middle, then fill two rings with the eighteen Action hexes according to their printed coordinates. Each of the six Action types has three hexes; the inner ring runs Fund, Research, Build, Organize, Deploy, Influence clockwise from the top. Give each player two normal-side Orgs, initially off the map; leave two in reserve. No other player pieces go on the map.
 
-Separate the twenty-four Headlines into four six-card Era packets and objectives into four three-card packets. Shuffle each packet. The Training deck contains forty cards: four copies of each of ten designs. Choose Initiative randomly; it moves clockwise after every cycle. All holdings are public; unrevealed cards remain hidden.
+Separate the twenty-four Headlines into four six-card Era packets and objectives into four three-card packets. Shuffle each packet. Before the first Headline, reveal one objective from each Era packet: four objectives in total. Keep all four face up throughout the game; do not draw replacement objectives when an Era changes. The Training deck contains forty cards: four copies of each of ten designs. Choose Initiative randomly; it moves clockwise after every cycle. All holdings and the four selected objectives are public; unrevealed cards remain hidden.
 
 <!-- map:start -->
 ## Shared hex map
 
 Eighteen playable Action hexes surround the central Era hex. Hexes sharing an edge are neighbors. The center records the Era and is not traversable. There is no wraparound or movement across corners.
 
-On your turn choose one Org. It may stay on its hex or move to one neighboring hex, then perform that hex's Action. An off-map Org may enter any playable hex. Multiple players may share a hex; there is no occupancy limit. If you cannot afford an Action, choose another reachable Action or spend the turn doing nothing. An unresolvable Action does not move the Org.
+After your optional trade, choose one Org. It may stay on its hex or move to one neighboring hex. An off-map Org may enter any playable hex. Multiple players may share a hex; there is no occupancy limit. Then perform the destination hex's Action if eligible and able to pay its full cost, or deliberately skip the Action, even if you could perform it. Movement does not require an affordable Action.
 
-Each Org counts as one presence, equipped or not. You control a hex only if you have more Orgs there than every rival. Ties leave it uncontrolled. Control matters when an objective asks for it.
+Skipping ends your turn without paying Action costs, receiving Action rewards, or triggering an Action-specific faction ability. Your Org stays at its chosen destination, keeps its equipment, counts for presence, and produces normally at the next Production. A skip is not another Core Action.
+
+Each Org counts as one presence, equipped or not. You control a hex only if you have more Orgs there than every rival. Ties leave it uncontrolled. Control matters when an objective asks for it; it grants no Production or income bonus.
 
 At Production, every placed Org earns its hex's printed yield. An equipped Org earns twice that yield. Unplaced Orgs produce nothing. Equipment travels with its Org.
 
@@ -46,10 +48,10 @@ Each Customer provides one Runway at Production and two Mandate at game end. To 
 
 ## Era and cycle
 
-Reveal one objective at the beginning of each Era and keep it face up for final scoring. Each Era has three cycles:
+The four objectives revealed at setup remain face up across all four Eras and score only at game end. Each Era has three cycles:
 
 1. Reveal one Headline from the current Era packet and resolve its immediate instructions in Initiative order.
-2. In Initiative order, each institution may offer one immediate trade, then chooses one reachable Action, assigns one Org, and resolves it. Actions may repeat; there are no hands, simultaneous commitments, or exhausted cards.
+2. In Initiative order, each institution may offer one immediate trade, then chooses one Org to stay or move one edge (or enter from off-map). Resolve the destination hex's Action or deliberately skip it. Actions may repeat; there are no hands, simultaneous commitments, or exhausted cards.
 3. Pass Initiative clockwise. After the third cycle, resolve Production and Reputation Review, then advance the Era.
 
 After Era IV Production and Review, resolve optional AGI recognition, score the final table, and read the World Ending. Every institution receives twelve turns, regardless of Org count.
@@ -74,7 +76,7 @@ Curated Corpus counts as the first absent domain in this order: Code, Science, W
 
 ## Immediate trading
 
-Before your Action, offer one Runway for one Compute, or one Compute for one Runway, to one named rival. They may accept or refuse. Both must afford the payment and have room under the receiving cap. An accepted exchange happens atomically and triggers Deal Flow where applicable. There are no counteroffers, credit, promises, or persistent Venture contracts. Refusal does not cost your Action.
+Before choosing your Org and destination, you may offer one Runway for one Compute, or one Compute for one Runway, to one named rival. They may accept or refuse. Both must afford the payment and have room under the receiving cap. An accepted exchange happens atomically and triggers Deal Flow where applicable. There are no counteroffers, credit, promises, or persistent Venture contracts. After acceptance, refusal, or no offer, continue with your Org and destination choice, then perform or skip its Action.
 
 ## Production and Reputation Review
 
@@ -102,7 +104,7 @@ Break ties by Reputation, then Customers, then Compute; otherwise share victory.
 Component records own exact effects; this rulebook owns procedures and inventory. Actions and their lore are printed on hexes. Unique institutional, Headline, objective, Training, and historical lore is preserved. Historical technology lore remains reference content, not extra equipment or an additional subsystem.
 <!-- card-authority:end -->
 <!-- era-panels:start -->
-The central hex displays all four Eras and the current cycle. Each Era brings its own Headlines and objective. Equipment is available from the start; AGI recognition occurs only after Era IV. There are no Venture or upgrade unlocks to remember.
+The central hex displays all four Eras and the current cycle. Each Era brings its own Headlines. All four selected objectives are already visible from setup. Equipment is available from the start; AGI recognition occurs only after Era IV. There are no Venture or upgrade unlocks to remember.
 <!-- era-panels:end -->
 <!-- player-aids:start -->
 Each player mat includes five holding tracks, a final Mandate scale along its lower edge, the six Action summaries, and the turn and scoring reference. No separate player aid is required.
@@ -124,7 +126,7 @@ Five kits use colour and a non-colour symbol. Each kit's four Orgs have numbered
 - Six institution identity cards.
 - Forty Training cards: four copies of all ten existing designs.
 - Twenty-four Headline cards: six per Era.
-- Twelve objective cards: three per Era, four revealed per game.
+- Twelve objective cards: three per Era, one from each Era revealed at setup.
 - One Era/cycle marker and one Initiative marker.
 
 The playing kit has eighty-two cards and 153 items in total. No writing or pencil is required. Unique historical technology lore remains in the existing reference collection; it has no mandatory pieces. Action lore is printed on the eighteen Action hexes and Era lore on the center. No separate Action, Customer, or Facility cards; no Venture, equipment, recognition, or scoring tokens; no separate Governance Board or foldout aids. Deferred Tactics and secret objectives remain excluded.

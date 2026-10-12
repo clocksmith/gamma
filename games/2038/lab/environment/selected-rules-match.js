@@ -56,6 +56,9 @@ const choice = (
 function metrics() {
   return {
     actions: {},
+    turns: 0,
+    deliberateSkips: 0,
+    skippedActions: {},
     openingActions: [],
     projects: {},
     mandatesWon: {},
@@ -142,7 +145,15 @@ export class SelectedRulesMatch {
     this.complete = false;
     this.roundInitialized = false;
     this.decisionSerial = 0;
-    this.revealedMandates = [];
+    this.revealedMandates = config.rounds.flatMap(({ number }) => {
+      const pool = mandates.mandates.filter((card) => card.era === number);
+      const selected = (mandateMode === "fixed"
+        ? pool
+        : shuffle(pool, createRng(`${this.seed}:mandates:${number}`)))[0];
+      return selected ? [selected] : [];
+    });
+    this.roundMandate = this.revealedMandates.find((card) => card.era === 1) || null;
+    this.turnMovement = null;
     this.replay = [];
     this.publicHistory = [];
     this.immediateTradePackets = 0;
@@ -382,18 +393,53 @@ export class SelectedRulesMatch {
           {
             stage: "action_selection",
             resolvableWithoutTrade:
-              this.legalResolutions(seat, a.id).length > 0,
+              this.legalResolutions(seat, a.id).some((d) => !d.parameters.skipAction),
+            canReposition: true,
           },
         ),
       );
   }
+  legalMovementSelections(seat) {
+    const p = this.players[seat];
+    return this.board.flatMap((tile) => {
+      const resolutions = this.legalResolutions(seat, tile.actionId);
+      return p.pieces.filter((org) => this.canReach(org, tile)).map((org) =>
+        choice(
+          `move_${org.id}_${tile.instanceId}`,
+          `${org.tileId === tile.instanceId ? "Keep" : "Move"} Org ${p.pieces.indexOf(org) + 1} at ${tile.name} (${tile.q}, ${tile.r})`,
+          tile.actionId,
+          { pieceId: org.id, destinationId: tile.instanceId },
+          {
+            stage: "action_selection",
+            canReposition: true,
+            resolvableWithoutTrade: resolutions.some((d) =>
+              !d.parameters.skipAction && d.parameters.pieceId === org.id &&
+              d.parameters.destinationId === tile.instanceId),
+          },
+        ));
+    });
+  }
+  commitMovement(seat, decision) {
+    if (this.turnMovement) throw new RangeError("An Org movement is already committed.");
+    const p = this.players[seat];
+    const tile = this.board.find((t) => t.instanceId === decision.parameters?.destinationId);
+    if (!tile || tile.actionId !== decision.actionId)
+      throw new RangeError("Invalid destination Action.");
+    this.assignAgent(p, decision.parameters);
+    this.turnMovement = { seat, actionId: tile.actionId, ...clone(decision.parameters) };
+    this.recordEvent("org_movement", seat, `Org ${decision.parameters.pieceId} stays or moves to ${tile.instanceId}.`);
+  }
   legalResolutions(seat, actionId) {
     const p = this.players[seat];
     return this.board
-      .filter((a) => a.actionId === actionId)
+      .filter((a) => a.actionId === actionId &&
+        (!this.turnMovement || this.turnMovement.seat !== seat ||
+          a.instanceId === this.turnMovement.destinationId))
       .flatMap((a) =>
         p.pieces
-          .filter((org) => this.canReach(org, a))
+          .filter((org) => this.canReach(org, a) &&
+            (!this.turnMovement || this.turnMovement.seat !== seat ||
+              org.id === this.turnMovement.pieceId))
           .flatMap((agent) => {
             const base = {
               pieceId: agent.id,
@@ -505,6 +551,10 @@ export class SelectedRulesMatch {
                 ),
               );
             }
+            decisions.push(choice(
+              "skip_action", "Skip the destination Action", actionId,
+              { skipAction: true }, {},
+            ));
             return decisions.map((d) => ({
               ...d,
               decisionId: `${d.decisionId}_${agent.id}_${a.instanceId}`,
@@ -525,14 +575,27 @@ export class SelectedRulesMatch {
       throw new RangeError("Invalid Org assignment.");
     agent.tileId = parameters.destinationId;
   }
-  applyResolution(seat, decision) {
+  prepareResolution(seat, decision, { research = false } = {}) {
     const current = this.legalResolutions(seat, decision.actionId).find(
       (d) => d.decisionId === decision.decisionId,
     );
     if (!current) throw new RangeError("Action is no longer legal.");
-    const p = this.players[seat],
-      a = current.parameters;
-    this.assignAgent(p, a);
+    if (current.actionId === "research" && !current.parameters.skipAction && !research)
+      throw new Error("Research requires its interactive draw sequence.");
+    // Standalone resolution helpers commit the same single movement as a turn.
+    // During a turn, the locked Org and destination were already committed.
+    if (!this.turnMovement) this.assignAgent(this.players[seat], current.parameters);
+    else if (this.turnMovement.seat !== seat)
+      throw new RangeError("Another player's movement is committed.");
+    return current;
+  }
+  applyResolution(seat, decision) {
+    const current = this.prepareResolution(seat, decision);
+    const p = this.players[seat], a = current.parameters;
+    if (a.skipAction) {
+      this.recordEvent("action_skipped", seat, `${current.actionId} deliberately skipped.`);
+      return current;
+    }
     switch (current.actionId) {
       case "fund":
         this.addResource(
@@ -601,8 +664,13 @@ export class SelectedRulesMatch {
     return card;
   }
   async research(policies, seat, decision) {
+    if (decision.actionId !== "research") throw new RangeError("Research Action required.");
+    const current = this.prepareResolution(seat, decision, { research: true });
+    if (current.parameters.skipAction) {
+      this.recordEvent("action_skipped", seat, "research deliberately skipped.");
+      return current;
+    }
     const p = this.players[seat];
-    this.assignAgent(p, decision.parameters);
     this.addResource(p, "compute", -this.rulesVariant.researchComputeCost);
     let provisional = 0;
     const domains = new Set(),
@@ -938,15 +1006,7 @@ export class SelectedRulesMatch {
     this.players.forEach((p) => {
       p.actionsUsed = [];
     });
-    const pool = this.mandateDocument.mandates.filter(
-      (m) => m.era === this.round,
-    );
-    this.roundMandate =
-      (this.mandateMode === "fixed"
-        ? pool
-        : shuffle(pool, createRng(`${this.seed}:mandates:${this.round}`)))[0] ||
-      null;
-    if (this.roundMandate) this.revealedMandates.push(this.roundMandate);
+    this.roundMandate = this.revealedMandates.find((card) => card.era === this.round) || null;
     this.eraHeadlines = shuffle(
       this.headlineDocument.headlines.filter((h) => h.round === this.round),
       createRng(`${this.seed}:headlines:${this.round}`),
@@ -964,27 +1024,35 @@ export class SelectedRulesMatch {
         policies,
         seat,
         "select",
-        this.legalActionSelections(seat),
+        this.legalMovementSelections(seat),
       );
       const id = (p.selectedAction = selected.actionId);
-      const legal = this.legalResolutions(seat, id);
-      if (legal.length) {
-        const d = await this.choose(policies, seat, "resolve", legal);
-        if (id === "research") await this.research(policies, seat, d);
-        else this.applyResolution(seat, d);
-      } else {
-        p.metrics.forcedNoOps++;
-        p.metrics.blockedAfterCommitment++;
-        this.recordEvent(
-          "blocked_action",
-          seat,
-          `${id} has no legal resolution.`,
-        );
+      this.commitMovement(seat, selected);
+      try {
+        const legal = this.legalResolutions(seat, id);
+        if (legal.length) {
+          const d = await this.choose(policies, seat, "resolve", legal);
+          if (id === "research" && !d.parameters.skipAction)
+            await this.research(policies, seat, d);
+          else this.applyResolution(seat, d);
+          if (d.parameters.skipAction) {
+            p.metrics.deliberateSkips++;
+            increment(p.metrics.skippedActions, id);
+          } else {
+            p.actionsUsed.push(id);
+            increment(p.metrics.actions, id);
+            if (this.round === 1) p.metrics.openingActions.push(id);
+          }
+        } else {
+          p.metrics.forcedNoOps++;
+          p.metrics.blockedAfterCommitment++;
+          this.recordEvent("blocked_action", seat, `${id} has no legal resolution.`);
+        }
+        p.metrics.turns++;
+      } finally {
+        this.turnMovement = null;
+        p.selectedAction = null;
       }
-      p.actionsUsed.push(id);
-      p.selectedAction = null;
-      increment(p.metrics.actions, id);
-      if (this.round === 1) p.metrics.openingActions.push(id);
       this.recordEligibility(p, "after_action");
     }
     this.initiativeSeat = (this.initiativeSeat + 1) % this.playerCount;

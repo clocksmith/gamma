@@ -12,6 +12,40 @@ five selected proposals were implemented. Earlier 19-tile, every-Era
 map-motion, transmission, Tactic, secret-objective, and endgame-scoring
 assumptions are historical only.
 
+## Optional destination Action and setup objectives (2026-10-12)
+
+The user selected a new playtest candidate: legal Org movement is independent
+of whether the destination Action can be paid for or completed. After an optional
+trade, the player chooses one Org and its legal destination, then performs or
+deliberately skips the Action. An affordable Action may also be skipped. The
+skip has no Action cost, reward, or Action-specific ability; the resulting map
+position still counts for presence and ordinary Production. Off-map entry,
+equipment travelling with the Org, and Organize’s reassignment of a second Org
+retain their existing rules. The intent changes the movement/Action boundary;
+it does not introduce a seventh Action or an extra turn.
+
+At setup, reveal one objective from each of the four Era packets before the
+first Headline. All four stay visible throughout play and each scores once from
+the final table after Era IV Production, Reputation Review, and optional AGI
+recognition. This deliberately replaces later-Era objective reveals, not the
+objective metrics, qualifications, awards, or final-state scoring procedure.
+
+Headline wording now names the Org conditions already present in its mechanical
+effects and places resolution before sequential turns. Exact numbers, effects,
+card titles, scenario placement and lore are preserved. Research remains two
+Compute. All other prices, production yields, faction abilities, Initiative,
+eighty-two cards and 153 components remain unchanged. There is no control-income
+bonus. Earlier candidates and sealed releases remain historical evidence.
+
+Affected authorities: `rules.md`, component timing and reference copy, `ui.json`,
+simulation coverage and strategy documentation, selected-rules runtime, browser
+decisions, policy treatment of positional skips, generated player materials,
+regressions, and the current CATSCAN/AGENTS boundary. Numeric/effect records,
+faction and world lore, and physical inventory receive no mechanical change.
+Implementation checks can establish synchronization; new comparative balance
+and facilitated/blind human evidence are still required. No publication or
+deployment follows from selecting this candidate.
+
 ## Shared-hex reliability and balance review (2026-10-10)
 
 The [paired study](../evidence/studies/2026-10-10-shared-hex-balance.md) tests the
