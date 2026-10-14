@@ -117,7 +117,7 @@ dystopian conclusion.
   unchanged. Preserve the six Core Actions, push-your-luck Training, four Eras,
   and the separate World Ending. More Orgs increase presence and production,
   not turns. This candidate needs fresh balance and human-play evidence; no
-  publication is authorized. Full dated text: `CATSCAN.md`.
+  publication is authorized. Full dated text: `GOVERNANCE_DETAILS.md`.
 - `web/` owns the browser implementation; `tests/` contract, determinism, and
   probability checks; `evidence/playtests/` observed sessions and receipts.
   Never present a simulated result as a human playtest.

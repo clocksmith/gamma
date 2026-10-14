@@ -22,27 +22,22 @@ Provide a workbench for model evaluation, translation distillation, SAME-R capab
 
 ## Contracts
 
-- Input: [Strategic goals](GOALS.md)
-- Input: [System intent and invariants](INTENT.md)
+- Input: [Strategic goals](GOALS.md) and [system intent](INTENT.md).
 - Input: Model weights, training pairs, evaluation datasets and [compression objective](projects/enwiki9/contracts/research/v4/objective-contract.json).
 - Output: Run contracts, manifests, scoreboards, normalized bundles and compression evidence.
 
 ## Invariants
 
 - Proven compute probe on ROCm/CUDA before launching training or eval sweeps.
-- Training/evaluation logs `[run-contract]` with dataset, schedule and device; compression freezes its lane's experiment contract.
+- Training/evaluation logs `[run-contract]` with dataset, schedule and device.
 - Reporting rebuilds are strictly decoupled from raw training/eval execution and safe against in-flight jobs.
-- Compression preserves original bytes, complete accounting and separate diagnostic/qualification authority.
-- The enwiki9 lane is archived by user decision on 2026-10-08. Its project status
-  withdraws research and execution authority until explicit user reopening;
-  historical objectives and evidence remain intact.
+- Compression freezes its lane's experiment contract and preserves original bytes, complete accounting and separate diagnostic/qualification authority.
+- enwiki9 is archived by user decision (2026-10-08): no research or execution
+  authority until explicit user reopening; historical objectives and evidence remain intact.
 
 ## Acceptance
 
-- Run index and results bundle rebuilds execute cleanly:
-  - `python3 projects/distillation/translation/pipeline/build_run_index.py`
-  - `python3 projects/distillation/translation/pipeline/rebuild_translation_results_bundle.py`
-- [Compression tests](projects/enwiki9/tests/run_architecture_groups.py) and [engine tests](tests/test_engine_interface.py) verify component contracts.
+- [Translation rebuilds](INTENT.md#evidence), [compression tests](projects/enwiki9/tests/run_architecture_groups.py) and [engine tests](tests/test_engine_interface.py) pass.
 
 ## Non-goals
 

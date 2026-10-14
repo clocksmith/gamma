@@ -15,6 +15,11 @@ resolution, lifecycle decisions and artifact publication belong to callers.
 
 Maintained predictor and decoder-built memory components.
 
+## Contracts
+
+- Input: Explicit configuration, authenticated assets and decoded history.
+- Output: Bounded, causal prediction state through explicit observation interfaces.
+
 ## Invariants
 
 - Inputs are explicit configuration, authenticated assets and decoded history.
@@ -35,3 +40,7 @@ predictors neither select experiments nor publish results.
 ## Non-goals
 
 Queue ownership, host discovery, experiment launch, packaging or scientific verdicts.
+
+## Freedom
+
+Any mechanism is permitted if it preserves these boundaries and passes the acceptance evidence.

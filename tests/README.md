@@ -167,47 +167,28 @@ with open("sessions/test_session.json", "w") as f:
 
 ## Continuous Integration
 
-CI should run this test suite on every pull request and on pushes to `main`
-via `/.github/workflows/ci.yml` (see root automation docs).
+`/.github/workflows/ci.yml` runs these jobs on every pull request and on pushes
+to `main`:
 
-```yaml
-# .github/workflows/ci.yml
-name: CI
+- `lint`: `ruff check --select E9,F63,F7,F82 .`
+- `test`: installs `requirements.txt` and pytest, then runs `./run_tests.sh`.
+  This full run includes the regression and docs-parity test files below;
+  archived enwiki9 test files are deselected by `tests/conftest.py`.
+- `docs_drift`: `python tools/catscan.py --check` only.
+- `smoke_cli`: installs `requirements/base.txt`, then runs `python gamma.py help`
+  and `python gamma.py help <command>` for `game`, `comparison`, `mind-meld`,
+  `benchmark`, and `codegen`.
 
-on: [push, pull_request]
+The enwiki9 jobs run only on manual dispatch (`workflow_dispatch`):
 
-jobs:
-  lint:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-      - run: python -m pip install ruff
-      - run: ruff check --select E9,F63,F7,F82 .
+- `enwiki9`: matrix over the `pure`, `codec`, `native`, and `historical` groups
+  of `projects/enwiki9/tests/run_architecture_groups.py`, enabled by the
+  `enwiki9_groups` input.
+- `enwiki9_linux_resources`: the `linux` group on the self-hosted
+  `enwiki9-cgroup` runner, enabled by the `enwiki9_linux_resources` input.
 
-  test:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-      - run: python -m pip install -r requirements.txt
-      - run: python -m pip install pytest
-      - run: ./run_tests.sh
-
-  smoke_cli:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-      - run: python -m pip install -r requirements/base.txt
-      - run: python gamma.py help
-      - run: python gamma.py help game
-      - run: python gamma.py help mind-meld
-      - run: python gamma.py help benchmark
-      - run: python gamma.py help codegen
-```
-
-Branch protection should require these checks before merge to keep CI blocking.
+Branch protection should require the `lint`, `test`, `docs_drift`, and
+`smoke_cli` checks before merge to keep CI blocking.
 
 ## Regression Gates
 
