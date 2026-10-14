@@ -17,9 +17,8 @@ Maintain execution, evidence, lifecycle, packaging and reporting services while 
 
 ## Scope
 
-Python services and experiment-specific native diagnostic sources under
-`gamma_enwiki9/`. Native diagnostic sources belong to adapters; the existing
-execution services retain process and resource authority.
+Python services and adapter-owned native diagnostic sources under
+`gamma_enwiki9/`; execution services retain process and resource authority.
 
 ## Contracts
 
@@ -28,20 +27,17 @@ execution services retain process and resource authority.
 
 ## Invariants
 
-- Services never import the lab or research application.
-- Evidence never imports reporting, execution or experiment adapters.
+- Services never import the lab or research application; evidence never imports reporting, execution or experiment adapters.
 - Pure projection never reads procfs, samples CPU state or mutates records.
 - Static closure is relative to declarations; dynamic loading requires explicit dependencies and restricted replay.
-- Terminal interpretation resolves original input identities; launches require current bindings. Original-validator replay remains separate.
-- Virtual address limits exceed resident budgets only with an identity-bound inherited memory cgroup.
-- Immutable publication, derived replacement and canonical append remain distinct operations.
 - Process success never grants score credit.
-- Adapter-owned native diagnostics receive explicit inputs and emit measurements;
-  they do not launch experiments, mutate lifecycle records or grant promotion.
+- Adapter-owned native diagnostics receive explicit inputs and emit measurements,
+  never launching experiments, mutating lifecycle records or granting promotion.
+- [Retained details](GOVERNANCE_DETAILS.md) keep the full prior charter, including identity, memory and publication invariants.
 
 ## Acceptance
 
-[Explicit test groups](../tests/run_architecture_groups.py) cover pure behavior, codec equivalence, native fixtures, historical closure and separately provisioned Linux resources. Tests never recurse through results.
+[Explicit test groups](../tests/run_architecture_groups.py) cover pure behavior, codec equivalence, native fixtures, historical closure and separately provisioned Linux resources without recursing through results.
 
 ## Non-goals
 

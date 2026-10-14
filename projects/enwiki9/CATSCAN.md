@@ -4,10 +4,7 @@ Parent: [Gamma research projects](../CATSCAN.md)
 
 ## Target
 
-Preserve the archived research and its evidence after the user's 2026-10-08
-retirement decision. The unachieved historical target remains a Gamma-authored
-codec reconstructing enwik9 exactly at or below 96,000,000 counted bytes with
-bound resource evidence. Preserve all 105M/99M/90M/96M contracts.
+Preserve the archived research and its evidence after the user's 2026-10-08 retirement decision, including the unachieved historical 96,000,000-byte target and all 105M/99M/90M/96M contracts.
 
 ## Authority
 
@@ -27,15 +24,10 @@ Candidates, source closures, experiments, execution, evidence and delivery.
 - [Project status](operations/runtime/project_status.json) withdraws research and
   execution authority while archived. The lab rejects research, queue release and
   execution before side effects; inspection and archive maintenance remain available.
-- Reopening requires explicit user authorization; historical handoffs and contracts
-  cannot restart the project. Retirement earns no score credit or impossibility claim.
+- Only explicit user authorization reopens the project. Retirement earns no score credit or impossibility claim.
 - Missing inversion, determinism, dependencies, resource or accounting evidence fails closed.
 - Measured candidates and bound hashes remain immutable; semantic mutations receive new identities.
-- Component gains require joint replay; forecasts are not additive score credit.
-- Admission locks runtime before queue; qualification reserves the queue before obtaining a lease. Cleanup removes only owned files, lease before lock.
-- Historical verification uses original immutable bytes; validity, compatibility and launch authority remain separate.
-- New candidates declare kinds/entrypoints; interrupted creation reconciles idempotently before use.
-- Projection is deterministic; host observations are explicit and timestamped.
+- [Retained details](GOVERNANCE_DETAILS.md) keep the full prior charter, including replay, queue, lease, verification, candidate and projection invariants.
 
 ## Acceptance
 
