@@ -2,41 +2,39 @@
 
 ## Project archived by user decision (2026-10-08)
 
-The user stopped the entire project. The current authority is
-[project status](operations/runtime/project_status.json). Do not continue the
-donor campaign, autonomous research, training, compression, downloads, dependency
-installation, or queued execution. Earlier standing permissions and prospective
-handoffs below are historical and do not authorize work while archived.
-Read-only inspection, evidence preservation and explicitly requested archive
-maintenance remain available. Reopening requires a new explicit user instruction;
-generic "go", queue release, another device, or a historical contract is insufficient.
-Preserve all source, contracts, weights, results, licenses and failures. Do not
-delete artifacts as part of stopping. The objective was not achieved, and this
-resource decision does not establish scientific impossibility.
+The user stopped the entire project; [project status](operations/runtime/project_status.json)
+is the current authority. Do not continue the donor campaign, autonomous
+research, training, compression, downloads, dependency installation, or queued
+execution; standing permissions and prospective handoffs below are historical
+and authorize no work while archived. Read-only inspection, evidence
+preservation, and explicitly requested archive maintenance remain available.
+Only a new explicit user instruction reopens it; generic "go", queue release,
+another device, or a historical contract is insufficient. Preserve all source,
+contracts, weights, results, licenses, and failures; stopping deletes nothing.
+The objective was not achieved; this resource decision does not establish
+scientific impossibility.
 
 Applies throughout `projects/enwiki9/`, including `ledger/` and `workbench/`.
-Obey [Gamma's instructions](../../AGENTS.md) and the applicable `CATSCAN.md`
-chain; a nearer instruction file may narrow these rules. Boundary changes
-require the affected charter to change with the implementation.
+Obey [Gamma's instructions](../../AGENTS.md), including its
+[Unicode policy](../../EMOJI.md) and CATSCAN boundary rules, and the applicable
+`CATSCAN.md` chain; a nearer instruction file may narrow these rules.
 
 Use [ADAPTIVE_WORKFLOW.md](ADAPTIVE_WORKFLOW.md) as the command manual and
 `tools/enwiki9_lab.py` as the operational entrance. [README.md](README.md) is the
 directory map; [ledger/README.md](ledger/README.md#record-map) maps canonical records.
-On “go”, inspect ownership and relevant evidence, carry the next justified action
-to a recorded result, and continue independent work when one gate is held.
-At each decision boundary, use the manual's [test/mutate/explore rules](ADAPTIVE_WORKFLOW.md#choose-testing-mutation-or-exploration)
+When active, “go” means: inspect ownership and evidence, carry the next justified
+action to a recorded result, and continue independent work when one gate is held.
+At decision boundaries, use the manual's [test/mutate/explore rules](ADAPTIVE_WORKFLOW.md#choose-testing-mutation-or-exploration)
 and the [creative prompts](workbench/PROMPTS.md#creative-discovery) when changing direction.
 
 ## Git workflow: direct to main
 
-- Work and commit directly on the owning repository's `main` branch, then push
-  directly to its existing `origin/main` remote branch.
-- Do not create feature/task branches, branch-backed worktrees, or GitHub pull
-  requests. Do not use a branch/PR workflow unless the user explicitly requests it.
-- If the checkout is on another branch, preserve its work and move the task to
-  `main` safely; never discard changes to switch branches.
-- Stage only task-related changes, run the applicable checks, and integrate remote
-  updates without overwriting unrelated work. Never force-push `main`.
+- Commit on the owning repo's `main` and push to `origin/main`. No feature
+  branches, branch-backed worktrees, or PRs unless the user asks for them.
+- On another branch, preserve its work and move the task to `main` safely;
+  never discard changes to switch. Never force-push `main`.
+- Stage only task-related changes; integrate remote updates without
+  overwriting unrelated work.
 - Report the pushed commit or the concrete blocker. A local commit is not a push.
 
 ## Authority and permissions
@@ -45,29 +43,28 @@ and the [creative prompts](workbench/PROMPTS.md#creative-discovery) when changin
   targeted regression tests, the release canary, and independently bounded
   discovery gates on assigned resources. Large launches and dependency/model
   installation require explicit user authorization; never auto-install them.
-- Inspect actual host occupancy before source changes or resource-intensive work.
-  Run `python3 tools/enwiki9_lab.py start` for sampled CPU use, available RAM,
-  affinity/cgroup limits, job starts, budgets, and available progress estimates.
-  Use the manual's [resource planning instructions](ADAPTIVE_WORKFLOW.md#resources-parallel-work-and-event-timing)
-  to size the next move; prefer admitted independent parallel work when capacity
-  permits. Refresh the sample before launching; available capacity is not a claim.
-  Preserve claims, leases, workers, and existing sole observers, including
-  HORIZON's observer. Missing controllers and unknown occupancy grant no launch
-  permission. Committed status is a timestamped host snapshot.
+- Before source changes or resource-intensive work, inspect host occupancy
+  with `python3 tools/enwiki9_lab.py start` (CPU, RAM, cgroup limits, jobs,
+  budgets) and size the move with the manual's
+  [resource planning instructions](ADAPTIVE_WORKFLOW.md#resources-parallel-work-and-event-timing),
+  preferring admitted independent parallel work when capacity permits. Refresh
+  the sample before launching; available capacity is not a claim. Preserve
+  claims, leases, workers, and existing sole observers, including HORIZON's.
+  Missing controllers or unknown occupancy grant no launch permission.
+  Committed status is a timestamped host snapshot.
 - Publish ownership before launching a resource-intensive gate. Give every job
   a unique identity, output path, and explicit CPU, memory, scratch, and elapsed
   stop. Independent discovery may share a host; concurrent timing is diagnostic.
   Qualification requires isolated timing, calibration, and complete resource
-  evidence. Its future certificate does not block implementing the candidate.
-- Assume other agents may pursue the same objective. Search current proposals,
-  claims, running jobs, and relevant lineage for the same mechanism and population
-  before implementing or launching. An owned experiment calls for a distinct
-  path or explicitly coordinated contribution; a new name does not make duplicate
-  work independent. Recheck published ownership before execution.
+  evidence; its future certificate does not block implementing the candidate.
+- Other agents may pursue the same objective. Before implementing or launching,
+  search proposals, claims, running jobs, and lineage for the same mechanism
+  and population; an owned experiment needs a distinct path or coordinated
+  contribution (a new name is not independence). Recheck ownership before
+  execution.
 - Do not distribute `docs/atlas_clockwork_seal_problem_set.md` to candidates
   unless `tools/atlas_clockwork_seal.py verify --require-bound` reports
   `VALID_BOUND`. Expert review of an `UNBOUND` draft is allowed.
-- Follow [the Unicode policy](../../EMOJI.md); do not add emojis.
 
 ## Scientific invariants
 
@@ -77,38 +74,31 @@ and the [creative prompts](workbench/PROMPTS.md#creative-discovery) when changin
   and experiment bindings, including the v1 105M, v2 99M and v3 90M milestones. Consult
   [competitive provenance](operations/provenance/competitive_frontier_20260919.json)
   before treating engineering economics as an accepted prize threshold.
-- The stretch target is 95,000,000 complete bytes. The current priority is a better
-  exported compact model from preserved P, without metadata, judged by native
-  archives and separately measured packed-model costs. Native-forward correction
-  and one matched data-only/joint-cost comparison are already complete; follow
-  the [current training handoff](docs/fx2_matched_training_20260920.md#current-research-priority).
-  Keep the [causal relational binding design](operations/adaptive/experiments/fx2_relational_binding_design_q0_v1.json)
-  and broader cross-history hypothesis parked until a proposal identifies a
-  different decoder-available source of information. The
-  [first fixed realization](docs/causal_relational_grammar_20260920.md) is now
-  parked after valid losses on all three declared populations. Do not add a
-  mechanism, alter resets or scale this realization; first
-  identify a specific unresolved cause supported by its terminal attribution.
-  Preserve the broader cross-history hypothesis, census and retired split-stream
-  result; raw shares are not savings forecasts.
-  The [development donor-coverage diagnostic](docs/fx2_donor_coverage_20260920.md)
-  is also closed: additional prefix-selected donors expose only 210.390918 parent
-  bits and their tested normalized distribution loses. Do not build or scale this
-  exact stored-spelling transfer from that result; keep its conditional event
-  costs and the distinction between four-slot capacity and pair eligibility.
-- The [matched native-forward comparison](docs/fx2_matched_training_20260920.md)
-  is closed: J saves fixed model bytes but worsens native payload. Do not scale
-  this 16-update profile, increase its budget, or introduce metadata from that result.
-  Preserve P/E/A/J and retired metadata checkpoints. The native forward remains
-  authoritative and its backward remains an explicitly approximate reference
-  Jacobian. Any new checkpoint needs fresh native archives and actual packing.
-- The [fixed P/A/J trajectory attribution](docs/fx2_training_trajectory_20260920.md)
-  is also closed. All 512 trained-target probabilities per checkpoint match the
-  retained native window evaluations; off-window neural and final-coder losses
-  overwhelm the trained-position gains. Do not repeat this as unfinished parity
-  or attribution work. Coverage or preservation of parent behavior is the next
-  research question, without selecting a remedy or increasing this profile's
-  budget. No causal mixer defect or surrogate-Jacobian cause is established.
+- The stretch target is 95,000,000 complete bytes. The last research priority
+  (a better exported compact model from preserved P, without metadata, judged
+  by native archives and separately measured packed-model costs) is in the
+  [training handoff](docs/fx2_matched_training_20260920.md#current-research-priority).
+- Parked until a proposal identifies a different decoder-available information
+  source: the [causal relational binding design](operations/adaptive/experiments/fx2_relational_binding_design_q0_v1.json)
+  and the broader cross-history hypothesis. The
+  [first fixed realization](docs/causal_relational_grammar_20260920.md) lost on
+  all three declared populations; add no mechanism, reset change, or scale-up
+  without a specific unresolved cause from its terminal attribution. Preserve
+  the hypothesis, census, and retired split-stream result; raw shares are not
+  savings forecasts.
+- Closed; do not rebuild, scale, raise budgets, add metadata, or redo as
+  unfinished parity/attribution work from them: the
+  [donor-coverage diagnostic](docs/fx2_donor_coverage_20260920.md) (keep its
+  conditional event costs and the four-slot capacity vs pair eligibility
+  distinction), the [matched native-forward comparison](docs/fx2_matched_training_20260920.md)
+  (J saves fixed model bytes but worsens native payload; 16-update profile),
+  and the [fixed P/A/J trajectory attribution](docs/fx2_training_trajectory_20260920.md)
+  (off-window losses overwhelm trained-position gains; no causal mixer defect
+  or surrogate-Jacobian cause is established). The next question is coverage
+  or preservation of parent behavior, without pre-selecting a remedy.
+- Preserve P/E/A/J and retired metadata checkpoints. The native forward is
+  authoritative; its backward is an explicitly approximate reference Jacobian.
+  Any new checkpoint needs fresh native archives and actual packing.
 - The counted core delivery has a no-argument restricted inverse on its declared
   fixture. It is not the unexecuted full-enwik9 split/reorder package or a prize
   qualification. Keep its measured alternatives, licenses and calibration gaps
@@ -116,9 +106,9 @@ and the [creative prompts](workbench/PROMPTS.md#creative-discovery) when changin
 - Every semantic mutation gets a new candidate. Never edit running, sealed, or
   measured source in place. Use the canonical lifecycle, not ad hoc launchers.
 - Freeze hypothesis, parent, changed mechanism, development budget, selection
-  population, sealed confirmation, controls, and stop rule. Budgeted development
-  tuning is allowed; freeze before confirmation. A failed configuration does
-  not disprove its entire information source. Economic stops are budget decisions;
+  population, sealed confirmation, controls, and stop rule before confirmation;
+  budgeted development tuning is allowed. A failed configuration does not
+  disprove its entire information source. Economic stops are budget decisions;
   certified futility needs a proved bound.
 - Compare identical populations and coordinates. History-dependent mechanisms
   need causal warmup. Reuse builds or traces only when frontend, source, state,
@@ -127,8 +117,8 @@ and the [creative prompts](workbench/PROMPTS.md#creative-discovery) when changin
   probabilities cannot restore missing continuous runtime or memory evidence.
 - Missing alignment, causality, inversion, determinism, provenance, resource, or
   accounting evidence blocks promotion. Quarantine broken evidence; never
-  fabricate or silently discard missing artifacts. Optional diagnostics remain
-  explicitly missing rather than becoming invented codec failures.
+  fabricate or silently discard missing artifacts. Optional diagnostics stay
+  explicitly missing, not invented codec failures.
 - Validate the terminal reflection before scientific transitions or selecting
   descendants. Review selected ancestry first; unrelated historical backlog
   does not block independent work. Preserve failures and scoped exclusions.
@@ -141,16 +131,16 @@ and the [creative prompts](workbench/PROMPTS.md#creative-discovery) when changin
 ## Durable records and handoff
 
 Record every meaningfully evaluated algorithm and decisive conclusion, including
-rejections before implementation, merges, parked ideas, and oracle-only work.
-Keep considered ideas in the research register, batches in dated portfolios,
-actionable experiments in the existing adaptive lifecycle, and exact artifacts
-and run rows in results. Portfolios create no queue or score authority.
+rejections before implementation, merges, parked ideas, and oracle-only work:
+considered ideas in the research register, batches in dated portfolios,
+actionable experiments in the adaptive lifecycle, and exact artifacts and run
+rows in results. Portfolios create no queue or score authority.
 
 Follow immutable evidence links before using a claim. Keep commands, hashes,
-outcomes, and next actions in canonical records; do not create another registry,
-queue, or device-local notebook. Regenerate disposable views after changes.
-Complete cross-device handoff by publishing source, ownership, receipts, run
-rows, conclusions, and generated status through the
+outcomes, and next actions in canonical records, not another registry, queue,
+or device-local notebook. Regenerate disposable views after changes. Complete
+cross-device handoff by publishing source, ownership, receipts, run rows,
+conclusions, and generated status through the
 [manual's handoff procedure](ADAPTIVE_WORKFLOW.md#cross-device-operation).
 
 When explicitly asked for Hutter status, include the `96,000,000` byte and

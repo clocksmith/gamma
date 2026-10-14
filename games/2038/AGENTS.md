@@ -4,23 +4,21 @@ These instructions apply to the entire Mandate 2038 project.
 
 ## Git workflow: direct to main
 
-- Work and commit directly on the owning repository's `main` branch, then push
-  directly to its existing `origin/main` remote branch.
-- Do not create feature/task branches, branch-backed worktrees, or GitHub pull
-  requests. Do not use a branch/PR workflow unless the user explicitly requests it.
-- If the checkout is on another branch, preserve its work and move the task to
-  `main` safely; never discard changes to switch branches.
-- Stage only task-related changes, run the applicable checks, and integrate remote
-  updates without overwriting unrelated work. Never force-push `main`.
+- Commit on the owning repo's `main` and push to `origin/main`. No feature
+  branches, branch-backed worktrees, or PRs unless the user asks for them.
+- On another branch, preserve its work and move the task to `main` safely;
+  never discard changes to switch. Never force-push `main`.
+- Stage only task-related changes; integrate remote updates without
+  overwriting unrelated work.
 - Report the pushed commit or the concrete blocker. A local commit is not a push.
 
 ## Component Intent
 
 Before modifying a file, read the `CATSCAN.md` chain from the repository root
 to the target directory. Treat Target, Authority, Invariants, Acceptance, and
-Non-goals as implementation constraints. A child may narrow its parent but may
-not contradict it. Boundary changes require the affected charter to change
-with the implementation; algorithms remain free inside those constraints.
+Non-goals as implementation constraints; a child may narrow but not contradict
+its parent. Boundary changes require the affected charter to change with the
+implementation; algorithms remain free inside those constraints.
 
 ## Product Intent
 
@@ -29,200 +27,174 @@ institutions racing to build, deploy, regulate, and plausibly declare AGI.
 It combines engine building, push-your-luck research, asymmetric
 institutions, negotiation, and public Reputation.
 
-The writing contract in `world.md` owns tone and Era placement. Ground the
-setting in concrete situations, with wonder, opportunity, absurdity, and danger.
-Humor comes from recognizable behavior and incentives, not allegations about
-real people. Do not force every scene into the same dystopian conclusion.
+Ground the setting in concrete situations, with wonder, opportunity,
+absurdity, and danger. Humor comes from recognizable behavior and incentives,
+not allegations about real people. Do not force every scene into the same
+dystopian conclusion.
 
 ## Canonical Boundaries
 
-- `components/` owns mechanical records: mechanics, IDs, rule wording, and
-  author-only `$scenario` references. Creative prose resolves through explicit `loreRef` records
-  in the internal author bible `world.md`. Era panels own names, rules, unlocks, and epigraph references,
-  and structured `$era` notes; the Era overviews own extended setting prose.
+- `components/` owns mechanical records (mechanics, IDs, rule wording,
+  author-only `$scenario` references); creative prose resolves through explicit
+  `loreRef` records in `world.md`. Era panels own names, rules, unlocks,
+  epigraph references, and structured `$era` notes; Era overviews own extended
+  setting prose.
 - `rules.md` owns Game procedures, map instructions, component states, and
-  supported inventory prose. The complete player rulebook includes all of these
-  sections. Named excerpts also generate internal review references; those are
-  not required player documents.
-  `world.md` is an authoring document. A layout selects approved setting and Era
-  passages and compiled ending fields for the player companion. The selected companion is published as an optional narrative at
-  `/docs/world-and-institutions.html`; it is not required in the physical kit.
-  The whole bible is never a player document. Internal means audience, not access control.
-- The game has one ruleset: eighteen shared Action hexes, producing Orgs, and the twenty-four current
-  Headlines. There is no selectable rules profile, connected Network, Link,
-  Power market, Realignment, or Volatility module. Simulation parameter research
+  supported inventory prose, all included in the complete player rulebook. Named
+  excerpts also generate internal review references (not required player
+  documents).
+- `world.md` is the internal author bible and sole authority for lore,
+  editorial method, concept placement, research provenance, tone, and
+  writing-layer contracts; `dist/contracts/era-situation-ledger.json` is its
+  machine-enforced traceability and deployment projection. Create no parallel
+  lore scratchpad or thematic authority. The
+  bible is never a player document: a layout selects approved setting and Era
+  passages and compiled ending fields for the optional companion at
+  `/docs/world-and-institutions.html`, which the physical kit does not require.
+  Internal means audience, not access control.
+- One ruleset, from the 2026-10-10 shared-hex selection: eighteen playable
+  Action hexes around one Era hex, producing Orgs (Build equips one by flipping
+  its token), numeric Customers, Mandate derived from visible state, forty
+  Training cards (ten designs, four copies each, shared draw/discard
+  lifecycle), and the twenty-four current Headlines. Orgs act in Initiative
+  order; Actions may repeat. Retired, never selectable: the six-area board;
+  separate Facilities, upgrades, Customer cards, Action cards, and Ventures;
+  simultaneous selection; Power, Trust milestones, and per-Era scoring (the
+  2026-10-09 prototype); any rules profile, connected Network, Link, Power
+  market, Realignment, or Volatility module. Simulation parameter research
   must not reintroduce retired modes through unchecked options.
-- `ui.json` owns browser labels and tutorial wording. `content/runtime/`
-  owns simulation and strategy copy; `content/data/` owns shared variables.
-  `components/game.json` owns board and supply records. `content/templates/`
-  contains reference layouts: headings, field labels, and references to their
-  owners. Do not add independent procedural prose or numeric overrides there.
-- `physical/` owns component form, dimensions, and state encoding.
-  The human-readable box inventory is included in `dist/docs/core-rules.md`;
-  `dist/review/docs/component-inventory.md` is an internal review extract;
-  generated physical-kit output remains in `dist/physical-kit/`, with protocols,
-  receipt schemas, release evidence, and source data under each kit's `observer/`.
-- `experimental/` owns deferred optional modules; its content is never part of
-  baseline play unless the user explicitly activates it.
-- `content/graph.json` declares deployment profiles, authored sources, and every
-  generated projection. Audience and packaging declarations generate
-  `dist/review/docs/content-provenance.md`; it is content provenance, not a complete
-  code dependency graph. Do not hand-edit any target it declares.
-- `content/README.md` is the editing and build-path map, not a parallel rules source.
-- `dist/runtime/` owns compiler-generated runtime JSON; `dist/docs/` owns the
-  complete player rulebook; `dist/review/docs/` owns supplementary Markdown;
-  `dist/site/docs/` and `dist/site/review/` render those audiences separately; and
-  `dist/physical-kit/` owns frozen kit output.
-- `versions/current-release.json` is the mutable release declaration.
-  `versions/<version>/` contains immutable historical release evidence and
-  must never be rewritten to make current sources pass.
-- `docs/design-decisions.md` records current rationale, exclusions, open
-  evidence questions, and implementation gaps without duplicating rules text.
-- `docs/playtesting-and-evidence.md` owns physical and simulated evidence
-  identity, test protocol, comparison classes, and change control.
-- `docs/manufacturing-and-publishing-study.md` contains dated planning research,
-  not quotes, legal advice, or authorization to manufacture.
-- `world.md` is the sole authority for lore, editorial
-  method, concept placement, research provenance, tone, and writing-layer
-  contracts. `dist/contracts/era-situation-ledger.json` is its machine-enforced
-  traceability and deployment projection, not a parallel lore authority. Do
-  not create a parallel lore scratchpad or thematic authority.
-- Scenario bindings are generated from component records, never maintained
-  separately. Shared scenarios have one Markdown definition and `$scenario.ref` links.
-  Scenario definitions and dispositions live in the marked canon section of `world.md`.
-  The compiler strips `$scenario` and `$era` from all playable outputs.
-- `docs/simulation-and-player-strategies.md` documents the executable
-  simulation surface and must name any gap from the canonical rulebook.
-- `docs/balance-and-exploitability.md` owns the human-readable balance,
-  counter-strategy, and promotion contract. Its machine authority is
+- `ui.json` owns browser labels and tutorial wording; `content/runtime/`
+  simulation and strategy copy; `content/data/` shared variables;
+  `components/game.json` board and supply records. `content/templates/` holds
+  only reference layouts (headings, field labels, owner references), never
+  independent procedural prose or numeric overrides.
+- `physical/` owns component form, dimensions, and state encoding. The box
+  inventory is in `dist/docs/core-rules.md` (review extract:
+  `dist/review/docs/component-inventory.md`); generated kit output stays in
+  `dist/physical-kit/`, with protocols, receipt schemas, release evidence, and
+  source data under each kit's `observer/`.
+- `experimental/` owns deferred optional modules, outside baseline play until
+  the user explicitly activates them.
+- `content/graph.json` declares deployment profiles, authored sources, and
+  every generated projection; never hand-edit a declared target. Its audience
+  and packaging declarations generate `dist/review/docs/content-provenance.md`
+  (content provenance, not a complete code dependency graph).
+  `content/README.md` is the editing and build-path map, not a rules source.
+- `dist/runtime/` owns compiler-generated runtime JSON, `dist/docs/` the
+  complete player rulebook, `dist/review/docs/` supplementary Markdown, and
+  `dist/physical-kit/` frozen kit output; `dist/site/docs/` and
+  `dist/site/review/` render those audiences separately.
+- `versions/current-release.json` is the mutable release declaration;
+  `versions/<version>/` is immutable historical release evidence, never
+  rewritten to make current sources pass.
+- In `docs/`: `design-decisions.md` records rationale, exclusions, open
+  evidence questions, and implementation gaps without duplicating rules text;
+  `playtesting-and-evidence.md` owns physical and simulated evidence identity,
+  test protocol, comparison classes, and change control;
+  `manufacturing-and-publishing-study.md` is dated planning research, not
+  quotes, legal advice, or authorization to manufacture;
+  `simulation-and-player-strategies.md` documents the executable simulation
+  surface and must name any gap from the canonical rulebook;
+  `balance-and-exploitability.md` owns the human-readable balance,
+  counter-strategy, and promotion contract, with machine authority
   `lab/contracts/balance-contract.json`.
-- The user-selected simplification uses optional trading followed by choosing
-  one Org to stay or move one edge, then performing or deliberately skipping its
-  destination Action even when affordable. Movement is independent of Action
-  affordability; a skip applies no Action costs, rewards, or Action-specific ability.
-  Two-sided Orgs retain equipment, presence, and ordinary Production. Turns are
-  sequential, with five holdings and derived final Mandate. All four objectives
-  are revealed at setup, one per Era packet before the first Headline, kept visible,
-  and scored once from final state without Era-by-Era replacement. Preserve the six
-  Core Actions, push-your-luck Training, fictional institutions, four Eras and
-  separate World Ending. More Orgs increase presence and production, not turns.
-- `web/` owns the browser implementation.
-- `tests/` owns contract, determinism, and probability checks.
-- `evidence/playtests/` owns observed sessions and receipts. Never present a simulated
-  result as a human playtest.
+- Scenario bindings are generated from component records, never maintained
+  separately. Each shared scenario has one Markdown definition and disposition
+  in the marked canon section of `world.md`, linked by `$scenario.ref`. The
+  compiler strips `$scenario` and `$era` from all playable outputs.
+- The user-selected simplification (2026-10-12 movement and setup-objective
+  candidate): after optional trading, choose one Org to stay or move one edge,
+  then perform or deliberately skip its destination Action even when
+  affordable. Movement is independent of Action affordability; a skip applies
+  no Action costs, rewards, or Action-specific ability. Off-map entry and
+  Organize’s second-Org reassignment keep their exceptions. Two-sided Orgs
+  retain equipment, presence, and ordinary Production. Turns are sequential,
+  with five holdings and derived final Mandate. All four objectives are
+  revealed at setup, one per Era packet before the first Headline, stay
+  visible, and score once from final state without Era-by-Era replacement. No
+  control-income bonus; Research stays two Compute; prices, yields, faction
+  abilities, lore, Initiative, eighty-two cards, and 153 components are
+  unchanged. Preserve the six Core Actions, push-your-luck Training, four Eras,
+  and the separate World Ending. More Orgs increase presence and production,
+  not turns. This candidate needs fresh balance and human-play evidence; no
+  publication is authorized. Full dated text: `CATSCAN.md`.
+- `web/` owns the browser implementation; `tests/` contract, determinism, and
+  probability checks; `evidence/playtests/` observed sessions and receipts.
+  Never present a simulated result as a human playtest.
 
-When implementation needs an interpretation that the canonical rules do not
-resolve, record it as provisional in `docs/design-decisions.md`. Do not silently
-rewrite the baseline.
+When implementation needs an interpretation the canonical rules do not
+resolve, record it as provisional in `docs/design-decisions.md`; do not
+silently rewrite the baseline.
 
 ## Fictional-Identity Boundary
 
 Dovetalis Labs, Loopfold AI, Mirevanta Works, Kestralyn, Orisonix, and
-Corthaven are the canonical fictional player institutions. Their CEOs are
-fictional characters. Do not replace them with real people, recognizable
-caricatures, or real institutional aliases.
-
-Historically inspired events must target board state, not present accusations
-about a real person or company as fact. Do not imply endorsement or introduce
-company logos, copied trade dress, or generated photorealistic likenesses.
-Public retail release still requires an explicit publishing decision and
-appropriate legal review.
+Corthaven are the canonical fictional player institutions, with fictional
+CEOs; never replace them with real people, recognizable caricatures, or real
+institutional aliases. Historically inspired events target board state, never
+presenting accusations about a real person or company as fact. No implied
+endorsement, company logos, copied trade dress, or generated photorealistic
+likenesses. Public retail release requires an explicit publishing decision and
+legal review.
 
 ## Development
 
-- Use modern browser-native JavaScript with no framework unless the user
-  chooses one.
+- Browser-native modern JavaScript; no framework unless the user chooses one.
 - Keep the simulation deterministic under an explicit seed.
-- Keep game content in the semantic graph rather than duplicating it in UI
-  code. Generate JSON projections for runtime consumers.
+- Keep game content in the semantic graph, not UI code; generate JSON
+  projections for runtime consumers.
 - Log state transitions so a play session can be reconstructed.
 - Prefer accessible HTML controls and SVG/CSS geometry over image-only UI.
 - Do not add final art before rules and component counts survive blind tests.
 
 ## Validation
 
-Run:
-
-```bash
-npm test
-npm run check
-git diff --check
-```
-
-Browser claims require a browser check. Probability studies require the
-simulation command and a saved dated result under `evidence/studies/`.
+Reference commands, not per-edit gates: `npm test` (prefer one
+`node --test tests/<name>.test.mjs`), `npm run check` (after editing authored
+content or projections), `git diff --check`. Browser claims require a browser
+check; probability studies require the simulation command and a saved dated
+result under `evidence/studies/`.
 
 ## Simulation-Driven Change Control
 
-Any change motivated by simulated play must include all of the following in
-the same Git history:
+A change motivated by simulated play includes, in the same Git history:
 
-1. Preserve the raw report in the local `evidence/studies/simulation/` archive.
-2. Add a tracked dated study receipt recording seed, run count, player count,
-   profiles, backends, rules variant, report hash, aggregate results, validity
-   limits, and the hypothesis being tested.
-3. List every resulting delta and every affected surface. At minimum audit the
-   canonical rulebook, machine-readable data, simulator, browser prototype,
+1. The raw report in the local `evidence/studies/simulation/` archive.
+2. A tracked dated study receipt: seed, run count, player count, profiles,
+   backends, rules variant, report hash, aggregate results, validity limits,
+   and the hypothesis tested.
+3. Every resulting delta and affected surface, auditing at least the canonical
+   rulebook, machine-readable data, simulator, browser prototype,
    reference/player aids, tests, and playtest documentation.
-4. Explicitly record “no change” for an audited surface that does not require a
-   delta; do not edit the rulebook merely to make the checklist look complete.
-5. Validate implementation and content contracts, then create an intentional
-   Git commit that names the study or receipt.
+4. An explicit “no change” for an audited surface needing no delta; do not
+   edit the rulebook merely to make the checklist look complete.
+5. The checks covering the changed surfaces, then an intentional commit naming
+   the study or receipt.
 
-Simulation evidence may motivate a candidate rule variant. It does not become
-canonical doctrine until the user selects it and every affected authority is
+Simulation evidence may motivate a candidate rule variant; it becomes
+canonical only when the user selects it and every affected authority is
 updated together.
 
-Four players is the authoritative balance configuration. Three- and
-five-player games are the suggested fully supported configurations, not incidental variants:
-every promoted rules candidate must preserve their integrity, strategic
-diversity, faction viability, negotiation, and completion quality. Two-player games are playable exploratory configurations; their reports are
-non-promotional diagnostics until their own evidence contract is approved.
-Six-player games are not playable; preserve their historical evidence only.
+Four players is the authoritative balance configuration. Three and five
+players are suggested, fully supported configurations; every promoted rules
+candidate must preserve their integrity, strategic diversity, faction
+viability, negotiation, and completion quality. Two-player games are playable
+but exploratory, with non-promotional reports until their own evidence
+contract is approved. Six-player games are not playable; keep only their
+historical evidence.
 
-No tournament average, strategy-evolution champion, rule-search recommendation,
-thin-cell maximum, or LLM anecdote may be described as balanced or promoted
-alone. Run the unified `npm run simulate:audit` frame; require registered
-coverage, partial pooling, multiplicity-safe sequential intervals, the bounded
-adversarial diagnostic, a clean committed source, tracked receipt, one-lever
-common-seed comparison for any proposed rule delta, and explicit user approval.
+No tournament average, strategy-evolution champion, rule-search
+recommendation, thin-cell maximum, or LLM anecdote alone may be called
+balanced or promoted. Promotion requires the unified `npm run simulate:audit`
+frame with registered coverage, partial pooling, multiplicity-safe sequential
+intervals, the bounded adversarial diagnostic, a clean committed source, a
+tracked receipt, a one-lever common-seed comparison for any proposed rule
+delta, and explicit user approval.
 
 ## Git And Publication
 
-- Apply the direct-to-main workflow in the owning Gamma repository; this does
-  not create an independent publication target for this game.
-- Preserve unrelated work.
-- This project is not publishable through `rdpush` until it has an explicit
-  remote and is added to the canonical Deco workspace registry.
+- This game has no publication target independent of Gamma and is not
+  publishable through `rdpush` until it has an explicit remote and is in the
+  canonical Deco workspace registry.
 - Do not invent a remote, deployment target, crowdfunding status, quote, or
   manufacturing commitment.
-
-The historical 2026-10-09 smaller prototype retired Power, Trust milestones, and per-Era scoring. The shared-hex and 2026-10-12 selections below own the current movement, component, and objective-timing boundaries. Old sealed releases and evidence remain unchanged.
-
-## Selected shared-hex simplification (2026-10-10)
-
-The user selected a shared hex board and fewer components. This supersedes earlier
-six-area, separate Facility, Customer-card, Action-card, Venture and simultaneous
-selection requirements. Eighteen playable hexes surround one Era hex. Orgs stay or move
-one edge, then perform or deliberately skip the destination Action, in Initiative
-order; Actions may repeat. All Orgs produce; Build equips an Org by flipping its token. No separate
-Facilities, upgrades, Ventures or Customer cards remain. Customers are numeric;
-Mandate is calculated from visible state. Forty Training cards retain all ten
-designs with four copies each and the existing shared draw/discard lifecycle.
-Keep all unique lore and fictional institutions. Old releases remain immutable.
-
-## Selected movement and setup-objective candidate (2026-10-12)
-
-This selection deliberately supersedes mandatory destination Actions, movement
-blocked by Action affordability, and one objective revealed at each Era start.
-Resolve an optional trade, choose one Org and a legal stay or edge move, then
-perform or deliberately skip the destination Action. Off-map entry and Organize’s
-second-Org reassignment keep their existing exceptions. Skips do not grant an
-Action or trigger Action-specific abilities; ordinary Production and equipment
-remain intact. Reveal all four objectives at setup, one from each Era packet
-before the first Headline; keep them visible and score each once from final state.
-
-No control-income bonus is introduced. Research remains two Compute; all prices,
-yields, faction abilities, lore, Initiative, eighty-two cards and 153 components
-remain unchanged. The dated design decision records this new candidate, which
-requires fresh balance and human-play evidence. No publication is authorized.
