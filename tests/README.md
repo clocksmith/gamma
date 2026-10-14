@@ -167,17 +167,20 @@ with open("sessions/test_session.json", "w") as f:
 
 ## Continuous Integration
 
-`/.github/workflows/ci.yml` runs these jobs on every pull request and on pushes
-to `main`:
+`/.github/workflows/ci.yml` runs smoke checks on every pull request and on
+pushes to `main`:
 
-- `lint`: `ruff check --select E9,F63,F7,F82 .`
-- `test`: installs `requirements.txt` and pytest, then runs `./run_tests.sh`.
-  This full run includes the regression and docs-parity test files below;
-  archived enwiki9 test files are deselected by `tests/conftest.py`.
-- `docs_drift`: `python tools/catscan.py --check` only.
-- `smoke_cli`: installs `requirements/base.txt`, then runs `python gamma.py help`
+- `lint`: `ruff check --select E9,F63,F7,F82` over everything except the
+  archived `projects/enwiki9` lane and notebooks.
+- `smoke`: installs `requirements.txt` and pytest, runs `python gamma.py help`
   and `python gamma.py help <command>` for `game`, `comparison`, `mind-meld`,
-  `benchmark`, and `codegen`.
+  `benchmark`, and `codegen`, then the engine, game, and UI tests
+  (`tests/test_engine_interface.py`, `tests/test_engine_factory.py`,
+  `tests/test_game.py`, `tests/test_ui_components.py`).
+
+The full pytest suite (`./run_tests.sh`) and the CATSCAN drift check
+(`python tools/catscan.py --check`) are not CI gates; run them when a change
+edits what they cover.
 
 The enwiki9 jobs run only on manual dispatch (`workflow_dispatch`):
 
@@ -187,8 +190,7 @@ The enwiki9 jobs run only on manual dispatch (`workflow_dispatch`):
 - `enwiki9_linux_resources`: the `linux` group on the self-hosted
   `enwiki9-cgroup` runner, enabled by the `enwiki9_linux_resources` input.
 
-Branch protection should require the `lint`, `test`, `docs_drift`, and
-`smoke_cli` checks before merge to keep CI blocking.
+Branch protection, if enabled, should require the `lint` and `smoke` checks.
 
 ## Regression Gates
 

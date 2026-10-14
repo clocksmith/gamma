@@ -6,11 +6,14 @@ This module handles all terminal output, formatting, and display functions.
 
 import logging
 import shutil
-from typing import List, Optional, Tuple
+from typing import TYPE_CHECKING, List, Optional, Tuple
 
 from src.core import config as cfg
 from src.core.fallback_telemetry import FallbackTelemetry
 from src.ui import displays as ui
+
+if TYPE_CHECKING:
+    from src.game.difficulty_levels import DifficultyLevel
 
 logger = logging.getLogger(__name__)
 _FALLBACKS = FallbackTelemetry("game_cli_renderer", logger)

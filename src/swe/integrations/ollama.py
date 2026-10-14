@@ -23,7 +23,10 @@ Usage:
 import asyncio
 import json
 from dataclasses import dataclass
-from typing import Any, Dict, List, Optional, AsyncIterator
+from typing import TYPE_CHECKING, Any, Dict, List, Optional, AsyncIterator
+
+if TYPE_CHECKING:
+    from ..agent import AgentConfig, SWEAgentV2
 
 try:
     import httpx

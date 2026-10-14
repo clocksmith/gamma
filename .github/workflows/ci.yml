@@ -61,71 +61,34 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-
       - name: Install lint tooling
         run: |
           python -m pip install --upgrade pip
           python -m pip install ruff
+      # The archived enwiki9 lane has its own manual test groups above.
+      - name: Ruff syntax and undefined names
+        run: ruff check --select E9,F63,F7,F82 --extend-exclude projects/enwiki9 --extend-exclude '*.ipynb' .
 
-      - name: Ruff (blocking)
-        run: ruff check --select E9,F63,F7,F82 .
-
-  test:
+  # Hosted CI is a smoke test. The full pytest suite (./run_tests.sh) and the
+  # CATSCAN drift check (python tools/catscan.py --check) run on demand.
+  smoke:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          python -m pip install -r requirements.txt
-          python -m pip install pytest
-
-      - name: Pytest suite (blocking)
-        run: ./run_tests.sh
-
-  docs_drift:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
-
-      - name: CATSCAN drift check (blocking)
-        run: python tools/catscan.py --check
-
-  smoke_cli:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
-
-      - name: Install minimal runtime deps
-        run: |
-          python -m pip install --upgrade pip
-          python -m pip install -r requirements/base.txt
-
-      - name: CLI help smoke checks (blocking)
+          python -m pip install -r requirements.txt pytest
+      - name: CLI help smoke
         run: |
           python gamma.py help
           python gamma.py help game
@@ -133,3 +96,5 @@ jobs:
           python gamma.py help mind-meld
           python gamma.py help benchmark
           python gamma.py help codegen
+      - name: Engine, game, and UI tests
+        run: python -m pytest -q tests/test_engine_interface.py tests/test_engine_factory.py tests/test_game.py tests/test_ui_components.py

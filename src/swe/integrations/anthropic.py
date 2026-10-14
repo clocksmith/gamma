@@ -17,7 +17,10 @@ Usage:
 
 import os
 from dataclasses import dataclass
-from typing import Any, Dict, List, Optional
+from typing import TYPE_CHECKING, Any, Dict, List, Optional
+
+if TYPE_CHECKING:
+    from ..agent import AgentConfig, SWEAgentV2
 
 try:
     import anthropic
