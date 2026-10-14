@@ -223,17 +223,17 @@ python3 -m pytest tests/test_command_router.py -m regression
 python3 -m pytest tests/test_fallback_telemetry.py -m regression
 ```
 
-## Docs vs Runtime Drift Gate
+## CLI Help Surface Check
 
-The docs parity check lives in:
+The CLI help check lives in:
 
 - `tests/test_docs_cli_parity.py`
 
 It validates:
 
-1. Required CLI snippets are still present in `README.md`.
-2. Top-level `gamma.py --help` still exposes documented commands.
-3. `gamma.py help <command>` still resolves for documented subcommands.
+1. Top-level `gamma.py --help` still exposes documented commands.
+2. `gamma.py help <command>` still resolves for documented subcommands.
+3. Generated `web/dist/` bundles are not present in the tree.
 
 Run it directly:
 
