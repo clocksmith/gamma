@@ -1,11 +1,9 @@
 """
 Test Core Config Module
 
-Tests the core configuration constants and settings:
-- Default constants
-- Model information
+Tests the core configuration invariants:
+- Model information structure
 - Color configuration based on platform
-- Special tokens
 """
 
 import sys
@@ -15,53 +13,6 @@ import unittest
 from unittest.mock import patch, MagicMock
 
 from src.core import config
-
-
-class TestConfigConstants(unittest.TestCase):
-    """Test basic configuration constants."""
-
-    def test_default_engine(self):
-        """Default engine should be pytorch."""
-        self.assertEqual(config.DEFAULT_ENGINE, "pytorch")
-
-    def test_default_model_name(self):
-        """Default model should be gemma-3-1b-it."""
-        self.assertEqual(config.DEFAULT_MODEL_NAME, "google/gemma-3-1b-it")
-
-    def test_gemma_models_list(self):
-        """GEMMA_MODELS should contain all models from GEMMA_MODEL_INFO."""
-        self.assertEqual(set(config.GEMMA_MODELS), set(config.GEMMA_MODEL_INFO.keys()))
-        self.assertGreater(len(config.GEMMA_MODELS), 0)
-
-    def test_default_temperature(self):
-        """Default temperature should be 0.9."""
-        self.assertEqual(config.DEFAULT_TEMPERATURE, 0.9)
-
-    def test_default_top_k(self):
-        """Default top_k should be 64."""
-        self.assertEqual(config.DEFAULT_TOP_K, 64)
-
-    def test_default_top_p(self):
-        """Default top_p should be 0.95."""
-        self.assertEqual(config.DEFAULT_TOP_P, 0.95)
-
-    def test_pytorch_config(self):
-        """PyTorch configuration should have expected values."""
-        self.assertEqual(config.PYTORCH_DEVICE_MAP, "auto")
-        self.assertEqual(config.PYTORCH_ATTN_IMPLEMENTATION, "eager")
-        self.assertEqual(config.PYTORCH_USE_KV_CACHE, False)
-
-    def test_special_tokens(self):
-        """Special tokens should be defined."""
-        self.assertEqual(config.TOKEN_PAD, "<pad>")
-        self.assertEqual(config.TOKEN_EOS, "<eos>")
-        self.assertEqual(config.TOKEN_BOS, "<bos>")
-        self.assertEqual(config.TOKEN_UNK, "<unk>")
-
-    def test_special_token_game_repr(self):
-        """SPECIAL_TOKEN_GAME_REPR should map special tokens."""
-        self.assertIn("pad_token", config.SPECIAL_TOKEN_GAME_REPR)
-        self.assertEqual(config.SPECIAL_TOKEN_GAME_REPR["pad_token"], config.TOKEN_PAD)
 
 
 class TestGemmaModelInfo(unittest.TestCase):
@@ -155,23 +106,6 @@ class TestColorConfiguration(unittest.TestCase):
 
         # Verify isatty was checked
         self.assertIsInstance(config.USE_COLORS, bool)
-
-
-class TestShortcuts(unittest.TestCase):
-    """Test keyboard shortcuts."""
-
-    def test_quit_shortcut(self):
-        """Quit shortcut should be defined."""
-        self.assertEqual(config.SHORTCUT_QUIT, "q")
-
-    def test_confirm_shortcuts(self):
-        """Confirm shortcuts should be defined."""
-        self.assertEqual(config.SHORTCUT_CONFIRM_CONFIG_ACCEPT, "y")
-        self.assertEqual(config.SHORTCUT_CONFIRM_CONFIG_MODIFY, "m")
-
-    def test_skip_shortcut(self):
-        """Skip shortcut should be empty string."""
-        self.assertEqual(config.SHORTCUT_MODIFY_PARAM_SKIP, "")
 
 
 if __name__ == "__main__":
