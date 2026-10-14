@@ -6,6 +6,7 @@ Import from here for consistent typing throughout the codebase.
 """
 
 from typing import (
+    TYPE_CHECKING,
     Any,
     Dict,
     List,
@@ -20,6 +21,9 @@ from dataclasses import dataclass, field, fields
 
 import numpy as np
 import numpy.typing as npt
+
+if TYPE_CHECKING:
+    from src.core.engine_interface import LLMEngine
 
 # Basic token types
 TokenId = int

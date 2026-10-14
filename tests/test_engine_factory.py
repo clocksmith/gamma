@@ -10,12 +10,21 @@ Tests engine factory logic:
 """
 
 import sys
+import types
 
 import unittest
 from unittest.mock import Mock, MagicMock, patch
 import platform
 
 from src.engines import engine_factory
+
+
+def stub_backend(module_path, class_name):
+    """Stub an optional backend module so dispatch is tested without its library."""
+    module = types.ModuleType(module_path)
+    engine_class = Mock(name=class_name)
+    setattr(module, class_name, engine_class)
+    return patch.dict(sys.modules, {module_path: module}), engine_class
 
 
 class TestSupportedEngines(unittest.TestCase):
@@ -74,13 +83,14 @@ class TestGetEngine(unittest.TestCase):
         # The factory will handle ImportError naturally
         pass  # Skip for now as it requires actual missing module
 
-    @patch('src.engines.native.pytorch_engine.PyTorchEngine')
-    def test_pytorch_engine(self, mock_pytorch):
+    def test_pytorch_engine(self):
         """Should return PyTorch engine."""
+        stub, mock_pytorch = stub_backend('src.engines.native.pytorch_engine', 'PyTorchEngine')
         mock_instance = Mock()
         mock_pytorch.return_value = mock_instance
 
-        result = engine_factory.get_engine("pytorch", "test-model")
+        with stub:
+            result = engine_factory.get_engine("pytorch", "test-model")
 
         self.assertEqual(result, mock_instance)
         mock_pytorch.assert_called_once()
@@ -99,14 +109,14 @@ class TestGetEngine(unittest.TestCase):
         # Complex torch imports - skip for basic testing
         pass
 
-    @patch.dict('sys.modules', {'tensorflow': MagicMock(), 'tensorflow.keras': MagicMock()})
-    @patch('src.engines.native.tensorflow_engine.TensorFlowEngine')
-    def test_tensorflow_engine(self, mock_tf):
+    def test_tensorflow_engine(self):
         """Should return TensorFlow engine."""
+        stub, mock_tf = stub_backend('src.engines.native.tensorflow_engine', 'TensorFlowEngine')
         mock_instance = Mock()
         mock_tf.return_value = mock_instance
 
-        result = engine_factory.get_engine("tensorflow", "test-model")
+        with stub:
+            result = engine_factory.get_engine("tensorflow", "test-model")
 
         self.assertEqual(result, mock_instance)
 
@@ -114,13 +124,14 @@ class TestGetEngine(unittest.TestCase):
         """Should raise RuntimeError on TensorFlow import failure."""
         pass  # Skip - requires actual missing module
 
-    @patch('src.engines.native.jax_engine.JaxEngine')
-    def test_jax_engine(self, mock_jax):
+    def test_jax_engine(self):
         """Should return JAX engine."""
+        stub, mock_jax = stub_backend('src.engines.native.jax_engine', 'JaxEngine')
         mock_instance = Mock()
         mock_jax.return_value = mock_instance
 
-        result = engine_factory.get_engine("jax", "test-model")
+        with stub:
+            result = engine_factory.get_engine("jax", "test-model")
 
         self.assertEqual(result, mock_instance)
 
@@ -128,13 +139,14 @@ class TestGetEngine(unittest.TestCase):
         """Should raise RuntimeError on JAX import failure."""
         pass  # Skip - requires actual missing module
 
-    @patch('src.engines.native.llama_cpp_engine.LlamaCppEngine')
-    def test_llamacpp_engine(self, mock_llamacpp):
+    def test_llamacpp_engine(self):
         """Should return Llama.cpp engine."""
+        stub, mock_llamacpp = stub_backend('src.engines.native.llama_cpp_engine', 'LlamaCppEngine')
         mock_instance = Mock()
         mock_llamacpp.return_value = mock_instance
 
-        result = engine_factory.get_engine("llamacpp", "model.gguf")
+        with stub:
+            result = engine_factory.get_engine("llamacpp", "model.gguf")
 
         self.assertEqual(result, mock_instance)
 
@@ -198,13 +210,14 @@ class TestGetEngine(unittest.TestCase):
         # All should succeed
         self.assertEqual(mock_ollama.call_count, 3)
 
-    @patch('src.engines.native.pytorch_engine.PyTorchEngine')
-    def test_none_config_treated_as_empty(self, mock_pytorch):
+    def test_none_config_treated_as_empty(self):
         """Should treat None config as empty dict with normalized mode."""
+        stub, mock_pytorch = stub_backend('src.engines.native.pytorch_engine', 'PyTorchEngine')
         mock_instance = Mock()
         mock_pytorch.return_value = mock_instance
 
-        result = engine_factory.get_engine("pytorch", "model", None)
+        with stub:
+            result = engine_factory.get_engine("pytorch", "model", None)
 
         # Should be called with normalized config (mode added)
         args, kwargs = mock_pytorch.call_args
