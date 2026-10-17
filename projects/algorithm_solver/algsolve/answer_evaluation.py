@@ -20,6 +20,7 @@ from .answer import answer
 from .embed import Embedder, EXPECTED_SHA256
 from .lookup import LookupIndex, load_thresholds
 from .records import LANE_ROOT, load_hidden_tests
+from .public_examples import recover
 from .rerank_recognition import diagnostic_entries, digest
 from .routes import Budget, Context
 from .synth.training_pairs import sha
@@ -28,13 +29,13 @@ from .synth.training_pairs import sha
 def make_query(spec, by_key, problems, paragraphs):
     if spec['kind'] == 'absent_exact':
         source = problems[spec['problem_uid']]
-        return source, replace(source, hidden_tests_path='', reference_solutions=[], import_notes={})
+        return source, recover(replace(source, hidden_tests_path='', reference_solutions=[], import_notes={}))
     entry = by_key[spec['target']]
     source = problems[entry.judge_uid]
     if source.entry != entry.entry or source.params != entry.params:
         raise ValueError('Query and independent judge signatures disagree')
     statement = entry.statement if spec['kind'] == 'exact' else paragraphs[entry.key]['paraphrase']
-    query = replace(source, statement=statement, starter_code=entry.starter_code,
+    query = replace(recover(source), statement=statement, starter_code=entry.starter_code,
                     hidden_tests_path='', reference_solutions=[], import_notes={})
     return source, query
 
@@ -68,8 +69,9 @@ def main():
                            LANE_ROOT/'contracts/sample_manifest.json']},
                 'source': {name:sha(LANE_ROOT/'algsolve'/name) for name in
                            ['answer.py','answer_evaluation.py','embed.py','lookup.py','validate.py','records.py',
+                            'public_examples.py','values.py','importers.py',
                             'test_corrections.py','judge/judge.py','judge/functional_semantics.py','judge/harness_functional.py']},
-                'oracle_inputs': {q['qid']: {'public_sha256': digest(make_query(q, by_key, problems, paragraphs)[0].public_tests),
+                'oracle_inputs': {q['qid']: {'public_sha256': digest(make_query(q, by_key, problems, paragraphs)[1].public_tests),
                                             'independent_sha256': digest(load_hidden_tests(make_query(q, by_key, problems, paragraphs)[0]))}
                                   for q in manifest['recognition']},
                 'generation': False, 'reranking': False, 'hidden_test_role': 'scoring only, after answer decision',

@@ -46,8 +46,11 @@ _EXAMPLE_RE = re.compile(
 def statement_examples(statement: str, params: list[tuple[str, str]], ret_annotation: str) -> tuple[list[dict], int]:
     tests, dropped = [], 0
     for match in _EXAMPLE_RE.finditer(statement):
-        raw_in = " ".join(match.group("input").split())
-        raw_out = match.group("output").strip()
+        # Some upstream statements have a literal backslash-r at line endings.
+        # Preserve whitespace/escapes inside quoted values; never unescape the
+        # whole statement or collapse runs of spaces in string arguments.
+        raw_in = re.sub(r"\\r(?=\r?\n|$)", "", match.group("input")).strip()
+        raw_out = re.sub(r"\\r(?=\r?\n|$)", "", match.group("output")).strip()
         try:
             args, kwargs = values.parse_call_arguments(raw_in)
             ordered = values.order_arguments(params, args, kwargs)

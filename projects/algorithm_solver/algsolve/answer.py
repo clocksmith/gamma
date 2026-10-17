@@ -19,6 +19,7 @@ from . import validate
 from .judge import judge
 from .lookup import adapt_solution, decide, fingerprint
 from .records import LANE_ROOT, Problem
+from .public_examples import recover
 from .routes import Budget, Context, RouteResult, run_generative
 
 
@@ -27,8 +28,10 @@ def answer(context: Context, query: Problem, *, reranker=None, rerank_thresholds
     started = time.perf_counter()
     # Only query inputs and public examples cross the route boundary.
     query = replace(query, hidden_tests_path='', reference_solutions=[], import_notes={})
+    query = recover(query)
     result = {'decision': 'abstain', 'code': None, 'source': None,
               'example_passed': False, 'independent_tests_passed': None,
+              'public_example_count': len(query.public_tests),
               'dataset_label': 'prior model exposure unknown', 'attempts': []}
 
     def finish(reason=None):
