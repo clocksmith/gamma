@@ -5,20 +5,26 @@ deterministic tooling, the local model (Qwen3.5-4B), or `codex exec`.
 
 ## Goal
 
-Build a fast algorithm-problem solver whose work comes mainly from retrieval, composition of
-verified components, and verification, with little generative inference at runtime. Measure every
-claim on a frozen sample with hidden-test judging, and compare against plain prompting.
+Two separate targets; neither uses a generative model at runtime:
 
-## Two goals
+1. **Recognize known problems.** Recognize indexed problems despite rewriting and
+   return their existing correct solutions. Keep the all-corpus service index
+   isolated from synthesis. Measure correct/wrong matches, calibrated abstention,
+   independently tested solution coverage, paraphrase/sibling/absent cases and
+   complete latency. The optional Codex adaptation route is a generative baseline,
+   not success on this target.
+2. **Compose unfamiliar solutions.** Retrieve independently tested components and
+   deterministically search executable skeletons, bindings and small expressions.
+   Mine only permitted development solutions; freeze v2 contracts and identities
+   before confirmation. Audit algorithm-specific compositions with holes <=40 AST
+   nodes, then compare unguided/retrieval-guided search against Codex baselines.
+   Public examples reject candidates; hidden tests score final outcomes only.
 
-- Goal 1 (minimal, primary): index the whole corpus with verified solutions and answer exact and
-  similar-sounding problems by retrieval (embed, rerank, return or adapt the stored solution).
-  Exact part is done: `python -m algsolve.corpus build|selftest` indexed 3,353 LeetCode problems;
-  3,353/3,353 exact statements matched themselves, 2,538/2,538 returned verified solutions passed
-  hidden tests, p50 0.10 s (`findings/corpus-selftest/summary.json`). Open: paraphrases and sibling
-  variants over the whole corpus, a reranker for I/II/III siblings, Codeforces/AtCoder coverage.
-- Goal 2 (experimental): retrieval-guided deterministic composition (embed, rerank, typed
-  components, bounded search). See findings 3 and next steps 2-5.
+Exact lookup has evidence for 3,353/3,353 indexed statements; 2,538 returned
+solutions have independent passing tests. That leaves 815 indexed entries without
+that evidence, not 815 demonstrated incorrect solutions. Paraphrase recognition,
+sibling discrimination, absent-case coverage and practical deterministic
+composition coverage remain open.
 
 Committed result summaries live in `findings/` (runs/ and data/ are gitignored and machine-local).
 
@@ -77,8 +83,8 @@ Do not rank Claude against Codex from these numbers.
    audit on the reserved confirmation families with Codex only. The production
    target remains generation-free composition, measured by algorithm-specific
    compositions with holes <=40 nodes, not merely expressibility.
-3. Finish the still-active Codex run, rebuild its final report without changing
-   raw rows, and replace the partial checkpoint. Do not restart Claude.
+3. Codex comparison closure is complete. Preserve the final reports and raw rows;
+   do not rerun Codex or restart Claude merely to close the handoff.
 4. Follow `editor-protocol.md` before connecting an editor. No browser mode is
    deployed: the current corpus/judge emits Python, not JavaScript; the static
    lab cannot run the Linux sandbox. This lane prepares a research interface,
@@ -102,7 +108,7 @@ effects: none outside Gamma; no production website changes.
    correct decision 0.956 [0.928, 0.980], wrong match 0.024, exact 50/50, paraphrase 48/50, absent
    49/50 abstained, about 0.1 s. Weak spot: sibling problems (House Robber I/II style), 4 wrong
    matches with score margins of 0.0015-0.010.
-2. For strong models, retrieval and templates add nothing. Interim paired results against
+2. Retrieval and templates did not improve either tested frontier solver. Final paired results against
    model_alone on problems with independent tests (likely exposed to these models):
    - claude-v1 (complete, 150 problems, 121 with independent tests): model_alone 0.826; retrieval
      0.826 (difference 0.0 [-0.025, 0.025]); classify_template 0.818 (-0.008 [-0.025, 0.0]); p50 route 6 s.
@@ -168,59 +174,55 @@ the judge fails closed without them):
 5. Goal 1: `python -m algsolve.corpus build` then `python -m algsolve.corpus selftest`.
 6. `claude -p` / `codex exec` solvers need those CLIs logged in; the qwen solver needs a GPU.
 
-## Earlier handoff process descriptions (historical)
+## Current takeover and next execution
 
-- claude-v1 finished (600/600); report in `findings/claude-v1/`.
-- codex-v1 was then still running on the original machine (it has since finished 600/600; the final
-  report is committed in `findings/codex-v1/`; 125/150 problems when this was written). Its results exist only there; whoever has that machine should rebuild with
-  `python -m algsolve.run --run-name codex-v1 --stages report`, copy `report.md`/`report.json`
-  into `findings/codex-v1/`, commit and push. `findings/codex-v1/` holds the interim snapshot.
+The owning session has taken over at the user's request. Workspace `rdpull`
+completed; local and `128` Gamma checkouts were clean at `d8b8711b1`. Process
+inspection on both hosts found no active algorithm-solver run. The final Codex
+report covers 150/150 problems and all four routes; 121 have independent tests.
+`findings/codex-v1/snapshot.json` and the earlier takeover receipt are historical
+partial observations, not the final report. No raw comparison rows were changed.
 
-## Next steps (no Claude needed)
+1. **Calibrate recognition before claiming reranker improvement.**
+   `algsolve/rerank_recognition.py` adds resumable `dev` and `evaluate` stages.
+   Fit only the existing 60 development queries; freeze thresholds before the
+   200 evaluation queries. Binding includes corpus, query text, active index,
+   model manifest, Doppler revision and scoring source. Incomplete development
+   cannot produce calibration. Original absent questions now occur in the corpus,
+   so this diagnostic excludes their canonical sibling family per query. Report
+   these controlled absent cases separately; natural full-corpus absent coverage
+   still needs an independently specified set. Report cold-per-query Doppler
+   process/model-loading cost separately from retrieval, with combined p50/p95.
 
-1. Close out the comparison.
-   - When codex-v1 (and claude-v1, if left running) finish, rebuild reports and record the final
-     paired table here. Expected outcome: no measurable gain from retrieval/templates for frontier CLIs.
-   - Optional local control: resume the Qwen run (`--run-name baseline-v2 --solver qwen
-     --stages solving,report`) to see whether help matters for a small model. Slow at 11.4 tok/s;
-     speeding it up needs an approved install (flash-linear-attention + causal-conv1d) or llama.cpp.
+   From this directory on `128` (append `--limit 2` for a bounded initial probe):
+   ```sh
+   /home/x/deco/gamma/.venv_rocm/bin/python -m algsolve.rerank_recognition dev --name corpus-rerank-v1 --cli /home/x/deco/doppler/src/cli/doppler-cli.js --model-dir /home/x/deco/doppler/models/local/qwen-3-reranker-0-6b-f16-af32
+   ```
+   Use the same arguments with `evaluate` only after calibration exists. The
+   current adapter starts a fresh Node runtime per query; do not describe these
+   latencies as steady-state serving. Evaluation reports recognition decisions
+   and stored validation provenance, not newly judged correct answers.
 
-2. Test whether a richer, mined library changes the composition picture (deterministic, index only).
-   - Write `algsolve/synth/mine.py`: AST-extract helper functions, classes and inner functions from
-     validated LeetCodeDataset references and Doocs `Solution.py` (index problems only), normalize
-     (rename locals, strip docstrings), hash and cluster by structure, rank by frequency, keep provenance.
-   - Turn the top clusters into components with written contracts and brute-force unit tests (the
-     pattern in `tests/test_algorithm_solver_synth.py`); add skeletons only where a recurring control
-     structure appears. This is vocabulary v2.
-   - Build a fresh confirmation set from index problems not used in mining or dev (seeded, stratified).
-   - Audit v2 with Codex only: `python -m algsolve.synth.audit dev --name audit-v2-confirm --proposers codex:3`
-     (point `dev_problems` at the confirmation set first).
-   - Decision metric: share of problems demonstrated with algorithm-specific skeletons and holes
-     <= 40 nodes. If that stays near zero, retire the "choose, don't generate" premise.
+2. **Build verified v2 components from existing mining output.** Mining and the
+   fresh 66-problem/60-family reservation already exist; do not redraw the split
+   or repeat mining as unfinished work. Inspect cross-family candidates beyond
+   v1, write explicit contracts and independent brute-force tests, then freeze v2.
+   An offline Codex expressibility audit is distinct from runtime generation-free
+   solving. Keep the <=40 AST-node metric, but do not equate expressibility with
+   a deterministic solver finding the solution.
 
-3. Measure what search can actually find (A1, unguided; deterministic).
-   - Write a bounded enumerator: skeleton choice x input bindings x expressions up to N nodes from a
-     small operator set, checked against public examples (counterexample-guided), hidden tests only
-     for final scoring.
-   - Evaluate on index problems whose demonstrated compositions are small (from `runs/audit-dev-1*`
-     and the v2 audit). Report solve rate, candidates explored, search time, abstentions.
+3. **Implement bounded composition search.** Enumerate skeletons, legal bindings
+   and bounded expressions; reject with public examples, abstain at the budget,
+   score final candidates with hidden tests. Compare unguided and retrieval-guided
+   search with the same components and budgets, retaining explored-candidate
+   counts, correctness, coverage, abstentions and latency. Use existing Codex
+   results as the generative baseline; an optional grammar-constrained generator
+   is another baseline, not the target solver.
 
-4. Grammar as a fence for a generator (Codex or Qwen, no Claude).
-   - New route `compose_codex`: codex proposes a composition (as in the audit), public-example
-     feedback only, one repair, same budget; hidden tests only for scoring. Compare against
-     codex-v1 model_alone on the frozen 150 using the paired report. Question: does constraining
-     output to the grammar cost accuracy, and does it buy speed or reliability?
-
-5. Fix the lookup weak spot with a reranker (no install).
-   - Use Doppler's existing node path (`doppler/src/cli/doppler-cli.js verify` with the rerank
-     workload; local models `doppler/models/local/qwen-3-reranker-0-6b-{q4k-ehf16,f16}-af32`) to
-     rescore the top-10 lookup candidates. Refit thresholds on dev queries only, then rerun the
-     recognition track. Target: the 4 sibling wrong matches. Note q4k scores the "yes" logit and
-     f16 the yes-no difference.
-
-6. Honest unseen-problem evaluation (needs approval for new downloads).
-   - Collect problems released after the solvers' training cutoffs with official tests, then rerun
-     the comparison. Until then all solving numbers are on likely-exposed problems.
+New problem downloads and model installations require separate authorization.
+The Qwen run remains stopped. The existing answer interface defaults to no
+fallback and checks query examples with provenance; editor deployment is not
+part of this takeover.
 
 ## Open workspace items
 
