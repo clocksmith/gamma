@@ -201,7 +201,21 @@ def main():
             vector = embedder.encode([text], query=True)[0]
             candidates = lookup.scored_candidates(text, vector)
             retrieved_at = time.perf_counter()
-            ranked = rerank_candidates(candidates, reranker(text, [by_key[c['key']].query_text() for c in candidates]))
+            try:
+                ranked = rerank_candidates(candidates, reranker(text, [by_key[c['key']].query_text() for c in candidates]))
+            except Exception as error:
+                failure = {'binding': digest(binding), 'stage': args.stage, 'qid': query['qid'],
+                           'completed_queries': len(rows), 'error_type': type(error).__name__,
+                           'message': str(error), 'query_sha256': hashlib.sha256(text.encode()).hexdigest(),
+                           'candidate_keys': [c['key'] for c in candidates]}
+                for field in ('stdout', 'stderr'):
+                    value = getattr(error, field, '') or ''
+                    failure[field] = value.decode(errors='replace') if isinstance(value, bytes) else value
+                # Keep every failure receipt. It never becomes a scored row or
+                # an abstention, and a later retry does not erase the evidence.
+                (directory/f'failure-{query["qid"]}-{time.time_ns()}.json').write_text(
+                    json.dumps(failure, indent=2) + '\n')
+                raise
             row = {**query, 'retrieved': candidates, 'reranked': ranked,
                    'retrieval_seconds': retrieved_at - started, 'rerank_seconds': time.perf_counter() - retrieved_at,
                    'query_sha256': hashlib.sha256(text.encode()).hexdigest(),

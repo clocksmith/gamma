@@ -183,7 +183,19 @@ report covers 150/150 problems and all four routes; 121 have independent tests.
 `findings/codex-v1/snapshot.json` and the earlier takeover receipt are historical
 partial observations, not the final report. No raw comparison rows were changed.
 
-1. **Calibrate recognition before claiming reranker improvement.**
+1. **Restore real reranker execution, then calibrate recognition.** The first
+   development query (`dq000`, number-of-different-subsequences-gcds, top 10)
+   reproduced Vulkan device loss twice on `128`. Model loading completed;
+   prefill selected `prefill_streaming_f16kv`; RADV reported a guilty hard
+   recovery and `VK_ERROR_DEVICE_LOST`, followed by the secondary cleanup error
+   “BufferPool requires a live GPU device.” No query scores, calibration or
+   evaluation results were produced. See
+   `findings/reranker-algorithm-probe-20261017/receipt.json`. The next execution
+   task is to qualify this same untruncated query/candidate workload through
+   Doppler before expanding the run. Do not hide this failure as an abstention
+   or shorten away constraints to make the probe pass.
+
+   **Calibration path ready, runtime qualification open.**
    `algsolve/rerank_recognition.py` adds resumable `dev` and `evaluate` stages.
    Fit only the existing 60 development queries; freeze thresholds before the
    200 evaluation queries. Binding includes corpus, query text, active index,
@@ -194,7 +206,7 @@ partial observations, not the final report. No raw comparison rows were changed.
    still needs an independently specified set. Report cold-per-query Doppler
    process/model-loading cost separately from retrieval, with combined p50/p95.
 
-   From this directory on `128` (append `--limit 2` for a bounded initial probe):
+   From this directory on `128` (use a new run name after source/runtime changes; append `--limit 2` for a bounded probe):
    ```sh
    /home/x/deco/gamma/.venv_rocm/bin/python -m algsolve.rerank_recognition dev --name corpus-rerank-v1 --cli /home/x/deco/doppler/src/cli/doppler-cli.js --model-dir /home/x/deco/doppler/models/local/qwen-3-reranker-0-6b-f16-af32
    ```
