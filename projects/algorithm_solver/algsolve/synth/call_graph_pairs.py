@@ -94,6 +94,9 @@ def main():
                 'confirmation_sha256': training_pairs.sha(args.confirmation),
                 'manifest_sha256': mine.digest(manifest),
                 'exporter_sha256': training_pairs.sha(Path(__file__)),
+                'judge_sources': {name: training_pairs.sha(LANE_ROOT/'algsolve'/name) for name in
+                                  ['validate.py', 'records.py', 'test_corrections.py', 'judge/judge.py',
+                                   'judge/functional_semantics.py', 'judge/harness_functional.py', 'judge/sandbox.py']},
                 'development_policy': 'research index minus solving, recognition, and reserved confirmation sibling families',
                 'input_policy': 'statement, starter, params, public examples; no independent tests',
                 'limits': {'nodes': call_graph.MAX_NODES, 'glue_ast_nodes': call_graph.MAX_GLUE_NODES},
