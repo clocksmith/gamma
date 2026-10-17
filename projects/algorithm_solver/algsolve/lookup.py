@@ -57,9 +57,24 @@ def _constraints_section(text: str) -> str:
     return text[at:] if at >= 0 else text
 
 
+def _solution_method(text: str) -> re.Match | None:
+    """The first method of `class Solution`, ignoring commented-out helper classes.
+
+    LeetCode starter code for tree and list problems begins with a commented
+    `# class TreeNode: def __init__(self, ...)`; that must not be taken as the
+    problem's method.
+    """
+    code = "\n".join(line for line in text.splitlines() if not line.lstrip().startswith("#"))
+    at = code.find("class Solution")
+    for match in _DEF_RE.finditer(code, at if at >= 0 else 0):
+        if match.group(1) != "__init__":
+            return match
+    return None
+
+
 def fingerprint(text: str) -> Fingerprint:
     method, params = "", ()
-    match = _DEF_RE.search(text)
+    match = _solution_method(text)
     if match:
         method = match.group(1)
         raw = match.group(2) or ""

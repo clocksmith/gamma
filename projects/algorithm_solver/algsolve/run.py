@@ -144,16 +144,20 @@ def score_code(problem: Problem, code: str | None) -> dict:
     if not code:
         return {"public": None, "hidden": None, "evidence": "failed", "judge_seconds": 0.0}
     started = time.perf_counter()
-    public = validate.judge_problem(problem, code, problem.public_tests)
+    # Problems without parseable statement examples (allowed only as recognition
+    # targets) are scored on their hidden tests alone.
+    public = validate.judge_problem(problem, code, problem.public_tests) if problem.public_tests else None
     hidden_tests = load_hidden_tests(problem)
     hidden = validate.judge_problem(problem, code, hidden_tests, wall_seconds=120.0) if hidden_tests else None
+    examples_ok = public.passed if public is not None else None
     evidence = "failed"
-    if public.passed:
+    if examples_ok:
         evidence = "example_passed"
-        if problem.evidence_ceiling == "independent_tests_passed" and hidden is not None and hidden.passed:
-            evidence = "independent_tests_passed"
+    if (examples_ok is not False and problem.evidence_ceiling == "independent_tests_passed"
+            and hidden is not None and hidden.passed):
+        evidence = "independent_tests_passed"
     return {
-        "public": public.to_dict(),
+        "public": public.to_dict() if public else None,
         "hidden": hidden.to_dict() if hidden else None,
         "evidence": evidence,
         "evidence_ceiling": problem.evidence_ceiling,
