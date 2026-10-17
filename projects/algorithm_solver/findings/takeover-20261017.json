@@ -1,0 +1,42 @@
+{
+  "component": "algorithm_solver",
+  "date": "2026-10-17",
+  "host": "128",
+  "source_base": "4afb2c516",
+  "scope": "Research interface and diagnostics only; no editor deployment.",
+  "checks": [
+    {
+      "command": ".venv_rocm/bin/python -m pytest -q tests/test_algorithm_solver_judge.py tests/test_algorithm_solver_lane.py tests/test_algorithm_solver_synth.py",
+      "passed": 45
+    },
+    {
+      "command": "PYTHONPATH=projects/algorithm_solver .venv_rocm/bin/python -m pytest -q projects/algorithm_solver/tests tests/test_algorithm_solver_lane.py",
+      "passed": 20,
+      "note": "Before reranker test file was added"
+    },
+    {
+      "command": "python -m unittest discover -s tests -p test_mine.py",
+      "passed": 3
+    },
+    {
+      "command": "python -m unittest discover -s tests -p test_rerank.py",
+      "passed": 2
+    }
+  ],
+  "runs": [
+    "python -m algsolve.synth.mine --name mine-v2-candidates-20261017",
+    "python -m algsolve.corpus_recognition --name corpus-recognition-20261017",
+    "python -m algsolve.answer runs/editor-answer-smoke-20261017/query.json --index research",
+    "node /home/x/deco/doppler/src/cli/doppler-cli.js verify --config runs/reranker-probe-request.json --surface node"
+  ],
+  "reranker_adapter_scores": [
+    0.161398,
+    4.888988
+  ],
+  "limitations": [
+    "Reranker scores are not calibrated on algorithm development queries.",
+    "No generated adaptation quality campaign.",
+    "No new verified components or composition coverage.",
+    "Codex comparison remains active and partial."
+  ]
+}

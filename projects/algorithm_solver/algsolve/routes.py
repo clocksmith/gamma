@@ -192,7 +192,8 @@ def run_lookup(context: Context, problem: Problem) -> RouteResult:
     return result
 
 
-def run_generative(context: Context, problem: Problem, route: str) -> RouteResult:
+def run_generative(context: Context, problem: Problem, route: str, *,
+                   retrieved_context: tuple[str, list[str]] | None = None) -> RouteResult:
     torch = context.generator.torch  # None for CLI solvers (no local generation)
     if torch is not None:
         torch.cuda.reset_peak_memory_stats()
@@ -203,7 +204,7 @@ def run_generative(context: Context, problem: Problem, route: str) -> RouteResul
     result = RouteResult(route=route, uid=problem.uid, code=None, decision="no_code")
     extra = ""
     if route == "retrieval":
-        extra, keys = retrieval_block(context, problem, stages)
+        extra, keys = retrieved_context if retrieved_context is not None else retrieval_block(context, problem, stages)
         result.detail["retrieved"] = keys
     elif route == "classify_template":
         extra, info = template_block(context, problem, stages)

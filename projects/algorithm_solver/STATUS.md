@@ -22,6 +22,81 @@ claim on a frozen sample with hidden-test judging, and compare against plain pro
 
 Committed result summaries live in `findings/` (runs/ and data/ are gitignored and machine-local).
 
+## Takeover checkpoint: retrieval interface and component mining
+
+Work remains inside this lane. No new downloads, installs, Claude calls or paid
+services were started. Existing Codex execution on `x@128.tail995236.ts.net`
+continues; a complete-line snapshot now records 135/150 finished problems (121
+with independent tests). See `findings/codex-v1/report.md` and `snapshot.json`.
+Model-alone and retrieval both pass 0.802 on that paired independent subset;
+templates pass 0.777. This is still partial, with different completed prefixes
+from Claude; do not rank models or call the run complete.
+
+- `algsolve/answer.py`: a JSON CLI and injected Python interface for a future
+  editor mode. Retrieve, optionally rerank with separate calibrated thresholds,
+  verify against **query** public examples, then optionally adapt through the
+  existing Codex generation/repair path. No examples or missing sandbox means
+  abstention. A failed generated candidate is never returned as approved code.
+  Source attribution survives; original-reference validation is distinct from
+  query correctness. The real Two Sum smoke passed its public examples through
+  the Linux sandbox; independent query tests were not evaluated. Receipt:
+  `findings/editor-answer-smoke-20261017/`.
+- `algsolve/corpus_recognition.py`: all 150 existing known-query recognition
+  cases against 3,353 corpus entries, CPU float32 embeddings, original thresholds,
+  no refitting. Exact 50/50, paraphrase 48/50 (2 abstentions), siblings 43/50
+  (4 wrong matches, 3 abstentions). Existing model-generated paraphrases retain
+  original starter signatures; these are not human paraphrases or unseen tasks.
+  Old absent queries are excluded because full-corpus membership changed.
+  Receipt: `findings/corpus-recognition-20261017/`.
+- `algsolve/rerank.py`: local-only Doppler adapter, tested with the existing
+  Qwen3-Reranker-0.6B F16 artifact on Node/WebGPU. The synthetic sum/max pair
+  scores 4.888988/0.161398 respectively; five built-in semantic checks pass.
+  The adapter restores candidate order and rejects incomplete, non-finite,
+  duplicate or input-mismatched scores. This is connectivity evidence only;
+  no algorithm-sibling calibration or reranker improvement claim. Receipt:
+  `findings/reranker-probe-20261017/`.
+- `algsolve/synth/mine.py`: deterministic index-only AST mining, preserving
+  source hashes, licenses and attribution. Reserved 66 problems in 60 fresh
+  sibling families, stratified by difficulty, before inspecting solution ASTs.
+  Of 3,207 remaining entries, 2,446 have validated references used in mining:
+  5,679 clusters, 79 recurring across problems, 44 across distinct families,
+  zero parse failures. Top repeats are largely union-find/Fenwick operations
+  already present in v1. Structural hashes are not semantic equivalence or
+  newly verified components. V1 remains unchanged (`2cdc0dbf…`). Receipts:
+  `findings/mine-v2-candidates-20261017/` (split and summary); complete candidate
+  source/provenance remains in the matching remote `runs/` directory.
+
+### Next bounded decisions
+
+1. Fit the reranker's acceptance threshold and margin on the existing 60
+   development queries only; bind the model manifest and scoring semantics to
+   that calibration. Then evaluate the frozen recognition queries once, comparing
+   wrong matches, correct matches, abstentions and total latency. Do not tune on
+   the four observed test-set sibling failures.
+2. Inspect cross-family mining candidates that add capabilities beyond v1.
+   Write explicit contracts and brute-force tests before freezing a separate v2;
+   audit on the reserved confirmation families with Codex only. The production
+   target remains generation-free composition, measured by algorithm-specific
+   compositions with holes <=40 nodes, not merely expressibility.
+3. Finish the still-active Codex run, rebuild its final report without changing
+   raw rows, and replace the partial checkpoint. Do not restart Claude.
+4. Follow `editor-protocol.md` before connecting an editor. No browser mode is
+   deployed: the current corpus/judge emits Python, not JavaScript; the static
+   lab cannot run the Linux sandbox. This lane prepares a research interface,
+   not an unauthenticated code-execution service. User input encodings and
+   problem-solving modes remain separate; insertion must be explicit.
+
+Acceptance evidence: the existing judge/lane/synthesis tests pass (45 tests).
+New answer/mining tests plus the existing lane tests pass (20); the subsequent
+family-count checks pass (3) and reranker adapter checks pass (2). The real
+answer CLI and Doppler adapter were exercised on `128`. Test generators are
+fixtures; they do not establish Codex adaptation quality. All executions log
+`[run-contract]`. See the takeover receipt for exact commands.
+
+Component: algorithm_solver. Intent: deliberately extended to the user-authorized
+retrieval interface and index-only mining; frozen comparisons preserved. Boundary
+effects: none outside Gamma; no production website changes.
+
 ## What we learned
 
 1. Lookup works for known problems. Recognition track (`runs/baseline-v2`, 200 queries / 125 groups):
@@ -49,8 +124,9 @@ Committed result summaries live in `findings/` (runs/ and data/ are gitignored a
 
 ## Ground rules to keep
 
-- Held-out problems (contracts/sample_manifest.json) and their aliases never enter the index,
-  retrieval, classifier training, vocabulary design, mining, or planner training.
+- Held-out problems (contracts/sample_manifest.json) and aliases never enter the research index,
+  retrieval, classifier training, vocabulary design, mining, or planner training. The separately
+  named all-corpus service index is only for known-problem retrieval, never held-out solving.
 - Expected outputs never enter the sandbox; verdicts fail closed. Report `example_passed` and
   `independent_tests_passed` separately; `benchmark_judge_accepted` is not evaluated.
 - The vocabulary in contracts/synth_vocabulary.json (sha256 2cdc0dbf...) is frozen. Any expanded
@@ -92,7 +168,7 @@ the judge fails closed without them):
 5. Goal 1: `python -m algsolve.corpus build` then `python -m algsolve.corpus selftest`.
 6. `claude -p` / `codex exec` solvers need those CLIs logged in; the qwen solver needs a GPU.
 
-## Running at handoff
+## Earlier handoff process descriptions (historical)
 
 - claude-v1 finished (600/600); report in `findings/claude-v1/`.
 - codex-v1 is still running on the original machine (tmux `algsolve-codex`, 125/150 problems when
