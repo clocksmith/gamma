@@ -25,12 +25,11 @@ Committed result summaries live in `findings/` (runs/ and data/ are gitignored a
 ## Takeover checkpoint: retrieval interface and component mining
 
 Work remains inside this lane. No new downloads, installs, Claude calls or paid
-services were started. Existing Codex execution on `x@128.tail995236.ts.net`
-continues; a complete-line snapshot now records 135/150 finished problems (121
-with independent tests). See `findings/codex-v1/report.md` and `snapshot.json`.
-Model-alone and retrieval both pass 0.802 on that paired independent subset;
-templates pass 0.777. This is still partial, with different completed prefixes
-from Claude; do not rank models or call the run complete.
+services were started. The Codex execution on `x@128.tail995236.ts.net` has since
+finished: 150/150 problems (121 with independent tests); `findings/codex-v1/report.md`
+is the final report (`snapshot.json` is the earlier 135/150 snapshot). Model-alone and
+retrieval both pass 0.802 on the paired independent subset; templates pass 0.777.
+Do not rank Claude against Codex from these numbers.
 
 - `algsolve/answer.py`: a JSON CLI and injected Python interface for a future
   editor mode. Retrieve, optionally rerank with separate calibrated thresholds,
@@ -107,11 +106,12 @@ effects: none outside Gamma; no production website changes.
    model_alone on problems with independent tests (likely exposed to these models):
    - claude-v1 (complete, 150 problems, 121 with independent tests): model_alone 0.826; retrieval
      0.826 (difference 0.0 [-0.025, 0.025]); classify_template 0.818 (-0.008 [-0.025, 0.0]); p50 route 6 s.
-   - codex-v1 (109 problems): model_alone 0.817; retrieval 0.817 (0.0 [-0.028, 0.028]);
-     classify_template 0.789 (-0.028 [-0.055, 0.0]); p50 route 9-10 s.
-   - Retrieval wins one problem and loses one against each solver's own model_alone; templates gain
-     none. The two runs cover different completed prefixes, so do not rank Claude against Codex from
-     these numbers. These are paired interim results, not proof that help cannot work. Zero CLI tool
+   - codex-v1 (complete, 150 problems, 121 with independent tests): model_alone 0.802; retrieval
+     0.802 (0.0 [-0.033, 0.033]); classify_template 0.777 (-0.025 [-0.058, 0.008]); p50 route 11 s.
+   - Retrieval wins and loses equally against each solver's own model_alone (Claude 1/1, Codex 2/2);
+     templates win 0-1 and lose 1 (Claude) or 4 (Codex). Do not rank Claude against Codex from these
+     numbers (different solvers, same frozen sample). These are paired results on likely-exposed
+     problems, not proof that help cannot work. Zero CLI tool
      items recorded.
 3. Composition from the frozen vocabulary does not replace generation. Held-out audit stopped
    early by decision (`runs/audit-heldout-1/STOPPED.json`, 44 LeetCode-style problems): 41
@@ -171,8 +171,8 @@ the judge fails closed without them):
 ## Earlier handoff process descriptions (historical)
 
 - claude-v1 finished (600/600); report in `findings/claude-v1/`.
-- codex-v1 is still running on the original machine (tmux `algsolve-codex`, 125/150 problems when
-  this was written). Its results exist only there; whoever has that machine should rebuild with
+- codex-v1 was then still running on the original machine (it has since finished 600/600; the final
+  report is committed in `findings/codex-v1/`; 125/150 problems when this was written). Its results exist only there; whoever has that machine should rebuild with
   `python -m algsolve.run --run-name codex-v1 --stages report`, copy `report.md`/`report.json`
   into `findings/codex-v1/`, commit and push. `findings/codex-v1/` holds the interim snapshot.
 
