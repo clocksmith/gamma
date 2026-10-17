@@ -246,9 +246,20 @@ partial observations, not the final report. No raw comparison rows were changed.
    retrieval-guided search as matched baselines/fallbacks, retaining explored
    candidates. Existing Codex results remain the autoregressive baseline.
 
+   The real `graph-targets-v1` export completed on `128`: 65 input audit rows,
+   3 duplicate proposals, 1 independently requalified training pair (`lcd:323`),
+   48 rejected by the algorithm-specific/<=40-node gate, 7 without independent
+   or public tests, 2 outside permitted development, and 4 without demonstrated
+   compositions. No pattern-confirmation pair exists in this one-pair export.
+   All 54 focused judge/lane/synthesis/graph-target tests passed. Receipts:
+   `findings/graph-targets-v1/`; complete pair data stays in the ignored remote
+   `runs/graph-targets-v1/`. No model calls or training occurred. The next asset
+   is a larger, independently tested v2 development graph corpus; neither neural
+   predictor accuracy nor fast unfamiliar-problem solving is established.
+
    This composition-data work can proceed independently of the Doppler device-loss
-   blocker. The existing audit is not a substantial training corpus; requalify
-   eligible targets and grow verified v2 coverage before any training campaign.
+   blocker. Preserve the one-pair result and grow verified v2 coverage before any
+   training campaign.
 
 New problem downloads and model installations require separate authorization.
 The Qwen run remains stopped. The existing answer interface defaults to no
