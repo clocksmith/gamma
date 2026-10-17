@@ -182,7 +182,8 @@ def solving_summary(records: list[dict], manifest: dict) -> dict:
             "mean_stage_seconds": {k: round(statistics.mean(v), 3) for k, v in sorted(stage_totals.items())},
             "budget_exhausted": sum(1 for r in rows if r.get("budget_exhausted")),
             "final_hidden_outcomes": dict(hidden_reasons),
-            "gpu_peak_gb_max": round(max((r.get("gpu_peak_bytes") or 0) for r in rows) / 1e9, 2) if rows else None,
+            "gpu_peak_gb_max": (round(max((r.get("gpu_peak_bytes") or 0) for r in rows) / 1e9, 2)
+                                if rows and any(r.get("gpu_peak_bytes") for r in rows) else None),
         }
         if route == "lookup":
             summary["lookup_matches_on_held_out_problems"] = sum(
@@ -198,6 +199,13 @@ def solving_summary(records: list[dict], manifest: dict) -> dict:
                 if r.get("first_attempt") and _evidence(r, "first_attempt") != "independent_tests_passed"
                 and _evidence(r) == "independent_tests_passed")
             summary["generation_stopped_by"] = dict(collections.Counter(a.get("stopped_by") for r in rows for a in r["attempts"]))
+            metas = [a.get("meta") or {} for r in rows for a in r["attempts"] if a.get("stage") in ("first", "repair")]
+            if any(metas):
+                summary["cli_calls"] = len(metas)
+                summary["cli_reported_cost_usd_total"] = round(sum(m.get("reported_cost_usd") or 0 for m in metas), 4)
+                summary["cli_calls_with_tool_items"] = sum(1 for m in metas if (m.get("tool_items") or 0) > 0)
+                summary["cli_models"] = sorted({x for m in metas for x in (m.get("models") or [])})
+                summary["output_tokens_total"] = sum(a.get("new_tokens") or 0 for r in rows for a in r["attempts"])
         if route == "classify_template":
             summary["classifier_unknown"] = sum(1 for r in rows if not (r["detail"].get("classifier") or {}).get("patterns"))
             summary["classifier_pattern_counts"] = dict(collections.Counter(
@@ -234,15 +242,17 @@ def build(run_dir: Path) -> dict:
     manifest = splits.load_manifest()
     meta = json.loads((run_dir / "run_meta.json").read_text()) if (run_dir / "run_meta.json").exists() else {}
     recognition = _read(run_dir / "recognition.jsonl")
+    solver = meta.get("solver", "qwen")
     solving = _read(run_dir / "solving.jsonl")
     lane = run_dir.parents[1]
     report = {
         "run_name": run_dir.name,
         "label": DATASET_LABEL,
-        "status": "complete" if (len(recognition) == len(manifest["recognition"])
+        "status": "complete" if (len(recognition) in (0, len(manifest["recognition"]))
                                  and len(solving) == 4 * manifest["counts"]["solving_problems"]) else "partial",
-        "interpretation": "Initial comparison on a small frozen sample; not a ranking. Results describe Qwen3.5-4B "
-                          "on transformers/ROCm with the contract budgets, not other backends or budgets.",
+        "interpretation": "Initial comparison on a small frozen sample; not a ranking. Results describe the named "
+                          "solver with the contract budgets, not other backends or budgets. Frontier CLI solvers very "
+                          "likely saw these 2024-2025 problems; compare routes, not absolute rates.",
         "evidence_levels": {
             "example_passed": "passes the public examples shown in the statement",
             "independent_tests_passed": "passes the problem's full hidden test set (LeetCodeDataset asserts, "
@@ -253,7 +263,9 @@ def build(run_dir: Path) -> dict:
         "contract_line": meta.get("contract_line"),
         "manifest_sha256": meta.get("manifest_sha256"),
         "sessions": meta.get("sessions"),
-        "recognition": recognition_summary(recognition, manifest),
+        "solver": solver,
+        "recognition": recognition_summary(recognition, manifest) if recognition else {
+            "note": "not run here: lookup does not depend on the solver; see the baseline-v2 run"},
         "solving": solving_summary(solving, manifest),
         "lookup_thresholds": _maybe_json(lane / "contracts" / "lookup_thresholds.json"),
         "classifier_metrics": {k: v for k, v in (_maybe_json(lane / "contracts" / "classifier_metrics.json") or {}).items()
@@ -277,6 +289,10 @@ def _fmt_rate(rate: dict) -> str:
 
 def render_markdown(report: dict) -> str:
     rec, sol = report["recognition"], report["solving"]
+    if "note" in rec:
+        rec_lines = ["## Recognition (known-problem lookup)", "", rec["note"], ""]
+    else:
+        rec_lines = None
     lines = [
         f"# Algorithm solver comparison: {report['run_name']}",
         "",
@@ -286,6 +302,19 @@ def render_markdown(report: dict) -> str:
         "",
         f"Contract: `{report.get('contract_line')}`",
         "",
+        f"Solver: `{report.get('solver')}`",
+        "",
+    ]
+    if rec_lines:
+        lines += rec_lines
+    else:
+        lines += _recognition_lines(rec)
+    lines += _solving_lines(report, sol)
+    return "\n".join(lines)
+
+
+def _recognition_lines(rec: dict) -> list[str]:
+    lines = [
         "## Recognition (known-problem lookup)",
         "",
         f"{rec['queries_done']}/{rec['queries_expected']} queries in {rec['groups']} groups. Rates are per group with 95% "
@@ -309,8 +338,12 @@ def render_markdown(report: dict) -> str:
     ]
     for kind, counts in rec["outcomes_by_query_kind"].items():
         lines.append(f"| {kind} | {', '.join(f'{k}={v}' for k, v in sorted(counts.items()))} |")
-    lines += [
-        "",
+    lines.append("")
+    return lines
+
+
+def _solving_lines(report: dict, sol: dict) -> list[str]:
+    lines = [
         "## Solving (held-out problems)",
         "",
         f"{sol['problems_with_all_routes']}/{sol['problems_expected']} problems finished all four routes; "
@@ -347,9 +380,12 @@ def render_markdown(report: dict) -> str:
         s = sol["routes"].get(route)
         if s:
             stops = s.get("generation_stopped_by")
+            cli = (f"; CLI calls {s['cli_calls']}, with tool items {s['cli_calls_with_tool_items']}, "
+                   f"reported cost ${s['cli_reported_cost_usd_total']} (notional on subscription), models {s['cli_models']}"
+                   if s.get("cli_calls") else "")
             lines.append(f"- {route}: " + ", ".join(f"{k}={v}" for k, v in s["mean_stage_seconds"].items())
                          + f"; GPU peak {s['gpu_peak_gb_max']} GB"
-                         + (f"; generation stopped by {stops}" if stops else ""))
+                         + (f"; generation stopped by {stops}" if stops else "") + cli)
     lines += [
         "",
         "## Evidence levels",
@@ -359,4 +395,4 @@ def render_markdown(report: dict) -> str:
         "Full numbers, thresholds, classifier metrics and per-route outcome counts are in report.json.",
         "",
     ]
-    return "\n".join(lines)
+    return lines

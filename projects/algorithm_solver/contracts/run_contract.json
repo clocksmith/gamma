@@ -74,5 +74,39 @@
   "automatic corpus feedback",
   "live-page integration",
   "other models or serving backends"
- ]
+ ],
+ "solvers": {
+  "qwen": {
+   "note": "the 'model' section; local transformers/ROCm",
+   "decoding": "greedy",
+   "repo": "Qwen/Qwen3.5-4B",
+   "revision": "851bf6e806efd8d0a36b00ddf55e13ccb7b8cd0a"
+  },
+  "claude": {
+   "harness": "claude -p (Claude Code 2.1.302)",
+   "auth": "subscription",
+   "repo": "claude-opus-5-5",
+   "revision": "harness-managed",
+   "effort": "high",
+   "decoding": "harness default (not greedy)",
+   "tools": "--tools \"\" (none); no MCP, no setting sources, no session persistence",
+   "workdir": "fresh empty temporary directory per call"
+  },
+  "codex": {
+   "harness": "codex exec (codex-cli 0.162.1)",
+   "auth": "subscription",
+   "repo": "gpt-6-astra",
+   "revision": "harness-managed",
+   "effort": "high",
+   "decoding": "harness default (not greedy)",
+   "tools": "no off switch: ephemeral, read-only sandbox, instruction not to run commands; tool items counted per call",
+   "workdir": "fresh empty temporary directory per call"
+  }
+ },
+ "solver_budget_notes": {
+  "token_caps": "enforced for qwen; not enforceable through either CLI, recorded per call",
+  "wall_caps": "route_wall_seconds and judge limits apply to every solver",
+  "repairs": "same single repair with public-example feedback for every solver; CLI calls are stateless, so the repair prompt includes the previous answer and the feedback",
+  "exposure": "frontier models very likely saw 2024-2025 LeetCode/LiveCodeBench/Codeforces problems; compare routes, not absolute rates"
+ }
 }
