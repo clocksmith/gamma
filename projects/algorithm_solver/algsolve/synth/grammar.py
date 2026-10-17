@@ -30,7 +30,9 @@ ALLOWED_METHODS = frozenset({
     "append", "appendleft", "pop", "popleft", "add", "discard", "remove", "get", "items", "keys", "values",
     "count", "index", "split", "strip", "join", "lower", "upper", "isdigit", "isalpha", "startswith",
     "endswith", "find", "replace", "most_common", "update", "extend", "sort", "copy", "setdefault",
-    "bit_count",
+    "bit_count", "union", "intersection", "difference", "symmetric_difference", "issubset", "issuperset",
+    "isdisjoint", "isupper", "islower", "isalnum", "isspace", "rfind", "rindex", "rstrip", "lstrip", "zfill",
+    "intersection_update", "difference_update", "insert", "reverse", "clear", "popitem",
 })
 _EXPR_NODES = (
     ast.Expression, ast.Name, ast.Load, ast.Store, ast.Constant, ast.BinOp, ast.UnaryOp, ast.BoolOp,
