@@ -30,6 +30,27 @@ composition coverage remain open.
 
 Committed result summaries live in `findings/` (runs/ and data/ are gitignored and machine-local).
 
+### Current reranker repair
+
+The exact failing `dq000` query and ten retrieved candidates now finish on
+host 128's Vulkan device with an explicit existing Doppler head128 prefill
+kernel patch. Manifest, precision, full statements and candidate order stay
+unchanged. The adapter also normalizes outer whitespace before dispatch,
+matching Doppler's interface, while retaining exact response binding checks.
+No Doppler runtime or model artifact was modified. The default manifest's
+streaming path remains unqualified for these long inputs.
+
+`findings/reranker-head128-20261017/` records 11.44 seconds for the fresh
+verification process, including 7.97 seconds for ranking and 2.08 seconds for
+five semantic checks (all passed). The correct candidate ranks first in this
+one development case. This repairs the reproduced blocker; it does not establish
+full calibration, improved recognition, or fast inference.
+
+Explicit evaluation config (included in calibration identity):
+`--runtime-config contracts/rerank-head128.json` with
+`qwen-3-reranker-0-6b-f16-af32`. Other models/devices are not qualified by this
+receipt. Existing failed streaming-path receipts remain open evidence.
+
 ## Takeover checkpoint: retrieval interface and component mining
 
 Work remains inside this lane. No new downloads, installs, Claude calls or paid

@@ -128,6 +128,7 @@ def main():
     parser.add_argument('--name', required=True)
     parser.add_argument('--cli', type=Path, required=True)
     parser.add_argument('--model-dir', type=Path, required=True)
+    parser.add_argument('--runtime-config', type=Path, help='Explicit Doppler runtime config; bound into calibration')
     parser.add_argument('--limit', type=int, help='Bound new queries; incomplete development cannot freeze thresholds')
     args = parser.parse_args()
     if not args.name.replace('-', '').replace('_', '').isalnum() or args.limit is not None and args.limit <= 0:
@@ -141,7 +142,8 @@ def main():
     problems = splits.load_all()
     paragraphs = {r['key']: r for r in map(json.loads, paraphrase.PARAPHRASES_PATH.read_text().splitlines())}
     by_key = {e.key: e for e in entries}
-    reranker = DopplerReranker(args.cli, args.model_dir)
+    runtime_config = json.loads(args.runtime_config.read_text()) if args.runtime_config else {}
+    reranker = DopplerReranker(args.cli, args.model_dir, runtime_config=runtime_config)
     runtime_root = args.cli.resolve().parents[2]
     runtime_revision = subprocess.check_output(['git', '-C', str(runtime_root), 'rev-parse', 'HEAD'], text=True).strip()
     if subprocess.check_output(['git', '-C', str(runtime_root), 'status', '--porcelain', '--untracked-files=no'], text=True).strip():
@@ -152,6 +154,8 @@ def main():
              LANE_ROOT/'algsolve/embed.py']
     binding = {'files': {str(p.relative_to(LANE_ROOT)): hashlib.sha256(p.read_bytes()).hexdigest() for p in files},
                'model_manifest_sha256': reranker.manifest_sha256, 'model_id': reranker.model_id,
+               'runtime_config': runtime_config, 'runtime_config_sha256': reranker.runtime_config_sha256,
+               'input_normalization': 'trim outer whitespace only before request and exact response binding',
                'runtime_revision': runtime_revision, 'top_k': TOP_K, 'dev_queries': dev, 'evaluation_queries': evaluation,
                'query_inputs': {q['qid']: {'text_sha256': hashlib.sha256(recognition_query_text(q, by_key, problems, paragraphs).encode()).hexdigest(),
                                            'active_indices_sha256': digest(diagnostic_entries(entries, q, problems))}
