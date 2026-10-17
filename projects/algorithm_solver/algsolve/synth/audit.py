@@ -255,7 +255,8 @@ def require_frozen() -> str:
     digest = vocabulary_hash()
     if frozen["sha256"] != digest:
         raise SystemExit(f"vocabulary changed since freezing ({digest[:12]} != {frozen['sha256'][:12]})")
-    status = subprocess.run(["git", "status", "--porcelain", "--", "algsolve/synth", "contracts/synth_vocabulary.json"],
+    tracked = [f"algsolve/synth/{n}" for n in VOCAB_FILES] + ["contracts/synth_vocabulary.json"]
+    status = subprocess.run(["git", "status", "--porcelain", "--", *tracked],
                             cwd=LANE_ROOT, capture_output=True, text=True).stdout.strip()
     if status:
         raise SystemExit("vocabulary files have uncommitted changes")
@@ -278,7 +279,20 @@ def freeze() -> dict:
     return info
 
 
-def run_audit(name: str, selected: list[Problem], vocab: str) -> Path:
+def parse_proposers(text: str | None):
+    """`claude:3,codex:2` -> (("claude", 3), ("codex", 2)); default PROPOSERS."""
+    if not text:
+        return PROPOSERS
+    out = []
+    for part in text.split(","):
+        name, _, budget = part.partition(":")
+        if name not in SOLVERS:
+            raise SystemExit(f"unknown proposer {name!r}; choose from {sorted(SOLVERS)}")
+        out.append((name, int(budget or 3)))
+    return tuple(out)
+
+
+def run_audit(name: str, selected: list[Problem], vocab: str, proposers=PROPOSERS) -> Path:
     out_dir = AUDIT_RUNS / name
     out_dir.mkdir(parents=True, exist_ok=True)
     out_path = out_dir / "audit.jsonl"
@@ -290,7 +304,7 @@ def run_audit(name: str, selected: list[Problem], vocab: str) -> Path:
             if problem.uid in done:
                 continue
             try:
-                record = audit_problem(problem, PROPOSERS)
+                record = audit_problem(problem, proposers)
             except SolverUnavailable as exc:
                 print(f"[audit] proposer unavailable, stopping for resume: {exc}", flush=True)
                 break
@@ -331,6 +345,7 @@ def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("action", choices=("dev", "freeze", "heldout", "summary"))
     parser.add_argument("--name", default=None)
+    parser.add_argument("--proposers", default=None, help="e.g. codex:3 (default claude:3,codex:2)")
     args = parser.parse_args(argv)
     problems = splits.load_all()
     if args.action == "freeze":
@@ -340,10 +355,12 @@ def main(argv: list[str] | None = None) -> int:
         print(json.dumps(summarize(AUDIT_RUNS / args.name), indent=1))
         return 0
     if args.action == "dev":
-        out = run_audit(args.name or f"audit-dev-{vocabulary_hash()[:8]}", dev_problems(problems), vocabulary_hash())
+        out = run_audit(args.name or f"audit-dev-{vocabulary_hash()[:8]}", dev_problems(problems), vocabulary_hash(),
+                        parse_proposers(args.proposers))
     else:
         vocab = require_frozen()
-        out = run_audit(args.name or f"audit-heldout-{vocab[:8]}", heldout_problems(problems), vocab)
+        out = run_audit(args.name or f"audit-heldout-{vocab[:8]}", heldout_problems(problems), vocab,
+                        parse_proposers(args.proposers))
     print(json.dumps(summarize(out), indent=1))
     return 0
 
