@@ -1,94 +1,121 @@
 # Algorithm solver: status and handoff
 
-Updated 2026-10-17. Interim numbers below are labelled as such; final numbers come from
-`runs/<run>/report.md` and `runs/<audit>/summary.json`, rebuilt from results files.
+Updated 2026-10-17. Everything below can be continued without Claude: the next steps use
+deterministic tooling, the local model (Qwen3.5-4B), or `codex exec`.
 
-## Goals
+## Goal
 
-1. Measure whether help (known-answer lookup, retrieved solved examples, an algorithm-pattern
-   classifier with templates) makes a solver faster or more reliable than the same solver alone,
-   on a frozen sample with hidden-test judging.
-2. Synthesis track (user-approved stages 1-2): test whether solutions can be built from a frozen,
-   typed vocabulary of tested components and skeletons instead of free-form code. First number:
-   demonstrated coverage of the 150 held-out problems.
-3. Later (not started): retrieval-guided and learned composition planners (A1-B3 grid), novel
-   composition holdout, reranking, live paste/edit interface.
+Build a fast algorithm-problem solver whose work comes mainly from retrieval, composition of
+verified components, and verification, with little generative inference at runtime. Measure every
+claim on a frozen sample with hidden-test judging, and compare against plain prompting.
 
-## Ground rules (from the approved plan)
+## What we learned
 
-- Held-out problems and their aliases/near-duplicates never enter the index, retrieval, classifier
-  training or vocabulary design. Recognition (lookup) and solving are separate tracks.
-- Expected outputs never enter the sandbox; verdicts fail closed. Evidence levels stay separate:
-  `example_passed`, `independent_tests_passed`, `benchmark_judge_accepted` (not evaluated).
-- Dataset label: held out from our pipeline; prior model exposure unknown (likely exposed for
-  Claude/Codex). Compare routes, not absolute rates. Initial comparison, not a ranking.
-- The synthesis vocabulary was built from index problems only, frozen (hash below), and is not
-  changed after the held-out audit; an expanded vocabulary needs a fresh confirmation set.
+1. Lookup works for known problems. Recognition track (`runs/baseline-v2`, 200 queries / 125 groups):
+   correct decision 0.956 [0.928, 0.980], wrong match 0.024, exact 50/50, paraphrase 48/50, absent
+   49/50 abstained, about 0.1 s. Weak spot: sibling problems (House Robber I/II style), 4 wrong
+   matches with score margins of 0.0015-0.010.
+2. For strong models, retrieval and templates add nothing. Interim paired results against
+   model_alone on problems with independent tests (likely exposed to these models):
+   - claude-v1 (121 problems): model_alone 0.826; retrieval 0.826 (difference 0.0 [-0.025, 0.025]);
+     classify_template 0.818 (-0.008 [-0.025, 0.0]); p50 route 6 s.
+   - codex-v1 (109 problems): model_alone 0.817; retrieval 0.817 (0.0 [-0.028, 0.028]);
+     classify_template 0.789 (-0.028 [-0.055, 0.0]); p50 route 9-10 s.
+3. Composition from the frozen vocabulary does not replace generation. Held-out audit stopped
+   early by decision (`runs/audit-heldout-1/STOPPED.json`, 44 LeetCode-style problems): 41
+   demonstrated expressible, but 35 only through generic skeletons (new logic written into a
+   loop/formula hole); 6 algorithm-specific; 0 algorithm-specific with small holes (<= 40 AST
+   nodes); median hole size 58 nodes. A chooser that only picks skeletons and bindings would cover
+   close to none of these problems. Index dev audit (60 problems) showed the same pattern.
+4. Local Qwen3.5-4B runs at 11.4 tok/s on transformers (torch fallback for linear attention);
+   it was stopped after 89 solving records by user decision.
 
-## Where things are
+## Ground rules to keep
+
+- Held-out problems (contracts/sample_manifest.json) and their aliases never enter the index,
+  retrieval, classifier training, vocabulary design, mining, or planner training.
+- Expected outputs never enter the sandbox; verdicts fail closed. Report `example_passed` and
+  `independent_tests_passed` separately; `benchmark_judge_accepted` is not evaluated.
+- The vocabulary in contracts/synth_vocabulary.json (sha256 2cdc0dbf...) is frozen. Any expanded
+  vocabulary is v2 and needs a fresh confirmation set that was not used to build it.
+- Label results: held out from our pipeline; prior model exposure unknown (likely for frontier
+  models). Initial comparisons, not rankings.
+- Gamma workflow: commit on main, push (`rdpush gamma`), log `[run-contract]` for runs.
+
+## Where things are (paths relative to gamma/projects/algorithm_solver)
 
 | Path | What |
 |---|---|
-| `algsolve/judge/` | bubblewrap sandbox, in-sandbox harness, host-side verdicts (stdin + functional) |
-| `algsolve/importers.py`, `values.py`, `validate.py` | records from LeetCodeDataset, Doocs, LiveCodeBench v6 file, Codeforces; AST-parsed tests; reference validation |
-| `algsolve/splits.py`, `prepare.py` | index, aliases, near-duplicates, frozen sample |
-| `algsolve/lookup.py`, `embed.py`, `classify.py`, `patterns/catalog.py` | lookup (Qwen3-Embedding-0.6B + fingerprint rescoring), TF-IDF classifier, 13 templates |
-| `algsolve/routes.py`, `model.py`, `cli_solvers.py`, `run.py`, `report.py` | four routes; Qwen3.5-4B, `claude -p`, `codex exec` solvers; runner; report |
+| `algsolve/judge/` | bubblewrap sandbox, in-sandbox harness, host-side verdicts |
+| `algsolve/importers.py`, `values.py`, `validate.py` | problem records, AST-parsed tests, reference validation |
+| `algsolve/splits.py`, `prepare.py` | index (3,273 LeetCode problems), aliases, near-duplicates, frozen sample |
+| `algsolve/lookup.py`, `embed.py`, `classify.py`, `patterns/catalog.py` | lookup, embeddings, TF-IDF classifier, 13 templates |
+| `algsolve/routes.py`, `model.py`, `cli_solvers.py`, `run.py`, `report.py` | four routes; qwen / claude / codex solvers; runner; report |
 | `algsolve/synth/` | grammar, 17 components, 21 skeletons, AST renderer, expressibility audit |
-| `contracts/run_contract.json`, `sample_manifest.json` | budgets, solvers, frozen sample (sha256 `40da673a...`) |
-| `contracts/lookup_thresholds.json`, `classifier_metrics.json` | fitted on dev/index data only |
-| `contracts/synth_vocabulary.json` | frozen vocabulary (sha256 `2cdc0dbf...`), dev-audit history |
-| `data/` (gitignored) | fetched sources with hash manifest, derived records, tests, embeddings, paraphrases |
-| `runs/` (gitignored) | per-run results, logs, reports |
-| `../../tests/test_algorithm_solver_*.py` | judge (fail-closed), lane, synthesis contract tests |
+| `contracts/` | run contract, frozen sample, lookup thresholds, classifier metrics, frozen vocabulary |
+| `data/` (gitignored) | sources + hash manifest, derived records, hidden tests, embeddings, paraphrases |
+| `runs/` (gitignored) | `baseline-v2` (recognition + stopped Qwen), `claude-v1`, `codex-v1`, `audit-dev-1*`, `audit-heldout-1` |
+| `../../tests/test_algorithm_solver_{judge,lane,synth}.py` | 23 judge, 11 lane, 12 synthesis tests |
 
-## Done
+Python: `/home/x/deco/gamma/.venv_rocm/bin/python`, run from this directory.
 
-- Data: approved downloads (9,726,341,702 bytes) hash-recorded in `data/raw/fetch_manifest.json`.
-  Qwen3.5-4B in the HF cache; Qwen3-Embedding-0.6B read in place from Doppler's verified copy.
-- Judge: 23 fail-closed tests; mutation checks show the network and host-file tests fail on a leaky sandbox.
-- Recognition track (`runs/baseline-v2`, complete): 200 queries / 125 groups. Correct decision
-  0.956 [0.928, 0.980]; wrong-match 0.024; exact 50/50, paraphrase 48/50 (2 abstain), sibling
-  families 0.86 correct with 4 wrong matches (margins 0.0015-0.010; dev-fitted margin is 0),
-  absent 49/50 abstained. 144/146 returned solutions pass the true problem's hidden tests.
-  Lookup p50 0.096 s.
-- Qwen3.5-4B solving: stopped by user decision at 89 records (`runs/baseline-v2/STOPPED.json`).
-  Measured 11.4 tok/s (transformers torch fallback for linear attention).
-- `runs/baseline-v1`: aborted for a fingerprint bug (`ABORTED.json`).
-- Synthesis stage 1: vocabulary built and frozen. Dev audit on 60 index problems: 58 demonstrated
-  expressible after fixes (38 of the first 56 used only generic skeletons), 2 unresolved.
+## Running at handoff
 
-## Running (tmux sessions; results resume on rerun)
+- `tmux` session `algsolve-codex`: `python -m algsolve.run --run-name codex-v1 --solver codex --stages solving,report`.
+  Leave it to finish; rerunning the same command resumes.
+- `tmux` session `algsolve-claude` (claude-v1, about 59 items left) uses Claude. Either let it finish or stop it:
+  `tmux kill-session -t algsolve-claude`. Partial results stay valid; reports rebuild from them.
+- Rebuild any report: `python -m algsolve.run --run-name <run> --stages report` (no model calls).
 
-| Session | Command | Log / results |
-|---|---|---|
-| `algsolve-claude` | `python -m algsolve.run --run-name claude-v1 --solver claude --stages solving,report` | `runs/claude-v1/` |
-| `algsolve-codex` | same with `codex-v1 --solver codex` | `runs/codex-v1/` |
-| `algsolve-audit-heldout` | `python -m algsolve.synth.audit heldout --name audit-heldout-1` | `runs/audit-heldout-1/` |
+## Next steps (no Claude needed)
 
-Interim (not final): claude-v1 at 111 complete problems, independent pass rate model_alone 0.838,
-retrieval 0.838, classify_template 0.829, p50 route 5-6 s. codex-v1 at 77 problems: 0.857 / 0.844
-/ 0.831, p50 9-10 s. No tool use observed in any CLI call. Lookup answers no held-out problem (by design).
+1. Close out the comparison.
+   - When codex-v1 (and claude-v1, if left running) finish, rebuild reports and record the final
+     paired table here. Expected outcome: no measurable gain from retrieval/templates for frontier CLIs.
+   - Optional local control: resume the Qwen run (`--run-name baseline-v2 --solver qwen
+     --stages solving,report`) to see whether help matters for a small model. Slow at 11.4 tok/s;
+     speeding it up needs an approved install (flash-linear-attention + causal-conv1d) or llama.cpp.
 
-If a run stops with `[solver-unavailable]` (subscription limit), rerun the same command; finished
-items are skipped. Rebuild a report any time: `python -m algsolve.run --run-name <run> --stages report`.
+2. Test whether a richer, mined library changes the composition picture (deterministic, index only).
+   - Write `algsolve/synth/mine.py`: AST-extract helper functions, classes and inner functions from
+     validated LeetCodeDataset references and Doocs `Solution.py` (index problems only), normalize
+     (rename locals, strip docstrings), hash and cluster by structure, rank by frequency, keep provenance.
+   - Turn the top clusters into components with written contracts and brute-force unit tests (the
+     pattern in `tests/test_algorithm_solver_synth.py`); add skeletons only where a recurring control
+     structure appears. This is vocabulary v2.
+   - Build a fresh confirmation set from index problems not used in mining or dev (seeded, stratified).
+   - Audit v2 with Codex only: `python -m algsolve.synth.audit dev --name audit-v2-confirm --proposers codex:3`
+     (point `dev_problems` at the confirmation set first).
+   - Decision metric: share of problems demonstrated with algorithm-specific skeletons and holes
+     <= 40 nodes. If that stays near zero, retire the "choose, don't generate" premise.
 
-## Next
+3. Measure what search can actually find (A1, unguided; deterministic).
+   - Write a bounded enumerator: skeleton choice x input bindings x expressions up to N nodes from a
+     small operator set, checked against public examples (counterexample-guided), hidden tests only
+     for final scoring.
+   - Evaluate on index problems whose demonstrated compositions are small (from `runs/audit-dev-1*`
+     and the v2 audit). Report solve rate, candidates explored, search time, abstentions.
 
-1. When the CLI runs finish: report paired pass rates per route vs model_alone, first attempt vs
-   repair, latency, failure types, by source and date; label all as likely exposed.
-2. When the held-out audit finishes: report demonstrated coverage by source, skeleton family
-   (generic vs algorithm-specific), hole-node size, outside-grammar categories, unresolved.
-3. Then, with user approval: unguided/retrieval-guided/learned synthesis configurations (A1-B3),
-   structured requirement specs for the 150 (hand-written, no algorithm hints), novel-composition
-   holdout, reranking via Doppler's existing node path (`doppler-cli.js verify` rerank workload,
-   local q4k/f16 Qwen3-Reranker artifacts; no install needed).
+4. Grammar as a fence for a generator (Codex or Qwen, no Claude).
+   - New route `compose_codex`: codex proposes a composition (as in the audit), public-example
+     feedback only, one repair, same budget; hidden tests only for scoring. Compare against
+     codex-v1 model_alone on the frozen 150 using the paired report. Question: does constraining
+     output to the grammar cost accuracy, and does it buy speed or reliability?
 
-## Open items for the user
+5. Fix the lookup weak spot with a reranker (no install).
+   - Use Doppler's existing node path (`doppler/src/cli/doppler-cli.js verify` with the rerank
+     workload; local models `doppler/models/local/qwen-3-reranker-0-6b-{q4k-ehf16,f16}-af32`) to
+     rescore the top-10 lookup candidates. Refit thresholds on dev queries only, then rerun the
+     recognition track. Target: the 4 sibling wrong matches. Note q4k scores the "yes" logit and
+     f16 the yes-no difference.
 
-- reploid has uncommitted changes deleting most of `self/cloud-access-windows.js` and
-  `self/cloud-access-status.js` (5,846 lines). Not from this work; `rdpush` was run for gamma only
-  so they were not auto-committed.
-- `mutecity` is listed in `ouroboros/deco/tools/workspace-repos.json` but absent locally, which
-  makes repo-less `rdstatus`/`rdpull`/`rdpush` fail with `spawnSync git ENOENT`.
-- Old `deco-sync` stashes remain in reploid (dated 2026-10-12 and 2026-10-13).
+6. Honest unseen-problem evaluation (needs approval for new downloads).
+   - Collect problems released after the solvers' training cutoffs with official tests, then rerun
+     the comparison. Until then all solving numbers are on likely-exposed problems.
+
+## Open workspace items
+
+- The bootstrap printed: "Preserved legacy checkout at /home/x/deco/plasma; reconcile its local
+  work before creating the project link" (mutecity appears to succeed plasma).
+- Root `deco` has untracked scratch directories (worktrees/, doe-native-candidate.8Ji85X/,
+  doe-replay-barrier/, doe-emitters/, releases/, .local/, progress.log) left uncommitted on purpose.
