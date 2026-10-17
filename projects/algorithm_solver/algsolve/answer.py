@@ -103,14 +103,15 @@ def main():
     parser.add_argument('query', type=Path, help='JSON Problem with parsed public examples; see editor-protocol.md')
     parser.add_argument('--index', choices=('research', 'corpus'), default='research')
     parser.add_argument('--fallback', choices=('none', 'codex'), default='none')
+    parser.add_argument('--device', choices=('cpu', 'cuda'), default='cpu', help='Explicit embedding device; no automatic fallback')
     parser.add_argument('--rerank-run', type=Path, help='Frozen development calibration directory (corpus index only)')
     parser.add_argument('--doppler-cli', type=Path)
     parser.add_argument('--reranker-model', type=Path)
     args = parser.parse_args()
     reranker, rerank_thresholds = None, None
     if args.rerank_run:
-        if args.index != 'corpus' or not args.doppler_cli or not args.reranker_model:
-            parser.error('--rerank-run requires --index corpus, --doppler-cli and --reranker-model')
+        if args.index != 'corpus' or args.device != 'cpu' or not args.doppler_cli or not args.reranker_model:
+            parser.error('--rerank-run requires --index corpus, --device cpu, --doppler-cli and --reranker-model')
         from .calibrated_reranker import load
         reranker, rerank_thresholds = load(args.rerank_run, args.doppler_cli, args.reranker_model)
     elif args.doppler_cli or args.reranker_model:
@@ -123,8 +124,8 @@ def main():
     torch.set_num_threads(4)
     contract = json.loads((LANE_ROOT / 'contracts/run_contract.json').read_text())
     print(f'[run-contract] run_name=editor-answer pairs_input_spec={args.query} resume_from=none '
-          f'resume_stage=none decode=harness-default eval_dataset_paths=public_examples device=cpu '
-          f'schedule=serial runtime_mode=cpu sweep_mode=live index={args.index}', file=sys.stderr)
+          f'resume_stage=none decode=harness-default eval_dataset_paths=public_examples device={args.device} '
+          f'schedule=serial runtime_mode={args.device} sweep_mode=live index={args.index}', file=sys.stderr)
     if args.index == 'corpus':
         entries = corpus.read_entries()
         if json.loads(corpus.KEYS_PATH.read_text()) != [entry.key for entry in entries]:
@@ -138,7 +139,7 @@ def main():
         from .cli_solvers import SOLVERS
         config = contract['solvers']['codex']
         generator = SOLVERS['codex'](config['repo'], config['effort'])
-    context = Context(generator=generator, embedder=Embedder(device='cpu'), lookup=index,
+    context = Context(generator=generator, embedder=Embedder(device=args.device), lookup=index,
                       thresholds=load_thresholds(), classifier=None, entries=entries,
                       budget=Budget.from_contract(contract))
     query = Problem.from_dict(json.loads(args.query.read_text()))
