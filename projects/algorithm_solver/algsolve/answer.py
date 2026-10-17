@@ -103,11 +103,24 @@ def main():
     parser.add_argument('query', type=Path, help='JSON Problem with parsed public examples; see editor-protocol.md')
     parser.add_argument('--index', choices=('research', 'corpus'), default='research')
     parser.add_argument('--fallback', choices=('none', 'codex'), default='none')
+    parser.add_argument('--rerank-run', type=Path, help='Frozen development calibration directory (corpus index only)')
+    parser.add_argument('--doppler-cli', type=Path)
+    parser.add_argument('--reranker-model', type=Path)
     args = parser.parse_args()
+    reranker, rerank_thresholds = None, None
+    if args.rerank_run:
+        if args.index != 'corpus' or not args.doppler_cli or not args.reranker_model:
+            parser.error('--rerank-run requires --index corpus, --doppler-cli and --reranker-model')
+        from .calibrated_reranker import load
+        reranker, rerank_thresholds = load(args.rerank_run, args.doppler_cli, args.reranker_model)
+    elif args.doppler_cli or args.reranker_model:
+        parser.error('Reranker paths require an explicit --rerank-run')
     import numpy as np
     from . import corpus, splits
     from .embed import Embedder
     from .lookup import LookupIndex, load_thresholds
+    import torch
+    torch.set_num_threads(4)
     contract = json.loads((LANE_ROOT / 'contracts/run_contract.json').read_text())
     print(f'[run-contract] run_name=editor-answer pairs_input_spec={args.query} resume_from=none '
           f'resume_stage=none decode=harness-default eval_dataset_paths=public_examples device=cpu '
@@ -129,7 +142,8 @@ def main():
                       thresholds=load_thresholds(), classifier=None, entries=entries,
                       budget=Budget.from_contract(contract))
     query = Problem.from_dict(json.loads(args.query.read_text()))
-    print(json.dumps(answer(context, query, allow_generation=args.fallback != 'none'), ensure_ascii=False))
+    print(json.dumps(answer(context, query, reranker=reranker, rerank_thresholds=rerank_thresholds,
+                            allow_generation=args.fallback != 'none'), ensure_ascii=False))
 
 
 if __name__ == '__main__':
