@@ -13,7 +13,7 @@ Measure whether lookup, retrieval, or pattern classification with templates make
 
 ## Scope
 
-- Applies to `algsolve/`, `contracts/`, and run outputs under `runs/`.
+- Applies to `algsolve/`, `contracts/`, committed `findings/`, and run outputs under `runs/`.
 
 ## Contracts
 

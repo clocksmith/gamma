@@ -1,0 +1,54 @@
+# Algorithm solver comparison: codex-v1
+
+Status: partial. Held out from our pipeline; prior model exposure unknown.
+
+Initial comparison on a small frozen sample; not a ranking. Results describe the named solver with the contract budgets, not other backends or budgets. Frontier CLI solvers very likely saw these 2024-2025 problems; compare routes, not absolute rates.
+
+Contract: `[run-contract] run_name=codex-v1 pairs_input_spec=contracts/sample_manifest.json@40da673a01f4 resume_from=none resume_stage=none decode=harness default (not greedy) eval_dataset_paths=data/derived/problems.jsonl,data/derived/tests device=cuda schedule=none runtime_mode=normal_rocm sweep_mode=live model=gpt-6-astra@harness-mana solver=codex thinking=high route_wall_seconds=120 first_max_new_tokens=1024 repair_max_new_tokens=1024 repairs=1`
+
+Solver: `codex`
+
+## Recognition (known-problem lookup)
+
+not run here: lookup does not depend on the solver; see the baseline-v2 run
+
+## Solving (held-out problems)
+
+125/150 problems finished all four routes; 121 of them have independent tests. Intervals resample problems.
+
+| route | independent pass | example pass (all) | first-attempt independent | p50 / p95 route s | p50 / p95 time to checked answer s | budget exhausted |
+|---|---|---|---|---|---|---|
+| lookup | 0.000 [0.000, 0.000] (n=121) | 0.000 [0.000, 0.000] (n=125) | n/a | 0.101 / 0.352 | 0.101 / 0.352 | 0 |
+| model_alone | 0.802 [0.727, 0.868] (n=121) | 0.944 [0.904, 0.976] (n=125) | 0.802 [0.727, 0.868] (n=121) | 10.456 / 75.6 | 10.525 / 77.161 | 5 |
+| retrieval | 0.802 [0.727, 0.868] (n=121) | 0.952 [0.912, 0.984] (n=125) | 0.793 [0.719, 0.860] (n=121) | 10.182 / 79.304 | 10.647 / 80.784 | 4 |
+| classify_template | 0.777 [0.703, 0.851] (n=121) | 0.936 [0.896, 0.976] (n=125) | 0.777 [0.703, 0.851] (n=121) | 10.292 / 68.102 | 10.734 / 71.581 | 6 |
+
+Paired against model_alone (problems with independent tests):
+
+| route | solved here only | solved by model_alone only | difference [95% CI] |
+|---|---|---|---|
+| lookup | 0 | 97 | -0.8017 [-0.8678, -0.7273] |
+| retrieval | 2 | 2 | 0.0 [-0.0331, 0.0331] |
+| classify_template | 1 | 4 | -0.0248 [-0.0579, 0.0083] |
+
+Per-source counts (independent / example passes):
+
+- lookup: cf: 0/0 of 25; lcb: 0/0 of 50; lcd: 0/0 of 50
+- model_alone: cf: 16/20 of 25; lcb: 39/48 of 50; lcd: 42/50 of 50
+- retrieval: cf: 16/20 of 25; lcb: 40/49 of 50; lcd: 41/50 of 50
+- classify_template: cf: 16/20 of 25; lcb: 38/47 of 50; lcd: 40/50 of 50
+
+Mean stage seconds:
+
+- lookup: embed=0.121, match=0.012, public_judge=0.088; GPU peak None GB
+- model_alone: generate=19.329, public_judge=0.042, repair_generate=16.754; GPU peak None GB; generation stopped by {'eos': 124, 'max_time': 5}; CLI calls 129, with tool items 0, reported cost $0 (notional on subscription), models ['gpt-6-astra']
+- retrieval: generate=18.84, public_judge=0.041, repair_generate=16.949, retrieve=0.133; GPU peak None GB; generation stopped by {'eos': 127, 'max_time': 4}; CLI calls 131, with tool items 0, reported cost $0 (notional on subscription), models ['gpt-6-astra']
+- classify_template: classify=0.002, generate=18.019, public_judge=0.043, repair_generate=16.447; GPU peak None GB; generation stopped by {'eos': 125, 'max_time': 6}; CLI calls 131, with tool items 0, reported cost $0 (notional on subscription), models ['gpt-6-astra']
+
+## Evidence levels
+
+- `example_passed`: passes the public examples shown in the statement
+- `independent_tests_passed`: passes the problem's full hidden test set (LeetCodeDataset asserts, LiveCodeBench private tests, Codeforces official tests marked complete)
+- `benchmark_judge_accepted`: not evaluated in this run (LiveCodeBench's own judge was not run)
+
+Full numbers, thresholds, classifier metrics and per-route outcome counts are in report.json.
