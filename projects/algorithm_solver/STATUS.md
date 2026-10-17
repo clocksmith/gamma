@@ -21,6 +21,10 @@ claim on a frozen sample with hidden-test judging, and compare against plain pro
      classify_template 0.818 (-0.008 [-0.025, 0.0]); p50 route 6 s.
    - codex-v1 (109 problems): model_alone 0.817; retrieval 0.817 (0.0 [-0.028, 0.028]);
      classify_template 0.789 (-0.028 [-0.055, 0.0]); p50 route 9-10 s.
+   - Retrieval wins one problem and loses one against each solver's own model_alone; templates gain
+     none. The two runs cover different completed prefixes, so do not rank Claude against Codex from
+     these numbers. These are paired interim results, not proof that help cannot work. Zero CLI tool
+     items recorded.
 3. Composition from the frozen vocabulary does not replace generation. Held-out audit stopped
    early by decision (`runs/audit-heldout-1/STOPPED.json`, 44 LeetCode-style problems): 41
    demonstrated expressible, but 35 only through generic skeletons (new logic written into a
@@ -57,7 +61,7 @@ claim on a frozen sample with hidden-test judging, and compare against plain pro
 | `runs/` (gitignored) | `baseline-v2` (recognition + stopped Qwen), `claude-v1`, `codex-v1`, `audit-dev-1*`, `audit-heldout-1` |
 | `../../tests/test_algorithm_solver_{judge,lane,synth}.py` | 23 judge, 11 lane, 12 synthesis tests |
 
-Python: `/home/x/deco/gamma/.venv_rocm/bin/python`, run from this directory.
+Python: `/home/x/deco/gamma/.venv_rocm/bin/python`, run from this directory (the plain `.venv` lacks NumPy).
 
 ## Running at handoff
 
