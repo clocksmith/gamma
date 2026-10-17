@@ -66,9 +66,30 @@ Updated 2026-10-17. Interim numbers below are labelled as such; final numbers co
 | `algsolve-codex` | same with `codex-v1 --solver codex` | `runs/codex-v1/` |
 | `algsolve-audit-heldout` | `python -m algsolve.synth.audit heldout --name audit-heldout-1` | `runs/audit-heldout-1/` |
 
-Interim (not final): claude-v1 at 111 complete problems, independent pass rate model_alone 0.838,
-retrieval 0.838, classify_template 0.829, p50 route 5-6 s. codex-v1 at 77 problems: 0.857 / 0.844
-/ 0.831, p50 9-10 s. No tool use observed in any CLI call. Lookup answers no held-out problem (by design).
+Interim snapshot, 2026-10-17, rebuilt from the live runs on `x@128`
+(using `/home/x/deco/gamma/.venv_rocm/bin/python`; the plain `.venv` lacks NumPy):
+
+| Run | Complete problems / independent-test problems | Alone / retrieval / templates | Median route seconds |
+|---|---|---|---|
+| claude-v1 | 129 / 121 | 82.64% / 82.64% / 81.82% | 6.16 / 6.58 / 6.11 |
+| codex-v1 | 96 / 96 | 81.25% / 81.25% / 78.12% | 9.55 / 10.11 / 10.22 |
+
+Each retrieval route wins one problem and loses one against its own model-alone
+baseline. Templates gain none and lose one (Claude) or three (Codex). These are
+paired interim results, not proof that help cannot work. The runs cover different
+completed prefixes and must not be used to rank the solvers. Lookup answers no
+held-out problem by design. The report records zero CLI tool items.
+
+The held-out vocabulary audit snapshot covers 36/150 problems, all from LCD:
+34 demonstrated expressible against independent tests, two unresolved. Of the
+34 successes, 28 use generic skeletons only. Rendered hole-node counts range
+from 12 to 199. This is partial demonstrated coverage, not a final coverage rate
+or evidence of successful specialized-component reuse.
+
+All three runner processes were observed alive and their append-only result
+counts increased during inspection. Reporting only was invoked; no new solver,
+training, planner, reranker or download was launched. The frozen vocabulary and
+sample remain unchanged. Rebuild after completion before drawing conclusions.
 
 If a run stops with `[solver-unavailable]` (subscription limit), rerun the same command; finished
 items are skipped. Rebuild a report any time: `python -m algsolve.run --run-name <run> --stages report`.
