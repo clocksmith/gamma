@@ -61,8 +61,11 @@ def evaluate(node: ast.AST) -> Any:
             if value in ("inf", "-inf"):
                 return {"__float__": value}
             return float(value)
-    if isinstance(node, ast.Name) and node.id in ("inf", "None", "True", "False"):
-        return {"inf": {"__float__": "inf"}, "None": None, "True": True, "False": False}[node.id]
+    if isinstance(node, ast.Name) and node.id in ("inf", "None", "True", "False", "null", "true", "false"):
+        # Statement examples use JSON literals even with Python starter code.
+        # Resolve AST names, never textual replacement inside quoted strings.
+        return {"inf": {"__float__": "inf"}, "None": None, "True": True, "False": False,
+                "null": None, "true": True, "false": False}[node.id]
     raise Unsupported(type(node).__name__)
 
 
@@ -113,7 +116,10 @@ def parse_call_arguments(text: str) -> tuple[list[Any], dict[str, Any]]:
     except SyntaxError as exc:
         raise Unsupported(f"syntax: {exc.msg}") from None
     assert isinstance(call, ast.Call)
-    return [evaluate(a) for a in call.args], {k.arg: evaluate(k.value) for k in call.keywords if k.arg}
+    names = [k.arg for k in call.keywords]
+    if None in names or len(set(names)) != len(names):
+        raise Unsupported('argument unpacking or duplicate keyword')
+    return [evaluate(a) for a in call.args], {k.arg: evaluate(k.value) for k in call.keywords}
 
 
 def canonical_tree(items: list[Any]) -> list[Any]:
