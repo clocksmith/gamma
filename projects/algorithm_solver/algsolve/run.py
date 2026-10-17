@@ -40,7 +40,7 @@ def git(*args: str) -> str:
 
 
 def check_manifest_committed(contract: dict) -> str:
-    relative = splits.MANIFEST_PATH.relative_to(Path(git("rev-parse", "--show-toplevel")))
+    relative = splits.MANIFEST_PATH.relative_to(LANE_ROOT)  # git runs with cwd=LANE_ROOT
     if not git("ls-files", str(relative)):
         raise SystemExit("sample manifest is not committed; commit it before any model run")
     if git("status", "--porcelain", str(relative)):
@@ -161,14 +161,14 @@ def score_code(problem: Problem, code: str | None) -> dict:
     }
 
 
-def stage_recognition(run_dir: Path, context, entries, problems, manifest, paraphrases) -> None:
+def stage_recognition(run_dir: Path, context, entries, problems, manifest, paraphrases, limit: int | None = None) -> None:
     from .lookup import adapt_solution, fingerprint
 
     out_path = run_dir / "recognition.jsonl"
     done = load_done(out_path, lambda r: r["qid"])
     by_key = {e.key: e for e in entries}
     with out_path.open("a", encoding="utf-8") as out:
-        for query in manifest["recognition"]:
+        for query in manifest["recognition"][:limit]:
             if query["qid"] in done:
                 continue
             text = recognition_query_text(query, by_key, problems, paraphrases)
@@ -197,12 +197,15 @@ def stage_recognition(run_dir: Path, context, entries, problems, manifest, parap
             out.flush()
 
 
-def stage_solving(run_dir: Path, context, problems, manifest) -> None:
+def stage_solving(run_dir: Path, context, problems, manifest, limit: int | None = None) -> None:
     from .routes import ROUTES, run_route
 
     out_path = run_dir / "solving.jsonl"
     done = load_done(out_path, lambda r: (r["uid"], r["route"]))
     uids = manifest["solving"]["lcd"] + manifest["solving"]["lcb"] + manifest["solving"]["cf"]
+    if limit:
+        # Smoke runs take a few problems from each source.
+        uids = manifest["solving"]["lcd"][:limit] + manifest["solving"]["lcb"][:limit] + manifest["solving"]["cf"][:limit]
     total = len(uids) * len(ROUTES)
     with out_path.open("a", encoding="utf-8") as out:
         for n, uid in enumerate(uids):
@@ -230,11 +233,15 @@ def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--run-name", required=True)
     parser.add_argument("--stages", default="fit,recognition,solving,report")
+    parser.add_argument("--limit", type=int, default=None,
+                        help="smoke test: first N recognition queries and N solving problems per source")
     args = parser.parse_args(argv)
     stages = args.stages.split(",")
 
     contract = json.loads(CONTRACT_PATH.read_text())
     digest = check_manifest_committed(contract)
+    if args.limit and not args.run_name.startswith("smoke"):
+        raise SystemExit("--limit is for smoke runs; use a run name starting with 'smoke'")
     run_dir = RUNS / args.run_name
     run_dir.mkdir(parents=True, exist_ok=True)
 
@@ -276,9 +283,9 @@ def main(argv: list[str] | None = None) -> int:
         classifier=Classifier(), entries=entries, budget=Budget.from_contract(contract),
     )
     if "recognition" in stages:
-        stage_recognition(run_dir, context, entries, problems, manifest, paraphrases)
+        stage_recognition(run_dir, context, entries, problems, manifest, paraphrases, args.limit)
     if "solving" in stages:
-        stage_solving(run_dir, context, problems, manifest)
+        stage_solving(run_dir, context, problems, manifest, args.limit)
     meta = json.loads(meta_path.read_text())
     meta["sessions"][-1].update(finished=time.strftime("%Y-%m-%dT%H:%M:%S%z"),
                                 host_max_rss_bytes=resource.getrusage(resource.RUSAGE_SELF).ru_maxrss * 1024)

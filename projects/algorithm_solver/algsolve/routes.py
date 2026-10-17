@@ -140,11 +140,11 @@ def describe_failure(problem: Problem, verdict: judge.Verdict) -> str:
     if reason == judge.WRONG_ANSWER and "i" in first:
         test = problem.public_tests[first["i"]]
         shown_input = json.dumps(test["args"]) if problem.io_mode == "functional" else test["input"]
-        observed = first.get("observed")
         if problem.io_mode == "stdin":
-            observed = "(see judge: output did not match)"
+            return (f"Your solution gave a wrong answer on a public example.\nInput:\n{shown_input}\n"
+                    f"Expected output:\n{test['expected']}\nYour output:\n{first.get('observed') or ''}")
         return (f"Your solution gave a wrong answer on a public example.\nInput: {shown_input}\n"
-                f"Expected: {json.dumps(test['expected'])}\nGot: {json.dumps(observed)}")
+                f"Expected: {json.dumps(test['expected'])}\nGot: {json.dumps(first.get('observed'))}")
     if reason in (judge.RUNTIME_ERROR, judge.LOAD_ERROR):
         detail = first.get("error") or first.get("load_error") or ""
         return (f"Your solution raised an error on a public example: {detail} {first.get('detail') or ''}\n"
