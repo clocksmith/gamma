@@ -5,7 +5,7 @@ deterministic tooling, the local model (Qwen3.5-4B), or `codex exec`.
 
 ## Goal
 
-Two separate targets; neither uses a generative model at runtime:
+Two separate targets; neither generates source code autoregressively at runtime:
 
 1. **Recognize known problems.** Recognize indexed problems despite rewriting and
    return their existing correct solutions. Keep the all-corpus service index
@@ -14,7 +14,9 @@ Two separate targets; neither uses a generative model at runtime:
    complete latency. The optional Codex adaptation route is a generative baseline,
    not success on this target.
 2. **Compose unfamiliar solutions.** Retrieve independently tested components and
-   deterministically search executable skeletons, bindings and small expressions.
+   predict a bounded graph non-autoregressively with component, binding, parameter
+   and structure heads. Assemble and validate deterministically; bounded search
+   is a baseline and fallback, not the primary intended inference path.
    Mine only permitted development solutions; freeze v2 contracts and identities
    before confirmation. Audit algorithm-specific compositions with holes <=40 AST
    nodes, then compare unguided/retrieval-guided search against Codex baselines.
@@ -223,13 +225,30 @@ partial observations, not the final report. No raw comparison rows were changed.
    solving. Keep the <=40 AST-node metric, but do not equate expressibility with
    a deterministic solver finding the solution.
 
-3. **Implement bounded composition search.** Enumerate skeletons, legal bindings
-   and bounded expressions; reject with public examples, abstain at the budget,
-   score final candidates with hidden tests. Compare unguided and retrieval-guided
-   search with the same components and budgets, retaining explored-candidate
-   counts, correctness, coverage, abstentions and latency. Use existing Codex
-   results as the generative baseline; an optional grammar-constrained generator
-   is another baseline, not the target solver.
+3. **Learn direct graph prediction from verified targets.** The chosen architecture
+   is a retrieval-conditioned encoder with interacting program slots, parallel
+   component/EMPTY, binding, parameter and structure predictions, and optionally
+   bounded refinement. Deterministic compilation and execution remain authoritative.
+   `algsolve/synth/graph_targets.py` implements the initial bounded target format
+   and compiler; `training_pairs.py` requalifies permitted development audit
+   proposals against public and independent tests. V1 is unchanged. Current
+   target support is functional IO, three stage slots, algorithm-specific
+   structure and <=40 total hole AST nodes. Hole logic is retained as structured
+   ASTs, not hidden behind a component ID. This is data/compiler scaffolding:
+   no neural predictor, learned weights or fast-solving result exists yet.
+
+   Split connected groups of problem identities and structural patterns together
+   so alternative graphs cannot leak across training and pattern confirmation.
+   Keep the separately reserved confirmation families entirely out of this
+   dataset. First measure independently judged first-prediction correctness,
+   wrong acceptance, coverage, warm/cold complete latency and memory. Report
+   refinement rounds and retry results separately. Build bounded unguided and
+   retrieval-guided search as matched baselines/fallbacks, retaining explored
+   candidates. Existing Codex results remain the autoregressive baseline.
+
+   This composition-data work can proceed independently of the Doppler device-loss
+   blocker. The existing audit is not a substantial training corpus; requalify
+   eligible targets and grow verified v2 coverage before any training campaign.
 
 New problem downloads and model installations require separate authorization.
 The Qwen run remains stopped. The existing answer interface defaults to no
