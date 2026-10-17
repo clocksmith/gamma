@@ -101,3 +101,16 @@ def test_recognition_outcomes_and_grouping():
     assert summary["group_correct_decision_rate"]["value"] == 0.25  # (0.5 + 0.0) / 2 groups
     assert summary["group_wrong_match_rate"]["value"] == 0.5
     assert summary["outcomes_by_query_kind"]["absent_exact"] == {"wrong_match": 1}
+
+
+def test_fingerprint_ignores_commented_helper_classes():
+    starter = (
+        "# Definition for a binary tree node.\n"
+        "# class TreeNode:\n"
+        "#     def __init__(self, val=0, left=None, right=None):\n"
+        "#         self.val = val\n"
+        "class Solution:\n"
+        "    def postorderTraversal(self, root: Optional[TreeNode]) -> List[int]:\n"
+    )
+    fp = lookup.fingerprint("Given the root of a binary tree...\n\n" + starter)
+    assert fp.method == "postorderTraversal" and fp.params == ("root",)
