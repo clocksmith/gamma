@@ -193,8 +193,9 @@ def run_lookup(context: Context, problem: Problem) -> RouteResult:
 
 
 def run_generative(context: Context, problem: Problem, route: str) -> RouteResult:
-    torch = context.generator.torch
-    torch.cuda.reset_peak_memory_stats()
+    torch = context.generator.torch  # None for CLI solvers (no local generation)
+    if torch is not None:
+        torch.cuda.reset_peak_memory_stats()
     budget = context.budget
     started = time.perf_counter()
     deadline = started + budget.route_wall_seconds
@@ -229,7 +230,7 @@ def run_generative(context: Context, problem: Problem, route: str) -> RouteResul
         code = extract_code(gen.text)
         record = {"stage": "first" if attempt == 0 else "repair", "prompt_tokens": gen.prompt_tokens,
                   "new_tokens": gen.new_tokens, "generate_seconds": round(gen.seconds, 3),
-                  "stopped_by": gen.stopped_by, "code": code}
+                  "stopped_by": gen.stopped_by, "code": code, "meta": gen.meta}
         if gen.stopped_by == "max_time":
             result.budget_exhausted = True
         if not code.strip():
@@ -251,7 +252,7 @@ def run_generative(context: Context, problem: Problem, route: str) -> RouteResul
         ]
     result.stages = stages
     result.seconds = time.perf_counter() - started
-    result.gpu_peak_bytes = int(torch.cuda.max_memory_allocated())
+    result.gpu_peak_bytes = int(torch.cuda.max_memory_allocated()) if torch is not None else None
     return result
 
 

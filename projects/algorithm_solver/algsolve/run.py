@@ -85,14 +85,14 @@ def judge_selfcheck() -> dict:
     return checks
 
 
-def contract_line(run_name: str, contract: dict, digest: str) -> str:
-    model = contract["model"]
+def contract_line(run_name: str, contract: dict, digest: str, solver: str = "qwen") -> str:
+    model = contract["model"] if solver == "qwen" else contract["solvers"][solver]
     return (
         f"[run-contract] run_name={run_name} pairs_input_spec=contracts/sample_manifest.json@{digest[:12]} "
         f"resume_from=none resume_stage=none decode={model['decoding']} "
         f"eval_dataset_paths=data/derived/problems.jsonl,data/derived/tests device=cuda schedule=none "
         f"runtime_mode=normal_rocm sweep_mode=live model={model['repo']}@{model['revision'][:12]} "
-        f"thinking={model['thinking']} route_wall_seconds={contract['budgets']['route_wall_seconds']} "
+        f"solver={solver} thinking={model.get('thinking', model.get('effort'))} route_wall_seconds={contract['budgets']['route_wall_seconds']} "
         f"first_max_new_tokens={contract['budgets']['first_attempt_max_new_tokens']} "
         f"repair_max_new_tokens={contract['budgets']['repair_max_new_tokens']} repairs={contract['budgets']['repairs']}"
     )
@@ -237,6 +237,8 @@ def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--run-name", required=True)
     parser.add_argument("--stages", default="fit,recognition,solving,report")
+    parser.add_argument("--solver", choices=("qwen", "claude", "codex"), default="qwen",
+                        help="generator for the generative routes; lookup, embedding, classifier and judge are shared")
     parser.add_argument("--limit", type=int, default=None,
                         help="smoke test: first N recognition queries and N solving problems per source")
     args = parser.parse_args(argv)
@@ -255,11 +257,12 @@ def main(argv: list[str] | None = None) -> int:
 
     probe = gpu_probe()
     selfcheck = judge_selfcheck()
-    line = contract_line(args.run_name, contract, digest)
+    line = contract_line(args.run_name, contract, digest, args.solver)
     print(line, flush=True)
     meta_path = run_dir / "run_meta.json"
     meta = json.loads(meta_path.read_text()) if meta_path.exists() else {"sessions": []}
-    meta.update(run_name=args.run_name, contract=contract, manifest_sha256=digest, contract_line=line)
+    meta.update(run_name=args.run_name, contract=contract, manifest_sha256=digest, contract_line=line,
+                solver=args.solver)
     meta["sessions"].append({
         "started": time.strftime("%Y-%m-%dT%H:%M:%S%z"), "stages": stages, "gpu_probe": probe,
         "judge_selfcheck": selfcheck, "git_commit": git("rev-parse", "HEAD"),
@@ -276,7 +279,12 @@ def main(argv: list[str] | None = None) -> int:
     manifest = splits.load_manifest()
     problems = splits.load_all()
     entries = splits.read_index_entries()
-    generator = Generator()
+    if args.solver == "qwen":
+        generator = Generator()
+    else:
+        from .cli_solvers import SOLVERS
+
+        generator = SOLVERS[args.solver]()
     embedder = Embedder()
 
     if "fit" in stages:
@@ -289,7 +297,19 @@ def main(argv: list[str] | None = None) -> int:
     if "recognition" in stages:
         stage_recognition(run_dir, context, entries, problems, manifest, paraphrases, args.limit)
     if "solving" in stages:
-        stage_solving(run_dir, context, problems, manifest, args.limit)
+        from .cli_solvers import SolverUnavailable
+
+        try:
+            stage_solving(run_dir, context, problems, manifest, args.limit)
+        except SolverUnavailable as exc:
+            # Usage limit or transport failure: nothing is recorded for the item in
+            # flight; rerunning the same command resumes from the next unfinished item.
+            print(f"[solver-unavailable] {exc}", flush=True)
+            meta = json.loads(meta_path.read_text())
+            meta["sessions"][-1]["stopped"] = f"solver unavailable: {exc}"
+            meta_path.write_text(json.dumps(meta, indent=1) + "\n")
+            report.build(run_dir)
+            return 3
     meta = json.loads(meta_path.read_text())
     meta["sessions"][-1].update(finished=time.strftime("%Y-%m-%dT%H:%M:%S%z"),
                                 host_max_rss_bytes=resource.getrusage(resource.RUSAGE_SELF).ru_maxrss * 1024)

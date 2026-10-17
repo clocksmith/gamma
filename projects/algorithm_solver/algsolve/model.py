@@ -23,6 +23,7 @@ class Generation:
     new_tokens: int
     seconds: float
     stopped_by: str               # eos | max_new_tokens | max_time
+    meta: dict | None = None      # backend details (CLI usage, reported cost, tool use)
 
 
 class Generator:
