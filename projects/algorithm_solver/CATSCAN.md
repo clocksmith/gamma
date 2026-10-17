@@ -4,11 +4,11 @@ Parent: [Gamma research projects](../CATSCAN.md)
 
 ## Target
 
-Measure whether lookup, retrieval, or pattern classification with templates makes a small local model faster or more reliable than the same model alone.
+Build and measure example-gated retrieval of stored algorithm solutions. Separately investigate deterministic component composition and compare both against model generation under frozen evidence contracts.
 
 ## Authority
 
-- Owns imported problem records, the sandboxed judge, the four routes, frozen samples, and comparison reports.
+- Owns imported problem records, the sandboxed judge, the four comparison routes, the editor-facing answer interface, index-only mining, frozen samples, and comparison reports.
 - Does not claim unseen-problem generalization, benchmark-judge acceptance, or results beyond the contract's model and backend.
 
 ## Scope
@@ -23,7 +23,9 @@ Measure whether lookup, retrieval, or pattern classification with templates make
 ## Invariants
 
 - Expected outputs never enter the sandbox; verdicts fail closed.
-- Solving problems and their aliases stay out of lookup, retrieval, and classifier training.
+- Held-out solving problems and aliases stay out of research lookup, retrieval, mining and training. The existing separate all-corpus service index is only for known-problem retrieval; it cannot supply research comparisons or vocabulary mining.
+- Editor answers require query-public-example verification; stored-reference validation is not query correctness. Missing sandbox or examples fails closed.
+- Expanded vocabulary candidates reserve fresh confirmation families before mining. Structural recurrence alone is not a tested component.
 - Generative routes share one model, budget, and repair allowance; repairs see public examples only.
 - Evidence levels stay separate: example-passed, independent-tests-passed, benchmark-judge-accepted.
 
@@ -33,7 +35,7 @@ Measure whether lookup, retrieval, or pattern classification with templates make
 
 ## Non-goals
 
-- Training, live-page integration, or use during assessments without explicit permission.
+- Training, production editor hosting, automatic insertion, or use during assessments. The user authorized preparing a future editor mode; this lane owns its research interface, not a production web application.
 
 ## Freedom
 
