@@ -1,0 +1,78 @@
+{
+ "run_contract_version": 1,
+ "dataset_label": "Held out from our pipeline; prior model exposure unknown.",
+ "interpretation": "Initial comparison on a small frozen sample; not a ranking.",
+ "model": {
+  "repo": "Qwen/Qwen3.5-4B",
+  "revision": "851bf6e806efd8d0a36b00ddf55e13ccb7b8cd0a",
+  "dtype": "bfloat16",
+  "backend": "transformers 5.13.1, torch 2.12.1+rocm7.2, Radeon 8060S (gfx1151)",
+  "thinking": false,
+  "decoding": "greedy",
+  "requests": "one at a time"
+ },
+ "embedding_model": {
+  "repo": "Qwen/Qwen3-Embedding-0.6B",
+  "path": "~/.local/share/doppler/capsule-baselines/20260906/source-checkpoints/qwen-embedding-source-97b0c614",
+  "model_safetensors_sha256": "0437e45c94563b09e13cb7a64478fc406947a93cb34a7e05870fc8dcd48e23fd",
+  "use": "read in place"
+ },
+ "budgets": {
+  "first_attempt_max_new_tokens": 1024,
+  "repair_max_new_tokens": 1024,
+  "repairs": 1,
+  "repair_shares_route_budget": true,
+  "route_wall_seconds": 120,
+  "route_wall_covers": [
+   "classification",
+   "retrieval",
+   "generation",
+   "repair",
+   "public-example judging"
+  ],
+  "judge_wall_seconds": 30,
+  "judge_reserve_seconds": 10,
+  "min_repair_seconds": 15,
+  "retrieval_k": 2,
+  "repair_feedback": "public examples only; hidden tests never reach a route",
+  "final_scoring": "public and hidden tests judged after the route returns; reported separately and added to time-to-checked-answer"
+ },
+ "judge_limits": {
+  "default_cpu_seconds_per_test": 2,
+  "default_memory_bytes": 536870912,
+  "memory_limit_kind": "RLIMIT_AS (address space)",
+  "output_cap_bytes": 1048576,
+  "max_processes": 16,
+  "codeforces": "dataset time and memory limits (C++-calibrated) applied as given",
+  "functional_cpu_budget": "per-test CPU seconds x number of tests, shared by one harness process",
+  "float_tolerance": "rel/abs 1e-5",
+  "interpreter": "/usr/bin/python3 3.14 stdlib only (no sortedcontainers)",
+  "isolation": "bubblewrap: all namespaces unshared, /usr read-only, task dir read-only, tmpfs /tmp, cleared environment"
+ },
+ "evidence_levels": {
+  "example_passed": "passes the public examples shown in the statement",
+  "independent_tests_passed": "passes the full hidden test set",
+  "benchmark_judge_accepted": "not evaluated in this run"
+ },
+ "sample": {
+  "manifest": "contracts/sample_manifest.json",
+  "manifest_sha256": "40da673a01f48bab08fe6c07a07f493c603e0a34c858c72c2282fcd487fb1bd5",
+  "seed": 20261017,
+  "solving_problems": 150,
+  "recognition_queries": 200,
+  "recognition_groups": 125,
+  "dev_queries": 60
+ },
+ "reporting": {
+  "recognition_unit": "group (source problem or sibling family)",
+  "solving_unit": "problem",
+  "intervals": "95% bootstrap, 2000 resamples, seed 20261017",
+  "latency": "median and p95 per route; stage breakdown; time to checked answer"
+ },
+ "not_in_scope": [
+  "training",
+  "automatic corpus feedback",
+  "live-page integration",
+  "other models or serving backends"
+ ]
+}
