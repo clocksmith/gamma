@@ -346,8 +346,10 @@ def render_markdown(report: dict) -> str:
     for route in ROUTE_ORDER:
         s = sol["routes"].get(route)
         if s:
+            stops = s.get("generation_stopped_by")
             lines.append(f"- {route}: " + ", ".join(f"{k}={v}" for k, v in s["mean_stage_seconds"].items())
-                         + f"; GPU peak {s['gpu_peak_gb_max']} GB")
+                         + f"; GPU peak {s['gpu_peak_gb_max']} GB"
+                         + (f"; generation stopped by {stops}" if stops else ""))
     lines += [
         "",
         "## Evidence levels",

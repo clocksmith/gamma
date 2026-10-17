@@ -231,6 +231,7 @@ def judge_stdin(
         return Verdict(False, NO_TESTS, 0, 0, 0.0)
     total, passed, spent = len(tests), 0, 0.0
     first = None
+    last_observed = None
     stderr_tail = ""
     for i, test in enumerate(tests):
         remaining = wall_seconds - spent
@@ -261,6 +262,7 @@ def judge_stdin(
             reason = RUNTIME_ERROR
         else:
             observed = run.stdout.decode("utf-8", "replace")
+            last_observed = observed
             if checker_source is None:
                 ok = tokens_equal(test.expected, observed)
             else:
@@ -272,7 +274,8 @@ def judge_stdin(
         if reason is None:
             passed += 1
             continue
-        first = first or {"i": i, "reason": reason, "exit_code": run.exit_code, "signal": run.signal}
+        first = first or {"i": i, "reason": reason, "exit_code": run.exit_code, "signal": run.signal,
+                          "observed": (last_observed or "")[:500] if reason == WRONG_ANSWER else None}
         if stop_on_first_failure:
             break
     if passed == total:
