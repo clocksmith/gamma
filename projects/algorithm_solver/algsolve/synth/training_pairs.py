@@ -118,9 +118,13 @@ def assign_splits(pairs):
             key = parent[key]
         return key
     for pair in pairs:
-        uid, pattern_id = root('uid:' + pair['uid']), root('pattern:' + pair['pattern_sha256'])
-        if uid != pattern_id:
-            parent[max(uid, pattern_id)] = min(uid, pattern_id)
+        identities = ['uid:' + pair['uid'], 'pattern:' + pair['pattern_sha256']]
+        if pair.get('problem_family'):
+            identities.append('family:' + pair['problem_family'])
+        for identity in identities[1:]:
+            left, right = root(identities[0]), root(identity)
+            if left != right:
+                parent[max(left, right)] = min(left, right)
     groups = {}
     for key in parent:
         groups.setdefault(root(key), []).append(key)

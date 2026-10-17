@@ -1,0 +1,394 @@
+{
+  "schema": "algsolve.call-graph-proposals.v2",
+  "status": "development proposals; unqualified until fresh independent judging",
+  "rows": [
+    {
+      "uid": "lcd:1343",
+      "nodes": [
+        {
+          "operator": "window_sums",
+          "arguments": [
+            "arr",
+            "k"
+          ],
+          "output": "sums"
+        }
+      ],
+      "answer": "sum(v >= k * threshold for v in sums)",
+      "proposer": "codex-manual-development-composition",
+      "basis": "permitted research-index development task; explicit existing algorithm contracts"
+    },
+    {
+      "uid": "lcd:643",
+      "nodes": [
+        {
+          "operator": "window_sums",
+          "arguments": [
+            "nums",
+            "k"
+          ],
+          "output": "sums"
+        }
+      ],
+      "answer": "max(sums) / k",
+      "proposer": "codex-manual-development-composition",
+      "basis": "permitted research-index development task; explicit existing algorithm contracts"
+    },
+    {
+      "uid": "lcd:1423",
+      "nodes": [
+        {
+          "operator": "window_sums",
+          "arguments": [
+            "cardPoints",
+            "len(cardPoints) - k"
+          ],
+          "output": "sums"
+        }
+      ],
+      "answer": "sum(cardPoints) - min(sums)",
+      "proposer": "codex-manual-development-composition",
+      "basis": "permitted research-index development task; explicit existing algorithm contracts"
+    },
+    {
+      "uid": "lcd:2090",
+      "nodes": [
+        {
+          "operator": "window_sums",
+          "arguments": [
+            "nums",
+            "2*k+1"
+          ],
+          "output": "sums"
+        }
+      ],
+      "answer": "[-1]*k + [v//(2*k+1) for v in sums] + [-1]*k if sums else [-1]*len(nums)",
+      "proposer": "codex-manual-development-composition",
+      "basis": "permitted research-index development task; explicit existing algorithm contracts"
+    },
+    {
+      "uid": "lcd:1749",
+      "nodes": [
+        {
+          "operator": "prefix_sums",
+          "arguments": [
+            "nums"
+          ],
+          "output": "prefix"
+        }
+      ],
+      "answer": "max(prefix) - min(prefix)",
+      "proposer": "codex-manual-development-composition",
+      "basis": "permitted research-index development task; explicit existing algorithm contracts"
+    },
+    {
+      "uid": "lcd:2559",
+      "nodes": [
+        {
+          "operator": "prefix_sums",
+          "arguments": [
+            "[w[0] in 'aeiou' and w[-1] in 'aeiou' for w in words]"
+          ],
+          "output": "prefix"
+        }
+      ],
+      "answer": "[prefix[r+1] - prefix[l] for l,r in queries]",
+      "proposer": "codex-manual-development-composition",
+      "basis": "permitted research-index development task; explicit existing algorithm contracts"
+    },
+    {
+      "uid": "lcd:3070",
+      "nodes": [
+        {
+          "operator": "prefix_2d",
+          "arguments": [
+            "grid"
+          ],
+          "output": "prefix"
+        }
+      ],
+      "answer": "sum(sum(v <= k for v in row[1:]) for row in prefix[1:])",
+      "proposer": "codex-manual-development-composition",
+      "basis": "permitted research-index development task; explicit existing algorithm contracts"
+    },
+    {
+      "uid": "lcd:300",
+      "nodes": [
+        {
+          "operator": "lis_length",
+          "arguments": [
+            "nums",
+            "True"
+          ],
+          "output": "length"
+        }
+      ],
+      "answer": "length",
+      "proposer": "codex-manual-development-composition",
+      "basis": "permitted research-index development task; explicit existing algorithm contracts"
+    },
+    {
+      "uid": "lcd:2826",
+      "nodes": [
+        {
+          "operator": "lis_length",
+          "arguments": [
+            "nums",
+            "False"
+          ],
+          "output": "length"
+        }
+      ],
+      "answer": "len(nums) - length",
+      "proposer": "codex-manual-development-composition",
+      "basis": "permitted research-index development task; explicit existing algorithm contracts"
+    },
+    {
+      "uid": "lcd:354",
+      "nodes": [
+        {
+          "operator": "lis_length",
+          "arguments": [
+            "[h for w,h in sorted(envelopes, key=lambda e: (e[0], -e[1]))]",
+            "True"
+          ],
+          "output": "length"
+        }
+      ],
+      "answer": "length",
+      "proposer": "codex-manual-development-composition",
+      "basis": "permitted research-index development task; explicit existing algorithm contracts"
+    },
+    {
+      "uid": "lcd:3231",
+      "nodes": [
+        {
+          "operator": "lis_length",
+          "arguments": [
+            "[-v for v in nums]",
+            "False"
+          ],
+          "output": "length"
+        }
+      ],
+      "answer": "length",
+      "proposer": "codex-manual-development-composition",
+      "basis": "permitted research-index development task; explicit existing algorithm contracts"
+    },
+    {
+      "uid": "lcd:1392",
+      "nodes": [
+        {
+          "operator": "prefix_function",
+          "arguments": [
+            "s"
+          ],
+          "output": "prefix"
+        }
+      ],
+      "answer": "s[:prefix[-1]]",
+      "proposer": "codex-manual-development-composition",
+      "basis": "permitted research-index development task; explicit existing algorithm contracts"
+    },
+    {
+      "uid": "lcd:686",
+      "nodes": [
+        {
+          "operator": "find_all",
+          "arguments": [
+            "a * ((len(b)+len(a)-1)//len(a)+1)",
+            "b"
+          ],
+          "output": "positions"
+        }
+      ],
+      "answer": "(positions[0]+len(b)+len(a)-1)//len(a) if positions else -1",
+      "proposer": "codex-manual-development-composition",
+      "basis": "permitted research-index development task; explicit existing algorithm contracts"
+    },
+    {
+      "uid": "lcd:214",
+      "nodes": [
+        {
+          "operator": "prefix_function",
+          "arguments": [
+            "s + '#' + s[::-1]"
+          ],
+          "output": "prefix"
+        }
+      ],
+      "answer": "s[prefix[-1]:][::-1] + s",
+      "proposer": "codex-manual-development-composition",
+      "basis": "permitted research-index development task; explicit existing algorithm contracts"
+    },
+    {
+      "uid": "lcd:28",
+      "nodes": [
+        {
+          "operator": "find_all",
+          "arguments": [
+            "haystack",
+            "needle"
+          ],
+          "output": "positions"
+        }
+      ],
+      "answer": "positions[0] if positions else -1",
+      "proposer": "codex-manual-development-composition",
+      "basis": "permitted research-index development task; explicit existing algorithm contracts"
+    },
+    {
+      "uid": "lcd:2223",
+      "nodes": [
+        {
+          "operator": "z_function",
+          "arguments": [
+            "s"
+          ],
+          "output": "z"
+        }
+      ],
+      "answer": "sum(z)",
+      "proposer": "codex-manual-development-composition",
+      "basis": "permitted research-index development task; explicit existing algorithm contracts"
+    },
+    {
+      "uid": "lcd:56",
+      "nodes": [
+        {
+          "operator": "merge_intervals",
+          "arguments": [
+            "intervals"
+          ],
+          "output": "merged"
+        }
+      ],
+      "answer": "merged",
+      "proposer": "codex-manual-development-composition",
+      "basis": "permitted research-index development task; explicit existing algorithm contracts"
+    },
+    {
+      "uid": "lcd:57",
+      "nodes": [
+        {
+          "operator": "merge_intervals",
+          "arguments": [
+            "intervals + [newInterval]"
+          ],
+          "output": "merged"
+        }
+      ],
+      "answer": "merged",
+      "proposer": "codex-manual-development-composition",
+      "basis": "permitted research-index development task; explicit existing algorithm contracts"
+    },
+    {
+      "uid": "lcd:1063",
+      "nodes": [
+        {
+          "operator": "next_index",
+          "arguments": [
+            "nums",
+            "lambda a,b: a < b"
+          ],
+          "output": "nexts"
+        }
+      ],
+      "answer": "sum(j-i for i,j in enumerate(nexts))",
+      "proposer": "codex-manual-development-composition",
+      "basis": "permitted research-index development task; explicit existing algorithm contracts"
+    },
+    {
+      "uid": "lcd:739",
+      "nodes": [
+        {
+          "operator": "next_index",
+          "arguments": [
+            "temperatures",
+            "lambda a,b: a > b"
+          ],
+          "output": "nexts"
+        }
+      ],
+      "answer": "[j-i if j < len(temperatures) else 0 for i,j in enumerate(nexts)]",
+      "proposer": "codex-manual-development-composition",
+      "basis": "permitted research-index development task; explicit existing algorithm contracts"
+    },
+    {
+      "uid": "lcd:1019",
+      "nodes": [
+        {
+          "operator": "list_values",
+          "arguments": [
+            "head"
+          ],
+          "output": "values"
+        },
+        {
+          "operator": "next_index",
+          "arguments": [
+            "values",
+            "lambda a,b: a > b"
+          ],
+          "output": "nexts"
+        }
+      ],
+      "answer": "[values[j] if j < len(values) else 0 for j in nexts]",
+      "proposer": "codex-manual-development-composition",
+      "basis": "permitted research-index development task; explicit existing algorithm contracts"
+    },
+    {
+      "uid": "lcd:210",
+      "nodes": [
+        {
+          "operator": "adjacency",
+          "arguments": [
+            "numCourses",
+            "[(b,a) for a,b in prerequisites]",
+            "True",
+            "False"
+          ],
+          "output": "adj"
+        },
+        {
+          "operator": "topo",
+          "arguments": [
+            "numCourses",
+            "adj"
+          ],
+          "output": "order"
+        }
+      ],
+      "answer": "order if order is not None else []",
+      "proposer": "codex-manual-development-composition",
+      "basis": "permitted research-index development task; explicit existing algorithm contracts"
+    },
+    {
+      "uid": "lcd:743",
+      "nodes": [
+        {
+          "operator": "adjacency",
+          "arguments": [
+            "n+1",
+            "times",
+            "True",
+            "True"
+          ],
+          "output": "adj"
+        },
+        {
+          "operator": "dijkstra",
+          "arguments": [
+            "n+1",
+            "adj",
+            "[k]"
+          ],
+          "output": "dist"
+        }
+      ],
+      "answer": "max(dist[1:]) if max(dist[1:]) < float('inf') else -1",
+      "proposer": "codex-manual-development-composition",
+      "basis": "permitted research-index development task; explicit existing algorithm contracts"
+    }
+  ]
+}
