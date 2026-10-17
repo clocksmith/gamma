@@ -472,7 +472,81 @@ class c_Trie:
         return node is not None and self.ending[node] > 0
 """)
 
+component("structures", """
+Conversions for LeetCode linked lists and binary trees (ListNode / TreeNode are provided by the harness).
+c_list_values(head) -> list of values; c_list_from(values) -> head (None if empty).
+c_tree_values(root) -> LeetCode level-order list (trailing None trimmed); c_tree_from(values) -> root.
+""", """
+def c_list_values(head):
+    out = []
+    while head is not None:
+        out.append(head.val)
+        head = head.next
+    return out
+
+
+def c_list_from(values):
+    head = None
+    for v in reversed(list(values)):
+        head = ListNode(v, head)
+    return head
+
+
+def c_tree_values(root):
+    out, queue = [], [root]
+    while queue:
+        node = queue.pop(0)
+        if node is None:
+            out.append(None)
+            continue
+        out.append(node.val)
+        queue.append(node.left)
+        queue.append(node.right)
+    while out and out[-1] is None:
+        out.pop()
+    return out
+
+
+def c_tree_from(values):
+    values = list(values)
+    if not values or values[0] is None:
+        return None
+    root = TreeNode(values[0])
+    queue, i = [root], 1
+    while queue and i < len(values):
+        node = queue.pop(0)
+        if i < len(values) and values[i] is not None:
+            node.left = TreeNode(values[i])
+            queue.append(node.left)
+        i += 1
+        if i < len(values) and values[i] is not None:
+            node.right = TreeNode(values[i])
+            queue.append(node.right)
+        i += 1
+    return root
+""")
+
 COMPONENT_DEPENDENCIES = {"kruskal": ["dsu"]}
+
+
+def provided_names() -> dict[str, str]:
+    """Map each top-level c_* function/class to the component that defines it."""
+    import ast
+
+    out = {}
+    for name, spec in COMPONENTS.items():
+        for node in ast.parse(spec["source"]).body:
+            if isinstance(node, (ast.FunctionDef, ast.ClassDef)):
+                out[node.name] = name
+    return out
+
+
+def referenced(source: str) -> list[str]:
+    """Components whose c_* names appear in the given hole text."""
+    import re
+
+    names = provided_names()
+    return sorted({names[m] for m in re.findall(r"\bc_\w+", source) if m in names})
 
 
 def resolve(names: list[str]) -> list[str]:

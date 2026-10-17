@@ -149,6 +149,7 @@ def render(composition: dict | str, *, method: str | None = None, params: list[s
     for stage in stages:
         needed += SKELETON_COMPONENTS.get(stage["skeleton"], [])
     needed += composition.get("components") or []
+    needed += comp.referenced(json.dumps(composition))
     names = comp.resolve(list(dict.fromkeys(needed)))
 
     if io.get("mode", "functional") == "functional":

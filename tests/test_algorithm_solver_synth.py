@@ -264,3 +264,25 @@ def test_render_rejects_out_of_grammar_holes():
         render.render(bad, method="f", params=["x"])
     with pytest.raises(grammar.GrammarError):
         render.render({"stages": [{"skeleton": "nope", "inputs": [], "holes": {}}], "answer": "1"}, method="f", params=[])
+
+
+def test_structure_conversions_round_trip():
+    ns = load("structures")
+    exec("class ListNode:\n    def __init__(self, val=0, next=None):\n        self.val, self.next = val, next\n"
+         "class TreeNode:\n    def __init__(self, val=0, left=None, right=None):\n"
+         "        self.val, self.left, self.right = val, left, right\n", ns)
+    for values in ([], [1], [3, 1, 2, 2]):
+        assert ns["c_list_values"](ns["c_list_from"](values)) == values
+    for values in ([], [1], [4, 2, 7, 1, 3, None, 9], [1, None, 2, None, 3]):
+        assert ns["c_tree_values"](ns["c_tree_from"](values)) == values
+    assert grammar.check_expr("set(a).union(b)").nodes > 0
+
+
+def test_referenced_components_are_included_automatically():
+    composition = {"stages": [{"skeleton": "formula", "inputs": ["nums"], "output": "n",
+                               "holes": {"value": "c_lis_length(nums)"}}], "answer": "n"}
+    rendered = render.render(composition, method="lengthOfLIS", params=["nums"])
+    assert "lis" in rendered.components
+    ns: dict = {}
+    exec(rendered.source, ns)
+    assert ns["Solution"]().lengthOfLIS([10, 9, 2, 5, 3, 7, 101, 18]) == 4
