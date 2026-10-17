@@ -4,39 +4,40 @@ Parent: [Gamma research projects](../CATSCAN.md)
 
 ## Target
 
-Build and measure example-gated retrieval of stored algorithm solutions. Separately investigate deterministic component composition and compare both against model generation under frozen evidence contracts.
+Recognize stored solutions; separately learn non-autoregressive composition with deterministic assembly/validation. Compare against search and autoregressive generation.
 
 ## Authority
 
-- Owns imported problem records, the sandboxed judge, the four comparison routes, the editor-facing answer interface, index-only mining, frozen samples, and comparison reports.
-- Does not claim unseen-problem generalization, benchmark-judge acceptance, or results beyond the contract's model and backend.
+Owns problem imports, sandbox judging, comparison routes, research answer interfaces, index-only mining, graph datasets, frozen samples and reports. No unsupported generalization or benchmark-acceptance claims.
 
 ## Scope
 
-- Applies to `algsolve/`, `contracts/`, committed `findings/`, and run outputs under `runs/`.
+`algsolve/`, `contracts/`, `findings/`, `runs/`.
 
 ## Contracts
 
-- Input: [Run contract](contracts/run_contract.json) and the committed [sample manifest](contracts/sample_manifest.json).
-- Output: Per-item results and a report rebuilt from them.
+- Input: [run contract](contracts/run_contract.json), [sample manifest](contracts/sample_manifest.json).
+- Output: per-item evidence and rebuilt reports.
 
 ## Invariants
 
 - Expected outputs never enter the sandbox; verdicts fail closed.
-- Held-out solving problems and aliases stay out of research lookup, retrieval, mining and training. The existing separate all-corpus service index is only for known-problem retrieval; it cannot supply research comparisons or vocabulary mining.
-- Editor answers require query-public-example verification; stored-reference validation is not query correctness. Missing sandbox or examples fails closed.
-- Expanded vocabulary candidates reserve fresh confirmation families before mining. Structural recurrence alone is not a tested component.
-- Generative routes share one model, budget, and repair allowance; repairs see public examples only.
-- Evidence levels stay separate: example-passed, independent-tests-passed, benchmark-judge-accepted.
+- Held-out problems/aliases stay outside research retrieval, mining and training. The separate all-corpus service index supplies known-problem retrieval only.
+- Answers require query-public-example verification; stored validation is not query correctness. Missing sandbox/examples fails closed.
+- Graph proposals cannot bypass vocabulary, binding, resource or execution checks. Report first-prediction correctness/complete latency separately from retries/search.
+- Training excludes protected families; shared structural patterns and alternative solutions stay together. Tests do not prove correctness.
+- Reserve fresh confirmation families before vocabulary mining. Structural recurrence does not verify components.
+- Generative comparisons share model/budget/repair allowance; repairs see public examples only.
+- Separate example-passed, independent-tests-passed and benchmark-judge-accepted evidence.
 
 ## Acceptance
 
-- [Judge tests](../../tests/test_algorithm_solver_judge.py) and [lane tests](../../tests/test_algorithm_solver_lane.py) pass before any run.
+[Judge](../../tests/test_algorithm_solver_judge.py) and [lane](../../tests/test_algorithm_solver_lane.py) tests pass before runs.
 
 ## Non-goals
 
-- Training, production editor hosting, automatic insertion, or use during assessments. The user authorized preparing a future editor mode; this lane owns its research interface, not a production web application.
+Unbounded training, automatic downloads, production editor hosting, automatic insertion, assessment use.
 
 ## Freedom
 
-Any mechanism is permitted if it preserves these boundaries and passes the acceptance evidence.
+Any implementation preserving these boundaries and acceptance evidence.
