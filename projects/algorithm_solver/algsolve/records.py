@@ -89,4 +89,5 @@ def write_hidden_tests(problem: Problem, tests: list[dict[str, Any]]) -> None:
 def load_hidden_tests(problem: Problem) -> list[dict[str, Any]]:
     if not problem.hidden_tests_path:
         return []
-    return json.loads((DERIVED / problem.hidden_tests_path).read_text(encoding="utf-8"))
+    from .test_corrections import apply
+    return apply(problem, json.loads((DERIVED / problem.hidden_tests_path).read_text(encoding="utf-8")))

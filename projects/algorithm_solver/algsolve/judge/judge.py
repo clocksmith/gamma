@@ -15,6 +15,7 @@ from pathlib import Path
 from typing import Any
 
 from . import sandbox
+from .functional_semantics import VALIDATORS
 
 HARNESS_PATH = Path(__file__).with_name("harness_functional.py")
 FLOAT_REL_TOL = 1e-5
@@ -43,6 +44,7 @@ class FunctionalTest:
     # "return": compare the return value; "arg:<k>": compare positional arg k
     # after the call (in-place problems).
     compare: str = "return"
+    validator: str | None = None  # Host-only; never sent to candidate execution.
 
 
 @dataclass
@@ -94,6 +96,14 @@ def judge_functional(
 ) -> Verdict:
     if not tests:
         return Verdict(False, NO_TESTS, 0, 0, 0.0)
+    for index, test in enumerate(tests):
+        if test.validator is not None:
+            try:
+                if test.compare != 'return' or test.validator not in VALIDATORS:
+                    raise ValueError('Unknown functional validator or incompatible comparison')
+                VALIDATORS[test.validator](test.args, None)  # Validate input contract before execution.
+            except (TypeError, ValueError) as error:
+                return Verdict(False, CHECKER_ERROR, len(tests), 0, 0.0, {'i': index, 'detail': str(error)})
     calls = {"entry": entry, "calls": [{"args": t.args, "kwargs": t.kwargs} for t in tests]}
     limits = sandbox.Limits(
         cpu_seconds=max(1, math.ceil(per_test_cpu_seconds * len(tests))),
@@ -191,6 +201,8 @@ def _matches(test: FunctionalTest, record: dict) -> bool:
     if "error" in record:
         return False
     key_present = "result" in record if test.compare == "return" else "args_after" in record
+    if test.validator is not None:
+        return key_present and VALIDATORS[test.validator](test.args, _observed(test, record))
     return key_present and values_equal(test.expected, _observed(test, record))
 
 

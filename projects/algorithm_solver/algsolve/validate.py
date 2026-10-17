@@ -31,10 +31,14 @@ def stdin_tests(raw: list[dict]) -> list[judge.StdinTest]:
 
 def judge_problem(problem: Problem, source: str, raw_tests: list[dict], *, wall_seconds: float = 30.0) -> judge.Verdict:
     if problem.io_mode == "functional":
+        tests = functional_tests(raw_tests)
+        if problem.slug == 'course-schedule-ii' and problem.entry.get('method') == 'findOrder':
+            for test in tests:
+                test.validator = 'topological_order'
         return judge.judge_functional(
             source,
             problem.entry,
-            functional_tests(raw_tests),
+            tests,
             per_test_cpu_seconds=problem.cpu_seconds,
             wall_seconds=wall_seconds,
             memory_bytes=problem.memory_bytes,
@@ -59,6 +63,9 @@ def content_hash(problem: Problem) -> str:
         json.dumps([problem.entry, problem.cpu_seconds, problem.memory_bytes, problem.checker], sort_keys=True),
         json.dumps(problem.import_notes.get("unusable")),
         (Path(__file__).parent / "judge" / "harness_functional.py").read_text(encoding="utf-8"),
+        (Path(__file__).parent / "judge" / "judge.py").read_text(encoding="utf-8"),
+        (Path(__file__).parent / "judge" / "functional_semantics.py").read_text(encoding="utf-8"),
+        Path(__file__).read_text(encoding="utf-8"),
     ):
         digest.update(part.encode("utf-8"))
         digest.update(b"\0")
