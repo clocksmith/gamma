@@ -9,6 +9,19 @@ Build a fast algorithm-problem solver whose work comes mainly from retrieval, co
 verified components, and verification, with little generative inference at runtime. Measure every
 claim on a frozen sample with hidden-test judging, and compare against plain prompting.
 
+## Two goals
+
+- Goal 1 (minimal, primary): index the whole corpus with verified solutions and answer exact and
+  similar-sounding problems by retrieval (embed, rerank, return or adapt the stored solution).
+  Exact part is done: `python -m algsolve.corpus build|selftest` indexed 3,353 LeetCode problems;
+  3,353/3,353 exact statements matched themselves, 2,538/2,538 returned verified solutions passed
+  hidden tests, p50 0.10 s (`findings/corpus-selftest/summary.json`). Open: paraphrases and sibling
+  variants over the whole corpus, a reranker for I/II/III siblings, Codeforces/AtCoder coverage.
+- Goal 2 (experimental): retrieval-guided deterministic composition (embed, rerank, typed
+  components, bounded search). See findings 3 and next steps 2-5.
+
+Committed result summaries live in `findings/` (runs/ and data/ are gitignored and machine-local).
+
 ## What we learned
 
 1. Lookup works for known problems. Recognition track (`runs/baseline-v2`, 200 queries / 125 groups):
@@ -17,8 +30,8 @@ claim on a frozen sample with hidden-test judging, and compare against plain pro
    matches with score margins of 0.0015-0.010.
 2. For strong models, retrieval and templates add nothing. Interim paired results against
    model_alone on problems with independent tests (likely exposed to these models):
-   - claude-v1 (121 problems): model_alone 0.826; retrieval 0.826 (difference 0.0 [-0.025, 0.025]);
-     classify_template 0.818 (-0.008 [-0.025, 0.0]); p50 route 6 s.
+   - claude-v1 (complete, 150 problems, 121 with independent tests): model_alone 0.826; retrieval
+     0.826 (difference 0.0 [-0.025, 0.025]); classify_template 0.818 (-0.008 [-0.025, 0.0]); p50 route 6 s.
    - codex-v1 (109 problems): model_alone 0.817; retrieval 0.817 (0.0 [-0.028, 0.028]);
      classify_template 0.789 (-0.028 [-0.055, 0.0]); p50 route 9-10 s.
    - Retrieval wins one problem and loses one against each solver's own model_alone; templates gain
@@ -63,13 +76,29 @@ claim on a frozen sample with hidden-test judging, and compare against plain pro
 
 Python: `/home/x/deco/gamma/.venv_rocm/bin/python`, run from this directory (the plain `.venv` lacks NumPy).
 
+## Setting up on another machine
+
+`data/` and `runs/` are not in git. To regenerate (Linux with bubblewrap and prlimit is required;
+the judge fails closed without them):
+
+1. Python env with torch, transformers >= 5.2, peft, datasets, pyarrow, numpy, scikit-learn 1.9.1,
+   huggingface_hub.
+2. `python -m algsolve.fetch` (approved sources, about 9.7 GB including Qwen3.5-4B; `--only datasets
+   --only doocs` skips the model, which only the qwen solver needs).
+3. Embedding model: download `Qwen/Qwen3-Embedding-0.6B` and set `ALGSOLVE_EMBEDDING_DIR` to it;
+   `embed.py` verifies model.safetensors sha256 0437e45c... Use `ALGSOLVE_DEVICE=cpu` without a GPU.
+4. `python -m algsolve.prepare inspect`, then `prepare freeze` (rebuilds the index; it refuses to
+   redraw the committed manifest and exits after writing the index), then `prepare decode`.
+5. Goal 1: `python -m algsolve.corpus build` then `python -m algsolve.corpus selftest`.
+6. `claude -p` / `codex exec` solvers need those CLIs logged in; the qwen solver needs a GPU.
+
 ## Running at handoff
 
-- `tmux` session `algsolve-codex`: `python -m algsolve.run --run-name codex-v1 --solver codex --stages solving,report`.
-  Leave it to finish; rerunning the same command resumes.
-- `tmux` session `algsolve-claude` (claude-v1, about 59 items left) uses Claude. Either let it finish or stop it:
-  `tmux kill-session -t algsolve-claude`. Partial results stay valid; reports rebuild from them.
-- Rebuild any report: `python -m algsolve.run --run-name <run> --stages report` (no model calls).
+- claude-v1 finished (600/600); report in `findings/claude-v1/`.
+- codex-v1 is still running on the original machine (tmux `algsolve-codex`, 125/150 problems when
+  this was written). Its results exist only there; whoever has that machine should rebuild with
+  `python -m algsolve.run --run-name codex-v1 --stages report`, copy `report.md`/`report.json`
+  into `findings/codex-v1/`, commit and push. `findings/codex-v1/` holds the interim snapshot.
 
 ## Next steps (no Claude needed)
 

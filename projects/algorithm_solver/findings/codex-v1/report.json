@@ -1,0 +1,598 @@
+{
+ "run_name": "codex-v1",
+ "label": "Held out from our pipeline; prior model exposure unknown.",
+ "status": "partial",
+ "interpretation": "Initial comparison on a small frozen sample; not a ranking. Results describe the named solver with the contract budgets, not other backends or budgets. Frontier CLI solvers very likely saw these 2024-2025 problems; compare routes, not absolute rates.",
+ "evidence_levels": {
+  "example_passed": "passes the public examples shown in the statement",
+  "independent_tests_passed": "passes the problem's full hidden test set (LeetCodeDataset asserts, LiveCodeBench private tests, Codeforces official tests marked complete)",
+  "benchmark_judge_accepted": "not evaluated in this run (LiveCodeBench's own judge was not run)"
+ },
+ "contract": {
+  "run_contract_version": 1,
+  "dataset_label": "Held out from our pipeline; prior model exposure unknown.",
+  "interpretation": "Initial comparison on a small frozen sample; not a ranking.",
+  "model": {
+   "repo": "Qwen/Qwen3.5-4B",
+   "revision": "851bf6e806efd8d0a36b00ddf55e13ccb7b8cd0a",
+   "dtype": "bfloat16",
+   "backend": "transformers 5.13.1, torch 2.12.1+rocm7.2, Radeon 8060S (gfx1151)",
+   "thinking": false,
+   "decoding": "greedy",
+   "requests": "one at a time"
+  },
+  "embedding_model": {
+   "repo": "Qwen/Qwen3-Embedding-0.6B",
+   "path": "~/.local/share/doppler/capsule-baselines/20260906/source-checkpoints/qwen-embedding-source-97b0c614",
+   "model_safetensors_sha256": "0437e45c94563b09e13cb7a64478fc406947a93cb34a7e05870fc8dcd48e23fd",
+   "use": "read in place"
+  },
+  "budgets": {
+   "first_attempt_max_new_tokens": 1024,
+   "repair_max_new_tokens": 1024,
+   "repairs": 1,
+   "repair_shares_route_budget": true,
+   "route_wall_seconds": 120,
+   "route_wall_covers": [
+    "classification",
+    "retrieval",
+    "generation",
+    "repair",
+    "public-example judging"
+   ],
+   "judge_wall_seconds": 30,
+   "judge_reserve_seconds": 10,
+   "min_repair_seconds": 15,
+   "retrieval_k": 2,
+   "repair_feedback": "public examples only; hidden tests never reach a route",
+   "final_scoring": "public and hidden tests judged after the route returns; reported separately and added to time-to-checked-answer"
+  },
+  "judge_limits": {
+   "default_cpu_seconds_per_test": 2,
+   "default_memory_bytes": 536870912,
+   "memory_limit_kind": "RLIMIT_AS (address space)",
+   "output_cap_bytes": 1048576,
+   "max_processes": 16,
+   "codeforces": "dataset time and memory limits (C++-calibrated) applied as given",
+   "functional_cpu_budget": "per-test CPU seconds x number of tests, shared by one harness process",
+   "float_tolerance": "rel/abs 1e-5",
+   "interpreter": "/usr/bin/python3 3.14 stdlib only (no sortedcontainers)",
+   "isolation": "bubblewrap: all namespaces unshared, /usr read-only, task dir read-only, tmpfs /tmp, cleared environment"
+  },
+  "evidence_levels": {
+   "example_passed": "passes the public examples shown in the statement",
+   "independent_tests_passed": "passes the full hidden test set",
+   "benchmark_judge_accepted": "not evaluated in this run"
+  },
+  "sample": {
+   "manifest": "contracts/sample_manifest.json",
+   "manifest_sha256": "40da673a01f48bab08fe6c07a07f493c603e0a34c858c72c2282fcd487fb1bd5",
+   "seed": 20261017,
+   "solving_problems": 150,
+   "recognition_queries": 200,
+   "recognition_groups": 125,
+   "dev_queries": 60
+  },
+  "reporting": {
+   "recognition_unit": "group (source problem or sibling family)",
+   "solving_unit": "problem",
+   "intervals": "95% bootstrap, 2000 resamples, seed 20261017",
+   "latency": "median and p95 per route; stage breakdown; time to checked answer"
+  },
+  "not_in_scope": [
+   "training",
+   "automatic corpus feedback",
+   "live-page integration",
+   "other models or serving backends"
+  ],
+  "solvers": {
+   "qwen": {
+    "note": "the 'model' section; local transformers/ROCm",
+    "decoding": "greedy",
+    "repo": "Qwen/Qwen3.5-4B",
+    "revision": "851bf6e806efd8d0a36b00ddf55e13ccb7b8cd0a"
+   },
+   "claude": {
+    "harness": "claude -p (Claude Code 2.1.302)",
+    "auth": "subscription",
+    "repo": "claude-opus-5-5",
+    "revision": "harness-managed",
+    "effort": "high",
+    "decoding": "harness default (not greedy)",
+    "tools": "--tools \"\" (none); no MCP, no setting sources, no session persistence",
+    "workdir": "fresh empty temporary directory per call"
+   },
+   "codex": {
+    "harness": "codex exec (codex-cli 0.162.1)",
+    "auth": "subscription",
+    "repo": "gpt-6-astra",
+    "revision": "harness-managed",
+    "effort": "high",
+    "decoding": "harness default (not greedy)",
+    "tools": "no off switch: ephemeral, read-only sandbox, instruction not to run commands; tool items counted per call",
+    "workdir": "fresh empty temporary directory per call"
+   }
+  },
+  "solver_budget_notes": {
+   "token_caps": "enforced for qwen; not enforceable through either CLI, recorded per call",
+   "wall_caps": "route_wall_seconds and judge limits apply to every solver",
+   "repairs": "same single repair with public-example feedback for every solver; CLI calls are stateless, so the repair prompt includes the previous answer and the feedback",
+   "exposure": "frontier models very likely saw 2024-2025 LeetCode/LiveCodeBench/Codeforces problems; compare routes, not absolute rates"
+  }
+ },
+ "contract_line": "[run-contract] run_name=codex-v1 pairs_input_spec=contracts/sample_manifest.json@40da673a01f4 resume_from=none resume_stage=none decode=harness default (not greedy) eval_dataset_paths=data/derived/problems.jsonl,data/derived/tests device=cuda schedule=none runtime_mode=normal_rocm sweep_mode=live model=gpt-6-astra@harness-mana solver=codex thinking=high route_wall_seconds=120 first_max_new_tokens=1024 repair_max_new_tokens=1024 repairs=1",
+ "manifest_sha256": "40da673a01f48bab08fe6c07a07f493c603e0a34c858c72c2282fcd487fb1bd5",
+ "sessions": [
+  {
+   "started": "2026-10-17T13:45:40-0400",
+   "stages": [
+    "solving",
+    "report"
+   ],
+   "gpu_probe": {
+    "torch": "2.12.1+rocm7.2",
+    "hip": "7.2.53211",
+    "cuda_available": true,
+    "device_count": 1,
+    "device": "Radeon 8060S Graphics",
+    "matmul_probe": "ok",
+    "probe_value_finite": true
+   },
+   "judge_selfcheck": {
+    "correct_passes": true,
+    "zero_tests_fail": true,
+    "hang_fails": true,
+    "network_blocked": true
+   },
+   "git_commit": "5e43d321c06248c69364c7252910b66b0ae9f868",
+   "python": "3.14.4",
+   "platform": "Linux-7.0.0-38-generic-x86_64-with-glibc2.43"
+  }
+ ],
+ "solver": "codex",
+ "recognition": {
+  "note": "not run here: lookup does not depend on the solver; see the baseline-v2 run"
+ },
+ "solving": {
+  "problems_expected": 150,
+  "problems_with_all_routes": 125,
+  "problems_with_independent_tests": 121,
+  "routes": {
+   "lookup": {
+    "example_passed_rate_all": {
+     "value": 0.0,
+     "ci95": [
+      0.0,
+      0.0
+     ],
+     "n": 125
+    },
+    "independent_passed_rate": {
+     "value": 0.0,
+     "ci95": [
+      0.0,
+      0.0
+     ],
+     "n": 121
+    },
+    "by_source": {
+     "cf": {
+      "n": 25,
+      "independent_passed": 0,
+      "example_passed": 0
+     },
+     "lcb": {
+      "n": 50,
+      "independent_passed": 0,
+      "example_passed": 0
+     },
+     "lcd": {
+      "n": 50,
+      "independent_passed": 0,
+      "example_passed": 0
+     }
+    },
+    "answered": 0,
+    "route_seconds": {
+     "p50": 0.101,
+     "p95": 0.352,
+     "max": 0.473
+    },
+    "time_to_checked_answer_seconds": {
+     "p50": 0.101,
+     "p95": 0.352
+    },
+    "mean_stage_seconds": {
+     "embed": 0.121,
+     "match": 0.012,
+     "public_judge": 0.088
+    },
+    "budget_exhausted": 0,
+    "final_hidden_outcomes": {
+     "no_code": 125
+    },
+    "gpu_peak_gb_max": null,
+    "lookup_matches_on_held_out_problems": 4,
+    "lookup_answers_on_held_out_problems": 0
+   },
+   "model_alone": {
+    "example_passed_rate_all": {
+     "value": 0.944,
+     "ci95": [
+      0.904,
+      0.976
+     ],
+     "n": 125
+    },
+    "independent_passed_rate": {
+     "value": 0.8017,
+     "ci95": [
+      0.7273,
+      0.8678
+     ],
+     "n": 121
+    },
+    "by_source": {
+     "cf": {
+      "n": 25,
+      "independent_passed": 16,
+      "example_passed": 20
+     },
+     "lcb": {
+      "n": 50,
+      "independent_passed": 39,
+      "example_passed": 48
+     },
+     "lcd": {
+      "n": 50,
+      "independent_passed": 42,
+      "example_passed": 50
+     }
+    },
+    "answered": 121,
+    "route_seconds": {
+     "p50": 10.456,
+     "p95": 75.6,
+     "max": 110.153
+    },
+    "time_to_checked_answer_seconds": {
+     "p50": 10.525,
+     "p95": 77.161
+    },
+    "mean_stage_seconds": {
+     "generate": 19.329,
+     "public_judge": 0.042,
+     "repair_generate": 16.754
+    },
+    "budget_exhausted": 5,
+    "final_hidden_outcomes": {
+     "passed": 100,
+     "wrong_answer": 7,
+     "runtime_error": 4,
+     "no_code": 4,
+     "timeout": 2,
+     "output_limit": 7,
+     "checker_error": 1
+    },
+    "gpu_peak_gb_max": null,
+    "first_attempt_independent_passed_rate": {
+     "value": 0.8017,
+     "ci95": [
+      0.7273,
+      0.8678
+     ],
+     "n": 121
+    },
+    "repairs_attempted": 4,
+    "repair_turned_fail_into_independent_pass": 0,
+    "generation_stopped_by": {
+     "eos": 124,
+     "max_time": 5
+    },
+    "cli_calls": 129,
+    "cli_reported_cost_usd_total": 0,
+    "cli_calls_with_tool_items": 0,
+    "cli_models": [
+     "gpt-6-astra"
+    ],
+    "output_tokens_total": 97595
+   },
+   "retrieval": {
+    "example_passed_rate_all": {
+     "value": 0.952,
+     "ci95": [
+      0.912,
+      0.984
+     ],
+     "n": 125
+    },
+    "independent_passed_rate": {
+     "value": 0.8017,
+     "ci95": [
+      0.7273,
+      0.8678
+     ],
+     "n": 121
+    },
+    "by_source": {
+     "cf": {
+      "n": 25,
+      "independent_passed": 16,
+      "example_passed": 20
+     },
+     "lcb": {
+      "n": 50,
+      "independent_passed": 40,
+      "example_passed": 49
+     },
+     "lcd": {
+      "n": 50,
+      "independent_passed": 41,
+      "example_passed": 50
+     }
+    },
+    "answered": 123,
+    "route_seconds": {
+     "p50": 10.182,
+     "p95": 79.304,
+     "max": 110.135
+    },
+    "time_to_checked_answer_seconds": {
+     "p50": 10.647,
+     "p95": 80.784
+    },
+    "mean_stage_seconds": {
+     "generate": 18.84,
+     "public_judge": 0.041,
+     "repair_generate": 16.949,
+     "retrieve": 0.133
+    },
+    "budget_exhausted": 4,
+    "final_hidden_outcomes": {
+     "passed": 100,
+     "runtime_error": 6,
+     "wrong_answer": 6,
+     "no_code": 2,
+     "timeout": 2,
+     "output_limit": 7,
+     "checker_error": 2
+    },
+    "gpu_peak_gb_max": null,
+    "first_attempt_independent_passed_rate": {
+     "value": 0.7934,
+     "ci95": [
+      0.719,
+      0.8595
+     ],
+     "n": 121
+    },
+    "repairs_attempted": 6,
+    "repair_turned_fail_into_independent_pass": 1,
+    "generation_stopped_by": {
+     "eos": 127,
+     "max_time": 4
+    },
+    "cli_calls": 131,
+    "cli_reported_cost_usd_total": 0,
+    "cli_calls_with_tool_items": 0,
+    "cli_models": [
+     "gpt-6-astra"
+    ],
+    "output_tokens_total": 107937
+   },
+   "classify_template": {
+    "example_passed_rate_all": {
+     "value": 0.936,
+     "ci95": [
+      0.896,
+      0.976
+     ],
+     "n": 125
+    },
+    "independent_passed_rate": {
+     "value": 0.7769,
+     "ci95": [
+      0.7025,
+      0.8512
+     ],
+     "n": 121
+    },
+    "by_source": {
+     "cf": {
+      "n": 25,
+      "independent_passed": 16,
+      "example_passed": 20
+     },
+     "lcb": {
+      "n": 50,
+      "independent_passed": 38,
+      "example_passed": 47
+     },
+     "lcd": {
+      "n": 50,
+      "independent_passed": 40,
+      "example_passed": 50
+     }
+    },
+    "answered": 122,
+    "route_seconds": {
+     "p50": 10.292,
+     "p95": 68.102,
+     "max": 110.126
+    },
+    "time_to_checked_answer_seconds": {
+     "p50": 10.734,
+     "p95": 71.581
+    },
+    "mean_stage_seconds": {
+     "classify": 0.002,
+     "generate": 18.019,
+     "public_judge": 0.043,
+     "repair_generate": 16.447
+    },
+    "budget_exhausted": 6,
+    "final_hidden_outcomes": {
+     "passed": 97,
+     "runtime_error": 5,
+     "wrong_answer": 9,
+     "no_code": 3,
+     "timeout": 2,
+     "output_limit": 7,
+     "checker_error": 2
+    },
+    "gpu_peak_gb_max": null,
+    "first_attempt_independent_passed_rate": {
+     "value": 0.7769,
+     "ci95": [
+      0.7025,
+      0.8512
+     ],
+     "n": 121
+    },
+    "repairs_attempted": 6,
+    "repair_turned_fail_into_independent_pass": 0,
+    "generation_stopped_by": {
+     "eos": 125,
+     "max_time": 6
+    },
+    "cli_calls": 131,
+    "cli_reported_cost_usd_total": 0,
+    "cli_calls_with_tool_items": 0,
+    "cli_models": [
+     "gpt-6-astra"
+    ],
+    "output_tokens_total": 95993,
+    "classifier_unknown": 14,
+    "classifier_pattern_counts": {
+     "dynamic_programming": 48,
+     "hash_counting": 32,
+     "greedy_sorting": 45,
+     "prefix_sum": 8,
+     "sliding_window": 3,
+     "binary_search": 9,
+     "monotonic_stack": 2,
+     "two_pointers": 3,
+     "graph_traversal": 12,
+     "heap": 4,
+     "union_find": 4
+    }
+   }
+  },
+  "paired_vs_model_alone": {
+   "lookup": {
+    "solved_here_not_by_model_alone": 0,
+    "solved_by_model_alone_not_here": 97,
+    "pass_rate_difference": -0.8017,
+    "ci95": [
+     -0.8678,
+     -0.7273
+    ],
+    "n": 121
+   },
+   "retrieval": {
+    "solved_here_not_by_model_alone": 2,
+    "solved_by_model_alone_not_here": 2,
+    "pass_rate_difference": 0.0,
+    "ci95": [
+     -0.0331,
+     0.0331
+    ],
+    "n": 121
+   },
+   "classify_template": {
+    "solved_here_not_by_model_alone": 1,
+    "solved_by_model_alone_not_here": 4,
+    "pass_rate_difference": -0.0248,
+    "ci95": [
+     -0.0579,
+     0.0083
+    ],
+    "n": 121
+   }
+  }
+ },
+ "lookup_thresholds": {
+  "min_score": 1.096599,
+  "min_margin": 0.0,
+  "dev_correct": 49,
+  "dev_wrong": 0,
+  "dev_cases": 60,
+  "fitted_on": "recognition_dev queries only"
+ },
+ "classifier_metrics": {
+  "trained_on_index_entries": 2600,
+  "unlabelled_entries_skipped": 673,
+  "cv": "5-fold, out-of-fold probabilities",
+  "threshold": 0.45,
+  "cv_micro_f1": 0.534,
+  "cv_unknown_rate": 0.0485,
+  "per_label": {
+   "backtracking": {
+    "support": 143,
+    "precision": 0.583,
+    "recall": 0.294
+   },
+   "binary_search": {
+    "support": 314,
+    "precision": 0.39,
+    "recall": 0.322
+   },
+   "dynamic_programming": {
+    "support": 611,
+    "precision": 0.527,
+    "recall": 0.552
+   },
+   "graph_traversal": {
+    "support": 491,
+    "precision": 0.865,
+    "recall": 0.809
+   },
+   "greedy_sorting": {
+    "support": 760,
+    "precision": 0.55,
+    "recall": 0.632
+   },
+   "hash_counting": {
+    "support": 758,
+    "precision": 0.576,
+    "recall": 0.612
+   },
+   "heap": {
+    "support": 240,
+    "precision": 0.296,
+    "recall": 0.2
+   },
+   "monotonic_stack": {
+    "support": 186,
+    "precision": 0.552,
+    "recall": 0.344
+   },
+   "prefix_sum": {
+    "support": 236,
+    "precision": 0.448,
+    "recall": 0.364
+   },
+   "shortest_path": {
+    "support": 37,
+    "precision": 0.481,
+    "recall": 0.351
+   },
+   "sliding_window": {
+    "support": 143,
+    "precision": 0.455,
+    "recall": 0.427
+   },
+   "two_pointers": {
+    "support": 234,
+    "precision": 0.437,
+    "recall": 0.342
+   },
+   "union_find": {
+    "support": 95,
+    "precision": 0.369,
+    "recall": 0.326
+   }
+  },
+  "max_labels": 2
+ }
+}
