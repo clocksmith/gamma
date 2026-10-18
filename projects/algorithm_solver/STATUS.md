@@ -181,15 +181,15 @@ system produces protected generalization results.
 1. Keep the qualified retrieval/public-check route. Address sibling discrimination
    using development-only negatives and a new natural-absence set, preserving the
    current frozen evaluation. Extend independent stored-solution coverage.
-2. Grow the frozen typed codec's real development corpus beyond its current
-   16 qualified graphs / 12 problems. All admitted operations and recipes occur
-   somewhere in this corpus, but support does not survive the proposed family
-   split. Add independently tested support across disjoint families. Require
-   training support for every admitted part before treating unseen combinations as
-   a fair composition test. Keep negatives with counterexamples and accept valid
-   alternative graphs. Do not redraw the reserved 66-problem/60-family split.
-3. Freeze a sufficiently supported library/data version, then evaluate fresh
-   patterns/families once. Report teacher coverage, student first-prediction
+2. The frozen-codec corpus now has 24 qualified graphs / 18 problems. Its
+   development split passes support for all 9 audit targets against 15 fit targets.
+   Reserve genuinely fresh protected patterns/families and freeze the prediction
+   and search comparison before training. Keep examined rows as development,
+   preserve counterexample-backed negatives and valid alternatives, and do not
+   redraw the existing reserved 66-problem/60-family split. Feature presence is
+   necessary evidence, not proof that 24 graphs are sufficient to train a solver.
+3. Train the compact typed predictor under that frozen contract, then evaluate
+   the fresh set once. Report teacher coverage, student first-prediction
    correctness, wrong acceptance and complete latency separately. Compare bounded
    unguided/retrieval-guided search and the generative baseline on matched tasks.
 4. No RL campaign yet. The proposed library-growth and pass@8 RL gates remain
@@ -294,7 +294,7 @@ reviews, public/independent verdicts and declared-maximum input probes. It rejec
 protected or otherwise unpermitted problems before accessing their tests.
 Different correct graphs stay together by problem/family/pattern identity.
 
-The final [qualification receipt](findings/typed-real-dev-v2/summary.json) records:
+The initial successful [qualification receipt](findings/typed-real-dev-v2/summary.json) records:
 
 - 16 accepted graphs across 12 selected problems, including four alternative
   implementations; 41 public and 1,884 independent **test executions**, plus
@@ -317,14 +317,58 @@ development repair rejects those suites as qualification authorities and supplie
 These are separately identified development tests, not benchmark rescoring.
 Details: [test integrity](findings/typed-real-dev-v2/test_integrity.json).
 
-The [support audit](findings/typed-real-dev-v2/support_audit.json) still blocks the
-proposed split: only 2/6 audit targets have complete support in its 10 fit targets;
+That [support audit](findings/typed-real-dev-v2/support_audit.json) blocked the
+proposed split: only 2/6 audit targets had complete support in its 10 fit targets;
 the split places every DSU example outside training. In leave-one-family-out
 diagnostics, 7/12 families have full feature support. Do not present that split as
 a fair generalization experiment or train against it. All examined targets remain
 development/debugging material. Fresh protected patterns/families have **not**
 been reserved for this codec; no new predictor, search comparison, or generalization
-result is claimed. Build cross-family support before that reservation and training.
+result is claimed. The later support checkpoint below resolves that split's
+missing-feature blocker; protected reservation and training remain subsequent work.
+
+### Cross-family support checkpoint
+
+The [latest qualification](findings/typed-real-dev-v5/summary.json), from isolated
+source snapshot `a642cc293` on host 128, qualifies **24 graphs / 18 problems**.
+The codec remains `e91aee58…`; no operations, recipe definitions, bounds or split
+rules changed. Additions cover tree validation, chronological connectivity,
+largest-unique-value selection, capacity packing, meeting compatibility and MST
+edge classification. The last task consumes either the forest cost or total cost
+minus cycle weight to classify edges; recipe calls are not unused support markers.
+Meeting compatibility also has a maximum-cardinality interval-schedule alternative.
+
+- 57 public and 2,975 independent test executions; 24 declared-bound probes.
+- **9/9 audit graphs have complete feature support in 15 fit graphs**, with no
+  same-problem, sibling-family or expanded-pattern overlap under the existing
+  grouping rules. Both alternatives for a problem remain together.
+- All admitted operators and recipes occur in the fit partition. This is a
+  necessary support gate, not semantic novelty, useful coverage or learning proof.
+- Leave-one-family-out support is 17/18, diagnostic only. Edge classification is
+  the only family returning a pair of integer lists; that family is in fit here.
+- 60 focused tests plus 23 proposal subtests passed after the qualification
+  repairs. The final additional interval graph then passed the 15 affected tests
+  and all 24 proposal subtests, followed by the full development qualification.
+  Seven local cross-family oracle tests also passed, including a maximum-size MST
+  graph exercising lighter-edge writes and critical-edge output within the same budget.
+
+The [first expansion run](findings/typed-real-dev-v3/summary.json) preserved five
+failed graphs. Three additional imported suites violated their stated contracts:
+14/89 acquaintance cases, 3/89 largest-unique-value cases, and 10/101 meeting cases.
+Whole source-hash-bound suites were rejected as qualification authorities; separate
+112-case reachability, 367-case frequency, and 179-case event-sweep development
+oracle suites replace them. No imported files or historical scores were rewritten.
+The host judge also now honors arbitrary order *within* critical/pseudo-critical
+edge groups; group identity, exact membership, duplicates and integer indices are
+still checked. Normal list comparisons remain ordered. See
+[test integrity](findings/typed-real-dev-v5/test_integrity.json).
+
+The [intermediate audit](findings/typed-real-dev-v4/summary.json) reached 7/9 support;
+the final interval-schedule alternative supplied the remaining pair-list length
+binding without changing the split rule. All inspected targets remain development.
+No fresh protected set, trained typed predictor or learned generalization result
+exists yet. Recognition receipts and the separately owned two-button work remain
+independent; this run did not rescore recognition or modify editor input codes.
 
 ## Binary-input vocabulary study (256one integration)
 
