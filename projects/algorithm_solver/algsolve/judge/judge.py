@@ -15,7 +15,7 @@ from pathlib import Path
 from typing import Any
 
 from . import sandbox
-from .functional_semantics import VALIDATORS, edge_index_groups
+from .functional_semantics import VALIDATORS, edge_index_groups, unordered_outer
 
 HARNESS_PATH = Path(__file__).with_name("harness_functional.py")
 FLOAT_REL_TOL = 1e-5
@@ -98,6 +98,13 @@ def judge_functional(
     if not tests:
         return Verdict(False, NO_TESTS, 0, 0, 0.0)
     for index, test in enumerate(tests):
+        if test.compare == 'return:unordered_outer':
+            try:
+                if test.validator is not None:
+                    raise ValueError('Incompatible functional validator')
+                unordered_outer(test.expected, None)
+            except (TypeError, ValueError) as error:
+                return Verdict(False, CHECKER_ERROR, len(tests), 0, 0.0, {'i': index, 'detail': str(error)})
         if test.compare == 'return:edge_index_groups':
             try:
                 if test.validator is not None:
@@ -196,7 +203,7 @@ def _score_functional(result: sandbox.SandboxResult, tests: list[FunctionalTest]
 
 
 def _observed(test: FunctionalTest, record: dict) -> Any:
-    if test.compare in ("return", "return:edge_index_groups"):
+    if test.compare in ("return", "return:edge_index_groups", "return:unordered_outer"):
         return record.get("result")
     if test.compare.startswith("arg:"):
         k = int(test.compare.split(":", 1)[1])
@@ -208,7 +215,9 @@ def _observed(test: FunctionalTest, record: dict) -> Any:
 def _matches(test: FunctionalTest, record: dict) -> bool:
     if "error" in record:
         return False
-    key_present = "result" in record if test.compare in ("return", "return:edge_index_groups") else "args_after" in record
+    key_present = "result" in record if test.compare in ("return", "return:edge_index_groups", "return:unordered_outer") else "args_after" in record
+    if test.compare == 'return:unordered_outer':
+        return key_present and unordered_outer(test.expected, _observed(test, record))
     if test.compare == 'return:edge_index_groups':
         return key_present and edge_index_groups(test.args, test.expected, _observed(test, record))
     if test.validator is not None:

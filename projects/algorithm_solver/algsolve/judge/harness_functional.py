@@ -31,6 +31,9 @@ from itertools import *
 from functools import *
 from string import *
 from operator import *
+# Convenience imports must not replace Python's modular exponentiation.
+# Candidate code can still explicitly import a different pow itself.
+from builtins import pow
 inf = float('inf')
 
 class ListNode:
