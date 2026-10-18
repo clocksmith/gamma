@@ -191,3 +191,26 @@ run contract; original comparisons and failed receipts remain preserved.
 
 Prior workspace notes, not re-audited here: the legacy plasma/mutecity checkout
 reconciliation and root scratch directories remain outside this Gamma task.
+
+## Binary-input vocabulary study (256one integration)
+
+The user also requested corpus-derived input vocabularies and challenge navigation.
+This is an encoding study, not additional solver correctness evidence. Source
+acquisition, fitting and metadata export live in `algsolve/input_corpus.py`,
+`input_vocabulary.py` and `input_catalog.py`; the browser remains in 256one.
+See [the retained receipt](findings/binary-input-v1/python-summary.json).
+
+Pinned Doocs sources (657 JavaScript and 3,418 TypeScript files, plus license and
+README) remain under ignored `data/raw/doocs__leetcode_input/<revision>/` on host
+128, with per-file Git blob and SHA256 verification. They have not been executed.
+Python v1 fits 128 shortcuts on 1,831 permitted validated ASCII reference texts
+and scores 466 separate family-split development files: 609,096 presses versus
+1,570,219 for ASCII, a 61.2% ideal encoding reduction. This does not measure human
+speed, prove optimal vocabulary selection, or change the frozen solver vocabulary.
+Protected solving/recognition/reserved families remain excluded via the existing
+training policy. Raw rows and profiles stay in `runs/binary-python-v1/`.
+
+The challenge export contains only titles, slugs and difficulties for 3,353 known
+problems. It is navigation, not an editor judge or deployed solver. Next: evaluate
+a JS successor using the pinned sources, count corrections/navigation effort,
+and compare fixed candidate vocabularies before replacing already learned codes.

@@ -8,7 +8,7 @@ Recognize stored solutions; separately learn non-autoregressive composition with
 
 ## Authority
 
-Owns problem imports, sandbox judging, comparison routes, research answer interfaces, index-only mining, graph datasets, frozen samples and reports. No unsupported generalization or benchmark-acceptance claims.
+Owns problem imports, sandbox judging, comparison routes, research answer interfaces, index-only mining, graph datasets, frozen samples and reports. Also owns the user-requested binary-input vocabulary study on permitted reference text; 256one owns its editor UI and runtime packaging. No unsupported generalization or benchmark-acceptance claims.
 
 ## Scope
 
@@ -25,6 +25,7 @@ Owns problem imports, sandbox judging, comparison routes, research answer interf
 - Held-out problems/aliases stay outside research retrieval, mining and training. The separate all-corpus service index supplies known-problem retrieval only.
 - Answers require query-public-example verification; stored validation is not query correctness. Missing sandbox/examples fails closed.
 - Graph proposals cannot bypass vocabulary, binding, resource or execution checks. Report first-prediction correctness/complete latency separately from retries/search.
+- Binary-input studies keep raw references ignored, record pinned sources and measure encoding cost separately from solving correctness and human effort. Public challenge navigation exports metadata only, never hidden tests or solutions.
 - Training excludes protected families; shared structural patterns and alternative solutions stay together. Tests do not prove correctness.
 - Reserve fresh confirmation families before vocabulary mining. Structural recurrence does not verify components.
 - Generative comparisons share model/budget/repair allowance; repairs see public examples only.
