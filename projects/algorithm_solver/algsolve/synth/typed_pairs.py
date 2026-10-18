@@ -12,7 +12,7 @@ import time
 from .. import public_examples, splits, validate
 from ..records import LANE_ROOT, load_hidden_tests
 from . import audit, mine, training_pairs, typed_codec as codec
-from . import typed_development as dev, typed_program as ir, typed_recipes, typed_support
+from . import development_tests, typed_development as dev, typed_program as ir, typed_recipes, typed_support
 
 
 def qualify(row, allowed, problems, identity):
@@ -35,6 +35,7 @@ def qualify(row, allowed, problems, identity):
     assembly = time.perf_counter() - started
     independent = load_hidden_tests(problem)
     if not independent: return None, {'reason': 'missing_independent_tests'}
+    independent, test_source = development_tests.select(uid, independent)
     public = validate.judge_problem(problem, source, problem.public_tests)
     hidden = validate.judge_problem(problem, source, independent) if public.passed else None
     bounds = validate.judge_problem(problem, source, [row['bound_probe']]) if hidden and hidden.passed else None
@@ -42,6 +43,7 @@ def qualify(row, allowed, problems, identity):
     verdict = {'reason': 'qualified' if ok else 'test_failure',
                'public': public.to_dict(), 'independent': hidden.to_dict() if hidden else None,
                'declared_bound_probe': bounds.to_dict() if bounds else None,
+               'test_source': test_source,
                'source_sha256': hashlib.sha256(source.encode()).hexdigest(),
                'assembly_seconds': assembly, 'total_seconds': time.perf_counter()-started}
     if not ok: return None, verdict
@@ -59,6 +61,7 @@ def qualify(row, allowed, problems, identity):
                            'problem_sha256': codec.digest({'statement': problem.statement, 'starter': problem.starter_code,
                                                           'params': problem.params, 'public': problem.public_tests}),
                            'independent_tests_sha256': mine.digest(independent),
+                           'test_source': test_source,
                            'public_tests_passed': public.tests_passed, 'independent_tests_passed': hidden.tests_passed,
                            'declared_bound_probe_passed': True, 'codec_sha256': identity,
                            'qualification': 'finite development-test agreement plus declared-bound probe; no prediction or formal proof'}}
@@ -122,7 +125,7 @@ def main():
     rows = dev.proposed()
     directory = LANE_ROOT/'runs'/args.name
     directory.mkdir(parents=True, exist_ok=False)
-    sources = ['synth/typed_pairs.py', 'synth/typed_development.py', 'synth/typed_support.py',
+    sources = ['synth/typed_pairs.py', 'synth/typed_development.py', 'synth/typed_support.py', 'synth/development_tests.py',
                'synth/training_pairs.py', 'public_examples.py', 'values.py', 'importers.py',
                'validate.py', 'records.py', 'test_corrections.py', 'judge/judge.py',
                'judge/functional_semantics.py', 'judge/harness_functional.py', 'judge/sandbox.py']
@@ -159,10 +162,12 @@ def main():
                                 [p for p in pairs if p['learning_split']=='development_audit'])
     support['proposed_development_split'] = split
     summary = {'proposals': len(rows), 'qualified_pairs': len(pairs), 'distinct_problems': len({p['uid'] for p in pairs}),
+               'codec_sha256': identity,
                'counts': dict(Counter(v['reason'] for v in verdicts)),
                'independent_tests_passed': sum(p['provenance']['independent_tests_passed'] for p in pairs),
                'public_tests_passed': sum(p['provenance']['public_tests_passed'] for p in pairs),
                'bound_probes_passed': len(pairs), 'explicit_exclusions': exclusions,
+               'test_sources': dict(Counter(p['provenance']['test_source']['kind'] for p in pairs)),
                'counterexample_backed_negatives': len(rejected),
                'missing_admitted_features': support['missing_admitted_features'],
                'development_partitions': dict(Counter(p['learning_split'] for p in pairs)),
@@ -173,10 +178,13 @@ def main():
                           'Passing sandbox tests and maximum-input probes qualifies development labels, not neural prediction.',
                           'Requirement complexity is reviewed, not mechanically proven; probe sizes do not prove all resource bounds.',
                           'Different correct graphs and their tests are retained together.']}
-    for name, value in [('summary', summary), ('support_audit', support), ('exclusions', exclusions)]:
-        (directory/f'{name}.json').write_text(json.dumps(value, indent=2)+'\n')
     for name, value in [('pairs',pairs), ('negatives',rejected)]:
         (directory/f'{name}.jsonl').write_text(''.join(json.dumps(v)+'\n' for v in value))
+    summary['artifacts_sha256'] = {name: training_pairs.sha(directory/name)
+                                  for name in ['pairs.jsonl','negatives.jsonl','verdicts.jsonl','contract.json']}
+    summary['support_audit_sha256'] = codec.digest(support)
+    for name, value in [('summary', summary), ('support_audit', support), ('exclusions', exclusions)]:
+        (directory/f'{name}.json').write_text(json.dumps(value, indent=2)+'\n')
     print(json.dumps(summary, indent=2))
 
 
