@@ -63,6 +63,14 @@ Fetched and derived data stay under `data/` (gitignored); run outputs under
 - `algsolve/lookup.py`, `classify.py`, `patterns/catalog.py`, `routes.py`, `model.py`: the four routes
 - `algsolve/run.py`, `report.py`: the comparison command and the report rebuilt from results
 
+## Natural-description recognition
+
+Goal 1b has a separate [natural-description development diagnostic](findings/natural-description-dev-v1/README.md).
+It sends only authored query text to the unchanged recognizer, scores identity
+and required clarification separately, and never reads protected composition
+targets or executes returned code. It is not a new answer route or a qualified
+natural-language interface.
+
 ## Learned composition target (current direction)
 
 The newest representation experiment is
