@@ -71,6 +71,22 @@ and required clarification separately, and never reads protected composition
 targets or executes returned code. It is not a new answer route or a qualified
 natural-language interface.
 
+A separate [assisted clarification prototype](findings/clarification-dialogues-dev-v1/README.md)
+compares curated requirements across candidates and their known siblings. It asks
+about distinctions such as adjacency, trade limits and output, then requires the
+user to confirm the complete stored statement. A selected identity is not a
+tested solution. This CLI does not change the existing browser bridge or lookup
+thresholds:
+
+```sh
+python -m algsolve.clarify 'Help me pick houses with the most money without choosing neighbors.' --device cpu --receipt /tmp/house-selection.json
+```
+
+Use the provisioned environment and existing corpus/embedding files. Reply with
+an option number or `q`; unknown requirements and rejected statements abstain.
+Receipts are never overwritten. Goal 1b still needs independent human testing
+and genuinely absent algorithm cases; current dialogue results use scripted replies.
+
 ## Learned composition target (current direction)
 
 The newest representation experiment is
