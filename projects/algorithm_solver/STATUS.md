@@ -8,11 +8,11 @@ summary is 50 words, excluding its title. Composition remains unproven.
 
 ### 1a. Recognize known problem statements
 
-Recognize indexed problems from complete statements and controlled paraphrases, return stored code, and check public examples without generation. Current evidence: 144 of 150 known queries returned independently passing answers. Next, fix sibling identification errors using development negatives and expand independent validation beyond the 2,538 currently supported stored solutions across families.
+Recognize indexed problems from complete statements and paraphrases, returning stored code without generation. Prior evidence: 144/150 returned answers passed available independent tests; identity remains separately qualified. The full inventory now accounts for 815 evidence gaps. Next, finish 3,288 eligible exact-query journeys and independently evaluate frozen paraphrases and sibling distinctions separately.
 
 ### 1b. Understand natural problem descriptions
 
-Map informal descriptions to intended problems and clarify missing requirements. A curated, user-assisted selector now resolves 20 scripted development conversations; eight rejection cases abstain. These results rely on scripted replies and explicit statement confirmation, not automatic understanding. Next, test independent users, genuine absent problems, redundant questions, and complete interaction time.
+Map informal descriptions to intended requirements and ask consequential clarifying questions. Existing scripted development selections are not independent answer evidence. Forty fresh agent-authored queries across recognition and description tracks are independently reviewed and sealed. Next, freeze complete candidate routes, evaluate description-to-answer correctness, and report questions, abstentions, wrong acceptances, and latency.
 
 ## 2. Learn to compose executable solutions
 
@@ -53,6 +53,15 @@ encoding savings alone do not establish composition or human-effort gains.
 | 1b | [Baseline](findings/natural-description-dev-v1/README.md): correct identity first on 10/16 specified requests, top five on 16/16; no accepted matches. [Assisted dialogue prototype](findings/clarification-dialogues-dev-v1/README.md): 20/20 scripted selections, eight abstentions, 0–3 distinction questions plus confirmation. Curated contracts and scripted confirmations are not automatic recognition or independent qualification; genuine absence and human journey time remain unmeasured. |
 | 2a | [Typed student receipt](findings/typed-student-v2/summary.json): all eight audit predictions failed structural validation. [Development corpus](findings/typed-real-dev-v5/summary.json) is the permitted debugging source. |
 | 2b | [Frozen reservation](contracts/typed_confirmation_v1.json) and [teacher qualification](findings/typed-confirmation-qualified-v1/summary.json). Protected student scoring has not run. |
+
+Current recognition qualification: [frozen protocol](contracts/recognition_qualification_v1.json),
+[full-library inventory and active answer audit](findings/library-answer-audit-v2/README.md),
+and [sealed independent query set](findings/recognition-independent-v1/README.md).
+The 815 historical gaps are accounted for, not all repaired: 685 lack independent
+tests, 109 have tests needing current qualification, 19 have unusable in-place
+evidence, and two are protected exclusions. All 3,353 entries are inventoried;
+65 protected aliases are excluded from execution. The 40-query set is agent-authored
+and agent-reviewed, not human evidence. Do not open it before candidate freeze.
 
 Preserve working lookup. Keep its all-corpus index out of composition training,
 mining and evaluation. Use development evidence to repair graph prediction;
