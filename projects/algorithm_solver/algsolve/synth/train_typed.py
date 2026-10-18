@@ -132,7 +132,12 @@ def main():
     for p in requests:
         started=time.perf_counter(); vectors.append(embedder.encode([query_text(p)],query=True,instruction=INSTRUCTION)[0])
         embedding_seconds.append(time.perf_counter()-started)
-    vectors=np.array(vectors); neighbors=np.argsort(-(vectors@contracts.T),axis=1,kind='stable')[:,:4]
+    vectors=np.array(vectors); neighbors=[]; retrieval_seconds=[]
+    for vector in vectors:
+        started=time.perf_counter()
+        neighbors.append(np.argsort(-(contracts@vector),kind='stable')[:4])
+        retrieval_seconds.append(time.perf_counter()-started)
+    neighbors=np.array(neighbors)
     query=torch.from_numpy(vectors); memory=torch.from_numpy(contracts[neighbors])
     model=TypedPredictor(vectors.shape[1],encoding.slots,len(encoding.types))
     optimizer=torch.optim.AdamW(model.parameters(),lr=.001)
@@ -155,12 +160,14 @@ def main():
         for i,pair in enumerate(requests):
             started=time.perf_counter(); codes=decisions(model(query[i:i+1],memory[i:i+1])); seconds=time.perf_counter()-started
             predictions.append({'uid':pair['uid'],'split':pair['learning_split'],'codes':codes,
-                                'prediction_seconds':seconds,'embedding_seconds':embedding_seconds[i]})
+                                'prediction_seconds':seconds,'embedding_seconds':embedding_seconds[i],
+                                'retrieval_seconds':retrieval_seconds[i]})
     (output/'predictions.jsonl').write_text(''.join(json.dumps(p)+'\n' for p in predictions))
     rows=[]
     with (output/'development_scores.jsonl').open('w') as stream:
         for pair,prediction in zip(requests,predictions):
-            result=score(pair,prediction['codes'],encoding,identity,prediction['prediction_seconds']+prediction['embedding_seconds'])
+            elapsed=sum(prediction[k] for k in ('prediction_seconds','embedding_seconds','retrieval_seconds'))
+            result=score(pair,prediction['codes'],encoding,identity,elapsed)
             row={'uid':pair['uid'],'split':pair['learning_split'],**result}; rows.append(row)
             stream.write(json.dumps(row)+'\n'); stream.flush()
             print(json.dumps({'development_scored':len(rows),'total':len(requests),'correct':result['first_prediction_correct']}),flush=True)
@@ -175,7 +182,7 @@ def main():
                                            ('contract.json','predictions.jsonl','development_scores.jsonl','metrics.jsonl')},
              'limits':['One fixed configuration on 10 development fit problems; not a learned generalization claim.',
                        'Protected targets and tests were not loaded; no protected score exists.',
-                       'Reported decision timing uses per-request warm embedding plus prediction, assembly and public checks; fit retrieval setup is separate.',
+                       'Reported decision timing includes warm embedding, retrieval ranking, prediction, assembly and public checks; fit-contract embedding setup is separate.',
                        'One forward over primitive tree slots; invalid syntax/type/effects abstain without repair.',
                        'Equivalent teacher alternatives share one problem loss; exact teacher equality is not the correctness criterion.'],
              'next_gate':'Implement matched deterministic search and seal all route/checkpoint artifacts before protected scoring.'}
