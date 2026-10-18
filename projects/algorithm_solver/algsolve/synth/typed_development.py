@@ -139,7 +139,109 @@ def proposed():
             'O(m log m + m log n) time, O(n+m) state; unused vertex zero accounted for explicitly',
             'n <= 10000, m <= 10000, 1-based vertices; n+1 DSU slots <= 20000',
             [10000,[[i,i+1,1] for i in range(1,10000)]+[[1,10000,1]]], 9999)
+    cross_family(add)
     return rows
+
+
+def cross_family(add):
+    """Additional permitted families; codec and existing split rule stay fixed."""
+    p = program({'n': 'int', 'edges': PAIRS}, [
+        call('dsu.new', 'sets', ref('n')),
+        assign('valid', pure('eq', pure('len', ref('edges')), pure('sub', ref('n'), lit(1))), 'var'),
+        each('edge', ref('edges'), [
+            call('dsu.find', 'left', ref('sets'), field(ref('edge'), 0)),
+            call('dsu.find', 'right', ref('sets'), field(ref('edge'), 1)),
+            branch(pure('eq', ref('left'), ref('right')), [assign('valid', lit(False), 'set')],
+                [call('dsu.union', 'joined', ref('sets'), field(ref('edge'), 0), field(ref('edge'), 1))])])],
+        ref('valid'), 'bool')
+    edges = [[i, i+1] for i in range(1999)]
+    edges += [[a,b] for a in range(3) for b in range(a+2,2000)][:5000-len(edges)]
+    add(261, 'acyclic_edge_count', p, 'O((n+m) log n) upper bound, O(n) DSU state; acyclic and n-1 edges imply a tree',
+        'n <= 2000, m <= 5000; distinct undirected edges, no self loops', [2000, edges], False)
+
+    p = program({'logs': ir.EDGES, 'n': 'int'}, [
+        assign('ordered', pure('sort_by', ref('logs'), lit(0), lit(False))),
+        call('dsu.new', 'sets', ref('n')), assign('count', ref('n'), 'var'), assign('answer', lit(-1), 'var'),
+        each('entry', ref('ordered'), [
+            call('dsu.union', 'joined', ref('sets'), field(ref('entry'), 1), field(ref('entry'), 2)),
+            branch(ref('joined'), [assign('count', pure('sub', ref('count'), lit(1)), 'set'),
+                branch(pure('eq', ref('count'), lit(1)), [assign('answer', field(ref('entry'), 0), 'set')])])])],
+        ref('answer'), 'int')
+    # At n=100 at most 9900 ordered pairs can occur under the input contract.
+    logs = [[t, a, b] for t, (a,b) in enumerate((a,b) for a in range(100) for b in range(100) if a != b)]
+    add(1101, 'chronological_connectivity', p, 'O(m log m + (n+m) log n) upper bound, O(n+m) state',
+        '2 <= n <= 100, m <= 10000, unique timestamps <= 1e9 and unique ordered pairs',
+        [list(reversed(logs)), 100], 98)
+
+    p = program({'nums': ir.INTS}, [*histogram(), invoke('stable_unique', 'unique', ref('nums')),
+        assign('answer', lit(-1), 'var'), each('x', ref('unique'), [
+            call('map.get', 'count', ref('counts'), ref('x'), lit(0)),
+            branch(pure('eq', ref('count'), lit(1)), [branch(pure('lt', ref('answer'), ref('x')),
+                [assign('answer', ref('x'), 'set')])])])], ref('answer'), 'int')
+    add(1133, 'unique_frequency_maximum', p, 'O(n+u^2) with copied recipe output, u <= 1001; O(n+u) storage; no stricter requirement',
+        'n <= 2000, values 0..1000', [list(range(1001))+list(range(999))], 1000)
+
+    p = program({'weight': ir.INTS}, [invoke('heap_sort', 'ordered', ref('weight')),
+        assign('remaining', lit(5000), 'var'), assign('count', lit(0), 'var'),
+        each('x', ref('ordered'), [branch(pure('not', pure('lt', ref('remaining'), ref('x'))), [
+            assign('remaining', pure('sub', ref('remaining'), ref('x')), 'set'),
+            assign('count', pure('add', ref('count'), lit(1)), 'set')])])], ref('count'), 'int')
+    add(1196, 'sorted_capacity', p, 'O(n^2) from copied recipe output, O(n) storage; n <= 1000, no stricter requirement',
+        'n <= 1000, weights 1..1000; capacity 5000', [[1]*1000], 1000)
+
+    p = program({'intervals': PAIRS}, [
+        assign('ordered', pure('sort_by', ref('intervals'), lit(0), lit(True))),
+        assign('next_start', lit(1000000), 'var'), assign('valid', lit(True), 'var'),
+        each('interval', ref('ordered'), [
+            branch(pure('lt', ref('next_start'), field(ref('interval'), 1)), [assign('valid', lit(False), 'set')]),
+            assign('next_start', field(ref('interval'), 0), 'set')])], ref('valid'), 'bool')
+    add(252, 'reverse_interval_scan', p, 'O(n log n) time, O(n) sorted values; touching endpoints do not overlap',
+        'n <= 10000, 0 <= start < end <= 1000000', [[[i,i+1] for i in range(10000)]], True)
+
+    # Edge criticality genuinely consumes the minimum cost, unlike simply
+    # attaching an unused recipe to claim feature support.
+    for alternative in (False, True):
+        if alternative:
+            prefix = [invoke('cycle_weight', 'rejected', ref('n'), ref('edges'), lit(False)),
+                      assign('total', lit(0), 'var'), each('edge', ref('edges'), [
+                          assign('total', pure('add', ref('total'), field(ref('edge'), 2)), 'set')]),
+                      assign('minimum', pure('sub', ref('total'), ref('rejected')))]
+        else:
+            prefix = [invoke('forest', 'forest', ref('n'), ref('edges'), lit(False)),
+                      assign('minimum', field(ref('forest'), 0))]
+        join = [call('dsu.union', 'joined', ref('without'), field(ref('edge'), 0), field(ref('edge'), 1)),
+                branch(ref('joined'), [assign('count', pure('add', ref('count'), lit(1)), 'set'),
+                    assign('cost', pure('add', ref('cost'), field(ref('edge'), 2)), 'set')])]
+        # One exclusion MST per candidate. For a noncritical edge, endpoints
+        # disconnected using strictly lighter edges iff it occurs in some MST.
+        body = [*prefix, assign('ordered', pure('sort_by', ref('edges'), lit(2), lit(False))),
+            assign('critical', pure('empty_ints'), 'var'), assign('pseudo', pure('empty_ints'), 'var'),
+            assign('index', lit(0), 'var'), each('candidate', ref('edges'), [
+                call('dsu.new', 'without', ref('n')), call('dsu.new', 'lighter', ref('n')),
+                assign('count', lit(0), 'var'), assign('cost', lit(0), 'var'),
+                each('edge', ref('ordered'), [
+                    branch(pure('lt', field(ref('edge'), 2), field(ref('candidate'), 2)), [
+                        call('dsu.union', 'light_join', ref('lighter'), field(ref('edge'), 0), field(ref('edge'), 1))]),
+                    branch(pure('eq', field(ref('edge'), 0), field(ref('candidate'), 0)), [
+                        branch(pure('not', pure('eq', field(ref('edge'), 1), field(ref('candidate'), 1))), join)], join)]),
+                assign('is_critical', pure('lt', ref('minimum'), ref('cost')), 'var'),
+                branch(pure('lt', ref('count'), pure('sub', ref('n'), lit(1))), [assign('is_critical', lit(True), 'set')]),
+                branch(ref('is_critical'), [assign('critical', pure('append', ref('critical'), ref('index')), 'set')], [
+                    call('dsu.find', 'left', ref('lighter'), field(ref('candidate'), 0)),
+                    call('dsu.find', 'right', ref('lighter'), field(ref('candidate'), 1)),
+                    branch(pure('not', pure('eq', ref('left'), ref('right'))), [
+                        assign('pseudo', pure('append', ref('pseudo'), ref('index')), 'set')])]),
+                assign('index', pure('add', ref('index'), lit(1)), 'set')])]
+        p = program({'n': 'int', 'edges': ir.EDGES}, body,
+                    pure('tuple', ref('critical'), ref('pseudo')), ('tuple', ir.INTS, ir.INTS))
+        # A cycle through all vertices plus chords: every equal-weight edge is
+        # pseudo-critical. Maximum n and m exercise the nested scans.
+        edges = [[i,i+1,1000] for i in range(99)] + [[0,99,1000]]
+        edges += [[a,b,1000] for a in range(3) for b in range(a+2,99)][:100]
+        add(1489, 'cycle_cost_classification' if alternative else 'forest_cost_classification', p,
+            'O(m log m + m*(n+m log n)) upper bound, O(n+m) live storage; one exclusion MST per edge',
+            '2 <= n <= 100, m <= 200, unique ordered endpoints a < b; connected; weights 1..1000',
+            [100, edges], ([], list(range(200))))
 
 
 def unsupported():
