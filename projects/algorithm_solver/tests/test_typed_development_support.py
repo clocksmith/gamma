@@ -4,7 +4,7 @@ from itertools import combinations, product
 import random
 import unittest
 
-from algsolve.synth import typed_development, typed_program, typed_recipes
+from algsolve.synth import typed_codec, typed_development, typed_program, typed_recipes
 
 
 def connected(n, edges):
@@ -95,6 +95,17 @@ class CrossFamilyTargets(unittest.TestCase):
                     result = typed_program.execute(graph, {'n': n, 'edges': edges},
                                                    recipes=typed_recipes.catalog())
                     self.assertEqual(tuple(map(set,result)), (critical,pseudo))
+
+    def test_maximum_edge_classification_with_critical_and_lighter_edges(self):
+        # Complements the all-equal maximum-input proposal: forces the lighter
+        # DSU writes and critical-edge branch without raising the frozen budget.
+        edges = [[i,i+1,1] for i in range(99)] + [[0,99,1000]]
+        edges += [[a,b,1000] for a in range(3) for b in range(a+2,99)][:100]
+        for row in self.rows:
+            if row['uid'] == 'lcd:1489':
+                actual = typed_program.execute(row['program'], {'n':100,'edges':edges},
+                    recipes=typed_recipes.catalog(),budget=typed_codec.EXECUTION_BUDGET)
+                self.assertEqual(actual,(list(range(99)),[]))
 
 
 if __name__ == '__main__':

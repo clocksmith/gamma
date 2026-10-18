@@ -193,20 +193,22 @@ under the existing Linux environment:
 python -m algsolve.synth.typed_pairs --codec contracts/typed_codec_v1.json --confirmation findings/mine-v2-candidates-20261017/split.json --name typed-real-new-run
 ```
 
-The [receipt](findings/typed-real-dev-v2/summary.json) qualifies 16 graphs across
-12 problems, with alternate correct implementations and two counterexample-backed
+The [receipt](findings/typed-real-dev-v5/summary.json) qualifies 24 graphs across
+18 problems, with alternate correct implementations and two counterexample-backed
 negatives. Raw statement/target pairs and verdicts remain ignored on host 128 in
-`runs/typed-real-dev-v2/`; summary hashes bind those artifacts. Two invalid imported
+`runs/typed-real-dev-v5/`; summary hashes bind those artifacts. Five invalid imported
 suites use explicitly identified, source-bound oracle replacements for development
 qualification; original data and failed receipts remain intact. See
-[test integrity](findings/typed-real-dev-v2/test_integrity.json).
+[test integrity](findings/typed-real-dev-v5/test_integrity.json). The host comparator
+for critical/pseudo-critical MST edge indices permits order changes within each
+group while preserving membership and rejecting duplicate or invalid indices.
 
 `typed_support.py` audits operations, resources, operand types/ports, binding modes,
 control forms, literal classes and recipe expansion before proposing a development
 split. It checks problem/family/pattern overlap as well as missing features. These
-are necessary conditions, not proof of learnability. The full corpus covers every
-admitted operator and recipe, but the proposed split leaves DSU unsupported in
-training and is blocked. No model training or protected evaluation was launched.
-Add support across independent families, reserve fresh protected combinations,
-then measure first-prediction correctness before search or repair. Inspected
+are necessary conditions, not proof of learnability. All 9 development audit graphs
+are now supported by 15 fit graphs, with all admitted operators and recipes in fit.
+No model training or protected evaluation was launched. Reserve fresh protected
+combinations and freeze the comparison contract, then train and measure
+first-prediction correctness before search or repair. Inspected
 development rows cannot become fresh evaluation merely by changing their labels.
