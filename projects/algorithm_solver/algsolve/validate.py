@@ -35,6 +35,10 @@ def judge_problem(problem: Problem, source: str, raw_tests: list[dict], *, wall_
         if problem.slug == 'course-schedule-ii' and problem.entry.get('method') == 'findOrder':
             for test in tests:
                 test.validator = 'topological_order'
+        if (problem.slug == 'find-critical-and-pseudo-critical-edges-in-minimum-spanning-tree'
+                and problem.entry.get('method') == 'findCriticalAndPseudoCriticalEdges'):
+            for test in tests:
+                test.compare = 'return:edge_index_groups'
         return judge.judge_functional(
             source,
             problem.entry,

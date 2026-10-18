@@ -15,7 +15,7 @@ from pathlib import Path
 from typing import Any
 
 from . import sandbox
-from .functional_semantics import VALIDATORS
+from .functional_semantics import VALIDATORS, edge_index_groups
 
 HARNESS_PATH = Path(__file__).with_name("harness_functional.py")
 FLOAT_REL_TOL = 1e-5
@@ -42,7 +42,8 @@ class FunctionalTest:
     kwargs: dict[str, Any] = field(default_factory=dict)
     expected: Any = None
     # "return": compare the return value; "arg:<k>": compare positional arg k
-    # after the call (in-place problems).
+    # after the call (in-place problems). "return:edge_index_groups" compares
+    # critical/pseudo-critical membership with order ignored inside each group.
     compare: str = "return"
     validator: str | None = None  # Host-only; never sent to candidate execution.
 
@@ -97,6 +98,13 @@ def judge_functional(
     if not tests:
         return Verdict(False, NO_TESTS, 0, 0, 0.0)
     for index, test in enumerate(tests):
+        if test.compare == 'return:edge_index_groups':
+            try:
+                if test.validator is not None:
+                    raise ValueError('Incompatible functional validator')
+                edge_index_groups(test.args, test.expected, None)
+            except (TypeError, ValueError) as error:
+                return Verdict(False, CHECKER_ERROR, len(tests), 0, 0.0, {'i': index, 'detail': str(error)})
         if test.validator is not None:
             try:
                 if test.compare != 'return' or test.validator not in VALIDATORS:
@@ -188,7 +196,7 @@ def _score_functional(result: sandbox.SandboxResult, tests: list[FunctionalTest]
 
 
 def _observed(test: FunctionalTest, record: dict) -> Any:
-    if test.compare == "return":
+    if test.compare in ("return", "return:edge_index_groups"):
         return record.get("result")
     if test.compare.startswith("arg:"):
         k = int(test.compare.split(":", 1)[1])
@@ -200,7 +208,9 @@ def _observed(test: FunctionalTest, record: dict) -> Any:
 def _matches(test: FunctionalTest, record: dict) -> bool:
     if "error" in record:
         return False
-    key_present = "result" in record if test.compare == "return" else "args_after" in record
+    key_present = "result" in record if test.compare in ("return", "return:edge_index_groups") else "args_after" in record
+    if test.compare == 'return:edge_index_groups':
+        return key_present and edge_index_groups(test.args, test.expected, _observed(test, record))
     if test.validator is not None:
         return key_present and VALIDATORS[test.validator](test.args, _observed(test, record))
     return key_present and values_equal(test.expected, _observed(test, record))

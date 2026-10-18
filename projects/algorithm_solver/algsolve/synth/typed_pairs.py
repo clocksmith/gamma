@@ -183,7 +183,9 @@ def main():
     summary['artifacts_sha256'] = {name: training_pairs.sha(directory/name)
                                   for name in ['pairs.jsonl','negatives.jsonl','verdicts.jsonl','contract.json']}
     summary['support_audit_sha256'] = codec.digest(support)
-    for name, value in [('summary', summary), ('support_audit', support), ('exclusions', exclusions)]:
+    integrity = {v['uid']: v['test_source'] for v in verdicts if 'test_source' in v}
+    for name, value in [('summary', summary), ('support_audit', support), ('exclusions', exclusions),
+                        ('test_integrity', integrity)]:
         (directory/f'{name}.json').write_text(json.dumps(value, indent=2)+'\n')
     print(json.dumps(summary, indent=2))
 

@@ -32,3 +32,29 @@ def topological_order(args, observed):
 
 
 VALIDATORS = {'topological_order': topological_order}
+
+
+def edge_index_groups(args, expected, observed):
+    """Compare critical/pseudo-critical sets without changing group identity.
+
+    This checks agreement with the host's expected membership, not an independent
+    proof of the MST classification. Duplicates and bool-as-int indices fail.
+    """
+    if len(args) != 2 or type(args[1]) is not list:
+        raise ValueError('Invalid edge-classification input')
+    count = len(args[1])
+
+    def groups(value):
+        if type(value) is not list or len(value) != 2 or any(type(g) is not list for g in value):
+            return None
+        flat = [i for group in value for i in group]
+        if (any(type(i) is not int or not 0 <= i < count for i in flat)
+                or len(set(flat)) != len(flat)):
+            return None
+        return [set(group) for group in value]
+
+    wanted = groups(list(expected) if type(expected) is tuple else expected)
+    if wanted is None:
+        raise ValueError('Invalid expected edge-index groups')
+    actual = groups(observed)
+    return actual is not None and actual == wanted
