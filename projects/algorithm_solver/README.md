@@ -172,3 +172,41 @@ All examples and the five previously examined confirmation problems are now
 development/debugging material. The next learning experiment must check target
 expressibility and training coverage before training, then use fresh protected
 patterns/families. The existing known-problem lookup path is untouched.
+
+## Frozen codec and real development targets
+
+The [frozen codec](contracts/typed_codec_v1.json) binds the typed-program v2 schema,
+14 pure and 14 stateful operators, four recipes, explicit positional signatures,
+type/effect semantics, reference rules, limits and canonical serialization.
+`map.get` is the added read-only primitive. Source/catalog drift fails closed;
+future changes require a new codec artifact, never changing a protected run's
+vocabulary after seeing its results. Existing baseline receipts are preserved.
+
+`typed_development.py` contains offline-authored proposals for permitted real
+development problems. `typed_pairs.py` checks policy before loading tests, renders
+the fixed interpreter plus validated graph data into the existing sandbox, and
+records public/independent verdicts and declared-bound probes. Graphs contain no
+Python-expression holes; expected outputs remain on the host. Run from the lane
+under the existing Linux environment:
+
+```sh
+python -m algsolve.synth.typed_pairs --codec contracts/typed_codec_v1.json --confirmation findings/mine-v2-candidates-20261017/split.json --name typed-real-new-run
+```
+
+The [receipt](findings/typed-real-dev-v2/summary.json) qualifies 16 graphs across
+12 problems, with alternate correct implementations and two counterexample-backed
+negatives. Raw statement/target pairs and verdicts remain ignored on host 128 in
+`runs/typed-real-dev-v2/`; summary hashes bind those artifacts. Two invalid imported
+suites use explicitly identified, source-bound oracle replacements for development
+qualification; original data and failed receipts remain intact. See
+[test integrity](findings/typed-real-dev-v2/test_integrity.json).
+
+`typed_support.py` audits operations, resources, operand types/ports, binding modes,
+control forms, literal classes and recipe expansion before proposing a development
+split. It checks problem/family/pattern overlap as well as missing features. These
+are necessary conditions, not proof of learnability. The full corpus covers every
+admitted operator and recipe, but the proposed split leaves DSU unsupported in
+training and is blocked. No model training or protected evaluation was launched.
+Add support across independent families, reserve fresh protected combinations,
+then measure first-prediction correctness before search or repair. Inspected
+development rows cannot become fresh evaluation merely by changing their labels.
