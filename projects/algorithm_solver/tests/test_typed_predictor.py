@@ -34,5 +34,10 @@ class TypedPredictorTests(unittest.TestCase):
         method,source=signature(pair)
         self.assertEqual(method,'solve'); self.assertNotIn('123456789',source); self.assertIn('pass',source)
 
+    def test_bodyless_imported_starter_is_accepted_without_changing_signature(self):
+        pair={'input':{'starter_code':'class Solution:\n    def solve(self, nums: List[int]) -> int:\n        '}}
+        method,source=signature(pair)
+        self.assertEqual(method,'solve'); self.assertIn('nums: List[int]',source); self.assertIn('pass',source)
+
 
 if __name__=='__main__': unittest.main()
