@@ -50,5 +50,25 @@ class DevelopmentTestIntegrity(unittest.TestCase):
             self.assertEqual(len(remaining),len(edges)-1)
             self.assertTrue(tests.connected(len(edges),remaining))
 
+    def test_additional_import_defects_violate_the_problem_contracts(self):
+        with self.assertRaisesRegex(ValueError, 'vertex'):
+            tests.acquaintance_oracle([[[1,0,1],[2,5,8]],6])
+        with self.assertRaisesRegex(ValueError, 'outside'):
+            tests.unique_maximum_oracle([[-10]])
+        with self.assertRaisesRegex(ValueError, 'interval'):
+            tests.meetings_oracle([[[1,1000000],[1000001,2000000]]])
+        self.assertEqual(tests.acquaintance_oracle([[[0,0,1]],2]),0)
+        self.assertEqual(tests.acquaintance_oracle([[[0,0,1]],3]),-1)
+        self.assertEqual(tests.unique_maximum_oracle([[0,1,1]]),0)
+        self.assertTrue(tests.meetings_oracle([[[0,1],[1,2]]]))
+        self.assertFalse(tests.meetings_oracle([[[0,2],[1,2]]]))
+
+    def test_added_suites_are_deterministic_and_contract_valid(self):
+        for uid in ('lcd:1101','lcd:1133','lcd:252'):
+            first = tests.generated(uid)
+            self.assertEqual(first, tests.generated(uid))
+            for row in first:
+                self.assertEqual(tests.ORACLES[uid](row['args']),row['expected'])
+
 
 if __name__=='__main__': unittest.main()
