@@ -1,5 +1,9 @@
 # Algorithm solver lane
 
+Current goals, evidence gaps and next actions: [STATUS.md](STATUS.md).
+The [experiment history](HISTORY.md) preserves prior checkpoints. The original
+comparison below remains a baseline, not the definition of the current goals.
+
 A bounded experiment: can known-answer lookup, retrieved examples, or an
 algorithm-pattern classifier with templates make a small local model
 (Qwen3.5-4B, thinking off) faster or more reliable than the same model alone?
@@ -66,8 +70,10 @@ The newest representation experiment is
 The older pilots below remain evidence; they are not the intended final component
 granularity or a qualified unfamiliar-problem solver.
 
-The active two-track goals and measured gaps are in [STATUS.md](STATUS.md).
-Goal 2 is learned unfamiliar-problem composition from typed functions,
+The two main goals and four subgoals are in [STATUS.md](STATUS.md): recognize
+known statements (1a), understand natural descriptions (1b), compose familiar
+solutions and variants (2a), and compose unfamiliar solutions (2b).
+Goal 2 uses typed functions,
 data-structure operations, explicit state and control flow. Reusable recipes
 expand into those building blocks; they are not the primitive vocabulary itself.
 A compact neural predictor selects and connects the pieces, and deterministic
