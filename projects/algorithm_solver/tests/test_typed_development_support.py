@@ -65,10 +65,12 @@ class CrossFamilyTargets(unittest.TestCase):
 
     def test_meetings_against_pairwise_overlap(self):
         intervals = [[a,b] for a in range(4) for b in range(a+1,5)]
+        graphs = [r['program'] for r in self.rows if r['uid'] == 'lcd:252']
         for size in range(4):
             for rows in combinations(intervals,size):
                 expected = all(max(a[0],b[0]) >= min(a[1],b[1]) for a,b in combinations(rows,2))
-                self.assertEqual(self.run_graph(252,list(reversed(rows))), expected)
+                for graph in graphs:
+                    self.assertEqual(typed_program.execute(graph, {'intervals':list(reversed(rows))}),expected)
         self.assertFalse(self.run_graph(252, [[0,1],[0,1]]))
         self.assertTrue(self.run_graph(252, [[999999,1000000]]))
 
