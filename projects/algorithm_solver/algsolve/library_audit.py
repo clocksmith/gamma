@@ -183,10 +183,18 @@ def independent_score(entry, code, problems, inventory):
             raise ValueError('Independent tests changed after seal')
         if tests:
             verdicts.append({'uid': source.uid, **validate.judge_problem(source, code, tests, wall_seconds=30).to_dict()})
-    status = ('passed' if all(v['passed'] for v in verdicts) else 'failed') if verdicts else 'missing_tests'
+    return {'status': independent_status(verdicts), 'verdicts': verdicts}
+
+
+def independent_status(verdicts):
+    """Broken checkers/test domains are not incorrect candidate answers."""
     if any(v.get('reason') == 'sandbox_error' for v in verdicts):
-        status = 'infrastructure_error'
-    return {'status': status, 'verdicts': verdicts}
+        return 'infrastructure_error'
+    if any(v.get('reason') == 'checker_error' for v in verdicts):
+        return 'unusable_independent_tests'
+    if not verdicts or any(v.get('tests_total', 0) <= 0 for v in verdicts):
+        return 'missing_tests'
+    return 'passed' if all(v['passed'] for v in verdicts) else 'failed'
 
 
 def audit_one(entry, context, problems, inventory):

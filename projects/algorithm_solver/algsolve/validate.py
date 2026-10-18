@@ -35,6 +35,19 @@ def judge_problem(problem: Problem, source: str, raw_tests: list[dict], *, wall_
         if problem.slug == 'course-schedule-ii' and problem.entry.get('method') == 'findOrder':
             for test in tests:
                 test.validator = 'topological_order'
+        # Only these declared contracts relax equality. Ordinary user arrays
+        # and unrelated methods remain ordered; names alone never select a rule.
+        semantic = {
+            ('alphabet-board-path', 'alphabetBoardPath'): 'alphabet_board_path',
+            ('array-with-elements-not-equal-to-average-of-neighbors', 'rearrangeArray'): 'nonaverage_neighbors',
+        }.get((problem.slug, problem.entry.get('method')))
+        if semantic:
+            for test in tests:
+                test.validator = semantic
+        if (problem.slug, problem.entry.get('method')) in {
+                ('accounts-merge', 'accountsMerge'), ('all-paths-from-source-to-target', 'allPathsSourceTarget')}:
+            for test in tests:
+                test.compare = 'return:unordered_outer'
         if (problem.slug == 'find-critical-and-pseudo-critical-edges-in-minimum-spanning-tree'
                 and problem.entry.get('method') == 'findCriticalAndPseudoCriticalEdges'):
             for test in tests:
