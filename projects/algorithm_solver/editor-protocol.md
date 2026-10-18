@@ -14,6 +14,14 @@ From `projects/algorithm_solver`, on the provisioned Linux judge host:
 ../../.venv_rocm/bin/python -m algsolve.answer query.json --index research
 ```
 
+The provisioned Radeon 8060S path is explicit:
+`--index corpus --device cuda`. CPU remains the default; there is no automatic
+device fallback. The Python API can retain its embedding model across calls;
+each CLI process pays cold loading. The frozen GPU answer journey returned
+144/150 known answers, all passing independent tests, and abstained on 50/50
+controlled-absence cases. Warm answered medians were 154–179 ms; cold embedding
+load was separately 3.00 seconds. See `findings/corpus-answer-gpu-v2/` for scope.
+
 The default is retrieval only. `--fallback codex` explicitly enables the existing
 subscription CLI when a stored answer cannot be verified. It uses the retrieved
 candidate as context and the existing generation/repair budget. No Claude,
@@ -37,6 +45,10 @@ installation, download or API provisioning happens here.
 Expected values remain in the trusted host judge. They never enter the candidate
 sandbox. Missing examples, failed examples or a missing sandbox do not produce
 an approved answer. No hidden-test file is loaded by the answer route.
+When `public_tests` is empty, the route can parse explicit `Input`/`Output`
+examples from the statement using its restricted literal parser and starter
+signature. It accepts JSON booleans/null without changing quoted strings, and
+refuses partial recovery if another explicit example cannot be parsed.
 
 The JSON result distinguishes `decision`, `code`, `route`, `example_passed`,
 `independent_tests_passed` (null: not evaluated for this query), attempts, time,
@@ -46,8 +58,12 @@ Results retain the label **prior model exposure unknown**.
 
 An injected reranker must return one finite score per retrieved candidate and
 have separate development-fitted thresholds. Existing embedding thresholds
-cannot be reused for reranker scores. This injection point is implemented;
-The `DopplerReranker` adapter has passed a synthetic pair on the existing local F16 model. Algorithm-sibling quality and development-set calibration remain unqualified.
+cannot be reused for reranker scores. `--rerank-run <directory> --doppler-cli
+<path> --reranker-model <directory>` loads a fully bound development calibration
+with the corpus/CPU path. The tested head128 configuration completed real queries
+but was rejected on development quality and latency (30/50 accepted known queries
+versus 49/50 for retrieval; 13.03 s versus 1.23 s median total). It stays optional
+for reproducibility, not enabled by default. Sibling identity errors remain open.
 
 ## Index separation
 

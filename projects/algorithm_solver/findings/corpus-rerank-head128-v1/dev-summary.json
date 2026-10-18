@@ -1,0 +1,67 @@
+{
+  "binding": "bfe35a03a1c85cb2445d281d9169991bf39bd974e1849474e46f1773f58be1cf",
+  "stage": "dev",
+  "completed": 60,
+  "comparison": {
+    "baseline": {
+      "by_kind": {
+        "exact": {
+          "queries": 20,
+          "correct_match": 20,
+          "returned_independently_validated": 20
+        },
+        "paraphrase": {
+          "queries": 20,
+          "correct_match": 19,
+          "returned_independently_validated": 19,
+          "abstention": 1
+        },
+        "sibling_paraphrase": {
+          "queries": 10,
+          "correct_match": 10,
+          "returned_independently_validated": 10
+        },
+        "controlled_absent": {
+          "queries": 10,
+          "correct_abstention": 10
+        }
+      },
+      "p50_seconds": 1.23485171100765,
+      "p95_seconds": 2.2758603569338445
+    },
+    "reranked": {
+      "by_kind": {
+        "exact": {
+          "queries": 20,
+          "abstention": 8,
+          "correct_match": 12,
+          "returned_independently_validated": 12
+        },
+        "paraphrase": {
+          "queries": 20,
+          "abstention": 10,
+          "correct_match": 10,
+          "returned_independently_validated": 10
+        },
+        "sibling_paraphrase": {
+          "queries": 10,
+          "correct_match": 8,
+          "returned_independently_validated": 8,
+          "abstention": 2
+        },
+        "controlled_absent": {
+          "queries": 10,
+          "correct_abstention": 10
+        }
+      },
+      "p50_seconds": 13.026054893009132,
+      "p95_seconds": 17.45784802013804
+    }
+  },
+  "limits": [
+    "Recognition decisions, not newly judged answers.",
+    "Model-generated paraphrases retain starter signatures.",
+    "Absent cases use controlled family exclusion, not natural full-corpus absence.",
+    "Stored independent validation is provenance, not query correctness."
+  ]
+}
