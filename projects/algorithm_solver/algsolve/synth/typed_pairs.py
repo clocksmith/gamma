@@ -172,8 +172,14 @@ def main():
                'missing_admitted_features': support['missing_admitted_features'],
                'development_partitions': dict(Counter(p['learning_split'] for p in pairs)),
                'proposed_split_supported': split['all_supported'],
+               'proposed_audit_targets': len(split['candidates']),
+               'supported_audit_targets': sum(r['supported'] for r in split['candidates']),
+               'proposed_partition_eligible': split['partition_eligible'],
                'student_trained': False, 'protected_generalization': None,
-               'next_gate': 'Preserve all examined targets as development; build support across disjoint families, reserve fresh protected structures, then train.',
+               'next_gate': ('Development support gate passed; preserve examined targets as development, '
+                             'reserve fresh protected structures/families and freeze the prediction/search comparison before training.'
+                             if split['partition_eligible'] and not support['missing_admitted_features'] else
+                             'Preserve all examined targets as development; build support across disjoint families, reserve fresh protected structures, then train.'),
                'limits': ['Selected authored targets, not random problem coverage.',
                           'Passing sandbox tests and maximum-input probes qualifies development labels, not neural prediction.',
                           'Requirement complexity is reviewed, not mechanically proven; probe sizes do not prove all resource bounds.',
