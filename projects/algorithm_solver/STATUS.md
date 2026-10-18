@@ -148,8 +148,9 @@ on the five confirmation tasks is not useful solving. Receipts and support audit
 1. Keep the qualified retrieval/public-check route. Address sibling discrimination
    using development-only negatives and a new natural-absence set, preserving the
    current frozen evaluation. Extend independent stored-solution coverage.
-2. Grow independently tested real development compositions and replace the pilot's
-   whole-expression bank with parameterized operator/operand prediction. Require
+2. Use the separate typed primitive/recipe experiment below to replace opaque
+   algorithm selection and Python glue with explicit operations, control flow and
+   state effects. Grow independently tested real development compositions. Require
    training support for every admitted part before treating unseen combinations as
    a fair composition test. Keep negatives with counterexamples and accept valid
    alternative graphs. Do not redraw the reserved 66-problem/60-family split.
@@ -191,6 +192,48 @@ run contract; original comparisons and failed receipts remain preserved.
 
 Prior workspace notes, not re-audited here: the legacy plasma/mutecity checkout
 reconciliation and root scratch directories remain outside this Gamma task.
+
+## Hierarchical primitive experiment
+
+The user clarified that composition should assemble programming building blocks,
+not mostly choose complete algorithms. `typed_program.py`, `typed_recipes.py` and
+`typed_experiment.py` now provide a separate, dependency-free development lane.
+Lookup, frozen v1 and call-graph v2 are unchanged. Inputs and bindings have types;
+comparisons, field projection, arithmetic, collection operations, branches, loops
+and accumulation are structured data. DSU, heap, queue and map operations carry
+explicit allocation/read/write effects. Four recipes expand hygienically into
+the same graph; no arbitrary Python expressions are accepted.
+
+Eight hand-authored variants passed 800 seeded synthetic cases against independent
+oracles, both with recipes and after full expansion. The forest oracle exhausts
+small spanning forests rather than repeating Kruskal. Both old v2 and the new
+representation pass the same 100 minimum-forest cases. Expanded graphs contain
+11–29 operations; two three-statement fragments are shared between distinct
+recipes with binding identity preserved. Maximum versus minimum forest and
+forest weight versus component count each change one graph leaf. These are
+representation/edit-count observations, not measured human adaptation effort.
+
+Two type-correct negative graphs have concrete failing inputs. Types establish
+structural compatibility, not fulfillment of the requested task. Focused tests
+also cover effect order, shadowing, branch scope, resource escape, bounds,
+budget exhaustion, fresh state and recipe expansion. 34 focused tests passed,
+including the existing v1 synthesis and v2 call-graph checks.
+
+Receipts: [typed primitive development](findings/typed-primitives-dev-v3/summary.json),
+with source/input hashes and expanded graphs alongside it. Prediction latency and
+first-prediction correctness are **unmeasured**: no model has been trained for this
+representation. This is development scaffolding with execution evidence, not a
+new unfamiliar-problem solving result. Resources remain local to their recipes;
+cross-recipe resource borrowing, recursion and generic container types are not
+implemented. List append currently copies the list.
+
+The five examined old confirmation cases are debugging material now. Before the
+next student run, freeze a supported primitive/recipe target codec, verify every
+required operation and binding is representable and covered in training, and
+reserve fresh protected composition patterns/families. None of these synthetic
+fixtures is fresh evaluation material. Next: teach typed choices and bindings,
+then score one predicted graph and complete latency on the fresh cases; accept
+equivalent correct graphs and retain counterexample-backed hard negatives.
 
 ## Binary-input vocabulary study (256one integration)
 

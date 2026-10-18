@@ -61,6 +61,11 @@ Fetched and derived data stay under `data/` (gitignored); run outputs under
 
 ## Learned composition target (current direction)
 
+The newest representation experiment is
+[typed primitives and expandable recipes](#typed-primitives-and-expandable-recipes).
+The older pilots below remain evidence; they are not the intended final component
+granularity or a qualified unfamiliar-problem solver.
+
 The active two-track goals and measured gaps are in [STATUS.md](STATUS.md).
 For unfamiliar problems the selected experiment is non-autoregressive,
 retrieval-conditioned graph prediction: interacting slots predict component IDs
@@ -118,3 +123,47 @@ reports 21x faster program generation on ConvFinQA/MultiHiertt numerical QA.
 syntax-preserving editing for inverse graphics. Neither result establishes
 Gamma algorithm-solving speed or coverage. Refinement/diffusion must justify
 its additional passes on this workload.
+
+## Typed primitives and expandable recipes
+
+This separate experiment implements the requested finer granularity before more
+training. `algsolve/synth/typed_program.py` interprets typed JSON graphs with pure
+operators, explicit stateful calls, lexical bindings, branches, bounded iteration
+and accumulation. A recipe expands into that same representation. There are no
+Python source holes or hidden complete-algorithm calls in the expanded graph.
+
+The initial catalog has 14 pure operations, 13 effectful operations over DSU,
+integer heap/queue/map resources, and four inspectable recipes. `forest` expands
+to sort edges, project endpoints/weight, find roots, compare, conditionally union,
+and accumulate. `cycle_weight` changes the connections and sums rejected edges.
+Heap sort and stable uniqueness can be connected in either order; equivalent
+correct graphs are accepted. Types and state effects do not establish task
+correctness: two intentionally wrong, type-correct graphs retain counterexamples.
+
+From `projects/algorithm_solver`, with no model or new dependencies:
+
+```sh
+python3 -m algsolve.synth.typed_experiment --output runs/typed-primitives-new-run
+```
+
+The command refuses to overwrite a run. It writes source/input-bound contracts,
+graphs (including expanded forms), case rows, and a summary. The retained
+[development receipt](findings/typed-primitives-dev-v3/summary.json) records eight
+variants and 800/800 small synthetic cases passing independent oracles. Expanded
+sizes are 11–29 operation nodes; refs/literals are not counted as operations.
+There are two shared three-statement fragments across distinct recipes, preserving
+reference identity under binding renaming. This is measured structural reuse in
+hand-built examples, not discovered corpus coverage.
+
+The matched minimum-forest comparison also runs the retained v2 Kruskal graph.
+Timing distinguishes old execution alone from complete assembly and new typed
+validation/execution. Neither includes retrieval, prediction, or external judging.
+Prediction time and first-prediction correctness are null because no predictor
+targets this representation yet. Graph leaf changes are an adaptation proxy,
+not human-action measurements. Inputs are small, resources are recipe-local,
+and functional append copies lists; this is not a performance-qualified runtime.
+
+All examples and the five previously examined confirmation problems are now
+development/debugging material. The next learning experiment must check target
+expressibility and training coverage before training, then use fresh protected
+patterns/families. The existing known-problem lookup path is untouched.
