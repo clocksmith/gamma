@@ -27,6 +27,19 @@ QUERY_INSTRUCTION = "Instruct: Given a programming problem, retrieve the identic
 MAX_TOKENS = 1024
 
 
+class LazyCPUEmbedder:
+    """Retain the encoder once needed; exact lookup can run without loading it."""
+    def __init__(self):
+        self.encoder = None
+
+    def encode(self, *args, **kwargs):
+        if self.encoder is None:
+            import torch
+            torch.set_num_threads(4)
+            self.encoder = Embedder(device='cpu')
+        return self.encoder.encode(*args, **kwargs)
+
+
 def verify_weights() -> None:
     for name, expected in EXPECTED_SHA256.items():
         digest = hashlib.sha256()
