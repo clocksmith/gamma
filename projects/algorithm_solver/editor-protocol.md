@@ -1,6 +1,6 @@
 # Solver mode boundary
 
-The editor integration is being prepared in Gamma, not deployed to 256.one.
+The 256.one editor connects explicitly to Gamma’s loopback-only research bridge.
 Binary ASCII and JavaScript Huffman are input encodings. Retrieval is a separate
 problem-solving mode: the user supplies a problem and examples, inspects a
 candidate and explicitly chooses whether to insert it. A retrieval score must
@@ -73,17 +73,60 @@ for measuring held-out solving or mining components. Corpus self-retrieval
 results are not generalization evidence. The original frozen experiments and
 vocabulary are unchanged.
 
-## What remains before browser integration
+## Paired editor bridge
 
-- Parse an editor's actual problem/examples into the normalized request without
-  guessing missing assertions or signatures.
-- Choose a deliberate local bridge to the Linux sandbox; the static website
-  cannot run bubblewrap or trust browser-submitted executable checkers.
-- Scope authentication, request sizes, queue limits, cancellation and explicit
-  insertion. Do not expose this CLI as an unauthenticated public code runner.
-- Qualify paraphrase/sibling recognition and the optional reranker, then show
-  match provenance, abstentions and public-example evidence in the editor.
+Start `python -m algsolve.editor_bridge` from this lane on the provisioned Linux
+judge host, then forward loopback port 8875 to the browsing machine if needed:
 
-No current result establishes a JavaScript solution adapter: the stored corpus
-and judge use Python. A future JS editor mode must show Python explicitly or
-qualify a separate JavaScript implementation.
+```sh
+ssh -N -L 127.0.0.1:8875:127.0.0.1:8875 user@judge-host
+```
+
+Choose Connect Gamma in the editor and click Connect in the local pairing window.
+The token stays in memory, never in URLs or browser storage. Host and origin
+checks, exact CORS, frame denial, a 128 KiB request cap and one active job bound
+this personal research interface. No public listener or unauthenticated runner
+is created. Existing data/model installations are reused without downloads.
+
+`challenge` returns attributed statements, generated signature-only starters and
+public examples from the known corpus, with original license notices. It returns
+neither stored solutions nor hidden tests. This personal view does not establish
+rights to republish statements. The static website exports catalog metadata only.
+`retrieve` uses the existing CPU known-answer route, with no generation/reranking;
+each disposable job pays cold model loading. Do not apply the separate warmed GPU
+latency numbers above to this bridge. Missing/failed examples retain abstentions.
+The editor shows source, match, Python language and verdict before explicit insertion.
+
+`run` accepts Python or JavaScript source (64 KiB maximum) and at most 20 public
+examples. The host reconstructs a restricted functional problem; client checkers,
+hidden paths and resource overrides are ignored. Expected values never enter the
+sandbox. The JS harness supports named synchronous functions, positional inputs,
+arrays/plain JSON, ListNode/TreeNode markers and in-place argument comparison.
+Unsupported values, asynchronous functions, absent examples and malformed output
+fail closed. It does not claim all LeetCode signatures/design-class APIs work.
+
+Node runs with JIT disabled and a 64 MiB V8 heap inside the existing Linux
+namespace. Functional JS jobs get 3 CPU seconds, 8 wall seconds, 1 GiB address
+space and 64 KiB per output stream; Python uses its existing qualified judge.
+Scratch jobs get 2 CPU/3 wall seconds. The bridge kills a worker after 90 seconds
+independently of the browser. Cancellation unwinds the namespace and deletes task
+files; a subsequent job can run. Exact request-byte SHA256 binds results to
+language, source, problem and operation. Editing the document/problem invalidates
+stale displayed verdicts.
+
+## Evidence and limits
+
+`findings/editor-workspace-v1/` records automated binary-input → Linux public
+examples → optional explicit insertion for one JavaScript and one Python Two Sum
+solution. It is not human effort evidence or arbitrary-problem qualification.
+Focused tests cover wrong answers, output limits, CPU timeout, network/filesystem
+isolation, unsupported results, active sandbox cancellation and later capacity.
+The existing judge/lane tests remain applicable. Source attribution is not an
+independent correctness proof. No JS stored-solution adaptation is claimed.
+
+ASCII stays a seven-bit input alphabet. The owner’s final requirement makes the
+active Python and JavaScript encodings exactly 256 entries of eight bits each:
+128 ASCII, 123 recurring shortcuts and five commands, with no escape payload.
+Huffman v1/v2 profiles are retained as historical evidence, not selectable active
+encodings. Input encoding, sandbox execution, known retrieval and unfamiliar
+composition remain separate mechanisms and evidence classes.

@@ -5,6 +5,28 @@ recognition and separately learned, generation-free composition. **The overall
 composition goal is not finished.** The current known-answer route has measured
 end-to-end evidence; the first composition student has no generalization win.
 
+## Two-button editor integration
+
+The owner clarified the input contract: ASCII is exactly 128 seven-bit entries;
+JavaScript and Python are each exactly 256 eight-bit entries, including commands.
+`input_fixed_width.py` fits 123 recurring shortcuts from existing screened
+training rows; IDs 0–127 remain ASCII and IDs 251–255 are commands. No escape
+payloads or extra entries. The previous Huffman profiles remain immutable history.
+
+[Fixed-width receipts](findings/binary-input-byte256-v1/) retain full press costs,
+profile/source hashes and prior-exposure limits. Development encoding costs are
+192,024/292,152 presses (JS versus ASCII) and 859,040/1,570,219 (Python versus ASCII).
+These are ideal encoding counts, not human productivity or solver improvements.
+
+[Editor protocol](editor-protocol.md) now defines the paired loopback bridge,
+bounded Python/Node execution and optional known-answer retrieval. The static
+256.one UI owns typing and local effort counters; Gamma owns judging and retrieval.
+[Workspace evidence](findings/editor-workspace-v1/) records both automated binary
+input journeys passing 3/3 public examples and explicit Python answer insertion
+without adding manual press counts. Independent tests were not run for these
+submitted queries. This does not complete unfamiliar composition or the broader
+recognition qualification queue below.
+
 ## Two goals
 
 1. Recognize indexed problems despite rewriting and return an existing correct

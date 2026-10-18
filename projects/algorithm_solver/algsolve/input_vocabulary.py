@@ -60,10 +60,16 @@ def encode(text, book):
     return cost[0], counts
 
 
-def fit(texts):
-    # Fixed 128-shortcut budget; candidates are identifiers, operators and indent runs.
-    counts = Counter(token for text in texts for token in re.findall(r'[A-Za-z_][A-Za-z_0-9]+|\n +| {2,}|==|!=|<=|>=|//|\*\*|:=|->|\+=|-=|=>|===', text))
-    shortcuts = sorted(counts, key=lambda t: (-counts[t] * (len(t) - 1), t))[:128]
+def lexemes(text):
+    return re.findall(r'[A-Za-z_][A-Za-z_0-9]+|\n +| {2,}|==|!=|<=|>=|//|\*\*|:=|->|\+=|-=|=>|===', text)
+
+
+def fit(texts, shortcut_count=122):
+    # Bounded shortcut budget; candidates are identifiers, operators and indent runs.
+    if not 1 <= shortcut_count <= 122:
+        raise ValueError("Total vocabulary exceeds 256 entries")
+    counts = Counter(token for text in texts for token in lexemes(text))
+    shortcuts = sorted(counts, key=lambda t: (-counts[t] * (len(t) - 1), t))[:shortcut_count]
     char_counts = Counter(''.join(texts))
     weights = {chr(i): max(1, char_counts[chr(i)]) for i in range(128)}
     weights.update({token: counts[token] for token in shortcuts})
@@ -87,8 +93,13 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--confirmation', type=Path, required=True)
     parser.add_argument('--output', type=Path, required=True)
+    parser.add_argument('--shortcuts', type=int, default=122)
     args = parser.parse_args()
-    print('[run-contract] run_name=binary-python-v1 pairs_input_spec=permitted-research-index '
+    if not 1 <= args.shortcuts <= 122:
+        raise ValueError('128 ASCII + six commands + shortcuts must fit in 256 entries')
+    if args.output.exists():
+        raise ValueError('Use a new immutable run directory')
+    print(f'[run-contract] run_name={args.output.name} pairs_input_spec=permitted-research-index '
           'resume_from=none resume_stage=none decode=deterministic eval_dataset_paths=family-hash-development '
           'device=cpu schedule=fit-then-score runtime_mode=cpu sweep_mode=after_train', flush=True)
     entries, problems, manifest = splits.read_index_entries(), splits.load_all(), splits.load_manifest()
@@ -108,7 +119,7 @@ def main():
     train = [r['text'] for r in rows if r['split'] == 'train']
     if not train or not any(r['split'] == 'development' for r in rows):
         raise ValueError('Empty split')
-    weights = fit(train)
+    weights = fit(train, args.shortcuts)
     book = codes(weights)
     scores = {}
     for split in ['train', 'development']:
@@ -117,11 +128,11 @@ def main():
         presses = sum(encode(text, book)[0] for text in texts)
         scores[split] = {'files': len(texts), 'ascii_presses': ascii_presses, 'huffman_presses': presses,
                          'saving_fraction': 1 - presses / ascii_presses}
-    profile = {'id': 'leetcode-python-lexical128-v1', 'weights': sorted(weights.items())}
+    profile = {'id': f'leetcode-python-lexical{args.shortcuts}-v2', 'weights': sorted(weights.items())}
     receipt = {'profile': profile['id'], 'profile_sha256': digest(profile), 'scores': scores,
                'confirmation_sha256': hashlib.sha256(args.confirmation.read_bytes()).hexdigest(),
                'source_rows_sha256': digest(rows), 'script_sha256': hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
-               'method': '128 frequency-times-length shortcuts; six training-only DP/refit iterations; minimum training cost chosen',
+               'method': f'{args.shortcuts} frequency-times-length shortcuts; six training-only DP/refit iterations; minimum training cost chosen',
                'limits': 'Error-free optimal segmentation for this fixed codebook only; no measured human effort or global optimum. Development is not protected solver confirmation.',
                'policy': 'Existing research exclusions plus reserved/recognition sibling families; ASCII validated reference text only; no hidden outputs.'}
     args.output.mkdir(parents=True, exist_ok=True)
