@@ -9,18 +9,17 @@ from __future__ import annotations
 
 import copy
 from collections import deque
-from dataclasses import dataclass
 import heapq
 import json
 
-SCHEMA = 'algsolve.typed-program.v1'
+SCHEMA = 'algsolve.typed-program.v2'
 INTS = ('list', 'int')
 EDGE = ('tuple', 'int', 'int', 'int')
 EDGES = ('list', EDGE)
 RESOURCES = {'dsu', 'heap_int', 'queue_int', 'map_int_int'}
 MAX_GRAPH_NODES = 4096
 MAX_DEPTH = 48
-MAX_COLLECTION = 10000
+MAX_COLLECTION = 20000
 MAX_INTEGER_BITS = 128
 
 
@@ -96,6 +95,7 @@ EFFECTS = {
     'queue.size': (('queue_int',), 'int', 'read'),
     'map.new': ((), 'map_int_int', 'allocate'),
     'map.has': (('map_int_int', 'int'), 'bool', 'read'),
+    'map.get': (('map_int_int', 'int', 'int'), 'int', 'read'),
     'map.set': (('map_int_int', 'int', 'int'), 'unit', 'write'),
 }
 PURE = {'add', 'sub', 'mul', 'eq', 'lt', 'not', 'neg', 'len', 'range',
@@ -165,9 +165,13 @@ def validate(program, recipes=None, stack=(), _remaining=None):
     _remaining = [MAX_GRAPH_NODES] if _remaining is None else _remaining
     _remaining[0] -= bounded_tree(program)
     require(_remaining[0] >= 0, 'Expanded recipe validation size limit exceeded')
-    fields(program, 'schema', 'inputs', 'body', 'return', 'output_type')
+    fields(program, 'schema', 'parameters', 'inputs', 'body', 'return', 'output_type')
     require(program['schema'] == SCHEMA and type(program['inputs']) is dict, 'Invalid program schema')
-    env = {name(k): (dtype(v), False) for k, v in program['inputs'].items()}
+    parameters = program['parameters']
+    require(type(parameters) is list and all(type(p) is str for p in parameters), 'Ordered signature required')
+    require(len(parameters) == len(set(parameters)) and set(parameters) == set(program['inputs']),
+            'Signature must cover each input exactly once')
+    env = {name(k): (dtype(program['inputs'][k]), False) for k in parameters}
     require(not any(resource(t) for t, _ in env.values()), 'Resource inputs are not supported')
     output = dtype(program['output_type'])
     require(not resource(output), 'Resource outputs are not supported')
@@ -236,17 +240,17 @@ def validate(program, recipes=None, stack=(), _remaining=None):
                 raise Invalid('Unknown statement')
     block(program['body'], env)
     require(expr(program['return'], env) == output, 'Return type mismatch')
-    return {k: dtype(t) for k, t in program['inputs'].items()}, output
+    return {k: dtype(program['inputs'][k]) for k in parameters}, output
 
 
-@dataclass
 class Cell:
-    value: object
+    def __init__(self, value):
+        self.value = value
 
 
-@dataclass
 class Budget:
-    remaining: int = 100000
+    def __init__(self, remaining=100000):
+        self.remaining = remaining
 
     def spend(self, amount=1):
         self.remaining -= amount
@@ -314,13 +318,14 @@ def _effect(op, a, budget):
         return obj.popleft()
     elif op == 'queue.size': return len(obj)
     elif op == 'map.has': return a[1] in obj
+    elif op == 'map.get': return obj.get(a[1], a[2])
     elif op == 'map.set': obj[a[1]] = a[2]
     else: raise Invalid('Unknown effect')
     return None
 
 
 def _run(program, arguments, recipes, budget):
-    env = dict(zip(program['inputs'], arguments))
+    env = dict(zip(program['parameters'], arguments))
     def expr(e, scope):
         budget.spend()
         if 'ref' in e:
@@ -387,7 +392,7 @@ def expanded(program, recipes):
                 if op == 'recipe':
                     target = recipes[s['recipe']]
                     child = {}
-                    for key, arg in zip(target['inputs'], s['args']):
+                    for key, arg in zip(target['parameters'], s['args']):
                         child[key] = fresh()
                         result.append({'op': 'let', 'name': child[key], 'value': expression(arg, names)})
                     sub, answer = expand(target, child)
@@ -414,9 +419,10 @@ def expanded(program, recipes):
         body = block(p['body'], mapping)
         return body, expression(p['return'], mapping)
     # Prefix inputs so fresh local names cannot collide with external bindings.
-    mapping = {k: f'input{i}' for i, k in enumerate(program['inputs'])}
+    mapping = {k: f'input{i}' for i, k in enumerate(program['parameters'])}
     body, answer = expand(program, dict(mapping))
-    result = {'schema': SCHEMA, 'inputs': {mapping[k]: v for k, v in program['inputs'].items()},
+    result = {'schema': SCHEMA, 'parameters': [mapping[k] for k in program['parameters']],
+              'inputs': {mapping[k]: v for k, v in program['inputs'].items()},
               'body': body, 'return': answer, 'output_type': program['output_type']}
     validate(result)
     return result, mapping
@@ -436,4 +442,5 @@ def operation_counts(program):
 
 
 def canonical(program):
-    return json.dumps(program, sort_keys=True, separators=(',', ':'))
+    # Positional ports live in the explicit parameters array, never map order.
+    return json.dumps(program, sort_keys=True, separators=(',', ':'), allow_nan=False)
