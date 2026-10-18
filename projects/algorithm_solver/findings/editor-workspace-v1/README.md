@@ -41,3 +41,14 @@ The bridge binds only to loopback and requires explicit pairing. The site does
 not deploy a public runner. A phone can type without it, but cannot use a desktop's
 loopback connection automatically. See [editor protocol](../../editor-protocol.md)
 for setup, supported signatures and resource limits.
+
+## Deployed check
+
+[Deployed receipt](deployed-journey.json) repeats both input/execution journeys and
+explicit retrieval insertion from `https://256.one/labs/two-button/`. Chromium's
+local-network permission was explicitly granted for that origin in the isolated
+automation context. Without it the browser blocked the loopback fetch; typing
+remained available. This grant is separate from Gamma's own explicit pairing.
+The deployed mobile check verified three modes, 128/256/256 entries, exactly
+7/8/8 presses and visible touch controls with no page errors. UI follow-up fixes
+invalidate results after language/problem edits and explain local-network denial.
