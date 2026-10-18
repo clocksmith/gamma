@@ -11,7 +11,7 @@ import time
 import numpy as np
 import torch
 
-from .. import validate
+from .. import validate, values
 from ..embed import Embedder, EXPECTED_SHA256
 from ..records import LANE_ROOT, Problem, load_hidden_tests, safe_name
 from . import development_tests, typed_codec, typed_confirmation
@@ -22,7 +22,7 @@ INSTRUCTION='Instruct: Retrieve typed programming components that solve this tas
 
 
 def signature(pair):
-    tree=ast.parse(pair['input']['starter_code'])
+    tree=values._stub_tree(pair['input']['starter_code'])
     classes=[n for n in tree.body if isinstance(n,ast.ClassDef) and n.name=='Solution']
     methods=[n for c in classes for n in c.body if isinstance(n,ast.FunctionDef) and n.name!='__init__']
     if len(methods)!=1: raise ValueError('Ambiguous development method signature')
@@ -105,11 +105,13 @@ def main():
             raise ValueError('Alternative targets have different requests')
         unique.setdefault(pair['uid'],pair)
     requests=list(unique.values()); indices={p['uid']:i for i,p in enumerate(requests)}
+    texts=[query_text(p) for p in requests]
     fit_indices=[indices[p['uid']] for p in fit]
     groups=[[j for j,p in enumerate(fit) if p['uid']==uid] for uid in dict.fromkeys(p['uid'] for p in fit)]
     output=LANE_ROOT/'runs'/args.name; output.mkdir(exist_ok=False)
-    sources={name:typed_confirmation.sha(Path(__file__).with_name(name)) for name in
-             ('train_typed.py','typed_predictor.py','typed_prediction_codec.py')}
+    source_names=('synth/train_typed.py','synth/typed_predictor.py','synth/typed_prediction_codec.py',
+                  'synth/development_tests.py','embed.py','values.py','validate.py','records.py','test_corrections.py')
+    sources={name:typed_confirmation.sha(LANE_ROOT/'algsolve'/name) for name in source_names}
     contract={'schema':'algsolve.typed-student-development.v1','codec_sha256':identity,
               'dataset_sha256':typed_confirmation.sha(pairs_path),'qualification_receipt_sha256':typed_confirmation.sha(qualified_path),
               'prediction_encoding':encoding.descriptor(),'seed':17,'steps':400,'width':64,'layers':2,
@@ -129,8 +131,8 @@ def main():
     started=time.perf_counter(); contracts=embedder.encode(descriptions,batch_size=4)
     contract_embedding_seconds=time.perf_counter()-started
     vectors=[]; embedding_seconds=[]
-    for p in requests:
-        started=time.perf_counter(); vectors.append(embedder.encode([query_text(p)],query=True,instruction=INSTRUCTION)[0])
+    for text in texts:
+        started=time.perf_counter(); vectors.append(embedder.encode([text],query=True,instruction=INSTRUCTION)[0])
         embedding_seconds.append(time.perf_counter()-started)
     vectors=np.array(vectors); neighbors=[]; retrieval_seconds=[]
     for vector in vectors:
