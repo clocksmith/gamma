@@ -42,7 +42,7 @@ def load_profiles(path=PROFILES):
 
 
 class ClarificationSession:
-    def __init__(self, query, candidates, catalog, *, max_questions=6, max_candidates=12):
+    def __init__(self, query, candidates, catalog, *, max_questions=6, max_candidates=12, facts=None):
         if not isinstance(query, str) or not query.strip() or len(query) > 60000:
             raise ValueError('A bounded nonempty description is required')
         if not 1 <= max_questions <= 12 or not 1 <= max_candidates <= 32:
@@ -69,6 +69,14 @@ class ClarificationSession:
         self.omitted = expanded[max_candidates:]
         self.initial = initial
         self.expanded = [key for key in self.active if key not in initial]
+        self.facts = dict(facts or {})
+        for facet, value in self.facts.items():
+            if facet not in self.catalog['facets'] or value not in self.catalog['facets'][facet]['values']:
+                raise ValueError('Undeclared explicit requirement')
+        # Missing profile facts are unknown, never evidence of contradiction.
+        self.active = [key for key in self.active if all(
+            facet not in self.profiles[key]['facts'] or self.profiles[key]['facts'][facet] == value
+            for facet,value in self.facts.items())]
 
     def _finish(self, decision, reason, key=None):
         self.pending = None
