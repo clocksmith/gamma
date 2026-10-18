@@ -12,7 +12,7 @@ Recognize indexed problems from complete statements and controlled paraphrases, 
 
 ### 1b. Understand natural problem descriptions
 
-Map informal, incomplete, conversational descriptions to the intended problem and requirements. Evaluate independently written descriptions, changed signatures, missing examples, genuine absent problems, and misleading siblings. Ask for clarification when essential details are missing. This capability is not established by controlled paraphrases. Next, create a separate development and protected evaluation collection.
+Map informal descriptions to the intended problem and requirements; clarify missing details. In 24 agent-authored development probes, all 16 specified targets appeared among five candidates, but none was accepted; four ambiguous requests received no clarification. Next, qualify requirement-sensitive selection and clarification using development data, then evaluate independently written protected descriptions.
 
 ## 2. Learn to compose executable solutions
 
@@ -50,7 +50,7 @@ encoding savings alone do not establish composition or human-effort gains.
 | Subgoal | Evidence and gap |
 |---|---|
 | 1a | [Known-answer results](findings/corpus-answer-gpu-v2/) and [identity limitations](HISTORY.md#current-known-answer-qualification). Passing retrieved-problem tests does not establish the intended problem was matched. |
-| 1b | No separate natural-description qualification yet; controlled paraphrases are not its acceptance evidence. |
+| 1b | [Natural-description development diagnostic](findings/natural-description-dev-v1/README.md): correct identity ranked first on 10/16 specified requests, in the top five on 16/16; all 24 queries abstained. Four easy out-of-domain rejections do not qualify genuine absent-algorithm handling. No independent human or protected qualification. |
 | 2a | [Typed student receipt](findings/typed-student-v2/summary.json): all eight audit predictions failed structural validation. [Development corpus](findings/typed-real-dev-v5/summary.json) is the permitted debugging source. |
 | 2b | [Frozen reservation](contracts/typed_confirmation_v1.json) and [teacher qualification](findings/typed-confirmation-qualified-v1/summary.json). Protected student scoring has not run. |
 
