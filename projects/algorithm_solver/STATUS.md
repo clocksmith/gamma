@@ -10,10 +10,14 @@ end-to-end evidence; the first composition student has no generalization win.
 1. Recognize indexed problems despite rewriting and return an existing correct
    solution without generating code. Distinguish siblings, abstain on uncertain
    matches, preserve provenance, and verify the query's public examples.
-2. Predict reusable algorithms, bindings and parameters in parallel, assemble
-   an executable graph deterministically, and solve unfamiliar combinations
-   quickly. Count retrieval, prediction, assembly and checking. Search is a
-   baseline/fallback; autoregressive code generation is not this runtime target.
+2. Learned unfamiliar-problem composition: predict solutions by composing typed
+   functions, data-structure operations, explicit state and control flow. Reusable
+   recipes expand into those building blocks; recipes are not the primitive
+   vocabulary itself. A compact neural predictor selects and connects the pieces;
+   deterministic code assembles and validates the result without autoregressive
+   source generation at runtime. Count retrieval, prediction, assembly and checking.
+   Search is a baseline/fallback. The three-algorithm-call limit belongs only to
+   the first implemented baseline, not this goal.
 
 The all-corpus service index is for goal 1 only. Never use it to train or evaluate
 unfamiliar composition. Raw datasets, model checkpoints and per-query rows remain
@@ -99,7 +103,7 @@ V1 remains unchanged at `2cdc0dbf…`. Its earlier export still has one valid pa
 from 65 audit rows; preserve `findings/graph-targets-v1/` and the poor v1 audit
 coverage. Those results did not establish a ceiling on better decompositions.
 
-`call_graph.py` adds a separate candidate v2 representation: up to three explicit
+`call_graph.py` retains the recorded v2 baseline: up to three explicit
 algorithm-call nodes, checked references, no dead algorithm nodes, and at most
 40 total glue AST nodes. It exposes existing v1 library algorithms directly.
 Only fixed-width window sums is a new algorithm; it passed randomized slice-sum
@@ -142,6 +146,13 @@ The graph forward pass median was 0.73 ms on valid decoded graphs; warm total
 training-task latency was about 0.82 s, dominated by CPU embedding. Fast abstention
 on the five confirmation tasks is not useful solving. Receipts and support audit:
 `findings/parallel-graph-pilot-v1/`; checkpoint and raw rows remain in the remote run.
+
+The 22 qualified teacher graphs, 17/17 training fit and 0/5 confirmation result
+describe that bounded baseline. They establish predictor/compiler infrastructure
+and missing operator/expression support, not a limit on learned composition.
+The distinct finer-grained experiment below tests shared typed pieces and new
+connections. No learned unfamiliar-composition success is established until that
+system produces protected generalization results.
 
 ## What remains, in order
 

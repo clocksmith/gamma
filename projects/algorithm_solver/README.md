@@ -67,15 +67,20 @@ The older pilots below remain evidence; they are not the intended final componen
 granularity or a qualified unfamiliar-problem solver.
 
 The active two-track goals and measured gaps are in [STATUS.md](STATUS.md).
-For unfamiliar problems the selected experiment is non-autoregressive,
-retrieval-conditioned graph prediction: interacting slots predict component IDs
-(including EMPTY), input/earlier-output bindings, bounded parameters and structure.
-Deterministic code validates and compiles the proposal. Search is a matched
-baseline and bounded fallback. Measure the first prediction before retries;
-retrieval, prediction, assembly and verification all count toward complete latency.
+Goal 2 is learned unfamiliar-problem composition from typed functions,
+data-structure operations, explicit state and control flow. Reusable recipes
+expand into those building blocks; they are not the primitive vocabulary itself.
+A compact neural predictor selects and connects the pieces, and deterministic
+code assembles and validates the result without autoregressive source generation
+at runtime. The three-call limit is a baseline constraint, not a goal constraint.
+Search is a matched baseline and bounded fallback. Measure the first prediction
+before retries; retrieval, prediction, assembly and verification all count toward
+complete latency. Protected generalization results are required before claiming
+success for the finer-grained learned composer.
 
-`algsolve/synth/graph_targets.py` supplies a bounded target representation and
-compiler over frozen vocabulary v1, not a neural model. Initial targets use
+The recorded baselines remain unchanged. `algsolve/synth/graph_targets.py` supplies
+a bounded target representation and compiler over frozen vocabulary v1, not a
+neural model. Initial targets use
 functional IO, three stage slots, explicit bindings, structured hole ASTs and
 <=40 total hole AST nodes with at least one algorithm-specific skeleton.
 `training_pairs.py` exports only permitted development proposals that round-trip
