@@ -178,17 +178,19 @@ def _run_in(task_dir: Path, argv: list[str], stdin: bytes, limits: Limits) -> Sa
 
     timed_out = False
     try:
-        proc.wait(timeout=limits.wall_seconds)
-    except subprocess.TimeoutExpired:
-        timed_out = True
+        try:
+            proc.wait(timeout=limits.wall_seconds)
+        except subprocess.TimeoutExpired:
+            timed_out = True
+    finally:
+        # Cancellation must kill the namespace before releasing its task files.
         _kill_group(proc)
         proc.wait()
-    # The pid namespace dies with bwrap; make sure any stragglers in the
-    # session are gone before the readers are joined.
-    _kill_group(proc)
-    for reader in readers:
-        reader.join(timeout=5)
-    writer.join(timeout=1)
+        for reader in readers:
+            reader.join(timeout=5)
+        writer.join(timeout=1)
+        for stream in (proc.stdin, proc.stdout, proc.stderr):
+            stream.close()
     wall = time.monotonic() - started
 
     code = proc.returncode

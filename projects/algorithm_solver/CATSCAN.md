@@ -13,7 +13,7 @@ does not constrain the composition goal.
 
 ## Authority
 
-Owns problem imports, sandbox judging, comparison routes, research answer interfaces, index-only mining, graph datasets, frozen samples and reports. Also owns the user-requested binary-input vocabulary study on permitted reference text; 256one owns its editor UI and runtime packaging. No unsupported generalization or benchmark-acceptance claims.
+Owns problem imports, sandbox judging, comparison routes, research answer interfaces, index-only mining, graph datasets, frozen samples and reports. Also owns the user-requested binary-input vocabulary study on permitted reference text; 256one owns its editor UI and runtime packaging. Gamma owns an explicitly paired, loopback-only research bridge to its bounded Linux judge and known-answer interface. No unsupported generalization or benchmark-acceptance claims.
 
 ## Scope
 
@@ -31,7 +31,8 @@ Owns problem imports, sandbox judging, comparison routes, research answer interf
 - Answers require query-public-example verification; stored validation is not query correctness. Missing sandbox/examples fails closed.
 - Graph proposals cannot bypass vocabulary, binding, resource or execution checks. Report first-prediction correctness/complete latency separately from retries/search.
 - Recipes are inspectable expansions, not the primitive vocabulary. Keep bounded-baseline results distinct from finer-grained experiments; learned unfamiliar-composition success requires protected generalization evidence.
-- Binary-input studies keep raw references ignored, record pinned sources and measure encoding cost separately from solving correctness and human effort. Public challenge navigation exports metadata only, never hidden tests or solutions.
+- Binary-input studies keep raw references ignored, record pinned sources and measure encoding cost separately from solving correctness and human effort. Public challenge navigation exports metadata only. Paired personal research views may export attributed statements, generated signature-only starters and public examples, with source license notices; never hidden tests or stored solutions through the challenge route. Checked solution retrieval is a separate explicit action.
+- Editor jobs require a paired origin/token, bounded requests and execution, cancellation cleanup and exact request/result binding. Python/JavaScript entry alphabets contain exactly 256 eight-bit codes, including commands; ASCII remains 128 seven-bit codes.
 - Training excludes protected families; shared structural patterns and alternative solutions stay together. Tests do not prove correctness.
 - Reserve fresh confirmation families before vocabulary mining. Structural recurrence does not verify components.
 - Generative comparisons share model/budget/repair allowance; repairs see public examples only.
