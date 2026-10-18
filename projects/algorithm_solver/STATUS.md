@@ -1,6 +1,6 @@
 # Algorithm solver: status and handoff
 
-Updated 2026-10-17. Component: `algorithm_solver`. Intent preserved: fast known
+Updated 2026-10-18. Component: `algorithm_solver`. Intent preserved: fast known
 recognition and separately learned, generation-free composition. **The overall
 composition goal is not finished.** The current known-answer route has measured
 end-to-end evidence; the first composition student has no generalization win.
@@ -408,10 +408,90 @@ is not a matched comparison on this pool. No new external-model run was launched
 `typed_confirmation.py check` revalidates codec, corpus, reservation, implementation
 and exposure hashes and rejects new exposure inventory or changed graph identities.
 Six focused tests passed; both real metadata freeze and check passed on host 128
-at source `c75312699`. The guarded contract remains explicitly **not evaluation
-ready**: protected targets are unqualified, no typed student is trained, and exact
-route/checkpoint/encoding artifacts must be sealed before the one scoring pass.
-This is a reservation and policy checkpoint, not a trained solver or evaluation.
+at source `c75312699`. At that checkpoint the guarded contract recorded **not
+evaluation ready**: protected targets were unqualified and no typed student was
+trained. Later receipts below advance those stages without rewriting the frozen
+reservation. Exact route/checkpoint/encoding artifacts must still be sealed
+before the one scoring pass.
+
+### Protected teacher qualification
+
+[Qualification receipt](findings/typed-confirmation-qualified-v1/summary.json):
+ten sealed teacher proposals qualified against the unchanged typed codec and
+15-graph fit partition. They passed **26 public tests, 1,052 independent test
+executions and ten declared-maximum-input probes**, with complete fit-side feature
+support and no expanded-pattern overlap with either development partition.
+This is teacher coverage of **10/66**, not student solving or universal coverage.
+
+The fixed denominator also retains 19 unsupported interfaces, 13 input-bound
+exclusions, three entries without independent evidence, and 21 entries for which
+no bounded teacher decomposition was submitted. The last category is not proof
+of missing operations or impossibility. No failed protected target was repaired,
+no protected suite was replaced, and no operation, recipe or development example
+was added from protected feedback. The development file remains
+`566d6b440d7fdd16bac0b86114b5e8dd35ba8bd646b6bd304f8cfbc5e201330e`.
+
+`typed_target_qualification.py` seals all proposals before independent tests are
+loaded, checks fit-only support and fit/audit overlap, and retains exclusions and
+failure reasons. Its raw proposals, graphs and verdicts live separately under
+`runs/protected/typed-confirmation-qualified-v1/` on host 128. They are forbidden
+training/retrieval inputs; only the aggregate receipt is published. Independent
+means the test authority, not a separate human or agent author. Finite test
+agreement and maximum-size probes do not prove correctness or all resource bounds.
+The source-bound reservation check passed again after qualification. The Linux
+judge/lane/qualification checks passed 39 tests at source `2d1fa9c02`.
+
+### First typed-tree student: trained, no audit win
+
+[Development receipt](findings/typed-student-v2/summary.json) and
+[training contract](findings/typed-student-v2/contract.json) record one fixed
+400-step CPU configuration at source `c3a3bf185`: **197,612 parameters**, 192 tree
+slots, 15 fit graphs across ten problems, and nine audit graphs across eight
+problems. The prediction encoding is fitted on the fit partition only. Operation,
+first-child/next-sibling edge, binding, type and sign/magnitude literal heads run
+in one parallel forward. Recipes remain IR nodes with deterministic expansion;
+no arbitrary expression templates or autoregressive source generation are used.
+The loss permits multiple qualified targets for a problem, rather than requiring
+one teacher's exact decomposition. This does not establish that every supplied
+alternative or operator was learned.
+
+| Development partition | Problems | Structurally valid first graphs | Independently correct first graphs | Answered | Wrong acceptance |
+|---|---:|---:|---:|---:|---:|
+| Fit | 10 | 8 | 4 | 4 | 0 |
+| Audit | 8 | 0 | 0 | 0 | 0 |
+
+Audit failures were five invalid root/nontrailing-empty layouts, one invalid tree
+edge, one expression-shape error and one statement-shape error. They are
+development evidence about structure prediction; protected diagnostics did not
+drive this encoding or training. No malformed graph was repaired for scoring.
+All 24 development targets round-trip through the encoding to identical expanded
+graphs, including literal values and bindings. Seven focused encoding/predictor
+tests, including those 24 round-trip subtests, passed across the initial check and
+the affected adapter check.
+
+The head's median forward-and-decision time was **0.832 ms**. Complete development
+fit p50/p95 were 1.084/1.933 seconds; audit p50/p95 were 0.717/0.921 seconds, all
+abstentions. These include warm embedding, retrieval ranking, prediction, assembly
+and public checking; independent scoring is separate. Cold embedding load was
+2.269 seconds and one-time fit-contract embedding was 28.188 seconds. Training
+took 8.336 seconds. **Fast graph prediction and fast abstention are not a solving
+win.** The current typed student has no learned generalization result.
+
+The [first preparation failure](findings/typed-student-v1/failure.json) remains
+recorded: a signature-only starter lacked a body, and the new adapter rejected
+it before any optimizer step. Reusing the existing stub parser fixed that boundary
+without changing corpus bytes, codec, model configuration or protected targets.
+The successful run and checkpoint are under `runs/typed-student-v2/` on host 128.
+Checkpoint SHA256:
+`25f9ca2ff223f5ae930f9511be21445efaa6dde49a697eccd5c648bdb918617c`.
+
+Protected student scoring remains unopened. The post-training reservation check
+still passed with the original 37 exposure authorities and unchanged development
+hash. Next work is development-only diagnosis of malformed first graphs and the
+matched deterministic-search routes; seal all route/checkpoint artifacts before
+the protected scoring pass. Keep protected exclusions out of library/training
+changes and retain all 66 entries in coverage reports. Recognition and the
+two-button editor were not changed by this campaign.
 
 ## Binary-input vocabulary study (256one integration)
 
