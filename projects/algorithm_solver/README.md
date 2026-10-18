@@ -208,7 +208,21 @@ control forms, literal classes and recipe expansion before proposing a developme
 split. It checks problem/family/pattern overlap as well as missing features. These
 are necessary conditions, not proof of learnability. All 9 development audit graphs
 are now supported by 15 fit graphs, with all admitted operators and recipes in fit.
-No model training or protected evaluation was launched. Reserve fresh protected
-combinations and freeze the comparison contract, then train and measure
+No model training or protected evaluation was launched. The
+[typed confirmation contract](contracts/typed_confirmation_v1.json) now retains
+the original 66 protected problems / 60 sibling families and freezes comparison
+policy. Next qualify protected teacher targets and seal the route artifacts, then train and measure
 first-prediction correctness before search or repair. Inspected
 development rows cannot become fresh evaluation merely by changing their labels.
+
+Verify the reservation against the existing Linux artifacts from the lane:
+
+```sh
+python -m algsolve.synth.typed_confirmation check --contract contracts/typed_confirmation_v1.json
+```
+
+The check reads identities and hashes, not protected test results. It rejects
+source drift, missing exposure authorities, overlap and changed exposure inventory.
+Metadata-compatible interfaces are not proof of executable target support; all
+unsupported members stay in fixed-pool coverage. Neither this command nor the
+reservation launches training, search, teachers or protected scoring.

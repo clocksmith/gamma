@@ -183,11 +183,12 @@ system produces protected generalization results.
    current frozen evaluation. Extend independent stored-solution coverage.
 2. The frozen-codec corpus now has 24 qualified graphs / 18 problems. Its
    development split passes support for all 9 audit targets against 15 fit targets.
-   Reserve genuinely fresh protected patterns/families and freeze the prediction
-   and search comparison before training. Keep examined rows as development,
-   preserve counterexample-backed negatives and valid alternatives, and do not
-   redraw the existing reserved 66-problem/60-family split. Feature presence is
-   necessary evidence, not proof that 24 graphs are sufficient to train a solver.
+   The 66-problem/60-sibling-family reservation and comparison policy are now bound
+   to `contracts/typed_confirmation_v1.json`. Next qualify teacher-only protected
+   targets against the frozen codec, fit-side feature support and pattern exclusion;
+   retain unsupported members in fixed-pool coverage. Keep examined rows as
+   development, preserve negatives and alternatives, and do not redraw the pool.
+   Feature presence is necessary evidence, not proof that 24 graphs suffice to train.
 3. Train the compact typed predictor under that frozen contract, then evaluate
    the fresh set once. Report teacher coverage, student first-prediction
    correctness, wrong acceptance and complete latency separately. Compare bounded
@@ -366,9 +367,51 @@ still checked. Normal list comparisons remain ordered. See
 The [intermediate audit](findings/typed-real-dev-v4/summary.json) reached 7/9 support;
 the final interval-schedule alternative supplied the remaining pair-list length
 binding without changing the split rule. All inspected targets remain development.
-No fresh protected set, trained typed predictor or learned generalization result
-exists yet. Recognition receipts and the separately owned two-button work remain
+At that checkpoint, no typed protected reservation, trained predictor or learned
+generalization result existed. Recognition receipts and the separately owned two-button work remain
 independent; this run did not rescore recognition or modify editor input codes.
+
+### Typed confirmation reservation and comparison policy
+
+[The frozen contract](contracts/typed_confirmation_v1.json) retains all 66 entries
+and 60 sibling families from the existing pre-mining reservation. It does not draw
+replacement tasks or promote the nine inspected development audit graphs to
+protected evaluation. The source-bound exposure scan covers **37 artifacts**:
+composer audit identities, mined provenance, development pairs/verdicts, earlier
+solving runs and binary-input source exposure. None overlaps the reserved families.
+This establishes exclusion under those recorded artifacts, not absence from
+foundation-model pretraining, the independent known-problem corpus, or unrecorded
+human inspection. Sibling grouping does not prove semantic-pattern novelty.
+
+Metadata reports independent evidence available for 63 entries, numeric parameter
+interfaces for 47, and both for 44. These are **not qualified composition targets**.
+No protected statements, references or tests were exported or evaluated by this
+step. Teacher-only target qualification must establish executable graphs, actual
+bounds, complete fit-side support and exclusion of previously examined graph
+patterns. Unsupported targets keep their rejection reasons and remain in the
+66-entry coverage denominator. The frozen codec may not grow in response.
+
+The policy compares one parallel predicted graph, unguided bounded search,
+retrieval-guided bounded search and nearest-fit-graph lookup. Search is capped at
+128 candidates; all routes share a two-second warm decision budget including
+public checking. First-graph correctness is separate from fallback; incorrect
+publicly accepted answers count as wrong acceptance. Retrieval uses fit-side
+graphs and component contracts only, never the production index or audit targets.
+No neural reranker or autoregressive source generator is introduced.
+
+Report cold loading, warm embedding/retrieval, prediction/search, assembly,
+public checks and independent scoring separately, plus complete p50/p95/max
+decision latency including failed attempts. One-second warm p50 and two-second
+p95 are experiment targets, not measured wins. The historical 80.2% Codex result
+is not a matched comparison on this pool. No new external-model run was launched.
+
+`typed_confirmation.py check` revalidates codec, corpus, reservation, implementation
+and exposure hashes and rejects new exposure inventory or changed graph identities.
+Six focused tests passed; both real metadata freeze and check passed on host 128
+at source `c75312699`. The guarded contract remains explicitly **not evaluation
+ready**: protected targets are unqualified, no typed student is trained, and exact
+route/checkpoint/encoding artifacts must be sealed before the one scoring pass.
+This is a reservation and policy checkpoint, not a trained solver or evaluation.
 
 ## Binary-input vocabulary study (256one integration)
 
