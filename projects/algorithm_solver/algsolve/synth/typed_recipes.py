@@ -20,7 +20,7 @@ def invoke(recipe, out, *args): return {'op': 'recipe', 'recipe': recipe, 'args'
 
 
 def program(inputs, body, answer, output):
-    return json.loads(json.dumps({'schema': SCHEMA, 'inputs': inputs, 'body': body,
+    return json.loads(json.dumps({'schema': SCHEMA, 'parameters': list(inputs), 'inputs': inputs, 'body': body,
                                  'return': answer, 'output_type': output}))
 
 
