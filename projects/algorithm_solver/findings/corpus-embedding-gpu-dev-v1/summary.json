@@ -1,0 +1,114 @@
+{
+  "inputs_sha256": "99ca46e3cea1bb42ae5fe968f5cc0088cdc144f4a401dcd575f3f854adc2234c",
+  "queries": 60,
+  "index_entries": 3353,
+  "partition": "development",
+  "embedding_device": "cuda",
+  "embedding_dtype": "float16",
+  "thresholds": {
+    "min_score": 1.096599,
+    "min_margin": 0.0,
+    "dev_correct": 49,
+    "dev_wrong": 0,
+    "dev_cases": 60,
+    "fitted_on": "recognition_dev queries only"
+  },
+  "torch_version": "2.12.1+rocm7.2",
+  "hsa_override": null,
+  "gpu_name": "Radeon 8060S Graphics",
+  "absent_policy": "development only: exclude entire canonical sibling family per absent query",
+  "label": "prior model exposure unknown; known-problem recognition only",
+  "completed": 60,
+  "by_kind": {
+    "exact": {
+      "queries": 20,
+      "correct": 20
+    },
+    "paraphrase": {
+      "queries": 20,
+      "correct": 19,
+      "abstain": 1
+    },
+    "sibling_paraphrase": {
+      "queries": 10,
+      "correct": 10
+    },
+    "absent_exact": {
+      "queries": 10,
+      "correct": 10
+    }
+  },
+  "embedding_load_seconds": 2.619363696023356,
+  "p50_seconds": 0.0958145555050578,
+  "p95_seconds": 0.192096605154802,
+  "failures": [
+    {
+      "i": 21,
+      "kind": "paraphrase",
+      "target": "lc:rearrange-array-to-maximize-prefix-score",
+      "matched": null,
+      "decision": "abstain",
+      "correct": false,
+      "seconds": 0.09155430999817327,
+      "candidates": [
+        {
+          "key": "lc:rearrange-array-to-maximize-prefix-score",
+          "cosine": 0.8660059571266174,
+          "score": 1.063625004745665,
+          "features": {
+            "method": 1.0,
+            "params": 1.0,
+            "numbers": 0.14285714285714285,
+            "phrases": 0.3333333333333333
+          }
+        },
+        {
+          "key": "lc:maximum-unique-subarray-sum-after-deletion",
+          "cosine": 0.744928240776062,
+          "score": 0.859928240776062,
+          "features": {
+            "method": 0.0,
+            "params": 1.0,
+            "numbers": 0.4,
+            "phrases": 0.25
+          }
+        },
+        {
+          "key": "lc:number-of-ways-to-split-array",
+          "cosine": 0.7017031908035278,
+          "score": 0.8517031908035279,
+          "features": {
+            "method": 0.0,
+            "params": 1.0,
+            "numbers": 0.0,
+            "phrases": 1.0
+          }
+        },
+        {
+          "key": "lc:maximum-sum-score-of-array",
+          "cosine": 0.734244704246521,
+          "score": 0.8509113709131877,
+          "features": {
+            "method": 0.0,
+            "params": 1.0,
+            "numbers": 0.16666666666666666,
+            "phrases": 0.5
+          }
+        },
+        {
+          "key": "lc:make-the-prefix-sum-non-negative",
+          "cosine": 0.7468453645706177,
+          "score": 0.836131078856332,
+          "features": {
+            "method": 0.0,
+            "params": 1.0,
+            "numbers": 0.14285714285714285,
+            "phrases": 0.25
+          }
+        }
+      ],
+      "numbers_preserved": 0.333
+    }
+  ],
+  "limitation": "Existing model-generated paraphrases with unchanged starter code; no human paraphrase validation or unseen-problem claim."
+}

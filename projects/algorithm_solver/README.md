@@ -88,9 +88,29 @@ license/attribution, vocabulary identity and fresh validation provenance are
 retained. Connected groups of problem identities and structural graph patterns
 are assigned together; hash-selected groups are reserved for pattern confirmation.
 This conservative structural grouping is not proof of semantic-pattern novelty.
-A tiny export is not enough to train or qualify the proposed model. Retrieval
-conditioning, synthetic target generation, hard negatives and a trained predictor
-remain to be implemented and evaluated against protected tasks.
+A tiny export is not enough to qualify the proposed model. The separate
+`call_graph.py` candidate now exposes existing library algorithms as explicit
+nodes and adds independently tested fixed-width window sums. Of 23 selected
+development proposals, 22 pass fresh public/independent tests within the
+40-node glue limit. This is selected teacher coverage, not benchmark coverage.
+
+`parallel_graph.py` and `train_parallel.py` implement a retrieval-conditioned
+parallel slot predictor, deterministic assembly and a frozen development pilot:
+
+```sh
+python -m algsolve.synth.call_graph_pairs --proposals contracts/call_graph_development.json --confirmation findings/mine-v2-candidates-20261017/split.json --name call-graph-dev-v2-requalified
+python -m algsolve.synth.train_parallel --dataset runs/call-graph-dev-v2-requalified/pairs.jsonl --name parallel-graph-pilot-v1 --steps 200
+```
+
+Use new names for new executions; existing datasets/runs are not overwritten.
+The pilot passed 17/17 training tasks and 0/5 pattern-confirmation tasks. Four
+confirmation graphs need expression templates missing from training and three
+use operators without training examples; none has complete training support.
+The 149,505-parameter graph head runs alongside a frozen 0.6B embedding model.
+It is working model/compiler infrastructure, not qualified unfamiliar solving.
+See `findings/parallel-graph-pilot-v1/` and the current next steps in `STATUS.md`.
+More verified real compositions, parameterized expression prediction, hard
+negatives and fresh supported confirmation remain necessary.
 
 Research precedent, not Gamma evidence: [NAPG](https://arxiv.org/abs/2211.03462)
 reports 21x faster program generation on ConvFinQA/MultiHiertt numerical QA.

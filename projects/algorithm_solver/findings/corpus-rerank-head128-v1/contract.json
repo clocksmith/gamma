@@ -1,0 +1,2974 @@
+{
+  "files": {
+    "data/derived/corpus_entries.jsonl": "be05215a94bbe15083ffea79cc42c88fa8fad16a0793df15775089829f9b3be4",
+    "data/derived/corpus_embeddings.npy": "fc45c1e544ae27365c1d96bb6a732b514d3a325e3802f94fcdb3efe1b076655c",
+    "data/derived/corpus_embedding_keys.json": "45bcc81e58f30e6907b69a20eef27b184c05b1894b1222264ba3ba5a22c7bc54",
+    "contracts/sample_manifest.json": "40da673a01f48bab08fe6c07a07f493c603e0a34c858c72c2282fcd487fb1bd5",
+    "data/derived/paraphrases.jsonl": "9c5abcfb9d5bfec83c5afd163697a3de49cde289423d0d8a1f528fcb878b3bbb",
+    "algsolve/rerank_recognition.py": "4f60facb38924118ea1e44092d43e4fe484dcba77e7111526707368637b8142d",
+    "algsolve/rerank.py": "ba3795b1f9027ab8c213cf2402153bef475e672d99b002b693ce04501785e01a",
+    "algsolve/lookup.py": "f47af304f80dc06d448404e0c48a046d99cdebe90c3045ae51b87fce570784c9",
+    "algsolve/embed.py": "3ee7744c217c8e93a5dde5754fb7c3fb158966c8fa53e4f11f3b128932d054da"
+  },
+  "model_manifest_sha256": "e07c809b283dfd7f7a2164d722f3fc65738a31adc5913295660988d1d9a5c406",
+  "model_id": "qwen-3-reranker-0-6b-f16-af32",
+  "runtime_config": {
+    "inference": {
+      "executionPatch": {
+        "addKernels": [
+          {
+            "key": "attn_head128",
+            "kernel": {
+              "kernel": "attention_head128_f16kv.wgsl",
+              "entry": "main",
+              "digest": "sha256:559a3da4f3f5dcc4671f5a9b429a84209340a66a6e17f583bb329b2e23832c9b",
+              "precision": {
+                "kvDtype": "f16"
+              }
+            }
+          }
+        ],
+        "set": [
+          {
+            "section": "prefill",
+            "op": "attention",
+            "kernelKey": "attn_head128"
+          }
+        ]
+      }
+    }
+  },
+  "runtime_config_sha256": "ce7594911a17109198a2fb3181c609de50220b9e2150902058271661f4438ef4",
+  "input_normalization": "trim outer whitespace only before request and exact response binding",
+  "runtime_revision": "63d099c219082ece2997c5710715513539fdfbe6",
+  "top_k": 10,
+  "dev_queries": [
+    {
+      "group": "known:number-of-different-subsequences-gcds",
+      "kind": "exact",
+      "qid": "dq000",
+      "target": "lc:number-of-different-subsequences-gcds"
+    },
+    {
+      "group": "known:number-of-different-subsequences-gcds",
+      "kind": "paraphrase",
+      "qid": "dq001",
+      "target": "lc:number-of-different-subsequences-gcds"
+    },
+    {
+      "group": "known:split-array-into-maximum-number-of-subarrays",
+      "kind": "exact",
+      "qid": "dq002",
+      "target": "lc:split-array-into-maximum-number-of-subarrays"
+    },
+    {
+      "group": "known:split-array-into-maximum-number-of-subarrays",
+      "kind": "paraphrase",
+      "qid": "dq003",
+      "target": "lc:split-array-into-maximum-number-of-subarrays"
+    },
+    {
+      "group": "known:node-with-highest-edge-score",
+      "kind": "exact",
+      "qid": "dq004",
+      "target": "lc:node-with-highest-edge-score"
+    },
+    {
+      "group": "known:node-with-highest-edge-score",
+      "kind": "paraphrase",
+      "qid": "dq005",
+      "target": "lc:node-with-highest-edge-score"
+    },
+    {
+      "group": "known:divisible-and-non-divisible-sums-difference",
+      "kind": "exact",
+      "qid": "dq006",
+      "target": "lc:divisible-and-non-divisible-sums-difference"
+    },
+    {
+      "group": "known:divisible-and-non-divisible-sums-difference",
+      "kind": "paraphrase",
+      "qid": "dq007",
+      "target": "lc:divisible-and-non-divisible-sums-difference"
+    },
+    {
+      "group": "known:find-building-where-alice-and-bob-can-meet",
+      "kind": "exact",
+      "qid": "dq008",
+      "target": "lc:find-building-where-alice-and-bob-can-meet"
+    },
+    {
+      "group": "known:find-building-where-alice-and-bob-can-meet",
+      "kind": "paraphrase",
+      "qid": "dq009",
+      "target": "lc:find-building-where-alice-and-bob-can-meet"
+    },
+    {
+      "group": "known:integer-to-roman",
+      "kind": "exact",
+      "qid": "dq010",
+      "target": "lc:integer-to-roman"
+    },
+    {
+      "group": "known:integer-to-roman",
+      "kind": "paraphrase",
+      "qid": "dq011",
+      "target": "lc:integer-to-roman"
+    },
+    {
+      "group": "known:minimized-maximum-of-products-distributed-to-any-store",
+      "kind": "exact",
+      "qid": "dq012",
+      "target": "lc:minimized-maximum-of-products-distributed-to-any-store"
+    },
+    {
+      "group": "known:minimized-maximum-of-products-distributed-to-any-store",
+      "kind": "paraphrase",
+      "qid": "dq013",
+      "target": "lc:minimized-maximum-of-products-distributed-to-any-store"
+    },
+    {
+      "group": "known:the-kth-factor-of-n",
+      "kind": "exact",
+      "qid": "dq014",
+      "target": "lc:the-kth-factor-of-n"
+    },
+    {
+      "group": "known:the-kth-factor-of-n",
+      "kind": "paraphrase",
+      "qid": "dq015",
+      "target": "lc:the-kth-factor-of-n"
+    },
+    {
+      "group": "known:di-string-match",
+      "kind": "exact",
+      "qid": "dq016",
+      "target": "lc:di-string-match"
+    },
+    {
+      "group": "known:di-string-match",
+      "kind": "paraphrase",
+      "qid": "dq017",
+      "target": "lc:di-string-match"
+    },
+    {
+      "group": "known:divide-nodes-into-the-maximum-number-of-groups",
+      "kind": "exact",
+      "qid": "dq018",
+      "target": "lc:divide-nodes-into-the-maximum-number-of-groups"
+    },
+    {
+      "group": "known:divide-nodes-into-the-maximum-number-of-groups",
+      "kind": "paraphrase",
+      "qid": "dq019",
+      "target": "lc:divide-nodes-into-the-maximum-number-of-groups"
+    },
+    {
+      "group": "known:rearrange-array-to-maximize-prefix-score",
+      "kind": "exact",
+      "qid": "dq020",
+      "target": "lc:rearrange-array-to-maximize-prefix-score"
+    },
+    {
+      "group": "known:rearrange-array-to-maximize-prefix-score",
+      "kind": "paraphrase",
+      "qid": "dq021",
+      "target": "lc:rearrange-array-to-maximize-prefix-score"
+    },
+    {
+      "group": "known:prime-number-of-set-bits-in-binary-representation",
+      "kind": "exact",
+      "qid": "dq022",
+      "target": "lc:prime-number-of-set-bits-in-binary-representation"
+    },
+    {
+      "group": "known:prime-number-of-set-bits-in-binary-representation",
+      "kind": "paraphrase",
+      "qid": "dq023",
+      "target": "lc:prime-number-of-set-bits-in-binary-representation"
+    },
+    {
+      "group": "known:minimum-operations-to-collect-elements",
+      "kind": "exact",
+      "qid": "dq024",
+      "target": "lc:minimum-operations-to-collect-elements"
+    },
+    {
+      "group": "known:minimum-operations-to-collect-elements",
+      "kind": "paraphrase",
+      "qid": "dq025",
+      "target": "lc:minimum-operations-to-collect-elements"
+    },
+    {
+      "group": "known:increasing-decreasing-string",
+      "kind": "exact",
+      "qid": "dq026",
+      "target": "lc:increasing-decreasing-string"
+    },
+    {
+      "group": "known:increasing-decreasing-string",
+      "kind": "paraphrase",
+      "qid": "dq027",
+      "target": "lc:increasing-decreasing-string"
+    },
+    {
+      "group": "known:sell-diminishing-valued-colored-balls",
+      "kind": "exact",
+      "qid": "dq028",
+      "target": "lc:sell-diminishing-valued-colored-balls"
+    },
+    {
+      "group": "known:sell-diminishing-valued-colored-balls",
+      "kind": "paraphrase",
+      "qid": "dq029",
+      "target": "lc:sell-diminishing-valued-colored-balls"
+    },
+    {
+      "group": "known:maximum-length-of-repeated-subarray",
+      "kind": "exact",
+      "qid": "dq030",
+      "target": "lc:maximum-length-of-repeated-subarray"
+    },
+    {
+      "group": "known:maximum-length-of-repeated-subarray",
+      "kind": "paraphrase",
+      "qid": "dq031",
+      "target": "lc:maximum-length-of-repeated-subarray"
+    },
+    {
+      "group": "known:count-increasing-quadruplets",
+      "kind": "exact",
+      "qid": "dq032",
+      "target": "lc:count-increasing-quadruplets"
+    },
+    {
+      "group": "known:count-increasing-quadruplets",
+      "kind": "paraphrase",
+      "qid": "dq033",
+      "target": "lc:count-increasing-quadruplets"
+    },
+    {
+      "group": "known:shortest-cycle-in-a-graph",
+      "kind": "exact",
+      "qid": "dq034",
+      "target": "lc:shortest-cycle-in-a-graph"
+    },
+    {
+      "group": "known:shortest-cycle-in-a-graph",
+      "kind": "paraphrase",
+      "qid": "dq035",
+      "target": "lc:shortest-cycle-in-a-graph"
+    },
+    {
+      "group": "known:words-within-two-edits-of-dictionary",
+      "kind": "exact",
+      "qid": "dq036",
+      "target": "lc:words-within-two-edits-of-dictionary"
+    },
+    {
+      "group": "known:words-within-two-edits-of-dictionary",
+      "kind": "paraphrase",
+      "qid": "dq037",
+      "target": "lc:words-within-two-edits-of-dictionary"
+    },
+    {
+      "group": "known:shortest-uncommon-substring-in-an-array",
+      "kind": "exact",
+      "qid": "dq038",
+      "target": "lc:shortest-uncommon-substring-in-an-array"
+    },
+    {
+      "group": "known:shortest-uncommon-substring-in-an-array",
+      "kind": "paraphrase",
+      "qid": "dq039",
+      "target": "lc:shortest-uncommon-substring-in-an-array"
+    },
+    {
+      "family": [
+        "lc:count-the-number-of-special-characters-i",
+        "lc:count-the-number-of-special-characters-ii"
+      ],
+      "group": "family:count-the-number-of-special-characters",
+      "kind": "sibling_paraphrase",
+      "qid": "dq040",
+      "target": "lc:count-the-number-of-special-characters-i"
+    },
+    {
+      "family": [
+        "lc:count-the-number-of-special-characters-i",
+        "lc:count-the-number-of-special-characters-ii"
+      ],
+      "group": "family:count-the-number-of-special-characters",
+      "kind": "sibling_paraphrase",
+      "qid": "dq041",
+      "target": "lc:count-the-number-of-special-characters-ii"
+    },
+    {
+      "family": [
+        "lc:max-consecutive-ones",
+        "lc:max-consecutive-ones-ii",
+        "lc:max-consecutive-ones-iii"
+      ],
+      "group": "family:max-consecutive-ones",
+      "kind": "sibling_paraphrase",
+      "qid": "dq042",
+      "target": "lc:max-consecutive-ones-ii"
+    },
+    {
+      "family": [
+        "lc:max-consecutive-ones",
+        "lc:max-consecutive-ones-ii",
+        "lc:max-consecutive-ones-iii"
+      ],
+      "group": "family:max-consecutive-ones",
+      "kind": "sibling_paraphrase",
+      "qid": "dq043",
+      "target": "lc:max-consecutive-ones-iii"
+    },
+    {
+      "family": [
+        "lc:minimum-time-to-revert-word-to-initial-state-i",
+        "lc:minimum-time-to-revert-word-to-initial-state-ii"
+      ],
+      "group": "family:minimum-time-to-revert-word-to-initial-state",
+      "kind": "sibling_paraphrase",
+      "qid": "dq044",
+      "target": "lc:minimum-time-to-revert-word-to-initial-state-i"
+    },
+    {
+      "family": [
+        "lc:minimum-time-to-revert-word-to-initial-state-i",
+        "lc:minimum-time-to-revert-word-to-initial-state-ii"
+      ],
+      "group": "family:minimum-time-to-revert-word-to-initial-state",
+      "kind": "sibling_paraphrase",
+      "qid": "dq045",
+      "target": "lc:minimum-time-to-revert-word-to-initial-state-ii"
+    },
+    {
+      "family": [
+        "lc:range-addition",
+        "lc:range-addition-ii"
+      ],
+      "group": "family:range-addition",
+      "kind": "sibling_paraphrase",
+      "qid": "dq046",
+      "target": "lc:range-addition"
+    },
+    {
+      "family": [
+        "lc:range-addition",
+        "lc:range-addition-ii"
+      ],
+      "group": "family:range-addition",
+      "kind": "sibling_paraphrase",
+      "qid": "dq047",
+      "target": "lc:range-addition-ii"
+    },
+    {
+      "family": [
+        "lc:find-beautiful-indices-in-the-given-array-i",
+        "lc:find-beautiful-indices-in-the-given-array-ii"
+      ],
+      "group": "family:find-beautiful-indices-in-the-given-array",
+      "kind": "sibling_paraphrase",
+      "qid": "dq048",
+      "target": "lc:find-beautiful-indices-in-the-given-array-i"
+    },
+    {
+      "family": [
+        "lc:find-beautiful-indices-in-the-given-array-i",
+        "lc:find-beautiful-indices-in-the-given-array-ii"
+      ],
+      "group": "family:find-beautiful-indices-in-the-given-array",
+      "kind": "sibling_paraphrase",
+      "qid": "dq049",
+      "target": "lc:find-beautiful-indices-in-the-given-array-ii"
+    },
+    {
+      "group": "absent:identify-the-largest-outlier-in-an-array",
+      "kind": "absent_exact",
+      "problem_uid": "lcd:3371",
+      "qid": "dq050",
+      "target": null
+    },
+    {
+      "group": "absent:total-characters-in-string-after-transformations-ii",
+      "kind": "absent_exact",
+      "problem_uid": "lcd:3337",
+      "qid": "dq051",
+      "target": null
+    },
+    {
+      "group": "absent:find-a-safe-walk-through-a-grid",
+      "kind": "absent_exact",
+      "problem_uid": "lcd:3286",
+      "qid": "dq052",
+      "target": null
+    },
+    {
+      "group": "absent:phone-number-prefix",
+      "kind": "absent_exact",
+      "problem_uid": "lcd:3491",
+      "qid": "dq053",
+      "target": null
+    },
+    {
+      "group": "absent:check-if-grid-can-be-cut-into-sections",
+      "kind": "absent_exact",
+      "problem_uid": "lcd:3394",
+      "qid": "dq054",
+      "target": null
+    },
+    {
+      "group": "absent:find-the-count-of-monotonic-pairs-i",
+      "kind": "absent_exact",
+      "problem_uid": "lcd:3250",
+      "qid": "dq055",
+      "target": null
+    },
+    {
+      "group": "absent:maximize-score-of-numbers-in-ranges",
+      "kind": "absent_exact",
+      "problem_uid": "lcd:3281",
+      "qid": "dq056",
+      "target": null
+    },
+    {
+      "group": "absent:find-minimum-time-to-reach-last-room-i",
+      "kind": "absent_exact",
+      "problem_uid": "lcd:3341",
+      "qid": "dq057",
+      "target": null
+    },
+    {
+      "group": "absent:find-the-last-marked-nodes-in-tree",
+      "kind": "absent_exact",
+      "problem_uid": "lcd:3313",
+      "qid": "dq058",
+      "target": null
+    },
+    {
+      "group": "absent:minimum-operations-to-make-columns-strictly-increasing",
+      "kind": "absent_exact",
+      "problem_uid": "lcd:3402",
+      "qid": "dq059",
+      "target": null
+    }
+  ],
+  "evaluation_queries": [
+    {
+      "group": "known:base-7",
+      "kind": "exact",
+      "qid": "rq000",
+      "target": "lc:base-7"
+    },
+    {
+      "group": "known:base-7",
+      "kind": "paraphrase",
+      "qid": "rq001",
+      "target": "lc:base-7"
+    },
+    {
+      "group": "known:check-if-there-is-a-path-with-equal-number-of-0s-and-1s",
+      "kind": "exact",
+      "qid": "rq002",
+      "target": "lc:check-if-there-is-a-path-with-equal-number-of-0s-and-1s"
+    },
+    {
+      "group": "known:check-if-there-is-a-path-with-equal-number-of-0s-and-1s",
+      "kind": "paraphrase",
+      "qid": "rq003",
+      "target": "lc:check-if-there-is-a-path-with-equal-number-of-0s-and-1s"
+    },
+    {
+      "group": "known:check-if-a-string-can-break-another-string",
+      "kind": "exact",
+      "qid": "rq004",
+      "target": "lc:check-if-a-string-can-break-another-string"
+    },
+    {
+      "group": "known:check-if-a-string-can-break-another-string",
+      "kind": "paraphrase",
+      "qid": "rq005",
+      "target": "lc:check-if-a-string-can-break-another-string"
+    },
+    {
+      "group": "known:remove-duplicates-from-an-unsorted-linked-list",
+      "kind": "exact",
+      "qid": "rq006",
+      "target": "lc:remove-duplicates-from-an-unsorted-linked-list"
+    },
+    {
+      "group": "known:remove-duplicates-from-an-unsorted-linked-list",
+      "kind": "paraphrase",
+      "qid": "rq007",
+      "target": "lc:remove-duplicates-from-an-unsorted-linked-list"
+    },
+    {
+      "group": "known:binary-trees-with-factors",
+      "kind": "exact",
+      "qid": "rq008",
+      "target": "lc:binary-trees-with-factors"
+    },
+    {
+      "group": "known:binary-trees-with-factors",
+      "kind": "paraphrase",
+      "qid": "rq009",
+      "target": "lc:binary-trees-with-factors"
+    },
+    {
+      "group": "known:maximum-total-importance-of-roads",
+      "kind": "exact",
+      "qid": "rq010",
+      "target": "lc:maximum-total-importance-of-roads"
+    },
+    {
+      "group": "known:maximum-total-importance-of-roads",
+      "kind": "paraphrase",
+      "qid": "rq011",
+      "target": "lc:maximum-total-importance-of-roads"
+    },
+    {
+      "group": "known:roman-to-integer",
+      "kind": "exact",
+      "qid": "rq012",
+      "target": "lc:roman-to-integer"
+    },
+    {
+      "group": "known:roman-to-integer",
+      "kind": "paraphrase",
+      "qid": "rq013",
+      "target": "lc:roman-to-integer"
+    },
+    {
+      "group": "known:number-of-ways-where-square-of-number-is-equal-to-product-of-two-numbers",
+      "kind": "exact",
+      "qid": "rq014",
+      "target": "lc:number-of-ways-where-square-of-number-is-equal-to-product-of-two-numbers"
+    },
+    {
+      "group": "known:number-of-ways-where-square-of-number-is-equal-to-product-of-two-numbers",
+      "kind": "paraphrase",
+      "qid": "rq015",
+      "target": "lc:number-of-ways-where-square-of-number-is-equal-to-product-of-two-numbers"
+    },
+    {
+      "group": "known:binary-tree-postorder-traversal",
+      "kind": "exact",
+      "qid": "rq016",
+      "target": "lc:binary-tree-postorder-traversal"
+    },
+    {
+      "group": "known:binary-tree-postorder-traversal",
+      "kind": "paraphrase",
+      "qid": "rq017",
+      "target": "lc:binary-tree-postorder-traversal"
+    },
+    {
+      "group": "known:find-k-pairs-with-smallest-sums",
+      "kind": "exact",
+      "qid": "rq018",
+      "target": "lc:find-k-pairs-with-smallest-sums"
+    },
+    {
+      "group": "known:find-k-pairs-with-smallest-sums",
+      "kind": "paraphrase",
+      "qid": "rq019",
+      "target": "lc:find-k-pairs-with-smallest-sums"
+    },
+    {
+      "group": "known:construct-binary-tree-from-preorder-and-postorder-traversal",
+      "kind": "exact",
+      "qid": "rq020",
+      "target": "lc:construct-binary-tree-from-preorder-and-postorder-traversal"
+    },
+    {
+      "group": "known:construct-binary-tree-from-preorder-and-postorder-traversal",
+      "kind": "paraphrase",
+      "qid": "rq021",
+      "target": "lc:construct-binary-tree-from-preorder-and-postorder-traversal"
+    },
+    {
+      "group": "known:number-of-good-paths",
+      "kind": "exact",
+      "qid": "rq022",
+      "target": "lc:number-of-good-paths"
+    },
+    {
+      "group": "known:number-of-good-paths",
+      "kind": "paraphrase",
+      "qid": "rq023",
+      "target": "lc:number-of-good-paths"
+    },
+    {
+      "group": "known:minimum-time-to-eat-all-grains",
+      "kind": "exact",
+      "qid": "rq024",
+      "target": "lc:minimum-time-to-eat-all-grains"
+    },
+    {
+      "group": "known:minimum-time-to-eat-all-grains",
+      "kind": "paraphrase",
+      "qid": "rq025",
+      "target": "lc:minimum-time-to-eat-all-grains"
+    },
+    {
+      "group": "known:smallest-string-with-swaps",
+      "kind": "exact",
+      "qid": "rq026",
+      "target": "lc:smallest-string-with-swaps"
+    },
+    {
+      "group": "known:smallest-string-with-swaps",
+      "kind": "paraphrase",
+      "qid": "rq027",
+      "target": "lc:smallest-string-with-swaps"
+    },
+    {
+      "group": "known:longest-valid-parentheses",
+      "kind": "exact",
+      "qid": "rq028",
+      "target": "lc:longest-valid-parentheses"
+    },
+    {
+      "group": "known:longest-valid-parentheses",
+      "kind": "paraphrase",
+      "qid": "rq029",
+      "target": "lc:longest-valid-parentheses"
+    },
+    {
+      "group": "known:jump-game-vii",
+      "kind": "exact",
+      "qid": "rq030",
+      "target": "lc:jump-game-vii"
+    },
+    {
+      "group": "known:jump-game-vii",
+      "kind": "paraphrase",
+      "qid": "rq031",
+      "target": "lc:jump-game-vii"
+    },
+    {
+      "group": "known:smallest-value-of-the-rearranged-number",
+      "kind": "exact",
+      "qid": "rq032",
+      "target": "lc:smallest-value-of-the-rearranged-number"
+    },
+    {
+      "group": "known:smallest-value-of-the-rearranged-number",
+      "kind": "paraphrase",
+      "qid": "rq033",
+      "target": "lc:smallest-value-of-the-rearranged-number"
+    },
+    {
+      "group": "known:two-city-scheduling",
+      "kind": "exact",
+      "qid": "rq034",
+      "target": "lc:two-city-scheduling"
+    },
+    {
+      "group": "known:two-city-scheduling",
+      "kind": "paraphrase",
+      "qid": "rq035",
+      "target": "lc:two-city-scheduling"
+    },
+    {
+      "group": "known:depth-of-bst-given-insertion-order",
+      "kind": "exact",
+      "qid": "rq036",
+      "target": "lc:depth-of-bst-given-insertion-order"
+    },
+    {
+      "group": "known:depth-of-bst-given-insertion-order",
+      "kind": "paraphrase",
+      "qid": "rq037",
+      "target": "lc:depth-of-bst-given-insertion-order"
+    },
+    {
+      "group": "known:minimum-suffix-flips",
+      "kind": "exact",
+      "qid": "rq038",
+      "target": "lc:minimum-suffix-flips"
+    },
+    {
+      "group": "known:minimum-suffix-flips",
+      "kind": "paraphrase",
+      "qid": "rq039",
+      "target": "lc:minimum-suffix-flips"
+    },
+    {
+      "group": "known:tuple-with-same-product",
+      "kind": "exact",
+      "qid": "rq040",
+      "target": "lc:tuple-with-same-product"
+    },
+    {
+      "group": "known:tuple-with-same-product",
+      "kind": "paraphrase",
+      "qid": "rq041",
+      "target": "lc:tuple-with-same-product"
+    },
+    {
+      "group": "known:minimum-window-subsequence",
+      "kind": "exact",
+      "qid": "rq042",
+      "target": "lc:minimum-window-subsequence"
+    },
+    {
+      "group": "known:minimum-window-subsequence",
+      "kind": "paraphrase",
+      "qid": "rq043",
+      "target": "lc:minimum-window-subsequence"
+    },
+    {
+      "group": "known:power-of-four",
+      "kind": "exact",
+      "qid": "rq044",
+      "target": "lc:power-of-four"
+    },
+    {
+      "group": "known:power-of-four",
+      "kind": "paraphrase",
+      "qid": "rq045",
+      "target": "lc:power-of-four"
+    },
+    {
+      "group": "known:sender-with-largest-word-count",
+      "kind": "exact",
+      "qid": "rq046",
+      "target": "lc:sender-with-largest-word-count"
+    },
+    {
+      "group": "known:sender-with-largest-word-count",
+      "kind": "paraphrase",
+      "qid": "rq047",
+      "target": "lc:sender-with-largest-word-count"
+    },
+    {
+      "group": "known:queens-that-can-attack-the-king",
+      "kind": "exact",
+      "qid": "rq048",
+      "target": "lc:queens-that-can-attack-the-king"
+    },
+    {
+      "group": "known:queens-that-can-attack-the-king",
+      "kind": "paraphrase",
+      "qid": "rq049",
+      "target": "lc:queens-that-can-attack-the-king"
+    },
+    {
+      "group": "known:most-frequent-number-following-key-in-an-array",
+      "kind": "exact",
+      "qid": "rq050",
+      "target": "lc:most-frequent-number-following-key-in-an-array"
+    },
+    {
+      "group": "known:most-frequent-number-following-key-in-an-array",
+      "kind": "paraphrase",
+      "qid": "rq051",
+      "target": "lc:most-frequent-number-following-key-in-an-array"
+    },
+    {
+      "group": "known:sort-the-jumbled-numbers",
+      "kind": "exact",
+      "qid": "rq052",
+      "target": "lc:sort-the-jumbled-numbers"
+    },
+    {
+      "group": "known:sort-the-jumbled-numbers",
+      "kind": "paraphrase",
+      "qid": "rq053",
+      "target": "lc:sort-the-jumbled-numbers"
+    },
+    {
+      "group": "known:split-concatenated-strings",
+      "kind": "exact",
+      "qid": "rq054",
+      "target": "lc:split-concatenated-strings"
+    },
+    {
+      "group": "known:split-concatenated-strings",
+      "kind": "paraphrase",
+      "qid": "rq055",
+      "target": "lc:split-concatenated-strings"
+    },
+    {
+      "group": "known:slowest-key",
+      "kind": "exact",
+      "qid": "rq056",
+      "target": "lc:slowest-key"
+    },
+    {
+      "group": "known:slowest-key",
+      "kind": "paraphrase",
+      "qid": "rq057",
+      "target": "lc:slowest-key"
+    },
+    {
+      "group": "known:excel-sheet-column-title",
+      "kind": "exact",
+      "qid": "rq058",
+      "target": "lc:excel-sheet-column-title"
+    },
+    {
+      "group": "known:excel-sheet-column-title",
+      "kind": "paraphrase",
+      "qid": "rq059",
+      "target": "lc:excel-sheet-column-title"
+    },
+    {
+      "group": "known:symmetric-tree",
+      "kind": "exact",
+      "qid": "rq060",
+      "target": "lc:symmetric-tree"
+    },
+    {
+      "group": "known:symmetric-tree",
+      "kind": "paraphrase",
+      "qid": "rq061",
+      "target": "lc:symmetric-tree"
+    },
+    {
+      "group": "known:minimum-skips-to-arrive-at-meeting-on-time",
+      "kind": "exact",
+      "qid": "rq062",
+      "target": "lc:minimum-skips-to-arrive-at-meeting-on-time"
+    },
+    {
+      "group": "known:minimum-skips-to-arrive-at-meeting-on-time",
+      "kind": "paraphrase",
+      "qid": "rq063",
+      "target": "lc:minimum-skips-to-arrive-at-meeting-on-time"
+    },
+    {
+      "group": "known:unique-substrings-with-equal-digit-frequency",
+      "kind": "exact",
+      "qid": "rq064",
+      "target": "lc:unique-substrings-with-equal-digit-frequency"
+    },
+    {
+      "group": "known:unique-substrings-with-equal-digit-frequency",
+      "kind": "paraphrase",
+      "qid": "rq065",
+      "target": "lc:unique-substrings-with-equal-digit-frequency"
+    },
+    {
+      "group": "known:richest-customer-wealth",
+      "kind": "exact",
+      "qid": "rq066",
+      "target": "lc:richest-customer-wealth"
+    },
+    {
+      "group": "known:richest-customer-wealth",
+      "kind": "paraphrase",
+      "qid": "rq067",
+      "target": "lc:richest-customer-wealth"
+    },
+    {
+      "group": "known:trim-a-binary-search-tree",
+      "kind": "exact",
+      "qid": "rq068",
+      "target": "lc:trim-a-binary-search-tree"
+    },
+    {
+      "group": "known:trim-a-binary-search-tree",
+      "kind": "paraphrase",
+      "qid": "rq069",
+      "target": "lc:trim-a-binary-search-tree"
+    },
+    {
+      "group": "known:ambiguous-coordinates",
+      "kind": "exact",
+      "qid": "rq070",
+      "target": "lc:ambiguous-coordinates"
+    },
+    {
+      "group": "known:ambiguous-coordinates",
+      "kind": "paraphrase",
+      "qid": "rq071",
+      "target": "lc:ambiguous-coordinates"
+    },
+    {
+      "group": "known:replace-the-substring-for-balanced-string",
+      "kind": "exact",
+      "qid": "rq072",
+      "target": "lc:replace-the-substring-for-balanced-string"
+    },
+    {
+      "group": "known:replace-the-substring-for-balanced-string",
+      "kind": "paraphrase",
+      "qid": "rq073",
+      "target": "lc:replace-the-substring-for-balanced-string"
+    },
+    {
+      "group": "known:the-time-when-the-network-becomes-idle",
+      "kind": "exact",
+      "qid": "rq074",
+      "target": "lc:the-time-when-the-network-becomes-idle"
+    },
+    {
+      "group": "known:the-time-when-the-network-becomes-idle",
+      "kind": "paraphrase",
+      "qid": "rq075",
+      "target": "lc:the-time-when-the-network-becomes-idle"
+    },
+    {
+      "group": "known:maximum-strictly-increasing-cells-in-a-matrix",
+      "kind": "exact",
+      "qid": "rq076",
+      "target": "lc:maximum-strictly-increasing-cells-in-a-matrix"
+    },
+    {
+      "group": "known:maximum-strictly-increasing-cells-in-a-matrix",
+      "kind": "paraphrase",
+      "qid": "rq077",
+      "target": "lc:maximum-strictly-increasing-cells-in-a-matrix"
+    },
+    {
+      "group": "known:count-subarrays-with-more-ones-than-zeros",
+      "kind": "exact",
+      "qid": "rq078",
+      "target": "lc:count-subarrays-with-more-ones-than-zeros"
+    },
+    {
+      "group": "known:count-subarrays-with-more-ones-than-zeros",
+      "kind": "paraphrase",
+      "qid": "rq079",
+      "target": "lc:count-subarrays-with-more-ones-than-zeros"
+    },
+    {
+      "group": "known:best-team-with-no-conflicts",
+      "kind": "exact",
+      "qid": "rq080",
+      "target": "lc:best-team-with-no-conflicts"
+    },
+    {
+      "group": "known:best-team-with-no-conflicts",
+      "kind": "paraphrase",
+      "qid": "rq081",
+      "target": "lc:best-team-with-no-conflicts"
+    },
+    {
+      "group": "known:tree-of-coprimes",
+      "kind": "exact",
+      "qid": "rq082",
+      "target": "lc:tree-of-coprimes"
+    },
+    {
+      "group": "known:tree-of-coprimes",
+      "kind": "paraphrase",
+      "qid": "rq083",
+      "target": "lc:tree-of-coprimes"
+    },
+    {
+      "group": "known:subtree-removal-game-with-fibonacci-tree",
+      "kind": "exact",
+      "qid": "rq084",
+      "target": "lc:subtree-removal-game-with-fibonacci-tree"
+    },
+    {
+      "group": "known:subtree-removal-game-with-fibonacci-tree",
+      "kind": "paraphrase",
+      "qid": "rq085",
+      "target": "lc:subtree-removal-game-with-fibonacci-tree"
+    },
+    {
+      "group": "known:minimum-subarrays-in-a-valid-split",
+      "kind": "exact",
+      "qid": "rq086",
+      "target": "lc:minimum-subarrays-in-a-valid-split"
+    },
+    {
+      "group": "known:minimum-subarrays-in-a-valid-split",
+      "kind": "paraphrase",
+      "qid": "rq087",
+      "target": "lc:minimum-subarrays-in-a-valid-split"
+    },
+    {
+      "group": "known:maximum-subsequence-score",
+      "kind": "exact",
+      "qid": "rq088",
+      "target": "lc:maximum-subsequence-score"
+    },
+    {
+      "group": "known:maximum-subsequence-score",
+      "kind": "paraphrase",
+      "qid": "rq089",
+      "target": "lc:maximum-subsequence-score"
+    },
+    {
+      "group": "known:minimum-time-to-visit-a-cell-in-a-grid",
+      "kind": "exact",
+      "qid": "rq090",
+      "target": "lc:minimum-time-to-visit-a-cell-in-a-grid"
+    },
+    {
+      "group": "known:minimum-time-to-visit-a-cell-in-a-grid",
+      "kind": "paraphrase",
+      "qid": "rq091",
+      "target": "lc:minimum-time-to-visit-a-cell-in-a-grid"
+    },
+    {
+      "group": "known:most-profit-assigning-work",
+      "kind": "exact",
+      "qid": "rq092",
+      "target": "lc:most-profit-assigning-work"
+    },
+    {
+      "group": "known:most-profit-assigning-work",
+      "kind": "paraphrase",
+      "qid": "rq093",
+      "target": "lc:most-profit-assigning-work"
+    },
+    {
+      "group": "known:remove-sub-folders-from-the-filesystem",
+      "kind": "exact",
+      "qid": "rq094",
+      "target": "lc:remove-sub-folders-from-the-filesystem"
+    },
+    {
+      "group": "known:remove-sub-folders-from-the-filesystem",
+      "kind": "paraphrase",
+      "qid": "rq095",
+      "target": "lc:remove-sub-folders-from-the-filesystem"
+    },
+    {
+      "group": "known:unique-number-of-occurrences",
+      "kind": "exact",
+      "qid": "rq096",
+      "target": "lc:unique-number-of-occurrences"
+    },
+    {
+      "group": "known:unique-number-of-occurrences",
+      "kind": "paraphrase",
+      "qid": "rq097",
+      "target": "lc:unique-number-of-occurrences"
+    },
+    {
+      "group": "known:number-of-strings-which-can-be-rearranged-to-contain-substring",
+      "kind": "exact",
+      "qid": "rq098",
+      "target": "lc:number-of-strings-which-can-be-rearranged-to-contain-substring"
+    },
+    {
+      "group": "known:number-of-strings-which-can-be-rearranged-to-contain-substring",
+      "kind": "paraphrase",
+      "qid": "rq099",
+      "target": "lc:number-of-strings-which-can-be-rearranged-to-contain-substring"
+    },
+    {
+      "family": [
+        "lc:word-pattern",
+        "lc:word-pattern-ii"
+      ],
+      "group": "family:word-pattern",
+      "kind": "sibling_paraphrase",
+      "qid": "rq100",
+      "target": "lc:word-pattern"
+    },
+    {
+      "family": [
+        "lc:word-pattern",
+        "lc:word-pattern-ii"
+      ],
+      "group": "family:word-pattern",
+      "kind": "sibling_paraphrase",
+      "qid": "rq101",
+      "target": "lc:word-pattern-ii"
+    },
+    {
+      "family": [
+        "lc:number-of-subarrays-that-match-a-pattern-i",
+        "lc:number-of-subarrays-that-match-a-pattern-ii"
+      ],
+      "group": "family:number-of-subarrays-that-match-a-pattern",
+      "kind": "sibling_paraphrase",
+      "qid": "rq102",
+      "target": "lc:number-of-subarrays-that-match-a-pattern-i"
+    },
+    {
+      "family": [
+        "lc:number-of-subarrays-that-match-a-pattern-i",
+        "lc:number-of-subarrays-that-match-a-pattern-ii"
+      ],
+      "group": "family:number-of-subarrays-that-match-a-pattern",
+      "kind": "sibling_paraphrase",
+      "qid": "rq103",
+      "target": "lc:number-of-subarrays-that-match-a-pattern-ii"
+    },
+    {
+      "family": [
+        "lc:valid-palindrome",
+        "lc:valid-palindrome-ii",
+        "lc:valid-palindrome-iii",
+        "lc:valid-palindrome-iv"
+      ],
+      "group": "family:valid-palindrome",
+      "kind": "sibling_paraphrase",
+      "qid": "rq104",
+      "target": "lc:valid-palindrome"
+    },
+    {
+      "family": [
+        "lc:valid-palindrome",
+        "lc:valid-palindrome-ii",
+        "lc:valid-palindrome-iii",
+        "lc:valid-palindrome-iv"
+      ],
+      "group": "family:valid-palindrome",
+      "kind": "sibling_paraphrase",
+      "qid": "rq105",
+      "target": "lc:valid-palindrome-ii"
+    },
+    {
+      "family": [
+        "lc:pascals-triangle",
+        "lc:pascals-triangle-ii"
+      ],
+      "group": "family:pascals-triangle",
+      "kind": "sibling_paraphrase",
+      "qid": "rq106",
+      "target": "lc:pascals-triangle"
+    },
+    {
+      "family": [
+        "lc:pascals-triangle",
+        "lc:pascals-triangle-ii"
+      ],
+      "group": "family:pascals-triangle",
+      "kind": "sibling_paraphrase",
+      "qid": "rq107",
+      "target": "lc:pascals-triangle-ii"
+    },
+    {
+      "family": [
+        "lc:remove-all-ones-with-row-and-column-flips",
+        "lc:remove-all-ones-with-row-and-column-flips-ii"
+      ],
+      "group": "family:remove-all-ones-with-row-and-column-flips",
+      "kind": "sibling_paraphrase",
+      "qid": "rq108",
+      "target": "lc:remove-all-ones-with-row-and-column-flips"
+    },
+    {
+      "family": [
+        "lc:remove-all-ones-with-row-and-column-flips",
+        "lc:remove-all-ones-with-row-and-column-flips-ii"
+      ],
+      "group": "family:remove-all-ones-with-row-and-column-flips",
+      "kind": "sibling_paraphrase",
+      "qid": "rq109",
+      "target": "lc:remove-all-ones-with-row-and-column-flips-ii"
+    },
+    {
+      "family": [
+        "lc:house-robber",
+        "lc:house-robber-ii",
+        "lc:house-robber-iii",
+        "lc:house-robber-iv"
+      ],
+      "group": "family:house-robber",
+      "kind": "sibling_paraphrase",
+      "qid": "rq110",
+      "target": "lc:house-robber-ii"
+    },
+    {
+      "family": [
+        "lc:house-robber",
+        "lc:house-robber-ii",
+        "lc:house-robber-iii",
+        "lc:house-robber-iv"
+      ],
+      "group": "family:house-robber",
+      "kind": "sibling_paraphrase",
+      "qid": "rq111",
+      "target": "lc:house-robber-iii"
+    },
+    {
+      "family": [
+        "lc:alternating-groups-i",
+        "lc:alternating-groups-ii"
+      ],
+      "group": "family:alternating-groups",
+      "kind": "sibling_paraphrase",
+      "qid": "rq112",
+      "target": "lc:alternating-groups-i"
+    },
+    {
+      "family": [
+        "lc:alternating-groups-i",
+        "lc:alternating-groups-ii"
+      ],
+      "group": "family:alternating-groups",
+      "kind": "sibling_paraphrase",
+      "qid": "rq113",
+      "target": "lc:alternating-groups-ii"
+    },
+    {
+      "family": [
+        "lc:max-chunks-to-make-sorted",
+        "lc:max-chunks-to-make-sorted-ii"
+      ],
+      "group": "family:max-chunks-to-make-sorted",
+      "kind": "sibling_paraphrase",
+      "qid": "rq114",
+      "target": "lc:max-chunks-to-make-sorted"
+    },
+    {
+      "family": [
+        "lc:max-chunks-to-make-sorted",
+        "lc:max-chunks-to-make-sorted-ii"
+      ],
+      "group": "family:max-chunks-to-make-sorted",
+      "kind": "sibling_paraphrase",
+      "qid": "rq115",
+      "target": "lc:max-chunks-to-make-sorted-ii"
+    },
+    {
+      "family": [
+        "lc:number-of-islands",
+        "lc:number-of-islands-ii"
+      ],
+      "group": "family:number-of-islands",
+      "kind": "sibling_paraphrase",
+      "qid": "rq116",
+      "target": "lc:number-of-islands"
+    },
+    {
+      "family": [
+        "lc:number-of-islands",
+        "lc:number-of-islands-ii"
+      ],
+      "group": "family:number-of-islands",
+      "kind": "sibling_paraphrase",
+      "qid": "rq117",
+      "target": "lc:number-of-islands-ii"
+    },
+    {
+      "family": [
+        "lc:maximum-number-of-events-that-can-be-attended",
+        "lc:maximum-number-of-events-that-can-be-attended-ii"
+      ],
+      "group": "family:maximum-number-of-events-that-can-be-attended",
+      "kind": "sibling_paraphrase",
+      "qid": "rq118",
+      "target": "lc:maximum-number-of-events-that-can-be-attended"
+    },
+    {
+      "family": [
+        "lc:maximum-number-of-events-that-can-be-attended",
+        "lc:maximum-number-of-events-that-can-be-attended-ii"
+      ],
+      "group": "family:maximum-number-of-events-that-can-be-attended",
+      "kind": "sibling_paraphrase",
+      "qid": "rq119",
+      "target": "lc:maximum-number-of-events-that-can-be-attended-ii"
+    },
+    {
+      "family": [
+        "lc:find-the-number-of-ways-to-place-people-i",
+        "lc:find-the-number-of-ways-to-place-people-ii"
+      ],
+      "group": "family:find-the-number-of-ways-to-place-people",
+      "kind": "sibling_paraphrase",
+      "qid": "rq120",
+      "target": "lc:find-the-number-of-ways-to-place-people-i"
+    },
+    {
+      "family": [
+        "lc:find-the-number-of-ways-to-place-people-i",
+        "lc:find-the-number-of-ways-to-place-people-ii"
+      ],
+      "group": "family:find-the-number-of-ways-to-place-people",
+      "kind": "sibling_paraphrase",
+      "qid": "rq121",
+      "target": "lc:find-the-number-of-ways-to-place-people-ii"
+    },
+    {
+      "family": [
+        "lc:lonely-pixel-i",
+        "lc:lonely-pixel-ii"
+      ],
+      "group": "family:lonely-pixel",
+      "kind": "sibling_paraphrase",
+      "qid": "rq122",
+      "target": "lc:lonely-pixel-i"
+    },
+    {
+      "family": [
+        "lc:lonely-pixel-i",
+        "lc:lonely-pixel-ii"
+      ],
+      "group": "family:lonely-pixel",
+      "kind": "sibling_paraphrase",
+      "qid": "rq123",
+      "target": "lc:lonely-pixel-ii"
+    },
+    {
+      "family": [
+        "lc:minimum-number-of-flips-to-make-binary-grid-palindromic-i",
+        "lc:minimum-number-of-flips-to-make-binary-grid-palindromic-ii"
+      ],
+      "group": "family:minimum-number-of-flips-to-make-binary-grid-palindromic",
+      "kind": "sibling_paraphrase",
+      "qid": "rq124",
+      "target": "lc:minimum-number-of-flips-to-make-binary-grid-palindromic-i"
+    },
+    {
+      "family": [
+        "lc:minimum-number-of-flips-to-make-binary-grid-palindromic-i",
+        "lc:minimum-number-of-flips-to-make-binary-grid-palindromic-ii"
+      ],
+      "group": "family:minimum-number-of-flips-to-make-binary-grid-palindromic",
+      "kind": "sibling_paraphrase",
+      "qid": "rq125",
+      "target": "lc:minimum-number-of-flips-to-make-binary-grid-palindromic-ii"
+    },
+    {
+      "family": [
+        "lc:find-indices-with-index-and-value-difference-i",
+        "lc:find-indices-with-index-and-value-difference-ii"
+      ],
+      "group": "family:find-indices-with-index-and-value-difference",
+      "kind": "sibling_paraphrase",
+      "qid": "rq126",
+      "target": "lc:find-indices-with-index-and-value-difference-i"
+    },
+    {
+      "family": [
+        "lc:find-indices-with-index-and-value-difference-i",
+        "lc:find-indices-with-index-and-value-difference-ii"
+      ],
+      "group": "family:find-indices-with-index-and-value-difference",
+      "kind": "sibling_paraphrase",
+      "qid": "rq127",
+      "target": "lc:find-indices-with-index-and-value-difference-ii"
+    },
+    {
+      "family": [
+        "lc:moving-stones-until-consecutive",
+        "lc:moving-stones-until-consecutive-ii"
+      ],
+      "group": "family:moving-stones-until-consecutive",
+      "kind": "sibling_paraphrase",
+      "qid": "rq128",
+      "target": "lc:moving-stones-until-consecutive"
+    },
+    {
+      "family": [
+        "lc:moving-stones-until-consecutive",
+        "lc:moving-stones-until-consecutive-ii"
+      ],
+      "group": "family:moving-stones-until-consecutive",
+      "kind": "sibling_paraphrase",
+      "qid": "rq129",
+      "target": "lc:moving-stones-until-consecutive-ii"
+    },
+    {
+      "family": [
+        "lc:check-if-strings-can-be-made-equal-with-operations-i",
+        "lc:check-if-strings-can-be-made-equal-with-operations-ii"
+      ],
+      "group": "family:check-if-strings-can-be-made-equal-with-operations",
+      "kind": "sibling_paraphrase",
+      "qid": "rq130",
+      "target": "lc:check-if-strings-can-be-made-equal-with-operations-i"
+    },
+    {
+      "family": [
+        "lc:check-if-strings-can-be-made-equal-with-operations-i",
+        "lc:check-if-strings-can-be-made-equal-with-operations-ii"
+      ],
+      "group": "family:check-if-strings-can-be-made-equal-with-operations",
+      "kind": "sibling_paraphrase",
+      "qid": "rq131",
+      "target": "lc:check-if-strings-can-be-made-equal-with-operations-ii"
+    },
+    {
+      "family": [
+        "lc:add-two-numbers",
+        "lc:add-two-numbers-ii"
+      ],
+      "group": "family:add-two-numbers",
+      "kind": "sibling_paraphrase",
+      "qid": "rq132",
+      "target": "lc:add-two-numbers"
+    },
+    {
+      "family": [
+        "lc:add-two-numbers",
+        "lc:add-two-numbers-ii"
+      ],
+      "group": "family:add-two-numbers",
+      "kind": "sibling_paraphrase",
+      "qid": "rq133",
+      "target": "lc:add-two-numbers-ii"
+    },
+    {
+      "family": [
+        "lc:minimum-area-rectangle",
+        "lc:minimum-area-rectangle-ii"
+      ],
+      "group": "family:minimum-area-rectangle",
+      "kind": "sibling_paraphrase",
+      "qid": "rq134",
+      "target": "lc:minimum-area-rectangle"
+    },
+    {
+      "family": [
+        "lc:minimum-area-rectangle",
+        "lc:minimum-area-rectangle-ii"
+      ],
+      "group": "family:minimum-area-rectangle",
+      "kind": "sibling_paraphrase",
+      "qid": "rq135",
+      "target": "lc:minimum-area-rectangle-ii"
+    },
+    {
+      "family": [
+        "lc:maximum-profitable-triplets-with-increasing-prices-i",
+        "lc:maximum-profitable-triplets-with-increasing-prices-ii"
+      ],
+      "group": "family:maximum-profitable-triplets-with-increasing-prices",
+      "kind": "sibling_paraphrase",
+      "qid": "rq136",
+      "target": "lc:maximum-profitable-triplets-with-increasing-prices-i"
+    },
+    {
+      "family": [
+        "lc:maximum-profitable-triplets-with-increasing-prices-i",
+        "lc:maximum-profitable-triplets-with-increasing-prices-ii"
+      ],
+      "group": "family:maximum-profitable-triplets-with-increasing-prices",
+      "kind": "sibling_paraphrase",
+      "qid": "rq137",
+      "target": "lc:maximum-profitable-triplets-with-increasing-prices-ii"
+    },
+    {
+      "family": [
+        "lc:task-scheduler",
+        "lc:task-scheduler-ii"
+      ],
+      "group": "family:task-scheduler",
+      "kind": "sibling_paraphrase",
+      "qid": "rq138",
+      "target": "lc:task-scheduler"
+    },
+    {
+      "family": [
+        "lc:task-scheduler",
+        "lc:task-scheduler-ii"
+      ],
+      "group": "family:task-scheduler",
+      "kind": "sibling_paraphrase",
+      "qid": "rq139",
+      "target": "lc:task-scheduler-ii"
+    },
+    {
+      "family": [
+        "lc:cousins-in-binary-tree",
+        "lc:cousins-in-binary-tree-ii"
+      ],
+      "group": "family:cousins-in-binary-tree",
+      "kind": "sibling_paraphrase",
+      "qid": "rq140",
+      "target": "lc:cousins-in-binary-tree"
+    },
+    {
+      "family": [
+        "lc:cousins-in-binary-tree",
+        "lc:cousins-in-binary-tree-ii"
+      ],
+      "group": "family:cousins-in-binary-tree",
+      "kind": "sibling_paraphrase",
+      "qid": "rq141",
+      "target": "lc:cousins-in-binary-tree-ii"
+    },
+    {
+      "family": [
+        "lc:contains-duplicate",
+        "lc:contains-duplicate-ii",
+        "lc:contains-duplicate-iii"
+      ],
+      "group": "family:contains-duplicate",
+      "kind": "sibling_paraphrase",
+      "qid": "rq142",
+      "target": "lc:contains-duplicate"
+    },
+    {
+      "family": [
+        "lc:contains-duplicate",
+        "lc:contains-duplicate-ii",
+        "lc:contains-duplicate-iii"
+      ],
+      "group": "family:contains-duplicate",
+      "kind": "sibling_paraphrase",
+      "qid": "rq143",
+      "target": "lc:contains-duplicate-ii"
+    },
+    {
+      "family": [
+        "lc:shifting-letters",
+        "lc:shifting-letters-ii"
+      ],
+      "group": "family:shifting-letters",
+      "kind": "sibling_paraphrase",
+      "qid": "rq144",
+      "target": "lc:shifting-letters"
+    },
+    {
+      "family": [
+        "lc:shifting-letters",
+        "lc:shifting-letters-ii"
+      ],
+      "group": "family:shifting-letters",
+      "kind": "sibling_paraphrase",
+      "qid": "rq145",
+      "target": "lc:shifting-letters-ii"
+    },
+    {
+      "family": [
+        "lc:minimum-number-of-coins-for-fruits",
+        "lc:minimum-number-of-coins-for-fruits-ii"
+      ],
+      "group": "family:minimum-number-of-coins-for-fruits",
+      "kind": "sibling_paraphrase",
+      "qid": "rq146",
+      "target": "lc:minimum-number-of-coins-for-fruits"
+    },
+    {
+      "family": [
+        "lc:minimum-number-of-coins-for-fruits",
+        "lc:minimum-number-of-coins-for-fruits-ii"
+      ],
+      "group": "family:minimum-number-of-coins-for-fruits",
+      "kind": "sibling_paraphrase",
+      "qid": "rq147",
+      "target": "lc:minimum-number-of-coins-for-fruits-ii"
+    },
+    {
+      "family": [
+        "lc:minimum-cost-to-convert-string-i",
+        "lc:minimum-cost-to-convert-string-ii"
+      ],
+      "group": "family:minimum-cost-to-convert-string",
+      "kind": "sibling_paraphrase",
+      "qid": "rq148",
+      "target": "lc:minimum-cost-to-convert-string-i"
+    },
+    {
+      "family": [
+        "lc:minimum-cost-to-convert-string-i",
+        "lc:minimum-cost-to-convert-string-ii"
+      ],
+      "group": "family:minimum-cost-to-convert-string",
+      "kind": "sibling_paraphrase",
+      "qid": "rq149",
+      "target": "lc:minimum-cost-to-convert-string-ii"
+    },
+    {
+      "group": "absent:longest-palindrome-after-substring-concatenation-ii",
+      "kind": "absent_exact",
+      "problem_uid": "lcd:3504",
+      "qid": "rq150",
+      "target": null
+    },
+    {
+      "group": "absent:find-the-lexicographically-largest-string-from-the-box-i",
+      "kind": "absent_exact",
+      "problem_uid": "lcd:3403",
+      "qid": "rq151",
+      "target": null
+    },
+    {
+      "group": "absent:count-paths-with-the-given-xor-value",
+      "kind": "absent_exact",
+      "problem_uid": "lcd:3393",
+      "qid": "rq152",
+      "target": null
+    },
+    {
+      "group": "absent:subsequences-with-a-unique-middle-mode-i",
+      "kind": "absent_exact",
+      "problem_uid": "lcd:3395",
+      "qid": "rq153",
+      "target": null
+    },
+    {
+      "group": "absent:sum-of-k-subarrays-with-length-at-least-m",
+      "kind": "absent_exact",
+      "problem_uid": "lcd:3473",
+      "qid": "rq154",
+      "target": null
+    },
+    {
+      "group": "absent:count-mentions-per-user",
+      "kind": "absent_exact",
+      "problem_uid": "lcd:3433",
+      "qid": "rq155",
+      "target": null
+    },
+    {
+      "group": "absent:check-balanced-string",
+      "kind": "absent_exact",
+      "problem_uid": "lcd:3340",
+      "qid": "rq156",
+      "target": null
+    },
+    {
+      "group": "absent:substring-matching-pattern",
+      "kind": "absent_exact",
+      "problem_uid": "lcd:3407",
+      "qid": "rq157",
+      "target": null
+    },
+    {
+      "group": "absent:maximum-possible-number-by-binary-concatenation",
+      "kind": "absent_exact",
+      "problem_uid": "lcd:3309",
+      "qid": "rq158",
+      "target": null
+    },
+    {
+      "group": "absent:minimum-operations-to-make-elements-within-k-subarrays-equal",
+      "kind": "absent_exact",
+      "problem_uid": "lcd:3505",
+      "qid": "rq159",
+      "target": null
+    },
+    {
+      "group": "absent:count-substrings-with-k-frequency-characters-i",
+      "kind": "absent_exact",
+      "problem_uid": "lcd:3325",
+      "qid": "rq160",
+      "target": null
+    },
+    {
+      "group": "absent:length-of-the-longest-increasing-path",
+      "kind": "absent_exact",
+      "problem_uid": "lcd:3288",
+      "qid": "rq161",
+      "target": null
+    },
+    {
+      "group": "absent:minimum-array-sum",
+      "kind": "absent_exact",
+      "problem_uid": "lcd:3366",
+      "qid": "rq162",
+      "target": null
+    },
+    {
+      "group": "absent:maximum-points-tourist-can-earn",
+      "kind": "absent_exact",
+      "problem_uid": "lcd:3332",
+      "qid": "rq163",
+      "target": null
+    },
+    {
+      "group": "absent:maximize-active-section-with-trade-ii",
+      "kind": "absent_exact",
+      "problem_uid": "lcd:3501",
+      "qid": "rq164",
+      "target": null
+    },
+    {
+      "group": "absent:find-special-substring-of-length-k",
+      "kind": "absent_exact",
+      "problem_uid": "lcd:3456",
+      "qid": "rq165",
+      "target": null
+    },
+    {
+      "group": "absent:minimize-the-maximum-edge-weight-of-graph",
+      "kind": "absent_exact",
+      "problem_uid": "lcd:3419",
+      "qid": "rq166",
+      "target": null
+    },
+    {
+      "group": "absent:check-if-digits-are-equal-in-string-after-operations-i",
+      "kind": "absent_exact",
+      "problem_uid": "lcd:3461",
+      "qid": "rq167",
+      "target": null
+    },
+    {
+      "group": "absent:find-the-sequence-of-strings-appeared-on-the-screen",
+      "kind": "absent_exact",
+      "problem_uid": "lcd:3324",
+      "qid": "rq168",
+      "target": null
+    },
+    {
+      "group": "absent:check-if-dfs-strings-are-palindromes",
+      "kind": "absent_exact",
+      "problem_uid": "lcd:3327",
+      "qid": "rq169",
+      "target": null
+    },
+    {
+      "group": "absent:smallest-substring-with-identical-characters-ii",
+      "kind": "absent_exact",
+      "problem_uid": "lcd:3399",
+      "qid": "rq170",
+      "target": null
+    },
+    {
+      "group": "absent:minimum-total-operations",
+      "kind": "absent_exact",
+      "problem_uid": "lcd:3353",
+      "qid": "rq171",
+      "target": null
+    },
+    {
+      "group": "absent:maximize-score-after-pair-deletions",
+      "kind": "absent_exact",
+      "problem_uid": "lcd:3496",
+      "qid": "rq172",
+      "target": null
+    },
+    {
+      "group": "absent:maximum-number-of-distinct-elements-after-operations",
+      "kind": "absent_exact",
+      "problem_uid": "lcd:3397",
+      "qid": "rq173",
+      "target": null
+    },
+    {
+      "group": "absent:maximum-number-of-matching-indices-after-right-shifts",
+      "kind": "absent_exact",
+      "problem_uid": "lcd:3400",
+      "qid": "rq174",
+      "target": null
+    },
+    {
+      "group": "absent:minimum-cost-to-reach-every-position",
+      "kind": "absent_exact",
+      "problem_uid": "lcd:3502",
+      "qid": "rq175",
+      "target": null
+    },
+    {
+      "group": "absent:find-subtree-sizes-after-changes",
+      "kind": "absent_exact",
+      "problem_uid": "lcd:3331",
+      "qid": "rq176",
+      "target": null
+    },
+    {
+      "group": "absent:reverse-degree-of-a-string",
+      "kind": "absent_exact",
+      "problem_uid": "lcd:3498",
+      "qid": "rq177",
+      "target": null
+    },
+    {
+      "group": "absent:maximum-area-rectangle-with-point-constraints-ii",
+      "kind": "absent_exact",
+      "problem_uid": "lcd:3382",
+      "qid": "rq178",
+      "target": null
+    },
+    {
+      "group": "absent:separate-squares-ii",
+      "kind": "absent_exact",
+      "problem_uid": "lcd:3454",
+      "qid": "rq179",
+      "target": null
+    },
+    {
+      "group": "absent:zero-array-transformation-iii",
+      "kind": "absent_exact",
+      "problem_uid": "lcd:3362",
+      "qid": "rq180",
+      "target": null
+    },
+    {
+      "group": "absent:count-the-number-of-arrays-with-k-matching-adjacent-elements",
+      "kind": "absent_exact",
+      "problem_uid": "lcd:3405",
+      "qid": "rq181",
+      "target": null
+    },
+    {
+      "group": "absent:minimum-operations-to-make-array-values-equal-to-k",
+      "kind": "absent_exact",
+      "problem_uid": "lcd:3375",
+      "qid": "rq182",
+      "target": null
+    },
+    {
+      "group": "absent:constructing-two-increasing-arrays",
+      "kind": "absent_exact",
+      "problem_uid": "lcd:3269",
+      "qid": "rq183",
+      "target": null
+    },
+    {
+      "group": "absent:longest-special-path-ii",
+      "kind": "absent_exact",
+      "problem_uid": "lcd:3486",
+      "qid": "rq184",
+      "target": null
+    },
+    {
+      "group": "absent:maximum-frequency-of-an-element-after-performing-operations-ii",
+      "kind": "absent_exact",
+      "problem_uid": "lcd:3347",
+      "qid": "rq185",
+      "target": null
+    },
+    {
+      "group": "absent:minimum-operations-to-make-character-frequencies-equal",
+      "kind": "absent_exact",
+      "problem_uid": "lcd:3389",
+      "qid": "rq186",
+      "target": null
+    },
+    {
+      "group": "absent:count-beautiful-splits-in-an-array",
+      "kind": "absent_exact",
+      "problem_uid": "lcd:3388",
+      "qid": "rq187",
+      "target": null
+    },
+    {
+      "group": "absent:longest-special-path",
+      "kind": "absent_exact",
+      "problem_uid": "lcd:3425",
+      "qid": "rq188",
+      "target": null
+    },
+    {
+      "group": "absent:select-cells-in-grid-with-maximum-score",
+      "kind": "absent_exact",
+      "problem_uid": "lcd:3276",
+      "qid": "rq189",
+      "target": null
+    },
+    {
+      "group": "absent:properties-graph",
+      "kind": "absent_exact",
+      "problem_uid": "lcd:3493",
+      "qid": "rq190",
+      "target": null
+    },
+    {
+      "group": "absent:frequencies-of-shortest-supersequences",
+      "kind": "absent_exact",
+      "problem_uid": "lcd:3435",
+      "qid": "rq191",
+      "target": null
+    },
+    {
+      "group": "absent:minimum-cost-good-caption",
+      "kind": "absent_exact",
+      "problem_uid": "lcd:3441",
+      "qid": "rq192",
+      "target": null
+    },
+    {
+      "group": "absent:count-almost-equal-pairs-i",
+      "kind": "absent_exact",
+      "problem_uid": "lcd:3265",
+      "qid": "rq193",
+      "target": null
+    },
+    {
+      "group": "absent:longest-common-prefix-of-k-strings-after-removal",
+      "kind": "absent_exact",
+      "problem_uid": "lcd:3485",
+      "qid": "rq194",
+      "target": null
+    },
+    {
+      "group": "absent:count-substrings-that-satisfy-k-constraint-i",
+      "kind": "absent_exact",
+      "problem_uid": "lcd:3258",
+      "qid": "rq195",
+      "target": null
+    },
+    {
+      "group": "absent:maximum-unique-subarray-sum-after-deletion",
+      "kind": "absent_exact",
+      "problem_uid": "lcd:3487",
+      "qid": "rq196",
+      "target": null
+    },
+    {
+      "group": "absent:find-the-power-of-k-size-subarrays-i",
+      "kind": "absent_exact",
+      "problem_uid": "lcd:3254",
+      "qid": "rq197",
+      "target": null
+    },
+    {
+      "group": "absent:permutations-iv",
+      "kind": "absent_exact",
+      "problem_uid": "lcd:3470",
+      "qid": "rq198",
+      "target": null
+    },
+    {
+      "group": "absent:shortest-matching-substring",
+      "kind": "absent_exact",
+      "problem_uid": "lcd:3455",
+      "qid": "rq199",
+      "target": null
+    }
+  ],
+  "query_inputs": {
+    "dq000": {
+      "text_sha256": "e81ee452a92f6a33c036865c8a32bc1225f2b1a379426932c22ac75633401477",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "dq001": {
+      "text_sha256": "6bdc86fa13d0f67c15f7f834d768211cfdb903fda00d05955bb88c738311f618",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "dq002": {
+      "text_sha256": "ea8ec9e70ca9b9f6e08d8806e6b6fc917375811f3053a4050948b6fd8fb8b575",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "dq003": {
+      "text_sha256": "ca09f7ac9c05b4a45988fd25dea6c7d50d8056958ce4a5d444ad97d0b99cead5",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "dq004": {
+      "text_sha256": "593dc3edd25c4fc6b23131bafdd81d7fc71320a4d7992ae54628ebb7a44f75ec",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "dq005": {
+      "text_sha256": "2283d973df7f1636423215b1e6e185c9732d20ca5a656947d0281ba78eb1d1a4",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "dq006": {
+      "text_sha256": "3063ebd7a8a3e43a2a2e61fc9030ece29c2e1ab6cd7481f312296b4e4e3a0701",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "dq007": {
+      "text_sha256": "90563e5c52fb258270ea50532de974a7f70cd6389974b50bd35cd983ff21c261",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "dq008": {
+      "text_sha256": "020631005a4918176067d7d079649f32adfe19f28e0acbbe36673a93274e40c5",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "dq009": {
+      "text_sha256": "622a9ba6d5ef12d522cc51eca5be022725dcfd2996157277c9df36ea08e91841",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "dq010": {
+      "text_sha256": "8fc589eb86f96b754e9263e3ebc1aaef6dbbf3e5482072eb63c830f28d67e35a",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "dq011": {
+      "text_sha256": "2df143bf9d180ae2af3427e83e3d0e2f47126110e4837b88c984984988efd4c6",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "dq012": {
+      "text_sha256": "8b064124c2d7effc291b52cad3983ea50e0ea6b5ecd898545609c3d581d7496d",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "dq013": {
+      "text_sha256": "534f7eb00eb0b4bcfcae7bf6e1e3f136c2dc74e0df41ae8ebc2af0ede8be7e85",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "dq014": {
+      "text_sha256": "759517d9b39817653c59269ae44b49150b4aa80bd342b322c7ce1b81bd609419",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "dq015": {
+      "text_sha256": "0451f90ae0c9aec0d562a0ed19e1cb0b5a742ac262c6fe1b6f5d7ff8c32a97ac",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "dq016": {
+      "text_sha256": "3cf7dbc4d43b86249cefe94d16feb7f2cff6cc2670a2a496dd8e9442fc8eb40f",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "dq017": {
+      "text_sha256": "df54e524d823b06efe17dc8d4c8f83ce0edeafd70de611da4127310f4a8f89fa",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "dq018": {
+      "text_sha256": "879eb9bca93d9c0fe38eeb1a3cd79ba7188c4991897629d094f060d87488d1ac",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "dq019": {
+      "text_sha256": "d390733128918f4b6e4a5168c4e3b16ecb6aed3d6c8d3ad6127c28b86e672e8a",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "dq020": {
+      "text_sha256": "76b9849159c8d1b08e7f4331d97c9dd9952bf321a44b27d74fcb371e83a37707",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "dq021": {
+      "text_sha256": "1f8fa860402eb221c57cd09d9e7f65e008b8842d4a2e059762501f1fd78995a3",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "dq022": {
+      "text_sha256": "f2cb19497e68a3f6ff5cbe2d46e6f0c1b12894223f3c225e74aaf722326bf447",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "dq023": {
+      "text_sha256": "3b5417030810c2a681e10433a3a18586d9c473fc4979c004aab1d27b21ec45e6",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "dq024": {
+      "text_sha256": "23941f0b11643512f3c0ff5cb6273881f3fca99b92bdfaf975c37f349e2e0655",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "dq025": {
+      "text_sha256": "6cdf7eef82402d21ee9590c355352a1da61e1dedf3210e2c1dcd89e2812da6ee",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "dq026": {
+      "text_sha256": "c56a183183ae98e1fc7c2fbd76895a29074e5392b5f6684e88a4c2e9afeb47c3",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "dq027": {
+      "text_sha256": "671b54a35b3537389f82eb7c18e734d8e8e33e6061b0e1dc8923cf655aca1b65",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "dq028": {
+      "text_sha256": "a569a03603437b99ab31b066edfee6da235449a9d30a8820dbdc6a4ef6ee58f8",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "dq029": {
+      "text_sha256": "f49089e38586ff272996ee83c3df48ff5f9772213b679f3a9306c2849292ff9f",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "dq030": {
+      "text_sha256": "ce5287c7e87267894180830a86004bdf88b18839c567377f2308e13622b433bc",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "dq031": {
+      "text_sha256": "1d15e65505eb3df736f841bd7ce0291ef61c9aaee3926a463b0fcfc778816059",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "dq032": {
+      "text_sha256": "daedf1b9a693b3521a1e4214b99f379a0a356799c685e13691e2c40e363d3315",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "dq033": {
+      "text_sha256": "9358bd226ce6beb2a7bc5b3930c049fefa295f5d7a00799a4a82a3b8ce7d20d7",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "dq034": {
+      "text_sha256": "7827bda54a02365ce925897eee767d4122444b78f915562b8762a9f27f15a35e",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "dq035": {
+      "text_sha256": "044ea5863802177c2e6f7cd33ebf8dccdc6f54756dcad926c2414778d4b6f9a4",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "dq036": {
+      "text_sha256": "9fc32d505320feaf21e99622d931571808ce28f545bf2172ce70059ec2f5057b",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "dq037": {
+      "text_sha256": "2edb3dd7af530d0098a197d54d7a79ea34813092bddbe90006aa66ead9d66333",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "dq038": {
+      "text_sha256": "5e4b38e588422755b3340a7888a19c43110e093953003a503e915cc1c58ddb7c",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "dq039": {
+      "text_sha256": "e6a00b9fe8274ac959857810b8d8ffd71f24f53fbdb12bd834ddf719b53581ee",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "dq040": {
+      "text_sha256": "55753efbfca2513f001b54e9d5a3f044e216a57cf675ba2f88d9b9ae3b831e8e",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "dq041": {
+      "text_sha256": "a140e309657299bf09025e6e58622ba8efb031d5a91a23e6f4f540e370c2519e",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "dq042": {
+      "text_sha256": "4d027ab34af971bf59df5297fd8a45f5a7cdae5fecbddb11decd7d24cc155b0b",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "dq043": {
+      "text_sha256": "59b3cbd38fe86891a24afd2e18a90cee3a54d5e30b0fe93fcc34e607a7a95529",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "dq044": {
+      "text_sha256": "fa81cd7ccb3391eb47c4885940118fb05269605d0985e4c36195901dd014ba9e",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "dq045": {
+      "text_sha256": "0893d695498d826b08282a24862c2cf8d4aefb2fc7d83d62cd00748e6b39d08a",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "dq046": {
+      "text_sha256": "7b3bb3e109bb935c8bace54f56982ba5ed71f2c5fed2d190e264e93b80bc2731",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "dq047": {
+      "text_sha256": "64841c8a9e1525835a4e7280dd9c4a0d535a8a810f15a35a0acd7229db58892a",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "dq048": {
+      "text_sha256": "0c79284410f2ebb240e4b43283f4343e81e9ee5ff2b5fa6f0a6bd7cbf2db44f3",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "dq049": {
+      "text_sha256": "7de57ec37aa61f8a491a0912edf4c09b97b62667921e05bc5a899678b979b974",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "dq050": {
+      "text_sha256": "62d50a58b7b0e1541bae950b1aa1780c9aed02920aa6d73ba55db022eba77418",
+      "active_indices_sha256": "2d9e89e57a52776af8b196f236ad60997630c0dde6004c0a7575311c75cdb5e2"
+    },
+    "dq051": {
+      "text_sha256": "1d5d815471d3c6972686b5661be0ff32d8e092d78aa9252a867d1e5ab6a1c7f6",
+      "active_indices_sha256": "dfb437962b47bd7e32a3ae27e6403bf78c0e783e50ded434d70f9ccd57131b1a"
+    },
+    "dq052": {
+      "text_sha256": "b8ca2fd220f23c77a1be27ab72cdcb3a78af6c298772ce3d3b320e89b028a8c7",
+      "active_indices_sha256": "2bd312f676673c8dd19bbf5b21f3dd4b745f4109da6903954abe86afd05aad47"
+    },
+    "dq053": {
+      "text_sha256": "7cc641df67d88df15aa48732cece6787a0eaecde6d9919c71c406c5bed4b5acd",
+      "active_indices_sha256": "9068fb6951abf547ca97e32127ebf0d6c6512d1c483ab240105997be47790fb9"
+    },
+    "dq054": {
+      "text_sha256": "a1cf3440d0d8a4df57c08fb64c309f6b1e19afa652ec3eec6758e79f402a3776",
+      "active_indices_sha256": "19259fc786a85989404c7eb1bf0146867cf3a73d23c010ac603603535c5a1a41"
+    },
+    "dq055": {
+      "text_sha256": "c4b5821e4ae8ef74f3a7185018d0e697a4d0d086ab2313cc4eb47b2614ee19c3",
+      "active_indices_sha256": "6ba889219b75de715a00838b8095ecdf2f2b8bbcb2a4eb030d67ab5cc89ef1a3"
+    },
+    "dq056": {
+      "text_sha256": "3c8e47bfc5b027528276cdc11b9776ad713d7ba3d9f0b9bc7e2c67d94214a378",
+      "active_indices_sha256": "3e02939ffcafa6d7da031b5d05e04e037ddfd99f456cb16416e0c51ea03c837d"
+    },
+    "dq057": {
+      "text_sha256": "6c4b233f95a2d052faf88029b336e13f159abc5abd857523ab35d90f21be237e",
+      "active_indices_sha256": "d252446b6c6b3f29ca9f71d712e1b9e47eb17e9dfaa4884253054bfcdc88850b"
+    },
+    "dq058": {
+      "text_sha256": "e09c2f7732ed77e2421ba8806e0c1a25f17fe040d113cf30fcdce1e82f49b17a",
+      "active_indices_sha256": "b8d291caeaba97bccc067be8b4dea72dd2f071f5f78c22e6ddf5ccc097789688"
+    },
+    "dq059": {
+      "text_sha256": "2cb342cc7a7d83a5d87fe739208a4c545b9eda9a1abbfa8e07a79f8daf29ba8d",
+      "active_indices_sha256": "c56d5a303520aa3f38e5bbe21c005d7a622894d4ae39bd1b36593231afd17ca3"
+    },
+    "rq000": {
+      "text_sha256": "01b85eb986000d2f8030f5a03436d8af99c0664e1d73719d7d6ca2ef669bdf2e",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq001": {
+      "text_sha256": "6d5d4b0614fd6d0420ef65b214e1753bcef6a9735538f37f4a431260c087f3c6",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq002": {
+      "text_sha256": "df00a33945c37d46b7655df9ab0b43e2451dbc1f9d78102d051b64fd78371d64",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq003": {
+      "text_sha256": "635823e4661bbcc080dca01cb57c3ede1ea32cddc9ab7684715a2b15be598a64",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq004": {
+      "text_sha256": "817e2d8be87b047eab11daf4d83dda0ca8f0dc22c76d993bc01323cc4fed1532",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq005": {
+      "text_sha256": "736eaffdfa55b22c40e7d0ef3f6de0d7c1743c87c44b2a3ac317be521849d9e6",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq006": {
+      "text_sha256": "a3eb797c219a43e75e8a3ad2c8e6d14b38da773ba495e081da7313ea7faee3fb",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq007": {
+      "text_sha256": "dedb64e5269e584faa9b75e91dbd5266aa6ab88343187063910640b0ea1923bc",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq008": {
+      "text_sha256": "f640e9dd43d939aa2d41cc71de033559bcb4420a093350764dc0679f8b594915",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq009": {
+      "text_sha256": "57179131f0667e3fbffa3caf3ddb3d12723cf4e4c404f39f6509d4939ec1271d",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq010": {
+      "text_sha256": "753fba0f3a88e5c27f6d1ff89dca8c0a4b9913fec84c4b0539445f6293b74f71",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq011": {
+      "text_sha256": "b770bd954f098a1e5dcf24015dfc274d053afbc35a678e669ddd87dc5d279465",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq012": {
+      "text_sha256": "4d52216f5e467556fddd881fef1edd75d039d5a16fb38cb07451d576b231c310",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq013": {
+      "text_sha256": "f145c4c5c76eeb5444dfffb4f680aed1260e30d087004034b9dc67752d9c0707",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq014": {
+      "text_sha256": "93787d7c6869a047a57920e47021f2d3e9010bc2d71e64cdfe17b9f426cb2045",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq015": {
+      "text_sha256": "3344bac64147662930df28590f91e4bf96afd78840c8a75dc0058ac6f1f5202d",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq016": {
+      "text_sha256": "77f4609de91c62afba139bcf69171e3cd99b92759e75f609c2f84f120712d449",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq017": {
+      "text_sha256": "b46b86ec67023b1fe49a5f1a11ff31bb8e9d928a8b98fd4fb9b9fa35bf908abc",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq018": {
+      "text_sha256": "703beef9107c745dcc97794234fe020eff9b952e52dba6b5db1b879c4daa069f",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq019": {
+      "text_sha256": "a95f0c7e4e49c37b5b5849bf2103c9c3409a233b550cdf8a9318a5113e6f8b90",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq020": {
+      "text_sha256": "b443c51c2888dc2a1a115d6cf9d8d5113fd591c71e6672ac42fd2af8f1e6eaf4",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq021": {
+      "text_sha256": "b283831b1abb70f42ed929ffd1b9d3403656d7d274ed2d94e0996eacc1ee2b68",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq022": {
+      "text_sha256": "593300e05bf76e2ac17cd770251066db224ceec35546769133fd92fd56a9a4cd",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq023": {
+      "text_sha256": "c1c6e6a5ebe24044a6878931277e2bd1c2025a0f06d16d9d1e52298f030be240",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq024": {
+      "text_sha256": "79871a8ac9050365d1ef8524eefe3edfa9c00b6331f1a553a0e60245da776e8d",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq025": {
+      "text_sha256": "2804d1442e227b1160036cd6b3cd024413a6a19c7bd8189109449d3eda45f9a1",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq026": {
+      "text_sha256": "4202a9a34879df3df19245958b7bbd1e80230d6695fe864ec933b6f871edd0e6",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq027": {
+      "text_sha256": "b564b399b50130cc64789f028862ff223188672a1154b1f6282b6940a6cefad5",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq028": {
+      "text_sha256": "46cb4919dce0a56679a4a60efde255ad663b2315c4a414e6bd4ec164d360b98a",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq029": {
+      "text_sha256": "7f222fc093ef2a22b2df550c4f608f1965f1e353dbc11d9e88f50155239843fe",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq030": {
+      "text_sha256": "95eadfe218982c5c9225ebe11457524e30426dcfaf6032494bec374a82dcd6ba",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq031": {
+      "text_sha256": "fd3576f93fbf5d3bf70824a3ba31e87b23a96ba06eb29d20ac0ae4bbd6fdd2ae",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq032": {
+      "text_sha256": "9ea07435ed46a3c2b3fca1df467a920dab1ec2ca724f533fcee0810b6e107d66",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq033": {
+      "text_sha256": "ca1cefe80e40ad9e4b9d42fd969ae54963189701e7c016ce76dfc6e9b768405d",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq034": {
+      "text_sha256": "61dd8412bd0c9822e88d486a03b9ef2b2727a9c88c34d38ec44d67c4962f4a95",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq035": {
+      "text_sha256": "a795cd01fe32867b18f39da2101ac053345e4db6d377d03d8cab51a0e1a0d9c3",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq036": {
+      "text_sha256": "a4fbe1f23c43c2bad8461912655118546a547f6f439f2ccdceb2d877229b7b33",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq037": {
+      "text_sha256": "32be0949858dea72d15432d4791f58ae2cf6de9e5c7c90f29c200deada10dde1",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq038": {
+      "text_sha256": "85fd0d5a00cbd9dd0e7179149c94b4e5d77c819978509272eff39687c8c6000f",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq039": {
+      "text_sha256": "66ad7a8d70ba3233bfa8194dc86c7108ef79f57874360a11f5f7cde31e1355de",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq040": {
+      "text_sha256": "e354cbee8c8ec3c2ff9860be53427e3b5fdc493512fcc228860911291ca2eebd",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq041": {
+      "text_sha256": "8f3f4328d4f60548ca85f0294172416e791506c536b7e3efdeedf715e2ad3426",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq042": {
+      "text_sha256": "7b7042c0be3925cff9acc35b0a11f82463c82592acf1659abf681882eb646155",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq043": {
+      "text_sha256": "d7d09376e6bfd35e43bb6d38004bdbfd30567272d5546f9db73481952ea73ed9",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq044": {
+      "text_sha256": "2260b3389536acd8e17b4efd3707cbc5bba35484a61d5fff421f89bef243aac8",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq045": {
+      "text_sha256": "5f78345909c65d6218a283e04068359a3d471f5dc65f2ed65103a8b0b2bb3514",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq046": {
+      "text_sha256": "4d5ea7e4416b14fccca82ed3e008d8911f7304d79969d3d4476d0eee372af7ba",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq047": {
+      "text_sha256": "c3a472c3eddbddaf7d7146b49ff34cd6bf8292672675257a696c86d017adb532",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq048": {
+      "text_sha256": "bb99bfd1311264756e0db32dcd649bcd4f5275b255a264200575833f9a8fc4fa",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq049": {
+      "text_sha256": "3fef9a1844822216d8affcc57201b6770af16f5bfb65bbd52dda682bfac2795b",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq050": {
+      "text_sha256": "caa416888d86a1913c02a0d6956ab03c6f01fd3e1a4ca018eaf9aebe177c7ed5",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq051": {
+      "text_sha256": "2ee7672be577b1f1a114faaaa97de2d0066f4dd4079ce334670bae8c2068390e",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq052": {
+      "text_sha256": "63b8b69d422700b185ab6e1d8ec945cf50dfe92fa70dc095eff70245e40e68e2",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq053": {
+      "text_sha256": "7768a8480b2fa3d760b505fb16ef03464649b4f1520ad53d612015b8da5196d1",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq054": {
+      "text_sha256": "5a4cf2897729f6a19849ed3b0d1b4e28f0f50f45cd707b0e015cf0b0cf606cb5",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq055": {
+      "text_sha256": "f9b58fce50b5165bb616eeb948ea7e9926837583b9608260294c288c03bdf28f",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq056": {
+      "text_sha256": "e0b5dcb87c494f237c3ec615a43b6e11829c61c9f6b7c5d36b5b8256370dab52",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq057": {
+      "text_sha256": "9b3a04ebf0b75ef7f7737ca26c63fa7926a44ba1fc93fc3cec17eae1490697f2",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq058": {
+      "text_sha256": "bc107edeed0106e71e0fc1c7342cd9142a427651d59832faec312e0f3a9f5dc5",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq059": {
+      "text_sha256": "2be80e762b7302eee4758e466e8e9d0fd36ffeb6ccb1b74b80b616da9e1eabd7",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq060": {
+      "text_sha256": "11c0c06e1748da3bdd3451d08270b489493df4e66690d7071c09b743d1bdc268",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq061": {
+      "text_sha256": "368a9b8b3b3e9f07953b879bea015909f5602accf39c0340fec9e1ae5848a497",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq062": {
+      "text_sha256": "2394abeab23c8e7749e12aeac2a36f3ef7e65468aa04cd503c88d4124c053180",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq063": {
+      "text_sha256": "b3f11aa0c2ee53d2d7ae260d90beee9f9add99ba896964b22f17b20fb3017648",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq064": {
+      "text_sha256": "49f6e8f86e28940a2a8d105e2252bc7c6e3aa2c375ad32068e26140c3f24182f",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq065": {
+      "text_sha256": "2157a2e20c6be4b00e98d708d7f35e9c10afb6aaa5a5408a00c6f492ef8d93c1",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq066": {
+      "text_sha256": "cf2b5e328c7326f8e5c275b51c8056638869af6108a9edf45eea21ca385171a6",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq067": {
+      "text_sha256": "b4451b39f9a69d1053db7319ef517837ee284a9382c29c95ed57cd169f50d41b",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq068": {
+      "text_sha256": "c1b87426b96640b37f97e56bfe265b394f20c127fbd0c0aed47ed21eea2c4f13",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq069": {
+      "text_sha256": "ba3019d48c25639a8504722712f16d26b22b45e4afdb32b713f7f27c682ac74c",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq070": {
+      "text_sha256": "32be711a1d431f4d37c37edea71e0749840b611aff64c395b43a14ab6adc3742",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq071": {
+      "text_sha256": "4b22c368de827f29f93456603c55dbb78300911a7757a0d7b4c4abeacd5d0eb7",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq072": {
+      "text_sha256": "381cf4ddee9a389a5fa689fde2903e0e876ff26e4d462fd37cc0114cbf23c226",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq073": {
+      "text_sha256": "dc7d9830e6f868fe28721467a24e33d925aa920669077ebd4844153c0cafd035",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq074": {
+      "text_sha256": "3714babdfd2fd2174125beb05cde8a6eba35bcfeacde144e79b2762a9c91b23d",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq075": {
+      "text_sha256": "f91d05d820acf38fa65d03b85e8d8ac5a44d4d4e8e93d385a16f6cced7db9a4f",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq076": {
+      "text_sha256": "1bedb031cd9edbbc238b4556f69eec45863aaa4486fa35ee862031001982bb5a",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq077": {
+      "text_sha256": "6bd7feae485ed91dbe61f3110668299877c8b656d9449f92691abb4f135f4fd9",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq078": {
+      "text_sha256": "3c0fcfd17122c05cf805102e02d949cda501de75cdfc3b484c1f77a5ff487a2a",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq079": {
+      "text_sha256": "91c6091133ce5b701410f2e338a2926e0453270827bde53e1170ab10a7f28e0b",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq080": {
+      "text_sha256": "2a0ed8250c3eabdec461637690063a0352510d8cc0079d5a2781e108c7e76227",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq081": {
+      "text_sha256": "4ec5dca97c13ec5af7b8f98e2ebc58faac8be21f102895b1a48f91acb3629dc3",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq082": {
+      "text_sha256": "b2a78abbf097743333648b02643f9a861a21ce21a0d0cc6b1508b031bb229e26",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq083": {
+      "text_sha256": "1e76cd4898dcf093b52d3a06ba9d09c109ba1086d3f1125ab08ed1061f756dcf",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq084": {
+      "text_sha256": "365460fc04ae4aca923a6fea3b145a1a9e7b35dc7805510d5adedadffd483ca9",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq085": {
+      "text_sha256": "7e76e8df5c4dabedeff9168a5f754dfa60fa6bb555ec8c6df3dc0f69bb0c53b0",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq086": {
+      "text_sha256": "7a9919e58a579855ac2af08a8b9903385ba6b63a45d4601d21a0d309eb4636d7",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq087": {
+      "text_sha256": "dd791710b957637120f6906f325396ec3670e5dd7a4949d2e2c650a43d037f35",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq088": {
+      "text_sha256": "ad9f6faa125da46b1a1deacb2f431337181360ee1d7b2c96d9d2f37d2cc814cb",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq089": {
+      "text_sha256": "a35d7959cee90757a842f2d7c4e4b04f91a80c7c10bb61bcea7c73bd2050b20d",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq090": {
+      "text_sha256": "794c04431e5ca53e165901b776a3273d155286bc89fce0fae97a78841dd9bbf6",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq091": {
+      "text_sha256": "70567d0823d3b731b9b7f4725a5824c728d10f59c2940bbd0252c65ce2f16591",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq092": {
+      "text_sha256": "1a867dff1cfcc44a53e7dba4b29a2ad74b9e0c7e5cfd7c4ff767321fb6a31202",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq093": {
+      "text_sha256": "86f2b81554f228e4120e657826dd51416f66fb2e1307bc580b5eaf9e507a0378",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq094": {
+      "text_sha256": "633f5f997360b3a6d2aaa35e15a4793eeb880d85377bcf2fa26f36eea29ab775",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq095": {
+      "text_sha256": "1c02d72be9d2da48cc53611a313ee7343f1315034ac71ab94d72d21647fa23fe",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq096": {
+      "text_sha256": "52bdd4c45df3e82a3e62ba3da07192db8c19c250521f3206ad208997bdae782a",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq097": {
+      "text_sha256": "1eb81b6c6c43b4edb382521e41ad268595933b457385a9f1d838bfe44e3b1277",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq098": {
+      "text_sha256": "6eb3adda65ef22e7d342752e21ab479cf117f0b54a2c0dfc62d4227b2c1b38a3",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq099": {
+      "text_sha256": "c1c521d37f048fa5da8f56a151d292d8681c721691b077c8ec5667884643f4ff",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq100": {
+      "text_sha256": "f9bf694b8e91eeabce643741354fc138177914267c63db1adcc908bb07d23765",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq101": {
+      "text_sha256": "8491e19b1fded88c8149b01170b3c1a3c1a72f50f360cdda4c8fcd160555ffc3",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq102": {
+      "text_sha256": "a0df765f411a865e71f908d570255955df1d6a3ba4bee182a77a474ca6e073c0",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq103": {
+      "text_sha256": "88af178df97d66783a75970912faeb46de6d44aea41b4731e41b809e86f2c5d1",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq104": {
+      "text_sha256": "5c66278eb26cc81732dc65398344a909645667df94575dd876beb134a1c5861f",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq105": {
+      "text_sha256": "91704f629c78761d0ff868484cd887e317f997e8ea08817c81b8d1b5b7963c89",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq106": {
+      "text_sha256": "4f82bbf86355887075724bf1d773fa436a602a51e098fddaaf31403b71db8530",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq107": {
+      "text_sha256": "cb396d21b64af66391bfdf5983cfde01528e24e9dbbbfc1b44e6f2d9b1226248",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq108": {
+      "text_sha256": "f75f2a97a25bdac515a28bba7318574b2a938f3a4ee6445c94a0a0e183ba3c22",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq109": {
+      "text_sha256": "6738ebacfd473fb66c939729de6949341d53b5fdf130f4341368e2145e3738c4",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq110": {
+      "text_sha256": "723652747e8eee57876ddce5eee1e0dc60d5db3eb0e723be6514ec6e33d2004e",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq111": {
+      "text_sha256": "4823cc36ea6f5430c562d62e72b97d07d58cf7888491a6688a2fe4a2eaaa61de",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq112": {
+      "text_sha256": "f4f4923592b9354c78044b488cc0a43362ddb39ef946a52ac6107481f4acb9e3",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq113": {
+      "text_sha256": "4ad0ac51edae579ee834f816720183eb8b6713752d8511d83b2efa3fb4fec775",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq114": {
+      "text_sha256": "e078e4008b7b37c9d851e18b48b179abda4fc22d8a0098e4579780d4df5e46f8",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq115": {
+      "text_sha256": "9bb6bb969726f14cb2e356cf1632dfecd2fae0bcdbe4ab63ffc925896dcf972e",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq116": {
+      "text_sha256": "2dc1539294d5e366c9a2859313daac2e34be28096ec1c94e9d8443c743fdcc83",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq117": {
+      "text_sha256": "1d0e1d1d0d769e9f06966c74757bf2d6744e723e98330ef606e5c1513153fb15",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq118": {
+      "text_sha256": "016de7af5de7a0b2297ca0fe039d4db227cd5fffc8a2893dfbf964be2cb34267",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq119": {
+      "text_sha256": "e45196e37b7d87372f5368d9a0668cbf1b30242444f515996333ad3ed086c8af",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq120": {
+      "text_sha256": "5b0c6c6d7d77d1a8505cc4d9710915277e96843abe9382d1f9ef8ad2eebb5551",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq121": {
+      "text_sha256": "0e2feda93a626ff3568af71a6ab8acbcc59daf7bd3416772ec63ca225424a2fd",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq122": {
+      "text_sha256": "7d17d089324b15440cca50d76753109c48401afd3dba3903ce7c83a289770f63",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq123": {
+      "text_sha256": "4c0a08a0e006eb45f5eaa1fab09049e3607ff16920073b7038b5357652110744",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq124": {
+      "text_sha256": "c42a3eed3b50235258a1c601aa85cc5301fa734b0492f5566b4a0f4c87b52b84",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq125": {
+      "text_sha256": "dcdc776163d636d7faaf36b028eda7e24c1a1efd2b34487743cff79c7aebc823",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq126": {
+      "text_sha256": "39f63d7f7a533929a226757442ef2a6100066c8d0b09a8a08a67ad0cc0cad616",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq127": {
+      "text_sha256": "ba830cf128bc14897d0e50422c0f542b39765a28f1b36987c88b1518db428ca9",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq128": {
+      "text_sha256": "5d0c30a61900601f5f649257d1eb22cba2d3177ad15998926c5a82643d045d9e",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq129": {
+      "text_sha256": "29fcfa6f1431215d23074a04244cec0b0afb8b59f8099fa0493b0408474230c6",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq130": {
+      "text_sha256": "4e81b993242b71b304b5a08e37d1ffb2966ee6e0ae4329aefbdca84cfe403178",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq131": {
+      "text_sha256": "d74eaeede7d2adf91a88f4f4579c849eab8ceee1166407115a9590d870cf3338",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq132": {
+      "text_sha256": "9b5d674d811317e2b4264ab5b3629ecdddfde602e32aff9fa56350ed854109e2",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq133": {
+      "text_sha256": "a5cdd3c219ec9d7f3a8f83389cd9275e481a9824e2e3d79061e851592291aa18",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq134": {
+      "text_sha256": "d3a554795ee01ed8aa0d960799518c0f2c61e4454005fb62331dd5c8e140764e",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq135": {
+      "text_sha256": "bb1d9635d93b7a5e8433bf13f4b555e1edbcb531cc92e0be460d87731aa11e0e",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq136": {
+      "text_sha256": "cfb2a916bc7197810591b3473d653c0a793ff20b486789a414a4c9b4d4846b6b",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq137": {
+      "text_sha256": "5787ee3703145eccd9378aae5125d8b519ebfd21fe7f4c41cac5332224eb02da",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq138": {
+      "text_sha256": "1192406dec38eb8a244e57d41c590703d31128e8640a70f66d01a7ae6d17bfb4",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq139": {
+      "text_sha256": "86972d65f05513cb97d04e7a0c21a368b743346054029d25191141aff166a6a6",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq140": {
+      "text_sha256": "0eb6073ac67df3009641b2305413e573a2b532b9152b333732bf2ec312ac3b52",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq141": {
+      "text_sha256": "7fed9ef12eeda264fcb3f77ab83e5f59222baf9b876f2103557e258233e14094",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq142": {
+      "text_sha256": "d5e79a39074ace2f2c197881b036a35988031596ebff29c769cfa7037462ce45",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq143": {
+      "text_sha256": "d2f900026df45f72a632b5496e3b694057eb27b0fb86263ee18870d676328a42",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq144": {
+      "text_sha256": "166526adf1c0c71f48fc413904eba77938e7e1d5b0bf3c64f15268714d91af0e",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq145": {
+      "text_sha256": "aefaefe5821fbfaa4f21705e0bc808674582108a6142b7e6111d4471a2eb4fb2",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq146": {
+      "text_sha256": "dd8a14beda2a971c4682b6d36b61548ed5f250608297ee99e7466c7d2a68b897",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq147": {
+      "text_sha256": "79cde890e18d096571910b96c936e8f9ffedd73558515cd93b0b710955cac9ef",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq148": {
+      "text_sha256": "e3a7f8a944d7e6c736d2f31c511415a540ddb81a7c71427305c46b80284a8339",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq149": {
+      "text_sha256": "bb07e293c89b9f5ccbcb431c314502b010ec23ac4208c2b160c5bec39554e2af",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq150": {
+      "text_sha256": "43fcc02f4f470c3bb0475491f97e097ea07be0f78c70dfae54c2d72e3cb179a1",
+      "active_indices_sha256": "2261b0a373a3792c30d25c302d2705354b508cedd12fa7ca9ae90aeb2567f951"
+    },
+    "rq151": {
+      "text_sha256": "f109ce3817d2679c2fab647e25e8f67e7f7aaab7e7e0063b0c697626b7dda467",
+      "active_indices_sha256": "30438ed230b8be0a797160aa7ef9cb8b9421670b9bddd662864fcbc9810d49d7"
+    },
+    "rq152": {
+      "text_sha256": "c77f3916ac16e14709cf740f2ad471ad923dcc3b99de1be13df42cf5d1874f11",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq153": {
+      "text_sha256": "6fbc69bab97e5b55038ad745aed11ecdf17c657761059e8473b689832e96bad8",
+      "active_indices_sha256": "b6c3f4fddb80a532ae942143515383d9427b71ed90254dc2ee728d86dd2ac457"
+    },
+    "rq154": {
+      "text_sha256": "539b2fb8970811813d5e1b2bd3c16f99801d7b77340a40bc6251fcd205885127",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq155": {
+      "text_sha256": "7223d122196c9c5b96f6a8c2570fdef06ea24bec41e19c01aea129e06960bcb8",
+      "active_indices_sha256": "074e1ba87cc88d8906daaf6bdef6650210e26c495d1be0c8b521a4912dfffad6"
+    },
+    "rq156": {
+      "text_sha256": "8b8870a7d3ae38967628a3915952c254791f3947b4442a7e4a17d37d6c6af43c",
+      "active_indices_sha256": "0db3994df59d9582337a7b7bf50a69ceeddc72e16a60394d18a850b2808c9a87"
+    },
+    "rq157": {
+      "text_sha256": "713a43ea22d3eb309252c7ecb32dfbe6fcff5a5a34eec6f90ab1dc75ef272039",
+      "active_indices_sha256": "74d37895536c4a2aa99feeacabbeb7d23ed7efa7012ee6929df36a9d085cf5e7"
+    },
+    "rq158": {
+      "text_sha256": "93f566dbe298f0438626a73c6faf510a92c5a6574bec4ab84cc8d3d1f1a1dbee",
+      "active_indices_sha256": "12ff8a1dfe59ec177e42843fd319f2f668d2fc37e5c39624745bbd21525a5a13"
+    },
+    "rq159": {
+      "text_sha256": "730a4aabbe2a3c62f2e5c12da2d1a848c7468304fc4b6e8fe2c6cf56445eddcb",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq160": {
+      "text_sha256": "44d8c5687571d0ea89f95cb582adb0c7491b5aef2279fe6c7cf38baaa85842be",
+      "active_indices_sha256": "4bc769cef72d581f602e316f542ad8c3edf6c3b6cc36eac190d2fd1998bb52bf"
+    },
+    "rq161": {
+      "text_sha256": "fc8e0a7bfa72f57322d3f7a6f0b4ad84f1004551b94fcaeca8c604910846dc78",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq162": {
+      "text_sha256": "adb3ecea4732c5a51311959f15e2b84e17dc73e8864bceacdb9202da1846a041",
+      "active_indices_sha256": "eb47c66c8d4c51dc23f5d6cc100f5dc3090d7256465b2199d0be09068ff2a6ec"
+    },
+    "rq163": {
+      "text_sha256": "74af6dfee9b8df8cf90500efa5b6e1e11556673ba4f03e4dba6f14fe9b626e7b",
+      "active_indices_sha256": "010fe6278a628a2b4899b50d622b1977977ca8833d35590f43458243eec9c407"
+    },
+    "rq164": {
+      "text_sha256": "0adb105ba564e7b787291b4ab7de45942236e2ff07e81507e875dc392da84e98",
+      "active_indices_sha256": "99ee46032a7670445ca6638a41e69904cd1d5e6402dedb63586674f406652fa5"
+    },
+    "rq165": {
+      "text_sha256": "6b78a5c9e3df30488f1905ca34bcb63691de25b5f7bf2f10ad84ed00ca61e130",
+      "active_indices_sha256": "edc8d6a869f7181784b836f678666952269e23768ee4628a8ac5735ea82e1aab"
+    },
+    "rq166": {
+      "text_sha256": "4c51dceac9ddffefd40307e5a27b94863c2a0490c26b100b35e9287370ab85b6",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq167": {
+      "text_sha256": "00f66178635babb90dab72861a892570849ed6787c087482ee66810a42f04774",
+      "active_indices_sha256": "d716954f731a702ac5398f75a1e55ef0759bacfb8a39849069b6238b33087f6e"
+    },
+    "rq168": {
+      "text_sha256": "95ea384a39213f502d823e8130690c6ad92baf8eb60b7d41fbcd5e5702214260",
+      "active_indices_sha256": "5e131dc5e13f79d1801fc681f1d00b1c67c0253655b2339e0d84fdf233f07d39"
+    },
+    "rq169": {
+      "text_sha256": "7faeddfb50105055a56e78c7d7ab77b42063816dbbd51e819f94cc5e765b9d89",
+      "active_indices_sha256": "dc5d95316f525e9c82306e3b87c434dd62acab81c0721513ffb16bbbb5c2d1ea"
+    },
+    "rq170": {
+      "text_sha256": "0e29db07bc8ac4e48696d6056692f3fd378f4453133bcb45a6ae9a0b8b0c7483",
+      "active_indices_sha256": "49091370ffd4f46eeb3903417c23ebd91057b5e0a4fcd44edf1233874bf0caf6"
+    },
+    "rq171": {
+      "text_sha256": "16cc11c163020877f022758bb6c3a995df117d93bcaf0525109b434b36ff0a64",
+      "active_indices_sha256": "f095e409366f51a3e6fd4aed436b2d43218ac5976894f14d1e8568162bd36ab9"
+    },
+    "rq172": {
+      "text_sha256": "c56d8a9a5533e3616bb45fdc7edd78f230fa673d423eb7311eddaad627563558",
+      "active_indices_sha256": "60730c5968772a9bacb75f1ec94a54dcb8da98d5c3ab1dee2668b8aa6d25de57"
+    },
+    "rq173": {
+      "text_sha256": "8b5316c89bede65987147b01876fb4ca8f6a22b1321cd47c5f5724046d725892",
+      "active_indices_sha256": "e24492f0315a718de5ab525ffe74c060990b8a3039ee7c7897cd75965a2b6c3f"
+    },
+    "rq174": {
+      "text_sha256": "8baf6cf9ef69492b6bd6a2796682e9089fcefe318e31a0d4c4141c65f33f8562",
+      "active_indices_sha256": "22db49fe00521633e423ac272b54532cded89f3ec6b243633fbb48597d308876"
+    },
+    "rq175": {
+      "text_sha256": "d485d27a631819c0c31910c0e96e9d1213d3482db306532bd84851c75c62ac0f",
+      "active_indices_sha256": "f4a039f021b81f5ba9418b954f9e66c63013b5e0c42c951fa260a1ac71118853"
+    },
+    "rq176": {
+      "text_sha256": "31dc1105d44b4b072e09845c2eddb5553fb6b9b2c5a0da441714693269477b7c",
+      "active_indices_sha256": "33ac550e8d6b26452ab1f006788a093fdb1532a17fe2944b00f8778a2bb0f983"
+    },
+    "rq177": {
+      "text_sha256": "dc62e8f4fa88beea72d8199c8e4d81f244ee4a5185b617b15af92558194b3bd2",
+      "active_indices_sha256": "73b6adad4915906f7e538eec4100547364db572182a5e28222e9246db4bb470a"
+    },
+    "rq178": {
+      "text_sha256": "9f3d507c82899952083653cc1de518045a940fece5752e70df8e2ebbe044a8bc",
+      "active_indices_sha256": "388e9f4f2b1a4aea0ef46131be43d9e81e3231ac6ee03adbb2da84a737eb4393"
+    },
+    "rq179": {
+      "text_sha256": "e45cbfe4178ca47f5f815e403fc1d08c21238560e5623ec9aaad5d6f2cbc4924",
+      "active_indices_sha256": "3459a3d47c4767be06bd3a2d34b1a45ba0c1c259df13d362ca29c30118b37210"
+    },
+    "rq180": {
+      "text_sha256": "5a46ef237b3be0093082246fc05746dc1f1206319bf004b78afd2373f9ed0f40",
+      "active_indices_sha256": "96cfdee81e10ffffc68868ce0e6fd831df6dacdb13a1807a1348863593b37c3d"
+    },
+    "rq181": {
+      "text_sha256": "cf78af5048062ef946b2a81afe334fde2c3b94b060a18fe55d70d73c828c9697",
+      "active_indices_sha256": "c315be5065c3458effaa32fc8994e62151ffbb4e5dda6c20b413e94d3fec8688"
+    },
+    "rq182": {
+      "text_sha256": "ee744603cf962de4e2cb671c6a4b666024743924affb194aa7da82661e836901",
+      "active_indices_sha256": "0d88145beaf8f83a30f6d9c0cc9d1564802faa2dc936601d26a8a9c5881a00e3"
+    },
+    "rq183": {
+      "text_sha256": "36fc97b47920d7de0f99c3d2f03407178a859d795396530dd91c5939cbef334f",
+      "active_indices_sha256": "94913279aa5df60fbe9ca799c43cbacfc6c1b79974ef7d16bd5acfe90fab82ed"
+    },
+    "rq184": {
+      "text_sha256": "b7e5f4f5763ed46c86b7e20e8c327104066730654ef2e2c86f73527cf29a38e2",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq185": {
+      "text_sha256": "0940a609bcc7b47df08c02329a8cae4a7584c8fa642c2a0440be47df507dc195",
+      "active_indices_sha256": "2c976c6866697802f8c992f3ab8a81e33b7e4d9d33aca658a09689f3c9357b08"
+    },
+    "rq186": {
+      "text_sha256": "9fb948379f537d10c3891a2baff2ae6b1cd7dcfce667c1ecaf60ea88a682f856",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq187": {
+      "text_sha256": "9801b9ff0fa5ea7111bc2350f2b849222e496e8dbc36c00c65e63fb166312e24",
+      "active_indices_sha256": "64837c25c60eaa3b5e92b30ede0671f184793056219c9918e575761288e6eff5"
+    },
+    "rq188": {
+      "text_sha256": "20545e2c65e78af9d17d69f9d98577955488a348c01fc2b5d30bcb8b35b2a0bf",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq189": {
+      "text_sha256": "09f719e01142d329839f698d791619fe09c3b2c67a0db3c00df3de7cd67ee67f",
+      "active_indices_sha256": "07d5391357fefd5f66690f09972fe1073cb822304cc3a8fc37ddd4759e163902"
+    },
+    "rq190": {
+      "text_sha256": "e2da92e4559ddd1816a5cb662a90ad77bb904c55a1a4969299d17e76f0f73511",
+      "active_indices_sha256": "ff317d151b46978f2b7daf47481f8d9c9957284ec945137f5f9d5fbcd35edb3e"
+    },
+    "rq191": {
+      "text_sha256": "0681eecd8b0d657f8aff4b4b7847063175a74073f12e3346a76055ba97dc3be5",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq192": {
+      "text_sha256": "69259d83d9bedd82e51ed0e57f64fcff95c1233d68b27a3e89a631ed6bc50ba2",
+      "active_indices_sha256": "054be37a0a449caf93cd90864b948c0fc0ba3b3436de7c69746ea3d2a48614a9"
+    },
+    "rq193": {
+      "text_sha256": "49bd9f31f0596477d9651bfc0e7291697635a01db6a9c1d29d54d27845c43458",
+      "active_indices_sha256": "2a2069a8ec8d42fbc8c77075f915c24e012b94b04ef62f626a63d76da80eadfa"
+    },
+    "rq194": {
+      "text_sha256": "d1c60fdb76b950c5e75807d235271eb686efe494842194464f7f653812ec3377",
+      "active_indices_sha256": "8b3d5375b7515adbb6e2fdf062a08bf0283127021e919eb1dc82c7b0feedfa92"
+    },
+    "rq195": {
+      "text_sha256": "9b853e74ab9e18255c9049061a176c42671d9656069de221ea964b5ad687541c",
+      "active_indices_sha256": "d8ba593eeb034e239a1b643847b49aa89e868a6731d07a1cda098411b0ce16e8"
+    },
+    "rq196": {
+      "text_sha256": "f7d88d55627277ad1c8cf1fd6c8cbcbcecf80050e044a969c36131b3b8cafb2d",
+      "active_indices_sha256": "ea4278fd3b153bf2ce25a6dd99195612e772affc5ca370cd067c0d085fd809f7"
+    },
+    "rq197": {
+      "text_sha256": "5e2325a1726d41baa124250ed011f344354e7c3b97b463d72e7454551f8eb5f2",
+      "active_indices_sha256": "53b763039cea68f1a1926daad130207390a3d191d0197e1c17e550278287881e"
+    },
+    "rq198": {
+      "text_sha256": "4c61a4a3352b9f0074c4c6728b6e21b78fb741f433ec6ae2d2059ffce1819409",
+      "active_indices_sha256": "cf9116d1bc50d14ab1e4c14a14e74b0ce530fc5f3b9c50a8cfc597ac28bb175b"
+    },
+    "rq199": {
+      "text_sha256": "869e556b9512d1637bd272f29bef3a77b60a60e85418e5208b96790e1bf21862",
+      "active_indices_sha256": "875d750413d0c1da240623127fd9b1fff5e1c1248f91fa539092b734b0c62050"
+    }
+  },
+  "baseline_thresholds": {
+    "min_score": 1.096599,
+    "min_margin": 0.0,
+    "dev_correct": 49,
+    "dev_wrong": 0,
+    "dev_cases": 60,
+    "fitted_on": "recognition_dev queries only"
+  },
+  "embedding_device": "cpu",
+  "absent_policy": "exclude canonical sibling family per absent query; controlled diagnostic",
+  "latency_scope": "warm embedding; fresh Doppler process including model loading per query"
+}
