@@ -11,6 +11,12 @@ selects and connects them, with deterministic assembly and validation. Compare
 against search and autoregressive generation. The recorded three-call baseline
 does not constrain the composition goal.
 
+The binary-input composition objective is minimal total presses to a correct
+program using an experimental fixed-width vocabulary with N <= 8 bits per entry.
+It covers familiar variants first and unfamiliar combinations separately; the
+current three text-entry encodings remain baselines. Goal definitions and the
+natural-description matching boundary live in [STATUS.md](STATUS.md#matching-and-binary-input-objectives).
+
 ## Authority
 
 Owns problem imports, sandbox judging, comparison routes, research answer interfaces, index-only mining, graph datasets, frozen samples and reports. Also owns the user-requested binary-input vocabulary study on permitted reference text; 256one owns its editor UI and runtime packaging. Gamma owns an explicitly paired, loopback-only research bridge to its bounded Linux judge and known-answer interface. No unsupported generalization or benchmark-acceptance claims.
@@ -33,6 +39,7 @@ Owns problem imports, sandbox judging, comparison routes, research answer interf
 - Recipes are inspectable expansions, not the primitive vocabulary. Keep bounded-baseline results distinct from finer-grained experiments; learned unfamiliar-composition success requires protected generalization evidence.
 - Binary-input studies keep raw references ignored, record pinned sources and measure encoding cost separately from solving correctness and human effort. Public challenge navigation exports metadata only. Paired personal research views may export attributed statements, generated signature-only starters and public examples, with source license notices; never hidden tests or stored solutions through the challenge route. Checked solution retrieval is a separate explicit action.
 - Editor jobs require a paired origin/token, bounded requests and execution, cancellation cleanup and exact request/result binding. Python/JavaScript entry alphabets contain exactly 256 eight-bit codes, including commands; ASCII remains 128 seven-bit codes.
+- A composable-input experiment must not silently replace those entry alphabets. Count bindings, parameters, navigation and corrections in total input cost; measure complete latency and correctness separately. Nearest-match retrieval does not authorize an exact-problem claim or an unverified adapted solution.
 - Training excludes protected families; shared structural patterns and alternative solutions stay together. Tests do not prove correctness.
 - Reserve fresh confirmation families before vocabulary mining. Structural recurrence does not verify components.
 - Generative comparisons share model/budget/repair allowance; repairs see public examples only.

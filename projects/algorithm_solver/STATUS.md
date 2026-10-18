@@ -24,6 +24,27 @@ Assemble typed components into correct programs for supported problems and varia
 
 Generalize to unfamiliar combinations of learned operations, state, bindings, and control flow through one parallel prediction and deterministic assembly. Preserve the reserved 66 problems; teacher coverage is ten, not student success. Next, diagnose development failures, finish matched search baselines, freeze all artifacts, and perform protected scoring without adapting to results.
 
+## Matching and binary-input objectives
+
+Goal **1b** accepts natural-language descriptions and identifies the intended
+indexed problem and its requirements. Distinguish a requirement-equivalent match
+from a nearby candidate, an underspecified request and an absent problem. Similarity
+alone does not establish identity. Ask for missing requirements; a twist that
+requires adapting code belongs to composition, not an exact-match claim. Goal
+**1a** retains complete statements and controlled paraphrases as its input scope.
+
+The user-facing composition objective spans **2a**, then **2b**: use only `0` and
+`1` to select and connect composable functions, data-structure operations, state,
+control flow and recipes, with the fewest total presses to a correct solution.
+Investigate a fixed-width vocabulary of **N bits, N <= 8**; eight is a candidate,
+not a proven optimum. Count selection, bindings, parameters, navigation, insertion
+and corrections, and report elapsed time, correctness and coverage alongside
+presses. An entry selects a piece or action; a sequence builds a program. Compare
+against the current seven-bit ASCII and eight-bit Python/JavaScript text-entry
+baselines. Preserve those three encodings while testing a separate composable
+vocabulary. Solving all LeetCode problems is the ambition, not current coverage;
+encoding savings alone do not establish composition or human-effort gains.
+
 ## Evidence and operating boundaries
 
 | Subgoal | Evidence and gap |
