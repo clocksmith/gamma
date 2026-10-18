@@ -33,7 +33,12 @@ def details(slug):
             'example_passed': None, 'independent_tests_passed': None}
 
 
-def retrieve(raw):
+def retrieve(raw, approved_library=None):
+    if approved_library is not None:
+        from .approved_library import load_context
+        from .answer import answer
+        context, catalog = load_context(approved_library)
+        return dict(answer(context, query_problem(raw), approved_library=catalog), language='python')
     import numpy as np
     import torch
     from . import corpus
@@ -54,7 +59,7 @@ def retrieve(raw):
     return dict(answer(context, query_problem(raw)), language='python')
 
 
-def run_job(payload, connection, request_digest):
+def run_job(payload, connection, request_digest, approved_library=None):
     def stop(*_):
         raise SystemExit(0)
     signal.signal(signal.SIGTERM, stop)
@@ -65,7 +70,7 @@ def run_job(payload, connection, request_digest):
             elif payload['operation'] == 'run':
                 result = execute(payload.get('language'), payload.get('source'), payload.get('problem'))
             elif payload['operation'] == 'retrieve':
-                result = retrieve(payload.get('problem'))
+                result = retrieve(payload.get('problem'), approved_library=approved_library)
             else:
                 raise ValueError('Unknown operation')
         result['request_binding'] = {'request_sha256': request_digest}

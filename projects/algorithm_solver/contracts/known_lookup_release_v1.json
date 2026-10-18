@@ -1,0 +1,33 @@
+{
+  "schema": "algsolve.known-lookup-release.v1",
+  "status": "acceptance_contract_frozen_before_scoring",
+  "authority": "User delegated the choice of release gate: do your best.",
+  "scope": "Goal 1a only: known-problem recognition and approved stored answers, without generation.",
+  "library": {
+    "inventory": 3353,
+    "protected_exclusions": 65,
+    "eligible_exact_paths": 3288,
+    "approval": "Only source-bound references with positive independent verdicts and a correct, executed exact-answer path. Every other entry has an explicit exclusion reason.",
+    "runtime": "Linux bounded sandbox; CPU embeddings only when the complete statement and interface are not an exact match.",
+    "exclusion_selection": "Unqualified candidates remain in retrieval. Never redirect a rejected top candidate to an approved sibling. Protected composition aliases are excluded from the active index."
+  },
+  "recognition": {
+    "sealed_set_sha256": "7aa039b3090b611c030cb1b2ca872f1c3a04f12aac8fe590c6f3d26c0df201b4",
+    "selection": "All 12 paraphrases and 8 sibling variants, plus all 4 absent-algorithm cases. Other description cases stay unopened for 1b.",
+    "known_queries": 20,
+    "absent_queries": 4,
+    "minimum_accepted_and_correct_known": 18,
+    "maximum_wrong_acceptances": 0,
+    "maximum_accepted_unqualified": 0,
+    "minimum_absent_rejections": 4,
+    "identity": "Independently reviewed target identity, scored separately from query-owned test verdicts.",
+    "correctness": "Public checks at request time; private query-owned checks only after the answer returns. Missing evidence is not a pass.",
+    "no_posthoc_changes": "Freeze code, data, policy, model, evaluator and environment before opening. Report a failed gate without lowering it; changes motivated by these results require a new independent set.",
+    "limits": "Agent-authored/reviewed purposive sample, not human evidence or universal coverage. Report Wilson and family-cluster uncertainty; zero observed wrong answers is not a zero true error rate."
+  },
+  "interaction": {
+    "required": ["visible matched or uncertain candidate identity", "source provenance", "separate stored qualification and public-query verdicts", "explicit insertion", "stale-result rejection", "errors and cancellation", "desktop and mobile"],
+    "timing": "Report fresh-process startup, first embedding request, warm exact and warm paraphrase paths separately. Count full retrieval, assembly and checking. No isolated-speed claim from shared-host audit timing."
+  },
+  "non_goals": ["arbitrary informal descriptions", "learned composition", "all LeetCode problems", "proof from finite tests", "automatic editor insertion"]
+}

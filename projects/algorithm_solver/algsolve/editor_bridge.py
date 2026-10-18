@@ -5,6 +5,7 @@ import hmac
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 import json
 import multiprocessing
+from pathlib import Path
 import secrets
 import signal
 import threading
@@ -17,10 +18,14 @@ MAX_BODY = 131072
 
 
 class Jobs:
-    def __init__(self):
+    def __init__(self, approved_library=None):
         self.items = {}
         self.lock = threading.Lock()
         self.context = multiprocessing.get_context('spawn')
+        self.approved_library = str(Path(approved_library).resolve()) if approved_library else None
+        if self.approved_library:
+            from .approved_library import ApprovedLibrary
+            ApprovedLibrary.load(self.approved_library)
 
     def poll(self, job):
         if job.get('result'):
@@ -65,7 +70,7 @@ class Jobs:
             if len(self.items) >= 16:
                 raise RuntimeError('Recent job limit reached')
             parent, child = self.context.Pipe(duplex=False)
-            process = self.context.Process(target=run_job, args=(payload, child, request_digest), daemon=True)
+            process = self.context.Process(target=run_job, args=(payload, child, request_digest, self.approved_library), daemon=True)
             process.start()
             child.close()
             job_id = secrets.token_hex(16)
@@ -172,13 +177,15 @@ class Handler(BaseHTTPRequestHandler):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--port', type=int, default=8875)
+    parser.add_argument('--approved-library', type=Path,
+                        help='Only return independently qualified, source-bound stored answers')
     args = parser.parse_args()
     def stop(*_):
         raise SystemExit(0)
     signal.signal(signal.SIGTERM, stop)
     server = ThreadingHTTPServer(('127.0.0.1', args.port), Handler)
     server.token = secrets.token_urlsafe(32)
-    server.jobs = Jobs()
+    server.jobs = Jobs(approved_library=args.approved_library)
     threading.Thread(target=server.jobs.reap, daemon=True).start()
     print('[run-contract] run_name=editor-bridge pairs_input_spec=explicit-editor-requests resume_from=none '
           'resume_stage=none decode=none eval_dataset_paths=public-examples device=cpu schedule=single-job '

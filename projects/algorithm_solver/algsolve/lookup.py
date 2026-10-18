@@ -119,6 +119,29 @@ class LookupIndex:
         self.embeddings = embeddings
         self.fingerprints = [fingerprint(e.query_text()) for e in entries]
         self.by_key = {e.key: i for i, e in enumerate(entries)}
+        self.by_exact_text = {}
+        self.by_exact_problem = {}
+        for entry in entries:
+            self.by_exact_text.setdefault(entry.query_text().strip(), []).append(entry.key)
+            self.by_exact_problem.setdefault(self._problem_identity(entry), []).append(entry.key)
+
+    @staticmethod
+    def _problem_identity(problem):
+        return (problem.statement.strip(), json.dumps(problem.entry, sort_keys=True), json.dumps(problem.params))
+
+    def exact_problem_key(self, problem):
+        """Generated signature-only editor starters retain their typed interface."""
+        keys = self.by_exact_problem.get(self._problem_identity(problem), [])
+        return keys[0] if len(keys) == 1 else None
+
+    def exact_key(self, query_text: str) -> str | None:
+        """Only byte-equivalent statement + interface; no title/slug shortcut.
+
+        Do not collapse internal whitespace: it can be meaningful inside input
+        literals. Duplicate text remains ambiguous rather than choosing first.
+        """
+        keys = self.by_exact_text.get(query_text.strip(), [])
+        return keys[0] if len(keys) == 1 else None
 
     @classmethod
     def load(cls, entries: list[IndexEntry]) -> "LookupIndex":
@@ -197,9 +220,19 @@ def adapt_solution(code: str, entry: IndexEntry, query_method: str | None) -> st
         return code
     for node in ast.walk(tree):
         if isinstance(node, ast.ClassDef) and node.name == "Solution":
+            if any(isinstance(item, (ast.FunctionDef, ast.AsyncFunctionDef)) and item.name == query_method
+                   for item in node.body):
+                raise ValueError('Requested method collides with an existing helper')
             for item in node.body:
                 if isinstance(item, ast.FunctionDef) and item.name == entry.entry["method"]:
+                    original_name = item.name
                     item.name = query_method
+                    # Recursive/helper references to the old method retain the
+                    # same bound implementation after the interface rename.
+                    node.body.append(ast.Assign(targets=[ast.Name(id=original_name,ctx=ast.Store())],
+                                                value=ast.Name(id=query_method,ctx=ast.Load())))
+                    break
+    ast.fix_missing_locations(tree)
     return ast.unparse(tree)
 
 
