@@ -159,9 +159,10 @@ system produces protected generalization results.
 1. Keep the qualified retrieval/public-check route. Address sibling discrimination
    using development-only negatives and a new natural-absence set, preserving the
    current frozen evaluation. Extend independent stored-solution coverage.
-2. Use the separate typed primitive/recipe experiment below to replace opaque
-   algorithm selection and Python glue with explicit operations, control flow and
-   state effects. Grow independently tested real development compositions. Require
+2. Grow the frozen typed codec's real development corpus beyond its current
+   16 qualified graphs / 12 problems. All admitted operations and recipes occur
+   somewhere in this corpus, but support does not survive the proposed family
+   split. Add independently tested support across disjoint families. Require
    training support for every admitted part before treating unseen combinations as
    a fair composition test. Keep negatives with counterexamples and accept valid
    alternative graphs. Do not redraw the reserved 66-problem/60-family split.
@@ -238,13 +239,70 @@ new unfamiliar-problem solving result. Resources remain local to their recipes;
 cross-recipe resource borrowing, recursion and generic container types are not
 implemented. List append currently copies the list.
 
-The five examined old confirmation cases are debugging material now. Before the
-next student run, freeze a supported primitive/recipe target codec, verify every
-required operation and binding is representable and covered in training, and
-reserve fresh protected composition patterns/families. None of these synthetic
-fixtures is fresh evaluation material. Next: teach typed choices and bindings,
-then score one predicted graph and complete latency on the fresh cases; accept
+The five examined old confirmation cases are debugging material now. The target
+codec freeze and real-development corpus below advance the next step; no student
+has been trained on them. Verify feature support in the actual training partition
+and reserve fresh protected composition patterns/families before training.
+None of these synthetic fixtures is fresh evaluation material. Then teach typed
+choices and bindings and score one predicted graph and complete latency; accept
 equivalent correct graphs and retain counterexample-backed hard negatives.
+
+## Frozen typed codec and real development corpus
+
+`contracts/typed_codec_v1.json` freezes codec identity `e91aee58…`: typed-program
+schema v2, 14 pure operations, **14** stateful operations (adding `map.get`), the
+four recipe definitions, types/effects, bindings, expansion, serialization and
+limits. Positional invocation uses an explicit ordered `parameters` array;
+canonical JSON can sort every object key without changing argument order.
+Tests cover nonalphabetical same-type ports through serialization and expansion.
+`map.get` returns stored zero rather than a nonzero default, does not insert an
+absent key, and rejects boolean/noninteger defaults. `map.has` distinguishes
+presence when the stored value equals the default.
+
+The frozen collection/resource capacity is 20,000, allowing the declared
+10,000-city bound plus the explicitly unused vertex zero. Qualification uses
+a 2,000,000-operation execution budget and the existing Linux sandbox limits.
+This is a named bounded profile, not unrestricted runtime support. Prior codec
+and synthetic receipts remain historical; the algorithm-call v1/v2 baseline
+sources are unchanged.
+
+`typed_pairs.py` now emits source-bound real development targets, provenance,
+graph/expansion hashes, required-feature inventories, recipe usage, requirement
+reviews, public/independent verdicts and declared-maximum input probes. It rejects
+protected or otherwise unpermitted problems before accessing their tests.
+Different correct graphs stay together by problem/family/pattern identity.
+
+The final [qualification receipt](findings/typed-real-dev-v2/summary.json) records:
+
+- 16 accepted graphs across 12 selected problems, including four alternative
+  implementations; 41 public and 1,884 independent **test executions**, plus
+  16 declared-bound probes. Alternative graphs repeat some problem tests.
+- Every admitted pure/effectful operation, resource and recipe appears in the
+  qualified corpus. This is corpus-wide presence, not split support or learning.
+- Four explicit exclusions for mandatory complexity, missing operations or
+  unsupported input bounds. No incorrect-answer fit was accepted to bypass them.
+- Two type-correct negatives have failing public counterexamples.
+- 81 focused tests and 816 subtests passed on host 128. The run used an isolated
+  source snapshot at `09dad3af2`, preserving the remote checkout's concurrent work.
+
+The initial [run](findings/typed-real-dev-v1/summary.json) qualified 14 graphs and
+failed Missing Number and Redundant Connection. Tracing found invalid imported
+suites: 7/47 Missing Number cases violated the value domain; 62/76 Redundant
+Connection cases violated endpoint or single-cycle graph constraints. Their
+original files, outputs and failure receipts remain unchanged. A source-hash-bound
+development repair rejects those suites as qualification authorities and supplies
+336 set-difference-oracle cases and 170 edge-removal/connectivity-oracle cases.
+These are separately identified development tests, not benchmark rescoring.
+Details: [test integrity](findings/typed-real-dev-v2/test_integrity.json).
+
+The [support audit](findings/typed-real-dev-v2/support_audit.json) still blocks the
+proposed split: only 2/6 audit targets have complete support in its 10 fit targets;
+the split places every DSU example outside training. In leave-one-family-out
+diagnostics, 7/12 families have full feature support. Do not present that split as
+a fair generalization experiment or train against it. All examined targets remain
+development/debugging material. Fresh protected patterns/families have **not**
+been reserved for this codec; no new predictor, search comparison, or generalization
+result is claimed. Build cross-family support before that reservation and training.
 
 ## Binary-input vocabulary study (256one integration)
 
