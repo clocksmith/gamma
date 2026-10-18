@@ -1,0 +1,2680 @@
+{
+  "recipes": {
+    "forest": {
+      "schema": "algsolve.typed-program.v1",
+      "inputs": {
+        "n": "int",
+        "edges": [
+          "list",
+          [
+            "tuple",
+            "int",
+            "int",
+            "int"
+          ]
+        ],
+        "descending": "bool"
+      },
+      "body": [
+        {
+          "op": "call",
+          "operator": "dsu.new",
+          "args": [
+            {
+              "ref": "n"
+            }
+          ],
+          "out": "sets"
+        },
+        {
+          "op": "let",
+          "name": "ordered",
+          "value": {
+            "op": "sort_by",
+            "args": [
+              {
+                "ref": "edges"
+              },
+              {
+                "literal": 2
+              },
+              {
+                "ref": "descending"
+              }
+            ]
+          }
+        },
+        {
+          "op": "var",
+          "name": "total",
+          "value": {
+            "literal": 0
+          }
+        },
+        {
+          "op": "var",
+          "name": "accepted",
+          "value": {
+            "literal": 0
+          }
+        },
+        {
+          "op": "for",
+          "item": "edge",
+          "in": {
+            "ref": "ordered"
+          },
+          "body": [
+            {
+              "op": "let",
+              "name": "u",
+              "value": {
+                "op": "field",
+                "args": [
+                  {
+                    "ref": "edge"
+                  },
+                  {
+                    "literal": 0
+                  }
+                ]
+              }
+            },
+            {
+              "op": "let",
+              "name": "v",
+              "value": {
+                "op": "field",
+                "args": [
+                  {
+                    "ref": "edge"
+                  },
+                  {
+                    "literal": 1
+                  }
+                ]
+              }
+            },
+            {
+              "op": "let",
+              "name": "weight",
+              "value": {
+                "op": "field",
+                "args": [
+                  {
+                    "ref": "edge"
+                  },
+                  {
+                    "literal": 2
+                  }
+                ]
+              }
+            },
+            {
+              "op": "call",
+              "operator": "dsu.find",
+              "args": [
+                {
+                  "ref": "sets"
+                },
+                {
+                  "ref": "u"
+                }
+              ],
+              "out": "left"
+            },
+            {
+              "op": "call",
+              "operator": "dsu.find",
+              "args": [
+                {
+                  "ref": "sets"
+                },
+                {
+                  "ref": "v"
+                }
+              ],
+              "out": "right"
+            },
+            {
+              "op": "if",
+              "condition": {
+                "op": "not",
+                "args": [
+                  {
+                    "op": "eq",
+                    "args": [
+                      {
+                        "ref": "left"
+                      },
+                      {
+                        "ref": "right"
+                      }
+                    ]
+                  }
+                ]
+              },
+              "then": [
+                {
+                  "op": "call",
+                  "operator": "dsu.union",
+                  "args": [
+                    {
+                      "ref": "sets"
+                    },
+                    {
+                      "ref": "u"
+                    },
+                    {
+                      "ref": "v"
+                    }
+                  ],
+                  "out": "joined"
+                },
+                {
+                  "op": "set",
+                  "name": "total",
+                  "value": {
+                    "op": "add",
+                    "args": [
+                      {
+                        "ref": "total"
+                      },
+                      {
+                        "ref": "weight"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "op": "set",
+                  "name": "accepted",
+                  "value": {
+                    "op": "add",
+                    "args": [
+                      {
+                        "ref": "accepted"
+                      },
+                      {
+                        "literal": 1
+                      }
+                    ]
+                  }
+                }
+              ],
+              "else": []
+            }
+          ]
+        }
+      ],
+      "return": {
+        "op": "tuple",
+        "args": [
+          {
+            "ref": "total"
+          },
+          {
+            "op": "sub",
+            "args": [
+              {
+                "ref": "n"
+              },
+              {
+                "ref": "accepted"
+              }
+            ]
+          }
+        ]
+      },
+      "output_type": [
+        "tuple",
+        "int",
+        "int"
+      ]
+    },
+    "cycle_weight": {
+      "schema": "algsolve.typed-program.v1",
+      "inputs": {
+        "n": "int",
+        "edges": [
+          "list",
+          [
+            "tuple",
+            "int",
+            "int",
+            "int"
+          ]
+        ],
+        "descending": "bool"
+      },
+      "body": [
+        {
+          "op": "call",
+          "operator": "dsu.new",
+          "args": [
+            {
+              "ref": "n"
+            }
+          ],
+          "out": "sets"
+        },
+        {
+          "op": "let",
+          "name": "ordered",
+          "value": {
+            "op": "sort_by",
+            "args": [
+              {
+                "ref": "edges"
+              },
+              {
+                "literal": 2
+              },
+              {
+                "ref": "descending"
+              }
+            ]
+          }
+        },
+        {
+          "op": "var",
+          "name": "total",
+          "value": {
+            "literal": 0
+          }
+        },
+        {
+          "op": "for",
+          "item": "edge",
+          "in": {
+            "ref": "ordered"
+          },
+          "body": [
+            {
+              "op": "let",
+              "name": "u",
+              "value": {
+                "op": "field",
+                "args": [
+                  {
+                    "ref": "edge"
+                  },
+                  {
+                    "literal": 0
+                  }
+                ]
+              }
+            },
+            {
+              "op": "let",
+              "name": "v",
+              "value": {
+                "op": "field",
+                "args": [
+                  {
+                    "ref": "edge"
+                  },
+                  {
+                    "literal": 1
+                  }
+                ]
+              }
+            },
+            {
+              "op": "let",
+              "name": "weight",
+              "value": {
+                "op": "field",
+                "args": [
+                  {
+                    "ref": "edge"
+                  },
+                  {
+                    "literal": 2
+                  }
+                ]
+              }
+            },
+            {
+              "op": "call",
+              "operator": "dsu.union",
+              "args": [
+                {
+                  "ref": "sets"
+                },
+                {
+                  "ref": "u"
+                },
+                {
+                  "ref": "v"
+                }
+              ],
+              "out": "joined"
+            },
+            {
+              "op": "if",
+              "condition": {
+                "op": "not",
+                "args": [
+                  {
+                    "ref": "joined"
+                  }
+                ]
+              },
+              "then": [
+                {
+                  "op": "set",
+                  "name": "total",
+                  "value": {
+                    "op": "add",
+                    "args": [
+                      {
+                        "ref": "total"
+                      },
+                      {
+                        "ref": "weight"
+                      }
+                    ]
+                  }
+                }
+              ],
+              "else": []
+            }
+          ]
+        }
+      ],
+      "return": {
+        "ref": "total"
+      },
+      "output_type": "int"
+    },
+    "heap_sort": {
+      "schema": "algsolve.typed-program.v1",
+      "inputs": {
+        "values": [
+          "list",
+          "int"
+        ]
+      },
+      "body": [
+        {
+          "op": "call",
+          "operator": "heap.new",
+          "args": [],
+          "out": "heap"
+        },
+        {
+          "op": "for",
+          "item": "value",
+          "in": {
+            "ref": "values"
+          },
+          "body": [
+            {
+              "op": "call",
+              "operator": "heap.push",
+              "args": [
+                {
+                  "ref": "heap"
+                },
+                {
+                  "ref": "value"
+                }
+              ],
+              "out": "pushed"
+            }
+          ]
+        },
+        {
+          "op": "var",
+          "name": "answer",
+          "value": {
+            "op": "empty_ints",
+            "args": []
+          }
+        },
+        {
+          "op": "for",
+          "item": "unused",
+          "in": {
+            "ref": "values"
+          },
+          "body": [
+            {
+              "op": "call",
+              "operator": "heap.pop",
+              "args": [
+                {
+                  "ref": "heap"
+                }
+              ],
+              "out": "smallest"
+            },
+            {
+              "op": "set",
+              "name": "answer",
+              "value": {
+                "op": "append",
+                "args": [
+                  {
+                    "ref": "answer"
+                  },
+                  {
+                    "ref": "smallest"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ],
+      "return": {
+        "ref": "answer"
+      },
+      "output_type": [
+        "list",
+        "int"
+      ]
+    },
+    "stable_unique": {
+      "schema": "algsolve.typed-program.v1",
+      "inputs": {
+        "values": [
+          "list",
+          "int"
+        ]
+      },
+      "body": [
+        {
+          "op": "call",
+          "operator": "map.new",
+          "args": [],
+          "out": "seen"
+        },
+        {
+          "op": "call",
+          "operator": "queue.new",
+          "args": [],
+          "out": "queue"
+        },
+        {
+          "op": "for",
+          "item": "value",
+          "in": {
+            "ref": "values"
+          },
+          "body": [
+            {
+              "op": "call",
+              "operator": "map.has",
+              "args": [
+                {
+                  "ref": "seen"
+                },
+                {
+                  "ref": "value"
+                }
+              ],
+              "out": "present"
+            },
+            {
+              "op": "if",
+              "condition": {
+                "op": "not",
+                "args": [
+                  {
+                    "ref": "present"
+                  }
+                ]
+              },
+              "then": [
+                {
+                  "op": "call",
+                  "operator": "map.set",
+                  "args": [
+                    {
+                      "ref": "seen"
+                    },
+                    {
+                      "ref": "value"
+                    },
+                    {
+                      "literal": 1
+                    }
+                  ],
+                  "out": "recorded"
+                },
+                {
+                  "op": "call",
+                  "operator": "queue.push",
+                  "args": [
+                    {
+                      "ref": "queue"
+                    },
+                    {
+                      "ref": "value"
+                    }
+                  ],
+                  "out": "queued"
+                }
+              ],
+              "else": []
+            }
+          ]
+        },
+        {
+          "op": "call",
+          "operator": "queue.size",
+          "args": [
+            {
+              "ref": "queue"
+            }
+          ],
+          "out": "count"
+        },
+        {
+          "op": "var",
+          "name": "answer",
+          "value": {
+            "op": "empty_ints",
+            "args": []
+          }
+        },
+        {
+          "op": "for",
+          "item": "unused",
+          "in": {
+            "op": "range",
+            "args": [
+              {
+                "ref": "count"
+              }
+            ]
+          },
+          "body": [
+            {
+              "op": "call",
+              "operator": "queue.pop",
+              "args": [
+                {
+                  "ref": "queue"
+                }
+              ],
+              "out": "first"
+            },
+            {
+              "op": "set",
+              "name": "answer",
+              "value": {
+                "op": "append",
+                "args": [
+                  {
+                    "ref": "answer"
+                  },
+                  {
+                    "ref": "first"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ],
+      "return": {
+        "ref": "answer"
+      },
+      "output_type": [
+        "list",
+        "int"
+      ]
+    }
+  },
+  "fixtures": {
+    "minimum_forest": {
+      "schema": "algsolve.typed-program.v1",
+      "inputs": {
+        "n": "int",
+        "edges": [
+          "list",
+          [
+            "tuple",
+            "int",
+            "int",
+            "int"
+          ]
+        ]
+      },
+      "body": [
+        {
+          "op": "recipe",
+          "recipe": "forest",
+          "args": [
+            {
+              "ref": "n"
+            },
+            {
+              "ref": "edges"
+            },
+            {
+              "literal": false
+            }
+          ],
+          "out": "result"
+        }
+      ],
+      "return": {
+        "op": "field",
+        "args": [
+          {
+            "ref": "result"
+          },
+          {
+            "literal": 0
+          }
+        ]
+      },
+      "output_type": "int"
+    },
+    "maximum_forest": {
+      "schema": "algsolve.typed-program.v1",
+      "inputs": {
+        "n": "int",
+        "edges": [
+          "list",
+          [
+            "tuple",
+            "int",
+            "int",
+            "int"
+          ]
+        ]
+      },
+      "body": [
+        {
+          "op": "recipe",
+          "recipe": "forest",
+          "args": [
+            {
+              "ref": "n"
+            },
+            {
+              "ref": "edges"
+            },
+            {
+              "literal": true
+            }
+          ],
+          "out": "result"
+        }
+      ],
+      "return": {
+        "op": "field",
+        "args": [
+          {
+            "ref": "result"
+          },
+          {
+            "literal": 0
+          }
+        ]
+      },
+      "output_type": "int"
+    },
+    "component_count": {
+      "schema": "algsolve.typed-program.v1",
+      "inputs": {
+        "n": "int",
+        "edges": [
+          "list",
+          [
+            "tuple",
+            "int",
+            "int",
+            "int"
+          ]
+        ]
+      },
+      "body": [
+        {
+          "op": "recipe",
+          "recipe": "forest",
+          "args": [
+            {
+              "ref": "n"
+            },
+            {
+              "ref": "edges"
+            },
+            {
+              "literal": false
+            }
+          ],
+          "out": "result"
+        }
+      ],
+      "return": {
+        "op": "field",
+        "args": [
+          {
+            "ref": "result"
+          },
+          {
+            "literal": 1
+          }
+        ]
+      },
+      "output_type": "int"
+    },
+    "rejected_edge_weight": {
+      "schema": "algsolve.typed-program.v1",
+      "inputs": {
+        "n": "int",
+        "edges": [
+          "list",
+          [
+            "tuple",
+            "int",
+            "int",
+            "int"
+          ]
+        ]
+      },
+      "body": [
+        {
+          "op": "recipe",
+          "recipe": "cycle_weight",
+          "args": [
+            {
+              "ref": "n"
+            },
+            {
+              "ref": "edges"
+            },
+            {
+              "literal": false
+            }
+          ],
+          "out": "result"
+        }
+      ],
+      "return": {
+        "ref": "result"
+      },
+      "output_type": "int"
+    },
+    "heap_sort": {
+      "schema": "algsolve.typed-program.v1",
+      "inputs": {
+        "values": [
+          "list",
+          "int"
+        ]
+      },
+      "body": [
+        {
+          "op": "recipe",
+          "recipe": "heap_sort",
+          "args": [
+            {
+              "ref": "values"
+            }
+          ],
+          "out": "result"
+        }
+      ],
+      "return": {
+        "ref": "result"
+      },
+      "output_type": [
+        "list",
+        "int"
+      ]
+    },
+    "stable_unique": {
+      "schema": "algsolve.typed-program.v1",
+      "inputs": {
+        "values": [
+          "list",
+          "int"
+        ]
+      },
+      "body": [
+        {
+          "op": "recipe",
+          "recipe": "stable_unique",
+          "args": [
+            {
+              "ref": "values"
+            }
+          ],
+          "out": "result"
+        }
+      ],
+      "return": {
+        "ref": "result"
+      },
+      "output_type": [
+        "list",
+        "int"
+      ]
+    },
+    "sorted_unique": {
+      "schema": "algsolve.typed-program.v1",
+      "inputs": {
+        "values": [
+          "list",
+          "int"
+        ]
+      },
+      "body": [
+        {
+          "op": "recipe",
+          "recipe": "stable_unique",
+          "args": [
+            {
+              "ref": "values"
+            }
+          ],
+          "out": "unique"
+        },
+        {
+          "op": "recipe",
+          "recipe": "heap_sort",
+          "args": [
+            {
+              "ref": "unique"
+            }
+          ],
+          "out": "sorted"
+        }
+      ],
+      "return": {
+        "ref": "sorted"
+      },
+      "output_type": [
+        "list",
+        "int"
+      ]
+    },
+    "unique_sorted": {
+      "schema": "algsolve.typed-program.v1",
+      "inputs": {
+        "values": [
+          "list",
+          "int"
+        ]
+      },
+      "body": [
+        {
+          "op": "recipe",
+          "recipe": "heap_sort",
+          "args": [
+            {
+              "ref": "values"
+            }
+          ],
+          "out": "sorted"
+        },
+        {
+          "op": "recipe",
+          "recipe": "stable_unique",
+          "args": [
+            {
+              "ref": "sorted"
+            }
+          ],
+          "out": "unique"
+        }
+      ],
+      "return": {
+        "ref": "unique"
+      },
+      "output_type": [
+        "list",
+        "int"
+      ]
+    }
+  },
+  "expanded": {
+    "minimum_forest": {
+      "schema": "algsolve.typed-program.v1",
+      "inputs": {
+        "input0": "int",
+        "input1": [
+          "list",
+          [
+            "tuple",
+            "int",
+            "int",
+            "int"
+          ]
+        ]
+      },
+      "body": [
+        {
+          "op": "let",
+          "name": "v1",
+          "value": {
+            "ref": "input0"
+          }
+        },
+        {
+          "op": "let",
+          "name": "v2",
+          "value": {
+            "ref": "input1"
+          }
+        },
+        {
+          "op": "let",
+          "name": "v3",
+          "value": {
+            "literal": false
+          }
+        },
+        {
+          "op": "call",
+          "operator": "dsu.new",
+          "args": [
+            {
+              "ref": "v1"
+            }
+          ],
+          "out": "v4"
+        },
+        {
+          "op": "let",
+          "name": "v5",
+          "value": {
+            "op": "sort_by",
+            "args": [
+              {
+                "ref": "v2"
+              },
+              {
+                "literal": 2
+              },
+              {
+                "ref": "v3"
+              }
+            ]
+          }
+        },
+        {
+          "op": "var",
+          "name": "v6",
+          "value": {
+            "literal": 0
+          }
+        },
+        {
+          "op": "var",
+          "name": "v7",
+          "value": {
+            "literal": 0
+          }
+        },
+        {
+          "op": "for",
+          "item": "v8",
+          "in": {
+            "ref": "v5"
+          },
+          "body": [
+            {
+              "op": "let",
+              "name": "v9",
+              "value": {
+                "op": "field",
+                "args": [
+                  {
+                    "ref": "v8"
+                  },
+                  {
+                    "literal": 0
+                  }
+                ]
+              }
+            },
+            {
+              "op": "let",
+              "name": "v10",
+              "value": {
+                "op": "field",
+                "args": [
+                  {
+                    "ref": "v8"
+                  },
+                  {
+                    "literal": 1
+                  }
+                ]
+              }
+            },
+            {
+              "op": "let",
+              "name": "v11",
+              "value": {
+                "op": "field",
+                "args": [
+                  {
+                    "ref": "v8"
+                  },
+                  {
+                    "literal": 2
+                  }
+                ]
+              }
+            },
+            {
+              "op": "call",
+              "operator": "dsu.find",
+              "args": [
+                {
+                  "ref": "v4"
+                },
+                {
+                  "ref": "v9"
+                }
+              ],
+              "out": "v12"
+            },
+            {
+              "op": "call",
+              "operator": "dsu.find",
+              "args": [
+                {
+                  "ref": "v4"
+                },
+                {
+                  "ref": "v10"
+                }
+              ],
+              "out": "v13"
+            },
+            {
+              "op": "if",
+              "condition": {
+                "op": "not",
+                "args": [
+                  {
+                    "op": "eq",
+                    "args": [
+                      {
+                        "ref": "v12"
+                      },
+                      {
+                        "ref": "v13"
+                      }
+                    ]
+                  }
+                ]
+              },
+              "then": [
+                {
+                  "op": "call",
+                  "operator": "dsu.union",
+                  "args": [
+                    {
+                      "ref": "v4"
+                    },
+                    {
+                      "ref": "v9"
+                    },
+                    {
+                      "ref": "v10"
+                    }
+                  ],
+                  "out": "v14"
+                },
+                {
+                  "op": "set",
+                  "name": "v6",
+                  "value": {
+                    "op": "add",
+                    "args": [
+                      {
+                        "ref": "v6"
+                      },
+                      {
+                        "ref": "v11"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "op": "set",
+                  "name": "v7",
+                  "value": {
+                    "op": "add",
+                    "args": [
+                      {
+                        "ref": "v7"
+                      },
+                      {
+                        "literal": 1
+                      }
+                    ]
+                  }
+                }
+              ],
+              "else": []
+            }
+          ]
+        },
+        {
+          "op": "let",
+          "name": "v15",
+          "value": {
+            "op": "tuple",
+            "args": [
+              {
+                "ref": "v6"
+              },
+              {
+                "op": "sub",
+                "args": [
+                  {
+                    "ref": "v1"
+                  },
+                  {
+                    "ref": "v7"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "return": {
+        "op": "field",
+        "args": [
+          {
+            "ref": "v15"
+          },
+          {
+            "literal": 0
+          }
+        ]
+      },
+      "output_type": "int"
+    },
+    "maximum_forest": {
+      "schema": "algsolve.typed-program.v1",
+      "inputs": {
+        "input0": "int",
+        "input1": [
+          "list",
+          [
+            "tuple",
+            "int",
+            "int",
+            "int"
+          ]
+        ]
+      },
+      "body": [
+        {
+          "op": "let",
+          "name": "v1",
+          "value": {
+            "ref": "input0"
+          }
+        },
+        {
+          "op": "let",
+          "name": "v2",
+          "value": {
+            "ref": "input1"
+          }
+        },
+        {
+          "op": "let",
+          "name": "v3",
+          "value": {
+            "literal": true
+          }
+        },
+        {
+          "op": "call",
+          "operator": "dsu.new",
+          "args": [
+            {
+              "ref": "v1"
+            }
+          ],
+          "out": "v4"
+        },
+        {
+          "op": "let",
+          "name": "v5",
+          "value": {
+            "op": "sort_by",
+            "args": [
+              {
+                "ref": "v2"
+              },
+              {
+                "literal": 2
+              },
+              {
+                "ref": "v3"
+              }
+            ]
+          }
+        },
+        {
+          "op": "var",
+          "name": "v6",
+          "value": {
+            "literal": 0
+          }
+        },
+        {
+          "op": "var",
+          "name": "v7",
+          "value": {
+            "literal": 0
+          }
+        },
+        {
+          "op": "for",
+          "item": "v8",
+          "in": {
+            "ref": "v5"
+          },
+          "body": [
+            {
+              "op": "let",
+              "name": "v9",
+              "value": {
+                "op": "field",
+                "args": [
+                  {
+                    "ref": "v8"
+                  },
+                  {
+                    "literal": 0
+                  }
+                ]
+              }
+            },
+            {
+              "op": "let",
+              "name": "v10",
+              "value": {
+                "op": "field",
+                "args": [
+                  {
+                    "ref": "v8"
+                  },
+                  {
+                    "literal": 1
+                  }
+                ]
+              }
+            },
+            {
+              "op": "let",
+              "name": "v11",
+              "value": {
+                "op": "field",
+                "args": [
+                  {
+                    "ref": "v8"
+                  },
+                  {
+                    "literal": 2
+                  }
+                ]
+              }
+            },
+            {
+              "op": "call",
+              "operator": "dsu.find",
+              "args": [
+                {
+                  "ref": "v4"
+                },
+                {
+                  "ref": "v9"
+                }
+              ],
+              "out": "v12"
+            },
+            {
+              "op": "call",
+              "operator": "dsu.find",
+              "args": [
+                {
+                  "ref": "v4"
+                },
+                {
+                  "ref": "v10"
+                }
+              ],
+              "out": "v13"
+            },
+            {
+              "op": "if",
+              "condition": {
+                "op": "not",
+                "args": [
+                  {
+                    "op": "eq",
+                    "args": [
+                      {
+                        "ref": "v12"
+                      },
+                      {
+                        "ref": "v13"
+                      }
+                    ]
+                  }
+                ]
+              },
+              "then": [
+                {
+                  "op": "call",
+                  "operator": "dsu.union",
+                  "args": [
+                    {
+                      "ref": "v4"
+                    },
+                    {
+                      "ref": "v9"
+                    },
+                    {
+                      "ref": "v10"
+                    }
+                  ],
+                  "out": "v14"
+                },
+                {
+                  "op": "set",
+                  "name": "v6",
+                  "value": {
+                    "op": "add",
+                    "args": [
+                      {
+                        "ref": "v6"
+                      },
+                      {
+                        "ref": "v11"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "op": "set",
+                  "name": "v7",
+                  "value": {
+                    "op": "add",
+                    "args": [
+                      {
+                        "ref": "v7"
+                      },
+                      {
+                        "literal": 1
+                      }
+                    ]
+                  }
+                }
+              ],
+              "else": []
+            }
+          ]
+        },
+        {
+          "op": "let",
+          "name": "v15",
+          "value": {
+            "op": "tuple",
+            "args": [
+              {
+                "ref": "v6"
+              },
+              {
+                "op": "sub",
+                "args": [
+                  {
+                    "ref": "v1"
+                  },
+                  {
+                    "ref": "v7"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "return": {
+        "op": "field",
+        "args": [
+          {
+            "ref": "v15"
+          },
+          {
+            "literal": 0
+          }
+        ]
+      },
+      "output_type": "int"
+    },
+    "component_count": {
+      "schema": "algsolve.typed-program.v1",
+      "inputs": {
+        "input0": "int",
+        "input1": [
+          "list",
+          [
+            "tuple",
+            "int",
+            "int",
+            "int"
+          ]
+        ]
+      },
+      "body": [
+        {
+          "op": "let",
+          "name": "v1",
+          "value": {
+            "ref": "input0"
+          }
+        },
+        {
+          "op": "let",
+          "name": "v2",
+          "value": {
+            "ref": "input1"
+          }
+        },
+        {
+          "op": "let",
+          "name": "v3",
+          "value": {
+            "literal": false
+          }
+        },
+        {
+          "op": "call",
+          "operator": "dsu.new",
+          "args": [
+            {
+              "ref": "v1"
+            }
+          ],
+          "out": "v4"
+        },
+        {
+          "op": "let",
+          "name": "v5",
+          "value": {
+            "op": "sort_by",
+            "args": [
+              {
+                "ref": "v2"
+              },
+              {
+                "literal": 2
+              },
+              {
+                "ref": "v3"
+              }
+            ]
+          }
+        },
+        {
+          "op": "var",
+          "name": "v6",
+          "value": {
+            "literal": 0
+          }
+        },
+        {
+          "op": "var",
+          "name": "v7",
+          "value": {
+            "literal": 0
+          }
+        },
+        {
+          "op": "for",
+          "item": "v8",
+          "in": {
+            "ref": "v5"
+          },
+          "body": [
+            {
+              "op": "let",
+              "name": "v9",
+              "value": {
+                "op": "field",
+                "args": [
+                  {
+                    "ref": "v8"
+                  },
+                  {
+                    "literal": 0
+                  }
+                ]
+              }
+            },
+            {
+              "op": "let",
+              "name": "v10",
+              "value": {
+                "op": "field",
+                "args": [
+                  {
+                    "ref": "v8"
+                  },
+                  {
+                    "literal": 1
+                  }
+                ]
+              }
+            },
+            {
+              "op": "let",
+              "name": "v11",
+              "value": {
+                "op": "field",
+                "args": [
+                  {
+                    "ref": "v8"
+                  },
+                  {
+                    "literal": 2
+                  }
+                ]
+              }
+            },
+            {
+              "op": "call",
+              "operator": "dsu.find",
+              "args": [
+                {
+                  "ref": "v4"
+                },
+                {
+                  "ref": "v9"
+                }
+              ],
+              "out": "v12"
+            },
+            {
+              "op": "call",
+              "operator": "dsu.find",
+              "args": [
+                {
+                  "ref": "v4"
+                },
+                {
+                  "ref": "v10"
+                }
+              ],
+              "out": "v13"
+            },
+            {
+              "op": "if",
+              "condition": {
+                "op": "not",
+                "args": [
+                  {
+                    "op": "eq",
+                    "args": [
+                      {
+                        "ref": "v12"
+                      },
+                      {
+                        "ref": "v13"
+                      }
+                    ]
+                  }
+                ]
+              },
+              "then": [
+                {
+                  "op": "call",
+                  "operator": "dsu.union",
+                  "args": [
+                    {
+                      "ref": "v4"
+                    },
+                    {
+                      "ref": "v9"
+                    },
+                    {
+                      "ref": "v10"
+                    }
+                  ],
+                  "out": "v14"
+                },
+                {
+                  "op": "set",
+                  "name": "v6",
+                  "value": {
+                    "op": "add",
+                    "args": [
+                      {
+                        "ref": "v6"
+                      },
+                      {
+                        "ref": "v11"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "op": "set",
+                  "name": "v7",
+                  "value": {
+                    "op": "add",
+                    "args": [
+                      {
+                        "ref": "v7"
+                      },
+                      {
+                        "literal": 1
+                      }
+                    ]
+                  }
+                }
+              ],
+              "else": []
+            }
+          ]
+        },
+        {
+          "op": "let",
+          "name": "v15",
+          "value": {
+            "op": "tuple",
+            "args": [
+              {
+                "ref": "v6"
+              },
+              {
+                "op": "sub",
+                "args": [
+                  {
+                    "ref": "v1"
+                  },
+                  {
+                    "ref": "v7"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "return": {
+        "op": "field",
+        "args": [
+          {
+            "ref": "v15"
+          },
+          {
+            "literal": 1
+          }
+        ]
+      },
+      "output_type": "int"
+    },
+    "rejected_edge_weight": {
+      "schema": "algsolve.typed-program.v1",
+      "inputs": {
+        "input0": "int",
+        "input1": [
+          "list",
+          [
+            "tuple",
+            "int",
+            "int",
+            "int"
+          ]
+        ]
+      },
+      "body": [
+        {
+          "op": "let",
+          "name": "v1",
+          "value": {
+            "ref": "input0"
+          }
+        },
+        {
+          "op": "let",
+          "name": "v2",
+          "value": {
+            "ref": "input1"
+          }
+        },
+        {
+          "op": "let",
+          "name": "v3",
+          "value": {
+            "literal": false
+          }
+        },
+        {
+          "op": "call",
+          "operator": "dsu.new",
+          "args": [
+            {
+              "ref": "v1"
+            }
+          ],
+          "out": "v4"
+        },
+        {
+          "op": "let",
+          "name": "v5",
+          "value": {
+            "op": "sort_by",
+            "args": [
+              {
+                "ref": "v2"
+              },
+              {
+                "literal": 2
+              },
+              {
+                "ref": "v3"
+              }
+            ]
+          }
+        },
+        {
+          "op": "var",
+          "name": "v6",
+          "value": {
+            "literal": 0
+          }
+        },
+        {
+          "op": "for",
+          "item": "v7",
+          "in": {
+            "ref": "v5"
+          },
+          "body": [
+            {
+              "op": "let",
+              "name": "v8",
+              "value": {
+                "op": "field",
+                "args": [
+                  {
+                    "ref": "v7"
+                  },
+                  {
+                    "literal": 0
+                  }
+                ]
+              }
+            },
+            {
+              "op": "let",
+              "name": "v9",
+              "value": {
+                "op": "field",
+                "args": [
+                  {
+                    "ref": "v7"
+                  },
+                  {
+                    "literal": 1
+                  }
+                ]
+              }
+            },
+            {
+              "op": "let",
+              "name": "v10",
+              "value": {
+                "op": "field",
+                "args": [
+                  {
+                    "ref": "v7"
+                  },
+                  {
+                    "literal": 2
+                  }
+                ]
+              }
+            },
+            {
+              "op": "call",
+              "operator": "dsu.union",
+              "args": [
+                {
+                  "ref": "v4"
+                },
+                {
+                  "ref": "v8"
+                },
+                {
+                  "ref": "v9"
+                }
+              ],
+              "out": "v11"
+            },
+            {
+              "op": "if",
+              "condition": {
+                "op": "not",
+                "args": [
+                  {
+                    "ref": "v11"
+                  }
+                ]
+              },
+              "then": [
+                {
+                  "op": "set",
+                  "name": "v6",
+                  "value": {
+                    "op": "add",
+                    "args": [
+                      {
+                        "ref": "v6"
+                      },
+                      {
+                        "ref": "v10"
+                      }
+                    ]
+                  }
+                }
+              ],
+              "else": []
+            }
+          ]
+        },
+        {
+          "op": "let",
+          "name": "v12",
+          "value": {
+            "ref": "v6"
+          }
+        }
+      ],
+      "return": {
+        "ref": "v12"
+      },
+      "output_type": "int"
+    },
+    "heap_sort": {
+      "schema": "algsolve.typed-program.v1",
+      "inputs": {
+        "input0": [
+          "list",
+          "int"
+        ]
+      },
+      "body": [
+        {
+          "op": "let",
+          "name": "v1",
+          "value": {
+            "ref": "input0"
+          }
+        },
+        {
+          "op": "call",
+          "operator": "heap.new",
+          "args": [],
+          "out": "v2"
+        },
+        {
+          "op": "for",
+          "item": "v3",
+          "in": {
+            "ref": "v1"
+          },
+          "body": [
+            {
+              "op": "call",
+              "operator": "heap.push",
+              "args": [
+                {
+                  "ref": "v2"
+                },
+                {
+                  "ref": "v3"
+                }
+              ],
+              "out": "v4"
+            }
+          ]
+        },
+        {
+          "op": "var",
+          "name": "v5",
+          "value": {
+            "op": "empty_ints",
+            "args": []
+          }
+        },
+        {
+          "op": "for",
+          "item": "v6",
+          "in": {
+            "ref": "v1"
+          },
+          "body": [
+            {
+              "op": "call",
+              "operator": "heap.pop",
+              "args": [
+                {
+                  "ref": "v2"
+                }
+              ],
+              "out": "v7"
+            },
+            {
+              "op": "set",
+              "name": "v5",
+              "value": {
+                "op": "append",
+                "args": [
+                  {
+                    "ref": "v5"
+                  },
+                  {
+                    "ref": "v7"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "op": "let",
+          "name": "v8",
+          "value": {
+            "ref": "v5"
+          }
+        }
+      ],
+      "return": {
+        "ref": "v8"
+      },
+      "output_type": [
+        "list",
+        "int"
+      ]
+    },
+    "stable_unique": {
+      "schema": "algsolve.typed-program.v1",
+      "inputs": {
+        "input0": [
+          "list",
+          "int"
+        ]
+      },
+      "body": [
+        {
+          "op": "let",
+          "name": "v1",
+          "value": {
+            "ref": "input0"
+          }
+        },
+        {
+          "op": "call",
+          "operator": "map.new",
+          "args": [],
+          "out": "v2"
+        },
+        {
+          "op": "call",
+          "operator": "queue.new",
+          "args": [],
+          "out": "v3"
+        },
+        {
+          "op": "for",
+          "item": "v4",
+          "in": {
+            "ref": "v1"
+          },
+          "body": [
+            {
+              "op": "call",
+              "operator": "map.has",
+              "args": [
+                {
+                  "ref": "v2"
+                },
+                {
+                  "ref": "v4"
+                }
+              ],
+              "out": "v5"
+            },
+            {
+              "op": "if",
+              "condition": {
+                "op": "not",
+                "args": [
+                  {
+                    "ref": "v5"
+                  }
+                ]
+              },
+              "then": [
+                {
+                  "op": "call",
+                  "operator": "map.set",
+                  "args": [
+                    {
+                      "ref": "v2"
+                    },
+                    {
+                      "ref": "v4"
+                    },
+                    {
+                      "literal": 1
+                    }
+                  ],
+                  "out": "v6"
+                },
+                {
+                  "op": "call",
+                  "operator": "queue.push",
+                  "args": [
+                    {
+                      "ref": "v3"
+                    },
+                    {
+                      "ref": "v4"
+                    }
+                  ],
+                  "out": "v7"
+                }
+              ],
+              "else": []
+            }
+          ]
+        },
+        {
+          "op": "call",
+          "operator": "queue.size",
+          "args": [
+            {
+              "ref": "v3"
+            }
+          ],
+          "out": "v8"
+        },
+        {
+          "op": "var",
+          "name": "v9",
+          "value": {
+            "op": "empty_ints",
+            "args": []
+          }
+        },
+        {
+          "op": "for",
+          "item": "v10",
+          "in": {
+            "op": "range",
+            "args": [
+              {
+                "ref": "v8"
+              }
+            ]
+          },
+          "body": [
+            {
+              "op": "call",
+              "operator": "queue.pop",
+              "args": [
+                {
+                  "ref": "v3"
+                }
+              ],
+              "out": "v11"
+            },
+            {
+              "op": "set",
+              "name": "v9",
+              "value": {
+                "op": "append",
+                "args": [
+                  {
+                    "ref": "v9"
+                  },
+                  {
+                    "ref": "v11"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "op": "let",
+          "name": "v12",
+          "value": {
+            "ref": "v9"
+          }
+        }
+      ],
+      "return": {
+        "ref": "v12"
+      },
+      "output_type": [
+        "list",
+        "int"
+      ]
+    },
+    "sorted_unique": {
+      "schema": "algsolve.typed-program.v1",
+      "inputs": {
+        "input0": [
+          "list",
+          "int"
+        ]
+      },
+      "body": [
+        {
+          "op": "let",
+          "name": "v1",
+          "value": {
+            "ref": "input0"
+          }
+        },
+        {
+          "op": "call",
+          "operator": "map.new",
+          "args": [],
+          "out": "v2"
+        },
+        {
+          "op": "call",
+          "operator": "queue.new",
+          "args": [],
+          "out": "v3"
+        },
+        {
+          "op": "for",
+          "item": "v4",
+          "in": {
+            "ref": "v1"
+          },
+          "body": [
+            {
+              "op": "call",
+              "operator": "map.has",
+              "args": [
+                {
+                  "ref": "v2"
+                },
+                {
+                  "ref": "v4"
+                }
+              ],
+              "out": "v5"
+            },
+            {
+              "op": "if",
+              "condition": {
+                "op": "not",
+                "args": [
+                  {
+                    "ref": "v5"
+                  }
+                ]
+              },
+              "then": [
+                {
+                  "op": "call",
+                  "operator": "map.set",
+                  "args": [
+                    {
+                      "ref": "v2"
+                    },
+                    {
+                      "ref": "v4"
+                    },
+                    {
+                      "literal": 1
+                    }
+                  ],
+                  "out": "v6"
+                },
+                {
+                  "op": "call",
+                  "operator": "queue.push",
+                  "args": [
+                    {
+                      "ref": "v3"
+                    },
+                    {
+                      "ref": "v4"
+                    }
+                  ],
+                  "out": "v7"
+                }
+              ],
+              "else": []
+            }
+          ]
+        },
+        {
+          "op": "call",
+          "operator": "queue.size",
+          "args": [
+            {
+              "ref": "v3"
+            }
+          ],
+          "out": "v8"
+        },
+        {
+          "op": "var",
+          "name": "v9",
+          "value": {
+            "op": "empty_ints",
+            "args": []
+          }
+        },
+        {
+          "op": "for",
+          "item": "v10",
+          "in": {
+            "op": "range",
+            "args": [
+              {
+                "ref": "v8"
+              }
+            ]
+          },
+          "body": [
+            {
+              "op": "call",
+              "operator": "queue.pop",
+              "args": [
+                {
+                  "ref": "v3"
+                }
+              ],
+              "out": "v11"
+            },
+            {
+              "op": "set",
+              "name": "v9",
+              "value": {
+                "op": "append",
+                "args": [
+                  {
+                    "ref": "v9"
+                  },
+                  {
+                    "ref": "v11"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "op": "let",
+          "name": "v12",
+          "value": {
+            "ref": "v9"
+          }
+        },
+        {
+          "op": "let",
+          "name": "v13",
+          "value": {
+            "ref": "v12"
+          }
+        },
+        {
+          "op": "call",
+          "operator": "heap.new",
+          "args": [],
+          "out": "v14"
+        },
+        {
+          "op": "for",
+          "item": "v15",
+          "in": {
+            "ref": "v13"
+          },
+          "body": [
+            {
+              "op": "call",
+              "operator": "heap.push",
+              "args": [
+                {
+                  "ref": "v14"
+                },
+                {
+                  "ref": "v15"
+                }
+              ],
+              "out": "v16"
+            }
+          ]
+        },
+        {
+          "op": "var",
+          "name": "v17",
+          "value": {
+            "op": "empty_ints",
+            "args": []
+          }
+        },
+        {
+          "op": "for",
+          "item": "v18",
+          "in": {
+            "ref": "v13"
+          },
+          "body": [
+            {
+              "op": "call",
+              "operator": "heap.pop",
+              "args": [
+                {
+                  "ref": "v14"
+                }
+              ],
+              "out": "v19"
+            },
+            {
+              "op": "set",
+              "name": "v17",
+              "value": {
+                "op": "append",
+                "args": [
+                  {
+                    "ref": "v17"
+                  },
+                  {
+                    "ref": "v19"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "op": "let",
+          "name": "v20",
+          "value": {
+            "ref": "v17"
+          }
+        }
+      ],
+      "return": {
+        "ref": "v20"
+      },
+      "output_type": [
+        "list",
+        "int"
+      ]
+    },
+    "unique_sorted": {
+      "schema": "algsolve.typed-program.v1",
+      "inputs": {
+        "input0": [
+          "list",
+          "int"
+        ]
+      },
+      "body": [
+        {
+          "op": "let",
+          "name": "v1",
+          "value": {
+            "ref": "input0"
+          }
+        },
+        {
+          "op": "call",
+          "operator": "heap.new",
+          "args": [],
+          "out": "v2"
+        },
+        {
+          "op": "for",
+          "item": "v3",
+          "in": {
+            "ref": "v1"
+          },
+          "body": [
+            {
+              "op": "call",
+              "operator": "heap.push",
+              "args": [
+                {
+                  "ref": "v2"
+                },
+                {
+                  "ref": "v3"
+                }
+              ],
+              "out": "v4"
+            }
+          ]
+        },
+        {
+          "op": "var",
+          "name": "v5",
+          "value": {
+            "op": "empty_ints",
+            "args": []
+          }
+        },
+        {
+          "op": "for",
+          "item": "v6",
+          "in": {
+            "ref": "v1"
+          },
+          "body": [
+            {
+              "op": "call",
+              "operator": "heap.pop",
+              "args": [
+                {
+                  "ref": "v2"
+                }
+              ],
+              "out": "v7"
+            },
+            {
+              "op": "set",
+              "name": "v5",
+              "value": {
+                "op": "append",
+                "args": [
+                  {
+                    "ref": "v5"
+                  },
+                  {
+                    "ref": "v7"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "op": "let",
+          "name": "v8",
+          "value": {
+            "ref": "v5"
+          }
+        },
+        {
+          "op": "let",
+          "name": "v9",
+          "value": {
+            "ref": "v8"
+          }
+        },
+        {
+          "op": "call",
+          "operator": "map.new",
+          "args": [],
+          "out": "v10"
+        },
+        {
+          "op": "call",
+          "operator": "queue.new",
+          "args": [],
+          "out": "v11"
+        },
+        {
+          "op": "for",
+          "item": "v12",
+          "in": {
+            "ref": "v9"
+          },
+          "body": [
+            {
+              "op": "call",
+              "operator": "map.has",
+              "args": [
+                {
+                  "ref": "v10"
+                },
+                {
+                  "ref": "v12"
+                }
+              ],
+              "out": "v13"
+            },
+            {
+              "op": "if",
+              "condition": {
+                "op": "not",
+                "args": [
+                  {
+                    "ref": "v13"
+                  }
+                ]
+              },
+              "then": [
+                {
+                  "op": "call",
+                  "operator": "map.set",
+                  "args": [
+                    {
+                      "ref": "v10"
+                    },
+                    {
+                      "ref": "v12"
+                    },
+                    {
+                      "literal": 1
+                    }
+                  ],
+                  "out": "v14"
+                },
+                {
+                  "op": "call",
+                  "operator": "queue.push",
+                  "args": [
+                    {
+                      "ref": "v11"
+                    },
+                    {
+                      "ref": "v12"
+                    }
+                  ],
+                  "out": "v15"
+                }
+              ],
+              "else": []
+            }
+          ]
+        },
+        {
+          "op": "call",
+          "operator": "queue.size",
+          "args": [
+            {
+              "ref": "v11"
+            }
+          ],
+          "out": "v16"
+        },
+        {
+          "op": "var",
+          "name": "v17",
+          "value": {
+            "op": "empty_ints",
+            "args": []
+          }
+        },
+        {
+          "op": "for",
+          "item": "v18",
+          "in": {
+            "op": "range",
+            "args": [
+              {
+                "ref": "v16"
+              }
+            ]
+          },
+          "body": [
+            {
+              "op": "call",
+              "operator": "queue.pop",
+              "args": [
+                {
+                  "ref": "v11"
+                }
+              ],
+              "out": "v19"
+            },
+            {
+              "op": "set",
+              "name": "v17",
+              "value": {
+                "op": "append",
+                "args": [
+                  {
+                    "ref": "v17"
+                  },
+                  {
+                    "ref": "v19"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "op": "let",
+          "name": "v20",
+          "value": {
+            "ref": "v17"
+          }
+        }
+      ],
+      "return": {
+        "ref": "v20"
+      },
+      "output_type": [
+        "list",
+        "int"
+      ]
+    }
+  }
+}
