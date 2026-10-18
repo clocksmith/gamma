@@ -198,6 +198,19 @@ def cross_family(add):
     add(252, 'reverse_interval_scan', p, 'O(n log n) time, O(n) sorted values; touching endpoints do not overlap',
         'n <= 10000, 0 <= start < end <= 1000000', [[[i,i+1] for i in range(10000)]], True)
 
+    # A second meaningful route: maximum-cardinality interval scheduling, then
+    # check whether the selected schedule contains every requested meeting.
+    p = program({'intervals': PAIRS}, [
+        assign('ordered', pure('sort_by', ref('intervals'), lit(1), lit(False))),
+        assign('end', lit(0), 'var'), assign('selected', lit(0), 'var'),
+        each('interval', ref('ordered'), [
+            branch(pure('not', pure('lt', field(ref('interval'), 0), ref('end'))), [
+                assign('end', field(ref('interval'), 1), 'set'),
+                assign('selected', pure('add', ref('selected'), lit(1)), 'set')])])],
+        pure('eq', ref('selected'), pure('len', ref('intervals'))), 'bool')
+    add(252, 'maximum_schedule_coverage', p, 'O(n log n) time, O(n) sorted values; greedy maximum interval count equals requested count iff all fit',
+        'n <= 10000, 0 <= start < end <= 1000000', [[[i,i+1] for i in range(10000)]], True)
+
     # Edge criticality genuinely consumes the minimum cost, unlike simply
     # attaching an unused recipe to claim feature support.
     for alternative in (False, True):
