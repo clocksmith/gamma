@@ -49,6 +49,22 @@ new training, new download, protected scoring, public push or deployment is part
 of this campaign. Coverage, autonomous macro selection and measured human effort
 remain three distinct outcomes.
 
+## Bounded macro analysis on the94-problem corpus
+
+[Representation study](findings/corpus-macro-analysis-128-v1/README.md) compares
+syntax-only shortcuts, two parameterized fragments and94 bounded whole-solution
+entries per language. BFS level collection reuses one entry across102/103/107;
+adjacent-duplicate skipping reuses another across15/18. All564 profile/source
+round trips preserve exact bytes. The five reconstructed pairs pass409 existing
+independent cases and11 public examples per language;24 decoder controls pass.
+
+Complete hybrid streams save327 bytes across both languages, but dictionaries
+cost2,943 extra bytes, so the hybrid loses2,616 bytes on one corpus pass. All94
+hybrid programs still require lexical remainder. This is source-aware in-sample
+representation evidence, with zero autonomous solves or protected evaluation.
+The105-problem union is100 wave plus five disjoint foundation problems; all11
+unadmitted problems and their retained domain failures are enumerated in the report.
+
 ## Reviewed bilingual development corpus:94 unique problems
 
 The [v4 catalog](findings/js-corpus-b01-b02-integration-128-v1/catalog.json) preserves

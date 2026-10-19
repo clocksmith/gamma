@@ -1,0 +1,252 @@
+[
+  {
+    "rank": 1,
+    "name": "bfs_collect_one_level",
+    "problem_ids": [
+      102,
+      103,
+      107
+    ],
+    "languages": [
+      "javascript",
+      "python"
+    ],
+    "tested": true,
+    "why": "One level collector is reused by ordinary, zigzag and bottom-up traversal; outer output ordering remains outside the fragment.",
+    "fragments": [
+      {
+        "language": "javascript",
+        "name": "bfs_collect_one_level",
+        "ids": [
+          102,
+          103,
+          107
+        ],
+        "occurrences": 3,
+        "raw_fragment_bytes": 447,
+        "variants": 1,
+        "contracts": {
+          "name": "bfs_collect_one_level",
+          "precondition": "Acyclic binary tree nodes; level output empty. JS source frontier is not modified during iteration; next-frontier is separate. Python deque initial length defines level size; appending children is intentional.",
+          "effects": "JS appends values and children to two distinct output arrays. Python consumes current nodes and appends children on the same deque; appends values to a separate list. Bound temporaries must be fresh, distinct from operand handles.",
+          "fixed_constants": "Tree field names val,left,right; traversal order left before right; Python len(q) evaluated once."
+        },
+        "round_trips_passed": true
+      },
+      {
+        "language": "python",
+        "name": "bfs_collect_one_level",
+        "ids": [
+          102,
+          103,
+          107
+        ],
+        "occurrences": 3,
+        "raw_fragment_bytes": 705,
+        "variants": 1,
+        "contracts": {
+          "name": "bfs_collect_one_level",
+          "precondition": "Acyclic binary tree nodes; level output empty. JS source frontier is not modified during iteration; next-frontier is separate. Python deque initial length defines level size; appending children is intentional.",
+          "effects": "JS appends values and children to two distinct output arrays. Python consumes current nodes and appends children on the same deque; appends values to a separate list. Bound temporaries must be fresh, distinct from operand handles.",
+          "fixed_constants": "Tree field names val,left,right; traversal order left before right; Python len(q) evaluated once."
+        },
+        "round_trips_passed": true
+      }
+    ],
+    "measured_complete_program_costs": [
+      {
+        "language": "javascript",
+        "fragment": "bfs_collect_one_level",
+        "ids": [
+          102,
+          103,
+          107
+        ],
+        "lexical_complete_bytes": 883,
+        "hybrid_complete_bytes": 725,
+        "complete_stream_saving": 158,
+        "caveat": "Includes actual program framing, identifier table and nonfragment remainder. Same language profile also replaces two lexical slots; not independent additive causal attribution."
+      },
+      {
+        "language": "python",
+        "fragment": "bfs_collect_one_level",
+        "ids": [
+          102,
+          103,
+          107
+        ],
+        "lexical_complete_bytes": 898,
+        "hybrid_complete_bytes": 757,
+        "complete_stream_saving": 141,
+        "caveat": "Includes actual program framing, identifier table and nonfragment remainder. Same language profile also replaces two lexical slots; not independent additive causal attribution."
+      }
+    ],
+    "full_program_without_lexical_remainder": 0
+  },
+  {
+    "rank": 2,
+    "name": "skip_adjacent_equal_values",
+    "problem_ids": [
+      15,
+      18
+    ],
+    "languages": [
+      "javascript",
+      "python"
+    ],
+    "tested": true,
+    "why": "After emitting a tuple, advance the selected pointer over equal neighbor values. Direction and pointer bindings are explicit operands.",
+    "fragments": [
+      {
+        "language": "javascript",
+        "name": "skip_adjacent_equal_values",
+        "ids": [
+          15,
+          18
+        ],
+        "occurrences": 4,
+        "raw_fragment_bytes": 462,
+        "variants": 2,
+        "contracts": {
+          "name": "skip_adjacent_equal_values",
+          "precondition": "Integer in-range pointers into sorted dense numeric array, after emitting a tuple and moving both pointers. Compare only while left<right.",
+          "effects": "Moves one pointer inward over values equal to the just-emitted neighbor; reads array without mutation. Language equality retains original semantics.",
+          "fixed_constants": "Offset and step of one; direction is a charged variant byte, not a free channel."
+        },
+        "round_trips_passed": true
+      },
+      {
+        "language": "python",
+        "name": "skip_adjacent_equal_values",
+        "ids": [
+          15,
+          18
+        ],
+        "occurrences": 4,
+        "raw_fragment_bytes": 288,
+        "variants": 2,
+        "contracts": {
+          "name": "skip_adjacent_equal_values",
+          "precondition": "Integer in-range pointers into sorted dense numeric array, after emitting a tuple and moving both pointers. Compare only while left<right.",
+          "effects": "Moves one pointer inward over values equal to the just-emitted neighbor; reads array without mutation. Language equality retains original semantics.",
+          "fixed_constants": "Offset and step of one; direction is a charged variant byte, not a free channel."
+        },
+        "round_trips_passed": true
+      }
+    ],
+    "measured_complete_program_costs": [
+      {
+        "language": "javascript",
+        "fragment": "skip_adjacent_equal_values",
+        "ids": [
+          15,
+          18
+        ],
+        "lexical_complete_bytes": 1258,
+        "hybrid_complete_bytes": 1186,
+        "complete_stream_saving": 72,
+        "caveat": "Includes actual program framing, identifier table and nonfragment remainder. Same language profile also replaces two lexical slots; not independent additive causal attribution."
+      },
+      {
+        "language": "python",
+        "fragment": "skip_adjacent_equal_values",
+        "ids": [
+          15,
+          18
+        ],
+        "lexical_complete_bytes": 795,
+        "hybrid_complete_bytes": 707,
+        "complete_stream_saving": 88,
+        "caveat": "Includes actual program framing, identifier table and nonfragment remainder. Same language profile also replaces two lexical slots; not independent additive causal attribution."
+      }
+    ],
+    "full_program_without_lexical_remainder": 0
+  },
+  {
+    "rank": 3,
+    "name": "whole_breadth_first_level_loop",
+    "tested": false,
+    "why": "Larger overlapping parent of the tested level collector; two problems only. Do not add its coverage or savings to the contained fragment.",
+    "language_candidates": [
+      {
+        "language": "python",
+        "kind": "While",
+        "shape_sha256": "93b35fa74236d35b58518019337b1f7c425ae01c6a9b8dcd602a9a1db557e5ba",
+        "ids": [
+          102,
+          107
+        ],
+        "occurrences": 2,
+        "raw_bytes": 602
+      },
+      {
+        "language": "javascript",
+        "kind": "WhileStatement",
+        "shape_sha256": "06343f737e8f6effcde4b483f3855b7c1431fa479d7ad644277cebd29d74e157",
+        "ids": [
+          102,
+          107
+        ],
+        "occurrences": 2,
+        "raw_bytes": 536
+      }
+    ],
+    "qualification": "Syntactic candidate only; no decoder entry, complete stream cost or behavioral promotion."
+  },
+  {
+    "rank": 4,
+    "name": "bounded_integer_list_domain_guard",
+    "tested": false,
+    "why": "Guard reuse is real but specific to these two identical numeric domains. Error type and caller-visible behavior differ by language; not a general algorithm macro.",
+    "language_candidates": [
+      {
+        "language": "javascript",
+        "kind": "IfStatement",
+        "shape_sha256": "8263a5a9d3c699cf5bfd076853eec19b2cb69088f358608e19af0f70be935766",
+        "ids": [
+          1512,
+          1748
+        ],
+        "occurrences": 2,
+        "raw_bytes": 356
+      },
+      {
+        "language": "python",
+        "kind": "If",
+        "shape_sha256": "a3853e51c2f305145521345061fa7815f95c2414ad2cac848a4ded40a22964f7",
+        "ids": [
+          1512,
+          1748
+        ],
+        "occurrences": 2,
+        "raw_bytes": 340
+      }
+    ],
+    "qualification": "Syntactic candidate only; no decoder entry, complete stream cost or behavioral promotion."
+  },
+  {
+    "rank": 5,
+    "name": "advance_linked_node_cursor",
+    "tested": false,
+    "why": "Small pointer step is frequent, but mutation, aliasing and nullability depend on context. No general reusable-fragment qualification or Python parity inferred.",
+    "language_candidates": [
+      {
+        "language": "javascript",
+        "kind": "ExpressionStatement",
+        "shape_sha256": "15483f266c97c1735e51d30476b7fc80c1a2bffeffc51e5e04eb81e92eb1ff9b",
+        "ids": [
+          19,
+          21,
+          25,
+          61,
+          82,
+          83,
+          92
+        ],
+        "occurrences": 11,
+        "raw_bytes": 333
+      }
+    ],
+    "qualification": "Syntactic candidate only; no decoder entry, complete stream cost or behavioral promotion."
+  }
+]
