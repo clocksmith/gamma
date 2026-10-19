@@ -13,8 +13,11 @@ selects and connects them, with deterministic assembly and validation. Compare
 against search and autoregressive generation. The recorded three-call baseline
 does not constrain the composition goal.
 
-The separate optional binary-input experiment targets minimal total presses to a correct
-program using an experimental fixed-width vocabulary with N <= 8 bits per entry.
+The owner-requested human composition goal targets a reusable vocabulary for solving
+problems and writing code with minimal total inputs, time to correctness and corrections.
+A bounded binary-input candidate uses fixed-width choices with N <= 8 bits per entry;
+measure connections, bindings, constants and navigation, not operation labels alone.
+The current 43 model labels are not an established optimal human vocabulary.
 It covers familiar variants first and unfamiliar combinations separately; the
 current three text-entry encodings remain baselines, not dependencies of autonomous
 solving. Goal definitions and the
