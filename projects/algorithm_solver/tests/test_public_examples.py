@@ -1,3 +1,4 @@
+"""Synthetic parser/abstention checks; no solver or isolation qualification."""
 import unittest
 
 from algsolve import importers, values
@@ -39,6 +40,48 @@ class PublicExampleTests(unittest.TestCase):
         self.assertIs(recover(problem), problem)
         problem.public_tests = [{'args':[2], 'expected':False}]
         self.assertIs(recover(problem), problem)
+
+
+
+    def test_invalid_whitelisted_operations_are_unsupported_data(self):
+        # Whitelisting float/arithmetic is not permission for malformed values
+        # to escape the parser and crash one-shot recognition on the host.
+        for text in ('float([1])', 'float("not-a-number")', 'float(1000000**64)',
+                     '(1000000**64) * 1.0', 'float("1+1")'):
+            with self.subTest(text=text), self.assertRaises(values.Unsupported):
+                values.parse_value(text)
+        self.assertEqual(values.parse_value('float("2.5")'), 2.5)
+        self.assertEqual(values.parse_value('float("inf")'), {'__float__': 'inf'})
+
+    def test_incomplete_example_cannot_silently_leave_a_passing_subset(self):
+        source = 'Input: n = 1\nOutput: true\nInput: n = 2\n'
+        tests, dropped = importers.statement_examples(source, [('n', 'int')], 'bool')
+        self.assertEqual(len(tests), 1)
+        self.assertEqual(dropped, 1)
+        # Indented labels and literal label text preserve the same boundary.
+        tests, dropped = importers.statement_examples(
+            '  Input: s = "Input: text"\n  Output: "Output: text"\n', [('s', 'str')], 'str')
+        self.assertEqual(dropped, 0)
+        self.assertEqual(tests[0]['args'], ['Input: text'])
+
+    def test_one_shot_answer_abstains_before_lookup_for_incomplete_or_invalid_examples(self):
+        from algsolve.answer import answer
+        valid = 'Input: n = 1\nOutput: true\n'
+        suffixes = ('Input: n = 2\n', 'Input: n = 2\nOutput: float([1])\n',
+                    'Input: n = float("bad")\nOutput: false\n')
+        for suffix in suffixes:
+            with self.subTest(suffix=suffix):
+                problem = Problem('fixture:example', 'fixture', 'example', '', '', valid + suffix,
+                                  'functional', starter_code='class Solution:\n def solve(self, n: int) -> bool:\n',
+                                  entry={'method': 'solve'}, params=[['n', 'int']])
+                self.assertIs(recover(problem), problem)
+                # Any attempt to use a lookup, embedder or judge would fail on
+                # this bare context. No candidate or untrusted code is executed.
+                result = answer(object(), problem)
+                self.assertEqual(result['decision'], 'abstain')
+                self.assertEqual(result['reason'], 'query_has_no_public_examples')
+                self.assertEqual(result['attempts'], [])
+                self.assertEqual(problem.public_tests, [])
 
 
 if __name__ == '__main__':

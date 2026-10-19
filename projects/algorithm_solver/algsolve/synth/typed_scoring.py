@@ -114,11 +114,14 @@ def _score_locked(output, requests, candidate, routes, load_tests, score_result)
                     raise ValueError('Score receipt identity or contents changed')
             else:
                 if tests is None:
-                    tests = load_tests(copy.deepcopy(pair))
+                    tests = copy.deepcopy(load_tests(copy.deepcopy(pair)))
                     if not tests or typed_codec.digest(tests) != binding['independent_tests_sha256']:
                         raise ValueError('Independent development scoring authority changed')
                 check_frozen()
-                result = score_result(copy.deepcopy(pair), copy.deepcopy(decision['routes'][route]), tests)
+                scoring_tests = copy.deepcopy(tests)
+                result = score_result(copy.deepcopy(pair), copy.deepcopy(decision['routes'][route]), scoring_tests)
+                if typed_codec.digest(scoring_tests) != binding['independent_tests_sha256']:
+                    raise ValueError('Independent scoring changed the frozen tests')
                 check_frozen()
                 receipt = {'binding':binding, 'result':result}
                 if any(result.get(k) != v for k,v in decision['routes'][route].items()
