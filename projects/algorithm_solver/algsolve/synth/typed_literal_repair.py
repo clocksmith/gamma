@@ -16,7 +16,7 @@ from .typed_correction import INVALID, validate_codes
 from .typed_prediction_codec import BITS, OPS
 
 
-def literal_search(encoding, codes, logits, params, config, evaluate, *, deadline):
+def literal_search(encoding, codes, logits, params, config, evaluate, *, deadline, candidate_filter=None):
     started = time.perf_counter()
     deadline = min(deadline, started + config['wall_seconds'])
     if not (0 <= config['pool_size'] <= 8 and 0 <= config['max_executions'] <= 4
@@ -66,6 +66,10 @@ def literal_search(encoding, codes, logits, params, config, evaluate, *, deadlin
             result['attempts'].append(attempt)
             if failure:
                 continue
+            if candidate_filter is not None:
+                attempt['proposal_filter_failure'] = candidate_filter(graph)
+                if attempt['proposal_filter_failure'] is not None:
+                    continue
             attempt['graph_sha256'] = typed_codec.digest(graph)
             remaining = deadline-time.perf_counter()
             if remaining <= 0:

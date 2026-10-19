@@ -47,13 +47,17 @@ def check_stored(query, entry, wall_seconds):
 
 
 def answer(context: Context, query: Problem, *, reranker=None, rerank_thresholds=None,
-           allow_generation: bool = False, approved_library=None) -> dict:
+           allow_generation: bool = False, approved_library=None,
+           public_output_contracts: bool = False) -> dict:
     if approved_library is not None and allow_generation:
         raise ValueError('Approved-library lookup does not permit generated fallback')
     started = time.perf_counter()
     # Only query inputs and public examples cross the route boundary.
     query = replace(query, hidden_tests_path='', reference_solutions=[], import_notes={})
     query = recover(query)
+    if public_output_contracts:
+        from .public_contracts import bind
+        query = bind(query)
     result = {'decision': 'abstain', 'code': None, 'source': None,
               'example_passed': False, 'independent_tests_passed': None,
               'public_example_count': len(query.public_tests),
