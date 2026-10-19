@@ -1,10 +1,12 @@
 import tempfile
+import json
 from pathlib import Path
 import unittest
 from unittest.mock import patch
 
 from algsolve.library_audit import (audit_one, check_seal, digest, exact_query,
                                    independent_score, inventory_entry, original_for, sha)
+from algsolve.library_audit import summarize
 from algsolve.recognition_boundary import exclusion_closure
 from algsolve.recognition_metrics import wilson
 from algsolve.records import Problem
@@ -88,6 +90,25 @@ class LibraryAuditTests(unittest.TestCase):
         low, high = wilson(0,10)
         self.assertAlmostEqual(low,0)
         self.assertGreater(high,.2)
+
+    def test_report_corrects_checker_classification_without_rewriting_receipts(self):
+        score = {'status':'failed','verdicts':[{'passed':False,'reason':'checker_error','tests_total':1}]}
+        row = {'key':'lc:one','historical_gap':False,'accepted':True,'identity_correct':True,
+               'wrong_acceptance':True,'accepted_unqualified':False,'accepted_and_correct':False,
+               'stored_solution':score,'returned_solution':score}
+        inventory = {'key':'lc:one','historical_verified':True,'identity_valid':True,
+                     'provenance_present':True,'interface_compatible':True}
+        with tempfile.TemporaryDirectory() as tmp:
+            directory = Path(tmp)
+            original = json.dumps(row)+'\n'
+            (directory/'answers.jsonl').write_text(original)
+            (directory/'inventory.jsonl').write_text(json.dumps(inventory)+'\n')
+            with patch('algsolve.recognition_metrics.summarize_results', side_effect=lambda rows: rows[0]):
+                result = summarize(directory)
+            self.assertFalse(result['metrics']['wrong_acceptance'])
+            self.assertTrue(result['metrics']['accepted_unqualified'])
+            self.assertEqual(result['reclassified_evidence_records'],2)
+            self.assertEqual((directory/'answers.jsonl').read_text(),original)
 
 
 if __name__ == '__main__':

@@ -1,4 +1,7 @@
 import copy
+import hashlib
+from pathlib import Path
+import tempfile
 import unittest
 from unittest.mock import patch
 
@@ -22,6 +25,22 @@ def fixture():
 
 
 class ApprovedLibraryTests(unittest.TestCase):
+    def test_runtime_or_threshold_changes_invalidate_approval(self):
+        entry, inventory, rows = fixture()
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root/'thresholds.json').write_text('{"min_score":1}')
+            sha = hashlib.sha256((root/'thresholds.json').read_bytes()).hexdigest()
+            catalog = ApprovedLibrary(build([entry],inventory,rows,evidence={},
+                                            runtime_files={'thresholds.json':sha}))
+            catalog.verify_runtime(root)
+            (root/'thresholds.json').write_text('{"min_score":0}')
+            with self.assertRaisesRegex(ValueError,'runtime changed'):
+                catalog.verify_runtime(root)
+            unbound = ApprovedLibrary(build([entry],inventory,rows,evidence={}))
+            with self.assertRaisesRegex(ValueError,'no serving-runtime'):
+                unbound.verify_runtime(root)
+
     def test_exact_statement_skips_embedding_but_still_executes_public_gate(self):
         from algsolve.judge.judge import Verdict
         entry, inventory, rows = fixture()

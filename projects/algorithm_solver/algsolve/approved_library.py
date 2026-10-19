@@ -38,7 +38,7 @@ def entry_hash(entry):
     return digest(asdict(entry))
 
 
-def build(entries, inventory, results, *, evidence):
+def build(entries, inventory, results, *, evidence, runtime_files=None):
     from .library_audit import independent_status
     by_key = {e.key: e for e in entries}
     inv = {r['key']: r for r in inventory}
@@ -83,6 +83,7 @@ def build(entries, inventory, results, *, evidence):
             'scope': 'stored-answer qualification; recognition release is separately gated',
             'identity_policy': {'minimum_sibling_margin': MIN_SIBLING_MARGIN,
                                 'basis': 'previously inspected recognition failures; development only'},
+            'runtime_files_sha256': runtime_files or {},
             'evidence': evidence, 'approved': approved, 'excluded': excluded,
             'counts': {'inventory': len(inv), 'approved': len(approved), 'excluded': len(excluded),
                        'exclusion_reasons': dict(Counter(excluded.values()))}}
@@ -115,6 +116,18 @@ class ApprovedLibrary:
                 'independent_test_count': sum(v['tests_passed'] for v in record['independent_verdicts']),
                 'scope': 'stored reference on its original problem; query identity checked separately'}
 
+    def verify_runtime(self, root):
+        files = self.manifest.get('runtime_files_sha256', {})
+        if not files:
+            raise ValueError('Approval catalog has no serving-runtime binding')
+        for relative, expected in files.items():
+            path = Path(relative)
+            if path.is_absolute() or '..' in path.parts:
+                raise ValueError('Invalid runtime-bound path')
+            actual = hashlib.sha256((root/path).read_bytes()).hexdigest()
+            if actual != expected:
+                raise ValueError('Qualified runtime changed: '+relative)
+
     def identity_check(self, entry, candidates, lookup, *, exact=False, minimum_margin=0.):
         from .splits import sibling_base
         if exact:
@@ -138,6 +151,7 @@ def load_context(path):
     from .records import LANE_ROOT
     from .routes import Budget, Context
     catalog = ApprovedLibrary.load(path)
+    catalog.verify_runtime(LANE_ROOT)
     entries = corpus.read_entries()
     keys = json.loads(corpus.KEYS_PATH.read_text())
     if keys != [e.key for e in entries]:
@@ -161,6 +175,7 @@ def main():
     parser.add_argument('output', type=Path)
     args = parser.parse_args()
     from .library_audit import inputs, rows, sha
+    from . import corpus
     _, entries, _, boundary = inputs()
     contract = json.loads((args.audit / 'contract.json').read_text())
     # Input identity is checked against the original snapshot, even when the
@@ -171,9 +186,17 @@ def main():
             raise ValueError('Audit input changed: ' + relative)
     if digest(boundary) != contract['boundary_sha256']:
         raise ValueError('Protected boundary changed')
+    serving = ['answer.py','approved_library.py','lookup.py','embed.py','public_examples.py',
+               'importers.py','values.py','validate.py','editor_execution.py','editor_task.py',
+               'editor_bridge.py','records.py','corpus.py','splits.py','routes.py']
+    runtime_paths = [LANE_ROOT/'algsolve'/name for name in serving] + sorted((LANE_ROOT/'algsolve/judge').glob('*.py'))
+    runtime_paths += [corpus.ENTRIES_PATH, corpus.KEYS_PATH, corpus.EMBEDDINGS_PATH,
+                      LANE_ROOT/'contracts/run_contract.json', LANE_ROOT/'contracts/lookup_thresholds.json',
+                      LANE_ROOT/'contracts/statement_lookup_thresholds.json']
     manifest = build(entries, rows(args.audit / 'inventory.jsonl'), rows(args.audit / 'answers.jsonl'),
                      evidence={name: sha(args.audit / name) for name in
-                               ('contract.json', 'inventory.jsonl', 'answers.jsonl')})
+                               ('contract.json', 'inventory.jsonl', 'answers.jsonl')},
+                     runtime_files={str(p.relative_to(LANE_ROOT)):sha(p) for p in runtime_paths})
     args.output.parent.mkdir(parents=True, exist_ok=True)
     with args.output.open('x') as stream:
         stream.write(json.dumps(manifest, indent=2) + '\n')

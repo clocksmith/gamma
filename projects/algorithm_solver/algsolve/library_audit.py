@@ -291,11 +291,27 @@ def summarize(directory):
     from .recognition_metrics import summarize_results
     inventory = rows(directory / 'inventory.jsonl')
     results = rows(directory / 'answers.jsonl') if (directory / 'answers.jsonl').exists() else []
+    # Older receipts called checker failures candidate failures. Preserve those
+    # raw rows; derive the corrected evidence category explicitly in reporting.
+    reclassified = 0
+    for row in results:
+        for field in ('stored_solution', 'returned_solution'):
+            score = row[field]
+            if score.get('verdicts'):
+                status = independent_status(score['verdicts'])
+                reclassified += status != score['status']
+                score['status'] = status
+        returned = row['returned_solution']['status']
+        row['accepted_and_correct'] = row['accepted'] and row['identity_correct'] and returned == 'passed'
+        row['wrong_acceptance'] = row['accepted'] and (not row['identity_correct'] or returned == 'failed')
+        row['accepted_unqualified'] = row['accepted'] and row['identity_correct'] and returned not in ('passed', 'failed')
     eligible = [r for r in inventory if not r.get('excluded')]
     gaps = [r for r in eligible if not r['historical_verified']]
     summary = {'inventory_entries': len(inventory), 'eligible_entries': len(eligible),
                'excluded_entries': len(inventory)-len(eligible), 'executed': len(results),
                'complete': len(results) == len(eligible),
+               'reclassified_evidence_records': reclassified,
+               'reporter_sha256': sha(Path(__file__)),
                'historical_gaps_total': sum(not r['historical_verified'] for r in inventory),
                'historical_gaps_eligible': len(gaps),
                'gap_coverage': dict(Counter(r['independent_coverage'] for r in gaps)),
