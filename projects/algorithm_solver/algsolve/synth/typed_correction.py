@@ -59,6 +59,14 @@ def correct(encoding, raw, logits, params, config, *, deadline=None):
                     raise ValueError('Raw prediction does not match captured logits')
         active = [i for i, value in enumerate(raw['op']) if value != 0]
         frontier = min(len(active), encoding.slots-1)
+        op_slots = set(active) | {frontier}
+        # Opt-in diagnostic candidate: an EMPTY inside the predicted active
+        # prefix is itself a repairable decision. Counting active nodes does
+        # not locate these holes. Keep model ranking and every search bound.
+        if config.get('include_interior_empty', False):
+            interior = sorted(set(range(max(active, default=-1)+1)) - set(active))
+            op_slots.update(interior)
+            result['interior_empty_slots'] = interior
         pool = []
         for field in config['fields']:
             for slot, scores in enumerate(logits[field]):
@@ -68,7 +76,7 @@ def correct(encoding, raw, logits, params, config, *, deadline=None):
                     if slot not in [*range(len(params)), INPUTS]:
                         continue
                 elif field == 'op':
-                    if slot not in active and slot != frontier:
+                    if slot not in op_slots:
                         continue
                 elif slot not in active:
                     continue

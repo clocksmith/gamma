@@ -145,6 +145,26 @@ developer-authored checks. This is not retrieval qualification or a new solving
 benchmark. Broad coverage loss is unmeasured; the candidate is unselected. New
 training and protected composition remain gated as above.
 
+## Real-route recognition and bounded fit repair on 128
+
+[Real frozen-route comparison](findings/required-facets-real-dev-128-v1/README.md)
+rejects the required-facet candidate for useful coverage: on 16 specified consumed
+requests, unchanged control returned 7 correct answers and candidate returned 0.
+Both had 0 wrong acceptances; candidate lost all 7 correct answers. Eight additional
+no-example controls abstained in both arms. Actual per-arm embedding/retrieval
+matched exactly; control reproduced historical dispositions. Full warm specified
+route p50/p95 was 0.311/0.933 s control and 0.345/0.911 s candidate under existing host
+load. No tuning or fresh qualification followed.
+
+[Interior-slot repair replay](findings/typed-interior-empty-fit-128-v1/README.md)
+adds an opt-in repair-pool eligibility fix, preserving the default. On 10 original
+fit captures, validity rose 9 to10 against existing correction, but accepted-correct
+answers remained 4, with 0 wrong acceptances and 6 abstentions in both arms. The
+newly valid graph failed public examples. Raw predictions, original runs and all
+search bounds remain intact. Repair costs were measured separately; inherited
+inference makes hybrid totals unsuitable as new end-to-end latency. No audit rerun,
+training, protected opening or 2a/2b qualification occurred.
+
 ## Matching and binary-input objectives
 
 1a and 1b share stored-answer recognition. Similarity, a partial requirement match
