@@ -64,7 +64,18 @@ blocked115 result. Sources stay ignored/private under `data/derived/` and `runs/
 This changes the development source corpus only, not the Python recognition catalog,
 autonomous composer or live app. Recursive implementations have finite-test evidence,
 not maximum-depth performance qualification. Problem115 is excluded pending exact
-integer transport qualification in a separate successor runner.
+integer transport review in a separate successor runner.
+
+The [isolated exact-integer successor](findings/js-exact-integer-transport-128-v1/summary.json)
+now qualifies115 on all101 unchanged independent cases, two public examples and
+four input-preservation probes. Its canonical tagged decimal transport maps native
+BigInt to exact host Python integers, rejects unsafe integral Number results and
+malformed/reserved tags, and preserves existing mathematical expectations and
+comparison rules. Seven independent protocol software-test groups pass, including
+adjacent large integers and v1-safe-value compatibility. The shared live wave helper
+and original blocked115 receipt remain unchanged. This is a separately qualified
+candidate awaiting integration review:24 integrated unique problems,25 across all
+distinct development evidence, not25 entries in the integrated catalog.
 
 ## Completed bounded source/macro foundation on 128
 
