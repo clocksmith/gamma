@@ -1,0 +1,264 @@
+{
+  "decision": "answered",
+  "reason": "public_passed",
+  "example_passed": true,
+  "independent_tests_passed": null,
+  "language": "python",
+  "code": "\"\"\"Separate hierarchical-composition experiment: typed data, never Python holes.\n\nPrograms are structured graphs. Recipes expand into the same representation;\neffects are explicit statements and cannot hide inside pure expressions. This is\na bounded interpreter for repository-owned development fixtures, not a sandbox\nqualification or a trained predictor. No eval/exec, imports, or user callbacks.\n\"\"\"\nfrom __future__ import annotations\n\nimport copy\nfrom collections import deque\nimport heapq\nimport json\n\nSCHEMA = 'algsolve.typed-program.v2'\nINTS = ('list', 'int')\nEDGE = ('tuple', 'int', 'int', 'int')\nEDGES = ('list', EDGE)\nRESOURCES = {'dsu', 'heap_int', 'queue_int', 'map_int_int'}\nMAX_GRAPH_NODES = 4096\nMAX_DEPTH = 48\nMAX_COLLECTION = 20000\nMAX_INTEGER_BITS = 128\n\n\nclass Invalid(ValueError):\n    pass\n\n\nclass BudgetExceeded(Invalid):\n    pass\n\n\ndef require(ok, message):\n    if not ok:\n        raise Invalid(message)\n\n\ndef fields(value, *keys):\n    require(type(value) is dict and set(value) == set(keys), f'Expected fields: {keys}')\n\n\ndef name(value):\n    require(type(value) is str and value.isidentifier() and not value.startswith('_'), 'Invalid binding')\n    return value\n\n\ndef dtype(value):\n    if type(value) is str:\n        require(value in {'int', 'bool', 'unit'} | RESOURCES, 'Unknown type')\n        return value\n    require(type(value) in (tuple, list) and len(value) >= 2, 'Invalid compound type')\n    tag, *args = value\n    require(tag in ('list', 'tuple') and (tag != 'list' or len(args) == 1), 'Invalid type constructor')\n    args = tuple(dtype(a) for a in args)\n    require(not any(resource(a) for a in args), 'Resources cannot be stored in values')\n    return (tag, *args)\n\n\ndef resource(t):\n    return type(t) is str and t in RESOURCES\n\n\ndef check_value(value, t):\n    if t == 'int':\n        require(type(value) is int and value.bit_length() <= MAX_INTEGER_BITS, 'Expected bounded integer')\n    elif t == 'bool':\n        require(type(value) is bool, 'Expected boolean')\n    elif t == 'unit':\n        require(value is None, 'Expected unit')\n    elif type(t) is tuple:\n        require(type(value) in (list, tuple) and len(value) <= MAX_COLLECTION, 'Expected bounded collection')\n        if t[0] == 'list':\n            for item in value:\n                check_value(item, t[1])\n        else:\n            require(len(value) == len(t) - 1, 'Tuple width mismatch')\n            for item, ty in zip(value, t[1:]):\n                check_value(item, ty)\n    else:\n        raise Invalid('Resource values cannot cross the program boundary')\n\n\n# Arguments, result, observable effect. Resource identities are lexical bindings.\nEFFECTS = {\n    'dsu.new': (('int',), 'dsu', 'allocate'),\n    'dsu.find': (('dsu', 'int'), 'int', 'read'),\n    'dsu.union': (('dsu', 'int', 'int'), 'bool', 'write'),\n    'heap.new': ((), 'heap_int', 'allocate'),\n    'heap.push': (('heap_int', 'int'), 'unit', 'write'),\n    'heap.pop': (('heap_int',), 'int', 'write'),\n    'queue.new': ((), 'queue_int', 'allocate'),\n    'queue.push': (('queue_int', 'int'), 'unit', 'write'),\n    'queue.pop': (('queue_int',), 'int', 'write'),\n    'queue.size': (('queue_int',), 'int', 'read'),\n    'map.new': ((), 'map_int_int', 'allocate'),\n    'map.has': (('map_int_int', 'int'), 'bool', 'read'),\n    'map.get': (('map_int_int', 'int', 'int'), 'int', 'read'),\n    'map.set': (('map_int_int', 'int', 'int'), 'unit', 'write'),\n}\nPURE = {'add', 'sub', 'mul', 'eq', 'lt', 'not', 'neg', 'len', 'range',\n        'tuple', 'field', 'empty_ints', 'append', 'sort_by'}\n\n\ndef pure_type(op, ts, raw):\n    if op in {'add', 'sub', 'mul'}:\n        require(ts == ['int', 'int'], 'Arithmetic requires integers')\n        return 'int'\n    if op in {'eq', 'lt'}:\n        require(len(ts) == 2 and ts[0] == ts[1] and ts[0] in ('int', 'bool'), 'Invalid comparison')\n        return 'bool'\n    if op in {'not', 'neg'}:\n        t = 'bool' if op == 'not' else 'int'\n        require(ts == [t], 'Invalid unary operation')\n        return t\n    if op == 'empty_ints':\n        require(not ts, 'Empty list has no arguments')\n        return INTS\n    if op == 'tuple':\n        require(bool(ts) and not any(resource(t) for t in ts), 'Invalid tuple')\n        return ('tuple', *ts)\n    if op in {'field', 'sort_by'}:\n        require(len(ts) == (2 if op == 'field' else 3), 'Wrong projection arity')\n        t = ts[0]\n        if op == 'sort_by':\n            require(type(t) is tuple and t[0] == 'list' and ts[2] == 'bool', 'Sort needs list and direction')\n            t = t[1]\n        require(type(t) is tuple and t[0] == 'tuple', 'Projection requires tuple')\n        require(type(raw[1]) is dict and set(raw[1]) == {'literal'} and type(raw[1]['literal']) is int,\n                'Field index must be a literal integer')\n        i = raw[1]['literal']\n        require(0 <= i < len(t) - 1, 'Field index outside tuple')\n        require(op != 'sort_by' or t[i + 1] in ('int', 'bool'), 'Sort key must be scalar')\n        return t[i + 1] if op == 'field' else ts[0]\n    if op == 'len':\n        require(len(ts) == 1 and type(ts[0]) is tuple and ts[0][0] == 'list', 'Length requires list')\n        return 'int'\n    if op == 'range':\n        require(ts == ['int'], 'Range requires integer')\n        return INTS\n    if op == 'append':\n        require(len(ts) == 2 and ts[0] == ('list', ts[1]), 'Append element mismatch')\n        return ts[0]\n    raise Invalid('Unknown pure operator')\n\n\ndef bounded_tree(value, depth=0):\n    require(depth <= MAX_DEPTH, 'Graph nesting limit exceeded')\n    require(type(value) in (dict, list, str, int, bool, type(None)), 'Graph must be JSON data')\n    if type(value) in (dict, list):\n        children = value.values() if type(value) is dict else value\n        n = 1 + sum(bounded_tree(child, depth + 1) for child in children)\n    else:\n        n = 1\n        if type(value) is str:\n            require(len(value) <= 256, 'Text is a binding/operator, not source code')\n    require(n <= MAX_GRAPH_NODES, 'Graph size limit exceeded')\n    return n\n\n\ndef validate(program, recipes=None, stack=(), _remaining=None):\n    recipes = recipes or {}\n    # Bound total recipe traversal as well as each individual graph. Otherwise\n    # a small branching recipe DAG could demand exponential validation work.\n    _remaining = [MAX_GRAPH_NODES] if _remaining is None else _remaining\n    _remaining[0] -= bounded_tree(program)\n    require(_remaining[0] >= 0, 'Expanded recipe validation size limit exceeded')\n    fields(program, 'schema', 'parameters', 'inputs', 'body', 'return', 'output_type')\n    require(program['schema'] == SCHEMA and type(program['inputs']) is dict, 'Invalid program schema')\n    parameters = program['parameters']\n    require(type(parameters) is list and all(type(p) is str for p in parameters), 'Ordered signature required')\n    require(len(parameters) == len(set(parameters)) and set(parameters) == set(program['inputs']),\n            'Signature must cover each input exactly once')\n    env = {name(k): (dtype(program['inputs'][k]), False) for k in parameters}\n    require(not any(resource(t) for t, _ in env.values()), 'Resource inputs are not supported')\n    output = dtype(program['output_type'])\n    require(not resource(output), 'Resource outputs are not supported')\n\n    def expr(e, scope):\n        require(type(e) is dict, 'Expressions must be structured objects')\n        if set(e) == {'ref'}:\n            require(e['ref'] in scope, 'Unbound reference')\n            return scope[e['ref']][0]\n        if set(e) == {'literal'}:\n            v = e['literal']\n            t = 'bool' if type(v) is bool else 'int'\n            check_value(v, t)\n            return t\n        fields(e, 'op', 'args')\n        require(type(e['args']) is list and e['op'] in PURE, 'Unknown pure expression')\n        ts = [expr(a, scope) for a in e['args']]\n        return pure_type(e['op'], ts, e['args'])\n\n    def bind(scope, key, ty, mutable=False):\n        name(key)\n        require(key not in scope, 'Shadowing/rebinding requires explicit set')\n        scope[key] = (ty, mutable)\n\n    def block(body, scope):\n        require(type(body) is list, 'Block must be a list')\n        for s in body:\n            require(type(s) is dict and 'op' in s, 'Invalid statement')\n            op = s['op']\n            if op in ('let', 'var', 'set'):\n                fields(s, 'op', 'name', 'value')\n                ty = expr(s['value'], scope)\n                require(not resource(ty), 'Resource aliasing is not supported')\n                if op == 'set':\n                    require(scope.get(s['name']) == (ty, True), 'Set requires matching mutable binding')\n                else:\n                    bind(scope, s['name'], ty, op == 'var')\n            elif op == 'call':\n                fields(s, 'op', 'operator', 'args', 'out')\n                require(s['operator'] in EFFECTS and type(s['args']) is list, 'Unknown effect')\n                ins, out, _ = EFFECTS[s['operator']]\n                require(tuple(expr(a, scope) for a in s['args']) == ins, 'Effect port type mismatch')\n                bind(scope, s['out'], out)\n            elif op == 'recipe':\n                fields(s, 'op', 'recipe', 'args', 'out')\n                key = s['recipe']\n                require(key in recipes and key not in stack and len(stack) < 8, 'Unknown/recursive recipe')\n                target = recipes[key]\n                ins, out = validate(target, recipes, (*stack, key), _remaining)\n                require(type(s['args']) is list and [expr(a, scope) for a in s['args']] == list(ins.values()),\n                        'Recipe port type mismatch')\n                bind(scope, s['out'], out)\n            elif op == 'for':\n                fields(s, 'op', 'item', 'in', 'body')\n                ty = expr(s['in'], scope)\n                require(type(ty) is tuple and ty[0] == 'list', 'Iteration requires list')\n                child = dict(scope)\n                bind(child, s['item'], ty[1])\n                block(s['body'], child)\n            elif op == 'if':\n                fields(s, 'op', 'condition', 'then', 'else')\n                require(expr(s['condition'], scope) == 'bool', 'Condition requires boolean')\n                block(s['then'], dict(scope))\n                block(s['else'], dict(scope))\n            else:\n                raise Invalid('Unknown statement')\n    block(program['body'], env)\n    require(expr(program['return'], env) == output, 'Return type mismatch')\n    return {k: dtype(program['inputs'][k]) for k in parameters}, output\n\n\nclass Cell:\n    def __init__(self, value):\n        self.value = value\n\n\nclass Budget:\n    def __init__(self, remaining=100000):\n        self.remaining = remaining\n\n    def spend(self, amount=1):\n        self.remaining -= amount\n        if self.remaining < 0:\n            raise BudgetExceeded('Execution operation budget exhausted')\n\n\ndef _pure(op, a, budget):\n    if op == 'add': return a[0] + a[1]\n    if op == 'sub': return a[0] - a[1]\n    if op == 'mul': return a[0] * a[1]\n    if op == 'eq': return a[0] == a[1]\n    if op == 'lt': return a[0] < a[1]\n    if op == 'not': return not a[0]\n    if op == 'neg': return -a[0]\n    if op == 'tuple': return tuple(a)\n    if op == 'field': return a[0][a[1]]\n    if op == 'empty_ints': return []\n    if op == 'len': return len(a[0])\n    n = a[0] if op == 'range' else len(a[0]) + (op == 'append')\n    require(0 <= n <= MAX_COLLECTION, 'Collection size limit exceeded')\n    budget.spend(n * max(1, n.bit_length()) if op == 'sort_by' else n)\n    if op == 'range': return list(range(n))\n    if op == 'append': return [*a[0], a[1]]\n    if op == 'sort_by': return sorted(a[0], key=lambda x: x[a[1]], reverse=a[2])\n    raise Invalid('Unknown operation')\n\n\ndef _effect(op, a, budget):\n    if op == 'dsu.new':\n        require(0 <= a[0] <= MAX_COLLECTION, 'Invalid disjoint-set size')\n        budget.spend(a[0])\n        return [list(range(a[0])), [1] * a[0]]\n    if op in ('dsu.find', 'dsu.union'):\n        parent, sizes = a[0]\n        def root(i):\n            require(0 <= i < len(parent), 'Vertex outside disjoint sets')\n            while parent[i] != i:\n                budget.spend()\n                i = parent[i]\n            return i\n        x = root(a[1])\n        if op == 'dsu.find': return x\n        y = root(a[2])\n        if x == y: return False\n        if sizes[x] < sizes[y]: x, y = y, x\n        parent[y] = x\n        sizes[x] += sizes[y]\n        return True\n    if op == 'heap.new': return []\n    if op == 'queue.new': return deque()\n    if op == 'map.new': return {}\n    obj = a[0]\n    if op.endswith('.push') or op == 'map.set':\n        require(len(obj) < MAX_COLLECTION or (op == 'map.set' and a[1] in obj), 'Resource capacity exceeded')\n    if op.startswith('heap.'):\n        budget.spend(max(1, len(obj).bit_length()))\n    if op == 'heap.push': heapq.heappush(obj, a[1])\n    elif op == 'heap.pop':\n        require(bool(obj), 'Pop from empty heap')\n        return heapq.heappop(obj)\n    elif op == 'queue.push': obj.append(a[1])\n    elif op == 'queue.pop':\n        require(bool(obj), 'Pop from empty queue')\n        return obj.popleft()\n    elif op == 'queue.size': return len(obj)\n    elif op == 'map.has': return a[1] in obj\n    elif op == 'map.get': return obj.get(a[1], a[2])\n    elif op == 'map.set': obj[a[1]] = a[2]\n    else: raise Invalid('Unknown effect')\n    return None\n\n\ndef _run(program, arguments, recipes, budget):\n    env = dict(zip(program['parameters'], arguments))\n    def expr(e, scope):\n        budget.spend()\n        if 'ref' in e:\n            v = scope[e['ref']]\n            return v.value if isinstance(v, Cell) else v\n        if 'literal' in e: return e['literal']\n        result = _pure(e['op'], [expr(a, scope) for a in e['args']], budget)\n        if type(result) is int:\n            check_value(result, 'int')\n        return result\n    def block(body, scope):\n        for s in body:\n            budget.spend()\n            op = s['op']\n            if op in ('let', 'var', 'set'):\n                value = expr(s['value'], scope)\n                if op == 'set': scope[s['name']].value = value\n                else: scope[s['name']] = Cell(value) if op == 'var' else value\n            elif op == 'call':\n                scope[s['out']] = _effect(s['operator'], [expr(a, scope) for a in s['args']], budget)\n            elif op == 'recipe':\n                scope[s['out']] = _run(recipes[s['recipe']], [expr(a, scope) for a in s['args']], recipes, budget)\n            elif op == 'for':\n                for item in expr(s['in'], scope):\n                    budget.spend()\n                    block(s['body'], {**scope, s['item']: item})\n            elif op == 'if':\n                block(s['then'] if expr(s['condition'], scope) else s['else'], dict(scope))\n    block(program['body'], env)\n    return expr(program['return'], env)\n\n\ndef execute(program, arguments, *, recipes=None, budget=100000):\n    \"\"\"Validate before execution; each call owns fresh state, including on failure.\"\"\"\n    recipes = recipes or {}\n    ins, out = validate(program, recipes)\n    require(type(arguments) is dict and set(arguments) == set(ins), 'Input names mismatch')\n    for key, ty in ins.items(): check_value(arguments[key], ty)\n    require(type(budget) is int and budget > 0, 'Invalid execution budget')\n    result = _run(program, [copy.deepcopy(arguments[k]) for k in ins], recipes, Budget(budget))\n    check_value(result, out)\n    return result\n\n\ndef expanded(program, recipes):\n    \"\"\"Inspectable hygienic inlining; recipe result becomes an ordinary let.\n\n    No closures, hidden state, or opaque algorithm calls remain after expansion.\n    \"\"\"\n    validate(program, recipes)\n    serial = [0]\n    def expand(p, mapping):\n        def expression(e, names):\n            if 'ref' in e: return {'ref': names[e['ref']]}\n            if 'literal' in e: return dict(e)\n            return {'op': e['op'], 'args': [expression(a, names) for a in e['args']]}\n        def fresh():\n            serial[0] += 1\n            return f'v{serial[0]}'\n        def block(body, names):\n            result = []\n            for s in body:\n                op = s['op']\n                if op == 'recipe':\n                    target = recipes[s['recipe']]\n                    child = {}\n                    for key, arg in zip(target['parameters'], s['args']):\n                        child[key] = fresh()\n                        result.append({'op': 'let', 'name': child[key], 'value': expression(arg, names)})\n                    sub, answer = expand(target, child)\n                    result.extend(sub)\n                    names[s['out']] = fresh()\n                    result.append({'op': 'let', 'name': names[s['out']], 'value': answer})\n                elif op in ('let', 'var', 'set'):\n                    value = expression(s['value'], names)\n                    if op != 'set': names[s['name']] = fresh()\n                    result.append({'op': op, 'name': names[s['name']], 'value': value})\n                elif op == 'call':\n                    args = [expression(a, names) for a in s['args']]\n                    names[s['out']] = fresh()\n                    result.append({'op': op, 'operator': s['operator'], 'args': args, 'out': names[s['out']]})\n                elif op == 'for':\n                    child = dict(names)\n                    child[s['item']] = fresh()\n                    result.append({'op': op, 'item': child[s['item']], 'in': expression(s['in'], names),\n                                   'body': block(s['body'], child)})\n                elif op == 'if':\n                    result.append({'op': op, 'condition': expression(s['condition'], names),\n                                   'then': block(s['then'], dict(names)), 'else': block(s['else'], dict(names))})\n            return result\n        body = block(p['body'], mapping)\n        return body, expression(p['return'], mapping)\n    # Prefix inputs so fresh local names cannot collide with external bindings.\n    mapping = {k: f'input{i}' for i, k in enumerate(program['parameters'])}\n    body, answer = expand(program, dict(mapping))\n    result = {'schema': SCHEMA, 'parameters': [mapping[k] for k in program['parameters']],\n              'inputs': {mapping[k]: v for k, v in program['inputs'].items()},\n              'body': body, 'return': answer, 'output_type': program['output_type']}\n    validate(result)\n    return result, mapping\n\n\ndef operation_counts(program):\n    from collections import Counter\n    counts = Counter()\n    def visit(v):\n        if type(v) is dict:\n            if 'op' in v: counts[v.get('operator', v['op'])] += 1\n            for child in v.values(): visit(child)\n        elif type(v) is list:\n            for child in v: visit(child)\n    visit(program)\n    return dict(sorted(counts.items()))\n\n\ndef canonical(program):\n    # Positional ports live in the explicit parameters array, never map order.\n    return json.dumps(program, sort_keys=True, separators=(',', ':'), allow_nan=False)\n\n\n_TYPED = json.loads('{\"program\":{\"body\":[{\"args\":[],\"op\":\"call\",\"operator\":\"heap.new\",\"out\":\"slot_2\"},{\"body\":[{\"args\":[{\"ref\":\"slot_2\"},{\"ref\":\"slot_3\"}],\"op\":\"call\",\"operator\":\"heap.push\",\"out\":\"slot_6\"}],\"in\":{\"ref\":\"heights\"},\"item\":\"slot_3\",\"op\":\"for\"},{\"name\":\"slot_9\",\"op\":\"var\",\"value\":{\"literal\":0}},{\"body\":[{\"args\":[{\"ref\":\"slot_2\"}],\"op\":\"call\",\"operator\":\"heap.pop\",\"out\":\"slot_14\"},{\"condition\":{\"args\":[{\"args\":[{\"ref\":\"slot_11\"},{\"ref\":\"slot_14\"}],\"op\":\"eq\"}],\"op\":\"not\"},\"else\":[],\"op\":\"if\",\"then\":[{\"name\":\"slot_9\",\"op\":\"set\",\"value\":{\"args\":[{\"ref\":\"slot_9\"},{\"literal\":1}],\"op\":\"add\"}}]}],\"in\":{\"ref\":\"heights\"},\"item\":\"slot_11\",\"op\":\"for\"}],\"inputs\":{\"heights\":[\"list\",\"int\"]},\"output_type\":\"int\",\"parameters\":[\"heights\"],\"return\":{\"ref\":\"slot_9\"},\"schema\":\"algsolve.typed-program.v2\"},\"recipes\":{\"cycle_weight\":{\"body\":[{\"args\":[{\"ref\":\"n\"}],\"op\":\"call\",\"operator\":\"dsu.new\",\"out\":\"sets\"},{\"name\":\"ordered\",\"op\":\"let\",\"value\":{\"args\":[{\"ref\":\"edges\"},{\"literal\":2},{\"ref\":\"descending\"}],\"op\":\"sort_by\"}},{\"name\":\"total\",\"op\":\"var\",\"value\":{\"literal\":0}},{\"body\":[{\"name\":\"u\",\"op\":\"let\",\"value\":{\"args\":[{\"ref\":\"edge\"},{\"literal\":0}],\"op\":\"field\"}},{\"name\":\"v\",\"op\":\"let\",\"value\":{\"args\":[{\"ref\":\"edge\"},{\"literal\":1}],\"op\":\"field\"}},{\"name\":\"weight\",\"op\":\"let\",\"value\":{\"args\":[{\"ref\":\"edge\"},{\"literal\":2}],\"op\":\"field\"}},{\"args\":[{\"ref\":\"sets\"},{\"ref\":\"u\"},{\"ref\":\"v\"}],\"op\":\"call\",\"operator\":\"dsu.union\",\"out\":\"joined\"},{\"condition\":{\"args\":[{\"ref\":\"joined\"}],\"op\":\"not\"},\"else\":[],\"op\":\"if\",\"then\":[{\"name\":\"total\",\"op\":\"set\",\"value\":{\"args\":[{\"ref\":\"total\"},{\"ref\":\"weight\"}],\"op\":\"add\"}}]}],\"in\":{\"ref\":\"ordered\"},\"item\":\"edge\",\"op\":\"for\"}],\"inputs\":{\"descending\":\"bool\",\"edges\":[\"list\",[\"tuple\",\"int\",\"int\",\"int\"]],\"n\":\"int\"},\"output_type\":\"int\",\"parameters\":[\"n\",\"edges\",\"descending\"],\"return\":{\"ref\":\"total\"},\"schema\":\"algsolve.typed-program.v2\"},\"forest\":{\"body\":[{\"args\":[{\"ref\":\"n\"}],\"op\":\"call\",\"operator\":\"dsu.new\",\"out\":\"sets\"},{\"name\":\"ordered\",\"op\":\"let\",\"value\":{\"args\":[{\"ref\":\"edges\"},{\"literal\":2},{\"ref\":\"descending\"}],\"op\":\"sort_by\"}},{\"name\":\"total\",\"op\":\"var\",\"value\":{\"literal\":0}},{\"name\":\"accepted\",\"op\":\"var\",\"value\":{\"literal\":0}},{\"body\":[{\"name\":\"u\",\"op\":\"let\",\"value\":{\"args\":[{\"ref\":\"edge\"},{\"literal\":0}],\"op\":\"field\"}},{\"name\":\"v\",\"op\":\"let\",\"value\":{\"args\":[{\"ref\":\"edge\"},{\"literal\":1}],\"op\":\"field\"}},{\"name\":\"weight\",\"op\":\"let\",\"value\":{\"args\":[{\"ref\":\"edge\"},{\"literal\":2}],\"op\":\"field\"}},{\"args\":[{\"ref\":\"sets\"},{\"ref\":\"u\"}],\"op\":\"call\",\"operator\":\"dsu.find\",\"out\":\"left\"},{\"args\":[{\"ref\":\"sets\"},{\"ref\":\"v\"}],\"op\":\"call\",\"operator\":\"dsu.find\",\"out\":\"right\"},{\"condition\":{\"args\":[{\"args\":[{\"ref\":\"left\"},{\"ref\":\"right\"}],\"op\":\"eq\"}],\"op\":\"not\"},\"else\":[],\"op\":\"if\",\"then\":[{\"args\":[{\"ref\":\"sets\"},{\"ref\":\"u\"},{\"ref\":\"v\"}],\"op\":\"call\",\"operator\":\"dsu.union\",\"out\":\"joined\"},{\"name\":\"total\",\"op\":\"set\",\"value\":{\"args\":[{\"ref\":\"total\"},{\"ref\":\"weight\"}],\"op\":\"add\"}},{\"name\":\"accepted\",\"op\":\"set\",\"value\":{\"args\":[{\"ref\":\"accepted\"},{\"literal\":1}],\"op\":\"add\"}}]}],\"in\":{\"ref\":\"ordered\"},\"item\":\"edge\",\"op\":\"for\"}],\"inputs\":{\"descending\":\"bool\",\"edges\":[\"list\",[\"tuple\",\"int\",\"int\",\"int\"]],\"n\":\"int\"},\"output_type\":[\"tuple\",\"int\",\"int\"],\"parameters\":[\"n\",\"edges\",\"descending\"],\"return\":{\"args\":[{\"ref\":\"total\"},{\"args\":[{\"ref\":\"n\"},{\"ref\":\"accepted\"}],\"op\":\"sub\"}],\"op\":\"tuple\"},\"schema\":\"algsolve.typed-program.v2\"},\"heap_sort\":{\"body\":[{\"args\":[],\"op\":\"call\",\"operator\":\"heap.new\",\"out\":\"heap\"},{\"body\":[{\"args\":[{\"ref\":\"heap\"},{\"ref\":\"value\"}],\"op\":\"call\",\"operator\":\"heap.push\",\"out\":\"pushed\"}],\"in\":{\"ref\":\"values\"},\"item\":\"value\",\"op\":\"for\"},{\"name\":\"answer\",\"op\":\"var\",\"value\":{\"args\":[],\"op\":\"empty_ints\"}},{\"body\":[{\"args\":[{\"ref\":\"heap\"}],\"op\":\"call\",\"operator\":\"heap.pop\",\"out\":\"smallest\"},{\"name\":\"answer\",\"op\":\"set\",\"value\":{\"args\":[{\"ref\":\"answer\"},{\"ref\":\"smallest\"}],\"op\":\"append\"}}],\"in\":{\"ref\":\"values\"},\"item\":\"unused\",\"op\":\"for\"}],\"inputs\":{\"values\":[\"list\",\"int\"]},\"output_type\":[\"list\",\"int\"],\"parameters\":[\"values\"],\"return\":{\"ref\":\"answer\"},\"schema\":\"algsolve.typed-program.v2\"},\"stable_unique\":{\"body\":[{\"args\":[],\"op\":\"call\",\"operator\":\"map.new\",\"out\":\"seen\"},{\"args\":[],\"op\":\"call\",\"operator\":\"queue.new\",\"out\":\"queue\"},{\"body\":[{\"args\":[{\"ref\":\"seen\"},{\"ref\":\"value\"}],\"op\":\"call\",\"operator\":\"map.has\",\"out\":\"present\"},{\"condition\":{\"args\":[{\"ref\":\"present\"}],\"op\":\"not\"},\"else\":[],\"op\":\"if\",\"then\":[{\"args\":[{\"ref\":\"seen\"},{\"ref\":\"value\"},{\"literal\":1}],\"op\":\"call\",\"operator\":\"map.set\",\"out\":\"recorded\"},{\"args\":[{\"ref\":\"queue\"},{\"ref\":\"value\"}],\"op\":\"call\",\"operator\":\"queue.push\",\"out\":\"queued\"}]}],\"in\":{\"ref\":\"values\"},\"item\":\"value\",\"op\":\"for\"},{\"args\":[{\"ref\":\"queue\"}],\"op\":\"call\",\"operator\":\"queue.size\",\"out\":\"count\"},{\"name\":\"answer\",\"op\":\"var\",\"value\":{\"args\":[],\"op\":\"empty_ints\"}},{\"body\":[{\"args\":[{\"ref\":\"queue\"}],\"op\":\"call\",\"operator\":\"queue.pop\",\"out\":\"first\"},{\"name\":\"answer\",\"op\":\"set\",\"value\":{\"args\":[{\"ref\":\"answer\"},{\"ref\":\"first\"}],\"op\":\"append\"}}],\"in\":{\"args\":[{\"ref\":\"count\"}],\"op\":\"range\"},\"item\":\"unused\",\"op\":\"for\"}],\"inputs\":{\"values\":[\"list\",\"int\"]},\"output_type\":[\"list\",\"int\"],\"parameters\":[\"values\"],\"return\":{\"ref\":\"answer\"},\"schema\":\"algsolve.typed-program.v2\"}}}')\nclass Solution:\n    def heightChecker(self, heights):\n        return execute(_TYPED[\"program\"], {'heights': heights}, recipes=_TYPED[\"recipes\"], budget=2000000)\n",
+  "program": {
+    "schema": "algsolve.typed-program.v2",
+    "parameters": [
+      "heights"
+    ],
+    "inputs": {
+      "heights": [
+        "list",
+        "int"
+      ]
+    },
+    "body": [
+      {
+        "op": "call",
+        "operator": "heap.new",
+        "out": "slot_2",
+        "args": []
+      },
+      {
+        "op": "for",
+        "item": "slot_3",
+        "in": {
+          "ref": "heights"
+        },
+        "body": [
+          {
+            "op": "call",
+            "operator": "heap.push",
+            "out": "slot_6",
+            "args": [
+              {
+                "ref": "slot_2"
+              },
+              {
+                "ref": "slot_3"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "op": "var",
+        "name": "slot_9",
+        "value": {
+          "literal": 0
+        }
+      },
+      {
+        "op": "for",
+        "item": "slot_11",
+        "in": {
+          "ref": "heights"
+        },
+        "body": [
+          {
+            "op": "call",
+            "operator": "heap.pop",
+            "out": "slot_14",
+            "args": [
+              {
+                "ref": "slot_2"
+              }
+            ]
+          },
+          {
+            "op": "if",
+            "condition": {
+              "op": "not",
+              "args": [
+                {
+                  "op": "eq",
+                  "args": [
+                    {
+                      "ref": "slot_11"
+                    },
+                    {
+                      "ref": "slot_14"
+                    }
+                  ]
+                }
+              ]
+            },
+            "then": [
+              {
+                "op": "set",
+                "name": "slot_9",
+                "value": {
+                  "op": "add",
+                  "args": [
+                    {
+                      "ref": "slot_9"
+                    },
+                    {
+                      "literal": 1
+                    }
+                  ]
+                }
+              }
+            ],
+            "else": []
+          }
+        ]
+      }
+    ],
+    "return": {
+      "ref": "slot_9"
+    },
+    "output_type": "int"
+  },
+  "codec_sha256": "e91aee58994ae952e2b43406606127689e10688404f2b5c774380dc7a77df7ad",
+  "public_example_count": 3,
+  "public": {
+    "passed": true,
+    "reason": null,
+    "tests_total": 3,
+    "tests_passed": 3,
+    "wall_seconds": 0.026305441999284085,
+    "first_failure": null,
+    "stderr_tail": ""
+  },
+  "timing": {
+    "shared_inference_seconds": 0.08420603999547893,
+    "construction_seconds": 0.000254710997978691,
+    "correction_seconds": 0.0014172549999784678,
+    "assembly_seconds": 0.0005696660009562038,
+    "execution_seconds": 0.026762463996419683,
+    "total_seconds": 0.11660160599421943,
+    "semantic_seconds": 0.001955259998794645
+  },
+  "setup_seconds": 5.2099594450046425,
+  "mode": "frozen_gpu_guard",
+  "source_generation": false,
+  "checkpoint_sha256": "25f9ca2ff223f5ae930f9511be21445efaa6dde49a697eccd5c648bdb918617c",
+  "raw_decision": "answered",
+  "raw_program": {
+    "schema": "algsolve.typed-program.v2",
+    "parameters": [
+      "heights"
+    ],
+    "inputs": {
+      "heights": [
+        "list",
+        "int"
+      ]
+    },
+    "body": [
+      {
+        "op": "call",
+        "operator": "heap.new",
+        "out": "slot_2",
+        "args": []
+      },
+      {
+        "op": "for",
+        "item": "slot_3",
+        "in": {
+          "ref": "heights"
+        },
+        "body": [
+          {
+            "op": "call",
+            "operator": "heap.push",
+            "out": "slot_6",
+            "args": [
+              {
+                "ref": "slot_2"
+              },
+              {
+                "ref": "slot_3"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "op": "var",
+        "name": "slot_9",
+        "value": {
+          "literal": 0
+        }
+      },
+      {
+        "op": "for",
+        "item": "slot_11",
+        "in": {
+          "ref": "heights"
+        },
+        "body": [
+          {
+            "op": "call",
+            "operator": "heap.pop",
+            "out": "slot_14",
+            "args": [
+              {
+                "ref": "slot_2"
+              }
+            ]
+          },
+          {
+            "op": "if",
+            "condition": {
+              "op": "not",
+              "args": [
+                {
+                  "op": "eq",
+                  "args": [
+                    {
+                      "ref": "slot_11"
+                    },
+                    {
+                      "ref": "slot_14"
+                    }
+                  ]
+                }
+              ]
+            },
+            "then": [
+              {
+                "op": "set",
+                "name": "slot_9",
+                "value": {
+                  "op": "add",
+                  "args": [
+                    {
+                      "ref": "slot_9"
+                    },
+                    {
+                      "literal": 1
+                    }
+                  ]
+                }
+              }
+            ],
+            "else": []
+          }
+        ]
+      }
+    ],
+    "return": {
+      "ref": "slot_9"
+    },
+    "output_type": "int"
+  },
+  "correction": null,
+  "qualification": {
+    "scope": "Ten previously consumed development-fit problems",
+    "correct": 8,
+    "cases": 10,
+    "wrong": 0,
+    "p95_seconds": 0.2961809851976795,
+    "release_qualified": false,
+    "nearby_variants_qualified": false
+  },
+  "request_binding": {
+    "request_sha256": "55b61579baac905b7e3991c24be09e7b7996b075e79a0beb772db769d0911941"
+  }
+}
