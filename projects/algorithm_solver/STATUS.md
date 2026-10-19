@@ -49,6 +49,21 @@ new training, new download, protected scoring, public push or deployment is part
 of this campaign. Coverage, autonomous macro selection and measured human effort
 remain three distinct outcomes.
 
+## Successor bilingual development corpus:60 unique problems
+
+The [v3 catalog](findings/js-corpus-subset-domain-128-v1/catalog.json) preserves all58
+predecessor rows and adds78/90 after fresh both-language runs under the separately
+versioned outer-order comparator:60 problems,120 implementations,5,289 matched
+independent cases per language. Twelve adversarial comparator fixtures passed in
+both runtimes; missing or duplicate subsets remain rejected.
+
+The [domain review](findings/js-corpus-subset-domain-128-v1/README.md) retains96
+invalid-domain cases across60/65/74/81/87 in explicit quarantine. Both languages
+pass597 remaining existing cases and13 public examples, with independently
+verified expectations. That is explicitly scoped domain-regression evidence;
+these five remain excluded from the60-entry catalog. No historical artifact,
+production serving path, other owner batch or protected test was changed.
+
 ## Integrated bilingual development corpus:58 unique problems
 
 The [v2 catalog](findings/js-corpus-b03-b04-integration-128-v1/catalog.json)
