@@ -26,18 +26,56 @@ from .train_typed import INSTRUCTION, problem_for, query_text
 from .typed_prediction_codec import PredictionCodec
 from .typed_predictor import TypedPredictor, decisions
 from .typed_comparison import nearest_graph, run_route, score_fixed, summarize, report
+from .typed_scoring import score_frozen, write_bytes_once, write_json_once, preserve_json
 
 
 def write(path, value):
-    with path.open('x') as stream:
-        json.dump(value, stream, indent=2, allow_nan=False)
-        stream.write('\n')
+    write_json_once(path, value)
 
 
 def write_rows(path, rows):
-    with path.open('x') as stream:
-        for row in rows:
-            stream.write(json.dumps(row, allow_nan=False)+'\n')
+    data = ''.join(json.dumps(row, allow_nan=False)+'\n' for row in rows).encode()
+    if path.exists():
+        if path.read_bytes() != data:
+            raise ValueError(f'Existing evidence differs: {path.name}')
+    else:
+        write_bytes_once(path, data)
+
+
+def finish_scoring(output, requests, candidate, config_path, config, training, identity):
+    def check_environment():
+        if candidate != manifest(config_path,config,training,identity):
+            raise ValueError('Candidate environment or files changed; cannot score or publish')
+    check_environment()
+    def load_tests(pair):
+        tests,_ = development_tests.select(pair['uid'],load_hidden_tests(problem_for(pair)))
+        return tests
+    def score_result(pair, decision, tests):
+        result = score_fixed(decision,problem_for(pair),tests)
+        print(json.dumps({'scored':pair['uid'],'route':decision['route']}),flush=True)
+        return result
+    scored = score_frozen(output,requests,candidate,config['routes'],load_tests,score_result)
+    check_environment()
+    write_rows(output/'scores.jsonl',scored)
+    summary = summarize(scored,config['selection'])
+    summary.update(schema='algsolve.typed-composer-development-report.v1',candidate_sha256=typed_codec.digest(candidate),
+                   protected_scored=False,autonomous_loop_started=False,
+                   setup=json.loads((output/'setup.json').read_text()),
+                   artifacts_sha256={str(p.relative_to(output)):typed_confirmation.sha(p)
+                       for p in sorted(output.rglob('*')) if p.is_file() and
+                       p.name not in ('summary.json','report.md','lock') and not p.name.startswith('.')},
+                   limitations=['Development selection only; no fresh generalization result.',
+                                'One fixed checkpoint and one bounded correction configuration; no model training.',
+                                'Historical search baselines remain required before protected scoring.',
+                                'Finite tests establish tested agreement, not universal program correctness.'])
+    preserve_json(output/'summary.json',summary)
+    report_bytes = report(summary).encode()
+    if (output/'report.md').exists():
+        if (output/'report.md').read_bytes() != report_bytes:
+            raise ValueError('Existing report differs')
+    else:
+        write_bytes_once(output/'report.md',report_bytes)
+    print(json.dumps(summary,indent=2),flush=True)
 
 
 def source_hashes():
@@ -66,6 +104,8 @@ def manifest(config_path, config, checkpoint_contract, identity):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--name', required=True)
+    parser.add_argument('--resume-scoring', action='store_true',
+                        help='Resume only missing independent scores from unchanged frozen decisions')
     args = parser.parse_args()
     if not args.name.replace('-', '').isalnum():
         raise ValueError('Invalid run name')
@@ -97,6 +137,11 @@ def main():
             raise ValueError('Alternatives disagree about the request')
         unique.setdefault(p['uid'], p)
     requests = list(unique.values())
+    output = LANE_ROOT/'runs'/args.name
+    if args.resume_scoring:
+        candidate = json.loads((output/'candidate.json').read_text())
+        finish_scoring(output,requests,candidate,config_path,config,candidate['checkpoint_contract'],identity)
+        return
     started = time.perf_counter()
     checkpoint = torch.load(checkpoint_path, map_location='cpu', weights_only=True)
     training = checkpoint['contract']
@@ -112,9 +157,8 @@ def main():
                            encoding.slots, len(encoding.types), width=training['width'])
     model.load_state_dict(checkpoint['state_dict'], strict=True); model.eval()
     checkpoint_load = time.perf_counter()-started
-    output = LANE_ROOT/'runs'/args.name; output.mkdir(exist_ok=False)
+    output.mkdir(exist_ok=False)
     candidate = manifest(config_path, config, training, identity)
-    candidate_id = typed_codec.digest(candidate)
     write(output/'candidate.json', candidate)
     print(f'[run-contract] run_name={args.name} pairs_input_spec={config["corpus"]} '
           f'resume_from={config["checkpoint"]} resume_stage=evaluation decode=raw-and-bounded-schema-correction '
@@ -183,35 +227,9 @@ def main():
                 prediction_seconds=capture['prediction_seconds'] if name!='nearest_training_graph' else 0.)
         rows.append({'uid':pair['uid'],'split':pair['learning_split'],'routes':routes})
     write_rows(output/'decisions.jsonl',rows)
-    decisions_hash = typed_confirmation.sha(output/'decisions.jsonl')
-    # This is the first independent-test read. Freeze every response beforehand.
-    scored = []
-    for pair,row in zip(requests,rows):
-        problem = problem_for(pair)
-        tests,_ = development_tests.select(pair['uid'],load_hidden_tests(problem))
-        if typed_codec.digest(tests) != pair['provenance']['independent_tests_sha256']:
-            raise ValueError('Independent development scoring authority changed')
-        scored.append({**row,'independent_tests_sha256':typed_codec.digest(tests),
-                       'routes':{k:score_fixed(v,problem,tests) for k,v in row['routes'].items()}})
-        print(json.dumps({'scored':len(scored),'total':len(requests)}),flush=True)
-    write_rows(output/'scores.jsonl',scored)
-    # Detect drift before any promotion, including code, dependencies and inputs.
-    if candidate != manifest(config_path,config,training,identity):
-        raise ValueError('Candidate environment or files changed during execution')
-    if typed_confirmation.sha(output/'decisions.jsonl') != decisions_hash:
-        raise ValueError('Frozen decisions changed during scoring')
-    summary = summarize(scored,config['selection'])
-    summary.update(schema='algsolve.typed-composer-development-report.v1',candidate_sha256=candidate_id,
-                   protected_scored=False,autonomous_loop_started=False,setup=cold,
-                   artifacts_sha256={p.name:typed_confirmation.sha(p) for p in sorted(output.iterdir()) if p.is_file()},
-                   limitations=['Development selection only; no fresh generalization result.',
-                                'One fixed checkpoint and one bounded correction configuration; no model training.',
-                                'Historical search baselines remain required before protected scoring.',
-                                'Finite tests establish tested agreement, not universal program correctness.'])
-    write(output/'summary.json',summary)
-    with (output/'report.md').open('x') as stream:
-        stream.write(report(summary))
-    print(json.dumps(summary,indent=2),flush=True)
+    # Only now may independent tests be loaded. Each route verdict is durably
+    # retained, and --resume-scoring never re-predicts or changes public decisions.
+    finish_scoring(output,requests,candidate,config_path,config,training,identity)
 
 
 if __name__=='__main__': main()

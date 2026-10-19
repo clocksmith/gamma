@@ -126,11 +126,12 @@ def score_fixed(result, problem, independent_tests, *, judge=validate.judge_prob
     if result['source'] is not None:
         started = time.perf_counter()
         verdict = judge(problem, result['source'], independent_tests)
-        result.update(independent=verdict.to_dict(), independently_correct=verdict.passed,
+        unscorable = verdict.reason in ('sandbox_error', 'checker_error', 'no_tests')
+        result.update(independent=verdict.to_dict(), independently_correct=None if unscorable else verdict.passed,
                       independent_scoring_seconds=time.perf_counter()-started,
-                      accepted_correct=result['decision']=='answered' and verdict.passed,
-                      wrong_acceptance=result['decision']=='answered' and not verdict.passed)
-        result['infrastructure_failure'] |= verdict.reason in ('sandbox_error', 'checker_error')
+                      accepted_correct=result['decision']=='answered' and not unscorable and verdict.passed,
+                      wrong_acceptance=result['decision']=='answered' and not unscorable and not verdict.passed)
+        result['infrastructure_failure'] |= unscorable
     return result
 
 
@@ -210,6 +211,8 @@ def report(summary):
                   '```', '', 'The runner refuses changed checkpoints or codecs. `candidate.json` pins the complete source, dependency, '
                   'data and configuration identity. `captures.jsonl` retains raw predictions and logits. `decisions.jsonl` '
                   'fixes every route response before independent scoring; `scores.jsonl` adds separate execution verdicts. '
-                  '`summary.json` retains artifact hashes and phase setup costs.', '',
+                  '`summary.json` retains artifact hashes and phase setup costs. Each completed route score is retained '
+                  'under `scoring/`. Resume an interrupted scoring stage with the same `--name` and `--resume-scoring`; '
+                  'changed candidates, decisions or scoring identities are rejected.', '',
                   'No protected cases or fresh 2b variants were scored. This report does not authorize the autonomous loop.'])
     return '\n'.join(lines)+'\n'
