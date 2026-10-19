@@ -304,7 +304,10 @@ def judge_stdin(
             if checker_source is None:
                 ok = tokens_equal(test.expected, observed)
             else:
-                ok, checker_failure = _run_checker(checker_source, test, observed)
+                try:
+                    ok, checker_failure = _run_checker(checker_source, test, observed)
+                except sandbox.SandboxUnavailable as exc:
+                    return Verdict(False, SANDBOX_ERROR, total, passed, spent, {"detail": str(exc)})
                 if checker_failure:
                     return Verdict(False, CHECKER_ERROR, total, passed, spent, {"i": i, "detail": checker_failure}, stderr_tail)
             if not ok:

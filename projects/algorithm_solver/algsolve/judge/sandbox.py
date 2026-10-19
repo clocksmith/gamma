@@ -12,6 +12,7 @@ Nothing here decides pass/fail. Callers compare outputs on the host.
 from __future__ import annotations
 
 import os
+import json
 import shutil
 import signal
 import subprocess
@@ -132,15 +133,43 @@ def run(
 
 
 def _run_in(task_dir: Path, argv: list[str], stdin: bytes, limits: Limits) -> SandboxResult:
+    # bwrap closes this private descriptor in the child, before exec. Its
+    # monitor reports exit-code only after successful setup/exec. Candidate
+    # stdout/stderr cannot impersonate this channel. See bubblewrap 0.9.0
+    # report_child_exit_status() and opt_json_status_fd in bubblewrap.c.
+    with tempfile.TemporaryFile() as status:
+        return _run_monitored(task_dir, argv, stdin, limits, status)
+
+
+def _payload_exited(status: bytes, exit_code: int | None) -> bool:
+    if len(status) > 4096:
+        return False
+    try:
+        records = [json.loads(line) for line in status.splitlines() if line.strip()]
+    except (ValueError, UnicodeDecodeError):
+        return False
+    if any(not isinstance(record, dict) for record in records):
+        return False
+    exits = [record['exit-code'] for record in records if 'exit-code' in record]
+    return len(exits) == 1 and type(exits[0]) is int and 0 <= exits[0] <= 255 and exits[0] == exit_code
+
+
+def _run_monitored(task_dir: Path, argv: list[str], stdin: bytes, limits: Limits, status) -> SandboxResult:
     started = time.monotonic()
-    proc = subprocess.Popen(
-        bwrap_argv(task_dir, limits, argv),
-        stdin=subprocess.PIPE,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
-        start_new_session=True,
-        env={"PATH": "/usr/bin"},
-    )
+    command = bwrap_argv(task_dir, limits, argv)
+    command[1:1] = ['--json-status-fd', str(status.fileno())]
+    try:
+        proc = subprocess.Popen(
+            command,
+            stdin=subprocess.PIPE,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            start_new_session=True,
+            pass_fds=(status.fileno(),),
+            env={"PATH": "/usr/bin"},
+        )
+    except OSError as error:
+        raise SandboxUnavailable(f'Cannot start bubblewrap: {error}') from error
     captured = {"stdout": bytearray(), "stderr": bytearray()}
     exceeded = threading.Event()
 
@@ -194,6 +223,10 @@ def _run_in(task_dir: Path, argv: list[str], stdin: bytes, limits: Limits) -> Sa
     wall = time.monotonic() - started
 
     code = proc.returncode
+    status.seek(0)
+    if not timed_out and not exceeded.is_set() and not _payload_exited(status.read(4097), code):
+        detail = bytes(captured['stderr'])[-600:].decode('utf-8', 'replace')
+        raise SandboxUnavailable(f'Bubblewrap did not confirm payload execution (exit={code}): {detail}')
     sig = -code if code is not None and code < 0 else None
     # bwrap reports a child killed by signal N as exit status 128 + N.
     if sig is None and code is not None and code > 128:
