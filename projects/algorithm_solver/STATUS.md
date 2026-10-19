@@ -346,3 +346,29 @@ The current fresh timing loss is lcd:1710; lcd:1101/lcd:1489 remain semantic
 failures. No current-run improvement is attributed solely to host load.
 The bounded run took60.018seconds atfourthreads and5.190GBpeakRSS. Public decisions
 were sealed before independent scoring; no training or protected scoring occurred.
+
+
+## Further imported-input coverage and exhausted binding hypothesis
+
+[Source-bound input repair](findings/known-public-input-1a-128-v1/README.md)
+returns **4/79** additional correct known answers versus 0/79 control, with zero
+wrong acceptances or losses. The four returned programs pass 438 independent and
+10 public checks. Old imported whitespace corruption is reconstructed on literal
+source before parsing; expected values, solution bytes and caller-supplied
+examples remain unchanged. Twenty-five of the historical 832 exclusions now have
+successful development paths, leaving **807**: 685 missing-test, 75 exact-path,
+26 runtime and 21 unusable-evidence entries. Historical approvals remain 2,456/3,288;
+3,353 is the historical full index, not the eligible denominator. No stale flags
+were copied or runtime catalog rebound. All 27 indexed alternatives for 15 SortedList
+failures still require the missing dependency; that indexed fallback hypothesis
+is exhausted without installing anything.
+
+[Explicit fallback binding experiment](findings/typed-public-binding-fit-128-v1/README.md)
+corrects the declared -1 accumulator but returns **8/10**, matching guard control,
+with no wrong acceptances or losses. It is unselected. The remaining correct
+endpoint/completion-bit pair ranks 10th, outside four executions; the seven-bit
+critical-edge failure also remains. Public decisions preceded independent tests.
+No search-bound or acceptance change followed scoring. The prior 8/10 capture,
+7/10 fresh matched result and 3.023-second p95 remain intact. Sealed phase inspection
+attributes 97.17% of summed warm route time to query embedding, versus 28 ms total
+predictor execution across ten queries; no new timing run or causal load claim.
