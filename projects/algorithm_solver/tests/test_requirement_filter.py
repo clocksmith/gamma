@@ -97,6 +97,32 @@ class RequirementDevelopment(unittest.TestCase):
         # Ordinary alternatives still supply no cardinality assertion.
         self.assertNotIn('transactions', explicit_facts('Buy once or abstain.')['facts'])
 
+    def test_opt_in_zero_action_option_preserves_only_explicit_transaction_bound(self):
+        for text, value in [('Buy once and then sell on a later day, or do nothing', 'one'),
+                            ('At most two transactions, or do nothing', 'two'),
+                            ('Unlimited transactions or do nothing', 'unlimited')]:
+            with self.subTest(text=text):
+                self.assertNotIn('transactions', explicit_facts(text)['facts'])
+                parsed = explicit_facts(text, allow_noop_option=True)
+                self.assertEqual(parsed['facts']['transactions'], value)
+                self.assertNotIn('fee', parsed['facts'])
+                self.assertNotIn('cooldown', parsed['facts'])
+        for text in ['Buy once or unlimited transactions', 'Maybe buy once or do nothing',
+                     'If buy once or do nothing', '"Buy once or do nothing"',
+                     'Buy once or sell twice or do nothing', 'Buy once or do nothing else',
+                     'Buy once or abstain', 'Do nothing', 'Not buy once or do nothing']:
+            with self.subTest(text=text):
+                self.assertNotIn('transactions', explicit_facts(text, allow_noop_option=True)['facts'])
+        es = [entry('a', 'A'), entry('b', 'B')]
+        lookup = LookupIndex(es, np.zeros((2, 1)))
+        cs = [{'key': 'a', 'score': .9}, {'key': 'b', 'score': .8}]
+        ps = [profile('A', transactions='unlimited'), profile('B', transactions='one')]
+        query = 'Buy once or do nothing.'
+        self.assertEqual(RequirementFilter(ps).apply(query, cs, lookup)[0], cs)
+        kept, trace = RequirementFilter(ps, allow_noop_option=True).apply(query, cs, lookup)
+        self.assertEqual(kept, cs[1:])
+        self.assertEqual(trace['pre_filter'], cs)
+
     def test_conflicts_abstain_without_erasing_candidates(self):
         es=[entry('x','x')];lookup=LookupIndex(es,np.zeros((1,1)))
         cs=[{'key':'x','score':.9}]
