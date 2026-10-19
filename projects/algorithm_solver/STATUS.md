@@ -60,38 +60,34 @@ not wait for recognition to pass or require an exact stored-answer match.
 Retrieving permitted reusable components is optional assistance, not problem
 identification. The composition work proceeds as follows:
 
-1. **Constrained construction:** use the existing typed predictor and codec on
-   development composition problems. Preserve raw predictions and compare raw
-   versus corrected results on the **same composition cases**, never the 20
-   recognition queries. Report structural validity, actual program correctness,
-   wrong acceptances, abstentions, correction cost and complete latency separately.
-   First reliably fit a small verified corpus; valid structure is not a correct
-   algorithm. Use alternative correct graphs and counterexample-backed wrong
-   bindings. Do not grow the model before diagnosing this bottleneck.
-2. **Autonomous development loop — missing:** select a few permitted expressible
-   families. Convert tested references into graphs; generate semantic variants;
-   establish independent brute-force, boundary and randomized oracles. Within a
-   recorded compute budget, an LLM development agent proposes edits, parameters,
-   shared subgraphs and merges, receives validator/test failures and repairs them.
-   Retain successes, rejected attempts, provenance and resource-bound verdicts.
-   Promote components only with independent contracts/tests and reuse across
-   distinct cases; do not hide an entire answer inside one oversized component.
-3. **Teach and freeze:** feed qualified graphs/components into the compact parallel
-   predictor. At query time use the problem, optional component retrieval,
-   prediction, deterministic assembly and checking. No human steering or
-   autoregressive source generation. Report runtime search/repair separately from
-   first prediction and development cost. Protected composition scoring waits for
-   a frozen, development-qualified composer and agreed matched baselines;
-   recognition passing is neither a prerequisite nor evidence for this gate.
-4. **Independent nearby variants:** evaluator authors private semantic changes,
-   seeds, answers and checks without seeing candidate failures. Familiar base
-   problems are allowed; changed requirements/solutions stay unseen. Keep the
-   66-problem reservation and harder family-disjoint work separate. The verified
-   catalog has 3,353 originals; no evidence establishes 6,000 distinct originals.
-5. **Matched ablations:** stored solution; existing graph with parameter edits;
-   fixed-library composition; agent-improved-library composition; learned predictor
-   versus bounded search. Compare identical tasks/budgets, wrong acceptance,
-   coverage and complete latency including checks and repairs.
+1. **Interface and baselines:** use the bound typed IR and the new
+   [composer comparison contract](contracts/typed_composer_comparison_v1.json).
+   Freeze node/edge rules, inputs/outputs, invalid-graph behavior and abstention.
+   Compare raw prediction, bounded correction of that same prediction, and nearest
+   frozen training graph. Preserve the old reservation's search-baseline obligations;
+   reconcile any addendum explicitly before protected scoring.
+2. **Development comparison:** use identical composition inputs. Preserve raw
+   graphs and edit traces. Report validity, executed correctness, abstentions,
+   wrong acceptances, useful/harmful corrections, construction/correction time and
+   total latency. A validity-only repair is not a solved problem. Select correction
+   using development cases; constraints cannot substitute a hand-authored solution.
+3. **Freeze, then score:** qualify all selected routes on development data and seal
+   implementations, configuration, checkpoint, encoding, components, evaluator,
+   budgets and baselines. Then run one protected composition comparison. No tuning
+   on its outcomes. Recognition passing is neither prerequisite nor evidence here.
+4. **Separate 2b:** evaluate freshly authored nearby semantic variants under their
+   own seal. Familiar bases may be allowed; changed requirements and answers remain
+   unseen. Do not tune the frozen 2a composer on those variants after evaluation
+   begins. Preserve the broader 66-problem reservation separately.
+5. **Autonomous graph-development loop — deferred:** launch only after raw
+   composition, constrained composition and protected scoring have independently
+   established receipts. Then, within a recorded compute budget, propose graph
+   edits, parameterizations and shared subgraphs on permitted development families;
+   validate types/effects/bounds and independent oracles, repair failures and retain
+   every attempt. Promote components only with contracts, tests and distinct-case
+   reuse. Training on qualified graphs produces a new composer version; protected
+   feedback does not become training data. Compare that later version against the
+   fixed-library and parameter-only baselines on fresh frozen tasks.
 
 Current code boundary: `typed_predictor.decisions()` independently takes argmax
 for operation, child/sibling edges, bindings and types. `PredictionCodec.decode()`
@@ -100,10 +96,12 @@ The next **composition** change belongs at this construction boundary, retaining
 raw predictions and a separately scored constrained result. Recognition has its
 own candidate-selection work above. No new training campaign has started.
 
-Next composition milestone: a frozen fast composer correctly handles independently
-tested unseen semantic variants without human steering or runtime LLM code
-writing. Existing typed interpretation is sufficient; no new editor, native
-compiler or replacement framework is required.
+Next checkpoint: a development-qualified frozen composer, agreed baselines and
+sealed metrics, followed by one protected composition run. The existing typed IR
+is frozen; the corrected route, matched baselines and candidate seal remain open.
+Neither `03e290393` nor this protocol update supplies an experimental result.
+Existing typed interpretation is sufficient; no new editor, native compiler or
+replacement framework is required.
 
 ## Evidence and operating boundaries
 
