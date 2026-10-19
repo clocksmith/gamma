@@ -4,24 +4,29 @@ Parent: [Gamma research projects](../CATSCAN.md)
 
 ## Target
 
-Recognize stored solutions; separately learn autonomous non-autoregressive composition of
-typed functions, data-structure operations, explicit state and control flow.
-Goal 2a assembles known problems; 2b adapts nearby semantic variants. No human
-steering or runtime source generation is required. Reusable recipes expand into
-those building blocks; a compact neural predictor
-selects and connects them, with deterministic assembly and validation. Compare
-against search and autoregressive generation. The recorded three-call baseline
-does not constrain the composition goal.
+Goals 1a/1b recognize problems independently of language and retrieve values with
+one or more separately qualified implementations; the consuming program chooses
+the language. Goal 1b uses one informal description and answers or abstains with
+zero clarification. Goals 2a/2b autonomously compose
+complete familiar/nearby-variant programs from at most 256 reusable parameterized
+semantic macros per language, without query-time autoregressive source generation.
+The target is broad measured LeetCode coverage, not a graph architecture campaign.
 
-The owner-requested human composition goal targets a reusable vocabulary for solving
-problems and writing code with minimal total inputs, time to correctness and corrections.
-A bounded binary-input candidate uses fixed-width choices with N <= 8 bits per entry;
-measure connections, bindings, constants and navigation, not operation labels alone.
-The current 43 model labels are not an established optimal human vocabulary.
-It covers familiar variants first and unfamiliar combinations separately; the
-current three text-entry encodings remain baselines, not dependencies of autonomous
-solving. Goal definitions and the
-natural-description matching boundary live in [STATUS.md](STATUS.md#matching-and-binary-input-objectives).
+Build consistent, independently qualified JavaScript and Python source corpora
+before claiming vocabulary coverage. Concepts can be shared without forcing
+identical codebooks. A typed graph may serve as optional validation/assembly IR;
+it is not a substitute for the language-specific corpus and token/macro sequence.
+The same semantic macros support human binary input, including all bindings,
+constants, control/escape tokens, navigation and corrections in measured cost.
+Measure representation coverage, autonomous correctness and human effort separately.
+A complete solution may occupy one of the 256 entries and yield a valid one-macro
+program. Report single/multi-macro granularity and all operand costs; exclude hidden
+unbounded answer lookup, not full-solution entries within the fixed budget.
+
+[Clarified goal/design contract](contracts/semantic_macro_goals_v1.json) preserves
+the existing Python-only catalog, 24 teacher graphs and frozen experiment as
+limited precursors. Existing ASCII7 and JS/Python lexical byte256 alphabets remain
+baselines, and 43 predictor node labels are not the target semantic codebook.
 
 ## Authority
 

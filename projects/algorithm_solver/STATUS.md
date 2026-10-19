@@ -14,6 +14,41 @@ retain earlier contracts, failures and reproduction instructions.
 | **2a: autonomous familiar composition** | Recovered original GPU guard returns 8/10 consumed fit cases at 0.296 s p95, versus nearest graph 9/10. The approved balanced-loss pair finished; candidate returned 1/10 guarded correct with two wrong acceptances and was rejected. | No learned improvement or protected generalization established. Preserve original assets and rejected candidate separately; human composition input does not qualify this goal. |
 | **2b: nearby semantic variants** | No independent nearby-variant result. Existing broader 66-problem reservation and protected tests remain unopened. | New separate variant-seal protocol prepared. First qualify/freeze a composer, then independently author/review changed requirements/answers; direct public input only. Do not train on or tune from opened variants. |
 
+## Clarified target: JavaScript and Python semantic macros
+
+The owner clarified the goal on 2026-10-19: a consistent, independently tested
+JavaScript/Python solution corpus and up to 256 reusable parameterized semantic
+macros per language. Typed graph IR is optional. The current 2,501-answer catalog
+is Python-only; the 24 teacher graphs and existing lexical editor codebooks are
+precursors, not completion. A whole solution can be a vocabulary entry and a
+valid one-macro program. Unbounded answer lookup, representation coverage,
+autonomous solving and human input cost remain separate measurements.
+[Exact goal/design contract](contracts/semantic_macro_goals_v1.json) defines the
+first bounded Good Pairs slice, language semantics, complete token accounting,
+versioning, and unchanged protected boundaries. The fit-fragment prototype was
+paused before a sealed comparison; its 300 candidates have no standalone semantic
+qualification. No new model training, protected scoring or UI deployment follows
+from this clarification.
+
+## Next campaign: consistent JavaScript/Python corpus foundation
+
+Prioritize a bounded, varied, already-permitted development slice supporting
+semantic-macro design before further tiny graph-predictor tuning. Inspect locally
+available JavaScript source/provenance first; use explicit faithful translations
+only when needed, never silently claiming they were existing references. Start
+with Good Pairs and add permitted frequency, interval, sorting and heap examples,
+with identical hash-bound independent cases and separately declared language
+semantics. Preserve Python1a approvals; do not change the language-agnostic
+recognizer or production serving catalog in this foundation campaign.
+
+The initial Good Pairs macro transcription covers two algorithms in both languages;
+qualification and complete stream costs are recorded separately. Further corpus
+entries require source normalization, isolated JS/Python execution, mutation and
+numeric checks, source/test identities and retained failures. No broad conversion,
+new training, new download, protected scoring, public push or deployment is part
+of this campaign. Coverage, autonomous macro selection and measured human effort
+remain three distinct outcomes.
+
 ## Recognition evidence and next run
 
 [Matched development result](findings/recognition-requirements-dev-suby-v1/README.md)
