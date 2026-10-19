@@ -16,7 +16,7 @@ from .typed_correction import INVALID, validate_codes
 from .typed_prediction_codec import BITS, OPS
 
 
-def literal_search(encoding, codes, logits, params, config, evaluate, *, deadline, candidate_filter=None):
+def literal_search(encoding, codes, logits, params, config, evaluate, *, deadline, candidate_filter=None, captured_bits=None, frozen_slots=()):
     started = time.perf_counter()
     deadline = min(deadline, started + config['wall_seconds'])
     if not (0 <= config['pool_size'] <= 8 and 0 <= config['max_executions'] <= 4
@@ -29,13 +29,23 @@ def literal_search(encoding, codes, logits, params, config, evaluate, *, deadlin
             raise ValueError('Literal logit dimensions differ')
         if any(not math.isfinite(float(v)) for row in logits for v in row):
             raise ValueError('Nonfinite literal logits')
-        if codes['bits'] != [[int(v >= 0) for v in row] for row in logits]:
+        frozen_slots = set(frozen_slots)
+        if any(type(s) is not int or not 0 <= s < encoding.slots for s in frozen_slots):
+            raise ValueError('Invalid frozen literal slot')
+        original_bits = codes['bits'] if captured_bits is None else captured_bits
+        if original_bits != [[int(v >= 0) for v in row] for row in logits]:
             raise ValueError('Literal decisions differ from captured logits')
+        if any(row != original_bits[i] and i not in frozen_slots for i,row in enumerate(codes['bits'])):
+            raise ValueError('Unbound literal differs from captured logits')
+        if any(OPS[codes['op'][i]] not in ('int','bool') for i in frozen_slots):
+            raise ValueError('Frozen slot is not a literal')
         graph, error = validate_codes(encoding, codes, params)
         if error:
             raise ValueError('Literal search requires a valid starting graph: ' + error)
         pool = []
         for slot, operation in enumerate(codes['op']):
+            if slot in frozen_slots:
+                continue
             label = OPS[operation]
             # Boolean decoding only permits a zero sign and magnitude0/1.
             bits = range(BITS) if label == 'int' else [1] if label == 'bool' else []
