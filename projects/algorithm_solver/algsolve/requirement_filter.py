@@ -32,7 +32,7 @@ def _negative_coordinations(text):
     return spans
 
 
-def explicit_facts(text):
+def explicit_facts(text, *, allow_noop_option=False):
     """Extract known assertions, retaining coordinated absence and uncertainty.
 
     This deliberately loses coverage rather than interpreting double negation,
@@ -64,7 +64,15 @@ def explicit_facts(text):
                         facet in group['facets'] and group['start'] <= span['start'] < group['end']
                         and all(group['start'] <= position < group['end'] for position in ors)
                         for group in coordinated)
-                    if not negative_assertion:
+                    # A trailing zero-action option does not change an explicit
+                    # transaction upper bound. This is opt-in and deliberately
+                    # excludes arbitrary alternatives, conditions and quotations.
+                    noop = re.search(r'\bor\s+do\s+nothing\s*$', sentence, re.I)
+                    noop_option = (allow_noop_option and facet == 'transactions'
+                                   and value in ('one', 'two', 'unlimited') and noop
+                                   and span['end'] <= sentence_start + noop.start()
+                                   and all(sentence_start + noop.start() <= p for p in ors))
+                    if not negative_assertion and not noop_option:
                         reason = 'alternative_clause'
                 if reason:
                     suppressed.append(dict(span, facet=facet, value=value, reason=reason))
@@ -85,7 +93,8 @@ def contradicts(facet, requested, source):
 
 
 class RequirementFilter:
-    def __init__(self, profiles):
+    def __init__(self, profiles, *, allow_noop_option=False):
+        self.allow_noop_option = allow_noop_option
         self.profiles = {}
         for profile in profiles:
             h = profile['statement_sha256']
@@ -95,7 +104,7 @@ class RequirementFilter:
             self.profiles[h] = facts
 
     def apply(self, text, candidates, lookup):
-        parsed = explicit_facts(text)
+        parsed = explicit_facts(text, allow_noop_option=self.allow_noop_option)
         kept, audit = [], []
         for candidate in candidates:
             entry = lookup.entries[lookup.by_key[candidate['key']]]

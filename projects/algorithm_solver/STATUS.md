@@ -165,6 +165,26 @@ search bounds remain intact. Repair costs were measured separately; inherited
 inference makes hybrid totals unsuitable as new end-to-end latency. No audit rerun,
 training, protected opening or 2a/2b qualification occurred.
 
+## Narrow recognition gain and known-fit semantic attribution
+
+[Three-arm real comparison](findings/noop-option-real-dev-128-v1/README.md)
+measured 12/16 specified requests correct with an opt-in zero-action alternative
+parser rule, versus 11/16 for unchanged contradiction filtering and 7/16 for
+default lookup. No lost correct answers or observed wrong acceptances. The rule
+preserves the explicit single-trade limit in “buy once … or do nothing”; it does
+not infer fees or expand the rejected required-facet gate. All original controls,
+thresholds and approvals remain intact. This consumed-development source-suite
+gain is not proof of complete informal semantics or a release promotion.
+
+[Known-fit diagnosis](findings/typed-fit-semantic-diagnosis-128-v1/README.md)
+attributes five of six unsuccessful structurally valid cases to literal bits
+only; the sixth selects stable-unique instead of sorting. Every case already has
+qualified fit targets. Only 74 of 15,093 supervised literal bits are positive,
+a plausible optimization issue that has not been established causally. A named
+four-CPU, 8-GiB bounded literal-margin construction experiment is specified with
+exact assets and acceptance criteria; it has not run. No new training, target-derived
+solver edits, audit rerun, protected scoring or 2a/2b qualification occurred.
+
 ## Matching and binary-input objectives
 
 1a and 1b share stored-answer recognition. Similarity, a partial requirement match
