@@ -217,7 +217,8 @@ preserving all isolation, limits and cleanup; synthetic median judge time fell
 5 subtests passed. Post-score label analysis places two known literal repairs at
 proposal ranks 1 and 3, so training is not yet the demonstrated immediate need.
 The rejected candidate, two-second gate and all training/protected boundaries
-remain intact; stabilize and instrument execution before a new quality pass.
+remain intact. The owner subsequently authorized correctness development alongside
+serving workloads; quiet conditions are needed for clean latency promotion only.
 
 ## Matching and binary-input objectives
 
@@ -243,3 +244,58 @@ tests, graph labels, responses and model weights ignored and local. Commit only
 code and metadata/aggregate evidence, directly to main; push and synchronize the
 clean Mac Gamma checkout. No editor dependency, model auto-download, protected
 opening, or claim of arbitrary unseen solving follows from these results.
+
+
+## Current priority and correctness progress on 128
+
+Owner priority is near-complete **1a stored known-solution recognition**, with
+**2a autonomous known-problem graph composition** proceeding independently in
+parallel. Informal one-input 1b and nearby semantic variants 2b remain active
+objectives behind these priorities; neither gains qualification from 1a/2a.
+Serving workload contention does not block correctness development. A separate
+fleet task owns the subsequently authorized 27B contributor intervention; this
+execution task does not stop workers, and smaller contributors remain active.
+All timings remain contended unless measured otherwise.
+
+[Literal correctness replay](findings/typed-literal-semantic-fit-128-v1/README.md)
+improved structural control 4/10 to 6/10 on original consumed fit captures.
+[Recipe plus literal repair](findings/typed-semantic-fit-128-v1/README.md) improved
+that to **7/10**, with zero wrong acceptances, no lost correct answers and zero
+infrastructure failures. The combined opt-in candidate shares four additional
+public executions and 0.25 seconds across both repair stages, with deterministic
+typed construction and model-logit ordering. All public decisions were sealed
+before original independent source tests. Capture replay excludes inference:
+this is semantic correctness evidence, not fresh latency or release qualification.
+Protected 66 targets/60 families remain unopened; no new training is approved.
+
+Public push remains blocked by the existing automatic approval rejection of
+external destination/payload trust. Preserve local commits and use only reviewed
+targeted private-host synchronization; do not retry or route around the denial.
+
+
+[Known-answer example recovery](findings/known-problem-1a-128-v1/README.md)
+returns **3/19 additional correct exact known answers**, versus zero for the
+control, with zero wrong acceptances. The three outputs pass 279 independent
+checks and seven public checks. A 3,288-entry static eligible parser census
+recovers five formerly empty example sets and changes no existing nonempty set.
+This is separate from paraphrase recognition and the informal 16-case result.
+The recovered original index has 3,353 entries; 65 present protected aliases
+are removed by a 66-key closure, leaving 3,288 eligible entries. Exact indexed
+identity resolves all eligible entries, but historical source-bound approvals
+cover only **2,456/3,288 (74.70%)**. The remaining 832 are 685 missing-test,
+100 exact-path, 26 failed-reference and 21 unusable-evidence exclusions. Current
+runtime hashes differ from the historical approval catalog, so no approval
+refresh or release promotion is claimed. The report names concrete remaining
+public-contract, independent-evidence and fresh matching-qualification work.
+
+
+[Fresh matched fit comparison](findings/typed-semantic-fresh-fit-128-v1/README.md)
+after the fleet-owned 27B stop returned raw/structural **3/10**, literal **4/10**,
+combined recipe/literal **5/10**, and nearest-training-graph **5/10** correct.
+Every arm had zero wrong acceptances and infrastructure failures; no harmful
+corrections occurred. All ten raw predictions exactly match the historical
+checkpoint captures. The combined candidate p95 is **3.241 seconds**, failing
+the unchanged two-second gate. Correctness progress and latency qualification
+remain separate. The 0.8B/2B contributors remained running; no uncontended or
+causal timing claim is made. The one run used four threads, 5.218 GB peak RSS
+and 56.599 seconds, with no new training or post-score tuning.
