@@ -1,0 +1,134 @@
+{
+  "schema": "algsolve.goal-readiness.suby.v1",
+  "base_commit": "bccbf685e9daf770db51cc739af8e62509bb185d",
+  "host": "suby",
+  "user": "clocksmith",
+  "scope": "Read-only readiness audit; no new solver run or qualification",
+  "contract_sha256": {
+    "contracts/known_lookup_release_v2.json": "43aa642bb0a9090dd387a7da3b0c57f20e458f0bbb4cb9eda1c08639b478f18d",
+    "contracts/description_oneshot_v1.json": "8eb9f5cc072158a773da3771915d731141c935254abdd88829ef9fac6e69968e",
+    "contracts/recognition_qualification_v1.json": "3dc82e30cccb5c9a78bfc3157f3db99d4b8ccff35593b11e4a61b48c340a04cd",
+    "contracts/typed_composer_development_v1.json": "5fbace6d025047ae654eab27e9054f44429e423ea19fcde9cebfe87e2fa6e1dc",
+    "contracts/typed_composer_comparison_v1.json": "2d0aa99c7624ddd587a2130c02c7e1f19415adafa9c5857c995dd2716fb7b8e9",
+    "contracts/typed_confirmation_v1.json": "756cc54f2cf4e761f480a151bc98c25f01e70dd9ac3a82e960669f7d43081e3d"
+  },
+  "local_assets": {
+    "data/derived/corpus_entries.jsonl": "missing",
+    "data/derived/corpus_embedding_keys.json": "missing",
+    "data/derived/corpus_embeddings.npy": "missing",
+    "data/derived/problems.jsonl": "missing",
+    "data/derived/reference_validation.jsonl": "missing",
+    "data/derived/near_duplicates.json": "missing",
+    "data/derived/tests": "missing",
+    "runs/known-lookup-library-v2/approved-library.json": "missing",
+    "findings/known-lookup-release-v2/approved-library.json": "present",
+    "contracts/natural_description_dev_v1.json": "present",
+    "findings/natural-description-dev-v1/recognition.jsonl": "present",
+    "runs/typed-student-v2/model.pt": "missing",
+    "runs/typed-real-dev-v5/pairs.jsonl": "missing"
+  },
+  "recognition_original_file_hashes": {
+    "data/derived/corpus_entries.jsonl": "be05215a94bbe15083ffea79cc42c88fa8fad16a0793df15775089829f9b3be4",
+    "data/derived/corpus_embedding_keys.json": "45bcc81e58f30e6907b69a20eef27b184c05b1894b1222264ba3ba5a22c7bc54",
+    "data/derived/corpus_embeddings.npy": "fc45c1e544ae27365c1d96bb6a732b514d3a325e3802f94fcdb3efe1b076655c",
+    "runs/known-lookup-library-v2/approved-library.json": "104cae9f9bdd1a3993d772d3b7e05de5ad89637ce27a69da115ddadd6cd8ccd8"
+  },
+  "embedding": {
+    "configured_directory": "/home/x/.local/share/doppler/capsule-baselines/20260906/source-checkpoints/qwen-embedding-source-97b0c614",
+    "configured_directory_present": false,
+    "required_sha256": {
+      "model.safetensors": "0437e45c94563b09e13cb7a64478fc406947a93cb34a7e05870fc8dcd48e23fd",
+      "tokenizer.json": "def76fb086971c7867b829c23a26261e38d9d74e02139253b38aeb9df8b4b50a"
+    },
+    "model_downloaded_or_loaded": false,
+    "searched_provisioning_roots": [
+      "/home/clocksmith/.cache",
+      "/home/clocksmith/.local/share",
+      "/home/clocksmith/deco/doppler"
+    ],
+    "converted_model_directory": "/home/clocksmith/deco/doppler/models/local/qwen-3-embedding-0-6b-q4k-ehf16-af32",
+    "converted_directory_files": [
+      "tokenizer.json",
+      "manifest.json"
+    ],
+    "converted_required_shards": 9,
+    "converted_shards_present": 0,
+    "usable_frozen_encoder_found": false,
+    "limit": "This is a check of configured/relevant provisioned locations, not a claim to have inventoried every filesystem path; the converted format would also require a separately authorized experiment."
+  },
+  "composition_original_hashes": {
+    "model.pt": "25f9ca2ff223f5ae930f9511be21445efaa6dde49a697eccd5c648bdb918617c",
+    "pairs.jsonl": "566d6b440d7fdd16bac0b86114b5e8dd35ba8bd646b6bd304f8cfbc5e201330e"
+  },
+  "goals": {
+    "1a": {
+      "target": "Qualified stored answers for known complete statements and paraphrases; no runtime source generation",
+      "existing_gate": {
+        "eligible_exact_paths": 3288,
+        "minimum_known_correct": 18,
+        "known_queries": 20,
+        "maximum_wrong_acceptances": 0,
+        "maximum_accepted_unqualified": 0,
+        "absent_rejected": 4,
+        "absent_queries": 4
+      },
+      "existing_evidence": "Historical v2: 13/20 correct known, zero wrong/unqualified accepted, 4/4 absent rejected; gate failed. All 3288 old exact paths completed, 2456 approved answers and 832 abstentions.",
+      "current_candidate": "Changed serving sources are not requalified; no new numerical result",
+      "next_user_facing_measurement": "After source-bound asset restoration and isolation qualification, rerun exact answer paths; encoder not needed for exact matches. Then evaluate candidate comparison on permitted paraphrase development data with the hash-verified encoder.",
+      "minimum_owner_action": "Provide the recognition development bundle from an accessible backup or provisioned local path and an approved isolated-judge session; provide original encoder for paraphrase work. No 128 connection is required if a backup exists.",
+      "confirmation_eligibility": "Not eligible. Freeze a development-qualified candidate and a fresh independently authored/reviewed set before any later confirmation; old v1/v2 openings remain development only."
+    },
+    "1b": {
+      "target": "Same recognition engine; one initial description, one stored answer or abstention, zero questions",
+      "existing_gate": "Correct requirement-equivalent identity, approved stored source, initially supplied public checks, query-owned independent scoring after the decision, abstention on unresolved requirements, zero questions; freeze before reserved descriptions. No numeric final coverage/completion threshold is declared in description_oneshot_v1.json.",
+      "existing_evidence": "Authored development baseline: target first on 10/16 specified descriptions, top five on 16/16, zero accepted answers. Historical assisted dialogue is not one-shot evidence.",
+      "minimum_owner_action": "Same restored recognition bundle, verified encoder and approved judge as 1a. Before any future confirmation, agree a numeric first-attempt correctness/coverage criterion without changing existing zero-question, identity or safety requirements.",
+      "next_user_facing_measurement": "Measure returned, independently correct stored answers and wrong acceptances on permitted initial-description development requests. Requests without sufficient initially supplied public checking must still abstain.",
+      "confirmation_eligibility": "Not eligible; original 12 complete and four ambiguous reserved cases remain unopened."
+    },
+    "2a": {
+      "target": "Autonomous typed graph composition for familiar problems; no hand steering or autoregressive source generation at request time",
+      "existing_evidence": "Historical fixed checkpoint: 4/10 fit correct, 0/8 audit correct; no current matched comparison or qualified candidate.",
+      "next_development_gate": {
+        "minimum_additional_audit_correct": 1,
+        "maximum_harmful_corrections": 0,
+        "maximum_wrong_acceptances": 0,
+        "validity_must_not_decrease": true,
+        "abstentions_must_not_increase": true,
+        "fit_successes_preserved": true,
+        "maximum_complete_p95_seconds": 2.0,
+        "maximum_p95_increase_seconds": 0.25,
+        "maximum_infrastructure_failures": 0
+      },
+      "minimum_owner_action": "Provide the original model.pt and qualified pairs.jsonl plus corresponding non-protected development test files and the hash-verified encoder; provide an approved isolated-judge session.",
+      "next_user_facing_measurement": "Run the original matched raw/constrained/nearest-fit-graph DEVELOPMENT comparison once prerequisites pass, retaining every prediction, verdict and end-to-end cost. This selects only the correction, not goal completion.",
+      "confirmation_eligibility": "Not eligible. Required unguided and retrieval-guided search baselines, explicit corrected-route addendum and complete candidate seal remain open. The historical fixed reservation stays 66 entries; no protected scoring this turn.",
+      "final_completion_definition": "Existing composition contract requires joint correctness/coverage/latency reporting; it does not define a universal known-problem success percentage. Do not convert a development pass into 100% completion."
+    },
+    "2b": {
+      "target": "Autonomous adaptation to freshly authored semantic variants; familiar bases may be allowed, changed requirements and answers unseen",
+      "existing_gate": "Development-qualified frozen composer plus a separately sealed semantic-variant cohort/evaluator; first-attempt correctness and full latency; no tuning after opening. Preserve the broader 66-problem reservation separately. A numeric final nearby-variant pass threshold is not declared.",
+      "existing_evidence": "No nearby-variant student result or eligible frozen candidate. Historical teacher qualification is not student solving evidence.",
+      "minimum_owner_action": "First unblock 2a development. Before later independent scoring, authorize a separate reviewed variant contract and numeric success criterion, then seal it with the qualified composer and an approved judge.",
+      "next_user_facing_measurement": "Only after the required freeze, score fresh semantic variants once; this turn explicitly does not open them.",
+      "confirmation_eligibility": "Not eligible; do not author/open protected variants as an implementation shortcut."
+    }
+  },
+  "common_minimum_unblock": "Owner supplies original permitted development assets from an accessible backup/local path and a platform-approved execution session that supports the existing bubblewrap isolation. Do not change host policies or remove inherited restrictions within this task.",
+  "why_no_more_code_only_work": "No statements/stored code/corpus vectors or compatible encoder are available for recognition; no original checkpoint/corpus/tests are available for the matched composition run; isolated execution is unqualified. More fixture tests cannot establish accepted correct answers or close these gates.",
+  "conditional_new_experiment_proposal": {
+    "name": "typed-student-suby-development-v1",
+    "status": "PROPOSED ONLY; not authorized or initiated",
+    "when_relevant": "Only if originals cannot be recovered and owner explicitly chooses a new experiment; it never replaces or reproduces the old checkpoint/corpus identity.",
+    "scope": "Freshly identified 24 development graph rows across the same already-examined development families only, 15 fit/9 audit rows, independently qualified development oracles, existing frozen IR, one fixed predictor configuration; retain all rejects. No protected data or autonomous learning loop.",
+    "resources": "Existing Python/torch/transformers dependencies; owner-provisioned hash-verified Qwen encoder; approved isolated judge; CPU with four threads, one 400-step training configuration (width 64, two layers, seed 17) in a new run directory. No GPU, dependency downloads or sweep. Freeze exact data and runtime/compute limits before launch.",
+    "prerequisite_limit": "This proposal still needs provisioned encoder, qualified new development statements/oracles, isolated judge and explicit approval. It cannot progress in the present restricted context.",
+    "claim_limit": "New development result only; no old-run reproduction, goal completion or protected generalization claim."
+  },
+  "new_tests_or_model_runs": false,
+  "protected_evaluation_opened": false,
+  "network_or_sandbox_retried": false,
+  "host_security_changed": false,
+  "new_completion_percentages": null,
+  "candidate_eligible_for_confirmation": false
+}

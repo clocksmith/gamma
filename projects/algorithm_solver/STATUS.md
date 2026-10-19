@@ -3,7 +3,7 @@
 Gamma owns the research solver, internally `algorithm_solver`; 256.one owns its
 editor/interface. This descriptive title is not a separate product-name decision.
 
-Updated 2026-10-18. Two main goals, each with two subgoals. Each subgoal
+Updated 2026-10-19. Two main goals, each with two subgoals. Each subgoal
 summary is 50 words, excluding its title. Composition remains unproven.
 [Experiment history and reproduction details](HISTORY.md) preserve the prior handoff.
 
@@ -239,6 +239,41 @@ checkpoint/corpus matched composition run and its search-baseline obligations
 remain blocked as above. Do not replace missing originals, reopen protected
 cases, or treat this software validation as permission to freeze a composer.
 Component intent is preserved; authority and lane boundaries are unchanged.
+
+## Goal completion gates and local prerequisites, 2026-10-19
+
+A read-only audit at `bccbf685e` found no permitted local experiment that can
+currently demonstrate another accepted correct answer. The historical approval
+manifest and authored description development receipts are retained, but the
+serving corpus, stored-code inputs, vectors, source tests and original composition
+assets are absent. The configured Qwen encoder directory is absent too. The local
+Doppler embedding directory contains only a tokenizer and manifest: **zero of
+nine weight shards are present**. It is not a provisioned substitute encoder.
+[Readiness receipt](findings/goal-readiness-suby/summary.json) binds the governing
+contracts, exact missing paths, original hashes and the minimum unblock per goal.
+
+| Goal | Existing gate and result | Next measurable step and minimum prerequisite |
+|---|---|---|
+| 1a | At least 18/20 correct known answers; zero wrong/unqualified acceptances; 4/4 absent rejections. Historical v2 reached 13/20 and failed. | Restore the permitted source/index/test bundle and approved isolated judge; requalify actual exact answer paths. Exact lookup needs no encoder load. Paraphrase development additionally needs the frozen Qwen encoder. |
+| 1b | Correct identity plus qualified executed stored code, one initial description, zero questions and abstention on unresolved requirements. No numeric final coverage threshold is declared. | Same assets and judge as 1a; measure first-attempt returned-correct development answers. Before future confirmation, agree a numeric coverage/correctness criterion while preserving the existing evidence and zero-question rules. |
+| 2a | The next gate requires at least one additional correct audit answer, zero harm/wrong acceptance/infrastructure failure, preserved fit successes, and the declared latency bounds. It is a development-selection gate, not goal completion. | Restore original checkpoint/pairs, corresponding development test files and Qwen encoder; qualify isolation; run the matched development comparison. Historical search baselines and a complete seal remain required afterward. |
+| 2b | Separately sealed fresh semantic variants with unseen changed answers; first-attempt correctness and complete latency; no post-opening tuning. The existing 66-problem reservation stays separate. No numeric final variant threshold is declared. | First qualify a composer through 2a development, then agree and seal the separate variant criterion/cohort before a later authorized opening. No variants are opened in this turn. |
+
+The smallest common user action is to provision those original permitted assets
+from an accessible backup or local source and provide an approved suby execution
+session supporting the existing isolated judge. That does not require contacting
+128 if a backup exists. No child-side code change can remove inherited platform
+restrictions, and no such bypass or host-security change is authorized.
+
+If original composition assets cannot be recovered, the receipt proposes—but does
+not initiate—a separately named `typed-student-suby-development-v1`: newly
+identified/qualified development data, existing IR, four CPU threads and one fixed
+400-step training configuration. It requires explicit owner approval, provisioned
+encoder and an approved judge. It cannot be called the original experiment or
+replace its assets. No new numerical qualification, tests, downloads or model
+runs occurred in this audit. No candidate is eligible for confirmation yet.
+Further code-only fixture work would not close any of these evidence gaps;
+there is no supported completion percentage to report.
 
 ## Evidence and operating boundaries
 
