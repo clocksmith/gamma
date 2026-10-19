@@ -43,6 +43,44 @@ _EXAMPLE_RE = re.compile(
 )
 
 
+
+def _example_literal(text: str, start: int, *, whole_input: bool = False) -> tuple[str, int]:
+    """Read a whole bracketed output without altering quoted data.
+
+    Statement layout can split lists/matrices across lines and use non-breaking
+    indentation. Neither newlines nor layout whitespace inside a string are
+    rewritten. The restricted values parser remains the sole data authority.
+    """
+    start += len(text[start:]) - len(text[start:].lstrip())
+    quote, escaped, depth = None, False, 0
+    out = []
+    end = start
+    for end in range(start, len(text)):
+        char = text[end]
+        if quote:
+            out.append(char)
+            if escaped:
+                escaped = False
+            elif char == "\\":
+                escaped = True
+            elif char == quote:
+                quote = None
+            continue
+        if char == "\n" and not whole_input:
+            if depth <= 0 or re.match(r"[ \t\xa0]*(?:Input|Output|Example|Explanation|Constraints)\b",
+                                      text[end + 1:]):
+                return ''.join(out), end
+        if char in ("'", '"'):
+            quote = char
+        elif char in '[({':
+            depth += 1
+        elif char in '])}':
+            depth -= 1
+        # HTML layout whitespace is harmless only outside quoted literals.
+        out.append(' ' if char == '\xa0' else char)
+    return ''.join(out), len(text)
+
+
 def statement_examples(statement: str, params: list[tuple[str, str]], ret_annotation: str) -> tuple[list[dict], int]:
     tests = []
     matches = list(_EXAMPLE_RE.finditer(statement))
@@ -57,8 +95,10 @@ def statement_examples(statement: str, params: list[tuple[str, str]], ret_annota
         # Preserve whitespace/escapes inside quoted values; never unescape the
         # whole statement or collapse runs of spaces in string arguments.
         raw_in = re.sub(r"\\r(?=\r?\n|$)", "", match.group("input")).strip()
-        raw_out = re.sub(r"\\r(?=\r?\n|$)", "", match.group("output")).strip()
+        raw_out, _ = _example_literal(statement, match.start("output"))
+        raw_out = re.sub(r"\\r(?=\r?\n|$)", "", raw_out).strip()
         try:
+            raw_in, _ = _example_literal(raw_in, 0, whole_input=True)
             args, kwargs = values.parse_call_arguments(raw_in)
             ordered = values.order_arguments(params, args, kwargs)
             ordered = [values.wrap_for_annotation(v, ann) for v, (_, ann) in zip(ordered, params)]

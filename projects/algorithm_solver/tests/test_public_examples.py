@@ -26,6 +26,35 @@ class PublicExampleTests(unittest.TestCase):
         self.assertEqual(tests[0]['args'], ['a\rb'])
         self.assertEqual(tests[0]['expected'], 'a\rb')
 
+    def test_multiline_nested_output_preserves_quoted_whitespace_and_labels(self):
+        source = ('Input: grid = [["a"],\n\xa0 ["b"]]\nOutput: \n'
+                  '[["a\xa0 b", "Input: data"],\n\xa0 ["\\\"quoted\\\"", "two  spaces"]]\n'
+                  'Explanation: this is not data.\n')
+        tests, dropped = importers.statement_examples(source, [('grid', 'List[List[str]]')], 'List[List[str]]')
+        self.assertEqual(dropped, 0)
+        self.assertEqual(tests[0]['args'], [[["a"], ["b"]]])
+        self.assertEqual(tests[0]['expected'], [['a\xa0 b', 'Input: data'], ['"quoted"', 'two  spaces']])
+
+    def test_separate_input_lines_are_not_silently_discarded(self):
+        source = 'Input: ["Store", "get"]\n[[1], [2]]\nOutput: [null, 2]\n'
+        tests, dropped = importers.statement_examples(source, [('ops', 'List[str]')], 'List[int]')
+        self.assertEqual(tests, [])
+        self.assertEqual(dropped, 1)
+        # Expressions may legitimately span lines before a comma: preserve all
+        # input syntax and let the restricted parser decide, not the scanner.
+        source = 'Input: a = [1]\n, b = [2]\nOutput: 3\n'
+        tests, dropped = importers.statement_examples(source, [('a', 'List[int]'), ('b', 'List[int]')], 'int')
+        self.assertEqual(dropped, 0)
+        self.assertEqual(tests[0]['args'], [[1], [2]])
+
+    def test_multiline_incomplete_or_executable_output_is_rejected(self):
+        for output in ('[1,\n2', '[1,\n__import__("os")]'):
+            with self.subTest(output=output):
+                source = 'Input: n = 1\nOutput: ' + output + '\nExample 2:\nInput: n = 2\nOutput: [2]\n'
+                tests, dropped = importers.statement_examples(source, [('n', 'int')], 'List[int]')
+                self.assertEqual(dropped, 1)
+                self.assertEqual(tests, [{'args': [2], 'expected': [2], 'compare': 'return'}])
+
     def test_recovery_uses_only_explicit_examples_and_refuses_partial_parse(self):
         problem = Problem(uid='user:1', source='user', source_id='1', title='P', slug='',
                           statement='Input: n = 1\nOutput: true\n', io_mode='functional',
