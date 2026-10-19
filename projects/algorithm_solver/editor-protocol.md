@@ -1,12 +1,19 @@
 # Solver mode boundary
 
 The 256.one editor connects explicitly to Gamma’s loopback-only research bridge.
-Binary ASCII and JavaScript Huffman are input encodings. Retrieval is a separate
+Seven-bit ASCII and eight-bit Python/JavaScript are input encodings. Retrieval is a separate
 problem-solving mode: the user supplies a problem and examples, inspects a
 candidate and explicitly chooses whether to insert it. A retrieval score must
 never silently insert or execute code as the user types.
 
 ## Current interface
+
+For the bounded 1a path, use [qualified lookup](qualified-lookup.md). Its
+`--approved-library` option binds approved references to independent evidence,
+serving code, index and thresholds. Exact statement/interface requests skip the
+encoder; unresolved identities and unsupported references abstain. The linked
+report states whether the independent recognition release gate passed. The
+research interfaces and historical GPU figures below are separate evidence.
 
 From `projects/algorithm_solver`, on the provisioned Linux judge host:
 

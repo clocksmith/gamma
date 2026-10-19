@@ -1,6 +1,8 @@
 # Algorithm solver lane
 
 Current goals, evidence gaps and next actions: [STATUS.md](STATUS.md).
+For source-bound known answers and explicit editor insertion, see
+[qualified lookup usage](qualified-lookup.md) and its linked release decision.
 The [experiment history](HISTORY.md) preserves prior checkpoints. The original
 comparison below remains a baseline, not the definition of the current goals.
 
@@ -65,27 +67,17 @@ Fetched and derived data stay under `data/` (gitignored); run outputs under
 
 ## Natural-description recognition
 
-Goal 1b has a separate [natural-description development diagnostic](findings/natural-description-dev-v1/README.md).
-It sends only authored query text to the unchanged recognizer, scores identity
-and required clarification separately, and never reads protected composition
-targets or executes returned code. It is not a new answer route or a qualified
-natural-language interface.
+Goal 1b is [one-shot recognition](contracts/description_oneshot_v1.json): one
+natural description, one answer or abstention, zero questions. It shares 1a's
+embedding retrieval, candidate comparison and qualified stored-answer path.
+Ambiguity that changes the answer requires abstention, not invented constraints.
+Neither track requires source generation or composition.
 
-A separate [assisted clarification prototype](findings/clarification-dialogues-dev-v1/README.md)
-compares curated requirements across candidates and their known siblings. It asks
-about distinctions such as adjacency, trade limits and output, then requires the
-user to confirm the complete stored statement. A selected identity is not a
-tested solution. This CLI does not change the existing browser bridge or lookup
-thresholds:
-
-```sh
-python -m algsolve.clarify 'Help me pick houses with the most money without choosing neighbors.' --device cpu --receipt /tmp/house-selection.json
-```
-
-Use the provisioned environment and existing corpus/embedding files. Reply with
-an option number or `q`; unknown requirements and rejected statements abstain.
-Receipts are never overwritten. Goal 1b still needs independent human testing
-and genuinely absent algorithm cases; current dialogue results use scripted replies.
+The [original diagnostic](findings/natural-description-dev-v1/README.md) and
+[assisted-dialogue prototype](findings/clarification-dialogues-dev-v1/README.md)
+remain historical development evidence. Scripted clarification results do not
+qualify the current one-shot goal. The reserved description subset remains
+unopened pending candidate and evaluator freeze.
 
 ## Learned composition target (current direction)
 

@@ -1,4 +1,7 @@
-# Algorithm solver: status and handoff
+# Gamma: Algorithm Recognition & Composition
+
+Gamma owns the research solver, internally `algorithm_solver`; 256.one owns its
+editor/interface. This descriptive title is not a separate product-name decision.
 
 Updated 2026-10-18. Two main goals, each with two subgoals. Each subgoal
 summary is 50 words, excluding its title. Composition remains unproven.
@@ -8,11 +11,11 @@ summary is 50 words, excluding its title. Composition remains unproven.
 
 ### 1a. Recognize known problem statements
 
-Recognize indexed problems from complete statements and paraphrases, returning stored code without generation. Prior evidence: 144/150 returned answers passed available independent tests; identity remains separately qualified. The full inventory now accounts for 815 evidence gaps. Next, finish 3,288 eligible exact-query journeys and independently evaluate frozen paraphrases and sibling distinctions separately.
+Recognize indexed problems from complete statements and paraphrases, returning qualified stored code without generation. All 3,288 eligible exact paths passed: 2,456 answers and 832 exclusions. Independent recognition failed: seven of twenty known queries answered correctly, with zero wrong acceptances. Next, repair candidate comparison and evaluate a freshly frozen replacement independently.
 
 ### 1b. Understand natural problem descriptions
 
-Map informal descriptions to intended requirements and ask consequential clarifying questions. Existing scripted development selections are not independent answer evidence. Forty fresh agent-authored queries across recognition and description tracks are independently reviewed and sealed. Next, freeze complete candidate routes, evaluate description-to-answer correctness, and report questions, abstentions, wrong acceptances, and latency.
+Recognize indexed problems from one natural description using the same retrieval and candidate comparison engine as 1a. Return justified stored code or abstain, with zero clarification questions. Missing distinctions must not become invented constraints. Next, evaluate complete and ambiguous descriptions independently; report first-attempt correctness, wrong acceptances, coverage, and complete latency.
 
 ## 2. Learn to compose executable solutions
 
@@ -29,9 +32,14 @@ Generalize to unfamiliar combinations of learned operations, state, bindings, an
 Goal **1b** accepts natural-language descriptions and identifies the intended
 indexed problem and its requirements. Distinguish a requirement-equivalent match
 from a nearby candidate, an underspecified request and an absent problem. Similarity
-alone does not establish identity. Ask for missing requirements; a twist that
+alone does not establish identity. Abstain when missing requirements change the answer; a twist that
 requires adapting code belongs to composition, not an exact-match claim. Goal
 **1a** retains complete statements and controlled paraphrases as its input scope.
+Both use the same lookup engine, without generation or composition. Goal 1b is
+strictly one description, one decision, zero follow-up or confirmation questions.
+The earlier assisted-dialogue results remain historical development experiments.
+The [one-shot contract](contracts/description_oneshot_v1.json) supersedes the
+clarification provisions of the original recognition protocol for future 1b work.
 
 The user-facing composition objective spans **2a**, then **2b**: use only `0` and
 `1` to select and connect composable functions, data-structure operations, state,
@@ -49,19 +57,20 @@ encoding savings alone do not establish composition or human-effort gains.
 
 | Subgoal | Evidence and gap |
 |---|---|
-| 1a | [Known-answer results](findings/corpus-answer-gpu-v2/) and [identity limitations](HISTORY.md#current-known-answer-qualification). Passing retrieved-problem tests does not establish the intended problem was matched. |
+| 1a | [Source qualification and failed independent release gate](findings/known-lookup-release-v1/README.md). Exact-path success does not establish paraphrase recognition. |
 | 1b | [Baseline](findings/natural-description-dev-v1/README.md): correct identity first on 10/16 specified requests, top five on 16/16; no accepted matches. [Assisted dialogue prototype](findings/clarification-dialogues-dev-v1/README.md): 20/20 scripted selections, eight abstentions, 0–3 distinction questions plus confirmation. Curated contracts and scripted confirmations are not automatic recognition or independent qualification; genuine absence and human journey time remain unmeasured. |
 | 2a | [Typed student receipt](findings/typed-student-v2/summary.json): all eight audit predictions failed structural validation. [Development corpus](findings/typed-real-dev-v5/summary.json) is the permitted debugging source. |
 | 2b | [Frozen reservation](contracts/typed_confirmation_v1.json) and [teacher qualification](findings/typed-confirmation-qualified-v1/summary.json). Protected student scoring has not run. |
 
-Current recognition qualification: [frozen protocol](contracts/recognition_qualification_v1.json),
-[full-library inventory and active answer audit](findings/library-answer-audit-v2/README.md),
-and [sealed independent query set](findings/recognition-independent-v1/README.md).
-The 815 historical gaps are accounted for, not all repaired: 685 lack independent
-tests, 109 have tests needing current qualification, 19 have unusable in-place
-evidence, and two are protected exclusions. All 3,353 entries are inventoried;
-65 protected aliases are excluded from execution. The 40-query set is agent-authored
-and agent-reviewed, not human evidence. Do not open it before candidate freeze.
+Current recognition qualification: [complete source audit](findings/library-answer-audit-v3/README.md)
+and [failed v1 recognition release](findings/known-lookup-release-v1/README.md).
+The source audit accounts for all 815 historical gaps; unsupported entries are
+excluded, not promoted. All 3,288 eligible requests passed the gated exact-path
+check: 2,456 approved answers, 832 abstentions. Recognition v1 answered 7/20 known
+queries correctly, with zero wrong acceptances and 4/4 absent rejections. The
+frozen 18/20 gate failed. That opened set is now debugging evidence. A fresh
+agent-authored/reviewed replacement is being prepared independently. The original
+16 description cases remain sealed, with the new zero-question 1b contract.
 
 Preserve working lookup. Keep its all-corpus index out of composition training,
 mining and evaluation. Use development evidence to repair graph prediction;
