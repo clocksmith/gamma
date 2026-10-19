@@ -1,0 +1,74 @@
+{
+  "schema": "algsolve.requirements-paired-development-contract.v1",
+  "name": "recognition-requirements-dev-suby-v1",
+  "purpose": "Measure useful stored-answer recognition coverage from a contradiction-only requirement filter against the unchanged reconstruction control.",
+  "cohort": {
+    "control_candidate_sha256": "64f10768b5004782cf8549215357d8d08ee2be8cd74b8b6198fe8c7ced83a33e",
+    "index_entries": 66,
+    "requests": 24,
+    "specified": 16,
+    "no_example_pre_retrieval_controls": 8,
+    "source_approved": 16,
+    "fixture_changes": false,
+    "source_or_profile_changes": false
+  },
+  "policy": {
+    "opt_in_only": true,
+    "query_authority": "statement text only; no expected key, source text, starter, signature or independent output enters query parsing",
+    "source_authority": "unchanged curated profile facts bound by exact indexed statement SHA256; no ID-specific policy branches",
+    "facets": [
+      "ordering",
+      "indexing",
+      "layout",
+      "transactions",
+      "fee",
+      "cooldown",
+      "output",
+      "updates",
+      "duplicates",
+      "changes"
+    ],
+    "query_parser": "Existing explicit grammar, with additional conservative negation, uncertainty, alternative and quoted-context suppression; unrecognized paraphrases remain unknown. Conflicting retained facts abstain. No inferred defaults.",
+    "ordering_direction": "An arbitrary-order source supports sorted input, so sorted query versus arbitrary source alone is not a contradiction. An unsorted query contradicts a sorted-only source precondition.",
+    "selection": "Apply unchanged public-interface filter, then contradiction-only source-contract exclusion. Leave unknown and unapproved sources visible; preserve all raw identities, order, scores and cosine. Apply existing score/general/sibling gates to remaining candidates. Check source approval, then exactly one public execution; failure abstains. Exact and no-example routes unchanged.",
+    "implementation": "Opt-in lookup adapter; existing answer.py and execution code unchanged. Candidate repeats the deterministic interface filter inside answer(); measured overhead retained.",
+    "thresholds": "Existing frozen statement score/general-margin and sibling-margin values unchanged. No score boost, candidate expansion, model fitting or threshold fitting."
+  },
+  "freeze": "After deterministic synthetic development tests pass, freeze implementation, tests, contracts, dependencies, check receipt, all control contents/mtimes, payloads, source approval, fixture and vector identities in candidate.json before comparative inference or judge execution.",
+  "accounting": {
+    "source_vectors": "Reuse the original 66 vectors without remeasurement; disclose cached index setup.",
+    "queries": "One freshly measured query embedding and raw retrieval per eligible retained request, shared identically by both arms. Save the vector and full raw list. No-example controls have no embedding.",
+    "arms": "Alternate arm order by fixed request index. Measure each arm including opt-in filtering, approval, adaptation and public execution while replaying shared inputs. Charge the measured shared embedding/retrieval time to each arm; disclose this charge and avoid calling replay time fresh inference.",
+    "complete_cost": "Report actual paired wall (including first load, guards and receipt I/O), process and child CPU, sampled process-tree RSS and disk. Separately report encoder load/hash verification, warm charged route phases and post-decision scoring. Cached stages retain original measured times; completed resume performs no inference/judging. No exclusive-host performance claim.",
+    "budgets": "Each arm receives the original route/judge budget with measured shared retrieval subtracted from remaining route time."
+  },
+  "evidence": "Save complete raw and pre/post-interface/requirement shortlists, all identities and qualification reasons, query facts/spans/suppressions/conflicts, source facts/hashes, contradictions, first choices, gates/margins, public errors and abstentions. Preserve local code-bearing responses and test payloads, never publish them. Seal all 48 public decisions before independent scoring.",
+  "reporting_selection_rule": {
+    "primary": "All 24 requests retained, with specified16 and pre-retrieval8 reported separately. Correct requires returned code, intended identity, unchanged source approval and passing permitted independent source suite. Report correct/wrong/unqualified acceptances, abstentions and infrastructure errors for both arms.",
+    "useful": "Candidate correct and control not correct on the same retained request.",
+    "harmful": "Loss of a control-correct answer, or newly introduced wrong/unqualified acceptance or infrastructure failure.",
+    "retain_as_development_candidate": "At least one useful change, no harmful changes, no candidate wrong/unqualified acceptances or infrastructure failures, both arms within original per-request budgets and resource envelope, and no unexplained control disposition drift from the original pilot. This selects a development candidate only; it does not change a release gate or set final 1b coverage.",
+    "negative_result": "Complete and retain the experiment even if selection fails; do not tune this frozen candidate on its results.",
+    "release": "No release promotion or fresh confirmation from these consumed requests. Existing release gates remain unchanged."
+  },
+  "limits": {
+    "cpu_threads": 4,
+    "aggregate_rss_bytes": 8589934592,
+    "asset_control_and_new_run_disk_bytes": 5368709120,
+    "first_run_wall_seconds": 900,
+    "downloads": false,
+    "training": false,
+    "protected_evaluation": false,
+    "new_resources_or_framework": false
+  },
+  "failures_resume": "Atomic hash-bound immutable stage receipts. Source/input/dependency/receipt drift rejects resume. Preserve failures locally. sandbox_error represents infrastructure failure; no unsandboxed fallback or host-security changes.",
+  "limitations": [
+    "Consumed development requests and curated profiles; no new holdout, generalization, semantic equivalence or learned-solving evidence.",
+    "Same LCD shortlist and newly public-example-augmented fixtures as the reconstruction pilot; no historical full-catalog reproduction claim.",
+    "Finite imported source tests are not independently authored query tests or benchmark acceptance.",
+    "Eight controls lack public examples and stop before retrieval; no semantic ambiguity/absence claim.",
+    "Unknown and missing requirements remain unknown; this conservative grammar can lose coverage.",
+    "Three below-floor matches cannot be fixed by contradiction exclusion; island unprofiled/unapproved candidates may still lead.",
+    "Original composer/checkpoint/corpus identities and protected evaluations remain untouched."
+  ]
+}

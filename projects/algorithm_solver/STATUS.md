@@ -365,6 +365,32 @@ all input hashes, evidence fields, budgets, remaining gaps and next actions.
 No further model run starts in this diagnostic turn; the completed control remains
 immutable, and the eight no-example controls remain pre-retrieval evidence only.
 
+## Matched requirement-filter development result, 2026-10-19
+
+[Completed comparison and frozen candidate](findings/recognition-requirements-dev-suby-v1/README.md):
+**11/16 correct specified answers versus 7/16 control**, four useful changes, no
+lost control successes, zero wrong/unqualified acceptances and zero infrastructure
+errors. The same 66 entries, 24 inputs, source vectors and 16-source approval
+manifest were used; all eight no-example controls remain pre-retrieval evidence.
+The unchanged control reproduced its original dispositions, candidate orders and
+scores. Candidate `11e940fdca16abb0b968bd2459ff60285ed442f77e6c6a1bede9502296f69cfa`
+was sealed after 50 focused tests and 39 subtests, before inference or judging.
+
+The opt-in contradiction policy passes its frozen development-retention rule;
+it does not promote default lookup or pass a release/fresh-confirmation gate.
+Specified charged route p50/p95 was 0.635/0.991 seconds control and 0.638/1.018
+seconds candidate, including shared measured query retrieval charged to both.
+The 20.94-second comparison stayed inside four CPU threads, 8 GiB RSS and 5 GiB
+disk. Completed resume preserved 149 new and 208 original file contents/mtimes.
+
+Five specified abstentions remain: conservative parsing drops the one-trade fact
+in an alternative clause; three correct tops remain below the fixed score floor;
+and the island request still has unresolved unknown/unapproved competitors.
+Keep those failures. This bounded experiment is complete; any next parser,
+representation or source-contract candidate must be separately declared and
+sealed before more inference. Original composition assets remain unavailable,
+protected evaluation remains unopened, and no training or download occurred.
+
 ## Evidence and operating boundaries
 
 | Subgoal | Evidence and gap |
