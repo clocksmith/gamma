@@ -173,13 +173,13 @@ class TypedComparisonTests(unittest.TestCase):
         self.assertFalse(unchanged['structurally_valid'])
         self.assertEqual(unchanged['decision'],'abstain')
         self.assertTrue(fixed['structurally_valid'])
-        self.assertEqual(fixed['decision'],'answered',fixed)
-        self.assertEqual(wrong['decision'],'answered',wrong)
+        self.assertEqual(fixed['decision'],'answered',fixed['public'])
+        self.assertEqual(wrong['decision'],'answered',wrong['public'])
         independent = [{'args':[n],'expected':n} for n in (-4,0,42)]
         fixed_score = score_fixed(fixed,self.problem,independent)
         wrong_score = score_fixed(wrong,self.problem,independent)
-        self.assertTrue(fixed_score['accepted_correct'],fixed_score)
-        self.assertTrue(wrong_score['wrong_acceptance'],wrong_score)
+        self.assertTrue(fixed_score['accepted_correct'],fixed_score['independent'])
+        self.assertTrue(wrong_score['wrong_acceptance'],wrong_score['independent'])
         self.assertFalse(wrong_score['accepted_correct'])
 
     def test_outcomes_and_gate_require_correctness_gain(self):
