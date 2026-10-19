@@ -29,6 +29,15 @@ def _size(value: Any) -> int:
 
 
 def evaluate(node: ast.AST) -> Any:
+    try:
+        return _evaluate(node)
+    except Unsupported:
+        raise
+    except (TypeError, ValueError, ArithmeticError) as error:
+        raise Unsupported(f"invalid data expression: {type(error).__name__}") from None
+
+
+def _evaluate(node: ast.AST) -> Any:
     if isinstance(node, ast.Constant):
         if isinstance(node.value, (int, float, str, bool)) or node.value is None:
             return node.value

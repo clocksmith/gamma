@@ -170,12 +170,13 @@ Remaining gaps and next actions:
 - SSH to both configured aliases and the supplied 128 LAN address fails at
   local socket creation (`Operation not permitted`), before any handshake.
   This establishes neither remote identity nor that 128 is offline.
-- Mac's configured host-key alias is `xys-macbook-air.tail995236.ts.net`.
-  Its stored ED25519 fingerprint is
-  `SHA256:CvRB17NZ4kZcZFmCYQV75lz7f/q8b24KqCJOzlYO/cU`;
-  the owner supplied `SHA256:ZcBGtPahvQYV20efuvV+sFPOGC9Zrht+xVgAlNAXuIc`.
-  Stop access until trusted out-of-band verification resolves that conflict.
-  No trust file or authorization script was changed or executed.
+- The owner independently reverified Mac's live ED25519 fingerprint as
+  `SHA256:CvRB17NZ4kZcZFmCYQV75lz7f/q8b24KqCJOzlYO/cU`, matching the
+  already-stored key, and reports strict suby-to-Mac SSH succeeded outside this
+  restricted task. This supersedes the earlier `ZcBG...` inventory value;
+  the fingerprint discrepancy is resolved. No trust rewrite is needed.
+  This task did not retry SSH or execute the authorization script, and its local
+  socket restriction remains distinct from the owner's successful connection.
 - The current bubblewrap probe fails before payload execution at
   `Failed to create NETLINK_ROUTE socket: Operation not permitted`.
   The enclosing Codex process already inherits one seccomp filter,
@@ -197,6 +198,47 @@ Remaining gaps and next actions:
   and requalify the changed runtime on permitted development assets before any
   fresh independent evaluation. No sealed description cases were opened;
   Goal 1b still permits one initial request and zero questions.
+
+## Further permitted software development, 2026-10-19
+
+Continued from the clean, owner-synchronized merge `960c485ac` without accessing
+128 or retrying denied network/sandbox operations. The recognition boundary now
+refuses malformed public-example subsets: unmatched explicit `Input` blocks are
+counted as dropped, and conversion/arithmetic failures in the restricted value
+parser become `Unsupported` data rather than uncaught host exceptions. A valid
+example followed by an unfinished or invalid example now produces one-shot
+abstention before lookup or judging. The parser still executes only its existing
+whitelist; no new expression forms, questions, thresholds or acceptance rules
+were added. Existing corpus bytes and qualification receipts remain untouched.
+
+A separate composition scoring defect was reproduced with a synthetic callback:
+mutating one route's expected value changed subsequent routes' expectations from
+3 to 4 to 5. The scorer now owns a detached test snapshot, passes each route its
+own copy and verifies its test hash again before publishing a verdict. Mutation
+fails closed before that receipt is written; prior receipts survive and normal
+resumption uses the same sealed tests. This preserves the matched-evidence
+boundary without changing the frozen vocabulary or original asset identities.
+
+Validation: **56 tests and 26 subtests passed in 0.43 seconds**, one real-sandbox
+comparison test deliberately deselected. All five touched Python files compiled
+and all changed modules imported. These synthetic fixtures and mocked verdicts
+are software checks only, not isolated-execution evidence, recognition accuracy
+or learned solving improvement. The earlier blocked judge campaign remains open.
+[Source-bound software receipt](findings/development-software-boundaries-suby/summary.json)
+records the exact command, source hashes, reproductions and remaining gates.
+
+```sh
+PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=projects/algorithm_solver:projects/algorithm_solver/tests .venv/bin/python -m pytest -q -p no:cacheprovider projects/algorithm_solver/tests/test_public_examples.py tests/test_algorithm_solver_lane.py projects/algorithm_solver/tests/test_interface_compatibility.py projects/algorithm_solver/tests/test_approved_library.py projects/algorithm_solver/tests/test_typed_scoring.py projects/algorithm_solver/tests/test_typed_comparison.py -k 'not test_real_sandbox_distinguishes_invalid_repaired_and_valid_wrong'
+```
+
+Next measurable recognition work requires the original development catalog,
+corpus embeddings and source-bound approval inputs, followed by an approved
+isolated judge and requalification of the changed serving runtime. Until those
+inputs are available, no catalog-level accuracy claim is supported. The original
+checkpoint/corpus matched composition run and its search-baseline obligations
+remain blocked as above. Do not replace missing originals, reopen protected
+cases, or treat this software validation as permission to freeze a composer.
+Component intent is preserved; authority and lane boundaries are unchanged.
 
 ## Evidence and operating boundaries
 

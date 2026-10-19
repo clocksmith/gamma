@@ -1,0 +1,84 @@
+{
+  "schema": "algsolve.development-software-boundaries.v1",
+  "host": "suby",
+  "base_commit": "960c485acc186c46726eb281939b2bd674708f0e",
+  "scope": "Synthetic development-only software checks; no model inference, isolated candidate execution or solver qualification",
+  "changed_files_sha256": {
+    "algsolve/importers.py": "34093fcf80752572b704fd6e2c3c81c80b0ff08ae8d03f874ebe9c079863cf9d",
+    "algsolve/values.py": "af1d8844d031989c293532ef0a7d008bb17114d433f50457fb7f573945d80af6",
+    "algsolve/synth/typed_scoring.py": "bf34ac73e36a28098c478632503f327078c2101c070cae4316083295057aff97",
+    "tests/test_public_examples.py": "52ce2ae1cd92712b06435bdfbb4c2a032a85b4b1ee7b28e3841655e8c0fda336",
+    "tests/test_typed_scoring.py": "a1f703c5cd3a3670746a3ec665e78229be42956f41f5e6a1cb8401f4c3eb8070"
+  },
+  "checks": {
+    "command": "PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=projects/algorithm_solver:projects/algorithm_solver/tests .venv/bin/python -m pytest -q -p no:cacheprovider projects/algorithm_solver/tests/test_public_examples.py tests/test_algorithm_solver_lane.py projects/algorithm_solver/tests/test_interface_compatibility.py projects/algorithm_solver/tests/test_approved_library.py projects/algorithm_solver/tests/test_typed_scoring.py projects/algorithm_solver/tests/test_typed_comparison.py -k 'not test_real_sandbox_distinguishes_invalid_repaired_and_valid_wrong'",
+    "exit_code": 0,
+    "passed": 56,
+    "subtests_passed": 26,
+    "deselected": 1,
+    "elapsed_seconds": 0.43,
+    "compilation": "All five touched Python files compiled to /tmp; changed modules imported",
+    "diff_check": "passed",
+    "temporary_snapshot": "16 tests and 16 subtests passed before application"
+  },
+  "reproductions_before_fix": {
+    "invalid_conversions": {
+      "float([1])": "TypeError",
+      "float(\"not-a-number\")": "ValueError",
+      "float(1000000**64)": "OverflowError"
+    },
+    "incomplete_public_examples": {
+      "input": "Input: n = 1\nOutput: true\nInput: n = 2\n",
+      "parsed_tests": 1,
+      "dropped": 0,
+      "recovered_subset": true
+    },
+    "mutable_scoring_tests": {
+      "route_order": [
+        "raw",
+        "constrained",
+        "nearest_training_graph"
+      ],
+      "expectations_seen": [
+        3,
+        4,
+        5
+      ],
+      "fixture": "Mock scorer increments the shared expected field; no untrusted program or model executes"
+    }
+  },
+  "behavior_after_fix": [
+    "Restricted conversion/arithmetic failures become Unsupported, leaving recognition to abstain before lookup",
+    "Unmatched explicit Input blocks count as dropped, preventing partial automatic public-example recovery",
+    "Each scoring callback receives a detached copy of the sealed test authority; post-callback mutation rejects publication",
+    "Previously committed route receipts survive a rejected callback and normal scoring resumes on original tests"
+  ],
+  "preserved": [
+    "Frozen thresholds and acceptance rules",
+    "Existing catalog/corpus and raw results",
+    "One-shot zero-question 1b behavior",
+    "Protected evaluation data",
+    "Original composition checkpoint/corpus identities and vocabulary",
+    "Isolation contract and host security policy"
+  ],
+  "owner_update": {
+    "pushed_merge": "960c485ac",
+    "mac_live_fingerprint": "SHA256:CvRB17NZ4kZcZFmCYQV75lz7f/q8b24KqCJOzlYO/cU",
+    "verification": "Owner independently verified live server and reports strict SSH succeeded outside this restricted task",
+    "supersedes": "Earlier ZcBG inventory value; no trust rewrite needed",
+    "local_ssh_retried": false
+  },
+  "remaining_gates": [
+    "Original recognition development catalog/embeddings/approval inputs absent locally",
+    "Changed source-bound serving runtime requires requalification before new claims",
+    "Original composition checkpoint and qualified corpus absent",
+    "Existing isolated judge remains unqualified; no network/sandbox retry in this work",
+    "Historical search baselines and full frozen selection gates still required before protected composition scoring"
+  ],
+  "protected_opened": false,
+  "matched_composition_started": false,
+  "autonomous_loop_started": false,
+  "new_accuracy_or_learned_solving_result": false,
+  "host_policy_changed": false,
+  "next_step": "Supply original permitted development inputs and an approved isolated judge; preserve all originals and existing protected gates"
+}

@@ -44,8 +44,15 @@ _EXAMPLE_RE = re.compile(
 
 
 def statement_examples(statement: str, params: list[tuple[str, str]], ret_annotation: str) -> tuple[list[dict], int]:
-    tests, dropped = [], 0
-    for match in _EXAMPLE_RE.finditer(statement):
+    tests = []
+    matches = list(_EXAMPLE_RE.finditer(statement))
+    # A trailing/incomplete explicit Input block has no regex match. Count it
+    # as dropped so recovery cannot approve only the other examples. Labels
+    # inside a captured literal are already part of that example, not new ones.
+    labels = re.finditer(r"(?m)^[ \t]*(?P<label>Input)(?=:|[ \t]|$)", statement)
+    dropped = sum(not any(match.start() <= label.start('label') < match.end()
+                          for match in matches) for label in labels)
+    for match in matches:
         # Some upstream statements have a literal backslash-r at line endings.
         # Preserve whitespace/escapes inside quoted values; never unescape the
         # whole statement or collapse runs of spaces in string arguments.

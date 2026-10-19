@@ -140,4 +140,34 @@ class FrozenScoringTests(unittest.TestCase):
         self.assertEqual(self.calls,[])
 
 
+
+    def test_scorer_cannot_mutate_test_authority_or_publish_its_verdict(self):
+        def mutate(pair, decision, tests):
+            tests[0]['expected'] = 999
+            return self.scorer(pair, decision, tests)
+        with self.assertRaisesRegex(ValueError, 'changed the frozen tests'):
+            self.run_scoring(mutate, loader=lambda pair: self.tests)
+        self.assertEqual(self.tests, [{'args': [3], 'expected': 3}])
+        self.assertEqual(list((self.root/'scoring').glob('0000-*.json')), [])
+
+    def test_later_route_mutation_preserves_prior_receipt_and_resumes_same_tests(self):
+        def mutate_second(pair, decision, tests):
+            if decision['route'] == 'constrained':
+                tests[0]['args'].append(999)
+            return self.scorer(pair, decision, tests)
+        with self.assertRaisesRegex(ValueError, 'changed the frozen tests'):
+            self.run_scoring(mutate_second)
+        raw = self.root/'scoring/0000-raw.json'
+        original = raw.read_bytes()
+        self.assertFalse((self.root/'scoring/0000-constrained.json').exists())
+        observed = []
+        def unchanged(pair, decision, tests):
+            observed.append(copy.deepcopy(tests))
+            return self.scorer(pair, decision, tests)
+        self.assertEqual(len(self.run_scoring(unchanged)), 2)
+        self.assertEqual(observed, [self.tests] * 5)
+        self.assertEqual(raw.read_bytes(), original)
+        self.assertEqual(self.calls.count(('fixture:0', 'raw')), 1)
+
+
 if __name__=='__main__': unittest.main()
