@@ -372,3 +372,50 @@ No search-bound or acceptance change followed scoring. The prior 8/10 capture,
 7/10 fresh matched result and 3.023-second p95 remain intact. Sealed phase inspection
 attributes 97.17% of summed warm route time to query embedding, versus 28 ms total
 predictor execution across ten queries; no new timing run or causal load claim.
+
+## Existing GPU path and next predictor experiment
+
+[Existing GPU reuse](findings/typed-gpu-reuse-fit-128-v2/README.md) returns
+**8/10 correct at 0.296-second p95** for frozen guard repair, versus 4/10 raw and
+9/10 nearest fit graph, with zero wrong acceptances/infrastructure failures. This
+clears the development timing gate on consumed fit inputs only. Six raw code
+records differ from CPU, so numerical equivalence is not claimed; all ten GPU
+captures repeat exactly across the resource-rejected combined attempt and the
+successful GPU-only follow-up. The complete CPU capture arm is hash-reused with
+its measured costs (4/10 guard, 4.470-second p95), not a query-cache speed claim.
+Original checkpoint/corpus/encoder identities remain exact; no new training,
+model, dependency or protected access occurred. Rejected allocation evidence is
+preserved separately. Defaults remain unchanged.
+
+The remaining lcd:1101/1489 failures are semantic, and further public repair
+variants are stopped. A [concrete matched literal-loss proposal](findings/typed-literal-objective-proposal-128-v1/README.md)
+requires explicit owner approval for two 400-step arms. Tokenizer-only preflight
+found full inputs up to 1,660 tokens; compact JSON still 1,189 and fails 1,024. The exact
+proposal uses shared 2,048-token full-text CPU float32 encoding, no truncation,
+unchanged codec and one balanced-literal objective versus the existing loss.
+No embeddings or training ran for that proposal. This is a new experiment,
+not the older rebuilt-corpus run and not historical reproduction.
+
+## Fresh usable catalog on 128
+
+The [fresh known-answer catalog](findings/known-catalog-refresh-128-v1/README.md)
+now approves **2,481 / 3,288 eligible entries**, including all 25 recovered paths,
+with no lost historical approvals. Approved references passed **241,062 independent
+tests**. Full final serving verification returned 2,481 answers and 807 abstentions,
+with zero failures and no embedding model load. The optional manifest policy and
+runtime identity gate bind current source, interpreter, stdlib and sandbox tools;
+fresh v2 verdicts remain linked through a documented loader-only v4 rebind.
+Historical verdicts were not reused as approvals. Runtime identity was first
+captured during v2, explicitly not represented as a pre-run freeze.
+
+The remaining 807 are 685 missing independent tests, 75 public answer-path gaps,
+26 runtime failures and 21 unusable evidence cases. The 685 have no matching tested
+source in the local corpus. Nine named-output unordered declarations are the next
+coherent supported public-contract candidate, not nine promised recoveries.
+Sorted Containers 2.4.0 is only a proposed version for 15 dependency cases;
+judge-visible packaging needs explicit authority. No install occurred.
+
+The separate recognition release remains 13/20 known against an 18/20 gate.
+Catalog qualification does not promote the unqualified one-shot matcher.
+See the [completion plan for all four goals](findings/completion-plan-128-v1/README.md)
+for remaining evidence and exact training-approval boundaries.

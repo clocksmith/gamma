@@ -55,7 +55,8 @@ def answer(context: Context, query: Problem, *, reranker=None, rerank_thresholds
     # Only query inputs and public examples cross the route boundary.
     query = replace(query, hidden_tests_path='', reference_solutions=[], import_notes={})
     query = recover(query)
-    if public_output_contracts:
+    catalog_policy = getattr(approved_library, 'manifest', {}).get('answer_policy', {})
+    if public_output_contracts or catalog_policy.get('public_output_contracts', False):
         from .public_contracts import bind
         query = bind(query)
     result = {'decision': 'abstain', 'code': None, 'source': None,

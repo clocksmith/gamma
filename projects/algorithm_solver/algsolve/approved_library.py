@@ -38,7 +38,7 @@ def entry_hash(entry):
     return digest(asdict(entry))
 
 
-def build(entries, inventory, results, *, evidence, runtime_files=None):
+def build(entries, inventory, results, *, evidence, runtime_files=None, answer_policy=None, runtime_environment=None):
     from .library_audit import independent_status
     by_key = {e.key: e for e in entries}
     inv = {r['key']: r for r in inventory}
@@ -87,7 +87,18 @@ def build(entries, inventory, results, *, evidence, runtime_files=None):
             'evidence': evidence, 'approved': approved, 'excluded': excluded,
             'counts': {'inventory': len(inv), 'approved': len(approved), 'excluded': len(excluded),
                        'exclusion_reasons': dict(Counter(excluded.values()))}}
+    if answer_policy is not None:
+        _validate_answer_policy(answer_policy)
+        body['answer_policy'] = answer_policy
+    if runtime_environment is not None:
+        body['runtime_environment'] = runtime_environment
     return dict(body, sha256=digest(body))
+
+
+def _validate_answer_policy(policy):
+    if (not isinstance(policy, dict) or set(policy) != {'public_output_contracts'}
+            or type(policy['public_output_contracts']) is not bool):
+        raise ValueError('Unsupported approved answer policy')
 
 
 class ApprovedLibrary:
@@ -97,6 +108,8 @@ class ApprovedLibrary:
             raise ValueError('Invalid approved-library manifest')
         if set(manifest['approved']) & set(manifest['excluded']):
             raise ValueError('An entry cannot be both approved and excluded')
+        if 'answer_policy' in manifest:
+            _validate_answer_policy(manifest['answer_policy'])
         self.manifest = manifest
 
     @classmethod
@@ -117,6 +130,9 @@ class ApprovedLibrary:
                 'scope': 'stored reference on its original problem; query identity checked separately'}
 
     def verify_runtime(self, root):
+        if 'runtime_environment' in self.manifest:
+            from .qualification_environment import verify
+            verify(self.manifest['runtime_environment'])
         files = self.manifest.get('runtime_files_sha256', {})
         if not files:
             raise ValueError('Approval catalog has no serving-runtime binding')
