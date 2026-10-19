@@ -35,6 +35,20 @@ def training_view(pairs):
     return fit,requests,[indices[p['uid']] for p in fit],groups
 
 
+def full_input_tokens(tokenizer, inputs, maximum):
+    """Reject silent truncation before encoder allocation or training."""
+    rows = [{'kind': kind, 'identity': key,
+             'tokens': len(tokenizer(text, truncation=False)['input_ids'])}
+            for kind, key, text in inputs]
+    oversized = [r for r in rows if r['tokens'] > maximum]
+    if oversized:
+        counts = {kind: sum(r['kind'] == kind for r in oversized)
+                  for kind in sorted({r['kind'] for r in rows})}
+        raise ValueError(f'Full encoder inputs exceed {maximum} tokens: {counts}; '
+                         'no truncation, embeddings or training permitted')
+    return rows
+
+
 def freeze():
     import importlib.metadata,sys
     from ..rebuild_download import FILES,verify
@@ -44,6 +58,15 @@ def freeze():
     proposal=load(PROPOSAL)
     if sha(DATA/'pairs.jsonl')!=proposal['corpus_sha256']:raise ValueError('Proposed corpus changed')
     fit,requests,indices,groups=training_view(pairs);encoding=PredictionCodec.fit(fit)
+    payloads={n:verify(ASSET/n,s) for n,s in FILES.items()}
+    from transformers import AutoTokenizer
+    from ..embed import MAX_TOKENS
+    from .train_typed import query_text,INSTRUCTION
+    tokenizer=AutoTokenizer.from_pretrained(ASSET/'encoder',local_files_only=True)
+    inputs=[('fit_graph',typed_codec.digest(p['target']),
+             typed_codec.digest(p['target'])+' '+json.dumps(p['target']['program'],sort_keys=True)) for p in fit]
+    inputs += [('query',p['uid'],INSTRUCTION+query_text(p)) for p in requests]
+    token_counts=full_input_tokens(tokenizer,inputs,MAX_TOKENS)
     contract={'schema':'algsolve.typed-lcd-suby-training.v1','name':NAME,
         'proposal_sha256':sha(PROPOSAL),'dataset_sha256':sha(DATA/'pairs.jsonl'),
         'qualification_sha256':sha(DATA/'summary.json'),'codec_sha256':identity,
@@ -54,7 +77,7 @@ def freeze():
         'alternative_loss':'minimum supervised loss over qualified fit graphs for each problem',
         'checkpoint_selection':'fixed step400 only; no audit scoring, sweep or adaptive retries',
         'sources_sha256':{str(p.relative_to(LANE_ROOT)):sha(p) for p in (LANE_ROOT/'algsolve').rglob('*.py')},
-        'payloads':{n:verify(ASSET/n,s) for n,s in FILES.items()},
+        'payloads':payloads,'full_input_token_counts':token_counts,'input_truncation':False,
         'dependencies':{n:importlib.metadata.version(n) for n in ('torch','transformers','numpy')},'python':sys.executable,
         'protected_scoring':False,'historical_reproduction':False,'nearby_variants_loaded':False,
         'limits':proposal['limits']}

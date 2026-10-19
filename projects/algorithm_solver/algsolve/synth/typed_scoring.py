@@ -13,7 +13,7 @@ import os
 from pathlib import Path
 import tempfile
 
-from . import typed_codec
+from . import mine, typed_codec
 
 
 def sha(path):
@@ -97,6 +97,8 @@ def _score_locked(output, requests, candidate, routes, load_tests, score_result)
         if any(sha(output/name) != digest for name,digest in frozen.items()):
             raise ValueError('Frozen evidence changed during scoring')
 
+    # Qualification stores independent-test hashes with mine.digest, not the
+    # compact graph serialization used for candidate and receipt identities.
     rows = []
     for i,(pair,decision) in enumerate(zip(requests,decisions)):
         tests = None
@@ -115,12 +117,12 @@ def _score_locked(output, requests, candidate, routes, load_tests, score_result)
             else:
                 if tests is None:
                     tests = copy.deepcopy(load_tests(copy.deepcopy(pair)))
-                    if not tests or typed_codec.digest(tests) != binding['independent_tests_sha256']:
+                    if not tests or mine.digest(tests) != binding['independent_tests_sha256']:
                         raise ValueError('Independent development scoring authority changed')
                 check_frozen()
                 scoring_tests = copy.deepcopy(tests)
                 result = score_result(copy.deepcopy(pair), copy.deepcopy(decision['routes'][route]), scoring_tests)
-                if typed_codec.digest(scoring_tests) != binding['independent_tests_sha256']:
+                if mine.digest(scoring_tests) != binding['independent_tests_sha256']:
                     raise ValueError('Independent scoring changed the frozen tests')
                 check_frozen()
                 receipt = {'binding':binding, 'result':result}

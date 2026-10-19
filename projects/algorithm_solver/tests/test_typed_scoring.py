@@ -7,7 +7,7 @@ import tempfile
 import unittest
 from unittest.mock import patch
 
-from algsolve.synth import typed_codec
+from algsolve.synth import mine, typed_codec
 from algsolve.synth.typed_scoring import score_frozen, write_bytes_once, write_json_once
 
 
@@ -20,7 +20,7 @@ class FrozenScoringTests(unittest.TestCase):
         self.candidate = {'schema':'fixture','version':1}
         self.tests = [{'args':[3],'expected':3}]
         self.requests = [{'uid':f'fixture:{i}','learning_split':split,
-                          'provenance':{'independent_tests_sha256':typed_codec.digest(self.tests)}}
+                          'provenance':{'independent_tests_sha256':mine.digest(self.tests)}}
                          for i,split in enumerate(['development_fit','development_audit'])]
         self.decisions = [{'uid':p['uid'],'split':p['learning_split'],
                            'routes':{r:{'route':r,'decision':'abstain','reason':'fixture_invalid',
@@ -47,6 +47,21 @@ class FrozenScoringTests(unittest.TestCase):
     def run_scoring(self,scorer=None,loader=None):
         return score_frozen(self.root,self.requests,self.candidate,self.routes,
                             loader or self.loader,scorer or self.scorer)
+
+    def test_qualification_test_hash_is_distinct_from_graph_hash(self):
+        # Pair qualification uses sorted JSON with ordinary separators. Graphs
+        # and receipt objects use a different, compact serialization.
+        import hashlib
+        expected = hashlib.sha256(b'[{"args": [3], "expected": 3}]').hexdigest()
+        self.assertEqual(self.requests[0]['provenance']['independent_tests_sha256'], expected)
+        self.assertNotEqual(expected, typed_codec.digest(self.tests))
+        self.assertEqual(len(self.run_scoring()), 2)
+
+    def test_graph_hash_cannot_replace_qualified_test_authority(self):
+        self.requests[0]['provenance']['independent_tests_sha256'] = typed_codec.digest(self.tests)
+        with self.assertRaisesRegex(ValueError, 'scoring authority'):
+            self.run_scoring()
+        self.assertEqual(self.calls, [])
 
     def test_interruption_retains_each_route_and_resumes_only_missing(self):
         def interrupt(pair,decision,tests):
