@@ -21,7 +21,19 @@ Evaluating and transferring capabilities across compact language models, transla
 3. **Reproducible Distillation**: Distillation pipelines produce verifiable student weights, layer patterns, and quantization receipts that pass reference test oracles.
 4. **Fail-Closed Gate Promotion**: Candidate models, evaluation metrics, or heuristic estimators fail closed at promotion boundaries if required baseline evidence or compute probes fail.
 
-5. **Human Composition Vocabulary**: Alongside autonomous algorithm solving, develop reusable composition input that lets people solve problems and write code with fewer complete inputs, less time to correctness and fewer corrections. Compare against ASCII, JavaScript and Python; count connections, bindings, constants and navigation. Human-guided success never qualifies autonomous goals 2a/2b, and current labels/recipes are not presumed optimal.
+5. **Language-specific Semantic Macro Vocabulary**: Build consistently normalized,
+independently tested JavaScript and Python solution corpora. Develop at most 256
+reusable, parameterized macros per language that compose complete programs for
+as many LeetCode problems as supported by evidence. Goals 1a/1b recognize problems
+independently of language and retrieve a value with one or more separately tested
+implementations; the consumer chooses the language. Goals 2a/2b autonomously
+compose familiar and nearby-variant solutions with language-specific macros. People use the same semantic macros through binary
+input, counting bindings, constants, control/escape tokens, navigation and
+corrections. Graph IR is optional, not the objective. Language codebooks may
+differ. Measure representational coverage, autonomous solving and human effort
+separately. A whole solution can occupy one of the 256 entries and form a valid
+one-macro program; unbounded answer lookup and human steering remain separate
+from autonomous macro selection. No vocabulary is presumed optimal.
 
 ## Operating Loops
 
