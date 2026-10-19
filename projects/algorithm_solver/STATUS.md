@@ -49,6 +49,22 @@ new training, new download, protected scoring, public push or deployment is part
 of this campaign. Coverage, autonomous macro selection and measured human effort
 remain three distinct outcomes.
 
+## Reviewed bilingual development corpus:94 unique problems
+
+The [v4 catalog](findings/js-corpus-b01-b02-integration-128-v1/catalog.json) preserves
+all60 predecessor rows and adds34 reviewed B01/B02 pairs:94 problems,188
+implementations,8,545 matched existing independent cases per language.31 pass the
+unchanged helper;9/23/30 pass separate exact-integer, nested-node-decoding and
+outer-index-order contracts. All original failed receipts remain intact.
+
+[Review and limits](findings/js-corpus-b01-b02-integration-128-v1/README.md) include
+107 public differential calls,45 additional semantic calls,9 software-control
+groups and both-language transport controls. Six new full-set failures remain
+excluded:1/17/33/39/45/50. Their359 valid existing cases pass both languages;
+151 other cases are retained in quarantine. This is development source coverage,
+not new autonomous solving, fresh holdout evidence or formal correctness.
+Production recognition and all protected reservations remain unchanged.
+
 ## Successor bilingual development corpus:60 unique problems
 
 The [v3 catalog](findings/js-corpus-subset-domain-128-v1/catalog.json) preserves all58
