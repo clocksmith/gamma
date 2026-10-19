@@ -1,6 +1,7 @@
 # Known lookup v1: release gate failed
 
 The source library and exact serving path qualify within the stated bounds.
+The [fresh v2 follow-up](../known-lookup-release-v2/README.md) also failed its unchanged recognition gate.
 The independent recognition candidate does **not** qualify for release.
 
 | Evidence | Result |

@@ -1,7 +1,9 @@
 # Known-problem lookup with approved references
 
-Use [the qualification report](findings/known-lookup-release-v1/README.md) for the
-current release decision, library coverage and recognition results. A source
+Use [the qualification report](findings/known-lookup-release-v2/README.md) for the
+current release decision, library coverage and recognition results. Recognition
+qualification failed; these instructions expose the bounded source-approved
+service and do not claim a qualified paraphrase release. A source
 approval catalog is not, by itself, a passed recognition release gate.
 
 Gamma owns lookup and its Linux checking sandbox. The optional editor is
@@ -17,7 +19,7 @@ dependencies and Linux sandbox installed:
 
 ```sh
 ../../.venv_rocm/bin/python -m algsolve.editor_bridge \
-  --approved-library findings/known-lookup-release-v1/approved-library.json
+  --approved-library findings/known-lookup-release-v2/approved-library.json
 ```
 
 If the browser runs on another computer, forward the bridge's loopback port:
@@ -36,7 +38,7 @@ For a JSON request using the [existing Problem format](editor-protocol.md):
 
 ```sh
 ../../.venv_rocm/bin/python -m algsolve.answer query.json --index corpus \
-  --approved-library findings/known-lookup-release-v1/approved-library.json
+  --approved-library findings/known-lookup-release-v2/approved-library.json
 ```
 
 There is no generated fallback in this mode. It requires the exact library
