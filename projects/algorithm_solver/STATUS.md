@@ -348,6 +348,23 @@ claim fresh confirmation, lower acceptance gates or start composer training.
 The historical 3,353-entry reproduction and original matched composition run
 remain unavailable; protected evaluation remains unopened.
 
+## Recognition abstention diagnosis, 2026-10-19
+
+[Trace diagnosis and exact candidate proposal](findings/recognition-abstentions-dev-suby-v1/README.md)
+separate five unused-explicit-requirement cases, three below-floor representation
+failures and the island ranking/qualification case. The four confidence failures
+are three score-floor failures plus one margin failure. No inference, judge run,
+threshold change or new accuracy result occurred in this diagnosis.
+
+The proposed contradiction-only filter uses existing text-only query facts and
+exact-hash-bound source metadata; unknowns and unapproved entries stay visible.
+It preserves the same 66 entries/24 requests, scores, thresholds and 16-source
+approval manifest. Implement and deterministically check the opt-in policy, then
+seal a new candidate before a matched instrumented run. The linked proposal records
+all input hashes, evidence fields, budgets, remaining gaps and next actions.
+No further model run starts in this diagnostic turn; the completed control remains
+immutable, and the eight no-example controls remain pre-retrieval evidence only.
+
 ## Evidence and operating boundaries
 
 | Subgoal | Evidence and gap |
