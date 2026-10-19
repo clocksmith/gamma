@@ -91,6 +91,22 @@ class TypedComparisonTests(unittest.TestCase):
         self.assertEqual(one['attempts'],two['attempts'])
         self.assertTrue(any(a['validation_failure'] for a in one['attempts']))
 
+    def test_opt_in_interior_empty_slot_can_be_repaired_without_changing_control(self):
+        raw, logits = capture(self.encoding, graph())
+        sequence = next(i for i, v in enumerate(raw['op']) if OPS[v] == 'sequence')
+        corrupt(raw, logits, 'op', sequence, OPS.index('EMPTY'))
+        original = copy.deepcopy(raw)
+        control = correct(self.encoding, raw, logits, ['x'], self.config)
+        candidate = correct(self.encoding, raw, logits, ['x'],
+                            {**self.config, 'include_interior_empty': True})
+        self.assertIsNone(control['graph'])
+        self.assertEqual(candidate['reason'], 'schema_repaired')
+        self.assertEqual(candidate['interior_empty_slots'], [sequence])
+        self.assertEqual(candidate['edits'][0]['slot'], sequence)
+        self.assertEqual(raw, original)
+        self.assertEqual(typed_program.execute(candidate['graph'], {'x': 13}), 13)
+        self.assertEqual(candidate['final_codes']['bits'], raw['bits'])
+
     def test_bounds_reject_without_substitution(self):
         raw,logits = capture(self.encoding,graph())
         corrupt(raw,logits,'first',0,1)
