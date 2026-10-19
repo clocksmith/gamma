@@ -299,3 +299,50 @@ the unchanged two-second gate. Correctness progress and latency qualification
 remain separate. The 0.8B/2B contributors remained running; no uncontended or
 causal timing claim is made. The one run used four threads, 5.218 GB peak RSS
 and 56.599 seconds, with no new training or post-score tuning.
+
+
+## Explicit output contracts and static guard repair
+
+[Known-answer public-order handling](findings/known-public-order-1a-128-v1/README.md)
+now returns **21/100** historical exact-path exclusions correctly against **3/100**
+control: **18 additional answers**, zero wrong acceptances and zero losses.
+The new answers pass 1,538 independent checks and 38 public checks. An opt-in
+binder recognizes a narrow explicit free-order output requirement and uses the
+existing outer-list multiset comparator, preserving duplicates, types and inner
+order. Explicit stricter contracts and direct ordering contradictions take
+priority. Review found a contradiction-parser gap; the separately frozen v2
+fix retained all 200 decisions and source hashes. The first candidate is preserved.
+
+The full population is 3,353 historical index entries, 65 present protected
+aliases excluded and **3,288 eligible** entries. The unchanged historical catalog
+has **2,456 approvals**. Its 832 exclusions comprise 685 missing-test entries,
+100 public execution/contract gaps, 15 unsupported SortedList dependency failures,
+10 memory failures, one missing datetime import, 19 in-place None-only evidence
+sets and two unusable independent sets. Twenty-one development paths now succeed,
+leaving **811 without fresh successful paths**. This does not create 2,477 current
+approvals: runtime rebinding and fresh matching qualification remain outstanding.
+
+[Static numeric-guard proposal filtering](findings/typed-guard-fit-128-v1/README.md)
+improves consumed-fit capture replay **7/10 to8/10**, against structural control
+4/10, with zero wrong acceptances, lost correct answers or infrastructure failures.
+It derives conservative integer lower bounds, skips proposals with unreachable
+nonempty branches and leaves unknown bounds eligible. Accepted controls remain
+unchanged. The repaired candy-discount graph is reached on the fourth public
+execution after skipping four dead-guard proposals; the pool/edit/execution/time
+limits are unchanged. This is an opt-in heuristic, not a new validity rule.
+The prior fresh 5/10 losses at lcd:1051 and lcd:1046 are separately attributable
+to embedding exceeding two seconds before repair. Remaining semantic failures
+are lcd:1101 and lcd:1489. No training or protected evaluation was performed.
+
+
+[Fresh static-filter comparison](findings/typed-guard-fresh-fit-128-v1/README.md)
+returned **7/10** correct for the guard candidate versus **6/10** matched semantic
+control, **5/10** literal-only, **4/10** structural control and **6/10** nearest
+training graph, with zero wrong acceptances or harmful corrections. All ten raw
+predictions match the original checkpoint captures. Candidate p95 remains
+**3.023 seconds**, failing the unchanged two-second gate. Prior fresh 5/10 and
+capture-only 7/10 records remain intact; the new capture-only result is8/10.
+The current fresh timing loss is lcd:1710; lcd:1101/lcd:1489 remain semantic
+failures. No current-run improvement is attributed solely to host load.
+The bounded run took60.018seconds atfourthreads and5.190GBpeakRSS. Public decisions
+were sealed before independent scoring; no training or protected scoring occurred.
