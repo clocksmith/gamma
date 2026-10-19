@@ -311,6 +311,43 @@ opening is authorized by this result. No model accuracy or learned-solving resul
 exists, and no candidate is eligible for confirmation. Continue the declared
 development gates only after the missing inputs pass their original hash checks.
 
+## Approved recognition reconstruction completed, 2026-10-19
+
+The recognition asset blocker is resolved for a **new bounded LCD-only development
+pilot**, not for reproduction of the historical complete service. The owner
+approved only the pinned encoder and LCD training file: 1,296,663,981 bytes were
+downloaded and hash-verified. Protected identity/family/recorded-alias exclusions
+were applied before indexing or qualification; historical files and thresholds
+were not changed. The frozen 83-key development shortlist yielded 66 available
+permitted entries, including all 16 requested targets.
+
+[Reconstruction finding](findings/recognition-rebuild-dev-suby-v1/README.md) and
+[aggregate receipt](findings/recognition-rebuild-dev-suby-v1/summary.json): all
+16 stored target references passed 39 public cases, 1,418 imported independent
+cases and their actual exact-answer paths. The one-shot description pilot
+returned **7/16 specified answers correctly**, zero wrong or unqualified answers,
+and nine abstentions. All 24 requests remain in the denominator; four ambiguous
+and four out-of-domain controls abstained at the missing-public-example gate.
+Those eight results are not evidence of semantic ambiguity or absence detection.
+No questions were asked. Fixtures add target-source public examples to the old
+authored descriptions; no oracle signature or target identity enters the route.
+This is not matched improvement over the old description-only baseline.
+
+Specified warm route p50/p95 was **0.777/0.937 seconds**. The pilot completed in
+240.05 seconds wall time, with 3.98 GB observed peak aggregate RSS and 1.30 GB
+monitored disk, within the approved four-thread / 8 GiB RAM / 5 GiB disk envelope.
+Completed-run resumption preserved 208 artifact contents and mtimes without new
+inference or judging. Raw source data, weights, test payloads and code-bearing
+responses stay local and ignored. Only aggregate evidence and runner code are
+committed; the license discrepancy and source attribution are retained.
+
+Next meaningful development work is a separately sealed requirement-aware
+candidate comparison against this fixed control, preserving the nine abstentions
+and recording matched costs. Do not tune or overwrite this completed candidate,
+claim fresh confirmation, lower acceptance gates or start composer training.
+The historical 3,353-entry reproduction and original matched composition run
+remain unavailable; protected evaluation remains unopened.
+
 ## Evidence and operating boundaries
 
 | Subgoal | Evidence and gap |
