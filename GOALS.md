@@ -21,6 +21,8 @@ Evaluating and transferring capabilities across compact language models, transla
 3. **Reproducible Distillation**: Distillation pipelines produce verifiable student weights, layer patterns, and quantization receipts that pass reference test oracles.
 4. **Fail-Closed Gate Promotion**: Candidate models, evaluation metrics, or heuristic estimators fail closed at promotion boundaries if required baseline evidence or compute probes fail.
 
+5. **Human Composition Vocabulary**: Alongside autonomous algorithm solving, develop reusable composition input that lets people solve problems and write code with fewer complete inputs, less time to correctness and fewer corrections. Compare against ASCII, JavaScript and Python; count connections, bindings, constants and navigation. Human-guided success never qualifies autonomous goals 2a/2b, and current labels/recipes are not presumed optimal.
+
 ## Operating Loops
 
 1. **Empirical Evaluation Loop**:

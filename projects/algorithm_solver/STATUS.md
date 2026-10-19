@@ -1,15 +1,17 @@
 # Gamma: Algorithm Recognition & Composition
 
 Updated 2026-10-19. All four goals remain the main research lane. Recognition and
-composition qualify independently; 256.one is a separate optional interface.
+composition qualify independently. The parallel human-composition goal now has a
+bounded 0/1 input mechanism in the existing 256one editor; human steering never
+substitutes for autonomous 2a/2b evidence.
 [Previous full status/handoff](HISTORY-suby-20261019.md) and [experiment history](HISTORY.md)
 retain earlier contracts, failures and reproduction instructions.
 
 | Goal | Actual evidence | Next executable step / boundary |
 |---|---|---|
-| **1a: stored-solution recognition** | 16 reconstructed stored references qualify; full historical 1a release failed 13/20 versus unchanged 18/20 gate. The suby reconstruction has 66 entries, not the historical full catalog. | Fresh sealed sample: 7/12 paraphrases and 3/8 sibling variants correct, zero wrong known-target answers. Preserve this bounded no-absence result; full-catalog gate remains unpassed. |
+| **1a: stored-solution recognition** | Current exact-known catalog serves 2,501/3,288 eligible entries, backed by 244,375 independent checks; 787 abstentions and zero serving failures. Separately, description recognition remains 13/20 versus the unchanged 18/20 release gate. | Preserve exact-known qualification separately from description matching. Remaining exclusions and runtime identities are in the dependency-recovery receipt below. |
 | **1b: one informal input, zero questions** | Frozen contradiction candidate returned 11/16 correct development answers versus 7/16 control, zero wrong/unqualified, five abstentions. Eight old no-example controls are pre-retrieval evidence only. | Fresh sample: 6/12 complete descriptions correct; only 2/4 required ambiguity abstentions, two wrong acceptances. Candidate fails required ambiguity behavior; no promotion or tuning on this opened confirmation. |
-| **2a: autonomous familiar composition** | Original assets recovered on 128. Matched raw/corrected each returned 4/10 fit and 0/8 audit correct; nearest-fit graph 8/10 fit and 0/8 audit; zero wrong acceptances or infrastructure failures. | Correction adds no correct answer and is rejected by the frozen audit rule. Preserve original/rebuilt identities; new training still requires full-text memory qualification and owner approval. |
+| **2a: autonomous familiar composition** | Recovered original GPU guard returns 8/10 consumed fit cases at 0.296 s p95, versus nearest graph 9/10. The approved balanced-loss pair finished; candidate returned 1/10 guarded correct with two wrong acceptances and was rejected. | No learned improvement or protected generalization established. Preserve original assets and rejected candidate separately; human composition input does not qualify this goal. |
 | **2b: nearby semantic variants** | No independent nearby-variant result. Existing broader 66-problem reservation and protected tests remain unopened. | New separate variant-seal protocol prepared. First qualify/freeze a composer, then independently author/review changed requirements/answers; direct public input only. Do not train on or tune from opened variants. |
 
 ## Recognition evidence and next run
@@ -461,3 +463,20 @@ typed language, frozen original GPU composer and this latest stored-answer catal
 to 256one. Software and live integration passed. Goals 1b and 2b remain unqualified;
 the strongest measured composer still trails the matched nearest baseline.
 App integration does not establish autonomous generalization.
+
+
+## Human composition vocabulary and editor input
+
+The owner explicitly added a human-facing goal: reusable composition input for
+solving problems and writing code, measured by total input, time to correctness,
+corrections and correctness against ASCII/JavaScript/Python. Current model labels
+are not presumed optimal. Autonomous 1a/1b/2a/2b remain independently required.
+
+[Binary input v1](findings/human-composition-input-128-v1/README.md) implements
+operation/recipe selection, explicit typed bindings, signed constants, Return,
+Undo, public Test and versioned replay in the existing 256one challenge workspace.
+It keeps the existing encodings and challenge ordering. Unsupported types/features
+are explicit. Complete automated tapes and bounded execution checks are initial
+mechanism evidence, not human productivity or autonomous-generalization results.
+Next is a frozen, counterbalanced human comparison with task-reveal timing and
+independent correctness; protect the unopened autonomous reservation separately.
