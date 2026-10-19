@@ -11,7 +11,7 @@ summary is 50 words, excluding its title. Composition remains unproven.
 
 ### 1a. Recognize known problem statements
 
-Recognize indexed problems from complete statements and paraphrases, returning qualified stored code without generation. All 3,288 eligible exact paths passed: 2,456 answers and 832 exclusions. Independent recognition failed: seven of twenty known queries answered correctly, with zero wrong acceptances. Next, repair candidate comparison and evaluate a freshly frozen replacement independently.
+Recognize indexed problems from complete statements and paraphrases, returning qualified stored code without generation. All 3,288 eligible exact paths passed: 2,456 answers and 832 abstentions. Fresh recognition returned 13/20 correct known answers, zero wrong acceptances, and 4/4 absent rejections. The 18/20 gate failed; improve candidate comparison without lowering acceptance requirements.
 
 ### 1b. Understand natural problem descriptions
 
@@ -19,13 +19,13 @@ Recognize indexed problems from one natural description using the same retrieval
 
 ## 2. Learn to compose executable solutions
 
-### 2a. Compose familiar solutions and variants
+### 2a. Autonomously compose known problems
 
-Assemble typed components into correct programs for supported problems and variants, rather than retrieving complete answers or generating source tokens. First repair malformed graph predictions and improve development training coverage. The typed student solved four of ten fitting problems and zero of eight audit problems; dependable composition remains unproven today.
+Automatically assemble correct programs for known LeetCode-style problems from reusable typed graph components, without human steering or runtime source generation. Existing infrastructure solved four of ten fitting problems and zero of eight audit problems. Next, constrain graph construction, fit verified development graphs reliably, and establish an autonomous graph-development learning loop.
 
-### 2b. Compose unfamiliar solutions
+### 2b. Autonomously adapt nearby variants
 
-Generalize to unfamiliar combinations of learned operations, state, bindings, and control flow through one parallel prediction and deterministic assembly. Preserve the reserved 66 problems; teacher coverage is ten, not student success. Next, diagnose development failures, finish matched search baselines, freeze all artifacts, and perform protected scoring without adapting to results.
+Automatically adapt or combine learned components for nearby variants with changed constants, conditions, filtering, aggregation, or outputs. Test unseen semantic changes independently; a familiar base problem is allowed. Preserve the existing 66-problem reservation as a separate broader experiment. Measure first-attempt correctness and complete latency without human steering or runtime generation.
 
 ## Matching and binary-input objectives
 
@@ -41,36 +41,74 @@ The earlier assisted-dialogue results remain historical development experiments.
 The [one-shot contract](contracts/description_oneshot_v1.json) supersedes the
 clarification provisions of the original recognition protocol for future 1b work.
 
-The user-facing composition objective spans **2a**, then **2b**: use only `0` and
-`1` to select and connect composable functions, data-structure operations, state,
-control flow and recipes, with the fewest total presses to a correct solution.
-Investigate a fixed-width vocabulary of **N bits, N <= 8**; eight is a candidate,
-not a proven optimum. Count selection, bindings, parameters, navigation, insertion
-and corrections, and report elapsed time, correctness and coverage alongside
-presses. An entry selects a piece or action; a sequence builds a program. Compare
-against the current seven-bit ASCII and eight-bit Python/JavaScript text-entry
-baselines. Preserve those three encodings while testing a separate composable
-vocabulary. Solving all LeetCode problems is the ambition, not current coverage;
-encoding savings alone do not establish composition or human-effort gains.
+The **binary editor is a separate, optional interface experiment**, not a dependency
+or acceptance gate for autonomous solving. Preserve seven-bit ASCII and eight-bit
+Python/JavaScript entry. A future composable vocabulary may use N <= 8 bits per
+entry; measure all selections, bindings, navigation, corrections and insertion.
+Encoding savings and human effort remain distinct from solver correctness.
+
+## Active sequence: improve executable graphs, then teach the fast composer
+
+1. **Recognition:** retain the shared one-shot engine, qualified source catalog and
+   failed release receipts. Improve requirement-aware comparison on development
+   cases; freeze before fresh independent scoring. Missing source tests are a
+   separate library-coverage task. No dialogue manager or weaker acceptance gate.
+2. **Structural validity:** use the existing typed predictor and codec. Test bounded
+   type-aware construction/decoding, recording corrections and their cost. First
+   reliably fit a small verified development corpus; valid structure is not a
+   correct algorithm. Use alternative correct graphs and counterexample-backed
+   wrong bindings. Do not grow the model before diagnosing this bottleneck.
+3. **Autonomous development loop — missing:** select a few permitted expressible
+   families. Convert tested references into graphs; generate semantic variants;
+   establish independent brute-force, boundary and randomized oracles. Within a
+   recorded compute budget, an LLM development agent proposes edits, parameters,
+   shared subgraphs and merges, receives validator/test failures and repairs them.
+   Retain successes, rejected attempts, provenance and resource-bound verdicts.
+   Promote components only with independent contracts/tests and reuse across
+   distinct cases; do not hide an entire answer inside one oversized component.
+4. **Teach and freeze:** feed qualified graphs/components into the compact parallel
+   predictor. At query time use retrieval → prediction → deterministic assembly
+   and checking. No human steering or autoregressive source generation. Report
+   runtime search/repair separately from first prediction and development cost.
+5. **Independent nearby variants:** evaluator authors private semantic changes,
+   seeds, answers and checks without seeing candidate failures. Familiar base
+   problems are allowed; changed requirements/solutions stay unseen. Keep the
+   66-problem reservation and harder family-disjoint work separate. The verified
+   catalog has 3,353 originals; no evidence establishes 6,000 distinct originals.
+6. **Matched ablations:** stored solution; existing graph with parameter edits;
+   fixed-library composition; agent-improved-library composition; learned predictor
+   versus bounded search. Compare identical tasks/budgets, wrong acceptance,
+   coverage and complete latency including checks and repairs.
+
+Current code boundary: `typed_predictor.decisions()` independently takes argmax
+for operation, child/sibling edges, bindings and types. `PredictionCodec.decode()`
+then rejects invalid trees and scope/type/effect violations; it performs no repair.
+The next change belongs at this construction boundary, retaining raw predictions
+and a separately scored constrained result. No new training campaign has started.
+
+Next decisive milestone: a frozen fast composer correctly handles independently
+tested unseen semantic variants without human steering or runtime LLM code
+writing. Existing typed interpretation is sufficient; no new editor, native
+compiler or replacement framework is required.
 
 ## Evidence and operating boundaries
 
 | Subgoal | Evidence and gap |
 |---|---|
-| 1a | [Source qualification and failed independent release gate](findings/known-lookup-release-v1/README.md). Exact-path success does not establish paraphrase recognition. |
+| 1a | [Source qualification and failed independent release gate](findings/known-lookup-release-v2/README.md). Exact-path success does not establish paraphrase recognition. |
 | 1b | [Baseline](findings/natural-description-dev-v1/README.md): correct identity first on 10/16 specified requests, top five on 16/16; no accepted matches. [Assisted dialogue prototype](findings/clarification-dialogues-dev-v1/README.md): 20/20 scripted selections, eight abstentions, 0–3 distinction questions plus confirmation. Curated contracts and scripted confirmations are not automatic recognition or independent qualification; genuine absence and human journey time remain unmeasured. |
 | 2a | [Typed student receipt](findings/typed-student-v2/summary.json): all eight audit predictions failed structural validation. [Development corpus](findings/typed-real-dev-v5/summary.json) is the permitted debugging source. |
 | 2b | [Frozen reservation](contracts/typed_confirmation_v1.json) and [teacher qualification](findings/typed-confirmation-qualified-v1/summary.json). Protected student scoring has not run. |
 
 Current recognition qualification: [complete source audit](findings/library-answer-audit-v3/README.md)
-and [failed v1 recognition release](findings/known-lookup-release-v1/README.md).
-The source audit accounts for all 815 historical gaps; unsupported entries are
-excluded, not promoted. All 3,288 eligible requests passed the gated exact-path
-check: 2,456 approved answers, 832 abstentions. Recognition v1 answered 7/20 known
-queries correctly, with zero wrong acceptances and 4/4 absent rejections. The
-frozen 18/20 gate failed. That opened set is now debugging evidence. A fresh
-agent-authored/reviewed replacement is being prepared independently. The original
-16 description cases remain sealed, with the new zero-question 1b contract.
+and [failed v2 recognition release](findings/known-lookup-release-v2/README.md).
+Both candidates completed all 3,288 gated exact paths with zero path failures.
+V1 returned 7/20 known answers; fresh v2 returned 13/20. Both had zero wrong
+acceptances and 4/4 absent rejections; both failed the unchanged 18/20 gate.
+These are different samples, not a matched improvement estimate. Both opened sets
+are now debugging evidence. The original 16 descriptions remain sealed; 1b permits
+zero questions. Query embeddings currently use CPU PyTorch/Transformers; the
+Doppler reranker remains rejected and disabled.
 
 Preserve working lookup. Keep its all-corpus index out of composition training,
 mining and evaluation. Use development evidence to repair graph prediction;

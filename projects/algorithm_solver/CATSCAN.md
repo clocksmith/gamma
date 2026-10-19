@@ -4,17 +4,20 @@ Parent: [Gamma research projects](../CATSCAN.md)
 
 ## Target
 
-Recognize stored solutions; separately learn non-autoregressive composition of
+Recognize stored solutions; separately learn autonomous non-autoregressive composition of
 typed functions, data-structure operations, explicit state and control flow.
-Reusable recipes expand into those building blocks; a compact neural predictor
+Goal 2a assembles known problems; 2b adapts nearby semantic variants. No human
+steering or runtime source generation is required. Reusable recipes expand into
+those building blocks; a compact neural predictor
 selects and connects them, with deterministic assembly and validation. Compare
 against search and autoregressive generation. The recorded three-call baseline
 does not constrain the composition goal.
 
-The binary-input composition objective is minimal total presses to a correct
+The separate optional binary-input experiment targets minimal total presses to a correct
 program using an experimental fixed-width vocabulary with N <= 8 bits per entry.
 It covers familiar variants first and unfamiliar combinations separately; the
-current three text-entry encodings remain baselines. Goal definitions and the
+current three text-entry encodings remain baselines, not dependencies of autonomous
+solving. Goal definitions and the
 natural-description matching boundary live in [STATUS.md](STATUS.md#matching-and-binary-input-objectives).
 
 ## Authority
@@ -42,7 +45,8 @@ Owns problem imports, sandbox judging, comparison routes, research answer interf
 - Editor jobs require a paired origin/token, bounded requests and execution, cancellation cleanup and exact request/result binding. Python/JavaScript entry alphabets contain exactly 256 eight-bit codes, including commands; ASCII remains 128 seven-bit codes.
 - A composable-input experiment must not silently replace those entry alphabets. Count bindings, parameters, navigation and corrections in total input cost; measure complete latency and correctness separately. Nearest-match retrieval does not authorize an exact-problem claim or an unverified adapted solution.
 - Training excludes protected families; shared structural patterns and alternative solutions stay together. Tests do not prove correctness.
-- Reserve fresh confirmation families before vocabulary mining. Structural recurrence does not verify components.
+- An autonomous development agent may propose and repair graphs within a recorded compute budget using permitted development evidence only. Retain rejected attempts. Component promotion requires independent contracts/tests and distinct-case reuse; it is not automatic from structural recurrence. Nearby-variant evaluation may share a familiar base while withholding its changed semantics and answer; preserve the existing broader reservation separately.
+- Keep the existing family-disjoint confirmation reservation frozen before vocabulary mining. A separately identified nearby-variant test holds changed requirements and solutions out while allowing a familiar base. Structural recurrence does not verify components.
 - Generative comparisons share model/budget/repair allowance; repairs see public examples only.
 - Separate example-passed, independent-tests-passed and benchmark-judge-accepted evidence.
 
