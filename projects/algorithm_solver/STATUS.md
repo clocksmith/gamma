@@ -49,6 +49,23 @@ new training, new download, protected scoring, public push or deployment is part
 of this campaign. Coverage, autonomous macro selection and measured human effort
 remain three distinct outcomes.
 
+## Integrated JavaScript corpus: B05 only
+
+The [private development JavaScript catalog](findings/js-corpus-b05-integration-128-v1/catalog.json)
+contains **24 unique problems**: the original five plus19 passing B05 candidates,
+with2,217 existing independent cases. IDs and language-agnostic keys are deduplicated;
+alternative implementations do not inflate this total. The B05 JS and original Python
+sources each passed1,617 cases. All19 B05 candidates also preserve inputs in40 public
+example calls. B01–B04 remain owner-managed and were not imported.
+
+[Integration evidence](findings/js-corpus-b05-integration-128-v1/integration.json)
+retains pinned JS/TS provenance, exact source/test/receipt hashes and the original
+blocked115 result. Sources stay ignored/private under `data/derived/` and `runs/`.
+This changes the development source corpus only, not the Python recognition catalog,
+autonomous composer or live app. Recursive implementations have finite-test evidence,
+not maximum-depth performance qualification. Problem115 is excluded pending exact
+integer transport qualification in a separate successor runner.
+
 ## Completed bounded source/macro foundation on 128
 
 The [first macro slice](findings/semantic-macro-foundation-128-v1/summary.json)
