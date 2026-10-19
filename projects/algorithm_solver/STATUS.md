@@ -47,18 +47,28 @@ Python/JavaScript entry. A future composable vocabulary may use N <= 8 bits per
 entry; measure all selections, bindings, navigation, corrections and insertion.
 Encoding savings and human effort remain distinct from solver correctness.
 
-## Active sequence: improve executable graphs, then teach the fast composer
+## Two parallel tracks with independent qualification
 
-1. **Recognition:** retain the shared one-shot engine, qualified source catalog and
-   failed release receipts. Improve requirement-aware comparison on development
-   cases; freeze before fresh independent scoring. Missing source tests are a
-   separate library-coverage task. No dialogue manager or weaker acceptance gate.
-2. **Structural validity:** use the existing typed predictor and codec. Test bounded
-   type-aware construction/decoding, recording corrections and their cost. First
-   reliably fit a small verified development corpus; valid structure is not a
-   correct algorithm. Use alternative correct graphs and counterexample-backed
-   wrong bindings. Do not grow the model before diagnosing this bottleneck.
-3. **Autonomous development loop — missing:** select a few permitted expressible
+**Recognition (1a/1b):** improve single-shot candidate selection on development
+queries, then freeze and evaluate fresh recognition cases. Retain the qualified
+source catalog and failed release receipts. The 13/20 result measures recognition
+only; graph-construction changes do not improve that score. Missing source tests
+are a separate coverage task. No dialogue manager or weaker acceptance gate.
+
+**Composition (2a/2b):** give the composer the problem directly. Development does
+not wait for recognition to pass or require an exact stored-answer match.
+Retrieving permitted reusable components is optional assistance, not problem
+identification. The composition work proceeds as follows:
+
+1. **Constrained construction:** use the existing typed predictor and codec on
+   development composition problems. Preserve raw predictions and compare raw
+   versus corrected results on the **same composition cases**, never the 20
+   recognition queries. Report structural validity, actual program correctness,
+   wrong acceptances, abstentions, correction cost and complete latency separately.
+   First reliably fit a small verified corpus; valid structure is not a correct
+   algorithm. Use alternative correct graphs and counterexample-backed wrong
+   bindings. Do not grow the model before diagnosing this bottleneck.
+2. **Autonomous development loop — missing:** select a few permitted expressible
    families. Convert tested references into graphs; generate semantic variants;
    establish independent brute-force, boundary and randomized oracles. Within a
    recorded compute budget, an LLM development agent proposes edits, parameters,
@@ -66,16 +76,19 @@ Encoding savings and human effort remain distinct from solver correctness.
    Retain successes, rejected attempts, provenance and resource-bound verdicts.
    Promote components only with independent contracts/tests and reuse across
    distinct cases; do not hide an entire answer inside one oversized component.
-4. **Teach and freeze:** feed qualified graphs/components into the compact parallel
-   predictor. At query time use retrieval → prediction → deterministic assembly
-   and checking. No human steering or autoregressive source generation. Report
-   runtime search/repair separately from first prediction and development cost.
-5. **Independent nearby variants:** evaluator authors private semantic changes,
+3. **Teach and freeze:** feed qualified graphs/components into the compact parallel
+   predictor. At query time use the problem, optional component retrieval,
+   prediction, deterministic assembly and checking. No human steering or
+   autoregressive source generation. Report runtime search/repair separately from
+   first prediction and development cost. Protected composition scoring waits for
+   a frozen, development-qualified composer and agreed matched baselines;
+   recognition passing is neither a prerequisite nor evidence for this gate.
+4. **Independent nearby variants:** evaluator authors private semantic changes,
    seeds, answers and checks without seeing candidate failures. Familiar base
    problems are allowed; changed requirements/solutions stay unseen. Keep the
    66-problem reservation and harder family-disjoint work separate. The verified
    catalog has 3,353 originals; no evidence establishes 6,000 distinct originals.
-6. **Matched ablations:** stored solution; existing graph with parameter edits;
+5. **Matched ablations:** stored solution; existing graph with parameter edits;
    fixed-library composition; agent-improved-library composition; learned predictor
    versus bounded search. Compare identical tasks/budgets, wrong acceptance,
    coverage and complete latency including checks and repairs.
@@ -83,10 +96,11 @@ Encoding savings and human effort remain distinct from solver correctness.
 Current code boundary: `typed_predictor.decisions()` independently takes argmax
 for operation, child/sibling edges, bindings and types. `PredictionCodec.decode()`
 then rejects invalid trees and scope/type/effect violations; it performs no repair.
-The next change belongs at this construction boundary, retaining raw predictions
-and a separately scored constrained result. No new training campaign has started.
+The next **composition** change belongs at this construction boundary, retaining
+raw predictions and a separately scored constrained result. Recognition has its
+own candidate-selection work above. No new training campaign has started.
 
-Next decisive milestone: a frozen fast composer correctly handles independently
+Next composition milestone: a frozen fast composer correctly handles independently
 tested unseen semantic variants without human steering or runtime LLM code
 writing. Existing typed interpretation is sufficient; no new editor, native
 compiler or replacement framework is required.
