@@ -49,6 +49,22 @@ new training, new download, protected scoring, public push or deployment is part
 of this campaign. Coverage, autonomous macro selection and measured human effort
 remain three distinct outcomes.
 
+## Bounded macro selection: three JS and four Python entries
+
+[Selection experiment](findings/corpus-macro-selection-128-v1/README.md) exhaustively
+evaluates the existing five-JS/four-Python candidate menu. Input-optimal subsets
+save424 complete-stream bytes beyond the frozen two-fragment profiles (751 versus
+lexical), with codebook storage reported separately. The cursor step and extra JS
+collector are rejected; Python's fourth concept earns only7 bytes over its best
+three-concept alternative. No unused slots were filled speculatively.
+
+All4,512 subset/source round trips preserve bytes. Seven reconstructed pairs pass
+610 existing independent cases and17 public examples per language;26 malformed
+controls, three independent optimizer controls and28 guard rejection executions
+pass.17 fragment calls cover seven pairs, but97.36% of source bytes remain lexical
+fallback and no complete program is semantic-only. This is a measured stopping
+decision on representation, with no training, deployment or autonomous solve.
+
 ## Bounded macro analysis on the94-problem corpus
 
 [Representation study](findings/corpus-macro-analysis-128-v1/README.md) compares
