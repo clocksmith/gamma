@@ -419,3 +419,25 @@ The separate recognition release remains 13/20 known against an 18/20 gate.
 Catalog qualification does not promote the unqualified one-shot matcher.
 See the [completion plan for all four goals](findings/completion-plan-128-v1/README.md)
 for remaining evidence and exact training-approval boundaries.
+
+
+## Qualified named-output extension and owner-ready training packet
+
+The explicit [named-output wrapper](findings/known-named-output-1a-128-v1/README.md)
+now serves **2,487 approved entries**, six more than the preserved base catalog.
+Across all 3,288 eligible queries it returned 2,487 answers and 801 abstentions
+with zero failures and no encoder load. The frozen nine-case comparison improved
+0/9 to 6/9, with zero wrong or harmful changes. Approved sources carry 241,529
+independent test passes. The original catalog remains byte-identical and valid.
+Final candidate checks: 47 tests and 57 subtests passed. The 801 remaining cases
+are 685 missing independent tests, 69 public paths, 26 runtime failures and
+21 unusable evidence cases. This does not promote new-description recognition.
+
+The [owner approval packet](findings/typed-literal-objective-proposal-128-v1/OWNER_APPROVAL.md)
+now binds original/control/candidate identities, exact initial tensor hashes,
+family separation, full-text 2,048-token encoding and the objective difference.
+The opt-in balanced loss passed eight focused tests and two subtests without
+optimizer steps. No training has started. The proposed two 400-step arms share
+a combined 4 CPU / 8 GiB / 5 GiB / 2,400-second cap, use no GPU or downloads,
+and require explicit owner approval. The hash-pinned Sorted Containers wheel
+and judge-visible packaging are a separate unstarted approval scope.

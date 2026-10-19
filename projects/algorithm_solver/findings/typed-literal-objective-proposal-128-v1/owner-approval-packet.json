@@ -1,0 +1,374 @@
+{
+  "schema": "algsolve.owner-training-approval.v1",
+  "created_utc": "2026-10-19T13:30:36.435292+00:00",
+  "status": "ready_for_owner_review_not_authorized_not_started",
+  "name": "typed-literal-balanced-pair-128-v1",
+  "original": {
+    "name": "typed-student-v2",
+    "checkpoint": "runs/typed-student-v2/model.pt",
+    "checkpoint_sha256": "25f9ca2ff223f5ae930f9511be21445efaa6dde49a697eccd5c648bdb918617c",
+    "corpus": "runs/typed-real-dev-v5/pairs.jsonl",
+    "corpus_sha256": "566d6b440d7fdd16bac0b86114b5e8dd35ba8bd646b6bd304f8cfbc5e201330e",
+    "codec_sha256": "e91aee58994ae952e2b43406606127689e10688404f2b5c774380dc7a77df7ad",
+    "context_tokens": 1024,
+    "encoder_dtype": "float32",
+    "steps": 400,
+    "seed": 17,
+    "role": "Preserved historical reference; neither arm resumes this checkpoint."
+  },
+  "control": {
+    "name": "typed-literal-balanced-pair-128-v1/control",
+    "loss": "algsolve.synth.typed_predictor.per_example_loss",
+    "loss_source_sha256": "e6732936965200cbc6ca76d41d1d209fcfdc0498d4bc89dd53329c338d8e5f9a",
+    "initial_tensor_manifest_sha256": "eccda374ddfea26a3c57246791e9200c24b9b017c0b448c1f30d365a2e65a7d0",
+    "trained_checkpoint_sha256": null
+  },
+  "candidate": {
+    "name": "typed-literal-balanced-pair-128-v1/balanced",
+    "loss": "algsolve.synth.typed_balanced_loss.per_example_balanced_loss",
+    "loss_source_sha256": "ff21367f9cf5ac04094c420d2375b3c40aca9420bf36e7031753b81718975a57",
+    "initial_tensor_manifest_sha256": "eccda374ddfea26a3c57246791e9200c24b9b017c0b448c1f30d365a2e65a7d0",
+    "trained_checkpoint_sha256": null
+  },
+  "initialization": {
+    "seed": 17,
+    "parameters": 197612,
+    "identity_definition": "SHA256 of canonical JSON mapping sorted state names to dtype, shape and tensor-byte SHA256; fresh constructor; no optimizer steps",
+    "receipt_sha256": "4f2faac81a398ed9d796e1b56fc5fa52a156ea9bf26b96d51b8b1618fcb8ac10"
+  },
+  "shared_configuration": {
+    "name": "typed-literal-balanced-pair-128-v1",
+    "status": "proposed_not_authorized_not_started",
+    "corpus": "runs/typed-real-dev-v5/pairs.jsonl",
+    "corpus_sha256": "566d6b440d7fdd16bac0b86114b5e8dd35ba8bd646b6bd304f8cfbc5e201330e",
+    "codec_sha256": "e91aee58994ae952e2b43406606127689e10688404f2b5c774380dc7a77df7ad",
+    "preflight_sha256": "a9278aa26d956c40f387fb422ecd16edcefb40da91a070f2e58c6b46e4d45e60",
+    "arms": [
+      "existing_loss_control",
+      "per_example_positive_negative_balanced_literal_BCE"
+    ],
+    "configurations": 2,
+    "steps_per_arm": 400,
+    "seed": 17,
+    "width": 64,
+    "layers": 2,
+    "optimizer": "AdamW",
+    "learning_rate": 0.001,
+    "retrieval_k": 4,
+    "fit_graphs": 15,
+    "fit_problems": 10,
+    "context_tokens": 2048,
+    "truncation": false,
+    "maximum_measured_tokens": 1660,
+    "encoder_dtype": "float32",
+    "device": "cpu",
+    "threads": 4,
+    "rss_bytes": 8589934592,
+    "disk_bytes": 5368709120,
+    "per_training_phase_seconds": 900,
+    "total_seconds": 2400,
+    "checkpoint_selection": "fixed_final_step400_only",
+    "protected_scoring": false,
+    "audit_scoring": false,
+    "nearby_variants": false,
+    "downloads": false,
+    "new_dependencies": false,
+    "training_started": false,
+    "encoder_batch_size": 1,
+    "encoder_files_sha256": {
+      "config.json": "b5bf1f51fc45be473a54718cef92448d90a1be001bf9b9a44b8c7f10a19feaa9",
+      "tokenizer_config.json": "253153d0738ceb4c668d2eff957714dd2bea0b56de772a9fdccd96cbf517e6a0"
+    },
+    "encoder_model_context_maximum": 32768
+  },
+  "family_separation": {
+    "fit_graphs": 15,
+    "fit_problems": 10,
+    "fit_families": [
+      "find-critical-and-pseudo-critical-edges-in-minimum-spanning-tree",
+      "height-checker",
+      "last-stone-weight",
+      "maximum-product-of-two-elements-in-an-array",
+      "maximum-units-on-a-truck",
+      "meeting-rooms",
+      "minimum-cost-of-buying-candies-with-discount",
+      "number-of-good-pairs",
+      "sum-of-unique-elements",
+      "the-earliest-moment-when-everyone-become-friends"
+    ],
+    "audit_graphs": 9,
+    "audit_problems": 8,
+    "audit_families": [
+      "connecting-cities-with-minimum-cost",
+      "count-elements-with-maximum-frequency",
+      "graph-valid-tree",
+      "how-many-apples-can-you-put-into-the-basket",
+      "largest-unique-number",
+      "missing-number",
+      "number-of-connected-components-in-an-undirected-graph",
+      "redundant-connection"
+    ],
+    "fit_audit_sibling_overlap": [],
+    "protected_family_overlap": [],
+    "protected_entries": 66,
+    "protected_families": 60,
+    "audit_use_in_this_experiment": false,
+    "audit_exposure_note": "The original eight audit problems have prior comparison exposure; excluded from this training/evaluation and not presented as fresh holdout. Shared primitives/algorithmic structures across development partitions are intentional."
+  },
+  "encoding": {
+    "original_tokens_maximum": 1660,
+    "old_limit": 1024,
+    "new_shared_limit": 2048,
+    "truncation": false,
+    "full_original_text_preserved": true,
+    "compact_attempt_maximum": 1189,
+    "compact_attempt_rejected": true,
+    "preflight_sha256": "a9278aa26d956c40f387fb422ecd16edcefb40da91a070f2e58c6b46e4d45e60",
+    "weights_sha256": "0437e45c94563b09e13cb7a64478fc406947a93cb34a7e05870fc8dcd48e23fd",
+    "tokenizer_sha256": "def76fb086971c7867b829c23a26261e38d9d74e02139253b38aeb9df8b4b50a",
+    "model_config_sha256": "b5bf1f51fc45be473a54718cef92448d90a1be001bf9b9a44b8c7f10a19feaa9",
+    "tokenizer_config_sha256": "253153d0738ceb4c668d2eff957714dd2bea0b56de772a9fdccd96cbf517e6a0",
+    "batch_size": 1,
+    "global_serving_context_changed": false
+  },
+  "objective": {
+    "control": "Mean masked literal BCE across all supervised bits per example; sum unchanged nonliteral CE heads; minimum across qualified graph alternatives per fit problem, mean across10problems.",
+    "candidate": "Replace only literal term by mean of mean-positive BCE and mean-negative BCE over present classes per example. Ignore -100; absent class omitted; all-masked example0. All nonliteral heads and alternative/problem reduction unchanged.",
+    "evidence": "74 of15093 fit literal bits set; imbalance is a hypothesis, not a causal or solving result.",
+    "software_checks": "8 tests and2subtests passed; synthetic gradients only, no optimizer steps."
+  },
+  "combined_budget": {
+    "sequential_arms": true,
+    "total_optimizer_steps": 800,
+    "maximum_configurations": 2,
+    "cpu_threads_maximum": 4,
+    "cpu_quota_percent": 400,
+    "gpu_training_or_encoding": false,
+    "gpu_threads_or_jobs": 0,
+    "aggregate_rss_bytes": 8589934592,
+    "total_asset_and_run_disk_bytes": 5368709120,
+    "per_arm_training_wall_seconds": 900,
+    "combined_training_wall_seconds_maximum": 1800,
+    "entire_experiment_wall_seconds_maximum": 2400,
+    "scope_of_entire_budget": "preflight, encoder setup and embeddings, both training arms, fresh-query evaluation, public decisions and independent scoring; existing weights read in place",
+    "parallel_lane_policy": "Finish/pause task-owned1a compute before four-thread training; no overlap exceeding shared4CPU/8GiB cap. Do not stop external contributors.",
+    "timeout_policy": "Stop and preserve partial evidence; no silent retries, extension, sweep or resume."
+  },
+  "dependencies": {
+    "python": "/home/x/deco/gamma/.venv_rocm/bin/python",
+    "versions": {
+      "torch": "2.12.1+rocm7.2",
+      "transformers": "5.13.1",
+      "numpy": "2.4.4"
+    },
+    "new_dependencies": false,
+    "downloads": false,
+    "external_providers": false,
+    "new_models": false
+  },
+  "evaluation": {
+    "requests": "Only the10consumed original fit requests",
+    "arms": [
+      "raw",
+      "frozen_guard_repair",
+      "nearest_fit_graph"
+    ],
+    "fit_memory": "All15same qualified fit graphs; top4stable cosine neighbors from sharedfull-textCPUfloat32 representation; nearestbaselineusesexactsame memory/similarities; no known-answer catalog or expectedUID target substitution",
+    "query_timing": "Fresh query embeddings for both models; fixed training embeddings may be shared only during optimizer training, never used as query latency measurements",
+    "sealing": "Both final step400checkpoints and allpublic decisions sealed before independent tests",
+    "repair_maximum_extra_executions": 4,
+    "repair_wall_seconds": 0.25,
+    "decision_wall_seconds": 2.0,
+    "guard_config_frozen_reference": "findings/typed-gpu-reuse-fit-128-v2/contract.json",
+    "nearest_baseline_is_matched": true
+  },
+  "acceptance": {
+    "raw_correct_gain_vs_new_control_minimum": 1,
+    "guard_correct_gain_vs_new_control_minimum": 1,
+    "lost_correct_maximum": 0,
+    "wrong_acceptances_maximum": 0,
+    "infrastructure_failures_maximum": 0,
+    "latency_p95_maximum_seconds": 2.0,
+    "quality_and_latency_reported_separately": true,
+    "expected_outcome": "Test whether balancing improves wholeliteral/executable correctness, especially remaining three/seven-bit failures; no gain guaranteed. HistoricalGPU8/10guard and9/10nearest are context, not fixed denominators for the new matchedCPUcomparison.",
+    "release_or_generalization_qualification": false
+  },
+  "gpu_evidence": {
+    "run": "typed-gpu-reuse-fit-128-v2",
+    "results": {
+      "cpu": {
+        "raw": {
+          "cases": 10,
+          "correct": 3,
+          "wrong": 0,
+          "infrastructure": 0,
+          "valid": 8,
+          "abstentions": 7,
+          "p50": 2.457967913500397,
+          "p95": 4.468491061150779,
+          "maximum": 5.063968372003728
+        },
+        "structural_control": {
+          "cases": 10,
+          "correct": 3,
+          "wrong": 0,
+          "infrastructure": 0,
+          "valid": 9,
+          "abstentions": 7,
+          "p50": 2.4615807270001824,
+          "p95": 4.4684907056982395,
+          "maximum": 5.063779476000491
+        },
+        "guard_candidate": {
+          "cases": 10,
+          "correct": 4,
+          "wrong": 0,
+          "infrastructure": 0,
+          "valid": 9,
+          "abstentions": 6,
+          "p50": 2.4630298460015183,
+          "p95": 4.4703673924486775,
+          "maximum": 5.065614530998573
+        },
+        "nearest_training_graph": {
+          "cases": 10,
+          "correct": 3,
+          "wrong": 0,
+          "infrastructure": 0,
+          "valid": 10,
+          "abstentions": 7,
+          "p50": 2.4542575730010867,
+          "p95": 4.46445191609673,
+          "maximum": 5.059582622998278
+        }
+      },
+      "cuda": {
+        "raw": {
+          "cases": 10,
+          "correct": 4,
+          "wrong": 0,
+          "infrastructure": 0,
+          "valid": 8,
+          "abstentions": 6,
+          "p50": 0.10175585100114404,
+          "p95": 0.17347455289946076,
+          "maximum": 0.1992985669967311
+        },
+        "structural_control": {
+          "cases": 10,
+          "correct": 4,
+          "wrong": 0,
+          "infrastructure": 0,
+          "valid": 10,
+          "abstentions": 6,
+          "p50": 0.1110162674995081,
+          "p95": 0.17212711179963658,
+          "maximum": 0.19645445199785172
+        },
+        "guard_candidate": {
+          "cases": 10,
+          "correct": 8,
+          "wrong": 0,
+          "infrastructure": 0,
+          "valid": 10,
+          "abstentions": 2,
+          "p50": 0.14705522899930656,
+          "p95": 0.2961809851976795,
+          "maximum": 0.3166606309969211
+        },
+        "nearest_training_graph": {
+          "cases": 10,
+          "correct": 9,
+          "wrong": 0,
+          "infrastructure": 0,
+          "valid": 10,
+          "abstentions": 1,
+          "p50": 0.09677550749620423,
+          "p95": 0.16630711169800627,
+          "maximum": 0.1932440369964752
+        }
+      }
+    },
+    "consumed_fit_cases": 10,
+    "dtype": "ExistingQwenencoderGPUfloat16; predictorCPUfloat32",
+    "cpu_threads": 2,
+    "gpu": "Radeon8060S",
+    "runtime": "torch2.12.1+rocm7.2; noHSAoverride; realmatmulpassed",
+    "new_training": false,
+    "warm_no_query_cache": true,
+    "setup_excluded_but_reported": true,
+    "host_transfer_and_sync_in_timer": true,
+    "gpu_results_numerically_equivalent_to_cpu": false,
+    "raw_records_differ": 6,
+    "neighbor_order_differ": 1,
+    "gpu_capture_repeat_match": 10,
+    "cpu_arm_origin": "Measured completeCPUcaptures from rejected combinedprocessv1 retainedbyhash; same2threads/search/inputs, notsimultaneous or exclusivehost timing",
+    "original_failed_run_preserved": true,
+    "remaining_contributors": "qwen0.8BPID2707andqwen2BPID2711running; both27BservicesinactiveMainPID0. Recheckedaftermeasurement, notcontinuousattestation.",
+    "resource_receipt": "peakprocessRSS3.805GB + GPUpeakreservation2.510GB <6GiB rootallocation; catalog2GiBparallel; actualfollowupwall17.491seconds"
+  },
+  "catalog_population": {
+    "historical": 3353,
+    "reserved": 66,
+    "reserved_present": 65,
+    "reserved_missing_metadata_keys": [
+      "lc:largest-local-values-in-a-matrix-ii"
+    ],
+    "eligible": 3288,
+    "approved": 2481,
+    "eligible_excluded": 807,
+    "exclusion_counts": {
+      "missing_independent_tests": 685,
+      "exact_public_path": 75,
+      "runtime": 26,
+      "unusable_evidence": 21
+    },
+    "runtime_breakdown": {
+      "sortedcontainers_missing": 15,
+      "memory": 10,
+      "datetime_import": 1
+    },
+    "unusable_breakdown": {
+      "in_place_None_only": 19,
+      "checker_or_input_mismatch": 2
+    },
+    "label": "Preserved 2481-entry baseline before the separately qualified named-output extension"
+  },
+  "requested_approval": "Authorize exactly typed-literal-balanced-pair-128-v1:2sequential400step fresh arms usingshared2048tokenfulltextCPUfloat32encoder inputs, existing vs balancedliteral loss, withincombined4CPU/8GiB/5GiB/2400seconds; no audit/protected scoring, downloads, installs, publicpush, services changes or broadenedrepair.",
+  "separate_dependency_proposal": {
+    "status": "not_authorized_not_downloaded_not_installed",
+    "affected_existing_cases": 15,
+    "indexed_references": 27,
+    "version": "sortedcontainers==2.4.0",
+    "version_authority": "Proposed pinned version; source imports are unversioned, no historical requirement/pin recovered",
+    "wheel": "sortedcontainers-2.4.0-py2.py3-none-any.whl",
+    "bytes": 29575,
+    "sha256": "a163dcaede0f1c021485e957a39245190e74249897e2ae4b2aa38595db237ee0",
+    "metadata_url": "https://pypi.org/pypi/sortedcontainers/2.4.0/json",
+    "wheel_url": "https://files.pythonhosted.org/packages/32/46/9cb0e58b2deb7f82b84065f37f3bffeb12413f947f9388e4cac22c4621ce/sortedcontainers-2.4.0-py2.py3-none-any.whl",
+    "license": "Apache-2.0",
+    "packaging": "After separate approval only: fetch exact hash-pinned purePython wheel into project-local vendor artifact; retain license and provenance; no pip/system/venv install. Supply one fixed flat /task wheel file because nested taskfilenames are rejected. Use fixed manifest-bound zipimport/importlib bootstrap inside existing judge; preload sortedcontainers and bind SortedList for14implicit-reference usages and preserve1explicitimport. No manifest-selected command or arbitrary path.",
+    "isolation": "Keep /usr/bin/python3 -I -S, read-only/task, current namespaces, no network and all resource limits. Host-venv install or copy-to/task alone is insufficient.",
+    "qualification": "Separately approve judge integration and fresh dependency-enabled runtime qualification. Pinwheel/bootstrap/source/testidentities; replay15fixed cases and relevant sandbox/import/drift tests before any newcatalogapproval. Changedjudgeruntime requiresnewcatalogenvironment identity; no automaticreuseofoldapproval.",
+    "included_in_training_approval": false,
+    "document": "findings/known-named-output-1a-128-v1/DEPENDENCY_PROPOSAL.md"
+  },
+  "catalog_continuation": {
+    "approved": 2487,
+    "eligible_excluded": 801,
+    "exclusion_counts": {
+      "missing_independent_tests": 685,
+      "exact_public_path": 69,
+      "runtime": 26,
+      "unusable_evidence": 21
+    },
+    "approved_independent_tests_passed": 241529,
+    "verified_serving_cases": 3288,
+    "serving_failures": 0,
+    "catalog_sha256": "946294bbb6ca38bfb5def768af3d6222d251e561f37219f8c4b6db185655f092",
+    "route": "Explicit algsolve.named_lookup wrapper; original catalog unchanged",
+    "comparison": "Frozen nine cases: control0/9 to candidate6/9 correct, zero wrong answers",
+    "training": false,
+    "new_description_recognition_release": false
+  }
+}

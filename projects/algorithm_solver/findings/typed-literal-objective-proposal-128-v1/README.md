@@ -68,3 +68,9 @@ frozen candidate and authority; new training never grants protected access.
 **Required owner approval:** authorize exactly this paired 2x400-step experiment,
 including the shared 2,048-token full-text context, within the stated budgets. This does not authorize the older
 rebuilt-corpus training proposal, installs, new models or expanded search bounds.
+
+The [complete owner approval packet](OWNER_APPROVAL.md) and
+[machine-readable identities and bounds](owner-approval-packet.json) now include
+the original/checkpoint/initialization hashes, explicit family separation, full
+combined budget, matched baseline and GPU measurement caveats. The opt-in loss
+implementation passes eight tests plus two subtests; no optimizer step occurred.

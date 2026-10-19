@@ -70,3 +70,13 @@ Commit and synchronize source/evidence through trusted private host bundles.
 Public GitHub publication remains blocked by automatic approval review pending
 explicit approval for the exact destination and payload. No public-push workaround
 is authorized. Operational approvals do not permit human steering at query time.
+
+
+## Continuation: six additional exact known answers
+
+The [qualified named-output extension](../known-named-output-1a-128-v1/README.md)
+raises exact coverage to 2,487 of 3,288 eligible entries with zero failures in
+full serving verification. It leaves 801 abstentions; 1b and 2b remain unqualified.
+The [owner-ready paired training packet](../typed-literal-objective-proposal-128-v1/OWNER_APPROVAL.md)
+contains the exact two-arm identities and combined budget. Training and the
+separate dependency packaging remain unstarted pending explicit approval.
