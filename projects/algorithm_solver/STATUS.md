@@ -202,6 +202,23 @@ No post-score tuning, budget relaxation, training, protected opening or default
 route promotion followed. Software checks passed separately: 50 tests plus
 5 subtests, then 5 repair tests plus 2 subtests after final overhead accounting.
 
+## Timing reconciliation and measured wait overhead
+
+[Exact loss attribution](findings/typed-timing-reconciliation-128-v1/README.md)
+reconciles structural 4/10 to 2/10 and nearest 8/10 to 4/10: all six arm-level
+losses retain identical correct source and occur because fresh embedding alone
+exceeded two seconds, before any public sandbox execution. Cold encoder setup is
+outside the warm gate; warm embedding and complete sandbox overhead are inside.
+A current paired placement probe did not reproduce the historical slowdown or
+justify an affinity change. Historical contention is not causally identified.
+A reproduced Python process-wait delay was removed with a host pidfd notification,
+preserving all isolation, limits and cleanup; synthetic median judge time fell
+32.155 to 24.791 ms. This does not change solver scores. All 54 focused tests and
+5 subtests passed. Post-score label analysis places two known literal repairs at
+proposal ranks 1 and 3, so training is not yet the demonstrated immediate need.
+The rejected candidate, two-second gate and all training/protected boundaries
+remain intact; stabilize and instrument execution before a new quality pass.
+
 ## Matching and binary-input objectives
 
 1a and 1b share stored-answer recognition. Similarity, a partial requirement match

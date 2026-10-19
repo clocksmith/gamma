@@ -7,6 +7,7 @@ isolation probes, prove the boundary held) before judge results are trusted.
 from __future__ import annotations
 
 import os
+import subprocess
 from pathlib import Path
 import sys
 import tempfile
@@ -321,3 +322,29 @@ def test_checker_must_give_a_recognized_verdict():
     forging = "print(1)\n"
     verdict = judge.judge_stdin(forging, tests, checker_source=accepting, **_fast())
     assert not verdict.passed
+
+
+@pytest.mark.parametrize("fallback", [False, True])
+def test_child_exit_wait_reaps_and_preserves_return_code(monkeypatch, fallback):
+    if fallback:
+        def unavailable(pid):
+            raise OSError("pidfd unavailable")
+        monkeypatch.setattr(sandbox.os, "pidfd_open", unavailable, raising=False)
+    with subprocess.Popen([sys.executable, "-c", "raise SystemExit(7)"]) as proc:
+        assert sandbox._wait_for_exit(proc, 2.) == 7
+        assert proc.returncode == 7
+
+
+@pytest.mark.parametrize("fallback", [False, True])
+def test_child_exit_wait_preserves_timeout(monkeypatch, fallback):
+    if fallback:
+        def unavailable(pid):
+            raise OSError("pidfd unavailable")
+        monkeypatch.setattr(sandbox.os, "pidfd_open", unavailable, raising=False)
+    with subprocess.Popen([sys.executable, "-c", "import time; time.sleep(10)"]) as proc:
+        try:
+            with pytest.raises(subprocess.TimeoutExpired):
+                sandbox._wait_for_exit(proc, .01)
+        finally:
+            proc.kill()
+            proc.wait()
