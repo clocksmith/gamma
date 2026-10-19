@@ -20,7 +20,8 @@ def query_problem(raw):
             raise ValueError('Each example needs args and expected')
         if test.get('kwargs'):
             raise ValueError('Use positional arguments in editor examples')
-        if test.get('compare', 'return') != 'return' and not re.fullmatch(r'arg:\d+', test.get('compare', '')):
+        from .judge.declared_comparison import MODES
+        if test.get('compare', 'return') not in MODES | {'return'} and not re.fullmatch(r'arg:\d+', test.get('compare', '')):
             raise ValueError('Unsupported comparison')
     entry = raw.get('entry', {})
     if not isinstance(entry, dict) or not IDENTIFIER.fullmatch(entry.get('method', '')):

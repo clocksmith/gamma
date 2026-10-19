@@ -186,7 +186,7 @@ def main():
             raise ValueError('Audit input changed: ' + relative)
     if digest(boundary) != contract['boundary_sha256']:
         raise ValueError('Protected boundary changed')
-    serving = ['answer.py','approved_library.py','lookup.py','embed.py','public_examples.py',
+    serving = ['answer.py','approved_library.py','lookup.py','interface_compatibility.py','embed.py','public_examples.py',
                'importers.py','values.py','validate.py','editor_execution.py','editor_task.py',
                'editor_bridge.py','records.py','corpus.py','splits.py','routes.py']
     runtime_paths = [LANE_ROOT/'algsolve'/name for name in serving] + sorted((LANE_ROOT/'algsolve/judge').glob('*.py'))

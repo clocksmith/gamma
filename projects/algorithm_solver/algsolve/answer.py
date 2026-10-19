@@ -76,8 +76,12 @@ def answer(context: Context, query: Problem, *, reranker=None, rerank_thresholds
         retrieval_text = query.statement if approved_library is not None else query.query_text()
         vector = context.embedder.encode([retrieval_text], query=True)[0]
         candidates = context.lookup.scored_candidates(retrieval_text, vector)
+        if approved_library is not None:
+            from .interface_compatibility import filter_candidates
+            candidates, rejected = filter_candidates(candidates, context.lookup, query.public_tests)
+            result['interface_rejections'] = rejected
     if not candidates:
-        return finish('empty_index')
+        return finish('no_compatible_candidate' if result.get('interface_rejections') else 'empty_index')
     thresholds = (context.statement_thresholds if approved_library is not None
                   and hasattr(context, 'statement_thresholds') else context.thresholds)
     if reranker is not None and exact is None:

@@ -14,6 +14,8 @@ from .library_audit import inputs, sha, write
 from .lookup import LookupIndex
 from .records import LANE_ROOT
 from .rerank_recognition import calibrate, diagnostic_entries
+from .interface_compatibility import filter_candidates
+from .public_examples import recover
 
 
 def main():
@@ -41,7 +43,8 @@ def main():
                                       else q['problem_uid'] in problems)]
     files = [corpus.ENTRIES_PATH, corpus.EMBEDDINGS_PATH, corpus.KEYS_PATH, paraphrase.PARAPHRASES_PATH,
              LANE_ROOT / 'contracts/sample_manifest.json', Path(__file__),
-             LANE_ROOT / 'algsolve/lookup.py', LANE_ROOT / 'algsolve/embed.py']
+             LANE_ROOT / 'algsolve/lookup.py', LANE_ROOT / 'algsolve/embed.py',
+             LANE_ROOT / 'algsolve/interface_compatibility.py']
     contract = {'scope': 'old inspected recognition queries now development-only; no fresh cases',
                 'query_count': len(queries), 'excluded_count': len(proposed)-len(queries),
                 'input_sha256': {str(p.relative_to(LANE_ROOT)):sha(p) for p in files},
@@ -73,11 +76,21 @@ def main():
             active = LookupIndex([entries[i] for i in indices], vectors[indices]) if q['kind']=='absent_exact' else index
             started = time.perf_counter()
             candidates = active.scored_candidates(text, encoder.encode([text], query=True)[0])
+            source = problems.get(q.get('problem_uid'))
+            if source is None and q.get('target') in by_key:
+                source = next((problems[uid] for uid in by_key[q['target']].members if uid in problems), None)
+            examples = recover(source).public_tests if source else []
+            candidates, rejected = filter_candidates(candidates, active, examples)
             row = {'qid':q['qid'], 'target':q['target'], 'kind':q['kind'],
-                   'reranked':candidates, 'seconds':time.perf_counter()-started}
+                   'reranked':candidates, 'interface_rejections':rejected,
+                   'seconds':time.perf_counter()-started}
             rows.append(row); stream.write(json.dumps(row)+'\n'); stream.flush()
             print(f'[statement-calibration] {len(rows)}/{len(queries)}', flush=True)
-    thresholds = calibrate(rows, queries)
+    supported = [dict(r, reranked=r['reranked'] if len(r['reranked'])>1 else
+                      r['reranked']+[{'key':None,'score':-1.}]) for r in rows if r['reranked']]
+    qids = {r['qid'] for r in supported}
+    thresholds = calibrate(supported, [q for q in queries if q['qid'] in qids])
+    thresholds['incompatible_queries_abstained'] = len(rows)-len(supported)
     thresholds['fitted_on'] = 'old inspected recognition development and known-query diagnostics, statement only'
     write(directory/'thresholds.json', thresholds)
     print(json.dumps(thresholds), flush=True)

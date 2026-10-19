@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import json
 import math
+from .declared_comparison import MODES as DECLARED_MODES, compare as declared_compare
 from dataclasses import asdict, dataclass, field
 from pathlib import Path
 from typing import Any
@@ -98,6 +99,10 @@ def judge_functional(
     if not tests:
         return Verdict(False, NO_TESTS, 0, 0, 0.0)
     for index, test in enumerate(tests):
+        if test.compare in DECLARED_MODES and (test.validator is not None or
+                not declared_compare(test.compare, test.expected, test.expected)):
+            return Verdict(False, CHECKER_ERROR, len(tests), 0, 0.0,
+                           {'i':index, 'detail':'Invalid declared comparison evidence'})
         if test.compare == 'return:unordered_outer':
             try:
                 if test.validator is not None:
@@ -203,7 +208,7 @@ def _score_functional(result: sandbox.SandboxResult, tests: list[FunctionalTest]
 
 
 def _observed(test: FunctionalTest, record: dict) -> Any:
-    if test.compare in ("return", "return:edge_index_groups", "return:unordered_outer"):
+    if test.compare in DECLARED_MODES or test.compare in ("return", "return:edge_index_groups", "return:unordered_outer"):
         return record.get("result")
     if test.compare.startswith("arg:"):
         k = int(test.compare.split(":", 1)[1])
@@ -215,6 +220,8 @@ def _observed(test: FunctionalTest, record: dict) -> Any:
 def _matches(test: FunctionalTest, record: dict) -> bool:
     if "error" in record:
         return False
+    if test.compare in DECLARED_MODES:
+        return 'result' in record and declared_compare(test.compare, record['result'], test.expected)
     key_present = "result" in record if test.compare in ("return", "return:edge_index_groups", "return:unordered_outer") else "args_after" in record
     if test.compare == 'return:unordered_outer':
         return key_present and unordered_outer(test.expected, _observed(test, record))
