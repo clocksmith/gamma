@@ -49,6 +49,20 @@ new training, new download, protected scoring, public push or deployment is part
 of this campaign. Coverage, autonomous macro selection and measured human effort
 remain three distinct outcomes.
 
+## Integrated bilingual development corpus:58 unique problems
+
+The [v2 catalog](findings/js-corpus-b03-b04-integration-128-v1/catalog.json)
+preserves the24-entry predecessor and adds33 reviewed B03/B04 candidates plus115
+after exact-integer review:58 JavaScript and58 Python implementations, with5,095
+matched independent cases per language. Raw sources remain private. This changes
+the corpus for semantic macro discovery, not production recognition or the app.
+
+[Seven-conflict review](findings/js-corpus-b03-b04-integration-128-v1/README.md)
+retains five invalid-domain failures. The isolated outer-order correction for78/90
+passes91/91 and103/103 in both languages without source or expected-value edits;
+those two remain separate review results, outside the requested33+115 integration.
+Historical catalogs, failures, other owners' batches and protected tests remain intact.
+
 ## Integrated JavaScript corpus: B05 only
 
 The [private development JavaScript catalog](findings/js-corpus-b05-integration-128-v1/catalog.json)
