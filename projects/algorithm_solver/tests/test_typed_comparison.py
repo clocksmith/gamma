@@ -148,6 +148,40 @@ class TypedComparisonTests(unittest.TestCase):
         self.assertFalse(scored['accepted_correct']); self.assertEqual(scored['decision'],'abstain')
         self.assertNotIn('independent',row)
 
+    def test_missing_or_broken_judge_is_unknown_not_a_wrong_answer(self):
+        accepted = self.run_fixture(graph())
+        for reason in ('sandbox_error','checker_error','no_tests'):
+            with self.subTest(reason=reason):
+                scored = score_fixed(accepted,self.problem,[],
+                    judge=lambda *a,**k:Verdict(False,reason,0,0,.01))
+                self.assertIsNone(scored['independently_correct'])
+                self.assertFalse(scored['wrong_acceptance'])
+                self.assertFalse(scored['accepted_correct'])
+                self.assertTrue(scored['infrastructure_failure'])
+                self.assertEqual(correction_outcome(scored,scored),'unknown')
+
+    @unittest.skipUnless(Path('/usr/bin/bwrap').exists() and Path('/usr/bin/prlimit').exists(),
+                         'Real execution requires the Linux sandbox')
+    def test_real_sandbox_distinguishes_invalid_repaired_and_valid_wrong(self):
+        raw,logits = capture(self.encoding,graph())
+        corrupt(raw,logits,'first',0,1)
+        common = (self.problem,raw,logits,self.encoding,'fixture',.01,self.config,2.)
+        unchanged = run_route('raw',*common)
+        fixed = run_route('constrained',*common)
+        # A constant passes this public example but fails other identity inputs.
+        wrong = run_route('nearest_training_graph',*common,baseline_graph=graph(3))
+        self.assertFalse(unchanged['structurally_valid'])
+        self.assertEqual(unchanged['decision'],'abstain')
+        self.assertTrue(fixed['structurally_valid'])
+        self.assertEqual(fixed['decision'],'answered',fixed)
+        self.assertEqual(wrong['decision'],'answered',wrong)
+        independent = [{'args':[n],'expected':n} for n in (-4,0,42)]
+        fixed_score = score_fixed(fixed,self.problem,independent)
+        wrong_score = score_fixed(wrong,self.problem,independent)
+        self.assertTrue(fixed_score['accepted_correct'],fixed_score)
+        self.assertTrue(wrong_score['wrong_acceptance'],wrong_score)
+        self.assertFalse(wrong_score['accepted_correct'])
+
     def test_outcomes_and_gate_require_correctness_gain(self):
         def result(valid=False,correct=False,wrong=False,latency=.1):
             return {'structurally_valid':valid,'accepted_correct':correct,'wrong_acceptance':wrong,
