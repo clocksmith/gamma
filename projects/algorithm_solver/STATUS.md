@@ -110,15 +110,21 @@ The original `runs/typed-student-v2/model.pt` and
 Host `128` and recovery after reboot remain unverified. Recover the original
 hash-matching assets; do not silently retrain or substitute another corpus.
 
-[Suby software checks](findings/comparison-software-checks-suby/summary.json):
-the latest run at `47625acce` has 49 passing tests, 18 failures and 43 passing
-subtests. The earlier run had 42 passes and 17 failures; retain both logs.
-AppArmor's `unprivileged_userns` profile denies bubblewrap's `setpcap` and
-`net_admin` capabilities, preventing sandbox startup. The live probe now
-correctly returns `sandbox_error`, not a candidate runtime failure. No host
-security policy was changed, and these execution failures remain open.
-Qualify a supported sandbox configuration without weakening isolation, then
-rerun the focused judge/lane/comparison checks before the actual comparison:
+[Historical suby software checks](findings/comparison-software-checks-suby/summary.json)
+at `47625acce` had 49 passing tests, 18 failures and 43 passing subtests; retain
+both earlier logs and the AppArmor startup-denial evidence. A later ordinary
+restricted task context also denied socket creation. Neither established that
+command-specific reviewed execution was unavailable.
+
+**Current judge qualification:** the supported reviewed execution path now passes
+one harmless startup probe and **62 focused tests plus 19 subtests**, with zero
+failures, skips or deselections, in 10.88 seconds. These include actual sandbox
+execution and existing network/filesystem/process/resource containment checks.
+[Reviewed qualification receipt and raw logs](findings/reviewed-execution-suby/summary.json)
+bind the source, context, command and results. The existing bubblewrap isolation
+was unchanged; no host security setting, key or credential was modified. Original
+model/corpus assets remain missing. After restoring and hash-verifying them, use
+the approved reviewed context for the existing development comparison:
 
 ```sh
 PYTHONPATH=projects/algorithm_solver .venv/bin/python -m algsolve.synth.compare_typed --name typed-comparison-dev-v1
@@ -274,6 +280,36 @@ replace its assets. No new numerical qualification, tests, downloads or model
 runs occurred in this audit. No candidate is eligible for confirmation yet.
 Further code-only fixture work would not close any of these evidence gaps;
 there is no supported completion percentage to report.
+
+## Reviewed execution update, 2026-10-19
+
+The previous readiness audit describes the ordinary restricted task context.
+Command-specific automatic approval review subsequently permitted strict Mac SSH,
+Git fetch/push and the unchanged Linux judge qualification. Under that supported
+path the suby process reports `Seccomp: 0` and `NoNewPrivs: 0`, while the host
+AppArmor user-namespace restriction remains enabled. The probe and all focused
+qualification tests passed. This resolves the tested judge-startup boundary in
+reviewed execution; ordinary task socket restrictions are not an outstanding
+reason to reject that approved path. Historical failures remain preserved.
+
+Strict SSH returned `mac.lan` / `xyz`. The Mac's existing stored host key was
+retained. Metadata-only workspace/back-up searches found neither the recognition
+source/index bundle nor the original composition checkpoint/corpus. No protected
+contents or private credentials were read; 128 was not contacted. Other local
+embedding models are not approved substitutes and were not loaded.
+
+Commits `bccbf685e` and `5b83b24f8` were normally pushed to `origin/main`, and the
+clean Mac Gamma checkout fast-forwarded to `5b83b24f8`. Its wrapper lacked Node in
+the noninteractive PATH; existing Git performed the guarded fast-forward without
+installing anything. Only Gamma was synchronized.
+
+The smallest remaining common unblock is now **the original permitted development
+asset bundle and frozen encoder**, supplied from any authorized accessible backup
+or local source. The focused isolated-judge prerequisite is satisfied in reviewed
+execution. No new download, training run, replacement experiment or protected
+opening is authorized by this result. No model accuracy or learned-solving result
+exists, and no candidate is eligible for confirmation. Continue the declared
+development gates only after the missing inputs pass their original hash checks.
 
 ## Evidence and operating boundaries
 
