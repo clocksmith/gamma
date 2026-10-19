@@ -182,8 +182,25 @@ only; the sixth selects stable-unique instead of sorting. Every case already has
 qualified fit targets. Only 74 of 15,093 supervised literal bits are positive,
 a plausible optimization issue that has not been established causally. A named
 four-CPU, 8-GiB bounded literal-margin construction experiment is specified with
-exact assets and acceptance criteria; it has not run. No new training, target-derived
-solver edits, audit rerun, protected scoring or 2a/2b qualification occurred.
+exact assets and acceptance criteria. Its completed result is recorded below.
+No new training, target-derived solver edits, audit rerun, protected scoring or
+2a/2b qualification occurred.
+
+## Literal-margin fit experiment on 128
+
+[The frozen bounded candidate](findings/typed-literal-margin-fit-128-v1/README.md)
+returned 2/10 accepted-correct answers, matching its structural control; nearest
+training graph returned 4/10. Every arm had zero wrong acceptances and zero
+infrastructure failures. Candidate p95 was 5.134 seconds against the unchanged
+two-second warm budget, so acceptance failed. All ten raw predictions matched
+historical captures exactly. Only one additional literal public execution was
+possible and it timed out; the five previously diagnosed literal-only cases
+never reached repair because inference exhausted the decision budget. This is
+limited mechanism evidence, not proof that literal repair cannot help. The raw
+logits, decisions, repair traces and independent scores are preserved and sealed.
+No post-score tuning, budget relaxation, training, protected opening or default
+route promotion followed. Software checks passed separately: 50 tests plus
+5 subtests, then 5 repair tests plus 2 subtests after final overhead accounting.
 
 ## Matching and binary-input objectives
 
