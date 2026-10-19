@@ -124,6 +124,65 @@ open. Neither `03e290393` nor implementation/unit tests supply a solver result.
 Existing typed interpretation is sufficient; no new editor, native compiler or
 replacement framework is required.
 
+## Suby development inspection, 2026-10-19
+
+Recognition development proceeded independently of blocked composition execution.
+A synthetic caller-public-data probe found that candidate return-type filtering
+handled `return` but skipped the runner's default `return:exact`. The filter now
+checks that exact mode too, preserving exact judging's lossless integer/float
+equivalence without changing caller examples or relaxing input types. Non-exact
+comparison modes remain inconclusive at this filter. This fixes an interface
+boundary; passing software checks does not establish recognition or learned
+solving improvement. The source-bound approved catalog must be requalified for
+this changed runtime before new serving or evaluation claims; retain old catalog
+and raw receipts unchanged. No threshold or acceptance requirement changed.
+
+Validation on suby: 36 tests and seven subtests passed, one real-sandbox test
+deselected, using the command below. Touched-file compilation and module import
+also passed. These are software checks, not the earlier 49-pass/18-failure
+qualification campaign and not new corpus or protected evaluation evidence.
+
+```sh
+PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=projects/algorithm_solver:projects/algorithm_solver/tests .venv/bin/python -m pytest -q -p no:cacheprovider projects/algorithm_solver/tests/test_interface_compatibility.py projects/algorithm_solver/tests/test_approved_library.py projects/algorithm_solver/tests/test_declared_comparison.py tests/test_algorithm_solver_lane.py -k 'not test_declared_public_contract_survives_both_editor_execution_paths'
+```
+
+Remaining gaps and next actions:
+
+- Local `data/` is absent, including the recognition catalog and embeddings;
+  original composition checkpoint and qualified corpus remain absent too.
+  Recover original source-bound assets only through verified, authorized access;
+  do not substitute rebuilt assets under their identities.
+- SSH to both configured aliases and the supplied 128 LAN address fails at
+  local socket creation (`Operation not permitted`), before any handshake.
+  This establishes neither remote identity nor that 128 is offline.
+- Mac's configured host-key alias is `xys-macbook-air.tail995236.ts.net`.
+  Its stored ED25519 fingerprint is
+  `SHA256:CvRB17NZ4kZcZFmCYQV75lz7f/q8b24KqCJOzlYO/cU`;
+  the owner supplied `SHA256:ZcBGtPahvQYV20efuvV+sFPOGC9Zrht+xVgAlNAXuIc`.
+  Stop access until trusted out-of-band verification resolves that conflict.
+  No trust file or authorization script was changed or executed.
+- The current bubblewrap probe fails before payload execution at
+  `Failed to create NETLINK_ROUTE socket: Operation not permitted`.
+  The enclosing Codex process already inherits one seccomp filter,
+  `NoNewPrivs=1` and zero capabilities. Syscall tracing is denied too.
+  No readable seccomp denial record identifies the exact filter rule; do not
+  attribute this current socket failure solely to AppArmor.
+- Separately, the kernel journal records earlier AppArmor denials of `net_admin`
+  and `setpcap` for bubblewrap under `unprivileged_userns` on 2026-10-18.
+  A platform-approved execution session on suby must permit the needed SSH
+  sockets and nested bubblewrap setup while preserving the existing isolation
+  contract. An inherited filter cannot be removed by a child process. If host
+  AppArmor still denies the approved session, an administrator must supply an
+  approved judge execution profile. No host policy change or bypass is authorized
+  by this work; no unsandboxed fallback is permitted.
+- After access, original assets and isolation are qualified, rerun the judge and
+  lane acceptance checks, then the declared development comparison command above
+  in the composition section. Historical search baselines and an explicit seal
+  remain required before protected composition scoring. For recognition, freeze
+  and requalify the changed runtime on permitted development assets before any
+  fresh independent evaluation. No sealed description cases were opened;
+  Goal 1b still permits one initial request and zero questions.
+
 ## Evidence and operating boundaries
 
 | Subgoal | Evidence and gap |

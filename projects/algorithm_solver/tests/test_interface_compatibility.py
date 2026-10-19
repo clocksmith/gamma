@@ -42,3 +42,40 @@ class InterfaceTests(unittest.TestCase):
         kept, rejected = filter_candidates(candidates,ctx.lookup,[{'args':['wrong']}])
         self.assertEqual(kept,[])
         self.assertEqual(rejected,[{'key':ctx.entries[0].key,'reason':'argument_type'}])
+
+
+class ExactPublicInterfaceTests(unittest.TestCase):
+    def test_recognition_default_exact_rule_filters_incompatible_output(self):
+        from algsolve.recognition_release import public_problem
+        entry = copy.deepcopy(context().entries[0])
+        entry.starter_code = 'class Solution:\n def solve(self, nums: list[int]) -> int: pass'
+        query = public_problem({'query': 'Return whether an input value is present.',
+                                'public_examples': [{'args': [[2, 3]], 'expected': True}]})
+        self.assertEqual(query.public_tests[0]['compare'], 'return:exact')
+        candidates = [{'key': entry.key, 'score': .8}]
+        ctx = context()
+        ctx.entries[0].starter_code = entry.starter_code
+        kept, rejected = filter_candidates(candidates, ctx.lookup, query.public_tests)
+        self.assertEqual(kept, [])
+        self.assertEqual(rejected, [{'key': entry.key, 'reason': 'return_type'}])
+
+    def test_exact_return_checks_structure_and_preserves_numeric_equivalence(self):
+        entry = copy.deepcopy(context().entries[0])
+        entry.starter_code = 'class Solution:\n def solve(self, nums: list[int]) -> list[int]: pass'
+        for expected, reason in [([[1]], 'return_type'), ([True], 'return_type'),
+                                 ([1.0], None), ([1.5], 'return_type')]:
+            with self.subTest(expected=expected):
+                example = {'args': [[2]], 'expected': expected, 'compare': 'return:exact'}
+                original = copy.deepcopy(example)
+                self.assertEqual(mismatch(entry, [example]), reason)
+                self.assertEqual(example, original)
+        # Exact output equivalence must not loosen the input declaration.
+        self.assertEqual(mismatch(entry, [{'args': [[2.0]], 'expected': [2],
+                                          'compare': 'return:exact'}]), 'argument_type')
+
+    def test_nonexact_and_inplace_modes_remain_inconclusive(self):
+        entry = copy.deepcopy(context().entries[0])
+        entry.starter_code = 'class Solution:\n def solve(self, nums: list[int]) -> int: pass'
+        for mode in ('arg:0', 'return:numeric_list_tol_1e-5', 'unknown'):
+            with self.subTest(mode=mode):
+                self.assertIsNone(mismatch(entry, [{'args': [[2]], 'expected': [2], 'compare': mode}]))
