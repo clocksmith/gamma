@@ -1,0 +1,89 @@
+{
+  "schema": "recognition-independent-public-comparison-adapter-v1",
+  "artifact": "evaluator-comparison.py",
+  "artifact_sha256": "80c975d955c59a6e7ebe9262b076173bfc1090714f116f5b2d7742c31a7bb943",
+  "contains_case_ids_or_targets_or_case_values": false,
+  "callable": {
+    "name": "compare",
+    "arguments": [
+      "actual: JSON value",
+      "expected: JSON value",
+      "output_comparison: string or null"
+    ],
+    "returns": "boolean",
+    "unknown_mode": "false; never fall back to permissive equality"
+  },
+  "case_field": "output_comparison is optional; absent/null selects exact structural comparison. Rules are public requirement semantics, not intended-identity hints.",
+  "example_adapter": {
+    "input_shape": {
+      "args": "array of ordered positional JSON values",
+      "expected": "JSON value"
+    },
+    "host_judge_shape": {
+      "args": "same unmodified args",
+      "expected": "same unmodified expected",
+      "compare": "declared host comparison mode"
+    },
+    "policy": "Add compare only in a derived host-judge request. Do not edit authored examples. Apply identical rules to public and private checks. Compare-mode assignment is fixed before candidate opening.",
+    "sandbox_boundary": "Only invocation inputs and returned program enter sandbox execution. Expected values and comparator code remain in host judge.",
+    "private_boundary": "Private checks execute only after route response capture; never used for ranking, repair or generation."
+  },
+  "modes": [
+    {
+      "authored_rule": null,
+      "suggested_host_mode": "return:exact",
+      "requirements": [
+        "Recursive JSON structure and ordered lists match.",
+        "Booleans are never numbers; integer expected values require integer actual values.",
+        "Finite numeric outputs use numerical equality when expected type is noninteger number.",
+        "String output equality is exact."
+      ]
+    },
+    {
+      "authored_rule": "numeric lists with absolute or relative tolerance 1e-5",
+      "suggested_host_mode": "return:numeric_list_tol_1e-5",
+      "requirements": [
+        "Both outputs are flat lists of equal length.",
+        "Elements must be finite numbers, never booleans.",
+        "Preserve order. For each pair, absolute difference must be <= max(1e-5,1e-5*max(abs(actual),abs(expected)))."
+      ]
+    },
+    {
+      "authored_rule": "unordered list of distinct integers",
+      "suggested_host_mode": "return:unordered_distinct_int",
+      "requirements": [
+        "Both outputs are lists containing integers, never booleans.",
+        "Each list has no duplicate values.",
+        "Compare sorted lists, retaining length and multiplicity checks."
+      ]
+    },
+    {
+      "authored_rule": "unordered outer list; preserve inner order",
+      "suggested_host_mode": "return:unordered_outer",
+      "requirements": [
+        "Both outputs are lists of integer lists; booleans are invalid.",
+        "Each full inner sequence must be unique in the outer list.",
+        "Outer order may change; inner order cannot change.",
+        "Compare sorted tuples of complete rows with length and duplicate checks; never convert only to sets."
+      ]
+    },
+    {
+      "authored_rule": "exact rational decimal equivalence; parentheses denote indefinite repetition; enforce requested sign/integer/no-exponent formatting",
+      "suggested_host_mode": "return:rational_decimal",
+      "requirements": [
+        "Both outputs are strings encoding decimal numbers with optional minus sign, optional decimal part, and optional final parenthesized repeating digits.",
+        "No exponent, plus sign, redundant integer leading zeros, negative zero, or empty fractional part.",
+        "An integer result must have no decimal point. Terminating decimals must not be encoded using repeating blocks.",
+        "Parse exactly with integer arithmetic. For integer part I, nonrepeating digits F of length m, and repeating digits R of length k, magnitude is I + F/10^m + R/(10^m*(10^k-1)); omit terms not present and apply sign.",
+        "Equivalent nonterminating representations are accepted without float conversion; equality is exact rational equality."
+      ]
+    }
+  ],
+  "validation": {
+    "artifact": "comparison-validation.json",
+    "sha256": "e97587e3d861adbfa164e6078e396f518d3e588e90cb0910bd9bebfca3e40538",
+    "synthetic_checks_passed": 18
+  },
+  "representation": "JSON positional arguments only; no pointer objects or custom typed markers are needed.",
+  "clarification_questions": 0
+}
