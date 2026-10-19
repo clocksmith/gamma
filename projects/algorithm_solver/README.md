@@ -87,8 +87,10 @@ The older pilots below remain evidence; they are not the intended final componen
 granularity or a qualified unfamiliar-problem solver.
 
 The two main goals and four subgoals are in [STATUS.md](STATUS.md): recognize
-known statements (1a), understand natural descriptions (1b), compose familiar
-solutions and variants (2a), and compose unfamiliar solutions (2b).
+known statements (1a), understand natural descriptions (1b), autonomously compose
+known problems (2a), and autonomously handle nearby semantic variants (2b).
+The binary editor is optional and is not a prerequisite for either solving goal.
+The active bounded graph-development and student-learning sequence is in STATUS.
 Goal 2 uses typed functions,
 data-structure operations, explicit state and control flow. Reusable recipes
 expand into those building blocks; they are not the primitive vocabulary itself.
