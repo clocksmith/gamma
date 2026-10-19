@@ -87,7 +87,8 @@ def fingerprint(text: str) -> Fingerprint:
 
 def _jaccard(a: frozenset, b: frozenset) -> float:
     if not a and not b:
-        return 1.0
+        # Absence of extracted evidence is not agreement about requirements.
+        return 0.0
     return len(a & b) / len(a | b)
 
 
