@@ -7,8 +7,8 @@ retain earlier contracts, failures and reproduction instructions.
 
 | Goal | Actual evidence | Next executable step / boundary |
 |---|---|---|
-| **1a: stored-solution recognition** | 16 reconstructed stored references qualify; full historical 1a release failed 13/20 versus unchanged 18/20 gate. The local index has 66 entries, not the historical full catalog. | Prepared fresh-query evaluator and source-bound author/reviewer inputs. Author/review/seal a new bounded known-query sample after explicit agent authorization, then execute the frozen route. No full-catalog or absence release claim. |
-| **1b: one informal input, zero questions** | Frozen contradiction candidate returned 11/16 correct development answers versus 7/16 control, zero wrong/unqualified, five abstentions. Eight old no-example controls are pre-retrieval evidence only. | Same fresh evaluator: independently reviewed complete and materially ambiguous descriptions, initial examples only, zero questions, all first choices/errors/abstentions retained. No post-opening tuning or invented coverage gate. |
+| **1a: stored-solution recognition** | 16 reconstructed stored references qualify; full historical 1a release failed 13/20 versus unchanged 18/20 gate. The local index has 66 entries, not the historical full catalog. | Fresh sealed sample: 7/12 paraphrases and 3/8 sibling variants correct, zero wrong known-target answers. Preserve this bounded no-absence result; full-catalog gate remains unpassed. |
+| **1b: one informal input, zero questions** | Frozen contradiction candidate returned 11/16 correct development answers versus 7/16 control, zero wrong/unqualified, five abstentions. Eight old no-example controls are pre-retrieval evidence only. | Fresh sample: 6/12 complete descriptions correct; only 2/4 required ambiguity abstentions, two wrong acceptances. Candidate fails required ambiguity behavior; no promotion or tuning on this opened confirmation. |
 | **2a: autonomous familiar composition** | New local corpus: 24 graph labels / 18 problems qualified on 57 public + 2,975 independent cases + 24 bound probes. No-training nearest baseline returned 2/10 fit and 0/8 audit correct; 16 abstentions, zero wrong/infra. No new learned prediction result. | Prepared separate fixed CPU training runner and exact resource proposal. Freeze it before training, then freeze/execute raw versus bounded correction versus nearest graph using identical inputs and existing correctness gates. Query embedding already exceeds the two-second budget for many cases; a head-only change cannot establish latency qualification. |
 | **2b: nearby semantic variants** | No independent nearby-variant result. Existing broader 66-problem reservation and protected tests remain unopened. | New separate variant-seal protocol prepared. First qualify/freeze a composer, then independently author/review changed requirements/answers; direct public input only. Do not train on or tune from opened variants. |
 
@@ -20,15 +20,21 @@ The policy, thresholds, weights, 66 entries, vectors and 16-source approval stay
 unchanged. No default route or release gate was promoted.
 [Fresh-query protocol](contracts/recognition_fresh_suby_v1.json) plans the existing
 protocol's 12 paraphrases, eight sibling variants, 12 complete and four ambiguous
-descriptions on the bounded catalog. Its evaluator and metadata-only author
-catalog are prepared; no new cases have been authored/opened. Two distinct
-isolated author/reviewer roles require explicit delegation authorization under
-the current agent policy. The original reserved description subset remains sealed
+descriptions on the bounded catalog. Explicitly authorized isolated author/reviewer
+agents completed and sealed
+all 36 cases; seven were revised before sealing, none rejected or replaced.
+[Fresh frozen result](findings/recognition-fresh-suby-v1/README.md): 16/36 correct
+answers, two wrong acceptances, 18 abstentions, zero unqualified answers/questions.
+Both errors were materially ambiguous descriptions, so the candidate fails the
+required behavior and must not be promoted. No result-driven change was made.
+Agent review is not human review; prior model exposure is unknown. The original
+reserved description subset remains sealed
 and is absent locally. The full-catalog 1a gate stays unpassed; this new limited
 sample cannot supply its full-catalog/absence evidence. Goal 1b has no agreed
 final numeric coverage threshold; do not invent one.
 
-After author/reviewer authorization, review seal and evaluator freeze:
+The completed frozen run is resumable without inference/judging while its bound
+source set stays identical (93 fresh / 208 original control files preserved):
 
 ```sh
 export OMP_NUM_THREADS=4 OPENBLAS_NUM_THREADS=4 MKL_NUM_THREADS=4
@@ -37,9 +43,13 @@ PYTHONPATH=projects/algorithm_solver .venv/bin/python -m algsolve.fresh_recognit
 PYTHONPATH=projects/algorithm_solver .venv/bin/python -m algsolve.fresh_recognition_suby run
 ```
 
-The fresh harness passed 20 focused tests and 38 subtests. These are software
-checks, not fresh recognition results. Cold model loading, full/loaded route costs,
-review rejections, wrong/unqualified answers and family uncertainty stay distinct.
+The fresh harness passed 20 focused tests and 38 subtests before authoring. The
+run counter through scoring was 34.745 seconds wall; loaded route p50/p95
+0.664/1.258 seconds,
+cold encoder load 4.161 seconds. All 32 known targets appeared in raw top five;
+retrieval did not establish identity. A future development candidate needs explicit
+negative/missing-distinction handling and separately sealed unopened confirmation.
+No existing release gate or protected boundary changed.
 
 ## Composition evidence and next run
 
@@ -48,7 +58,10 @@ review rejections, wrong/unqualified answers and family uncertainty stay distinc
 `6c43031ed101199ab6cdae7a8377a301988ad83d8343ad84689ccccf7e4a5cd5`.
 The 15 fit / 9 audit graphs retain problem/family/pattern separation and existing
 support checks. [Nearest-fit baseline](findings/typed-lcd-suby-nearest-v1/README.md)
-records actual failures and complete costs. Labels are existing authored teachers;
+records actual failures and complete costs.
+[Existing-trace latency attribution](findings/typed-lcd-suby-latency-attribution-v1/README.md)
+finds embedding/ranking alone over two seconds for 7/10 fit and 4/8 audit requests;
+all 18 inputs are untruncated. Labels are existing authored teachers;
 the baseline reuses fit graphs. Neither is learned autonomous solving.
 
 [Exact training proposal](contracts/typed_lcd_suby_training_proposal_v1.json):
