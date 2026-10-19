@@ -14,14 +14,36 @@ from .requirements import extract
 FACETS = ('ordering', 'indexing', 'layout', 'transactions', 'fee', 'cooldown',
           'output', 'updates', 'duplicates', 'changes')
 
+# Only these existing absence concepts have an unambiguous coordinated reading.
+# `no A or B` prohibits both; this is not the alternative `A or B`. An unrelated
+# or outside the entire recognized span still makes the clause uncertain.
+_NEGATIVE_TERM = r'(?:transaction fee|fees?|cooldown|waiting days?)'
+_NEGATIVE_COORDINATION = re.compile(
+    r'\bno\s+' + _NEGATIVE_TERM + r'(?:\s+(?:or|nor)\s+' + _NEGATIVE_TERM + r')+\b', re.I)
+
+
+def _negative_coordinations(text):
+    spans = []
+    for match in _NEGATIVE_COORDINATION.finditer(text):
+        terms = re.split(r'\s+(?:or|nor)\s+', re.sub(r'^no\s+', '', match.group(), flags=re.I), flags=re.I)
+        facets = sorted({'fee' if 'fee' in term.lower() else 'cooldown' for term in terms})
+        spans.append({'start': match.start(), 'end': match.end(), 'text': match.group(),
+                      'facets': facets})
+    return spans
+
 
 def explicit_facts(text):
-    """Retain the existing grammar, suppressing additional uncertain contexts.
+    """Extract known assertions, retaining coordinated absence and uncertainty.
 
     This deliberately loses coverage rather than interpreting double negation,
     alternatives, quoted requirements or hypothetical clauses as assertions.
     """
     parsed = extract(text)
+    coordinated = _negative_coordinations(text)
+    for span in coordinated:
+        for facet in span['facets']:
+            parsed['evidence'].setdefault(facet, {}).setdefault('none', []).append(
+                {k: span[k] for k in ('start', 'end', 'text')})
     evidence, suppressed = {}, []
     for facet, values in parsed['evidence'].items():
         for value, spans in values.items():
@@ -34,10 +56,16 @@ def explicit_facts(text):
                     reason = 'negated_prefix'
                 elif re.search(r'\b(?:if|unless|might|maybe|perhaps|possibly|assuming|suppose|could|would|either)\b', sentence, re.I):
                     reason = 'conditional_or_uncertain_clause'
-                elif re.search(r'\bor\b', sentence, re.I) and facet != 'output':
-                    reason = 'alternative_clause'
                 elif '"' in before or '\u201c' in before or '\u201d' in before:
                     reason = 'quoted_context'
+                elif re.search(r'\b(?:or|nor)\b', sentence, re.I) and facet != 'output':
+                    ors = [sentence_start + m.start() for m in re.finditer(r'\b(?:or|nor)\b', sentence, re.I)]
+                    negative_assertion = value == 'none' and any(
+                        facet in group['facets'] and group['start'] <= span['start'] < group['end']
+                        and all(group['start'] <= position < group['end'] for position in ors)
+                        for group in coordinated)
+                    if not negative_assertion:
+                        reason = 'alternative_clause'
                 if reason:
                     suppressed.append(dict(span, facet=facet, value=value, reason=reason))
                 else:

@@ -7,17 +7,18 @@ retain earlier contracts, failures and reproduction instructions.
 
 | Goal | Actual evidence | Next executable step / boundary |
 |---|---|---|
-| **1a: stored-solution recognition** | 16 reconstructed stored references qualify; full historical 1a release failed 13/20 versus unchanged 18/20 gate. The local index has 66 entries, not the historical full catalog. | Fresh sealed sample: 7/12 paraphrases and 3/8 sibling variants correct, zero wrong known-target answers. Preserve this bounded no-absence result; full-catalog gate remains unpassed. |
+| **1a: stored-solution recognition** | 16 reconstructed stored references qualify; full historical 1a release failed 13/20 versus unchanged 18/20 gate. The suby reconstruction has 66 entries, not the historical full catalog. | Fresh sealed sample: 7/12 paraphrases and 3/8 sibling variants correct, zero wrong known-target answers. Preserve this bounded no-absence result; full-catalog gate remains unpassed. |
 | **1b: one informal input, zero questions** | Frozen contradiction candidate returned 11/16 correct development answers versus 7/16 control, zero wrong/unqualified, five abstentions. Eight old no-example controls are pre-retrieval evidence only. | Fresh sample: 6/12 complete descriptions correct; only 2/4 required ambiguity abstentions, two wrong acceptances. Candidate fails required ambiguity behavior; no promotion or tuning on this opened confirmation. |
-| **2a: autonomous familiar composition** | New local corpus: 24 graph labels / 18 problems qualified on 57 public + 2,975 independent cases + 24 bound probes. No-training nearest baseline returned 2/10 fit and 0/8 audit correct; 16 abstentions, zero wrong/infra. No new learned prediction result. | Prepared separate fixed CPU training runner and exact resource proposal. Freeze it before training, then freeze/execute raw versus bounded correction versus nearest graph using identical inputs and existing correctness gates. Query embedding already exceeds the two-second budget for many cases; a head-only change cannot establish latency qualification. |
+| **2a: autonomous familiar composition** | Original assets recovered on 128. Matched raw/corrected each returned 4/10 fit and 0/8 audit correct; nearest-fit graph 8/10 fit and 0/8 audit; zero wrong acceptances or infrastructure failures. | Correction adds no correct answer and is rejected by the frozen audit rule. Preserve original/rebuilt identities; new training still requires full-text memory qualification and owner approval. |
 | **2b: nearby semantic variants** | No independent nearby-variant result. Existing broader 66-problem reservation and protected tests remain unopened. | New separate variant-seal protocol prepared. First qualify/freeze a composer, then independently author/review changed requirements/answers; direct public input only. Do not train on or tune from opened variants. |
 
 ## Recognition evidence and next run
 
 [Matched development result](findings/recognition-requirements-dev-suby-v1/README.md)
 binds candidate `11e940fdca16abb0b968bd2459ff60285ed442f77e6c6a1bede9502296f69cfa`.
-The policy, thresholds, weights, 66 entries, vectors and 16-source approval stay
-unchanged. No default route or release gate was promoted.
+That archived candidate keeps its original policy, thresholds, weights, 66 entries,
+vectors and 16-source approval. A separate coordinated-negation parser patch is
+software-tested but unselected; no default route or release gate was promoted.
 [Fresh-query protocol](contracts/recognition_fresh_suby_v1.json) plans the existing
 protocol's 12 paraphrases, eight sibling variants, 12 complete and four ambiguous
 descriptions on the bounded catalog. Explicitly authorized isolated author/reviewer
@@ -26,15 +27,17 @@ all 36 cases; seven were revised before sealing, none rejected or replaced.
 [Fresh frozen result](findings/recognition-fresh-suby-v1/README.md): 16/36 correct
 answers, two wrong acceptances, 18 abstentions, zero unqualified answers/questions.
 Both errors were materially ambiguous descriptions, so the candidate fails the
-required behavior and must not be promoted. No result-driven change was made.
+required behavior and must not be promoted. The evaluated candidate was not
+changed; follow-up code is designated separately.
 Agent review is not human review; prior model exposure is unknown. The original
-reserved description subset remains sealed
-and is absent locally. The full-catalog 1a gate stays unpassed; this new limited
+reserved description subset was absent on suby and remains unopened here. The full-catalog 1a gate stays unpassed; this new limited
 sample cannot supply its full-catalog/absence evidence. Goal 1b has no agreed
 final numeric coverage threshold; do not invent one.
 
-The completed frozen run is resumable without inference/judging while its bound
-source set stays identical (93 fresh / 208 original control files preserved):
+The completed frozen run resumed without inference/judging (93 fresh / 208
+original control files preserved). Subsequent source patches intentionally differ
+from the frozen binding: these archival commands require the exact source bytes
+from commit `36404d2a1`, rather than relabeling current code as that candidate:
 
 ```sh
 export OMP_NUM_THREADS=4 OPENBLAS_NUM_THREADS=4 MKL_NUM_THREADS=4
@@ -50,8 +53,27 @@ cold encoder load 4.161 seconds. All 32 known targets appeared in raw top five;
 retrieval did not establish identity. A future development candidate needs explicit
 negative/missing-distinction handling and separately sealed unopened confirmation.
 No existing release gate or protected boundary changed.
+[Finite post-fresh diagnosis](findings/post-fresh-diagnosis-suby-v1/README.md)
+distinguishes the missing trade/duplicate semantics from a concrete coordinated
+negative parser defect. The opt-in patch `recognition-negative-coordination-dev-v1`
+is software-tested, unselected, with no new recognition inference. The consumed
+fresh cohort was not replayed. A missing-required-facet gate is proposed, not
+claimed implemented or qualified.
 
 ## Composition evidence and next run
+
+[Recovered original matched comparison on 128](findings/reconciliation-128-v1/README.md)
+completed without training. All 18 raw predictions match the historical checkpoint.
+One scoring-serialization bug was fixed; the new evaluator scored byte-identical
+frozen decisions under a separately recorded identity, preserving the failed run.
+Raw/corrected each returned 4/10 fit and 0/8 audit accepted-correct answers; nearest
+fit returned 8/10 and 0/8. All routes had zero wrong acceptances and infrastructure
+failures. Correction increased fit validity by one but added no correct answer,
+so the unchanged selection rule rejects it. Protected scoring remains closed.
+This historical comparison retains the original 1,024-token fit-memory truncation;
+it does not qualify a full-text encoding policy or the separately rebuilt corpus.
+
+The following suby results remain distinct historical/rebuilt evidence:
 
 [New corpus qualification](findings/typed-lcd-suby-development-v1/README.md):
 `runs/typed-lcd-suby-development-v1/pairs.jsonl` has SHA256
@@ -61,17 +83,27 @@ support checks. [Nearest-fit baseline](findings/typed-lcd-suby-nearest-v1/README
 records actual failures and complete costs.
 [Existing-trace latency attribution](findings/typed-lcd-suby-latency-attribution-v1/README.md)
 finds embedding/ranking alone over two seconds for 7/10 fit and 4/8 audit requests;
-all 18 inputs are untruncated. Labels are existing authored teachers;
+all 18 request texts are untruncated. Labels are existing authored teachers;
 the baseline reuses fit graphs. Neither is learned autonomous solving.
+The follow-up audit distinguishes untruncated requests from two truncated memory
+descriptions. Query vectors are already shared across matched routes; each
+unique request and fit graph is encoded once. One fixed 719-token cache on/off
+pair produced identical vectors but took 5.025/5.311 seconds forward-only. No
+encoder, model, threshold or cap change followed; no safe two-second fix is shown.
 
 [Exact training proposal](contracts/typed_lcd_suby_training_proposal_v1.json):
 `typed-lcd-student-suby-v1`, 400 fixed steps, seed 17, width 64, two layers,
 AdamW 0.001, four CPU threads, 8 GiB RAM, 5 GiB asset/run disk, 900-second cap,
 existing frozen encoder only; no download, dependency install, protected input or
-sweep. The prepared runner has not trained. AGENTS.md requires user authority for
+sweep. The prepared runner has not trained. Its new full-text preflight rejects two
+fit-graph memory descriptions (1,565 and 1,660 tokens) above the existing 1,024
+cap, before encoder allocation. All 18 request texts fit. The old baseline remains
+intact; a separately declared full-text memory policy and new baseline identity
+are needed before a valid training freeze. AGENTS.md requires user authority for
 compute jobs; the earlier scope prohibited training. Confirm that the current
-broader scope authorizes this exact newly named run before launch. Do not treat
-the historical `training:false` comparison contract as a new training run.
+broader scope authorizes this exact newly named run before launch, after the
+full-text encoding boundary is qualified. The commands currently refuse oversized
+inputs. Do not treat the historical `training:false` comparison contract as a new training run.
 
 ```sh
 export OMP_NUM_THREADS=4 OPENBLAS_NUM_THREADS=4 MKL_NUM_THREADS=4
@@ -92,11 +124,13 @@ campaign. No protected score or autonomous graph-development loop is authorized.
 permission while holding changed semantics and answers out. It declares no new
 final numeric 2b coverage gate.
 
-Historical reproduction remains blocked: original checkpoint
+The original checkpoint
 `25f9ca2ff223f5ae930f9511be21445efaa6dde49a697eccd5c648bdb918617c`
 and corpus `566d6b440d7fdd16bac0b86114b5e8dd35ba8bd646b6bd304f8cfbc5e201330e`
-are absent. New artifacts never use those identities. Development now proceeds
-locally without 128; no new weights, dataset or protected data was acquired.
+were recovered on 128 and verified against frozen repository contracts. Rebuilt
+suby assets keep their separate identities. The full comparison and evaluator-only
+recovery are retained under `runs/typed-composer-recovered-128-v1` and
+`runs/typed-composer-recovered-128-scorefix-v1`. No weights or datasets were downloaded.
 
 ## Matching and binary-input objectives
 
@@ -109,8 +143,12 @@ insertion. Encoding savings or interface tests cannot establish solver correctne
 
 ## Operating boundary
 
-Suby is the execution host; use its repository `.venv/bin/python` and the supported
-reviewed execution context for the unchanged isolated Linux judge. Preserve
+128 is the execution host; use its repository `.venv_rocm/bin/python` (the default
+`.venv` lacks PyTorch) and normal reviewed execution for the isolated Linux judge.
+The current host passed 78 focused tests plus 58 subtests; the scoring fix passed
+23 focused tests plus 11 subtests. Those overlapping software checks are separate
+from solving evidence. All six existing SSH directions among 128, suby and macOS
+passed strict pinned host-key checks. Preserve
 [sandbox qualification](findings/reviewed-execution-suby/summary.json), failures,
 original controls, frozen vocabulary, source/test provenance and resource bounds.
 Never change host security policy or use unsandboxed fallback. Keep raw source,

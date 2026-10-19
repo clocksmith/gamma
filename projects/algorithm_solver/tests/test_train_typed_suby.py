@@ -7,7 +7,7 @@ import tempfile
 import unittest
 from unittest.mock import patch
 
-from algsolve.synth.train_typed_suby import training_view, train
+from algsolve.synth.train_typed_suby import training_view, train, full_input_tokens
 from algsolve.rebuild_recognition import sha
 
 
@@ -21,6 +21,22 @@ class ProposedTrainingBoundaries(unittest.TestCase):
         self.assertEqual([p['target'] for p in fit],[1,2,3])
         self.assertEqual(indices,[0,0,2]);self.assertEqual(groups,[[0,1],[2]])
         self.assertTrue(all('target' not in r for r in requests))
+
+    def test_full_text_preflight_accepts_boundary_and_never_requests_truncation(self):
+        calls=[]
+        def tokenize(text, **kw):
+            calls.append(kw)
+            return {'input_ids': list(range(len(text)))}
+        rows=full_input_tokens(tokenize,[('fit_graph','g','four'),('query','q','abc')],4)
+        self.assertEqual([r['tokens'] for r in rows],[4,3])
+        self.assertTrue(all(c=={'truncation':False} for c in calls))
+        self.assertTrue(all('text' not in r for r in rows))
+
+    def test_oversized_memory_or_query_fails_closed(self):
+        for kind in ('fit_graph','query'):
+            with self.subTest(kind=kind):
+                with self.assertRaisesRegex(ValueError,'no truncation, embeddings or training'):
+                    full_input_tokens(lambda text,**kw:{'input_ids':range(len(text))},[(kind,'id','large')],4)
 
     def test_completed_training_resumes_without_importing_model_or_fitting(self):
         with tempfile.TemporaryDirectory() as temp:

@@ -63,6 +63,40 @@ class RequirementDevelopment(unittest.TestCase):
             with self.subTest(text=text):
                 self.assertEqual({k:v for k,v in explicit_facts(text)['facts'].items() if k != 'family'}, {})
 
+    def test_coordinated_absence_is_conjunction_not_alternative(self):
+        for text in ['no fees or waiting days', 'no cooldown or transaction fee',
+                     'no transaction fee nor cooldown', 'no waiting day or fees or cooldown']:
+            with self.subTest(text=text):
+                parsed = explicit_facts(text)
+                self.assertEqual(parsed['facts']['fee'], 'none')
+                self.assertEqual(parsed['facts']['cooldown'], 'none')
+                self.assertNotIn('transactions', parsed['facts'])
+                self.assertTrue(parsed['evidence']['cooldown']['none'])
+                es = [entry('a', 'A'), entry('b', 'B'), entry('unknown', 'unknown')]
+                lookup = LookupIndex(es, np.zeros((3, 1)))
+                cs = [{'key': e.key, 'score': .9-i/10} for i, e in enumerate(es)]
+                policy = RequirementFilter([profile('A', fee='none', cooldown='one_day'),
+                                            profile('B', fee='none', cooldown='none')])
+                kept, trace = policy.apply(text, cs, lookup)
+                self.assertEqual(kept, cs[1:])
+                self.assertEqual(cs[0]['score'], .9)
+                self.assertEqual(trace['audit'][0]['contradictions'][0]['facet'], 'cooldown')
+                self.assertIsNone(trace['audit'][2]['source_facts'])
+
+    def test_coordinated_absence_does_not_erase_uncertainty_or_invent_defaults(self):
+        for text in ['not no fees or waiting days', 'if no fees or waiting days',
+                     '"no fees or waiting days" is merely a label',
+                     'no fees or waiting days or one-day cooldown',
+                     'either no fees or waiting days', 'no fees or waiting days might apply']:
+            with self.subTest(text=text):
+                parsed = explicit_facts(text)
+                self.assertNotIn('fee', parsed['facts'])
+                self.assertNotIn('cooldown', parsed['facts'])
+        self.assertNotIn('transactions', explicit_facts('No fees or waiting days.')['facts'])
+        self.assertNotIn('duplicates', explicit_facts('Return the rank-th largest value.')['facts'])
+        # Ordinary alternatives still supply no cardinality assertion.
+        self.assertNotIn('transactions', explicit_facts('Buy once or abstain.')['facts'])
+
     def test_conflicts_abstain_without_erasing_candidates(self):
         es=[entry('x','x')];lookup=LookupIndex(es,np.zeros((1,1)))
         cs=[{'key':'x','score':.9}]
