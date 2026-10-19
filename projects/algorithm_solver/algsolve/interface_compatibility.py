@@ -39,6 +39,17 @@ def _accepts(node, value):
     return True
 
 
+def _exact_expected(value):
+    # Exact judging permits an integer result for an equal float expectation.
+    # Normalize only lossless numeric representations for annotation checks;
+    # caller examples remain unchanged and input checks stay strict.
+    if type(value) is float and value.is_integer():
+        return int(value)
+    if isinstance(value, list):
+        return [_exact_expected(item) for item in value]
+    return value
+
+
 def mismatch(entry, examples):
     """Return a concrete incompatibility, or None (compatible OR unknown)."""
     if not entry.entry.get('method') or not entry.params:
@@ -65,8 +76,10 @@ def mismatch(entry, examples):
             if not accepts(annotation, value):
                 return 'argument_type'
         # In-place tests describe mutated inputs rather than the return value.
-        if example.get('compare', 'return') == 'return' and 'expected' in example and return_type:
-            if not accepts(return_type, example['expected']):
+        mode = example.get('compare', 'return')
+        if mode in ('return', 'return:exact') and 'expected' in example and return_type:
+            expected = _exact_expected(example['expected']) if mode == 'return:exact' else example['expected']
+            if not accepts(return_type, expected):
                 return 'return_type'
     return None
 
