@@ -92,14 +92,35 @@ identification. The composition work proceeds as follows:
 Current code boundary: `typed_predictor.decisions()` independently takes argmax
 for operation, child/sibling edges, bindings and types. `PredictionCodec.decode()`
 then rejects invalid trees and scope/type/effect violations; it performs no repair.
-The next **composition** change belongs at this construction boundary, retaining
-raw predictions and a separately scored constrained result. Recognition has its
-own candidate-selection work above. No new training campaign has started.
+The new [matched runner](algsolve/synth/compare_typed.py) adds separate raw,
+bounded-correction and nearest-fit-graph routes. It retains logits, raw graphs,
+edit/rejection traces, final graphs and per-phase timings, freezes public decisions
+before independent scoring, and records source/dependency/input identities.
+The [predeclared development configuration](contracts/typed_composer_development_v1.json)
+allows one correction configuration: at most two scalar edits, 128 candidates and
+0.2 seconds. Selection requires an additional correct audit answer, zero harmful
+corrections/wrong acceptances, preserved fitting successes and bounded latency;
+validity alone cannot qualify it. No new training campaign has started.
+
+**Execution blocked:** the original `runs/typed-student-v2/model.pt` and
+`runs/typed-real-dev-v5/pairs.jsonl` are absent locally. Host `128` is offline in
+Tailscale and SSH timed out; the alternate host rejected authentication. The local
+preflight fails before model execution. Focused repair/measurement tests pass,
+but there is no matched development report or qualified candidate yet. Restore
+the existing Linux host, run the focused judge/lane checks there, then execute:
+
+```sh
+PYTHONPATH=projects/algorithm_solver .venv/bin/python -m algsolve.synth.compare_typed --name typed-comparison-dev-v1
+```
+
+The run writes `candidate.json`, `captures.jsonl`, `decisions.jsonl`, `scores.jsonl`,
+`summary.json` and `report.md` under its new run directory. A rejected candidate
+remains recorded and cannot open protected scoring. Recognition remains independent.
 
 Next checkpoint: a development-qualified frozen composer, agreed baselines and
 sealed metrics, followed by one protected composition run. The existing typed IR
-is frozen; the corrected route, matched baselines and candidate seal remain open.
-Neither `03e290393` nor this protocol update supplies an experimental result.
+is frozen; matched execution, baseline qualification and the candidate seal remain
+open. Neither `03e290393` nor implementation/unit tests supply a solver result.
 Existing typed interpretation is sufficient; no new editor, native compiler or
 replacement framework is required.
 
