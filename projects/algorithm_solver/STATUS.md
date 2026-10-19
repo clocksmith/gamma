@@ -49,6 +49,47 @@ new training, new download, protected scoring, public push or deployment is part
 of this campaign. Coverage, autonomous macro selection and measured human effort
 remain three distinct outcomes.
 
+## Completed bounded source/macro foundation on 128
+
+The [first macro slice](findings/semantic-macro-foundation-128-v1/summary.json)
+contains Good Pairs' authored frequency-map graph and retained correct predictor
+pair-scan, explicitly transcribed into both language profiles. All four expansions
+passed the same102 independent cases, three public examples, input-preservation
+checks and binary round-trip. It is a manual corpus/representation foundation,
+with zero new autonomous solves. Twelve active macro/control entries and244
+reserved positions per language do not constitute a completed256-entry vocabulary.
+Complete streams cost71/72bytes (568/576binary presses), including signature/profile
+framing, bindings, constants and block closes; full normalized source and verified
+lexical baseline costs are in [input costs](findings/semantic-macro-foundation-128-v1/input-costs.json).
+
+The [varied five-family development catalog](findings/source-corpus-js-py-128-v3/qualified-catalog.json)
+now has separately qualified Python and JavaScript implementations for Good Pairs,
+Sum of Unique Elements, Meeting Rooms, Maximum Product and Last Stone Weight.
+Each language passes the same600 existing independent cases. Native JS/TS sources
+were taken from the already-pinned local Doocs snapshot, with declared TypeScript
+conversion and AST normalization; Python uses existing counterparts. Normalized
+wrappers copy inputs. The JS unique-sum candidate explicitly changes the fixed-size
+counter to a Map, and the heap case explicitly supplies a self-contained max heap.
+Neither change is misrepresented as an untouched upstream solution.
+
+[First failures](findings/source-corpus-js-py-128-v1/summary.json),
+[paired repair](findings/source-corpus-js-py-128-v2/summary.json), and
+[heap domain repair](findings/source-corpus-js-py-128-v3/summary.json) remain separate.
+Existing tests exceed some published problem bounds; the normalized shared domain
+is explicit and no case was removed. Return-only JS checks omit unused argument
+echoes to avoid output-cap failures; mutation checks still capture arguments, with
+unchanged sandbox isolation/output limits. The original fixed-array unique-sum JS
+still fails one test and the dependency-free original heap JS still cannot run.
+This is developer-informed regression on consumed cases, not fresh generalization,
+autonomous composition improvement, or a production1a catalog promotion.
+
+Next: expand the representative qualified source corpus under the same provenance,
+semantics and failure-retention rules; mine parameterized language-specific AST
+candidates and measure complete input cost before selecting a fixed vocabulary.
+Whole-solution entries are allowed within256; compare granularity without assuming
+that finer pieces are optimal. The paused300-fragment graph prototype is preserved,
+not expanded into a separate architecture campaign.
+
 ## Recognition evidence and next run
 
 [Matched development result](findings/recognition-requirements-dev-suby-v1/README.md)
