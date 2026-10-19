@@ -1,0 +1,69 @@
+{
+  "decision": "answered",
+  "code": "class Solution:\n    def continuousSubarrays(self, nums: List[int]) -> int:\n        ans = i = 0\n        sl = SortedList()\n        for x in nums:\n            sl.add(x)\n            while sl[-1] - sl[0] > 2:\n                sl.remove(nums[i])\n                i += 1\n            ans += len(sl)\n        return ans\n",
+  "source": {
+    "key": "lc:continuous-subarrays",
+    "license": [
+      "LeetCodeDataset: apache-2.0 (HF) / MIT (GitHub); problem text from LeetCode",
+      "doocs/leetcode CC-BY-SA-4.0; commercial reprints need author authorization; research use only"
+    ],
+    "attribution": [
+      "https://leetcode.com/problems/continuous-subarrays",
+      "https://leetcode.com/problems/continuous-subarrays/ via newfacade/LeetCodeDataset"
+    ],
+    "stored_reference_validated": false,
+    "qualification": {
+      "approved": true,
+      "manifest_sha256": "e33a037627191f2bab63fe94360c530d63275f3a863e869375d4b1c2cb37529a",
+      "code_sha256": "8d7fb65fd0e5965e31073a079116115d2c3cf5265fa923c261bac8115eaa4966",
+      "reference_uid": "lcd:2762",
+      "independent_test_count": 234,
+      "scope": "stored reference on its original problem; query identity checked separately"
+    }
+  },
+  "example_passed": true,
+  "independent_tests_passed": null,
+  "public_example_count": 2,
+  "dataset_label": "prior model exposure unknown",
+  "attempts": [
+    {
+      "stage": "stored",
+      "public": {
+        "passed": true,
+        "reason": null,
+        "tests_total": 2,
+        "tests_passed": 2,
+        "wall_seconds": 0.04794981000304688,
+        "first_failure": null,
+        "stderr_tail": ""
+      }
+    }
+  ],
+  "match": {
+    "decision": "match",
+    "key": "lc:continuous-subarrays",
+    "candidates": [
+      {
+        "key": "lc:continuous-subarrays",
+        "score": 1.0,
+        "exact": true
+      }
+    ],
+    "reranked": false,
+    "exact_statement_and_interface": true,
+    "identity_check": {
+      "accepted": true,
+      "basis": "exact statement and interface"
+    }
+  },
+  "answer_interface": {
+    "class": "Solution",
+    "method": "continuousSubarrays"
+  },
+  "route": "stored",
+  "seconds": 0.04922147899924312,
+  "language": "python",
+  "request_binding": {
+    "request_sha256": "38c064a55aa275c83e2bee896f8fa93c38091934a7971480b7c664fd25ca9f02"
+  }
+}

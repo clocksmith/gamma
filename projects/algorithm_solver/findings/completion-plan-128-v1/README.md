@@ -80,3 +80,14 @@ full serving verification. It leaves 801 abstentions; 1b and 2b remain unqualifi
 The [owner-ready paired training packet](../typed-literal-objective-proposal-128-v1/OWNER_APPROVAL.md)
 contains the exact two-arm identities and combined budget. Training and the
 separate dependency packaging remain unstarted pending explicit approval.
+
+
+## Approved work completed and app connected
+
+The [two-arm experiment](../typed-literal-balanced-pair-128-v1/README.md) completed;
+balanced loss failed and is unselected. The [dependency qualification](../known-sortedcontainers-1a-128-v1/README.md)
+adds fourteen answers, for 2,501 qualified entries and 787 eligible abstentions.
+The [working editor integration](../editor-composition-128-v1/README.md) exposes
+frozen typed programs, public checking and the measured original GPU composer.
+No further training, protected scoring, new-description recognition promotion or
+nearby-variant qualification follows from these results.

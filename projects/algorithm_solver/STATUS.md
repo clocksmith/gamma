@@ -441,3 +441,23 @@ optimizer steps. No training has started. The proposed two 400-step arms share
 a combined 4 CPU / 8 GiB / 5 GiB / 2,400-second cap, use no GPU or downloads,
 and require explicit owner approval. The hash-pinned Sorted Containers wheel
 and judge-visible packaging are a separate unstarted approval scope.
+
+
+## Approved training, dependency recovery and 256one integration
+
+The [approved paired experiment](findings/typed-literal-balanced-pair-128-v1/README.md)
+completed both 400-step arms. Control returned 5/10 raw and 6/10 guarded correct;
+balanced returned 0/10 raw and 1/10 guarded, with one and two wrong acceptances
+respectively. The candidate was rejected; no further training launched. Receipt
+and report failures remain preserved; the summary was rebuilt from complete
+immutable records without repeating inference or scoring. Protected and audit
+requests remain untouched.
+
+The [approved dependency runtime](findings/known-sortedcontainers-1a-128-v1/README.md)
+adds 14 qualified answers: **2,501/3,288**, 244,375 independent checks, 787 abstentions
+and zero full-serving failures. Existing catalogs remain valid. The explicit
+[composition bridge](findings/editor-composition-128-v1/README.md) connects the actual
+typed language, frozen original GPU composer and this latest stored-answer catalog
+to 256one. Software and live integration passed. Goals 1b and 2b remain unqualified;
+the strongest measured composer still trails the matched nearest baseline.
+App integration does not establish autonomous generalization.
