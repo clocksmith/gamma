@@ -1,0 +1,117 @@
+{
+  "schema": "algsolve.typed-composer-comparison.v1",
+  "status": "interface_and_comparison_design_recorded; implementation_and_candidate_seal_pending",
+  "scope": "Composition only. Direct problem input; independent of recognition scores and its release gate.",
+  "schema_binding": {
+    "contract": "contracts/typed_codec_v1.json",
+    "file_sha256": "e95bf0248acfbabd343ade89a3a047eb099d2f2febce47b465318b177755bd1e",
+    "codec_sha256": "e91aee58994ae952e2b43406606127689e10688404f2b5c774380dc7a77df7ad",
+    "node_types": "Use the bound codec pure operators, effectful calls, statements, literals/references and hygienically expanded recipes. No arbitrary Python holes or hidden complete-answer replacement.",
+    "prediction_reference": "findings/typed-student-v2/contract.json",
+    "prediction_descriptor_sha256": "9620ca3e3f8f449ff9bf7b489d11d054f8645c74f6947afc5ef31d2368763f6e",
+    "edges": "Root owns body sequence and return expression. Preorder first-child/next-sibling tree; trailing EMPTY slots only; no cycles, shared children or unreachable active nodes. Bindings address inputs or preceding declarations and obey lexical scope, mutability, port types and resource effects.",
+    "limits": "Keep codec resource/graph/execution limits. Freeze the selected prediction descriptor, type vocabulary and slot limits in the candidate manifest; the historical 192-slot descriptor is a baseline, not a general goal limit."
+  },
+  "interface": {
+    "input": [
+      "problem statement",
+      "signature-only starter",
+      "ordered parameter names and types",
+      "caller public examples"
+    ],
+    "forbidden_input": [
+      "recognized production-index identity or stored answer prerequisite",
+      "protected reference graphs",
+      "independent scoring tests",
+      "teacher solution"
+    ],
+    "output": [
+      "request identity",
+      "route identity",
+      "raw prediction bytes and hash",
+      "corrected graph and hash or null",
+      "explicit edit trace and reasons",
+      "structural/type/effect/resource verdict",
+      "decision answered or abstain",
+      "abstention reason",
+      "public execution verdict",
+      "phase timing"
+    ],
+    "answer": "Return assembled source only for a valid graph that passes public checks within the complete request budget. Independent correctness is scored afterward, not asserted by the route.",
+    "invalid_graph": "Retain raw prediction, reject before execution, and abstain. Corrected route may attempt only its sealed bounded correction; unresolved violations, budget exhaustion and execution failures abstain.",
+    "infrastructure_failure": "Record separately, never count as correctness or silent task exclusion; no automatic graph substitution."
+  },
+  "routes": {
+    "raw": "One parallel model prediction; unchanged strict decoder; no correction, repair search or source generation.",
+    "constrained": "Use the same checkpoint, input and captured raw prediction. A bounded deterministic correction may repair malformed structure/bindings under the sealed authority; record every edit. A fresh model prediction is not this paired route.",
+    "nearest_training_graph": "Simple existing-system baseline: nearest frozen fit-side graph by the same provisioned embedding, deterministic tie-break by graph hash, interface/type-compatible candidates only, positional alpha-renaming only, no literal/control-flow/algorithm edits; no compatible graph means abstention.",
+    "historical_reservation": "typed_confirmation_v1.json is immutable. Its unguided_search and retrieval_guided_search obligations remain for that reserved campaign. Adding the corrected route requires an explicit sealed addendum; this document does not silently drop a route or open the reservation."
+  },
+  "correction_authority": {
+    "allowed": "Only declared graph-schema/type/scope/effect constraints applied to captured model proposals. Select and freeze edit kinds, ordering, tie-breaks, maximum edits/candidates and stopping rule on development cases.",
+    "preserve": "An already valid raw graph stays unchanged in this correction experiment. A valid but wrong algorithm is not a malformed graph.",
+    "forbidden": [
+      "replacing the graph with a hand-authored or retrieved complete solution",
+      "consulting expected public or private outputs to choose edits",
+      "LLM repair or source generation",
+      "erasing the raw prediction",
+      "changing problem requirements, codec vocabulary or execution limits"
+    ],
+    "public_tests": "May reject the final graph, not drive this correction. Test-guided repair/search is a separate route and cost."
+  },
+  "paired_measurement": {
+    "tasks": "Identical composition cases and initial inputs for every route; never reuse the 20 recognition questions as the composition comparison.",
+    "checkpoint": "Same frozen checkpoint, raw prediction and inference inputs for raw versus corrected; preserve logits if the mechanism uses them.",
+    "quality": [
+      "end-to-end accepted-and-independently-correct",
+      "graph validity",
+      "independent program correctness",
+      "wrong acceptance",
+      "abstention",
+      "validity gained/lost"
+    ],
+    "corrections": {
+      "useful": "Raw does not produce an accepted correct answer; corrected does.",
+      "harmful": "Raw produces an accepted correct answer and corrected does not, or corrected introduces a wrong acceptance.",
+      "neutral": "Neither useful nor harmful; report validity-only repairs and unchanged results separately.",
+      "evidence": "Compute these categories after both responses are fixed, using the same independent tests. Missing scoring evidence remains unknown, never correct."
+    },
+    "timing": [
+      "cold setup",
+      "warm embedding/retrieval",
+      "model prediction",
+      "construction/validation",
+      "correction",
+      "assembly",
+      "public checking",
+      "complete decision",
+      "independent scoring separately"
+    ],
+    "complete": "Count all route work and correction cost, including failures and abstentions. Shared prediction time is charged to both raw and corrected totals. Use actual elapsed intervals without double-counting nested stages.",
+    "statistics": [
+      "counts and fixed denominators",
+      "p50",
+      "p95",
+      "maximum"
+    ],
+    "budget": "Retain the existing 2-second warm request envelope including public checking. Freeze any development-motivated revision explicitly before scoring; faster abstention is not a solving win."
+  },
+  "opening_gate": [
+    "Implement raw, constrained and baseline routes; verify legal/illegal graph behavior and actual execution on development cases.",
+    "Select correction only on development composition cases. Define numerical development acceptance before selecting a candidate; record failures and harmful corrections.",
+    "Seal code/configuration, checkpoint, encoding, codec, components, training/development inputs, evaluator, protected cohort, budgets, deterministic tie-breaks and environment.",
+    "Reconcile and seal all baselines required by the existing reserved campaign without altering its 66-problem denominator.",
+    "Run one protected scoring pass after the seal; no tuning, task replacement or unseen claim after feedback. Interruptions resume the same frozen run."
+  ],
+  "nearby_variants_2b": "Separate freshly authored semantic-variant evaluation with its own seal; a familiar base may be allowed, but changed requirements and answers remain unseen. Do not use variants to tune the frozen 2a composer after evaluation starts. Preserve the broader 66-problem reservation separately.",
+  "autonomous_development_loop": "Do not launch until raw composition, constrained composition and protected scoring have independently established receipts. Any later development loop uses permitted development feedback only and creates a new version; protected outcomes are not training rewards.",
+  "current_state": {
+    "schema_verified": true,
+    "corrected_route_implemented": false,
+    "matched_baselines_qualified": false,
+    "candidate_frozen": false,
+    "protected_scoring_authorized_by_this_file": false,
+    "autonomous_loop_ready": false,
+    "new_experiment_result": false
+  }
+}
