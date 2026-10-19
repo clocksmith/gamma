@@ -14,6 +14,7 @@ from __future__ import annotations
 import os
 import json
 import shutil
+import selectors
 import signal
 import subprocess
 import tempfile
@@ -154,6 +155,28 @@ def _payload_exited(status: bytes, exit_code: int | None) -> bool:
     return len(exits) == 1 and type(exits[0]) is int and 0 <= exits[0] <= 255 and exits[0] == exit_code
 
 
+def _wait_for_exit(proc: subprocess.Popen, timeout: float) -> int:
+    """Wait for the same child exit without timed-wait polling latency on Linux.
+
+    The descriptor is host-only and observes the bubblewrap monitor. Unsupported
+    kernels retain Popen.wait; namespace, status verification and cleanup stay
+    with the caller. Always reap the child after its exit notification.
+    """
+    deadline = time.monotonic() + timeout
+    try:
+        descriptor = os.pidfd_open(proc.pid)
+    except (AttributeError, OSError):
+        return proc.wait(timeout=max(0., deadline - time.monotonic()))
+    try:
+        with selectors.DefaultSelector() as selector:
+            selector.register(descriptor, selectors.EVENT_READ)
+            if not selector.select(max(0., deadline - time.monotonic())):
+                raise subprocess.TimeoutExpired(proc.args, timeout)
+        return proc.wait()
+    finally:
+        os.close(descriptor)
+
+
 def _run_monitored(task_dir: Path, argv: list[str], stdin: bytes, limits: Limits, status) -> SandboxResult:
     started = time.monotonic()
     command = bwrap_argv(task_dir, limits, argv)
@@ -208,7 +231,7 @@ def _run_monitored(task_dir: Path, argv: list[str], stdin: bytes, limits: Limits
     timed_out = False
     try:
         try:
-            proc.wait(timeout=limits.wall_seconds)
+            _wait_for_exit(proc, limits.wall_seconds)
         except subprocess.TimeoutExpired:
             timed_out = True
     finally:
