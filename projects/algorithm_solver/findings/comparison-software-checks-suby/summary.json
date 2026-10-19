@@ -1,0 +1,107 @@
+{
+  "schema": "algsolve.comparison-software-checks.v1",
+  "host": "suby",
+  "platform": "Linux-6.8.0-90-generic-x86_64-with-glibc2.39",
+  "source_commit": "47625acced8dc06dafa449d24a19502f014a188a",
+  "scope": "Software regression checks only; no original checkpoint/corpus and no learned solver scoring.",
+  "runs": [
+    {
+      "run": "comparison-software-checks-suby",
+      "source_commit": "0ce43dcfa",
+      "failed": 17,
+      "passed": 42,
+      "passed_subtests": 35,
+      "seconds": 2.04,
+      "failures": [
+        "FAILED tests/test_algorithm_solver_judge.py::test_correct_solution_passes - A...",
+        "FAILED tests/test_algorithm_solver_judge.py::test_wrong_answer_fails - Assert...",
+        "FAILED tests/test_algorithm_solver_judge.py::test_forged_duplicate_records_fail",
+        "FAILED tests/test_algorithm_solver_judge.py::test_printed_verdict_text_is_ignored",
+        "FAILED tests/test_algorithm_solver_judge.py::test_early_exit_fails - Assertio...",
+        "FAILED tests/test_algorithm_solver_judge.py::test_exit_after_partial_results_fails",
+        "FAILED tests/test_algorithm_solver_judge.py::test_cpu_hang_times_out - Assert...",
+        "FAILED tests/test_algorithm_solver_judge.py::test_sleeping_hang_hits_wall_limit",
+        "FAILED tests/test_algorithm_solver_judge.py::test_excessive_output_fails - As...",
+        "FAILED tests/test_algorithm_solver_judge.py::test_network_is_unreachable - As...",
+        "FAILED tests/test_algorithm_solver_judge.py::test_host_files_are_not_readable",
+        "FAILED tests/test_algorithm_solver_judge.py::test_task_directory_is_read_only",
+        "FAILED tests/test_algorithm_solver_judge.py::test_linked_list_and_tree_round_trip",
+        "FAILED tests/test_algorithm_solver_judge.py::test_in_place_argument_comparison",
+        "FAILED tests/test_algorithm_solver_judge.py::test_stdin_judge_passes_and_fails",
+        "FAILED tests/test_algorithm_solver_judge.py::test_checker_must_give_a_recognized_verdict",
+        "FAILED projects/algorithm_solver/tests/test_typed_comparison.py::TypedComparisonTests::test_real_sandbox_distinguishes_invalid_repaired_and_valid_wrong"
+      ],
+      "artifacts_sha256": {
+        "pytest.log": "cfc95fb5e5328c46840361fa08abda8e817d363cdd8ed2314e9a8c8a82dc2145",
+        "junit.xml": "6aac89e4276f0c60cc75fe9ac874e70cd70fdc986cbf3140edc78d163c173a3e"
+      }
+    },
+    {
+      "run": "comparison-software-checks-suby-v2",
+      "source_commit": "47625acce",
+      "failed": 18,
+      "passed": 49,
+      "passed_subtests": 43,
+      "seconds": 2.05,
+      "failures": [
+        "FAILED tests/test_algorithm_solver_judge.py::test_correct_solution_passes - A...",
+        "FAILED tests/test_algorithm_solver_judge.py::test_wrong_answer_fails - Assert...",
+        "FAILED tests/test_algorithm_solver_judge.py::test_forged_duplicate_records_fail",
+        "FAILED tests/test_algorithm_solver_judge.py::test_printed_verdict_text_is_ignored",
+        "FAILED tests/test_algorithm_solver_judge.py::test_early_exit_fails - Assertio...",
+        "FAILED tests/test_algorithm_solver_judge.py::test_exit_after_partial_results_fails",
+        "FAILED tests/test_algorithm_solver_judge.py::test_cpu_hang_times_out - Assert...",
+        "FAILED tests/test_algorithm_solver_judge.py::test_sleeping_hang_hits_wall_limit",
+        "FAILED tests/test_algorithm_solver_judge.py::test_excessive_output_fails - As...",
+        "FAILED tests/test_algorithm_solver_judge.py::test_memory_limit_fails - Assert...",
+        "FAILED tests/test_algorithm_solver_judge.py::test_network_is_unreachable - As...",
+        "FAILED tests/test_algorithm_solver_judge.py::test_host_files_are_not_readable",
+        "FAILED tests/test_algorithm_solver_judge.py::test_task_directory_is_read_only",
+        "FAILED tests/test_algorithm_solver_judge.py::test_linked_list_and_tree_round_trip",
+        "FAILED tests/test_algorithm_solver_judge.py::test_in_place_argument_comparison",
+        "FAILED tests/test_algorithm_solver_judge.py::test_stdin_judge_passes_and_fails",
+        "FAILED tests/test_algorithm_solver_judge.py::test_checker_must_give_a_recognized_verdict",
+        "FAILED projects/algorithm_solver/tests/test_typed_comparison.py::TypedComparisonTests::test_real_sandbox_distinguishes_invalid_repaired_and_valid_wrong"
+      ],
+      "artifacts_sha256": {
+        "pytest.log": "3304a9e252dc81d357482f61ff9d5c427ce2669e93e73a486a52485250b56cd0",
+        "junit.xml": "1fd7dd8ced3e9860ee8e2a3c208355ca1bdf16726ef5b17be88c299c59ee62b2"
+      }
+    }
+  ],
+  "live_startup_probe": {
+    "passed": false,
+    "reason": "sandbox_error",
+    "tests_total": 1,
+    "tests_passed": 0,
+    "wall_seconds": 0.0,
+    "first_failure": {
+      "detail": "Bubblewrap did not confirm payload execution (exit=1): bwrap: loopback: Failed RTM_NEWADDR: Operation not permitted\n"
+    },
+    "stderr_tail": ""
+  },
+  "kernel_denials": [
+    "Oct 18 21:11:01 suby kernel: audit: type=1400 audit(1792372261.275:26327): apparmor=\"AUDIT\" operation=\"userns_create\" class=\"namespace\" info=\"Userns create - transitioning profile\" profile=\"unconfined\" pid=2664271 comm=\"bwrap\" requested=\"userns_create\" target=\"unprivileged_userns\"",
+    "Oct 18 21:13:58 suby kernel: audit: type=1400 audit(1792372438.050:26348): apparmor=\"AUDIT\" operation=\"userns_create\" class=\"namespace\" info=\"Userns create - transitioning profile\" profile=\"unconfined\" pid=2665347 comm=\"bwrap\" requested=\"userns_create\" target=\"unprivileged_userns\"",
+    "Oct 18 21:13:58 suby kernel: audit: type=1400 audit(1792372438.064:26349): apparmor=\"AUDIT\" operation=\"userns_create\" class=\"namespace\" info=\"Userns create - transitioning profile\" profile=\"unconfined\" pid=2665352 comm=\"bwrap\" requested=\"userns_create\" target=\"unprivileged_userns\"",
+    "Oct 18 21:13:58 suby kernel: audit: type=1400 audit(1792372438.074:26350): apparmor=\"AUDIT\" operation=\"userns_create\" class=\"namespace\" info=\"Userns create - transitioning profile\" profile=\"unconfined\" pid=2665357 comm=\"bwrap\" requested=\"userns_create\" target=\"unprivileged_userns\"",
+    "Oct 18 21:13:58 suby kernel: audit: type=1400 audit(1792372438.079:26351): apparmor=\"AUDIT\" operation=\"userns_create\" class=\"namespace\" info=\"Userns create - transitioning profile\" profile=\"unconfined\" pid=2665362 comm=\"bwrap\" requested=\"userns_create\" target=\"unprivileged_userns\"",
+    "Oct 18 21:13:58 suby kernel: audit: type=1400 audit(1792372438.089:26352): apparmor=\"AUDIT\" operation=\"userns_create\" class=\"namespace\" info=\"Userns create - transitioning profile\" profile=\"unconfined\" pid=2665367 comm=\"bwrap\" requested=\"userns_create\" target=\"unprivileged_userns\"",
+    "Oct 18 21:13:58 suby kernel: audit: type=1400 audit(1792372438.098:26353): apparmor=\"AUDIT\" operation=\"userns_create\" class=\"namespace\" info=\"Userns create - transitioning profile\" profile=\"unconfined\" pid=2665372 comm=\"bwrap\" requested=\"userns_create\" target=\"unprivileged_userns\"",
+    "Oct 18 21:13:58 suby kernel: audit: type=1400 audit(1792372438.103:26354): apparmor=\"AUDIT\" operation=\"userns_create\" class=\"namespace\" info=\"Userns create - transitioning profile\" profile=\"unconfined\" pid=2665377 comm=\"bwrap\" requested=\"userns_create\" target=\"unprivileged_userns\"",
+    "Oct 18 21:13:58 suby kernel: audit: type=1400 audit(1792372438.107:26355): apparmor=\"AUDIT\" operation=\"userns_create\" class=\"namespace\" info=\"Userns create - transitioning profile\" profile=\"unconfined\" pid=2665382 comm=\"bwrap\" requested=\"userns_create\" target=\"unprivileged_userns\"",
+    "Oct 18 21:13:58 suby kernel: audit: type=1400 audit(1792372438.117:26356): apparmor=\"AUDIT\" operation=\"userns_create\" class=\"namespace\" info=\"Userns create - transitioning profile\" profile=\"unconfined\" pid=2665388 comm=\"bwrap\" requested=\"userns_create\" target=\"unprivileged_userns\"",
+    "Oct 18 21:13:58 suby kernel: audit: type=1400 audit(1792372438.126:26357): apparmor=\"AUDIT\" operation=\"userns_create\" class=\"namespace\" info=\"Userns create - transitioning profile\" profile=\"unconfined\" pid=2665393 comm=\"bwrap\" requested=\"userns_create\" target=\"unprivileged_userns\"",
+    "Oct 18 21:14:25 suby kernel: audit: type=1400 audit(1792372465.462:26372): apparmor=\"AUDIT\" operation=\"userns_create\" class=\"namespace\" info=\"Userns create - transitioning profile\" profile=\"unconfined\" pid=2665717 comm=\"bwrap\" requested=\"userns_create\" target=\"unprivileged_userns\""
+  ],
+  "bwrap_version": "bubblewrap 0.9.0",
+  "bwrap_sha256": "52231e1caf55bcbc667b269f49c63599a6f7db4767ae6a039580d0ff853db712",
+  "protected_opened": false,
+  "autonomous_loop_started": false,
+  "host_policy_changed": false,
+  "qualification": "blocked; sandbox-dependent failures remain open",
+  "assets_available": {
+    "runs/typed-student-v2/model.pt": false,
+    "runs/typed-real-dev-v5/pairs.jsonl": false
+  }
+}

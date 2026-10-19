@@ -102,12 +102,23 @@ allows one correction configuration: at most two scalar edits, 128 candidates an
 corrections/wrong acceptances, preserved fitting successes and bounded latency;
 validity alone cannot qualify it. No new training campaign has started.
 
-**Execution blocked:** the original `runs/typed-student-v2/model.pt` and
-`runs/typed-real-dev-v5/pairs.jsonl` are absent locally. Host `128` is offline in
-Tailscale and SSH timed out; the alternate host rejected authentication. The local
-preflight fails before model execution. Focused repair/measurement tests pass,
-but there is no matched development report or qualified candidate yet. Restore
-the existing Linux host, run the focused judge/lane checks there, then execute:
+**Execution handoff:** suby is the primary execution computer, using
+`ssh -o HostKeyAlias=suby.tail995236.ts.net clocksmith@192.168.86.54` and
+`/home/clocksmith/deco/gamma`. Read its applicable instructions before work.
+The original `runs/typed-student-v2/model.pt` and
+`runs/typed-real-dev-v5/pairs.jsonl` are absent on both the Mac and suby.
+Host `128` and recovery after reboot remain unverified. Recover the original
+hash-matching assets; do not silently retrain or substitute another corpus.
+
+[Suby software checks](findings/comparison-software-checks-suby/summary.json):
+the latest run at `47625acce` has 49 passing tests, 18 failures and 43 passing
+subtests. The earlier run had 42 passes and 17 failures; retain both logs.
+AppArmor's `unprivileged_userns` profile denies bubblewrap's `setpcap` and
+`net_admin` capabilities, preventing sandbox startup. The live probe now
+correctly returns `sandbox_error`, not a candidate runtime failure. No host
+security policy was changed, and these execution failures remain open.
+Qualify a supported sandbox configuration without weakening isolation, then
+rerun the focused judge/lane/comparison checks before the actual comparison:
 
 ```sh
 PYTHONPATH=projects/algorithm_solver .venv/bin/python -m algsolve.synth.compare_typed --name typed-comparison-dev-v1
@@ -115,7 +126,11 @@ PYTHONPATH=projects/algorithm_solver .venv/bin/python -m algsolve.synth.compare_
 
 The run writes `candidate.json`, `captures.jsonl`, `decisions.jsonl`, `scores.jsonl`,
 `summary.json` and `report.md` under its new run directory. A rejected candidate
-remains recorded and cannot open protected scoring. Recognition remains independent.
+remains recorded and cannot open protected scoring. Each scored route is saved
+atomically under `scoring/`; resume only missing scores with the same `--name`
+and `--resume-scoring`. Candidate, decision, cohort or test-identity drift blocks
+resumption. Incomplete scores cannot produce a report. Recognition remains
+independent; no matched model report or development-qualified candidate exists yet.
 
 Next checkpoint: a development-qualified frozen composer, agreed baselines and
 sealed metrics, followed by one protected composition run. The existing typed IR
