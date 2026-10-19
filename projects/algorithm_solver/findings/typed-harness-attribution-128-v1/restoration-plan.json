@@ -1,0 +1,84 @@
+{
+  "status": "not_authorized_not_armed_no_signals_sent",
+  "workers": [
+    {
+      "pid": 2707,
+      "ppid": 2569,
+      "uid": "1000\t1000\t1000\t1000",
+      "start_ticks": "35519",
+      "boot_id": "54d2726b-9b36-4778-914c-0e5337d42210",
+      "exe": "/usr/bin/node",
+      "cwd": "/home/x/.local/share/reploid/releases/93b6208e-public-qwen/reploid",
+      "cgroup": "0::/user.slice/user-1000.slice/user@1000.service/app.slice/reploid-qwen-08b.service",
+      "cmdline_sha256": "a70d1eae7c42550c8625f5783774bb3bf5e81f6dbf86c5d687a54ee4e1de8af7",
+      "exe_sha256": "d0efb6fcb9d023ba4e2b160ec2384dc28fe4f17732141ef47f676828fa960505"
+    },
+    {
+      "pid": 2709,
+      "ppid": 2569,
+      "uid": "1000\t1000\t1000\t1000",
+      "start_ticks": "35519",
+      "boot_id": "54d2726b-9b36-4778-914c-0e5337d42210",
+      "exe": "/usr/bin/node",
+      "cwd": "/home/x/.local/share/reploid/releases/q4k-split-b020ac9b/reploid",
+      "cgroup": "0::/user.slice/user-1000.slice/user@1000.service/app.slice/reploid-qwen-27b-split.service",
+      "cmdline_sha256": "151d0699b3dbe2f1376bef6f4a31c79d3ed7b8823440f6951a57836bdaa53bfc",
+      "exe_sha256": "d0efb6fcb9d023ba4e2b160ec2384dc28fe4f17732141ef47f676828fa960505"
+    },
+    {
+      "pid": 2711,
+      "ppid": 2569,
+      "uid": "1000\t1000\t1000\t1000",
+      "start_ticks": "35519",
+      "boot_id": "54d2726b-9b36-4778-914c-0e5337d42210",
+      "exe": "/usr/bin/node",
+      "cwd": "/home/x/.local/share/reploid/releases/93b6208e-public-qwen/reploid",
+      "cgroup": "0::/user.slice/user-1000.slice/user@1000.service/app.slice/reploid-qwen-2b.service",
+      "cmdline_sha256": "94aec4a95c586e16d0d63fbb09e8ae56a37afb6cc53032b5e928504617f02370",
+      "exe_sha256": "d0efb6fcb9d023ba4e2b160ec2384dc28fe4f17732141ef47f676828fa960505"
+    },
+    {
+      "pid": 8273,
+      "ppid": 8266,
+      "uid": "1000\t1000\t1000\t1000",
+      "start_ticks": "38553",
+      "boot_id": "54d2726b-9b36-4778-914c-0e5337d42210",
+      "exe": "/usr/bin/node",
+      "cwd": "/home/x/.local/share/reploid/releases/q4k-27b-6ba1f43a/reploid",
+      "cgroup": "0::/user.slice/user-1000.slice/user@1000.service/app.slice/reploid-qwen-27b.service",
+      "cmdline_sha256": "95d2dde15b460cc91d60cea86354ad8ad5ccf712c72dd282c603e0b4285570ed",
+      "exe_sha256": "d0efb6fcb9d023ba4e2b160ec2384dc28fe4f17732141ef47f676828fa960505"
+    }
+  ],
+  "python_pidfd_support": {
+    "open": true,
+    "send_signal": true
+  },
+  "comparison_limit_seconds": 300,
+  "termination_cleanup_allowance_seconds": 10,
+  "independent_restore_deadline_seconds": 330,
+  "duration_basis_seconds": {
+    "historical_three_arm_phase_sum": 100.25317381200148,
+    "slow_frozen_three_arm_phase_sum": 182.10926446898884
+  },
+  "requirements": [
+    "Revalidate boot ID, UID, start ticks, executable, command hash, cgroup and service parent/main PID immediately before approval execution. Stop on any mismatch; do not chase replacement PIDs.",
+    "Open pidfds for the four validated Node processes; signal through those handles so PID reuse cannot target a replacement. Do not stop the systemd manager or flock parent.",
+    "Require each target initially running or sleeping, not already stopped. Record the exact intended set before any signal.",
+    "Start an independent watchdog with inherited pidfds outside the benchmark scope. Require an armed acknowledgement before the first STOP; watchdog restores the originally eligible set on 330-second expiry or supervisor-pipe EOF.",
+    "Supervisor restoration runs in finally and SIGINT/SIGTERM handlers. Stop benchmark children before releasing the quiet window. Watchdog remains armed until all intended processes are verified restored or exited.",
+    "After STOP, verify all four targets and their threads are stopped, CPU ticks cease and the measured CPUs are quiet before launching. Any failed check aborts and restores; no retry loop.",
+    "Run only the fixed sequential arms under the 300-second outer cap and 120-second per-arm caps. Retain partial outputs and failures.",
+    "On completion, CONT original pidfds only. Revalidate identities, resumed states/CPU activity, service state and peer/status logs; report connection or request failures. Do not auto-restart services or edit their policy.",
+    "Do not launch conditional quality comparison while workers remain paused for an unbounded repair session. Restore first; any later approved quiet window must have its own supervisor/watchdog receipt."
+  ],
+  "interruption_impact": {
+    "control_channel_timeout_seconds": 10,
+    "connection_timeout_seconds": 30,
+    "execution_channel_timeout_seconds": 300,
+    "input_channel_timeout_seconds": 900,
+    "participant_poll_seconds": 2,
+    "status_log_heartbeat_seconds": 300,
+    "meaning": "STOP halts event loops and heartbeats but keeps process memory, GPU allocations and locks. In-flight requests may time out and peers may disconnect; CONT restores scheduling, not request success."
+  }
+}

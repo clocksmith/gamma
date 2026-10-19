@@ -50,7 +50,7 @@ def main():
  fit=[p for p in read_rows(ROOT/'runs/typed-real-dev-v5/pairs.jsonl') if p['learning_split']=='development_fit']
  unique={}
  for p in fit:unique.setdefault(p['uid'],p)
- requests=list(unique.values());original=[load(p) for p in sorted(old.glob('capture-*.json'))]
+ requests=list(unique.values());original=[load(p) for p in sorted(old.glob('capture-[0-9][0-9][0-9][0-9].json'))]
  assert [p['uid'] for p in requests]==[p['uid'] for p in original] and len(requests)==10
  out.mkdir(parents=True)
  publish(out/'manifest.json',dict(arm=args.arm,protocol_sha256=sha(HERE/'protocol.json'),driver_sha256=sha(Path(__file__)),
