@@ -132,6 +132,19 @@ suby assets keep their separate identities. The full comparison and evaluator-on
 recovery are retained under `runs/typed-composer-recovered-128-v1` and
 `runs/typed-composer-recovered-128-scorefix-v1`. No weights or datasets were downloaded.
 
+## Required-facet development candidate on 128
+
+[Bounded implementation and evidence](findings/required-facets-dev-128-v1/README.md)
+adds an explicit opt-in gate for missing answer-changing requirements. Ten
+statement-bound stock/rank contracts are declared; unbound non-exact sources
+abstain without promoting a lower candidate. Default lookup and all old receipts
+remain unchanged. In 12 developer-exposed synthetic cases with fixed retrieval
+and test approval, the real sandbox route retained four complete requests and
+blocked eight required abstentions. Four returned programs passed eight additional
+developer-authored checks. This is not retrieval qualification or a new solving
+benchmark. Broad coverage loss is unmeasured; the candidate is unselected. New
+training and protected composition remain gated as above.
+
 ## Matching and binary-input objectives
 
 1a and 1b share stored-answer recognition. Similarity, a partial requirement match
