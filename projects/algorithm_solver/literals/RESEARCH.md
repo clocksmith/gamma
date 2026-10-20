@@ -50,3 +50,29 @@ These are definitions for proposed comparisons, not additional implemented arms:
 No new implementation, benchmark, source rewrite or synthesis run is authorized
 by this note. Compare any future proposal against the preserved literal and
 whole-program baselines with matched interfaces, evidence and counted storage.
+
+## What the implementation history now supports
+
+The [80-problem measured-gain experiment](scale-v2/README.md) improves actual
+dictionary selection and source normalization. Its selectors use exact
+counterfactual parsing costs, reclaim redundant learned strings, and measure
+bounded remove/add replacements. This aligns with established optimal-parsing
+and heuristic-table-learning ideas (OptFSST); it does not establish a new
+compression algorithm or a comparison against that implementation.
+
+The distinction from babble/Stitch remains substantive: Gamma presently learns
+flat strings, not parameterized reusable functions modulo an equational theory.
+Its guarded JavaScript rewrites are not equality saturation. DreamCoder's
+library-and-solver learning loop is also not implemented by these experiments.
+
+What is new *within Gamma* is measured evidence: the larger 80-problem development
+set, the matched selection/refactoring ablations, counterfactual decision traces,
+and a class-binding failure caught and fixed by broader execution. The eight-bit
+winner still emits53.2% of its selections as single characters. That finding
+limits an algorithm-library claim even while input cost improves.
+
+The research question remains whether jointly rewritten, genuinely reusable
+pieces reduce complete input cost on new semantic tasks and can be selected
+correctly with little effort. Neither compression, ASCII expressibility nor
+finite execution tests establishes that result. No literature novelty claim or
+publication-level superiority is supported by the current measurements.

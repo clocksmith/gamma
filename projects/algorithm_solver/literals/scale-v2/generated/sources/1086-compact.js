@@ -1,0 +1,1 @@
+function solve(a){const b={};let c=0;for(const [e,f]of a){if(!b['$'+e]){b['$'+e]=[];}const g=b['$'+e];let h=0;while(h<g.length&&g[h]>f){h+=1;}g.splice(h,0,f);if(g.length>5){g.pop();}c=Math.max(c,e);}const d=[];for(let i=1;i<=c;i+=1){const j=b['$'+i]||[];if(j.length){let k=0;for(const l of j.slice(0,5)){k+=l;}d.push([i,Math.floor(k/5)]);}}return d;}

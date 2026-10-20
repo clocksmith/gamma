@@ -1,0 +1,1 @@
+function solve(b,c){const d={};for(let g=0;g<c.length;g+=1){d['$'+c[g]]=g;}const e=[];for(let h=0;h<b.length;h+=1){const i=b[h];e.push(['$'+i in d?d['$'+i]:1000+i,h,i]);}e.sort(a);const f=[];for(const j of e){f.push(j[2]);}return f;}function a(k,l){return k[0]-l[0]||k[1]-l[1];}

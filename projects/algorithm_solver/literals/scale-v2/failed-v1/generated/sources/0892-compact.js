@@ -1,0 +1,1 @@
+function solve(a){let b=0;for(let c=0;c<a.length;c+=1){const d=a[c];for(let e=0;e<d.length;e+=1){const f=d[e];if(f!==0){b+=2+f*4;if(c>0){b-=Math.min(f,a[c-1][e])*2;}if(e>0){b-=Math.min(f,d[e-1])*2;}}}}return b;}
