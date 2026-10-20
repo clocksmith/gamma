@@ -39,7 +39,9 @@ All wrappers, separators, identifiers, constants and punctuation are counted.
 Retain original sources and rejected trials; every rewrite is a separately
 identified candidate. Measure dictionary cardinality, full stored bytes, program
 selection counts, reconstruction, execution correctness and search cost. Whole
-program entries are allowed and pay their complete dictionary storage cost.
+program entries remain a separately counted historical baseline. The current
+16/32/64/128/256-entry candidate comparison excludes whole-program entries and
+reports reuse and one-off chunk sizes explicitly.
 Keep Pareto tradeoffs visible. Reconstruction of given code is representation
 evidence; autonomous description-to-program assembly needs a separate evaluation.
 The pilot uses 20 distinct easy JavaScript problems and explores vocabulary sizes
