@@ -1,0 +1,399 @@
+{
+  "literals": [
+    {
+      "id": 0,
+      "text": "\n",
+      "utf8_bytes": 1
+    },
+    {
+      "id": 1,
+      "text": "        count--;\n",
+      "utf8_bytes": 17
+    },
+    {
+      "id": 2,
+      "text": "        previous = 1;\n",
+      "utf8_bytes": 22
+    },
+    {
+      "id": 3,
+      "text": "      && (counts.get('L') || 0) === (counts.get('R') || 0);\n",
+      "utf8_bytes": 60
+    },
+    {
+      "id": 4,
+      "text": "      const index = Math.floor((left + right) / 2);\n",
+      "utf8_bytes": 52
+    },
+    {
+      "id": 5,
+      "text": "      const result = left === right;\n",
+      "utf8_bytes": 37
+    },
+    {
+      "id": 6,
+      "text": "      count += values[index] - values[index - length];\n",
+      "utf8_bytes": 55
+    },
+    {
+      "id": 7,
+      "text": "      count = values[index - 1] < values[index] ? count + 1 : 1;\n",
+      "utf8_bytes": 65
+    },
+    {
+      "id": 8,
+      "text": "      else right = index;\n",
+      "utf8_bytes": 26
+    },
+    {
+      "id": 9,
+      "text": "      if (values[index] < value) left = index + 1;\n",
+      "utf8_bytes": 51
+    },
+    {
+      "id": 10,
+      "text": "      if (values[index] === 0 && previous === 0 && (values[index + 1] ?? 0) === 0) {\n",
+      "utf8_bytes": 85
+    },
+    {
+      "id": 11,
+      "text": "      left += value;\n",
+      "utf8_bytes": 21
+    },
+    {
+      "id": 12,
+      "text": "      minimum = Math.min(minimum, value);\n",
+      "utf8_bytes": 42
+    },
+    {
+      "id": 13,
+      "text": "      result = Math.max(result, count);\n",
+      "utf8_bytes": 40
+    },
+    {
+      "id": 14,
+      "text": "      result = Math.max(result, value - minimum);\n",
+      "utf8_bytes": 50
+    },
+    {
+      "id": 15,
+      "text": "      return result;\n",
+      "utf8_bytes": 21
+    },
+    {
+      "id": 16,
+      "text": "      right -= value;\n",
+      "utf8_bytes": 22
+    },
+    {
+      "id": 17,
+      "text": "      } else previous = values[index];\n",
+      "utf8_bytes": 39
+    },
+    {
+      "id": 18,
+      "text": "    const counts = new Map();\n",
+      "utf8_bytes": 30
+    },
+    {
+      "id": 19,
+      "text": "    const sorted = [...values].sort((first, second) => first - second);\n",
+      "utf8_bytes": 72
+    },
+    {
+      "id": 20,
+      "text": "    const value = values[result];\n",
+      "utf8_bytes": 34
+    },
+    {
+      "id": 21,
+      "text": "    for (const value of values) counts.set(value, (counts.get(value) || 0) + 1);\n",
+      "utf8_bytes": 81
+    },
+    {
+      "id": 22,
+      "text": "    for (const value of values) {\n",
+      "utf8_bytes": 34
+    },
+    {
+      "id": 23,
+      "text": "    for (let index = 0; count > 0 && index < values.length; index++) {\n",
+      "utf8_bytes": 71
+    },
+    {
+      "id": 24,
+      "text": "    for (let index = 1; index < values.length; index++) {\n",
+      "utf8_bytes": 58
+    },
+    {
+      "id": 25,
+      "text": "    for (let index = length; index < values.length; index++) {\n",
+      "utf8_bytes": 63
+    },
+    {
+      "id": 26,
+      "text": "    if (count % 2) result ^= value;\n",
+      "utf8_bytes": 36
+    },
+    {
+      "id": 27,
+      "text": "    if (count > values.length / 2) return value;\n",
+      "utf8_bytes": 49
+    },
+    {
+      "id": 28,
+      "text": "    if (counts.get(value) > 1) return value;\n",
+      "utf8_bytes": 45
+    },
+    {
+      "id": 29,
+      "text": "    if (counts.has(value + 1)) result = Math.max(result, count + counts.get(value + 1));\n",
+      "utf8_bytes": 89
+    },
+    {
+      "id": 30,
+      "text": "    if (counts.has(value)) result++;\n",
+      "utf8_bytes": 37
+    },
+    {
+      "id": 31,
+      "text": "    if (result.get(value) !== count) return false;\n",
+      "utf8_bytes": 51
+    },
+    {
+      "id": 32,
+      "text": "    if (value >= 'a' && value <= 'z' && counts.get(value) === 1) return result;\n",
+      "utf8_bytes": 80
+    },
+    {
+      "id": 33,
+      "text": "    let count = 1;\n",
+      "utf8_bytes": 19
+    },
+    {
+      "id": 34,
+      "text": "    let count = values.slice(0, length).reduce((result, value) => result + value, 0);\n",
+      "utf8_bytes": 86
+    },
+    {
+      "id": 35,
+      "text": "    let left = 0;\n",
+      "utf8_bytes": 18
+    },
+    {
+      "id": 36,
+      "text": "    let minimum = Infinity;\n",
+      "utf8_bytes": 28
+    },
+    {
+      "id": 37,
+      "text": "    let previous = 0;\n",
+      "utf8_bytes": 22
+    },
+    {
+      "id": 38,
+      "text": "    let result = 0;\n",
+      "utf8_bytes": 20
+    },
+    {
+      "id": 39,
+      "text": "    let result = 1;\n",
+      "utf8_bytes": 20
+    },
+    {
+      "id": 40,
+      "text": "    let result = count;\n",
+      "utf8_bytes": 24
+    },
+    {
+      "id": 41,
+      "text": "    let right = values.length;\n",
+      "utf8_bytes": 31
+    },
+    {
+      "id": 42,
+      "text": "    let right = values.reduce((result, value) => result + value, 0);\n",
+      "utf8_bytes": 69
+    },
+    {
+      "id": 43,
+      "text": "    return !/A[\\s\\S]*A|LLL/.test(values);\n",
+      "utf8_bytes": 42
+    },
+    {
+      "id": 44,
+      "text": "    return (counts.get('U') || 0) === (counts.get('D') || 0)\n",
+      "utf8_bytes": 61
+    },
+    {
+      "id": 45,
+      "text": "    return count <= 0;\n",
+      "utf8_bytes": 23
+    },
+    {
+      "id": 46,
+      "text": "    return result / length;\n",
+      "utf8_bytes": 28
+    },
+    {
+      "id": 47,
+      "text": "    return result;\n",
+      "utf8_bytes": 19
+    },
+    {
+      "id": 48,
+      "text": "    return values.findIndex(value => {\n",
+      "utf8_bytes": 39
+    },
+    {
+      "id": 49,
+      "text": "    return values.reduce((result, value, index) => result + (value !== sorted[index]), 0);\n",
+      "utf8_bytes": 91
+    },
+    {
+      "id": 50,
+      "text": "    return values.replace(/[A-Z]/g, value => value.toLowerCase());\n",
+      "utf8_bytes": 67
+    },
+    {
+      "id": 51,
+      "text": "    return values.replace(/[aeiou]/g, '');\n",
+      "utf8_bytes": 43
+    },
+    {
+      "id": 52,
+      "text": "    return values.replaceAll('.', '[.]');\n",
+      "utf8_bytes": 42
+    },
+    {
+      "id": 53,
+      "text": "    return values[left] === value ? left : -1;\n",
+      "utf8_bytes": 47
+    },
+    {
+      "id": 54,
+      "text": "    while (left < right) {\n",
+      "utf8_bytes": 27
+    },
+    {
+      "id": 55,
+      "text": "    }\n",
+      "utf8_bytes": 6
+    },
+    {
+      "id": 56,
+      "text": "    });\n",
+      "utf8_bytes": 8
+    },
+    {
+      "id": 57,
+      "text": "  const counts = countValues(values);\n",
+      "utf8_bytes": 38
+    },
+    {
+      "id": 58,
+      "text": "  const result = countValues(other);\n",
+      "utf8_bytes": 37
+    },
+    {
+      "id": 59,
+      "text": "  for (const [value, count] of counts) {\n",
+      "utf8_bytes": 41
+    },
+    {
+      "id": 60,
+      "text": "  for (const value of other) {\n",
+      "utf8_bytes": 31
+    },
+    {
+      "id": 61,
+      "text": "  for (const value of values) {\n",
+      "utf8_bytes": 32
+    },
+    {
+      "id": 62,
+      "text": "  for (let result = 0; result < values.length; result++) {\n",
+      "utf8_bytes": 59
+    },
+    {
+      "id": 63,
+      "text": "  if (counts.size !== result.size) return false;\n",
+      "utf8_bytes": 49
+    },
+    {
+      "id": 64,
+      "text": "  let result = 0;\n",
+      "utf8_bytes": 18
+    },
+    {
+      "id": 65,
+      "text": "  return -1;\n",
+      "utf8_bytes": 13
+    },
+    {
+      "id": 66,
+      "text": "  return 0;\n",
+      "utf8_bytes": 12
+    },
+    {
+      "id": 67,
+      "text": "  return Math.min(counts.size, Math.floor(values.length / 2));\n",
+      "utf8_bytes": 63
+    },
+    {
+      "id": 68,
+      "text": "  return null;\n",
+      "utf8_bytes": 15
+    },
+    {
+      "id": 69,
+      "text": "  return result;\n",
+      "utf8_bytes": 17
+    },
+    {
+      "id": 70,
+      "text": "  return true;\n",
+      "utf8_bytes": 15
+    },
+    {
+      "id": 71,
+      "text": "  }\n",
+      "utf8_bytes": 4
+    },
+    {
+      "id": 72,
+      "text": "function countValues(values) {\n  const counts = new Map();\n  for (const value of values) {\n    counts.set(value, (counts.get(value) || 0) + 1);\n  }\n  return counts;\n}\n",
+      "utf8_bytes": 167
+    },
+    {
+      "id": 73,
+      "text": "function solve(values) {\n",
+      "utf8_bytes": 25
+    },
+    {
+      "id": 74,
+      "text": "function solve(values, count) {\n",
+      "utf8_bytes": 32
+    },
+    {
+      "id": 75,
+      "text": "function solve(values, length) {\n",
+      "utf8_bytes": 33
+    },
+    {
+      "id": 76,
+      "text": "function solve(values, other) {\n",
+      "utf8_bytes": 32
+    },
+    {
+      "id": 77,
+      "text": "function solve(values, value) {\n",
+      "utf8_bytes": 32
+    },
+    {
+      "id": 78,
+      "text": "}\n",
+      "utf8_bytes": 2
+    }
+  ]
+}
