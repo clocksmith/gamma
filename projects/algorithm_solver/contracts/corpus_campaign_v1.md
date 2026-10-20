@@ -211,3 +211,56 @@ fixtures from `tests/campaign_public_fixture.py`; the existing legacy campaign
 tests remain separate. Artifact hashes bind evidence consistency, not honesty or
 mathematical correctness; coordinator provenance checks and independent review
 remain mandatory. Private transcript test data must not be exported publicly.
+
+## Source selection before payload decoding
+
+The shared source verifier selects the exact first-field corpus key before JSON decoding. It preserves the existing selected reference UID and code hash checks, rejects duplicate selected records or object fields, and fails closed when the selected identity is absent or unsupported. Streaming still reads raw file bytes; this is a pre-decode boundary, not a zero-filesystem-access claim.
+
+Preparation and replay use the reviewed scoped reader with explicit claimed keys/UIDs and complete raw/canonical record pins. Independent-test loading uses one exact approved UID/path, rejects symlinks, checks the raw hash before decoding, and then verifies the unchanged canonical case list. New executions bind the reader activation and measured runtime identities before and after execution. Historical broad-decoding incidents, failed attempts and evidence remain immutable; subsequent safe intake cannot retroactively establish historical source nonaccess or model-context non-exposure.
+
+## Version 3: explicit exact-integer interfaces
+
+The `exact_integer_policy` input authorizes only the pinned LC670 JavaScript uint20 Number/BigInt profile. `uint64_bool_policy` independently authorizes the pinned LC633 Python/JavaScript uint64-to-strict-boolean profile. Policies bind language, source, standard, numeric domain, runtime contract, technical review, prior failures, measured toolchain and raw evidence. They do not modify earlier Python670 completion or silently widen a legacy interface.
+
+Admission performs host-only replay of saved raw observations against unchanged case/expected/comparison identities. It checks exact decimal representation, strict runtime labels and booleans, complete test/control coverage, input preservation, sandbox status, and measured executable/module/link identities. Candidate code, codecs and runner artifacts are never imported by admission. Exhaustion in the bounded633factorization algorithm remains an error; no total uint64 completion guarantee is implied.
+
+A source author cannot approve or independently review their own candidate. Named identities must be nonempty strings, and policy-listed entries cannot downgrade by stripping alternate-interface fields. The actual ledger policy snapshot must be enumerated in execution artifacts even when its bytes equal an original policy at another path. Historical failures and rejected wrappers stay preserved. The separately named interfaces qualify consumed development normalization; they establish neither autonomous solving nor protected generalization.
+
+The separate `inputs.uint1024_policy` admits only `0738:javascript`, using
+`lc738-uint1024-number-bigint-v1`. Here “uint1024” means at most **1024 decimal
+digits**, with values from 0 through 10^1024−1. It does not mean a 1024-bit integer.
+The original problem domain remains 0..10^9. The frozen 114 development cases
+include 85 official-domain and 29 extended cases; all pass. These are consumed
+development cases, not fresh generalization evidence.
+
+A new outer dispatcher delegates every existing profile to the unchanged
+633/670 dispatcher. The 633 validator and dispatcher, 670 validator/toolchain
+helper, and prior policies retain their exact bytes and identities. The only
+changes to `corpus_campaign.py` are its two dispatcher imports. The 738 policy
+pins the resulting whole module, every gate dependency, and a historical reader
+snapshot. Admission proves the exact two-import transformation and equal
+`verify_source` ASTs. The old activation and postverification remain historical
+whole-module evidence; they are not relabeled as the new module's identity.
+Unchanged scoped helper files continue to be verified against current bytes.
+
+The gate parses and scores host evidence; it never imports or executes candidate,
+author codec, harness, runner, or historical reader code. It requires the separate
+post-run independent review, frozen source and test contracts, all 114 raw named
+transcripts, 114 raw sandbox controls, 30 identified host controls, and the measured
+runtime and reader evidence. Every sandbox receipt binds before/after runtime
+verification. Raw canonical decimal envelopes reconstruct exact integers before
+unchanged host comparison; Number/BigInt boundaries, strict index/status types,
+mutation and primitive alias observations fail closed. The pinned runner's
+`sandbox_ok` comes from `SandboxResult.ok`, including the output-limit flag.
+The gate explicitly checks that evidence; it does not manufacture a missing flag.
+Measured executable/library/module identities are checked again at intake, with
+no claim of a complete dynamic or kernel/CPU closure.
+
+The preserved Number attempt remains 109/114. The separately blocked uint20
+attempt remains 92/92 executed, 22 unexecuted, with its raw index preserved.
+Completed Python738 is unchanged. Neither a stripped legacy contract nor a
+combined comparison/runtime profile can bypass the 738 coordinator requirement.
+Stage snapshots the approved policy and all dependent evidence; record checks
+that authority and replays the observations. Synthetic tests use temporary
+policies/ledgers only. The supplied policy proposal is pending; root approval,
+independent admission evidence, installation and intake remain separate actions.
