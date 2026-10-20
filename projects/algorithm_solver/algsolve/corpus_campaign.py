@@ -1,4 +1,7 @@
-"""Private metadata-only normalization ledger. Never imports or executes candidates.
+"""Private normalization ledger. Never imports or executes candidates.
+
+Legacy admission is metadata-only. The opt-in v2 public-order profile also
+reads approved host-only test transcripts and rescores them without execution.
 
 Receipt validation binds evidence, not truth: a responsible independent reviewer must
 inspect the named artifacts. This ledger is not a solver, judge, or signature system.
@@ -101,16 +104,25 @@ def stage(data,key,owner,token,normalized,contract,standard,root):
     e=data['entries'][key];owned(e,owner,token);verify_source(e['source'])
     if e['attempts'] and e['attempts'][-1]['status']=='staged':raise ValueError('Record or abandon current attempt first')
     c=json.loads(Path(contract).read_text())
-    if c.get('schema')!='algsolve.campaign-contract.v1' or c.get('entry')!=key:raise ValueError('Wrong contract identity')
+    if c.get('schema') not in ('algsolve.campaign-contract.v1','algsolve.campaign-contract.v2') or c.get('entry')!=key:raise ValueError('Wrong contract identity')
     source_sha=e['source']['sha256'] if e['source'] else None
     normalized_sha=file_ref(normalized)['sha256']
     if c.get('source_sha256')!=source_sha or c.get('normalized_sha256')!=normalized_sha:raise ValueError('Contract source binding mismatch')
     if c.get('independent_sets')!=e['independent_sets']:raise ValueError('Contract must preserve all frozen independent sets')
-    if c.get('comparison')!='unchanged' or c.get('interface')!='exact-public-adapter':raise ValueError('Comparison or interface contract weakened')
+    if c.get('interface')!='exact-public-adapter':raise ValueError('Interface contract weakened')
+    profile_refs=[]
+    if c['schema']=='algsolve.campaign-contract.v1':
+        from .campaign_public_contracts import requires_profile
+        if requires_profile(data,e):raise ValueError('Coordinator policy requires versioned public comparison admission')
+        if c.get('comparison')!='unchanged' or any(k in c for k in ('public_comparison','independent_comparison')):raise ValueError('Legacy comparison contract changed')
+    else:
+        from .campaign_public_contracts import profile
+        _,_,_,profile_refs=profile(data,e,c)
     if type(c.get('public_tests')) is not int or c['public_tests']<1:raise ValueError('Public example count required')
     if not c.get('mutation_contract') or not c.get('alias_contract'):raise ValueError('Mutation and alias contracts required')
     attempt={'number':len(e['attempts'])+1,'owner':owner,'created':now(),'status':'staged','source_sha256':source_sha,
              'normalized':snapshot(root,normalized),'contract':snapshot(root,contract),'standard':snapshot(root,standard),'receipts':[]}
+    if profile_refs:attempt['public_profile']=[snapshot(root,ref['path']) for ref in profile_refs]
     e['attempts'].append(attempt);e['status']='staged';event(data,e,'stage',owner,attempt=attempt['number'])
     return attempt
 
@@ -149,6 +161,17 @@ def record(data,key,owner,token,evidence_path,root):
     review=receipts['review']
     if not review.get('reviewer') or review['reviewer']==a['owner'] or review.get('semantic_role_mapping_reviewed') is not True or review.get('complexity_reviewed') is not True or review.get('unresolved')!=[]:
         raise ValueError('Independent semantic/complexity review required')
+    if c['schema']=='algsolve.campaign-contract.v2':
+        from .campaign_public_contracts import execution_profile,profile
+        for ref in a.get('public_profile',[]):verify(ref)
+        _,_,_,current_refs=profile(data,e,c)
+        if [r['sha256'] for r in current_refs]!=[r['sha256'] for r in a.get('public_profile',[])]:raise ValueError('Staged public policy changed')
+        execution_profile(data,e,c,execution,review)
+    else:
+        from .campaign_public_contracts import requires_profile
+        if requires_profile(data,e):raise ValueError('Coordinator policy requires versioned public comparison admission')
+        if any(k in execution for k in ('public_comparison','semantic_qualification','independent_comparison')):
+            raise ValueError('Semantic evidence cannot be relabeled legacy unchanged')
     # Preserve receipts and every underlying artifact by content hash, not just paths.
     frozen=[]
     for kind,ref in bundle.items():

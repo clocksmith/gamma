@@ -1,8 +1,9 @@
 # Canonical corpus campaign v1
 
 Private staging ledger for 2,354 eligible problems and 4,708 language entries.
-This is coordination and evidence bookkeeping, not a judge or solver. It never
-executes candidate sources or opens independent test files. Existing qualification
+This is coordination and evidence bookkeeping, not a solver. It never executes
+candidate sources. Legacy v1 does not open independent test files; the explicit
+v2 profile below host-scores already-approved test transcripts. Existing qualification
 is recorded separately from canonical normalization completion.
 
 ## Verified starting inventory
@@ -160,3 +161,53 @@ The census test skips when the private ledger is absent. No solve is claimed by
 these software checks. No repository commit, public push, deployment, training,
 protected scoring or independent candidate execution was performed by this ledger
 subtask.
+
+## Versioned statement-declared public comparison
+
+Legacy v1 admission remains metadata-only. The opt-in v2 branch also reads already
+approved host-only test transcripts and rescores their saved observations; it never
+imports or executes candidate sources, opens unrelated test sets, or edits expected
+values. Public order freedom comes from the pinned statement, not problem-name
+inference or an author-supplied success count.
+
+The coordinator explicitly registers `inputs.public_comparison_policy` as a
+path/SHA256 reference to `algsolve.public-comparison-policy.v1`. The policy names
+an approving coordinator distinct from the source author and pins each permitted
+problem key, public packet and trusted binder/judge runtime. Policy-listed entries
+must use v2 at both staging and recording; stripping extension fields cannot
+downgrade them to the legacy path. Policy dependencies are snapshotted at staging
+and must remain identical through completion.
+
+A v2 contract declares `schema: algsolve.campaign-contract.v2`,
+`comparison: statement-declared-public.v1`, `independent_comparison: unchanged`,
+and the actual `source_author`. Its `public_comparison` descriptor binds mode,
+policy, packet, statement, raw/bound public-test hashes and complete runtime hashes.
+The verifier recomputes `bind(recover(problem))` using the trusted implementation.
+Only default return-to-unordered_outer public changes are allowed; arguments,
+expected arrays, multiplicity, types, explicit exact modes and independent
+comparisons remain intact.
+
+Execution receipts add the same descriptor and independent mode plus references
+`semantic_qualification`, `qualification_freeze`, `host_tests`, and
+`strict_predecessor`, all included in underlying artifacts. They retain
+`strict_public_passed` separately. Complete independent groups must match their
+original canonical hashes, and effective independent tests must equal the raw
+tests exactly. Public raw/effective groups must match the pinned/bound packet.
+Every chunk is checked for complete, contiguous coverage, clean bounded sandbox
+flags, exact-integer unique result indices/completion, preserved call arguments,
+no mutable input aliases, and judge-verifiable results. Stored counts/verdicts
+must agree with host rescoring.
+
+The independent review receipt additionally requires
+`public_comparison_reviewed: true` and `public_comparison_sha256` equal to the
+canonical descriptor hash. The source author cannot provide this review. Existing
+source-standard, interface, semantic-role, complexity and full independent-case
+gates remain required. Historical strict failures stay immutable; a semantic
+qualification is a separate versioned result and must never be labeled unchanged
+or presented as a repaired historical score.
+
+Portable tests in `tests/test_campaign_public_admission.py` use only synthetic
+fixtures from `tests/campaign_public_fixture.py`; the existing legacy campaign
+tests remain separate. Artifact hashes bind evidence consistency, not honesty or
+mathematical correctness; coordinator provenance checks and independent review
+remain mandatory. Private transcript test data must not be exported publicly.

@@ -1,5 +1,7 @@
 # Bilingual corpus campaign: 33 reviewed problem pairs
 
+The later [51-pair checkpoint](../corpus-campaign-128-v3/README.md) records continued work and explicit public-order admission.
+
 This immutable revision-246 checkpoint records 66 accepted implementations across
 33 problems. Each language passed 3,097 unchanged independent cases and 75 public
 cases: 3,172 per language, 6,344 selected executions total. Source, contract,
