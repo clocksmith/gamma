@@ -1,5 +1,9 @@
 # Joint source and literal recomposition
 
+The follow-up [working language and full assembly examples](working/README.md)
+cover20/20 problems using79 literal strings at7 bits per selection, verified
+directly from packed files. This report retains the source-search comparisons.
+
 This second pass removes the historical four-bit vocabulary cap. It compares
 20 distinct known JavaScript problems with three source arms: the frozen
 standalone baseline, eight manually authored shared-counting rewrites, and six
