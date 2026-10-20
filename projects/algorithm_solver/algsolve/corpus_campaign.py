@@ -9,7 +9,7 @@ inspect the named artifacts. This ledger is not a solver, judge, or signature sy
 from __future__ import annotations
 import argparse, collections, contextlib, datetime, fcntl, hashlib, json, os
 from pathlib import Path
-import tempfile, uuid
+import tempfile, uuid, re
 
 SCHEMA='algsolve.corpus-campaign.v1'
 
@@ -30,15 +30,34 @@ def verify(ref):
 def verify_source(ref):
     if ref is None: return
     if ref['kind']!='corpus-reference': verify(ref); return
-    with Path(ref['path']).open() as f:
+    # Corpus producers put key first. Unsupported layouts fail closed rather
+    # than decoding unrelated source/statement/example payloads to find a key.
+    key=ref['key']
+    if not isinstance(key,str) or re.fullmatch(r'[A-Za-z0-9_:./-]+',key) is None:
+        raise ValueError('Unsupported approved source identity')
+    prefix=re.compile(rb'^\s*\{\s*"key"\s*:\s*"([A-Za-z0-9_:./-]+)"\s*[,}]')
+    def unique_fields(pairs):
+        row={}
+        for name,value in pairs:
+            if name in row: raise ValueError('Duplicate JSON field in approved source record')
+            row[name]=value
+        return row
+    found=False
+    with Path(ref['path']).open('rb') as f:
         for line in f:
-            row=json.loads(line)
-            if row['key']!=ref['key']: continue
-            candidate=next((x for x in row['references'] if x.get('validated')),row['references'][0])
+            match=prefix.match(line)
+            if match is None or match[1].decode('ascii')!=key: continue
+            if found: raise ValueError('Duplicate approved source identity')
+            row=json.loads(line,object_pairs_hook=unique_fields)
+            if row.get('key')!=key: raise ValueError('Approved source identity changed')
+            references=row.get('references')
+            if not isinstance(references,list) or not references:
+                raise ValueError('Approved Python reference missing')
+            candidate=next((x for x in references if x.get('validated')),references[0])
             if candidate['uid']!=ref['uid'] or sha_bytes(candidate['code'].encode())!=ref['sha256']:
                 raise ValueError('Approved Python reference changed')
-            return
-    raise ValueError('Approved Python reference missing')
+            found=True
+    if not found: raise ValueError('Approved Python reference missing')
 
 def save(path, data):
     path=Path(path)

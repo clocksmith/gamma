@@ -1,0 +1,90 @@
+{
+  "schema": "algsolve.intake-source-reader-independent-review.v1",
+  "reviewer": "/root/w002_reconcile_next",
+  "author": "/root",
+  "utc": "2026-10-20T03:18:12.980851+00:00",
+  "status": "passed",
+  "unresolved": [],
+  "baseline": {
+    "path": "/home/x/Documents/Codex/2026-10-19/task/intake-source-reader-fix-v1/baseline.py",
+    "sha256": "5eeae34b042006f888c98b17d55d98658a394c0aaa68d5f27fa64af80532f6a0"
+  },
+  "baseline_metadata": {
+    "path": "/home/x/Documents/Codex/2026-10-19/task/intake-source-reader-fix-v1/baseline.json",
+    "sha256": "15aac718b4b26b9c2c0c0959a327d66016b50b9a9e7a11af5e4f7ae3daad36b0"
+  },
+  "candidate": {
+    "path": "/home/x/Documents/Codex/2026-10-19/task/intake-source-reader-fix-v1/corpus_campaign.py",
+    "sha256": "60b27cb7c56a0835286b471695e088d8df7c8263c717ab42ca3f0d5461a6d193"
+  },
+  "scope": "Shared verify_source selection before JSON decode only; synthetic files only. No real corpus or candidate content access/execution.",
+  "checks": [
+    "Anchored raw-byte first-key selector validates requested ASCII identity and matches exact key before json.loads; poison/unrelated/nested-key/nonfirst-key/escaped-identity rows are never decoded.",
+    "Only selected record decoded. Selected effective key is rechecked, nonempty references required, existing first-validated-or-first fallback unchanged, exact selected UID and code SHA remain authority.",
+    "Duplicate selected records rejected before decoding second selected record; duplicate JSON fields at any object level in selected record rejected by object_pairs_hook, including same-value duplicates.",
+    "Malformed selected JSON, missing identity and unsupported requested/layout identities fail closed. Existing None and ordinary-file reference behavior remains unchanged.",
+    "New code scans raw line prefixes through remaining file to detect duplicate selected records, without decoding unrelated payloads. Unsupported nonfirst-key rows are skipped and cannot qualify a missing selection."
+  ],
+  "finding_resolved": {
+    "same_value_duplicate_json_key": "Reproduced acceptance in initialcandidate c2e7db5b3eb66b1376f9805952563c21cd58b3673f66af838cdd13aaa6407bc0. Final60b27cb7... now rejects with selected-record object_pairs_hook."
+  },
+  "tests": {
+    "author_synthetic": {
+      "total": 9,
+      "passed": 9,
+      "log": {
+        "path": "/home/x/Documents/Codex/2026-10-19/task/intake-source-reader-independent-review-v1/tests-author.txt",
+        "sha256": "85410c280337afbced4dad4ee3247a889dc0e647142000f9ed98e8b95b2faff6"
+      }
+    },
+    "additional_independent_synthetic": {
+      "total": 7,
+      "passed": 7,
+      "source": {
+        "path": "/home/x/Documents/Codex/2026-10-19/task/intake-source-reader-independent-review-v1/test_additional.py",
+        "sha256": "57748b7f905924a4bd1491644f2e80abc7f21c31391467fd03245f6e7db7b8cd"
+      },
+      "log": {
+        "path": "/home/x/Documents/Codex/2026-10-19/task/intake-source-reader-independent-review-v1/tests-additional.txt",
+        "sha256": "d4df560836b7dd15f54e7e8b3618d92b777104b64b96b5703ac6062a2d660d5b"
+      }
+    },
+    "composed_gate_synthetic": {
+      "total": 16,
+      "passed": 16,
+      "log": {
+        "path": "/home/x/Documents/Codex/2026-10-19/task/intake-source-reader-independent-review-v1/tests-composed.txt",
+        "sha256": "2f4f298c2228c11571aa078ae0af526f85b3afb9d4af6f78cb987aac8171c4b6"
+      }
+    },
+    "real_corpus_accesses": 0,
+    "candidate_executions": 0
+  },
+  "merge_recommendation": {
+    "safe_reader_patch": "Install the exact reviewed candidate only against baseline5eeae34b042006f888c98b17d55d98658a394c0aaa68d5f27fa64af80532f6a0; otherwise apply only import re and verify_source body change.",
+    "gate_composition": "For670integration use prepared composed file or identically apply the exact reader function/import to reviewed gate module. Do not overwrite installed reader fix with older gate copy. All other gate bytes verified identical after reversing this precise function/import patch.",
+    "prepared_composed_module": {
+      "path": "/home/x/Documents/Codex/2026-10-19/task/intake-source-reader-independent-review-v1/composed_corpus_campaign.py",
+      "sha256": "b20a66a201a6d9b6a198108f0ce91ade5211b2f772a2b09636d73477bf73e743"
+    },
+    "prior_reviewed_gate_module": {
+      "path": "/home/x/Documents/Codex/2026-10-19/task/campaign-exact-integer-admission-v2-toolchain/staged_admission/corpus_campaign.py",
+      "sha256": "ee521f754108431d9bae15692a227d7d61cbbfaa171939ef049415cf3895307c"
+    },
+    "other_validator_files_unchanged": [
+      {
+        "path": "/home/x/Documents/Codex/2026-10-19/task/campaign-exact-integer-admission-v2-toolchain/staged_admission/campaign_exact_integer.py",
+        "sha256": "3bdeb5c907e220e0558370be914bc2f169aa6be29a9285cdb986615c2ca38d43"
+      },
+      {
+        "path": "/home/x/Documents/Codex/2026-10-19/task/campaign-exact-integer-admission-v2-toolchain/staged_admission/campaign_toolchain.py",
+        "sha256": "962c475d1a295facb3081a943874a12667cc85a50aed392f0020f1ec0d255864"
+      }
+    ],
+    "prior_gate_review": {
+      "path": "/home/x/Documents/Codex/2026-10-19/task/exact-integer-admission-independent-review-v2-toolchain/review-independent.json",
+      "sha256": "92f4f24baaf2dca3380d8cd0e4f06c9925d85dd997da8d5e5d6a28968d9375bb"
+    }
+  },
+  "actions": "No repo edits, installation, ledger changes, real data access, network sync or deployment by reviewer."
+}
