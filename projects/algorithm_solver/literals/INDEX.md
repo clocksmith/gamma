@@ -4,7 +4,15 @@ Start here for source versions, experiments and the working literal languages.
 This is a navigation index over existing manifests and reports, not a second
 results ledger. No experiments are running under this maintenance task.
 
-**Current working result:** [shared7 guide and two complete examples](pass2/working/README.md),
+**Latest input-cost result:** [literal-only budget comparison](budgets/README.md),
+58 exact strings at six bits, 20/20 programs in 77 selections / 462 selection bits,
+with 3,834/3,834 development checks. Its complete package is larger (4,972 bytes)
+than shared7 (4,468 bytes); this is an input-cost/storage tradeoff.
+[Exact strings](budgets/selected-v1/budget-64/dictionary.json),
+[sequences](budgets/selected-v1/budget-64/manifest.json), and
+[execution receipt](budgets/execution-v1/report.json) are preserved.
+
+**Preserved working baseline:** [shared7 guide and two complete examples](pass2/working/README.md),
 79 literals, seven bits per selection, 20/20 programs and 3,834/3,834 development
 checks. [Exact strings](pass2/working/packages/shared7/dictionary.json) and
 [all sequences](pass2/working/packages/shared7/manifest.json) reconstruct complete
@@ -20,7 +28,7 @@ this index does not import their corpus ledger or modify its admission status.
 | Track | Status | Evidence boundary / entry point |
 |---|---|---|
 | 2a/2b parameterized macros | Planned broader vocabulary; existing precursors retained | [Macro contract](../contracts/semantic_macro_goals_v1.json). Separate from flat literals; this index does not requalify precursor results. |
-| 3a flat literals | Passed offline representation and development execution | [Working guide](pass2/working/README.md); no hidden slots, renaming, dispatch or injected helpers. |
+| 3a flat literals | Passed offline representation and development execution | [Budget comparison](budgets/README.md) and [preserved working guide](pass2/working/README.md); no hidden slots, renaming, dispatch or injected helpers. |
 | Bounded AST preprocessing for literals | Passed for six concrete rewrites | [Rules](pass2/rewrite.cjs), [lineage](pass2/transformations.json), [execution](pass2/execution/report.json). AST parsing selects source rewrites; emitted vocabulary remains flat strings. |
 | AST-backed composition language | Planned proposal only | No implemented language, vocabulary, sequences, execution result or committed experiment claimed. Existing AST preprocessing is not this proposal. Await research/design. |
 | Functional-style composition variant | Planned proposal only | No implemented experimental arm or result. Existing idiomatic examples containing reduce/map are not a systematic functional-style composition experiment. |
@@ -88,6 +96,7 @@ the linked execution reports, not silently rewritten.
 | Joint source/dictionary recomposition | Passed execution:14 new sources,2,488/2,488 checks;3,888 source combinations and7,825 trials | [Trials/frontier](pass2/results/results.json), [exact encodings](pass2/results/encodings), [execution/reuse](pass2/execution/report.json), [review receipts](pass2/review-evidence.json). Finite-pool enumeration under two heuristic dictionary strategies, not global optimization. | [a1730d36](https://github.com/clocksmith/gamma/commit/a1730d363a2f3d5ce879879bb84ac0f375bfc788) |
 | Dense unchanged-source controls | Passed comparison; general improvement claim rejected | [32 control trials](pass2/controls/results.json), [control encodings](pass2/controls/encodings), [combined summary](pass2/summary.json). Rewrites did not beat unchanged-source controls at declared dictionary-byte checkpoints; retain Pareto tradeoffs. | [a1730d36](https://github.com/clocksmith/gamma/commit/a1730d363a2f3d5ce879879bb84ac0f375bfc788) |
 | Working 4–8-bit packets | Passed:shared7 decoded 20/20 and3,834/3,834 checks | [Package summary](pass2/working/packages/summary.json), [packet execution](pass2/working/execution/report.json), [codec review](pass2/working/review-evidence.json). Fixed-width IDs and all framing counted; primary shared language has zero whole-program entries. | [0951af88](https://github.com/clocksmith/gamma/commit/0951af88c332818133f132cce9d6cf8e277b90cb) |
+| Literal-only 16/32/64/128/256 budget comparison | Passed execution; lower input cost with larger dictionary. Small-cap coverage incomplete. | [Frozen contract](budgets/results-v1/contract.json), [accepted merge traces](budgets/results-v1/trials.json), [pooled winners](budgets/selected-v1/summary.json), [execution](budgets/execution-v1/report.json). 16/32 entries covered9/14 tasks;58 entries cover20 with77 selections. 22 distinct decoded task/source pairs passed4,107 checks; identical programs across widths share execution evidence. No new source rewrite or autonomous solve. | [b4bf675c](https://github.com/clocksmith/gamma/commit/b4bf675c633edbfeefffc691436085634a88297f) |
 
 All trial IDs map to their retained encoding JSON or reproducible method/source
 choices. Existing tools and reports remain in place; no rejected trace, source
@@ -121,10 +130,19 @@ is a diagnostic, not the shared-language claim. The 6/7/8-bit languages cover 20
 
 ## Research and proposed comparisons
 
+The [budget comparison's package index](budgets/selected-v1/summary.json)
+adds five successors at declared widths4–8. Their manifests use the same
+dictionary/packet/source hash chain. The 58-entry winner is packed separately at
+6/7/8 bits, with dictionaries, sequences and decoded views under
+[`budgets/selected-v1`](budgets/selected-v1). These packages were introduced at
+[b4bf675c](https://github.com/clocksmith/gamma/commit/b4bf675c633edbfeefffc691436085634a88297f);
+the earlier package table remains unchanged.
+
 The [concise literature mapping](RESEARCH.md) separates direct tokenisation,
 one-level grammar costs, library learning, fixed-string compression and future
 synthesis. AST-backed and functional-style tracks remain proposals, not measured
-capabilities. No comparison implementation or new experiment was launched.
+capabilities. No AST-backed or functional-style comparison has been implemented
+or scored.
 
 ## Maintenance rules
 

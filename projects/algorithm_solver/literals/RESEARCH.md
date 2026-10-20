@@ -5,8 +5,9 @@
 Our descriptive formulation is **joint semantics-preserving program rewriting
 and bounded static-dictionary compression**. This is a mapping of the existing
 problem to related work, not a novelty claim, a new experiment, or a claim that
-Gamma implements the cited systems. Current results remain the exact
-[79-literal and 140-literal packages](pass2/working/packages/summary.json).
+Gamma implements the cited systems. The exact
+[79-literal and 140-literal packages](pass2/working/packages/summary.json) are
+preserved controls for the newer [literal-budget comparison](budgets/README.md).
 
 | Question | Related primary source | Relevance and boundary |
 |---|---|---|
