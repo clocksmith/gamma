@@ -1,5 +1,7 @@
 # Literal composition pilot: joint source and vocabulary optimization
 
+[Experiment index: versions, lineage, languages, evidence and proposals](INDEX.md).
+
 The current goal is to recompose correct solutions into consistent, reusable
 literal pieces and measure the vocabulary/storage/program-length tradeoff.
 The owner removed the four-bit restriction on2026-10-20 at16:50UTC. Vocabulary
