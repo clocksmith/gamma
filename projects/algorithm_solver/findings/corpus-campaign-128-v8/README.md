@@ -1,0 +1,13 @@
+# Reviewed bilingual corpus checkpoint on 128
+
+Revision 833 accepts 247 implementations across 123 complete Python/JavaScript pairs. These implementations passed 24,782 case executions: 577 public and 24,205 independent. The checkpoint verifies 14,492 evidence artifacts. These are source-normalization results under declared contracts, not new autonomous solving results.
+
+Rounds 12, 13 and 14 add 71 independently reviewed implementations. Round 12 retains the failed JavaScript implementation of problem 868: its Number transport lost precision on extended inputs. Its Python implementation passed. The separate exact-integer successor remains outside this checkpoint's acceptance count. Rounds 13 and 14 pass 2,672 and 2,274 normalized cases respectively. Full raw sandbox status, source/input hashes, output bytes, mutation and alias observations, and before/after boundary checks were independently replayed. No independent fixture or expectation changed.
+
+The helper identity audit found one shared-name conflict among the previous 176 accepted implementations: problem 526 counts bounded-mask bits while problem 762 counts integer-magnitude bits with a different signature and domain. Their existing per-problem qualifications remain valid. A distinct identity reconciliation and deterministic checker are being reviewed and requalified separately; this checkpoint does not claim that work is accepted or that global canonical naming is complete.
+
+The historical source-reader incident remains recorded: unrelated records were decoded before selection in earlier runs. Clean historical protected-source nonaccess cannot be certified. Current activated readers select approved identities before decoding. A further recorded provenance incident exposed already-consumed problem 738 development fixtures during preparation of the 868 adapter; no protected files or new candidate execution were involved. The incident remains part of the successor's provenance limitations.
+
+The previous verified private sync is afbfefc42 on 128, Suby and Mac. This checkpoint needs its own subsequent commit and sync receipt. No public Git push, protected scoring, new training, language promotion or new site deployment is represented. The separately approved site commit 739648386cc69475ee4e7e3530095bc11c6746d5 is already deployed.
+
+Continue the remaining corpus across batch boundaries. Problem 760 remains blocked under unchanged strict comparison; its diagnostic relation checker has not replaced that validator. Claims and reservations are not accepted results. Broad autonomous composition and nearby-variant solving remain unqualified.
