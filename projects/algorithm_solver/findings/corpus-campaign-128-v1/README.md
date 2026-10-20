@@ -1,5 +1,7 @@
 # Bilingual corpus campaign: first reviewed batch and complete accounting
 
+This historical checkpoint is followed by the [33-pair checkpoint](../corpus-campaign-128-v2/README.md).
+
 The campaign covers 2,354 eligible problems /4,708 problem-language entries.
 The first 11 problems now have 22 selected normalized implementations, each with
 unchanged public/independent execution, structural enforcement, mutation/alias
@@ -78,9 +80,9 @@ A frozen copy and content-addressed receipt artifacts are preserved under
 `runs/corpus-campaign-128-v1/`. Do not create two concurrent ledger writers.
 
 ```sh
-PYTHONPATH=projects/algorithm_solver python 3 -m algsolve.corpus_campaign \
+PYTHONPATH=projects/algorithm_solver python3 -m algsolve.corpus_campaign \
   --ledger /home/x/Documents/Codex/2026-10-19/task/corpus-campaign-v1/ledger.json status
-PYTHONPATH=projects/algorithm_solver python 3 -m algsolve.corpus_campaign \
+PYTHONPATH=projects/algorithm_solver python3 -m algsolve.corpus_campaign \
   --ledger /home/x/Documents/Codex/2026-10-19/task/corpus-campaign-v1/ledger.json next --limit 10
 ```
 
