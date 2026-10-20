@@ -8,6 +8,23 @@ from .public_examples import recover
 from .records import Problem
 
 
+
+def _known_source_public(entry, original):
+    """Recover only pinned missing examples from this exact imported challenge.
+
+    Arbitrary user packets and existing examples never enter this repair path.
+    The statement, starter, method and parameter types must match the known
+    source before its frozen literal-format repair can supply public cases.
+    """
+    if (original.public_tests or original.io_mode != 'functional'
+            or any(getattr(original, name) != getattr(entry, name)
+                   for name in ('statement', 'starter_code', 'entry', 'params'))):
+        return original
+    from .imported_examples import _repair_pinned_public_examples
+    candidate = _repair_pinned_public_examples(original)
+    return candidate[0] if candidate is not None and candidate[1]['changed'] else original
+
+
 def details(slug):
     from . import corpus, splits
     entry = next((e for e in corpus.read_entries() if e.slug == slug), None)
@@ -15,6 +32,7 @@ def details(slug):
         raise ValueError('Unknown challenge')
     problems = splits.load_all()
     originals = [problems[uid] for uid in entry.members if uid in problems]
+    originals = [_known_source_public(entry, original) for original in originals]
     original = next((p for p in originals if p.public_tests and p.io_mode == 'functional'), None)
     query = Problem(uid='user:editor', source='user', source_id=slug, title=entry.title,
                     slug=slug, statement=entry.statement, io_mode='functional', entry=entry.entry,
