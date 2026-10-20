@@ -28,13 +28,34 @@ the existing Python-only catalog, 24 teacher graphs and frozen experiment as
 limited precursors. Existing ASCII7 and JS/Python lexical byte256 alphabets remain
 baselines, and 43 predictor node labels are not the target semantic codebook.
 
+## Literal composition: goals 3a/3b
+
+[Literal goals](contracts/literal_composition_goals_v1.json) add a separate track:
+3a optimizes tested known-program sources jointly with a flat dictionary of
+literal strings; 3b later freezes both vocabulary and assembly procedure before
+unseen-problem/variant evaluation. A literal contains actual names and syntax.
+Concatenation performs no substitution, free renaming or hidden expansion.
+All wrappers, separators, identifiers, constants and punctuation are counted.
+Retain original sources and rejected trials; every rewrite is a separately
+identified candidate. Measure dictionary cardinality, full stored bytes, program
+selection counts, reconstruction, execution correctness and search cost. Whole
+program entries are allowed and pay their complete dictionary storage cost.
+Keep Pareto tradeoffs visible. Reconstruction of given code is representation
+evidence; autonomous description-to-program assembly needs a separate evaluation.
+The pilot uses 20 distinct easy JavaScript problems and explores vocabulary sizes
+while jointly recomposing correct sources for consistency and sharing. The owner
+removed the initial four-bit restriction; retain its measured negative result as
+a historical baseline. No raw-source escape or hidden parameter channel is allowed.
+The bounded known-program pilot may use permitted development problems only;
+existing protected targets and future 3b holdouts remain unopened.
+
 ## Authority
 
 Owns problem imports, sandbox judging, comparison routes, research answer interfaces, index-only mining, graph datasets, frozen samples and reports. Also owns the user-requested binary-input vocabulary study on permitted reference text; 256one owns its editor UI and runtime packaging. Gamma owns an explicitly paired, loopback-only research bridge to its bounded Linux judge and known-answer interface. No unsupported generalization or benchmark-acceptance claims.
 
 ## Scope
 
-`algsolve/`, `contracts/`, `findings/`, `runs/`.
+`algsolve/`, `contracts/`, `findings/`, `runs/`, `literals/`.
 
 ## Contracts
 

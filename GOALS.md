@@ -35,6 +35,23 @@ separately. A whole solution can occupy one of the 256 entries and form a valid
 one-macro program; unbounded answer lookup and human steering remain separate
 from autonomous macro selection. No vocabulary is presumed optimal.
 
+6. **Literal Composition (3a/3b)**: Keep literal composition separate from the
+parameterized macro track. Goal 3a jointly optimizes complete, correct source for
+known problems and a reusable dictionary of exact literal strings. Every emitted
+character, including names, constants, wrappers, whitespace and punctuation, must
+come from the counted encoding; there are no free binding or expression slots.
+The pilot covers approximately 20 distinct easy JavaScript problems and varies
+vocabulary size while jointly recomposing sources and extracting literal strings.
+The owner removed the initial four-bit limit; preserve it as a diagnostic baseline.
+There is no free raw-source escape; dictionary and framing costs remain explicit.
+Goal 3b later evaluates a frozen literal vocabulary and frozen assembly procedure
+on unseen problems or semantic variants. Preserve protected boundaries. Compare
+vocabulary cardinality, stored dictionary bytes, program selections, correctness
+and search cost on a Pareto frontier, including whole-program literals. Offline
+encoding of supplied solutions is not autonomous assembly from a description.
+See the [six-goal contract](projects/algorithm_solver/contracts/literal_composition_goals_v1.json)
+and [twenty-program 3a pilot](projects/algorithm_solver/literals/README.md).
+
 ## Operating Loops
 
 1. **Empirical Evaluation Loop**:
