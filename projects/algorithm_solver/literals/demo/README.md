@@ -1,6 +1,6 @@
 # Binary literal composition in 256.one
 
-Status: implemented and locally verified. Open the demo's **Workspace → Shared7 development validation and replay** panel. It coexists with the four main BITS input modes and typed composition. This is human binary assembly and offline reconstruction, not autonomous
+Status: deployed and verified at https://256.one/labs/two-button/. Open the demo's **Workspace → Shared7 development validation and replay** panel. It coexists with the four main BITS input modes and typed composition. This is human binary assembly and offline reconstruction, not autonomous
 selection from a problem description or evidence for 3b.
 
 ## Frozen language and input protocol
@@ -111,3 +111,13 @@ shared7 inputs. No existing package is overwritten. Git history identifies the
 introducing integration and compatibility commits; qualification records pin
 runtime/dictionary/source hashes. Deployment receipts separately establish live
 state. Offline encoding and human input do not establish autonomous assembly.
+
+## Verified publication
+
+[Deployment receipt](evidence/deployment.json) pins release
+`34bb23be88356698` and code commit `3abb11651519c2f8a62b574275e7c5ecb5a15334`.
+The seven-file overlay preserves 3,958 unrelated hosted paths.
+[Live HTTPS and browser checks](evidence/live-verification.json) verified all
+seven file hashes, desktop/mobile loading, four input modes, unique DOM IDs and
+partial-bit input without changing the main editor. Native execution still
+requires the paired local Gamma bridge; the site is not a public code runner.
