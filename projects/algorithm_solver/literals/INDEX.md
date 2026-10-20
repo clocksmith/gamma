@@ -4,7 +4,13 @@ Start here for source versions, experiments and the working literal languages.
 This is a navigation index over existing manifests and reports, not a second
 results ledger. No experiments are running under this maintenance task.
 
-**Latest input-cost result:** [literal-only budget comparison](budgets/README.md),
+**Latest input-cost result:** [complete line-span search](budgets/SPANS.md),
+62 exact strings at six bits, 20/20 programs in 74 selections / 444 selection bits,
+with 3,834/3,834 development checks. The complete package is 5,405 bytes.
+This is the selection minimum for its frozen 341-string pool, not a global
+optimum or autonomous solving.
+
+**Previous input/storage tradeoff:** [literal-only budget comparison](budgets/README.md),
 58 exact strings at six bits, 20/20 programs in 77 selections / 462 selection bits,
 with 3,834/3,834 development checks. Its complete package is larger (4,972 bytes)
 than shared7 (4,468 bytes); this is an input-cost/storage tradeoff.
@@ -97,6 +103,7 @@ the linked execution reports, not silently rewritten.
 | Dense unchanged-source controls | Passed comparison; general improvement claim rejected | [32 control trials](pass2/controls/results.json), [control encodings](pass2/controls/encodings), [combined summary](pass2/summary.json). Rewrites did not beat unchanged-source controls at declared dictionary-byte checkpoints; retain Pareto tradeoffs. | [a1730d36](https://github.com/clocksmith/gamma/commit/a1730d363a2f3d5ce879879bb84ac0f375bfc788) |
 | Working 4–8-bit packets | Passed:shared7 decoded 20/20 and3,834/3,834 checks | [Package summary](pass2/working/packages/summary.json), [packet execution](pass2/working/execution/report.json), [codec review](pass2/working/review-evidence.json). Fixed-width IDs and all framing counted; primary shared language has zero whole-program entries. | [0951af88](https://github.com/clocksmith/gamma/commit/0951af88c332818133f132cce9d6cf8e277b90cb) |
 | Literal-only 16/32/64/128/256 budget comparison | Passed execution; lower input cost with larger dictionary. Small-cap coverage incomplete. | [Frozen contract](budgets/results-v1/contract.json), [accepted merge traces](budgets/results-v1/trials.json), [pooled winners](budgets/selected-v1/summary.json), [execution](budgets/execution-v1/report.json). 16/32 entries covered9/14 tasks;58 entries cover20 with77 selections. 22 distinct decoded task/source pairs passed4,107 checks; identical programs across widths share execution evidence. No new source rewrite or autonomous solve. | [b4bf675c](https://github.com/clocksmith/gamma/commit/b4bf675c633edbfeefffc691436085634a88297f) |
+| Complete admitted line-span pool | Passed: 20 programs, 74 selections, 3,834 checks | [Frozen pool and implementation identity](budgets/spans-v1/contract.json), [minimum counts](budgets/spans-v1/summary.json), [packets](budgets/spans-v1/budget-64/manifest.json), [execution](budgets/spans-execution-v1/report.json). 62 strings; 444 input bits; larger 5,405-byte package. No new source semantics. | Immutable artifact hashes in the linked contract |
 
 All trial IDs map to their retained encoding JSON or reproducible method/source
 choices. Existing tools and reports remain in place; no rejected trace, source
