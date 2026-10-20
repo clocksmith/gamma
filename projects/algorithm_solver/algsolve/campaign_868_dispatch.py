@@ -5,6 +5,16 @@ from . import campaign_868_integer as gap
 
 distinct = common.distinct
 
+def requires_989(data, entry):
+    reference = data.get('inputs', {}).get('integer989_policy')
+    if reference is None: return False
+    policy = common.check(reference)
+    common.need(policy.get('schema') == 'algsolve.integer989-admission-policy.v1' and
+                type(policy.get('entries')) is dict and set(policy['entries']) == {'0989:javascript'},
+                '989 coordinator policy must contain only0989JavaScript')
+    return common.key(entry) in policy['entries']
+
+
 def requires_1056(data, entry):
     reference = data.get('inputs', {}).get('integer1056_policy')
     if reference is None:
@@ -29,8 +39,17 @@ def requires_profile(data, entry):
     return common.key(entry) in policy['entries']
 
 def select(data, entry):
+    required989 = requires_989(data, entry)
     required = requires_profile(data, entry)
     required1056 = requires_1056(data, entry)
+    if common.key(entry) == '0989:javascript':
+        common.need(not common.requires_profile(data, entry) and
+                    not previous.previous.requires_square(data, entry) and
+                    not previous.requires_profile(data, entry) and not required and not required1056,
+                    'Combined alternate profiles forbidden')
+        from . import campaign_989_integer as carry
+        return carry
+    common.need(not required989, 'Unsupported989 alternate entry')
     if common.key(entry) == '1056:javascript':
         common.need(not common.requires_profile(data, entry) and
                     not previous.previous.requires_square(data, entry) and
@@ -49,6 +68,8 @@ def select(data, entry):
     return previous.select(data, entry)
 
 def reject_legacy(data, entry, *documents):
+    common.need(not requires_989(data, entry),
+                "Coordinator989 policy requires version3; downgrade forbidden")
     common.need(not requires_1056(data, entry),
                 'Coordinator1056 policy requires version3; downgrade forbidden')
     common.need(not requires_profile(data, entry),
