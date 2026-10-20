@@ -95,7 +95,7 @@ class Handler(base.Handler):
 
 def main():
     parser=argparse.ArgumentParser(description=__doc__);parser.add_argument('--port',type=int,default=8875)
-    parser.add_argument('--approved-library',type=Path,default=ROOT/'findings/known-sortedcontainers-1a-128-v1/approved-library.json')
+    parser.add_argument('--approved-library',type=Path,default=ROOT/'findings/pinned-public-1a-128-v1/approved-library.json')
     args=parser.parse_args();server=ThreadingHTTPServer(('127.0.0.1',args.port),Handler)
     server.token=secrets.token_urlsafe(32);server.jobs=Jobs(args.approved_library)
     signal.signal(signal.SIGTERM,lambda *_:sys.exit(0));threading.Thread(target=server.jobs.reap,daemon=True).start()

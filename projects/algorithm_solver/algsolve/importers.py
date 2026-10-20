@@ -81,7 +81,14 @@ def _example_literal(text: str, start: int, *, whole_input: bool = False) -> tup
     return ''.join(out), len(text)
 
 
-def statement_examples(statement: str, params: list[tuple[str, str]], ret_annotation: str) -> tuple[list[dict], int]:
+def statement_examples(statement: str, params: list[tuple[str, str]], ret_annotation: str, *,
+                       parameter_aliases: dict[str, str] | None = None,
+                       duplicate_output_label: bool = False) -> tuple[list[dict], int]:
+    """Parse literal examples and count every unsupported explicit example.
+
+    Optional alias/label repairs are for source-bound offline callers only;
+    default query parsing is unchanged. Alias keys never rewrite string data.
+    """
     tests = []
     matches = list(_EXAMPLE_RE.finditer(statement))
     # A trailing/incomplete explicit Input block has no regex match. Count it
@@ -100,6 +107,18 @@ def statement_examples(statement: str, params: list[tuple[str, str]], ret_annota
         try:
             raw_in, _ = _example_literal(raw_in, 0, whole_input=True)
             args, kwargs = values.parse_call_arguments(raw_in)
+            # Opt-in offline repair: rename parsed keyword keys, never string data.
+            if parameter_aliases:
+                names = {name for name, _ in params}
+                if (not set(parameter_aliases.values()) <= names
+                        or len(set(parameter_aliases.values())) != len(parameter_aliases)):
+                    raise values.Unsupported('invalid public parameter aliases')
+                mapped = {parameter_aliases.get(key, key): value for key, value in kwargs.items()}
+                if len(mapped) != len(kwargs):
+                    raise values.Unsupported('public parameter alias collision')
+                kwargs = mapped
+            if duplicate_output_label and raw_out.startswith('Output:'):
+                raw_out = raw_out[len('Output:'):].lstrip()
             ordered = values.order_arguments(params, args, kwargs)
             ordered = [values.wrap_for_annotation(v, ann) for v, (_, ann) in zip(ordered, params)]
             expected = values.wrap_for_annotation(values.parse_value(raw_out), ret_annotation)
