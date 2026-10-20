@@ -23,6 +23,10 @@ ENTRIES = [
 BY_NAME = {name:(i,fields) for i,(name,fields) in enumerate(ENTRIES)}
 RESERVED_WORDS = set('break case catch class const continue debugger default delete do else enum export extends false finally for function if import in instanceof let new null return super switch this throw true try typeof var void while with yield await implements interface package private protected public static'.split())
 
+# Function declarations must not shadow emitted JS dependencies or violate strict bindings.
+# Python methods live on Solution and do not shadow these module/global names.
+JS_METHOD_COLLISIONS = frozenset({'addInt','Map','Number','Array','RangeError','TypeError','eval','arguments'})
+
 
 def require(condition,message):
     if not condition:raise ValueError(message)
@@ -44,6 +48,7 @@ def check_record(record):
     require(record['language'] in LANGUAGES,'Unknown source language')
     name=record['method']
     require(isinstance(name,str) and re.fullmatch('[A-Za-z][A-Za-z0-9_]{0,63}',name) and not keyword.iskeyword(name) and name not in RESERVED_WORDS,'Invalid shared function name')
+    require(record['language']!='javascript' or name not in JS_METHOD_COLLISIONS,'JavaScript function name conflicts with emitted runtime or strict binding')
     instructions=record['instructions']
     require(isinstance(instructions,list) and 0<len(instructions)<=MAX_INSTRUCTIONS,'Instruction limit')
     for item in instructions:

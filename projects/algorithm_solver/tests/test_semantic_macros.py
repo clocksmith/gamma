@@ -53,6 +53,22 @@ class MacroTests(unittest.TestCase):
             p=m.good_pairs('javascript','map');p['method']=name
             with self.assertRaises(ValueError):m.encode(p)
 
+    def test_js_runtime_names_are_language_specific(self):
+        names = ('addInt', 'Map', 'Number', 'Array', 'RangeError', 'TypeError', 'eval', 'arguments')
+        for name in names:
+            with self.subTest(name=name):
+                p = m.good_pairs('python', 'map'); p['method'] = name
+                data = m.encode(p)
+                self.assertEqual(m.decode(data), p)
+                p['language'] = 'javascript'
+                with self.assertRaisesRegex(ValueError, 'conflicts'): m.encode(p)
+                with self.assertRaisesRegex(ValueError, 'conflicts'): m.expand(p)
+                legacy = bytearray(data); legacy[5] = 1
+                with self.assertRaisesRegex(ValueError, 'conflicts'): m.decode(bytes(legacy))
+        for name in ('Object', 'Math', 'JSON', 'Solution', 'p0', 'v1', 'addInteger', 'map', 'NumberOfPairs'):
+            p = m.good_pairs('javascript', 'map'); p['method'] = name
+            self.assertEqual(m.decode(m.encode(p)), p)
+
     def test_implicit_source_and_unknown_macros_are_rejected(self):
         p=m.good_pairs('python','map');p['instructions'][0]={'op':'source','args':['return 4']}
         with self.assertRaises(ValueError):m.encode(p)
