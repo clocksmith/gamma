@@ -87,15 +87,15 @@ development corpus; preserve each frozen successor and its complete evidence.
 ## Current checkpoint and next work
 
 [Scale100-v1](scale100-v1/README.md) supplies 100/100 exposed development
-problems. The [shared-heap successor](heap-v1/README.md) reduces their total to
-7,085 eight-bit selections and 13,797 complete package bytes without changing
-the 256-entry dictionary. Median 62, p95 152 and 52.59% character bits remain above
-target. The worst program falls from 494 to 230 selections. The refactor passes
-332 checks on 83 existing cases; 206 packets independently decode. M1 is **not met**.
+problems. The [shared-row successor](row-v1/README.md) improves the heap baseline
+from 7,085 to **7,016 eight-bit selections**, with median **60**, p95 **152** and
+**53.38%** character bits. Its package grows from 13,797 to **13,948 bytes**; keep
+the smaller heap baseline as a separate storage control. The row refactors pass
+2,132 checks on 533 cases and 800 packets independently decode. M1 is **not met**.
 
 | Milestone | Current evidence | Next decisive work |
 |---|---|---|
-| 1 | 100 tested development problems; naming gains plus a verified shared-heap refactor | Extend counted shared helpers to window, DP and backtracking code; compare against the frozen 100 baseline. Broaden to a frozen 500-problem qualification only with explicit mix and support accounting. |
+| 1 | 100 tested development problems; verified shared heap and DP-row refactors | Reduce callback/binding fragmentation; rank literals by exact gain, then extend shared helpers to windows and backtracking against frozen controls. Broaden to a frozen 500-problem qualification only with explicit mix and support accounting. |
 | 2 | No autonomous literal assembly result | Establish first-attempt description-to-sequence prediction on development data, distinct from stored-sequence lookup; measure correctness and complete latency. |
 | 3 | No fresh semantic-variant result | Freeze the composer and qualify development behavior before opening separately reserved variants. |
 | 4 | No broad autonomous result | Broaden family coverage after M1–3 gates; count failures and unsupported cases. |
