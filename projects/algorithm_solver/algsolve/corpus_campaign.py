@@ -128,7 +128,7 @@ def stage(data,key,owner,token,normalized,contract,standard,root):
     normalized_sha=file_ref(normalized)['sha256']
     if c.get('source_sha256')!=source_sha or c.get('normalized_sha256')!=normalized_sha:raise ValueError('Contract source binding mismatch')
     if c.get('independent_sets')!=e['independent_sets']:raise ValueError('Contract must preserve all frozen independent sets')
-    from . import campaign_integer_dispatch as integer_profile
+    from . import campaign_uint1024_dispatch as integer_profile
     runtime_refs=[]
     if c['schema']=='algsolve.campaign-contract.v3':
         from .campaign_public_contracts import requires_profile as requires_public_profile
@@ -175,7 +175,7 @@ def record(data,key,owner,token,evidence_path,root):
     for kind,ref in bundle.items():
         verify(ref);receipt=json.loads(Path(ref['path']).read_text());receipt_check(receipt,a,key,kind);receipts[kind]=receipt
     c=json.loads(Path(a['contract']['path']).read_text())
-    from . import campaign_integer_dispatch as integer_profile
+    from . import campaign_uint1024_dispatch as integer_profile
     if c['schema']!='algsolve.campaign-contract.v3':integer_profile.reject_legacy(data,e,c,*receipts.values())
     st=receipts['standard']
     if st.get('standard_sha256')!=a['standard']['sha256'] or st.get('errors')!=[] or st.get('idempotent') is not True:
