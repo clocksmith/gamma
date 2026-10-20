@@ -1,0 +1,599 @@
+{
+  "schema": "gamma.literal-mechanical-transformations.v1",
+  "entries": [
+    {
+      "id": 121,
+      "original_method": "maxProfit",
+      "parameters": [
+        "values"
+      ],
+      "arity": 1,
+      "input": {
+        "path": "../sources/normalized/0121.js",
+        "sha256": "d5dbc33836b5d70ac4c35bde6242ef27265e46b724a9bfecc892d5be105d86a0",
+        "bytes": 228
+      },
+      "output": {
+        "path": "recomposed/0121.js",
+        "sha256": "d5dbc33836b5d70ac4c35bde6242ef27265e46b724a9bfecc892d5be105d86a0",
+        "bytes": 228
+      },
+      "transformation": {
+        "status": "unchanged",
+        "reason": "no-supported-pattern",
+        "source_sha256": "d5dbc33836b5d70ac4c35bde6242ef27265e46b724a9bfecc892d5be105d86a0",
+        "output_sha256": "d5dbc33836b5d70ac4c35bde6242ef27265e46b724a9bfecc892d5be105d86a0"
+      }
+    },
+    {
+      "id": 136,
+      "original_method": "singleNumber",
+      "parameters": [
+        "values"
+      ],
+      "arity": 1,
+      "input": {
+        "path": "../sources/normalized/0136.js",
+        "sha256": "2f1e4bd86c909afd12bd215b0ac599e25907032e4c4e9c3f8497eb3d1f4570e4",
+        "bytes": 93
+      },
+      "output": {
+        "path": "recomposed/0136.js",
+        "sha256": "35fd187088162a514a7513343003e219185d8118bf00ff0a7f976a533143b0fb",
+        "bytes": 353
+      },
+      "transformation": {
+        "status": "rewritten",
+        "rule": "xor-fold-to-count-parity",
+        "source_sha256": "2f1e4bd86c909afd12bd215b0ac599e25907032e4c4e9c3f8497eb3d1f4570e4",
+        "output_sha256": "35fd187088162a514a7513343003e219185d8118bf00ff0a7f976a533143b0fb",
+        "helper_sha256": "4d32f1832780dde8e15d36d6fda614c5ab2ac06c66f612551752dfc95ab900cf",
+        "helper_bytes": 167,
+        "input_span_utf16": {
+          "start": 29,
+          "end": 88
+        },
+        "input_replaced_bytes": 59,
+        "replacement_bytes": 151,
+        "unchanged_prefix_sha256": "56bb86d02d7b301029a64b601c1a154ccbb922ac7cb2cae2fd4434c3cb837b4a",
+        "unchanged_tail_sha256": "2d59e4e690521345a1c6be146b4ede7338797a33c690163f3e0a558bbba4178a",
+        "unchanged_tail_bytes": 5,
+        "domain": "Dense finite signed32 integer arrays. XOR parity equivalence; O(k) additional Map memory replaces O(1). No source-order dependence or input mutation under this domain.",
+        "tail_preserved": true,
+        "complete_source_counted": true
+      }
+    },
+    {
+      "id": 169,
+      "original_method": "majorityElement",
+      "parameters": [
+        "values"
+      ],
+      "arity": 1,
+      "input": {
+        "path": "../sources/normalized/0169.js",
+        "sha256": "ae5e57a574da9c7ef375dfdda3c3b055f1ad9c0c12abeaee2443bcaadd8d6780",
+        "bytes": 203
+      },
+      "output": {
+        "path": "recomposed/0169.js",
+        "sha256": "ae5e57a574da9c7ef375dfdda3c3b055f1ad9c0c12abeaee2443bcaadd8d6780",
+        "bytes": 203
+      },
+      "transformation": {
+        "status": "unchanged",
+        "reason": "no-supported-pattern",
+        "source_sha256": "ae5e57a574da9c7ef375dfdda3c3b055f1ad9c0c12abeaee2443bcaadd8d6780",
+        "output_sha256": "ae5e57a574da9c7ef375dfdda3c3b055f1ad9c0c12abeaee2443bcaadd8d6780"
+      }
+    },
+    {
+      "id": 242,
+      "original_method": "isAnagram",
+      "parameters": [
+        "values",
+        "other"
+      ],
+      "arity": 2,
+      "input": {
+        "path": "../sources/normalized/0242.js",
+        "sha256": "9facbacabddb78ed360921400ea4048cc18d8c1e966dda9868df6e5d4b2a2006",
+        "bytes": 316
+      },
+      "output": {
+        "path": "recomposed/0242.js",
+        "sha256": "debd8a2479aaf0b0a9adf09fc24016ad4ad17afa391adcb867ffc4d1eef080b0",
+        "bytes": 399
+      },
+      "transformation": {
+        "status": "rewritten",
+        "rule": "inline-map-frequency-to-shared-helper",
+        "source_sha256": "9facbacabddb78ed360921400ea4048cc18d8c1e966dda9868df6e5d4b2a2006",
+        "output_sha256": "debd8a2479aaf0b0a9adf09fc24016ad4ad17afa391adcb867ffc4d1eef080b0",
+        "helper_sha256": "4d32f1832780dde8e15d36d6fda614c5ab2ac06c66f612551752dfc95ab900cf",
+        "helper_bytes": 167,
+        "input_span_utf16": {
+          "start": 36,
+          "end": 156
+        },
+        "input_replaced_bytes": 120,
+        "replacement_bytes": 35,
+        "unchanged_prefix_sha256": "21d30c3c1cf429c3d5a2f132c7d75ca642bdf823ce5da0cd2699656222dfc30c",
+        "unchanged_tail_sha256": "b7e1c1076dd7aca50fae69c669921d5d3bc84b774f3c302a43d6682164fa3285",
+        "unchanged_tail_bytes": 160,
+        "domain": "Ordinary dense arrays or strings, unmodified built-in Map and iterator behavior; integer occurrence counts remain exact. Same frequency algorithm and same statement order.",
+        "tail_preserved": true,
+        "complete_source_counted": true
+      }
+    },
+    {
+      "id": 387,
+      "original_method": "firstUniqChar",
+      "parameters": [
+        "values"
+      ],
+      "arity": 1,
+      "input": {
+        "path": "../sources/normalized/0387.js",
+        "sha256": "39b73fc3161858f63609e61c6784ba9d53668dee5104cb6d6896c89139bbebc6",
+        "bytes": 342
+      },
+      "output": {
+        "path": "recomposed/0387.js",
+        "sha256": "39b73fc3161858f63609e61c6784ba9d53668dee5104cb6d6896c89139bbebc6",
+        "bytes": 342
+      },
+      "transformation": {
+        "status": "unchanged",
+        "reason": "no-supported-pattern",
+        "source_sha256": "39b73fc3161858f63609e61c6784ba9d53668dee5104cb6d6896c89139bbebc6",
+        "output_sha256": "39b73fc3161858f63609e61c6784ba9d53668dee5104cb6d6896c89139bbebc6"
+      }
+    },
+    {
+      "id": 551,
+      "original_method": "checkRecord",
+      "parameters": [
+        "values"
+      ],
+      "arity": 1,
+      "input": {
+        "path": "../sources/normalized/0551.js",
+        "sha256": "dad128586517552b194e1971402a16faf74121f4315fe0a24949f8f42771529c",
+        "bytes": 71
+      },
+      "output": {
+        "path": "recomposed/0551.js",
+        "sha256": "dad128586517552b194e1971402a16faf74121f4315fe0a24949f8f42771529c",
+        "bytes": 71
+      },
+      "transformation": {
+        "status": "unchanged",
+        "reason": "no-supported-pattern",
+        "source_sha256": "dad128586517552b194e1971402a16faf74121f4315fe0a24949f8f42771529c",
+        "output_sha256": "dad128586517552b194e1971402a16faf74121f4315fe0a24949f8f42771529c"
+      }
+    },
+    {
+      "id": 575,
+      "original_method": "distributeCandies",
+      "parameters": [
+        "values"
+      ],
+      "arity": 1,
+      "input": {
+        "path": "../sources/normalized/0575.js",
+        "sha256": "d4aa5829cc239991aee48c09daa5269d3a9ef93dc4ad800bd467aa809023f654",
+        "bytes": 103
+      },
+      "output": {
+        "path": "recomposed/0575.js",
+        "sha256": "7a5fc1c0adea5ee45aad4c688a0627edfdbd1be616cfc4c85c778def9213dbd6",
+        "bytes": 275
+      },
+      "transformation": {
+        "status": "rewritten",
+        "rule": "set-cardinality-to-frequency-cardinality",
+        "source_sha256": "d4aa5829cc239991aee48c09daa5269d3a9ef93dc4ad800bd467aa809023f654",
+        "output_sha256": "7a5fc1c0adea5ee45aad4c688a0627edfdbd1be616cfc4c85c778def9213dbd6",
+        "helper_sha256": "4d32f1832780dde8e15d36d6fda614c5ab2ac06c66f612551752dfc95ab900cf",
+        "helper_bytes": 167,
+        "input_span_utf16": {
+          "start": 45,
+          "end": 60
+        },
+        "input_replaced_bytes": 15,
+        "replacement_bytes": 19,
+        "unchanged_prefix_sha256": "c58b6f25ebb7b2d43e37f811a436fd130f002485c851e54c070119961221d87d",
+        "unchanged_tail_sha256": "cd6dd217c28a98a2cfc399ef7bdbae8e587b65f1dfd836b33a1007ad4e10080e",
+        "unchanged_tail_bytes": 43,
+        "domain": "Dense finite-integer arrays, unmodified built-ins; SameValueZero key classes unchanged. Counts add per-key numeric storage but no input mutation.",
+        "tail_preserved": true,
+        "complete_source_counted": true
+      }
+    },
+    {
+      "id": 594,
+      "original_method": "findLHS",
+      "parameters": [
+        "values"
+      ],
+      "arity": 1,
+      "input": {
+        "path": "../sources/normalized/0594.js",
+        "sha256": "d19bf9f5fa63c9c19e70e6060b47d51ba7799f4b7b3bd6cfa35ebbf54ebdf382",
+        "bytes": 319
+      },
+      "output": {
+        "path": "recomposed/0594.js",
+        "sha256": "098ab0567a674b29ee2d3fe940886533adc4fbbb6da1b0bfd1702cd0e42a42f0",
+        "bytes": 416
+      },
+      "transformation": {
+        "status": "rewritten",
+        "rule": "inline-map-frequency-to-shared-helper",
+        "source_sha256": "d19bf9f5fa63c9c19e70e6060b47d51ba7799f4b7b3bd6cfa35ebbf54ebdf382",
+        "output_sha256": "098ab0567a674b29ee2d3fe940886533adc4fbbb6da1b0bfd1702cd0e42a42f0",
+        "helper_sha256": "4d32f1832780dde8e15d36d6fda614c5ab2ac06c66f612551752dfc95ab900cf",
+        "helper_bytes": 167,
+        "input_span_utf16": {
+          "start": 29,
+          "end": 135
+        },
+        "input_replaced_bytes": 106,
+        "replacement_bytes": 35,
+        "unchanged_prefix_sha256": "56bb86d02d7b301029a64b601c1a154ccbb922ac7cb2cae2fd4434c3cb837b4a",
+        "unchanged_tail_sha256": "57930864393419057129e0e9e2e84bb4db6304740f78911247dcab18671190be",
+        "unchanged_tail_bytes": 184,
+        "domain": "Ordinary dense arrays or strings, unmodified built-in Map and iterator behavior; integer occurrence counts remain exact. Same frequency algorithm and same statement order.",
+        "tail_preserved": true,
+        "complete_source_counted": true
+      }
+    },
+    {
+      "id": 605,
+      "original_method": "canPlaceFlowers",
+      "parameters": [
+        "values",
+        "count"
+      ],
+      "arity": 2,
+      "input": {
+        "path": "../sources/normalized/0605.js",
+        "sha256": "6d6e6950b55fe289d1a075481a385db99f565f2d7eb5f3002a19613d56dd3e81",
+        "bytes": 321
+      },
+      "output": {
+        "path": "recomposed/0605.js",
+        "sha256": "6d6e6950b55fe289d1a075481a385db99f565f2d7eb5f3002a19613d56dd3e81",
+        "bytes": 321
+      },
+      "transformation": {
+        "status": "unchanged",
+        "reason": "no-supported-pattern",
+        "source_sha256": "6d6e6950b55fe289d1a075481a385db99f565f2d7eb5f3002a19613d56dd3e81",
+        "output_sha256": "6d6e6950b55fe289d1a075481a385db99f565f2d7eb5f3002a19613d56dd3e81"
+      }
+    },
+    {
+      "id": 643,
+      "original_method": "findMaxAverage",
+      "parameters": [
+        "values",
+        "length"
+      ],
+      "arity": 2,
+      "input": {
+        "path": "../sources/normalized/0643.js",
+        "sha256": "3c7e9dfc0630d2b1a947c1902751565188315784785610897900ff82156423c6",
+        "bytes": 339
+      },
+      "output": {
+        "path": "recomposed/0643.js",
+        "sha256": "3c7e9dfc0630d2b1a947c1902751565188315784785610897900ff82156423c6",
+        "bytes": 339
+      },
+      "transformation": {
+        "status": "unchanged",
+        "reason": "no-supported-pattern",
+        "source_sha256": "3c7e9dfc0630d2b1a947c1902751565188315784785610897900ff82156423c6",
+        "output_sha256": "3c7e9dfc0630d2b1a947c1902751565188315784785610897900ff82156423c6"
+      }
+    },
+    {
+      "id": 657,
+      "original_method": "judgeCircle",
+      "parameters": [
+        "values"
+      ],
+      "arity": 1,
+      "input": {
+        "path": "../sources/normalized/0657.js",
+        "sha256": "dd3e5d7a7f9892bf26cd82f7ffddd7d661325e20ed98e0e05c0cd664eed3c25d",
+        "bytes": 261
+      },
+      "output": {
+        "path": "recomposed/0657.js",
+        "sha256": "90fffd0a0d59480926ca14b258a64dcfd4a0139d58a9c1b232d2316602cff58f",
+        "bytes": 358
+      },
+      "transformation": {
+        "status": "rewritten",
+        "rule": "inline-map-frequency-to-shared-helper",
+        "source_sha256": "dd3e5d7a7f9892bf26cd82f7ffddd7d661325e20ed98e0e05c0cd664eed3c25d",
+        "output_sha256": "90fffd0a0d59480926ca14b258a64dcfd4a0139d58a9c1b232d2316602cff58f",
+        "helper_sha256": "4d32f1832780dde8e15d36d6fda614c5ab2ac06c66f612551752dfc95ab900cf",
+        "helper_bytes": 167,
+        "input_span_utf16": {
+          "start": 29,
+          "end": 135
+        },
+        "input_replaced_bytes": 106,
+        "replacement_bytes": 35,
+        "unchanged_prefix_sha256": "56bb86d02d7b301029a64b601c1a154ccbb922ac7cb2cae2fd4434c3cb837b4a",
+        "unchanged_tail_sha256": "3b749e4de9fb47c3f05882162ba4c257dccd0eaf935c13f3368c483ce2ae5514",
+        "unchanged_tail_bytes": 126,
+        "domain": "Ordinary dense arrays or strings, unmodified built-in Map and iterator behavior; integer occurrence counts remain exact. Same frequency algorithm and same statement order.",
+        "tail_preserved": true,
+        "complete_source_counted": true
+      }
+    },
+    {
+      "id": 674,
+      "original_method": "findLengthOfLCIS",
+      "parameters": [
+        "values"
+      ],
+      "arity": 1,
+      "input": {
+        "path": "../sources/normalized/0674.js",
+        "sha256": "9e8bf5b809a7e951eea2af1c9d7becd2990ec7a1c63b1b6e6fb3c6fc6abc54e1",
+        "bytes": 256
+      },
+      "output": {
+        "path": "recomposed/0674.js",
+        "sha256": "9e8bf5b809a7e951eea2af1c9d7becd2990ec7a1c63b1b6e6fb3c6fc6abc54e1",
+        "bytes": 256
+      },
+      "transformation": {
+        "status": "unchanged",
+        "reason": "no-supported-pattern",
+        "source_sha256": "9e8bf5b809a7e951eea2af1c9d7becd2990ec7a1c63b1b6e6fb3c6fc6abc54e1",
+        "output_sha256": "9e8bf5b809a7e951eea2af1c9d7becd2990ec7a1c63b1b6e6fb3c6fc6abc54e1"
+      }
+    },
+    {
+      "id": 704,
+      "original_method": "search",
+      "parameters": [
+        "values",
+        "value"
+      ],
+      "arity": 2,
+      "input": {
+        "path": "../sources/normalized/0704.js",
+        "sha256": "8d2068b6215d1d80023b2505ca0afc36393eab2da9bb090937ea8134839477d2",
+        "bytes": 294
+      },
+      "output": {
+        "path": "recomposed/0704.js",
+        "sha256": "8d2068b6215d1d80023b2505ca0afc36393eab2da9bb090937ea8134839477d2",
+        "bytes": 294
+      },
+      "transformation": {
+        "status": "unchanged",
+        "reason": "no-supported-pattern",
+        "source_sha256": "8d2068b6215d1d80023b2505ca0afc36393eab2da9bb090937ea8134839477d2",
+        "output_sha256": "8d2068b6215d1d80023b2505ca0afc36393eab2da9bb090937ea8134839477d2"
+      }
+    },
+    {
+      "id": 709,
+      "original_method": "toLowerCase",
+      "parameters": [
+        "values"
+      ],
+      "arity": 1,
+      "input": {
+        "path": "../sources/normalized/0709.js",
+        "sha256": "eff2a761a079d0ff125ee44981edac87774fb8d85a85f9c9c724caed882d1538",
+        "bytes": 96
+      },
+      "output": {
+        "path": "recomposed/0709.js",
+        "sha256": "eff2a761a079d0ff125ee44981edac87774fb8d85a85f9c9c724caed882d1538",
+        "bytes": 96
+      },
+      "transformation": {
+        "status": "unchanged",
+        "reason": "no-supported-pattern",
+        "source_sha256": "eff2a761a079d0ff125ee44981edac87774fb8d85a85f9c9c724caed882d1538",
+        "output_sha256": "eff2a761a079d0ff125ee44981edac87774fb8d85a85f9c9c724caed882d1538"
+      }
+    },
+    {
+      "id": 724,
+      "original_method": "pivotIndex",
+      "parameters": [
+        "values"
+      ],
+      "arity": 1,
+      "input": {
+        "path": "../sources/normalized/0724.js",
+        "sha256": "904111f335926484b5b7b373d46d29fced6b37582b9a42512b93d7c98fd89a8d",
+        "bytes": 264
+      },
+      "output": {
+        "path": "recomposed/0724.js",
+        "sha256": "904111f335926484b5b7b373d46d29fced6b37582b9a42512b93d7c98fd89a8d",
+        "bytes": 264
+      },
+      "transformation": {
+        "status": "unchanged",
+        "reason": "no-supported-pattern",
+        "source_sha256": "904111f335926484b5b7b373d46d29fced6b37582b9a42512b93d7c98fd89a8d",
+        "output_sha256": "904111f335926484b5b7b373d46d29fced6b37582b9a42512b93d7c98fd89a8d"
+      }
+    },
+    {
+      "id": 771,
+      "original_method": "numJewelsInStones",
+      "parameters": [
+        "values",
+        "other"
+      ],
+      "arity": 2,
+      "input": {
+        "path": "../sources/normalized/0771.js",
+        "sha256": "345feb0d3a777f437d72cc2fbc9a6297ebd482a4c1e2fecfe3b81177e4c1f935",
+        "bytes": 189
+      },
+      "output": {
+        "path": "recomposed/0771.js",
+        "sha256": "e5c31b8e8054799717623005cd3b868299fc2aa257152107c9e94a091f963328",
+        "bytes": 361
+      },
+      "transformation": {
+        "status": "rewritten",
+        "rule": "set-membership-to-frequency-membership",
+        "source_sha256": "345feb0d3a777f437d72cc2fbc9a6297ebd482a4c1e2fecfe3b81177e4c1f935",
+        "output_sha256": "e5c31b8e8054799717623005cd3b868299fc2aa257152107c9e94a091f963328",
+        "helper_sha256": "4d32f1832780dde8e15d36d6fda614c5ab2ac06c66f612551752dfc95ab900cf",
+        "helper_bytes": 167,
+        "input_span_utf16": {
+          "start": 51,
+          "end": 66
+        },
+        "input_replaced_bytes": 15,
+        "replacement_bytes": 19,
+        "unchanged_prefix_sha256": "eda0293dac04d8ba32e883125434d20843b8862c5a6cbbffda08ad5f4ebb7589",
+        "unchanged_tail_sha256": "b2b65bb1c977e15ef3e63a6e641c5a4a93b30a2912969f782f799079488d1114",
+        "unchanged_tail_bytes": 123,
+        "domain": "Ordinary arrays or strings with unmodified iterators/built-ins. Tail may only query counts.has or counts.size; no Set identity/iteration/mutation dependence.",
+        "tail_preserved": true,
+        "complete_source_counted": true
+      }
+    },
+    {
+      "id": 961,
+      "original_method": "repeatedNTimes",
+      "parameters": [
+        "values"
+      ],
+      "arity": 1,
+      "input": {
+        "path": "../sources/normalized/0961.js",
+        "sha256": "f3fcdc91f6983467b24fb26173b3ccaf9ab542fa017d7066d7ae67210d5b803c",
+        "bytes": 184
+      },
+      "output": {
+        "path": "recomposed/0961.js",
+        "sha256": "f3fcdc91f6983467b24fb26173b3ccaf9ab542fa017d7066d7ae67210d5b803c",
+        "bytes": 184
+      },
+      "transformation": {
+        "status": "unchanged",
+        "reason": "no-supported-pattern",
+        "source_sha256": "f3fcdc91f6983467b24fb26173b3ccaf9ab542fa017d7066d7ae67210d5b803c",
+        "output_sha256": "f3fcdc91f6983467b24fb26173b3ccaf9ab542fa017d7066d7ae67210d5b803c"
+      }
+    },
+    {
+      "id": 1051,
+      "original_method": "heightChecker",
+      "parameters": [
+        "values"
+      ],
+      "arity": 1,
+      "input": {
+        "path": "../sources/normalized/1051.js",
+        "sha256": "7f0be670b60665e08bd2bd854aee08c553560b1ee4eb1ee164762c98f9b8a168",
+        "bytes": 192
+      },
+      "output": {
+        "path": "recomposed/1051.js",
+        "sha256": "7f0be670b60665e08bd2bd854aee08c553560b1ee4eb1ee164762c98f9b8a168",
+        "bytes": 192
+      },
+      "transformation": {
+        "status": "unchanged",
+        "reason": "no-supported-pattern",
+        "source_sha256": "7f0be670b60665e08bd2bd854aee08c553560b1ee4eb1ee164762c98f9b8a168",
+        "output_sha256": "7f0be670b60665e08bd2bd854aee08c553560b1ee4eb1ee164762c98f9b8a168"
+      }
+    },
+    {
+      "id": 1108,
+      "original_method": "defangIPaddr",
+      "parameters": [
+        "values"
+      ],
+      "arity": 1,
+      "input": {
+        "path": "../sources/normalized/1108.js",
+        "sha256": "98594f286e3fb2691531d9f65f89942c6efa1b730fa5345febc358f558d1259f",
+        "bytes": 71
+      },
+      "output": {
+        "path": "recomposed/1108.js",
+        "sha256": "98594f286e3fb2691531d9f65f89942c6efa1b730fa5345febc358f558d1259f",
+        "bytes": 71
+      },
+      "transformation": {
+        "status": "unchanged",
+        "reason": "no-supported-pattern",
+        "source_sha256": "98594f286e3fb2691531d9f65f89942c6efa1b730fa5345febc358f558d1259f",
+        "output_sha256": "98594f286e3fb2691531d9f65f89942c6efa1b730fa5345febc358f558d1259f"
+      }
+    },
+    {
+      "id": 1119,
+      "original_method": "removeVowels",
+      "parameters": [
+        "values"
+      ],
+      "arity": 1,
+      "input": {
+        "path": "../sources/normalized/1119.js",
+        "sha256": "d93c5357c684d9dd12d117c84437db39be4950e54edaaba6059fdcac27d78c1f",
+        "bytes": 72
+      },
+      "output": {
+        "path": "recomposed/1119.js",
+        "sha256": "d93c5357c684d9dd12d117c84437db39be4950e54edaaba6059fdcac27d78c1f",
+        "bytes": 72
+      },
+      "transformation": {
+        "status": "unchanged",
+        "reason": "no-supported-pattern",
+        "source_sha256": "d93c5357c684d9dd12d117c84437db39be4950e54edaaba6059fdcac27d78c1f",
+        "output_sha256": "d93c5357c684d9dd12d117c84437db39be4950e54edaaba6059fdcac27d78c1f"
+      }
+    }
+  ],
+  "tools": {
+    "acorn": {
+      "version": "8.16.0",
+      "path": "/usr/share/nodejs/acorn/dist/acorn.js",
+      "sha256": "24974706ffc00984a334f9ee085cc3cb2bf0a0ec80787ea9374ab5b5b6535681"
+    },
+    "node": {
+      "version": "v22.22.1",
+      "path": "/usr/bin/node",
+      "sha256": "d0efb6fcb9d023ba4e2b160ec2384dc28fe4f17732141ef47f676828fa960505"
+    }
+  },
+  "counts": {
+    "programs": 20,
+    "rewritten": 6,
+    "unchanged": 14
+  },
+  "bytes": {
+    "input": 4214,
+    "output": 5095
+  },
+  "helper": {
+    "bytes": 167,
+    "sha256": "4d32f1832780dde8e15d36d6fda614c5ab2ac06c66f612551752dfc95ab900cf"
+  }
+}
