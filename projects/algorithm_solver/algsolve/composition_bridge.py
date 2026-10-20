@@ -57,6 +57,9 @@ def run_job(payload,connection,digest,approved_library=None):
                 os.sched_setaffinity(0,sorted(os.sched_getaffinity(0))[:2])
                 from .editor_composition import compose,check_graph
                 result=compose(payload.get('problem')) if op=='compose' else check_graph(payload.get('problem'),payload.get('program'))
+            elif op=='literal_check':
+                from .literal_editor import check
+                result=check(payload)
             elif op=='retrieve':result=retrieve(payload.get('problem'),approved_library)
             elif op=='challenge':result=editor_task.details(payload.get('slug'))
             elif op=='run':result=execute(payload.get('language'),payload.get('source'),payload.get('problem'),approved_library)
@@ -88,7 +91,7 @@ class Handler(base.Handler):
             length=int(self.headers.get('Content-Length','0'))
             if self.path!='/jobs' or not 0<length<=base.MAX_BODY or self.headers.get('Content-Type')!='application/json':raise ValueError('Invalid request size, path or content type')
             body=self.rfile.read(length);payload=json.loads(body)
-            if not isinstance(payload,dict) or payload.get('operation') not in {'run','retrieve','challenge','compose','typed_check'}:raise ValueError('Unknown operation')
+            if not isinstance(payload,dict) or payload.get('operation') not in {'run','retrieve','challenge','compose','typed_check','literal_check'}:raise ValueError('Unknown operation')
             self.send(202,{'id':self.server.jobs.start(payload,hashlib.sha256(body).hexdigest())})
         except RuntimeError as error:self.send(409,{'error':str(error)})
         except (ValueError,TypeError) as error:self.send(400,{'error':str(error)})
