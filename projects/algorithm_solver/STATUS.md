@@ -14,6 +14,16 @@ retain earlier contracts, failures and reproduction instructions.
 | **2a: autonomous familiar composition** | Recovered original GPU guard returns 8/10 consumed fit cases at 0.296 s p95, versus nearest graph 9/10. The approved balanced-loss pair finished; candidate returned 1/10 guarded correct with two wrong acceptances and was rejected. | No learned improvement or protected generalization established. Preserve original assets and rejected candidate separately; human composition input does not qualify this goal. |
 | **2b: nearby semantic variants** | No independent nearby-variant result. Existing broader 66-problem reservation and protected tests remain unopened. | New separate variant-seal protocol prepared. First qualify/freeze a composer, then independently author/review changed requirements/answers; direct public input only. Do not train on or tune from opened variants. |
 
+## Owner-delivered JavaScript imports: W002 B01–B06
+
+150 distinct JavaScript implementations and their semantics files are imported
+unchanged and tracked in `runs/js-corpus-wave-002/`. Original downloads and hashes
+are preserved. [B05/B06 import receipts](findings/web-deliveries-W002-B05-B06-import/README.md)
+record 50 additional problems with IDs and file hashes checked, **no algorithm
+qualification runs**. The owner directed import first, qualification separately.
+[Earlier B01–B04 diagnostics](findings/web-deliveries-W002-B01-B04-v1/README.md)
+remain preserved; imports do not change the qualified catalog or solving claims.
+
 ## Clarified target: JavaScript and Python semantic macros
 
 The owner clarified the goal on 2026-10-19: a consistent, independently tested
