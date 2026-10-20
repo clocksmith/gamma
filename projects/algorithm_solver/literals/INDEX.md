@@ -32,6 +32,16 @@ run evidence; **passed/failed** applies only to the named criterion;
 or recommendation. A completed negative experiment can pass execution checks
 while failing its optimization target. Do not infer overall goal completion.
 
+## Binary demo integration
+
+[Literal demo protocol, tools and evidence](demo/README.md): implemented binary
+input using the unchanged shared7 dictionary, separately counted controls, exact
+replay and isolated Gamma validation. [Qualification](demo/evidence/qualification.json)
+passed 3,834/3,834 checks; [desktop/mobile smoke](demo/evidence/browser-receipt.json)
+passed. Human assembly and offline reconstruction only; no autonomous or 3b
+claim. This integration has its own introducing Git commit; source and dictionary
+hashes remain pinned in the linked records. Live deployment is verified separately.
+
 ## Source versions and lineage
 
 There are **20 problems × 6 named source versions = 120 source files**, representing

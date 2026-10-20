@@ -1,0 +1,61 @@
+--- a/public/labs/two-button/index.html
++++ b/public/labs/two-button/index.html
+@@ -12,0 +13 @@
++  <link rel="stylesheet" href="literal-editor.css?v=literal-shared7-v1">
+@@ -118,0 +120,19 @@
++      <section id="literalComposition" class="literal-composition" aria-labelledby="literalTitle">
++        <h3 id="literalTitle">Literal composition · 7-bit JavaScript</h3>
++        <p>Choose exact JavaScript strings using only 0 and 1. Every seven bits selects one piece. Helpers and whitespace are part of the stored strings; nothing is inserted into the main editor.</p>
++        <p id="literalIdentity" class="literal-identity"></p>
++        <label>Known development problem<select id="literalProblem" aria-label="Literal problem"></select></label>
++        <details><summary>Example guide (no insertion)</summary><p id="literalGuide"></p></details>
++        <code id="literalPrefix"></code>
++        <div class="literal-buttons"><button id="literalZero" data-literal-bit="0" type="button" aria-label="Literal 0" disabled>0</button><button data-literal-bit="1" type="button" aria-label="Literal 1" disabled>1</button><button id="undoLiteralBit" type="button" disabled>Undo bit</button><button id="newLiteralAttempt" type="button">New attempt</button></div>
++        <p>Binary controls: <code>1111101</code> Undo last literal · <code>1111110</code> Reset source · <code>1111111</code> Finish. IDs 79–124 are unused and rejected. Undo bit/Backspace corrects a partial or invalid word.</p>
++        <p id="literalStatus" role="status">Loading frozen literal dictionary…</p>
++        <p id="literalCost"></p>
++        <details><summary>Selected pieces</summary><ol id="literalPieces"></ol></details>
++        <details open><summary>Complete assembled JavaScript</summary><pre id="literalSource"></pre></details>
++        <button id="testLiteral" type="button" disabled>Test finished literal program with Gamma</button>
++        <p>Connect Gamma above to validate in its bounded local sandbox. The page never executes this source. Tests cover known development cases and input preservation; they do not establish autonomous synthesis.</p>
++        <pre id="literalResult"></pre>
++        <details><summary>Dictionary reference and version</summary><pre id="literalVocabulary"></pre><a href="literal-language.json" target="_blank" rel="noopener">Frozen language and earlier evidence</a></details>
++        <details><summary>Session recording and read-only replay</summary><p>Every accepted bit and Undo bit action is recorded locally. Export before closing. Replay verifies dictionary identity, selections, source hash and costs without executing source; imported test receipts are historical, unverified records.</p><label>Current binary stream<textarea id="literalStream" readonly spellcheck="false"></textarea></label><button id="exportLiteral" type="button">Export literal session</button><label>Open recorded JSON as read-only replay<input id="literalReplayFile" type="file" accept="application/json,.json"></label></details>
++      </section>
+@@ -257 +277 @@
+-    import { bindWorkspace } from './workspace.js?v=static-problems-v1';
++    import { bindWorkspace } from './workspace.js?v=literal-shared7-v1';
+--- a/public/labs/two-button/workspace.js
++++ b/public/labs/two-button/workspace.js
+@@ -0,0 +1 @@
++import { bindLiteralEditor } from './literal-editor.js?v=literal-shared7-v1';
+@@ -211,0 +213 @@
++  bindLiteralEditor(editor, {job});
+--- a/public/labs/two-button/README.md
++++ b/public/labs/two-button/README.md
+@@ -394,0 +395,25 @@
++
++
++
++## Literal composition (shared7)
++
++Workspace now includes a separate Literal composition panel beside the existing
++macro and semantic modes. Enter only zeroes and ones: each seven-bit word selects
++one of 79 frozen strings. IDs 79–124 are rejected; 125 undoes a literal, 126 resets
++retained source and 127 finishes. Controls have their own visible bit cost.
++Dictionary reference and known-program guides insert no source. Export/replay
++records preserve dictionary identity, events, bits, source hash and test receipts;
++imports are read-only and historical receipts are not independently authenticated.
++
++Finished source is validated only through the paired Gamma `literal_check`
++operation in its existing bounded Linux sandbox. Nothing is evaluated in the
++page. This is human binary composition, not autonomous synthesis. The frozen
++dictionary hash is
++`62ab89348d4781187375f35663f81b6304a70b9f951d9bd3327fecae6d3b8c39`.
++Gamma's `projects/algorithm_solver/literals/demo/` holds the canonical assets,
++protocol documentation, portable tests and 20-program / 3,834-case evidence.
++The original source-only benchmark excludes the new interactive controls.
++
++This sandbox panel uses `gamma.literal-shared7-interactive.v1` with control IDs
++125–127. The existing BITS typing profile remains separate with its original
++controls. Recordings from those protocols are not interchangeable.
