@@ -8,6 +8,14 @@ results ledger. Completed runs below retain their source, dictionary and executi
 automation, generalization, scale and literature-comparison targets. Targets are
 separate from the measured results below.
 
+**Latest joint-search result:** [multi-seed source/dictionary comparison on 128](joint-v1/README.md)
+checks 3,299 exact-cost moves over the same 80 problems. The best input count stays
+6,413 selections; unused-entry removal saves eight bytes. The storage arm saves
+68 bytes (0.58%) but adds 50 selections. All winners still select compact source;
+no accepted move switches variants. Eight behavioral checks and 640 independently
+decoded packets pass by joining unchanged-source execution receipts. No new
+execution, autonomous-solving, protected-result or deployment claim.
+
 **Latest broader-set result:** [measured-gain literal selection on 80 problems](scale-v2/README.md)
 replaces frequency-only admission with exact counterfactual resegmentation,
 reclaims redundant entries, and measures bounded swaps. Scope-safe compact source
