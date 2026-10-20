@@ -8,6 +8,15 @@ results ledger. Completed runs below retain their source, dictionary and executi
 automation, generalization, scale and literature-comparison targets. Targets are
 separate from the measured results below.
 
+**Latest selection-search result:** [exact marginal ranking](rank-v1/README.md)
+beats matched estimated ranking on the same 674 source choices / 100 problems.
+The 256-entry result uses **6,963 selections**, median **58.5**, p95 **153** and
+**53.37%** character bits. Its 14,005-byte package and worst-case 234 selections
+are worse than the row control. The 128-entry result improves both selections
+(11,558) and storage (15,750 B). All 400 packets independently decode and five
+accepted moves replay; unchanged source receipts supply execution evidence.
+No compact-library or autonomous-solving qualification.
+
 **Latest joint-refactor result:** [shared DP rows](row-v1/README.md) pass
 2,132 checks on 533 cases. One counted helper serves four selected eight-bit
 solutions; the same 100-problem pool uses 7,016 selections, median 60, p95 152.

@@ -87,15 +87,16 @@ development corpus; preserve each frozen successor and its complete evidence.
 ## Current checkpoint and next work
 
 [Scale100-v1](scale100-v1/README.md) supplies 100/100 exposed development
-problems. The [shared-row successor](row-v1/README.md) improves the heap baseline
-from 7,085 to **7,016 eight-bit selections**, with median **60**, p95 **152** and
-**53.38%** character bits. Its package grows from 13,797 to **13,948 bytes**; keep
-the smaller heap baseline as a separate storage control. The row refactors pass
-2,132 checks on 533 cases and 800 packets independently decode. M1 is **not met**.
+problems. The [exact-ranking successor](rank-v1/README.md) uses **6,963 eight-bit
+selections**, median **58.5**, p95 **153**, and **53.37%** character bits. Its
+**14,005-byte** package is larger than the 13,797-byte heap control; worst-case
+input is 234 versus 230. The seven-bit arm improves to 11,558 selections and
+15,750 bytes. All 400 packets independently decode; five moves independently
+replay; source bytes and native qualification are unchanged. M1 is **not met**.
 
 | Milestone | Current evidence | Next decisive work |
 |---|---|---|
-| 1 | 100 tested development problems; verified shared heap and DP-row refactors | Reduce callback/binding fragmentation; rank literals by exact gain, then extend shared helpers to windows and backtracking against frozen controls. Broaden to a frozen 500-problem qualification only with explicit mix and support accounting. |
+| 1 | 100 tested development problems; verified shared heap/DP rows; exact ranking beats estimated ranking | Reduce callback/binding fragmentation; extend shared helpers to windows and backtracking, retaining storage/tail controls. Broaden to a frozen 500-problem qualification only with explicit mix and support accounting. |
 | 2 | No autonomous literal assembly result | Establish first-attempt description-to-sequence prediction on development data, distinct from stored-sequence lookup; measure correctness and complete latency. |
 | 3 | No fresh semantic-variant result | Freeze the composer and qualify development behavior before opening separately reserved variants. |
 | 4 | No broad autonomous result | Broaden family coverage after M1–3 gates; count failures and unsupported cases. |
