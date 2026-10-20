@@ -157,10 +157,11 @@ The human user owns 1a/1b and the corpus continuation. This task owns only
 [Ownership and handoff](OWNERSHIP.md) records the boundary and corpus snapshot.
 Existing macro work and the 256one application are unchanged by this pilot.
 
-The next bounded experiment recomposes frequency-related solutions around an
-identical, explicit `countValues(values)` helper and consistent loop/return
-conventions, preserving full emitted helpers and independently checking outputs.
-Compare larger vocabulary ranges and Pareto tradeoffs under the revised goal.
-Keep the earlier sixteen-entry negative result, and do not replace distinct tasks
-with duplicate interfaces or reinterpret partial coverage as success. Autonomous
-problem-description-to-sequence assembly and unseen evaluation remain untested.
+The completed [joint recomposition experiment](pass2/README.md) adds a guarded
+AST rewrite pass, 3,888 source combinations and 7,857 dictionary trials including
+dense baseline controls. Fourteen new source versions passed all 2,488 output and
+input-preservation checks. Shared rewrites offer some vocabulary/selection
+tradeoffs, but do not beat the denser unchanged-source control at the declared
+dictionary-byte budgets. See the exact dictionaries, source sequences and
+[measured summary](pass2/summary.json). Autonomous problem-description-to-sequence
+assembly and unseen evaluation remain untested.
