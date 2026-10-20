@@ -150,6 +150,15 @@ Selection was deliberate, not random. Domains and input hashes are in
 [ATTRIBUTION.json](ATTRIBUTION.json) and [notices](notices/NOTICE.txt).
 The original source corpus is unchanged. No corpus acceptance was added.
 
+## Working 4–8-bit language
+
+The [concrete shared language](pass2/working/README.md) now reconstructs all twenty
+problems with79 literals and7 bits per selection. The154 selections include real
+JavaScript statements and a helper reused across eight programs; no entry is a
+whole solution. Programs decoded from the packed files passed3,834/3,834 checks.
+The guide shows two complete before/after examples, dictionary IDs and full byte
+accounting. An alternative140-literal language fits8 bits per selection.
+
 ## Remaining work and ownership
 
 The human user owns 1a/1b and the corpus continuation. This task owns only
