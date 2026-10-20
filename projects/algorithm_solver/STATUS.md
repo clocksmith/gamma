@@ -1,6 +1,6 @@
 # Gamma: Algorithm Recognition & Composition
 
-Updated 2026-10-19. All four goals remain the main research lane. Recognition and
+Updated 2026-10-20. All four goals remain the main research lane. Recognition and
 composition qualify independently. The parallel human-composition goal now has a
 bounded 0/1 input mechanism in the existing 256one editor; human steering never
 substitutes for autonomous 2a/2b evidence.
@@ -13,6 +13,33 @@ retain earlier contracts, failures and reproduction instructions.
 | **1b: one informal input, zero questions** | Frozen contradiction candidate returned 11/16 correct development answers versus 7/16 control, zero wrong/unqualified, five abstentions. Eight old no-example controls are pre-retrieval evidence only. | Fresh sample: 6/12 complete descriptions correct; only 2/4 required ambiguity abstentions, two wrong acceptances. Candidate fails required ambiguity behavior; no promotion or tuning on this opened confirmation. |
 | **2a: autonomous familiar composition** | Recovered original GPU guard returns 8/10 consumed fit cases at 0.296 s p95, versus nearest graph 9/10. The approved balanced-loss pair finished; candidate returned 1/10 guarded correct with two wrong acceptances and was rejected. | No learned improvement or protected generalization established. Preserve original assets and rejected candidate separately; human composition input does not qualify this goal. |
 | **2b: nearby semantic variants** | No independent nearby-variant result. Existing broader 66-problem reservation and protected tests remain unopened. | New separate variant-seal protocol prepared. First qualify/freeze a composer, then independently author/review changed requirements/answers; direct public input only. Do not train on or tune from opened variants. |
+
+## Doppler integration for 1a / 1b
+
+[Runnable Doppler recognition route](doppler-recognition.md) now retains local
+embedding/reranker models across requests. Query embeddings execute in Doppler;
+the active 3,288-entry candidate explicitly reuses the hash-pinned Transformers
+document vectors and has separate development calibration. The existing CPU
+serving path and editor default remain unchanged.
+
+On the 24 consumed development descriptions, embedding retrieval puts 11/16 known
+targets first. Zero-wrong development calibration accepts three and abstains on
+21; these are pre-public-check recognition results, not returned-answer accuracy
+or release qualification. On 128, an exact and an informal sorted-pair request
+both returned the intended approved source and passed two public examples each.
+The informal request executed embeddings on the Radeon 8060S through Doppler.
+Optional reranking completed the same 24 cases: six correct first choices,
+four accepted correct and 20 abstentions after separate zero-wrong development
+fitting. Median recognition time rose from 198 ms to 21.27 s. This configuration
+is not promoted. [Integration evidence](findings/doppler-recognition-integration-v1/README.md)
+records the model-switching check, 24 focused tests and preserved failures.
+The optional reranked answer path also passed the same two public examples on
+128; the three requests cover one problem, not three independently scored tasks.
+
+The initial token-array adapter bug and invalid index are retained separately.
+The corrected adapter passes text plus explicit token IDs and checks the executed
+token sequence. No protected scoring, composition work, model download or UI
+deployment occurred in this integration.
 
 ## Owner-delivered JavaScript imports: W002 B01–B06
 
