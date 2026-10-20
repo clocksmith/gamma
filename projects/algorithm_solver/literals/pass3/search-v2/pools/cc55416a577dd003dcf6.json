@@ -1,0 +1,22 @@
+[
+  "function solve(values) {\n    const counts = new Map();\n    for (const value of values) counts.set(value, (counts.get(value) || 0) + 1);\n    let result = 0;\n    for (const [value, count] of counts) {\n      if (counts.has(value + 1)) result = Math.max(result, count + counts.get(value + 1));\n    }\n    return result;\n  }\n",
+  "function solve(values) {\n    const counts = new Map();\n    for (const value of values) counts.set(value, (counts.get(value) || 0) + 1);\n    return (counts.get('U') || 0) === (counts.get('D') || 0)\n      && (counts.get('L') || 0) === (counts.get('R') || 0);\n  }\n",
+  "function solve(values) {\n    const counts = new Map();\n    for (const value of values) {\n      if (value >= 'a' && value <= 'z') {\n        counts.set(value, (counts.get(value) || 0) + 1);\n      }\n    }\n    for (let index = 0; index < values.length; index++) {\n      if (counts.get(values[index]) === 1) return index;\n    }\n    return -1;\n  }\n",
+  "function solve(values) {\n    const counts = new Set();\n    for (const value of values) {\n      if (counts.has(value)) return value;\n      counts.add(value);\n    }\n    return null;\n  }\n",
+  "function solve(values) {\n    const sorted = [...values].sort((first, second) => first - second);\n    return values.reduce((result, value, index) => result + (value !== sorted[index]), 0);\n  }\n",
+  "function solve(values) {\n    let count = 1;\n    let result = 1;\n    for (let index = 1; index < values.length; index++) {\n      count = values[index - 1] < values[index] ? count + 1 : 1;\n      result = Math.max(result, count);\n    }\n    return result;\n  }\n",
+  "function solve(values) {\n    let minimum = Infinity;\n    let result = 0;\n    for (const value of values) {\n      minimum = Math.min(minimum, value);\n      result = Math.max(result, value - minimum);\n    }\n    return result;\n  }\n",
+  "function solve(values) {\n    let result = 0;\n    let count = 0;\n    for (const value of values) {\n      if (!count) result = value;\n      count += value === result ? 1 : -1;\n    }\n    return result;\n  }\n",
+  "function solve(values) {\n    let right = values.reduce((result, value) => result + value, 0);\n    let left = 0;\n    return values.findIndex(value => {\n      right -= value;\n      const result = left === right;\n      left += value;\n      return result;\n    });\n  }\n",
+  "function solve(values) {\n    return !/A[\\s\\S]*A|LLL/.test(values);\n  }\n",
+  "function solve(values) {\n    return Math.min(new Set(values).size, Math.floor(values.length / 2));\n  }\n",
+  "function solve(values) {\n    return values.reduce((result, value) => result ^ value, 0);\n  }\n",
+  "function solve(values) {\n    return values.replace(/[A-Z]/g, value => value.toLowerCase());\n  }\n",
+  "function solve(values) {\n    return values.replace(/[aeiou]/g, '');\n  }\n",
+  "function solve(values) {\n    return values.replaceAll('.', '[.]');\n  }\n",
+  "function solve(values, count) {\n    let previous = 0;\n    for (let index = 0; count > 0 && index < values.length; index++) {\n      if (values[index] === 0 && previous === 0 && (values[index + 1] ?? 0) === 0) {\n        count--;\n        previous = 1;\n      } else previous = values[index];\n    }\n    return count <= 0;\n  }\n",
+  "function solve(values, length) {\n    let count = values.slice(0, length).reduce((result, value) => result + value, 0);\n    let result = count;\n    for (let index = length; index < values.length; index++) {\n      count += values[index] - values[index - length];\n      result = Math.max(result, count);\n    }\n    return result / length;\n  }\n",
+  "function solve(values, other) {\n    const counts = new Map();\n    for (const value of values) {\n      counts.set(value, (counts.get(value) || 0) + 1);\n    }\n    for (const value of other) {\n      counts.set(value, (counts.get(value) || 0) - 1);\n    }\n    return [...counts.values()].every(value => value === 0);\n  }\n",
+  "function solve(values, other) {\n    const counts = new Set(values);\n    let result = 0;\n    for (const value of other) {\n      if (counts.has(value)) result++;\n    }\n    return result;\n  }\n",
+  "function solve(values, value) {\n    let left = 0;\n    let right = values.length;\n    while (left < right) {\n      const index = Math.floor((left + right) / 2);\n      if (values[index] < value) left = index + 1;\n      else right = index;\n    }\n    return values[left] === value ? left : -1;\n  }\n"
+]
