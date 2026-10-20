@@ -1,5 +1,7 @@
 # Reviewed bilingual normalization pilot
 
+This preserves the initial pilot outcome. The later [campaign batch](../corpus-campaign-128-v1/README.md) resolves its five remaining discrepancies through separately frozen, reviewed successors; earlier failures below remain historical evidence.
+
 Six problems have preserved original sources and separately normalized JavaScript
 and Python implementations. All final implementations pass **538/538 admissible
 existing cases per language** (522 independent, 16 public), including input
