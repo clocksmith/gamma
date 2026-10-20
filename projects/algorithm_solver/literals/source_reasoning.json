@@ -1,0 +1,200 @@
+{
+  "schema": "gamma.literal-source-rewrite-reasoning.v1",
+  "packets": [
+    {
+      "schema": "algsolve.literal-pilot-source-reasoning.v1",
+      "entries": [
+        {
+          "id": 136,
+          "method": "singleNumber",
+          "arity": 1,
+          "domain": "Dense signed-32-bit integer arrays; ordinary unmodified JavaScript intrinsics.",
+          "equivalence_reasoning": "Conservative inlines the original XOR fold. Idiomatic reduce applies the same ordered XOR operation with initial zero. JavaScript ToInt32 behavior is retained.",
+          "mutation_and_alias": "No input mutation; scalar result.",
+          "complexity": "O(n) time, O(1) extra space.",
+          "status": "source reasoning only; independent execution pending"
+        },
+        {
+          "id": 169,
+          "method": "majorityElement",
+          "arity": 1,
+          "domain": "Dense finite-integer arrays; official input guarantees a strict majority.",
+          "equivalence_reasoning": "Both retain Boyer-Moore candidate/balance transitions. The idiomatic zero test is equivalent because the balance remains integral. Neither adds majority verification.",
+          "mutation_and_alias": "No input mutation; scalar result.",
+          "complexity": "O(n) time, O(1) extra space.",
+          "status": "source reasoning only; independent execution pending"
+        },
+        {
+          "id": 242,
+          "method": "isAnagram",
+          "arity": 2,
+          "domain": "Ordinary JavaScript strings; iteration uses Unicode code points, not UTF-16 length equality.",
+          "equivalence_reasoning": "Conservative preserves two object frequency tables and both scans. Idiomatic Map adds first-string counts and subtracts second-string counts; all zero is equivalent to equal multisets. It retains code-point iteration without a length shortcut.",
+          "mutation_and_alias": "Strings immutable; boolean result.",
+          "complexity": "O(n+m) expected time, O(k) extra space, with k distinct code points.",
+          "status": "source reasoning only; independent execution pending"
+        },
+        {
+          "id": 387,
+          "method": "firstUniqChar",
+          "arity": 1,
+          "domain": "Official lowercase ASCII strings; declared handling also retains ignored non-lowercase symbols under ordinary intrinsics.",
+          "equivalence_reasoning": "Conservative retains the 26-cell count table and UTF-16 index scan. Idiomatic Map counts lowercase ASCII only: original out-of-range count updates produce NaN and cannot equal one. Both therefore return the first unique lowercase character at its original UTF-16 offset.",
+          "mutation_and_alias": "Strings immutable; integer index or -1.",
+          "complexity": "O(n) time, O(26) count space.",
+          "status": "source reasoning only; independent execution pending"
+        },
+        {
+          "id": 575,
+          "method": "distributeCandies",
+          "arity": 1,
+          "domain": "Dense finite-integer arrays. Mixed types, arbitrary objects and prototype pollution are outside this equivalence claim.",
+          "equivalence_reasoning": "Conservative retains object-key membership and distinct counting. Set equality and numeric object-key equality coincide for this integer domain, including 0/-0. Both retain floor(length/2), including odd-length extensions.",
+          "mutation_and_alias": "No input mutation; scalar result.",
+          "complexity": "O(n) expected time, O(k) extra space.",
+          "status": "source reasoning only; independent execution pending"
+        },
+        {
+          "id": 771,
+          "method": "numJewelsInStones",
+          "arity": 2,
+          "domain": "Ordinary JavaScript strings and unmodified built-in prototypes.",
+          "equivalence_reasoning": "Conservative retains dollar-prefixed object membership, inlining the key helper. Idiomatic Set implements the same code-point membership. Duplicate jewel symbols remain a single membership; stone multiplicity and case sensitivity are preserved.",
+          "mutation_and_alias": "Strings immutable; scalar count.",
+          "complexity": "O(n+m) expected time, O(k) extra space.",
+          "status": "source reasoning only; independent execution pending"
+        },
+        {
+          "id": 961,
+          "method": "repeatedNTimes",
+          "arity": 1,
+          "domain": "Dense finite-integer arrays; official promise is one repeated value. Mixed types and special string property names are outside this claim.",
+          "equivalence_reasoning": "Conservative retains object membership. Idiomatic Set returns the value at the same first repeated occurrence, and retains null when no repeat exists.",
+          "mutation_and_alias": "No input mutation; scalar value or null.",
+          "complexity": "O(n) expected time, O(k) extra space.",
+          "status": "source reasoning only; independent execution pending"
+        },
+        {
+          "id": 1051,
+          "method": "heightChecker",
+          "arity": 1,
+          "domain": "Dense finite-integer height arrays. NaN, sparse arrays, proxies and arbitrary objects are outside this equivalence claim.",
+          "equivalence_reasoning": "Conservative preserves max-heap construction, child selection and extraction on a slice. Idiomatic uses a numeric comparator to sort a spread copy. Both compare the sorted numeric sequence against each original position with strict inequality.",
+          "mutation_and_alias": "Both sort a private copy: caller array identity, element values and original order remain unchanged. Scalar mismatch count returned.",
+          "complexity": "Conservative O(n log n) time and O(n) copy space. Idiomatic uses runtime numeric Array.sort, with O(n) copy; engine cost remains subject to runtime qualification.",
+          "status": "source reasoning only; independent execution pending"
+        },
+        {
+          "id": 1108,
+          "method": "defangIPaddr",
+          "arity": 1,
+          "domain": "Valid IPv4 strings; replacement reasoning extends to ordinary strings. Idiomatic requires String.replaceAll support in the qualification runtime.",
+          "equivalence_reasoning": "Conservative retains split on a literal period followed by join. Idiomatic replaceAll uses a literal string search and replacement with no replacement-expansion tokens, replacing exactly the same periods.",
+          "mutation_and_alias": "Strings immutable; new string result.",
+          "complexity": "O(n) output work; built-in allocation details depend on runtime.",
+          "status": "source reasoning only; independent execution pending"
+        },
+        {
+          "id": 1119,
+          "method": "removeVowels",
+          "arity": 1,
+          "domain": "Official lowercase ASCII strings; ordinary-string reasoning preserves all other UTF-16 content.",
+          "equivalence_reasoning": "Conservative retains code-point traversal and concatenation skipping exactly a/e/i/o/u. Idiomatic global fixed character-class replacement removes those same lowercase ASCII units only.",
+          "mutation_and_alias": "Strings immutable; new string result.",
+          "complexity": "Conservative repeated concatenation may have quadratic copying in the worst case; idiomatic fixed-character-class scan has linear matching work, with runtime allocation qualification pending.",
+          "status": "source reasoning only; independent execution pending"
+        }
+      ],
+      "excluded_claims": [
+        "No arbitrary proxy/getter/prototype-mutated environment equivalence.",
+        "No new candidate execution, fixture scoring, literal-vocabulary qualification or autonomous solving claim."
+      ]
+    },
+    {
+      "schema": "algsolve.literal-pilot-source-reasoning.v1",
+      "entries": [
+        {
+          "id": 121,
+          "domain": "Dense finite integer price arrays with exact-integer differences in JavaScript safe range.",
+          "equivalence_reasoning": "Conservative preserves minimum/profit updates. Idiomatic updates the minimum before comparison: a newly minimal value gives zero, so cannot increase the nonnegative best profit. Empty array returns zero.",
+          "mutation_and_alias": "No caller input mutation. Arrays are only read; strings are immutable; output is scalar or a new string.",
+          "complexity": "O(n) time/O(1) space.",
+          "qualification": "Source reasoning only; execution pending."
+        },
+        {
+          "id": 551,
+          "domain": "Ordinary JavaScript strings; official alphabet A/L/P.",
+          "equivalence_reasoning": "Conservative retains absence count and consecutive-late state. Idiomatic rejects at least two A symbols anywhere (including across line breaks) or literal LLL. Other characters reset late runs in both.",
+          "mutation_and_alias": "No caller input mutation. Arrays are only read; strings are immutable; output is scalar or a new string.",
+          "complexity": "Conservative linear scan/O(1); regex repeated-start search can be superlinear on arbitrary strings; bounded official input and runtime qualification required.",
+          "qualification": "Source reasoning only; execution pending."
+        },
+        {
+          "id": 594,
+          "domain": "Dense finite integer arrays with values and value+1 exactly represented.",
+          "equivalence_reasoning": "Object and Map identify the same numeric equivalence classes. For every present x with present x+1, maximize frequency(x)+frequency(x+1). Iterating distinct keys removes redundant comparisons, not possible answers.",
+          "mutation_and_alias": "No caller input mutation. Arrays are only read; strings are immutable; output is scalar or a new string.",
+          "complexity": "O(n) expected time/O(k) space.",
+          "qualification": "Source reasoning only; execution pending."
+        },
+        {
+          "id": 605,
+          "domain": "Dense binary arrays and finite integer count. Official flowerbed has no adjacent planted flowers.",
+          "equivalence_reasoning": "Both greedy scans simulate planting in previous state without modifying the array. Idiomatic nullish boundary applies only to out-of-range access in this domain. Loop continuation and final count<=0 match the original early returns.",
+          "mutation_and_alias": "No caller input mutation. Arrays are only read; strings are immutable; output is scalar or a new string.",
+          "complexity": "O(n) time/O(1) space.",
+          "qualification": "Source reasoning only; execution pending."
+        },
+        {
+          "id": 643,
+          "domain": "Dense finite integer arrays; integer window length between1 and array length; sums/differences remain exact safe integers.",
+          "equivalence_reasoning": "Both initialize the same ordered window sum, apply identical entering-minus-leaving updates, and take its maximum before dividing. Idiomatic slice/reduce does not reorder additions.",
+          "mutation_and_alias": "No caller input mutation. Arrays are only read; strings are immutable; output is scalar or a new string.",
+          "complexity": "O(n) time; conservative O(1), idiomatic O(window length) copy space.",
+          "qualification": "Source reasoning only; execution pending."
+        },
+        {
+          "id": 657,
+          "domain": "Ordinary strings of bounded length with counters in safe-integer range; official moves U/D/L/R.",
+          "equivalence_reasoning": "Original signed displacements are zero exactly when opposing move counts agree. Map retains multiplicity; ignored symbols do not affect either opposing equality.",
+          "mutation_and_alias": "No caller input mutation. Arrays are only read; strings are immutable; output is scalar or a new string.",
+          "complexity": "O(n) expected time; conservative O(1), idiomatic O(k) space.",
+          "qualification": "Source reasoning only; execution pending."
+        },
+        {
+          "id": 674,
+          "domain": "Dense finite integer arrays. Official arrays nonempty; empty extension deliberately retains original return1.",
+          "equivalence_reasoning": "Both retain increasing-run recurrence, reset count to1 on non-increase, and maintain maximum initialized1.",
+          "mutation_and_alias": "No caller input mutation. Arrays are only read; strings are immutable; output is scalar or a new string.",
+          "complexity": "O(n) time/O(1) space.",
+          "qualification": "Source reasoning only; execution pending."
+        },
+        {
+          "id": 704,
+          "domain": "Sorted dense finite numeric arrays and finite numeric target, ordinary JS array length bounds.",
+          "equivalence_reasoning": "Both compute lower bound and return the first exact match, preserving duplicate order. Averaged indices are exact below array length bound. At length, idiomatic undefined cannot equal a finite numeric target.",
+          "mutation_and_alias": "No caller input mutation. Arrays are only read; strings are immutable; output is scalar or a new string.",
+          "complexity": "O(log n) time/O(1) space.",
+          "qualification": "Source reasoning only; execution pending."
+        },
+        {
+          "id": 709,
+          "domain": "Ordinary JavaScript strings.",
+          "equivalence_reasoning": "Conservative retains explicit ASCII lookup. Idiomatic only matches A-Z before invoking lowercase; it does not lowercase non-ASCII symbols. Other UTF-16 content is retained.",
+          "mutation_and_alias": "No caller input mutation. Arrays are only read; strings are immutable; output is scalar or a new string.",
+          "complexity": "O(n) matching/iteration work and O(n) result space.",
+          "qualification": "Source reasoning only; execution pending."
+        },
+        {
+          "id": 724,
+          "domain": "Dense finite integer arrays with cumulative sums in exact safe-integer range.",
+          "equivalence_reasoning": "Both sum values in order, subtract current value from right sum, compare to left, then add current to left. findIndex returns the first true comparison and otherwise -1. Updating a private left counter on the successful iteration changes no observable result.",
+          "mutation_and_alias": "No caller input mutation. Arrays are only read; strings are immutable; output is scalar or a new string.",
+          "complexity": "O(n) time/O(1) extra scalar state apart from runtime callbacks.",
+          "qualification": "Source reasoning only; execution pending."
+        }
+      ]
+    }
+  ],
+  "qualification": "Offline semantic rationale; see separate execution report, not a formal proof."
+}
