@@ -1,0 +1,149 @@
+{
+  "schema": "algsolve.combined-ingestion-boundary-independent-review.v1",
+  "reviewer": "/root/w002_reconcile_next",
+  "utc": "2026-10-20T03:22:42.740399+00:00",
+  "status": "passed",
+  "unresolved": [],
+  "scope": "Shared intake source verification, explicitly claimed corpus/problem preparation and replay, direct pinned test-file loading, and the trusted pinned runtime-verification hook. Synthetic-only review; no actual corpus or imported test payloads read.",
+  "shared_reader": {
+    "candidate": {
+      "path": "/home/x/Documents/Codex/2026-10-19/task/intake-source-reader-fix-v1/corpus_campaign.py",
+      "sha256": "60b27cb7c56a0835286b471695e088d8df7c8263c717ab42ca3f0d5461a6d193"
+    },
+    "review": {
+      "path": "/home/x/Documents/Codex/2026-10-19/task/intake-source-reader-independent-review-v1/review-independent.json",
+      "sha256": "ad0cbd819e8ccbcc93e8b5410020bcd65e0bb86ed6fc3c10a6cc844d46b86a6a"
+    },
+    "reviewed_670_composition": {
+      "path": "/home/x/Documents/Codex/2026-10-19/task/intake-source-reader-independent-review-v1/composed_corpus_campaign.py",
+      "sha256": "b20a66a201a6d9b6a198108f0ce91ade5211b2f772a2b09636d73477bf73e743"
+    },
+    "verified_installed_source": {
+      "path": "/home/x/deco/gamma/projects/algorithm_solver/algsolve/corpus_campaign.py",
+      "sha256": "60b27cb7c56a0835286b471695e088d8df7c8263c717ab42ca3f0d5461a6d193"
+    }
+  },
+  "scoped_helper_freeze": {
+    "path": "/home/x/Documents/Codex/2026-10-19/task/corpus-loader-remediation-539-541-v2/freeze.json",
+    "sha256": "401ac6dae1e3093a37502cf2fa4f6ec779cddb9370cd5d2f1ce6754135e74328"
+  },
+  "scoped_sources": [
+    {
+      "path": "/home/x/Documents/Codex/2026-10-19/task/corpus-loader-remediation-539-541-v2/claimed_row_loader.py",
+      "sha256": "a5af60e8fbfe7f6c687da44cc31d47a58a241b0208e40b0ae3e43f612496c846"
+    },
+    {
+      "path": "/home/x/Documents/Codex/2026-10-19/task/corpus-loader-remediation-539-541-v2/approved_test_loader.py",
+      "sha256": "3c58cb44872f858c40519e561bd9866d65774798f8d6229ce720780e79858530"
+    },
+    {
+      "path": "/home/x/Documents/Codex/2026-10-19/task/corpus-loader-remediation-539-541-v2/runtime_gate.py",
+      "sha256": "801e9eda474a6d08807c8c714d0b720f6a086fda8b60b58c6310696af88864ef"
+    }
+  ],
+  "preserved_original_freeze": {
+    "path": "/home/x/Documents/Codex/2026-10-19/task/corpus-loader-boundary-incident-normalize-539-541-v1/remediation-freeze.json",
+    "sha256": "363e5be1da3f95fc5beabd24a69469633461f94a0ecacbe05243a7655811a10f"
+  },
+  "review_findings": [
+    {
+      "id": "selected-duplicate-json-fields",
+      "status": "resolved-in-distinct-v2",
+      "details": "Original preparation could capture duplicate selected JSON fields into raw/canonical pins. Distinct successor rejects duplicate fields at every selected object depth in both prepare and replay, including escaped equivalent names. Original bytes preserved."
+    }
+  ],
+  "path_reviews": [
+    {
+      "path": "Shared corpus-reference verify_source",
+      "guarantee": "Requested exact ASCII first-key prefix chosen before JSON decoding; no unrelated full record decoding. Exact selected UID/code hash and existing reference selection authority retained. Duplicate selected rows and duplicate selected JSON fields reject; nonfirst-key layouts cannot qualify selection."
+    },
+    {
+      "path": "Initial preparation of explicit corpus key / Problem uid",
+      "guarantee": "Coordinator supplies exact claimed identity map, plus source uid/hash for corpus keys. First identity prefix selects before decode. Complete selected raw/canonical hashes captured, then pinned replay re-verifies selected source before returning. No claim discovery or expansion; returned pins must be frozen before test loading."
+    },
+    {
+      "path": "Replay of already pinned claimed records",
+      "guarantee": "Unapproved raw rows skipped before decoder; selected complete raw-line SHA checked before decode; complete canonical record hash and selected source uid/hash checked after unique-field decode. Duplicate/missing selected identities fail closed."
+    },
+    {
+      "path": "Direct approved test file",
+      "guarantee": "Exact frozen uid maps only to tests/<uid>.json spelling. Other IDs, alternate paths, traversal, intermediate/final symlinks, invalid count/hash reject. Raw SHA checked before JSON decode; exact case-list count/canonical SHA checked without corrections, filtering, comparator or expectation changes."
+    },
+    {
+      "path": "Pinned trusted runtime helper",
+      "guarantee": "Module and manifest bytes checked before module import or manifest decode. Only approved measurement implementation is imported; this hook does not execute candidates and does not itself establish coordinator authorization."
+    }
+  ],
+  "synthetic_checks": {
+    "author_checks_independently_rerun_from_copies": {
+      "direct_test_loader": 11,
+      "claimed_preparation_replay": 11,
+      "duplicate_selected_fields": 20,
+      "total": 42,
+      "passed": 42,
+      "reports": [
+        {
+          "path": "/home/x/Documents/Codex/2026-10-19/task/ingestion-boundary-independent-review-v1/copied-frozen-v2/synthetic-checks.json",
+          "sha256": "cdce193fbafdc7e72cbc3ba816c775a990bab24f932313b963f4f8142c99723c"
+        },
+        {
+          "path": "/home/x/Documents/Codex/2026-10-19/task/ingestion-boundary-independent-review-v1/copied-frozen-v2/synthetic-row-checks.json",
+          "sha256": "77699e7d1e50b90c3418e4c8168d0fefe46118fb9cedcab33063a474fce7adf4"
+        },
+        {
+          "path": "/home/x/Documents/Codex/2026-10-19/task/ingestion-boundary-independent-review-v1/copied-frozen-v2/synthetic-duplicate-checks.json",
+          "sha256": "1fa76eb52c227bf8dd32cdd8c89c0588226f57e6aba0632dc3fc41d00923aa81"
+        }
+      ]
+    },
+    "independent_canaries": {
+      "total": 8,
+      "passed": 8,
+      "source": {
+        "path": "/home/x/Documents/Codex/2026-10-19/task/ingestion-boundary-independent-review-v1/test_additional_v2.py",
+        "sha256": "ad34a83dfd3bf08806a181304014695c7879edf0e7ca9435dd4a3a527a49ffc8"
+      },
+      "log": {
+        "path": "/home/x/Documents/Codex/2026-10-19/task/ingestion-boundary-independent-review-v1/tests-additional-v2.txt",
+        "sha256": "1f682893f3f62508db8548ae0c31b3382dc10dd56e3405fdf7bfa04402c1e0bf"
+      },
+      "coverage": [
+        "Second duplicate selected record rejected before second decode",
+        "Multiple authorized claims with malformed unapproved poison never decoded",
+        "Wrong test raw hash fails before decode",
+        "Intermediate test-path symlink fails before file read",
+        "Boolean count rejected before filesystem access",
+        "All expected/comparator fields returned unchanged",
+        "Wrong runtime module hash fails before import",
+        "Wrong runtime manifest hash fails before decode/import"
+      ]
+    },
+    "shared_source_reader": {
+      "author": 9,
+      "independent": 7,
+      "all_passed": true,
+      "composed_670_recheck": 16
+    }
+  },
+  "preservation": {
+    "original_frozen_file_count": 11,
+    "successor_frozen_file_count": 11,
+    "all_original_and_successor_hashes_unchanged_after_review": true,
+    "test_scripts_copied_before_execution": true,
+    "original_frozen_result_files_not_overwritten": true
+  },
+  "limits": [
+    "The byte-prefix selector scans raw JSONL lines; this is a pre-decode isolation guarantee, not a claim that the operating system never reads unrelated raw file bytes.",
+    "Only exact source bytes and synthetic helper behavior reviewed here. Future concrete adapters must use these exact reviewed helpers and freeze claim pins/reader/runtime identities before execution.",
+    "No retrospective repair of historical broad-decoding access. Existing incident evidence and Round8 upstream claim limitation remain; this receipt does not admit or requalify those runs.",
+    "No real corpus, imported hidden-test file, protected payload or candidate was opened/executed in this review.",
+    "No repository/ledger edits or install performed. Parent remains responsible for source installation, exact adapter integration and admission decisions."
+  ],
+  "merge_recommendation": "Install reviewed shared reader or preserve it through the prepared670-composed module; adopt scoped helper successor401ac6da... for future preparation/replay/direct loading. Keep old incident/source/result artifacts unchanged; do not reuse earlier broad-decoding preparation scripts.",
+  "model_context_audit_limits": {
+    "evidence_scope": "Static reader/runner source and local incident metadata plus synthetic canaries. No full conversation, shell-history, OS-access or model-context reconstruction performed.",
+    "historical_nonaccess": "Prior whole-record host decoding is recorded as an access-boundary violation. Selected model-visible outputs do not prove unrelated/protected source nonaccess or establish which bytes reached any model context. No historical cleanliness relabeling is supported.",
+    "protected_scoring": "Forbidden; no protected inventory or protected payload was opened to quantify the affected subset. Review approves future scoped development reader behavior only.",
+    "resume_scope": "Parent may bind this new reviewed reader identity and resume unaffected authorized development; this is not authorization for protected scoring or admission of historically affected runs."
+  }
+}
