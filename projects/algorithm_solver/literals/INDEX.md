@@ -8,6 +8,15 @@ results ledger. Completed runs below retain their source, dictionary and executi
 automation, generalization, scale and literature-comparison targets. Targets are
 separate from the measured results below.
 
+**Latest semantic-refactor result:** [shared heap code](heap-v1/README.md)
+cuts #1046 from 494 to 205 selections with the dictionary unchanged. The same 100
+problems now use 7,085 eight-bit selections and 13,797 complete package bytes;
+worst program 230, median 62 and p95 152. All 332 checks pass and 206 packets are
+independently decoded. The helper now serves 976, 1051 and 1046. Character fallback
+remains 52.59%; this improves the expensive tail, not Milestone 1 qualification.
+[Complete source](heap-v1/generated/sources/1046-heap-role.js) ·
+[Sequence](heap-v1/encodings/heap-role-8/manifest.json) · [Comparison](heap-v1/summary.json).
+
 **Latest broader-set checkpoint:** [100-problem expansion](scale100-v1/README.md)
 adds 20 already-qualified development problems. All 136 new source versions pass
 13,495 checks; 1,000 packets pass independent decoding and receipt joins.
