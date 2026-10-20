@@ -1,0 +1,8 @@
+class Solution {
+  judgeCircle(values) {
+    const counts = new Map();
+    for (const value of values) counts.set(value, (counts.get(value) || 0) + 1);
+    return (counts.get('U') || 0) === (counts.get('D') || 0)
+      && (counts.get('L') || 0) === (counts.get('R') || 0);
+  }
+}
