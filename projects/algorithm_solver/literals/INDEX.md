@@ -8,6 +8,14 @@ results ledger. Completed runs below retain their source, dictionary and executi
 automation, generalization, scale and literature-comparison targets. Targets are
 separate from the measured results below.
 
+**Latest joint-refactor result:** [shared DP rows](row-v1/README.md) pass
+2,132 checks on 533 cases. One counted helper serves four selected eight-bit
+solutions; the same 100-problem pool uses 7,016 selections, median 60, p95 152.
+The package increases to 13,948 bytes and character fraction to 53.38%, so retain
+the heap package as the smaller-storage control. Source-only and dictionary-only
+ablations establish that the selection gain needs both changes. All 800 packets
+independently decode. M1 and autonomous solving remain unqualified.
+
 **Latest semantic-refactor result:** [shared heap code](heap-v1/README.md)
 cuts #1046 from 494 to 205 selections with the dictionary unchanged. The same 100
 problems now use 7,085 eight-bit selections and 13,797 complete package bytes;
