@@ -50,12 +50,12 @@ def profile(data,entry,contract):
     allowed=policy.get('entries',{}).get(key(entry));need(type(allowed) is dict,'Entry lacks explicit language-specific runtime policy')
     need(allowed.get('profile')==PROFILE and allowed.get('numeric_domain')==DOMAIN and allowed.get('source_author')==author,'Unsupported numeric domain/profile/author')
     need(allowed.get('normalized_sha256')==contract['normalized_sha256'],'Coordinator candidate hash differs')
-    from . import campaign_toolchain,campaign_uint1024_dispatch,campaign_integer_dispatch,campaign_633_integer,campaign_exact_integer,corpus_campaign
-    modules={'campaign_738_integer.py':Path(__file__),'campaign_uint1024_dispatch.py':Path(campaign_uint1024_dispatch.__file__),'campaign_integer_dispatch.py':Path(campaign_integer_dispatch.__file__),'campaign_633_integer.py':Path(campaign_633_integer.__file__),'campaign_exact_integer.py':Path(campaign_exact_integer.__file__),'campaign_toolchain.py':Path(campaign_toolchain.__file__),'corpus_campaign.py':Path(corpus_campaign.__file__)}
+    from . import campaign_toolchain,campaign_uint1024_dispatch,campaign_integer_dispatch,campaign_633_integer,campaign_exact_integer,corpus_campaign,campaign_868_dispatch,campaign_868_integer,campaign_868_transition
+    modules={'campaign_868_dispatch.py':Path(campaign_868_dispatch.__file__),'campaign_868_integer.py':Path(campaign_868_integer.__file__),'campaign_868_transition.py':Path(campaign_868_transition.__file__),'campaign_868_replay.py':Path(__file__).with_name('campaign_868_replay.py'),'campaign_738_integer.py':Path(__file__),'campaign_uint1024_dispatch.py':Path(campaign_uint1024_dispatch.__file__),'campaign_integer_dispatch.py':Path(campaign_integer_dispatch.__file__),'campaign_633_integer.py':Path(campaign_633_integer.__file__),'campaign_exact_integer.py':Path(campaign_exact_integer.__file__),'campaign_toolchain.py':Path(campaign_toolchain.__file__),'corpus_campaign.py':Path(corpus_campaign.__file__)}
     need(allowed.get('admission_modules')=={n:sha(p) for n,p in modules.items()},'738 admission module identity drift')
     need(allowed.get('admission_validator_sha256')==sha(Path(__file__)) and allowed.get('admission_toolchain_validator_sha256')==sha(Path(campaign_toolchain.__file__)),'Coordinator admission validator changed')
     need(contract.get('standard_sha256')==allowed['standard']['sha256'],'Contract standard differs from approved frozen policy')
-    refs=[policy_ref];bound={}
+    refs=[policy_ref]+campaign_868_transition.validate(policy,allowed);bound={}
     for name in BINDINGS:bound[name]=check(allowed.get(name)) if name!='historical_reader' else Path(allowed[name]['path']).read_text();need(sha(allowed[name]['path'])==allowed[name]['sha256'],'738 binding drift');refs.append(allowed[name])
     runtime=allowed.get('runtime');need(type(runtime) is dict and set(runtime)==set(RUNTIME),'Missing trusted intake judge runtime')
     for name,path in RUNTIME.items():need(sha(path)==runtime[name],'Trusted exact integer judge runtime drift');refs.append(ref(path))
@@ -233,7 +233,8 @@ def extra_profile_checks(bound,allowed,entry,contract,current_module):
     for name in ['reader_activation','reader_bindings']:
         need(frozen.get(name+'_sha256')==allowed[name]['sha256']==files[name.replace('_','-')+'.json'],'738 reader not frozen before execution')
     old=bound['historical_reader'];before='from . import campaign_integer_dispatch as integer_profile';after='from . import campaign_uint1024_dispatch as integer_profile'
-    need(old.count(before)==2 and current_module.read_text()==old.replace(before,after),'738 combined module differs beyond two authorized imports')
+    from . import campaign_868_transition
+    need(old.count(before)==2 and current_module.read_text()==campaign_868_transition.expected_reader(old.replace(before,after)),'738 combined module differs beyond exact reviewed868 import transition')
     def reader_ast(text):
         nodes=[n for n in ast.parse(text).body if isinstance(n,ast.FunctionDef) and n.name=='verify_source'];need(len(nodes)==1,'738 scoped reader missing/duplicate');return ast.dump(nodes[0],include_attributes=False)
     need(reader_ast(old)==reader_ast(current_module.read_text()),'738 scoped reader changed')

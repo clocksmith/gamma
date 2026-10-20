@@ -264,3 +264,32 @@ Stage snapshots the approved policy and all dependent evidence; record checks
 that authority and replays the observations. Synthetic tests use temporary
 policies/ledgers only. The supplied policy proposal is pending; root approval,
 independent admission evidence, installation and intake remain separate actions.
+
+## Exact 868 admission and explicit 738 compatibility transition
+
+The separate `inputs.integer868_policy` admits only `0868:javascript` under
+`exact-public-spelling:lc868-uint1024-to-small-number.v1`. The input is a
+nonnegative integer with at most 1024 decimal digits; the result is a small exact
+Number. This is the pinned source and runtime interface, not authorization for
+arbitrary large-integer programs. Its saved qualification contains all 68
+unchanged cases per language: 52 official-domain and 16 extended cases. The gate
+replays the saved observations and 77 controls without executing candidates.
+Only JavaScript admission changes; the completed Python entry stays unchanged.
+
+The new outer dispatcher preserves the prior 633/670/738 and ordinary admission
+routes. The shared campaign module changes only its two dispatcher imports;
+its source-selection function and scoped helper identities remain unchanged.
+The explicit 738 compatibility transition preserves its historical policy and
+changes only the approved admission-module identities and transition reference.
+Its source, numeric domain, comparisons, scores and prior evidence are retained.
+Old whole-module identities remain historical evidence and are not relabeled.
+
+Installation requires finished old-identity executions and intake, a pinned
+readiness record, preserved module/ledger snapshots, and verification of the
+installed closure. The coordinator changes the policies and reader activation
+together, then independently verifies the installed state before admission.
+Execution artifacts must name the actual content-addressed policy snapshot;
+byte equality to a policy at another path is insufficient. Prior failed Number
+transport, rejected wrapper attempts and reference-access incidents remain
+preserved. These consumed development results establish neither protected
+nonaccess nor autonomous composition or semantic-variant generalization.
