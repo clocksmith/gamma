@@ -1,0 +1,1 @@
+function solve(a){const b=a.length;const c=a[0].length;const d=[];for(let e=0;e<b;e+=1){const f=[];for(let g=0;g<c;g+=1){let h=0;let i=0;for(let j=e-1;j<e+2;j+=1){for(let k=g-1;k<g+2;k+=1){if(j>=0&&j<b&&k>=0&&k<c){h+=a[j][k];i+=1;}}}f.push(Math.floor(h/ i));}d.push(f);}return d;}

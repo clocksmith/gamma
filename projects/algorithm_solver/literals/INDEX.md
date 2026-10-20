@@ -2,7 +2,18 @@
 
 Start here for source versions, experiments and the working literal languages.
 This is a navigation index over existing manifests and reports, not a second
-results ledger. No experiments are running under this maintenance task.
+results ledger. Completed runs below retain their source, dictionary and execution identities.
+
+**Latest broader-set result:** [measured-gain literal selection on 80 problems](scale-v2/README.md)
+replaces frequency-only admission with exact counterfactual resegmentation,
+reclaims redundant entries, and measures bounded swaps. Scope-safe compact source
+plus 256 strings represents 80/80 exposed development programs in 6,413 eight-bit
+selections (median63), versus9,218 for matched frequency ranking and7,933 for the
+lexical control. The128-string arm covers80/80 in10,155 seven-bit selections.
+All240 source versions pass25,236 checks on8,412 distinct cases;960 selected/control
+packets independently decode to qualified source hashes. Single-character fallback
+still accounts for53.2% of eight-bit selections. No autonomous/unseen-result claim.
+[Dictionaries and sequences](scale-v2/search-v2/) · [audit](scale-v2/audit.json).
 
 **Latest input-cost result:** [complete line-span search](budgets/SPANS.md),
 59 exact strings at six bits after equal-length compaction, 20/20 programs in
@@ -196,9 +207,9 @@ the earlier package table remains unchanged.
 
 The [concise literature mapping](RESEARCH.md) separates direct tokenisation,
 one-level grammar costs, library learning, fixed-string compression and future
-synthesis. AST-backed and functional-style tracks remain proposals, not measured
-capabilities. No AST-backed or functional-style comparison has been implemented
-or scored.
+synthesis. An AST-backed composition language remains a proposal. Bounded AST
+and functional source preprocessing for flat strings now has the separately
+recorded pass3 results above; it is not that proposed language.
 
 ## Maintenance rules
 

@@ -1,0 +1,1 @@
+function solve(c){const d={};let e=0;for(const f of c){const g=[];const h=[];let i=0;for(const k of f){if(i%2===0){g.push(k);}else{h.push(k);}i+=1;}g.sort(b);h.sort(b);const j=a(g.join('')+h.join(''));if(d[j]!==true){d[j]=true;e+=1;}}return e;}function a(l){return'$'+l;}function b(m,n){return m.codePointAt(0)-n.codePointAt(0);}
