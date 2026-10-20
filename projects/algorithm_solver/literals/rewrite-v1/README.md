@@ -99,7 +99,7 @@ Run from the repository root on Linux with Gamma's existing judge dependencies:
 ~~~sh
 node projects/algorithm_solver/literals/rewrite-v1/test-rewrites.cjs
 node projects/algorithm_solver/literals/rewrite-v1/test-fragments.cjs
-python3 projects/algorithm_solver/literals/rewrite-v1/audit.py
+python3 projects/algorithm_solver/literals/rewrite-v1/audit.py --output /tmp/rewrite-audit-new.json
 ~~~
 
 The audit uses only retained files. A fresh search must write a new directory:

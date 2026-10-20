@@ -8,6 +8,15 @@ results ledger. Completed runs below retain their source, dictionary and executi
 automation, generalization, scale and literature-comparison targets. Targets are
 separate from the measured results below.
 
+**Latest broader-set checkpoint:** [100-problem expansion](scale100-v1/README.md)
+adds 20 already-qualified development problems. All 136 new source versions pass
+13,495 checks; 1,000 packets pass independent decoding and receipt joins.
+The frozen 256-entry dictionary covers 100/100 in 7,374 selections, median 62,
+p95 152 and 52.22% character bits. Relearning does not improve total selections;
+a 39-byte package saving costs 14 extra selections. Private sources/tests and
+their packets remain on 128; public evidence records identities and costs.
+Milestone 1 remains unmet; no autonomous or protected result.
+
 **Latest measured improvement:** [capture-checked source rewrites and joint learning](rewrite-v1/README.md)
 reduce the same 80 problems from 6,413 to 5,461 eight-bit selections (14.84%), with
 an 11,353-byte complete package (3.63% smaller). Median 57, p95 148 and 51.05%
@@ -26,7 +35,7 @@ no accepted move switches variants. Eight behavioral checks and 640 independentl
 decoded packets pass by joining unchanged-source execution receipts. No new
 execution, autonomous-solving, protected-result or deployment claim.
 
-**Latest broader-set result:** [measured-gain literal selection on 80 problems](scale-v2/README.md)
+**Previous broader-set result:** [measured-gain literal selection on 80 problems](scale-v2/README.md)
 replaces frequency-only admission with exact counterfactual resegmentation,
 reclaims redundant entries, and measures bounded swaps. Scope-safe compact source
 plus 256 strings represents 80/80 exposed development programs in 6,413 eight-bit
