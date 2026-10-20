@@ -4,6 +4,10 @@ Start here for source versions, experiments and the working literal languages.
 This is a navigation index over existing manifests and reports, not a second
 results ledger. Completed runs below retain their source, dictionary and execution identities.
 
+[Milestones 1–5](MILESTONES.md) record the agreed compact-library gate and proposed
+automation, generalization, scale and literature-comparison targets. Targets are
+separate from the measured results below.
+
 **Latest broader-set result:** [measured-gain literal selection on 80 problems](scale-v2/README.md)
 replaces frequency-only admission with exact counterfactual resegmentation,
 reclaims redundant entries, and measures bounded swaps. Scope-safe compact source
