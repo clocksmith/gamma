@@ -1,0 +1,1 @@
+const solve=(a,b)=>{const c={};for(let a=0;a<b.length;a+=1){c['$'+b[a]]=a;}const d=[];for(let b=0;b<a.length;b+=1){const e=a[b];d.push(['$'+e in c?c['$'+e]:1000+e,b,e]);}d.sort(h);const e=[];for(const a of d){e.push(a[2]);}return e;};function h(a,b){return a[0]-b[0]||a[1]-b[1];}

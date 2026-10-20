@@ -1,0 +1,1 @@
+const solve=a=>{if(typeof a==='number'&&!Number.isSafeInteger(a))throw new RangeError('Exact integer required');let b=BigInt(a);if(b<0n||b!==0n&&b%10n===0n)return false;let c=0n;while(b>c){c=c*10n+b%10n;b/=10n;}return b===c||b===c/10n;};

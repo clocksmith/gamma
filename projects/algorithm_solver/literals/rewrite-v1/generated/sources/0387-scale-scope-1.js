@@ -1,0 +1,1 @@
+function solve(a){const b=h(a);for(let c=0;c<a.length;c+=1){const d=a.charCodeAt(c)-97;if(b[d]===1){return c;}}return-1;}function h(a){const b=new Array(26).fill(0);for(const c of a){const a=c.charCodeAt(0)-97;b[a]+=1;}return b;}

@@ -3,8 +3,9 @@
 Owner direction, 2026-10-20: Milestone 1 is agreed. Milestones 2–5 below are
 proposed numerical targets; Milestone 5 is deliberately a hypothetical
 literature-leading target. These are engineering choices, not published
-qualification standards or achieved results. This roadmap grants no new run,
-training, download, protected-data access, or deployment authority.
+qualification standards or achieved results. The owner subsequently authorized
+continued milestone work on x@128. That continuation preserves frozen experiment
+gates, protected-data boundaries and separate training/deployment qualification.
 
 The [goals contract](../contracts/literal_composition_goals_v1.json) defines the
 literal/macro distinction. [Experiment index](INDEX.md) links measured evidence.
@@ -82,3 +83,21 @@ single-character selection bits. It has no whole-program entries and no
 autonomous-assembly result. This is progress toward M1, not M1 qualification.
 The next work is reducing fallback and program length while broadening the
 development corpus; preserve each frozen successor and its complete evidence.
+
+## Current checkpoint and next work
+
+[Rewrite-v1](rewrite-v1/README.md) improves the same 80 development programs to
+5,461 eight-bit selections: median 57, p95 148, 51.05% character bits and 11,353
+complete package bytes. All 460 original/new source versions passed 56,623 checks;
+800 packets independently decode to qualified source. M1 is **not met**.
+
+| Milestone | Current evidence | Next decisive work |
+|---|---|---|
+| 1 | 80 tested development problems; improved joint encoding | Expand to 100 permitted problems, preserving provenance; reduce fallback and selection tails before a frozen 500-problem qualification. |
+| 2 | No autonomous literal assembly result | Establish a first-attempt description-to-sequence control on development data, distinct from stored-sequence lookup. |
+| 3 | No fresh semantic-variant result | Freeze the composer and qualify development behavior before opening separately reserved variants. |
+| 4 | No broad autonomous result | Broaden family coverage after M1–3 gates; count failures and unsupported cases. |
+| 5 | Literature mapped, no matched superiority result | Pin applicable comparator implementations and matched cost contracts; compression and solving need separate experiments. |
+
+These are dependencies, not completion claims. Current work stays in literals;
+recognition, admission ledgers and protected evaluation remain untouched.

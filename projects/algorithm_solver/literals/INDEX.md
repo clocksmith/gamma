@@ -8,7 +8,17 @@ results ledger. Completed runs below retain their source, dictionary and executi
 automation, generalization, scale and literature-comparison targets. Targets are
 separate from the measured results below.
 
-**Latest joint-search result:** [multi-seed source/dictionary comparison on 128](joint-v1/README.md)
+**Latest measured improvement:** [capture-checked source rewrites and joint learning](rewrite-v1/README.md)
+reduce the same 80 problems from 6,413 to 5,461 eight-bit selections (14.84%), with
+an 11,353-byte complete package (3.63% smaller). Median 57, p95 148 and 51.05%
+character bits remain above Milestone 1 targets. All 460 new/control source versions
+pass 56,623 checks; 800 packets pass independent decoding and receipt joins.
+The matched ablation distinguishes source-only, dictionary-only and joint effects.
+No autonomous/protected result or deployment claim.
+[Exact dictionary](rewrite-v1/search-v1/joint-256-start0/dictionary.json) ·
+[Sequences](rewrite-v1/search-v1/joint-256-start0/manifest.json) · [Audit](rewrite-v1/audit.json).
+
+**Previous joint-search result:** [multi-seed source/dictionary comparison on 128](joint-v1/README.md)
 checks 3,299 exact-cost moves over the same 80 problems. The best input count stays
 6,413 selections; unused-entry removal saves eight bytes. The storage arm saves
 68 bytes (0.58%) but adds 50 selections. All winners still select compact source;
