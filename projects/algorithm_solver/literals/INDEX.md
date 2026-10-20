@@ -15,6 +15,20 @@ The [six-goal contract](../contracts/literal_composition_goals_v1.json) and
 [ownership handoff](OWNERSHIP.md) remain authoritative. The human user owns 1a/1b;
 this index does not import their corpus ledger or modify its admission status.
 
+## Bounded functional and AST-informed literal comparison
+
+[Pass 3 report and complete examples](pass3/README.md) records 84 qualified source
+variants, 16,258 check executions on the same 20 development problems, and 101
+bounded dictionary trials. The new 61-string candidate uses 78 six-bit selections;
+the matched fixed-source control takes 81. A 114-string candidate uses 1,107
+seven-bit selections and a 2,726-byte package. These are separate storage/input
+tradeoffs; the prior 59-string/74-selection result remains the lower-input result.
+[Lineage](pass3/generated/manifest.json), [all costs](pass3/comparison.json),
+[execution](pass3/qualification-v1/report.json), and [packet audit](pass3/audit.json)
+are retained. Functional rewrites and AST-informed fixed-string proposals are
+implemented here; autonomous synthesis and AST/functional composition languages
+remain unimplemented. Shared7 live dictionary IDs/bytes remain unchanged.
+
 ## Tracks and status
 
 | Track | Status | Evidence boundary / entry point |
@@ -23,7 +37,7 @@ this index does not import their corpus ledger or modify its admission status.
 | 3a flat literals | Passed offline representation and development execution | [Working guide](pass2/working/README.md); no hidden slots, renaming, dispatch or injected helpers. |
 | Bounded AST preprocessing for literals | Passed for six concrete rewrites | [Rules](pass2/rewrite.cjs), [lineage](pass2/transformations.json), [execution](pass2/execution/report.json). AST parsing selects source rewrites; emitted vocabulary remains flat strings. |
 | AST-backed composition language | Planned proposal only | No implemented language, vocabulary, sequences, execution result or committed experiment claimed. Existing AST preprocessing is not this proposal. Await research/design. |
-| Functional-style composition variant | Planned proposal only | No implemented experimental arm or result. Existing idiomatic examples containing reduce/map are not a systematic functional-style composition experiment. |
+| Functional source alternatives for flat literals | Bounded offline experiment passed | [Pass 3](pass3/README.md): guarded functional folds/filter/map and arrow rewrites; no new functional composition language or autonomous claim. |
 | Autonomous known-description assembly / 3b frozen unseen evaluation | Planned; untested | Representation success does not establish either goal. Protected holdouts remain outside this index. |
 
 Status vocabulary: **planned** has no measured result; **running** requires live
@@ -44,7 +58,7 @@ hashes remain pinned in the linked records. Live deployment is verified separate
 
 ## Source versions and lineage
 
-There are **20 problems × 6 named source versions = 120 source files**, representing
+The original/pass2 source inventory below contains **20 problems × 6 named source versions = 120 source files**, representing
 **94 distinct (problem, source SHA256) pairs**. Package `assembled/` files are
 verified decoded views, not additional solution versions. Hash manifests and the
 introduction commits below pin immutable versions; later changes should add a
