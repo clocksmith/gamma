@@ -1,8 +1,6 @@
 # Binary literal composition in 256.one
 
-Status: implemented and locally verified. Open the demo's **Workspace → Literal
-composition** panel. It coexists with the existing typed macro and semantic
-modes. This is human binary assembly and offline reconstruction, not autonomous
+Status: implemented and locally verified. Open the demo's **Workspace → Shared7 development validation and replay** panel. It coexists with the four main BITS input modes and typed composition. This is human binary assembly and offline reconstruction, not autonomous
 selection from a problem description or evidence for 3b.
 
 ## Frozen language and input protocol
@@ -57,12 +55,12 @@ eval, new authentication policy, protected cases or recognition defaults.
 - [Full native qualification](evidence/qualification.json): 20 programs,
   3,834/3,834 checks, plus rejected invalid source. This is a new execution run
   through `literal_check`, not a reused source-hash claim.
-- [Browser receipt](evidence/browser-receipt.json): desktop 1280×900 and mobile
+- [Current browser receipt](evidence/current-browser-receipt.json): desktop 1280×900 and mobile
   390×844; real pairing and sandbox validation for #242 (264 cases) and #594
   (157 cases); unused ID, Undo-bit, Undo-literal, Reset, Finish, export and
   read-only replay; no page errors, failed lab requests or horizontal overflow.
-- [Desktop recording](evidence/desktop-session.json) and
-  [mobile recording](evidence/mobile-session.json) replay exact tested streams.
+- [Desktop recording](evidence/current-desktop-session.json) and
+  [mobile recording](evidence/current-mobile-session.json) replay exact tested streams.
 - Existing [semantic codec](evidence/semantic-codec-regression.json),
   [semantic editor](evidence/semantic-editor-regression.json), and
   [macro input](evidence/composition-input-regression.json) regressions passed.
@@ -86,37 +84,30 @@ No dependencies or models are downloaded by these commands.
 
 ## Site integration and provenance
 
-The four `literal-*` assets in this directory are byte-identical to the served
-256one assets. [Panel markup](panel.html) and [wiring patch](256one-wiring.patch)
-show the scoped integration against 256one base
-`1f647ebf12e9dd06a3d0244a5a51a4e78dc32b6e`. Apply only after reviewing any newer
-site changes. `export-language.py` deterministically rebuilds the readable JSON
-from frozen shared7 inputs. No existing package is overwritten.
-
-This integration's introducing commit is the Git history entry for this file;
-qualification records pin source/dictionary hashes. Deployment is a separate
-operation and local checks alone do not establish what is live.
-
-## Reconciled live-site overlay
-
-The deployment preflight found a newer BITS site with static problem loading,
-a composition-set explorer and retained literal-profile assets. The old local
-checkout is not a complete deployment source. The [live wiring patch](256one-live-wiring.patch)
+The four `literal-*` assets here are byte-identical to the seven-file deployment
+overlay. [Panel markup](panel.html), [current wiring patch](256one-live-wiring.patch)
 and [overlay hashes](deployment-overlay.json) target Hosting version
-`05593c3b04669d47`; all other paths/configuration must be preserved.
-The [reconciled browser receipt](evidence/live-browser-receipt.json) supersedes
-the older-layout smoke receipt for deployment. It retains the three main input
-encodings, typed composition and explorer link. The initial preview lacked four
-shared CSS imports; they were restored before the final visual checks.
+`d7262c3089ad6dbf`. Preserve every other live path and Hosting configuration;
+recheck the release before publication. The patch uses zero-context unified
+format (`git apply --unidiff-zero`); verify base hashes first. The original
+[local wiring candidate](256one-wiring.patch) targets 256one Git base
+`1f647ebf12e9dd06a3d0244a5a51a4e78dc32b6e` and is not a complete deployment tree.
 
-Existing BITS literal assets use a different input/recording protocol. This
-Gamma panel explicitly uses `gamma.literal-shared7-interactive.v1`; its control
-IDs 125–127 and exported records must not be mixed with that other profile.
-The frozen 79 dictionary entries themselves are identical. Set
-`LITERAL_EXPECT_EXPLORER=1` for the current live-layout browser smoke, or
-`LITERAL_EXPECT_SEMANTIC=1` for the preserved earlier local-layout candidate.
-The semantic panel's absence from the newer live base predates this overlay;
-this patch neither removes nor restores it.
+A concurrent release activated the main BITS literal mode. This validation
+section is collapsed by default and has exclusively `gamma`-prefixed DOM IDs.
+The main `bits-literal-shared7-v1` profile uses command IDs 79–81; this validation
+protocol uses 125–127. Records are not interchangeable. The 79 source strings
+are identical. The panel never changes the main editor's source.
 
-The wiring files use zero-context unified patches (`git apply --unidiff-zero`);
-verify the recorded base hashes before applying them.
+The current smoke check preserves all four main encodings, switches into and out
+of native literal mode, and retains typed composition and the explorer link.
+Set `LITERAL_EXPECT_EXPLORER=1` for this check. Earlier local/live-layout receipts
+remain in `evidence/` as history. An initial preview lacked shared CSS imports;
+those were restored before final visual checks. Two deployment guards stopped
+before creating any version when concurrent releases changed the target files.
+
+`export-language.py` deterministically rebuilds the readable JSON from frozen
+shared7 inputs. No existing package is overwritten. Git history identifies the
+introducing integration and compatibility commits; qualification records pin
+runtime/dictionary/source hashes. Deployment receipts separately establish live
+state. Offline encoding and human input do not establish autonomous assembly.
