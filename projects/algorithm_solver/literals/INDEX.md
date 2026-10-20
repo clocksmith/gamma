@@ -29,6 +29,26 @@ are retained. Functional rewrites and AST-informed fixed-string proposals are
 implemented here; autonomous synthesis and AST/functional composition languages
 remain unimplemented. Shared7 live dictionary IDs/bytes remain unchanged.
 
+## Larger development clusters and dictionary merging
+
+[Sixty-problem cluster experiment](clusters-v1/README.md) expands the legacy family
+to 40 and adds 20 array/matrix problems. The frozen split is 48 fit / 12
+previously exposed development-heldback problems. All 180 active source variants
+pass 20,277 checks on 6,759 distinct reference cases under the final input-effect
+policy. The 84-trial fit sweep finds a 256-string rewritten global dictionary
+with 5,345 selections and a 9,413-byte fit package, versus 10,070 selections /
+13,408 bytes for naive union and 11,936 / 16,408 for the best fixed-source control.
+
+Frozen expressibility is 48/48 fit plus 11/12 heldback, **59/60 overall**; #929
+needs an absent `@` literal. No heldback tuning or autonomous-synthesis claim.
+[Split](clusters-v1/contract.json), [comparison](clusters-v1/comparison.json),
+[freeze](clusters-v1/vocabulary-freeze.json), [heldback report](clusters-v1/heldback-expression/report.json),
+[audit](clusters-v1/audit.json) and [reproduction](clusters-v1/REPRODUCE.md) retain
+exact sources, sequences, costs, failures and limitations. Sixteen additional
+unqualified preflight source versions exceeded the planned historical source cap;
+that deviation is recorded, while the executed pool stayed at 180. Live shared7
+and all prior baselines remain unchanged.
+
 ## Tracks and status
 
 | Track | Status | Evidence boundary / entry point |
