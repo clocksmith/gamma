@@ -146,3 +146,31 @@ M1 is **not met**; 100 exposed programs cannot qualify the frozen 500-problem ta
 
 These are dependencies, not completion claims. Current work stays in literals;
 recognition, admission ledgers and protected evaluation remain untouched.
+
+## 2026-10-21 continuation: current development and M6 proposal
+
+The preceding milestone 1–5 definitions and numerical thresholds are unchanged.
+Earlier development checkpoints remain historical. Completed language-specific
+aggregate receipts and known limitations are in
+[RESULTS.md](research-loop-v1/RESULTS.md): 150 exposed JavaScript problems and a
+separately qualified 25-problem Python baseline. A smaller corpus cannot qualify
+400/500; neither language meets compactness gates. All framing, helper code,
+Python indentation/imports and dictionary storage remain counted. The frozen 500
+population/admission gap is explicit and protected evaluation remains reserved.
+
+A fluid [research feedback loop](RESEARCH_LOOP.md) evolves problem sets, correct
+source alternatives and vocabulary sets **between frozen comparisons**. The
+[matched baseline protocol](BASELINE_PROTOCOL.md) isolates source-only,
+dictionary-only and joint effects against stronger fixed-source methods. Failed
+or mixed results guide the next bounded experiment without erasing their records
+or changing milestone thresholds.
+
+| Additional milestone | Win condition | Gate |
+|---|---|---|
+| **6. Publication-worthy novel discovery** — proposed | A precise new mechanism or substantive finding survives strong comparison and independent scrutiny. | Pass every M6 gate in [RESEARCH_LOOP.md](RESEARCH_LOOP.md): defensible prior-art distinction; attributable result under matched strong baselines/ablations and full costs; correctness/representation integrity; appropriately frozen evaluation; reproducibility and independent review; owner-approved publication decision. No claim of venue acceptance or current achievement. |
+
+M6 does not authorize a public push, paper submission, external message or new
+representation implicitly. Recursive/cyclic dictionaries and ring all-reduce
+remain proposals with their own decoder/resource/coordination obligations.
+An offline encoding result remains distinct from autonomous assembly and unseen
+semantic generalization, regardless of whether it motivates a useful paper.

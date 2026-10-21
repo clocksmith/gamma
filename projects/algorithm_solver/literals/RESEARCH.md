@@ -76,3 +76,35 @@ pieces reduce complete input cost on new semantic tasks and can be selected
 correctly with little effort. Neither compression, ASCII expressibility nor
 finite execution tests establishes that result. No literature novelty claim or
 publication-level superiority is supported by the current measurements.
+
+## 2026-10-21 addition: matched optimization and research loop
+
+The preceding 80-problem discussion is historical evidence, not the current
+inventory. The latest completed 150-JavaScript and 25-Python aggregate receipts and
+full limits are indexed in [research-loop-v1/RESULTS.md](research-loop-v1/RESULTS.md). They remain
+separate exposed development populations; neither meets M1 or establishes
+an autonomous composer. Original sources, failed candidates and the
+79/140-literal baselines remain preserved.
+
+[Tempus et al., ConvexTok: Tokenisation via Convex Relaxations, v1](https://arxiv.org/html/2605.22821v1)
+is a central fixed-source vocabulary-selection comparator: shared token
+activation couples occurrence-edge paths under a vocabulary budget. LP
+relaxation gives a bound and rounding yields a dictionary for exact parsing.
+Its reported results do not transfer to Gamma's source rewriting or full packet
+costs. The [matched baseline protocol](BASELINE_PROTOCOL.md) pins the restricted
+adaptation, cost extensions, candidate fairness and bounded solver tests; the completed restricted diagnostic is reported in
+[RESULTS.md](research-loop-v1/RESULTS.md), separately from the broader protocol.
+
+[Casel et al.](https://link.springer.com/article/10.1007/s00224-020-10013-w)
+remains the grammar-cost reference. Its acyclic one-level grammar model and
+specific size measures must not be treated as a theorem for arbitrary
+multi-program literal packets or cyclic expansion. Parameterized/recursive
+grammars are separate representations with explicit costs.
+
+The [feedback loop](RESEARCH_LOOP.md) records the owner's dynamic-programming,
+source-graph rewriting/reduction, self-referential compression and ring
+all-reduce hypotheses. Only exact fixed-dictionary DP and the receipt-backed
+source/dictionary experiments are implemented here. Ring all-reduce is a
+coordination hypothesis, not a compression result; recursive dictionary
+expansion requires a separately specified decoder. M6 is a proposed gate for
+publication-worthy novel discovery, not a novelty claim or publication action.
