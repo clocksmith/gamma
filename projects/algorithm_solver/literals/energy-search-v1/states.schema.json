@@ -1,0 +1,10 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:gamma:energy-states:v1",
+  "description": "Distinct external state shapes. harness.py applies semantic eligibility and exact-cost checks.",
+  "oneOf": [
+    {"type":"object","required":["kind","piece_id","text","track","provenance","contract_refs"],"properties":{"kind":{"const":"candidate_piece"},"piece_id":{"type":"string","pattern":"^[0-9a-f]{64}$"},"text":{"type":"string","minLength":1},"track":{"enum":["compression","readable"]},"provenance":{"type":"array","minItems":1,"items":{"type":"string"}},"contract_refs":{"type":"array","items":{"type":"string"}}},"additionalProperties":false},
+    {"type":"object","required":["kind","problem_id","source_variant","piece_ids","prefix_sha256","open_holes","control_bits"],"properties":{"kind":{"const":"partial_assembly"},"problem_id":{"type":"string"},"source_variant":{"type":"string"},"piece_ids":{"type":"array","items":{"type":"string"}},"prefix_sha256":{"type":"string","pattern":"^[0-9a-f]{64}$"},"open_holes":{"type":"array","items":{"type":"string","minLength":1}},"control_bits":{"type":"integer","minimum":0}},"additionalProperties":false},
+    {"type":"object","required":["kind","piece_ids","choices","width","track"],"properties":{"kind":{"const":"vocabulary_solution_state"},"piece_ids":{"type":"array","minItems":1,"maxItems":256,"uniqueItems":true,"items":{"type":"string"}},"choices":{"type":"array","minItems":1,"items":{"type":"array","minItems":2,"maxItems":2,"items":{"type":"string"}}},"width":{"enum":[6,7,8]},"track":{"enum":["compression","readable"]}},"additionalProperties":false}
+  ]
+}

@@ -1,0 +1,361 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gamma.energy-dataset.v1",
+  "title": "Pinned energy-search development dataset",
+  "type": "object",
+  "required": [
+    "schema",
+    "corpus_id",
+    "evidence_class",
+    "reviewed_manifest",
+    "contracts",
+    "variants",
+    "qualifications",
+    "split",
+    "excluded"
+  ],
+  "properties": {
+    "schema": {
+      "const": "gamma.energy-dataset.v1"
+    },
+    "corpus_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "evidence_class": {
+      "enum": [
+        "synthetic_fixture_only",
+        "exposed-development"
+      ]
+    },
+    "reviewed_manifest": {
+      "const": true
+    },
+    "contracts": {
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "#/$defs/contract"
+      }
+    },
+    "variants": {
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "#/$defs/variant"
+      }
+    },
+    "qualifications": {
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "#/$defs/qualification"
+      }
+    },
+    "split": {
+      "type": "object",
+      "required": [
+        "id",
+        "seed",
+        "families",
+        "exposed_development",
+        "frozen_before_scoring"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "seed": {
+          "type": "integer"
+        },
+        "families": {
+          "type": "object",
+          "additionalProperties": {
+            "enum": [
+              "train",
+              "validation",
+              "test"
+            ]
+          }
+        },
+        "exposed_development": {
+          "const": true
+        },
+        "frozen_before_scoring": {
+          "const": true
+        }
+      }
+    },
+    "excluded": {
+      "type": "object",
+      "required": [
+        "problem_ids",
+        "family_ids",
+        "source_sha256",
+        "aliases"
+      ],
+      "additionalProperties": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "$defs": {
+    "hash": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "contract": {
+      "type": "object",
+      "required": [
+        "problem_id",
+        "language",
+        "output",
+        "mutation",
+        "alias",
+        "numeric",
+        "complexity",
+        "domain"
+      ],
+      "properties": {
+        "problem_id": {
+          "type": "string"
+        },
+        "language": {
+          "enum": [
+            "javascript",
+            "python"
+          ]
+        },
+        "output": {
+          "type": "string",
+          "minLength": 1
+        },
+        "mutation": {
+          "type": "string",
+          "minLength": 1
+        },
+        "alias": {
+          "type": "string",
+          "minLength": 1
+        },
+        "numeric": {
+          "type": "string",
+          "minLength": 1
+        },
+        "complexity": {
+          "type": "string",
+          "minLength": 1
+        },
+        "domain": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "variant": {
+      "type": "object",
+      "required": [
+        "id",
+        "problem_id",
+        "family_id",
+        "language",
+        "aliases",
+        "source",
+        "source_sha256",
+        "contract_id",
+        "contract_sha256",
+        "qualification_id",
+        "helper_spans",
+        "implicit_code",
+        "operand_bits",
+        "control_bits"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "problem_id": {
+          "type": "string"
+        },
+        "family_id": {
+          "type": "string"
+        },
+        "language": {
+          "enum": [
+            "javascript",
+            "python"
+          ]
+        },
+        "aliases": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "source": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source_sha256": {
+          "$ref": "#/$defs/hash"
+        },
+        "contract_sha256": {
+          "$ref": "#/$defs/hash"
+        },
+        "contract_id": {
+          "type": "string"
+        },
+        "qualification_id": {
+          "type": "string"
+        },
+        "implicit_code": {
+          "const": false
+        },
+        "operand_bits": {
+          "const": 0
+        },
+        "control_bits": {
+          "const": 0
+        },
+        "helper_spans": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "start",
+              "end",
+              "sha256"
+            ],
+            "properties": {
+              "start": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "end": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "sha256": {
+                "$ref": "#/$defs/hash"
+              }
+            }
+          }
+        }
+      }
+    },
+    "qualification": {
+      "type": "object",
+      "required": [
+        "source_sha256",
+        "contract_sha256",
+        "status",
+        "gates",
+        "evidence_class"
+      ],
+      "properties": {
+        "source_sha256": {
+          "$ref": "#/$defs/hash"
+        },
+        "contract_sha256": {
+          "$ref": "#/$defs/hash"
+        },
+        "status": {
+          "enum": [
+            "passed",
+            "failed",
+            "pending"
+          ]
+        },
+        "evidence_class": {
+          "enum": [
+            "synthetic_fixture_only",
+            "exposed-development"
+          ]
+        },
+        "gates": {
+          "type": "object",
+          "required": [
+            "output",
+            "mutation",
+            "alias",
+            "numeric",
+            "complexity",
+            "domain"
+          ],
+          "additionalProperties": {
+            "type": "boolean"
+          }
+        },
+        "proof_files": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "path",
+              "sha256"
+            ],
+            "properties": {
+              "path": {
+                "type": "string"
+              },
+              "sha256": {
+                "$ref": "#/$defs/hash"
+              }
+            }
+          }
+        },
+        "candidate_execution": {
+          "const": false
+        },
+        "independent_reviewed": {
+          "type": "boolean"
+        },
+        "tests_passed": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "tests_total": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "runtime_sha256": {
+          "$ref": "#/$defs/hash"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "evidence_class": {
+                "const": "synthetic_fixture_only"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "candidate_execution"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "evidence_class": {
+                "const": "exposed-development"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "independent_reviewed",
+              "tests_passed",
+              "tests_total",
+              "runtime_sha256",
+              "proof_files"
+            ]
+          }
+        }
+      ]
+    }
+  }
+}
