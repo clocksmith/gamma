@@ -1,0 +1,1 @@
+function solve(a,b){if(b<0||b>a){return[];}const r=[];const c=[];function d(e){if(c.length===b){r.push(c.slice());return;}const f=b-c.length;const g=a-f+1;for(let i=e;i<=g;i+=1){c.push(i);d(i+1);c.pop();}}d(1);return r;}

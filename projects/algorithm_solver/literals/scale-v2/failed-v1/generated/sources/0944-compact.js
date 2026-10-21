@@ -1,0 +1,1 @@
+function solve(a){const b=[];for(const e of a){b.push(Array.from(e));}const c=b[0].length;let d=0;for(let f=0;f<c;f+=1){for(let g=1;g<b.length;g+=1){if(b[g][f].codePointAt(0)<b[g-1][f].codePointAt(0)){d+=1;break;}}}return d;}

@@ -1,0 +1,1 @@
+const solve=a=>{const b=Array.from(a);let c=0;let d=b.length;while(c+1<d){while(c+1<d&&!/^\p{L}$/u.test(b[c])){c+=1;}while(c+1<d&&!/^\p{L}$/u.test(b[d-1])){d-=1;}if(c+1<d){const a=b[c];b[c]=b[d-1];b[d-1]=a;c+=1;d-=1;}}return b.join('');};

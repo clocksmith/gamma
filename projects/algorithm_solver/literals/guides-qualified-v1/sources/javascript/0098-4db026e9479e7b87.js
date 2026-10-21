@@ -1,0 +1,1 @@
+function solve(a){const r=[];let b=a;let n=0;let c=false;while(b!==null||r.length>0){while(b!==null){r.push(b);b=b.left;}b=r.pop();if(c&&b.val<=n){return false;}n=b.val;c=true;b=b.right;}return true;}

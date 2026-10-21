@@ -1,0 +1,1 @@
+function solve(a,b){const r=[];let n=0,[c,d]=b;while(n<a.length&&a[n][1]<c){r.push(a[n++]);}while(n<a.length&&a[n][0]<=d){c=Math.min(c,a[n][0]);d=Math.max(d,a[n][1]);n++;}r.push([c,d]);while(n<a.length){r.push(a[n++]);}return r;}

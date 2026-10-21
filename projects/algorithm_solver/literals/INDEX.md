@@ -2,9 +2,127 @@
 
 Start here for source versions, experiments and the working literal languages.
 This is a navigation index over existing manifests and reports, not a second
-results ledger. No experiments are running under this maintenance task.
+results ledger. Completed runs below retain their source, dictionary and execution identities.
 
-**Current working result:** [shared7 guide and two complete examples](pass2/working/README.md),
+[Milestones 1–5](MILESTONES.md) record the agreed compact-library gate and proposed
+automation, generalization, scale and literature-comparison targets. Targets are
+separate from the measured results below.
+
+**Latest matching refinement:** [Exact token-boundary proposals](scale150-refine-v1/README.md)
+on the same 150 programs reduce eight-bit selections from 12,790 to 12,337,
+median 77 to 74, p95 205 to 198, and package bytes from 22,773 to 22,296.
+A matched deeper AST/span control reaches 12,738 selections. Both arms pass
+1,800 independent packet/source-choice checks in total; native source hashes
+are unchanged. Original 100 regress by 14 selections; shared 125 improve by 205.
+M1 remains unmet; no live dictionary changed.
+
+**Latest staged expansion:** [125 to 150 development problems](scale150-v1/README.md)
+represents all 150 with 256 entries: 12,790 selections, median 77, p95 205,
+60.43% character bits and a 22,773-byte complete package. The initial three
+missing-constructor failures are preserved; the successor explicitly encodes
+that support source. All 162 new variants pass 11,878 checks; 1,200 packets and
+source choices pass independent audit. Shared 125 regress by four selections;
+new 25 improve by 408. M1 remains unmet. Corpus admission and a concrete frozen
+500-problem manifest remain qualification dependencies.
+
+**Previous staged expansion:** [100 to 125 development problems](scale125-v1/README.md)
+represents 125/125 with the frozen 256-entry dictionary and qualified source
+normalization: 9,836 selections, median 67, p95 185, 57.84% character bits and
+18,253 package bytes. Shared 100 stay at 6,613 selections; added 25 cost 3,223.
+164 source versions pass 15,272 checks; 1,000 packets and source choices pass an
+independent audit. Bounded relearning found no input improvement. M1 remains unmet;
+no frozen 500-problem qualification population has been established here.
+
+**Previous coordinated source/dictionary result:** [matrix traversal](matrix-kernels-v1/README.md)
+uses 6,613 eight-bit selections on the same 100 exposed problems, median 57,
+p95 148 and 53.20% character bits. Its 14,005-byte package is 25 bytes larger than
+the [window baseline](window-count-v1/README.md). Four rewrites pass 4,584 checks;
+2,800 packets independently decode. Seven-bit storage/tail regressions and the
+smaller storage alternatives remain explicit. M1 and autonomous solving are not qualified.
+
+**Latest selection-search result:** [exact marginal ranking](rank-v1/README.md)
+beats matched estimated ranking on the same 674 source choices / 100 problems.
+The 256-entry result uses **6,963 selections**, median **58.5**, p95 **153** and
+**53.37%** character bits. Its 14,005-byte package and worst-case 234 selections
+are worse than the row control. The 128-entry result improves both selections
+(11,558) and storage (15,750 B). All 400 packets independently decode and five
+accepted moves replay; unchanged source receipts supply execution evidence.
+No compact-library or autonomous-solving qualification.
+
+**Latest joint-refactor result:** [shared DP rows](row-v1/README.md) pass
+2,132 checks on 533 cases. One counted helper serves four selected eight-bit
+solutions; the same 100-problem pool uses 7,016 selections, median 60, p95 152.
+The package increases to 13,948 bytes and character fraction to 53.38%, so retain
+the heap package as the smaller-storage control. Source-only and dictionary-only
+ablations establish that the selection gain needs both changes. All 800 packets
+independently decode. M1 and autonomous solving remain unqualified.
+
+**Latest semantic-refactor result:** [shared heap code](heap-v1/README.md)
+cuts #1046 from 494 to 205 selections with the dictionary unchanged. The same 100
+problems now use 7,085 eight-bit selections and 13,797 complete package bytes;
+worst program 230, median 62 and p95 152. All 332 checks pass and 206 packets are
+independently decoded. The helper now serves 976, 1051 and 1046. Character fallback
+remains 52.59%; this improves the expensive tail, not Milestone 1 qualification.
+[Complete source](heap-v1/generated/sources/1046-heap-role.js) ·
+[Sequence](heap-v1/encodings/heap-role-8/manifest.json) · [Comparison](heap-v1/summary.json).
+
+**Latest broader-set checkpoint:** [100-problem expansion](scale100-v1/README.md)
+adds 20 already-qualified development problems. All 136 new source versions pass
+13,495 checks; 1,000 packets pass independent decoding and receipt joins.
+The frozen 256-entry dictionary covers 100/100 in 7,374 selections, median 62,
+p95 152 and 52.22% character bits. Relearning does not improve total selections;
+a 39-byte package saving costs 14 extra selections. Private sources/tests and
+their packets remain on 128; public evidence records identities and costs.
+Milestone 1 remains unmet; no autonomous or protected result.
+
+**Latest measured improvement:** [capture-checked source rewrites and joint learning](rewrite-v1/README.md)
+reduce the same 80 problems from 6,413 to 5,461 eight-bit selections (14.84%), with
+an 11,353-byte complete package (3.63% smaller). Median 57, p95 148 and 51.05%
+character bits remain above Milestone 1 targets. All 460 new/control source versions
+pass 56,623 checks; 800 packets pass independent decoding and receipt joins.
+The matched ablation distinguishes source-only, dictionary-only and joint effects.
+No autonomous/protected result or deployment claim.
+[Exact dictionary](rewrite-v1/search-v1/joint-256-start0/dictionary.json) ·
+[Sequences](rewrite-v1/search-v1/joint-256-start0/manifest.json) · [Audit](rewrite-v1/audit.json).
+
+**Previous joint-search result:** [multi-seed source/dictionary comparison on 128](joint-v1/README.md)
+checks 3,299 exact-cost moves over the same 80 problems. The best input count stays
+6,413 selections; unused-entry removal saves eight bytes. The storage arm saves
+68 bytes (0.58%) but adds 50 selections. All winners still select compact source;
+no accepted move switches variants. Eight behavioral checks and 640 independently
+decoded packets pass by joining unchanged-source execution receipts. No new
+execution, autonomous-solving, protected-result or deployment claim.
+
+**Previous broader-set result:** [measured-gain literal selection on 80 problems](scale-v2/README.md)
+replaces frequency-only admission with exact counterfactual resegmentation,
+reclaims redundant entries, and measures bounded swaps. Scope-safe compact source
+plus 256 strings represents 80/80 exposed development programs in 6,413 eight-bit
+selections (median63), versus9,218 for matched frequency ranking and7,933 for the
+lexical control. The128-string arm covers80/80 in10,155 seven-bit selections.
+All240 source versions pass25,236 checks on8,412 distinct cases;960 selected/control
+packets independently decode to qualified source hashes. Single-character fallback
+still accounts for53.2% of eight-bit selections. No autonomous/unseen-result claim.
+[Dictionaries and sequences](scale-v2/search-v2/) · [audit](scale-v2/audit.json).
+
+**Latest input-cost result:** [complete line-span search](budgets/SPANS.md),
+59 exact strings at six bits after equal-length compaction, 20/20 programs in
+74 selections / 444 selection bits, with 3,834/3,834 development checks.
+The complete package is 5,009 bytes, down from the first span result's 5,405 bytes.
+This is the selection minimum for its frozen 341-string pool, not a global
+optimum or autonomous solving.
+[Current dictionary](budgets/compact-v1/budget-64/dictionary.json) ·
+[All assemblies](budgets/compact-v1/budget-64/manifest.json) ·
+[Live set explorer](https://256.one/labs/two-button/compositions/)
+
+**Previous input/storage tradeoff:** [literal-only budget comparison](budgets/README.md),
+58 exact strings at six bits, 20/20 programs in 77 selections / 462 selection bits,
+with 3,834/3,834 development checks. Its complete package is larger (4,972 bytes)
+than shared7 (4,468 bytes); this is an input-cost/storage tradeoff.
+[Exact strings](budgets/selected-v1/budget-64/dictionary.json),
+[sequences](budgets/selected-v1/budget-64/manifest.json), and
+[execution receipt](budgets/execution-v1/report.json) are preserved.
+
+**Preserved working baseline:** [shared7 guide and two complete examples](pass2/working/README.md),
 79 literals, seven bits per selection, 20/20 programs and 3,834/3,834 development
 checks. [Exact strings](pass2/working/packages/shared7/dictionary.json) and
 [all sequences](pass2/working/packages/shared7/manifest.json) reconstruct complete
@@ -54,7 +172,7 @@ and all prior baselines remain unchanged.
 | Track | Status | Evidence boundary / entry point |
 |---|---|---|
 | 2a/2b parameterized macros | Planned broader vocabulary; existing precursors retained | [Macro contract](../contracts/semantic_macro_goals_v1.json). Separate from flat literals; this index does not requalify precursor results. |
-| 3a flat literals | Passed offline representation and development execution | [Working guide](pass2/working/README.md); no hidden slots, renaming, dispatch or injected helpers. |
+| 3a flat literals | Passed offline representation and development execution | [Budget comparison](budgets/README.md) and [preserved working guide](pass2/working/README.md); no hidden slots, renaming, dispatch or injected helpers. |
 | Bounded AST preprocessing for literals | Passed for six concrete rewrites | [Rules](pass2/rewrite.cjs), [lineage](pass2/transformations.json), [execution](pass2/execution/report.json). AST parsing selects source rewrites; emitted vocabulary remains flat strings. |
 | AST-backed composition language | Planned proposal only | No implemented language, vocabulary, sequences, execution result or committed experiment claimed. Existing AST preprocessing is not this proposal. Await research/design. |
 | Functional source alternatives for flat literals | Bounded offline experiment passed | [Pass 3](pass3/README.md): guarded functional folds/filter/map and arrow rewrites; no new functional composition language or autonomous claim. |
@@ -132,6 +250,9 @@ the linked execution reports, not silently rewritten.
 | Joint source/dictionary recomposition | Passed execution:14 new sources,2,488/2,488 checks;3,888 source combinations and7,825 trials | [Trials/frontier](pass2/results/results.json), [exact encodings](pass2/results/encodings), [execution/reuse](pass2/execution/report.json), [review receipts](pass2/review-evidence.json). Finite-pool enumeration under two heuristic dictionary strategies, not global optimization. | [a1730d36](https://github.com/clocksmith/gamma/commit/a1730d363a2f3d5ce879879bb84ac0f375bfc788) |
 | Dense unchanged-source controls | Passed comparison; general improvement claim rejected | [32 control trials](pass2/controls/results.json), [control encodings](pass2/controls/encodings), [combined summary](pass2/summary.json). Rewrites did not beat unchanged-source controls at declared dictionary-byte checkpoints; retain Pareto tradeoffs. | [a1730d36](https://github.com/clocksmith/gamma/commit/a1730d363a2f3d5ce879879bb84ac0f375bfc788) |
 | Working 4–8-bit packets | Passed:shared7 decoded 20/20 and3,834/3,834 checks | [Package summary](pass2/working/packages/summary.json), [packet execution](pass2/working/execution/report.json), [codec review](pass2/working/review-evidence.json). Fixed-width IDs and all framing counted; primary shared language has zero whole-program entries. | [0951af88](https://github.com/clocksmith/gamma/commit/0951af88c332818133f132cce9d6cf8e277b90cb) |
+| Literal-only 16/32/64/128/256 budget comparison | Passed execution; lower input cost with larger dictionary. Small-cap coverage incomplete. | [Frozen contract](budgets/results-v1/contract.json), [accepted merge traces](budgets/results-v1/trials.json), [pooled winners](budgets/selected-v1/summary.json), [execution](budgets/execution-v1/report.json). 16/32 entries covered9/14 tasks;58 entries cover20 with77 selections. 22 distinct decoded task/source pairs passed4,107 checks; identical programs across widths share execution evidence. No new source rewrite or autonomous solve. | [b4bf675c](https://github.com/clocksmith/gamma/commit/b4bf675c633edbfeefffc691436085634a88297f) |
+| Complete admitted line-span pool | Passed: 20 programs, 74 selections, 3,834 checks | [Frozen pool and implementation identity](budgets/spans-v1/contract.json), [minimum counts](budgets/spans-v1/summary.json), [packets](budgets/spans-v1/budget-64/manifest.json), [execution](budgets/spans-execution-v1/report.json). 62 strings; 444 input bits; larger 5,405-byte package. No new source semantics. | Immutable artifact hashes in the linked contract |
+| Equally short assemblies, smaller dictionary | Passed: 20 programs, 74 selections, 3,834 checks | [Result and deletions](budgets/compact-v1/summary.json), [execution](budgets/compact-execution-v1/report.json). 59 strings, 444 bits, 5,009 package bytes. Follow-on [75/77/80-selection searches](budgets/frontier-v1/summary.json) found no additional improvement; identical packets reuse execution via [explicit receipt](budgets/frontier-v1/verification.json). | Immutable artifact hashes in the linked contracts |
 
 All trial IDs map to their retained encoding JSON or reproducible method/source
 choices. Existing tools and reports remain in place; no rejected trace, source
@@ -165,10 +286,19 @@ is a diagnostic, not the shared-language claim. The 6/7/8-bit languages cover 20
 
 ## Research and proposed comparisons
 
+The [budget comparison's package index](budgets/selected-v1/summary.json)
+adds five successors at declared widths4–8. Their manifests use the same
+dictionary/packet/source hash chain. The 58-entry winner is packed separately at
+6/7/8 bits, with dictionaries, sequences and decoded views under
+[`budgets/selected-v1`](budgets/selected-v1). These packages were introduced at
+[b4bf675c](https://github.com/clocksmith/gamma/commit/b4bf675c633edbfeefffc691436085634a88297f);
+the earlier package table remains unchanged.
+
 The [concise literature mapping](RESEARCH.md) separates direct tokenisation,
 one-level grammar costs, library learning, fixed-string compression and future
-synthesis. AST-backed and functional-style tracks remain proposals, not measured
-capabilities. No comparison implementation or new experiment was launched.
+synthesis. An AST-backed composition language remains a proposal. Bounded AST
+and functional source preprocessing for flat strings now has the separately
+recorded pass3 results above; it is not that proposed language.
 
 ## Maintenance rules
 
@@ -180,3 +310,10 @@ case inventory, mutation policy and storage format matched or explicitly distinc
 No running status, success claim or promotion may come solely from a planned
 command or generated source. Keep 1a/1b ownership and protected evaluation
 boundaries unchanged.
+
+
+## Research feedback loop and matched baselines — 2026-10-21
+
+- [Continuous research loop and M6 discovery gate](RESEARCH_LOOP.md), with M1–M5 unchanged.
+- [Matched source/dictionary baseline protocol](BASELINE_PROTOCOL.md) and [central literature mapping](RESEARCH.md).
+- [Completed JS150/Python25 and restricted flow diagnostic](research-loop-v1/RESULTS.md): methods, aggregates and hash commitments only. This is offline representation evidence; private programs/cases are not redistributed and public corpus reproduction remains incomplete.

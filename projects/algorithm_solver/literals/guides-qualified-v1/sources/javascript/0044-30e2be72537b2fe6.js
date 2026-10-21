@@ -1,0 +1,1 @@
+function solve(a,b){let c=0;let d=0;let e=-1;let f=0;while(c<a.length){if(d<b.length&&(b[d]==='?'||b[d]===a[c])){c++;d++;}else if(d<b.length&&b[d]==='*'){e=d++;f=c;}else if(e!==-1){d=e+1;c=++f;}else{return false;}}while(d<b.length&&b[d]==='*'){d++;}return d===b.length;}

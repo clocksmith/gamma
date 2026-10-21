@@ -1,0 +1,1 @@
+function solve(a){if(a.length===0){return 0;}let b=a[0];let c=a[0];for(const x of a){if(x<b){b=x;}if(x>c){c=x;}}const d=new Array(c-b+1).fill(0);const e=new Array(d.length).fill(-1);let r=0;let f=a.length;for(let i=0;i<a.length;i+=1){const c=a[i]-b;if(e[c]===-1){e[c]=i;}d[c]+=1;const g=i-e[c]+1;if(d[c]>r){r=d[c];f=g;}else if(d[c]===r&&g<f){f=g;}}return f;}

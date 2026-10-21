@@ -1,0 +1,1 @@
+function h(a){const b=a.length;const c=Array.from({length:b+1},()=>Array(b+1).fill(0));for(let i=b-1;i>=0;--i){for(let j=0;j<=i;++j){c[i][j]=Math.min(c[i+1][j],c[i+1][j+1])+a[i][j];}}return c[0][0];}function solve(a){return h(a);}

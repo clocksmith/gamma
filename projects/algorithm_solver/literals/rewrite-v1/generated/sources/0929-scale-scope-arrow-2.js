@@ -1,0 +1,1 @@
+const solve=a=>{const b={};let c=0;for(const d of a){const a=d.split('@');const e=a[0];const f=a[1];const g=[];for(const a of e){if(a==='.'){continue;}if(a==='+'){break;}g.push(a);}const h='$'+g.join('')+'@'+f;if(!b[h]){c+=1;b[h]=true;}}return c;};

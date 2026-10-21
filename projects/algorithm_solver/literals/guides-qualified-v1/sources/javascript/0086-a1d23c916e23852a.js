@@ -1,0 +1,1 @@
+function solve(a,b){const c={next:null};const d={next:null};let e=c;let f=d;let g=a;while(g!==null){const h=g.next;g.next=null;if(g.val<b){e.next=g;e=g;}else{f.next=g;f=g;}g=h;}e.next=d.next;return c.next;}

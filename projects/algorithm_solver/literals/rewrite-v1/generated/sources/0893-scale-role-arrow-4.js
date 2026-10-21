@@ -1,0 +1,1 @@
+const solve=a=>{const m={};let r=0;for(const x of a){const a=[];const b=[];let n=0;for(const y of x){if(n%2===0){a.push(y);}else{b.push(y);}n+=1;}a.sort(d);b.sort(d);const c=h(a.join('')+b.join(''));if(m[c]!==true){m[c]=true;r+=1;}}return r;};function h(a){return'$'+a;}function d(a,b){return a.codePointAt(0)-b.codePointAt(0);}
