@@ -1,0 +1,1 @@
+function solve(a){const b=[...a].sort((a,b)=>a-b);const r=[];const c=[];function d(a){r.push(c.slice());for(let i=a;i<b.length;i+=1){if(i>a&&b[i]===b[i-1]){continue;}c.push(b[i]);d(i+1);c.pop();}}d(0);return r;}

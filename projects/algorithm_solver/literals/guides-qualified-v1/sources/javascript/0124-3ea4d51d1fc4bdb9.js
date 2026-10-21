@@ -1,0 +1,1 @@
+var a=function(a){let b=-1001;const c=a=>{if(!a){return 0;}const d=Math.max(0,c(a.left));const e=Math.max(0,c(a.right));b=Math.max(b,d+e+a.val);return Math.max(d,e)+a.val;};c(a);return b;};const solve=b=>a(b);

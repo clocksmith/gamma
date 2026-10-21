@@ -1,0 +1,1 @@
+function h(a,b){const c=new Array(b.length+1).fill(0n);c[0]=1n;for(const x of a){for(let i=b.length;i>=1;--i){if(x===b[i-1])c[i]+=c[i-1];}}const d=c[b.length];return d<=BigInt(Number.MAX_SAFE_INTEGER)?Number(d):d;}function solve(a,b){return h(a,b);}

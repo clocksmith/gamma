@@ -1,0 +1,1 @@
+function solve(a,b){if(b<=1){return a;}const c=Array.from(a);if(b>=c.length){return a;}const d=Array.from({length:b},()=>[]);let r=0;let n=1;for(const x of c){d[r].push(x);if(r===0){n=1;}else if(r===b-1){n=-1;}r+=n;}return d.map(a=>a.join('')).join('');}

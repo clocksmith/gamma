@@ -1,0 +1,1 @@
+function solve(a,b){if(a==='0'||b==='0'){return'0';}const c=new Array(a.length+b.length).fill(0);for(let i=a.length-1;i>=0;i--){for(let j=b.length-1;j>=0;j--){const d=i+j+1;const e=(a.charCodeAt(i)-48)*(b.charCodeAt(j)-48)+c[d];c[d]=e%10;c[d-1]+=Math.floor(e/10);}}return c.join('').replace(/^0+/,'')||'0';}
