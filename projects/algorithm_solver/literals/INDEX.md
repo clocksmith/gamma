@@ -8,6 +8,13 @@ results ledger. Completed runs below retain their source, dictionary and executi
 automation, generalization, scale and literature-comparison targets. Targets are
 separate from the measured results below.
 
+**Latest coordinated source/dictionary result:** [matrix traversal](matrix-kernels-v1/README.md)
+uses 6,613 eight-bit selections on the same 100 exposed problems, median 57,
+p95 148 and 53.20% character bits. Its 14,005-byte package is 25 bytes larger than
+the [window baseline](window-count-v1/README.md). Four rewrites pass 4,584 checks;
+2,800 packets independently decode. Seven-bit storage/tail regressions and the
+smaller storage alternatives remain explicit. M1 and autonomous solving are not qualified.
+
 **Latest selection-search result:** [exact marginal ranking](rank-v1/README.md)
 beats matched estimated ranking on the same 674 source choices / 100 problems.
 The 256-entry result uses **6,963 selections**, median **58.5**, p95 **153** and
