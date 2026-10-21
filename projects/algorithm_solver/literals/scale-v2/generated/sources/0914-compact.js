@@ -1,0 +1,1 @@
+function solve(b){const c={};for(const e of b){c[e]=(c[e]||0)+1;}let d=0;for(const f in c){const g=c[f];d=a(d,g);}return d>=2;}function a(h,i){h=Math.abs(h);i=Math.abs(i);while(i!==0){const j=h%i;h=i;i=j;}return h;}

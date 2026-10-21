@@ -47,7 +47,9 @@ There is no free raw-source escape; dictionary and framing costs remain explicit
 Goal 3b later evaluates a frozen literal vocabulary and frozen assembly procedure
 on unseen problems or semantic variants. Preserve protected boundaries. Compare
 vocabulary cardinality, stored dictionary bytes, program selections, correctness
-and search cost on a Pareto frontier, including whole-program literals. Offline
+and search cost on a Pareto frontier. Preserve whole-program literals as a
+separate historical baseline; the current 16/32/64/128/256-entry comparison
+excludes them from candidate vocabularies. Offline
 encoding of supplied solutions is not autonomous assembly from a description.
 See the [six-goal contract](projects/algorithm_solver/contracts/literal_composition_goals_v1.json)
 and [twenty-program 3a pilot](projects/algorithm_solver/literals/README.md).

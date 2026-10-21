@@ -1,0 +1,1 @@
+const solve=(a,b)=>{const c=Array.from(a);const d=Array.from(b);let r=0;let n=0;while(r<c.length&&n<d.length){if(c[r]!==d[n]){return false;}let a=r+1;while(a<c.length&&c[a]===c[r]){a+=1;}let b=n+1;while(b<d.length&&d[b]===d[n]){b+=1;}if(a-r>b-n){return false;}r=a;n=b;}return r===c.length&&n===d.length;};

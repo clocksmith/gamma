@@ -1,0 +1,1 @@
+const solve=a=>{const b=a.length;const c=a[0].length;const r=[];for(let i=0;i<b;i+=1){const d=[];for(let j=0;j<c;j+=1){let r=0;let n=0;for(let d=i-1;d<i+2;d+=1){for(let i=j-1;i<j+2;i+=1){if(d>=0&&d<b&&i>=0&&i<c){r+=a[d][i];n+=1;}}}d.push(Math.floor(r/n));}r.push(d);}return r;};

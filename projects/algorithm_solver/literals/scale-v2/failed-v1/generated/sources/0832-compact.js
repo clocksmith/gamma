@@ -1,0 +1,1 @@
+function solve(b){const c=b.length;for(const d of b){let e=0;let f=c-1;while(e<f){if(d[e]===d[f]){d[e]=a(d[e]);d[f]=a(d[f]);}e+=1;f-=1;}if(e===f){d[e]=a(d[e]);}}return b;}function a(g){if(g%2===0){return g+1;}return g-1;}

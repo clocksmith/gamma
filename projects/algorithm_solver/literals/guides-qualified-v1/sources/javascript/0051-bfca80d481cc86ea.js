@@ -1,0 +1,1 @@
+function solve(a){const s=new Set();const b=new Set();const c=new Set();const r=new Array(a);const d=[];function e(f){if(f===a){d.push(r.map(b=>'.'.repeat(b)+'Q'+'.'.repeat(a-b-1)));return;}for(let i=0;i<a;i++){const a=f-i;const d=f+i;if(s.has(i)||b.has(a)||c.has(d)){continue;}s.add(i);b.add(a);c.add(d);r[f]=i;e(f+1);s.delete(i);b.delete(a);c.delete(d);}}e(0);return d;}

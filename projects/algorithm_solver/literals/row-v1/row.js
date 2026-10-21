@@ -1,0 +1,1 @@
+function h(a,b,c,d){const e=new Array(b+1);for(let j=0;j<=b;j++){e[j]=c(0,j,j?e[j-1]:undefined);}for(let i=1;i<=a;i++){let f=e[0];e[0]=c(i,0,e[0]);for(let j=1;j<=b;j++){const g=e[j];e[j]=d(i,j,g,e[j-1],f);f=g;}}return e[b];}

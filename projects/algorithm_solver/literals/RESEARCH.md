@@ -5,8 +5,9 @@
 Our descriptive formulation is **joint semantics-preserving program rewriting
 and bounded static-dictionary compression**. This is a mapping of the existing
 problem to related work, not a novelty claim, a new experiment, or a claim that
-Gamma implements the cited systems. Current results remain the exact
-[79-literal and 140-literal packages](pass2/working/packages/summary.json).
+Gamma implements the cited systems. The exact
+[79-literal and 140-literal packages](pass2/working/packages/summary.json) are
+preserved controls for the newer [literal-budget comparison](budgets/README.md).
 
 | Question | Related primary source | Relevance and boundary |
 |---|---|---|
@@ -17,6 +18,8 @@ Gamma implements the cited systems. Current results remain the exact
 | Learn libraries and subsequently synthesize task solutions | [Ellis et al., DreamCoder](https://arxiv.org/abs/2006.08381), [Grand et al., LILO](https://arxiv.org/abs/2310.19791) | DreamCoder jointly grows abstractions and a learned search model. LILO combines synthesis, Stitch-based compression and documentation. They inform a later autonomous task-solving track; they provide no evidence that our offline encoded sequences solve autonomously. |
 | Practical bounded fixed-string compression | [Boncz et al., FSST](https://www.vldb.org/pvldb/vol13/p2649-boncz.pdf), [author implementation](https://github.com/cwida/fsst) | FSST maps 1–8-byte strings to byte codes and permits escaped raw bytes. Our literals have no such length cap and no free raw-source escape. A fair comparator must retain and charge those differences. No FSST experiment has run here. |
 | Improve parsing under a learned symbol table | [Chehaidar et al., OptFSST](https://arxiv.org/abs/2607.11271v3) | Optimal dynamic-programming encoding given a table is separated from heuristic table learning. That distinction also matters here. This is a proposed comparator, not an implemented result or evidence of identical formats. |
+| Give fixed source pieces structural metadata | [ESTree specification](https://github.com/estree/estree), [Yin & Neubig, syntax-driven code generation](https://aclanthology.org/P17-1041/) | AST metadata and syntax-constrained generation are established tools. Metadata must not insert missing source or imply semantic correctness; the neural paper does not establish Gamma's non-autoregressive goal. |
+| Compose functional building blocks | [Balog et al., DeepCoder](https://www.microsoft.com/en-us/research/publication/deepcoder-learning-write-programs/) | Learned guidance for program search from input/output examples is a useful comparator. It does not establish that functional JavaScript rewrites use fewer literal selections or preserve execution cost. |
 
 Searching equivalent source variants for a cost objective is also related to
 superoptimization in the broad sense. That conceptual relationship does not
@@ -47,3 +50,61 @@ These are definitions for proposed comparisons, not additional implemented arms:
 No new implementation, benchmark, source rewrite or synthesis run is authorized
 by this note. Compare any future proposal against the preserved literal and
 whole-program baselines with matched interfaces, evidence and counted storage.
+
+## What the implementation history now supports
+
+The [80-problem measured-gain experiment](scale-v2/README.md) improves actual
+dictionary selection and source normalization. Its selectors use exact
+counterfactual parsing costs, reclaim redundant learned strings, and measure
+bounded remove/add replacements. This aligns with established optimal-parsing
+and heuristic-table-learning ideas (OptFSST); it does not establish a new
+compression algorithm or a comparison against that implementation.
+
+The distinction from babble/Stitch remains substantive: Gamma presently learns
+flat strings, not parameterized reusable functions modulo an equational theory.
+Its guarded JavaScript rewrites are not equality saturation. DreamCoder's
+library-and-solver learning loop is also not implemented by these experiments.
+
+What is new *within Gamma* is measured evidence: the larger 80-problem development
+set, the matched selection/refactoring ablations, counterfactual decision traces,
+and a class-binding failure caught and fixed by broader execution. The eight-bit
+winner still emits53.2% of its selections as single characters. That finding
+limits an algorithm-library claim even while input cost improves.
+
+The research question remains whether jointly rewritten, genuinely reusable
+pieces reduce complete input cost on new semantic tasks and can be selected
+correctly with little effort. Neither compression, ASCII expressibility nor
+finite execution tests establishes that result. No literature novelty claim or
+publication-level superiority is supported by the current measurements.
+
+## 2026-10-21 addition: matched optimization and research loop
+
+The preceding 80-problem discussion is historical evidence, not the current
+inventory. The latest completed 150-JavaScript and 25-Python aggregate receipts and
+full limits are indexed in [research-loop-v1/RESULTS.md](research-loop-v1/RESULTS.md). They remain
+separate exposed development populations; neither meets M1 or establishes
+an autonomous composer. Original sources, failed candidates and the
+79/140-literal baselines remain preserved.
+
+[Tempus et al., ConvexTok: Tokenisation via Convex Relaxations, v1](https://arxiv.org/html/2605.22821v1)
+is a central fixed-source vocabulary-selection comparator: shared token
+activation couples occurrence-edge paths under a vocabulary budget. LP
+relaxation gives a bound and rounding yields a dictionary for exact parsing.
+Its reported results do not transfer to Gamma's source rewriting or full packet
+costs. The [matched baseline protocol](BASELINE_PROTOCOL.md) pins the restricted
+adaptation, cost extensions, candidate fairness and bounded solver tests; the completed restricted diagnostic is reported in
+[RESULTS.md](research-loop-v1/RESULTS.md), separately from the broader protocol.
+
+[Casel et al.](https://link.springer.com/article/10.1007/s00224-020-10013-w)
+remains the grammar-cost reference. Its acyclic one-level grammar model and
+specific size measures must not be treated as a theorem for arbitrary
+multi-program literal packets or cyclic expansion. Parameterized/recursive
+grammars are separate representations with explicit costs.
+
+The [feedback loop](RESEARCH_LOOP.md) records the owner's dynamic-programming,
+source-graph rewriting/reduction, self-referential compression and ring
+all-reduce hypotheses. Only exact fixed-dictionary DP and the receipt-backed
+source/dictionary experiments are implemented here. Ring all-reduce is a
+coordination hypothesis, not a compression result; recursive dictionary
+expansion requires a separately specified decoder. M6 is a proposed gate for
+publication-worthy novel discovery, not a novelty claim or publication action.

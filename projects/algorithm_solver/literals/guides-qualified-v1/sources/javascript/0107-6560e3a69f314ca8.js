@@ -1,0 +1,1 @@
+var a=function(a){const r=[];if(!a){return r;}const b=[a];while(b.length){const a=[];const c=[];for(const {val:x,left:y,right:d}of b){a.push(x);y&&c.push(y);d&&c.push(d);}r.push(a);b.splice(0,b.length,...c);}return r.reverse();};const solve=b=>a(b);

@@ -1,0 +1,1 @@
+function solve(a){const s=new Set();const b=new Set();const c=new Set();let r=0;function d(e){if(e===a){r++;return;}for(let i=0;i<a;i++){const a=e-i;const f=e+i;if(s.has(i)||b.has(a)||c.has(f)){continue;}s.add(i);b.add(a);c.add(f);d(e+1);s.delete(i);b.delete(a);c.delete(f);}}d(0);return r;}

@@ -1,0 +1,1 @@
+var a=function(a,b){const c=[];const d=[];function e(a,b){if(!a)return;b-=a.val;d.push(a.val);if(!a.left&&!a.right&&b==0)c.push([...d]);e(a.left,b);e(a.right,b);d.pop();}e(a,b);return c;};function solve(b,c){return a(b,c);}

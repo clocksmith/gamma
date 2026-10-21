@@ -1,0 +1,1 @@
+const solve=a=>{const m={};for(const x of a){m[x]=(m[x]||0)+1;}let r=0;for(const k in m){const a=m[k];r=h(r,a);}return r>=2;};function h(a,b){a=Math.abs(a);b=Math.abs(b);while(b!==0){const c=a%b;a=b;b=c;}return a;}
