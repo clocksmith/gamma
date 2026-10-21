@@ -16,7 +16,8 @@ Four source-hash-guarded witnesses for two exposed development problems, two lan
 
 ## Contracts
 
-Input is an explicitly provided, already reviewed external witness file and the pinned existing `algsolve/synth/components.py` registry. Output is a separately stored successor with exact expected identity. The [evidence summary](evidence.json) distinguishes historical full-program qualification from portable-tool tests.
+- Input: an explicitly provided, already reviewed external witness file and the pinned existing `algsolve/synth/components.py` registry.
+- Output: a separately stored successor with exact expected identity. The [evidence summary](evidence.json) distinguishes historical full-program qualification from portable-tool tests.
 
 ## Invariants
 

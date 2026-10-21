@@ -20,6 +20,27 @@ permits qualified alternative algorithms while preserving exact successor decodi
 The [readable family](readable-v1/README.md) is one human-readable policy under
 2a; arbitrary-fragment compression remains a separate policy. Both can use 2b.
 
+## Current local implementation checkpoints
+
+These reviewed commits are local research evidence, not new BITS profiles or
+public releases. Their runtime/test receipts retain the historical contracts.
+
+| Goals | Implementation and evidence | Result and limits |
+| --- | --- | --- |
+| 2a/2b | [Audited incumbent preservation](joint-v1/incumbent-v1/README.md), `af6d804ff84dfebaaeee4aefbc92b54b8f6d9906` | Four 16-problem JS/Python arms retain the best imported feasible costs after 80 proposals; no measured rewrite gain. 21 focused tests, 64 packet roundtrips and 2,164 independent forward-DP checks. |
+| 2a/2b | [Integer-count alignment](count-alignment-v1/README.md), `ee687ebc8f3b4dbbe039acaef792673869e1e359` | Full-program evidence covers two development problems in both languages. Joined helpers save ten six-bit selections per language versus their exact-line successor control, but increase dictionary/package storage. Preserve original no-helper alternatives; no human-usability claim. 18 focused mechanism tests. |
+| 2a/2b | [Dot source-witness inventory](seed-inventory-v1/README.md), `a67e8dc9e8463236b483fa6660e7890a393df118` | 187 cross-problem physical-line witnesses from 120 hash-verified sources / 60 problems; ten tests. Lines are not automatically complete statements or semantically qualified components. Source admission is unchanged. |
+| 2b/4c | [Candidate energy harness](energy-search-v1/README.md), `94ea02c9c619a2c3bb8c8cf7bd1152cafb952dcc` | Contract-gated exact costs, source/dictionary neighborhoods and a scorer interface; 30 tests, 18 synthetic arms and a 32-state restricted reference. No model trained, candidate programs executed or independent solving established. |
+
+The [energy protocol](energy-search-v1/PROTOCOL.md) separates development library
+optimization from frozen unseen composition. Candidate provenance, qualification,
+full input/storage costs and protected boundaries remain gates before promotion.
+The existing Python statement miner is
+[`macro_mine.py`](../findings/corpus-macro-analysis-128-v1/macro_mine.py): it uses
+`ast.stmt` and source segments, but its top-level I/O makes it unsuitable for direct
+import. Exact byte-span provenance is a proposed integration refinement, not an
+implemented new extractor or semantic-equivalence check.
+
 ## Preserved experiment checkpoints
 
 [Milestones M1–M6](MILESTONES.md) record the agreed compact-library gate and proposed
