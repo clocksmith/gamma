@@ -6,7 +6,7 @@ Agents read the linked charters from the repository root down to the file they c
 
 | Component | Charter | Parent | Target |
 | --- | --- | --- | --- |
-| `Gamma Repository` | [CATSCAN.md](../CATSCAN.md) | `none` | Provide a workbench for model evaluation, translation distillation, SAME-R capability transfer, backend comparison and lossless compression under verifiable contracts. |
+| `Gamma Repository` | [CATSCAN.md](../CATSCAN.md) | `none` | Provide reproducible model, capability-transfer and algorithmic-composition research under verifiable contracts. |
 | `Flux package` | [flux/CATSCAN.md](../flux/CATSCAN.md) | `Gamma Repository` | Provide Flux's independently installable execution surface while keeping its package and web contracts isolated from Gamma experiments. |
 | `Gamma games` | [games/CATSCAN.md](../games/CATSCAN.md) | `Gamma Repository` | Host playable systems whose authored rules, runtime behavior, and evidence remain internally coherent and distinct from model benchmarks. |
 | `Gamma core package` | [gamma-core/CATSCAN.md](../gamma-core/CATSCAN.md) | `Gamma Repository` | Provide a small installable Python core for reusable Gamma primitives without importing repository research state. |
@@ -17,7 +17,7 @@ Agents read the linked charters from the repository root down to the file they c
 | `Gamma tools` | [tools/CATSCAN.md](../tools/CATSCAN.md) | `Gamma Repository` | Provide reproducible developer, analysis, migration, validation, and benchmark-support utilities without becoming hidden product behavior. |
 | `Gamma web client` | [web/CATSCAN.md](../web/CATSCAN.md) | `Gamma Repository` | Present Gamma's supported interactive surfaces in the browser without changing engine, game, or evidence semantics. |
 | `Mandate 2038` | [games/2038/CATSCAN.md](../games/2038/CATSCAN.md) | `Gamma games` | Deliver a coherent, replayable institutional strategy game whose authored rules, browser runtime, physical specification, and evidence agree. |
-| `Algorithm Solver` | [projects/algorithm_solver/CATSCAN.md](../projects/algorithm_solver/CATSCAN.md) | `Gamma research projects` | Recognize stored solutions; separately learn non-autoregressive composition with deterministic assembly/validation. Compare against search and autoregressive generation. |
+| `Algorithm Solver` | [projects/algorithm_solver/CATSCAN.md](../projects/algorithm_solver/CATSCAN.md) | `Gamma research projects` | Develop qualified recognition, reusable languages, human composition, autonomous assembly and research evidence under versioned goals. |
 | `Distillation research` | [projects/distillation/CATSCAN.md](../projects/distillation/CATSCAN.md) | `Gamma research projects` | Measure capability transfer from teacher to student models under frozen task, data, checkpoint, and evaluation contracts. |
 | `Gamma enwiki9` | [projects/enwiki9/CATSCAN.md](../projects/enwiki9/CATSCAN.md) | `Gamma research projects` | Preserve the archived research and its evidence after the user's 2026-10-08 retirement decision, including the unachieved historical 96,000,000-byte target and all 105M/99M/90M/96M contracts. |
 | `SAME-R` | [projects/samer/CATSCAN.md](../projects/samer/CATSCAN.md) | `Gamma research projects` | Attribute outcome differences to swappable approaches under matched evaluation and replication contracts. |

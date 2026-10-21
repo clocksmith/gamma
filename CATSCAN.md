@@ -6,43 +6,46 @@ Parent: none
 
 ## Target
 
-Provide a workbench for model evaluation, translation distillation, SAME-R capability transfer, backend comparison and lossless compression under verifiable contracts.
+Provide reproducible model, capability-transfer and algorithmic-composition research under verifiable contracts.
 
 ## Authority
 
-- Owns evaluation, distillation, compression experiments, checkpoint evaluators, scoreboards and simulation prototypes.
-- Does not own production inference runtimes (Doppler), formal hardware attestation (Doe), or multi-agent rooms (Reploid).
+Owns evaluation, distillation, composition, authorized compression research and evidence.
+Doppler owns production inference, Doe compiler/runtime correctness, Reploid rooms,
+and 256one production editor hosting.
 
 ## Scope
 
-- Evaluation: `src/engines/`, `src/benchmarks/`, `src/comparison/`, `src/mind_meld/`.
-- Distillation: `projects/distillation/translation/`, `projects/distillation/wgsl/`.
-- Capability transfer: `projects/samer/`. Compression: `projects/enwiki9/`.
-- Simulation: `games/2038/`, `src/game/`.
+Model engines, benchmarks and comparison under `src/`; translation/WGSL distillation,
+SAME-R and algorithm-solving research under `projects/`; game simulations.
+`projects/enwiki9/` is archived.
 
 ## Contracts
 
-- Input: [Strategic goals](GOALS.md) and [system intent](INTENT.md).
-- Input: Model weights, training pairs, evaluation datasets and [compression objective](projects/enwiki9/contracts/research/v4/objective-contract.json).
-- Output: Run contracts, manifests, scoreboards, normalized bundles and compression evidence.
+- Input: [goals](GOALS.md), [intent](INTENT.md), pinned datasets and
+[versioned algorithm goals and aliases](projects/algorithm_solver/contracts/algorithm_solver_goals_v2.json).
+- Output: run contracts, qualification receipts, scoreboards and reproducible artifacts.
 
 ## Invariants
 
-- Proven compute probe on ROCm/CUDA before launching training or eval sweeps.
-- Training/evaluation logs `[run-contract]` with dataset, schedule and device.
-- Reporting rebuilds are strictly decoupled from raw training/eval execution and safe against in-flight jobs.
-- Compression freezes its lane's experiment contract and preserves original bytes, complete accounting and separate diagnostic/qualification authority.
-- enwiki9 is archived by user decision (2026-10-08): no research or execution
-  authority until explicit user reopening; historical objectives and evidence remain intact.
+Verify accelerator compute before training/evaluation. Bind dataset, schedule and
+device in named run contracts. Separate reporting from execution; preserve
+originals, failures, complete costs and promotion authority. Goal relabeling
+cannot change historical evidence or protected gates.
+enwiki9 remains retired since 2026-10-08; only explicit owner reopening grants
+research/execution authority.
 
 ## Acceptance
 
-- [Translation rebuilds](INTENT.md#evidence), [compression tests](projects/enwiki9/tests/run_architecture_groups.py) and [engine tests](tests/test_engine_interface.py) pass.
+Applicable [engine tests](tests/test_engine_interface.py), [translation evidence](INTENT.md#evidence)
+and [algorithm component gates](projects/algorithm_solver/CATSCAN.md#acceptance)
+pass for the changed behavior. Archived [compression evidence](projects/enwiki9/contracts/research/v4/objective-contract.json)
+remains preserved without authorizing execution.
 
 ## Non-goals
 
-- Production JavaScript runtime packaging, cloud model hosting, or unverified marketing claims.
+Production inference/editor hosting, cloud model serving, or unsupported capability claims.
 
 ## Freedom
 
-Any internal algorithm or model training recipe is permitted if it preserves declared run contracts and produces verified scoreboards.
+Any implementation preserving these boundaries and its frozen acceptance contracts.
