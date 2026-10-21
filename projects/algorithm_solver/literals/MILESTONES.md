@@ -84,7 +84,21 @@ autonomous-assembly result. This is progress toward M1, not M1 qualification.
 The next work is reducing fallback and program length while broadening the
 development corpus; preserve each frozen successor and its complete evidence.
 
-## Current checkpoint and next work
+## Latest development expansion
+
+[Scale125-v1](scale125-v1/README.md) freezes 25 additions across seven structural
+families and reaches 125/125 exposed development representations. At 256 entries:
+9,836 selections, median 67, p95 185, 57.84% character bits, 18,253 package bytes.
+Original 100 remain at 6,613 selections; new 25 add 3,223. The bounded dictionary
+search found no further input gain. Both 128/7 and 256/8 arms retain all costs.
+
+M1 is not met. No concrete frozen 500-problem qualification manifest was located
+in current contract records; this is a qualification-population gap, not permission
+to relabel development fitting. The [separate evaluation protocol](scale125-v1/EVALUATION.md)
+preserves all thresholds and protected reservations. Next expansion requires a
+new frozen 125-to-150 stage, with frozen-dictionary transfer measured first.
+
+## Previous 100-problem checkpoint
 
 [Scale100-v1](scale100-v1/README.md) supplies 100 exposed development problems.
 The [matrix successor](matrix-kernels-v1/README.md), building on the qualified

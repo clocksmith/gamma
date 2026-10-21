@@ -8,7 +8,15 @@ results ledger. Completed runs below retain their source, dictionary and executi
 automation, generalization, scale and literature-comparison targets. Targets are
 separate from the measured results below.
 
-**Latest coordinated source/dictionary result:** [matrix traversal](matrix-kernels-v1/README.md)
+**Latest staged expansion:** [100 to 125 development problems](scale125-v1/README.md)
+represents 125/125 with the frozen 256-entry dictionary and qualified source
+normalization: 9,836 selections, median 67, p95 185, 57.84% character bits and
+18,253 package bytes. Shared 100 stay at 6,613 selections; added 25 cost 3,223.
+164 source versions pass 15,272 checks; 1,000 packets and source choices pass an
+independent audit. Bounded relearning found no input improvement. M1 remains unmet;
+no frozen 500-problem qualification population has been established here.
+
+**Previous coordinated source/dictionary result:** [matrix traversal](matrix-kernels-v1/README.md)
 uses 6,613 eight-bit selections on the same 100 exposed problems, median 57,
 p95 148 and 53.20% character bits. Its 14,005-byte package is 25 bytes larger than
 the [window baseline](window-count-v1/README.md). Four rewrites pass 4,584 checks;
