@@ -4,7 +4,25 @@ Start here for source versions, experiments and the working literal languages.
 This is a navigation index over existing manifests and reports, not a second
 results ledger. Completed runs below retain their source, dictionary and execution identities.
 
-[Milestones 1–5](MILESTONES.md) record the agreed compact-library gate and proposed
+## Current goal navigation
+
+[Goals v2](../contracts/algorithm_solver_goals_v2.json) organizes recognition
+(1a–c), exact-string languages/joint optimization (2a/2b), structured languages
+(2c), human studies (3a–c), autonomous assembly/generalization (4a–c), and
+publication-quality research (5a/5b). The [current scorecard](../STATUS.md#current-v2-scorecard)
+holds measurements and ownership. This index remains navigation, not another ledger.
+
+Historical 2a/2b macro and 3a/3b literal IDs in dated experiment records retain
+v1 meanings. The [alias map](../contracts/algorithm_solver_goals_v2.json) maps
+representation to 2a/2b/2c and autonomous evidence to 4a/4b without promoting it.
+[Behavior-preserving joint composition](RESEARCH.md#behavior-preserving-joint-composition)
+permits qualified alternative algorithms while preserving exact successor decoding.
+The [readable family](readable-v1/README.md) is one human-readable policy under
+2a; arbitrary-fragment compression remains a separate policy. Both can use 2b.
+
+## Preserved experiment checkpoints
+
+[Milestones M1–M6](MILESTONES.md) record the agreed compact-library gate and proposed
 automation, generalization, scale and literature-comparison targets. Targets are
 separate from the measured results below.
 
@@ -129,8 +147,9 @@ checks. [Exact strings](pass2/working/packages/shared7/dictionary.json) and
 JavaScript by concatenation. Offline encoding is verified; autonomous selection
 from a description and 3b generalization are untested.
 
-The [six-goal contract](../contracts/literal_composition_goals_v1.json) and
-[ownership handoff](OWNERSHIP.md) remain authoritative. The human user owns 1a/1b;
+The [legacy literal contract](../contracts/literal_composition_goals_v1.json) and
+[ownership handoff](OWNERSHIP.md) retain their frozen meanings;
+[current aliases](../contracts/algorithm_solver_goals_v2.json) reorganize them. The human user owns 1a/1b;
 this index does not import their corpus ledger or modify its admission status.
 
 ## Bounded functional and AST-informed literal comparison
@@ -171,13 +190,15 @@ and all prior baselines remain unchanged.
 
 | Track | Status | Evidence boundary / entry point |
 |---|---|---|
-| 2a/2b parameterized macros | Planned broader vocabulary; existing precursors retained | [Macro contract](../contracts/semantic_macro_goals_v1.json). Separate from flat literals; this index does not requalify precursor results. |
-| 3a flat literals | Passed offline representation and development execution | [Budget comparison](budgets/README.md) and [preserved working guide](pass2/working/README.md); no hidden slots, renaming, dispatch or injected helpers. |
-| 3a readable literals | Small exact-text pilot; qualified source parity | [Readable family](readable-v1/README.md): complete formatted lines and small statements/blocks, three Medium development problems in both languages. Full costs and weak cross-problem reuse disclosed; no typed holes or autonomous claim. |
+| 2c macro representation; 4a/4b macro assembly | Planned broader vocabulary; existing precursors retained | [Macro contract](../contracts/semantic_macro_goals_v1.json). Separate from flat literals; this index does not requalify precursor results. |
+| 2a/2b flat literals | Passed offline representation and development execution | [Budget comparison](budgets/README.md) and [preserved working guide](pass2/working/README.md); no hidden slots, renaming, dispatch or injected helpers. |
+| 2a readable literals | Small exact-text pilot; qualified source parity | [Readable family](readable-v1/README.md): complete formatted lines and small statements/blocks, three Medium development problems in both languages. Full costs and weak cross-problem reuse disclosed; no typed holes or autonomous claim. |
 | Bounded AST preprocessing for literals | Passed for six concrete rewrites | [Rules](pass2/rewrite.cjs), [lineage](pass2/transformations.json), [execution](pass2/execution/report.json). AST parsing selects source rewrites; emitted vocabulary remains flat strings. |
-| AST-backed composition language | Planned proposal only | No implemented language, vocabulary, sequences, execution result or committed experiment claimed. Existing AST preprocessing is not this proposal. Await research/design. |
+| 2c structured composition languages | Local balanced-statement pilot qualified; broader language unestablished | [Current scorecard](../STATUS.md#current-v2-scorecard) distinguishes that three-problem local pilot from existing AST preprocessing and macro evidence. No autonomous claim. |
 | Functional source alternatives for flat literals | Bounded offline experiment passed | [Pass 3](pass3/README.md): guarded functional folds/filter/map and arrow rewrites; no new functional composition language or autonomous claim. |
-| Autonomous known-description assembly / 3b frozen unseen evaluation | Planned; untested | Representation success does not establish either goal. Protected holdouts remain outside this index. |
+| 4a literal known-description assembly / 4b frozen unseen evaluation | Unmeasured for these literal packages | Representation success does not establish either goal. Protected holdouts remain outside this index. |
+| 3a–c human learning and independent solving | Unmeasured | Guided replay and UI checks are mechanism evidence, not participant outcomes. |
+| 4c neural primitives; 5a/5b research quality | Stretch / unmet | [Research protocol](RESEARCH.md) and unchanged [M5/M6 gates](MILESTONES.md) require separate measured evidence. |
 
 Status vocabulary: **planned** has no measured result; **running** requires live
 run evidence; **passed/failed** applies only to the named criterion;

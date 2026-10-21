@@ -1,6 +1,8 @@
 # Research mapping: proposals, not implemented comparisons
 
 [Return to experiment index](INDEX.md). Sources checked 2026-10-20.
+Current organization: [goals v2](../contracts/algorithm_solver_goals_v2.json);
+[scorecard](../STATUS.md#current-v2-scorecard). Historical numbered goals retain v1 meanings.
 
 Our descriptive formulation is **joint semantics-preserving program rewriting
 and bounded static-dictionary compression**. This is a mapping of the existing
@@ -27,14 +29,86 @@ establish equivalence of methods, novelty of this combination, or semantic proof
 for our JavaScript transformations. Existing outputs are supported by explicit
 domain arguments and finite correctness/input-preservation tests.
 
+## Behavior-preserving joint composition
+
+This is current goal **2b**, mapped from the joint-optimization part of legacy
+3a. It does not replace human-readable or compression-first policies under 2a. Its target is a shared
+vocabulary that constructs programs satisfying complete problem contracts.
+The successor may use a different algorithm, data structure, naming scheme or
+control flow; it need not reproduce the predecessor's source bytes. Exact
+literal decoding still reconstructs every byte of the **selected successor**,
+whose hash binds it to its own qualification receipt. Fixed-source reconstruction
+remains a separately identified control and keeps its original evidence.
+
+Compression-first may choose arbitrary exact fragments. Human-readable favors
+recognizable complete lines, statements, blocks and fully counted reusable
+general functions/classes. Both policies can use qualified successor programs;
+readability does not replace compression. Abstract common constructs must become
+counted source pieces and calls in this flat-literal lane. Typed holes, hidden
+operands or nonterminal expansion change the representation and stay separate.
+Current whole-solution exclusions remain; a complete task-specific entrypoint or
+whole algorithm body is not a general helper merely because it is a function.
+
+**Implemented versus missing.** [joint-v1](joint-v1/README.md) already reselects
+among hash-pinned qualified alternatives after exact add/delete/swap/paired
+moves; its source loader verifies qualification and matched interfaces. That
+experiment made zero accepted source switches, not zero implementation of source
+choice. [rewrite-v1](rewrite-v1/README.md) adds bounded capture-checked naming and
+existing qualified helper alternatives, with 12 source switches in its measured
+joint moves. These are concrete source/dictionary methods, not a general
+behavior-equivalence engine. Broad automatic alternative-algorithm generation,
+independent qualification at scale, and autonomous description-to-program
+assembly have not been established. Stored-answer lookup (1a/1b) is separate.
+
+**Qualification before vocabulary credit.** Pin the full input domain and
+observable contract, including outputs and ordering, mutation/alias rules,
+numeric/Unicode/exception behavior, and required time/space complexity. Preserve
+original sources and qualify each successor separately in the existing approved
+isolated judge, using independently established expectations and independent
+review. Differential checks against a valid predecessor can help but do not
+replace the contract or complexity argument. Mutation, alias and numeric
+requirements come from the pinned problem contract, not incidental behavior of
+one reference implementation. Retain counterexamples and failed versions; repair and requalify a new version without filtering failures or
+weakening requirements. Finite tests establish bounded evidence, not universal
+semantic equivalence. An alternative algorithm is permitted only when it meets
+these obligations, including any explicitly required observable mutation/order.
+
+**Matched six/seven/eight-bit comparison.** Extend the existing
+[baseline protocol](BASELINE_PROTOCOL.md), without rewriting its historical run,
+to 64/128/256-entry arms on the same admitted development problems and the same
+qualified variants. Freeze cases, source/candidate pools, codebooks, objectives
+and compute budgets. Within each candidate policy, give all widths and
+source-only/dictionary-only/joint ablations the same information. Treat a change
+of candidate policy or mining budget as an explicit factor. Freeze stable IDs
+per language/profile; unused IDs fail closed. The old mandatory 96-character
+basis cannot fit a 64-entry arm: use an explicitly declared basis and
+reachability-aware scoring, rather than silently omitting unencodable programs.
+This note does not claim that the canonical joint-v1 implementation already
+supports that smaller configuration.
+
+Report coverage with all failures in the denominator; total/median/p95/worst
+selections; payload, padding, framing and control bits; stored dictionary,
+helpers/imports, full decoder and runtime costs; distinct-problem reuse and
+large one-off chunks; correctness/effect/complexity evidence; search time and
+memory. Every operand, binding, wrapper and whitespace byte is charged in the
+selected encoding. No free adapters, raw-source escapes, hidden dispatch or
+per-problem codebooks. Keep input and storage tradeoffs separate. These measures
+can improve without proving human learnability or autonomous solving.
+
+M1–M6 thresholds, historical goal IDs, corpus-admission ownership and protected
+boundaries remain unchanged. Legacy 3b reservations map to current 4b. A goal of solving the whole corpus is a target, not
+current coverage. This documentation addition launches no experiment and
+publishes no new program or private test data.
+
 ## Keep representation boundaries explicit
 
 These are definitions for proposed comparisons, not additional implemented arms:
 
 - **AST-selected fixed snippets:** if the decoder still concatenates exact stored
   strings, the representation remains a flat string dictionary. Our existing AST
-  preprocessing is in this category; a new AST-backed composition language is
-  still only a proposal.
+  preprocessing is in this category; a structured language has different charged semantics under current 2c.
+  The local balanced-statement pilot is tracked in the current scorecard; it
+  does not turn this historical preprocessing into a structured-language result.
 - **Identical whole-subtree reuse:** representing shared subtree identity as graph
   nodes is DAG compression. It changes the representation and must charge its
   structural encoding rather than inherit literal bit costs.

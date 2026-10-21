@@ -4,11 +4,11 @@ Parent: none
 
 ## Need
 
-Machine learning researchers and engineers require reproducible benchmarks, verifiable distillation workflows, and head-to-head model comparisons without subjective metrics or ungrounded claims.
+Researchers and engineers require reproducible model benchmarks, verifiable distillation workflows, and independently measured program composition. Human binary-input fluency and autonomous solving need separate evidence, not inference from representation or interface checks.
 
 ## Target
 
-Provide an empirical evaluation workbench and capability transfer laboratory that produces standardized run contracts, auditable scoreboards, and validated compact model artifacts.
+Provide an empirical evaluation, capability transfer and algorithmic composition laboratory under the [current goal contract](projects/algorithm_solver/contracts/algorithm_solver_goals_v2.json), with standardized run contracts, auditable scoreboards and independently qualified artifacts.
 
 ## Invariants
 
@@ -17,6 +17,7 @@ Provide an empirical evaluation workbench and capability transfer laboratory tha
 - Scoreboard generation is decoupled from execution and safe against in-flight training processes.
 - Experimental research findings in domain lanes never silently promote to repository-wide product claims.
 - Missing datasets, failed probes, or unverified score improvements fail closed at promotion gates.
+- Recognition, reusable representation, human solving and autonomous composition qualify independently; preserve legacy IDs, milestone thresholds and protected reservations. Alternative programs satisfy pinned behavioral and complexity contracts; exact decoding binds the selected source, not an incidental predecessor spelling.
 
 ## Evidence
 

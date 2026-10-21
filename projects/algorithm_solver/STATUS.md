@@ -1,5 +1,112 @@
 # Gamma: Algorithm Recognition & Composition
 
+## Current v2 scorecard
+
+Snapshot: **2026-10-21**. [Goals v2](contracts/algorithm_solver_goals_v2.json)
+organizes the work; [historical v1 status](#historical-v1-status) below retains
+its original measurements and goal meanings. A score is an observed numerator,
+denominator or objective, not a completion percentage inferred from software tests.
+**No family is declared achieved.** “Unmeasured” means no qualifying outcome here,
+not a measured zero success rate. Local receipts below remain local; hashes do not
+make private experiments publicly reproducible.
+
+| Goal / precise outcome | Measured score and evidence date | Gate / next blocking requirement | Actual owner / lane |
+|---|---|---|---|
+| **1a** retrieve a separately qualified known-spec implementation | Historical exact-known service: **2,501/3,288**, 787 abstentions, 244,375 independent checks; description control **13/20**, gate 18/20 (2026-10-20, historical receipts below). These are different tests. | Exact-known serving evidence does not pass the description-recognition gate; qualify the complete intended route. | Human-owned recognition; Jupiter supplies infrastructure. |
+| **1b** one informal answer/abstention, zero questions | Consumed frozen confirmation: **16/36 correct, 2 wrong acceptances, 18 abstentions**, zero questions (2026-10-20, [receipt](findings/recognition-fresh-suby-v1/README.md)). | **Failed** ambiguity behavior; no agreed final coverage threshold. Need a new independently sealed confirmation after development. | Human-owned recognition; no takeover. |
+| **1c** broader qualified coverage and complete latency | New index **72/2,960 = 2.4324%** embedding completion, independently audited 2026-10-21; one document truncated by frozen 1,024-token policy. Historical route p50/p95 **0.664/1.258 s** on the consumed cohort. | Index completion is not retrieval quality or full-text coverage. Complete permitted indexing, headroom review, fresh query scoring and end-to-end timing. | Jupiter coordinator; `index_headroom_review` diagnoses monitoring after a failed successor stage. |
+| **2a** compact versioned exact-string languages | Current qualified live-guide coverage: **150 distinct JS / 50 Python**. Retained matched research benchmark: JS **150/150**, Python **25/25**, 128/7 and 256/8 arms ([2026-10-21 metrics](literals/research-loop-v1/RESULTS.md)). Readable six-bit pilot: **3/3 Medium per language**, JS 63 entries / 81 selections; Python 53 / 57 ([package](literals/readable-v1/README.md)). | Representation checks pass at those scopes; **M1 unmet** below. Local three-graph profiles are not promoted to BITS. Reuse is weak; no 1,000-problem claim. | Jupiter composition lane; no separately running JS/Python optimizer workers in this snapshot. |
+| **2b** jointly choose correct successor algorithms and dictionaries | Eighty-problem rewrite run: **6,413→5,461** selections, 12 source switches, **56,623** checks ([receipt](literals/rewrite-v1/README.md), 2026-10-20). Python 25: original 3,624 / source-only 3,219 / dictionary-only 3,247 / joint **2,684** (2026-10-21). | Bounded methods implemented; general rewrite generation/qualification and broader cost targets unestablished. Successors qualify pinned contracts, not incidental original behavior. | Jupiter composition lane; shared DFS source alternatives in light development, no new executions yet. |
+| **2c** charged macro/AST/editor-action languages | Historical seven reconstructed pairs pass **610 cases + 17 public examples per language**; **97.36%** lexical fallback ([macro receipt](findings/corpus-macro-selection-128-v1/README.md)). Local balanced pilot: **434/434 decoded + 434/434 predecessor + 434/434 differential matches**, 12 effect controls, 56 sandbox calls (2026-10-21). | Mechanism/finite-contract checks passed; operands and controls counted. No semantic-only broad coverage or autonomous result. Compare like-for-like representations before promotion. | Jupiter balanced-statement lane; run complete, no source execution active. |
+| **3a** learn and retain stable mappings | **Unmeasured** participant acquisition/delayed recall; no participant denominator (2026-10-21). | Freeze participants, practice budget, mapping identity, delayed recall and error protocol. 64 slots/readability alone are not evidence. | Human-study lane unassigned; Jupiter retains BITS implementation. |
+| **3b** independently solve unfamiliar problems without guidance | **Unmeasured** unaided human solving; no reserved participant task outcomes (2026-10-21). | Independent tasks and exposure controls, guidance disabled, correctness scored without answer revelation. | Human-study lane unassigned. |
+| **3c** full interaction versus ordinary coding | **Unmeasured** participant time-to-correct, errors/corrections and total input comparisons. BITS release is verified separately below (2026-10-21). | Matched, counterbalanced tasks/tooling and complete interaction accounting; browser automation is not human productivity. | Human-study lane unassigned; Jupiter BITS, Mars release assistance only. |
+| **4a** known-problem autonomous assembly | Historical macro/graph guard **8/10** consumed fit cases, p95 0.296 s; nearest graph **9/10**. Learned candidate **1/10** with two wrong acceptances, rejected (historical 2026-10-20). Literal autonomous assembly **unmeasured**. | No broad pass; M2 remains proposed and unmet. Freeze complete description-to-program first-attempt route; distinguish stored-sequence lookup. | Jupiter composition research; macro/literal evidence separate. |
+| **4b** frozen unseen variants/families | **Unmeasured** qualifying protected outcome; original 66-target reservation preserved (2026-10-21). | Qualify/freeze composer and procedure, then independently reserved variants. Exposed development cannot substitute. | Reserved evaluation; no scoring worker active. |
+| **4c** neural primitive stretch | **Unmeasured** qualifying neural-primitive composition benefit (2026-10-21). | Specify representation, charge model/decoder/operands, satisfy same qualification and reservation gates. No training authorized by taxonomy. | Stretch lane unassigned. |
+| **5a** publication-worthy novel contribution | **No demonstrated M6 pass**. Local methods/negative results exist; public reproducibility is incomplete ([boundary](literals/research-loop-v1/RESULTS.md#publication-and-reproducibility-boundary), 2026-10-21). | Precise contribution, faithful strong baselines, reproducible permitted data, uncertainty and independent critical review. | Jupiter research; independent review not yet assigned. |
+| **5b** literature-leading matched performance | Restricted four-program diagnostic: LP/MIP, rounding and greedy all **1,021 selections**, no superiority ([receipt](literals/research-loop-v1/RESULTS.md#restricted-occurrence-flow-comparator-negative-result), 2026-10-21). | M5 hypothetical targets unmet; need matched applicable systems, complete costs/compute, three independent task sets, two hardware settings and external reproduction. | Jupiter research-comparison lane; no broad superiority run active. |
+
+### M1 gate-by-gate: unchanged qualification requirements
+
+These are the retained **150-JS / 25-Python matched research cohorts**, not a
+claim that these are all admitted sources or that other populations share their
+metrics. Their metadata counts are JS **79 easy / 54 medium / 17 hard** and Python
+**5 / 15 / 5**, from pinned downloaded snapshots in the linked aggregate receipt.
+The three-graph readable pilot has three Medium problems per language and cannot
+replace either denominator. Do not add different cohorts to claim milestone coverage.
+
+| Unchanged M1 gate | Observed matching evidence | Gate status / gap |
+|---|---|---|
+| At least **400/500 frozen problems** | JS 150/150 development; Python 25/25 development. | **Not met**; concrete qualifying frozen 500 population remains unestablished here. Admission is not composition coverage. |
+| At most **256 entries** | 256 entries in both eight-bit arms. | **Met for these subsets only**, not M1 qualification. |
+| **Median ≤32 selections** | JS 72.5; Python 90. | **Not met** in either matched eight-bit arm. |
+| **p95 ≤96 selections** | JS 198; Python 193. | **Not met**. |
+| **Character selection bits ≤10%** | JS 58.037%; Python 45.417%. | **Not met**. |
+| **Zero whole-solution entries** | Zero in the two reported matched arms. | **Met for these subsets only**; preserve each frozen candidate-policy audit. |
+| Matched **128/7 versus 256/8** | JS payload 141,085 versus 98,600 bits; Python 31,976 versus 21,472. | **Comparison completed** on each language's own cohort; do not compare cross-language averages as matched. |
+| Complete source/packet/accounting and correctness evidence | JS package 25,532 versus 22,375 bytes; Python 5,839 versus 5,753. Every packet charges 41 framing bytes; full sources/helpers counted. | The research receipt separately leaves unchanged decoder/deployment footprint unmeasured; no hidden inclusion. Qualifying 500 population and complete final receipt still required. |
+
+The smaller JS storage control is **22,296 bytes / 12,337 selections**, versus
+shared-helper **22,375 / 12,325**; retain both tradeoffs. Existing
+[M1–M6 definitions](literals/MILESTONES.md) and numerical gates are unchanged.
+
+### Current operation and evidence identities
+
+- **Jupiter** is coordinator and Gamma/BITS owner. Active scoped roles at this
+  checkpoint: coordinator, goal/scorecard documentation, `next_assignment_packet`,
+  and shared DFS source-reuse drafting for #547/#841 (#1091 unchanged).
+  The bounded 72→80 successor stopped after 17.77 seconds on disk-accounting
+  freshness: 75 are saved, but only 72 independently audited. Three new worker
+  receipts are clean; the unaudited additions receive no completion credit.
+  No GPU job is running; `index_headroom_review` diagnoses monitoring without
+  automatic restart. No separate JS/Python optimizer is claimed running. Mars is release assistance only; no completed research takeover is claimed.
+- Campaign ledger: **556 accepted implementations; 30 pending**. This is distinct
+  from historical service-catalog entries and composition coverage. Next 20-problem
+  assignment is being recomputed against the newly supplied 98 authored IDs
+  plus 11 additional exposures; provisional #2185/#2511 overlap. No new claims
+  or admissions have been made. Original failures and pending
+  successor qualification stay preserved; no admission follows from this reorganization.
+- Index prefix audit: `prefix72-monitored-independent-audit-v2.json`, SHA-256
+  `e2baa66e0f7f54caade6232353909bc05d083bd2c224a3f4ee54cf923627caa8`:
+  **72/2,960**, exact float32 replay, previous prefix preserved, 60 raw requests /
+  57 files, all eight workers sampled. That audited stage peaked at
+  **7.91 GiB** near the 8 GiB cap. The subsequent stage failed closed as
+  described above; its saved additions do not change the audited score. This is indexing/infrastructure evidence only.
+- Balanced local execution summary SHA-256
+  `9e6281896cb3afe3231e7bd6d23037d9e38c628eb9f9a1f7071655055fc85d86`;
+  434 decoded/predecessor/differential checks, 12 controls, 56 calls. Problem 1091
+  effect rules include permitted discovery marking and exact row identities;
+  evidence is not a generic no-mutation claim or a whole write-event trace.
+- **Current BITS coverage:** 880 literal profile/problem combinations plus 157
+  ASCII guides = **1,037 inventory rows**, not 1,037 distinct problems. Distinct
+  literal coverage is 150 JavaScript / 50 Python; Python difficulty is
+  **10 easy / 30 medium / 10 hard**. Python 50 uses **8,624 selections at 128/7**
+  and **4,675 at 256/8**. With the UI protocol's one control bit per selection,
+  those streams cost **68,992 / 42,075 bits**; this is not the research codec
+  with 41-byte packet headers. Inventory CSV SHA-256
+  `fb635bd24e43f8b6c369803e9e322ebe5b8489c5905317b0a6021b67c61aa888`
+  binds that distinct coverage/format evidence.
+- **BITS live:** commit `7908dcbf95406b658b3e9658fac63ec47bf1f334`, hosting version
+  `04a508eb0dc1013c`, released **2026-10-21T18:36:20.156Z**;
+  `projects/683912546251/sites/one256/channels/live/releases/1792607780156000`.
+  `live-browser-review-001.json` SHA-256
+  `bfecc16e1d17ff63c79b5a8277b5fe5168a51b043f2dbf5c7307fa83fd6f600f` binds
+  the independent live review. Release/UI verification is separate from human
+  fluency, autonomous solving, and the unpromoted local six-bit pilot.
+- **Doppler** remains a separate Jupiter task:
+  `01a15c3b-5570-7e73-936c-1b78c12ca442`, readable and `waitingOnApproval`.
+  The exact pending action is not exposed; no approval or restart is inferred.
+  Gamma documentation and other independent work continue.
+
+## Historical v1 status
+
+The following historical narrative is preserved verbatim after its original H1.
+Its 1a/1b/2a/2b/3a/3b IDs use their original v1 meanings. Historical “current,”
+“next” and ownership statements are dated observations, not today's scheduling.
+Consult the scorecard above and the v2 alias map for current organization.
+
+
 Updated 2026-10-20. All four goals remain the main research lane. Recognition and
 composition qualify independently. The parallel human-composition goal now has a
 bounded 0/1 input mechanism in the existing 256one editor; human steering never
