@@ -173,6 +173,7 @@ and all prior baselines remain unchanged.
 |---|---|---|
 | 2a/2b parameterized macros | Planned broader vocabulary; existing precursors retained | [Macro contract](../contracts/semantic_macro_goals_v1.json). Separate from flat literals; this index does not requalify precursor results. |
 | 3a flat literals | Passed offline representation and development execution | [Budget comparison](budgets/README.md) and [preserved working guide](pass2/working/README.md); no hidden slots, renaming, dispatch or injected helpers. |
+| 3a readable literals | Small exact-text pilot; qualified source parity | [Readable family](readable-v1/README.md): complete formatted lines and small statements/blocks, three Medium development problems in both languages. Full costs and weak cross-problem reuse disclosed; no typed holes or autonomous claim. |
 | Bounded AST preprocessing for literals | Passed for six concrete rewrites | [Rules](pass2/rewrite.cjs), [lineage](pass2/transformations.json), [execution](pass2/execution/report.json). AST parsing selects source rewrites; emitted vocabulary remains flat strings. |
 | AST-backed composition language | Planned proposal only | No implemented language, vocabulary, sequences, execution result or committed experiment claimed. Existing AST preprocessing is not this proposal. Await research/design. |
 | Functional source alternatives for flat literals | Bounded offline experiment passed | [Pass 3](pass3/README.md): guarded functional folds/filter/map and arrow rewrites; no new functional composition language or autonomous claim. |

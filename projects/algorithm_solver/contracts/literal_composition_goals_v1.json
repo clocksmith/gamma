@@ -72,5 +72,17 @@
     "1a": "human user",
     "1b": "human user",
     "3a": "current execution task; scoped literal source/tools/goals only"
+  },
+  "literal_families": {
+    "readable-literals": {
+      "goal": "3a",
+      "name": "Readable literals",
+      "definition": "Exact UTF-8 strings formed from complete formatted lines, statements, reusable functions/classes or balanced blocks; actual identifiers, constants, punctuation, indentation and newlines are charged.",
+      "decoder": "Flat concatenation only; no typed holes, source substitution, free renaming, implicit indentation or hidden expansion.",
+      "distinction": "Structured constructors with typed expression/body holes are a separate representation related to 2a/2b, not a silent change to 3a literals.",
+      "whole_answer_policy": "Do not present a whole answer, its wrapper or a block containing its whole algorithm as a general reusable function/class. Report task-specific large blocks and distinct-problem support explicitly; preserve current whole-program exclusions.",
+      "evidence": "../literals/readable-v1/README.md",
+      "status": "Bounded known-source representation and execution-qualified source parity; no autonomous or unseen claim."
+    }
   }
 }
