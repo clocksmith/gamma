@@ -86,13 +86,14 @@ development corpus; preserve each frozen successor and its complete evidence.
 
 ## Current checkpoint and next work
 
-[Scale100-v1](scale100-v1/README.md) supplies 100/100 exposed development
-problems. The [exact-ranking successor](rank-v1/README.md) uses **6,963 eight-bit
-selections**, median **58.5**, p95 **153**, and **53.37%** character bits. Its
-**14,005-byte** package is larger than the 13,797-byte heap control; worst-case
-input is 234 versus 230. The seven-bit arm improves to 11,558 selections and
-15,750 bytes. All 400 packets independently decode; five moves independently
-replay; source bytes and native qualification are unchanged. M1 is **not met**.
+[Scale100-v1](scale100-v1/README.md) supplies 100 exposed development problems.
+The [matrix successor](matrix-kernels-v1/README.md), building on the qualified
+[window rewrite](window-count-v1/README.md), uses **6,613 eight-bit selections**,
+median **57**, p95 **148**, and **53.20%** character bits. Its **14,005-byte** package
+is 25 bytes larger than the matched window baseline. The seven-bit input candidate
+improves median but worsens storage/tail/fallback; retain the reported alternatives.
+Four source rewrites pass 4,584 checks; 2,800 packets decode independently.
+M1 is **not met**; 100 exposed programs cannot qualify the frozen 500-problem target.
 
 | Milestone | Current evidence | Next decisive work |
 |---|---|---|
