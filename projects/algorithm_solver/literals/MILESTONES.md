@@ -84,6 +84,16 @@ autonomous-assembly result. This is progress toward M1, not M1 qualification.
 The next work is reducing fallback and program length while broadening the
 development corpus; preserve each frozen successor and its complete evidence.
 
+## Latest same-corpus refinement
+
+[Token-boundary proposal refinement](scale150-refine-v1/README.md) represents the
+same 150 development problems with 12,337 eight-bit selections, median 74,
+p95 198, 58.09% character bits and 22,296 package bytes. A matched deeper
+AST/span control reaches 12,738 selections. Both 7/8-bit comparisons, storage
+alternatives and subset regressions are retained; 1,800 packets independently
+decode. This remains far above the M1 cost gates and below its coverage gate.
+No source qualification, protected-data boundary or live dictionary changed.
+
 ## Latest development expansion
 
 [Scale150-v1](scale150-v1/README.md) reaches 150/150 known development
