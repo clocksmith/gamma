@@ -8,6 +8,14 @@ results ledger. Completed runs below retain their source, dictionary and executi
 automation, generalization, scale and literature-comparison targets. Targets are
 separate from the measured results below.
 
+**Latest matching refinement:** [Exact token-boundary proposals](scale150-refine-v1/README.md)
+on the same 150 programs reduce eight-bit selections from 12,790 to 12,337,
+median 77 to 74, p95 205 to 198, and package bytes from 22,773 to 22,296.
+A matched deeper AST/span control reaches 12,738 selections. Both arms pass
+1,800 independent packet/source-choice checks in total; native source hashes
+are unchanged. Original 100 regress by 14 selections; shared 125 improve by 205.
+M1 remains unmet; no live dictionary changed.
+
 **Latest staged expansion:** [125 to 150 development problems](scale150-v1/README.md)
 represents all 150 with 256 entries: 12,790 selections, median 77, p95 205,
 60.43% character bits and a 22,773-byte complete package. The initial three
