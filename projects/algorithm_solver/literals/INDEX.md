@@ -310,3 +310,10 @@ case inventory, mutation policy and storage format matched or explicitly distinc
 No running status, success claim or promotion may come solely from a planned
 command or generated source. Keep 1a/1b ownership and protected evaluation
 boundaries unchanged.
+
+
+## Research feedback loop and matched baselines — 2026-10-21
+
+- [Continuous research loop and M6 discovery gate](RESEARCH_LOOP.md), with M1–M5 unchanged.
+- [Matched source/dictionary baseline protocol](BASELINE_PROTOCOL.md) and [central literature mapping](RESEARCH.md).
+- [Completed JS150/Python25 and restricted flow diagnostic](research-loop-v1/RESULTS.md): methods, aggregates and hash commitments only. This is offline representation evidence; private programs/cases are not redistributed and public corpus reproduction remains incomplete.
