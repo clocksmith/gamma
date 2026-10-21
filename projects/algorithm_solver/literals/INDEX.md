@@ -8,7 +8,16 @@ results ledger. Completed runs below retain their source, dictionary and executi
 automation, generalization, scale and literature-comparison targets. Targets are
 separate from the measured results below.
 
-**Latest staged expansion:** [100 to 125 development problems](scale125-v1/README.md)
+**Latest staged expansion:** [125 to 150 development problems](scale150-v1/README.md)
+represents all 150 with 256 entries: 12,790 selections, median 77, p95 205,
+60.43% character bits and a 22,773-byte complete package. The initial three
+missing-constructor failures are preserved; the successor explicitly encodes
+that support source. All 162 new variants pass 11,878 checks; 1,200 packets and
+source choices pass independent audit. Shared 125 regress by four selections;
+new 25 improve by 408. M1 remains unmet. Corpus admission and a concrete frozen
+500-problem manifest remain qualification dependencies.
+
+**Previous staged expansion:** [100 to 125 development problems](scale125-v1/README.md)
 represents 125/125 with the frozen 256-entry dictionary and qualified source
 normalization: 9,836 selections, median 67, p95 185, 57.84% character bits and
 18,253 package bytes. Shared 100 stay at 6,613 selections; added 25 cost 3,223.

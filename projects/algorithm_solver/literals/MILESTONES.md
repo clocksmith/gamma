@@ -86,6 +86,23 @@ development corpus; preserve each frozen successor and its complete evidence.
 
 ## Latest development expansion
 
+[Scale150-v1](scale150-v1/README.md) reaches 150/150 known development
+representations. The 256-entry input arm uses 12,790 selections, median 77,
+p95 205, 60.43% character bits and 22,773 dictionary-plus-packet bytes.
+All constructor support is encoded. 162 source variants pass 11,878 checks;
+1,200 packets independently decode. Shared 125 change from 9,836 to 9,840
+selections; new 25 cost 2,950. Both 128/7 and 256/8 arms retain full costs.
+
+M1 remains unmet. The current metadata inventory permits at most 363 distinct
+JavaScript problems before further qualification checks, so at least 37 more
+admissions are needed for 400 coverage. Admission remains user-owned. Freeze
+the concrete 500-problem population before milestone qualification; M1 permits
+fitting its familiar source corpus, without opening protected reservations.
+Next: bounded exact dictionary refinement on the same 150, then another frozen
+expansion using only already qualified development material.
+
+## Previous 125-problem expansion
+
 [Scale125-v1](scale125-v1/README.md) freezes 25 additions across seven structural
 families and reaches 125/125 exposed development representations. At 256 entries:
 9,836 selections, median 67, p95 185, 57.84% character bits, 18,253 package bytes.
