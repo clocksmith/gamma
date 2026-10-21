@@ -1,0 +1,1 @@
+function solve(a){let b=0;while(b<a.length&&a[b]===' '){b++;}let c=1;if(a[b]==='+'||a[b]==='-'){if(a[b]==='-'){c=-1;}b++;}const d=c<0?2147483648:2147483647;let e=0;while(b<a.length){const f=a.charCodeAt(b)-48;if(f<0||f>9){break;}if(e>Math.floor((d-f)/10)){return c<0?-2147483648:2147483647;}e=e*10+f;b++;}return e===0?0:c*e;}
