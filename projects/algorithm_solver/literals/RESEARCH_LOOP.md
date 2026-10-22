@@ -25,6 +25,111 @@ This loop can continue while milestones remain unmet; it does not weaken their g
 | Recursive or self-referential dictionary compression | Separate experimental format with explicit expansion semantics, termination conditions, expansion/depth limits and full stored rule/edge/decoder costs. Compare decoded identical sources and complete storage against flat literals. | Recursive/cyclic dictionary expansion changes the representation. It cannot inherit seven/eight-bit flat-literal accounting. If entries are flattened, charge every resulting UTF-8 byte. Runtime recursion inside fully stored JavaScript/Python source remains ordinary counted code, as in the qualified tree-fold experiment. |
 | Ring all-reduce | Only if profiling shows enough independent scoring work and aggregate communication benefit: compare coordination overhead and elapsed search at matched total compute. | Ring all-reduce is distributed aggregation/coordination, not an intrinsic compression method. It provides no vocabulary-quality claim by itself. This is a proposal only; no fleet jobs, connections, services or distributed experiments are launched by these documents. |
 
+## Energy-guided candidate evaluation (goals v2:2a/2b and v2:4c)
+
+Status, 2026-10-21: a local candidate interface, exact-cost baseline and synthetic
+mechanism checks are implemented. No learned energy model has been trained or
+shown to improve solving. The previous proposal below remains the rationale;
+implementation does not inherit its hoped-for outcomes. Canonical goal IDs,
+M1–M6 gates, qualification authority and protected boundaries are unchanged.
+
+The private implementation and immutable receipts are in
+`/home/x/Documents/Codex/2026-10-19/task/gamma-energy-candidate-harness-v1`.
+Its `PROTOCOL.md` supplies the frozen experiment procedure, `smoke-001` records
+24 mechanism tests, 18 synthetic seed/policy/width comparisons and a 32-state
+exhaustive reference. These test the harness, not real problem solving or an EBM.
+The existing [goals](../../../GOALS.md) and [algorithm component charter](../CATSCAN.md)
+remain authoritative; this section is part of the existing research loop, not a
+new competing goal register.
+
+### Two evidence tracks
+
+- **Track A: vocabulary and qualified source-choice optimization.** Repeatedly
+  diagnose costs and failures on exposed development data, design or mine exact
+  pieces, qualify alternative algorithms, then freeze and compare a finite
+  source/library search. Maintain separate compression-first and readable-piece
+  policies at 64/128/256 entries. Exact decoding reconstructs the selected
+  successor, not necessarily the original source.
+- **Track B: composition from descriptions.** Freeze vocabulary, mappings,
+  candidate generator, scorer, search/stopping policy and compute before an
+  independently reserved evaluation. Record first-attempt behavior, abstention,
+  costs and independent correctness. No Track B solver or evaluation is supplied
+  by the current harness. Mapping a supplied correct source to IDs is Track A
+  representation evidence, not autonomous assembly.
+
+### Repeatable candidate-selection procedure
+
+1. Diagnose one failure or cost cluster and state a falsifiable hypothesis.
+   Freeze problem/family/alias/exposure identities, source and contract hashes,
+   qualification receipts, candidate provenance, budgets and promotion criteria
+   before observing the new outcomes.
+2. Compare designed-only, mined-only and combined seeds. Each proposed piece
+   needs exact source witnesses and applicable domain/effect/dependency
+   contracts. A name such as "make a map" does not prove substitutability.
+   Keep dense counters, sparse maps, queue layers and visited/color state distinct
+   where their contracts differ. Unrepresentable seed sets retain their complete
+   problem denominator; no free alphabet or hidden helper makes them pass.
+3. Record a support matrix by distinct problem, source alternative and piece:
+   exact marginal cost, overlap, dependencies and pair complementarity. Use
+   add/delete/swap/rewrite neighborhoods and exact resegmentation. Keep a bounded
+   exhaustive or already-available solver reference for small frozen pools;
+   its bound is not a global semantic optimum.
+4. Independently qualify new full programs before search eligibility. Charge all
+   helper/import/operand/control/framing/decoder bytes. Low energy cannot override
+   output, mutation/alias, numeric, complexity or protected-boundary failures.
+   Preserve invalid, unreachable, high-cost and successful proposals with reasons,
+   source IDs, scorer identity, seed, exact labels and elapsed compute.
+5. Compare neural and non-neural guidance only when both exist, under matched
+   candidate access, exact-evaluation/scorer-call caps and compute, with training
+   and model storage visible. The present comparison computes every proposal's
+   exact cost and tests offline ranking mechanics; it cannot prove search speedup.
+6. Retain coverage/input/storage/readability Pareto tradeoffs, regressions and
+   failed hypotheses. Confirm a proposed gain with a predeclared matched run and
+   independent review before promotion. Readability proxies do not establish
+   human memorability. Publication and BITS export remain separate approvals and
+   deterministic qualification steps.
+
+Repeated feedback is development exposure. Family/near-duplicate separation and
+source/alias leakage checks precede a one-time frozen confirmation gate. Once
+confirmation outcomes influence candidate selection, those examples become
+exposed development in the next immutable version. They cannot be relabeled
+unseen. Track B needs its own untouched population and judge.
+
+A future trainable energy must pin feature inputs, objective, positive/negative
+sampling, source/family splits, model/checkpoint identity and training/scoring
+budgets. The local protocol gives a proposed first ranking objective. A handmade
+cost function, untrained scorer interface or synthetic test is not a trained EBM.
+No model download, expensive training, protected-data opening or automatic
+promotion follows from this documentation.
+
+[Energy-Based Transformers (Gladstone et al., 2025)](https://arxiv.org/abs/2507.02092)
+learn an input/candidate compatibility energy and refine predictions through
+energy minimization. [ALOE (Dai et al., 2020)](https://proceedings.neurips.cc/paper_files/paper/2020/hash/7612936dcc85282c6fa4dd9d4ffe57f1-Abstract.html)
+learns discrete energy models with an auxiliary sampler that mimics local search.
+These motivate a candidate for neural-guided composition under **4c**, and for
+ranking source rewrites or vocabulary moves under **2b**. Neither publication
+establishes a result for Gamma's flat-literal decoder or complete cost objective.
+
+A falsifiable first comparison would replace only the proposal ranking in a
+frozen finite source/library search with learned energy, retaining the same
+legal moves, exact fixed-dictionary parsing, correctness gates and full costs.
+Compare against current non-neural search and an unlearned ranking control under
+matched candidate access, wall time and total compute. Record training cost and
+model storage separately and inclusively; do not hide them in inference-only
+numbers. Freeze vocabulary, permitted source alternatives, seeds, budgets,
+independent splits and evaluation procedure before measuring outcomes. Proposal
+ranking must not see held-out tests or solutions, and exposed development tasks
+cannot become unseen evaluation.
+
+Measure qualified solutions found, full encoding costs, failed proposals,
+search time and memory across seeds. For a later autonomous partial-assembly
+study, independently qualify the complete decoded program from its description;
+ranking an existing supplied answer does not demonstrate autonomous synthesis.
+A low learned energy is neither a correctness certificate nor a global-optimality
+bound. Any gain must survive matched ablations and independent output/effect and
+decoding checks. A future execution contract and resource authorization are
+required before training or running this new method.
+
 ## Completed development evidence
 
 The [aggregate report](research-loop-v1/RESULTS.md) records the matched 150-program

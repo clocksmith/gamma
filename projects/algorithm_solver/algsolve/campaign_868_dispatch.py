@@ -38,7 +38,27 @@ def requires_profile(data, entry):
                 '868 coordinator policy must contain only0868JavaScript')
     return common.key(entry) in policy['entries']
 
+def reject_domain(data, entry):
+    reference = data.get('inputs', {}).get('domain_successor_policy')
+    if reference is None:
+        common.need('domain_successor_installation' not in data.get('inputs', {}),
+                    'Incomplete domain policy installation')
+        return
+    policy = common.check(reference)
+    ids = (764, 765, 775, 777, 778, 779, 785, 787, 793, 795, 804, 807, 1260, 1275, 1287)
+    entries = {f'{number:04d}:{language}' for number in ids
+               for language in ('javascript', 'python')}
+    common.need(policy.get('schema') == 'gamma.domain-successor-policy.v1' and
+                policy.get('profile_id') == 'assigned20-pinned-domain-v2' and
+                policy.get('status') == 'approved' and policy.get('approved_by') == '/root' and
+                type(policy.get('entries')) is dict and set(policy['entries']) == entries and
+                'domain_successor_installation' in data.get('inputs', {}),
+                'Explicit15-pair domain policy required')
+    common.need(common.key(entry) not in entries,
+                'Registered domain successor requires explicit route; legacy downgrade forbidden')
+
 def select(data, entry):
+    reject_domain(data, entry)
     required989 = requires_989(data, entry)
     required = requires_profile(data, entry)
     required1056 = requires_1056(data, entry)
@@ -68,6 +88,7 @@ def select(data, entry):
     return previous.select(data, entry)
 
 def reject_legacy(data, entry, *documents):
+    reject_domain(data, entry)
     common.need(not requires_989(data, entry),
                 "Coordinator989 policy requires version3; downgrade forbidden")
     common.need(not requires_1056(data, entry),
