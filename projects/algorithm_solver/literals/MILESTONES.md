@@ -55,6 +55,22 @@ Jupiter-driven session; see [DRIVER_HANDOFF.md](DRIVER_HANDOFF.md).
 - **Six-bit Jupiter supplement** ([sixbit-v1](sixbit-v1/README.md)): complete. No verdict changes.
   Canonical any-substring coverage also needs 79 entries (solver-proven, not certified).
 
+## Owner direction, 2026-10-22 evening (with Amendment 1)
+
+The sequence is control, then components, then a scorer only after search headroom is shown.
+This is a staged recommendation, not blanket authorization.
+- **First:** the compaction-only control [minify-control-v1](minify-control-v1/FREEZE.md)
+  (original vs minified vs rewritten sources; fixed and refitted dictionaries).
+- **Then:** typed, parameterized components ([structural-v1](structural-v1/DRAFT.md), a draft
+  until the control reports). They are audited for disguised solutions and fully charged, and
+  compared on a development-validation partition. The final held-out set is not reopened
+  after component changes.
+- **Scorer:** no learned scorer before stronger conventional search shows real headroom.
+  Training needs explicit approval.
+- No bit/hex model and no blocked 400-step run.
+- M1 thresholds and M2's non-autoregressive rule are unchanged. Offline representation results
+  do not establish M2 or M3.
+
 ## Measurement rules
 
 - Freeze problem IDs, family/difficulty mix, interfaces, mutation/numerical and
