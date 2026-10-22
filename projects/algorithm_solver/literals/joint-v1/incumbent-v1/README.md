@@ -12,7 +12,7 @@ bytes and decoder storage remain separate reported quantities. This objective
 is not a universal human-usability score or a global-optimality certificate.
 
 `optimizer.py` adds an accepted-state observer to the bounded existing search.
-Its candidate ranking and add/remove/swap moves are unchanged. The shared
+Its historical candidate ranking and default add/remove/swap ordering are preserved. The shared
 [`reachable_core.py`](../reachable_core.py) retains the historical 96-character
 default while allowing an explicit empty mandatory basis and fail-closed
 unreachable-source results. The codec is the existing
@@ -66,3 +66,26 @@ a larger candidate space alone is not a measured gain.
 See `evidence.json` for source and receipt hashes. Private source pools, original
 test bodies, dictionaries and program packets are intentionally external inputs;
 they are not included in this code-and-aggregate checkpoint.
+
+## Canonical six-bit and UTF-8 successor
+
+The supported incumbent adapter now accepts explicit 6/7/8-bit tables and UTF-8
+sources/dictionaries while preserving the unchanged historical codec and exact
+core. Six bits means at most 64 entries, without an implicit character basis or
+raw-source escape. Existing identity, coverage, source-choice and packet gates
+remain in force. Synthetic UTF-8/CRLF controls do not qualify real programs.
+
+`optimize(..., swap_policy="balanced")` optionally distributes the eight swap
+proposals across all four shortlisted additions and removals. The default remains
+`legacy`; this fixes shortlist participation, not a proven compression advantage.
+The earlier source-as-data comparison using an independently implemented
+compatible codec found no retained-cost gain from this policy. It is not a new
+canonical-codec performance result. `exact_evaluations`, `trim_evaluations` and
+occurrence substring scans are now reported separately from proposal trials;
+forward audits, observer validation and complete runtime retain separate costs.
+
+Run `python3 -B test_successor.py` from this directory for 13 focused controls:
+64 versus 65 entries, UTF-8 exact packets, cache/full-DP parity, incumbent retention,
+bounded schedules and canonical packet golden vectors. The unchanged 21 incumbent
+and 30 energy mechanism tests also pass with the canonical codec. No candidate
+program execution, admission, protected evaluation or human-fluency claim follows.

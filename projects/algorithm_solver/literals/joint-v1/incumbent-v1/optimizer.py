@@ -70,15 +70,35 @@ def rank_additions(state, index, pool):
     return [r[-1] for r in sorted(ranks)[:8]]
 
 
-def optimize(sources, initial, pool, coordinated, width, expired, *, max_rounds=3, max_trials=96, observe=None):
+def swap_schedule(additions, removals, policy='legacy'):
+    """Eight deterministic proposals; balanced avoids addition-prefix starvation."""
+    if policy == 'legacy':
+        return list((a, r) for a in additions[:4] for r in removals)[:8]
+    if policy != 'balanced':
+        raise ValueError('Unknown swap policy')
+    if not removals:
+        return []
+    additions = additions[:4]
+    return [(a, removals[(i + offset) % len(removals)])
+            for offset in range(len(removals))
+            for i, a in enumerate(additions)][:8]
+
+
+def optimize(sources, initial, pool, coordinated, width, expired, *, max_rounds=3, max_trials=96, observe=None, swap_policy='legacy'):
     if type(max_rounds) is not int or type(max_trials) is not int or min(max_rounds, max_trials) < 0:
         raise ValueError("Nonnegative integer search bounds required")
+    if swap_policy not in ('legacy', 'balanced'):
+        raise ValueError('Unknown swap policy')
     began = time.process_time()
     index = core.Occurrences(sources)
     current = initial
     states = [initial]
     trace = []
-    parity = trials = forward = 0
+    parity = trials = forward = exact_evaluations = trim_evaluations = 0
+    def evaluate(*args, **kwargs):
+        nonlocal exact_evaluations
+        exact_evaluations += 1
+        return core.evaluate(*args, **kwargs)
     def check(state):
         nonlocal forward
         assert core.audit(sources, state, width)
@@ -97,7 +117,7 @@ def optimize(sources, initial, pool, coordinated, width, expired, *, max_rounds=
             trace.append({'kind': 'coordinated', 'name': name, 'skipped': 'entry cap', 'entries': len(table)})
             continue
         assert table <= set(pool)
-        state = core.evaluate(sources, table, width, mandatory=())
+        state = evaluate(sources, table, width, mandatory=())
         trials += 1
         states.append(state)
         check(state)
@@ -124,11 +144,11 @@ def optimize(sources, initial, pool, coordinated, width, expired, *, max_rounds=
                 return None
             tested.add(identity)
             trials += 1
-            cached = core.evaluate(sources, candidate, width, current, (), index)
+            cached = evaluate(sources, candidate, width, current, (), index)
             if expired():
                 attempts.append({'remove': list(remove), 'add': list(add), 'status': 'expiry-before-parity', 'qualified_trial': False})
                 return None
-            full = core.evaluate(sources, candidate, width, mandatory=())
+            full = evaluate(sources, candidate, width, mandatory=())
             assert core.comparable(cached) == core.comparable(full)
             parity += 1
             states.append(cached)
@@ -148,7 +168,7 @@ def optimize(sources, initial, pool, coordinated, width, expired, *, max_rounds=
         additions = rank_additions(current, index, pool)
         for piece in additions:
             consider(add=[piece])
-        for add, remove in list((a, r) for a in additions[:4] for r in removals)[:8]:
+        for add, remove in swap_schedule(additions, removals, swap_policy):
             consider(remove=[remove], add=[add])
         for pair in list(combinations(additions[:4], 2))[:4]:
             needed = max(0, len(current['vocab']) + 2 - 2**width)
@@ -158,9 +178,11 @@ def optimize(sources, initial, pool, coordinated, width, expired, *, max_rounds=
             check(best)
             used = {p for pid, v in best['chosen'].items() for p in best['parsed'][(pid, v)]}
             if used != set(best['vocab']) and not expired() and trials < max_trials:
-                smaller = core.evaluate(sources, used, width, best, (), index)
+                smaller = evaluate(sources, used, width, best, (), index)
+                trim_evaluations += 1
                 if not expired():
-                    full = core.evaluate(sources, used, width, mandatory=())
+                    full = evaluate(sources, used, width, mandatory=())
+                    trim_evaluations += 1
                     assert core.comparable(smaller) == core.comparable(full)
                     assert smaller['coverage'] == best['coverage'] and smaller['selections'] == best['selections']
                     parity += 1
@@ -182,9 +204,11 @@ def optimize(sources, initial, pool, coordinated, width, expired, *, max_rounds=
     pareto_complete = not expired()
     retained = frontier(states) if pareto_complete else [initial, current]
     return current, {'trials': trials, 'cached_full_parity_checks': parity,
+                     'swap_policy': swap_policy, 'exact_evaluations': exact_evaluations,
+                     'trim_evaluations': trim_evaluations,
+                     'occurrence_substring_scans': index.substring_scans,
                      'forward_audits': forward, 'cpu_seconds': time.process_time()-began,
                      'stop': stop, 'trace': trace, 'max_rounds': max_rounds, 'max_trials': max_trials,
                      'pareto_complete': pareto_complete,
                      'pareto': [{**brief(s), 'choices': s['chosen'], 'dictionary': list(s['vocab'])}
                                 for s in retained]}
-
