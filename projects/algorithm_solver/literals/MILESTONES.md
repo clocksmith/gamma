@@ -20,6 +20,16 @@ develops literal representation and autonomous assembly under 3a/3b.
 | **4. Broad, faster composition** — proposed | Scale useful coverage and reduce input and execution costs without enlarging the vocabulary. | **1,600/2,000 first-attempt correct**, across **≥25 predeclared families**; **≤256 entries**, **median ≤24**, **p95 ≤64 selections**, **≤5%** single-character bits; complete warm **p50 ≤100 ms**, **p95 ≤500 ms**; zero whole-solution entries and zero observed wrong acceptances. |
 | **5. Literature-leading results** — hypothetical | Beat the strongest applicable reproducible methods under matched tasks and requirements. | **≥20% smaller complete encoded packages** than the best applicable compression/library baseline; **≥2× faster complete solving** than the best applicable published compositional baseline; **≥10× faster than a strong autoregressive baseline**, at no lower independent correctness or accepted coverage. Demonstrate on **3 independently constructed task sets**, on **2 hardware configurations**, with **1 independent external reproduction**. Preserve M4 scale and compactness on the algorithm track. |
 
+## Owner decision, 2026-10-22
+
+The owner approved the M1 admission path: list the 363 metadata-eligible JavaScript
+problems with their remaining qualification needs, admit candidates beyond the current
+150 as they pass the normal checks, plan newly qualified solutions for the gap to 500,
+and freeze the 500-problem population before M1 qualification. Also approved: a frozen
+source-rewriting experiment on the 150, then vocabulary search at scale and a held-out
+measure. Thresholds and the protected reservation are unchanged. Work moves to a
+Jupiter-driven session; see [DRIVER_HANDOFF.md](DRIVER_HANDOFF.md).
+
 ## Measurement rules
 
 - Freeze problem IDs, family/difficulty mix, interfaces, mutation/numerical and
