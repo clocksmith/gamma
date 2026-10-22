@@ -30,6 +30,23 @@ source-rewriting experiment on the 150, then vocabulary search at scale and a he
 measure. Thresholds and the protected reservation are unchanged. Work moves to a
 Jupiter-driven session; see [DRIVER_HANDOFF.md](DRIVER_HANDOFF.md).
 
+## 2026-10-22 progress: frozen 500 and shared-style rewrites
+
+- **The 500 are frozen** ([admission500-v1](admission500-v1/README.md),
+  [population-500.json](admission500-v1/evidence/population-500.json)): the 150 earlier
+  development problems, all 213 metadata-eligible candidates from ledger revision 1810 (each
+  passing source, receipt, contract and literal-harness checks), and 137 newly written and
+  independently qualified problems (174 submissions; 37 failures retained). That is 168 easy,
+  281 medium and 51 hard, with 48,405 corpus cases. No M1 measurement preceded the freeze, and
+  the protected 66 stayed closed.
+- **Shared-style rewrites** ([style150-v1](style150-v1/README.md), [style150-v2](style150-v2/README.md)):
+  all 150 rewrites qualify with strict parity. The best joint arm represents the 150 in 9,337
+  eight-bit selections, median 53.5 and p95 141 (previously 12,337, 74 and 198). On 30 problems
+  held out of dictionary fitting, the style cuts selections 13.4%. v1's span proposer scored
+  unchosen variants; v2 fixes it, and both runs are kept.
+- **Next:** [scale500-v1](scale500-v1/FREEZE.md), the first M1 measurement on the frozen 500,
+  with rewrites of the other 350 and a 100-problem held-out slice. Thresholds are unchanged.
+
 ## Measurement rules
 
 - Freeze problem IDs, family/difficulty mix, interfaces, mutation/numerical and
