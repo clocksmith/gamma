@@ -112,10 +112,30 @@ submission fails independent cases is recorded as failed, with logs, and replace
 next problem in its stratum's order. Independent-case feedback is never used to repair a
 solution.
 
-## 4. Freezing the 500
+**Result: 137 of 137 written and qualified** ([evidence/gap-outcomes.json](evidence/gap-outcomes.json),
+contract [evidence/gap-contract.json](evidence/gap-contract.json)). Writers made 174 submissions, one
+per problem. 137 passed all public and independent cases and an independent source review;
+37 failed and were replaced in their stratum order. By difficulty: easy 46 of 56, medium 77 of
+97, hard 14 of 21. Failure causes, from a host-side diagnosis that was never shown to writers:
+28 wrong answers (most on one to six cases), 7 runtime errors and 2 time limits. Two failures
+come from the test data, not the writing: 1592's public examples collapse runs of spaces, so no
+statement-correct output matches them; 784's statement allows any order, but its cases compare
+one order exactly. No review rejected a passing source. The frozen harness also caps the V8 heap
+at 64 MB (`--max-old-space-size=64`). Later writers were told so; the 363 admitted sources passed
+under the same limit.
 
-The 500 is frozen once the 137 new problems are qualified, and before any M1 measurement
-(dictionary fitting or encoding on new problems). The freeze binds IDs, family and difficulty
-mix, interfaces, mutation, numeric and complexity requirements, cases, candidate identity
-and budgets. All 363 stay in the denominator whether or not they qualify. M1 still needs
-400 of 500 independently correct programs at the unchanged compactness gates.
+## 4. The frozen 500
+
+**Frozen 2026-10-22** ([evidence/population-500.json](evidence/population-500.json), sha256
+`0d6cb3ff…`), before any M1 measurement on the 213 admitted or the 137 new problems.
+[`freeze500.py`](freeze500.py) bound it: the 150 earlier development problems, the 213 admitted
+here and the 137 newly written. That is 168 easy, 281 medium and 51 hard, with 48,405 corpus
+cases. Each problem records its admitted source hash, charged helper bytes, entry form, transport
+(9 exact-integer), adapter (23: nested list nodes; 30, 78, 90: unordered outer order), and case
+count and hash. All 500 admitted sources pass all 48,405 cases in the frozen harness.
+
+Requirements for any successor source: the unchanged oracle on every case; strict parity with
+the admitted source's result, type, arguments after the call and alias edges; exact integers;
+and the stage resource limits (finite tests, not a complexity proof). All 500 stay in the M1
+denominator. M1 still needs 400 of 500 at the unchanged compactness gates. The protected
+66-problem reservation was never opened.
