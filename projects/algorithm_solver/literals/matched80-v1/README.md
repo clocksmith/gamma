@@ -2,8 +2,9 @@
 
 Goal v2:2a/2b, Track A development optimization. Frozen **2026-10-21 22:49 EDT**
 at parent `8e9593c3f` before any arm ran. [contract.json](contract.json) pins every
-input by SHA-256 and states each rule below; this page summarizes it. Results go in
-`run-v1/` and a separate report; this commit contains no outcomes.
+input by SHA-256 and states each rule below; this page summarizes it. The design was
+committed at `492ff3c6c` before any arm ran; the [outcome](#outcome-2026-10-21) below
+was added afterwards. Generated tables are in [RESULTS.md](RESULTS.md).
 
 ## Question
 
@@ -71,6 +72,60 @@ python3 -B run.py --output run-v1
 `make_contract.py` wrote `contract.json` once; `designed/build_pool.py` and
 `labels/extract_labels.py` (run on 128 against the pinned raw files) rebuild their
 outputs and also refuse to overwrite.
+
+## Outcome (2026-10-21)
+
+Run on Mars (Python 3.14.2) in 268 s; all 14 jobs completed and no arm reached its time
+limit, so results are fixed by the trial caps. Every one of the 18 arms covers **80/80**
+programs, each packet verified against its qualified hash by the canonical codec. The
+unchanged scale-v2 control reproduced all four stored results with identical
+dictionaries (canonical 16,932 / 7,866; compact 10,155 / 6,413 selections).
+[RESULTS.md](RESULTS.md) has every metric; [results.json](results.json) adds per-tag and
+primary-tag breakdowns, peak memory and inherited joint search costs;
+[preparation.json](preparation.json) records preparation costs.
+
+| Selections | designed | mined | combined | joint (same pool) |
+| --- | ---: | ---: | ---: | ---: |
+| canonical, 128 | 28,607 | 20,063 | 18,940 | - |
+| canonical, 256 | 25,720 | 10,906 | 10,735 | - |
+| compact, 128 | 11,794 | 10,950 | 10,659 | designed 11,754 / mined 10,670 / combined 10,659 |
+| compact, 256 | 11,593 | 7,472 | 7,303 | designed 11,481 / mined 7,468 / combined 7,302 |
+
+Predictions:
+
+1. **Holds.** Combined uses fewer selections than mined on canonical source (-5.6% at
+   128, -1.6% at 256), and also on compact (-2.7%, -2.3%).
+2. **Holds.** A designed-only readable menu costs 1.43x / 2.36x mined selections on
+   canonical source and 1.08x / 1.55x on compact. Designed-only 256-entry arms use more
+   input bits than their 128-entry arms (canonical 205,760 vs 200,249; compact 92,744 vs
+   82,558): a pool of 86 or 41 pieces cannot pay for the eighth bit.
+3. **Fails as measured.** Compact combined arms contain more designed-piece matches
+   than canonical ones (10 vs 5 at 128, 23 vs 12 at 256). The measure classifies entries
+   by text, not by which proposer found them: short compact pieces such as `=0;` and
+   `if(` are also found by mining, and mined-only arms contain such matches too.
+4. **Holds.** Joint arms never lose the fixed incumbent; improvements are 0.0-2.6%.
+   Every joint arm chose compact source for all 80 problems, so gains come from
+   vocabulary moves, not source switching.
+
+**Ranking caveat.** The shared shortlist ranking frozen to keep pools comparable is
+weaker than scale-v2's span-count ranking: the matched mined arms use 7.8-38.6% more
+selections than the stored scale-v2 results, and the best matched arm (joint combined
+256, 7,302) does not improve on the stored 6,413. Pool comparisons are valid under this
+ranking only; whether the designed pool's small gain survives under a stronger ranking is
+untested, because span-count ranking does not apply to designed pieces.
+
+**Failure inspection.** The same programs are costliest in every arm: #1046 (a
+hand-written heap, 634 selections and 76% single characters even in the best arm), #4
+(the only Hard binary search), #824, #976, #844 and #748. Heap operations occur in too
+few problems to meet the two-witness rule. Designed canonical arms spell out recurring
+names (`result`, `items`, `values`) and statement tails (`) {`, `];`); complete readable
+statements are too coarse to recur. Designed compact arms spell out declarations
+(`let b`, `const b`) and block endings, which cannot be identifier-free pieces.
+
+Proposed next steps, not run: make shortlist ranking an explicit matched factor in a new
+frozen experiment; test a finer readable policy (names and statement tails) as a separate
+arm; extend heap and queue support only once more problems witness it. Component checks
+still await independent review; nothing here changes BITS or a live dictionary.
 
 ## Limits
 
