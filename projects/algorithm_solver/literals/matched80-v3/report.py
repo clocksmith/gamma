@@ -102,7 +102,7 @@ def main():
         flag = ' (time limit)' if res['stop'] == 'time_limit' else ''
         return (f"| {name} | {a['selections']:,} | {(a['selections'] - a['reference']['selections']) / a['reference']['selections']:+.2%} | "
                 f"{a['dictionary_bytes']:,} | {a['packet_bytes']:,} | {a['package_bytes']:,} | {d['min']} / {d['median']} / {d['p90']} / {d['max']} | "
-                f"{d['better']} / {d['same']} / {d['worse']} (+{d['largest_increase']}) | {res['trials']:,} | {res['search_seconds']:.0f}{flag} |")
+                f"{d['better']} / {d['same']} / {d['worse']} ({d['largest_increase']:+d}) | {res['trials']:,} | {res['search_seconds']:.0f}{flag} |")
     head = ('| Arm | Selections | vs reference | Dictionary B | Packets B | Package B | Per problem min / median / p90 / max | '
             'Problems better / same / worse (largest increase) | Trials | Seconds |')
     lines = ['# Matched 80, iteration 3 results', '',
