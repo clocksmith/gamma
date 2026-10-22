@@ -91,6 +91,13 @@ and fixed the stale BITS browser specs; deployed to one256, 45 changed public fi
 byte-identical live ([receipt](bits-deploy-receipts/2026-10-22-256one-6eaee4e.json)).
 No profile or bar changed.
 
+2026-10-22: 256one `b4230d2` names every vocabulary "problems · style · width · presses"
+(+ "macros"), offers five in the picker and hides the 7-bit JS150, readable JS150 and
+Python 50 variants (each needs more presses than its 8-bit sibling on the same problems;
+they stay loadable and replayable). Input-tree tiles preview literal text. Deployed; 44
+changed public files byte-identical live
+([receipt](bits-deploy-receipts/2026-10-22-256one-b4230d2.json)). No profile or bar changed.
+
 Not promoted: matched80-v2 8-bit (6,360, -0.83%) and every matched80-v1 arm.
 
 JavaScript 150, Python 50 and readable JavaScript 150 slots keep their published
