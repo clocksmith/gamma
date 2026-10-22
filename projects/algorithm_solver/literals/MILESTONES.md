@@ -44,8 +44,16 @@ Jupiter-driven session; see [DRIVER_HANDOFF.md](DRIVER_HANDOFF.md).
   eight-bit selections, median 53.5 and p95 141 (previously 12,337, 74 and 198). On 30 problems
   held out of dictionary fitting, the style cuts selections 13.4%. v1's span proposer scored
   unchosen variants; v2 fixes it, and both runs are kept.
-- **Next:** [scale500-v1](scale500-v1/FREEZE.md), the first M1 measurement on the frozen 500,
-  with rewrites of the other 350 and a 100-problem held-out slice. Thresholds are unchanged.
+- **First M1 measurement on the frozen 500** ([scale500-v1](scale500-v1/README.md)): **M1 not met.**
+  All 350 rewrites of the other problems qualify. The best arm (256 entries, 8 bits, ILS) uses
+  43,065 selections, median 63.5, p95 191, 54% single-character, with no whole-solution
+  entries; the gates are 32, 96 and 10%. Against the admitted sources the rewrites cut
+  selections 66%, mostly because they are about 3x shorter (bytes per selection rise only
+  2.67 to 2.97). Dictionaries fitted on 400 problems cost only 1-3% more on the 100 held out
+  of fitting. ILS adds under 1%, so the remaining gap needs a different representation, not
+  more search. All five predictions were met as frozen.
+- **Six-bit Jupiter supplement** ([sixbit-v1](sixbit-v1/README.md)): complete. No verdict changes.
+  Canonical any-substring coverage also needs 79 entries (solver-proven, not certified).
 
 ## Measurement rules
 
