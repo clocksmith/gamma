@@ -63,8 +63,13 @@ def main():
         if m['experiment'] != 'A':
             continue
         lower = c.get('min_entries_at_least')
-        verdict = 'no (certified)' if c.get('six_bit_exact_coverage_impossible') else ('yes' if c.get('entries', 999) <= 64 else 'unresolved')
-        lines.append(f"| {label} | {m['job']} | {fmt(lower)} | {fmt(c.get('entries'))} | {'yes' if c.get('optimum_proven') else 'no'} | {verdict} | "
+        milp = m.get('milp') or {}
+        # No certificate (the LP hit its limit) but HiGHS closed the MILP: the optimum rests on the solver alone.
+        solver_only = lower is None and milp.get('status') == 0 and milp.get('mip_gap') == 0 and c.get('entries') is not None
+        proven = 'yes' if c.get('optimum_proven') else ('solver only (gap 0), not certified' if solver_only else 'no')
+        verdict = ('no (certified)' if c.get('six_bit_exact_coverage_impossible') else 'yes' if c.get('entries', 999) <= 64
+                   else 'no (solver only, not certified)' if solver_only else 'unresolved')
+        lines.append(f"| {label} | {m['job']} | {fmt(lower)} | {fmt(c.get('entries'))} | {proven} | {verdict} | "
                      f"{category(run, m['job'])} ({macro.get((run, m['job']), {}).get('macro_entries', '-')} / {near(run, m['job'])}) | {solver(m['lp'])} | {solver(m.get('milp'))} |")
     lines += ['', '## B: maximum coverage with 64 entries', '',
               '| Run | Job | Covered | Certified coverage upper bound | Selections | Presses (x7) | Package bytes | Median / p95 / max | Category | Phase 1 | Phase 2 |',

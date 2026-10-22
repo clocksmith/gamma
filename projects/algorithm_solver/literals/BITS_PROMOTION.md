@@ -111,7 +111,10 @@ entries, at 88,207 presses against 36,621 for live 8-bit on those 64. The separa
 specified escape codec needs at least 75,925 presses for primitive dictionaries, against
 55,449 for live 8-bit v2; its any-substring result (24,613 presses) depends on macro and
 near-whole-program entries and is reported only in the macro category. The Jupiter
-compute supplement for the unresolved jobs is still running. Note: the 256one macro
+compute supplement (2026-10-22) changes no verdict. Canonical any-substring also needs 79
+entries (solver-proven, gap 0, not independently certified). Any-substring coverage of 64 programs
+needs 12,216 selections at best (85,512 presses, optimal, against 37,809 for live 8-bit v2 on those
+programs). The other two jobs replicate. Note: the 256one macro
 classifier flags only definitions that close inside an entry; near-whole-program entries
 that stop before the final brace are not flagged, which matters for any-substring
 experiments but not for the live joint80 profiles (entries at most 27 bytes).

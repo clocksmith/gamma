@@ -15,6 +15,8 @@ program and at least half its length (a reporting addition).
 | Mars (frozen) | a-u-compact | 79 | 79 | yes | no (certified) | macro (1 / 11) | optimal, 275 s | optimal, 253 s |
 | Mars (frozen) | a-w-canonical | 92 | 92 | yes | no (certified) | primitive (0 / 0) | optimal, 709 s | optimal, 1,829 s |
 | Mars (frozen) | a-w-compact | 92 | 92 | yes | no (certified) | primitive (0 / 0) | optimal, 68 s | optimal, 45 s |
+| Jupiter (supplement) | a-u-canonical | - | 79 | solver only (gap 0), not certified | no (solver only, not certified) | macro (11 / 11) | time limit, 7,200 s | optimal, 6,591 s |
+| Jupiter (supplement) | a-w-canonical | 92 | 92 | yes | no (certified) | primitive (0 / 0) | optimal, 1,150 s | optimal, 2,044 s |
 
 ## B: maximum coverage with 64 entries
 
@@ -22,6 +24,7 @@ program and at least half its length (a reporting addition).
 | --- | --- | ---: | ---: | ---: | ---: | ---: | --- | --- | --- | --- |
 | Mars (frozen) | b-u-compact | 64 | 64 | 12,574 | 88,018 | 13,091 | 176.0 / 409 / 472 | macro | optimal, 1,235 s | time limit, 1,807 s |
 | Mars (frozen) | b-w-compact | 64 | 64 | 12,601 | 88,207 | 12,534 | 174.5 / 408 / 471 | primitive | optimal, 722 s | optimal, 1,540 s |
+| Jupiter (supplement) | b-u-compact | 64 | 64 | 12,216 | 85,512 | 13,100 | 174.5 / 408 / 471 | macro | optimal, 1,187 s | optimal, 2,895 s |
 
 Same covered programs, live profiles (presses = selections x frame width):
 
@@ -31,6 +34,8 @@ Same covered programs, live profiles (presses = selections x frame width):
 | | uncovered | #4, #7, #9, #62, #67, #69, #387, #657, #682, #709, #748, #844, #892, #917, #929, #1046 | | | |
 | Mars (frozen) | b-w-compact | 88,207 | 38,061 | 36,621 | 53,112 |
 | | uncovered | #4, #7, #9, #67, #387, #551, #657, #682, #709, #748, #824, #844, #892, #917, #929, #1046 | | | |
+| Jupiter (supplement) | b-u-compact | 85,512 | 39,483 | 37,809 | 54,744 |
+| | uncovered | #4, #7, #62, #67, #69, #387, #551, #657, #682, #709, #806, #824, #844, #917, #929, #1046 | | | |
 
 ## C: literal-escape6-v1 (63 entries + ESC, all 80 programs)
 
@@ -38,12 +43,15 @@ Same covered programs, live profiles (presses = selections x frame width):
 | --- | --- | ---: | ---: | ---: | ---: | --- | --- | --- |
 | Mars (frozen) | c-u-compact | 24,613 | 24,166 | 199 | 1,548 | 23,296 / 21,760 | macro (22 / 59) | optimal, 2,802 s |
 | Mars (frozen) | c-w-compact | 75,925 | 75,925 | 8,485 | 1,102 | 13,492 / 11,956 | primitive (0 / 0) | optimal, 1,878 s |
+| Jupiter (supplement) | c-u-compact | 24,613 | 24,166 | 199 | 1,548 | 23,296 / 21,760 | macro (22 / 59) | optimal, 2,090 s |
 
 Whole-cohort presses of live profiles: 8-bit v1 (bar at freeze) 57,717; 8-bit v2 (live now) 55,449; 7-bit v2 (live) 79,280.
 
 Mars (frozen) c-u-compact escaped characters: '\n' ' ' '!' '%' '&' "'" '(' ')' '*' '+' ',' '-' '.' '/' '0' '1' '2' '3' '5' ';' '<' '=' '>' 'A' 'L' 'M' '[' ']' '^' 'a' 'b' 'c' 'd' 'e' 'f' 'g' 'h' 'i' 'j' 'l' 'm' 'n' 'o' 'p' 'r' 's' 't' 'u' 'w' 'x' '{' '|' '}'
 
 Mars (frozen) c-w-compact escaped characters: '!' '$' '%' '&' '*' '/' '2' '3' '4' '5' '6' '7' '8' '9' ':' '>' '?' '@' 'A' 'B' 'C' 'D' 'E' 'F' 'G' 'H' 'I' 'J' 'K' 'L' 'M' 'N' 'O' 'P' 'Q' 'R' 'S' 'T' 'U' 'V' 'W' 'X' 'Y' 'Z' '\\' '^' 'k' 'm' 'o' 'p' 'q' 'r' 't' 'u' 'v' 'w' 'x' 'y' 'z' '{' '|' '}'
+
+Jupiter (supplement) c-u-compact escaped characters: '\n' ' ' '!' '%' '&' "'" '(' ')' '*' '+' ',' '-' '.' '/' '0' '1' '2' '3' '5' ';' '<' '=' '>' 'A' 'L' 'M' '[' ']' '^' 'a' 'b' 'c' 'd' 'e' 'f' 'g' 'h' 'i' 'j' 'l' 'm' 'n' 'o' 'p' 'r' 's' 't' 'u' 'w' 'x' '{' '|' '}'
 
 ## Per-problem counts (Mars run-v1, compact)
 
