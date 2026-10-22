@@ -1,8 +1,17 @@
-# Jupiter supplement: in progress (handoff)
+# Jupiter supplement: complete
 
 Declared in [FREEZE-jupiter.md](FREEZE-jupiter.md) (commit `542187a26`) before its
 targets' Mars results were seen. Mars `run-v1` is the frozen record and is committed and
 verified; this run adds compute only. Handed off on 2026-10-22 while still running.
+
+**Complete (2026-10-22).** The process exited at 14:06 EDT with all four jobs logged and all
+four manifests written. `verify_amended.py run-jupiter-v1` passed in the scratch clone and
+again in the shared checkout. `run-jupiter-v1` is committed beside `run-v1`, and the verdicts
+are in [README.md](README.md) and [RESULTS.md](RESULTS.md). Job times: a-u-canonical
+13,792 s, b-u-compact 4,740 s, c-u-compact 3,773 s, a-w-canonical 3,195 s. a-u-canonical's LP
+hit its 7,200 s limit, so it has no certificate.json. Its 79-entry optimum is the MILP's
+(gap 0) and is not independently certified. The steps below are kept as the record of how
+the run was collected.
 
 ## Where it runs
 

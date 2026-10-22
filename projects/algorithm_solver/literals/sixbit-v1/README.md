@@ -3,8 +3,8 @@
 Design: [FREEZE.md](FREEZE.md) (frozen at `2bd349e51` before any job ran) and the
 [Jupiter compute supplement](FREEZE-jupiter.md) (declared at `542187a26` before its
 targets' results were seen). Codec C: [ESCAPE6.md](ESCAPE6.md). All numbers:
-[RESULTS.md](RESULTS.md). Supplement status: [JUPITER_HANDOFF.md](JUPITER_HANDOFF.md)
-(running; not yet reported).
+[RESULTS.md](RESULTS.md). The Jupiter supplement `run-jupiter-v1` finished on 2026-10-22 and is
+recorded below ([JUPITER_HANDOFF.md](JUPITER_HANDOFF.md), complete).
 
 ## Outcome (2026-10-22, from the frozen Mars run `run-v1`)
 
@@ -18,7 +18,7 @@ from the stored potentials over every eligible substring, without trusting the s
 | Sources | Rule W (witnessed) | Rule U (any substring) |
 | --- | --- | --- |
 | compact | minimum 92 entries (certified, optimal) | minimum 79 entries (certified, optimal) |
-| canonical | minimum 92 entries (certified, optimal) | unresolved on Mars: LP hit 1,800 s; best vocabulary 562 entries |
+| canonical | minimum 92 entries (certified, optimal; replicated on Jupiter) | Mars: unresolved (LP hit 1,800 s; best vocabulary 562 entries). Jupiter supplement: 79 entries, optimal by the solver (MILP gap 0), not independently certified |
 
 Assumptions behind "impossible":
 - Entries are literal strings and a program must be their exact concatenation, as in the
@@ -30,14 +30,22 @@ Assumptions behind "impossible":
   entries: the U optimum uses 11 of them. The bound of 79 therefore holds for every literal
   vocabulary, macros included.
 
+Canonical U, from the Jupiter supplement: HiGHS closed the MILP at 79 entries (dual bound 79,
+gap 0, 6,591 s), so 64 entries are not enough there either. Its LP hit the 7,200 s limit and left
+no potentials, so verify_amended.py has no certificate to recompute. Unlike the other three A
+results, this one rests on the solver. The vocabulary itself is checked: every entry obeys rule
+U and all 80 programs segment over it.
+
 The minimum is decided by segmentation, not character counts. 92 distinct characters
 alone would not prove the bound, since multi-character entries can hold several.
 
 **B. 64 entries cover at most 64 of the 80 programs under either rule (certified).**
 - W (primitive): 64 programs in 12,601 selections, which is optimal. That is 88,207
   presses, against 36,621 for the live 8-bit profile on the same 64 programs.
-- U (macro category): also 64 programs, in 12,574 selections. Phase 2 hit its limit, so
-  this count is not proven optimal.
+- U (macro category): also 64 programs. Mars phase 2 hit its limit at 12,574 selections
+  (not proven). The Jupiter supplement solved it: 12,216 selections (85,512 presses), optimal.
+  Its 64 programs differ from the W set (uncovered #4 #7 #62 #67 #69 #387 #551 #657 #682 #709
+  #806 #824 #844 #917 #929 #1046); live 8-bit v2 needs 37,809 presses on them.
 - Uncovered under W: #4 #7 #9 #67 #387 #551 #657 #682 #709 #748 #824 #844 #892 #917 #929
   #1046.
 
@@ -46,7 +54,7 @@ alone would not prove the bound, since multi-character entries can hold several.
   escapes. This is the minimum for any 63-entry W dictionary under literal-escape6-v1,
   so it cannot reach the bar at freeze (57,717) or the live 8-bit v2 (55,449). It does
   use fewer presses than live 7-bit v2 (79,280).
-- U: 24,613 presses, optimal, certified lower bound 24,166. This comes from macro entries:
+- U: 24,613 presses, optimal, certified lower bound 24,166 (replicated exactly on Jupiter). This comes from macro entries:
   22 entries meet the BITS macro rule and 59 of the 63 are near-whole programs. It is
   reported in the macro category and, per [BITS_PROMOTION.md](../BITS_PROMOTION.md), not
   compared with primitive bars.
@@ -54,7 +62,8 @@ alone would not prove the bound, since multi-character entries can hold several.
 Predictions:
 - P1 (W-strict cannot cover #709, #917, #929) holds analytically.
 - P2 holds.
-- P3 holds for compact; canonical U is unresolved.
+- P3 holds for compact (certified). For canonical U it holds on the Jupiter supplement by the
+  solver's proof (79 > 64), not by an independent certificate.
 - P4 holds: 64 < 80, and W covers exactly as many as U.
 - P5 holds for W. As stated, it fails for U (24,613 < 57,717), but only through macro
   entries, which the macro rule excludes from that comparison.
