@@ -47,10 +47,20 @@ Read it with [MILESTONES.md](MILESTONES.md), [RESEARCH_LOOP.md](RESEARCH_LOOP.md
   about 3 bytes per selection. Scale150: 12,337 selections, median 74, p95 198, 58%.
 - **matched80-v3** finished: 8-bit promoted; 7-bit 9,784 not promoted; readable units
   recorded on their own scorecard.
-- **sixbit-v1** (A exact coverage, B max coverage, C escape codec) is in progress: the
-  frozen Mars run `run-v1` plus a declared Jupiter compute supplement (`542187a26`).
-  Its results commit belongs to the agent that froze it; `6035206e1` was an incomplete
-  third-party snapshot of that run, not its results.
+- **sixbit-v1** verdicts from the frozen Mars run are committed (`c914c5a3a`,
+  [RESULTS.md](sixbit-v1/RESULTS.md)): 64 entries cannot cover the 80 (certified minima
+  92 witnessed, 79 any-substring); at most 64 of 80 fit; the escape codec needs at least
+  75,925 presses for primitive dictionaries. No six-bit slot opens. `6035206e1` was an
+  incomplete third-party snapshot, completed by `5b176bb6b`.
+- **Your first pickup:** the six-bit Jupiter compute supplement is still running
+  detached (PID 1985600, started 10:19 EDT, worst case about 6 h for A/C jobs and 10 h
+  for B). Follow [sixbit-v1/JUPITER_HANDOFF.md](sixbit-v1/JUPITER_HANDOFF.md) to check
+  completion, verify with `verify_amended.py`, copy `run-jupiter-v1` into the shared
+  checkout, commit, and update RESULTS.md and BITS_PROMOTION.md.
+- **Open item:** 256one `public/labs/two-button/macro-entries.js` flags only definitions
+  that close inside an entry; near-whole-program entries that stop before the final
+  brace pass as primitive. Tighten it before trusting macro labels on any-substring
+  experiments (live joint80 profiles are unaffected: entries are at most 27 bytes).
 
 ## Working rules learned here
 
