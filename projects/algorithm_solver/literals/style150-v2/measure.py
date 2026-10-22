@@ -68,7 +68,7 @@ def main():
     jobs = [j for j in m1.jobs(a.work.resolve(), a.output.resolve(), c, None) if j['name'].split('-')[0] in c['arms2']]
     start = time.monotonic()
     with concurrent.futures.ProcessPoolExecutor(a.parallel, initializer=_patch) as pool:
-        results = list(pool.map(m1.run_arm, jobs))
+        results = list(pool.map(run, jobs))
     write(a.output / 'results.json', {'contract_sha256': sha((HERE / 'contract.json').read_bytes()), 'seconds': time.monotonic() - start, 'arms': results})
     for r in results:
         s = r['all150']
@@ -78,6 +78,12 @@ def main():
 
 def _patch():
     v3.hybrid_proposer = hybrid_chosen
+
+
+def run(job):
+    """Picklable worker entry (the v1 module is loaded dynamically and cannot be pickled by reference)."""
+    _patch()
+    return m1.run_arm(job)
 
 
 if __name__ == '__main__':
