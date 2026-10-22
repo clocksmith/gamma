@@ -103,6 +103,19 @@ Not promoted: matched80-v3 7-bit (best 9,784, -1.27%, bar 9,711); matched80-v3 r
 arms (separate scorecard, no live readable 80 slot; the best needs 73,503 presses against
 57,717); matched80-v2 8-bit (6,360, -0.83%) and every matched80-v1 arm.
 
+Six-bit ([sixbit-v1](sixbit-v1/RESULTS.md), frozen Mars run, 2026-10-22): no six-bit slot
+opens. Exact segmentation proves 64 literal entries cannot cover the 80 compact programs
+(certified minima 92 under the witnessed rule and 79 under any-substring entries, which
+admit even near-whole-program macros). At most 64 of 80 programs fit in 64 witnessed
+entries, at 88,207 presses against 36,621 for live 8-bit on those 64. The separately
+specified escape codec needs at least 75,925 presses for primitive dictionaries, against
+55,449 for live 8-bit v2; its any-substring result (24,613 presses) depends on macro and
+near-whole-program entries and is reported only in the macro category. The Jupiter
+compute supplement for the unresolved jobs is still running. Note: the 256one macro
+classifier flags only definitions that close inside an entry; near-whole-program entries
+that stop before the final brace are not flagged, which matters for any-substring
+experiments but not for the live joint80 profiles (entries at most 27 bytes).
+
 JavaScript 150, Python 50 and readable JavaScript 150 slots keep their published
 guide-export numbers in [guides-qualified-v1](guides-qualified-v1/README.md); all six of
 those profiles are macro category, so a primitive candidate on those cohorts opens a
