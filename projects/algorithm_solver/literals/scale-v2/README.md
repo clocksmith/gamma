@@ -96,6 +96,8 @@ reuse 6,759 cases. Three source versions repeat these cases. Expected results
 stay outside the Linux sandbox. Rewrites must match independent outputs and
 the original's input effects. These are finite domain tests, not formal
 equivalence, official judge acceptance, or maximum-size execution qualification.
+A [fresh-copy rerun](qualification-rerun-v1/README.md) on 2026-10-21 reproduced
+these counts, hashes and all 510 observation files; only per-call times differed.
 
 The [independent packet audit](audit.json) decodes **960** selected/control
 packets, checks source/qualification identities and byte costs, and checks raw
