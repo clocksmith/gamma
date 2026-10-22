@@ -11,7 +11,12 @@ import tempfile
 sys.dont_write_bytecode = True
 if hasattr(os, "sched_getaffinity"):
     os.sched_setaffinity(0, {min(os.sched_getaffinity(0))})
-resource.setrlimit(resource.RLIMIT_AS, (256 * 1024 * 1024,) * 2)
+if sys.platform == 'darwin':
+    # macOS refuses an address-space cap below the interpreter's existing mappings.
+    print('test_incumbent: 256 MiB RLIMIT_AS NOT ENFORCED on macOS; '
+          'memory-limit evidence requires Linux', file=sys.stderr)
+else:
+    resource.setrlimit(resource.RLIMIT_AS, (256 * 1024 * 1024,) * 2)
 resource.setrlimit(resource.RLIMIT_CPU, (10, 10))
 HERE = Path(__file__).resolve().parent
 spec = importlib.util.spec_from_file_location('incumbent_under_test', HERE / 'incumbent.py')
