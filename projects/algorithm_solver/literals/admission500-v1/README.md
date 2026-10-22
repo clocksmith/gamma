@@ -57,7 +57,27 @@ Mechanics were checked beforehand on development problem 136 (already admitted):
 with a wrong-method negative control failing.
 
 A failing problem stays in the 363 denominator with its logs and is not replaced; at most
-one separately frozen packaging or adapter repair may follow. Results: pending.
+one separately frozen packaging or adapter repair may follow.
+
+**Result: 213 of 213 admitted** ([evidence/admitted-213.json](evidence/admitted-213.json)).
+
+| Attempt | Problems | Qualified | Cases passed | Wall time |
+| --- | ---: | ---: | ---: | ---: |
+| 001, frozen stage ([report](evidence/qualification-attempt-001.json)) | 213 | 207 | 20,184 / 20,260 | 27.6 s |
+| 002, exact-integer transport ([contract](evidence/repair-contract-002.json), [report](evidence/qualification-attempt-002.json)) | 6 | 6 | 553 / 553 | 1.1 s |
+
+The six attempt-001 failures (633, 670, 738, 868, 989, 1056) are the problems the corpus
+qualified under exact-integer runtime profiles. The literal harness passed every integer as
+a JSON Number, which loses precision above 2^53−1 (and 633's source takes BigInt). Attempt
+002, frozen and committed before it ran, changes input transport only: 633 receives BigInt
+and the other five receive BigInt above 2^53−1, decoded by
+[`harness-exact-integer.cjs`](harness-exact-integer.cjs), which differs from the frozen
+harness by one decoder line. Sources, cases, expected values and the oracle are unchanged;
+attempt 001 is preserved. Later rewrite experiments must run these six with the same
+transport.
+
+The 363 are therefore all qualified literal development problems: the 150 earlier stages
+plus these 213. This is representation material with prior exposure, not unseen data.
 
 ## 3. Gap to 500: 137 newly written problems
 
@@ -65,7 +85,10 @@ one separately frozen packaging or adapter repair may follow. Results: pending.
 ([evidence/gap-selection.json](evidence/gap-selection.json)). Eligible problems are pending
 at both revision 1810 and the current snapshot (1873), unclaimed, unreserved, functional,
 outside the protected IDs and families, outside the 363 and their families, and have a
-hash-valid independent set of at least 20 cases: 1,503 problems. Quotas follow the 363's mix:
+hash-valid independent set of at least 20 cases: 1,503 problems.
+[Amendment 001](evidence/gap-amendment-001.json), made before any solution was written,
+skips problems whose cases expect non-finite values (Python `inf`), which the frozen harness
+rejects whatever the solution: 3132 and 2817 (both medium), replaced in order. Quotas follow the 363's mix:
 **46 easy, 77 medium, 14 hard**. Order within each stratum is sha256 of the seed
 `gamma-admission500-gap-v1` plus the problem UID; the first quota are selected and the next
 three times quota are the replacement order.
