@@ -250,3 +250,11 @@ source drift, missing exposure authorities, overlap and changed exposure invento
 Metadata-compatible interfaces are not proof of executable target support; all
 unsupported members stay in fixed-pool coverage. Neither this command nor the
 reservation launches training, search, teachers or protected scoring.
+
+
+## Cleared authoring artifact preparation
+
+[Authoring artifact tools](AUTHORING_ARTIFACTS.md) organize explicitly supplied
+source variants and witnesses without qualification or admission. The
+[Python block inventory](literals/block-inventory-v1/README.md) adds complete
+statement/block candidates with conditional contracts, not semantic equivalence.

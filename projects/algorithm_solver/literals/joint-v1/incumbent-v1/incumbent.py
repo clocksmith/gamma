@@ -32,14 +32,14 @@ def require(condition, reason):
 
 
 def table_bytes(strings):
-    pieces = [s.encode('ascii') for s in strings]
+    pieces = [s.encode('utf-8') for s in strings]
     return b'LTD1' + len(pieces).to_bytes(4, 'big') + b''.join(len(p).to_bytes(4, 'big') + p for p in pieces)
 
 
 def validate_table(strings, sources, pool, width):
-    require(type(width) is int and width in [7, 8], 'width outside frozen successor')
+    require(type(width) is int and width in [6, 7, 8], 'width outside supported successor')
     require(strings and len(strings) == len(set(strings)) <= 2 ** width, 'entry cap / duplicate / empty table')
-    require(all(type(p) is str and p and p.isascii() for p in strings), 'invalid literal')
+    require(all(type(p) is str and p for p in strings), 'invalid literal')
     require(set(strings) <= set(pool), 'literal outside frozen candidate pool')
     require(not set(strings).intersection(s for vs in sources.values() for s in vs.values()), 'whole-program entry')
 
@@ -57,7 +57,7 @@ def validate_payload(descriptor, expected, manifest, dictionary, packets, source
     require(expected['problem_ids'] == sorted(sources, key=int), 'problem denominator mismatch')
     require(set(fixed_choices) == set(sources), 'fixed source choices incomplete')
     width = expected['width']
-    strings = [p.decode('ascii') for p in codec.decode_dictionary(dictionary)]
+    strings = [p.decode('utf-8') for p in codec.decode_dictionary(dictionary)]
     validate_table(strings, sources, pool, width)
     require(strings == sorted(strings), 'noncanonical dictionary ID ordering')
     require(manifest['language'] == expected['language'] and manifest['width'] == width, 'manifest language / width')
@@ -74,11 +74,11 @@ def validate_payload(descriptor, expected, manifest, dictionary, packets, source
         require(p['represented'] is True, 'incomplete incumbent coverage')
         variant = p['variant']
         require(variant == fixed_choices[pid] and variant in sources[pid], 'unqualified or mismatched source variant')
-        source = sources[pid][variant].encode('ascii')
+        source = sources[pid][variant].encode('utf-8')
         require(sha(source) == p['source_sha256'] and len(source) == p['source_bytes'], 'source hash / length mismatch')
         packet = packets[pid]
         require(len(packet) >= 41 and packet[4] == width, 'packet width mismatch')
-        codec.verify_packet(packet, dictionary, [s.encode('ascii') for s in strings], source)
+        codec.verify_packet(packet, dictionary, [s.encode('utf-8') for s in strings], source)
         count = int.from_bytes(packet[37:41], 'big')
         bits = ''.join(format(b, '08b') for b in packet[41:])
         ids = [int(bits[i * width:(i + 1) * width], 2) for i in range(count)]
