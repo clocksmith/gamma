@@ -25,3 +25,7 @@ Arms C, D, E, CH and DH, at 128/7 and 256/8 (definitions in the v1 freeze).
 Before freezing, the fixed proposer was checked on v1's stalled CH-256 state (an existing v1
 output). Its top candidates (`while(`, `.push(`) each save hundreds of selections there,
 whereas v1's proposer offered only zero-gain whitespace. No v2 arm had run.
+
+Plumbing amendment: the first launch failed before any arm ran (the process pool could not
+pickle v1's dynamically loaded `run_arm`). `measure.py` now submits a module-level wrapper and
+the contract hash was updated; no design, budget or prediction changed.
