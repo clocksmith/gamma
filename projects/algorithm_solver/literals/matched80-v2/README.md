@@ -34,6 +34,23 @@ A result reaches BITS only through [BITS_PROMOTION.md](../BITS_PROMOTION.md): at
 2% fewer selections than the live profile, package bytes at most 5% higher, a verified
 guide package and passing BITS checks.
 
+## Outcome (2026-10-21)
+
+All 8 jobs completed on Mars in 136 s; no arm reached its time limit; every packet
+decodes to its qualified source hash ([RESULTS.md](RESULTS.md)).
+
+1. **Holds.** span-12 reproduces 10,155 and 6,413 exactly.
+2. **Mostly fails.** Wider shortlists change nothing at 128 entries and save at most
+   8 selections (0.12%) at 256, at up to 16x the trials.
+3. **Holds.** The designed hybrid beats span at every width: 10,034 vs 10,155 at 128
+   (-1.2%) and 6,361-6,368 vs 6,405-6,413 at 256 (-0.7 to -0.8%).
+
+The joint polish from each size's best fixed arm reaches **9,910 selections at
+7 bits** (-2.41%, package -1.57%; all 80 compact sources are the ones already
+published) and 6,360 at 8 bits (-0.83%). Under [BITS_PROMOTION.md](../BITS_PROMOTION.md)
+the 7-bit result qualifies to replace `bits-literal-joint80-7-v1`; the 8-bit result
+does not reach the 2% bar, so the live 8-bit profile stays.
+
 ## Reproduce
 
 ```sh
