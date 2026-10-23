@@ -88,6 +88,30 @@ erase the skeleton savings, because the shared style already makes recurring idi
 The final held-out 100 was not opened. No scorer: every search stopped at a local optimum under
 its cap.
 
+## Owner direction, 2026-10-23 (operand cost)
+
+Relayed from Mars. Next, reduce operand-selection cost instead of adding components:
+- declare each identifier once per program, then reference it by role (input, index,
+  accumulator, queue, output);
+- count every action;
+- compare against the shared-style and minified baselines on untouched programs, reporting
+  median, p90 and how many programs improve or worsen;
+- keep correctness fixed with independent execution tests;
+- test unfamiliar human users separately from solver compression;
+- predeclare promotion criteria. The 32-selection goal remains, and a small median gain that
+  worsens most programs is not enough.
+
+Rename-only is a secondary attribution control. The weak structural-v1 256-entry candidate
+(T-R-256) is **not confirmed or shipped**. No BITS update until a candidate beats the live profiles.
+
+**roles-v1** ([FREEZE.md](roles-v1/FREEZE.md)) implements this on dev-val 100:
+- arms: bind (B), rename-only (N) and literal (L) on the minified and shared-style pools;
+- every action counted, and every decoded program execution-tested;
+- promotion criteria frozen before any arm. The final held-out 100 stays closed.
+
+The human study is planned separately ([HUMAN_STUDY.md](roles-v1/HUMAN_STUDY.md)), and it is not
+run or simulated.
+
 ## Measurement rules
 
 - Freeze problem IDs, family/difficulty mix, interfaces, mutation/numerical and
