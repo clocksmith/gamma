@@ -33,7 +33,10 @@ grammar, thresholds or index after this spec is accepted makes the confirmation 
 ## Who authors and who reviews
 
 - **Author.** One author who is neither claude nor codex, and who has not seen the gate code, the grammar, the facet
-  contracts, the synthetic suite, the retained 24 development requests or the consumed fresh 36. A human author is
+  contracts, the synthetic suite, the retained 24 development requests or the consumed fresh 36.
+  The author necessarily learns the abstract answer-changing distinctions named in the C2 quotas (for example "the
+  street may be circular"). That is allowed, and it is all the author learns about what the gate checks. The author
+  never sees the candidate's own facet names, grammar words, regular expressions or values. A human author is
   preferred. If the owner instead approves an isolated agent role, it must start from a fresh context with only the
   materials listed below, and the record must say "agent-authored" rather than "human-authored".
 - **Reviewer.** A second person or role, also independent of claude and codex. The reviewer checks labels, the
@@ -111,10 +114,10 @@ The candidate **passes** confirmation only if all of the following hold.
 
 | | Condition |
 | --- | --- |
-| R1 | **No wrong acceptance** in any category. A wrong acceptance is an answer whose source identity is wrong, or whose code fails the source tests or the request's examples. |
+| R1 | **No wrong acceptance** in any category. A wrong acceptance is (a) **any** answer on a C2, C3 or C5 case, whose label is abstain, even when the returned source is compatible with one reading and passes the request's examples; or (b) on a C1 or C4 case, an answer whose source identity is wrong, or whose code fails the source tests or the request's examples. |
 | R2 | **Every C2 and C3 case abstains** (36 or more). This is the mandatory-ambiguity behavior that the consumed fresh 36 failed. |
 | R3 | **Every C5 case abstains.** |
-| R4 | **C1 coverage: at least 60% of the C1 requests are answered correctly**, at least 23 of 38. This is a proposed threshold. 1b has no agreed coverage gate, so the owner confirms or replaces this number before the packet is sealed, and the rule is frozen then. |
+| R4 | **C1 coverage: at least 60% of the C1 requests are answered correctly**, at least 23 of 38. This is a proposed threshold. 1b has no agreed coverage gate, so the owner confirms or replaces this number **before any author begins writing**, and the rule is frozen then. Nobody may set or change it after authorship starts or after any output exists. |
 | R5 | No infrastructure error, unqualified answer or route-budget failure, and no drift in the control route. |
 
 **Always reported, in addition to the pass decision:**
@@ -122,9 +125,13 @@ The candidate **passes** confirmation only if all of the following hold.
 - each category separately;
 - the abstention reasons;
 - C4 coverage;
-- the exact (Clopper–Pearson) 95% upper bound on the wrong-acceptance rate.
+- the wrong-acceptance rate among accepted answers, with its exact two-sided 95% Clopper–Pearson upper bound. The
+  denominator is the number of accepted answers across all categories. It is undefined when nothing is accepted,
+  so it is always reported alongside the complete per-category coverage and abstention counts.
 
-For example, with no wrong acceptances in about 60 accepted answers, that bound is about 6%.
+The binomial interval is a descriptive sample model. Requests in the same family are correlated, so the bound is not
+a guarantee for unseen requests. For example, if all 50 answer-eligible C1 and C4 requests are accepted with no
+wrong acceptance, the upper bound is about 7.1%.
 
 **Not claimed even if the candidate passes:**
 - 1b qualification beyond this index;
