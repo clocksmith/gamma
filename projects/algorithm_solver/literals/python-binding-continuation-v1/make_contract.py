@@ -17,7 +17,7 @@ c.update(schema='gamma.python-binding-continuation.v1',python_bin=str(Path('/usr
 work=Path('/home/x/Documents/Codex/2026-10-19/task/literal-admission500-v1/python-name/run-v1')
 for w in (7,8):
     p=work/f'w{w}'/'baseline-dictionary.json';c['baseline_dictionaries'][str(w)]={'file':str(p),'sha256':sha(p)}
-for name in ('graph.py','backend.py','run.py','qualification.py','launch.py','make_contract.py','test_graph.py','test_pipeline.py','FREEZE.md'):
+for name in ('graph.py','backend.py','run.py','qualification.py','launch.py','make_contract.py','test_graph.py','test_pipeline.py','FREEZE.md','AMENDMENT-1.md'):
     p=HERE/name;c['code_hashes'][str(p.relative_to(LIT))]=sha(p)
 for rel in ('python-name-v1/contract.json','python-name-v1/evidence/results.json','binding-descent-v1/rewrite.py','lns-naming-v1/engine.py'):
     c['code_hashes'][rel]=sha(LIT/rel)

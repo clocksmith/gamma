@@ -189,4 +189,24 @@ class GraphTests(unittest.TestCase):
             self.assertTrue(graph.record('from helper import '+name+' as hidden\ndef solve():\n value=1\n return hidden()\n')['unsafe'],name)
 
 
+class NewlineOffsetTests(unittest.TestCase):
+    def test_python_newline_offsets_and_comment_controls(self):
+        for newline in ('\n', '\r', '\r\n'):
+            for separator in ('\x0b', '\x0c', '\x1c', '\x1d', '\x1e'):
+                source = newline.join(('def solve(n):',
+                    '    value = n + 1 # x' + separator + 'y',
+                    '    doubled = value * 2', '    return doubled', ''))
+                record = graph.record(source)
+                self.assertFalse(record['unsafe'], (newline, repr(separator)))
+                self.assertEqual({v['name'] for v in record['variables']}, {'value', 'doubled'})
+                edits = [(a,b,'x' if v['name']=='value' else 'y')
+                         for v in record['variables'] for a,b in v['spans']]
+                changed = source
+                for a,b,name in sorted(edits, reverse=True):
+                    changed = changed[:a] + name + changed[b:]
+                graph.validate_rewrite(source, changed, record)
+                left, right = {}, {}
+                exec(source, left); exec(changed, right)
+                self.assertEqual(left['solve'](4), right['solve'](4))
+
 if __name__=='__main__':unittest.main()

@@ -6,6 +6,7 @@ retains the whole source because caught exception messages expose binding names.
 """
 import ast
 import keyword
+import re
 import symtable
 
 REFLECTION = {
@@ -81,9 +82,7 @@ def record(text):
                     reserved.add(child.id)
                 if isinstance(child, ast.arg):
                     reserved.add(child.arg)
-    offsets = [0]
-    for line in text.splitlines(keepends=True):
-        offsets.append(offsets[-1] + len(line))
+    offsets = [0] + [match.end() for match in re.finditer(r'\r\n|\r|\n', text)]
     spans = {}
     ownership = {}
     used_children = set()
@@ -145,6 +144,8 @@ def record(text):
         visit(tree, table)
     except (KeyError, ValueError):
         return unsupported('scope_mapping')
+    except AssertionError:
+        return unsupported('scope_mapping_assert')
     # Global reservations deliberately exclude captured spelling from every
     # scope. Remaining eligible locals cannot have an edited cross-scope use.
     ordered = sorted(spans, key=lambda k: (min(spans[k]), k[1]))
@@ -166,9 +167,7 @@ qualification remains mandatory. Returns the final color vector.
 """
     before, after = ast.parse(original), ast.parse(rewritten)
     compile(after, 'candidate.py', 'exec')
-    starts = [0]
-    for line in original.splitlines(keepends=True):
-        starts.append(starts[-1] + len(line))
+    starts = [0] + [match.end() for match in re.finditer(r'\r\n|\r|\n', original)]
     owner = {}
     variables = original_record['variables']
     for variable in variables:
