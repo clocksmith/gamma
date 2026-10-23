@@ -41,6 +41,18 @@ The existing Python statement miner is
 import. Exact byte-span provenance is a proposed integration refinement, not an
 implemented new extractor or semantic-equivalence check.
 
+## 2026-10-23 fixed-source feasibility diagnostic
+
+[Cost decomposition and optimistic bounds](cost-decomposition-v1/README.md) uses only
+R dev-fit 300 / dev-val 100. L-R-256 dev-val reproduces 8,948 selections (median
+63.5, p95 211; 9,048 actions including Finish). Syntax accounts for 50.2% of
+byte-fraction selection attribution; identifiers account for 48.2% of the
+single-character tail. The fit-only unlimited-substring oracle has median 21
+and p95 75, but relaxes shared capacity. The capacity-aware necessary bound is
+also too weak to decide M1 feasibility. Neither local search stopping nor
+compressor rates prove impossibility. All 800 baseline packets decode exactly;
+no held-out/protected sources were opened and no vocabulary was promoted.
+
 ## Preserved experiment checkpoints
 
 [Milestones M1–M6](MILESTONES.md) record the agreed compact-library gate and proposed
