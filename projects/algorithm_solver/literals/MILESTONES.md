@@ -71,6 +71,14 @@ This is a staged recommendation, not blanket authorization.
 - M1 thresholds and M2's non-autoregressive rule are unchanged. Offline representation results
   do not establish M2 or M3.
 
+**Control result** ([minify-control-v1](minify-control-v1/README.md)). Minifying the originals
+(layout only, all 500 still qualified) makes them 22.4% shorter but saves only 10.1% of
+selections with refitted 256-entry dictionaries (147,360 to 132,522). The shared-style rewrites
+save a further 66.5% (44,364; median 65.5, p95 199), and all 500 programs improve. Their text
+is 60% shorter than the minified sources (names, idioms, removed checks), with 19% more bytes
+per selection. Dictionaries barely transfer across styles. M1 is not met. Seven of eight
+predictions held; K1 (compaction worth at least 25%) did not.
+
 ## Measurement rules
 
 - Freeze problem IDs, family/difficulty mix, interfaces, mutation/numerical and
