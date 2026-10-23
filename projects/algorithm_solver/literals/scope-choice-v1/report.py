@@ -103,7 +103,7 @@ def main(folder):
                 'profile_source_bytes':dict(sizes),'skips':dict(skips),'error_sha256':failures}
     clean(r);(HERE/'evidence').mkdir(exist_ok=True);analyze.write(HERE/'evidence/results.json',r)
     lines=['# Scope-local naming and vocabulary-aware selection','',
-        '[Freeze](FREEZE.md) pushed in `1e2271151`; [review/run receipt](REVIEW.md); [sanitized evidence](evidence/results.json).', '',
+        '[Freeze](FREEZE.md) pushed in `1e2271151`; [review/run receipt](REVIEW.md); [sanitized evidence](evidence/results.json). [Contract metadata clarification](NOTE-2026-10-23-CONTRACT-METADATA.md).', '',
         f'Input candidate: **{r["selected_input_candidate"] or "none"}**. These are consumed-development source-plus-encoder results. They do not establish M1 qualification, independent generalization or autonomous assembly.', '',
         'Scope-local naming adds little over the matched printer control in this fixed alphabet family: joint128 saves 21 validation actions (0.15%, 5 better/84 same/11 worse), while joint256 saves 28 (0.31%, 2/98/0). Neither arm passes readiness. Only three validation programs choose a mangled profile in each joint arm. Their total binding count is unchanged; distinct spellings decrease from 762 to 749. This measures the fixed family, not the best possible per-binding search.', '',
         '## Costs and qualification','',
