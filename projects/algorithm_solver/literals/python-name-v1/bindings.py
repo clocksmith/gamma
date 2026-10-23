@@ -51,7 +51,7 @@ def forbidden(text,entry):
     """Exact source and entry method/body strings, with and without first-line indent."""
     tree=ast.parse(text);out={text};lines=text.splitlines(keepends=True)
     offsets=[0]
-    for line in lines:offsets.append(offsets[-1]+len(line))
+    for line in lines:offsets.append(offsets[-1]+len(line.encode()))
     for cls in tree.body:
         if isinstance(cls,ast.ClassDef) and cls.name=='Solution':
             for method in cls.body:
@@ -63,7 +63,7 @@ def forbidden(text,entry):
                         chunk=''.join(lines[first.lineno-1:last.end_lineno])
                         out.add(chunk.rstrip('\n'))
                         offset=first.col_offset
-                        out.add(chunk[offset:].rstrip('\n'))
-                        out.add(text[offsets[first.lineno-1]+first.col_offset:offsets[last.end_lineno-1]+last.end_col_offset])
+                        out.add(chunk.encode()[offset:].decode().rstrip('\n'))
+                        out.add(text.encode()[offsets[first.lineno-1]+first.col_offset:offsets[last.end_lineno-1]+last.end_col_offset].decode())
     assert len(out)>1,'entry method not found'
     return {s for s in out if s}

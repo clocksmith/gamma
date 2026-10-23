@@ -46,5 +46,9 @@ class PythonBindingTests(unittest.TestCase):
         self.assertIn('return a+1',banned);self.assertIn(text,banned)
         self.assertTrue(bindings.record('def f(é): return é')['unsafe'])
 
+    def test_unicode_body_uses_ast_byte_positions(self):
+        text='class Solution:\n def solve(self,a):return "é"+a\n'
+        self.assertIn('return "é"+a',bindings.forbidden(text,'solve'))
+
 
 if __name__=='__main__':unittest.main()
