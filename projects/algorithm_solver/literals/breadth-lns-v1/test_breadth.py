@@ -37,5 +37,15 @@ class Repair(unittest.TestCase):
         self.assertGreater(checked, 20)
 
 
+    def test_restrictive_caps_bind_and_can_be_infeasible(self):
+        texts = {0: 'aaaa', 1: 'bbbb'}; fixed = list(sel.ALPHABET); cand = ['aa', 'bb']
+        chosen, rec = breadth.repair(texts, fixed, cand, 1, 30, weights={0: 5, 1: 1})
+        self.assertEqual((rec['status'], chosen), (0, ['aa']))  # uncapped: the heavier program wins
+        chosen, rec = breadth.repair(texts, fixed, cand, 1, 30, weights={0: 5, 1: 1}, caps={0: 4, 1: 2})
+        self.assertEqual((rec['status'], chosen), (0, ['bb']))  # the cap on program 1 forces bb
+        chosen, rec = breadth.repair(texts, fixed, cand, 1, 30, caps={0: 2, 1: 2})
+        self.assertFalse(rec['feasible'])  # one slot cannot satisfy both caps
+
+
 if __name__ == '__main__':
     unittest.main()

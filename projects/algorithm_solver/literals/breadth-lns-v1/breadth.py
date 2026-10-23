@@ -94,6 +94,8 @@ def arm_run(a, c):
     ranked = [pool[i] for i in np.lexsort((np.arange(len(pool)), -score))]
     start = per_program(fit, baseline, analyze)
     weights = {p: round(c['relative_scale'] / start[p]) for p in fit} if arm == 'relative' else None
+    assert weights is None or min(weights.values()) >= 1  # positive weights: each program's optimum is its shortest path
+    TOL = c['objective_tolerance']  # absolute; objectives are integers, so any real discrepancy is >= 1
     objective = (lambda costs: sum(weights[p] * costs[p] for p in costs)) if weights else (lambda costs: sum(costs.values()))
     rng = random.Random(cfg['seed'])
     incumbent, costs = list(baseline), dict(start)
@@ -115,8 +117,8 @@ def arm_run(a, c):
         trial_costs = per_program(fit, trial, analyze) if solver['feasible'] else None
         trial_obj = objective(trial_costs) if trial_costs else None
         if solver['feasible']:
-            assert trial_obj <= solver['objective'] + 1e-6 * max(1, abs(solver['objective'])), 'exact rescoring exceeds the MILP objective'
-            if solver['status'] == 0: assert abs(trial_obj - solver['objective']) <= 1e-6 * max(1, abs(solver['objective'])), 'solver-optimal mismatch'
+            assert trial_obj <= solver['objective'] + TOL, 'exact rescoring exceeds the MILP objective'
+            if solver['status'] == 0: assert abs(trial_obj - solver['objective']) <= TOL, 'solver-optimal mismatch'
             if arm == 'nonregress': assert all(trial_costs[p] <= costs[p] for p in fit), 'nonregression violated'
         accepted = trial_obj is not None and trial_obj < best and not set(trial) & forbidden
         if accepted:
@@ -144,7 +146,11 @@ def arm_run(a, c):
     val = analyze.load_sources(work, {**parent, 'sources': [r for r in parent['sources'] if r['id'] in set(val_ids)]})
     forbidden_all = forbidden | sel.forbidden_strings(val)
     for name, vocab in (('pinned', baseline), (arm, incumbent)):
-        rows, illegal, db = sel.measure(val, vocab, width, forbidden_all)
+        allrows, illegal, db = sel.measure({**fit, **val}, vocab, width, forbidden_all)  # decodes all 400 programs
+        assert len(allrows) == len(fit) + len(val)
+        report[f'decoded_{"pinned" if name == "pinned" else "arm"}'] = len(allrows)
+        report[f'fit_selections_{"pinned" if name == "pinned" else "arm"}'] = sum(allrows[str(p)]['selections'] for p in fit_ids)
+        rows = {str(p): allrows[str(p)] for p in val_ids}
         sel_total = sum(r['selections'] for r in rows.values())
         report[f'validation_{"pinned" if name == "pinned" else "arm"}'] = {
             'illegal_entry_sha256': illegal, 'dictionary_bytes': db,
