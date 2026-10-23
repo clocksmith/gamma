@@ -4,6 +4,16 @@ Start here for source versions, experiments and the working literal languages.
 This is a navigation index over existing manifests and reports, not a second
 results ledger. Completed runs below retain their source, dictionary and execution identities.
 
+## Structured stacking: local template saving, no ready arm — 2026-10-23
+
+[Matched structured arms](stacking-structured-v1/README.md) replay all 2,000
+program views. Prefix ties searched literal at 8,324 validation actions;
+template and union use 8,334. One template-used program saves seven actions,
+while slot replacement costs worsen 17 others. No P entries survive, and no
+structured arm passes the frozen gates. Conditional subsets retain full global
+overhead. [Freeze](stacking-structured-v1/FREEZE.md),
+[review](stacking-structured-v1/REVIEW.md).
+
 ## Python optional characters: gain and coverage failure — 2026-10-23
 
 [Matched Python repairs](python-character-slots-v1/README.md) independently
