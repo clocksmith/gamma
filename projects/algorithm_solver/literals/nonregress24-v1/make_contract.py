@@ -6,7 +6,7 @@ HERE = Path(__file__).resolve().parent; LIT = HERE.parent
 sha = lambda p: hashlib.sha256((LIT / p).read_bytes()).hexdigest()
 HIGHS = '/home/x/deco/gamma/.venv_rocm/lib/python3.14/site-packages/scipy/optimize/_highspy/_core.cpython-314-x86_64-linux-gnu.so'
 CODE = ['nonregress24-v1/run.py', 'nonregress24-v1/capped.py', 'nonregress24-v1/evidence.py', 'nonregress24-v1/make_contract.py',
-        'nonregress24-v1/FREEZE.md', 'nonregress24-v1/test_capped.py', 'character-slots-v1/evidence/results.json', 'seeded-repair-v1/model.py', 'character-slots-v1/repair.py',
+        'nonregress24-v1/FREEZE.md', 'nonregress24-v1/AMENDMENT-1.md', 'nonregress24-v1/test_capped.py', 'character-slots-v1/evidence/results.json', 'seeded-repair-v1/model.py', 'character-slots-v1/repair.py',
         'breadth-lns-v1/breadth.py', 'lagrange-select-v2/selection.py', 'cost-decomposition-v1/analyze.py',
         'cost-decomposition-v1/lexical.cjs', 'literals.py', 'pass2/working/bitpack.py', 'tail-search-v1/structure.cjs']
 c = {'schema': 'gamma.nonregress24-v1.contract.v1',

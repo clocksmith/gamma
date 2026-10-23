@@ -25,6 +25,7 @@ ARMS = ('nonregress', 'unweighted')
 
 
 def contract():
+    assert __debug__ and not os.environ.get('PYTHONOPTIMIZE'), 'assertions must stay enabled (no -O / PYTHONOPTIMIZE)'
     c = json.loads((HERE / 'contract.json').read_text())
     for rel, h in c['code_hashes'].items(): assert sha((LIT / rel).read_bytes()) == h, rel
     assert sha((LIT / 'cost-decomposition-v1/contract.json').read_bytes()) == c['parent_contract_sha256']
@@ -147,7 +148,7 @@ def launch(a, c):
     env = {**os.environ, 'PYTHONHASHSEED': '0', 'OMP_NUM_THREADS': '1', 'OPENBLAS_NUM_THREADS': '1'}
     lim = c['limits']
     cap = lambda: resource.setrlimit(resource.RLIMIT_AS, (lim['address_space_bytes'],) * 2)
-    procs = [subprocess.Popen(['timeout', str(lim['arm_seconds']), sys.executable, '-B', __file__, '--work', str(a.work), '--output', str(a.output), '--arm', arm,
+    procs = [subprocess.Popen(['timeout', '--kill-after=10', str(lim['arm_seconds']), sys.executable, '-B', __file__, '--work', str(a.work), '--output', str(a.output), '--arm', arm,
                                '--cores', ','.join(map(str, c['cores'][arm]))] + (['--smoke', str(a.smoke)] if a.smoke else []),
                               env=env, preexec_fn=cap)
              for arm in ARMS]
