@@ -1,7 +1,8 @@
 # Item 13 independent confirmation commissioning spec v1
 
 Status: reviewable commissioning draft, 2026-10-23. Codex reviewed the candidate
-identity, protection, denominators and pass rules; Claude cross-review pending. No cases have been authored,
+identity, protection, denominators and pass rules; Claude reviewed the initial draft; the explicit transfer stage below addresses
+its substantive review request and awaits final cross-review. No cases have been authored,
 no confirmation data opened, and no experiment is authorized by this document.
 The owner confirmed that item 13 merits independent confirmation while keeping
 its candidate and every M1 threshold frozen. This spec implements the permitted
@@ -138,6 +139,72 @@ bits from single-character entries, zero whole-solution entries. The existing
 candidate misses the cost gates. New tests cannot change that fact, substitute a
 400-program denominator for 500, or establish M2/human fluency. See
 [MILESTONES.md](../MILESTONES.md).
+
+## Proposed second stage: fresh-program dictionary transfer
+
+This is a concrete additional commission for the owner to approve, not permission
+for the team to author or open new material. It addresses fresh compactness
+transfer separately from the first stage's correctness confirmation.
+
+Commission **exactly 100 newly written JavaScript programs for 100 distinct
+independently selected problem contracts**. A custodian first seals the problem
+manifest and family/difficulty strata, before implementation authoring and before
+any candidate cost is measured. Require an exclusion audit against all previously
+used development programs, final held-out 100, protected 66 and their aliases;
+none of those reservations is implicitly opened. Selection cannot depend on
+source length, dictionary coverage or measured gains. The population defines the
+scope of the eventual claim; it is not a representative sample merely because
+its authors are independent.
+
+Authors and reviewers have the same independence and exposure restrictions as
+stage one. They receive requirements only, not candidate/control sources,
+dictionaries, naming policies, packets or measured costs. Authors write one
+implementation and at least 16 independent cases per problem (or a reviewed
+exhaustive smaller domain); an independent reviewer qualifies all implementations
+against the sealed contracts before dictionary evaluation. The custodian seals
+sources, cases, expected observations and all revision history together. No style
+hint is supplied to make the code fit either dictionary. Unencodable sources and
+resource failures remain failures in the 100-program denominator.
+
+After a separately approved scored opening, encode each identical qualified
+source once with the unchanged item13 dictionary/encoder and once with its pinned
+R control dictionary/encoder. No source rewrite, refit, repair, per-program
+codebook selection or alternative source choice is allowed. Independently decode
+all packets and reproduce their source hashes. Use the same complete charges and
+sandbox resource limits as stage one. Report this as **dictionary transfer on
+independently written sources**: it cannot by itself replicate the original 6%
+benefit of jointly changing source names and dictionary. A fresh evaluation of
+that full rewriting pipeline would need its own sealed source-transformation
+procedure and matched source controls; do not silently add it to this stage.
+
+Freeze the transfer pass rule now: all 100 programs qualified and decoded under
+both arms; at most 256 entries and clean whole-source/body audits; candidate
+validation actions at least 5% lower; strictly lower median and p90 actions;
+at least 60 improved and at most 25 worsened; nonincreasing single-character
+selection-bit fraction; raw package at most 105% of control. Report all predicates,
+selection median/p95, absolute character counts, total bytes and paired outcomes,
+including failures. This is a fixed 100-program transfer test, not a rescaled
+M1 qualification. Stage-one correctness, reproduced development advantage and
+stage-two transfer each have separate verdicts; none substitutes for another.
+
+## Resource and incomplete-commission receipt
+
+The inherited JavaScript sandbox limits are **3 CPU seconds, 8 wall seconds,
+1 GiB memory per 16-case batch**, at most four workers on assigned cores. Pin the
+exact harness/runtime and output cap in the executable freeze before authorship;
+no later relaxation based on outcomes. Historical roles-v1 recorded exit137 for
+1015/1079/1088 under 24 workers, followed by disclosed serial/four-worker passes.
+Item23 later retained an unchanged-source1079 exit137 with no retry and an
+unestablished cause. These are precommitted resource observations, not an excuse
+to drop future kills; every kill remains a failed observation.
+
+Stage one's nominal minimum is 6,400 authored cases plus independent oracles.
+If coverage or independent review is incomplete, publish an **incomplete
+commission coverage report** containing all 400 IDs, completed/reviewed/sealed
+counts, missing requirements and failure reasons. Do not shrink its denominator
+or claim full-400 confirmation. No partial packet is opened merely because some
+cases are ready; the custodian preserves the unopened remainder and the owner
+must approve any separately frozen partial evaluation.
 
 ## Required delivery and remaining permissions
 
