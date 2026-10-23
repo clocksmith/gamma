@@ -1,6 +1,7 @@
 """Pinned metadata and supplied-artifact helpers; no import-time corpus access."""
 import hashlib
 import json
+import math
 import os
 from pathlib import Path
 import sys
@@ -30,6 +31,19 @@ def identity(width,arm):
     assert width in (7,8) and arm in engine.ARMS
     return f'w{width}/{arm}'
 
+def finite_seconds(value,maximum=None):
+    assert type(value) in (int,float) and math.isfinite(value) and value>=0,'invalid timing receipt'
+    if maximum is not None:assert value<=maximum,'timing receipt exceeds frozen bound'
+    return value
+
+def renderer_runtime_files():
+    paths=(Path(sys.executable).resolve(),Path(render.ast.__file__).resolve(),Path(render.tokenize.__file__).resolve())
+    return {str(path):sha(path.read_bytes()) for path in paths}
+
+def verify_runtime_files(c):
+    for path,h in c['runtime_files'].items():assert sha(Path(path).read_bytes())==h,path
+    assert all(c['runtime_files'].get(path)==h for path,h in renderer_runtime_files().items()),'renderer runtime pin missing or changed'
+
 def verify(c):
     require_assertions()
     assert str(Path(sys.executable).resolve())==c['python_bin']
@@ -37,7 +51,7 @@ def verify(c):
     assert len(set(c['partition']['dev_fit']+c['partition']['dev_val']))==36
     assert set(c['entries'])==set(map(str,c['partition']['dev_fit']+c['partition']['dev_val']))
     for rel,h in c['code_hashes'].items():assert sha((LIT/rel).read_bytes())==h,rel
-    for path,h in c['runtime_files'].items():assert sha(Path(path).read_bytes())==h,path
+    verify_runtime_files(c)
     old=checked(c['parent_contract']);receipt=checked(c['qualification'])
     assert old['partition']==c['partition'] and old['sources']==c['sources']
     assert receipt['contract_sha256']==c['parent_contract']['sha256']

@@ -2,7 +2,7 @@
 import json
 from pathlib import Path
 import sys
-from common import LIT,sha,write
+from common import LIT,sha,write,finite_seconds
 sys.path.insert(0,str(LIT.parent))
 from algsolve.judge import sandbox
 from algsolve.judge.judge import FunctionalTest,_matches
@@ -78,7 +78,8 @@ def replay(folder,spec,source,c):
     for record,offset in zip(batches,range(0,len(tests),size)):
         batch=tests[offset:offset+size]
         assert record['offset']==offset and record['cases']==len(batch)
-        assert isinstance(record['wall_seconds'],(int,float)) and record['wall_seconds']>=0
+        finite_seconds(record['wall_seconds'],c['limits']['qualification_seconds']+c['timing_receipt_tolerance_seconds'])
+        assert all(type(record[key]) is bool for key in ('ok','timed_out','output_limit_exceeded'))
         raw=(folder/f'{offset}.stdout').read_bytes();err=(folder/f'{offset}.stderr').read_bytes()
         assert sha(raw)==record['stdout_sha256'] and sha(err)==record['stderr_sha256']
         assert record['ok']==(record['exit_code']==0 and not record['timed_out'] and not record['output_limit_exceeded'])

@@ -5,23 +5,24 @@ import json
 import platform
 import sys
 from pathlib import Path
-from common import HERE,LIT,sha,write,require_assertions
+from common import HERE,LIT,sha,write,require_assertions,renderer_runtime_files,verify
 
 def spec(path):return {'file':str(path.resolve()),'sha256':sha(path.read_bytes())}
 
-def build(activate=False):
+def build():
     require_assertions()
     parent=json.loads((LIT/'python-binding-continuation-v1/contract.json').read_text())
     pins=json.loads((LIT/'python-character-slots-v1/contract.json').read_text())
     assert parent['partition']==pins['partition']
-    c={'schema':'gamma.python-source-rendering.v1','execution_authorized':activate,
+    c={'schema':'gamma.python-source-rendering.v1','execution_authorized':False,
        'parent_recorded_commit':'84a4c7310','parent_contract':spec(LIT/'python-binding-continuation-v1/contract.json'),
        'anchor_pin_contract':spec(LIT/'python-character-slots-v1/contract.json'),
        'qualification':spec(LIT/'python-binding-continuation-v1/evidence/results.json'),
        'partition':parent['partition'],'sources':parent['sources'],'entries':pins['entries'],'inputs':pins['inputs'],
        'python_bin':str(Path(sys.executable).resolve()),'python_version':platform.python_version(),
        'cores':list(range(8)),'qualification_cores':list(range(4)),
-       'overall_seconds':2400,'limits':{'address_space_bytes':8*1024**3,'fit_seconds':300,'validation_seconds':180,
+       'overall_seconds':2400,'supervisor_cleanup_seconds':30,'timing_receipt_tolerance_seconds':1,
+       'limits':{'address_space_bytes':8*1024**3,'fit_seconds':300,'validation_seconds':180,
        'qualification_seconds':1800,'report_seconds':600,'qualification_cpu_seconds':3,'qualification_wall_seconds':8,
        'qualification_memory_bytes':512*1024**2,'qualification_output_bytes':4*1024**2,'qualification_batch_cases':32},
        'rounds':2,'search':{'trials':12000,'seconds':60},
@@ -44,13 +45,24 @@ def build(activate=False):
             c['code_hashes'][str(path.relative_to(LIT))]=sha(path.read_bytes())
     c['offline_encoder_bytes']=sum((LIT/rel).stat().st_size for rel in c['code_hashes'] if rel.endswith(('.py','.cjs')) and '/test_' not in rel)
     c['offline_encoder_scope']='Conservative pinned local source inventory; installed runtime and standard-library footprint unmeasured.'
+    c['runtime_files'].update(renderer_runtime_files())
     return c
+
+def activation_payload(current,reviewed):
+    """Only authorization may change; verify bytes behind all existing pins too."""
+    assert reviewed['execution_authorized'] is False and current['execution_authorized'] is False
+    assert current==reviewed,'reviewed pending contract drift; review a new draft before activation'
+    verify(current)
+    result=copy.deepcopy(reviewed);result['execution_authorized']=True
+    return result
 
 def main():
     ap=argparse.ArgumentParser();ap.add_argument('--activate',action='store_true',help='Only after root/Claude prelaunch approval; writes executable contract')
-    args=ap.parse_args();c=build(args.activate)
+    args=ap.parse_args();c=build()
     target=HERE/('contract.json' if args.activate else 'pending-contract.json')
-    if args.activate:assert not target.exists(),'no contract overwrite'
+    if args.activate:
+        assert not target.exists(),'no contract overwrite'
+        c=activation_payload(c,json.loads((HERE/'pending-contract.json').read_text()))
     write(target,c)
     print(json.dumps({'file':target.name,'sha256':sha(target.read_bytes()),'execution_authorized':args.activate,'private_content_read':False}))
 if __name__=='__main__':main()
