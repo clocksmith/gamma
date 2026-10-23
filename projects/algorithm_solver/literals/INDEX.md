@@ -4,6 +4,17 @@ Start here for source versions, experiments and the working literal languages.
 This is a navigation index over existing manifests and reports, not a second
 results ledger. Completed runs below retain their source, dictionary and execution identities.
 
+## Full-substring relaxation remains inconclusive — 2026-10-23
+
+[Implicit full-pool certificates](all-substring-fraction-v1/README.md) cover
+13,553,771/13,561,646 words in the fixed R/naming fit cohorts, including
+one-owner strings of every length. Exact lower bounds remain −37,980/−37,943;
+all 320 generated proposals lack complete coverage. Independent full-pool proof,
+integer replay and 1,200 witness packet checks pass. The restricted start-tied
+dual cannot settle 10% reachability; the earlier positive shared-pool bounds
+remain valid. No promotion. [Freeze](all-substring-fraction-v1/FREEZE.md),
+[review](all-substring-fraction-v1/REVIEW.md).
+
 ## Flat stacking: action and tail gains, no successor — 2026-10-23
 
 [Matched stacking](stacking-v1/README.md) independently replays all 8,800 packets;
