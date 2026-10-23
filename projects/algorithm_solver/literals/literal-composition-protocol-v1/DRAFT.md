@@ -80,8 +80,10 @@ implementation freeze: permitted familiar specifications, qualified source
 variants, interfaces, public examples and the selected fixed literal dictionary.
 All development texts must be identified; no sealed scoring descriptions or
 independent scoring cases enter development or training. This permits offline
-learning from familiar solutions and does not claim that learned weights cannot
-memorize them. Source/alias family restrictions still apply. No external model,
+learning from familiar solutions. Because scored and development IDs overlap,
+the primary comparison is explicitly labeled **familiar recall and assembly**;
+it does not establish unseen-source or unseen-problem generalization. Learned
+weights and symbolic rules can both memorize familiar solutions. Source/alias family restrictions still apply. No external model,
 corpus, service or download is added implicitly; any proposed pretrained
 component needs a declared provenance/contamination audit and owner authority.
 
@@ -113,14 +115,40 @@ access receipt make this enforceable. Development data stays unmounted.
 | T: trained | A frozen non-autoregressive learned procedure predicts one complete literal-ID proposal from the same input and dictionary. | Weights, tokenizer, architecture and decoding procedure are sealed; training needs separate explicit owner go-ahead. |
 | L: lookup control | Recognize the description and return a stored complete program/sequence from a declared finite table. | Table, recognizer and all storage/runtime are charged; score separately as recognition/lookup, never as autonomous composition. |
 
-No architecture is chosen here. Before implementation execution, each composer
+No architecture is chosen here. The shared dictionary is a mandatory execution-freeze field: name its candidate,
+entry order and exact hash before fitting either arm. This task definition does
+not choose between item13, item24 or a later qualified representation.
+
+Before implementation execution, each composer
 must declare exactly how it produces a proposal. Neither may emit successive
 source tokens/literal IDs conditioned autoregressively on its preceding emitted
 sequence. An encoder and simultaneous position predictions are potentially
 eligible; next-token/source/literal generation is not. Symbolic construction
-must also satisfy the rule. A fixed inspection/serialization pass over an
-already chosen structure is not a free source-generation channel. Cross-review
+must also satisfy the rule. For either arm, autoregression means choosing a source token or literal ID
+conditioned on the arm's own previously emitted IDs. A left-to-right serializer
+of an already chosen complete plan is eligible if it makes no new construction
+decision from its emitted prefix; all planning and serialization are charged. Cross-review
 must resolve eligibility before running, not after favorable output.
+
+Apply the **same stored-answer audit to S and T**, including their complete
+sealed deployment assets, rules/weights, auxiliary tables and inference access.
+For each first proposal report exact source and packet match rates against the
+allowed development solutions, plus its longest contiguous emitted literal-ID
+run matching any development packet. Canonically encode the common development
+sources under the sealed dictionary for that comparison. Publish only lengths,
+rates and hashes; never packets. Freeze the audit script and its matching policy
+before inference. Score L on those same familiar IDs as the explicit recall
+control; its known-ID retrieval ceiling remains separately labeled.
+
+These output-overlap measurements do not prove or disprove memorization: correct
+independent assembly can exactly match a known program, and memorized knowledge
+can have a different surface form. Architecture and access review must therefore
+apply equally to both arms. Any explicit per-problem complete answer table or
+retrieval mechanism belongs in L, whether hidden in symbolic assets or attached
+to a trained model. If a mechanism's eligibility cannot be established, retain
+its familiar-recall result and mark composition eligibility unresolved; an
+unresolved audit cannot support M2. Do not call trained memorization independent
+solving merely because the answer table is not inspectable as source text.
 
 There is one primary proposal per query, committed before public checks. No
 candidate search, reranking several complete programs, test-feedback repair,

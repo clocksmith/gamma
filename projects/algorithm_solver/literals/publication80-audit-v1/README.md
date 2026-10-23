@@ -62,7 +62,8 @@ lineage/permission review. Correctness receipts do not decide copyright status.
 ## Primary rights evidence checked
 
 [Retrieval metadata](upstream-checks.json) records URLs, UTC checks and hashes;
-no page payload or program source was saved. Six direct requests succeeded.
+no page payload or program source was saved. Six direct requests succeeded. These fetched public pages only; no Gamma project
+data was sent to those sites.
 LeetCode's direct request returned 403; its terms were separately read through
 the web tool. The existing archived HF/GitHub notice hashes were also verified.
 
@@ -97,7 +98,7 @@ the web tool. The existing archived HF/GitHub notice hashes were also verified.
 | --- | --- | --- |
 | G1 | All 80 | Explicit owner authorization naming the new source hashes, intended distribution and publication scope. Prior permission for compact sources does not cover distinct rewrites automatically. |
 | G2 | All 80 | Select the actual release files. Bind each to predecessor/reference hashes, transformation/authorship records and its qualification receipt. The style150 inventory is one candidate inventory, not approval to choose it. |
-| G3 | 60 LCD-derived rows | Establish which upstream grant covers the selected reference files and subsequent adaptations; retain evidence resolving HF/GitHub scope and any third-party rights. Availability and Gamma's MIT license do not answer this. |
+| G3 | 60 LCD-derived rows | Establish which upstream grant covers the selected reference files and subsequent adaptations; retain evidence resolving HF/GitHub scope and any third-party rights. The HF card describes Python while these 60 implementations are JavaScript: bind the derivation step to its authorship/transformation record. Availability and Gamma's MIT license do not answer this. |
 | G4 | 19 owner-supplied candidates | Record author/agent provenance, source inputs or reused code, rights-holder authority and scope of permission for the exact rewritten artifacts. Existing seals prove identity, not these rights assertions. |
 | G5 | ID 1046 | Resolve the doocs-specific grant/README wording for the intended distribution; record required attribution, modifications and derivative-license treatment, or a distinct authorized replacement with a new lineage. No automatic replacement is performed. |
 | G6 | All selected release artifacts | Produce a file-level attribution/license/notice package and verify it against the approved manifest. Treat descriptions, examples and helpers separately if later included; none is approved through this source-only audit. |
