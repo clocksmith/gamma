@@ -4,6 +4,16 @@ Start here for source versions, experiments and the working literal languages.
 This is a navigation index over existing manifests and reports, not a second
 results ledger. Completed runs below retain their source, dictionary and execution identities.
 
+## Local syntax alternatives — 2026-10-23
+
+[Guarded per-node syntax search](syntax-choice-v1/README.md): all2,000packets decode;
+two branch inversions save three fit selections, with no validation gain. Both
+new syntax variants pass171checks. Fresh qualification of one unchanged seed
+source fails with sandbox exit137, leaving399/400per arm; the failure is retained
+without retry and its cause is unestablished. No successor or historical verdict
+change. [Freeze](syntax-choice-v1/FREEZE.md), [review](syntax-choice-v1/REVIEW.md),
+[evidence](syntax-choice-v1/evidence/results.json).
+
 ## Exact character-fraction certificate — 2026-10-23
 
 [Fixed-source/codebook ratio optima](fraction-certificate-v1/README.md): all six
