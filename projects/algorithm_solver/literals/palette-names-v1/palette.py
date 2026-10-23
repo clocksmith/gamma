@@ -200,13 +200,14 @@ def qualify(work, out, c, results):
         for pid, row in a['per_problem'].items():
             key = (pid, row['source_sha256'])
             if row['source_sha256'] != original[pid] and key not in known: jobs[key] = texts[pid]
-    receipts = {}
+    receipts, failures = {}, {}
     with concurrent.futures.ProcessPoolExecutor(4) as pool:
         futs = {pool.submit(minify.style.parity, minify.shim(work), int(pid), text, 'solve', specs[pid], None): (pid, h) for (pid, h), text in jobs.items()}
         for f in concurrent.futures.as_completed(futs):
             pid, h = futs[f]; passed, ok, n, bad = f.result()
             receipts[f'{pid}:{h}'] = {'passed': passed, 'checks_passed': ok, 'cases': n}
-            analyze.write(out / 'qualification-private.json', {**receipts, f'{pid}:{h}:failures': bad})
+            if bad: failures[f'{pid}:{h}'] = bad  # every failure detail is kept, privately
+            analyze.write(out / 'qualification-private.json', {'receipts': receipts, 'failures': failures})
     for a in results:
         a['qualification'] = {}
         for pid, row in a['per_problem'].items():
