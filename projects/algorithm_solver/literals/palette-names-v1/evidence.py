@@ -13,7 +13,11 @@ sha = lambda raw: hashlib.sha256(raw).hexdigest()
 
 def summary(rows, ids, db):
     acts = sorted(rows[str(p)]['actions'] for p in ids); sel = sum(rows[str(p)]['selections'] for p in ids)
-    return {'actions': sum(acts), 'median': statistics.median(acts), 'p90': acts[-(-9 * len(acts) // 10) - 1],
+    sels = sorted(rows[str(p)]['selections'] for p in ids)
+    q = lambda xs, f: xs[-(-int(f * 100) * len(xs) // 100) - 1]
+    return {'selections': {'total': sel, 'median': statistics.median(sels), 'p90': q(sels, .9), 'p95': q(sels, .95), 'worst': sels[-1],
+                           'within_32': sum(s <= 32 for s in sels), 'within_96': sum(s <= 96 for s in sels)},
+            'actions': sum(acts), 'median': statistics.median(acts), 'p90': acts[-(-9 * len(acts) // 10) - 1],
             'p95': acts[-(-19 * len(acts) // 20) - 1], 'worst': acts[-1], 'within_32': sum(a <= 32 for a in acts), 'within_96': sum(a <= 96 for a in acts),
             'single_character_codes': sum(rows[str(p)]['single_characters'] for p in ids),
             'single_character_fraction': sum(rows[str(p)]['single_characters'] for p in ids) / sel,
@@ -55,6 +59,8 @@ def main():
                                'packet_bytes': len(pk), 'source_bytes': len(t.encode())}
     arms = {r['arm']: r for r in res['arms']}
     out = {'schema': 'gamma.palette-names-v1.evidence.v1', 'contract_sha256': res['contract_sha256'], 'results_sha256': sha((a.run / 'results.json').read_bytes()),
+           'decoder_dependency_bytes': {rel: (LIT / rel).stat().st_size for rel in ('literals.py', 'pass2/working/bitpack.py')},
+           'offline_encoder_bytes': {rel: (LIT / rel).stat().st_size for rel in ('palette-names-v1/palette.py', 'binding-descent-v1/rewrite.py', 'binding-descent-v1/bindings.cjs')},
            'pinned_R': summary(base_rows, val_ids, len(db)), 'arms': {}}
     for name, r in arms.items():
         all_q = all(r['qualification'][str(p)]['passed'] for p in fit_ids + val_ids)
