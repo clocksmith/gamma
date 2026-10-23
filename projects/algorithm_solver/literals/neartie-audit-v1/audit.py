@@ -94,6 +94,10 @@ def main():
             cand, base = sums[comp['candidate']][pc_], sums[comp['comparator']][pk_]
             pr = paired(encoded[comp['candidate']][pc_], encoded[comp['comparator']][pk_])
             checks = readiness(cand, base, pr, comp['rule'])
+            if comp['rule'] == 'successor':  # item 14's successor rule also requires full readiness against the original control
+                ctrl = sums[comp['ready_comparator']][pk_]
+                full = readiness(cand, ctrl, paired(encoded[comp['candidate']][pc_], encoded[comp['ready_comparator']][pk_]), 'ready')
+                checks['ready_vs_control'] = all(full.values())
             if pairing == 'historical':  # must reproduce exactly the recorded failing predicates
                 assert sorted(k for k, v in checks.items() if not v) == sorted(comp['expected_historical_failed']), comp['label']
             comparisons.append({**comp, 'pairing': pairing, 'candidate_policy': pc_, 'comparator_policy': pk_,
