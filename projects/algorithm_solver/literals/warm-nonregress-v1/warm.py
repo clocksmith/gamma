@@ -31,6 +31,8 @@ def contract():
     rt = c['runtime']; exe = os.path.realpath(sys.executable)
     assert exe == rt['python_realpath'] and sha(Path(exe).read_bytes()) == rt['python_sha256'], exe
     import scipy; assert sys.version.split()[0] == rt['python_version'] and scipy.__version__ == rt['scipy']
+    from scipy.optimize._highspy import _core  # the HiGHS extension item 26's solve() actually loads
+    assert os.path.realpath(_core.__file__) == rt['highs_extension_path'] and sha(Path(_core.__file__).read_bytes()) == rt['highs_extension_sha256']
     return c
 
 
