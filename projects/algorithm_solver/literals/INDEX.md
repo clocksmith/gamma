@@ -32,6 +32,16 @@ alphabet-family result, not a bound on per-binding search.
 [Freeze](scope-choice-v1/FREEZE.md), [review](scope-choice-v1/REVIEW.md),
 [evidence](scope-choice-v1/evidence/results.json).
 
+## Per-binding naming descent — 2026-10-23
+
+[Capture-conflict naming search](binding-descent-v1/README.md) passes the frozen
+development criteria at256: scope_joint saves6.01% validation actions
+(75better/21same/4worse), lowers character fraction55.14%→49.89% and package
+bytes15,255→14,724. Fixed-dictionary scope also passes (5.22%,73/27/0).
+All4,000choices qualify;649distinct changes pass62,521checks. Confirmation is
+owner-gated; M1 remains unmet. [Freeze](binding-descent-v1/FREEZE.md),
+[review](binding-descent-v1/REVIEW.md), [evidence](binding-descent-v1/evidence/results.json).
+
 ## Current goal navigation
 
 [Goals v2](../contracts/algorithm_solver_goals_v2.json) organizes recognition
