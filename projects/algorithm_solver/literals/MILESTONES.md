@@ -312,3 +312,8 @@ scores 2.36-8.86% below where the shared matched80-v3 local search ends (exact c
 5.25%, 3.71%, 2.95%).
 A local optimum is therefore not the best dictionary at this scale; the gap shrinks with subset size, so full-scale
 headroom is untested. Proposed next: an exact large-neighbourhood search on the full problem.
+
+**Exact large-neighbourhood search** ([mip-lns-v1](mip-lns-v1/README.md), dev-val 100): not ready. Exact HiGHS repairs
+on the full 300 dev-fit programs cut selections 3.26% at 256 entries and 1.41% at 128 below the shared local
+search's optimum; dev-val actions fall 2.59% and 0.87%. At 256 more programs worsen than improve (45 vs 33) and the
+median rises by one, so the larger fit gain is concentrated. Stacking with item 13's naming is the next shared item.
