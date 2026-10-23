@@ -1,19 +1,22 @@
 """Opt-in answer-changing facet gate for one-input stored recognition (development).
 
-Every indexed source carries a reviewed contract: its family, the facts that
-separate it from same-family siblings or from a material alternative reading,
-and the facets a request must settle before a non-exact stored answer returns.
-A required facet is settled by explicit, certain query evidence, or, only for a
-declared add-on feature (fee, cooldown, circular layout, ...), by the request
-not mentioning that feature at all. Trade count, duplicate policy and output
-never default. Source facts, public examples and sibling absence never fill an
-omission. The gate only rejects: the selected source is never replaced.
+Every indexed source carries a contract: its family, its completeness review,
+the facts that separate it from siblings and from material alternative
+readings, and the facets a request must settle before a non-exact stored answer
+returns. An unreviewed source abstains: an empty or partial facet list is not
+proof of identity. A required facet is settled by explicit, certain query
+evidence. A contract document may additionally declare absence defaults for
+add-on features (used only by labelled ablations); trade count, duplicate
+policy, output and the other no-default facets can never default. Source facts,
+public examples and sibling absence never fill an omission. The gate only
+rejects: the selected source is never replaced.
 
 The grammar is a conservative phrase grammar, not a language model. Evidence is
 uncertain when a hedge or conditional precedes it in its clause, when the
-sentence opens with a conditional, when it is quoted, or when `or`/`nor` in its
-clause offers an alternative (a recognized `no A or B` absence list and a
-trailing fallback such as `or zero` are not alternatives).
+sentence opens with a conditional, when it is quoted, when an absence phrase is
+itself negated (`it is not true that there are no fees`), or when `or`/`nor`
+within two words of it offers an alternative (a recognized `no A or B` absence
+list and a trailing fallback such as `or zero` are not alternatives).
 """
 from __future__ import annotations
 
@@ -38,7 +41,7 @@ RULES = [
     ('cooldown', 'one_day', r"\b(?:cooldown|cool-down|sit out the next day|wait (?:one|a|1) (?:full )?day|wait the next day|skip the (?:next|following) day|rest (?:for )?(?:one|a) day)\b", False),
     # houses and subarrays
     ('layout', 'circle', r"\b(?:circle|circular|ring|wraps? around|closed block|last (?:house|element|number|one) (?:touches|is adjacent to|neighbors|is next to) the first|first and last (?:houses? |elements? )?are (?:also )?(?:adjacent|neighbou?rs))\b", False),
-    ('layout', 'line', r"\b(?:straight (?:street|line|row)|in a (?:row|line|straight line)|row of houses|first and last (?:houses? )?(?:are not|aren't) (?:adjacent|neighbou?rs))\b", True),
+    ('layout', 'line', r"\b(?:straight (?:street|line|row)|in a (?:row|line|straight line)|row of houses|first and last (?:houses? |elements? )?(?:are not|aren't) (?:adjacent|neighbou?rs)|not (?:circular|a circle|cyclic)|(?:doesn't|does not) wrap(?: around)?)\b", True),
     ('layout', 'tree', r"\bbinary tree\b", False),
     ('deletion', 'one', r"\b(?:(?:delete|remove|drop|skip) (?:at most |up to )?one (?:element|number|value|item|entry)|one deletion|at most one deletion)\b", False),
     # islands
@@ -81,8 +84,31 @@ RULES = [
     ('output', 'two_windows', r"\btwo non-?overlapping (?:subarrays|sub-arrays|slices|windows|segments)\b", False),
     ('output', 'longest_subsequence', r"\b(?:longest subsequence|(?:maximum|largest) (?:length|size) (?:of )?(?:a |any )?subsequence)\b", False),
     ('repetition', 'infinite', r"\b(?:infinite(?:ly)?|repeat(?:s|ed)? (?:forever|endlessly|infinitely)|appended to itself (?:forever|infinitely|repeatedly)|concatenat\w+ (?:infinitely|forever|endlessly))\b", False),
+    ('repetition', 'none', r"\b(?:not repeated|(?:doesn't|does not|never) repeat|(?:array|list) (?:is )?(?:used |taken )?as given|no repetition)\b", True),
+    # facets found by the material-alternative review (never defaulted)
+    ('holding', 'one_share', r"\b(?:(?:hold|holding|own|owning|keep) (?:at most |only |just )?(?:one|a single|1) share|one share at a time|at most one share|(?:must|have to|need to) sell (?:it |the stock |the share )?before (?:buying|you buy|i buy)|sell before (?:you |i )?buy(?:ing)? again|(?:cannot|can't) hold more than one|no more than one share)\b", True),
+    ('adjacency', 'no_adjacent', r"\b(?:(?:never|not|cannot|can't|don't|do not|no|without) (?:\w+ ){0,3}(?:two )?(?:adjacent|neighbou?ring|neighbou?rs|consecutive|next-door)|non-?adjacent)\b", True),
+    ('connectivity', 'four', r"\b(?:(?:4|four)[- ](?:directional(?:ly)?|directions?|connected|neighbou?rs?|neighbou?rhood)|up,? down,? left,? (?:and|or) right|horizontally (?:and|or) vertically|vertically (?:and|or) horizontally|(?:not|never|no) diagonal(?:ly|s)?|shared edges|shares? an edge|edge[- ]adjacent)\b", True),
+    ('connectivity', 'eight', r"\b(?:(?:8|eight)[- ](?:directional(?:ly)?|directions?|connected|neighbou?rs?)|(?:including|also|and) diagonal(?:ly|s)?|diagonals? (?:also )?count)\b", False),
+    ('solutions', 'exactly_one', r"\b(?:exactly one (?:solution|pair|answer|valid pair)|(?:has|have|is) exactly one|(?:a |the )?unique (?:solution|pair)|only one (?:valid )?(?:solution|pair))\b", False),
+    ('reuse', 'distinct_positions', r"\b(?:(?:at |two )?different (?:positions|indices|indexes|elements)|(?:same|one) (?:position|element|index) (?:can't|cannot|may not|must not|can not) be used twice|not use the same (?:element|position|index) twice|two distinct (?:positions|indices|indexes)|distinct (?:positions|indices|indexes))\b", True),
+    ('positivity', 'positive', r"\b(?:(?:all|every|each) (?:of the )?(?:numbers|values|elements|integers|entries)(?: in [\w ]{1,20}?)? (?:are|is) (?:strictly )?positive|positive (?:integers|numbers|values|entries))\b", False),
+    ('fallback', 'zero', r"\b(?:(?:return |give |output )?(?:0|zero) if (?:none|no such|there is no|there's no|nothing|no (?:subarray|slice|window))|or (?:0|zero) if)\b", False),
+    ('nonempty', 'yes', r"\b(?:non-?empty|at least one (?:element|number|value|item|entry)|(?:cannot|can't) be empty|must (?:contain|include|pick) at least one)\b", True),
+    ('output', 'max_sum', r"\b(?:(?:greatest|largest|maximum|biggest|highest) (?:possible )?(?:total )?sum|max(?:imum)? subarray sum)\b", False),
+    ('ties', 'unique_answer', r"\b(?:(?:the )?answer (?:set )?is (?:guaranteed (?:to be )?)?unique|guaranteed (?:to be )?unique|unique answer|no ties)\b", False),
+    ('answer_order', 'any', r"\b(?:(?:in )?any (?:output )?order|order (?:does not|doesn't) matter|any output order|in either order)\b", False),
+    ('rank_base', 'one', r"\b(?:ranks? (?:start|starts|begin|begins) (?:at|from) (?:1|one)|(?:starting|start) (?:at|from) (?:1|one)|smallest (?:rank|value|element) (?:gets|is|has) (?:rank )?(?:1|one))\b", False),
+    ('prereq_direction', 'second_first', r"(?:\[\s*a\s*,\s*b\s*\] (?:means|says|indicates) (?:(?:that|do|you must|i must|we must) )?(?:take |complete |finish |do )?b (?:\w+ ){0,3}before a|\bb (?:must|has to|needs to) be (?:taken|completed|finished|done) before a|\bto take a,? (?:you|i|we) must (?:first )?take b)\b", False),
+    ('border', 'any', r"\b(?:outside (?:the (?:map|grid|matrix) )?is (?:all )?water|(?:all )?(?:four )?edges of the (?:grid|map) are (?:all )?surrounded by water|(?:assume|treat) (?:everything |the area )?outside (?:the (?:grid|map) )?(?:as|is) water|islands? touching the (?:edge|border) (?:still )?counts?)\b", False),
+    ('updates', 'batch', r"\b(?:(?:one|a|this|the given|the) (?:fixed |static )?(?:array|list)|in (?:items|nums|this array|this list))\b", False),
+    ('relation', 'at_least', r"(?:\b(?:at least|reaches or exceeds|greater than or equal to|no less than|meets or exceeds)\b|>=)", True),
+    ('relation', 'exactly', r"\b(?:(?:sums?|adds? up|add up) (?:exactly )?to (?:the )?target|exactly (?:equal to |equals )?(?:the )?target|equals? (?:the )?target|equal to (?:the )?target)\b", False),
+    ('deletion', 'none', r"\b(?:no deletions?|without (?:deleting|removing) (?:any|anything)|(?:cannot|can't|may not) (?:delete|remove) (?:any|anything))\b", True),
 ]
 _COMPILED = [(f, v, re.compile(p, re.I), neg) for f, v, p, neg in RULES]
+NEVER_DEFAULT = {'transactions', 'duplicates', 'output', 'holding', 'adjacency', 'connectivity', 'solutions', 'reuse',
+                 'positivity', 'fallback', 'nonempty', 'ties', 'answer_order', 'rank_base', 'prereq_direction', 'relation'}
 # An add-on feature is absent only if the request never mentions it. A mention that the grammar cannot read
 # (for example `if there is a fee, it is per trade`) blocks the default instead of being ignored.
 MENTIONS = {k: re.compile(p, re.I) for k, p in {
@@ -106,6 +132,9 @@ _NEGATION = re.compile(r"\b(?:not|never|don't|do not|doesn't|does not|no|without
 _HEDGE = re.compile(r'(?<!same )(?<!equal )(?<!identical )(?<!equivalent )\b(?:if|unless|maybe|might|perhaps|possibly|assuming|suppose|supposing|either|optionally)\b', re.I)  # `the same if` defines, it does not hedge
 _OPENING = re.compile(r'^\s*(?:if|unless|suppose|supposing|assuming|when|whenever)\b', re.I)
 _OR = re.compile(r'\b(?:or|nor)\b', re.I)
+# A negation earlier in the sentence than an absence phrase (`it is not true that there are no fees`).
+# Only a negation that scopes over the phrase counts: `not true that`, `false that`, or `not` right before it.
+_DOUBLE = re.compile(r"(?:\b(?:not|never)\s+$|\b(?:not|never|isn't) (?:true|the case)(?: that)?\b|\b(?:false|untrue|wrong) (?:that|to say)\b|\b(?:doesn't|does not|don't|do not) (?:mean|say|claim)(?: that)?\b)", re.I)
 _FALLBACK = re.compile(r'\b(?:or|nor)\s+(?:else\s+)?(?:do nothing|zero|0|-1|minus one|an? empty|empty|none|null|nothing|false|return)\b', re.I)
 _SENTENCE = re.compile(r'[.;!?\n]+')
 _SEGMENT = re.compile(r',|\bbut\b|\bwhile\b|\bhowever\b|\bthough\b|:|\(|\)|—|–| - ', re.I)
@@ -141,7 +170,9 @@ def parse(text):
         if not encodes_negation and (in_neg_list or _NEGATION.search(before)):
             continue  # negated mention of a positive value: not evidence for it
         reason = None
-        if _HEDGE.search(before) or _OPENING.match(text[sent_start:s]):
+        if (encodes_negation or in_neg_list) and _DOUBLE.search(before):
+            reason = 'double_negation'
+        elif _HEDGE.search(before) or _OPENING.match(text[sent_start:s]):
             reason = 'conditional_or_hedged'
         elif text[:s].count('"') % 2 or text[:s].count('“') > text[:s].count('”'):
             reason = 'quoted'
@@ -174,7 +205,7 @@ class FacetGate:
             raise ValueError('Unsupported facet-gate schema')
         self.defaults = dict(document['absence_defaults'])
         self.compatible = {tuple(x) for x in document.get('compatible', [])}
-        if set(self.defaults) - set(MENTIONS) or {'transactions', 'duplicates', 'output'} & set(self.defaults):
+        if set(self.defaults) - set(MENTIONS) or NEVER_DEFAULT & set(self.defaults):
             raise ValueError('Defaults are allowed only for declared add-on features')
         self.contracts = {}
         for c in document['contracts']:
@@ -183,8 +214,10 @@ class FacetGate:
                     or len(set(required)) != len(required) or not set(required) <= set(facts) <= set(FACETS)
                     or any(not isinstance(v, str) or not v for v in facts.values()) or h in self.contracts):
                 raise ValueError(f"Invalid or duplicate facet contract: {c.get('source_key')}")
+            if c.get('completeness') not in ('reviewed', 'unreviewed'):
+                raise ValueError(f"Contract completeness must be reviewed or unreviewed: {c['source_key']}")
             self.contracts[h] = {'source_key': c['source_key'], 'family': c['family'], 'facts': dict(facts),
-                                 'required_facets': sorted(required)}
+                                 'required_facets': sorted(required), 'completeness': c['completeness']}
 
     def agrees(self, facet, requested, source):
         return requested == source or (facet, requested, source) in self.compatible
@@ -197,6 +230,8 @@ class FacetGate:
                   'scope': 'declared answer-changing facets only; not semantic equivalence'}
         if contract is None:
             return dict(result, reason='facet_gate_unbound_source')
+        if contract['completeness'] != 'reviewed':
+            return dict(result, reason='facet_gate_unreviewed_source')
         facts = contract['facts']
         conflicts = sorted(set(parsed['conflicts']) & set(facts))
         contradictions = [{'facet': f, 'query': v, 'source': facts[f]} for f, v in parsed['facts'].items()

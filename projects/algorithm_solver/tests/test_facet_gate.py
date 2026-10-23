@@ -9,11 +9,12 @@ from test_required_facets import Approved, fixture
 STOCK = dict(transactions='unlimited', fee='none', cooldown='none')
 
 
-def doc(statement, facts=STOCK, required=None, defaults=None):
+def doc(statement, facts=STOCK, required=None, defaults=None, completeness='reviewed'):
     return {'schema_version': 1, 'absence_defaults': defaults if defaults is not None else {'fee': 'none', 'cooldown': 'none'},
             'compatible': [['ordering', 'sorted', 'arbitrary']],
             'contracts': [{'source_key': 'a', 'family': 'stock', 'statement_sha256': hashlib.sha256(statement.encode()).hexdigest(),
-                           'facts': dict(facts), 'required_facets': list(required if required is not None else facts)}]}
+                           'facts': dict(facts), 'required_facets': list(required if required is not None else facts),
+                           'completeness': completeness}]}
 
 
 class Grammar(unittest.TestCase):
@@ -31,7 +32,7 @@ class Grammar(unittest.TestCase):
 
     def test_distant_or_and_trailing_fallback_do_not(self):
         self.assertEqual(parse('Find the shortest consecutive slice whose sum reaches or exceeds the target.')['facts'],
-                         {'output': 'shortest_window'})
+                         {'output': 'shortest_window', 'relation': 'at_least'})
         self.assertEqual(parse('Return the two positions, or -1 if none.')['facts'], {'output': 'positions'})
 
     def test_hedges_and_opening_conditionals_but_not_permission(self):
@@ -42,6 +43,15 @@ class Grammar(unittest.TestCase):
     def test_negated_positive_value_is_not_evidence(self):
         self.assertNotIn('cooldown', parse('There is never a cooldown period after selling.')['facts'])
         self.assertEqual(parse('without a cooldown')['facts'], {'cooldown': 'none'})
+
+    def test_negated_absence_phrase_is_uncertain(self):
+        for text in ('It is not true that there are no fees.', 'It is false that there is no cooldown.', 'There are not no fees.'):
+            with self.subTest(text=text):
+                p = parse(text)
+                self.assertEqual(p['facts'], {})
+                self.assertEqual(len(p['uncertain']), 1)
+        facts = parse('The array is not circular and no deletions are allowed.')['facts']
+        self.assertEqual((facts['layout'], facts['deletion']), ('line', 'none'))
 
     def test_two_certain_values_conflict(self):
         self.assertEqual(parse('Unlimited transactions. Buy once.')['conflicts'], {'transactions': ['one', 'unlimited']})
@@ -68,8 +78,8 @@ class Gate(unittest.TestCase):
         self.assertEqual(self.check('Unlimited transactions with a transaction fee of 2.')['reason'], 'facet_gate_contradiction')
 
     def test_defaults_cannot_cover_output_count_or_duplicates(self):
-        for facet in ('transactions', 'duplicates', 'output'):
-            with self.subTest(facet=facet), self.assertRaises(ValueError):
+        for facet in ('transactions', 'duplicates', 'output', 'holding', 'connectivity', 'relation'):
+            with self.subTest(facet=facet), self.assertRaises((ValueError, KeyError)):
                 FacetGate(doc(self.entry.statement, defaults={facet: 'x'}))
 
     def test_compatible_value_is_not_a_contradiction(self):
@@ -77,10 +87,23 @@ class Gate(unittest.TestCase):
                        facts=dict(output='positions', ordering='arbitrary'), required=['output', 'ordering'])
         self.assertTrue(r['accepted'], r)
 
-    def test_unbound_and_reviewed_singleton(self):
+    def test_unbound_and_unreviewed_sources_abstain(self):
         gate = FacetGate(doc('other statement'))
         self.assertEqual(gate.check('anything', self.entry)['reason'], 'facet_gate_unbound_source')
-        self.assertTrue(self.check('anything at all', facts={}, required=[])['accepted'])
+        r = self.check('Unlimited transactions. No fees or cooldown.', completeness='unreviewed')
+        self.assertEqual(r['reason'], 'facet_gate_unreviewed_source')
+        self.assertTrue(self.check('anything at all', facts={}, required=[])['accepted'])  # reviewed: no facet changes the answer
+
+    def test_strict_document_never_settles_by_silence(self):
+        r = self.check('Unlimited transactions. Maximum profit.', defaults={})
+        self.assertEqual((r['reason'], r['missing']), ('facet_gate_missing', ['cooldown', 'fee']))
+
+    def test_reviewer_counterexamples_abstain(self):
+        for text in ('Buy and sell any number of times. A brokerage charge is subtracted on every sale.',
+                     'Buy and sell any number of times. It is not true that there are no fees.'):
+            for defaults in ({}, {'fee': 'none', 'cooldown': 'none'}):
+                with self.subTest(text=text, defaults=defaults):
+                    self.assertFalse(self.check(text, defaults=defaults)['accepted'])
 
 
 class Route(unittest.TestCase):
