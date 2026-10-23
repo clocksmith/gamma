@@ -4,6 +4,17 @@ Start here for source versions, experiments and the working literal languages.
 This is a navigation index over existing manifests and reports, not a second
 results ledger. Completed runs below retain their source, dictionary and execution identities.
 
+## Python optional characters: gain and coverage failure — 2026-10-23
+
+[Matched Python repairs](python-character-slots-v1/README.md) independently
+replay287of288 output/problem pairs. Optional128 uses1,383validation actions
+versus1,420, improves8of9programs and lowers median/character share, but its
+2.61%gain misses the5%gate. Optional256 loses coverage on one validation
+program; partial costs cannot promote it. No successor or cross-width choice.
+[Freeze](python-character-slots-v1/FREEZE.md),
+[review](python-character-slots-v1/REVIEW.md),
+[coverage diagnostics](python-character-slots-v1/COVERAGE.md).
+
 ## Full-substring relaxation remains inconclusive — 2026-10-23
 
 [Implicit full-pool certificates](all-substring-fraction-v1/README.md) cover
