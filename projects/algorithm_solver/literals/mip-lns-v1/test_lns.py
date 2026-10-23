@@ -16,13 +16,21 @@ class Repair(unittest.TestCase):
             if len(pool) < 6: continue
             fixed = list(sel.ALPHABET) + pool[:2]; cand = pool[2:10]
             for k in (1, 2, 3):
-                chosen, status, obj, _ = lns.repair(texts, fixed, cand, k, 30)
+                chosen, rec = lns.repair(texts, fixed, cand, k, 30)
                 best = min(sel.exact_fit(texts, fixed + list(c)) for r in range(k + 1) for c in itertools.combinations(cand, r))
-                self.assertEqual(status, 0)
+                self.assertEqual(rec['status'], 0)
                 self.assertEqual(sel.exact_fit(texts, fixed + chosen), best, (trial, k))
-                self.assertEqual(round(obj), best)
+                self.assertLessEqual(abs(rec['objective'] - best), 1e-6)
                 checked += 1
         self.assertGreater(checked, 20)
+
+    def test_sparse_incumbent_can_refill_all_free_capacity(self):
+        texts = {0: 'abab;cdcd;efef', 1: 'abab;cdcd;efef!', 2: 'ab;cd;ef;'}
+        pool = sel.build_pool(texts, set(texts.values()), 4)
+        fixed = list(sel.ALPHABET)  # sparse incumbent: no learned entries
+        chosen, rec = lns.repair(texts, fixed, pool, 3, 30)  # capacity 3 although nothing was freed
+        self.assertEqual(rec['status'], 0)
+        self.assertEqual(len(chosen), 3)
 
 
 if __name__ == '__main__':
