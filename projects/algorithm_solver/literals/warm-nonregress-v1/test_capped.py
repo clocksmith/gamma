@@ -1,0 +1,52 @@
+"""Synthetic checks for capped.py: exhaustive optimum under nonregression caps, warm/cold agreement, incumbent validity."""
+import itertools, random, sys, unittest
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import capped
+
+analyze = capped.analyze
+
+
+def costs(texts, vocab):
+    return {p: len(analyze.shortest_encode(t, vocab)) for p, t in texts.items()}
+
+
+def brute(texts, fixed, cand, capacity, caps):
+    best = None
+    for r in range(capacity + 1):
+        for sub in itertools.combinations(cand, r):
+            c = costs(texts, list(fixed) + list(sub))
+            if all(c[p] <= caps[p] for p in texts):
+                v = sum(c.values()); best = v if best is None or v < best else best
+    return best
+
+
+class CappedTests(unittest.TestCase):
+    def test_exhaustive_optimum_warm_and_cold(self):
+        rng = random.Random(37)
+        for trial in range(40):
+            texts = {i: ''.join(rng.choice('abc') for _ in range(rng.randint(4, 12))) for i in range(rng.randint(2, 4))}
+            subs = sorted({t[i:j] for t in texts.values() for i in range(len(t)) for j in range(i + 2, min(len(t), i + 4) + 1)})
+            fixed = list('abc'); pool = rng.sample(subs, min(len(subs), 7)); capacity = rng.randint(1, 3)
+            incumbent = fixed + pool[:min(capacity, 2)]; cand = [s for s in pool]  # incumbent's learned entries stay candidates
+            caps = costs(texts, incumbent)
+            want = brute(texts, fixed, cand, capacity, caps)
+            m = capped.build(texts, fixed, cand, capacity, incumbent, caps)
+            self.assertEqual(m['initial'], sum(caps.values()))
+            for warm in (True, False):
+                chosen, rec = capped.solve(m, cand, warm, 30.)
+                self.assertTrue(rec['optimal'] and rec['feasible'], rec)
+                got = costs(texts, fixed + chosen)
+                self.assertTrue(all(got[p] <= caps[p] for p in texts))
+                self.assertEqual(sum(got.values()), want)
+                self.assertEqual(round(rec['objective']), want)
+
+    def test_incumbent_violating_cap_is_rejected(self):
+        texts = {1: 'abab', 2: 'abc'}; fixed = list('abc'); cand = ['ab']
+        caps = {1: 1, 2: 3}  # 'abab' needs 2 selections with 'ab'; a cap below the incumbent's cost must fail closed
+        with self.assertRaises(AssertionError):
+            capped.build(texts, fixed, cand, 1, fixed + ['ab'], caps)
+
+
+if __name__ == '__main__':
+    unittest.main()
