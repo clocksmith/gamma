@@ -12,6 +12,51 @@ HERE = Path(__file__).resolve().parent; LIT = HERE.parent
 packet_audit = backend.module('fraction_primal_packet_audit', LIT / 'all-substring-fraction-v1/report.py')
 sha, write = backend.sha, backend.write
 SOLVER_TIMER_TOLERANCE = .05  # Separate HiGHS/monotonic timers, seconds.
+PATH_POLICY = 'minimum_F_then_minimum_N_then_lexicographic_entry_ids'
+# Inherited exactly from all-substring-fraction-v1/report.py witness().
+NEAR_WHOLE_THRESHOLD = .9
+
+
+def witness_summary(witness):
+    """Aggregate already independently replayed packets, without changing paths."""
+    stats = witness['entry_statistics']; entries = witness['entries']
+    assert len(stats) == entries
+    one = sum(row['distinct_program_support'] == 1 for row in stats)
+    near = sum(row['maximum_fraction_of_containing_source'] >= NEAR_WHOLE_THRESHOLD for row in stats)
+    both = sum(row['distinct_program_support'] == 1 and
+               row['maximum_fraction_of_containing_source'] >= NEAR_WHOLE_THRESHOLD for row in stats)
+    assert one == witness['one_owner_entries']
+    assert near == witness['entries_covering_at_least_90_percent_of_a_source']
+    n = witness['selections']; actions = witness['actions']
+    assert actions['total'] == n['total'] + n['n']
+    assert witness['objective'] == 10*witness['characters'] - n['total']
+    assert witness['character_fraction'] == witness['characters']/n['total']
+    return {'path_policy': PATH_POLICY, 'programs': n['n'], 'F': witness['objective'],
+            'C': witness['characters'], 'N': n['total'], 'actions': actions['total'],
+            'median_selections': n['median'], 'p90_selections': n['p90'], 'p95_selections': n['p95'],
+            'character_fraction': witness['character_fraction'], 'entries': entries,
+            'entry_share_denominator': 'all_dictionary_entries_including_unused_and_singletons',
+            'one_owner_entries': one, 'one_owner_entry_share': one/entries if entries else None,
+            'near_whole_entries': near, 'near_whole_entry_share': near/entries if entries else None,
+            'one_owner_and_near_whole_entries': both,
+            'one_owner_and_near_whole_entry_share': both/entries if entries else None,
+            'near_whole_threshold': NEAR_WHOLE_THRESHOLD,
+            'near_whole_definition': 'entry_length >= 90% of at least one source containing that entry',
+            'one_owner_definition': 'substring occurs in exactly one distinct source, regardless of packet use',
+            'entry_share_interpretation': 'descriptive size/support counts; not semantic reuse or legality tests'}
+
+
+def summarize_witnesses(witnesses):
+    summaries = {name: witness_summary(witnesses[name]) for name in ('seed','warm','cold') if name in witnesses}
+    seed = summaries['seed']
+    for row in summaries.values():
+        row['relative_to_minimum_F_seed'] = {
+            'F_delta': row['F']-seed['F'], 'N_delta': row['N']-seed['N'],
+            'actions_delta': row['actions']-seed['actions'],
+            'character_fraction_delta': row['character_fraction']-seed['character_fraction'],
+            'lower_fraction_with_higher_N': row['character_fraction'] < seed['character_fraction'] and row['N'] > seed['N'],
+            'lower_F_with_higher_N': row['F'] < seed['F'] and row['N'] > seed['N']}
+    return summaries
 
 
 def number(value, nonnegative=True):
@@ -112,6 +157,7 @@ def replay_arm(raw, folder, work, c, contract_hash):
             'pool_sha256': raw['pool_sha256'], 'model_sha256': model_hash,
             'arcs': rebuilt['arcs'], 'variables': rebuilt['variables'], 'transitions': rebuilt['transitions'],
             'solve_order': c['solve_order'][cohort], 'solvers': solvers, 'witnesses': witnesses,
+            'witness_cost_and_entry_share_summary': summarize_witnesses(witnesses),
             'warm_nonregression': witnesses['warm']['objective'] <= initial,
             'warm_F_gain': initial - witnesses['warm']['objective'],
             'cold_F_gain': initial - witnesses['cold']['objective'] if 'cold' in witnesses else None,
@@ -176,7 +222,24 @@ def write_report(report, here=HERE):
         for arm in report['arms']:
             w = arm['witnesses']
             lines.append(f"| {arm['cohort']} | {w['seed']['objective']} | {w['warm']['objective']} | {w.get('cold', {}).get('objective', 'infeasible')} | {arm['warm_F_gain']} | {w['warm']['entries']} | {arm['parent_full_class_integer_lower_bound']} |")
+        lines += ['', 'All following seed and feasible-witness rows use exact **minimum-F paths**, with ties by minimum N and then entry IDs. These are not minimum-N encodings. Actions include one Finish per program; median/p90/p95 below count selections only.', '',
+                  '| Cohort | Witness | F | C | Character fraction | N | Actions | Median N | p90 N | p95 N | N change vs seed |',
+                  '|---|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|']
+        for arm in report['arms']:
+            for name, row in arm['witness_cost_and_entry_share_summary'].items():
+                lines.append(f"| {arm['cohort']} | {name} | {row['F']} | {row['C']} | {100*row['character_fraction']:.4f}% | {row['N']} | {row['actions']} | {row['median_selections']} | {row['p90_selections']} | {row['p95_selections']} | {row['relative_to_minimum_F_seed']['N_delta']:+d} |")
+        lines += ['', '| Cohort | Witness | Dictionary entries | One-owner entries / share | Near-whole entries / share | Both / share |',
+                  '|---|---|---:|---:|---:|---:|']
+        for arm in report['arms']:
+            for name, row in arm['witness_cost_and_entry_share_summary'].items():
+                counts = [f"{row[count]} / {100*row[share]:.2f}%" if row[share] is not None else '0 / undefined'
+                          for count, share in [('one_owner_entries','one_owner_entry_share'),
+                                               ('near_whole_entries','near_whole_entry_share'),
+                                               ('one_owner_and_near_whole_entries','one_owner_and_near_whole_entry_share')]]
+                lines.append(f"| {arm['cohort']} | {name} | {row['entries']} | {' | '.join(counts)} |")
+        lines += ['', 'Entry-share denominators include every dictionary entry, including unused entries and singletons. One-owner means occurrence in exactly one distinct source, not use by one packet. Near-whole retains the inherited threshold: entry length at least 90% of any containing source. The overlap column is both conditions. These are descriptive size/support statistics, not semantic reuse or legality tests.']
     lines += ['', 'Every singleton is charged. F = 10 C − N targets the aggregate character fraction; exact minimum-F paths may use more selections than minimum-N paths.',
+              '', 'Lower F or a lower character fraction does not imply fewer actions or better selection quantiles. Signed seed comparisons and the lower_fraction_with_higher_N flag in metadata expose that tradeoff under the same minimum-F policy. No minimum-N counterfactual is computed by this reporting addition.',
               '', report['bound_interpretation'], '', 'One-owner and near-whole strings remain relaxation witnesses with semantic reuse unresolved. No M1 candidate or full-class impossibility claim follows. Item 23’s failed qualification remains recorded; unchanged sources reuse only exact item 13 passing hashes.',
               '', 'No validation or protected population was loaded. Sources, vocabularies, q and packets remain private.']
     (here / 'README.md').write_text('\n'.join(lines) + '\n')
