@@ -16,7 +16,11 @@ c.update(schema='gamma.all-length-fraction.contract.v1',
     limits={'workers':2,'arm_cores':{'R':[0],'naming':[1]},'address_space_bytes':8589934592,'overall_seconds':2400},
     pre_freeze_audit={'corpus_probe':False,'tests':6,'exhaustive_pool_instances':500,'exhaustive_suffix_array_instances':300})
 assert c['search']['iterations']==2000 and c['search']['seconds']==1200
-for file in ('pool.py','run.py','test_pool.py','make_contract.py','FREEZE.md'):
+c['prelaunch_amendment']={'base_freeze_commit':'1465cdaff','document':'AMENDMENT-1.md','inherited_dual_sha256':old['code_hashes']['fraction-capacity-v1/dual.py']}
+c['pre_freeze_audit']['occurrence_tests']=4
+c['pre_freeze_audit']['random_old_new_graphs']=150
+c['pre_freeze_audit']['brute_match_sets']=100
+for file in ('pool.py','run.py','test_pool.py','make_contract.py','FREEZE.md','occurrence.py','test_occurrence.py','AMENDMENT-1.md'):
     c['code_hashes'][str((HERE/file).relative_to(LIT))]=sha(HERE/file)
 c['code_hashes']['fraction-capacity-v1/contract.json']=sha(LIT/'fraction-capacity-v1/contract.json')
 c['offline_encoder_files']={str((LIT/rel).resolve()):h for rel,h in c['code_hashes'].items() if rel.endswith(('.py','.cjs')) and '/test_' not in rel}

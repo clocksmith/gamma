@@ -16,6 +16,9 @@ import dual as d
 analyze=d.analyze
 sys.path.insert(0,str(HERE))
 import pool as shared_pool
+import occurrence
+d.Graph=occurrence.Graph
+d.independent_certificate=occurrence.independent_certificate
 
 
 def measure(texts,vocab,folder,decoder_bytes):
