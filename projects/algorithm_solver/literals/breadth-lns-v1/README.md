@@ -70,3 +70,9 @@ All 400 programs decode in every arm, and the whole-solution audit is clean.
 - **Runtime change.** The arms moved from two cores each to one core each mid-run. scipy exposes no HiGHS
   thread option, so the effect on solver speed is unmeasured. The time-limit counts above include any slowdown.
 - **Item 29**, which carries these objectives onto item 13, was frozen before this result and is unchanged by it.
+
+**Note, 2026-10-23 23:55Z** ([warm-nonregress-v1](../warm-nonregress-v1/README.md), item 37). The nonregress stall
+recorded here is not caused by a missing warm start. On the same seed, RNG and first snapshot, item 26's direct-HiGHS
+model (`threads=1`, `random_seed=8`, cap rows) solved the nonregression repairs that SciPy's `milp` could not, and
+warm and cold followed identical trajectories. Read this stage's nonregress row as an outcome of the SciPy wrapper or
+its configuration. Which factor matters is not isolated. No number above changes.
