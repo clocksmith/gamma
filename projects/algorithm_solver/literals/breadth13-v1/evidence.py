@@ -15,8 +15,7 @@ q = lambda xs, f: xs[math.ceil(f * len(xs)) - 1]
 
 def rows_for(texts, vocab):
     rows, illegal, db = sel.measure(texts, vocab, 8, sel.forbidden_strings(texts))
-    assert not illegal
-    return rows, db
+    return rows, db, illegal
 
 
 def summary(rows, ids, db):
@@ -38,12 +37,12 @@ def main():
     c = json.loads((HERE / 'contract.json').read_text()); res = json.loads((a.run / 'results.json').read_text())
     assert res['contract_sha256'] == sha((HERE / 'contract.json').read_bytes())
     parent = json.loads((LIT / 'cost-decomposition-v1/contract.json').read_text()); fit_ids, val_ids = parent['partition']['dev_fit'], parent['partition']['dev_val']
-    seed_vocab, allsrc = succ.load_seed(a.work, c)
-    seed_rows, seed_db = rows_for(allsrc, seed_vocab)
+    seed_vocab, allsrc = succ.load_seed(a.work, c, 'all')
+    seed_rows, seed_db, ill = rows_for(allsrc, seed_vocab); assert not ill
     pin = parent['dictionaries']['8']; pvocab = json.loads((a.work / pin['relative_path']).read_text())
     assert sha((a.work / pin['relative_path']).read_bytes()) == pin['sha256']
     original = analyze.load_sources(a.work, {**parent, 'sources': [r for r in parent['sources'] if r['id'] in set(val_ids)]})
-    r_rows, r_db = rows_for(original, pvocab)
+    r_rows, r_db, ill = rows_for(original, pvocab); assert not ill
     # Sources are item 13's own (unchanged), so their qualification is item 13's/15's receipts by exact hash.
     assert sha((LIT / c['qualification_receipt']).read_bytes()) == c['qualification_receipt_sha256']
     qual = json.loads((LIT / c['qualification_receipt']).read_text())
@@ -61,14 +60,31 @@ def main():
     out = {'schema': 'gamma.breadth13-v1.evidence.v1', 'contract_sha256': res['contract_sha256'], 'results_sha256': sha((a.run / 'results.json').read_bytes()),
            'qualification_reused': c['qualification_receipt'], 'all_sources_qualified_by_receipt': all_q,
            'pinned_R': summary(r_rows, val_ids, r_db), 'seed': summary(seed_rows, val_ids, seed_db),
-           'current_best': {'evidence': cb['evidence'], 'arm': cb['arm'], **cb_sum}, 'arms': {}}
-    for arm in res['arms']:
-        rows = arm['per_problem']; s = summary(rows, val_ids, arm['dictionary_bytes']); f = summary(rows, fit_ids, arm['dictionary_bytes'])
+           'current_best': {'evidence': cb['evidence'], 'arm': cb['arm'], **cb_sum}, 'exit_codes': res['exit_codes'],
+           'decoder_dependency_bytes': {rel: (LIT / rel).stat().st_size for rel in ('literals.py', 'pass2/working/bitpack.py')},
+           'offline_encoder_bytes': {rel: (LIT / rel).stat().st_size for rel in ('breadth13-v1/succ.py', 'breadth-lns-v1/breadth.py',
+                                                                                 'lagrange-select-v2/selection.py', 'cost-decomposition-v1/analyze.py',
+                                                                                 'tail-search-v1/structure.cjs')},
+           'arms': {}, 'failed_arms': {}}
+    present = {x['arm']: x for x in res['arms']}
+    for name in succ.ARMS:
+        # A missing arm or a nonzero exit is a retained failure, never silently dropped from the evidence.
+        if name not in present or res['exit_codes'].get(name) != 0:
+            out['failed_arms'][name] = {'exit_code': res['exit_codes'].get(name), 'results_present': name in present}; continue
+        arm = present[name]; folder = a.run / name
+        # Independent replay: re-read the sealed dictionary, check it against the fit seal, and re-measure all 400 sources.
+        raw = (folder / 'dictionary.json').read_bytes(); seal = json.loads((folder / 'fit-seal.json').read_text())
+        assert sha(raw) == seal['dictionary_sha256'] == arm['dictionary_sha256'] and seal['validation_loaded'] is False
+        vocab = json.loads(raw); assert len(vocab) <= 256
+        replay, replay_db, replay_illegal = rows_for(allsrc, vocab)
+        assert replay_illegal == arm['illegal_entry_sha256'] and replay_db == arm['dictionary_bytes'] and replay == {str(k): v for k, v in arm['per_problem'].items()}, name
+        assert arm['decoded'] == len(replay) == 400
+        rows = replay; s = summary(rows, val_ids, replay_db); f = summary(rows, fit_ids, replay_db)
         pr_r, pr_s = paired(rows, r_rows, val_ids), paired(rows, seed_rows, val_ids)
         ready = {'actions_5pct': s['actions'] <= 0.95 * out['pinned_R']['actions'], 'median_lower': s['median'] < out['pinned_R']['median'],
                  'p90_lower': s['p90'] < out['pinned_R']['p90'], 'improved_60': pr_r['better'] >= 60, 'worsened_25': pr_r['worse'] <= 25,
                  'fraction_not_higher': s['single_character_fraction'] <= out['pinned_R']['single_character_fraction'],
-                 'package_105': s['package_bytes'] <= 1.05 * out['pinned_R']['package_bytes'], 'qualified_clean': all_q and not arm['illegal_entry_sha256'],
+                 'package_105': s['package_bytes'] <= 1.05 * out['pinned_R']['package_bytes'], 'qualified_clean': all_q and not replay_illegal,
                  'decoded_400': arm['decoded'] == 400}
         inc = {'fewer_actions': s['actions'] < out['seed']['actions'], 'median_not_worse': s['median'] <= out['seed']['median'],
                'p90_not_worse': s['p90'] <= out['seed']['p90'], 'fraction_not_higher': s['single_character_fraction'] <= out['seed']['single_character_fraction'],
@@ -86,6 +102,7 @@ def main():
                                    'new_current_best': all(ready.values()) and all(inc.values()) and all(vs_cb.values()),
                                    'per_problem_validation_actions': {str(p): rows[str(p)]['actions'] for p in val_ids}}
     cands = [k for k, v in out['arms'].items() if v['successor']]
+    out['replayed_arms'] = sorted(out['arms'])
     rank = lambda k: (out['arms'][k]['validation']['actions'], out['arms'][k]['validation']['package_bytes'], k)
     out['selected_successor'] = min(cands, key=rank) if cands else None
     best = [k for k in cands if out['arms'][k]['new_current_best']]
