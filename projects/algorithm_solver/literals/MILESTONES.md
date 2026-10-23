@@ -298,3 +298,10 @@ optimistic diagnostics, not legal candidate dictionaries or scorer headroom.
 M1 thresholds and held-out/protected reservations remain unchanged. Next is a
 matched conventional search ablation on dev-fit, followed by fixed dev-val
 measurement; no training, BITS update or source publication is authorized.
+
+**Global dictionary selection** ([lagrange-select-v2](lagrange-select-v2/README.md), dev-val 100): not ready.
+A per-occurrence Lagrangian relaxation over 223,244 fit-witnessed strings certifies that no dictionary made of the
+96 characters plus pool entries can need fewer than 21,215 dev-fit selections at 256 entries (32,700 at 128);
+the best found needs 25,924 (41,247). Exact search started from the Lagrangian primal ends 0.7-1.05% below the
+local-search control on fit and 0.2-0.9% on dev-val, with many programs worse. The remaining pool gap (at most
+18.2% on fit at 256) is far below what M1 needs, and its attainability is not shown. No scorer case.
