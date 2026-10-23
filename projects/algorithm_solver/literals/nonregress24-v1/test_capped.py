@@ -62,6 +62,14 @@ class CappedTests(unittest.TestCase):
         self.assertTrue(rows['1']['encodable']); self.assertEqual(rows['1']['selections'], 2)
         self.assertEqual(rows['2'], {'encodable': False})
 
+    def test_timeout_kill_after_bounds_a_term_ignoring_child(self):
+        import subprocess, time
+        code = 'import signal, time; signal.signal(signal.SIGTERM, signal.SIG_IGN); time.sleep(60)'
+        t0 = time.monotonic()
+        r = subprocess.run(['timeout', '--kill-after=2', '1', sys.executable, '-c', code])
+        self.assertEqual(r.returncode, 137)  # SIGKILL after the grace period, not an unbounded wait
+        self.assertLess(time.monotonic() - t0, 10)
+
     def test_incumbent_violating_cap_is_rejected(self):
         texts = {1: 'abab', 2: 'abc'}; fixed = list('abc'); cand = ['ab']
         caps = {1: 1, 2: 3}  # 'abab' needs 2 selections with 'ab'; a cap below the incumbent's cost must fail closed
