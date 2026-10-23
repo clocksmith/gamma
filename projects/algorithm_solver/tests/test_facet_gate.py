@@ -53,6 +53,17 @@ class Grammar(unittest.TestCase):
         facts = parse('The array is not circular and no deletions are allowed.')['facts']
         self.assertEqual((facts['layout'], facts['deletion']), ('line', 'none'))
 
+    def test_multiple_or_repeated_trades_are_not_unlimited(self):
+        for text in ('I can repeatedly buy and sell.', 'You may make multiple trades.', 'Several transactions are fine.'):
+            with self.subTest(text=text):
+                self.assertNotIn('transactions', parse(text)['facts'])
+        self.assertEqual(parse('Multiple trades, at most three transactions.')['facts']['transactions'], 'bounded_other')
+
+    def test_exactly_one_forbids_zero_trades(self):
+        p = parse('You must complete exactly one transaction, even if it loses money.')
+        self.assertEqual((p['facts']['transactions'], p['facts']['zero_trade']), ('one', 'forbidden'))
+        self.assertEqual(parse('Buy once and sell later, or do nothing.')['facts']['zero_trade'], 'allowed')
+
     def test_two_certain_values_conflict(self):
         self.assertEqual(parse('Unlimited transactions. Buy once.')['conflicts'], {'transactions': ['one', 'unlimited']})
 
