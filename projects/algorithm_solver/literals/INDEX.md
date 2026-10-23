@@ -4,6 +4,15 @@ Start here for source versions, experiments and the working literal languages.
 This is a navigation index over existing manifests and reports, not a second
 results ledger. Completed runs below retain their source, dictionary and execution identities.
 
+## Python rendering: small action gain, worse character share — 2026-10-23
+
+[Matched rendering/source-dictionary arms](python-source-rendering-v1/README.md)
+replay all360views; five new sources pass513checks.128joint reaches1,405
+validation actions versus1,420, but character share rises74.27%to76.79%;
+256arms tie935. No ready candidate.
+[Freeze](python-source-rendering-v1/FREEZE.md),
+[review](python-source-rendering-v1/REVIEW.md).
+
 ## Atomic constructor admission: literal-only gain — 2026-10-23
 
 [Matched atomic bundles](constructor-bundles-v1/README.md) replay all2,000views.
