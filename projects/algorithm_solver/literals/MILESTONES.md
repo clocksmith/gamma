@@ -330,3 +330,9 @@ cold-started repairs, HiGHS found no feasible point within 300 s, although the c
 feasible (fit −14 selections, dev-val −2 actions). Equal relative weights cut fit 1.50% but made dev-val slightly worse (9,053 vs
 9,048 actions, 51 programs worse, median 64.5 → 67.5). The plain objective again gives the largest total gain
 (dev-val −2.59%) with a concentrated cost (43 programs worse).
+
+**Breadth-aware repairs on item 13** ([breadth13-v1](breadth13-v1/README.md), dev-val 100): no successor. The plain
+objective cuts dev-val actions 1.78% (8,353) and gives the lowest p95 yet (169 selections), but the median rises and
+36 programs get worse. Relative weighting lowers the median (62.0) and improves 48 programs, but 35 get worse and the
+character fraction rises. The nonregression repair again accepts nothing when cold-started. Item 24 remains the
+current best.
