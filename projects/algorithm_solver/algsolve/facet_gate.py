@@ -31,10 +31,15 @@ from pathlib import Path
 # negation are exempt from the negated-prefix rule.
 RULES = [
     # stock
-    ('transactions', 'one', r"\b(?:buy (?:it |the stock |a share |one share )?once|(?:only |just |exactly )?(?:one|a single|1) (?:completed |single )?(?:trade|transaction|purchase|round trip)s?\b|at most one (?:trade|transaction)|one buy and one sell|a single buy and (?:a single )?sell)", False),
-    ('transactions', 'two', r"\b(?:at most (?:two|2) (?:completed )?(?:trades|transactions)|up to (?:two|2) (?:completed )?(?:trades|transactions)|(?:two|2) (?:separate |completed |non-?overlapping )?(?:trades|transactions))\b", False),
-    ('transactions', 'k', r"\b(?:at most k (?:completed )?(?:trades|transactions)|up to k (?:trades|transactions)|k (?:completed )?(?:trades|transactions))\b", False),
-    ('transactions', 'unlimited', r"\b(?:repeatedly buy|buy and sell (?:as many times|repeatedly|multiple times|any number of times)|as many (?:trades|transactions|times) as (?:i|you|we) (?:want|like|wish)|as often as (?:i|you|we) (?:want|like|wish)|any number of (?:stock )?(?:trades|transactions|times)|unlimited (?:number of )?(?:trades|transactions)|no limit on (?:the number of )?(?:trades|transactions)|multiple (?:trades|transactions))\b", False),
+    # Trade count is an upper bound; whether zero trades is allowed is the separate zero_trade facet.
+    # `repeatedly`, `multiple` or `several` never prove an unlimited count.
+    ('transactions', 'one', r"\b(?:buy (?:it |the stock |a share |one share )?once|(?:at most |only |just |exactly )?(?:one|a single|1) (?:completed |single )?(?:trade|transaction|purchase|round trip)s?\b|one buy and one sell|a single buy and (?:a single )?sell)", False),
+    ('transactions', 'two', r"\b(?:(?:at most|up to|no more than) (?:two|2) (?:completed )?(?:trades|transactions)|(?:two|2) (?:separate |completed |non-?overlapping )?(?:trades|transactions))\b", False),
+    ('transactions', 'k', r"\b(?:(?:at most|up to|no more than) k (?:completed )?(?:trades|transactions)|k (?:completed )?(?:trades|transactions))\b", False),
+    ('transactions', 'bounded_other', r"\b(?:at most|up to|no more than|exactly) (?:three|four|five|six|seven|eight|nine|ten|[3-9]|\d{2,}) (?:completed )?(?:trades|transactions)\b", False),
+    ('transactions', 'unlimited', r"\b(?:as many (?:trades|transactions|times) as (?:i|you|we) (?:want|like|wish)|as often as (?:i|you|we) (?:want|like|wish)|any number of (?:stock )?(?:trades|transactions|times)|unlimited (?:number of )?(?:trades|transactions)|no limit on (?:the number of )?(?:trades|transactions))\b", False),
+    ('zero_trade', 'allowed', r"\b(?:(?:or )?do(?:ing)? nothing(?: is allowed)?|(?:may|can) (?:skip trading|choose not to trade|not trade)|never trade|not trade at all|(?:return|answer is|profit is|should return) (?:0|zero)|including zero|at most one (?:trade|transaction))\b", False),
+    ('zero_trade', 'forbidden', r"\b(?:must (?:complete|make|do|perform) (?:exactly )?(?:one|a|at least one) (?:trade|transaction)|even if (?:it|that|this) loses money|at least one (?:trade|transaction)|required to (?:trade|buy))\b", False),
     ('fee', 'none', r"\b(?:no (?:transaction |trading )?(?:fees?|commissions?)|fee[- ]free|without (?:any )?(?:fees?|commissions?)|free of (?:charge|fees))\b", True),
     ('fee', 'per_trade', r"\b(?:transaction fee|(?:a )?fee (?:of|per|for each|on each)|costs? (?:a )?commission|commission (?:per|on each|for each|exactly once)|pay (?:a|the) fee|charged (?:a fee )?(?:once )?(?:per|for each) (?:completed )?(?:trade|transaction))\b", False),
     ('cooldown', 'none', r"\b(?:no (?:cooldown|cool-down|waiting (?:days?|period))|without (?:a |any )?(?:cooldown|cool-down|waiting (?:day|period)))\b", True),
@@ -108,7 +113,8 @@ RULES = [
 ]
 _COMPILED = [(f, v, re.compile(p, re.I), neg) for f, v, p, neg in RULES]
 NEVER_DEFAULT = {'transactions', 'duplicates', 'output', 'holding', 'adjacency', 'connectivity', 'solutions', 'reuse',
-                 'positivity', 'fallback', 'nonempty', 'ties', 'answer_order', 'rank_base', 'prereq_direction', 'relation'}
+                 'positivity', 'fallback', 'nonempty', 'ties', 'answer_order', 'rank_base', 'prereq_direction', 'relation',
+                 'zero_trade'}
 # An add-on feature is absent only if the request never mentions it. A mention that the grammar cannot read
 # (for example `if there is a fee, it is per trade`) blocks the default instead of being ignored.
 MENTIONS = {k: re.compile(p, re.I) for k, p in {
