@@ -336,3 +336,10 @@ objective cuts dev-val actions 1.78% (8,353) and gives the lowest p95 yet (169 s
 36 programs get worse. Relative weighting lowers the median (62.0) and improves 48 programs, but 35 get worse and the
 character fraction rises. The nonregression repair again accepts nothing when cold-started. Item 24 remains the
 current best.
+
+**Nonregression repair with direct HiGHS** ([warm-nonregress-v1](warm-nonregress-v1/README.md), dev-val 100): a
+breadth-safe successor of item 13. 8,377 dev-val actions (−1.49%), median 62.0, 26 programs better and 0 worse. Warm
+and cold starts follow identical trajectories, so the warm start is not what helps. The stall in items 22 and 29
+came from the SciPy `milp` interface or configuration: item 26's direct model solves the same first snapshots to
+optimality in about 160 s. It does not beat item 24 (8,336 actions, lower fraction), so item 24 remains the current
+best.
