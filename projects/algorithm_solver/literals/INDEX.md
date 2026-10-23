@@ -41,6 +41,15 @@ The existing Python statement miner is
 import. Exact byte-span provenance is a proposed integration refinement, not an
 implemented new extractor or semantic-equivalence check.
 
+## 2026-10-23 tail-search ablations
+
+[Eight-arm tail search](tail-search-v1/README.md) compares alphabet reclamation
+and all-position syntax proposals at 128/256 entries. No arm passes readiness.
+Reclaiming seven fit-unused character slots loses three validation programs;
+positions preserves coverage but adds 16 validation actions at 128 and saves
+only five at 256. All searches terminate locally, with no optimum claim.
+The next step is vocabulary-aware rewriting under a new qualification contract.
+
 ## 2026-10-23 fixed-source feasibility diagnostic
 
 [Cost decomposition and optimistic bounds](cost-decomposition-v1/README.md) uses only
