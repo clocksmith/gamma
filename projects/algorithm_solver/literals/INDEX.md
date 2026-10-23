@@ -4,6 +4,16 @@ Start here for source versions, experiments and the working literal languages.
 This is a navigation index over existing manifests and reports, not a second
 results ledger. Completed runs below retain their source, dictionary and execution identities.
 
+## Exact repairs plus naming — 2026-10-23
+
+[Combined dictionary/source search](lns-naming-v1/README.md): all3,200choices
+qualify;404distinct changes pass40,328checks. Joint/adaptive saves169validation
+actions versus item13 (1.99%), but median actions rise62.5→65 and37programs worsen.
+No LNS view meets readiness or the incremental successor rule. Common fixed-source
+and adaptive views separate dictionary and encoding effects. Item13 stays selected.
+[Freeze](lns-naming-v1/FREEZE.md), [review](lns-naming-v1/REVIEW.md),
+[evidence](lns-naming-v1/evidence/results.json).
+
 ## Local syntax alternatives — 2026-10-23
 
 [Guarded per-node syntax search](syntax-choice-v1/README.md): all2,000packets decode;
