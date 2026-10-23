@@ -4,6 +4,16 @@ Start here for source versions, experiments and the working literal languages.
 This is a navigation index over existing manifests and reports, not a second
 results ledger. Completed runs below retain their source, dictionary and execution identities.
 
+## Known-incumbent repair starts — 2026-10-23
+
+[Matched cold/warm HiGHS calls](seeded-repair-v1/README.md): all16calls feasible,
+4,800packets decode. Warm preserves24750fit selections in all8pairs; cold returns
+worse points. Neither condition improves the seed or reaches optimality within
+90seconds. Retaining the incumbent leaves all8search outcomes tied. The frozen
+tool-recommendation rule passes; no search gain, candidate promotion or validation
+claim. [Freeze](seeded-repair-v1/FREEZE.md), [review](seeded-repair-v1/REVIEW.md),
+[evidence](seeded-repair-v1/evidence/results.json).
+
 ## Capacity-aware character-fraction bounds — 2026-10-23
 
 [Exact capacity certificates](fraction-capacity-v1/README.md) exclude a10%character
