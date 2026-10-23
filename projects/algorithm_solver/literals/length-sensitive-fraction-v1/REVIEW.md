@@ -34,3 +34,9 @@ Qualification reuses exact parent hashes; item23's later unchanged-source
 exit137 remains separate evidence. One-owner/near-whole semantic reuse remains
 unresolved. Component intent, M1, protected sets and publication boundaries are
 preserved. No production or selection change.
+
+A subsequent unpinned path_diagnostics.py replay compares final-q path bins with
+the retained feasible seed. Three invented path replays and a cost-corruption
+regression pass. Existing full certificate/pins/source hashes are rechecked;
+per-source path objectives match independent heap DP, and seed costs match the
+main report. Only counts and hashes are published. No frozen file changes.

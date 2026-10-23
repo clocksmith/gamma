@@ -39,3 +39,15 @@ Execution took 1,207.36 seconds. R/naming stopped at their time boundaries after
 bounded iteration). Generated proposals all lack coverage: 42/42 and 44/44.
 All 1,200 retained witness packets decode; no validation or fresh source
 execution occurred. P1/P2/P4 hold; P3 is false. See [review](REVIEW.md).
+
+## Descriptive path replay,2026-10-23
+
+A separate [path-bin replay](evidence/path-diagnostics.json) checks the final-q
+minimum paths against the independent heap DP and the feasible seed against
+its retained per-program costs. Relaxed paths use29,074/30,579edges, zero
+single-character edges and27,335/29,066 length-two edges for R/naming. Only one
+edge per cohort is length129+:149/131bytes. Feasible seed paths use28,554/27,099
+edges, including13,871/12,122 characters and zero length129+edges. Thus the
+relaxed paths also are not dominated by long-bin edges at these points. This
+is descriptive, with deterministic path ties; it does not causally decompose
+the dual gap. No new search, source execution or witness is introduced.
