@@ -108,7 +108,7 @@ def instance(n, seed, c, work, out):
         vocab = list(sel.ALPHABET) + sorted(chosen)
         exact = check_dictionary(texts, vocab, width, forbidden, analyze)
         assert exact <= round(res.fun) + 1e-6, 'exact rescoring exceeds the MILP objective'
-        if res.status == 0: assert exact == round(res.fun), 'solver-optimal objective disagrees with exact rescoring'
+        if res.status == 0: assert abs(exact - res.fun) <= 1e-6, 'solver-optimal objective disagrees with exact rescoring'
         row['milp_exact_fit'] = exact; dictionaries['milp'] = vocab
     for arm, flt in (('local', None), ('local_pool', set(pool))):
         vocab, info = local(texts, width, flt, c, sel)
