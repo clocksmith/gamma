@@ -4,6 +4,15 @@ Start here for source versions, experiments and the working literal languages.
 This is a navigation index over existing manifests and reports, not a second
 results ledger. Completed runs below retain their source, dictionary and execution identities.
 
+## Atomic constructor admission: literal-only gain — 2026-10-23
+
+[Matched atomic bundles](constructor-bundles-v1/README.md) replay all2,000views.
+TB ties the matched literal-bundle control at8,324validation actions; both
+accept one literal bundle and zero constructor bundles. T1 uses8,334actions
+with one locally useful template. No ready structured arm or flat promotion.
+[Freeze](constructor-bundles-v1/FREEZE.md),
+[review](constructor-bundles-v1/REVIEW.md).
+
 ## Length-bin dual improves bounds but remains inconclusive — 2026-10-23
 
 [Full-substring length-sensitive bounds](length-sensitive-fraction-v1/README.md)
