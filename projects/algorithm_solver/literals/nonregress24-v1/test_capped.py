@@ -70,6 +70,17 @@ class CappedTests(unittest.TestCase):
         self.assertEqual(r.returncode, 137)  # SIGKILL after the grace period, not an unbounded wait
         self.assertLess(time.monotonic() - t0, 10)
 
+    def test_optimized_python_is_refused(self):
+        import subprocess
+        here = Path(__file__).resolve().parent
+        code = ("import sys; sys.path[:0]=['.','../breadth-lns-v1','../lagrange-select-v2','../cost-decomposition-v1','..','../pass2/working']; "
+                "import run; run.contract()")
+        for flags, env in ((['-O'], {}), ([], {'PYTHONOPTIMIZE': '1'})):
+            r = subprocess.run([sys.executable, *flags, '-B', '-c', code], cwd=here, capture_output=True, text=True,
+                               env={**__import__('os').environ, **env})
+            self.assertNotEqual(r.returncode, 0)
+            self.assertIn('assertions must stay enabled', r.stderr)
+
     def test_incumbent_violating_cap_is_rejected(self):
         texts = {1: 'abab', 2: 'abc'}; fixed = list('abc'); cand = ['ab']
         caps = {1: 1, 2: 3}  # 'abab' needs 2 selections with 'ab'; a cap below the incumbent's cost must fail closed
