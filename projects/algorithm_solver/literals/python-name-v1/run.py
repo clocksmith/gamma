@@ -25,7 +25,7 @@ def sources(c,ids):
     for row in c['sources']:
         if row['id'] in ids:
             raw=Path(row['file']).read_bytes();assert analyze.sha(raw)==row['sha256']
-            out[row['id']]=raw.decode('ascii')
+            out[row['id']]=raw.decode('utf-8')
     assert set(out)==set(ids)
     return out
 
