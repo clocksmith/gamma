@@ -102,7 +102,7 @@ def measure(arm,texts,nodes,keys,pools,folder,c):
     (folder/'dictionary.bin').write_bytes(db)
     packets = folder/'packets'
     packets.mkdir()
-    plans,rows = {},{}
+    plans,rows,decoded = {},{},{}
     eligibility = set(key for values in pools.values() for key in values)
     arm_eligibility = {key for key in eligibility if key[0] in ARMS.get(arm,set())}
     banned = {body for group in nodes.values() for body in group['bodies']}
@@ -126,7 +126,7 @@ def measure(arm,texts,nodes,keys,pools,folder,c):
             vocab = [k[1:] for k in keys]
             ids = {k:i for i,k in enumerate(keys)}
             packet = analyze.encode(vocab,[ids[k] for k in plan['tokens']],8)
-            assert analyze.decode(db,packet)==text
+            decoded[pid] = analyze.decode(db,packet)
             assert len(analyze.shortest_encode(text,vocab))==plan['selections']
         (packets/f'{pid}.bin').write_bytes(packet)
         rows[pid] = {**common,'encodable':True,'selections':plan['selections'],'actions':plan['selections']+1,
@@ -137,7 +137,11 @@ def measure(arm,texts,nodes,keys,pools,folder,c):
     # its literal encoding. No trial dictionary is selected from decode results.
     if typed and plans:
         decoded = codec.decode_many(keys,plans)
-        assert all(decoded[pid] == texts[pid] for pid in plans)
+    assert set(decoded)==set(plans)
+    for pid,actual in decoded.items():
+        decoded_hash=analyze.sha(actual.encode())
+        assert actual==texts[pid] and decoded_hash==c['source_qualification'][pid]['source_sha256']
+        rows[pid]['decoded_source_sha256']=decoded_hash
     analyze.write(folder/'sources.json',texts)
     analyze.write(folder/'plans.json',plans)
     result = {'arm':arm,'representation':'flat_literal' if not typed else 'structured_2c',
