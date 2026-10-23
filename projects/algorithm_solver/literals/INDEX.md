@@ -60,6 +60,15 @@ Control128 has no character-count tie headroom. No encoder change or promotion.
 [Freeze](segmentation-audit-v1/FREEZE.md), [review](segmentation-audit-v1/REVIEW.md),
 [evidence](segmentation-audit-v1/evidence/results.json).
 
+## Character-aware dictionary objectives — 2026-10-23
+
+[Fixed-source weighted search](character-objective-v1/README.md): all6,000packets
+decode. Strongest penalty reduces validation character codes6.13% but increases
+actions5.17%; it misses the frozen10%within5%tradeoff. The original ready seed
+remains selected. Canonical/common-encoder and weighted views are separate.
+[Freeze](character-objective-v1/FREEZE.md), [amendment](character-objective-v1/AMENDMENT-1.md),
+[review](character-objective-v1/REVIEW.md), [evidence](character-objective-v1/evidence/results.json).
+
 ## Current goal navigation
 
 [Goals v2](../contracts/algorithm_solver_goals_v2.json) organizes recognition
