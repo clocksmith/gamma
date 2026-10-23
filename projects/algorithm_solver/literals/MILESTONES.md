@@ -304,10 +304,11 @@ A per-occurrence Lagrangian relaxation over 223,244 fit-witnessed strings certif
 96 characters plus pool entries can need fewer than 21,215 dev-fit selections at 256 entries (32,700 at 128);
 the best found needs 25,924 (41,247). Exact search started from the Lagrangian primal ends 0.7-1.05% below the
 local-search control on fit and 0.2-0.9% on dev-val, with many programs worse. The remaining pool gap (at most
-18.2% on fit at 256) is far below what M1 needs, and its attainability is not shown. No scorer case.
+18.2% of total fit selections at 256) is not a median bound, and its attainability is not shown. No scorer case.
 
 **Exact-optimum search audit** ([mip-audit-v2](mip-audit-v2/README.md), dev-fit sub-instances only): on all 18 random
 subsets of 20/30/40 dev-fit programs with 32 learned slots, HiGHS reaches a solver-optimal pool dictionary that
-beats the shared matched80-v3 local search by 2.4-8.9% (exact canonical rescoring; medians 5.25%, 3.71%, 2.95%).
+scores 2.36-8.86% below where the shared matched80-v3 local search ends (exact canonical rescoring; median gaps
+5.25%, 3.71%, 2.95%).
 A local optimum is therefore not the best dictionary at this scale; the gap shrinks with subset size, so full-scale
 headroom is untested. Proposed next: an exact large-neighbourhood search on the full problem.
