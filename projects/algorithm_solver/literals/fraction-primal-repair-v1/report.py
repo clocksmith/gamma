@@ -221,7 +221,7 @@ def write_report(report, here=HERE):
                   '|---|---:|---:|---:|---:|---:|---:|']
         for arm in report['arms']:
             w = arm['witnesses']
-            lines.append(f"| {arm['cohort']} | {w['seed']['objective']} | {w['warm']['objective']} | {w.get('cold', {}).get('objective', 'infeasible')} | {arm['warm_F_gain']} | {w['warm']['entries']} | {arm['parent_full_class_integer_lower_bound']} |")
+            lines.append(f"| {arm['cohort']} | {w['seed']['objective']} | {w['warm']['objective']} | {w.get('cold', {}).get('objective', 'no feasible output returned')} | {arm['warm_F_gain']} | {w['warm']['entries']} | {arm['parent_full_class_integer_lower_bound']} |")
         lines += ['', 'All following seed and feasible-witness rows use exact **minimum-F paths**, with ties by minimum N and then entry IDs. These are not minimum-N encodings. Actions include one Finish per program; median/p90/p95 below count selections only.', '',
                   '| Cohort | Witness | F | C | Character fraction | N | Actions | Median N | p90 N | p95 N | N change vs seed |',
                   '|---|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|']
