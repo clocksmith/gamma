@@ -4,6 +4,16 @@ Start here for source versions, experiments and the working literal languages.
 This is a navigation index over existing manifests and reports, not a second
 results ledger. Completed runs below retain their source, dictionary and execution identities.
 
+## Full-substring primal repair preserves seeds — 2026-10-23
+
+[Matched warm/cold fraction repair](fraction-primal-repair-v1/README.md)
+replays1,800packets. Warm starts retain F110,156/94,121 without improvement;
+cold dictionaries re-encode to worse F192,792/173,398 and higher selections.
+All four solves time out with feasible points and no optimality. No10%witness
+or pool-impossibility conclusion.
+[Freeze](fraction-primal-repair-v1/FREEZE.md),
+[review](fraction-primal-repair-v1/REVIEW.md).
+
 ## Python rendering: small action gain, worse character share — 2026-10-23
 
 [Matched rendering/source-dictionary arms](python-source-rendering-v1/README.md)
