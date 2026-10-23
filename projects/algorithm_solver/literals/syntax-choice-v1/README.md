@@ -73,6 +73,8 @@ Distinct final changed sources: 291/292 qualified, 29167/29183 strict original-c
 
 Four focused Python tests and127 synthetic behavior observations passed before launch, plus parse/compile/import/help. Source observation can matter in JavaScript; guarded unsupported forms are retained, not silently reinterpreted. Component intent and canonical/production behavior preserved.
 
+Dated context (2026-10-23): [roles-v1’s disclosed rerun](../roles-v1/FREEZE.md) also records an exit137 kill for problem1079 under24workers, followed by a serial pass and a successful four-worker audit. That earlier observation supports investigating resource sensitivity; it does not identify this run’s kill cause or authorize a retry under this freeze.
+
 Any selected successor requires separately frozen owner-approved confirmation. Private candidate: syntax-choice/run-v1/<selected>-256. No protected opening, training, publication, deployment, human study or ledger/catalog/claim write.
 
 Rebuild: `python3 -B projects/algorithm_solver/literals/syntax-choice-v1/report.py --run /private/syntax-choice/run-v1`.
