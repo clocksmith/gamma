@@ -9,9 +9,13 @@ exited 0. [report.py](report.py) was committed at `b9dee5217` before validation 
 dictionary independently and re-measures all 400 programs. [Evidence](evidence/results.json) holds only
 aggregates, IDs and hashes.
 
-**Result: neither breadth-aware objective protects breadth, and no arm is ready.**
-- nonregress forbids any fit program from getting worse. 16 of its 18 repairs hit the 300 s solver limit without
-  a feasible point, so it barely moved.
+**Result: no arm is ready. nonregress protects breadth but gains almost nothing; relative fails to protect
+breadth.**
+- nonregress forbids any fit program from getting worse. It ends with 0 fit and 0 dev-val programs worse, but 16
+  of its 18 repairs hit the 300 s solver limit without HiGHS *finding* a feasible point. These repairs are not
+  infeasible: the removed entries stay among the candidates, so the current dictionary is always a feasible
+  nonregression point. The repairs were cold-started, so this is a search limitation, not evidence against the
+  constraint. The arm accepted one move (−14 fit selections).
 - relative weights every program equally by its relative cost. It cut fit selections, but it made validation
   breadth worse than the plain objective did.
 - unweighted, the item 11 objective, again gives the largest total gain with a concentrated cost, as in item 11.
@@ -54,11 +58,14 @@ All 400 programs decode in every arm, and the whole-solution audit is clean.
 
 ## What this shows and does not show
 
-- **Shows.** On R's dictionary, with this LNS budget, constraining regressions inside each repair makes the
-  exact repair mostly infeasible within 300 s. Equal relative weighting does not trade total gain for breadth.
-  The concentration seen in item 11 is not fixed by these two objective changes.
-- **Does not show** that breadth cannot be protected some other way, for example by a longer solver limit for
-  nonregress, a soft regression penalty, or a quantile objective. These two objectives were tested only with
+- **Shows.** On R's dictionary, with this LNS budget and cold-started repairs, the per-program regression
+  constraint keeps breadth but HiGHS rarely finds a feasible point within 300 s, so almost no gain is made. Equal
+  relative weighting does not trade total gain for breadth. These two objective changes do not remove the
+  concentration seen in item 11.
+- **Does not show** that the nonregression constraint cannot yield gains. A warm start from the current
+  dictionary, as in item 26's adapter, with the nonregression constraints included in the incumbent check, would
+  always give the solver a feasible point. That would be a separately frozen comparison. A longer solver limit, a
+  soft regression penalty or a quantile objective are also untested. These two objectives were tested only with
   this seed, budget and candidate rule.
 - **Runtime change.** The arms moved from two cores each to one core each mid-run. scipy exposes no HiGHS
   thread option, so the effect on solver speed is unmeasured. The time-limit counts above include any slowdown.

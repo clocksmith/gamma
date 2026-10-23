@@ -324,8 +324,9 @@ are identifier-shaped and 9 of those are reserved words. No call introduced one.
 on dev-val (8,504 actions), so item 13 stays the current best. The palette idea is untested beyond this rule and
 this dictionary.
 
-**Breadth-aware exact LNS** ([breadth-lns-v1](breadth-lns-v1/README.md), dev-val 100): not ready, and neither
-breadth objective helps. Forbidding fit regressions inside each repair made 16 of 18 repairs time out (fit −14
-selections, dev-val −2 actions). Equal relative weights cut fit 1.50% but made dev-val slightly worse (9,053 vs
+**Breadth-aware exact LNS** ([breadth-lns-v1](breadth-lns-v1/README.md), dev-val 100): not ready. Forbidding fit
+regressions inside each repair protects breadth (0 programs worse) but gains almost nothing. In 16 of 18
+cold-started repairs, HiGHS found no feasible point within 300 s, although the current dictionary is always
+feasible (fit −14 selections, dev-val −2 actions). Equal relative weights cut fit 1.50% but made dev-val slightly worse (9,053 vs
 9,048 actions, 51 programs worse, median 64.5 → 67.5). The plain objective again gives the largest total gain
 (dev-val −2.59%) with a concentrated cost (43 programs worse).
