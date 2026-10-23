@@ -56,6 +56,9 @@ def main():
              'checked, Lagrangian bounds recomputed from the stored potentials over every eligible',
              'substring). Category uses the BITS macro rule; near-whole counts entries found in one',
              'program and at least half its length (a reporting addition).', '',
+             'Press figures use the frozen protocol (frame bit plus code). Since 256one `fff69c5` (2026-10-22)',
+             'BITS enters a literal as its ID alone, so live 7-bit v2 is now 69,370 presses and 8-bit v2 49,288;',
+             'see the dated note in [README.md](README.md).', '',
              '## A: exact coverage (minimum entries)', '',
              '| Run | Job | Certified lower bound | Smallest vocabulary found | Optimum proven | 64 entries enough? | Category (macro / near-whole) | LP | MILP |',
              '| --- | --- | ---: | ---: | --- | --- | --- | --- | --- |']

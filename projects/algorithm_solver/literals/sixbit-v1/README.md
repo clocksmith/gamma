@@ -74,6 +74,17 @@ the live 8-bit profile.
 
 ## Notes
 
+- **Dated note (2026-10-22, 256one `fff69c5`).** Every press figure here uses the frozen protocol
+  of one frame bit plus the code. BITS now enters a literal as its ID alone. The live profiles are
+  now 69,370 presses (7-bit v2) and 49,288 (8-bit v2), against 79,280 and 55,449 here. The
+  verdicts do not change. Recounting this run at 6 presses per six-bit selection:
+  - B-W's 12,601 selections are 75,606 presses, against 32,552 for live 8-bit v2 on the same 64
+    programs.
+  - C-W is 65,236 presses with an escape counted as an ESC code plus a 7-bit character (6 + 7),
+    against 49,288 for live 8-bit v2.
+
+  That recount is a reporting estimate, not part of the freeze.
+
 - `verify.py` is pinned by both contracts and stays as frozen. Its one bug compared
   `bitpack.decode` text with bytes, after `literal_codec.verify_packet` had already
   accepted the packet. `verify_amended.py` corrects that comparison and changes nothing
