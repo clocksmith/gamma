@@ -4,6 +4,16 @@ Start here for source versions, experiments and the working literal languages.
 This is a navigation index over existing manifests and reports, not a second
 results ledger. Completed runs below retain their source, dictionary and execution identities.
 
+## Exact character-fraction certificate — 2026-10-23
+
+[Fixed-source/codebook ratio optima](fraction-certificate-v1/README.md): all six
+certificates and3,600packet decodes pass. Validation minima are77.75% R128,
+48.63% R256 and43.91% naming256;10% is unreachable for these fixed pairs even
+without an action budget. The256witnesses add12.94%/14.12% actions. This bounds
+no changed dictionary or source, and promotes no encoder.
+[Freeze](fraction-certificate-v1/FREEZE.md), [review](fraction-certificate-v1/REVIEW.md),
+[evidence](fraction-certificate-v1/evidence/results.json).
+
 ## Mined identifier templates — 2026-10-23
 
 [Identifier-parameterized AST templates](identifier-templates-v1/README.md): all
