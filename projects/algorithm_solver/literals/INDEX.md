@@ -4,6 +4,17 @@ Start here for source versions, experiments and the working literal languages.
 This is a navigation index over existing manifests and reports, not a second
 results ledger. Completed runs below retain their source, dictionary and execution identities.
 
+## Python scope-local continuation — 2026-10-23
+
+[Matched Python naming](python-binding-continuation-v1/README.md): all360choices
+qualify/decode;8changed programs pass950checks. Scope and global controls tie.
+At256 the joint arms use935validation actions versus949baseline,3better/6same,
+median97selections unchanged and56.91%characters;128unchanged. No readiness or
+scope successor. Only27fit/9consumed-validation programs, conservative eligible
+locals; no Python/JS pooling or M1. [Freeze](python-binding-continuation-v1/FREEZE.md),
+[amendment](python-binding-continuation-v1/AMENDMENT-1.md),
+[review](python-binding-continuation-v1/REVIEW.md).
+
 ## Independent confirmation and assembly task preparation — 2026-10-23
 
 [Item13 commissioning spec](binding-confirmation-commission-v1/SPEC.md) separates

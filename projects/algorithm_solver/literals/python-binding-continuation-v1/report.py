@@ -136,7 +136,7 @@ def main(folder):
         elif isinstance(v,list):
             for item in v:safe(item)
     safe(r);(HERE/'evidence').mkdir(exist_ok=True);analyze.write(HERE/'evidence/results.json',r)
-    lines=['# Python scope naming continuation', '', '[Freeze](FREEZE.md), [design](DESIGN.md), [metadata evidence](evidence/results.json).', '',
+    lines=['# Python scope naming continuation', '', '[Freeze](FREEZE.md), [newline amendment](AMENDMENT-1.md), [review receipt](REVIEW.md), [design](DESIGN.md), [metadata evidence](evidence/results.json).', '',
         f'Selected development successor: **{r["selected_ready_arm"] or "none"}**. Python only: 27 fit and nine consumed validation problems. '
         'No protected access, new confirmation, M1 qualification or JS/Python pooled claim.', '',
         '| Entries | Arm | Split | Decode | Qualify | Selections | Median | p90 | p95 | Actions | Character fraction | Package |',
@@ -161,7 +161,7 @@ def main(folder):
     q=r['fresh_qualification_summary'];lines+=['',f'Fresh qualification: {q["passed"]}/{q["distinct_sources"]} distinct changed programs, '
         f'{q["checks_passed"]}/{q["checks_total"]} checks passed. Original sources reuse exact-hash passing item6 receipts. No retries or repairs.', '',
         f'Measured run wall time: {r["seconds"]:.2f} seconds. Search/qualification counts, stop reasons and per-ID metadata are in evidence. '
-        'The 28 prelaunch synthetic checks establish focused implementation checks, not numerical qualification.', '',
+        'The 29 prelaunch synthetic checks establish focused implementation checks, not numerical qualification.', '',
         'M1 remains400/500,<=256entries,median<=32,p95<=96selections,<=10%single-character bits,zero whole-solution entries. '
         'This36-program panel cannot qualify it. Component intent preserved; no production, admission or publication authority changed.', '',
         'Rebuild with `python3 -B projects/algorithm_solver/literals/python-binding-continuation-v1/report.py --run /private/run/path`.','']
