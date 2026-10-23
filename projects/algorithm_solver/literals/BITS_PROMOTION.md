@@ -99,6 +99,13 @@ they stay loadable and replayable). Input-tree tiles preview literal text. Deplo
 changed public files byte-identical live
 ([receipt](bits-deploy-receipts/2026-10-22-256one-b4230d2.json)). No profile or bar changed.
 
+Not promoted (2026-10-22, [bits80-bridge-v1](bits80-bridge-v1/README.md)): every committed
+literal dictionary since the live promotion, evaluated on the 80 published compact sources. That
+covers style150-v1/v2, scale500-v1, minify-control-v1 and the structural-v1 literal arms, 31 per
+width. The best are 11,203 selections at 7-bit (bar 9,711) and 7,750 at 8-bit (bar 6,037), and
+no candidate improves more than 3 of the 80 programs. The live controls reproduce exactly.
+Nothing was deployed.
+
 Not promoted: matched80-v3 7-bit (best 9,784, -1.27%, bar 9,711); matched80-v3 readable
 arms (separate scorecard, no live readable 80 slot; the best needs 73,503 presses against
 57,717); matched80-v2 8-bit (6,360, -0.83%) and every matched80-v1 arm.
