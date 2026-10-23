@@ -12,7 +12,9 @@ def fixture(root):
     ids=list(range(1,37));fitids=ids[:27];val=ids[27:]
     texts={str(p):f'class Solution:\n    def solve(self,n):\n        total = n + {1+p%2}\n        return total\n' for p in ids}
     c={**CFG,'partition':{'dev_fit':fitids,'dev_val':val},'entries':{str(p):'solve' for p in ids},'sources':[],'inputs':{},
-       'predictions':{f'P{i}':'synthetic' for i in range(1,6)},'decoder_source_bytes':13010,'offline_encoder_bytes':1000,'limits':{'qualification_batch_cases':32}}
+       'predictions':{f'P{i}':'synthetic' for i in range(1,6)},'decoder_source_bytes':13010,'offline_encoder_bytes':1000,
+       'overall_seconds':2400,'supervisor_cleanup_seconds':30,'timing_receipt_tolerance_seconds':1,'qualification_cores':[0,1,2,3],
+       'limits':{'qualification_batch_cases':32,'qualification_seconds':1800,'fit_seconds':300}}
     for pid in ids:
         expected=2+pid%2;tp=meta/f'{pid}-tests.json';write(tp,[{'args':[1],'expected':expected}])
         obs={'i':0,'result':expected,'result_type':'int','args_before':[1],'args_after':[1],'aliases':[],'error':None}
@@ -71,7 +73,7 @@ def fixture(root):
             a['qualification'][pid]=q
         a['qualified']=36
     write(out/'results.json',{'contract_sha256':digest,'arms':results,'elapsed':1,'fresh_sources':len(qjobs),'fresh_cases':len(qjobs)})
-    write(out/'run-binding.json',{'contract_sha256':digest});write(out/'status.json',{'complete':True})
+    write(out/'run-binding.json',{'contract_sha256':digest});write(out/'status.json',{'complete':True,'phase':'complete','elapsed':1})
     write(out/'supervisor-receipt.json',{'complete':True,'exit_code':0,'outer_timeout':False,'contract_sha256':digest,'elapsed':1})
     return out,c,here
 class PipelineTests(unittest.TestCase):
@@ -135,4 +137,49 @@ class PipelineTests(unittest.TestCase):
         self.assertTrue(a['fit']['full_cohort_cost_available']);self.assertFalse(a['validation']['full_cohort_cost_available'])
         self.assertIsNone(a['validation']['full_cohort_actions']);self.assertIsNone(a['validation']['full_cohort_package_bytes'])
         self.assertIn('incomplete',a['validation']['aggregate_scope']);self.assertEqual(a['validation']['package_bytes'],100)
+    def test_unknown_result_field_cannot_be_published(self):
+        p=self.out/'results.json';raw=p.read_bytes();r=json.loads(raw);r['private_debug']='PRIVATE SOURCE FRAGMENT';write(p,r)
+        try:
+            with self.assertRaisesRegex(AssertionError,'unexpected result metadata'):self.replay()
+        finally:p.write_bytes(raw)
+    def test_nonfinite_overbudget_and_incoherent_run_timing_rejected(self):
+        cases=[('results.json',999999),('results.json',float('inf')),('supervisor-receipt.json',float('nan')),
+               ('supervisor-receipt.json',2432),('supervisor-receipt.json',0.5),('status.json',float('nan'))]
+        for filename,seconds in cases:
+            with self.subTest(filename=filename,seconds=seconds):
+                p=self.out/filename;raw=p.read_bytes();r=json.loads(raw);r['elapsed']=seconds;write(p,r)
+                try:
+                    with self.assertRaises(AssertionError):self.replay()
+                finally:p.write_bytes(raw)
+        p=self.out/'all-fit-seal.json';raw=p.read_bytes();r=json.loads(raw);r['arms']['w7/U']['elapsed']=301.1;write(p,r)
+        try:
+            with self.assertRaisesRegex(AssertionError,'timing receipt exceeds'):self.replay()
+        finally:p.write_bytes(raw)
+    def test_search_stop_and_cost_metadata_are_constrained(self):
+        good={'trials':1,'seconds':0.1,'selections':100,'stop':'trial_limit'}
+        self.assertEqual(len(report.checked_search_rounds({'search':[good,good]},'J',self.c,1)),2)
+        for field,value in [('stop','PRIVATE SOURCE'),('seconds',float('nan')),('seconds',2.1),('selections','PRIVATE SOURCE')]:
+            bad={**good,field:value}
+            with self.subTest(field=field):
+                with self.assertRaises(AssertionError):report.checked_search_rounds({'search':[bad,good]},'J',self.c,1)
+        with self.assertRaises(AssertionError):report.checked_search_rounds({'search':[good]},'S',self.c,1)
+    def test_nonfinite_qualification_batch_time_rejected(self):
+        folder=next((self.out/'qualification').iterdir());p=folder/'receipt.json';raw=p.read_bytes();receipt=json.loads(raw)
+        spec=next(s for s in self.c['sources'] if str(s['id'])==receipt['id'])
+        source=json.loads((self.out/'w7/S/sources.json').read_text())[receipt['id']]
+        receipt['batches'][0]['wall_seconds']=float('nan');write(p,receipt)
+        try:
+            with self.assertRaisesRegex(AssertionError,'invalid timing receipt'):qualification.replay(folder,spec,source,self.c)
+        finally:p.write_bytes(raw)
+    def test_failure_replaces_previous_successful_markdown(self):
+        output=self.root/'replace-success'
+        with patch.object(report,'verify'),patch.object(report,'HERE',self.here):report.publish(self.out,self.c,output)
+        self.assertIn('ready:',(output/'REPORT.md').read_text())
+        p=self.out/'failure.json';write(p,{'phase':'synthetic_timeout'})
+        try:
+            with patch.object(report,'verify'),patch.object(report,'HERE',self.here):
+                with self.assertRaises(AssertionError):report.publish(self.out,self.c,output)
+            self.assertIn('**No verdict.**',(output/'REPORT.md').read_text());self.assertNotIn('ready:',(output/'REPORT.md').read_text())
+            self.assertFalse(json.loads((output/'results.json').read_text())['complete'])
+        finally:p.unlink()
 if __name__=='__main__':unittest.main()

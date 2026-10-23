@@ -8,9 +8,24 @@ import resource
 import signal
 import time
 from common import (HERE,LIT,engine,render,analyze,write,sha,contract,verify,checked,texts_checked,authority,
-                    identity,variants_for,evaluate,seal_files,check_files)
+                    identity,variants_for,evaluate,seal_files,check_files,finite_seconds)
 from run import FIT_FILES,CHOICE_FILES,check_all_fit
 import qualification
+
+SEARCH_STOPS=frozenset({'fixed_dictionary','trial_limit','time_limit','local_optimum'})
+
+def checked_search_rounds(record,name,c,fit_elapsed):
+    assert len(record['search'])==(2 if name in ('D','J') else 1)
+    allowed=SEARCH_STOPS-{'fixed_dictionary'} if name in ('D','J') else {'fixed_dictionary'}
+    result=[]
+    for r in record['search']:
+        assert type(r['trials']) is int and 0<r['trials']<=c['search']['trials']
+        assert type(r['selections']) is int and r['selections']>=0
+        assert r['stop'] in allowed,'unknown or wrong-arm search stop'
+        finite_seconds(r['seconds'],fit_elapsed+c['timing_receipt_tolerance_seconds'])
+        result.append({key:r[key] for key in ('trials','seconds','selections','stop')})
+    assert sum(r['seconds'] for r in result)<=fit_elapsed+c['timing_receipt_tolerance_seconds']
+    return result
 
 def paired(a,b,ids):
     better=worse=0
@@ -91,21 +106,31 @@ def augment_costs(a,texts,c):
 def replay(folder,c):
     verify(c)
     assert not list(folder.rglob('failure.json')),'failed execution'
-    assert json.loads((folder/'status.json').read_text())['complete'] is True
+    status=json.loads((folder/'status.json').read_text())
+    assert status['complete'] is True and status['phase']=='complete'
     supervisor=json.loads((folder/'supervisor-receipt.json').read_text())
-    assert supervisor['complete'] and supervisor['exit_code']==0 and not supervisor['outer_timeout']
+    assert supervisor['complete'] is True and type(supervisor['exit_code']) is int and supervisor['exit_code']==0 and supervisor['outer_timeout'] is False
+    tolerance=c['timing_receipt_tolerance_seconds']
+    supervisor_seconds=finite_seconds(supervisor['elapsed'],c['overall_seconds']+c['supervisor_cleanup_seconds']+tolerance)
     digest=sha((HERE/'contract.json').read_bytes())
     assert supervisor['contract_sha256']==digest
     assert json.loads((folder/'run-binding.json').read_text())=={'contract_sha256':digest}
     result=json.loads((folder/'results.json').read_text());assert result['contract_sha256']==digest
+    assert set(result)=={'contract_sha256','arms','elapsed','fresh_sources','fresh_cases'},'unexpected result metadata'
+    runner_seconds=finite_seconds(result['elapsed'],c['overall_seconds']+tolerance)
+    status_seconds=finite_seconds(status['elapsed'],c['overall_seconds']+tolerance)
+    assert runner_seconds<=status_seconds<=supervisor_seconds,'runner duration exceeds enclosing supervisor or final status'
+    assert type(result['fresh_sources']) is int and type(result['fresh_cases']) is int
     arm_map={(a['width'],a['arm']):a for a in result['arms']}
     assert len(result['arms'])==10 and set(arm_map)=={(w,a) for w in (7,8) for a in (*engine.ARMS,'R')}
     allfit=check_all_fit(folder);allchoice=json.loads((folder/'all-choices-seal.json').read_text())
+    for summary in allfit['arms'].values():
+        finite_seconds(summary['elapsed'],min(c['limits']['fit_seconds'],runner_seconds)+tolerance)
     assert allchoice['case_data_loaded'] is False
     assert allchoice['all_fit_seal_sha256']==sha((folder/'all-fit-seal.json').read_bytes())
     assert set(allchoice['arms'])==set(allfit['arms']) and set(allchoice['references'])=={'7','8'}
     ids=set(map(str,c['partition']['dev_fit']+c['partition']['dev_val']))
-    specs={str(row['id']):row for row in c['sources']};qjobs={};private={}
+    specs={str(row['id']):row for row in c['sources']};qjobs={};private={};search_rounds={}
     for width in (7,8):
         parent=texts_checked(c,width);seed=checked(c['inputs'][str(width)]['seed_dictionary'])
         fitbase={str(pid):parent[str(pid)] for pid in c['partition']['dev_fit']}
@@ -142,8 +167,7 @@ def replay(folder,c):
                 record=json.loads((arm/'fit-record.json').read_text())
                 assert record['arm']==name and record['validation_loaded'] is False and record['case_data_loaded'] is False
                 assert record['source_choices']==ft and record['fit_selections']==sum(x['selections'] for x in ft.values())
-                assert len(record['search'])==(2 if name in ('D','J') else 1)
-                assert all(0<r['trials']<=c['search']['trials'] for r in record['search'])
+                search_rounds[width,name]=checked_search_rounds(record,name,c,allfit['arms'][key]['elapsed'])
                 assert record['search'][-1]['selections']==record['fit_selections']
                 if name in ('U','S'):assert vocab==seed
                 if name in ('U','D'):assert sources==parent
@@ -173,6 +197,13 @@ def replay(folder,c):
     for key,(spec,text) in qjobs.items():
         receipts[key]=qualification.replay(folder/'qualification'/key,spec,text,c)
         assert receipts[key]==qstored[key]
+    # Qualification groups run sequential batches on disjoint cores, assigned
+    # round-robin by sorted key. Sandbox wall receipts include process cleanup,
+    # so bound them by the enclosing worker/runner, not the 8s payload timer.
+    groups=[0.0 for _ in c['qualification_cores']]
+    for index,key in enumerate(sorted(receipts)):
+        groups[index%len(groups)]+=sum(b['wall_seconds'] for b in receipts[key]['batches'])
+    for seconds in groups:finite_seconds(seconds,min(c['limits']['qualification_seconds'],runner_seconds)+tolerance)
     assert result['fresh_sources']==len(receipts) and result['fresh_cases']==sum(q['cases'] for q in receipts.values())
     for (width,name),a in arm_map.items():
         sources,old,menu_summary=private[width,name];expected_q={}
@@ -188,8 +219,7 @@ def replay(folder,c):
         a['changed_sources_by_split']={key:sum(sources[str(pid)]!=old[str(pid)] for pid in c['partition'][split])
             for key,split in [('fit','dev_fit'),('validation','dev_val')]}
         if name!='R':
-            record=json.loads((folder/identity(width,name)/'fit-record.json').read_text())
-            a['search_rounds']=[{key:r[key] for key in ('trials','seconds','selections','stop')} for r in record['search']]
+            a['search_rounds']=search_rounds[width,name]
         else:a['search_rounds']=[]
         a['representation_eligible']=not a['illegal_entry_sha256']
         a['full_cohort_qualified']=a['qualified']==36 and a['fit']['covered']==27 and a['validation']['covered']==9
@@ -226,6 +256,7 @@ def publish(folder,c,output):
     try:result=replay(folder,c)
     except (Exception,KeyboardInterrupt) as error:
         result=failure(folder,error);output.mkdir(parents=True,exist_ok=True);write(output/'results.json',result)
+        (output/'REPORT.md').write_text('# Python source rendering and dictionary stack\n\n**No verdict.** Execution is incomplete or artifact verification failed.\n\nSee [failure metadata](results.json). Earlier successful conclusions are withdrawn.\n')
         raise
     result['independent_replay_seconds']=time.monotonic()-started
     output.mkdir(parents=True,exist_ok=True);write(output/'results.json',result)

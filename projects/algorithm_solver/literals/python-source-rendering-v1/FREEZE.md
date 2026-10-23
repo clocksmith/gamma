@@ -20,6 +20,8 @@ Eight fit workers, one per arm, cores0–7 in width then U/S/D/J order,8GiB each
 
 The reused search clock is checked at operation boundaries; an in-flight exact evaluation can cross the60-second search budget. The300-second worker alarm and2400-second overall deadline are hard bounds. Report actual round durations and trial counts rather than claiming exact equal compute.
 
+Timing receipts must be finite, numeric and nonnegative. The frozen receipt tolerance is1 second for recording/scheduling overhead; it does not extend any execution alarm. Fit receipts are bounded by300 seconds plus tolerance and by the runner; search-round sums by their fit receipt plus tolerance. Runner/final-status receipts are bounded by2400 seconds plus tolerance and ordered within the enclosing supervisor; supervisor receipt is bounded by2400+30 cleanup seconds plus tolerance. Qualification batch wall time includes sandbox setup/reaping and up to two5-second reader joins plus a1-second writer join, so it is not equated to the8-second payload timeout. Each batch and each deterministic worker's sum of batch walls must fit the1800-second qualification/overall-run enclosing bound plus tolerance. NaN/infinity, negative, incoherent or over-budget receipts produce no verdict.
+
 Qualification follows both pools: four workers, disjoint deterministic key lists, cores0–3,8GiB and1800-second worker phase deadline. Each source is attempted once in32-case batches with3 CPU/8 wall seconds,512MiB sandbox memory and4MiB output. Failures are recorded; subsequent declared batches continue without rerun. At most144 distinct new sources. Exact new-source/case counts seal before execution.
 
 Runner deadline2400 seconds; supervisor allows30 seconds cleanup and kills its process group. Sandboxes retain existing die-with-parent isolation. Threads fixed1; no other cores/GPU/model/download/network. Independent reporter is separately core0,8GiB/600 seconds; replay cost is separate from search/qualification.
@@ -44,6 +46,8 @@ Costs charge global dictionary, headers/padding/Finish, decoder source, source b
 
 ## Review and activation
 
-Development: `python3 -m unittest test_render test_engine test_pipeline` plus syntax/import checks. `python3 make_contract.py` refreshes pending public pins with no private read; output is non-executable.
+Development: `python3 -m unittest test_render test_engine test_pipeline test_contract` plus syntax/import checks. `python3 make_contract.py` refreshes pending public pins with no private read; output is non-executable.
 
 Only after root/Claude approve: `python3 make_contract.py --activate`, inspect digest, then `python3 launch.py --output <fresh-private-run-directory>`. After supervisor completion, `python3 report.py --run <same-private-run-directory>` writes metadata-only evidence/REPORT.md. Root owns approval record, actual location, execution and publication/commit/push. These launch commands must not execute during draft development.
+
+Preactivation review amendment, 2026-10-23: activation requires exact current-versus-reviewed pending equality, verifies every pinned code/runtime/public-input byte, then copies the reviewed payload changing only execution_authorized=false to true. Drift requires a refreshed draft and review, never silent repinning at activation. Resolved Python, ast.py and tokenize.py are explicitly pinned. Report input top-level keys are exact; search-stop values are fixed_dictionary, trial_limit, time_limit or local_optimum with arm-specific restrictions, and copied numerical fields are validated. A failed replay overwrites any stale successful REPORT.md with explicit no-verdict text as well as failed metadata. No activation or private input access has occurred.

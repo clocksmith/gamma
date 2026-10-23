@@ -20,7 +20,7 @@ def main():
     command=['taskset','-c',','.join(map(str,c['cores'])),c['python_bin'],'-B',str(HERE/'run.py'),'--output',str(args.output.resolve())]
     with log.open('xb') as stream:
         process=subprocess.Popen(command,stdout=stream,stderr=subprocess.STDOUT,env=env,start_new_session=True)
-        try:code=process.wait(timeout=c['overall_seconds']+30)
+        try:code=process.wait(timeout=c['overall_seconds']+c['supervisor_cleanup_seconds'])
         except subprocess.TimeoutExpired:timeout=True;code=None
         finally:
             try:os.killpg(process.pid,signal.SIGKILL)
