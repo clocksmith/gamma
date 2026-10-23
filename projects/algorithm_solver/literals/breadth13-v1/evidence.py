@@ -1,0 +1,100 @@
+"""Public evidence and the frozen decision rules for breadth13-v1 (FREEZE.md).
+
+  evidence.py --work DIR --run DIR/breadth13/run-v1    writes evidence/results.json (aggregates, IDs, hashes)
+"""
+import argparse, hashlib, json, statistics, sys
+from pathlib import Path
+
+HERE = Path(__file__).resolve().parent; LIT = HERE.parent
+sys.path[:0] = [str(HERE), str(LIT / 'breadth-lns-v1'), str(LIT / 'lagrange-select-v2'), str(LIT / 'cost-decomposition-v1'), str(LIT), str(LIT / 'pass2/working')]
+import math
+import analyze, succ, selection as sel
+sha = lambda raw: hashlib.sha256(raw).hexdigest()
+q = lambda xs, f: xs[math.ceil(f * len(xs)) - 1]
+
+
+def rows_for(texts, vocab):
+    rows, illegal, db = sel.measure(texts, vocab, 8, sel.forbidden_strings(texts))
+    assert not illegal
+    return rows, db
+
+
+def summary(rows, ids, db):
+    sels = sorted(rows[str(p)]['selections'] for p in ids); acts = sorted(rows[str(p)]['actions'] for p in ids); n = sum(sels)
+    return {'selections': {'total': n, 'median': statistics.median(sels), 'p90': q(sels, .9), 'p95': q(sels, .95), 'worst': sels[-1],
+                           'within_32': sum(s <= 32 for s in sels), 'within_96': sum(s <= 96 for s in sels)},
+            'actions': sum(acts), 'median': statistics.median(acts), 'p90': q(acts, .9), 'p95': q(acts, .95),
+            'single_character_fraction': sum(rows[str(p)]['single_characters'] for p in ids) / n,
+            'package_bytes': db + sum(rows[str(p)]['packet_bytes'] for p in ids)}
+
+
+def paired(a, b, ids):
+    d = [a[str(p)]['actions'] - b[str(p)]['actions'] for p in ids]
+    return {'better': sum(x < 0 for x in d), 'same': sum(x == 0 for x in d), 'worse': sum(x > 0 for x in d)}
+
+
+def main():
+    ap = argparse.ArgumentParser(); ap.add_argument('--work', type=Path, required=True); ap.add_argument('--run', type=Path, required=True); a = ap.parse_args()
+    c = json.loads((HERE / 'contract.json').read_text()); res = json.loads((a.run / 'results.json').read_text())
+    assert res['contract_sha256'] == sha((HERE / 'contract.json').read_bytes())
+    parent = json.loads((LIT / 'cost-decomposition-v1/contract.json').read_text()); fit_ids, val_ids = parent['partition']['dev_fit'], parent['partition']['dev_val']
+    seed_vocab, allsrc = succ.load_seed(a.work, c)
+    seed_rows, seed_db = rows_for(allsrc, seed_vocab)
+    pin = parent['dictionaries']['8']; pvocab = json.loads((a.work / pin['relative_path']).read_text())
+    assert sha((a.work / pin['relative_path']).read_bytes()) == pin['sha256']
+    original = analyze.load_sources(a.work, {**parent, 'sources': [r for r in parent['sources'] if r['id'] in set(val_ids)]})
+    r_rows, r_db = rows_for(original, pvocab)
+    # Sources are item 13's own (unchanged), so their qualification is item 13's/15's receipts by exact hash.
+    assert sha((LIT / c['qualification_receipt']).read_bytes()) == c['qualification_receipt_sha256']
+    qual = json.loads((LIT / c['qualification_receipt']).read_text())
+    q13 = next(x for x in qual['arms'] if x['arm'] == 'scope_joint' and x['width'] == 8)
+    assert all(q13['per_problem'][str(p)]['source_sha256'] == sha(allsrc[p].encode()) for p in fit_ids + val_ids)
+    all_q = all(q13['qualification'][str(p)]['passed'] for p in fit_ids + val_ids)
+    # Current best at freeze time (item 24 optional), a published comparator only: its per-program actions and aggregates.
+    cb = c['current_best']; assert sha((LIT / cb['evidence']).read_bytes()) == cb['evidence_sha256']
+    cba = next(x for x in json.loads((LIT / cb['evidence']).read_text())['arms'] if x['arm'] == cb['arm'])
+    cb_rows = {str(p): {'actions': cba['per_problem'][str(p)]['actions']} for p in val_ids}
+    cbv = cba['validation']
+    cb_sum = {'actions': cbv['actions']['total'], 'median': cbv['actions']['median'], 'p90': cbv['actions']['p90'],
+              'single_character_fraction': cbv['single_character_fraction'], 'package_bytes': cbv['package_bytes']}
+    assert cb_sum['actions'] == sum(r['actions'] for r in cb_rows.values())
+    out = {'schema': 'gamma.breadth13-v1.evidence.v1', 'contract_sha256': res['contract_sha256'], 'results_sha256': sha((a.run / 'results.json').read_bytes()),
+           'qualification_reused': c['qualification_receipt'], 'all_sources_qualified_by_receipt': all_q,
+           'pinned_R': summary(r_rows, val_ids, r_db), 'seed': summary(seed_rows, val_ids, seed_db),
+           'current_best': {'evidence': cb['evidence'], 'arm': cb['arm'], **cb_sum}, 'arms': {}}
+    for arm in res['arms']:
+        rows = arm['per_problem']; s = summary(rows, val_ids, arm['dictionary_bytes']); f = summary(rows, fit_ids, arm['dictionary_bytes'])
+        pr_r, pr_s = paired(rows, r_rows, val_ids), paired(rows, seed_rows, val_ids)
+        ready = {'actions_5pct': s['actions'] <= 0.95 * out['pinned_R']['actions'], 'median_lower': s['median'] < out['pinned_R']['median'],
+                 'p90_lower': s['p90'] < out['pinned_R']['p90'], 'improved_60': pr_r['better'] >= 60, 'worsened_25': pr_r['worse'] <= 25,
+                 'fraction_not_higher': s['single_character_fraction'] <= out['pinned_R']['single_character_fraction'],
+                 'package_105': s['package_bytes'] <= 1.05 * out['pinned_R']['package_bytes'], 'qualified_clean': all_q and not arm['illegal_entry_sha256'],
+                 'decoded_400': arm['decoded'] == 400}
+        inc = {'fewer_actions': s['actions'] < out['seed']['actions'], 'median_not_worse': s['median'] <= out['seed']['median'],
+               'p90_not_worse': s['p90'] <= out['seed']['p90'], 'fraction_not_higher': s['single_character_fraction'] <= out['seed']['single_character_fraction'],
+               'worsened_25': pr_s['worse'] <= 25, 'package_105': s['package_bytes'] <= 1.05 * out['seed']['package_bytes']}
+        pr_c = paired(rows, cb_rows, val_ids)
+        vs_cb = {'fewer_actions': s['actions'] < cb_sum['actions'], 'median_not_worse': s['median'] <= cb_sum['median'],
+                 'p90_not_worse': s['p90'] <= cb_sum['p90'], 'fraction_not_higher': s['single_character_fraction'] <= cb_sum['single_character_fraction'],
+                 'worsened_25': pr_c['worse'] <= 25, 'package_105': s['package_bytes'] <= 1.05 * cb_sum['package_bytes']}
+        out['arms'][arm['arm']] = {**{k: arm[k] for k in ('moves', 'accepted_moves', 'lns_seconds', 'start_fit', 'final_fit', 'final_objective',
+                                                          'fit_programs_worse_than_start', 'fit_programs_better_than_start', 'statuses', 'dictionary_sha256',
+                                                          'illegal_entry_sha256', 'decoded')},
+                                   'fit': f, 'validation': s, 'paired_vs_R': pr_r, 'paired_vs_seed': pr_s, 'paired_vs_current_best': pr_c, 'ready_vs_R': ready,
+                                   'incremental_vs_seed': inc, 'incremental_vs_current_best': vs_cb,
+                                   'successor': all(ready.values()) and all(inc.values()),
+                                   'new_current_best': all(ready.values()) and all(inc.values()) and all(vs_cb.values()),
+                                   'per_problem_validation_actions': {str(p): rows[str(p)]['actions'] for p in val_ids}}
+    cands = [k for k, v in out['arms'].items() if v['successor']]
+    rank = lambda k: (out['arms'][k]['validation']['actions'], out['arms'][k]['validation']['package_bytes'], k)
+    out['selected_successor'] = min(cands, key=rank) if cands else None
+    best = [k for k in cands if out['arms'][k]['new_current_best']]
+    out['selected_new_current_best'] = min(best, key=rank) if best else None
+    (HERE / 'evidence').mkdir(exist_ok=True); (HERE / 'evidence/results.json').write_text(json.dumps(out, indent=1, sort_keys=True) + '\n')
+    for k, v in out['arms'].items():
+        print(k, v['validation']['actions'], v['validation']['median'], v['validation']['p90'], v['paired_vs_seed'], v['successor'])
+    print('seed', out['seed']['actions'], 'selected', out['selected_successor'], 'new current best', out['selected_new_current_best'])
+
+
+if __name__ == '__main__':
+    main()
