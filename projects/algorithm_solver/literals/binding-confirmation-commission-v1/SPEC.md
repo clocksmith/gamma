@@ -1,8 +1,8 @@
 # Item 13 independent confirmation commissioning spec v1
 
-Status: reviewable commissioning draft, 2026-10-23. Codex reviewed the candidate
-identity, protection, denominators and pass rules; Claude reviewed the initial draft; the explicit transfer stage below addresses
-its substantive review request and awaits final cross-review. No cases have been authored,
+Status: **cross-reviewed commissioning spec**, 2026-10-23. Codex and Claude
+approved the candidate identities, protection, separate correctness/transfer
+verdicts and pass rules (team LOG2026-10-23T21:55Z). No cases have been authored,
 no confirmation data opened, and no experiment is authorized by this document.
 The owner confirmed that item 13 merits independent confirmation while keeping
 its candidate and every M1 threshold frozen. This spec implements the permitted

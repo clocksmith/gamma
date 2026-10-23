@@ -4,6 +4,17 @@ Start here for source versions, experiments and the working literal languages.
 This is a navigation index over existing manifests and reports, not a second
 results ledger. Completed runs below retain their source, dictionary and execution identities.
 
+## Independent confirmation and assembly task preparation — 2026-10-23
+
+[Item13 commissioning spec](binding-confirmation-commission-v1/SPEC.md) separates
+fresh correctness tests on400known programs from a proposed100program dictionary
+transfer study. [Frozen4a task](literal-composition-protocol-v1/TASK.md) defines
+matched symbolic/trained familiar recall and assembly, symmetric information and
+stored-answer audits, first proposals and complete costs. Independent authorship,
+training and scored openings remain gated; no cases or descriptions were written.
+[80-source provenance audit](publication80-audit-v1/README.md) resolves60LCD-derived,
+19owner-candidate and1doocs-derived lineages; no new rewrite publication is cleared.
+
 ## Optional character slots: ready development successor — 2026-10-23
 
 [Coverage-constrained selection](character-slots-v1/README.md) selects optional:
