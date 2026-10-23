@@ -164,7 +164,29 @@ def qualification_authority(folder,c,e):
     return known,fresh,failures
 
 
-def verify_run_artifacts(folder,raw,c,e):
+def verify_reference_inputs(name, sources_raw, vocab_raw, c, work=None):
+    """Pin original bytes, then compare exact source values and ordered entries.
+
+    The optional no-work path preserves the existing synthetic replay API: it
+    accepts only artifacts whose serialization itself matches the pinned hash.
+    Production main always supplies the original work root.
+    """
+    reference_name = 'seed13' if name == 'best24' else name
+    source_rel = c['references'][reference_name]+'/sources.json'
+    vocab_rel = c['references'][name]+'/dictionary.json'
+    originals = []
+    for rel, artifact in ((source_rel, sources_raw), (vocab_rel, vocab_raw)):
+        original = (Path(work)/rel).read_bytes() if work is not None else artifact
+        assert hashlib.sha256(original).hexdigest() == c['private_files'][rel], rel
+        originals.append(json.loads(original))
+    sources, vocab = json.loads(sources_raw), json.loads(vocab_raw)
+    assert isinstance(sources, dict) and all(type(pid) is str and type(text) is str for pid, text in sources.items())
+    assert isinstance(vocab, list) and all(type(word) is str for word in vocab)
+    assert sources == originals[0], 'reference source values differ from pinned original'
+    assert vocab == originals[1], 'reference vocabulary order or values differ from pinned original'
+
+
+def verify_run_artifacts(folder,raw,c,e,work=None):
     assert not (folder/'failure.json').exists(),'incomplete run cannot be promoted'
     assert json.loads((folder/'status.json').read_text())['complete']
     assert json.loads((folder/'supervisor-receipt.json').read_text())['complete']
@@ -211,12 +233,9 @@ def verify_run_artifacts(folder,raw,c,e):
             assert e.base.sel.forbidden_strings(validation)<=val_banned
             banned|=fit_banned|val_banned
         else:
-            reference_name='seed13' if a['arm']=='best24' else a['arm']
-            source_rel=c['references'][reference_name]+'/sources.json'
-            dict_rel=c['references'][a['arm']]+'/dictionary.json'
-            # Artifacts use exactly the pinned original JSON serialization.
-            assert e.analyze.sha((base/'sources.json').read_bytes())==c['private_files'][source_rel]
-            assert e.analyze.sha(vocab_raw)==c['private_files'][dict_rel]
+            # measure() reserializes JSON. Original bytes remain hash-pinned;
+            # dictionary order and every source string must still match exactly.
+            verify_reference_inputs(a['arm'], (base/'sources.json').read_bytes(), vocab_raw, c, work)
         replay_arm(a,sources,vocab,dictionary,base/a['policy'],banned,c,e,known,fresh)
         for pid,row in a['per_problem'].items():
             if (pid,row['source_sha256']) not in known:used_fresh.add(f'{pid}:{row["source_sha256"]}')
@@ -236,13 +255,13 @@ def display_cost_row(a):
     return (f"| {a['arm']} | {a['policy']} | {a['fit']['qualified']}/300; {d['qualified']}/100 | "
             f"{actions.get('total','unavailable')} | {quantiles} | {d['single_character_codes']}/{fracstr} | {d['package_bytes']} | {a['successor']} |")
 
-def main(folder):
+def main(folder, work=None):
     c = json.loads((HERE/'contract.json').read_text())
     raw = json.loads((folder/'results.json').read_text())
     assert raw['contract_sha256'] == hashlib.sha256((HERE/'contract.json').read_bytes()).hexdigest()
     # Independent replay verifies encoding policy, full costs and qualification.
     import engine as e
-    verify_run_artifacts(folder,raw,c,e)
+    verify_run_artifacts(folder,raw,c,e,folder.parents[1] if work is None else work)
     for name, pinned in c['reference_validation'].items():
         actual = next(a for a in raw['arms'] if a['arm'] == name and a['policy'] == 'canonical')['validation']
         for key, value in pinned.items():
@@ -288,7 +307,7 @@ def main(folder):
              '| --- | --- | --- | ---: | --- | --- | ---: | --- |']
     for a in result['arms']:
         lines.append(display_cost_row(a))
-    lines += ['', 'All eight outputs start from item13 for attribution; current-best24 is retained as a separately replayed matched reference. ',
+    lines += ['', 'All eight outputs start from item13 for attribution; current-best24 is retained as a separately replayed matched reference.',
               'Source-factor controls precede two shared repair trajectories and weighted finishing forks. Deep arms use identical NCP source bytes.', '',
               '| Arm/encoder | Better/same/worse vs24 | Failed predicates |', '| --- | --- | --- |']
     for a in result['arms']:
@@ -310,4 +329,6 @@ def main(folder):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--run', type=Path, required=True)
-    main(parser.parse_args().run)
+    parser.add_argument('--work', type=Path, help='Original pinned input root; defaults to run directory parents[1]')
+    args = parser.parse_args()
+    main(args.run, args.work)

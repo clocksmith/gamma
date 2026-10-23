@@ -4,6 +4,17 @@ Start here for source versions, experiments and the working literal languages.
 This is a navigation index over existing manifests and reports, not a second
 results ledger. Completed runs below retain their source, dictionary and execution identities.
 
+## Flat stacking: action and tail gains, no successor — 2026-10-23
+
+[Matched stacking](stacking-v1/README.md) independently replays all 8,800 packets;
+65 new sources pass 6,026 checks. D10 reaches 8,324 validation actions and p95
+174 selections versus item24's 8,336/197, but its matched minN/minC character
+share rises to 49.2096% from 48.8708%. D11 lowers character share but worsens
+actions, median and breadth. Neither passes the frozen incremental gates;
+item24 remains selected. [Freeze](stacking-v1/FREEZE.md),
+[cap amendment](stacking-v1/AMENDMENT-1.md), [review](stacking-v1/REVIEW.md),
+[reporting correction](stacking-v1/NOTE-2026-10-23-reporting.md).
+
 ## All-length shared-pool bounds — 2026-10-23
 
 [Expanded exact certificates](all-length-fraction-v1/README.md) retain positive
