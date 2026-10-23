@@ -4,6 +4,16 @@ Start here for source versions, experiments and the working literal languages.
 This is a navigation index over existing manifests and reports, not a second
 results ledger. Completed runs below retain their source, dictionary and execution identities.
 
+## Mined identifier templates — 2026-10-23
+
+[Identifier-parameterized AST templates](identifier-templates-v1/README.md): all
+1,600 packets decode with unchanged-source qualification. R saves 33 validation
+actions (0.36%); naming adds 11. Both have 95 eligible programs, but use templates
+in 20 and 1 respectively. Neither candidate is ready; conditional benefits and
+complete metadata/decoder costs are reported. Separate structured goal2c.
+[Freeze](identifier-templates-v1/FREEZE.md), [review](identifier-templates-v1/REVIEW.md),
+[evidence](identifier-templates-v1/evidence/results.json).
+
 ## Prefix expression constructors — 2026-10-23
 
 [Matched prefix-arity experiment](expression-prefix-v1/README.md): all 1,600
