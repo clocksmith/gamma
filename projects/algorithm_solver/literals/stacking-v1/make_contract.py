@@ -29,7 +29,7 @@ c.update(schema='gamma.stacking.flat.v1', execution_status='requires_pushed_free
          all_cores=list(range(8)), source_cores=[[0,1],[2,3],[4,5],[6,7]],
          repair_cores=[[0,1,2,3],[4,5,6,7]],
          limits={'search_workers': 4, 'sandbox_workers': 4, 'address_space_bytes': 8589934592,
-                 'overall_seconds': 3600, 'termination_grace_seconds': 30},
+                 'overall_seconds': 7200, 'termination_grace_seconds': 30},
          structured_sidecar_executed=False)
 for parent in ('lns-naming-v1', 'compiler-choice-v1', 'coupled-names-v1',
                'segmentation-audit-v1', 'character-objective-v1',
@@ -47,7 +47,7 @@ for name in ('R', 'seed13'):
 rel = c['references']['best24']+'/dictionary.json'
 c['private_files'][rel] = sha(WORK/rel)
 for file in ('coverage_search.py', 'engine.py', 'run.py', 'launch.py', 'make_contract.py',
-             'test_coverage_search.py', 'test_engine.py', 'test_report.py', 'FREEZE.md'):
+             'test_coverage_search.py', 'test_engine.py', 'test_report.py', 'FREEZE.md', 'AMENDMENT-1.md'):
     c['code_hashes'][str((HERE/file).relative_to(LIT))] = sha(HERE/file)
 for rel in ('binding-descent-v1/evidence/results.json', 'lns-naming-v1/evidence/results.json',
             'character-slots-v1/evidence/results.json'):
