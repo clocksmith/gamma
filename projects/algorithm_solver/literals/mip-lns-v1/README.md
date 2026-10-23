@@ -18,6 +18,10 @@
   - strict monotone acceptance.
 
   The replay covers the LNS snapshot only, not the later moves or the polish.
+- **Final replay:** after recording (LOG 20:36Z), Codex replayed the whole run: all 32 accepted dictionaries and
+  the 6 sealed final dictionaries over fit and dev-val, 12,000 independent canonical packet decodes in total.
+  Every count, quantile, fraction, package size, seal hash and body/capacity audit matched. The script's SHA is
+  `05a00f5b37ab0e6bea1f9baf5eae9d0456ac71d31699486ac22740769f8d69f6`, and the receipt is kept privately.
 
 ## Result
 
