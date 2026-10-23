@@ -4,6 +4,16 @@ Start here for source versions, experiments and the working literal languages.
 This is a navigation index over existing manifests and reports, not a second
 results ledger. Completed runs below retain their source, dictionary and execution identities.
 
+## Length-bin dual improves bounds but remains inconclusive — 2026-10-23
+
+[Full-substring length-sensitive bounds](length-sensitive-fraction-v1/README.md)
+improve R/naming to−27,266/−28,259, with1,200 witness packets independently
+replayed. All86 generated dictionaries lack coverage. Final relaxed top256
+choices contain no length129+ entries, so long-bin dominance does not explain
+these final points. No10% reachability or M1 conclusion.
+[Freeze](length-sensitive-fraction-v1/FREEZE.md),
+[review](length-sensitive-fraction-v1/REVIEW.md).
+
 ## Structured stacking: local template saving, no ready arm — 2026-10-23
 
 [Matched structured arms](stacking-structured-v1/README.md) replay all 2,000
