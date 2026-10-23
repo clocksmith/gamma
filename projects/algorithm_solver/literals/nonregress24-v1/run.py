@@ -25,7 +25,8 @@ ARMS = ('nonregress', 'unweighted')
 
 
 def contract():
-    assert __debug__ and not os.environ.get('PYTHONOPTIMIZE'), 'assertions must stay enabled (no -O / PYTHONOPTIMIZE)'
+    if not __debug__ or os.environ.get('PYTHONOPTIMIZE') not in ('', '0', None):  # an assert would itself be compiled out under -O
+        raise RuntimeError('assertions must stay enabled (no -O / PYTHONOPTIMIZE)')
     c = json.loads((HERE / 'contract.json').read_text())
     for rel, h in c['code_hashes'].items(): assert sha((LIT / rel).read_bytes()) == h, rel
     assert sha((LIT / 'cost-decomposition-v1/contract.json').read_bytes()) == c['parent_contract_sha256']
