@@ -82,8 +82,9 @@ shared-helper **22,375 / 12,325**; retain both tradeoffs. Existing
   ASCII guides = **1,037 inventory rows**, not 1,037 distinct problems. Distinct
   literal coverage is 150 JavaScript / 50 Python; Python difficulty is
   **10 easy / 30 medium / 10 hard**. Python 50 uses **8,624 selections at 128/7**
-  and **4,675 at 256/8**. With the UI protocol's one control bit per selection,
-  those streams cost **68,992 / 42,075 bits**; this is not the research codec
+  and **4,675 at 256/8**. Since 256one `fff69c5` (2026-10-22) a literal is entered as its ID
+  alone, so those streams cost **60,368 / 37,400 presses**; they cost 68,992 / 42,075
+  before that, with one control bit per selection. This is not the research codec
   with 41-byte packet headers. Inventory CSV SHA-256
   `fb635bd24e43f8b6c369803e9e322ebe5b8489c5905317b0a6021b67c61aa888`
   binds that distinct coverage/format evidence.

@@ -8,7 +8,8 @@ are seen. It does not change [M1-M6](MILESTONES.md) or any frozen experiment gat
 ## Slots
 
 A BITS slot is one language, one problem cohort (an exact ID set), one width
-(6, 7 or 8 bits of payload plus BITS's frame bit), one policy (literal
+(6, 7 or 8 bits; since 256one `fff69c5` a literal is entered as its ID alone, so one w-bit
+selection is w presses), one policy (literal
 compression, or readable/human-composed) and one entry category (primitive or macro,
 below). Each slot shows at most one current profile.
 
@@ -58,7 +59,8 @@ is not broader problem coverage, and it is not autonomous solving.
 
 A first profile for an empty slot (for example any 6-bit slot) is promoted only if it
 covers its whole declared cohort and beats the cheapest existing profile on that cohort
-in total input presses (width plus frame bit, times selections).
+in total input presses (width times selections; the Undo literal and Finish buttons are
+outside the bitstream and are recorded separately as command presses).
 
 ## Supersession
 
@@ -69,10 +71,32 @@ unless it is also cheaper on the smaller cohort's programs.
 
 ## Current bars (80 compact sources)
 
+Promotion bars are selection counts and package bytes. They are unchanged by the input change
+below.
+
 | Slot | Live profile | Selections | Package bytes |
 | --- | --- | ---: | ---: |
 | JavaScript 80, literal, 7-bit, primitive | `bits-literal-joint80-7-v2` | 9,910 | 12,798 |
 | JavaScript 80, literal, 8-bit, primitive | `bits-literal-joint80-8-v2` | 6,161 | 11,750 |
+
+**Press accounting (2026-10-22, 256one `fff69c5`).** BITS no longer sends a leading control bit
+before each literal. A selection costs exactly its width in presses: 7 at 7-bit, 8 at 8-bit.
+Undo literal and Finish are buttons outside the bitstream, one press each, recorded as
+`commandPresses`. Reset is gone. Old records with the control bit (schema
+`bits-literal-attempt-v2`) still replay; new records are v3.
+
+| Profile | Selections | Presses now (width x selections) | Presses before (width + 1) |
+| --- | ---: | ---: | ---: |
+| `bits-literal-joint80-7-v2` | 9,910 | 69,370 | 79,280 |
+| `bits-literal-joint80-8-v2` | 6,161 | 49,288 | 55,449 |
+
+The hidden 7-bit variants still need more presses than their 8-bit siblings on the same problems:
+- JS150: 139,853 vs 98,504;
+- readable JS150: 316,295 vs 288,400;
+- Python 50: 60,368 vs 37,400.
+
+Press figures elsewhere on this page that predate `fff69c5` (the matched80-v3 readable
+comparison and the sixbit-v1 paragraph) use the old width + 1 accounting.
 
 ## Promotion log
 
@@ -98,6 +122,12 @@ Python 50 variants (each needs more presses than its 8-bit sibling on the same p
 they stay loadable and replayable). Input-tree tiles preview literal text. Deployed; 44
 changed public files byte-identical live
 ([receipt](bits-deploy-receipts/2026-10-22-256one-b4230d2.json)). No profile or bar changed.
+
+2026-10-22: 256one `fff69c5` enters literal IDs directly, without the leading control bit (presses
+per selection = width; Undo literal and Finish are separate command buttons; Reset removed;
+v2 attempt records still replay). Deployed; 42 changed public files byte-identical live
+([receipt](bits-deploy-receipts/2026-10-22-256one-fff69c5.json)). No profile, selection count or
+bar changed.
 
 Not promoted (2026-10-22, [bits80-bridge-v1](bits80-bridge-v1/README.md)): every committed
 literal dictionary since the live promotion, evaluated on the 80 published compact sources. That
