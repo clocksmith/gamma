@@ -317,3 +317,9 @@ headroom is untested. Proposed next: an exact large-neighbourhood search on the 
 on the full 300 dev-fit programs cut selections 3.26% at 256 entries and 1.41% at 128 below the shared local
 search's optimum; dev-val actions fall 2.59% and 0.87%. At 256 more programs worsen than improve (45 vs 33) and the
 median rises by one, so the larger fit gain is concentrated. Stacking with item 13's naming is the next shared item.
+
+**Multi-character naming palette** ([palette-names-v1](palette-names-v1/README.md), dev-val 100): null. The frozen
+palette drawn from item 13's dictionary held only 3 multi-character names, because of 160 learned entries only 10
+are identifier-shaped and 9 of those are reserved words. No call introduced one. Every searched arm equals item 13
+on dev-val (8,504 actions), so item 13 stays the current best. The palette idea is untested beyond this rule and
+this dictionary.
