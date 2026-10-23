@@ -42,6 +42,15 @@ All4,000choices qualify;649distinct changes pass62,521checks. Confirmation is
 owner-gated; M1 remains unmet. [Freeze](binding-descent-v1/FREEZE.md),
 [review](binding-descent-v1/REVIEW.md), [evidence](binding-descent-v1/evidence/results.json).
 
+## Coupled naming continuation — 2026-10-23
+
+[Dictionary-guided coupled changes](coupled-names-v1/README.md): all2,400choices qualify;
+324distinct changes pass32,466checks. Coupled proposals save7validation actions
+over the ready item13 seed (5better/95same/0worse), but character fraction rises
+slightly despite two fewer character codes. No incremental successor selected.
+[Freeze](coupled-names-v1/FREEZE.md), [review](coupled-names-v1/REVIEW.md),
+[evidence](coupled-names-v1/evidence/results.json).
+
 ## Current goal navigation
 
 [Goals v2](../contracts/algorithm_solver_goals_v2.json) organizes recognition
