@@ -4,6 +4,17 @@ Start here for source versions, experiments and the working literal languages.
 This is a navigation index over existing manifests and reports, not a second
 results ledger. Completed runs below retain their source, dictionary and execution identities.
 
+## Optional character slots: ready development successor — 2026-10-23
+
+[Coverage-constrained selection](character-slots-v1/README.md) selects optional:
+92 character and164 learned entries, all1,200packets decoded. Validation8,336actions
+versus8,504item13 and8,428matched fixed96; median61.5selections, p95197,
+character fraction49.60%. Passes frozen R readiness and incremental comparisons
+against both controls. Exact-source qualification reused from item15, not new
+execution. Consumed development evidence only; M1 and independent confirmation
+remain unestablished. [Freeze](character-slots-v1/FREEZE.md),
+[review](character-slots-v1/REVIEW.md), [evidence](character-slots-v1/evidence/results.json).
+
 ## Known-incumbent repair starts — 2026-10-23
 
 [Matched cold/warm HiGHS calls](seeded-repair-v1/README.md): all16calls feasible,
