@@ -4,6 +4,17 @@ Start here for source versions, experiments and the working literal languages.
 This is a navigation index over existing manifests and reports, not a second
 results ledger. Completed runs below retain their source, dictionary and execution identities.
 
+## Capacity-aware character-fraction bounds — 2026-10-23
+
+[Exact capacity certificates](fraction-capacity-v1/README.md) exclude a10%character
+fraction for all dictionaries/segmentations in four fixed-source, fit-only pool
+models. Integer lower bounds on10C−N: R33,595(fixed96)/20,731(flex256), naming
+18,292/12,776. All certificates replay;3,000witness packets decode. These bounds
+cover the complete300fit programs and declared shared2–64-plus-seed pools only,
+not rewrites, arbitrary strings/subsets, quantiles or400of500M1 coverage. No
+candidate promotion. [Freeze](fraction-capacity-v1/FREEZE.md),
+[review](fraction-capacity-v1/REVIEW.md), [evidence](fraction-capacity-v1/evidence/results.json).
+
 ## Exact repairs plus naming — 2026-10-23
 
 [Combined dictionary/source search](lns-naming-v1/README.md): all3,200choices
