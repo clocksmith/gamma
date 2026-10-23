@@ -4,6 +4,18 @@ Start here for source versions, experiments and the working literal languages.
 This is a navigation index over existing manifests and reports, not a second
 results ledger. Completed runs below retain their source, dictionary and execution identities.
 
+## All-length shared-pool bounds — 2026-10-23
+
+[Expanded exact certificates](all-length-fraction-v1/README.md) retain positive
+integer lower bounds on 10C−N: R 22,196 and naming 13,725. Both complete
+300-program fit cohorts exclude 10% characters with any dictionary of at most
+256 entries from their all-length shared pools; maximum lengths are 326/322.
+Independent pool reconstruction, certificate replay and 1,200 packet decodes pass.
+No arbitrary one-owner strings, rewrites, subset or M1-wide impossibility claim.
+[Freeze](all-length-fraction-v1/FREEZE.md),
+[amendment](all-length-fraction-v1/AMENDMENT-1.md),
+[review](all-length-fraction-v1/REVIEW.md).
+
 ## Python scope-local continuation — 2026-10-23
 
 [Matched Python naming](python-binding-continuation-v1/README.md): all360choices
