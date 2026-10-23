@@ -22,6 +22,16 @@ fraction; at 256 it saves 0.15%. No ready arm. Byte-minimum source can worsen
 literal input cost. [Freeze](compiler-choice-v1/FREEZE.md),
 [review](compiler-choice-v1/REVIEW.md), [evidence](compiler-choice-v1/evidence/results.json).
 
+## Scope-local naming family — 2026-10-23
+
+[Fixed naming alternatives](scope-choice-v1/README.md): all 3,200 choices qualify;
+163 distinct changed programs pass 15,632 checks. Joint naming saves 21/28 validation
+actions at 128/256 over matched printer controls; only three validation programs
+choose a mangled profile in either joint arm. No ready arm. This is a finite
+alphabet-family result, not a bound on per-binding search.
+[Freeze](scope-choice-v1/FREEZE.md), [review](scope-choice-v1/REVIEW.md),
+[evidence](scope-choice-v1/evidence/results.json).
+
 ## Current goal navigation
 
 [Goals v2](../contracts/algorithm_solver_goals_v2.json) organizes recognition
