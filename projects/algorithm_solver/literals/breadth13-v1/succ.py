@@ -9,7 +9,7 @@ fit selections), nonregress (total fit selections, with no fit program allowed t
 incumbent) and relative (sum of w_p * cost_p, w_p = round(10^6 / start_p)). The seed is evaluated directly. Moves are accepted only on a strict improvement of
 the arm's own objective under exact canonical rescoring. Validation opens only after the arm's dictionary is sealed.
 """
-import argparse, hashlib, json, os, random, subprocess, sys, time
+import argparse, hashlib, json, os, random, resource, subprocess, sys, time
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
@@ -25,14 +25,23 @@ def contract():
     c = json.loads((HERE / 'contract.json').read_text())
     for rel, h in c['code_hashes'].items(): assert sha((LIT / rel).read_bytes()) == h, rel
     assert sha((LIT / 'cost-decomposition-v1/contract.json').read_bytes()) == c['parent_contract_sha256']
+    rt = c['runtime']; exe = os.path.realpath(sys.executable)
+    assert exe == rt['python_realpath'] and sha(Path(exe).read_bytes()) == rt['python_sha256'], exe
+    import scipy; assert sys.version.split()[0] == rt['python_version'] and scipy.__version__ == rt['scipy']
     return c
 
 
-def load_seed(work, c):
+def load_seed(work, c, part):
+    """part 'fit': the seed dictionary and item 13's fit-sources.json only. part 'all': all 400 sources (after the seal)."""
     folder = work / c['seed']['relative_path']
-    for f, h in c['seed']['private_sha256'].items(): assert sha((folder / f).read_bytes()) == h, f
-    vocab = json.loads((folder / 'dictionary.json').read_text())
-    allsrc = {int(k): v for k, v in json.loads((folder / 'sources.json').read_text()).items()}
+    names = ['dictionary.json', 'fit-sources.json'] if part == 'fit' else ['dictionary.json', 'fit-sources.json', 'sources.json']
+    raw = {f: (folder / f).read_bytes() for f in names}
+    for f in names: assert sha(raw[f]) == c['seed']['private_sha256'][f], f
+    vocab = json.loads(raw['dictionary.json'])
+    fit = {int(k): v for k, v in json.loads(raw['fit-sources.json']).items()}
+    if part == 'fit': return vocab, fit
+    allsrc = {int(k): v for k, v in json.loads(raw['sources.json']).items()}
+    assert all(allsrc[p] == fit[p] for p in fit)
     return vocab, allsrc
 
 
@@ -43,8 +52,8 @@ def arm_run(a, c):
     parent = json.loads((LIT / 'cost-decomposition-v1/contract.json').read_text())
     fit_ids, val_ids = parent['partition']['dev_fit'], parent['partition']['dev_val']
     work, out, arm, width, cfg = a.work.resolve(), a.output.resolve(), a.arm, 8, c['lns']
-    seed_vocab, allsrc = load_seed(work, c)
-    fit = {p: allsrc[p] for p in fit_ids}  # item 13's selected fit sources; validation values are not touched yet
+    seed_vocab, fit = load_seed(work, c, 'fit')  # item 13's selected fit sources only; validation is not read before the seal
+    assert sorted(fit) == sorted(fit_ids)
     forbidden = sel.forbidden_strings(fit)
     pool = sel.build_pool(fit, forbidden, c['pool_max_length'])
     graph = sel.Graph(fit, pool, c['pool_max_length'])
@@ -99,6 +108,7 @@ def arm_run(a, c):
     if a.smoke:
         print(json.dumps({'smoke': True, **report}), flush=True); return
     # Validation opens only now: item 13's own validation sources, unchanged, under the sealed dictionary.
+    _, allsrc = load_seed(work, c, 'all')
     val = {p: allsrc[p] for p in val_ids}
     forbidden_all = forbidden | sel.forbidden_strings(val)
     allrows, illegal, db = sel.measure({**fit, **val}, incumbent, width, forbidden_all)
@@ -112,13 +122,16 @@ def arm_run(a, c):
 def launch(a, c):
     a.output.mkdir(parents=True, exist_ok=False)
     env = {**os.environ, 'PYTHONHASHSEED': '0', 'OMP_NUM_THREADS': '1', 'OPENBLAS_NUM_THREADS': '1'}
-    procs = [subprocess.Popen([sys.executable, '-B', __file__, '--work', str(a.work), '--output', str(a.output), '--arm', arm,
-                               '--cores', ','.join(map(str, c['cores'][arm]))] + (['--smoke', str(a.smoke)] if a.smoke else []), env=env)
+    lim = c['limits']
+    cap = lambda: resource.setrlimit(resource.RLIMIT_AS, (lim['address_space_bytes'],) * 2)
+    procs = [subprocess.Popen(['timeout', str(lim['arm_seconds']), sys.executable, '-B', __file__, '--work', str(a.work), '--output', str(a.output), '--arm', arm,
+                               '--cores', ','.join(map(str, c['cores'][arm]))] + (['--smoke', str(a.smoke)] if a.smoke else []),
+                              env=env, preexec_fn=cap)
              for arm in ARMS]
     codes = [p.wait() for p in procs]
     arms = [json.loads((a.output / arm / 'results.json').read_text()) for arm in ARMS if (a.output / arm / 'results.json').exists()]
-    (a.output / 'results.json').write_text(json.dumps({'contract_sha256': sha((HERE / 'contract.json').read_bytes()), 'exit_codes': codes,
-                                                       'arms': arms}, indent=1) + '\n')
+    (a.output / 'results.json').write_text(json.dumps({'contract_sha256': sha((HERE / 'contract.json').read_bytes()),
+                                                       'exit_codes': dict(zip(ARMS, codes)), 'arms': arms}, indent=1) + '\n')
 
 
 def main():
