@@ -13,6 +13,15 @@ Eligibility and actual use are reported separately; no constructor-impossibility
 or M1 claim. [Freeze](expression-prefix-v1/FREEZE.md),
 [review](expression-prefix-v1/REVIEW.md), [evidence](expression-prefix-v1/evidence/results.json).
 
+## Compiler alternatives — 2026-10-23
+
+[Compiler choice and joint fitting](compiler-choice-v1/README.md): all 3,200
+choices qualify; 589 distinct changes pass 57,280 checks. At 128 entries joint
+saves 5.28% validation actions (81 better/11 worse) but raises single-character
+fraction; at 256 it saves 0.15%. No ready arm. Byte-minimum source can worsen
+literal input cost. [Freeze](compiler-choice-v1/FREEZE.md),
+[review](compiler-choice-v1/REVIEW.md), [evidence](compiler-choice-v1/evidence/results.json).
+
 ## Current goal navigation
 
 [Goals v2](../contracts/algorithm_solver_goals_v2.json) organizes recognition
