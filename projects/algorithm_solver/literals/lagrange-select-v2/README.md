@@ -65,7 +65,8 @@ the strongest this relaxation can give.
 - **The headroom question stays open, with a firmer scale.** For pool dictionaries, no
   256-entry dictionary can need fewer than 21,215 dev-fit selections. The best found needs 25,924,
   so the best possible improvement on fit is at most 18.2%.
-  - That bound is far from M1's scale: halving the median would need about a 50% cut.
+  - That bound concerns total dev-fit selections. It does not bound the attainable median or
+    p95, so it is not a statement about M1.
   - Whether any of that gap is attainable is not shown. The relaxation has plateaued, and a
     per-occurrence Lagrangian relaxation is known to be loose for problems of this kind, so most of
     the gap may be relaxation weakness rather than better dictionaries.
@@ -76,3 +77,6 @@ Not claimed:
 - a universal lower bound (the certificate covers only pool dictionaries);
 - attainability of the bound;
 - any confirmation, BITS change, scorer or training.
+
+Wording corrected on 2026-10-23 (Codex, gamma-team LOG 18:57Z): a total-selection bound is not
+compared with M1's median target. No number changed.
