@@ -22,14 +22,14 @@ c.update(
             'halve_after': 30, 'primal_every': 25,
             'multiplier_family': 'one nonnegative multiplier per source start',
             'witness_depths': ['shortest_allowed', 'longest_allowed']},
-    limits={'workers': 2, 'arm_cores': {'R': [0], 'naming': [1]},
+    limits={'workers': 2, 'arm_cores': {'R': [14], 'naming': [15]},
             'address_space_bytes': 8589934592, 'overall_seconds': 2400},
     pre_freeze_audit={'corpus_probe': False, 'tests': 11,
                       'random_explicit_pool_comparisons': 180,
                       'exhaustive_tiny_dictionary_searches': 40})
 c['code_hashes']['all-length-fraction-v1/contract.json'] = sha(parent_path)
 for name in ('implicit.py', 'optimize.py', 'run.py', 'supervise.py', 'make_contract.py',
-             'test_implicit.py', 'test_optimize.py', 'DRAFT.md', 'FREEZE.md'):
+             'test_implicit.py', 'test_optimize.py', 'DRAFT.md', 'FREEZE.md', 'AMENDMENT-1.md'):
     c['code_hashes'][str((HERE/name).relative_to(LIT))] = sha(HERE/name)
 c['offline_encoder_files'] = {str((LIT/rel).resolve()): digest for rel, digest in c['code_hashes'].items()
                               if rel.endswith(('.py', '.cjs')) and '/test_' not in rel}
