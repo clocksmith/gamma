@@ -79,6 +79,15 @@ is 60% shorter than the minified sources (names, idioms, removed checks), with 1
 per selection. Dictionaries barely transfer across styles. M1 is not met. Seven of eight
 predictions held; K1 (compaction worth at least 25%) did not.
 
+**Structural components** ([structural-v1](structural-v1/README.md), dev-val 100 only): negative.
+31 typed components (counting, queue, graph, tree folds) were audited and fully charged. Only 4,
+10 and 19 had support on the original, minified and rewritten sources. Search removed them all
+on the original and minified sources. On the rewrites it kept two counting components: −0.12% at
+256 entries (8,937 vs 8,948, more programs worse than better) and +0.76% at 128. Operand charges
+erase the skeleton savings, because the shared style already makes recurring idioms literal text.
+The final held-out 100 was not opened. No scorer: every search stopped at a local optimum under
+its cap.
+
 ## Measurement rules
 
 - Freeze problem IDs, family/difficulty mix, interfaces, mutation/numerical and
