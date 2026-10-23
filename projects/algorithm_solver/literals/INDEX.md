@@ -4,6 +4,15 @@ Start here for source versions, experiments and the working literal languages.
 This is a navigation index over existing manifests and reports, not a second
 results ledger. Completed runs below retain their source, dictionary and execution identities.
 
+## Prefix expression constructors — 2026-10-23
+
+[Matched prefix-arity experiment](expression-prefix-v1/README.md): all 1,600
+packets decode; validation actions improve 1.28% at 128 entries and 0.46% at
+256 versus searched literal controls. Storage increases, neither arm is ready.
+Eligibility and actual use are reported separately; no constructor-impossibility
+or M1 claim. [Freeze](expression-prefix-v1/FREEZE.md),
+[review](expression-prefix-v1/REVIEW.md), [evidence](expression-prefix-v1/evidence/results.json).
+
 ## Current goal navigation
 
 [Goals v2](../contracts/algorithm_solver_goals_v2.json) organizes recognition
