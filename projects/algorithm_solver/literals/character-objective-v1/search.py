@@ -62,7 +62,7 @@ def brief(state):return {k:v for k,v in state.items() if k not in ('vocab','pars
 def prune(texts,state,width,weight,budget):
     used={word for parts in state['parsed'].values() for word in parts}
     removed=set(state['vocab'])-used-FALLBACK
-    if not removed:return state,[]
+    if not removed or budget.expired():return state,[]
     result=evaluate(texts,set(state['vocab'])-removed,width,weight,state,budget)
     assert cost(result)[:3]==cost(state)[:3]
     return result,sorted(removed)
@@ -148,4 +148,3 @@ def refill(sources, state, width, weight, banned, nb, limit, budget):
         state, _ = prune(sources, best[0], width, weight, budget)
         added.append(best[1])
     return state, added
-
