@@ -26,7 +26,8 @@ def contract():
 
 
 def repair(texts, fixed, cand, k, seconds):
-    """Exact best <= k additions from `cand` given the fixed entries. Returns (chosen, status, objective, seconds)."""
+    """Exact best <= k additions from `cand` given the fixed entries (kept entries are arcs of cost 1 that need no
+    capacity decision). Returns (chosen, solver record)."""
     import numpy as np
     from scipy.optimize import milp, LinearConstraint, Bounds
     from scipy.sparse import coo_matrix
@@ -57,7 +58,10 @@ def repair(texts, fixed, cand, k, seconds):
                integrality=integ, bounds=Bounds(0, 1), options={'time_limit': float(seconds), 'mip_rel_gap': 0.0, 'disp': False})
     chosen = [cand[i] for i in range(C) if res.x is not None and res.x[i] > 0.5]
     assert len(chosen) <= k
-    return chosen, int(res.status), None if res.fun is None else float(res.fun), time.monotonic() - t0
+    record = {'status': int(res.status), 'message': str(res.message), 'objective': None if res.fun is None else float(res.fun),
+              'dual_bound': getattr(res, 'mip_dual_bound', None), 'gap': getattr(res, 'mip_gap', None),
+              'seconds': time.monotonic() - t0, 'feasible': res.x is not None}
+    return chosen, record
 
 
 def width_run(a, c):
@@ -80,6 +84,7 @@ def width_run(a, c):
     ranked = [pool[i] for i in np.lexsort((np.arange(len(pool)), -score))]
     rng = random.Random(cfg['seed'])
     incumbent, best = list(baseline), sel.exact_fit(fit, baseline)
+    live = out / f'w{width}-live'; live.mkdir(parents=True)  # private per-move receipts written as the search runs
     moves, started = [], time.monotonic()
     while time.monotonic() - started < cfg['lns_seconds']:
         learned = sorted(s for s in incumbent if s not in sel.ALPHABET)
@@ -90,13 +95,20 @@ def width_run(a, c):
         extra = [s for s in rng.sample(pool, min(len(pool), cfg['random'] * 3)) if s not in fixset and s not in set(top)][:cfg['random']]
         cand = list(dict.fromkeys(removed + top + extra))
         remaining = cfg['lns_seconds'] - (time.monotonic() - started)
-        chosen, status, objective, secs = repair(fit, fixed, cand, len(removed), min(cfg['milp_seconds'], max(1., remaining)))
+        capacity = 2 ** width - len(fixed)  # full legal capacity, so an accepted sparse move never ratchets slots away
+        chosen, solver = repair(fit, fixed, cand, capacity, min(cfg['milp_seconds'], max(1., remaining)))
         trial = fixed + chosen
-        exact = sel.exact_fit(fit, trial)
-        accepted = exact < best and not set(trial) & forbidden
-        if accepted: incumbent, best = trial, exact
-        moves.append({'move': len(moves), 'status': status, 'objective': objective, 'exact': exact, 'accepted': accepted,
-                      'incumbent': best, 'seconds': secs, 'candidates': len(cand), 'kept_removed': len(set(chosen) & set(removed))})
+        exact = sel.exact_fit(fit, trial) if solver['feasible'] else None
+        if solver['feasible']:
+            assert exact <= solver['objective'] + 1e-6, 'exact rescoring exceeds the MILP objective'
+            if solver['status'] == 0: assert abs(exact - solver['objective']) <= 1e-6, 'solver-optimal objective disagrees'
+        accepted = exact is not None and exact < best and not set(trial) & forbidden
+        if accepted:
+            incumbent, best = trial, exact
+            (live / f'incumbent-{len(moves):04d}.json').write_text(json.dumps(incumbent) + '\n')
+        moves.append({'move': len(moves), **solver, 'capacity': capacity, 'chosen': len(chosen), 'exact': exact, 'accepted': accepted,
+                      'incumbent': best, 'candidates': len(cand), 'kept_removed': len(set(chosen) & set(removed))})
+        with open(live / 'moves.jsonl', 'a') as fh: fh.write(json.dumps(moves[-1]) + '\n')
         print(json.dumps({'width': width, **moves[-1]}), flush=True)
     lns_seconds = time.monotonic() - started
     pcfg = {**c['polish'], 'trials': 50 if a.smoke else c['polish']['trials']}
