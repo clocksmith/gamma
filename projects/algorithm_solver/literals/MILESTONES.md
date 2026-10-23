@@ -278,3 +278,23 @@ representation implicitly. Recursive/cyclic dictionaries and ring all-reduce
 remain proposals with their own decoder/resource/coordination obligations.
 An offline encoding result remains distinct from autonomous assembly and unseen
 semantic generalization, regardless of whether it motivates a useful paper.
+
+## 2026-10-23 correction and fixed-source cost diagnostic
+
+The owner's forwarded correction supersedes the earlier interpretations that
+local search stopping establishes no search headroom or that a new representation
+is mathematically necessary. The historical runs and numbers remain unchanged.
+A local optimum is not a global bound, and general-compressor rates cannot be
+used as a lower bound for a 256-entry exact-string dictionary.
+
+[The frozen cost diagnostic](cost-decomposition-v1/README.md) reproduces the
+L-R development baselines with 800 exact packet decodes. At 256 entries on
+100 dev-val programs, syntax is 50.2% of byte-fraction-attributed selections;
+identifiers are the largest single-character tail (48.2%). A fit-witnessed
+unlimited-string oracle reaches median 21/p95 75, against measured 63.5/211,
+but relaxes dictionary capacity. The capacity-aware bound on the fixed 400 is
+also too weak to establish feasibility or impossibility. These are explicitly
+optimistic diagnostics, not legal candidate dictionaries or scorer headroom.
+M1 thresholds and held-out/protected reservations remain unchanged. Next is a
+matched conventional search ablation on dev-fit, followed by fixed dev-val
+measurement; no training, BITS update or source publication is authorized.
