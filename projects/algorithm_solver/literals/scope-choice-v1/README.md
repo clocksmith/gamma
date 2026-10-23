@@ -1,6 +1,6 @@
 # Scope-local naming and vocabulary-aware selection
 
-[Freeze](FREEZE.md) pushed in `1e2271151`; [review/run receipt](REVIEW.md); [sanitized evidence](evidence/results.json).
+[Freeze](FREEZE.md) pushed in `1e2271151`; [review/run receipt](REVIEW.md); [sanitized evidence](evidence/results.json). [Contract metadata clarification](NOTE-2026-10-23-CONTRACT-METADATA.md).
 
 Input candidate: **none**. These are consumed-development source-plus-encoder results. They do not establish M1 qualification, independent generalization or autonomous assembly.
 

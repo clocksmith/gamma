@@ -86,7 +86,7 @@ def main(folder):
             for x in v:clean(x)
     clean(r);(HERE/'evidence').mkdir(exist_ok=True);analyze.write(HERE/'evidence/results.json',r)
     lines=['# Compiler alternatives and vocabulary-aware selection','',
-        '[Freeze](FREEZE.md) pushed in `fe0cb9290`; [review/run receipt](REVIEW.md); [sanitized evidence](evidence/results.json).', '',
+        '[Freeze](FREEZE.md) pushed in `fe0cb9290`; [review/run receipt](REVIEW.md); [sanitized evidence](evidence/results.json). [Contract metadata clarification](NOTE-2026-10-23-CONTRACT-METADATA.md).', '',
         f'Input candidate: **{r["selected_input_candidate"] or "none"}**. These are consumed-development source-plus-encoder results. They do not establish M1 qualification, independent generalization or autonomous assembly.', '',
         'The 128-entry joint arm saves 745 of 14,114 validation actions (5.28%), improves 81 programs and worsens 11, and reduces raw package bytes from 17,225 to 16,577. Its only failed readiness predicate is single-character fraction, which rises from 78.67% to 81.95% even though absolute character codes fall from 11,025 to 10,874. Total selections shrink faster than character codes, so this is a ratio effect; the frozen predicate still fails. At 256 entries joint saves only 14 actions (0.15%). Byte-minimum sources are 9.45% shorter on validation but cost more inputs under the initial dictionaries: 2.88% more at 128 and 13.19% more at 256. Source-byte minimization and literal-input minimization differ.', '',
         '## Costs and qualification','',
