@@ -41,6 +41,15 @@ The existing Python statement miner is
 import. Exact byte-span provenance is a proposed integration refinement, not an
 implemented new extractor or semantic-equivalence check.
 
+## 2026-10-23 vocabulary-aware naming
+
+[Binding-aware name search](name-search-v1/README.md) qualifies all 377 distinct
+changed programs (37,402 checks). Joint256 reduces validation actions from 9,048
+to 8,684 (4.02%), improving 73 and worsening 1; single-character share falls from
+55.14% to 51.23%. It fails only the frozen 5% readiness threshold. All six arms
+retain full coverage; no promotion. This measures offline source-plus-encoder
+optimization, not autonomous solving. Python transfer is the next board item.
+
 ## 2026-10-23 tail-search ablations
 
 [Eight-arm tail search](tail-search-v1/README.md) compares alphabet reclamation
