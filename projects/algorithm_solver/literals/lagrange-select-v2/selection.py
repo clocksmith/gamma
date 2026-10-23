@@ -163,7 +163,7 @@ def certify(graph, lam, b, denominator):
     sums = [0] * graph.entries
     for o, e in enumerate(graph.occ_entry.tolist()): sums[e] += q[o]
     numerator = total - sum(sorted(sums, reverse=True)[:b])
-    return {'numerator': numerator, 'denominator': denominator, 'integer_lower_bound': -(-numerator // denominator)}
+    return {'numerator': numerator, 'denominator': denominator, 'integer_lower_bound': -(-numerator // denominator), 'q': q}
 
 
 def polish(texts, vocab, width, cfg, m2):
@@ -228,6 +228,13 @@ def arm(job):
     for name, r in results.items():
         (folder / f'{name}.json').write_text(json.dumps(r['vocab']) + '\n'); seal[name] = sha((folder / f'{name}.json').read_bytes())
     (folder / 'trace.json').write_text(json.dumps(trace) + '\n')
+    # Private replay receipt (amendment 1): quantized multipliers and the pool/occurrence ordering they index.
+    q = certificate.pop('q')
+    np.save(folder / 'certificate-q.npy', np.array(q, dtype=np.int64))
+    order = hashlib.sha256()
+    for s in pool: order.update(s.encode() + b'\0')
+    order.update(graph.occ_entry.tobytes())
+    certificate.update(q_sha256=sha((folder / 'certificate-q.npy').read_bytes()), pool_occurrence_order_sha256=order.hexdigest())
     (folder / 'fit-seal.json').write_text(json.dumps({'dictionaries_sha256': seal, 'validation_loaded': False}) + '\n')
     if job['iterations']:  # smoke: plumbing and timing on dev-fit only; validation is never opened
         smoke = {'width': width, 'smoke': True, 'pool_entries': len(pool), 'occurrence_edges': int(len(graph.occ_entry)),
