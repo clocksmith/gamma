@@ -34,6 +34,12 @@ class CharacterSearchTests(unittest.TestCase):
         texts={1:'abab',2:'abab'};vocab=list(s.v3.base.ALPHABET)+['ab','zz'];budget=s.Budget({'trials':100,'seconds':60})
         state=s.evaluate(texts,vocab,7,4,None,budget);after,removed=s.prune(texts,state,7,4,budget)
         self.assertEqual(removed,['zz']);self.assertEqual(s.cost(state)[:3],s.cost(after)[:3]);self.assertTrue(s.FALLBACK<=set(after['vocab']))
+    def test_prune_does_not_exceed_trial_cap(self):
+        texts={1:'abab',2:'abab'};budget=s.Budget({'trials':1,'seconds':60})
+        state=s.evaluate(texts,list(s.v3.base.ALPHABET)+['ab','zz'],7,4,None,budget)
+        after,removed=s.prune(texts,state,7,4,budget)
+        self.assertIs(after,state);self.assertEqual(removed,[]);self.assertEqual(budget.trials,1)
+
     def test_proposals_require_two_owners_and_exclude_bodies(self):
         texts={1:'abab',2:'abab',3:'xy'};budget=s.Budget({'trials':100,'seconds':60})
         state=s.evaluate(texts,list(s.v3.base.ALPHABET),7,4,None,budget)
