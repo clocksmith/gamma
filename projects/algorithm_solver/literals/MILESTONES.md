@@ -112,6 +112,18 @@ Rename-only is a secondary attribution control. The weak structural-v1 256-entry
 The human study is planned separately ([HUMAN_STUDY.md](roles-v1/HUMAN_STUDY.md)), and it is not
 run or simulated.
 
+**Result** ([roles-v1](roles-v1/README.md), dev-val 100): not promoted. Every action is counted,
+and all 1,200 decoded programs pass every case.
+- **Minified sources:** binding cuts actions 23.9% at 256 entries (27,198 to 20,701; all 100
+  programs better) and 19.0% at 128.
+- **Rename-only control:** cuts 49.6% at 256 (to 13,700). Declaring the original names gives back
+  about half of what role naming saves, and naming explains 74% of the gap from the minified to
+  the shared-style sources.
+- **Shared-style rewrites:** roles add nothing. Search deleted every slot; L-R stays best at
+  9,048 actions, median 64.5.
+- **Verdict:** no B arm passes against the shared-style baseline at either width. M1 is not moved.
+  All seven predictions held. The final held-out 100 was not opened.
+
 ## Measurement rules
 
 - Freeze problem IDs, family/difficulty mix, interfaces, mutation/numerical and
