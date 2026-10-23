@@ -4,6 +4,7 @@ from pathlib import Path
 
 HERE = Path(__file__).resolve().parent; LIT = HERE.parent
 sha = lambda p: hashlib.sha256((LIT / p).read_bytes()).hexdigest()
+HIGHS = '/home/x/deco/gamma/.venv_rocm/lib/python3.14/site-packages/scipy/optimize/_highspy/_core.cpython-314-x86_64-linux-gnu.so'
 CODE = ['warm-nonregress-v1/warm.py', 'warm-nonregress-v1/capped.py', 'warm-nonregress-v1/evidence.py', 'warm-nonregress-v1/make_contract.py',
         'warm-nonregress-v1/FREEZE.md', 'warm-nonregress-v1/AMENDMENT-1.md', 'warm-nonregress-v1/test_capped.py', 'seeded-repair-v1/model.py', 'character-slots-v1/repair.py',
         'breadth-lns-v1/breadth.py', 'lagrange-select-v2/selection.py', 'cost-decomposition-v1/analyze.py',
@@ -24,5 +25,6 @@ c = {'schema': 'gamma.warm-nonregress-v1.contract.v1',
      'cores': {'warm': [8], 'cold': [9]},
      'limits': {'arm_seconds': 5400, 'address_space_bytes': 10 * 2 ** 30},
      'runtime': {'launcher': '/home/x/deco/gamma/.venv_rocm/bin/python', 'python_realpath': '/usr/bin/python3.14',
-                 'python_sha256': hashlib.sha256(Path('/usr/bin/python3.14').read_bytes()).hexdigest(), 'python_version': '3.14.4', 'scipy': '1.18.1'}}
+                 'python_sha256': hashlib.sha256(Path('/usr/bin/python3.14').read_bytes()).hexdigest(), 'python_version': '3.14.4', 'scipy': '1.18.1',
+                 'highs_extension_path': HIGHS, 'highs_extension_sha256': hashlib.sha256(Path(HIGHS).read_bytes()).hexdigest()}}
 (HERE / 'contract.json').write_text(json.dumps(c, indent=1, sort_keys=True) + '\n')

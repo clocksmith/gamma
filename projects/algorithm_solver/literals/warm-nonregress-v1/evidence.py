@@ -81,6 +81,17 @@ def main():
         assert replay_illegal == arm['illegal_entry_sha256'] and replay_db == arm['dictionary_bytes'] and replay == {str(k): v for k, v in arm['per_problem'].items()}, name
         assert arm['decoded'] == len(replay) == 400
         rows = replay; s = summary(rows, val_ids, replay_db); f = summary(rows, fit_ids, replay_db)
+        # Reconcile every reported counter with the replay and with the retained move log; never copy one unchecked.
+        fit_sel = {p: rows[str(p)]['selections'] for p in fit_ids}; seed_sel = {p: seed_rows[str(p)]['selections'] for p in fit_ids}
+        recon = {'start_fit': sum(seed_sel.values()), 'final_fit': sum(fit_sel.values()), 'final_objective': sum(fit_sel.values()),
+                 'fit_programs_worse_than_start': sum(fit_sel[p] > seed_sel[p] for p in fit_ids),
+                 'fit_programs_better_than_start': sum(fit_sel[p] < seed_sel[p] for p in fit_ids)}
+        mv = [json.loads(line) for line in (a.run / f'{name}-live' / 'moves.jsonl').read_text().splitlines()]
+        recon.update(moves=len(mv), accepted_moves=sum(m['accepted'] for m in mv), improving_moves=sum(m['accepted'] for m in mv),
+                     feasible_moves=sum(m['feasible'] for m in mv), optimal_moves=sum(m['optimal'] for m in mv),
+                     statuses={str(x): sum(m['model_status'] == x for m in mv) for x in sorted({m['model_status'] for m in mv})})
+        assert all(recon[k] == arm[k] for k in recon), {k: (recon[k], arm[k]) for k in recon if recon[k] != arm[k]}
+        assert all(m['warm'] == (name == 'warm') for m in mv) and (name != 'warm' or all(m['feasible'] for m in mv))
         pr_r, pr_s = paired(rows, r_rows, val_ids), paired(rows, seed_rows, val_ids)
         ready = {'actions_5pct': s['actions'] <= 0.95 * out['pinned_R']['actions'], 'median_lower': s['median'] < out['pinned_R']['median'],
                  'p90_lower': s['p90'] < out['pinned_R']['p90'], 'improved_60': pr_r['better'] >= 60, 'worsened_25': pr_r['worse'] <= 25,
@@ -94,9 +105,9 @@ def main():
         vs_cb = {'fewer_actions': s['actions'] < cb_sum['actions'], 'median_not_worse': s['median'] <= cb_sum['median'],
                  'p90_not_worse': s['p90'] <= cb_sum['p90'], 'fraction_not_higher': s['single_character_fraction'] <= cb_sum['single_character_fraction'],
                  'worsened_25': pr_c['worse'] <= 25, 'package_105': s['package_bytes'] <= 1.05 * cb_sum['package_bytes']}
-        out['arms'][arm['arm']] = {**{k: arm[k] for k in ('moves', 'accepted_moves', 'lns_seconds', 'start_fit', 'final_fit', 'final_objective',
-                                                          'fit_programs_worse_than_start', 'fit_programs_better_than_start', 'statuses', 'dictionary_sha256',
-                                                          'illegal_entry_sha256', 'decoded', 'feasible_moves', 'optimal_moves', 'improving_moves')},
+        out['arms'][arm['arm']] = {**recon, 'lns_seconds': arm['lns_seconds'], 'dictionary_sha256': arm['dictionary_sha256'],
+                                   'illegal_entry_sha256': replay_illegal, 'decoded': len(replay),
+                                   'dev_val_worse_than_seed': pr_s['worse'],
                                    'fit': f, 'validation': s, 'paired_vs_R': pr_r, 'paired_vs_seed': pr_s, 'paired_vs_current_best': pr_c, 'ready_vs_R': ready,
                                    'incremental_vs_seed': inc, 'incremental_vs_current_best': vs_cb,
                                    'successor': all(ready.values()) and all(inc.values()),
@@ -107,6 +118,14 @@ def main():
     if {'warm', 'cold'} <= set(replays):
         out['warm_vs_cold'] = {'validation': paired(replays['warm'], replays['cold'], val_ids),
                                'fit': paired(replays['warm'], replays['cold'], fit_ids)}
+    A = out['arms']; have = lambda *ns: all(n in A for n in ns)
+    out['predictions'] = {  # FREEZE.md W1-W6, evaluated on the replayed and reconciled values only
+        'W1': A['cold']['accepted_moves'] <= 2 if have('cold') else None,
+        'W2': A['warm']['feasible_moves'] == A['warm']['moves'] if have('warm') else None,
+        'W3': A['warm']['accepted_moves'] > A['cold']['accepted_moves'] if have('warm', 'cold') else None,
+        'W4': (A['warm']['start_fit'] - A['warm']['final_fit']) < 0.01 * A['warm']['start_fit'] if have('warm') else None,
+        'W5': (A['warm']['fit_programs_worse_than_start'] == 0 and A['warm']['dev_val_worse_than_seed'] <= 5) if have('warm') else None,
+        'W6': not any(v['new_current_best'] for v in A.values()) if A else None}
     rank = lambda k: (out['arms'][k]['validation']['actions'], out['arms'][k]['validation']['package_bytes'], k)
     out['selected_successor'] = min(cands, key=rank) if cands else None
     best = [k for k in cands if out['arms'][k]['new_current_best']]
@@ -114,7 +133,8 @@ def main():
     (HERE / 'evidence').mkdir(exist_ok=True); (HERE / 'evidence/results.json').write_text(json.dumps(out, indent=1, sort_keys=True) + '\n')
     for k, v in out['arms'].items():
         print(k, v['validation']['actions'], v['validation']['median'], v['validation']['p90'], v['paired_vs_seed'], v['successor'])
-    print('seed', out['seed']['actions'], 'selected', out['selected_successor'], 'new current best', out['selected_new_current_best'])
+    print('seed', out['seed']['actions'], 'selected', out['selected_successor'], 'new current best', out['selected_new_current_best'],
+          'failed', out['failed_arms'], out['predictions'])
 
 
 if __name__ == '__main__':
