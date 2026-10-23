@@ -51,6 +51,15 @@ slightly despite two fewer character codes. No incremental successor selected.
 [Freeze](coupled-names-v1/FREEZE.md), [review](coupled-names-v1/REVIEW.md),
 [evidence](coupled-names-v1/evidence/results.json).
 
+## Exact segmentation audit — 2026-10-23
+
+[Fixed-source tie and character objectives](segmentation-audit-v1/README.md): all6,400
+packets decode. Among shortest encodings, control256 validation character codes
+fall4,934→4,855 (1.60%) at unchanged9,048actions; scope_joint256 falls4,193→4,129.
+Control128 has no character-count tie headroom. No encoder change or promotion.
+[Freeze](segmentation-audit-v1/FREEZE.md), [review](segmentation-audit-v1/REVIEW.md),
+[evidence](segmentation-audit-v1/evidence/results.json).
+
 ## Current goal navigation
 
 [Goals v2](../contracts/algorithm_solver_goals_v2.json) organizes recognition
