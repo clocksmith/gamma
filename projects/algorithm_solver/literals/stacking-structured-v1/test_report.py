@@ -36,6 +36,14 @@ class ReportTests(unittest.TestCase):
                 report.run.analyze.write(folder/'dictionary.json',keys)
                 result=report.run.measure(arm,texts,nodes,keys,pools,folder,c)
                 report.replay(folder,result,c,pools)
+                self.assertEqual(result['per_problem']['1']['decoded_source_sha256'],c['source_qualification']['1']['source_sha256'])
+                usage=result['validation_entry_usage']
+                if arm=='prefix':
+                    self.assertGreater(result['validation']['prefix_codes'],usage['distinct_prefix_entries_used'])
+                    self.assertGreater(usage['distinct_prefix_entries_used'],0)
+                    self.assertEqual(usage['distinct_identifier_entries_used'],0)
+                if arm=='literal':
+                    self.assertEqual(usage,{'distinct_prefix_entries_used':0,'distinct_identifier_entries_used':0})
                 forged=copy.deepcopy(result)
                 forged['entries']+=1
                 with self.assertRaises(AssertionError):report.replay(folder,forged,c,pools)
@@ -44,6 +52,9 @@ class ReportTests(unittest.TestCase):
                 with self.assertRaises(AssertionError):report.replay(folder,forged,c,pools)
                 forged=copy.deepcopy(result)
                 forged['per_problem']['0']['eligible']=not forged['per_problem']['0']['eligible']
+                with self.assertRaises(AssertionError):report.replay(folder,forged,c,pools)
+                forged=copy.deepcopy(result)
+                forged['per_problem']['1']['decoded_source_sha256']='0'*64
                 with self.assertRaises(AssertionError):report.replay(folder,forged,c,pools)
 
     def test_conditional_overlapping_and_empty_subsets_keep_global_costs(self):
@@ -104,8 +115,14 @@ class ReportTests(unittest.TestCase):
         self.assertFalse(got['flat_M1_promotion_allowed'])
         self.assertTrue(got['predictions']['S4_union_fewer_actions_than_both_single_kinds']['correct'])
         self.assertFalse(got['predictions']['S5_union_does_not_pass_full_stacking_rule']['correct'])
+        self.assertTrue(got['predictions']['S6_prefix_fewer_actions_than_untouched_D11']['observed'])
+        self.assertTrue(got['predictions']['S7_template_fewer_actions_than_untouched_D11']['observed'])
         result['arms'][2]=arm('template',94)
         self.assertIsNone(report.build(result,c)['selected_structured_candidate'])
+        result['arms'][-1]=arm('D11',93)
+        changed=report.build(result,c)
+        self.assertFalse(changed['predictions']['S6_prefix_fewer_actions_than_untouched_D11']['observed'])
+        self.assertFalse(changed['predictions']['S7_template_fewer_actions_than_untouched_D11']['observed'])
 
     def test_coverage_and_package_cannot_be_hidden_by_mean_gain(self):
         a,b=arm('union',90),arm('literal',100)

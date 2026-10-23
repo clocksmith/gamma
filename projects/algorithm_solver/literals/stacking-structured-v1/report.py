@@ -128,9 +128,21 @@ def build(result,c):
         'S2_prefix_fewer_actions_than_matched_literal':fewer('prefix','literal'),
         'S3_template_fewer_actions_than_matched_literal':fewer('template','literal'),
         'S4_union_fewer_actions_than_both_single_kinds':fewer('union','prefix') and fewer('union','template'),
-        'S5_union_does_not_pass_full_stacking_rule':not union['stacking_ready']}
+        'S5_union_does_not_pass_full_stacking_rule':not union['stacking_ready'],
+        'S6_prefix_fewer_actions_than_untouched_D11':fewer('prefix','D11'),
+        'S7_template_fewer_actions_than_untouched_D11':fewer('template','D11')}
+    descriptions={
+        'S1':'All 2000 program views decode and qualify.',
+        'S2':'Prefix uses fewer validation actions than searched literal.',
+        'S3':'Template uses fewer validation actions than searched literal.',
+        'S4':'Union uses fewer validation actions than both individual kinds.',
+        'S5':'Union does not pass the full stacking rule.',
+        'S6':'Prefix uses fewer validation actions than untouched D11.',
+        'S7':'Template uses fewer validation actions than untouched D11.'}
     result['predictions']={key:{'expected':True,'observed':value,'correct':value is True}
                            for key,value in observations.items()}
+    for key,prediction in result['predictions'].items():
+        prediction['statement']=descriptions[key.split('_',1)[0]]
     return result
 
 
@@ -159,6 +171,7 @@ def replay(folder,a,c,pools):
     eligibility={key for values in pools.values() for key in values}
     arm_eligibility={key for key in eligibility if key[0] in run.ARMS.get(a['arm'],set())}
     assert a['illegal_entry_sha256']==sorted(run.analyze.sha(k[1:].encode()) for k in keys if k[0]=='L' and k[1:] in banned)
+    decoded={}
     for pid,text in texts.items():
         row=a['per_problem'][pid]
         for field,allowed in (('eligible',eligibility),('arm_eligible',arm_eligibility)):
@@ -175,16 +188,24 @@ def replay(folder,a,c,pools):
             assert packet==codec.packet(keys,plan['tokens'])
         else:
             assert packet==run.analyze.encode([k[1:] for k in keys],[keys.index(k) for k in plan['tokens']],8)
-            assert run.analyze.decode(db,packet)==text
+            decoded[pid]=run.analyze.decode(db,packet)
         for field in ('selections','single_characters','prefix_codes','identifier_codes','argument_codes',
                       'prefix_fixed_bytes','identifier_fixed_bytes','repeated_identifier_bytes','generated_bytes'):
             assert row[field]==plan[field],(pid,field)
         assert row['actions']==plan['selections']+1 and row['packet_sha256']==run.analyze.sha(packet)
         assert row['packet_bytes']==len(packet) and row['source_bytes']==len(text.encode())
     if typed and plans:
-        assert codec.decode_many(keys,plans)=={pid:texts[pid] for pid in plans}
+        decoded=codec.decode_many(keys,plans)
+    assert set(decoded)==set(plans)
+    for pid,actual in decoded.items():
+        digest=run.analyze.sha(actual.encode())
+        assert actual==texts[pid] and digest==c['source_qualification'][pid]['source_sha256']
+        assert a['per_problem'][pid]['decoded_source_sha256']==digest
     for split,group in (('fit','dev_fit'),('validation','dev_val')):
         assert a[split]==run.aggregate(a['per_problem'],c['partition'][group],db,a['decoder_dependency_bytes'])
+    used={key for pid in map(str,c['partition']['dev_val']) for key in plans.get(pid,{}).get('tokens',[])}
+    a['validation_entry_usage']={'distinct_prefix_entries_used':sum(key[0]=='P' for key in used),
+                                'distinct_identifier_entries_used':sum(key[0]=='I' for key in used)}
 
 
 def main(folder):
@@ -264,19 +285,21 @@ def main(folder):
     result=build(result,c)
     run.analyze.write(folder/'report.json',result)
     lines=['# Structured stacking result','','Separate 2c evidence; no flat M1 promotion.','',
-           '| Arm | Validation actions | Median | p90 | C/N | Package bytes | Used programs |',
-           '| --- | ---: | ---: | ---: | ---: | ---: | ---: |']
+           '| Arm | Validation actions | Median | p90 | C/N | Package bytes | Used programs | Distinct P/I entries used |',
+           '| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |']
     for arm in result['arms']:
         v=arm['validation']
+        used=arm['validation_entry_usage']
+        entry_usage=f"{used['distinct_prefix_entries_used']}/{used['distinct_identifier_entries_used']}"
         if v['covered']!=100:
-            lines.append(f"| {arm['arm']} | incomplete ({v['covered']}/100) | | | | | |")
+            lines.append(f"| {arm['arm']} | incomplete ({v['covered']}/100) | | | | | | {entry_usage} |")
         else:
-            lines.append(f"| {arm['arm']} | {v['actions']['total']} | {v['actions']['median']} | {v['actions']['p90']} | {v['single_character_fraction']:.6f} | {v['package_bytes']} | {v['used_programs']} |")
+            lines.append(f"| {arm['arm']} | {v['actions']['total']} | {v['actions']['median']} | {v['actions']['p90']} | {v['single_character_fraction']:.6f} | {v['package_bytes']} | {v['used_programs']} | {entry_usage} |")
     lines += ['',f"Union passes the full structured stacking rule: {result['selected_structured_candidate']=='union'}.",
               'All predicate failures, per-program coverage, pairwise changes, decoder-inclusive bytes and costs are in report.json.']
     lines += ['','| Prediction | Expected | Observed | Correct |','| --- | --- | --- | --- |']
     for name,prediction in result['predictions'].items():
-        lines.append(f"| {name} | {prediction['expected']} | {prediction['observed']} | {prediction['correct']} |")
+        lines.append(f"| {name.split('_',1)[0]}: {prediction['statement']} | {prediction['expected']} | {prediction['observed']} | {prediction['correct']} |")
     lines += ['','Conditional subsets are descriptive and may overlap. Their exact IDs and paired costs are in report.json. '
               'Each package below retains the entire global dictionary; subsets receive no dictionary discount and must not be summed.',
               '','| Selection arm | Subset | Count | Actions | N | C | C/N | Full dictionary + subset packets |',

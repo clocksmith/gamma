@@ -4,6 +4,14 @@ This draft implements the deferred2c branch of the [stack design](../stacking-v1
 The independent [draft freeze](FREEZE.md) is the execution/evidence contract.
 No source binding, corpus probe or experiment has been performed.
 
+Draft amendment, 2026-10-23, after published draft `dcb645b38`: add explicit
+reconstructed-byte/source-receipt hash equality, distinct validation P/I entry
+use counts derived from independently replayed plans, and S6/S7 signed forecasts
+against untouched D11. This is still an unbound preactivation draft, not an
+execution freeze. Root confirmed fixed D11 even if another flat arm is selected;
+a failed D11 prerequisite stops the experiment without an effectiveness result
+for P/I. Optional-character coverage risk is plausible and unmeasured.
+
 Historical inclusion rationale: item5 prefix reduced R256 from9048 to9006 actions
 (42), but had no demonstrated13 transfer and larger package16620 versus15255.
 Item20 identifier templates reduced R from9048 to9015 (33), while naming rose
@@ -23,15 +31,15 @@ Synthetic tests cover roundtrip, malformed framing, precedence, forbidden nestin
 paid argument requirements, whole-body guards, depth, exact toy paths, both cache
 invalidations, distinct-program support and fail-closed report gates.
 
-Review questions before activation:
+Preactivation decisions and checks:
 
-1. Confirm fixedD11 is the desired predetermined transfer cohort even if it is
+1. Root confirmed fixedD11 as the predetermined transfer cohort even if it is
    not item30's selected flat successor. A failed or unqualified D11 blocks this
    sidecar instead of allowing a substitute cohort.
-2. Confirm the conservative generated-byte/whole-body guard and inherited
+2. Root accepted the conservative generated-byte/whole-body guard and inherited
    structured readiness gates. These make the new language narrower than5/20;
    results cannot be relabeled historical replay.
-3. Confirm a canonical minN policy is the proper matched causal comparison here;
+3. Root accepted canonical minN as the matched comparison policy here;
    no mixed-policy comparison against item24 is proposed.
 4. Inspect the independent decoder and planned source receipt binding. Complete
    item30 replay, an independently reviewed/pushed final freeze, and completed
