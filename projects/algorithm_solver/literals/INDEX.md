@@ -69,6 +69,15 @@ remains selected. Canonical/common-encoder and weighted views are separate.
 [Freeze](character-objective-v1/FREEZE.md), [amendment](character-objective-v1/AMENDMENT-1.md),
 [review](character-objective-v1/REVIEW.md), [evidence](character-objective-v1/evidence/results.json).
 
+## Pinned FSST comparison — 2026-10-23
+
+[Native FSST and Gamma adapters](fsst-compare-v1/README.md): all4,000packets decode.
+Optimal native parsing saves2.07%/2.31%validation actions over the author encoder
+on R/naming, but both native and adapted tables remain larger than Gamma’s seeds.
+No ready adapter; the native eight-byte symbol limit and format stay explicit.
+[Freeze](fsst-compare-v1/FREEZE.md), [review](fsst-compare-v1/REVIEW.md),
+[evidence](fsst-compare-v1/evidence/results.json).
+
 ## Current goal navigation
 
 [Goals v2](../contracts/algorithm_solver_goals_v2.json) organizes recognition
