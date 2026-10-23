@@ -27,14 +27,15 @@ Nothing has launched. These changes come from codex's review of `942f8cc6e` (gam
 Two runs touched the corpus between writing FREEZE.md and the freeze commit. FREEZE.md declared them, but they
 were not synthetic. They are kept, not erased:
 
-- **Fit-only smoke**: `succ.py --smoke 120`, all three arms, cores 11–13, at about 21:56Z. Each arm made exactly
+- **Fit-only smoke**: `succ.py --smoke 120`, all three arms, cores 11–13, ending 21:46:19Z (receipt file times; started about two minutes earlier). Each arm made exactly
   one repair, a 120 s HiGHS time-limited move. The results:
   - unweighted: feasible, not an improvement;
   - nonregress: no feasible point;
   - relative: feasible, rescored at 29,453 fit selections, not an improvement.
 
-  No move was accepted. Every arm's final dictionary equals the seed's list, with fit at 24,750. Validation was
-  never read. The receipt is in private storage at `breadth13/smoke-prefreeze/`:
+  No move was accepted. Every arm's final dictionary equals the seed's list, with fit at 24,750. The old
+  `load_seed()` **loaded** `sources.json`, including all 100 validation sources, into the smoke processes. No
+  validation value was used by the optimizer or scored, and smoke mode returns before measurement. The receipt is in private storage at `breadth13/smoke-prefreeze/`:
 
   | File | SHA-256 |
   | --- | --- |
