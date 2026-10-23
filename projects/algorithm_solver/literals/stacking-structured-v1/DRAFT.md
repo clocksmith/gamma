@@ -58,3 +58,12 @@ rejection, incomplete-supervisor reporting, and overlapping/empty conditional su
 full global overhead and retained coverage failures. Python syntax/imports, Node
 syntax, CLI help and the unbound manifest hashes were checked. This does not
 establish corpus runtime, numerical qualification or structured readiness.
+
+## Activation preparation — 2026-10-23
+
+Item30 recorded4d65f5f91 and Claude independently confirmed its selection
+calculations at22:34Z. D11 is complete and qualified, though not the best flat
+action arm. The final FREEZE and bound contract retain that exact predetermined
+cohort. Preparation hashes existing artifacts and reads metadata receipts only;
+no structured search or source-content probe. Final cross-review and push
+precede launch, queued on0–7 after item34.

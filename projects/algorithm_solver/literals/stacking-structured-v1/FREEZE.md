@@ -1,18 +1,16 @@
-# Structured stacking v1 — DRAFT, unbound and not authorized to launch
+# Structured stacking v1 — final prelaunch freeze
 
-This is a new, separate 2c experiment. It does not amend item30's flat
-[freeze](../stacking-v1/FREEZE.md), any historical record, or M1's literal
-representation. Root must obtain Claude review, bind the completed D11 receipts,
-resolve review findings, and push the final contract/freeze before execution.
-`contract.pending.json` deliberately has `source_bound=false`; the runner requires
-a later `contract.json`. No D11 private sources were inspected to write this draft.
+2026-10-23, after item30 record4d65f5f91 and Claude's independent selection
+cross-check at22:34Z. D11 has400/400 exact decode and qualification; it was
+predeclared before item30 results and is retained even though D10 uses fewer
+actions. No item32 source values or costs were inspected to select this cohort.
 
-Draft amendment, 2026-10-23, following published draft `dcb645b38`: this remains
-unbound and has never been execution-frozen. Claude's preactivation notes add
-an explicit decoded-byte hash comparison to the bound source receipt, distinct
-P/I entries actually used in validation (counts only), and predictions S6/S7
-against untouched D11. The fixed-D11-or-stop rule remains unchanged; no substitute
-source cohort or corpus access is authorized by this amendment.
+This new, separate2c experiment does not amend item30's flat freeze, any
+historical record or M1. The final contract binds the completed D11 sources,
+dictionary, parent execution contract and independently replayed evidence.
+`contract.pending.json` remains an unbound template; execution requires the
+bound `contract.json`, pushed final freeze, Claude review and release of cores
+0–7 after item34. No corpus search has occurred for this experiment.
 
 ## Question and fixed cohort
 
