@@ -35,7 +35,7 @@ def paired(a, b, ids):
 
 def main():
     ap = argparse.ArgumentParser(); ap.add_argument('--work', type=Path, required=True); ap.add_argument('--run', type=Path, required=True); a = ap.parse_args()
-    c = json.loads((HERE / 'contract.json').read_text()); res = json.loads((a.run / 'results.json').read_text())
+    c = succ.contract(); res = json.loads((a.run / 'results.json').read_text())  # verifies code, runtime and parent hashes first
     assert res['contract_sha256'] == sha((HERE / 'contract.json').read_bytes())
     parent = json.loads((LIT / 'cost-decomposition-v1/contract.json').read_text()); fit_ids, val_ids = parent['partition']['dev_fit'], parent['partition']['dev_val']
     seed_vocab, allsrc = succ.load_seed(a.work, c, 'all')

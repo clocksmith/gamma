@@ -5,7 +5,7 @@ from pathlib import Path
 HERE = Path(__file__).resolve().parent; LIT = HERE.parent
 sha = lambda p: hashlib.sha256((LIT / p).read_bytes()).hexdigest()
 CODE = ['warm-nonregress-v1/warm.py', 'warm-nonregress-v1/capped.py', 'warm-nonregress-v1/evidence.py', 'warm-nonregress-v1/make_contract.py',
-        'warm-nonregress-v1/FREEZE.md', 'warm-nonregress-v1/test_capped.py', 'seeded-repair-v1/model.py', 'character-slots-v1/repair.py',
+        'warm-nonregress-v1/FREEZE.md', 'warm-nonregress-v1/AMENDMENT-1.md', 'warm-nonregress-v1/test_capped.py', 'seeded-repair-v1/model.py', 'character-slots-v1/repair.py',
         'breadth-lns-v1/breadth.py', 'lagrange-select-v2/selection.py', 'cost-decomposition-v1/analyze.py',
         'cost-decomposition-v1/lexical.cjs', 'literals.py', 'pass2/working/bitpack.py', 'tail-search-v1/structure.cjs']
 c = {'schema': 'gamma.warm-nonregress-v1.contract.v1',
