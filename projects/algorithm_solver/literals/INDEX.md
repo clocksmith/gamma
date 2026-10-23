@@ -41,6 +41,14 @@ The existing Python statement miner is
 import. Exact byte-span provenance is a proposed integration refinement, not an
 implemented new extractor or semantic-equivalence check.
 
+## 2026-10-23 Python naming transfer
+
+[Python naming transfer](python-name-v1/README.md) uses 27 fit and nine validation
+problems with independent Python qualification. All 11 distinct changed sources
+pass 1,373 checks. At 256, rename saves 12/949 validation actions; joint saves 15
+but worsens median and single-character share. No readiness, no M1 qualification.
+The 128-entry arms do not improve; all coverage and failures remain visible.
+
 ## 2026-10-23 vocabulary-aware naming
 
 [Binding-aware name search](name-search-v1/README.md) qualifies all 377 distinct
