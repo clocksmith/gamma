@@ -38,7 +38,7 @@ class Grammar(unittest.TestCase):
     def test_hedges_and_opening_conditionals_but_not_permission(self):
         self.assertIn('fee', parse('If there is a fee, it is charged per trade.')['uncertain'])
         self.assertIn('transactions', parse('Maybe unlimited transactions.')['uncertain'])
-        self.assertEqual(parse('You may complete at most two transactions.')['facts'], {'transactions': 'two'})
+        self.assertEqual(parse('You may complete at most two transactions.')['facts']['transactions'], 'two')
 
     def test_negated_positive_value_is_not_evidence(self):
         self.assertNotIn('cooldown', parse('There is never a cooldown period after selling.')['facts'])
@@ -63,6 +63,9 @@ class Grammar(unittest.TestCase):
         p = parse('You must complete exactly one transaction, even if it loses money.')
         self.assertEqual((p['facts']['transactions'], p['facts']['zero_trade']), ('one', 'forbidden'))
         self.assertEqual(parse('Buy once and sell later, or do nothing.')['facts']['zero_trade'], 'allowed')
+        self.assertEqual(parse('Complete exactly one transaction. Return zero if all prices are equal.')['facts']['zero_trade'], 'forbidden')
+        self.assertNotIn('zero_trade', parse('Return zero when no trade makes money.')['facts'])
+        self.assertEqual(parse('At most two transactions.')['facts']['zero_trade'], 'allowed')
 
     def test_two_certain_values_conflict(self):
         self.assertEqual(parse('Unlimited transactions. Buy once.')['conflicts'], {'transactions': ['one', 'unlimited']})
