@@ -1,0 +1,13 @@
+# Item60 proof-only review
+
+Reviewed2026-10-23 EDT. Scope: [DRAFT](DRAFT.md), [supplied-input oracle](proof.py) and [exhaustive tests](test_proof.py). No private input, corpus timing, new production kernel, binder or launch was used. The root mathematical/code review and reciprocal independent read-only review found no blocker; the latter did not rerun tests or edit files.
+
+The per-source bound is valid because actual shared penalties are no larger than local top-s all-occurrence weights, actual owner-only penalties are no larger than the owner's top-t weights, and their union is a nonoverlapping subset of all allowed arcs. Capping the sum by Rall therefore bounds actual used q. It does not bound the dictionary's complete activation sum.
+
+For a fixed split, adding S to a concave owner prefix and capping it preserves nonnegative nonincreasing increments. The implementation correctly starts from the generally nonzero sum of capped shared baselines, retains finite zero-valued slots and uses stable owner/rank ties. Thus its marginal allocation is exact for this relaxation. It does not pretend that independently selected shared sets agree across sources.
+
+Both the joint inequality and57's inequality apply to the same actual one-owner count j. Taking their minimum at each j is therefore sound; maximizing those minima over j<=k gives a valid charge and preserves dominance over57. Weak duality with unchanged L,D yields the exact integer ceiling. All scheduling arcs, including entries omitted from top lists, remain in Rall. Bounds remain conditional on fixed source, bans, ownership, capacity and q; a positive value alone does not prove coverage feasibility.
+
+Six focused checks passed in0.114seconds. Independent tiny oracles check every covering dictionary/path, interval schedule and owner allocation, plus18deterministic random pools. The strict fixed53example has a covering witness attaining16 after57's bound−22. The shared-coupling example exercises the necessary minimum with57. Additional cases cover repeated occurrences, shared singleton support, zero/tied weights, capacity0/excess, finite counts, missing/negative/bool penalties, no full-graph path and optimized-Python rejection. Syntax and links were checked; no broad suite or complexity measurement was run.
+
+The prototype materializes explicit substring occurrences and strings, with potentially quadratic occurrences and cubic substring-byte storage. Its test timing is development evidence only. The separately named next-design document introduces no production code or measured result. Gamma intent is preserved: named conditional targets, exact paid entries, reproducible small oracles and no unsupported scientific or promotion claim.
