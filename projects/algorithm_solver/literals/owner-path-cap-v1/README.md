@@ -1,7 +1,47 @@
-# Item 57 supplied-input proof: owner path caps
+# Owner path caps exclude 10% in nonempty support classes
 
-This is a mathematical design with invented exhaustive checks, not a corpus
-result. It keeps item 53's nonnegative occurrence penalties and path minimum
+The independently checked original-fit run gives **10C−N >= 6,651 for R and
+>=119 for naming at k=3**, where k bounds the number of dictionary entries
+occurring in only one source. Item59 established that these capacity256 classes
+are nonempty. This is the first nonvacuous fraction exclusion in the recorded
+full-substring classes permitting one-owner entries.
+
+| Original300 fit cohort | Item53 k3 bound | Item57 k3 bound | Largest positive k | Last positive bound | Next bound | Unrestricted k256 |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| R | -393 | 6,651 | 8 | 581 | -425 at9 | -26,872 |
+| naming | -6,137 | 119 | 3 | 119 | -1,188 at4 | -27,652 |
+
+Thus C/N<=10% is excluded for every covering dictionary with at most256 entries
+and at most8 one-owner entries on original R, and at most3 on original naming.
+The naming margin is small:119 at k3, with a negative bound already at k4.
+The at-most-k classes from3 onward are nonempty by the existing seeds in
+[item59](../support-budget-feasibility-v1/README.md). Positive budgets0–2 still
+have no covering dictionaries. Larger budgets remain inconclusive; this is no
+unrestricted10% impossibility, optimized-potential claim, new dictionary or M1
+qualification. Source rewriting changes the target and is outside this bound.
+
+The [complete report](evidence/REPORT.md) and [all257 paired rows per cohort](evidence/results.json)
+retain item53, exact charge reductions, work and commitments. Both cohorts
+improve255 of257 raw and integer budgets. At k256, R improves by1,876,312 integer
+units and naming by1,651,567, while both bounds remain negative. Predictions
+P1–P4 pass; P5 (positive unrestricted endpoint) fails.
+
+Production supervisor elapsed10.439110 seconds; separate independent report
+supervisor elapsed48.446613 seconds, both with exits[0,0] and completed cleanup.
+All81 code/23 runtime pins remain unchanged. Every production forward recurrence
+and independent backward schedule, owner top list and budget row agrees, and
+both historical50/53 proofs are exactly reconstructed. Per-worker report peaks
+are684,632/663,332KiB for R/naming; these are process peaks, not aggregate memory.
+
+There were no validation/case reads, source executions, new qualification jobs
+or witness packets. Exact original13 qualification is reused, with item23's
+later unchanged-source exit137 preserved separately. Currentbest51flat and M1
+thresholds are unchanged. See [review](REVIEW.md) for identities and boundaries.
+
+## Earlier invented evidence
+
+The initial mathematical design used invented exhaustive checks, before the
+original-fit result above. It keeps item 53's nonnegative occurrence penalties and path minimum
 fixed, and caps each owner's one-owner penalty contribution by the maximum
 weight of a nonoverlapping interval schedule. Shared penalties keep their old
 occurrence-sum upper bound.
@@ -68,5 +108,4 @@ entries and inspected 6,006,000 endpoints per traversal.
 
 This supplies correctness evidence on the tested inputs and one bounded
 complexity observation only. No private corpus, source execution, fresh qualification,
-multiplier search, witness packet, M1 admission or promotion occurred. A separate
-corpus freeze and review remain necessary. See [review record](REVIEW.md).
+multiplier search, witness packet, M1 admission or promotion occurred. The later corpus freeze and review are recorded above. See [review record](REVIEW.md).
