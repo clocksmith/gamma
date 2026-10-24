@@ -34,3 +34,18 @@ seconds; compile/import passed. Shape-valid rehashed corruption is rejected by
 fresh replay. Public projection excludes sources, entries, owner IDs and full
 vectors. No66 execution import, private input or measured63 modification was
 introduced. Component intent and publication/admission boundaries are preserved.
+
+## 2026-10-24 original-fit acceptance review
+
+Root and an independent auditor checked complete production/report receipts,
+strict zero exits, all128 code/23 runtime/37 public pins and sanitized metadata.
+Every254 defined row per cohort independently reconciles charge, signed ceiling,
+predecessor maximum and raw/integer deltas. Empty0–2 rows are strictly null.
+The exact top-level and86-field arm allowlists exclude private vectors/entries.
+
+Interior gains occur at k18–29 for R and k12–27 for naming, peaking165/198
+integer units at k23/k16. Thus this is not a joint-null result, although the
+registered endpoint/range predictions P2–P5 are false. Positive support ranges
+and full256 bounds are unchanged from the respective best predecessors.
+The independent audit opened public summaries/supervisors and pinned code only;
+no private proofs or ancestral carriers were opened or kernels rerun.
