@@ -374,3 +374,12 @@ optimum for capped exact repairs at these budgets.
 actions (4 better, 0 worse), median 98 → 97 actions. The single-character fraction rises (56.91% → 57.39%), so it is
 not a successor, and it is 2.1% below R against the 5% bar, so it is not ready. At 128 entries nothing moved: k = 32
 frees every learned entry and all repairs hit the 120 s limit.
+
+**Python: fraction drift blocks breadth-safe gains** ([python-lexfrac-v1](python-lexfrac-v1/README.md), 9 Python dev-val):
+no successor.
+- **w8:** the lexicographic N-then-C arm reaches 927 actions (5 programs better, 0 worse vs item 31) and keeps the
+  fraction 0.53 points below its flat control. It is still above the anchor (57.41% vs 56.91%).
+- **w7:** with k = 8 the repair finds headroom that k = 32 missed: 1,420 → 1,402 actions, all 9 programs better. The
+  fraction still rises (74.27% → 74.59%).
+
+On Python, removing selections mostly removes multi-character ones, so the fraction rises.
