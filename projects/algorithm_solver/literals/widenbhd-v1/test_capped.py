@@ -124,6 +124,23 @@ class CappedTests(unittest.TestCase):
         finally:
             evidence.record_time_comparison = orig
 
+    def test_existential_predictions_are_three_valued(self):
+        sys.path[:0] = [str(Path(__file__).resolve().parent.parent / d) for d in ('breadth-lns-v1', 'lagrange-select-v2', 'cost-decomposition-v1', '.', 'pass2/working')]
+        import evidence
+        arm = lambda acc, gain, succ: {'accepted_moves': acc, 'start_fit': 100, 'final_fit': 100 - gain, 'successor': succ,
+                                       'statuses': {}, 'fit_programs_worse_than_start': 0, 'dev_val_worse_than_seed': 0}
+        # one arm failed, the replayed arm does not satisfy: unresolved, not False
+        p = evidence.predictions({'k80': arm(1, 2, False)}, ['k80'], {'k120': {'exit_code': 1}})
+        self.assertEqual((p['K1'], p['K3'], p['K4'], p['K2'], p['K5'], p['K6']), (None, None, None, None, None, False))
+        # one arm failed, the replayed arm satisfies: True
+        p = evidence.predictions({'k80': arm(3, 9, True)}, ['k80'], {'k120': {'exit_code': 1}})
+        self.assertEqual((p['K1'], p['K3'], p['K4']), (True, True, True))
+        # both replayed, neither satisfies: False
+        p = evidence.predictions({'k80': arm(1, 2, False), 'k120': arm(0, 0, False)}, ['k80', 'k120'], {})
+        self.assertEqual((p['K1'], p['K3'], p['K4'], p['K6']), (False, False, False, True))
+        # no arm replayed at all: unresolved
+        self.assertIsNone(evidence.predictions({}, [], {'k80': {}, 'k120': {}})['K4'])
+
     def test_incumbent_violating_cap_is_rejected(self):
         texts = {1: 'abab', 2: 'abc'}; fixed = list('abc'); cand = ['ab']
         caps = {1: 1, 2: 3}  # 'abab' needs 2 selections with 'ab'; a cap below the incumbent's cost must fail closed

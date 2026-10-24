@@ -64,6 +64,23 @@ def replacement(a, cands, out, replays, val_ids, rank):
     return {'resolved': True, 'per_candidate': per, 'eligible': ok, 'replacement_allowed': bool(ok), 'selected': min(ok, key=rank) if ok else None}
 
 
+def exists(full, pred, n_arms=2):
+    """Existential prediction over arms: True if any fully replayed arm satisfies it; False only if every arm fully
+    replayed and none does; otherwise None (an unobserved or failed arm cannot establish the negative)."""
+    if any(pred(k) for k in full): return True
+    return False if len(full) == n_arms else None
+
+
+def predictions(A, full, failed):  # FREEZE.md K1-K6 (AMENDMENT-1: three-valued existential predictions)
+    both = len(full) == 2
+    return {'K1': exists(full, lambda k: A[k]['accepted_moves'] >= 3),
+            'K2': A['k120']['statuses'].get('13', 0) > A['k80']['statuses'].get('13', 0) if both else None,
+            'K3': exists(full, lambda k: A[k]['start_fit'] - A[k]['final_fit'] > 5),
+            'K4': exists(full, lambda k: A[k]['successor']),
+            'K5': all(A[k]['fit_programs_worse_than_start'] == 0 and A[k]['dev_val_worse_than_seed'] <= 5 for k in full) if both else None,
+            'K6': both and not failed}
+
+
 def paired(a, b, ids):
     d = [a[str(p)]['actions'] - b[str(p)]['actions'] for p in ids]
     return {'better': sum(x < 0 for x in d), 'same': sum(x == 0 for x in d), 'worse': sum(x > 0 for x in d)}
@@ -169,13 +186,7 @@ def main():
         out['k80_vs_k120'] = {'validation': paired(replays['k80'], replays['k120'], val_ids), 'fit': paired(replays['k80'], replays['k120'], fit_ids)}
     A = out['arms']
     ok = lambda n: n in full
-    out['predictions'] = {  # FREEZE.md K1-K6, evaluated on the replayed and reconciled values only
-        'K1': any(A[k]['accepted_moves'] >= 3 for k in full) if full else None,
-        'K2': A['k120']['statuses'].get('13', 0) > A['k80']['statuses'].get('13', 0) if len(full) == 2 else None,
-        'K3': any(A[k]['start_fit'] - A[k]['final_fit'] > 5 for k in full) if full else None,
-        'K4': any(A[k]['successor'] for k in full) if full else False,
-        'K5': all(A[k]['fit_programs_worse_than_start'] == 0 and A[k]['dev_val_worse_than_seed'] <= 5 for k in full) if len(full) == 2 else None,
-        'K6': len(full) == 2 and not out['failed_arms']}
+    out['predictions'] = predictions(A, full, out['failed_arms'])
     rank = lambda k: (out['arms'][k]['validation']['actions'], out['arms'][k]['validation']['package_bytes'], k)
     out['selected_successor'] = min(cands, key=rank) if cands else None
     best = [k for k in cands if out['arms'][k]['new_current_best']]
