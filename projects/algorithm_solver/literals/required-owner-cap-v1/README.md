@@ -32,3 +32,7 @@ item 56's accepted alphabet/ban assumptions, not a general theorem.
 No private input, scalable kernel, complexity measurement, binder, runner,
 source execution, fresh qualification, M1 result or current-best change.
 Further implementation or execution requires a separately reviewed task.
+
+The separate [continuation proposal](DRAFT-NEXT.md) reuses hash-bound accepted
+item 57 caps and independently replays forced-owner reachability and constrained
+allocation. It is design-only and grants no implementation or input access.
