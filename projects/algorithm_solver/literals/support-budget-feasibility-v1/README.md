@@ -38,8 +38,9 @@ public-file hashes, 16 verified existing pin links, aggregate coverage and
 qualification counts, and seed/source/pool/ban commitments. Its SHA256 is
 `1a126e65656a228110c763900a2981718d9806fa04b7dc46229e19f88a6d5342`.
 It contains no source text, dictionary entries, per-source identities or cases.
-Root and a separate agent verified the lineage; Claude review was requested
-and is not represented here as an approval. See the [review](REVIEW.md).
+Root and a separate agent verified the lineage. Claude subsequently confirmed
+the proof at2026-10-24T02:38Z; the artifact preserves its earlier review-status
+snapshot. See the [review](REVIEW.md).
 
 No new source execution, qualification, private read, dictionary, packet or
 multiplier calculation occurred. Original item 13 qualification is reused by
