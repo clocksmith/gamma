@@ -24,3 +24,18 @@ No private inputs, scalable implementation, price tuning or measurement.
 A separate reviewed scalable design and frozen protocol must precede either
 an invented performance measurement or original-input execution. Component
 intent and admission, qualification and publication boundaries are unchanged.
+
+## Supplied scalable kernels
+
+The [approved design](DRAFT-NEXT.md) now has supplied-input
+[production](caps.py) and [independent checking](independent.py), with
+[production tests](test_caps.py) and [checker tests](test_independent.py).
+Counts cover every allowed shared and owner occurrence. The fixed15 prices
+produce all-entry residual schedules, global entry charges and an explicit
+minimum with57. Unpriced all-entry vectors remain distinct from57's owner caps.
+
+Eight production checks passed0.177seconds and five independent checks
+passed0.281seconds, including actualq53 tiny oracles, real JSON transport at
+B0/1/16/256 and all supplied recurrence/count/cap comparisons. Root and an
+independent reviewer found no blocker. There is no invented performance or
+original-input measurement yet, and no61 combination is silently included.
