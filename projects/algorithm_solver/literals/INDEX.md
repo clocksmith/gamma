@@ -4,6 +4,18 @@ Start here for source versions, experiments and the working literal languages.
 This is a navigation index over existing manifests and reports, not a second
 results ledger. Completed runs below retain their source, dictionary and execution identities.
 
+## Required-owner support certificate — 2026-10-24
+
+[Item61](required-owner-cap-v1/README.md) inherits57's accepted full-graph caps
+and freshly checks the three forced owners and constrained allocation. Atk3,
+bounds rise6651→13349 (R) and119→6011 (naming). Largest positive support budgets
+rise8→9 and3→4; next bounds are-737/-976. These exclude10% for covering
+capacity256 dictionaries in the frozen allowed full-substring universe with
+global whole-source/solve-body bans and paid singletons, on the original300fit
+sources. Item59 supplies class feasibility. k0–2 are empty/null; fullk256 remains
+negative/inconclusive. No M1, witness, qualification or currentbest change.
+[Full curves](required-owner-cap-v1/evidence/results.json).
+
 ## Historical spelling comparator corrected; no successor — 2026-10-24
 
 [Item58](comparator-carrier-replay-v1/README.md) resolves54's historical comparison
