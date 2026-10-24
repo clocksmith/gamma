@@ -79,3 +79,32 @@ identities. The intermediate worker-status remains a progress snapshot and is
 superseded by final receipts. No rerun or private input was used in this audit.
 The paired gain uses positive pricing; the repeated gain selects zero price.
 Both fullcapacity bounds remain negative and positive ranges are unchanged.
+
+## Original-fit integration review, before private access
+
+The original-nine design passed root and independent review. Review clarified
+that fresh61 uses the owner-only57 capped prefixes, distinct from global
+lambda0. New producer and reporter preserve measured66 unchanged, add fresh56
+trie/AC coverage with every Boolean recurrence, and compare61 heap/sort
+allocation against its complete public scientific commitments. The explicit
+same-q min(T61,G) carries null rows below the forced floor and no fictitious
+allocation when the global bound wins. Full old science and all57/price/unpriced
+forward recurrence audits remain mandatory.
+
+Root reviewed all new scientific, binding, lifecycle and freeze paths; a separate
+reviewer audited production/integration. Ten binding plus ten lifecycle tests
+passed0.636seconds. Nine integration tests passed6.738seconds, including actual
+invented300-ID/two-cohort production-to-JSON-to-independent-worker-to-publication,
+96 paid characters, exactly3 forced owners, complete ancestral science and
+multi-digit allocation keys. Shape-valid rehashed interior57/price/unpriced
+vectors, counts, coverage bits and a fully reconciled corrupted numeric cap
+fail fresh replay. Tiny actualq covering-path checks, null/finite/mandatory-zero
+slots, all three winner labels, ties, signed ceilings and identity mismatches
+are covered. Failed production precedes ancestral loading; retained-size limits,
+public allowlists and real descendant/blocked-I/O cleanup checks pass.
+
+New Python files compile/import; all64 measured code and12 runtime pins are
+unchanged. These29 focused checks establish development behavior only. No
+original input stat/open or size probe occurred. Root approves public-only
+pending preparation. Claude must review the pushed FREEZE before exact
+activation and fresh original-input production/report phases on6/7.
