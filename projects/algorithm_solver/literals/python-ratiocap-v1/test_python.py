@@ -70,9 +70,32 @@ class PythonTests(unittest.TestCase):
                         if nr * c <= cr * n:
                             v = M * n + c; best = v if best is None or v < best else best
             m = capped.build(texts, fixed, pool, capacity, incumbent, caps, None, M, ratio=(nr, cr))
-            chosen, rec = capped.solve(m, pool, True, 30.)
+            chosen, rec = capped.solve(m, pool, True, 30., integral_arcs=True)
             self.assertTrue(rec['optimal']); self.assertEqual(round(rec['objective']), best); checked += 1
         self.assertGreater(checked, 30)
+
+    def test_ratio_row_fractional_mixture_and_shorter_canonical(self):
+        # codex's constructed case (LOG 04:53Z): one source, seed path a|bc|de|fg|hi (N 5, C 1, ratio 1/5)
+        texts = {1: 'abcdefghi'}; fixed = list('abcdefghi') + ['bc', 'de', 'fg', 'hi']
+        cand = ['bcde', 'fghi', 'ab', 'cd', 'ef', 'ghi']; M = 1000; caps = {1: 5}
+        self.assertEqual(costs(texts, fixed), {1: 5})
+        m = capped.build(texts, fixed, cand, len(cand), fixed, caps, None, M, ratio=(5, 1))
+        _, cont = capped.solve(m, cand, True, 30., integral_arcs=False)   # item 26's continuous arcs
+        chosen, integ = capped.solve(m, cand, True, 30., integral_arcs=True)
+        self.assertTrue(integ['optimal']); self.assertEqual(round(integ['objective']), 4 * M)      # ab|cd|ef|ghi: N 4, C 0
+        self.assertLess(cont['objective'], 4 * M - 1)                                              # fractional mixture is cheaper
+        # canonical decode of the chosen dictionary may be shorter than the solver path and break the ratio: reject, never abort
+        trial = fixed + chosen; seq = analyze.shortest_encode(texts[1], trial)
+        n_c, c_c = len(seq), sum(len(trial[i]) == 1 for i in seq)
+        ok = run.trial_check(n_c, c_c, round(integ['objective']) // M, True, (5, 1), 0.25)
+        if 'bcde' in chosen and 'fghi' in chosen:
+            self.assertEqual((n_c, c_c), (3, 1)); self.assertFalse(ok)
+        self.assertFalse(run.trial_check(3, 1, 4, True, (5, 1), 0.25))   # shorter canonical, ratio fails -> rejected, no assertion
+        self.assertTrue(run.trial_check(4, 0, 4, True, (5, 1), 0.25))
+        with self.assertRaises(AssertionError):
+            run.trial_check(3, 1, 4, True, None, 0.25)                    # without a ratio row the optimal equality must hold
+        with self.assertRaises(AssertionError):
+            run.trial_check(5, 1, 4, False, (5, 1), 0.25)                 # canonical N can never exceed the path
 
     def test_canonical_order_is_set_determined(self):
         cm = run.common()
