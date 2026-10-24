@@ -49,3 +49,22 @@ compile/import passed. Reviewers inspected but did not rerun tests or read priva
 inputs. No mathematical, transport or authority blocker remains. The seven
 original theorem checks bring the prospective registered oracle inventory to20.
 A separately reviewed invented measurement still precedes any corpus protocol.
+
+## Invented measurement protocol review
+
+Root read the new harness, its tests and fixed-fixture specification. A separate
+reviewer checked historical authority, count/recurrence accounting and lifecycle;
+the test author reviewed scientific reconciliation through actual tiny JSON
+execution. Fourteen focused harness checks passed1.283seconds, including real
+descendant cleanup, hard deadlines, failed publication and output preservation.
+All20 registered proof/kernel oracles run inside the single600-second clock.
+Full50/53/57 science and both directional commitments remain exact;63 supplies
+an explicitly bound structural utility, not a numerical comparator.
+
+Audit found the item60 tiny proof oracle missing from the inventory. The new
+explicit ORACLE_DEPENDENCIES pin includes it; syntax/whitespace checks passed
+after the inventory-only correction. No remaining blocker. New global shared
+counts, all15 price and unpriced schedules, complete recurrence audits and all
+257 rows are compared. Root approves public-only pin preparation. Claude must
+review the pushed protocol before the single measurement. No private input or
+large-fixture execution has occurred for66.
