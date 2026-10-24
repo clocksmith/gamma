@@ -6,7 +6,7 @@ HERE = Path(__file__).resolve().parent; LIT = HERE.parent
 sha = lambda p: hashlib.sha256((LIT / p).read_bytes()).hexdigest()
 HIGHS = '/home/x/deco/gamma/.venv_rocm/lib/python3.14/site-packages/scipy/optimize/_highspy/_core.cpython-314-x86_64-linux-gnu.so'
 CODE = ['alphabet96-v2/run.py', 'alphabet96-v2/capped.py', 'alphabet96-v2/evidence.py', 'alphabet96-v2/make_contract.py',
-        'alphabet96-v2/FREEZE.md', 'alphabet96-v2/test_capped.py', 'lexfrac-v1/evidence/results.json', 'holdout-gate-v1/evidence/results.json', 'alphabet96-v1/evidence/results.json', 'binding-descent-v1/evidence/results.json', 'seeded-repair-v1/model.py',
+        'alphabet96-v2/FREEZE.md', 'alphabet96-v2/AMENDMENT-1.md', 'alphabet96-v2/test_capped.py', 'lexfrac-v1/evidence/results.json', 'holdout-gate-v1/evidence/results.json', 'alphabet96-v1/evidence/results.json', 'binding-descent-v1/evidence/results.json', 'seeded-repair-v1/model.py',
         'lagrange-select-v2/selection.py', 'cost-decomposition-v1/analyze.py', 'cost-decomposition-v1/lexical.cjs', 'literals.py',
         'pass2/working/bitpack.py', 'tail-search-v1/structure.cjs']
 c = {'schema': 'gamma.alphabet96-v2.contract.v1',
