@@ -1,4 +1,43 @@
-# Global entry pricing: theorem record
+# Global entry pricing
+
+## Accepted invented measurement, 2026-10-24
+
+The single [frozen measurement](SYNTHETIC-SPEC.md) passed. All20 registered
+oracles and both original invented fixtures completed within the600-second
+whole-process envelope. Final supervisor169.305032seconds, worker168.874491seconds,
+oracles0.940598seconds and cleanup0.000175seconds. Peak worker893056KiB and
+supervisor137468KiB are separate cumulative peaks, not a simultaneous total.
+All64 code and12 runtime pins remained unchanged. See the byte-exact
+[result](synthetic-results.json) and [supervisor](synthetic-supervisor.json).
+
+| Invented fixture | Strict raw/integer budgets vs57 | k3 bound | Largest positive k | Full256 bound57 ->66 | Selected price |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| Paired prefix75k | 172, k85–256 | 63143, unchanged | 81, unchanged | -57362 -> -2265 | 256000000 |
+| Repeated owner12k | 251, k6–256 | 28459, unchanged | 4, unchanged | -151368 -> -13900 | 0 |
+
+For paired75k the selected global charge is262531279050: entry charge65536000000
+plus residual196995279050. Positive pricing improves the standalone unpriced
+all-entry bound from-159066 to-2265. For repeated12k the winning zero-price
+charge is245833750000, so its gain comes from the unpriced all-entry cap and
+must not be attributed to positive pricing. Both fullcapacity bounds remain
+negative; neither extends the positive budget range or proves10% unreachable.
+
+Production/checker times were33.684940/74.212898seconds and20.019229/36.201673seconds.
+These are phase measurements, not matched total-time ratios or corpus forecasts.
+Full historical50/53/57 science, every57 and all15-price/unpriced forward recurrence,
+global counts, exact work counters and all257 rows independently reconcile.
+The intermediate worker-status file remains a last-progress snapshot; final
+worker/result/supervisor receipts establish completion and no failure marker exists.
+
+Root and a separate reviewer audited acceptance and metadata arithmetic without
+rerunning kernels. Result SHA256:
+`43826f2616230eee54eb5114e5353726a613a815bffc3572782fd43f621dccb8`.
+No private input was opened. This is an invented-input result, not original-fit
+performance, M1 qualification, a dictionary witness or a fullclass exclusion.
+A new reviewed corpus design must explicitly reconstruct61 before combining
+its same-q bound with the global cap. Existing measured files remain frozen.
+
+## Historical theorem and supplied implementation stages
 
 Item 66 proves a cardinality-aware charge across all fixed source paths.
 For each allowed entry, divide a nonnegative integer price by its total

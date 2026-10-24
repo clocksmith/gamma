@@ -68,3 +68,14 @@ counts, all15 price and unpriced schedules, complete recurrence audits and all
 257 rows are compared. Root approves public-only pin preparation. Claude must
 review the pushed protocol before the single measurement. No private input or
 large-fixture execution has occurred for66.
+
+## Accepted invented-result audit
+
+Claude approved the single measurement at04:40Z. Final result/supervisor and
+worker receipt complete, exit is integer0, no failure or pending marker remains;
+64code/12runtime pins unchanged. Independent metadata audit reconciled historical
+science, all257 exact ceilings/deltas, global/count/cap/price digests and K*N/K*A
+identities. The intermediate worker-status remains a progress snapshot and is
+superseded by final receipts. No rerun or private input was used in this audit.
+The paired gain uses positive pricing; the repeated gain selects zero price.
+Both fullcapacity bounds remain negative and positive ranges are unchanged.
