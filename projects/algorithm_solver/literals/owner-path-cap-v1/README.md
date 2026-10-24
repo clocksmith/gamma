@@ -4,14 +4,17 @@ The independently checked original-fit run gives **10C−N >= 6,651 for R and
 >=119 for naming at k=3**, where k bounds the number of dictionary entries
 occurring in only one source. Item59 established that these capacity256 classes
 are nonempty. This is the first nonvacuous fraction exclusion in the recorded
-full-substring classes permitting one-owner entries.
+full-substring classes permitting one-owner entries. The class retains the frozen
+global whole-source/solve-body bans and paid singleton entries; there is no free
+character fallback.
 
 | Original300 fit cohort | Item53 k3 bound | Item57 k3 bound | Largest positive k | Last positive bound | Next bound | Unrestricted k256 |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
 | R | -393 | 6,651 | 8 | 581 | -425 at9 | -26,872 |
 | naming | -6,137 | 119 | 3 | 119 | -1,188 at4 | -27,652 |
 
-Thus C/N<=10% is excluded for every covering dictionary with at most256 entries
+Thus C/N<=10% is excluded for every covering dictionary in this allowed class
+with at most256 entries
 and at most8 one-owner entries on original R, and at most3 on original naming.
 The naming margin is small:119 at k3, with a negative bound already at k4.
 The at-most-k classes from3 onward are nonempty by the existing seeds in

@@ -21,7 +21,8 @@ No currentbest or promotion claim. [Evidence](comparator-carrier-replay-v1/evide
 at k3:6,651 R /119 naming. Largest positive budgets are8/3, and item59 proves
 these at-most-k classes nonempty. Thus10% is excluded for covering dictionaries
 with at most8/3 one-owner entries, respectively, on the fixed original300fit
-sources with capacity256. Budgets0–2 remain vacuous; unrestrictedk256 bounds
+sources with capacity256, frozen global source/body bans and paid singletons.
+Budgets0–2 remain vacuous; unrestrictedk256 bounds
 -26,872/-27,652 remain inconclusive. All81 code/23 runtime pins unchanged;
 production/replay supervisor10.439/48.447s. No dictionary, new qualification,
 validation, M1 or currentbest change. [Fullcurves](owner-path-cap-v1/evidence/results.json).
