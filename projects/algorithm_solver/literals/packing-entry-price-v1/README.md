@@ -25,3 +25,21 @@ The count is conservative and can be much larger than exact interval packing.
 A separate reviewed scalable design and frozen protocol must precede any
 measurement or original-input run. Component intent and admission/publication
 boundaries are preserved; ancestor files remain unchanged.
+
+## Supplied owner-only implementation, 2026-10-24
+
+The [scalable design](DRAFT-NEXT.md) now has [production](caps.py) and a
+separate [independent checker](independent.py). Both reconstruct unchanged63
+and a charged additional context. New per-depth n=min(m,N/length) divisors,
+count streams and every15-price recurrence are independently checked. The
+full original63 baseline remains explicit; shared weights are unchanged.
+Global packing prices and required-owner orchestration are not part of these
+kernels.
+
+Eight [production checks](test_caps.py) passed0.260seconds and seven
+[checker checks](test_independent.py) passed in two focused groups0.364/0.060
+seconds. Syntax/import checks passed. Actual q53 tiny oracle agreement,
+within-group divisor changes, real JSON transport and repaired-hash corruption
+are covered. Root and independent read-only reviews found no blocker. These
+checks establish supplied implementation behavior, not performance or original
+fit acceptance. A separate reviewed frozen invented measurement comes next.
