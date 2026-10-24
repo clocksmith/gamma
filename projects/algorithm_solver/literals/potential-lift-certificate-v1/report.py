@@ -391,9 +391,12 @@ def publish(output, result):
         for name in ('REPORT.md.pending', 'results.json.pending'):
             (output/name).unlink(missing_ok=True)
     except BaseException as error:
-        # The owner's alarm may already have fired. Do not start new receipt
-        # writes here; the supervisor owns a separately bounded failure phase.
-        remove_success(output)
+        # A one-shot owner alarm has no remaining guard once it has fired.
+        # Propagate that BaseException without starting even an unlink; the
+        # supervisor re-arms its single absolute emergency budget before
+        # withdrawal. Ordinary direct-call write errors still withdraw locally.
+        if isinstance(error, Exception) or signal.getitimer(signal.ITIMER_REAL)[0] > 0:
+            remove_success(output)
         raise
 
 
@@ -489,6 +492,21 @@ def combine(run, output, config, elapsed, returncodes):
             'validation_or_cases_opened': False, 'optimality_claim': False}
 
 
+def worker_failure_guard(deadline):
+    remaining = deadline-time.monotonic()
+    if remaining <= 0: raise HardDeadline('report worker failure publication deadline')
+    signal.setitimer(signal.ITIMER_REAL, remaining)
+
+
+def withdraw_worker(target, failure, deadline):
+    worker_failure_guard(deadline)
+    try: target.unlink(missing_ok=True)
+    except Exception: pass
+    worker_failure_guard(deadline)
+    write(target.with_name(target.stem+'-failure.json'), failure)
+    worker_failure_guard(deadline)
+
+
 def worker(cohort, work, run, output, deadline):
     started = BOOT_STARTED if BOOT_STARTED is not None else time.monotonic()
     phase, target, fresh = 'setup', Path(output)/(cohort+'.json'), False
@@ -533,13 +551,10 @@ def worker(cohort, work, run, output, deadline):
             raise HardDeadline('report deadline after worker publication')
         return result
     except BaseException as error:
-        signal.setitimer(signal.ITIMER_REAL, 10)
         if fresh:
-            try:
-                target.unlink(missing_ok=True)
-            finally:
-                write(Path(output)/(cohort+'-failure.json'), {
-                    **failure_result(error), 'phase': phase, 'seconds': time.monotonic()-started})
+            emergency_deadline = min(time.monotonic()+10, effective+10)
+            withdraw_worker(target, {**failure_result(error), 'phase': phase,
+                            'seconds': time.monotonic()-started}, emergency_deadline)
         raise
     finally:
         signal.setitimer(signal.ITIMER_REAL, 0)

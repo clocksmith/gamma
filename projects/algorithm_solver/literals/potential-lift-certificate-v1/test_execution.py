@@ -4,6 +4,7 @@ import hashlib
 import io
 import json
 import os
+import signal
 from pathlib import Path
 import tempfile
 import time
@@ -151,6 +152,23 @@ class ExecutionTests(unittest.TestCase):
                 with self.assertRaises(OSError): run.arm('R', root, out, time.monotonic()+30)
             self.assertFalse((out/'R/results.json').exists())
             self.assertFalse(json.loads((out/'R/failure.json').read_text())['complete'])
+
+    def test_failure_unlink_deadline_prevents_failure_write(self):
+        with tempfile.TemporaryDirectory() as d:
+            previous = signal.signal(signal.SIGALRM, run.expired)
+            try:
+                with patch.object(Path, 'unlink', side_effect=lambda **_: time.sleep(.2)), \
+                     patch.object(b, 'write') as write:
+                    with self.assertRaises(run.HardDeadline):
+                        run.withdraw_worker(Path(d), {'complete': False}, time.monotonic()+.02)
+                    write.assert_not_called()
+                with patch.object(b, 'write') as write, patch.object(Path, 'unlink') as unlink:
+                    with self.assertRaises(run.HardDeadline):
+                        run.withdraw_worker(Path(d), {}, time.monotonic()-.01)
+                    unlink.assert_not_called(); write.assert_not_called()
+            finally:
+                signal.setitimer(signal.ITIMER_REAL, 0)
+                signal.signal(signal.SIGALRM, previous)
 
     def test_worker_malformed_deadline_fails_before_private_read(self):
         with tempfile.TemporaryDirectory() as d, patch.object(b, 'load_inputs') as loader:

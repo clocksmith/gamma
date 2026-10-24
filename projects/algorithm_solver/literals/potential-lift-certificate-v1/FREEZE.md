@@ -185,3 +185,24 @@ auxiliary design documents, outside new execution pins. The original measured
 implementation, tests, this FREEZE, parent public evidence and required runtime
 files are pinned in the pending contract. Component intent is preserved with
 no production boundary change or promotion authority added.
+
+## Prelaunch correction, 2026-10-24 01:55 UTC (2026-10-23 EDT)
+
+Before any item50 production launch, close the report publication deadline gap:
+if a hard BaseException reaches the publication handler after its one-shot owner
+alarm has expired, that handler starts no unlink or other I/O. It immediately
+re-raises to the supervisor, which withdraws success under the already defined
+single absolute emergency budget. A still-live owner alarm continues to guard
+local withdrawal, and direct ordinary write errors retain local withdrawal.
+A focused real-alarm regression verifies that no unlink starts after expiry and
+that subsequent owner-guarded withdrawal publishes no verdict. This correction
+changes supervision only; measured proof files, mathematics, inputs and budgets
+remain unchanged. Regenerate pending and active contracts by exact activation
+before review; this note grants no launch authority.
+
+The same correction covers each production and independent-report cohort worker:
+one absolute failure deadline is capped by the effective cohort deadline plus
+10 seconds. Success unlink and failure receipt write each check and rearm only
+its remaining time. No `finally` block starts a write after an unlink deadline.
+Real-alarm tests cover interrupted unlink and already-expired budget refusal for
+both worker paths; ordinary write failure still removes success and records failure.
