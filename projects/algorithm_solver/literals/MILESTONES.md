@@ -368,3 +368,9 @@ current best. k = 80 with 600 s repairs gives a successor of item 43 (8,283 acti
 actions with a slightly higher fraction (49.530% vs 49.505%), so the record-time replacement has no eligible
 candidate. k = 120 accepted nothing: all 5 repairs hit the 600 s limit. Item 43's region looks close to a local
 optimum for capped exact repairs at these budgets.
+
+**Python: the JS breadth-safe repair transfers partially** ([python-nonregress-v1](python-nonregress-v1/README.md),
+9 Python dev-val). At 256 entries, from item 31's anchor: fit −2.7% (16 programs better, 0 worse), dev-val 935 → 929
+actions (4 better, 0 worse), median 98 → 97 actions. The single-character fraction rises (56.91% → 57.39%), so it is
+not a successor, and it is 2.1% below R against the 5% bar, so it is not ready. At 128 entries nothing moved: k = 32
+frees every learned entry and all repairs hit the 120 s limit.
