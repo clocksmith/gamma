@@ -168,8 +168,10 @@ missing primary-policy comparator. Such a gap blocks that verdict until a
 separately authorized, source-bound replay supplies it; no comparator omission.
 
 A **spelling transfer benefit** is a descriptive paired result: complete/qualified
-and legal U/S, no increase in total actions, median/p90 or package, and strictly
-lower C/N under each policy. Strict actions versus the own U control are not
+and legal U/S over all 400 programs, then on the consumed validation 100 no
+increase in total actions, median/p90 or package, and strictly lower C/N under each
+policy. Fit cost and fraction changes are separate diagnostics, not an additional
+strict-fit-fraction gate. Strict actions versus the own U control are not
 required for this hypothesis. Report separate pass/fail predicates and actual
 signed changes, including a primary-only effect if canonical predicates fail.
 At fixed action count, distinguish fewer character selections from source-byte
