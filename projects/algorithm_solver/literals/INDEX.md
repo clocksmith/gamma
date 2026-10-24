@@ -4,6 +4,17 @@ Start here for source versions, experiments and the working literal languages.
 This is a navigation index over existing manifests and reports, not a second
 results ledger. Completed runs below retain their source, dictionary and execution identities.
 
+## Fixed-potential slack removal leaves the positive endpoint unchanged — 2026-10-24
+
+[Item53](potential-tightening-v1/README.md) independently replays both full
+support-budget curves per cohort. R gains one integer unit at52 budgets;
+naming gains none, despite raw charge reductions at228/210 budgets. Both
+largest positive budgets stayk2; unrestricted bounds remain−1,903,184/−1,679,219.
+This measures fixed-potential slack removal, not the broader potential optimum.
+No coverage witness, unrestricted10% exclusion or M1 change.
+[Paired curves](potential-tightening-v1/evidence/results.json),
+[review](potential-tightening-v1/REVIEW.md).
+
 ## Fixed-source support-budget certificate — 2026-10-24
 
 [Item50](potential-lift-certificate-v1/README.md) independently replays all257
