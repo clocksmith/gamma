@@ -13,11 +13,21 @@ import report
 
 
 def stop(processes,seconds):
-    started=time.monotonic()
+    started=time.monotonic();first_error=None
     for process in processes:
         try:os.killpg(process.pid,signal.SIGKILL)
         except ProcessLookupError:pass
-    for process in processes:process.wait(timeout=max(.001,seconds-(time.monotonic()-started)))
+        except WholeJobTimeout:raise
+        except BaseException as error:
+            if first_error is None:first_error=error
+    for process in processes:
+        remaining=seconds-(time.monotonic()-started)
+        if remaining<=0:raise WholeJobTimeout('cleanup deadline')
+        try:process.wait(timeout=remaining)
+        except WholeJobTimeout:raise
+        except BaseException as error:
+            if first_error is None:first_error=error
+    if first_error is not None:raise first_error
     return time.monotonic()-started
 
 
@@ -71,31 +81,77 @@ def main(phase,work,output,run=None):
         elapsed=c.number(time.monotonic()-started,PHASE_SECONDS)
         if phase=='production':
             result={'complete':True,'validation_loaded':False,'contract_sha256':contract_hash,'seconds':elapsed,'arms':arms}
-            c.write(output/'results.json',result)
         else:
             raw=json.loads((run/'results.json').read_text())
-            result=report.combine(arms,raw,contract,elapsed,run);report.publish(result,output)
+            result=report.combine(arms,raw,contract,elapsed,run)
         c.number(time.monotonic()-started,PHASE_SECONDS)
     except BaseException as error:
         failure={'complete':False,'validation_loaded':False,'phase':where,'exception':type(error).__name__,
                  'contract_sha256':contract_hash,'seconds':time.monotonic()-started,'partial_witnesses_promoted':False}
     finally:
         signal.setitimer(signal.ITIMER_REAL,0)
-        try:cleanup=stop(processes,CLEANUP_SECONDS)
+        cleanup_started=time.monotonic();cleanup_error=None
+        # Cleanup has its own bounded tolerance, including log flush/close.
+        try:
+            signal.setitimer(signal.ITIMER_REAL,CLEANUP_SECONDS)
+            try:stop(processes,CLEANUP_SECONDS)
+            except BaseException as error:cleanup_error=error
+            for log in logs:
+                remaining=CLEANUP_SECONDS-(time.monotonic()-cleanup_started)
+                if remaining<=0:raise WholeJobTimeout('cleanup deadline')
+                signal.setitimer(signal.ITIMER_REAL,remaining)
+                try:log.close()
+                except BaseException as error:
+                    if cleanup_error is None:cleanup_error=error
         except BaseException as error:
-            cleanup=CLEANUP_SECONDS;failure={'complete':False,'validation_loaded':False,
-                'phase':'cleanup','exception':type(error).__name__,'contract_sha256':contract_hash,
+            if cleanup_error is None:cleanup_error=error
+        finally:
+            signal.setitimer(signal.ITIMER_REAL,0)
+        cleanup=time.monotonic()-cleanup_started
+        if cleanup_error is not None:
+            failure={'complete':False,'validation_loaded':False,'phase':'cleanup',
+                'exception':type(cleanup_error).__name__,'contract_sha256':contract_hash,
                 'seconds':time.monotonic()-started,'partial_witnesses_promoted':False}
-        for log in logs:log.close()
+    # Success is published only after worker cleanup AND every log close.
+    # Receipt and publication I/O remain inside the original whole-phase cap.
+    try:
+        if failure is not None:raise RuntimeError('phase incomplete')
+        where='publication'
+        remaining=deadline-time.monotonic()
+        if remaining<=0:raise WholeJobTimeout('whole-phase deadline')
+        signal.setitimer(signal.ITIMER_REAL,remaining)
+        c.write(output/'supervisor.json',{'complete':True,'phase':phase,'contract_sha256':contract_hash,
+            'elapsed':time.monotonic()-started,'cleanup_seconds':cleanup,'returncodes':[p.returncode for p in processes]})
+        if phase=='report':report.publish(result,output)
+        else:c.write(output/'results.json',result)
+        c.number(time.monotonic()-started,PHASE_SECONDS)
+    except BaseException as error:
+        signal.setitimer(signal.ITIMER_REAL,0)
+        if failure is None:
+            failure={'complete':False,'validation_loaded':False,'phase':where,'exception':type(error).__name__,
+                'contract_sha256':contract_hash,'seconds':time.monotonic()-started,'partial_witnesses_promoted':False}
         if writable:
-            c.write(output/'supervisor.json',{'complete':failure is None,'phase':phase,'contract_sha256':contract_hash,
-                'elapsed':time.monotonic()-started,'cleanup_seconds':cleanup,'returncodes':[p.returncode for p in processes]})
-            if failure is not None:
-                c.write(output/'failure.json',failure)
-                if phase=='report':report.publish({'complete':False,'population':'fixed300_fit_only','validation_loaded':False,
-                    'contract_sha256':contract_hash,'failure_sha256':c.sha(output/'failure.json'),
-                    'predictions':{'P1':False,'P2':None,'P3':None}},output)
-    if failure is not None:raise RuntimeError('phase incomplete; retained failure receipt')
+            # Each failure write is independent: a failed receipt must never
+            # bypass withdrawal of a success artifact written moments earlier.
+            for name,value in [('failure.json',failure),('supervisor.json',{
+                    'complete':False,'phase':phase,'contract_sha256':contract_hash,
+                    'elapsed':time.monotonic()-started,'cleanup_seconds':cleanup,
+                    'returncodes':[p.returncode for p in processes]})]:
+                try:c.write(output/name,value)
+                except BaseException:
+                    try:(output/name).unlink(missing_ok=True)
+                    except BaseException:pass
+            try:
+                if phase=='report':report.publish(report.failure_result('supervisor_failure'),output)
+                else:(output/'results.json').unlink(missing_ok=True)
+            except BaseException:
+                # Even a broken failure publisher cannot preserve stale success.
+                for name in ('results.json','REPORT.md'):
+                    try:(output/name).unlink(missing_ok=True)
+                    except BaseException:pass
+        raise RuntimeError('phase incomplete; failure withdrawal attempted') from error
+    finally:
+        signal.setitimer(signal.ITIMER_REAL,0)
 
 
 if __name__=='__main__':
