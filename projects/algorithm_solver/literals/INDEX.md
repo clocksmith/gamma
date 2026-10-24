@@ -4,6 +4,14 @@ Start here for source versions, experiments and the working literal languages.
 This is a navigation index over existing manifests and reports, not a second
 results ledger. Completed runs below retain their source, dictionary and execution identities.
 
+## Tightening preserves every fixed-potential bound — 2026-10-24
+
+[Item53 mathematical design](potential-tightening-v1/README.md) proves that
+removing old-edge slack preserves path potentials and weakly improves every
+support-budget bound over item50. Independent proof review and three invented
+oracle tests pass. No corpus input, numerical gain, unrestricted optimum or
+M1 exclusion is claimed.
+
 ## Fixed spelling stack reaches its worker cap — 2026-10-24
 
 [Item46](postfit-spelling-stack-v1/README.md) stops during fit at its frozen
