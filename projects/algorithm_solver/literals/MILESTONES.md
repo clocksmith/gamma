@@ -344,3 +344,10 @@ is therefore a solver-path difference, not a missing start: item 26's direct mod
 to optimality in about 160 s. The interface, configuration and model build all differ; which one matters is not
 isolated. It does not beat item 24 (8,336 actions, lower fraction), so item 24 remains the current
 best.
+
+**New current best: nonregression repair stacked on item 24** ([nonregress24-v1](nonregress24-v1/README.md), dev-val
+100). Item 37's breadth-safe direct-HiGHS repair, continued from item 24, gives 8,285 dev-val actions (−0.61% vs
+item 24), with 21 programs better and 0 worse. The median stays at 61.5 selections, the p95 goes 197 → 195, and the
+single-character fraction goes 49.60% → 49.54%. It passes every frozen gate. The matched uncapped model gains more on
+fit, and reaches p95 165, but fails on the median and the fraction (20 programs worse). The M1 gates of median 32, p95
+96 and 10% remain far off.
