@@ -109,6 +109,20 @@ class CappedTests(unittest.TestCase):
         self.assertEqual(evidence.invariant_violation({'fit_programs_worse_than_start': 3}), {'fit_programs_worse_than_start': 3})
         r = evidence.record_time_comparison('/nonexistent.json', 'x', {}, {}, [], '0' * 64)
         self.assertFalse(r['resolved'])  # a missing comparator leaves replacement unresolved, never a default pass
+        import types
+        none = types.SimpleNamespace(record_time_best=None, record_time_arm=None, record_time_sha256=None)
+        r = evidence.replacement(none, ['tail'], {}, {}, [], lambda k: k)
+        self.assertEqual((r['resolved'], r['replacement_allowed']), (False, False))  # no binding: never defaults to item 43
+        # every candidate is checked before ranking: the first-ranked failing the comparator must not hide a passing one
+        orig = evidence.record_time_comparison
+        evidence.record_time_comparison = lambda path, arm, s, rows, ids, h: {'resolved': True, 'passes': s['ok']}
+        try:
+            bound = types.SimpleNamespace(record_time_best='x', record_time_arm='y', record_time_sha256='z')
+            out = {'arms': {'a': {'validation': {'ok': False}}, 'b': {'validation': {'ok': True}}}}
+            r = evidence.replacement(bound, ['a', 'b'], out, {'a': {}, 'b': {}}, [], lambda k: k)
+            self.assertEqual((r['selected'], r['eligible']), ('b', ['b']))
+        finally:
+            evidence.record_time_comparison = orig
 
     def test_incumbent_violating_cap_is_rejected(self):
         texts = {1: 'abab', 2: 'abc'}; fixed = list('abc'); cand = ['ab']

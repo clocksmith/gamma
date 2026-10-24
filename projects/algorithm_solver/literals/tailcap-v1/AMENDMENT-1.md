@@ -10,7 +10,12 @@ Nothing has launched. These changes come from codex's review of `e14f90abf` (gam
      predicates against that comparator, bound by its SHA-256.
    - If the comparator's evidence is missing, does not match its hash, or lacks compatible per-program validation
      actions and aggregates, replacement is **unresolved**. It never defaults to item 43.
-   - Without the argument, the comparator is item 43, the current best at freeze time.
+   - **An explicit binding is always required**, even when item 43 is still current. Without
+     `--record-time-best`, `--record-time-arm` and `--record-time-sha256`, replacement is unresolved and
+     `replacement_allowed` is false. The first version of this amendment defaulted to item 43 when the argument was
+     missing; codex caught this (LOG 01:03Z).
+   - **Every frozen-rule successor** is checked against the record-time comparator before ranking. The replacement is
+     the best-ranked candidate that passes, so a top-ranked candidate that fails cannot hide another that passes.
 2. **The nonregression invariant is enforced, not just counted.** A completed arm whose reconciled fit programs
    worse than the seed is above zero is rejected under `failed_arms` as `nonregression_invariant_violated`. Before
    this change, it was reconciled but used only by prediction T5. A focused synthetic test checks the rejection

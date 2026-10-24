@@ -53,6 +53,17 @@ def record_time_comparison(path, arm, s, rows, val_ids, sha_expected):
     return {'resolved': True, 'evidence': str(path), 'arm': arm, 'evidence_sha256': sha_expected, 'paired': pr, 'checks': checks, 'passes': all(checks.values())}
 
 
+def replacement(a, cands, out, replays, val_ids, rank):
+    if a.record_time_best is None or not a.record_time_arm or not a.record_time_sha256:
+        return {'resolved': False, 'replacement_allowed': False, 'selected': None, 'reason': 'no explicit record-time binding'}
+    per = {k: record_time_comparison(a.record_time_best, a.record_time_arm, out['arms'][k]['validation'], replays[k], val_ids, a.record_time_sha256)
+           for k in cands}
+    if any(not v.get('resolved') for v in per.values()):
+        return {'resolved': False, 'replacement_allowed': False, 'selected': None, 'per_candidate': per, 'reason': 'comparator unresolved'}
+    ok = [k for k in cands if per[k]['passes']]
+    return {'resolved': True, 'per_candidate': per, 'eligible': ok, 'replacement_allowed': bool(ok), 'selected': min(ok, key=rank) if ok else None}
+
+
 def paired(a, b, ids):
     d = [a[str(p)]['actions'] - b[str(p)]['actions'] for p in ids]
     return {'better': sum(x < 0 for x in d), 'same': sum(x == 0 for x in d), 'worse': sum(x > 0 for x in d)}
@@ -172,14 +183,9 @@ def main():
     out['selected_successor'] = min(cands, key=rank) if cands else None
     best = [k for k in cands if out['arms'][k]['new_current_best']]
     out['selected_new_current_best'] = min(best, key=rank) if best else None
-    # AMENDMENT-1: replacing the M1-GAP current-best row also needs the record-time best, if it is not item 43.
-    if a.record_time_best is None:
-        out['record_time_best'] = {'comparator': 'item 43 nonregress (the frozen comparator)', 'replacement_allowed': out['selected_new_current_best'] is not None}
-    else:
-        sel_arm = out['selected_new_current_best']
-        cmp = (record_time_comparison(a.record_time_best, a.record_time_arm, out['arms'][sel_arm]['validation'], replays[sel_arm], val_ids, a.record_time_sha256)
-               if sel_arm else None)
-        out['record_time_best'] = {'comparison': cmp, 'replacement_allowed': bool(cmp and cmp.get('resolved') and cmp['passes'])}
+    # AMENDMENT-1: replacing the M1-GAP current-best row needs an EXPLICIT record-time binding (also when item 43 is still
+    # current). Every frozen-rule successor is checked against it before ranking; a missing binding leaves replacement unresolved.
+    out['record_time_best'] = replacement(a, cands, out, replays, val_ids, rank)
     (HERE / 'evidence').mkdir(exist_ok=True); (HERE / 'evidence/results.json').write_text(json.dumps(out, indent=1, sort_keys=True) + '\n')
     for k, v in out['arms'].items():
         if 'validation' not in v: print(k, 'coverage failure', v['coverage']); continue
