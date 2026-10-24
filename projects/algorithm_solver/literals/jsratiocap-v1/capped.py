@@ -45,10 +45,14 @@ def solve(model, candidates, warm, seconds, seed=260, integral_arcs=False):
     feasible = bool(solution.value_valid and info.primal_solution_status == h.kSolutionStatusFeasible)
     chosen = []; fun = None; residual = None
     if feasible:
-        x = np.asarray(solution.col_value); values = matrix @ x; eps = 1e-6
-        assert np.all(x >= -eps) and np.all(x <= 1 + eps) and np.all(values >= m['lower'] - eps) and np.all(values <= m['upper'] + eps)
+        x = np.asarray(solution.col_value); eps = 1e-6
+        assert np.all(x >= -eps) and np.all(x <= 1 + eps)
         assert np.max(np.abs(x - np.rint(x)), initial=0) <= eps  # every variable integral, arcs included
-        fun = float(m['cost'] @ x); assert abs(fun - info.objective_function_value) <= eps
+        # jsratiocap-v1 AMENDMENT-1: check rows and objective on the rounded integral point, exactly. The ratio row's coefficients
+        # (about 1e4) would turn a 1e-10 solver residual into an absolute row error above eps on the unrounded point.
+        x = np.rint(x); values = matrix @ x
+        assert np.all(values >= m['lower']) and np.all(values <= m['upper'])  # integer data and point: exact in float64
+        fun = float(m['cost'] @ x); assert abs(fun - info.objective_function_value) <= 1e-9 * max(1., abs(fun))
         chosen = [s for i, s in enumerate(candidates) if x[i] > .5]
         residual = float(info.max_primal_infeasibility)
     if warm: assert feasible and fun <= m['initial'] + 1e-6

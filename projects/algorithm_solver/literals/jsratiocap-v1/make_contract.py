@@ -6,7 +6,7 @@ HERE = Path(__file__).resolve().parent; LIT = HERE.parent
 sha = lambda p: hashlib.sha256((LIT / p).read_bytes()).hexdigest()
 HIGHS = '/home/x/deco/gamma/.venv_rocm/lib/python3.14/site-packages/scipy/optimize/_highspy/_core.cpython-314-x86_64-linux-gnu.so'
 CODE = ['jsratiocap-v1/run.py', 'jsratiocap-v1/capped.py', 'jsratiocap-v1/evidence.py', 'jsratiocap-v1/make_contract.py',
-        'jsratiocap-v1/FREEZE.md', 'jsratiocap-v1/test_capped.py', 'lexfrac-v1/evidence/results.json', 'seeded-repair-v1/model.py',
+        'jsratiocap-v1/FREEZE.md', 'jsratiocap-v1/AMENDMENT-1.md', 'jsratiocap-v1/test_capped.py', 'lexfrac-v1/evidence/results.json', 'seeded-repair-v1/model.py',
         'lagrange-select-v2/selection.py', 'cost-decomposition-v1/analyze.py', 'cost-decomposition-v1/lexical.cjs', 'literals.py',
         'pass2/working/bitpack.py', 'tail-search-v1/structure.cjs']
 c = {'schema': 'gamma.jsratiocap-v1.contract.v1',
