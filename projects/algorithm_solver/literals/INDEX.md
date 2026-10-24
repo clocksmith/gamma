@@ -861,6 +861,10 @@ recorded pass3 results above; it is not that proposed language.
 
 [Item68](required-entry-price-cap-v1/README.md) proves a combined charge no greater than61 or63. Six exhaustive tiny checks pass; a coverable example gives bounds4/4/7. General q only, no corpus result or execution contract.
 
+## 2026-10-24: invented global-price measurement accepted
+
+[Item66](global-entry-price-cap-v1/README.md) completes in169.305seconds with20oracles and exact independent replay. Full256 bounds improve -57362→-2265 on paired75k and -151368→-13900 on repeated12k; positive ranges unchanged. Paired uses positive price, repeated selects zero. No original-fit or fullclass exclusion claim.
+
 ## Maintenance rules
 
 Add a short row and links when a scoped experiment closes; update current status
