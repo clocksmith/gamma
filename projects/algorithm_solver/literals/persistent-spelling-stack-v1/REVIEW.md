@@ -33,3 +33,18 @@ The authorized frozen report-v2 ran through the exact supervisor with its 1,800-
 The evidence directory copies only the frozen reporter's allowlisted results/prose, supervisory receipts, explicit public-hash comparator binding and a metadata-only diagnosis. Private source, dictionary strings, cases and raw observations are not published. README tables reconcile to those result aggregates. No broad tests or additional optimization runs were performed for this record.
 
 Item46's retained timeout, item41's earlier gates and failure, consumed-development limitations, closed protected/final-heldout populations, unchanged M1 thresholds and no-default-promotion boundary all remain intact. Approval is limited to recording the transfer evidence and the unresolved comparator failure honestly.
+
+## 2026-10-24 separate historical comparator resolution
+
+[Item 58](../comparator-carrier-replay-v1/README.md) subsequently reconstructs the
+fixed historical item 51-flat comparison using distinct original/reformatted
+JSON and ordered-binary identities. Its 800 comparator packet decodes complete
+under both policies; it inherits this record's 4,800 candidate views. No spelling
+candidate passes the full successor rules: 24-S, 43N-S and 43W-S use 53, 2 and
+18 more validation actions than fixed item 51, respectively; 43W-S also fails
+median nonincrease. Character-share gains alone do not pass the action gate.
+
+This is a new historical record with R1/R2 and restated P1–P4 true, not a change
+to this frozen report-v2: its P4 remains null and both earlier reports remain
+preserved. No new candidate search, qualification or candidate packet replay
+occurred, and no current-best or promotion claim follows.

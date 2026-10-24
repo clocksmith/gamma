@@ -48,3 +48,18 @@ Dictionary storage is 2,662 / 2,692 / 2,897 bytes for 24 / 43N / 43W. Every pack
 Production completes in 97.344 seconds. Report-v1 takes 394.312 seconds; the fresh item51-bound report-v2 takes 403.728 seconds. Both reporting costs remain charged; production runs once. The caps are unchanged: 1,800 absolute seconds per anchor, 3,600 for production, 1,800 for each report, cores0–3 and 8 GiB address space per process, with bounded failure cleanup. Report-v2 has a complete exit-zero supervisory receipt and no failure marker, but that does not resolve its comparator assertion. Per-process memory and separate service peaks are retained in metadata; no aggregate-memory-cap claim is made.
 
 All 174 code pins and 56 runtime pins remain unchanged after recording. Component intent is preserved: fixed source and dictionary authority, complete paid costs, paired controls, strict qualification, retained failures and no unsupported promotion.
+
+## 2026-10-24 separate historical comparator resolution
+
+[Item 58](../comparator-carrier-replay-v1/README.md) subsequently reconstructs the
+fixed historical item 51-flat comparison using distinct original/reformatted
+JSON and ordered-binary identities. Its 800 comparator packet decodes complete
+under both policies; it inherits this record's 4,800 candidate views. No spelling
+candidate passes the full successor rules: 24-S, 43N-S and 43W-S use 53, 2 and
+18 more validation actions than fixed item 51, respectively; 43W-S also fails
+median nonincrease. Character-share gains alone do not pass the action gate.
+
+This is a new historical record with R1/R2 and restated P1–P4 true, not a change
+to this frozen report-v2: its P4 remains null and both earlier reports remain
+preserved. No new candidate search, qualification or candidate packet replay
+occurred, and no current-best or promotion claim follows.
