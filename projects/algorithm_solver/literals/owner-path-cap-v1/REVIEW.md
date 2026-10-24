@@ -71,3 +71,44 @@ No private input, held-out/validation/case read, source execution, fresh semanti
 qualification, dictionary witness or M1/current-best claim occurred. Original
 item 50/53 records and gates remain unchanged. A corpus protocol requires its
 own frozen authority and cross-review.
+
+## Original-fit record — 2026-10-24 UTC
+
+Claude approved freeze7ac685c6f before activation/launch. Activation7df62a46d
+changed only active=false totrue in the exactly rebuilt pending contract.
+Contract SHA256:072ff2adda98f4f01f0a72e36d6f33d563882a48ed419e084d1aede2e34e4be0.
+Accepted result SHA256:bba5e9d001abb89f1ffeff46b48f4d980e0deb1e14dc8bf2a4c2c245b3e2e56b.
+Root rehashed all81 code and23 runtime dependencies unchanged after replay.
+Frozen measured/execution files remain byte-exact; this record adds only prose
+and selected metadata, never private source/owner/top/q/schedule arrays.
+
+Nine original28 input carriers were used, with five exact reads per cohort and
+one shared carrier. No private50/53/56 input was read. Public59 lineage binds the
+known minimum feasible support budget3. Production reconstructs every53 term;
+independent reporting rebuilds both50/53 proofs and all57 rows. It independently
+checks76,107/76,033 forward positions and14,650,737/14,624,664 endpoints, in
+addition to fresh backward schedules. Every owner top/count/cap/allocation and
+full digest agrees. Shared33 index/structural verifier, source parser and53
+baseline utilities remain disclosed dependencies, not independent parser proofs.
+
+The charge caps path-used penalties, not dictionary activation-weight sums.
+299 of300 owners per cohort have positive caps and clipped prefixes. Owner cap
+sums are125,377,852,879 /109,445,525,254 at denominator1,000,000. Both retain76,800
+owner-top entries, while schedules include every allowed one-owner occurrence,
+including omitted entries. Max charge reduction is1,876,312,567,397 /
+1,651,566,830,442. L remains93,534,943,854 /78,055,753,489 exactly.
+
+Production worker times10.006706/9.519630s and peaks496,680/484,996KiB; independent
+worker times46.323746/33.780054s and peaks684,632/663,332KiB. Whole supervisor
+receipts10.439110/48.446613s include startup, checks and cleanup; no timing ratio
+or corpus scalability extrapolation. Both supervisors are complete with actual
+integer exits[0,0]; cleanup0.000085/0.000131s. No failure receipt or retry.
+
+At k3, integer bounds6,651/119 are positive in nonempty classes. R stays positive
+through8 (581), then isnegative at9(-425); naming first becomesnegative at4
+(-1,188). Below3 the coverage classes are empty; at256 the bounds remain
+-26,872/-27,652. P1 exactness, P2 strictgain, P3 increasedendpoint and P4 positive
+nonempty class all hold; P5 unrestrictedpositivity does not. This settles the
+frozen fixed-q path-cap question, not potential optimization, semantic reuse,
+source optimization or M1. No fresh qualification, candidate packet, held-out
+access, promotion or change to currentbest51flat occurred.

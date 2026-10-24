@@ -4,15 +4,16 @@ Start here for source versions, experiments and the working literal languages.
 This is a navigation index over existing manifests and reports, not a second
 results ledger. Completed runs below retain their source, dictionary and execution identities.
 
-## Owner path caps pass the single invented measurement — 2026-10-24
+## Owner path caps exclude10% in nonempty support classes — 2026-10-24
 
-[Item57](owner-path-cap-v1/README.md) independently agrees on both fixed invented
-fixtures, every owner cap and all forward recurrences. Whole elapsed is26.868267s;
-worker peak617,256KiB. Strict integer gains occur at255/256 budgets, with positive
-endpoints moving75→81 and0→4. Both unrestricted endpoints remain negative.
-All35 code/12 runtime pins are unchanged. This is invented-input evidence only;
-original-fit execution requires its separate freeze and review.
-[Receipts](owner-path-cap-v1/synthetic-results.json).
+[Item57](owner-path-cap-v1/README.md) independently gives positive10C−N bounds
+at k3:6,651 R /119 naming. Largest positive budgets are8/3, and item59 proves
+these at-most-k classes nonempty. Thus10% is excluded for covering dictionaries
+with at most8/3 one-owner entries, respectively, on the fixed original300fit
+sources with capacity256. Budgets0–2 remain vacuous; unrestrictedk256 bounds
+-26,872/-27,652 remain inconclusive. All81 code/23 runtime pins unchanged;
+production/replay supervisor10.439/48.447s. No dictionary, new qualification,
+validation, M1 or currentbest change. [Fullcurves](owner-path-cap-v1/evidence/results.json).
 
 ## Existing dictionaries attain the minimum one-owner budget of three — 2026-10-24
 
