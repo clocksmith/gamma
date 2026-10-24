@@ -1,0 +1,9 @@
+# Item63 proof-only review record
+
+The original source/ban universe, q and L remain fixed. For every used owner entry e, its removed penalty is at most m_e floor(λ/m_e)<=λ, using all allowed occurrences. The full residual interval maximum therefore yields Q_owner<=λt+Rλ. The pointwise minimum with A(t) is a nondecreasing concave finite prefix; lambda0 recovers the57 cap, enabling exact marginal allocation and pointwise bound domination.
+
+The implementation shares57's tiny baseline oracle explicitly. Its tests use independent exhaustive interval subsets, covering dictionaries, every encoding path and all owner allocations. Six focused tests passed in0.112 seconds, including16 deterministic random tiny populations and invalid-input/optimized-Python checks. This is mathematical implementation evidence only; no corpus or performance conclusion follows.
+
+The strict example has an explicit covering dictionary in the compared budget class, but uses general fixed q and leaves the lower bound negative. Low-ranked intervals and zero-q occurrences remain included. The ceil/undercounted-multiplicity counterexample shows why the removal multiplicity must be bounded correctly. This protocol counts all occurrences; counting only positive-q occurrences could also be valid under a separately defined rule and is not claimed unsafe.
+
+Root read the proof and tests without a blocker. Reciprocal review found no mathematical implementation blocker; its final documentation corrections distinguish the actual62 mechanism and avoid claiming that positive-q-only counts are inherently unsafe. Its generator-consumption finding was fixed by normalizing bans once, with a passing generator-equivalence regression. No private data, scalable code, price search, timing campaign, binder, Git operation or ancestor edit occurred. Component intent is preserved; no admission, qualification or publication boundary changed.
