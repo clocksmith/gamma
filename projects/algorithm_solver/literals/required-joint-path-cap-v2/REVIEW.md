@@ -21,3 +21,13 @@ k*, bounds or split charges were viewed. The failed62 record remains incomplete.
 Root may now prepare public-only pending; Claude cross-review precedes activation.
 Component intent and all admission, qualification and publication boundaries
 are preserved.
+
+## Accepted frozen execution
+
+Claude approved the exact freeze before activation and launch. Production and
+independent replay both completed under unchanged167code/23runtime pins and
+resource guards. Every numerical row equals61, and all254 defined split
+comparisons add no joint tightening. Root checked the accepted receipts,
+all-row identity, split counts and published aggregate-only fields. No frozen
+file was changed. Failure62 remains separate and incomplete; this64 record
+settles the combined question without changing the candidate or M1 claims.
