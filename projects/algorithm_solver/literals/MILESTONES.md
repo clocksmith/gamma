@@ -383,3 +383,12 @@ no successor.
   fraction still rises (74.27% → 74.59%).
 
 On Python, removing selections mostly removes multi-character ones, so the fraction rises.
+
+**Python: first incremental passes over item 31** ([python-ratiocap-v1](python-ratiocap-v1/README.md), 9 Python
+dev-val). Breadth-safe repair from item 31's anchors improves both widths with 0 programs worse while keeping the
+single-character fraction at or below the anchor:
+- **w8:** the lexicographic arm reaches 935 → 914 actions (5 programs better), with the fraction 56.91% → 56.46%.
+- **w7:** an aggregate fit-fraction constraint reaches 1,420 → 1,395 (8 better), with the fraction 74.27% → 73.81%.
+  The unconstrained control's fraction rose.
+
+All incremental checks pass. Readiness against R still needs 5% (w8 reaches 3.7%), so there is no successor.
