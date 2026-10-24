@@ -55,3 +55,19 @@ historical fields and new recurrence/field/digest reconciliation. The first
 fixture is null; the second improves65 budgets without moving k* or the256
 endpoint. This measures the declared implementation on invented inputs only.
 All measured files are now immutable; corpus wrappers must be new files.
+
+## Original-input continuation design review
+
+Root read DRAFT-CORPUS after the accepted invented measurement. It preserves
+all fifteen prices, original nine inputs, q53/L/D and full57 baseline science.
+The new count streams, all price schedules, every forward recurrence, finite
+prefixes and allocations must agree independently. Item61 is descriptive only;
+item59 marks k0–2 coverage-vacuous without dropping the numerical63 rows.
+
+Separate predeclared64MiB ancestral and256MiB retained limits accommodate the
+planned carriers without a private size probe or promise that they fit. Failure
+remains incomplete, with one absolute10-second emergency budget. The diagnostic
+counts positive original marginal ranks, including ties and its denominator;
+it does not attribute selected ranks or establish grid adequacy. Root approves
+new wrappers, tests and public-only binder implementation. Pending preparation,
+activation and original-input execution still require their subsequent reviews.
