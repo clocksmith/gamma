@@ -71,3 +71,34 @@ counts positive original marginal ranks, including ties and its denominator;
 it does not attribute selected ranks or establish grid adequacy. Root approves
 new wrappers, tests and public-only binder implementation. Pending preparation,
 activation and original-input execution still require their subsequent reviews.
+
+## Corpus wrapper and integration review
+
+Root read the new binder, explicit inventory, production worker, independent
+reporter, supervisor and all three focused test modules. The wrappers preserve
+the measured kernels and reconstruct the full original50/53/57 science. The
+report pre-read guard rejects failed production and malformed identities;
+source-dependent recurrence checks then replay both complete forward schedules,
+count streams, caps, finite allocations and price diagnostics. The public output
+uses an explicit field allowlist and descriptive61 context only.
+
+Seven integration checks passed4.176seconds through an actual invented300-ID
+JSON production-to-independent-worker-to-publication pipeline. A strengthened
+check passed0.495seconds: rehashed intermediate57/63 vectors, a count commitment
+and numeric cap pass structural checks but fail fresh recurrence/count replay.
+The fixture exposed null61 bounds in the descriptive maximum; the new reporter
+was corrected before pinning. Boolean substitutions also fail.
+
+Ten lifecycle checks passed0.061seconds, including real descendant process-group
+cleanup, hard deadlines, failure-write errors, success withdrawal and preservation
+of existing outputs. All49 measured code and12 runtime commitments remain
+unchanged. Root did not repeat the author's checks or open private inputs.
+Pending preparation is conditioned on the binder's focused checks completing;
+Claude's pushed-FREEZE approval remains required before exact activation.
+
+The eight binder checks passed0.196seconds; syntax/import and whitespace checks
+passed. The explicit inventory includes the public60 contract used only by a
+binding-test fixture, with no private60 carrier. Separate64MiB ancestral and
+256MiB retained read/write/hash boundaries, signed q, declared-root pre-stat
+checks, duplicate keys/scalars, exact activation and public prerequisites are
+covered. Root approves public-only pending preparation after these25 new checks.
