@@ -102,6 +102,14 @@ class CappedTests(unittest.TestCase):
             self.assertNotEqual(r.returncode, 0)
             self.assertIn('assertions must stay enabled', r.stderr)
 
+    def test_evidence_rejects_nonregression_violation_and_unresolved_comparator(self):
+        sys.path[:0] = [str(Path(__file__).resolve().parent.parent / d) for d in ('breadth-lns-v1', 'lagrange-select-v2', 'cost-decomposition-v1', '.', 'pass2/working')]
+        import evidence
+        self.assertIsNone(evidence.invariant_violation({'fit_programs_worse_than_start': 0}))
+        self.assertEqual(evidence.invariant_violation({'fit_programs_worse_than_start': 3}), {'fit_programs_worse_than_start': 3})
+        r = evidence.record_time_comparison('/nonexistent.json', 'x', {}, {}, [], '0' * 64)
+        self.assertFalse(r['resolved'])  # a missing comparator leaves replacement unresolved, never a default pass
+
     def test_incumbent_violating_cap_is_rejected(self):
         texts = {1: 'abab', 2: 'abc'}; fixed = list('abc'); cand = ['ab']
         caps = {1: 1, 2: 3}  # 'abab' needs 2 selections with 'ab'; a cap below the incumbent's cost must fail closed
