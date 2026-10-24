@@ -4,6 +4,16 @@ Start here for source versions, experiments and the working literal languages.
 This is a navigation index over existing manifests and reports, not a second
 results ledger. Completed runs below retain their source, dictionary and execution identities.
 
+## Owner path caps pass the single invented measurement — 2026-10-24
+
+[Item57](owner-path-cap-v1/README.md) independently agrees on both fixed invented
+fixtures, every owner cap and all forward recurrences. Whole elapsed is26.868267s;
+worker peak617,256KiB. Strict integer gains occur at255/256 budgets, with positive
+endpoints moving75→81 and0→4. Both unrestricted endpoints remain negative.
+All35 code/12 runtime pins are unchanged. This is invented-input evidence only;
+original-fit execution requires its separate freeze and review.
+[Receipts](owner-path-cap-v1/synthetic-results.json).
+
 ## Existing dictionaries attain the minimum one-owner budget of three — 2026-10-24
 
 [Item59](support-budget-feasibility-v1/README.md) joins accepted public13/50/56
