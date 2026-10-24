@@ -872,6 +872,13 @@ all defined rows equal61, k*9R/4naming and full256 -26872/-27652. Standalone
 G selects price128000000 but stays weaker at -43319/-43955. No additional
 support exclusion, witness, current-best or M1 change.
 
+## 2026-10-24: required priced slots improve intermediate budgets
+
+[Item68](required-entry-price-cap-v1/README.md) accepted:12 R budgets and16
+naming budgets beat the pointwise maximum of61/63, with peak integer gains
+165/198. Positive ranges stay9/4 and full256 stays-24549/-25172; no additional
+positive exclusion or M1 change. Endpoint predictions P2–P5 are false.
+
 ## Maintenance rules
 
 Add a short row and links when a scoped experiment closes; update current status
