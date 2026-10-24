@@ -6,7 +6,7 @@ HERE = Path(__file__).resolve().parent; LIT = HERE.parent
 sha = lambda p: hashlib.sha256((LIT / p).read_bytes()).hexdigest()
 HIGHS = '/home/x/deco/gamma/.venv_rocm/lib/python3.14/site-packages/scipy/optimize/_highspy/_core.cpython-314-x86_64-linux-gnu.so'
 CODE = ['widenbhd-v1/run.py', 'widenbhd-v1/capped.py', 'widenbhd-v1/evidence.py', 'widenbhd-v1/make_contract.py',
-        'widenbhd-v1/FREEZE.md', 'widenbhd-v1/test_capped.py', 'tailcap-v1/evidence/results.json', 'nonregress24-v1/evidence/results.json', 'seeded-repair-v1/model.py', 'character-slots-v1/repair.py',
+        'widenbhd-v1/FREEZE.md', 'widenbhd-v1/AMENDMENT-1.md', 'widenbhd-v1/test_capped.py', 'tailcap-v1/evidence/results.json', 'nonregress24-v1/evidence/results.json', 'seeded-repair-v1/model.py', 'character-slots-v1/repair.py',
         'breadth-lns-v1/breadth.py', 'lagrange-select-v2/selection.py', 'cost-decomposition-v1/analyze.py',
         'cost-decomposition-v1/lexical.cjs', 'literals.py', 'pass2/working/bitpack.py', 'tail-search-v1/structure.cjs']
 c = {'schema': 'gamma.widenbhd-v1.contract.v1',
