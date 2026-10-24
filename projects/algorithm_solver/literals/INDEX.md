@@ -841,6 +841,10 @@ synthesis. An AST-backed composition language remains a proposal. Bounded AST
 and functional source preprocessing for flat strings now has the separately
 recorded pass3 results above; it is not that proposed language.
 
+## 2026-10-24: required joint cap attempt incomplete
+
+[Item62](required-joint-path-cap-v1/README.md) production completed, but independent receipt validation rejected integer-key hash ordering after JSON transport. No numerical result; all predictions null. Frozen artifacts and failure preserved; a new v2 protocol is required.
+
 ## Maintenance rules
 
 Add a short row and links when a scoped experiment closes; update current status

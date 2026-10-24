@@ -51,3 +51,7 @@ heap and scan select residual marginals separately. Independent full tiny
 oracles test the shared formula. Six focused checks passed0.169seconds;
 the audit did not rerun them. No performance, source provenance, full graph
 independence or corpus claim follows. The new design waits its own freeze.
+
+## Frozen-run failure and correction requirement
+
+The final prelaunch audit and9execution/10supervisor checks passed, but missed integer-key ordering across JSON transport. The original-fit independent report then failed closed in allocation_shape before ancestral input reads. An independent invented12-slot reproduction isolates owner57_prefix and owner61_prefix; the other six digests remain stable. No62 result is accepted. Correct canonical serialization in a new protocol, retaining all validation and historical artifacts; add an actual allocator round-trip regression, not a patched digest fixture. The mathematical proof is not falsified by this transport failure.
