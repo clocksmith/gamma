@@ -45,3 +45,13 @@ inventory check passed0.012seconds (14harness checks total). Compile passed.
 The independent reviewers inspected but did not rerun tests, pin or measure.
 Public-only pin preparation is now approved; Claude must review the pushed
 protocol and exact pins before the single invented measurement.
+
+## Accepted measurement review
+
+Claude approved before the single fresh run. Both complete receipts, exit0,
+absence of failure and every49code/12runtime commitment were checked after
+completion. All19oracles and both fixed fixtures accepted, with complete
+historical fields and new recurrence/field/digest reconciliation. The first
+fixture is null; the second improves65 budgets without moving k* or the256
+endpoint. This measures the declared implementation on invented inputs only.
+All measured files are now immutable; corpus wrappers must be new files.
