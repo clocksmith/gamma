@@ -1,70 +1,107 @@
-# Item 50 proof and synthetic review
+# Item 50 review and execution record
 
-2026-10-24. Scope: supplied-input potential lift, independent scalar replay and
-one invented complexity measurement. No private source/q/pool access or corpus
-certificate was authorized or performed. The production proposal is separate
-in [DRAFT-NEXT.md](DRAFT-NEXT.md); neither this record nor its mathematical
-prediction substitutes for a reviewed execution freeze.
+Recorded after the separately authorized production and independent replay on
+2026-10-24 UTC. Component intent is preserved: exact, scoped evidence under a
+frozen contract, with no promotion or change to M1 thresholds or boundaries.
 
-Root and the independent confirmation reviewer found no remaining proof
-blocker before the single measured run. Review explicitly checked:
+## Review, activation and unchanged pins
 
-- exact old occurrence q preservation and lexicographic string-PID/start/end
-  order; old Bellman inequalities, retained tight paths and full suffix-distance
-  equality despite negative longer-edge base costs;
-- complete old shared pool plus seed/optional-character exceptions, exact
-  source/ban identity, paid singleton support and zero-weight absent entries;
-- exact endpoint-dependent new weights, rather than reusing item 35's constant
-  bin-piece weights; unique-range splitting including zero-weight ties and
-  overlapping repeated-one-owner contributions;
-- all 257 exact capacity allocations, actual class sizes, ceiling division,
-  k0 dominance and k256 unrestricted-charge equality;
-- explicit rejection when Python assertions are optimized away, and complexity
-  stated with actual old-trie transitions rather than an output-linear claim.
+Root and independent review checked old occurrence-q preservation and order,
+negative-edge Bellman inequalities, surviving tight paths, full shared-pool
+completeness, source/body bans, paid singleton support, absent entries, exact
+endpoint-dependent weights, and all 257 support/capacity allocations. The
+independent checker uses Aho-Corasick occurrence enumeration, forward and reversed
+DAG paths, same-owner run endpoints, all-depth streaming and separate bounded top
+selection. It shares the disclosed item 33 suffix index/completeness verifier
+and input/parser authority; it does not reuse the optimized range-minimum selection.
 
-The separate checker uses Aho-Corasick terminal links, forward source paths,
-reversed-DAG potentials, same-owner run endpoints, streaming over every allowed
-depth and bounded sorted top lists. It intentionally shares item 33's Index and
-accepted suffix/interval/ban verifier; this structural dependency is disclosed.
-It does not import the prototype or reuse its range-minimum top selection.
+Claude approved freeze d4e6736d2 at 01:52Z. Activation 4a857d978 was held before
+launch for additional deadline fixes. The dated correction 09105e2b4 was approved
+at 01:56Z: an expired one-shot alarm cannot start an unguarded unlink, and neither
+worker can enter a `finally` failure write after its unlink deadline. One absolute
+failure budget guards each later operation. Ordinary write errors still withdraw
+success, and foreign BaseException deadlines propagate.
 
-Nine prototype tests and eight independent tests cover random explicit full
-paths/weights, exhaustive dictionary weak duality and charges, overlaps,
-duplicate source contents, source/ban/q/order/receipt corruption, missing
-shared or extra entries, corrupted shared index, exact positive/negative
-rounding, and optimized-Python rejection. A separate tiny synthetic generator
-integration agreed on all 257 rows before measurement. The measured job reran
-the 17 small oracle tests inside its declared envelope; this was part of the
-single predeclared measurement, not an additional benchmark.
+Active contract:
+`2390e202beb8a1796105a13f6e82597ce25ac29f88654c9ddc1dbd6eacd099f7`.
+All 29 code and 20 runtime hashes were rechecked unchanged after accepted replay.
+The original eight measured proof/specification dependencies and synthetic
+receipt remain unchanged. README and this review are outside execution pins.
 
-The spec was pinned before execution, including fixture seeds/shapes/source
-and ban hashes, deterministic q-generation code, interpreter/runtime files and
-eight code/document hashes. Realized pool and q digests were first computed
-during timed reconstruction. The root launched one 180-second measurement on
-core 6 with 8 GiB and external cleanup limit 10 seconds. It completed in 20.589095
-seconds, peak RSS 489,168KiB, with exact agreement on all 514 allocation rows
-and selected top-entry identities. See the [receipt](synthetic-results.json).
-Both the paired 75k old-pool construction and the periodic 12k repeated-owner
-stress were included. No cap was relaxed and no fixture was tuned after results.
+Focused development evidence comprised nine prototype and eight independent
+oracle tests; 11 original execution checks; eight supervisor checks including a
+real child/grandchild process-group cleanup; ten final reporter tests; and four
+affected production-worker checks after the final amendment. The latter cover
+real alarm interruption during unlink, expired-budget refusal, ordinary
+post-publication failure withdrawal and worker-to-independent-report schema
+agreement. These focused checks do not imply a broad repository qualification.
 
-Public original 28 source/contract review additionally confirmed that 28/33/35
-pin identical fit-source files, fit IDs and ban-parser code. Both accepted28
-arms report zero learned seed extras. Future private replay must still derive
-the exact global source/body bans, including primitive arrow bodies, and reject
-any old-pool intersection after optional characters are unioned. It must bind
-raw pool/q/result hashes, require a one-dimensional integer q array, convert
-NumPy scalars to Python integers without rounding, and compare the old ordered
-per-program path list and all exact certificate terms. This public review did
-not open or validate those private files.
+## Accepted execution and replay
 
-No new decoding, qualification, source-solving or current-best claim is made.
-The inherited item 23 unchanged-source exit 137 is not erased by mathematical
-source identity. No semantic-reuse conclusion follows from distinct-source
-support. Small-k positivity can be caused by unique characters; a negative
-full-class bound remains inconclusive. Worst-case repeated aggregation and
-streaming replay remain quadratic. The invented measurement is not a corpus
-runtime prediction.
+Root launched once at 01:56:55Z on cores 6/7 under the frozen 600-second cohort,
+1,200-second whole-phase and 8-GiB-per-process limits. Production completed in
+6.898202974 seconds; independently launched reporting completed in 14.435679134
+seconds. Both supervisory receipts are complete with actual integer [0,0] exits;
+cleanup took 0.000078258 and 0.000114656 seconds respectively. No failure marker,
+retry, cohort substitution or partial-certificate promotion occurred.
 
-Measured pins, specification and receipt are preserved byte-for-byte. Only this
-review, README, next-design note and the navigation index are postmeasurement
-documentation. Component intent is preserved with no boundary change.
+The public report's pre-publication elapsed fields are 6.897504136 seconds for
+production and 14.427997857 seconds for reporting. The longer supervisor values
+include final collection/publication and are the headline whole-phase times.
+Peak worker RSS was 465,584/450,256 KiB for production and 339,316/327,424 KiB for
+replay (R/naming); these are separate process peaks, not a simultaneous sum.
+
+Only the nine exact hash-bound parent input files were authorized. Accepted
+replay independently reconstructed old pool/occurrence order, signed-int64 q
+identity, source hashes and complete global source/body bans, including primitive
+arrow bodies. It reconciled the old ordered path terms, L, top charge and bound;
+checked full item 35 source/ban/substring geometry; and compared all 257 rows and
+selected top identities per cohort. No validation, cases, source execution,
+new witness or packet decoding is part of this run.
+
+Public accepted report SHA256:
+`7b667f287c02ce0f2c4b0438c6baf5cf85cf9402e85b4747d1c7abbbe27f5eb8`.
+Its bound production-results hash is
+`cd41275711b13023ca372fbddc84c1c1058de78be0fa2c9415eb4a607735df14`.
+Production supervisor SHA256:
+`82dfe7372e5138078f885c62777b2aa58a2601781851f2628d610cab8edfd6f6`.
+Replay supervisor SHA256:
+`60b7e6d47d864490fdc3329c50aa05469a9b15c60bb127e82293e374018da459`.
+
+Recording links: [results](evidence/results.json),
+[generated report](evidence/REPORT.md), [replay supervisor](evidence/supervisor.json),
+[production supervisor](evidence/production-supervisor.json). The recording audit
+read only those public-schema outputs and supervisor metadata. It separately
+checked exact field allowlists, all 514 integer numerators and ceilings, capacity
+counts, monotonicity, the positive/negative boundary, predictions and unchanged
+pins; it did not reopen private arm proofs, sources, q or selected-entry IDs.
+
+## Exact result and limits
+
+Both cohorts have k*=2. R's k2 numerator 7,135,689,484 yields F>=7,136; its k3
+numerator −394,006,905 yields only F>=−394. Naming's k2 numerator 483,646,210
+yields F>=484; its k3 numerator −6,137,009,819 yields only F>=−6,137. Denominator
+is 1,000,000 throughout. Positivity occurs exactly at k0, k1 and k2 in both
+257-point curves. The k256 bounds are −1,903,184 and −1,679,219.
+
+Exact L28 equality holds. The k0 bounds 22,197/13,727 exceed the old
+22,196/13,725: excluding one-owner alphabet entries may reduce dictionary charge.
+The predeclared invariant was dominance, not equal charges. P1 and P2 are true;
+P3 is false. No prediction or gate was changed after private input access.
+
+The conclusion is precisely that no <=256-entry dictionary with at most two
+one-owner paid entries reaches aggregate C/N<=10% on either named fixed
+300-program cohort. All lengths and one-owner strings are admitted subject to
+the exact source/body bans, so this extends the former shared-only pool claim.
+It does not establish coverage feasibility of the restricted class, identify
+semantic reuse, or prove any larger support budget sufficient. Unique characters
+may make small-k classes infeasible. A nonpositive fixed-q result does not bound
+the best dual value from above. No optimizer or witness search was run.
+
+Only exact named original item 13 qualification is reused; zero fresh jobs and
+zero witness packets. Item 23's later unchanged-source exit 137 remains separate.
+No canonical-policy, package, 400/500-population, held-out, independent-confirmation,
+M1 or current-best promotion follows. Near-whole and one-owner semantic-reuse
+questions remain open. The earlier invented measurement remains separate
+implementation evidence, and quadratic worst-case aggregation/replay remains a
+limit even though this measured production and replay completed within budget.

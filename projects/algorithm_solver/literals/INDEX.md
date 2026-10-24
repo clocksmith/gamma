@@ -4,6 +4,18 @@ Start here for source versions, experiments and the working literal languages.
 This is a navigation index over existing manifests and reports, not a second
 results ledger. Completed runs below retain their source, dictionary and execution identities.
 
+## Fixed-source support-budget certificate — 2026-10-24
+
+[Item50](potential-lift-certificate-v1/README.md) independently replays all257
+budgets for each original300-source cohort. No dictionary with at most two
+one-owner entries reaches aggregate C/N<=10%: k2 bounds are7136 (R) and484
+(naming). Atk3 they become−394/−6137; unrestrictedk256 remains inconclusive.
+The full pool includes all allowed exact substrings and paid characters. This
+is a conditional fixed-source exclusion, not coverage feasibility, semantic
+reuse, a witness, a dual optimum or M1. Production6.898s, replay14.436s; all
+514rows agree. [Full curve](potential-lift-certificate-v1/evidence/results.json)
+and [review](potential-lift-certificate-v1/REVIEW.md).
+
 ## Persistent parser preserves the invented trial trace — 2026-10-24
 
 [Item52](persistent-spelling-parser-v1/README.md) matches all four fixed blocks'
