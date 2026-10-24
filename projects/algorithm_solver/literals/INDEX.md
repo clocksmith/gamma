@@ -845,6 +845,10 @@ recorded pass3 results above; it is not that proposed language.
 
 [Item62](required-joint-path-cap-v1/README.md) production completed, but independent receipt validation rejected integer-key hash ordering after JSON transport. No numerical result; all predictions null. Frozen artifacts and failure preserved; a new v2 protocol is required.
 
+## 2026-10-24: corrected combined required joint cap
+
+[Item64](required-joint-path-cap-v2/README.md) accepted: all257 curves equal61, k*9R/4naming; no joint tightening at any of254 defined splits per cohort. Both fullcapacity bounds remain negative. The failed62 attempt stays incomplete; currentbest51 unchanged.
+
 ## Maintenance rules
 
 Add a short row and links when a scoped experiment closes; update current status
