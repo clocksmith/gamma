@@ -857,6 +857,10 @@ recorded pass3 results above; it is not that proposed language.
 
 [Item63](entry-price-path-cap-v1/README.md) accepted: full256 bounds rise -26872→-24549 for R and -27652→-25172 for naming, with240/247 strict budgets. Positive ranges stay8/3; no fullcapacity10% exclusion. Price diagnostics and exact fresh replay are retained. Currentbest51 unchanged.
 
+## 2026-10-24: forced-owner slots with priced prefixes
+
+[Item68](required-entry-price-cap-v1/README.md) proves a combined charge no greater than61 or63. Six exhaustive tiny checks pass; a coverable example gives bounds4/4/7. General q only, no corpus result or execution contract.
+
 ## Maintenance rules
 
 Add a short row and links when a scoped experiment closes; update current status
