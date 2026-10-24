@@ -105,3 +105,20 @@ M1 or current-best promotion follows. Near-whole and one-owner semantic-reuse
 questions remain open. The earlier invented measurement remains separate
 implementation evidence, and quadratic worst-case aggregation/replay remains a
 limit even though this measured production and replay completed within budget.
+
+## 2026-10-24 interpretation update: positive support bands are coverage-infeasible
+
+The accepted [item 56 coverage result](../support-coverage-floor-v1/README.md)
+subsequently establishes a necessary one-owner-entry floor of **three in both
+identical original 300-source fit cohorts**. Every positive budget in items 50
+and 53 is k=0,1,2, so all of those positive fraction exclusions are **vacuous for
+covering dictionaries**: those classes cannot cover the sources at all. The
+recorded curves and inequalities remain valid, but the positive values exclude
+no realizable covering dictionary. This supersedes the earlier uncertainty
+about coverage at those budgets without changing frozen numerical evidence.
+
+At k>=3, this floor merely stops ruling out coverage. This floor alone establishes neither 256-entry coverage
+nor C/N<=10%; the fraction bounds remain nonpositive there. The
+floor does not prove that three one-owner entries suffice under capacity. This
+is a dated interpretation update from [independently replayed metadata](../support-coverage-floor-v1/evidence/results.json),
+not a new run, changed target, promotion, or global dual-optimum claim.
