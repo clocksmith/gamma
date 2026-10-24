@@ -4,6 +4,15 @@ Start here for source versions, experiments and the working literal languages.
 This is a navigation index over existing manifests and reports, not a second
 results ledger. Completed runs below retain their source, dictionary and execution identities.
 
+## Joint quantile/fraction bounds remain negative — 2026-10-24
+
+[Fixed-300 joint certificate](joint-quantile-fraction-v1/README.md) independently
+replays all twelve points. Best conditional bounds−23,660/−23,655 atq=0 are
+inconclusive. Exact median/p95 restrictions strengthen the path bound, but
+supply neither a feasible dictionary nor an M1/400/500population exclusion.
+[Freeze](joint-quantile-fraction-v1/FREEZE.md),
+[review](joint-quantile-fraction-v1/REVIEW.md).
+
 ## Full-substring primal repair preserves seeds — 2026-10-23
 
 [Matched warm/cold fraction repair](fraction-primal-repair-v1/README.md)
