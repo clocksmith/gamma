@@ -1,7 +1,8 @@
 # Item 53 review: fixed-potential tightening
 
-2026-10-24. This records the theorem and supplied-input implementation review;
-it is not original-fit execution approval or a new scientific corpus result.
+2026-10-24. This records the theorem, supplied-input implementation review and
+accepted original-fit independent replay. Execution approval was obtained
+separately as recorded below; this review authorizes no further run.
 
 The preserved [theorem](DRAFT.md) requires finite old suffix distances, retained
 allowed tight paths and unchanged feasible entry classes. Setting every allowed
@@ -45,7 +46,7 @@ reconcile, but historical top digests were unavailable. The older timing setup
 differs, so a whole-run speed ratio is not supported; the measured worker memory
 peak increased from489,168 to587,508KiB.
 
-Unmeasured execution wrappers require the exact original28 nine-file allowlist
+The execution wrappers require the exact original28 nine-file allowlist
 and accepted public50 curve/proof digests. Focused supplied execution tests
 cover actual two-cohort worker-to-independent-report integration, public50
 curve/top/order/source corruption, q payload/types, primitive-arrow bans,
@@ -61,9 +62,49 @@ result time no later than supervisor time; both receipts become execution pins.
 README/REVIEW remain unpinned recording documents. DRAFT-NEXT is a pinned
 measured-design dependency. Preserved theorem and item50 files remain unchanged.
 
-Remaining gates: root records this supplied result, constructs the inactive
-execution contract, obtains Claude's freeze review, performs exact activation,
-and releases the assigned core queue. No private53 inputs, validation, cases,
-new qualification or witness packets have been read or produced by this work.
-Algorithm-solver intent, qualification thresholds and promotion authority are
+Those prelaunch gates were subsequently completed: supplied-result record
+`0baac8d70`, freeze `256651682`, Claude approval and exact activation
+`807df1750`. The active contract hash is
+`825fdffe47ee3b16f787647c8dab4956b795b71e43283dfc95d870e6852b94fe`.
+The record-only work below read finalized report metadata and the contract;
+it did not reopen sources, pools, q or other original-fit inputs.
+
+## Accepted original-fit production and independent report
+
+Both [production](evidence/production-supervisor.json) and
+[report](evidence/supervisor.json) supervisors are complete with actual integer
+exit codes[0,0], finished cleanup and the same active contract identity.
+Supervisor elapsed times are6.515635154966731 and22.39357433002442seconds.
+After completion, every45 code pin and23 runtime pin was rehashed unchanged.
+Only the finalized public-ready [results](evidence/results.json),
+[REPORT](evidence/REPORT.md) and two supervisor receipts were copied into the
+repository. No frozen implementation or contract file changed.
+
+The result SHA256 is
+`ba4a25c38ce2ab8db6defba02c3e246125af3d31dca7602e64d557c9465cf0c5`.
+It independently accepts exact original28 and public50 identities, all suffix
+potentials and old/new weights, both class-top identities and all514 paired
+values per cohort. The complete curves and raw/ceiled differences remain in
+the machine-readable result; the README includes k0/1/2/3/256 side by side.
+
+Both cohorts retain k*=2. R improves228 raw charges and52 integer bounds;
+naming improves210 raw charges and zero integer bounds. The maximum integer
+gain is1 for R and0 for naming. P1/P2 are true and P3/P4 false. In particular,
+R k3 changes-394 to-393 while naming k3 stays-6,137; neither becomes positive.
+Unrestricted endpoints remain-1,903,184/-1,679,219.
+
+Removing168,390,772,380/157,849,615,761 integer units of old occurrence
+multiplier mass yields at most308,361/5,068 units of support-charge reduction.
+The denominator is1,000,000. This distinguishes substantial total slack removal
+from a small change in the maximum selected-entry charge, and distinguishes
+raw improvements from integer-bound improvements. It does not refute searching
+different potentials; only this fixed-potential tightening was measured.
+
+No coverage witness is supplied. Positive small-k bounds do not prove that any
+such class can cover all sources; negative full-class bounds do not establish
+feasibility or a10% representation. This record makes no unrestricted10%
+exclusion, M1, semantic-reuse, validation, packet, fresh-qualification or global
+dual-optimality claim. Original13 exact-hash qualification and the separate
+item23 exit137 caveat remain intact. Item51 flat remains current best at this
+record. Algorithm-solver intent, thresholds and promotion authority are
 preserved without a component boundary change.
