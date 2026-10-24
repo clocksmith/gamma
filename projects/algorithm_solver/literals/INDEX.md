@@ -4,6 +4,17 @@ Start here for source versions, experiments and the working literal languages.
 This is a navigation index over existing manifests and reports, not a second
 results ledger. Completed runs below retain their source, dictionary and execution identities.
 
+## Naming reduces character share without an atomic gain — 2026-10-24
+
+[Atomic spelling/entry comparison](atomic-naming-entry-v1/README.md) independently
+replays 4,000 packets and 21 fresh sources passing 1,795 checks. S/A/J retain
+8,324 validation actions while reducing primary character share from 49.2096%
+to 48.2125% (canonical 49.9635% to 48.9664%). Every standing R/13/24/N/NCP
+comparison passes, but J ties D10/D/S/A and fails its frozen strict-action
+gates. No fit move, atomic-transaction gain or current-best replacement.
+[Freeze](atomic-naming-entry-v1/FREEZE.md),
+[review](atomic-naming-entry-v1/REVIEW.md).
+
 ## Joint quantile/fraction bounds remain negative — 2026-10-24
 
 [Fixed-300 joint certificate](joint-quantile-fraction-v1/README.md) independently
