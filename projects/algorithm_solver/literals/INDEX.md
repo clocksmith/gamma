@@ -4,6 +4,17 @@ Start here for source versions, experiments and the working literal languages.
 This is a navigation index over existing manifests and reports, not a second
 results ledger. Completed runs below retain their source, dictionary and execution identities.
 
+## Historical spelling comparator corrected; no successor — 2026-10-24
+
+[Item58](comparator-carrier-replay-v1/README.md) resolves54's historical comparison
+against fixed51flat through explicit original-JSON, rewritten-JSON and ordered-
+binary identity.800 comparator packets independently decode;54's4,800 candidate
+views remain inherited accepted evidence. No spelling arm passes:24-S/43N-S/43W-S
+use53/2/18 more validation actions than51, despite lower character fractions.
+Original54P4null remains unchanged;58's restatedP4 istrue (no successor).
+194code/56runtimepins unchanged,4.546927s supervisor, zero fresh qualification.
+No currentbest or promotion claim. [Evidence](comparator-carrier-replay-v1/evidence/results.json).
+
 ## Owner path caps exclude10% in nonempty support classes — 2026-10-24
 
 [Item57](owner-path-cap-v1/README.md) independently gives positive10C−N bounds
