@@ -54,6 +54,13 @@ def measure_safe(texts, vocab, width, forbidden):
     return rows, illegal, len(analyze.dictionary_bytes(vocab))
 
 
+def ordered(universe_index, selected):
+    """Serialize a selected entry set in the fixed universe order (seed order, then sorted non-seed pool entries), so the
+    same set always gets the same IDs and canonical ID tie-breaking is preserved across moves (AMENDMENT-1)."""
+    assert all(s in universe_index for s in selected), 'entry outside the fixed universe'
+    return sorted(set(selected), key=universe_index.__getitem__)
+
+
 def load_seed(work, c, part):
     """part 'fit': item 24's dictionary and item 13's fit-sources.json only. part 'all': all 400 sources (after the seal)."""
     folder = work / c['seed']['relative_path']
@@ -83,6 +90,9 @@ def arm_run(a, c):
     graph = sel.Graph(fit, pool, c['pool_max_length'])
     score = np.bincount(graph.occ_entry, minlength=len(pool)) * np.array([len(s) - 1 for s in pool])
     ranked = [pool[i] for i in np.lexsort((np.arange(len(pool)), -score))]
+    universe = list(seed_vocab) + sorted(set(pool) - set(seed_vocab))  # fixed once; both arms serialize trials in this order
+    uidx = {s: i for i, s in enumerate(universe)}
+    assert ordered(uidx, seed_vocab) == list(seed_vocab)
     def nc(vocab):  # canonical (shortest, smaller-ID ties) per-program selections N and single-character selections C
         out = {}
         for p, t in fit.items():
@@ -111,7 +121,7 @@ def arm_run(a, c):
         model = capped.build(fit, fixed, cand, capacity, incumbent, dict(costs), None, M if lex else None)
         chosen, solver = capped.solve(model, cand, True, min(cfg['milp_seconds'], max(1., remaining)), seed=cfg['seed'])
         solver = {**solver, 'build_seconds': model['build_seconds'], 'arcs': model['arcs'], 'initial': model['initial']}
-        trial = fixed + chosen
+        trial = ordered(uidx, fixed + chosen)
         trial_nc = nc(trial) if solver['feasible'] else None
         trial_costs = {p: v[0] for p, v in trial_nc.items()} if trial_nc else None
         trial_obj = objective(trial_nc) if trial_nc else None
