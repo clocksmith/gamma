@@ -29,3 +29,19 @@ review did not rerun author tests or inspect private data. New O(KN) state
 claims cover schedules/count metadata, while baseline proofs, AC/context and
 Index state remain separately charged. No full-process memory bound is inferred
 from that claim. Frozen theorem and ancestor files are unchanged.
+
+## Invented measurement protocol review
+
+Root, a historical-science/transport reviewer and a separate lifecycle reviewer
+inspected the new harness. The fixed19 oracles and original two fixtures stay
+inside one600-second deadline. Both57/63 full forward schedules and count/cap
+commitments are checked, with exact K*N/K*A counters and every historical
+50/53/57 commitment. No historical schedule is fabricated or elapsed-time
+ratio inferred. JSON normalization rejects key collisions and keeps scalar
+types. Lifecycle preserves fresh outputs and one absolute failure budget.
+
+Thirteen tiny pipeline/lifecycle checks passed1.222seconds; the added oracle
+inventory check passed0.012seconds (14harness checks total). Compile passed.
+The independent reviewers inspected but did not rerun tests, pin or measure.
+Public-only pin preparation is now approved; Claude must review the pushed
+protocol and exact pins before the single invented measurement.
