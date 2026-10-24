@@ -1,71 +1,104 @@
-# Potential lift: proof and invented complexity measurement
+# Item 50: fixed-potential support-budget certificate
 
-[Premeasurement design](DRAFT.md), [review](REVIEW.md),
-[fixed synthetic specification](synthetic-spec.json),
-[measured receipt](synthetic-results.json),
-[proposed next adapter](DRAFT-NEXT.md).
+**On each fixed 300-program cohort, no dictionary with at most 256 paid entries
+and at most two one-owner entries reaches aggregate C/N <= 10%.** Here a
+one-owner entry occurs in exactly one source ID; all paid entries, including
+single characters, count. Entries may have any length, but complete sources and
+the pinned solve-body exclusions are banned. This is a conditional full-substring
+fraction bound, not an M1 or canonical-policy result.
 
-The potential construction preserves an old occurrence certificate's path value
-while adding every allowed exact substring. Under exact source, ban and pool
-identity, its k=0 bound is at least the old bound when k limits the number of
-paid entries occurring in exactly one source. This offers a different
-certificate from [item 49's uninformative fixed q points](../support-budget-certificate-v1/README.md).
-No corpus lift has been executed and no new Gamma exclusion is claimed here.
+[Accepted evidence](evidence/results.json), [generated report](evidence/REPORT.md),
+[independent replay receipt](evidence/supervisor.json),
+[production receipt](evidence/production-supervisor.json), [review](REVIEW.md),
+[freeze and prelaunch correction](FREEZE.md).
 
-For old backward integer distances d and denominator D, retain every old q
-exactly. A new occurrence i->j receives
-`qnew=max(0,d_i-d_j-D*b)`, where b is 9 for a singleton and −1 otherwise. Every
-path costs at least d_0 by telescoping, and an old tight path still achieves
-d_0. Shared strings were already in item 28, so their weights are unchanged.
-Exact top256 charges with at most k one-owner entries yield valid lower bounds
-on F=10C−N for every k=0,...,256. All paid entries, including singletons, count.
-This is an aggregate fraction relaxation, not a canonical or package optimum.
+The largest support budget with a positive bound is **k*=2 in both cohorts**.
+The exact integer lower bounds are for F=10C−N, where N counts selections and
+excludes Finish. All 257 budgets per cohort were independently replayed; no
+budget was selected or omitted after observing the curve.
 
-One predeclared invented measurement completed in **20.589 seconds**, including
-both optimized constructions, separate all-depth replays, and 17 small oracle
-tests. Peak RSS was 489,168KiB on core 6, under the 180-second/8GiB envelope. Every
-one of the257 rows agreed independently for each fixture; no second run occurred.
+| Maximum one-owner entries k | R lower bound | Naming lower bound |
+| ---: | ---: | ---: |
+| 0 | 22,197 | 13,727 |
+| 1 | 14,666 | 7,105 |
+| 2 | 7,136 | 484 |
+| 3 | −394 | −6,137 |
+| 256 | −1,903,184 | −1,679,219 |
 
-| Invented fixture | Programs / characters | Old pool / occurrences | Full allowed entries | Old replay + index | New charge aggregation | Independent replay |
-| --- | ---: | ---: | ---: | ---: | ---: | ---: |
-| Paired65-character prefixes | 300 / 75,000 | 313,344 / 758,605 | 8,966,636 | 3.539s | 0.348s | 11.310s |
-| Repeated one-owner periods | 12 / 12,000 | 101 / 12,832 | 143,070 | 0.175s | 1.123s | 1.814s |
+At the boundary, R's exact k2/k3 numerators are 7,135,689,484 and −394,006,905;
+naming's are 483,646,210 and −6,137,009,819, all at denominator 1,000,000.
+The table uses exact ceiling division. A nonpositive value is inconclusive:
+three one-owner entries are not proved sufficient, nor is any larger budget.
+Positivity also does not establish that the restricted class can cover the
+sources at all; unique characters may make small support budgets infeasible.
+Distinct-source support is not semantic reuse.
 
-Pool construction and q generation are additional measured phases in the
-receipt; the table does not sum to whole-job time. The paired fixture used
-75,019 unique-entry range-minimum queries and only 6 repeated new-occurrence
-contributions. The periodic stress used 5,991,440 repeated contributions. The
-independent checker streamed all 9,109,706 allowed depths across both fixtures,
-checked 771,437 old edge inequalities and 87,000 tight suffix positions, and
-reconstructed all 514 allocation rows. It shares the accepted item 33 suffix
-index/completeness verifier but uses separate occurrence enumeration, path
-relaxation, support classification, weight enumeration and top selection.
+## What was certified
 
-The arbitrary, predeclared synthetic q was not optimized. Its paired-fixture
-k0/k256 bounds were −714,965/−839,437; periodic bounds were 84,146/−116,365,267.
-These values are mechanism checks, not research-corpus findings. The positive
-periodic k0 value coexists with a negative unrestricted endpoint, illustrating
-why the conditional and full-class claims must remain distinct.
+Retain item 28's integer occurrence multipliers exactly on every old edge. From
+its backward shortest-path potentials d, assign each newly allowed occurrence
+`qnew=max(0,d_i-d_j-D*b)`, with base cost b=9 for a singleton and −1 otherwise.
+All new edges respect the same potential inequalities, while old tight paths
+survive. The complete path term therefore remains exactly item 28's. Exact
+support-class top-entry charges then give each lower bound.
 
-The old Gamma item 28 bounds 22,196/13,725 would be retained or strengthened at k0
-**only after exact private identity and certificate replay**. That replay has
-not happened. Small-k infeasibility may reflect unique characters rather than
-semantic reuse; larger k is not proved sufficient. A negative lifted bound
-does not bound the optimal dual value from above. Near-whole entries, one-owner
-entries and semantic reuse remain unresolved M1 issues; no witness, action
-gain,400/500-population result, qualification or promotion follows.
+The old path numerators remain 93,534,943,854 for R and 78,055,753,489 for naming.
+The k0 bounds strengthen item 28's 22,196/13,725 to 22,197/13,727 because the
+support restriction can reduce the old dictionary charge. The required invariant
+was k0 dominance, not equality. No q optimization, witness search or source
+execution occurred. The negative k256 endpoint is one fixed multiplier result;
+it does not bound the full-class dual optimum from above.
 
-The optimized representation avoids quadratic new-string storage. Repeated
-one-owner aggregation still has a quadratic worst case; independent replay
-streams all depths. These invented sizes do not establish a corpus ETA or a
-universal runtime guarantee. Production and reporting remain separately proposed
-in [DRAFT-NEXT](DRAFT-NEXT.md), with no binder or launch authorized by this record.
-No private source, q, pool, validation input or case was read for this work.
+| Cohort | Source characters | Full allowed entries | One-owner entries | Entries shared by at least two source IDs |
+| --- | ---: | ---: | ---: | ---: |
+| R | 76,107 | 13,553,771 | 13,245,477 | 308,294 |
+| Naming | 76,033 | 13,561,646 | 13,270,460 | 291,186 |
 
-Specification SHA256:
-`066ea7e7c9a092643e5c5791d671cdb872e4e9b6ce088b503d7534044bc42cd0`.
-Receipt SHA256:
-`bceb5b672ec730041b8e650b298e6991b847dda9123a9399aaafd77ff0ec6fec`.
-The eight measured code/document pins remain unchanged. Component intent and
-production boundaries are preserved; this is supplied-input mathematical and
-synthetic feasibility evidence only.
+Each cohort has 111,543 compressed groups and 966 exact banned occurrences.
+Independent replay checked all 27,115,417 allowed depths across the two cohorts,
+including all unique-entry depths, all 514 allocation rows and the exact selected
+entry identities privately. It reconstructs old paths and support/weight/top
+selection separately; the pinned input/parser binding and item 33 suffix index
+and completeness verifier are disclosed shared dependencies.
+
+## Execution and limits
+
+Production completed in **6.898203 seconds** and independent replay in
+**14.435679 seconds**, measured by their whole-phase supervisors. Both phases
+returned two actual integer zero exits and completed cleanup. These are measured
+runtimes for this run, not forecasts or universal complexity claims.
+
+| Cohort | Production worker seconds | Replay worker seconds | Production peak RSS KiB | Replay peak RSS KiB |
+| --- | ---: | ---: | ---: | ---: |
+| R | 6.683 | 14.287 | 465,584 | 339,316 |
+| Naming | 6.205 | 13.835 | 450,256 | 327,424 |
+
+The unchanged envelope was 600 seconds per cohort, 1,200 seconds per whole
+phase, cores 6/7, one BLAS/OpenMP thread, and 8 GiB address space per process.
+A single capped 10-second emergency budget governs failure cleanup/publication;
+success remains inside the original phase deadline. Repeated-owner aggregation
+and independent streaming retain quadratic worst-case work. All 29 execution
+code pins and 20 runtime pins remain unchanged after launch.
+
+Registered outcomes: **P1 true** (exact old path term and k0 dominance, required),
+**P2 true** (some positive k>=1), **P3 false** (no positive unrestricted k256 bound).
+Only the exact original item 13 source qualification receipts are reused.
+There are zero fresh qualification jobs and zero new witness packets. Item 23's
+later unchanged-source exit 137 remains a separate inherited failure.
+
+No validation or cases were opened. There is no new decoding, package-cost,
+canonical-action, feasible dictionary, optimality, 400/500 admission, held-out,
+independent-confirmation or promotion claim. Current-best dictionaries and M1
+thresholds are unchanged. Public evidence contains hashes, counts and scalar
+terms, not source text, q, pools, potentials or selected-entry identities.
+
+## Preserved proof and invented measurement
+
+The [premeasurement design](DRAFT.md), [synthetic specification](synthetic-spec.json)
+and [single measured receipt](synthetic-results.json) remain byte-for-byte
+unchanged. That earlier invented run completed in 20.589095 seconds, peak RSS
+489,168 KiB, with all 17 oracle tests and 514 rows agreeing. It included a paired
+75,000-character fixture and a repeated-owner 12,000-character stress fixture.
+Those arbitrary-q bounds are mechanism evidence, separate from this corpus
+certificate. The [adapter design](DRAFT-NEXT.md) and
+[report design](REPORT-DESIGN.md) preserve the prelaunch reasoning.
