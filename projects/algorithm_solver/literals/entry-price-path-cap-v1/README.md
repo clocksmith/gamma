@@ -11,3 +11,22 @@ No scalable implementation, private input, benchmark, binder, pending contract, 
 ## Supplied implementation design
 
 The [fixed-family design](DRAFT-NEXT.md) uses15 globally declared integer prices, laminar suffix-group occurrence counts in production and independent per-start Z histograms. Every price schedule and forward recurrence must reconcile. Root and independent review found no design blocker against the actual33 Index. Supplied kernels and tiny correctness checks may now be implemented; a separate reviewed invented measurement remains necessary before any corpus design. No private input or run is authorized.
+
+## Supplied kernels and independent replay
+
+The [production kernel](caps.py) walks laminar depth segments and prices every
+allowed one-owner arc; the [independent checker](independent.py) derives
+multiplicities with per-start Z histograms and fresh AC ownership. Both
+reconstruct57 and charge their additional potential/index context. All15 fixed
+prices, lambda0 full-vector identity, finite allocations and JSON-stable
+scientific digests agree on tiny supplied populations.
+
+Eight production tests passed0.167seconds, including actual JSON-to-checker
+agreement at capacities0/1/16/256; five independent tests passed0.270seconds.
+Both handle separate and aliased one-shot ban iterables. Root and read-only
+independent audit found no blocker; syntax/import checks pass. The checker can
+run without supplied vectors for tiny standalone analysis; any measured paired
+run must supply both57/63 forward schedules and verify every recurrence and
+its checked flag/digest. These are development checks, not complexity evidence.
+A separate fixed-fixture measurement protocol is being prepared; no private
+input, timing run or corpus contract exists yet.
