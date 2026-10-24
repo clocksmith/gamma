@@ -29,3 +29,20 @@ Only [proof.py](proof.py) and [test_proof.py](test_proof.py) execute, using supp
 tiny inputs and unchanged mathematical 60/61 oracles. No private data, corpus
 design, production kernel, pins, binder, benchmark, run or promotion was made.
 Existing Gamma intent, historical evidence and milestone gates remain unchanged.
+
+## 2026-10-24: supplied allocation and continuation design
+
+The new [pure allocator](allocation.py) has heap and owner-scan methods and
+[focused tests](test_allocation.py). Six checks passed, including the exhaustive
+proof oracle,24 tiny random graphs at four capacities,257 rows, clipping,
+mandatory saturation, finite zero ties, negative L and malformed inputs. Root
+and independent read-only review found no blocker. Shared validation/formula
+and row construction are explicit; the two marginal traversals differ.
+No source ownership, shared identities or reachability is established by this
+supplied-prefix API; their provenance must come from separate authority.
+
+Separate60/61 records now exist:60 is null against57, while61 strengthens the
+small support budgets. The [continuation design](DRAFT-NEXT.md) inherits accepted
+60 graph receipts and freshly reconstructs forced owners and the combined
+allocation. It is an implementation proposal, not a private-input or launch
+contract; a separate reviewed FREEZE remains necessary.
