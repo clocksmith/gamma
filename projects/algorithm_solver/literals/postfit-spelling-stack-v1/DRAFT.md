@@ -238,7 +238,9 @@ corrupt packet/seal rejection; cleanup/deadline/receipt failure dominance.
 
 Tentative resource envelope for that future freeze: three single-core spelling
 workers on 0/1/2, <=8 GiB each, max 153,600 counted per-source proposal evaluations
-per anchor, no repeated menu fitting, and a 1,800-second whole worker cap. U
+per anchor, no repeated menu fitting, and a 1,800-second absolute per-anchor deadline from fit start, including fit
+finalization and the shared fit-barrier wait before validation. No new worker
+replenishes that deadline. U
 measurement runs within the same arm budget. A supervisor on 0–3 bounds the whole
 production including qualification to 3,600 seconds, at most four strict sandbox
 workers with inherited per-source limits, plus 10-second bounded group cleanup.
