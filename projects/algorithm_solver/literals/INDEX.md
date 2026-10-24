@@ -4,6 +4,15 @@ Start here for source versions, experiments and the working literal languages.
 This is a navigation index over existing manifests and reports, not a second
 results ledger. Completed runs below retain their source, dictionary and execution identities.
 
+## Joint path-cap attribution — 2026-10-24
+
+[Item60](joint-path-cap-v1/README.md) freshly replays the original inputs and
+all57/60 scheduling recurrences. The joint shared/one-owner cap gives no raw or
+integer gain at any257 budget in either cohort; bounds exactly equal57.
+The separately recorded61 required-owner constraint remains stronger (k*=9/4
+versus8/3). This null fixed-penalty result does not evaluate their combination.
+No M1, qualification, witness or current-best change.
+
 ## Required-owner support certificate — 2026-10-24
 
 [Item61](required-owner-cap-v1/README.md) inherits57's accepted full-graph caps

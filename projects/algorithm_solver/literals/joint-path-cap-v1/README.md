@@ -1,3 +1,50 @@
+# Item 60: joint path caps match the existing original-fit bounds
+
+The independent original-fit replay accepted, with **no raw or integer gain at
+any of257 budgets in either cohort** relative to item57. The local shared/all-arc
+relaxation is valid but does not strengthen these fixed penalties and sources.
+This null result does not establish that every possible joint cap or the later
+required-owner combination is ineffective.
+
+| Cohort / method | k3 lower bound | Largest positive k | k256 lower bound |
+| --- | ---: | ---: | ---: |
+| R,57 frozen comparator | 6651 | 8 | -26872 |
+| R,60 joint cap | 6651 | 8 | -26872 |
+| R,61 required owners, descriptive | 13349 | 9 | -26872 |
+| naming,57 frozen comparator | 119 | 3 | -27652 |
+| naming,60 joint cap | 119 | 3 | -27652 |
+| naming,61 required owners, descriptive | 6011 | 4 | -27652 |
+
+The61 rows are a descriptive comparison requested during cross-review, outside
+60's frozen predictions. P1 passes; P2–P5 are false. Item61 supplies the strongest
+recorded exclusions among these methods. All refer to10C-N on the original300
+fit sources per cohort, capacity256, frozen allowed full-substring universe,
+global whole-source/solve-body bans and paid singletons. k0–2 are coverage-vacuous;
+item59 proves the at-most classes from3 upward nonempty. Fullk256 stays negative
+and inconclusive. This is no new dictionary, M1 result or current-best change.
+
+The [freeze](FREEZE.md) was pushed1bfc35bc6 and approved by Claude before
+activatione1bd83ebd. Production supervisor accepted19.851610seconds and the
+independent report91.750261seconds, both exits[0,0], cleanup0.000092/0.000101s.
+Worker production peaks549316/527916KiB and report731012/711784KiB (R/naming)
+are separate measurements. Aggregate production JSON was55,807,567bytes and
+fit the unchanged64MiB read cap. All109code/23runtime/26public pins remained
+unchanged. Eighteen focused wrapper checks and root/independent audits preceded
+execution; measured kernels retained their earlier oracle checks.
+
+[Full numerical curves](evidence/results.json), [report](evidence/REPORT.md),
+[production receipt](evidence/production-supervisor.json) and
+[report receipt](evidence/report-supervisor.json) preserve the result.
+Both phases freshly rebuilt50/53/57 from exactly the original nine files and
+verified every57/60 forward recurrence, independently rebuilt local shared
+weights and all-arc backward schedules, and agreed on all allocations/digests.
+No private57 output was input; shared structural dependencies are explicit.
+No required-owner constraint was applied. No source execution, qualification,
+new packet, validation or protected input. Exact13 qualification reuse and23's
+unchanged-source exit137 caveat remain. Current best stays51.
+
+## Earlier proof and invented measurement record
+
 # Joint path caps: a proof and tiny exhaustive checks
 
 The [proof](DRAFT.md) gives a valid fixed-q charge on actual path-used penalties that never weakens [item57](../owner-path-cap-v1/DRAFT.md). It caps shared and one-owner contributions together within each source, then takes the minimum with57at each dictionary-slot split before maximizing across allowed splits.
