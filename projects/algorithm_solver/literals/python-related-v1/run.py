@@ -11,7 +11,7 @@ canonical set-determined order; binary arcs; lexicographic M*N + C with acceptan
                  learned entry most often adjacent (consecutive selections in the incumbent's canonical fit encodings) to the
                  entries already freed, ties and an exhausted neighbourhood broken by the LNS rng;
   w8rnd, w7rnd   item 69's uniform random removal (matched controls).
-k = 48 at w8 and 8 at w7; LNS seed 10 in every arm. Validation sources are read only after the arm's dictionary is sealed.
+k = 48 at w8 and 8 at w7; LNS seed 10 (candidates, HiGHS) and removal seed 1010 (a separate rng) in every arm. Validation sources are read only after the arm's dictionary is sealed.
 """
 import argparse, hashlib, importlib.util, json, os, random, resource, subprocess, sys, time
 from pathlib import Path
@@ -110,15 +110,16 @@ def arm_run(a, c):
     objective = (lambda v: M * sum(x[0] for x in v.values()) + sum(x[1] for x in v.values())) if lex else (lambda v: sum(x[0] for x in v.values()))
     assert M > sum(start.values())
     TOL = c['objective_tolerance']; rng = random.Random(cfg['seed'])
+    removal_rng = random.Random(cfg['removal_seed'])  # AMENDMENT-1: removal draws never shift the shared candidate stream
     incumbent = list(seed); best = objective(cur_nc)
     live = out / f'{a.arm}-live'; live.mkdir(parents=True)
     moves, started = [], time.monotonic(); budget_s = a.smoke or cfg['lns_seconds']
     while time.monotonic() - started < budget_s:
         learned = sorted(s for s in incumbent if len(s) > 1)  # characters are never freed
         if spec['removal'] == 'related':
-            removed = related_removal(rng, learned, cfg['k'], adjacency(fit, incumbent, analyze, learned))
+            removed = related_removal(removal_rng, learned, cfg['k'], adjacency(fit, incumbent, analyze, learned))
         else:
-            removed = rng.sample(learned, min(cfg['k'], len(learned)))
+            removed = removal_rng.sample(learned, min(cfg['k'], len(learned)))
         fixed = [s for s in incumbent if s not in set(removed)]; fixset = set(fixed)
         top = [s for s in ranked if s not in fixset][:cfg['top']]
         extra = [s for s in rng.sample(pool, min(len(pool), cfg['random'] * 3)) if s not in fixset and s not in set(top)][:cfg['random']]
