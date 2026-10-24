@@ -356,3 +356,9 @@ fit, and reaches p95 165, but fails on the median and the fraction (20 programs 
 The tail-weighted and flat arms reach the identical dictionary through the same 2 moves: dev-val 8,283 actions (−2),
 0 programs worse, p95 unchanged at 195. The single-character fraction rises by 0.012 points, so the frozen fraction
 check fails. Item 43 stays the current best. Its LNS neighbourhood looks nearly exhausted under the caps.
+
+**New current best by a small margin: fixed-order capped repair from item 43** ([lexfrac-v1](lexfrac-v1/README.md),
+dev-val 100). Both arms reach the identical dictionary: 8,283 dev-val actions (−2), 2 programs better and 0 worse,
+single-character fraction 49.542% → 49.505%. It passes every frozen gate, so it is selected (flat, on the name tie).
+The lexicographic C objective made no difference. The fraction gain over item 48's equal-N result comes from the
+fixed universe ID order, through canonical tie-breaking. The M1 gaps are unchanged in substance.
