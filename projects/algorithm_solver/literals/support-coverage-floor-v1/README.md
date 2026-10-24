@@ -58,3 +58,20 @@ qualification; item 23's later unchanged-source exit 137 remains separate.
 No source execution, M1, semantic-reuse, minimum-support, global dual-optimality,
 current-best change or promotion claim follows. See the [review](REVIEW.md) for
 lineage, bounded execution and the record-only audit.
+
+## 2026-10-24 later cross-record coverage witness: minimum budget exactly three
+
+[Item 59's public-lineage audit](../support-budget-feasibility-v1/README.md)
+combines the item 56 lower bound with the existing exact-hash item 13 covering
+seeds. Item 50 verifies those 256-entry seeds are subsets of the same old pools;
+item 56 finds only three one-owner pool entries. Each seed thus uses at most
+three, while the floor forces at least three. **The minimum feasible one-owner
+budget under capacity 256 is exactly three**, and the same seeds witness every
+at-most-k covering class for k>=3.
+
+This resolves coverage using additional cross-record witness evidence; the
+item 56 floor alone still proves only necessity. Earlier floor-only uncertainty
+statements are superseded by this later inference. The vacuity at k=0,1,2 is
+unchanged. C/N<=10% remains unresolved in the now-known nonempty classes k>=3;
+the existing witnesses do not achieve that fraction. No new private read,
+packet decode, source execution or qualification was performed.
