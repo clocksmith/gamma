@@ -4,6 +4,26 @@ Start here for source versions, experiments and the working literal languages.
 This is a navigation index over existing manifests and reports, not a second
 results ledger. Completed runs below retain their source, dictionary and execution identities.
 
+## Fixed spelling stack reaches its worker cap — 2026-10-24
+
+[Item46](postfit-spelling-stack-v1/README.md) stops during fit at its frozen
+1,800-second anchor deadline. Last checkpoints span201/202/197 of300 fit IDs;
+no fit seal, validation, qualification or independent report was reached.
+All140 code and47 runtime pins remain unchanged. Failure retained, no restart,
+scientific verdict or promotion. [Evidence](postfit-spelling-stack-v1/evidence/incomplete.json).
+
+## Potential lift preserves conditional certificates — 2026-10-24
+
+[Item50 proof and invented measurement](potential-lift-certificate-v1/README.md)
+extends old occurrence multipliers to all allowed substrings while preserving
+the path term. k0 retains the old positive bound after exact identity replay;
+no corpus lift has yet run. Two invented fixtures complete in20.589seconds,
+with independent agreement on all514 support-budget rows. Repeated-entry work
+remains quadratic; no corpus ETA, witness or M1 claim follows.
+[Premeasurement design](potential-lift-certificate-v1/DRAFT.md),
+[review](potential-lift-certificate-v1/REVIEW.md),
+[measured receipt](potential-lift-certificate-v1/synthetic-results.json).
+
 ## Canonical fraction gains preserve every fit-program cap — 2026-10-24
 
 [Capped canonical exchanges](canonical-fraction-exchange-v1/README.md) reduce
