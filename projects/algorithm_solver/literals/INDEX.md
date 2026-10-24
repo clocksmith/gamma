@@ -4,6 +4,16 @@ Start here for source versions, experiments and the working literal languages.
 This is a navigation index over existing manifests and reports, not a second
 results ledger. Completed runs below retain their source, dictionary and execution identities.
 
+## Positive small-support fraction classes cannot cover the corpus — 2026-10-24
+
+[Item56](support-coverage-floor-v1/README.md) independently finds a necessary
+one-owner-entry floor of3 in both fixed300-source cohorts. Every positive50/53
+budget (0,1,2) is coverage-infeasible: those fraction exclusions are vacuous for
+covering dictionaries. The floor alone does not prove sufficiency at3 or reachability
+of10%. All43 code/20 runtime pins remain unchanged; production4.094s, replay6.869s.
+[Evidence](support-coverage-floor-v1/evidence/results.json),
+[review](support-coverage-floor-v1/REVIEW.md).
+
 ## Spelling transfer reduces character share; comparator unresolved — 2026-10-24
 
 [Item54](persistent-spelling-stack-v1/README.md) transfers fixed-dictionary
