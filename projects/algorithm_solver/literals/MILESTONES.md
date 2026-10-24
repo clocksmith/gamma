@@ -362,3 +362,9 @@ dev-val 100). Both arms reach the identical dictionary: 8,283 dev-val actions (â
 single-character fraction 49.542% â†’ 49.505%. It passes every frozen gate, so it is selected (flat, on the name tie).
 The lexicographic C objective made no difference. The fraction gain over item 48's equal-N result comes from the
 fixed universe ID order, through canonical tie-breaking. The M1 gaps are unchanged in substance.
+
+**Larger nonregression neighbourhoods from item 43** ([widenbhd-v1](widenbhd-v1/README.md), dev-val 100): no new
+current best. k = 80 with 600 s repairs gives a successor of item 43 (8,283 actions, 0 worse). It ties item 51 on
+actions with a slightly higher fraction (49.530% vs 49.505%), so the record-time replacement has no eligible
+candidate. k = 120 accepted nothing: all 5 repairs hit the 600 s limit. Item 43's region looks close to a local
+optimum for capped exact repairs at these budgets.
