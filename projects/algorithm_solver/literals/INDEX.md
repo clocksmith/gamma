@@ -30,9 +30,12 @@ scientific retry, item46 rescue or promotion.
 
 [Item53 mathematical design](potential-tightening-v1/README.md) proves that
 removing old-edge slack preserves path potentials and weakly improves every
-support-budget bound over item50. Independent proof review and three invented
-oracle tests pass. No corpus input, numerical gain, unrestricted optimum or
-M1 exclusion is claimed.
+support-budget bound over item50. Independent proof review and supplied-input oracles pass. A single pinned
+invented measurement completes in15.997seconds, independently matching both
+257-row curves for each fixture. Strict integer gains appear at257 and253
+budgets, respectively; worker peak RSS587,508KiB. This is no corpus gain,
+unrestricted optimum or M1 exclusion. [Measurement](potential-tightening-v1/synthetic-results.json)
+and [review](potential-tightening-v1/REVIEW.md).
 
 ## Fixed spelling stack reaches its worker cap — 2026-10-24
 
