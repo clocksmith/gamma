@@ -25,6 +25,21 @@ if __name__ == '__main__':
 import binding as b
 
 
+def failure_guard(deadline):
+    remaining = deadline-time.monotonic()
+    if remaining <= 0: raise HardDeadline('cohort failure publication deadline')
+    signal.setitimer(signal.ITIMER_REAL, remaining)
+
+
+def withdraw_worker(folder, failure, deadline):
+    failure_guard(deadline)
+    try: (folder/'results.json').unlink(missing_ok=True)
+    except Exception: pass
+    failure_guard(deadline)
+    b.write(folder/'failure.json', failure)
+    failure_guard(deadline)
+
+
 def arm(cohort, work, output, deadline):
     started = BOOT if __name__ == '__main__' else time.monotonic()
     signal.signal(signal.SIGALRM, expired)
@@ -63,13 +78,11 @@ def arm(cohort, work, output, deadline):
         assert time.monotonic() < deadline
     except BaseException as error:
         if writable:
-            signal.setitimer(signal.ITIMER_REAL, 10)
-            try:
-                (folder/'results.json').unlink(missing_ok=True)
-            finally:
-                b.write(folder/'failure.json', {'complete': False, 'validation_loaded': False,
-                        'phase': phase, 'exception': type(error).__name__,
-                        'seconds': time.monotonic()-started, 'partial_certificates_promoted': False})
+            emergency_deadline = min(time.monotonic()+10, deadline+10)
+            withdraw_worker(folder, {'complete': False, 'validation_loaded': False,
+                'phase': phase, 'exception': type(error).__name__,
+                'seconds': time.monotonic()-started, 'partial_certificates_promoted': False},
+                emergency_deadline)
         raise
     finally:
         signal.setitimer(signal.ITIMER_REAL, 0)

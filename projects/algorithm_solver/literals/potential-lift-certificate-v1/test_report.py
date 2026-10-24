@@ -232,8 +232,14 @@ class ReporterTests(unittest.TestCase):
             value = replace(path, target)
             if path.name == 'REPORT.md.pending': raise report.HardDeadline('after prose')
             return value
-        with patch.object(Path, 'replace', after_prose):
-            with self.assertRaises(report.HardDeadline): report.publish(self.f.output, result)
+        previous = signal.signal(signal.SIGALRM, report._expired)
+        try:
+            signal.setitimer(signal.ITIMER_REAL, 1)
+            with patch.object(Path, 'replace', after_prose):
+                with self.assertRaises(report.HardDeadline): report.publish(self.f.output, result)
+        finally:
+            signal.setitimer(signal.ITIMER_REAL, 0)
+            signal.signal(signal.SIGALRM, previous)
         self.assertFalse((self.f.output/'results.json').exists())
         self.assertFalse((self.f.output/'REPORT.md').exists())
         report.withdraw(self.f.output, report.HardDeadline('supervisor failure phase'))
@@ -249,6 +255,46 @@ class ReporterTests(unittest.TestCase):
         self.assertFalse((self.f.output/'results.json').exists())
         report.withdraw(self.f.output, OSError('supervisor failure phase'))
         self.assertFalse(report.read(self.f.output/'results.json')['complete'])
+
+    def test_worker_failure_unlink_deadline_prevents_failure_write(self):
+        target = self.f.output/'R.json'
+        previous = signal.signal(signal.SIGALRM, report._expired)
+        try:
+            with patch.object(Path, 'unlink', side_effect=lambda **_: time.sleep(.2)), \
+                 patch.object(report, 'write') as write:
+                with self.assertRaises(report.HardDeadline):
+                    report.withdraw_worker(target, {'complete': False}, time.monotonic()+.02)
+                write.assert_not_called()
+            with patch.object(report, 'write') as write, patch.object(Path, 'unlink') as unlink:
+                with self.assertRaises(report.HardDeadline):
+                    report.withdraw_worker(target, {}, time.monotonic()-.01)
+                unlink.assert_not_called(); write.assert_not_called()
+        finally:
+            signal.setitimer(signal.ITIMER_REAL, 0)
+            signal.signal(signal.SIGALRM, previous)
+
+    def test_expired_owner_alarm_skips_unguarded_local_unlink(self):
+        class OwnerDeadline(BaseException): pass
+        (self.f.output/'results.json').write_text('{"complete": true}')
+        (self.f.output/'REPORT.md').write_text('stale success')
+        def expired(*_): raise OwnerDeadline('one-shot owner deadline')
+        previous = signal.signal(signal.SIGALRM, expired)
+        try:
+            with patch.object(report, 'markdown', side_effect=lambda _: time.sleep(.2)), \
+                 patch.object(Path, 'unlink') as unlink:
+                signal.setitimer(signal.ITIMER_REAL, .02)
+                with self.assertRaises(OwnerDeadline):
+                    report.publish(self.f.output, {'complete': True})
+                self.assertEqual(signal.getitimer(signal.ITIMER_REAL)[0], 0)
+                unlink.assert_not_called()
+            # The owner, not publish(), now establishes the failure-I/O guard.
+            signal.setitimer(signal.ITIMER_REAL, .5)
+            report.withdraw(self.f.output, OwnerDeadline('supervisor failure phase'))
+            self.assertFalse(report.read(self.f.output/'results.json')['complete'])
+            self.assertIn('no verdict', (self.f.output/'REPORT.md').read_text())
+        finally:
+            signal.setitimer(signal.ITIMER_REAL, 0)
+            signal.signal(signal.SIGALRM, previous)
 
     def test_foreign_hard_deadline_during_failure_write_stops_later_io(self):
         class OwnerDeadline(BaseException): pass
