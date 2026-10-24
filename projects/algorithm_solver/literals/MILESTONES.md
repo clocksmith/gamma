@@ -351,3 +351,8 @@ item 24), with 21 programs better and 0 worse. The median stays at 61.5 selectio
 single-character fraction goes 49.60% → 49.54%. It passes every frozen gate. The matched uncapped model gains more on
 fit, and reaches p95 165, but fails on the median and the fraction (20 programs worse). The M1 gates of median 32, p95
 96 and 10% remain far off.
+
+**Tail-weighted nonregression repair from item 43** ([tailcap-v1](tailcap-v1/README.md), dev-val 100): no successor.
+The tail-weighted and flat arms reach the identical dictionary through the same 2 moves: dev-val 8,283 actions (−2),
+0 programs worse, p95 unchanged at 195. The single-character fraction rises by 0.012 points, so the frozen fraction
+check fails. Item 43 stays the current best. Its LNS neighbourhood looks nearly exhausted under the caps.
