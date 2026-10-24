@@ -76,6 +76,14 @@ def load_seed(work, c, part):
     return vocab, order, allsrc
 
 
+def keep_exactly(model, capacity):
+    """AMENDMENT-1: make the budget row an equality for the drop (keep exactly `capacity` learned entries). With no caps and no
+    ratio row, capped.build's budget row is the model's last row."""
+    assert model['cap_rows'] == 0 and model['upper'][-1] == capacity and model['lower'][-1] == -float('inf')
+    model['lower'][-1] = capacity
+    assert model['matrix'][[-1], :] @ model['start'] == capacity, 'the warm start must keep exactly capacity entries'
+
+
 def arm_run(a, c):
     os.sched_setaffinity(0, {int(x) for x in a.cores.split(',')})
     import numpy as np
@@ -115,8 +123,9 @@ def arm_run(a, c):
     warm = ordered(uidx, chars + seed_learned[:capacity])
     started = time.monotonic()
     model = capped.build(fit, chars, seed_learned, capacity, warm, None, None, M)
+    keep_exactly(model, capacity)
     chosen, solver = capped.solve(model, seed_learned, True, a.smoke or c['drop_seconds'], seed=cfg['seed'])  # a smoke caps the drop too
-    assert solver['feasible'] and len(chosen) <= capacity
+    assert solver['feasible'] and len(chosen) == capacity, 'the drop must keep exactly capacity learned entries'
     incumbent = ordered(uidx, chars + chosen); cur_nc = nc(incumbent); costs = {p: v[0] for p, v in cur_nc.items()}
     n_path = int((solver['objective'] + TOL) // M)
     assert sum(costs.values()) <= n_path + TOL and (not solver['optimal'] or abs(sum(costs.values()) - n_path) <= TOL)

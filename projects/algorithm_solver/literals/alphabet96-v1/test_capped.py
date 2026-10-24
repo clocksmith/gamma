@@ -71,10 +71,20 @@ class JsRatioTests(unittest.TestCase):
                 return n
             best_n = min(lexcost(sub) for sub in itertools.combinations(learned, cap))
             warm = fixed + learned[:cap]
-            chosen, rec = capped.solve(capped.build(texts, fixed, learned, cap, warm, None, None, M), learned, True, 30.)
-            self.assertTrue(rec['optimal']); self.assertLessEqual(len(chosen), cap)
+            m = capped.build(texts, fixed, learned, cap, warm, None, None, M); run.keep_exactly(m, cap)
+            chosen, rec = capped.solve(m, learned, True, 30.)
+            self.assertTrue(rec['optimal']); self.assertEqual(len(chosen), cap)
             self.assertEqual(round(rec['objective']) // M, best_n)
             self.assertEqual(sum(costs(texts, fixed + chosen).values()), best_n)
+
+    def test_drop_keeps_exactly_capacity_with_useless_entries(self):
+        texts = {1: 'abab', 2: 'abc'}; fixed = list('abc'); learned = ['ab', 'zz', 'qq', 'bc']  # zz, qq occur nowhere
+        for cap in (1, 2, 3):
+            warm = fixed + learned[:cap]
+            m = capped.build(texts, fixed, learned, cap, warm, None, None, 1000); run.keep_exactly(m, cap)
+            for w in (True, False):
+                chosen, rec = capped.solve(m, learned, w, 30.)
+                self.assertTrue(rec['optimal']); self.assertEqual(len(chosen), cap); self.assertIn('ab', chosen)
 
     def test_fixed_universe_order(self):
         text = 'abcd'; v1 = ['a', 'b', 'c', 'd', 'abc', 'ab', 'cd']; v2 = ['a', 'b', 'c', 'd', 'ab', 'cd', 'abc']
