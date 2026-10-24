@@ -32,3 +32,17 @@ supervisor SHA256:
 `901eb7849f94a60540519f395d072ffdfb819e527695968abfe1dd49ce89d3a0`.
 No original-fit claim follows from this accepted invented observation. Component
 intent is preserved; no boundary change or modification of frozen ancestors.
+
+## 2026-10-24: original-fit execution record
+
+Root and independent stable-wrapper audits found no blocker;18 focused checks
+passed. Claude approved freeze1bfc35bc6 before activatione1bd83ebd. Exact active
+contract1b01460f48b880c4ddd2810cf82fca74a19ea93a7bf9424c12c02e6062105c42.
+Both phases completed with zero integer exits and cleanup before publication.
+Every109code/23runtime pin was rechecked unchanged. Public result SHA256:
+`bda50970d789f8c93d00a9cc5e0dbc6debdf45ea74b3198fc1b91cccf2e2fcbd`.
+Every257 raw charge and integer bound equals57 in both original cohorts.
+The preserved result is null; no attribution to an untested combined method.
+61 is separately shown descriptively, not retrofitted into60 predictions.
+Private proof vectors/identities remain private; public artifacts are hashes,
+aggregates, numerical curves and receipts. Intent preserved, no boundary change.
