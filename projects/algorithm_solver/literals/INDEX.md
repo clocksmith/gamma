@@ -4,6 +4,16 @@ Start here for source versions, experiments and the working literal languages.
 This is a navigation index over existing manifests and reports, not a second
 results ledger. Completed runs below retain their source, dictionary and execution identities.
 
+## Existing dictionaries attain the minimum one-owner budget of three — 2026-10-24
+
+[Item59](support-budget-feasibility-v1/README.md) joins accepted public13/50/56
+identities: existing256-entry dictionaries cover both original300-source
+cohorts, are subsets of pools containing only3 one-owner entries, and attain
+56's necessary floor3. Thus the minimum feasible support budget is exactly3;
+every at-most-k class for k>=3 is nonempty. No such class is yet proved to reach
+10% character share. This is a public-record inference with zero new private
+reads, decoding or qualification. [Lineage](support-budget-feasibility-v1/evidence/public-lineage.json).
+
 ## Positive small-support fraction classes cannot cover the corpus — 2026-10-24
 
 [Item56](support-coverage-floor-v1/README.md) independently finds a necessary
