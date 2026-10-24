@@ -11,3 +11,24 @@ Both the joint inequality and57's inequality apply to the same actual one-owner 
 Six focused checks passed in0.114seconds. Independent tiny oracles check every covering dictionary/path, interval schedule and owner allocation, plus18deterministic random pools. The strict fixed53example has a covering witness attaining16 after57's bound−22. The shared-coupling example exercises the necessary minimum with57. Additional cases cover repeated occurrences, shared singleton support, zero/tied weights, capacity0/excess, finite counts, missing/negative/bool penalties, no full-graph path and optimized-Python rejection. Syntax and links were checked; no broad suite or complexity measurement was run.
 
 The prototype materializes explicit substring occurrences and strings, with potentially quadratic occurrences and cubic substring-byte storage. Its test timing is development evidence only. The separately named next-design document introduces no production code or measured result. Gamma intent is preserved: named conditional targets, exact paid entries, reproducible small oracles and no unsupported scientific or promotion claim.
+
+## 2026-10-24: paired implementation and measurement review
+
+Root reviewed production local-weight accumulation/full all-arc forward DP and
+independent fresh AC/local full sorting/backward schedule. Their allocation
+implementations differ (next-marginal heap versus repeated owner scan) and all
+scientific fields agree. Shared33 structural index and inherited57/53 kernels
+are declared dependencies, not wholly independent implementations. Every
+production57/60 forward recurrence is separately verified by the checker.
+Eight production, eight checker and13 tiny lifecycle checks passed; six proof
+checks make the measured oracle suite22. Prior accepted output preservation,
+absolute cleanup deadlines and blocked failure I/O have focused coverage.
+
+Claude approved the pinned protocol a1fc7c5ed before launch. All49code/12runtime
+pins stayed unchanged. The two exact fixed fixtures independently reconcile
+all50/53/57/60 curves and historical commitments. Result SHA256:
+`3e4a63a79cf6b819d7e1a0bddd5d2696c93bc41b43958bf38b5506fe63bd7bf6`;
+supervisor SHA256:
+`901eb7849f94a60540519f395d072ffdfb819e527695968abfe1dd49ce89d3a0`.
+No original-fit claim follows from this accepted invented observation. Component
+intent is preserved; no boundary change or modification of frozen ancestors.
