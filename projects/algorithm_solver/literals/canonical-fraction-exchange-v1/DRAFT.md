@@ -1,7 +1,8 @@
 # Item 47: canonical fraction exchange with per-program seed caps
 
-Design and supplied-input proof only. No runner, binder, freeze, private input or
-launch is authorized here. The proposed two cohorts reuse item 40's fixed 300-fit
+Initial design and supplied-input proof; root subsequently authorized production
+preparation under the envelope below. [FREEZE.md](FREEZE.md) governs the pending
+implementation review. Private input and launch remain unauthorized until review. The proposed two cohorts reuse item 40's fixed 300-fit
 R/naming sources, exact bounded pools and measured 249-entry seed dictionaries.
 No validation or new qualification is proposed. Binding awaits a separate review.
 
@@ -204,5 +205,6 @@ Retain only an already fully search-rescored improvement if the soft search budg
 interrupts a sweep; report every omitted opportunity. A hard phase failure or
 independent replay failure yields no accepted witness and no retry. The proposed
 budget allows an intentionally incomplete neighborhood search, not a promised
-number of completed epochs. No production code, binder, freeze or launch is part
-of the present task; root/Claude review is still required for any such work.
+number of completed epochs. Root subsequently approved production wrapper, binder and freeze preparation
+under this exact envelope. No private inputs, activation or launch precede the
+separate root/Claude review; the measured prototype files remain unchanged.
