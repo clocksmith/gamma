@@ -28,13 +28,40 @@ def summary(rows, ids, db):
             'package_bytes': db + sum(rows[str(p)]['packet_bytes'] for p in ids)}
 
 
+def invariant_violation(recon):
+    """The nonregression caps are the experiment's invariant: a completed arm with any fit program worse is rejected."""
+    return {'fit_programs_worse_than_start': recon['fit_programs_worse_than_start']} if recon['fit_programs_worse_than_start'] > 0 else None
+
+
+def record_time_comparison(path, arm, s, rows, val_ids, sha_expected):
+    """Incremental predicates against the current best recorded at THIS stage's record time (AMENDMENT-1).
+    Returns None (replacement unresolved) unless the comparator's evidence is hash-bound and carries compatible
+    per-program validation actions and aggregates."""
+    try:
+        raw = Path(path).read_bytes(); assert sha(raw) == sha_expected
+        cb = json.loads(raw)['arms'][arm]; v = cb['validation']
+        crow = {str(p): {'actions': cb['per_problem_validation_actions'][str(p)]} for p in val_ids}
+        cs = {'actions': v['actions'], 'median': v['median'], 'p90': v['p90'], 'single_character_fraction': v['single_character_fraction'],
+              'package_bytes': v['package_bytes']}
+        assert cs['actions'] == sum(r['actions'] for r in crow.values())
+    except Exception as ex:
+        return {'resolved': False, 'reason': f'{type(ex).__name__}: {ex}'[:200]}
+    pr = paired(rows, crow, val_ids)
+    checks = {'fewer_actions': s['actions'] < cs['actions'], 'median_not_worse': s['median'] <= cs['median'], 'p90_not_worse': s['p90'] <= cs['p90'],
+              'fraction_not_higher': s['single_character_fraction'] <= cs['single_character_fraction'], 'worsened_25': pr['worse'] <= 25,
+              'package_105': s['package_bytes'] <= 1.05 * cs['package_bytes']}
+    return {'resolved': True, 'evidence': str(path), 'arm': arm, 'evidence_sha256': sha_expected, 'paired': pr, 'checks': checks, 'passes': all(checks.values())}
+
+
 def paired(a, b, ids):
     d = [a[str(p)]['actions'] - b[str(p)]['actions'] for p in ids]
     return {'better': sum(x < 0 for x in d), 'same': sum(x == 0 for x in d), 'worse': sum(x > 0 for x in d)}
 
 
 def main():
-    ap = argparse.ArgumentParser(); ap.add_argument('--work', type=Path, required=True); ap.add_argument('--run', type=Path, required=True); a = ap.parse_args()
+    ap = argparse.ArgumentParser(); ap.add_argument('--work', type=Path, required=True); ap.add_argument('--run', type=Path, required=True)
+    ap.add_argument('--record-time-best', type=Path, help='evidence of the current best recorded at record time, if not item 43')
+    ap.add_argument('--record-time-arm'); ap.add_argument('--record-time-sha256'); a = ap.parse_args()
     c = succ.contract(); res = json.loads((a.run / 'results.json').read_text())  # verifies code, runtime and parent hashes first
     assert res['contract_sha256'] == sha((HERE / 'contract.json').read_bytes())
     parent = json.loads((LIT / 'cost-decomposition-v1/contract.json').read_text()); fit_ids, val_ids = parent['partition']['dev_fit'], parent['partition']['dev_val']
@@ -101,6 +128,9 @@ def main():
                      feasible_moves=sum(m['feasible'] for m in mv), optimal_moves=sum(m['optimal'] for m in mv),
                      statuses={str(x): sum(m['model_status'] == x for m in mv) for x in sorted({m['model_status'] for m in mv})})
         assert all(recon[k] == arm[k] for k in recon), {k: (recon[k], arm[k]) for k in recon if recon[k] != arm[k]}
+        bad = invariant_violation(recon)
+        if bad:
+            out['failed_arms'][name] = {'nonregression_invariant_violated': bad}; continue
         assert all(m['warm'] and m['feasible'] for m in mv)  # both arms are warm-started; a lost incumbent fails closed
         pr_r, pr_s = paired(rows, r_rows, val_ids), paired(rows, seed_rows, val_ids)
         ready = {'actions_5pct': s['actions'] <= 0.95 * out['pinned_R']['actions'], 'median_lower': s['median'] < out['pinned_R']['median'],
@@ -142,6 +172,14 @@ def main():
     out['selected_successor'] = min(cands, key=rank) if cands else None
     best = [k for k in cands if out['arms'][k]['new_current_best']]
     out['selected_new_current_best'] = min(best, key=rank) if best else None
+    # AMENDMENT-1: replacing the M1-GAP current-best row also needs the record-time best, if it is not item 43.
+    if a.record_time_best is None:
+        out['record_time_best'] = {'comparator': 'item 43 nonregress (the frozen comparator)', 'replacement_allowed': out['selected_new_current_best'] is not None}
+    else:
+        sel_arm = out['selected_new_current_best']
+        cmp = (record_time_comparison(a.record_time_best, a.record_time_arm, out['arms'][sel_arm]['validation'], replays[sel_arm], val_ids, a.record_time_sha256)
+               if sel_arm else None)
+        out['record_time_best'] = {'comparison': cmp, 'replacement_allowed': bool(cmp and cmp.get('resolved') and cmp['passes'])}
     (HERE / 'evidence').mkdir(exist_ok=True); (HERE / 'evidence/results.json').write_text(json.dumps(out, indent=1, sort_keys=True) + '\n')
     for k, v in out['arms'].items():
         if 'validation' not in v: print(k, 'coverage failure', v['coverage']); continue
