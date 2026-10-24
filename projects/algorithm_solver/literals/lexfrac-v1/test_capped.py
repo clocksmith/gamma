@@ -52,6 +52,24 @@ class CappedTests(unittest.TestCase):
                 self.assertEqual(sum(got.values()), want)
                 self.assertEqual(round(rec['objective']), want)
 
+    def test_fixed_universe_order_preserves_canonical_ties(self):
+        sys.path[:0] = [str(Path(__file__).resolve().parent.parent / d) for d in ('breadth-lns-v1', 'lagrange-select-v2', 'cost-decomposition-v1', '.', 'pass2/working')]
+        import run
+        # Regression: the same entry set in two orders gives different canonical C, because ID order breaks equal-N ties.
+        text = 'abcd'
+        v1 = ['a', 'b', 'c', 'd', 'abc', 'ab', 'cd']; v2 = ['a', 'b', 'c', 'd', 'ab', 'cd', 'abc']
+        chars = lambda v: sum(len(v[i]) == 1 for i in analyze.shortest_encode(text, v))
+        self.assertNotEqual(chars(v1), chars(v2))  # the hazard the fixed order removes
+        universe = ['a', 'b', 'c', 'd', 'abc', 'zz'] + sorted(['ab', 'cd', 'qq'])  # seed order, then sorted non-seed entries
+        uidx = {s: i for i, s in enumerate(universe)}
+        # A freed-and-reselected entry, or a different construction order, still serializes identically.
+        self.assertEqual(run.ordered(uidx, v1), run.ordered(uidx, v2))
+        self.assertEqual(run.ordered(uidx, ['cd', 'a', 'abc', 'b', 'ab', 'd', 'c']), ['a', 'b', 'c', 'd', 'abc', 'ab', 'cd'])
+        # New (non-seed) entries follow the seed entries in sorted order.
+        self.assertEqual(run.ordered(uidx, ['qq', 'ab', 'a']), ['a', 'ab', 'qq'])
+        with self.assertRaises(AssertionError):
+            run.ordered(uidx, ['a', 'outside'])
+
     def test_lexicographic_n_then_c_matches_exhaustive(self):
         rng = random.Random(51)
         for trial in range(30):
