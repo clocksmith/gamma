@@ -92,3 +92,48 @@ see [review](REVIEW.md). This is prelaunch preparation, with no original66
 input opened and no corpus result. A pushed exact pending inventory, Claude
 cross-review and exact activation precede execution. The29 focused checks do
 not establish original-fit acceptance, performance or M1 qualification.
+
+
+## 2026-10-24 original-fit result: no gain over required-owner bound
+
+The [frozen original-nine run](FREEZE.md) and independent replay both accepted.
+The combined min(T61,G) exactly equals61 at every defined budget in both
+cohorts. The global bound never wins or ties: required-owner is active at all
+254 defined budgets per cohort. Budgets0–2 remain empty/null.
+
+| Cohort | Combined k3 | Largest positive k | Combined k256 | Standalone global bound |
+| --- | ---: | ---: | ---: | ---: |
+| R | 13349 | 9 | -26872 | -43319 |
+| naming | 6011 | 4 | -27652 | -43955 |
+
+Both global minimizers are uniquely index8, lambda128000000. R global charge
+136854529835 splits into32768000000 entry charge and104086529835 residual;
+naming122011140578 splits into32768000000 and89243140578. Positive pricing
+improves standalone unpriced bounds by23386/20252 integer units, yet remains
+weaker than61 everywhere. Neither interior selection nor this null establishes
+grid adequacy, impossibility of a better certificate, or an attainable10% witness.
+The large-budget63 bounds remain stronger than this66 headline.
+
+P1 is true; P2–P5 are false. All original28/50/53/57 commitments, fresh56/61
+coverage/allocation, global multiplicities, every baseline/unpriced/15-price
+numeric and Boolean recurrence, and all257 rows were independently reconciled.
+The fixed global family adds no original-fit support exclusion beyond61's
+at-most9 one-owner entries for R and4 for naming. Item59 establishes those
+classes are nonempty; full256 remains inconclusive.
+
+Production/report supervisor times were74.126217/131.616489seconds, both with
+strict integer exit codes[0,0]. Result collection clocks73.511096/119.787420
+are distinct from supervisor envelopes. Production workers took61.462078 and
+71.723893seconds; independent workers115.553280 and119.206804seconds. Their
+peak RSS values were577248/561612KiB and1138168/1117772KiB respectively,
+separate process peaks. Cleanup took0.000115/0.000129seconds. All134 code,
+23 runtime and33 public pins remained unchanged.
+
+See byte-exact [results](evidence/results.json), [report](evidence/REPORT.md),
+[production supervisor](evidence/production-supervisor.json) and
+[report supervisor](evidence/report-supervisor.json). Result SHA256:
+`e48231b33ee34aa90111c08254eed30a18ba64e5336cfe015c73dd660f637625`.
+Root and a separate reviewer checked receipts, hashes, every public row and
+price-component arithmetic without rerunning kernels. No dictionary, source,
+qualification, validation, protected, M1 or current-best change. Component
+intent and publication/admission boundaries remain preserved.

@@ -108,3 +108,15 @@ unchanged. These29 focused checks establish development behavior only. No
 original input stat/open or size probe occurred. Root approves public-only
 pending preparation. Claude must review the pushed FREEZE before exact
 activation and fresh original-input production/report phases on6/7.
+
+
+## 2026-10-24 original-fit acceptance review
+
+Root and an independent auditor verified the active contract, unchanged134
+code/23 runtime/33 public pins, complete production/report receipts and strict
+zero exits. Every30 price row and514 combined row was recomputed from sanitized
+metadata. Both global minimizers are unique index8; all254 defined budgets
+per cohort select required-owner. Every headline and prediction agrees with
+that result. Byte-exact public receipts exclude private sources, entries,
+owner identities and vectors. The null is specific to this fixed price family
+and original fit inputs; no broader optimality or M1 conclusion follows.

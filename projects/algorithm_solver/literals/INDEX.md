@@ -865,6 +865,13 @@ recorded pass3 results above; it is not that proposed language.
 
 [Item66](global-entry-price-cap-v1/README.md) completes in169.305seconds with20oracles and exact independent replay. Full256 bounds improve -57362→-2265 on paired75k and -151368→-13900 on repeated12k; positive ranges unchanged. Paired uses positive price, repeated selects zero. No original-fit or fullclass exclusion claim.
 
+## 2026-10-24: original global-price family adds no bound
+
+[Item66](global-entry-price-cap-v1/README.md) accepted with full fresh replay:
+all defined rows equal61, k*9R/4naming and full256 -26872/-27652. Standalone
+G selects price128000000 but stays weaker at -43319/-43955. No additional
+support exclusion, witness, current-best or M1 change.
+
 ## Maintenance rules
 
 Add a short row and links when a scoped experiment closes; update current status
