@@ -4,6 +4,25 @@ Start here for source versions, experiments and the working literal languages.
 This is a navigation index over existing manifests and reports, not a second
 results ledger. Completed runs below retain their source, dictionary and execution identities.
 
+## Fraction gains trade away canonical compactness — 2026-10-24
+
+[Direct coverage-preserving exchanges](direct-fraction-exchange-v1/README.md)
+replay 13,800 packet views and improve F in both fixed-300 cohorts. Canonical
+character shares fall to 47.82% R and 43.85% naming, but minimum selections rise
+1,132/1,167, with worse median and p95. No 10% witness or M1 promotion.
+[Freeze](direct-fraction-exchange-v1/FREEZE.md),
+[review](direct-fraction-exchange-v1/REVIEW.md),
+[canonical policy note](direct-fraction-exchange-report-v1/CANONICAL-REPORTING-NOTE.md).
+
+## Joint dual ascent retains its zero baseline — 2026-10-24
+
+[Sixteen-point joint ascent](joint-dual-ascent-v1/README.md) completes both
+trajectories; independently verified best bounds remain −23,660/−23,655 at q=0.
+The finite negative trajectory does not bound the joint-dual optimum from above
+or exclude a stronger certificate, M1, or a 400/500 population.
+[Freeze](joint-dual-ascent-v1/FREEZE.md),
+[review](joint-dual-ascent-v1/REVIEW.md).
+
 ## Naming reduces character share without an atomic gain — 2026-10-24
 
 [Atomic spelling/entry comparison](atomic-naming-entry-v1/README.md) independently
