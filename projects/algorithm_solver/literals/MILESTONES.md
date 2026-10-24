@@ -393,7 +393,7 @@ single-character fraction at or below the anchor:
 
 All incremental checks pass. Readiness against R still needs 5% (w8 reaches 3.7%), so there is no successor.
 
-**Python: item 69's dictionaries are a plateau** ([python-ratiocap-v2](python-ratiocap-v2/README.md)). Continuing
-item 69's matched repair from its best dictionaries, with a fresh LNS seed, changed nothing on validation: the ratio
-arms accepted 0 moves, and the lex arms made one tiny fit move each. The gap to R readiness (at least 13 actions at w8,
-at least 46 at w7) will not close by continuing this method.
+**Python: no further validation gain from item 69's dictionaries** ([python-ratiocap-v2](python-ratiocap-v2/README.md)).
+Continuing item 69's matched repair with a fresh LNS seed changed nothing on validation in this frozen bounded run: the
+ratio arms accepted 0 moves, and the lex arms made one small fit move each. This is not an exhaustive local-optimum
+claim.
