@@ -4,6 +4,17 @@ Start here for source versions, experiments and the working literal languages.
 This is a navigation index over existing manifests and reports, not a second
 results ledger. Completed runs below retain their source, dictionary and execution identities.
 
+## Spelling transfer reduces character share; comparator unresolved — 2026-10-24
+
+[Item54](persistent-spelling-stack-v1/README.md) transfers fixed-dictionary
+spelling to actual24/43N/43W under both policies. Validation actions are unchanged;
+character selections fall87/87/94, with source bytes increasing435/435/470.
+All4,800 candidate packet views and6,776 checks on74 new hashes replay. The
+record-time51 comparison fails closed on a JSON-carrier identity defect;
+P1–P3 true, P4 unknown, no replacement verdict. Frozen implementation and both
+reports remain preserved. [Evidence](persistent-spelling-stack-v1/evidence/results.json),
+[diagnosis](persistent-spelling-stack-v1/evidence/comparator-audit.json).
+
 ## Fixed-potential slack removal leaves the positive endpoint unchanged — 2026-10-24
 
 [Item53](potential-tightening-v1/README.md) independently replays both full
