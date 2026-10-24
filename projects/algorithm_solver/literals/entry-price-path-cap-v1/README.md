@@ -30,3 +30,21 @@ run must supply both57/63 forward schedules and verify every recurrence and
 its checked flag/digest. These are development checks, not complexity evidence.
 A separate fixed-fixture measurement protocol is being prepared; no private
 input, timing run or corpus contract exists yet.
+
+## Accepted invented measurement
+
+The [single fixed-fixture measurement](SYNTHETIC-RESULT.md) completed in137.054628
+supervisor seconds with19oracles and all49code/12runtime commitments unchanged.
+Paired75k is null at all257 budgets. Repeated12k improves65 raw/integer budgets,
+including k3 28459→29587, but k*=4 and fullk256−151368 stay unchanged. All price
+and historical schedule checks pass. No original-fit gain or runtime forecast
+follows; a separate original-input design is next.
+
+The grid's top is8192000000 in penalty units. It is a per-entry price; division
+by an entry's occurrence count gives the per-occurrence subtraction. It is not
+a claim to span every useful price or zero every residual. Public57 maximum
+owner path caps bound single-occurrence q and average W_e/m_e by8892964810R/
+7934232825naming. Thus the grid top covers that loose average upper bound for
+naming, but this argument cannot establish it forR. These public aggregates do
+not tightly bound m_e*max(q), which suffices to zero all of an entry's residuals.
+The family stays fixed; no pre-freeze private probe or grid adaptation is implied.
