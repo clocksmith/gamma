@@ -43,3 +43,14 @@ within-group divisor changes, real JSON transport and repaired-hash corruption
 are covered. Root and independent read-only reviews found no blocker. These
 checks establish supplied implementation behavior, not performance or original
 fit acceptance. A separate reviewed frozen invented measurement comes next.
+
+## Accepted invented measurement, 2026-10-24 (claude, after the restart)
+
+The [single invented measurement](SYNTHETIC-RESULT.md) was accepted in 423.40 s with all 21 oracles. All 257 budgets
+agree independently on both fixtures.
+- **Paired 75k is null:** no owner endpoint has n < m.
+- **Repeated 12k improves 35 budgets** (k = 1–35), with a peak integer gain of +771 at k = 12 and k3 going
+  29,587 → 29,808.
+- The largest positive budget (k = 4) and the full k256 bound of −151,368 are unchanged.
+
+No original-input result follows.
