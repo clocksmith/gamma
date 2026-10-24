@@ -11,3 +11,21 @@ Root read the proof and tests without a blocker. Reciprocal review found no math
 ## Scalable design review
 
 Root and separate read-only review checked the actual33 structural groups: unique laminar intervals, retained fully banned groups, internal terminal suffixes and the virtual-root equal interval case support the proposed parent/depth walk. Z histogram suffix sums count all overlapping within-owner occurrences; fresh support proves their global meaning for owner-only arcs. Independently accumulated forward recurrence right-hand sides plus initial zero prove every supplied vector. Retained price schedules/audits are O(KN); quotient cache O(KM), M<=G=O(N), with inherited baseline/index costs separate. Design approval permits supplied implementation and tiny tests only.
+
+## Supplied code review
+
+Root and read-only independent audit inspected both new kernels and their tiny
+oracles. Laminar width counts and independently reconstructed AC ownership/Z
+counts cover all allowed owner arcs, including zero penalties, overlap,
+terminal-prefix suffixes and banned structural groups. Every price has a full
+schedule, lambda0 equals57, and supplied forward recurrences are checked beside
+backward schedules. Heap versus complete stable marginal sorting yields the
+same finite allocation. Normalized digests survive actual JSON transport.
+
+A one-shot ban iterable could be consumed by the first of two contexts; both
+implementations now normalize bans/expected bans once, preserving shared
+iterator identity. Focused separate/aliased regressions pass. The independent
+review did not rerun author tests or inspect private data. New O(KN) state
+claims cover schedules/count metadata, while baseline proofs, AC/context and
+Index state remain separately charged. No full-process memory bound is inferred
+from that claim. Frozen theorem and ancestor files are unchanged.
