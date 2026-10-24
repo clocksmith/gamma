@@ -7,3 +7,7 @@ The [derivation](DRAFT.md), [explicit oracle](proof.py) and [exhaustive tiny tes
 A constructed coverable k1 example lowers the charge20→17 and raises the integer bound−4→−1. It demonstrates strictness on general fixed q, not positive certification, q53 strictness, optimal prices or corpus gains. Six focused tests passed in0.112 seconds. See the [review record](REVIEW.md).
 
 No scalable implementation, private input, benchmark, binder, pending contract, execution or promotion is authorized. Items60/61/62 remain separate mechanisms.
+
+## Supplied implementation design
+
+The [fixed-family design](DRAFT-NEXT.md) uses15 globally declared integer prices, laminar suffix-group occurrence counts in production and independent per-start Z histograms. Every price schedule and forward recurrence must reconcile. Root and independent review found no design blocker against the actual33 Index. Supplied kernels and tiny correctness checks may now be implemented; a separate reviewed invented measurement remains necessary before any corpus design. No private input or run is authorized.
