@@ -102,3 +102,27 @@ binding-test fixture, with no private60 carrier. Separate64MiB ancestral and
 256MiB retained read/write/hash boundaries, signed q, declared-root pre-stat
 checks, duplicate keys/scalars, exact activation and public prerequisites are
 covered. Root approves public-only pending preparation after these25 new checks.
+
+## Accepted original-fit evidence review
+
+Claude approved freeze3e4043eaa before exact activationf54f94c42. Both phases
+completed with integer exits[0,0] and no failure markers. Root rechecked active
+identity and all115 code/23 runtime commitments after completion. Independent
+report acceptance requires complete original science, every forward recurrence,
+count/cap/prefix agreement and exact public output reconciliation. Public result
+and supervisor files were copied byte-for-byte, with private proofs retained
+under the run root.
+
+The fullcapacity improvements are accepted but negative; positive support
+exclusion ranges are unchanged. All maximum-grid diagnostic counts are zero,
+which does not establish grid adequacy. Original-weight rank denominators and
+ties are explicit. The affine-versus-A diagnostic includes old lambda0 effects;
+it must not be relabelled as a count of new63 gains. Item61 is descriptive only.
+Current-best51, source qualification and M1 remain unchanged.
+
+A separate public-only audit reconciled every row, signed ceiling, raw/integer
+delta, strict interval, diagnostic sum and result hash. The record distinguishes
+zero maximum-price selections from absence of maximum-price tied minimizers;
+the stored smallest-index histogram establishes only the former. No other
+numerical or scope blocker remained. No private carrier was inspected by this
+publication reviewer.

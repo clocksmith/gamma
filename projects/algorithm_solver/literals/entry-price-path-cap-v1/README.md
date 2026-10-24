@@ -1,5 +1,65 @@
 # Item63: entry-price owner path caps
 
+## Accepted original-fit result, 2026-10-24
+
+The reviewed [freeze](FREEZE.md) at3e4043eaa and exact activationf54f94c42
+completed fresh production and independent replay from the original nine files.
+[Accepted evidence](evidence/results.json) and [generated report](evidence/REPORT.md)
+record P1=true, P2=false, P3=false, P4=true, P5=false. The result SHA256 is
+`89e875b6200902385af4775afd3d8ccdf558acbeb84fc5259bc206a7fb390aa5`.
+All115 code/23 runtime commitments stayed unchanged.
+
+| Cohort | 57 k3 | 63 k3 | Largest positive k, both | 57 k256 | 63 k256 | Strict raw/integer budgets |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| R | 6651 | 6651 | 8 | -26872 | -24549 | 240 (k17–256) |
+| naming | 119 | 119 | 3 | -27652 | -25172 | 247 (k10–256) |
+
+At fullcapacity, raw charges fall by2322818809 for R and2479856340 for naming
+at D=1000000, giving integer-bound gains2323 and2480. Both bounds remain
+negative, so the full256-entry 10% gate stays unresolved. The positive exclusion
+ranges do not grow. Descriptive item61 remains stronger at small owner budgets:
+k3=13349/6011 and largest-positive k=9/4. Its required-owner constraint is not
+part of63, and this record does not measure a combination.
+
+All257 paired rows, complete historical28/50/53/57 identities, every57/63
+forward recurrence, all price counts/caps/prefixes and independent allocation
+accepted. Item59 establishes nonempty at-most owner classes fromk3; numerical
+rowsk0–2 are coverage-vacuous. The scope is each fixed300 fit population,
+capacity256, all allowed exact substrings under global whole-source/body bans
+and paid singletons. It excludes neither arbitrary rewrites nor all fullcapacity
+dictionaries. No witness, new qualification, validation, M1 or current-best gain.
+
+The frozen diagnostic counts finite positive-original-weight owner ranks,
+including ranks not chosen by the final allocation. Nonzero prices minimize
+4323/76025 ranks for R and4167/76128 for naming; all are interior-grid choices.
+There are497/484 tied ranks. No rank selects the maximum price under the
+smallest-index tie rule; maximum-price ties are not separately identified. These are
+smallest-index tie choices, not proof of optimal prices or grid adequacy.
+The affine bound is below A at75725/75829 ranks, including the lambda0
+path-cap effect already available to57; that count is not all a new63 gain.
+
+[Production supervisor](evidence/production-supervisor.json) records51.347362
+seconds and [report supervisor](evidence/report-supervisor.json)135.021279,
+both with strict integer exits[0,0]. Workers used50.343405/48.970536 seconds
+in production and106.768535/127.286703 in report, with peak RSS538700/526532
+and796384/775276KiB respectively. Cleanup took0.000084/0.000100 seconds.
+These are named receipt clocks; result fields51.122416/127.703770 are earlier
+collection clocks, not replacements for supervisor elapsed time. The aggregate
+production carrier is104757028 bytes, within the predeclared256MiB new-carrier
+limit; original files retained their64MiB limit. No cap changed after opening.
+
+Twenty-five focused wrapper/binder/lifecycle checks preceded the freeze,
+including real JSON transport and deliberate corruption. Original13
+qualification is reused by exact source hashes; unchanged-source23 exit137
+remains separate. All measured code is now immutable. A required-owner
+combination or a changed price family needs a separate protocol. Item66's
+all-entry theorem and kernels remain a separate next investigation.
+
+## Earlier development stages
+
+The following sections retain their earlier scope and authorization statements;
+the accepted original-fit record above is the current status.
+
 Proof-only refinement of item57. Charging at most λ per used owner entry leaves a residual interval schedule; taking the minimum of these affine bounds and original activation prefixes preserves concavity and cannot weaken57.
 
 The [derivation](DRAFT.md), [explicit oracle](proof.py) and [exhaustive tiny tests](test_proof.py) use supplied nonnegative integer penalties and a finite integer lambda family containing0. They neither load corpus data nor choose prices.

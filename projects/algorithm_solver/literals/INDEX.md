@@ -853,6 +853,10 @@ recorded pass3 results above; it is not that proposed language.
 
 [Item66](global-entry-price-cap-v1/README.md) proves a globally paid entry-price cap. Seven tiny exhaustive checks and independent review pass; a coverable example improves charges80/60 to52 but leaves bound-58. No corpus or full256 certificate claim.
 
+## 2026-10-24: fixed owner entry prices improve large budgets
+
+[Item63](entry-price-path-cap-v1/README.md) accepted: full256 bounds rise -26872→-24549 for R and -27652→-25172 for naming, with240/247 strict budgets. Positive ranges stay8/3; no fullcapacity10% exclusion. Price diagnostics and exact fresh replay are retained. Currentbest51 unchanged.
+
 ## Maintenance rules
 
 Add a short row and links when a scoped experiment closes; update current status
