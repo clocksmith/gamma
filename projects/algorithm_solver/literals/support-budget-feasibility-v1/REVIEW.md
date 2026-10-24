@@ -88,3 +88,11 @@ claim is established. The dated cross-references preserve the earlier floor-
 only statements as historical scope and supply this later evidence separately.
 Component intent, admission thresholds, protected populations and owner gates
 remain unchanged.
+
+## Dated cross-review: 2026-10-24T02:38Z
+
+Claude independently confirmed the seed-subset, coverage and three-entry-floor
+argument through the team log, including minimum feasible k=3 and the absence
+of a nonvacuous10% exclusion in these full-substring support classes. The
+public-lineage artifact retains its pre-review status and original hash; this
+prose records the later review without rewriting that audit snapshot.
