@@ -24,3 +24,28 @@ Reviewers inspected those checks without rerunning them or opening private
 inputs. The unchanged tiny item57 oracle is shared for L and baseline charge;
 the item60 oracle appears only in the explicit comparison test. No scalable
 algorithm or production contract is approved by this record.
+
+## Supplied-kernel review
+
+Claude approved the theorem at04:23Z. Root and a separate reviewer inspected
+the supplied production/checker and their tests. Interval widths count global
+multiplicity; independent shared AC totals are reconciled with complete unique
+shared group/depth identities and every occurrence. Owner Z counts retain
+zero-q and overlapping occurrences. Exact trie-prefix lookup never follows
+failure links or restarts after a missing prefix, avoiding false shared matches
+and a new dense endpoint map. Inherited contexts remain separately charged.
+
+Every price vector and the separately constructed unpriced all-entry vector
+have complete forward recurrence audits against fresh backward schedules.
+The lambda0 identity is all-entry, as the tiny60 comparison confirms; explicit
+min(T57,G) establishes domination. Actual reconstructedq53 examples are compared
+to the tiny proof rather than assuming its general-q strict examples arise
+from those potentials. Shared count/stream/cap/price-row/vector corruptions and
+scalar/key changes are rejected. Actual production-to-JSON-to-checker tests
+cover capacities0/1/16/256 and all common fields and digests.
+
+Eight production checks passed0.177seconds; five checker checks passed0.281seconds;
+compile/import passed. Reviewers inspected but did not rerun tests or read private
+inputs. No mathematical, transport or authority blocker remains. The seven
+original theorem checks bring the prospective registered oracle inventory to20.
+A separately reviewed invented measurement still precedes any corpus protocol.
