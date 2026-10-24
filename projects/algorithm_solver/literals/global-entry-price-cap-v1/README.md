@@ -78,3 +78,17 @@ passed0.281seconds, including actualq53 tiny oracles, real JSON transport at
 B0/1/16/256 and all supplied recurrence/count/cap comparisons. Root and an
 independent reviewer found no blocker. There is no invented performance or
 original-input measurement yet, and no61 combination is silently included.
+
+## Original-input continuation prepared
+
+The [new design](DRAFT-CORPUS.md) and [execution freeze](FREEZE.md) explicitly
+combine the measured global cap with freshly reconstructed56 coverage and61
+required-owner allocation. The original nine files remain the only input set.
+All measured code is unchanged; every baseline/global/coverage recurrence and
+all257 combined rows must reconcile in fresh independent reporting.
+
+Twenty binding/lifecycle checks and nine invented integration checks pass;
+see [review](REVIEW.md). This is prelaunch preparation, with no original66
+input opened and no corpus result. A pushed exact pending inventory, Claude
+cross-review and exact activation precede execution. The29 focused checks do
+not establish original-fit acceptance, performance or M1 qualification.
