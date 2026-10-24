@@ -39,3 +39,15 @@ finite ties/zeros, B=0/r>B and the strict toy's 76/104/66 charges with
 N=12/C=10/F=88. It also inspected the exhaustive interval/allocation/dictionary/
 path checks. It did not rerun tests, edit files or read private inputs; this is
 independent mathematical/code review, not a second measured experiment.
+
+## Supplied-prefix allocation review
+
+Root and a separate read-only audit inspected allocation.py/test_allocation.py.
+No blocker: exact prefix clipping and all-cap relation, same shared finite
+lengths, mandatory baseline replacing g0, finite zero slots, stable ties,
+B0/r>B handling, rebuilt60/61 curves and pointwise dominance agree with the
+proof. Shared input validation/formula/row construction is disclosed; the
+heap and scan select residual marginals separately. Independent full tiny
+oracles test the shared formula. Six focused checks passed0.169seconds;
+the audit did not rerun them. No performance, source provenance, full graph
+independence or corpus claim follows. The new design waits its own freeze.
