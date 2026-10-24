@@ -4,6 +4,16 @@ Start here for source versions, experiments and the working literal languages.
 This is a navigation index over existing manifests and reports, not a second
 results ledger. Completed runs below retain their source, dictionary and execution identities.
 
+## Persistent parser preserves the invented trial trace — 2026-10-24
+
+[Item52](persistent-spelling-parser-v1/README.md) matches all four fixed blocks'
+semantic hashes and counts. Old end-to-end blocks take11.60/11.50seconds,
+persistent blocks0.54/0.54, with startup and cleanup charged. Observed concurrent
+RSS is higher for persistence. One invented comparison, no corpus estimate,
+scientific retry, item46 rescue or promotion.
+[Timing specification](persistent-spelling-parser-v1/TIMING-SPEC.md),
+[evidence](persistent-spelling-parser-v1/evidence/results.json).
+
 ## Tightening preserves every fixed-potential bound — 2026-10-24
 
 [Item53 mathematical design](potential-tightening-v1/README.md) proves that
