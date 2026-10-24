@@ -74,6 +74,13 @@ and k256, plus all257 curves in the machine-readable evidence. Label57 as
 context and60/61 as the predeclared component comparisons. Explicitly report
 whether naming's largest positive budget moves past4.
 
+Also retain sanitized per-split numerical charges and descriptive counts over
+j>=3: where the unconstrained joint60 charge is below57's split charge, where
+the required joint62 charge is below61's split charge, and where the combined
+split is strictly below each parent. Omit allocation choices and owner IDs.
+Equality of running-max curves can hide improvements at nonmaximizing splits;
+these observations belong inside the reviewed run, not a private preflight.
+
 - P1 required: exact inherited authority, fresh forced-set/recurrence checks,
   exact paired allocation, complete parent60/61 reconstruction and dominance.
 - P2 uncertain: a strict raw charge gain over61 at k3 in either cohort.
