@@ -14,7 +14,49 @@ HERE = Path(__file__).resolve().parent; LIT = HERE.parent
 spec = importlib.util.spec_from_file_location('seeded_repair_model', LIT / 'seeded-repair-v1/model.py')
 model26 = importlib.util.module_from_spec(spec); spec.loader.exec_module(model26)
 analyze = model26.analyze
-solve = model26.solve
+_h = model26.h  # the HiGHS binding item 26 already imports and pins
+
+
+def solve(model, candidates, warm, seconds, seed=260, integral_arcs=False):
+    """item 26's solve(), unchanged except that integral_arcs=True also declares every arc (flow) variable integer.
+
+    Item 26 leaves arc variables continuous and relies on the flow structure for integral paths. An aggregate ratio row
+    breaks that structure: the LP can mix paths (python-ratiocap-v1 AMENDMENT-1), so item 69 declares arcs integer in
+    every arm. All arc variables are bounded in [0, 1], so integer means binary.
+    """
+    if not integral_arcs:
+        return model26.solve(model, candidates, warm, seconds, seed)
+    import numpy as np
+    h = _h; started = time.monotonic(); m = model; matrix = m['matrix']; lp = h.HighsLp(); V = m['variables']; R = len(m['upper'])
+    lp.num_col_ = V; lp.num_row_ = R; lp.col_cost_ = m['cost']; lp.col_lower_ = np.zeros(V); lp.col_upper_ = np.ones(V); lp.row_lower_ = m['lower']; lp.row_upper_ = m['upper']
+    lp.a_matrix_.num_col_ = V; lp.a_matrix_.num_row_ = R; lp.a_matrix_.format_ = h.MatrixFormat.kColwise
+    lp.a_matrix_.start_ = matrix.indptr.astype(np.int32); lp.a_matrix_.index_ = matrix.indices.astype(np.int32); lp.a_matrix_.value_ = matrix.data
+    lp.integrality_ = [h.HighsVarType.kInteger] * V  # activations AND arcs integer
+    solver = h._Highs()
+    for key, value in {'output_flag': False, 'time_limit': float(seconds), 'mip_rel_gap': 0., 'threads': 1, 'random_seed': seed}.items():
+        assert solver.setOptionValue(key, value) == h.HighsStatus.kOk, key
+    assert solver.passModel(lp) == h.HighsStatus.kOk
+    supplied = None
+    if warm:
+        point = h.HighsSolution(); point.col_value = m['start']; point.row_value = matrix @ m['start']; point.value_valid = True
+        status = solver.setSolution(point); assert status == h.HighsStatus.kOk; supplied = int(status)
+    status = solver.run(); assert status != h.HighsStatus.kError
+    info = solver.getInfo(); solution = solver.getSolution(); model_status = solver.getModelStatus()
+    feasible = bool(solution.value_valid and info.primal_solution_status == h.kSolutionStatusFeasible)
+    chosen = []; fun = None; residual = None
+    if feasible:
+        x = np.asarray(solution.col_value); values = matrix @ x; eps = 1e-6
+        assert np.all(x >= -eps) and np.all(x <= 1 + eps) and np.all(values >= m['lower'] - eps) and np.all(values <= m['upper'] + eps)
+        assert np.max(np.abs(x - np.rint(x)), initial=0) <= eps  # every variable integral, arcs included
+        fun = float(m['cost'] @ x); assert abs(fun - info.objective_function_value) <= eps
+        chosen = [s for i, s in enumerate(candidates) if x[i] > .5]
+        residual = float(info.max_primal_infeasibility)
+    if warm: assert feasible and fun <= m['initial'] + 1e-6
+    def finite(v): return float(v) if np.isfinite(v) else None
+    return chosen, {'warm': warm, 'set_solution_status': supplied, 'model_status': int(model_status), 'message': solver.modelStatusToString(model_status),
+                    'optimal': model_status == h.HighsModelStatus.kOptimal, 'feasible': feasible, 'objective': fun, 'dual_bound': finite(info.mip_dual_bound),
+                    'gap': finite(info.mip_gap), 'nodes': int(info.mip_node_count), 'max_primal_infeasibility': residual,
+                    'solver_run_seconds': solver.getRunTime(), 'call_seconds': time.monotonic() - started, 'integral_arcs': True}
 
 
 def build(texts, fixed, candidates, capacity, incumbent, caps, weights=None, char_scale=None, ratio=None):

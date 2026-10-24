@@ -41,6 +41,17 @@ def contract():
     return c
 
 
+def trial_check(n_canon, c_canon, n_path, optimal, ratio_ref, tol):
+    """Return whether the canonical trial meets the ratio (always True without a ratio row). Canonical N is per-program
+    minimal, so it never exceeds the solver path's N. Equality is required only at optimality AND when the canonical
+    trial itself meets the ratio: otherwise a longer ratio-feasible path can be optimal for the same dictionary
+    (AMENDMENT-1), which must reach rejection, not an abort."""
+    assert n_canon <= n_path + tol, 'exact rescoring exceeds the MILP selections'
+    ratio_ok = True if ratio_ref is None else ratio_ref[0] * c_canon <= ratio_ref[1] * n_canon
+    if optimal and ratio_ok: assert abs(n_canon - n_path) <= tol, 'solver-optimal N mismatch'
+    return ratio_ok
+
+
 def checked(work, spec):
     raw = (work / spec['relative_path']).read_bytes(); assert sha(raw) == spec['sha256'], spec['relative_path']; return json.loads(raw)
 
@@ -88,22 +99,19 @@ def arm_run(a, c):
         n_inc = sum(x[0] for x in cur_nc.values()); c_inc = sum(x[1] for x in cur_nc.values())
         model = capped.build(fit, fixed, cand, capacity, incumbent, dict(costs), None, M if lex else None,
                              ratio=(n_inc, c_inc) if spec['ratio'] else None)
-        chosen, solver = capped.solve(model, cand, True, min(cfg['milp_seconds'], max(1., remaining)), seed=cfg['seed'])
+        chosen, solver = capped.solve(model, cand, True, min(cfg['milp_seconds'], max(1., remaining)), seed=cfg['seed'], integral_arcs=True)
         solver = {**solver, 'build_seconds': model['build_seconds'], 'arcs': model['arcs'], 'initial': model['initial']}
         trial = cm.ordered(fixed + chosen)  # canonical order: the same entry set always gets the same IDs
         trial_nc = nc(trial) if solver['feasible'] else None
         trial_costs = {p: v[0] for p, v in trial_nc.items()} if trial_nc else None
         trial_obj = objective(trial_nc) if trial_nc else None
+        ratio_ok = True
         if solver['feasible']:
             n_path = int((solver['objective'] + TOL) // M) if lex else solver['objective']
-            # canonical N is per-program minimal; canonical C (ID ties) may exceed the solver path's C, so only N is checked
-            assert sum(trial_costs.values()) <= n_path + TOL, 'exact rescoring exceeds the MILP selections'
-            if solver['optimal']: assert abs(sum(trial_costs.values()) - n_path) <= TOL, 'solver-optimal N mismatch'
-            assert all(trial_costs[p] <= costs[p] for p in fit), 'nonregression violated'
-        ratio_ok = True
-        if spec['ratio'] and trial_nc:
             # the fraction predicate is enforced on the canonical decoded trial, not only on the solver path
-            ratio_ok = n_inc * sum(x[1] for x in trial_nc.values()) <= c_inc * sum(x[0] for x in trial_nc.values())
+            ratio_ok = trial_check(sum(trial_costs.values()), sum(x[1] for x in trial_nc.values()), n_path, solver['optimal'],
+                                   (n_inc, c_inc) if spec['ratio'] else None, TOL)
+            assert all(trial_costs[p] <= costs[p] for p in fit), 'nonregression violated'
         accepted = trial_obj is not None and trial_obj < best and ratio_ok and not set(trial) & forbidden
         if accepted:
             incumbent, costs, cur_nc, best = trial, trial_costs, trial_nc, trial_obj
