@@ -4,6 +4,17 @@ Start here for source versions, experiments and the working literal languages.
 This is a navigation index over existing manifests and reports, not a second
 results ledger. Completed runs below retain their source, dictionary and execution identities.
 
+## Fixed multipliers cannot certify support-budget exclusion — 2026-10-24
+
+[Item49 public preflight](support-budget-certificate-v1/README.md) proves that
+reusing zero and item35's recorded multipliers cannot yield a positive bound at
+any one-owner entry budget. The path terms are already negative; subtracting
+any nonnegative activation charge preserves that sign. No private experiment
+was needed. Support-specific multiplier construction remains a separate question.
+[Proof](support-budget-certificate-v1/DRAFT.md),
+[independent review](support-budget-certificate-v1/REVIEW.md),
+[public arithmetic receipt](support-budget-certificate-v1/public-preflight.json).
+
 ## Fraction gains trade away canonical compactness — 2026-10-24
 
 [Direct coverage-preserving exchanges](direct-fraction-exchange-v1/README.md)
