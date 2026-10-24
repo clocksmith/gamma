@@ -4,6 +4,16 @@ Start here for source versions, experiments and the working literal languages.
 This is a navigation index over existing manifests and reports, not a second
 results ledger. Completed runs below retain their source, dictionary and execution identities.
 
+## Canonical fraction gains preserve every fit-program cap — 2026-10-24
+
+[Capped canonical exchanges](canonical-fraction-exchange-v1/README.md) reduce
+character share from54.06% to51.99% on R and49.81% to47.73% on naming, while
+saving264/254 selections and worsening no program against its seed. All6,000
+retained packet views replay. This is a fixed300-fit result, with no validation,
+10% witness, local/global optimum or M1 promotion.
+[Freeze](canonical-fraction-exchange-v1/FREEZE.md),
+[review](canonical-fraction-exchange-v1/REVIEW.md).
+
 ## Fixed multipliers cannot certify support-budget exclusion — 2026-10-24
 
 [Item49 public preflight](support-budget-certificate-v1/README.md) proves that
