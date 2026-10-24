@@ -36,7 +36,7 @@ def build():
     # Parent report helpers are independently reused for packet/metadata checks.
     path=c.LIT/'fraction-primal-repair-v1/report.py';result['code_hashes'][str(path.relative_to(c.LIT))]=c.sha(path)
     for path in sorted(c.HERE.iterdir()):
-        if path.suffix=='.py' or path.name in ('DRAFT.md','FREEZE.md'):
+        if path.suffix=='.py' or path.name in ('DRAFT.md','FREEZE.md','AMENDMENT-1.md'):
             result['code_hashes'][str(path.relative_to(c.LIT))]=c.sha(path)
     result['runtime_files'][str(Path(result['python_bin']).resolve())]=c.sha(Path(result['python_bin']).resolve())
     result['offline_encoder_files']={str((c.LIT/rel).resolve()):h for rel,h in result['code_hashes'].items()
