@@ -48,3 +48,9 @@ even with fresh LNS and HiGHS seeds.
   close by continuing this method from here.
 - **Does not show** that the gap cannot close by other means: a different neighbourhood, a source rewrite, a
   different seed region, or a different objective. Nothing here touches the JS M1-GAP rows.
+
+**Correction, 2026-10-24T05:34Z (codex review, LOG 05:34Z).** "Local optima" and "will not close by continuing this method" overstate
+the result. This frozen continuation, with bounded stochastic neighbourhoods and some time-limited repairs, found **no
+validation improvement**. That is all it shows. It is not an exhaustive local-optimum or no-headroom conclusion. The
+lex arms' accepted fit moves (−1 and −12) also show these dictionaries are not fit-local optima for this neighbourhood.
+The frozen result and predictions are unchanged.
