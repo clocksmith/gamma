@@ -849,6 +849,10 @@ recorded pass3 results above; it is not that proposed language.
 
 [Item64](required-joint-path-cap-v2/README.md) accepted: all257 curves equal61, k*9R/4naming; no joint tightening at any of254 defined splits per cohort. Both fullcapacity bounds remain negative. The failed62 attempt stays incomplete; currentbest51 unchanged.
 
+## 2026-10-24: global entry-price theorem
+
+[Item66](global-entry-price-cap-v1/README.md) proves a globally paid entry-price cap. Seven tiny exhaustive checks and independent review pass; a coverable example improves charges80/60 to52 but leaves bound-58. No corpus or full256 certificate claim.
+
 ## Maintenance rules
 
 Add a short row and links when a scoped experiment closes; update current status
