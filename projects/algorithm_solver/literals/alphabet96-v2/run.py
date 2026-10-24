@@ -154,7 +154,7 @@ def arm_run(a, c):
     (folder / 'fit-seal.json').write_text(json.dumps({'dictionary_sha256': seal, 'validation_loaded': False}) + '\n')
     report = {'arm': arm, 'k': spec['k'], 'repair': spec['repair'], 'universe': spec['universe'], 'moves': len(moves), 'accepted_moves': sum(m['accepted'] for m in moves),
               'lns_seconds': time.monotonic() - started, 'seed_fit': sum(x[0] for x in seed_nc.values()), 'seed_characters': sum(x[1] for x in seed_nc.values()),
-              'start_dictionary_sha256': sha((json.dumps(ordered(uidx, seed_vocab)) + '\\n').encode()),
+              'start_dictionary_sha256': sha((json.dumps(ordered(uidx, seed_vocab)) + '\n').encode()),
               'start_fit': sum(start.values()), 'final_fit': sum(costs.values()), 'final_objective': best,
               'start_characters': sum(x[1] for x in start_nc.values()), 'final_characters': sum(x[1] for x in cur_nc.values()),
               'fit_programs_worse_than_start': sum(costs[p] > start[p] for p in fit), 'fit_programs_better_than_start': sum(costs[p] < start[p] for p in fit),

@@ -141,7 +141,7 @@ def main():
     out['predictions'] = {  # FREEZE.md H1-H5
         'H1': (A['lastdrop']['validation']['single_character_fraction'] < out['start']['single_character_fraction']) if ok('lastdrop') else None,
         'H2': any(v['robust_ready'] for v in A.values()) if A else None,
-        'H3': all(A[n]['accepted_moves'] >= 1 for n in reps) if len(reps) == 2 else None,
+        'H3': (all(A[n]['accepted_moves'] >= 1 for n in reps) if len(reps) == 2 else (False if any(n in out['failed_arms'] for n in ('repair43', 'repairlast')) else None)),
         'H4': any(A[n]['validation']['actions'] < out['start']['actions'] for n in reps) if reps else None,
         'H5': all(ok(n) for n in succ.ARMS) and not out['failed_arms']}
     cands = [k for k, v in A.items() if v['robust_ready']]

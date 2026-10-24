@@ -3,7 +3,7 @@ optional aggregate fraction row N_ref*C_new <= C_ref*N_new (python-ratiocap-v1; 
 
 build() is seeded-repair-v1/model.build's occurrence-flow model, rebuilt here with arc owners so each fit program p gets
 one extra row  sum(arcs of p) <= caps[p]. The supplied incumbent (every incumbent candidate active, its canonical shortest
-paths as 0/1 flows) is checked against EVERY row, the cap rows included, before any solve. solve() is item 26's unchanged.
+paths as 0/1 flows) is checked against EVERY row, the cap rows included, before any solve. solve() is item 26's procedure with corrected objective checks (see its docstring).
 """
 import importlib.util, time
 from pathlib import Path
