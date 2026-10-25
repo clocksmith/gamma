@@ -1,0 +1,20 @@
+{
+  "problem_id": 1079,
+  "language": "javascript",
+  "entry_point": "Solution.numTilePossibilities",
+  "status": "unqualified_candidate",
+  "input": "tiles is an uppercase-English string of length n in [1,7]. Collections are ordinary finite dense arrays/lists, not subclasses, proxies, sparse/accessor-backed collections. Strings are ordinary/primitive strings. Every collection length and computed allocation size fits [0,4294967295], with padded sizes explicitly included. No concurrent mutation or built-in monkey-patching is allowed. Preconditions are not runtime-checked, and allocation/resource capacity or completion is not guaranteed by declared bounds. JavaScript integer inputs are primitive safe-integer Number, excluding negative zero, NaN, infinities, fractions and BigInt.",
+  "return": "Integer number of distinct nonempty letter sequences constructible using at most the available multiplicity of each letter.",
+  "mutation_aliasing": "Inputs and caller-held aliases remain unchanged; working state is private. The Solution instance retains no state.",
+  "numeric": "Each recursion node contributes one distinct next-letter prefix. At n = 7 with all letters distinct, the total is 7 + 42 + 210 + 840 + 2520 + 5040 + 5040 = 13699, bounding every recursive count and partial sum. All integer inputs/intermediates remain within [-9007199254740991,9007199254740991]; no bitwise coercion is used.",
+  "complexity": "With S distinct nonempty constructible sequences: O(n+26*(S+1)) time and O(26+n) auxiliary storage including the histogram and bounded recursive stack. No output sequences are materialized. Bounds include ordinary built-in operations/allocations and assume bounded-word arithmetic, constant-time indexing, amortized append/pop and any explicitly stated hash/sort behavior.",
+  "helpers": [
+    {
+      "name": "countSequences",
+      "contract": "Counts all nonempty sequences from a private 26-entry nonnegative letter histogram with total count at most 7. Choosing a letter consumes one copy, recursion counts continuations, and undo restores the histogram exactly on normal return. Equal copies are never treated as distinct choices.",
+      "cost": "For S distinct nonempty sequences from the supplied histogram, O(26*(S+1)) time and O(n+1) recursive stack depth for n remaining tiles; all counters and recursive calls are included. Its complete definition is 257 UTF-8 bytes; separator newlines count toward total source bytes."
+    }
+  ],
+  "source_accounting": "The complete standalone source is 473 UTF-8 bytes, including every helper, Solution wrapper, signature, loop, built-in call, annotation/comment, whitespace and terminal newline. Helpers are fully charged per candidate, not free shared libraries. No imports, runtime-generated implementations or hidden source expansion are used. Any eventual judge-interface adapter is additional charged source.",
+  "evidence_boundary": "Authored permitted dev_fit alternative outside frozen source sets. Membership checked only against already-public cost-decomposition-v1/contract.json partition.dev_fit and candidate manifest. Input/effect/complexity declarations are not frozen-predecessor equivalence receipts. No candidate execution/import, behavioral qualification, benchmark acceptance or M1/M2 pass is claimed. Mandatory isolated judging remains blocked; private original source/case/receipt material is unavailable. Static syntax/metadata checks do not establish correctness. Independent source-bound isolated qualification must cover one tile, all identical tiles, seven distinct tiles, mixed multiplicities, complete histogram restoration, and repeated calls, actual return types, numerical/Unicode and effect contracts, full source/adapter charges and complexity before admission or promotion. Current public definition checked at https://leetcode.com/problems/letter-tile-possibilities/; this does not replace frozen-contract qualification."
+}
