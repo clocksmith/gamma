@@ -1,0 +1,66 @@
+{
+  "schema_version": 2,
+  "problem_id": "988",
+  "title": "Smallest String Starting From Leaf",
+  "status": "public_statement_transcribed_pending_independent_review",
+  "qualified": false,
+  "source": {
+    "url": "https://leetcode.com/problems/smallest-string-starting-from-leaf/",
+    "publisher": "LeetCode",
+    "retrieved_date_utc": "2026-10-25",
+    "identity_verified_from_official_page": true,
+    "access": "freely_accessible_unauthenticated",
+    "identity_line": 18,
+    "clause_lines": "22-29,59-61",
+    "source_pin": "source-pin.json",
+    "batch": "a"
+  },
+  "interface_proposal": {
+    "entrypoint": "solve",
+    "calling_convention": "ordered_positional",
+    "parameters": [
+      [
+        "root",
+        "binary_tree<integer>"
+      ]
+    ],
+    "authority": "local catalogue convention; not claimed official runtime signature"
+  },
+  "constraints": {
+    "node_count": [
+      1,
+      8500
+    ],
+    "node_value": [
+      0,
+      25
+    ],
+    "node_value_mapping": "0=a through 25=z",
+    "leaf": "node without children"
+  },
+  "result": {
+    "type": "string",
+    "semantics": "Lexicographically minimum leaf-to-root letter sequence; when one sequence prefixes another, the shorter sequence is smaller.",
+    "comparison": "exact_ordered_value"
+  },
+  "complexity": {
+    "required_time": null,
+    "required_space": null,
+    "official_follow_up": null
+  },
+  "unspecified_by_statement": {
+    "input_mutation": null,
+    "result_aliasing": null,
+    "invalid_input_exceptions": null
+  },
+  "local_policy_proposal": {
+    "status": "not_adopted",
+    "effects": "Freeze input-preservation and returned-alias policy independently before qualification; mathematical modifications are not automatically caller-visible effects.",
+    "transport": "JSON values; integer parameters exclude booleans; real values must be finite.",
+    "tree_transport": "For 988, proposed recursive object {val,left,right}, null absent children; adapter identity and depth handling need independent review."
+  },
+  "boundary_plan": [
+    "Use a chain of 8500 nodes and distinct leaf strings with shared prefixes; assess recursion safety under selected runtime."
+  ],
+  "promotion_gate": "Independent clause/interface/effect review plus new source/runtime/test-bound receipts. Never upgrade compatibility-only probes or historical admitted evidence."
+}

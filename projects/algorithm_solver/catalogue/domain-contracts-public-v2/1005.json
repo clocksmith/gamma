@@ -1,0 +1,72 @@
+{
+  "schema_version": 2,
+  "problem_id": "1005",
+  "title": "Maximize Sum Of Array After K Negations",
+  "status": "public_statement_transcribed_pending_independent_review",
+  "qualified": false,
+  "source": {
+    "url": "https://leetcode.com/problems/maximize-sum-of-array-after-k-negations/",
+    "publisher": "LeetCode",
+    "retrieved_date_utc": "2026-10-25",
+    "identity_verified_from_official_page": true,
+    "access": "freely_accessible_unauthenticated",
+    "identity_line": 18,
+    "clause_lines": "22-28,52-55",
+    "source_pin": "source-pin.json",
+    "batch": "a"
+  },
+  "interface_proposal": {
+    "entrypoint": "solve",
+    "calling_convention": "ordered_positional",
+    "parameters": [
+      [
+        "nums",
+        "array<integer>"
+      ],
+      [
+        "k",
+        "integer"
+      ]
+    ],
+    "authority": "local catalogue convention; not claimed official runtime signature"
+  },
+  "constraints": {
+    "length": [
+      1,
+      10000
+    ],
+    "values": [
+      -100,
+      100
+    ],
+    "k": [
+      1,
+      10000
+    ]
+  },
+  "result": {
+    "type": "integer",
+    "semantics": "Maximum resulting sum after exactly k sign inversions, each choosing any index; an index may be chosen repeatedly.",
+    "comparison": "exact_ordered_value"
+  },
+  "complexity": {
+    "required_time": null,
+    "required_space": null,
+    "official_follow_up": null
+  },
+  "unspecified_by_statement": {
+    "input_mutation": null,
+    "result_aliasing": null,
+    "invalid_input_exceptions": null
+  },
+  "local_policy_proposal": {
+    "status": "not_adopted",
+    "effects": "Freeze input-preservation and returned-alias policy independently before qualification; mathematical modifications are not automatically caller-visible effects.",
+    "transport": "JSON values; integer parameters exclude booleans; real values must be finite.",
+    "tree_transport": null
+  },
+  "boundary_plan": [
+    "n=10000 and k=10000; compare odd/even excess flips with and without zero."
+  ],
+  "promotion_gate": "Independent clause/interface/effect review plus new source/runtime/test-bound receipts. Never upgrade compatibility-only probes or historical admitted evidence."
+}

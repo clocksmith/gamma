@@ -1,0 +1,67 @@
+{
+  "schema_version": 2,
+  "problem_id": "2192",
+  "title": "All Ancestors of a Node in a Directed Acyclic Graph",
+  "status": "public_statement_transcribed_pending_independent_review",
+  "qualified": false,
+  "source": {
+    "url": "https://leetcode.com/problems/all-ancestors-of-a-node-in-a-directed-acyclic-graph/",
+    "publisher": "LeetCode",
+    "retrieved_date_utc": "2026-10-25",
+    "identity_verified_from_official_page": true,
+    "access": "freely_accessible_unauthenticated",
+    "identity_line": 18,
+    "clause_lines": "22-27,61-68",
+    "source_pin": "source-pin.json",
+    "batch": "b"
+  },
+  "interface_proposal": {
+    "entrypoint": "solve",
+    "calling_convention": "ordered_positional",
+    "parameters": [
+      [
+        "n",
+        "integer"
+      ],
+      [
+        "edges",
+        "array<tuple<integer,integer>>"
+      ]
+    ],
+    "authority": "local catalogue convention; not claimed official runtime signature"
+  },
+  "constraints": {
+    "n": [
+      1,
+      1000
+    ],
+    "edge_count": "0 through min(2000,n*(n-1)/2)",
+    "endpoints": "distinct nodes in 0 through n-1",
+    "graph": "directed acyclic, no duplicate edges"
+  },
+  "result": {
+    "type": "array<array<integer>>",
+    "semantics": "For each node index, return every distinct predecessor reachable by a positive-length directed path to it, numerically ascending.",
+    "comparison": "exact_ordered_value"
+  },
+  "complexity": {
+    "required_time": null,
+    "required_space": null,
+    "official_follow_up": null
+  },
+  "unspecified_by_statement": {
+    "input_mutation": null,
+    "result_aliasing": null,
+    "invalid_input_exceptions": null
+  },
+  "local_policy_proposal": {
+    "status": "not_adopted",
+    "effects": "Freeze input-preservation and returned-alias policy independently before qualification; mathematical modifications are not automatically caller-visible effects.",
+    "transport": "JSON values; integer parameters exclude booleans; real values must be finite.",
+    "tree_transport": null
+  },
+  "boundary_plan": [
+    "n=1000 chain has ancestor list lengths 0 through 999; add redundant paths up to 2000 edges without duplicating ancestors."
+  ],
+  "promotion_gate": "Independent clause/interface/effect review plus new source/runtime/test-bound receipts. Never upgrade compatibility-only probes or historical admitted evidence."
+}

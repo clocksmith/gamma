@@ -1,0 +1,86 @@
+{
+  "schema_version": 2,
+  "problem_id": "1514",
+  "evidence_class": "independently_authored_public_synthetic_plan",
+  "execution_status": "not_run",
+  "candidate_used_as_oracle": false,
+  "comparison": "absolute_error_at_most_1e-5",
+  "cases": [
+    {
+      "args": [
+        2,
+        [],
+        [],
+        0,
+        1
+      ],
+      "expected": 0.0,
+      "purpose": "disconnected"
+    },
+    {
+      "args": [
+        2,
+        [
+          [
+            0,
+            1
+          ]
+        ],
+        [
+          1.0
+        ],
+        1,
+        0
+      ],
+      "expected": 1.0,
+      "purpose": "undirected certainty"
+    },
+    {
+      "args": [
+        3,
+        [
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            0,
+            2
+          ]
+        ],
+        [
+          0.8,
+          0.5,
+          0.3
+        ],
+        0,
+        2
+      ],
+      "expected": 0.4,
+      "purpose": "two hops beat direct"
+    },
+    {
+      "args": [
+        2,
+        [
+          [
+            0,
+            1
+          ]
+        ],
+        [
+          0.0
+        ],
+        0,
+        1
+      ],
+      "expected": 0.0,
+      "purpose": "zero probability"
+    }
+  ],
+  "expected_output_boundary": "Expected values remain outside candidate sandbox."
+}
