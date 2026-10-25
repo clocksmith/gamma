@@ -129,3 +129,107 @@ class KnownSpecServiceTests(unittest.TestCase):
 
 
 if __name__ == '__main__': unittest.main()
+
+class KnownSpecServiceV2Tests(KnownSpecServiceTests):
+    """V2 controls use the real synthetic boundary validator, never a fake allow."""
+    def setUp(self):
+        super().setUp()
+        from .test_boundary_policy import BoundaryPolicyTests
+        raw, pins = BoundaryPolicyTests().fixture()
+        paths = {}
+        for name, data in raw.items():
+            path = self.root / ('boundary-' + name + '.json'); path.write_bytes(data); paths[name] = str(path)
+        self.gate = {'schema':'gamma.boundary-gate-config.v1','artifact_paths':paths,'trusted_hashes':pins}
+        u = json.loads(raw['universe']); c = json.loads(Path(self.config['catalogue']['path']).read_text())
+        c['universe_sha256'] = digest(u)
+        for i in range(3,6):
+            c['problems'].append({'problem_id':'leetcode:'+str(i),'implementations':{
+                lang:{'status':'protected' if i<5 else 'blocked','reason':'synthetic boundary'} for lang in ('javascript','python')}})
+        self.v2 = dict(self.config, schema='gamma.known-spec-service.v2',
+            universe={'path':paths['universe'],'sha256':pins['universe']}, catalogue=self.write('v2-catalogue',c))
+        self.s2 = {'schema':'gamma.known-spec-source-access.v2','boundary_gate':self.write('gate',self.gate),
+            'locators':self.write('global-locators',{'schema':'gamma.dual.source-locators.v1',
+                'problems':{'leetcode:1':{'python':str(self.root/'1.py')}}}),
+            'authorized_problem_ids':['leetcode:1'], 'source_roots':[str(self.root)]}
+        self.v2['source_access'] = self.s2
+
+    def test_v2_global_exact_read_gate_called_before_open(self):
+        from . import boundary_policy
+        service = KnownSpecService(self.v2); calls=[]
+        original = boundary_policy.authorize_before_open
+        def gate(*a,**k): calls.append('gate'); return original(*a,**k)
+        from .materialize import read_source
+        def opener(*a,**k): self.assertEqual(calls,['gate']); calls.append('source'); return read_source(*a,**k)
+        with patch('projects.algorithm_solver.catalogue.known_spec_service.boundary_policy.authorize_before_open',side_effect=gate), patch('projects.algorithm_solver.catalogue.known_spec_service.read_source',side_effect=opener):
+            value=service.request('leetcode:1',language='python',include_source=True)
+        self.assertEqual(value['artifact']['source_utf8'],self.data.decode()); self.assertEqual(calls,['gate','source'])
+
+    def test_v2_every_open_rechecks_policy_drift(self):
+        service=KnownSpecService(self.v2)
+        self.assertEqual(service.request('leetcode:1',language='python',include_source=True)['status'],'matched')
+        Path(self.gate['artifact_paths']['classification']).write_text('{}')
+        with patch('projects.algorithm_solver.catalogue.known_spec_service.read_source',side_effect=AssertionError):
+            self.assertEqual(service.request('leetcode:1',language='python',include_source=True)['reason'],'source_materialization_failed')
+
+    def test_v2_valid_receipt_cannot_override_boundary_denial(self):
+        service=KnownSpecService(self.v2)
+        with patch('projects.algorithm_solver.catalogue.known_spec_service.boundary_policy.authorize_before_open',side_effect=PermissionError('reserved')), patch('projects.algorithm_solver.catalogue.known_spec_service.read_source',side_effect=AssertionError):
+            self.assertEqual(service.request('leetcode:1',language='python',include_source=True)['status'],'abstain')
+
+    def test_v2_reserved_unknown_cannot_be_located_or_authorized(self):
+        for pid in ('leetcode:3','leetcode:4','leetcode:5'):
+            source=dict(self.s2,authorized_problem_ids=[pid])
+            with self.assertRaises(ValueError):KnownSpecService(dict(self.v2,source_access=source))
+        service=KnownSpecService(self.v2)
+        with patch('projects.algorithm_solver.catalogue.known_spec_service.read_source',side_effect=AssertionError):
+            for pid in ('leetcode:3','leetcode:4','leetcode:5'):self.assertEqual(service.request(pid,language='python',include_source=True)['status'],'abstain')
+
+    def test_v2_legacy_explicit_locator_alias_and_no_inference(self):
+        alias={'schema':'gamma.numeric-id-alias-map.v1','from_universe_sha256':'a'*64,
+            'to_universe_sha256':self.gate['trusted_hashes']['universe'],'access_policy_sha256':self.gate['trusted_hashes']['policy'],
+            'aliases':{'development400:1':'leetcode:1'}}
+        self.s2.update(aliases=self.write('v2-aliases',alias),development_universe_sha256='a'*64,
+            locators=self.write('v2-legacy-locators',{'schema':'gamma.dual.source-locators.v1','problems':{'development400:1':{'python':str(self.root/'1.py')}}}))
+        self.assertEqual(KnownSpecService(self.v2).request('leetcode:1',language='python',include_source=True)['status'],'matched')
+        del self.s2['aliases'];del self.s2['development_universe_sha256']
+        with self.assertRaises(ValueError):KnownSpecService(self.v2)
+
+    def test_v2_duplicate_identity_locators_rejected(self):
+        self.test_v2_legacy_explicit_locator_alias_and_no_inference()
+        # Restore explicit alias then duplicate same canonical identity in global spelling.
+        self.s2['aliases']={'path':str(self.root/'v2-aliases.json'),'sha256':hashlib.sha256((self.root/'v2-aliases.json').read_bytes()).hexdigest()}
+        self.s2['development_universe_sha256']='a'*64
+        self.s2['locators']=self.write('duplicate',{'schema':'gamma.dual.source-locators.v1','problems':{
+            'leetcode:1':{'python':str(self.root/'1.py')},'development400:1':{'python':str(self.root/'1.py')}}})
+        with self.assertRaises(ValueError):KnownSpecService(self.v2)
+
+    def test_v2_locator_and_gate_file_drift(self):
+        for key in ('locators','boundary_gate'):
+            service=KnownSpecService(self.v2);path=Path(self.s2[key]['path']);old=path.read_bytes();path.write_text('{}')
+            with patch('projects.algorithm_solver.catalogue.known_spec_service.read_source',side_effect=AssertionError):
+                self.assertEqual(service.request('leetcode:1',language='python',include_source=True)['status'],'abstain')
+            path.write_bytes(old)
+
+    def test_v2_strict_unknown_config_fields(self):
+        for config in (dict(self.v2,magic_allow=True),dict(self.v2,source_access=dict(self.s2,ignore_boundary=True))):
+            with self.assertRaises(ValueError):KnownSpecService(config)
+
+    def test_v2_rebind_preserves_qualified_and_all_receipts(self):
+        from .known_spec_service import rebind_boundary_universe
+        old=json.loads(Path(self.config['universe']['path']).read_text());c=json.loads(Path(self.v2['catalogue']['path']).read_text());r=json.loads(Path(self.config['verified_receipts']['path']).read_text())
+        new=json.loads(Path(self.v2['universe']['path']).read_text());old=dict(new,protected_problem_ids=[]);c['universe_sha256']=digest(old)
+        result,receipts,audit=rebind_boundary_universe(old,c,r,new,self.gate,predecessor_catalogue_sha256=digest(c))
+        self.assertEqual(receipts,r);self.assertEqual(result['problems'][:2],c['problems'][:2]);self.assertEqual(audit['protected_after'],2)
+        with self.assertRaises(ValueError):rebind_boundary_universe(old,c,r,new,self.gate,predecessor_catalogue_sha256='0'*64)
+
+class StrictServiceMetadataTests(unittest.TestCase):
+    def test_duplicate_fields_rejected_even_with_matching_pin(self):
+        from .known_spec_service import _strict_spec
+        with tempfile.TemporaryDirectory() as root:
+            path=Path(root)/'metadata.json';raw=b'{"schema":"x","schema":"y"}';path.write_bytes(raw)
+            with self.assertRaises(ValueError):_strict_spec({'path':str(path),'sha256':hashlib.sha256(raw).hexdigest()})
+    def test_nonfinite_fields_rejected(self):
+        from .known_spec_service import _strict_spec
+        with tempfile.TemporaryDirectory() as root:
+            path=Path(root)/'metadata.json';raw=b'{"x":NaN}';path.write_bytes(raw)
+            with self.assertRaises(ValueError):_strict_spec({'path':str(path),'sha256':hashlib.sha256(raw).hexdigest()})
