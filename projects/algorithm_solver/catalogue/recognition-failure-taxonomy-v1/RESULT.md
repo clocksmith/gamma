@@ -1,0 +1,11 @@
+# Development diagnosis, not an improvement claim
+
+Readback recomputed every aggregate from2080 rows (52 queries ×20 policies ×2 matched-service arms). At c65-m12 both arms have6 positive distractor tops; threshold abstentions rise43→44. At c75-m12 both have6 distractor tops and44 threshold abstentions. No unavailable-artifact flag was observed at these policies; threshold checks happen before availability, so this does not prove top artifacts are available.
+
+Manual review froze all6 positive distractors plus the first4 correct-top low-margin examples before reading their development prose. All6 distractors have only title authority: competitor semantics must remain UNKNOWN. Target-defining objective/output facts are often explicit; the existing narrow guard extracted no facts on the entire development cohort. One reviewed description leaves scalar-versus-route output form ambiguous; another omits priority-list domain premises supplied only by declared cohort scope. Two image descriptions explicitly state mutation/root aliasing, but encoded document text omits the effect policy retained in authority.scope. Low margins even for clear correct-top descriptions show insufficient separation, not a proven embedding cause.
+
+## One prospective change
+
+Prepare a clause-level typed fact extractor as a linked interpreter successor, not a threshold sweep: span-grounded positive/negative output entity/cardinality/order, distinctness/strictness, contiguity and mutation/root-alias obligations. Reuse the existing facet lattice and three-valued applicability authority. Permit supported clauses within longer prose without declaring unsupported remainder understood. Contradictory or scope-ambiguous clauses stay UNKNOWN/abstain; negation cannot be dropped. Test synthetic minimal pairs including NOT index, NOT values, NOT gapped sequence and same-root versus fresh-root.
+
+Freeze grammar before any future evaluation. Treat it first as observable extraction/veto coverage, not an acceptance-promoting identity resolver: title-only competitors remain unknown and cannot be filtered away. Any later representation projection requires its own matched-service/all4081 frozen experiment. No new model run, policy search, confirmation read or recognition qualification occurred in this diagnosis. Private query texts/semantic notes remain outside Git.

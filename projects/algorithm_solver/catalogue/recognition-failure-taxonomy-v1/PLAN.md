@@ -1,0 +1,5 @@
+# Frozen cached development taxonomy
+
+Restore exact old4081 index,48 verified delta vectors and52 original query vectors. Compare the same20 policies using matched v16 decisions and full4081 rankings, never filter by availability. Recheck positive target rank, top identity, cosine, top-two margin and fixed threshold slack. Mechanical overlapping buckets are top artifact unavailable, distractor top identity, fixed-threshold abstention and accepted control. They are observations, not causal diagnosis. Missing semantic facts, embedding cause and output/effect ambiguity remain explicitly UNKNOWN until separately reviewed; no automatic semantic labels from scores.
+
+Private output retains per-query IDs/ranks/scores (not text); public output may include aggregates only. No model invocation, new queries, training, policy search, source reads or confirmation. Existing20 policies and all4081 rivals remain fixed. Host budget512MiB/60CPU/60wall. Four synthetic tests passed; execution awaits independent main review of freeze. No improvement/generalization claim can follow this authored development-only analysis.
