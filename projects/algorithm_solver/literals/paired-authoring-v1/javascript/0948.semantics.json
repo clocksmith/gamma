@@ -1,0 +1,20 @@
+{
+  "problem_id": 948,
+  "language": "javascript",
+  "entry_point": "Solution.bagOfTokensScore",
+  "status": "unqualified_candidate",
+  "input": "tokens is an Array of n integer token costs in [0,10000], with 0 <= n <= 1000; power is an integer in [0,10000]. Integer inputs are primitive safe-integer Numbers, excluding negative zero, NaN, infinities, fractions and BigInt. Arrays are dense ordinary Arrays without holes, subclasses, proxies or accessors; strings are primitive. No concurrent mutation or modified standard built-ins are allowed. Preconditions are not dynamically validated. Size bounds do not guarantee available memory or completion within an unqualified runtime budget.",
+  "return": "The largest score attainable from initial score zero, using each token at most once: pay its cost from power to gain one score, or spend one existing score to gain its cost in power. Token order is freely chosen. Empty tokens returns 0.",
+  "mutation_aliasing": "Only a fresh copied ordering is sorted. The scalar power parameter is rebound locally, and no input token or caller container is changed. No play order is returned. The Solution instance retains no state; separate calls share no mutable result state.",
+  "numeric": "Power stays nonnegative and is at most initial power plus all token costs, at most 10010000. Score and its maximum are in [0,n]. Indices range from -1 through n; comparator differences are in [-10000,10000]. All arithmetic intermediates are exact safe integers.",
+  "complexity": "After sorting, O(n+1) two-pointer work consumes a different token each iteration. Buy the cheapest available token when affordable; otherwise, when another purchase can remain possible, sell the most expensive available token and retain the best score seen. JavaScript copied sorting adds O(n+1) copying plus target-runtime T_sort(n) comparison/sort work and S_sort(n) workspace. ECMAScript supplies no universal O(n log n) sort complexity guarantee; comparator work is bounded O(1) here and is included in T_sort.",
+  "helpers": [
+    {
+      "name": "inline_sort_comparator",
+      "contract": "Compare two bounded integer values numerically by their safe exact difference; only a private copied array is sorted.",
+      "cost": "The complete const ordered copied-sort statement containing this inline comparator is 72 UTF-8 bytes including indentation and terminal newline, already included in total source. Every comparator call and copied-sort allocation is charged."
+    }
+  ],
+  "source_accounting": "The complete standalone source is 575 UTF-8 bytes, including all 1 declared helper definitions/statements and their calls, wrappers, closure/state definitions, built-in operations, allocations, annotations/comments where present, whitespace and terminal newline. Every reused helper is present in full and charged per candidate; no external helper library, import, generated implementation or hidden source expansion exists. Standard built-in work, temporary state and output materialization are included in the stated costs. Any eventual frozen-judge adapter is additional charged source.",
+  "evidence_boundary": "Independently authored dev_fit candidate, verified against cost-decomposition-v1/contract.json partition.dev_fit and kept outside frozen source sets. No candidate import/execution, predecessor equivalence, behavioral qualification, benchmark acceptance or M1/M2 achievement is claimed. The mandatory isolated judge and private source/case/receipt package remain unavailable. Syntax checks and these declarations are static only. Remaining gate: independent source-bound isolated qualification of empty/zero-cost inputs, insufficient power, profitable sale before another purchase, maximum-score retention, duplicates and read-only sorting, exact frozen interface/types/effects, numerical requirements and complete source/helper/adapter/runtime costs. No admission or promotion follows."
+}

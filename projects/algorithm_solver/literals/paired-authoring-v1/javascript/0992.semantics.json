@@ -1,0 +1,20 @@
+{
+  "problem_id": 992,
+  "language": "javascript",
+  "entry_point": "Solution.subarraysWithKDistinct",
+  "status": "unqualified_candidate",
+  "input": "nums is an Array of n safe-integer labels, with 0 <= n <= 20000; k is an integer in [0,20000]. Labels may repeat and may be negative. Empty input and k=0 are explicit extensions. Integer inputs are primitive safe-integer Numbers, excluding negative zero, NaN, infinities, fractions and BigInt. Arrays are dense ordinary Arrays without holes, subclasses, proxies or accessors; strings are primitive. No concurrent mutation or modified standard built-ins are allowed. Preconditions are not dynamically validated. Size bounds do not guarantee available memory or completion within an unqualified runtime budget.",
+  "return": "The exact number of nonempty contiguous subarrays containing exactly k distinct labels. Return 0 for k=0, empty nums, or more requested distinct labels than occur.",
+  "mutation_aliasing": "Input values and order remain unchanged. Each helper call creates its own frequency map; there is no shared mutable state between the at-most windows or between invocations. The Solution instance retains no state; separate calls share no mutable result state.",
+  "numeric": "Each at-most total, not just their difference, is at most n*(n+1)/2 <= 200010000. Counts and indices are bounded by n; k-1 may be -1 and is handled before scanning. Labels are compared/hashed, never arithmetically combined. All accumulator intermediates are exact safe integers.",
+  "complexity": "Two O(n+1) sliding-window passes, with each endpoint advancing at most n times, assuming average map costs. O(min(n,k+1)+1) peak frequency storage includes the transient extra distinct label before shrinking. The first helper map need not be live during the second; total insert/delete work remains O(n+1). Map/set costs assume ordinary average O(1) operations after charging key construction/hash/comparison; no universal ECMAScript constant-time or adversarial collision-resistance guarantee is claimed.",
+  "helpers": [
+    {
+      "name": "atMost",
+      "contract": "Count nonempty contiguous subarrays with at most limit distinct labels; a negative limit returns zero immediately. Shrink the left endpoint until the frequency-map size is admissible, then count every valid suffix ending at right.",
+      "cost": "The complete helper definition is 617 UTF-8 bytes including indentation and terminal newline, already included in the total source. O(n+1) expected time per call, with all frequency updates, deletions, window arithmetic and allocations included."
+    }
+  ],
+  "source_accounting": "The complete standalone source is 715 UTF-8 bytes, including all 1 declared helper definitions/statements and their calls, wrappers, closure/state definitions, built-in operations, allocations, annotations/comments where present, whitespace and terminal newline. Every reused helper is present in full and charged per candidate; no external helper library, import, generated implementation or hidden source expansion exists. Standard built-in work, temporary state and output materialization are included in the stated costs. Any eventual frozen-judge adapter is additional charged source.",
+  "evidence_boundary": "Independently authored dev_fit candidate, verified against cost-decomposition-v1/contract.json partition.dev_fit and kept outside frozen source sets. No candidate import/execution, predecessor equivalence, behavioral qualification, benchmark acceptance or M1/M2 achievement is claimed. The mandatory isolated judge and private source/case/receipt package remain unavailable. Syntax checks and these declarations are static only. Remaining gate: independent source-bound isolated qualification of k=0, repeated/negative labels, too many distinct requested, zero-count deletion, endpoint amortization and exact separate at-most totals, exact frozen interface/types/effects, numerical requirements and complete source/helper/adapter/runtime costs. No admission or promotion follows."
+}
