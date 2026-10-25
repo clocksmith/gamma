@@ -14,7 +14,7 @@ hosting. Existing admission and promotion authority is unchanged.
 
 ## Scope
 
-`algsolve/`, `contracts/`, `findings/`, `runs/`, `literals/`.
+`algsolve/`, `contracts/`, `findings/`, `runs/`, `literals/`, `catalogue/`.
 
 ## Contracts
 
@@ -34,6 +34,13 @@ and autonomous correctness qualify separately. Algorithms satisfy pinned
 behavior/effect/complexity contracts; exact decoding reconstructs selected
 bytes. Charge helpers, operands, controls and decoder costs. Retain rejected
 attempts. Organization grants no execution or publication authority.
+
+The owner-approved [prospective catalogue roadmap](catalogue/ROADMAP-v1.md)
+prioritizes complete dual-language foundation and recognition 1a/1b/1c, and adds
+16/32-entry exploratory literal profiles. This deliberately changes future work
+priority, not historical gates, verdicts or protected-data authority. Catalogue
+validation checks metadata and external receipt bindings; it does not grant judge
+qualification or prove recognition.
 
 ## Acceptance
 

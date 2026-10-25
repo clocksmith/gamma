@@ -47,6 +47,16 @@ old results. JavaScript and Python qualify independently.
    under existing M5 gates. Neither a proposed target nor internal readiness
    guarantees novelty, venue acceptance or permission to submit.
 
+## Current owner priority (2026-10-25)
+
+Goals 1a/1b/1c and a complete consistently represented JavaScript/Python catalogue
+now lead the [prospective roadmap](projects/algorithm_solver/catalogue/ROADMAP-v1.md).
+Its eligible universe is independent of current source availability. The literal
+frontier additionally investigates 16/32-entry (4/5-bit) profiles alongside 64/128/256;
+partial coverage remains explicit. Historical M1–M6 gates/results are preserved,
+and original compact-library M1 remains unmet. This priority change does not
+reclassify protected populations or qualify an existing result retroactively.
+
 ## Operating Loops
 
 Freeze contracts and budgets; execute bounded experiments; independently verify

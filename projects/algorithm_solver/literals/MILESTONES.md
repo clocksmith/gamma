@@ -1,5 +1,11 @@
 # Compact composition milestones
 
+> Historical compact-composition roadmap, preserved without retroactive changes.
+> On 2026-10-25 the owner prioritized recognition 1a/1b/1c and complete consistent
+> JavaScript/Python solutions under the [prospective roadmap](../catalogue/ROADMAP-v1.md).
+> Original M1 remains unmet. The new roadmap also studies 4–8-bit literal frontiers;
+> it does not award a compactness pass to existing results.
+
 Owner direction, 2026-10-20: Milestone 1 is agreed. Milestones 2–5 below are
 proposed numerical targets; Milestone 5 is deliberately a hypothetical
 literature-leading target. These are engineering choices, not published
