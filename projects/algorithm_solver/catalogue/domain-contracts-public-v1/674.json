@@ -1,0 +1,70 @@
+{
+  "schema_version": 1,
+  "problem_id": "674",
+  "status": "public_statement_transcribed_pending_independent_review",
+  "qualified": false,
+  "canonical_interface_proposal": {
+    "entrypoint": "solve",
+    "calling_convention": "ordered_positional",
+    "parameters": [
+      [
+        "nums",
+        "array<integer>"
+      ]
+    ],
+    "authority": "local catalogue convention, not an official LeetCode signature"
+  },
+  "source": {
+    "url": "https://leetcode.com/problems/longest-continuous-increasing-subsequence/",
+    "publisher": "LeetCode",
+    "retrieved_at_utc": "2026-10-25T18:48:02Z",
+    "access": "freely_accessible_unauthenticated",
+    "identity_verified": true,
+    "evidence_batch_file": "source-pin.json",
+    "clause_lines": {
+      "identity": "18",
+      "domain": "22-23,44-47",
+      "result": "22-23,34-39"
+    }
+  },
+  "title": "Longest Continuous Increasing Subsequence",
+  "constraints": {
+    "length": [
+      1,
+      10000
+    ],
+    "element_range": [
+      -1000000000,
+      1000000000
+    ]
+  },
+  "result": {
+    "type": "integer",
+    "semantics": "Maximum length of a contiguous strictly increasing run; singleton runs have length one.",
+    "comparison": "exact"
+  },
+  "complexity": {
+    "time": null,
+    "space": null
+  },
+  "notes": [
+    "The prose index definition uses l < r, but its explicit constant-array example returns one and n=1 is legal; singleton runs must be included."
+  ],
+  "unspecified_by_statement": {
+    "input_mutation": null,
+    "output_aliasing": null,
+    "exceptions_outside_domain": null
+  },
+  "local_policy_proposal": {
+    "status": "not_adopted",
+    "values": "JSON integer/string/array value transport; reject booleans as integers, NaN and infinity.",
+    "effects": "Review and freeze input-preservation and return-alias policy separately before qualification; do not infer from functional outputs.",
+    "unicode": "Only 833 and 916 have string inputs; their published alphabet excludes non-ASCII characters.",
+    "numeric": "All specified input integers and result integers fit exactly in JavaScript Number; Python integers preserve the same mathematical values."
+  },
+  "test_plan": [
+    "At n=10000 use increasing, constant and descending arrays; expected lengths n, 1, 1.",
+    "Concatenate increasing runs separated by equal/decreasing boundaries and compare known run lengths."
+  ],
+  "promotion": "Contract review plus separately bound source/interface/runtime/effect/test receipts required; no compatibility probe upgrade."
+}
