@@ -1,0 +1,20 @@
+{
+  "problem_id": 1031,
+  "language": "javascript",
+  "entry_point": "Solution.maxSumTwoNoOverlap",
+  "status": "unqualified_candidate",
+  "input": "nums is an Array of n integers in [0,1000], with 2 <= n <= 1000. firstLen and secondLen are positive integers whose sum is at most n. Integer inputs are primitive safe-integer Numbers, excluding negative zero, NaN, infinities, fractions and BigInt. Arrays are dense ordinary Arrays without holes, subclasses, proxies or accessors; strings are primitive. No concurrent mutation or modified standard built-ins are allowed. Preconditions are not dynamically validated. Size bounds do not guarantee available memory or completion within an unqualified runtime budget.",
+  "return": "The maximum sum of two nonoverlapping contiguous subarrays with respective lengths firstLen and secondLen. Either length may appear first; adjacency is allowed. Return the sum only, not indices.",
+  "mutation_aliasing": "Input entries, their order and both length values remain unchanged. A fresh prefix-sum container is private; the two helper passes share it read-only and keep separate scalar running maxima. The Solution instance retains no state; separate calls share no mutable result state.",
+  "numeric": "Prefix sums and final two-window totals are at most 1000000. The evaluated best_first+prefix[end] addition can double-count a prefix before subtraction and is conservatively bounded by 2000000. Prefix differences are nonnegative; all indices, sums and intermediate arithmetic remain exact safe integers.",
+  "complexity": "O(n) time for prefix construction and two ordered-window passes, with O(n) prefix storage and O(1) helper state. Each pass updates the best first window ending no later than the current second window begins, guaranteeing nonoverlap.",
+  "helpers": [
+    {
+      "name": "firstBeforeSecond",
+      "contract": "Maximize the two-window sum under the constraint that the first_length window lies entirely before the second_length window. Sweep the second window endpoint while maintaining the best eligible first window.",
+      "cost": "The complete helper definition is 490 UTF-8 bytes including indentation and terminal newline, already included in the total source. O(n) time and O(1) additional space per pass; both length orderings, all prefix differences and their arithmetic are charged."
+    }
+  ],
+  "source_accounting": "The complete standalone source is 774 UTF-8 bytes, including all 1 declared helper definitions/statements and their calls, wrappers, closure/state definitions, built-in operations, allocations, annotations/comments where present, whitespace and terminal newline. Every reused helper is present in full and charged per candidate; no external helper library, import, generated implementation or hidden source expansion exists. Standard built-in work, temporary state and output materialization are included in the stated costs. Any eventual frozen-judge adapter is additional charged source.",
+  "evidence_boundary": "Independently authored dev_fit candidate, verified against cost-decomposition-v1/contract.json partition.dev_fit and kept outside frozen source sets. No candidate import/execution, predecessor equivalence, behavioral qualification, benchmark acceptance or M1/M2 achievement is claimed. The mandatory isolated judge and private source/case/receipt package remain unavailable. Syntax checks and these declarations are static only. Remaining gate: independent source-bound isolated qualification of both window orders, equal lengths, exact-fit total length, adjacent windows, best earlier first window and intermediate addition before subtraction, exact frozen interface/types/effects, numerical requirements and complete source/helper/adapter/runtime costs. No admission or promotion follows."
+}

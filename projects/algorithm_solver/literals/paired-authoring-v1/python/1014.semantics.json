@@ -1,0 +1,14 @@
+{
+  "problem_id": 1014,
+  "language": "python",
+  "entry_point": "Solution.maxScoreSightseeingPair",
+  "status": "unqualified_candidate",
+  "input": "values is a list of n integers in [1,1000], with 2 <= n <= 50000. Integer inputs are plain int values excluding bool. Containers are ordinary lists and strings are ordinary str values, without subclasses or overloaded behavior. No concurrent mutation or modified standard built-ins are allowed. Preconditions are not dynamically validated. Size bounds do not guarantee available memory or completion within an unqualified runtime budget.",
+  "return": "The maximum values[i]+values[j]+i-j over distinct indices 0 <= i < j < n. Return the score, not the pair.",
+  "mutation_aliasing": "Input entries and order remain unchanged. A running scalar maximum represents only earlier left endpoints; it is updated after evaluating each current right endpoint. The Solution instance retains no state; separate calls share no mutable result state.",
+  "numeric": "values[i]+i is at most 50999. The evaluated addition best_left+values[right] is at most 51999 before subtracting right; all scores and other intermediates have magnitude below 52000. Initializing from the first genuine pair avoids an invalid empty/same-index solution. All operations are exact safe integers.",
+  "complexity": "O(n) time and O(1) auxiliary/output space. Each right endpoint evaluates one candidate against the best previous value-plus-index and then updates that summary.",
+  "helpers": [],
+  "source_accounting": "The complete standalone source is 324 UTF-8 bytes, including all 0 declared helper definitions/statements and their calls, wrappers, closure/state definitions, built-in operations, allocations, annotations/comments where present, whitespace and terminal newline. Every reused helper is present in full and charged per candidate; no external helper library, import, generated implementation or hidden source expansion exists. Standard built-in work, temporary state and output materialization are included in the stated costs. Any eventual frozen-judge adapter is additional charged source.",
+  "evidence_boundary": "Independently authored dev_fit candidate, verified against cost-decomposition-v1/contract.json partition.dev_fit and kept outside frozen source sets. No candidate import/execution, predecessor equivalence, behavioral qualification, benchmark acceptance or M1/M2 achievement is claimed. The mandatory isolated judge and private source/case/receipt package remain unavailable. Syntax checks and these declarations are static only. Remaining gate: independent source-bound isolated qualification of two entries, best pair far apart, equal values, left-before-right update order and all addition/subtraction intermediates, exact frozen interface/types/effects, numerical requirements and complete source/helper/adapter/runtime costs. No admission or promotion follows."
+}

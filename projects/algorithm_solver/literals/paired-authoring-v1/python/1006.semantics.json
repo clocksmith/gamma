@@ -1,0 +1,20 @@
+{
+  "problem_id": 1006,
+  "language": "python",
+  "entry_point": "Solution.clumsy",
+  "status": "unqualified_candidate",
+  "input": "n is an integer in [1,10000]. Integer inputs are plain int values excluding bool. Containers are ordinary lists and strings are ordinary str values, without subclasses or overloaded behavior. No concurrent mutation or modified standard built-ins are allowed. Preconditions are not dynamically validated. Size bounds do not guarantee available memory or completion within an unqualified runtime budget.",
+  "return": "The clumsy factorial n*(n-1)/(n-2)+(n-3)-(n-4)*(n-5)/(n-6)+(n-7)-..., cycling multiply, divide, add, subtract with normal precedence. Each positive multiplication/division group is floored before a later subtraction applies its sign. Return the exact integer value.",
+  "mutation_aliasing": "Only scalar inputs are read. The method accumulates complete positive groups and applies their outer signs; no expression strings, evaluators or external arithmetic libraries are used. The Solution instance retains no state; separate calls share no mutable result state.",
+  "numeric": "The largest multiplication is 10000*9999 = 99990000. Division uses a positive denominator at most 9998. Python integer floor division is exact; JavaScript binary64 division followed by floor yields the same integer here: a nonintegral quotient is at least 1/9998 from an integer, far beyond rounding error at these magnitudes. A conservative absolute bound of 10^12 covers every accumulated prefix. All integer results and intermediate products/sums are safe. A negative group is never floored after negation.",
+  "complexity": "O(n) time and O(1) auxiliary/output space, with O(n) constant-time bounded product-group evaluations and no recursion or stored expression. Trailing one- and two-factor groups are handled directly.",
+  "helpers": [
+    {
+      "name": "product_group",
+      "contract": "Evaluate the positive leading multiplication/division group beginning at first. For first>=3 use floor(first*(first-1)/(first-2)); for first=2 return 2*1=2; for first=1 return 1.",
+      "cost": "The complete helper definition is 144 UTF-8 bytes including indentation and terminal newline, already included in the total source. O(1) bounded arithmetic per invocation; positive-floor semantics and every product/division are charged."
+    }
+  ],
+  "source_accounting": "The complete standalone source is 452 UTF-8 bytes, including all 1 declared helper definitions/statements and their calls, wrappers, closure/state definitions, built-in operations, allocations, annotations/comments where present, whitespace and terminal newline. Every reused helper is present in full and charged per candidate; no external helper library, import, generated implementation or hidden source expansion exists. Standard built-in work, temporary state and output materialization are included in the stated costs. Any eventual frozen-judge adapter is additional charged source.",
+  "evidence_boundary": "Independently authored dev_fit candidate, verified against cost-decomposition-v1/contract.json partition.dev_fit and kept outside frozen source sets. No candidate import/execution, predecessor equivalence, behavioral qualification, benchmark acceptance or M1/M2 achievement is claimed. The mandatory isolated judge and private source/case/receipt package remain unavailable. Syntax checks and these declarations are static only. Remaining gate: independent source-bound isolated qualification of n=1/2/3, incomplete trailing groups, multiplication/division precedence, positive floor before subtraction and accumulated numeric bounds, exact frozen interface/types/effects, numerical requirements and complete source/helper/adapter/runtime costs. No admission or promotion follows. Public problem description checked on 2026-10-25, without solution/editorial access: https://leetcode.com/problems/clumsy-factorial/description/. That text is not a frozen qualification receipt."
+}
