@@ -117,6 +117,30 @@ test("Human Evaluation forces banking and curated Corpus uses absent printed dom
   assert.equal(p.reputation, 2);
   assert.equal(p.metrics.researchCapability[0].outcome, "human-evaluation");
 });
+test("Curated Corpus automatically counts the first missing category and repeats when all are counted", async () => {
+  const categories = ["code", "science", "web", "books", "images", "video", "synthetic"];
+  for (const types of [
+    ["code", "curated_corpus", "science"],
+    [...categories, "curated_corpus"],
+  ]) {
+    const m = fixture();
+    const p = m.players[0];
+    p.compute = 2;
+    p.capability = 4;
+    m.trainingDrawPile = types.map(type => c(type, categories.includes(type) ? "domain" : "special"));
+    const counted = [];
+    await m.research(policies(m, packet => {
+      assert.deepEqual(packet.legalDecisions.map(d => d.decisionId), ["research_bank", "research_continue"]);
+      counted.push([...m.trainingRun.domains]);
+      return packet.legalDecisions.find(d => d.decisionId === "research_continue");
+    }), 0, action(m, 0, "research"));
+    assert.deepEqual(counted.at(-1), types.length === 3 ? ["code", "science"] : categories);
+    assert.equal(p.metrics.researchCapability[0].outcome, "crashed");
+    assert.equal(p.capability, 4, "A repeat loses only this attempt's temporary total");
+    assert.equal(p.compute, 0);
+  }
+});
+
 test("Scientific Method offers affordable paid bank; Safety retains only one on crash", async () => {
   for (const id of ["imperial_research_lab", "safety_laboratory"]) {
     const m = fixture({ factionId: id });
