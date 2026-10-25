@@ -1,0 +1,60 @@
+{
+  "schema": "gamma.recognition-statement-authority.v1",
+  "problem_id": "leetcode:944",
+  "numeric_id": 944,
+  "title": "Delete Columns to Make Sorted",
+  "status": "prospective_pending_independent_review",
+  "source": {
+    "url": "https://leetcode.com/problems/delete-columns-to-make-sorted/",
+    "publisher": "LeetCode",
+    "retrieved_at_utc": "2026-10-25T22:56:15Z",
+    "identity_verified": true,
+    "identity_line": 18,
+    "source_response_sha256": "063cfa006fd06d29cf2411c18471f43bf7584670152eb957267f986fc0317e63",
+    "digest_representation": "Exact returned web-tool response string encoded UTF-8 without added newline; not raw HTML",
+    "access": "public_unauthenticated",
+    "license": "No redistribution license established from inspected statement. Full imported text not republished; facts paraphrased with attribution.",
+    "pin_limitation": "Response digest binds observed extraction, not an immutable publisher archive."
+  },
+  "pre_open_gate": "pre-open-gate.json",
+  "clauses": [
+    {
+      "id": "input_grid",
+      "lines": "22-24,66-71",
+      "fact": "An ordered array of 1..100 equally long strings, each 1..1000 lowercase English letters, forms the grid rows."
+    },
+    {
+      "id": "sorting_axis",
+      "lines": "31",
+      "fact": "Evaluate each column independently in original top-to-bottom row order."
+    },
+    {
+      "id": "nondecreasing",
+      "lines": "31",
+      "fact": "Adjacent equal letters are allowed; a downward decrease makes that column unsorted."
+    },
+    {
+      "id": "deletion",
+      "lines": "31-33",
+      "fact": "Remove every unsorted column, rather than rearranging characters or permuting rows."
+    },
+    {
+      "id": "output",
+      "lines": "33",
+      "fact": "Return the integer count of removed columns."
+    }
+  ],
+  "derived_formalization": {
+    "type": "mathematical consequence of cited clauses",
+    "result": "count of j for which some i in 0..n-2 has strs[i][j] > strs[i+1][j]",
+    "result_range": "0..common string length"
+  },
+  "unspecified": {
+    "caller_visible_mutation": null,
+    "runtime_complexity": null,
+    "invalid_input_behavior": null
+  },
+  "qualification_created": false,
+  "historical102_replaced": false,
+  "canonical_sources_authored": false
+}
