@@ -1,0 +1,14 @@
+{
+  "problem_id": 941,
+  "language": "python",
+  "entry_point": "Solution.validMountainArray",
+  "status": "unqualified_candidate",
+  "input": "arr is a list of n integers in [-9007199254740991,9007199254740991], with 0 <= n <=4294967295. Integer inputs are plain int, excluding bool; list and string inputs are ordinary list/str values without subclasses. No concurrent mutation or modified standard built-ins are allowed. Preconditions are not checked at runtime. Size bounds do not guarantee available memory or completion within an unqualified runtime budget.",
+  "return": "Boolean indicating that the ENTIRE array has length at least 3, strictly increases to an interior peak, then strictly decreases to the final element. A plateau, endpoint peak or extra turn is invalid.",
+  "mutation_aliasing": "All input values, caller containers and ordering remain unchanged. The Solution instance retains no state and separate calls share no mutable result state. Only one scan index is retained.",
+  "numeric": "Values are compared without subtraction, and index+1 stays within safe bounds before guarded access. The return is a boolean.",
+  "complexity": "O(n+1) time and O(1) auxiliary space. Consume one maximal strict ascent, reject endpoint peaks, then consume one strict descent and require exact arrival at the final position.",
+  "helpers": [],
+  "source_accounting": "The complete standalone source is 435 UTF-8 bytes, including all 0 declared helper definitions/statements and their calls, wrappers, closure/state definitions, built-in operations, allocations, annotations/comments where present, whitespace and terminal newline. Every reused helper is present in full and charged per candidate; no external helper library, import, generated implementation or hidden source expansion exists. Standard built-in work, exact-integer or floating arithmetic, temporary state and output materialization are included in the stated costs. Any eventual frozen-judge adapter is additional charged source.",
+  "evidence_boundary": "Independently authored dev_fit candidate, verified against cost-decomposition-v1/contract.json partition.dev_fit and kept outside frozen source sets. No candidate import/execution, predecessor equivalence, behavioral qualification, benchmark acceptance or M1/M2 achievement is claimed. The mandatory isolated judge and private source/case/receipt package remain unavailable. Syntax checks and these declarations are static only. Remaining gate: independent source-bound isolated qualification of short inputs, pure rise/fall, plateaus, interior peak, extra turns, complete-array rather than subarray semantics, exact frozen interface/types/effects, numerical requirements and complete source/helper/adapter/runtime costs. No admission or promotion follows."
+}

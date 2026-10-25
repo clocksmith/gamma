@@ -1,0 +1,20 @@
+{
+  "problem_id": 917,
+  "language": "javascript",
+  "entry_point": "Solution.reverseOnlyLetters",
+  "status": "unqualified_candidate",
+  "input": "s is an ASCII string of length in [0,4294967295]. Only A-Z and a-z are letters; digits, punctuation, spaces and control characters are nonletters. Integer inputs, when present, are primitive safe-integer Numbers excluding negative zero, NaN, infinities, fractions and BigInt. Arrays are dense ordinary Arrays without holes, proxies, subclasses or accessors; strings are primitive. No concurrent mutation or modified standard built-ins are allowed. Preconditions are not checked at runtime. Size bounds do not guarantee available memory or completion within an unqualified runtime budget.",
+  "return": "An immutable string with the Array of letters reversed while every nonletter stays at its exact original index. Letter case and character multiplicities are preserved. Empty input is accepted.",
+  "mutation_aliasing": "All input values, caller containers and ordering remain unchanged. The Solution instance retains no state and separate calls share no mutable result state. Swaps affect only a fresh character Array. Equal returned strings need not have fresh object identity.",
+  "numeric": "The helper performs exact ASCII range comparisons rather than language-dependent Unicode isalpha rules. Indices and -1 sentinels remain exact safe integers.",
+  "complexity": "O(len(s)+1) time and auxiliary/result storage, including materializing characters and joining. Each pointer advances monotonically; each nonletter is skipped once and each letter is swapped at most once.",
+  "helpers": [
+    {
+      "name": "isLetter",
+      "contract": "Return true exactly for a single ASCII character in A-Z or a-z. The main method calls it only on characters from the admitted ASCII string.",
+      "cost": "The complete helper definition/statement is 124 UTF-8 bytes including indentation and terminal newline, already included in total source. O(1) comparisons per call; complete helper and both scan call sites are charged."
+    }
+  ],
+  "source_accounting": "The complete standalone source is 644 UTF-8 bytes, including all 1 declared helper definitions/statements and their calls, wrappers, closure/state definitions, built-in operations, allocations, annotations/comments where present, whitespace and terminal newline. Every reused helper is present in full and charged per candidate; no external helper library, import, generated implementation or hidden source expansion exists. Standard built-in work, exact-integer or floating arithmetic, temporary state and output materialization are included in the stated costs. Any eventual frozen-judge adapter is additional charged source.",
+  "evidence_boundary": "Independently authored dev_fit candidate, verified against cost-decomposition-v1/contract.json partition.dev_fit and kept outside frozen source sets. No candidate import/execution, predecessor equivalence, behavioral qualification, benchmark acceptance or M1/M2 achievement is claimed. The mandatory isolated judge and private source/case/receipt package remain unavailable. Syntax checks and these declarations are static only. Remaining gate: independent source-bound isolated qualification of empty/no letters/all letters, mixed case, leading/trailing punctuation, embedded controls, fixed nonletter positions and ASCII-only classification, exact frozen interface/types/effects, numerical requirements and complete source/helper/adapter/runtime costs. No admission or promotion follows."
+}

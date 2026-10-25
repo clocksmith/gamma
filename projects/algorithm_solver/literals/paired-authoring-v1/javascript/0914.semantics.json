@@ -1,0 +1,20 @@
+{
+  "problem_id": 914,
+  "language": "javascript",
+  "entry_point": "Solution.hasGroupsSizeX",
+  "status": "unqualified_candidate",
+  "input": "deck is an Array of n integer labels in [-9007199254740991,9007199254740991], with 0 <= n <=10000. Integer inputs, when present, are primitive safe-integer Numbers excluding negative zero, NaN, infinities, fractions and BigInt. Arrays are dense ordinary Arrays without holes, proxies, subclasses or accessors; strings are primitive. No concurrent mutation or modified standard built-ins are allowed. Preconditions are not checked at runtime. Size bounds do not guarantee available memory or completion within an unqualified runtime budget.",
+  "return": "Boolean indicating whether the entire nonempty deck can be partitioned into equal-sized groups of one identical value per group, with one common integer group size X >=2. X need not be returned. Empty input is explicitly false.",
+  "mutation_aliasing": "All input values, caller containers and ordering remain unchanged. The Solution instance retains no state and separate calls share no mutable result state. A private frequency map is allocated. No cards are moved, removed or grouped in the input.",
+  "numeric": "Label values are only hashed/compared. Counts and Euclidean remainders are nonnegative integers <=10000. The gcd helper checks right!=0 before modulo, so no zero divisor occurs. Starting gcd 0 adopts the first positive frequency.",
+  "complexity": "O(n+u*log(n+1)+1) time for u distinct values under average map costs, O(u+1) map storage and O(1) helper state. A frequency gcd of1 permits immediate rejection. Map/set operation costs assume ordinary average O(1) lookup; target-runtime behavior must be qualified, and universal ECMAScript constant-time guarantees or adversarial collision resistance are not claimed.",
+  "helpers": [
+    {
+      "name": "greatestCommonDivisor",
+      "contract": "Euclidean gcd of nonnegative integer arguments, returning the first argument when the second is zero. Called with current common gcd and a positive frequency.",
+      "cost": "The complete helper definition/statement is 168 UTF-8 bytes including indentation and terminal newline, already included in total source. O(log(max(left,right)+1)) time and O(1) state; the complete helper and every modulo step are included."
+    }
+  ],
+  "source_accounting": "The complete standalone source is 598 UTF-8 bytes, including all 1 declared helper definitions/statements and their calls, wrappers, closure/state definitions, built-in operations, allocations, annotations/comments where present, whitespace and terminal newline. Every reused helper is present in full and charged per candidate; no external helper library, import, generated implementation or hidden source expansion exists. Standard built-in work, exact-integer or floating arithmetic, temporary state and output materialization are included in the stated costs. Any eventual frozen-judge adapter is additional charged source.",
+  "evidence_boundary": "Independently authored dev_fit candidate, verified against cost-decomposition-v1/contract.json partition.dev_fit and kept outside frozen source sets. No candidate import/execution, predecessor equivalence, behavioral qualification, benchmark acceptance or M1/M2 achievement is claimed. The mandatory isolated judge and private source/case/receipt package remain unavailable. Syntax checks and these declarations are static only. Remaining gate: independent source-bound isolated qualification of empty/singleton, one value, incompatible counts, group size greater than 2, early gcd 1 and frequency-map non-mutation, exact frozen interface/types/effects, numerical requirements and complete source/helper/adapter/runtime costs. No admission or promotion follows."
+}
