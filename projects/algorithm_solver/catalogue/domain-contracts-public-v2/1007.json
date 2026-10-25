@@ -1,0 +1,69 @@
+{
+  "schema_version": 2,
+  "problem_id": "1007",
+  "title": "Minimum Domino Rotations For Equal Row",
+  "status": "public_statement_transcribed_pending_independent_review",
+  "qualified": false,
+  "source": {
+    "url": "https://leetcode.com/problems/minimum-domino-rotations-for-equal-row/",
+    "publisher": "LeetCode",
+    "retrieved_date_utc": "2026-10-25",
+    "identity_verified_from_official_page": true,
+    "access": "freely_accessible_unauthenticated",
+    "identity_line": 18,
+    "clause_lines": "22-27,49-53",
+    "source_pin": "source-pin.json",
+    "batch": "a"
+  },
+  "interface_proposal": {
+    "entrypoint": "solve",
+    "calling_convention": "ordered_positional",
+    "parameters": [
+      [
+        "tops",
+        "array<integer>"
+      ],
+      [
+        "bottoms",
+        "array<integer>"
+      ]
+    ],
+    "authority": "local catalogue convention; not claimed official runtime signature"
+  },
+  "constraints": {
+    "length": [
+      2,
+      20000
+    ],
+    "same_length": true,
+    "values": [
+      1,
+      6
+    ]
+  },
+  "result": {
+    "type": "integer",
+    "semantics": "Minimum swaps of a domino top/bottom pair needed to make either entire row constant; return -1 if neither row can be made constant.",
+    "comparison": "exact_ordered_value"
+  },
+  "complexity": {
+    "required_time": null,
+    "required_space": null,
+    "official_follow_up": null
+  },
+  "unspecified_by_statement": {
+    "input_mutation": null,
+    "result_aliasing": null,
+    "invalid_input_exceptions": null
+  },
+  "local_policy_proposal": {
+    "status": "not_adopted",
+    "effects": "Freeze input-preservation and returned-alias policy independently before qualification; mathematical modifications are not automatically caller-visible effects.",
+    "transport": "JSON values; integer parameters exclude booleans; real values must be finite.",
+    "tree_transport": null
+  },
+  "boundary_plan": [
+    "n=20000: all equal; alternating complement faces; one domino excludes every candidate."
+  ],
+  "promotion_gate": "Independent clause/interface/effect review plus new source/runtime/test-bound receipts. Never upgrade compatibility-only probes or historical admitted evidence."
+}

@@ -1,0 +1,88 @@
+{
+  "schema_version": 2,
+  "problem_id": "1514",
+  "title": "Path with Maximum Probability",
+  "status": "public_statement_transcribed_pending_independent_review",
+  "qualified": false,
+  "source": {
+    "url": "https://leetcode.com/problems/path-with-maximum-probability/",
+    "publisher": "LeetCode",
+    "retrieved_date_utc": "2026-10-25",
+    "identity_verified_from_official_page": true,
+    "access": "freely_accessible_unauthenticated",
+    "identity_line": 18,
+    "clause_lines": "22-25,32-34,55-64",
+    "source_pin": "source-pin.json",
+    "batch": "b"
+  },
+  "interface_proposal": {
+    "entrypoint": "solve",
+    "calling_convention": "ordered_positional",
+    "parameters": [
+      [
+        "n",
+        "integer"
+      ],
+      [
+        "edges",
+        "array<tuple<integer,integer>>"
+      ],
+      [
+        "succProb",
+        "array<real>"
+      ],
+      [
+        "start",
+        "integer"
+      ],
+      [
+        "end",
+        "integer"
+      ]
+    ],
+    "authority": "local catalogue convention; not claimed official runtime signature"
+  },
+  "constraints": {
+    "n": [
+      2,
+      10000
+    ],
+    "edge_count": [
+      0,
+      20000
+    ],
+    "same_edge_probability_count": true,
+    "endpoints": "0 through n-1; different within each edge",
+    "start_end": "different nodes in 0 through n-1",
+    "probability": [
+      0,
+      1
+    ],
+    "graph": "undirected, no parallel edges"
+  },
+  "result": {
+    "type": "real",
+    "semantics": "Maximum product of edge success probabilities along a start-to-end path; zero when disconnected.",
+    "comparison": "absolute_error_at_most_1e-5"
+  },
+  "complexity": {
+    "required_time": null,
+    "required_space": null,
+    "official_follow_up": null
+  },
+  "unspecified_by_statement": {
+    "input_mutation": null,
+    "result_aliasing": null,
+    "invalid_input_exceptions": null
+  },
+  "local_policy_proposal": {
+    "status": "not_adopted",
+    "effects": "Freeze input-preservation and returned-alias policy independently before qualification; mathematical modifications are not automatically caller-visible effects.",
+    "transport": "JSON values; integer parameters exclude booleans; real values must be finite.",
+    "tree_transport": null
+  },
+  "boundary_plan": [
+    "n=10000, edges=20000; zero/one-weight cycles, tiny products, competing routes. Preserve finite values and specified absolute tolerance."
+  ],
+  "promotion_gate": "Independent clause/interface/effect review plus new source/runtime/test-bound receipts. Never upgrade compatibility-only probes or historical admitted evidence."
+}

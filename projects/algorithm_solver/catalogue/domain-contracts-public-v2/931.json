@@ -1,0 +1,65 @@
+{
+  "schema_version": 2,
+  "problem_id": "931",
+  "title": "Minimum Falling Path Sum",
+  "status": "public_statement_transcribed_pending_independent_review",
+  "qualified": false,
+  "source": {
+    "url": "https://leetcode.com/problems/minimum-falling-path-sum/",
+    "publisher": "LeetCode",
+    "retrieved_date_utc": "2026-10-25",
+    "identity_verified_from_official_page": true,
+    "access": "freely_accessible_unauthenticated",
+    "identity_line": 18,
+    "clause_lines": "22-23,46-50",
+    "source_pin": "source-pin.json",
+    "batch": "a"
+  },
+  "interface_proposal": {
+    "entrypoint": "solve",
+    "calling_convention": "ordered_positional",
+    "parameters": [
+      [
+        "matrix",
+        "array<array<integer>>"
+      ]
+    ],
+    "authority": "local catalogue convention; not claimed official runtime signature"
+  },
+  "constraints": {
+    "n": [
+      1,
+      100
+    ],
+    "shape": "n by n",
+    "values": [
+      -100,
+      100
+    ]
+  },
+  "result": {
+    "type": "integer",
+    "semantics": "Minimum full-height path sum starting anywhere in the first row; each next row changes column by -1, 0 or 1 within bounds.",
+    "comparison": "exact_ordered_value"
+  },
+  "complexity": {
+    "required_time": null,
+    "required_space": null,
+    "official_follow_up": null
+  },
+  "unspecified_by_statement": {
+    "input_mutation": null,
+    "result_aliasing": null,
+    "invalid_input_exceptions": null
+  },
+  "local_policy_proposal": {
+    "status": "not_adopted",
+    "effects": "Freeze input-preservation and returned-alias policy independently before qualification; mathematical modifications are not automatically caller-visible effects.",
+    "transport": "JSON values; integer parameters exclude booleans; real values must be finite.",
+    "tree_transport": null
+  },
+  "boundary_plan": [
+    "n=100 uniform -100 gives -10000; use edge-hugging and alternating diagonal paths."
+  ],
+  "promotion_gate": "Independent clause/interface/effect review plus new source/runtime/test-bound receipts. Never upgrade compatibility-only probes or historical admitted evidence."
+}
