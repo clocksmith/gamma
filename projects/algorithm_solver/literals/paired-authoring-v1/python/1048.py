@@ -1,6 +1,7 @@
 class Solution:
     def longestStrChain(self, words):
-        ordered = sorted(words, key=len)
+        words.sort(key=len)
+        ordered = words
         ending = {}
         best = 0
         for word in ordered:

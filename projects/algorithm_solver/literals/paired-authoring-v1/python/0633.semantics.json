@@ -3,18 +3,31 @@
   "language": "python",
   "entry_point": "Solution.judgeSquareSum",
   "status": "unqualified_candidate",
-  "input": "c is an integer in [0, 4503599627370495]. Integers are plain int, excluding bool; lists and strings are ordinary list/str values, not subclasses. No concurrent mutation, getters or modified standard built-ins are allowed. Preconditions are not checked at runtime. Declared size bounds are not a guarantee of available memory or completion within an unqualified runtime budget.",
+  "input": "c is a plain Python int, excluding bool, in [0,2**64-1]. This explicitly expands the prior paired safe-number half-range; Python arithmetic is exact and does not inherit JavaScript Number coercion. No monkey-patched runtime or concurrent mutation. Resource exhaustion fails closed.",
   "return": "Boolean indicating whether c equals a*a + b*b for some nonnegative integers a and b. Zero returns true via a = b = 0. Only existence is returned, not a witness pair.",
-  "mutation_aliasing": "No mutable input exists. The source uses scalar integer search bounds only and retains no instance state.",
-  "numeric": "The floor-square-root helper accepts safe nonnegative integers and caps each searched middle at 94906265, whose square 9007199136250225 is safe. In the main two-pointer search both squared terms are <= c, so their sum is <= 2*c <= 9007199254740990. Bounding individual squares alone would not suffice; this half-range c domain bounds the addition too. All pointer arithmetic and squares are exact.",
-  "complexity": "O(sqrt(c) + log(c+2) + 1) time and O(1) auxiliary space. First find floor(sqrt(c)) using fully included binary search, then increase the smaller endpoint or decrease the larger one according to the exact sum. No floating sqrt, factorization table or candidate-pair array is used.",
+  "mutation_aliasing": "No mutable caller input. Factor stack, set and work budget are private; no retained instance state.",
+  "numeric": "All square roots, modular powers, products, remainders, factors and counters use exact Python integers. Twelve fixed Miller-Rabin witnesses 2 through37 and bounded deterministic Brent-style factor splitting mirror the admitted reference arithmetic policy for this64-bit domain. A square remainder contributes only even prime exponents and can be discarded.",
+  "complexity": "Bounded at1,048,576 factorization modular iterations, at most16 deterministic constants with65,536 iterations each; primality checks and exact square roots add bit-complexity costs. Factorization has no claimed worst-case polynomial success bound; work/seed exhaustion raises and fails qualification. Stack and prime-parity set are O(log(c+2)) entries. Built-in pow/gcd/isqrt arithmetic and imports are fully explicit.",
   "helpers": [
     {
-      "name": "floor_sqrt",
-      "contract": "Return floor(sqrt(value)) for a nonnegative safe integer using the same capped half-open binary-search invariant as candidate 69. The excluded upper endpoint is not squared.",
-      "cost": "The full helper definition is 356 UTF-8 bytes including indentation and terminal newline, already included in complete source bytes. O(log(value+2)) time, at most 27 iterations on the safe range, and O(1) auxiliary state; the entire helper and call are charged."
+      "name": "is_prime",
+      "contract": "Fixed-witness exact modular primality screening in the stated64-bit domain."
+    },
+    {
+      "name": "split_factor",
+      "contract": "Return a nontrivial divisor or raise on the explicit shared work/seed budget; never guess primality."
+    },
+    {
+      "name": "PRIME_BASES",
+      "contract": "Twelve fixed public prime witnesses, not case-derived answer data."
     }
   ],
-  "source_accounting": "The complete standalone source is 717 UTF-8 bytes, including all 1 declared helper definitions/statements, their calls, the Solution/method wrappers, built-in operations, allocations, annotations/comments where present, whitespace and terminal newline. Every reused helper is fully included and charged, not supplied by a hidden library. Standard-library/built-in work and temporary/output allocation are included in the stated complexity, not free operations. No imports, runtime-generated implementations or hidden source expansion exist. Any adapter required by the frozen judge is additional charged source.",
-  "evidence_boundary": "Independently authored dev_fit candidate, checked against cost-decomposition-v1/contract.json partition.dev_fit and kept outside frozen source sets. No candidate was imported or executed. No predecessor equivalence, behavioral qualification, benchmark acceptance or M1/M2 progress is claimed. The mandatory isolated judge and frozen private source/case/receipt package remain unavailable. Syntax checks and author declarations are static evidence only. Remaining gate: independent source-bound isolated qualification covering zero/one, perfect squares, equal square pair, absent representation, pointer crossing, safe-square cap and sum-of-two-squares numeric bound, exact frozen interfaces/types/effects, complete source/helper/adapter charges and runtime cost. No admission or promotion follows from these declarations."
+  "source_accounting": "The complete standalone source is 3584 UTF-8 bytes. Every helper, import, constant, constructor, wrapper, call, annotation, whitespace and newline is charged; standard runtime integer operations are explicit. Any uniform solve adapter is separately charged.",
+  "evidence_boundary": "Versioned Python successor after retained native pilot failure. Static syntax only for these new bytes; fresh isolated frozen-case replay and independent effect/type verification remain required. Finite tests do not prove all-domain complexity or M1.",
+  "successor": {
+    "version": "python-exact-factorization-v1",
+    "prior_source_sha256": "e332b8fad4fea01b50f898e72ac316b6c6413e77b5459a074166b19ab0b6aa8b",
+    "prior_semantics_sha256": "99da1567b0d321cdeff0477dfc78f7c729b95e27a5c8c9ff88515783a174cc29",
+    "reason": "Preserve failed pilot receipt; exact new bytes require independent isolated replay."
+  }
 }

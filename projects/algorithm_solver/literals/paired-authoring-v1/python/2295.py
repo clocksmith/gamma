@@ -1,5 +1,6 @@
 class Solution:
     def arrayChange(self, nums: list[int], operations: list[list[int]]) -> list[int]:
+        nums = nums.copy()
         positions = {value: index for index, value in enumerate(nums)}
         for previous, replacement in operations:
             index = positions.pop(previous)

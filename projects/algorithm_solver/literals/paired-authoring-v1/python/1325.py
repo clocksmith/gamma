@@ -1,9 +1,16 @@
-# External TreeNode shape: val: int, left: TreeNode | None, right: TreeNode | None.
+class TreeNode:
+    def __init__(self, val=0, left=None, right=None):
+        self.val = val
+        self.left = left
+        self.right = right
+
+
 class Solution:
     def removeLeafNodes(self, root, target: int):
         if root is None:
             return None
         stack = [(root, False)]
+        built = {None: None}
         while stack:
             node, expanded = stack.pop()
             if not expanded:
@@ -13,14 +20,10 @@ class Solution:
                 if node.left is not None:
                     stack.append((node.left, False))
             else:
-                left = node.left
-                right = node.right
-                if left is not None and left.val == target:
-                    if left.left is None and left.right is None:
-                        node.left = None
-                if right is not None and right.val == target:
-                    if right.left is None and right.right is None:
-                        node.right = None
-        if root.val == target and root.left is None and root.right is None:
-            return None
-        return root
+                left = built[node.left]
+                right = built[node.right]
+                if left is None and right is None and node.val == target:
+                    built[node] = None
+                else:
+                    built[node] = TreeNode(node.val, left, right)
+        return built[root]
