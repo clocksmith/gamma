@@ -170,4 +170,51 @@ class Medium34PolicyTests(unittest.TestCase):
     with self.assertRaises(ValueError):a.check_observation_policy(lane,changed)
    with self.assertRaises(ValueError):a.check_observation_policy('hard32-wave2-numeric-v2',f)
 
+class Hard3TransportPolicyTests(unittest.TestCase):
+ def test_fixed_eight_ids_and_transport_policy(self):
+  f={'ids':[2132,2267,2290,2426,2565,2569,2573,2663],'effect_policy':'read-only args; fresh mutable returns; no result-to-input aliases','result_policy':'exact typed scalar/list; ID2569 canonical integer transport tags decoded in both languages; local read-only effects'}
+  a.check_observation_policy('hard32-wave3-transport-v2',f)
+  for key,value in [('ids',f['ids'][:-1]),('ids',list(reversed(f['ids']))),('result_policy','approximate numeric'),('effect_policy','mutation allowed')]:
+   changed=copy.deepcopy(f);changed[key]=value
+   with self.assertRaises(ValueError):a.check_observation_policy('hard32-wave3-transport-v2',changed)
+  for lane in('hard32-wave3-v1','hard32-wave2-numeric-v2','medium32-wave4-v1'):
+   with self.assertRaises(ValueError):a.check_observation_policy(lane,f)
+ def test_finite_coverage_caveats(self):
+  base=a.qualification_caveats('hard10-v1',2573)
+  self.assertEqual(a.qualification_caveats('hard32-wave3-transport-v2',2132),base)
+  self.assertTrue(any('reach100' in x and 'up to1000' in x for x in a.qualification_caveats('hard32-wave3-transport-v2',2573)))
+  self.assertTrue(any('at most8' in x for x in a.qualification_caveats('hard32-wave3-transport-v2',2663)))
+  self.assertTrue(any('both language' in x and 'malformed' in x for x in a.qualification_caveats('hard32-wave3-transport-v2',2569)))
+
+class Hard4PolicyTests(unittest.TestCase):
+ def test_actual_2709_oracle_rejects_integer_true(self):
+  import importlib.util
+  path=a.lane_path('hard32-wave4-v1')/'oracle.py'
+  spec=importlib.util.spec_from_file_location('_hard4_boolean_control',path)
+  oracle=importlib.util.module_from_spec(spec);spec.loader.exec_module(oracle)
+  args=[[2,3,6]]
+  for language,kind in(('python','bool'),('javascript','boolean')):
+   record={'result':1,'result_type':kind,'args_before':args,'args_after':args,'alias_edges':[]}
+   self.assertFalse(oracle.compare(2709,args,True,record,language)[0])
+   record['result']=True;self.assertTrue(oracle.compare(2709,args,True,record,language)[0])
+  self.assertTrue(any('exact boolean' in x and 'integer1' in x for x in a.qualification_caveats('hard32-wave4-v1',2709)))
+ def test_seven_ids_and_no_premium_promotion(self):
+  f={'ids':[2709,2781,2953,3003,3041,3093,3130],'effect_policy':'read-only args; fresh mutable returns; no result-to-input aliases','result_policy':'exact typed integer scalar/list; local read-only effects'}
+  a.check_observation_policy('hard32-wave4-v1',f)
+  for ids in(f['ids']+[2792],f['ids'][:-1],list(reversed(f['ids']))):
+   x=copy.deepcopy(f);x['ids']=ids
+   with self.assertRaises(ValueError):a.check_observation_policy('hard32-wave4-v1',x)
+  with self.assertRaises(ValueError):a.check_observation_policy('hard32-wave3-transport-v2',f)
+
+class ObserverSuccessorPolicyTests(unittest.TestCase):
+ def test_only_original_medium2_semantics(self):
+  f={'ids':[1567,1573,1630,1653,1743,1817,1877,1887],
+     'effect_policy':'read-only args; fresh mutable returns; no result-to-input aliases',
+     'result_policy':'typed exact scalars and ordered lists; ID1743 relational unique-vertex adjacent path, either orientation; local read-only/fresh-return effects'}
+  a.check_observation_policy('medium32-wave2-observer-v1',f)
+  for key,value in [('ids',f['ids'][:-1]),('effect_policy','ignore aliases'),('result_policy','return equality only')]:
+   changed=copy.deepcopy(f);changed[key]=value
+   with self.assertRaises(ValueError):a.check_observation_policy('medium32-wave2-observer-v1',changed)
+  self.assertEqual(a.qualification_caveats('medium32-wave2-observer-v1',1743),a.qualification_caveats('medium32-wave2-v1',1743))
+
 if __name__=='__main__':unittest.main()

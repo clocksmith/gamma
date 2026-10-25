@@ -31,9 +31,12 @@ LANES = {
     'medium32-wave1-v1': 'public-domain-qualification-medium32-v1',
     'medium32-wave2-v1': 'public-domain-qualification-medium32-wave2-v1',
     'medium32-wave2-memory-v1': 'public-domain-qualification-medium32-wave2-memory-v1',
+    'medium32-wave2-observer-v1': 'public-domain-qualification-medium32-wave2-observer-v1',
     'medium32-wave3-v1': 'public-domain-qualification-medium32-wave3-v1',
     'medium32-wave4-v1': 'public-domain-qualification-medium32-wave4-v1',
     'hard32-wave2-numeric-v2': 'public-domain-qualification-hard32-wave2-numeric-v2',
+    'hard32-wave3-transport-v2': 'public-domain-qualification-hard32-wave3-transport-v2',
+    'hard32-wave4-v1': 'public-domain-qualification-hard32-wave4-v1',
 }
 _IMPORT_LOCK = threading.RLock()
 LANGUAGES = ('javascript', 'python')
@@ -138,10 +141,19 @@ def check_observation_policy(lane, freeze):
     medium['medium32-wave3-v1'] = ([1894,1911,1921,1953,1976,2079,2131,2135], 'exact typed integer scalar; local read-only effects')
     medium['medium32-wave4-v1'] = ([2170,2186,2256,2433,2587,2597,2602,2860], 'exact typed integer scalar/list; local read-only effects')
     medium['medium32-wave2-memory-v1'] = medium['medium32-wave2-v1']
+    medium['medium32-wave2-observer-v1'] = medium['medium32-wave2-v1']
     if lane == 'hard32-wave2-numeric-v2':
         if freeze.get('ids') != [1515, 1521, 1542, 1585, 1713, 2111, 2127]:
             raise ValueError('numerical comparator requires exact reviewed seven-ID population')
         expected = '1515 finite numerical absolute tolerance 1e-5 with exact binary-float conversion and analytic oracle uncertainty guard; other results exact typed scalar; local read-only effects'
+    if lane == 'hard32-wave3-transport-v2':
+        if freeze.get('ids') != [2132,2267,2290,2426,2565,2569,2573,2663]:
+            raise ValueError('integer transport comparator requires exact reviewed eight-ID population')
+        expected = 'exact typed scalar/list; ID2569 canonical integer transport tags decoded in both languages; local read-only effects'
+    if lane == 'hard32-wave4-v1':
+        if freeze.get('ids') != [2709,2781,2953,3003,3041,3093,3130]:
+            raise ValueError('Hard4 exact comparator requires reviewed seven-ID population')
+        expected = 'exact typed integer scalar/list; local read-only effects'
     if lane in medium:
         population, expected = medium[lane]
         if freeze.get('ids') != population:
@@ -161,6 +173,15 @@ def qualification_caveats(lane, pid):
             '1515 finite numerical evidence uses 20 analytic point/line/symmetric/majority/three-point fixtures and static algorithm review, not a general geometric-median oracle.',
             '1515 accepts finite numerical returns within absolute 1e-5, conservatively reduced by the frozen 1e-35 analytic-oracle uncertainty guard; equality of floating encodings is not required.',
             'The complete official point domain is validated, but arbitrary-input correctness verification is not established by this finite analytic fixture set.'])
+    if lane == 'hard32-wave3-transport-v2':
+        if pid == 2569:
+            caveats.append('2569 exact integer lists use existing canonical large-integer transport tags in both language harnesses; normalization does not permit floating tolerance, malformed tags, bools or a different outer result type.')
+        if pid == 2573:
+            caveats.append('2573 official matrix size up to1000 is validated, but finite executed fixtures reach100; complete1000-square matrix transport exceeds unchanged packet/output limits. No maximum-domain execution or universal correctness proof is claimed.')
+        if pid == 2663:
+            caveats.append('2663 full official length up to100000 is validated; finite executed lexical fixtures have length at most8. Static complexity review is separate from maximum-length execution evidence.')
+    if lane == 'hard32-wave4-v1' and pid == 2709:
+        caveats.append('2709 requires an exact boolean in both language profiles. The historical frozen batch policy label says integer scalar/list as shorthand; the independently pinned per-ID oracle and authority define boolean semantics and reject integer1 for true.')
     return caveats
 
 
