@@ -2,8 +2,8 @@
 
 Owner: [Algorithm Solver charter](../../CATSCAN.md).
 
-Fifteen permitted development-fit problems have standalone Python and JavaScript
-candidates: 34, 35, 62, 64, 71, 84, 85, 91, 104, 111, 347, 560, 567, 704 and 733. The IDs are checked
+Twenty-seven permitted development-fit problems have standalone Python and JavaScript
+candidates: 11, 15, 18, 21, 22, 24, 34, 35, 62, 64, 71, 78, 84, 85, 86, 90, 91, 104, 111, 153, 252, 253, 347, 560, 567, 704, 733. The IDs are checked
 against the already-public pinned development partition, not a new population.
 
 These are newly authored, readable candidates. They do not replace the frozen
@@ -28,13 +28,21 @@ receipts. They also do not publish the separately gated 80-rewrite set.
   equal heights coalesce and a virtual zero flush avoids mutating input arrays.
 - Rolling DP states preserve dependency order and bound all intermediate integer
   counts, including decoding prefixes rather than just the final answer.
+- Linked-list operations share a fully charged sentinel helper and preserve input
+  node identity while explicitly relinking next edges. Shared merge tails are
+  outside their declared disjoint-input domain.
+- Backtracking uses choose/recurse/undo with fresh output copies and bounded
+  recursion. Output costs remain explicit, not hidden as constant extra space.
+- Sum searches share copied sorting and deduplicated k-sum with a two-pointer
+  base case; meetings share sorted endpoints and half-open interval semantics.
 - Frequency, prefix-sum and fixed-alphabet window loops use explicit count state.
   Reuse actual invariants, not a generic abstraction that hides different rules.
 - JavaScript numeric assumptions are declared. No bitwise midpoint truncation or
   silent assumption that arbitrary Python integers behave like JS Number.
-- Effects matter: flood fill preserves and returns the input image; other inputs
-  remain unmodified. Tree shape, image row identity and accepted string alphabet
-  are explicit in each sidecar.
+- Effects matter: flood fill preserves and returns the modified input image;
+  linked-list candidates relink original nodes. Other candidates leave inputs
+  unchanged. Tree shape, list ownership, row identity and accepted alphabets are
+  explicit in each sidecar.
 - Count every helper, class wrapper and eventual adapter in comparisons. Consistent
   source is a candidate mechanism, not evidence of reduced composition cost.
 
