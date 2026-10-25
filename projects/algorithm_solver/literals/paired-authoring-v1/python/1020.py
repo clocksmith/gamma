@@ -19,6 +19,7 @@ class Solution:
                 if row == 0 or row == rows - 1 or column == 0 or column == columns - 1:
                     if grid[row][column] == 1:
                         visited[row][column] = True
+                        grid[row][column] = 0
                         queue.append((row, column))
         head = 0
         while head < len(queue):
@@ -27,6 +28,7 @@ class Solution:
             for next_row, next_column in cardinal_neighbors(row, column, rows, columns):
                 if grid[next_row][next_column] == 1 and not visited[next_row][next_column]:
                     visited[next_row][next_column] = True
+                    grid[next_row][next_column] = 0
                     queue.append((next_row, next_column))
         count = 0
         for row in range(rows):

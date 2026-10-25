@@ -1,6 +1,7 @@
 class Solution:
     def bagOfTokensScore(self, tokens, power):
-        ordered = sorted(tokens)
+        tokens.sort()
+        ordered = tokens
         left = 0
         right = len(ordered) - 1
         score = 0

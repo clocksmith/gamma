@@ -1,6 +1,7 @@
 class Solution:
     def minIncrementForUnique(self, nums: list[int]) -> int:
-        ordered = sorted(nums)
+        nums.sort()
+        ordered = nums
         next_free = 0
         moves = 0
         for value in ordered:
