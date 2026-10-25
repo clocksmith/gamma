@@ -97,3 +97,14 @@ published, and no candidate execution, dictionary fit or new M1 result occurred.
 The next substantive gate is frozen-domain/effect reconciliation and independent
 isolated qualification. The public shared-breadth pilot is also ready for that
 same blocked runtime gate. Keep the protected populations closed.
+
+## Known domain-reconciliation blockers
+
+Static inspection found frozen inputs outside the authored domains for 1153 and
+2898. Their sidecars explicitly block promotion. Do not remove those cases,
+change the frozen denominator, or infer behavior from the conventional problem
+title. Resolve the authoritative contract before claiming predecessor parity.
+Private input details and observations remain outside the repository.
+
+The 1100 alternative now explicitly handles zero-width windows as n+1 empty
+windows; this extension is source-reviewed and syntax-checked, not executed.

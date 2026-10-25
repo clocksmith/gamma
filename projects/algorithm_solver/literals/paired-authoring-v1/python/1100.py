@@ -1,5 +1,7 @@
 class Solution:
     def numKLenSubstrNoRepeats(self, text, k):
+        if k == 0:
+            return len(text) + 1
         counts = {}
         total = 0
         for right, character in enumerate(text):
