@@ -2,35 +2,29 @@ class Solution:
     def shortestCommonSupersequence(self, str1: str, str2: str) -> str:
         rows = len(str1)
         columns = len(str2)
-        lengths = [[0] * (columns + 1) for _ in range(rows + 1)]
-        for row in range(rows + 1):
-            lengths[row][columns] = rows - row
-        for column in range(columns + 1):
-            lengths[rows][column] = columns - column
-        for row in range(rows - 1, -1, -1):
-            for column in range(columns - 1, -1, -1):
-                if str1[row] == str2[column]:
-                    lengths[row][column] = 1 + lengths[row + 1][column + 1]
+        common = [[0] * (columns + 1) for _ in range(rows + 1)]
+        for row in range(1, rows + 1):
+            for column in range(1, columns + 1):
+                if str1[row - 1] == str2[column - 1]:
+                    common[row][column] = common[row - 1][column - 1] + 1
                 else:
-                    lengths[row][column] = 1 + min(lengths[row + 1][column], lengths[row][column + 1])
+                    common[row][column] = max(common[row - 1][column], common[row][column - 1])
         result = []
-        row = 0
-        column = 0
-        while row < rows and column < columns:
-            if str1[row] == str2[column]:
-                result.append(str1[row])
-                row += 1
-                column += 1
-            elif lengths[row + 1][column] <= lengths[row][column + 1]:
-                result.append(str1[row])
-                row += 1
-            else:
+        row = rows
+        column = columns
+        while row or column:
+            if row == 0:
+                column -= 1
                 result.append(str2[column])
-                column += 1
-        while row < rows:
-            result.append(str1[row])
-            row += 1
-        while column < columns:
-            result.append(str2[column])
-            column += 1
+            elif column == 0 or common[row][column] == common[row - 1][column]:
+                row -= 1
+                result.append(str1[row])
+            elif common[row][column] == common[row][column - 1]:
+                column -= 1
+                result.append(str2[column])
+            else:
+                row -= 1
+                column -= 1
+                result.append(str1[row])
+        result.reverse()
         return "".join(result)
