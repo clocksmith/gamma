@@ -1,0 +1,39 @@
+{
+  "schema_version": 2,
+  "problem_id": "1106",
+  "evidence_class": "independently_authored_public_synthetic_plan",
+  "execution_status": "not_run",
+  "candidate_used_as_oracle": false,
+  "comparison": "exact_ordered_value",
+  "cases": [
+    {
+      "args": [
+        "t"
+      ],
+      "expected": true,
+      "purpose": "leaf"
+    },
+    {
+      "args": [
+        "!(t)"
+      ],
+      "expected": false,
+      "purpose": "negation"
+    },
+    {
+      "args": [
+        "&(t,|(f,t),!(f))"
+      ],
+      "expected": true,
+      "purpose": "nested operators"
+    },
+    {
+      "args": [
+        "|(f)"
+      ],
+      "expected": false,
+      "purpose": "single operand"
+    }
+  ],
+  "expected_output_boundary": "Expected values remain outside candidate sandbox."
+}

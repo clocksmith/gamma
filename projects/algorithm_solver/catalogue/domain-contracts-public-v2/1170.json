@@ -1,0 +1,69 @@
+{
+  "schema_version": 2,
+  "problem_id": "1170",
+  "title": "Compare Strings by Frequency of the Smallest Character",
+  "status": "public_statement_transcribed_pending_independent_review",
+  "qualified": false,
+  "source": {
+    "url": "https://leetcode.com/problems/compare-strings-by-frequency-of-the-smallest-character/",
+    "publisher": "LeetCode",
+    "retrieved_date_utc": "2026-10-25",
+    "identity_verified_from_official_page": true,
+    "access": "freely_accessible_unauthenticated",
+    "identity_line": 18,
+    "clause_lines": "22-25,43-48",
+    "source_pin": "source-pin.json",
+    "batch": "b"
+  },
+  "interface_proposal": {
+    "entrypoint": "solve",
+    "calling_convention": "ordered_positional",
+    "parameters": [
+      [
+        "queries",
+        "array<string>"
+      ],
+      [
+        "words",
+        "array<string>"
+      ]
+    ],
+    "authority": "local catalogue convention; not claimed official runtime signature"
+  },
+  "constraints": {
+    "each_array_length": [
+      1,
+      2000
+    ],
+    "each_word_length": [
+      1,
+      10
+    ],
+    "alphabet": "a-z"
+  },
+  "result": {
+    "type": "array<integer>",
+    "semantics": "For each query in order, count word entries with a strictly larger frequency of their own smallest letter than the query has of its own smallest letter.",
+    "comparison": "exact_ordered_value"
+  },
+  "complexity": {
+    "required_time": null,
+    "required_space": null,
+    "official_follow_up": null
+  },
+  "unspecified_by_statement": {
+    "input_mutation": null,
+    "result_aliasing": null,
+    "invalid_input_exceptions": null
+  },
+  "local_policy_proposal": {
+    "status": "not_adopted",
+    "effects": "Freeze input-preservation and returned-alias policy independently before qualification; mathematical modifications are not automatically caller-visible effects.",
+    "transport": "JSON values; integer parameters exclude booleans; real values must be finite.",
+    "tree_transport": null
+  },
+  "boundary_plan": [
+    "2000 repeated queries/words with smallest-letter frequencies 1 and 10; equal thresholds yield zero."
+  ],
+  "promotion_gate": "Independent clause/interface/effect review plus new source/runtime/test-bound receipts. Never upgrade compatibility-only probes or historical admitted evidence."
+}
