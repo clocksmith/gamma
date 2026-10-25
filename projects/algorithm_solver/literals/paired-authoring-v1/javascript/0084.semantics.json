@@ -1,0 +1,20 @@
+{
+  "problem_id": 84,
+  "language": "javascript",
+  "entry_point": "Solution.largestRectangleArea",
+  "status": "unqualified_candidate",
+  "input": "heights is a dense ordinary Array of nonnegative safe-integer Numbers describing unit-width histogram bars. The paired domain has length n in [0, 4294967295], every height at most 9007199254740991, and mathematical n * H <= 9007199254740991, where H is the maximum height or zero for an empty Array. Inputs must fit both runtimes. NaN, infinities, negative zero, non-integers, BigInt, sparse arrays, accessors, proxies and concurrent mutation are excluded. Preconditions are not checked at runtime.",
+  "return": "A nonnegative safe-integer Number equal to the largest rectangle area formed by consecutive unit-width bars, with zero returned for an empty or all-zero histogram. For every nonempty interval [left, right), its rectangle area is (right - left) times the minimum height in that interval; the result is the maximum of these areas and zero.",
+  "mutation_aliasing": "The caller's heights Array and its elements remain unchanged, including its length. The flush uses a virtual zero and never appends to the input. A scalar is returned, the helper stack is local, and the Solution instance retains no state.",
+  "numeric": "The shared bounds are 0 <= n <= 4294967295, 0 <= height <= 9007199254740991 and n * H <= 9007199254740991. All height, width and area calculations are exact safe-integer Number operations. Widths are at most n, computed areas are at most n * H, and the loop counter is at most n + 1. No bitwise coercion is used. These are mathematical preconditions, not floating-point validation checks.",
+  "complexity": "O(n + 1) time and O(n + 1) auxiliary space under constant-cost Number arithmetic, indexing and amortized Array stack operations. Each positive-height entry is pushed at most once and popped at most once; equal heights do not create duplicate entries. At most n start/height pairs are stored. The empty input takes O(1) time and space.",
+  "helpers": [
+    {
+      "name": "histogramArea",
+      "contract": "Reads nonnegative heights under the declared area bound and returns the maximum contiguous histogram area without mutation. Before each right position, stack entries have increasing starts and strictly increasing positive heights; each start is the earliest column supporting that height through right - 1. Popping taller entries computes their completed area and carries the earliest start forward. Equal heights keep the existing earlier start. A virtual zero at right == n flushes every positive entry without an input write.",
+      "cost": "One call, O(n + 1) time and O(n + 1) auxiliary space. Its complete 881-byte UTF-8 definition, from 'function' through the newline after its closing brace, is byte-identical in 0084.js and 0085.js and is charged in full in each standalone candidate. The inter-definition blank line is charged in total source bytes."
+    }
+  ],
+  "source_accounting": "The complete standalone source is 974 UTF-8 bytes, including the 881-byte helper, comments, separator newline, Solution wrapper, call site and terminal newline. Shared spelling is not a free library: all helper bytes are charged separately for this candidate. No imports, generated source or hidden expansion exists. Any eventual judge adapter is additional charged source.",
+  "evidence_boundary": "Independently authored dev_fit candidate outside frozen source sets. No candidate execution, predecessor equivalence, behavioral qualification, benchmark acceptance or M1 progress is claimed. The mandatory isolated judge is unavailable; static checks do not establish runtime correctness. Independent source-bound qualification must cover empty input, zeros, repeated heights, increasing/decreasing runs, exact numeric limits and input preservation before promotion."
+}

@@ -11,7 +11,7 @@ class Solution {
     }
 
     const result = [];
-    for (let frequency = nums.length; frequency > 0; frequency--) {
+    for (let frequency = nums.length; frequency > 0; frequency -= 1) {
       for (const value of buckets[frequency]) {
         result.push(value);
         if (result.length === k) {

@@ -1,0 +1,14 @@
+{
+  "problem_id": 91,
+  "language": "python",
+  "entry_point": "Solution.numDecodings",
+  "status": "unqualified_candidate",
+  "input": "s is a plain string containing only ASCII decimal digits 0 through 9. The empty string is accepted as an explicit zero-result extension. Preconditions, including the paired numeric bounds, are not checked at runtime.",
+  "return": "The integer number of ways to split s into tokens 1 through 26, representing letters A through Z. Tokens cannot have a leading zero: a zero contributes only as the second digit of 10 or 20. An empty string, a leading zero or a string with no valid complete split returns zero.",
+  "mutation_aliasing": "Strings are immutable and only read. All rolling counts are local scalars. The result aliases no mutable input, and the Solution instance retains no state.",
+  "numeric": "The paired domain bounds len(s) by 4294967295 and requires the number of valid decodings of every prefix, not just the final string, to be <= 9007199254740991. The empty-prefix state is one. Each current sum counts a prefix and each retained state counts an earlier prefix, so all counts and additions stay within the safe-integer range; indices and loop increments do too. Python arbitrary-size integers do not broaden the paired domain. ASCII digit comparisons need no integer parsing or Unicode normalization.",
+  "complexity": "O(len(s) + 1) time and O(1) auxiliary space under constant-cost string indexing and safe-integer arithmetic. At each index, one_back counts the preceding prefix and two_back counts the prefix before that. A nonzero single digit contributes one_back; a valid 10..26 pair contributes two_back. Shift both states only after forming the new prefix count; no recursion or substring copies are used.",
+  "helpers": [],
+  "source_accounting": "The complete Solution class, initialization, loop, token predicates and method wrapper belong to this standalone candidate and must be charged. There are no imported helpers or hidden source expansion; any eventual judge adapter must be charged separately.",
+  "evidence_boundary": "Independently authored dev_fit candidate outside frozen source sets. No candidate execution, predecessor equivalence, behavioral qualification, benchmark acceptance or M1 progress is claimed. Frozen original sources and tests were unavailable."
+}

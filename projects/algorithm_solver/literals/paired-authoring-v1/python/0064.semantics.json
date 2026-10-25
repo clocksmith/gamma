@@ -1,0 +1,14 @@
+{
+  "problem_id": 64,
+  "language": "python",
+  "entry_point": "Solution.minPathSum",
+  "status": "unqualified_candidate",
+  "input": "grid is a nonempty plain list of nonempty, equal-length plain lists containing nonnegative plain int values, excluding bool. Rows may alias because the grid is read-only. Preconditions, including the paired numeric bounds, are not checked at runtime.",
+  "return": "The integer minimum sum of cell values along a path from the top-left cell to the bottom-right cell using only one-cell right or down moves. Both endpoint values are included; a one-cell grid returns its sole value.",
+  "mutation_aliasing": "No grid or row writes, sorting, row replacement or input copies. The rolling list is newly allocated and not exposed. All input values and row identities remain unchanged. The scalar result aliases no mutable input, and the Solution instance retains no state.",
+  "numeric": "The paired domain requires 1 <= rows,columns <= 4294967295 and nonnegative integer cell values. The mathematical bound (rows+columns-1)*maximum_cell_value must be <= 9007199254740991. Each path prefix, stored minimum and addition is bounded by that value, including first-row and first-column initialization; dimensions, indices and loop increments are safe integers. No infinite sentinel is used. Python arbitrary-size integers do not broaden the paired domain.",
+  "complexity": "O(rows*columns) time and O(columns) auxiliary space under constant-cost indexing and safe-integer arithmetic. Initialize first-row prefix costs, then process later rows left to right. Before an interior update, the current slot is the minimum cost from above and the previous slot is the updated cost from the left; choose the smaller and add the current cell.",
+  "helpers": [],
+  "source_accounting": "The complete Solution class, rolling-state allocation and initialization, loops and method wrapper belong to this standalone candidate and must be charged. There are no imported helpers or hidden source expansion; any eventual judge adapter must be charged separately.",
+  "evidence_boundary": "Independently authored dev_fit candidate outside frozen source sets. No candidate execution, predecessor equivalence, behavioral qualification, benchmark acceptance or M1 progress is claimed. Frozen original sources and tests were unavailable."
+}
