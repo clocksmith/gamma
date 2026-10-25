@@ -1,0 +1,160 @@
+{
+  "authority": "Independent official public descriptions; local paraphrases, not raw HTML",
+  "automatic_promotion": false,
+  "private_cases_read": false,
+  "problems": [
+    {
+      "domain": "Array length1..100000, entries1..100000.",
+      "entrypoint": "solve",
+      "id": 2709,
+      "local_effect_policy": "read-only arguments; fresh mutable returns and no output-to-input aliases; explicit local policy, not official mutation requirement",
+      "objective": "Whether the index graph joining distinct indices whose values have GCD>1 is connected. Single vertex is connected.",
+      "official_identity_verified": true,
+      "official_url": "https://leetcode.com/problems/greatest-common-divisor-traversal/description/",
+      "ordered_parameters": [
+        "nums"
+      ],
+      "qualification_status": "not executed",
+      "result_comparison": "exact typed value",
+      "result_type": "boolean",
+      "review_date": "2026-10-25",
+      "source_complexity_review": {
+        "official_requirement_claimed": false,
+        "property": "Smallest-prime sieve and union-find over shared factors; O(M log log M+n log M alpha(n)) expected time, O(M+n) space.",
+        "status": "both exact owner sources statically reviewed, not executed"
+      }
+    },
+    {
+      "domain": "Lowercase word length1..100000;1..100000 forbidden lowercase strings, each length1..10.",
+      "entrypoint": "solve",
+      "id": 2781,
+      "local_effect_policy": "read-only arguments; fresh mutable returns and no output-to-input aliases; explicit local policy, not official mutation requirement",
+      "objective": "Length of longest contiguous substring containing no forbidden string as substring; empty allowed.",
+      "official_identity_verified": true,
+      "official_url": "https://leetcode.com/problems/length-of-the-longest-valid-substring/description/",
+      "ordered_parameters": [
+        "word",
+        "forbidden"
+      ],
+      "qualification_status": "not executed",
+      "result_comparison": "exact typed value",
+      "result_type": "integer",
+      "review_date": "2026-10-25",
+      "source_complexity_review": {
+        "official_requirement_claimed": false,
+        "property": "Sliding left boundary from latest forbidden start, set lookup over suffixes of length<=10; O(n*L^2+F) expected time including slicing and hashing.",
+        "status": "both exact owner sources statically reviewed, not executed"
+      }
+    },
+    {
+      "domain": "Lowercase word length1..100000;1<=k<=len(word).",
+      "entrypoint": "solve",
+      "id": 2953,
+      "local_effect_policy": "read-only arguments; fresh mutable returns and no output-to-input aliases; explicit local policy, not official mutation requirement",
+      "objective": "Count nonempty substrings in which every present character occurs exactly k times and adjacent alphabetical distances are<=2.",
+      "official_identity_verified": true,
+      "official_url": "https://leetcode.com/problems/count-complete-substrings/description/",
+      "ordered_parameters": [
+        "word",
+        "k"
+      ],
+      "qualification_status": "not executed",
+      "result_comparison": "exact typed value",
+      "result_type": "integer",
+      "review_date": "2026-10-25",
+      "source_complexity_review": {
+        "official_requirement_claimed": false,
+        "property": "Split at invalid adjacency and slide each of26 possible distinct-count window sizes; O(26*n) time, O(n+26) space.",
+        "status": "both exact owner sources statically reviewed, not executed"
+      }
+    },
+    {
+      "domain": "Lowercase string length1..10000;1<=k<=26.",
+      "entrypoint": "solve",
+      "id": 3003,
+      "local_effect_policy": "read-only arguments; fresh mutable returns and no output-to-input aliases; explicit local policy, not official mutation requirement",
+      "objective": "Change at most one character, then repeatedly remove the longest prefix having at most k distinct letters; maximize resulting partition count.",
+      "official_identity_verified": true,
+      "official_url": "https://leetcode.com/problems/maximize-the-number-of-partitions-after-operations/description/",
+      "ordered_parameters": [
+        "s",
+        "k"
+      ],
+      "qualification_status": "not executed",
+      "result_comparison": "exact typed value",
+      "result_type": "integer",
+      "review_date": "2026-10-25",
+      "source_complexity_review": {
+        "official_requirement_claimed": false,
+        "property": "Prefix state, monotonic window boundaries and suffix partition counts evaluate each replacement through next unseen-letter boundary; O(26^2*n) time, O(n+26) space.",
+        "status": "both exact owner sources statically reviewed, not executed"
+      }
+    },
+    {
+      "domain": "Array length1..100000; positive entries1..1000000.",
+      "entrypoint": "solve",
+      "id": 3041,
+      "local_effect_policy": "read-only arguments; fresh mutable returns and no output-to-input aliases; explicit local policy, not official mutation requirement",
+      "objective": "Independently increase each element by at most1, then select a maximum-size subset that sorts to distinct consecutive integers.",
+      "official_identity_verified": true,
+      "official_url": "https://leetcode.com/problems/maximize-consecutive-elements-in-an-array-after-modification/description/",
+      "ordered_parameters": [
+        "nums"
+      ],
+      "qualification_status": "not executed",
+      "result_comparison": "exact typed value",
+      "result_type": "integer",
+      "review_date": "2026-10-25",
+      "source_complexity_review": {
+        "official_requirement_claimed": false,
+        "property": "Sorted-copy DP ending at each value; both transitions read pre-element state, O(n log n) time and O(n) space.",
+        "status": "both exact owner sources statically reviewed, not executed"
+      }
+    },
+    {
+      "domain": "Each list has1..10000 lowercase strings, each length1..5000; total characters per list<=500000.",
+      "entrypoint": "solve",
+      "id": 3093,
+      "local_effect_policy": "read-only arguments; fresh mutable returns and no output-to-input aliases; explicit local policy, not official mutation requirement",
+      "objective": "Return container index for each query, maximizing common suffix length, then minimizing container word length, then index.",
+      "official_identity_verified": true,
+      "official_url": "https://leetcode.com/problems/longest-common-suffix-queries/description/",
+      "ordered_parameters": [
+        "wordsContainer",
+        "wordsQuery"
+      ],
+      "qualification_status": "not executed",
+      "result_comparison": "exact typed value",
+      "result_type": "integer list",
+      "review_date": "2026-10-25",
+      "source_complexity_review": {
+        "official_requirement_claimed": false,
+        "property": "Compact reversed trie with first-child/sibling arrays and minimum length/index summaries; O(26*(S+Q)) time and O(S+query_count) space.",
+        "status": "both exact owner sources statically reviewed, not executed"
+      }
+    },
+    {
+      "domain": "All three integers1..1000.",
+      "entrypoint": "solve",
+      "id": 3130,
+      "local_effect_policy": "read-only arguments; fresh mutable returns and no output-to-input aliases; explicit local policy, not official mutation requirement",
+      "objective": "Count binary strings with exact zero/one counts and no constant run longer than limit, modulo1000000007.",
+      "official_identity_verified": true,
+      "official_url": "https://leetcode.com/problems/find-all-possible-stable-binary-arrays-ii/description/",
+      "ordered_parameters": [
+        "zero",
+        "one",
+        "limit"
+      ],
+      "qualification_status": "not executed",
+      "result_comparison": "exact typed value",
+      "result_type": "integer",
+      "review_date": "2026-10-25",
+      "source_complexity_review": {
+        "official_requirement_claimed": false,
+        "property": "Two ending-bit DP states subtract overlong runs; one full table plus rolling row; O(zero*one) time and space.",
+        "status": "both exact owner sources statically reviewed, not executed"
+      }
+    }
+  ]
+}

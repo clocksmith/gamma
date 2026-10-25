@@ -1,0 +1,31 @@
+{
+  "argument_order": [
+    "nums1",
+    "nums2",
+    "queries"
+  ],
+  "domain": "Equal arrays length1..100000; nums1 binary, nums2 entries0..1e9;1..100000 queries. Type1[1,l,r] valid inclusive indices; type2[2,p,0],p0..1e6; type3[3,0,0].",
+  "entry_point": "solve",
+  "entrypoint": "solve",
+  "id": 2569,
+  "local_effect_policy": "read-only arguments; fresh mutable returns and no output-to-input aliases; explicit local policy, not official mutation requirement",
+  "objective": "Flip nums1 intervals, add p*nums1[i] to nums2[i], and return each requested nums2 sum in order.",
+  "official_identity_verified": true,
+  "official_url": "https://leetcode.com/problems/handling-sum-queries-after-update/description/",
+  "ordered_parameters": [
+    "nums1",
+    "nums2",
+    "queries"
+  ],
+  "problem_id": 2569,
+  "qualification_status": "not executed",
+  "result_comparison": "exact typed value; JS2569 canonical BigInt tags normalize to exact integers only",
+  "result_semantics": "Flip nums1 intervals, add p*nums1[i] to nums2[i], and return each requested nums2 sum in order.",
+  "result_type": "integer list",
+  "review_date": "2026-10-25",
+  "source_complexity_review": {
+    "official_requirement_claimed": false,
+    "property": "Lazy segment tree tracks ones and flips, exact BigInt JS total/Python int; O(n+q log n) time, O(n+q) space. Existing exact BigInt transport required above2**53.",
+    "status": "both exact owner sources statically reviewed, not executed"
+  }
+}
