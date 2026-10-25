@@ -86,6 +86,45 @@ class LiteralComparisonTests(unittest.TestCase):
             self.assertTrue(all(r["gain"] > 0 for r in report["trace"]))
             self.assertEqual(report["fit_total_selections"], sum(len(compare.scorer.shortest_encode(t, first)) for t in texts.values()))
 
+    def test_cached_absent_programs_match_full_rescore(self):
+        populations = [
+            {"a": "red alpha\nred alpha\ntail a\n",
+             "b": "blue beta\nblue beta\ntail b\n"},
+            {"a": "same one\nsame two\nleft\n",
+             "b": "same one\nsame two\nright\n", "c": "different\nlast\n"},
+        ]
+        for texts in populations:
+            for capacity in (128, 256):
+                chosen, trace = [], []
+                remaining = set(compare.candidate_pool(texts))
+                incumbent = sum(map(len, texts.values()))
+                evaluations = 0
+                while remaining and len(chosen) < capacity - len(compare.ALPHABET):
+                    trials = []
+                    for piece in sorted(remaining):
+                        vocabulary = compare.ALPHABET + sorted(chosen + [piece])
+                        count = sum(len(compare.scorer.shortest_encode(text, vocabulary))
+                                    for text in texts.values())
+                        trials.append((count, len(piece.encode()), piece))
+                        evaluations += 1
+                    count, _, piece = min(trials)
+                    if count >= incumbent:
+                        break
+                    chosen.append(piece)
+                    remaining.remove(piece)
+                    trace.append({"step": len(chosen), "literal": piece,
+                                  "before": incumbent, "after": count,
+                                  "gain": incumbent - count})
+                    incumbent = count
+                with mock.patch.object(compare, "minimum_count", wraps=compare.minimum_count) as calls:
+                    actual, report = compare.fit_dictionary(texts, capacity)
+                self.assertEqual(actual, compare.ALPHABET + sorted(chosen))
+                self.assertEqual(report["trace"], trace)
+                self.assertEqual(report["evaluations"], evaluations)
+                self.assertEqual(report["fit_total_selections"], incumbent)
+                self.assertLess(calls.call_count, evaluations * len(texts))
+                self.assertTrue(all(call.args[2] for call in calls.call_args_list))
+
     def test_cpu_expiry_is_failure_not_partial_success(self):
         with mock.patch.object(compare, "CPU_SECONDS_PER_FIT", -1):
             with self.assertRaisesRegex(RuntimeError, "arm failed"):
