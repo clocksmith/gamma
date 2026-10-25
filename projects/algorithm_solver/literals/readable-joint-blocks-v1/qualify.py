@@ -235,25 +235,39 @@ def parse_records(raw, count):
     return rows[:-1]
 
 
-def qualify(output: Path):
+def qualify(output: Path, languages: tuple[str, ...] = ("python", "javascript"), node_runtime: Path | None = None):
+    if not languages or len(set(languages)) != len(languages) or any(x not in ("python", "javascript") for x in languages):
+        raise ValueError("select distinct supported languages")
     output.mkdir(parents=True, exist_ok=False)
     started = time.monotonic()
     cases = build_cases()
-    sources = build_sources()
+    sources = {language: problems for language, problems in build_sources().items() if language in languages}
+    source_rows = [row for row in provenance() if row["language"] in languages]
     rows = [{**row, "passed": False, "checks_total": len(cases[row["problem_id"]]), "checks_passed": 0,
              "independent_oracle_checks_total": sum(case["expectation_mode"] == "independent-oracle" for case in cases[row["problem_id"]]),
-             "predecessor_compatibility_checks_total": sum(case["expectation_mode"] == "predecessor-effect-compatibility" for case in cases[row["problem_id"]])} for row in provenance()]
+             "predecessor_compatibility_checks_total": sum(case["expectation_mode"] == "predecessor-effect-compatibility" for case in cases[row["problem_id"]])} for row in source_rows]
     code = {name: sha((HERE/name).read_bytes()) for name in ("variants.py", "qualify.py", "QUALIFICATION.md")}
-    contract = {"schema": SCHEMA, "seed": SEED, "sources": provenance(), "cases_sha256": sha(json_bytes(cases)), "code_sha256": code,
+    contract = {"schema": SCHEMA, "seed": SEED, "sources": source_rows, "cases_sha256": sha(json_bytes(cases)), "code_sha256": code,
                 "cases_by_problem": {p:len(c) for p,c in cases.items()}, "case_origin": "synthetic_and_public_samples_only", "max_total_wall_seconds": 180,
                 "batch_cases": 128, "sandbox": "existing_algsolve.judge.sandbox.run_unmodified", "sandbox_sha256": sha(Path(sandbox.__file__).read_bytes()),
                 "runtime_paths": {"python": "/usr/bin/python3", "javascript": "/usr/bin/node"}, "protected_access": False}
+    if set(languages) != {"python", "javascript"}:
+        contract['language_scope'] = list(languages)
+        contract['runtime_paths'] = {key: value for key, value in contract['runtime_paths'].items() if key in languages}
+        contract['scope'] = 'language-only prerequisite; not paired qualification or M1'
+    runtime_manifest = None
+    if node_runtime is not None:
+        from algsolve.judge import pinned_runtime
+        runtime_manifest = pinned_runtime.freeze_runtime(node_runtime)
+        contract['runtime_identity'] = runtime_manifest
+        contract['runtime_paths']['javascript'] = '/runtime/node'
+        contract['runtime_adapter_sha256'] = sha(Path(pinned_runtime.__file__).read_bytes())
     raw = json_bytes(contract)
     (output/"contract.json").write_bytes(raw)
     report = {"schema": SCHEMA, "status": "blocked", "success": False, "rows": rows, "cases_sha256": contract["cases_sha256"], "code_sha256": code,
               "qualification_contract_sha256": sha(raw), "failures": [], "candidate_executions": 0, "protected_access": False}
     try:
-        missing = [path for path in contract["runtime_paths"].values() if not Path(path).is_file()]
+        missing = [path for path in contract["runtime_paths"].values() if path != "/runtime/node" and not Path(path).is_file()]
         if missing:
             raise sandbox.SandboxUnavailable("Required runtime absent from existing sandbox mount: " + ", ".join(missing))
         for language, problems in sources.items():
@@ -272,7 +286,12 @@ def qualify(output: Path):
                         else:
                             argv = ["/usr/bin/node", "--jitless", "--single-threaded", "--max-old-space-size=64", "runner.cjs"]
                             files = {"program.js": source, "runner.cjs": JAVASCRIPT_RUNNER}
-                        result = sandbox.run(argv, files=files, stdin=json_bytes(payload(METHODS[problem],batch)), limits=sandbox.Limits(cpu_seconds=4,wall_seconds=10,memory_bytes=1024**3,max_output_bytes=8*1024**2))
+                        limits = sandbox.Limits(cpu_seconds=4,wall_seconds=10,memory_bytes=1024**3,max_output_bytes=8*1024**2)
+                        if language == 'javascript' and runtime_manifest is not None:
+                            result = pinned_runtime.run_node(node_runtime, manifest=runtime_manifest, files=files,
+                                stdin=json_bytes(payload(METHODS[problem],batch)), limits=limits, node_args=argv[1:])
+                        else:
+                            result = sandbox.run(argv, files=files, stdin=json_bytes(payload(METHODS[problem],batch)), limits=limits)
                         report["candidate_executions"] += 1
                         stem = f"{language}-{problem}-{variant}-{offset}"
                         (output/(stem+".stdout")).write_bytes(result.stdout)
@@ -307,8 +326,10 @@ def qualify(output: Path):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument("--language", choices=("python", "javascript"), action="append")
+    parser.add_argument("--node-runtime", type=Path)
     arguments = parser.parse_args()
-    receipt = qualify(arguments.output)
+    receipt = qualify(arguments.output, tuple(arguments.language) if arguments.language else ("python", "javascript"), arguments.node_runtime)
     print(json.dumps({key:receipt[key] for key in ("status","success","candidate_executions")}, sort_keys=True))
     if "blocker" in receipt:
         print(receipt["blocker"])

@@ -120,6 +120,26 @@ class OracleAndComparatorTests(unittest.TestCase):
             with self.assertRaises(ValueError):
                 qualify.parse_records(bad,1)
 
+    def test_language_scope_rejects_invalid_or_duplicate_selection(self):
+        for languages in ((), ("ruby",), ("python", "python")):
+            with tempfile.TemporaryDirectory() as directory, self.assertRaises(ValueError):
+                qualify.qualify(Path(directory)/"run", languages)
+
+    def test_python_only_contract_cannot_claim_paired_coverage(self):
+        with tempfile.TemporaryDirectory() as directory, patch.object(qualify.sandbox,"run") as run:
+            original_is_file = Path.is_file
+            def exists(path):
+                return False if str(path) == "/usr/bin/python3" else original_is_file(path)
+            with patch.object(Path,"is_file",exists):
+                receipt = qualify.qualify(Path(directory)/"run", ("python",))
+            contract = json.loads((Path(directory)/"run"/"contract.json").read_text())
+            self.assertEqual(contract["language_scope"], ["python"])
+            self.assertEqual(set(contract["runtime_paths"]), {"python"})
+            self.assertEqual(len(receipt["rows"]), 6)
+            self.assertTrue(all(row["language"] == "python" for row in receipt["rows"]))
+            self.assertEqual(receipt["status"], "blocked")
+            run.assert_not_called()
+
     def test_runtime_blocker_cannot_qualify_or_launch_candidates(self):
         with tempfile.TemporaryDirectory() as directory, patch.object(qualify.sandbox,"run") as run:
             original_is_file = Path.is_file

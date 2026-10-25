@@ -53,3 +53,18 @@ preserving identities. Independent-oracle and compatibility counts are separate.
 
 No final-100 source/test, protected-66 source/test, model, training, private original
 test, download, recognition artifact, deployment or BITS publication is involved.
+
+## Versioned dot runtime continuation (2026-10-25)
+
+The owner explicitly approved a pinned Node runtime mount. New runs may select
+`--node-runtime` with the approved executable. The versioned `pinned_runtime`
+adapter snapshots and hashes that executable, then directly executes it from one
+read-only `/runtime/node` mount. The original sandbox, no-network namespaces,
+read-only task files, private temporary directory, resource limits, host-only
+expectations and process-group cleanup remain unchanged. Runtime bytes, dependency
+closure and adapter identity are frozen before candidate execution. No ELF-loader
+permission workaround is used. Historical blocked receipts remain unchanged.
+
+`--language python` or `--language javascript` creates a language-scoped prerequisite
+receipt containing only that language's sources. It cannot satisfy the paired
+comparison gate. The default still requires both languages and all twelve rows.
