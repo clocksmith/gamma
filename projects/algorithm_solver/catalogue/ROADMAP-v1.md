@@ -43,8 +43,10 @@ Protected final100 and protected66 remain closed. Record protected slots and the
 specific missing authority; do not redefine them out of the universe or claim
 complete coverage. The owner explicitly selected **all 4,081 known numeric problem IDs**, hence
 **8,162 language slots**, including acquisition of missing material. The exact
-ID manifest must be safely materialized and hash-frozen; a count alone is not
-a universe freeze. The current 400 development import is **not** the complete
+ID manifest is independently parsed and hash-frozen; see
+[the metadata receipt](ALL4081-UNIVERSE-RECEIPT-v1.json). All 8,162 language
+slots are represented, with blocked/protected statuses retained. A count alone
+would not establish this universe freeze. The current 400 development import is **not** the complete
 catalogue. Historical catalogue receipts remain historical until their exact
 runtime/interface/contract bindings are checked; new runtime tests do not
 retroactively replace them. Finite cases are evidence, not universal proof.
@@ -110,3 +112,11 @@ the existing authorized transport without moving execution elsewhere.
 Focused checks: `python3 -m unittest projects.algorithm_solver.catalogue.test_catalogue projects.algorithm_solver.catalogue.test_retrieval projects.algorithm_solver.catalogue.test_python_development_adapter` (22 tests), package import and Python compilation. The charter validator is absent from this sparse workspace; no full charter-validation pass is claimed.
 
 The Python development adapter has been exercised on the already authorized 400-ID metadata slice: 372 authored pending registry bindings, 28 blocked including 16 compatibility-only probes, zero automatic promotions. Its JavaScript slots mean evidence not imported by that adapter, not missing JavaScript solutions globally. This is neither the full eligible universe nor a downgrade of the separate finite replay receipts.
+
+The [explicit v2 evidence policy](EVIDENCE-POLICY-v2.md) preserves independently
+verified frozen-admitted-contract qualification without relabeling it universal
+normative proof. The global bridge preserves original receipts and exact numeric
+alias/protection bindings. [Current full-universe status](ALL4081-STATUS-v1.json)
+is400 JavaScript and372 Python source-qualified artifacts; all other slots remain
+visible. Exact-ID routing and source materialization do not qualify informal
+recognition, current execution or full serving latency.
