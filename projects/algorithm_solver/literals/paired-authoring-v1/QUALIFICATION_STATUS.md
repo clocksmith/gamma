@@ -6,7 +6,7 @@ Final 100 and protected 66 remain closed. **M1 is not met.**
 
 ## Actual execution
 
-The original 400 programs were replayed through the approved pinned runtime,
+The original 400 JavaScript programs were replayed through the approved pinned runtime,
 with historical typed/exact-integer transports and independent host-side oracle
 and full observation parity. 397 passed; 1015, 1079 and 1088 exhausted the unchanged
 CPU budget. Those failures remain recorded, not relabeled semantic errors.
@@ -20,7 +20,7 @@ Three fully charged, independently replayed source successors restore coverage:
   enumerating only half-length digit choices.
 
 Together, the 397 unchanged originals and these three successors pass all
-**39,368 frozen development cases** across **400 programs**. Fresh independent
+**39,368 frozen development cases** across **400 JavaScript programs**. Fresh independent
 small-domain controls also pass **4,240 checks** in both languages. Verifiers
 replay actual outputs and hashes; pass flags alone cannot establish eligibility.
 This is finite behavioral evidence, not a proof beyond declared domains.
