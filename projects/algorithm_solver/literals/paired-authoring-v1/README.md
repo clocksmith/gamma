@@ -79,7 +79,7 @@ All sources are **unqualified candidates**. Static review, Python AST parsing,
 JavaScript syntax checks and metadata checks do not establish runtime correctness,
 predecessor equivalence, admission or an M1 result. No candidate was imported or
 executed during authoring. The exact permitted private development package has now been transferred and
-verified on dot; its mandatory isolated judge is still unavailable. The 24 new
+verified on dot. The native desktop now supports the isolated judge with the owner-approved pinned Node runtime; frozen-case qualification has begun. The 24 new
 pairs use those frozen interfaces as static development context, not execution
 evidence. Earlier sidecars retain their historical authoring-time availability
 statements; those statements are not current environment status.
