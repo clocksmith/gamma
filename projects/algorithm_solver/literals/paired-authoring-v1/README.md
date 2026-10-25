@@ -2,11 +2,12 @@
 
 Owner: [Algorithm Solver charter](../../CATSCAN.md).
 
-61 permitted development-fit problems have standalone Python and JavaScript
-candidates: 11, 15, 18, 21, 22, 24, 25, 28, 34, 35, 40, 51, 52, 54, 55, 59, 61,
-62, 64, 66, 67, 69, 71, 78, 82, 84, 85, 86, 90, 91, 93, 96, 103, 104, 107, 111,
-112, 115, 122, 123, 124, 128, 148, 153, 252, 253, 347, 526, 532, 541, 560, 567,
-594, 643, 647, 658, 674, 704, 733, 744, 977. The IDs are checked
+79 permitted development-fit problems have standalone Python and JavaScript
+candidates: 11, 15, 18, 21, 22, 24, 25, 28, 34, 35, 40, 42, 51, 52, 54, 55, 59,
+61, 62, 64, 66, 67, 69, 71, 78, 79, 82, 84, 85, 86, 90, 91, 93, 96, 103, 104,
+107, 111, 112, 115, 122, 123, 124, 127, 128, 148, 153, 252, 253, 347, 526, 532,
+541, 560, 567, 582, 594, 643, 647, 658, 674, 678, 704, 733, 744, 844, 897, 951,
+977, 1020, 1021, 1034, 1042, 1047, 1061, 1091, 1101, 1129, 1325. The IDs are checked
 against the already-public pinned development partition, not a new population.
 
 These are newly authored, readable candidates. They do not replace the frozen
@@ -38,13 +39,18 @@ receipts. They also do not publish the separately gated 80-rewrite set.
   recursion. Output costs remain explicit, not hidden as constant extra space.
 - Sum searches share copied sorting and deduplicated k-sum with a two-pointer
   base case; meetings share sorted endpoints and half-open interval semantics.
+- Graph traversals share fully charged cardinal-neighbor helpers, while union-find
+  owns its parent/size invariants. Tree equivalence uses canonical structural IDs,
+  not ambiguous serialized values or assumptions of unique node values.
 - Frequency, prefix-sum and fixed-alphabet window loops use explicit count state.
   Reuse actual invariants, not a generic abstraction that hides different rules.
 - JavaScript numeric assumptions are declared. No bitwise midpoint truncation or
   silent assumption that arbitrary Python integers behave like JS Number.
 - Effects matter: flood fill preserves and returns the modified input image;
-  linked-list candidates relink original nodes. Other candidates leave inputs
-  unchanged. Tree shape, list ownership, row identity and accepted alphabets are
+  linked-list candidates relink original nodes. Tree pruning/relinking candidates
+  change declared original edges, border coloring updates declared cells, and
+  shortest-path discovery preserves the public predecessor's input markings.
+  Other candidates leave inputs unchanged. Tree shape, list ownership, row identity and accepted alphabets are
   explicit in each sidecar.
 - Count every helper, class wrapper and eventual adapter in comparisons. Consistent
   source is a candidate mechanism, not evidence of reduced composition cost.
