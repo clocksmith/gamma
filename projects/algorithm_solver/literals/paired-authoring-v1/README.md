@@ -2,7 +2,7 @@
 
 Owner: [Algorithm Solver charter](../../CATSCAN.md).
 
-281 permitted development-fit problems have standalone Python and JavaScript
+286 permitted development-fit problems have standalone Python and JavaScript
 candidates: 6, 10, 11, 15, 18, 21, 22, 23, 24, 25, 28, 29, 34, 35, 40, 42, 51,
 52, 54, 55, 58, 59, 61, 62, 64, 66, 67, 69, 71, 78, 79, 82, 84, 85, 86, 89, 90,
 91, 93, 96, 103, 104, 106, 107, 111, 112, 115, 122, 123, 124, 127, 128, 148,
@@ -21,7 +21,7 @@ candidates: 6, 10, 11, 15, 18, 21, 22, 23, 24, 25, 28, 29, 34, 35, 40, 42, 51,
 1732, 1748, 1752, 1754, 1785, 1791, 1823, 1846, 1848, 1942, 1961, 1967, 1979,
 2027, 2037, 2054, 2086, 2192, 2200, 2282, 2287, 2295, 2338, 2341, 2357, 2364,
 2367, 2379, 2395, 2400, 2430, 2468, 2491, 2563, 2670, 2740, 2785, 2808, 2810,
-2836, 2873, 2902, 2913, 2942, 3100, 3105, 3147, 3192, 3210, 3233, plus 1063, 1100, 1119, 1176 and 1180. The IDs are checked
+2836, 2873, 2902, 2913, 2942, 3100, 3105, 3147, 3192, 3210, 3233, plus 1063, 1100, 1119, 1121, 1153, 1176, 1180, 1891, 2743 and 2898. The IDs are checked
 against the already-public pinned development partition, not a new population.
 
 The historical 500-problem JavaScript admission record is separate (see
@@ -78,7 +78,7 @@ All sources are **unqualified candidates**. Static review, Python AST parsing,
 JavaScript syntax checks and metadata checks do not establish runtime correctness,
 predecessor equivalence, admission or an M1 result. No candidate was imported or
 executed during authoring. The exact permitted private development package has now been transferred and
-verified on dot; its mandatory isolated judge is still unavailable. The five new
+verified on dot; its mandatory isolated judge is still unavailable. The ten new
 pairs use those frozen interfaces as static development context, not execution
 evidence. Earlier sidecars retain their historical authoring-time availability
 statements; those statements are not current environment status.
