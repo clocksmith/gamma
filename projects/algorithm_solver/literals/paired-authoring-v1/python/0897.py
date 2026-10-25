@@ -1,6 +1,6 @@
 # External TreeNode shape: val: int, left: TreeNode | None, right: TreeNode | None.
 class Solution:
-    def increasingBST(self, root: "TreeNode | None") -> "TreeNode | None":
+    def increasingBST(self, root):
         stack = []
         current = root
         head = None

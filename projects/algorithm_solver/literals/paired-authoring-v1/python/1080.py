@@ -1,6 +1,6 @@
 # External TreeNode fields: val, left, right; absent children are None.
 class Solution:
-    def sufficientSubset(self, root: "TreeNode | None", limit: int) -> "TreeNode | None":
+    def sufficientSubset(self, root, limit: int):
         if root is None:
             return None
         stack = [(root, None, False, root.val, False, False)]

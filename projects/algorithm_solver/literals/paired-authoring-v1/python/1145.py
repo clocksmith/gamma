@@ -1,6 +1,6 @@
 # External TreeNode fields: val, left, right; absent children are None.
 class Solution:
-    def btreeGameWinningMove(self, root: "TreeNode", n: int, x: int) -> bool:
+    def btreeGameWinningMove(self, root, n: int, x: int) -> bool:
         sizes = {}
         stack = [(root, False)]
         left_size = 0

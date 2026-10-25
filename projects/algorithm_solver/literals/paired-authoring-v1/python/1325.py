@@ -1,6 +1,6 @@
 # External TreeNode shape: val: int, left: TreeNode | None, right: TreeNode | None.
 class Solution:
-    def removeLeafNodes(self, root: "TreeNode | None", target: int) -> "TreeNode | None":
+    def removeLeafNodes(self, root, target: int):
         if root is None:
             return None
         stack = [(root, False)]

@@ -1,6 +1,6 @@
 # External TreeNode shape: val: int, left: TreeNode | None, right: TreeNode | None.
 class Solution:
-    def maxDepth(self, root: "TreeNode | None") -> int:
+    def maxDepth(self, root) -> int:
         if root is None:
             return 0
 
