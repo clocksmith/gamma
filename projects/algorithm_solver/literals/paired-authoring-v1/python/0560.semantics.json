@@ -1,0 +1,14 @@
+{
+  "problem_id": 560,
+  "language": "python",
+  "entry_point": "Solution.subarraySum",
+  "status": "unqualified_candidate",
+  "input": "nums is a list of integers, excluding bool, and k is an integer. Zero, negative values and repeated prefix sums are supported; an empty list returns 0. Python arithmetic is exact. For cross-language comparison, every input, k, every mathematical prefix sum and prefix minus k must be a safe integer in [-9007199254740991, 9007199254740991], and n * (n + 1) / 2 must be <= 9007199254740991. Inputs outside the declared domain are not validated.",
+  "return": "Type: nonnegative integer. Exact integer equality for the number of nonempty contiguous subarrays with sum k. Invariants: counts starts with the empty prefix 0 occurring once. After adding each value, query counts[prefix - k] before incrementing counts[prefix], so the current prefix cannot count as an empty subarray. All prior occurrences of an equal prefix remain counted; the algorithm does not assume positive inputs.",
+  "mutation_aliasing": "Input mutation: none. scalar result No persistent Solution instance state.",
+  "numeric": "Word-sized integers for the paired domain; unbounded Python arithmetic and hashing have additional bit costs. On the shared domain, every input, k, every mathematical prefix and every prefix minus k lies in [-9007199254740991, 9007199254740991], and n * (n + 1) / 2 <= 9007199254740991. These are mathematical preconditions, not runtime checks.",
+  "complexity": "n = len(nums) O(n) expected with constant-time dictionary operations. O(n), with at most n + 1 distinct prefix-count entries.",
+  "helpers": [],
+  "source_accounting": "The Solution class, method, empty-prefix initialization, lookup-before-update order and dictionary operations are all charged as source. No external helper library or hidden source expansion.",
+  "evidence_boundary": "Independently authored dev_fit candidate outside frozen source sets. No candidate execution, predecessor equivalence, behavioral qualification, benchmark acceptance or M1 progress is claimed. Remaining gates: Approved isolated behavioral qualification, including empty input, zero targets, zero values, negative values and repeated prefixes. Independent acceptance and source-bound receipts before frozen-set or M1 promotion. Syntax checks alone do not qualify this candidate."
+}

@@ -1,0 +1,14 @@
+{
+  "problem_id": 733,
+  "language": "javascript",
+  "entry_point": "Solution.floodFill",
+  "status": "unqualified_candidate",
+  "input": "image is a nonempty rectangular dense ordinary Array of dense ordinary Arrays with at least one column. Nested row objects are pairwise distinct. sr and sc are integer indices within the image. Cells and color are exact integer colors. The paired domain has at most 4294967295 cells so the coordinate queue fits a JavaScript array. Sparse/jagged arrays, repeated row aliases, getters/proxies and concurrent mutation are outside the domain. Preconditions are not checked at runtime.",
+  "return": "The same image object after recoloring precisely the starting cell's original-color component under four-way adjacency. If the original color equals color, the unchanged input object is returned immediately.",
+  "mutation_aliasing": "Mutates the caller's image in place by assigning color only to cells in the selected component. The outer image and all row identities are preserved; no row is replaced or resized. Any caller alias to the outer image or an individual row observes the mutation. Rows within the image must be pairwise distinct. The Solution instance retains no state.",
+  "numeric": "The paired domain restricts cells and color to exact integers in [-9007199254740991, 9007199254740991], excluding booleans and negative zero; JavaScript uses Number, not BigInt. Coordinates, dimensions, queue lengths and neighbor additions are exact. Colors are compared and assigned only; no arithmetic is performed on them.",
+  "complexity": "O(k) time and O(k) auxiliary space for a changed k-cell component, hence O(rows * columns) worst case. The append-only queue retains every visited coordinate pair, all of which are charged; the four direction pairs use O(1) space. Equal old/new color returns in O(1) time and space. Indexing and queue append are constant/amortized constant time; no recursion or front removal is used.",
+  "helpers": [],
+  "source_accounting": "The complete method, Solution wrapper, direction data and queue operations are included in this standalone candidate. No external library or hidden source expansion.",
+  "evidence_boundary": "Independently authored dev_fit candidate outside frozen source sets. No candidate execution, predecessor equivalence, behavioral qualification, benchmark acceptance or M1 progress is claimed. Mandatory judge execution is blocked; syntax checks do not establish behavioral correctness."
+}
