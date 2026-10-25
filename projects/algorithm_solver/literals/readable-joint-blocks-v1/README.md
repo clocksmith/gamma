@@ -37,7 +37,7 @@ See the [machine-readable status](evidence/comparison-status.json) and
 - The comparison independently replays the whole qualification evidence bundle,
   rather than trusting pass flags. It requires current cases/code/sandbox hashes,
   all planned checks/executions, zero failures and all retained observations.
-- Nineteen focused comparison tests pass: exact minimum cost, canonical ID ties,
+- Twenty focused comparison tests pass: exact minimum cost, canonical ID ties,
   round trips, malformed packets, cross-process reproducibility, budget failure,
   full byte accounting, complete evidence replay and stale/incomplete receipt
   rejection. These tests use inert synthetic text, not candidate execution.
@@ -65,3 +65,18 @@ required runtime and isolation prerequisites, it must remain blocked. If code,
 sources, cases or sandbox change, make a new freeze and qualification receipt;
 do not edit old evidence or manually mark it successful. No models, training,
 protected final 100/protected 66, deployment or human study are involved.
+
+## Exact fitting optimization
+
+Trial literals absent from a program reuse that program's exact current selection
+count instead of rescoring its unchanged graph. Counts are refreshed from the
+independent canonical scorer after every accepted addition. Every candidate still
+receives its exact total score and consumes the same evaluation-budget unit;
+pool, ordering, tie-breaks and acceptance policy are unchanged. A synthetic
+full-rescore reference checks dictionaries, complete move traces and evaluation
+counts for both widths, and confirms absent programs skip DP work.
+
+This reduces redundant work; it is not a measured corpus speedup or a change to
+M1 compactness. The code hash changes: historical freezes/receipts stay intact
+and cannot authorize a new production fit. Create fresh artifacts only after the
+unchanged isolated qualification gate can succeed.

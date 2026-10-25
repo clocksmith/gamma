@@ -138,7 +138,9 @@ def fit_dictionary(texts: dict[str, str], capacity: int, forbidden=()) -> tuple[
     occurrences = {piece: [occurrence_ends(texts[p], piece) for p in keys] for piece in pool}
     edges = [[[] for _ in texts[p]] for p in keys]
     chosen, remaining, trace = [], set(pool), []
-    incumbent = sum(map(len, texts.values()))
+    # Absent trial literals leave this program unchanged; cache its exact count.
+    base_counts = [len(texts[p]) for p in keys]
+    incumbent = sum(base_counts)
     evaluations = 0
     while remaining and len(chosen) < capacity - len(ALPHABET):
         trials = []
@@ -147,6 +149,7 @@ def fit_dictionary(texts: dict[str, str], capacity: int, forbidden=()) -> tuple[
             if evaluations > MAX_FIT_EVALUATIONS or time.process_time() - started > CPU_SECONDS_PER_FIT:
                 raise RuntimeError("frozen fit budget exceeded; arm failed, no partial dictionary accepted")
             count = sum(minimum_count(len(texts[p]), edges[i], occurrences[piece][i])
+                        if occurrences[piece][i] else base_counts[i]
                         for i, p in enumerate(keys))
             # Minimize exact N; equal N prefers fewer added bytes, then literal UTF-8 order.
             trials.append((count, len(piece.encode()), piece))
@@ -159,7 +162,8 @@ def fit_dictionary(texts: dict[str, str], capacity: int, forbidden=()) -> tuple[
             for at, end in occurrences[piece][i].items():
                 edges[i][at].append(end)
         vocabulary = ALPHABET + sorted(chosen)
-        actual = sum(len(scorer.shortest_encode(texts[p], vocabulary)) for p in keys)
+        base_counts = [len(scorer.shortest_encode(texts[p], vocabulary)) for p in keys]
+        actual = sum(base_counts)
         if actual != count:
             raise AssertionError("fit graph disagrees with existing exact scorer")
         trace.append({"step": len(chosen), "literal": piece, "before": incumbent,
