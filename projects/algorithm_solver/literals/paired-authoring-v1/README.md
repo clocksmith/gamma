@@ -2,8 +2,8 @@
 
 Owner: [Algorithm Solver charter](../../CATSCAN.md).
 
-Twenty-seven permitted development-fit problems have standalone Python and JavaScript
-candidates: 11, 15, 18, 21, 22, 24, 34, 35, 62, 64, 71, 78, 84, 85, 86, 90, 91, 104, 111, 153, 252, 253, 347, 560, 567, 704, 733. The IDs are checked
+Forty-three permitted development-fit problems have standalone Python and JavaScript
+candidates: 11, 15, 18, 21, 22, 24, 28, 34, 35, 54, 55, 59, 62, 64, 66, 67, 69, 71, 78, 84, 85, 86, 90, 91, 103, 104, 107, 111, 112, 122, 128, 153, 252, 253, 347, 541, 560, 567, 647, 674, 704, 733, 977. The IDs are checked
 against the already-public pinned development partition, not a new population.
 
 These are newly authored, readable candidates. They do not replace the frozen
