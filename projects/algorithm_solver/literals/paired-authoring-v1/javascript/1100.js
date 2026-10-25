@@ -1,5 +1,8 @@
 class Solution {
   numKLenSubstrNoRepeats(text, k) {
+    if (k === 0) {
+      return text.length + 1;
+    }
     const counts = new Map();
     let total = 0;
     for (let right = 0; right < text.length; right += 1) {
