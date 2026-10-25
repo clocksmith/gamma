@@ -1,0 +1,65 @@
+{
+  "schema_version": 2,
+  "problem_id": "955",
+  "title": "Delete Columns to Make Sorted II",
+  "status": "public_statement_transcribed_pending_independent_review",
+  "qualified": false,
+  "source": {
+    "url": "https://leetcode.com/problems/delete-columns-to-make-sorted-ii/",
+    "publisher": "LeetCode",
+    "retrieved_date_utc": "2026-10-25",
+    "identity_verified_from_official_page": true,
+    "access": "freely_accessible_unauthenticated",
+    "identity_line": 18,
+    "clause_lines": "22-27,55-59",
+    "source_pin": "source-pin.json",
+    "batch": "a"
+  },
+  "interface_proposal": {
+    "entrypoint": "solve",
+    "calling_convention": "ordered_positional",
+    "parameters": [
+      [
+        "strs",
+        "array<string>"
+      ]
+    ],
+    "authority": "local catalogue convention; not claimed official runtime signature"
+  },
+  "constraints": {
+    "rows": [
+      1,
+      100
+    ],
+    "common_length": [
+      1,
+      100
+    ],
+    "alphabet": "a-z"
+  },
+  "result": {
+    "type": "integer",
+    "semantics": "Minimum count of shared column positions to delete so the remaining strings, in original row order, are lexicographically nondecreasing.",
+    "comparison": "exact_ordered_value"
+  },
+  "complexity": {
+    "required_time": null,
+    "required_space": null,
+    "official_follow_up": null
+  },
+  "unspecified_by_statement": {
+    "input_mutation": null,
+    "result_aliasing": null,
+    "invalid_input_exceptions": null
+  },
+  "local_policy_proposal": {
+    "status": "not_adopted",
+    "effects": "Freeze input-preservation and returned-alias policy independently before qualification; mathematical modifications are not automatically caller-visible effects.",
+    "transport": "JSON values; integer parameters exclude booleans; real values must be finite.",
+    "tree_transport": null
+  },
+  "boundary_plan": [
+    "100 equal rows require zero deletions; decreasing uniform rows require deleting all 100 columns."
+  ],
+  "promotion_gate": "Independent clause/interface/effect review plus new source/runtime/test-bound receipts. Never upgrade compatibility-only probes or historical admitted evidence."
+}
