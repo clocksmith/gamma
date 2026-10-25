@@ -28,6 +28,8 @@ LANES = {
     'easy32-wave3-v1': 'public-domain-qualification-easy32-wave3-v1',
     'easy32-wave4-v1': 'public-domain-qualification-easy32-wave4-v1',
     'hard32-wave1-v1': 'public-domain-qualification-hard32-v1',
+    'medium32-wave1-v1': 'public-domain-qualification-medium32-v1',
+    'medium32-wave2-v1': 'public-domain-qualification-medium32-wave2-v1',
 }
 _IMPORT_LOCK = threading.RLock()
 LANGUAGES = ('javascript', 'python')
@@ -123,6 +125,16 @@ def check_observation_policy(lane, freeze):
         if freeze.get('ids') != [1317, 1351, 1470, 1556, 1598, 1716, 1800, 1854]:
             raise ValueError('property comparator requires exact reviewed population')
         expected += ' except1317 any valid positive no-zero pair'
+    medium = {
+        'medium32-wave1-v1': ([1248, 1319, 1338, 1400, 1466, 1471, 1482, 1540],
+            'typed exact scalars; ID1471 duplicate-sensitive multiset, arbitrary order; local read-only/fresh-return effects'),
+        'medium32-wave2-v1': ([1567, 1573, 1630, 1653, 1743, 1817, 1877, 1887],
+            'typed exact scalars and ordered lists; ID1743 relational unique-vertex adjacent path, either orientation; local read-only/fresh-return effects'),
+    }
+    if lane in medium:
+        population, expected = medium[lane]
+        if freeze.get('ids') != population:
+            raise ValueError('relational comparator requires exact reviewed population')
     if (freeze.get('effect_policy') != 'read-only args; fresh mutable returns; no result-to-input aliases' or
             freeze.get('result_policy') != expected):
         raise ValueError('unsupported local observation policy')

@@ -114,4 +114,16 @@ class ObservationPolicyTests(unittest.TestCase):
   f['effect_policy']='mutation permitted'
   with self.assertRaises(ValueError):a.check_observation_policy('hard10-v1',f)
 
+
+class MediumPolicyTests(unittest.TestCase):
+ def test_multiset_and_path_are_not_general_order_relaxations(self):
+  cases=[('medium32-wave1-v1',[1248,1319,1338,1400,1466,1471,1482,1540],'typed exact scalars; ID1471 duplicate-sensitive multiset, arbitrary order; local read-only/fresh-return effects'),('medium32-wave2-v1',[1567,1573,1630,1653,1743,1817,1877,1887],'typed exact scalars and ordered lists; ID1743 relational unique-vertex adjacent path, either orientation; local read-only/fresh-return effects')]
+  for lane,ids,policy in cases:
+   f={'ids':ids,'effect_policy':'read-only args; fresh mutable returns; no result-to-input aliases','result_policy':policy}
+   a.check_observation_policy(lane,f)
+   for other in ('easy32-wave1-v1','hard32-wave1-v1'):
+    with self.assertRaises(ValueError):a.check_observation_policy(other,f)
+   f['ids']=ids[:-1]
+   with self.assertRaises(ValueError):a.check_observation_policy(lane,f)
+
 if __name__=='__main__':unittest.main()
