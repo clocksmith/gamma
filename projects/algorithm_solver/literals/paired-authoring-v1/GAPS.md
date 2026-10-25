@@ -11,33 +11,14 @@ separate result. Neither source count nor syntax success is a percentage of M1/M
 The final held-out 100 and protected 66 remain closed. Missing or unsupported
 problems must not be removed from an evaluation denominator.
 
-## Unwritten definitions
+## Authored development-fit coverage
 
-The following 14 development-fit IDs remain unwritten. Their checked official
-pages previously exposed a subscription gate. The exact permitted private
-development package is now available, so frozen-input reconciliation can
-continue without accessing those gated pages. No access
-restriction was bypassed and no placeholder source is counted as a solution.
-The independently verified transfer supplies the original frozen development
-sources/cases; it does not by itself prove a complete natural-language contract.
-An inferred title alone does not freeze a contract.
-
-| ID | Checked official definition |
-| --- | --- |
-| 1056 | https://leetcode.com/problems/confusing-number/ |
-| 1064 | https://leetcode.com/problems/fixed-point/ |
-| 1065 | https://leetcode.com/problems/index-pairs-of-a-string/ |
-| 1066 | https://leetcode.com/problems/campus-bikes-ii/ |
-| 1067 | https://leetcode.com/problems/digit-count-in-range/ |
-| 1086 | https://leetcode.com/problems/high-five/ |
-| 1087 | https://leetcode.com/problems/brace-expansion/ |
-| 1088 | https://leetcode.com/problems/confusing-number-ii/ |
-| 1099 | https://leetcode.com/problems/two-sum-less-than-k/ |
-| 1181 | https://leetcode.com/problems/before-and-after-puzzle/ |
-| 1183 | https://leetcode.com/problems/maximum-number-of-ones/ |
-| 1258 | https://leetcode.com/problems/synonymous-sentences/ |
-| 2422 | https://leetcode.com/problems/merge-operations-to-turn-array-into-a-palindrome/ |
-| 3104 | https://leetcode.com/problems/find-longest-self-contained-substring/ |
+All 300 permitted development-fit IDs now have Python and JavaScript candidate
+sources. This closes source-authoring coverage only, not qualification or M1.
+The 24 previously unwritten definitions were approached through the exact
+permitted frozen interfaces and finite development inputs, not subscription
+bypasses or inferred titles. Each new sidecar declares its supported domain;
+none asserts that finite examples supply the full authoritative contract.
 
 Authored candidates 548 and 734 are different: their declared intended contracts
 are present, but exact official-statement provenance remains unresolved. Their
@@ -84,8 +65,8 @@ a bundle or local commit does not establish remote publication.
 
 ## Frozen-input authoring continuation
 
-Ten additional paired alternatives now cover 1063, 1100, 1119, 1121, 1153,
-1176, 1180, 1891, 2743 and 2898.
+Twenty-four additional paired alternatives cover the previously unwritten
+development-fit IDs.
 They use explicit monotonic-start, sliding-window, filtering and run-counting
 invariants, plus frequency feasibility, consistent replacement mappings,
 monotone integer search and price/index grouping. In particular, 1176 replaces a full prefix-sum array with constant
@@ -100,7 +81,7 @@ same blocked runtime gate. Keep the protected populations closed.
 
 ## Known domain-reconciliation blockers
 
-Static inspection found frozen inputs outside the authored domains for 1153 and
+Static inspection found frozen inputs outside the authored domains for 1064, 1086, 1087, 1153 and
 2898. Their sidecars explicitly block promotion. Do not remove those cases,
 change the frozen denominator, or infer behavior from the conventional problem
 title. Resolve the authoritative contract before claiming predecessor parity.
@@ -108,3 +89,8 @@ Private input details and observations remain outside the repository.
 
 The 1100 alternative now explicitly handles zero-width windows as n+1 empty
 windows; this extension is source-reviewed and syntax-checked, not executed.
+
+Additional source-side mechanisms include a word trie for 1065, one acyclic
+bike-mask DP for 1066, positional digit counting for 1067, arithmetic tile
+frequencies for 1183, and constant-alphabet occurrence maps for 3104. These
+properties are declared and statically reviewed, not runtime or selection wins.
