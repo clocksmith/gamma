@@ -1,4 +1,10 @@
-# External TreeNode shape: val: int, left: TreeNode | None, right: TreeNode | None.
+class TreeNode:
+    def __init__(self, val=0, left=None, right=None):
+        self.val = val
+        self.left = left
+        self.right = right
+
+
 class Solution:
     def increasingBST(self, root):
         stack = []
@@ -9,14 +15,12 @@ class Solution:
             while current is not None:
                 stack.append(current)
                 current = current.left
-            node = stack.pop()
-            current = node.right
-            node.left = None
+            original = stack.pop()
+            node = TreeNode(original.val)
             if tail is None:
                 head = node
             else:
                 tail.right = node
             tail = node
-        if tail is not None:
-            tail.right = None
+            current = original.right
         return head

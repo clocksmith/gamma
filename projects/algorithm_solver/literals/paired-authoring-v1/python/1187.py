@@ -12,7 +12,13 @@ def upper_bound(values: list[int], target: int) -> int:
 
 class Solution:
     def makeArrayIncreasing(self, arr1: list[int], arr2: list[int]) -> int:
-        replacements = sorted(set(arr2))
+        arr2.sort()
+        unique_count = 0
+        for value in arr2:
+            if unique_count == 0 or value != arr2[unique_count - 1]:
+                arr2[unique_count] = value
+                unique_count += 1
+        replacements = arr2[:unique_count]
         states = {-1: 0}
         for value in arr1:
             following = {}

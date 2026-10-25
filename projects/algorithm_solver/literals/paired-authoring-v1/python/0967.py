@@ -7,9 +7,9 @@ class Solution:
                 last = prefix % 10
                 lower = last - k
                 upper = last + k
-                if lower >= 0:
-                    following.append(prefix * 10 + lower)
-                if k != 0 and upper <= 9:
+                if upper <= 9:
                     following.append(prefix * 10 + upper)
+                if k != 0 and lower >= 0:
+                    following.append(prefix * 10 + lower)
             prefixes = following
         return prefixes
