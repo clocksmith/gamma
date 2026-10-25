@@ -1,0 +1,20 @@
+{
+  "problem_id": 633,
+  "language": "javascript",
+  "entry_point": "Solution.judgeSquareSum",
+  "status": "unqualified_candidate",
+  "input": "c is an integer in [0, 4503599627370495]. Integers are primitive safe-integer Numbers, excluding negative zero, NaN, infinities, fractions and BigInt. Arrays are dense ordinary Arrays without holes, proxies, subclasses or accessor-backed elements; strings are primitive, not boxed. No concurrent mutation, getters or modified standard built-ins are allowed. Preconditions are not checked at runtime. Declared size bounds are not a guarantee of available memory or completion within an unqualified runtime budget.",
+  "return": "Boolean indicating whether c equals a*a + b*b for some nonnegative integers a and b. Zero returns true via a = b = 0. Only existence is returned, not a witness pair.",
+  "mutation_aliasing": "No mutable input exists. The source uses scalar integer search bounds only and retains no instance state.",
+  "numeric": "The floor-square-root helper accepts safe nonnegative integers and caps each searched middle at 94906265, whose square 9007199136250225 is safe. In the main two-pointer search both squared terms are <= c, so their sum is <= 2*c <= 9007199254740990. Bounding individual squares alone would not suffice; this half-range c domain bounds the addition too. All pointer arithmetic and squares are exact.",
+  "complexity": "O(sqrt(c) + log(c+2) + 1) time and O(1) auxiliary space. First find floor(sqrt(c)) using fully included binary search, then increase the smaller endpoint or decrease the larger one according to the exact sum. No floating sqrt, factorization table or candidate-pair array is used.",
+  "helpers": [
+    {
+      "name": "floorSqrt",
+      "contract": "Return floor(sqrt(value)) for a nonnegative safe integer using the same capped half-open binary-search invariant as candidate 69. The excluded upper endpoint is not squared.",
+      "cost": "The full helper definition is 373 UTF-8 bytes including indentation and terminal newline, already included in complete source bytes. O(log(value+2)) time, at most 27 iterations on the safe range, and O(1) auxiliary state; the entire helper and call are charged."
+    }
+  ],
+  "source_accounting": "The complete standalone source is 707 UTF-8 bytes, including all 1 declared helper definitions/statements, their calls, the Solution/method wrappers, built-in operations, allocations, annotations/comments where present, whitespace and terminal newline. Every reused helper is fully included and charged, not supplied by a hidden library. Standard-library/built-in work and temporary/output allocation are included in the stated complexity, not free operations. No imports, runtime-generated implementations or hidden source expansion exist. Any adapter required by the frozen judge is additional charged source.",
+  "evidence_boundary": "Independently authored dev_fit candidate, checked against cost-decomposition-v1/contract.json partition.dev_fit and kept outside frozen source sets. No candidate was imported or executed. No predecessor equivalence, behavioral qualification, benchmark acceptance or M1/M2 progress is claimed. The mandatory isolated judge and frozen private source/case/receipt package remain unavailable. Syntax checks and author declarations are static evidence only. Remaining gate: independent source-bound isolated qualification covering zero/one, perfect squares, equal square pair, absent representation, pointer crossing, safe-square cap and sum-of-two-squares numeric bound, exact frozen interfaces/types/effects, complete source/helper/adapter charges and runtime cost. No admission or promotion follows from these declarations."
+}

@@ -1,0 +1,20 @@
+{
+  "problem_id": 576,
+  "language": "python",
+  "entry_point": "Solution.findPaths",
+  "status": "unqualified_candidate",
+  "input": "m and n are integers in [1, 50]; maxMove is an integer in [0, 50]. startRow is in [0, m-1] and startColumn is in [0, n-1]. Integers are plain int, excluding bool; lists and strings are ordinary list/str values, not subclasses. No concurrent mutation, getters or modified standard built-ins are allowed. Preconditions are not checked at runtime. Declared size bounds are not a guarantee of available memory or completion within an unqualified runtime budget.",
+  "return": "The number of four-direction movement sequences that first exit the m-by-n grid within at most maxMove moves, modulo 1000000007. Every exit ends that path, so it cannot reenter or generate further steps. Different directions count as different paths, even when several exit from one cell. maxMove = 0 returns 0.",
+  "mutation_aliasing": "Only scalar inputs are supplied. All count grids and four direction pairs are private. Every grid row is distinct, and a newly zeroed grid is used for each next step so current-step counts cannot be reused prematurely. No state persists between calls.",
+  "numeric": "Stored ways and escaped remain in [0, 1000000006]. Each update adds exactly two residues and applies modulo immediately, so its maximum intermediate is 2000000012, safely exact. Original path counts may exceed safe integers but are never materialized. Coordinates including -1/m/n sentinels and the at-most-50 step counter are exact small integers.",
+  "complexity": "O((maxMove + 1)*m*n) time, including the initial and per-step grid initialization and at most four updates per cell. O(m*n + 1) live auxiliary space retains at most the old and next grids plus fixed directions. Total allocated grid cells over the call are O((maxMove + 1)*m*n); allocation is charged rather than hidden. No recursion or all-step tensor is retained.",
+  "helpers": [
+    {
+      "name": "new_grid",
+      "contract": "Allocate a new rows-by-columns zero grid with distinct row containers, with positive dimensions. Used for the initial state and every next movement layer.",
+      "cost": "The full helper definition is 106 UTF-8 bytes including indentation and terminal newline, already included in complete source bytes. O(rows*columns + rows) initialization time and allocated cells/row slots; no row aliases and no cached grid state."
+    }
+  ],
+  "source_accounting": "The complete standalone source is 1358 UTF-8 bytes, including all 1 declared helper definitions/statements, their calls, the Solution/method wrappers, built-in operations, allocations, annotations/comments where present, whitespace and terminal newline. Every reused helper is fully included and charged, not supplied by a hidden library. Standard-library/built-in work and temporary/output allocation are included in the stated complexity, not free operations. No imports, runtime-generated implementations or hidden source expansion exist. Any adapter required by the frozen judge is additional charged source.",
+  "evidence_boundary": "Independently authored dev_fit candidate, checked against cost-decomposition-v1/contract.json partition.dev_fit and kept outside frozen source sets. No candidate was imported or executed. No predecessor equivalence, behavioral qualification, benchmark acceptance or M1/M2 progress is claimed. The mandatory isolated judge and frozen private source/case/receipt package remain unavailable. Syntax checks and author declarations are static evidence only. Remaining gate: independent source-bound isolated qualification covering zero moves, one-cell grid with four exit directions, edge/corner starts, first-exit termination, per-step separation, modular wrap, distinct grid rows and live/total allocation costs, exact frozen interfaces/types/effects, complete source/helper/adapter charges and runtime cost. No admission or promotion follows from these declarations."
+}

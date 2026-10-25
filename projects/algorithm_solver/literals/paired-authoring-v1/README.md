@@ -2,13 +2,20 @@
 
 Owner: [Algorithm Solver charter](../../CATSCAN.md).
 
-79 permitted development-fit problems have standalone Python and JavaScript
-candidates: 11, 15, 18, 21, 22, 24, 25, 28, 34, 35, 40, 42, 51, 52, 54, 55, 59,
-61, 62, 64, 66, 67, 69, 71, 78, 79, 82, 84, 85, 86, 90, 91, 93, 96, 103, 104,
-107, 111, 112, 115, 122, 123, 124, 127, 128, 148, 153, 252, 253, 347, 526, 532,
-541, 560, 567, 582, 594, 643, 647, 658, 674, 678, 704, 733, 744, 844, 897, 951,
-977, 1020, 1021, 1034, 1042, 1047, 1061, 1091, 1101, 1129, 1325. The IDs are checked
+119 permitted development-fit problems have standalone Python and JavaScript
+candidates: 6, 11, 15, 18, 21, 22, 24, 25, 28, 34, 35, 40, 42, 51, 52, 54, 55,
+58, 59, 61, 62, 64, 66, 67, 69, 71, 78, 79, 82, 84, 85, 86, 89, 90, 91, 93, 96,
+103, 104, 106, 107, 111, 112, 115, 122, 123, 124, 127, 128, 148, 153, 252, 253,
+347, 526, 532, 541, 551, 553, 554, 560, 566, 567, 575, 576, 581, 582, 594, 599,
+611, 633, 643, 645, 647, 658, 670, 674, 678, 696, 704, 728, 733, 738, 740, 744,
+747, 832, 844, 867, 874, 897, 951, 977, 986, 1001, 1020, 1021, 1024, 1034, 1042,
+1047, 1061, 1074, 1080, 1091, 1094, 1101, 1109, 1129, 1130, 1139, 1145, 1162,
+1314, 1325, 1514, 1791, 2192, 2282. The IDs are checked
 against the already-public pinned development partition, not a new population.
+
+The historical 500-problem JavaScript admission record is separate (see
+[Milestones](../MILESTONES.md)). This inventory counts new paired alternatives,
+not newly admitted problems or a fraction of M1/M2 completion.
 
 These are newly authored, readable candidates. They do not replace the frozen
 `style150-v1` one-line `solve` representation, its sources, or its qualification
