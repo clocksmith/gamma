@@ -2,10 +2,9 @@
 
 This checkpoint implements a matched source/dictionary experiment on the three
 previously exposed readable-v1 problems #547, #841 and #1091, separately in
-JavaScript and Python. It is a tested harness and frozen plan, **not an M1 pass
-or a measured successor**.
+JavaScript and Python. It now has matched isolated pilot evidence, **not an M1 pass**.
 
-## Current result: qualification blocked
+## Historical result: qualification blocked
 
 The fresh dot run stopped before executing any candidate because the unchanged
 judge's required `/usr/bin/node` runtime is absent from its exposed filesystem.
@@ -80,3 +79,24 @@ This reduces redundant work; it is not a measured corpus speedup or a change to
 M1 compactness. The code hash changes: historical freezes/receipts stay intact
 and cannot authorize a new production fit. Create fresh artifacts only after the
 unchanged isolated qualification gate can succeed.
+
+## 2026-10-25 dot runtime continuation
+
+The native dot desktop supports the unchanged isolation; the separate command
+namespace's earlier NETLINK failure was not a desktop-wide restriction. The owner
+approved a versioned, hash-pinned, read-only executable Node mount. Native controls
+confirmed read-only task/runtime files, no host workspace, and loopback-only
+network visibility. Historical blocked receipts above remain unchanged.
+
+A fresh matched run passed **9,280 checks**, **76 isolated executions**, all twelve
+Python/JavaScript baseline and shared-breadth rows, and no failures. Independent
+oracle and aliased-grid compatibility checks remain distinct. The 128/256 comparison
+completed with exact packet reconstruction and complete byte accounting. At 256,
+shared-breadth JS has median 23/p95 27 and Python 19/20, both zero character bits;
+this is only **three exposed problems per language**, not 400/500 qualification.
+The 128 arms still have high character fractions and do not meet compactness gates.
+
+[Compact result receipt](evidence/dot-runtime-continuation.json) binds the complete
+local evidence at `/workspace/shared/gamma-dot-diagnostics/`; no private development
+cases are published. New qualification accepts `--node-runtime` with the approved
+executable. Runtime identity and its adapter are checked again during comparison.

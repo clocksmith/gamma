@@ -356,6 +356,12 @@ def validate_qualification_bundle(path: Path, identities: list[dict]) -> dict:
         "runtime_paths": {"python": "/usr/bin/python3", "javascript": "/usr/bin/node"},
         "protected_access": False,
     }
+    if 'runtime_identity' in contract:
+        from algsolve.judge import pinned_runtime
+        pinned_runtime.validate_manifest(contract['runtime_identity'])
+        expected['runtime_identity'] = contract['runtime_identity']
+        expected['runtime_paths']['javascript'] = '/runtime/node'
+        expected['runtime_adapter_sha256'] = sha(Path(pinned_runtime.__file__).read_bytes())
     if contract != expected:
         raise ValueError("qualification cases, sources, code, sandbox or schedule changed")
     require_qualification(receipt, identities, contract)
@@ -392,6 +398,7 @@ def pinned_files() -> list[Path]:
             HERE / "variants.py", HERE / "qualify.py", HERE / "QUALIFICATION.md",
             CODEC_FILE, SCORER_FILE, POLICY_FILE,
             LIT.parent / "algsolve" / "judge" / "sandbox.py",
+            LIT.parent / "algsolve" / "judge" / "pinned_runtime.py",
             *[LIT / "readable-v1" / "fixtures" / f"{pid}.json" for pid in PROBLEMS]]
 
 
