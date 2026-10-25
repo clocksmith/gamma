@@ -2,7 +2,7 @@
 
 Owner: [Algorithm Solver charter](../../CATSCAN.md).
 
-199 permitted development-fit problems have standalone Python and JavaScript
+219 permitted development-fit problems have standalone Python and JavaScript
 candidates: 6, 10, 11, 15, 18, 21, 22, 23, 24, 25, 28, 29, 34, 35, 40, 42, 51,
 52, 54, 55, 58, 59, 61, 62, 64, 66, 67, 69, 71, 78, 79, 82, 84, 85, 86, 89, 90,
 91, 93, 96, 103, 104, 106, 107, 111, 112, 115, 122, 123, 124, 127, 128, 148,
@@ -15,8 +15,9 @@ candidates: 6, 10, 11, 15, 18, 21, 22, 23, 24, 25, 28, 29, 34, 35, 40, 42, 51,
 1163, 1165, 1170, 1171, 1175, 1187, 1314, 1325, 1328, 1346, 1375, 1419, 1464,
 1514, 1534, 1545, 1546, 1574, 1636, 1685, 1686, 1690, 1696, 1710, 1717, 1723,
 1725, 1732, 1748, 1752, 1754, 1785, 1791, 1823, 1846, 1848, 1942, 1961, 1967,
-1979, 2027, 2037, 2054, 2086, 2192, 2200, 2282, 2287, 2295, 2341, 2357, 2364,
-2367, 2379, 2395, 2491, 2563. The IDs are checked
+1979, 2027, 2037, 2054, 2086, 2192, 2200, 2282, 2287, 2295, 2338, 2341, 2357,
+2364, 2367, 2379, 2395, 2400, 2430, 2468, 2491, 2563, 2670, 2740, 2785, 2808,
+2810, 2836, 2873, 2902, 2913, 2942, 3100, 3105, 3147, 3192, 3210, 3233. The IDs are checked
 against the already-public pinned development partition, not a new population.
 
 The historical 500-problem JavaScript admission record is separate (see
