@@ -13,16 +13,18 @@ problems must not be removed from an evaluation denominator.
 
 ## Unwritten definitions
 
-The following 24 development-fit IDs remain unwritten. Their checked official
-pages exposed a subscription gate without the exact problem definition. No access
+The following 19 development-fit IDs remain unwritten. Their checked official
+pages previously exposed a subscription gate. The exact permitted private
+development package is now available, so frozen-input reconciliation can
+continue without accessing those gated pages. No access
 restriction was bypassed and no placeholder source is counted as a solution.
-A user-provided authorized definition or the original frozen source/contract can
-resolve the missing input; an inferred title alone does not freeze a contract.
+The independently verified transfer supplies the original frozen development
+sources/cases; it does not by itself prove a complete natural-language contract.
+An inferred title alone does not freeze a contract.
 
 | ID | Checked official definition |
 | --- | --- |
 | 1056 | https://leetcode.com/problems/confusing-number/ |
-| 1063 | https://leetcode.com/problems/number-of-valid-subarrays/ |
 | 1064 | https://leetcode.com/problems/fixed-point/ |
 | 1065 | https://leetcode.com/problems/index-pairs-of-a-string/ |
 | 1066 | https://leetcode.com/problems/campus-bikes-ii/ |
@@ -31,12 +33,8 @@ resolve the missing input; an inferred title alone does not freeze a contract.
 | 1087 | https://leetcode.com/problems/brace-expansion/ |
 | 1088 | https://leetcode.com/problems/confusing-number-ii/ |
 | 1099 | https://leetcode.com/problems/two-sum-less-than-k/ |
-| 1100 | https://leetcode.com/problems/find-k-length-substrings-with-no-repeated-characters/ |
-| 1119 | https://leetcode.com/problems/remove-vowels-from-a-string/ |
 | 1121 | https://leetcode.com/problems/divide-array-into-increasing-sequences/ |
 | 1153 | https://leetcode.com/problems/string-transforms-into-another-string/ |
-| 1176 | https://leetcode.com/problems/diet-plan-performance/ |
-| 1180 | https://leetcode.com/problems/count-substrings-with-only-one-distinct-letter/ |
 | 1181 | https://leetcode.com/problems/before-and-after-puzzle/ |
 | 1183 | https://leetcode.com/problems/maximum-number-of-ones/ |
 | 1258 | https://leetcode.com/problems/synonymous-sentences/ |
@@ -54,7 +52,9 @@ effect, complexity and independent behavioral qualification.
 
 ## Required inputs and execution
 
-The original private development package is absent from this checkpoint. Use the
+The original private development package was received and policy-verified on dot
+on 2026-10-25: 1,202 payloads and 400 filtered metadata rows. It remains private,
+outside this repository. Future transfers must use the
 existing [bounded transfer procedure](../readable-joint-blocks-v1/TRANSFER.md),
 which admits the exact 400 permitted development sources, cases, baseline records,
 dictionaries and filtered metadata while excluding held-out/protected inputs.
@@ -78,10 +78,25 @@ lookup control, hardware/check budgets, first-attempt accounting and measured
 complete latency. The targets in [MILESTONES.md](../MILESTONES.md) are not a
 completed M2 experiment. Do not open protected sets or add unapproved training.
 
-Commits are retained on local main. A separately supplied incremental Git bundle
+The previous source checkpoint `d5bc65c0` has been published to main. Further
+commits must be independently verified on the remote before claiming publication. A separately supplied incremental Git bundle
 must be verified against its advertised head; an earlier bundle does not include
-later commits or uncommitted work. This checkpoint was not published to GitHub: the existing API write route rejected
+later commits or uncommitted work. Dot cannot directly publish further changes: the existing API write route rejected
 an unrelated repository `.gitattributes` symlink, and shell Git had no write
 credentials. Preserve that unrelated file. Publication needs an authorized Git
 write path, current remote-head reconciliation and a normal non-force update;
 a bundle or local commit does not establish remote publication.
+
+## Frozen-input authoring continuation
+
+Five additional paired alternatives now cover 1063, 1100, 1119, 1176 and 1180.
+They use explicit monotonic-start, sliding-window, filtering and run-counting
+invariants. In particular, 1176 replaces a full prefix-sum array with constant
+auxiliary state; 1100 avoids materializing a character array within the declared
+ASCII domain. These are source-level complexity properties, not measured
+runtime or composition wins. No private source, cases or observations are
+published, and no candidate execution, dictionary fit or new M1 result occurred.
+
+The next substantive gate is frozen-domain/effect reconciliation and independent
+isolated qualification. The public shared-breadth pilot is also ready for that
+same blocked runtime gate. Keep the protected populations closed.
