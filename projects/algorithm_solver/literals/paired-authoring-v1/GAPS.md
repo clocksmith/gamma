@@ -37,11 +37,15 @@ dictionaries and filtered metadata while excluding held-out/protected inputs.
 Verify the independently supplied archive digest and its source-bound allowlist;
 do not substitute a public rewrite for a missing exact source hash.
 
-The recorded dot judge probe failed before candidate execution with
-`NETLINK_ROUTE: Operation not permitted`; the expected `/usr/bin/node` is also
-absent. Syntax parsing is not a substitute for isolated judging. Restore an
-execution environment satisfying the unchanged isolation contract; do not execute
-candidates directly on the host or weaken isolation to get a passing run.
+The earlier command-namespace probe failed before candidate execution with
+`NETLINK_ROUTE: Operation not permitted`. A new native dot desktop probe established
+that the unchanged isolation works there. The owner approved a versioned pinned
+read-only Node executable mount; runtime/task writes are denied and the host
+workspace is absent. The shared-breadth pilot now passes 9,280 isolated checks.
+Paired frozen-case replay is underway, with independent expected outputs retained
+only on the host. This is finite behavioral evidence, not automatic domain/effect/
+complexity admission. Never execute candidates directly on the host or relax
+isolation to obtain a passing result.
 
 ## Milestones and publication
 
