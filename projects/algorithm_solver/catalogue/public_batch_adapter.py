@@ -23,6 +23,11 @@ LANES = {
     'eight-v3': 'public-domain-qualification-v3',
     'easy16-v1': 'public-domain-qualification-easy16-v1',
     'hard10-v1': 'public-domain-qualification-hard10-v1',
+    'easy32-wave1-v1': 'public-domain-qualification-easy32-v1',
+    'easy32-wave2-v1': 'public-domain-qualification-easy32-wave2-v1',
+    'easy32-wave3-v1': 'public-domain-qualification-easy32-wave3-v1',
+    'easy32-wave4-v1': 'public-domain-qualification-easy32-wave4-v1',
+    'hard32-wave1-v1': 'public-domain-qualification-hard32-v1',
 }
 _IMPORT_LOCK = threading.RLock()
 LANGUAGES = ('javascript', 'python')
@@ -107,6 +112,20 @@ def lane_path(lane):
     if not isinstance(lane, str) or lane not in LANES:
         raise ValueError('unsupported reviewed verifier lane')
     return HERE / LANES[lane]
+
+
+def check_observation_policy(lane, freeze):
+    # A property comparator is admitted only for the exact reviewed lane/ID set,
+    # not as a general relaxation of ordered equality in historical batches.
+    lane_path(lane)
+    expected = 'exact typed ordered structures'
+    if lane == 'easy32-wave1-v1':
+        if freeze.get('ids') != [1317, 1351, 1470, 1556, 1598, 1716, 1800, 1854]:
+            raise ValueError('property comparator requires exact reviewed population')
+        expected += ' except1317 any valid positive no-zero pair'
+    if (freeze.get('effect_policy') != 'read-only args; fresh mutable returns; no result-to-input aliases' or
+            freeze.get('result_policy') != expected):
+        raise ValueError('unsupported local observation policy')
 
 
 def _module(name, path):
@@ -248,8 +267,7 @@ def adopt_plan(plan_path, trusted_plan_sha256):
         boundary_policy.authorize_before_open(f'leetcode:{pid}', gate['artifact_paths'], gate['trusted_hashes'],
             language='python', payload_kind='statement')
     values['authority_review'], raws['authority_review'] = pinned(plan['authority_review'])
-    if freeze.get('effect_policy') != 'read-only args; fresh mutable returns; no result-to-input aliases' or freeze.get('result_policy') != 'exact typed ordered structures':
-        raise ValueError('unsupported local observation policy')
+    check_observation_policy(plan['lane'], freeze)
     contracts = check_authority(values['authority_review'], lane=plan['lane'], freeze_sha256=sha(raws['freeze']),
         review_sha256=sha(raws['review']), ids=ids)
     if review.get('independent_review') is not True or 'boundary_policy' not in review.get('reviewed', []):

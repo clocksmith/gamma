@@ -99,4 +99,19 @@ class PublicBatchTests(unittest.TestCase):
    root=Path(d);fifo=root/'authority.json';os.mkfifo(fifo)
    with self.assertRaises(ValueError):a.pinned({'path':str(fifo),'sha256':'a'*64})
 
+
+class ObservationPolicyTests(unittest.TestCase):
+ def test_property_comparator_is_exact_lane_scoped(self):
+  f={'ids':[1317,1351,1470,1556,1598,1716,1800,1854],'effect_policy':'read-only args; fresh mutable returns; no result-to-input aliases','result_policy':'exact typed ordered structures except1317 any valid positive no-zero pair'}
+  a.check_observation_policy('easy32-wave1-v1',f)
+  for lane in ('easy16-v1','hard32-wave1-v1','easy32-wave2-v1'):
+   with self.assertRaises(ValueError):a.check_observation_policy(lane,f)
+  f['ids']=[1317]
+  with self.assertRaises(ValueError):a.check_observation_policy('easy32-wave1-v1',f)
+ def test_historical_equality_and_effects_unchanged(self):
+  f={'effect_policy':'read-only args; fresh mutable returns; no result-to-input aliases','result_policy':'exact typed ordered structures'}
+  a.check_observation_policy('hard10-v1',f)
+  f['effect_policy']='mutation permitted'
+  with self.assertRaises(ValueError):a.check_observation_policy('hard10-v1',f)
+
 if __name__=='__main__':unittest.main()
