@@ -7,6 +7,7 @@ import hashlib
 import json
 
 LANGUAGES = ('javascript', 'python')
+EVIDENCE_CLASSES = {'normative-typed-effects', 'frozen-admitted-typed-effects'}
 STATUSES = {'missing', 'authored', 'blocked', 'protected', 'qualified'}
 BINDINGS = ('source_sha256', 'problem_contract_sha256', 'interface_sha256',
             'runtime_sha256', 'tests_sha256', 'effects_sha256')
@@ -34,7 +35,18 @@ def validate(universe, catalogue, verified_receipts):
     accepted from catalogue rows. Completion is conditional on that verifier.
     """
     fields(universe, ('schema', 'eligible_problem_ids', 'metadata_sha256', 'eligibility_policy', 'protected_problem_ids'))
-    fields(catalogue, ('schema', 'universe_sha256', 'problems'))
+    fields(catalogue, ('schema', 'universe_sha256', 'problems', 'evidence_policy'))
+    version = catalogue.get('schema')
+    allowed_evidence = {'normative-typed-effects'}
+    if version == 'gamma.dual-language-catalogue.v2':
+        policy = catalogue.get('evidence_policy', {})
+        fields(policy, ('schema', 'allowed_classes', 'scope_rule'))
+        classes = policy.get('allowed_classes')
+        if policy.get('schema') != 'gamma.catalogue-evidence-policy.v1' or not isinstance(classes, list) or not classes or any(not isinstance(x, str) for x in classes) or len(classes) != len(set(classes)) or not set(classes) <= EVIDENCE_CLASSES or policy.get('scope_rule') != 'exact-bound-contract-only':
+            raise ValueError('explicit bounded evidence policy required')
+        allowed_evidence = set(classes)
+    elif 'evidence_policy' in catalogue:
+        raise ValueError('evidence policy requires catalogue v2')
     if universe.get('schema') != 'gamma.catalogue-universe.v1':
         raise ValueError('unknown universe schema')
     ids = universe.get('eligible_problem_ids', [])
@@ -45,7 +57,7 @@ def validate(universe, catalogue, verified_receipts):
         raise ValueError('explicit immutable protection subset required')
     if not hash_value(universe.get('metadata_sha256')) or not universe.get('eligibility_policy'):
         raise ValueError('missing independent universe provenance')
-    if catalogue.get('schema') != 'gamma.dual-language-catalogue.v1' or catalogue.get('universe_sha256') != digest(universe):
+    if version not in ('gamma.dual-language-catalogue.v1', 'gamma.dual-language-catalogue.v2') or catalogue.get('universe_sha256') != digest(universe):
         raise ValueError('catalogue universe mismatch')
     rows = catalogue.get('problems', [])
     if not isinstance(rows, list):
@@ -56,13 +68,14 @@ def validate(universe, catalogue, verified_receipts):
     if len(keyed) != len(rows) or set(keyed) != set(ids):
         raise ValueError('missing, duplicate or extra problem: denominator cannot change')
     counts = {language: {status: 0 for status in sorted(STATUSES)} for language in LANGUAGES}
+    evidence_counts = {language: {kind: 0 for kind in sorted(EVIDENCE_CLASSES)} for language in LANGUAGES}
     for pid in ids:
         row = keyed[pid]
         if set(row.get('implementations', {})) != set(LANGUAGES):
             raise ValueError('both language slots required: ' + pid)
         for language in LANGUAGES:
             impl = row['implementations'][language]
-            fields(impl, (*BINDINGS, 'status', 'reason', 'canonical_variant_id', 'provenance', 'interface', 'receipt_sha256'))
+            fields(impl, (*BINDINGS, 'status', 'reason', 'canonical_variant_id', 'provenance', 'interface', 'receipt_sha256', 'evidence_class', 'contract_scope', 'caveats'))
             status = impl.get('status')
             if status not in STATUSES:
                 raise ValueError('unknown status')
@@ -89,15 +102,23 @@ def validate(universe, catalogue, verified_receipts):
             receipt = verified_receipts.get(receipt_id)
             if not receipt or digest(receipt) != receipt_id:
                 raise ValueError('no independently verified receipt binding')
-            if receipt.get('problem_id') != pid or receipt.get('language') != language or receipt.get('verdict') != 'qualified' or receipt.get('evidence_class') != 'normative-typed-effects' or receipt.get('independent_verifier') is not True:
+            if receipt.get('problem_id') != pid or receipt.get('language') != language or receipt.get('verdict') != 'qualified' or receipt.get('evidence_class') not in allowed_evidence or receipt.get('independent_verifier') is not True:
                 raise ValueError('wrong identity or compatibility-only receipt')
+            if version == 'gamma.dual-language-catalogue.v2':
+                if impl.get('evidence_class') != receipt['evidence_class'] or not isinstance(impl.get('contract_scope'), str) or not impl['contract_scope'] or not isinstance(impl.get('caveats'), list) or any(not isinstance(x, str) or not x for x in impl['caveats']):
+                    raise ValueError('explicit evidence class/scope/caveats required')
+                if any(receipt.get(key) != impl.get(key) for key in ('contract_scope', 'caveats')):
+                    raise ValueError('artifact applicability differs from verified receipt')
+                if impl['evidence_class'] == 'frozen-admitted-typed-effects' and not impl['caveats']:
+                    raise ValueError('admitted evidence requires explicit scope caveats')
             if receipt.get('canonical_variant_id') != impl['canonical_variant_id'] or receipt.get('provenance_sha256') != digest(impl['provenance']):
                 raise ValueError('canonical variant/provenance not receipt-bound')
             if any(receipt.get(key) != impl[key] for key in BINDINGS):
                 raise ValueError('stale qualification binding')
+            evidence_counts[language][receipt['evidence_class']] += 1
     complete = all(counts[language]['qualified'] == len(ids) for language in LANGUAGES)
     return {'schema': 'gamma.catalogue-validation.v1', 'eligible_problems': len(ids),
-            'language_counts': counts, 'complete_dual_language_catalogue': complete,
+            'language_counts': counts, 'qualified_by_evidence_class': evidence_counts, 'complete_dual_language_catalogue': complete,
             'qualification_conditional_on_external_receipt_verifier': True,
             'current_runtime_and_serving_policy_verified': False,
             'recognition_1a_1b_1c_qualified': False, 'historical_m1_qualified': False}

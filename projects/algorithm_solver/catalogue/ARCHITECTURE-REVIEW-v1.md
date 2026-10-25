@@ -21,9 +21,25 @@ current dot approvals. The old exact-refresh catalog was host/runtime-bound.
 
 The requested complete universe must be frozen independently of current source
 availability. Missing, blocked, stale, incompatible and protected states remain
-visible. If the owner means all 4,081 imported metadata identities, the difference
-from the 3,353 source-bearing entries is ingestion/identity work, not permission
-to invent statements or declare the absent source pairs qualified.
+visible. The owner selected **all 4,081 numeric identities / 8,162 language slots**.
+The difference from the 3,353 source-bearing entries is ingestion/identity work,
+not permission to invent statements or declare absent source pairs qualified.
+The [universe receipt](ALL4081-UNIVERSE-RECEIPT-v1.json) binds the exact IDs and
+titles to the global metadata table at the already-pinned Doocs commit. It also
+binds 400 exact numeric aliases from the existing development universe; no slug,
+title or similarity inference is used. Canonical slugs are independently joined
+for 3,357 IDs; 724 remain explicitly unresolved.
+
+The initial access policy retains only the previously authorized 400 IDs. Every
+other 3,681 is metadata-only: 66 known protected identities and 3,615 with
+unresolved broader-boundary/provenance classification. The 381 historical
+boundary entries inside the known-source exclusions are not necessarily the
+full 4,081 boundary: the original combined closure contains 382 keys. Its exact
+numeric membership and final100 membership still require a safe metadata export.
+Do not add overlapping reservations or replace an unresolved list with empty.
+Source availability, source publication/license permission and semantic
+qualification remain separate metadata fields. No imported original source is
+authorized for publication merely because its identity appears in this table.
 
 ## Minimal language-independent known-spec API
 
