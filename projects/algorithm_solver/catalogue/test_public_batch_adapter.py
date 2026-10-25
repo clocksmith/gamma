@@ -126,4 +126,48 @@ class MediumPolicyTests(unittest.TestCase):
    f['ids']=ids[:-1]
    with self.assertRaises(ValueError):a.check_observation_policy(lane,f)
 
+
+class Hard2AndMemoryPolicyTests(unittest.TestCase):
+ def test_numeric_policy_exact_lane_ids_and_tolerance(self):
+  f={'ids':[1515,1521,1542,1585,1713,2111,2127],
+     'effect_policy':'read-only args; fresh mutable returns; no result-to-input aliases',
+     'result_policy':'1515 finite numerical absolute tolerance 1e-5 with exact binary-float conversion and analytic oracle uncertainty guard; other results exact typed scalar; local read-only effects'}
+  a.check_observation_policy('hard32-wave2-numeric-v2',f)
+  for lane in('hard32-wave2-v1','hard32-wave1-v1','hard10-v1','medium32-wave2-v1','medium32-wave2-memory-v1'):
+   with self.assertRaises(ValueError):a.check_observation_policy(lane,f)
+  for key,value in(('ids',f['ids']+[1788]),('ids',f['ids'][1:]),('result_policy',f['result_policy'].replace('1e-5','1e-3')),('effect_policy','mutation allowed')):
+   changed=copy.deepcopy(f);changed[key]=value
+   with self.assertRaises(ValueError):a.check_observation_policy('hard32-wave2-numeric-v2',changed)
+ def test_numeric_caveat_is_preserved_and_narrow(self):
+  base=a.qualification_caveats('hard32-wave1-v1',1515)
+  self.assertEqual(a.qualification_caveats('hard32-wave2-numeric-v2',1521),base)
+  added=a.qualification_caveats('hard32-wave2-numeric-v2',1515)
+  self.assertEqual(added[:len(base)],base)
+  self.assertTrue(any('20 analytic' in x for x in added))
+  self.assertTrue(any('absolute 1e-5' in x and '1e-35' in x for x in added))
+  self.assertTrue(any('arbitrary-input correctness verification is not established' in x for x in added))
+ def test_memory_successor_has_fixed_lane_and_unchanged_comparator(self):
+  self.assertEqual(a.lane_path('medium32-wave2-memory-v1').name,'public-domain-qualification-medium32-wave2-memory-v1')
+  f={'ids':[1567,1573,1630,1653,1743,1817,1877,1887],
+     'effect_policy':'read-only args; fresh mutable returns; no result-to-input aliases',
+     'result_policy':'typed exact scalars and ordered lists; ID1743 relational unique-vertex adjacent path, either orientation; local read-only/fresh-return effects'}
+  a.check_observation_policy('medium32-wave2-memory-v1',f)
+  a.check_observation_policy('medium32-wave2-v1',f)
+  f['ids']=[1743]
+  with self.assertRaises(ValueError):a.check_observation_policy('medium32-wave2-memory-v1',f)
+
+class Medium34PolicyTests(unittest.TestCase):
+ def test_exact_populations_and_cross_lane_rejection(self):
+  rows=[('medium32-wave3-v1',[1894,1911,1921,1953,1976,2079,2131,2135]),('medium32-wave4-v1',[2170,2186,2256,2433,2587,2597,2602,2860])]
+  for lane,ids in rows:
+   f={'ids':ids,'effect_policy':'read-only args; fresh mutable returns; no result-to-input aliases','result_policy':('exact typed integer scalar; local read-only effects' if lane=='medium32-wave3-v1' else 'exact typed integer scalar/list; local read-only effects')}
+   a.check_observation_policy(lane,f)
+   for other,_ in rows:
+    if other!=lane:
+     with self.assertRaises(ValueError):a.check_observation_policy(other,f)
+   for key,value in [('ids',ids[:-1]),('ids',list(reversed(ids))),('result_policy','approximate numeric'),('effect_policy','mutation allowed')]:
+    changed=copy.deepcopy(f);changed[key]=value
+    with self.assertRaises(ValueError):a.check_observation_policy(lane,changed)
+   with self.assertRaises(ValueError):a.check_observation_policy('hard32-wave2-numeric-v2',f)
+
 if __name__=='__main__':unittest.main()

@@ -30,6 +30,10 @@ LANES = {
     'hard32-wave1-v1': 'public-domain-qualification-hard32-v1',
     'medium32-wave1-v1': 'public-domain-qualification-medium32-v1',
     'medium32-wave2-v1': 'public-domain-qualification-medium32-wave2-v1',
+    'medium32-wave2-memory-v1': 'public-domain-qualification-medium32-wave2-memory-v1',
+    'medium32-wave3-v1': 'public-domain-qualification-medium32-wave3-v1',
+    'medium32-wave4-v1': 'public-domain-qualification-medium32-wave4-v1',
+    'hard32-wave2-numeric-v2': 'public-domain-qualification-hard32-wave2-numeric-v2',
 }
 _IMPORT_LOCK = threading.RLock()
 LANGUAGES = ('javascript', 'python')
@@ -131,6 +135,13 @@ def check_observation_policy(lane, freeze):
         'medium32-wave2-v1': ([1567, 1573, 1630, 1653, 1743, 1817, 1877, 1887],
             'typed exact scalars and ordered lists; ID1743 relational unique-vertex adjacent path, either orientation; local read-only/fresh-return effects'),
     }
+    medium['medium32-wave3-v1'] = ([1894,1911,1921,1953,1976,2079,2131,2135], 'exact typed integer scalar; local read-only effects')
+    medium['medium32-wave4-v1'] = ([2170,2186,2256,2433,2587,2597,2602,2860], 'exact typed integer scalar/list; local read-only effects')
+    medium['medium32-wave2-memory-v1'] = medium['medium32-wave2-v1']
+    if lane == 'hard32-wave2-numeric-v2':
+        if freeze.get('ids') != [1515, 1521, 1542, 1585, 1713, 2111, 2127]:
+            raise ValueError('numerical comparator requires exact reviewed seven-ID population')
+        expected = '1515 finite numerical absolute tolerance 1e-5 with exact binary-float conversion and analytic oracle uncertainty guard; other results exact typed scalar; local read-only effects'
     if lane in medium:
         population, expected = medium[lane]
         if freeze.get('ids') != population:
@@ -138,6 +149,19 @@ def check_observation_policy(lane, freeze):
     if (freeze.get('effect_policy') != 'read-only args; fresh mutable returns; no result-to-input aliases' or
             freeze.get('result_policy') != expected):
         raise ValueError('unsupported local observation policy')
+
+
+
+def qualification_caveats(lane, pid):
+    caveats = ['Finite independent tests and algorithm review are not universal correctness proof.',
+        'Run the frozen input validator before candidate execution; arbitrary-input oracle service is not qualified.',
+        'Acquisition/availability does not grant source publication, recognition, or current-serving execution qualification.']
+    if lane == 'hard32-wave2-numeric-v2' and pid == 1515:
+        caveats.extend([
+            '1515 finite numerical evidence uses 20 analytic point/line/symmetric/majority/three-point fixtures and static algorithm review, not a general geometric-median oracle.',
+            '1515 accepts finite numerical returns within absolute 1e-5, conservatively reduced by the frozen 1e-35 analytic-oracle uncertainty guard; equality of floating encodings is not required.',
+            'The complete official point domain is validated, but arbitrary-input correctness verification is not established by this finite analytic fixture set.'])
+    return caveats
 
 
 def _module(name, path):
@@ -348,9 +372,7 @@ def adopt_plan(plan_path, trusted_plan_sha256):
                 'base_catalogue_sha256': sha(raws['catalogue'])}, 'source_publication_authorized': False,
             'historical_receipts_unchanged': True}
         scope = f'Reviewed statement domain for problem {pid}; exact ordered solve interface and explicitly reviewed local effects only.'
-        caveats = ['Finite independent tests and algorithm review are not universal correctness proof.',
-            'Run the frozen input validator before candidate execution; arbitrary-input oracle service is not qualified.',
-            'Acquisition/availability does not grant source publication, recognition, or current-serving execution qualification.']
+        caveats = qualification_caveats(plan['lane'], pid)
         impl = {'status': 'qualified', 'canonical_variant_id': language+':'+source['sha256'], 'source_sha256': source['sha256'],
             'problem_contract_sha256': digest(contract), 'interface': interface, 'interface_sha256': digest(interface),
             'runtime_sha256': digest(runtime), 'tests_sha256': tests_sha, 'effects_sha256': digest(effects),
