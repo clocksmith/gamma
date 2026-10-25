@@ -22,10 +22,16 @@ class ReplayTests(unittest.TestCase):
         for raw in (b'{"i":0,"i":0}\n{"done":1}',b'{"i":true}\n{"done":1}',b'{"i":0}\n{"done":true}',b'{"i":0,"result":NaN}\n{"done":1}',b'{"done":1}',b'{"i":1}\n{"done":1}'):
             with self.assertRaises((ValueError,TypeError)):q.parse(raw,1)
     def test_strict_return_types_and_errors(self):
-        self.assertFalse(q.matches({'expected':1},{'result':True}))
-        self.assertFalse(q.matches({'expected':1},{'result':1,'error':'failure'}))
-        self.assertTrue(q.matches({'expected':[[1],[2]],'compare':'return:unordered_outer'},{'result':[[2],[1]]}))
-        self.assertFalse(q.matches({'expected':1,'compare':'unknown'},{'result':1}))
+        self.assertFalse(q.matches({'args':[],'expected':1},{'result':True}))
+        self.assertFalse(q.matches({'args':[],'expected':1},{'result':1,'error':'failure'}))
+        self.assertTrue(q.matches({'args':[],'expected':[[1],[2]],'compare':'return:unordered_outer'},{'result':[[2],[1]]}))
+        self.assertFalse(q.matches({'args':[],'expected':1,'compare':'unknown'},{'result':1}))
+    def test_original_float_tolerance_not_exact_or_unbounded(self):
+        case={'args':[],'expected':0.7327777870686082}
+        self.assertTrue(q.matches(case,{'result':0.7327777870686083}))
+        self.assertFalse(q.matches(case,{'result':0.733}))
+        self.assertFalse(q.matches(case,{'result':True}))
+        self.assertFalse(q.matches(case,{'result':float('nan')}))
     def test_effects_require_values_aliases_and_identity_survival(self):
         row={'args_after':[[1]],'alias_paths':[],'identity_survival':[[['arg/0'],['arg/0']]]}
         self.assertTrue(q.effects_match(row,dict(row)))

@@ -1,16 +1,18 @@
-def count_sequences(counts: list[int]) -> int:
-    total = 0
-    for letter in range(26):
-        if counts[letter] > 0:
-            counts[letter] -= 1
-            total += 1 + count_sequences(counts)
-            counts[letter] += 1
-    return total
-
-
 class Solution:
     def numTilePossibilities(self, tiles: str) -> int:
         counts = [0] * 26
         for letter in tiles:
-            counts[ord(letter) - ord("A")] += 1
-        return count_sequences(counts)
+            counts[ord(letter) - 65] += 1
+        ways = [1]
+        for count in counts:
+            if count == 0:
+                continue
+            following = [0] * (len(ways) + count)
+            for length, existing in enumerate(ways):
+                combinations = 1
+                for used in range(count + 1):
+                    if used > 0:
+                        combinations = combinations * (length + used) // used
+                    following[length + used] += existing * combinations
+            ways = following
+        return sum(ways) - 1

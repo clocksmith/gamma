@@ -1,6 +1,6 @@
 class Solution {
   smallestRangeII(nums, k) {
-    const ordered = nums.slice().sort((left, right) => {
+    const ordered = nums.sort((left, right) => {
       if (left < right) {
         return -1;
       }
