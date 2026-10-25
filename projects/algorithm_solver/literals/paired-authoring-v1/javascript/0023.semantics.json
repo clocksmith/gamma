@@ -1,0 +1,25 @@
+{
+  "problem_id": 23,
+  "language": "javascript",
+  "entry_point": "Solution.mergeKLists",
+  "status": "unqualified_candidate",
+  "input": "lists is an outer Array of k heads, 0 <= k <= 4294967295. Each head is null or a finite, acyclic, nondecreasing singly linked list. All nodes across all lists are distinct: shared tails and repeated head references are excluded. There are at most 4294967295 total nodes. Caller-owned ListNode objects have ordinary writable val/next data fields; val is an integer in [-9007199254740991, 9007199254740991], and next is a node or null. Integers are primitive safe-integer Numbers, excluding negative zero, NaN, infinities, fractions and BigInt. Arrays are dense ordinary Arrays, excluding holes, proxies, subclasses and accessors; strings are primitive rather than boxed. Standard built-ins are unmodified; no concurrent mutation or custom field access occurs. Preconditions are not checked at runtime. Declared bounds do not guarantee allocation capacity or completion within an unqualified runtime budget.",
+  "return": "The first original node of one nondecreasing merge, or null when all lists are empty. Equal values are stable within each original list and ordered by original list index across lists. Every original node appears exactly once; no value-only copy replaces a node.",
+  "mutation_aliasing": "The outer lists Array and its head references remain unchanged, but original node next fields are rewired. Values and node identities remain intact. External aliases to original heads/nodes observe the final merged edges. The final list is acyclic and null-terminated. Private round-head arrays and helper sentinels are allocated; sentinels are never returned. No state persists between calls.",
+  "numeric": "Values are compared without arithmetic. k, total node count, paired-array indices and round lengths are safe integers. Pair-loop index+1 and final index+=2 remain at most 4294967296, which is exact. Sentinel objects carry no numeric value that could collide with an input value.",
+  "complexity": "O(k + N*log(k+1) + 1) time for N total nodes, including copying k heads and processing empty runs. O(k+1) live auxiliary head-array space plus one active sentinel; old and next round arrays are both charged. Across all rounds O(k+1) head slots and O(k+1) sentinel objects are allocated. Each node participates in at most ceil(log2(k)) stable pairwise merges. No recursion, heap or new output nodes are used.",
+  "helpers": [
+    {
+      "name": "Link",
+      "contract": "A complete sentinel class with only a next field. Each merge creates one private instance; it is never returned and is not an input ListNode.",
+      "cost": "The complete helper definition/statement is 80 UTF-8 bytes including indentation and terminal newline, already included in standalone source bytes. O(1) time/space per merge sentinel, with O(k+1) total sentinel allocations accounted for."
+    },
+    {
+      "name": "mergeRuns",
+      "contract": "Stable iterative merge of two disjoint sorted null-terminated lists; left wins equal-value comparisons, original nodes are relinked and any final suffix is attached directly.",
+      "cost": "The complete helper definition/statement is 379 UTF-8 bytes including indentation and terminal newline, already included in standalone source bytes. O(a+b+1) worst-case time and one constant-size sentinel, with all comparisons and edge writes charged. No copied nodes or hidden merge library."
+    }
+  ],
+  "source_accounting": "The complete standalone source is 959 UTF-8 bytes, including all 2 declared helper definitions/statements and their calls, class/method wrappers, standard built-in operations, allocations, annotations/comments where present, whitespace and terminal newline. Reused helper code is fully present and charged per candidate, not supplied free. ListNode, when used, is an explicit caller-owned input shape, not hidden node construction. Runtime/output/temporary allocations are included in the declared costs. No imports, generated implementation or hidden source expansion exist. Any eventual frozen-judge adapter is additional charged source.",
+  "evidence_boundary": "Independently authored dev_fit candidate, verified against cost-decomposition-v1/contract.json partition.dev_fit and excluded from frozen sources. No candidate imports or execution, predecessor equivalence, behavioral qualification, benchmark acceptance or M1/M2 achievement are claimed. Mandatory isolated judging and the private frozen source/case/receipt package remain unavailable. Static syntax and these declarations cannot establish runtime correctness. Remaining gate: independent source-bound isolated qualification of zero/all-empty/odd numbers of lists, disjoint ownership, equal-value node stability, all original identities, unchanged outer heads, final edges/aliases and complete round/sentinel allocation, exact frozen interfaces/types/effects and complete source/helper/adapter/runtime costs. No admission or promotion is granted."
+}
