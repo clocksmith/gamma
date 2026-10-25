@@ -1,0 +1,71 @@
+{
+  "schema_version": 1,
+  "problem_id": "832",
+  "status": "public_statement_transcribed_pending_independent_review",
+  "qualified": false,
+  "canonical_interface_proposal": {
+    "entrypoint": "solve",
+    "calling_convention": "ordered_positional",
+    "parameters": [
+      [
+        "image",
+        "array<array<integer>>"
+      ]
+    ],
+    "authority": "local catalogue convention, not an official LeetCode signature"
+  },
+  "source": {
+    "url": "https://leetcode.com/problems/flipping-an-image/",
+    "publisher": "LeetCode",
+    "retrieved_at_utc": "2026-10-25T18:48:02Z",
+    "access": "freely_accessible_unauthenticated",
+    "identity_verified": true,
+    "evidence_batch_file": "source-pin.json",
+    "clause_lines": {
+      "identity": "18",
+      "domain": "22,49-54",
+      "result": "22-29"
+    }
+  },
+  "title": "Flipping an Image",
+  "constraints": {
+    "rows": [
+      1,
+      20
+    ],
+    "columns": "equal to row count",
+    "element_values": [
+      0,
+      1
+    ]
+  },
+  "result": {
+    "type": "array<array<integer>>",
+    "semantics": "An n by n matrix R with R[i][j] = 1 - original_image[i][n-1-j].",
+    "comparison": "exact_nested_ordered"
+  },
+  "complexity": {
+    "time": null,
+    "space": null
+  },
+  "notes": [
+    "Constraint variable images is normalized to image; square shape is required. Returning the transformed image does not explicitly require input mutation or fresh allocation."
+  ],
+  "unspecified_by_statement": {
+    "input_mutation": null,
+    "output_aliasing": null,
+    "exceptions_outside_domain": null
+  },
+  "local_policy_proposal": {
+    "status": "not_adopted",
+    "values": "JSON integer/string/array value transport; reject booleans as integers, NaN and infinity.",
+    "effects": "Review and freeze input-preservation and return-alias policy separately before qualification; do not infer from functional outputs.",
+    "unicode": "Only 833 and 916 have string inputs; their published alphabet excludes non-ASCII characters.",
+    "numeric": "All specified input integers and result integers fit exactly in JavaScript Number; Python integers preserve the same mathematical values."
+  },
+  "test_plan": [
+    "At n=20 use all-zero/all-one matrices and an asymmetric pattern.",
+    "Applying the transformation twice restores the original value matrix; this alone is not sufficient as an oracle."
+  ],
+  "promotion": "Contract review plus separately bound source/interface/runtime/effect/test receipts required; no compatibility probe upgrade."
+}

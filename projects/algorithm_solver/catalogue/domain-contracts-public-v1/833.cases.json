@@ -1,0 +1,94 @@
+{
+  "schema_version": 1,
+  "problem_id": "833",
+  "evidence_class": "independently_authored_synthetic_test_plan_not_execution",
+  "candidate_used_as_oracle": false,
+  "comparison": "exact",
+  "cases": [
+    {
+      "args": [
+        "q",
+        [
+          0
+        ],
+        [
+          "q"
+        ],
+        [
+          "zz"
+        ]
+      ],
+      "expected": "zz",
+      "purpose": "singleton expansion"
+    },
+    {
+      "args": [
+        "q",
+        [
+          0
+        ],
+        [
+          "z"
+        ],
+        [
+          "a"
+        ]
+      ],
+      "expected": "q",
+      "purpose": "nonmatch"
+    },
+    {
+      "args": [
+        "mnop",
+        [
+          2,
+          0
+        ],
+        [
+          "op",
+          "m"
+        ],
+        [
+          "x",
+          "uvw"
+        ]
+      ],
+      "expected": "uvwnx",
+      "purpose": "unsorted indices simultaneous expansion and shrink"
+    },
+    {
+      "args": [
+        "abcd",
+        [
+          1
+        ],
+        [
+          "bc"
+        ],
+        [
+          "z"
+        ]
+      ],
+      "expected": "azd",
+      "purpose": "interior preserves outside"
+    },
+    {
+      "args": [
+        "xy",
+        [
+          1
+        ],
+        [
+          "yz"
+        ],
+        [
+          "a"
+        ]
+      ],
+      "expected": "xy",
+      "purpose": "source longer than remaining suffix"
+    }
+  ],
+  "execution_status": "not_run",
+  "expected_output_location": "Must remain outside candidate sandbox."
+}
