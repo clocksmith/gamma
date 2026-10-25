@@ -11,22 +11,22 @@ class Solution {
     const counts = new Array(26).fill(0);
     for (const value of s1) {
       const index = value.charCodeAt(0) - 97;
-      counts[index]++;
+      counts[index] += 1;
     }
 
     let missing = window_size;
-    for (let right = 0; right < s2.length; right++) {
+    for (let right = 0; right < s2.length; right += 1) {
       const incoming = s2.charCodeAt(right) - 97;
       if (counts[incoming] > 0) {
-        missing--;
+        missing -= 1;
       }
-      counts[incoming]--;
+      counts[incoming] -= 1;
 
       if (right >= window_size) {
         const outgoing = s2.charCodeAt(right - window_size) - 97;
-        counts[outgoing]++;
+        counts[outgoing] += 1;
         if (counts[outgoing] > 0) {
-          missing++;
+          missing += 1;
         }
       }
 

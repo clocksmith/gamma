@@ -2,8 +2,8 @@
 
 Owner: [Algorithm Solver charter](../../CATSCAN.md).
 
-Nine permitted development-fit problems have standalone Python and JavaScript
-candidates: 34, 35, 104, 111, 347, 560, 567, 704 and 733. The IDs are checked
+Fifteen permitted development-fit problems have standalone Python and JavaScript
+candidates: 34, 35, 62, 64, 71, 84, 85, 91, 104, 111, 347, 560, 567, 704 and 733. The IDs are checked
 against the already-public pinned development partition, not a new population.
 
 These are newly authored, readable candidates. They do not replace the frozen
@@ -14,7 +14,8 @@ receipts. They also do not publish the separately gated 80-rewrite set.
 
 - Python uses four-space indentation; JavaScript uses two spaces and explicit
   braces. Use descriptive role names and preserve the same algorithmic structure
-  across languages rather than forcing identical syntax.
+  across languages rather than forcing identical syntax. Increment/decrement
+  counters explicitly with += 1 / -= 1 in both languages.
 - Each program is a complete `Solution` class plus any helpers it needs. Standard
   method names form the declared candidate interface. There is no top-level call,
   hidden helper import, generated implementation, or outside source expansion.
@@ -23,6 +24,10 @@ receipts. They also do not publish the separately gated 80-rewrite set.
 - Tree traversals share iterative level queues and a head cursor. Retained queue
   entries count toward O(n) space; do not claim O(width) space or use quadratic
   front removal.
+- Histogram problems reuse the same fully included monotonic-stack helper;
+  equal heights coalesce and a virtual zero flush avoids mutating input arrays.
+- Rolling DP states preserve dependency order and bound all intermediate integer
+  counts, including decoding prefixes rather than just the final answer.
 - Frequency, prefix-sum and fixed-alphabet window loops use explicit count state.
   Reuse actual invariants, not a generic abstraction that hides different rules.
 - JavaScript numeric assumptions are declared. No bitwise midpoint truncation or
