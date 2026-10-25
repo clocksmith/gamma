@@ -1,0 +1,270 @@
+{
+  "schema": "chatgpt.gamma-hard10-dual-language-candidates.v1",
+  "batch_id": "HARD10-20261025",
+  "date": "2026-10-25",
+  "repository": "clocksmith/gamma",
+  "frozen_repository_commit": "7290ac480db36698b4c69e677f4f51172dd738bd",
+  "selection": {
+    "problem_ids": [
+      10,
+      42,
+      84,
+      85,
+      123,
+      546,
+      564,
+      992,
+      1074,
+      1187
+    ],
+    "difficulty": "Hard",
+    "count": 10,
+    "scope": "All ten IDs occur in the exposed dev_fit list of cost-decomposition-v1/contract.json. No protected/final-holdout payload read.",
+    "exclusion_check": "Selected numeric IDs, lc:slugs, doocs:zero-padded IDs, and lcd:IDs do not occur in published library-answer-audit-v2 exclusions. Selection confined to authorized development400 metadata; not an assertion about every corpus family."
+  },
+  "qualification_status": "authored local candidates; NOT Gamma-qualified or admitted",
+  "canonical_api": {
+    "entrypoint": "solve",
+    "arguments": "ordered-positional"
+  },
+  "native_apis": "Named JavaScript functions; Python Solution methods; same input order and outputs.",
+  "problems": [
+    {
+      "id": 10,
+      "title": "Regular Expression Matching",
+      "slug": "regular-expression-matching",
+      "native": "isMatch",
+      "params": [
+        "s",
+        "p"
+      ],
+      "return_type": "bool",
+      "algorithm": "Rolling-row dynamic programming for whole-string matching; * either omits its atom or consumes another matching character.",
+      "complexity": {
+        "time": "O(len(s) * len(p))",
+        "auxiliary_space": "O(len(p))"
+      },
+      "schema": "chatgpt.gamma-candidate-problem-contract.v1",
+      "difficulty": "Hard",
+      "source_url": "https://leetcode.com/problems/regular-expression-matching/description/",
+      "canonical_entrypoint": "solve",
+      "arguments": "ordered-positional",
+      "input_mutation": "none",
+      "gamma_frozen_problem_contract_status": "not available in the inspected public source; coordinator verification required",
+      "source_code_provenance": "freshly authored, not a copied or minified repository implementation"
+    },
+    {
+      "id": 42,
+      "title": "Trapping Rain Water",
+      "slug": "trapping-rain-water",
+      "native": "trap",
+      "params": [
+        "height"
+      ],
+      "return_type": "int",
+      "algorithm": "Two inward-moving pointers finalize water at the lower boundary.",
+      "complexity": {
+        "time": "O(n)",
+        "auxiliary_space": "O(1)"
+      },
+      "schema": "chatgpt.gamma-candidate-problem-contract.v1",
+      "difficulty": "Hard",
+      "source_url": "https://leetcode.com/problems/trapping-rain-water/description/",
+      "canonical_entrypoint": "solve",
+      "arguments": "ordered-positional",
+      "input_mutation": "none",
+      "gamma_frozen_problem_contract_status": "not available in the inspected public source; coordinator verification required",
+      "source_code_provenance": "freshly authored, not a copied or minified repository implementation"
+    },
+    {
+      "id": 84,
+      "title": "Largest Rectangle in Histogram",
+      "slug": "largest-rectangle-in-histogram",
+      "native": "largestRectangleArea",
+      "params": [
+        "heights"
+      ],
+      "return_type": "int",
+      "algorithm": "Increasing stack of indices; a virtual zero-height bar closes remaining rectangles without mutating the input.",
+      "complexity": {
+        "time": "O(n)",
+        "auxiliary_space": "O(n)"
+      },
+      "schema": "chatgpt.gamma-candidate-problem-contract.v1",
+      "difficulty": "Hard",
+      "source_url": "https://leetcode.com/problems/largest-rectangle-in-histogram/description/",
+      "canonical_entrypoint": "solve",
+      "arguments": "ordered-positional",
+      "input_mutation": "none",
+      "gamma_frozen_problem_contract_status": "not available in the inspected public source; coordinator verification required",
+      "source_code_provenance": "freshly authored, not a copied or minified repository implementation"
+    },
+    {
+      "id": 85,
+      "title": "Maximal Rectangle",
+      "slug": "maximal-rectangle",
+      "native": "maximalRectangle",
+      "params": [
+        "matrix"
+      ],
+      "return_type": "int",
+      "algorithm": "Accumulate column heights for each row and solve each histogram with a monotone stack.",
+      "complexity": {
+        "time": "O(rows * columns)",
+        "auxiliary_space": "O(columns)"
+      },
+      "schema": "chatgpt.gamma-candidate-problem-contract.v1",
+      "difficulty": "Hard",
+      "source_url": "https://leetcode.com/problems/maximal-rectangle/description/",
+      "canonical_entrypoint": "solve",
+      "arguments": "ordered-positional",
+      "input_mutation": "none",
+      "gamma_frozen_problem_contract_status": "not available in the inspected public source; coordinator verification required",
+      "source_code_provenance": "freshly authored, not a copied or minified repository implementation"
+    },
+    {
+      "id": 123,
+      "title": "Best Time to Buy and Sell Stock III",
+      "slug": "best-time-to-buy-and-sell-stock-iii",
+      "native": "maxProfit",
+      "params": [
+        "prices"
+      ],
+      "return_type": "int",
+      "algorithm": "Four cash/holding states for at most two non-overlapping transactions; reverse updates use the previous day’s states.",
+      "complexity": {
+        "time": "O(n)",
+        "auxiliary_space": "O(1)"
+      },
+      "schema": "chatgpt.gamma-candidate-problem-contract.v1",
+      "difficulty": "Hard",
+      "source_url": "https://leetcode.com/problems/best-time-to-buy-and-sell-stock-iii/description/",
+      "canonical_entrypoint": "solve",
+      "arguments": "ordered-positional",
+      "input_mutation": "none",
+      "gamma_frozen_problem_contract_status": "not available in the inspected public source; coordinator verification required",
+      "source_code_provenance": "freshly authored, not a copied or minified repository implementation"
+    },
+    {
+      "id": 546,
+      "title": "Remove Boxes",
+      "slug": "remove-boxes",
+      "native": "removeBoxes",
+      "params": [
+        "boxes"
+      ],
+      "return_type": "int",
+      "algorithm": "Run-length compression and interval DP with a carried count of matching boxes to the right.",
+      "complexity": {
+        "time": "O(n^4) worst case",
+        "auxiliary_space": "O(n^3) memo plus O(n) stack"
+      },
+      "schema": "chatgpt.gamma-candidate-problem-contract.v1",
+      "difficulty": "Hard",
+      "source_url": "https://leetcode.com/problems/remove-boxes/description/",
+      "canonical_entrypoint": "solve",
+      "arguments": "ordered-positional",
+      "input_mutation": "none",
+      "gamma_frozen_problem_contract_status": "not available in the inspected public source; coordinator verification required",
+      "source_code_provenance": "freshly authored, not a copied or minified repository implementation"
+    },
+    {
+      "id": 564,
+      "title": "Find the Closest Palindrome",
+      "slug": "find-the-closest-palindrome",
+      "native": "nearestPalindromic",
+      "params": [
+        "n"
+      ],
+      "return_type": "str",
+      "algorithm": "Mirror the leading half and its adjacent values; include digit-length boundaries, exclude the input, and break ties toward the smaller candidate.",
+      "complexity": {
+        "time": "O(d) string work plus a constant number of exact d-digit arithmetic operations; d <= 18",
+        "auxiliary_space": "O(d)"
+      },
+      "schema": "chatgpt.gamma-candidate-problem-contract.v1",
+      "difficulty": "Hard",
+      "source_url": "https://leetcode.com/problems/find-the-closest-palindrome/description/",
+      "canonical_entrypoint": "solve",
+      "arguments": "ordered-positional",
+      "input_mutation": "none",
+      "gamma_frozen_problem_contract_status": "not available in the inspected public source; coordinator verification required",
+      "source_code_provenance": "freshly authored, not a copied or minified repository implementation"
+    },
+    {
+      "id": 992,
+      "title": "Subarrays with K Different Integers",
+      "slug": "subarrays-with-k-different-integers",
+      "native": "subarraysWithKDistinct",
+      "params": [
+        "nums",
+        "k"
+      ],
+      "return_type": "int",
+      "algorithm": "Subtract the number of windows with at most k-1 distinct values from those with at most k.",
+      "complexity": {
+        "time": "O(n) expected with hash maps",
+        "auxiliary_space": "O(n)"
+      },
+      "schema": "chatgpt.gamma-candidate-problem-contract.v1",
+      "difficulty": "Hard",
+      "source_url": "https://leetcode.com/problems/subarrays-with-k-different-integers/description/",
+      "canonical_entrypoint": "solve",
+      "arguments": "ordered-positional",
+      "input_mutation": "none",
+      "gamma_frozen_problem_contract_status": "not available in the inspected public source; coordinator verification required",
+      "source_code_provenance": "freshly authored, not a copied or minified repository implementation"
+    },
+    {
+      "id": 1074,
+      "title": "Number of Submatrices That Sum to Target",
+      "slug": "number-of-submatrices-that-sum-to-target",
+      "native": "numSubmatrixSumTarget",
+      "params": [
+        "matrix",
+        "target"
+      ],
+      "return_type": "int",
+      "algorithm": "Pair boundaries along the smaller dimension, compress to a line, and count target-sum intervals with prefix frequencies.",
+      "complexity": {
+        "time": "O(min(rows, columns)^2 * max(rows, columns)) expected with hash maps",
+        "auxiliary_space": "O(max(rows, columns))"
+      },
+      "schema": "chatgpt.gamma-candidate-problem-contract.v1",
+      "difficulty": "Hard",
+      "source_url": "https://leetcode.com/problems/number-of-submatrices-that-sum-to-target/description/",
+      "canonical_entrypoint": "solve",
+      "arguments": "ordered-positional",
+      "input_mutation": "none",
+      "gamma_frozen_problem_contract_status": "not available in the inspected public source; coordinator verification required",
+      "source_code_provenance": "freshly authored, not a copied or minified repository implementation"
+    },
+    {
+      "id": 1187,
+      "title": "Make Array Strictly Increasing",
+      "slug": "make-array-strictly-increasing",
+      "native": "makeArrayIncreasing",
+      "params": [
+        "arr1",
+        "arr2"
+      ],
+      "return_type": "int",
+      "algorithm": "Dynamic programming by replacement count, retaining the smallest achievable tail; binary-search replacement choices and prune dominated states.",
+      "complexity": {
+        "time": "O(m log m + n^2 log(m + 1)) worst case",
+        "auxiliary_space": "O(n + m)"
+      },
+      "schema": "chatgpt.gamma-candidate-problem-contract.v1",
+      "difficulty": "Hard",
+      "source_url": "https://leetcode.com/problems/make-array-strictly-increasing/description/",
+      "canonical_entrypoint": "solve",
+      "arguments": "ordered-positional",
+      "input_mutation": "none",
+      "gamma_frozen_problem_contract_status": "not available in the inspected public source; coordinator verification required",
+      "source_code_provenance": "freshly authored, not a copied or minified repository implementation"
+    }
+  ],
+  "repository_changes": false,
+  "training": false,
+  "protected_tests_opened": false
+}
