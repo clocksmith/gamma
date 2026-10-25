@@ -86,6 +86,7 @@ let pollTimer = null;
 let bridgeConnected = !bridgeRequired;
 let previewState = null;
 let previewSerial = 0;
+let guideDismissed = false;
 const boardView = createBoard(
   elements.board,
   document.querySelector(".board-note"),
@@ -685,6 +686,28 @@ function renderLedger() {
     .join("");
 }
 
+function renderFirstEraGuide(state) {
+  const panel = $("first-era-guide");
+  panel.hidden = !firstGameGuideMode || guideDismissed || !state;
+  if (panel.hidden) return;
+  const complete = state.round > 1 || state.complete;
+  const stage = game?.pending?.requestId?.split(":").at(-2);
+  $("guide-title").textContent = complete ? copy.guide.complete : copy.guide.title;
+  $("guide-cycle").textContent = complete
+    ? copy.guide.completeText
+    : `${formatCopy(copy.guide.cycle, state)}. ${copy.guide.cycles[state.cycle - 1]}`;
+  $("guide-now").textContent = copy.guide.stages[stage] || copy.guide.waiting;
+  $("guide-points").textContent = formatCopy(copy.guide.points, {
+    points: state.players.find((player) => player.seat === 0).mandate,
+  });
+  $("guide-continue").hidden = !complete;
+}
+
+$("guide-continue").addEventListener("click", () => {
+  guideDismissed = true;
+  $("first-era-guide").hidden = true;
+});
+
 function render() {
   const state = game?.state || previewState;
   // The setup controls are only relevant before the first match is created.
@@ -713,6 +736,7 @@ function render() {
   $("setup-preview-label").hidden = Boolean(game);
   renderDecisions();
   renderLedger();
+  renderFirstEraGuide(state);
 }
 
 async function refresh() {
