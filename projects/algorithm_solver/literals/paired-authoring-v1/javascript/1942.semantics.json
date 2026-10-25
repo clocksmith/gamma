@@ -1,0 +1,20 @@
+{
+  "problem_id": 1942,
+  "language": "javascript",
+  "entry_point": "Solution.smallestChair",
+  "status": "unqualified_candidate",
+  "input": "times contains n arrival/departure pairs, with 1 <= n <= 10000 and 1 <= arrival < departure <= 100000. Arrivals are distinct. targetFriend is an index in [0,n-1]. Collections are ordinary finite dense arrays/lists, not subclasses, proxies, sparse/accessor-backed collections. Strings are ordinary/primitive strings. Every collection length and computed allocation size fits [0,4294967295], with padded sizes explicitly included. No concurrent mutation or built-in monkey-patching is allowed. Preconditions are not runtime-checked, and allocation/resource capacity or completion is not guaranteed by declared bounds. JavaScript integer inputs are primitive safe-integer Number, excluding negative zero, NaN, infinities, fractions and BigInt.",
+  "return": "The smallest currently unoccupied chair assigned to targetFriend when chairs are numbered from zero. Departures at a time free chairs before any arrival at that same time.",
+  "mutation_aliasing": "Inputs and caller-held aliases remain unchanged; working state is private. The Solution instance retains no state. Event triples and assignments are private; no actual booking or external state changes occur.",
+  "numeric": "Times, event comparator differences, chair IDs and heap child indices are small exact integers. Every departure follows its own arrival, so assigned[friend] is valid when released. A never-used chair is greater than every reusable chair. All integer inputs/intermediates remain within [-9007199254740991,9007199254740991]; no bitwise coercion is used.",
+  "complexity": "O(n log(n+1)) time and O(n) auxiliary space for 2n event triples, sorted events, assignment array and fully included minimum heap. Early return does not remove the initial event-construction/sort cost. Bounds include ordinary built-in operations/allocations and assume bounded-word arithmetic, constant-time indexing, amortized append/pop and any explicitly stated hash/sort behavior.",
+  "helpers": [
+    {
+      "name": "MinimumHeap",
+      "contract": "Private binary min-heap of chair integers. push restores priority upward; pop removes the minimum and restores priority downward. pop requires a nonempty heap.",
+      "cost": "O(log(H+1)) time per operation and O(H+1) storage for H entries; entire class charged. Its complete definition is 1111 UTF-8 bytes; separator newlines count toward total source bytes."
+    }
+  ],
+  "source_accounting": "The complete standalone source is 2062 UTF-8 bytes, including every helper, Solution wrapper, signature, loop, built-in call, annotation/comment, whitespace and terminal newline. Helpers are fully charged per candidate, not free shared libraries. No imports, runtime-generated implementations or hidden source expansion are used. Any eventual judge-interface adapter is additional charged source.",
+  "evidence_boundary": "Authored permitted dev_fit alternative outside frozen source sets. Membership checked only against already-public cost-decomposition-v1/contract.json partition.dev_fit and candidate manifest. Input/effect/complexity declarations are not frozen-predecessor equivalence receipts. No candidate execution/import, behavioral qualification, benchmark acceptance or M1/M2 pass is claimed. Mandatory isolated judging remains blocked; private original source/case/receipt material is unavailable. Static syntax/metadata checks do not establish correctness. Independent source-bound isolated qualification must cover target first/last arrival, same-time departures, several reusable chairs, arrivals out of input order, smallest free versus latest free and input preservation, actual return types, numerical/Unicode and effect contracts, full source/adapter charges and complexity before admission or promotion."
+}

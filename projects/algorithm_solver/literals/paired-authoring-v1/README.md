@@ -2,7 +2,7 @@
 
 Owner: [Algorithm Solver charter](../../CATSCAN.md).
 
-179 permitted development-fit problems have standalone Python and JavaScript
+199 permitted development-fit problems have standalone Python and JavaScript
 candidates: 6, 10, 11, 15, 18, 21, 22, 23, 24, 25, 28, 29, 34, 35, 40, 42, 51,
 52, 54, 55, 58, 59, 61, 62, 64, 66, 67, 69, 71, 78, 79, 82, 84, 85, 86, 89, 90,
 91, 93, 96, 103, 104, 106, 107, 111, 112, 115, 122, 123, 124, 127, 128, 148,
@@ -14,7 +14,9 @@ candidates: 6, 10, 11, 15, 18, 21, 22, 23, 24, 25, 28, 29, 34, 35, 40, 42, 51,
 1130, 1139, 1140, 1143, 1144, 1145, 1150, 1151, 1154, 1155, 1156, 1160, 1162,
 1163, 1165, 1170, 1171, 1175, 1187, 1314, 1325, 1328, 1346, 1375, 1419, 1464,
 1514, 1534, 1545, 1546, 1574, 1636, 1685, 1686, 1690, 1696, 1710, 1717, 1723,
-1725, 1732, 1748, 1752, 1754, 1785, 1791, 1823, 1846, 2192, 2282. The IDs are checked
+1725, 1732, 1748, 1752, 1754, 1785, 1791, 1823, 1846, 1848, 1942, 1961, 1967,
+1979, 2027, 2037, 2054, 2086, 2192, 2200, 2282, 2287, 2295, 2341, 2357, 2364,
+2367, 2379, 2395, 2491, 2563. The IDs are checked
 against the already-public pinned development partition, not a new population.
 
 The historical 500-problem JavaScript admission record is separate (see
@@ -57,12 +59,11 @@ receipts. They also do not publish the separately gated 80-rewrite set.
   Reuse actual invariants, not a generic abstraction that hides different rules.
 - JavaScript numeric assumptions are declared. No bitwise midpoint truncation or
   silent assumption that arbitrary Python integers behave like JS Number.
-- Effects matter: flood fill preserves and returns the modified input image;
-  linked-list candidates relink original nodes. Tree pruning/relinking candidates
-  change declared original edges, border coloring updates declared cells, and
-  shortest-path discovery preserves the public predecessor's input markings.
-  Other candidates leave inputs unchanged. Tree shape, list ownership, row identity and accepted alphabets are
-  explicit in each sidecar.
+- Effects are part of each candidate's contract. Sidecars state which caller-owned
+  arrays, grid cells, list links or tree edges may change, which identities survive,
+  and whether returned containers are fresh or intentionally alias an input.
+  There is no blanket nonmutation guarantee. Tree shape, list ownership, row
+  identity and accepted alphabets remain explicit rather than inferred.
 - Count every helper, class wrapper and eventual adapter in comparisons. Consistent
   source is a candidate mechanism, not evidence of reduced composition cost.
 
