@@ -5,11 +5,11 @@ class Solution:
             if parent not in children:
                 children[parent] = []
             children[parent].append(process)
-        queue = [kill]
-        head = 0
-        while head < len(queue):
-            process = queue[head]
-            head += 1
-            for child in children.get(process, ()):
-                queue.append(child)
-        return queue
+        pending = [kill]
+        result = []
+        while pending:
+            process = pending.pop()
+            result.append(process)
+            for child in reversed(children.get(process, ())):
+                pending.append(child)
+        return result
