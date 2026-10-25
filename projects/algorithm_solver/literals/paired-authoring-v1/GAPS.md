@@ -13,7 +13,7 @@ problems must not be removed from an evaluation denominator.
 
 ## Unwritten definitions
 
-The following 19 development-fit IDs remain unwritten. Their checked official
+The following 14 development-fit IDs remain unwritten. Their checked official
 pages previously exposed a subscription gate. The exact permitted private
 development package is now available, so frozen-input reconciliation can
 continue without accessing those gated pages. No access
@@ -33,15 +33,10 @@ An inferred title alone does not freeze a contract.
 | 1087 | https://leetcode.com/problems/brace-expansion/ |
 | 1088 | https://leetcode.com/problems/confusing-number-ii/ |
 | 1099 | https://leetcode.com/problems/two-sum-less-than-k/ |
-| 1121 | https://leetcode.com/problems/divide-array-into-increasing-sequences/ |
-| 1153 | https://leetcode.com/problems/string-transforms-into-another-string/ |
 | 1181 | https://leetcode.com/problems/before-and-after-puzzle/ |
 | 1183 | https://leetcode.com/problems/maximum-number-of-ones/ |
 | 1258 | https://leetcode.com/problems/synonymous-sentences/ |
-| 1891 | https://leetcode.com/problems/cutting-ribbons/ |
 | 2422 | https://leetcode.com/problems/merge-operations-to-turn-array-into-a-palindrome/ |
-| 2743 | https://leetcode.com/problems/count-substrings-without-repeating-character/ |
-| 2898 | https://leetcode.com/problems/maximum-linear-stock-score/ |
 | 3104 | https://leetcode.com/problems/find-longest-self-contained-substring/ |
 
 Authored candidates 548 and 734 are different: their declared intended contracts
@@ -89,9 +84,11 @@ a bundle or local commit does not establish remote publication.
 
 ## Frozen-input authoring continuation
 
-Five additional paired alternatives now cover 1063, 1100, 1119, 1176 and 1180.
+Ten additional paired alternatives now cover 1063, 1100, 1119, 1121, 1153,
+1176, 1180, 1891, 2743 and 2898.
 They use explicit monotonic-start, sliding-window, filtering and run-counting
-invariants. In particular, 1176 replaces a full prefix-sum array with constant
+invariants, plus frequency feasibility, consistent replacement mappings,
+monotone integer search and price/index grouping. In particular, 1176 replaces a full prefix-sum array with constant
 auxiliary state; 1100 avoids materializing a character array within the declared
 ASCII domain. These are source-level complexity properties, not measured
 runtime or composition wins. No private source, cases or observations are
