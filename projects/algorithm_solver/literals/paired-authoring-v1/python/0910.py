@@ -1,6 +1,7 @@
 class Solution:
     def smallestRangeII(self, nums: list[int], k: int) -> int:
-        ordered = sorted(nums)
+        nums.sort()
+        ordered = nums
         best = ordered[-1] - ordered[0]
         for index in range(len(ordered) - 1):
             highest = max(ordered[-1] - k, ordered[index] + k)

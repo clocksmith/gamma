@@ -7,8 +7,10 @@
   "return": "Count positive integers at most limit whose decimal digits rotate validly by 180 degrees and whose rotated numerical value differs.",
   "mutation_aliasing": "No caller-owned input is mutated. No state survives on the Solution instance. Scalar/string results have value semantics; private work containers do not escape.",
   "numeric": "Temporary successor, place and rotated arithmetic remain below 10^11, and count is at most limit; all are safe integers.",
-  "complexity": "O(A+1) time for A generated valid-digit numbers <= limit; O(D+1) auxiliary DFS-stack space with at most five pending branches per decimal depth D. No recursion-depth dependency or full integer-range scan.",
-  "helpers": [],
-  "source_accounting": "The complete standalone source is 554 UTF-8 bytes, including class/method wrappers, fully included helper definitions where present, built-ins, allocations, whitespace and terminal newline. Every helper is stored and charged. No hidden library or source expansion. A frozen solve-entry adapter must also be stored and charged before measurement.",
-  "evidence_boundary": "Independently authored alternative after static inspection of the exact permitted development predecessor and cases supplied through the verified private dev400 transfer. No private source, case, expected result or baseline is reproduced in this candidate package. No candidate was executed or imported. Finite input examples and static review do not establish the full frozen contract, runtime correctness, predecessor effect parity, admission, compression improvement or M1 qualification. Requires independent source-bound isolated execution and frozen numeric/effect/complexity reconciliation. Final100 and protected66 remain closed."
+  "complexity": "For D decimal digits, O(D*5^ceil(D/2)) time and O(D) auxiliary space: positional counting of all valid-digit numbers minus half-length generation of rotation-invariant numbers. No full range or full valid-digit tree enumeration.",
+  "helpers": [
+    "Nested visit function enumerates only rotation-invariant digit pairs; its complete body is included and charged."
+  ],
+  "source_accounting": "The complete standalone source is 1389 UTF-8 bytes, including class/method wrappers, fully included helper definitions where present, built-ins, allocations, whitespace and terminal newline. Every helper is stored and charged. No hidden library or source expansion. A frozen solve-entry adapter must also be stored and charged before measurement.",
+  "evidence_boundary": "Algorithmic successor after original-runtime resource failures were retained. A timeout is not a semantic counterexample. Expanded declared arithmetic bounds and the counting invariant require independent frozen-output/effect replay plus exhaustive small-domain controls before eligibility. No historical admitted source or receipt changed. This is an unqualified candidate, not M1 evidence; final100/protected66 remain closed."
 }

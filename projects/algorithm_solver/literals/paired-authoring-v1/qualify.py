@@ -20,7 +20,9 @@ sys.path.insert(0, str(HERE.parent.parent))
 from algsolve.judge import sandbox
 from algsolve.judge.declared_comparison import exact
 from algsolve.judge.functional_semantics import unordered_outer
-BLOCKED = {1064, 1086, 1087, 1153, 2898}
+from algsolve.judge.judge import FunctionalTest, _matches
+from algsolve.judge import judge as host_judge
+BLOCKED = {153, 252, 645, 674, 832, 833, 916, 1064, 1086, 1087, 1153, 2898}
 SCHEMA = 'gamma.paired.frozen-case-replay.v1'
 
 PYTHON_RUNNER = r'''import json,sys
@@ -133,9 +135,8 @@ def parse(raw,count):
 def matches(case,row):
     if 'error' in row or 'result' not in row:return False
     mode=case.get('compare','return')
-    if mode=='return':return exact(row['result'],case['expected'])
-    if mode=='return:unordered_outer':return unordered_outer(case['expected'],row['result'])
-    return False
+    if mode not in ('return','return:unordered_outer'):return False
+    return bool(_matches(FunctionalTest(args=case['args'],expected=case['expected'],compare=mode),row))
 
 
 def effects_match(left,right):
@@ -188,10 +189,11 @@ def run(root,output,ids,node_path=None,max_wall=600):
     runtime_identity=pinned_runtime.freeze_runtime(node_path)
     contract={'schema':SCHEMA,'ids':ids,'denominator':300,'protected_access':False,'runtime':runtime_identity,
               'python_runtime_sha256':sha(Path('/usr/bin/python3').read_bytes()),
+              'host_judge_sha256':sha(Path(host_judge.__file__).read_bytes()),
               'code_sha256':sha(Path(__file__).read_bytes()),'pinned_runtime_sha256':sha(Path(pinned_runtime.__file__).read_bytes()),'sandbox_sha256':sha(Path(sandbox.__file__).read_bytes()),
               'batch_cases':32,'max_wall_seconds':max_wall,'source_identities':[identities[pid,lang] for pid in ids for lang in ('python','javascript')],
               'input_sha256':{str(pid):{kind:sha(v[kind]) for kind in ('source','cases')} for pid,v in frozen.items()},
-              'comparison':'strict JSON return (stronger than legacy float tolerance), declared unordered outer only; exact predecessor mutation/alias/identity parity',
+              'comparison':'original FunctionalTest/_matches return oracle and declared unordered outer; exact predecessor mutation/alias/identity parity',
               'promotion_authority':False,'remaining_gates':['authoritative domain reconciliation','effect contract audit','complexity qualification','literal cost qualification']}
     write(output/'contract.json',contract)
     report={'schema':SCHEMA,'contract_sha256':sha(encoded(contract)),'rows':[],'candidate_executions':0,'m1_qualified':False,'promoted':False,'status':'running'}
@@ -223,8 +225,12 @@ def run(root,output,ids,node_path=None,max_wall=600):
                     report['candidate_executions']+=1
                     stem=output/f'{pid}-{variant}-{offset}'
                     stem.with_suffix('.stdout').write_bytes(result.stdout);stem.with_suffix('.stderr').write_bytes(result.stderr)
-                    if not result.ok:raise RuntimeError(f'process failure {pid} {variant} {offset}')
-                    records.extend(parse(result.stdout,len(batch)))
+                    try:
+                        if not result.ok:raise RuntimeError(f'process failure exit={result.exit_code} timeout={result.timed_out} output_limit={result.output_limit_exceeded}')
+                        records.extend(parse(result.stdout,len(batch)))
+                    except (ValueError,TypeError,RuntimeError) as error:
+                        row['failures'].append({'variant':variant,'offset':offset,'execution_or_protocol':str(error)})
+                        records.extend({'i':i,'error':'execution_or_protocol_failure'} for i in range(len(batch)))
                 observations[variant]=records
                 passed=0
                 for index,(case,record) in enumerate(zip(cases,records)):

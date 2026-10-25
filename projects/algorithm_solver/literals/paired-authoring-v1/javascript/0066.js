@@ -1,13 +1,13 @@
 class Solution {
   plusOne(digits) {
-    const result = digits.slice();
-    for (let index = result.length - 1; index >= 0; index -= 1) {
-      if (result[index] < 9) {
-        result[index] += 1;
-        return result;
+    for (let index = digits.length - 1; index >= 0; index -= 1) {
+      if (digits[index] < 9) {
+        digits[index] += 1;
+        return digits;
       }
-      result[index] = 0;
+      digits[index] = 0;
     }
-    return [1].concat(result);
+    digits.unshift(1);
+    return digits;
   }
 }
