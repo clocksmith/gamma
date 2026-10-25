@@ -1,0 +1,20 @@
+{
+  "problem_id": 744,
+  "language": "python",
+  "entry_point": "Solution.nextGreatestLetter",
+  "status": "unqualified_candidate",
+  "input": "letters is a nonempty nondecreasing sequence of one-character ASCII lowercase strings a through z, with length <= 4294967295. target is one ASCII lowercase character. Duplicates and singleton input are accepted. Integers are plain int values, excluding bool. Containers are ordinary lists rather than subclasses; strings are ordinary str values. Standard built-ins are unmodified and no concurrent mutation occurs. Preconditions are not checked at runtime. Declared size bounds do not guarantee allocation capacity or completion within an unqualified runtime budget.",
+  "return": "The smallest letter in letters strictly greater than target, wrapping to letters[0] if none exists. Return an immutable one-character string, not an index. Equal letters do not satisfy the strict comparison.",
+  "mutation_aliasing": "All input values, ordering and caller-owned containers remain unchanged. The Solution instance retains no state, and separate calls share no mutable result state. The returned immutable value may be the existing element; fresh string object identity is not required. No mutable output container is allocated.",
+  "numeric": "Only safe integer indices and lengths are computed. ASCII lowercase ordering agrees across the two languages, and the upper-bound comparison uses <= directly rather than target arithmetic. The end insertion point is replaced with zero before indexing.",
+  "complexity": "O(log(n + 1)) time and O(1) auxiliary space for n letters. The fully included upper-bound helper uses a half-open interval and returns the first index whose value is greater than target, or n. There is no linear scan or sorting.",
+  "helpers": [
+    {
+      "name": "upper_bound",
+      "contract": "Return the first index with values[index] > target in an ascending sequence, or length if no such index exists. This is the same half-open upper-bound structure as the existing range-search candidate, with string annotations in Python.",
+      "cost": "The full helper definition is 285 UTF-8 bytes including indentation and terminal newline, already included in source bytes. O(log(n + 1)) comparisons and O(1) live state; the complete helper is copied into and fully charged to this standalone source."
+    }
+  ],
+  "source_accounting": "The complete standalone source is 508 UTF-8 bytes, including all 1 declared helper definitions/statements, helper calls and closure state, Solution/method wrappers, standard built-in calls, allocations, annotations/comments where present, whitespace and terminal newline. Every reused helper is present in full and charged per candidate, not supplied as a free library. ListNode/TreeNode, when used, are explicit caller-owned input shapes, not hidden construction helpers. There are no imports, hidden implementations or runtime source expansion. Any eventual frozen-judge adapter is additional charged source. Runtime work, temporary state and output materialization remain part of the declared cost.",
+  "evidence_boundary": "Independently authored dev_fit candidate outside frozen source sets. Membership was checked against cost-decomposition-v1/contract.json partition.dev_fit. No candidate execution, predecessor equivalence, behavioral qualification, benchmark acceptance or M1/M2 progress is claimed. The mandatory isolated judge is blocked and the frozen private source/case/receipt package is unavailable. Python AST parsing, JavaScript syntax checks and these declarations are static evidence only. Remaining gate: independent source-bound isolated qualification covering singleton, duplicate equal letters, immediate successor, wrap at/above maximum, target below minimum, strict comparison and ASCII ordering parity, the exact frozen input/return/effect contract, runtime complexity and complete helper/adapter charges. No admission or promotion follows from these author declarations."
+}

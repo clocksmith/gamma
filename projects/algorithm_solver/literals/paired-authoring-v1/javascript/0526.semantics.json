@@ -1,0 +1,20 @@
+{
+  "problem_id": 526,
+  "language": "javascript",
+  "entry_point": "Solution.countArrangement",
+  "status": "unqualified_candidate",
+  "input": "n is an integer with 0 <= n <= 15. Integers are primitive safe-integer Numbers, excluding negative zero, NaN, infinities, fractions and BigInt. Containers are dense ordinary Arrays, excluding holes, proxies, subclasses and accessor-backed elements; strings are primitive, not boxed. Standard built-ins are unmodified and no concurrent mutation occurs. Preconditions are not checked at runtime. Declared size bounds do not guarantee allocation capacity or completion within an unqualified runtime budget.",
+  "return": "The exact count of permutations of integers 1 through n for which each 1-based position i contains value v satisfying v divides i or i divides v. n = 0 returns 1 for the empty permutation. Permutations themselves are not materialized.",
+  "mutation_aliasing": "There is no mutable input. The private used-value boolean array is restored after each recursive choice. No state is retained between calls.",
+  "numeric": "Positions and candidate values are positive when modulo is evaluated, so there is no division by zero. Every recursive count and nonnegative accumulated prefix is at most n! <= 15! = 1307674368000, within the safe-integer range. At most n + 1 <= 16 recursive calls are live.",
+  "complexity": "O(n*n! + 1) worst-case time and O(n + 1) auxiliary space. Each partial permutation scans at most n candidates; divisibility and used-value checks prune but are not assumed to reduce the factorial upper bound. Only scalar counts are returned.",
+  "helpers": [
+    {
+      "name": "count_from",
+      "contract": "A position-based recursive closure. At position n+1 return one; otherwise choose an unused value satisfying either divisibility direction, mark it, recurse to the next position, add the count and unmark it.",
+      "cost": "The full helper definition is 406 UTF-8 bytes including indentation and terminal newline, already included in source bytes. All modulo operations, scans, recursion and reversible writes are charged; maximum live helper depth n + 1 and count bounds are explicit."
+    }
+  ],
+  "source_accounting": "The complete standalone source is 528 UTF-8 bytes, including all 1 declared helper definitions/statements, helper calls and closure state, Solution/method wrappers, standard built-in calls, allocations, annotations/comments where present, whitespace and terminal newline. Every reused helper is present in full and charged per candidate, not supplied as a free library. ListNode/TreeNode, when used, are explicit caller-owned input shapes, not hidden construction helpers. There are no imports, hidden implementations or runtime source expansion. Any eventual frozen-judge adapter is additional charged source. Runtime work, temporary state and output materialization remain part of the declared cost.",
+  "evidence_boundary": "Independently authored dev_fit candidate outside frozen source sets. Membership was checked against cost-decomposition-v1/contract.json partition.dev_fit. No candidate execution, predecessor equivalence, behavioral qualification, benchmark acceptance or M1/M2 progress is claimed. The mandatory isolated judge is blocked and the frozen private source/case/receipt package is unavailable. Python AST parsing, JavaScript syntax checks and these declarations are static evidence only. Remaining gate: independent source-bound isolated qualification covering n = 0/1, both divisibility directions, no repeated value, count completeness, exact factorial-bound intermediates, used-state restoration and bounded recursion, the exact frozen input/return/effect contract, runtime complexity and complete helper/adapter charges. No admission or promotion follows from these author declarations."
+}
