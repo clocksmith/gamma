@@ -1,7 +1,7 @@
 # Direct-entry candidate supply
 
 This is a candidate generator for the incremental family-vocabulary plan, **not**
-a separate fit arm or a qualification result. It builds on historical
+a separate fit arm. It builds on historical
 class-to-solve normalization; the new obligation is exact-byte qualification and
 integration with the current source pool, not a novelty claim.
 
@@ -42,3 +42,12 @@ remain closed.
 Run the trusted synthetic parser-only checks with the pinned Node executable and
 `test_lower.mjs`. Dependency loading reuses the receipt-verified exact upstream
 source loader in `role-canonical-v1/parser.mjs`.
+
+## Completed fresh qualification
+
+All 163 emitted sources passed 15,955 frozen cases in 575 isolated executions,
+with independent AST regeneration and observation replay. Three conservatively
+unsupported inputs retain their previous qualified source variants. The emitted
+complete sources shrink from 117,577 to 104,360 bytes; this is not an M1 result.
+See `qualification-summary.json`. Admission into a new vocabulary search still
+requires a linked supply freeze rather than changing a running source pool.
