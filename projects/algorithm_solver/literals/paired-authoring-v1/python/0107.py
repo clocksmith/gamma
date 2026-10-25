@@ -1,6 +1,6 @@
 # External TreeNode shape: val: int, left: TreeNode | None, right: TreeNode | None.
 class Solution:
-    def levelOrderBottom(self, root: "TreeNode | None") -> list[list[int]]:
+    def levelOrderBottom(self, root) -> list[list[int]]:
         if root is None:
             return []
 

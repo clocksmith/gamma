@@ -23,6 +23,6 @@ def canonical_tree(root, intern: dict) -> int:
 
 
 class Solution:
-    def flipEquiv(self, root1: "TreeNode | None", root2: "TreeNode | None") -> bool:
+    def flipEquiv(self, root1, root2) -> bool:
         intern = {}
         return canonical_tree(root1, intern) == canonical_tree(root2, intern)
