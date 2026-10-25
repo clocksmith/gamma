@@ -1,0 +1,5 @@
+# Frozen document-closed guard evaluation
+
+Same102-authority interpreter in both54/102vector arms at matched v16 service; deliberately not a historical54-authority guard. Preserve the original20 unguarded policy metrics/decisions from the exact result, check accepted top identities against full4081 cached rankings, then only veto. No filtering or reranking. Restore exact pinned arrays and52 query cache; no encoder/source/confirmation. Stop on code/policy/cache/annotation identity drift.
+
+Independent52 annotations were frozen before newparser outputs. Report admissible and tentative signed-fact scoring separately: unknown gold facets remain unreviewed, not automatically wrong; precision with zero reviewed predictions is null. Closed-document coverage, gold recall, acceptance/wrong/control metrics remain separate. Every newly vetoed acceptance requires independent manual soundness review before any benefit claim. Same102 guard authority in both arms prevents a hidden authority-change confound. Host512MiB/60CPU/60wall. Five synthetic metric/veto tests passed. No execution before main independent freeze review.
