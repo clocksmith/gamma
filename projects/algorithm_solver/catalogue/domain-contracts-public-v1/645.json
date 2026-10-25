@@ -1,0 +1,72 @@
+{
+  "schema_version": 1,
+  "problem_id": "645",
+  "status": "public_statement_transcribed_pending_independent_review",
+  "qualified": false,
+  "canonical_interface_proposal": {
+    "entrypoint": "solve",
+    "calling_convention": "ordered_positional",
+    "parameters": [
+      [
+        "nums",
+        "array<integer>"
+      ]
+    ],
+    "authority": "local catalogue convention, not an official LeetCode signature"
+  },
+  "source": {
+    "url": "https://leetcode.com/problems/set-mismatch/",
+    "publisher": "LeetCode",
+    "retrieved_at_utc": "2026-10-25T18:48:02Z",
+    "access": "freely_accessible_unauthenticated",
+    "identity_verified": true,
+    "evidence_batch_file": "source-pin.json",
+    "clause_lines": {
+      "identity": "18",
+      "domain": "22-25,43-46",
+      "result": "25,29-38"
+    }
+  },
+  "title": "Set Mismatch",
+  "constraints": {
+    "length": [
+      2,
+      10000
+    ],
+    "published_element_range": [
+      1,
+      10000
+    ],
+    "structure": "Start with integers 1 through n once each; replace one occurrence by another member. Exactly one value occurs twice and one is absent.",
+    "derived_element_range": "1 through n, from set construction; input need not be sorted."
+  },
+  "result": {
+    "type": "array<integer>",
+    "length": 2,
+    "semantics": "Duplicate value first, missing value second.",
+    "comparison": "exact_ordered"
+  },
+  "complexity": {
+    "time": null,
+    "space": null
+  },
+  "notes": [
+    "Do not admit arbitrary arrays merely because they satisfy the loose published numeric bounds."
+  ],
+  "unspecified_by_statement": {
+    "input_mutation": null,
+    "output_aliasing": null,
+    "exceptions_outside_domain": null
+  },
+  "local_policy_proposal": {
+    "status": "not_adopted",
+    "values": "JSON integer/string/array value transport; reject booleans as integers, NaN and infinity.",
+    "effects": "Review and freeze input-preservation and return-alias policy separately before qualification; do not infer from functional outputs.",
+    "unicode": "Only 833 and 916 have string inputs; their published alphabet excludes non-ASCII characters.",
+    "numeric": "All specified input integers and result integers fit exactly in JavaScript Number; Python integers preserve the same mathematical values."
+  },
+  "test_plan": [
+    "At n=10000 generate the full range then replace first with last and vice versa; shuffle without changing the known duplicate/missing pair."
+  ],
+  "promotion": "Contract review plus separately bound source/interface/runtime/effect/test receipts required; no compatibility probe upgrade."
+}
