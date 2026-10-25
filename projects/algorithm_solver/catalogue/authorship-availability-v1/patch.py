@@ -26,12 +26,13 @@ def inventory_items(patch,universe):
     if not isinstance(items,list)or not items:raise ValueError('nonempty inventory required')
     for item in items:
         if not isinstance(item,dict)or set(item)!=ITEM_FIELDS:raise ValueError('only whitelisted Git metadata fields')
-        pid,lang=item['problem_id'],item['language'];match=ID.fullmatch(pid)if isinstance(pid,str)else None
-        if not match or pid not in universe['eligible_problem_ids']or lang not in ('javascript','python')or (pid,lang)in seen:raise ValueError('duplicate/unknown exact slot')
+        pid,lang=item['problem_id'],item['language']
+        id_match=ID.fullmatch(pid)if isinstance(pid,str)else None
+        if not id_match or pid not in universe['eligible_problem_ids']or lang not in ('javascript','python')or (pid,lang)in seen:raise ValueError('duplicate/unknown exact slot')
         seen.add((pid,lang));path=item['repository_path'];parts=PurePosixPath(path).parts if isinstance(path,str)else()
         suffix='js'if lang=='javascript'else'py'
         if (not parts or path.startswith('/')or '\\'in path or '..'in parts or '.'in path.split('/')or ''in path.split('/')or
-            not path.startswith('projects/algorithm_solver/catalogue/authored/')or parts[-2]!=lang or parts[-1]!=match[1]+'.'+suffix):raise ValueError('identity-bound relative Git path required')
+            not path.startswith('projects/algorithm_solver/catalogue/authored/')or parts[-2]!=lang or parts[-1]!=id_match[1]+'.'+suffix):raise ValueError('identity-bound relative Git path required')
         if (item['owner_commit']!=commit or item['git_object_hash_algorithm']!='sha1'or
             not isinstance(item['git_blob_object_id'],str)or not HEX40.fullmatch(item['git_blob_object_id'])or item['source_sha256_known_from_this_inventory']is not False):raise ValueError('Git identity is not source-byte qualification')
     blocked=patch.get('declared_blocked')
