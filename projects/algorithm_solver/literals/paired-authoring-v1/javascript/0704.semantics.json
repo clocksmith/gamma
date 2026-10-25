@@ -1,0 +1,20 @@
+{
+  "problem_id": 704,
+  "language": "javascript",
+  "entry_point": "Solution.search",
+  "status": "unqualified_candidate",
+  "input": "nums is a plain dense Array of Number integers in increasing order; target is a Number integer. Preconditions are not checked at runtime.",
+  "return": "The Number integer index of target, or -1 for an empty Array or absent target. If duplicate values are supplied, the first matching index is returned as an explicit extension, not a predecessor-equivalence claim.",
+  "mutation_aliasing": "No input writes, sorting or copies. The result is a Number integer. The Solution instance retains no state.",
+  "numeric": "Values and target are safe integers in [-9007199254740991, 9007199254740991]; NaN, infinities and BigInt are excluded. Array indices and length are exact Numbers. The midpoint uses Math.floor without bitwise truncation, and no target arithmetic is used.",
+  "complexity": "O(log(n + 1)) time and O(1) auxiliary space under constant-cost indexing and Number comparisons.",
+  "helpers": [
+    {
+      "name": "lowerBound",
+      "contract": "Returns the first index whose value is at least target, or n; searches [left, right).",
+      "cost": "One call, O(log(n + 1)) time and O(1) space. Its complete identical definition is included in each of the three search candidates."
+    }
+  ],
+  "source_accounting": "All helper and wrapper source belongs to this standalone candidate and must be charged; no external helper library or hidden source expansion.",
+  "evidence_boundary": "Independently authored dev_fit candidate outside frozen source sets. No candidate execution, predecessor equivalence, behavioral qualification, benchmark acceptance or M1 progress is claimed. Frozen original sources and tests were unavailable."
+}

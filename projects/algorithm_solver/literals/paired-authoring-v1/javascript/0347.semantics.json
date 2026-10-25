@@ -1,0 +1,20 @@
+{
+  "problem_id": 347,
+  "language": "javascript",
+  "entry_point": "Solution.topKFrequent",
+  "status": "unqualified_candidate",
+  "input": "nums is a nonempty dense Array of finite integer Number values in [-9007199254740991, 9007199254740991], with length <= 4294967294 so that length + 1 is a valid Array length. k is a safe integer with 1 <= k <= the number of distinct values. Counts and indices stay exact within this domain. The integer domain does not distinguish -0 from 0; Map canonicalizes that key to 0. NaN, infinities, BigInt, sparse arrays and non-integers are outside the domain. Inputs are not validated.",
+  "return": "Type: fresh Array of k distinct integer Number values. Every selected frequency is at least every unselected frequency; compare the selected values without requiring a particular output order. Descending frequency, with equal-frequency values ordered by first occurrence in nums. If a tie crosses k, the earliest first occurrences are selected. Exact sequence equality under integer-value comparison is expected between these two candidates on their shared domain, independently of order-insensitive problem acceptance.",
+  "mutation_aliasing": "Input mutation: none. The returned Array is newly allocated and never aliases nums; every bucket is a separately allocated Array. No persistent Solution instance state.",
+  "numeric": "Exact safe-integer Number counts and indices; no bitwise coercions. Values lie in [-9007199254740991, 9007199254740991] on the shared domain; n <= 4294967294. Signed-zero identity is not distinguished.",
+  "complexity": "n = nums.length; u = number of distinct values O(n) expected under expected constant-time Map operations; ECMAScript itself does not promise this hash-table bound. No sorting is performed. O(n): n + 1 bucket Arrays, u Map entries, and exactly u stored bucket values in total. The output contains k values.",
+  "helpers": [
+    {
+      "name": "inline Array.from bucket initializer",
+      "contract": "Allocates one distinct empty Array per bucket; the callback is entirely inline.",
+      "cost": "n + 1 constant-time callback calls and n + 1 empty bucket Arrays; the callback source is charged in this file."
+    }
+  ],
+  "source_accounting": "The Solution class, method, Map operations, Array.from callback allocating each bucket, loops and result construction are all charged as source. No external helper library or hidden source expansion.",
+  "evidence_boundary": "Independently authored dev_fit candidate outside frozen source sets. No candidate execution, predecessor equivalence, behavioral qualification, benchmark acceptance or M1 progress is claimed. Remaining gates: Approved isolated behavioral qualification, including ties, repeated values and input non-mutation. Independent acceptance and source-bound receipts before frozen-set or M1 promotion. Syntax checks alone do not qualify this candidate."
+}
