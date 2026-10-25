@@ -1,9 +1,9 @@
 class Solution:
     def plusOne(self, digits: list[int]) -> list[int]:
-        result = digits.copy()
-        for index in range(len(result) - 1, -1, -1):
-            if result[index] < 9:
-                result[index] += 1
-                return result
-            result[index] = 0
-        return [1] + result
+        for index in range(len(digits) - 1, -1, -1):
+            if digits[index] < 9:
+                digits[index] += 1
+                return digits
+            digits[index] = 0
+        digits.insert(0, 1)
+        return digits

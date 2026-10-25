@@ -1,13 +1,13 @@
 class Solution {
   findRestaurant(list1, list2) {
     const positions = new Map();
-    for (let index = 0; index < list1.length; index += 1) {
-      positions.set(list1[index], index);
+    for (let index = 0; index < list2.length; index += 1) {
+      positions.set(list2[index], index);
     }
     let best_sum = list1.length + list2.length;
     let result = [];
-    for (let index = 0; index < list2.length; index += 1) {
-      const name = list2[index];
+    for (let index = 0; index < list1.length; index += 1) {
+      const name = list1[index];
       if (!positions.has(name)) {
         continue;
       }

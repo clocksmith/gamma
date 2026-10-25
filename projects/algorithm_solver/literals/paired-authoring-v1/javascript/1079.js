@@ -1,22 +1,22 @@
-function countSequences(counts) {
-  let total = 0;
-  for (let letter = 0; letter < 26; letter += 1) {
-    if (counts[letter] > 0) {
-      counts[letter] -= 1;
-      total += 1 + countSequences(counts);
-      counts[letter] += 1;
-    }
-  }
-  return total;
-}
-
-
 class Solution {
   numTilePossibilities(tiles) {
-    const counts = Array(26).fill(0);
+    const counts = new Array(26).fill(0);
     for (const letter of tiles) {
       counts[letter.charCodeAt(0) - 65] += 1;
     }
-    return countSequences(counts);
+    let ways = [1];
+    for (const count of counts) {
+      if (count === 0) continue;
+      const following = new Array(ways.length + count).fill(0);
+      for (let length = 0; length < ways.length; length += 1) {
+        let combinations = 1;
+        for (let used = 0; used <= count; used += 1) {
+          if (used > 0) combinations = combinations * (length + used) / used;
+          following[length + used] += ways[length] * combinations;
+        }
+      }
+      ways = following;
+    }
+    return ways.reduce((total, value) => total + value, 0) - 1;
   }
 }

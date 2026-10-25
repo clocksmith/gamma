@@ -9,15 +9,16 @@ class Solution {
       }
       children.get(parent).push(process);
     }
-    const queue = [kill];
-    let head = 0;
-    while (head < queue.length) {
-      const process = queue[head];
-      head += 1;
-      for (const child of children.get(process) || []) {
-        queue.push(child);
+    const pending = [kill];
+    const result = [];
+    while (pending.length > 0) {
+      const process = pending.pop();
+      result.push(process);
+      const descendants = children.get(process) || [];
+      for (let index = descendants.length - 1; index >= 0; index -= 1) {
+        pending.push(descendants[index]);
       }
     }
-    return queue;
+    return result;
   }
 }
