@@ -18,7 +18,7 @@ from .known_spec_service import KnownSpecService
 from .public_batch_adapter import bounded_regular_read, fields, pinned, sha
 
 ORIGINAL_SHA = '956e15f937b9f457014eaac7d91939209ba3901f3f4f5f9e93b53f41ed037e43'
-EFFECTS = 'read-only arguments and no return aliases, except876requires original middle-node identity'
+EFFECTS = 'Original-node effects for 814/2074/2807; original middle-node alias for 876; other arguments read-only with fresh returns'
 
 
 def domain_module(pid):
@@ -59,6 +59,9 @@ def check_review(review, freeze, freeze_sha256, original):
         module_sha = sha(bounded_regular_read(module_path))
         source = contract.get('source_review', {}).get(language, {})
         if (job.get('domain_validator') != 'imported358-v1' or job.get('comparison_policy') != f'problem:{pid}' or
+                job.get('node_identity') is not (pid in (814, 2074, 2807)) or
+                type(job.get('max_cases_per_batch')) is not int or
+                job['max_cases_per_batch'] != (1 if pid in (814, 1681, 1755, 2074, 2807) else 32) or
                 freeze.get('additional_code', {}).get(module_path) != module_sha or
                 contract.get('input_validator_sha256') != module_sha or
                 contract.get('comparison_policy') != job['comparison_policy'] or
@@ -89,6 +92,8 @@ def check_outcomes(jobs, verification):
                 outcome.get('tests_raw_sha256') != job['tests_raw_sha256'] or
                 outcome.get('cases') != job['case_count']):
             raise ValueError('outcome source/case binding differs')
+    if any(outcome['passed'] is not True for outcome in outcomes):
+        raise ValueError('complete all-or-nothing qualification requires every implementation to pass')
     return {(f"leetcode:{o['id']}", o['language']) for o in outcomes if o['passed']}
 
 

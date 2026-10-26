@@ -4,17 +4,19 @@
 // O(N + W) time and O(W) output space, W = output characters. Inputs are preserved.
 function solve(words, maxWidth) {
   const lines = [];
+  const lengths = words.map((word) => Array.from(word).length);
   let left = 0;
   while (left < words.length) {
     let right = left;
     let letters = 0;
-    while (right < words.length && letters + words[right].length + right - left <= maxWidth) {
-      letters += words[right].length;
+    while (right < words.length && letters + lengths[right] + right - left <= maxWidth) {
+      letters += lengths[right];
       right += 1;
     }
     const gaps = right - left - 1;
     if (right === words.length || gaps === 0) {
-      lines.push(words.slice(left, right).join(' ').padEnd(maxWidth, ' '));
+      const line = words.slice(left, right).join(' ');
+      lines.push(line + ' '.repeat(maxWidth - letters - gaps));
     } else {
       const width = Math.floor((maxWidth - letters) / gaps);
       const extra = (maxWidth - letters) % gaps;

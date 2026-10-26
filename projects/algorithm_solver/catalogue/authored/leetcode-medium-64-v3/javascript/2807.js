@@ -1,7 +1,7 @@
 'use strict';
 
-// 2807. Insert Greatest Common Divisors in Linked List: build a fresh list with each adjacent-pair gcd inserted.
-// O(n log M) time and O(1) auxiliary space excluding returned nodes; inputs are read-only.
+// 2807. Insert Greatest Common Divisors in Linked List: insert between original adjacent nodes.
+// O(n log M) time and O(1) auxiliary space excluding inserted nodes; originals are retained.
 class ListNode {
   constructor(val = 0, next = null) {
     this.val = val;
@@ -14,17 +14,13 @@ function solve(head) {
     while (right !== 0) [left, right] = [right, left % right];
     return left;
   }
-  const dummy = new ListNode();
-  let tail = dummy;
-  for (let current = head; current !== null; current = current.next) {
-    tail.next = new ListNode(current.val);
-    tail = tail.next;
-    if (current.next !== null) {
-      tail.next = new ListNode(gcd(current.val, current.next.val));
-      tail = tail.next;
-    }
+  let current = head;
+  while (current !== null && current.next !== null) {
+    const following = current.next;
+    current.next = new ListNode(gcd(current.val, following.val), following);
+    current = following;
   }
-  return dummy.next;
+  return head;
 }
 
 const insertGreatestCommonDivisors = solve;

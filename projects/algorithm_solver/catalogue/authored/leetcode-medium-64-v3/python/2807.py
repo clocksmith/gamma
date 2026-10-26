@@ -1,4 +1,4 @@
-"""2807. Insert Greatest Common Divisors in Linked List: build a fresh list with each adjacent-pair gcd inserted."""
+"""2807. Insert Greatest Common Divisors in Linked List: insert between original adjacent nodes."""
 from __future__ import annotations
 from math import gcd
 
@@ -10,18 +10,13 @@ class ListNode:
 
 
 def solve(head: ListNode | None) -> ListNode | None:
-    """O(n log M) time and O(1) auxiliary space excluding returned nodes; inputs are read-only."""
-    dummy = ListNode()
-    tail = dummy
+    """O(n log M) time/O(1) auxiliary space; insert new gcd nodes, retain originals."""
     current = head
-    while current is not None:
-        tail.next = ListNode(current.val)
-        tail = tail.next
-        if current.next is not None:
-            tail.next = ListNode(gcd(current.val, current.next.val))
-            tail = tail.next
-        current = current.next
-    return dummy.next
+    while current is not None and current.next is not None:
+        following = current.next
+        current.next = ListNode(gcd(current.val, following.val), following)
+        current = following
+    return head
 
 
 class Solution:

@@ -1,7 +1,7 @@
 'use strict';
 
-// 814. Binary Tree Pruning: build a pruned copy in iterative postorder.
-// O(n) time and O(n) auxiliary space excluding the returned tree; inputs are read-only.
+// 814. Binary Tree Pruning: prune zero-only child links in iterative postorder.
+// O(n) time and O(n) auxiliary space; only zero-only child links are removed.
 class TreeNode {
   constructor(val = 0, left = null, right = null) {
     this.val = val;
@@ -12,7 +12,7 @@ class TreeNode {
 
 function solve(root) {
   if (root === null) return null;
-  const copies = new Map();
+  const kept = new Map();
   const stack = [[root, false]];
   while (stack.length) {
     const [node, ready] = stack.pop();
@@ -22,11 +22,11 @@ function solve(root) {
       if (node.left !== null) stack.push([node.left, false]);
       continue;
     }
-    const left = copies.get(node.left) || null;
-    const right = copies.get(node.right) || null;
-    copies.set(node, node.val !== 0 || left !== null || right !== null ? new TreeNode(node.val, left, right) : null);
+    if (!kept.get(node.left)) node.left = null;
+    if (!kept.get(node.right)) node.right = null;
+    kept.set(node, node.val !== 0 || node.left !== null || node.right !== null);
   }
-  return copies.get(root);
+  return kept.get(root) ? root : null;
 }
 
 const pruneTree = solve;

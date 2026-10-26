@@ -24,7 +24,8 @@ def fixture(tmp_path):
         for lang in a.shared.LANGUAGES:
             job = {'id': pid, 'language': lang, 'statement': statement, 'source_sha256': 'a'*64,
                    'tests_raw_sha256': 'c'*64, 'case_count': 5, 'comparison_policy': f'problem:{pid}',
-                   'domain_validator': 'imported358-v1'}
+                   'domain_validator': 'imported358-v1', 'node_identity': pid in (814, 2074, 2807),
+                   'max_cases_per_batch': 1 if pid in (814, 1681, 1755, 2074, 2807) else 32}
             jobs.append(job)
             contract['source_review'][lang] = {'source_sha256': 'a'*64, 'conclusion': 'reviewed',
                 'complexity_review': 'bounded', 'effects_review': 'readonly', 'reviewer': 'separate reviewer'}
@@ -45,7 +46,7 @@ def test_complete_review(tmp_path):
     assert len(a.check_review(review, freeze, 'f'*64, original)) == 358
 
 
-@pytest.mark.parametrize('change', ['partial', 'duplicate', 'statement', 'source', 'validator', 'reviewer', 'ledger-authority'])
+@pytest.mark.parametrize('change', ['partial', 'duplicate', 'statement', 'source', 'validator', 'reviewer', 'ledger-authority', 'batch-profile', 'identity-profile'])
 def test_rejects_partial_or_substituted_evidence(tmp_path, change):
     freeze, review, original = fixture(tmp_path)
     if change == 'partial': freeze['jobs'].pop()
@@ -55,15 +56,21 @@ def test_rejects_partial_or_substituted_evidence(tmp_path, change):
     elif change == 'validator': review['contracts']['1']['input_validator_sha256'] = '0'*64
     elif change == 'reviewer': del review['contracts']['1']['source_review']['python']['reviewer']
     elif change == 'ledger-authority': review['evidence_pins'][0]['sha256'] = '0'*64
+    elif change == 'batch-profile': freeze['jobs'][0]['max_cases_per_batch'] = True
+    elif change == 'identity-profile': freeze['jobs'][0]['node_identity'] = True
     with pytest.raises(ValueError): a.check_review(review, freeze, 'f'*64, original)
 
 
-def test_failed_outcome_is_preserved_without_adoption():
+def test_any_failed_outcome_refuses_atomic_adoption():
     jobs = [{'id': 1, 'language': lang, 'source_sha256': 'a'*64, 'tests_raw_sha256': 'b'*64, 'case_count': 5}
             for lang in a.shared.LANGUAGES]
     outcomes = [{**job, 'cases': 5, 'passed': index == 0, 'failure_count': index}
                 for index, job in enumerate(jobs)]
-    assert a.check_outcomes(jobs, {'outcomes': outcomes}) == {('leetcode:1', 'javascript')}
+    with pytest.raises(ValueError, match='all-or-nothing'):
+        a.check_outcomes(jobs, {'outcomes': outcomes})
+    successful = copy.deepcopy(outcomes)
+    successful[1].update(passed=True, failure_count=0)
+    assert a.check_outcomes(jobs, {'outcomes': successful}) == {('leetcode:1', lang) for lang in a.shared.LANGUAGES}
     outcomes[1]['passed'] = True
     with pytest.raises(ValueError): a.check_outcomes(jobs, {'outcomes': outcomes})
     with pytest.raises(ValueError): a.check_outcomes(jobs, {'outcomes': outcomes[:1]})
