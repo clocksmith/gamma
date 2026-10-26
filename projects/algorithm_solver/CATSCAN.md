@@ -8,9 +8,10 @@ Develop qualified recognition, reusable languages, human composition, autonomous
 
 ## Authority
 
-Owns research imports, isolated judging, comparisons, indexes, corpora and reports.
-The human user retains recognition ownership; 256one owns production editor
-hosting. Existing admission and promotion authority is unchanged.
+Owns imports, judging, comparisons, indexes, corpora, reports and local BITS discovery.
+The owner-requested read-only discovery adapter serves 256one’s public tree and
+returns identities for human selection. 256one owns production editor hosting.
+Admission and promotion authority remain unchanged.
 
 ## Scope
 
@@ -18,40 +19,33 @@ hosting. Existing admission and promotion authority is unchanged.
 
 ## Contracts
 
-- Input: [versioned goals](contracts/algorithm_solver_goals_v2.json), [run contract](contracts/run_contract.json), [sample](contracts/sample_manifest.json), [composition comparison](contracts/typed_composer_comparison_v1.json).
-- Output: source-bound qualification receipts, cost measurements and rebuilt reports.
+- Input: [goals](contracts/algorithm_solver_goals_v2.json), [run contract](contracts/run_contract.json), [sample](contracts/sample_manifest.json), [composition comparison](contracts/typed_composer_comparison_v1.json).
+- Output: source-bound receipts, cost measurements and reports.
 
 ## Invariants
 
-Inherit the authority, contracts, invariants and acceptance boundaries
-in [the preserved charter](HISTORY-CATSCAN-v1.md); its numbered goals are historical
-v1 aliases, not current taxonomy. The v2 alias map reorganizes goals without
-changing those boundaries, evidence or [M1–M6 gates](literals/MILESTONES.md).
+Inherit [the preserved charter](HISTORY-CATSCAN-v1.md), including its authority,
+behavior/effect/complexity contracts and [M1–M6 gates](literals/MILESTONES.md).
+The v2 alias map reorganizes historical goal numbering without changing gates.
+Expected outputs stay outside sandboxes; protected families stay closed; verdicts
+fail closed. Recognition, representation, human performance and autonomous
+correctness qualify separately. Bind exact source/decoding bytes; charge helpers,
+operands, controls and decoder costs; retain rejected attempts.
 
-Expected outputs stay outside the sandbox. Protected families/aliases stay closed;
-answers and verdicts fail closed. Recognition, representation, human performance
-and autonomous correctness qualify separately. Algorithms satisfy pinned
-behavior/effect/complexity contracts; exact decoding reconstructs selected
-bytes. Charge helpers, operands, controls and decoder costs. Retain rejected
-attempts. Organization grants no execution or publication authority.
-
-The owner-approved [prospective catalogue roadmap](catalogue/ROADMAP-v1.md)
-prioritizes complete dual-language foundation and recognition 1a/1b/1c, and adds
-16/32-entry exploratory literal profiles. This deliberately changes future work
-priority, not historical gates, verdicts or protected-data authority. Catalogue
-validation checks metadata and external receipt bindings; it does not grant judge
-qualification or prove recognition.
+The approved [roadmap](catalogue/ROADMAP-v1.md) prioritizes dual-language foundation,
+recognition 1a/1b/1c and exploratory 16/32-entry profiles. Catalogue validation
+checks receipt bindings, not recognition or judge qualification. Organization
+confers no execution/publication authority.
 
 ## Acceptance
 
-[Judge](../../tests/test_algorithm_solver_judge.py) and
-[lane](../../tests/test_algorithm_solver_lane.py) checks pass before runs;
-[charter validation](../../tools/catscan.py) checks documentation changes.
-Preserve source, decode, human and autonomous evidence classes.
+[Judge](../../tests/test_algorithm_solver_judge.py), [lane](../../tests/test_algorithm_solver_lane.py)
+checks before runs; [charter](../../tools/catscan.py) validation for documentation.
+Preserve distinct evidence classes.
 
 ## Non-goals
 
-Unbounded training/downloads, production editor hosting, automatic insertion,
+Unbounded training/downloads, production hosting, automatic source insertion,
 assessment use or hidden answer lookup presented as composition.
 
 ## Freedom
