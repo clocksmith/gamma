@@ -1,24 +1,28 @@
 # Gap 11 candidate source import
 
-This batch preserves 104 JavaScript/Python candidate pairs from the downloaded
-`gamma-gap-11-js-python.patch`. All 208 files match their supplied SHA-256 and
-Git blob identities. The [manifest](manifest.json) records exact source identities,
-public specification links and the owner-approved publication scope.
+All 139 delivered JavaScript/Python candidate pairs are imported: 278 source
+files. Their bytes match the supplied SHA-256 and Git blob identities, and all
+files pass syntax checks. The [manifest](manifest.json) records the source
+identities and the scoped owner approval to finish this source-only import.
 
-These are authored candidates, not qualified solutions. Syntax checks do not
-establish correctness, compatible judge interfaces or complexity. No candidate
-was executed, no cases were opened, and no catalogue, recognition, serving,
-training or qualification registry was changed. Forwarding interfaces still need
-independent binding to consuming problem contracts.
+The [assignment](delivery/gamma-gap-11-assignment.json) and
+[handoff](delivery/gamma-gap-11-handoff.md) are retained byte-for-byte as supplier
+provenance. Their original classifications and execution claims describe that
+delivery, not the current import or canonical admission authority.
 
-The delivery covers 139 of 180 assigned problems. Only the 104 pairs with existing
-source-acquisition permission were applied here. Another 35 delivered pairs remain
-unapplied pending their existing access gates; 41 assignments have no source
-payload. Per-ID restricted metadata and the private catalogue are not published.
-The complete original delivery remains outside Git for reconciliation.
+The earlier import published 104 pairs under existing acquisition permission.
+The owner subsequently directed completion and publication of all delivered
+sources, including the remaining 35 pairs. This is a scoped archival source-intake
+exception, not a change to historical access classifications, protected case
+permissions, frozen research populations or evaluation gates.
 
-The owner authorized publication of these 104 pairs on 2026-10-26. This does not
-change the historical access policy or authorize any blocked identities, protected
-cases, execution, indexing, training, serving or qualification. The quarantine
-name alone is not an isolation mechanism; downstream readers must keep enforcing
-their existing hash-bound admission gates.
+These are authored candidates, not qualified solutions. No candidate was executed
+and no case was opened. Syntax checks do not establish correctness, complexity or
+judge-interface compatibility. No catalogue, recognition, serving, training or
+qualification registry was changed. Existing reservations stay closed; this
+publication establishes no protected or unseen-evaluation admissibility.
+
+Of the 180 assigned problems, 41 have no source payload: 33 unavailable
+specifications and eight without a defined dual-language interface. These remain
+explicitly undelivered, not invented stubs. The original patch is archived outside
+Git; every source it contains is represented by the hashes in this batch.
