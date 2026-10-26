@@ -1,0 +1,17 @@
+# Span-preserving adapter: synthetic-only
+
+This separate prospective component leaves the committed `contract-clause-recognition-v1` checkpoint and every historical predictor unchanged. It has no model/cohort/source/service imports, no encoder calls, no acceptance decisions, and no confirmation examples. Synthetic examples are generic independently constructed controls, not extracted failures.
+
+## Evidence tracks
+
+Every non-whitespace request span is retained with exact original Unicode-codepoint offsets, request SHA and span-text SHA. Eight finite complete-clause patterns identify simple output/input/effect predicates. Only an entirely covered supported document without opposing predicates gets `grounded_grammar` / explicit scope; this label means supported grammar evidence, not universal semantic proof. Questions, quotes, introductory/reported/conditional/optional scopes and unsupported remainder keep **all** spans tentative with UNKNOWN polarity/scope. Generic natural prose is not rejected: it remains available to a future empirical compatibility consumer, with six role hypotheses explicitly hypotheses, not inferred facts. Grounded parsing is not a prerequisite for that empirical mode.
+
+Contract adaptation preserves the original pinned structured-field span/provenance. `task_identifying`, `carried_domain_or_api` and `UNKNOWN` purposes must be supplied explicitly; none is inferred from `required`, title or role. No contract obligation automatically requires user repetition. The adapter expects already validated clause records from the reviewed representation loader and is not an authorization substitute.
+
+Compatibility observations preserve both query and authority provenance and evidence track. Cosine is mapped by exactly `(cosine + 1) / 2`; invalid/nonfinite/out-of-range scores are rejected, not clipped. Orthogonal cosine maps to 0.5. This number is neither a probability nor entailment. In particular, a score of 1 with tentative polarity still yields semantic entailment UNKNOWN. Missing pairs produce no observation, not negative evidence.
+
+## Unresolved integration
+
+This adapter does not yet invoke the existing frozen encoder, infer robust scope/polarity from arbitrary prose, choose role alignment, rank candidates, or apply acceptance/abstention rules. Its compatibility records are deliberately separate from the earlier explicit-evidence-only aggregator API: tentative observations must not be silently cast to explicit evidence. A prospective integration must specify the separate empirical signal and full-4,081 ranking treatment, exact encoder prompts/cache identity, and acceptance policy before any campaign. Root has separately approved a fresh context-isolated author to select24 additional normative domains in deterministic hash order (excluding the historical20) and author72 new DEVELOPMENT descriptions under live authority gates. This is authoring authorization only, not permission for model execution, evaluation, training or assets. Exact authorship/exposure provenance must accompany the new data. Any expensive evaluation remains separately unauthorized. No new assets or training.
+
+The ten synthetic tests establish offsets, finite grammar/negation, unresolved scope, conflicting predicates, tentative-prose retention, normalization, contract-purpose non-inference and deterministic observation ordering. They do not establish factual extraction accuracy, coverage or recognition usefulness.

@@ -1,0 +1,5 @@
+import fs from 'node:fs';import crypto from 'node:crypto';import {classify,controls}from './classify.mjs';
+const hash=x=>crypto.createHash('sha256').update(x).digest('hex');const tests=controls();console.log(JSON.stringify({controls:tests}));if(tests.some(x=>x.observed!==x.expected))throw Error('classification controls failed');
+const input=JSON.parse(fs.readFileSync(0,'utf8'));if(input.variants.length!==52||input.owners!==48||input.source_bytes!==8942)throw Error('fixed52 scope');
+let bytes=0;const keys=new Set(),owners=new Set();for(const v of input.variants){if(hash(v.source)!==v.source_sha256||keys.has(v.key))throw Error('source identity');keys.add(v.key);owners.add(v.problem_id);bytes+=Buffer.byteLength(v.source);console.log(JSON.stringify({key:v.key,problem_id:v.problem_id,source_sha256:v.source_sha256,source_bytes:Buffer.byteLength(v.source),...classify(v.source)}));}
+if(bytes!==8942||owners.size!==48)throw Error('source mass/owner drift');console.log(JSON.stringify({done:52,owners:48,source_bytes:bytes,candidate_execution:false,admitted:0}));
