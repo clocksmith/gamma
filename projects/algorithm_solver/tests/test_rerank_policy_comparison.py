@@ -67,6 +67,15 @@ class ComparisonTests(unittest.TestCase):
         data = cohort([case()]); data['cases'][0]['documents'][1]['key'] = 'wrong'
         with self.assertRaises(ValueError):p.validate_cohort(data)
 
+    def test_review_must_approve_exact_cohort_without_blockers(self):
+        data = cohort([case()])
+        review = {'schema': 'gamma.rerank-confusion-review.v1', 'approved': True,
+                  'cohort_sha256': p.digest(data), 'blockers': []}
+        p.validate_review(data, review)
+        for changes in ({'approved': False}, {'approved': 1}, {'cohort_sha256': 'stale'},
+                        {'blockers': ['incorrect label']}, {'schema': 'other'}):
+            with self.assertRaises(ValueError):p.validate_review(data, dict(review, **changes))
+
     def test_chunking_preserves_global_ids_and_runs_inference_once_per_chunk(self):
         c = case(); c['documents'] = [{'key': str(i), 'text': 'Document '+str(i)} for i in range(23)]
         class Runtime:

@@ -1,0 +1,242 @@
+{
+  "schema": "gamma.rerank-confusion-aggregate.v1",
+  "cohort_sha256": "e5375a43494c04f9c12abb702c01cd4f83243f0aeabfeb1edd0bc0d8e43262d4",
+  "independent_review_sha256": "9763b65fc0f4d41946f24accd27cbc6f79f4dfed6bf3c709dbaad36adbb16ee5",
+  "surfaces": {
+    "node": {
+      "summary": {
+        "queries": 24,
+        "positive_queries": 16,
+        "control_queries": 8,
+        "positive_targets_in_candidates": 16,
+        "candidate_recall": 1.0,
+        "policies": {
+          "true_logit": {
+            "thresholds": {
+              "min_score": 16.012367248535156,
+              "min_margin": 12.030374526977539,
+              "dev_correct": 3,
+              "dev_wrong": 0,
+              "dev_cases": 24
+            },
+            "top1_correct": 16,
+            "top1_accuracy_positive": 1.0,
+            "top1_accuracy_when_present": 1.0,
+            "correct_accepted": 3,
+            "wrong_accepted": 0,
+            "abstentions": 21,
+            "development_precision": 1.0,
+            "development_recall": 0.1875
+          },
+          "logit_difference": {
+            "thresholds": {
+              "min_score": 8.98095417022705,
+              "min_margin": 0.0,
+              "dev_correct": 7,
+              "dev_wrong": 0,
+              "dev_cases": 24
+            },
+            "top1_correct": 16,
+            "top1_accuracy_positive": 1.0,
+            "top1_accuracy_when_present": 1.0,
+            "correct_accepted": 7,
+            "wrong_accepted": 0,
+            "abstentions": 17,
+            "development_precision": 1.0,
+            "development_recall": 0.4375
+          }
+        },
+        "recognition_qualified": false,
+        "scope": "Same-inference development comparison; independent per-policy development calibration. No held-out accuracy, catalogue coverage, deployment or training claim.",
+        "top1_disagreements": 0,
+        "contract_sha256": "71cc81fe20adaf6f4013bef3aad2b91e02cf95c23698f1e3b13bd49a85c48588",
+        "observations_sha256": "ba5e23145a50f0103c86cd716e8e003d659ff189293df0dfa4b5cde219c4bb56"
+      },
+      "runtime": {
+        "runtime": "doppler",
+        "revision": "e969a17dd3d53be3b500b86a13fbc33cc9c5119f",
+        "source_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "worker_sha256": "d16340e0dc8937ecdd0410ea1ef50d2e966ec31b46f7dc66f372920e8ea2ae50",
+        "session_sha256": "122bef5a9cddc20d21ef214dae539f15b92124a8223322351541e15009aa71b9",
+        "surface": "node",
+        "max_tokens": 1024,
+        "query_instruction": "Instruct: Given a programming problem, retrieve the identical problem\nQuery: ",
+        "models": {
+          "embedding": {
+            "manifest_sha256": "aa8b96509f17ba0c949aee6891abd0459883d0c4be761f666242240a97e9d979",
+            "runtime_config": {}
+          },
+          "rerank": {
+            "manifest_sha256": "e07c809b283dfd7f7a2164d722f3fc65738a31adc5913295660988d1d9a5c406",
+            "runtime_config": {}
+          }
+        }
+      },
+      "per_query_inference_seconds": [
+        10.18790709899622,
+        7.829776074009715,
+        7.907682874996681,
+        6.666850919980789,
+        7.362114343006397,
+        8.2496100999997,
+        7.204239423997933,
+        7.342683179973392,
+        6.9327646430174354,
+        6.7456200379820075,
+        6.132582132995594,
+        8.578546880016802,
+        9.317587108991574,
+        10.044608527998207,
+        9.284322550985962,
+        8.742207434988813,
+        9.15745294399676,
+        9.883062103006523,
+        8.663786326011177,
+        9.402970463008387,
+        9.097348331008106,
+        9.1120626500051,
+        9.033587685000384,
+        9.03129896800965
+      ],
+      "physical_backend": {
+        "backend": "webgpu",
+        "adapter": {
+          "vendor": "amd",
+          "architecture": "rdna-3",
+          "device": "radeon-8060s-graphics-radv-strix-halo-",
+          "description": "radv: Mesa 26.0.3-1ubuntu1"
+        },
+        "hasF16": true,
+        "hasSubgroups": true,
+        "maxBufferSize": 4294967292,
+        "deviceEpoch": 0,
+        "kernelPathId": "qwen-3-reranker-0-6b-f16-af32-execution-inline",
+        "kernelPathSource": "none",
+        "executionPlanId": "primary",
+        "activationDtype": "f32"
+      }
+    },
+    "browser": {
+      "summary": {
+        "queries": 24,
+        "positive_queries": 16,
+        "control_queries": 8,
+        "positive_targets_in_candidates": 16,
+        "candidate_recall": 1.0,
+        "policies": {
+          "true_logit": {
+            "thresholds": {
+              "min_score": 16.012367248535156,
+              "min_margin": 12.030374526977539,
+              "dev_correct": 3,
+              "dev_wrong": 0,
+              "dev_cases": 24
+            },
+            "top1_correct": 16,
+            "top1_accuracy_positive": 1.0,
+            "top1_accuracy_when_present": 1.0,
+            "correct_accepted": 3,
+            "wrong_accepted": 0,
+            "abstentions": 21,
+            "development_precision": 1.0,
+            "development_recall": 0.1875
+          },
+          "logit_difference": {
+            "thresholds": {
+              "min_score": 8.98095417022705,
+              "min_margin": 0.0,
+              "dev_correct": 7,
+              "dev_wrong": 0,
+              "dev_cases": 24
+            },
+            "top1_correct": 16,
+            "top1_accuracy_positive": 1.0,
+            "top1_accuracy_when_present": 1.0,
+            "correct_accepted": 7,
+            "wrong_accepted": 0,
+            "abstentions": 17,
+            "development_precision": 1.0,
+            "development_recall": 0.4375
+          }
+        },
+        "recognition_qualified": false,
+        "scope": "Same-inference development comparison; independent per-policy development calibration. No held-out accuracy, catalogue coverage, deployment or training claim.",
+        "top1_disagreements": 0,
+        "contract_sha256": "56217fbc7a05da2a304166cf787191c9f7771527f67b4edecf70ea073b07954f",
+        "observations_sha256": "75484b792db91a8db45dbe7bfd153cba92d26669df4dc46dcc2ffca954b7eff1"
+      },
+      "runtime": {
+        "runtime": "doppler",
+        "revision": "e969a17dd3d53be3b500b86a13fbc33cc9c5119f",
+        "source_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "worker_sha256": "eee2c88b7025889f5b10d692fa3fd18fb825dee42e5aa83ed86bb7285175ddf0",
+        "session_sha256": "122bef5a9cddc20d21ef214dae539f15b92124a8223322351541e15009aa71b9",
+        "surface": "browser",
+        "max_tokens": 1024,
+        "query_instruction": "Instruct: Given a programming problem, retrieve the identical problem\nQuery: ",
+        "models": {
+          "embedding": {
+            "manifest_sha256": "aa8b96509f17ba0c949aee6891abd0459883d0c4be761f666242240a97e9d979",
+            "runtime_config": {}
+          },
+          "rerank": {
+            "manifest_sha256": "e07c809b283dfd7f7a2164d722f3fc65738a31adc5913295660988d1d9a5c406",
+            "runtime_config": {}
+          }
+        }
+      },
+      "per_query_inference_seconds": [
+        13.617708406993188,
+        7.611132949008606,
+        7.661775126995053,
+        6.292752311012009,
+        6.942643740010681,
+        7.809033550001914,
+        6.7054177219979465,
+        6.85621083798469,
+        6.36843749700347,
+        6.349029524979414,
+        5.898441836005077,
+        8.245198155025719,
+        8.738088144978974,
+        9.562186049995944,
+        8.750970110006165,
+        8.291722385009052,
+        8.458038221986499,
+        9.2894960269914,
+        8.193432275991654,
+        8.74704371902044,
+        8.52208833998884,
+        8.644060596998315,
+        8.374040469003376,
+        8.430727996019414
+      ],
+      "physical_backend": {
+        "backend": "webgpu",
+        "adapter": {
+          "vendor": "amd",
+          "architecture": "rdna-3",
+          "device": "0x1586",
+          "description": "Radeon 8060S Graphics (RADV STRIX_HALO)"
+        },
+        "hasF16": true,
+        "hasSubgroups": true,
+        "maxBufferSize": 4294967292,
+        "deviceEpoch": 0,
+        "kernelPathId": "qwen-3-reranker-0-6b-f16-af32-execution-inline",
+        "kernelPathSource": "none",
+        "executionPlanId": "primary",
+        "activationDtype": "f32"
+      }
+    }
+  },
+  "max_abs_logit_difference": 0.0,
+  "executed_tokens_identical": true,
+  "recognition_qualified": false,
+  "limitations": [
+    "16 positive queries and eight controls, deliberately authored for supplied groups of 3\u20135 candidates.",
+    "Development thresholds fitted on the scored cohort; no held-out precision/recall claim.",
+    "No full-catalogue retrieval, adapter training, current-serving promotion or UI deployment.",
+    "Raw statements and receipts remain private; aggregate hashes alone do not make the full experiment publicly reproducible."
+  ]
+}

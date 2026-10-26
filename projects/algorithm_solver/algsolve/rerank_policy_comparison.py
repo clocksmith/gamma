@@ -59,6 +59,14 @@ def validate_cohort(cohort):
     return cases
 
 
+def validate_review(cohort, review):
+    if (review.get('schema') != 'gamma.rerank-confusion-review.v1'
+            or review.get('approved') is not True
+            or review.get('cohort_sha256') != digest(cohort)
+            or review.get('blockers') != []):
+        raise ValueError('approved independent review must bind this exact cohort without blockers')
+
+
 def rank_logits(case, evidence, policy):
     if policy not in POLICIES:
         raise ValueError('unknown scoring policy')
@@ -152,6 +160,7 @@ def main():
     source = parser.add_mutually_exclusive_group(required=True)
     source.add_argument('--cohort', type=Path, help='Explicit permitted development text; never reserved data')
     source.add_argument('--synthetic', action='store_true')
+    parser.add_argument('--review', type=Path, help='Independent approval bound to the exact custom cohort')
     for name in ('doppler-root', 'embedding-model', 'reranker-model', 'output'):
         parser.add_argument('--' + name, type=Path, required=True)
     parser.add_argument('--surface', choices=('node', 'browser'), default='node')
@@ -161,6 +170,16 @@ def main():
         parser.error('development input exceeds 4 MiB')
     cohort = json.loads(args.cohort.read_text()) if args.cohort else synthetic_cohort()
     cases = validate_cohort(cohort)
+    if args.cohort and args.review is None:
+        parser.error('--cohort requires --review; preserve unreviewed drafts without model execution')
+    review_binding = None
+    if args.review:
+        if args.review.stat().st_size > 1024**2:
+            parser.error('review artifact exceeds 1 MiB')
+        review_raw = args.review.read_bytes()
+        review = json.loads(review_raw)
+        validate_review(cohort, review)
+        review_binding = {'sha256': hashlib.sha256(review_raw).hexdigest(), 'review': review}
     config = json.loads(args.runtime_config.read_text()) if args.runtime_config else {}
     args.output.mkdir(parents=True, exist_ok=False)
     with DopplerRuntime(args.doppler_root, args.embedding_model, args.reranker_model,
@@ -173,6 +192,7 @@ def main():
                         ('rerank_policy_comparison.py', 'doppler_runtime.py', 'rerank.py',
                          'lookup.py', 'rerank_recognition.py', 'doppler_probe.py')},
                     'calibration_partition': 'development', 'recognition_qualified': False}
+        contract['independent_review'] = review_binding
         (args.output/'contract.json').write_text(json.dumps(contract, indent=2, allow_nan=False) + '\n')
         observations = []
         with (args.output/'observations.jsonl').open('x') as stream:
