@@ -5,12 +5,13 @@ from pathlib import Path
 import tempfile
 import threading
 import unittest
+from types import SimpleNamespace
 from unittest.mock import patch
 
 import numpy as np
 
 from algsolve.bits_recognition import BitsRecognizer
-from algsolve.bits_server import create_server
+from algsolve.bits_server import create_server, create_recognizer
 
 
 class Runtime:
@@ -48,6 +49,25 @@ class RecognitionTests(unittest.TestCase):
         self.assertEqual(result['query_sha256'],hashlib.sha256(text.encode()).hexdigest())
         self.assertNotIn('source',json.dumps(result))
         self.assertNotIn('tests',json.dumps(result))
+        self.assertNotIn('diagnostics',result)
+        self.assertGreaterEqual(result['timings']['total_ms'],result['timings']['rerank_ms'])
+
+    def test_retrieval_uses_whole_index_and_stable_identity_ties(self):
+        self.recognizer.keys=['lc:second','lc:first']
+        self.recognizer.vectors=np.array([[1.,0.],[1.,0.]])
+        rows=self.recognizer.retrieve(np.array([1.,0.]),1)
+        self.assertEqual(rows[0]['key'],'lc:first')
+        for invalid in (0,65,True):
+            with self.assertRaises(ValueError):self.recognizer.retrieve(np.array([1.,0.]),invalid)
+        with self.assertRaises(ValueError):self.recognizer.retrieve(np.array([float('nan'),0.]))
+
+    def test_diagnostics_bind_candidates_without_returning_document_bodies(self):
+        result=self.recognizer.recognize('A description',diagnostics=True)
+        self.assertEqual(result['diagnostics']['indexed_count'],2)
+        rows=result['diagnostics']['evidence']
+        self.assertEqual([row['key'] for row in rows],['lc:first','lc:second'])
+        self.assertEqual(rows[0]['document_sha256'],hashlib.sha256(b'First Problem').hexdigest())
+        self.assertNotIn('document',rows[0])
 
     def test_truncated_query_abstains_and_busy_requests_do_not_queue(self):
         self.recognizer.runtime.last_receipt['embedding_rows'][0]['truncated']=True
@@ -93,6 +113,14 @@ class ServerTests(unittest.TestCase):
         self.assertEqual(self.request('GET','/.private')[0],403)
         self.assertEqual(self.request('GET','/outside')[0],403)
         self.assertEqual(self.request('GET','/','',{'Host':'attacker.example'})[0],403)
+
+    def test_default_kernel_profile_rejects_a_different_model_before_loading(self):
+        (self.root/'manifest.json').write_text('{}')
+        args=SimpleNamespace(reranker_config=None,reranker_model=self.root)
+        with patch('algsolve.bits_server.DopplerRuntime') as runtime:
+            with self.assertRaisesRegex(ValueError,'does not bind'):
+                create_recognizer(args)
+            runtime.assert_not_called()
 
 
 if __name__=='__main__':unittest.main()

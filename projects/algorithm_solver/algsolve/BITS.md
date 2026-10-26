@@ -33,9 +33,14 @@ runtime. These are existing frozen Qwen reference document vectors queried with
 Doppler embeddings, not a newly trained or qualified index. Semantic retrieval
 keeps ten candidates and ranks their permitted public statements (otherwise only
 their titles) by yes-minus-no logit. It returns up to three possible matches without
-probability claims or automatic acceptance. Reranker prefill uses explicit
-128-token synchronous chunks, recorded in the runtime identity, to bound each
-GPU submission without truncating descriptions. Truncated queries abstain. A poisoned
+probability claims or automatic acceptance. The default reranker configuration
+uses Doppler’s tiled F16 projections and head-128 attention with bounded 512-token
+synchronous prefill chunks. It pins the original model manifest and changes no
+weights, prompts or candidate count. Pull Doppler’s single-row selected-logit fix
+(`d1a8879e`) before using chunked reranking. The generated configuration and its
+provenance live under `config/bits-reranker-tiled-v1/`; a mismatching model fails
+before loading. `--reranker-config PATH` selects an explicitly supplied alternative
+which is also bound into the runtime identity. Truncated queries abstain. A poisoned
 runtime is replaced on retry only if its identity is unchanged.
 
 The original source boundary is checked before opening each public statement.
@@ -55,3 +60,43 @@ PYTHONPATH=.:projects/algorithm_solver .venv/bin/python -m pytest -q \
 These tests establish endpoint boundaries and selection mechanics, not population
 precision/recall. Recognition qualification, composition effort, human performance
 and solution qualification remain separate evidence contracts.
+
+## Diagnostics and measured limits
+
+The [retained comparison](../findings/bits-latency-v1/summary.json) profiles one
+authored query over ten unchanged candidates. The original resident worker took
+77.37 seconds warm, of which 77.01 seconds was reranker execution. The tiled
+512-token path took 1.87–1.91 seconds warm in Node and 2.06–2.07 seconds in the
+browser. Cold requests took 3.91 and 9.88 seconds respectively. These repeated
+query measurements are not population p50/p95, and the 250 ms target remains
+unmet. There is no judge in this discovery route. Public BITS hosting is unchanged.
+
+All ten candidate rankings and executed tokens matched; maximum paired logit
+change was 0.00735. Across the separate 24 consumed development queries with
+supplied candidates, all rankings/tokens also matched, with maximum change below
+0.00902. Floating-point differences can change threshold decisions: old acceptance
+calibration is not promoted to the new runtime. No fresh confirmation is claimed.
+
+For stage timings, replace `algsolve.bits_server` in the startup command with
+`algsolve.bits_profile` and add `--query-file PATH --output NEW_DIRECTORY --repeats 3`.
+The output binds model/index identities and retains every iteration, including
+failures. `algsolve.compare_bits_profiles REFERENCE CANDIDATE --output NEW_JSON`
+checks complete profiles for identical input tokens, documents and rankings.
+The API response includes timings; detailed diagnostic logits remain outside the
+normal browser response. Run under a hard memory/lifetime process-group supervisor.
+
+`algsolve.bits_retrieval_probe` takes the same startup arguments plus `--cohort`,
+`--review`, and `--output`; only a hash-bound, independently reviewed development
+cohort is accepted. The measured dense retriever hit 15/16 positive targets at
+rank one and 16/16 by rank eight over the existing 3,353 vectors. This is not a
+3,599-ID test: 727 non-protected eligible identities lack mapped vectors. Existing
+protected vectors remain in the frozen index as competing identities; their
+statement payloads remain closed. Qualified-source availability never filters
+this discovery ranking. Reviewed confusable candidates can still be absent at
+rank 32, so target recall alone is not adequate ambiguity evidence.
+
+To regenerate the execution overlay, run `prepare_bits_kernel_config.mjs` with
+Doppler root, the provisioned F16 reranker directory, and a new output directory.
+It delegates graph compilation and kernel digest checks to Doppler, preserves
+weights/manifests, and records provenance. Revalidate changed execution before
+replacing the maintained default; generation itself is not qualification.
