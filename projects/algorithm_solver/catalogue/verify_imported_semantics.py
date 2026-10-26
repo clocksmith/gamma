@@ -269,6 +269,9 @@ def compare(pid, case, record, language):
     except (TypeError, ValueError, KeyError, IndexError, OverflowError):
         valid = False
     if not valid: return 'result_value'
+    if pid in (814, 2074, 2807):
+        from .verify_node_identity import check
+        return check(pid, case['args'], record)
     for field in ('args_before', 'args_after'):
         if not identical(record.get(field), normalized(case['args'])): return 'input_effects'
     required_aliases = []

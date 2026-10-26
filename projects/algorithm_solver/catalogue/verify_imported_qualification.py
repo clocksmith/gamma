@@ -83,7 +83,7 @@ def verify(path):
         source, cases = q.job_inputs(freeze, job, gate)
         if row['source_sha256'] != q.sha(source) or row['cases'] != len(cases):
             raise ValueError('source/case identity mismatch')
-        groups = list(q.batches(cases))
+        groups = list(q.batches(cases, job.get('max_cases_per_batch', 32), job.get('node_identity', False)))
         if len(groups) != len(row['calls']):
             raise ValueError('missing batch observations')
         failures = []

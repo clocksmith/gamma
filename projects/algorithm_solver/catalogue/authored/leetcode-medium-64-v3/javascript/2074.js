@@ -1,7 +1,7 @@
 'use strict';
 
-// 2074. Reverse Nodes in Even Length Groups: copy values into fresh nodes using each actual group length.
-// O(n) time and O(n) auxiliary space excluding the returned list; inputs are read-only.
+// 2074. Reverse Nodes in Even Length Groups: relink original nodes by actual group length.
+// O(n) time and O(1) auxiliary space; original node links are modified.
 class ListNode {
   constructor(val = 0, next = null) {
     this.val = val;
@@ -10,21 +10,34 @@ class ListNode {
 }
 
 function solve(head) {
-  const values = [];
-  for (let current = head; current !== null; current = current.next) values.push(current.val);
-  const dummy = new ListNode();
-  let tail = dummy;
-  let left = 0;
+  const dummy = new ListNode(0, head);
+  let previous = dummy;
+  let current = head;
   let requested = 1;
-  while (left < values.length) {
-    const right = Math.min(values.length, left + requested);
-    const reversed = (right - left) % 2 === 0;
-    for (let offset = 0; offset < right - left; offset += 1) {
-      const index = reversed ? right - 1 - offset : left + offset;
-      tail.next = new ListNode(values[index]);
-      tail = tail.next;
+  while (current !== null) {
+    let following = current;
+    let last = current;
+    let count = 0;
+    while (following !== null && count < requested) {
+      last = following;
+      following = following.next;
+      count += 1;
     }
-    left = right;
+    if (count % 2 === 0) {
+      const tail = current;
+      let reversed = following;
+      for (let index = 0; index < count; index += 1) {
+        const next = current.next;
+        current.next = reversed;
+        reversed = current;
+        current = next;
+      }
+      previous.next = reversed;
+      previous = tail;
+    } else {
+      previous = last;
+    }
+    current = following;
     requested += 1;
   }
   return dummy.next;

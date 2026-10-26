@@ -226,6 +226,9 @@ def compare(pid,case,record,language):
     try:same=semantic_value(pid,case['args'],got,wanted)
     except (TypeError,ValueError,IndexError,KeyError,OverflowError):same=False
     if not same:return 'result_value'
+    if pid in (814,2074,2807):
+        from .node_identity_contracts import check
+        return check(pid,case['args'],record,exact,canonical)
     before=canonical(case['args'])
     if not exact(record.get('args_before'),before)or not exact(record.get('args_after'),before):return 'input_effects'
     aliases=[]

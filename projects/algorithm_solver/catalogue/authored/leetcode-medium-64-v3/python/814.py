@@ -1,4 +1,4 @@
-"""814. Binary Tree Pruning: build a pruned copy in iterative postorder."""
+"""814. Binary Tree Pruning: prune zero-only child links in iterative postorder."""
 from __future__ import annotations
 
 
@@ -10,10 +10,10 @@ class TreeNode:
 
 
 def solve(root: TreeNode | None) -> TreeNode | None:
-    """O(n) time and O(n) auxiliary space excluding the returned tree; inputs are read-only."""
+    """O(n) time/space; prune zero-only child links and retain surviving nodes."""
     if root is None:
         return None
-    copies = {}
+    kept = {}
     stack = [(root, False)]
     while stack:
         node, ready = stack.pop()
@@ -24,10 +24,12 @@ def solve(root: TreeNode | None) -> TreeNode | None:
             if node.left is not None:
                 stack.append((node.left, False))
             continue
-        left = copies.get(id(node.left))
-        right = copies.get(id(node.right))
-        copies[id(node)] = TreeNode(node.val, left, right) if node.val or left or right else None
-    return copies[id(root)]
+        if not kept.get(id(node.left), False):
+            node.left = None
+        if not kept.get(id(node.right), False):
+            node.right = None
+        kept[id(node)] = bool(node.val or node.left is not None or node.right is not None)
+    return root if kept[id(root)] else None
 
 
 class Solution:

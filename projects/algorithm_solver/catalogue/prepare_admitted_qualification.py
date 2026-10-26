@@ -109,7 +109,7 @@ def prepare(args):
                 accepted.extend(extra)
         if not accepted:raise ValueError('no independently admitted cases')
         # Enforce every resource packet boundary before launching any source.
-        list(q.batches(accepted))
+        list(q.batches(accepted,1 if pid in (814,1681,1755,2074,2807)else 32,pid in (814,2074,2807)))
         cases_by_id[pid]=accepted
         decisions[pid]={'id':pid,'statement':job['statement'],'original_tests_raw_sha256':job['tests_raw_sha256'],
                        'decisions':ledger,'public_examples':public,
@@ -131,6 +131,7 @@ def prepare(args):
         job.update(source_sha256=source_sha,tests_raw_sha256=q.file_hash(args.output/job['tests']),
                    tests_canonical_sha256=q.canonical_tests_hash(cases_by_id[pid]),case_count=len(cases_by_id[pid]),
                    domain_validator='imported358-v1',comparison_policy=f'problem:{pid}',
+                   max_cases_per_batch=1 if pid in (814,1681,1755,2074,2807)else 32,node_identity=pid in (814,2074,2807),
                    admission_sha256=q.file_hash(args.output/'admission'/f'{pid}.json'))
         jobs.append(job)
     modules=(admission,clean,results,independent)
@@ -140,12 +141,14 @@ def prepare(args):
               'additional_code':{str(Path(m.__file__).resolve()):q.file_hash(m.__file__)for m in modules},
               'max_packet_bytes':q.MAX_PACKET,'public_examples_checked':example_counts,
               'test_authority':'Pinned historical independent cases admitted by statement domain; corrections independently derived; pinned public examples and reviewed supplementary cases appended.',
-              'effects':'read-only arguments and no return aliases, except876requires original middle-node identity',
+              'effects':'Original-node effects for 814/2074/2807; original middle-node alias for 876; other arguments read-only with fresh returns',
               'comparison':'problem-specific typed return contracts; explicit nonunique outputs and absolute numeric tolerances',
               'supplements':supplements,'source_replacements':replacements,
               'scope':'Finite independent statement-domain typed/local-effect checks plus independent static algorithm review; no universal correctness or full-domain runtime proof.',
               'automatic_promotion':False,'protected_access':False}
     contract['additional_code'][str(Path(__file__).resolve())]=q.file_hash(__file__)
+    node_verifier=Path(__file__).with_name('verify_node_identity.py').resolve()
+    contract['additional_code'][str(node_verifier)]=q.file_hash(node_verifier)
     q.write(args.output/'contract.json',contract)
     return {'jobs':len(jobs),'checks':sum(j['case_count']for j in jobs),'public_examples':sum(example_counts.values()),'contract_sha256':q.file_hash(args.output/'contract.json')}
 

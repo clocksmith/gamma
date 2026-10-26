@@ -25,8 +25,9 @@ REPO = SOLVER.parents[1]
 INVENTORY = SOLVER / 'findings/library-answer-audit-v2/inventory.jsonl'
 INVENTORY_SHA = 'da99c407bff14065f25282c23baef6d1daf69e7b9b76fce189b2922485bc5e77'
 HARNESS = SOLVER / 'catalogue/public-domain-qualification-medium32-wave2-observer-v1'
+NODE_HARNESS = SOLVER / 'catalogue/imported-node-observer-v1'
 LIMITS = dict(cpu_seconds=3, wall_seconds=8, memory_bytes=1024**3,
-              max_output_bytes=4 * 1024**2)
+              max_output_bytes=8 * 1024**2)
 MAX_FILE = 8 * 1024**2
 MAX_PACKET = 1_100_000
 
@@ -87,7 +88,8 @@ def runtime():
 
 def code_pins():
     paths = [Path(__file__), Path(sandbox.__file__), HARNESS / 'harness.py', HARNESS / 'harness.cjs',
-             Path(__file__).with_name('imported_result_contracts.py')]
+             Path(__file__).with_name('imported_result_contracts.py'),
+             Path(__file__).with_name('node_identity_contracts.py'), NODE_HARNESS / 'harness.py', NODE_HARNESS / 'harness.cjs']
     return {str(p): file_hash(p) for p in paths}
 
 
@@ -141,18 +143,23 @@ def compare(case, record, language, policy='exact'):
     return None
 
 
-def packet(cases):
+def packet(cases, node_identity=False):
     from .imported_result_contracts import canonical
-    return {'entry': 'solve', 'method': 'solve', 'calls': [{'args': canonical(c['args'])} for c in cases]}
+    result = {'entry': 'solve', 'method': 'solve', 'calls': [{'args': canonical(c['args'])} for c in cases]}
+    if node_identity:
+        result['node_identity'] = True
+    return result
 
 
-def batches(cases):
+def batches(cases, maximum_calls=32, node_identity=False):
+    if type(maximum_calls) is not int or not 1 <= maximum_calls <= 32 or type(node_identity) is not bool:
+        raise ValueError('invalid frozen batching policy')
     group = []
     offset = 0
     for case in cases:
-        if len(encoded(packet([case]))) > MAX_PACKET:
+        if len(encoded(packet([case], node_identity))) > MAX_PACKET:
             raise ValueError('case exceeds packet cap; no silent truncation')
-        if group and (len(group) == 32 or len(encoded(packet(group + [case]))) > MAX_PACKET):
+        if group and (len(group) == maximum_calls or len(encoded(packet(group + [case], node_identity))) > MAX_PACKET):
             yield offset, group
             offset += len(group)
             group = []
@@ -310,14 +317,15 @@ def execute(args):
             source, cases = job_inputs(args.freeze, job, gate)
             row = {'id': job['id'], 'language': job['language'], 'source_sha256': sha(source), 'calls': [],
                    'cases': len(cases), 'failures': [], 'passed': False}
-            for offset, batch in batches(cases):
+            for offset, batch in batches(cases, job.get('max_cases_per_batch', 32), job.get('node_identity', False)):
                 if time.monotonic() - start > args.max_wall:
                     raise TimeoutError('campaign wall budget')
                 if job['language'] == 'python':
                     argv = ['/usr/bin/python3', '-I', '-S', 'harness.py']; program = 'program.py'; harness = 'harness.py'
                 else:
                     argv = ['/usr/bin/node', '--jitless', '--single-threaded', '--max-old-space-size=64', 'harness.cjs']; program = 'program.js'; harness = 'harness.cjs'
-                result = sandbox.run(argv, files={program: source, harness: read(HARNESS / harness), 'inputs.json': encoded(packet(batch))}, limits=sandbox.Limits(**LIMITS))
+                observer = NODE_HARNESS if job.get('node_identity', False) else HARNESS
+                result = sandbox.run(argv, files={program: source, harness: read(observer / harness), 'inputs.json': encoded(packet(batch, job.get('node_identity', False)))}, limits=sandbox.Limits(**LIMITS))
                 stem = f"{job['id']}-{job['language']}-{offset}"
                 (args.output / (stem + '.stdout')).write_bytes(result.stdout)
                 (args.output / (stem + '.stderr')).write_bytes(result.stderr)
