@@ -12,6 +12,66 @@ been switched to this candidate.
 
 ## Run
 
+### Node and browser execution (2026-10-26)
+
+`DopplerRuntime(..., surface='node'|'browser')` and the lookup CLI's
+`--surface node|browser` use the same `doppler_session.mjs` operations. The browser
+worker retains a headless Chrome instance and both model handles; model inference
+executes in browser WebGPU, while Python retains retrieval and answer gates.
+The shared ES module also accepts a browser caller's pinned `loadModel` callback.
+Both paths check embedding token identity, finite normalized vectors, and complete
+document-bound reranker scores. Runtime identity includes the surface and shared
+module hash: previous index/calibration receipts cannot silently authorize this
+successor. Build and calibrate a separately identified index for each surface.
+
+The browser worker requires provisioned models inside the Doppler checkout,
+Chrome, and Doppler's installed Playwright. Its HTTP server binds only loopback
+and external requests are blocked. No model download or CPU fallback occurs.
+
+Run the bounded physical integration probe with an interpreter containing NumPy:
+
+```sh
+systemd-run --user --scope --quiet -p MemoryMax=12G \
+  timeout --kill-after=5s 240s env PYTHONPATH=projects/algorithm_solver \
+  python3 -m algsolve.doppler_probe \
+  --doppler-root /home/x/deco/doppler \
+  --embedding-model /home/x/deco/doppler/models/local/qwen-3-embedding-0-6b-q4k-ehf16-af32 \
+  --reranker-model /home/x/deco/doppler/models/local/qwen-3-reranker-0-6b-f16-af32 \
+  --output /tmp/gamma-node-browser-probe.json
+```
+
+This uses the provisioned Q4_K embedder and F16 reranker with manifest execution
+defaults. It checks physical execution, model switching, and Node/browser parity
+on three synthetic cases. It does **not** establish catalogue precision/recall.
+The owner's current target is at least 99% precision and at least 99% recall,
+separately on each surface. Wrong positive and control acceptances count against
+precision; positive abstentions count against recall. Missing cases, partial
+indexes, development fitting and exact-ID bypasses cannot establish that target
+for informal recognition. The synchronized authored imports are not automatic
+qualification; use the current pinned catalogue and permitted documents, then a
+fresh independent confirmation cohort. Preserve the consumed failed confirmation.
+
+The [physical receipt](findings/doppler-node-browser-v1/physical-probe.json)
+records identical Node/browser embeddings and reranker scores on Jupiter's Radeon
+8060S for those probes, including an embedding repeated after reranking. Thirty
+focused Python tests and four shared-session Node tests passed. The complete-cohort
+scorer is `catalogue.recognition_acceptance.evaluate`; it rejects missing/extra
+decisions and reports precision, recall, their denominators and Wilson intervals
+without treating a point-estimate pass as release qualification.
+
+The synchronized main at `a35e0a6c2` includes 192 additional authored pairs and
+receipts for an earlier 502-JavaScript/503-Python qualified inventory (v22; later
+adoptions are separate). It does not contain the current private catalogue,
+boundary bundle, or full permitted recognition documents referenced under Dot's
+`/workspace/shared`. Jupiter has none of those paths and Dot's registered SSH
+hostname did not resolve during this work. Current population-wide accuracy is
+therefore unmeasured for this Node/browser successor. Supply those exact pinned
+artifacts and a fresh independently authored confirmation population before
+claiming the requested 99% precision and recall. No protected data or consumed
+confirmation queries were opened by this integration.
+
+### Earlier reference-index candidate
+
 Run from Gamma. Use provisioned model directories and the adjacent Doppler
 checkout; no model installation is performed.
 
