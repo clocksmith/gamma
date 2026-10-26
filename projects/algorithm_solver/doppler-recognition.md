@@ -141,6 +141,65 @@ accuracy. Exact statement/interface matches avoid unnecessary model calls.
 
 ## Verification and limits
 
+### Paired scoring-policy diagnostic
+
+`algsolve.rerank_policy_comparison` compares `true_logit` and
+`logit_difference` from one execution of each query/document pair. It retains
+both logits, executed token IDs, candidate identities and runtime receipts;
+neither the model manifest nor serving thresholds are changed. Candidates are
+sent in chunks of at most ten, supporting fixed development shortlists of up to
+50 documents. This is pairwise scoring, not a listwise model call.
+
+Run from Gamma with provisioned models and explicit resource limits:
+
+```sh
+systemd-run --user --scope --quiet -p MemoryMax=12G \
+  timeout --kill-after=5s 240s env PYTHONPATH=projects/algorithm_solver \
+  .venv/bin/python -m algsolve.rerank_policy_comparison \
+  --synthetic --surface node \
+  --doppler-root /home/x/deco/doppler \
+  --embedding-model /home/x/deco/doppler/models/local/qwen-3-embedding-0-6b-q4k-ehf16-af32 \
+  --reranker-model /home/x/deco/doppler/models/local/qwen-3-reranker-0-6b-f16-af32 \
+  --output projects/algorithm_solver/runs/rerank-policy-node-new
+```
+
+Use `--surface browser` and a separate output directory for browser execution.
+`--synthetic` uses the three existing integration probes. Alternatively,
+`--cohort permitted-development.json` accepts this explicit input shape:
+
+```json
+{
+  "schema": "gamma.rerank-policy-input.v1",
+  "partition": "development",
+  "cases": [{
+    "id": "query-1",
+    "query": "Return indices of two array elements summing to a target.",
+    "target": "pair-indices",
+    "documents": [
+      {"key": "pair-indices", "text": "Return two indices whose values sum to the target."},
+      {"key": "pair-values", "text": "Return the two values whose sum equals the target."}
+    ]
+  }]
+}
+```
+
+Only supply already permitted development text. The CLI does not resolve
+catalogue IDs, authorize protected text, or open an evaluation population.
+Use a null target for unmatched/ambiguous controls; a positive target absent
+from its shortlist remains in the recall denominator. Candidate identities
+and all queries must be retained. The input supports at most 100 queries and
+4 MiB, with a 500 KB per-query packet bound.
+
+`contract.json` freezes inputs, runtime and comparison code before inference.
+`observations.jsonl` retains each completed query; interrupted runs retain
+their partial evidence without a completed summary. `summary.json` fits
+separate thresholds for each policy on the same development cohort. Those
+figures are in-sample diagnostics, not held-out accuracy, calibrated production
+probabilities, or recognition qualification. Execution timing is shared by the
+two derived policies; it cannot establish a policy-specific inference speedup.
+For reproducible replay, use the pinned code and call `summarize` on the frozen
+cohort and observations; do not mix a successor cohort with earlier logits.
+
 The adapter verifies request IDs/hashes, finite normalized vectors, original
 candidate ordering, manifest identity and the exact embedding tokens executed.
 Timeouts and malformed results close the worker. Logs remain under

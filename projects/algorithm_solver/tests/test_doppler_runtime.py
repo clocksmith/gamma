@@ -68,6 +68,28 @@ class RuntimeTests(unittest.TestCase):
             with self.assertRaises(ValueError):
                 self.runtime.rerank('q', ['a', 'b'])
 
+    def test_paired_evidence_retains_raw_logits_and_executed_tokens(self):
+        rows = [{'index': 1, 'document': 'b', 'score': 2., 'trueLogit': 2.,
+                 'falseLogit': -5., 'tokenCount': 2, 'tokenIds': [12, 13]},
+                {'index': 0, 'document': 'a', 'score': 3., 'trueLogit': 3.,
+                 'falseLogit': 8., 'tokenCount': 1, 'tokenIds': [11]}]
+        with patch.object(self.runtime, '_request', return_value={'query': 'q', 'ranking': rows}):
+            actual = self.runtime.rerank_evidence('q', ['a', 'b'])
+            self.assertEqual([r['trueLogit'] for r in actual], [3., 2.])
+            self.assertEqual([r['falseLogit'] for r in actual], [8., -5.])
+            self.assertEqual(actual[0]['tokenIds'], [11])
+
+    def test_paired_evidence_rejects_missing_logits_or_inexact_tokens(self):
+        base = dict(index=0, document='a', score=1., trueLogit=1., falseLogit=0.,
+                    tokenCount=1, tokenIds=[11])
+        for changes in ({'falseLogit': None}, {'trueLogit': float('nan')},
+                        {'trueLogit': True}, {'tokenIds': None}, {'tokenCount': 2},
+                        {'tokenCount': True}, {'tokenIds': [False]}):
+            with self.subTest(changes=changes), patch.object(self.runtime, '_request',
+                    return_value={'query': 'q', 'ranking': [dict(base, **changes)]}):
+                with self.assertRaises(ValueError):
+                    self.runtime.rerank_evidence('q', ['a'])
+
     def start_fake(self, body):
         script = self.root/'worker.py'
         script.write_text('import sys,json,hashlib,time\n'+body)

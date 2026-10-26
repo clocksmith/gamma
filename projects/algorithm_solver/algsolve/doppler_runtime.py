@@ -165,13 +165,40 @@ class DopplerRuntime:
         return np.concatenate(vectors)
 
     def rerank(self, query, documents):
+        _, scores = self._rerank_output(query, documents)
+        return scores
+
+    def _rerank_output(self, query, documents):
         query, documents = query.strip(), [d.strip() for d in documents]
         output = self._request('rerank', query=query, documents=documents)
         try:
             scores = scores_from_output(json.dumps({'ok': True, 'result': {'output': output}}),
                                         query, documents)
             self.last_receipt['backend'] = output.get('backend')
-            return scores
+            return output, scores
+        except BaseException:
+            self.close()
+            raise
+
+    def rerank_evidence(self, query, documents):
+        """Return original-order logits for paired scoring-policy experiments.
+
+        Does not override the model manifest or the serving score policy.
+        Both policies can be recomputed from the exact same executed tokens.
+        """
+        output, _ = self._rerank_output(query, documents)
+        try:
+            rows = sorted(output['ranking'], key=lambda row: row['index'])
+            for row in rows:
+                if any(type(row.get(k)) not in (int, float) or not np.isfinite(row[k])
+                       for k in ('trueLogit', 'falseLogit')):
+                    raise ValueError('Reranker evidence requires finite yes/no logits')
+                tokens = row.get('tokenIds')
+                if (type(tokens) is not list or not tokens
+                        or type(row.get('tokenCount')) is not int or row['tokenCount'] != len(tokens)
+                        or any(type(t) is not int or t < 0 for t in tokens)):
+                    raise ValueError('Reranker evidence requires exact executed token IDs')
+            return rows
         except BaseException:
             self.close()
             raise
