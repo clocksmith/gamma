@@ -113,7 +113,11 @@ class LookupTests(unittest.TestCase):
         self.assertEqual(lookup.recognize(q)['reason'], 'query_has_no_public_examples')
         self.entry.references[0]['code'] += '\n# modified'
         lookup.index.entries[0].references[0]['code'] += '\n# modified'
-        self.assertEqual(lookup.recognize(query(3))['reason'], 'stored_answer_not_approved')
+        # Exact specification bypasses fuzzy confidence, so this reaches the
+        # source gate even though this fixture intentionally indexes one item.
+        changed = query(3)
+        changed.statement, changed.starter_code = self.entry.statement, self.entry.starter_code
+        self.assertEqual(lookup.recognize(changed)['reason'], 'stored_answer_not_approved')
 
     def test_calibration_threshold_edits_rejected(self):
         path = self.calibrate()
