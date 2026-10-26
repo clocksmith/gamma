@@ -13,6 +13,7 @@ from __future__ import annotations
 
 import ast
 import json
+import math
 import re
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -172,9 +173,26 @@ class LookupIndex:
 
 
 def decide(candidates: list[dict], thresholds: dict[str, float]) -> MatchResult:
+    if not candidates:
+        raise ValueError('a nonempty candidate ranking is required')
+    for name in ('min_score', 'min_margin'):
+        value = thresholds[name]
+        if type(value) not in (int, float) or not math.isfinite(value):
+            raise ValueError('finite score and margin thresholds are required')
+    if thresholds['min_margin'] < 0:
+        raise ValueError('margin threshold cannot be negative')
+    keys = [row['key'] for row in candidates]
+    if (any(type(key) is not str or not key for key in keys) or len(set(keys)) != len(keys)
+            or any(type(row['score']) not in (int, float) or not math.isfinite(row['score']) for row in candidates)):
+        raise ValueError('unique candidate identities and finite scores are required')
+    candidates = sorted(candidates, key=lambda row: (-row['score'], row['key']))
     best = candidates[0]
     second = candidates[1] if len(candidates) > 1 else {"key": None, "score": float("-inf")}
-    accept = best["score"] >= thresholds["min_score"] and best["score"] - second["score"] >= thresholds["min_margin"]
+    gap = best['score'] - second['score']
+    # A missing competitor or tied top score supplies no discrimination evidence,
+    # even when development calibration chose a zero minimum margin.
+    accept = (len(candidates) >= 2 and gap > 0 and best['score'] >= thresholds['min_score']
+              and gap >= thresholds['min_margin'])
     return MatchResult(
         decision="match" if accept else "abstain",
         key=best["key"] if accept else None,
