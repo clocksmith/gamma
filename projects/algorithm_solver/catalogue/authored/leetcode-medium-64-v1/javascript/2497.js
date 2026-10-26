@@ -7,7 +7,11 @@ function solve(vals, edges, k) {
   for (const value of vals) answer = Math.max(answer, value);
   if (k === 0) return answer;
   const neighbors = Array.from({ length: vals.length }, () => []);
+  const seenEdges = new Set();
   for (const [left, right] of edges) {
+    const edge = left < right ? `${left}:${right}` : `${right}:${left}`;
+    if (seenEdges.has(edge)) continue;
+    seenEdges.add(edge);
     if (vals[right] > 0) neighbors[left].push(vals[right]);
     if (vals[left] > 0) neighbors[right].push(vals[left]);
   }

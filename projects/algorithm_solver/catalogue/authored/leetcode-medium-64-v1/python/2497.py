@@ -7,7 +7,12 @@ def solve(vals: list[int], edges: list[list[int]], k: int) -> int:
     if k == 0:
         return answer
     neighbors = [[] for _ in vals]
+    seen_edges = set()
     for left, right in edges:
+        edge = (min(left, right), max(left, right))
+        if edge in seen_edges:
+            continue
+        seen_edges.add(edge)
         if vals[right] > 0:
             neighbors[left].append(vals[right])
         if vals[left] > 0:
