@@ -62,7 +62,7 @@ COMPARISON_POLICIES = {
 
 
 def numeric(value,lo,hi,name,decimal_places=None):
-    need(type(value) in (int,float) and isfinite(value) and lo<=value<=hi,
+    need(type(value) in (int,float) and lo<=value<=hi and isfinite(value),
          f'{name} must be a finite number in [{lo}, {hi}]')
     if decimal_places is not None:
         scaled=Decimal(str(value))*10**decimal_places
@@ -109,7 +109,7 @@ def simple_graph(n,edges,connected=False,tree=False):
 
 
 def parent_tree(parents,root,name):
-    n=len(parents);need(parents[root]==-1,f'{name}[root] == -1');children=[[] for _ in parents]
+    n=len(parents);integer(parents[root],-1,-1,f'{name}[root]');children=[[] for _ in parents]
     for node,parent in enumerate(parents):
         if node==root: continue
         integer(parent,0,n-1,f'{name}[i]');need(parent!=node,'node is not its own parent');children[parent].append(node)
@@ -401,3 +401,368 @@ def validate(pid,args):
     elif pid==2732:matrix(a,1,10000,1,5,0,1,'grid')
     elif pid==2851:text(a,2,500000,LOWER,'s');text(args[1],len(a),len(a),LOWER,'t');integer(args[2],1,10**15,'k')
     else:raise DomainError(f'expanded validator missing {pid}')
+
+
+def expected(pid,args):
+    """Independent definition-level answers; deliberately no source imports."""
+    validate(pid,args)
+    if pid not in ORACLE_IDS:raise ValueError(f'no expanded independent oracle for {pid}')
+    a=args[0]
+    if pid==171:
+        result=0
+        for c in a:result=result*26+ord(c)-64
+        return result
+    if pid==190:return int(format(a,'032b')[::-1],2)
+    if pid==191:return bin(a).count('1')
+    if pid==205:return len(set(a))==len(set(args[1]))==len(set(zip(a,args[1])))
+    if pid==231:return a>0 and a&(a-1)==0
+    if pid==258:
+        while a>=10:a=sum(map(int,str(a)))
+        return a
+    if pid==263:
+        if a<=0:return False
+        for prime in (2,3,5):
+            while a%prime==0:a//=prime
+        return a==1
+    if pid==405:return format(a%(2**32),'x')
+    if pid==448:return sorted(set(range(1,len(a)+1))-set(a))
+    if pid in (461,2220):return bin(a^args[1]).count('1')
+    if pid==1275:return _tic_winner(a)
+    if pid==1310:
+        prefix=[0]
+        for x in a:prefix.append(prefix[-1]^x)
+        return [prefix[r+1]^prefix[l] for l,r in args[1]]
+    if pid==1347:return sum((Counter(a)-Counter(args[1])).values())
+    if pid==1432:
+        values=[]
+        for old in string.digits:
+            for new in string.digits:
+                changed=str(a).replace(old,new)
+                if changed[0]!='0':values.append(int(changed))
+        return max(values)-min(values)
+    if pid==1447:return [f'{p}/{q}' for q in range(2,a+1) for p in range(1,q) if gcd(p,q)==1]
+    if pid==1451:
+        result=' '.join(sorted(a.lower().split(' '),key=len));return result[0].upper()+result[1:]
+    if pid==1456:
+        k=args[1];prefix=[0]
+        for c in a:prefix.append(prefix[-1]+(c in 'aeiou'))
+        return max(prefix[i+k]-prefix[i] for i in range(len(a)-k+1))
+    if pid==1491:return float(Fraction(sum(a)-max(a)-min(a),len(a)-2))
+    if pid==1497:
+        counts=Counter(x%args[1] for x in a);k=args[1]
+        return all(count%2==0 if (2*r)%k==0 else count==counts[k-r] for r,count in counts.items())
+    if pid==1583:
+        n,prefs,pairs=args;partner={}
+        for x,y in pairs:partner[x]=y;partner[y]=x
+        rank=[{v:i for i,v in enumerate(row)} for row in prefs]
+        return sum(any(rank[x][u]<rank[x][partner[x]] and rank[u][x]<rank[u][partner[u]] for u in prefs[x]) for x in range(n))
+    if pid==1604:
+        times=defaultdict(list)
+        for name,time in zip(a,args[1]):times[name].append(clock(time))
+        return sorted(name for name,visits in times.items() if any(y-x<=60 for x,y in zip(sorted(visits),sorted(visits)[2:])))
+    if pid==1615:
+        adj=[set() for _ in range(a)]
+        for u,v in args[1]:adj[u].add(v);adj[v].add(u)
+        return max(len(adj[u])+len(adj[v])-(v in adj[u]) for u in range(a) for v in range(u+1,a))
+    if pid==1616:
+        def joinable(first,second):
+            left,right=0,len(first)-1
+            while left<right and first[left]==second[right]:left+=1;right-=1
+            return any(s[left:right+1]==s[left:right+1][::-1] for s in (first,second))
+        return joinable(*args) or joinable(*reversed(args))
+    if pid==1619:
+        trimmed=sorted(a)[len(a)//20:-len(a)//20];return float(Fraction(sum(trimmed),len(trimmed)))
+    if pid==1663:
+        remaining=args[1];letters=[]
+        for position in range(a):
+            smallest=max(1,remaining-26*(a-position-1));letters.append(chr(96+smallest));remaining-=smallest
+        return ''.join(letters)
+    if pid==1700:
+        counts=Counter(a)
+        for sandwich in args[1]:
+            if not counts[sandwich]:break
+            counts[sandwich]-=1
+        return sum(counts.values())
+    if pid==1704:return sum(c.lower() in 'aeiou' for c in a[:len(a)//2])==sum(c.lower() in 'aeiou' for c in a[len(a)//2:])
+    if pid==1736:return max(_time_options(a))
+    if pid==1738:
+        columns=[0]*len(a[0]);values=[]
+        for row in a:
+            prefix=0
+            for c,v in enumerate(row):columns[c]^=v;prefix^=columns[c];values.append(prefix)
+        return sorted(values,reverse=True)[args[1]-1]
+    if pid==1829:
+        total=0
+        for x in a:total^=x
+        mask=2**args[1]-1;result=[]
+        for x in reversed(a):result.append(total^mask);total^=x
+        return result
+    if pid==1935:return sum(not(set(word)&set(args[1])) for word in a.split(' '))
+    if pid==1946:
+        result=list(a);begun=False
+        for i,c in enumerate(a):
+            replacement=str(args[1][int(c)])
+            if replacement>c:begun=True
+            if begun and replacement<c:break
+            if begun:result[i]=replacement
+        return ''.join(result)
+    if pid==1963:
+        balance=minimum=0
+        for c in a:balance+=1 if c=='[' else -1;minimum=min(minimum,balance)
+        return (-minimum+1)//2
+    if pid==1992:return _rectangles(a)
+    if pid==1994:
+        counts=Counter(a);primes=(2,3,5,7,11,13,17,19,23,29);ways={0:1}
+        for value,count in sorted(counts.items()):
+            if value==1 or any(value%(p*p)==0 for p in primes):continue
+            mask=sum(1<<i for i,p in enumerate(primes) if value%p==0)
+            additions=defaultdict(int)
+            for used,total in ways.items():
+                if used&mask==0:additions[used|mask]=(additions[used|mask]+total*count)%MOD
+            for used,total in additions.items():ways[used]=(ways.get(used,0)+total)%MOD
+        return sum(v for mask,v in ways.items() if mask)*pow(2,counts[1],MOD)%MOD
+    if pid==2024:
+        best=0
+        for chosen in 'TF':
+            left=changed=0
+            for right,c in enumerate(a):
+                changed+=c!=chosen
+                while changed>args[1]:changed-=a[left]!=chosen;left+=1
+                best=max(best,right-left+1)
+        return best
+    if pid==2032:
+        counts=Counter(v for values in args for v in set(values));return sorted(v for v,c in counts.items() if c>=2)
+    if pid==2042:
+        nums=[int(token) for token in a.split() if token.isdigit()];return all(x<y for x,y in zip(nums,nums[1:]))
+    if pid==2064:
+        left,right=1,max(args[1])
+        while left<right:
+            middle=(left+right)//2
+            if sum((v+middle-1)//middle for v in args[1])<=a:right=middle
+            else:left=middle+1
+        return left
+    if pid==2068:
+        first,second=map(Counter,args);return all(abs(first[c]-second[c])<=3 for c in LOWER)
+    if pid==2087:
+        start,home,rows,cols=args;total=0
+        for first,last,costs in ((start[0],home[0],rows),(start[1],home[1],cols)):
+            if first<last:total+=sum(costs[first+1:last+1])
+            elif first>last:total+=sum(costs[last:first])
+        return total
+    if pid==2115:
+        recipes,ingredients,supplies=args;available=set(supplies)
+        while True:
+            added={recipe for recipe,items in zip(recipes,ingredients) if set(items)<=available}-available
+            if not added:break
+            available|=added
+        return sorted(set(recipes)&available)
+    if pid==2133:
+        wanted=set(range(1,len(a)+1));return all(set(row)==wanted for row in a) and all(set(col)==wanted for col in zip(*a))
+    if pid==2162:
+        start,move,push,target=args;costs=[]
+        for minute in range(100):
+            second=target-60*minute
+            if not 0<=second<=99:continue
+            digits=f'{minute:02}{second:02}'.lstrip('0');finger=str(start);cost=0
+            for digit in digits:cost+=push+(move if digit!=finger else 0);finger=digit
+            costs.append(cost)
+        return min(costs)
+    if pid==2194:return [c+r for c in UPPER[ord(a[0])-65:ord(a[3])-64] for r in string.digits[int(a[1]):int(a[4])+1]]
+    if pid==2197:return _merge_noncoprime(a)
+    if pid==2215:return [sorted(set(a)-set(args[1])),sorted(set(args[1])-set(a))]
+    if pid==2224:
+        remaining=clock(args[1])-clock(a);count=0
+        for step in (60,15,5,1):part,remaining=divmod(remaining,step);count+=part
+        return count
+    if pid==2249:
+        from math import isqrt
+        columns=defaultdict(list)
+        for cx,cy,r in a:
+            for x in range(cx-r,cx+r+1):
+                dy=isqrt(r*r-(x-cx)**2);columns[x].append((cy-dy,cy+dy))
+        count=0
+        for intervals in columns.values():
+            low=high=None
+            for left,right in sorted(intervals):
+                if low is None:low,high=left,right
+                elif left>high+1:count+=high-low+1;low,high=left,right
+                else:high=max(high,right)
+            count+=high-low+1
+        return count
+    if pid==2273:
+        result=[];previous=None
+        for word in a:
+            signature=tuple(sorted(Counter(word).items()))
+            if signature!=previous:result.append(word);previous=signature
+        return result
+    if pid==2288:
+        result=[]
+        for token in a.split(' '):
+            if re.fullmatch(r'\$[0-9]+',token):
+                cents=int(token[1:])*(100-args[1]);token=f'${cents//100}.{cents%100:02}'
+            result.append(token)
+        return ' '.join(result)
+    if pid==2293:
+        values=a[:]
+        while len(values)>1:values=[(min if i%2==0 else max)(values[2*i:2*i+2]) for i in range(len(values)//2)]
+        return values[0]
+    if pid==2303:
+        previous=hundredths=0
+        for upper,percent in a:
+            taxed=max(0,min(args[1],upper)-previous);hundredths+=taxed*percent;previous=upper
+        return float(Fraction(hundredths,100))
+    if pid==2306:
+        groups=defaultdict(set)
+        for idea in a:groups[idea[0]].add(idea[1:])
+        return sum(2*len(x-y)*len(y-x) for x,y in combinations(groups.values(),2))
+    if pid==2317:
+        # Operation only clears selected set bits. Retain each present bit in
+        # exactly one element to attain their union as the final XOR.
+        result=0
+        for value in a:result|=value
+        return result
+    if pid==2331:
+        nodes=common.tree_nodes(a,1,1000,0,3);values=[False]*len(nodes)
+        for i in range(len(nodes)-1,-1,-1):
+            value,left,right=nodes[i]
+            values[i]=bool(value) if left is None else (values[left] or values[right]) if value==2 else (values[left] and values[right])
+        return values[0]
+    if pid==2337:
+        first=[(i,c) for i,c in enumerate(a) if c!='_'];second=[(i,c) for i,c in enumerate(args[1]) if c!='_']
+        return len(first)==len(second) and all(c==d and (i>=j if c=='L' else i<=j) for (i,c),(j,d) in zip(first,second))
+    if pid==2343:return [sorted(range(len(a)),key=lambda i:(a[i][-trim:],i))[k-1] for k,trim in args[1]]
+    if pid==2354:
+        counts=Counter(bin(v).count('1') for v in set(a));return sum(c*d for x,c in counts.items() for y,d in counts.items() if x+y>=args[1])
+    if pid==2425:
+        result=0
+        if len(args[1])%2:
+            for v in a:result^=v
+        if len(a)%2:
+            for v in args[1]:result^=v
+        return result
+    if pid==2429:
+        # Lexicographically minimize XOR bits from most significant downward.
+        quota=bin(args[1]).count('1');result=0
+        for bit in range(30,-1,-1):
+            if quota and a&(1<<bit):result|=1<<bit;quota-=1
+        for bit in range(31):
+            if quota and result&(1<<bit)==0:result|=1<<bit;quota-=1
+        return result
+    if pid==2465:
+        values=sorted(a);return len({values[i]+values[-i-1] for i in range(len(a)//2)})
+    if pid==2469:
+        value=Fraction(str(a));return [float(value+Fraction(27315,100)),float(value*Fraction(9,5)+32)]
+    if pid==2470:
+        answer=0;k=args[1]
+        for start in range(len(a)):
+            current=1
+            for end in range(start,len(a)):
+                current=lcm(current,a[end])
+                if k%current:break
+                answer+=current==k
+        return answer
+    if pid==2544:return sum(int(c)*(1 if i%2==0 else -1) for i,c in enumerate(str(a)))
+    if pid==2553:return [int(c) for value in a for c in str(value)]
+    if pid==2570:
+        sums=Counter()
+        for rows in args:
+            for key,value in rows:sums[key]+=value
+        return [[key,value] for key,value in sorted(sums.items())]
+    if pid==2578:
+        # Largest decimal places belong to smallest digits, with balanced
+        # digit counts across the two numbers; alternating sorted digits does so.
+        digits=sorted(str(a));return int(''.join(digits[::2]) or '0')+int(''.join(digits[1::2]) or '0')
+    if pid==2586:return sum(word[0] in 'aeiou' and word[-1] in 'aeiou' for word in a[args[1]:args[2]+1])
+    raise AssertionError(f'expanded oracle missing {pid}')
+
+
+def agrees(pid,got,want):
+    if pid in (1491,1619,2303):return type(want) in (int,float) and isfinite(want) and abs(got-want)<=1e-5
+    if pid==2469:return type(want) is list and len(want)==2 and all(type(y) in (int,float) and isfinite(y) and abs(x-y)<=1e-5 for x,y in zip(got,want))
+    if pid in (1447,1992,2032,2115):
+        try:return type(want) is list and common.exact(sorted(got),sorted(want))
+        except TypeError:return False
+    if pid==2215:
+        try:return type(want) is list and len(want)==2 and all(type(y) is list and common.exact(sorted(x),sorted(y)) for x,y in zip(got,want))
+        except TypeError:return False
+    return common.exact(got,want)
+
+
+def admit_case(pid,case):
+    original=deepcopy(case)
+    try:
+        need(type(case) is dict and set(case)=={'args','expected','compare'},'case fields are args,expected,compare')
+        need(case['compare']=='return','comparison is return');validate(pid,case['args'])
+    except DomainError as error:return {'status':'rejected-domain','reason':str(error),'original':original}
+    if pid not in ORACLE_IDS:return {'status':'domain-valid-oracle-unreviewed','original':original}
+    wanted=expected(pid,case['args']);corrected=deepcopy(case);corrected['expected']=wanted
+    return {'status':'oracle-confirmed' if agrees(pid,wanted,case['expected']) else 'oracle-corrected',
+        'original':original,'case':corrected,'comparison_policy':COMPARISON_POLICIES.get(pid,'exact'),
+        'reason':'independent statement-level oracle; no candidate source or observation consulted'}
+
+
+def public_examples(pid,raw):
+    clean=re.sub(r'</?(?:p|pre|div|li|ul|ol|br)\b[^>]*>','\n',raw.decode())
+    clean=html.unescape(re.sub('<[^>]*>','',clean)).replace('\xa0',' ')
+    class Names(ast.NodeTransformer):
+        def visit_Name(self,node):
+            if node.id not in ('true','false','null'):raise ValueError('unexpected bare example token')
+            return ast.copy_location(ast.Constant({'true':True,'false':False,'null':None}[node.id]),node)
+    reviewed=[]
+    for match in re.finditer(r'Input:\s*(.*?)\s*Output:\s*(.*?)(?=Explanation:|Explantion:|Explaination:|Example\s*\d+:|Constraints:|$)',clean,re.S):
+        call=ast.parse('f('+match[1].strip()+')',mode='eval').body
+        if not isinstance(call,ast.Call) or call.args or not call.keywords or any(k.arg is None for k in call.keywords):raise ValueError('unsupported public example argument syntax')
+        args=[ast.literal_eval(Names().visit(k.value)) for k in call.keywords]
+        if pid in (2331,2458):args[0]={'__tree_node__':args[0]}
+        if pid==1721:args[0]={'__list_node__':args[0]}
+        validate(pid,args)
+        row={'args':args,'domain_checked':True}
+        if pid in ORACLE_IDS:
+            want=ast.literal_eval(Names().visit(ast.parse(match[2].strip(),mode='eval')).body)
+            got=expected(pid,args)
+            if not agrees(pid,got,want):raise ValueError(f'expanded oracle/public example mismatch {pid}: {got!r} != {want!r}')
+            row.update(expected=got,public_expected=want,oracle_checked=True)
+        reviewed.append(row)
+    if not reviewed:raise ValueError(f'no public examples for {pid}')
+    return reviewed
+
+
+def sha(raw):return hashlib.sha256(raw).hexdigest()
+
+
+def audit(freeze,gate_path,output):
+    from .boundary_policy import authorize_before_open
+    freeze=Path(freeze);contract_raw=(freeze/'contract.json').read_bytes()
+    need(sha(contract_raw)=='38aa4b0b1e6e205c47342da786c9dc25ff9f6c10a77511ae831ed0a99c3bcdd5',
+         'audit requires the exact expanded diagnostic freeze-v1 contract')
+    contract=json.loads(contract_raw)
+    gate=json.loads(Path(gate_path).read_text());jobs={j['id']:j for j in contract['jobs'] if j['id'] in IDS}
+    need(set(jobs)==IDS,'expanded freeze contains all 114 selected IDs')
+    output=Path(output);output.mkdir(parents=True,exist_ok=False)
+    report={'schema':'gamma.expanded-case-admission.v1','freeze_contract_sha256':sha(contract_raw),
+        'module_sha256':sha(Path(__file__).read_bytes()),'helper_module_sha256':sha(Path(common.__file__).read_bytes()),
+        'candidate_sources_opened':False,'candidate_observations_opened':False,'candidate_executions':0,
+        'diagnostic_failure_categories_consulted':True,
+        'automatic_promotion':False,'new_qualifications':0,'problems':[]}
+    for pid,job in sorted(jobs.items()):
+        authorize_before_open(f'leetcode:{pid}',gate['artifact_paths'],gate['trusted_hashes'],language='python',payload_kind='statement')
+        raw=Path(job['statement']['path']).read_bytes();need(sha(raw)==job['statement']['sha256'],'pinned statement hash matches')
+        examples=public_examples(pid,raw)
+        authorize_before_open(f'leetcode:{pid}',gate['artifact_paths'],gate['trusted_hashes'],language='python')
+        path=freeze/job['tests'];need(path.stat().st_size<=8*1024**2,'case file <=8 MiB');raw=path.read_bytes();need(sha(raw)==job['tests_raw_sha256'],'pinned historical tests hash matches')
+        cases=json.loads(raw);decisions=[dict(index=i,**admit_case(pid,case)) for i,case in enumerate(cases)]
+        payload={'id':pid,'statement':job['statement'],'original_tests_sha256':sha(raw),'public_examples':examples,
+                 'comparison_policy':COMPARISON_POLICIES.get(pid,'exact'),'decisions':decisions}
+        encoded=json.dumps(payload,sort_keys=True,separators=(',',':'),allow_nan=False).encode()+b'\n';(output/f'{pid}.json').write_bytes(encoded)
+        report['problems'].append({'id':pid,'case_count':len(cases),'public_examples':len(examples),'public_oracle_examples':sum(x.get('oracle_checked',False) for x in examples),
+            'counts':dict(Counter(d['status'] for d in decisions)),
+            'rejection_reasons':dict(Counter(d['reason'] for d in decisions if d['status']=='rejected-domain')),
+            'artifact':f'{pid}.json','sha256':sha(encoded)})
+    report['counts']=dict(sum((Counter(r['counts']) for r in report['problems']),Counter()))
+    (output/'report.json').write_text(json.dumps(report,indent=2)+'\n');return report
+
+
+if __name__=='__main__':
+    parser=argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--freeze',required=True);parser.add_argument('--gate',dest='gate_path',required=True);parser.add_argument('--output',required=True)
+    result=audit(**vars(parser.parse_args()));print(json.dumps({'problems':len(result['problems']),'counts':result['counts']}))
