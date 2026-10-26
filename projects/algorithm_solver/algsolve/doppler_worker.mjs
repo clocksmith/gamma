@@ -3,6 +3,7 @@ import { readFile } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
 import { createInterface } from 'node:readline';
 import { pathToFileURL } from 'node:url';
+import { createRecognitionSession } from './doppler_session.mjs';
 
 console.log = console.error; // stdout is exclusively the response protocol.
 console.info = console.error;
@@ -17,11 +18,9 @@ globalThis.fetch = (input, options) => {
   return localFetch(input, options);
 };
 const { load } = await import(new URL('src/client/doppler-api.js', root));
-const models = new Map();
 const hash = value => createHash('sha256').update(JSON.stringify(value)).digest('hex');
 
 async function modelFor(operation) {
-  if (models.has(operation)) return models.get(operation);
   const spec = config[operation];
   if (!spec) throw new Error(`No ${operation} model configured`);
   const bytes = await readFile(`${spec.path}/manifest.json`);
@@ -32,53 +31,10 @@ async function modelFor(operation) {
     cache: false, isolatedLoader: true, onProgress() {},
     runtimeConfig: spec.runtime_config ?? {},
   });
-  models.set(operation, model);
   return model;
 }
 
-async function execute(request) {
-  const started = performance.now();
-  if (!['embedding', 'rerank'].includes(request.operation)) throw new Error('Unknown operation');
-  const model = await modelFor(request.operation);
-  const loaded = performance.now();
-  let output;
-  if (request.operation === 'embedding') {
-    if (!Array.isArray(request.texts) || !request.texts.length || request.texts.length > 32
-        || request.texts.some(t => typeof t !== 'string' || !t.trim())) {
-      throw new Error('Embedding requires 1–32 nonempty texts');
-    }
-    const rows = [];
-    for (const text of request.texts) {
-      const tokens = model.advanced.tokenizeText(text);
-      // Match Gamma's existing encoder's right truncation, without re-tokenizing.
-      const inputIds = tokens.slice(0, config.max_tokens);
-      const result = await model.embedWithEvidence(text, { inputIds });
-      if (!inputIds.length || result.tokens.length !== inputIds.length
-          || inputIds.some((token, index) => result.tokens[index] !== token)) {
-        throw new Error('Doppler executed different embedding tokens than requested');
-      }
-      rows.push({
-        embedding: Array.from(result.embedding), tokens: result.tokens.length,
-        truncated: tokens.length > config.max_tokens,
-        backend: result.backendIdentity,
-      });
-    }
-    output = { texts: request.texts, rows };
-  } else {
-    if (typeof request.query !== 'string' || !request.query.trim()
-        || !Array.isArray(request.documents) || !request.documents.length
-        || request.documents.length > 10
-        || request.documents.some(d => typeof d !== 'string' || !d.trim())) {
-      throw new Error('Reranking requires a query and 1–10 nonempty documents');
-    }
-    const result = await model.rerankWithEvidence(request.query, request.documents);
-    output = { query: result.query, ranking: result.ranking, backend: result.backendIdentity };
-  }
-  return {
-    output, input_sha256: hash(request),
-    load_ms: loaded - started, execution_ms: performance.now() - loaded,
-  };
-}
+const session = createRecognitionSession({ loadModel: modelFor, maxTokens: config.max_tokens });
 
 try {
   // Sequential execution retains models and avoids cross-request runtime races.
@@ -87,7 +43,9 @@ try {
     try {
       request = JSON.parse(line);
       if (!Number.isSafeInteger(request.id)) throw new Error('Request id required');
-      const result = await execute(request);
+      const result = await session.request(request);
+      result.input_sha256 = hash(request);
+      result.execution_surface = { kind: 'node', version: process.version };
       process.stdout.write(JSON.stringify({ id: request.id, ok: true, result }) + '\n');
     } catch (error) {
       process.stdout.write(JSON.stringify({
@@ -99,7 +57,7 @@ try {
     }
   }
 } finally {
-  for (const model of models.values()) await model.unload();
+  await session.close();
 }
 // The Node WebGPU provider may retain native handles after model cleanup.
 process.exit(process.exitCode ?? 0);

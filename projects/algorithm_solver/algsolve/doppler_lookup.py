@@ -257,6 +257,7 @@ def main():
     parser.add_argument('--doppler-root', type=Path, required=True)
     parser.add_argument('--embedding-model', type=Path, required=True)
     parser.add_argument('--reranker-model', type=Path)
+    parser.add_argument('--surface', choices=('node', 'browser'), default='node')
     parser.add_argument('--rerank', action='store_true', help='Enable scoring, separately calibrated')
     parser.add_argument('--runtime-config', type=Path, help='Explicit per-role runtime configs: embedding/rerank')
     parser.add_argument('--index', type=Path, required=True)
@@ -277,7 +278,8 @@ def main():
         parser.error('--rerank requires --reranker-model')
     configs = json.loads(args.runtime_config.read_text()) if args.runtime_config else {}
     with DopplerRuntime(args.doppler_root, args.embedding_model, args.reranker_model,
-                        embedding_config=configs.get('embedding'), reranker_config=configs.get('rerank')) as runtime:
+                        embedding_config=configs.get('embedding'), reranker_config=configs.get('rerank'),
+                        surface=args.surface) as runtime:
         if args.operation == 'build':
             print(json.dumps(build_index(runtime, args.entries, args.catalog, args.index,
                                          reference_vectors=args.reference_vectors,

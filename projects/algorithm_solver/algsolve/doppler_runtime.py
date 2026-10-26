@@ -19,6 +19,8 @@ from .records import LANE_ROOT
 from .rerank import scores_from_output
 
 WORKER = Path(__file__).with_name('doppler_worker.mjs')
+SESSION = Path(__file__).with_name('doppler_session.mjs')
+BROWSER_WORKER = Path(__file__).with_name('doppler_browser_worker.mjs')
 
 
 def sha(path):
@@ -28,9 +30,12 @@ def sha(path):
 class DopplerRuntime:
     """Own one subprocess and both model handles; close on errors or cancellation."""
     def __init__(self, root, embedding_model, reranker_model=None, *, timeout=90,
-                 embedding_config=None, reranker_config=None, log_dir=None):
+                 embedding_config=None, reranker_config=None, log_dir=None, surface='node'):
         if not 0 < timeout <= 600:
             raise ValueError('Doppler timeout must be in (0, 600]')
+        if surface not in ('node', 'browser'):
+            raise ValueError('Doppler surface must be node or browser')
+        self.worker = WORKER if surface == 'node' else BROWSER_WORKER
         root = Path(root).resolve(strict=True)
         (root / 'src/client/doppler-api.js').resolve(strict=True)
         self.config = {'root': str(root), 'max_tokens': MAX_TOKENS}
@@ -47,7 +52,8 @@ class DopplerRuntime:
         self.identity = {
             'runtime': 'doppler', 'revision': revision,
             'source_diff_sha256': hashlib.sha256(diff).hexdigest(),
-            'worker_sha256': sha(WORKER), 'max_tokens': MAX_TOKENS,
+            'worker_sha256': sha(self.worker), 'session_sha256': sha(SESSION),
+            'surface': surface, 'max_tokens': MAX_TOKENS,
             'query_instruction': QUERY_INSTRUCTION,
             'models': {role: {k: v for k, v in self.config[role].items() if k != 'path'}
                        for role in ('embedding', 'rerank') if role in self.config},
@@ -68,7 +74,7 @@ class DopplerRuntime:
         config_path.write_text(json.dumps(self.config, allow_nan=False))
         self._log = (self._directory/'stderr.log').open('wb')
         self.process = subprocess.Popen(
-            ['node', str(WORKER), str(config_path)], stdin=subprocess.PIPE,
+            ['node', str(self.worker), str(config_path)], stdin=subprocess.PIPE,
             stdout=subprocess.PIPE, stderr=self._log, start_new_session=True, bufsize=0)
 
     def _request(self, operation, **payload):

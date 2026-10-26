@@ -1,0 +1,483 @@
+{
+  "schema": "gamma.doppler-node-browser-probe.v1",
+  "passed": true,
+  "probe_sha256": "59c332f2b38eb383f9db8c860946e16c3b3aa23e2b1518c7f02d068feafbdcaa",
+  "cases": [
+    [
+      "pair",
+      "Find two positions in an integer array whose values sum to a target.",
+      [
+        "Return the indices of two array elements whose sum equals the target.",
+        "Return the length of the longest increasing subsequence."
+      ]
+    ],
+    [
+      "islands",
+      "Count the connected groups of land in a binary grid using four-direction adjacency.",
+      [
+        "Return the number of four-connected islands in a grid of land and water.",
+        "Return the maximum sum of a contiguous subarray."
+      ]
+    ],
+    [
+      "brackets",
+      "Determine whether parentheses and square and curly brackets are correctly nested and closed.",
+      [
+        "Check whether a string of brackets has matching opening and closing types in proper nesting order.",
+        "Sort the integers of an array in ascending order."
+      ]
+    ]
+  ],
+  "surfaces": {
+    "node": {
+      "identity": {
+        "runtime": "doppler",
+        "revision": "e969a17dd3d53be3b500b86a13fbc33cc9c5119f",
+        "source_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "worker_sha256": "d16340e0dc8937ecdd0410ea1ef50d2e966ec31b46f7dc66f372920e8ea2ae50",
+        "session_sha256": "122bef5a9cddc20d21ef214dae539f15b92124a8223322351541e15009aa71b9",
+        "surface": "node",
+        "max_tokens": 1024,
+        "query_instruction": "Instruct: Given a programming problem, retrieve the identical problem\nQuery: ",
+        "models": {
+          "embedding": {
+            "manifest_sha256": "aa8b96509f17ba0c949aee6891abd0459883d0c4be761f666242240a97e9d979",
+            "runtime_config": {}
+          },
+          "rerank": {
+            "manifest_sha256": "e07c809b283dfd7f7a2164d722f3fc65738a31adc5913295660988d1d9a5c406",
+            "runtime_config": {}
+          }
+        }
+      },
+      "query_receipt": {
+        "load_ms": 739.8608609999999,
+        "execution_ms": 242.67047100000013,
+        "input_sha256": "fce1b9ab2b888dd76d6b70d1f747eddc18835fb72977ec8c79f9cfc10e990358",
+        "execution_surface": {
+          "kind": "node",
+          "version": "v22.22.1"
+        },
+        "total_ms": 1299.4714000087697,
+        "embedding_rows": [
+          {
+            "tokens": 30,
+            "truncated": false,
+            "backend": {
+              "backend": "webgpu",
+              "adapter": {
+                "vendor": "amd",
+                "architecture": "rdna-3",
+                "device": "radeon-8060s-graphics-radv-strix-halo-",
+                "description": "radv: Mesa 26.0.3-1ubuntu1"
+              },
+              "hasF16": true,
+              "hasSubgroups": true,
+              "maxBufferSize": 4294967292,
+              "deviceEpoch": 0,
+              "kernelPathId": "qwen-3-embedding-0-6b-q4k-ehf16-af32-execution-inline",
+              "kernelPathSource": "none",
+              "executionPlanId": "primary",
+              "activationDtype": "f32"
+            }
+          }
+        ]
+      },
+      "document_receipt": {
+        "load_ms": 0.002864999999928841,
+        "execution_ms": 151.21360000000004,
+        "input_sha256": "a6fcf42c1b53648a0018d1cc04d8b4ee1641e4e669fc680523d005c7ea8c9879",
+        "execution_surface": {
+          "kind": "node",
+          "version": "v22.22.1"
+        },
+        "total_ms": 155.30393199878745,
+        "embedding_rows": [
+          {
+            "tokens": 14,
+            "truncated": false,
+            "backend": {
+              "backend": "webgpu",
+              "adapter": {
+                "vendor": "amd",
+                "architecture": "rdna-3",
+                "device": "radeon-8060s-graphics-radv-strix-halo-",
+                "description": "radv: Mesa 26.0.3-1ubuntu1"
+              },
+              "hasF16": true,
+              "hasSubgroups": true,
+              "maxBufferSize": 4294967292,
+              "deviceEpoch": 0,
+              "kernelPathId": "qwen-3-embedding-0-6b-q4k-ehf16-af32-execution-inline",
+              "kernelPathSource": "none",
+              "executionPlanId": "primary",
+              "activationDtype": "f32"
+            }
+          },
+          {
+            "tokens": 11,
+            "truncated": false,
+            "backend": {
+              "backend": "webgpu",
+              "adapter": {
+                "vendor": "amd",
+                "architecture": "rdna-3",
+                "device": "radeon-8060s-graphics-radv-strix-halo-",
+                "description": "radv: Mesa 26.0.3-1ubuntu1"
+              },
+              "hasF16": true,
+              "hasSubgroups": true,
+              "maxBufferSize": 4294967292,
+              "deviceEpoch": 0,
+              "kernelPathId": "qwen-3-embedding-0-6b-q4k-ehf16-af32-execution-inline",
+              "kernelPathSource": "none",
+              "executionPlanId": "primary",
+              "activationDtype": "f32"
+            }
+          }
+        ]
+      },
+      "cases": [
+        {
+          "id": "pair",
+          "scores": [
+            6.689435005187988,
+            -4.050762176513672
+          ],
+          "expected_first": true,
+          "receipt": {
+            "load_ms": 1296.6912150000003,
+            "execution_ms": 1613.9649640000002,
+            "input_sha256": "258d4d33271065eb236c0bb4a086680ed35ccceff9fe53d64a9b160d6f43e0a4",
+            "execution_surface": {
+              "kind": "node",
+              "version": "v22.22.1"
+            },
+            "total_ms": 2911.182654002914,
+            "backend": {
+              "backend": "webgpu",
+              "adapter": {
+                "vendor": "amd",
+                "architecture": "rdna-3",
+                "device": "radeon-8060s-graphics-radv-strix-halo-",
+                "description": "radv: Mesa 26.0.3-1ubuntu1"
+              },
+              "hasF16": true,
+              "hasSubgroups": true,
+              "maxBufferSize": 4294967292,
+              "deviceEpoch": 0,
+              "kernelPathId": "qwen-3-reranker-0-6b-f16-af32-execution-inline",
+              "kernelPathSource": "none",
+              "executionPlanId": "primary",
+              "activationDtype": "f32"
+            }
+          }
+        },
+        {
+          "id": "islands",
+          "scores": [
+            7.524527549743652,
+            -8.298287868499756
+          ],
+          "expected_first": true,
+          "receipt": {
+            "load_ms": 0.0011020000001735752,
+            "execution_ms": 1492.3396979999998,
+            "input_sha256": "285381be7cf8a54108370522a8db5ff2876cdd73de0ed921f9cfe4c9f60f2e40",
+            "execution_surface": {
+              "kind": "node",
+              "version": "v22.22.1"
+            },
+            "total_ms": 1492.8511549951509,
+            "backend": {
+              "backend": "webgpu",
+              "adapter": {
+                "vendor": "amd",
+                "architecture": "rdna-3",
+                "device": "radeon-8060s-graphics-radv-strix-halo-",
+                "description": "radv: Mesa 26.0.3-1ubuntu1"
+              },
+              "hasF16": true,
+              "hasSubgroups": true,
+              "maxBufferSize": 4294967292,
+              "deviceEpoch": 0,
+              "kernelPathId": "qwen-3-reranker-0-6b-f16-af32-execution-inline",
+              "kernelPathSource": "none",
+              "executionPlanId": "primary",
+              "activationDtype": "f32"
+            }
+          }
+        },
+        {
+          "id": "brackets",
+          "scores": [
+            6.044239044189453,
+            -9.442604064941406
+          ],
+          "expected_first": true,
+          "receipt": {
+            "load_ms": 0.0013929999995525577,
+            "execution_ms": 1242.4776700000002,
+            "input_sha256": "dd4d6076d8c94dbe6c3e11ec0faf64b17900494daf411330eaacf189737312ce",
+            "execution_surface": {
+              "kind": "node",
+              "version": "v22.22.1"
+            },
+            "total_ms": 1242.9661730129737,
+            "backend": {
+              "backend": "webgpu",
+              "adapter": {
+                "vendor": "amd",
+                "architecture": "rdna-3",
+                "device": "radeon-8060s-graphics-radv-strix-halo-",
+                "description": "radv: Mesa 26.0.3-1ubuntu1"
+              },
+              "hasF16": true,
+              "hasSubgroups": true,
+              "maxBufferSize": 4294967292,
+              "deviceEpoch": 0,
+              "kernelPathId": "qwen-3-reranker-0-6b-f16-af32-execution-inline",
+              "kernelPathSource": "none",
+              "executionPlanId": "primary",
+              "activationDtype": "f32"
+            }
+          }
+        }
+      ],
+      "document_similarities": [
+        0.8765857219696045,
+        0.38508105278015137
+      ],
+      "embedding_expected_first": true,
+      "model_switch_embedding_max_abs": 0.0,
+      "physical_gpu": true
+    },
+    "browser": {
+      "identity": {
+        "runtime": "doppler",
+        "revision": "e969a17dd3d53be3b500b86a13fbc33cc9c5119f",
+        "source_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "worker_sha256": "eee2c88b7025889f5b10d692fa3fd18fb825dee42e5aa83ed86bb7285175ddf0",
+        "session_sha256": "122bef5a9cddc20d21ef214dae539f15b92124a8223322351541e15009aa71b9",
+        "surface": "browser",
+        "max_tokens": 1024,
+        "query_instruction": "Instruct: Given a programming problem, retrieve the identical problem\nQuery: ",
+        "models": {
+          "embedding": {
+            "manifest_sha256": "aa8b96509f17ba0c949aee6891abd0459883d0c4be761f666242240a97e9d979",
+            "runtime_config": {}
+          },
+          "rerank": {
+            "manifest_sha256": "e07c809b283dfd7f7a2164d722f3fc65738a31adc5913295660988d1d9a5c406",
+            "runtime_config": {}
+          }
+        }
+      },
+      "query_receipt": {
+        "load_ms": 2334.300000011921,
+        "execution_ms": 258.90000000596046,
+        "input_sha256": "fce1b9ab2b888dd76d6b70d1f747eddc18835fb72977ec8c79f9cfc10e990358",
+        "execution_surface": {
+          "kind": "browser",
+          "version": "146.0.7680.177"
+        },
+        "total_ms": 3896.3699220039416,
+        "embedding_rows": [
+          {
+            "tokens": 30,
+            "truncated": false,
+            "backend": {
+              "backend": "webgpu",
+              "adapter": {
+                "vendor": "amd",
+                "architecture": "rdna-3",
+                "device": "0x1586",
+                "description": "Radeon 8060S Graphics (RADV STRIX_HALO)"
+              },
+              "hasF16": true,
+              "hasSubgroups": true,
+              "maxBufferSize": 4294967292,
+              "deviceEpoch": 0,
+              "kernelPathId": "qwen-3-embedding-0-6b-q4k-ehf16-af32-execution-inline",
+              "kernelPathSource": "none",
+              "executionPlanId": "primary",
+              "activationDtype": "f32"
+            }
+          }
+        ]
+      },
+      "document_receipt": {
+        "load_ms": 0,
+        "execution_ms": 154.90000000596046,
+        "input_sha256": "a6fcf42c1b53648a0018d1cc04d8b4ee1641e4e669fc680523d005c7ea8c9879",
+        "execution_surface": {
+          "kind": "browser",
+          "version": "146.0.7680.177"
+        },
+        "total_ms": 166.688735014759,
+        "embedding_rows": [
+          {
+            "tokens": 14,
+            "truncated": false,
+            "backend": {
+              "backend": "webgpu",
+              "adapter": {
+                "vendor": "amd",
+                "architecture": "rdna-3",
+                "device": "0x1586",
+                "description": "Radeon 8060S Graphics (RADV STRIX_HALO)"
+              },
+              "hasF16": true,
+              "hasSubgroups": true,
+              "maxBufferSize": 4294967292,
+              "deviceEpoch": 0,
+              "kernelPathId": "qwen-3-embedding-0-6b-q4k-ehf16-af32-execution-inline",
+              "kernelPathSource": "none",
+              "executionPlanId": "primary",
+              "activationDtype": "f32"
+            }
+          },
+          {
+            "tokens": 11,
+            "truncated": false,
+            "backend": {
+              "backend": "webgpu",
+              "adapter": {
+                "vendor": "amd",
+                "architecture": "rdna-3",
+                "device": "0x1586",
+                "description": "Radeon 8060S Graphics (RADV STRIX_HALO)"
+              },
+              "hasF16": true,
+              "hasSubgroups": true,
+              "maxBufferSize": 4294967292,
+              "deviceEpoch": 0,
+              "kernelPathId": "qwen-3-embedding-0-6b-q4k-ehf16-af32-execution-inline",
+              "kernelPathSource": "none",
+              "executionPlanId": "primary",
+              "activationDtype": "f32"
+            }
+          }
+        ]
+      },
+      "cases": [
+        {
+          "id": "pair",
+          "scores": [
+            6.689435005187988,
+            -4.050762176513672
+          ],
+          "expected_first": true,
+          "receipt": {
+            "load_ms": 3942.9000000059605,
+            "execution_ms": 1266.5999999940395,
+            "input_sha256": "258d4d33271065eb236c0bb4a086680ed35ccceff9fe53d64a9b160d6f43e0a4",
+            "execution_surface": {
+              "kind": "browser",
+              "version": "146.0.7680.177"
+            },
+            "total_ms": 5221.551484981319,
+            "backend": {
+              "backend": "webgpu",
+              "adapter": {
+                "vendor": "amd",
+                "architecture": "rdna-3",
+                "device": "0x1586",
+                "description": "Radeon 8060S Graphics (RADV STRIX_HALO)"
+              },
+              "hasF16": true,
+              "hasSubgroups": true,
+              "maxBufferSize": 4294967292,
+              "deviceEpoch": 0,
+              "kernelPathId": "qwen-3-reranker-0-6b-f16-af32-execution-inline",
+              "kernelPathSource": "none",
+              "executionPlanId": "primary",
+              "activationDtype": "f32"
+            }
+          }
+        },
+        {
+          "id": "islands",
+          "scores": [
+            7.524527549743652,
+            -8.298287868499756
+          ],
+          "expected_first": true,
+          "receipt": {
+            "load_ms": 0,
+            "execution_ms": 1214.5,
+            "input_sha256": "285381be7cf8a54108370522a8db5ff2876cdd73de0ed921f9cfe4c9f60f2e40",
+            "execution_surface": {
+              "kind": "browser",
+              "version": "146.0.7680.177"
+            },
+            "total_ms": 1219.274064002093,
+            "backend": {
+              "backend": "webgpu",
+              "adapter": {
+                "vendor": "amd",
+                "architecture": "rdna-3",
+                "device": "0x1586",
+                "description": "Radeon 8060S Graphics (RADV STRIX_HALO)"
+              },
+              "hasF16": true,
+              "hasSubgroups": true,
+              "maxBufferSize": 4294967292,
+              "deviceEpoch": 0,
+              "kernelPathId": "qwen-3-reranker-0-6b-f16-af32-execution-inline",
+              "kernelPathSource": "none",
+              "executionPlanId": "primary",
+              "activationDtype": "f32"
+            }
+          }
+        },
+        {
+          "id": "brackets",
+          "scores": [
+            6.044239044189453,
+            -9.442604064941406
+          ],
+          "expected_first": true,
+          "receipt": {
+            "load_ms": 0,
+            "execution_ms": 1210.9000000059605,
+            "input_sha256": "dd4d6076d8c94dbe6c3e11ec0faf64b17900494daf411330eaacf189737312ce",
+            "execution_surface": {
+              "kind": "browser",
+              "version": "146.0.7680.177"
+            },
+            "total_ms": 1214.2837489955127,
+            "backend": {
+              "backend": "webgpu",
+              "adapter": {
+                "vendor": "amd",
+                "architecture": "rdna-3",
+                "device": "0x1586",
+                "description": "Radeon 8060S Graphics (RADV STRIX_HALO)"
+              },
+              "hasF16": true,
+              "hasSubgroups": true,
+              "maxBufferSize": 4294967292,
+              "deviceEpoch": 0,
+              "kernelPathId": "qwen-3-reranker-0-6b-f16-af32-execution-inline",
+              "kernelPathSource": "none",
+              "executionPlanId": "primary",
+              "activationDtype": "f32"
+            }
+          }
+        }
+      ],
+      "document_similarities": [
+        0.8765857219696045,
+        0.38508105278015137
+      ],
+      "embedding_expected_first": true,
+      "model_switch_embedding_max_abs": 0.0,
+      "physical_gpu": true
+    }
+  },
+  "embedding_max_abs_difference": 0.0,
+  "rerank_max_abs_difference": 0.0,
+  "recognition_qualified": false,
+  "scope": "Three synthetic integration probes; no catalogue, source, protected data or evaluation cohort read."
+}

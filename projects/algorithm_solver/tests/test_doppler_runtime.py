@@ -47,6 +47,17 @@ class RuntimeTests(unittest.TestCase):
                 with self.assertRaises(ValueError):
                     self.runtime.encode(['q'])
 
+    def test_surface_and_shared_code_are_bound_to_runtime_identity(self):
+        with patch('algsolve.doppler_runtime.subprocess.check_output', return_value=b''):
+            browser = DopplerRuntime(self.root, self.root, surface='browser', log_dir=self.root/'logs')
+        self.addCleanup(browser.close)
+        self.assertEqual(browser.identity['surface'], 'browser')
+        self.assertEqual(self.runtime.identity['surface'], 'node')
+        self.assertEqual(browser.identity['session_sha256'], self.runtime.identity['session_sha256'])
+        self.assertNotEqual(browser.identity['worker_sha256'], self.runtime.identity['worker_sha256'])
+        with self.assertRaisesRegex(ValueError, 'surface'):
+            DopplerRuntime(self.root, self.root, surface='unknown')
+
     def test_rerank_returns_original_order_and_rejects_wrong_documents(self):
         rows = [{'index': 1, 'document': 'b', 'score': 2.},
                 {'index': 0, 'document': 'a', 'score': 1.}]
