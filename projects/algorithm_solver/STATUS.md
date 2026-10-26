@@ -1,3 +1,5 @@
+> Historical definitions and dated evidence below are preserved. Current milestone IDs, gates and status are maintained in the [generated milestone view](catalogue/MILESTONES.md) from `catalogue/roadmap-v1.json`; do not update current status independently here. Original frozen gates remain binding.
+
 # Gamma: Algorithm Recognition & Composition
 
 ## Current v2 scorecard
