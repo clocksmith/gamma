@@ -26,7 +26,7 @@ Authority: owner_direction_2026-10-25 (agreed). Status: **not_qualified**. Gate 
 - All 4,081 frozen eligible IDs remain in the denominator: 8,162 JavaScript/Python slots, including blocked and protected gaps.
 - Consistent ordered-positional solve interface and pinned input/result, ordering, exception, numeric, Unicode, mutation/alias and complexity contracts; qualification binds source, adapter, interface, runtime and test hashes.
 
-Evidence: [catalogue-v25](#catalogue-v25), [catalogue-jupiter-reported](#catalogue-jupiter-reported)
+Evidence: [catalogue-v25](#catalogue-v25), [catalogue-jupiter-reported](#catalogue-jupiter-reported), [catalogue-jupiter943-metadata-20261026](#catalogue-jupiter943-metadata-20261026)
 
 ## D2: Qualified known-spec and one-description recognition
 
@@ -469,6 +469,18 @@ Source SHA-256: `c8bb3a9a4bdefe1dea1a263affb76283e285b4faaa3d088f88d2103ce2b1c5b
 - median_selections: 63.5 count.
 - p95_selections: 191 count.
 - singleton_selection_share: 54.2 percent.
+
+### catalogue-jupiter943-metadata-20261026
+
+Verification: **locally_verified_metadata**. Observed: 2026-10-26; recorded: 2026-10-26.
+
+Source: `source-backlog-audit-20261026/RECONCILIATION.json`.
+
+Read actual Jupiter catalogue metadata over SSH; snapshot SHA-256 9ab963740caad76bb15d602fb2ab93e2d010f2765605a9b9e63bbaa620dbb329 has 943 paired records marked qualified. Count and metadata identity verified; source availability, receipts, scientific qualification and publication are not inferred. Private catalogue and per-ID protection/status membership are not published.
+
+Source SHA-256: `f8c977ceecdcad8c3498eb02b41f90b56519c6a85f08e7a774aba1bc93bba676`.
+
+- paired_catalogue_status_records: 943/4081 (23.107% measured ratio) count.
 
 ## Maintenance
 
