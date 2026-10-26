@@ -1,1 +1,0 @@
-function solve(a){if(a.length===0){return 0;}let b=a[0].length;let c=0;for(const d of a){b=Math.min(b,d.length);let e=d[0];for(const f of d){if(f>0){c+=1;}e=Math.max(e,f);}c+=e;}for(let g=0;g<b;g+=1){let h=a[0][g];for(const i of a){h=Math.max(h,i[g]);}c+=h;}return c;}

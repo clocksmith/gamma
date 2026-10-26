@@ -1,5 +1,0 @@
-// Exact source slices at Acorn token boundaries; never parameterized templates.
-const fs=require('fs'),acorn=require('/usr/share/nodejs/acorn');
-const rows=JSON.parse(fs.readFileSync(process.argv[2]));const owners=new Map(),scores=new Map();
-for(const row of rows){const text=row.text,ts=[...acorn.tokenizer(text,{ecmaVersion:2022})].filter(t=>t.type.label!=='eof'),counts=new Map();for(let i=0;i<ts.length;i++)for(let n=1;n<=5&&i+n<=ts.length;n++){const s=text.slice(ts[i].start,ts[i+n-1].end);if(s.length<2||Buffer.byteLength(s)>96)continue;counts.set(s,(counts.get(s)||0)+1);}for(const [s,n]of counts){if(!owners.has(s)){owners.set(s,new Set());scores.set(s,new Map());}owners.get(s).add(row.id);scores.get(s).set(row.id,Math.max(n,scores.get(s).get(row.id)||0));}}
-const result=[...owners].filter(([s,o])=>o.size>=2).map(([s,o])=>({text:s,owners:o.size,frequency:[...scores.get(s).values()].reduce((a,b)=>a+b,0)}));result.sort((a,b)=>b.owners-a.owners||b.frequency-a.frequency||a.text.localeCompare(b.text));fs.writeFileSync(process.argv[3],JSON.stringify(result));console.log(JSON.stringify({source_variants:rows.length,candidates:result.length}));

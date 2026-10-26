@@ -1,3 +1,0 @@
-import assert from 'node:assert/strict';import test from 'node:test';import {fixture,host,action} from './helpers/smaller-game.mjs';
-test('legal equipment choices are independent of board array ordering',()=>{const a=fixture(),b=fixture();b.board.reverse();for(const m of [a,b]){m.players[0].runway=12;host(m,1,'fund');host(m,2,'fund');}const ids=m=>m.legalResolutions(0,'build').map(d=>d.decisionId).sort();assert.deepEqual(ids(a),ids(b));});
-test('a stale distant destination fails before payment',()=>{const m=fixture();m.players[0].runway=12;const d=action(m,0,'build');m.players[0].pieces.forEach(p=>p.tileId='fund');const before=m.snapshot();assert.throws(()=>m.applyResolution(0,d),/no longer legal/);assert.deepEqual(m.snapshot(),before);});

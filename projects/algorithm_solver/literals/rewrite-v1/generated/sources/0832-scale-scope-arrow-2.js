@@ -1,1 +1,0 @@
-const solve=a=>{const b=a.length;for(const c of a){let a=0;let d=b-1;while(a<d){if(c[a]===c[d]){c[a]=h(c[a]);c[d]=h(c[d]);}a+=1;d-=1;}if(a===d){c[a]=h(c[a]);}}return a;};function h(a){if(a%2===0){return a+1;}return a-1;}

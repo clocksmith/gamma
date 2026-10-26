@@ -1,2 +1,0 @@
-var a=function(a,b){const m=new Map();const c=b.length;for(let i=0;i<c;++i){m.set(b[i],i);}const d=(b,c,e)=>{if(e<=0){return null;}const f=a[b];const g=m.get(f);const h=d(b+1,c,g-c);const i=d(b+1+g-c,g+1,e-1-(g-c));return new TreeNode(f,h,i);};return d(0,0,c);};function solve(b,c){return a(b,c);}
-class TreeNode { constructor(val = 0, left = null, right = null) { this.val = val; this.left = left; this.right = right; } }

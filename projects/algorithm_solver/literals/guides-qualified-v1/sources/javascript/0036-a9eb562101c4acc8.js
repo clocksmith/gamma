@@ -1,1 +1,0 @@
-function solve(a){const b=Array.from({length:9},()=>new Set());const c=Array.from({length:9},()=>new Set());const d=Array.from({length:9},()=>new Set());for(let i=0;i<9;i++){for(let j=0;j<9;j++){const e=a[i][j];if(e==='.'){continue;}const f=Math.floor(i/3)*3+Math.floor(j/3);if(b[i].has(e)||c[j].has(e)||d[f].has(e)){return false;}b[i].add(e);c[j].add(e);d[f].add(e);}}return true;}

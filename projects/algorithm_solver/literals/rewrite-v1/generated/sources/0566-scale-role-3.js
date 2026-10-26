@@ -1,1 +1,0 @@
-function solve(a,b,c){const d=a.length;const e=a[0].length;const f=d*e;if(f!==b*c){return a;}const g=h(b,c,0);for(let i=0;i<f;i+=1){g[Math.floor(i/c)][i%c]=a[Math.floor(i/e)][i%e];}return g;}function h(a,b,c){const r=[];for(let i=0;i<a;i+=1){r.push(new Array(b).fill(c));}return r;}

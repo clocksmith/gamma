@@ -1,1 +1,0 @@
-const solve=(a,b)=>{const m={};for(let i=0;i<b.length;i+=1){m['$'+b[i]]=i;}const r=[];for(let i=0;i<a.length;i+=1){const b=a[i];r.push(['$'+b in m?m['$'+b]:1000+b,i,b]);}r.sort(h);const c=[];for(const x of r){c.push(x[2]);}return c;};function h(a,b){return a[0]-b[0]||a[1]-b[1];}

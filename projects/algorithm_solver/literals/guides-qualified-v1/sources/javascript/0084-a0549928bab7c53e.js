@@ -1,1 +1,0 @@
-function solve(a){let r=0;h(a,(x,y)=>{r=Math.max(r,x*y);});return r;}function h(a,f){const r=[];for(let i=0;i<=a.length;i+=1){const b=i===a.length?0:a[i];while(r.length>0&&a[r[r.length-1]]>b){const x=r.pop();const y=r.length===0?0:r[r.length-1]+1;f(a[x],i-y);}if(i<a.length){r.push(i);}}}

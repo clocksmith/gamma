@@ -1,2 +1,0 @@
-function h(a,b){const c=a.length;const m={};for(let i=0;i<c;i++){m[a[i]]=i;}const d=(a,c,e)=>{if(e<=0){return null;}const f=b[c+e-1];const g=m[f];const h=d(a,c,g-a);const i=d(g+1,c+g-a,e-1-(g-a));return new TreeNode(f,h,i);};return d(0,0,c);}function solve(a,b){return h(a,b);}
-class TreeNode { constructor(val = 0, left = null, right = null) { this.val = val; this.left = left; this.right = right; } }

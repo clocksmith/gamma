@@ -1,1 +1,0 @@
-const solve=a=>{const b=[];for(const c of a){if(c==='+'){b.push(b[b.length-1]+b[b.length-2]);}else if(c==='D'){b.push(b[b.length-1]*2);}else if(c==='C'){b.pop();}else{b.push(+c);}}let c=0;for(const a of b){c+=a;}return c;};

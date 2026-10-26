@@ -1,1 +1,0 @@
-const solve=(a,b)=>{const c=h(a,b);if(c<a.length&&a[c]===b){return c;}return-1;};function h(a,b){let c=0;let d=a.length;while(c<d){const e=c+Math.floor((d-c)/2);if(a[e]<b){c=e+1;}else{d=e;}}return c;}

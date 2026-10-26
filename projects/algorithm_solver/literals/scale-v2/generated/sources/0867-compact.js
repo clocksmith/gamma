@@ -1,1 +1,0 @@
-function solve(a){if(a.length===0){return[];}let b=a[0].length;for(const d of a){b=Math.min(b,d.length);}const c=[];for(let e=0;e<b;e+=1){const f=[];for(const g of a){f.push(g[e]);}c.push(f);}return c;}

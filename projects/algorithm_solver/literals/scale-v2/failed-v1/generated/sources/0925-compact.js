@@ -1,1 +1,0 @@
-function solve(a,b){const c=Array.from(a);const d=Array.from(b);let e=0;let f=0;while(e<c.length&&f<d.length){if(c[e]!==d[f]){return false;}let g=e+1;while(g<c.length&&c[g]===c[e]){g+=1;}let h=f+1;while(h<d.length&&d[h]===d[f]){h+=1;}if(g-e>h-f){return false;}e=g;f=h;}return e===c.length&&f===d.length;}

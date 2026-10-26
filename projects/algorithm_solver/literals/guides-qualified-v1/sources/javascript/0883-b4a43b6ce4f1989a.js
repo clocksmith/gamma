@@ -1,1 +1,0 @@
-function solve(a){if(a.length===0){return 0;}let b=a[0].length;let r=0;for(const x of a){b=Math.min(b,x.length);let a=x[0];for(const y of x){if(y>0){r+=1;}a=Math.max(a,y);}r+=a;}for(let i=0;i<b;i+=1){let b=a[0][i];for(const x of a){b=Math.max(b,x[i]);}r+=b;}return r;}

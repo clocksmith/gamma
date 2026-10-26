@@ -1,1 +1,0 @@
-function solve(a){const b=a.length;for(let i=0;i<b;i++){while(Number.isInteger(a[i])&&a[i]>0&&a[i]<=b&&a[a[i]-1]!==a[i]){const b=a[i]-1;const c=a[b];a[b]=a[i];a[i]=c;}}for(let i=0;i<b;i++){if(a[i]!==i+1){return i+1;}}return b+1;}

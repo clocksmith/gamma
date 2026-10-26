@@ -1,1 +1,0 @@
-function solve(a,b){if(b.length===0){return 0;}const c=new Array(b.length).fill(0);for(let a=1,d=0;a<b.length;a++){while(d>0&&b[a]!==b[d]){d=c[d-1];}if(b[a]===b[d]){d++;}c[a]=d;}for(let d=0,e=0;d<a.length;d++){while(e>0&&a[d]!==b[e]){e=c[e-1];}if(a[d]===b[e]){e++;}if(e===b.length){return d-e+1;}}return-1;}

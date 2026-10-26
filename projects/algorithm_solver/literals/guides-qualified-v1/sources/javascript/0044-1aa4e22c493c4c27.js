@@ -1,1 +1,0 @@
-function solve(a,b){let r=0;let n=0;let c=-1;let d=0;while(r<a.length){if(n<b.length&&(b[n]==='?'||b[n]===a[r])){r++;n++;}else if(n<b.length&&b[n]==='*'){c=n++;d=r;}else if(c!==-1){n=c+1;r=++d;}else{return false;}}while(n<b.length&&b[n]==='*'){n++;}return n===b.length;}

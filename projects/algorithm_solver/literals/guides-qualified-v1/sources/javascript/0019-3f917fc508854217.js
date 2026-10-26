@@ -1,1 +1,0 @@
-function solve(a,b){if(!Number.isInteger(b)||b<1){throw new RangeError('n must be a positive integer');}const m={next:a};let c=m;let d=m;for(let i=0;i<b;i++){c=c.next;if(c==null){throw new RangeError('n exceeds the list length');}}while(c.next!=null){c=c.next;d=d.next;}d.next=d.next.next;return m.next;}

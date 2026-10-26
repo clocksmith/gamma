@@ -1,0 +1,139 @@
+name: Prepare LeetCode 3623-4081 paired patch
+
+on:
+  push:
+    branches:
+      - artifact/leetcode-3623-4081-patch-20261026
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: prepare-leetcode-3623-4081-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - name: Checkout Gamma
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Restore pinned generator programs
+        shell: bash
+        env:
+          GENERATOR_PY_GZ_B64: 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
+          GENERATOR_JS_GZ_B64: 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
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import base64, gzip, os
+          from pathlib import Path
+          Path('/tmp/generate_leetcode_pairs.py').write_bytes(gzip.decompress(base64.b64decode(os.environ['GENERATOR_PY_GZ_B64'])))
+          Path('/tmp/generate_leetcode_javascript.cjs').write_bytes(gzip.decompress(base64.b64decode(os.environ['GENERATOR_JS_GZ_B64'])))
+          PY
+          python -m py_compile /tmp/generate_leetcode_pairs.py
+          node --check /tmp/generate_leetcode_javascript.cjs
+
+      - name: Fetch pinned doocs source ranges
+        shell: bash
+        run: |
+          set -euo pipefail
+          git clone --filter=blob:none --no-checkout https://github.com/doocs/leetcode.git /tmp/doocs-leetcode
+          git -C /tmp/doocs-leetcode sparse-checkout init --cone
+          git -C /tmp/doocs-leetcode sparse-checkout set \
+            solution/3600-3699 \
+            solution/3700-3799 \
+            solution/3800-3899 \
+            solution/3900-3999 \
+            solution/4000-4099
+          git -C /tmp/doocs-leetcode checkout f39d6eb98551c8b90713a26a70bf681494803ab9
+          test "$(git -C /tmp/doocs-leetcode rev-parse HEAD)" = "f39d6eb98551c8b90713a26a70bf681494803ab9"
+
+      - name: Install pinned TypeScript transpiler
+        run: npm install --no-save --ignore-scripts typescript@5.9.3
+
+      - name: Generate quarantined paired sources
+        shell: bash
+        run: |
+          set -euo pipefail
+          python /tmp/generate_leetcode_pairs.py \
+            --repo "$GITHUB_WORKSPACE" \
+            --upstream /tmp/doocs-leetcode \
+            --node-helper /tmp/generate_leetcode_javascript.cjs
+
+      - name: Verify exact source counts and syntax
+        shell: bash
+        run: |
+          set -euo pipefail
+          target="projects/algorithm_solver/catalogue/quarantined/leetcode-3623-4081-paired-v1"
+          test "$(find "$target/python" -maxdepth 1 -type f -name '*.py' | wc -l)" -eq 252
+          test "$(find "$target/javascript" -maxdepth 1 -type f -name '*.js' | wc -l)" -eq 252
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          report = json.loads(Path('projects/algorithm_solver/catalogue/quarantined/leetcode-3623-4081-paired-v1/generation-report.json').read_text())
+          assert report['status'] == 'passed', report
+          assert report['generated_pair_count'] == 252, report
+          assert report['python_syntax_checked'] == 252, report
+          assert report['javascript_syntax_checked'] == 252, report
+          PY
+          find "$target/python" -maxdepth 1 -type f -name '*.py' -print0 | xargs -0 -n 1 python -m py_compile
+          find "$target/javascript" -maxdepth 1 -type f -name '*.js' -print0 | xargs -0 -n 1 node --check
+          find "$target" -type d -name __pycache__ -prune -exec rm -rf {} +
+
+      - name: Build and independently apply-check patch
+        shell: bash
+        run: |
+          set -euo pipefail
+          target="projects/algorithm_solver/catalogue/quarantined/leetcode-3623-4081-paired-v1"
+          artifacts=/tmp/gamma-leetcode-3623-4081-artifacts
+          patch="$artifacts/gamma-leetcode-3623-4081-paired.patch"
+          mkdir -p "$artifacts"
+          git add -N -- "$target"
+          git diff --check -- "$target"
+          git diff --no-ext-diff --binary -- "$target" > "$patch"
+          test -s "$patch"
+
+          git worktree add --detach /tmp/gamma-patch-check HEAD
+          git -C /tmp/gamma-patch-check apply --check "$patch"
+          git -C /tmp/gamma-patch-check apply "$patch"
+          test "$(find "/tmp/gamma-patch-check/$target/python" -maxdepth 1 -type f -name '*.py' | wc -l)" -eq 252
+          test "$(find "/tmp/gamma-patch-check/$target/javascript" -maxdepth 1 -type f -name '*.js' | wc -l)" -eq 252
+          find "/tmp/gamma-patch-check/$target/python" -maxdepth 1 -type f -name '*.py' -print0 | xargs -0 -n 1 python -m py_compile
+          find "/tmp/gamma-patch-check/$target/javascript" -maxdepth 1 -type f -name '*.js' -print0 | xargs -0 -n 1 node --check
+
+          tar -czf "$artifacts/gamma-leetcode-3623-4081-paired-sources.tar.gz" -C "$GITHUB_WORKSPACE" "$target"
+          cp "$target/generation-report.json" "$artifacts/"
+          cp "$target/manifest.json" "$artifacts/"
+          cp "$target/source-list.csv" "$artifacts/"
+          cp "$target/README.md" "$artifacts/"
+          (
+            cd "$artifacts"
+            sha256sum gamma-leetcode-3623-4081-paired.patch \
+              gamma-leetcode-3623-4081-paired-sources.tar.gz \
+              generation-report.json manifest.json source-list.csv README.md \
+              > SHA256SUMS
+          )
+
+      - name: Upload patch artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: gamma-leetcode-3623-4081-paired-patch
+          path: /tmp/gamma-leetcode-3623-4081-artifacts/
+          if-no-files-found: error
+          retention-days: 7

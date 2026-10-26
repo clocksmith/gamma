@@ -1,1 +1,0 @@
-var a=function(a){const b=Array(101).fill(0);let r=0;for(const x of a){r+=b[x]++;}return r;};function solve(b){if(!Array.isArray(b)||b.length<0||b.length>20000||!b.every(a=>Number.isSafeInteger(a)&&a>=0&&a<=1000000))throw new TypeError('declared input domain');return a(JSON.parse(JSON.stringify(b)));}

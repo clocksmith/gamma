@@ -1,1 +1,0 @@
-"""Mind Meld CLI package"""
