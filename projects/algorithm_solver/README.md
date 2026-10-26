@@ -1,6 +1,7 @@
 # Algorithm solver lane
 
-Current goals, evidence gaps and next actions: [STATUS.md](STATUS.md).
+Current milestone gates, evidence and status: [milestone registry view](catalogue/MILESTONES.md).
+[STATUS.md](STATUS.md) preserves dated historical scorecards; goals are tags, not completion units.
 For source-bound known answers and explicit editor insertion, see
 [qualified lookup usage](qualified-lookup.md) and its linked release decision.
 The [experiment history](HISTORY.md) preserves prior checkpoints. The original

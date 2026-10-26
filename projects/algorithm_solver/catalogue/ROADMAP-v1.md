@@ -1,3 +1,5 @@
+> Historical definitions and dated evidence below are preserved. Current milestone IDs, gates and status are maintained in the [generated milestone view](MILESTONES.md) from `catalogue/roadmap-v1.json`; do not update current status independently here. Original frozen gates remain binding.
+
 # Recognition and dual-language catalogue roadmap v1
 
 Owner direction, 2026-10-25: prioritize goals **1a, 1b and 1c**, with a
