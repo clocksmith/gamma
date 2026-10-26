@@ -30,6 +30,12 @@ def independent_failures(raw, cases, language, policy='exact'):
         record, case = observations[i], cases[i]
         if type(record) is not dict or type(record.get('i')) is not int or record['i'] != i:
             raise ValueError('out-of-order or duplicate observation')
+        if policy.startswith('problem:'):
+            from .verify_imported_semantics import compare as statement_compare
+            reason = statement_compare(int(policy.split(':')[1]), case, record, language)
+            if reason:
+                failures.append({'index': i, 'reason': reason})
+            continue
         expected = case['expected']
         kind = type(expected).__name__
         if language == 'javascript':

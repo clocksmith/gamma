@@ -124,27 +124,37 @@ def adopt_plan(plan_path, trusted_plan_sha256):
     if ([(o['id'], o['language']) for o in outcomes] != [(j['id'], j['language']) for j in freeze['jobs']] or
             any(o['passed'] is not True or o['failure_count'] != 0 for o in outcomes)):
         raise ValueError('complete all-cases-passed outcomes required')
+    return build_successor(plan, trusted_plan_sha256, config, freeze, review, contracts,
+                           universe, catalogue, receipts, source_bytes, verification)
+
+
+def build_successor(plan, plan_sha256, config, freeze, review, contracts, universe,
+                    catalogue, receipts, source_bytes, verification, *, lane='fresh67-v1'):
+    """Shared receipt construction after lane-specific authority and replay gates."""
+    provenance_key = 'fresh_qualification' if lane == 'fresh67-v1' else 'admitted_qualification'
     rows = {r['problem_id']: r for r in catalogue['problems']}
     replacements, additions, descriptors = {}, {}, {}
-    for job, outcome in zip(freeze['jobs'], outcomes):
+    for job, outcome in zip(freeze['jobs'], verification['outcomes']):
+        if outcome['passed'] is not True:
+            continue
         pid, language = job['id'], job['language']; gid = f'leetcode:{pid}'
         if (outcome['source_sha256'] != job['source_sha256'] or outcome['tests_raw_sha256'] != job['tests_raw_sha256'] or
                 outcome['cases'] != job['case_count']):
             raise ValueError('source-specific verdict differs')
         reviewed = contracts[str(pid)]
-        contract = {'schema': 'gamma.reviewed-fresh-contract.v1', 'numeric_problem_id': pid,
+        contract = {'schema': 'gamma.reviewed-fresh-contract.v1' if lane == 'fresh67-v1' else 'gamma.reviewed-imported-contract.v1', 'numeric_problem_id': pid,
             'reviewed_statement_contract': reviewed, 'statement_identity': job['statement'],
             'normative_statement_scope': review['normative_statement_scope'],
             'authority_review_sha256': plan['review']['sha256'], 'qualification_freeze_sha256': plan['freeze']['sha256'],
-            'input_validator': {'lane': 'fresh67-v1', 'module_sha256': reviewed['input_validator_sha256'],
+            'input_validator': {'lane': lane, 'module_sha256': reviewed['input_validator_sha256'],
                 'numeric_problem_id': pid, 'entrypoint': 'validate', 'required_before_candidate_execution': True}}
         interface = {'schema': 'gamma.call-interface.v1', 'entrypoint': 'solve', 'arguments': 'ordered-positional', 'typed_contract': digest(contract)}
         runtime = {'language': language, 'runtime_closure': freeze['runtime'], 'limits': freeze['limits'],
             'max_packet_bytes': freeze['max_packet_bytes'], 'code': freeze['code']}
-        effects = {'policy': EFFECTS, 'comparison_policy': job['comparison_policy'], 'code': freeze['code'],
+        effects = {'policy': freeze['effects'], 'comparison_policy': job['comparison_policy'], 'code': freeze['code'],
             'verifier_sha256': plan['verifier_sha256'], 'review_sha256': plan['review']['sha256']}
         old = rows[gid]['implementations'][language]
-        provenance = {'fresh_qualification': {'problem_contract': contract, 'source_provenance': job,
+        provenance = {provenance_key: {'problem_contract': contract, 'source_provenance': job,
             'report_sha256': plan['report']['sha256'], 'verification_sha256': plan['verification']['sha256'],
             'review_sha256': plan['review']['sha256'], 'case_count': job['case_count']},
             'previous_canonical': {'implementation_sha256': digest(old), 'receipt_sha256': old.get('receipt_sha256'),
@@ -167,9 +177,9 @@ def adopt_plan(plan_path, trusted_plan_sha256):
         descriptors[f'{language}:{pid}'] = {'problem_contract': contract, 'runtime': runtime, 'effects': effects}
     updated, retained, summary = replace_canonicals(universe, catalogue, receipts, replacements, additions)
     return {'catalogue': updated, 'verified_receipts': retained, 'summary': summary, 'config': config,
-        'source_locators': pinned(config['source_access']['locators'])[0], 'source_bytes': source_bytes,
-        'binding_descriptors': descriptors, 'audit': {'schema': 'gamma.fresh67-adoption.v1',
-            'plan_sha256': trusted_plan_sha256, 'previous_receipts_preserved': len(receipts),
+        'source_locators': pinned(config['source_access']['locators'])[0], 'source_bytes': {key: source_bytes[key] for key in replacements},
+        'binding_descriptors': descriptors, 'audit': {'schema': 'gamma.fresh67-adoption.v1' if lane == 'fresh67-v1' else 'gamma.imported358-adoption.v1',
+            'plan_sha256': plan_sha256, 'previous_receipts_preserved': len(receipts),
             'adopted_source_language_pairs': len(replacements), 'new_receipts': len(additions),
             'activated': False, 'candidate_executions': 0, 'source_publication_authorized': False}}
 

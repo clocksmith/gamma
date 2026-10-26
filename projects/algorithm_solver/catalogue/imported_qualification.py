@@ -86,7 +86,8 @@ def runtime():
 
 
 def code_pins():
-    paths = [Path(__file__), Path(sandbox.__file__), HARNESS / 'harness.py', HARNESS / 'harness.cjs']
+    paths = [Path(__file__), Path(sandbox.__file__), HARNESS / 'harness.py', HARNESS / 'harness.cjs',
+             Path(__file__).with_name('imported_result_contracts.py')]
     return {str(p): file_hash(p) for p in paths}
 
 
@@ -113,6 +114,9 @@ def expected_type(value, language):
 
 
 def compare(case, record, language, policy='exact'):
+    if policy.startswith('problem:'):
+        from .imported_result_contracts import compare as statement_compare
+        return statement_compare(int(policy.split(':')[1]), case, record, language)
     if 'error' in record:
         return 'candidate_error'
     if record.get('result_type') != expected_type(case['expected'], language):
@@ -138,7 +142,8 @@ def compare(case, record, language, policy='exact'):
 
 
 def packet(cases):
-    return {'entry': 'solve', 'method': 'solve', 'calls': [{'args': c['args']} for c in cases]}
+    from .imported_result_contracts import canonical
+    return {'entry': 'solve', 'method': 'solve', 'calls': [{'args': canonical(c['args'])} for c in cases]}
 
 
 def batches(cases):
@@ -282,6 +287,11 @@ def job_inputs(root, job, gate):
         from .qualification_fresh_cases import validate
         for case in cases:
             validate(pid, case['args'])
+    elif job.get('domain_validator') == 'imported358-v1':
+        from . import imported_case_admission, imported_clean_domains
+        validator = imported_case_admission.validate if pid in imported_case_admission.DOMAIN_IDS else imported_clean_domains.validate
+        for case in cases:
+            validator(pid, case['args'])
     elif 'domain_validator' in job:
         raise ValueError('unknown input validator')
     return source, cases
