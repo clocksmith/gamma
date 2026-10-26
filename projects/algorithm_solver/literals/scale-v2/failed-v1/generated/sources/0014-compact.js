@@ -1,1 +1,0 @@
-function solve(a){if(a.length===0){return'';}const b=Array.from(a[0]);let c=b.length;for(let d=1;d<a.length&&c>0;d++){const e=Array.from(a[d]);let f=0;while(f<c&&f<e.length&&b[f]===e[f]){f++;}c=f;}return b.slice(0,c).join('');}

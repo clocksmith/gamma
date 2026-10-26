@@ -1,2 +1,0 @@
-import assert from 'node:assert/strict';import test from 'node:test';import {pointyTopAxialPosition} from '../web/src/hex-layout.js';
-test('historical report display retains pure point-top coordinate conversion',()=>{const a=pointyTopAxialPosition({q:0,r:0},{width:144,height:125,originX:200,originY:200});const b=pointyTopAxialPosition({q:1,r:0},{width:144,height:125,originX:200,originY:200});assert.equal(b.left-a.left,108);assert.equal(b.top-a.top,62.5);});

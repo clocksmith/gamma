@@ -1,1 +1,0 @@
-function solve(a,b){if(b<=0){return true;}let c=b;let d=0;for(let b=0;b<a.length;b+=1){const e=b+1<a.length?a[b+1]:0;if(a[b]===0&&d===0&&e===0){c-=1;d=1;if(c<=0){return true;}}else{d=a[b];}}return false;}

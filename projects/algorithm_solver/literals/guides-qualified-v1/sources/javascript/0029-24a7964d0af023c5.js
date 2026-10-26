@@ -1,1 +1,0 @@
-function solve(a,b){const c=-2147483648;const r=2147483647;if(b===0){throw new RangeError('Division by zero');}if(a===c&&b===-1){return r;}const d=a<0!==b<0;let e=Math.abs(a);const f=Math.abs(b);let n=0;while(e>=f){let a=f;let r=1;while(a+a<=e){a+=a;r+=r;}e-=a;n+=r;}return d?-n:n;}

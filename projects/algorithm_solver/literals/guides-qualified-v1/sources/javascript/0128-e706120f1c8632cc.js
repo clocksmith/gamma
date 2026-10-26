@@ -1,1 +1,0 @@
-var a=function(a){const s=new Set(a);let r=0;const m=new Map();for(const x of a){let a=x;while(s.has(a)){s.delete(a++);}m.set(x,(m.get(a)||0)+(a-x));r=Math.max(r,m.get(x));}return r;};const solve=b=>a(b);

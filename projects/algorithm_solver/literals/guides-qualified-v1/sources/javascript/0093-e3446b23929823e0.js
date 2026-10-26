@@ -1,1 +1,0 @@
-function solve(a){if(a.length<4||a.length>12){return[];}const r=[];const b=[];function c(d){if(b.length===4){if(d===a.length){r.push(b.join('.'));}return;}const e=4-b.length;const f=a.length-d;if(f<e||f>e*3){return;}for(let i=1;i<=3&&d+i<=a.length;i+=1){if(i>1&&a[d]==='0'){break;}const e=a.slice(d,d+i);const f=Number(e);if(f>255){break;}b.push(e);c(d+i);b.pop();}}c(0);return r;}

@@ -1,1 +1,0 @@
-const solve=(a,b)=>{const c=f(b);let d=a.length+b.length;let e=[];for(let b=0;b<a.length;b+=1){const f=a[b];const g=h(f);if(g in c){const a=c[g];const h=b+a;if(h<d){d=h;e=[f];}else if(h===d){e.push(f);}}}return e;};function h(a){return'$'+a;}function f(a){const b={};for(let c=0;c<a.length;c+=1){const d=h(a[c]);b[d]=c;}return b;}

@@ -1,1 +1,0 @@
-function solve(a){const r=Array.from({length:a},()=>Array(a).fill(0));let n=1;h(a,a,(i,j)=>{r[i][j]=n++;});return r;}function h(a,b,f){let r=0,n=a-1,c=0,d=b-1;while(r<=n&&c<=d){for(let i=c;i<=d;i+=1){f(r,i);}r++;for(let i=r;i<=n;i+=1){f(i,d);}d--;if(r<=n){for(let i=d;i>=c;i-=1){f(n,i);}}n--;if(c<=d){for(let i=n;i>=r;i-=1){f(i,c);}}c++;}}

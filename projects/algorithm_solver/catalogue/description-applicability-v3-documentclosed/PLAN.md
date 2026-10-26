@@ -1,7 +1,0 @@
-# Document-complete admission endpoint
-
-Independent review rejected partial-span, clause-prefix and delimiter-independent hard-fact proposals: unknown introductory prose can govern later clauses, including quotations, conditional instructions and negative examples. All rejected proposals remain frozen/unrun.
-
-This successor retains partial spans and locally complete clauses as tentative diagnostics, but activates no facts unless the entire document is consumed by the finite supported clause grammar. Unknown remainder means document-level UNKNOWN, never a veto. Generic value is not an input element. Explicit negative clauses, exact input-value/index exclusion, typed cardinality and ID-bound reviewed local effects remain supported. This is a narrow grammar, not unrestricted-language understanding. No title-only competitor elimination, reranking, availability invention, acceptance promotion or policy change.
-
-12 synthetic tests cover prior review counterexamples, including cross-delimiter conditional/quotation/negative-example scope. All4081 competitors and original20 policies remain. Future development evaluation must separate tentative extraction from admissible facts, independently review any actual veto, and report accepted coverage/wrong accepts separately. Expected informal coverage may remain poor; no usefulness or accuracy claim precedes measurement. Confirmation remains closed, no encoder invocation.

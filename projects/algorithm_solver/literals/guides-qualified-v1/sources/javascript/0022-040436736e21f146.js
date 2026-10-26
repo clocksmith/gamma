@@ -1,1 +1,0 @@
-function solve(a){if(!Number.isInteger(a)||a<0){throw new RangeError('n must be a nonnegative integer');}const r=[];const b=[];function c(d,e){if(d===a&&e===a){r.push(b.join(''));return;}if(d<a){b.push('(');c(d+1,e);b.pop();}if(e<d){b.push(')');c(d,e+1);b.pop();}}c(0,0);return r;}

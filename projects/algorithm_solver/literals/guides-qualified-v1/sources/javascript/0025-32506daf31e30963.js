@@ -1,1 +1,0 @@
-function solve(a,b){if(b<=1||!a){return a;}const m={next:a};let c=m;while(true){let a=c;for(let i=0;i<b&&a;i++){a=a.next;}if(!a){break;}const d=a.next;const e=c.next;let f=d;let g=e;while(g!==d){const a=g.next;g.next=f;f=g;g=a;}c.next=a;c=e;}return m.next;}

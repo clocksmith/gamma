@@ -1,1 +1,0 @@
-const solve=a=>{const b='ABCDEFGHIJKLMNOPQRSTUVWXYZ';const c='abcdefghijklmnopqrstuvwxyz';const d=[];for(const e of a){const a=b.indexOf(e);if(a>=0){d.push(c[a]);}else{d.push(e);}}return d.join('');};

@@ -1,1 +1,0 @@
-function solve(a,b){return h(a.length,b.length,(a,b,c)=>a+b,(c,d,e,f,g)=>a[c-1]===b[d-1]?g:1+Math.min(e,f,g));}function h(a,b,c,d){const e=new Array(b+1);for(let a=0;a<=b;a++){e[a]=c(0,a,a?e[a-1]:undefined);}for(let f=1;f<=a;f++){let a=e[0];e[0]=c(f,0,e[0]);for(let c=1;c<=b;c++){const b=e[c];e[c]=d(f,c,b,e[c-1],a);a=b;}}return e[b];}

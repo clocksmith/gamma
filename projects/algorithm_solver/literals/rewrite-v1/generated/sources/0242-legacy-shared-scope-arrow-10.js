@@ -1,1 +1,0 @@
-function h(a){const b=new Map();for(const c of a){b.set(c,(b.get(c)||0)+1);}return b;}const solve=(a,b)=>{const c=h(a);const d=h(b);if(c.size!==d.size)return false;for(const [a,b]of c){if(d.get(a)!==b)return false;}return true;};

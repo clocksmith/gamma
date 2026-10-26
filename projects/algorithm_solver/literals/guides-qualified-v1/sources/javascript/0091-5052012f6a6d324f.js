@@ -1,1 +1,0 @@
-function solve(a){if(a.length===0||a[0]==='0'){return 0;}let r=1;let n=1;for(let i=1;i<a.length;i+=1){let b=0;if(a[i]!=='0'){b+=n;}const c=Number(a.slice(i-1,i+1));if(c>=10&&c<=26){b+=r;}r=n;n=b;}return n;}

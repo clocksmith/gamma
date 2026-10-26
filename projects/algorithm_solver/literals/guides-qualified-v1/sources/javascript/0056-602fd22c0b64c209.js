@@ -1,1 +1,0 @@
-function solve(a){if(!a.length){return[];}a.sort((a,b)=>a[0]-b[0]);const r=[a[0].slice()];for(let i=1;i<a.length;i++){const b=r[r.length-1];if(a[i][0]<=b[1]){b[1]=Math.max(b[1],a[i][1]);}else{r.push(a[i].slice());}}return r;}

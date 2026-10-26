@@ -1,1 +1,0 @@
-const solve=(a,b)=>{const c=h(a);const d=h(b);for(const b of a){if(c[b]!==(d[b]||0)){return false;}}for(const a of b){if(d[a]!==(c[a]||0)){return false;}}return true;};function h(a){const b={};for(const c of a){b[c]=(b[c]||0)+1;}return b;}

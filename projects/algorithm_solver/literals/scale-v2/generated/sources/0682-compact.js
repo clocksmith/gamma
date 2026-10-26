@@ -1,1 +1,0 @@
-function solve(a){const b=[];for(const d of a){if(d==='+'){b.push(b[b.length-1]+b[b.length-2]);}else if(d==='D'){b.push(b[b.length-1]*2);}else if(d==='C'){b.pop();}else{b.push(+d);}}let c=0;for(const e of b){c+=e;}return c;}

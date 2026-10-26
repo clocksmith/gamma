@@ -1,1 +1,0 @@
-const solve=a=>{const m={};let r=0;for(const [x,y]of a){if(!m['$'+x]){m['$'+x]=[];}const a=m['$'+x];let n=0;while(n<a.length&&a[n]>y){n+=1;}a.splice(n,0,y);if(a.length>5){a.pop();}r=Math.max(r,x);}const b=[];for(let i=1;i<=r;i+=1){const a=m['$'+i]||[];if(a.length){let r=0;for(const x of a.slice(0,5)){r+=x;}b.push([i,Math.floor(r/5)]);}}return b;};
