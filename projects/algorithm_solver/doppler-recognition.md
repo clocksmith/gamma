@@ -165,7 +165,8 @@ systemd-run --user --scope --quiet -p MemoryMax=12G \
 
 Use `--surface browser` and a separate output directory for browser execution.
 `--synthetic` uses the three existing integration probes. Alternatively,
-`--cohort permitted-development.json` accepts this explicit input shape:
+`--cohort permitted-development.json --review independent-review.json` accepts
+this explicit input shape:
 
 ```json
 {
@@ -185,6 +186,11 @@ Use `--surface browser` and a separate output directory for browser execution.
 
 Only supply already permitted development text. The CLI does not resolve
 catalogue IDs, authorize protected text, or open an evaluation population.
+Custom cohorts require an independently produced review with schema
+`gamma.rerank-confusion-review.v1`, `approved: true`, an empty `blockers` list,
+and `cohort_sha256` equal to the canonical `digest(cohort)` from the comparison
+module. The run binds the complete review and its file hash. This identity check
+preserves a review decision; a self-authored approval is not independent review.
 Use a null target for unmatched/ambiguous controls; a positive target absent
 from its shortlist remains in the recall denominator. Candidate identities
 and all queries must be retained. The input supports at most 100 queries and
