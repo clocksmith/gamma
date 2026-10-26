@@ -21,7 +21,7 @@ def equal(left, right):
     return left == right
 
 
-def independent_failures(raw, cases, language):
+def independent_failures(raw, cases, language, policy='exact'):
     observations = [q.decode(line) for line in raw.splitlines()]
     if len(observations) != len(cases) + 1 or observations.pop() != {'done': len(cases)}:
         raise ValueError('incomplete output protocol')
@@ -35,11 +35,22 @@ def independent_failures(raw, cases, language):
         if language == 'javascript':
             kind = {'int': 'number', 'float': 'number', 'bool': 'boolean', 'str': 'string',
                     'NoneType': 'object', 'dict': 'object', 'list': 'object'}[kind]
+        got = record.get('result')
+        if policy == 'set-of-strings':
+            same = (type(got) is list and all(type(x) is str for x in got)
+                    and len(got) == len(set(got)) and set(got) == set(expected))
+        elif policy == 'permutation-of-chars':
+            from collections import Counter
+            same = type(got) is str and Counter(got) == Counter(expected)
+        elif policy == 'exact':
+            same = equal(got, expected)
+        else:
+            raise ValueError('unregistered comparison policy')
         if 'error' in record:
             reason = 'candidate_error'
         elif record.get('result_type') != kind:
             reason = 'result_type'
-        elif not equal(record.get('result'), expected):
+        elif not same:
             reason = 'result_value'
         elif not equal(record.get('args_before'), case['args']) or not equal(record.get('args_after'), case['args']):
             reason = 'input_effects'
@@ -82,7 +93,7 @@ def verify(path):
                 failures.append({'offset': offset, 'reason': 'isolated_execution_failed'})
             else:
                 try:
-                    failures.extend({'offset': offset, **f} for f in independent_failures(stdout, batch, job['language']))
+                    failures.extend({'offset': offset, **f} for f in independent_failures(stdout, batch, job['language'], job.get('comparison_policy', 'exact')))
                 except (ValueError, TypeError, KeyError) as error:
                     failures.append({'offset': offset, 'reason': 'invalid_output', 'error': str(error)})
         if row['failures'] != failures or row['passed'] is not (not failures):
