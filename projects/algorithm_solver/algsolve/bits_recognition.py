@@ -8,6 +8,7 @@ import json
 from pathlib import Path
 import re
 import threading
+import time
 
 import numpy as np
 
@@ -86,7 +87,22 @@ class BitsRecognizer:
         # Public examples, starter signatures and all other fields are not returned.
         return packet['problem']['statement'], 'published-statement'
 
-    def recognize(self, text):
+    def retrieve(self, vector, limit=10):
+        """Rank the complete existing index, independent of implementation availability."""
+        if type(limit) is not int or not 1 <= limit <= 64:
+            raise ValueError('candidate limit must be between 1 and 64')
+        if vector.shape != (self.vectors.shape[1],) or not np.isfinite(vector).all():
+            raise ValueError('invalid query vector')
+        similarities = self.vectors @ vector
+        positions = np.lexsort((self.keys, -similarities))[:limit]
+        return [{'key': self.keys[i], 'score': float(similarities[i])} for i in positions]
+
+    def recognize(self, text, *, diagnostics=False):
+        started = time.perf_counter()
+        timings = {}
+        def finish(**result):
+            timings['total_ms'] = (time.perf_counter() - started) * 1000
+            return dict(base, **result, timings=timings)
         if type(text) is not str or not text.strip() or len(text.encode()) > 32768:
             raise ValueError('Enter a problem description of at most 32 KB.')
         query = text.strip()
@@ -97,7 +113,7 @@ class BitsRecognizer:
                  (row['title'].casefold(), row['slug'], str(row['problem_id']),
                   '#'+str(row['problem_id']).removeprefix('leetcode:'))]
         if len(exact) == 1:
-            return dict(base, status='candidates', method='exact-metadata', candidates=exact)
+            return finish(status='candidates', method='exact-metadata', candidates=exact)
         if not self.lock.acquire(blocking=False):
             raise RuntimeError('Recognition is busy. Try again.')
         try:
@@ -107,19 +123,38 @@ class BitsRecognizer:
                     successor.close()
                     raise RuntimeError('Recognition runtime changed; restart the local server.')
                 self.runtime = successor
+            phase = time.perf_counter()
             vector = self.runtime.encode([query], query=True)[0]
+            timings['embedding_ms'] = (time.perf_counter() - phase) * 1000
+            timings['embedding_load_ms'] = self.runtime.last_receipt.get('load_ms')
+            timings['embedding_execution_ms'] = self.runtime.last_receipt.get('execution_ms')
             if self.runtime.last_receipt['embedding_rows'][0].get('truncated'):
-                return dict(base, status='abstain', reason='query_too_long', candidates=[])
-            similarities = self.vectors @ vector
+                return finish(status='abstain', reason='query_too_long', candidates=[])
+            phase = time.perf_counter()
             # Availability never filters recognition. Original vector positions are retained.
-            positions = sorted(range(len(self.keys)), key=lambda i: (-float(similarities[i]), self.keys[i]))[:10]
-            keys = [self.keys[i] for i in positions]
+            keys = [row['key'] for row in self.retrieve(vector)]
+            timings['retrieve_ms'] = (time.perf_counter() - phase) * 1000
+            phase = time.perf_counter()
             descriptions = [self.document(key) for key in keys]
+            timings['documents_ms'] = (time.perf_counter() - phase) * 1000
+            phase = time.perf_counter()
             evidence = self.runtime.rerank_evidence(query, [text for text, _ in descriptions])
+            timings['rerank_ms'] = (time.perf_counter() - phase) * 1000
+            timings['rerank_load_ms'] = self.runtime.last_receipt.get('load_ms')
+            timings['rerank_execution_ms'] = self.runtime.last_receipt.get('execution_ms')
+            timings['rerank_tokens'] = [row.get('tokenCount') for row in evidence]
             scores = [row['trueLogit'] - row['falseLogit'] for row in evidence]
             order = sorted(range(len(keys)), key=lambda i: (-scores[i], keys[i]))[:3]
             candidates = [dict(self.metadata[keys[i]], document_scope=descriptions[i][1]) for i in order]
-            return dict(base, status='candidates', method='embedding-and-reranking', candidates=candidates)
+            extra = {}
+            if diagnostics:
+                extra['diagnostics'] = {'indexed_count': len(self.keys),
+                    'backend': self.runtime.last_receipt.get('backend'), 'evidence': [
+                    {'key': key, 'document_sha256': hashlib.sha256(description[0].strip().encode()).hexdigest(),
+                     'document_scope': description[1], **{name: row.get(name) for name in
+                        ('trueLogit', 'falseLogit', 'tokenIds', 'tokenCount', 'phase')}}
+                    for key, description, row in zip(keys, descriptions, evidence)]}
+            return finish(status='candidates', method='embedding-and-reranking', candidates=candidates, **extra)
         finally:
             self.lock.release()
 

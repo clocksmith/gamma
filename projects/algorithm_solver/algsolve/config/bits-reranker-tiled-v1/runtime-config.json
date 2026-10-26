@@ -1,0 +1,243 @@
+{
+  "inference": {
+    "kernelPath": {
+      "id": "qwen-3-reranker-0-6b-f16-af32-execution-inline",
+      "name": "Execution inline kernel path",
+      "description": "Generated from manifest.inference.execution",
+      "activationDtype": "f32",
+      "kvDtype": "f16",
+      "decode": {
+        "steps": [
+          {
+            "op": "input_norm",
+            "kernel": "rmsnorm.wgsl",
+            "entry": "main"
+          },
+          {
+            "op": "q_proj",
+            "kernel": "matmul_gemv_subgroup.wgsl",
+            "entry": "main_vec4",
+            "weights": "layer.{L}.self_attn.q_proj"
+          },
+          {
+            "op": "k_proj",
+            "kernel": "matmul_gemv_subgroup.wgsl",
+            "entry": "main_vec4",
+            "weights": "layer.{L}.self_attn.k_proj"
+          },
+          {
+            "op": "v_proj",
+            "kernel": "matmul_gemv_subgroup.wgsl",
+            "entry": "main_vec4",
+            "weights": "layer.{L}.self_attn.v_proj"
+          },
+          {
+            "op": "rope_q",
+            "kernel": "rope.wgsl",
+            "entry": "main"
+          },
+          {
+            "op": "rope_k",
+            "kernel": "rope.wgsl",
+            "entry": "main"
+          },
+          {
+            "op": "attention",
+            "kernel": "attention_decode_online_f16kv.wgsl",
+            "entry": "main",
+            "precision": {
+              "kvDtype": "f16"
+            }
+          },
+          {
+            "op": "o_proj",
+            "kernel": "matmul_gemv_subgroup.wgsl",
+            "entry": "main_vec4",
+            "weights": "layer.{L}.self_attn.o_proj"
+          },
+          {
+            "op": "attn_residual",
+            "kernel": "residual.wgsl",
+            "entry": "main"
+          },
+          {
+            "op": "post_attn_norm",
+            "kernel": "rmsnorm.wgsl",
+            "entry": "main"
+          },
+          {
+            "op": "gate_proj",
+            "kernel": "matmul_gemv_subgroup.wgsl",
+            "entry": "main_vec4",
+            "weights": "layer.{L}.mlp.gate_proj"
+          },
+          {
+            "op": "up_proj",
+            "kernel": "matmul_gemv_subgroup.wgsl",
+            "entry": "main_vec4",
+            "weights": "layer.{L}.mlp.up_proj"
+          },
+          {
+            "op": "activation",
+            "kernel": "silu.wgsl",
+            "entry": "main"
+          },
+          {
+            "op": "down_proj",
+            "kernel": "matmul_gemv_subgroup.wgsl",
+            "entry": "main_vec4",
+            "weights": "layer.{L}.mlp.down_proj"
+          },
+          {
+            "op": "ffn_residual",
+            "kernel": "residual.wgsl",
+            "entry": "main"
+          }
+        ]
+      },
+      "prefill": {
+        "steps": [
+          {
+            "op": "input_norm",
+            "kernel": "rmsnorm.wgsl",
+            "entry": "main"
+          },
+          {
+            "op": "q_proj",
+            "kernel": "matmul_f16w_f32a_tiled.wgsl",
+            "entry": "main",
+            "weights": "layer.{L}.self_attn.q_proj"
+          },
+          {
+            "op": "k_proj",
+            "kernel": "matmul_f16w_f32a_tiled.wgsl",
+            "entry": "main",
+            "weights": "layer.{L}.self_attn.k_proj"
+          },
+          {
+            "op": "v_proj",
+            "kernel": "matmul_f16w_f32a_tiled.wgsl",
+            "entry": "main",
+            "weights": "layer.{L}.self_attn.v_proj"
+          },
+          {
+            "op": "rope_q",
+            "kernel": "rope.wgsl",
+            "entry": "main"
+          },
+          {
+            "op": "rope_k",
+            "kernel": "rope.wgsl",
+            "entry": "main"
+          },
+          {
+            "op": "attention",
+            "kernel": "attention_head128_f16kv.wgsl",
+            "entry": "main",
+            "precision": {
+              "kvDtype": "f16"
+            }
+          },
+          {
+            "op": "o_proj",
+            "kernel": "matmul_f16w_f32a_tiled.wgsl",
+            "entry": "main",
+            "weights": "layer.{L}.self_attn.o_proj"
+          },
+          {
+            "op": "attn_residual",
+            "kernel": "residual.wgsl",
+            "entry": "main"
+          },
+          {
+            "op": "post_attn_norm",
+            "kernel": "rmsnorm.wgsl",
+            "entry": "main"
+          },
+          {
+            "op": "gate_proj",
+            "kernel": "matmul_f16w_f32a_tiled.wgsl",
+            "entry": "main",
+            "weights": "layer.{L}.mlp.gate_proj"
+          },
+          {
+            "op": "up_proj",
+            "kernel": "matmul_f16w_f32a_tiled.wgsl",
+            "entry": "main",
+            "weights": "layer.{L}.mlp.up_proj"
+          },
+          {
+            "op": "activation",
+            "kernel": "silu.wgsl",
+            "entry": "main"
+          },
+          {
+            "op": "down_proj",
+            "kernel": "matmul_f16w_f32a_tiled.wgsl",
+            "entry": "main",
+            "weights": "layer.{L}.mlp.down_proj"
+          },
+          {
+            "op": "ffn_residual",
+            "kernel": "residual.wgsl",
+            "entry": "main"
+          }
+        ]
+      },
+      "preLayer": [
+        {
+          "op": "embed",
+          "kernel": "gather_f16.wgsl",
+          "entry": "main",
+          "weights": "embed_tokens"
+        }
+      ],
+      "postLayer": [
+        {
+          "op": "final_norm",
+          "kernel": "rmsnorm.wgsl",
+          "entry": "main"
+        },
+        {
+          "op": "lm_head",
+          "kernel": "matmul_gemv_subgroup.wgsl",
+          "entry": "main_multicol",
+          "weights": "lm_head",
+          "constants": {
+            "MULTICOL_COLS_PER_WG": 8,
+            "MULTICOL_THREADS_PER_COL": 32
+          }
+        },
+        {
+          "op": "lm_head_prefill",
+          "kernel": "matmul_f16w_f32a_tiled.wgsl",
+          "entry": "main",
+          "weights": "lm_head"
+        },
+        {
+          "op": "sample",
+          "kernel": "sample.wgsl",
+          "entry": "sample_single_pass"
+        }
+      ]
+    },
+    "compute": {
+      "activationDtype": "f32"
+    },
+    "session": {
+      "compute": {
+        "defaults": {
+          "activationDtype": "f32",
+          "mathDtype": "f32",
+          "accumDtype": "f32",
+          "outputDtype": "f32"
+        }
+      },
+      "kvcache": {
+        "kvDtype": "f16"
+      },
+      "prefillTokenChunkSize": 512,
+      "prefillChunkSubmitMode": "sync"
+    }
+  }
+}

@@ -8,7 +8,10 @@ import signal
 from urllib.parse import unquote, urlsplit
 
 from .bits_recognition import BitsRecognizer
-from .doppler_runtime import DopplerRuntime
+from .doppler_runtime import DopplerRuntime, sha
+
+
+DEFAULT_PROFILE = Path(__file__).with_name('config')/'bits-reranker-tiled-v1'
 
 
 class Handler(SimpleHTTPRequestHandler):
@@ -86,23 +89,47 @@ def create_server(public_root, recognizer, port=8874):
     return server
 
 
-def main():
+def argument_parser():
     parser = argparse.ArgumentParser(description=__doc__)
     for name in ('public-root', 'keys', 'vectors', 'gate', 'doppler-root', 'embedding-model', 'reranker-model'):
         parser.add_argument('--'+name, type=Path, required=True)
     parser.add_argument('--gate-sha256', required=True)
     parser.add_argument('--port', type=int, default=8874)
     parser.add_argument('--surface', choices=('node', 'browser'), default='node')
-    args = parser.parse_args()
+    parser.add_argument('--reranker-config', type=Path,
+                        help='Explicit Doppler runtime configuration; bound into index identity')
+    return parser
+
+
+def create_recognizer(args):
+    config_path = args.reranker_config or DEFAULT_PROFILE/'runtime-config.json'
+    if config_path.stat().st_size > 1024**2:
+        raise ValueError('runtime configuration exceeds one MB')
+    if args.reranker_config is None:
+        preparation = json.loads((DEFAULT_PROFILE/'preparation.json').read_text())
+        if (sha(args.reranker_model/'manifest.json') != preparation['manifest_sha256']
+                or sha(config_path) != preparation['runtime_config_sha256']):
+            raise ValueError('Default BITS profile does not bind these artifacts; provide an explicit --reranker-config.')
+    reranker_config = json.loads(config_path.read_text())
+    if type(reranker_config) is not dict:
+        raise ValueError('runtime configuration must be an object')
     def runtime_factory():
         return DopplerRuntime(args.doppler_root, args.embedding_model, args.reranker_model,
                               timeout=90, surface=args.surface,
-                              reranker_config={'inference': {'session': {
-                                  'prefillTokenChunkSize': 128, 'prefillChunkSubmitMode': 'sync'}}})
+                              reranker_config=reranker_config)
     runtime = runtime_factory()
-    recognizer = BitsRecognizer(public_root=args.public_root, keys=args.keys, vectors=args.vectors,
-                                gate=args.gate, gate_sha256=args.gate_sha256, runtime=runtime,
-                                runtime_factory=runtime_factory)
+    try:
+        return BitsRecognizer(public_root=args.public_root, keys=args.keys, vectors=args.vectors,
+                              gate=args.gate, gate_sha256=args.gate_sha256, runtime=runtime,
+                              runtime_factory=runtime_factory)
+    except BaseException:
+        runtime.close()
+        raise
+
+
+def main():
+    args = argument_parser().parse_args()
+    recognizer = create_recognizer(args)
     server = create_server(args.public_root, recognizer, args.port)
     def stop(*_):raise SystemExit(0)
     signal.signal(signal.SIGTERM, stop)
