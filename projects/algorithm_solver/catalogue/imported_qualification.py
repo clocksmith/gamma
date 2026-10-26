@@ -112,12 +112,23 @@ def expected_type(value, language):
     return names[type(value)][language == 'javascript']
 
 
-def compare(case, record, language):
+def compare(case, record, language, policy='exact'):
     if 'error' in record:
         return 'candidate_error'
     if record.get('result_type') != expected_type(case['expected'], language):
         return 'result_type'
-    if not exact(record.get('result'), case['expected']):
+    got, wanted = record.get('result'), case['expected']
+    if policy == 'set-of-strings':
+        if type(got) is not list or any(type(x) is not str for x in got) or len(set(got)) != len(got):
+            return 'result_value'
+        got, wanted = sorted(got), sorted(wanted)
+    elif policy == 'permutation-of-chars':
+        if type(got) is not str:
+            return 'result_value'
+        got, wanted = sorted(got), sorted(wanted)
+    elif policy != 'exact':
+        raise ValueError('unregistered comparison policy')
+    if not exact(got, wanted):
         return 'result_value'
     if not exact(record.get('args_before'), case['args']) or not exact(record.get('args_after'), case['args']):
         return 'input_effects'
@@ -145,7 +156,7 @@ def batches(cases):
         yield offset, group
 
 
-def check_output(raw, cases, language):
+def check_output(raw, cases, language, policy='exact'):
     records = [decode(line) for line in raw.splitlines()]
     if len(records) != len(cases) + 1 or records[-1] != {'done': len(cases)}:
         raise ValueError('incomplete output protocol')
@@ -153,7 +164,7 @@ def check_output(raw, cases, language):
     for i, (case, record) in enumerate(zip(cases, records[:-1])):
         if type(record) is not dict or type(record.get('i')) is not int or record['i'] != i:
             raise ValueError('out-of-order or duplicate observation')
-        reason = compare(case, record, language)
+        reason = compare(case, record, language, policy)
         if reason:
             failures.append({'index': i, 'reason': reason})
     return failures
@@ -243,6 +254,9 @@ def load_freeze(path):
     contract = decode(raw)
     if contract['schema'] != 'gamma.imported-independent-execution.v1' or contract['code'] != code_pins() or contract['limits'] != LIMITS:
         raise ValueError('execution freeze drift')
+    for name, expected in contract.get('additional_code', {}).items():
+        if file_hash(name) != expected:
+            raise ValueError('oracle or validator changed since freeze')
     KnownSpecService.from_config(Path(contract['service_config']), contract['service_config_sha256'])
     config = decode(read(contract['service_config']))
     gate = decode(read(config['source_access']['boundary_gate']['path']))
@@ -264,6 +278,12 @@ def job_inputs(root, job, gate):
     cases = decode(raw)
     if sha(source) != job['source_sha256'] or sha(raw) != job['tests_raw_sha256'] or len(cases) != job['case_count']:
         raise ValueError('frozen source/cases changed')
+    if job.get('domain_validator') == 'fresh67-v1':
+        from .qualification_fresh_cases import validate
+        for case in cases:
+            validate(pid, case['args'])
+    elif 'domain_validator' in job:
+        raise ValueError('unknown input validator')
     return source, cases
 
 
@@ -299,7 +319,7 @@ def execute(args):
                     row['failures'].append({'offset': offset, 'reason': 'isolated_execution_failed'})
                 else:
                     try:
-                        row['failures'].extend({'offset': offset, **f} for f in check_output(result.stdout, batch, job['language']))
+                        row['failures'].extend({'offset': offset, **f} for f in check_output(result.stdout, batch, job['language'], job.get('comparison_policy', 'exact')))
                     except (ValueError, TypeError, KeyError) as error:
                         row['failures'].append({'offset': offset, 'reason': 'invalid_output', 'error': str(error)})
             row['passed'] = not row['failures']
