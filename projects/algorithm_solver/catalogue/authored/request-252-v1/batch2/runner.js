@@ -1,0 +1,26 @@
+'use strict';
+const fs = require('fs');
+const path = require('path');
+const assert = require('assert');
+const root = path.resolve(__dirname, '..');
+const allowed = new Set([3217,3231,3237,3484,3517,3524,3531,3539,3551,3559,3567,3574,3579,3587,3598,3608,3618]);
+const cases = JSON.parse(fs.readFileSync(0, 'utf8'));
+const outputs = cases.map(test => {
+    assert(allowed.has(test.problem_id));
+    const before = JSON.stringify(test.args);
+    const actual = require(path.join(root,'javascript',`${test.problem_id}.js`)).solve(...test.args);
+    assert.strictEqual(JSON.stringify(test.args),before,'input mutation');
+    return actual;
+});
+const {ListNode, modifiedList} = require(path.join(root,'javascript','3217.js'));
+const nodes = [1,2,1,3,1].map(value => new ListNode(value));
+for (let i=0;i+1<nodes.length;++i) nodes[i].next=nodes[i+1];
+const head = modifiedList([1],nodes[0]);
+assert(head===nodes[1] && head.next===nodes[3] && head.next.next===null);
+const {Spreadsheet} = require(path.join(root,'javascript','3484.js'));
+const sheet = new Spreadsheet(1000);
+sheet.setCell('Z1000',100000);
+assert.strictEqual(sheet.getValue('=Z1000+100000'),200000);
+sheet.resetCell('Z1000');
+assert.strictEqual(sheet.getValue('=Z1000+A1'),0);
+process.stdout.write(JSON.stringify(outputs));

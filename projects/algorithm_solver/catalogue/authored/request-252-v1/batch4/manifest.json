@@ -1,0 +1,1791 @@
+[
+  {
+    "problem_id": 3227,
+    "canonical_key": "lc:vowels-game-in-a-string",
+    "parameters": [
+      "s"
+    ],
+    "status": "authored_locally_tested_candidate",
+    "qualification": "not_qualified",
+    "admission": "not_admitted",
+    "base_commit": "bc252ef318b165396288cd3f3d0ecbd4b84c03da",
+    "authorship": "Original implementation and independent oracle code; no upstream solution code consulted or copied.",
+    "source_url": "https://leetcode.com/problems/vowels-game-in-a-string/",
+    "source_consulted_at": "2026-10-27",
+    "definition_provenance": {
+      "official_url": "https://leetcode.com/problems/vowels-game-in-a-string/",
+      "identity_verified": 3227,
+      "scope": "Public definition, constraints, and examples; no editorial or hidden tests."
+    },
+    "contract": {
+      "meaning": "Return whether the first player wins the vowel-parity deletion game.",
+      "inputs": "Lowercase English string of length 1..100000.",
+      "result": "boolean",
+      "ordering": "Preserve query/operation order for arrays; other results scalar.",
+      "mutation": "Input arrays/objects are not modified. NeighborSum constructor copies the grid.",
+      "numeric": "JavaScript Number integers are exact within the stated bounds; all arithmetic products remain below 2^53. Python uses arbitrary-precision integers.",
+      "unicode": "Strings are restricted to the stated ASCII alphabet; out-of-contract Unicode and malformed inputs are unspecified.",
+      "exceptions": "Valid-contract inputs do not raise; malformed input behavior is not a qualified API guarantee."
+    },
+    "complexity": "O(n) time, O(1) auxiliary space",
+    "correctness_argument": "Any positive odd vowel count permits deleting everything. For positive even count Alice leaves odd count; Bob can only remove even count, so Alice then deletes the remainder.",
+    "adapter": null,
+    "tests": {
+      "public_example": 2,
+      "independent_small_oracle": 254
+    },
+    "test_receipt": "batch4/test-receipt.json",
+    "cases": [
+      [
+        [
+          "leetcoder"
+        ],
+        true
+      ],
+      [
+        [
+          "bbcd"
+        ],
+        false
+      ]
+    ],
+    "source_files": {
+      "javascript": {
+        "path": "javascript/3227.js",
+        "sha256": "63c232103b91dea26ba4cca35609e16041db27257e727b4a766e37d22ff3ccb1"
+      },
+      "python": {
+        "path": "python/3227.py",
+        "sha256": "705ae7427ae375b0ab4c50c8cc2b4110b6e3ecef2c4fad467f31920f0c2425dc"
+      }
+    },
+    "limitations": [
+      "Finite development tests are not semantic qualification or official judge acceptance.",
+      "No protected/private cases, admission changes, source-access policy changes, dependencies, commit, or push."
+    ]
+  },
+  {
+    "problem_id": 3234,
+    "canonical_key": "lc:count-the-number-of-substrings-with-dominant-ones",
+    "parameters": [
+      "s"
+    ],
+    "status": "authored_locally_tested_candidate",
+    "qualification": "not_qualified",
+    "admission": "not_admitted",
+    "base_commit": "bc252ef318b165396288cd3f3d0ecbd4b84c03da",
+    "authorship": "Original implementation and independent oracle code; no upstream solution code consulted or copied.",
+    "source_url": "https://leetcode.com/problems/count-the-number-of-substrings-with-dominant-ones/",
+    "source_consulted_at": "2026-10-27",
+    "definition_provenance": {
+      "official_url": "https://leetcode.com/problems/count-the-number-of-substrings-with-dominant-ones/",
+      "identity_verified": 3234,
+      "scope": "Public definition, constraints, and examples; no editorial or hidden tests."
+    },
+    "contract": {
+      "meaning": "Count contiguous substrings having at least the square of their zero count in ones.",
+      "inputs": "Binary ASCII string of length 1..40000.",
+      "result": "integer in 0..800020000",
+      "ordering": "Preserve query/operation order for arrays; other results scalar.",
+      "mutation": "Input arrays/objects are not modified. NeighborSum constructor copies the grid.",
+      "numeric": "JavaScript Number integers are exact within the stated bounds; all arithmetic products remain below 2^53. Python uses arbitrary-precision integers.",
+      "unicode": "Strings are restricted to the stated ASCII alphabet; out-of-contract Unicode and malformed inputs are unspecified.",
+      "exceptions": "Valid-contract inputs do not raise; malformed input behavior is not a qualified API guarantee."
+    },
+    "complexity": "O(n sqrt(n)) time, O(n) auxiliary space",
+    "correctness_argument": "For each left endpoint and feasible zero count z, exactly one interval of right endpoints has z zeros. Intersect it with length at least z*z+z; count the intersection.",
+    "adapter": null,
+    "tests": {
+      "public_example": 2,
+      "independent_small_oracle": 1022,
+      "structured_large": 1
+    },
+    "test_receipt": "batch4/test-receipt.json",
+    "cases": [
+      [
+        [
+          "00011"
+        ],
+        5
+      ],
+      [
+        [
+          "101101"
+        ],
+        16
+      ]
+    ],
+    "source_files": {
+      "javascript": {
+        "path": "javascript/3234.js",
+        "sha256": "16b4e59024d23c5cae761e4d776cc955ad3efd33d90bbf2bdbc572e8c1a79896"
+      },
+      "python": {
+        "path": "python/3234.py",
+        "sha256": "64ed767b256c23663524187b7608c3c7105acd271378e3d2bbd77f6c38af8961"
+      }
+    },
+    "limitations": [
+      "Finite development tests are not semantic qualification or official judge acceptance.",
+      "No protected/private cases, admission changes, source-access policy changes, dependencies, commit, or push."
+    ]
+  },
+  {
+    "problem_id": 3242,
+    "canonical_key": "lc:design-neighbor-sum-service",
+    "parameters": [
+      "operations",
+      "arguments"
+    ],
+    "status": "authored_locally_tested_candidate",
+    "qualification": "not_qualified",
+    "admission": "not_admitted",
+    "base_commit": "bc252ef318b165396288cd3f3d0ecbd4b84c03da",
+    "authorship": "Original implementation and independent oracle code; no upstream solution code consulted or copied.",
+    "source_url": "https://leetcode.com/problems/design-neighbor-sum-service/",
+    "source_consulted_at": "2026-10-27",
+    "definition_provenance": {
+      "official_url": "https://leetcode.com/problems/design-neighbor-sum-service/",
+      "identity_verified": 3242,
+      "scope": "Public definition, constraints, and examples; no editorial or hidden tests."
+    },
+    "contract": {
+      "meaning": "Execute constructor and adjacent/diagonal neighbor sum calls.",
+      "inputs": "3..10 square grid is a permutation of 0..n*n-1; value valid; at most 2*n*n queries.",
+      "result": "array of null constructor result and integer query results",
+      "ordering": "Preserve query/operation order for arrays; other results scalar.",
+      "mutation": "Input arrays/objects are not modified. NeighborSum constructor copies the grid.",
+      "numeric": "JavaScript Number integers are exact within the stated bounds; all arithmetic products remain below 2^53. Python uses arbitrary-precision integers.",
+      "unicode": "Strings are restricted to the stated ASCII alphabet; out-of-contract Unicode and malformed inputs are unspecified.",
+      "exceptions": "Valid-contract inputs do not raise; malformed input behavior is not a qualified API guarantee."
+    },
+    "complexity": "O(n^2 + q) time and O(n^2) service state",
+    "correctness_argument": "Index each value position once; sum only legal four orthogonal or diagonal offsets.",
+    "adapter": {
+      "native_class": "NeighborSum",
+      "solve": "solve(operations, arguments) consumes equal-length operation and argument arrays, beginning with NeighborSum; emits null for constructor and integer per query. Native NeighborSum is independently exported. Constructor snapshots caller grid."
+    },
+    "tests": {
+      "public_example": 2,
+      "independent_small_oracle": 35
+    },
+    "test_receipt": "batch4/test-receipt.json",
+    "cases": [
+      [
+        [
+          [
+            "NeighborSum",
+            "adjacentSum",
+            "adjacentSum",
+            "diagonalSum",
+            "diagonalSum"
+          ],
+          [
+            [
+              [
+                [
+                  0,
+                  1,
+                  2
+                ],
+                [
+                  3,
+                  4,
+                  5
+                ],
+                [
+                  6,
+                  7,
+                  8
+                ]
+              ]
+            ],
+            [
+              1
+            ],
+            [
+              4
+            ],
+            [
+              4
+            ],
+            [
+              8
+            ]
+          ]
+        ],
+        [
+          null,
+          6,
+          16,
+          16,
+          4
+        ]
+      ],
+      [
+        [
+          [
+            "NeighborSum",
+            "adjacentSum",
+            "diagonalSum"
+          ],
+          [
+            [
+              [
+                [
+                  1,
+                  2,
+                  0,
+                  3
+                ],
+                [
+                  4,
+                  7,
+                  15,
+                  6
+                ],
+                [
+                  8,
+                  9,
+                  10,
+                  11
+                ],
+                [
+                  12,
+                  13,
+                  14,
+                  5
+                ]
+              ]
+            ],
+            [
+              15
+            ],
+            [
+              9
+            ]
+          ]
+        ],
+        [
+          null,
+          23,
+          45
+        ]
+      ]
+    ],
+    "source_files": {
+      "javascript": {
+        "path": "javascript/3242.js",
+        "sha256": "45837692f7420466f50291cf22f46d89f1e6f50bbc48d5c76742b8318192e302"
+      },
+      "python": {
+        "path": "python/3242.py",
+        "sha256": "88a61d3b6db926860da458fbad6dafcc44456684c8f6e1cb300f350be9410b8e"
+      }
+    },
+    "limitations": [
+      "Finite development tests are not semantic qualification or official judge acceptance.",
+      "No protected/private cases, admission changes, source-access policy changes, dependencies, commit, or push."
+    ]
+  },
+  {
+    "problem_id": 3513,
+    "canonical_key": "lc:number-of-unique-xor-triplets-i",
+    "parameters": [
+      "nums"
+    ],
+    "status": "authored_locally_tested_candidate",
+    "qualification": "not_qualified",
+    "admission": "not_admitted",
+    "base_commit": "bc252ef318b165396288cd3f3d0ecbd4b84c03da",
+    "authorship": "Original implementation and independent oracle code; no upstream solution code consulted or copied.",
+    "source_url": "https://leetcode.com/problems/number-of-unique-xor-triplets-i/",
+    "source_consulted_at": "2026-10-27",
+    "definition_provenance": {
+      "official_url": "https://leetcode.com/problems/number-of-unique-xor-triplets-i/",
+      "identity_verified": 3513,
+      "scope": "Public definition, constraints, and examples; no editorial or hidden tests."
+    },
+    "contract": {
+      "meaning": "Count distinct XOR values from triples with nondecreasing indices, allowing repeated indices.",
+      "inputs": "Permutation of 1..n with 1 <= n <= 100000.",
+      "result": "integer in 1..131072",
+      "ordering": "Preserve query/operation order for arrays; other results scalar.",
+      "mutation": "Input arrays/objects are not modified. NeighborSum constructor copies the grid.",
+      "numeric": "JavaScript Number integers are exact within the stated bounds; all arithmetic products remain below 2^53. Python uses arbitrary-precision integers.",
+      "unicode": "Strings are restricted to the stated ASCII alphabet; out-of-contract Unicode and malformed inputs are unspecified.",
+      "exceptions": "Valid-contract inputs do not raise; malformed input behavior is not a qualified API guarantee."
+    },
+    "complexity": "O(log n) time, O(1) space",
+    "correctness_argument": "For n<=2 only the original values occur. For n>=3 the triples span all bit patterns below the next power of two. Reordering is immaterial because XOR is commutative and indices may repeat.",
+    "adapter": null,
+    "tests": {
+      "public_example": 2,
+      "independent_small_oracle": 80,
+      "structured_large": 1
+    },
+    "test_receipt": "batch4/test-receipt.json",
+    "cases": [
+      [
+        [
+          [
+            1,
+            2
+          ]
+        ],
+        2
+      ],
+      [
+        [
+          [
+            3,
+            1,
+            2
+          ]
+        ],
+        4
+      ]
+    ],
+    "source_files": {
+      "javascript": {
+        "path": "javascript/3513.js",
+        "sha256": "54e95372d6a52b6264caaa316f50d67123adaa78a6bcd514319dec02aad66fe9"
+      },
+      "python": {
+        "path": "python/3513.py",
+        "sha256": "86f6dfcca4e0efa3cfde91a4c8be5a8c6c5e2eb7e44a62a992889358dd96107a"
+      }
+    },
+    "limitations": [
+      "Finite development tests are not semantic qualification or official judge acceptance.",
+      "No protected/private cases, admission changes, source-access policy changes, dependencies, commit, or push."
+    ]
+  },
+  {
+    "problem_id": 3522,
+    "canonical_key": "lc:calculate-score-after-performing-instructions",
+    "parameters": [
+      "instructions",
+      "values"
+    ],
+    "status": "authored_locally_tested_candidate",
+    "qualification": "not_qualified",
+    "admission": "not_admitted",
+    "base_commit": "bc252ef318b165396288cd3f3d0ecbd4b84c03da",
+    "authorship": "Original implementation and independent oracle code; no upstream solution code consulted or copied.",
+    "source_url": "https://leetcode.com/problems/calculate-score-after-performing-instructions/",
+    "source_consulted_at": "2026-10-27",
+    "definition_provenance": {
+      "official_url": "https://leetcode.com/problems/calculate-score-after-performing-instructions/",
+      "identity_verified": 3522,
+      "scope": "Public definition, constraints, and examples; no editorial or hidden tests."
+    },
+    "contract": {
+      "meaning": "Follow add/jump instructions until leaving the array or revisiting an executed instruction.",
+      "inputs": "Equal arrays length 1..100000; instructions add/jump; values integers -100000..100000.",
+      "result": "integer within [-10000000000,10000000000]",
+      "ordering": "Preserve query/operation order for arrays; other results scalar.",
+      "mutation": "Input arrays/objects are not modified. NeighborSum constructor copies the grid.",
+      "numeric": "JavaScript Number integers are exact within the stated bounds; all arithmetic products remain below 2^53. Python uses arbitrary-precision integers.",
+      "unicode": "Strings are restricted to the stated ASCII alphabet; out-of-contract Unicode and malformed inputs are unspecified.",
+      "exceptions": "Valid-contract inputs do not raise; malformed input behavior is not a qualified API guarantee."
+    },
+    "complexity": "O(n) time and O(n) space",
+    "correctness_argument": "Mark an instruction before execution; at most n distinct instructions contribute.",
+    "adapter": null,
+    "tests": {
+      "public_example": 3,
+      "independent_small_oracle": 80,
+      "structured_large": 1
+    },
+    "test_receipt": "batch4/test-receipt.json",
+    "cases": [
+      [
+        [
+          [
+            "jump",
+            "add",
+            "add",
+            "jump",
+            "add",
+            "jump"
+          ],
+          [
+            2,
+            1,
+            3,
+            1,
+            -2,
+            -3
+          ]
+        ],
+        1
+      ],
+      [
+        [
+          [
+            "jump",
+            "add",
+            "add"
+          ],
+          [
+            3,
+            1,
+            1
+          ]
+        ],
+        0
+      ],
+      [
+        [
+          [
+            "jump"
+          ],
+          [
+            0
+          ]
+        ],
+        0
+      ]
+    ],
+    "source_files": {
+      "javascript": {
+        "path": "javascript/3522.js",
+        "sha256": "8695908f9ce70f04bbafa6038d686dc2ecb7f429217df7290b6b021bb512ad04"
+      },
+      "python": {
+        "path": "python/3522.py",
+        "sha256": "09c49617e5d3ae1c9faf0f0bf86ed2bbfa763da714eab0bd5918d88a17f29207"
+      }
+    },
+    "limitations": [
+      "Finite development tests are not semantic qualification or official judge acceptance.",
+      "No protected/private cases, admission changes, source-access policy changes, dependencies, commit, or push."
+    ]
+  },
+  {
+    "problem_id": 3527,
+    "canonical_key": "lc:find-the-most-common-response",
+    "parameters": [
+      "responses"
+    ],
+    "status": "authored_locally_tested_candidate",
+    "qualification": "not_qualified",
+    "admission": "not_admitted",
+    "base_commit": "bc252ef318b165396288cd3f3d0ecbd4b84c03da",
+    "authorship": "Original implementation and independent oracle code; no upstream solution code consulted or copied.",
+    "source_url": "https://leetcode.com/problems/find-the-most-common-response/description/",
+    "source_consulted_at": "2026-10-27",
+    "definition_provenance": {
+      "official_url": "https://leetcode.com/problems/find-the-most-common-response/description/",
+      "identity_verified": 3527,
+      "scope": "Public definition, constraints, and examples; no editorial or hidden tests."
+    },
+    "contract": {
+      "meaning": "Choose most frequent response counting each day once, breaking ties lexicographically.",
+      "inputs": "1..1000 days, 1..1000 responses per day, lowercase English words length 1..10.",
+      "result": "string",
+      "ordering": "Preserve query/operation order for arrays; other results scalar.",
+      "mutation": "Input arrays/objects are not modified. NeighborSum constructor copies the grid.",
+      "numeric": "JavaScript Number integers are exact within the stated bounds; all arithmetic products remain below 2^53. Python uses arbitrary-precision integers.",
+      "unicode": "Strings are restricted to the stated ASCII alphabet; out-of-contract Unicode and malformed inputs are unspecified.",
+      "exceptions": "Valid-contract inputs do not raise; malformed input behavior is not a qualified API guarantee."
+    },
+    "complexity": "O(total input characters + distinct responses) expected time; O(distinct responses + largest daily set) space",
+    "correctness_argument": "A daily set prevents repeated contributions; compare frequency and then ASCII lexicographic order.",
+    "adapter": null,
+    "tests": {
+      "public_example": 2,
+      "independent_small_oracle": 80
+    },
+    "test_receipt": "batch4/test-receipt.json",
+    "cases": [
+      [
+        [
+          [
+            [
+              "good",
+              "ok",
+              "good",
+              "ok"
+            ],
+            [
+              "ok",
+              "bad",
+              "good",
+              "ok",
+              "ok"
+            ],
+            [
+              "good"
+            ],
+            [
+              "bad"
+            ]
+          ]
+        ],
+        "good"
+      ],
+      [
+        [
+          [
+            [
+              "good",
+              "ok",
+              "good"
+            ],
+            [
+              "ok",
+              "bad"
+            ],
+            [
+              "bad",
+              "notsure"
+            ],
+            [
+              "great",
+              "good"
+            ]
+          ]
+        ],
+        "bad"
+      ]
+    ],
+    "source_files": {
+      "javascript": {
+        "path": "javascript/3527.js",
+        "sha256": "1109f22aa0601b29f58a14b897bd0d1c32285440a20df453bee281329c2869e4"
+      },
+      "python": {
+        "path": "python/3527.py",
+        "sha256": "f2e8357304283fbc856d587279faa370450af28351d68cbd01aabb7ec97d3b15"
+      }
+    },
+    "limitations": [
+      "Finite development tests are not semantic qualification or official judge acceptance.",
+      "No protected/private cases, admission changes, source-access policy changes, dependencies, commit, or push."
+    ]
+  },
+  {
+    "problem_id": 3534,
+    "canonical_key": "lc:path-existence-queries-in-a-graph-ii",
+    "parameters": [
+      "n",
+      "nums",
+      "maxDiff",
+      "queries"
+    ],
+    "status": "authored_locally_tested_candidate",
+    "qualification": "not_qualified",
+    "admission": "not_admitted",
+    "base_commit": "bc252ef318b165396288cd3f3d0ecbd4b84c03da",
+    "authorship": "Original implementation and independent oracle code; no upstream solution code consulted or copied.",
+    "source_url": "https://leetcode.com/problems/path-existence-queries-in-a-graph-ii/",
+    "source_consulted_at": "2026-10-27",
+    "definition_provenance": {
+      "official_url": "https://leetcode.com/problems/path-existence-queries-in-a-graph-ii/",
+      "identity_verified": 3534,
+      "scope": "Public definition, constraints, and examples; no editorial or hidden tests."
+    },
+    "contract": {
+      "meaning": "Return shortest unweighted distances when values within maxDiff induce edges.",
+      "inputs": "n and q in 1..100000; nums and maxDiff in 0..100000; endpoints valid.",
+      "result": "integer array; -1 unreachable, 0 self, otherwise hop count",
+      "ordering": "Preserve query/operation order for arrays; other results scalar.",
+      "mutation": "Input arrays/objects are not modified. NeighborSum constructor copies the grid.",
+      "numeric": "JavaScript Number integers are exact within the stated bounds; all arithmetic products remain below 2^53. Python uses arbitrary-precision integers.",
+      "unicode": "Strings are restricted to the stated ASCII alphabet; out-of-contract Unicode and malformed inputs are unspecified.",
+      "exceptions": "Valid-contract inputs do not raise; malformed input behavior is not a qualified API guarantee."
+    },
+    "complexity": "O((n+q) log n) time, O(n log n + q) space",
+    "correctness_argument": "Sorted-value components split at large gaps. A shortest monotone route always takes the farthest reachable rank; binary lifting counts these maximal jumps.",
+    "adapter": null,
+    "tests": {
+      "public_example": 3,
+      "independent_small_oracle": 100,
+      "structured_large": 1
+    },
+    "test_receipt": "batch4/test-receipt.json",
+    "cases": [
+      [
+        [
+          5,
+          [
+            1,
+            8,
+            3,
+            4,
+            2
+          ],
+          3,
+          [
+            [
+              0,
+              3
+            ],
+            [
+              2,
+              4
+            ]
+          ]
+        ],
+        [
+          1,
+          1
+        ]
+      ],
+      [
+        [
+          5,
+          [
+            5,
+            3,
+            1,
+            9,
+            10
+          ],
+          2,
+          [
+            [
+              0,
+              1
+            ],
+            [
+              0,
+              2
+            ],
+            [
+              2,
+              3
+            ],
+            [
+              4,
+              3
+            ]
+          ]
+        ],
+        [
+          1,
+          2,
+          -1,
+          1
+        ]
+      ],
+      [
+        [
+          3,
+          [
+            3,
+            6,
+            1
+          ],
+          1,
+          [
+            [
+              0,
+              0
+            ],
+            [
+              0,
+              1
+            ],
+            [
+              1,
+              2
+            ]
+          ]
+        ],
+        [
+          0,
+          -1,
+          -1
+        ]
+      ]
+    ],
+    "source_files": {
+      "javascript": {
+        "path": "javascript/3534.js",
+        "sha256": "17371144e947bbbd0910cce094e7a0c094e4f34d160b74fac154cd6fe9ba0a40"
+      },
+      "python": {
+        "path": "python/3534.py",
+        "sha256": "de43241f84e31af02aab7e85460e0f7d49f87a85172662c622cf8b2864e8c019"
+      }
+    },
+    "limitations": [
+      "Finite development tests are not semantic qualification or official judge acceptance.",
+      "No protected/private cases, admission changes, source-access policy changes, dependencies, commit, or push."
+    ]
+  },
+  {
+    "problem_id": 3546,
+    "canonical_key": "lc:equal-sum-grid-partition-i",
+    "parameters": [
+      "grid"
+    ],
+    "status": "authored_locally_tested_candidate",
+    "qualification": "not_qualified",
+    "admission": "not_admitted",
+    "base_commit": "bc252ef318b165396288cd3f3d0ecbd4b84c03da",
+    "authorship": "Original implementation and independent oracle code; no upstream solution code consulted or copied.",
+    "source_url": "https://leetcode.com/problems/equal-sum-grid-partition-i/",
+    "source_consulted_at": "2026-10-27",
+    "definition_provenance": {
+      "official_url": "https://leetcode.com/problems/equal-sum-grid-partition-i/",
+      "identity_verified": 3546,
+      "scope": "Public definition, constraints, and examples; no editorial or hidden tests."
+    },
+    "contract": {
+      "meaning": "Determine whether one nonempty horizontal or vertical straight cut yields equal sums.",
+      "inputs": "Positive integer matrix; 2..100000 cells; each value 1..100000.",
+      "result": "boolean",
+      "ordering": "Preserve query/operation order for arrays; other results scalar.",
+      "mutation": "Input arrays/objects are not modified. NeighborSum constructor copies the grid.",
+      "numeric": "JavaScript Number integers are exact within the stated bounds; all arithmetic products remain below 2^53. Python uses arbitrary-precision integers.",
+      "unicode": "Strings are restricted to the stated ASCII alphabet; out-of-contract Unicode and malformed inputs are unspecified.",
+      "exceptions": "Valid-contract inputs do not raise; malformed input behavior is not a qualified API guarantee."
+    },
+    "complexity": "O(m*n) time; Python O(m) temporary slice, JavaScript O(1) auxiliary space",
+    "correctness_argument": "Every legal straight cut is a row or column prefix; compare twice each prefix with the total.",
+    "adapter": null,
+    "tests": {
+      "public_example": 2,
+      "independent_small_oracle": 80,
+      "structured_large": 1
+    },
+    "test_receipt": "batch4/test-receipt.json",
+    "cases": [
+      [
+        [
+          [
+            [
+              1,
+              4
+            ],
+            [
+              2,
+              3
+            ]
+          ]
+        ],
+        true
+      ],
+      [
+        [
+          [
+            [
+              1,
+              3
+            ],
+            [
+              2,
+              4
+            ]
+          ]
+        ],
+        false
+      ]
+    ],
+    "source_files": {
+      "javascript": {
+        "path": "javascript/3546.js",
+        "sha256": "6556e75325356c971d0037ed52e3fbb1ff089022b9f6caa64a9f448695b2079f"
+      },
+      "python": {
+        "path": "python/3546.py",
+        "sha256": "51cb6bd47a4e3f761627a23b397ad786c04c3c133b67b341e72e9df1a400dc42"
+      }
+    },
+    "limitations": [
+      "Finite development tests are not semantic qualification or official judge acceptance.",
+      "No protected/private cases, admission changes, source-access policy changes, dependencies, commit, or push."
+    ]
+  },
+  {
+    "problem_id": 3556,
+    "canonical_key": "lc:sum-of-largest-prime-substrings",
+    "parameters": [
+      "s"
+    ],
+    "status": "authored_locally_tested_candidate",
+    "qualification": "not_qualified",
+    "admission": "not_admitted",
+    "base_commit": "bc252ef318b165396288cd3f3d0ecbd4b84c03da",
+    "authorship": "Original implementation and independent oracle code; no upstream solution code consulted or copied.",
+    "source_url": "https://leetcode.com/problems/sum-of-largest-prime-substrings/",
+    "source_consulted_at": "2026-10-27",
+    "definition_provenance": {
+      "official_url": "https://leetcode.com/problems/sum-of-largest-prime-substrings/",
+      "identity_verified": 3556,
+      "scope": "Public definition, constraints, and examples; no editorial or hidden tests."
+    },
+    "contract": {
+      "meaning": "Sum the three largest distinct primes represented by substrings, or all primes if fewer.",
+      "inputs": "Digit ASCII string length 1..10; leading zeroes ignored.",
+      "result": "integer less than 30000000000",
+      "ordering": "Preserve query/operation order for arrays; other results scalar.",
+      "mutation": "Input arrays/objects are not modified. NeighborSum constructor copies the grid.",
+      "numeric": "JavaScript Number integers are exact within the stated bounds; all arithmetic products remain below 2^53. Python uses arbitrary-precision integers.",
+      "unicode": "Strings are restricted to the stated ASCII alphabet; out-of-contract Unicode and malformed inputs are unspecified.",
+      "exceptions": "Valid-contract inputs do not raise; malformed input behavior is not a qualified API guarantee."
+    },
+    "complexity": "O(n^2 sqrt(V) + n^2 log n) time, O(n^2) space; V < 10^10",
+    "correctness_argument": "Enumerate unique parsed values in descending order; exact trial division rejects composites, stopping after three primes.",
+    "adapter": null,
+    "tests": {
+      "public_example": 2,
+      "independent_small_oracle": 80
+    },
+    "test_receipt": "batch4/test-receipt.json",
+    "cases": [
+      [
+        [
+          "12234"
+        ],
+        1469
+      ],
+      [
+        [
+          "111"
+        ],
+        11
+      ]
+    ],
+    "source_files": {
+      "javascript": {
+        "path": "javascript/3556.js",
+        "sha256": "4e599b7f92fc531cb8be072b5328533763f01cb63a3f5cd19c74ed904b13f912"
+      },
+      "python": {
+        "path": "python/3556.py",
+        "sha256": "97e793438092729e746d2ee1114e4c13bf698e30a1442bc412291b6cb39c5e2a"
+      }
+    },
+    "limitations": [
+      "Finite development tests are not semantic qualification or official judge acceptance.",
+      "No protected/private cases, admission changes, source-access policy changes, dependencies, commit, or push."
+    ]
+  },
+  {
+    "problem_id": 3562,
+    "canonical_key": "lc:maximum-profit-from-trading-stocks-with-discounts",
+    "parameters": [
+      "n",
+      "present",
+      "future",
+      "hierarchy",
+      "budget"
+    ],
+    "status": "authored_locally_tested_candidate",
+    "qualification": "not_qualified",
+    "admission": "not_admitted",
+    "base_commit": "bc252ef318b165396288cd3f3d0ecbd4b84c03da",
+    "authorship": "Original implementation and independent oracle code; no upstream solution code consulted or copied.",
+    "source_url": "https://leetcode.com/problems/maximum-profit-from-trading-stocks-with-discounts/",
+    "source_consulted_at": "2026-10-27",
+    "definition_provenance": {
+      "official_url": "https://leetcode.com/problems/maximum-profit-from-trading-stocks-with-discounts/",
+      "identity_verified": 3562,
+      "scope": "Public definition, constraints, and examples; no editorial or hidden tests."
+    },
+    "contract": {
+      "meaning": "Maximize sale-minus-purchase profit under budget; direct child discount applies only if its parent buys.",
+      "inputs": "Rooted employee tree, n<=160; prices 1..50; budget 1..160; hierarchy IDs 1-based, arrays zero-based.",
+      "result": "nonnegative integer",
+      "ordering": "Preserve query/operation order for arrays; other results scalar.",
+      "mutation": "Input arrays/objects are not modified. NeighborSum constructor copies the grid.",
+      "numeric": "JavaScript Number integers are exact within the stated bounds; all arithmetic products remain below 2^53. Python uses arbitrary-precision integers.",
+      "unicode": "Strings are restricted to the stated ASCII alphabet; out-of-contract Unicode and malformed inputs are unspecified.",
+      "exceptions": "Valid-contract inputs do not raise; malformed input behavior is not a qualified API guarantee."
+    },
+    "complexity": "O(n*budget^2) time, O(n*budget) space",
+    "correctness_argument": "Exact-spend subtree tables distinguish whether the parent bought. Child convolutions use discounted state only when this node buys; skipped nodes cannot pass discounts to descendants.",
+    "adapter": null,
+    "tests": {
+      "public_example": 4,
+      "independent_small_oracle": 90
+    },
+    "test_receipt": "batch4/test-receipt.json",
+    "cases": [
+      [
+        [
+          2,
+          [
+            1,
+            2
+          ],
+          [
+            4,
+            3
+          ],
+          [
+            [
+              1,
+              2
+            ]
+          ],
+          3
+        ],
+        5
+      ],
+      [
+        [
+          2,
+          [
+            3,
+            4
+          ],
+          [
+            5,
+            8
+          ],
+          [
+            [
+              1,
+              2
+            ]
+          ],
+          4
+        ],
+        4
+      ],
+      [
+        [
+          3,
+          [
+            4,
+            6,
+            8
+          ],
+          [
+            7,
+            9,
+            11
+          ],
+          [
+            [
+              1,
+              2
+            ],
+            [
+              1,
+              3
+            ]
+          ],
+          10
+        ],
+        10
+      ],
+      [
+        [
+          3,
+          [
+            5,
+            2,
+            3
+          ],
+          [
+            8,
+            5,
+            6
+          ],
+          [
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              3
+            ]
+          ],
+          7
+        ],
+        12
+      ]
+    ],
+    "source_files": {
+      "javascript": {
+        "path": "javascript/3562.js",
+        "sha256": "ff1844209b6a06a30861b02b4493347d98511914dfa18d1c7d3a2f9dea364254"
+      },
+      "python": {
+        "path": "python/3562.py",
+        "sha256": "1f15ed6607936fe6507fa8a838828753e531ee20e4e8aad08bd683402b07fdbc"
+      }
+    },
+    "limitations": [
+      "Finite development tests are not semantic qualification or official judge acceptance.",
+      "No protected/private cases, admission changes, source-access policy changes, dependencies, commit, or push."
+    ]
+  },
+  {
+    "problem_id": 3572,
+    "canonical_key": "lc:maximize-ysum-by-picking-a-triplet-of-distinct-xvalues",
+    "parameters": [
+      "x",
+      "y"
+    ],
+    "status": "authored_locally_tested_candidate",
+    "qualification": "not_qualified",
+    "admission": "not_admitted",
+    "base_commit": "bc252ef318b165396288cd3f3d0ecbd4b84c03da",
+    "authorship": "Original implementation and independent oracle code; no upstream solution code consulted or copied.",
+    "source_url": "https://leetcode.com/problems/maximize-ysum-by-picking-a-triplet-of-distinct-xvalues/",
+    "source_consulted_at": "2026-10-27",
+    "definition_provenance": {
+      "official_url": "https://leetcode.com/problems/maximize-ysum-by-picking-a-triplet-of-distinct-xvalues/",
+      "identity_verified": 3572,
+      "scope": "Public definition, constraints, and examples; no editorial or hidden tests."
+    },
+    "contract": {
+      "meaning": "Maximize sum of three y-values whose corresponding x-values are pairwise distinct.",
+      "inputs": "Equal arrays length 3..100000; x,y in 1..1000000.",
+      "result": "integer -1 or at most 3000000",
+      "ordering": "Preserve query/operation order for arrays; other results scalar.",
+      "mutation": "Input arrays/objects are not modified. NeighborSum constructor copies the grid.",
+      "numeric": "JavaScript Number integers are exact within the stated bounds; all arithmetic products remain below 2^53. Python uses arbitrary-precision integers.",
+      "unicode": "Strings are restricted to the stated ASCII alphabet; out-of-contract Unicode and malformed inputs are unspecified.",
+      "exceptions": "Valid-contract inputs do not raise; malformed input behavior is not a qualified API guarantee."
+    },
+    "complexity": "O(n) expected time, O(distinct x) space",
+    "correctness_argument": "Only the largest y per x can help; take the top three retained groups.",
+    "adapter": null,
+    "tests": {
+      "public_example": 2,
+      "independent_small_oracle": 80
+    },
+    "test_receipt": "batch4/test-receipt.json",
+    "cases": [
+      [
+        [
+          [
+            1,
+            2,
+            1,
+            3,
+            2
+          ],
+          [
+            5,
+            3,
+            4,
+            6,
+            2
+          ]
+        ],
+        14
+      ],
+      [
+        [
+          [
+            1,
+            2,
+            1,
+            2
+          ],
+          [
+            4,
+            5,
+            6,
+            7
+          ]
+        ],
+        -1
+      ]
+    ],
+    "source_files": {
+      "javascript": {
+        "path": "javascript/3572.js",
+        "sha256": "9416fa8ebc90987025b1bf7f7ada8c900d66c70b2b410f8922a2be00c7ba14f5"
+      },
+      "python": {
+        "path": "python/3572.py",
+        "sha256": "c566baf277aafbf9251b7159c8957e6c0020abd8fb927bef18f03fdd35aafd14"
+      }
+    },
+    "limitations": [
+      "Finite development tests are not semantic qualification or official judge acceptance.",
+      "No protected/private cases, admission changes, source-access policy changes, dependencies, commit, or push."
+    ]
+  },
+  {
+    "problem_id": 3577,
+    "canonical_key": "lc:count-the-number-of-computer-unlocking-permutations",
+    "parameters": [
+      "complexity"
+    ],
+    "status": "authored_locally_tested_candidate",
+    "qualification": "not_qualified",
+    "admission": "not_admitted",
+    "base_commit": "bc252ef318b165396288cd3f3d0ecbd4b84c03da",
+    "authorship": "Original implementation and independent oracle code; no upstream solution code consulted or copied.",
+    "source_url": "https://leetcode.com/problems/count-the-number-of-computer-unlocking-permutations/",
+    "source_consulted_at": "2026-10-27",
+    "definition_provenance": {
+      "official_url": "https://leetcode.com/problems/count-the-number-of-computer-unlocking-permutations/",
+      "identity_verified": 3577,
+      "scope": "Public definition, constraints, and examples; no editorial or hidden tests."
+    },
+    "contract": {
+      "meaning": "Count valid root-first computer unlocking orders modulo 1000000007.",
+      "inputs": "2..100000 positive complexities <=10^9. Computer 0 is the root and first in the counted order.",
+      "result": "integer in 0..1000000006",
+      "ordering": "Preserve query/operation order for arrays; other results scalar.",
+      "mutation": "Input arrays/objects are not modified. NeighborSum constructor copies the grid.",
+      "numeric": "JavaScript Number integers are exact within the stated bounds; all arithmetic products remain below 2^53. Python uses arbitrary-precision integers.",
+      "unicode": "Strings are restricted to the stated ASCII alphabet; out-of-contract Unicode and malformed inputs are unspecified.",
+      "exceptions": "Valid-contract inputs do not raise; malformed input behavior is not a qualified API guarantee."
+    },
+    "complexity": "O(n) time, O(1) space",
+    "correctness_argument": "A value no greater than the root cannot become reachable by an increasing-index, increasing-complexity chain. Otherwise the root unlocks every node and all remaining permutations work.",
+    "adapter": null,
+    "tests": {
+      "public_example": 2,
+      "independent_small_oracle": 70,
+      "structured_large": 1
+    },
+    "test_receipt": "batch4/test-receipt.json",
+    "cases": [
+      [
+        [
+          [
+            1,
+            2,
+            3
+          ]
+        ],
+        2
+      ],
+      [
+        [
+          [
+            3,
+            3,
+            3,
+            4,
+            4,
+            4
+          ]
+        ],
+        0
+      ]
+    ],
+    "source_files": {
+      "javascript": {
+        "path": "javascript/3577.js",
+        "sha256": "e6335dde001573d3fe27b1814cea9100cc917bfd90384e91de9c2ab2abc1d89b"
+      },
+      "python": {
+        "path": "python/3577.py",
+        "sha256": "9581b1ec4d9550c733a37700ae76bcebae0cae849041e192aa80571a84169ca0"
+      }
+    },
+    "limitations": [
+      "Finite development tests are not semantic qualification or official judge acceptance.",
+      "No protected/private cases, admission changes, source-access policy changes, dependencies, commit, or push."
+    ]
+  },
+  {
+    "problem_id": 3584,
+    "canonical_key": "lc:maximum-product-of-first-and-last-elements-of-a-subsequence",
+    "parameters": [
+      "nums",
+      "m"
+    ],
+    "status": "authored_locally_tested_candidate",
+    "qualification": "not_qualified",
+    "admission": "not_admitted",
+    "base_commit": "bc252ef318b165396288cd3f3d0ecbd4b84c03da",
+    "authorship": "Original implementation and independent oracle code; no upstream solution code consulted or copied.",
+    "source_url": "https://leetcode.com/problems/maximum-product-of-first-and-last-elements-of-a-subsequence/",
+    "source_consulted_at": "2026-10-27",
+    "definition_provenance": {
+      "official_url": "https://leetcode.com/problems/maximum-product-of-first-and-last-elements-of-a-subsequence/",
+      "identity_verified": 3584,
+      "scope": "Public definition, constraints, and examples; no editorial or hidden tests."
+    },
+    "contract": {
+      "meaning": "Maximize first-times-last product over size-m subsequences.",
+      "inputs": "Array length 1..100000, values -100000..100000, 1<=m<=n.",
+      "result": "integer within [-10000000000,10000000000]",
+      "ordering": "Preserve query/operation order for arrays; other results scalar.",
+      "mutation": "Input arrays/objects are not modified. NeighborSum constructor copies the grid.",
+      "numeric": "JavaScript Number integers are exact within the stated bounds; all arithmetic products remain below 2^53. Python uses arbitrary-precision integers.",
+      "unicode": "Strings are restricted to the stated ASCII alphabet; out-of-contract Unicode and malformed inputs are unspecified.",
+      "exceptions": "Valid-contract inputs do not raise; malformed input behavior is not a qualified API guarantee."
+    },
+    "complexity": "O(n) time, O(1) space",
+    "correctness_argument": "For each right endpoint, eligible left endpoints are at least m-1 positions away. Their minimum and maximum suffice for product maximization; m=1 squares one element.",
+    "adapter": null,
+    "tests": {
+      "public_example": 3,
+      "independent_small_oracle": 80,
+      "structured_large": 1
+    },
+    "test_receipt": "batch4/test-receipt.json",
+    "cases": [
+      [
+        [
+          [
+            -1,
+            -9,
+            2,
+            3,
+            -2,
+            -3,
+            1
+          ],
+          1
+        ],
+        81
+      ],
+      [
+        [
+          [
+            1,
+            3,
+            -5,
+            5,
+            6,
+            -4
+          ],
+          3
+        ],
+        20
+      ],
+      [
+        [
+          [
+            2,
+            -1,
+            2,
+            -6,
+            5,
+            2,
+            -5,
+            7
+          ],
+          2
+        ],
+        35
+      ]
+    ],
+    "source_files": {
+      "javascript": {
+        "path": "javascript/3584.js",
+        "sha256": "3d2db31c170b398823ac06283fafe46068a1e41d7f91673bf851ee7e5d0b79dd"
+      },
+      "python": {
+        "path": "python/3584.py",
+        "sha256": "f11116c2c07039e80eaf80dbb773650bfe464b2fb8e034c10c0c1ed24e3d8a51"
+      }
+    },
+    "limitations": [
+      "Finite development tests are not semantic qualification or official judge acceptance.",
+      "No protected/private cases, admission changes, source-access policy changes, dependencies, commit, or push."
+    ]
+  },
+  {
+    "problem_id": 3590,
+    "canonical_key": "lc:kth-smallest-path-xor-sum",
+    "parameters": [
+      "par",
+      "vals",
+      "queries"
+    ],
+    "status": "authored_locally_tested_candidate",
+    "qualification": "not_qualified",
+    "admission": "not_admitted",
+    "base_commit": "bc252ef318b165396288cd3f3d0ecbd4b84c03da",
+    "authorship": "Original implementation and independent oracle code; no upstream solution code consulted or copied.",
+    "source_url": "https://leetcode.com/problems/kth-smallest-path-xor-sum/",
+    "source_consulted_at": "2026-10-27",
+    "definition_provenance": {
+      "official_url": "https://leetcode.com/problems/kth-smallest-path-xor-sum/",
+      "identity_verified": 3590,
+      "scope": "Public definition, constraints, and examples; no editorial or hidden tests."
+    },
+    "contract": {
+      "meaning": "Select kth smallest distinct root-to-node inclusive XOR among nodes in each queried subtree.",
+      "inputs": "Valid tree rooted 0; n,q<=50000; vals 0..100000; k 1..n; parent labels need not precede children.",
+      "result": "integer array with -1 for insufficient distinct values",
+      "ordering": "Preserve query/operation order for arrays; other results scalar.",
+      "mutation": "Input arrays/objects are not modified. NeighborSum constructor copies the grid.",
+      "numeric": "JavaScript Number integers are exact within the stated bounds; all arithmetic products remain below 2^53. Python uses arbitrary-precision integers.",
+      "unicode": "Strings are restricted to the stated ASCII alphabet; out-of-contract Unicode and malformed inputs are unspecified.",
+      "exceptions": "Valid-contract inputs do not raise; malformed input behavior is not a qualified API guarantee."
+    },
+    "complexity": "O(n log n log V + q log V) time, O(n+q+V) space; V<=n distinct XORs",
+    "correctness_argument": "Iterative DFS assigns Euler intervals. DSU-on-tree retains the largest child sack; frequencies track duplicate XORs while a Fenwick tree stores one flag per present distinct value for order statistics.",
+    "adapter": null,
+    "tests": {
+      "public_example": 2,
+      "independent_small_oracle": 100,
+      "structured_large": 1
+    },
+    "test_receipt": "batch4/test-receipt.json",
+    "cases": [
+      [
+        [
+          [
+            -1,
+            0,
+            0
+          ],
+          [
+            1,
+            1,
+            1
+          ],
+          [
+            [
+              0,
+              1
+            ],
+            [
+              0,
+              2
+            ],
+            [
+              0,
+              3
+            ]
+          ]
+        ],
+        [
+          0,
+          1,
+          -1
+        ]
+      ],
+      [
+        [
+          [
+            -1,
+            0,
+            1
+          ],
+          [
+            5,
+            2,
+            7
+          ],
+          [
+            [
+              0,
+              1
+            ],
+            [
+              1,
+              2
+            ],
+            [
+              1,
+              3
+            ],
+            [
+              2,
+              1
+            ]
+          ]
+        ],
+        [
+          0,
+          7,
+          -1,
+          0
+        ]
+      ]
+    ],
+    "source_files": {
+      "javascript": {
+        "path": "javascript/3590.js",
+        "sha256": "54e337bf121eb1fcc079423b46373729ccd90fde561ae6ae73a1ad14cbe2a53e"
+      },
+      "python": {
+        "path": "python/3590.py",
+        "sha256": "089ce0f8e94501338d30b8eaba8a6a00d551ecc590d77d5c7cd154298b5266b2"
+      }
+    },
+    "limitations": [
+      "Finite development tests are not semantic qualification or official judge acceptance.",
+      "No protected/private cases, admission changes, source-access policy changes, dependencies, commit, or push."
+    ]
+  },
+  {
+    "problem_id": 3600,
+    "canonical_key": "lc:maximize-spanning-tree-stability-with-upgrades",
+    "parameters": [
+      "n",
+      "edges",
+      "k"
+    ],
+    "status": "authored_locally_tested_candidate",
+    "qualification": "not_qualified",
+    "admission": "not_admitted",
+    "base_commit": "bc252ef318b165396288cd3f3d0ecbd4b84c03da",
+    "authorship": "Original implementation and independent oracle code; no upstream solution code consulted or copied.",
+    "source_url": "https://leetcode.com/problems/maximize-spanning-tree-stability-with-upgrades/",
+    "source_consulted_at": "2026-10-27",
+    "definition_provenance": {
+      "official_url": "https://leetcode.com/problems/maximize-spanning-tree-stability-with-upgrades/",
+      "identity_verified": 3600,
+      "scope": "Public definition, constraints, and examples; no editorial or hidden tests."
+    },
+    "contract": {
+      "meaning": "Maximize minimum edge strength of a spanning tree including every mandatory edge, with at most k optional one-time doublings.",
+      "inputs": "2<=n<=100000, 1<=m<=100000, unique undirected edges, strength 1..100000, must 0/1, 0<=k<=n.",
+      "result": "integer -1 or in 1..200000",
+      "ordering": "Preserve query/operation order for arrays; other results scalar.",
+      "mutation": "Input arrays/objects are not modified. NeighborSum constructor copies the grid.",
+      "numeric": "JavaScript Number integers are exact within the stated bounds; all arithmetic products remain below 2^53. Python uses arbitrary-precision integers.",
+      "unicode": "Strings are restricted to the stated ASCII alphabet; out-of-contract Unicode and malformed inputs are unspecified.",
+      "exceptions": "Valid-contract inputs do not raise; malformed input behavior is not a qualified API guarantee."
+    },
+    "complexity": "O((n+m) log S * alpha(n)) time, O(n) space; S<=200000",
+    "correctness_argument": "Threshold feasibility requires an acyclic mandatory forest with sufficient strength. Join all free eligible edges before upgrade edges; every additional component merger costs one upgrade, minimizing the required count.",
+    "adapter": null,
+    "tests": {
+      "public_example": 3,
+      "independent_small_oracle": 100,
+      "structured_large": 1
+    },
+    "test_receipt": "batch4/test-receipt.json",
+    "cases": [
+      [
+        [
+          3,
+          [
+            [
+              0,
+              1,
+              2,
+              1
+            ],
+            [
+              1,
+              2,
+              3,
+              0
+            ]
+          ],
+          1
+        ],
+        2
+      ],
+      [
+        [
+          3,
+          [
+            [
+              0,
+              1,
+              4,
+              0
+            ],
+            [
+              1,
+              2,
+              3,
+              0
+            ],
+            [
+              0,
+              2,
+              1,
+              0
+            ]
+          ],
+          2
+        ],
+        6
+      ],
+      [
+        [
+          3,
+          [
+            [
+              0,
+              1,
+              1,
+              1
+            ],
+            [
+              1,
+              2,
+              1,
+              1
+            ],
+            [
+              2,
+              0,
+              1,
+              1
+            ]
+          ],
+          0
+        ],
+        -1
+      ]
+    ],
+    "source_files": {
+      "javascript": {
+        "path": "javascript/3600.js",
+        "sha256": "32bd1e40d3a24589f42545c72a2101828d3deab67b45b29ac27a54dd9f259066"
+      },
+      "python": {
+        "path": "python/3600.py",
+        "sha256": "1f723e8dc074ee010012f0eef100c4e3194b2bcc6b27852b9763792c57e2b89a"
+      }
+    },
+    "limitations": [
+      "Finite development tests are not semantic qualification or official judge acceptance.",
+      "No protected/private cases, admission changes, source-access policy changes, dependencies, commit, or push."
+    ]
+  },
+  {
+    "problem_id": 3613,
+    "canonical_key": "lc:minimize-maximum-component-cost",
+    "parameters": [
+      "n",
+      "edges",
+      "k"
+    ],
+    "status": "authored_locally_tested_candidate",
+    "qualification": "not_qualified",
+    "admission": "not_admitted",
+    "base_commit": "bc252ef318b165396288cd3f3d0ecbd4b84c03da",
+    "authorship": "Original implementation and independent oracle code; no upstream solution code consulted or copied.",
+    "source_url": "https://leetcode.com/problems/minimize-maximum-component-cost/",
+    "source_consulted_at": "2026-10-27",
+    "definition_provenance": {
+      "official_url": "https://leetcode.com/problems/minimize-maximum-component-cost/",
+      "identity_verified": 3613,
+      "scope": "Public definition, constraints, and examples; no editorial or hidden tests."
+    },
+    "contract": {
+      "meaning": "Minimize the maximum retained edge weight while keeping at most k connected components.",
+      "inputs": "Connected undirected graph, n<=50000, m<=100000, weights 1..1000000, 1<=k<=n.",
+      "result": "integer 0..1000000",
+      "ordering": "Preserve query/operation order for arrays; other results scalar.",
+      "mutation": "Input arrays/objects are not modified. NeighborSum constructor copies the grid.",
+      "numeric": "JavaScript Number integers are exact within the stated bounds; all arithmetic products remain below 2^53. Python uses arbitrary-precision integers.",
+      "unicode": "Strings are restricted to the stated ASCII alphabet; out-of-contract Unicode and malformed inputs are unspecified.",
+      "exceptions": "Valid-contract inputs do not raise; malformed input behavior is not a qualified API guarantee."
+    },
+    "complexity": "O(m log m) time, O(n+m) space",
+    "correctness_argument": "Kruskal joins components by increasing weights until only k remain; any smaller threshold leaves too many components.",
+    "adapter": null,
+    "tests": {
+      "public_example": 2,
+      "independent_small_oracle": 80,
+      "structured_large": 1
+    },
+    "test_receipt": "batch4/test-receipt.json",
+    "cases": [
+      [
+        [
+          5,
+          [
+            [
+              0,
+              1,
+              4
+            ],
+            [
+              1,
+              2,
+              3
+            ],
+            [
+              1,
+              3,
+              2
+            ],
+            [
+              3,
+              4,
+              6
+            ]
+          ],
+          2
+        ],
+        4
+      ],
+      [
+        [
+          4,
+          [
+            [
+              0,
+              1,
+              5
+            ],
+            [
+              1,
+              2,
+              5
+            ],
+            [
+              2,
+              3,
+              5
+            ]
+          ],
+          1
+        ],
+        5
+      ]
+    ],
+    "source_files": {
+      "javascript": {
+        "path": "javascript/3613.js",
+        "sha256": "2cd210a221a3797625e525ac968e7cd8cbd35ee8fd82fb03ea9be6b3adbeda6c"
+      },
+      "python": {
+        "path": "python/3613.py",
+        "sha256": "e0eb05a12d57dbb15a4a90f96e4b7e9f4fc333d292d7a2943e0550af72dbefad"
+      }
+    },
+    "limitations": [
+      "Finite development tests are not semantic qualification or official judge acceptance.",
+      "No protected/private cases, admission changes, source-access policy changes, dependencies, commit, or push."
+    ]
+  },
+  {
+    "problem_id": 3620,
+    "canonical_key": "lc:network-recovery-pathways",
+    "parameters": [
+      "edges",
+      "online",
+      "k"
+    ],
+    "status": "authored_locally_tested_candidate",
+    "qualification": "not_qualified",
+    "admission": "not_admitted",
+    "base_commit": "bc252ef318b165396288cd3f3d0ecbd4b84c03da",
+    "authorship": "Original implementation and independent oracle code; no upstream solution code consulted or copied.",
+    "source_url": "https://leetcode.com/problems/network-recovery-pathways/",
+    "source_consulted_at": "2026-10-27",
+    "definition_provenance": {
+      "official_url": "https://leetcode.com/problems/network-recovery-pathways/",
+      "identity_verified": 3620,
+      "scope": "Public definition, constraints, and examples; no editorial or hidden tests."
+    },
+    "contract": {
+      "meaning": "Maximize the minimum edge cost on a 0-to-last-node path of total cost at most k with all nodes online.",
+      "inputs": "DAG, 2<=n<=50000, m<=100000; costs 0..10^9, k<=5*10^13; endpoints online.",
+      "result": "integer -1 or 0..1000000000",
+      "ordering": "Preserve query/operation order for arrays; other results scalar.",
+      "mutation": "Input arrays/objects are not modified. NeighborSum constructor copies the grid.",
+      "numeric": "JavaScript Number integers are exact within the stated bounds; all arithmetic products remain below 2^53. Python uses arbitrary-precision integers.",
+      "unicode": "Strings are restricted to the stated ASCII alphabet; out-of-contract Unicode and malformed inputs are unspecified.",
+      "exceptions": "Valid-contract inputs do not raise; malformed input behavior is not a qualified API guarantee."
+    },
+    "complexity": "O((n+m) log C) time, O(n+m) space; C<=10^9",
+    "correctness_argument": "For each proposed minimum edge cost, shortest paths in topological order decide budget feasibility. Threshold feasibility is monotone, allowing binary search.",
+    "adapter": null,
+    "tests": {
+      "public_example": 2,
+      "independent_small_oracle": 100,
+      "structured_large": 1
+    },
+    "test_receipt": "batch4/test-receipt.json",
+    "cases": [
+      [
+        [
+          [
+            [
+              0,
+              1,
+              5
+            ],
+            [
+              1,
+              3,
+              10
+            ],
+            [
+              0,
+              2,
+              3
+            ],
+            [
+              2,
+              3,
+              4
+            ]
+          ],
+          [
+            true,
+            true,
+            true,
+            true
+          ],
+          10
+        ],
+        3
+      ],
+      [
+        [
+          [
+            [
+              0,
+              1,
+              7
+            ],
+            [
+              1,
+              4,
+              5
+            ],
+            [
+              0,
+              2,
+              6
+            ],
+            [
+              2,
+              3,
+              6
+            ],
+            [
+              3,
+              4,
+              2
+            ],
+            [
+              2,
+              4,
+              6
+            ]
+          ],
+          [
+            true,
+            true,
+            true,
+            false,
+            true
+          ],
+          12
+        ],
+        6
+      ]
+    ],
+    "source_files": {
+      "javascript": {
+        "path": "javascript/3620.js",
+        "sha256": "46042e2b79342601a48e9b2f048b9237c12c40f36a7112cf213c478fc2ef2652"
+      },
+      "python": {
+        "path": "python/3620.py",
+        "sha256": "efbc3ac8ca0be8a170e43bcabba57ea865dc700c049e66d4e5ad24edcd314f94"
+      }
+    },
+    "limitations": [
+      "Finite development tests are not semantic qualification or official judge acceptance.",
+      "No protected/private cases, admission changes, source-access policy changes, dependencies, commit, or push."
+    ]
+  }
+]
