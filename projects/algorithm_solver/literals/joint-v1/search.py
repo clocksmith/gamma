@@ -23,47 +23,106 @@ def write(path, value):
     path.write_text(json.dumps(value, indent=2, sort_keys=True) + '\n')
 
 
-def order(vocab):
-    return list(base.ALPHABET) + sorted(set(vocab) - set(base.ALPHABET))
+def order(vocab, alphabet=None):
+    """Keep the historical alphabet unless an explicit charged alphabet is supplied."""
+    vocab = list(vocab)
+    alphabet = base.ALPHABET if alphabet is None else list(alphabet)
+    if any(not isinstance(s, str) or not s for s in [*alphabet, *vocab]):
+        raise ValueError('literals must be nonempty strings')
+    if len(set(alphabet)) != len(alphabet):
+        raise ValueError('duplicate alphabet entry')
+    return list(alphabet) + sorted(set(vocab) - set(alphabet))
 
 
-def evaluate(sources, vocab, width, parent=None):
+def representable_prefix(text, tree):
+    """Longest reachable prefix; the existing exact DP chooses its minimum path.
+
+    This never skips a missing character or joins text across an uncovered gap.
+    Equal-length minimum paths retain the existing lower literal-ID tie break.
+    """
+    reachable = {0}
+    for start in range(len(text)):
+        if start not in reachable:
+            continue
+        node, end = tree, start
+        while end < len(text) and text[end] in node:
+            node = node[text[end]]
+            end += 1
+            if None in node:
+                reachable.add(end)
+    end = max(reachable)
+    return end, tuple(base.segment(text[:end], tree))
+
+
+def evaluate(sources, vocab, width, parent=None, *, alphabet=None, allow_partial=False):
     """All variants compete after every move. Reuse only unaffected exact parses."""
-    vocab = order(vocab)
+    if type(width) is not int or not 4 <= width <= 8:
+        raise ValueError('width must be 4..8')
+    vocab = order(vocab, alphabet)
     if len(vocab) > 2**width:
         raise ValueError('dictionary exceeds fixed-width budget')
     if any(s == text for variants in sources.values() for text in variants.values() for s in vocab):
         raise ValueError('whole-program literal')
     tree = base.trie(vocab)
+    if parent:
+        shared = set(vocab) & set(parent['vocab'])
+        if ([s for s in vocab if s in shared]
+                != [s for s in parent['vocab'] if s in shared]):
+            parent = None  # IDs define ties, so reordered shared literals need a new path.
     delta = set(vocab).symmetric_difference(parent['vocab']) if parent else None
-    parsed, chosen = {}, {}
+    parsed, chosen, uncovered, source_hashes = {}, {}, {}, {}
     for pid, variants in sorted(sources.items()):
         options = []
         for variant, text in sorted(variants.items()):
             key = (pid, variant)
-            if parent and not any(fragment in text for fragment in delta):
+            source_hashes[key] = sha(text.encode())
+            if (parent and key in parent['parsed']
+                    and parent.get('source_hashes', {}).get(key) == source_hashes[key]
+                    and not any(fragment in text for fragment in delta)):
                 parts = parent['parsed'][key]
             else:
-                parts = tuple(vocab[i] for i in base.segment(text, tree))
+                try:
+                    parts = tuple(vocab[i] for i in base.segment(text, tree))
+                except ValueError:
+                    if not allow_partial:
+                        raise
+                    end, prefix = representable_prefix(text, tree)
+                    uncovered[key] = {'prefix_characters': end,
+                                      'prefix': tuple(vocab[i] for i in prefix),
+                                      'uncovered_characters': len(text) - end,
+                                      'uncovered_utf8_bytes': len(text[end:].encode())}
+                    continue
             parsed[key] = parts
             options.append((len(parts), len(text.encode()), variant))
-        chosen[pid] = min(options)[2]
+        if options:
+            chosen[pid] = min(options)[2]
     counts = [len(parsed[(pid, variant)]) for pid, variant in chosen.items()]
     dictionary = len(base.dictionary_bytes(vocab))
     packets = sum(41 + (width * n + 7) // 8 for n in counts)
+    singletons = sum(len(piece) == 1 for pid, variant in chosen.items()
+                     for piece in parsed[(pid, variant)])
     return {'vocab': vocab, 'parsed': parsed, 'chosen': chosen,
+            'source_hashes': source_hashes, 'uncovered': uncovered,
+            'coverage': len(chosen), 'target': len(sources), 'allow_partial': allow_partial,
+            'literal_bits': width * sum(counts), 'singleton_bits': width * singletons,
+            'singleton_selections': singletons,
+            'singleton_bit_share': singletons / sum(counts) if sum(counts) else None,
+            'median_selections': statistics.median(counts) if counts else None,
+            'p95_selections': sorted(counts)[math.ceil(.95 * len(counts)) - 1] if counts else None,
             'selections': sum(counts), 'package_bytes': dictionary + packets,
             'dictionary_bytes': dictionary, 'packet_bytes': packets}
 
 
 def cost(state, objective):
+    prefix = (-state['coverage'],) if state.get('allow_partial') else ()
     if objective == 'input':
-        return state['selections'], state['package_bytes']
-    return state['package_bytes'], state['selections']
+        return prefix + (state['selections'], state['package_bytes'])
+    return prefix + (state['package_bytes'], state['selections'])
 
 
 def brief(state):
-    return {k: state[k] for k in ['selections', 'package_bytes', 'dictionary_bytes', 'packet_bytes']} | {'entries': len(state['vocab'])}
+    return {k: state[k] for k in ['coverage', 'target', 'selections', 'literal_bits',
+        'singleton_bits', 'package_bytes', 'dictionary_bytes', 'packet_bytes']} | {'entries': len(state['vocab'])}
 
 
 def proposals(sources, state, limit):
@@ -86,17 +145,23 @@ def proposals(sources, state, limit):
                   key=lambda s: (-sum(scores[s].values()), len(s.encode()), s))[:limit]
 
 
-def prune(sources, state, width):
+def prune(sources, state, width, *, alphabet=None, allow_partial=False):
     used = {s for pid, v in state['chosen'].items() for s in state['parsed'][(pid, v)]}
-    removed = sorted(set(state['vocab']) - used - set(base.ALPHABET))
+    if not used:
+        return state, []  # The existing packet format requires a nonempty dictionary.
+    protected = base.ALPHABET if alphabet is None else alphabet
+    removed = sorted(set(state['vocab']) - used - set(protected))
     if not removed:
         return state, []
-    result = evaluate(sources, set(state['vocab']) - set(removed), width, state)
+    result = evaluate(sources, set(state['vocab']) - set(removed), width, state,
+                      alphabet=alphabet, allow_partial=allow_partial)
     assert result['selections'] == state['selections']
+    assert result['coverage'] == state['coverage']
     return result, removed
 
 
-def improve(sources, initial, width, objective, limits):
+def improve(sources, initial, width, objective, limits, *, alphabet=None,
+            allow_partial=False, candidate_pool=None):
     current = initial
     trace, trials = [], 0
     start = time.monotonic()
@@ -111,25 +176,30 @@ def improve(sources, initial, width, objective, limits):
             nonlocal trials, best, best_move
             candidate = set(current['vocab']) - set(remove) | set(add)
             identity = tuple(sorted(candidate))
-            if len(candidate) > 2**width or identity in tested or expired():
+            if not candidate or len(candidate) > 2**width or identity in tested or expired():
                 return None
             tested.add(identity)
-            state = evaluate(sources, candidate, width, current)
+            state = evaluate(sources, candidate, width, current,
+                             alphabet=alphabet, allow_partial=allow_partial)
             trials += 1
             move = {'remove': list(remove), 'add': list(add), 'result': brief(state),
-                    'source_changes': {str(pid): v for pid, v in state['chosen'].items() if v != current['chosen'][pid]}}
+                    'source_changes': {str(pid): v for pid, v in state['chosen'].items() if v != current['chosen'].get(pid)}}
             attempts.append(move)
             if cost(state, objective) < cost(best, objective):
                 best, best_move = state, move
             return state
         # Score deletion harm exactly; frequency is not used to select removals.
         deletions = []
-        for fragment in current['vocab'][len(base.ALPHABET):]:
+        protected = set(base.ALPHABET if alphabet is None else alphabet)
+        for fragment in current['vocab']:
+            if fragment in protected:
+                continue
             state = consider(remove=[fragment])
             if state:
                 deletions.append((cost(state, objective), fragment))
         removals = [s for _, s in sorted(deletions)[:limits['removal_shortlist']]]
-        additions = proposals(sources, current, limits['addition_shortlist'])
+        additions = (proposals(sources, current, limits['addition_shortlist']) if candidate_pool is None
+                     else [s for s in candidate_pool if s not in current['vocab']][:limits['addition_shortlist']])
         for add in additions:
             consider(add=[add])
             for remove in removals:
@@ -142,7 +212,8 @@ def improve(sources, initial, width, objective, limits):
                 consider(remove=remove, add=pair)
         pruned = []
         if best_move:
-            best, pruned = prune(sources, best, width)
+            best, pruned = prune(sources, best, width, alphabet=alphabet,
+                                 allow_partial=allow_partial)
             assert cost(best, objective) < cost(current, objective)
         trace.append({'round': round_no, 'before': brief(current), 'attempts': attempts,
                       'accepted': best_move, 'pruned_after_move': pruned, 'after': brief(best)})
