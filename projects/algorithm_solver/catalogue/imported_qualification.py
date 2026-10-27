@@ -353,6 +353,10 @@ def load_freeze(path):
         from .request_native2415_qualification import additional_code
         if contract.get('additional_code') != additional_code():
             raise ValueError('unapproved fixed native2415 request code paths')
+    if any(j.get('domain_validator') == 'request-cohort02-v1' for j in contract.get('jobs', [])):
+        from .request_cohort02_qualification import additional_code
+        if contract.get('additional_code') != additional_code():
+            raise ValueError('unapproved fixed cohort02 request code paths')
     for name, expected in contract.get('additional_code', {}).items():
         if file_hash(name) != expected:
             raise ValueError('oracle or validator changed since freeze')
@@ -388,6 +392,9 @@ def load_freeze(path):
     if any(j.get('domain_validator') == 'request-native2415-v1' for j in contract['jobs']):
         from .request_native2415_qualification import verify_freeze
         verify_freeze(path, contract, gate)
+    if any(j.get('domain_validator') == 'request-cohort02-v1' for j in contract['jobs']):
+        from .request_cohort02_qualification import verify_freeze
+        verify_freeze(path, contract, gate)
     return raw, contract, gate
 
 
@@ -397,7 +404,7 @@ def job_inputs(root, job, gate):
         raise ValueError('invalid frozen job identity')
     source_interface(job)
     if ('domain_validator' in job and job['domain_validator'] not in
-            ('fresh67-v1', 'imported358-v1', 'request3215-v1', 'request-next4-v1', 'request-next5-v1', 'request-parallel15-v1', 'request-parallel10-v1', 'request-parallel-fgh15-v1', 'request-git-subset01-v1', 'request-git-ordinary31-v1', 'request-native2415-v1')):
+            ('fresh67-v1', 'imported358-v1', 'request3215-v1', 'request-next4-v1', 'request-next5-v1', 'request-parallel15-v1', 'request-parallel10-v1', 'request-parallel-fgh15-v1', 'request-git-subset01-v1', 'request-git-ordinary31-v1', 'request-native2415-v1', 'request-cohort02-v1')):
         raise ValueError('unknown input validator')
     if job.get('domain_validator') == 'request3215-v1' and pid != 3215:
         raise ValueError('request3215 validator cannot enroll another problem')
@@ -433,11 +440,22 @@ def job_inputs(root, job, gate):
         from .request_native2415_qualification import IDS, INTERFACES
         if pid not in IDS or job.get('source_interface') != INTERFACES[lang]:
             raise ValueError('native2415 validator requires the fixed problem and native interface')
+    if job.get('domain_validator') == 'request-cohort02-v1':
+        from .request_cohort02_qualification import IDS
+        expected_interface = 'commonjs-function-solve-v1' if lang == 'javascript' else 'global-solve-v1'
+        if (pid not in IDS or job.get('source_interface') != expected_interface or
+                job.get('comparison_policy') != 'exact' or job.get('node_identity', False) is not False):
+            raise ValueError('cohort02 validator requires the fixed ordinary population and exact interface')
     suffix = 'py' if lang == 'python' else 'js'
     if job['source'] != f'sources/{pid}.{suffix}' or job['tests'] != f'tests/{pid}.json':
         raise ValueError('invalid frozen exact locator')
-    authorize_before_open(f'leetcode:{pid}', gate['artifact_paths'], gate['trusted_hashes'], language=lang)
-    source = read(root / job['source'], 1024 * 1024)
+    if job.get('domain_validator') == 'request-cohort02-v1':
+        from .request_cohort02_qualification import MUTABLE_ACCESS_LOG, source_bytes
+        source = source_bytes(root / job['source'], pid, lang, gate,
+                              receipt_path=root / MUTABLE_ACCESS_LOG)
+    else:
+        authorize_before_open(f'leetcode:{pid}', gate['artifact_paths'], gate['trusted_hashes'], language=lang)
+        source = read(root / job['source'], 1024 * 1024)
     raw = read(root / job['tests'])
     cases = decode(raw)
     if sha(source) != job['source_sha256'] or sha(raw) != job['tests_raw_sha256'] or len(cases) != job['case_count']:
@@ -485,6 +503,10 @@ def job_inputs(root, job, gate):
             validate(pid, case['args'])
     elif job.get('domain_validator') == 'request-native2415-v1':
         from .request_native2415_qualification import validate
+        for case in cases:
+            validate(pid, case['args'])
+    elif job.get('domain_validator') == 'request-cohort02-v1':
+        from .request_cohort02_qualification import validate
         for case in cases:
             validate(pid, case['args'])
     elif 'domain_validator' in job:
