@@ -11,6 +11,40 @@ import idiom_pilot as pilot
 
 
 class IdiomPoolTests(unittest.TestCase):
+    def test_whitespace_cannot_disguise_single_character_entries(self):
+        text = 'a + 1;\n'
+        sources = {1: {'a': text}, 2: {'a': text + '\n'}}
+        spans = {f'{pid}/a': ['a ', ' 1', ';\n', ' + ', '1;'] for pid in sources}
+        pools, _ = pilot.admitted_pools(sources, spans)
+        for name in ('assistant_seed', 'ast_spans', 'seed_ast_union'):
+            self.assertTrue(all(len(piece.strip()) > 1 for piece in pools[name]))
+            self.assertNotIn('a ', pools[name])
+        self.assertIn('1;', pools['ast_spans'])
+
+    def test_whole_token_windows_bridge_ast_gaps_in_both_languages(self):
+        examples = {
+            'javascript': ('function solve(values) {\n  let count = 0;\n'
+                           '  for (const value of values) { count += value; }\n'
+                           '  return count;\n}\n', ';\n  for'),
+            'python': ('def solve(values):\n    count = 0\n'
+                       '    for value in values:\n        count += value\n'
+                       '    return count\n', '0\n    for'),
+        }
+        for language, (text, join) in examples.items():
+            with self.subTest(language=language):
+                sources = {1: {'a': text}, 2: {'a': text}}
+                parsed = pilot.syntactic_spans(sources, language, Path('/usr/bin/node'),
+                                               pilot.digest('/usr/bin/node'))
+                bounds = {(pid, 'a'): set(parsed['boundaries'][f'{pid}/a']) for pid in sources}
+                pools, _ = pilot.admitted_pools(sources, parsed['spans'], parsed['excluded_units'],
+                                               language, boundaries=bounds)
+                self.assertIn(join, pools['ast_spans'])
+                pool = pilot.arm_pool(pools['seed_ast_union'], sources, 'strict')
+                path = pilot.joint.segment(text, pilot.joint.base.trie(pool), bounds[1, 'a'])
+                self.assertEqual(''.join(pool[i] for i in path), text)
+                self.assertTrue(all(len(pool[i].strip()) > 1 for i in path))
+                self.assertNotIn(text.index('values') + 2, bounds[1, 'a'])
+
     def test_partial_token_occurrences_cannot_establish_human_pool_reuse(self):
         sources = {1: {'a': 'long+2'}, 2: {'a': 'longer+2'}}
         spans = {'1/a': ['long'], '2/a': ['longer']}

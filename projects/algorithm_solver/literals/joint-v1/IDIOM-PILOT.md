@@ -214,6 +214,43 @@ GAMMA_TEST_NODE=/absolute/existing/node python3 -m unittest discover \
 
 ## Historical control and retained failures
 
+### Complete-token joins, 250-source replay
+
+The [token-join replay](development-replay-v1/token-joins-summary.json) retains
+the same 250 exact, previously exposed JavaScript fitting sources. Machine
+proposals now include windows of one through three complete lexer tokens, with
+their exact intervening/trailing whitespace. These fill gaps between AST nodes;
+they do not rewrite sources or substitute parameters. Human-oriented pools also
+reject whitespace-padded single characters. All existing reuse, token-boundary,
+complete-answer exclusion and exact-decoding checks remain in force.
+
+The combined strict arm produced these fitted results:
+
+| Entries | Complete programs | Median / p95 selections | Singleton bits |
+| --- | --- | --- | --- |
+| 64 | 11/250 | 7 / 11 | 0 |
+| 128 | 21/250 | 10 / 15 | 0 |
+| 256 | 38/250 | 12 / 17 | 0 |
+
+Percentiles describe covered programs only; all uncovered programs remain in the
+250 denominator. The preceding strict replay covered zero at each width. Its
+restricted-fallback 256-entry result covered 43 but used 23.34% singleton bits;
+the new result is a tradeoff, not a claim of higher coverage than that result.
+All supplied-population and original milestone claims remain false.
+
+Forty bounded comparisons completed with 882 successful initial/final packet
+round trips. Search elapsed time was 56.91 seconds; the entire systemd unit ran
+62.63 seconds with a 214.3M reported peak under a 2 GiB memory limit and 360-second
+runtime limit. The report binds code, inputs and private full traces.
+
+A separate development probe weighted seed paths by cross-problem reuse before
+evaluating their genuine minimum-cost encodings. Its best 256-entry candidate
+covered 41/250 with median 16, p95 30 and zero singleton bits. Stronger reuse
+weights increased selection costs without improving coverage. This probe is
+retained separately, not installed as the optimizer default. Neither run creates
+source qualification, Python fitting authority, browser admission, publication,
+fresh confirmation or evidence of human usability.
+
 An explicit `--legacy-scale80-control` flag reproduces only the hash-pinned,
 already-exposed 80-problem control. It is mutually exclusive with `--config` and
 does not admit a larger corpus or confer fresh evaluation status. The control
