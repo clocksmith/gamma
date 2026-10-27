@@ -217,4 +217,141 @@ class ObserverSuccessorPolicyTests(unittest.TestCase):
    with self.assertRaises(ValueError):a.check_observation_policy('medium32-wave2-observer-v1',changed)
   self.assertEqual(a.qualification_caveats('medium32-wave2-observer-v1',1743),a.qualification_caveats('medium32-wave2-v1',1743))
 
+
+class Request3215AdoptionTests(unittest.TestCase):
+ def test_mapping_is_explicit_and_cannot_escape(self):
+  self.assertEqual(a.relocated_artifact('/native/bundle/run/a', '/native/bundle', '/local/bundle'), Path('/local/bundle/run/a'))
+  for path in ('/native/bundle2/run/a', '/native/bundle/../a', '/native/bundle//a', 'run/a', '/native/bundle'):
+   with self.subTest(path=path), self.assertRaises(ValueError):
+    a.relocated_artifact(path, '/native/bundle', '/local/bundle')
+  for root in ('/local//bundle', '/local/../bundle', 'local'):
+   with self.subTest(root=root), self.assertRaises(ValueError):
+    a.relocated_artifact('/native/bundle/a', '/native/bundle', root)
+
+ def observation_fixture(self, directory):
+  from . import imported_qualification as q
+  case={'args':[[1],[2],[3]], 'expected':1, 'compare':'return'}
+  record={'i':0,'result':1,'result_type':'int','args_before':case['args'],
+          'args_after':case['args'],'alias_edges':[]}
+  job={'id':3215,'language':'python','source_sha256':'a'*64,'tests_raw_sha256':'b'*64}
+  call={'stem':'3215-python-0','offset':0,'count':1,'exit_code':0,'timed_out':False,'output_limit_exceeded':False}
+  row={'id':3215,'language':'python','source_sha256':job['source_sha256'],'cases':1,
+       'calls':[call],'failures':[],'passed':True}
+  def write(records):
+   stdout=b''.join(q.encoded(x) for x in records)
+   (directory/'3215-python-0.stdout').write_bytes(stdout)
+   (directory/'3215-python-0.stderr').write_bytes(b'')
+   call['stdout_sha256']=a.sha(stdout);call['stderr_sha256']=a.sha(b'')
+  write([record,{'done':1}])
+  return job,case,record,row,write
+
+ def test_comparator_replays_values_types_effects_and_aliases_not_pass_flag(self):
+  # Synthetic unit records exercise the comparator only; they are not an
+  # adoption plan or evidence for the real source qualification.
+  with tempfile.TemporaryDirectory() as tmp:
+   root=Path(tmp);job,case,record,row,write=self.observation_fixture(root)
+   self.assertTrue(a.request3215_observations({'rows':[row]},[job],[case],root)[0]['passed'])
+   for key,value in [('result',0),('result',True),('result_type','number'),
+                     ('args_after',[[1],[2],[4]]),('alias_edges',[['result','args[0]']])]:
+    with self.subTest(key=key,value=value):
+     forged=copy.deepcopy(record);forged[key]=value;write([forged,{'done':1}])
+     with self.assertRaisesRegex(ValueError,'replay disagrees'):
+      a.request3215_observations({'rows':[row]},[job],[case],root)
+
+ def test_observation_incompleteness_order_and_resource_failures_rejected(self):
+  with tempfile.TemporaryDirectory() as tmp:
+   root=Path(tmp);job,case,record,row,write=self.observation_fixture(root)
+   for records in ([record], [record,record,{'done':1}], [{**record,'i':1},{'done':1}]):
+    write(records)
+    with self.assertRaises(ValueError):a.request3215_observations({'rows':[row]},[job],[case],root)
+   write([record,{'done':1}])
+   for key,value in [('offset',1),('count',2),('stem','../elsewhere'),('timed_out',True),('exit_code',1),('output_limit_exceeded',True)]:
+    changed=copy.deepcopy(row);changed['calls'][0][key]=value
+    with self.subTest(key=key),self.assertRaises(ValueError):
+     a.request3215_observations({'rows':[changed]},[job],[case],root)
+   for rows in ([],[row,row]):
+    with self.assertRaises(ValueError):a.request3215_observations({'rows':rows},[job],[case],root)
+
+ def pre_payload_fixture(self):
+  from . import imported_qualification as q
+  from . import request_qualification as request
+  from . import verify_imported_qualification as verifier
+  native='/native/bundle';local='/local/bundle';fr=native+'/run-3215/freeze';repo=a.HERE.parents[2]
+  current=q.code_pins()
+  code={native+'/code/'+str(Path(p).relative_to(repo)):h for p,h in current.items()}
+  generator=native+'/code/'+str(Path(request.__file__).relative_to(repo))
+  jobs=[]
+  for language,suffix in [('javascript','js'),('python','py')]:
+   jobs.append({'id':3215,'language':language,'source':f'sources/3215.{suffix}',
+    'source_sha256':request.SOURCE_SHA256[language],'original_source':native+f'/inputs/sources/{language}/3215.{suffix}',
+    'tests':'tests/3215.json','tests_raw_sha256':request.CASES_SHA256,'tests_canonical_sha256':'a'*64,
+    'case_count':request.CASE_COUNT,'statement':{'path':fr+'/statement.md','sha256':request.STATEMENT_SHA256},
+    'domain_validator':a.REQUEST3215_LANE,'comparison_policy':'exact',
+    'source_interface':'commonjs-object-solve-v1' if language=='javascript' else 'global-solve-v1'})
+  runtime={p:{'resolved':p,'sha256':'a'*64} for p in ('/usr/bin/node','/usr/bin/python3','/usr/bin/bwrap','/usr/bin/prlimit')}
+  raws={k:k.encode() for k in ('freeze','report','verification','review','universe','catalogue','receipts','qualification_service','qualification_boundary_gate')}
+  freeze={'schema':'gamma.imported-independent-execution.v1','selected_problem_ids':[3215],
+   'jobs':jobs,'pending':[],'automatic_promotion':False,'protected_access':False,'limits':q.LIMITS,
+   'max_packet_bytes':q.MAX_PACKET,'code':code,'additional_code':{generator:code[generator]},
+   'runtime':runtime,'service_config_sha256':a.sha(raws['qualification_service'])}
+  report={'schema':'gamma.imported-independent-report.v1','freeze':fr,'freeze_sha256':a.sha(raws['freeze']),
+   'status':'completed','new_qualifications':0}
+  review={'independent_review':True,'reviewed':list(a.REQUEST3215_REVIEW),
+   **{k+'_sha256':a.sha(raws[k]) for k in ('freeze','report','verification')},
+   'source_sha256':request.SOURCE_SHA256,'native_runtime_sha256':digest(runtime)}
+  gate={'schema':'gamma.boundary-gate-config.v1','artifact_paths':{},'trusted_hashes':{'universe':a.sha(raws['universe'])}}
+  service={'schema':'gamma.known-spec-service.v2','source_access':{'boundary_gate':{'sha256':a.sha(raws['qualification_boundary_gate'])}},
+   **{name:{'sha256':a.sha(raws[key])} for name,key in [('universe','universe'),('catalogue','catalogue'),('verified_receipts','receipts')]}}
+  values={'freeze':freeze,'report':report,'verification':{},'review':review,'boundary_gate':gate,
+   'qualification_boundary_gate':copy.deepcopy(gate),'qualification_service':service,'authority_review':{}}
+  plan={'native_bundle_root':native,'artifact_root':local,
+   'freeze':{'path':local+'/run-3215/freeze/contract.json'},'report':{'path':local+'/run-3215/observations/report.json'},
+   'verification':{'path':local+'/run-3215/independent-verification.json'}}
+  code_payloads={str(Path(local)/'code'/Path(p).relative_to(repo)):Path(p).read_bytes() for p in [*current,verifier.__file__]}
+  return plan,values,raws,code_payloads
+
+ def test_denied_gate_never_reads_candidate_statement_or_cases(self):
+  plan,values,raws,code=self.pre_payload_fixture()
+  with patch.object(a,'bounded_regular_read',side_effect=lambda p,**kw:code[str(p)]) as reads, \
+       patch.object(a.boundary_policy,'authorize_before_open',side_effect=PermissionError('denied')):
+   with self.assertRaises(PermissionError):a.replay_request3215(plan,values,raws)
+  self.assertTrue(reads.call_args_list)
+  self.assertTrue(all('/code/' in str(call.args[0]) for call in reads.call_args_list))
+
+ def test_missing_authority_never_reads_candidate_statement_or_cases(self):
+  plan,values,raws,code=self.pre_payload_fixture()
+  with patch.object(a,'bounded_regular_read',side_effect=lambda p,**kw:code[str(p)]) as reads, \
+       patch.object(a.boundary_policy,'authorize_before_open'):
+   with self.assertRaisesRegex(ValueError,'adoption fields'):a.replay_request3215(plan,values,raws)
+  self.assertTrue(all('/code/' in str(call.args[0]) for call in reads.call_args_list))
+
+ def test_interface_and_population_fail_before_payload_reads(self):
+  plan,values,raws,_=self.pre_payload_fixture()
+  for key,value in [('source_interface','global-solve-v1'),('id',3216),('source','../3215.js')]:
+   changed=copy.deepcopy(values);changed['freeze']['jobs'][0][key]=value
+   with self.subTest(key=key),patch.object(a,'bounded_regular_read',side_effect=AssertionError('must not read')):
+    with self.assertRaises(ValueError):a.replay_request3215(plan,changed,raws)
+
+ def test_review_and_runtime_changes_fail_before_payload_reads(self):
+  plan,values,raws,code=self.pre_payload_fixture()
+  for key,value in [('independent_review',False),('source_sha256',{}),('reviewed',['boundary_policy']),('native_runtime_sha256','f'*64)]:
+   changed=copy.deepcopy(values);changed['review'][key]=value
+   with self.subTest(key=key),patch.object(a,'bounded_regular_read',side_effect=lambda p,**kw:code[str(p)]) as reads:
+    with self.assertRaisesRegex(ValueError,'review required'):a.replay_request3215(plan,changed,raws)
+   self.assertTrue(all('/code/' in str(call.args[0]) for call in reads.call_args_list))
+
+ def test_fixed_input_gate_uses_existing_request_owner_without_execution(self):
+  from . import request_qualification as request
+  contract={'reviewed_statement_contract':{'problem_id':'leetcode:3215','numeric_problem_id':3215},
+   'input_validator':{'lane':a.REQUEST3215_LANE,'module_sha256':a.sha(Path(request.__file__).read_bytes()),
+    'numeric_problem_id':3215,'entrypoint':'validate','required_before_candidate_execution':True}}
+  impl={'status':'qualified','evidence_class':'normative-typed-effects','problem_contract_sha256':digest(contract),
+   'provenance':{'public_batch':{'problem_contract':contract}}}
+  self.assertEqual(a.validate_batch_inputs(impl,[[0],[1],[2]])['candidate_executed'],False)
+  for args in ([[True],[0],[0]],[[],[0],[0]],[[10**9+1],[0],[0]]):
+   with self.assertRaises(ValueError):a.validate_batch_inputs(impl,args)
+  contract['input_validator']['numeric_problem_id']=3216
+  impl['problem_contract_sha256']=digest(contract)
+  with self.assertRaises(ValueError):a.validate_batch_inputs(impl,[[0],[1],[2]])
+
 if __name__=='__main__':unittest.main()
