@@ -15,6 +15,113 @@ from .boundary_policy import validate_policy
 from .catalogue import BINDINGS, LANGUAGES, digest, hash_value, validate
 from .public_batch_adapter import bounded_regular_read, pinned, sha
 from ..algsolve import authoring_variants
+from ..algsolve.splits import sibling_base
+
+
+def reconcile_development_replay(catalogue, historical_aliases, key_aliases, source_contract,
+                                 qualification_contract, source_contract_sha256, boundary):
+    """Join historical exact JS fit authority, without making a new registry.
+
+    Caller verifies raw metadata pins and current catalogue/receipts first. This
+    is exposed source-as-data replay, never independent family confirmation.
+    Optional modern authoring sidecars cannot retroactively invalidate a pinned
+    historical fit. No sidecar hash or authoring variant identity is invented.
+    """
+    if (source_contract.get('schema') != 'gamma.cost-decomposition.contract.v1' or
+            qualification_contract.get('schema') != 'gamma.name-search.v1' or
+            qualification_contract.get('parent_contract_sha256') != source_contract_sha256 or
+            qualification_contract.get('partition') != source_contract.get('partition')):
+        raise ValueError('exact historical source/qualification contract chain required')
+    partition = source_contract['partition']
+    if set(partition) != {'dev_fit', 'dev_val'}:
+        raise ValueError('preserved fit/validation partition required')
+    for ids in partition.values():
+        if (not isinstance(ids, list) or not ids or
+                any(type(pid) is not int or pid <= 0 for pid in ids) or len(ids) != len(set(ids))):
+            raise ValueError('invalid historical membership')
+    fit, val = (set(partition[k]) for k in ('dev_fit', 'dev_val'))
+    if fit & val:
+        raise ValueError('historical membership conflict')
+    sources = source_contract.get('sources', [])
+    by_source = {r['id']: r for r in sources}
+    cases = qualification_contract.get('qualification', [])
+    by_cases = {r['id']: r for r in cases}
+    expected = {f'development400:{pid}': f'leetcode:{pid}' for pid in fit | val}
+    if (len(by_source) != len(sources) or set(by_source) != fit | val or
+            len(by_cases) != len(cases) or set(by_cases) != fit | val or
+            historical_aliases.get('aliases') != expected):
+        raise ValueError('exact historical population/alias denominator required')
+    for pid, row in by_source.items():
+        path = Path(row['relative_path'])
+        if (not hash_value(row.get('sha256')) or path.is_absolute() or '..' in path.parts or
+                path.suffix != '.js' or path.stem != str(pid) or
+                set(by_cases[pid].get('files', {})) != {
+                    f'population500/{pid}-tests.json', f'population500-baseline/qualification/baselines/{pid}.json'} or
+                any(not hash_value(h) for h in by_cases[pid]['files'].values())):
+            raise ValueError('historical exact JavaScript source/case commitments required')
+    current = {r['problem_id']: r for r in catalogue['problems']}
+    parent = {gid: gid for gid in current}
+    def root(gid):
+        while parent[gid] != gid:
+            parent[gid] = parent[parent[gid]]; gid = parent[gid]
+        return gid
+    def union(a, b):
+        a, b = root(a), root(b)
+        parent[max(a, b)] = min(a, b)
+    families = {}
+    aliases = key_aliases.get('by_key')
+    if not isinstance(aliases, dict):
+        raise ValueError('existing corpus key alias metadata required')
+    for key, gid in aliases.items():
+        if not isinstance(key, str) or not re.fullmatch(r'lc:[a-z0-9]+(?:-[a-z0-9]+)*', key) or gid not in current:
+            raise ValueError('unknown or malformed canonical key alias')
+        # Reuse the recognition owner's existing roman-suffix sibling rule.
+        # These known links can exclude a conflict; they cannot prove full closure.
+        family = sibling_base(key[3:])
+        if family in families:
+            union(gid, families[family])
+        else:
+            families[family] = gid
+    groups = {}
+    for gid in current:
+        groups.setdefault(root(gid), []).append(gid)
+    fit_ids = {f'leetcode:{pid}' for pid in fit}
+    rows = []
+    for pid in sorted(fit | val):
+        gid = f'leetcode:{pid}'
+        if gid not in current:
+            raise ValueError('historical identity absent from canonical catalogue')
+        members = sorted(groups[root(gid)])
+        conflict = sorted(set(members) - fit_ids if gid in fit_ids else set(members) & fit_ids)
+        slots = {}
+        for language in LANGUAGES:
+            impl = current[gid]['implementations'][language]
+            authorized = gid in boundary.authorized
+            exact = language == 'javascript' and impl.get('source_sha256') == by_source[pid]['sha256']
+            reasons = []
+            if gid not in fit_ids: reasons.append('preserved_consumed_development_validation')
+            if not authorized: reasons.append('source_permission_not_authorized')
+            if impl.get('status') != 'qualified': reasons.append('current_qualification_not_established')
+            if not exact: reasons.append('historical_exact_language_source_not_joined')
+            if conflict: reasons.append('known_alias_sibling_group_crosses_membership')
+            slots[language] = {'eligible': not reasons, 'exclusions': reasons,
+                'canonical_variant_id': impl.get('canonical_variant_id'),
+                'bindings': {k: impl.get(k) for k in BINDINGS},
+                'receipt_sha256': impl.get('receipt_sha256'),
+                'identity_owner': 'current canonical catalogue; historical exact source contract',
+                'authoring_variant_created': False, 'sidecar_semantics_sha256': None,
+                'semantic_binding': 'current receipt problem_contract_sha256; no invented authoring sidecar'}
+        rows.append({'problem_id': gid, 'historical_membership': 'dev_fit' if pid in fit else 'dev_val',
+            'exposure': 'previously_exposed', 'canonical_group_members': members,
+            'known_cross_membership_conflicts': conflict,
+            'grouping_scope': 'canonical identity plus existing alias/roman-sibling links; full near-duplicate closure unknown',
+            'implementations': slots})
+    return {'schema': 'gamma.historical-development-replay-join.v1', 'problems': rows,
+        'summary': {'problems': len(rows), 'historical_fit': len(fit), 'preserved_validation': len(val),
+            'eligible': {language: sum(r['implementations'][language]['eligible'] for r in rows) for language in LANGUAGES},
+            'known_group_conflict_fit_problems': sum(r['problem_id'] in fit_ids and bool(r['known_cross_membership_conflicts']) for r in rows),
+            'source_payload_reads': 0, 'qualification_created': False, 'fresh_confirmation_created': False,
+            'unseen_generalization_evaluated': False, 'complete_near_duplicate_closure_established': False}}
 
 
 def project(universe, catalogue, receipts, policy, aliases, census, exposure):

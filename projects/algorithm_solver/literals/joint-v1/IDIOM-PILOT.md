@@ -18,9 +18,36 @@ never letters or digits. Complementary source-path bundles seed the dictionary;
 no alphabet receives slots first. The strict initializer also competes in the
 fallback arm. Empty pools remain explicit zero-coverage, unserializable states.
 
-## Pinned input contract
+## Historical exposed development replay
 
-The larger-corpus fitting CLI requires an
+An existing fit contract is sufficient authority for its exact source bytes;
+optional modern authoring records are not a retroactive requirement. The
+`gamma.idiom-development-replay-config.v1` route has exactly `schema`, `language`
+(`javascript`), `service`, `source_contract` and `qualification_contract`. The last
+three are absolute path/SHA256 descriptors. It consumes the existing
+cost-decomposition source contract and name-search qualification contract, checks
+their parent hash, identical complete fit/validation partition, exact numeric
+aliases and source/case commitments, and joins current qualified canonical bytes.
+Changed sources and Python cannot inherit this JavaScript exact-source grant.
+
+`guide_admission.reconcile_development_replay` owns this metadata join. It preserves
+canonical variant IDs and current receipt problem-contract/semantics bindings;
+no new variant registry, sidecar hash, qualification or split is invented. Both
+language slots share canonical problem grouping. Existing corpus-key aliases and
+the recognition owner's roman-suffix sibling rule identify known group conflicts;
+fit members linked to validation, reserved or unknown/outside members are excluded
+without reallocation. Missing full near-duplicate closure remains explicit.
+
+This reruns an already exposed development fit. It creates neither a new grouped
+corpus assignment nor independent confirmation, and cannot establish unseen
+generalization. Unknown closure still blocks a fresh confirmation claim; it does
+not retroactively revoke the historical exact-source fitting authority. The full
+historical denominator and per-record exclusions remain in the private contract.
+All source opens still use the live existing service boundary and exact hashes.
+
+## Modern authoring input contract
+
+The modern larger-corpus route requires an
 absolute hash-pinned `gamma.idiom-fitting-config.v1` JSON file with exactly these
 fields: `schema`, `language` (`python` or `javascript`), `service`, `admission`,
 `authoring_catalog`, and `fitting_policy`. Each of the last four fields is an
@@ -55,9 +82,10 @@ All selected metadata is preflighted before the first source request:
 - Reject duplicate variants/bytes. Request source only through the existing
   service, which repeats its live boundary before opening. Recheck exact bytes.
 
-The current admission projection defaults to unknown memberships/unreviewed
-closure. It therefore cannot be fitted until authentic exposure, grouping,
-variant and policy joins exist. This tool does not assign those joins, qualify
+The current prospective admission projection defaults to unknown memberships/
+unreviewed closure. This route therefore needs authentic exposure, grouping,
+variant and policy joins. Existing historical replay uses the route above rather
+than treating optional new records as a retroactive gate. This tool assigns no joins, qualifies
 new variants, establish licenses, admit browser guides or grant publication.
 The bounded loader accepts up to 4096 selected variants per language and 32 MiB
 of source text; this is capacity, not a claim that a population is eligible.
@@ -115,6 +143,66 @@ original population, coverage, median 32, p95 96 or 10% singleton-bit gates.
 `pilot_numeric_thresholds_met` describes only the supplied development population;
 `original_population_gate_evaluated` and `milestone_qualified` remain false.
 No fitted profile is promoted or deployed.
+
+## Historical development replay result
+
+The [pre-integration character-floor comparator](development-replay-v1/summary.json)
+retains its original code pins and measured implementation identity. It predates
+the upstream strict/punctuation lexical policy integrated below; its full-coverage
+results are not results under that newer policy. It uses 250 exposed,
+byte-identical JavaScript fit sources from the historical 300/100 split. Of 287
+matching fit sources, 37 are excluded by known cross-membership alias/sibling
+groups; 13 other current canonical fit sources differ from the historical bytes.
+The 100 validation members remain excluded. No optional authoring ledger is
+required retroactively, and this JavaScript authority is not transferred to Python.
+
+One matched round per pool/width completed in 32.71 seconds. The final run's
+sampled peak process-group RSS was 317816832 bytes, below its 2 GiB sampled guard;
+the wall limit was 180 seconds. This is sampled monitoring, not an OS memory-limit
+or between-poll peak claim. Initial/final packets passed 5544 canonical round trips.
+The report preserves prior attempts and all 20 arms; no source strings, dictionary
+entries, literal-ID sequences or private membership lists are published.
+
+Best final arm at each width, ordered by coverage then absolute singleton bits,
+total literal bits and package bytes:
+
+| Width | Pool | Coverage | Selections | Singleton bits | Median / p95 | Package bytes |
+| --- | --- | --- | --- | --- | --- | --- |
+| 4 | seed | 0/250 | 0 | 0 | unavailable | 83 |
+| 5 | seed | 0/250 | 0 | 0 | unavailable | 163 |
+| 6 | seed | 193/250 | 41168 | 247008 | 193 / 432 | 39189 |
+| 7 | seed | 250/250 | 38801 | 224210 | 126 / 323 | 45160 |
+| 8 | seed + AST | 250/250 | 32219 | 203400 | 99.5 / 301 | 45660 |
+
+At width 8, seed-only uses 38116 selections, 249496 singleton bits and 49408
+package bytes. The combined arm improves those costs but still has 78.91%
+singleton bits. Machine-only spans are worse than seeds at both full-coverage
+widths. No arm passes the unchanged 32/96/10% gates; the original frozen-population
+gate is not evaluated. Low-width zero/partial coverage is failure, not cheap
+complete representation. This limited search is not an infeasibility result.
+
+The [integrated constrained comparison](development-replay-v1/constrained-summary.json)
+preserves both upstream singleton arms and complete lexical boundaries on the
+same 250 sources. All 40 matched arms completed in 85.92 seconds, sampled peak
+process-group RSS 318324736 bytes, with 526 initial/final canonical packet round
+trips. Strict human-oriented pools cover **0/250 at every width**. Highest human
+pool coverage with punctuation-only fallback is:
+
+| Width | Pool | Coverage | Selections | Singleton bits | Median / p95 | Package bytes |
+| --- | --- | --- | --- | --- | --- | --- |
+| 4 | AST | 3/250 | 19 | 20 | 5 / 9 | 544 |
+| 5 | seed + AST | 6/250 | 45 | 60 | 8 / 10 | 889 |
+| 6 | seed + AST | 12/250 | 140 | 276 | 10.5 / 31 | 1607 |
+| 7 | seed + AST | 23/250 | 297 | 539 | 13 / 19 | 2949 |
+| 8 | seed + AST | 43/250 | 694 | 1296 | 16 / 23 | 5770 |
+
+These percentiles describe covered programs only. Every arm fails supplied-
+population qualification; the denominator remains 250, with exclusions against
+the historical 400 also retained. Compression-only fragments remain a separate
+unrestricted-boundary control. This is a measured coverage bottleneck under the
+bounded proposal/initializer policy, not evidence that larger vocabularies or
+all equivalent programs are impossible. The candidate pools contain 57 seeds,
+3686 syntactic spans, 3716 union entries and 29465 compression fragments.
 
 Focused checks (set `GAMMA_TEST_NODE` to an existing Node path to include its
 parse-only integration check):

@@ -10,6 +10,7 @@ import sys
 sys.path.insert(0, str(Path(__file__).resolve().parents[4]))
 from projects.algorithm_solver.algsolve import authoring_variants as owner
 from projects.algorithm_solver.catalogue.catalogue import BINDINGS, hash_value
+from projects.algorithm_solver.catalogue.guide_admission import reconcile_development_replay
 from projects.algorithm_solver.catalogue.known_spec_service import (
     KnownSpecService, _boundary_snapshot, _strict_spec,
 )
@@ -27,9 +28,59 @@ def fields(value, names):
     require(isinstance(value, dict) and set(value) == set(names), 'unexpected fitting fields')
 
 
+def load_development_replay(config, config_sha256):
+    """Historical exact JS fitting needs no newly invented authoring ledger."""
+    fields(config, ('schema', 'language', 'service', 'source_contract', 'qualification_contract'))
+    require(config['language'] == 'javascript', 'historical contract authorizes exact JavaScript sources only')
+    service_config, source_contract, qualification = (
+        _strict_spec(config[k]) for k in ('service', 'source_contract', 'qualification_contract'))
+    service = KnownSpecService.from_config(config['service']['path'], config['service']['sha256'])
+    gate = _strict_spec(service_config['source_access']['boundary_gate'])
+    boundary = _boundary_snapshot(gate)
+    aliases = _strict_spec(service_config['source_access']['aliases'])
+    key_aliases = _strict_spec({'path': gate['artifact_paths']['identity_aliases'],
+                                'sha256': gate['trusted_hashes']['identity_aliases']})
+    catalogue = _strict_spec(service_config['catalogue'])
+    joined = reconcile_development_replay(catalogue, aliases, key_aliases, source_contract,
+        qualification, config['source_contract']['sha256'], boundary)
+    selected = [row for row in joined['problems'] if row['implementations']['javascript']['eligible']]
+    require(0 < len(selected) <= MAX_VARIANTS, 'no bounded eligible historical replay population')
+    # Complete metadata selection precedes every source open. KnownSpecService
+    # repeats the live source gate, hash and current receipt checks on each read.
+    sources, memberships, size = {}, [], 0
+    for row in selected:
+        gid = row['problem_id']; slot = row['implementations']['javascript']
+        require(gid in service_config['source_access']['authorized_problem_ids'], 'outside service source grant')
+        boundary.authorize(gid, language='javascript', payload_kind='source')
+    for row in selected:
+        gid = row['problem_id']; slot = row['implementations']['javascript']
+        value = service.request(gid, language='javascript', include_source=True)
+        artifact = value.get('artifact', {}); text = artifact.get('source_utf8')
+        require(artifact.get('status') == 'materialized' and isinstance(text, str) and text.strip() and
+                owner.sha(text.encode()) == artifact.get('source_sha256') == slot['bindings']['source_sha256'],
+                'guarded historical exact source bytes unavailable')
+        size += len(text.encode()); require(size <= MAX_SOURCE_BYTES, 'fitting source byte budget exceeded')
+        sources[int(gid.split(':')[1])] = {slot['canonical_variant_id']: text}
+        memberships.append({'problem_id': gid, 'membership': row['historical_membership'],
+            'canonical_group_members': row['canonical_group_members'], 'canonical_variant_id': slot['canonical_variant_id'],
+            'source_sha256': slot['bindings']['source_sha256'],
+            'problem_contract_sha256': slot['bindings']['problem_contract_sha256'],
+            'receipt_sha256': slot['receipt_sha256'], 'sidecar_semantics_sha256': None})
+    return sources, {'schema': 'gamma.idiom-development-replay-inputs.v1', 'language': 'javascript',
+        'config_sha256': config_sha256, 'inputs': {k + '_sha256': config[k]['sha256']
+            for k in ('service', 'source_contract', 'qualification_contract')},
+        'problem_count': len(sources), 'source_count': len(sources), 'source_bytes': size,
+        'memberships': memberships, 'historical_join': joined, 'source_rewrites': 0, 'candidate_executions': 0,
+        'qualification_created': False, 'corpus_admission_created': False,
+        'browser_admission_created': False, 'publication_authorized': False,
+        'fresh_confirmation_created': False, 'unseen_generalization_evaluated': False}
+
+
 def load_fitting_inputs(config_path, config_sha256):
     """Preflight EVERY selected metadata row before any guarded source request."""
     config = _strict_spec({'path': str(config_path), 'sha256': config_sha256})
+    if config.get('schema') == 'gamma.idiom-development-replay-config.v1':
+        return load_development_replay(config, config_sha256)
     fields(config, ('schema', 'language', 'service', 'admission', 'authoring_catalog', 'fitting_policy'))
     require(config['schema'] == 'gamma.idiom-fitting-config.v1' and
             config['language'] in ('javascript', 'python'), 'explicit fitting schema and language required')

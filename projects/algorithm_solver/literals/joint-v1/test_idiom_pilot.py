@@ -6,6 +6,7 @@ from collections import defaultdict
 import json
 from pathlib import Path
 import subprocess
+import shutil
 import idiom_pilot as pilot
 
 
@@ -20,7 +21,10 @@ class IdiomPoolTests(unittest.TestCase):
 
     def test_ast_spans_keep_charged_separators_and_unicode_boundaries(self):
         source = 'function solve(longName) {\n  return "λ😀" + longName;\n}\n'
-        raw = subprocess.run(['/usr/bin/node', '--expose-internals',
+        node = os.environ.get('GAMMA_TEST_NODE') or shutil.which('node')
+        if not node:
+            self.skipTest('existing Node runtime required for parse-only integration')
+        raw = subprocess.run([node, '--expose-internals',
                               str(Path(pilot.__file__).with_name('idiom_spans.cjs'))],
                              input=json.dumps({'sources': {'one': source}, 'max_span_bytes': 160}), text=True, capture_output=True,
                              timeout=10, check=True)
@@ -105,6 +109,12 @@ class IdiomPoolTests(unittest.TestCase):
         pareto = next(row for row in result if 'pareto_pools' in row)
         self.assertEqual(pareto['pareto_pools'], ['ast_spans', 'seed_ast_union'])
 
+    def test_python_complete_class_and_body_cannot_be_a_literal(self):
+        text = 'class Solution:\n    x = 1\n    y = 2\n'
+        parsed = pilot.python_spans({'1/a': text})
+        pools, _ = pilot.admitted_pools({1: {'a': text}, 2: {'a': text + '# other\n'}},
+            {'1/a': ['x = 1\n    y = 2'], '2/a': ['x = 1\n    y = 2']}, parsed['excluded_units'], 'python')
+        for pool in pools.values(): self.assertNotIn('x = 1\n    y = 2', pool)
 
     def test_python_long_unicode_and_adjacent_spans_are_exact_without_execution(self):
         text = ('raise RuntimeError("never execute")\n'

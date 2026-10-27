@@ -127,7 +127,7 @@ def python_spans(sources, maximum_bytes=MAX_SPAN_BYTES):
         boundaries[key] = sorted(safe)
         found = set()
         for node in ast.walk(tree):
-            if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef, ast.Lambda)):
+            if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef, ast.Lambda)):
                 excluded.add(ast.get_source_segment(text, node))
                 if isinstance(node.body, list) and node.body:
                     first, last = node.body[0], node.body[-1]
@@ -365,9 +365,9 @@ def main():
     contract = {'schema': 'gamma.exposed-idiom-pilot.v2', 'fitting_inputs': inputs,
                 'source_count': inputs['source_count'], 'problem_count': len(sources), 'language': inputs['language'],
                 'source_exposure': 'Previously exposed historical control' if args.legacy_scale80_control else 'Explicit previously_exposed development_fit selection; no fresh confirmation',
-                'source_evidence': 'Historical finite qualification only' if args.legacy_scale80_control else 'Exact existing canonical receipts and unchanged authoring variant identities',
-                'authoring_registry_reconciliation': 'Legacy semantics join unavailable' if args.legacy_scale80_control else 'Existing owner queried; unknown authoring status retained',
-                'family_reuse': 'Unknown for legacy control' if args.legacy_scale80_control else 'Distinct canonical problems; reviewed grouping retained in fitting input',
+                'source_evidence': 'Historical finite qualification only' if args.legacy_scale80_control else 'Exact existing canonical receipts; input route declares its historical or authoring-owner identity',
+                'authoring_registry_reconciliation': 'Legacy semantics join unavailable' if args.legacy_scale80_control else 'Historical route retains canonical identities without inventing sidecars; modern route queries existing authoring owner',
+                'family_reuse': 'Unknown for legacy control' if args.legacy_scale80_control else 'Distinct canonical problems; input records retain grouping scope and known conflicts; no independent family-confirmation claim',
                 'source_rewrites': 0, 'candidate_executions': 0, 'limits': limits,
                 'proposal_limits': {'max_span_bytes': MAX_SPAN_BYTES,
                                     'max_spans_per_source': MAX_SPANS_PER_SOURCE,
@@ -383,7 +383,10 @@ def main():
                 'controls': 'Offline representation only; no Finish/Undo or human interaction claim',
                 'parser': ast_result['parser'], 'parser_runtime_sha256': ast_result['runtime_sha256'],
                 'parser_runtime_version': ast_result.get('runtime_version'),
-                'code_sha256': {p.name: digest(p) for p in [Path(__file__), ast_script, Path(joint.__file__), Path(__file__).with_name('fitting_inputs.py')]},
+                'code_sha256': {p.name: digest(p) for p in [Path(__file__), ast_script, Path(joint.__file__),
+                    Path(__file__).with_name('fitting_inputs.py'),
+                    *[Path(__file__).resolve().parents[2] / 'catalogue' / name for name in
+                      ('guide_admission.py', 'known_spec_service.py', 'boundary_policy.py', 'catalogue.py')]]},
                 'decoder_storage': {p.name: {'sha256': digest(p), 'bytes': p.stat().st_size}
                                     for p in [joint.SCALE.parent / 'literals.py', joint.SCALE.parent / 'pass2/working/bitpack.py']},
                 'decoder_storage_scope': 'Selected codec source files only, not the complete installed runtime footprint',
