@@ -15,7 +15,7 @@ Admission and promotion authority remain unchanged.
 
 ## Scope
 
-`algsolve/`, `contracts/`, `findings/`, `runs/`, `literals/`, `catalogue/`.
+`algsolve/`, `contracts/`, `findings/`, `runs/`, `literals/`, `catalogue/`, `staged/`.
 
 ## Contracts
 
