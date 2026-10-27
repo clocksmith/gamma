@@ -115,7 +115,45 @@ def grouping_impossible(n,m,groups,before):
     return cyclic(n,item_edges) or cyclic(m,group_edges)
 
 
+def unequal_group_witness(pid, args, answer):
+    """Exactly the 2900/2901 word-subsequence contracts, never exact tie matching.
+
+    Host cost is O(n) for 2900 and O(n**2 * maximum word length) for 2901,
+    with O(n) storage. No candidate budget or unrelated result policy changes.
+    """
+    if type(pid) is not int or pid not in (2900, 2901): return False
+    if type(args) is not list or len(args) != 2: return False
+    words, groups = args
+    if type(words) is not list or type(groups) is not list: return False
+    n = len(words)
+    if not 1 <= n <= (100 if pid == 2900 else 1000) or len(groups) != n: return False
+    if any(type(w) is not str or not 1 <= len(w) <= 10 or
+           any(not 'a' <= c <= 'z' for c in w) for w in words): return False
+    if len(set(words)) != n: return False
+    low, high = (0, 1) if pid == 2900 else (1, n)
+    if any(type(g) is not int or not low <= g <= high for g in groups): return False
+    if type(answer) is not list or not answer or any(type(w) is not str for w in answer): return False
+    positions = {w: i for i, w in enumerate(words)}
+    indices = [positions.get(w, -1) for w in answer]
+    if any(i < 0 for i in indices): return False
+    def follows(i, j):
+        return groups[i] != groups[j] and (pid == 2900 or
+            (len(words[i]) == len(words[j]) and
+             sum(a != b for a, b in zip(words[i], words[j])) == 1))
+    if any(i >= j or not follows(i, j) for i, j in zip(indices, indices[1:])): return False
+    if pid == 2900:
+        optimum = 1 + sum(groups[i] != groups[i - 1] for i in range(1, n))
+    else:
+        longest = [1] * n
+        for j in range(n):
+            for i in range(j):
+                if follows(i, j): longest[j] = max(longest[j], longest[i] + 1)
+        optimum = max(longest)
+    return len(answer) == optimum
+
+
 def semantic_value(pid,args,got,wanted):
+    if pid in (2900, 2901): return unequal_group_witness(pid, args, got)
     if pid in STRING_SETS:
         return type(got)is list and all(type(v)is str for v in got) and len(got)==len(set(got)) and set(got)==set(wanted)
     if pid in INTEGER_SETS:
