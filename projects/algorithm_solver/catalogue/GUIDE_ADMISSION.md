@@ -36,13 +36,50 @@ limits:
   --verify-sources --output /absolute/private/new-snapshot
 ```
 
-The JSON config has exactly `service` and `source_census`, each an absolute
+The JSON config requires `service` and `source_census`, each an absolute
 `path` and SHA-256 descriptor. Service uses the existing v2 configuration.
+Optional `authoring_catalog`, `source_evidence` and `historical_guides` use the
+same pinned-descriptor form and extend this inventory, not a second registry.
 No input source/reference paths from the census are followed. Omit
 `--verify-sources` for metadata-only inspection. The private output directory
 must not exist; it receives `queue.json`, aggregate `summary.json` and detached
 `SHA256SUMS`. Do not commit private per-ID membership or source locators.
 The snapshot binds input and implementation hashes; it does not certify freshness.
+
+### Exact-source evidence reconciliation
+
+`authoring_catalog` is the existing `algsolve/authoring_variants.py` output.
+The inventory calls that owner's `query`, preserves every supplied variant ID,
+provenance and `unknown` qualification, and links an existing canonical receipt
+only when both source and problem-contract hashes match. A different implementation
+of the same problem does not inherit qualification. No matching supplied record
+means only that this catalogue has no matching record, not that no variant exists.
+
+`source_evidence` is a list of metadata records with `problem_id`, `language`,
+`kind` (`license`, `browser_adapter` or `host_api`), `bindings`, and an `evidence`
+object containing the existing evidence or its references. `bindings` must contain
+all six exact catalogue bindings: `source_sha256`, `problem_contract_sha256`,
+`interface_sha256`, `runtime_sha256`, `tests_sha256` and `effects_sha256`.
+Only permitted, qualified canonical slots with all six matching hashes receive a
+join. Mismatches remain explicit, with the supplied record retained for inspection.
+The inventory never follows an evidence path or interprets an arbitrary `passed`
+flag as acceptance. Joined metadata changes the blocker from *not joined* to
+*acceptance not established*; the applicable existing verifier still owns acceptance.
+Original numeric, mutation, identity and complexity obligations stay in their
+exact contract/semantics and qualification records. No rewrite or new correctness
+claim is made by associating these records.
+
+`historical_guides` is a list with `problem_id`, `language`, `source_sha256`,
+`profile_id` and an `evidence` object. These records occupy a separate historical
+list. Their source match is reported, but their evidence is never transplanted
+onto a canonical source, nor does canonical qualification retroactively qualify
+a guide. Unknown historical evidence is not relabeled as absent or fresh.
+
+These optional joins are metadata-only and retain all problems and both languages.
+They do not clear publication, admission, split, grouping or exposure gates.
+Each reconciliation produces a new inventory value; a previously reconciled
+snapshot is not an accumulator for additional evidence. No optional input changes
+the behavior or source-read scope of `--verify-sources`.
 
 ## Corpus and evidence requirements
 
