@@ -57,6 +57,14 @@ partial coverage remains explicit. Historical M1–M6 gates/results are preserve
 and original compact-library M1 remains unmet. This priority change does not
 reclassify protected populations or qualify an existing result retroactively.
 
+## Counted spelling extension (2026-10-27)
+
+The owner chose long fragments with a separately charged spelling mode for BITS.
+The [hybrid codec](projects/algorithm_solver/literals/fragment-spelling-v1/README.md)
+reserves a mode code and charges every byte, transition and interaction control.
+Keep its representation identity and costs separate from pure-literal profiles;
+no source qualification, protected reservation or M1 threshold changes implicitly.
+
 ## Operating Loops
 
 Freeze contracts and budgets; execute bounded experiments; independently verify
