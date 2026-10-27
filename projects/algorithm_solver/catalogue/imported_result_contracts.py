@@ -10,7 +10,7 @@ STRING_SETS = {282,472,784,884,2933}
 INTEGER_SETS = {1606,2951}
 FLOAT_TOLERANCES = {813:1e-6,1377:1e-5,1701:1e-5,3194:0.0}
 NODE_RETURNS = {814:'TreeNode',876:'ListNode',998:'TreeNode',1008:'TreeNode',
-                1382:'TreeNode',2074:'ListNode',2196:'TreeNode',2807:'ListNode',2816:'ListNode'}
+                1382:'TreeNode',2074:'ListNode',2196:'TreeNode',2415:'TreeNode',2807:'ListNode',2816:'ListNode'}
 
 
 def canonical(value):
@@ -226,7 +226,7 @@ def compare(pid,case,record,language):
     try:same=semantic_value(pid,case['args'],got,wanted)
     except (TypeError,ValueError,IndexError,KeyError,OverflowError):same=False
     if not same:return 'result_value'
-    if pid in (814,2074,2807):
+    if pid in (814,2074,2415,2807):
         from .node_identity_contracts import check
         return check(pid,case['args'],record,exact,canonical)
     before=canonical(case['args'])
