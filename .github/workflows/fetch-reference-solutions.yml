@@ -1,0 +1,62 @@
+name: Fetch pinned reference solutions
+
+on:
+  push:
+    branches:
+      - artifact/leetcode-3623-4081-patch-20261026
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Clone pinned Python contest reference
+        shell: bash
+        run: |
+          set -euo pipefail
+          git clone --filter=blob:none --no-checkout https://github.com/YunTianZhou/LeetcodeContest.git /tmp/python-ref
+          git -C /tmp/python-ref checkout 18c29c3c2de329ed84348dc845590f219a56b30f
+          test "$(git -C /tmp/python-ref rev-parse HEAD)" = "18c29c3c2de329ed84348dc845590f219a56b30f"
+          git -C /tmp/python-ref rev-parse HEAD > /tmp/PYTHON_REF_COMMIT
+          tar -czf /tmp/yuntianzhou-leetcode-contest-18c29c3.tar.gz \
+            --exclude=.git -C /tmp/python-ref .
+
+      - name: Clone pinned JavaScript reference
+        shell: bash
+        run: |
+          set -euo pipefail
+          git clone --filter=blob:none --no-checkout https://github.com/dp9u0/oj-solution.git /tmp/javascript-ref
+          git -C /tmp/javascript-ref sparse-checkout init --cone
+          git -C /tmp/javascript-ref sparse-checkout set \
+            problems/3600-3699 problems/3700-3799 problems/3800-3899 \
+            problems/3900-3999 problems/4000-4099
+          git -C /tmp/javascript-ref checkout 2075d4c8256a5a466015091906d03b823d4ada97
+          test "$(git -C /tmp/javascript-ref rev-parse HEAD)" = "2075d4c8256a5a466015091906d03b823d4ada97"
+          git -C /tmp/javascript-ref rev-parse HEAD > /tmp/JAVASCRIPT_REF_COMMIT
+          tar -czf /tmp/dp9u0-oj-solution-3600-4099-2075d4c.tar.gz \
+            -C /tmp/javascript-ref \
+            problems/3600-3699 problems/3700-3799 problems/3800-3899 \
+            problems/3900-3999 problems/4000-4099
+
+      - name: Record checksums
+        run: |
+          cd /tmp
+          sha256sum yuntianzhou-leetcode-contest-18c29c3.tar.gz \
+            dp9u0-oj-solution-3600-4099-2075d4c.tar.gz > REFERENCE_SHA256SUMS
+
+      - name: Upload reference artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: leetcode-3623-4081-reference-repos
+          path: |
+            /tmp/yuntianzhou-leetcode-contest-18c29c3.tar.gz
+            /tmp/dp9u0-oj-solution-3600-4099-2075d4c.tar.gz
+            /tmp/PYTHON_REF_COMMIT
+            /tmp/JAVASCRIPT_REF_COMMIT
+            /tmp/REFERENCE_SHA256SUMS
+          if-no-files-found: error
+          retention-days: 7
