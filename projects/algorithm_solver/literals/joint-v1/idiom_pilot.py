@@ -35,12 +35,61 @@ SEEDS = [
     'i++', 'j++', 'i--', 'j--', 'i = 0', 'i=0', 'res = []', 'res=[]',
 ]
 
+FALLBACK = frozenset('()[]{}.,:;+-*/%=!<>&|^~?\\ \t\n\r')
+
+
+def arm_pool(pool, sources, arm):
+    """No alphabet preallocation, even in the restricted fallback arm."""
+    if arm not in ('strict', 'punctuation_fallback'):
+        raise ValueError('unknown singleton policy')
+    longer = list(dict.fromkeys(piece for piece in pool if len(piece) > 1))
+    chars = Counter(char for variants in sources.values() for text in variants.values()
+                    for char in text if char in FALLBACK)
+    return longer + (sorted(chars, key=lambda c: (-chars[c], c))
+                     if arm == 'punctuation_fallback' else [])
+
+
+def seed_vocabulary(sources, pool, width, boundaries=None):
+    """Try complete complementary bundles, not a prefix of frequent characters.
+
+    Every bundle is a minimum segmentation using the entire admitted pool.
+    Select bundles within budget; unused capacity goes to the ranked longer
+    candidates. This bounded initializer does not claim globally optimal sets.
+    """
+    vocab = joint.order(pool, [])
+    if not vocab:
+        raise ValueError('empty candidate pool')
+    tree, bundles = joint.base.trie(vocab), []
+    for pid, variants in sorted(sources.items()):
+        for variant, text in sorted(variants.items()):
+            try:
+                path = joint.segment(text, tree, None if boundaries is None else boundaries[pid, variant])
+            except ValueError:
+                continue
+            pieces = tuple(vocab[i] for i in path)
+            if len(set(pieces)) <= 2**width:
+                bundles.append((pid, variant, pieces))
+    selected = set()
+    while bundles:
+        choices = [(len(set(parts) - selected), len(parts), pid, variant, parts)
+                   for pid, variant, parts in bundles
+                   if len(selected | set(parts)) <= 2**width and set(parts) - selected]
+        if not choices:
+            break
+        _, _, _, _, pieces = min(choices)
+        selected.update(pieces)
+    for piece in pool:
+        if len(selected) == 2**width:
+            break
+        selected.add(piece)
+    return joint.order(selected, [])
+
 
 def digest(path):
     return hashlib.sha256(Path(path).read_bytes()).hexdigest()
 
 
-def admitted_pools(sources, spans):
+def admitted_pools(sources, spans, boundaries=None):
     """At least two distinct problems, never variant count masquerading as reuse."""
     texts = [text for variants in sources.values() for text in variants.values()]
     full = set(texts)
@@ -71,11 +120,31 @@ def admitted_pools(sources, spans):
             eligible.add(fragment)
             owners[fragment] = found
             occurrences[fragment] = sum(max(text.count(fragment) for text in sources[pid].values()) for pid in found)
-    def ranked(pool):
-        return sorted(set(pool) & eligible,
-                      key=lambda s: (-occurrences[s] * (len(s) - 1), len(s.encode()), s))
-    return {'assistant_seed': ranked(SEEDS), 'ast_spans': ranked(machine),
-            'seed_ast_union': ranked(set(SEEDS) | machine),
+    human_eligible, human_occurrences = set(), Counter()
+    for fragment in eligible & (set(SEEDS) | machine):
+        valid_owners = set()
+        for pid, variants in sources.items():
+            counts = []
+            for variant, text in variants.items():
+                allowed = None if boundaries is None else boundaries[pid, variant]
+                count, start = 0, text.find(fragment)
+                while start >= 0:
+                    if allowed is None or (start in allowed and start + len(fragment) in allowed):
+                        count += 1
+                    start = text.find(fragment, start + 1)
+                counts.append(count)
+            if max(counts):
+                valid_owners.add(pid)
+                human_occurrences[fragment] += max(counts)
+        if len(valid_owners) >= 2:
+            human_eligible.add(fragment)
+    def ranked(pool, human=False):
+        accepted = human_eligible if human else eligible
+        counts = human_occurrences if human else occurrences
+        return sorted(set(pool) & accepted,
+                      key=lambda s: (-counts[s] * (len(s) - 1), len(s.encode()), s))
+    return {'assistant_seed': ranked(SEEDS, True), 'ast_spans': ranked(machine, True),
+            'seed_ast_union': ranked(set(SEEDS) | machine, True),
             'compression_fragments': ranked(fragments)}, owners
 
 
@@ -92,11 +161,21 @@ def metrics(state, sources, owners, width):
         if joint.base.decode(joint.base.dictionary_bytes(state['vocab']), packet) != sources[pid][variant]:
             raise ValueError('packet round trip drift')
         per[str(pid)] = {'variant': variant, 'source_sha256': state['source_hashes'][pid, variant],
-                         'selections': len(parts), 'literal_ids': ids}
+                         'selections': len(parts), 'literal_ids': ids,
+                         'singleton_selections': sum(len(piece) == 1 for piece in parts),
+                         'singleton_bits': width * sum(len(piece) == 1 for piece in parts)}
     keys = ('coverage', 'target', 'selections', 'literal_bits', 'singleton_bits',
             'singleton_selections', 'singleton_bit_share', 'median_selections',
-            'p95_selections', 'dictionary_bytes', 'packet_bytes', 'package_bytes')
+            'p95_selections', 'dictionary_bytes', 'packet_bytes', 'package_bytes',
+            'singleton_compliant_programs', 'within_32_selections', 'within_96_selections')
+    failures = []
+    if state['coverage'] != len(sources): failures.append('incomplete_supplied_population')
+    if state['median_selections'] is None or state['median_selections'] > 32: failures.append('median_above_32_or_undefined')
+    if state['p95_selections'] is None or state['p95_selections'] > 96: failures.append('p95_above_96_or_undefined')
+    if state['singleton_bit_share'] is None or state['singleton_bit_share'] > .1: failures.append('singleton_share_above_10_percent_or_undefined')
     return {**{key: state[key] for key in keys}, 'entries': len(state['vocab']),
+            'supplied_population_gate_failures': failures,
+            'interaction_presses': None, 'human_effort': None,
             'single_character_entries': sum(len(s) == 1 for s in state['vocab']),
             'whitespace_only_entries': sum(not s.strip() for s in state['vocab']),
             'whitespace_only_selections': sum(n for s, n in counts.items() if not s.strip()),
@@ -117,8 +196,8 @@ def metrics(state, sources, owners, width):
 def comparisons(rows):
     """Expose tradeoffs, not an unsupported scalar readability score."""
     result = []
-    for width in range(4, 9):
-        group = [row for row in rows if row['width'] == width]
+    for width, arm in sorted({(row['width'], row.get('arm', 'legacy')) for row in rows}):
+        group = [row for row in rows if row['width'] == width and row.get('arm', 'legacy') == arm]
         baseline = next(row['final'] for row in group if row['pool'] == 'assistant_seed')
         pareto = []
         for row in group:
@@ -134,14 +213,14 @@ def comparisons(rows):
                 pareto.append(row['pool'])
             common = baseline['programs'].keys() & metric['programs'].keys()
             delta = [metric['programs'][pid]['selections'] - baseline['programs'][pid]['selections'] for pid in common]
-            result.append({'width': width, 'pool': row['pool'], 'baseline': 'assistant_seed',
+            result.append({'width': width, 'arm': arm, 'pool': row['pool'], 'baseline': 'assistant_seed',
                            'matched_covered_problems': len(common),
                            'coverage_gained': len(metric['programs'].keys() - baseline['programs'].keys()),
                            'coverage_lost': len(baseline['programs'].keys() - metric['programs'].keys()),
                            'fewer_selections': sum(d < 0 for d in delta),
                            'more_selections': sum(d > 0 for d in delta),
                            'equal_selections': sum(d == 0 for d in delta)})
-        result.append({'width': width, 'pareto_pools': pareto,
+        result.append({'width': width, 'arm': arm, 'pareto_pools': pareto,
                        'dimensions': ['coverage', 'literal_bits', 'absolute_singleton_bits', 'dictionary_plus_packet_bytes'],
                        'readability': 'Separate candidate policy and whitespace diagnostics only; no human evidence'})
     return result
@@ -168,9 +247,9 @@ def main():
     result = subprocess.run([str(args.node), '--expose-internals', str(ast_script)],
                             input=json.dumps(flat), capture_output=True, text=True, timeout=30, check=True)
     ast_result = json.loads(result.stdout)
-    pools, owners = admitted_pools(sources, ast_result['spans'])
-    chars = Counter(char for variants in sources.values() for text in variants.values() for char in text)
-    char_rank = sorted(chars, key=lambda char: (-chars[char], char))
+    boundaries = {(pid, v): frozenset(ast_result['boundaries'][f'{pid}/{v}'])
+                  for pid, variants in sources.items() for v in variants}
+    pools, owners = admitted_pools(sources, ast_result['spans'], boundaries)
     # Fixed bounds and pool identities precede all comparisons. These 80 problems
     # were already exposed: this run cannot create independent confirmation.
     limits = {'rounds_per_start': 1, 'trials_per_start': 400, 'seconds_per_start': 6,
@@ -183,7 +262,11 @@ def main():
                 'authoring_registry_reconciliation': 'Blocked: legacy scale80 has no semantics records; no new IDs fabricated',
                 'family_reuse': 'Unknown: legacy metadata has no reconciled family labels',
                 'source_rewrites': 0, 'candidate_executions': 0, 'limits': limits,
-                'selection': 'Coverage first, then selections, then dictionary plus packet bytes; source ties use UTF-8 size then legacy variant name',
+                'selection': 'Prefer dictionaries meeting aggregate 10% singleton, median32 and p95 96 constraints; then compliant program counts, complete coverage, reachable prefixes, selections, storage. No failing program is removed.',
+                'singleton_arms': ['strict', 'punctuation_fallback'],
+                'fallback_characters': sorted(FALLBACK),
+                'initialization': 'Complete source-path bundles, then ranked longer pieces; compare strict seed as an incumbent in each arm. No character floor.',
+                'lexical_boundaries': 'Required for human-oriented pools; compression control is unrestricted',
                 'path_tie': 'Minimum selections; equal costs use lower dictionary ID at first differing position',
                 'operand_cost': 'All operands, names, constants, punctuation and whitespace are literal source bytes',
                 'controls': 'Offline representation only; no Finish/Undo or human interaction claim',
@@ -200,24 +283,32 @@ def main():
         (args.output / 'implementation' / path.name).write_bytes(path.read_bytes())
     started, rows = time.monotonic(), []
     for width in range(4, 9):
-        alphabet = char_rank[:min(len(char_rank), 2**width)]
-        for name, pool in pools.items():
-            initial_vocab = alphabet + pool[:2**width - len(alphabet)]
-            initial = joint.evaluate(sources, initial_vocab, width, alphabet=[], allow_partial=True)
+      for arm in ('strict', 'punctuation_fallback'):
+        for name, original_pool in pools.items():
+            pool = arm_pool(original_pool, sources, arm)
+            lexical = None if name == 'compression_fragments' else boundaries
+            initial_vocab = seed_vocabulary(sources, pool, width, lexical)
+            initial = joint.evaluate(sources, initial_vocab, width, alphabet=[], allow_partial=True,
+                                     boundaries=lexical, source_objective='compact')
+            strict_vocab = seed_vocabulary(sources, arm_pool(original_pool, sources, 'strict'), width, lexical)
+            strict_initial = joint.evaluate(sources, strict_vocab, width, alphabet=[], allow_partial=True,
+                                            boundaries=lexical, source_objective='compact')
+            initial = min((initial, strict_initial), key=lambda state: joint.cost(state, 'compact'))
             # The same existing paired search alternates exact source selection
             # with dictionary moves. No separate optimizer is introduced.
-            final, trace = joint.improve(sources, initial, width, 'input', limits,
-                                        alphabet=[], allow_partial=True, candidate_pool=pool + char_rank)
+            final, trace = joint.improve(sources, initial, width, 'compact', limits,
+                                        alphabet=[], allow_partial=True, candidate_pool=pool,
+                                        boundaries=lexical)
             initial_metrics, final_metrics = metrics(initial, sources, owners, width), metrics(final, sources, owners, width)
             common = initial['chosen'].keys() & final['chosen'].keys()
             deltas = [len(final['parsed'][pid, final['chosen'][pid]]) - len(initial['parsed'][pid, initial['chosen'][pid]]) for pid in common]
-            row = {'pool': name, 'width': width, 'budget': 2**width, 'initial': initial_metrics,
+            row = {'pool': name, 'arm': arm, 'width': width, 'budget': 2**width, 'initial': initial_metrics,
                    'final': final_metrics, 'source_switches': sum(final['chosen'][pid] != initial['chosen'][pid] for pid in common),
                    'regressions': sum(d > 0 for d in deltas), 'improvements': sum(d < 0 for d in deltas),
                    'trace': trace}
             rows.append(row)
-            joint.write(args.output / f'{width}-{name}.json', row)
-            print(json.dumps({'width': width, 'pool': name, **{key: final[key] for key in ('coverage', 'selections', 'median_selections', 'p95_selections', 'singleton_bits')}}), flush=True)
+            joint.write(args.output / f'{width}-{arm}-{name}.json', row)
+            print(json.dumps({'width': width, 'arm': arm, 'pool': name, **{key: final[key] for key in ('coverage', 'selections', 'median_selections', 'p95_selections', 'singleton_bits')}}), flush=True)
     joint.write(args.output / 'summary.json', {'contract_sha256': digest(args.output / 'contract.json'),
         'elapsed_seconds': time.monotonic() - started, 'rows': rows, 'comparisons': comparisons(rows),
         'publication': 'None; no browser admission or current catalogue promotion',

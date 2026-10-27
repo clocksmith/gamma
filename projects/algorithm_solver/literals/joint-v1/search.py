@@ -34,7 +34,35 @@ def order(vocab, alphabet=None):
     return list(alphabet) + sorted(set(vocab) - set(alphabet))
 
 
-def representable_prefix(text, tree):
+def segment(text, tree, boundaries=None):
+    """Minimum selections, then literal-ID order, at permitted lexical boundaries."""
+    if boundaries is None:
+        return base.segment(text, tree)
+    n = len(text)
+    costs, edges = [n + 1] * (n + 1), [None] * n
+    costs[n] = 0
+    for start in range(n - 1, -1, -1):
+        if start not in boundaries:
+            continue
+        node, end = tree, start
+        while end < n and text[end] in node:
+            node = node[text[end]]
+            end += 1
+            if end in boundaries and None in node and costs[end] < n + 1:
+                candidate = (costs[end] + 1, node[None])
+                previous = (costs[start], edges[start][0] if edges[start] else n + 1)
+                if candidate < previous:
+                    costs[start], edges[start] = candidate[0], (node[None], end)
+    if costs[0] > n:
+        raise ValueError('unrepresentable at lexical boundaries')
+    result, pos = [], 0
+    while pos < n:
+        index, pos = edges[pos]
+        result.append(index)
+    return result
+
+
+def representable_prefix(text, tree, boundaries=None):
     """Longest reachable prefix; the existing exact DP chooses its minimum path.
 
     This never skips a missing character or joins text across an uncovered gap.
@@ -48,13 +76,14 @@ def representable_prefix(text, tree):
         while end < len(text) and text[end] in node:
             node = node[text[end]]
             end += 1
-            if None in node:
+            if None in node and (boundaries is None or end in boundaries):
                 reachable.add(end)
     end = max(reachable)
-    return end, tuple(base.segment(text[:end], tree))
+    return end, tuple(segment(text[:end], tree, boundaries))
 
 
-def evaluate(sources, vocab, width, parent=None, *, alphabet=None, allow_partial=False):
+def evaluate(sources, vocab, width, parent=None, *, alphabet=None, allow_partial=False,
+             boundaries=None, source_objective='input'):
     """All variants compete after every move. Reuse only unaffected exact parses."""
     if type(width) is not int or not 4 <= width <= 8:
         raise ValueError('width must be 4..8')
@@ -70,38 +99,55 @@ def evaluate(sources, vocab, width, parent=None, *, alphabet=None, allow_partial
                 != [s for s in parent['vocab'] if s in shared]):
             parent = None  # IDs define ties, so reordered shared literals need a new path.
     delta = set(vocab).symmetric_difference(parent['vocab']) if parent else None
-    parsed, chosen, uncovered, source_hashes = {}, {}, {}, {}
+    parsed, chosen, uncovered, source_hashes, boundary_hashes = {}, {}, {}, {}, {}
     for pid, variants in sorted(sources.items()):
         options = []
         for variant, text in sorted(variants.items()):
             key = (pid, variant)
+            allowed = None if boundaries is None else frozenset(boundaries[key])
+            if allowed is not None and (0 not in allowed or len(text) not in allowed or
+                    any(type(p) is not int or p < 0 or p > len(text) for p in allowed)):
+                raise ValueError('invalid lexical boundaries')
+            boundary_hashes[key] = None if allowed is None else sha(json.dumps(sorted(allowed)).encode())
             source_hashes[key] = sha(text.encode())
             if (parent and key in parent['parsed']
                     and parent.get('source_hashes', {}).get(key) == source_hashes[key]
+                    and parent.get('boundary_hashes', {}).get(key) == boundary_hashes[key]
                     and not any(fragment in text for fragment in delta)):
                 parts = parent['parsed'][key]
             else:
                 try:
-                    parts = tuple(vocab[i] for i in base.segment(text, tree))
+                    parts = tuple(vocab[i] for i in segment(text, tree, allowed))
                 except ValueError:
                     if not allow_partial:
                         raise
-                    end, prefix = representable_prefix(text, tree)
+                    end, prefix = representable_prefix(text, tree, allowed)
                     uncovered[key] = {'prefix_characters': end,
                                       'prefix': tuple(vocab[i] for i in prefix),
                                       'uncovered_characters': len(text) - end,
                                       'uncovered_utf8_bytes': len(text[end:].encode())}
                     continue
             parsed[key] = parts
-            options.append((len(parts), len(text.encode()), variant))
+            priority = ()
+            if source_objective == 'compact':
+                compliant = bool(parts) and 10 * sum(len(p) == 1 for p in parts) <= len(parts)
+                priority = (not (compliant and len(parts) <= 96),
+                            not (compliant and len(parts) <= 32), not compliant)
+            options.append(priority + (len(parts), len(text.encode()), variant))
         if options:
-            chosen[pid] = min(options)[2]
+            chosen[pid] = min(options)[-1]
     counts = [len(parsed[(pid, variant)]) for pid, variant in chosen.items()]
     dictionary = len(base.dictionary_bytes(vocab))
     packets = sum(41 + (width * n + 7) // 8 for n in counts)
     singletons = sum(len(piece) == 1 for pid, variant in chosen.items()
                      for piece in parsed[(pid, variant)])
+    # These counts guide search but never delete a failing program from coverage.
+    # Check the genuine minimum path; no padded path can dilute singleton share.
+    compliant = [parts for pid, variant in chosen.items()
+                 if (parts := parsed[pid, variant]) and
+                 10 * sum(len(piece) == 1 for piece in parts) <= len(parts)]
     return {'vocab': vocab, 'parsed': parsed, 'chosen': chosen,
+            'boundary_hashes': boundary_hashes,
             'source_hashes': source_hashes, 'uncovered': uncovered,
             'coverage': len(chosen), 'target': len(sources), 'allow_partial': allow_partial,
             'literal_bits': width * sum(counts), 'singleton_bits': width * singletons,
@@ -110,10 +156,22 @@ def evaluate(sources, vocab, width, parent=None, *, alphabet=None, allow_partial
             'median_selections': statistics.median(counts) if counts else None,
             'p95_selections': sorted(counts)[math.ceil(.95 * len(counts)) - 1] if counts else None,
             'selections': sum(counts), 'package_bytes': dictionary + packets,
-            'dictionary_bytes': dictionary, 'packet_bytes': packets}
+            'dictionary_bytes': dictionary, 'packet_bytes': packets,
+            'singleton_compliant_programs': len(compliant),
+            'within_32_selections': sum(len(parts) <= 32 for parts in compliant),
+            'within_96_selections': sum(len(parts) <= 96 for parts in compliant),
+            'reachable_prefix_characters': sum(max(
+                (len(text) if (pid, v) in parsed else uncovered[pid, v]['prefix_characters'])
+                for v, text in variants.items()) for pid, variants in sources.items())}
 
 
 def cost(state, objective):
+    if objective == 'compact':
+        feasible = (bool(state['coverage']) and state['singleton_bit_share'] <= .1 and
+                    state['median_selections'] <= 32 and state['p95_selections'] <= 96)
+        return (not feasible, -state['within_96_selections'], -state['within_32_selections'],
+                -state['singleton_compliant_programs'], -state['coverage'],
+                -state['reachable_prefix_characters'], state['selections'], state['package_bytes'])
     prefix = (-state['coverage'],) if state.get('allow_partial') else ()
     if objective == 'input':
         return prefix + (state['selections'], state['package_bytes'])
@@ -145,7 +203,7 @@ def proposals(sources, state, limit):
                   key=lambda s: (-sum(scores[s].values()), len(s.encode()), s))[:limit]
 
 
-def prune(sources, state, width, *, alphabet=None, allow_partial=False):
+def prune(sources, state, width, *, alphabet=None, allow_partial=False, boundaries=None):
     used = {s for pid, v in state['chosen'].items() for s in state['parsed'][(pid, v)]}
     if not used:
         return state, []  # The existing packet format requires a nonempty dictionary.
@@ -154,14 +212,14 @@ def prune(sources, state, width, *, alphabet=None, allow_partial=False):
     if not removed:
         return state, []
     result = evaluate(sources, set(state['vocab']) - set(removed), width, state,
-                      alphabet=alphabet, allow_partial=allow_partial)
+                      alphabet=alphabet, allow_partial=allow_partial, boundaries=boundaries)
     assert result['selections'] == state['selections']
     assert result['coverage'] == state['coverage']
     return result, removed
 
 
 def improve(sources, initial, width, objective, limits, *, alphabet=None,
-            allow_partial=False, candidate_pool=None):
+            allow_partial=False, candidate_pool=None, boundaries=None):
     current = initial
     trace, trials = [], 0
     start = time.monotonic()
@@ -180,7 +238,8 @@ def improve(sources, initial, width, objective, limits, *, alphabet=None,
                 return None
             tested.add(identity)
             state = evaluate(sources, candidate, width, current,
-                             alphabet=alphabet, allow_partial=allow_partial)
+                             alphabet=alphabet, allow_partial=allow_partial, boundaries=boundaries,
+                             source_objective=objective)
             trials += 1
             move = {'remove': list(remove), 'add': list(add), 'result': brief(state),
                     'source_changes': {str(pid): v for pid, v in state['chosen'].items() if v != current['chosen'].get(pid)}}
@@ -211,9 +270,9 @@ def improve(sources, initial, width, objective, limits, *, alphabet=None,
             for remove in removal_sets:
                 consider(remove=remove, add=pair)
         pruned = []
-        if best_move:
+        if best_move and objective != 'compact':
             best, pruned = prune(sources, best, width, alphabet=alphabet,
-                                 allow_partial=allow_partial)
+                                 allow_partial=allow_partial, boundaries=boundaries)
             assert cost(best, objective) < cost(current, objective)
         trace.append({'round': round_no, 'before': brief(current), 'attempts': attempts,
                       'accepted': best_move, 'pruned_after_move': pruned, 'after': brief(best)})
