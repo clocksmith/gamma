@@ -20,7 +20,7 @@ PYTHONPATH=.:projects/algorithm_solver .venv/bin/python -m algsolve.bits_server 
   --reranker-model ../doppler/models/local/qwen-3-reranker-0-6b-f16-af32
 ```
 
-Open `http://127.0.0.1:8874/labs/two-button/`. Stop with Ctrl-C. Use a process-group
+Open `http://127.0.0.1:8874/labs/two-button/?recognition=service`. Stop with Ctrl-C. Use a process-group
 supervisor with a hard memory and lifetime limit for unattended jobs. The server
 binds loopback only; it does not authorize a public reverse proxy. `--surface
 browser` selects the existing Doppler browser worker instead of Node. No weights
@@ -61,6 +61,63 @@ These tests establish endpoint boundaries and selection mechanics, not populatio
 precision/recall. Recognition qualification, composition effort, human performance
 and solution qualification remain separate evidence contracts.
 
+## Static browser publication
+
+The default hosted BITS finder now consumes a public, versioned bundle rather than
+requiring the loopback endpoint. Gamma owns its generation and policy; 256one owns
+the interface; Doppler owns browser inference and verified model storage. Export
+existing document vectors without re-embedding at browser startup:
+
+```bash
+PYTHONPATH=.:projects/algorithm_solver .venv/bin/python -m algsolve.export_bits_browser \
+  --public-root ../256one/public \
+  --keys /absolute/path/to/corpus_embedding_keys.json \
+  --vectors /absolute/path/to/corpus_embeddings.npy \
+  --gate /absolute/path/to/boundary-gate.json \
+  --gate-sha256 ORIGINAL_TRUSTED_GATE_SHA256 \
+  --doppler-root ../doppler \
+  --model-variants /absolute/path/to/verified-model-variants.json \
+  --output ../256one/public/labs/two-button/recognition
+```
+
+The model-variant input names embedding/rerank manifest paths, immutable Hugging
+Face weight URLs, manifest SHA-256 and variant IDs, and tokenizer SHA-256/size.
+Provision it using Doppler's `tools/migrate-rdrr-shard-hashes.js` and independent
+pinned-revision LFS verification. Historical nonstandard shard digests are not
+accepted by weakening verification. Corrected SHA-256 variants preserve tensor
+bytes and recomputed tensor roots; qualification does not transfer automatically.
+Only public manifest bytes, pins and immutable weight URLs enter the bundle.
+The private input paths and migration receipts are not published.
+
+Export calls the existing boundary gate before opening each statement. It emits
+3,353 identities/vectors, 2,872 permitted descriptions with source notices, and
+481 title-only records. Restricted competitors remain in retrieval. No solution
+bodies, private cases, source gates or qualification receipts are emitted.
+Documents, vectors, reranker config and model manifests carry byte counts and
+SHA-256 pins; `release.js` pins the bundle manifest. Source vectors, keys, public
+packet manifest, exporter bytes and Doppler revision have provenance hashes.
+
+The browser explicitly offers about 1.76 GB of model download, verifies shards and
+tokenizers, retains models for repeated queries, and reuses OPFS cache on later
+visits. It executes the original instruction, normalization, top-ten retrieval,
+bounded reranking overlay and yes-minus-no scoring. Queries stay on the device.
+Exact title/slug/ID lookup does not need models. Optional local service behavior
+requires `?recognition=service`; browser asset failure never silently selects it.
+Storage, unsupported GPU, cancellation and GPU loss have explicit retry paths.
+
+Focused publication and endpoint checks:
+
+```bash
+PYTHONPATH=.:projects/algorithm_solver .venv/bin/python -m unittest \
+  projects.algorithm_solver.tests.test_bits_browser_export \
+  projects.algorithm_solver.tests.test_bits_recognition
+```
+
+These establish publication boundaries and mechanics, not precision/recall or a
+portable latency claim. Measured browser integration records belong beside the
+corresponding deployed 256one revision; older comparison numbers below do not
+establish its cold-download or cross-device performance.
+
 ## Diagnostics and measured limits
 
 The [retained comparison](../findings/bits-latency-v1/summary.json) profiles one
@@ -69,7 +126,7 @@ authored query over ten unchanged candidates. The original resident worker took
 512-token path took 1.87–1.91 seconds warm in Node and 2.06–2.07 seconds in the
 browser. Cold requests took 3.91 and 9.88 seconds respectively. These repeated
 query measurements are not population p50/p95, and the 250 ms target remains
-unmet. There is no judge in this discovery route. Public BITS hosting is unchanged.
+unmet. There is no judge in this discovery route. These measurements predate the static browser integration.
 
 All ten candidate rankings and executed tokens matched; maximum paired logit
 change was 0.00735. Across the separate 24 consumed development queries with
