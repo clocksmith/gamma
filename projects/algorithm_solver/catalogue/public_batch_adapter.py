@@ -1121,11 +1121,62 @@ def prepared_request_oracle(lane, pid):
 
 
 def check_prepared_helper_compatibility(retained, current):
-    """Prove replay primitives unchanged without executing retained Python code."""
+    """Validate exact reviewed replay compatibility without executing retained code."""
     import ast
     names = ('encoded', 'sha', 'file_hash', 'unique', 'decode', 'read', 'canonical_tests_hash',
              'exact', 'expected_type', 'packet', 'batches', 'source_interface')
     trees = [ast.parse(value) for value in (retained, current)]
+    # A reviewed, exact old-to-new loader-interface transition only. Parse the
+    # pinned source templates with this interpreter so AST-version details do
+    # not turn into an unreviewed cross-Python compatibility relaxation.
+    # Existing code/runtime/loader hashes remain retained in their receipts.
+    interface_names = ('source_interface', 'observer_files')
+    interface_nodes = [[node for node in tree.body if isinstance(node, ast.FunctionDef)
+                       and node.name in interface_names] for tree in trees]
+    if any([node.name for node in nodes] != list(interface_names) for nodes in interface_nodes):
+        raise ValueError('missing, duplicated or reordered interface helpers')
+    interface_ast = [[ast.dump(node) for node in nodes] for nodes in interface_nodes]
+    if interface_ast[0] != interface_ast[1]:
+        approved_old = '''def source_interface(job):
+    """Reject unsupported loader combinations before source or case access."""
+    interface = job.get('source_interface', 'global-solve-v1')
+    if interface not in ('global-solve-v1', 'commonjs-object-solve-v1'):
+        raise ValueError('unsupported frozen source interface')
+    if interface == 'commonjs-object-solve-v1' and (job['language'] != 'javascript' or job.get('node_identity', False)):
+        raise ValueError('CommonJS object interface requires JavaScript without node-identity transport')
+    return interface
+
+def observer_files(job):
+    if source_interface(job) == 'commonjs-object-solve-v1':
+        return {'harness.cjs': read(COMMONJS_HARNESS), 'observer.cjs': read(HARNESS / 'harness.cjs')}
+    observer = NODE_HARNESS if job.get('node_identity', False) else HARNESS
+    harness = 'harness.py' if job['language'] == 'python' else 'harness.cjs'
+    return {harness: read(observer / harness)}'''
+        approved_new = '''def source_interface(job):
+    """Reject unsupported loader combinations before source or case access."""
+    interface = job.get('source_interface', 'global-solve-v1')
+    if interface not in ('global-solve-v1', 'commonjs-object-solve-v1', 'commonjs-function-solve-v1'):
+        raise ValueError('unsupported frozen source interface')
+    if interface in ('commonjs-object-solve-v1', 'commonjs-function-solve-v1') and (job['language'] != 'javascript' or job.get('node_identity', False)):
+        raise ValueError('CommonJS interface requires JavaScript without node-identity transport')
+    return interface
+
+def observer_files(job):
+    interface = source_interface(job)
+    if interface == 'commonjs-function-solve-v1':
+        return {'harness.cjs': read(COMMONJS_HARNESS.with_name('function-harness.cjs')), 'observer.cjs': read(HARNESS / 'harness.cjs')}
+    if interface == 'commonjs-object-solve-v1':
+        return {'harness.cjs': read(COMMONJS_HARNESS), 'observer.cjs': read(HARNESS / 'harness.cjs')}
+    observer = NODE_HARNESS if job.get('node_identity', False) else HARNESS
+    harness = 'harness.py' if job['language'] == 'python' else 'harness.cjs'
+    return {harness: read(observer / harness)}'''
+        approved_ast = [[ast.dump(node) for node in ast.parse(source).body]
+                        for source in (approved_old, approved_new)]
+        if interface_ast != approved_ast:
+            raise ValueError('unreviewed source-interface compatibility transition')
+        replacements = dict(zip(interface_names, interface_nodes[0]))
+        trees[1].body = [replacements.get(node.name, node) if isinstance(node, ast.FunctionDef)
+                         else node for node in trees[1].body]
     for name in names:
         nodes = [[node for node in tree.body if isinstance(node, ast.FunctionDef) and node.name == name]
                  for tree in trees]

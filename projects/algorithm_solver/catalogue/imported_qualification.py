@@ -125,7 +125,7 @@ def code_pins():
     paths = [Path(__file__), Path(sandbox.__file__), Path(pinned_runtime.__file__), HARNESS / 'harness.py', HARNESS / 'harness.cjs',
              Path(__file__).with_name('imported_result_contracts.py'),
              Path(__file__).with_name('node_identity_contracts.py'), NODE_HARNESS / 'harness.py', NODE_HARNESS / 'harness.cjs',
-             COMMONJS_HARNESS, Path(__file__).with_name('request_qualification.py'),
+             COMMONJS_HARNESS, COMMONJS_HARNESS.with_name('function-harness.cjs'), Path(__file__).with_name('request_qualification.py'),
              Path(__file__).with_name('request_next4_oracles.py'),
              Path(__file__).with_name('request_next4_qualification.py'),
              Path(__file__).with_name('request_next5_oracles.py'),
@@ -339,6 +339,14 @@ def load_freeze(path):
         from .request_parallel_fgh15_qualification import additional_code
         if contract.get('additional_code') != additional_code():
             raise ValueError('unapproved fixed F/G/H-fifteen code paths')
+    if any(j.get('domain_validator') == 'request-git-subset01-v1' for j in contract.get('jobs', [])):
+        from .request_git_subset01_qualification import additional_code
+        if contract.get('additional_code') != additional_code():
+            raise ValueError('unapproved fixed Git-subset request code paths')
+    if any(j.get('domain_validator') == 'request-git-ordinary31-v1' for j in contract.get('jobs', [])):
+        from .request_git_ordinary31_qualification import additional_code
+        if contract.get('additional_code') != additional_code():
+            raise ValueError('unapproved fixed ordinary31 request code paths')
     for name, expected in contract.get('additional_code', {}).items():
         if file_hash(name) != expected:
             raise ValueError('oracle or validator changed since freeze')
@@ -365,6 +373,12 @@ def load_freeze(path):
     if any(j.get('domain_validator') == 'request-parallel-fgh15-v1' for j in contract['jobs']):
         from .request_parallel_fgh15_qualification import verify_freeze
         verify_freeze(path, contract, gate)
+    if any(j.get('domain_validator') == 'request-git-subset01-v1' for j in contract['jobs']):
+        from .request_git_subset01_qualification import verify_freeze
+        verify_freeze(path, contract, gate)
+    if any(j.get('domain_validator') == 'request-git-ordinary31-v1' for j in contract['jobs']):
+        from .request_git_ordinary31_qualification import verify_freeze
+        verify_freeze(path, contract, gate)
     return raw, contract, gate
 
 
@@ -374,7 +388,7 @@ def job_inputs(root, job, gate):
         raise ValueError('invalid frozen job identity')
     source_interface(job)
     if ('domain_validator' in job and job['domain_validator'] not in
-            ('fresh67-v1', 'imported358-v1', 'request3215-v1', 'request-next4-v1', 'request-next5-v1', 'request-parallel15-v1', 'request-parallel10-v1', 'request-parallel-fgh15-v1')):
+            ('fresh67-v1', 'imported358-v1', 'request3215-v1', 'request-next4-v1', 'request-next5-v1', 'request-parallel15-v1', 'request-parallel10-v1', 'request-parallel-fgh15-v1', 'request-git-subset01-v1', 'request-git-ordinary31-v1')):
         raise ValueError('unknown input validator')
     if job.get('domain_validator') == 'request3215-v1' and pid != 3215:
         raise ValueError('request3215 validator cannot enroll another problem')
@@ -398,6 +412,14 @@ def job_inputs(root, job, gate):
         from .request_parallel_fgh15_qualification import IDS
         if pid not in IDS:
             raise ValueError('F/G/H-fifteen validator cannot enroll another problem')
+    if job.get('domain_validator') == 'request-git-subset01-v1':
+        from .request_git_subset01_qualification import IDS
+        if pid not in IDS:
+            raise ValueError('Git-subset validator cannot enroll another problem')
+    if job.get('domain_validator') == 'request-git-ordinary31-v1':
+        from .request_git_ordinary31_qualification import IDS
+        if pid not in IDS:
+            raise ValueError('ordinary31 validator cannot enroll another problem')
     suffix = 'py' if lang == 'python' else 'js'
     if job['source'] != f'sources/{pid}.{suffix}' or job['tests'] != f'tests/{pid}.json':
         raise ValueError('invalid frozen exact locator')
@@ -440,6 +462,14 @@ def job_inputs(root, job, gate):
         from .request_parallel_fgh15_qualification import validate
         for case in cases:
             validate(pid, case['args'])
+    elif job.get('domain_validator') == 'request-git-subset01-v1':
+        from .request_git_subset01_qualification import validate
+        for case in cases:
+            validate(pid, case['args'])
+    elif job.get('domain_validator') == 'request-git-ordinary31-v1':
+        from .request_git_ordinary31_qualification import validate
+        for case in cases:
+            validate(pid, case['args'])
     elif 'domain_validator' in job:
         raise ValueError('unknown input validator')
     return source, cases
@@ -448,15 +478,18 @@ def job_inputs(root, job, gate):
 def source_interface(job):
     """Reject unsupported loader combinations before source or case access."""
     interface = job.get('source_interface', 'global-solve-v1')
-    if interface not in ('global-solve-v1', 'commonjs-object-solve-v1'):
+    if interface not in ('global-solve-v1', 'commonjs-object-solve-v1', 'commonjs-function-solve-v1'):
         raise ValueError('unsupported frozen source interface')
-    if interface == 'commonjs-object-solve-v1' and (job['language'] != 'javascript' or job.get('node_identity', False)):
-        raise ValueError('CommonJS object interface requires JavaScript without node-identity transport')
+    if interface in ('commonjs-object-solve-v1', 'commonjs-function-solve-v1') and (job['language'] != 'javascript' or job.get('node_identity', False)):
+        raise ValueError('CommonJS interface requires JavaScript without node-identity transport')
     return interface
 
 
 def observer_files(job):
-    if source_interface(job) == 'commonjs-object-solve-v1':
+    interface = source_interface(job)
+    if interface == 'commonjs-function-solve-v1':
+        return {'harness.cjs': read(COMMONJS_HARNESS.with_name('function-harness.cjs')), 'observer.cjs': read(HARNESS / 'harness.cjs')}
+    if interface == 'commonjs-object-solve-v1':
         return {'harness.cjs': read(COMMONJS_HARNESS), 'observer.cjs': read(HARNESS / 'harness.cjs')}
     observer = NODE_HARNESS if job.get('node_identity', False) else HARNESS
     harness = 'harness.py' if job['language'] == 'python' else 'harness.cjs'
