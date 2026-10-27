@@ -1,10 +1,52 @@
 """Behavioral checks for joint source choice and exact move accounting."""
 import unittest
+from contextlib import redirect_stdout
+from io import StringIO
 from itertools import product
 import search as joint
 
 
 class JointSearchTests(unittest.TestCase):
+    def test_singleton_objective_and_pareto_cannot_reward_ratio_padding(self):
+        state = {'coverage': 240, 'allow_partial': True, 'singleton_bits': 80,
+                 'literal_bits': 800, 'package_bytes': 300, 'singleton_bit_share': .1}
+        padded = dict(state, literal_bits=1600, package_bytes=400, singleton_bit_share=.05)
+        self.assertGreater(joint.cost(padded, 'singleton'), joint.cost(state, 'singleton'))
+        self.assertGreater(joint.pareto_vector(padded), joint.pareto_vector(state))
+        worse = dict(state, singleton_bits=88, literal_bits=1600, singleton_bit_share=.055)
+        self.assertGreater(joint.cost(worse, 'singleton'), joint.cost(state, 'singleton'))
+        with self.assertRaises(ValueError): joint.cost(state, 'ratio')
+
+    def test_absolute_singleton_reduction_and_full_costs_at_each_width(self):
+        sources = {i: {'a': 'abcabc!'} for i in range(1, 241)}
+        for width in range(4, 9):
+            with self.subTest(width=width):
+                before = joint.evaluate(sources, list('abc!'), width, alphabet=[])
+                after = joint.evaluate(sources, list('abc!') + ['abc'], width, alphabet=[])
+                self.assertEqual(after['coverage'], 240)
+                self.assertEqual((before['selections'], after['selections']), (1680, 720))
+                self.assertEqual((before['singleton_bits'], after['singleton_bits']), (1680 * width, 240 * width))
+                self.assertLess(joint.cost(after, 'singleton'), joint.cost(before, 'singleton'))
+                self.assertEqual(after['source_utf8_bytes'], 1680)
+                self.assertEqual(after['packet_header_bytes'], 41 * 240)
+                self.assertEqual(after['packet_bytes'] * 8,
+                    after['packet_header_bytes'] * 8 + after['literal_bits'] + after['payload_padding_bits'])
+                self.assertEqual(after['package_bytes'], after['packet_bytes'] + after['dictionary_bytes'])
+
+    def test_search_accepts_reused_span_for_absolute_singleton_reduction(self):
+        sources = {i: {'a': 'abcabc!'} for i in range(1, 241)}
+        initial = joint.evaluate(sources, list('abc!'), 4, alphabet=[], allow_partial=True)
+        limits = {'rounds_per_start': 1, 'trials_per_start': 40, 'seconds_per_start': 5,
+                  'removal_shortlist': 2, 'addition_shortlist': 2,
+                  'pair_removal_sets': 2, 'pair_addition_shortlist': 2}
+        with redirect_stdout(StringIO()):
+            final, trace = joint.improve(sources, initial, 4, 'singleton', limits,
+                alphabet=[], allow_partial=True, candidate_pool=['abc'])
+        self.assertEqual(final['coverage'], 240)
+        self.assertEqual(final['singleton_bits'], 960)
+        self.assertEqual(final['selections'], 720)
+        self.assertIsNotNone(trace['rounds'][0]['accepted'])
+
     def test_complementary_additions_change_source_only_together(self):
         sources = {1: {'a': 'aaaaaa', 'b': 'bcdefg'}}
         initial = joint.evaluate(sources, ['aa'], 7)

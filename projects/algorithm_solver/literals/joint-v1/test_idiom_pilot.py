@@ -1,10 +1,73 @@
 """Candidate provenance and reuse checks, independently of solver execution."""
 import unittest
 from collections import defaultdict
+from pathlib import Path
+import os
+from unittest.mock import patch
 import idiom_pilot as pilot
 
 
 class IdiomPoolTests(unittest.TestCase):
+    def test_python_long_unicode_and_adjacent_spans_are_exact_without_execution(self):
+        text = ('raise RuntimeError("never execute")\n'
+                'def solve(values):\n'
+                '    total = sum(é for é in values if é > 0)\n'
+                '    count = len(values)\n'
+                '    return total / max(count, 1)\n')
+        with patch('builtins.exec', side_effect=AssertionError('source executed')):
+            parsed = pilot.python_spans({'1/a': text})
+        spans = parsed['spans']['1/a']
+        pair = 'total = sum(é for é in values if é > 0)\n    count = len(values)'
+        self.assertIn(pair, spans)
+        self.assertTrue(all(s in text and len(s.encode()) <= 160 for s in spans))
+        self.assertEqual(len(parsed['runtime_sha256']), 64)
+        sources = {1: {'a': text}, 2: {'b': text + '# second problem\n'}}
+        pools, owners = pilot.admitted_pools(sources, {'1/a': spans, '2/b': spans},
+                                          parsed['excluded_units'], 'python')
+        self.assertIn(pair, pools['ast_spans'])
+        self.assertEqual(owners[pair], {1, 2})
+        self.assertIn('len(', pools['assistant_seed'])
+        for pool in pools.values():
+            self.assertTrue(all(s.strip() not in {u.strip() for u in parsed['excluded_units']} for s in pool))
+
+    def test_occurrence_trie_matches_nonoverlap_counts_and_distinct_problem_owners(self):
+        sources = {1: {'a': 'aaaaa', 'b': 'aaaaaaaa'}, 2: {'a': 'aaaa'}, 3: {'a': 'xyz'}}
+        candidates = {'aa', 'aaa', 'aaaa', 'xy', 'no'}
+        owners, counts = pilot.occurrence_index(sources, candidates)
+        for fragment in candidates:
+            self.assertEqual(owners[fragment], {pid for pid, variants in sources.items()
+                                                if any(fragment in s for s in variants.values())})
+            self.assertEqual(counts[fragment], sum(max(s.count(fragment) for s in variants.values())
+                                                  for variants in sources.values()))
+
+    def test_whitespace_does_not_disguise_complete_function_body(self):
+        text = 'def solve():\n    return 123\n'
+        parsed = pilot.python_spans({'1/a': text})
+        sources = {1: {'a': text}, 2: {'a': text + '# other\n'}}
+        pools, _ = pilot.admitted_pools(sources, {'1/a': ['    return 123'], '2/a': ['    return 123']},
+                                       parsed['excluded_units'], 'python')
+        for pool in pools.values(): self.assertNotIn('    return 123', pool)
+
+    def test_javascript_long_adjacent_spans_parse_without_execution(self):
+        node = os.environ.get('GAMMA_TEST_NODE')
+        if not node:
+            self.skipTest('explicit existing Node path required')
+        text = ('throw Error("never execute");\nfunction solve(values) {\n'
+                '  const total = values.reduce((sum, value) => sum + value, 0);\n'
+                '  const count = values.length;\n  return total / Math.max(count, 1);\n}\n')
+        runtime = Path(node)
+        parsed = pilot.syntactic_spans({1: {'a': text}, 2: {'b': text + '// second\n'}},
+                                       'javascript', runtime, pilot.digest(runtime))
+        pair = ('const total = values.reduce((sum, value) => sum + value, 0);\n'
+                '  const count = values.length;')
+        pools, _ = pilot.admitted_pools({1: {'a': text}, 2: {'b': text + '// second\n'}},
+                                       parsed['spans'], parsed['excluded_units'])
+        self.assertIn(pair, pools['ast_spans'])
+        self.assertGreater(len(pair.encode()), 40)
+        self.assertTrue(all(span in text for span in parsed['spans']['1/a']))
+        for pool in pools.values():
+            self.assertTrue(all(s.strip() not in {u.strip() for u in parsed['excluded_units']} for s in pool))
+
     def test_pilot_thresholds_do_not_evaluate_original_population_gate(self):
         sources = {1: {'a': 'abababcdcdcd'}}
         state = pilot.joint.evaluate(sources, ['ab', 'cd'], 4, alphabet=[])

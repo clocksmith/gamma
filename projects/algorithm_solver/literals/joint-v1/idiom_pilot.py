@@ -1,24 +1,24 @@
-"""Matched exact idiom candidate pools on the already exposed scale80 control.
+"""Matched exact idiom pools over an explicitly pinned development fitting set.
 
 This does not qualify sources, create authoring variants, freeze a new corpus,
 publish browser assets, or establish human readability/fluency. Historical
 source identities and bounded qualification remain attached to their own bytes.
 """
 import argparse
+import ast
 from collections import Counter, defaultdict
 import hashlib
 import json
 from pathlib import Path
 import subprocess
+import sys
 import time
 
 import search as joint
+from fitting_inputs import load_fitting_inputs
 
-PINS = {
-    'generated/manifest.json': 'c39f1a8697ca5296c6376f8e5dca3c5d9cd4d553551bdd872d023ab21c183143',
-    'qualification/report.json': '9802eaadddcaa28d4041a507f942202deb9518719ac135768c6753896fb5b557',
-    'protected-boundary.json': '2ac829a3bca4aac395845ae4e6c3fc5ad3c6a38e606b2441dfe841e0be9fa0ea',
-}
+MAX_CANDIDATES = 250000
+MAX_SPAN_BYTES = 160
 # Assistant-authored suggestions, not human proposals or reviewed usability data.
 # Every entry is concrete text. Operand names and spaces are emitted and charged.
 SEEDS = [
@@ -34,20 +34,112 @@ SEEDS = [
     '===', '!==', '<=', '>=', '&&', '||', '++', '--', '+=', '-=',
     'i++', 'j++', 'i--', 'j--', 'i = 0', 'i=0', 'res = []', 'res=[]',
 ]
+PYTHON_SEEDS = [
+    'def solve(', 'return ', 'return False', 'return True', 'return None',
+    'return -1', 'return 0', 'return 1', 'return []', 'if ', 'elif ', 'else:',
+    'for ', 'while ', ' in ', ' not in ', ' and ', ' or ', ' is None',
+    'range(', 'len(', 'enumerate(', 'zip(', 'sorted(', 'reversed(',
+    '.append(', '.pop(', '.get(', '.items()', '.values()', '.keys()',
+    'set(', 'dict(', 'list(', 'sum(', 'max(', 'min(', 'abs(',
+    '==', '!=', '<=', '>=', '+=', '-=', '//', '**',
+]
 
 
 def digest(path):
     return hashlib.sha256(Path(path).read_bytes()).hexdigest()
 
 
-def admitted_pools(sources, spans):
+def python_spans(sources, maximum_bytes=MAX_SPAN_BYTES):
+    """UTF-8-aware exact AST spans; parsing never imports or runs a source."""
+    spans, excluded = {}, set()
+    allowed = (ast.expr, ast.Assign, ast.AnnAssign, ast.AugAssign, ast.Return,
+               ast.If, ast.For, ast.While, ast.With, ast.Try, ast.Raise)
+    for key, text in sources.items():
+        tree = ast.parse(text)
+        found = set()
+        for node in ast.walk(tree):
+            if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef, ast.Lambda)):
+                excluded.add(ast.get_source_segment(text, node))
+                if isinstance(node.body, list) and node.body:
+                    first, last = node.body[0], node.body[-1]
+                    body = ast.copy_location(ast.Pass(), first)
+                    body.end_lineno, body.end_col_offset = last.end_lineno, last.end_col_offset
+                    excluded.add(ast.get_source_segment(text, body))
+                elif isinstance(node, ast.Lambda):
+                    excluded.add(ast.get_source_segment(text, node.body))
+            if isinstance(node, allowed) and not isinstance(node, (ast.Name, ast.Constant, ast.Lambda)):
+                value = ast.get_source_segment(text, node)
+                if value and value.strip() and len(value.encode()) <= maximum_bytes:
+                    found.add(value)
+            # Adjacent statements are a contiguous exact slice, including their
+            # original indentation/newlines; never concatenate disjoint spans.
+            for items in vars(node).values():
+                if not isinstance(items, list) or not items or not all(isinstance(x, ast.stmt) for x in items):
+                    continue
+                for start in range(len(items)):
+                    for size in (2, 3):
+                        if start + size > len(items):
+                            continue
+                        first, last = items[start], items[start + size - 1]
+                        interval = ast.copy_location(ast.Pass(), first)
+                        interval.end_lineno, interval.end_col_offset = last.end_lineno, last.end_col_offset
+                        value = ast.get_source_segment(text, interval)
+                        if value and value.strip() and len(value.encode()) <= maximum_bytes:
+                            found.add(value)
+            if len(found) > 512:
+                raise ValueError('per-source syntactic span budget exceeded')
+        spans[key] = sorted(found)
+    return {'parser': 'python-ast', 'runtime_version': sys.version,
+            'runtime_sha256': digest(sys.executable),
+            'spans': spans, 'excluded_units': sorted(x for x in excluded if x)}
+
+
+def syntactic_spans(sources, language, node=None, node_sha256=None):
+    flat = {f'{pid}/{variant}': text for pid, variants in sources.items() for variant, text in variants.items()}
+    if language == 'python':
+        return python_spans(flat)
+    if language != 'javascript' or node is None or not node.is_absolute() or digest(node) != node_sha256:
+        raise ValueError('explicit pinned JavaScript parser runtime required')
+    script = Path(__file__).with_name('idiom_spans.cjs')
+    result = subprocess.run([str(node), '--expose-internals', str(script)],
+        input=json.dumps({'sources': flat, 'max_span_bytes': MAX_SPAN_BYTES}),
+        capture_output=True, text=True, timeout=30, check=True)
+    return dict(json.loads(result.stdout), runtime_sha256=node_sha256)
+
+
+def occurrence_index(sources, candidates):
+    """One trie pass per source, with per-problem maxima across variants."""
+    tree = joint.base.trie(sorted(candidates))
+    ordered = sorted(candidates)
+    owners, totals = defaultdict(set), Counter()
+    for pid, variants in sources.items():
+        best = Counter()
+        for text in variants.values():
+            counts, ends = Counter(), {}
+            for start in range(len(text)):
+                node, stop = tree, start
+                while stop < len(text) and text[stop] in node:
+                    node = node[text[stop]]; stop += 1
+                    if None in node:
+                        fragment = ordered[node[None]]
+                        if start >= ends.get(fragment, 0):
+                            counts[fragment] += 1; ends[fragment] = stop
+            for fragment, count in counts.items():
+                best[fragment] = max(best[fragment], count)
+        for fragment, count in best.items():
+            owners[fragment].add(pid); totals[fragment] += count
+    return owners, totals
+
+
+def admitted_pools(sources, spans, excluded_units=(), language='javascript'):
     """At least two distinct problems, never variant count masquerading as reuse."""
     texts = [text for variants in sources.values() for text in variants.values()]
-    full = set(texts)
-    owners, occurrences = defaultdict(set), Counter()
+    full = {text.strip() for text in texts + list(excluded_units)}
+    if language not in ('javascript', 'python'):
+        raise ValueError('explicit supported pool language required')
+    seeds = PYTHON_SEEDS if language == 'python' else SEEDS
     machine, fragments = set(), set()
     for pid, variants in sources.items():
-        local = set()
         for variant, text in variants.items():
             extracted = spans[f'{pid}/{variant}']
             if any(fragment not in text for fragment in extracted):
@@ -57,25 +149,19 @@ def admitted_pools(sources, spans):
                 for length in (2, 3, 4, 6, 8, 12, 16):
                     if start + length <= len(text):
                         fragments.add(text[start:start + length])
-            local.update(extracted)
-        for fragment in local:
-            owners[fragment].add(pid)
+            if len(fragments) + len(machine) > MAX_CANDIDATES:
+                raise ValueError('candidate mining budget exceeded; reduce or explicitly regroup the fitting selection')
     # Check every pool by actual source occurrence, including assistant seeds.
-    all_candidates = set(SEEDS) | machine | fragments
-    eligible = set()
-    for fragment in all_candidates:
-        if len(fragment) < 2 or not fragment.strip() or fragment in full or len(fragment.encode()) > 48:
-            continue
-        found = {pid for pid, variants in sources.items() if any(fragment in text for text in variants.values())}
-        if len(found) >= 2:
-            eligible.add(fragment)
-            owners[fragment] = found
-            occurrences[fragment] = sum(max(text.count(fragment) for text in sources[pid].values()) for pid in found)
+    all_candidates = set(seeds) | machine | fragments
+    all_candidates = {s for s in all_candidates if len(s) >= 2 and s.strip() and s.strip() not in full
+                      and len(s.encode()) <= MAX_SPAN_BYTES}
+    owners, occurrences = occurrence_index(sources, all_candidates)
+    eligible = {s for s in all_candidates if len(owners[s]) >= 2}
     def ranked(pool):
         return sorted(set(pool) & eligible,
                       key=lambda s: (-occurrences[s] * (len(s) - 1), len(s.encode()), s))
-    return {'assistant_seed': ranked(SEEDS), 'ast_spans': ranked(machine),
-            'seed_ast_union': ranked(set(SEEDS) | machine),
+    return {'assistant_seed': ranked(seeds), 'ast_spans': ranked(machine),
+            'seed_ast_union': ranked(set(seeds) | machine),
             'compression_fragments': ranked(fragments)}, owners
 
 
@@ -95,7 +181,8 @@ def metrics(state, sources, owners, width):
                          'selections': len(parts), 'literal_ids': ids}
     keys = ('coverage', 'target', 'selections', 'literal_bits', 'singleton_bits',
             'singleton_selections', 'singleton_bit_share', 'median_selections',
-            'p95_selections', 'dictionary_bytes', 'packet_bytes', 'package_bytes')
+            'p95_selections', 'dictionary_bytes', 'packet_bytes', 'package_bytes',
+            'source_utf8_bytes', 'packet_header_bytes', 'payload_padding_bits')
     return {**{key: state[key] for key in keys}, 'entries': len(state['vocab']),
             'single_character_entries': sum(len(s) == 1 for s in state['vocab']),
             'whitespace_only_entries': sum(not s.strip() for s in state['vocab']),
@@ -123,11 +210,11 @@ def comparisons(rows):
         pareto = []
         for row in group:
             metric = row['final']
-            vector = (-metric['coverage'], metric['literal_bits'], metric['singleton_bits'], metric['package_bytes'])
+            vector = joint.pareto_vector(metric)
             dominated = False
             for other in group:
                 m = other['final']
-                v = (-m['coverage'], m['literal_bits'], m['singleton_bits'], m['package_bytes'])
+                v = joint.pareto_vector(m)
                 if all(a <= b for a, b in zip(v, vector)) and any(a < b for a, b in zip(v, vector)):
                     dominated = True
             if not dominated:
@@ -142,53 +229,49 @@ def comparisons(rows):
                            'more_selections': sum(d > 0 for d in delta),
                            'equal_selections': sum(d == 0 for d in delta)})
         result.append({'width': width, 'pareto_pools': pareto,
-                       'dimensions': ['coverage', 'literal_bits', 'absolute_singleton_bits', 'dictionary_plus_packet_bytes'],
+                       'dimensions': ['coverage', 'absolute_singleton_bits', 'literal_bits', 'dictionary_plus_packet_bytes'],
                        'readability': 'Separate candidate policy and whitespace diagnostics only; no human evidence'})
     return result
 
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--node', type=Path, required=True, help='Explicit parser runtime; source is never executed')
-    parser.add_argument('--node-sha256', required=True)
+    parser.add_argument('--config', type=Path, required=True)
+    parser.add_argument('--config-sha256', required=True)
+    parser.add_argument('--objective', choices=('input', 'storage', 'singleton'), default='singleton')
+    parser.add_argument('--node', type=Path, help='Pinned parser runtime; required only for JavaScript')
+    parser.add_argument('--node-sha256')
     parser.add_argument('--output', type=Path, required=True)
     args = parser.parse_args()
-    for name, expected in PINS.items():
-        if digest(joint.SCALE / name) != expected:
-            raise ValueError('Historical evidence pin mismatch: ' + name)
-    boundary = json.loads((joint.SCALE / 'protected-boundary.json').read_text())
-    if boundary['checked_problem_count'] != 80 or boundary['reserved_problem_overlap']:
-        raise ValueError('Unexpected historical development boundary')
-    if not args.node.is_absolute() or digest(args.node) != args.node_sha256:
-        raise ValueError('Parser runtime pin mismatch')
-    sources, _ = joint.load_sources()
+    sources, inputs = load_fitting_inputs(args.config, args.config_sha256)
+    if not args.output.is_absolute():
+        raise ValueError('absolute private output directory required')
     args.output.mkdir(parents=True, exist_ok=False)
     ast_script = Path(__file__).with_name('idiom_spans.cjs')
-    flat = {f'{pid}/{v}': text for pid, variants in sources.items() for v, text in variants.items()}
-    result = subprocess.run([str(args.node), '--expose-internals', str(ast_script)],
-                            input=json.dumps(flat), capture_output=True, text=True, timeout=30, check=True)
-    ast_result = json.loads(result.stdout)
-    pools, owners = admitted_pools(sources, ast_result['spans'])
+    ast_result = syntactic_spans(sources, inputs['language'], args.node, args.node_sha256)
+    pools, owners = admitted_pools(sources, ast_result['spans'], ast_result['excluded_units'], inputs['language'])
     chars = Counter(char for variants in sources.values() for text in variants.values() for char in text)
     char_rank = sorted(chars, key=lambda char: (-chars[char], char))
-    # Fixed bounds and pool identities precede all comparisons. These 80 problems
-    # were already exposed: this run cannot create independent confirmation.
+    # Fixed bounds and pool identities precede comparisons; no new membership,
+    # qualification or independent confirmation is inferred from fitting.
     limits = {'rounds_per_start': 1, 'trials_per_start': 400, 'seconds_per_start': 6,
               'removal_shortlist': 3, 'addition_shortlist': 5,
               'pair_removal_sets': 2, 'pair_addition_shortlist': 3}
-    contract = {'schema': 'gamma.exposed-idiom-pilot.v1', 'pins': PINS,
-                'source_count': 160, 'problem_count': 80, 'language': 'javascript',
-                'source_exposure': 'All 80 previously exposed development problems; no fresh confirmation',
-                'source_evidence': 'Historical finite oracle checks plus original output/input-effect parity',
-                'authoring_registry_reconciliation': 'Blocked: legacy scale80 has no semantics records; no new IDs fabricated',
-                'family_reuse': 'Unknown: legacy metadata has no reconciled family labels',
+    contract = {'schema': 'gamma.exposed-idiom-pilot.v2', 'fitting_inputs': inputs,
+                'source_count': inputs['source_count'], 'problem_count': len(sources), 'language': inputs['language'],
+                'source_exposure': 'Explicit previously_exposed development_fit selection; no fresh confirmation',
+                'source_evidence': 'Exact existing canonical receipts and unchanged authoring variant identities',
+                'authoring_registry_reconciliation': 'Existing owner queried; unknown authoring status retained',
+                'family_reuse': 'Distinct canonical problems; reviewed grouping retained in fitting input',
                 'source_rewrites': 0, 'candidate_executions': 0, 'limits': limits,
-                'selection': 'Coverage first, then selections, then dictionary plus packet bytes; source ties use UTF-8 size then legacy variant name',
+                'objective': args.objective,
+                'selection': 'Exact minimum segmentation; source ties use UTF-8 size then stable variant ID',
                 'path_tie': 'Minimum selections; equal costs use lower dictionary ID at first differing position',
                 'operand_cost': 'All operands, names, constants, punctuation and whitespace are literal source bytes',
                 'controls': 'Offline representation only; no Finish/Undo or human interaction claim',
-                'parser': ast_result['parser'], 'parser_runtime_sha256': args.node_sha256,
-                'code_sha256': {p.name: digest(p) for p in [Path(__file__), ast_script, Path(joint.__file__)]},
+                'parser': ast_result['parser'], 'parser_runtime_sha256': ast_result['runtime_sha256'],
+                'parser_runtime_version': ast_result.get('runtime_version'),
+                'code_sha256': {p.name: digest(p) for p in [Path(__file__), ast_script, Path(joint.__file__), Path(__file__).with_name('fitting_inputs.py')]},
                 'decoder_storage': {p.name: {'sha256': digest(p), 'bytes': p.stat().st_size}
                                     for p in [joint.SCALE.parent / 'literals.py', joint.SCALE.parent / 'pass2/working/bitpack.py']},
                 'decoder_storage_scope': 'Selected codec source files only, not the complete installed runtime footprint',
@@ -196,7 +279,7 @@ def main():
     joint.write(args.output / 'contract.json', contract)
     joint.write(args.output / 'candidate-pools.json', pools)
     (args.output / 'implementation').mkdir()
-    for path in [Path(__file__), ast_script, Path(joint.__file__)]:
+    for path in [Path(__file__), ast_script, Path(joint.__file__), Path(__file__).with_name('fitting_inputs.py')]:
         (args.output / 'implementation' / path.name).write_bytes(path.read_bytes())
     started, rows = time.monotonic(), []
     for width in range(4, 9):
@@ -206,7 +289,7 @@ def main():
             initial = joint.evaluate(sources, initial_vocab, width, alphabet=[], allow_partial=True)
             # The same existing paired search alternates exact source selection
             # with dictionary moves. No separate optimizer is introduced.
-            final, trace = joint.improve(sources, initial, width, 'input', limits,
+            final, trace = joint.improve(sources, initial, width, args.objective, limits,
                                         alphabet=[], allow_partial=True, candidate_pool=pool + char_rank)
             initial_metrics, final_metrics = metrics(initial, sources, owners, width), metrics(final, sources, owners, width)
             common = initial['chosen'].keys() & final['chosen'].keys()
