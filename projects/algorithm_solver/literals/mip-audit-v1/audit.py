@@ -8,7 +8,18 @@ and solve min total selections with at most B=32 learned entries plus the 96 cha
 (scipy.optimize.milp). Path flows are a network flow once x is fixed, so only x is integral. Separately run the
 minify-control-v1 local search (fallback alphabet, greedy refill, matched80-v3 exact local search, chosen-span
 proposer, 60,000 trials) on the same subset at 128 entries. Validation sources are never opened.
+
+The import repair does not revalidate historical experiment receipts.
 """
+import argparse
+import concurrent.futures
+import hashlib
+import json
+import multiprocessing
+import os
+import random
+import sys
+import time
 from pathlib import Path
 import numpy as np
 from scipy.optimize import milp, LinearConstraint, Bounds

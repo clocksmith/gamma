@@ -1,4 +1,7 @@
-"""Exactly the owner-approved two-arm original-corpus experiment; no retries."""
+"""Exactly the owner-approved two-arm original-corpus experiment; no retries.
+
+The integrity-reference repair does not revalidate historical experiment receipts.
+"""
 import gc, hashlib, importlib.metadata, json, os, sys, time
 from pathlib import Path
 import numpy as np
@@ -70,7 +73,7 @@ def main():
         publish(OUT/'literal-diagnostics.json',literal_diagnostics)
         losses={r:[uid for uid in unique if by['control'][uid]['routes'][r]['accepted_correct'] and not by['balanced'][uid]['routes'][r]['accepted_correct']] for r in ('raw','guard')}
         quality=all(metrics['balanced'][r]['correct']>=metrics['control'][r]['correct']+1 and not losses[r] for r in ('raw','guard')) and not any(v['wrong'] or v['infrastructure'] for m in metrics.values() for v in m.values())
-        assert all(sha(ROOT/n)==h for n,h in frozen['sources_sha256'].items()) and all(sha(Path(n))==h for n,h in judge_frozen['sources_sha256'].items()),'Frozen implementation changed'
+        assert all(sha(ROOT/n)==h for n,h in frozen['sources_sha256'].items()) and all(sha(Path(n))==h for n,h in frozen['judge_sources_sha256'].items()),'Frozen implementation changed'
         assert sha(PACKET)==frozen['packet_sha256'] and sha(path)==packet['original']['corpus_sha256']
         summary=dict(name=NAME,checkpoints_sha256=checkpoints,metrics=metrics,lost_correct=losses,quality_pass=quality,latency_pass=metrics['balanced']['guard']['p95']<=2,release_qualified=False,protected_opened=False,audit_opened=False,resources=monitor.counters(),actual_wall_seconds=time.perf_counter()-start)
         publish(OUT/'summary.json',summary);print('[summary] '+json.dumps(summary),flush=True)
