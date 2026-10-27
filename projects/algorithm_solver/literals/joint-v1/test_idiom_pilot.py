@@ -11,6 +11,19 @@ import idiom_pilot as pilot
 
 
 class IdiomPoolTests(unittest.TestCase):
+    def test_fixed_dictionary_audit_extracts_boundaries_without_proposing_literals(self):
+        source = 'function solve(longName) { return longName + 12345; }'
+        raw = subprocess.run(['/usr/bin/node', '--expose-internals',
+                              str(Path(pilot.__file__).with_name('idiom_spans.cjs'))],
+                             input=json.dumps({'sources': {'one': source}, 'max_span_bytes': 160,
+                                               'boundaries_only': True}), text=True,
+                             capture_output=True, timeout=10, check=True)
+        result = json.loads(raw.stdout)
+        self.assertEqual(result['spans'], {'one': []})
+        self.assertEqual(result['excluded_units'], [])
+        self.assertNotIn(source.index('longName') + 1, result['boundaries']['one'])
+        self.assertNotIn(source.index('12345') + 2, result['boundaries']['one'])
+
     def test_whitespace_cannot_disguise_single_character_entries(self):
         text = 'a + 1;\n'
         sources = {1: {'a': text}, 2: {'a': text + '\n'}}

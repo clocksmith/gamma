@@ -5,6 +5,8 @@ const acorn = require('internal/deps/acorn/acorn/dist/acorn');
 const payload = JSON.parse(fs.readFileSync(0, 'utf8'));
 const sources = payload.sources, maximum = payload.max_span_bytes;
 const maxSpans = payload.max_spans_per_source ?? 2048;
+const boundariesOnly = payload.boundaries_only ?? false;
+if (typeof boundariesOnly !== 'boolean') throw Error('explicit boundary-only mode required');
 if (!sources || typeof sources !== 'object' || Array.isArray(sources) || !Number.isInteger(maximum) || maximum < 2 || maximum > 512) throw Error('bounded span input required');
 if (!Number.isInteger(maxSpans) || maxSpans < 1 || maxSpans > 2048) throw Error('bounded span count required');
 const allowed = new Set(['MemberExpression', 'CallExpression', 'BinaryExpression',
@@ -37,6 +39,10 @@ for (const [key, source] of Object.entries(sources)) {
     })), ...comments.map(t => ({start: offsets.get(t.start), end: offsets.get(t.end), category: 'comment'}))]
       .sort((a, b) => a.start - b.start);
     features[key] = {};
+  }
+  if (boundariesOnly) {
+    result[key] = [];
+    continue;
   }
   const spans = new Set();
   function add(start, end) {

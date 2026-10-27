@@ -85,8 +85,8 @@ def representable_prefix(text, tree, boundaries=None):
 def evaluate(sources, vocab, width, parent=None, *, alphabet=None, allow_partial=False,
              boundaries=None, source_objective='input'):
     """All variants compete after every move. Reuse only unaffected exact parses."""
-    if type(width) is not int or not 4 <= width <= 8:
-        raise ValueError('width must be 4..8')
+    if type(width) is not int or not 4 <= width <= 12:
+        raise ValueError('width must be 4..12')
     vocab = order(vocab, alphabet)
     if len(vocab) > 2**width:
         raise ValueError('dictionary exceeds fixed-width budget')

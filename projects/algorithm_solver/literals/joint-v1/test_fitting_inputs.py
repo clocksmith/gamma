@@ -72,6 +72,8 @@ class FittingInputTests(unittest.TestCase):
         service = self.pin('service.json', {'catalogue': canonical, 'source_access': {
             'boundary_gate': gate, 'authorized_problem_ids': [f'leetcode:{i}' for i in self.texts]}})
         self.admission['inputs']['service_sha256'] = service['sha256']
+        if 'development_admission' in self.admission:
+            self.admission['development_admission']['inputs'] = {'service': service}
         admission = self.pin('admission.json', self.admission)
         catalog = self.pin('authoring.json', self.catalog)
         self.policy['inputs'] = {k + '_sha256': v['sha256'] for k, v in
@@ -126,6 +128,27 @@ class FittingInputTests(unittest.TestCase):
                 self.fixture(); mutate(self.admission['problems'][-1])
                 with self.assertRaises(ValueError): self.load()
                 self.service.request.assert_not_called()
+
+    def test_development_source_admission_does_not_require_browser_publication(self):
+        self.fixture()
+        self.admission['development_admission'] = {
+            'schema': 'gamma.exact-development-source-admission.v1',
+            'qualification_created': False, 'browser_guides_admitted': 0}
+        for row in self.admission['problems']:
+            slot = row['implementations']['python']
+            slot.update(blockers=['python_browser_execution_unavailable'], license=None, adapter=None,
+                development_blockers=[],
+                development_license={'verified_reference': {'bindings': slot['bindings']}},
+                development_adapter={'kind': 'existing_qualified_solve_interface', 'language': 'python',
+                    'interface_sha256': slot['bindings']['interface_sha256'],
+                    'qualified_runtime_sha256': slot['bindings']['runtime_sha256']})
+        sources, _ = self.load()
+        self.assertEqual(len(sources), len(self.texts))
+        self.admission['problems'][0]['implementations']['python']['development_blockers'] = ['host_policy:external_io']
+        self.service.request.reset_mock()
+        with self.assertRaisesRegex(ValueError, 'completed source-to-guide'):
+            self.load()
+        self.service.request.assert_not_called()
 
     def test_group_cannot_cross_fit_and_validation_even_if_validation_unselected(self):
         self.fixture()
@@ -182,7 +205,7 @@ class FittingInputTests(unittest.TestCase):
     def test_cli_reports_pinned_population_and_full_costs_for_all_widths(self):
         self.fixture(); spec = self.config(); output = self.root / 'report'
         argv = ['idiom_pilot.py', '--config', spec['path'], '--config-sha256', spec['sha256'],
-                '--output', str(output)]
+                '--widths', '9', '10', '11', '12', '--output', str(output)]
         with patch('sys.argv', argv), redirect_stdout(StringIO()):
             idiom_pilot.main()
         contract = json.loads((output / 'contract.json').read_text())
@@ -190,9 +213,9 @@ class FittingInputTests(unittest.TestCase):
         self.assertEqual(contract['source_count'], 2)
         self.assertEqual(contract['objective'], 'compact')
         report = json.loads((output / 'summary.json').read_text())
-        self.assertEqual(len(report['rows']), 40)
+        self.assertEqual(len(report['rows']), 32)
         self.assertEqual({row['arm'] for row in report['rows']}, {'strict', 'punctuation_fallback'})
-        self.assertEqual({row['width'] for row in report['rows']}, set(range(4, 9)))
+        self.assertEqual({row['width'] for row in report['rows']}, set(range(9, 13)))
         for row in report['rows']:
             result = row['final']
             self.assertEqual(result['target'], 2)

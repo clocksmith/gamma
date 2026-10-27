@@ -3,6 +3,7 @@ import argparse
 import hashlib
 import json
 from pathlib import Path
+import re
 
 
 def sha(data):
@@ -100,6 +101,72 @@ def query(catalog, problem_id, language):
     """Return all matches, never select or rank a preferred implementation."""
     return tuple(record for record in catalog['variants']
                  if record['problem_id'] == problem_id and record['language'] == language)
+
+
+def from_canonical_contracts(raw, expected_sha256):
+    """Index existing canonical source/contract pairs without inventing sidecars.
+
+    A complete, hash-matching qualification contract can supply the semantic
+    artifact for an unchanged canonical source. It is explicitly identified as
+    that artifact, never relabeled as a source-author's algorithm sidecar. The
+    original canonical ID is retained in provenance. Registry status stays
+    unknown; receipt validation and admission remain outside this owner.
+    Missing historical contract payloads remain unresolved.
+    """
+    if len(raw) > 32 * 1024**2 or sha(raw) != expected_sha256:
+        raise ValueError('Pinned bounded canonical metadata required')
+    metadata = json.loads(raw)
+    records, unresolved, seen = [], [], set()
+    kinds = ('public_batch', 'admitted_qualification', 'fresh_qualification', 'public_foundation')
+    valid_hash = lambda value: isinstance(value, str) and re.fullmatch(r'[0-9a-f]{64}', value)
+    for row in metadata['problems']:
+        gid = row['problem_id']
+        if not isinstance(gid, str) or not re.fullmatch(r'leetcode:[1-9][0-9]*', gid) or gid in seen:
+            raise ValueError('Unique canonical problem identities required')
+        seen.add(gid)
+        for language in ('javascript', 'python'):
+            implementation = row['implementations'][language]
+            if implementation.get('status') != 'qualified':
+                continue
+            payloads = [(kind, implementation.get('provenance', {}).get(kind, {}).get('problem_contract'))
+                        for kind in kinds]
+            payloads = [(kind, payload) for kind, payload in payloads if payload is not None]
+            if not payloads:
+                unresolved.append({'problem_id': gid, 'language': language,
+                                   'reason': 'complete_canonical_contract_payload_unavailable'})
+                continue
+            if len(payloads) != 1:
+                raise ValueError('Ambiguous canonical contract payload')
+            kind, payload = payloads[0]
+            # Match the canonical catalogue's JSON hash convention exactly.
+            contract_hash = sha(json.dumps(payload, sort_keys=True, separators=(',', ':'),
+                                           allow_nan=False).encode())
+            if (not isinstance(payload, dict) or not payload or
+                    contract_hash != implementation.get('problem_contract_sha256') or
+                    not valid_hash(implementation.get('source_sha256')) or
+                    not valid_hash(implementation.get('receipt_sha256')) or
+                    implementation.get('canonical_variant_id') != language + ':' + implementation['source_sha256']):
+                raise ValueError('Exact canonical source and complete semantic contract required')
+            identity = {'problem_id': int(gid.split(':')[1]), 'language': language,
+                        'source_sha256': implementation['source_sha256'],
+                        'semantics_sha256': contract_hash, 'problem_contract_sha256': contract_hash}
+            records.append(dict(identity, variant_id=sha(canonical(identity).encode()),
+                qualification={'status': 'unknown', 'reason': 'Registry metadata does not verify qualification receipts'},
+                provenance=[{'canonical_catalogue_sha256': expected_sha256,
+                    'canonical_variant_id': implementation['canonical_variant_id'],
+                    'semantic_artifact_kind': 'existing_canonical_qualification_contract',
+                    'semantic_payload_location': f'provenance.{kind}.problem_contract',
+                    'canonical_receipt_reference': implementation['receipt_sha256'],
+                    'authoring_sidecar_created': False}]))
+    records.sort(key=lambda r: (r['problem_id'], r['language'], r['variant_id']))
+    index = {}
+    for record in records:
+        index.setdefault(str(record['problem_id']), {}).setdefault(record['language'], []).append(record['variant_id'])
+    return {'schema': 'gamma.authoring-variant-catalog-pilot.v1', 'preferred_variant': None,
+            'qualification_policy': 'Unknown only; exact canonical contracts are metadata, not new qualification.',
+            'unique_problem_count': len(index), 'variant_count': len(records),
+            'index': index, 'variants': records, 'unresolved_canonical_slots': unresolved,
+            'qualification_created': False, 'source_payloads_opened': 0}
 
 
 def main():
