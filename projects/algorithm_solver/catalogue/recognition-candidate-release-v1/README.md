@@ -89,6 +89,22 @@ private BITS identity metadata was prepared; solution guides remain separate.
 
 ## Blocking conditions and next authorized steps
 
+The list below preserves the original checkpoint's conditions. On 2026-10-27,
+the runner gained cgroup-v2 preflight: it resolves `/proc/self/cgroup` through
+the actual mount root, checks finite `memory.max` values throughout the visible
+ancestry, and includes each ancestor's remaining headroom. A required cap fails
+closed unless an inherited limit is no larger than the plan's memory budget.
+The supervisor rechecks that cap while the worker runs and retains group cleanup
+on failure. It never sets machine or cgroup policy itself.
+
+A model-free Jupiter probe inside an explicitly capped systemd service verified
+an 8 GiB kernel limit for both supervisor and child, more than 5 GiB remaining
+headroom, normal child completion and no live owned-group members afterward.
+This resolves the runner's blanket rejection of an existing cap; it is not an
+encoder run, an OOM stress test or evidence that the pending 51 vectors exist.
+Any resumed run still needs its authentic private plan and assets, updated runner
+code pins, unchanged encoder identity and an adequately capped execution envelope.
+
 1. The existing CPU envelope needs at least 5 GiB available memory. Observed
    capacity was below that floor. No worker or model was launched.
 2. No existing approved kernel-hard aggregate-memory runner/cgroup was established.

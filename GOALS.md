@@ -62,6 +62,11 @@ entries (9–12 bits), retaining complete-program coverage, selection costs and
 singleton usage separately. These wider profiles cannot satisfy original M1's
 256-entry limit. More slots do not authorize new source access or publication.
 
+The owner's subsequent 2026-10-27 direction pauses composition work. Preserve
+the `3525aea16` wider-profile checkpoint; prioritize completing solutions,
+independent qualification and retrieval (D1–D3). Wider dictionaries do not
+complete those goals. Resume composition only on further owner direction.
+
 ## Counted spelling extension (2026-10-27)
 
 The owner chose long fragments with a separately charged spelling mode for BITS.
