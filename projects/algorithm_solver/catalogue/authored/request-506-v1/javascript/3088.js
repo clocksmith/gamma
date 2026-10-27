@@ -1,0 +1,4 @@
+// Original candidate implementation. Contract: https://leetcode.com/problems/make-string-anti-palindrome/
+"use strict";
+function solve(s){const a=[...s].sort(),h=a.length/2,total=Array(26).fill(0),available=Array(26).fill(0),forbidden=Array(26).fill(0);for(const c of a)total[c.charCodeAt(0)-97]++;if(Math.max(...total)>h)return '-1';for(let i=0;i<h;i++)forbidden[a[i].charCodeAt(0)-97]++;for(let i=h;i<a.length;i++)available[a[i].charCodeAt(0)-97]++;const right=[];for(let i=0;i<h;i++){const ban=a[h-i-1].charCodeAt(0)-97;forbidden[ban]--;const remaining=h-i-1;let choice=-1;for(let c=0;c<26;c++)if(available[c]>remaining-forbidden[c]){choice=c;break;}if(choice<0)for(let c=0;c<26;c++)if(c!==ban&&available[c]){choice=c;break;}if(choice===ban||choice<0)return '-1';available[choice]--;right.push(String.fromCharCode(97+choice));}return a.slice(0,h).join('')+right.join('');}
+module.exports = solve;

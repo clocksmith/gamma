@@ -1,0 +1,4 @@
+// Original candidate. Contract: https://leetcode.com/problems/design-graph-with-shortest-path-calculator/
+"use strict";
+function solve(operations,args){let g=[];const out=[];for(let i=0;i<operations.length;i++){const op=operations[i],a=args[i];if(op==='Graph'){g=Array.from({length:a[0]},()=>[]);for(const[u,v,w]of a[1])g[u].push([v,w]);out.push(null);}else if(op==='addEdge'){const[u,v,w]=a[0];g[u].push([v,w]);out.push(null);}else if(op==='shortestPath'){const[s,t]=a,n=g.length,d=Array(n).fill(Infinity),used=Array(n).fill(false);d[s]=0;for(let k=0;k<n;k++){let u=-1;for(let j=0;j<n;j++)if(!used[j]&&(u<0||d[j]<d[u]))u=j;if(u<0||d[u]===Infinity)break;used[u]=true;for(const[v,w]of g[u])d[v]=Math.min(d[v],d[u]+w);}out.push(d[t]===Infinity?-1:d[t]);}else throw Error('unknown operation');}return out;}
+module.exports = solve;
