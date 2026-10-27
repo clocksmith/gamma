@@ -26,6 +26,7 @@ INVENTORY = SOLVER / 'findings/library-answer-audit-v2/inventory.jsonl'
 INVENTORY_SHA = 'da99c407bff14065f25282c23baef6d1daf69e7b9b76fce189b2922485bc5e77'
 HARNESS = SOLVER / 'catalogue/public-domain-qualification-medium32-wave2-observer-v1'
 NODE_HARNESS = SOLVER / 'catalogue/imported-node-observer-v1'
+COMMONJS_HARNESS = SOLVER / 'catalogue/imported-commonjs-observer-v1/harness.cjs'
 LIMITS = dict(cpu_seconds=3, wall_seconds=8, memory_bytes=1024**3,
               max_output_bytes=8 * 1024**2)
 MAX_FILE = 8 * 1024**2
@@ -123,7 +124,8 @@ def run_batch(language, files, runtime_identity, node_runtime=None):
 def code_pins():
     paths = [Path(__file__), Path(sandbox.__file__), Path(pinned_runtime.__file__), HARNESS / 'harness.py', HARNESS / 'harness.cjs',
              Path(__file__).with_name('imported_result_contracts.py'),
-             Path(__file__).with_name('node_identity_contracts.py'), NODE_HARNESS / 'harness.py', NODE_HARNESS / 'harness.cjs']
+             Path(__file__).with_name('node_identity_contracts.py'), NODE_HARNESS / 'harness.py', NODE_HARNESS / 'harness.cjs',
+             COMMONJS_HARNESS, Path(__file__).with_name('request_qualification.py')]
     return {str(p): file_hash(p) for p in paths}
 
 
@@ -309,6 +311,9 @@ def load_freeze(path):
     gate = decode(read(config['source_access']['boundary_gate']['path']))
     if len({(j['id'], j['language']) for j in contract['jobs']}) != len(contract['jobs']):
         raise ValueError('duplicate frozen job')
+    if any(j.get('domain_validator') == 'request3215-v1' for j in contract['jobs']):
+        from .request_qualification import verify_freeze
+        verify_freeze(path, contract, gate)
     return raw, contract, gate
 
 
@@ -316,6 +321,9 @@ def job_inputs(root, job, gate):
     pid, lang = job['id'], job['language']
     if type(pid) is not int or lang not in ('python', 'javascript'):
         raise ValueError('invalid frozen job identity')
+    source_interface(job)
+    if job.get('domain_validator') == 'request3215-v1' and pid != 3215:
+        raise ValueError('request3215 validator cannot enroll another problem')
     suffix = 'py' if lang == 'python' else 'js'
     if job['source'] != f'sources/{pid}.{suffix}' or job['tests'] != f'tests/{pid}.json':
         raise ValueError('invalid frozen exact locator')
@@ -334,9 +342,31 @@ def job_inputs(root, job, gate):
         validator = imported_case_admission.validate if pid in imported_case_admission.DOMAIN_IDS else imported_clean_domains.validate
         for case in cases:
             validator(pid, case['args'])
+    elif job.get('domain_validator') == 'request3215-v1':
+        from .request_qualification import validate
+        for case in cases:
+            validate(pid, case['args'])
     elif 'domain_validator' in job:
         raise ValueError('unknown input validator')
     return source, cases
+
+
+def source_interface(job):
+    """Reject unsupported loader combinations before source or case access."""
+    interface = job.get('source_interface', 'global-solve-v1')
+    if interface not in ('global-solve-v1', 'commonjs-object-solve-v1'):
+        raise ValueError('unsupported frozen source interface')
+    if interface == 'commonjs-object-solve-v1' and (job['language'] != 'javascript' or job.get('node_identity', False)):
+        raise ValueError('CommonJS object interface requires JavaScript without node-identity transport')
+    return interface
+
+
+def observer_files(job):
+    if source_interface(job) == 'commonjs-object-solve-v1':
+        return {'harness.cjs': read(COMMONJS_HARNESS), 'observer.cjs': read(HARNESS / 'harness.cjs')}
+    observer = NODE_HARNESS if job.get('node_identity', False) else HARNESS
+    harness = 'harness.py' if job['language'] == 'python' else 'harness.cjs'
+    return {harness: read(observer / harness)}
 
 
 def execute(args):
@@ -356,11 +386,10 @@ def execute(args):
                 if time.monotonic() - start > args.max_wall:
                     raise TimeoutError('campaign wall budget')
                 if job['language'] == 'python':
-                    program = 'program.py'; harness = 'harness.py'
+                    program = 'program.py'
                 else:
-                    program = 'program.js'; harness = 'harness.cjs'
-                observer = NODE_HARNESS if job.get('node_identity', False) else HARNESS
-                result = run_batch(job['language'], {program: source, harness: read(observer / harness),
+                    program = 'program.js'
+                result = run_batch(job['language'], {program: source, **observer_files(job),
                                    'inputs.json': encoded(packet(batch, job.get('node_identity', False)))},
                                    contract['runtime'], node_runtime)
                 stem = f"{job['id']}-{job['language']}-{offset}"
