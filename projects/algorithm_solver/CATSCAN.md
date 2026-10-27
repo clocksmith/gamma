@@ -26,7 +26,7 @@ Admission and promotion authority remain unchanged.
 
 Inherit [the preserved charter](HISTORY-CATSCAN-v1.md), including its authority,
 behavior/effect/complexity contracts and [M1–M6 gates](literals/MILESTONES.md).
-The v2 alias map reorganizes historical goal numbering without changing gates.
+The v2 alias map reorganizes goal numbering without changing gates.
 Expected outputs stay outside sandboxes; protected families stay closed; verdicts
 fail closed. Recognition, representation, human performance and autonomous
 correctness qualify separately. Bind exact source/decoding bytes; charge helpers,
