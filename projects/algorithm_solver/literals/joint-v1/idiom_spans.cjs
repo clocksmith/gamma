@@ -2,12 +2,19 @@
 'use strict';
 const fs = require('node:fs');
 const acorn = require('internal/deps/acorn/acorn/dist/acorn');
-const sources = JSON.parse(fs.readFileSync(0, 'utf8'));
+const payload = JSON.parse(fs.readFileSync(0, 'utf8'));
+const sources = payload.sources, maximum = payload.max_span_bytes;
+const maxSpans = payload.max_spans_per_source ?? 2048;
+if (!sources || typeof sources !== 'object' || Array.isArray(sources) || !Number.isInteger(maximum) || maximum < 2 || maximum > 512) throw Error('bounded span input required');
+if (!Number.isInteger(maxSpans) || maxSpans < 1 || maxSpans > 2048) throw Error('bounded span count required');
 const allowed = new Set(['MemberExpression', 'CallExpression', 'BinaryExpression',
   'LogicalExpression', 'UpdateExpression', 'UnaryExpression', 'VariableDeclarator',
-  'ReturnStatement', 'VariableDeclaration', 'ExpressionStatement']);
+  'ReturnStatement', 'VariableDeclaration', 'ExpressionStatement', 'IfStatement', 'ForStatement',
+  'ForOfStatement', 'ForInStatement', 'WhileStatement', 'DoWhileStatement', 'TryStatement', 'ThrowStatement', 'NewExpression']);
 const result = {}, boundaries = {};
+const excluded = new Set();
 for (const [key, source] of Object.entries(sources)) {
+  if (typeof source !== 'string') throw Error('source text required');
   const tokens = [], comments = [];
   const ast = acorn.parse(source, {ecmaVersion: 2022, sourceType: 'script',
     onToken: tokens, onComment: comments});
@@ -23,7 +30,8 @@ for (const [key, source] of Object.entries(sources)) {
   const spans = new Set();
   function add(start, end) {
     const text = source.slice(start, end);
-    if (safe.has(start) && safe.has(end) && Buffer.byteLength(text) <= 48 && text.trim()) spans.add(text);
+    if (safe.has(start) && safe.has(end) && Buffer.byteLength(text) <= maximum && text.trim()) spans.add(text);
+    if (spans.size > maxSpans) throw Error('per-source syntactic span budget exceeded');
   }
   function withSpacing(start, end) {
     add(start, end);
@@ -34,6 +42,13 @@ for (const [key, source] of Object.entries(sources)) {
   }
   function walk(node) {
     if (!node || typeof node !== 'object') return;
+    if (['FunctionDeclaration', 'FunctionExpression', 'ArrowFunctionExpression'].includes(node.type)) {
+      excluded.add(source.slice(node.start, node.end));
+      if (node.body.type === 'BlockStatement') {
+        excluded.add(source.slice(node.body.start, node.body.end));
+        if (node.body.body.length) excluded.add(source.slice(node.body.body[0].start, node.body.body.at(-1).end));
+      } else excluded.add(source.slice(node.body.start, node.body.end));
+    }
     if (allowed.has(node.type)) {
       withSpacing(node.start, node.end);
     }
@@ -64,11 +79,20 @@ for (const [key, source] of Object.entries(sources)) {
       }
     }
     for (const value of Object.values(node)) {
-      if (Array.isArray(value)) value.forEach(walk);
+      if (Array.isArray(value)) {
+        if (value.length && value.every(x => x && /(?:Statement|Declaration)$/.test(x.type))) {
+          for (let i = 0; i < value.length; i++) {
+            for (const size of [2, 3]) if (i + size <= value.length) add(value[i].start, value[i + size - 1].end);
+          }
+        }
+        value.forEach(walk);
+      }
       else if (value && typeof value === 'object') walk(value);
     }
   }
   walk(ast);
   result[key] = [...spans].sort();
 }
-process.stdout.write(JSON.stringify({parser: `acorn-${acorn.version}`, spans: result, boundaries}));
+const output = JSON.stringify({parser: `acorn-${acorn.version}`, spans: result, boundaries, excluded_units: [...excluded].sort()});
+if (Buffer.byteLength(output) > 32 * 1024 * 1024) throw Error('syntactic output byte budget exceeded');
+process.stdout.write(output);
