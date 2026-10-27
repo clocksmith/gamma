@@ -135,7 +135,64 @@ def groups_possible(n, groups, prerequisites):
     return not has_cycle(list(range(n)), item_edges) and not has_cycle(list(dict.fromkeys(group_of)), cross_group)
 
 
+def alternating_word_witness(pid, args, answer):
+    """Independent 2900/2901 replay: ordered scan and backwards optimal suffixes.
+
+    The two identities are explicit; arbitrary result_valid fallback remains
+    unchanged. Only the new prospective lane may select these policies.
+    """
+    if type(pid) is not int or pid not in (2900, 2901): return False
+    if type(args) is not list or len(args) != 2: return False
+    words, labels = args
+    if type(words) is not list or type(labels) is not list: return False
+    size = len(words)
+    maximum = 100 if pid == 2900 else 1000
+    if not 1 <= size <= maximum or len(labels) != size: return False
+    seen = set()
+    for word in words:
+        if type(word) is not str or not 1 <= len(word) <= 10: return False
+        if any(ord(c) < 97 or ord(c) > 122 for c in word) or word in seen: return False
+        seen.add(word)
+    for label in labels:
+        if type(label) is not int: return False
+        if pid == 2900 and label not in (0, 1): return False
+        if pid == 2901 and not 1 <= label <= size: return False
+    if type(answer) is not list or not answer or any(type(x) is not str for x in answer): return False
+    # Scan input once; this rejects duplicates, unknown words and reordering
+    # without sharing the execution checker's word-to-index lookup.
+    selected, cursor = [], 0
+    for index, word in enumerate(words):
+        if cursor < len(answer) and word == answer[cursor]:
+            selected.append(index); cursor += 1
+    if cursor != len(answer): return False
+    def compatible(left, right):
+        if labels[left] == labels[right]: return False
+        if pid == 2900: return True
+        if len(words[left]) != len(words[right]): return False
+        changed = 0
+        for offset in range(len(words[left])):
+            if words[left][offset] != words[right][offset]: changed += 1
+            if changed > 1: return False
+        return changed == 1
+    for before, after in zip(selected, selected[1:]):
+        if not compatible(before, after): return False
+    if pid == 2900:
+        # Best alternating suffix starting with each group, using only the
+        # old opposite-group value at each input position.
+        best = [0, 0]
+        for group in reversed(labels): best[group] = max(best[group], 1 + best[1 - group])
+        optimum = max(best)
+    else:
+        suffix = [1] * size
+        for before in range(size - 1, -1, -1):
+            choices = (suffix[after] for after in range(before + 1, size) if compatible(before, after))
+            suffix[before] = 1 + max(choices, default=0)
+        optimum = max(suffix)
+    return len(selected) == optimum
+
+
 def result_valid(pid, args, answer, expected):
+    if pid in (2900, 2901): return alternating_word_witness(pid, args, answer)
     if pid in SET_RESULTS:
         return unique_collection(answer, expected, SET_RESULTS[pid])
     if pid in APPROXIMATE:

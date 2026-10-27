@@ -1312,24 +1312,28 @@ def _check_prepared_execution_delta(values, raws, expected, predecessor_ids):
 
 
 def check_prepared_effect_helper_compatibility(name, retained, current):
-    """Exact reviewed additive2415 successors, never a helper-name exemption.
+    """Exact reviewed additive successors, never a helper-name exemption.
 
-    The caller still validates the retained bytes against the immutable staged
-    runtime/spec pins. These pairs only permit current read-only replay helpers;
+    The caller first binds retained bytes to the immutable staged runtime/spec.
+    Forward pairs preserve the native2415 and unequal-word witness additions;
     historical execution identities and receipt/proof hashes remain unchanged.
+    This is read-only replay compatibility, not new execution authority.
     """
+    result_v1 = 'b601c7d128a1a21e85d605766ad7456142852c6fbcf18c431ec268ab99330d28'
+    result_native = 'a7b1a824263d026f589eaeaeeedff122b16f4e9efbd2ddd0e8b7c904aabbdbd0'
+    result_words = 'eef451d5d717ecf075925c34541c6760176570aa3bb16fd053230a9e66f4f65e'
     approved = {
-        'catalogue/imported_result_contracts.py': (
-            'b601c7d128a1a21e85d605766ad7456142852c6fbcf18c431ec268ab99330d28',
-            'a7b1a824263d026f589eaeaeeedff122b16f4e9efbd2ddd0e8b7c904aabbdbd0'),
-        'catalogue/node_identity_contracts.py': (
-            'b829437e895c88d6049aac5d8de32593fb324551488c525ef082797e0ecb33c3',
-            'bb8df1349fc0f3ebaba115171fa63ff990d3b181ced45a9ce6d9062444cd4567')}
+        'catalogue/imported_result_contracts.py': {
+            (result_v1, result_native), (result_v1, result_words),
+            (result_native, result_words)},
+        'catalogue/node_identity_contracts.py': {
+            ('b829437e895c88d6049aac5d8de32593fb324551488c525ef082797e0ecb33c3',
+             'bb8df1349fc0f3ebaba115171fa63ff990d3b181ced45a9ce6d9062444cd4567')}}
     if name not in approved:
         raise ValueError('unsupported prepared effect helper')
     if retained == current:
         return
-    if (sha(retained), sha(current)) != approved[name]:
+    if (sha(retained), sha(current)) not in approved[name]:
         raise ValueError('unreviewed prepared effect-helper compatibility transition')
 
 

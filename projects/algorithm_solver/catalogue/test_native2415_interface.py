@@ -129,7 +129,12 @@ class HistoricalEffectHelperBridgeTests(unittest.TestCase):
         # modules. Real retained-byte/pin checks remain the caller's first step.
         for name, (old_pin, new_pin) in self.transitions().items():
             raw = Path(q.__file__).with_name(name).read_bytes()
-            self.assertEqual(q.sha(raw), new_pin)
+            # The original exact transition remains accepted after a separately
+            # reviewed, additive two-ID semantic successor becomes current.
+            current_pins = {new_pin}
+            if name == 'imported_result_contracts.py':
+                current_pins.add('eef451d5d717ecf075925c34541c6760176570aa3bb16fd053230a9e66f4f65e')
+            self.assertIn(q.sha(raw), current_pins)
             adapter.check_prepared_effect_helper_compatibility('catalogue/' + name, raw, raw)
             with patch.object(adapter, 'sha', side_effect=[old_pin, new_pin]):
                 adapter.check_prepared_effect_helper_compatibility('catalogue/' + name, b'synthetic old', raw)
