@@ -11,7 +11,7 @@ from .catalogue import digest
 
 
 class PreparedRequestTests(unittest.TestCase):
-    def test_fixed_thirty_ids_and_no_cross_lane_import(self):
+    def test_fixed_forty_five_ids_and_no_cross_lane_import(self):
         seen = []
         for lane in a.PREPARED_REQUESTS:
             owner = a.prepared_request_owner(lane)
@@ -20,14 +20,15 @@ class PreparedRequestTests(unittest.TestCase):
                 self.assertIn(pid, oracle.IDS)
                 self.assertEqual(len(oracle.CASES_SHA256[pid]), 64)
                 seen.append(pid)
-        self.assertEqual(len(seen), 30)
-        self.assertEqual(len(set(seen)), 30)
-        for lane in ('../../evil', '/tmp/owner.py', 'request-parallel-fgh15-v1', None, [], True):
+        self.assertEqual(len(seen), 45)
+        self.assertEqual(len(set(seen)), 45)
+        for lane in ('../../evil', '/tmp/owner.py', 'request-unregistered-v1', None, [], True):
             with self.subTest(lane=lane), self.assertRaises(ValueError):
                 a.prepared_request_owner(lane)
         for lane, pid in [('request-next5-v1', 3223), ('request-parallel15-v1', 3514),
                           ('request-next5-v1', True), ('request-next5-v1', 3514.0),
-                          ('request-parallel10-v1', 3514), ('request-next5-v1', 3513)]:
+                          ('request-parallel10-v1', 3514), ('request-next5-v1', 3513),
+                          ('request-parallel-fgh15-v1', 3513), ('request-next5-v1', 3537)]:
             with self.subTest(lane=lane, pid=pid), self.assertRaises(ValueError):
                 a.prepared_request_oracle(lane, pid)
 
@@ -117,7 +118,11 @@ class PreparedRequestTests(unittest.TestCase):
                  3608: [1, [], 1], 3619: [[[0]], 1],
                  3513: [[1]], 3522: [['add'], [1]], 3527: [[['a']]],
                  3546: [[[1, 1]]], 3572: [[1, 2, 3], [1, 1, 1]],
-                 3227: ['a'], 3234: ['0'], 3556: ['2'], 3577: [[1, 2]], 3584: [[1], 1]}
+                 3227: ['a'], 3234: ['0'], 3556: ['2'], 3577: [[1, 2]], 3584: [[1], 1],
+                 3537: [0], 3542: [[0]], 3573: [[1, 1], 1], 3576: [[1], 1], 3614: ['a', 0],
+                 3525: [[1], 1, [[0, 1, 0, 0]]], 3552: [['.']], 3561: ['a'], 3574: [[1], 1], 3599: [[1], 1],
+                 3534: [1, [0], 0, [[0, 0]]], 3568: [['S'], 1], 3600: [2, [[0, 1, 1, 0]], 0],
+                 3613: [1, [], 1], 3620: [[], [True, True], 0]}
         for lane in a.PREPARED_REQUESTS:
             for pid in a.prepared_request_owner(lane).IDS:
                 with self.subTest(pid=pid):
@@ -258,6 +263,174 @@ class PreparedNextTenTests(unittest.TestCase):
                 values['catalogue']['problems'][0]['implementations']['python']['evidence_class'] = 'devtested'
             with self.subTest(mutation=mutation), patch.object(a, 'validate'), self.assertRaises(ValueError):
                 a._check_prepared_execution_delta(values, raw, expected, (1,))
+
+
+class PreparedFGHTests(unittest.TestCase):
+    def plan(self, runs=None):
+        value = PreparedNextTenTests().plan(runs)
+        value['schema'] = 'gamma.prepared-fgh15-adoption-plan.v1'
+        if runs is None:
+            value['runs'] = [{'lane': 'request-parallel-fgh15-v1'}]
+        return value
+
+    def test_exact_fgh_run_before_artifact_reads(self):
+        for runs in ([], [{'lane': 'request-parallel10-v1'}],
+                     [{'lane': 'request-parallel-fgh15-v1'}] * 2,
+                     [{'lane': 'request-next5-v1'}, {'lane': 'request-parallel-fgh15-v1'}]):
+            with self.subTest(runs=runs), patch.object(a, 'pinned', side_effect=AssertionError('must not read')), \
+                 self.assertRaises(ValueError):
+                a.adopt_prepared_fgh15_plan(self.plan(runs), 'a' * 64)
+
+    def test_fgh_counts_do_not_replace_sealed978_identity(self):
+        raw = {key: b'{"qualified":978}' for key in ('execution_catalogue', 'execution_receipts',
+               'catalogue', 'receipts', 'predecessor_review', 'predecessor_authority_review')}
+        with patch.object(a, 'validate', side_effect=AssertionError('must not validate')), \
+             self.assertRaisesRegex(ValueError, 'identity'):
+            a.check_fgh15_execution_delta({}, raw)
+
+    def test_fgh_failed_replay_or_authority_cannot_create_successor(self):
+        with patch.object(a, 'pinned', return_value=({}, b'{}')), \
+             patch.object(a, 'check_fgh15_execution_delta', return_value={}), \
+             patch.object(a, 'replay_prepared_request', side_effect=ValueError('authority failed')), \
+             patch.object(a, '_adopt_prepared_replays', side_effect=AssertionError('must not construct')) as build:
+            with self.assertRaisesRegex(ValueError, 'authority failed'):
+                a.adopt_prepared_fgh15_plan(self.plan(), 'a' * 64)
+            build.assert_not_called()
+
+    def test_fgh_delta_failure_precedes_replay(self):
+        with patch.object(a, 'pinned', return_value=({}, b'{}')), \
+             patch.object(a, 'check_fgh15_execution_delta', side_effect=ValueError('predecessor changed')), \
+             patch.object(a, 'replay_prepared_request', side_effect=AssertionError('must not replay')), \
+             self.assertRaisesRegex(ValueError, 'predecessor changed'):
+            a.adopt_prepared_fgh15_plan(self.plan(), 'a' * 64)
+
+    def test_fgh_success_dispatch_uses_shared_existing_builder(self):
+        replay = {'synthetic': 'not actual authority'}
+        with patch.object(a, 'pinned', return_value=({}, b'{}')), \
+             patch.object(a, 'check_fgh15_execution_delta', return_value={'preserved': True}), \
+             patch.object(a, 'replay_prepared_request', return_value=replay), \
+             patch.object(a, '_adopt_prepared_replays', return_value='synthetic') as build:
+            self.assertEqual(a.adopt_prepared_fgh15_plan(self.plan(), 'a' * 64), 'synthetic')
+            self.assertEqual(build.call_args.args[-1], [replay])
+        with patch.object(a, 'pinned', return_value=(self.plan(), b'{}')), \
+             patch.object(a, 'adopt_prepared_fgh15_plan', return_value='fgh') as fgh:
+            self.assertEqual(a.adopt_plan('/synthetic/plan', 'a' * 64), 'fgh')
+            fgh.assert_called_once()
+
+    def accounting(self):
+        clarification = {'problem_id': 3574, 'newly_written_statement_descriptor_hash_reads': 3,
+            'newly_written_transport_descriptor_hash_reads': 1,
+            'fresh_gate_rerun_immediately_before_each_of_these_four_local_hash_reads': False,
+            'source_payload_reads_before_oracle_approval': 0}
+        name = 'g/definition-accounting-clarification.json'
+        assessment = {'clarification_sha256': a.PREPARED_REQUESTS['request-parallel-fgh15-v1']['evidence'][name],
+            'fresh_gate_rerun_immediately_before_each_of_these_four_local_hash_reads': False,
+            'source_payload_reads_before_oracle_approval': 0,
+            'prospective_qualification_admissible_under_unchanged_policy': True,
+            'historical_per_open_compliance_established': False,
+            'basis': 'Synthetic assessment, not actual permission or historical compliance.'}
+        return {'acquisition_accounting_review': assessment}, {name: clarification}
+
+    def test_g_assessment_keeps_history_and_prospective_eligibility_distinct(self):
+        review, evidence = self.accounting(); before = copy.deepcopy((review, evidence))
+        a.check_fgh_acquisition_accounting(review, evidence)
+        self.assertEqual((review, evidence), before)
+        for key, value in [('clarification_sha256', 'f' * 64),
+                           ('fresh_gate_rerun_immediately_before_each_of_these_four_local_hash_reads', True),
+                           ('source_payload_reads_before_oracle_approval', 1),
+                           ('prospective_qualification_admissible_under_unchanged_policy', False),
+                           ('historical_per_open_compliance_established', True), ('basis', '')]:
+            changed = copy.deepcopy(review); changed['acquisition_accounting_review'][key] = value
+            with self.subTest(key=key), self.assertRaises(ValueError):
+                a.check_fgh_acquisition_accounting(changed, evidence)
+        with self.assertRaises(ValueError):
+            a.check_fgh_acquisition_accounting({}, evidence)
+
+    def test_g_historical_clarification_cannot_be_relabelled(self):
+        for key, value in [('problem_id', 3573), ('newly_written_statement_descriptor_hash_reads', 0),
+                           ('newly_written_transport_descriptor_hash_reads', 0),
+                           ('fresh_gate_rerun_immediately_before_each_of_these_four_local_hash_reads', True),
+                           ('source_payload_reads_before_oracle_approval', 1)]:
+            review, evidence = self.accounting()
+            evidence['g/definition-accounting-clarification.json'][key] = value
+            with self.subTest(key=key), self.assertRaises(ValueError):
+                a.check_fgh_acquisition_accounting(review, evidence)
+
+    def selectors(self):
+        owner = a.prepared_request_owner('request-parallel-fgh15-v1'); selectors, evidence = {}, {}
+        for group, ids in owner.GROUP_IDS.items():
+            rows, cases = [], []
+            for pid in ids:
+                oracle = owner.oracle_for(pid)
+                rows.append({'problem_id': pid, 'parameters': list(oracle.PARAMETERS[pid]),
+                    'manifest': owner.ORIGINAL_MANIFEST_METADATA[pid],
+                    'source_files': {language: {'path': f'{language}/{pid}.{suffix}',
+                        'sha256': owner.SOURCE_SHA256[pid][language]}
+                        for language, suffix in (('javascript', 'js'), ('python', 'py'))}})
+                count, case_pin, category_pin, batch_pin = (oracle.CASE_COUNT[pid], oracle.CASES_SHA256[pid],
+                    owner.CATEGORIES_SHA256[pid], owner.BATCHES_SHA256[pid])
+                if group == 'f':
+                    row = {'problem_id': pid, 'cases': count, 'cases_file': {'sha256': case_pin},
+                        'categories_file': {'sha256': category_pin}, 'batches_file': {'sha256': batch_pin}}
+                elif group == 'g':
+                    row = {'problem_id': pid, 'case_count': count, 'cases_sha256': case_pin,
+                        'categories_sha256': category_pin, 'batches_sha256': batch_pin}
+                else:
+                    row = {'problem_id': pid, 'cases': count, 'case_sha256': case_pin,
+                        'artifacts': [{'path': f'{pid}.categories.json', 'sha256': category_pin},
+                                      {'path': f'{pid}.batches.json', 'sha256': batch_pin}]}
+                cases.append(row)
+            if group == 'g':
+                rows = rows[3:4] + rows[:3] + rows[4:]
+            selectors[owner.SELECTOR_FILES[group]] = {'selected': rows,
+                'legacy_case_or_reasoning_fields_supplied_to_oracle_authors': False}
+            evidence[group + '/original-freeze.json'] = {'problems' if group == 'f' else 'cases': cases}
+        return selectors, evidence
+
+    def read_selectors(self, selectors, evidence):
+        calls = []
+        def pinned(spec):
+            path = Path(spec['path']); calls.append(path)
+            self.assertEqual(path.parent, Path('/synthetic/selectors'))
+            return selectors[path.name], b'{}'
+        with patch.object(a, 'pinned', side_effect=pinned):
+            result = a.prepared_fgh_originals(Path('/synthetic'), evidence)
+        return result, calls
+
+    def test_fgh_reads_only_three_selectors_and_preserves_all_schemas(self):
+        selectors, evidence = self.selectors(); before = copy.deepcopy((selectors, evidence))
+        (originals, cases), calls = self.read_selectors(selectors, evidence)
+        self.assertEqual(set(originals), set(cases))
+        self.assertEqual(len(originals), 15); self.assertEqual(len(calls), 3)
+        self.assertEqual((selectors, evidence), before)
+        self.assertTrue(all('manifest' not in path.name for path in calls))
+
+    def test_selector_or_original_schema_drift_fails(self):
+        for mutation in ('exposure', 'duplicate', 'parameters', 'manifest', 'source', 'case_order', 'case_hash'):
+            selectors, evidence = self.selectors()
+            selector = selectors['f-selection-v1.json']; row = selector['selected'][0]
+            if mutation == 'exposure': selector['legacy_case_or_reasoning_fields_supplied_to_oracle_authors'] = True
+            elif mutation == 'duplicate': selector['selected'][1] = copy.deepcopy(row)
+            elif mutation == 'parameters': row['parameters'] = ['wrong']
+            elif mutation == 'manifest': row['manifest'] = {'batch': 999, 'sha256': 'a' * 64}
+            elif mutation == 'source': row['source_files']['python']['sha256'] = 'f' * 64
+            elif mutation == 'case_order': evidence['f/original-freeze.json']['problems'].reverse()
+            else: evidence['f/original-freeze.json']['problems'][0]['cases_file']['sha256'] = 'f' * 64
+            with self.subTest(mutation=mutation), self.assertRaises(ValueError):
+                self.read_selectors(selectors, evidence)
+
+    def test_g_full_grouping_is_not_the_compact_projection(self):
+        from types import SimpleNamespace
+        full = [[0, [{'args': ['synthetic'], 'expected': 1}]]]
+        raw = q.encoded(full)
+        owner = SimpleNamespace(batch_manifest=lambda *args, **kwargs: full,
+                                group_for=lambda pid: 'g', BATCHES_SHA256={1: a.sha(raw)})
+        a.check_fgh_original_batches(owner, 1, [], None, raw)
+        with self.assertRaises(ValueError):
+            a.check_fgh_original_batches(owner, 1, [], None, q.encoded([{'offset': 0, 'calls': 1}]))
+        owner.BATCHES_SHA256[1] = 'f' * 64
+        with self.assertRaises(ValueError):
+            a.check_fgh_original_batches(owner, 1, [], None, raw)
 
 
 if __name__ == '__main__':
