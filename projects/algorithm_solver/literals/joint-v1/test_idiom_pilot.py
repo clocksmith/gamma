@@ -33,8 +33,12 @@ class IdiomPoolTests(unittest.TestCase):
         for language, (text, join) in examples.items():
             with self.subTest(language=language):
                 sources = {1: {'a': text}, 2: {'a': text}}
-                parsed = pilot.syntactic_spans(sources, language, Path('/usr/bin/node'),
-                                               pilot.digest('/usr/bin/node'))
+                node = os.environ.get('GAMMA_TEST_NODE') or shutil.which('node')
+                if language == 'javascript' and not node:
+                    self.skipTest('existing Node required for parse-only integration')
+                runtime = Path(node) if node else None
+                parsed = pilot.syntactic_spans(sources, language, runtime,
+                                               pilot.digest(runtime) if runtime else None)
                 bounds = {(pid, 'a'): set(parsed['boundaries'][f'{pid}/a']) for pid in sources}
                 pools, _ = pilot.admitted_pools(sources, parsed['spans'], parsed['excluded_units'],
                                                language, boundaries=bounds)
