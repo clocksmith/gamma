@@ -129,7 +129,12 @@ def code_pins():
              Path(__file__).with_name('request_next4_oracles.py'),
              Path(__file__).with_name('request_next4_qualification.py'),
              Path(__file__).with_name('request_next5_oracles.py'),
-             Path(__file__).with_name('request_next5_qualification.py')]
+             Path(__file__).with_name('request_next5_qualification.py'),
+             Path(__file__).with_name('request_parallel15_qualification.py'),
+             Path(__file__).with_name('request_parallel_a_oracles.py'),
+             Path(__file__).with_name('request_parallel_b_oracles.py'),
+             Path(__file__).with_name('request_parallel_c_oracles.py'),
+             Path(__file__).with_name('imported_clean_domains.py')]
     return {str(p): file_hash(p) for p in paths}
 
 
@@ -315,6 +320,10 @@ def load_freeze(path):
         from .request_next5_qualification import additional_code
         if contract.get('additional_code') != additional_code():
             raise ValueError('unapproved fixed next-five code paths')
+    if any(j.get('domain_validator') == 'request-parallel15-v1' for j in contract.get('jobs', [])):
+        from .request_parallel15_qualification import additional_code
+        if contract.get('additional_code') != additional_code():
+            raise ValueError('unapproved fixed parallel-fifteen code paths')
     for name, expected in contract.get('additional_code', {}).items():
         if file_hash(name) != expected:
             raise ValueError('oracle or validator changed since freeze')
@@ -332,6 +341,9 @@ def load_freeze(path):
     if any(j.get('domain_validator') == 'request-next5-v1' for j in contract['jobs']):
         from .request_next5_qualification import verify_freeze
         verify_freeze(path, contract, gate)
+    if any(j.get('domain_validator') == 'request-parallel15-v1' for j in contract['jobs']):
+        from .request_parallel15_qualification import verify_freeze
+        verify_freeze(path, contract, gate)
     return raw, contract, gate
 
 
@@ -341,7 +353,7 @@ def job_inputs(root, job, gate):
         raise ValueError('invalid frozen job identity')
     source_interface(job)
     if ('domain_validator' in job and job['domain_validator'] not in
-            ('fresh67-v1', 'imported358-v1', 'request3215-v1', 'request-next4-v1', 'request-next5-v1')):
+            ('fresh67-v1', 'imported358-v1', 'request3215-v1', 'request-next4-v1', 'request-next5-v1', 'request-parallel15-v1')):
         raise ValueError('unknown input validator')
     if job.get('domain_validator') == 'request3215-v1' and pid != 3215:
         raise ValueError('request3215 validator cannot enroll another problem')
@@ -353,6 +365,10 @@ def job_inputs(root, job, gate):
         from .request_next5_qualification import IDS
         if pid not in IDS:
             raise ValueError('request-next5 validator cannot enroll another problem')
+    if job.get('domain_validator') == 'request-parallel15-v1':
+        from .request_parallel15_qualification import IDS
+        if pid not in IDS:
+            raise ValueError('parallel-fifteen validator cannot enroll another problem')
     suffix = 'py' if lang == 'python' else 'js'
     if job['source'] != f'sources/{pid}.{suffix}' or job['tests'] != f'tests/{pid}.json':
         raise ValueError('invalid frozen exact locator')
@@ -381,6 +397,10 @@ def job_inputs(root, job, gate):
             validate(pid, case['args'])
     elif job.get('domain_validator') == 'request-next5-v1':
         from .request_next5_oracles import validate
+        for case in cases:
+            validate(pid, case['args'])
+    elif job.get('domain_validator') == 'request-parallel15-v1':
+        from .request_parallel15_qualification import validate
         for case in cases:
             validate(pid, case['args'])
     elif 'domain_validator' in job:
