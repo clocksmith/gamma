@@ -137,7 +137,10 @@ def evaluate(sources, vocab, width, parent=None, *, alphabet=None, allow_partial
         if options:
             chosen[pid] = min(options)[-1]
     counts = [len(parsed[(pid, variant)]) for pid, variant in chosen.items()]
-    dictionary = len(base.dictionary_bytes(vocab))
+    if not vocab and not allow_partial:
+        raise ValueError('nonempty literal list required')
+    # An empty proposal pool is a failed search state, not a serialized dictionary.
+    dictionary = len(base.dictionary_bytes(vocab)) if vocab else 0
     packets = sum(41 + (width * n + 7) // 8 for n in counts)
     singletons = sum(len(piece) == 1 for pid, variant in chosen.items()
                      for piece in parsed[(pid, variant)])
@@ -147,6 +150,7 @@ def evaluate(sources, vocab, width, parent=None, *, alphabet=None, allow_partial
                  if (parts := parsed[pid, variant]) and
                  10 * sum(len(piece) == 1 for piece in parts) <= len(parts)]
     return {'vocab': vocab, 'parsed': parsed, 'chosen': chosen,
+            'serializable_dictionary': bool(vocab),
             'boundary_hashes': boundary_hashes,
             'source_hashes': source_hashes, 'uncovered': uncovered,
             'coverage': len(chosen), 'target': len(sources), 'allow_partial': allow_partial,
@@ -155,6 +159,9 @@ def evaluate(sources, vocab, width, parent=None, *, alphabet=None, allow_partial
             'singleton_bit_share': singletons / sum(counts) if sum(counts) else None,
             'median_selections': statistics.median(counts) if counts else None,
             'p95_selections': sorted(counts)[math.ceil(.95 * len(counts)) - 1] if counts else None,
+            'source_utf8_bytes': sum(len(sources[pid][variant].encode()) for pid, variant in chosen.items()),
+            'packet_header_bytes': 41 * len(counts),
+            'payload_padding_bits': sum((-width * n) % 8 for n in counts),
             'selections': sum(counts), 'package_bytes': dictionary + packets,
             'dictionary_bytes': dictionary, 'packet_bytes': packets,
             'singleton_compliant_programs': len(compliant),
@@ -173,9 +180,20 @@ def cost(state, objective):
                 -state['singleton_compliant_programs'], -state['coverage'],
                 -state['reachable_prefix_characters'], state['selections'], state['package_bytes'])
     prefix = (-state['coverage'],) if state.get('allow_partial') else ()
+    if objective == 'singleton':
+        # Absolute counts precede every denominator. Adding multichar selections
+        # with unchanged singleton bits can never improve this objective.
+        return prefix + (state['singleton_bits'], state['literal_bits'], state['package_bytes'])
     if objective == 'input':
         return prefix + (state['selections'], state['package_bytes'])
-    return prefix + (state['package_bytes'], state['selections'])
+    if objective == 'storage':
+        return prefix + (state['package_bytes'], state['selections'])
+    raise ValueError('unknown search objective')
+
+
+def pareto_vector(state):
+    """No share/percentage dimension that can reward padding its denominator."""
+    return (-state['coverage'], state['singleton_bits'], state['literal_bits'], state['package_bytes'])
 
 
 def brief(state):

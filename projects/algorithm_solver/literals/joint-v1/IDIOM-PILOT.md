@@ -1,84 +1,139 @@
-# Exact idiom development pilot
+# Exact idiom development fitting
 
 `idiom_pilot.py` reuses this directory's joint source/dictionary evaluator. It
-compares assistant-authored concrete strings, exact AST and syntax-context spans, their
-union, and a separate arbitrary-substring compression control. Every candidate
-must occur in two distinct problems; multiple variants do not count as reuse.
-Multi-character whitespace-only entries and whole source programs are rejected.
-The strict arm permits no single-character entries. The fallback arm permits
-only charged punctuation, operators and whitespace; never letters or digits.
-Neither arm preallocates an alphabet. Complete complementary source-path bundles
-seed the dictionary before remaining ranked candidates. The strict seed also
-competes as an incumbent in the fallback arm.
+compares language-specific assistant-authored concrete strings, exact syntactic
+spans, their union, and a separate arbitrary-substring compression control.
+Python uses its AST; JavaScript uses the explicitly pinned Node runtime's Acorn.
+Parsing never imports or executes a candidate. Expressions, statements and
+contiguous two/three-statement spans retain original names, operands, whitespace
+and punctuation, up to 160 UTF-8 bytes. Whole source programs, complete function
+units/bodies (including whitespace-disguised copies), and whitespace-only
+multicharacter entries are excluded. Every candidate must occur in at least two
+distinct canonical problems; multiple variants do not count as reuse. Occurrence
+ranking uses nonoverlapping counts, maximized across variants per problem.
+Human-oriented pools require lexical-boundary reuse across problems and enforce
+those boundaries in each exact segmentation. Strict arms forbid all singleton
+entries. Fallback arms permit only charged punctuation, operators and whitespace,
+never letters or digits. Complementary source-path bundles seed the dictionary;
+no alphabet receives slots first. The strict initializer also competes in the
+fallback arm. Empty pools remain explicit zero-coverage, unserializable states.
 
-Human-oriented paths may split only at parser-derived lexical boundaries,
-including Unicode code-point offsets. A whole identifier in one source cannot
-silently become a partial identifier or numeric constant in another. Exact
-AST leaf/syntax contexts, statement spans, block separators and their whitespace
-are proposals, not human-reviewed usability evidence. The compression control
-does not enforce lexical boundaries and remains labeled compression only.
+## Pinned input contract
+
+The larger-corpus fitting CLI requires an
+absolute hash-pinned `gamma.idiom-fitting-config.v1` JSON file with exactly these
+fields: `schema`, `language` (`python` or `javascript`), `service`, `admission`,
+`authoring_catalog`, and `fitting_policy`. Each of the last four fields is an
+existing service-style descriptor `{ "path": "/absolute/path", "sha256": "..." }`.
+The service and its existing receipts, canonical metadata and source boundary
+remain authoritative. Admission is the existing
+`gamma.source-to-guide-inventory.v1`; authoring variants use the existing
+`algsolve/authoring_variants.py` owner and its unchanged stable identities.
+Authoring provenance paths are never followed.
+
+The externally reviewed fitting policy has exactly `schema`
+(`gamma.idiom-fitting-policy.v1`), nonempty `authority` and `reference`, `purpose`
+(`development-fitting`), `inputs`, and `variants`. Its `inputs` binds the exact
+`service_sha256`, `admission_sha256` and `authoring_catalog_sha256`. Each selected
+variant has exactly integer `problem_id`, `language`, `variant_id`, `membership`
+(`development_fit`), and `group_id`. These are trusted operator inputs requiring
+actual reviewed records; writing a policy or hash does not create permission.
+
+All selected metadata is preflighted before the first source request:
+
+- Preserve the complete admission denominator and exact service binding.
+- Require the live boundary's exact source permission binding, already-exposed
+  status and explicit existing `development_fit` membership.
+- Require reviewed near-duplicate closure, a preserved group ID and languages
+  kept together. Reject groups crossing heldout, unknown or closed membership.
+- Recompute the existing authoring identity without changing its unknown
+  qualification status. Require its exact source/contract to join a currently
+  qualified canonical slot and the admission row's six bindings and receipt.
+  Source availability alone never establishes qualification.
+- Require completed development admission, no outstanding blockers, and joined
+  license/adapter records. A qualification receipt alone is insufficient.
+- Reject duplicate variants/bytes. Request source only through the existing
+  service, which repeats its live boundary before opening. Recheck exact bytes.
+
+The current admission projection defaults to unknown memberships/unreviewed
+closure. It therefore cannot be fitted until authentic exposure, grouping,
+variant and policy joins exist. This tool does not assign those joins, qualify
+new variants, establish licenses, admit browser guides or grant publication.
+The bounded loader accepts up to 4096 selected variants per language and 32 MiB
+of source text; this is capacity, not a claim that a population is eligible.
+Mining also caps distinct proposals at 250000 and spans at 2048 per source.
+Exceeding a bound fails explicitly; it does not silently sample or regroup.
+
+```sh
+python3 projects/algorithm_solver/literals/joint-v1/idiom_pilot.py \
+  --config /absolute/private/fitting-config.json --config-sha256 EXPECTED_SHA256 \
+  --objective compact \
+  --output /absolute/private/new-run
+```
+
+For JavaScript also supply `--node /absolute/pinned/node --node-sha256 SHA256`.
+Python records its actual runtime version and executable hash. Outputs bind all
+metadata/code/runtime pins, exact memberships and source hashes. Output contains
+reconstructable development text and must remain in the authorized private
+location; only aggregate measurements and already-public historical controls are retained in Git.
+
+## Accounting and acceptance
 
 The evaluator's historical default still includes its 96-entry alphabet.
 Explicit `alphabet=[]` enables charged 4–8-bit experiments without that floor.
 Unrepresentable text never skips a gap: its longest reachable prefix and minimum
 path are retained, and the entire remaining suffix is uncovered. Only complete
 sources count toward coverage, selections or percentiles. Equal-cost paths use
-lower dictionary IDs. The compact objective first prefers dictionaries meeting
-the aggregate singleton/median/p95 constraints, then compliant program counts,
-coverage, reachable prefixes, selections and storage. Joint source selection
-prefers compliant alternatives, then minimum selections, UTF-8 size and variant
-name. Each alternative still uses its genuine minimum path. No padding or removal
-of failing programs can improve a reported percentage. Cache reuse binds source
-bytes, lexical boundaries and shared literal order. Prefix progress guides an
-incomplete search; it never counts as a represented program.
+lower dictionary IDs; source ties use UTF-8 byte length then stable variant ID.
+Cache reuse binds source bytes, lexical boundaries and shared literal order. The historical
+`search.py` scale80 CLI remains available for reproducing its old experiments.
 
-The pilot reads only the pinned, already exposed scale80 canonical/compact
-sources. Their historical evidence is finite development oracle checking plus
-original output/input-effect parity. It is not a new catalogue receipt. No
-source is rewritten or executed. The legacy manifest lacks the semantics
-records needed by `algsolve/authoring_variants.py`; reconciliation stays an
-explicit blocker and no competing variant IDs are invented.
+The default `compact` objective prefers dictionaries meeting the aggregate
+10% singleton, median 32 and p95 96 constraints before comparing compliant
+program counts, coverage, reachable prefixes and costs. Every denominator stays
+fixed; incomplete sources and constraint failures remain in the report. Prefix
+progress is a search signal, never complete coverage. Qualified source
+alternatives compete on those limits while each retains its minimum path.
+No padding is permitted. The `singleton` control orders coverage, absolute
+singleton bits, literal bits and storage; `input` and `storage` remain explicit
+controls. Pareto dimensions use absolute singleton bits, never a ratio that
+can reward a larger denominator. Selections and encoded bits are not measured
+interaction presses or human effort.
 
-```sh
-python3 projects/algorithm_solver/literals/joint-v1/idiom_pilot.py \
-  --node /absolute/pinned/node --node-sha256 EXPECTED_SHA256 \
-  --output /absolute/private/new-run
-```
+Both arms of all four pools share each width's entry budget and search bounds. Reports retain
+coverage/denominator at each width, absolute singleton bits and selections,
+p50/p95, dictionary bytes, packet headers, payload padding, complete packet and
+package bytes, source UTF-8 size, whitespace use, exact paths, and per-problem
+regressions. Selected codec source sizes are reported separately from complete
+installed runtime footprint. Helpers and operands receive no free expansion.
+No editor-control cost, human fluency or readability score is inferred.
 
-The explicit Node runtime parses text with its bundled Acorn; it never runs a
-candidate. Outputs retain the input/code pins, candidate pools, source hashes,
-minimum paths, rejected/accepted dictionary moves, coverage, p50/p95, absolute
-singleton bits, literal bits, whitespace usage, dictionary/packet storage and
-selected decoder source file sizes (not the complete installed runtime
-footprint). Source operands, helpers, names and constants remain in the
-charged literal text. No editor-control or human interaction cost is claimed.
+Historical scale80 pilot findings remain unchanged and unsuccessful. Larger
+synthetic fixtures test plumbing and accounting, not real problem coverage.
+Repeated exposure cannot supply independent confirmation. No result changes the
+original population, coverage, median 32, p95 96 or 10% singleton-bit gates.
+`pilot_numeric_thresholds_met` describes only the supplied development population;
+`original_population_gate_evaluated` and `milestone_qualified` remain false.
+No fitted profile is promoted or deployed.
 
-All four pools share each width's entry budget and search bounds. Actual entry
-counts can be lower; padding is not used to dilute singleton share. Comparisons
-show per-problem changes against the seed arm and a coverage/bits/singleton/storage
-Pareto set. These diagnostics do not assign a readability score or establish
-human fluency. A restricted unsuccessful search is not universal infeasibility.
-
-All 80 problems were exposed before this pilot. Repeated runs cannot supply
-independent confirmation. Family metadata, modern authoring-variant joins,
-larger permitted corpora, independent frozen nonreserved evaluation and browser
-admission remain separate work. No pilot result changes the original compact
-population, coverage, median 32, p95 96 or 10% singleton-bit gates.
-`pilot_numeric_thresholds_met` describes this supplied development population
-only; `original_population_gate_evaluated` and `milestone_qualified` remain false.
-
-The [retained development comparisons](idiom-results-20261027.json) include all
-five attempts, including failures. In the final combined seed/AST strict arm,
-64/128/256 entries cover only 3/6/6 of the 80 problems. Their covered-subset
-median selections are 22/30/30 and p95 values 31/32/32, with zero singleton
-selections. These are **not satisfactory coverage or compact-library passes**.
-The fallback arm retains the feasible strict incumbent instead of trading it
-for a higher-coverage dictionary above the singleton cap. No BITS vocabulary
-was published from these runs. Broader admission and qualified source rewriting
-remain required; this control does not substitute for either.
-
-Focused checks:
+Focused checks (set `GAMMA_TEST_NODE` to an existing Node path to include its
+parse-only integration check):
 
 ```sh
-python3 -m unittest discover -s projects/algorithm_solver/literals/joint-v1 -v
+GAMMA_TEST_NODE=/absolute/existing/node python3 -m unittest discover \
+  -s projects/algorithm_solver/literals/joint-v1 -v
 ```
+
+## Historical control and retained failures
+
+An explicit `--legacy-scale80-control` flag reproduces only the hash-pinned,
+already-exposed 80-problem control. It is mutually exclusive with `--config` and
+does not admit a larger corpus or confer fresh evaluation status. The control
+keeps its historical finite evidence and unresolved modern variant joins.
+
+`idiom-results-20261027.json` retains aggregate failed comparisons, binding each
+attempt to its actual code and inputs. Earlier attempts predate the integration
+of larger spans and complete-function exclusions; do not attribute them to a
+later implementation. The integrated replay is recorded separately. None of
+these results qualifies the original compact-library milestone or establishes
+human usability. No vocabulary was deployed from these runs.
