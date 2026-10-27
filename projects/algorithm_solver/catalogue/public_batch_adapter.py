@@ -1034,6 +1034,67 @@ PREPARED_REQUESTS['request-parallel10-v1'] = {'stage_sha256': '2420024b1a84a9989
  'scope': 'Finite in-domain development checks; not universal proof, fresh heldout confirmation, full-domain '
           'performance qualification or catalogue adoption.'}
 
+PREPARED_REQUESTS['request-parallel-fgh15-v1'] = {'stage_sha256': 'e95cb077a3673e5046441300f22daf74e29e40d16b0a8cadc887fe8b642a1629',
+ 'code': {'algsolve/judge/pinned_runtime.py': 'c711c2593aaf4b3d0a917e04e25bbdb2e2b7d8a36b7f48a25e97e58c8e97224e',
+          'algsolve/judge/sandbox.py': '04fe78fcc41dac4c22430d0cacc1d2b40c40daafc2b609ebfe47246030c3fd74',
+          'catalogue/imported-commonjs-observer-v1/harness.cjs': '55ff4173f9dab55de26dcfe502f60b33ecac96fd3ec9689b150cba58daa4b547',
+          'catalogue/imported-node-observer-v1/harness.cjs': 'a25471a4c491793b3f619eb2017eee85ccfa491188982eb2c57b5fef25378034',
+          'catalogue/imported-node-observer-v1/harness.py': '138b9ef75b4590158eb11456612ffebeee180e93abedb3cb3f374d0fb38c18b9',
+          'catalogue/imported_clean_domains.py': '713ebeddf0404aa32fb9424b62666c27a3950f113e6a9e7d0c83f9917ddee789',
+          'catalogue/imported_qualification.py': 'e1ae017ec75bff3ad3fdbb4c180aa9ff730d5032bf7466e15e6babd04d0341b4',
+          'catalogue/imported_result_contracts.py': 'b601c7d128a1a21e85d605766ad7456142852c6fbcf18c431ec268ab99330d28',
+          'catalogue/node_identity_contracts.py': 'b829437e895c88d6049aac5d8de32593fb324551488c525ef082797e0ecb33c3',
+          'catalogue/public-domain-qualification-medium32-wave2-observer-v1/harness.cjs': '48a8f16598b64032f7c43cd343d02b6fcdbf36912c7382a01520686b73b5f655',
+          'catalogue/public-domain-qualification-medium32-wave2-observer-v1/harness.py': 'a7d6d5c86ac58a05626573de789ad88390e299e4bd82a007590a8484162908f0',
+          'catalogue/request_next4_oracles.py': 'e61e612b92541b7afbb3b11d0bf7cfd51c87f3dd00c958f8c6485f1bd536da5b',
+          'catalogue/request_next4_qualification.py': '7d28fc6b8a65779529ecb3aed1d85a11c0f5b1036e5caf9ac95144023a615014',
+          'catalogue/request_next5_oracles.py': '8a6633b35652d718257b25f7b23e0833b26b8c9d4020447649902708d7f84e8f',
+          'catalogue/request_next5_qualification.py': 'a3c0516568fd76a4008825cfb4d4885ed60a4ce2418c6063128ed41d9190ef68',
+          'catalogue/request_parallel10_qualification.py': '6db8a8dc1351ff517cdf017b804251412781431a91ad805e51801e648f1d9d5a',
+          'catalogue/request_parallel15_qualification.py': '2909e62b4fe8a488b0fc20b76d1e2bdee5d2ffdf7f5a9d745fa5745329d35894',
+          'catalogue/request_parallel_a_oracles.py': '7cd4cb079e510332de9d3ec340279fb2cad0ccbe9d0688175b7cc96b6b2f8603',
+          'catalogue/request_parallel_b_oracles.py': '150cf7f037f7840f89d17da28fe9309144e2067872ce2f95f68cf0f7b156cdb6',
+          'catalogue/request_parallel_c_oracles.py': '3c9140f9baf32a6adbe683dc06e6cb1e4d4af5a5a22683bc3488b324ef9378cd',
+          'catalogue/request_parallel_d_oracles.py': '7dd07ad3d3f059a5a5b4ca0c07c4d3225a47c1dc201546fbc3c9fcc867080b8f',
+          'catalogue/request_parallel_e_oracles.py': '3ba8d658ae42e7a483ccaba4d321dd3d1d10b9ae550cdb935df4f4b037d6a959',
+          'catalogue/request_parallel_f_oracles.py': '4a28161b167018af11fd9a7b43773b992f8cd47497ef15a56f4cacf1f206d77d',
+          'catalogue/request_parallel_fgh15_qualification.py': 'e4b74494638b3333e389ff86acf15684423e73472b58fbf82ab00865516dabf4',
+          'catalogue/request_parallel_g_oracles.py': '2ea21481bebbb31d5b89e02da4364ca35e66f145ed5b529a9dde54bba0c7c734',
+          'catalogue/request_parallel_h_oracles.py': '2885ca33a40cb545e24caf2ec9f3d618607d72d2f5b870d780b33e1be01430a2',
+          'catalogue/request_qualification.py': '8e7b4e59e4e2b66d72006fdc30cd7817c0abe3af08df6d5b33c63c2eb4ef378a'},
+ 'additional_code': {'catalogue/imported_clean_domains.py': '713ebeddf0404aa32fb9424b62666c27a3950f113e6a9e7d0c83f9917ddee789',
+                     'catalogue/request_parallel_f_oracles.py': '4a28161b167018af11fd9a7b43773b992f8cd47497ef15a56f4cacf1f206d77d',
+                     'catalogue/request_parallel_fgh15_qualification.py': 'e4b74494638b3333e389ff86acf15684423e73472b58fbf82ab00865516dabf4',
+                     'catalogue/request_parallel_g_oracles.py': '2ea21481bebbb31d5b89e02da4364ca35e66f145ed5b529a9dde54bba0c7c734',
+                     'catalogue/request_parallel_h_oracles.py': '2885ca33a40cb545e24caf2ec9f3d618607d72d2f5b870d780b33e1be01430a2'},
+ 'evidence': {'f/definition-index.json': '3dfa946859f6018bea74c6d3b44c10dce370b4a240eabc98c01a9fcd2de6c291',
+              'f/first-static-review.json': '6c2b8a0225f77729bc10e3614f8ec3b905c85e42d3c1e32eb47cd55ad9b9fb97',
+              'f/independent-review.json': 'e39ad4d13abdd958d3ffbcdba59e918c6837770ce984eedabfecb85d7d49e907',
+              'f/original-freeze.json': '3a9275aefd95cb2876c50165eac86054376f06493f9a9366eefc15dbaf7219f9',
+              'f/preserved-author-freeze-v1.json': 'acccb7450a1ca2daa32c9d7ea18a554aae0d2839f98b70e01a4ab22e4eeaaaef',
+              'f/second-static-review.json': 'b56cc37d19de759834077d1689975f2944bda29f69618990a4c12f02bb4dff7f',
+              'f/source-acquisition.json': '366112240d83d678c57c018200945f88e033e69d3ead17363c92bc8c6d71d930',
+              'g/definition-accounting-clarification.json': '9052ef1553b9290579fa5021e9280a073e498a33389dcee7c26dc17300aae36b',
+              'g/definition-index.json': 'aee03682e8805d1da69e6f636bae177b7e2e3149c039e5e754b1f6257740a58f',
+              'g/first-static-review.json': '48f01f10887d2ffd52f1d4357db2cacccd4b74c4821bd772229b7892cbd1276a',
+              'g/independent-review.json': 'c27ddaf59fe51bb34a7e40c50b6bf4845f7512bc0d5317a9970c3b471f511853',
+              'g/original-freeze.json': '20c40bbbd1df79ac5aeb7542effa3179430dc2a345d11a956b2e8e1f94bf6b00',
+              'g/second-static-review.json': '160c691fdd62e2f11fdec898130dd77952584f89e7ff7e0749b8025dfa20d8d9',
+              'g/source-acquisition.json': '16c83001320d320aa1a0c15947a1ec8c8302fafe0c1b5796578cc932c21e55cf',
+              'h/definition-index.json': '0e6eddc3cea5a512f9cf5c90402d8e48cf6109407725e9592826593940c64c3c',
+              'h/first-static-review.json': '809483212990dccf98d1433e00bbae299672b7e5fc20f988c84b6e727bfa09ff',
+              'h/independent-review.json': 'ac7cf74f01d15aa0f54dd68cf6f952fc9ab792056368f83d414f8ab020be18e6',
+              'h/original-freeze.json': '975709c07dffb73192bdad95c4086cb51b927c9795a778b6c787c7f3ad305be0',
+              'h/second-static-review.json': '5fe026df3e16526260fc43bffda6b4f5625c2c5bf46b5855691b2d8f94711651',
+              'h/source-acquisition.json': '83e1cf7aa29ae183a93f4ed8ca8ba202f41faebe4e1c52f77ba2c6ba3277dd33',
+              'independent-runner-review-v1.json': 'a72c116b3984def9b96a8b59bab1292c0ebf515943c4f095ada43f7dd2d53147'},
+ 'run_directory': 'run-parallel-fgh15',
+ 'effects': 'Read-only arguments; exact typed scalar, string, or fresh ordered nested-list return; no '
+            'return-to-input alias.',
+ 'comparison': 'Exact typed returns and local effects against independent public-definition oracles.',
+ 'scope': 'Finite in-domain development checks; not universal proof, fresh heldout confirmation, full-domain '
+          'performance qualification or catalogue adoption.'}
+
 def prepared_request_owner(lane):
     """Only the already frozen request owners; no caller-defined imports."""
     if lane == 'request-next5-v1':
@@ -1042,6 +1103,8 @@ def prepared_request_owner(lane):
         from . import request_parallel15_qualification as owner
     elif lane == 'request-parallel10-v1':
         from . import request_parallel10_qualification as owner
+    elif lane == 'request-parallel-fgh15-v1':
+        from . import request_parallel_fgh15_qualification as owner
     else:
         raise ValueError('unsupported prepared request lane')
     return owner
@@ -1108,6 +1171,21 @@ def check_next10_execution_delta(values, raws):
     ids = (3215, 3228, 3523, 3558, 3597, 3514, 3528, 3566, 3578, 3607,
            3223, 3232, 3532, 3583, 3612, 3517, 3531, 3567, 3598, 3618,
            3524, 3551, 3587, 3608, 3619)
+    return _check_prepared_execution_delta(values, raws, expected, ids)
+
+
+def check_fgh15_execution_delta(values, raws):
+    """Preserve all thirty-five reviewed pairs over original 943 before adoption."""
+    expected = {'execution_catalogue': '9ab963740caad76bb15d602fb2ab93e2d010f2765605a9b9e63bbaa620dbb329',
+                'execution_receipts': '63a3c432f5ec3057dda03a560080f089d70ad4fffa9966a215343d61bd2148fc',
+                'catalogue': '2833e109997ed7a7efdeeb8341e1b8b3d70a8d4f20f1a8ed7eaaa4a9429c5721',
+                'receipts': '8c92a70588f5a1b5a0d18cb555af677427434072ad43214bad23bc334b210ed1',
+                'predecessor_review': '600a232a8ede75d4435be7325991f6cc5dfafb651adf4a92e36ea367a9b29259',
+                'predecessor_authority_review': '2cbbaa5a5015e6023ea603016fc9d26d2f0f31513c9f61bc81997d625502d1f7'}
+    ids = (3215, 3228, 3523, 3558, 3597, 3514, 3528, 3566, 3578, 3607,
+           3223, 3232, 3532, 3583, 3612, 3517, 3531, 3567, 3598, 3618,
+           3524, 3551, 3587, 3608, 3619, 3513, 3522, 3527, 3546, 3572,
+           3227, 3234, 3556, 3577, 3584)
     return _check_prepared_execution_delta(values, raws, expected, ids)
 
 
@@ -1189,6 +1267,82 @@ def check_prepared_code(run, freeze):
     return expected, additional, evidence
 
 
+def check_fgh_acquisition_accounting(review, evidence):
+    """Retain the old per-open limitation and require an independently bound assessment."""
+    name = 'g/definition-accounting-clarification.json'
+    pin = PREPARED_REQUESTS['request-parallel-fgh15-v1']['evidence'][name]
+    clarification = evidence[name]
+    assessment = review.get('acquisition_accounting_review', {})
+    fields(assessment, ('clarification_sha256',
+                       'fresh_gate_rerun_immediately_before_each_of_these_four_local_hash_reads',
+                       'source_payload_reads_before_oracle_approval', 'prospective_qualification_admissible_under_unchanged_policy',
+                       'historical_per_open_compliance_established', 'basis'))
+    if (clarification.get('problem_id') != 3574 or
+            clarification.get('newly_written_statement_descriptor_hash_reads') != 3 or
+            clarification.get('newly_written_transport_descriptor_hash_reads') != 1 or
+            clarification.get('fresh_gate_rerun_immediately_before_each_of_these_four_local_hash_reads') is not False or
+            clarification.get('source_payload_reads_before_oracle_approval') != 0 or
+            assessment['clarification_sha256'] != pin or
+            assessment['fresh_gate_rerun_immediately_before_each_of_these_four_local_hash_reads'] is not False or
+            assessment['source_payload_reads_before_oracle_approval'] != 0 or
+            assessment['prospective_qualification_admissible_under_unchanged_policy'] is not True or
+            assessment['historical_per_open_compliance_established'] is not False or
+            not isinstance(assessment['basis'], str) or not assessment['basis'].strip()):
+        raise ValueError('G accounting history or independent unchanged-policy assessment differs')
+
+
+def prepared_fgh_originals(root, evidence):
+    """Load only fixed sanitized selectors and the three immutable freeze schemas."""
+    owner = prepared_request_owner('request-parallel-fgh15-v1')
+    originals, original_cases = {}, {}
+    for group, ids in owner.GROUP_IDS.items():
+        selector, _ = pinned({'path': str(root / 'selectors' / owner.SELECTOR_FILES[group]),
+                              'sha256': owner.SELECTOR_SHA256[group]})
+        rows = selector.get('selected', [])
+        if (len(rows) != len(ids) or {row.get('problem_id') for row in rows} != set(ids) or
+                selector.get('legacy_case_or_reasoning_fields_supplied_to_oracle_authors') is not False):
+            raise ValueError('fixed sanitized selector population or exposure differs')
+        for row in rows:
+            pid = row['problem_id']; oracle = owner.oracle_for(pid)
+            if (tuple(row.get('parameters', [])) != oracle.PARAMETERS[pid] or
+                    {key: row.get('manifest', {}).get(key) for key in ('batch', 'sha256')} !=
+                    owner.ORIGINAL_MANIFEST_METADATA[pid] or
+                    row.get('source_files') != {language: {'path': f'{language}/{pid}.{suffix}',
+                        'sha256': owner.SOURCE_SHA256[pid][language]}
+                        for language, suffix in (('javascript', 'js'), ('python', 'py'))}):
+                raise ValueError('sanitized selector source or provenance binding differs')
+            originals[pid] = row
+        frozen = evidence[group + '/original-freeze.json']
+        cases = frozen['problems' if group == 'f' else 'cases']
+        if [row['problem_id'] for row in cases] != list(ids):
+            raise ValueError('original F/G/H case population differs')
+        for row in cases:
+            pid = row['problem_id']; oracle = owner.oracle_for(pid)
+            if group == 'f':
+                count, case_pin, category_pin, batch_pin = (row['cases'], row['cases_file']['sha256'],
+                    row['categories_file']['sha256'], row['batches_file']['sha256'])
+            elif group == 'g':
+                count, case_pin, category_pin, batch_pin = (row['case_count'], row['cases_sha256'],
+                    row['categories_sha256'], row['batches_sha256'])
+            else:
+                pins = {Path(item['path']).name: item['sha256'] for item in row['artifacts']}
+                count, case_pin = row['cases'], row['case_sha256']
+                category_pin, batch_pin = pins[f'{pid}.categories.json'], pins[f'{pid}.batches.json']
+            if (count != oracle.CASE_COUNT[pid] or case_pin != oracle.CASES_SHA256[pid] or
+                    category_pin != owner.CATEGORIES_SHA256[pid] or batch_pin != owner.BATCHES_SHA256[pid]):
+                raise ValueError('original F/G/H case or grouping binding differs')
+            original_cases[pid] = row
+    return originals, original_cases
+
+
+def check_fgh_original_batches(owner, pid, cases, oracle, raw):
+    """Do not substitute the compact projection for immutable original grouping."""
+    from . import imported_qualification as q
+    expected = q.encoded(owner.batch_manifest(cases, oracle, original_group=owner.group_for(pid)))
+    if raw != expected or sha(raw) != owner.BATCHES_SHA256[pid]:
+        raise ValueError('original F/G/H grouping was changed or replaced by its projection')
+
+
 def replay_prepared_request(run, common, common_raws):
     """Recompute one actual fixed request run; no candidate execution occurs."""
     from . import imported_qualification as q
@@ -1251,6 +1405,8 @@ def replay_prepared_request(run, common, common_raws):
             any(review.get(key + '_sha256') != sha(common_raws[key]) for key in
                 ('execution_catalogue', 'execution_receipts', 'catalogue', 'receipts', 'predecessor_review', 'predecessor_authority_review'))):
         raise ValueError('independent prepared source/runtime/base review required')
+    if run['lane'] == 'request-parallel-fgh15-v1':
+        check_fgh_acquisition_accounting(review, evidence)
     gate, native_gate, service = (common[key] for key in ('boundary_gate', 'qualification_boundary_gate', 'qualification_service'))
     for item in (gate, native_gate):
         fields(item, ('schema', 'artifact_paths', 'trusted_hashes'))
@@ -1272,7 +1428,9 @@ def replay_prepared_request(run, common, common_raws):
     if pre != expected_pre:
         raise ValueError('command-local preparation record differs')
     originals = {}
-    if run['lane'] == 'request-next5-v1':
+    if run['lane'] == 'request-parallel-fgh15-v1':
+        originals, original_cases = prepared_fgh_originals(root, evidence)
+    elif run['lane'] == 'request-next5-v1':
         manifest, _ = pinned({'path': str(root / 'original-manifest.json'), 'sha256': owner.MANIFEST_SHA256})
         originals = {row['problem_id']: row for row in manifest if row.get('problem_id') in owner.IDS}
         original_cases = {row['problem_id']: row for row in evidence['pre-source-oracle-freeze-v1.json']['problems']}
@@ -1313,6 +1471,9 @@ def replay_prepared_request(run, common, common_raws):
                 old_categories != q.encoded(origin['categories']) or sha(old_categories) != expected_category or
                 any(job['tests_canonical_sha256'] != q.canonical_tests_hash(cases) for job in jobs if job['id'] == pid)):
             raise ValueError('original and native prepared cases/categories differ')
+        if run['lane'] == 'request-parallel-fgh15-v1':
+            original_batches = bounded_regular_read(mapped(native + f'/inputs/generated-before-source/{pid}.batches.json'))
+            check_fgh_original_batches(owner, pid, cases, oracle, original_batches)
         cases_by_id[pid], designs[str(pid)], origins[str(pid)] = cases, design, origin
     if designs != pre['generated_cases'] or origins != provenance:
         raise ValueError('native prepared design provenance differs')
@@ -1369,6 +1530,24 @@ def adopt_prepared_next10_plan(plan, trusted_plan_sha256):
     return _adopt_prepared_replays(plan, trusted_plan_sha256, values, raws, delta, replays)
 
 
+def adopt_prepared_fgh15_plan(plan, trusted_plan_sha256):
+    """Build a successor of 978 only after actual F/G/H replay and authority pass."""
+    fields(plan, ('schema', 'universe', 'catalogue', 'receipts', 'execution_catalogue', 'execution_receipts',
+                  'predecessor_review', 'predecessor_authority_review', 'boundary_gate',
+                  'qualification_service', 'qualification_boundary_gate', 'runs'))
+    if plan['schema'] != 'gamma.prepared-fgh15-adoption-plan.v1':
+        raise ValueError('unsupported fixed F/G/H adoption plan')
+    if (not isinstance(plan['runs'], list) or
+            [run.get('lane') for run in plan['runs']] != ['request-parallel-fgh15-v1']):
+        raise ValueError('the exact prepared F/G/H run is required')
+    values, raws = {}, {}
+    for key in set(plan) - {'schema', 'runs'}:
+        values[key], raws[key] = pinned(plan[key])
+    delta = check_fgh15_execution_delta(values, raws)
+    replays = [replay_prepared_request(run, values, raws) for run in plan['runs']]
+    return _adopt_prepared_replays(plan, trusted_plan_sha256, values, raws, delta, replays)
+
+
 def _adopt_prepared_replays(plan, trusted_plan_sha256, values, raws, delta, replays):
     """Shared receipt construction only after the fixed plan and all replays pass."""
     universe, catalogue, receipts = (values[key] for key in ('universe', 'catalogue', 'receipts'))
@@ -1401,8 +1580,12 @@ def _adopt_prepared_replays(plan, trusted_plan_sha256, values, raws, delta, repl
                 'oracle_sha256': generator_sha, 'harness_sha256': code[prefix + 'catalogue/' + harness],
                 'observer_helper_sha256': code[prefix + 'catalogue/public-domain-qualification-medium32-wave2-observer-v1/harness.cjs'] if language == 'javascript' else None,
                 'verifier_sha256': data['verification']['verifier_sha256'], 'review_sha256': sha(raw['review'])}
-            batch = 1 if lane == 'request-next5-v1' else owner.MANIFEST_BATCH[pid]
-            manifest_pin = owner.MANIFEST_SHA256 if lane == 'request-next5-v1' else owner.MANIFEST_SHA256[batch]
+            if lane == 'request-parallel-fgh15-v1':
+                batch = owner.ORIGINAL_MANIFEST_METADATA[pid]['batch']
+                manifest_pin = owner.ORIGINAL_MANIFEST_METADATA[pid]['sha256']
+            else:
+                batch = 1 if lane == 'request-next5-v1' else owner.MANIFEST_BATCH[pid]
+                manifest_pin = owner.MANIFEST_SHA256 if lane == 'request-next5-v1' else owner.MANIFEST_SHA256[batch]
             provenance = {'public_batch': {'lane': lane, 'problem_contract': contract,
                 'source_provenance': {'original_manifest_sha256': manifest_pin,
                     'original_manifest_path': f'projects/algorithm_solver/catalogue/authored/request-252-v1/batch{batch}/manifest.json',
@@ -1414,16 +1597,26 @@ def _adopt_prepared_replays(plan, trusted_plan_sha256, values, raws, delta, repl
                 'previous_canonical': {'implementation_sha256': digest(old), 'receipt_sha256': old.get('receipt_sha256'),
                     'base_catalogue_sha256': sha(raws['catalogue']), 'implementation': copy.deepcopy(old)},
                 'source_publication_authorized': False, 'historical_receipts_unchanged': True}
+            if lane == 'request-parallel-fgh15-v1':
+                group = owner.group_for(pid)
+                provenance['public_batch']['source_provenance']['sanitized_selector'] = {
+                    'file': owner.SELECTOR_FILES[group], 'sha256': owner.SELECTOR_SHA256[group],
+                    'historical_manifest_payload_loaded': False}
+                provenance['acquisition_accounting_review'] = copy.deepcopy(data['review']['acquisition_accounting_review'])
             scope = f'Reviewed problem {pid} domain; exact source-specific solve interface, numeric and local-effect contract.'
             caveats = qualification_caveats(lane, pid) + [
                 f'{pid}: exactly {oracle.CASE_COUNT[pid]} finite cases per language; no full-domain performance or correctness proof.',
                 oracle.OMITTED_MAXIMUM_SHAPES[pid],
                 'Original independently frozen public-definition cases are retained, not fresh heldout confirmation.',
                 'New statement prefixes do not establish byte equivalence with historical definitions.',
-                ('Native execution authority was original 943; adoption separately preserves the reviewed twenty-five-pair delta to 968.'
+                ('Native execution authority was original 943; adoption separately preserves the reviewed thirty-five-pair delta to 978.'
+                 if lane == 'request-parallel-fgh15-v1' else
+                 'Native execution authority was original 943; adoption separately preserves the reviewed twenty-five-pair delta to 968.'
                  if lane == 'request-parallel10-v1' else
                  'Native execution authority was original 943; adoption separately preserves the reviewed five-pair delta to 948.'),
                 'Candidate only; no serving, runtime, browser, guide, recognition or publication activation.']
+            if lane == 'request-parallel-fgh15-v1':
+                caveats.append('The frozen G acquisition clarification retains four historical 3574 local descriptor reads without a fresh gate for each read; later gates do not retroactively repair that accounting limitation.')
             implementation = {'status': 'qualified', 'canonical_variant_id': language + ':' + job['source_sha256'],
                 'source_sha256': job['source_sha256'], 'problem_contract_sha256': digest(contract),
                 'interface': interface, 'interface_sha256': digest(interface), 'runtime_sha256': digest(runtime),
@@ -1454,6 +1647,8 @@ def _adopt_prepared_replays(plan, trusted_plan_sha256, values, raws, delta, repl
 def adopt_plan(plan_path, trusted_plan_sha256):
     """Build successor artifacts in memory; caller separately persists/publishes."""
     plan, _ = pinned({'path': str(plan_path), 'sha256': trusted_plan_sha256})
+    if isinstance(plan, dict) and plan.get('schema') == 'gamma.prepared-fgh15-adoption-plan.v1':
+        return adopt_prepared_fgh15_plan(plan, trusted_plan_sha256)
     if isinstance(plan, dict) and plan.get('schema') == 'gamma.prepared-next10-adoption-plan.v1':
         return adopt_prepared_next10_plan(plan, trusted_plan_sha256)
     if isinstance(plan, dict) and plan.get('schema') == 'gamma.prepared-next20-adoption-plan.v1':
