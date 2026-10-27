@@ -109,15 +109,29 @@ def evaluate(sources, vocab, width, parent=None, *, alphabet=None, allow_partial
             'singleton_bit_share': singletons / sum(counts) if sum(counts) else None,
             'median_selections': statistics.median(counts) if counts else None,
             'p95_selections': sorted(counts)[math.ceil(.95 * len(counts)) - 1] if counts else None,
+            'source_utf8_bytes': sum(len(sources[pid][variant].encode()) for pid, variant in chosen.items()),
+            'packet_header_bytes': 41 * len(counts),
+            'payload_padding_bits': sum((-width * n) % 8 for n in counts),
             'selections': sum(counts), 'package_bytes': dictionary + packets,
             'dictionary_bytes': dictionary, 'packet_bytes': packets}
 
 
 def cost(state, objective):
     prefix = (-state['coverage'],) if state.get('allow_partial') else ()
+    if objective == 'singleton':
+        # Absolute counts precede every denominator. Adding multichar selections
+        # with unchanged singleton bits can never improve this objective.
+        return prefix + (state['singleton_bits'], state['literal_bits'], state['package_bytes'])
     if objective == 'input':
         return prefix + (state['selections'], state['package_bytes'])
-    return prefix + (state['package_bytes'], state['selections'])
+    if objective == 'storage':
+        return prefix + (state['package_bytes'], state['selections'])
+    raise ValueError('unknown search objective')
+
+
+def pareto_vector(state):
+    """No share/percentage dimension that can reward padding its denominator."""
+    return (-state['coverage'], state['singleton_bits'], state['literal_bits'], state['package_bytes'])
 
 
 def brief(state):
