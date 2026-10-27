@@ -988,12 +988,60 @@ PREPARED_REQUESTS = {'request-next5-v1': {'stage_sha256': '70138a37694e9de425a40
                                     'confirmation, full-domain performance qualification or catalogue '
                                     'adoption.'}}
 
+PREPARED_REQUESTS['request-parallel10-v1'] = {'stage_sha256': '2420024b1a84a9989ea37fcdab98ba4b8f3625f31204defb2b29832a0ac0ed5d',
+ 'code': {'algsolve/judge/pinned_runtime.py': 'c711c2593aaf4b3d0a917e04e25bbdb2e2b7d8a36b7f48a25e97e58c8e97224e',
+          'algsolve/judge/sandbox.py': '04fe78fcc41dac4c22430d0cacc1d2b40c40daafc2b609ebfe47246030c3fd74',
+          'catalogue/imported-commonjs-observer-v1/harness.cjs': '55ff4173f9dab55de26dcfe502f60b33ecac96fd3ec9689b150cba58daa4b547',
+          'catalogue/imported-node-observer-v1/harness.cjs': 'a25471a4c491793b3f619eb2017eee85ccfa491188982eb2c57b5fef25378034',
+          'catalogue/imported-node-observer-v1/harness.py': '138b9ef75b4590158eb11456612ffebeee180e93abedb3cb3f374d0fb38c18b9',
+          'catalogue/imported_clean_domains.py': '713ebeddf0404aa32fb9424b62666c27a3950f113e6a9e7d0c83f9917ddee789',
+          'catalogue/imported_qualification.py': '6147c8eba2d124e56cb5eac4dde27f880b09e3b148abe9d02d44e930686dcc48',
+          'catalogue/imported_result_contracts.py': 'b601c7d128a1a21e85d605766ad7456142852c6fbcf18c431ec268ab99330d28',
+          'catalogue/node_identity_contracts.py': 'b829437e895c88d6049aac5d8de32593fb324551488c525ef082797e0ecb33c3',
+          'catalogue/public-domain-qualification-medium32-wave2-observer-v1/harness.cjs': '48a8f16598b64032f7c43cd343d02b6fcdbf36912c7382a01520686b73b5f655',
+          'catalogue/public-domain-qualification-medium32-wave2-observer-v1/harness.py': 'a7d6d5c86ac58a05626573de789ad88390e299e4bd82a007590a8484162908f0',
+          'catalogue/request_next4_oracles.py': 'e61e612b92541b7afbb3b11d0bf7cfd51c87f3dd00c958f8c6485f1bd536da5b',
+          'catalogue/request_next4_qualification.py': '7d28fc6b8a65779529ecb3aed1d85a11c0f5b1036e5caf9ac95144023a615014',
+          'catalogue/request_next5_oracles.py': '8a6633b35652d718257b25f7b23e0833b26b8c9d4020447649902708d7f84e8f',
+          'catalogue/request_next5_qualification.py': 'a3c0516568fd76a4008825cfb4d4885ed60a4ce2418c6063128ed41d9190ef68',
+          'catalogue/request_parallel10_qualification.py': '6db8a8dc1351ff517cdf017b804251412781431a91ad805e51801e648f1d9d5a',
+          'catalogue/request_parallel15_qualification.py': '2909e62b4fe8a488b0fc20b76d1e2bdee5d2ffdf7f5a9d745fa5745329d35894',
+          'catalogue/request_parallel_a_oracles.py': '7cd4cb079e510332de9d3ec340279fb2cad0ccbe9d0688175b7cc96b6b2f8603',
+          'catalogue/request_parallel_b_oracles.py': '150cf7f037f7840f89d17da28fe9309144e2067872ce2f95f68cf0f7b156cdb6',
+          'catalogue/request_parallel_c_oracles.py': '3c9140f9baf32a6adbe683dc06e6cb1e4d4af5a5a22683bc3488b324ef9378cd',
+          'catalogue/request_parallel_d_oracles.py': '7dd07ad3d3f059a5a5b4ca0c07c4d3225a47c1dc201546fbc3c9fcc867080b8f',
+          'catalogue/request_parallel_e_oracles.py': '3ba8d658ae42e7a483ccaba4d321dd3d1d10b9ae550cdb935df4f4b037d6a959',
+          'catalogue/request_qualification.py': '8e7b4e59e4e2b66d72006fdc30cd7817c0abe3af08df6d5b33c63c2eb4ef378a'},
+ 'additional_code': {'catalogue/imported_clean_domains.py': '713ebeddf0404aa32fb9424b62666c27a3950f113e6a9e7d0c83f9917ddee789',
+                     'catalogue/request_parallel10_qualification.py': '6db8a8dc1351ff517cdf017b804251412781431a91ad805e51801e648f1d9d5a',
+                     'catalogue/request_parallel_d_oracles.py': '7dd07ad3d3f059a5a5b4ca0c07c4d3225a47c1dc201546fbc3c9fcc867080b8f',
+                     'catalogue/request_parallel_e_oracles.py': '3ba8d658ae42e7a483ccaba4d321dd3d1d10b9ae550cdb935df4f4b037d6a959'},
+ 'evidence': {'d/original-freeze.json': 'd695fddf0154bc2c3e28a2a39b3696473feeb13e6056f55ba831cf1da8030e60',
+              'd/independent-review.json': '0d08b8b10994fe314fd3c9f4e126ea270a5a25388c0e1e51c32378332912b5b7',
+              'd/source-acquisition.json': '7998525f6c0acaf9aaba48b508e0519440538fb427a36dbb2763ec02557c2305',
+              'd/first-static-review.json': 'e4e4fc053c13e314c86e8ea95ac1250c2e8625e05a749353b774e5efa0b5a31a',
+              'd/second-static-review.json': '24742e929d376856ac7c3992577c23e6b54630028e3b4c562cc943b387f9cc89',
+              'e/original-freeze.json': '7508631030cdaf090839973ca12ac889f9e2aaebe18679200c95b21fa8a2e7f4',
+              'e/independent-review.json': 'e59ae9c51f41c7db4009a71415b3215b6793abb1538b9a07579d37676af242e4',
+              'e/source-acquisition.json': '37d7b22199d25924a8ac9d3c01f9394fdc45f66c118edf3e4f20925df1f16d77',
+              'e/first-static-review.json': '2e52805d9c637829427c5663c313b1ad6557f6a26e7db7219c6b7634aee61964',
+              'e/second-static-review.json': '0238e6c201921a071820166081fde8734323aa718c61eebd7f41212b1d58f0b5',
+              'independent-runner-review-v1.json': '51568751d771c403ba08b2c21a12a297f8feac2800e29b56f37fe70476607e5a'},
+ 'run_directory': 'run-parallel10',
+ 'effects': 'Read-only arguments; exact typed scalar, string, or fresh ordered nested-list return; no '
+            'return-to-input alias.',
+ 'comparison': 'Exact typed returns and local effects against independent public-definition oracles.',
+ 'scope': 'Finite in-domain development checks; not universal proof, fresh heldout confirmation, full-domain '
+          'performance qualification or catalogue adoption.'}
+
 def prepared_request_owner(lane):
-    """Only the two already frozen request owners; no caller-defined imports."""
+    """Only the already frozen request owners; no caller-defined imports."""
     if lane == 'request-next5-v1':
         from . import request_next5_qualification as owner
     elif lane == 'request-parallel15-v1':
         from . import request_parallel15_qualification as owner
+    elif lane == 'request-parallel10-v1':
+        from . import request_parallel10_qualification as owner
     else:
         raise ValueError('unsupported prepared request lane')
     return owner
@@ -1046,15 +1094,34 @@ def check_next20_execution_delta(values, raws):
                 'receipts': '4493a7117e4ed203ce17ea53c4edd802b942e06aac25e50a46be79c049fbcafc',
                 'predecessor_review': 'b2a29b912a9bb1dd42a50028d9fc39e8a0021e0766bc4a6165f66d5a23d3e621',
                 'predecessor_authority_review': '27b3a04dcf5a4247541a6162a3db59020441c7b4a72c983da341439cad754b75'}
+    return _check_prepared_execution_delta(values, raws, expected, (3215, 3228, 3523, 3558, 3597))
+
+
+def check_next10_execution_delta(values, raws):
+    """Preserve all twenty-five reviewed pairs over original 943 before adoption."""
+    expected = {'execution_catalogue': '9ab963740caad76bb15d602fb2ab93e2d010f2765605a9b9e63bbaa620dbb329',
+                'execution_receipts': '63a3c432f5ec3057dda03a560080f089d70ad4fffa9966a215343d61bd2148fc',
+                'catalogue': 'c0969512cc05cd755726114c63d8425ca42b2757540e7bbf6177814572f1b83f',
+                'receipts': '18a3a2766bda099aacbb0a6750107eaae7ec15da94f047ba6d3b92a1f133538a',
+                'predecessor_review': '6d59a9b042659ddc3c0b34d0ab4cb9f87bde41a33c0a6948ff421a6b7fb79c81',
+                'predecessor_authority_review': '40dd17ad04ebcddf9d70107b698c0b9dcb6402d5e25acb07f7e40683aad77cd5'}
+    ids = (3215, 3228, 3523, 3558, 3597, 3514, 3528, 3566, 3578, 3607,
+           3223, 3232, 3532, 3583, 3612, 3517, 3531, 3567, 3598, 3618,
+           3524, 3551, 3587, 3608, 3619)
+    return _check_prepared_execution_delta(values, raws, expected, ids)
+
+
+def _check_prepared_execution_delta(values, raws, expected, predecessor_ids):
+    """Exact fixed predecessor pins and reversible source/receipt-only delta."""
     if any(sha(raws[key]) != pin for key, pin in expected.items()):
-        raise ValueError('actual reviewed 948 predecessor identity differs')
+        raise ValueError('actual reviewed predecessor identity differs')
     old, new = values['execution_catalogue'], values['catalogue']
     old_receipts, receipts = values['execution_receipts'], values['receipts']
     validate(values['universe'], old, old_receipts)
     validate(values['universe'], new, receipts)
     restored = copy.deepcopy(new)
     originals = {row['problem_id']: row for row in old['problems']}
-    ids = {f'leetcode:{pid}' for pid in (3215, 3228, 3523, 3558, 3597)}
+    ids = {f'leetcode:{pid}' for pid in predecessor_ids}
     added = set()
     for row in restored['problems']:
         if row['problem_id'] not in ids:
@@ -1070,7 +1137,7 @@ def check_next20_execution_delta(values, raws):
                 raise ValueError('predecessor original implementation differs')
             added.add(implementation['receipt_sha256'])
             row['implementations'][language] = copy.deepcopy(original)
-    if digest(restored) != digest(old) or len(added) != 10 or set(receipts) - set(old_receipts) != added:
+    if digest(restored) != digest(old) or len(added) != len(ids) * 2 or set(receipts) - set(old_receipts) != added:
         raise ValueError('unrelated execution-to-adoption delta')
     if any(key not in receipts or digest(receipts[key]) != digest(value) for key, value in old_receipts.items()):
         raise ValueError('historical receipts changed')
@@ -1078,7 +1145,7 @@ def check_next20_execution_delta(values, raws):
             'execution_receipts_sha256': expected['execution_receipts'],
             'adoption_catalogue_sha256': expected['catalogue'], 'adoption_receipts_sha256': expected['receipts'],
             'preserved_predecessor_receipts': sorted(added), 'original_receipts_preserved': len(old_receipts),
-            'unselected_execution_slots_unchanged': len(old['problems']) * 2 - 10,
+            'unselected_execution_slots_unchanged': len(old['problems']) * 2 - len(ids) * 2,
             'predecessor_review_sha256': expected['predecessor_review'],
             'predecessor_authority_review_sha256': expected['predecessor_authority_review']}
 
@@ -1218,7 +1285,8 @@ def replay_prepared_request(run, common, common_raws):
                         raise ValueError('original manifest batch or duplicate differs')
                     originals[row['problem_id']] = row
         original_cases = {}
-        for group in ('a', 'b', 'c'):
+        groups = ('d', 'e') if run['lane'] == 'request-parallel10-v1' else ('a', 'b', 'c')
+        for group in groups:
             original = evidence[group + '/original-freeze.json']
             for row in original['problems' if group == 'c' else 'cases']:
                 original_cases[row['id' if group == 'c' else 'problem_id']] = row
@@ -1280,6 +1348,29 @@ def adopt_prepared_next20_plan(plan, trusted_plan_sha256):
     delta = check_next20_execution_delta(values, raws)
     # No in-memory successor is constructed before both independent replays pass.
     replays = [replay_prepared_request(run, values, raws) for run in plan['runs']]
+    return _adopt_prepared_replays(plan, trusted_plan_sha256, values, raws, delta, replays)
+
+
+def adopt_prepared_next10_plan(plan, trusted_plan_sha256):
+    """Build one reversible successor of 968 only after the exact ten-pair replay."""
+    fields(plan, ('schema', 'universe', 'catalogue', 'receipts', 'execution_catalogue', 'execution_receipts',
+                  'predecessor_review', 'predecessor_authority_review', 'boundary_gate',
+                  'qualification_service', 'qualification_boundary_gate', 'runs'))
+    if plan['schema'] != 'gamma.prepared-next10-adoption-plan.v1':
+        raise ValueError('unsupported fixed next-ten adoption plan')
+    if (not isinstance(plan['runs'], list) or
+            [run.get('lane') for run in plan['runs']] != ['request-parallel10-v1']):
+        raise ValueError('the exact prepared ten-pair run is required')
+    values, raws = {}, {}
+    for key in set(plan) - {'schema', 'runs'}:
+        values[key], raws[key] = pinned(plan[key])
+    delta = check_next10_execution_delta(values, raws)
+    replays = [replay_prepared_request(run, values, raws) for run in plan['runs']]
+    return _adopt_prepared_replays(plan, trusted_plan_sha256, values, raws, delta, replays)
+
+
+def _adopt_prepared_replays(plan, trusted_plan_sha256, values, raws, delta, replays):
+    """Shared receipt construction only after the fixed plan and all replays pass."""
     universe, catalogue, receipts = (values[key] for key in ('universe', 'catalogue', 'receipts'))
     rows = {row['problem_id']: row for row in catalogue['problems']}
     replacements, additions, locators, descriptors = {}, {}, {}, {}
@@ -1329,7 +1420,9 @@ def adopt_prepared_next20_plan(plan, trusted_plan_sha256):
                 oracle.OMITTED_MAXIMUM_SHAPES[pid],
                 'Original independently frozen public-definition cases are retained, not fresh heldout confirmation.',
                 'New statement prefixes do not establish byte equivalence with historical definitions.',
-                'Native execution authority was original 943; adoption separately preserves the reviewed five-pair delta to 948.',
+                ('Native execution authority was original 943; adoption separately preserves the reviewed twenty-five-pair delta to 968.'
+                 if lane == 'request-parallel10-v1' else
+                 'Native execution authority was original 943; adoption separately preserves the reviewed five-pair delta to 948.'),
                 'Candidate only; no serving, runtime, browser, guide, recognition or publication activation.']
             implementation = {'status': 'qualified', 'canonical_variant_id': language + ':' + job['source_sha256'],
                 'source_sha256': job['source_sha256'], 'problem_contract_sha256': digest(contract),
@@ -1361,6 +1454,8 @@ def adopt_prepared_next20_plan(plan, trusted_plan_sha256):
 def adopt_plan(plan_path, trusted_plan_sha256):
     """Build successor artifacts in memory; caller separately persists/publishes."""
     plan, _ = pinned({'path': str(plan_path), 'sha256': trusted_plan_sha256})
+    if isinstance(plan, dict) and plan.get('schema') == 'gamma.prepared-next10-adoption-plan.v1':
+        return adopt_prepared_next10_plan(plan, trusted_plan_sha256)
     if isinstance(plan, dict) and plan.get('schema') == 'gamma.prepared-next20-adoption-plan.v1':
         return adopt_prepared_next20_plan(plan, trusted_plan_sha256)
     if isinstance(plan, dict) and plan.get('schema') == 'gamma.request-next4-adoption-plan.v1':
