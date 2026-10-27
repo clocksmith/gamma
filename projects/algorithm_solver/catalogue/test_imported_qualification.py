@@ -172,5 +172,27 @@ class PinnedRuntimeRouteTests(unittest.TestCase):
             self.assertEqual(q.decode((args.output / 'report.json').read_bytes())['new_qualifications'], 0)
 
 
+class SourceInterfaceTests(unittest.TestCase):
+    def test_default_observers_are_unchanged(self):
+        self.assertEqual(q.observer_files({'language': 'python'}), {'harness.py': q.read(q.HARNESS / 'harness.py')})
+        self.assertEqual(q.observer_files({'language': 'javascript'}), {'harness.cjs': q.read(q.HARNESS / 'harness.cjs')})
+
+    def test_commonjs_reuses_exact_existing_typed_effect_helper(self):
+        files = q.observer_files({'language': 'javascript', 'source_interface': 'commonjs-object-solve-v1'})
+        self.assertEqual(files, {'harness.cjs': q.read(q.COMMONJS_HARNESS),
+                                 'observer.cjs': q.read(q.HARNESS / 'harness.cjs')})
+
+    def test_invalid_combinations_fail_before_payload_or_gate_reads(self):
+        for changes in ({'source_interface': 'guess'},
+                        {'source_interface': 'commonjs-object-solve-v1', 'language': 'python'},
+                        {'source_interface': 'commonjs-object-solve-v1', 'node_identity': True},
+                        {'id': 3216, 'domain_validator': 'request3215-v1'}):
+            job = {'id': 3215, 'language': 'javascript', **changes}
+            with self.subTest(job=job), patch.object(q, 'read') as read, patch.object(q, 'authorize_before_open') as gate:
+                with self.assertRaises(ValueError):
+                    q.job_inputs(Path('/unused'), job, {})
+                read.assert_not_called(); gate.assert_not_called()
+
+
 if __name__ == '__main__':
     unittest.main()
