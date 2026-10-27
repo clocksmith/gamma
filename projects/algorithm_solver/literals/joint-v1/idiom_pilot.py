@@ -308,6 +308,7 @@ def metrics(state, sources, owners, width):
             'pilot_numeric_thresholds_met': bool(state['coverage'] == len(sources) and state['median_selections'] is not None and state['median_selections'] <= 32
                 and state['p95_selections'] <= 96 and state['singleton_bit_share'] <= .1),
             'original_population_gate_evaluated': False,
+            'original_m1_width_eligible': width in (7, 8),
             'milestone_qualified': False}
 
 
@@ -352,8 +353,13 @@ def main():
     parser.add_argument('--objective', choices=('compact', 'input', 'storage', 'singleton'), default='compact')
     parser.add_argument('--node', type=Path, help='Pinned parser runtime; required only for JavaScript')
     parser.add_argument('--node-sha256')
+    parser.add_argument('--widths', type=int, nargs='+', choices=range(4, 13),
+                        default=list(range(4, 9)),
+                        help='Distinct fixed widths; 9..12 are wider coverage experiments, outside original M1')
     parser.add_argument('--output', type=Path, required=True)
     args = parser.parse_args()
+    if len(set(args.widths)) != len(args.widths):
+        parser.error('duplicate widths')
     if args.legacy_scale80_control:
         if args.config or args.config_sha256:
             parser.error('legacy control and new fitting inputs are mutually exclusive')
@@ -391,6 +397,9 @@ def main():
                 'authoring_registry_reconciliation': 'Legacy semantics join unavailable' if args.legacy_scale80_control else 'Historical route retains canonical identities without inventing sidecars; modern route queries existing authoring owner',
                 'family_reuse': 'Unknown for legacy control' if args.legacy_scale80_control else 'Distinct canonical problems; input records retain grouping scope and known conflicts; no independent family-confirmation claim',
                 'source_rewrites': 0, 'candidate_executions': 0, 'limits': limits,
+                'widths': args.widths,
+                'original_m1_entry_limit': 256,
+                'wider_profiles': 'Widths above 8 are coverage experiments, not original M1 candidates',
                 'proposal_limits': {'max_span_bytes': MAX_SPAN_BYTES,
                                     'max_spans_per_source': MAX_SPANS_PER_SOURCE,
                                     'max_candidates': MAX_CANDIDATES},
@@ -419,7 +428,7 @@ def main():
     for path in [Path(__file__), ast_script, Path(joint.__file__), Path(__file__).with_name('fitting_inputs.py')]:
         (args.output / 'implementation' / path.name).write_bytes(path.read_bytes())
     started, rows = time.monotonic(), []
-    for width in range(4, 9):
+    for width in args.widths:
       for arm in ('strict', 'punctuation_fallback'):
         for name, original_pool in pools.items():
             pool = arm_pool(original_pool, sources, arm)

@@ -159,9 +159,25 @@ def load_fitting_inputs(config_path, config_sha256):
                 'invalid or reclassified authoring identity')
         slot = problem['implementations'][language]
         impl = canonical[gid]['implementations'][language]
-        require(slot.get('development_corpus_admitted') is True and
-                slot.get('blockers') == [] and
-                slot.get('license') is not None and slot.get('adapter') is not None,
+        stage = admission.get('development_admission')
+        if stage is not None:
+            require(stage.get('schema') == 'gamma.exact-development-source-admission.v1' and
+                    stage.get('qualification_created') is False and
+                    stage.get('browser_guides_admitted') == 0 and
+                    stage.get('inputs', {}).get('service') == config['service'],
+                    'exact development admission stage required')
+            adapter = slot.get('development_adapter') or {}
+            license_record = (slot.get('development_license') or {}).get('verified_reference', {})
+            development_complete = (slot.get('development_blockers') == [] and
+                license_record.get('bindings') == slot['bindings'] and
+                adapter.get('kind') == 'existing_qualified_solve_interface' and
+                adapter.get('language') == language and
+                adapter.get('interface_sha256') == impl['interface_sha256'] and
+                adapter.get('qualified_runtime_sha256') == impl['runtime_sha256'])
+        else:
+            development_complete = (slot.get('blockers') == [] and
+                                    slot.get('license') is not None and slot.get('adapter') is not None)
+        require(slot.get('development_corpus_admitted') is True and development_complete,
                 'completed source-to-guide development admission required; metadata joins alone are insufficient')
         require(impl['status'] == 'qualified' and
                 slot.get('qualification', {}).get('receipt_binding_checked') is True and

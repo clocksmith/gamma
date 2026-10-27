@@ -21,6 +21,59 @@ never letters or digits. Complementary source-path bundles seed the dictionary;
 no alphabet receives slots first. The strict initializer also competes in the
 fallback arm. Empty pools remain explicit zero-coverage, unserializable states.
 
+`--widths 6 7 8 9 10 11 12` selects a matched coverage experiment with up to
+4096 entries. The default remains 4–8 bits for historical command compatibility.
+Duplicate widths or widths outside 4–12 fail before materializing sources. The
+existing LTV1 codec supports the larger IDs without changing historical packet
+bytes; width, payload padding, dictionary identity and out-of-range IDs are still
+checked. `--objective input` orders complete-program coverage before selection
+cost; the default `compact` retains its original constrained ordering. Both keep
+all supplied problems in the denominator. Widths above eight are outside original
+M1, even if their covered-program selection statistics meet its numerical targets.
+The packet extension is research support, not a change to the BITS browser decoder.
+
+## Wider coverage measurement (2026-10-27)
+
+The [retained aggregate](development-replay-v1/wide-coverage-summary.json) compares
+56 arms on the same 250 historically authorized JavaScript fitting sources, using
+the coverage-first `input` objective. It then checks the combined-pool dictionaries,
+without refitting, against all 943 qualified JavaScript sources in the pinned
+active catalogue. This diagnostic is exposed development evidence, not fresh
+confirmation. No source alternatives were rewritten or executed.
+
+| Width / entry budget | Strict fitting coverage / 250 | Strict catalogue coverage / 943 | Catalogue median / p95 selections |
+|---|---:|---:|---:|
+| 6 / 64 | 11 | 11 | 7 / 11 |
+| 7 / 128 | 21 | 21 | 10 / 15 |
+| 8 / 256 | 38 | 38 | 12 / 17 |
+| 9 / 512 | 63 | 64 | 14.5 / 23 |
+| 10 / 1024 | 107 | 112 | 19.5 / 32 |
+| 11 / 2048 | 175 | 196 | 26 / 56 |
+| 12 / 4096 | 195 | 223 | 28 / 73 |
+
+Every strict row uses zero single-character entries/selections. Percentiles cover
+only reconstructable programs; the complete denominator remains visible. The
+12-bit strict dictionary uses 2509 entries, so its 720 uncovered catalogue programs
+are not evidence that 4096 slots are exhausted. Punctuation fallback uses 2559
+entries and covers 240/943, with median 28, p95 76 and 1.89% singleton bits. The
+remaining 703 programs are still uncovered. Neither result meets near-total coverage.
+
+A bounded full-pool diagnostic verified the normalized pool hash against the
+actual fit: strict reachability is 195/250; punctuation fallback is 201/250, even
+with every candidate available. Thus the 12-bit combined dictionaries attain this
+pool's coverage ceiling on the fitting control. The remaining fallback cases are
+47 missing-text and two boundary-only failures. Missing identifiers, constants,
+strings, regexps and some keywords remain explicit; widening alone cannot repair
+them. This is a bound for this pool, not for other literals or qualified source
+alternatives, and it is not a 943-source feasibility result.
+
+The separate arbitrary-fragment compression control reaches 214/250 at 12 bits
+with fallback; it was not audited on all 943 and does not establish human usability.
+The fit verified 7108 initial/final packet round trips under a hard 2 GiB/420-second
+cgroup limit (246.640 seconds observed); the 943-source audit used a hard
+2 GiB/180-second limit (19.039 seconds observed). No Python wide-profile run,
+browser admission or publication occurred. Original M1 remains unmet.
+
 ## Historical exposed development replay
 
 An existing fit contract is sufficient authority for its exact source bytes;

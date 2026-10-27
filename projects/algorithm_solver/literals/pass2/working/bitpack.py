@@ -1,11 +1,11 @@
-"""Literal selection packets with an explicit fixed width of 4 through 8 bits."""
+"""Literal selection packets with an explicit fixed width of 4 through 12 bits."""
 import hashlib,struct,sys
 from pathlib import Path
 sys.path.insert(0,str(Path(__file__).resolve().parents[2]))
 from literals import dictionary_bytes,reconstruct,decode_bytes
 
 def encode(literals, sequence, bits):
-    if type(bits) is not int or not 4 <= bits <= 8: raise ValueError('width must be 4..8')
+    if type(bits) is not int or not 4 <= bits <= 12: raise ValueError('width must be 4..12')
     reconstruct(literals,sequence)
     if len(literals)>1<<bits: raise ValueError('dictionary exceeds width')
     payload=bytearray();value=occupied=0
@@ -20,7 +20,7 @@ def encode(literals, sequence, bits):
 def decode(dictionary, packet):
     if len(packet)<41 or packet[:4]!=b'LTV1':raise ValueError('packet header')
     bits=packet[4]
-    if not 4<=bits<=8:raise ValueError('width')
+    if not 4<=bits<=12:raise ValueError('width')
     if len(dictionary)<8 or dictionary[:4]!=b'LTD1':raise ValueError('dictionary header')
     if struct.unpack_from('>I',dictionary,4)[0]>1<<bits:raise ValueError('dictionary exceeds width')
     count=struct.unpack_from('>I',packet,37)[0]

@@ -3,10 +3,45 @@ from pathlib import Path
 import tempfile
 import unittest
 from unittest.mock import patch
-from algsolve.authoring_variants import build, query, sha, main
+from algsolve.authoring_variants import build, query, sha, main, from_canonical_contracts
 
 
 class CatalogTests(unittest.TestCase):
+    def canonical_fixture(self):
+        contract = {'domain': 'ASCII λ', 'result': 'integer', 'effects': 'read-only'}
+        contract_hash = sha(json.dumps(contract, sort_keys=True, separators=(',', ':')).encode())
+        return {'problems': [{'problem_id': 'leetcode:1', 'implementations': {
+            language: {'status': 'qualified', 'canonical_variant_id': language + ':' + 'a' * 64,
+                       'source_sha256': 'a' * 64, 'problem_contract_sha256': contract_hash,
+                       'receipt_sha256': 'b' * 64,
+                       'provenance': {'public_batch': {'problem_contract': contract}}}
+            for language in ('javascript', 'python')}}]}
+
+    def test_canonical_contract_view_preserves_identity_without_qualification(self):
+        value = self.canonical_fixture(); raw = json.dumps(value).encode()
+        with patch('builtins.open', side_effect=AssertionError('payload opened')):
+            result = from_canonical_contracts(raw, sha(raw))
+        self.assertEqual(result['variant_count'], 2)
+        record = query(result, 1, 'python')[0]
+        self.assertEqual(record['qualification']['status'], 'unknown')
+        self.assertEqual(record['provenance'][0]['canonical_variant_id'], 'python:' + 'a' * 64)
+        self.assertFalse(record['provenance'][0]['authoring_sidecar_created'])
+        self.assertEqual(record['semantics_sha256'], record['problem_contract_sha256'])
+        self.assertFalse(result['qualification_created'])
+
+    def test_missing_contract_stays_unresolved_and_hash_drift_fails(self):
+        value = self.canonical_fixture()
+        value['problems'][0]['implementations']['python']['provenance'] = {}
+        raw = json.dumps(value).encode(); result = from_canonical_contracts(raw, sha(raw))
+        self.assertEqual(result['variant_count'], 1)
+        self.assertEqual(len(result['unresolved_canonical_slots']), 1)
+        value['problems'][0]['implementations']['javascript']['problem_contract_sha256'] = 'c' * 64
+        raw = json.dumps(value).encode()
+        with self.assertRaisesRegex(ValueError, 'Exact canonical'):
+            from_canonical_contracts(raw, sha(raw))
+        with self.assertRaisesRegex(ValueError, 'Pinned bounded'):
+            from_canonical_contracts(raw, '0' * 64)
+
     def setUp(self):
         self.temp = tempfile.TemporaryDirectory()
         self.addCleanup(self.temp.cleanup)

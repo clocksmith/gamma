@@ -57,6 +57,11 @@ partial coverage remains explicit. Historical M1–M6 gates/results are preserve
 and original compact-library M1 remains unmet. This priority change does not
 reclassify protected populations or qualify an existing result retroactively.
 
+The owner's 2026-10-27 coverage extension additionally compares 512/1024/2048/4096
+entries (9–12 bits), retaining complete-program coverage, selection costs and
+singleton usage separately. These wider profiles cannot satisfy original M1's
+256-entry limit. More slots do not authorize new source access or publication.
+
 ## Counted spelling extension (2026-10-27)
 
 The owner chose long fragments with a separately charged spelling mode for BITS.

@@ -123,7 +123,7 @@ class JointSearchTests(unittest.TestCase):
 
     def test_explicit_alphabet_supports_all_widths_and_preserves_default(self):
         sources = {1: {'a': 'ababab!'}}
-        for width in range(4, 9):
+        for width in range(4, 13):
             state = joint.evaluate(sources, ['ab', '!'], width, alphabet=[])
             self.assertEqual(state['selections'], 4)
             self.assertEqual(state['literal_bits'], width * 4)
@@ -180,7 +180,7 @@ class JointSearchTests(unittest.TestCase):
         self.assertEqual(state['package_bytes'], len(dictionary) + len(packet))
 
     def test_invalid_literal_and_width_fail_closed(self):
-        for vocab, width in [([''], 4), (['a'], True), (['a'], 3), (['a'], 9)]:
+        for vocab, width in [([''], 4), (['a'], True), (['a'], 3), (['a'], 13)]:
             with self.assertRaises(ValueError):
                 joint.evaluate({1: {'a': 'aa'}}, vocab, width, alphabet=[])
 
@@ -223,7 +223,7 @@ class JointSearchTests(unittest.TestCase):
 
     def test_absolute_singleton_reduction_and_full_costs_at_each_width(self):
         sources = {i: {'a': 'abcabc!'} for i in range(1, 241)}
-        for width in range(4, 9):
+        for width in range(4, 13):
             with self.subTest(width=width):
                 before = joint.evaluate(sources, list('abc!'), width, alphabet=[])
                 after = joint.evaluate(sources, list('abc!') + ['abc'], width, alphabet=[])

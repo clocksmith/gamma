@@ -167,3 +167,32 @@ canonical catalogue: 121 have a qualified canonical counterpart with different
 bytes; 29 have no qualified canonical slot in this snapshot. None is an exact
 canonical source match. This does not revoke their separate historical guide
 evidence; it means that evidence cannot be transplanted onto canonical sources.
+
+## Exact development admission checkpoint (2026-10-27)
+
+`development_admission.py` is a downstream stage; inventory generation remains
+read-only. A pinned config contains `inventory`, `service`, and `license_evidence`
+path/SHA256 descriptors. The stage reopens only authorized, already-qualified
+sources through the existing service, checks all six bindings and the receipt,
+verifies exact source and applicable repository license Git bytes, and runs
+parse-only conservative host-policy checks. It writes a new snapshot, assigns no
+splits and creates no new qualification. Python browser execution is not required
+for this development-source stage; browser admission remains separate.
+
+The existing authoring owner now accepts complete canonical contract payloads
+through `from_canonical_contracts`, retaining actual contract/source provenance
+and unknown authoring qualification. Missing historical contract payloads remain
+unresolved. No synthetic semantics sidecar or replacement receipt is generated.
+
+The [aggregate checkpoint](guide-admission-v1/development-stage-summary.json)
+records 527 JavaScript and 487 Python admitted source slots (487 pairs) from the
+943-pair active catalogue. This is not dictionary coverage or a new fitting freeze.
+Source licenses do not grant publication of the private recovery payloads.
+Exposure and reviewed near-duplicate groups still need reconciliation.
+
+`browser_replay_evidence.py` verifies pinned replay bundles, unchanged source
+bindings and complete contiguous case batches before adding scoped adapter
+observations. The retained 397 JavaScript programs passed 42,303 return/mutation
+cases. These observations establish neither independent correctness qualification
+nor identity/alias acceptance, and admit zero new browser guides. Historical
+guide records and their original source identities remain intact.
