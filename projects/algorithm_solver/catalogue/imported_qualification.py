@@ -125,7 +125,9 @@ def code_pins():
     paths = [Path(__file__), Path(sandbox.__file__), Path(pinned_runtime.__file__), HARNESS / 'harness.py', HARNESS / 'harness.cjs',
              Path(__file__).with_name('imported_result_contracts.py'),
              Path(__file__).with_name('node_identity_contracts.py'), NODE_HARNESS / 'harness.py', NODE_HARNESS / 'harness.cjs',
-             COMMONJS_HARNESS, Path(__file__).with_name('request_qualification.py')]
+             COMMONJS_HARNESS, Path(__file__).with_name('request_qualification.py'),
+             Path(__file__).with_name('request_next4_oracles.py'),
+             Path(__file__).with_name('request_next4_qualification.py')]
     return {str(p): file_hash(p) for p in paths}
 
 
@@ -303,6 +305,10 @@ def load_freeze(path):
     contract = decode(raw)
     if contract['schema'] != 'gamma.imported-independent-execution.v1' or contract['code'] != code_pins() or contract['limits'] != LIMITS:
         raise ValueError('execution freeze drift')
+    if any(j.get('domain_validator') == 'request-next4-v1' for j in contract.get('jobs', [])):
+        from .request_next4_qualification import additional_code
+        if contract.get('additional_code') != additional_code():
+            raise ValueError('unapproved fixed request code paths')
     for name, expected in contract.get('additional_code', {}).items():
         if file_hash(name) != expected:
             raise ValueError('oracle or validator changed since freeze')
@@ -314,6 +320,9 @@ def load_freeze(path):
     if any(j.get('domain_validator') == 'request3215-v1' for j in contract['jobs']):
         from .request_qualification import verify_freeze
         verify_freeze(path, contract, gate)
+    if any(j.get('domain_validator') == 'request-next4-v1' for j in contract['jobs']):
+        from .request_next4_qualification import verify_freeze
+        verify_freeze(path, contract, gate)
     return raw, contract, gate
 
 
@@ -322,8 +331,15 @@ def job_inputs(root, job, gate):
     if type(pid) is not int or lang not in ('python', 'javascript'):
         raise ValueError('invalid frozen job identity')
     source_interface(job)
+    if ('domain_validator' in job and job['domain_validator'] not in
+            ('fresh67-v1', 'imported358-v1', 'request3215-v1', 'request-next4-v1')):
+        raise ValueError('unknown input validator')
     if job.get('domain_validator') == 'request3215-v1' and pid != 3215:
         raise ValueError('request3215 validator cannot enroll another problem')
+    if job.get('domain_validator') == 'request-next4-v1':
+        from .request_next4_qualification import IDS
+        if pid not in IDS:
+            raise ValueError('request-next4 validator cannot enroll another problem')
     suffix = 'py' if lang == 'python' else 'js'
     if job['source'] != f'sources/{pid}.{suffix}' or job['tests'] != f'tests/{pid}.json':
         raise ValueError('invalid frozen exact locator')
@@ -344,6 +360,10 @@ def job_inputs(root, job, gate):
             validator(pid, case['args'])
     elif job.get('domain_validator') == 'request3215-v1':
         from .request_qualification import validate
+        for case in cases:
+            validate(pid, case['args'])
+    elif job.get('domain_validator') == 'request-next4-v1':
+        from .request_next4_oracles import validate
         for case in cases:
             validate(pid, case['args'])
     elif 'domain_validator' in job:

@@ -186,12 +186,93 @@ class SourceInterfaceTests(unittest.TestCase):
         for changes in ({'source_interface': 'guess'},
                         {'source_interface': 'commonjs-object-solve-v1', 'language': 'python'},
                         {'source_interface': 'commonjs-object-solve-v1', 'node_identity': True},
-                        {'id': 3216, 'domain_validator': 'request3215-v1'}):
+                        {'id': 3216, 'domain_validator': 'request3215-v1'},
+                        {'id': 3215, 'domain_validator': 'request-next4-v1'},
+                        {'domain_validator': 'not-approved'}):
             job = {'id': 3215, 'language': 'javascript', **changes}
             with self.subTest(job=job), patch.object(q, 'read') as read, patch.object(q, 'authorize_before_open') as gate:
                 with self.assertRaises(ValueError):
                     q.job_inputs(Path('/unused'), job, {})
                 read.assert_not_called(); gate.assert_not_called()
+
+
+class NextFourBoundaryTests(unittest.TestCase):
+    def job(self, pid=3228, language='javascript'):
+        source = b'inert synthetic source; never executed'
+        cases = [{'args': ['0'], 'expected': 0, 'compare': 'return'}]
+        raw = q.encoded(cases)
+        suffix = 'js' if language == 'javascript' else 'py'
+        return {'id': pid, 'language': language, 'domain_validator': 'request-next4-v1',
+                'source_interface': 'commonjs-object-solve-v1' if language == 'javascript' else 'global-solve-v1',
+                'source': f'sources/{pid}.{suffix}', 'tests': f'tests/{pid}.json',
+                'source_sha256': q.sha(source), 'tests_raw_sha256': q.sha(raw),
+                'case_count': 1}, source, raw, cases
+
+    def test_denied_gate_does_not_open_source_or_cases(self):
+        job, _, _, _ = self.job()
+        with patch.object(q, 'authorize_before_open', side_effect=PermissionError('denied')), \
+                patch.object(q, 'read') as read:
+            with self.assertRaises(PermissionError):
+                q.job_inputs(Path('/unused'), job, {'artifact_paths': {}, 'trusted_hashes': {}})
+            read.assert_not_called()
+
+    def test_fixed_ids_dispatch_every_case_to_existing_new_oracle_owner(self):
+        from . import request_next4_oracles as oracle
+        for pid in (3228, 3523, 3558, 3597):
+            for language in ('javascript', 'python'):
+                job, source, raw, cases = self.job(pid, language)
+                with self.subTest(pid=pid, language=language), \
+                        patch.object(q, 'authorize_before_open') as gate, \
+                        patch.object(q, 'read', side_effect=[source, raw]), \
+                        patch.object(oracle, 'validate') as validate:
+                    self.assertEqual(q.job_inputs(Path('/unused'), job,
+                        {'artifact_paths': {}, 'trusted_hashes': {}}), (source, cases))
+                    validate.assert_called_once_with(pid, cases[0]['args'])
+                    gate.assert_called_once()
+
+    def test_next_four_freeze_calls_its_fixed_owner_before_payload_reads(self):
+        from . import request_next4_qualification as owner
+        contract = {'schema': 'gamma.imported-independent-execution.v1', 'code': {},
+                    'limits': q.LIMITS, 'service_config': '/config',
+                    'service_config_sha256': 'a' * 64,
+                    'additional_code': owner.additional_code(),
+                    'jobs': [{'id': 3228, 'language': 'javascript', 'domain_validator': 'request-next4-v1'}]}
+        config = {'source_access': {'boundary_gate': {'path': '/gate'}}}
+        with patch.object(q, 'read', side_effect=[q.encoded(contract), q.encoded(config), b'{}']) as read, \
+                patch.object(q, 'code_pins', return_value={}), \
+                patch.object(q.KnownSpecService, 'from_config'), \
+                patch.object(owner, 'verify_freeze', side_effect=ValueError('fixed population denied')) as verify:
+            with self.assertRaisesRegex(ValueError, 'fixed population denied'):
+                q.load_freeze(Path('/freeze'))
+            verify.assert_called_once_with(Path('/freeze'), contract, {})
+            self.assertEqual([str(c.args[0]) for c in read.call_args_list],
+                             ['/freeze/contract.json', '/config', '/gate'])
+
+    def test_foreign_additional_code_path_is_rejected_without_opening_it(self):
+        from . import request_next4_qualification as owner
+        contract = {'schema': 'gamma.imported-independent-execution.v1', 'code': {},
+                    'limits': q.LIMITS, 'additional_code': {'/foreign/payload': 'a' * 64},
+                    'jobs': [{'id': 3228, 'language': 'javascript', 'domain_validator': 'request-next4-v1'}]}
+        with patch.object(q, 'read', return_value=q.encoded(contract)), \
+                patch.object(q, 'code_pins', return_value={}), \
+                patch.object(owner, 'additional_code', return_value={'/fixed/owner.py': 'b' * 64}), \
+                patch.object(q, 'file_hash') as file_hash, \
+                patch.object(q.KnownSpecService, 'from_config') as service:
+            with self.assertRaisesRegex(ValueError, 'unapproved fixed request code paths'):
+                q.load_freeze(Path('/freeze'))
+            file_hash.assert_not_called()
+            service.assert_not_called()
+
+    def test_successor_code_never_relabels_an_earlier_execution_contract(self):
+        contract = {'schema': 'gamma.imported-independent-execution.v1',
+                    'code': {'prior-runner': 'a' * 64}, 'limits': q.LIMITS}
+        with patch.object(q, 'read', return_value=q.encoded(contract)) as read, \
+                patch.object(q, 'code_pins', return_value={'successor-runner': 'b' * 64}), \
+                patch.object(q.KnownSpecService, 'from_config') as service:
+            with self.assertRaisesRegex(ValueError, 'execution freeze drift'):
+                q.load_freeze(Path('/freeze'))
+            read.assert_called_once_with(Path('/freeze/contract.json'))
+            service.assert_not_called()
 
 
 if __name__ == '__main__':
