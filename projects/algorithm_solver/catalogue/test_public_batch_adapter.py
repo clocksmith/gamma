@@ -354,4 +354,246 @@ class Request3215AdoptionTests(unittest.TestCase):
   impl['problem_contract_sha256']=digest(contract)
   with self.assertRaises(ValueError):a.validate_batch_inputs(impl,[[0],[1],[2]])
 
+
+class RequestNext4AdoptionTests(unittest.TestCase):
+ def pre_payload_fixture(self):
+  from . import imported_qualification as q
+  from . import request_next4_qualification as request
+  from . import request_next4_oracles as oracle
+  plan, values, raws, code = Request3215AdoptionTests().pre_payload_fixture()
+  native, local = plan['native_bundle_root'], plan['artifact_root']
+  fr = native + '/run-next4/freeze'
+  plan.update(freeze={'path': local + '/run-next4/freeze/contract.json'},
+   report={'path': local + '/run-next4/observations/report.json'},
+   verification={'path': local + '/run-next4/independent-verification.json'})
+  raws.update({key: key.encode() for key in ('execution_catalogue', 'execution_receipts',
+    'predecessor_review', *a.NEXT4_ORIGINAL_EVIDENCE)})
+  jobs = []
+  for pid in request.IDS:
+   for language, suffix in [('javascript', 'js'), ('python', 'py')]:
+    jobs.append({'id': pid, 'language': language, 'source': f'sources/{pid}.{suffix}',
+     'source_sha256': request.SOURCE_SHA256[pid][language],
+     'original_source': native + f'/inputs/sources/{language}/{pid}.{suffix}',
+     'tests': f'tests/{pid}.json', 'tests_raw_sha256': oracle.CASES_SHA256[pid],
+     'tests_canonical_sha256': 'a' * 64, 'case_count': oracle.CASE_COUNT[pid],
+     'statement': {'path': fr + f'/statements/{pid}.md', 'sha256': oracle.STATEMENT_SHA256[pid]},
+     'domain_validator': a.REQUEST_NEXT4_LANE, 'comparison_policy': 'exact',
+     'source_interface': 'commonjs-object-solve-v1' if language == 'javascript' else 'global-solve-v1'})
+  values['freeze'].update(jobs=jobs, selected_problem_ids=list(request.IDS),
+   original_statement_byte_equivalence=False,
+   additional_code={native + '/code/' + str(Path(path).relative_to(a.HERE.parents[2])): pin
+                    for path, pin in request.additional_code().items()})
+  values['report']['freeze'] = fr
+  values['review'].update(reviewed=list(a.REQUEST3215_REVIEW | {'execution_base_delta'}),
+   source_sha256={str(pid): request.SOURCE_SHA256[pid] for pid in request.IDS},
+   **{key + '_sha256': a.sha(raws[key]) for key in ('predecessor_review', *a.NEXT4_ORIGINAL_EVIDENCE)},
+   **{name + '_sha256': a.sha(raws[key]) for name, key in (
+    ('execution_catalogue', 'execution_catalogue'), ('execution_receipts', 'execution_receipts'),
+    ('adoption_catalogue', 'catalogue'), ('adoption_receipts', 'receipts'))})
+  values['qualification_service'].update(catalogue={'sha256': a.sha(raws['execution_catalogue'])},
+   verified_receipts={'sha256': a.sha(raws['execution_receipts'])})
+  self.assertEqual(values['freeze']['max_packet_bytes'], q.MAX_PACKET)
+  return plan, values, raws, code
+
+ def test_denied_gate_never_opens_candidate_statement_or_cases(self):
+  plan, values, raws, code = self.pre_payload_fixture()
+  with patch.object(a, 'bounded_regular_read', side_effect=lambda p, **kw: code[str(p)]) as reads, \
+       patch.object(a.boundary_policy, 'authorize_before_open', side_effect=PermissionError('denied')):
+   with self.assertRaises(PermissionError): a.replay_request_next4(plan, values, raws)
+  self.assertTrue(reads.call_args_list)
+  self.assertTrue(all('/code/' in str(call.args[0]) for call in reads.call_args_list))
+
+ def test_missing_authority_never_opens_payloads(self):
+  plan, values, raws, code = self.pre_payload_fixture()
+  with patch.object(a, 'bounded_regular_read', side_effect=lambda p, **kw: code[str(p)]) as reads, \
+       patch.object(a.boundary_policy, 'authorize_before_open'):
+   with self.assertRaisesRegex(ValueError, 'adoption fields'): a.replay_request_next4(plan, values, raws)
+  self.assertTrue(all('/code/' in str(call.args[0]) for call in reads.call_args_list))
+
+ def test_exact_population_interfaces_and_source_pins_precede_payloads(self):
+  plan, values, raws, _ = self.pre_payload_fixture()
+  variants = []
+  for key, value in [('source_interface', 'global-solve-v1'), ('id', 3215),
+    ('source', '../3228.js'), ('source_sha256', 'f' * 64), ('case_count', 1),
+    ('tests_raw_sha256', 'f' * 64), ('comparison_policy', 'approximate')]:
+   changed = copy.deepcopy(values); changed['freeze']['jobs'][0][key] = value; variants.append(changed)
+  changed = copy.deepcopy(values); changed['freeze']['jobs'].pop(); variants.append(changed)
+  changed = copy.deepcopy(values); changed['freeze']['selected_problem_ids'].reverse(); variants.append(changed)
+  for changed in variants:
+   with patch.object(a, 'bounded_regular_read', side_effect=AssertionError('must not read')):
+    with self.assertRaises(ValueError): a.replay_request_next4(plan, changed, raws)
+
+ def test_review_binds_both_bases_and_all_original_records_before_payloads(self):
+  plan, values, raws, code = self.pre_payload_fixture()
+  keys = [key + '_sha256' for key in ('execution_catalogue', 'execution_receipts',
+   'adoption_catalogue', 'adoption_receipts', 'predecessor_review', *a.NEXT4_ORIGINAL_EVIDENCE)]
+  for key in keys + ['native_runtime_sha256']:
+   changed = copy.deepcopy(values); changed['review'][key] = 'f' * 64
+   with self.subTest(key=key), patch.object(a, 'bounded_regular_read', side_effect=lambda p, **kw: code[str(p)]) as reads:
+    with self.assertRaisesRegex(ValueError, 'review and execution-base'): a.replay_request_next4(plan, changed, raws)
+   self.assertTrue(all('/code/' in str(call.args[0]) for call in reads.call_args_list))
+
+ def test_execution_service_cannot_be_relabelled_to_adoption_base(self):
+  plan, values, raws, code = self.pre_payload_fixture()
+  for field, key in [('catalogue', 'catalogue'), ('verified_receipts', 'receipts')]:
+   changed = copy.deepcopy(values); changed['qualification_service'][field]['sha256'] = a.sha(raws[key])
+   with patch.object(a, 'bounded_regular_read', side_effect=lambda p, **kw: code[str(p)]) as reads:
+    with self.assertRaisesRegex(ValueError, 'original execution authority'): a.replay_request_next4(plan, changed, raws)
+   self.assertTrue(all('/code/' in str(call.args[0]) for call in reads.call_args_list))
+
+ def test_missing_original_evidence_cannot_use_native_refreeze(self):
+  plan = {'native_bundle_root': '/native/bundle', 'artifact_root': '/local/bundle'}
+  raws = {key: b'not the immutable first-read record' for key in a.NEXT4_ORIGINAL_EVIDENCE}
+  for key, (name, _) in a.NEXT4_ORIGINAL_EVIDENCE.items():
+   plan[key] = {'path': '/local/bundle/evidence/' + name}
+  with patch.object(a, 'bounded_regular_read', side_effect=AssertionError('must not read')):
+   with self.assertRaisesRegex(ValueError, 'immutable original evidence'):
+    a.check_next4_original_evidence(plan, {}, raws, {})
+
+ def test_per_id_observation_replay_uses_distinct_expectations(self):
+  from . import imported_qualification as q
+  with tempfile.TemporaryDirectory() as directory:
+   root = Path(directory); jobs = []; rows = []; cases_by_id = {}
+   for pid, value in [(3228, 2), (3523, 3)]:
+    case = {'args': [[value]], 'expected': value, 'compare': 'return'}
+    record = {'i': 0, 'result': value, 'result_type': 'int', 'args_before': case['args'],
+              'args_after': case['args'], 'alias_edges': []}
+    raw = q.encoded(record) + q.encoded({'done': 1}); stem = f'{pid}-python-0'
+    (root / (stem + '.stdout')).write_bytes(raw); (root / (stem + '.stderr')).write_bytes(b'')
+    job = {'id': pid, 'language': 'python', 'source_sha256': 'a' * 64, 'tests_raw_sha256': 'b' * 64}
+    call = {'stem': stem, 'offset': 0, 'count': 1, 'exit_code': 0, 'timed_out': False,
+     'output_limit_exceeded': False, 'stdout_sha256': a.sha(raw), 'stderr_sha256': a.sha(b'')}
+    jobs.append(job); cases_by_id[pid] = [case]
+    rows.append({'id': pid, 'language': 'python', 'source_sha256': 'a' * 64,
+                 'cases': 1, 'calls': [call], 'failures': [], 'passed': True})
+   outcomes = a._request_observations({'rows': rows}, jobs, cases_by_id, root)
+   self.assertTrue(all(row['passed'] for row in outcomes))
+   # The forged stdout and its recomputed hash still cannot override the oracle.
+   forged = dict(record, result=True, result_type='bool')
+   raw = q.encoded(forged) + q.encoded({'done': 1})
+   (root / (stem + '.stdout')).write_bytes(raw); rows[-1]['calls'][0]['stdout_sha256'] = a.sha(raw)
+   with self.assertRaisesRegex(ValueError, 'replay disagrees'):
+    a._request_observations({'rows': rows}, jobs, cases_by_id, root)
+
+ def test_fixed_validator_binds_actual_oracle_bytes_and_id(self):
+  from . import request_next4_oracles as oracle
+  contract = {'reviewed_statement_contract': {'problem_id': 'leetcode:3228', 'numeric_problem_id': 3228},
+   'input_validator': {'lane': a.REQUEST_NEXT4_LANE, 'module_sha256': a.sha(Path(oracle.__file__).read_bytes()),
+    'numeric_problem_id': 3228, 'entrypoint': 'validate', 'required_before_candidate_execution': True}}
+  impl = {'status': 'qualified', 'evidence_class': 'normative-typed-effects',
+   'problem_contract_sha256': digest(contract), 'provenance': {'public_batch': {'problem_contract': contract}}}
+  self.assertFalse(a.validate_batch_inputs(impl, ['1010'])['candidate_executed'])
+  for args in ([True], [''], ['012'], ['0', '1']):
+   with self.assertRaises(ValueError): a.validate_batch_inputs(impl, args)
+  contract['input_validator']['module_sha256'] = 'f' * 64; impl['problem_contract_sha256'] = digest(contract)
+  with self.assertRaises(ValueError): a.validate_batch_inputs(impl, ['1010'])
+  contract['input_validator'].update(module_sha256=a.sha(Path(oracle.__file__).read_bytes()), numeric_problem_id=3215)
+  contract['reviewed_statement_contract'].update(problem_id='leetcode:3215', numeric_problem_id=3215)
+  impl['problem_contract_sha256'] = digest(contract)
+  with self.assertRaisesRegex(ValueError, 'ID not admitted'): a.validate_batch_inputs(impl, ['1010'])
+
+ def test_finite_caveats_retain_counts_and_omitted_shapes(self):
+  from . import request_next4_oracles as oracle
+  for pid in oracle.IDS:
+   caveats = a.qualification_caveats(a.REQUEST_NEXT4_LANE, pid)
+   self.assertIn(oracle.OMITTED_MAXIMUM_SHAPES[pid], caveats)
+   self.assertTrue(any(str(oracle.CASE_COUNT[pid]) in text and 'no full-domain performance' in text for text in caveats))
+  with self.assertRaises(ValueError): a.qualification_caveats(a.REQUEST_NEXT4_LANE, 3215)
+
+
+class RequestNext4ExecutionDeltaTests(unittest.TestCase):
+ def fixture(self):
+  from . import request_qualification as predecessor
+  universe, old, receipts, _, _ = prior_tests.PublicFoundationAdoptionV2().replacement_fixture()
+  universe['eligible_problem_ids'][0] = 'leetcode:3215'; old['universe_sha256'] = digest(universe)
+  old['problems'][0]['problem_id'] = 'leetcode:3215'
+  for language, impl in old['problems'][0]['implementations'].items():
+   receipt = receipts.pop(impl['receipt_sha256']); receipt['problem_id'] = 'leetcode:3215'
+   rid = digest(receipt); receipts[rid] = receipt; impl['receipt_sha256'] = rid
+  # Historical receipts need not remain selected: preservation covers them too.
+  historical = {'synthetic_historical': True}; receipts[digest(historical)] = historical
+  new, retained = copy.deepcopy(old), copy.deepcopy(receipts)
+  review = {'reviewer': 'Synthetic fixture, not real authority',
+   'service_activation_authorized': False, 'source_publication_authorized': False,
+   'source_serving_permission_expanded': False, 'native_freeze_sha256': 'c' * 64,
+   'native_independent_verification_sha256': 'd' * 64, 'native_report_sha256': 'e' * 64,
+   'review_sha256': 'f' * 64, 'independent_observation_replay': {
+    'actual_new_adapter_read_only_replay_passed': True, 'source_language_pairs': 2,
+    'observations': predecessor.CASE_COUNT * 2, 'failures': 0, 'candidate_reexecutions': 0,
+    'original_artifacts_modified': False}}
+  encode = lambda value: json.dumps(value, sort_keys=True, separators=(',', ':')).encode()
+  raw_old = encode(old)
+  for language, impl in new['problems'][0]['implementations'].items():
+   previous = copy.deepcopy(impl); impl.update(source_sha256=predecessor.SOURCE_SHA256[language],
+    canonical_variant_id=language + ':' + predecessor.SOURCE_SHA256[language],
+    provenance={'previous_canonical': {'implementation': previous, 'implementation_sha256': digest(previous),
+      'receipt_sha256': previous['receipt_sha256'], 'base_catalogue_sha256': a.sha(raw_old)},
+     'public_batch': {'lane': a.REQUEST3215_LANE, 'problem_contract': {'qualification_freeze_sha256': review['native_freeze_sha256']},
+      'verification_sha256': review['native_independent_verification_sha256'],
+      'report_sha256': review['native_report_sha256'], 'review_sha256': review['review_sha256']}})
+   receipt = copy.deepcopy(receipts[previous['receipt_sha256']])
+   receipt.update(source_sha256=impl['source_sha256'], canonical_variant_id=impl['canonical_variant_id'],
+    provenance_sha256=digest(impl['provenance']), original_independent_verification_sha256=review['native_independent_verification_sha256'])
+   rid = digest(receipt); retained[rid] = receipt; impl['receipt_sha256'] = rid
+  values = {'universe': universe, 'execution_catalogue': old, 'execution_receipts': receipts,
+            'catalogue': new, 'receipts': retained, 'predecessor_review': review}
+  raws = {key: encode(value) for key, value in values.items()}
+  self.refresh_target_pins(values, raws)
+  return values, raws
+
+ def refresh_target_pins(self, values, raws):
+  for key in ('catalogue', 'receipts'):
+   raws[key] = json.dumps(values[key], sort_keys=True, separators=(',', ':')).encode()
+  values['predecessor_review']['candidate_artifact_sha256'] = {
+   'candidate-catalogue.json': a.sha(raws['catalogue']),
+   'candidate-verified-receipts.json': a.sha(raws['receipts'])}
+  raws['predecessor_review'] = json.dumps(values['predecessor_review'], sort_keys=True).encode()
+
+ def test_exact_two_slot_delta_preserves_all_metadata_without_mutation(self):
+  values, raws = self.fixture(); original = copy.deepcopy(values)
+  with patch.object(a, 'bounded_regular_read', side_effect=AssertionError('metadata only')):
+   delta = a.check_next4_execution_delta(values, raws)
+  self.assertEqual(values, original)
+  self.assertEqual(delta['unselected_execution_slots_unchanged'], 2)
+  self.assertEqual(delta['original_receipts_preserved'], 5)
+  self.assertEqual(len(delta['preserved_3215_receipts']), 2)
+
+ def test_unselected_slot_and_row_order_changes_fail_even_if_repinned(self):
+  for kind in ('slot', 'order', 'header'):
+   values, raws = self.fixture()
+   if kind == 'slot': values['catalogue']['problems'][1]['implementations']['python'] = {'status': 'missing', 'reason': 'synthetic change'}
+   elif kind == 'order': values['catalogue']['problems'].reverse()
+   else: values['catalogue']['evidence_policy']['allowed_classes'].append('frozen-admitted-typed-effects')
+   self.refresh_target_pins(values, raws)
+   with self.subTest(kind=kind), self.assertRaisesRegex(ValueError, 'unrelated catalogue/header/order'):
+    a.check_next4_execution_delta(values, raws)
+
+ def test_old_unselected_receipt_loss_or_extra_receipt_fail_even_if_repinned(self):
+  for kind in ('loss', 'extra', 'changed'):
+   values, raws = self.fixture(); rid = digest({'synthetic_historical': True})
+   if kind == 'loss': del values['receipts'][rid]
+   elif kind == 'changed': values['receipts'][rid] = {'synthetic_historical': False}
+   else:
+    item = {'unrelated_new_receipt': True}; values['receipts'][digest(item)] = item
+   self.refresh_target_pins(values, raws)
+   with self.subTest(kind=kind), self.assertRaisesRegex(ValueError, 'original receipts changed'):
+    a.check_next4_execution_delta(values, raws)
+
+ def test_independent_predecessor_review_and_native_receipt_are_required(self):
+  for key, value in [('reviewer', ''), ('source_publication_authorized', True),
+                     ('native_independent_verification_sha256', '0' * 64)]:
+   values, raws = self.fixture(); values['predecessor_review'][key] = value
+   with self.subTest(key=key), self.assertRaises(ValueError): a.check_next4_execution_delta(values, raws)
+  values, raws = self.fixture(); values['predecessor_review']['independent_observation_replay']['failures'] = 1
+  with self.assertRaisesRegex(ValueError, 'observation review'): a.check_next4_execution_delta(values, raws)
+
+ def test_archived_prior_slot_is_not_just_a_claimed_digest(self):
+  values, raws = self.fixture(); impl = values['catalogue']['problems'][0]['implementations']['javascript']
+  impl['provenance']['previous_canonical']['implementation'] = {'status': 'missing', 'reason': 'forged archive'}
+  receipt = values['receipts'].pop(impl['receipt_sha256']); receipt['provenance_sha256'] = digest(impl['provenance'])
+  rid = digest(receipt); values['receipts'][rid] = receipt; impl['receipt_sha256'] = rid
+  self.refresh_target_pins(values, raws)
+  with self.assertRaisesRegex(ValueError, 'exact 3215 predecessor'): a.check_next4_execution_delta(values, raws)
+
+
 if __name__=='__main__':unittest.main()

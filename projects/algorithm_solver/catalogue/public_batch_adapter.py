@@ -182,6 +182,12 @@ def qualification_caveats(lane, pid):
             caveats.append('2663 full official length up to100000 is validated; finite executed lexical fixtures have length at most8. Static complexity review is separate from maximum-length execution evidence.')
     if lane == 'hard32-wave4-v1' and pid == 2709:
         caveats.append('2709 requires an exact boolean in both language profiles. The historical frozen batch policy label says integer scalar/list as shorthand; the independently pinned per-ID oracle and authority define boolean semantics and reject integer1 for true.')
+    if lane == 'request-next4-v1':
+        from . import request_next4_oracles as oracle
+        if pid not in oracle.IDS:
+            raise ValueError('problem outside the fixed next-four lane')
+        caveats.extend([f'{pid}: exactly {oracle.CASE_COUNT[pid]} cases per language; no full-domain performance claim.',
+                       oracle.OMITTED_MAXIMUM_SHAPES[pid]])
     return caveats
 
 
@@ -307,15 +313,16 @@ def relocated_artifact(path, native_root, local_root):
     return Path(local_root) / relative
 
 
-def request3215_observations(report, jobs, cases, report_dir):
+def _request_observations(report, jobs, cases_by_id, report_dir):
     """Recompute verdicts with the existing independent comparator, never flags."""
     from . import imported_qualification as q
     from . import verify_imported_qualification as verifier
     if [(r.get('id'), r.get('language')) for r in report['rows']] != [(j['id'], j['language']) for j in jobs]:
         raise ValueError('missing, duplicate or reordered source outcomes')
     outcomes = []
-    groups = list(q.batches(cases))
     for job, row in zip(jobs, report['rows']):
+        cases = cases_by_id[job['id']]
+        groups = list(q.batches(cases))
         if row['source_sha256'] != job['source_sha256'] or row['cases'] != len(cases) or len(row['calls']) != len(groups):
             raise ValueError('source/case/batch population mismatch')
         failures = []
@@ -338,6 +345,11 @@ def request3215_observations(report, jobs, cases, report_dir):
             'source_sha256': job['source_sha256'], 'tests_raw_sha256': job['tests_raw_sha256'],
             'cases': len(cases), 'failure_count': len(failures)})
     return outcomes
+
+
+def request3215_observations(report, jobs, cases, report_dir):
+    """Preserve the original single-problem comparator entry point."""
+    return _request_observations(report, jobs, {job['id']: cases for job in jobs}, report_dir)
 
 
 def replay_request3215(plan, values, raws):
@@ -548,9 +560,359 @@ def adopt_request3215_plan(plan, trusted_plan_sha256):
             'active_config_modified': False, 'base_summary': before, 'historical_m1_qualified': False}}
 
 
+REQUEST_NEXT4_LANE = 'request-next4-v1'
+NEXT4_ORIGINAL_EVIDENCE = {
+    'original_freeze': ('pre-source-oracle-freeze.json', '41b30609149eaca3305241d2b1a1265c226997e33d6fca994cd5961c159577e2'),
+    'original_review': ('independent-pre-source-review-v1.json', '95d85c4f314f4ad68db00476da680d2bbe91f89a2f3e8e0e3471a0b127a9d9bd'),
+    'source_acquisition': ('source-acquisition-audit.json', '5d63033097dec0d0d80518dd5cd5ec6af996793386b4afeb5ea17ff8badaf4c2'),
+    'source_review': ('independent-source-static-review-v1.json', 'b57627404330f0f9d464525c723e32132461e7ef6a8b970e05acf69c20eaf967'),
+}
+
+
+def check_next4_execution_delta(values, raws):
+    """Prove the only intervening change is the already reviewed 3215 pair."""
+    from . import request_qualification as predecessor
+    universe, old, old_receipts, new, receipts, review = (values[key] for key in
+        ('universe', 'execution_catalogue', 'execution_receipts', 'catalogue', 'receipts', 'predecessor_review'))
+    validate(universe, old, old_receipts)
+    validate(universe, new, receipts)
+    artifacts = review.get('candidate_artifact_sha256', {})
+    if (artifacts.get('candidate-catalogue.json') != sha(raws['catalogue']) or
+            artifacts.get('candidate-verified-receipts.json') != sha(raws['receipts']) or
+            not review.get('reviewer') or review.get('service_activation_authorized') is not False or
+            review.get('source_publication_authorized') is not False or
+            review.get('source_serving_permission_expanded') is not False):
+        raise ValueError('independent 3215 predecessor artifact binding required')
+    replayed = review.get('independent_observation_replay', {})
+    if (replayed.get('actual_new_adapter_read_only_replay_passed') is not True or
+            replayed.get('source_language_pairs') != 2 or replayed.get('observations') != 2 * predecessor.CASE_COUNT or
+            replayed.get('failures') != 0 or replayed.get('candidate_reexecutions') != 0 or
+            replayed.get('original_artifacts_modified') is not False):
+        raise ValueError('actual predecessor observation review required')
+    restored = copy.deepcopy(new)
+    old_rows = {row['problem_id']: row for row in old['problems']}
+    new_rows = {row['problem_id']: row for row in restored['problems']}
+    added = set()
+    for language in LANGUAGES:
+        impl = new_rows['leetcode:3215']['implementations'][language]
+        prior = impl.get('provenance', {}).get('previous_canonical', {})
+        old_impl = old_rows['leetcode:3215']['implementations'][language]
+        batch = impl.get('provenance', {}).get('public_batch', {})
+        if (impl.get('status') != 'qualified' or impl.get('evidence_class') != 'normative-typed-effects' or
+                impl.get('source_sha256') != predecessor.SOURCE_SHA256[language] or
+                impl.get('canonical_variant_id') != language + ':' + predecessor.SOURCE_SHA256[language] or
+                prior.get('implementation_sha256') != digest(old_impl) or
+                digest(prior.get('implementation')) != digest(old_impl) or
+                prior.get('receipt_sha256') != old_impl.get('receipt_sha256') or
+                prior.get('base_catalogue_sha256') != sha(raws['execution_catalogue']) or
+                batch.get('lane') != REQUEST3215_LANE or
+                batch.get('problem_contract', {}).get('qualification_freeze_sha256') != review.get('native_freeze_sha256') or
+                batch.get('verification_sha256') != review.get('native_independent_verification_sha256') or
+                batch.get('report_sha256') != review.get('native_report_sha256') or
+                batch.get('review_sha256') != review.get('review_sha256')):
+            raise ValueError('exact 3215 predecessor delta differs')
+        rid = impl['receipt_sha256']
+        if receipts[rid].get('original_independent_verification_sha256') != review.get('native_independent_verification_sha256'):
+            raise ValueError('3215 predecessor receipt differs')
+        added.add(rid)
+        new_rows['leetcode:3215']['implementations'][language] = copy.deepcopy(old_impl)
+    # Canonical JSON comparison distinguishes bool/int and preserves row order.
+    if digest(restored) != digest(old):
+        raise ValueError('unrelated catalogue/header/order change across execution base')
+    if (set(receipts) - set(old_receipts) != added or len(added) != 2 or
+            any(key not in receipts or digest(receipts[key]) != digest(value) for key, value in old_receipts.items())):
+        raise ValueError('original receipts changed or unrelated receipts added')
+    return {'execution_catalogue_sha256': sha(raws['execution_catalogue']),
+        'execution_receipts_sha256': sha(raws['execution_receipts']),
+        'adoption_catalogue_sha256': sha(raws['catalogue']), 'adoption_receipts_sha256': sha(raws['receipts']),
+        'preserved_3215_receipts': sorted(added), 'original_receipts_preserved': len(old_receipts),
+        'unselected_execution_slots_unchanged': len(old['problems']) * 2 - 2,
+        'predecessor_review_sha256': sha(raws['predecessor_review'])}
+
+
+def check_next4_original_evidence(plan, values, raws, code):
+    """Bind before-first-read chronology, not merely the native command freeze."""
+    from . import request_next4_qualification as request
+    from . import request_next4_oracles as oracle
+    native, local = plan['native_bundle_root'], plan['artifact_root']
+    for key, (name, expected) in NEXT4_ORIGINAL_EVIDENCE.items():
+        if (sha(raws[key]) != expected or Path(plan[key]['path']) !=
+                relocated_artifact(native + '/evidence/' + name, native, local)):
+            raise ValueError('immutable original evidence identity differs')
+    frozen, review, acquisition, static = (values[key] for key in NEXT4_ORIGINAL_EVIDENCE)
+    pins = {key: sha(raws[key]) for key in NEXT4_ORIGINAL_EVIDENCE}
+    if (frozen.get('source_payload_reads_at_freeze') != 0 or
+            frozen.get('original_statement_byte_equivalence_claimed') is not False or
+            review.get('reviewed_freeze', {}).get('sha256') != pins['original_freeze'] or
+            acquisition.get('pre_source_oracle_freeze_sha256') != pins['original_freeze'] or
+            acquisition.get('independent_pre_source_review_sha256') != pins['original_review'] or
+            acquisition.get('status') != 'completed' or acquisition.get('source_payload_read_operations') != 8 or
+            acquisition.get('unique_candidate_files_acquired') != 8 or acquisition.get('candidate_executions') != 0 or
+            acquisition.get('historical_private_case_payload_reads') != 0 or
+            acquisition.get('native_original_service_config_sha256') != sha(raws['qualification_service']) or
+            static.get('pre_source_oracle_freeze', {}).get('sha256') != pins['original_freeze'] or
+            static.get('pre_source_independent_review', {}).get('sha256') != pins['original_review'] or
+            static.get('first_acquisition_audit', {}).get('sha256') != pins['source_acquisition'] or
+            static.get('case_writes_after_source_exposure_in_this_review') != 0 or
+            static.get('candidate_executions_in_this_review') != 0):
+        raise ValueError('original freeze/review/acquisition chronology differs')
+    expected_pairs = [(pid, language) for pid in request.IDS for language in LANGUAGES]
+    if ([(row.get('problem_id'), row.get('language')) for row in acquisition['rows']] != expected_pairs or
+            [(row.get('problem_id'), row.get('language')) for row in static['findings']] != expected_pairs):
+        raise ValueError('original exact source review population differs')
+    for acquired, finding in zip(acquisition['rows'], static['findings']):
+        pid, language = acquired['problem_id'], acquired['language']
+        if (acquired.get('sha256') != request.SOURCE_SHA256[pid][language] or
+                finding.get('source', {}).get('sha256') != request.SOURCE_SHA256[pid][language] or
+                finding.get('counterexample_found') is not False or
+                finding.get('eligible_for_existing_bounded_execution_route') is not True or
+                finding.get('candidate_executed_by_reviewer') is not False):
+            raise ValueError('original source-specific static evidence differs')
+    prefix = native + '/code/projects/algorithm_solver/catalogue/'
+    for name, spec in review['reviewed_code'].items():
+        if '/' in name or not name.endswith('.py'):
+            raise ValueError('unexpected reviewed code path')
+        path = relocated_artifact(prefix + name, native, local)
+        if sha(bounded_regular_read(path)) != spec['sha256']:
+            raise ValueError('original reviewed code differs')
+    if (frozen.get('oracle_module', {}).get('sha256') != code[prefix + 'request_next4_oracles.py'] or
+            frozen.get('original_manifest', {}).get('sha256') != request.MANIFEST_SHA256 or
+            frozen.get('total_cases_per_language') != sum(oracle.CASE_COUNT.values()) or
+            [row.get('problem_id') for row in frozen['problems']] != list(request.IDS)):
+        raise ValueError('original generated population differs')
+    return {row['problem_id']: row for row in frozen['problems']}
+
+
+def replay_request_next4(plan, values, raws):
+    """Fixed next-four retained replay under unchanged native evidence identities."""
+    from . import imported_qualification as q
+    from . import request_next4_qualification as request
+    from . import request_next4_oracles as oracle
+    from . import verify_imported_qualification as verifier
+    freeze, report, verification, review = (values[k] for k in ('freeze', 'report', 'verification', 'review'))
+    native, local = plan['native_bundle_root'], plan['artifact_root']
+    def mapped(path):
+        return relocated_artifact(path, native, local)
+    native_freeze = native + '/run-next4/freeze'
+    if (mapped(native_freeze + '/contract.json') != Path(plan['freeze']['path']) or
+            mapped(native + '/run-next4/observations/report.json') != Path(plan['report']['path']) or
+            mapped(native + '/run-next4/independent-verification.json') != Path(plan['verification']['path']) or
+            report.get('freeze') != native_freeze or report.get('freeze_sha256') != sha(raws['freeze']) or
+            report.get('schema') != 'gamma.imported-independent-report.v1' or
+            report.get('status') != 'completed' or report.get('new_qualifications') != 0):
+        raise ValueError('native next-four replay mapping or completion differs')
+    jobs = freeze.get('jobs', [])
+    if (freeze.get('schema') != 'gamma.imported-independent-execution.v1' or
+            freeze.get('selected_problem_ids') != list(request.IDS) or
+            [(j.get('id'), j.get('language')) for j in jobs] != [(pid, lang) for pid in request.IDS for lang in LANGUAGES] or
+            freeze.get('pending') != [] or freeze.get('automatic_promotion') is not False or
+            freeze.get('protected_access') is not False or freeze.get('original_statement_byte_equivalence') is not False or
+            freeze.get('limits') != q.LIMITS or freeze.get('max_packet_bytes') != q.MAX_PACKET):
+        raise ValueError('fixed next-four population, limits or scope differs')
+    for job in jobs:
+        pid, language = job['id'], job['language']; suffix = 'js' if language == 'javascript' else 'py'
+        fields(job, ('id', 'language', 'source', 'source_sha256', 'original_source', 'tests',
+            'tests_raw_sha256', 'tests_canonical_sha256', 'case_count', 'statement',
+            'domain_validator', 'comparison_policy', 'source_interface'))
+        interface = 'commonjs-object-solve-v1' if language == 'javascript' else 'global-solve-v1'
+        if (q.source_interface(job) != interface or job['source'] != f'sources/{pid}.{suffix}' or
+                job['tests'] != f'tests/{pid}.json' or job['source_sha256'] != request.SOURCE_SHA256[pid][language] or
+                job['original_source'] != native + f'/inputs/sources/{language}/{pid}.{suffix}' or
+                job['statement'] != {'path': native_freeze + f'/statements/{pid}.md', 'sha256': oracle.STATEMENT_SHA256[pid]} or
+                job['domain_validator'] != REQUEST_NEXT4_LANE or job['comparison_policy'] != 'exact' or
+                job['case_count'] != oracle.CASE_COUNT[pid] or job['tests_raw_sha256'] != oracle.CASES_SHA256[pid]):
+            raise ValueError('fixed next-four source/domain/interface differs')
+    repo = HERE.parents[2]
+    code = {native + '/code/' + str(Path(path).relative_to(repo)): value for path, value in q.code_pins().items()}
+    additional = {native + '/code/' + str(Path(path).relative_to(repo)): value for path, value in request.additional_code().items()}
+    verifier_path = native + '/code/' + str(Path(verifier.__file__).relative_to(repo))
+    if freeze.get('code') != code or freeze.get('additional_code') != additional:
+        raise ValueError('frozen next-four code population or bytes differ')
+    for path, expected in {**code, verifier_path: q.file_hash(verifier.__file__)}.items():
+        if sha(bounded_regular_read(mapped(path))) != expected:
+            raise ValueError('retained next-four code differs')
+    runtime = freeze.get('runtime')
+    if not isinstance(runtime, dict) or not {'/usr/bin/node', '/usr/bin/python3', '/usr/bin/bwrap', '/usr/bin/prlimit'} <= set(runtime):
+        raise ValueError('native runtime identity missing')
+    for path, identity in runtime.items():
+        fields(identity, ('resolved', 'sha256'))
+        if not Path(path).is_absolute() or not Path(identity['resolved']).is_absolute() or not hash_value(identity['sha256']):
+            raise ValueError('invalid native runtime identity')
+    expected_sources = {str(pid): request.SOURCE_SHA256[pid] for pid in request.IDS}
+    if (review.get('independent_review') is not True or
+            not (REQUEST3215_REVIEW | {'execution_base_delta'}) <= set(review.get('reviewed', [])) or
+            any(review.get(k + '_sha256') != sha(raws[k]) for k in
+                ('freeze', 'report', 'verification', 'predecessor_review', *NEXT4_ORIGINAL_EVIDENCE)) or
+            review.get('source_sha256') != expected_sources or review.get('native_runtime_sha256') != digest(runtime) or
+            any(review.get(name + '_sha256') != sha(raws[key]) for name, key in (
+                ('execution_catalogue', 'execution_catalogue'), ('execution_receipts', 'execution_receipts'),
+                ('adoption_catalogue', 'catalogue'), ('adoption_receipts', 'receipts')))):
+        raise ValueError('independent next-four review and execution-base bindings required')
+    gate, native_gate, service = (values[k] for k in ('boundary_gate', 'qualification_boundary_gate', 'qualification_service'))
+    for item in (gate, native_gate):
+        fields(item, ('schema', 'artifact_paths', 'trusted_hashes'))
+    if (gate['schema'] != 'gamma.boundary-gate-config.v1' or native_gate['schema'] != gate['schema'] or
+            gate['trusted_hashes'] != native_gate['trusted_hashes'] or
+            gate['trusted_hashes']['universe'] != sha(raws['universe']) or
+            freeze.get('service_config_sha256') != sha(raws['qualification_service']) or
+            service.get('schema') != 'gamma.known-spec-service.v2' or
+            service['source_access']['boundary_gate']['sha256'] != sha(raws['qualification_boundary_gate']) or
+            any(service[name]['sha256'] != sha(raws[key]) for name, key in (
+                ('universe', 'universe'), ('catalogue', 'execution_catalogue'), ('verified_receipts', 'execution_receipts')))):
+        raise ValueError('native original execution authority differs')
+    for pid in request.IDS:
+        for language in LANGUAGES:
+            boundary_policy.authorize_before_open(f'leetcode:{pid}', gate['artifact_paths'], gate['trusted_hashes'], language=language)
+        boundary_policy.authorize_before_open(f'leetcode:{pid}', gate['artifact_paths'], gate['trusted_hashes'], language='python', payload_kind='statement')
+    contracts = check_authority(values['authority_review'], lane=REQUEST_NEXT4_LANE,
+        freeze_sha256=sha(raws['freeze']), review_sha256=sha(raws['review']), ids=request.IDS)
+    if any(contracts[f'leetcode:{pid}']['statement_sha256'] != oracle.STATEMENT_SHA256[pid] for pid in request.IDS):
+        raise ValueError('next-four statement authority differs')
+    original_cases = check_next4_original_evidence(plan, values, raws, code)
+    root = mapped(native_freeze + '/contract.json').parent
+    pre, _ = pinned({'path': str(root / 'pre-source-freeze.json'), 'sha256': freeze['pre_source_freeze_sha256']})
+    provenance, _ = pinned({'path': str(root / 'case-provenance.json'), 'sha256': freeze['case_provenance_sha256']})
+    expected_pre = request.pre_source_record(pre.get('generated_cases'))
+    expected_pre.update(observer_code=code, additional_code=additional)
+    if pre != expected_pre:
+        raise ValueError('native command-local pre-source freeze differs')
+    manifest, _ = pinned({'path': str(root / 'original-manifest.json'), 'sha256': request.MANIFEST_SHA256})
+    originals = [row for row in manifest if row.get('problem_id') in request.IDS]
+    if len(originals) != 4 or {row['problem_id'] for row in originals} != set(request.IDS):
+        raise ValueError('original authoring manifest population differs')
+    originals = {row['problem_id']: row for row in originals}
+    cases_by_id, designs, origins = {}, {}, {}
+    for pid in request.IDS:
+        for language, suffix in (('javascript', 'js'), ('python', 'py')):
+            if originals[pid]['source_files'][language] != {'path': f'{language}/{pid}.{suffix}', 'sha256': request.SOURCE_SHA256[pid][language]}:
+                raise ValueError('original source authoring binding differs')
+        definition, _ = pinned({'path': str(root / f'statements/{pid}.provenance.json'), 'sha256': request.PROVENANCE_SHA256[pid]})
+        if (definition.get('problem_id') != pid or definition.get('new_statement_prefix_sha256') != oracle.STATEMENT_SHA256[pid] or
+                definition.get('original_manifest_sha256') != request.MANIFEST_SHA256 or
+                definition.get('original_statement_equivalence_established') is not False):
+            raise ValueError('new definition provenance differs')
+        boundary_policy.authorize_before_open(f'leetcode:{pid}', gate['artifact_paths'], gate['trusted_hashes'], language='python', payload_kind='statement')
+        statement = bounded_regular_read(root / f'statements/{pid}.md', maximum_bytes=131072)
+        cases, design, origin = request.generated(pid, statement)
+        raw = bounded_regular_read(root / f'tests/{pid}.json')
+        old_cases = bounded_regular_read(mapped(native + f'/inputs/generated-before-source/{pid}.cases.json'))
+        old_categories = bounded_regular_read(mapped(native + f'/inputs/generated-before-source/{pid}.categories.json'))
+        original = original_cases[pid]
+        if (raw != q.encoded(cases) or old_cases != raw or sha(old_cases) != original['cases']['sha256'] or
+                old_categories != q.encoded(origin['categories']) or sha(old_categories) != original['categories']['sha256'] or
+                original['case_count'] != len(cases) or original['statement']['sha256'] != oracle.STATEMENT_SHA256[pid] or
+                original['provenance']['sha256'] != request.PROVENANCE_SHA256[pid] or
+                any(job['tests_canonical_sha256'] != q.canonical_tests_hash(cases) for job in jobs if job['id'] == pid)):
+            raise ValueError('before-first-read and native generated cases differ')
+        cases_by_id[pid], designs[str(pid)], origins[str(pid)] = cases, design, origin
+    if designs != pre['generated_cases'] or provenance != origins:
+        raise ValueError('native case design provenance differs')
+    for job in jobs:
+        boundary_policy.authorize_before_open(f"leetcode:{job['id']}", gate['artifact_paths'], gate['trusted_hashes'], language=job['language'])
+        if sha(bounded_regular_read(root / job['source'], maximum_bytes=1_048_576)) != job['source_sha256']:
+            raise ValueError('exact next-four passed source bytes differ')
+    outcomes = _request_observations(report, jobs, cases_by_id, Path(plan['report']['path']).parent)
+    replayed = {'schema': 'gamma.imported-independent-verification.v1', 'verified': True,
+        'report_sha256': sha(raws['report']), 'freeze_sha256': sha(raws['freeze']),
+        'verifier_sha256': q.file_hash(verifier.__file__), 'outcomes': outcomes,
+        'passed': sum(row['passed'] for row in outcomes), 'total': len(outcomes),
+        'cases': sum(row['cases'] for row in outcomes), 'new_qualifications': 0,
+        'scope': freeze['scope'], 'automatic_promotion': False}
+    if replayed != verification or not all(row['passed'] for row in outcomes):
+        raise ValueError('actual next-four independent verification differs or failed')
+    return contracts, originals, root
+
+
+def adopt_request_next4_plan(plan, trusted_plan_sha256):
+    """Prospective candidate successor; preserve the original execution base."""
+    from . import request_next4_qualification as request
+    from . import request_next4_oracles as oracle
+    fields(plan, ('schema', 'universe', 'catalogue', 'receipts', 'execution_catalogue', 'execution_receipts',
+        'predecessor_review', 'boundary_gate', 'freeze', 'report', 'verification', 'review', 'authority_review',
+        'qualification_service', 'qualification_boundary_gate', 'native_bundle_root', 'artifact_root',
+        *NEXT4_ORIGINAL_EVIDENCE))
+    if plan['schema'] != 'gamma.request-next4-adoption-plan.v1':
+        raise ValueError('unsupported fixed next-four adoption plan')
+    values, raws = {}, {}
+    for key in set(plan) - {'schema', 'native_bundle_root', 'artifact_root'}:
+        values[key], raws[key] = pinned(plan[key])
+    delta = check_next4_execution_delta(values, raws)
+    contracts, originals, root = replay_request_next4(plan, values, raws)
+    universe, catalogue, receipts = (values[key] for key in ('universe', 'catalogue', 'receipts'))
+    freeze = values['freeze']; code = freeze['code']
+    rows = {row['problem_id']: row for row in catalogue['problems']}
+    replacements, additions, locators, descriptors = {}, {}, {}, {}
+    prefix = plan['native_bundle_root'] + '/code/projects/algorithm_solver/'
+    generator_sha = code[prefix + 'catalogue/request_next4_oracles.py']
+    for job in freeze['jobs']:
+        pid, language = job['id'], job['language']; gid = f'leetcode:{pid}'
+        old = rows[gid]['implementations'][language]
+        contract = {'schema': 'gamma.reviewed-public-batch-contract.v1', 'reviewed_statement_contract': contracts[gid],
+            'authority_review_sha256': sha(raws['authority_review']), 'qualification_freeze_sha256': sha(raws['freeze']),
+            'original_statement_byte_equivalence': False,
+            'input_validator': {'lane': REQUEST_NEXT4_LANE, 'module_sha256': generator_sha,
+                'numeric_problem_id': pid, 'entrypoint': 'validate', 'required_before_candidate_execution': True}}
+        interface = {'schema': 'gamma.call-interface.v1', 'entrypoint': 'solve', 'arguments': 'ordered-positional', 'typed_contract': digest(contract)}
+        runtime = {'language': language, 'runtime': freeze['runtime'], 'limits': freeze['limits'],
+            'sandbox_sha256': code[prefix + 'algsolve/judge/sandbox.py'],
+            'runner_sha256': code[prefix + 'catalogue/imported_qualification.py'],
+            'source_interface': job['source_interface'], 'native_runtime_only': True}
+        harness = ('imported-commonjs-observer-v1/harness.cjs' if language == 'javascript' else
+                   'public-domain-qualification-medium32-wave2-observer-v1/harness.py')
+        effects = {'local_effects': contracts[gid]['local_effects'], 'observed_effect_policy': freeze['effects'],
+            'observed_result_policy': freeze['comparison'], 'oracle_sha256': generator_sha,
+            'harness_sha256': code[prefix + 'catalogue/' + harness],
+            'observer_helper_sha256': code[prefix + 'catalogue/public-domain-qualification-medium32-wave2-observer-v1/harness.cjs'] if language == 'javascript' else None,
+            'verifier_sha256': values['verification']['verifier_sha256'], 'review_sha256': sha(raws['review'])}
+        provenance = {'public_batch': {'lane': REQUEST_NEXT4_LANE, 'problem_contract': contract,
+            'source_provenance': {'original_manifest_sha256': request.MANIFEST_SHA256,
+                'original_manifest_path': 'projects/algorithm_solver/catalogue/authored/request-252-v1/batch1/manifest.json',
+                'original_source': originals[pid]['source_files'][language], 'frozen_job': job,
+                'new_definition_provenance_sha256': request.PROVENANCE_SHA256[pid]},
+            'report_sha256': sha(raws['report']), 'verification_sha256': sha(raws['verification']),
+            'review_sha256': sha(raws['review']), 'case_count': oracle.CASE_COUNT[pid]},
+            'execution_to_adoption_base_delta': delta,
+            'original_evidence_sha256': {key: sha(raws[key]) for key in NEXT4_ORIGINAL_EVIDENCE},
+            'previous_canonical': {'implementation_sha256': digest(old), 'receipt_sha256': old.get('receipt_sha256'),
+                'base_catalogue_sha256': sha(raws['catalogue']), 'implementation': copy.deepcopy(old)},
+            'source_publication_authorized': False, 'historical_receipts_unchanged': True}
+        scope = f'Reviewed problem {pid} domain; exact source-specific solve interface, numeric and local-effect contract.'
+        caveats = qualification_caveats(REQUEST_NEXT4_LANE, pid) + [
+            'Finite public-definition checks; original pre-source cases are retained, not fresh heldout confirmation.',
+            'New statement snapshots are not claimed byte-identical to historical definitions.',
+            'Native execution authority was original 943; candidate 944 is separately proved to differ only by the preserved 3215 pair.',
+            'Candidate catalogue only; no serving subset, runtime, browser, recognition or publication activation.']
+        impl = {'status': 'qualified', 'canonical_variant_id': language + ':' + job['source_sha256'],
+            'source_sha256': job['source_sha256'], 'problem_contract_sha256': digest(contract),
+            'interface': interface, 'interface_sha256': digest(interface), 'runtime_sha256': digest(runtime),
+            'tests_sha256': oracle.CASES_SHA256[pid], 'effects_sha256': digest(effects),
+            'evidence_class': 'normative-typed-effects', 'contract_scope': scope, 'caveats': caveats, 'provenance': provenance}
+        receipt = {key: impl[key] for key in (*BINDINGS, 'canonical_variant_id', 'evidence_class', 'contract_scope', 'caveats')}
+        receipt.update(problem_id=gid, language=language, verdict='qualified', independent_verifier=True,
+            provenance_sha256=digest(provenance), original_independent_verification_sha256=sha(raws['verification']),
+            review_sha256=sha(raws['review']), per_problem_case_count=oracle.CASE_COUNT[pid],
+            verification_mode='fixed next-four imported-observation replay plus externally anchored independent authority review')
+        rid = digest(receipt); impl['receipt_sha256'] = rid
+        replacements[(gid, language)] = impl; additions[rid] = receipt
+        locators.setdefault(gid, {})[language] = str(root / job['source'])
+        descriptors[f'{language}:{pid}'] = {'problem_contract': contract, 'runtime': runtime, 'effects': effects}
+    updated, retained, summary = replace_canonicals(universe, catalogue, receipts, replacements, additions)
+    return {'catalogue': updated, 'verified_receipts': retained, 'summary': summary,
+        'source_locators': {'schema': 'gamma.dual.source-locators.v1', 'problems': locators},
+        'binding_descriptors': descriptors, 'audit': {'schema': 'gamma.public-batch-adoption.v1',
+            'plan_sha256': trusted_plan_sha256, 'adopted_source_language_pairs': len(replacements),
+            'previous_receipts_preserved': len(receipts), 'new_receipts': len(additions),
+            'source_publication_authorized': False, 'candidate_executions': 0, 'candidate_only': True,
+            'active_config_modified': False, 'execution_to_adoption_base_delta': delta,
+            'original_evidence_sha256': {key: sha(raws[key]) for key in NEXT4_ORIGINAL_EVIDENCE},
+            'historical_m1_qualified': False}}
+
+
 def adopt_plan(plan_path, trusted_plan_sha256):
     """Build successor artifacts in memory; caller separately persists/publishes."""
     plan, _ = pinned({'path': str(plan_path), 'sha256': trusted_plan_sha256})
+    if isinstance(plan, dict) and plan.get('schema') == 'gamma.request-next4-adoption-plan.v1':
+        return adopt_request_next4_plan(plan, trusted_plan_sha256)
     if isinstance(plan, dict) and plan.get('schema') == 'gamma.request3215-adoption-plan.v1':
         return adopt_request3215_plan(plan, trusted_plan_sha256)
     fields(plan, ('schema', 'lane', 'universe', 'catalogue', 'receipts', 'boundary_gate',
@@ -690,18 +1052,23 @@ def validate_batch_inputs(implementation, args):
         raise ValueError('reviewed problem contract changed')
     predicate = contract.get('input_validator', {})
     fields(predicate, ('lane', 'module_sha256', 'numeric_problem_id', 'entrypoint', 'required_before_candidate_execution'))
-    fixed_request = predicate['lane'] == REQUEST3215_LANE
+    fixed_request = predicate['lane'] in (REQUEST3215_LANE, REQUEST_NEXT4_LANE)
     directory = HERE if fixed_request else lane_path(predicate['lane'])
-    module_path = directory / ('request_qualification.py' if fixed_request else 'oracle.py')
+    module_name = ('request_qualification.py' if predicate['lane'] == REQUEST3215_LANE else
+                   'request_next4_oracles.py' if predicate['lane'] == REQUEST_NEXT4_LANE else 'oracle.py')
+    module_path = directory / module_name
     pid = predicate['numeric_problem_id']
     declared = contract.get('reviewed_statement_contract', {})
     if (type(pid) is not int or declared.get('numeric_problem_id') != pid or declared.get('problem_id') != f'leetcode:{pid}' or
             predicate['entrypoint'] != 'validate' or predicate['required_before_candidate_execution'] is not True or
             sha(bounded_regular_read(module_path)) != predicate['module_sha256']):
         raise ValueError('frozen input predicate identity mismatch')
-    if fixed_request:
+    if predicate['lane'] == REQUEST3215_LANE:
         from . import request_qualification as module
         ids = (module.PID,)
+    elif predicate['lane'] == REQUEST_NEXT4_LANE:
+        from . import request_next4_oracles as module
+        ids = module.IDS
     else:
         module = _module('_public_batch_input_validator', module_path)
         ids = module.IDS
