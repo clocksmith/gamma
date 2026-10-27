@@ -199,9 +199,53 @@ class CandidateTests(unittest.TestCase):
         self.assertEqual(FakeEncoder.calls, [])
 
     def test_hard_aggregate_request_fails_closed_without_model(self):
-        with self.assertRaises(c.HardAggregateMemoryUnavailable):
-            c.preflight(self.plan)
+        with mock.patch.object(c, 'cgroup_memory_limits', return_value=[]):
+            with self.assertRaises(c.HardAggregateMemoryUnavailable):
+                c.preflight(self.plan)
         self.assertEqual(FakeEncoder.calls, [])
+
+    def test_verified_inherited_cap_allows_preflight_without_loading_model(self):
+        self.plan['resources']['aggregate_rss_bytes'] = 8 * c.GIB
+        self.plan['execution']['python_sha256'] = c.sha(Path(sys.executable).resolve())
+        limits = [{'path': '/sys/fs/cgroup/job', 'maximum_bytes': 8 * c.GIB,
+                   'current_bytes': c.GIB}]
+        with mock.patch.object(c, 'cgroup_memory_limits', return_value=limits), \
+                mock.patch.object(c, 'available_memory_bytes', return_value=7 * c.GIB):
+            self.assertEqual(c.preflight(self.plan), 7 * c.GIB)
+            limits[0]['maximum_bytes'] = 9 * c.GIB
+            with self.assertRaises(c.HardAggregateMemoryUnavailable):
+                c.preflight(self.plan)
+        self.assertEqual(FakeEncoder.calls, [])
+
+    def test_nested_cgroup_headroom_includes_shared_ancestors(self):
+        mount = self.root / 'cgroup'; group = mount / 'parent/job'
+        group.mkdir(parents=True)
+        for path, maximum, used in [(mount, 'max', 10),
+                                    (group.parent, 512 * 1024**2, 300 * 1024**2),
+                                    (group, 2 * c.GIB, 100 * 1024**2)]:
+            (path / 'memory.max').write_text(str(maximum))
+            (path / 'memory.current').write_text(str(used))
+        metadata = {'/proc/self/cgroup': '0::/parent/job\n',
+                    '/proc/self/mountinfo': f'1 0 0:1 / {mount} rw - cgroup2 cgroup2 rw\n',
+                    '/proc/meminfo': 'MemAvailable: 8388608 kB\n'}
+        read = Path.read_text
+        def read_text(path, *args, **kwargs):
+            return metadata[str(path)] if str(path) in metadata else read(path, *args, **kwargs)
+        with mock.patch.object(Path, 'read_text', read_text):
+            self.assertEqual(c.available_memory_bytes(), 212 * 1024**2)
+            caps = c.require_memory_cap({'require_hard_aggregate_memory': True,
+                                        'aggregate_rss_bytes': 512 * 1024**2})
+            self.assertEqual(len(caps), 2)
+            (group.parent / 'memory.current').write_text(str(c.GIB))
+            self.assertEqual(c.available_memory_bytes(), 0)
+
+    def test_cgroup_mount_root_and_escaped_paths(self):
+        paths = c.memory_cgroup_paths('0::/tenant/job\n',
+            r'1 0 0:1 /tenant /mounted\040group rw - cgroup2 cgroup2 rw')
+        self.assertEqual(paths, [Path('/mounted group/job'), Path('/mounted group')])
+        self.assertEqual(c.memory_cgroup_paths('1:memory:/job\n', ''), [])
+        with self.assertRaises(c.CandidateError):
+            c.memory_cgroup_paths('0::/../job\n', '')
 
     def test_insufficient_headroom_fails_before_worker(self):
         self.plan['resources']['require_hard_aggregate_memory'] = False
@@ -266,6 +310,19 @@ class SupervisorTests(unittest.TestCase):
         result = self.run_child('import time; x=bytearray(32*1024*1024); time.sleep(30)', wall=2, memory=16 * 1024 ** 2)
         self.assertEqual(result['reason'], 'sampled_aggregate_rss_limit')
         self.assertFalse(result['aggregate_memory_kernel_hard_cap'])
+
+    def test_removed_kernel_cap_kills_worker_and_reports_loss(self):
+        limits = {'wall_seconds': 2, 'aggregate_rss_bytes': 128 * 1024**2,
+                  'rss_sample_seconds': .01, 'require_hard_aggregate_memory': True}
+        cap = [{'path': '/synthetic/job', 'maximum_bytes': 128 * 1024**2,
+                'current_bytes': 0}]
+        with tempfile.TemporaryDirectory() as tmp, \
+                mock.patch.object(c, 'cgroup_memory_limits', side_effect=[cap, []]):
+            with self.assertRaises(c.HardAggregateMemoryUnavailable):
+                c.supervise([sys.executable, '-c', 'import time;time.sleep(30)'], Path(tmp), limits)
+            result = json.loads(next(Path(tmp).glob('supervisor-*.json')).read_text())
+            self.assertFalse(result['aggregate_memory_kernel_hard_cap'])
+            self.assertTrue(result['cleanup']['verified_no_live_owned_group_members'])
 
     def test_interruption_kills_group_and_retains_terminal_evidence(self):
         with tempfile.TemporaryDirectory() as tmp:

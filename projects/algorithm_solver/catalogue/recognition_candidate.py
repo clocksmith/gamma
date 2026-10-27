@@ -1,9 +1,9 @@
 """Pinned incremental embedding candidate; no activation or qualification.
 
 The supervisor is stdlib-only. It enforces a wall deadline by killing its owned
-process group and per-process AS/CPU limits. Aggregate RSS is sampled, NOT a
-kernel hard cap. A requested hard aggregate cap fails closed unless such a
-capability is implemented and independently established; this version has none.
+process group and per-process AS/CPU limits. Aggregate RSS is sampled. A required
+kernel memory cap must already exist in the process's cgroup-v2 ancestry; the
+runner verifies that inherited limit and never creates or changes host policy.
 No protected statements, queries, confirmation cohorts or source are inputs.
 """
 from __future__ import annotations
@@ -399,20 +399,76 @@ def build_candidate(plan, output, *, encoder_factory=default_encoder):
         return summary
 
 
+def memory_cgroup_paths(membership, mounts):
+    """Resolve this process, including a cgroup filesystem mounted below root."""
+    groups = [line[3:] for line in membership.splitlines() if line.startswith('0::')]
+    if not groups:
+        return []  # cgroup v1 has no verified aggregate-cap route here.
+    require(len(groups) == 1, 'ambiguous unified cgroup membership')
+    group = Path(groups[0])
+    require(group.is_absolute() and '..' not in group.parts, 'invalid cgroup membership')
+    candidates = []
+    unescape = lambda text: re.sub(r'\\([0-7]{3})', lambda m: chr(int(m[1], 8)), text)
+    for line in mounts.splitlines():
+        before, separator, after = line.partition(' - ')
+        if not separator or after.split()[0] != 'cgroup2':
+            continue
+        fields = before.split()
+        require(len(fields) >= 6, 'invalid cgroup mount metadata')
+        root, point = (Path(unescape(fields[i])) for i in (3, 4))
+        require(root.is_absolute() and point.is_absolute() and
+                '..' not in root.parts and '..' not in point.parts, 'invalid cgroup mount path')
+        if group.is_relative_to(root):
+            candidates.append((root, point))
+    if not candidates:
+        return []
+    # Prefer the broadest visible ancestry, so parent limits are not omitted.
+    root, point = min(candidates, key=lambda pair: (len(pair[0].parts), str(pair[1])))
+    current = point / group.relative_to(root)
+    result = [current]
+    while current != point:
+        current = current.parent
+        result.append(current)
+    return result
+
+
+def cgroup_memory_limits():
+    paths = memory_cgroup_paths(Path('/proc/self/cgroup').read_text(),
+                                Path('/proc/self/mountinfo').read_text())
+    limits = []
+    for path in paths:
+        maximum, current = path / 'memory.max', path / 'memory.current'
+        if not maximum.exists() and not current.exists():
+            continue  # A controller-disabled child or the unrestricted root.
+        require(maximum.exists() and current.exists(), 'incomplete cgroup memory controller')
+        value, used = maximum.read_text().strip(), current.read_text().strip()
+        require(used.isdecimal() and (value == 'max' or value.isdecimal()), 'invalid cgroup memory accounting')
+        if value != 'max':
+            limits.append({'path': str(path), 'maximum_bytes': int(value), 'current_bytes': int(used)})
+    return limits
+
+
+def require_memory_cap(resources):
+    if not resources.get('require_hard_aggregate_memory', False):
+        return []
+    limits = cgroup_memory_limits()
+    if not any(row['maximum_bytes'] <= resources['aggregate_rss_bytes'] for row in limits):
+        raise HardAggregateMemoryUnavailable('no inherited cgroup-v2 cap within the requested memory budget; worker not launched')
+    return limits
+
+
 def available_memory_bytes():
     available = int(next(line.split()[1] for line in Path('/proc/meminfo').read_text().splitlines()
                          if line.startswith('MemAvailable:'))) * 1024
-    maximum, current = Path('/sys/fs/cgroup/memory.max'), Path('/sys/fs/cgroup/memory.current')
-    if maximum.exists() and current.exists() and maximum.read_text().strip() != 'max':
-        available = min(available, max(0, int(maximum.read_text()) - int(current.read_text())))
+    for row in cgroup_memory_limits():
+        available = min(available, max(0, row['maximum_bytes'] - row['current_bytes']))
     return available
 
 
 def preflight(plan):
     validate_plan(plan)
     check_code(plan)
-    if plan['resources']['require_hard_aggregate_memory']:
-        raise HardAggregateMemoryUnavailable('no verified delegated cgroup hard aggregate cap; worker not launched')
+    require_memory_cap(plan['resources'])
     available = available_memory_bytes()
     require(available >= plan['resources']['minimum_available_bytes'], 'less than required effective 5 GiB memory headroom; worker not launched')
     require(sha(Path(plan['encoder']['python']).resolve()) == plan['execution']['python_sha256'], 'runtime Python identity')
@@ -469,12 +525,14 @@ def supervise(command, output, limits, *, env=None, cwd=None):
     reason = 'worker_error'
     cleanup = {'verified_no_live_owned_group_members': True, 'remaining_live': []}
     caught = None
+    kernel_limits = []
     def stop(signum, _frame):
         raise InterruptedError('supervisor signal ' + str(signum))
     previous = {s: signal.getsignal(s) for s in (signal.SIGTERM, signal.SIGINT, signal.SIGHUP)}
     for s in previous:
         signal.signal(s, stop)
     try:
+        kernel_limits = require_memory_cap(limits)
         with (output / 'worker.stdout.log').open('ab') as stdout, (output / 'worker.stderr.log').open('ab') as stderr:
             # Block handled signals only across launch/assignment, closing the orphan-launch race.
             mask = signal.pthread_sigmask(signal.SIG_BLOCK, set(previous))
@@ -484,6 +542,9 @@ def supervise(command, output, limits, *, env=None, cwd=None):
             finally:
                 signal.pthread_sigmask(signal.SIG_SETMASK, mask)
             while True:
+                if limits.get('require_hard_aggregate_memory', False):
+                    kernel_limits = []
+                    kernel_limits = require_memory_cap(limits)
                 snapshot = group_snapshot(process.pid)
                 rss = sum(r['rss_bytes'] for r in snapshot if r['state'] not in ('Z', 'X'))
                 peak = max(peak, rss)
@@ -524,10 +585,12 @@ def supervise(command, output, limits, *, env=None, cwd=None):
         terminal = {'schema': 'gamma.recognition-candidate-supervision.v1', 'reason': reason,
             'worker_pid': process.pid if process else None, 'worker_returncode': process.returncode if process else None,
             'elapsed_seconds': time.monotonic() - started, 'peak_sampled_group_rss_bytes': peak,
-            'rss_sample_seconds': limits['rss_sample_seconds'], 'aggregate_memory_kernel_hard_cap': False,
+            'rss_sample_seconds': limits['rss_sample_seconds'],
+            'aggregate_memory_kernel_hard_cap': bool(kernel_limits),
+            'inherited_cgroup_limits_last_observed': kernel_limits,
             'wall_limit_seconds': limits['wall_seconds'], 'cleanup': cleanup,
             'status': 'completed' if reason == 'completed' and cleanup['verified_no_live_owned_group_members'] else 'blocked_or_failed',
-            'scope': 'owned process group; a child that deliberately escapes its group is not a kernel-contained descendant',
+            'scope': 'cleanup covers the owned process group; an inherited cgroup cap bounds memory, not escaped-process cleanup',
             'source_or_query_payloads_in_terminal': False}
         atomic_json(output / ('supervisor-' + str(time.time_ns()) + '.json'), terminal)
     if caught is not None:
