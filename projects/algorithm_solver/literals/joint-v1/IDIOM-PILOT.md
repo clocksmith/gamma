@@ -1,5 +1,8 @@
 # Exact idiom development fitting
 
+The [coverage diagnostic](COVERAGE-DIAGNOSTIC.md) distinguishes unavailable text,
+lexical boundaries, disconnected paths and dictionary capacity before another fit.
+
 `idiom_pilot.py` reuses this directory's joint source/dictionary evaluator. It
 compares language-specific assistant-authored concrete strings, exact syntactic
 spans, their union, and a separate arbitrary-substring compression control.

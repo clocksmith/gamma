@@ -182,7 +182,7 @@ def python_spans(sources, maximum_bytes=MAX_SPAN_BYTES):
             'spans': spans, 'boundaries': boundaries, 'excluded_units': sorted(x for x in excluded if x)}
 
 
-def syntactic_spans(sources, language, node=None, node_sha256=None):
+def syntactic_spans(sources, language, node=None, node_sha256=None, *, include_tokens=False):
     flat = {f'{pid}/{variant}': text for pid, variants in sources.items() for variant, text in variants.items()}
     if language == 'python':
         return python_spans(flat)
@@ -191,7 +191,7 @@ def syntactic_spans(sources, language, node=None, node_sha256=None):
     script = Path(__file__).with_name('idiom_spans.cjs')
     result = subprocess.run([str(node), '--expose-internals', str(script)],
         input=json.dumps({'sources': flat, 'max_span_bytes': MAX_SPAN_BYTES,
-                          'max_spans_per_source': MAX_SPANS_PER_SOURCE}),
+                          'max_spans_per_source': MAX_SPANS_PER_SOURCE, 'include_tokens': include_tokens}),
         capture_output=True, text=True, timeout=30)
     if result.returncode:
         raise ValueError('syntactic parser failed: ' + result.stderr[-2000:])

@@ -11,7 +11,7 @@ const allowed = new Set(['MemberExpression', 'CallExpression', 'BinaryExpression
   'LogicalExpression', 'UpdateExpression', 'UnaryExpression', 'VariableDeclarator',
   'ReturnStatement', 'VariableDeclaration', 'ExpressionStatement', 'IfStatement', 'ForStatement',
   'ForOfStatement', 'ForInStatement', 'WhileStatement', 'DoWhileStatement', 'TryStatement', 'ThrowStatement', 'NewExpression']);
-const result = {}, boundaries = {};
+const result = {}, boundaries = {}, tokenMetadata = {}, features = {};
 const excluded = new Set();
 for (const [key, source] of Object.entries(sources)) {
   if (typeof source !== 'string') throw Error('source text required');
@@ -27,6 +27,17 @@ for (const [key, source] of Object.entries(sources)) {
     for (let i = token.start + 1; i < token.end; i++) safe.delete(i);
   }
   boundaries[key] = [...safe].map(i => offsets.get(i)).sort((a, b) => a - b);
+  if (payload.include_tokens) {
+    tokenMetadata[key] = [...tokens.filter(t => t.end > t.start).map(t => ({
+      start: offsets.get(t.start), end: offsets.get(t.end),
+      category: t.type.label === 'name' ? 'identifier' : t.type.label === 'num' ? 'number' :
+        t.type.label === 'regexp' ? 'regexp' :
+        ['string', 'template', '`'].includes(t.type.label) ? 'string' :
+        t.type.keyword ? 'keyword' : /^(?:[(){}\[\],;.:]|\.\.\.)$/.test(source.slice(t.start, t.end)) ? 'syntax' : 'operator'
+    })), ...comments.map(t => ({start: offsets.get(t.start), end: offsets.get(t.end), category: 'comment'}))]
+      .sort((a, b) => a.start - b.start);
+    features[key] = {};
+  }
   const spans = new Set();
   function add(start, end) {
     const text = source.slice(start, end);
@@ -42,6 +53,26 @@ for (const [key, source] of Object.entries(sources)) {
   }
   function walk(node) {
     if (!node || typeof node !== 'object') return;
+    if (payload.include_tokens && node.type) {
+      const marks = [];
+      if (node.type === 'ForStatement') marks.push('indexed_loop');
+      if (node.type === 'ForOfStatement') marks.push('for_of_loop');
+      if (node.type === 'WhileStatement') marks.push('while_loop');
+      if (node.type === 'NewExpression' && ['Map', 'Set'].includes(node.callee.name)) marks.push('map_or_set');
+      if (node.type === 'NewExpression' && node.callee.name === 'Array') marks.push('array_construction');
+      if (node.type === 'MemberExpression' && !node.computed) {
+        const prop = node.property.name;
+        if (['left', 'right'].includes(prop)) marks.push('tree_link_syntax');
+        if (prop === 'next') marks.push('list_link_syntax');
+      }
+      if (node.type === 'CallExpression' && node.callee.type === 'MemberExpression' && !node.callee.computed) {
+        const prop = node.callee.property.name;
+        if (prop === 'sort') marks.push('sorting_call');
+        if (['push', 'pop'].includes(prop)) marks.push('push_or_pop_call');
+        if (prop === 'shift') marks.push('queue_shift_call');
+      }
+      for (const mark of marks) features[key][mark] = (features[key][mark] || 0) + 1;
+    }
     if (['FunctionDeclaration', 'FunctionExpression', 'ArrowFunctionExpression'].includes(node.type)) {
       excluded.add(source.slice(node.start, node.end));
       if (node.body.type === 'BlockStatement') {
@@ -108,6 +139,7 @@ for (const [key, source] of Object.entries(sources)) {
   }
   result[key] = [...spans].sort();
 }
-const output = JSON.stringify({parser: `acorn-${acorn.version}`, spans: result, boundaries, excluded_units: [...excluded].sort()});
+const output = JSON.stringify({parser: `acorn-${acorn.version}`, spans: result, boundaries, excluded_units: [...excluded].sort(),
+  ...(payload.include_tokens ? {tokens: tokenMetadata, features} : {})});
 if (Buffer.byteLength(output) > 32 * 1024 * 1024) throw Error('syntactic output byte budget exceeded');
 process.stdout.write(output);
