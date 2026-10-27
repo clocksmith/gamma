@@ -118,12 +118,15 @@ def python_spans(sources, maximum_bytes=MAX_SPAN_BYTES):
         offsets = [0]
         for line in lines: offsets.append(offsets[-1] + len(line))
         safe = set(range(len(text) + 1))
+        tokens = []
         for token in tokenize.generate_tokens(io.StringIO(text).readline):
             if token.type in (tokenize.ENCODING, tokenize.INDENT, tokenize.DEDENT, tokenize.NL, tokenize.NEWLINE, tokenize.ENDMARKER):
                 continue
             start = offsets[token.start[0] - 1] + token.start[1]
             end = offsets[token.end[0] - 1] + token.end[1]
             safe.difference_update(range(start + 1, end))
+            if end > start:
+                tokens.append((start, end))
         boundaries[key] = sorted(safe)
         found = set()
         for node in ast.walk(tree):
@@ -157,6 +160,22 @@ def python_spans(sources, maximum_bytes=MAX_SPAN_BYTES):
                             found.add(value)
             if len(found) > MAX_SPANS_PER_SOURCE:
                 raise ValueError('per-source syntactic span budget exceeded')
+        # Complete lexical tokens bridge the gaps between AST nodes. No source
+        # rewriting or split inside an identifier, number or string is allowed.
+        for index, (start, _) in enumerate(tokens):
+            for size in (1, 2, 3):
+                if index + size > len(tokens):
+                    continue
+                end = tokens[index + size - 1][1]
+                after = end
+                while after < len(text) and text[after].isspace():
+                    after += 1
+                for stop in (end, after):
+                    value = text[start:stop]
+                    if value.strip() and len(value.encode()) <= maximum_bytes:
+                        found.add(value)
+                if len(found) > MAX_SPANS_PER_SOURCE:
+                    raise ValueError('per-source syntactic span budget exceeded')
         spans[key] = sorted(found)
     return {'parser': 'python-ast', 'runtime_version': sys.version,
             'runtime_sha256': digest(sys.executable),
@@ -231,7 +250,10 @@ def admitted_pools(sources, spans, excluded_units=(), language='javascript', *, 
     owners, occurrences = occurrence_index(sources, all_candidates)
     eligible = {s for s in all_candidates if len(owners[s]) >= 2}
     human_owners, human_counts = occurrence_index(sources, eligible & (set(seeds) | machine), boundaries)
-    human_eligible = {s for s in human_owners if len(human_owners[s]) >= 2}
+    # Whitespace cannot disguise a character alphabet as longer literals.
+    # Real separators remain charged inside multi-token/whole-token pieces;
+    # the fallback arm admits actual punctuation singletons explicitly.
+    human_eligible = {s for s in human_owners if len(human_owners[s]) >= 2 and len(s.strip()) > 1}
     def ranked(pool, human=False):
         accepted = human_eligible if human else eligible
         counts = human_counts if human else occurrences

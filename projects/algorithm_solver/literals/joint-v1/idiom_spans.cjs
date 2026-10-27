@@ -91,6 +91,21 @@ for (const [key, source] of Object.entries(sources)) {
     }
   }
   walk(ast);
+  // AST nodes omit the joins between them. Admit short windows of whole
+  // lexer tokens, with their exact intervening/trailing whitespace, so a
+  // dictionary can assemble syntax without a character alphabet. These are
+  // syntax-context proposals, not arbitrary character n-grams or human review.
+  const significant = tokens.filter(token => token.end > token.start);
+  for (let i = 0; i < significant.length; i++) {
+    for (const size of [1, 2, 3]) {
+      if (i + size > significant.length) continue;
+      const first = significant[i], last = significant[i + size - 1];
+      add(first.start, last.end);
+      let end = last.end;
+      while (end < source.length && /\s/.test(source[end])) end++;
+      add(first.start, end);
+    }
+  }
   result[key] = [...spans].sort();
 }
 const output = JSON.stringify({parser: `acorn-${acorn.version}`, spans: result, boundaries, excluded_units: [...excluded].sort()});
