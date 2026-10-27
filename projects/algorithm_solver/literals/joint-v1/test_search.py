@@ -5,6 +5,61 @@ import search as joint
 
 
 class JointSearchTests(unittest.TestCase):
+    def test_aggregate_gate_failure_cannot_beat_a_feasible_partial_dictionary(self):
+        sources = {1: {'a': 'ab' * 12}, 2: {'a': 'cd' * 12}, 3: {'a': 'x' * 40 + '!'}}
+        one = joint.evaluate(sources, ['ab'], 4, alphabet=[], allow_partial=True)
+        two_plus_failure = joint.evaluate(sources, ['ab', 'cd', 'x', '!'], 4, alphabet=[], allow_partial=True)
+        self.assertEqual(two_plus_failure['within_32_selections'], 2)
+        self.assertGreater(two_plus_failure['singleton_bit_share'], .1)
+        self.assertLess(joint.cost(one, 'compact'), joint.cost(two_plus_failure, 'compact'))
+
+    def test_joint_choice_can_choose_compliant_qualified_variant_over_shorter_one(self):
+        sources = {1: {'short': 'abcdefghij!', 'shared': 'ab' * 12}}
+        vocab = ['abcdefghij', 'ab', '!']
+        default = joint.evaluate(sources, vocab, 4, alphabet=[])
+        compact = joint.evaluate(sources, vocab, 4, default, alphabet=[], source_objective='compact')
+        self.assertEqual(default['chosen'][1], 'short')
+        self.assertEqual(compact['chosen'][1], 'shared')
+        self.assertEqual(compact['within_32_selections'], 1)
+
+    def test_lexical_boundaries_prevent_partial_identifiers_and_literals(self):
+        sources = {1: {'a': 'foobar+12'}}
+        pieces = ['foo', 'bar', '+', '1', '2']
+        raw = joint.evaluate(sources, pieces, 4, alphabet=[], allow_partial=True)
+        self.assertEqual(raw['coverage'], 1)
+        boundaries = {(1, 'a'): {0, 6, 7, 9}}
+        checked = joint.evaluate(sources, pieces, 4, raw, alphabet=[], allow_partial=True,
+                                 boundaries=boundaries)
+        self.assertEqual(checked['coverage'], 0)
+        self.assertEqual(checked['uncovered'][1, 'a']['prefix_characters'], 0)
+        fixed = joint.evaluate(sources, ['foobar', '+12'], 4, checked, alphabet=[],
+                               boundaries=boundaries)
+        self.assertEqual(fixed['selections'], 2)
+
+    def test_gate_objective_cannot_buy_coverage_with_character_paths(self):
+        sources = {1: {'a': 'abababababababababab!'}, 2: {'a': 'xxxxxxxxxxxxxxxxxxxx?'}}
+        compact = joint.evaluate(sources, ['ab', '!'], 4, alphabet=[], allow_partial=True)
+        alphabet = joint.evaluate(sources, list('abx!?'), 4, alphabet=[], allow_partial=True)
+        self.assertEqual((compact['coverage'], alphabet['coverage']), (1, 2))
+        self.assertLess(joint.cost(compact, 'compact'), joint.cost(alphabet, 'compact'))
+        self.assertEqual(compact['within_32_selections'], 1)
+        self.assertEqual(alphabet['singleton_compliant_programs'], 0)
+
+    def test_shortest_path_is_not_padded_to_pass_singleton_gate(self):
+        text = 'abcdefghij!'
+        state = joint.evaluate({1: {'a': text}}, ['abcdefghij', 'ab', 'cd', 'ef', 'gh', 'ij', '!'],
+                               4, alphabet=[])
+        self.assertEqual(state['selections'], 2)
+        self.assertEqual(state['singleton_bit_share'], .5)
+        self.assertEqual(state['singleton_compliant_programs'], 0)
+
+    def test_zero_coverage_keeps_progress_without_claiming_complete_source(self):
+        sources = {1: {'a': 'abcdefgh!'}}
+        first = joint.evaluate(sources, ['ab'], 4, alphabet=[], allow_partial=True)
+        next_step = joint.evaluate(sources, ['ab', 'cd'], 4, alphabet=[], allow_partial=True)
+        self.assertLess(joint.cost(next_step, 'compact'), joint.cost(first, 'compact'))
+        self.assertEqual(next_step['coverage'], 0)
+
     def test_complementary_additions_change_source_only_together(self):
         sources = {1: {'a': 'aaaaaa', 'b': 'bcdefg'}}
         initial = joint.evaluate(sources, ['aa'], 7)

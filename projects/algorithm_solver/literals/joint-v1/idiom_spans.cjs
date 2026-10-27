@@ -4,16 +4,64 @@ const fs = require('node:fs');
 const acorn = require('internal/deps/acorn/acorn/dist/acorn');
 const sources = JSON.parse(fs.readFileSync(0, 'utf8'));
 const allowed = new Set(['MemberExpression', 'CallExpression', 'BinaryExpression',
-  'LogicalExpression', 'UpdateExpression', 'UnaryExpression', 'VariableDeclarator']);
-const result = {};
+  'LogicalExpression', 'UpdateExpression', 'UnaryExpression', 'VariableDeclarator',
+  'ReturnStatement', 'VariableDeclaration', 'ExpressionStatement']);
+const result = {}, boundaries = {};
 for (const [key, source] of Object.entries(sources)) {
-  const ast = acorn.parse(source, {ecmaVersion: 2022, sourceType: 'script'});
+  const tokens = [], comments = [];
+  const ast = acorn.parse(source, {ecmaVersion: 2022, sourceType: 'script',
+    onToken: tokens, onComment: comments});
+  // Python's segmenter indexes Unicode code points, not JavaScript UTF-16 units.
+  const offsets = new Map([[0, 0]]);
+  let units = 0, points = 0;
+  for (const char of source) { units += char.length; offsets.set(units, ++points); }
+  const safe = new Set(offsets.keys());
+  for (const token of [...tokens, ...comments]) {
+    for (let i = token.start + 1; i < token.end; i++) safe.delete(i);
+  }
+  boundaries[key] = [...safe].map(i => offsets.get(i)).sort((a, b) => a - b);
   const spans = new Set();
+  function add(start, end) {
+    const text = source.slice(start, end);
+    if (safe.has(start) && safe.has(end) && Buffer.byteLength(text) <= 48 && text.trim()) spans.add(text);
+  }
+  function withSpacing(start, end) {
+    add(start, end);
+    let before = start, after = end;
+    while (before > 0 && /\s/.test(source[before - 1])) before--;
+    while (after < source.length && /\s/.test(source[after])) after++;
+    add(before, end); add(start, after); add(before, after);
+  }
   function walk(node) {
     if (!node || typeof node !== 'object') return;
     if (allowed.has(node.type)) {
-      const text = source.slice(node.start, node.end);
-      if (Buffer.byteLength(text) <= 48 && text.trim() && !/[\r\n]/.test(text)) spans.add(text);
+      withSpacing(node.start, node.end);
+    }
+    if (['ForStatement', 'ForOfStatement', 'ForInStatement', 'WhileStatement',
+      'IfStatement', 'FunctionDeclaration'].includes(node.type)) {
+      const body = node.body || node.consequent;
+      if (body) withSpacing(node.start, body.start + (body.type === 'BlockStatement' ? 1 : 0));
+    }
+    if (node.type === 'BlockStatement') {
+      const body = node.body || [];
+      if (body.length) {
+        withSpacing(node.start, body[0].start);
+        withSpacing(body[body.length - 1].end, node.end);
+      }
+    }
+    // Whole leaf tokens and their adjacent syntax. Never slice a name, string,
+    // operator or numeric constant, including in another source's segmentation.
+    if (['Identifier', 'Literal', 'ThisExpression'].includes(node.type)) {
+      withSpacing(node.start, node.end);
+      const index = tokens.findIndex(token => token.start === node.start && token.end === node.end);
+      if (index >= 0) {
+        const syntax = token => token && token.end > token.start &&
+          !/[\w$'"`]/u.test(source.slice(token.start, token.end));
+        const before = tokens[index - 1], after = tokens[index + 1];
+        if (syntax(before)) withSpacing(before.start, node.end);
+        if (syntax(after)) withSpacing(node.start, after.end);
+        if (syntax(before) && syntax(after)) withSpacing(before.start, after.end);
+      }
     }
     for (const value of Object.values(node)) {
       if (Array.isArray(value)) value.forEach(walk);
@@ -23,4 +71,4 @@ for (const [key, source] of Object.entries(sources)) {
   walk(ast);
   result[key] = [...spans].sort();
 }
-process.stdout.write(JSON.stringify({parser: `acorn-${acorn.version}`, spans: result}));
+process.stdout.write(JSON.stringify({parser: `acorn-${acorn.version}`, spans: result, boundaries}));
