@@ -285,9 +285,274 @@ def replace_canonicals(universe, catalogue, receipts, replacements, additions):
     return result, retained, after
 
 
+# This route does not relabel imported execution artifacts as a public batch.
+# It checks their native identities and replays only retained observations.
+REQUEST3215_LANE = 'request3215-v1'
+REQUEST3215_REVIEW = frozenset(('boundary_policy', 'statement_identity', 'domain',
+    'interface', 'local_effects', 'complexity', 'raw_observations', 'native_runtime_identity'))
+
+
+def relocated_artifact(path, native_root, local_root):
+    """Explicit artifact-only relocation; never rewrite a native run contract."""
+    for value in (path, native_root, local_root):
+        if (not isinstance(value, str) or not value.startswith('/') or
+                any(part in ('', '.', '..') for part in value[1:].split('/'))):
+            raise ValueError('canonical absolute artifact mapping required')
+    try:
+        relative = Path(path).relative_to(native_root)
+    except ValueError:
+        raise ValueError('artifact outside explicit native bundle root') from None
+    if not relative.parts:
+        raise ValueError('artifact file required, not bundle root')
+    return Path(local_root) / relative
+
+
+def request3215_observations(report, jobs, cases, report_dir):
+    """Recompute verdicts with the existing independent comparator, never flags."""
+    from . import imported_qualification as q
+    from . import verify_imported_qualification as verifier
+    if [(r.get('id'), r.get('language')) for r in report['rows']] != [(j['id'], j['language']) for j in jobs]:
+        raise ValueError('missing, duplicate or reordered source outcomes')
+    outcomes = []
+    groups = list(q.batches(cases))
+    for job, row in zip(jobs, report['rows']):
+        if row['source_sha256'] != job['source_sha256'] or row['cases'] != len(cases) or len(row['calls']) != len(groups):
+            raise ValueError('source/case/batch population mismatch')
+        failures = []
+        for call, (offset, batch) in zip(row['calls'], groups):
+            stem = f"{job['id']}-{job['language']}-{offset}"
+            if call['stem'] != stem or call['offset'] != offset or call['count'] != len(batch):
+                raise ValueError('batch binding mismatch')
+            stdout = bounded_regular_read(report_dir / (stem + '.stdout'), maximum_bytes=q.LIMITS['max_output_bytes'])
+            stderr = bounded_regular_read(report_dir / (stem + '.stderr'), maximum_bytes=q.LIMITS['max_output_bytes'])
+            if sha(stdout) != call['stdout_sha256'] or sha(stderr) != call['stderr_sha256']:
+                raise ValueError('raw observation hash mismatch')
+            if type(call['exit_code']) is not int or call['exit_code'] != 0 or call['timed_out'] is not False or call['output_limit_exceeded'] is not False:
+                failures.append({'offset': offset, 'reason': 'isolated_execution_failed'})
+            else:
+                failures.extend({'offset': offset, **f} for f in
+                    verifier.independent_failures(stdout, batch, job['language'], 'exact'))
+        if row['failures'] != failures or row['passed'] is not (not failures):
+            raise ValueError('independent raw observation replay disagrees')
+        outcomes.append({'id': job['id'], 'language': job['language'], 'passed': not failures,
+            'source_sha256': job['source_sha256'], 'tests_raw_sha256': job['tests_raw_sha256'],
+            'cases': len(cases), 'failure_count': len(failures)})
+    return outcomes
+
+
+def replay_request3215(plan, values, raws):
+    """Fixed domain owner plus native pins; no host runtime substitution or run."""
+    from collections import Counter
+    from . import imported_qualification as q
+    from . import request_qualification as request
+    from . import verify_imported_qualification as verifier
+    freeze, report, verification, review = (values[k] for k in ('freeze', 'report', 'verification', 'review'))
+    native, local = plan['native_bundle_root'], plan['artifact_root']
+
+    def mapped(path):
+        return relocated_artifact(path, native, local)
+
+    native_freeze = native + '/run-3215/freeze'
+    if (mapped(native_freeze + '/contract.json') != Path(plan['freeze']['path']) or
+            mapped(native + '/run-3215/observations/report.json') != Path(plan['report']['path']) or
+            mapped(native + '/run-3215/independent-verification.json') != Path(plan['verification']['path']) or
+            report.get('freeze') != native_freeze or report.get('freeze_sha256') != sha(raws['freeze']) or
+            report.get('schema') != 'gamma.imported-independent-report.v1' or
+            report.get('status') != 'completed' or report.get('new_qualifications') != 0):
+        raise ValueError('native report/freeze mapping or completion mismatch')
+    jobs = freeze.get('jobs', [])
+    if (freeze.get('schema') != 'gamma.imported-independent-execution.v1' or
+            freeze.get('selected_problem_ids') != [request.PID] or
+            [(j.get('id'), j.get('language')) for j in jobs] != [(request.PID, lang) for lang in LANGUAGES] or
+            freeze.get('pending') != [] or freeze.get('automatic_promotion') is not False or
+            freeze.get('protected_access') is not False or freeze.get('limits') != q.LIMITS or
+            freeze.get('max_packet_bytes') != q.MAX_PACKET):
+        raise ValueError('fixed request population, limits or execution scope differs')
+    # Reject all interface/locator changes before any source, statement or case read.
+    for job in jobs:
+        language = job['language']; suffix = 'js' if language == 'javascript' else 'py'
+        fields(job, ('id', 'language', 'source', 'source_sha256', 'original_source', 'tests',
+            'tests_raw_sha256', 'tests_canonical_sha256', 'case_count', 'statement',
+            'domain_validator', 'comparison_policy', 'source_interface'))
+        expected_interface = 'commonjs-object-solve-v1' if language == 'javascript' else 'global-solve-v1'
+        if (q.source_interface(job) != expected_interface or job['source'] != f'sources/3215.{suffix}' or
+                job['tests'] != 'tests/3215.json' or job['source_sha256'] != request.SOURCE_SHA256[language] or
+                job['original_source'] != native + f'/inputs/sources/{language}/3215.{suffix}' or
+                job['statement'] != {'path': native_freeze + '/statement.md', 'sha256': request.STATEMENT_SHA256} or
+                job['domain_validator'] != REQUEST3215_LANE or job['comparison_policy'] != 'exact' or
+                job['case_count'] != request.CASE_COUNT or job['tests_raw_sha256'] != request.CASES_SHA256):
+            raise ValueError('fixed source/domain/interface binding differs')
+    # Compare native code identities by repository-relative name, including every
+    # helper. Current trusted comparator bytes must match the retained copy too.
+    repo = HERE.parents[2]
+    expected_code = {native + '/code/' + str(Path(path).relative_to(repo)): value for path, value in q.code_pins().items()}
+    generator = native + '/code/' + str(Path(request.__file__).relative_to(repo))
+    verifier_path = native + '/code/' + str(Path(verifier.__file__).relative_to(repo))
+    if freeze.get('code') != expected_code or freeze.get('additional_code') != {generator: expected_code[generator]}:
+        raise ValueError('frozen code population or bytes differ')
+    for path, expected in {**expected_code, verifier_path: q.file_hash(verifier.__file__)}.items():
+        if sha(bounded_regular_read(mapped(path))) != expected:
+            raise ValueError('retained frozen code differs')
+    runtime = freeze.get('runtime')
+    if not isinstance(runtime, dict) or not {'/usr/bin/node', '/usr/bin/python3', '/usr/bin/bwrap', '/usr/bin/prlimit'} <= set(runtime):
+        raise ValueError('native runtime identity missing')
+    for path, identity in runtime.items():
+        fields(identity, ('resolved', 'sha256'))
+        if not Path(path).is_absolute() or not Path(identity['resolved']).is_absolute() or not hash_value(identity['sha256']):
+            raise ValueError('invalid native runtime identity')
+    if (review.get('independent_review') is not True or
+            not REQUEST3215_REVIEW <= set(review.get('reviewed', [])) or
+            any(review.get(k + '_sha256') != sha(raws[k]) for k in ('freeze', 'report', 'verification')) or
+            review.get('source_sha256') != request.SOURCE_SHA256 or
+            review.get('native_runtime_sha256') != digest(runtime)):
+        raise ValueError('independent exact-source/native-runtime review required')
+    gate, native_gate, service = (values[k] for k in ('boundary_gate', 'qualification_boundary_gate', 'qualification_service'))
+    fields(gate, ('schema', 'artifact_paths', 'trusted_hashes'))
+    fields(native_gate, ('schema', 'artifact_paths', 'trusted_hashes'))
+    if (gate['schema'] != 'gamma.boundary-gate-config.v1' or native_gate['schema'] != gate['schema'] or
+            gate['trusted_hashes'] != native_gate['trusted_hashes'] or
+            gate['trusted_hashes']['universe'] != sha(raws['universe']) or
+            freeze.get('service_config_sha256') != sha(raws['qualification_service']) or
+            service.get('schema') != 'gamma.known-spec-service.v2' or
+            service['source_access']['boundary_gate']['sha256'] != sha(raws['qualification_boundary_gate']) or
+            any(service[name]['sha256'] != sha(raws[key]) for name, key in
+                (('universe', 'universe'), ('catalogue', 'catalogue'), ('verified_receipts', 'receipts')))):
+        raise ValueError('current base and native acquisition authority differ')
+    for language in LANGUAGES:
+        boundary_policy.authorize_before_open(request.IDENTITY, gate['artifact_paths'], gate['trusted_hashes'], language=language)
+    boundary_policy.authorize_before_open(request.IDENTITY, gate['artifact_paths'], gate['trusted_hashes'], language='python', payload_kind='statement')
+    contracts = check_authority(values['authority_review'], lane=REQUEST3215_LANE,
+        freeze_sha256=sha(raws['freeze']), review_sha256=sha(raws['review']), ids=[request.PID])
+    if contracts[request.IDENTITY]['statement_sha256'] != request.STATEMENT_SHA256:
+        raise ValueError('reviewed statement differs from fixed definition')
+    root = mapped(native_freeze + '/contract.json').parent
+    pre, _ = pinned({'path': str(root / 'pre-source-freeze.json'), 'sha256': freeze['pre_source_freeze_sha256']})
+    provenance, _ = pinned({'path': str(root / 'case-provenance.json'), 'sha256': freeze['case_provenance_sha256']})
+    if (pre.get('schema') != 'gamma.request3215-pre-source-freeze.v1' or pre.get('problem_ids') != [request.PID] or
+            pre.get('source_payload_reads_at_freeze') != 0 or pre.get('manifest_sha256') != request.MANIFEST_SHA256 or
+            pre.get('statement_sha256') != request.STATEMENT_SHA256 or pre.get('cases_per_language') != request.CASE_COUNT or
+            pre.get('tests_raw_sha256') != request.CASES_SHA256 or pre.get('expected_source_sha256') != request.SOURCE_SHA256 or
+            pre.get('generator_validator_sha256') != expected_code[generator] or pre.get('observer_code') != expected_code or
+            pre.get('limits') != q.LIMITS or pre.get('max_packet_bytes') != q.MAX_PACKET):
+        raise ValueError('pre-source freeze differs')
+    manifest, _ = pinned({'path': str(mapped(native + '/inputs/manifest.json')), 'sha256': request.MANIFEST_SHA256})
+    originals = [row for row in manifest if row.get('problem_id') == request.PID]
+    if len(originals) != 1:
+        raise ValueError('original authoring manifest identity missing')
+    original = originals[0]
+    for language, suffix in (('javascript', 'js'), ('python', 'py')):
+        if original['source_files'][language] != {'path': f'{language}/3215.{suffix}', 'sha256': request.SOURCE_SHA256[language]}:
+            raise ValueError('original authoring source identity differs')
+    if original['definition_provenance']['definition_prefix_sha256'] != request.STATEMENT_SHA256:
+        raise ValueError('original authoring definition differs')
+    boundary_policy.authorize_before_open(request.IDENTITY, gate['artifact_paths'], gate['trusted_hashes'], language='python', payload_kind='statement')
+    statement = bounded_regular_read(root / 'statement.md', maximum_bytes=131072)
+    cases, categories = request.build_cases(statement)
+    actual_cases = bounded_regular_read(root / 'tests/3215.json')
+    groups = list(q.batches(cases))
+    if (sha(actual_cases) != request.CASES_SHA256 or actual_cases != q.encoded(cases) or
+            any(job['tests_canonical_sha256'] != q.canonical_tests_hash(cases) for job in jobs) or
+            pre.get('batch_count_per_language') != len(groups) or
+            pre.get('largest_packet_bytes') != max(len(q.encoded(q.packet(batch))) for _, batch in groups) or
+            provenance != {'seed': request.SEED, 'categories': categories, 'counts': dict(Counter(categories)), 'predecessor': request.ORACLE_PREDECESSOR}):
+        raise ValueError('fixed generated cases or provenance differs')
+    for job in jobs:
+        boundary_policy.authorize_before_open(request.IDENTITY, gate['artifact_paths'], gate['trusted_hashes'], language=job['language'])
+        if sha(bounded_regular_read(root / job['source'], maximum_bytes=1_048_576)) != job['source_sha256']:
+            raise ValueError('exact passed source bytes differ')
+    outcomes = request3215_observations(report, jobs, cases, Path(plan['report']['path']).parent)
+    replayed = {'schema': 'gamma.imported-independent-verification.v1', 'verified': True,
+        'report_sha256': sha(raws['report']), 'freeze_sha256': sha(raws['freeze']),
+        'verifier_sha256': q.file_hash(verifier.__file__), 'outcomes': outcomes,
+        'passed': sum(o['passed'] for o in outcomes), 'total': len(outcomes),
+        'cases': sum(o['cases'] for o in outcomes), 'new_qualifications': 0,
+        'scope': freeze['scope'], 'automatic_promotion': False}
+    if replayed != verification or not all(row['passed'] for row in outcomes):
+        raise ValueError('actual independent verification differs or failed')
+    return contracts, original, root
+
+
+def adopt_request3215_plan(plan, trusted_plan_sha256):
+    """Return reversible candidate data only; never persist or activate service."""
+    from . import request_qualification as request
+    fields(plan, ('schema', 'universe', 'catalogue', 'receipts', 'boundary_gate', 'freeze',
+        'report', 'verification', 'review', 'authority_review', 'qualification_service',
+        'qualification_boundary_gate', 'native_bundle_root', 'artifact_root'))
+    if plan['schema'] != 'gamma.request3215-adoption-plan.v1':
+        raise ValueError('unsupported fixed request plan')
+    values, raws = {}, {}
+    for key in set(plan) - {'schema', 'native_bundle_root', 'artifact_root'}:
+        values[key], raws[key] = pinned(plan[key])
+    universe, catalogue, receipts = (values[k] for k in ('universe', 'catalogue', 'receipts'))
+    before = validate(universe, catalogue, receipts)
+    contracts, original, root = replay_request3215(plan, values, raws)
+    freeze = values['freeze']; gid = request.IDENTITY
+    rows = {row['problem_id']: row for row in catalogue['problems']}
+    replacements, additions, locators, descriptors = {}, {}, {}, {}
+    prefix = plan['native_bundle_root'] + '/code/projects/algorithm_solver/'
+    code = freeze['code']; generator_sha = code[prefix + 'catalogue/request_qualification.py']
+    for job in freeze['jobs']:
+        language = job['language']; old = rows[gid]['implementations'][language]
+        contract = {'schema': 'gamma.reviewed-public-batch-contract.v1', 'reviewed_statement_contract': contracts[gid],
+            'authority_review_sha256': sha(raws['authority_review']), 'qualification_freeze_sha256': sha(raws['freeze']),
+            'input_validator': {'lane': REQUEST3215_LANE, 'module_sha256': generator_sha,
+                'numeric_problem_id': request.PID, 'entrypoint': 'validate', 'required_before_candidate_execution': True}}
+        interface = {'schema': 'gamma.call-interface.v1', 'entrypoint': 'solve',
+            'arguments': 'ordered-positional', 'typed_contract': digest(contract)}
+        runtime = {'language': language, 'runtime': freeze['runtime'], 'limits': freeze['limits'],
+            'sandbox_sha256': code[prefix + 'algsolve/judge/sandbox.py'],
+            'runner_sha256': code[prefix + 'catalogue/imported_qualification.py'],
+            'source_interface': job['source_interface'], 'native_runtime_only': True}
+        harness = ('imported-commonjs-observer-v1/harness.cjs' if language == 'javascript' else
+                   'public-domain-qualification-medium32-wave2-observer-v1/harness.py')
+        effects = {'local_effects': contracts[gid]['local_effects'], 'observed_effect_policy': freeze['effects'],
+            'observed_result_policy': freeze['comparison'], 'oracle_sha256': generator_sha,
+            'harness_sha256': code[prefix + 'catalogue/' + harness],
+            'observer_helper_sha256': code[prefix + 'catalogue/public-domain-qualification-medium32-wave2-observer-v1/harness.cjs'] if language == 'javascript' else None,
+            'verifier_sha256': values['verification']['verifier_sha256'], 'review_sha256': sha(raws['review'])}
+        provenance = {'public_batch': {'lane': REQUEST3215_LANE, 'problem_contract': contract,
+            'source_provenance': {'original_manifest_sha256': request.MANIFEST_SHA256,
+                'original_manifest_path': 'projects/algorithm_solver/catalogue/authored/request-252-v1/batch1/manifest.json',
+                'original_source': original['source_files'][language], 'frozen_job': job},
+            'report_sha256': sha(raws['report']), 'verification_sha256': sha(raws['verification']),
+            'review_sha256': sha(raws['review']), 'case_count': request.CASE_COUNT},
+            'previous_canonical': {'implementation_sha256': digest(old), 'receipt_sha256': old.get('receipt_sha256'),
+                'base_catalogue_sha256': sha(raws['catalogue']), 'implementation': copy.deepcopy(old)},
+            'source_publication_authorized': False, 'historical_receipts_unchanged': True}
+        scope = 'Reviewed problem 3215 domain; exact source-specific solve interface, numeric and local-effect contract.'
+        caveats = qualification_caveats(REQUEST3215_LANE, request.PID) + [
+            '815 finite public-definition cases per language, not fresh heldout confirmation or full-domain performance qualification.',
+            'Native runtime identity belongs to the recorded execution host; relocated replay does not establish another host or browser runtime.',
+            'Candidate catalogue only; active service configuration and serving source subset remain unchanged.']
+        impl = {'status': 'qualified', 'canonical_variant_id': language + ':' + job['source_sha256'],
+            'source_sha256': job['source_sha256'], 'problem_contract_sha256': digest(contract),
+            'interface': interface, 'interface_sha256': digest(interface), 'runtime_sha256': digest(runtime),
+            'tests_sha256': request.CASES_SHA256, 'effects_sha256': digest(effects),
+            'evidence_class': 'normative-typed-effects', 'contract_scope': scope, 'caveats': caveats, 'provenance': provenance}
+        receipt = {key: impl[key] for key in (*BINDINGS, 'canonical_variant_id', 'evidence_class', 'contract_scope', 'caveats')}
+        receipt.update(problem_id=gid, language=language, verdict='qualified', independent_verifier=True,
+            provenance_sha256=digest(provenance), original_independent_verification_sha256=sha(raws['verification']),
+            review_sha256=sha(raws['review']), per_problem_case_count=request.CASE_COUNT,
+            verification_mode='fixed request imported-observation replay plus externally anchored independent authority review')
+        rid = digest(receipt); impl['receipt_sha256'] = rid
+        replacements[(gid, language)] = impl; additions[rid] = receipt
+        locators.setdefault(gid, {})[language] = str(root / job['source'])
+        descriptors[f'{language}:3215'] = {'problem_contract': contract, 'runtime': runtime, 'effects': effects}
+    updated, retained, summary = replace_canonicals(universe, catalogue, receipts, replacements, additions)
+    return {'catalogue': updated, 'verified_receipts': retained, 'summary': summary,
+        'source_locators': {'schema': 'gamma.dual.source-locators.v1', 'problems': locators},
+        'binding_descriptors': descriptors, 'audit': {'schema': 'gamma.public-batch-adoption.v1',
+            'plan_sha256': trusted_plan_sha256, 'adopted_source_language_pairs': len(replacements),
+            'previous_receipts_preserved': len(receipts), 'new_receipts': len(additions),
+            'source_publication_authorized': False, 'candidate_executions': 0, 'candidate_only': True,
+            'active_config_modified': False, 'base_summary': before, 'historical_m1_qualified': False}}
+
+
 def adopt_plan(plan_path, trusted_plan_sha256):
     """Build successor artifacts in memory; caller separately persists/publishes."""
     plan, _ = pinned({'path': str(plan_path), 'sha256': trusted_plan_sha256})
+    if isinstance(plan, dict) and plan.get('schema') == 'gamma.request3215-adoption-plan.v1':
+        return adopt_request3215_plan(plan, trusted_plan_sha256)
     fields(plan, ('schema', 'lane', 'universe', 'catalogue', 'receipts', 'boundary_gate',
                   'freeze', 'report', 'run_contract', 'verification', 'review', 'authority_review'))
     if plan['schema'] != 'gamma.public-batch-adoption-plan.v1':
@@ -425,15 +690,22 @@ def validate_batch_inputs(implementation, args):
         raise ValueError('reviewed problem contract changed')
     predicate = contract.get('input_validator', {})
     fields(predicate, ('lane', 'module_sha256', 'numeric_problem_id', 'entrypoint', 'required_before_candidate_execution'))
-    directory = lane_path(predicate['lane'])
+    fixed_request = predicate['lane'] == REQUEST3215_LANE
+    directory = HERE if fixed_request else lane_path(predicate['lane'])
+    module_path = directory / ('request_qualification.py' if fixed_request else 'oracle.py')
     pid = predicate['numeric_problem_id']
     declared = contract.get('reviewed_statement_contract', {})
     if (type(pid) is not int or declared.get('numeric_problem_id') != pid or declared.get('problem_id') != f'leetcode:{pid}' or
             predicate['entrypoint'] != 'validate' or predicate['required_before_candidate_execution'] is not True or
-            sha((directory / 'oracle.py').read_bytes()) != predicate['module_sha256']):
+            sha(bounded_regular_read(module_path)) != predicate['module_sha256']):
         raise ValueError('frozen input predicate identity mismatch')
-    module = _module('_public_batch_input_validator', directory / 'oracle.py')
-    if pid not in module.IDS:
+    if fixed_request:
+        from . import request_qualification as module
+        ids = (module.PID,)
+    else:
+        module = _module('_public_batch_input_validator', module_path)
+        ids = module.IDS
+    if pid not in ids:
         raise ValueError('predicate ID not admitted by fixed lane')
     module.validate(pid, args)
     return {'accepted': True, 'problem_contract_sha256': digest(contract), 'candidate_executed': False}
