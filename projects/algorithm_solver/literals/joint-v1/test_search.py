@@ -1,5 +1,6 @@
 """Behavioral checks for joint source choice and exact move accounting."""
 import unittest
+from itertools import product
 import search as joint
 
 
@@ -62,6 +63,95 @@ class JointSearchTests(unittest.TestCase):
         proposed = joint.evaluate(sources, ['abc','def','ghi','abcdefghi'], 8, initial)
         self.assertLess(joint.cost(proposed, 'input'), joint.cost(initial, 'input'))
         self.assertGreater(joint.cost(proposed, 'storage'), joint.cost(initial, 'storage'))
+
+    def test_explicit_alphabet_supports_all_widths_and_preserves_default(self):
+        sources = {1: {'a': 'ababab!'}}
+        for width in range(4, 9):
+            state = joint.evaluate(sources, ['ab', '!'], width, alphabet=[])
+            self.assertEqual(state['selections'], 4)
+            self.assertEqual(state['literal_bits'], width * 4)
+            self.assertEqual(state['singleton_bits'], width)
+            self.assertEqual(state['singleton_bit_share'], .25)
+            self.assertEqual(state['median_selections'], 4)
+            self.assertEqual(state['p95_selections'], 4)
+        self.assertTrue(set(joint.base.ALPHABET) <= set(joint.evaluate(sources, [], 7)['vocab']))
+
+    def test_unmatched_suffix_is_not_skipped_or_counted_as_covered(self):
+        sources = {1: {'a': 'abXab'}, 2: {'a': 'ababa'}}
+        state = joint.evaluate(sources, ['ab', 'a'], 4, alphabet=[], allow_partial=True)
+        self.assertEqual(state['coverage'], 1)
+        self.assertEqual(state['chosen'], {2: 'a'})
+        self.assertEqual(state['uncovered'][1, 'a'], {
+            'prefix_characters': 2, 'prefix': ('ab',),
+            'uncovered_characters': 3, 'uncovered_utf8_bytes': 3})
+        self.assertEqual(state['selections'], 3)
+
+    def test_longest_prefix_then_minimum_path_agrees_with_brute_force(self):
+        vocab = ['a', 'ab', 'b', 'ba']
+        tree = joint.base.trie(vocab)
+        def paths(text, offset=0, path=()):
+            yield offset, path
+            for i, fragment in enumerate(vocab):
+                if text.startswith(fragment, offset):
+                    yield from paths(text, offset + len(fragment), path + (i,))
+        for size in range(6):
+            for chars in product('abX', repeat=size):
+                text = ''.join(chars)
+                expected = min(paths(text), key=lambda row: (-row[0], len(row[1]), row[1]))
+                self.assertEqual(joint.representable_prefix(text, tree), expected)
+
+    def test_partial_source_choice_never_selects_uncovered_cheaper_variant(self):
+        sources = {1: {'short': 'X', 'covered': 'abab!'}}
+        state = joint.evaluate(sources, ['ab', '!'], 4, alphabet=[], allow_partial=True)
+        self.assertEqual(state['chosen'], {1: 'covered'})
+        empty = joint.evaluate(sources, ['X?'], 4, alphabet=[], allow_partial=True)
+        self.assertLess(joint.cost(state, 'input'), joint.cost(empty, 'input'))
+        self.assertIsNone(empty['median_selections'])
+
+    def test_incremental_cache_cannot_hide_source_or_coverage_changes(self):
+        initial = joint.evaluate({1: {'a': 'abab!'}}, ['ab', '!'], 4, alphabet=[], allow_partial=True)
+        changed = {1: {'a': 'abX!'}, 2: {'a': 'ababab!'}}
+        self.assertEqual(joint.evaluate(changed, ['ab', '!'], 4, initial, alphabet=[], allow_partial=True),
+                         joint.evaluate(changed, ['ab', '!'], 4, alphabet=[], allow_partial=True))
+
+    def test_small_dictionary_packet_storage_is_exact(self):
+        state = joint.evaluate({1: {'a': 'abab!'}}, ['ab', '!'], 5, alphabet=[])
+        sequence = [state['vocab'].index(s) for s in state['parsed'][1, 'a']]
+        packet = joint.base.encode(state['vocab'], sequence, 5)
+        dictionary = joint.base.dictionary_bytes(state['vocab'])
+        self.assertEqual(joint.base.decode(dictionary, packet), 'abab!')
+        self.assertEqual(state['package_bytes'], len(dictionary) + len(packet))
+
+    def test_invalid_literal_and_width_fail_closed(self):
+        for vocab, width in [([''], 4), (['a'], True), (['a'], 3), (['a'], 9)]:
+            with self.assertRaises(ValueError):
+                joint.evaluate({1: {'a': 'aa'}}, vocab, width, alphabet=[])
+
+    def test_changed_literal_id_order_invalidates_cached_tie(self):
+        sources = {1: {'a': 'aaa'}}
+        initial = joint.evaluate(sources, [], 4, alphabet=['a', 'aa'])
+        self.assertEqual(initial['parsed'][1, 'a'], ('a', 'aa'))
+        changed = joint.evaluate(sources, [], 4, initial, alphabet=['aa', 'a'])
+        self.assertEqual(changed['parsed'][1, 'a'], ('aa', 'a'))
+        self.assertEqual(changed, joint.evaluate(sources, [], 4, alphabet=['aa', 'a']))
+
+    def test_partial_parent_does_not_relax_a_strict_child(self):
+        sources = {1: {'a': 'abX'}}
+        initial = joint.evaluate(sources, ['ab'], 4, alphabet=[], allow_partial=True)
+        with self.assertRaisesRegex(ValueError, 'unrepresentable'):
+            joint.evaluate(sources, ['ab'], 4, initial, alphabet=[])
+
+    def test_uncovered_search_keeps_dictionary_format_valid(self):
+        sources = {1: {'a': 'xxx'}}
+        initial = joint.evaluate(sources, ['a', 'b'], 4, alphabet=[], allow_partial=True)
+        limits = {'rounds_per_start': 2, 'trials_per_start': 40, 'seconds_per_start': 5,
+                  'removal_shortlist': 2, 'addition_shortlist': 2,
+                  'pair_removal_sets': 2, 'pair_addition_shortlist': 2}
+        final, _ = joint.improve(sources, initial, 4, 'input', limits,
+                                alphabet=[], allow_partial=True, candidate_pool=['a', 'b'])
+        self.assertEqual(final['coverage'], 0)
+        self.assertTrue(final['vocab'])
+        self.assertEqual(final['dictionary_bytes'], len(joint.base.dictionary_bytes(final['vocab'])))
 
 
 if __name__ == '__main__':
