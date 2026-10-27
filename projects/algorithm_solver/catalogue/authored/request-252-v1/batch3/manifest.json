@@ -1,0 +1,928 @@
+[
+  {
+    "problem_id": 3223,
+    "parameters": [
+      "s"
+    ],
+    "canonical_key": "lc:minimum-length-of-string-after-operations",
+    "status": "authored_locally_tested_candidate",
+    "qualification": "not_qualified",
+    "admission": "not_admitted",
+    "base_commit": "bc252ef318b165396288cd3f3d0ecbd4b84c03da",
+    "contract": {
+      "domain": "Lowercase ASCII string, 1..200000 characters.",
+      "result": "Minimum remaining length after repeatedly deleting the closest matching character on both sides of a chosen occurrence.",
+      "mutation": "No caller argument mutation. Router methods mutate only their instance; operation tape creates a fresh instance per call.",
+      "ordering": "Input order and specified result order preserved.",
+      "exceptions": "Malformed or out-of-contract inputs are unspecified; no additional validation contract is claimed.",
+      "unicode": "String problems use the stated ASCII alphabet, not unrestricted Unicode.",
+      "numeric": "All required outputs and intermediate Number arithmetic are exact within the stated domain. Python uses exact integers. XOR operands stay below2^30; triangle area<=1e12; island sum<=1e11. 3518 caps counts at1e6, keeping multiply-before-divide intermediates<=5e9 and multinomial products<=1e12. 3583 reduces every contribution before the next addition."
+    },
+    "algorithm": "Each operation removes two occurrences of one letter; each positive odd count reduces to one and each positive even count to two.",
+    "complexity": "O(n) time, O(26) auxiliary space.",
+    "adapter": null,
+    "source_url": "https://leetcode.com/problems/minimum-length-of-string-after-operations/",
+    "definition_provenance": {
+      "official_url": "https://leetcode.com/problems/minimum-length-of-string-after-operations/",
+      "consulted_on": "2026-10-27",
+      "observed_numeric_id": 3223,
+      "acquired_rendered_response_sha256": "7d3f9660a762313b3bb18e6123eef211da38bba7a369d414c0bfa5698d4d4722",
+      "hash_scope": "Private UTF-8 JSON string containing the acquired official rendered definition response; not raw upstream HTML. Full statement snapshot is not redistributed.",
+      "scope": "Official public definition, constraints and public examples only; no editorial or implementation code consulted."
+    },
+    "authorship": "Original implementations authored for this patch; no upstream solution code copied.",
+    "tests": {
+      "public_example": 2,
+      "independent_small_oracle": 100,
+      "structured_edge": 1
+    },
+    "independent_oracle": "Enumerate every legal deletion recursively on short strings.",
+    "test_receipt": "batch3/test-results.json",
+    "source_files": {
+      "javascript": {
+        "path": "javascript/3223.js",
+        "sha256": "44d2764566a4d2c54819a9a8ed1f4e43678684a502ca5aa1335bc2d5d7434e1c"
+      },
+      "python": {
+        "path": "python/3223.py",
+        "sha256": "dfc64c1e07a6e224418071b721fb6b0d35774ac123e3f16aedc568cb3671d47c"
+      }
+    },
+    "limitations": [
+      "Finite development tests do not establish formal soundness, hidden-judge acceptance, complete maximum-constraint performance, catalogue qualification, or serving eligibility.",
+      "No protected/private cases, external judge submissions, policy changes, model calls, paid services, dependency additions, commits or pushes."
+    ]
+  },
+  {
+    "problem_id": 3232,
+    "parameters": [
+      "nums"
+    ],
+    "canonical_key": "lc:find-if-digit-game-can-be-won",
+    "status": "authored_locally_tested_candidate",
+    "qualification": "not_qualified",
+    "admission": "not_admitted",
+    "base_commit": "bc252ef318b165396288cd3f3d0ecbd4b84c03da",
+    "contract": {
+      "domain": "1..100 integers in [1,99].",
+      "result": "Boolean: can choosing all one-digit or all two-digit values yield a strictly larger sum than the rest?",
+      "mutation": "No caller argument mutation. Router methods mutate only their instance; operation tape creates a fresh instance per call.",
+      "ordering": "Input order and specified result order preserved.",
+      "exceptions": "Malformed or out-of-contract inputs are unspecified; no additional validation contract is claimed.",
+      "unicode": "String problems use the stated ASCII alphabet, not unrestricted Unicode.",
+      "numeric": "All required outputs and intermediate Number arithmetic are exact within the stated domain. Python uses exact integers. XOR operands stay below2^30; triangle area<=1e12; island sum<=1e11. 3518 caps counts at1e6, keeping multiply-before-divide intermediates<=5e9 and multinomial products<=1e12. 3583 reduces every contribution before the next addition."
+    },
+    "algorithm": "The two available sums partition the positive array; exactly unequal sums permit a strict win.",
+    "complexity": "O(n) time, O(1) auxiliary space.",
+    "adapter": null,
+    "source_url": "https://leetcode.com/problems/find-if-digit-game-can-be-won/",
+    "definition_provenance": {
+      "official_url": "https://leetcode.com/problems/find-if-digit-game-can-be-won/",
+      "consulted_on": "2026-10-27",
+      "observed_numeric_id": 3232,
+      "acquired_rendered_response_sha256": "c3bc6277a852e5083d794d85a1b2125f9131aed6f7f953e62005461b9eb9b334",
+      "hash_scope": "Private UTF-8 JSON string containing the acquired official rendered definition response; not raw upstream HTML. Full statement snapshot is not redistributed.",
+      "scope": "Official public definition, constraints and public examples only; no editorial or implementation code consulted."
+    },
+    "authorship": "Original implementations authored for this patch; no upstream solution code copied.",
+    "tests": {
+      "public_example": 3,
+      "independent_small_oracle": 100
+    },
+    "independent_oracle": "Construct both legal selections using decimal digit lengths and compare with their complements.",
+    "test_receipt": "batch3/test-results.json",
+    "source_files": {
+      "javascript": {
+        "path": "javascript/3232.js",
+        "sha256": "da490592837e9363f075070cccd13cee83291613149f677ea66d250f8e04154b"
+      },
+      "python": {
+        "path": "python/3232.py",
+        "sha256": "bb14ba0f2590486516e83ecc7ea95e1c477d3e4bfa13f2b830b660d654b89dad"
+      }
+    },
+    "limitations": [
+      "Finite development tests do not establish formal soundness, hidden-judge acceptance, complete maximum-constraint performance, catalogue qualification, or serving eligibility.",
+      "No protected/private cases, external judge submissions, policy changes, model calls, paid services, dependency additions, commits or pushes."
+    ]
+  },
+  {
+    "problem_id": 3241,
+    "parameters": [
+      "edges"
+    ],
+    "canonical_key": "lc:time-taken-to-mark-all-nodes",
+    "status": "authored_locally_tested_candidate",
+    "qualification": "not_qualified",
+    "admission": "not_admitted",
+    "base_commit": "bc252ef318b165396288cd3f3d0ecbd4b84c03da",
+    "contract": {
+      "domain": "Valid undirected tree on vertices 0..n-1, 2<=n<=100000; edges has n-1 pairs.",
+      "result": "Array of n completion times when each start is marked at zero; entering an odd vertex costs one and an even vertex costs two.",
+      "mutation": "No caller argument mutation. Router methods mutate only their instance; operation tape creates a fresh instance per call.",
+      "ordering": "Input order and specified result order preserved.",
+      "exceptions": "Malformed or out-of-contract inputs are unspecified; no additional validation contract is claimed.",
+      "unicode": "String problems use the stated ASCII alphabet, not unrestricted Unicode.",
+      "numeric": "All required outputs and intermediate Number arithmetic are exact within the stated domain. Python uses exact integers. XOR operands stay below2^30; triangle area<=1e12; island sum<=1e11. 3518 caps counts at1e6, keeping multiply-before-divide intermediates<=5e9 and multinomial products<=1e12. 3583 reduces every contribution before the next addition."
+    },
+    "algorithm": "Bottom-up best two child contributions and a top-down parent-side contribution yield weighted eccentricities; the cost belongs to the destination vertex.",
+    "complexity": "O(n) time and space; iterative traversals avoid call-stack depth limits.",
+    "adapter": null,
+    "source_url": "https://leetcode.com/problems/time-taken-to-mark-all-nodes/",
+    "definition_provenance": {
+      "official_url": "https://leetcode.com/problems/time-taken-to-mark-all-nodes/",
+      "consulted_on": "2026-10-27",
+      "observed_numeric_id": 3241,
+      "acquired_rendered_response_sha256": "82e4957ad00208b9bed200db3a3e442a9ce0c99fe9cc2c9704b84001d73c81e5",
+      "hash_scope": "Private UTF-8 JSON string containing the acquired official rendered definition response; not raw upstream HTML. Full statement snapshot is not redistributed.",
+      "scope": "Official public definition, constraints and public examples only; no editorial or implementation code consulted."
+    },
+    "authorship": "Original implementations authored for this patch; no upstream solution code copied.",
+    "tests": {
+      "public_example": 3,
+      "independent_small_oracle": 100,
+      "structured_edge": 1
+    },
+    "independent_oracle": "For every start, traverse the small tree independently and accumulate directed entry costs.",
+    "test_receipt": "batch3/test-results.json",
+    "source_files": {
+      "javascript": {
+        "path": "javascript/3241.js",
+        "sha256": "2a9acf332e3fc196547f49fc72237bbf84a69aeefdfc3dc9bb5b44cb311e4517"
+      },
+      "python": {
+        "path": "python/3241.py",
+        "sha256": "04ee54aab52b6fcd3b880a602fc47b01393a280a03f2d7a7a3a29bac96088e68"
+      }
+    },
+    "limitations": [
+      "Finite development tests do not establish formal soundness, hidden-judge acceptance, complete maximum-constraint performance, catalogue qualification, or serving eligibility.",
+      "No protected/private cases, external judge submissions, policy changes, model calls, paid services, dependency additions, commits or pushes."
+    ]
+  },
+  {
+    "problem_id": 3508,
+    "parameters": [
+      "operations",
+      "arguments"
+    ],
+    "canonical_key": "lc:implement-router",
+    "status": "authored_locally_tested_candidate",
+    "qualification": "not_qualified",
+    "admission": "not_admitted",
+    "base_commit": "bc252ef318b165396288cd3f3d0ecbd4b84c03da",
+    "contract": {
+      "domain": "Constructor-first Router operation tape; memoryLimit 2..100000, source/destination 1..200000, timestamps 1..1e9, at most 100000 method calls. addPacket timestamps nondecreasing; inclusive query bounds valid.",
+      "result": "Result per operation, null/None for constructor; duplicate addition false without eviction, otherwise true with FIFO eviction as needed; forwardPacket returns removed triple or []; getCount returns stored destination/range count.",
+      "mutation": "No caller argument mutation. Router methods mutate only their instance; operation tape creates a fresh instance per call.",
+      "ordering": "Input order and specified result order preserved.",
+      "exceptions": "Malformed or out-of-contract inputs are unspecified; no additional validation contract is claimed.",
+      "unicode": "String problems use the stated ASCII alphabet, not unrestricted Unicode.",
+      "numeric": "All required outputs and intermediate Number arithmetic are exact within the stated domain. Python uses exact integers. XOR operands stay below2^30; triangle area<=1e12; island sum<=1e11. 3518 caps counts at1e6, keeping multiply-before-divide intermediates<=5e9 and multinomial products<=1e12. 3583 reduces every contribution before the next addition."
+    },
+    "algorithm": "FIFO queue plus active-triple set; per-destination timestamp arrays stay sorted and are compacted as prefixes leave. Binary searches are restricted to the live suffix.",
+    "complexity": "Amortized O(1) add/forward, O(log M) getCount, O(M) live auxiliary storage for capacity M (excluding operation tape/output).",
+    "adapter": "solve(operations, arguments) requires Router constructor first, yields null/None constructor result; native Router class is independently available, preserving online method behavior.",
+    "source_url": "https://leetcode.com/problems/implement-router/",
+    "definition_provenance": {
+      "official_url": "https://leetcode.com/problems/implement-router/",
+      "consulted_on": "2026-10-27",
+      "observed_numeric_id": 3508,
+      "acquired_rendered_response_sha256": "726466e71dbdc62c5e8acb586288a5ac2b37098b0aa27bfafcfa570fe2a5e11d",
+      "hash_scope": "Private UTF-8 JSON string containing the acquired official rendered definition response; not raw upstream HTML. Full statement snapshot is not redistributed.",
+      "scope": "Official public definition, constraints and public examples only; no editorial or implementation code consulted."
+    },
+    "authorship": "Original implementations authored for this patch; no upstream solution code copied.",
+    "tests": {
+      "public_example": 2,
+      "independent_small_oracle": 100
+    },
+    "independent_oracle": "Naive list router executes randomly generated legal tapes and scans all active packets for range counts.",
+    "test_receipt": "batch3/test-results.json",
+    "source_files": {
+      "javascript": {
+        "path": "javascript/3508.js",
+        "sha256": "5a69aaf85c7cb15e9ff60cd22158db5c5fe3208735cc6cf94676ae5e5ccf7d9d"
+      },
+      "python": {
+        "path": "python/3508.py",
+        "sha256": "5153da1f2040577650450ed1cd4812810c47afa5dd0bc5ea1689f69b6b7c5355"
+      }
+    },
+    "limitations": [
+      "Finite development tests do not establish formal soundness, hidden-judge acceptance, complete maximum-constraint performance, catalogue qualification, or serving eligibility.",
+      "No protected/private cases, external judge submissions, policy changes, model calls, paid services, dependency additions, commits or pushes."
+    ]
+  },
+  {
+    "problem_id": 3518,
+    "parameters": [
+      "s",
+      "k"
+    ],
+    "canonical_key": "lc:smallest-palindromic-rearrangement-ii",
+    "status": "authored_locally_tested_candidate",
+    "qualification": "not_qualified",
+    "admission": "not_admitted",
+    "base_commit": "bc252ef318b165396288cd3f3d0ecbd4b84c03da",
+    "contract": {
+      "domain": "Palindromic lowercase ASCII string, length 1..10000; rank k in [1,1000000].",
+      "result": "One-based kth lexicographically smallest distinct palindromic permutation, or empty string when rank exceeds the count.",
+      "mutation": "No caller argument mutation. Router methods mutate only their instance; operation tape creates a fresh instance per call.",
+      "ordering": "Input order and specified result order preserved.",
+      "exceptions": "Malformed or out-of-contract inputs are unspecified; no additional validation contract is claimed.",
+      "unicode": "String problems use the stated ASCII alphabet, not unrestricted Unicode.",
+      "numeric": "All required outputs and intermediate Number arithmetic are exact within the stated domain. Python uses exact integers. XOR operands stay below2^30; triangle area<=1e12; island sum<=1e11. 3518 caps counts at1e6, keeping multiply-before-divide intermediates<=5e9 and multinomial products<=1e12. 3583 reduces every contribution before the next addition."
+    },
+    "algorithm": "Choose the left half lexicographically. A capped multinomial counts completions for each candidate prefix; subtract skipped blocks, retain the unique odd middle, and mirror.",
+    "complexity": "O(n A^2 log(k+1)) bounded arithmetic work and O(n+A) space for A=26; counts cap at current rank.",
+    "adapter": null,
+    "source_url": "https://leetcode.com/problems/smallest-palindromic-rearrangement-ii/",
+    "definition_provenance": {
+      "official_url": "https://leetcode.com/problems/smallest-palindromic-rearrangement-ii/",
+      "consulted_on": "2026-10-27",
+      "observed_numeric_id": 3518,
+      "acquired_rendered_response_sha256": "999b683de31612941b84710584253498b8b10af16305e8c960bd248371008acd",
+      "hash_scope": "Private UTF-8 JSON string containing the acquired official rendered definition response; not raw upstream HTML. Full statement snapshot is not redistributed.",
+      "scope": "Official public definition, constraints and public examples only; no editorial or implementation code consulted."
+    },
+    "authorship": "Original implementations authored for this patch; no upstream solution code copied.",
+    "tests": {
+      "public_example": 3,
+      "independent_small_oracle": 100,
+      "structured_edge": 2
+    },
+    "independent_oracle": "Enumerate all distinct permutations of short half-multisets, sort, mirror, and select the requested rank or reject it.",
+    "test_receipt": "batch3/test-results.json",
+    "source_files": {
+      "javascript": {
+        "path": "javascript/3518.js",
+        "sha256": "1a9cb2af29875ad6a0763bdbd8045a05394236908f91f010bdb43841a8014682"
+      },
+      "python": {
+        "path": "python/3518.py",
+        "sha256": "75754a53aaad0fec176d546f0f2c65b39137534767df400b56e271fe068f4f91"
+      }
+    },
+    "limitations": [
+      "Finite development tests do not establish formal soundness, hidden-judge acceptance, complete maximum-constraint performance, catalogue qualification, or serving eligibility.",
+      "No protected/private cases, external judge submissions, policy changes, model calls, paid services, dependency additions, commits or pushes."
+    ]
+  },
+  {
+    "problem_id": 3525,
+    "parameters": [
+      "nums",
+      "k",
+      "queries"
+    ],
+    "canonical_key": "lc:find-x-value-of-array-ii",
+    "status": "authored_locally_tested_candidate",
+    "qualification": "not_qualified",
+    "admission": "not_admitted",
+    "base_commit": "bc252ef318b165396288cd3f3d0ecbd4b84c03da",
+    "contract": {
+      "domain": "1..100000 positive values <=1e9; 1<=k<=5; 1..20000 queries [index,value,start,x], valid indices, value<=1e9, 0<=x<k.",
+      "result": "For each persistent update, count nonempty prefixes of the suffix starting at start with product modulo k equal to x. Caller arrays remain unchanged; updates persist inside this call.",
+      "mutation": "No caller argument mutation. Router methods mutate only their instance; operation tape creates a fresh instance per call.",
+      "ordering": "Input order and specified result order preserved.",
+      "exceptions": "Malformed or out-of-contract inputs are unspecified; no additional validation contract is claimed.",
+      "unicode": "String problems use the stated ASCII alphabet, not unrestricted Unicode.",
+      "numeric": "All required outputs and intermediate Number arithmetic are exact within the stated domain. Python uses exact integers. XOR operands stay below2^30; triangle area<=1e12; island sum<=1e11. 3518 caps counts at1e6, keeping multiply-before-divide intermediates<=5e9 and multinomial products<=1e12. 3583 reduces every contribution before the next addition."
+    },
+    "algorithm": "Segment summaries hold total product and counts of nonempty prefix products. Ordered concatenation retains left prefixes and remaps right prefixes by the left product, including noninvertible residues.",
+    "complexity": "O(nk + q k log n) time, O(nk + q) space including output.",
+    "adapter": null,
+    "source_url": "https://leetcode.com/problems/find-x-value-of-array-ii/",
+    "definition_provenance": {
+      "official_url": "https://leetcode.com/problems/find-x-value-of-array-ii/",
+      "consulted_on": "2026-10-27",
+      "observed_numeric_id": 3525,
+      "acquired_rendered_response_sha256": "c19083c9317f51db1ee5859b1923eb2a136df9310ad5f78fa5434ebb1e095f95",
+      "hash_scope": "Private UTF-8 JSON string containing the acquired official rendered definition response; not raw upstream HTML. Full statement snapshot is not redistributed.",
+      "scope": "Official public definition, constraints and public examples only; no editorial or implementation code consulted."
+    },
+    "authorship": "Original implementations authored for this patch; no upstream solution code copied.",
+    "tests": {
+      "public_example": 3,
+      "independent_small_oracle": 100,
+      "structured_edge": 1
+    },
+    "independent_oracle": "Apply updates to an independent copy and multiply every possible suffix-prefix directly as arbitrary precision Python integers.",
+    "test_receipt": "batch3/test-results.json",
+    "source_files": {
+      "javascript": {
+        "path": "javascript/3525.js",
+        "sha256": "85dbd15ca90411ffe493d7b4844edc993f80132641032ca5e399fe1e5a759f8b"
+      },
+      "python": {
+        "path": "python/3525.py",
+        "sha256": "c4d2a1bf5d070daf1f70b758d2e4c3fdbcbe4f5b00d310915de8bde925ce6404"
+      }
+    },
+    "limitations": [
+      "Finite development tests do not establish formal soundness, hidden-judge acceptance, complete maximum-constraint performance, catalogue qualification, or serving eligibility.",
+      "No protected/private cases, external judge submissions, policy changes, model calls, paid services, dependency additions, commits or pushes."
+    ]
+  },
+  {
+    "problem_id": 3532,
+    "parameters": [
+      "n",
+      "nums",
+      "maxDiff",
+      "queries"
+    ],
+    "canonical_key": "lc:path-existence-queries-in-a-graph-i",
+    "status": "authored_locally_tested_candidate",
+    "qualification": "not_qualified",
+    "admission": "not_admitted",
+    "base_commit": "bc252ef318b165396288cd3f3d0ecbd4b84c03da",
+    "contract": {
+      "domain": "Sorted nums length n in [1,100000], values 0..100000, maxDiff 0..100000, up to100000 valid vertex-pair queries.",
+      "result": "Boolean connectivity for each pair in the graph joining all values whose absolute difference is at most maxDiff.",
+      "mutation": "No caller argument mutation. Router methods mutate only their instance; operation tape creates a fresh instance per call.",
+      "ordering": "Input order and specified result order preserved.",
+      "exceptions": "Malformed or out-of-contract inputs are unspecified; no additional validation contract is claimed.",
+      "unicode": "String problems use the stated ASCII alphabet, not unrestricted Unicode.",
+      "numeric": "All required outputs and intermediate Number arithmetic are exact within the stated domain. Python uses exact integers. XOR operands stay below2^30; triangle area<=1e12; island sum<=1e11. 3518 caps counts at1e6, keeping multiply-before-divide intermediates<=5e9 and multinomial products<=1e12. 3583 reduces every contribution before the next addition."
+    },
+    "algorithm": "Adjacent sorted gaps larger than maxDiff are exactly component boundaries; no longer edge can cross such a gap.",
+    "complexity": "O(n+q) time, O(n+q) space including output.",
+    "adapter": null,
+    "source_url": "https://leetcode.com/problems/path-existence-queries-in-a-graph-i/",
+    "definition_provenance": {
+      "official_url": "https://leetcode.com/problems/path-existence-queries-in-a-graph-i/",
+      "consulted_on": "2026-10-27",
+      "observed_numeric_id": 3532,
+      "acquired_rendered_response_sha256": "b29458b58dd2f9bb3e3f1ec2c102118e2363a9b7f34ce94482a2e8235c482ce2",
+      "hash_scope": "Private UTF-8 JSON string containing the acquired official rendered definition response; not raw upstream HTML. Full statement snapshot is not redistributed.",
+      "scope": "Official public definition, constraints and public examples only; no editorial or implementation code consulted."
+    },
+    "authorship": "Original implementations authored for this patch; no upstream solution code copied.",
+    "tests": {
+      "public_example": 2,
+      "independent_small_oracle": 100
+    },
+    "independent_oracle": "Build the full pairwise small graph and BFS from every queried source.",
+    "test_receipt": "batch3/test-results.json",
+    "source_files": {
+      "javascript": {
+        "path": "javascript/3532.js",
+        "sha256": "5d62c36eac2a7f81a779eddc12267419a0463a08f5cda233b4feaa1dc5af1776"
+      },
+      "python": {
+        "path": "python/3532.py",
+        "sha256": "c2eb371ccef69bc1b660c014671a900ead67ee5909b2f6c980b097eead0bc093"
+      }
+    },
+    "limitations": [
+      "Finite development tests do not establish formal soundness, hidden-judge acceptance, complete maximum-constraint performance, catalogue qualification, or serving eligibility.",
+      "No protected/private cases, external judge submissions, policy changes, model calls, paid services, dependency additions, commits or pushes."
+    ]
+  },
+  {
+    "problem_id": 3542,
+    "parameters": [
+      "nums"
+    ],
+    "canonical_key": "lc:minimum-operations-to-convert-all-elements-to-zero",
+    "status": "authored_locally_tested_candidate",
+    "qualification": "not_qualified",
+    "admission": "not_admitted",
+    "base_commit": "bc252ef318b165396288cd3f3d0ecbd4b84c03da",
+    "contract": {
+      "domain": "1..100000 nonnegative integers <=100000.",
+      "result": "Minimum operations needed to zero all values when one operation zeros all occurrences of the minimum nonnegative value in a chosen contiguous interval.",
+      "mutation": "No caller argument mutation. Router methods mutate only their instance; operation tape creates a fresh instance per call.",
+      "ordering": "Input order and specified result order preserved.",
+      "exceptions": "Malformed or out-of-contract inputs are unspecified; no additional validation contract is claimed.",
+      "unicode": "String problems use the stated ASCII alphabet, not unrestricted Unicode.",
+      "numeric": "All required outputs and intermediate Number arithmetic are exact within the stated domain. Python uses exact integers. XOR operands stay below2^30; triangle area<=1e12; island sum<=1e11. 3518 caps counts at1e6, keeping multiply-before-divide intermediates<=5e9 and multinomial products<=1e12. 3583 reduces every contribution before the next addition."
+    },
+    "algorithm": "An increasing stack counts a new positive layer exactly when a smaller value separates it from the previous equal layer. Zero closes all positive layers.",
+    "complexity": "O(n) time and O(n) auxiliary space.",
+    "adapter": null,
+    "source_url": "https://leetcode.com/problems/minimum-operations-to-convert-all-elements-to-zero/",
+    "definition_provenance": {
+      "official_url": "https://leetcode.com/problems/minimum-operations-to-convert-all-elements-to-zero/",
+      "consulted_on": "2026-10-27",
+      "observed_numeric_id": 3542,
+      "acquired_rendered_response_sha256": "04e977b8dcb57ca382f23a72e96ecaf3ec800ed7a0e5103627196a7b001bc6af",
+      "hash_scope": "Private UTF-8 JSON string containing the acquired official rendered definition response; not raw upstream HTML. Full statement snapshot is not redistributed.",
+      "scope": "Official public definition, constraints and public examples only; no editorial or implementation code consulted."
+    },
+    "authorship": "Original implementations authored for this patch; no upstream solution code copied.",
+    "tests": {
+      "public_example": 3,
+      "independent_small_oracle": 100,
+      "structured_edge": 1
+    },
+    "independent_oracle": "Exact memoized search over every interval and the literal minimum-zeroing operation on short arrays.",
+    "test_receipt": "batch3/test-results.json",
+    "source_files": {
+      "javascript": {
+        "path": "javascript/3542.js",
+        "sha256": "fa15d6dc171741f59c41858d84075fd17b0f089265b0b01c91886387ec956f7c"
+      },
+      "python": {
+        "path": "python/3542.py",
+        "sha256": "993ccd892acb4dab4f00f2a6475eb3ae4fa4e671ce9a2d26b6b25c05eb694853"
+      }
+    },
+    "limitations": [
+      "Finite development tests do not establish formal soundness, hidden-judge acceptance, complete maximum-constraint performance, catalogue qualification, or serving eligibility.",
+      "No protected/private cases, external judge submissions, policy changes, model calls, paid services, dependency additions, commits or pushes."
+    ]
+  },
+  {
+    "problem_id": 3552,
+    "parameters": [
+      "matrix"
+    ],
+    "canonical_key": "lc:grid-teleportation-traversal",
+    "status": "authored_locally_tested_candidate",
+    "qualification": "not_qualified",
+    "admission": "not_admitted",
+    "base_commit": "bc252ef318b165396288cd3f3d0ecbd4b84c03da",
+    "contract": {
+      "domain": "Rectangular grid, each dimension1..1000; characters . # A..Z; top-left is not blocked.",
+      "result": "Minimum orthogonal moves from top-left to bottom-right, with optional zero-cost teleport between equal letters, each letter usable at most once per journey; -1 if unreachable.",
+      "mutation": "No caller argument mutation. Router methods mutate only their instance; operation tape creates a fresh instance per call.",
+      "ordering": "Input order and specified result order preserved.",
+      "exceptions": "Malformed or out-of-contract inputs are unspecified; no additional validation contract is claimed.",
+      "unicode": "String problems use the stated ASCII alphabet, not unrestricted Unicode.",
+      "numeric": "All required outputs and intermediate Number arithmetic are exact within the stated domain. Python uses exact integers. XOR operands stay below2^30; triangle area<=1e12; island sum<=1e11. 3518 caps counts at1e6, keeping multiply-before-divide intermediates<=5e9 and multinomial products<=1e12. 3583 reduces every contribution before the next addition."
+    },
+    "algorithm": "0-1 BFS settles cells by shortest distance. Expand a portal group once on its first settled cell; any shortest route can remove repeated same-letter teleport detours.",
+    "complexity": "O(mn) time and space; every grid edge and each portal group is expanded at most once.",
+    "adapter": null,
+    "source_url": "https://leetcode.com/problems/grid-teleportation-traversal/",
+    "definition_provenance": {
+      "official_url": "https://leetcode.com/problems/grid-teleportation-traversal/",
+      "consulted_on": "2026-10-27",
+      "observed_numeric_id": 3552,
+      "acquired_rendered_response_sha256": "c07e37ad31641d08d4151d33948c532b0348885103c7480c263ab5ba588bea3d",
+      "hash_scope": "Private UTF-8 JSON string containing the acquired official rendered definition response; not raw upstream HTML. Full statement snapshot is not redistributed.",
+      "scope": "Official public definition, constraints and public examples only; no editorial or implementation code consulted."
+    },
+    "authorship": "Original implementations authored for this patch; no upstream solution code copied.",
+    "tests": {
+      "public_example": 2,
+      "independent_small_oracle": 100,
+      "structured_edge": 2
+    },
+    "independent_oracle": "Independent Dijkstra retains the exact route-local used-letter mask (two-letter small grids), rather than global portal expansion.",
+    "test_receipt": "batch3/test-results.json",
+    "source_files": {
+      "javascript": {
+        "path": "javascript/3552.js",
+        "sha256": "6d4100675c1b6334a2bde0e6c90a3784c1b3a38095371fdf1d55fb4a8685bf15"
+      },
+      "python": {
+        "path": "python/3552.py",
+        "sha256": "4293742b75327dc3ac5757972feb9c346b374162c6072942d3e1940fcf92bdef"
+      }
+    },
+    "limitations": [
+      "Finite development tests do not establish formal soundness, hidden-judge acceptance, complete maximum-constraint performance, catalogue qualification, or serving eligibility.",
+      "No protected/private cases, external judge submissions, policy changes, model calls, paid services, dependency additions, commits or pushes."
+    ]
+  },
+  {
+    "problem_id": 3561,
+    "parameters": [
+      "s"
+    ],
+    "canonical_key": "lc:resulting-string-after-adjacent-removals",
+    "status": "authored_locally_tested_candidate",
+    "qualification": "not_qualified",
+    "admission": "not_admitted",
+    "base_commit": "bc252ef318b165396288cd3f3d0ecbd4b84c03da",
+    "contract": {
+      "domain": "Lowercase ASCII string of length1..100000; a and z are consecutive.",
+      "result": "Result after repeatedly removing the leftmost adjacent pair with circular alphabet distance one.",
+      "mutation": "No caller argument mutation. Router methods mutate only their instance; operation tape creates a fresh instance per call.",
+      "ordering": "Input order and specified result order preserved.",
+      "exceptions": "Malformed or out-of-contract inputs are unspecified; no additional validation contract is claimed.",
+      "unicode": "String problems use the stated ASCII alphabet, not unrestricted Unicode.",
+      "numeric": "All required outputs and intermediate Number arithmetic are exact within the stated domain. Python uses exact integers. XOR operands stay below2^30; triangle area<=1e12; island sum<=1e11. 3518 caps counts at1e6, keeping multiply-before-divide intermediates<=5e9 and multinomial products<=1e12. 3583 reduces every contribution before the next addition."
+    },
+    "algorithm": "The processed stack prefix has no removable pair; only its boundary with the next character can create the next leftmost removal.",
+    "complexity": "O(n) time and O(n) auxiliary/output space.",
+    "adapter": null,
+    "source_url": "https://leetcode.com/problems/resulting-string-after-adjacent-removals/",
+    "definition_provenance": {
+      "official_url": "https://leetcode.com/problems/resulting-string-after-adjacent-removals/",
+      "consulted_on": "2026-10-27",
+      "observed_numeric_id": 3561,
+      "acquired_rendered_response_sha256": "4f02aa9bd8b00f24f0e4fbcffd50f76dadadd1a075cc4b52e1c8da385964bdbb",
+      "hash_scope": "Private UTF-8 JSON string containing the acquired official rendered definition response; not raw upstream HTML. Full statement snapshot is not redistributed.",
+      "scope": "Official public definition, constraints and public examples only; no editorial or implementation code consulted."
+    },
+    "authorship": "Original implementations authored for this patch; no upstream solution code copied.",
+    "tests": {
+      "public_example": 3,
+      "independent_small_oracle": 100,
+      "structured_edge": 1
+    },
+    "independent_oracle": "Repeatedly scan the entire current string and delete its literal leftmost eligible pair.",
+    "test_receipt": "batch3/test-results.json",
+    "source_files": {
+      "javascript": {
+        "path": "javascript/3561.js",
+        "sha256": "b9064932054a59a55f60c40e710572ef79674329ee3eeabfa58896a82d913644"
+      },
+      "python": {
+        "path": "python/3561.py",
+        "sha256": "a1020ab0ac41c3245f2b6606c2f81e8f43f26f84d76247a1591d3b714bb25f25"
+      }
+    },
+    "limitations": [
+      "Finite development tests do not establish formal soundness, hidden-judge acceptance, complete maximum-constraint performance, catalogue qualification, or serving eligibility.",
+      "No protected/private cases, external judge submissions, policy changes, model calls, paid services, dependency additions, commits or pushes."
+    ]
+  },
+  {
+    "problem_id": 3568,
+    "parameters": [
+      "classroom",
+      "energy"
+    ],
+    "canonical_key": "lc:minimum-moves-to-clean-the-classroom",
+    "status": "authored_locally_tested_candidate",
+    "qualification": "not_qualified",
+    "admission": "not_admitted",
+    "base_commit": "bc252ef318b165396288cd3f3d0ecbd4b84c03da",
+    "contract": {
+      "domain": "Rectangular grid dimensions1..20, exactly one S, <=10 L, R reset, X blocked, . empty; capacity1..50.",
+      "result": "Minimum moves collecting every litter cell, or -1. Each move costs one energy; arriving at R restores full energy, including an arrival using the last unit.",
+      "mutation": "No caller argument mutation. Router methods mutate only their instance; operation tape creates a fresh instance per call.",
+      "ordering": "Input order and specified result order preserved.",
+      "exceptions": "Malformed or out-of-contract inputs are unspecified; no additional validation contract is claimed.",
+      "unicode": "String problems use the stated ASCII alphabet, not unrestricted Unicode.",
+      "numeric": "All required outputs and intermediate Number arithmetic are exact within the stated domain. Python uses exact integers. XOR operands stay below2^30; triangle area<=1e12; island sum<=1e11. 3518 caps counts at1e6, keeping multiply-before-divide intermediates<=5e9 and multinomial products<=1e12. 3583 reduces every contribution before the next addition."
+    },
+    "algorithm": "Level BFS over cell, collected-mask, and energy. At enqueue time, lower/equal energy is dominated by an already reached same cell/mask at no greater distance.",
+    "complexity": "Worst-case O(mn * 2^L * E) time and space including frontier; dominance table itself O(mn * 2^L).",
+    "adapter": null,
+    "source_url": "https://leetcode.com/problems/minimum-moves-to-clean-the-classroom/",
+    "definition_provenance": {
+      "official_url": "https://leetcode.com/problems/minimum-moves-to-clean-the-classroom/",
+      "consulted_on": "2026-10-27",
+      "observed_numeric_id": 3568,
+      "acquired_rendered_response_sha256": "e3000c5b9b09236c8f6c0a2be54bd2e6bd0bcdbe0128eaeefa60af765f8d961f",
+      "hash_scope": "Private UTF-8 JSON string containing the acquired official rendered definition response; not raw upstream HTML. Full statement snapshot is not redistributed.",
+      "scope": "Official public definition, constraints and public examples only; no editorial or implementation code consulted."
+    },
+    "authorship": "Original implementations authored for this patch; no upstream solution code copied.",
+    "tests": {
+      "public_example": 3,
+      "independent_small_oracle": 100,
+      "structured_edge": 2
+    },
+    "independent_oracle": "Independent BFS retains all exact (cell,mask,energy) states, without the energy-dominance optimization.",
+    "test_receipt": "batch3/test-results.json",
+    "source_files": {
+      "javascript": {
+        "path": "javascript/3568.js",
+        "sha256": "1415953d9120ab120b49f92b870a2f0d72cf379b1e7b0cdbe87bcb3890c56d87"
+      },
+      "python": {
+        "path": "python/3568.py",
+        "sha256": "9f3269f112e4fe166bba4952a860620e11ac9cb78943a95b6223817fa8c94184"
+      }
+    },
+    "limitations": [
+      "Finite development tests do not establish formal soundness, hidden-judge acceptance, complete maximum-constraint performance, catalogue qualification, or serving eligibility.",
+      "No protected/private cases, external judge submissions, policy changes, model calls, paid services, dependency additions, commits or pushes."
+    ]
+  },
+  {
+    "problem_id": 3576,
+    "parameters": [
+      "nums",
+      "k"
+    ],
+    "canonical_key": "lc:transform-array-to-all-equal-elements",
+    "status": "authored_locally_tested_candidate",
+    "qualification": "not_qualified",
+    "admission": "not_admitted",
+    "base_commit": "bc252ef318b165396288cd3f3d0ecbd4b84c03da",
+    "contract": {
+      "domain": "1..100000 values each -1 or1; 1<=k<=n.",
+      "result": "Whether at most k adjacent-pair sign flips can make all values equal.",
+      "mutation": "No caller argument mutation. Router methods mutate only their instance; operation tape creates a fresh instance per call.",
+      "ordering": "Input order and specified result order preserved.",
+      "exceptions": "Malformed or out-of-contract inputs are unspecified; no additional validation contract is claimed.",
+      "unicode": "String problems use the stated ASCII alphabet, not unrestricted Unicode.",
+      "numeric": "All required outputs and intermediate Number arithmetic are exact within the stated domain. Python uses exact integers. XOR operands stay below2^30; triangle area<=1e12; island sum<=1e11. 3518 caps counts at1e6, keeping multiply-before-divide intermediates<=5e9 and multinomial products<=1e12. 3583 reduces every contribution before the next addition."
+    },
+    "algorithm": "For each uniform target sign, the left-to-right choice at each edge is forced; test the final endpoint and the minimum resulting flip count.",
+    "complexity": "O(n) time and O(1) auxiliary space.",
+    "adapter": null,
+    "source_url": "https://leetcode.com/problems/transform-array-to-all-equal-elements/",
+    "definition_provenance": {
+      "official_url": "https://leetcode.com/problems/transform-array-to-all-equal-elements/",
+      "consulted_on": "2026-10-27",
+      "observed_numeric_id": 3576,
+      "acquired_rendered_response_sha256": "0c982b8e87caa10b8c446747d8bf4bee8180e163f977f73f288f67ca275b3057",
+      "hash_scope": "Private UTF-8 JSON string containing the acquired official rendered definition response; not raw upstream HTML. Full statement snapshot is not redistributed.",
+      "scope": "Official public definition, constraints and public examples only; no editorial or implementation code consulted."
+    },
+    "authorship": "Original implementations authored for this patch; no upstream solution code copied.",
+    "tests": {
+      "public_example": 2,
+      "independent_small_oracle": 100,
+      "structured_edge": 1
+    },
+    "independent_oracle": "Breadth-first exploration of every reachable sign vector on short arrays determines exact minimum flips.",
+    "test_receipt": "batch3/test-results.json",
+    "source_files": {
+      "javascript": {
+        "path": "javascript/3576.js",
+        "sha256": "4acd819de875fcd7eacbcde631faa088b54ba79207c4154841b5d5181f07aa38"
+      },
+      "python": {
+        "path": "python/3576.py",
+        "sha256": "a4b6d7884c6e5a593d4d3808d307a133d72ce04174a0fccceec43c3ead2574b2"
+      }
+    },
+    "limitations": [
+      "Finite development tests do not establish formal soundness, hidden-judge acceptance, complete maximum-constraint performance, catalogue qualification, or serving eligibility.",
+      "No protected/private cases, external judge submissions, policy changes, model calls, paid services, dependency additions, commits or pushes."
+    ]
+  },
+  {
+    "problem_id": 3583,
+    "parameters": [
+      "nums"
+    ],
+    "canonical_key": "lc:count-special-triplets",
+    "status": "authored_locally_tested_candidate",
+    "qualification": "not_qualified",
+    "admission": "not_admitted",
+    "base_commit": "bc252ef318b165396288cd3f3d0ecbd4b84c03da",
+    "contract": {
+      "domain": "3..100000 integers in [0,100000].",
+      "result": "Count index triples i<j<k with nums[i]=2*nums[j]=nums[k], modulo1000000007.",
+      "mutation": "No caller argument mutation. Router methods mutate only their instance; operation tape creates a fresh instance per call.",
+      "ordering": "Input order and specified result order preserved.",
+      "exceptions": "Malformed or out-of-contract inputs are unspecified; no additional validation contract is claimed.",
+      "unicode": "String problems use the stated ASCII alphabet, not unrestricted Unicode.",
+      "numeric": "All required outputs and intermediate Number arithmetic are exact within the stated domain. Python uses exact integers. XOR operands stay below2^30; triangle area<=1e12; island sum<=1e11. 3518 caps counts at1e6, keeping multiply-before-divide intermediates<=5e9 and multinomial products<=1e12. 3583 reduces every contribution before the next addition."
+    },
+    "algorithm": "After removing the center from the right counter, independent left/right counts of twice its value multiply to its contribution.",
+    "complexity": "O(n) expected time and O(U) space, U distinct input values.",
+    "adapter": null,
+    "source_url": "https://leetcode.com/problems/count-special-triplets/",
+    "definition_provenance": {
+      "official_url": "https://leetcode.com/problems/count-special-triplets/",
+      "consulted_on": "2026-10-27",
+      "observed_numeric_id": 3583,
+      "acquired_rendered_response_sha256": "212ad5bdd53e941d9d81f6195712f2c05e2255542db2298ab07cd571ac45b968",
+      "hash_scope": "Private UTF-8 JSON string containing the acquired official rendered definition response; not raw upstream HTML. Full statement snapshot is not redistributed.",
+      "scope": "Official public definition, constraints and public examples only; no editorial or implementation code consulted."
+    },
+    "authorship": "Original implementations authored for this patch; no upstream solution code copied.",
+    "tests": {
+      "public_example": 3,
+      "independent_small_oracle": 100,
+      "structured_edge": 1
+    },
+    "independent_oracle": "Enumerate every index triple and check both equalities.",
+    "test_receipt": "batch3/test-results.json",
+    "source_files": {
+      "javascript": {
+        "path": "javascript/3583.js",
+        "sha256": "b01eb7251cf8335f8ddc49d208845a5092604fc888fdb9f8cb117ebc3784b762"
+      },
+      "python": {
+        "path": "python/3583.py",
+        "sha256": "b9c5dc6cd04a57f4e50fc948811cfaadf3e6e680bfa232cd11e6dc1add056ea8"
+      }
+    },
+    "limitations": [
+      "Finite development tests do not establish formal soundness, hidden-judge acceptance, complete maximum-constraint performance, catalogue qualification, or serving eligibility.",
+      "No protected/private cases, external judge submissions, policy changes, model calls, paid services, dependency additions, commits or pushes."
+    ]
+  },
+  {
+    "problem_id": 3588,
+    "parameters": [
+      "coords"
+    ],
+    "canonical_key": "lc:find-maximum-area-of-a-triangle",
+    "status": "authored_locally_tested_candidate",
+    "qualification": "not_qualified",
+    "admission": "not_admitted",
+    "base_commit": "bc252ef318b165396288cd3f3d0ecbd4b84c03da",
+    "contract": {
+      "domain": "1..100000 unique coordinate pairs, both coordinates1..1000000.",
+      "result": "Twice maximum nonzero triangle area with at least one horizontal or vertical side, or -1 if no such triangle exists.",
+      "mutation": "No caller argument mutation. Router methods mutate only their instance; operation tape creates a fresh instance per call.",
+      "ordering": "Input order and specified result order preserved.",
+      "exceptions": "Malformed or out-of-contract inputs are unspecified; no additional validation contract is claimed.",
+      "unicode": "String problems use the stated ASCII alphabet, not unrestricted Unicode.",
+      "numeric": "All required outputs and intermediate Number arithmetic are exact within the stated domain. Python uses exact integers. XOR operands stay below2^30; triangle area<=1e12; island sum<=1e11. 3518 caps counts at1e6, keeping multiply-before-divide intermediates<=5e9 and multinomial products<=1e12. 3583 reduces every contribution before the next addition."
+    },
+    "algorithm": "For each equal-x/equal-y group maximize the parallel base span, and pair it with the farthest globally available perpendicular coordinate.",
+    "complexity": "O(n) expected time and O(n) auxiliary space.",
+    "adapter": null,
+    "source_url": "https://leetcode.com/problems/find-maximum-area-of-a-triangle/",
+    "definition_provenance": {
+      "official_url": "https://leetcode.com/problems/find-maximum-area-of-a-triangle/",
+      "consulted_on": "2026-10-27",
+      "observed_numeric_id": 3588,
+      "acquired_rendered_response_sha256": "5125dd2d918ec55b0fb3c866e8cd44b22b9b01998a4058be559c71f2c82f36f5",
+      "hash_scope": "Private UTF-8 JSON string containing the acquired official rendered definition response; not raw upstream HTML. Full statement snapshot is not redistributed.",
+      "scope": "Official public definition, constraints and public examples only; no editorial or implementation code consulted."
+    },
+    "authorship": "Original implementations authored for this patch; no upstream solution code copied.",
+    "tests": {
+      "public_example": 2,
+      "independent_small_oracle": 100,
+      "structured_edge": 1
+    },
+    "independent_oracle": "Enumerate all point triples, require an aligned side, and evaluate the determinant area.",
+    "test_receipt": "batch3/test-results.json",
+    "source_files": {
+      "javascript": {
+        "path": "javascript/3588.js",
+        "sha256": "f6ae8bc328f64f2c29d9249ed9dd033f46050480ece8ce1525d02036441a482e"
+      },
+      "python": {
+        "path": "python/3588.py",
+        "sha256": "3611859f49cf2c83ef0a35bc55efb82edbac3f8c7518fb7388fe4a0d39072542"
+      }
+    },
+    "limitations": [
+      "Finite development tests do not establish formal soundness, hidden-judge acceptance, complete maximum-constraint performance, catalogue qualification, or serving eligibility.",
+      "No protected/private cases, external judge submissions, policy changes, model calls, paid services, dependency additions, commits or pushes."
+    ]
+  },
+  {
+    "problem_id": 3599,
+    "parameters": [
+      "nums",
+      "k"
+    ],
+    "canonical_key": "lc:partition-array-to-minimize-xor",
+    "status": "authored_locally_tested_candidate",
+    "qualification": "not_qualified",
+    "admission": "not_admitted",
+    "base_commit": "bc252ef318b165396288cd3f3d0ecbd4b84c03da",
+    "contract": {
+      "domain": "1..250 positive integers<=1e9; 1<=k<=n.",
+      "result": "Minimum possible maximum subarray XOR among exactly k nonempty contiguous pieces.",
+      "mutation": "No caller argument mutation. Router methods mutate only their instance; operation tape creates a fresh instance per call.",
+      "ordering": "Input order and specified result order preserved.",
+      "exceptions": "Malformed or out-of-contract inputs are unspecified; no additional validation contract is claimed.",
+      "unicode": "String problems use the stated ASCII alphabet, not unrestricted Unicode.",
+      "numeric": "All required outputs and intermediate Number arithmetic are exact within the stated domain. Python uses exact integers. XOR operands stay below2^30; triangle area<=1e12; island sum<=1e11. 3518 caps counts at1e6, keeping multiply-before-divide intermediates<=5e9 and multinomial products<=1e12. 3583 reduces every contribution before the next addition."
+    },
+    "algorithm": "Prefix XOR gives each candidate last segment. Layered minimax dynamic programming tries every previous cut.",
+    "complexity": "O(kn^2) time and O(n) auxiliary space.",
+    "adapter": null,
+    "source_url": "https://leetcode.com/problems/partition-array-to-minimize-xor/",
+    "definition_provenance": {
+      "official_url": "https://leetcode.com/problems/partition-array-to-minimize-xor/",
+      "consulted_on": "2026-10-27",
+      "observed_numeric_id": 3599,
+      "acquired_rendered_response_sha256": "dec3d221c8fb345e0f050ad680b17f7a61452db8c6c99c5bff8d05a8ec58d54a",
+      "hash_scope": "Private UTF-8 JSON string containing the acquired official rendered definition response; not raw upstream HTML. Full statement snapshot is not redistributed.",
+      "scope": "Official public definition, constraints and public examples only; no editorial or implementation code consulted."
+    },
+    "authorship": "Original implementations authored for this patch; no upstream solution code copied.",
+    "tests": {
+      "public_example": 3,
+      "independent_small_oracle": 100,
+      "structured_edge": 1
+    },
+    "independent_oracle": "Enumerate all k-1 cut sets and directly XOR each piece, then minimize the maximum.",
+    "test_receipt": "batch3/test-results.json",
+    "source_files": {
+      "javascript": {
+        "path": "javascript/3599.js",
+        "sha256": "8ced561493c2ad37fe04db78581053285180a1a6bb956e53aa2ee0a499d24cae"
+      },
+      "python": {
+        "path": "python/3599.py",
+        "sha256": "2aaeb9e7e65b4d0b83b9e05f5baed99df0b3b0d468e1cbf7f57376d8024f6032"
+      }
+    },
+    "limitations": [
+      "Finite development tests do not establish formal soundness, hidden-judge acceptance, complete maximum-constraint performance, catalogue qualification, or serving eligibility.",
+      "No protected/private cases, external judge submissions, policy changes, model calls, paid services, dependency additions, commits or pushes."
+    ]
+  },
+  {
+    "problem_id": 3612,
+    "parameters": [
+      "s"
+    ],
+    "canonical_key": "lc:process-string-with-special-operations-i",
+    "status": "authored_locally_tested_candidate",
+    "qualification": "not_qualified",
+    "admission": "not_admitted",
+    "base_commit": "bc252ef318b165396288cd3f3d0ecbd4b84c03da",
+    "contract": {
+      "domain": "ASCII lowercase and * # %; input length1..20.",
+      "result": "Literal left-to-right processing: append letter; * deletes last if any; # duplicates all; % reverses; return final string.",
+      "mutation": "No caller argument mutation. Router methods mutate only their instance; operation tape creates a fresh instance per call.",
+      "ordering": "Input order and specified result order preserved.",
+      "exceptions": "Malformed or out-of-contract inputs are unspecified; no additional validation contract is claimed.",
+      "unicode": "String problems use the stated ASCII alphabet, not unrestricted Unicode.",
+      "numeric": "All required outputs and intermediate Number arithmetic are exact within the stated domain. Python uses exact integers. XOR operands stay below2^30; triangle area<=1e12; island sum<=1e11. 3518 caps counts at1e6, keeping multiply-before-divide intermediates<=5e9 and multinomial products<=1e12. 3583 reduces every contribution before the next addition."
+    },
+    "algorithm": "Maintain the explicit result; the input bound limits maximum intermediate length to2^19.",
+    "complexity": "O(sum of intermediate lengths + n) time and O(maximum intermediate length) space.",
+    "adapter": null,
+    "source_url": "https://leetcode.com/problems/process-string-with-special-operations-i/",
+    "definition_provenance": {
+      "official_url": "https://leetcode.com/problems/process-string-with-special-operations-i/",
+      "consulted_on": "2026-10-27",
+      "observed_numeric_id": 3612,
+      "acquired_rendered_response_sha256": "06d6da5b2def2aecd1eb052f03f11fd0a9ed759b231581182ec19528d16023bf",
+      "hash_scope": "Private UTF-8 JSON string containing the acquired official rendered definition response; not raw upstream HTML. Full statement snapshot is not redistributed.",
+      "scope": "Official public definition, constraints and public examples only; no editorial or implementation code consulted."
+    },
+    "authorship": "Original implementations authored for this patch; no upstream solution code copied.",
+    "tests": {
+      "public_example": 2,
+      "independent_small_oracle": 100,
+      "structured_edge": 1
+    },
+    "independent_oracle": "Independent immutable-string implementation applies each operation literally.",
+    "test_receipt": "batch3/test-results.json",
+    "source_files": {
+      "javascript": {
+        "path": "javascript/3612.js",
+        "sha256": "bf2e7380ba9cda96910123ba41a2fc365117c7f4c3bafe70d12e89de782cd4b8"
+      },
+      "python": {
+        "path": "python/3612.py",
+        "sha256": "f51ea1c82969cc46d32f69e17f7dcd76073e137746eb9956837594815eb8ee6b"
+      }
+    },
+    "limitations": [
+      "Finite development tests do not establish formal soundness, hidden-judge acceptance, complete maximum-constraint performance, catalogue qualification, or serving eligibility.",
+      "No protected/private cases, external judge submissions, policy changes, model calls, paid services, dependency additions, commits or pushes."
+    ]
+  },
+  {
+    "problem_id": 3619,
+    "parameters": [
+      "grid",
+      "k"
+    ],
+    "canonical_key": "lc:count-islands-with-total-value-divisible-by-k",
+    "status": "authored_locally_tested_candidate",
+    "qualification": "not_qualified",
+    "admission": "not_admitted",
+    "base_commit": "bc252ef318b165396288cd3f3d0ecbd4b84c03da",
+    "contract": {
+      "domain": "Rectangular grid, dimensions1..1000 and product<=100000; values0..1000000; k1..1000000.",
+      "result": "Count four-connected positive-cell islands whose total value is divisible by k; zeros are water.",
+      "mutation": "No caller argument mutation. Router methods mutate only their instance; operation tape creates a fresh instance per call.",
+      "ordering": "Input order and specified result order preserved.",
+      "exceptions": "Malformed or out-of-contract inputs are unspecified; no additional validation contract is claimed.",
+      "unicode": "String problems use the stated ASCII alphabet, not unrestricted Unicode.",
+      "numeric": "All required outputs and intermediate Number arithmetic are exact within the stated domain. Python uses exact integers. XOR operands stay below2^30; triangle area<=1e12; island sum<=1e11. 3518 caps counts at1e6, keeping multiply-before-divide intermediates<=5e9 and multinomial products<=1e12. 3583 reduces every contribution before the next addition."
+    },
+    "algorithm": "Iterative flood fill visits each positive cell once, accumulating the component sum before divisibility testing.",
+    "complexity": "O(mn) time and space; input grid not mutated.",
+    "adapter": null,
+    "source_url": "https://leetcode.com/problems/count-islands-with-total-value-divisible-by-k/",
+    "definition_provenance": {
+      "official_url": "https://leetcode.com/problems/count-islands-with-total-value-divisible-by-k/",
+      "consulted_on": "2026-10-27",
+      "observed_numeric_id": 3619,
+      "acquired_rendered_response_sha256": "8f12811afe46e42f602c5eac8096d803d938784488bc9c3be9a1538f49c43d11",
+      "hash_scope": "Private UTF-8 JSON string containing the acquired official rendered definition response; not raw upstream HTML. Full statement snapshot is not redistributed.",
+      "scope": "Official public definition, constraints and public examples only; no editorial or implementation code consulted."
+    },
+    "authorship": "Original implementations authored for this patch; no upstream solution code copied.",
+    "tests": {
+      "public_example": 2,
+      "independent_small_oracle": 100,
+      "structured_edge": 1
+    },
+    "independent_oracle": "Union-find joins adjacent positive cells; a separate component-sum pass computes divisibility.",
+    "test_receipt": "batch3/test-results.json",
+    "source_files": {
+      "javascript": {
+        "path": "javascript/3619.js",
+        "sha256": "95addd205f73482ea2e9774f23271d56ede3014ec8e04ad412f52467a0b9988e"
+      },
+      "python": {
+        "path": "python/3619.py",
+        "sha256": "24460827982b2b235b7c19b4056597b920f48541f288ff73939a625cdda883dd"
+      }
+    },
+    "limitations": [
+      "Finite development tests do not establish formal soundness, hidden-judge acceptance, complete maximum-constraint performance, catalogue qualification, or serving eligibility.",
+      "No protected/private cases, external judge submissions, policy changes, model calls, paid services, dependency additions, commits or pushes."
+    ]
+  }
+]

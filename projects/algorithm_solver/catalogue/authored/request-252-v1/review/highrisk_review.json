@@ -1,0 +1,252 @@
+{
+  "schema": "gamma.request-252-independent-review.v1",
+  "base_commit": "bc252ef318b165396288cd3f3d0ecbd4b84c03da",
+  "reviewed_at": "2026-10-27T00:29:26.683532+00:00",
+  "reviewed_problem_ids": [
+    3235,
+    3518,
+    3525,
+    3539,
+    3579,
+    3590,
+    3600
+  ],
+  "candidate_pairs_reviewed": 7,
+  "oracle_cases_per_language": 4961,
+  "oracle_language_checks": 9922,
+  "maximum_shape_language_checks": 6,
+  "blocking_findings": [],
+  "results": [
+    {
+      "problem_id": 3235,
+      "source_sha256": {
+        "python": "49fb8a3f233e3918efeaecb3d0c065d9fbdc389a6dc6a40b097606ecb59d2b88",
+        "javascript": "95e27c17789513a118c9e1c9e7e596b984fc7bbbfcd28008227c67e55e635692"
+      },
+      "cases_per_language": 3007,
+      "language_checks": 6014,
+      "categories": {
+        "public_example": 2,
+        "random_oracle": 1000,
+        "large_exact_geometry": 3,
+        "endpoint_uncovered_clipped_geometry": 2000,
+        "outside_intersection_or_barrier_fixture": 2
+      },
+      "python_seconds": 0.024,
+      "javascript_seconds": 0.0729,
+      "case_sha256": "23eb2b67a99f534e69192dd74df1736e1d72f5dd15686a8beba31c83cd493485",
+      "failures": [],
+      "manual_review": "Exact integer/BigInt corner and segment distances prevent floating precision errors. The radius-weighted point is in both intersecting convex disks. If that point is outside the rectangle but a common point is inside, the connecting segment crosses a top/right boundary, so the omitted pair edge is redundant via the common boundary arc. Independent clipped-disk witness graph validates nontrivial topologies."
+    },
+    {
+      "problem_id": 3518,
+      "source_sha256": {
+        "python": "75754a53aaad0fec176d546f0f2c65b39137534767df400b56e271fe068f4f91",
+        "javascript": "1a9cb2af29875ad6a0763bdbd8045a05394236908f91f010bdb43841a8014682"
+      },
+      "cases_per_language": 687,
+      "language_checks": 1374,
+      "categories": {
+        "random_oracle": 675,
+        "large_exact_integer_oracle": 12
+      },
+      "python_seconds": 0.0997,
+      "javascript_seconds": 0.0745,
+      "case_sha256": "c90ebcf1679b2579d33685e679d9c574794f6b603aee0793628e8bb17c335056",
+      "failures": [],
+      "manual_review": "Multinomial counts are capped only once the count is at least the remaining rank. Counts below rank stay exact. JS binomial products before division are bounded by 5000*1e6 and aggregate products by 1e12, both safe exact integers; integer quotients remain representable. Independent full-big-integer multinomial unranking validates large skewed and balanced inputs."
+    },
+    {
+      "problem_id": 3525,
+      "source_sha256": {
+        "python": "c4d2a1bf5d070daf1f70b758d2e4c3fdbcbe4f5b00d310915de8bde925ce6404",
+        "javascript": "85dbd15ca90411ffe493d7b4844edc993f80132641032ca5e399fe1e5a759f8b"
+      },
+      "cases_per_language": 300,
+      "language_checks": 600,
+      "categories": {
+        "random_oracle": 300
+      },
+      "python_seconds": 0.0199,
+      "javascript_seconds": 0.0626,
+      "case_sha256": "9ebdbd8b471cf5da7e21f1d8f624b68e019e0fb7a4e4740e2cee6429c871f682",
+      "failures": [],
+      "manual_review": "Segment merge keeps product plus nonempty-prefix residue counts. Order is intentionally noncommutative; the right query accumulator prepends nodes. Identity contributes no empty prefix, including k=1. Updates persist only in the private segment tree, preserving caller input."
+    },
+    {
+      "problem_id": 3539,
+      "source_sha256": {
+        "python": "7482e4abb471deb25cbc8e168dc94c27765a0b0613183aaee2f1cea2bcc81b47",
+        "javascript": "fbf9f397fd893f6d876252fe0b0d091c2374cf8c871acf4e014da836f580697f"
+      },
+      "cases_per_language": 240,
+      "language_checks": 480,
+      "categories": {
+        "random_oracle": 180,
+        "single_index_exact": 60
+      },
+      "python_seconds": 0.0066,
+      "javascript_seconds": 0.0629,
+      "case_sha256": "57768fe4cb766118b9187ad8f18003f8192555cee542d0a5b6c11cac9e34e322",
+      "failures": [],
+      "manual_review": "Used-position binomial choices count ordered sequences without overcounting. Carry transitions finalize one bit at each index; final popcount includes remaining carry. State encoding has width m+1, enough for all fields. BigInt modular products avoid JS precision loss. Ordered-sequence enumeration and maximum distinct-index closed form agree."
+    },
+    {
+      "problem_id": 3579,
+      "source_sha256": {
+        "python": "5ee8c51ea4857e23c1e210f5fd189be27e58bd99353f93987ae181a18a31d345",
+        "javascript": "85ca14c6d5333493504c6e8c0396aa5ecb10185fc3bf054e2c9137390fe64641"
+      },
+      "cases_per_language": 176,
+      "language_checks": 352,
+      "categories": {
+        "random_oracle": 175,
+        "public_example": 1
+      },
+      "python_seconds": 0.0026,
+      "javascript_seconds": 0.0688,
+      "case_sha256": "b127286a39112669d6311f774bde62c2c11a0079b3633c26448f6986cb9134a6",
+      "failures": [],
+      "manual_review": "A useful disjoint swap saves one operation only for opposite mismatches. Other swaps cannot improve over replacements. Opposite directed-character pairs can be greedily paired independently; a reversal can be performed before swaps/replacements without loss. Partition DP examines both orientations. Independent enumeration of every disjoint matching validates the shortcut."
+    },
+    {
+      "problem_id": 3590,
+      "source_sha256": {
+        "python": "089ce0f8e94501338d30b8eaba8a6a00d551ecc590d77d5c7cd154298b5266b2",
+        "javascript": "54e337bf121eb1fcc079423b46373729ccd90fde561ae6ae73a1ad14cbe2a53e"
+      },
+      "cases_per_language": 251,
+      "language_checks": 502,
+      "categories": {
+        "random_oracle": 250,
+        "deep_chain_no_recursion": 1
+      },
+      "python_seconds": 0.1055,
+      "javascript_seconds": 0.1325,
+      "case_sha256": "78a29c88bb101a002ad6b09ba86a3d5bc6f6b2c99a7b822add3f3c8e02ba3868",
+      "failures": [],
+      "manual_review": "Iterative DFS supports arbitrary valid parent numbering and deep chains. Root-inclusive path XORs are coordinate-compressed. Light sacks are discarded before the heavy sack is kept; Fenwick counts track distinct values via zero/nonzero frequency transitions. Explicit subtree sets and a 50000-node chain agree."
+    },
+    {
+      "problem_id": 3600,
+      "source_sha256": {
+        "python": "1f723e8dc074ee010012f0eef100c4e3194b2bcc6b27852b9763792c57e2b89a",
+        "javascript": "32bd1e40d3a24589f42545c72a2101828d3deab67b45b29ac27a54dd9f259066"
+      },
+      "cases_per_language": 300,
+      "language_checks": 600,
+      "categories": {
+        "random_oracle": 300
+      },
+      "python_seconds": 0.0047,
+      "javascript_seconds": 0.064,
+      "case_sha256": "02208cf9f90497ad1a1bf350b13c9eed4fa404706ce9ed312127a188ac389472",
+      "failures": [],
+      "manual_review": "Mandatory edges are checked first for cycles and threshold failure. Contracting free eligible optional edges minimizes required upgrades; any successful upgraded forest uses exactly components-minus-one edges. Monotone threshold feasibility supports binary search. Independent spanning-tree and upgrade-subset enumeration agrees."
+    }
+  ],
+  "maximum_shape_probes": [
+    {
+      "problem_id": 3525,
+      "language": "python",
+      "source_sha256": "c4d2a1bf5d070daf1f70b758d2e4c3fdbcbe4f5b00d310915de8bde925ce6404",
+      "passed": true,
+      "seconds": 0.6694,
+      "probe": "100000 elements, 20000 persistent update/query operations, exact all-ones closed form",
+      "timeout_seconds": 65,
+      "memory_limit": "512 MiB address space",
+      "expected_result_sha256": "ea594606110987928f6e182cc20c8da7b3b5cd8723719db968b15a5e08d1b4f6"
+    },
+    {
+      "problem_id": 3525,
+      "language": "javascript",
+      "source_sha256": "85dbd15ca90411ffe493d7b4844edc993f80132641032ca5e399fe1e5a759f8b",
+      "passed": true,
+      "seconds": 0.4248,
+      "probe": "100000 elements, 20000 persistent update/query operations, exact all-ones closed form",
+      "timeout_seconds": 65,
+      "memory_limit": "256 MiB V8 heap",
+      "expected_result_sha256": "ea594606110987928f6e182cc20c8da7b3b5cd8723719db968b15a5e08d1b4f6"
+    },
+    {
+      "problem_id": 3539,
+      "language": "python",
+      "source_sha256": "7482e4abb471deb25cbc8e168dc94c27765a0b0613183aaee2f1cea2bcc81b47",
+      "passed": true,
+      "seconds": 0.2785,
+      "probe": "50 indices, m=k=30: distinct-index ordered choices times common factor^30",
+      "timeout_seconds": 65,
+      "memory_limit": "512 MiB address space",
+      "expected_result_sha256": "7b48a7edb025d52279f71a41d1826b4452537c5b2b31a0a7afcbb24805b526c9"
+    },
+    {
+      "problem_id": 3539,
+      "language": "javascript",
+      "source_sha256": "fbf9f397fd893f6d876252fe0b0d091c2374cf8c871acf4e014da836f580697f",
+      "passed": true,
+      "seconds": 0.1501,
+      "probe": "50 indices, m=k=30: distinct-index ordered choices times common factor^30",
+      "timeout_seconds": 65,
+      "memory_limit": "256 MiB V8 heap",
+      "expected_result_sha256": "7b48a7edb025d52279f71a41d1826b4452537c5b2b31a0a7afcbb24805b526c9"
+    },
+    {
+      "problem_id": 3579,
+      "language": "python",
+      "source_sha256": "5ee8c51ea4857e23c1e210f5fd189be27e58bd99353f93987ae181a18a31d345",
+      "passed": true,
+      "seconds": 0.0707,
+      "probe": "100 mismatches with no improving swaps or reversal",
+      "timeout_seconds": 65,
+      "memory_limit": "512 MiB address space",
+      "expected_result_sha256": "ad57366865126e55649ecb23ae1d48887544976efea46a48eb5d85a6eeb4d306"
+    },
+    {
+      "problem_id": 3579,
+      "language": "javascript",
+      "source_sha256": "85ca14c6d5333493504c6e8c0396aa5ecb10185fc3bf054e2c9137390fe64641",
+      "passed": true,
+      "seconds": 0.0845,
+      "probe": "100 mismatches with no improving swaps or reversal",
+      "timeout_seconds": 65,
+      "memory_limit": "256 MiB V8 heap",
+      "expected_result_sha256": "ad57366865126e55649ecb23ae1d48887544976efea46a48eb5d85a6eeb4d306"
+    }
+  ],
+  "method_files_sha256": {
+    "highrisk_tests.py": "9eab492b8456a02a71ef82dde3abcb4d88dba87632dd29f3423352e76c149e09",
+    "highrisk_oracles.py": "a2d093a60ec876fce6ab8752dc84532bca92a144beadcbfc4e73904c3196b6af",
+    "highrisk_runner.py": "363ac017dee52711dec3c5f0d9153f413ad135cccb18e38a9a80ee5141a50795",
+    "highrisk_runner.js": "2a2d430fb08841b9a3465cb3a7e46ce5f3e4988b2b0baeb338aace98e4d77f47"
+  },
+  "boundary_config_sha256": "bb523a40169e2c3e6b9278393458c4c52e5461194b6f7052fd751ada125d9ea2",
+  "source_policy_changed": false,
+  "reserved_payloads_opened": false,
+  "qualification_created": false,
+  "limitations": [
+    "Finite development tests and manual review do not establish universal correctness or official hidden-judge acceptance.",
+    "Seven risk-selected IDs reviewed independently, not all 68 candidates.",
+    "The three maximum-shape cases are targeted correctness/resource checks, not exhaustive maximum-constraint or performance qualification."
+  ],
+  "reproduction": [
+    "python3 review/highrisk_tests.py --out review/highrisk_replay.json",
+    "Optional: --root /absolute/path/to/request-252-v1; --skip-maximum omits only the six separately counted maximum-shape checks."
+  ],
+  "official_definitions": {
+    "3235": "https://leetcode.com/problems/check-if-the-rectangle-corner-is-reachable/description/",
+    "3518": "https://leetcode.com/problems/smallest-palindromic-rearrangement-ii/description/",
+    "3525": "https://leetcode.com/problems/find-x-value-of-array-ii/description/",
+    "3539": "https://leetcode.com/problems/find-sum-of-array-product-of-magical-sequences/description/",
+    "3579": "https://leetcode.com/problems/minimum-steps-to-convert-string-with-operations/description/",
+    "3590": "https://leetcode.com/problems/kth-smallest-path-xor-sum/description/",
+    "3600": "https://leetcode.com/problems/maximize-spanning-tree-stability-with-upgrades/description/"
+  },
+  "runtime": {
+    "python": "3.12.14",
+    "node": "v24.22.1"
+  },
+  "portable_replay_verified_at": "2026-10-27T00:30:26.338656+00:00",
+  "portable_replay_oracle_language_checks": 9922,
+  "portable_replay_maximum_shape_language_checks": 6,
+  "pre_open_authorization": "All seven IDs were separately authorized for statement/source access using the unchanged live, hash-pinned boundary before review and replay. Portable replay verifies those fixed candidate IDs against reviewed source hashes; it neither acquires new content nor changes source-access policy."
+}

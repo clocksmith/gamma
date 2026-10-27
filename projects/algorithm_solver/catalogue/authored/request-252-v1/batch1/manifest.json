@@ -1,0 +1,868 @@
+[
+  {
+    "problem_id": 3215,
+    "canonical_key": "lc:count-triplets-with-even-xor-set-bits-ii",
+    "parameters": [
+      "a",
+      "b",
+      "c"
+    ],
+    "contract": {
+      "inputs": "Three nonempty integer arrays; each length <=100000; values in [0,10^9].",
+      "result": "Integer count of positional triples whose XOR has even popcount.",
+      "mutation": "Inputs are not mutated. Returned arrays/strings are newly produced; class state is per instance.",
+      "exceptions": "Valid contract inputs only; no extra invalid-input guarantee.",
+      "numeric": "Result <=10^15; JavaScript Number integers are exact.",
+      "unicode": "ASCII-only string domains where strings occur; other entries have no textual input."
+    },
+    "algorithm": "Count even/odd bit parity per array and combine four admissible parity triples.",
+    "complexity": "O(|a|+|b|+|c|) time at fixed 31-bit width; O(1) auxiliary space.",
+    "adapter": null,
+    "source_url": "https://leetcode.com/problems/count-triplets-with-even-xor-set-bits-ii/",
+    "definition_provenance": {
+      "official_url": "https://leetcode.com/problems/count-triplets-with-even-xor-set-bits-ii/",
+      "accessed_at": "2026-10-27",
+      "scope": "Public definition, constraints, and examples only; no editorial implementation copied.",
+      "identity_binding": "Canonical numeric alias/slug plus mirrored heading 3215 and official link checked.",
+      "official_access": "Official page returned a shell without definition; public admitted definition mirror used.",
+      "mirror_url": "https://raw.githubusercontent.com/doocs/leetcode/main/solution/3200-3299/3215.Count%20Triplets%20with%20Even%20XOR%20Set%20Bits%20II/README_EN.md",
+      "mirror_license": "CC-BY-SA-4.0 documentation; statement body not redistributed.",
+      "acquired_document_sha256": "fec08cd667894cb33ec5d5f0f0ab0e3198dfd3c2972c93b739715ce129ac8204",
+      "definition_prefix_sha256": "930c2e12cefeea550d26f5b9c1ae3e56fa7830fd6f36d4e13c02a6ca2a36a3ff"
+    },
+    "authorship": "Original local implementation, not copied upstream solution code.",
+    "base_commit": "bc252ef318b165396288cd3f3d0ecbd4b84c03da",
+    "status": "authored_locally_tested_candidate",
+    "qualification": "not_qualified",
+    "admission": "not_admitted",
+    "tests": {
+      "public_example": 2,
+      "independent_small_oracle": 80,
+      "numeric_edge": 1
+    },
+    "test_receipt": "batch1/test-results.json",
+    "source_files": {
+      "javascript": {
+        "path": "javascript/3215.js",
+        "sha256": "6dae4ca4cc55e3450a1bc6bb307124fb0c54d4985710d6dc8cb09f38ecd3efa3"
+      },
+      "python": {
+        "path": "python/3215.py",
+        "sha256": "6e107be508da7e3aea2c4ac92bcf3be469860be31ac34ad2d462ed2bf630547f"
+      }
+    },
+    "limitations": [
+      "Finite development tests are not universal proof, official hidden-judge acceptance, or catalogue qualification.",
+      "No protected/private cases, policy changes, admission, serving changes, commits, or pushes."
+    ]
+  },
+  {
+    "problem_id": 3228,
+    "canonical_key": "lc:maximum-number-of-operations-to-move-ones-to-the-end",
+    "parameters": [
+      "s"
+    ],
+    "contract": {
+      "inputs": "ASCII binary string, length 1..100000.",
+      "result": "Maximum legal moves of a 1 through the following nonempty run of zeroes.",
+      "mutation": "Inputs are not mutated. Returned arrays/strings are newly produced; class state is per instance.",
+      "exceptions": "Valid contract inputs only; no extra invalid-input guarantee.",
+      "numeric": "All counters <=n^2 and exact JavaScript Numbers.",
+      "unicode": "ASCII-only string domains where strings occur; other entries have no textual input."
+    },
+    "algorithm": "Each zero run charges all preceding ones once.",
+    "complexity": "O(n) time, O(1) auxiliary space.",
+    "adapter": null,
+    "source_url": "https://leetcode.com/problems/maximum-number-of-operations-to-move-ones-to-the-end/",
+    "definition_provenance": {
+      "official_url": "https://leetcode.com/problems/maximum-number-of-operations-to-move-ones-to-the-end/",
+      "accessed_at": "2026-10-27",
+      "scope": "Public definition, constraints, and examples only; no editorial implementation copied.",
+      "identity_binding": "Canonical numeric identity and slug from hash-bound alias metadata; visible official page ID checked."
+    },
+    "authorship": "Original local implementation, not copied upstream solution code.",
+    "base_commit": "bc252ef318b165396288cd3f3d0ecbd4b84c03da",
+    "status": "authored_locally_tested_candidate",
+    "qualification": "not_qualified",
+    "admission": "not_admitted",
+    "tests": {
+      "public_example": 2,
+      "independent_small_oracle": 80
+    },
+    "test_receipt": "batch1/test-results.json",
+    "source_files": {
+      "javascript": {
+        "path": "javascript/3228.js",
+        "sha256": "0e8ad2b50836156f7a3d2714969a1ab5ab6e5382c0ec4e1aa67f4cdc49df49a9"
+      },
+      "python": {
+        "path": "python/3228.py",
+        "sha256": "118a8dd9f4a5ceeb7975d38f16474c42d979436c9526faa261e9e2bf760f5846"
+      }
+    },
+    "limitations": [
+      "Finite development tests are not universal proof, official hidden-judge acceptance, or catalogue qualification.",
+      "No protected/private cases, policy changes, admission, serving changes, commits, or pushes."
+    ]
+  },
+  {
+    "problem_id": 3235,
+    "canonical_key": "lc:check-if-the-rectangle-corner-is-reachable",
+    "parameters": [
+      "xCorner",
+      "yCorner",
+      "circles"
+    ],
+    "contract": {
+      "inputs": "Rectangle sides 3..10^9; 1..1000 disks [x,y,r] with positive integer entries <=10^9. Centers may lie outside.",
+      "result": "Boolean: an interior path from (0,0) to the opposite corner avoids closed disks.",
+      "mutation": "Inputs are not mutated. Returned arrays/strings are newly produced; class state is per instance.",
+      "exceptions": "Valid contract inputs only; no extra invalid-input guarantee.",
+      "numeric": "All squared distances and weighted products use Python integers / JavaScript BigInt. Inputs remain safe-integer Numbers.",
+      "unicode": "ASCII-only string domains where strings occur; other entries have no textual input."
+    },
+    "algorithm": "DSU barrier connectivity between left/top and bottom/right arcs, exact clipped-side contacts, endpoint coverage, and radius-weighted overlap witnesses.",
+    "complexity": "O(n^2 alpha(n)) time, O(n) space.",
+    "adapter": null,
+    "source_url": "https://leetcode.com/problems/check-if-the-rectangle-corner-is-reachable/",
+    "definition_provenance": {
+      "official_url": "https://leetcode.com/problems/check-if-the-rectangle-corner-is-reachable/",
+      "accessed_at": "2026-10-27",
+      "scope": "Public definition, constraints, and examples only; no editorial implementation copied.",
+      "identity_binding": "Canonical numeric identity and slug from hash-bound alias metadata; visible official page ID checked."
+    },
+    "authorship": "Original local implementation, not copied upstream solution code.",
+    "base_commit": "bc252ef318b165396288cd3f3d0ecbd4b84c03da",
+    "status": "authored_locally_tested_candidate",
+    "qualification": "not_qualified",
+    "admission": "not_admitted",
+    "tests": {
+      "public_example": 4,
+      "independent_small_oracle": 240,
+      "numeric_edge": 2,
+      "outside_only_contacts": 1,
+      "corner_covered": 1
+    },
+    "test_receipt": "batch1/test-results.json",
+    "source_files": {
+      "javascript": {
+        "path": "javascript/3235.js",
+        "sha256": "95e27c17789513a118c9e1c9e7e596b984fc7bbbfcd28008227c67e55e635692"
+      },
+      "python": {
+        "path": "python/3235.py",
+        "sha256": "49fb8a3f233e3918efeaecb3d0c065d9fbdc389a6dc6a40b097606ecb59d2b88"
+      }
+    },
+    "limitations": [
+      "Finite development tests are not universal proof, official hidden-judge acceptance, or catalogue qualification.",
+      "No protected/private cases, policy changes, admission, serving changes, commits, or pushes."
+    ]
+  },
+  {
+    "problem_id": 3408,
+    "canonical_key": "lc:design-task-manager",
+    "parameters": [
+      "operations",
+      "arguments"
+    ],
+    "contract": {
+      "inputs": "Valid TaskManager operation tape; constructor tasks [userId,taskId,priority], unique live task IDs; at most 200000 method calls.",
+      "result": "Tape results: null for constructor/void methods; execTop returns winning user ID or -1.",
+      "mutation": "Inputs are not mutated. Returned arrays/strings are newly produced; class state is per instance.",
+      "exceptions": "Valid contract inputs only; no extra invalid-input guarantee.",
+      "numeric": "IDs <=100000, priorities <=10^9; Number comparisons and generation counters exact.",
+      "unicode": "ASCII-only string domains where strings occur; other entries have no textual input."
+    },
+    "algorithm": "Lazy max heap ordered by priority then task ID; monotone generation tokens invalidate obsolete records, including reused IDs.",
+    "complexity": "Initialization O(n log n); adds/edits O(log(n+q)); total heap work O((n+q) log(n+q)); O(n+q) space.",
+    "adapter": {
+      "interface": "solve(operations, arguments) maps an explicit valid operation tape to outputs; exported native TaskManager is retained in both languages.",
+      "void_transport": "Python None / JSON null / JavaScript undefined native methods converted to null in the tape."
+    },
+    "source_url": "https://leetcode.com/problems/design-task-manager/",
+    "definition_provenance": {
+      "official_url": "https://leetcode.com/problems/design-task-manager/",
+      "accessed_at": "2026-10-27",
+      "scope": "Public definition, constraints, and examples only; no editorial implementation copied.",
+      "identity_binding": "Canonical numeric identity and slug from hash-bound alias metadata; visible official page ID checked."
+    },
+    "authorship": "Original local implementation, not copied upstream solution code.",
+    "base_commit": "bc252ef318b165396288cd3f3d0ecbd4b84c03da",
+    "status": "authored_locally_tested_candidate",
+    "qualification": "not_qualified",
+    "admission": "not_admitted",
+    "tests": {
+      "public_example": 1,
+      "independent_small_oracle": 40
+    },
+    "test_receipt": "batch1/test-results.json",
+    "source_files": {
+      "javascript": {
+        "path": "javascript/3408.js",
+        "sha256": "8aa3d26ec8b7bbf0e35e93abb20e7c6cb004f33e4a4c237203d111d3c6df577d"
+      },
+      "python": {
+        "path": "python/3408.py",
+        "sha256": "aa0f82734445865728689c04d4b54251c7109798a8c11afb947115d7010a65af"
+      }
+    },
+    "limitations": [
+      "Finite development tests are not universal proof, official hidden-judge acceptance, or catalogue qualification.",
+      "No protected/private cases, policy changes, admission, serving changes, commits, or pushes."
+    ]
+  },
+  {
+    "problem_id": 3514,
+    "canonical_key": "lc:number-of-unique-xor-triplets-ii",
+    "parameters": [
+      "nums"
+    ],
+    "contract": {
+      "inputs": "1..1500 integers with values 1..1500. Repeated positions in a triplet are allowed.",
+      "result": "Number of distinct XOR values of triples with i<=j<=k.",
+      "mutation": "Inputs are not mutated. Returned arrays/strings are newly produced; class state is per instance.",
+      "exceptions": "Valid contract inputs only; no extra invalid-input guarantee.",
+      "numeric": "Transform intermediates bounded by U*1500^3 <2^53; no floating fractions or approximate rounding.",
+      "unicode": "ASCII-only string domains where strings occur; other entries have no textual input."
+    },
+    "algorithm": "Indicator XOR convolution cubed by Walsh-Hadamard transforms; positive support is invariant under sorting the three indices.",
+    "complexity": "O(n+U log U) time, O(U) space, U<=2048.",
+    "adapter": null,
+    "source_url": "https://leetcode.com/problems/number-of-unique-xor-triplets-ii/",
+    "definition_provenance": {
+      "official_url": "https://leetcode.com/problems/number-of-unique-xor-triplets-ii/",
+      "accessed_at": "2026-10-27",
+      "scope": "Public definition, constraints, and examples only; no editorial implementation copied.",
+      "identity_binding": "Canonical numeric identity and slug from hash-bound alias metadata; visible official page ID checked."
+    },
+    "authorship": "Original local implementation, not copied upstream solution code.",
+    "base_commit": "bc252ef318b165396288cd3f3d0ecbd4b84c03da",
+    "status": "authored_locally_tested_candidate",
+    "qualification": "not_qualified",
+    "admission": "not_admitted",
+    "tests": {
+      "public_example": 2,
+      "independent_small_oracle": 80,
+      "structured_shape": 1
+    },
+    "test_receipt": "batch1/test-results.json",
+    "source_files": {
+      "javascript": {
+        "path": "javascript/3514.js",
+        "sha256": "b0965c792ad7ca3b78696bde3d2221f8db29d00844ab930d46c9a218f67dedec"
+      },
+      "python": {
+        "path": "python/3514.py",
+        "sha256": "21a34891eedc09bc0dfa89b031dc0eaaf0f66f09081769ecc84a4202bca83c0c"
+      }
+    },
+    "limitations": [
+      "Finite development tests are not universal proof, official hidden-judge acceptance, or catalogue qualification.",
+      "No protected/private cases, policy changes, admission, serving changes, commits, or pushes."
+    ]
+  },
+  {
+    "problem_id": 3523,
+    "canonical_key": "lc:make-array-non-decreasing",
+    "parameters": [
+      "nums"
+    ],
+    "contract": {
+      "inputs": "Positive integer array, length <=200000; entries <=200000.",
+      "result": "Maximum nondecreasing length obtainable by replacing contiguous blocks by their maxima.",
+      "mutation": "Inputs are not mutated. Returned arrays/strings are newly produced; class state is per instance.",
+      "exceptions": "Valid contract inputs only; no extra invalid-input guarantee.",
+      "numeric": "Only bounded integer comparisons and counts.",
+      "unicode": "ASCII-only string domains where strings occur; other entries have no textual input."
+    },
+    "algorithm": "Count non-strict prefix maxima; later smaller elements can be absorbed into the latest block.",
+    "complexity": "O(n) time, O(1) auxiliary space.",
+    "adapter": null,
+    "source_url": "https://leetcode.com/problems/make-array-non-decreasing/",
+    "definition_provenance": {
+      "official_url": "https://leetcode.com/problems/make-array-non-decreasing/",
+      "accessed_at": "2026-10-27",
+      "scope": "Public definition, constraints, and examples only; no editorial implementation copied.",
+      "identity_binding": "Canonical numeric identity and slug from hash-bound alias metadata; visible official page ID checked."
+    },
+    "authorship": "Original local implementation, not copied upstream solution code.",
+    "base_commit": "bc252ef318b165396288cd3f3d0ecbd4b84c03da",
+    "status": "authored_locally_tested_candidate",
+    "qualification": "not_qualified",
+    "admission": "not_admitted",
+    "tests": {
+      "public_example": 2,
+      "independent_small_oracle": 80,
+      "structured_shape": 1
+    },
+    "test_receipt": "batch1/test-results.json",
+    "source_files": {
+      "javascript": {
+        "path": "javascript/3523.js",
+        "sha256": "32f3e0f1b6cb72a38fe225be1dece347c08dcabff1bcee3203fe79c872d218e2"
+      },
+      "python": {
+        "path": "python/3523.py",
+        "sha256": "9ddaa1002c12de27914133b90ca81c55d3c62b589fef7c26bb6744af4ef0a865"
+      }
+    },
+    "limitations": [
+      "Finite development tests are not universal proof, official hidden-judge acceptance, or catalogue qualification.",
+      "No protected/private cases, policy changes, admission, serving changes, commits, or pushes."
+    ]
+  },
+  {
+    "problem_id": 3528,
+    "canonical_key": "lc:unit-conversion-i",
+    "parameters": [
+      "conversions"
+    ],
+    "contract": {
+      "inputs": "Rooted directed conversion tree over n=len(conversions)+1 units, 2<=n<=100000; edges [source,target,factor], factors 1..10^9.",
+      "result": "Length-n array of root-to-unit products modulo 1000000007, root value 1.",
+      "mutation": "Inputs are not mutated. Returned arrays/strings are newly produced; class state is per instance.",
+      "exceptions": "Valid contract inputs only; no extra invalid-input guarantee.",
+      "numeric": "Python integer and JavaScript BigInt multiplication avoid unsafe Number products; outputs are bounded Numbers.",
+      "unicode": "ASCII-only string domains where strings occur; other entries have no textual input."
+    },
+    "algorithm": "Iterative traversal propagates modular products along the unique directed root path.",
+    "complexity": "O(n) time and space.",
+    "adapter": null,
+    "source_url": "https://leetcode.com/problems/unit-conversion-i/",
+    "definition_provenance": {
+      "official_url": "https://leetcode.com/problems/unit-conversion-i/",
+      "accessed_at": "2026-10-27",
+      "scope": "Public definition, constraints, and examples only; no editorial implementation copied.",
+      "identity_binding": "Canonical numeric identity and slug from hash-bound alias metadata; visible official page ID checked."
+    },
+    "authorship": "Original local implementation, not copied upstream solution code.",
+    "base_commit": "bc252ef318b165396288cd3f3d0ecbd4b84c03da",
+    "status": "authored_locally_tested_candidate",
+    "qualification": "not_qualified",
+    "admission": "not_admitted",
+    "tests": {
+      "public_example": 1,
+      "independent_small_oracle": 80
+    },
+    "test_receipt": "batch1/test-results.json",
+    "source_files": {
+      "javascript": {
+        "path": "javascript/3528.js",
+        "sha256": "5a3695ee6c366cb319607eec17af4a4b44788f77daea9335bb07a7ddae112261"
+      },
+      "python": {
+        "path": "python/3528.py",
+        "sha256": "c36c5e80261ae831362d7f8228dc2fe07916a0efa21a668d6ffd2b4a0a43cb55"
+      }
+    },
+    "limitations": [
+      "Finite development tests are not universal proof, official hidden-judge acceptance, or catalogue qualification.",
+      "No protected/private cases, policy changes, admission, serving changes, commits, or pushes."
+    ]
+  },
+  {
+    "problem_id": 3537,
+    "canonical_key": "lc:fill-a-special-grid",
+    "parameters": [
+      "n"
+    ],
+    "contract": {
+      "inputs": "Integer n in [0,10].",
+      "result": "2^n-square array using each integer in [0,4^n) once, recursively ordered TR<BR<BL<TL.",
+      "mutation": "Inputs are not mutated. Returned arrays/strings are newly produced; class state is per instance.",
+      "exceptions": "Valid contract inputs only; no extra invalid-input guarantee.",
+      "numeric": "Indices and assigned values are <=1048575 and exact.",
+      "unicode": "ASCII-only string domains where strings occur; other entries have no textual input."
+    },
+    "algorithm": "Recursive quadrant placement with disjoint consecutive ranges.",
+    "complexity": "O(4^n) time/output space, O(n) recursion stack.",
+    "adapter": null,
+    "source_url": "https://leetcode.com/problems/fill-a-special-grid/",
+    "definition_provenance": {
+      "official_url": "https://leetcode.com/problems/fill-a-special-grid/",
+      "accessed_at": "2026-10-27",
+      "scope": "Public definition, constraints, and examples only; no editorial implementation copied.",
+      "identity_binding": "Canonical numeric identity and slug from hash-bound alias metadata; visible official page ID checked."
+    },
+    "authorship": "Original local implementation, not copied upstream solution code.",
+    "base_commit": "bc252ef318b165396288cd3f3d0ecbd4b84c03da",
+    "status": "authored_locally_tested_candidate",
+    "qualification": "not_qualified",
+    "admission": "not_admitted",
+    "tests": {
+      "public_example": 3,
+      "independent_small_oracle": 7
+    },
+    "test_receipt": "batch1/test-results.json",
+    "source_files": {
+      "javascript": {
+        "path": "javascript/3537.js",
+        "sha256": "fabee728c1b36eda11196952b59ca0e6cfdd921ead3009c9a86494be07bfff22"
+      },
+      "python": {
+        "path": "python/3537.py",
+        "sha256": "d36f2cc4bc96f1b7cdc740ee842fd5a90e81b0fa143f9e43ae58426d9f418f46"
+      }
+    },
+    "limitations": [
+      "Finite development tests are not universal proof, official hidden-judge acceptance, or catalogue qualification.",
+      "No protected/private cases, policy changes, admission, serving changes, commits, or pushes."
+    ]
+  },
+  {
+    "problem_id": 3548,
+    "canonical_key": "lc:equal-sum-grid-partition-ii",
+    "parameters": [
+      "grid"
+    ],
+    "contract": {
+      "inputs": "Nonempty rectangular positive integer grid; 2..100000 cells; values <=100000.",
+      "result": "Boolean: a horizontal/vertical cut balances sums, possibly deleting one cell without emptying or disconnecting its side.",
+      "mutation": "Inputs are not mutated. Returned arrays/strings are newly produced; class state is per instance.",
+      "exceptions": "Valid contract inputs only; no extra invalid-input guarantee.",
+      "numeric": "Total sum <=10^10; exact Number sums and differences.",
+      "unicode": "ASCII-only string domains where strings occur; other entries have no textual input."
+    },
+    "algorithm": "Sweep cuts with value multisets; only endpoints may be removed from one-cell-wide sections; any cell is safe in a rectangle of both dimensions >=2.",
+    "complexity": "O(mn) expected time and O(mn) auxiliary space.",
+    "adapter": null,
+    "source_url": "https://leetcode.com/problems/equal-sum-grid-partition-ii/",
+    "definition_provenance": {
+      "official_url": "https://leetcode.com/problems/equal-sum-grid-partition-ii/",
+      "accessed_at": "2026-10-27",
+      "scope": "Public definition, constraints, and examples only; no editorial implementation copied.",
+      "identity_binding": "Canonical numeric identity and slug from hash-bound alias metadata; visible official page ID checked."
+    },
+    "authorship": "Original local implementation, not copied upstream solution code.",
+    "base_commit": "bc252ef318b165396288cd3f3d0ecbd4b84c03da",
+    "status": "authored_locally_tested_candidate",
+    "qualification": "not_qualified",
+    "admission": "not_admitted",
+    "tests": {
+      "public_example": 4,
+      "independent_small_oracle": 80
+    },
+    "test_receipt": "batch1/test-results.json",
+    "source_files": {
+      "javascript": {
+        "path": "javascript/3548.js",
+        "sha256": "6aabe2af0754fe63c93fb56b540ee23252244d91c0463e530d516059ee0286ee"
+      },
+      "python": {
+        "path": "python/3548.py",
+        "sha256": "32db65c59e6b5d15395d71f4df73e4b8ac78eee9f613eaa25376b233132bd8b1"
+      }
+    },
+    "limitations": [
+      "Finite development tests are not universal proof, official hidden-judge acceptance, or catalogue qualification.",
+      "No protected/private cases, policy changes, admission, serving changes, commits, or pushes."
+    ]
+  },
+  {
+    "problem_id": 3558,
+    "canonical_key": "lc:number-of-ways-to-assign-edge-weights-i",
+    "parameters": [
+      "edges"
+    ],
+    "contract": {
+      "inputs": "Undirected tree labeled 1..n rooted at 1; 2<=n<=100000.",
+      "result": "Odd-weight assignment count on one root-to-deepest path, modulo 1000000007.",
+      "mutation": "Inputs are not mutated. Returned arrays/strings are newly produced; class state is per instance.",
+      "exceptions": "Valid contract inputs only; no extra invalid-input guarantee.",
+      "numeric": "Python modular power; JavaScript repeated exact doubling modulo prime.",
+      "unicode": "ASCII-only string domains where strings occur; other entries have no textual input."
+    },
+    "algorithm": "Iterative maximum-depth traversal, then 2^(depth-1) modulo the prime.",
+    "complexity": "O(n) time and space.",
+    "adapter": null,
+    "source_url": "https://leetcode.com/problems/number-of-ways-to-assign-edge-weights-i/",
+    "definition_provenance": {
+      "official_url": "https://leetcode.com/problems/number-of-ways-to-assign-edge-weights-i/",
+      "accessed_at": "2026-10-27",
+      "scope": "Public definition, constraints, and examples only; no editorial implementation copied.",
+      "identity_binding": "Canonical numeric identity and slug from hash-bound alias metadata; visible official page ID checked."
+    },
+    "authorship": "Original local implementation, not copied upstream solution code.",
+    "base_commit": "bc252ef318b165396288cd3f3d0ecbd4b84c03da",
+    "status": "authored_locally_tested_candidate",
+    "qualification": "not_qualified",
+    "admission": "not_admitted",
+    "tests": {
+      "public_example": 2,
+      "independent_small_oracle": 80,
+      "structured_shape": 1
+    },
+    "test_receipt": "batch1/test-results.json",
+    "source_files": {
+      "javascript": {
+        "path": "javascript/3558.js",
+        "sha256": "d749291734edf67e7eabf4b3b4777237edea54d49907acd06b6060728912ae5e"
+      },
+      "python": {
+        "path": "python/3558.py",
+        "sha256": "8d755b4ff604c89e5aebd9d8711f00362e69d15eeac41541d8d6bec3700ccdce"
+      }
+    },
+    "limitations": [
+      "Finite development tests are not universal proof, official hidden-judge acceptance, or catalogue qualification.",
+      "No protected/private cases, policy changes, admission, serving changes, commits, or pushes."
+    ]
+  },
+  {
+    "problem_id": 3566,
+    "canonical_key": "lc:partition-array-into-two-equal-product-subsets",
+    "parameters": [
+      "nums",
+      "target"
+    ],
+    "contract": {
+      "inputs": "3..12 distinct positive integers <=100; integer target in [1,10^15].",
+      "result": "Boolean: a partition into two nonempty subsets has both products equal to target.",
+      "mutation": "Inputs are not mutated. Returned arrays/strings are newly produced; class state is per instance.",
+      "exceptions": "Valid contract inputs only; no extra invalid-input guarantee.",
+      "numeric": "Python arbitrary integers and JavaScript BigInt products; target input is an exact safe Number (or native BigInt in JS).",
+      "unicode": "ASCII-only string domains where strings occur; other entries have no textual input."
+    },
+    "algorithm": "Verify exact total product target^2, then bounded subset search with divisibility pruning.",
+    "complexity": "O(2^n) time, O(n) recursion space.",
+    "adapter": null,
+    "source_url": "https://leetcode.com/problems/partition-array-into-two-equal-product-subsets/",
+    "definition_provenance": {
+      "official_url": "https://leetcode.com/problems/partition-array-into-two-equal-product-subsets/",
+      "accessed_at": "2026-10-27",
+      "scope": "Public definition, constraints, and examples only; no editorial implementation copied.",
+      "identity_binding": "Canonical numeric identity and slug from hash-bound alias metadata; visible official page ID checked."
+    },
+    "authorship": "Original local implementation, not copied upstream solution code.",
+    "base_commit": "bc252ef318b165396288cd3f3d0ecbd4b84c03da",
+    "status": "authored_locally_tested_candidate",
+    "qualification": "not_qualified",
+    "admission": "not_admitted",
+    "tests": {
+      "public_example": 2,
+      "independent_small_oracle": 80,
+      "independent_square_product_oracle": 24,
+      "numeric_edge": 1
+    },
+    "test_receipt": "batch1/test-results.json",
+    "source_files": {
+      "javascript": {
+        "path": "javascript/3566.js",
+        "sha256": "c25bb9893156ac1757e4da4242d54a561f88437600dde42f6f3bf0a8f5236d19"
+      },
+      "python": {
+        "path": "python/3566.py",
+        "sha256": "8aee785fd0952dd2c2d7fbcbae6d0e3e837ee77a395185a871fa2f8faf5d7e02"
+      }
+    },
+    "limitations": [
+      "Finite development tests are not universal proof, official hidden-judge acceptance, or catalogue qualification.",
+      "No protected/private cases, policy changes, admission, serving changes, commits, or pushes."
+    ]
+  },
+  {
+    "problem_id": 3573,
+    "canonical_key": "lc:best-time-to-buy-and-sell-stock-v",
+    "parameters": [
+      "prices",
+      "k"
+    ],
+    "contract": {
+      "inputs": "2..1000 positive prices <=10^9; 1<=k<=floor(n/2).",
+      "result": "Maximum profit with <=k completed long or short transactions, with strictly separate opening/closing days.",
+      "mutation": "Inputs are not mutated. Returned arrays/strings are newly produced; class state is per instance.",
+      "exceptions": "Valid contract inputs only; no extra invalid-input guarantee.",
+      "numeric": "Finite profits <=5*10^11; Number arithmetic exact; -Infinity marks unreachable states.",
+      "unicode": "ASCII-only string domains where strings occur; other entries have no textual input."
+    },
+    "algorithm": "Daily snapshot DP over cash/long/short positions and completed-transaction count; no same-day reuse.",
+    "complexity": "O(nk) time, O(k) space.",
+    "adapter": null,
+    "source_url": "https://leetcode.com/problems/best-time-to-buy-and-sell-stock-v/",
+    "definition_provenance": {
+      "official_url": "https://leetcode.com/problems/best-time-to-buy-and-sell-stock-v/",
+      "accessed_at": "2026-10-27",
+      "scope": "Public definition, constraints, and examples only; no editorial implementation copied.",
+      "identity_binding": "Canonical numeric identity and slug from hash-bound alias metadata; visible official page ID checked."
+    },
+    "authorship": "Original local implementation, not copied upstream solution code.",
+    "base_commit": "bc252ef318b165396288cd3f3d0ecbd4b84c03da",
+    "status": "authored_locally_tested_candidate",
+    "qualification": "not_qualified",
+    "admission": "not_admitted",
+    "tests": {
+      "public_example": 2,
+      "independent_small_oracle": 80,
+      "numeric_edge": 1
+    },
+    "test_receipt": "batch1/test-results.json",
+    "source_files": {
+      "javascript": {
+        "path": "javascript/3573.js",
+        "sha256": "1441fdab088a5ec7d9783a52412c71b1dfc706c754a008871e908b3f3d8bf167"
+      },
+      "python": {
+        "path": "python/3573.py",
+        "sha256": "91d223db73f4504824d1e3c39fe8b70041487857f62c21aa8d8c3d942812e69f"
+      }
+    },
+    "limitations": [
+      "Finite development tests are not universal proof, official hidden-judge acceptance, or catalogue qualification.",
+      "No protected/private cases, policy changes, admission, serving changes, commits, or pushes."
+    ]
+  },
+  {
+    "problem_id": 3578,
+    "canonical_key": "lc:count-partitions-with-max-min-difference-at-most-k",
+    "parameters": [
+      "nums",
+      "k"
+    ],
+    "contract": {
+      "inputs": "Array length 2..50000, positive integers <=10^9; k in [0,10^9].",
+      "result": "Number of contiguous partitions with each segment max-min<=k, modulo 1000000007.",
+      "mutation": "Inputs are not mutated. Returned arrays/strings are newly produced; class state is per instance.",
+      "exceptions": "Valid contract inputs only; no extra invalid-input guarantee.",
+      "numeric": "Modular sums/differences remain below 2*1000000007; Number exact.",
+      "unicode": "ASCII-only string domains where strings occur; other entries have no textual input."
+    },
+    "algorithm": "Two monotone queues maintain earliest valid segment start; prefix sums aggregate DP transitions.",
+    "complexity": "O(n) time and space.",
+    "adapter": null,
+    "source_url": "https://leetcode.com/problems/count-partitions-with-max-min-difference-at-most-k/",
+    "definition_provenance": {
+      "official_url": "https://leetcode.com/problems/count-partitions-with-max-min-difference-at-most-k/",
+      "accessed_at": "2026-10-27",
+      "scope": "Public definition, constraints, and examples only; no editorial implementation copied.",
+      "identity_binding": "Canonical numeric identity and slug from hash-bound alias metadata; visible official page ID checked."
+    },
+    "authorship": "Original local implementation, not copied upstream solution code.",
+    "base_commit": "bc252ef318b165396288cd3f3d0ecbd4b84c03da",
+    "status": "authored_locally_tested_candidate",
+    "qualification": "not_qualified",
+    "admission": "not_admitted",
+    "tests": {
+      "public_example": 2,
+      "independent_small_oracle": 80,
+      "structured_shape": 1
+    },
+    "test_receipt": "batch1/test-results.json",
+    "source_files": {
+      "javascript": {
+        "path": "javascript/3578.js",
+        "sha256": "53fe77c4c414bc8de0448dc54d8545082abae3ce82b269c5dec2e525a199c970"
+      },
+      "python": {
+        "path": "python/3578.py",
+        "sha256": "80f33609f260db62ace10b61a9854a3ef721c00993ea24ab1c0c150e802cb093"
+      }
+    },
+    "limitations": [
+      "Finite development tests are not universal proof, official hidden-judge acceptance, or catalogue qualification.",
+      "No protected/private cases, policy changes, admission, serving changes, commits, or pushes."
+    ]
+  },
+  {
+    "problem_id": 3585,
+    "canonical_key": "lc:find-weighted-median-node-in-tree",
+    "parameters": [
+      "n",
+      "edges",
+      "queries"
+    ],
+    "contract": {
+      "inputs": "Weighted tree rooted at 0 with 2..100000 nodes; positive weights <=10^9; <=100000 ordered endpoint queries.",
+      "result": "For each u-to-v path, first node whose distance from u is at least half the total; u itself for u=v.",
+      "mutation": "Inputs are not mutated. Returned arrays/strings are newly produced; class state is per instance.",
+      "exceptions": "Valid contract inputs only; no extra invalid-input guarantee.",
+      "numeric": "Path distances <=10^14; doubled comparisons <2^53. No fractional threshold rounding.",
+      "unicode": "ASCII-only string domains where strings occur; other entries have no textual input."
+    },
+    "algorithm": "Iterative tree preprocessing, binary-lifting LCA and directional weighted ancestor search.",
+    "complexity": "O((n+q) log n) time, O(n log n+q) space.",
+    "adapter": null,
+    "source_url": "https://leetcode.com/problems/find-weighted-median-node-in-tree/",
+    "definition_provenance": {
+      "official_url": "https://leetcode.com/problems/find-weighted-median-node-in-tree/",
+      "accessed_at": "2026-10-27",
+      "scope": "Public definition, constraints, and examples only; no editorial implementation copied.",
+      "identity_binding": "Canonical numeric identity and slug from hash-bound alias metadata; visible official page ID checked."
+    },
+    "authorship": "Original local implementation, not copied upstream solution code.",
+    "base_commit": "bc252ef318b165396288cd3f3d0ecbd4b84c03da",
+    "status": "authored_locally_tested_candidate",
+    "qualification": "not_qualified",
+    "admission": "not_admitted",
+    "tests": {
+      "public_example": 3,
+      "independent_small_oracle": 80
+    },
+    "test_receipt": "batch1/test-results.json",
+    "source_files": {
+      "javascript": {
+        "path": "javascript/3585.js",
+        "sha256": "eda6c0eb7554c2660c7232d76bb325c537fbe6d9821503365aef378f38098f6a"
+      },
+      "python": {
+        "path": "python/3585.py",
+        "sha256": "00a174ad8a76eb977ab1e31e1546484bd78f86f4e3b9ca9d8c19e4a99e130019"
+      }
+    },
+    "limitations": [
+      "Finite development tests are not universal proof, official hidden-judge acceptance, or catalogue qualification.",
+      "No protected/private cases, policy changes, admission, serving changes, commits, or pushes."
+    ]
+  },
+  {
+    "problem_id": 3597,
+    "canonical_key": "lc:partition-string",
+    "parameters": [
+      "s"
+    ],
+    "contract": {
+      "inputs": "Lowercase ASCII string of length 1..100000.",
+      "result": "Greedy list of newly seen segments; trailing suffix already seen is not emitted.",
+      "mutation": "Inputs are not mutated. Returned arrays/strings are newly produced; class state is per instance.",
+      "exceptions": "Valid contract inputs only; no extra invalid-input guarantee.",
+      "numeric": "String offsets are ASCII code-unit/code-point equivalent; no Unicode generalization claimed.",
+      "unicode": "ASCII-only string domains where strings occur; other entries have no textual input."
+    },
+    "algorithm": "Prefix-closed trie of emitted strings; each new edge ends the current segment.",
+    "complexity": "O(n) expected time and O(n) space including output.",
+    "adapter": null,
+    "source_url": "https://leetcode.com/problems/partition-string/",
+    "definition_provenance": {
+      "official_url": "https://leetcode.com/problems/partition-string/",
+      "accessed_at": "2026-10-27",
+      "scope": "Public definition, constraints, and examples only; no editorial implementation copied.",
+      "identity_binding": "Canonical numeric identity and slug from hash-bound alias metadata; visible official page ID checked."
+    },
+    "authorship": "Original local implementation, not copied upstream solution code.",
+    "base_commit": "bc252ef318b165396288cd3f3d0ecbd4b84c03da",
+    "status": "authored_locally_tested_candidate",
+    "qualification": "not_qualified",
+    "admission": "not_admitted",
+    "tests": {
+      "public_example": 2,
+      "independent_small_oracle": 80
+    },
+    "test_receipt": "batch1/test-results.json",
+    "source_files": {
+      "javascript": {
+        "path": "javascript/3597.js",
+        "sha256": "6fdf167796e4490af694c7bdbcfc867defc86f111a6beb11866c24a1e0f0b26c"
+      },
+      "python": {
+        "path": "python/3597.py",
+        "sha256": "09b142e7c9f8ef047b8f4fe0205270eb490a5afa5255685df80399dd3898495f"
+      }
+    },
+    "limitations": [
+      "Finite development tests are not universal proof, official hidden-judge acceptance, or catalogue qualification.",
+      "No protected/private cases, policy changes, admission, serving changes, commits, or pushes."
+    ]
+  },
+  {
+    "problem_id": 3607,
+    "canonical_key": "lc:power-grid-maintenance",
+    "parameters": [
+      "c",
+      "connections",
+      "queries"
+    ],
+    "contract": {
+      "inputs": "1..100000 stations, <=100000 undirected links, <=200000 [kind,id] queries; kind 1 requests, kind 2 permanently deactivates.",
+      "result": "Results for kind 1: self if online, otherwise least online ID in the original connected component, else -1.",
+      "mutation": "Inputs are not mutated. Returned arrays/strings are newly produced; class state is per instance.",
+      "exceptions": "Valid contract inputs only; no extra invalid-input guarantee.",
+      "numeric": "Bounded integer IDs; offline stations retain connectivity.",
+      "unicode": "ASCII-only string domains where strings occur; other entries have no textual input."
+    },
+    "algorithm": "DSU static components and naturally sorted members with monotonically advancing online pointers.",
+    "complexity": "O((c+e) alpha(c)+q) time, O(c+e+q) total space including input/output; O(c) auxiliary excluding output.",
+    "adapter": null,
+    "source_url": "https://leetcode.com/problems/power-grid-maintenance/",
+    "definition_provenance": {
+      "official_url": "https://leetcode.com/problems/power-grid-maintenance/",
+      "accessed_at": "2026-10-27",
+      "scope": "Public definition, constraints, and examples only; no editorial implementation copied.",
+      "identity_binding": "Canonical numeric identity and slug from hash-bound alias metadata; visible official page ID checked."
+    },
+    "authorship": "Original local implementation, not copied upstream solution code.",
+    "base_commit": "bc252ef318b165396288cd3f3d0ecbd4b84c03da",
+    "status": "authored_locally_tested_candidate",
+    "qualification": "not_qualified",
+    "admission": "not_admitted",
+    "tests": {
+      "public_example": 2,
+      "independent_small_oracle": 80
+    },
+    "test_receipt": "batch1/test-results.json",
+    "source_files": {
+      "javascript": {
+        "path": "javascript/3607.js",
+        "sha256": "7a262ea57df825c43fb33406793effeaa226665aff2252a13212548bde75ac3f"
+      },
+      "python": {
+        "path": "python/3607.py",
+        "sha256": "414c29e2b3a96ea14447a16fda08ce951e91f6469fedfc048000226f276ea18e"
+      }
+    },
+    "limitations": [
+      "Finite development tests are not universal proof, official hidden-judge acceptance, or catalogue qualification.",
+      "No protected/private cases, policy changes, admission, serving changes, commits, or pushes."
+    ]
+  },
+  {
+    "problem_id": 3614,
+    "canonical_key": "lc:process-string-with-special-operations-ii",
+    "parameters": [
+      "s",
+      "k"
+    ],
+    "contract": {
+      "inputs": "ASCII lowercase letters plus *, #, %; source length <=100000; zero-based k<=10^15; final expanded length <=10^15.",
+      "result": "Character at index k after append/delete-last/duplicate/reverse operations, or period when out of bounds.",
+      "mutation": "Inputs are not mutated. Returned arrays/strings are newly produced; class state is per instance.",
+      "exceptions": "Valid contract inputs only; no extra invalid-input guarantee.",
+      "numeric": "Python integer / JavaScript BigInt lengths and indices; k may be safe Number or native BigInt in JS.",
+      "unicode": "ASCII-only string domains where strings occur; other entries have no textual input."
+    },
+    "algorithm": "Record prefix lengths and trace the queried index backward without expanding text.",
+    "complexity": "O(n) time and space in the bounded integer domain.",
+    "adapter": null,
+    "source_url": "https://leetcode.com/problems/process-string-with-special-operations-ii/",
+    "definition_provenance": {
+      "official_url": "https://leetcode.com/problems/process-string-with-special-operations-ii/",
+      "accessed_at": "2026-10-27",
+      "scope": "Public definition, constraints, and examples only; no editorial implementation copied.",
+      "identity_binding": "Canonical numeric identity and slug from hash-bound alias metadata; visible official page ID checked."
+    },
+    "authorship": "Original local implementation, not copied upstream solution code.",
+    "base_commit": "bc252ef318b165396288cd3f3d0ecbd4b84c03da",
+    "status": "authored_locally_tested_candidate",
+    "qualification": "not_qualified",
+    "admission": "not_admitted",
+    "tests": {
+      "public_example": 3,
+      "independent_small_oracle": 247,
+      "numeric_edge": 2
+    },
+    "test_receipt": "batch1/test-results.json",
+    "source_files": {
+      "javascript": {
+        "path": "javascript/3614.js",
+        "sha256": "3913697658aabb01b7986370067b36c18394f007636ecad41640aadbce66972a"
+      },
+      "python": {
+        "path": "python/3614.py",
+        "sha256": "d1e8c233f4c2b2e72aeb57b15f383c5dd8abdada29b67f6e976f477ebc6dc8a2"
+      }
+    },
+    "limitations": [
+      "Finite development tests are not universal proof, official hidden-judge acceptance, or catalogue qualification.",
+      "No protected/private cases, policy changes, admission, serving changes, commits, or pushes."
+    ]
+  }
+]

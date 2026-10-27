@@ -1,0 +1,865 @@
+[
+  {
+    "parameters": [
+      "nums",
+      "head_values"
+    ],
+    "input": "Distinct positive integer removal values and linked-list values; each length 1..100000, values 1..100000; at least one survivor.",
+    "result": "Survivor values in original order.",
+    "complexity": "O(len(nums)+len(head)) time, O(len(nums)) native auxiliary space; value-array adapter adds O(len(head)) space.",
+    "algorithm": "A membership set and dummy predecessor remove matching nodes while preserving every survivor node.",
+    "adapter": "solve accepts a JSON value array and returns a value array. Native modifiedList(nums, head) is also exposed; ListNode has val and next. Native call reuses surviving nodes and rewires links. Removed node links are not promised to be cleared.",
+    "effects": "solve does not mutate inputs; native modifiedList intentionally mutates next links on retained nodes.",
+    "problem_id": 3217,
+    "canonical_key": "lc:delete-nodes-from-linked-list-present-in-array",
+    "base_commit": "bc252ef318b165396288cd3f3d0ecbd4b84c03da",
+    "status": "authored_locally_tested_candidate",
+    "qualification": "not_qualified",
+    "admission": "not_admitted",
+    "authorship": "Original implementation; no upstream solution implementation copied.",
+    "source_consulted_at": "2026-10-27",
+    "boundary_authorization": "batch2/authorization.json",
+    "test_receipt": "batch2/test-results.json",
+    "tests": {
+      "public_example": 3,
+      "independent_small_oracle": 55,
+      "large_shape": 1
+    },
+    "source_files": {
+      "javascript": {
+        "path": "javascript/3217.js",
+        "sha256": "a13987dafc08fb0d47a0462a213d79bbd0cb151e32988c56278e13a88fe3d814"
+      },
+      "python": {
+        "path": "python/3217.py",
+        "sha256": "77f1607b2e19b7b3ee1bbde7707d24b1517a5fb08467ea1169e31743711c11a3"
+      }
+    },
+    "numeric": "Declared integers and intermediate arithmetic remain within JS safe integers; Python integers are exact.",
+    "unicode": "Strings are restricted to the ASCII alphabet in the input contract; no broader Unicode claim.",
+    "exceptions": "Behavior outside the declared valid input contract is unspecified; no error-message compatibility claim.",
+    "source_url": "https://leetcode.com/problems/delete-nodes-from-linked-list-present-in-array/",
+    "definition_provenance": {
+      "official_url": "https://leetcode.com/problems/delete-nodes-from-linked-list-present-in-array/",
+      "scope": "Problem definition, constraints and public examples only; no editorial or solution code consulted.",
+      "official_problem_id_verified": true
+    },
+    "limitations": [
+      "Finite tests do not prove universal correctness or official-judge acceptance.",
+      "No protected/private cases, models, catalogue promotions or source-access changes."
+    ]
+  },
+  {
+    "parameters": [
+      "nums"
+    ],
+    "input": "Array length 1..100000, integer values 1..100000.",
+    "result": "Minimum number of strictly increasing subsequences partitioning the input.",
+    "complexity": "O(n log n) time, O(n) space.",
+    "algorithm": "Chain-cover duality: the answer is longest non-increasing subsequence length; upper-bound patience sorting on negated values.",
+    "problem_id": 3231,
+    "canonical_key": "lc:minimum-number-of-increasing-subsequence-to-be-removed",
+    "base_commit": "bc252ef318b165396288cd3f3d0ecbd4b84c03da",
+    "status": "authored_locally_tested_candidate",
+    "qualification": "not_qualified",
+    "admission": "not_admitted",
+    "authorship": "Original implementation; no upstream solution implementation copied.",
+    "source_consulted_at": "2026-10-27",
+    "boundary_authorization": "batch2/authorization.json",
+    "test_receipt": "batch2/test-results.json",
+    "tests": {
+      "public_example": 3,
+      "independent_small_oracle": 55,
+      "large_shape": 1
+    },
+    "source_files": {
+      "javascript": {
+        "path": "javascript/3231.js",
+        "sha256": "024a63aad1b75406b7cd5d72ebef49c4ed6e277f0c9be742206aa2513138a883"
+      },
+      "python": {
+        "path": "python/3231.py",
+        "sha256": "d6fa37bfabd60d973fd67c7cd4d104318b6bb30ba5d9b9c677b469e6e9c4f4f6"
+      }
+    },
+    "effects": "No mutation of caller inputs; result containers are fresh.",
+    "numeric": "Declared integers and intermediate arithmetic remain within JS safe integers; Python integers are exact.",
+    "unicode": "Strings are restricted to the ASCII alphabet in the input contract; no broader Unicode claim.",
+    "exceptions": "Behavior outside the declared valid input contract is unspecified; no error-message compatibility claim.",
+    "adapter": null,
+    "source_url": "https://leetcode.com/problems/minimum-number-of-increasing-subsequence-to-be-removed/",
+    "definition_provenance": {
+      "official_url": "https://leetcode.com/problems/minimum-number-of-increasing-subsequence-to-be-removed/",
+      "scope": "Problem definition, constraints and public examples only; no editorial or solution code consulted.",
+      "official_problem_id_verified": false,
+      "fallback": {
+        "problem_id": 3231,
+        "url": "https://raw.githubusercontent.com/doocs/leetcode/main/solution/3200-3299/3231.Minimum%20Number%20of%20Increasing%20Subsequence%20to%20Be%20Removed/README_EN.md",
+        "raw_sha256": "fccf2947ecebec1dcbc7760722467e5952bf4eff6d4f9ccf6707d734f1809921",
+        "definition_sha256": "cdb296e11383336b96b56662e705a3282fc8bcbd09dcadaefde6045900bd8ee6",
+        "license": "CC-BY-SA-4.0",
+        "scope": "definition before Solutions only"
+      },
+      "official_access": "Premium/unavailable definition; exact numeric-ID/title-bound public definition fallback used.",
+      "fallback_problem_id_verified": true
+    },
+    "limitations": [
+      "Finite tests do not prove universal correctness or official-judge acceptance.",
+      "No protected/private cases, models, catalogue promotions or source-access changes."
+    ]
+  },
+  {
+    "parameters": [
+      "windows",
+      "queries"
+    ],
+    "input": "windows is a permutation of 1..n, n<=100000; 1..100000 queries name existing windows.",
+    "result": "Final top-to-bottom window order.",
+    "complexity": "O(n+q) expected time, O(n) space.",
+    "algorithm": "List distinct query IDs in reverse chronological order, then untouched windows in original order.",
+    "problem_id": 3237,
+    "canonical_key": "lc:alt-and-tab-simulation",
+    "base_commit": "bc252ef318b165396288cd3f3d0ecbd4b84c03da",
+    "status": "authored_locally_tested_candidate",
+    "qualification": "not_qualified",
+    "admission": "not_admitted",
+    "authorship": "Original implementation; no upstream solution implementation copied.",
+    "source_consulted_at": "2026-10-27",
+    "boundary_authorization": "batch2/authorization.json",
+    "test_receipt": "batch2/test-results.json",
+    "tests": {
+      "public_example": 2,
+      "independent_small_oracle": 55,
+      "large_shape": 1
+    },
+    "source_files": {
+      "javascript": {
+        "path": "javascript/3237.js",
+        "sha256": "2c1003b8d1243e044bc5b20a3bcf3e3504d307d9f3c2b20162d9303f285753c1"
+      },
+      "python": {
+        "path": "python/3237.py",
+        "sha256": "8860bcdda195dc6f3979ee0cf8b8286fe816233922fb04a60963242a5ea3142b"
+      }
+    },
+    "effects": "No mutation of caller inputs; result containers are fresh.",
+    "numeric": "Declared integers and intermediate arithmetic remain within JS safe integers; Python integers are exact.",
+    "unicode": "Strings are restricted to the ASCII alphabet in the input contract; no broader Unicode claim.",
+    "exceptions": "Behavior outside the declared valid input contract is unspecified; no error-message compatibility claim.",
+    "adapter": null,
+    "source_url": "https://leetcode.com/problems/alt-and-tab-simulation/",
+    "definition_provenance": {
+      "official_url": "https://leetcode.com/problems/alt-and-tab-simulation/",
+      "scope": "Problem definition, constraints and public examples only; no editorial or solution code consulted.",
+      "official_problem_id_verified": false,
+      "fallback": {
+        "problem_id": 3237,
+        "url": "https://raw.githubusercontent.com/doocs/leetcode/main/solution/3200-3299/3237.Alt%20and%20Tab%20Simulation/README_EN.md",
+        "raw_sha256": "0e2549541c450204b82ff8373f2e1ab02b75293118209cd3bc84202a1b9969d3",
+        "definition_sha256": "97750b3b41af7a0686a325da3b42995eb37f35d2ef06325f9ca3a2ad4bb2c487",
+        "license": "CC-BY-SA-4.0",
+        "scope": "definition before Solutions only"
+      },
+      "official_access": "Premium/unavailable definition; exact numeric-ID/title-bound public definition fallback used.",
+      "fallback_problem_id_verified": true
+    },
+    "limitations": [
+      "Finite tests do not prove universal correctness or official-judge acceptance.",
+      "No protected/private cases, models, catalogue promotions or source-access changes."
+    ]
+  },
+  {
+    "parameters": [
+      "operations",
+      "arguments"
+    ],
+    "input": "Valid operation tape beginning with Spreadsheet(rows), rows 1..1000, at most 10000 method calls; uppercase A..Z cell refs; values and literal operands 0..100000.",
+    "result": "One entry per operation: null for construction/set/reset, exact integer for getValue.",
+    "complexity": "O(q*L) expected time for tape and O(min(q,26*rows)) state, where L is formula/reference length.",
+    "algorithm": "Sparse cell map with direct two-operand parsing; resetting deletes a stored value.",
+    "adapter": "Native Spreadsheet(rows), setCell(cell,value), resetCell(cell), getValue(formula) remain available. solve(operations,arguments) translates valid constructor/method tapes; a fresh class instance is constructed per tape.",
+    "effects": "solve does not mutate tape arrays; native methods mutate only their own spreadsheet instance.",
+    "problem_id": 3484,
+    "canonical_key": "lc:design-spreadsheet",
+    "base_commit": "bc252ef318b165396288cd3f3d0ecbd4b84c03da",
+    "status": "authored_locally_tested_candidate",
+    "qualification": "not_qualified",
+    "admission": "not_admitted",
+    "authorship": "Original implementation; no upstream solution implementation copied.",
+    "source_consulted_at": "2026-10-27",
+    "boundary_authorization": "batch2/authorization.json",
+    "test_receipt": "batch2/test-results.json",
+    "tests": {
+      "public_example": 1,
+      "independent_small_oracle": 55
+    },
+    "source_files": {
+      "javascript": {
+        "path": "javascript/3484.js",
+        "sha256": "206e7155f28f513f33d155bd5cafb33fef826fa92066fd8680a3f73c06c7f8af"
+      },
+      "python": {
+        "path": "python/3484.py",
+        "sha256": "e2118204bf651d63cd7ec2d258963dfb8ed71c941768ed2af2c92f8521a3cf56"
+      }
+    },
+    "numeric": "Declared integers and intermediate arithmetic remain within JS safe integers; Python integers are exact.",
+    "unicode": "Strings are restricted to the ASCII alphabet in the input contract; no broader Unicode claim.",
+    "exceptions": "Behavior outside the declared valid input contract is unspecified; no error-message compatibility claim.",
+    "source_url": "https://leetcode.com/problems/design-spreadsheet/",
+    "definition_provenance": {
+      "official_url": "https://leetcode.com/problems/design-spreadsheet/",
+      "scope": "Problem definition, constraints and public examples only; no editorial or solution code consulted.",
+      "official_problem_id_verified": true
+    },
+    "limitations": [
+      "Finite tests do not prove universal correctness or official-judge acceptance.",
+      "No protected/private cases, models, catalogue promotions or source-access changes."
+    ]
+  },
+  {
+    "parameters": [
+      "s"
+    ],
+    "input": "A palindromic lowercase ASCII string, length 1..100000.",
+    "result": "Lexicographically least palindromic permutation.",
+    "complexity": "O(n+26 log 26) time, O(n) output space.",
+    "algorithm": "Place sorted half-counts on the left, the unique odd character centrally, then mirror.",
+    "problem_id": 3517,
+    "canonical_key": "lc:smallest-palindromic-rearrangement-i",
+    "base_commit": "bc252ef318b165396288cd3f3d0ecbd4b84c03da",
+    "status": "authored_locally_tested_candidate",
+    "qualification": "not_qualified",
+    "admission": "not_admitted",
+    "authorship": "Original implementation; no upstream solution implementation copied.",
+    "source_consulted_at": "2026-10-27",
+    "boundary_authorization": "batch2/authorization.json",
+    "test_receipt": "batch2/test-results.json",
+    "tests": {
+      "public_example": 3,
+      "independent_small_oracle": 55,
+      "large_shape": 1
+    },
+    "source_files": {
+      "javascript": {
+        "path": "javascript/3517.js",
+        "sha256": "15eb47769d6701c497fbed3c645b8c18221dc610e036c1bb89fcf2cdc306d15b"
+      },
+      "python": {
+        "path": "python/3517.py",
+        "sha256": "7471267e03cb312320e863cbacab2a6cd1ddd8f566a0f2891188929f15f8c1cc"
+      }
+    },
+    "effects": "No mutation of caller inputs; result containers are fresh.",
+    "numeric": "Declared integers and intermediate arithmetic remain within JS safe integers; Python integers are exact.",
+    "unicode": "Strings are restricted to the ASCII alphabet in the input contract; no broader Unicode claim.",
+    "exceptions": "Behavior outside the declared valid input contract is unspecified; no error-message compatibility claim.",
+    "adapter": null,
+    "source_url": "https://leetcode.com/problems/smallest-palindromic-rearrangement-i/",
+    "definition_provenance": {
+      "official_url": "https://leetcode.com/problems/smallest-palindromic-rearrangement-i/",
+      "scope": "Problem definition, constraints and public examples only; no editorial or solution code consulted.",
+      "official_problem_id_verified": true
+    },
+    "limitations": [
+      "Finite tests do not prove universal correctness or official-judge acceptance.",
+      "No protected/private cases, models, catalogue promotions or source-access changes."
+    ]
+  },
+  {
+    "parameters": [
+      "nums",
+      "k"
+    ],
+    "input": "Positive integer array length 1..100000, values <=1000000000; k in 1..5.",
+    "result": "Length-k array counting nonempty subarrays by product remainder.",
+    "complexity": "O(n*k) time, O(k) auxiliary space.",
+    "algorithm": "Count remainder classes for subarrays ending at each position, extending previous endings and adding the singleton.",
+    "numeric": "Counts can reach 5000050000; JS Number is exact. Products are reduced to remainder factors before multiplication.",
+    "problem_id": 3524,
+    "canonical_key": "lc:find-x-value-of-array-i",
+    "base_commit": "bc252ef318b165396288cd3f3d0ecbd4b84c03da",
+    "status": "authored_locally_tested_candidate",
+    "qualification": "not_qualified",
+    "admission": "not_admitted",
+    "authorship": "Original implementation; no upstream solution implementation copied.",
+    "source_consulted_at": "2026-10-27",
+    "boundary_authorization": "batch2/authorization.json",
+    "test_receipt": "batch2/test-results.json",
+    "tests": {
+      "public_example": 3,
+      "independent_small_oracle": 55,
+      "large_numeric": 1
+    },
+    "source_files": {
+      "javascript": {
+        "path": "javascript/3524.js",
+        "sha256": "5dcb2ff20cdd808284bf1429f6b3eaa872c05736031d7098f7f2a5cbbc5146b4"
+      },
+      "python": {
+        "path": "python/3524.py",
+        "sha256": "8d9180d48869d8a815ba40f53d8444323291090429b417129162bbd31500941f"
+      }
+    },
+    "effects": "No mutation of caller inputs; result containers are fresh.",
+    "unicode": "Strings are restricted to the ASCII alphabet in the input contract; no broader Unicode claim.",
+    "exceptions": "Behavior outside the declared valid input contract is unspecified; no error-message compatibility claim.",
+    "adapter": null,
+    "source_url": "https://leetcode.com/problems/find-x-value-of-array-i/",
+    "definition_provenance": {
+      "official_url": "https://leetcode.com/problems/find-x-value-of-array-i/",
+      "scope": "Problem definition, constraints and public examples only; no editorial or solution code consulted.",
+      "official_problem_id_verified": true
+    },
+    "limitations": [
+      "Finite tests do not prove universal correctness or official-judge acceptance.",
+      "No protected/private cases, models, catalogue promotions or source-access changes."
+    ]
+  },
+  {
+    "parameters": [
+      "n",
+      "buildings"
+    ],
+    "input": "Unique coordinates in an n-by-n grid, n 2..100000; 1..100000 buildings.",
+    "result": "Count with another building along each of the four cardinal directions.",
+    "complexity": "O(b) expected time and O(b) space.",
+    "algorithm": "A building is covered exactly when its coordinates lie strictly inside both same-row and same-column extrema.",
+    "problem_id": 3531,
+    "canonical_key": "lc:count-covered-buildings",
+    "base_commit": "bc252ef318b165396288cd3f3d0ecbd4b84c03da",
+    "status": "authored_locally_tested_candidate",
+    "qualification": "not_qualified",
+    "admission": "not_admitted",
+    "authorship": "Original implementation; no upstream solution implementation copied.",
+    "source_consulted_at": "2026-10-27",
+    "boundary_authorization": "batch2/authorization.json",
+    "test_receipt": "batch2/test-results.json",
+    "tests": {
+      "public_example": 3,
+      "independent_small_oracle": 55
+    },
+    "source_files": {
+      "javascript": {
+        "path": "javascript/3531.js",
+        "sha256": "192c6af678cd51aeaa753e0da08f4f4c5be6776325c295abca2c09b4b72cdfa8"
+      },
+      "python": {
+        "path": "python/3531.py",
+        "sha256": "fc2f926f65f7814b7be20a2ed2ad537643abdb6d01d82009dd68cc57cc330968"
+      }
+    },
+    "effects": "No mutation of caller inputs; result containers are fresh.",
+    "numeric": "Declared integers and intermediate arithmetic remain within JS safe integers; Python integers are exact.",
+    "unicode": "Strings are restricted to the ASCII alphabet in the input contract; no broader Unicode claim.",
+    "exceptions": "Behavior outside the declared valid input contract is unspecified; no error-message compatibility claim.",
+    "adapter": null,
+    "source_url": "https://leetcode.com/problems/count-covered-buildings/",
+    "definition_provenance": {
+      "official_url": "https://leetcode.com/problems/count-covered-buildings/",
+      "scope": "Problem definition, constraints and public examples only; no editorial or solution code consulted.",
+      "official_problem_id_verified": true
+    },
+    "limitations": [
+      "Finite tests do not prove universal correctness or official-judge acceptance.",
+      "No protected/private cases, models, catalogue promotions or source-access changes."
+    ]
+  },
+  {
+    "parameters": [
+      "m",
+      "k",
+      "nums"
+    ],
+    "input": "1<=k<=m<=30; 1..50 positive integers <=100000000.",
+    "result": "Sum of ordered sequence products with k set bits in the sum of powers of two, modulo 1000000007.",
+    "complexity": "O(len(nums)*m^3*k) time upper bound; O(m^2*k+m^2) state.",
+    "algorithm": "Bit-carry DP chooses the count of each index. Binomial factors choose its remaining sequence positions; a carry finalizes one bit per index. Remaining carry popcount closes the state.",
+    "numeric": "Python arbitrary precision and JS BigInt cover all modular products exactly. The reduced answer is returned as an ordinary integer/Number.",
+    "problem_id": 3539,
+    "canonical_key": "lc:find-sum-of-array-product-of-magical-sequences",
+    "base_commit": "bc252ef318b165396288cd3f3d0ecbd4b84c03da",
+    "status": "authored_locally_tested_candidate",
+    "qualification": "not_qualified",
+    "admission": "not_admitted",
+    "authorship": "Original implementation; no upstream solution implementation copied.",
+    "source_consulted_at": "2026-10-27",
+    "boundary_authorization": "batch2/authorization.json",
+    "test_receipt": "batch2/test-results.json",
+    "tests": {
+      "public_example": 3,
+      "independent_small_oracle": 55,
+      "large_shape": 1,
+      "large_numeric": 1
+    },
+    "source_files": {
+      "javascript": {
+        "path": "javascript/3539.js",
+        "sha256": "fbf9f397fd893f6d876252fe0b0d091c2374cf8c871acf4e014da836f580697f"
+      },
+      "python": {
+        "path": "python/3539.py",
+        "sha256": "7482e4abb471deb25cbc8e168dc94c27765a0b0613183aaee2f1cea2bcc81b47"
+      }
+    },
+    "effects": "No mutation of caller inputs; result containers are fresh.",
+    "unicode": "Strings are restricted to the ASCII alphabet in the input contract; no broader Unicode claim.",
+    "exceptions": "Behavior outside the declared valid input contract is unspecified; no error-message compatibility claim.",
+    "adapter": null,
+    "source_url": "https://leetcode.com/problems/find-sum-of-array-product-of-magical-sequences/",
+    "definition_provenance": {
+      "official_url": "https://leetcode.com/problems/find-sum-of-array-product-of-magical-sequences/",
+      "scope": "Problem definition, constraints and public examples only; no editorial or solution code consulted.",
+      "official_problem_id_verified": true
+    },
+    "limitations": [
+      "Finite tests do not prove universal correctness or official-judge acceptance.",
+      "No protected/private cases, models, catalogue promotions or source-access changes."
+    ]
+  },
+  {
+    "parameters": [
+      "nums"
+    ],
+    "input": "Distinct positive integers <=1000000000, length 1..100000.",
+    "result": "Minimum arbitrary pair swaps to sort by (decimal digit sum,value).",
+    "complexity": "O(n log n+n log(max(nums))) time, O(n) space.",
+    "algorithm": "Sorting indices induces a permutation; a cycle of length c requires c-1 swaps.",
+    "problem_id": 3551,
+    "canonical_key": "lc:minimum-swaps-to-sort-by-digit-sum",
+    "base_commit": "bc252ef318b165396288cd3f3d0ecbd4b84c03da",
+    "status": "authored_locally_tested_candidate",
+    "qualification": "not_qualified",
+    "admission": "not_admitted",
+    "authorship": "Original implementation; no upstream solution implementation copied.",
+    "source_consulted_at": "2026-10-27",
+    "boundary_authorization": "batch2/authorization.json",
+    "test_receipt": "batch2/test-results.json",
+    "tests": {
+      "public_example": 3,
+      "independent_small_oracle": 55
+    },
+    "source_files": {
+      "javascript": {
+        "path": "javascript/3551.js",
+        "sha256": "e50d0399178ea5b7727e7574e462eec0735fcecde8be2e88bf2a198915961f00"
+      },
+      "python": {
+        "path": "python/3551.py",
+        "sha256": "fc1ea519c9febc0f58f5f89f2a9f2ef1695cc62e55d4976b4a0c2667e3666621"
+      }
+    },
+    "effects": "No mutation of caller inputs; result containers are fresh.",
+    "numeric": "Declared integers and intermediate arithmetic remain within JS safe integers; Python integers are exact.",
+    "unicode": "Strings are restricted to the ASCII alphabet in the input contract; no broader Unicode claim.",
+    "exceptions": "Behavior outside the declared valid input contract is unspecified; no error-message compatibility claim.",
+    "adapter": null,
+    "source_url": "https://leetcode.com/problems/minimum-swaps-to-sort-by-digit-sum/",
+    "definition_provenance": {
+      "official_url": "https://leetcode.com/problems/minimum-swaps-to-sort-by-digit-sum/",
+      "scope": "Problem definition, constraints and public examples only; no editorial or solution code consulted.",
+      "official_problem_id_verified": true
+    },
+    "limitations": [
+      "Finite tests do not prove universal correctness or official-judge acceptance.",
+      "No protected/private cases, models, catalogue promotions or source-access changes."
+    ]
+  },
+  {
+    "parameters": [
+      "edges",
+      "queries"
+    ],
+    "input": "Undirected 1-indexed tree with 2..100000 nodes, and 1..100000 valid vertex-pair queries.",
+    "result": "For each query, count odd-sum assignments of 1/2 weights on that path only, modulo 1000000007.",
+    "complexity": "O((n+q) log n) time, O(n log n+q) space.",
+    "algorithm": "Iterative tree rooting and binary lifting give path length d. There are 2^(d-1) odd assignments for d>0; an empty path has zero.",
+    "numeric": "Modulo powers are formed by repeated doubling below 2*1000000007, exactly safe in JS Number.",
+    "problem_id": 3559,
+    "canonical_key": "lc:number-of-ways-to-assign-edge-weights-ii",
+    "base_commit": "bc252ef318b165396288cd3f3d0ecbd4b84c03da",
+    "status": "authored_locally_tested_candidate",
+    "qualification": "not_qualified",
+    "admission": "not_admitted",
+    "authorship": "Original implementation; no upstream solution implementation copied.",
+    "source_consulted_at": "2026-10-27",
+    "boundary_authorization": "batch2/authorization.json",
+    "test_receipt": "batch2/test-results.json",
+    "tests": {
+      "public_example": 2,
+      "independent_small_oracle": 55,
+      "large_shape": 1
+    },
+    "source_files": {
+      "javascript": {
+        "path": "javascript/3559.js",
+        "sha256": "edbd105a9852db263d074bf81312676db4cde18283f62b9aca2ac308fd9d505d"
+      },
+      "python": {
+        "path": "python/3559.py",
+        "sha256": "f745d20be26ad3c8126c63132adc09348c4d46a8b1ad678abab76dd6337988f1"
+      }
+    },
+    "effects": "No mutation of caller inputs; result containers are fresh.",
+    "unicode": "Strings are restricted to the ASCII alphabet in the input contract; no broader Unicode claim.",
+    "exceptions": "Behavior outside the declared valid input contract is unspecified; no error-message compatibility claim.",
+    "adapter": null,
+    "source_url": "https://leetcode.com/problems/number-of-ways-to-assign-edge-weights-ii/",
+    "definition_provenance": {
+      "official_url": "https://leetcode.com/problems/number-of-ways-to-assign-edge-weights-ii/",
+      "scope": "Problem definition, constraints and public examples only; no editorial or solution code consulted.",
+      "official_problem_id_verified": true
+    },
+    "limitations": [
+      "Finite tests do not prove universal correctness or official-judge acceptance.",
+      "No protected/private cases, models, catalogue promotions or source-access changes."
+    ]
+  },
+  {
+    "parameters": [
+      "grid",
+      "k"
+    ],
+    "input": "Rectangular integer grid with each dimension 1..30, values -100000..100000; 1<=k<=min(dimensions).",
+    "result": "Matrix of minimum differences between distinct values in each k-square, or zero if only one distinct value.",
+    "complexity": "O((r-k+1)*(c-k+1)*k^2*log(k^2)) time, O(k^2) temporary space plus output.",
+    "algorithm": "Deduplicate and sort each window; the closest distinct values are adjacent in sorted order.",
+    "problem_id": 3567,
+    "canonical_key": "lc:minimum-absolute-difference-in-sliding-submatrix",
+    "base_commit": "bc252ef318b165396288cd3f3d0ecbd4b84c03da",
+    "status": "authored_locally_tested_candidate",
+    "qualification": "not_qualified",
+    "admission": "not_admitted",
+    "authorship": "Original implementation; no upstream solution implementation copied.",
+    "source_consulted_at": "2026-10-27",
+    "boundary_authorization": "batch2/authorization.json",
+    "test_receipt": "batch2/test-results.json",
+    "tests": {
+      "public_example": 3,
+      "independent_small_oracle": 55
+    },
+    "source_files": {
+      "javascript": {
+        "path": "javascript/3567.js",
+        "sha256": "cf625ec8b7acb314fbc8c2840631104c10d3521b5dca053715da40f61a528e3d"
+      },
+      "python": {
+        "path": "python/3567.py",
+        "sha256": "277450454465b94abdd89fdc0ba366781bb315786a407aba1ba132a86fb22e0c"
+      }
+    },
+    "effects": "No mutation of caller inputs; result containers are fresh.",
+    "numeric": "Declared integers and intermediate arithmetic remain within JS safe integers; Python integers are exact.",
+    "unicode": "Strings are restricted to the ASCII alphabet in the input contract; no broader Unicode claim.",
+    "exceptions": "Behavior outside the declared valid input contract is unspecified; no error-message compatibility claim.",
+    "adapter": null,
+    "source_url": "https://leetcode.com/problems/minimum-absolute-difference-in-sliding-submatrix/",
+    "definition_provenance": {
+      "official_url": "https://leetcode.com/problems/minimum-absolute-difference-in-sliding-submatrix/",
+      "scope": "Problem definition, constraints and public examples only; no editorial or solution code consulted.",
+      "official_problem_id_verified": true
+    },
+    "limitations": [
+      "Finite tests do not prove universal correctness or official-judge acceptance.",
+      "No protected/private cases, models, catalogue promotions or source-access changes."
+    ]
+  },
+  {
+    "parameters": [
+      "nums",
+      "k"
+    ],
+    "input": "1..1500 positive integers <=1000000000; 1<=k<=n.",
+    "result": "Maximum subarray length times GCD after doubling at most k distinct elements once.",
+    "complexity": "O(n^2 log(max(nums))) time upper bound, O(n) auxiliary space.",
+    "algorithm": "Doubling can only add one factor of two to the GCD. It succeeds exactly when all subarray elements with the minimum two-adic valuation can be doubled.",
+    "numeric": "Maximum result is 3000000000000, safely exact in JS Number. No 32-bit truncation of products.",
+    "problem_id": 3574,
+    "canonical_key": "lc:maximize-subarray-gcd-score",
+    "base_commit": "bc252ef318b165396288cd3f3d0ecbd4b84c03da",
+    "status": "authored_locally_tested_candidate",
+    "qualification": "not_qualified",
+    "admission": "not_admitted",
+    "authorship": "Original implementation; no upstream solution implementation copied.",
+    "source_consulted_at": "2026-10-27",
+    "boundary_authorization": "batch2/authorization.json",
+    "test_receipt": "batch2/test-results.json",
+    "tests": {
+      "public_example": 3,
+      "independent_small_oracle": 55,
+      "large_numeric": 1
+    },
+    "source_files": {
+      "javascript": {
+        "path": "javascript/3574.js",
+        "sha256": "9f70dcdc36b7ff5b84c65447a7074cbb6b711718c84dc7fc80c943493e1c1b3b"
+      },
+      "python": {
+        "path": "python/3574.py",
+        "sha256": "e7c2355ca9933f1c0c421c5dd945a15f3b41061d88bc8d06175eab21407f7ef0"
+      }
+    },
+    "effects": "No mutation of caller inputs; result containers are fresh.",
+    "unicode": "Strings are restricted to the ASCII alphabet in the input contract; no broader Unicode claim.",
+    "exceptions": "Behavior outside the declared valid input contract is unspecified; no error-message compatibility claim.",
+    "adapter": null,
+    "source_url": "https://leetcode.com/problems/maximize-subarray-gcd-score/",
+    "definition_provenance": {
+      "official_url": "https://leetcode.com/problems/maximize-subarray-gcd-score/",
+      "scope": "Problem definition, constraints and public examples only; no editorial or solution code consulted.",
+      "official_problem_id_verified": true
+    },
+    "limitations": [
+      "Finite tests do not prove universal correctness or official-judge acceptance.",
+      "No protected/private cases, models, catalogue promotions or source-access changes."
+    ]
+  },
+  {
+    "parameters": [
+      "word1",
+      "word2"
+    ],
+    "input": "Equal-length lowercase ASCII strings of length 1..100. Partition into contiguous segments; each character can participate at most once per operation type.",
+    "result": "Minimum total replacements, disjoint swaps and segment reversals.",
+    "complexity": "O(n^3+26^2*n^2) time upper bound; O(n+26^2) auxiliary space.",
+    "algorithm": "For each segment and orientation, reciprocal mismatches share a swap; other mismatches need replacements. A prefix DP selects segment boundaries. Reversal is charged once. Disjoint swaps and replacements can be normalized after reversal without changing their counts.",
+    "problem_id": 3579,
+    "canonical_key": "lc:minimum-steps-to-convert-string-with-operations",
+    "base_commit": "bc252ef318b165396288cd3f3d0ecbd4b84c03da",
+    "status": "authored_locally_tested_candidate",
+    "qualification": "not_qualified",
+    "admission": "not_admitted",
+    "authorship": "Original implementation; no upstream solution implementation copied.",
+    "source_consulted_at": "2026-10-27",
+    "boundary_authorization": "batch2/authorization.json",
+    "test_receipt": "batch2/test-results.json",
+    "tests": {
+      "public_example": 3,
+      "independent_small_oracle": 55,
+      "large_shape": 1
+    },
+    "source_files": {
+      "javascript": {
+        "path": "javascript/3579.js",
+        "sha256": "85ca14c6d5333493504c6e8c0396aa5ecb10185fc3bf054e2c9137390fe64641"
+      },
+      "python": {
+        "path": "python/3579.py",
+        "sha256": "5ee8c51ea4857e23c1e210f5fd189be27e58bd99353f93987ae181a18a31d345"
+      }
+    },
+    "effects": "No mutation of caller inputs; result containers are fresh.",
+    "numeric": "Declared integers and intermediate arithmetic remain within JS safe integers; Python integers are exact.",
+    "unicode": "Strings are restricted to the ASCII alphabet in the input contract; no broader Unicode claim.",
+    "exceptions": "Behavior outside the declared valid input contract is unspecified; no error-message compatibility claim.",
+    "adapter": null,
+    "source_url": "https://leetcode.com/problems/minimum-steps-to-convert-string-with-operations/",
+    "definition_provenance": {
+      "official_url": "https://leetcode.com/problems/minimum-steps-to-convert-string-with-operations/",
+      "scope": "Problem definition, constraints and public examples only; no editorial or solution code consulted.",
+      "official_problem_id_verified": true
+    },
+    "limitations": [
+      "Finite tests do not prove universal correctness or official-judge acceptance.",
+      "No protected/private cases, models, catalogue promotions or source-access changes."
+    ]
+  },
+  {
+    "parameters": [
+      "nums"
+    ],
+    "input": "Distinct positive integers <=1000000000, length 1..100000.",
+    "result": "Minimum adjacent swaps to alternate parity, or -1 if impossible.",
+    "complexity": "O(n) time, O(n) space.",
+    "algorithm": "For each feasible starting parity, match even elements stably to their alternating target positions and sum their travel distances.",
+    "numeric": "Swap counts are at most O(n^2) and remain below 2^53 for the declared size.",
+    "problem_id": 3587,
+    "canonical_key": "lc:minimum-adjacent-swaps-to-alternate-parity",
+    "base_commit": "bc252ef318b165396288cd3f3d0ecbd4b84c03da",
+    "status": "authored_locally_tested_candidate",
+    "qualification": "not_qualified",
+    "admission": "not_admitted",
+    "authorship": "Original implementation; no upstream solution implementation copied.",
+    "source_consulted_at": "2026-10-27",
+    "boundary_authorization": "batch2/authorization.json",
+    "test_receipt": "batch2/test-results.json",
+    "tests": {
+      "public_example": 4,
+      "independent_small_oracle": 55,
+      "large_numeric": 1
+    },
+    "source_files": {
+      "javascript": {
+        "path": "javascript/3587.js",
+        "sha256": "601c383d98f5b7d922002a9d35ebfbd875ebb0e56ed8e4edc2bf8cbb297dda8c"
+      },
+      "python": {
+        "path": "python/3587.py",
+        "sha256": "29c04fa37e0a7858d154de4ade3f154643a17fc54eac4796c1820f18823089fa"
+      }
+    },
+    "effects": "No mutation of caller inputs; result containers are fresh.",
+    "unicode": "Strings are restricted to the ASCII alphabet in the input contract; no broader Unicode claim.",
+    "exceptions": "Behavior outside the declared valid input contract is unspecified; no error-message compatibility claim.",
+    "adapter": null,
+    "source_url": "https://leetcode.com/problems/minimum-adjacent-swaps-to-alternate-parity/",
+    "definition_provenance": {
+      "official_url": "https://leetcode.com/problems/minimum-adjacent-swaps-to-alternate-parity/",
+      "scope": "Problem definition, constraints and public examples only; no editorial or solution code consulted.",
+      "official_problem_id_verified": true
+    },
+    "limitations": [
+      "Finite tests do not prove universal correctness or official-judge acceptance.",
+      "No protected/private cases, models, catalogue promotions or source-access changes."
+    ]
+  },
+  {
+    "parameters": [
+      "words"
+    ],
+    "input": "1..100000 nonempty lowercase ASCII strings, total length <=100000.",
+    "result": "For each independent removal, maximum adjacent-pair LCP length in remaining sequence, or zero.",
+    "complexity": "O(total string length+n) time and O(n) space.",
+    "algorithm": "Prefix/suffix maxima preserve unaffected adjacent pairs; removal introduces only the bridge from the previous word to the next.",
+    "problem_id": 3598,
+    "canonical_key": "lc:longest-common-prefix-between-adjacent-strings-after-removals",
+    "base_commit": "bc252ef318b165396288cd3f3d0ecbd4b84c03da",
+    "status": "authored_locally_tested_candidate",
+    "qualification": "not_qualified",
+    "admission": "not_admitted",
+    "authorship": "Original implementation; no upstream solution implementation copied.",
+    "source_consulted_at": "2026-10-27",
+    "boundary_authorization": "batch2/authorization.json",
+    "test_receipt": "batch2/test-results.json",
+    "tests": {
+      "public_example": 2,
+      "independent_small_oracle": 55,
+      "large_shape": 1
+    },
+    "source_files": {
+      "javascript": {
+        "path": "javascript/3598.js",
+        "sha256": "9245c4b6e0634d2cc519fb71091504361256ba6530b5f877c4435192a5f1b2db"
+      },
+      "python": {
+        "path": "python/3598.py",
+        "sha256": "c7efbbbb4ba5d2264f5dcd7314ed658d7a704ad6ae729100dcfbd2c109d3d70b"
+      }
+    },
+    "effects": "No mutation of caller inputs; result containers are fresh.",
+    "numeric": "Declared integers and intermediate arithmetic remain within JS safe integers; Python integers are exact.",
+    "unicode": "Strings are restricted to the ASCII alphabet in the input contract; no broader Unicode claim.",
+    "exceptions": "Behavior outside the declared valid input contract is unspecified; no error-message compatibility claim.",
+    "adapter": null,
+    "source_url": "https://leetcode.com/problems/longest-common-prefix-between-adjacent-strings-after-removals/",
+    "definition_provenance": {
+      "official_url": "https://leetcode.com/problems/longest-common-prefix-between-adjacent-strings-after-removals/",
+      "scope": "Problem definition, constraints and public examples only; no editorial or solution code consulted.",
+      "official_problem_id_verified": true
+    },
+    "limitations": [
+      "Finite tests do not prove universal correctness or official-judge acceptance.",
+      "No protected/private cases, models, catalogue promotions or source-access changes."
+    ]
+  },
+  {
+    "parameters": [
+      "n",
+      "edges",
+      "k"
+    ],
+    "input": "Undirected simple graph with 1..100000 nodes indexed from zero, <=100000 edges [u,v,time], time 1..1000000000; 1<=k<=n.",
+    "result": "Least nonnegative time leaving at least k components after deleting every edge with timestamp <= time.",
+    "complexity": "O(e log e+(n+e)*alpha(n)) time, O(n+e) space.",
+    "algorithm": "Process equal timestamp groups descending with DSU. First group taking component count below k identifies the threshold; no such group means zero.",
+    "problem_id": 3608,
+    "canonical_key": "lc:minimum-time-for-k-connected-components",
+    "base_commit": "bc252ef318b165396288cd3f3d0ecbd4b84c03da",
+    "status": "authored_locally_tested_candidate",
+    "qualification": "not_qualified",
+    "admission": "not_admitted",
+    "authorship": "Original implementation; no upstream solution implementation copied.",
+    "source_consulted_at": "2026-10-27",
+    "boundary_authorization": "batch2/authorization.json",
+    "test_receipt": "batch2/test-results.json",
+    "tests": {
+      "public_example": 3,
+      "independent_small_oracle": 55,
+      "large_shape": 1
+    },
+    "source_files": {
+      "javascript": {
+        "path": "javascript/3608.js",
+        "sha256": "fe4c6aeca04d6a146c5e20f1b51b996442b19cca1a406ace31c2f880af3ebfe0"
+      },
+      "python": {
+        "path": "python/3608.py",
+        "sha256": "26932b02f85b47d6409e237c8cfb0b936ae5b92d59deadcd98c493c7803bc934"
+      }
+    },
+    "effects": "No mutation of caller inputs; result containers are fresh.",
+    "numeric": "Declared integers and intermediate arithmetic remain within JS safe integers; Python integers are exact.",
+    "unicode": "Strings are restricted to the ASCII alphabet in the input contract; no broader Unicode claim.",
+    "exceptions": "Behavior outside the declared valid input contract is unspecified; no error-message compatibility claim.",
+    "adapter": null,
+    "source_url": "https://leetcode.com/problems/minimum-time-for-k-connected-components/",
+    "definition_provenance": {
+      "official_url": "https://leetcode.com/problems/minimum-time-for-k-connected-components/",
+      "scope": "Problem definition, constraints and public examples only; no editorial or solution code consulted.",
+      "official_problem_id_verified": true
+    },
+    "limitations": [
+      "Finite tests do not prove universal correctness or official-judge acceptance.",
+      "No protected/private cases, models, catalogue promotions or source-access changes."
+    ]
+  },
+  {
+    "parameters": [
+      "nums"
+    ],
+    "input": "Integer array length 1..100000, values -1000000000..1000000000.",
+    "result": "Absolute difference between sum at prime zero-based indices and sum at all other indices.",
+    "complexity": "O(n log log n) time, O(n) space.",
+    "algorithm": "Sieve primality of indices and accumulate with opposite signs.",
+    "numeric": "Absolute sums are at most 100000000000000, safely exact in JS Number.",
+    "problem_id": 3618,
+    "canonical_key": "lc:split-array-by-prime-indices",
+    "base_commit": "bc252ef318b165396288cd3f3d0ecbd4b84c03da",
+    "status": "authored_locally_tested_candidate",
+    "qualification": "not_qualified",
+    "admission": "not_admitted",
+    "authorship": "Original implementation; no upstream solution implementation copied.",
+    "source_consulted_at": "2026-10-27",
+    "boundary_authorization": "batch2/authorization.json",
+    "test_receipt": "batch2/test-results.json",
+    "tests": {
+      "public_example": 2,
+      "independent_small_oracle": 55,
+      "large_numeric": 1
+    },
+    "source_files": {
+      "javascript": {
+        "path": "javascript/3618.js",
+        "sha256": "c7c813b2d8d3adbeafd560d850b421a396f888e09facd33e6dc3cfec1ac8db0f"
+      },
+      "python": {
+        "path": "python/3618.py",
+        "sha256": "f025c11f151269b0f52e77ecfe9301bb66d1347bb41757651a9a542c21fe9474"
+      }
+    },
+    "effects": "No mutation of caller inputs; result containers are fresh.",
+    "unicode": "Strings are restricted to the ASCII alphabet in the input contract; no broader Unicode claim.",
+    "exceptions": "Behavior outside the declared valid input contract is unspecified; no error-message compatibility claim.",
+    "adapter": null,
+    "source_url": "https://leetcode.com/problems/split-array-by-prime-indices/",
+    "definition_provenance": {
+      "official_url": "https://leetcode.com/problems/split-array-by-prime-indices/",
+      "scope": "Problem definition, constraints and public examples only; no editorial or solution code consulted.",
+      "official_problem_id_verified": true
+    },
+    "limitations": [
+      "Finite tests do not prove universal correctness or official-judge acceptance.",
+      "No protected/private cases, models, catalogue promotions or source-access changes."
+    ]
+  }
+]
