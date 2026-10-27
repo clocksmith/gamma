@@ -1,0 +1,4 @@
+// Original candidate. Contract: https://leetcode.com/problems/maximum-trailing-zeros-in-a-cornered-path/
+"use strict";
+function solve(grid){const m=grid.length,n=grid[0].length,F=[];for(const prime of [2,5]){const a=Array.from({length:m},()=>Array(n).fill(0)),r=Array.from({length:m},()=>Array(n+1).fill(0)),c=Array.from({length:m+1},()=>Array(n).fill(0));for(let i=0;i<m;i++)for(let j=0;j<n;j++){let x=grid[i][j];while(x%prime===0){a[i][j]++;x/=prime;}r[i][j+1]=r[i][j]+a[i][j];c[i+1][j]=c[i][j]+a[i][j];}F.push([a,r,c]);}let ans=0;for(let i=0;i<m;i++)for(let j=0;j<n;j++){const t=F.map(([a,r,c])=>{const z=[];for(const x of [r[i][j+1],r[i][n]-r[i][j]])for(const y of [c[i+1][j],c[m][j]-c[i][j]])z.push(x+y-a[i][j]);return z;});for(let k=0;k<4;k++)ans=Math.max(ans,Math.min(t[0][k],t[1][k]));}return ans;}
+module.exports = solve;

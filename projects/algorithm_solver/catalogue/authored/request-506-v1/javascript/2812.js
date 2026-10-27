@@ -1,0 +1,4 @@
+// Original candidate. Contract: https://leetcode.com/problems/find-the-safest-path-in-a-grid/
+"use strict";
+function solve(grid){const n=grid.length,d=Array.from({length:n},()=>Array(n).fill(-1)),dirs=[[1,0],[-1,0],[0,1],[0,-1]],q=[];for(let i=0;i<n;i++)for(let j=0;j<n;j++)if(grid[i][j]){d[i][j]=0;q.push([i,j]);}for(let h=0;h<q.length;h++){const[i,j]=q[h];for(const[di,dj]of dirs){let x=i+di,y=j+dj;if(x>=0&&x<n&&y>=0&&y<n&&d[x][y]<0){d[x][y]=d[i][j]+1;q.push([x,y]);}}}function ok(t){if(d[0][0]<t)return false;const seen=new Uint8Array(n*n),a=[[0,0]];seen[0]=1;for(let h=0;h<a.length;h++){const[i,j]=a[h];if(i===n-1&&j===n-1)return true;for(const[di,dj]of dirs){let x=i+di,y=j+dj;if(x>=0&&x<n&&y>=0&&y<n&&!seen[x*n+y]&&d[x][y]>=t){seen[x*n+y]=1;a.push([x,y]);}}}return false;}let l=0,r=Math.min(d[0][0],d[n-1][n-1])+1;while(l+1<r){let m=(l+r)>>1;if(ok(m))l=m;else r=m;}return l;}
+module.exports = solve;
