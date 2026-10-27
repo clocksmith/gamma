@@ -6,7 +6,7 @@ side's effect planner is deliberately not imported or consulted.
 from collections import deque
 from math import gcd
 
-IDS = {814, 2074, 2807}
+IDS = {814, 2074, 2415, 2807}
 
 
 def identical(left, right):
@@ -21,12 +21,19 @@ def identical(left, right):
 def decode_original(pid, args):
     if type(args) is not list or len(args) != 1 or type(args[0]) is not dict:
         raise ValueError('one encoded node argument required')
-    marker = '__tree_node__' if pid == 814 else '__list_node__'
+    marker = '__tree_node__' if pid in (814, 2415) else '__list_node__'
     if set(args[0]) != {marker}: raise ValueError('wrong input node shape')
     raw = args[0][marker]
     if type(raw) is not list or not raw or type(raw[0]) is not int:
         raise ValueError('nonempty node input required')
-    if pid != 814:
+    if pid == 2415:
+        # Independently validate complete levels without the planner's bit test.
+        width, remaining = 1, len(raw)
+        while remaining >= width:
+            remaining -= width; width *= 2
+        if remaining or len(raw) > 16383 or any(type(v) is not int or not 0 <= v <= 100000 for v in raw):
+            raise ValueError('native2415 perfect integer tree required')
+    if pid not in (814, 2415):
         if any(type(value) is not int for value in raw): raise ValueError('integer list values required')
         return [{'value': value, 'next': i+1 if i+1 < len(raw) else None} for i, value in enumerate(raw)]
     states = [{'value': raw[0], 'left': None, 'right': None}]
@@ -93,10 +100,10 @@ def check(pid, args, record):
             return 'node_identity_effects'
         if not identical(witness['before'], before) or not identical(witness['argument_roots'], [0]):
             return 'node_identity_effects'
-        after = witness['after']; n = len(before); tree = pid == 814
+        after = witness['after']; n = len(before); tree = pid in (814, 2415)
         if not valid_states(after, tree): return 'node_identity_effects'
         if len(after) != (2*n-1 if pid == 2807 else n): return 'node_identity_effects'
-        if any(after[i]['value'] != before[i]['value'] for i in range(n)):
+        if pid != 2415 and any(after[i]['value'] != before[i]['value'] for i in range(n)):
             return 'node_identity_effects'
         result_root = 0
         if pid == 814:
@@ -107,6 +114,24 @@ def check(pid, args, record):
                     original_child = before[i][edge]
                     allowed_child = original_child if original_child is not None and keep[original_child] else None
                     if not identical(after[i][edge], allowed_child): return 'node_identity_effects'
+        elif pid == 2415:
+            # Traverse the input edges and pair each odd level from both ends.
+            # No execution-side plan, heap mirror formula or language agreement.
+            level, odd = [0], False
+            while level:
+                for offset, index in enumerate(level):
+                    paired = level[len(level)-1-offset] if odd else index
+                    if after[index]['value'] != before[paired]['value']:
+                        return 'node_identity_effects'
+                    for edge in ('left', 'right'):
+                        if not identical(after[index][edge], before[index][edge]):
+                            return 'node_identity_effects'
+                level = [before[index][edge] for index in level for edge in ('left', 'right')
+                         if before[index][edge] is not None]
+                odd = not odd
+            integrity = {'schema': 'gamma.native2415-node-integrity.v1', 'node_count': n,
+                         'class_or_prototype_unchanged': True, 'own_field_descriptors_unchanged': True}
+            if not identical(record.get('node_integrity'), integrity): return 'node_identity_effects'
         elif pid == 2074:
             # Find the original position of each node in the output permutation
             # from triangular group starts and each final group's actual size.
@@ -127,6 +152,8 @@ def check(pid, args, record):
                 if new['value'] != gcd(before[i]['value'], before[i+1]['value']) or not identical(new['next'], i+1):
                     return 'node_identity_effects'
         if not identical(witness['result_root'], result_root): return 'node_identity_effects'
+        if pid == 2415 and not identical(record.get('result'), encode_graph(after, True)):
+            return 'node_identity_effects'
         if not identical(record.get('args_before'), [encode_graph(before, tree)]): return 'input_effects'
         if not identical(record.get('args_after'), [encode_graph(after, tree)]): return 'input_effects'
         aliases = [] if result_root is None else [['result', 'args.0']]

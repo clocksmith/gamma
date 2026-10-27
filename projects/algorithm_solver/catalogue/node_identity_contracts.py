@@ -2,7 +2,19 @@
 from copy import deepcopy
 from math import gcd
 
-IDS={814,2074,2807}
+IDS={814,2074,2415,2807}
+
+
+def native2415_values(args):
+    """The frozen native profile is a nonempty perfect tree, not a sparse tree."""
+    if type(args) is not list or len(args) != 1 or type(args[0]) is not dict or set(args[0]) != {'__tree_node__'}:
+        raise ValueError('native2415 requires one tree argument')
+    values = args[0]['__tree_node__']
+    if (type(values) is not list or not 1 <= len(values) <= 16383 or
+            (len(values) + 1) & len(values) or
+            any(type(value) is not int or not 0 <= value <= 100000 for value in values)):
+        raise ValueError('native2415 requires bounded perfect integer tree')
+    return values
 
 
 def original_nodes(argument):
@@ -36,6 +48,7 @@ def serialize(nodes,root):
 
 
 def plan(pid,args):
+    if pid == 2415: native2415_values(args)
     before=original_nodes(args[0]);after=deepcopy(before);n=len(before);root=0
     if pid==814:
         keep=[False]*n
@@ -51,6 +64,12 @@ def plan(pid,args):
             group=list(range(start,min(n,start+size)))
             order.extend(reversed(group)if len(group)%2==0 else group);start+=len(group);size+=1
         for position,i in enumerate(order):after[i]['next']=order[position+1]if position+1<n else None
+    elif pid==2415:
+        # Heap-index arithmetic; the independent verifier instead walks levels.
+        for i in range(n):
+            depth = (i + 1).bit_length() - 1
+            if depth % 2:
+                after[i]['value'] = before[3 * (1 << depth) - 3 - i]['value']
     elif pid==2807:
         for i in range(n-1):
             after[i]['next']=n+i
@@ -60,8 +79,17 @@ def plan(pid,args):
 
 
 def check(pid,args,record,equal,canonical):
-    expected=plan(pid,args)
+    if pid == 2415:
+        try: expected=plan(pid,args)
+        except (ValueError, TypeError, KeyError, IndexError): return 'node_identity_effects'
+    else: expected=plan(pid,args)
     if not equal(record.get('node_identity'),expected):return 'node_identity_effects'
+    if pid == 2415 and not equal(record.get('node_integrity'), {
+            'schema': 'gamma.native2415-node-integrity.v1', 'node_count': len(expected['before']),
+            'class_or_prototype_unchanged': True, 'own_field_descriptors_unchanged': True}):
+        return 'node_identity_effects'
+    if pid == 2415 and not equal(record.get('result'), serialize(expected['after'], 0)):
+        return 'node_identity_effects'
     if not equal(record.get('args_before'),canonical(args)):return 'input_effects'
     if not equal(record.get('args_after'),[serialize(expected['after'],0)]):return 'input_effects'
     aliases=[['result','args.0']]if expected['result_root']is not None else []

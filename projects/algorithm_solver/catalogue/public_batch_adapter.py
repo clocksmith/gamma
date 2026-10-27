@@ -1170,9 +1170,41 @@ def observer_files(job):
     observer = NODE_HARNESS if job.get('node_identity', False) else HARNESS
     harness = 'harness.py' if job['language'] == 'python' else 'harness.cjs'
     return {harness: read(observer / harness)}'''
+        approved_native = '''def source_interface(job):
+    """Reject unsupported loader combinations before source or case access."""
+    interface = job.get('source_interface', 'global-solve-v1')
+    if interface in ('native2415-commonjs-function-solve-v1', 'native2415-global-solve-v1'):
+        language = 'javascript' if interface == 'native2415-commonjs-function-solve-v1' else 'python'
+        if (type(job.get('id')) is not int or job['id'] != 2415 or job.get('language') != language or
+                job.get('node_identity') is not True or type(job.get('max_cases_per_batch')) is not int or
+                job['max_cases_per_batch'] != 1 or job.get('comparison_policy') != 'problem:2415'):
+            raise ValueError('native2415 interface requires exact problem, language, identity policy and singleton batches')
+        return interface
+    if interface not in ('global-solve-v1', 'commonjs-object-solve-v1', 'commonjs-function-solve-v1'):
+        raise ValueError('unsupported frozen source interface')
+    if interface in ('commonjs-object-solve-v1', 'commonjs-function-solve-v1') and (job['language'] != 'javascript' or job.get('node_identity', False)):
+        raise ValueError('CommonJS interface requires JavaScript without node-identity transport')
+    return interface
+
+def observer_files(job):
+    interface = source_interface(job)
+    if interface in ('native2415-commonjs-function-solve-v1', 'native2415-global-solve-v1'):
+        harness = 'harness.py' if job['language'] == 'python' else 'harness.cjs'
+        return {harness: read(NODE_HARNESS.with_name('imported-node2415-observer-v1') / harness)}
+    if interface == 'commonjs-function-solve-v1':
+        return {'harness.cjs': read(COMMONJS_HARNESS.with_name('function-harness.cjs')), 'observer.cjs': read(HARNESS / 'harness.cjs')}
+    if interface == 'commonjs-object-solve-v1':
+        return {'harness.cjs': read(COMMONJS_HARNESS), 'observer.cjs': read(HARNESS / 'harness.cjs')}
+    observer = NODE_HARNESS if job.get('node_identity', False) else HARNESS
+    harness = 'harness.py' if job['language'] == 'python' else 'harness.cjs'
+    return {harness: read(observer / harness)}'''
         approved_ast = [[ast.dump(node) for node in ast.parse(source).body]
-                        for source in (approved_old, approved_new)]
-        if interface_ast != approved_ast:
+                        for source in (approved_old, approved_new, approved_native)]
+        # Only the full reviewed pair of interface helpers may advance; no
+        # reverse, partially replaced or otherwise edited transition is valid.
+        allowed = [(approved_ast[0], approved_ast[1]), (approved_ast[0], approved_ast[2]),
+                   (approved_ast[1], approved_ast[2])]
+        if tuple(interface_ast) not in allowed:
             raise ValueError('unreviewed source-interface compatibility transition')
         replacements = dict(zip(interface_names, interface_nodes[0]))
         trees[1].body = [replacements.get(node.name, node) if isinstance(node, ast.FunctionDef)
@@ -1279,6 +1311,28 @@ def _check_prepared_execution_delta(values, raws, expected, predecessor_ids):
             'predecessor_authority_review_sha256': expected['predecessor_authority_review']}
 
 
+def check_prepared_effect_helper_compatibility(name, retained, current):
+    """Exact reviewed additive2415 successors, never a helper-name exemption.
+
+    The caller still validates the retained bytes against the immutable staged
+    runtime/spec pins. These pairs only permit current read-only replay helpers;
+    historical execution identities and receipt/proof hashes remain unchanged.
+    """
+    approved = {
+        'catalogue/imported_result_contracts.py': (
+            'b601c7d128a1a21e85d605766ad7456142852c6fbcf18c431ec268ab99330d28',
+            'a7b1a824263d026f589eaeaeeedff122b16f4e9efbd2ddd0e8b7c904aabbdbd0'),
+        'catalogue/node_identity_contracts.py': (
+            'b829437e895c88d6049aac5d8de32593fb324551488c525ef082797e0ecb33c3',
+            'bb8df1349fc0f3ebaba115171fa63ff990d3b181ced45a9ce6d9062444cd4567')}
+    if name not in approved:
+        raise ValueError('unsupported prepared effect helper')
+    if retained == current:
+        return
+    if (sha(retained), sha(current)) != approved[name]:
+        raise ValueError('unreviewed prepared effect-helper compatibility transition')
+
+
 def check_prepared_code(run, freeze):
     """Retain native runner identity while checking current read-only helpers."""
     from . import imported_qualification as q
@@ -1306,6 +1360,8 @@ def check_prepared_code(run, freeze):
         current = bounded_regular_read(HERE.parent / name)
         if name == 'catalogue/imported_qualification.py':
             check_prepared_helper_compatibility(raw, current)
+        elif name in ('catalogue/imported_result_contracts.py', 'catalogue/node_identity_contracts.py'):
+            check_prepared_effect_helper_compatibility(name, raw, current)
         elif sha(current) != pin:
             raise ValueError('current trusted prepared helper differs')
     verifier_pin = staged.get('projects/algorithm_solver/catalogue/verify_imported_qualification.py')

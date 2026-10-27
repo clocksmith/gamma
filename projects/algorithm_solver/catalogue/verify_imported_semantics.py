@@ -9,7 +9,7 @@ import math
 SET_RESULTS = {282: str, 472: str, 784: str, 884: str, 2933: str, 1606: int, 2951: int, 2951: int}
 APPROXIMATE = {813: 1e-6, 1377: 1e-5, 1701: 1e-5, 3194: 0.0}
 NODES = {814: 'TreeNode', 876: 'ListNode', 998: 'TreeNode', 1008: 'TreeNode',
-         1382: 'TreeNode', 2074: 'ListNode', 2196: 'TreeNode', 2807: 'ListNode', 2816: 'ListNode'}
+         1382: 'TreeNode', 2074: 'ListNode', 2196: 'TreeNode', 2415: 'TreeNode', 2807: 'ListNode', 2816: 'ListNode'}
 
 
 def normalized(value):
@@ -269,7 +269,7 @@ def compare(pid, case, record, language):
     except (TypeError, ValueError, KeyError, IndexError, OverflowError):
         valid = False
     if not valid: return 'result_value'
-    if pid in (814, 2074, 2807):
+    if pid in (814, 2074, 2415, 2807):
         from .verify_node_identity import check
         return check(pid, case['args'], record)
     for field in ('args_before', 'args_after'):
