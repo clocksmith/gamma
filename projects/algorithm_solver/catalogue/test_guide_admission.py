@@ -7,10 +7,87 @@ from types import SimpleNamespace
 import unittest
 from unittest.mock import Mock, patch
 
-from .guide_admission import build, project, reconcile_source_evidence, save_snapshot, verify_source_bindings
+from .guide_admission import (build, project, reconcile_source_evidence, save_snapshot,
+                             verify_source_bindings, reconcile_development_replay)
 from .catalogue import BINDINGS, digest
 from ..algsolve import authoring_variants
 from . import test_catalogue
+
+
+class HistoricalDevelopmentReplay(unittest.TestCase):
+    def fixture(self):
+        partition = {'dev_fit': [1, 2], 'dev_val': [3]}
+        self.source = {'schema': 'gamma.cost-decomposition.contract.v1', 'partition': partition,
+            'sources': [{'id': i, 'relative_path': f'style150/submitted/{i}.js', 'sha256': str(i) * 64}
+                        for i in range(1, 4)]}
+        self.qual = {'schema': 'gamma.name-search.v1', 'parent_contract_sha256': 'a' * 64,
+            'partition': copy.deepcopy(partition), 'qualification': [{'id': i, 'files': {
+                f'population500/{i}-tests.json': 'b' * 64,
+                f'population500-baseline/qualification/baselines/{i}.json': 'c' * 64}} for i in range(1, 4)]}
+        self.aliases = {'aliases': {f'development400:{i}': f'leetcode:{i}' for i in range(1, 4)}}
+        self.keys = {'by_key': {'lc:alpha': 'leetcode:1', 'lc:beta': 'leetcode:2', 'lc:gamma': 'leetcode:3'}}
+        self.catalogue = {'problems': [{'problem_id': f'leetcode:{i}', 'implementations': {
+            lang: dict({k: 'd' * 64 for k in BINDINGS}, status='qualified',
+                source_sha256=str(i) * 64 if lang == 'javascript' else 'e' * 64,
+                receipt_sha256='f' * 64, canonical_variant_id=f'{lang}:{i}')
+            for lang in ('javascript', 'python')}} for i in range(1, 5)]}
+        self.boundary = SimpleNamespace(authorized={f'leetcode:{i}' for i in range(1, 4)})
+
+    def join(self):
+        return reconcile_development_replay(self.catalogue, self.aliases, self.keys,
+            self.source, self.qual, 'a' * 64, self.boundary)
+
+    def test_historical_fit_needs_no_new_sidecar_or_authoring_registry(self):
+        self.fixture(); original = copy.deepcopy(self.catalogue)
+        with patch('builtins.open', side_effect=AssertionError('payload opened')):
+            result = self.join()
+        self.assertEqual(result['summary']['eligible'], {'javascript': 2, 'python': 0})
+        self.assertEqual(self.catalogue, original)
+        slot = result['problems'][0]['implementations']['javascript']
+        self.assertEqual(slot['canonical_variant_id'], 'javascript:1')
+        self.assertIsNone(slot['sidecar_semantics_sha256'])
+        self.assertFalse(slot['authoring_variant_created'])
+        self.assertFalse(result['summary']['fresh_confirmation_created'])
+        self.assertFalse(result['summary']['complete_near_duplicate_closure_established'])
+
+    def test_canonical_languages_group_together_and_validation_stays_excluded(self):
+        self.fixture(); result = self.join(); row = result['problems'][2]
+        self.assertEqual(row['historical_membership'], 'dev_val')
+        self.assertEqual(row['canonical_group_members'], ['leetcode:3'])
+        self.assertEqual(row['known_cross_membership_conflicts'], [])
+        for slot in row['implementations'].values():
+            self.assertIn('preserved_consumed_development_validation', slot['exclusions'])
+            self.assertFalse(slot['eligible'])
+
+    def test_known_sibling_cross_split_conflict_excludes_without_reallocation(self):
+        self.fixture(); self.keys['by_key'].update({'lc:related-i': 'leetcode:1', 'lc:related-ii': 'leetcode:3'})
+        result = self.join()
+        self.assertEqual(result['summary']['eligible']['javascript'], 1)
+        self.assertEqual(result['problems'][0]['known_cross_membership_conflicts'], ['leetcode:3'])
+        self.assertEqual(result['problems'][0]['historical_membership'], 'dev_fit')
+        self.assertEqual(self.source['partition']['dev_val'], [3])
+
+    def test_known_group_to_unknown_member_is_excluded(self):
+        self.fixture(); self.keys['by_key'].update({'lc:related-i': 'leetcode:2', 'lc:related-ii': 'leetcode:4'})
+        result = self.join()
+        self.assertFalse(result['problems'][1]['implementations']['javascript']['eligible'])
+
+    def test_changed_source_and_denied_identity_cannot_inherit_fit(self):
+        self.fixture(); self.catalogue['problems'][0]['implementations']['javascript']['source_sha256'] = '0' * 64
+        self.boundary.authorized.remove('leetcode:2')
+        result = self.join()
+        self.assertEqual(result['summary']['eligible']['javascript'], 0)
+        self.assertIn('historical_exact_language_source_not_joined', result['problems'][0]['implementations']['javascript']['exclusions'])
+
+    def test_partition_alias_language_and_chain_drift_fail_closed(self):
+        changes = [lambda: self.qual.update(parent_contract_sha256='0' * 64),
+            lambda: self.aliases['aliases'].update({'development400:1': 'leetcode:4'}),
+            lambda: self.source['sources'][0].update(relative_path='style150/submitted/1.py'),
+            lambda: self.qual['qualification'][0]['files'].clear(),
+            lambda: self.source['partition']['dev_fit'].append(3)]
+        for change in changes:
+            self.fixture(); change()
+            with self.assertRaises(ValueError): self.join()
 
 
 class GuideAdmission(unittest.TestCase):

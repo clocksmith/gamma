@@ -201,6 +201,59 @@ class FittingInputTests(unittest.TestCase):
             self.assertEqual(result['package_bytes'], result['dictionary_bytes'] + result['packet_bytes'])
             self.assertFalse(result['milestone_qualified'])
 
+    def historical_config(self):
+        self.fixture(3)
+        self.boundary.authorized = {f'leetcode:{i}' for i in self.texts}
+        for i in self.texts:
+            self.texts[i] = f'function solve(x) {{ return x + {i}; }}\n'
+            slot = self.canonical['problems'][i - 1]['implementations']['python']
+            slot.update(source_sha256=fitting.owner.sha(self.texts[i].encode()),
+                        canonical_variant_id=f'python:{i}')
+            self.canonical['problems'][i - 1]['implementations']['javascript'] = dict(slot,
+                canonical_variant_id='javascript:' + slot['source_sha256'])
+        canonical = self.pin('canonical.json', self.canonical)
+        aliases = self.pin('aliases.json', {'aliases': {f'development400:{i}': f'leetcode:{i}' for i in self.texts}})
+        keys = self.pin('keys.json', {'by_key': {f'lc:item-{i}': f'leetcode:{i}' for i in self.texts}})
+        gate = self.pin('gate.json', {'artifact_paths': {'identity_aliases': keys['path']},
+                                      'trusted_hashes': {'identity_aliases': keys['sha256']}})
+        service = self.pin('service.json', {'catalogue': canonical, 'source_access': {
+            'boundary_gate': gate, 'aliases': aliases, 'authorized_problem_ids': sorted(self.boundary.authorized)}})
+        source = self.pin('historical-source.json', {'schema': 'gamma.cost-decomposition.contract.v1',
+            'partition': {'dev_fit': [1, 2], 'dev_val': [3]}, 'sources': [
+                {'id': i, 'relative_path': f'style150/submitted/{i}.js', 'sha256': fitting.owner.sha(text.encode())}
+                for i, text in self.texts.items()]})
+        qual = self.pin('historical-qualification.json', {'schema': 'gamma.name-search.v1',
+            'parent_contract_sha256': source['sha256'], 'partition': {'dev_fit': [1, 2], 'dev_val': [3]},
+            'qualification': [{'id': i, 'files': {f'population500/{i}-tests.json': 'a' * 64,
+                f'population500-baseline/qualification/baselines/{i}.json': 'b' * 64}} for i in self.texts]})
+        def materialize(pid, *, language, include_source):
+            self.assertEqual(language, 'javascript'); self.assertIs(include_source, True)
+            self.assertNotEqual(pid, 'leetcode:3')
+            text = self.texts[int(pid.split(':')[1])]
+            return {'artifact': {'status': 'materialized', 'source_utf8': text,
+                                 'source_sha256': fitting.owner.sha(text.encode())}}
+        self.service.request.side_effect = materialize
+        return self.pin('replay.json', {'schema': 'gamma.idiom-development-replay-config.v1',
+            'language': 'javascript', 'service': service, 'source_contract': source, 'qualification_contract': qual})
+
+    def test_historical_loader_preserves_validation_and_uses_current_canonical_identity(self):
+        spec = self.historical_config()
+        sources, metadata = fitting.load_fitting_inputs(spec['path'], spec['sha256'])
+        self.assertEqual(set(sources), {1, 2})
+        self.assertEqual(self.service.request.call_count, 2)
+        self.assertEqual(metadata['historical_join']['summary']['preserved_validation'], 1)
+        self.assertFalse(metadata['fresh_confirmation_created'])
+        for variants in sources.values(): self.assertTrue(next(iter(variants)).startswith('javascript:'))
+        self.assertTrue(all(row['sidecar_semantics_sha256'] is None for row in metadata['memberships']))
+
+    def test_historical_loader_never_transfers_javascript_authority_to_python(self):
+        spec = self.historical_config()
+        config = json.loads(Path(spec['path']).read_text()); config['language'] = 'python'
+        spec = self.pin('wrong-language.json', config)
+        with self.assertRaisesRegex(ValueError, 'JavaScript sources only'):
+            fitting.load_fitting_inputs(spec['path'], spec['sha256'])
+        self.service.request.assert_not_called()
+
 
 if __name__ == '__main__':
     unittest.main()

@@ -81,6 +81,28 @@ Each reconciliation produces a new inventory value; a previously reconciled
 snapshot is not an accumulator for additional evidence. No optional input changes
 the behavior or source-read scope of `--verify-sources`.
 
+### Preserving historical fitting authority
+
+The prospective admission gates do not retroactively revoke an existing exposed
+development fit. `reconcile_development_replay` joins the existing hash-pinned
+cost-decomposition and name-search contracts to current canonical receipts and
+the verified exact numeric alias map. The original complete `dev_fit`/`dev_val`
+partition, language and exact source commitments are preserved. Byte-identical
+JavaScript fit members need no invented authoring sidecar or replacement variant
+ID. Current receipt contract/semantics bindings remain their existing evidence;
+the join creates no qualification. A changed implementation or Python source
+does not inherit that exact JavaScript grant.
+
+Canonical problems group both language identities. Known aliases and the existing
+recognition owner's roman-suffix sibling links identify cross-membership groups;
+those fit members are excluded, never reassigned. Full near-duplicate closure
+remains unknown. This narrow development replay does not assign a new corpus
+split or claim fresh independent family confirmation. All 100 consumed validation
+members remain excluded from fitting. The private replay report retains the full
+historical population, known conflicts, current hashes and exclusions. Source
+materialization still uses the existing per-open gate. No publication, browser
+admission or protected access follows from this linkage.
+
 ## Corpus and evidence requirements
 
 Before assigning a split, join exact source, interface, adapter, tests, provenance,
