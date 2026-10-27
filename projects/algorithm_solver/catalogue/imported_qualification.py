@@ -16,7 +16,7 @@ import re
 import subprocess
 import time
 
-from algsolve.judge import sandbox
+from algsolve.judge import pinned_runtime, sandbox
 from .boundary_policy import authorize_before_open
 from .known_spec_service import KnownSpecService, _boundary_snapshot
 
@@ -30,6 +30,8 @@ LIMITS = dict(cpu_seconds=3, wall_seconds=8, memory_bytes=1024**3,
               max_output_bytes=8 * 1024**2)
 MAX_FILE = 8 * 1024**2
 MAX_PACKET = 1_100_000
+PINNED_RUNTIME_SCHEMA = 'gamma.imported-pinned-node-runtime.v1'
+NODE_ARGS = ['--jitless', '--single-threaded', '--max-old-space-size=64', 'harness.cjs']
 
 
 def encoded(value):
@@ -77,17 +79,49 @@ def write(path, value):
     os.replace(temporary, path)
 
 
-def runtime():
-    paths = {'/usr/bin/python3', '/usr/bin/node', '/usr/bin/bwrap', '/usr/bin/prlimit'}
+def runtime(node_runtime=None):
+    """Freeze the explicit runtime route; never discover Node through PATH."""
+    node = pinned_runtime.freeze_runtime(Path(node_runtime)) if node_runtime is not None else None
+    paths = {'/usr/bin/python3', '/usr/bin/bwrap', '/usr/bin/prlimit'}
+    if node is None:
+        paths.add('/usr/bin/node')
     for name in sorted(paths.copy()):
         result = subprocess.run(['ldd', name], capture_output=True, text=True, check=True, timeout=10)
         paths.update(re.findall(r'(/[^\s()]+)', result.stdout))
-    return {name: {'resolved': str(Path(name).resolve(strict=True)), 'sha256': file_hash(name)}
+    host = {name: {'resolved': str(Path(name).resolve(strict=True)), 'sha256': file_hash(name)}
             for name in sorted(paths)}
+    return host if node is None else {'schema': PINNED_RUNTIME_SCHEMA, 'host': host, 'node': node}
+
+
+def verify_runtime(contract, node_runtime=None):
+    """Require the same frozen route, executable, dependencies and isolation."""
+    expected = contract['runtime']
+    pinned = expected.get('schema') == PINNED_RUNTIME_SCHEMA
+    if ('schema' in expected and not pinned) or pinned != (node_runtime is not None):
+        raise ValueError('explicit Node runtime route differs from freeze')
+    if expected != runtime(node_runtime):
+        raise ValueError('runtime drift')
+
+
+def run_batch(language, files, runtime_identity, node_runtime=None):
+    """Use the existing isolated adapter; expected answers are not in files."""
+    pinned = runtime_identity.get('schema') == PINNED_RUNTIME_SCHEMA
+    if ('schema' in runtime_identity and not pinned) or pinned != (node_runtime is not None):
+        raise ValueError('explicit Node runtime route differs from freeze')
+    if language == 'javascript' and pinned:
+        return pinned_runtime.run_node(Path(node_runtime), manifest=runtime_identity['node'],
+                                       files=files, limits=sandbox.Limits(**LIMITS), node_args=list(NODE_ARGS))
+    if language == 'python':
+        argv = ['/usr/bin/python3', '-I', '-S', 'harness.py']
+    elif language == 'javascript':
+        argv = ['/usr/bin/node', *NODE_ARGS]
+    else:
+        raise ValueError('unsupported qualification language')
+    return sandbox.run(argv, files=files, limits=sandbox.Limits(**LIMITS))
 
 
 def code_pins():
-    paths = [Path(__file__), Path(sandbox.__file__), HARNESS / 'harness.py', HARNESS / 'harness.cjs',
+    paths = [Path(__file__), Path(sandbox.__file__), Path(pinned_runtime.__file__), HARNESS / 'harness.py', HARNESS / 'harness.cjs',
              Path(__file__).with_name('imported_result_contracts.py'),
              Path(__file__).with_name('node_identity_contracts.py'), NODE_HARNESS / 'harness.py', NODE_HARNESS / 'harness.cjs']
     return {str(p): file_hash(p) for p in paths}
@@ -183,6 +217,7 @@ def check_output(raw, cases, language, policy='exact'):
 
 
 def prepare(args):
+    runtime_identity = runtime(getattr(args, 'node_runtime', None))
     service = KnownSpecService.from_config(args.config, args.config_sha256)
     config = decode(read(args.config))
     gate = decode(read(config['source_access']['boundary_gate']['path']))
@@ -251,7 +286,7 @@ def prepare(args):
                      'tests_canonical_sha256': desc['sha256'], 'case_count': len(cases), 'statement': statement})
     contract = {'schema': 'gamma.imported-independent-execution.v1', 'jobs': jobs, 'pending': pending,
                 'service_config': str(args.config.resolve()), 'service_config_sha256': args.config_sha256,
-                'runtime': runtime(), 'code': code_pins(), 'limits': LIMITS, 'max_packet_bytes': MAX_PACKET,
+                'runtime': runtime_identity, 'code': code_pins(), 'limits': LIMITS, 'max_packet_bytes': MAX_PACKET,
                 'test_authority': 'Owner request to qualify permitted implementations; pre-existing independently authored LCD cases, each bound to the historical source-free inventory.',
                 'inventory_sha256': INVENTORY_SHA, 'effects': 'read-only arguments; no mutable return-to-input aliases',
                 'comparison': 'exact typed ordered returns; failures retained, no comparator relaxation in this freeze',
@@ -306,8 +341,8 @@ def job_inputs(root, job, gate):
 
 def execute(args):
     frozen, contract, gate = load_freeze(args.freeze)
-    if contract['runtime'] != runtime():
-        raise ValueError('runtime drift')
+    node_runtime = getattr(args, 'node_runtime', None)
+    verify_runtime(contract, node_runtime)
     args.output.mkdir(parents=True, exist_ok=False)
     report = {'schema': 'gamma.imported-independent-report.v1', 'freeze': str(args.freeze.resolve()),
               'freeze_sha256': sha(frozen), 'status': 'running', 'rows': [], 'new_qualifications': 0}
@@ -321,11 +356,13 @@ def execute(args):
                 if time.monotonic() - start > args.max_wall:
                     raise TimeoutError('campaign wall budget')
                 if job['language'] == 'python':
-                    argv = ['/usr/bin/python3', '-I', '-S', 'harness.py']; program = 'program.py'; harness = 'harness.py'
+                    program = 'program.py'; harness = 'harness.py'
                 else:
-                    argv = ['/usr/bin/node', '--jitless', '--single-threaded', '--max-old-space-size=64', 'harness.cjs']; program = 'program.js'; harness = 'harness.cjs'
+                    program = 'program.js'; harness = 'harness.cjs'
                 observer = NODE_HARNESS if job.get('node_identity', False) else HARNESS
-                result = sandbox.run(argv, files={program: source, harness: read(observer / harness), 'inputs.json': encoded(packet(batch, job.get('node_identity', False)))}, limits=sandbox.Limits(**LIMITS))
+                result = run_batch(job['language'], {program: source, harness: read(observer / harness),
+                                   'inputs.json': encoded(packet(batch, job.get('node_identity', False)))},
+                                   contract['runtime'], node_runtime)
                 stem = f"{job['id']}-{job['language']}-{offset}"
                 (args.output / (stem + '.stdout')).write_bytes(result.stdout)
                 (args.output / (stem + '.stderr')).write_bytes(result.stderr)
@@ -345,8 +382,7 @@ def execute(args):
             report['elapsed_seconds'] = time.monotonic() - start
             write(args.output / 'report.json', report)
             print(json.dumps({'id': row['id'], 'language': row['language'], 'passed': row['passed'], 'cases': len(cases), 'completed': len(report['rows'])}), flush=True)
-        if contract['runtime'] != runtime():
-            raise ValueError('runtime changed during campaign')
+        verify_runtime(contract, node_runtime)
         report['status'] = 'completed'
     except Exception as error:
         report.update(status='failed', error=type(error).__name__ + ': ' + str(error))
@@ -364,10 +400,14 @@ def main():
     for name in ('config', 'statements', 'output'):
         prepare_parser.add_argument('--' + name, required=True, type=Path)
     prepare_parser.add_argument('--config-sha256', required=True)
+    prepare_parser.add_argument('--node-runtime', type=Path,
+                                help='Explicit approved Node binary; uses the existing read-only pinned adapter')
     run_parser = sub.add_parser('run')
     for name in ('freeze', 'output'):
         run_parser.add_argument('--' + name, required=True, type=Path)
     run_parser.add_argument('--max-wall', type=int, default=1800)
+    run_parser.add_argument('--node-runtime', type=Path,
+                            help='Required when the freeze selected the approved pinned Node route')
     args = parser.parse_args()
     print(json.dumps(prepare(args) if args.command == 'prepare' else execute(args)))
 

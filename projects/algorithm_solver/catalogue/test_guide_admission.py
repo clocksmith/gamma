@@ -7,7 +7,9 @@ from types import SimpleNamespace
 import unittest
 from unittest.mock import Mock, patch
 
-from .guide_admission import build, project, save_snapshot, verify_source_bindings
+from .guide_admission import build, project, reconcile_source_evidence, save_snapshot, verify_source_bindings
+from .catalogue import BINDINGS, digest
+from ..algsolve import authoring_variants
 from . import test_catalogue
 
 
@@ -115,8 +117,177 @@ class GuideAdmission(unittest.TestCase):
                 result = build(config)
                 self.assertEqual(result['summary']['problems'], 2)
                 self.assertEqual(result['summary']['source_payload_reads'], 0)
+                config.update(authoring_catalog=pin('authoring.json', {
+                    'schema': 'gamma.authoring-variant-catalog-pilot.v1', 'variants': []}),
+                    source_evidence=pin('evidence.json', []), historical_guides=pin('guides.json', []))
+                joined = build(config)
+                self.assertEqual(joined['summary']['source_evidence_reconciliation']['authoring_records'], 0)
+                self.assertEqual(joined['inputs']['source_evidence_sha256'], config['source_evidence']['sha256'])
+                self.assertIn('authoring_variants.py', joined['inputs']['code_sha256'])
+                self.assertEqual(joined['summary']['source_payload_reads'], 0)
+                original = Path(config['source_evidence']['path']).read_text()
+                Path(config['source_evidence']['path']).write_text('{}')
+                with self.assertRaises(ValueError): build(config)
+                Path(config['source_evidence']['path']).write_text(original)
                 Path(config['source_census']['path']).write_text('{}')
                 with self.assertRaises(ValueError): build(config)
+
+
+class SourceEvidenceReconciliation(unittest.TestCase):
+    def setUp(self):
+        args = list(GuideAdmission().inputs())
+        names = {'a': 'leetcode:1', 'b': 'leetcode:2'}
+        args[0]['eligible_problem_ids'] = list(names.values())
+        args[1]['universe_sha256'] = digest(args[0])
+        receipts = {}
+        for problem in args[1]['problems']:
+            problem['problem_id'] = names[problem['problem_id']]
+            for impl in problem['implementations'].values():
+                receipt = copy.deepcopy(args[2][impl['receipt_sha256']])
+                receipt['problem_id'] = problem['problem_id']
+                impl['receipt_sha256'] = digest(receipt)
+                receipts[impl['receipt_sha256']] = receipt
+        args[2] = receipts
+        args[3].authorized = set(names.values())
+        args[4] = {'alias-a': names['a']}
+        for observed in args[5]['problems']:
+            observed['global_id'] = names[observed['global_id']]
+        args[6] = {names['a']: [{'kind': 'previously_fitted'}]}
+        self.result = project(*args)
+        self.slot = self.result['problems'][0]['implementations']['javascript']
+        identity = {'problem_id': 1, 'language': 'javascript', 'source_sha256': 'b'*64,
+                    'semantics_sha256': 'c'*64, 'problem_contract_sha256': 'b'*64}
+        self.authored = dict(identity, variant_id=authoring_variants.sha(authoring_variants.canonical(identity).encode()),
+                             qualification={'status': 'unknown', 'reason': 'Authoring is not qualification'},
+                             provenance=[{'source_path': '/must/not/open/source.js'}])
+        self.catalog = {'schema': 'gamma.authoring-variant-catalog-pilot.v1', 'variants': [self.authored]}
+
+    def evidence(self, kind='license'):
+        return {'problem_id': 'leetcode:1', 'language': 'javascript', 'kind': kind,
+                'bindings': copy.deepcopy(self.slot['bindings']),
+                'evidence': {'path': '/must/not/open/evidence.json', 'status': 'unknown'}}
+
+    @staticmethod
+    def first_slot(result):
+        return result['problems'][0]['implementations']['javascript']
+
+    def test_authoring_owner_query_and_identity_reused_without_promotion(self):
+        original = copy.deepcopy(self.catalog)
+        with patch.object(authoring_variants, 'query', wraps=authoring_variants.query) as queried:
+            value = reconcile_source_evidence(self.result, authoring_catalog=self.catalog)
+        self.assertEqual(queried.call_count, 4)
+        row = self.first_slot(value)['authoring_variants']['records'][0]
+        self.assertEqual(row['record']['variant_id'], self.authored['variant_id'])
+        self.assertEqual(row['record']['qualification']['status'], 'unknown')
+        self.assertEqual(row['qualification_join'], 'exact_existing_canonical_receipt')
+        self.assertEqual(row['canonical_qualification_receipt_sha256'], self.slot['qualification']['receipt_sha256'])
+        self.assertEqual(self.catalog, original)
+        self.assertNotIn('authoring_variants', self.slot)
+        self.assertFalse(self.first_slot(value)['development_corpus_admitted'])
+
+    def test_different_source_and_contract_never_inherit_canonical_receipt(self):
+        for changed_field in ('source_sha256', 'problem_contract_sha256'):
+            with self.subTest(changed_field=changed_field):
+                row = copy.deepcopy(self.authored)
+                row[changed_field] = 'e'*64
+                identity = {k: row[k] for k in ('problem_id', 'language', 'source_sha256', 'semantics_sha256', 'problem_contract_sha256')}
+                row['variant_id'] = authoring_variants.sha(authoring_variants.canonical(identity).encode())
+                catalog = dict(self.catalog, variants=[row])
+                value = reconcile_source_evidence(self.result, authoring_catalog=catalog)
+                joined = self.first_slot(value)['authoring_variants']['records'][0]
+                self.assertEqual(joined['qualification_join'], 'not_joined')
+                self.assertIsNone(joined['canonical_qualification_receipt_sha256'])
+
+    def test_tampered_or_reclassified_authoring_record_rejected(self):
+        for mutate in (lambda r: r.update(variant_id='a'*64),
+                       lambda r: r.update(qualification={'status': 'qualified'}),
+                       lambda r: r.update(qualification=None)):
+            with self.subTest(mutate=mutate):
+                catalog = copy.deepcopy(self.catalog); mutate(catalog['variants'][0])
+                with self.assertRaisesRegex(ValueError, 'authoring record'):
+                    reconcile_source_evidence(self.result, authoring_catalog=catalog)
+        with self.assertRaisesRegex(ValueError, 'duplicate authoring'):
+            reconcile_source_evidence(self.result, authoring_catalog=dict(self.catalog, variants=[self.authored, self.authored]))
+        self.assertNotIn('authoring_variants', self.slot)
+
+    def test_exact_evidence_joins_do_not_invent_acceptance_or_read_paths(self):
+        records = [self.evidence(kind) for kind in ('license', 'browser_adapter', 'host_api')]
+        with patch('pathlib.Path.open', side_effect=AssertionError('no path reads')):
+            value = reconcile_source_evidence(self.result, source_evidence=records)
+        slot = self.first_slot(value)
+        self.assertTrue(all(r['status'] == 'exact_binding_joined' for r in slot['source_evidence_joins']))
+        self.assertTrue(all(r['record']['evidence']['status'] == 'unknown' for r in slot['source_evidence_joins']))
+        self.assertFalse(slot['license']['acceptance_evaluated'])
+        self.assertIn('license_acceptance_not_established', slot['blockers'])
+        self.assertIn('browser_adapter_acceptance_not_established', slot['blockers'])
+        self.assertIn('determinism_and_host_api_acceptance_not_established', slot['blockers'])
+        self.assertFalse(slot['browser_guide_admitted'])
+        self.assertFalse(slot['development_corpus_admitted'])
+        self.assertEqual(value['summary']['source_payload_reads'], 0)
+        self.assertEqual(value['summary']['source_evidence_reconciliation']['exact_binding_joined'], 3)
+
+    def test_every_qualification_binding_is_required_and_exact(self):
+        for field in BINDINGS:
+            with self.subTest(field=field):
+                record = self.evidence(); record['bindings'][field] = 'f'*64
+                slot = self.first_slot(reconcile_source_evidence(self.result, source_evidence=[record]))
+                joined = slot['source_evidence_joins'][0]
+                self.assertEqual(joined['reason'], 'canonical_binding_mismatch')
+                self.assertEqual(joined['mismatching_bindings'], [field])
+                self.assertIsNone(slot['license'])
+                self.assertIn('license_record_not_joined', slot['blockers'])
+                del record['bindings'][field]
+                with self.assertRaisesRegex(ValueError, 'complete exact bindings'):
+                    reconcile_source_evidence(self.result, source_evidence=[record])
+
+    def test_permission_and_qualification_cannot_be_bypassed_by_evidence(self):
+        for permission, qualified, expected in [('protected', True, 'permission_not_authorized'),
+                ('unresolved', True, 'permission_not_authorized'),
+                ('source_access_authorized', False, 'qualification_not_established')]:
+            with self.subTest(permission=permission, qualified=qualified):
+                result = copy.deepcopy(self.result)
+                result['problems'][0]['permission'] = permission
+                self.first_slot(result)['qualification']['receipt_binding_checked'] = qualified
+                value = reconcile_source_evidence(result, source_evidence=[self.evidence()])
+                self.assertEqual(self.first_slot(value)['source_evidence_joins'][0]['reason'], expected)
+                self.assertIsNone(self.first_slot(value)['license'])
+
+    def test_historical_guides_stay_distinct_even_if_source_matches(self):
+        for source_hash in ('b'*64, 'f'*64):
+            with self.subTest(source_hash=source_hash):
+                guide = {'problem_id': 'leetcode:1', 'language': 'javascript', 'source_sha256': source_hash,
+                         'profile_id': 'historical-profile', 'evidence': {'passed': True, 'scope': 'separate historical record'}}
+                value = reconcile_source_evidence(self.result, historical_guides=[guide])
+                row = self.first_slot(value)['historical_guides'][0]
+                self.assertEqual(row['canonical_source_match'], source_hash == 'b'*64)
+                self.assertEqual(row['qualification_join'], 'not_joined')
+                self.assertFalse(row['canonical_evidence_transplanted'])
+                self.assertEqual(row['record']['evidence'], guide['evidence'])
+
+    def test_absent_inputs_are_not_global_absence_or_freshness(self):
+        value = reconcile_source_evidence(self.result)
+        self.assertEqual(self.first_slot(value)['authoring_variants']['status'], 'not_supplied')
+        self.assertFalse(self.first_slot(value)['authoring_variants']['exhaustive_inventory'])
+        empty = reconcile_source_evidence(self.result, authoring_catalog=dict(self.catalog, variants=[]))
+        self.assertEqual(self.first_slot(empty)['authoring_variants']['status'], 'queried')
+        self.assertEqual(self.first_slot(empty)['authoring_variants']['records'], [])
+        self.assertEqual(empty['problems'][1]['exposure']['status'], 'unknown')
+        self.assertFalse(empty['summary']['fresh_confirmation_created'])
+        self.assertIsNone(empty['problems'][1]['split'])
+
+    def test_duplicate_unknown_and_bad_evidence_fail_without_changing_inventory(self):
+        record = self.evidence()
+        bad = copy.deepcopy(record); bad['problem_id'] = 'leetcode:999'
+        for records in ([record, record], [bad], [dict(record, broad_approval=True)]):
+            with self.subTest(records=records):
+                with self.assertRaises(ValueError):
+                    reconcile_source_evidence(self.result, source_evidence=records)
+        self.assertNotIn('source_evidence_joins', self.slot)
+
+    def test_reconciliation_is_one_shot_not_an_in_place_accumulator(self):
+        value = reconcile_source_evidence(self.result, source_evidence=[self.evidence()])
+        with self.assertRaisesRegex(ValueError, 'new inventory snapshot'):
+            reconcile_source_evidence(value, source_evidence=[self.evidence()])
 
 
 if __name__ == '__main__':

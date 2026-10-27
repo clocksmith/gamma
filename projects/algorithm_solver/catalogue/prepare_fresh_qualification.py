@@ -41,6 +41,7 @@ def examples(pid, raw):
 
 
 def prepare(args):
+    runtime_identity = q.runtime(getattr(args, 'node_runtime', None))
     KnownSpecService.from_config(args.config, args.config_sha256)
     config = q.decode(q.read(args.config))
     gate = q.decode(q.read(config['source_access']['boundary_gate']['path']))
@@ -101,7 +102,7 @@ def prepare(args):
                      'comparison_policy': 'set-of-strings' if pid == 301 else 'permutation-of-chars' if pid == 3692 else 'exact'})
     contract = {'schema': 'gamma.imported-independent-execution.v1', 'jobs': jobs, 'pending': [],
                 'service_config': str(args.config.resolve()), 'service_config_sha256': args.config_sha256,
-                'runtime': q.runtime(), 'code': q.code_pins(), 'limits': q.LIMITS,
+                'runtime': runtime_identity, 'code': q.code_pins(), 'limits': q.LIMITS,
                 'additional_code': {str(Path(oracle.__file__).resolve()): q.file_hash(oracle.__file__),
                                     str(Path(__file__).resolve()): q.file_hash(__file__)},
                 'max_packet_bytes': q.MAX_PACKET, 'public_examples_checked': example_counts,
@@ -120,4 +121,6 @@ if __name__ == '__main__':
     for name in ('config', 'statements', 'output'):
         p.add_argument('--' + name, required=True, type=Path)
     p.add_argument('--config-sha256', required=True)
+    p.add_argument('--node-runtime', type=Path,
+                   help='Explicit approved Node binary; uses the existing read-only pinned adapter')
     print(json.dumps(prepare(p.parse_args())))
