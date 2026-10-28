@@ -1,0 +1,104 @@
+{
+ "schema": "gamma.continuation-jk-semantic-variants.v1",
+ "variants": [
+  {
+   "problem_id": 3820,
+   "language": "python",
+   "name": "recursive-distances",
+   "defect": "Depth-first recursion replaces the breadth-first distance pass; deep trees exceed the recursion limit.",
+   "path": "variants/3820-python-recursive-distances.py",
+   "original_sha256": "db703aecd6efc40d92b43c6c840993d2249a98a660586b79b4fc4bbfa477dfd1",
+   "variant_sha256": "fad2079cc48d591462872debd700c8b1efd9884a837f54a31a653fe043db4b28"
+  },
+  {
+   "problem_id": 3820,
+   "language": "javascript",
+   "name": "recursive-distances",
+   "defect": "Depth-first recursion replaces the breadth-first distance pass; deep trees overflow the call stack.",
+   "path": "variants/3820-javascript-recursive-distances.js",
+   "original_sha256": "b878142582d58f12338628d6e57d7527c928e5d466a00b310cc09b41ee18648b",
+   "variant_sha256": "ca87a22825add5dd29d9fc4310fa6c4f9a5db8030cb845feb198c0023b203a68"
+  },
+  {
+   "problem_id": 3820,
+   "language": "javascript",
+   "name": "int32-squares",
+   "defect": "Squares use 32-bit Math.imul; triples with legs above 46340 can be missed.",
+   "path": "variants/3820-javascript-int32-squares.js",
+   "original_sha256": "b878142582d58f12338628d6e57d7527c928e5d466a00b310cc09b41ee18648b",
+   "variant_sha256": "6b6bac4871100f864f208f17fc1761b1fab9a03bef11fd589a9cd5c5d69ec2dc"
+  },
+  {
+   "problem_id": 3821,
+   "language": "javascript",
+   "name": "float32-binomials",
+   "defect": "Binomial table rows are Float32Array; coefficients above 2^24 round.",
+   "path": "variants/3821-javascript-float32-binomials.js",
+   "original_sha256": "a00b08e2cbf1b15aa55fd3a72d698d4e5d411404020e78b55bed2d9665ac3d97",
+   "variant_sha256": "99d326d86366f63fc61f4caebf2570b24b30bc9d067e6352808a370746328cbb"
+  },
+  {
+   "problem_id": 3825,
+   "language": "python",
+   "name": "bits-0-28",
+   "defect": "Scans bits 0..28 only; values up to 10^9 also use bit 29.",
+   "path": "variants/3825-python-bits-0-28.py",
+   "original_sha256": "2c01deb735c3e8222c367b01e739417b2f69f0a222272155f2ac0cf12d95e538",
+   "variant_sha256": "3f475aa02140df6868b020b61b902eb41916bf0997d1ef2e9a4d0e9bf020237a"
+  },
+  {
+   "problem_id": 3825,
+   "language": "javascript",
+   "name": "bits-0-28",
+   "defect": "Scans bits 0..28 only; values up to 10^9 also use bit 29.",
+   "path": "variants/3825-javascript-bits-0-28.js",
+   "original_sha256": "d4d1c3ef56a1d63b42bc368e698e6e7113853c76d1b666bde2e4ce2931fb8e27",
+   "variant_sha256": "57eea1162da93d839b39c989a19eea7ab94717acf38c0871cf54513c132278b4"
+  },
+  {
+   "problem_id": 3835,
+   "language": "python",
+   "name": "single-shrink",
+   "defect": "Shrinks the window at most once per step instead of until the cost fits.",
+   "path": "variants/3835-python-single-shrink.py",
+   "original_sha256": "7d217a66c80cf9420b0d417730a9354dcfdf2a48c76cc46b3536302dde8e0432",
+   "variant_sha256": "1936017eccfd2d49970412dcf45181461058ab84cb197cf6e7ea5fd2ba47903f"
+  },
+  {
+   "problem_id": 3835,
+   "language": "javascript",
+   "name": "single-shrink",
+   "defect": "Shrinks the window at most once per step instead of until the cost fits.",
+   "path": "variants/3835-javascript-single-shrink.js",
+   "original_sha256": "61df626d171d83238e3034738d2cd8d9fc5cff19a98deed3fd94bd045850a1c9",
+   "variant_sha256": "4a4c7a42ff6c72febef9cc61a29fc5581848e843e43b0170a2c0afa4bf0b5fa4"
+  },
+  {
+   "problem_id": 3835,
+   "language": "javascript",
+   "name": "int32-cost",
+   "defect": "Window cost uses 32-bit Math.imul; costs above 2^31 wrap.",
+   "path": "variants/3835-javascript-int32-cost.js",
+   "original_sha256": "61df626d171d83238e3034738d2cd8d9fc5cff19a98deed3fd94bd045850a1c9",
+   "variant_sha256": "c31eb5780980723c5a0f9bcaca22be9c0c12fb248ff2db91055b15dacc44782f"
+  },
+  {
+   "problem_id": 3850,
+   "language": "python",
+   "name": "exponent-bound-prune",
+   "defect": "Prunes states whose exponent magnitude exceeds the element count; a 4 adds two to the exponent of 2.",
+   "path": "variants/3850-python-exponent-bound-prune.py",
+   "original_sha256": "ee3d3ab7c2996371c3c4e64c2cd23a81458c55920b940a0f2dcc77200b257440",
+   "variant_sha256": "d9f7506d55750f715ce32fdda353b37c473db322cd4d08828df741ee58e32f98"
+  },
+  {
+   "problem_id": 3850,
+   "language": "javascript",
+   "name": "exponent-bound-prune",
+   "defect": "Prunes states whose exponent magnitude exceeds the element count; a 4 adds two to the exponent of 2.",
+   "path": "variants/3850-javascript-exponent-bound-prune.js",
+   "original_sha256": "5dbabe494d8a7f21fb65dbd965299ca606957688a803671787e118f97c328727",
+   "variant_sha256": "01e58f93622336634f0d04b9360d60b194f4aebc890f22de6e9ffb9ba1d8082c"
+  }
+ ]
+}
