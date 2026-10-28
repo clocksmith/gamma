@@ -1,0 +1,3 @@
+function TreeNode(val,left,right){this.val=val===undefined?0:val;this.left=left===undefined?null:left;this.right=right===undefined?null:right;}
+var binaryTreePaths=function(root){if(root===null)return[];const stack=[[root,false]],path=[],result=[];while(stack.length){const [node,leaving]=stack.pop();if(leaving){path.pop();continue;}path.push(String(node.val));stack.push([node,true]);if(node.left===null&&node.right===null)result.push(path.join('->'));else{if(node.right!==null)stack.push([node.right,false]);if(node.left!==null)stack.push([node.left,false]);}}return result;};
+module.exports={binaryTreePaths,TreeNode};

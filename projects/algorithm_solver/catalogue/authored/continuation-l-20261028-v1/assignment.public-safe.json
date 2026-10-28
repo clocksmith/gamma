@@ -1,0 +1,593 @@
+{
+  "authorization": "Exact ten rows authorized_source_and_statement in private-next-l-authorized.json; no protected or unknown payload reads",
+  "problems": [
+    {
+      "comparison": {
+        "policy": "exact typed JSON result"
+      },
+      "external_interface": {
+        "argument_order": [
+          "l",
+          "r",
+          "k"
+        ],
+        "canonical": "solve",
+        "language_parameter_names": {
+          "javascript": [
+            "l",
+            "r",
+            "k"
+          ],
+          "python": [
+            "l",
+            "r",
+            "k"
+          ]
+        },
+        "official": {
+          "name": "sumOfNumbers",
+          "params": [
+            {
+              "name": "l",
+              "type": "integer"
+            },
+            {
+              "name": "r",
+              "type": "integer"
+            },
+            {
+              "name": "k",
+              "type": "integer"
+            }
+          ],
+          "return": {
+            "type": "integer"
+          }
+        }
+      },
+      "id": 3855,
+      "mutation_alias_contract": {
+        "arguments": "unchanged",
+        "return": "fresh containers for list results; immutable scalar otherwise"
+      },
+      "numeric_complexity_contract": {
+        "candidate_design": "modular digit sum * choices**(k-1) * repunit(k) using inverse9",
+        "complexity_target": "O(log k) time/O(1) space",
+        "reference": "enumerate all digit tuples and positional integer values"
+      },
+      "qualification_status": "unknown",
+      "return_domain": {
+        "type": "integer"
+      },
+      "slug": "sum-of-k-digit-numbers-in-a-range",
+      "statement_constraints_snapshot": {
+        "domain_owner": "oracles.py validate_domain; exact public bounds",
+        "full_text_location": "private continuation-l definition snapshot",
+        "official_response_sha256": "3f4679113f09eeb0abf2107d39928c159d90e57213010e9c57524a825ce1c447",
+        "statement_html_sha256": "c88139ae2fc2d91fc7a92918e069ad328d2b5513cd7f9ddae058bd6382eeb62a"
+      },
+      "title": "Sum of K-Digit Numbers in a Range"
+    },
+    {
+      "comparison": {
+        "policy": "exact typed JSON result"
+      },
+      "external_interface": {
+        "argument_order": [
+          "n"
+        ],
+        "canonical": "solve",
+        "language_parameter_names": {
+          "javascript": [
+            "n"
+          ],
+          "python": [
+            "n"
+          ]
+        },
+        "official": {
+          "name": "minCost",
+          "params": [
+            {
+              "name": "n",
+              "type": "integer"
+            }
+          ],
+          "return": {
+            "type": "integer"
+          }
+        }
+      },
+      "id": 3857,
+      "mutation_alias_contract": {
+        "arguments": "unchanged",
+        "return": "fresh containers for list results; immutable scalar otherwise"
+      },
+      "numeric_complexity_contract": {
+        "candidate_design": "potential invariant sum cross pairs n*(n-1)/2",
+        "complexity_target": "O(1) time/space",
+        "reference": "recursive exhaustive split-tree optimum"
+      },
+      "qualification_status": "unknown",
+      "return_domain": {
+        "type": "integer"
+      },
+      "slug": "minimum-cost-to-split-into-ones",
+      "statement_constraints_snapshot": {
+        "domain_owner": "oracles.py validate_domain; exact public bounds",
+        "full_text_location": "private continuation-l definition snapshot",
+        "official_response_sha256": "a9fbdd94354afc1f7738f2f8697ebf1f0703f096fc7eb8039f7397f95d9b7a9c",
+        "statement_html_sha256": "c48eddd97d7cb288f043b760f4f09cb61413ff3bf2e0d11fcfca81d05638a46a"
+      },
+      "title": "Minimum Cost to Split into Ones"
+    },
+    {
+      "comparison": {
+        "policy": "exact typed JSON result"
+      },
+      "external_interface": {
+        "argument_order": [
+          "grid"
+        ],
+        "canonical": "solve",
+        "language_parameter_names": {
+          "javascript": [
+            "grid"
+          ],
+          "python": [
+            "grid"
+          ]
+        },
+        "official": {
+          "name": "minimumOR",
+          "params": [
+            {
+              "name": "grid",
+              "type": "integer[][]"
+            }
+          ],
+          "return": {
+            "type": "integer"
+          }
+        }
+      },
+      "id": 3858,
+      "mutation_alias_contract": {
+        "arguments": "unchanged",
+        "return": "fresh containers for list results; immutable scalar otherwise"
+      },
+      "numeric_complexity_contract": {
+        "candidate_design": "greedily clear high bits of allowed mask if every row has subset-compatible option",
+        "complexity_target": "O(17*m*n) time/O(1) auxiliary",
+        "reference": "Cartesian product of all row selections"
+      },
+      "qualification_status": "unknown",
+      "return_domain": {
+        "type": "integer"
+      },
+      "slug": "minimum-bitwise-or-from-grid",
+      "statement_constraints_snapshot": {
+        "domain_owner": "oracles.py validate_domain; exact public bounds",
+        "full_text_location": "private continuation-l definition snapshot",
+        "official_response_sha256": "50f2af65fc52bd8d5950bfe9ad7f9dcbc1f46f8176ca76c2627902f8b796236f",
+        "statement_html_sha256": "55683d45f22c55660ba0917c84ca8bff93992534d780a6154615123438d86dc5"
+      },
+      "title": "Minimum Bitwise OR From Grid"
+    },
+    {
+      "comparison": {
+        "policy": "exact typed JSON result"
+      },
+      "external_interface": {
+        "argument_order": [
+          "nums",
+          "k",
+          "m"
+        ],
+        "canonical": "solve",
+        "language_parameter_names": {
+          "javascript": [
+            "nums",
+            "k",
+            "m"
+          ],
+          "python": [
+            "nums",
+            "k",
+            "m"
+          ]
+        },
+        "official": {
+          "name": "countSubarrays",
+          "params": [
+            {
+              "name": "nums",
+              "type": "integer[]"
+            },
+            {
+              "name": "k",
+              "type": "integer"
+            },
+            {
+              "name": "m",
+              "type": "integer"
+            }
+          ],
+          "return": {
+            "type": "long"
+          }
+        }
+      },
+      "id": 3859,
+      "mutation_alias_contract": {
+        "arguments": "unchanged",
+        "return": "fresh containers for list results; immutable scalar otherwise"
+      },
+      "numeric_complexity_contract": {
+        "candidate_design": "at-most-k sliding window; active-value segment-tree minimum of global mth-last occurrence bounds valid starts",
+        "complexity_target": "O(n log distinct) time/O(n+distinct) space",
+        "reference": "Counter of each literal interval"
+      },
+      "qualification_status": "unknown",
+      "return_domain": {
+        "type": "long"
+      },
+      "slug": "count-subarrays-with-k-distinct-integers",
+      "statement_constraints_snapshot": {
+        "domain_owner": "oracles.py validate_domain; exact public bounds",
+        "full_text_location": "private continuation-l definition snapshot",
+        "official_response_sha256": "65d8bdaf47901f07207b6c40df60ab4b9aa3ecddf3fbb838c4713a0d39477476",
+        "statement_html_sha256": "390b06dccfaf630e2b2fc5bfcfaabcb9e59f9cc6873ca36266caa7cc0fc180e5"
+      },
+      "title": "Count Subarrays With K Distinct Integers"
+    },
+    {
+      "comparison": {
+        "policy": "exact typed JSON result"
+      },
+      "external_interface": {
+        "argument_order": [
+          "nums"
+        ],
+        "canonical": "solve",
+        "language_parameter_names": {
+          "javascript": [
+            "nums"
+          ],
+          "python": [
+            "nums"
+          ]
+        },
+        "official": {
+          "name": "smallestBalancedIndex",
+          "params": [
+            {
+              "name": "nums",
+              "type": "integer[]"
+            }
+          ],
+          "return": {
+            "type": "integer"
+          }
+        }
+      },
+      "id": 3862,
+      "mutation_alias_contract": {
+        "arguments": "unchanged",
+        "return": "fresh containers for list results; immutable scalar otherwise"
+      },
+      "numeric_complexity_contract": {
+        "candidate_design": "suffix products capped above total positive sum, guarded multiplication; compare left running sum",
+        "complexity_target": "O(n) time/O(n) space",
+        "reference": "literal exact arbitrary-precision suffix product per index"
+      },
+      "qualification_status": "unknown",
+      "return_domain": {
+        "type": "integer"
+      },
+      "slug": "find-the-smallest-balanced-index",
+      "statement_constraints_snapshot": {
+        "domain_owner": "oracles.py validate_domain; exact public bounds",
+        "full_text_location": "private continuation-l definition snapshot",
+        "official_response_sha256": "567dc64cd40230ec615e3819793d335fc7886deda5e747b07ea45899d8ebdb87",
+        "statement_html_sha256": "b0ce81cbdbead566b01c4728d500dc9369446531214c1b3cdff3fd63ff4b1c0f"
+      },
+      "title": "Find the Smallest Balanced Index"
+    },
+    {
+      "comparison": {
+        "policy": "exact typed JSON result"
+      },
+      "external_interface": {
+        "argument_order": [
+          "s"
+        ],
+        "canonical": "solve",
+        "language_parameter_names": {
+          "javascript": [
+            "s"
+          ],
+          "python": [
+            "s"
+          ]
+        },
+        "official": {
+          "name": "minOperations",
+          "params": [
+            {
+              "name": "s",
+              "type": "string"
+            }
+          ],
+          "return": {
+            "type": "integer"
+          }
+        }
+      },
+      "id": 3863,
+      "mutation_alias_contract": {
+        "arguments": "unchanged",
+        "return": "fresh containers for list results; immutable scalar otherwise"
+      },
+      "numeric_complexity_contract": {
+        "candidate_design": "sorted0,n2reverse impossible,endpoint globalextreme1,interior extremum2,otherwise3",
+        "complexity_target": "O(n) time/O(1) space",
+        "reference": "BFS all proper substring sorts"
+      },
+      "qualification_status": "unknown",
+      "return_domain": {
+        "type": "integer"
+      },
+      "slug": "minimum-operations-to-sort-a-string",
+      "statement_constraints_snapshot": {
+        "domain_owner": "oracles.py validate_domain; exact public bounds",
+        "full_text_location": "private continuation-l definition snapshot",
+        "official_response_sha256": "92b93d3b55786d6795eb30e94ba9402d825439b25d5da86fa02499620e694ff9",
+        "statement_html_sha256": "006f9eb31290479577068bfeea58f36894728410bd34ab34d4c824504871e5d7"
+      },
+      "title": "Minimum Operations to Sort a String"
+    },
+    {
+      "comparison": {
+        "policy": "exact typed JSON result"
+      },
+      "external_interface": {
+        "argument_order": [
+          "s",
+          "encCost",
+          "flatCost"
+        ],
+        "canonical": "solve",
+        "language_parameter_names": {
+          "javascript": [
+            "s",
+            "encCost",
+            "flatCost"
+          ],
+          "python": [
+            "s",
+            "encCost",
+            "flatCost"
+          ]
+        },
+        "official": {
+          "name": "minCost",
+          "params": [
+            {
+              "name": "s",
+              "type": "string"
+            },
+            {
+              "name": "encCost",
+              "type": "integer"
+            },
+            {
+              "name": "flatCost",
+              "type": "integer"
+            }
+          ],
+          "return": {
+            "type": "long"
+          }
+        }
+      },
+      "id": 3864,
+      "mutation_alias_contract": {
+        "arguments": "unchanged",
+        "return": "fresh containers for list results; immutable scalar otherwise"
+      },
+      "numeric_complexity_contract": {
+        "candidate_design": "prefix sensitive counts plus recursive min unsplit vs equal-half split, prune empty segments",
+        "complexity_target": "O(n) time/O(n) space",
+        "reference": "enumerate all valid recursive equal-half partition costs"
+      },
+      "qualification_status": "unknown",
+      "return_domain": {
+        "type": "long"
+      },
+      "slug": "minimum-cost-to-partition-a-binary-string",
+      "statement_constraints_snapshot": {
+        "domain_owner": "oracles.py validate_domain; exact public bounds",
+        "full_text_location": "private continuation-l definition snapshot",
+        "official_response_sha256": "3376af24da2ad32d02b6276c66ef577b33685ea57b9398c82ca81e60c99c7d21",
+        "statement_html_sha256": "4dbdd11fd21395f97c6d98aad7496722602dfa1f8a72531479c43ae274752c06"
+      },
+      "title": "Minimum Cost to Partition a Binary String"
+    },
+    {
+      "comparison": {
+        "policy": "exact typed JSON result"
+      },
+      "external_interface": {
+        "argument_order": [
+          "nums"
+        ],
+        "canonical": "solve",
+        "language_parameter_names": {
+          "javascript": [
+            "nums"
+          ],
+          "python": [
+            "nums"
+          ]
+        },
+        "official": {
+          "name": "gcdSum",
+          "params": [
+            {
+              "name": "nums",
+              "type": "integer[]"
+            }
+          ],
+          "return": {
+            "type": "long"
+          }
+        }
+      },
+      "id": 3867,
+      "mutation_alias_contract": {
+        "arguments": "unchanged",
+        "return": "fresh containers for list results; immutable scalar otherwise"
+      },
+      "numeric_complexity_contract": {
+        "candidate_design": "running maximum Euclidean gcd values then sorted endpoint gcds",
+        "complexity_target": "O(n log n+n log maxval) time/O(n) space",
+        "reference": "divisor-enumeration gcd, recomputed prefix maxima, sorted endpoint pairs"
+      },
+      "qualification_status": "unknown",
+      "return_domain": {
+        "type": "long"
+      },
+      "slug": "sum-of-gcd-of-formed-pairs",
+      "statement_constraints_snapshot": {
+        "domain_owner": "oracles.py validate_domain; exact public bounds",
+        "full_text_location": "private continuation-l definition snapshot",
+        "official_response_sha256": "e69bb7457f02ecb92ba6462ab0df82bf3a749d996578b74bc371897f9fc0f7be",
+        "statement_html_sha256": "5a8e9d994dfb7e2b1a704dca3f375b3dfbd85898a4d96f361bbe4e15f8ba9c08"
+      },
+      "title": "Sum of GCD of Formed Pairs"
+    },
+    {
+      "comparison": {
+        "policy": "exact typed JSON result"
+      },
+      "external_interface": {
+        "argument_order": [
+          "nums1",
+          "nums2"
+        ],
+        "canonical": "solve",
+        "language_parameter_names": {
+          "javascript": [
+            "nums1",
+            "nums2"
+          ],
+          "python": [
+            "nums1",
+            "nums2"
+          ]
+        },
+        "official": {
+          "name": "minCost",
+          "params": [
+            {
+              "name": "nums1",
+              "type": "integer[]"
+            },
+            {
+              "name": "nums2",
+              "type": "integer[]"
+            }
+          ],
+          "return": {
+            "type": "integer"
+          }
+        }
+      },
+      "id": 3868,
+      "mutation_alias_contract": {
+        "arguments": "unchanged",
+        "return": "fresh containers for list results; immutable scalar otherwise"
+      },
+      "numeric_complexity_contract": {
+        "candidate_design": "combined counts must even; half of total positive excess from one array needs cross swaps",
+        "complexity_target": "O(n) time/O(distinct) space",
+        "reference": "BFS canonical sorted multisets with literal cross swaps, free permutation quotient"
+      },
+      "qualification_status": "unknown",
+      "return_domain": {
+        "type": "integer"
+      },
+      "slug": "minimum-cost-to-equalize-arrays-using-swaps",
+      "statement_constraints_snapshot": {
+        "domain_owner": "oracles.py validate_domain; exact public bounds",
+        "full_text_location": "private continuation-l definition snapshot",
+        "official_response_sha256": "2950c9a30a5b1d2ed1f1730b12495bacf3bfc2653a5778740239ef24f4cba4fc",
+        "statement_html_sha256": "da42f5c92e58ba7a42c27666746b8ed917536d74899df9363e5a3a084b930241"
+      },
+      "title": "Minimum Cost to Equalize Arrays Using Swaps"
+    },
+    {
+      "comparison": {
+        "policy": "exact typed JSON result"
+      },
+      "external_interface": {
+        "argument_order": [
+          "l",
+          "r"
+        ],
+        "canonical": "solve",
+        "language_parameter_names": {
+          "javascript": [
+            "l",
+            "r"
+          ],
+          "python": [
+            "l",
+            "r"
+          ]
+        },
+        "official": {
+          "name": "countFancy",
+          "params": [
+            {
+              "name": "l",
+              "type": "long"
+            },
+            {
+              "name": "r",
+              "type": "long"
+            }
+          ],
+          "return": {
+            "type": "long"
+          }
+        }
+      },
+      "id": 3869,
+      "mutation_alias_contract": {
+        "arguments": "unchanged",
+        "return": "fresh containers for list results; immutable scalar otherwise"
+      },
+      "numeric_complexity_contract": {
+        "candidate_design": "digit-sum DP counts good-sum numbers, enumerate strictlymonotone numbers not already good-sum, subtract zero",
+        "complexity_target": "O(digits**2*10+2**10) time/O(digits**2+2**10) space",
+        "reference": "enumerate each integer and inspect monotonic digits and digit sum"
+      },
+      "qualification_status": "unknown",
+      "return_domain": {
+        "type": "long"
+      },
+      "slug": "count-fancy-numbers-in-a-range",
+      "statement_constraints_snapshot": {
+        "domain_owner": "oracles.py validate_domain; exact public bounds",
+        "full_text_location": "private continuation-l definition snapshot",
+        "official_response_sha256": "567889d2461349c5fd54a2d599086ae2e8e0cdb9d5748f5e5aaa4046ac3cd708",
+        "statement_html_sha256": "3981431a948ea8bc4157d241b28d1150b500b85f1468e6aee03242eb9f7d7ecb"
+      },
+      "title": "Count Fancy Numbers in a Range"
+    }
+  ],
+  "schema": "gamma.authored-assignment-public-safe.v1",
+  "status": "new development variants only; independent isolated qualification pending"
+}

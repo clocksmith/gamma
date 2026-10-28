@@ -1,0 +1,34 @@
+{
+  "comparison": "exact typed JSON result",
+  "effects": "126/140 outputorder irrelevant, complete distinct sequences;129/144/141/142 inputobjectgraph unchanged;133/138 deepclone fullydisjoint;142 result ORIGINAL node identity;143 voidreturn only nextedges maychange, SAME original nodes/values/head, noaddednodes/cycles",
+  "entrypoint": "solve",
+  "language": "javascript",
+  "native_binding": "native-bindings.json",
+  "official_interface": {
+    "name": "cloneGraph",
+    "params": [
+      {
+        "name": "node",
+        "type": "Node"
+      }
+    ],
+    "return": {
+      "type": "Node"
+    }
+  },
+  "parameters": [
+    "node"
+  ],
+  "problem_id": 133,
+  "qualification": {
+    "reason": "No candidate execution; source-free references and static syntax only",
+    "status": "unknown"
+  },
+  "schema": "gamma.authored-scalar-semantics.v1",
+  "source_reasoning": {
+    "candidate_design": "native BFS original\u2192freshNode map, reconstruct each neighbor list",
+    "complexity_target": "O(V+E) time/O(V+E) space",
+    "reference": "indexed graph clone structure expected plus independent identity conditions"
+  },
+  "source_sha256": "a794d77671acaea2a314eb7324c55f2fcaf7e449612e71b89ac269ae61b78b84"
+}

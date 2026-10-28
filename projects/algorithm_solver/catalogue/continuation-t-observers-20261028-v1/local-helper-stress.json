@@ -1,0 +1,52 @@
+{
+  "schema": "gamma.t-local-sourcefree-helper-stress-summary.v1",
+  "platform": "existing macOS Node runtime, not Linux sandbox",
+  "runtime_path": "/Users/xyz/.nvm/versions/node/v22.20.0/bin/node",
+  "flags": [
+    "--jitless",
+    "--single-threaded",
+    "--max-old-space-size=256"
+  ],
+  "runs": [
+    {
+      "schema": "gamma.t-local-helper-stress.v1",
+      "mode": "tree",
+      "nodes": 100000,
+      "elapsed_ms": 3072,
+      "record_json_bytes": 11712198,
+      "peak_process_memory_bytes": 166117376,
+      "node_version": "v22.20.0",
+      "node_flags": [
+        "--jitless",
+        "--single-threaded",
+        "--max-old-space-size=256"
+      ],
+      "candidate_executions": 0,
+      "linux_qualification": false
+    },
+    {
+      "schema": "gamma.t-local-helper-stress.v1",
+      "mode": "list",
+      "nodes": 100000,
+      "elapsed_ms": 2935,
+      "record_json_bytes": 6556493,
+      "peak_process_memory_bytes": 145735680,
+      "node_version": "v22.20.0",
+      "node_flags": [
+        "--jitless",
+        "--single-threaded",
+        "--max-old-space-size=256"
+      ],
+      "candidate_executions": 0,
+      "linux_qualification": false
+    }
+  ],
+  "tree_capture": "tool-returned stdout subsequently saved verbatim; list stdout/stderr captured directly",
+  "helper_pins": {
+    "harness.cjs": "b9600b5d59571b91393472920358a26d7d450fdf1bb392eeab9a95699cadc337",
+    "native_graphs.cjs": "dc07adeacafbbe7ae5f730b72ad95843b7583f0373bf0ac5382e64d410299f57",
+    "stress_helpers.cjs": "6494cf0e3be48069a1114cda8cd20354fcacb81d683fa7e4d4f20f051f688afe"
+  },
+  "scope": "source-free synthetic native construction/observation only, no real candidates loaded",
+  "not_a_qualification": "elapsed excludes final result-size serialization, maxRSS is observed per-process peak, not aggregate hard bound; no Linux CPU/wall/memory/runtime qualification"
+}

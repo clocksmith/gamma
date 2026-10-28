@@ -1,0 +1,16 @@
+{
+  "schema": "gamma.q-controller-preacceptance-review-corrections.v1",
+  "candidate_executions_before_and_after": 0,
+  "independent_review_findings": [
+    "Draft dispatch ran unapproved sources and only prevented qualification afterward.",
+    "Draft replay used unbounded read_bytes for raw streams and incorrectly treated the sandbox output cap as combined."
+  ],
+  "corrections": [
+    "Freeze schema v2 pins mandatory exact source-review dispatch policy; absent/false/mismatched approvals yield zero calls and all pass flags false.",
+    "Replay uses anchored bounded_regular_read at16MiB per actual stream before hashing/parsing, with boundary/tamper/symlink controls.",
+    "Actual stdout/stderr caps are EACH16MiB. No additional combined restriction or aggregate memory guarantee is claimed."
+  ],
+  "source_profiles_references_cases_and_earlier_controllers_changed": false,
+  "prior_runtime_evidence_revalidated": false,
+  "publication_attempted": false
+}

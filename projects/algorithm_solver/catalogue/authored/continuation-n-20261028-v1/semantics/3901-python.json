@@ -1,0 +1,43 @@
+{
+  "comparison": "exact typed JSON result",
+  "effects": "arguments unchanged",
+  "entrypoint": "solve",
+  "language": "python",
+  "official_interface": {
+    "name": "countGoodSubseq",
+    "params": [
+      {
+        "name": "nums",
+        "type": "integer[]"
+      },
+      {
+        "name": "p",
+        "type": "integer"
+      },
+      {
+        "name": "queries",
+        "type": "integer[][]"
+      }
+    ],
+    "return": {
+      "type": "integer"
+    }
+  },
+  "parameters": [
+    "nums",
+    "p",
+    "queries"
+  ],
+  "problem_id": 3901,
+  "qualification": {
+    "reason": "No candidate execution; source-free references and static syntax only",
+    "status": "unknown"
+  },
+  "schema": "gamma.authored-scalar-semantics.v1",
+  "source_reasoning": {
+    "candidate_design": "gcd segmenttree for p-divisibles; if all n eligible and n<=16 use explicit exclude-one gcd; if n>16 minimal gcd witness cannot use all n",
+    "complexity_target": "O((n+q) log n+q*16) time/O(n) space",
+    "reference": "every proper nonempty subsequence gcd after each query"
+  },
+  "source_sha256": "93453bb272dccf55804c94c7db49c778268b237fd01c442587d372b0f059241b"
+}

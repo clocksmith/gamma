@@ -1,0 +1,56 @@
+{
+  "problems": {
+    "3819": {
+      "reference": "repeat literal one-step rotation of indexed positions",
+      "candidate_design": "extract nonnegative sequence and map modular left-rotation into fresh copy",
+      "complexity_target": "O(n) time/O(n) space"
+    },
+    "3820": {
+      "reference": "all-pairs Floyd-Warshall distances on edge-list tree",
+      "candidate_design": "three iterative BFS traversals and exact sorted squared-distance equality",
+      "complexity_target": "O(n) time/O(n) space"
+    },
+    "3821": {
+      "reference": "enumerate bit-position combinations, sort resulting exact integers",
+      "candidate_design": "50-bit lexicographic combinatorial unranking with binomial zero-prefix counts",
+      "complexity_target": "O(50**2) preprocessing/O(50) selection"
+    },
+    "3824": {
+      "reference": "repeatedly subtract k literally for successive k",
+      "candidate_design": "binary search monotone sum ceil(value/k)<=k*k",
+      "complexity_target": "O(n log(max(nums)+n)) time/O(1) space"
+    },
+    "3825": {
+      "reference": "enumerate index subsets and check strict order/AND",
+      "candidate_design": "for each of30bits, patience LIS over values containing bit",
+      "complexity_target": "O(30*n log n) time/O(n) space"
+    },
+    "3828": {
+      "reference": "full alternating-player minimax over every legal contiguous deletion",
+      "candidate_design": "max of original endpoints: Alice can keep larger end; Bob can keep original surviving end after any nonterminal first move",
+      "complexity_target": "O(1) time/space"
+    },
+    "3830": {
+      "reference": "remove each element or none, enumerate every subarray and alternating comparisons",
+      "candidate_design": "left/right alternating span arrays, bridge across each deletion; truncate side to1 if adjacent sign conflicts",
+      "complexity_target": "O(n) time/O(n) space"
+    },
+    "3834": {
+      "reference": "rescan and merge literal leftmost equal pair",
+      "candidate_design": "stream stack with cascading equal-top merges",
+      "complexity_target": "O(n) time/O(n) space"
+    },
+    "3835": {
+      "reference": "all intervals with literal min/max",
+      "candidate_design": "monotone max/min deques plus positive-monotone cost sliding window",
+      "complexity_target": "O(n) time/O(n) space"
+    },
+    "3836": {
+      "reference": "enumerate both k-index combinations and dot products",
+      "candidate_design": "exact-pair-count sequence alignment DP; skip either index or pair diagonal",
+      "complexity_target": "O(n*m*k) time/O(m*k) space"
+    }
+  },
+  "numeric": "JS Number exact integer bounds:3821 answer<2**50 and binomial C(50,25)<2**47;3820 squares<=1e10;3824 ceil sum<=1e10;3834 merged sum<=1e10;3835 cost<=1e14,answer<=5000050000;3836 abs score<=1e14; use exponentiation not JS32bit shifts for3821",
+  "effects": "all inputs unchanged; array results fresh; tree interface is exact n,edges,x,y,z not object injection"
+}

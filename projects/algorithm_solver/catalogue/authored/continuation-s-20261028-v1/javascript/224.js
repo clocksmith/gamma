@@ -1,0 +1,2 @@
+var calculate=function(s){const contexts=[1];let sign=1,result=0,i=0;while(i<s.length){const c=s[i];if(c>='0'&&c<='9'){let value=0;while(i<s.length&&s[i]>='0'&&s[i]<='9'){value=value*10+s.charCodeAt(i)-48;i++;}result+=sign*value;continue;}if(c==='+')sign=contexts[contexts.length-1];else if(c==='-')sign=-contexts[contexts.length-1];else if(c==='(')contexts.push(sign);else if(c===')')contexts.pop();i++;}return result;};
+module.exports={calculate};

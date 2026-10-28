@@ -1,0 +1,71 @@
+{
+  "problems": {
+    "3909": {
+      "reference": "peakargmax and literal sums",
+      "candidate_design": "find peak scan and compare sums excluding shared peak",
+      "complexity_target": "O(n) time/O(1) space"
+    },
+    "3910": {
+      "reference": "all node subsets, literal edge connectivity closure",
+      "candidate_design": "mask parity and bitset adjacency expansion per even subset",
+      "complexity_target": "O(n*2**n) time/O(n+2**n) space"
+    },
+    "3913": {
+      "reference": "select highest frequency vowel group repeatedly with first-occurrence tie",
+      "candidate_design": "five-vowel counts/first-index, ordered replacement at vowel slots",
+      "complexity_target": "O(n) time/O(n) space"
+    },
+    "3914": {
+      "reference": "unit-interval-increment BFS to sorted states",
+      "candidate_design": "sum positive adjacent drops; each boundary deficit needs starts, suffixincrements achieve",
+      "complexity_target": "O(n) time/O(1) space"
+    },
+    "3915": {
+      "reference": "all subsequences with explicit spacing/sign checks",
+      "candidate_design": "delayed activation at indexi-k into two Fenwick max structures by value, strict up/down queries",
+      "complexity_target": "O(n log n) time/O(n) space"
+    },
+    "3918": {
+      "reference": "trial division of each integer in reversed range",
+      "candidate_design": "sieve through maximum endpoint and sum",
+      "complexity_target": "O(bound loglogbound) time/O(bound) space"
+    },
+    "3919": {
+      "reference": "all directed moves and Floyd-Warshall shortest paths",
+      "candidate_design": "closest-index tiesleft, directional adjacent-cost prefix sums",
+      "complexity_target": "O(n+q) time/O(n+q) space"
+    },
+    "3926": {
+      "reference": "literal character/joiner classification and maximal runs",
+      "candidate_design": "regex lowercase words with isolated internal hyphens, full chunkconcat",
+      "complexity_target": "O(totaltext+totalqueries) time/O(totaltext+totalqueries) space"
+    },
+    "3932": {
+      "reference": "enumerate base powers and distinct range outputs",
+      "candidate_design": "exact integer floorroot via binarysearch and guarded multiplication",
+      "complexity_target": "O(k log r) time/O(1) space"
+    },
+    "3934": {
+      "reference": "literal Counter of each length subarray tuple",
+      "candidate_design": "deterministic radix-doubling suffixarray then Kasai adjacentLCP; eachstartunique length1+maxneighborLCP",
+      "complexity_target": "O(n log n) time/O(n) space"
+    },
+    "3937": {
+      "reference": "enumerate actual nearby finalintegers per residue and distinct parity residues",
+      "candidate_design": "circular remaindercost per parity/residue, min distinct pair",
+      "complexity_target": "O(n*k+k**2) time/O(k) space"
+    },
+    "3941": {
+      "reference": "membership of each allowed alphabet character weighted",
+      "candidate_design": "distinct-character set and ASCII class weights",
+      "complexity_target": "O(n) time/O(66) space"
+    },
+    "3942": {
+      "reference": "BFS two literal operations on permutation tuples",
+      "candidate_design": "cyclic ascending/descending orbit check; directeddihedral shortest costs allow2reversals forrightrotation",
+      "complexity_target": "O(n) time/O(1) space"
+    }
+  },
+  "numeric": "all exact JS Number integers:3914<=1e14,3915<=1e10,3919cost<=2e9;3932 guardedproducts<=1e9; bitmasks3910<=8191; suffixarray keys/ranks<=100000",
+  "effects": "all input arrays/chunks/queries unchanged; output containers fresh; no publication"
+}

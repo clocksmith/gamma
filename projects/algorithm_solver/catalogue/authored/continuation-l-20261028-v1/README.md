@@ -1,0 +1,11 @@
+# Continuation L: ten newly authored development pairs
+
+IDs3855,3857,3858,3859,3862,3863,3864,3867,3868,3869. Existing live pinned policy authorized source/statement for both languages before exact official public definition retrieval. Full definitions remain private continuation-l. No imported candidate payload read, actual candidate execution or Git operation.
+
+Independent reference code, domain validators, contracts, case generator and algorithms were frozen before candidates. File-local unique importlib loaders were present from that initial freeze. References use literal digit tuples, exhaustive split trees, row Cartesian products, interval Counters, exact suffix products, BFS proper-substring sorts, every valid recursive partition, divisor-enumeration gcd, cross-swap state BFS modulo free permutations and literal per-number monotonicity. No language-agreement oracle.
+
+3859 maintains the minimal left boundary L for at-most-k distinct. For each active value its global m-th most recent occurrence p bounds starts that retain m copies by start<=p. When k active values exist, valid starts are precisely [L,min(p)] if nonempty. A minimum segment tree tracks active values; inactive leaves have an infinity sentinel. Fewer than m total occurrences use -1 and correctly yield no legal start. The bound simultaneously forces every active value present, hence exactly k.
+
+3862 positive suffix products saturate above totalSum, since no left sum can reach that cap; division guard avoids large JS products.3863 classification distinguishes already sorted, reversed length2, a correct global extreme endpoint (one operation), movable interior extreme (two), and both unique reversed endpoint extremes (three). Tiny reference BFS retains unreachable states as -1.3869 counts good digit sums by digit DP, then adds explicitly enumerated strictly monotone numbers whose digit sum is not good; overlap is excluded and zero removed.3855 modular products use JS BigInt.
+
+All inputs/nested arrays are unchanged and scalar outputs exact. Existing owner catalogue marks20 variants unknown. Syntax/static controls and independent reference tests are not solution qualification. Actual official ABI, effects, resource constraints and independent result checks require coordinator's existing isolated runner. No resource cap changed; generated packets stay private.

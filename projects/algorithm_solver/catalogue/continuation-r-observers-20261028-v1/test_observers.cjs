@@ -1,0 +1,27 @@
+'use strict';
+// Inert toy implementations only; no authored candidate modules are required.
+const assert=require('assert/strict'),{observe}=require('./harness.cjs');
+let passed=0;function test(name,fn){try{fn();passed++;}catch(e){process.stderr.write(name+'\n');throw e;}}
+function ListNode(val=0,next=null){this.val=val;this.next=next;}
+function TreeNode(val=0,left=null,right=null){this.val=val;this.left=left;this.right=right;}
+const call=(id,ns,args)=>observe(ns,id,{args});
+const shared=(roots=[0,1])=>({__list_graph__:{nodes:[{value:7,next:1},{value:7,next:null}],argument_roots:roots}});
+test('147 relinks originals',()=>{const insertionSortList=head=>{const second=head.next;second.next=head;head.next=null;return second;};const r=call(147,{insertionSortList,ListNode},[{__list_node__:[2,1]}]);assert.deepEqual(r.result,{__list_node__:[1,2]});assert.equal(r.node_identity.result_root,1);assert.deepEqual(r.args_after,[{__list_node__:[2]}]);});
+test('147 cloned output forbidden',()=>assert.throws(()=>call(147,{ListNode,insertionSortList:()=>new ListNode(1,new ListNode(2))},[{__list_node__:[2,1]}])));
+test('147 missing node forbidden',()=>assert.throws(()=>call(147,{ListNode,insertionSortList:head=>{head.next=null;return head;}},[{__list_node__:[1,2]}])));
+test('147 changed values forbidden',()=>assert.throws(()=>call(147,{ListNode,insertionSortList:head=>{head.val=0;return head;}},[{__list_node__:[1]}])));
+test('160 shared exact native heads',()=>{const r=call(160,{ListNode,getIntersectionNode:(a,b)=>b},[shared()]);assert.equal(r.node_identity.result_root,1);assert.deepEqual(r.node_identity.before,r.node_identity.after);assert.deepEqual(r.alias_edges,[['result','args.1']]);});
+test('160 alias both original heads',()=>assert.deepEqual(call(160,{ListNode,getIntersectionNode:a=>a},[shared([0,0])]).alias_edges,[['result','args.0'],['result','args.1']]));
+test('160 null exact return',()=>{const r=call(160,{ListNode,getIntersectionNode:()=>null},[shared()]);assert.equal(r.result,null);assert.equal(r.result_type,'object');});
+test('160 mutation forbidden',()=>assert.throws(()=>call(160,{ListNode,getIntersectionNode:(a,b)=>{a.next=null;return b;}},[shared()])));
+test('160 fabricated equal value forbidden',()=>assert.throws(()=>call(160,{ListNode,getIntersectionNode:()=>new ListNode(7)},[shared()])));
+test('160 input cycle rejected',()=>{const wire=shared();wire.__list_graph__.nodes[1].next=0;assert.throws(()=>call(160,{ListNode,getIntersectionNode:()=>null},[wire]));});
+test('173 source tree and class',()=>{function BSTIterator(root){this.root=root;}BSTIterator.prototype.hasNext=function(){return true;};BSTIterator.prototype.next=function(){return this.root.val;};const r=call(173,{BSTIterator,TreeNode},[['BSTIterator','hasNext','next'],[[{__tree_node__:[3]}],[],[]]]);assert.deepEqual(r.result,[null,true,3]);assert.deepEqual(r.native_method_return_types,['constructed','boolean','number']);assert.deepEqual(r.node_identity.before,r.node_identity.after);});
+test('173 tree changed forbidden',()=>{function BSTIterator(root){root.val++;}BSTIterator.prototype.next=function(){return 0;};BSTIterator.prototype.hasNext=function(){return true;};assert.throws(()=>call(173,{BSTIterator,TreeNode},[['BSTIterator'],[[{__tree_node__:[3]}]]]));});
+test('146 fresh native receivers',()=>{function LRUCache(capacity){this.data=new Map();}LRUCache.prototype.put=function(k,v){this.data.set(k,v);};LRUCache.prototype.get=function(k){return this.data.has(k)?this.data.get(k):-1;};const ns={LRUCache};assert.deepEqual(call(146,ns,[['LRUCache','put','get'],[[1],[2,7],[2]]]).result,[null,null,7]);assert.deepEqual(call(146,ns,[['LRUCache','get'],[[1],[2]]]).result,[null,-1]);});
+test('146 reused receiver rejected',()=>{let held;function LRUCache(capacity){if(held)return held;held=this;}LRUCache.prototype.get=function(){return -1;};LRUCache.prototype.put=function(){};const ns={LRUCache},args=[['LRUCache'],[[1]]];call(146,ns,args);assert.throws(()=>call(146,ns,args));});
+test('155 exact void/primitive returns',()=>{function MinStack(){this.values=[];}MinStack.prototype.push=function(v){this.values.push(v);};MinStack.prototype.getMin=function(){return Math.min(...this.values);};MinStack.prototype.top=function(){return this.values.at(-1);};MinStack.prototype.pop=function(){this.values.pop();};assert.deepEqual(call(155,{MinStack},[['MinStack','push','getMin','top','pop'],[[],[-2],[],[],[]]]).result,[null,null,-2,-2,null]);function Bad(){}Bad.prototype.push=function(v){return 0;};assert.throws(()=>call(155,{MinStack:Bad},[['MinStack','push'],[[],[1]]]));});
+test('188 named original function/no Solution fallback',()=>{const r=call(188,{maxProfit:(k,prices)=>7},[1,[0,7]]);assert.equal(r.result,7);assert.deepEqual(r.args_before,r.args_after);assert.throws(()=>call(188,{Solution:class{maxProfit(){return 7;}}},[1,[0,7]]));assert.throws(()=>call(188,{solve:()=>7},[1,[0,7]]));});
+test('native own flag tampering rejected',()=>{function LocalNode(val=0,next=null){this.val=val;this.next=next;}const insertionSortList=head=>{Object.defineProperty(head,'val',{writable:false});return head;};assert.throws(()=>call(147,{ListNode:LocalNode,insertionSortList},[{__list_node__:[1]}]));});
+test('blocked IDs and missing source constructor rejected',()=>{for(const id of [156,159,161,163])assert.throws(()=>call(id,{},[]));assert.throws(()=>call(147,{insertionSortList:h=>h},[{__list_node__:[1]}]));});
+process.stdout.write(JSON.stringify({source_free_tests_passed:passed,candidate_modules_loaded:0})+'\n');

@@ -1,0 +1,3 @@
+function ListNode(val,next){this.val=val===undefined?0:val;this.next=next===undefined?null:next;}
+var isPalindrome=function(head){if(head===null||head.next===null)return true;function reverse(node){let previous=null;while(node!==null){const following=node.next;node.next=previous;previous=node;node=following;}return previous;}let half=head,fast=head;while(fast.next!==null&&fast.next.next!==null){half=half.next;fast=fast.next.next;}const second=reverse(half.next);half.next=second;let left=head,right=second,equal=true;while(right!==null){if(left.val!==right.val)equal=false;left=left.next;right=right.next;}half.next=reverse(second);return equal;};
+module.exports={isPalindrome,ListNode};

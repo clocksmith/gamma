@@ -1,0 +1,17 @@
+# U257 fixed two-program official controller
+
+This is source preparation, not an executed qualification. Only257 Python and JavaScript are selected.246/247/248/249/250/254/255/256/259 remain explicitly unavailable-specification blocked; no fallback statements or replacement IDs are inferred.
+
+The original source manifest is `e23ade23922ae6ae356dac5259457f00be2036cd69908f3416234ad86b5820ff`; source-blind reference freeze is `dd9d61d32fd76592edfa38e36c812a80ec5b173b85a5450f24b571470ae631f3`. Exact source/semantics, original constructor/official-entry, full public definition/API and both language-template hashes are frozen. Unordered output is a MULTISET: duplicate path strings from equal-valued leaves are required, not discarded. Every original input node/value/pointer must remain unchanged.
+
+The independent source receipt is pinned separately from observer/controller approval. Because this lane's author also wrote its new observer, that source receipt cannot approve the observer/controller itself. Before freeze, another reviewer must create an exact receipt with schema `gamma.u-independent-observer-controller-review.v1`, `profile_sha256`, `source_manifest_sha256`, current `controller_sha256`, a nonempty `reviewer`, and strict booleans `independent_observer_review: true`, `independent_controller_review: true`. Supply its exact path and SHA256 through `--observer-review` and `--observer-review-sha256`. No such approval was generated here.
+
+`prepare` refetches the available public definition and actual templates on the executor, using fresh live source/statement gates. Newly fetched raw bytes and original raw snapshot hashes remain separate; exact decoded API, content and both template hashes must match. No private-copy path exists. `freeze` requires the exact public refetch receipt, Linux runtime, passing existing37-check judge preflight, unchanged argv/limits, exact original source/reference/helper closure, independent reviews and unchanged prospective plan. Source/semantics reads use fresh live gate checks and anchored bounded opens. Missing reviews never dispatch or qualify.
+
+`run` creates raw stdout/stderr and status before verdicts, retains failures and uncertain dispatch errors, and does not auto-retry uncertain outcomes. `replay` does not execute candidates: it independently recomputes host verdicts from saved raw streams and verifies exact starts, hashes, identities and summaries. Qualification is finite-suite only and never changes canonical adoption.
+
+All1,690 original cases are retained in53 batches and1,743 calls per language, zero transport exclusions. The maximum projected successful stdout is217,163 bytes; caps are unchanged. These projections do not establish actual Linux runtime readiness or a hard aggregate-memory bound.
+
+CLI: `protocol.py prepare|freeze|run|replay`, with `--gate`, `--gate-sha256`, `--statements`, `--review`, `--observer-review`, `--observer-review-sha256`, `--preflight`, `--preflight-sha256`, `--plan` (observer `prospective-plan.json`), `--freeze`, `--freeze-sha256`, `--output` as needed. Receipts are exclusive-created; preserve old failures.
+
+Validation:27 source-free controller controls,11 Python observer controls,10 JavaScript toy controls, JavaScript-to-independent-host integration and exact full-case/plan rebuild pass; fatal Ruff passes. Mock sandbox fixtures are inert text, never executed. Actual candidate executions0, independent qualification0; independent observer/controller acceptance and Linux execution remain pending.

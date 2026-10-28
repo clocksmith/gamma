@@ -1,0 +1,11 @@
+# Local U original source preparation
+
+Only257BinaryTreePaths has a verifiedpublicfullspec inthisrequestedU10. Nineofficialpremium members246,247,248,249,250,254,255,256,259remainBLOCKED, no inferredspec, replacementIDs orcandidatefiles. Additionalprivatefullspecavailability remainsunverified without an exactpermittedlocator; notassumedgloballyabsent.
+
+Separate source-blind owner froze specifications,bothactualtemplates,independent leaf-to-parent references,1,690cases/effectmodels and12sourcefreecontrols BEFORE thispair. FreezeSHA-256 `dd9d61d32fd76592edfa38e36c812a80ec5b173b85a5450f24b571470ae631f3`. Allfrozenreference/spec/case/README bytes unchanged. Authorindependentlyverifiedfull257content/templates and40source/statementpermissions, thenfresh257checks beforecode. Canonicalmetadataexact, noauthoredmanifestoverlap; importedinventoryunknown, no globalmissingclaim.
+
+PythonactualSolution.binaryTreePaths(root), JavaScriptactualtop-levelbinaryTreePaths(root), sourceTreeNodewithofficialval0/left-rightnull defaults. Iterativeenter/exitDFS carriesownpathbuffer andemits everyroot-to-leafpath, retainingduplicatepathstrings. O(n+totaloutputcharacters)time/O(height)auxiliaryspace, inputoriginalnodes/fields/edgesreadonly. No candidatecode imported orexecuted.
+
+Twoactualsyntaxchecks, fatal/scopedRuff,12unchangedsourcefreereferencecontrols andexistingauthoringvariantregistry passed. Separate prospectiveofficial-u-v1nativeentry/constructor/readonlypool/prototype/returntypeobserverprofile has NOTyetbeencreatedorbound. Its absence is an explicitqualificationblocker; hostsemantic/effectmodels cannotestablishactualABIqualification. No inventedprofilehash or immutablefunctionclaim.
+
+Independentexactsource/static/runtime/effects/resourcequalification andpublicpublicationapproval remainpending. Candidateexecutions,independentqualifications,activeadoptions allzero inthisauthoringtask. PublicationBLOCKEDpendingapproval; allworklocal,noGit/upload/privatecopy/install. EarlierT/S/Psourcebytes preserved.

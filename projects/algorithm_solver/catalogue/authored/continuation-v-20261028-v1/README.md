@@ -1,0 +1,11 @@
+# V independent HOST-ONLY API design
+
+Requested265,267,269,270,272,273,276,278,280,284. Only273/278/284haveverifiedpublicfullspecifications;sevenpremiumIDs explicitlyblocked,no substitutions. Fullspec/BOTHactualtemplatescachedBEFOREofficialGraphQL403; thatroute stopped, no retries/alternatehosts/fallback. Canonicalmetadataownership verified,noauthoredmanifestoverlaps; importedinventoryunknown.
+
+273independentfiniteEnglishgrammar generatesallunder1000phrases, thenformatsdecimalgroups; separatecanonicaldecoder checksvalue. Plannedcandidate usesgreedyrecursivescale decomposition.278host-onlyoraclefixture definesmonotonethreshold; independentfirst-badboundaryproperty and genuineAPIcall/response/range/logarithmicbudget models, notcross-language agreement. ActualPythonsolverreceivesONLYn andresolvesexactofficialglobals()['isBadVersion'];nofallback/stub/arbitraryscan. JSactualfactorysolution(isBadVersion)returnsfunction(n). Raw[n,bad]metadata isNOTactualABI.
+
+284actualPeekingIterator receives ONLY an opaqueofficialIterator APIobject, neverrawlist/tag. Source maycallONLYnext()/hasNext(); noIteratorimplementation orinternalfieldaccess. Independenthostlist-cursor reference deriveslogicalpeek/next/hasNext;hostAPIeventmodel validatesgenuinenextprefix/responses andselectedlazy-cachecost. Constructors/methodsactualPythonclass/JSfunctionprototype asverified. Genericrawnums/commandsmetadataisNOTnativeinterface.
+
+CRITICALHOSTBOUNDARY: host_api_fixture andexpected NEVER enterchildfiles,environment,globals,closures orsolverarguments.278threshold/finalanswer stayHOSTSIDE; future separatelyreviewedhost-mediatedproxy suppliesgenuineversionqueryresponses.284rawvalues/cursor stayhostside;sourcegets onlyofficialinterface. Thisfolder implementsNO childAPI,transport,always-falsestub orproxy. NewAPIprofilesarepending,notinherentlyimpossible. Semantic/APIpropertymodels alone cannotqualifyactualAPIbinding. Reviewed-source scope, notclaimed hostile-solver tamperresistance.
+
+Nine source-freecontrols andfatalRuff pass beforecandidatecode.14,016HOSTONLYcases includeEnglishnumericboundaries,allsmallmonotoneboundaries,int32largeversions,opaqueIteratorcache/exhaustion/calllimits. No candidate code/authorship/execution atreferencefreeze;noqualification/adoption. Publicationblockedpendingapproval,allworklocal,noGit/privatecopy/runtimeinstall.
