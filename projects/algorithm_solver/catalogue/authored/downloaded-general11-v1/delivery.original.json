@@ -1,0 +1,707 @@
+{
+  "schema": "gamma.new-solutions-batch22.v1",
+  "scope": "Freshly written, not pulled from Gamma. Problems with no authored JS/Python pair in clocksmith/gamma catalogue/authored at head dd7dd823, verified by the parent before delivery, no overlaps found. Only 11 problems in IDs 3101-3250 meet the simple-input constraints; rest are SQL/premium or unverifiable titles. This is not a claim of Gamma official independent admission.",
+  "qualification_method": "For each problem: public examples plus 20 random cross-language agreement checks per problem, JS via node and Python via import, outputs compared, plus brute-force checks for 3165, 3233, 3240. Problem 3239 first test comes from a worked walkthrough verified by hand, not confirmed as a LeetCode public example. Spot-checked independently by the parent for 3142, 3165, 3208, 3233, 3243, all passed.",
+  "counts": {
+    "problems": 11,
+    "passed": 11
+  },
+  "problems": [
+    {
+      "problem_id": 3142,
+      "slug": "check-if-grid-satisfies-conditions",
+      "title": "Check if Grid Satisfies Conditions",
+      "difficulty": "Easy",
+      "method": "satisfiesConditions",
+      "javascript": "'use strict';\n\n// 3142. Check if Grid Satisfies Conditions (Easy).\n// Specification: https://leetcode.com/problems/check-if-grid-satisfies-conditions/description/\nfunction solve(grid) {\n  const m = grid.length; const n = grid[0].length;\n  for (let i = 0; i < m; i++) {\n    for (let j = 0; j < n; j++) {\n      if (i + 1 < m && grid[i][j] !== grid[i + 1][j]) return false;\n      if (j + 1 < n && grid[i][j] === grid[i][j + 1]) return false;\n    }\n  }\n  return true;\n}\nconst satisfiesConditions = solve;\nclass Solution { satisfiesConditions(grid) { return solve(grid); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, satisfiesConditions };\n",
+      "python": "\"\"\"3142. Check if Grid Satisfies Conditions (Easy).\n\nSpecification: https://leetcode.com/problems/check-if-grid-satisfies-conditions/description/\n\"\"\"\n\n\ndef solve(grid: list[list[int]]) -> bool:\n    m, n = len(grid), len(grid[0])\n    for i in range(m):\n        for j in range(n):\n            if i + 1 < m and grid[i][j] != grid[i + 1][j]:\n                return False\n            if j + 1 < n and grid[i][j] == grid[i][j + 1]:\n                return False\n    return True\n\n\nclass Solution:\n    def satisfiesConditions(self, grid):\n        return solve(grid)\n",
+      "javascript_sha256": "e8657303077d163ee7f3f5599f7285111c3ed5e81d12126f8e9b631094ae1ad1",
+      "python_sha256": "821c52b70e9986a0d46d24374535d700257fc5dac2dc04483c8517f0e65ab53f",
+      "tests": [
+        [
+          [
+            [
+              [
+                1,
+                0,
+                2
+              ],
+              [
+                1,
+                0,
+                2
+              ]
+            ]
+          ],
+          true
+        ],
+        [
+          [
+            [
+              [
+                1,
+                1,
+                1
+              ],
+              [
+                0,
+                0,
+                0
+              ]
+            ]
+          ],
+          false
+        ],
+        [
+          [
+            [
+              [
+                1
+              ],
+              [
+                2
+              ],
+              [
+                3
+              ]
+            ]
+          ],
+          false
+        ],
+        [
+          [
+            [
+              [
+                1,
+                1
+              ],
+              [
+                1,
+                1
+              ]
+            ]
+          ],
+          false
+        ],
+        [
+          [
+            [
+              [
+                5
+              ]
+            ]
+          ],
+          true
+        ]
+      ],
+      "qualification": {
+        "passed": true
+      }
+    },
+    {
+      "problem_id": 3144,
+      "slug": "minimum-substring-partition-of-equal-character-frequency",
+      "title": "Minimum Substring Partition of Equal Character Frequency",
+      "difficulty": "Medium",
+      "method": "minimumSubstringsInPartition",
+      "javascript": "'use strict';\n\n// 3144. Minimum Substring Partition of Equal Character Frequency (Medium).\n// Specification: https://leetcode.com/problems/minimum-substring-partition-of-equal-character-frequency/description/\nfunction solve(s) {\n  const n = s.length; const dp = new Array(n + 1).fill(Infinity); dp[0] = 0;\n  for (let end = 0; end < n; end++) {\n    const counts = {};\n    for (let start = end; start >= 0; start--) {\n      counts[s[start]] = (counts[s[start]] || 0) + 1;\n      const vals = Object.values(counts);\n      if (Math.min(...vals) === Math.max(...vals)) {\n        dp[end + 1] = Math.min(dp[end + 1], dp[start] + 1);\n      }\n    }\n  }\n  return dp[n];\n}\nconst minimumSubstringsInPartition = solve;\nclass Solution { minimumSubstringsInPartition(s) { return solve(s); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, minimumSubstringsInPartition };\n",
+      "python": "\"\"\"3144. Minimum Substring Partition of Equal Character Frequency (Medium).\n\nSpecification: https://leetcode.com/problems/minimum-substring-partition-of-equal-character-frequency/description/\n\"\"\"\n\n\ndef solve(s: str) -> int:\n    n = len(s)\n    dp = [10 ** 9] * (n + 1)\n    dp[0] = 0\n    for end in range(n):\n        counts = {}\n        for start in range(end, -1, -1):\n            counts[s[start]] = counts.get(s[start], 0) + 1\n            vals = counts.values()\n            if min(vals) == max(vals):\n                dp[end + 1] = min(dp[end + 1], dp[start] + 1)\n    return dp[n]\n\n\nclass Solution:\n    def minimumSubstringsInPartition(self, s):\n        return solve(s)\n",
+      "javascript_sha256": "0a5c7af687f84995289701c0b5c86b23b17e35b1f208bc37df5b63f0fcc89127",
+      "python_sha256": "512461d757ff1f075315ee8e514cbfbdd3ed43ae76032e0d47daad9ee7600cf7",
+      "tests": [
+        [
+          [
+            "fabccddg"
+          ],
+          3
+        ],
+        [
+          [
+            "abababaccddb"
+          ],
+          2
+        ],
+        [
+          [
+            "aabbcc"
+          ],
+          1
+        ],
+        [
+          [
+            "a"
+          ],
+          1
+        ],
+        [
+          [
+            "ab"
+          ],
+          1
+        ]
+      ],
+      "qualification": {
+        "passed": true
+      }
+    },
+    {
+      "problem_id": 3147,
+      "slug": "taking-maximum-energy-from-the-mystic-dungeon",
+      "title": "Taking Maximum Energy From the Mystic Dungeon",
+      "difficulty": "Medium",
+      "method": "maximumEnergy",
+      "javascript": "'use strict';\n\n// 3147. Taking Maximum Energy From the Mystic Dungeon (Medium).\n// Specification: https://leetcode.com/problems/taking-maximum-energy-from-the-mystic-dungeon/description/\nfunction solve(energy, k) {\n  const n = energy.length; const dp = energy.slice(); let best = -Infinity;\n  for (let i = n - 1; i >= 0; i--) {\n    if (i + k < n) dp[i] += dp[i + k];\n    if (dp[i] > best) best = dp[i];\n  }\n  return best;\n}\nconst maximumEnergy = solve;\nclass Solution { maximumEnergy(energy, k) { return solve(energy, k); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, maximumEnergy };\n",
+      "python": "\"\"\"3147. Taking Maximum Energy From the Mystic Dungeon (Medium).\n\nSpecification: https://leetcode.com/problems/taking-maximum-energy-from-the-mystic-dungeon/description/\n\"\"\"\n\n\ndef solve(energy: list[int], k: int) -> int:\n    n = len(energy)\n    dp = list(energy)\n    best = None\n    for i in range(n - 1, -1, -1):\n        if i + k < n:\n            dp[i] += dp[i + k]\n        if best is None or dp[i] > best:\n            best = dp[i]\n    return best\n\n\nclass Solution:\n    def maximumEnergy(self, energy, k):\n        return solve(energy, k)\n",
+      "javascript_sha256": "7bf2f935bb658cefa36018a06547787ce23a887c83895b73f3e81b446531b749",
+      "python_sha256": "7e07f862b94647ce97fe7907aa708332813a5f4070cbd0489ba6cad812a2b3d9",
+      "tests": [
+        [
+          [
+            [
+              5,
+              2,
+              -10,
+              -5,
+              1
+            ],
+            3
+          ],
+          3
+        ],
+        [
+          [
+            [
+              -2,
+              -3,
+              -1
+            ],
+            2
+          ],
+          -1
+        ],
+        [
+          [
+            [
+              1,
+              2,
+              3
+            ],
+            1
+          ],
+          6
+        ],
+        [
+          [
+            [
+              -5
+            ],
+            1
+          ],
+          -5
+        ]
+      ],
+      "qualification": {
+        "passed": true
+      }
+    },
+    {
+      "problem_id": 3165,
+      "slug": "maximum-sum-of-subsequence-with-non-adjacent-elements",
+      "title": "Maximum Sum of Subsequence With Nonadjacent Elements",
+      "difficulty": "Hard",
+      "method": "maximumSumSubsequence",
+      "javascript": "'use strict';\n\n// 3165. Maximum Sum of Subsequence With Nonadjacent Elements (Hard).\n// Specification: https://leetcode.com/problems/maximum-sum-of-subsequence-with-non-adjacent-elements/description/\nfunction solve(nums, queries) {\n  const NEG = -1e18;\n  const n = nums.length;\n  const tree = new Array(4 * n);\n  function leaf(v) { return [[0, NEG], [NEG, v]]; }\n  function merge(a, b) {\n    const c = [[NEG, NEG], [NEG, NEG]];\n    for (let i = 0; i < 2; i++) for (let j = 0; j < 2; j++)\n      for (let x = 0; x < 2; x++) for (let y = 0; y < 2; y++) {\n        if (x === 1 && y === 1) continue;\n        if (a[i][x] === NEG || b[y][j] === NEG) continue;\n        c[i][j] = Math.max(c[i][j], a[i][x] + b[y][j]);\n      }\n    return c;\n  }\n  function build(node, l, r) {\n    if (l === r) { tree[node] = leaf(nums[l]); return; }\n    const mid = (l + r) >> 1;\n    build(node * 2, l, mid); build(node * 2 + 1, mid + 1, r);\n    tree[node] = merge(tree[node * 2], tree[node * 2 + 1]);\n  }\n  function update(node, l, r, pos, v) {\n    if (l === r) { tree[node] = leaf(v); return; }\n    const mid = (l + r) >> 1;\n    if (pos <= mid) update(node * 2, l, mid, pos, v);\n    else update(node * 2 + 1, mid + 1, r, pos, v);\n    tree[node] = merge(tree[node * 2], tree[node * 2 + 1]);\n  }\n  build(1, 0, n - 1);\n  const MOD = 1000000007; let total = 0;\n  for (const q of queries) {\n    nums[q[0]] = q[1];\n    update(1, 0, n - 1, q[0], q[1]);\n    const root = tree[1];\n    const best = Math.max(root[0][0], root[0][1], root[1][0], root[1][1]);\n    total = (total + best) % MOD;\n  }\n  return total;\n}\nconst maximumSumSubsequence = solve;\nclass Solution { maximumSumSubsequence(nums, queries) { return solve(nums, queries); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, maximumSumSubsequence };\n",
+      "python": "\"\"\"3165. Maximum Sum of Subsequence With Nonadjacent Elements (Hard).\n\nSpecification: https://leetcode.com/problems/maximum-sum-of-subsequence-with-non-adjacent-elements/description/\n\"\"\"\n\n\ndef solve(nums: list[int], queries: list[list[int]]) -> int:\n    NEG = -10 ** 18\n    n = len(nums)\n    tree = [None] * (4 * n)\n\n    def leaf(v):\n        return ((0, NEG), (NEG, v))\n\n    def merge(a, b):\n        c = [[NEG, NEG], [NEG, NEG]]\n        for i in range(2):\n            for j in range(2):\n                for x in range(2):\n                    for y in range(2):\n                        if x == 1 and y == 1:\n                            continue\n                        if a[i][x] == NEG or b[y][j] == NEG:\n                            continue\n                        c[i][j] = max(c[i][j], a[i][x] + b[y][j])\n        return ((c[0][0], c[0][1]), (c[1][0], c[1][1]))\n\n    def build(node, l, r):\n        if l == r:\n            tree[node] = leaf(nums[l])\n            return\n        mid = (l + r) // 2\n        build(node * 2, l, mid)\n        build(node * 2 + 1, mid + 1, r)\n        tree[node] = merge(tree[node * 2], tree[node * 2 + 1])\n\n    def update(node, l, r, pos, v):\n        if l == r:\n            tree[node] = leaf(v)\n            return\n        mid = (l + r) // 2\n        if pos <= mid:\n            update(node * 2, l, mid, pos, v)\n        else:\n            update(node * 2 + 1, mid + 1, r, pos, v)\n        tree[node] = merge(tree[node * 2], tree[node * 2 + 1])\n\n    build(1, 0, n - 1)\n    MOD = 10 ** 9 + 7\n    total = 0\n    for pos, val in queries:\n        nums[pos] = val\n        update(1, 0, n - 1, pos, val)\n        root = tree[1]\n        best = max(root[0][0], root[0][1], root[1][0], root[1][1])\n        total = (total + best) % MOD\n    return total\n\n\nclass Solution:\n    def maximumSumSubsequence(self, nums, queries):\n        return solve(nums, queries)\n",
+      "javascript_sha256": "88dc74622be837e5ba9e7bafa39abc4a00dc1890bf2404ee6db24e0d56406d4d",
+      "python_sha256": "97f7b327b7b300bfedb0e0b42b9f77b04ad3d6c5d7402af987199eb5bce1b52c",
+      "tests": [
+        [
+          [
+            [
+              3,
+              5,
+              9
+            ],
+            [
+              [
+                1,
+                -2
+              ],
+              [
+                0,
+                -3
+              ]
+            ]
+          ],
+          21
+        ],
+        [
+          [
+            [
+              0,
+              -1
+            ],
+            [
+              [
+                0,
+                -5
+              ]
+            ]
+          ],
+          0
+        ],
+        [
+          [
+            [
+              1,
+              2,
+              3,
+              1
+            ],
+            [
+              [
+                1,
+                10
+              ],
+              [
+                3,
+                5
+              ]
+            ]
+          ],
+          26
+        ]
+      ],
+      "qualification": {
+        "passed": true
+      }
+    },
+    {
+      "problem_id": 3192,
+      "slug": "minimum-operations-to-make-binary-array-elements-equal-to-one-ii",
+      "title": "Minimum Operations to Make Binary Array Elements Equal to One II",
+      "difficulty": "Medium",
+      "method": "minOperations",
+      "javascript": "'use strict';\n\n// 3192. Minimum Operations to Make Binary Array Elements Equal to One II (Medium).\n// Specification: https://leetcode.com/problems/minimum-operations-to-make-binary-array-elements-equal-to-one-ii/description/\nfunction solve(nums) {\n  let flips = 0; let ans = 0;\n  for (const v of nums) {\n    if ((v ^ flips) === 0) { flips ^= 1; ans++; }\n  }\n  return ans;\n}\nconst minOperations = solve;\nclass Solution { minOperations(nums) { return solve(nums); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, minOperations };\n",
+      "python": "\"\"\"3192. Minimum Operations to Make Binary Array Elements Equal to One II (Medium).\n\nSpecification: https://leetcode.com/problems/minimum-operations-to-make-binary-array-elements-equal-to-one-ii/description/\n\"\"\"\n\n\ndef solve(nums: list[int]) -> int:\n    flips = 0\n    ans = 0\n    for v in nums:\n        if (v ^ flips) == 0:\n            flips ^= 1\n            ans += 1\n    return ans\n\n\nclass Solution:\n    def minOperations(self, nums):\n        return solve(nums)\n",
+      "javascript_sha256": "0527245aa721ff973e88a801cfae55e4a65a410d732b928e2d0cd910d60abf3d",
+      "python_sha256": "1157d593283625bbc35fb28da296a1969d41650d379216e889b9c85fcc8aaa4c",
+      "tests": [
+        [
+          [
+            [
+              0,
+              1,
+              1,
+              0,
+              1
+            ]
+          ],
+          4
+        ],
+        [
+          [
+            [
+              1,
+              0,
+              0,
+              0
+            ]
+          ],
+          1
+        ],
+        [
+          [
+            [
+              0,
+              1,
+              0,
+              1
+            ]
+          ],
+          4
+        ],
+        [
+          [
+            [
+              1,
+              1,
+              1
+            ]
+          ],
+          0
+        ],
+        [
+          [
+            [
+              0
+            ]
+          ],
+          1
+        ]
+      ],
+      "qualification": {
+        "passed": true
+      }
+    },
+    {
+      "problem_id": 3208,
+      "slug": "alternating-groups-ii",
+      "title": "Alternating Groups II",
+      "difficulty": "Medium",
+      "method": "numberOfAlternatingGroups",
+      "javascript": "'use strict';\n\n// 3208. Alternating Groups II (Medium).\n// Specification: https://leetcode.com/problems/alternating-groups-ii/description/\nfunction solve(colors, k) {\n  const n = colors.length; let ans = 0;\n  for (let i = 0; i < n; i++) {\n    let ok = true;\n    for (let j = 0; j + 1 < k; j++) {\n      if (colors[(i + j) % n] === colors[(i + j + 1) % n]) { ok = false; break; }\n    }\n    if (ok) ans++;\n  }\n  return ans;\n}\nconst numberOfAlternatingGroups = solve;\nclass Solution { numberOfAlternatingGroups(colors, k) { return solve(colors, k); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, numberOfAlternatingGroups };\n",
+      "python": "\"\"\"3208. Alternating Groups II (Medium).\n\nSpecification: https://leetcode.com/problems/alternating-groups-ii/description/\n\"\"\"\n\n\ndef solve(colors: list[int], k: int) -> int:\n    n = len(colors)\n    ans = 0\n    for i in range(n):\n        ok = True\n        for j in range(k - 1):\n            if colors[(i + j) % n] == colors[(i + j + 1) % n]:\n                ok = False\n                break\n        if ok:\n            ans += 1\n    return ans\n\n\nclass Solution:\n    def numberOfAlternatingGroups(self, colors, k):\n        return solve(colors, k)\n",
+      "javascript_sha256": "b285355870de745900f839c53f12cbd84f00307af5f964858086fa30805d46dd",
+      "python_sha256": "f59bbfb031e383aa71440e2dd6c12496c321b36cfed57ebb6873d5ef7f2fe0b0",
+      "tests": [
+        [
+          [
+            [
+              0,
+              1,
+              0,
+              1,
+              0
+            ],
+            3
+          ],
+          3
+        ],
+        [
+          [
+            [
+              0,
+              1,
+              0,
+              0,
+              1,
+              0,
+              1
+            ],
+            6
+          ],
+          2
+        ],
+        [
+          [
+            [
+              1,
+              1,
+              0,
+              1
+            ],
+            4
+          ],
+          0
+        ],
+        [
+          [
+            [
+              0,
+              1,
+              0
+            ],
+            3
+          ],
+          1
+        ]
+      ],
+      "qualification": {
+        "passed": true
+      }
+    },
+    {
+      "problem_id": 3210,
+      "slug": "find-the-encrypted-string",
+      "title": "Find the Encrypted String",
+      "difficulty": "Easy",
+      "method": "getEncryptedString",
+      "javascript": "'use strict';\n\n// 3210. Find the Encrypted String (Easy).\n// Specification: https://leetcode.com/problems/find-the-encrypted-string/description/\nfunction solve(s, k) {\n  const n = s.length; let out = '';\n  for (let i = 0; i < n; i++) out += s[(i + k) % n];\n  return out;\n}\nconst getEncryptedString = solve;\nclass Solution { getEncryptedString(s, k) { return solve(s, k); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, getEncryptedString };\n",
+      "python": "\"\"\"3210. Find the Encrypted String (Easy).\n\nSpecification: https://leetcode.com/problems/find-the-encrypted-string/description/\n\"\"\"\n\n\ndef solve(s: str, k: int) -> str:\n    n = len(s)\n    return ''.join(s[(i + k) % n] for i in range(n))\n\n\nclass Solution:\n    def getEncryptedString(self, s, k):\n        return solve(s, k)\n",
+      "javascript_sha256": "19a629e97564907e0d6a342ce688cda6288194c6619981e4fc1657bbb8b9b8fe",
+      "python_sha256": "40261fb958b520e76fd4ce66db49019fbe761ddbe5bb52070f4e689a5183925e",
+      "tests": [
+        [
+          [
+            "dart",
+            3
+          ],
+          "tdar"
+        ],
+        [
+          [
+            "aaa",
+            1
+          ],
+          "aaa"
+        ],
+        [
+          [
+            "abc",
+            5
+          ],
+          "cab"
+        ]
+      ],
+      "qualification": {
+        "passed": true
+      }
+    },
+    {
+      "problem_id": 3233,
+      "slug": "find-the-count-of-numbers-which-are-not-special",
+      "title": "Find the Count of Numbers Which Are Not Special",
+      "difficulty": "Medium",
+      "method": "nonSpecialCount",
+      "javascript": "'use strict';\n\n// 3233. Find the Count of Numbers Which Are Not Special (Medium).\n// Specification: https://leetcode.com/problems/find-the-count-of-numbers-which-are-not-special/description/\nfunction solve(l, r) {\n  let limit = Math.floor(Math.sqrt(r));\n  while ((limit + 1) * (limit + 1) <= r) limit++;\n  while (limit * limit > r) limit--;\n  const isPrime = new Array(limit + 1).fill(true);\n  if (limit >= 0) isPrime[0] = false;\n  if (limit >= 1) isPrime[1] = false;\n  for (let i = 2; i * i <= limit; i++) if (isPrime[i])\n    for (let j = i * i; j <= limit; j += i) isPrime[j] = false;\n  let cnt = 0;\n  for (let p = 2; p <= limit; p++)\n    if (isPrime[p] && p * p >= l && p * p <= r) cnt++;\n  return (r - l + 1) - cnt;\n}\nconst nonSpecialCount = solve;\nclass Solution { nonSpecialCount(l, r) { return solve(l, r); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, nonSpecialCount };\n",
+      "python": "\"\"\"3233. Find the Count of Numbers Which Are Not Special (Medium).\n\nSpecification: https://leetcode.com/problems/find-the-count-of-numbers-which-are-not-special/description/\n\"\"\"\n\n\ndef solve(l: int, r: int) -> int:\n    import math\n    limit = math.isqrt(r)\n    is_prime = [True] * (limit + 1)\n    if limit >= 0:\n        is_prime[0] = False\n    if limit >= 1:\n        is_prime[1] = False\n    i = 2\n    while i * i <= limit:\n        if is_prime[i]:\n            for j in range(i * i, limit + 1, i):\n                is_prime[j] = False\n        i += 1\n    cnt = 0\n    for p in range(2, limit + 1):\n        if is_prime[p] and l <= p * p <= r:\n            cnt += 1\n    return (r - l + 1) - cnt\n\n\nclass Solution:\n    def nonSpecialCount(self, l, r):\n        return solve(l, r)\n",
+      "javascript_sha256": "c62d52256912b026ee35ba1c50e9b1927a19b3ef09f90a0b1e7519de78aebdde",
+      "python_sha256": "e529498e1669fb4a2e287308108191bd5fe003414c7d50ff25e007294a867e38",
+      "tests": [
+        [
+          [
+            5,
+            30
+          ],
+          24
+        ],
+        [
+          [
+            4,
+            16
+          ],
+          11
+        ],
+        [
+          [
+            1,
+            1
+          ],
+          1
+        ],
+        [
+          [
+            1,
+            10
+          ],
+          8
+        ]
+      ],
+      "qualification": {
+        "passed": true
+      }
+    },
+    {
+      "problem_id": 3239,
+      "slug": "minimum-number-of-flips-to-make-binary-grid-palindromic-i",
+      "title": "Minimum Number of Flips to Make Binary Grid Palindromic I",
+      "difficulty": "Medium",
+      "method": "minFlips",
+      "javascript": "'use strict';\n\n// 3239. Minimum Number of Flips to Make Binary Grid Palindromic I (Medium).\n// Specification: https://leetcode.com/problems/minimum-number-of-flips-to-make-binary-grid-palindromic-i/description/\nfunction solve(grid) {\n  const m = grid.length; const n = grid[0].length;\n  let rows = 0; let cols = 0;\n  for (let i = 0; i < m; i++)\n    for (let j = 0; j < n / 2; j++)\n      if (grid[i][j] !== grid[i][n - 1 - j]) rows++;\n  for (let j = 0; j < n; j++)\n    for (let i = 0; i < m / 2; i++)\n      if (grid[i][j] !== grid[m - 1 - i][j]) cols++;\n  return Math.min(rows, cols);\n}\nconst minFlips = solve;\nclass Solution { minFlips(grid) { return solve(grid); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, minFlips };\n",
+      "python": "\"\"\"3239. Minimum Number of Flips to Make Binary Grid Palindromic I (Medium).\n\nSpecification: https://leetcode.com/problems/minimum-number-of-flips-to-make-binary-grid-palindromic-i/description/\n\"\"\"\n\n\ndef solve(grid: list[list[int]]) -> int:\n    m, n = len(grid), len(grid[0])\n    rows = 0\n    cols = 0\n    for i in range(m):\n        for j in range(n // 2):\n            if grid[i][j] != grid[i][n - 1 - j]:\n                rows += 1\n    for j in range(n):\n        for i in range(m // 2):\n            if grid[i][j] != grid[m - 1 - i][j]:\n                cols += 1\n    return min(rows, cols)\n\n\nclass Solution:\n    def minFlips(self, grid):\n        return solve(grid)\n",
+      "javascript_sha256": "7c021047b4290ee3d9d28859a5c5de87a1840e1a4b0e387add9e295608e2d786",
+      "python_sha256": "74709db24770efe377d932b72b1657562bbfa3cbbdf5201f0475245e606e6bf0",
+      "tests": [
+        [
+          [
+            [
+              [
+                1,
+                0,
+                0
+              ],
+              [
+                0,
+                1,
+                1
+              ],
+              [
+                1,
+                1,
+                0
+              ]
+            ]
+          ],
+          1
+        ],
+        [
+          [
+            [
+              [
+                1,
+                0
+              ],
+              [
+                0,
+                1
+              ]
+            ]
+          ],
+          2
+        ],
+        [
+          [
+            [
+              [
+                1,
+                1
+              ],
+              [
+                1,
+                1
+              ]
+            ]
+          ],
+          0
+        ]
+      ],
+      "qualification": {
+        "passed": true
+      }
+    },
+    {
+      "problem_id": 3240,
+      "slug": "minimum-number-of-flips-to-make-binary-grid-palindromic-ii",
+      "title": "Minimum Number of Flips to Make Binary Grid Palindromic II",
+      "difficulty": "Medium",
+      "method": "minFlips",
+      "javascript": "'use strict';\n\n// 3240. Minimum Number of Flips to Make Binary Grid Palindromic II (Medium).\n// Specification: https://leetcode.com/problems/minimum-number-of-flips-to-make-binary-grid-palindromic-ii/description/\nfunction solve(grid) {\n  const m = grid.length; const n = grid[0].length;\n  let ans = 0; let middleOnes = 0; let mismatched = 0;\n  for (let i = 0; i < Math.floor(m / 2); i++)\n    for (let j = 0; j < Math.floor(n / 2); j++) {\n      const ones = grid[i][j] + grid[i][n - 1 - j] + grid[m - 1 - i][j] + grid[m - 1 - i][n - 1 - j];\n      ans += Math.min(ones, 4 - ones);\n    }\n  if (m % 2 === 1) {\n    const mid = Math.floor(m / 2);\n    for (let j = 0; j < Math.floor(n / 2); j++) {\n      const a = grid[mid][j]; const b = grid[mid][n - 1 - j];\n      mismatched += a ^ b; middleOnes += a + b;\n    }\n  }\n  if (n % 2 === 1) {\n    const mid = Math.floor(n / 2);\n    for (let i = 0; i < Math.floor(m / 2); i++) {\n      const a = grid[i][mid]; const b = grid[m - 1 - i][mid];\n      mismatched += a ^ b; middleOnes += a + b;\n    }\n  }\n  if (mismatched === 0) {\n    if (middleOnes % 4 === 2) ans += 2;\n  } else {\n    ans += mismatched;\n  }\n  if (m % 2 === 1 && n % 2 === 1) ans += grid[Math.floor(m / 2)][Math.floor(n / 2)];\n  return ans;\n}\nconst minFlips = solve;\nclass Solution { minFlips(grid) { return solve(grid); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, minFlips };\n",
+      "python": "\"\"\"3240. Minimum Number of Flips to Make Binary Grid Palindromic II (Medium).\n\nSpecification: https://leetcode.com/problems/minimum-number-of-flips-to-make-binary-grid-palindromic-ii/description/\n\"\"\"\n\n\ndef solve(grid: list[list[int]]) -> int:\n    m, n = len(grid), len(grid[0])\n    ans = 0\n    middle_ones = 0\n    mismatched = 0\n    for i in range(m // 2):\n        for j in range(n // 2):\n            ones = (grid[i][j] + grid[i][n - 1 - j]\n                    + grid[m - 1 - i][j] + grid[m - 1 - i][n - 1 - j])\n            ans += min(ones, 4 - ones)\n    if m % 2 == 1:\n        mid = m // 2\n        for j in range(n // 2):\n            a, b = grid[mid][j], grid[mid][n - 1 - j]\n            mismatched += a ^ b\n            middle_ones += a + b\n    if n % 2 == 1:\n        mid = n // 2\n        for i in range(m // 2):\n            a, b = grid[i][mid], grid[m - 1 - i][mid]\n            mismatched += a ^ b\n            middle_ones += a + b\n    if mismatched == 0:\n        if middle_ones % 4 == 2:\n            ans += 2\n    else:\n        ans += mismatched\n    if m % 2 == 1 and n % 2 == 1:\n        ans += grid[m // 2][n // 2]\n    return ans\n\n\nclass Solution:\n    def minFlips(self, grid):\n        return solve(grid)\n",
+      "javascript_sha256": "9da89e2a963f1a08062a30cebacbc13d04fed3bcc41d183d4e904f300a8809c4",
+      "python_sha256": "8c9827e1f429bd10a4d557452c9e733de3fa2eb1f66f591fd4e1e0cdcab8d046",
+      "tests": [
+        [
+          [
+            [
+              [
+                1,
+                0,
+                0
+              ],
+              [
+                0,
+                1,
+                0
+              ],
+              [
+                0,
+                0,
+                1
+              ]
+            ]
+          ],
+          3
+        ],
+        [
+          [
+            [
+              [
+                0,
+                1
+              ],
+              [
+                0,
+                1
+              ],
+              [
+                0,
+                0
+              ]
+            ]
+          ],
+          2
+        ],
+        [
+          [
+            [
+              [
+                1
+              ],
+              [
+                1
+              ]
+            ]
+          ],
+          2
+        ]
+      ],
+      "qualification": {
+        "passed": true
+      }
+    },
+    {
+      "problem_id": 3243,
+      "slug": "shortest-distance-after-road-addition-queries-i",
+      "title": "Shortest Distance After Road Addition Queries I",
+      "difficulty": "Medium",
+      "method": "shortestDistanceAfterQueries",
+      "javascript": "'use strict';\n\n// 3243. Shortest Distance After Road Addition Queries I (Medium).\n// Specification: https://leetcode.com/problems/shortest-distance-after-road-addition-queries-i/description/\nfunction solve(n, queries) {\n  const graph = Array.from({ length: n }, () => []);\n  for (let i = 0; i + 1 < n; i++) graph[i].push(i + 1);\n  function bfs() {\n    const dist = new Array(n).fill(-1); dist[0] = 0;\n    const queue = [0];\n    for (let head = 0; head < queue.length; head++) {\n      const u = queue[head];\n      for (const v of graph[u]) if (dist[v] === -1) { dist[v] = dist[u] + 1; queue.push(v); }\n    }\n    return dist[n - 1];\n  }\n  const ans = [];\n  for (const q of queries) {\n    graph[q[0]].push(q[1]);\n    ans.push(bfs());\n  }\n  return ans;\n}\nconst shortestDistanceAfterQueries = solve;\nclass Solution { shortestDistanceAfterQueries(n, queries) { return solve(n, queries); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, shortestDistanceAfterQueries };\n",
+      "python": "\"\"\"3243. Shortest Distance After Road Addition Queries I (Medium).\n\nSpecification: https://leetcode.com/problems/shortest-distance-after-road-addition-queries-i/description/\n\"\"\"\n\n\ndef solve(n: int, queries: list[list[int]]) -> list[int]:\n    from collections import deque\n    graph = [[] for _ in range(n)]\n    for i in range(n - 1):\n        graph[i].append(i + 1)\n\n    def bfs():\n        dist = [-1] * n\n        dist[0] = 0\n        queue = deque([0])\n        while queue:\n            u = queue.popleft()\n            for v in graph[u]:\n                if dist[v] == -1:\n                    dist[v] = dist[u] + 1\n                    queue.append(v)\n        return dist[n - 1]\n\n    ans = []\n    for u, v in queries:\n        graph[u].append(v)\n        ans.append(bfs())\n    return ans\n\n\nclass Solution:\n    def shortestDistanceAfterQueries(self, n, queries):\n        return solve(n, queries)\n",
+      "javascript_sha256": "b66c0c3f11b7a69ce0644b51c94e7e229e5d78a2e9ab5895e9476fcb643e179a",
+      "python_sha256": "41e64b5d261bc574eb446dc22e7a68eb42a3a31dbd1458aef2fa0437ab5ccd98",
+      "tests": [
+        [
+          [
+            5,
+            [
+              [
+                2,
+                4
+              ],
+              [
+                0,
+                2
+              ],
+              [
+                0,
+                4
+              ]
+            ]
+          ],
+          [
+            3,
+            2,
+            1
+          ]
+        ],
+        [
+          [
+            4,
+            [
+              [
+                0,
+                3
+              ],
+              [
+                0,
+                2
+              ]
+            ]
+          ],
+          [
+            1,
+            1
+          ]
+        ],
+        [
+          [
+            4,
+            [
+              [
+                0,
+                3
+              ]
+            ]
+          ],
+          [
+            1
+          ]
+        ]
+      ],
+      "qualification": {
+        "passed": true
+      }
+    }
+  ]
+}
