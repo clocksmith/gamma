@@ -1,0 +1,352 @@
+{
+  "authorization": "Owner requested finish all Gamma solutions and continue parallel source/qualification work, with existing source/statement permissions and protected-data boundaries preserved.",
+  "problems": [
+    {
+      "comparison": {
+        "native_receiver": "one original class instance per trace; new instance between traces",
+        "policy": "exact typed values in call order"
+      },
+      "external_interface": {
+        "argument_order": [
+          "operation_names",
+          "argument_lists"
+        ],
+        "canonical": "solve",
+        "language_parameter_names": {
+          "javascript": [
+            "operationNames",
+            "argumentLists"
+          ],
+          "python": [
+            "operation_names",
+            "argument_lists"
+          ]
+        },
+        "native_class": "ExamTracker",
+        "native_constructor": {
+          "params": []
+        },
+        "native_execution_status": "pending",
+        "native_methods": [
+          {
+            "name": "record",
+            "params": [
+              {
+                "name": "time",
+                "type": "integer"
+              },
+              {
+                "name": "score",
+                "type": "integer"
+              }
+            ],
+            "return": {
+              "type": "void"
+            }
+          },
+          {
+            "name": "totalScore",
+            "params": [
+              {
+                "name": "startTime",
+                "type": "integer"
+              },
+              {
+                "name": "endTime",
+                "type": "integer"
+              }
+            ],
+            "return": {
+              "type": "long"
+            }
+          }
+        ],
+        "native_route": "direct-class-v1"
+      },
+      "id": 3709,
+      "mutation_alias_contract": {
+        "native_state": "may change only through declared method semantics",
+        "returned_mutable_containers": "fresh local service envelope; not a stronger official algorithm claim",
+        "trace_inputs": "unchanged including nested argument lists"
+      },
+      "numeric_complexity_contract": {
+        "numeric": {
+          "integer_inputs": "exact bounded integers; bool rejected",
+          "javascript_safe_integer": true,
+          "output_integers_max": 100000000000000
+        },
+        "runtime_measurements": "not performed",
+        "source_reasoning_targets": "record O(1) amortized; totalScore O(log records); O(records) storage"
+      },
+      "objective_summary": "Implement original native class methods; solve is an explicitly distinct transcript adapter.",
+      "return_domain": {
+        "constructor_and_void": "null",
+        "kind": "ordered-constructor-and-method-transcript",
+        "query_types": {
+          "record": "void",
+          "totalScore": "long"
+        },
+        "status": "reference-and-ABI-prepared-not-execution-qualified"
+      },
+      "slug": "design-exam-scores-tracker",
+      "statement_constraints_snapshot": {
+        "content_sha256": "f47b5626d59a9bd7d039e18aa191865ab5d487a44450336929113a02719d8f88",
+        "full_statement_redistributed": false,
+        "reference_url": "https://leetcode.com/problems/design-exam-scores-tracker/description/",
+        "response_sha256": "5d60e600596d330a3d4ab96144a4ccfdffa879cd144a100a6e95b8b92ca9b315",
+        "status": "bound-official-public-definition",
+        "structured_facts_owner": "contracts.json"
+      },
+      "title": "Design Exam Scores Tracker"
+    },
+    {
+      "comparison": {
+        "native_receiver": "one original class instance per trace; new instance between traces",
+        "policy": "exact typed values in call order"
+      },
+      "external_interface": {
+        "argument_order": [
+          "operation_names",
+          "argument_lists"
+        ],
+        "canonical": "solve",
+        "language_parameter_names": {
+          "javascript": [
+            "operationNames",
+            "argumentLists"
+          ],
+          "python": [
+            "operation_names",
+            "argument_lists"
+          ]
+        },
+        "native_class": "AuctionSystem",
+        "native_constructor": {
+          "params": []
+        },
+        "native_execution_status": "pending",
+        "native_methods": [
+          {
+            "name": "addBid",
+            "params": [
+              {
+                "name": "userId",
+                "type": "integer"
+              },
+              {
+                "name": "itemId",
+                "type": "integer"
+              },
+              {
+                "name": "bidAmount",
+                "type": "integer"
+              }
+            ],
+            "return": {
+              "type": "void"
+            }
+          },
+          {
+            "name": "updateBid",
+            "params": [
+              {
+                "name": "userId",
+                "type": "integer"
+              },
+              {
+                "name": "itemId",
+                "type": "integer"
+              },
+              {
+                "name": "newAmount",
+                "type": "integer"
+              }
+            ],
+            "return": {
+              "type": "void"
+            }
+          },
+          {
+            "name": "removeBid",
+            "params": [
+              {
+                "name": "userId",
+                "type": "integer"
+              },
+              {
+                "name": "itemId",
+                "type": "integer"
+              }
+            ],
+            "return": {
+              "type": "void"
+            }
+          },
+          {
+            "name": "getHighestBidder",
+            "params": [
+              {
+                "name": "itemId",
+                "type": "integer"
+              }
+            ],
+            "return": {
+              "type": "integer"
+            }
+          }
+        ],
+        "native_route": "direct-class-v1"
+      },
+      "id": 3815,
+      "mutation_alias_contract": {
+        "native_state": "may change only through declared method semantics",
+        "returned_mutable_containers": "fresh local service envelope; not a stronger official algorithm claim",
+        "trace_inputs": "unchanged including nested argument lists"
+      },
+      "numeric_complexity_contract": {
+        "numeric": {
+          "integer_inputs": "exact bounded integers; bool rejected",
+          "javascript_safe_integer": true,
+          "output_integers_max": 50000
+        },
+        "runtime_measurements": "not performed",
+        "source_reasoning_targets": "bid insert/update O(log calls), removal O(1), query O(log calls) amortized via stale-entry removal; O(calls) storage"
+      },
+      "objective_summary": "Implement original native class methods; solve is an explicitly distinct transcript adapter.",
+      "return_domain": {
+        "constructor_and_void": "null",
+        "kind": "ordered-constructor-and-method-transcript",
+        "query_types": {
+          "addBid": "void",
+          "getHighestBidder": "integer",
+          "removeBid": "void",
+          "updateBid": "void"
+        },
+        "status": "reference-and-ABI-prepared-not-execution-qualified"
+      },
+      "slug": "design-auction-system",
+      "statement_constraints_snapshot": {
+        "content_sha256": "102f0bbf6b28ab46d05e798ce3e7ad4fd3c4a1e6b323379ca3e15dfba96fa417",
+        "full_statement_redistributed": false,
+        "reference_url": "https://leetcode.com/problems/design-auction-system/description/",
+        "response_sha256": "97aab3679d5a99cab8ec01add0eb36965a6ff8284aaf4aef9a8a791b593f82f5",
+        "status": "bound-official-public-definition",
+        "structured_facts_owner": "contracts.json"
+      },
+      "title": "Design Auction System"
+    },
+    {
+      "comparison": {
+        "native_receiver": "one original class instance per trace; new instance between traces",
+        "policy": "exact typed values in call order"
+      },
+      "external_interface": {
+        "argument_order": [
+          "operation_names",
+          "argument_lists"
+        ],
+        "canonical": "solve",
+        "language_parameter_names": {
+          "javascript": [
+            "operationNames",
+            "argumentLists"
+          ],
+          "python": [
+            "operation_names",
+            "argument_lists"
+          ]
+        },
+        "native_class": "RideSharingSystem",
+        "native_constructor": {
+          "params": []
+        },
+        "native_execution_status": "pending",
+        "native_methods": [
+          {
+            "name": "addRider",
+            "params": [
+              {
+                "name": "riderId",
+                "type": "integer"
+              }
+            ],
+            "return": {
+              "type": "void"
+            }
+          },
+          {
+            "name": "addDriver",
+            "params": [
+              {
+                "name": "driverId",
+                "type": "integer"
+              }
+            ],
+            "return": {
+              "type": "void"
+            }
+          },
+          {
+            "name": "matchDriverWithRider",
+            "params": [],
+            "return": {
+              "type": "integer[]"
+            }
+          },
+          {
+            "name": "cancelRider",
+            "params": [
+              {
+                "name": "riderId",
+                "type": "integer"
+              }
+            ],
+            "return": {
+              "type": "void"
+            }
+          }
+        ],
+        "native_route": "direct-class-v1"
+      },
+      "id": 3829,
+      "mutation_alias_contract": {
+        "native_state": "may change only through declared method semantics",
+        "returned_mutable_containers": "fresh local service envelope; not a stronger official algorithm claim",
+        "trace_inputs": "unchanged including nested argument lists"
+      },
+      "numeric_complexity_contract": {
+        "numeric": {
+          "integer_inputs": "exact bounded integers; bool rejected",
+          "javascript_safe_integer": true,
+          "output_integers_max": 1000
+        },
+        "runtime_measurements": "not performed",
+        "source_reasoning_targets": "all methods O(1) amortized; O(total added identities) storage"
+      },
+      "objective_summary": "Implement original native class methods; solve is an explicitly distinct transcript adapter.",
+      "return_domain": {
+        "constructor_and_void": "null",
+        "kind": "ordered-constructor-and-method-transcript",
+        "query_types": {
+          "addDriver": "void",
+          "addRider": "void",
+          "cancelRider": "void",
+          "matchDriverWithRider": "integer[]"
+        },
+        "status": "reference-and-ABI-prepared-not-execution-qualified"
+      },
+      "slug": "design-ride-sharing-system",
+      "statement_constraints_snapshot": {
+        "content_sha256": "6bce020520c5626ba15efa51c7f8c7c84644591df81b4779507c0ce249127987",
+        "full_statement_redistributed": false,
+        "reference_url": "https://leetcode.com/problems/design-ride-sharing-system/description/",
+        "response_sha256": "15d267b1f32c7ec54a6233492270956b90f32dee00c9cb33669818b4e61f7d79",
+        "status": "bound-official-public-definition",
+        "structured_facts_owner": "contracts.json"
+      },
+      "title": "Design Ride Sharing System"
+    }
+  ],
+  "schema": "gamma.public-safe-authoring-assignment.v1",
+  "scope": "Only newly generated source variants for the three exact public frontend identities. No private historical implementations or cases read, no globally missing-source, qualification, adoption or held-out claim."
+}

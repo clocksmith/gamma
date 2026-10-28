@@ -1,0 +1,267 @@
+{
+  "argument_effects": "Trace adapter leaves both input lists and all nested argument lists unchanged; returns fresh mutable outputs. Native instance state changes exactly as declared by methods.",
+  "constructor_count_per_trace": 1,
+  "native_abi_acceptance": "Requires separate direct-class observer and independent isolated execution; solve-trace success alone is insufficient.",
+  "problems": [
+    {
+      "complexity_targets": "record O(1) amortized; totalScore O(log records); O(records) storage",
+      "id": 3709,
+      "independent_reference": "list of event pairs; direct interval filter and sum",
+      "native_interface": {
+        "classname": "ExamTracker",
+        "constructor": {
+          "params": []
+        },
+        "methods": [
+          {
+            "name": "record",
+            "params": [
+              {
+                "name": "time",
+                "type": "integer"
+              },
+              {
+                "name": "score",
+                "type": "integer"
+              }
+            ],
+            "return": {
+              "type": "void"
+            }
+          },
+          {
+            "name": "totalScore",
+            "params": [
+              {
+                "name": "startTime",
+                "type": "integer"
+              },
+              {
+                "name": "endTime",
+                "type": "integer"
+              }
+            ],
+            "return": {
+              "type": "long"
+            }
+          }
+        ],
+        "return": {
+          "type": "boolean"
+        },
+        "systemdesign": true
+      },
+      "numeric_contract": {
+        "integer_inputs": "exact bounded integers; bool rejected",
+        "javascript_safe_integer": true,
+        "output_integers_max": 100000000000000
+      },
+      "reference_url": "https://leetcode.com/problems/design-exam-scores-tracker/description/",
+      "response_sha256": "5d60e600596d330a3d4ab96144a4ccfdffa879cd144a100a6e95b8b92ca9b315",
+      "slug": "design-exam-scores-tracker",
+      "statement_html_sha256": "f47b5626d59a9bd7d039e18aa191865ab5d487a44450336929113a02719d8f88",
+      "title": "Design Exam Scores Tracker",
+      "transcript_interface": {
+        "argument_order": [
+          "operation_names",
+          "argument_lists"
+        ],
+        "constructor_output": null,
+        "name": "solve",
+        "result_order": "constructor followed by every exact method call",
+        "scope": "Explicit class trace adapter, separate from direct native observer qualification.",
+        "void_method_output": null
+      }
+    },
+    {
+      "complexity_targets": "bid insert/update O(log calls), removal O(1), query O(log calls) amortized via stale-entry removal; O(calls) storage",
+      "id": 3815,
+      "independent_reference": "dictionary keyed by(item,user); direct scan maximum(amount,user)",
+      "native_interface": {
+        "classname": "AuctionSystem",
+        "constructor": {
+          "params": []
+        },
+        "methods": [
+          {
+            "name": "addBid",
+            "params": [
+              {
+                "name": "userId",
+                "type": "integer"
+              },
+              {
+                "name": "itemId",
+                "type": "integer"
+              },
+              {
+                "name": "bidAmount",
+                "type": "integer"
+              }
+            ],
+            "return": {
+              "type": "void"
+            }
+          },
+          {
+            "name": "updateBid",
+            "params": [
+              {
+                "name": "userId",
+                "type": "integer"
+              },
+              {
+                "name": "itemId",
+                "type": "integer"
+              },
+              {
+                "name": "newAmount",
+                "type": "integer"
+              }
+            ],
+            "return": {
+              "type": "void"
+            }
+          },
+          {
+            "name": "removeBid",
+            "params": [
+              {
+                "name": "userId",
+                "type": "integer"
+              },
+              {
+                "name": "itemId",
+                "type": "integer"
+              }
+            ],
+            "return": {
+              "type": "void"
+            }
+          },
+          {
+            "name": "getHighestBidder",
+            "params": [
+              {
+                "name": "itemId",
+                "type": "integer"
+              }
+            ],
+            "return": {
+              "type": "integer"
+            }
+          }
+        ],
+        "return": {
+          "type": "boolean"
+        },
+        "systemdesign": true
+      },
+      "numeric_contract": {
+        "integer_inputs": "exact bounded integers; bool rejected",
+        "javascript_safe_integer": true,
+        "output_integers_max": 50000
+      },
+      "reference_url": "https://leetcode.com/problems/design-auction-system/description/",
+      "response_sha256": "97aab3679d5a99cab8ec01add0eb36965a6ff8284aaf4aef9a8a791b593f82f5",
+      "slug": "design-auction-system",
+      "statement_html_sha256": "102f0bbf6b28ab46d05e798ce3e7ad4fd3c4a1e6b323379ca3e15dfba96fa417",
+      "title": "Design Auction System",
+      "transcript_interface": {
+        "argument_order": [
+          "operation_names",
+          "argument_lists"
+        ],
+        "constructor_output": null,
+        "name": "solve",
+        "result_order": "constructor followed by every exact method call",
+        "scope": "Explicit class trace adapter, separate from direct native observer qualification.",
+        "void_method_output": null
+      }
+    },
+    {
+      "complexity_targets": "all methods O(1) amortized; O(total added identities) storage",
+      "id": 3829,
+      "independent_reference": "literal FIFO rider/driver lists; list filtering cancellation",
+      "native_interface": {
+        "classname": "RideSharingSystem",
+        "constructor": {
+          "params": []
+        },
+        "methods": [
+          {
+            "name": "addRider",
+            "params": [
+              {
+                "name": "riderId",
+                "type": "integer"
+              }
+            ],
+            "return": {
+              "type": "void"
+            }
+          },
+          {
+            "name": "addDriver",
+            "params": [
+              {
+                "name": "driverId",
+                "type": "integer"
+              }
+            ],
+            "return": {
+              "type": "void"
+            }
+          },
+          {
+            "name": "matchDriverWithRider",
+            "params": [],
+            "return": {
+              "type": "integer[]"
+            }
+          },
+          {
+            "name": "cancelRider",
+            "params": [
+              {
+                "name": "riderId",
+                "type": "integer"
+              }
+            ],
+            "return": {
+              "type": "void"
+            }
+          }
+        ],
+        "return": {
+          "type": "boolean"
+        },
+        "systemdesign": true
+      },
+      "numeric_contract": {
+        "integer_inputs": "exact bounded integers; bool rejected",
+        "javascript_safe_integer": true,
+        "output_integers_max": 1000
+      },
+      "reference_url": "https://leetcode.com/problems/design-ride-sharing-system/description/",
+      "response_sha256": "15d267b1f32c7ec54a6233492270956b90f32dee00c9cb33669818b4e61f7d79",
+      "slug": "design-ride-sharing-system",
+      "statement_html_sha256": "6bce020520c5626ba15efa51c7f8c7c84644591df81b4779507c0ce249127987",
+      "title": "Design Ride Sharing System",
+      "transcript_interface": {
+        "argument_order": [
+          "operation_names",
+          "argument_lists"
+        ],
+        "constructor_output": null,
+        "name": "solve",
+        "result_order": "constructor followed by every exact method call",
+        "scope": "Explicit class trace adapter, separate from direct native observer qualification.",
+        "void_method_output": null
+      }
+    }
+  ],
+  "schema": "gamma.native-continuation-source-contract.v1",
+  "scope": "New source-exposed development variants only; no held-out/generalization, candidate execution, qualification or canonical adoption.",
+  "source_blind_reference_design": true
+}
