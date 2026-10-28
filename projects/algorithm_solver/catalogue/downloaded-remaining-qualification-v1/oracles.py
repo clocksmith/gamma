@@ -240,3 +240,28 @@ def matches(pid,args,value,want):
     if pid==368:return type(value)is list and len(value)==want and all(type(v)is int for v in value) and len(set(value))==len(value) and set(value)<=set(args[0]) and all(max(l,r)%min(l,r)==0 for l,r in combinations(value,2))
     if pid in (229,260,349,350):return type(value)is list and all(type(v)is int for v in value) and sorted(value)==want
     return exact(value,want)
+
+
+MANDATORY_FAILURES={
+    (7,'python'):'Accumulator can exceed signed 32-bit before the final overflow test',
+    (7,'javascript'):'Accumulator can exceed signed 32-bit before the final overflow test',
+    (287,'python'):'seen set grows with input; official contract requires constant extra space',
+    (287,'javascript'):'seen set grows with input; official contract requires constant extra space',
+    (371,'python'):'Signed conversion uses subtraction, forbidden by the problem contract',
+    (378,'python'):'Materialized flattened n*n list violates the mandatory subquadratic memory bound',
+    (378,'javascript'):'Materialized flattened n*n array violates the mandatory subquadratic memory bound',
+    (386,'python'):'Sorting a materialized range violates mandatory linear time and constant auxiliary space',
+    (386,'javascript'):'Sorting a materialized range violates mandatory linear time and constant auxiliary space',
+}
+FUNCTIONAL_ADAPTER_IDS=(189,283,289,324,344)
+
+
+def compare(pid,args,want,record,language):
+    if 'error'in record:return False,'candidate_error'
+    kind=int if pid==162 else list if pid==368 else type(want)
+    types={'python':{list:'list',int:'int',bool:'bool',str:'str'},'javascript':{list:'object',int:'number',bool:'boolean',str:'string'}}
+    if record.get('result_type')!=types[language][kind]:return False,'result_type'
+    if not matches(pid,args,record.get('result'),want):return False,'result_value'
+    if not exact(record.get('args_before'),args) or not exact(record.get('args_after'),args):return False,'input_effects'
+    if record.get('alias_edges')!=[]:return False,'mutable_return_alias'
+    return True,None
