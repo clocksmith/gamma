@@ -1,0 +1,19 @@
+# Fixed D/E20 prospective qualification lane
+
+This separate source-only lane binds exactly D3702,3703,3704,3708,3713,3714,3719,3720,3721,3722 and E3723,3724,3727,3728,3729,3732,3734,3737,3738,3739 in both languages. It uses the existing authored owners rather than a new source registry. D uses cases.py build_cases(include_maximum=True), independent oracles.reference and full-domain validate; E uses oracles.build_cases, expected, matches and validate. Exact assignment, manifest, source, semantics, reference/generator, helper, public definition and runtime hashes bind each freeze and replay. All manual review flags default false.
+
+The finite plan has8,186 distinct cases and298 batches per language. All36 D analytic maximum cases with an explicit isolate marker remain singleton batches, preserving that owner policy; separate small batches retain same-interpreter first-call repeats. Other large inputs use the existing measured repeat/bracket/singleton admission policy. All supplied E maximum witnesses remain present. No transport blockers occur in this exact plan; largest planned input2,400,053bytes and successful output4,800,209bytes. These are planned byte counts, not runtime measurements. Candidate resource behavior is unknown and all actual failures must remain retained. Maximum witnesses do not establish universal resource acceptance, and bounded references do not narrow the official input domain.
+
+The coordinator must publish/review before executor use. Full official public definitions are privately refetched on the Linux executor from the fixed GraphQL endpoint with exact frontendID/title/slug/CONTENT/API verification. Do not transfer local private statements/cases. Existing live six-anchor permissions gate each source/statement open and public fetch. Unknown/denied decisions fail closed. Sources use the existing anchored regular reader.
+
+Use the same CLI as the tested prior lanes:
+
+1. `protocol.py prepare --gate ORIGINAL_DESCRIPTOR --gate-sha256 HASH --statements NEW_PRIVATE_DIRECTORY`
+2. `protocol.py review-template --gate ORIGINAL_DESCRIPTOR --gate-sha256 HASH --review NEW_REVIEW_FILE`
+3. `protocol.py freeze --gate ORIGINAL_DESCRIPTOR --gate-sha256 HASH --statements DIRECTORY --preflight EXISTING37_CHECK_LOG --preflight-sha256 HASH --review REVIEW_FILE --freeze NEW_FREEZE`
+4. `protocol.py run --gate ORIGINAL_DESCRIPTOR --gate-sha256 HASH --statements DIRECTORY --freeze FREEZE --freeze-sha256 HASH --output NEW_OUTPUT_DIRECTORY`
+5. `protocol.py replay` with the same bindings and output directory; independently regenerates references/verdicts without executing candidates.
+
+Freeze first requires Linux and the exact existing37-check passing preflight plus executable/library/stdlib identity. Manual source safety, mandatory complexity, numeric, interface/effects and independent reference/boundary reviews must be explicitly true and exact-hash bound before qualification. Both languages use existing solve observation adapters; this does not claim official wrapper execution. Only original candidate, unchanged observer helpers and argument-only packet enter isolation. Expected values remain host-only. Original stdout/stderr and process metadata are flushed and hashed before verdicts; errors, timeouts, malformed/partial streams and failures stay preserved and replayable.
+
+Unchanged limits:1GiB address space,3CPU seconds,8wall seconds,16MiB output, Node256MiB heap,16processes,64open files,1MiB child-write RLIMIT_FSIZE. The explicit prospective host-prewritten input envelope is16MiB, distinct from the child-write cap. No installation, security change, cap increase, private copy, unsandboxed candidate execution or Git operation is part of this preparation. A/B,C and native frozen lane files and all authored sources remain unchanged. Finite exposed-development acceptance is separate from held-out generalization, catalogue adoption or universal complexity proof.
