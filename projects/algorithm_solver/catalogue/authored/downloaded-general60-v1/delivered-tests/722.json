@@ -1,0 +1,49 @@
+{
+  "authority": "Delivered examples and checks; not independent Gamma tests",
+  "problem_id": 722,
+  "reported_qualification": {
+    "failures": [],
+    "passed": true,
+    "problem_id": 722,
+    "random_cases": 20,
+    "slug": "remove-comments",
+    "title": "Remove Comments"
+  },
+  "tests": [
+    [
+      [
+        [
+          "/*Test program */",
+          "int main()",
+          "{ ",
+          "  // variable declaration ",
+          "int a, b, c;",
+          "/* This is a test",
+          "   multiline  ",
+          "   comment. */",
+          "}",
+          ""
+        ]
+      ],
+      [
+        "int main()",
+        "{ ",
+        "  ",
+        "int a, b, c;",
+        "}"
+      ]
+    ],
+    [
+      [
+        [
+          "a/*comment",
+          "line",
+          "more_comment*/b"
+        ]
+      ],
+      [
+        "ab"
+      ]
+    ]
+  ]
+}
