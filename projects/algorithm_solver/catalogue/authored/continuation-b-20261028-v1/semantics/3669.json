@@ -1,0 +1,71 @@
+{
+  "numeric_contract": "All externally returned numbers within exact JS integer range;3655 modular multiply uses15-bit split with every intermediate<2^53;3653 product<=1000000006*100000<2^53;3669 exact integer product<=100000",
+  "problem_contract": {
+    "external_interface": {
+      "argument_order": [
+        "n",
+        "k"
+      ],
+      "canonical": "solve",
+      "leetcode_method": "minDifference",
+      "official_metadata": {
+        "name": "minDifference",
+        "params": [
+          {
+            "name": "n",
+            "type": "integer"
+          },
+          {
+            "name": "k",
+            "type": "integer"
+          }
+        ],
+        "return": {
+          "type": "integer[]"
+        }
+      },
+      "wrapper_execution": "unrun"
+    },
+    "id": 3669,
+    "mutation_alias_contract": {
+      "canonical_solve": "read-only input values; mutable result fresh and not aliased to input",
+      "official_wrapper": "delegates same value API; runtime and effects qualification pending"
+    },
+    "numeric_complexity_contract": {
+      "algorithm": "Finite nondecreasing-divisor-tuple DFS, k<=5,n<=100000; O(k) recursion state plus selected answer; no universal fixed-time guarantee claimed",
+      "measured_resource_qualification": "pending"
+    },
+    "objective_summary": "Own candidate implementation for the verified official identity; imported availability unjoined, no global-missing or held-out claim",
+    "official_content_sha256": "a897144845088a3dedc01f89b8b46cab37b0d39e628ec308bb7cd9d77434cb2c",
+    "official_question_frontend_id": "3669",
+    "official_response_sha256": "445d7f0b807623f20e877dd8dbcfef4a955e13cf85d579d2dc2583cbcd077c59",
+    "return_domain": {
+      "comparison_policy": "problem:3669-optimal-factor-witness",
+      "independent_review": "pending",
+      "type": "integer[]"
+    },
+    "slug": "balanced-k-factor-decomposition",
+    "statement_constraints_snapshot": {
+      "independent_review": "pending",
+      "status": "official response pinned privately; independently summarized contract in semantics"
+    },
+    "supplied_reference_url": "https://leetcode.com/problems/balanced-k-factor-decomposition/description/",
+    "title": "Balanced K-Factor Decomposition"
+  },
+  "problem_id": 3669,
+  "qualification": {
+    "candidate_execution": false,
+    "canonical_adoption": false,
+    "status": "unknown"
+  },
+  "reference": {
+    "accepted_full_domain": "validate",
+    "bounded_expected": "expected",
+    "coverage": "official numeric examples and24seeded small cases perID; full maximum workload unexecuted",
+    "module": "oracles.py",
+    "semantic_acceptance": "accepts"
+  },
+  "schema": "gamma.authored-source-semantics.v1",
+  "semantic_acceptance": "Any order of k positive integer factors with exact product n and minimum max-minus-min; never compare to one arbitrary selected tuple",
+  "source_blind_reference_design_sha256": "67187f529af31b4b660995ced4ebc2dbf64e7c19b8f9c76c2b2a0abd4b98e55e"
+}
