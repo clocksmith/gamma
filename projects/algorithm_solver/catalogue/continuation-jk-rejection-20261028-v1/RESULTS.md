@@ -74,5 +74,7 @@ These operators are detectable by construction whenever they trigger. A perfect 
 
 ## Next
 
+Both steps below were completed the same day; see the [boundary repair and targeted-variant results](../continuation-jk-semantic-rejection-20261028-v1/RESULTS.md).
+
 1. Add problem-specific semantic variants for 3820, 3821, 3825, 3835 and 3850, matching the review gaps: a deep-tree traversal bug, 32-bit `n`, bits 0..28 only, a window that never shrinks, and floating-point fractions. Each is expected to be a false acceptance on the current cases, which measures the gap.
 2. Repair those five case sets in a new frozen lane, with independent references and boundary cases at the domain maximum. Then rerun this measurement, so the same semantic variants show the rejection.
