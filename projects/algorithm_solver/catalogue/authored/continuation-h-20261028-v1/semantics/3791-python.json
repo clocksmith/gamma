@@ -1,0 +1,38 @@
+{
+  "comparison": "exact typed JSON result",
+  "effects": "arguments unchanged",
+  "entrypoint": "solve",
+  "language": "python",
+  "official_interface": {
+    "name": "countBalanced",
+    "params": [
+      {
+        "name": "low",
+        "type": "long"
+      },
+      {
+        "name": "high",
+        "type": "long"
+      }
+    ],
+    "return": {
+      "type": "long"
+    }
+  },
+  "parameters": [
+    "low",
+    "high"
+  ],
+  "problem_id": 3791,
+  "qualification": {
+    "reason": "No candidate execution; source-free references and static syntax only",
+    "status": "unknown"
+  },
+  "schema": "gamma.authored-scalar-semantics.v1",
+  "source_reasoning": {
+    "candidate_design": "fixed-width padded digitDP signed position sums; equality invariant under leadingzero sign, exclude numbers<10",
+    "complexity_target": "O(digits**2*digitsum*10) time/O(digits*digitsum) space",
+    "reference": "enumerate each number and compare alternating digit slices"
+  },
+  "source_sha256": "c9f2bab7b78dd93414f0120f42773370753e4f6fa0685164bbc0646f5d5066bd"
+}
