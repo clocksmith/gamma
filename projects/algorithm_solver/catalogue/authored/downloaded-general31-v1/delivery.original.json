@@ -1,0 +1,1858 @@
+{
+  "schema": "gamma.new-solutions-batch11.v1",
+  "scope": "Freshly written, not pulled from Gamma. Problems with no authored JS/Python pair in clocksmith/gamma catalogue/authored at head dd7dd823, verified by the parent before delivery, no overlaps found. Writing agent attempted 36, dropped 5 as already authored (1489, 1515, 1557, 1585, 1521), leaving 31. Shortfall against 40 target is because remaining non-authored IDs in 1451-1600 are mostly tree, SQL, class, linked list, or API problems. This is not a claim of Gamma official independent admission.",
+  "qualification_method": "For each problem: public examples plus 20 random cross-language agreement checks per problem, JS via node and Python via import, outputs compared. Problem 1576 checked by validity, not exact string. Spot-checked independently by the parent for 1458, 1477, 1514, 1576, 1599, all passed.",
+  "counts": {
+    "problems": 31,
+    "passed": 31,
+    "dropped_as_already_authored": [
+      1489,
+      1515,
+      1557,
+      1585,
+      1521
+    ]
+  },
+  "problems": [
+    {
+      "problem_id": 1458,
+      "slug": "max-dot-product-of-two-subsequences",
+      "title": "Max Dot Product of Two Subsequences",
+      "difficulty": "Medium",
+      "method": "maxDotProduct",
+      "javascript": "'use strict';\n\n// 1458. Max Dot Product of Two Subsequences (Medium).\n// Specification: https://leetcode.com/problems/max-dot-product-of-two-subsequences/description/\nfunction solve(nums1, nums2) {\n  const NEG = -1000000000000000;\n  const dp = Array.from({ length: nums1.length + 1 }, () => new Array(nums2.length + 1).fill(NEG));\n  for (let i = 1; i <= nums1.length; i++) {\n    for (let j = 1; j <= nums2.length; j++) {\n      const product = nums1[i - 1] * nums2[j - 1];\n      let best = Math.max(dp[i - 1][j], dp[i][j - 1], product);\n      if (dp[i - 1][j - 1] !== NEG) best = Math.max(best, dp[i - 1][j - 1] + product);\n      dp[i][j] = best;\n    }\n  }\n  return dp[nums1.length][nums2.length];\n}\nconst maxDotProduct = solve;\nclass Solution { maxDotProduct(nums1, nums2) { return solve(nums1, nums2); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, maxDotProduct };\n",
+      "python": "\"\"\"1458. Max Dot Product of Two Subsequences (Medium).\n\nSpecification: https://leetcode.com/problems/max-dot-product-of-two-subsequences/description/\n\"\"\"\n\n\ndef solve(nums1: list[int], nums2: list[int]) -> int:\n    NEG = -10 ** 18\n    dp = [[NEG] * (len(nums2) + 1) for _ in range(len(nums1) + 1)]\n    for i in range(1, len(nums1) + 1):\n        for j in range(1, len(nums2) + 1):\n            product = nums1[i - 1] * nums2[j - 1]\n            best = max(dp[i - 1][j], dp[i][j - 1], product)\n            if dp[i - 1][j - 1] != NEG:\n                best = max(best, dp[i - 1][j - 1] + product)\n            dp[i][j] = best\n    return dp[len(nums1)][len(nums2)]\n\n\nclass Solution:\n    def maxDotProduct(self, nums1: list[int], nums2: list[int]) -> int:\n        return solve(nums1, nums2)\n",
+      "javascript_sha256": "6f44cd9d3546647c60b31b02a267493e9187a231939a337b05e825e9d16c4fa5",
+      "python_sha256": "32f09a873a2cec7712cbfe1c1386930c218bfb890fe131ef7ffe658ead5ef7b9",
+      "tests": [
+        [
+          [
+            [
+              2,
+              1,
+              -2,
+              5
+            ],
+            [
+              3,
+              0,
+              -6
+            ]
+          ],
+          18
+        ],
+        [
+          [
+            [
+              3,
+              -2
+            ],
+            [
+              2,
+              -6,
+              7
+            ]
+          ],
+          21
+        ],
+        [
+          [
+            [
+              -1,
+              -1
+            ],
+            [
+              1,
+              1
+            ]
+          ],
+          -1
+        ]
+      ],
+      "qualification": {
+        "problem_id": 1458,
+        "slug": "max-dot-product-of-two-subsequences",
+        "title": "Max Dot Product of Two Subsequences",
+        "passed": true,
+        "failures": [],
+        "random_cases": 20
+      }
+    },
+    {
+      "problem_id": 1460,
+      "slug": "make-two-arrays-equal-by-reversing-subarrays",
+      "title": "Make Two Arrays Equal by Reversing Subarrays",
+      "difficulty": "Easy",
+      "method": "canBeEqual",
+      "javascript": "'use strict';\n\n// 1460. Make Two Arrays Equal by Reversing Subarrays (Easy).\n// Specification: https://leetcode.com/problems/make-two-arrays-equal-by-reversing-subarrays/description/\nfunction solve(target, arr) {\n  const a = target.slice().sort((x, y) => x - y);\n  const b = arr.slice().sort((x, y) => x - y);\n  return a.length === b.length && a.every((v, i) => v === b[i]);\n}\nconst canBeEqual = solve;\nclass Solution { canBeEqual(target, arr) { return solve(target, arr); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, canBeEqual };\n",
+      "python": "\"\"\"1460. Make Two Arrays Equal by Reversing Subarrays (Easy).\n\nSpecification: https://leetcode.com/problems/make-two-arrays-equal-by-reversing-subarrays/description/\n\"\"\"\n\n\ndef solve(target: list[int], arr: list[int]) -> bool:\n    return sorted(target) == sorted(arr)\n\n\nclass Solution:\n    def canBeEqual(self, target: list[int], arr: list[int]) -> bool:\n        return solve(target, arr)\n",
+      "javascript_sha256": "e031a5a107d3d4b30e9d734fa4bd593fd32a229667fe4c2ca29b9095b54fda44",
+      "python_sha256": "8abdaa74ca1d7d8b7967affaca794b4595559bc191dd238df971bee06d7ee304",
+      "tests": [
+        [
+          [
+            [
+              1,
+              2,
+              3,
+              4
+            ],
+            [
+              2,
+              4,
+              1,
+              3
+            ]
+          ],
+          true
+        ],
+        [
+          [
+            [
+              7
+            ],
+            [
+              7
+            ]
+          ],
+          true
+        ],
+        [
+          [
+            [
+              3,
+              7,
+              9
+            ],
+            [
+              3,
+              7,
+              11
+            ]
+          ],
+          false
+        ]
+      ],
+      "qualification": {
+        "problem_id": 1460,
+        "slug": "make-two-arrays-equal-by-reversing-subarrays",
+        "title": "Make Two Arrays Equal by Reversing Subarrays",
+        "passed": true,
+        "failures": [],
+        "random_cases": 20
+      }
+    },
+    {
+      "problem_id": 1461,
+      "slug": "check-if-a-string-contains-all-binary-codes-of-size-k",
+      "title": "Check If a String Contains All Binary Codes of Size K",
+      "difficulty": "Medium",
+      "method": "hasAllCodes",
+      "javascript": "'use strict';\n\n// 1461. Check If a String Contains All Binary Codes of Size K (Medium).\n// Specification: https://leetcode.com/problems/check-if-a-string-contains-all-binary-codes-of-size-k/description/\nfunction solve(s, k) {\n  const seen = new Set();\n  for (let i = 0; i + k <= s.length; i++) seen.add(s.slice(i, i + k));\n  return seen.size === (1 << k);\n}\nconst hasAllCodes = solve;\nclass Solution { hasAllCodes(s, k) { return solve(s, k); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, hasAllCodes };\n",
+      "python": "\"\"\"1461. Check If a String Contains All Binary Codes of Size K (Medium).\n\nSpecification: https://leetcode.com/problems/check-if-a-string-contains-all-binary-codes-of-size-k/description/\n\"\"\"\n\n\ndef solve(s: str, k: int) -> bool:\n    seen = set()\n    for i in range(len(s) - k + 1):\n        seen.add(s[i:i + k])\n    return len(seen) == (1 << k)\n\n\nclass Solution:\n    def hasAllCodes(self, s: str, k: int) -> bool:\n        return solve(s, k)\n",
+      "javascript_sha256": "086d2991f17e5562eb80c691d36b0d6d9d2cf0687172373b03764319f08bcc7c",
+      "python_sha256": "006ded9ae7c444c8f0f352cb116fd714045375db566f61ad170373bbb54d4614",
+      "tests": [
+        [
+          [
+            "00110110",
+            2
+          ],
+          true
+        ],
+        [
+          [
+            "0110",
+            1
+          ],
+          true
+        ],
+        [
+          [
+            "0110",
+            2
+          ],
+          false
+        ]
+      ],
+      "qualification": {
+        "problem_id": 1461,
+        "slug": "check-if-a-string-contains-all-binary-codes-of-size-k",
+        "title": "Check If a String Contains All Binary Codes of Size K",
+        "passed": true,
+        "failures": [],
+        "random_cases": 20
+      }
+    },
+    {
+      "problem_id": 1467,
+      "slug": "probability-of-a-two-boxes-having-the-same-number-of-distinct-balls",
+      "title": "Probability of a Two Boxes Having The Same Number of Distinct Balls",
+      "difficulty": "Hard",
+      "method": "getProbability",
+      "javascript": "'use strict';\n\n// 1467. Probability of a Two Boxes Having The Same Number of Distinct Balls (Hard).\n// Specification: https://leetcode.com/problems/probability-of-a-two-boxes-having-the-same-number-of-distinct-balls/description/\nfunction comb(n, k) {\n  if (k < 0 || k > n) return 0;\n  let result = 1;\n  for (let i = 1; i <= k; i++) result = result * (n - i + 1) / i;\n  return result;\n}\nfunction solve(balls) {\n  const total = balls.reduce((s, v) => s + v, 0);\n  if (total % 2 !== 0) return 0;\n  const half = total / 2;\n  let favorable = 0;\n  function dfs(index, remaining, distinct1, distinct2, ways) {\n    if (index === balls.length) {\n      if (remaining === 0 && distinct1 === distinct2) favorable += ways;\n      return;\n    }\n    const count = balls[index];\n    for (let take = 0; take <= count; take++) {\n      if (take > remaining) break;\n      const d1 = distinct1 + (take > 0 ? 1 : 0);\n      const d2 = distinct2 + (take < count ? 1 : 0);\n      dfs(index + 1, remaining - take, d1, d2, ways * comb(count, take));\n    }\n  }\n  dfs(0, half, 0, 0, 1);\n  return favorable / comb(total, half);\n}\nconst getProbability = solve;\nclass Solution { getProbability(balls) { return solve(balls); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, getProbability };\n",
+      "python": "\"\"\"1467. Probability of a Two Boxes Having The Same Number of Distinct Balls (Hard).\n\nSpecification: https://leetcode.com/problems/probability-of-a-two-boxes-having-the-same-number-of-distinct-balls/description/\n\"\"\"\n\n\nimport math\n\n\ndef solve(balls: list[int]) -> float:\n    total = sum(balls)\n    if total % 2 != 0:\n        return 0.0\n    half = total // 2\n    favorable = 0.0\n\n    def dfs(index, remaining, distinct1, distinct2, ways):\n        nonlocal favorable\n        if index == len(balls):\n            if remaining == 0 and distinct1 == distinct2:\n                favorable += ways\n            return\n        count = balls[index]\n        for take in range(count + 1):\n            if take > remaining:\n                break\n            d1 = distinct1 + (1 if take > 0 else 0)\n            d2 = distinct2 + (1 if take < count else 0)\n            dfs(index + 1, remaining - take, d1, d2, ways * math.comb(count, take))\n\n    dfs(0, half, 0, 0, 1)\n    return favorable / math.comb(total, half)\n\n\nclass Solution:\n    def getProbability(self, balls: list[int]) -> float:\n        return solve(balls)\n",
+      "javascript_sha256": "83efa060c11581815879f3c3c8643708568e9a177e8526b1cf6f7e35ba9df299",
+      "python_sha256": "4e646df1b83f4868de096706c85b1277b70e86523abfe0cde3185aaca760c48c",
+      "tests": [
+        [
+          [
+            [
+              1,
+              1
+            ]
+          ],
+          1.0
+        ],
+        [
+          [
+            [
+              2,
+              1,
+              1
+            ]
+          ],
+          0.6666666666666666
+        ],
+        [
+          [
+            [
+              1,
+              2,
+              1,
+              2
+            ]
+          ],
+          0.6
+        ]
+      ],
+      "qualification": {
+        "problem_id": 1467,
+        "slug": "probability-of-a-two-boxes-having-the-same-number-of-distinct-balls",
+        "title": "Probability of a Two Boxes Having The Same Number of Distinct Balls",
+        "passed": true,
+        "failures": [],
+        "random_cases": 20
+      }
+    },
+    {
+      "problem_id": 1475,
+      "slug": "final-prices-with-a-special-discount-in-a-shop",
+      "title": "Final Prices With a Special Discount in a Shop",
+      "difficulty": "Easy",
+      "method": "finalPrices",
+      "javascript": "'use strict';\n\n// 1475. Final Prices With a Special Discount in a Shop (Easy).\n// Specification: https://leetcode.com/problems/final-prices-with-a-special-discount-in-a-shop/description/\nfunction solve(prices) {\n  const result = prices.slice();\n  const stack = [];\n  for (let i = 0; i < prices.length; i++) {\n    while (stack.length > 0 && prices[stack[stack.length - 1]] >= prices[i]) {\n      const index = stack.pop();\n      result[index] -= prices[i];\n    }\n    stack.push(i);\n  }\n  return result;\n}\nconst finalPrices = solve;\nclass Solution { finalPrices(prices) { return solve(prices); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, finalPrices };\n",
+      "python": "\"\"\"1475. Final Prices With a Special Discount in a Shop (Easy).\n\nSpecification: https://leetcode.com/problems/final-prices-with-a-special-discount-in-a-shop/description/\n\"\"\"\n\n\ndef solve(prices: list[int]) -> list[int]:\n    result = prices[:]\n    stack = []\n    for i, value in enumerate(prices):\n        while stack and prices[stack[-1]] >= value:\n            index = stack.pop()\n            result[index] -= value\n        stack.append(i)\n    return result\n\n\nclass Solution:\n    def finalPrices(self, prices: list[int]) -> list[int]:\n        return solve(prices)\n",
+      "javascript_sha256": "c7c520de8806e5cd6d647e211264706850f7ae5ce2681ecf6d5e12a23f0f8b38",
+      "python_sha256": "f9293d26c1dcccae85cc2aba504a3c133f468945520deb3b661f7122dcb1bd60",
+      "tests": [
+        [
+          [
+            [
+              8,
+              4,
+              6,
+              2,
+              3
+            ]
+          ],
+          [
+            4,
+            2,
+            4,
+            2,
+            3
+          ]
+        ],
+        [
+          [
+            [
+              1,
+              2,
+              3,
+              4,
+              5
+            ]
+          ],
+          [
+            1,
+            2,
+            3,
+            4,
+            5
+          ]
+        ],
+        [
+          [
+            [
+              10,
+              1,
+              1,
+              6
+            ]
+          ],
+          [
+            9,
+            0,
+            1,
+            6
+          ]
+        ]
+      ],
+      "qualification": {
+        "problem_id": 1475,
+        "slug": "final-prices-with-a-special-discount-in-a-shop",
+        "title": "Final Prices With a Special Discount in a Shop",
+        "passed": true,
+        "failures": [],
+        "random_cases": 20
+      }
+    },
+    {
+      "problem_id": 1477,
+      "slug": "find-two-non-overlapping-sub-arrays-each-with-target-sum",
+      "title": "Find Two Non-overlapping Sub-arrays Each With Target Sum",
+      "difficulty": "Medium",
+      "method": "minSumOfLengths",
+      "javascript": "'use strict';\n\n// 1477. Find Two Non-overlapping Sub-arrays Each With Target Sum (Medium).\n// Specification: https://leetcode.com/problems/find-two-non-overlapping-sub-arrays-each-with-target-sum/description/\nfunction solve(arr, target) {\n  const intervals = [];\n  for (let start = 0; start < arr.length; start++) {\n    let total = 0;\n    for (let end = start; end < arr.length; end++) {\n      total += arr[end];\n      if (total === target) intervals.push([start, end, end - start + 1]);\n    }\n  }\n  let best = Infinity;\n  for (let i = 0; i < intervals.length; i++) {\n    for (let j = 0; j < intervals.length; j++) {\n      if (intervals[i][1] < intervals[j][0] || intervals[j][1] < intervals[i][0]) {\n        best = Math.min(best, intervals[i][2] + intervals[j][2]);\n      }\n    }\n  }\n  return best === Infinity ? -1 : best;\n}\nconst minSumOfLengths = solve;\nclass Solution { minSumOfLengths(arr, target) { return solve(arr, target); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, minSumOfLengths };\n",
+      "python": "\"\"\"1477. Find Two Non-overlapping Sub-arrays Each With Target Sum (Medium).\n\nSpecification: https://leetcode.com/problems/find-two-non-overlapping-sub-arrays-each-with-target-sum/description/\n\"\"\"\n\n\ndef solve(arr: list[int], target: int) -> int:\n    intervals = []\n    for start in range(len(arr)):\n        total = 0\n        for end in range(start, len(arr)):\n            total += arr[end]\n            if total == target:\n                intervals.append((start, end, end - start + 1))\n    best = float('inf')\n    for i in range(len(intervals)):\n        for j in range(len(intervals)):\n            if intervals[i][1] < intervals[j][0] or intervals[j][1] < intervals[i][0]:\n                best = min(best, intervals[i][2] + intervals[j][2])\n    return -1 if best == float('inf') else best\n\n\nclass Solution:\n    def minSumOfLengths(self, arr: list[int], target: int) -> int:\n        return solve(arr, target)\n",
+      "javascript_sha256": "1d86f930c8ab9db60905dc138906c7976eda567280d9831258d5aa754149c802",
+      "python_sha256": "f10aac7ed02e46129fdbb9493c347062231a2a03396f91c17fcda34144354c24",
+      "tests": [
+        [
+          [
+            [
+              3,
+              2,
+              2,
+              4,
+              3
+            ],
+            3
+          ],
+          2
+        ],
+        [
+          [
+            [
+              7,
+              3,
+              4,
+              1,
+              8,
+              2
+            ],
+            8
+          ],
+          4
+        ],
+        [
+          [
+            [
+              1,
+              2,
+              1,
+              2,
+              1
+            ],
+            3
+          ],
+          4
+        ]
+      ],
+      "qualification": {
+        "problem_id": 1477,
+        "slug": "find-two-non-overlapping-sub-arrays-each-with-target-sum",
+        "title": "Find Two Non-overlapping Sub-arrays Each With Target Sum",
+        "passed": true,
+        "failures": [],
+        "random_cases": 20
+      }
+    },
+    {
+      "problem_id": 1487,
+      "slug": "making-file-names-unique",
+      "title": "Making File Names Unique",
+      "difficulty": "Medium",
+      "method": "getFolderNames",
+      "javascript": "'use strict';\n\n// 1487. Making File Names Unique (Medium).\n// Specification: https://leetcode.com/problems/making-file-names-unique/description/\nfunction solve(names) {\n  const used = new Set();\n  const nextSuffix = new Map();\n  const result = [];\n  for (const name of names) {\n    if (!used.has(name)) { used.add(name); nextSuffix.set(name, 1); result.push(name); continue; }\n    let suffix = nextSuffix.get(name) || 1;\n    while (used.has(name + '(' + suffix + ')')) suffix++;\n    const unique = name + '(' + suffix + ')';\n    used.add(unique);\n    nextSuffix.set(name, suffix + 1);\n    nextSuffix.set(unique, 1);\n    result.push(unique);\n  }\n  return result;\n}\nconst getFolderNames = solve;\nclass Solution { getFolderNames(names) { return solve(names); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, getFolderNames };\n",
+      "python": "\"\"\"1487. Making File Names Unique (Medium).\n\nSpecification: https://leetcode.com/problems/making-file-names-unique/description/\n\"\"\"\n\n\ndef solve(names: list[str]) -> list[str]:\n    used = set()\n    next_suffix = {}\n    result = []\n    for name in names:\n        if name not in used:\n            used.add(name)\n            next_suffix[name] = 1\n            result.append(name)\n            continue\n        suffix = next_suffix.get(name, 1)\n        while f\"{name}({suffix})\" in used:\n            suffix += 1\n        unique = f\"{name}({suffix})\"\n        used.add(unique)\n        next_suffix[name] = suffix + 1\n        next_suffix[unique] = 1\n        result.append(unique)\n    return result\n\n\nclass Solution:\n    def getFolderNames(self, names: list[str]) -> list[str]:\n        return solve(names)\n",
+      "javascript_sha256": "89a2ac40632d4ffc0bc77e9443848295143499cb7c588a763d63eeba20aadb2c",
+      "python_sha256": "b1f447ff59368b7f1d62f61f1ac4d909d4d06573d5e35fe9dda206464edb5276",
+      "tests": [
+        [
+          [
+            [
+              "pes",
+              "fifa",
+              "gta",
+              "pes(2019)"
+            ]
+          ],
+          [
+            "pes",
+            "fifa",
+            "gta",
+            "pes(2019)"
+          ]
+        ],
+        [
+          [
+            [
+              "gta",
+              "gta(1)",
+              "gta",
+              "avalon"
+            ]
+          ],
+          [
+            "gta",
+            "gta(1)",
+            "gta(2)",
+            "avalon"
+          ]
+        ],
+        [
+          [
+            [
+              "onepiece",
+              "onepiece(1)",
+              "onepiece(2)",
+              "onepiece(3)",
+              "onepiece"
+            ]
+          ],
+          [
+            "onepiece",
+            "onepiece(1)",
+            "onepiece(2)",
+            "onepiece(3)",
+            "onepiece(4)"
+          ]
+        ]
+      ],
+      "qualification": {
+        "problem_id": 1487,
+        "slug": "making-file-names-unique",
+        "title": "Making File Names Unique",
+        "passed": true,
+        "failures": [],
+        "random_cases": 20
+      }
+    },
+    {
+      "problem_id": 1488,
+      "slug": "avoid-flood-in-the-city",
+      "title": "Avoid Flood in The City",
+      "difficulty": "Medium",
+      "method": "avoidFlood",
+      "javascript": "'use strict';\n\n// 1488. Avoid Flood in The City (Medium).\n// Specification: https://leetcode.com/problems/avoid-flood-in-the-city/description/\nfunction solve(rains) {\n  const answer = new Array(rains.length).fill(1);\n  const lastRain = new Map();\n  const dryDays = [];\n  for (let day = 0; day < rains.length; day++) {\n    if (rains[day] === 0) { dryDays.push(day); continue; }\n    const lake = rains[day];\n    answer[day] = -1;\n    if (lastRain.has(lake)) {\n      const previous = lastRain.get(lake);\n      let chosen = -1;\n      for (let i = 0; i < dryDays.length; i++) {\n        if (dryDays[i] > previous) { chosen = i; break; }\n      }\n      if (chosen === -1) return [];\n      answer[dryDays[chosen]] = lake;\n      dryDays.splice(chosen, 1);\n    }\n    lastRain.set(lake, day);\n  }\n  return answer;\n}\nconst avoidFlood = solve;\nclass Solution { avoidFlood(rains) { return solve(rains); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, avoidFlood };\n",
+      "python": "\"\"\"1488. Avoid Flood in The City (Medium).\n\nSpecification: https://leetcode.com/problems/avoid-flood-in-the-city/description/\n\"\"\"\n\n\ndef solve(rains: list[int]) -> list[int]:\n    answer = [1] * len(rains)\n    last_rain = {}\n    dry_days = []\n    for day, lake in enumerate(rains):\n        if lake == 0:\n            dry_days.append(day)\n            continue\n        answer[day] = -1\n        if lake in last_rain:\n            previous = last_rain[lake]\n            chosen = None\n            for i, dry in enumerate(dry_days):\n                if dry > previous:\n                    chosen = i\n                    break\n            if chosen is None:\n                return []\n            answer[dry_days[chosen]] = lake\n            dry_days.pop(chosen)\n        last_rain[lake] = day\n    return answer\n\n\nclass Solution:\n    def avoidFlood(self, rains: list[int]) -> list[int]:\n        return solve(rains)\n",
+      "javascript_sha256": "36e0c864fcf9ef9ef737ca97ad78c0553710509375bd431acfc828b45c4ce5d0",
+      "python_sha256": "5211eba4281ab37724b793ec86939ee936f150a0a6e3e2f6c3804a740d96154f",
+      "tests": [
+        [
+          [
+            [
+              1,
+              2,
+              3,
+              4
+            ]
+          ],
+          [
+            -1,
+            -1,
+            -1,
+            -1
+          ]
+        ],
+        [
+          [
+            [
+              1,
+              2,
+              0,
+              0,
+              2,
+              1
+            ]
+          ],
+          [
+            -1,
+            -1,
+            2,
+            1,
+            -1,
+            -1
+          ]
+        ],
+        [
+          [
+            [
+              1,
+              2,
+              0,
+              1,
+              2
+            ]
+          ],
+          []
+        ]
+      ],
+      "qualification": {
+        "problem_id": 1488,
+        "slug": "avoid-flood-in-the-city",
+        "title": "Avoid Flood in The City",
+        "passed": true,
+        "failures": [],
+        "random_cases": 20
+      }
+    },
+    {
+      "problem_id": 1492,
+      "slug": "the-kth-factor-of-n",
+      "title": "The kth Factor of n",
+      "difficulty": "Medium",
+      "method": "kthFactor",
+      "javascript": "'use strict';\n\n// 1492. The kth Factor of n (Medium).\n// Specification: https://leetcode.com/problems/the-kth-factor-of-n/description/\nfunction solve(n, k) {\n  let count = 0;\n  for (let value = 1; value <= n; value++) {\n    if (n % value === 0) { count++; if (count === k) return value; }\n  }\n  return -1;\n}\nconst kthFactor = solve;\nclass Solution { kthFactor(n, k) { return solve(n, k); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, kthFactor };\n",
+      "python": "\"\"\"1492. The kth Factor of n (Medium).\n\nSpecification: https://leetcode.com/problems/the-kth-factor-of-n/description/\n\"\"\"\n\n\ndef solve(n: int, k: int) -> int:\n    count = 0\n    for value in range(1, n + 1):\n        if n % value == 0:\n            count += 1\n            if count == k:\n                return value\n    return -1\n\n\nclass Solution:\n    def kthFactor(self, n: int, k: int) -> int:\n        return solve(n, k)\n",
+      "javascript_sha256": "774a56afb157bb3d96b28933b51fe9963b7a7b848f4d37b54b00c97b05676c92",
+      "python_sha256": "b6d22314c966d94347a51ae69f0aed514495de752dada372b6fed3942c15d3f0",
+      "tests": [
+        [
+          [
+            12,
+            3
+          ],
+          3
+        ],
+        [
+          [
+            7,
+            2
+          ],
+          7
+        ],
+        [
+          [
+            4,
+            4
+          ],
+          -1
+        ],
+        [
+          [
+            1,
+            1
+          ],
+          1
+        ]
+      ],
+      "qualification": {
+        "problem_id": 1492,
+        "slug": "the-kth-factor-of-n",
+        "title": "The kth Factor of n",
+        "passed": true,
+        "failures": [],
+        "random_cases": 20
+      }
+    },
+    {
+      "problem_id": 1493,
+      "slug": "longest-subarray-of-1s-after-deleting-one-element",
+      "title": "Longest Subarray of 1's After Deleting One Element",
+      "difficulty": "Medium",
+      "method": "longestSubarray",
+      "javascript": "'use strict';\n\n// 1493. Longest Subarray of 1's After Deleting One Element (Medium).\n// Specification: https://leetcode.com/problems/longest-subarray-of-1s-after-deleting-one-element/description/\nfunction solve(nums) {\n  let left = 0; let zeros = 0; let best = 0;\n  for (let right = 0; right < nums.length; right++) {\n    if (nums[right] === 0) zeros++;\n    while (zeros > 1) { if (nums[left] === 0) zeros--; left++; }\n    best = Math.max(best, right - left + 1);\n  }\n  return best - 1;\n}\nconst longestSubarray = solve;\nclass Solution { longestSubarray(nums) { return solve(nums); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, longestSubarray };\n",
+      "python": "\"\"\"1493. Longest Subarray of 1's After Deleting One Element (Medium).\n\nSpecification: https://leetcode.com/problems/longest-subarray-of-1s-after-deleting-one-element/description/\n\"\"\"\n\n\ndef solve(nums: list[int]) -> int:\n    left = 0\n    zeros = 0\n    best = 0\n    for right, value in enumerate(nums):\n        if value == 0:\n            zeros += 1\n        while zeros > 1:\n            if nums[left] == 0:\n                zeros -= 1\n            left += 1\n        best = max(best, right - left + 1)\n    return best - 1\n\n\nclass Solution:\n    def longestSubarray(self, nums: list[int]) -> int:\n        return solve(nums)\n",
+      "javascript_sha256": "36589d888ebf2efd59acae67fc133c26ad253b9a12d0bf0619f9e23cc99cf77d",
+      "python_sha256": "4a715dbcb308bbf5273f90a486277a7d0ff5804056e5a66fdf3b4e1fdb296851",
+      "tests": [
+        [
+          [
+            [
+              1,
+              1,
+              0,
+              1
+            ]
+          ],
+          3
+        ],
+        [
+          [
+            [
+              0,
+              1,
+              1,
+              1,
+              0,
+              1,
+              1,
+              0,
+              1
+            ]
+          ],
+          5
+        ],
+        [
+          [
+            [
+              1,
+              1,
+              1
+            ]
+          ],
+          2
+        ],
+        [
+          [
+            [
+              0,
+              0
+            ]
+          ],
+          0
+        ]
+      ],
+      "qualification": {
+        "problem_id": 1493,
+        "slug": "longest-subarray-of-1s-after-deleting-one-element",
+        "title": "Longest Subarray of 1's After Deleting One Element",
+        "passed": true,
+        "failures": [],
+        "random_cases": 20
+      }
+    },
+    {
+      "problem_id": 1498,
+      "slug": "number-of-subsequences-that-satisfy-the-given-sum-condition",
+      "title": "Number of Subsequences That Satisfy the Given Sum Condition",
+      "difficulty": "Medium",
+      "method": "numSubseq",
+      "javascript": "'use strict';\n\n// 1498. Number of Subsequences That Satisfy the Given Sum Condition (Medium).\n// Specification: https://leetcode.com/problems/number-of-subsequences-that-satisfy-the-given-sum-condition/description/\nfunction solve(nums, target) {\n  const MOD = 1000000007;\n  const sorted = nums.slice().sort((a, b) => a - b);\n  const powers = new Array(sorted.length + 1).fill(1);\n  for (let i = 1; i <= sorted.length; i++) powers[i] = (powers[i - 1] * 2) % MOD;\n  let left = 0; let right = sorted.length - 1; let count = 0;\n  while (left <= right) {\n    if (sorted[left] + sorted[right] <= target) { count = (count + powers[right - left]) % MOD; left++; }\n    else right--;\n  }\n  return count;\n}\nconst numSubseq = solve;\nclass Solution { numSubseq(nums, target) { return solve(nums, target); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, numSubseq };\n",
+      "python": "\"\"\"1498. Number of Subsequences That Satisfy the Given Sum Condition (Medium).\n\nSpecification: https://leetcode.com/problems/number-of-subsequences-that-satisfy-the-given-sum-condition/description/\n\"\"\"\n\n\ndef solve(nums: list[int], target: int) -> int:\n    MOD = 1000000007\n    ordered = sorted(nums)\n    powers = [1] * (len(ordered) + 1)\n    for i in range(1, len(ordered) + 1):\n        powers[i] = (powers[i - 1] * 2) % MOD\n    left, right = 0, len(ordered) - 1\n    count = 0\n    while left <= right:\n        if ordered[left] + ordered[right] <= target:\n            count = (count + powers[right - left]) % MOD\n            left += 1\n        else:\n            right -= 1\n    return count\n\n\nclass Solution:\n    def numSubseq(self, nums: list[int], target: int) -> int:\n        return solve(nums, target)\n",
+      "javascript_sha256": "0302d6dc2290e0c569fd932be377e388ccda10fc4ecf6136091104218863a9d8",
+      "python_sha256": "a9d65f7637f4927a5e5b8d5c1314a743bf8b8ce36da8c15cc1ea3f919ff8be0b",
+      "tests": [
+        [
+          [
+            [
+              3,
+              5,
+              6,
+              7
+            ],
+            9
+          ],
+          4
+        ],
+        [
+          [
+            [
+              3,
+              3,
+              6,
+              8
+            ],
+            10
+          ],
+          6
+        ],
+        [
+          [
+            [
+              2,
+              3,
+              3,
+              4,
+              6,
+              7
+            ],
+            12
+          ],
+          61
+        ]
+      ],
+      "qualification": {
+        "problem_id": 1498,
+        "slug": "number-of-subsequences-that-satisfy-the-given-sum-condition",
+        "title": "Number of Subsequences That Satisfy the Given Sum Condition",
+        "passed": true,
+        "failures": [],
+        "random_cases": 20
+      }
+    },
+    {
+      "problem_id": 1507,
+      "slug": "reformat-date",
+      "title": "Reformat Date",
+      "difficulty": "Easy",
+      "method": "reformatDate",
+      "javascript": "'use strict';\n\n// 1507. Reformat Date (Easy).\n// Specification: https://leetcode.com/problems/reformat-date/description/\nconst MONTHS = { Jan: 1, Feb: 2, Mar: 3, Apr: 4, May: 5, Jun: 6, Jul: 7, Aug: 8, Sep: 9, Oct: 10, Nov: 11, Dec: 12 };\nfunction pad(value) { return value < 10 ? '0' + value : String(value); }\nfunction solve(date) {\n  const parts = date.split(' ');\n  const day = parseInt(parts[0], 10);\n  const month = MONTHS[parts[1]];\n  const year = parts[2];\n  return year + '-' + pad(month) + '-' + pad(day);\n}\nconst reformatDate = solve;\nclass Solution { reformatDate(date) { return solve(date); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, reformatDate };\n",
+      "python": "\"\"\"1507. Reformat Date (Easy).\n\nSpecification: https://leetcode.com/problems/reformat-date/description/\n\"\"\"\n\n\nMONTHS = {'Jan': 1, 'Feb': 2, 'Mar': 3, 'Apr': 4, 'May': 5, 'Jun': 6, 'Jul': 7, 'Aug': 8, 'Sep': 9, 'Oct': 10, 'Nov': 11, 'Dec': 12}\n\n\ndef _pad(value):\n    return f\"0{value}\" if value < 10 else str(value)\n\n\ndef solve(date: str) -> str:\n    parts = date.split(' ')\n    day = int(''.join(ch for ch in parts[0] if ch.isdigit()))\n    month = MONTHS[parts[1]]\n    year = parts[2]\n    return f\"{year}-{_pad(month)}-{_pad(day)}\"\n\n\nclass Solution:\n    def reformatDate(self, date: str) -> str:\n        return solve(date)\n",
+      "javascript_sha256": "e1f82cd1a0495819b39e28122b96c5da890b7ea76659dc6a732a7e2524d9d675",
+      "python_sha256": "f220956fc82cf2590f126c18a91d371fff92bdc5c13c0e732db555a5ca13a12d",
+      "tests": [
+        [
+          [
+            "20th Oct 2052"
+          ],
+          "2052-10-20"
+        ],
+        [
+          [
+            "6th Jun 1933"
+          ],
+          "1933-06-06"
+        ],
+        [
+          [
+            "26th May 1960"
+          ],
+          "1960-05-26"
+        ]
+      ],
+      "qualification": {
+        "problem_id": 1507,
+        "slug": "reformat-date",
+        "title": "Reformat Date",
+        "passed": true,
+        "failures": [],
+        "random_cases": 20
+      }
+    },
+    {
+      "problem_id": 1508,
+      "slug": "range-sum-of-sorted-subarray-sums",
+      "title": "Range Sum of Sorted Subarray Sums",
+      "difficulty": "Medium",
+      "method": "rangeSum",
+      "javascript": "'use strict';\n\n// 1508. Range Sum of Sorted Subarray Sums (Medium).\n// Specification: https://leetcode.com/problems/range-sum-of-sorted-subarray-sums/description/\nfunction solve(nums, n, left, right) {\n  const MOD = 1000000007;\n  const sums = [];\n  for (let start = 0; start < nums.length; start++) {\n    let total = 0;\n    for (let end = start; end < nums.length; end++) { total += nums[end]; sums.push(total); }\n  }\n  sums.sort((a, b) => a - b);\n  let answer = 0;\n  for (let i = left - 1; i < right; i++) answer = (answer + sums[i]) % MOD;\n  return answer;\n}\nconst rangeSum = solve;\nclass Solution { rangeSum(nums, n, left, right) { return solve(nums, n, left, right); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, rangeSum };\n",
+      "python": "\"\"\"1508. Range Sum of Sorted Subarray Sums (Medium).\n\nSpecification: https://leetcode.com/problems/range-sum-of-sorted-subarray-sums/description/\n\"\"\"\n\n\ndef solve(nums: list[int], n: int, left: int, right: int) -> int:\n    MOD = 1000000007\n    sums = []\n    for start in range(len(nums)):\n        total = 0\n        for end in range(start, len(nums)):\n            total += nums[end]\n            sums.append(total)\n    sums.sort()\n    answer = 0\n    for i in range(left - 1, right):\n        answer = (answer + sums[i]) % MOD\n    return answer\n\n\nclass Solution:\n    def rangeSum(self, nums: list[int], n: int, left: int, right: int) -> int:\n        return solve(nums, n, left, right)\n",
+      "javascript_sha256": "be202138bdc51885596c5a0826443a8de7d80782caafed35b11346fe42d2d8dd",
+      "python_sha256": "405e3f7982f39435621e66be9a898ce6991c23a9ea94c5687000b9bf587aa8b6",
+      "tests": [
+        [
+          [
+            [
+              1,
+              2,
+              3,
+              4
+            ],
+            4,
+            1,
+            5
+          ],
+          13
+        ],
+        [
+          [
+            [
+              1,
+              2,
+              3,
+              4
+            ],
+            4,
+            3,
+            4
+          ],
+          6
+        ],
+        [
+          [
+            [
+              1,
+              2,
+              3,
+              4
+            ],
+            4,
+            1,
+            10
+          ],
+          50
+        ]
+      ],
+      "qualification": {
+        "problem_id": 1508,
+        "slug": "range-sum-of-sorted-subarray-sums",
+        "title": "Range Sum of Sorted Subarray Sums",
+        "passed": true,
+        "failures": [],
+        "random_cases": 20
+      }
+    },
+    {
+      "problem_id": 1512,
+      "slug": "number-of-good-pairs",
+      "title": "Number of Good Pairs",
+      "difficulty": "Easy",
+      "method": "numIdenticalPairs",
+      "javascript": "'use strict';\n\n// 1512. Number of Good Pairs (Easy).\n// Specification: https://leetcode.com/problems/number-of-good-pairs/description/\nfunction solve(nums) {\n  const counts = new Map();\n  for (const value of nums) counts.set(value, (counts.get(value) || 0) + 1);\n  let total = 0;\n  for (const count of counts.values()) total += count * (count - 1) / 2;\n  return total;\n}\nconst numIdenticalPairs = solve;\nclass Solution { numIdenticalPairs(nums) { return solve(nums); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, numIdenticalPairs };\n",
+      "python": "\"\"\"1512. Number of Good Pairs (Easy).\n\nSpecification: https://leetcode.com/problems/number-of-good-pairs/description/\n\"\"\"\n\n\ndef solve(nums: list[int]) -> int:\n    counts = {}\n    for value in nums:\n        counts[value] = counts.get(value, 0) + 1\n    total = 0\n    for count in counts.values():\n        total += count * (count - 1) // 2\n    return total\n\n\nclass Solution:\n    def numIdenticalPairs(self, nums: list[int]) -> int:\n        return solve(nums)\n",
+      "javascript_sha256": "043c812165bdee73f75ee626ba9c5c19d25bfd6d196391b0679b4978396a3e84",
+      "python_sha256": "a08cf0ed5a7a4e7bcd16b73673ecde4a6086ad4e7b1e55decbcbe3e8cd99faa0",
+      "tests": [
+        [
+          [
+            [
+              1,
+              2,
+              3,
+              1,
+              1,
+              3
+            ]
+          ],
+          4
+        ],
+        [
+          [
+            [
+              1,
+              1,
+              1,
+              1
+            ]
+          ],
+          6
+        ],
+        [
+          [
+            [
+              1,
+              2,
+              3
+            ]
+          ],
+          0
+        ]
+      ],
+      "qualification": {
+        "problem_id": 1512,
+        "slug": "number-of-good-pairs",
+        "title": "Number of Good Pairs",
+        "passed": true,
+        "failures": [],
+        "random_cases": 20
+      }
+    },
+    {
+      "problem_id": 1514,
+      "slug": "path-with-maximum-probability",
+      "title": "Path with Maximum Probability",
+      "difficulty": "Medium",
+      "method": "maxProbability",
+      "javascript": "'use strict';\n\n// 1514. Path with Maximum Probability (Medium).\n// Specification: https://leetcode.com/problems/path-with-maximum-probability/description/\nfunction solve(n, edges, succProb, start, end) {\n  const graph = Array.from({ length: n }, () => []);\n  for (let i = 0; i < edges.length; i++) {\n    const [a, b] = edges[i];\n    graph[a].push([b, succProb[i]]);\n    graph[b].push([a, succProb[i]]);\n  }\n  const best = new Array(n).fill(0);\n  best[start] = 1;\n  const visited = new Array(n).fill(false);\n  for (let step = 0; step < n; step++) {\n    let node = -1; let value = 0;\n    for (let i = 0; i < n; i++) { if (!visited[i] && best[i] > value) { value = best[i]; node = i; } }\n    if (node === -1) break;\n    visited[node] = true;\n    for (const [neighbor, prob] of graph[node]) {\n      if (best[node] * prob > best[neighbor]) best[neighbor] = best[node] * prob;\n    }\n  }\n  return best[end];\n}\nconst maxProbability = solve;\nclass Solution { maxProbability(n, edges, succProb, start, end) { return solve(n, edges, succProb, start, end); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, maxProbability };\n",
+      "python": "\"\"\"1514. Path with Maximum Probability (Medium).\n\nSpecification: https://leetcode.com/problems/path-with-maximum-probability/description/\n\"\"\"\n\n\ndef solve(n: int, edges: list[list[int]], succProb: list[float], start: int, end: int) -> float:\n    graph = [[] for _ in range(n)]\n    for i, (a, b) in enumerate(edges):\n        graph[a].append((b, succProb[i]))\n        graph[b].append((a, succProb[i]))\n    best = [0.0] * n\n    best[start] = 1.0\n    visited = [False] * n\n    for _step in range(n):\n        node = -1\n        value = 0.0\n        for i in range(n):\n            if not visited[i] and best[i] > value:\n                value = best[i]\n                node = i\n        if node == -1:\n            break\n        visited[node] = True\n        for neighbor, prob in graph[node]:\n            if best[node] * prob > best[neighbor]:\n                best[neighbor] = best[node] * prob\n    return best[end]\n\n\nclass Solution:\n    def maxProbability(self, n: int, edges: list[list[int]], succProb: list[float], start: int, end: int) -> float:\n        return solve(n, edges, succProb, start, end)\n",
+      "javascript_sha256": "6844745fca826a1fb3b442bcc131ab7d78d72683c00b5ba81ad61e63437d9145",
+      "python_sha256": "47c3524354280dc4bb004b11d0dad254731d500c0289b4b7e5778ac60c506b56",
+      "tests": [
+        [
+          [
+            3,
+            [
+              [
+                0,
+                1
+              ],
+              [
+                1,
+                2
+              ],
+              [
+                0,
+                2
+              ]
+            ],
+            [
+              0.5,
+              0.5,
+              0.2
+            ],
+            0,
+            2
+          ],
+          0.25
+        ],
+        [
+          [
+            3,
+            [
+              [
+                0,
+                1
+              ],
+              [
+                1,
+                2
+              ],
+              [
+                0,
+                2
+              ]
+            ],
+            [
+              0.5,
+              0.5,
+              0.3
+            ],
+            0,
+            2
+          ],
+          0.3
+        ],
+        [
+          [
+            3,
+            [
+              [
+                0,
+                1
+              ]
+            ],
+            [
+              0.5
+            ],
+            0,
+            2
+          ],
+          0.0
+        ]
+      ],
+      "qualification": {
+        "problem_id": 1514,
+        "slug": "path-with-maximum-probability",
+        "title": "Path with Maximum Probability",
+        "passed": true,
+        "failures": [],
+        "random_cases": 20
+      }
+    },
+    {
+      "problem_id": 1518,
+      "slug": "water-bottles",
+      "title": "Water Bottles",
+      "difficulty": "Easy",
+      "method": "numWaterBottles",
+      "javascript": "'use strict';\n\n// 1518. Water Bottles (Easy).\n// Specification: https://leetcode.com/problems/water-bottles/description/\nfunction solve(numBottles, numExchange) {\n  let total = numBottles; let empty = numBottles;\n  while (empty >= numExchange) {\n    const exchanged = Math.floor(empty / numExchange);\n    total += exchanged;\n    empty = empty % numExchange + exchanged;\n  }\n  return total;\n}\nconst numWaterBottles = solve;\nclass Solution { numWaterBottles(numBottles, numExchange) { return solve(numBottles, numExchange); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, numWaterBottles };\n",
+      "python": "\"\"\"1518. Water Bottles (Easy).\n\nSpecification: https://leetcode.com/problems/water-bottles/description/\n\"\"\"\n\n\ndef solve(numBottles: int, numExchange: int) -> int:\n    total = numBottles\n    empty = numBottles\n    while empty >= numExchange:\n        exchanged = empty // numExchange\n        total += exchanged\n        empty = empty % numExchange + exchanged\n    return total\n\n\nclass Solution:\n    def numWaterBottles(self, numBottles: int, numExchange: int) -> int:\n        return solve(numBottles, numExchange)\n",
+      "javascript_sha256": "d561e6ab0f33908aa42aaca1ef2a373f13cd308243e1a8583a081393974c2c07",
+      "python_sha256": "7cf7cf5cd6e8b26a253380b10c7ff2dfd7542f8f47307bd576a3b82670ab611b",
+      "tests": [
+        [
+          [
+            9,
+            3
+          ],
+          13
+        ],
+        [
+          [
+            15,
+            4
+          ],
+          19
+        ],
+        [
+          [
+            5,
+            5
+          ],
+          6
+        ],
+        [
+          [
+            2,
+            3
+          ],
+          2
+        ]
+      ],
+      "qualification": {
+        "problem_id": 1518,
+        "slug": "water-bottles",
+        "title": "Water Bottles",
+        "passed": true,
+        "failures": [],
+        "random_cases": 20
+      }
+    },
+    {
+      "problem_id": 1525,
+      "slug": "number-of-good-ways-to-split-a-string",
+      "title": "Number of Good Ways to Split a String",
+      "difficulty": "Medium",
+      "method": "numSplits",
+      "javascript": "'use strict';\n\n// 1525. Number of Good Ways to Split a String (Medium).\n// Specification: https://leetcode.com/problems/number-of-good-ways-to-split-a-string/description/\nfunction solve(s) {\n  const leftCounts = new Map(); const rightCounts = new Map();\n  for (const ch of s) rightCounts.set(ch, (rightCounts.get(ch) || 0) + 1);\n  let count = 0;\n  for (let i = 0; i < s.length - 1; i++) {\n    const ch = s[i];\n    leftCounts.set(ch, (leftCounts.get(ch) || 0) + 1);\n    const remaining = rightCounts.get(ch) - 1;\n    if (remaining === 0) rightCounts.delete(ch); else rightCounts.set(ch, remaining);\n    if (leftCounts.size === rightCounts.size) count++;\n  }\n  return count;\n}\nconst numSplits = solve;\nclass Solution { numSplits(s) { return solve(s); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, numSplits };\n",
+      "python": "\"\"\"1525. Number of Good Ways to Split a String (Medium).\n\nSpecification: https://leetcode.com/problems/number-of-good-ways-to-split-a-string/description/\n\"\"\"\n\n\ndef solve(s: str) -> int:\n    left_counts = {}\n    right_counts = {}\n    for ch in s:\n        right_counts[ch] = right_counts.get(ch, 0) + 1\n    count = 0\n    for i in range(len(s) - 1):\n        ch = s[i]\n        left_counts[ch] = left_counts.get(ch, 0) + 1\n        remaining = right_counts[ch] - 1\n        if remaining == 0:\n            del right_counts[ch]\n        else:\n            right_counts[ch] = remaining\n        if len(left_counts) == len(right_counts):\n            count += 1\n    return count\n\n\nclass Solution:\n    def numSplits(self, s: str) -> int:\n        return solve(s)\n",
+      "javascript_sha256": "58ef39e474934b4c11849cde4e7fa15498fc369d725733098e8f22819fd299a9",
+      "python_sha256": "d30a0058e09da7b714651df1a078b06644de50e58520d8ce8b9ac0bcc9b3a505",
+      "tests": [
+        [
+          [
+            "aacaba"
+          ],
+          2
+        ],
+        [
+          [
+            "abcd"
+          ],
+          1
+        ],
+        [
+          [
+            "aaaaa"
+          ],
+          4
+        ],
+        [
+          [
+            "acbadbaada"
+          ],
+          2
+        ]
+      ],
+      "qualification": {
+        "problem_id": 1525,
+        "slug": "number-of-good-ways-to-split-a-string",
+        "title": "Number of Good Ways to Split a String",
+        "passed": true,
+        "failures": [],
+        "random_cases": 20
+      }
+    },
+    {
+      "problem_id": 1526,
+      "slug": "minimum-number-of-increments-on-subarrays-to-form-a-target-array",
+      "title": "Minimum Number of Increments on Subarrays to Form a Target Array",
+      "difficulty": "Hard",
+      "method": "minNumberOperations",
+      "javascript": "'use strict';\n\n// 1526. Minimum Number of Increments on Subarrays to Form a Target Array (Hard).\n// Specification: https://leetcode.com/problems/minimum-number-of-increments-on-subarrays-to-form-a-target-array/description/\nfunction solve(target) {\n  let operations = target[0];\n  for (let i = 1; i < target.length; i++) {\n    if (target[i] > target[i - 1]) operations += target[i] - target[i - 1];\n  }\n  return operations;\n}\nconst minNumberOperations = solve;\nclass Solution { minNumberOperations(target) { return solve(target); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, minNumberOperations };\n",
+      "python": "\"\"\"1526. Minimum Number of Increments on Subarrays to Form a Target Array (Hard).\n\nSpecification: https://leetcode.com/problems/minimum-number-of-increments-on-subarrays-to-form-a-target-array/description/\n\"\"\"\n\n\ndef solve(target: list[int]) -> int:\n    operations = target[0]\n    for i in range(1, len(target)):\n        if target[i] > target[i - 1]:\n            operations += target[i] - target[i - 1]\n    return operations\n\n\nclass Solution:\n    def minNumberOperations(self, target: list[int]) -> int:\n        return solve(target)\n",
+      "javascript_sha256": "626a3bad5f10e09d9c528c141032f0def571a3828b6d80c4be57583fd13b80a1",
+      "python_sha256": "eae736f33d839df56528b7be2b6792285d1667ef9ce1fd06b3309a390d5a212c",
+      "tests": [
+        [
+          [
+            [
+              1,
+              2,
+              3,
+              2,
+              1
+            ]
+          ],
+          3
+        ],
+        [
+          [
+            [
+              3,
+              1,
+              1,
+              2
+            ]
+          ],
+          4
+        ],
+        [
+          [
+            [
+              3,
+              1,
+              5,
+              4,
+              2
+            ]
+          ],
+          7
+        ],
+        [
+          [
+            [
+              1
+            ]
+          ],
+          1
+        ]
+      ],
+      "qualification": {
+        "problem_id": 1526,
+        "slug": "minimum-number-of-increments-on-subarrays-to-form-a-target-array",
+        "title": "Minimum Number of Increments on Subarrays to Form a Target Array",
+        "passed": true,
+        "failures": [],
+        "random_cases": 20
+      }
+    },
+    {
+      "problem_id": 1529,
+      "slug": "bulb-switcher-iv",
+      "title": "Bulb Switcher IV",
+      "difficulty": "Medium",
+      "method": "minFlips",
+      "javascript": "'use strict';\n\n// 1529. Bulb Switcher IV (Medium).\n// Specification: https://leetcode.com/problems/bulb-switcher-iv/description/\nfunction solve(target) {\n  let flips = 0;\n  let current = '0';\n  for (const ch of target) {\n    if (ch !== current) { flips++; current = ch; }\n  }\n  return flips;\n}\nconst minFlips = solve;\nclass Solution { minFlips(target) { return solve(target); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, minFlips };\n",
+      "python": "\"\"\"1529. Bulb Switcher IV (Medium).\n\nSpecification: https://leetcode.com/problems/bulb-switcher-iv/description/\n\"\"\"\n\n\ndef solve(target: str) -> int:\n    flips = 0\n    current = '0'\n    for ch in target:\n        if ch != current:\n            flips += 1\n            current = ch\n    return flips\n\n\nclass Solution:\n    def minFlips(self, target: str) -> int:\n        return solve(target)\n",
+      "javascript_sha256": "ce2f2393eb18cdc893cb8a74aa81f1daa6be59b90009eaefaca9a52fe2ab96ea",
+      "python_sha256": "688b2ed670a0c0662cb3f9a42a123de0cd330080ab9dde295da57f927d946a8d",
+      "tests": [
+        [
+          [
+            "10111"
+          ],
+          3
+        ],
+        [
+          [
+            "101"
+          ],
+          3
+        ],
+        [
+          [
+            "00000"
+          ],
+          0
+        ],
+        [
+          [
+            "001011101"
+          ],
+          5
+        ]
+      ],
+      "qualification": {
+        "problem_id": 1529,
+        "slug": "bulb-switcher-iv",
+        "title": "Bulb Switcher IV",
+        "passed": true,
+        "failures": [],
+        "random_cases": 20
+      }
+    },
+    {
+      "problem_id": 1545,
+      "slug": "find-kth-bit-in-nth-binary-string",
+      "title": "Find Kth Bit in Nth Binary String",
+      "difficulty": "Medium",
+      "method": "findKthBit",
+      "javascript": "'use strict';\n\n// 1545. Find Kth Bit in Nth Binary String (Medium).\n// Specification: https://leetcode.com/problems/find-kth-bit-in-nth-binary-string/description/\nfunction solve(n, k) {\n  let text = '0';\n  for (let step = 1; step < n; step++) {\n    const inverted = [...text].reverse().map((ch) => ch === '0' ? '1' : '0').join('');\n    text = text + '1' + inverted;\n  }\n  return text[k - 1];\n}\nconst findKthBit = solve;\nclass Solution { findKthBit(n, k) { return solve(n, k); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, findKthBit };\n",
+      "python": "\"\"\"1545. Find Kth Bit in Nth Binary String (Medium).\n\nSpecification: https://leetcode.com/problems/find-kth-bit-in-nth-binary-string/description/\n\"\"\"\n\n\ndef solve(n: int, k: int) -> str:\n    text = '0'\n    for _step in range(1, n):\n        inverted = \"\".join('1' if ch == '0' else '0' for ch in reversed(text))\n        text = text + '1' + inverted\n    return text[k - 1]\n\n\nclass Solution:\n    def findKthBit(self, n: int, k: int) -> str:\n        return solve(n, k)\n",
+      "javascript_sha256": "80ad20ba86b1808a1f2f578922d601f8c57bb2b976d42cdca7bbe4ec138f288b",
+      "python_sha256": "8d395edbeadc222ff8c1ccd3ff47a64752a2b038572cda4874074f97f9b303c2",
+      "tests": [
+        [
+          [
+            3,
+            1
+          ],
+          "0"
+        ],
+        [
+          [
+            4,
+            11
+          ],
+          "1"
+        ],
+        [
+          [
+            1,
+            1
+          ],
+          "0"
+        ],
+        [
+          [
+            2,
+            3
+          ],
+          "1"
+        ]
+      ],
+      "qualification": {
+        "problem_id": 1545,
+        "slug": "find-kth-bit-in-nth-binary-string",
+        "title": "Find Kth Bit in Nth Binary String",
+        "passed": true,
+        "failures": [],
+        "random_cases": 20
+      }
+    },
+    {
+      "problem_id": 1546,
+      "slug": "maximum-number-of-non-overlapping-subarrays-with-sum-equals-target",
+      "title": "Maximum Number of Non-Overlapping Subarrays With Sum Equals Target",
+      "difficulty": "Medium",
+      "method": "maxNonOverlapping",
+      "javascript": "'use strict';\n\n// 1546. Maximum Number of Non-Overlapping Subarrays With Sum Equals Target (Medium).\n// Specification: https://leetcode.com/problems/maximum-number-of-non-overlapping-subarrays-with-sum-equals-target/description/\nfunction solve(nums, target) {\n  const seen = new Set([0]);\n  let prefix = 0; let count = 0;\n  for (const value of nums) {\n    prefix += value;\n    if (seen.has(prefix - target)) { count++; seen.clear(); seen.add(prefix); }\n    else seen.add(prefix);\n  }\n  return count;\n}\nconst maxNonOverlapping = solve;\nclass Solution { maxNonOverlapping(nums, target) { return solve(nums, target); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, maxNonOverlapping };\n",
+      "python": "\"\"\"1546. Maximum Number of Non-Overlapping Subarrays With Sum Equals Target (Medium).\n\nSpecification: https://leetcode.com/problems/maximum-number-of-non-overlapping-subarrays-with-sum-equals-target/description/\n\"\"\"\n\n\ndef solve(nums: list[int], target: int) -> int:\n    seen = {0}\n    prefix = 0\n    count = 0\n    for value in nums:\n        prefix += value\n        if prefix - target in seen:\n            count += 1\n            seen = {prefix}\n        else:\n            seen.add(prefix)\n    return count\n\n\nclass Solution:\n    def maxNonOverlapping(self, nums: list[int], target: int) -> int:\n        return solve(nums, target)\n",
+      "javascript_sha256": "73b10d60d7a64aef58ca6d87ab3435064a32fb284382ebca605f23a049304994",
+      "python_sha256": "58591da5da491044e0dcf258872c95aa78aa6498166a42b32daa015d65f7bfb2",
+      "tests": [
+        [
+          [
+            [
+              1,
+              1,
+              1,
+              1,
+              1
+            ],
+            2
+          ],
+          2
+        ],
+        [
+          [
+            [
+              -1,
+              3,
+              5,
+              1,
+              4,
+              2,
+              -9
+            ],
+            6
+          ],
+          2
+        ],
+        [
+          [
+            [
+              0,
+              0,
+              0
+            ],
+            0
+          ],
+          3
+        ]
+      ],
+      "qualification": {
+        "problem_id": 1546,
+        "slug": "maximum-number-of-non-overlapping-subarrays-with-sum-equals-target",
+        "title": "Maximum Number of Non-Overlapping Subarrays With Sum Equals Target",
+        "passed": true,
+        "failures": [],
+        "random_cases": 20
+      }
+    },
+    {
+      "problem_id": 1552,
+      "slug": "magnetic-force-between-two-balls",
+      "title": "Magnetic Force Between Two Balls",
+      "difficulty": "Medium",
+      "method": "maxDistance",
+      "javascript": "'use strict';\n\n// 1552. Magnetic Force Between Two Balls (Medium).\n// Specification: https://leetcode.com/problems/magnetic-force-between-two-balls/description/\nfunction canPlace(position, m, distance) {\n  let placed = 1; let last = position[0];\n  for (let i = 1; i < position.length; i++) {\n    if (position[i] - last >= distance) { placed++; last = position[i]; if (placed >= m) return true; }\n  }\n  return placed >= m;\n}\nfunction solve(position, m) {\n  const sorted = position.slice().sort((a, b) => a - b);\n  let left = 1; let right = sorted[sorted.length - 1] - sorted[0]; let best = 1;\n  while (left <= right) {\n    const mid = Math.floor((left + right) / 2);\n    if (canPlace(sorted, m, mid)) { best = mid; left = mid + 1; } else right = mid - 1;\n  }\n  return best;\n}\nconst maxDistance = solve;\nclass Solution { maxDistance(position, m) { return solve(position, m); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, maxDistance };\n",
+      "python": "\"\"\"1552. Magnetic Force Between Two Balls (Medium).\n\nSpecification: https://leetcode.com/problems/magnetic-force-between-two-balls/description/\n\"\"\"\n\n\ndef _can_place(position, m, distance):\n    placed = 1\n    last = position[0]\n    for i in range(1, len(position)):\n        if position[i] - last >= distance:\n            placed += 1\n            last = position[i]\n            if placed >= m:\n                return True\n    return placed >= m\n\n\ndef solve(position: list[int], m: int) -> int:\n    ordered = sorted(position)\n    left, right = 1, ordered[-1] - ordered[0]\n    best = 1\n    while left <= right:\n        mid = (left + right) // 2\n        if _can_place(ordered, m, mid):\n            best = mid\n            left = mid + 1\n        else:\n            right = mid - 1\n    return best\n\n\nclass Solution:\n    def maxDistance(self, position: list[int], m: int) -> int:\n        return solve(position, m)\n",
+      "javascript_sha256": "b29b9059da7a6898b9d9f4d967b7bb1f7825c7d1cb09fd0be7f7b2f1997e6104",
+      "python_sha256": "82caa3a10ca966c2e7a6a52a41b173cfe2de4c98cc1ddd4f182c969609a644ec",
+      "tests": [
+        [
+          [
+            [
+              1,
+              2,
+              3,
+              4,
+              7
+            ],
+            3
+          ],
+          3
+        ],
+        [
+          [
+            [
+              5,
+              4,
+              3,
+              2,
+              1,
+              1000000000
+            ],
+            2
+          ],
+          999999999
+        ],
+        [
+          [
+            [
+              1,
+              2
+            ],
+            2
+          ],
+          1
+        ]
+      ],
+      "qualification": {
+        "problem_id": 1552,
+        "slug": "magnetic-force-between-two-balls",
+        "title": "Magnetic Force Between Two Balls",
+        "passed": true,
+        "failures": [],
+        "random_cases": 20
+      }
+    },
+    {
+      "problem_id": 1558,
+      "slug": "minimum-numbers-of-function-calls-to-make-target-array",
+      "title": "Minimum Numbers of Function Calls to Make Target Array",
+      "difficulty": "Medium",
+      "method": "minOperations",
+      "javascript": "'use strict';\n\n// 1558. Minimum Numbers of Function Calls to Make Target Array (Medium).\n// Specification: https://leetcode.com/problems/minimum-numbers-of-function-calls-to-make-target-array/description/\nfunction solve(nums) {\n  let operations = 0;\n  let values = nums.slice();\n  while (values.some((v) => v > 0)) {\n    let oddCount = 0;\n    for (let i = 0; i < values.length; i++) {\n      if (values[i] % 2 === 1) { values[i]--; oddCount++; }\n    }\n    operations += oddCount;\n    if (values.some((v) => v > 0)) {\n      values = values.map((v) => Math.floor(v / 2));\n      operations++;\n    }\n  }\n  return operations;\n}\nconst minOperations = solve;\nclass Solution { minOperations(nums) { return solve(nums); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, minOperations };\n",
+      "python": "\"\"\"1558. Minimum Numbers of Function Calls to Make Target Array (Medium).\n\nSpecification: https://leetcode.com/problems/minimum-numbers-of-function-calls-to-make-target-array/description/\n\"\"\"\n\n\ndef solve(nums: list[int]) -> int:\n    operations = 0\n    values = nums[:]\n    while any(v > 0 for v in values):\n        odd_count = 0\n        for i in range(len(values)):\n            if values[i] % 2 == 1:\n                values[i] -= 1\n                odd_count += 1\n        operations += odd_count\n        if any(v > 0 for v in values):\n            values = [v // 2 for v in values]\n            operations += 1\n    return operations\n\n\nclass Solution:\n    def minOperations(self, nums: list[int]) -> int:\n        return solve(nums)\n",
+      "javascript_sha256": "fb089d0997c13833b1b18d3e68163881b20e2342f18a25b46f61bb97e1a05788",
+      "python_sha256": "989b55e0c886250a561492cead0e07d604862eb367300934e3b48ca609f4606a",
+      "tests": [
+        [
+          [
+            [
+              1,
+              5
+            ]
+          ],
+          5
+        ],
+        [
+          [
+            [
+              2,
+              2
+            ]
+          ],
+          3
+        ],
+        [
+          [
+            [
+              4,
+              2,
+              5
+            ]
+          ],
+          6
+        ],
+        [
+          [
+            [
+              3,
+              2,
+              2,
+              4
+            ]
+          ],
+          7
+        ],
+        [
+          [
+            [
+              2,
+              4,
+              8,
+              16
+            ]
+          ],
+          8
+        ]
+      ],
+      "qualification": {
+        "problem_id": 1558,
+        "slug": "minimum-numbers-of-function-calls-to-make-target-array",
+        "title": "Minimum Numbers of Function Calls to Make Target Array",
+        "passed": true,
+        "failures": [],
+        "random_cases": 20
+      }
+    },
+    {
+      "problem_id": 1561,
+      "slug": "maximum-number-of-coins-you-can-get",
+      "title": "Maximum Number of Coins You Can Get",
+      "difficulty": "Medium",
+      "method": "maxCoins",
+      "javascript": "'use strict';\n\n// 1561. Maximum Number of Coins You Can Get (Medium).\n// Specification: https://leetcode.com/problems/maximum-number-of-coins-you-can-get/description/\nfunction solve(piles) {\n  const sorted = piles.slice().sort((a, b) => b - a);\n  let total = 0;\n  for (let i = 1; i < sorted.length; i += 3) {\n    if (i >= sorted.length - (sorted.length / 3) * 2) break;\n    total += sorted[i];\n  }\n  const groups = Math.floor(sorted.length / 3);\n  total = 0;\n  for (let group = 0; group < groups; group++) total += sorted[group * 2 + 1];\n  return total;\n}\nconst maxCoins = solve;\nclass Solution { maxCoins(piles) { return solve(piles); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, maxCoins };\n",
+      "python": "\"\"\"1561. Maximum Number of Coins You Can Get (Medium).\n\nSpecification: https://leetcode.com/problems/maximum-number-of-coins-you-can-get/description/\n\"\"\"\n\n\ndef solve(piles: list[int]) -> int:\n    ordered = sorted(piles, reverse=True)\n    groups = len(ordered) // 3\n    total = 0\n    for group in range(groups):\n        total += ordered[group * 2 + 1]\n    return total\n\n\nclass Solution:\n    def maxCoins(self, piles: list[int]) -> int:\n        return solve(piles)\n",
+      "javascript_sha256": "91e01cbec8fb89749864061892508bb8490edd272e97dea9f68ef217311e404a",
+      "python_sha256": "93bb64108cb17b71c94cb6a41063e0a2515e6d386eccec4872d627470610f720",
+      "tests": [
+        [
+          [
+            [
+              2,
+              4,
+              1,
+              2,
+              7,
+              8
+            ]
+          ],
+          9
+        ],
+        [
+          [
+            [
+              2,
+              4,
+              5
+            ]
+          ],
+          4
+        ],
+        [
+          [
+            [
+              9,
+              8,
+              7,
+              6,
+              5,
+              1,
+              2,
+              3,
+              4
+            ]
+          ],
+          18
+        ]
+      ],
+      "qualification": {
+        "problem_id": 1561,
+        "slug": "maximum-number-of-coins-you-can-get",
+        "title": "Maximum Number of Coins You Can Get",
+        "passed": true,
+        "failures": [],
+        "random_cases": 20
+      }
+    },
+    {
+      "problem_id": 1566,
+      "slug": "detect-pattern-of-length-m-repeated-k-or-more-times",
+      "title": "Detect Pattern of Length M Repeated K or More Times",
+      "difficulty": "Easy",
+      "method": "containsPattern",
+      "javascript": "'use strict';\n\n// 1566. Detect Pattern of Length M Repeated K or More Times (Easy).\n// Specification: https://leetcode.com/problems/detect-pattern-of-length-m-repeated-k-or-more-times/description/\nfunction solve(arr, m, k) {\n  for (let start = 0; start + m * k <= arr.length; start++) {\n    let ok = true;\n    for (let offset = 0; offset < m * k; offset++) {\n      if (arr[start + offset] !== arr[start + (offset % m)]) { ok = false; break; }\n    }\n    if (ok) return true;\n  }\n  return false;\n}\nconst containsPattern = solve;\nclass Solution { containsPattern(arr, m, k) { return solve(arr, m, k); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, containsPattern };\n",
+      "python": "\"\"\"1566. Detect Pattern of Length M Repeated K or More Times (Easy).\n\nSpecification: https://leetcode.com/problems/detect-pattern-of-length-m-repeated-k-or-more-times/description/\n\"\"\"\n\n\ndef solve(arr: list[int], m: int, k: int) -> bool:\n    for start in range(len(arr) - m * k + 1):\n        ok = True\n        for offset in range(m * k):\n            if arr[start + offset] != arr[start + (offset % m)]:\n                ok = False\n                break\n        if ok:\n            return True\n    return False\n\n\nclass Solution:\n    def containsPattern(self, arr: list[int], m: int, k: int) -> bool:\n        return solve(arr, m, k)\n",
+      "javascript_sha256": "08d2dc1d2762c3f95b49c3a599c5a8aad1ac371eda40cd140967fc2515d9c879",
+      "python_sha256": "38da14aed52a618ac98a9ed1f78e812421a40edca5a7614d225edb918108ddfb",
+      "tests": [
+        [
+          [
+            [
+              1,
+              2,
+              4,
+              4,
+              4,
+              4
+            ],
+            1,
+            3
+          ],
+          true
+        ],
+        [
+          [
+            [
+              1,
+              2,
+              1,
+              2,
+              1,
+              1,
+              1,
+              3
+            ],
+            2,
+            2
+          ],
+          true
+        ],
+        [
+          [
+            [
+              1,
+              2,
+              1,
+              2,
+              1,
+              3
+            ],
+            2,
+            3
+          ],
+          false
+        ]
+      ],
+      "qualification": {
+        "problem_id": 1566,
+        "slug": "detect-pattern-of-length-m-repeated-k-or-more-times",
+        "title": "Detect Pattern of Length M Repeated K or More Times",
+        "passed": true,
+        "failures": [],
+        "random_cases": 20
+      }
+    },
+    {
+      "problem_id": 1574,
+      "slug": "shortest-subarray-to-be-removed-to-make-array-sorted",
+      "title": "Shortest Subarray to be Removed to Make Array Sorted",
+      "difficulty": "Medium",
+      "method": "findLengthOfShortestSubarray",
+      "javascript": "'use strict';\n\n// 1574. Shortest Subarray to be Removed to Make Array Sorted (Medium).\n// Specification: https://leetcode.com/problems/shortest-subarray-to-be-removed-to-make-array-sorted/description/\nfunction solve(arr) {\n  const n = arr.length;\n  let left = 0;\n  while (left + 1 < n && arr[left] <= arr[left + 1]) left++;\n  if (left === n - 1) return 0;\n  let right = n - 1;\n  while (right > 0 && arr[right - 1] <= arr[right]) right--;\n  let best = Math.min(n - left - 1, right);\n  let i = 0; let j = right;\n  while (i <= left && j < n) {\n    if (arr[i] <= arr[j]) { best = Math.min(best, j - i - 1); i++; }\n    else j++;\n  }\n  return best;\n}\nconst findLengthOfShortestSubarray = solve;\nclass Solution { findLengthOfShortestSubarray(arr) { return solve(arr); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, findLengthOfShortestSubarray };\n",
+      "python": "\"\"\"1574. Shortest Subarray to be Removed to Make Array Sorted (Medium).\n\nSpecification: https://leetcode.com/problems/shortest-subarray-to-be-removed-to-make-array-sorted/description/\n\"\"\"\n\n\ndef solve(arr: list[int]) -> int:\n    n = len(arr)\n    left = 0\n    while left + 1 < n and arr[left] <= arr[left + 1]:\n        left += 1\n    if left == n - 1:\n        return 0\n    right = n - 1\n    while right > 0 and arr[right - 1] <= arr[right]:\n        right -= 1\n    best = min(n - left - 1, right)\n    i, j = 0, right\n    while i <= left and j < n:\n        if arr[i] <= arr[j]:\n            best = min(best, j - i - 1)\n            i += 1\n        else:\n            j += 1\n    return best\n\n\nclass Solution:\n    def findLengthOfShortestSubarray(self, arr: list[int]) -> int:\n        return solve(arr)\n",
+      "javascript_sha256": "4241a9a011e2f33bda4feb9de1c99741169f74d1e3c2eb7770cae84901c44f39",
+      "python_sha256": "bc69c9b40e4c24b4713250a29a974592e46d187b8d0e05659fe570f8d6ee74e8",
+      "tests": [
+        [
+          [
+            [
+              1,
+              2,
+              3,
+              10,
+              4,
+              2,
+              3,
+              5
+            ]
+          ],
+          3
+        ],
+        [
+          [
+            [
+              5,
+              4,
+              3,
+              2,
+              1
+            ]
+          ],
+          4
+        ],
+        [
+          [
+            [
+              1,
+              2,
+              3
+            ]
+          ],
+          0
+        ],
+        [
+          [
+            [
+              1
+            ]
+          ],
+          0
+        ]
+      ],
+      "qualification": {
+        "problem_id": 1574,
+        "slug": "shortest-subarray-to-be-removed-to-make-array-sorted",
+        "title": "Shortest Subarray to be Removed to Make Array Sorted",
+        "passed": true,
+        "failures": [],
+        "random_cases": 20
+      }
+    },
+    {
+      "problem_id": 1576,
+      "slug": "replace-all-s-to-avoid-consecutive-repeating-characters",
+      "title": "Replace All ?'s to Avoid Consecutive Repeating Characters",
+      "difficulty": "Medium",
+      "method": "modifyString",
+      "javascript": "'use strict';\n\n// 1576. Replace All ?'s to Avoid Consecutive Repeating Characters (Medium).\n// Specification: https://leetcode.com/problems/replace-all-s-to-avoid-consecutive-repeating-characters/description/\nfunction solve(s) {\n  const chars = [...s];\n  for (let i = 0; i < chars.length; i++) {\n    if (chars[i] !== '?') continue;\n    for (const candidate of ['a', 'b', 'c']) {\n      const left = i > 0 ? chars[i - 1] : '';\n      const right = i + 1 < chars.length ? chars[i + 1] : '';\n      if (candidate !== left && candidate !== right) { chars[i] = candidate; break; }\n    }\n  }\n  return chars.join('');\n}\nconst modifyString = solve;\nclass Solution { modifyString(s) { return solve(s); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, modifyString };\n",
+      "python": "\"\"\"1576. Replace All ?'s to Avoid Consecutive Repeating Characters (Medium).\n\nSpecification: https://leetcode.com/problems/replace-all-s-to-avoid-consecutive-repeating-characters/description/\n\"\"\"\n\n\ndef solve(s: str) -> str:\n    chars = list(s)\n    for i in range(len(chars)):\n        if chars[i] != '?':\n            continue\n        for candidate in ('a', 'b', 'c'):\n            left = chars[i - 1] if i > 0 else ''\n            right = chars[i + 1] if i + 1 < len(chars) else ''\n            if candidate != left and candidate != right:\n                chars[i] = candidate\n                break\n    return \"\".join(chars)\n\n\nclass Solution:\n    def modifyString(self, s: str) -> str:\n        return solve(s)\n",
+      "javascript_sha256": "e77c70f854d847f940442a3dd5db39e35cfe2a12938605b8e14ea698c51b694c",
+      "python_sha256": "59e6ec815ca0a9af41c80075d144ca37ee909ffbccf002e58b5f89036d580dcb",
+      "tests": [
+        [
+          [
+            "?zs"
+          ],
+          "azs"
+        ],
+        [
+          [
+            "ubv?w"
+          ],
+          "ubvaw"
+        ],
+        [
+          [
+            "j?qg??b"
+          ],
+          "jaqgacb"
+        ],
+        [
+          [
+            "??yw?ipkj?"
+          ],
+          "abywaipkja"
+        ]
+      ],
+      "qualification": {
+        "problem_id": 1576,
+        "slug": "replace-all-s-to-avoid-consecutive-repeating-characters",
+        "title": "Replace All ?'s to Avoid Consecutive Repeating Characters",
+        "passed": true,
+        "failures": [],
+        "random_cases": 20
+      }
+    },
+    {
+      "problem_id": 1578,
+      "slug": "minimum-deletion-cost-to-avoid-repeating-letters",
+      "title": "Minimum Deletion Cost to Avoid Repeating Letters",
+      "difficulty": "Medium",
+      "method": "minCost",
+      "javascript": "'use strict';\n\n// 1578. Minimum Deletion Cost to Avoid Repeating Letters (Medium).\n// Specification: https://leetcode.com/problems/minimum-deletion-cost-to-avoid-repeating-letters/description/\nfunction solve(s, cost) {\n  let total = 0;\n  for (let i = 1; i < s.length; i++) {\n    if (s[i] === s[i - 1]) {\n      if (cost[i] < cost[i - 1]) { total += cost[i]; cost[i] = cost[i - 1]; }\n      else total += cost[i - 1];\n    }\n  }\n  return total;\n}\nconst minCost = solve;\nclass Solution { minCost(s, cost) { return solve(s, cost); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, minCost };\n",
+      "python": "\"\"\"1578. Minimum Deletion Cost to Avoid Repeating Letters (Medium).\n\nSpecification: https://leetcode.com/problems/minimum-deletion-cost-to-avoid-repeating-letters/description/\n\"\"\"\n\n\ndef solve(s: str, cost: list[int]) -> int:\n    cost = cost[:]\n    total = 0\n    for i in range(1, len(s)):\n        if s[i] == s[i - 1]:\n            if cost[i] < cost[i - 1]:\n                total += cost[i]\n                cost[i] = cost[i - 1]\n            else:\n                total += cost[i - 1]\n    return total\n\n\nclass Solution:\n    def minCost(self, s: str, cost: list[int]) -> int:\n        return solve(s, cost)\n",
+      "javascript_sha256": "3f33ba44dc410fbd9b32717ec27dcebbe060661b79ca02ea82bd1af5402be884",
+      "python_sha256": "179071db835d7d964d9f80a21fb34edf5b387594350a9744f857fdb14f257724",
+      "tests": [
+        [
+          [
+            "abaac",
+            [
+              1,
+              2,
+              3,
+              4,
+              5
+            ]
+          ],
+          3
+        ],
+        [
+          [
+            "abc",
+            [
+              1,
+              2,
+              3
+            ]
+          ],
+          0
+        ],
+        [
+          [
+            "aabaa",
+            [
+              1,
+              2,
+              3,
+              4,
+              1
+            ]
+          ],
+          2
+        ]
+      ],
+      "qualification": {
+        "problem_id": 1578,
+        "slug": "minimum-deletion-cost-to-avoid-repeating-letters",
+        "title": "Minimum Deletion Cost to Avoid Repeating Letters",
+        "passed": true,
+        "failures": [],
+        "random_cases": 20
+      }
+    },
+    {
+      "problem_id": 1592,
+      "slug": "rearrange-spaces-between-words",
+      "title": "Rearrange Spaces Between Words",
+      "difficulty": "Easy",
+      "method": "reorderSpaces",
+      "javascript": "'use strict';\n\n// 1592. Rearrange Spaces Between Words (Easy).\n// Specification: https://leetcode.com/problems/rearrange-spaces-between-words/description/\nfunction solve(text) {\n  const words = text.split(' ').filter((w) => w.length > 0);\n  let spaces = 0;\n  for (const ch of text) { if (ch === ' ') spaces++; }\n  if (words.length === 1) return words[0] + ' '.repeat(spaces);\n  const between = Math.floor(spaces / (words.length - 1));\n  const trailing = spaces % (words.length - 1);\n  return words.join(' '.repeat(between)) + ' '.repeat(trailing);\n}\nconst reorderSpaces = solve;\nclass Solution { reorderSpaces(text) { return solve(text); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, reorderSpaces };\n",
+      "python": "\"\"\"1592. Rearrange Spaces Between Words (Easy).\n\nSpecification: https://leetcode.com/problems/rearrange-spaces-between-words/description/\n\"\"\"\n\n\ndef solve(text: str) -> str:\n    words = [w for w in text.split(' ') if w]\n    spaces = text.count(' ')\n    if len(words) == 1:\n        return words[0] + ' ' * spaces\n    between = spaces // (len(words) - 1)\n    trailing = spaces % (len(words) - 1)\n    return (' ' * between).join(words) + ' ' * trailing\n\n\nclass Solution:\n    def reorderSpaces(self, text: str) -> str:\n        return solve(text)\n",
+      "javascript_sha256": "2c890cdf298651f7130f56eda42a1f3c4d84bdacf6579c98a06bcbfcb93dd24a",
+      "python_sha256": "af8bb736e7c2f5b8d5ce05d5f4ad28f9b7579f3c28de165cf7ce3f56686cd4c7",
+      "tests": [
+        [
+          [
+            "  this   is  a sentence "
+          ],
+          "this   is   a   sentence"
+        ],
+        [
+          [
+            " practice   makes   perfect"
+          ],
+          "practice   makes   perfect "
+        ],
+        [
+          [
+            "hello   world"
+          ],
+          "hello   world"
+        ],
+        [
+          [
+            "  walks  udp  "
+          ],
+          "walks      udp"
+        ]
+      ],
+      "qualification": {
+        "problem_id": 1592,
+        "slug": "rearrange-spaces-between-words",
+        "title": "Rearrange Spaces Between Words",
+        "passed": true,
+        "failures": [],
+        "random_cases": 20
+      }
+    },
+    {
+      "problem_id": 1594,
+      "slug": "maximum-non-negative-product-in-a-matrix",
+      "title": "Maximum Non Negative Product in a Matrix",
+      "difficulty": "Medium",
+      "method": "maxProductPath",
+      "javascript": "'use strict';\n\n// 1594. Maximum Non Negative Product in a Matrix (Medium).\n// Specification: https://leetcode.com/problems/maximum-non-negative-product-in-a-matrix/description/\nfunction solve(grid) {\n  const MOD = 1000000007;\n  const rows = grid.length; const cols = grid[0].length;\n  const minDp = Array.from({ length: rows }, () => new Array(cols).fill(0));\n  const maxDp = Array.from({ length: rows }, () => new Array(cols).fill(0));\n  minDp[0][0] = grid[0][0]; maxDp[0][0] = grid[0][0];\n  for (let r = 0; r < rows; r++) {\n    for (let c = 0; c < cols; c++) {\n      if (r === 0 && c === 0) continue;\n      const candidates = [];\n      if (r > 0) { candidates.push(minDp[r - 1][c] * grid[r][c]); candidates.push(maxDp[r - 1][c] * grid[r][c]); }\n      if (c > 0) { candidates.push(minDp[r][c - 1] * grid[r][c]); candidates.push(maxDp[r][c - 1] * grid[r][c]); }\n      minDp[r][c] = Math.min(...candidates);\n      maxDp[r][c] = Math.max(...candidates);\n    }\n  }\n  const best = maxDp[rows - 1][cols - 1];\n  return best < 0 ? -1 : best % MOD;\n}\nconst maxProductPath = solve;\nclass Solution { maxProductPath(grid) { return solve(grid); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, maxProductPath };\n",
+      "python": "\"\"\"1594. Maximum Non Negative Product in a Matrix (Medium).\n\nSpecification: https://leetcode.com/problems/maximum-non-negative-product-in-a-matrix/description/\n\"\"\"\n\n\ndef solve(grid: list[list[int]]) -> int:\n    MOD = 1000000007\n    rows, cols = len(grid), len(grid[0])\n    min_dp = [[0] * cols for _ in range(rows)]\n    max_dp = [[0] * cols for _ in range(rows)]\n    min_dp[0][0] = grid[0][0]\n    max_dp[0][0] = grid[0][0]\n    for r in range(rows):\n        for c in range(cols):\n            if r == 0 and c == 0:\n                continue\n            candidates = []\n            if r > 0:\n                candidates.append(min_dp[r - 1][c] * grid[r][c])\n                candidates.append(max_dp[r - 1][c] * grid[r][c])\n            if c > 0:\n                candidates.append(min_dp[r][c - 1] * grid[r][c])\n                candidates.append(max_dp[r][c - 1] * grid[r][c])\n            min_dp[r][c] = min(candidates)\n            max_dp[r][c] = max(candidates)\n    best = max_dp[rows - 1][cols - 1]\n    return -1 if best < 0 else best % MOD\n\n\nclass Solution:\n    def maxProductPath(self, grid: list[list[int]]) -> int:\n        return solve(grid)\n",
+      "javascript_sha256": "095bf496d302c2eb933085d71162a34469fbbc72ade38175a75b4f26a617ff54",
+      "python_sha256": "a394cf9b69fcd4a9487ccd343c87bbc2703a9f568ab7fb5882cefe1e3e78c4fb",
+      "tests": [
+        [
+          [
+            [
+              [
+                -1,
+                -2,
+                -3
+              ],
+              [
+                -2,
+                -3,
+                -3
+              ],
+              [
+                -3,
+                -3,
+                -2
+              ]
+            ]
+          ],
+          -1
+        ],
+        [
+          [
+            [
+              [
+                1,
+                -2,
+                1
+              ],
+              [
+                1,
+                -2,
+                1
+              ],
+              [
+                3,
+                -4,
+                1
+              ]
+            ]
+          ],
+          8
+        ],
+        [
+          [
+            [
+              [
+                1,
+                3
+              ],
+              [
+                0,
+                -4
+              ]
+            ]
+          ],
+          0
+        ]
+      ],
+      "qualification": {
+        "problem_id": 1594,
+        "slug": "maximum-non-negative-product-in-a-matrix",
+        "title": "Maximum Non Negative Product in a Matrix",
+        "passed": true,
+        "failures": [],
+        "random_cases": 20
+      }
+    },
+    {
+      "problem_id": 1599,
+      "slug": "maximum-profit-of-operating-a-centennial-wheel",
+      "title": "Maximum Profit of Operating a Centennial Wheel",
+      "difficulty": "Medium",
+      "method": "minOperationsMaxProfit",
+      "javascript": "'use strict';\n\n// 1599. Maximum Profit of Operating a Centennial Wheel (Medium).\n// Specification: https://leetcode.com/problems/maximum-profit-of-operating-a-centennial-wheel/description/\nfunction solve(customers, boardingCost, runningCost) {\n  let waiting = 0; let profit = 0; let bestProfit = 0; let bestRotation = -1;\n  let rotation = 0;\n  while (waiting > 0 || rotation < customers.length) {\n    if (rotation < customers.length) waiting += customers[rotation];\n    const boarded = Math.min(4, waiting);\n    waiting -= boarded;\n    profit += boarded * boardingCost - runningCost;\n    rotation++;\n    if (profit > bestProfit) { bestProfit = profit; bestRotation = rotation; }\n  }\n  return bestRotation;\n}\nconst minOperationsMaxProfit = solve;\nclass Solution { minOperationsMaxProfit(customers, boardingCost, runningCost) { return solve(customers, boardingCost, runningCost); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, minOperationsMaxProfit };\n",
+      "python": "\"\"\"1599. Maximum Profit of Operating a Centennial Wheel (Medium).\n\nSpecification: https://leetcode.com/problems/maximum-profit-of-operating-a-centennial-wheel/description/\n\"\"\"\n\n\ndef solve(customers: list[int], boardingCost: int, runningCost: int) -> int:\n    waiting = 0\n    profit = 0\n    best_profit = 0\n    best_rotation = -1\n    rotation = 0\n    while waiting > 0 or rotation < len(customers):\n        if rotation < len(customers):\n            waiting += customers[rotation]\n        boarded = min(4, waiting)\n        waiting -= boarded\n        profit += boarded * boardingCost - runningCost\n        rotation += 1\n        if profit > best_profit:\n            best_profit = profit\n            best_rotation = rotation\n    return best_rotation\n\n\nclass Solution:\n    def minOperationsMaxProfit(self, customers: list[int], boardingCost: int, runningCost: int) -> int:\n        return solve(customers, boardingCost, runningCost)\n",
+      "javascript_sha256": "ea5c31644ada7baf5e04f922a02e4dfac2d3dbdc3ee3a25ac8df3cefbcac614d",
+      "python_sha256": "27cc4212c9c84b22c4d2827985db16aeca129fc0c421662975e89a41636cd00d",
+      "tests": [
+        [
+          [
+            [
+              8,
+              3
+            ],
+            5,
+            6
+          ],
+          3
+        ],
+        [
+          [
+            [
+              10,
+              9,
+              6
+            ],
+            6,
+            4
+          ],
+          7
+        ],
+        [
+          [
+            [
+              3,
+              4,
+              0,
+              5,
+              1
+            ],
+            1,
+            92
+          ],
+          -1
+        ]
+      ],
+      "qualification": {
+        "problem_id": 1599,
+        "slug": "maximum-profit-of-operating-a-centennial-wheel",
+        "title": "Maximum Profit of Operating a Centennial Wheel",
+        "passed": true,
+        "failures": [],
+        "random_cases": 20
+      }
+    }
+  ]
+}
