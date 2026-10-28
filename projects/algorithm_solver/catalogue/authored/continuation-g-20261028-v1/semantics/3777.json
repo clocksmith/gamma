@@ -1,0 +1,85 @@
+{
+  "pre_sourcg_reference_freeze_sha256": "546966a4d7da3cb0fa09465dc3d4e4338321c1bd3212efe6748d15f0cd10ff82",
+  "problem_contract": {
+    "external_interface": {
+      "argument_order": [
+        "s",
+        "queries"
+      ],
+      "canonical": "solve",
+      "leetcode_method": "minDeletions",
+      "official_metadata": {
+        "name": "minDeletions",
+        "params": [
+          {
+            "name": "s",
+            "type": "string"
+          },
+          {
+            "name": "queries",
+            "type": "integer[][]"
+          }
+        ],
+        "return": {
+          "type": "integer[]"
+        }
+      },
+      "wrapper_execution": "unrun"
+    },
+    "id": 3777,
+    "mutation_alias_contract": {
+      "canonical_solve": "Inputs unchanged; scalar/string or fresh list output; no aliased input return; dynamic query state local to one call",
+      "official_wrapper": "Delegating wrapper unexecuted"
+    },
+    "numeric_complexity_contract": {
+      "algorithm": "Each equal adjacent pair contributes one deletion. Maintain equal-edge indicators in Fenwick tree; flip changes only edges j,j+1; query sums edges(l,r]. O((n+q)log n) time/O(n+q) space; copied mutable string only.",
+      "numeric": "Fenwick indices<=100000 within signed32; values/output<=99999; ordered fresh list with strict integer entries; query input unchanged.",
+      "resource_acceptance": "unmeasured"
+    },
+    "objective_summary": "New original source-exposed candidate; imported inventory unknown; no global missing, qualification, adoption or held-out claim",
+    "official_content_sha256": "74ea10430839a0cda43997377dd38035826fd174957e1de52f43ec65832759a0",
+    "official_question_frontend_id": "3777",
+    "official_response_sha256": "befb0e50b6b1cb92e2137c479d3cfb136505ad8a4b3c2daeb9e1acd1da6aa65d",
+    "return_domain": {
+      "comparison_policy": "exact top-level type and value, no coercion",
+      "independent_review": "pending",
+      "type": "integer[]"
+    },
+    "slug": "minimum-deletions-to-make-alternating-substring",
+    "statement_constraints_snapshot": {
+      "domain_validator": "oracles.validate",
+      "full_official_snapshot": "Pinned privately; full statement omitted",
+      "independent_review": "pending",
+      "summary": "AB string length1..100000;1..100000 queries;[1,j] flips current j;[2,l,r] asks minimum deletions for alternating subsequence of current inclusive substring; updates persist within this call only"
+    },
+    "supplied_reference_url": "https://leetcode.com/problems/minimum-deletions-to-make-alternating-substring/description/",
+    "title": "Minimum Deletions to Make Alternating Substring"
+  },
+  "problem_id": 3777,
+  "qualification": {
+    "active_adopted": false,
+    "independent_runtime_assessment": false,
+    "status": "unknown"
+  },
+  "reference": {
+    "candidate_execution": "not performed",
+    "comparison": "matches",
+    "domain": "validate",
+    "expected": "expected",
+    "generator": "build_cases",
+    "module": "oracles.py"
+  },
+  "reference_revision": {
+    "candidate_programs_executed": 0,
+    "current_oracles_sha256": "aabd760960fe1885d0e4ec9a09b91e2843fb760ba8b2a0494672a41edcabab56",
+    "current_tests_sha256": "eaf29a1c1f7344e3f0a432561e16d07cc61a635713271dbf90b455ab7b37168f",
+    "limitation": "Corrected reference revision cannot be represented as wholly pre-source-blind; original exact code/freeze retained privately",
+    "old_oracles_sha256": "db4ab5efe1ad4b0e38c6b99ff77644687c3be9ac81bb535b96ef7894ad808ec4",
+    "previous_pre_source_freeze_sha256": "546966a4d7da3cb0fa09465dc3d4e4338321c1bd3212efe6748d15f0cd10ff82",
+    "reason": "3780 uniform large-domain certificate corrected: three equal x always sum3*x, divisible3. Static mathematical counterexample81copiesof2: old0 corrected6. No candidate source changed.",
+    "schema": "gamma.reference-revision.v1",
+    "tests": "10 source-free controls passed after repair; initial9passed before source",
+    "timing": "After candidate authorship, before any candidate execution"
+  },
+  "schema": "gamma.authored-source-semantics.v1"
+}
