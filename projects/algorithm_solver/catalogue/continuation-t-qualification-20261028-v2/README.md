@@ -1,0 +1,9 @@
+# T16 source-only delivery controller repair
+
+Derived from [the byte-preserved v1 controller](../continuation-t-qualification-20261028-v1/README.md). The original source-only package deliberately omitted four historical Mac stress-output files, while v1 required them at import. This controller separates those archival diagnostics from mandatory execution helpers. It does not reconstruct or claim to verify absent raw evidence.
+
+The original observer profile and source manifest hashes remain unchanged. Every operational helper is mandatory and hash checked; exactly the four named historical stress outputs may be absent. If any is present, it must be a regular file with its original hash; symlinks, directories and permission errors fail closed. New v2 freezes explicitly record each raw artifact's availability and expected hash, mark historical stress unused for qualification, and require that availability snapshot to match during run/replay. Run identity, report, replay and command summaries carry that same frozen availability record. Existing replay receipts are checked rather than overwritten. Controller hashes bind this changed policy; old execution freezes are rejected by the v2 schema.
+
+Source reviews, live boundary authorization, public definition/template pins, independent cases, unchanged Linux runtime and limits, native observer bindings, raw-first capture and replay remain required. No candidate was executed in this repair. The original static validation receipts are retained unchanged in v1; they do not certify this controller. Source-free tests exercise the missing/present/tampered archive boundary and mocked execution controls.
+
+The 16 selected programs remain source candidates. Actual Linux preflight, fresh execution freeze, bounded execution and independent raw replay remain pending. Missing Mac diagnostic output is not Linux evidence. Composition and catalogue promotion are unchanged.
