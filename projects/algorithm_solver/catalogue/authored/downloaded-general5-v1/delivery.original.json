@@ -1,0 +1,333 @@
+{
+  "schema": "gamma.new-solutions-batch19.v1",
+  "scope": "Freshly written, not pulled from Gamma. Problems with no authored JS/Python pair in clocksmith/gamma catalogue/authored at head dd7dd823, verified by the parent before delivery, no overlaps found. Only 5 problems in IDs 2651-2800 meet the simple-input constraints; 89 in range already authored, rest are JS-only, SQL, tree/class, premium, or unverifiable. This is not a claim of Gamma official independent admission.",
+  "qualification_method": "For each problem: public examples plus 20 random cross-language agreement checks per problem, JS via node and Python via import, outputs compared. Spot-checked independently by the parent for 2696, 2711, 2765, 2784, 2785, all passed.",
+  "counts": {
+    "problems": 5,
+    "passed": 5
+  },
+  "problems": [
+    {
+      "problem_id": 2696,
+      "slug": "minimum-string-length-after-removing-substrings",
+      "title": "Minimum String Length After Removing Substrings",
+      "difficulty": "Easy",
+      "method": "minLength",
+      "javascript": "'use strict';\n\n// 2696. Minimum String Length After Removing Substrings (Easy).\n// Specification: https://leetcode.com/problems/minimum-string-length-after-removing-substrings/description/\nfunction solve(s) {\n  const stack = [];\n  for (const ch of s) {\n    const top = stack.length ? stack[stack.length - 1] : '';\n    if ((top === 'A' && ch === 'B') || (top === 'C' && ch === 'D')) stack.pop();\n    else stack.push(ch);\n  }\n  return stack.length;\n}\nconst minLength = solve;\nclass Solution { minLength(s) { return solve(s); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, minLength };\n",
+      "python": "\"\"\"2696. Minimum String Length After Removing Substrings (Easy).\n\nSpecification: https://leetcode.com/problems/minimum-string-length-after-removing-substrings/description/\n\"\"\"\n\n\ndef solve(s: str) -> int:\n    stack = []\n    for ch in s:\n        top = stack[-1] if stack else ''\n        if (top == 'A' and ch == 'B') or (top == 'C' and ch == 'D'):\n            stack.pop()\n        else:\n            stack.append(ch)\n    return len(stack)\n\n\nclass Solution:\n    def minLength(self, s: str) -> int:\n        return solve(s)\n",
+      "javascript_sha256": "03d9f8b5ce00567e40432486e741ba7b2c406a21bfbc79d45d3ae9cee941cfa5",
+      "python_sha256": "81a0580efb22912e08f1f7c4be1493820484ada9dc06e884e0a765927e5a7067",
+      "tests": [
+        [
+          [
+            "ABFCACDB"
+          ],
+          2
+        ],
+        [
+          [
+            "ACBBD"
+          ],
+          5
+        ],
+        [
+          [
+            "ABAB"
+          ],
+          0
+        ],
+        [
+          [
+            "CDAB"
+          ],
+          0
+        ],
+        [
+          [
+            "A"
+          ],
+          1
+        ]
+      ],
+      "qualification": {
+        "passed": true,
+        "method": "public examples plus 20 random cross-language checks, per writing agent"
+      }
+    },
+    {
+      "problem_id": 2711,
+      "slug": "difference-of-number-of-distinct-values-on-diagonals",
+      "title": "Difference of Number of Distinct Values on Diagonals",
+      "difficulty": "Medium",
+      "method": "differenceOfDistinctValues",
+      "javascript": "'use strict';\n\n// 2711. Difference of Number of Distinct Values on Diagonals (Medium).\n// Specification: https://leetcode.com/problems/difference-of-number-of-distinct-values-on-diagonals/description/\nfunction solve(grid) {\n  const m = grid.length; const n = grid[0].length;\n  const answer = Array.from({ length: m }, () => new Array(n).fill(0));\n  for (let r = 0; r < m; r++) {\n    for (let c = 0; c < n; c++) {\n      const topLeft = new Set();\n      for (let i = r - 1, j = c - 1; i >= 0 && j >= 0; i--, j--) topLeft.add(grid[i][j]);\n      const bottomRight = new Set();\n      for (let i = r + 1, j = c + 1; i < m && j < n; i++, j++) bottomRight.add(grid[i][j]);\n      answer[r][c] = Math.abs(topLeft.size - bottomRight.size);\n    }\n  }\n  return answer;\n}\nconst differenceOfDistinctValues = solve;\nclass Solution { differenceOfDistinctValues(grid) { return solve(grid); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, differenceOfDistinctValues };\n",
+      "python": "\"\"\"2711. Difference of Number of Distinct Values on Diagonals (Medium).\n\nSpecification: https://leetcode.com/problems/difference-of-number-of-distinct-values-on-diagonals/description/\n\"\"\"\n\n\ndef solve(grid: list[list[int]]) -> list[list[int]]:\n    m, n = len(grid), len(grid[0])\n    answer = [[0] * n for _ in range(m)]\n    for r in range(m):\n        for c in range(n):\n            top_left = set()\n            i, j = r - 1, c - 1\n            while i >= 0 and j >= 0:\n                top_left.add(grid[i][j])\n                i -= 1\n                j -= 1\n            bottom_right = set()\n            i, j = r + 1, c + 1\n            while i < m and j < n:\n                bottom_right.add(grid[i][j])\n                i += 1\n                j += 1\n            answer[r][c] = abs(len(top_left) - len(bottom_right))\n    return answer\n\n\nclass Solution:\n    def differenceOfDistinctValues(self, grid: list[list[int]]) -> list[list[int]]:\n        return solve(grid)\n",
+      "javascript_sha256": "4ff4d615214ae6ddd2fa664c107799fb12cde5a123794dfd98eff4f781f10c9a",
+      "python_sha256": "327a364570db8b8302a30f3245f92028ed40423e729e6e6bda1d4d23951a13d7",
+      "tests": [
+        [
+          [
+            [
+              [
+                1,
+                2,
+                3
+              ],
+              [
+                3,
+                1,
+                5
+              ],
+              [
+                3,
+                2,
+                1
+              ]
+            ]
+          ],
+          [
+            [
+              1,
+              1,
+              0
+            ],
+            [
+              1,
+              0,
+              1
+            ],
+            [
+              0,
+              1,
+              1
+            ]
+          ]
+        ],
+        [
+          [
+            [
+              [
+                1
+              ]
+            ]
+          ],
+          [
+            [
+              0
+            ]
+          ]
+        ],
+        [
+          [
+            [
+              [
+                1,
+                1
+              ],
+              [
+                1,
+                1
+              ]
+            ]
+          ],
+          [
+            [
+              1,
+              0
+            ],
+            [
+              0,
+              1
+            ]
+          ]
+        ]
+      ],
+      "qualification": {
+        "passed": true,
+        "method": "public examples plus 20 random cross-language checks, per writing agent"
+      }
+    },
+    {
+      "problem_id": 2765,
+      "slug": "longest-alternating-subarray",
+      "title": "Longest Alternating Subarray",
+      "difficulty": "Easy",
+      "method": "alternatingSubarray",
+      "javascript": "'use strict';\n\n// 2765. Longest Alternating Subarray (Easy).\n// Specification: https://leetcode.com/problems/longest-alternating-subarray/description/\nfunction solve(nums) {\n  let best = -1;\n  for (let i = 0; i < nums.length; i++) {\n    let expected = 1; let j = i;\n    while (j + 1 < nums.length && nums[j + 1] - nums[j] === expected) {\n      j++; expected *= -1;\n    }\n    if (j - i + 1 > 1) best = Math.max(best, j - i + 1);\n  }\n  return best;\n}\nconst alternatingSubarray = solve;\nclass Solution { alternatingSubarray(nums) { return solve(nums); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, alternatingSubarray };\n",
+      "python": "\"\"\"2765. Longest Alternating Subarray (Easy).\n\nSpecification: https://leetcode.com/problems/longest-alternating-subarray/description/\n\"\"\"\n\n\ndef solve(nums: list[int]) -> int:\n    best = -1\n    for i in range(len(nums)):\n        expected = 1\n        j = i\n        while j + 1 < len(nums) and nums[j + 1] - nums[j] == expected:\n            j += 1\n            expected *= -1\n        if j - i + 1 > 1:\n            best = max(best, j - i + 1)\n    return best\n\n\nclass Solution:\n    def alternatingSubarray(self, nums: list[int]) -> int:\n        return solve(nums)\n",
+      "javascript_sha256": "dd520de6b1218b38c31be1c76fbc430f4557d7d42043adf031916b1387ffcf2a",
+      "python_sha256": "0774f0feff4361ac8f5f5daa60da8739d5001e33119ffd5638ffeed92ad06107",
+      "tests": [
+        [
+          [
+            [
+              2,
+              3,
+              4,
+              3,
+              4
+            ]
+          ],
+          4
+        ],
+        [
+          [
+            [
+              4,
+              5,
+              6
+            ]
+          ],
+          2
+        ],
+        [
+          [
+            [
+              5,
+              4,
+              3
+            ]
+          ],
+          -1
+        ],
+        [
+          [
+            [
+              1,
+              2,
+              1,
+              2,
+              1
+            ]
+          ],
+          5
+        ],
+        [
+          [
+            [
+              3,
+              4
+            ]
+          ],
+          2
+        ]
+      ],
+      "qualification": {
+        "passed": true,
+        "method": "public examples plus 20 random cross-language checks, per writing agent"
+      }
+    },
+    {
+      "problem_id": 2784,
+      "slug": "check-if-array-is-good",
+      "title": "Check if Array is Good",
+      "difficulty": "Easy",
+      "method": "isGood",
+      "javascript": "'use strict';\n\n// 2784. Check if Array is Good (Easy).\n// Specification: https://leetcode.com/problems/check-if-array-is-good/description/\nfunction solve(nums) {\n  const n = nums.length - 1;\n  if (n < 1) return false;\n  const freq = new Map();\n  for (const x of nums) freq.set(x, (freq.get(x) || 0) + 1);\n  if (freq.size !== n) return false;\n  for (let v = 1; v <= n; v++) {\n    const want = v === n ? 2 : 1;\n    if (freq.get(v) !== want) return false;\n  }\n  return true;\n}\nconst isGood = solve;\nclass Solution { isGood(nums) { return solve(nums); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, isGood };\n",
+      "python": "\"\"\"2784. Check if Array is Good (Easy).\n\nSpecification: https://leetcode.com/problems/check-if-array-is-good/description/\n\"\"\"\n\n\ndef solve(nums: list[int]) -> bool:\n    n = len(nums) - 1\n    if n < 1:\n        return False\n    freq = {}\n    for x in nums:\n        freq[x] = freq.get(x, 0) + 1\n    if len(freq) != n:\n        return False\n    for v in range(1, n + 1):\n        want = 2 if v == n else 1\n        if freq.get(v) != want:\n            return False\n    return True\n\n\nclass Solution:\n    def isGood(self, nums: list[int]) -> bool:\n        return solve(nums)\n",
+      "javascript_sha256": "17fc21a5bc9fca59de22162f87d6372d8aa7c82e2803522658a7f05647b0e7a6",
+      "python_sha256": "3a08f3221e6b9250472a540e930ac51e89993f47e82345a762e26a47cc1f8acc",
+      "tests": [
+        [
+          [
+            [
+              2,
+              1,
+              3
+            ]
+          ],
+          false
+        ],
+        [
+          [
+            [
+              1,
+              3,
+              3,
+              2
+            ]
+          ],
+          true
+        ],
+        [
+          [
+            [
+              1,
+              1
+            ]
+          ],
+          true
+        ],
+        [
+          [
+            [
+              3,
+              4,
+              4,
+              1,
+              2,
+              1
+            ]
+          ],
+          false
+        ],
+        [
+          [
+            [
+              1,
+              2,
+              3,
+              3
+            ]
+          ],
+          true
+        ]
+      ],
+      "qualification": {
+        "passed": true,
+        "method": "public examples plus 20 random cross-language checks, per writing agent"
+      }
+    },
+    {
+      "problem_id": 2785,
+      "slug": "sort-vowels-in-a-string",
+      "title": "Sort Vowels in a String",
+      "difficulty": "Medium",
+      "method": "sortVowels",
+      "javascript": "'use strict';\n\n// 2785. Sort Vowels in a String (Medium).\n// Specification: https://leetcode.com/problems/sort-vowels-in-a-string/description/\nfunction solve(s) {\n  const vowels = new Set(['a', 'e', 'i', 'o', 'u', 'A', 'E', 'I', 'O', 'U']);\n  const found = [];\n  for (const ch of s) if (vowels.has(ch)) found.push(ch);\n  found.sort();\n  let k = 0;\n  return s.split('').map((ch) => (vowels.has(ch) ? found[k++] : ch)).join('');\n}\nconst sortVowels = solve;\nclass Solution { sortVowels(s) { return solve(s); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, sortVowels };\n",
+      "python": "\"\"\"2785. Sort Vowels in a String (Medium).\n\nSpecification: https://leetcode.com/problems/sort-vowels-in-a-string/description/\n\"\"\"\n\n\ndef solve(s: str) -> str:\n    vowels = set('aeiouAEIOU')\n    found = sorted(ch for ch in s if ch in vowels)\n    k = 0\n    out = []\n    for ch in s:\n        if ch in vowels:\n            out.append(found[k])\n            k += 1\n        else:\n            out.append(ch)\n    return ''.join(out)\n\n\nclass Solution:\n    def sortVowels(self, s: str) -> str:\n        return solve(s)\n",
+      "javascript_sha256": "23aa0f5a2ac85451925fe7c8129a5914dec17d47ff505c22d19d9950c018a63c",
+      "python_sha256": "88e2d7f85dec649ecfbd38d31c103853de62759863baa809420055cd3c6d6d2a",
+      "tests": [
+        [
+          [
+            "lEetcOde"
+          ],
+          "lEOtcede"
+        ],
+        [
+          [
+            "lYmpH"
+          ],
+          "lYmpH"
+        ],
+        [
+          [
+            "aeiou"
+          ],
+          "aeiou"
+        ],
+        [
+          [
+            "UOIAE"
+          ],
+          "AEIOU"
+        ]
+      ],
+      "qualification": {
+        "passed": true,
+        "method": "public examples plus 20 random cross-language checks, per writing agent"
+      }
+    }
+  ]
+}
