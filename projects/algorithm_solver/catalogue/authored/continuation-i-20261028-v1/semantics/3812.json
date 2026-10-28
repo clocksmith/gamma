@@ -1,0 +1,83 @@
+{
+  "pre_sourci_reference_freeze_sha256": "31027e89c6bb3ae0bb226a9a4328d3a431ed7182578282cfc3e6d022a553f1ca",
+  "problem_contract": {
+    "external_interface": {
+      "argument_order": [
+        "n",
+        "edges",
+        "start",
+        "target"
+      ],
+      "canonical": "solve",
+      "leetcode_method": "minimumFlips",
+      "official_metadata": {
+        "name": "minimumFlips",
+        "params": [
+          {
+            "name": "n",
+            "type": "integer"
+          },
+          {
+            "name": "edges",
+            "type": "integer[][]"
+          },
+          {
+            "name": "start",
+            "type": "string"
+          },
+          {
+            "name": "target",
+            "type": "string"
+          }
+        ],
+        "return": {
+          "type": "list<integer>"
+        }
+      },
+      "wrapper_execution": "unrun"
+    },
+    "id": 3812,
+    "mutation_alias_contract": {
+      "canonical_solve": "Inputs unchanged; scalar/string or fresh list output; no aliased input return",
+      "official_wrapper": "Delegating wrapper unexecuted"
+    },
+    "numeric_complexity_contract": {
+      "algorithm": "Official ABI is explicit n,edges,start,target values, not TreeNode. Iterative rooted traversal propagates required endpoint parity from leaves; each treeedge uniquely forced by its cut. Return selected edge indices via ascending scan. O(n) time/O(n) space; recursion avoided.",
+      "numeric": "All labels/edgeindices<=99999; parity0/1; fresh ordered exact integer list. No repeated-edge cancellation needed because unique GF(2) incidence solution minimizes length.",
+      "resource_acceptance": "unmeasured"
+    },
+    "objective_summary": "New original source-exposed candidate; imported inventory unknown; no global missing, qualification, adoption or held-out claim",
+    "official_content_sha256": "fbf95ae08a95a863749be54104aca80c1b970e22cc1f505cf37515f704b237ff",
+    "official_question_frontend_id": "3812",
+    "official_response_sha256": "213020129059c8994be4f7ac0cdba9e149fde311038b9da0d19741edfc4a35f3",
+    "return_domain": {
+      "comparison_policy": "exact top-level type and value, no coercion",
+      "independent_review": "pending",
+      "type": "list<integer>"
+    },
+    "slug": "minimum-edge-toggles-on-a-tree",
+    "statement_constraints_snapshot": {
+      "domain_validator": "oracles.validate",
+      "full_official_snapshot": "Pinned privately; full statement omitted",
+      "independent_review": "pending",
+      "summary": "valid undirectedtree n2..100000; n-1ordered edge pairs labels0..n-1; start/target binary strings lengthn; toggle both edge endpoints; minimum operation edge indices in increasing order,[-1] impossible"
+    },
+    "supplied_reference_url": "https://leetcode.com/problems/minimum-edge-toggles-on-a-tree/description/",
+    "title": "Minimum Edge Toggles on a Tree"
+  },
+  "problem_id": 3812,
+  "qualification": {
+    "active_adopted": false,
+    "independent_runtime_assessment": false,
+    "status": "unknown"
+  },
+  "reference": {
+    "candidate_execution": "not performed",
+    "comparison": "matches",
+    "domain": "validate",
+    "expected": "expected",
+    "generator": "build_cases",
+    "module": "oracles.py"
+  },
+  "schema": "gamma.authored-source-semantics.v1"
+}
