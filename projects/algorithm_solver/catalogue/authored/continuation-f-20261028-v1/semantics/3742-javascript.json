@@ -1,0 +1,38 @@
+{
+  "comparison": "exact typed scalar or string",
+  "effects": "arguments unchanged",
+  "entrypoint": "solve",
+  "language": "javascript",
+  "official_interface": {
+    "name": "maxPathScore",
+    "params": [
+      {
+        "name": "grid",
+        "type": "integer[][]"
+      },
+      {
+        "name": "k",
+        "type": "integer"
+      }
+    ],
+    "return": {
+      "type": "integer"
+    }
+  },
+  "parameters": [
+    "grid",
+    "k"
+  ],
+  "problem_id": 3742,
+  "qualification": {
+    "reason": "No candidate execution; source-free references and static syntax only",
+    "status": "unknown"
+  },
+  "schema": "gamma.authored-scalar-semantics.v1",
+  "source_reasoning": {
+    "candidate_design": "rolling row DP indexed exact cost, cap k by path length",
+    "complexity_target": "O(m*n*min(k,m+n)) time/O(n*min(k,m+n)) space",
+    "reference": "enumerate every right/down path and count cost independently"
+  },
+  "source_sha256": "a1a8f3845b14d90c2a9919a377588b715be4b7e23e962aadf85a6b1fbe12ff6e"
+}

@@ -1,0 +1,60 @@
+{
+  "problems": {
+    "3741": {
+      "reference": "enumerate all index triples",
+      "candidate_design": "track last two positions for each value; consecutive occurrence triple minimizes twice span",
+      "complexity_target": "O(n) time/O(n) space"
+    },
+    "3742": {
+      "reference": "enumerate every right/down path and count cost independently",
+      "candidate_design": "rolling row DP indexed exact cost, cap k by path length",
+      "complexity_target": "O(m*n*min(k,m+n)) time/O(n*min(k,m+n)) space"
+    },
+    "3746": {
+      "reference": "memoized exhaustive balanced substring removals",
+      "candidate_design": "absolute count difference; opposite adjacent pair deletion achieves lower bound",
+      "complexity_target": "O(n) time/O(1) space"
+    },
+    "3747": {
+      "reference": "set of literal zero-deletion outputs for each x",
+      "candidate_design": "count zero-free positive integers <=n by decimal prefix combinatorics; outputs zero-free <= original",
+      "complexity_target": "O(log n) time/O(log n) space"
+    },
+    "3748": {
+      "reference": "all subarrays and all inversion pairs per query",
+      "candidate_design": "maximal nondecreasing run end and prefix counts; binary search split per query",
+      "complexity_target": "O(n+q log n) time/O(n+q) space"
+    },
+    "3751": {
+      "reference": "literal local triple comparison for every number",
+      "candidate_design": "enumerate numbers and local digit triples",
+      "complexity_target": "O(range*digits) time/O(digits) space"
+    },
+    "3753": {
+      "reference": "literal local triple comparison over bounded range, including near maximum n",
+      "candidate_design": "digit DP aggregate count and waviness with last two significant digits and tight flag",
+      "complexity_target": "O(digits*100*10) time/O(digits*100) space"
+    },
+    "3755": {
+      "reference": "enumerate intervals, literal xor and occurrence parity count",
+      "candidate_design": "earliest prefix state (xor,even-minus-odd)",
+      "complexity_target": "O(n) time/O(n) space"
+    },
+    "3756": {
+      "reference": "construct arbitrary-precision integer from each substring after deleting zeros",
+      "candidate_design": "nonzero digit-count/value/sum prefixes and powers ten; modular slice extraction",
+      "complexity_target": "O(n+q) time/O(n+q) space"
+    },
+    "3759": {
+      "reference": "count strictly greater elements independently for each position",
+      "candidate_design": "sort a copy and count values below kth largest cutoff; k0 all qualify",
+      "complexity_target": "O(n log n) time/O(n) space"
+    }
+  },
+  "numeric": {
+    "3753": "BigInt internal JS aggregate totals, final Number exact: padded15-digit universe total<=13*570*10**12=7.41e15 <2**53; leading padding adds only possible false first-digit peak, never removes a true peak/valley; number10**15 has zero waviness",
+    "3756": "JS BigInt products for modular prefix subtraction and final multiplication; convert bounded modulo results to Number",
+    "other": "all integer results <=5e9 except3747<=1e15; JS XOR inputs <2**30"
+  },
+  "effects": "input arrays and nested query/grid arrays unchanged; returned answer arrays fresh"
+}
