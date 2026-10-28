@@ -1,0 +1,3494 @@
+{
+  "schema": "gamma.new-solutions-batch2.v1",
+  "scope": "Freshly written, not pulled from Gamma. Problems with no authored JS/Python pair in clocksmith/gamma catalogue/authored at head dd7dd823, written in the authored consistent style and qualified by the method below. This is not a claim of Gamma official independent admission.",
+  "qualification_method": "For each problem: public examples plus 20 random cross-language agreement checks per problem where a safe random generator exists (JS via node in one batched process per problem, Python via import, outputs compared). Problem 324 checked by wiggle property and multiset, not exact order.",
+  "counts": {
+    "problems": 68,
+    "passed": 68
+  },
+  "problems": [
+    {
+      "problem_id": 7,
+      "slug": "reverse-integer",
+      "title": "Reverse Integer",
+      "difficulty": "Easy",
+      "method": "reverse",
+      "javascript": "'use strict';\n\n// 7. Reverse Integer (Easy).\n// Specification: https://leetcode.com/problems/reverse-integer/description/\nfunction solve(x) {\n  let result = 0;\n  let value = x;\n  while (value !== 0) {\n    const digit = value % 10;\n    result = result * 10 + digit;\n    value = Math.trunc(value / 10);\n  }\n  if (result > 2147483647 || result < -2147483648) return 0;\n  return result;\n}\nconst reverse = solve;\nclass Solution { reverse(x) { return solve(x); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, reverse };\n",
+      "python": "\"\"\"7. Reverse Integer (Easy).\n\nSpecification: https://leetcode.com/problems/reverse-integer/description/\n\"\"\"\n\n\ndef solve(x: int) -> int:\n    result = 0\n    value = x\n    while value != 0:\n        digit = value % 10 if value > 0 else -((-value) % 10)\n        result = result * 10 + digit\n        value = int(value / 10) if value > 0 else -int((-value) / 10)\n    if result > 2147483647 or result < -2147483648:\n        return 0\n    return result\n\n\nclass Solution:\n    def reverse(self, x: int) -> int:\n        return solve(x)\n",
+      "javascript_sha256": "b0bf2685226d864587ffac3b48549e304d1971a31cc7572b8142e4a37e520def",
+      "python_sha256": "c53d3869b2177ab59d205be9090678f55f737bd3c5305a4010f22461815edb62",
+      "tests": [
+        [
+          [
+            123
+          ],
+          321
+        ],
+        [
+          [
+            -123
+          ],
+          -321
+        ],
+        [
+          [
+            120
+          ],
+          21
+        ],
+        [
+          [
+            1534236469
+          ],
+          0
+        ]
+      ],
+      "qualification": {
+        "problem_id": 7,
+        "slug": "reverse-integer",
+        "title": "Reverse Integer",
+        "passed": true,
+        "failures": []
+      }
+    },
+    {
+      "problem_id": 9,
+      "slug": "palindrome-number",
+      "title": "Palindrome Number",
+      "difficulty": "Easy",
+      "method": "isPalindrome",
+      "javascript": "'use strict';\n\n// 9. Palindrome Number (Easy).\n// Specification: https://leetcode.com/problems/palindrome-number/description/\nfunction solve(x) {\n  if (x < 0) return false;\n  let reversed = 0;\n  let value = x;\n  while (value !== 0) { reversed = reversed * 10 + (value % 10); value = Math.trunc(value / 10); }\n  return reversed === x;\n}\nconst isPalindrome = solve;\nclass Solution { isPalindrome(x) { return solve(x); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, isPalindrome };\n",
+      "python": "\"\"\"9. Palindrome Number (Easy).\n\nSpecification: https://leetcode.com/problems/palindrome-number/description/\n\"\"\"\n\n\ndef solve(x: int) -> bool:\n    if x < 0:\n        return False\n    reversed_value = 0\n    value = x\n    while value != 0:\n        reversed_value = reversed_value * 10 + (value % 10)\n        value //= 10\n    return reversed_value == x\n\n\nclass Solution:\n    def isPalindrome(self, x: int) -> bool:\n        return solve(x)\n",
+      "javascript_sha256": "7b3b1a5ca287386eff396b2bba4803accc85d6f569665c10f8d69c5293510350",
+      "python_sha256": "4c826511ae26921d89ca81a0e2a62a6ac5526fc9276a9561d12e5fa6f38601c3",
+      "tests": [
+        [
+          [
+            121
+          ],
+          true
+        ],
+        [
+          [
+            -121
+          ],
+          false
+        ],
+        [
+          [
+            10
+          ],
+          false
+        ],
+        [
+          [
+            0
+          ],
+          true
+        ]
+      ],
+      "qualification": {
+        "problem_id": 9,
+        "slug": "palindrome-number",
+        "title": "Palindrome Number",
+        "passed": true,
+        "failures": []
+      }
+    },
+    {
+      "problem_id": 13,
+      "slug": "roman-to-integer",
+      "title": "Roman to Integer",
+      "difficulty": "Easy",
+      "method": "romanToInt",
+      "javascript": "'use strict';\n\n// 13. Roman to Integer (Easy).\n// Specification: https://leetcode.com/problems/roman-to-integer/description/\nconst VALUES = { I: 1, V: 5, X: 10, L: 50, C: 100, D: 500, M: 1000 };\nfunction solve(s) {\n  let total = 0;\n  for (let i = 0; i < s.length; i++) {\n    const value = VALUES[s[i]];\n    const next = i + 1 < s.length ? VALUES[s[i + 1]] : 0;\n    total += value < next ? -value : value;\n  }\n  return total;\n}\nconst romanToInt = solve;\nclass Solution { romanToInt(s) { return solve(s); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, romanToInt };\n",
+      "python": "\"\"\"13. Roman to Integer (Easy).\n\nSpecification: https://leetcode.com/problems/roman-to-integer/description/\n\"\"\"\n\n\nVALUES = {'I': 1, 'V': 5, 'X': 10, 'L': 50, 'C': 100, 'D': 500, 'M': 1000}\n\n\ndef solve(s: str) -> int:\n    total = 0\n    for i, ch in enumerate(s):\n        value = VALUES[ch]\n        nxt = VALUES[s[i + 1]] if i + 1 < len(s) else 0\n        total += -value if value < nxt else value\n    return total\n\n\nclass Solution:\n    def romanToInt(self, s: str) -> int:\n        return solve(s)\n",
+      "javascript_sha256": "881dc6481a73dfcbe2d08d928c22f3416ddd75713f39e6cd14e2accf2078320d",
+      "python_sha256": "9071c000098ace93ad51322d000b8ba13d8101532f29c3d701c26f09a2634b51",
+      "tests": [
+        [
+          [
+            "III"
+          ],
+          3
+        ],
+        [
+          [
+            "LVIII"
+          ],
+          58
+        ],
+        [
+          [
+            "MCMXCIV"
+          ],
+          1994
+        ],
+        [
+          [
+            "IV"
+          ],
+          4
+        ]
+      ],
+      "qualification": {
+        "problem_id": 13,
+        "slug": "roman-to-integer",
+        "title": "Roman to Integer",
+        "passed": true,
+        "failures": []
+      }
+    },
+    {
+      "problem_id": 70,
+      "slug": "climbing-stairs",
+      "title": "Climbing Stairs",
+      "difficulty": "Easy",
+      "method": "climbStairs",
+      "javascript": "'use strict';\n\n// 70. Climbing Stairs (Easy).\n// Specification: https://leetcode.com/problems/climbing-stairs/description/\nfunction solve(n) {\n  if (n <= 2) return n;\n  let a = 1; let b = 2;\n  for (let i = 3; i <= n; i++) { const c = a + b; a = b; b = c; }\n  return b;\n}\nconst climbStairs = solve;\nclass Solution { climbStairs(n) { return solve(n); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, climbStairs };\n",
+      "python": "\"\"\"70. Climbing Stairs (Easy).\n\nSpecification: https://leetcode.com/problems/climbing-stairs/description/\n\"\"\"\n\n\ndef solve(n: int) -> int:\n    if n <= 2:\n        return n\n    a, b = 1, 2\n    for _i in range(3, n + 1):\n        a, b = b, a + b\n    return b\n\n\nclass Solution:\n    def climbStairs(self, n: int) -> int:\n        return solve(n)\n",
+      "javascript_sha256": "8d1edc3d50fb3ff2d8f21d1b81bf4fd2c177debccbf319678b719c57002cbcd8",
+      "python_sha256": "955ecc0ebf4b61ec8c2ce8184cf88eed36627f5d77f487dfef75a44fbeab4469",
+      "tests": [
+        [
+          [
+            2
+          ],
+          2
+        ],
+        [
+          [
+            3
+          ],
+          3
+        ],
+        [
+          [
+            5
+          ],
+          8
+        ],
+        [
+          [
+            1
+          ],
+          1
+        ]
+      ],
+      "qualification": {
+        "problem_id": 70,
+        "slug": "climbing-stairs",
+        "title": "Climbing Stairs",
+        "passed": true,
+        "failures": []
+      }
+    },
+    {
+      "problem_id": 118,
+      "slug": "pascals-triangle",
+      "title": "Pascal's Triangle",
+      "difficulty": "Easy",
+      "method": "generate",
+      "javascript": "'use strict';\n\n// 118. Pascal's Triangle (Easy).\n// Specification: https://leetcode.com/problems/pascals-triangle/description/\nfunction solve(numRows) {\n  const result = [];\n  for (let row = 0; row < numRows; row++) {\n    const current = new Array(row + 1).fill(1);\n    for (let col = 1; col < row; col++) current[col] = result[row - 1][col - 1] + result[row - 1][col];\n    result.push(current);\n  }\n  return result;\n}\nconst generate = solve;\nclass Solution { generate(numRows) { return solve(numRows); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, generate };\n",
+      "python": "\"\"\"118. Pascal's Triangle (Easy).\n\nSpecification: https://leetcode.com/problems/pascals-triangle/description/\n\"\"\"\n\n\ndef solve(numRows: int) -> list[list[int]]:\n    result = []\n    for row in range(numRows):\n        current = [1] * (row + 1)\n        for col in range(1, row):\n            current[col] = result[row - 1][col - 1] + result[row - 1][col]\n        result.append(current)\n    return result\n\n\nclass Solution:\n    def generate(self, numRows: int) -> list[list[int]]:\n        return solve(numRows)\n",
+      "javascript_sha256": "8875f1d40a14524d2635afc4a546f0f334b6c06330361b0252e26c2034ce28c2",
+      "python_sha256": "2b86cef951e047a8fa01325b3854f631b6e8175a0f8ce3eed072ec8d839ccf19",
+      "tests": [
+        [
+          [
+            5
+          ],
+          [
+            [
+              1
+            ],
+            [
+              1,
+              1
+            ],
+            [
+              1,
+              2,
+              1
+            ],
+            [
+              1,
+              3,
+              3,
+              1
+            ],
+            [
+              1,
+              4,
+              6,
+              4,
+              1
+            ]
+          ]
+        ],
+        [
+          [
+            1
+          ],
+          [
+            [
+              1
+            ]
+          ]
+        ]
+      ],
+      "qualification": {
+        "problem_id": 118,
+        "slug": "pascals-triangle",
+        "title": "Pascal's Triangle",
+        "passed": true,
+        "failures": []
+      }
+    },
+    {
+      "problem_id": 119,
+      "slug": "pascals-triangle-ii",
+      "title": "Pascal's Triangle II",
+      "difficulty": "Easy",
+      "method": "getRow",
+      "javascript": "'use strict';\n\n// 119. Pascal's Triangle II (Easy).\n// Specification: https://leetcode.com/problems/pascals-triangle-ii/description/\nfunction solve(rowIndex) {\n  let row = [1];\n  for (let i = 1; i <= rowIndex; i++) {\n    const next = new Array(i + 1).fill(1);\n    for (let col = 1; col < i; col++) next[col] = row[col - 1] + row[col];\n    row = next;\n  }\n  return row;\n}\nconst getRow = solve;\nclass Solution { getRow(rowIndex) { return solve(rowIndex); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, getRow };\n",
+      "python": "\"\"\"119. Pascal's Triangle II (Easy).\n\nSpecification: https://leetcode.com/problems/pascals-triangle-ii/description/\n\"\"\"\n\n\ndef solve(rowIndex: int) -> list[int]:\n    row = [1]\n    for i in range(1, rowIndex + 1):\n        nxt = [1] * (i + 1)\n        for col in range(1, i):\n            nxt[col] = row[col - 1] + row[col]\n        row = nxt\n    return row\n\n\nclass Solution:\n    def getRow(self, rowIndex: int) -> list[int]:\n        return solve(rowIndex)\n",
+      "javascript_sha256": "ee44014d196b78fe8bc9d27a2010b93802197290fd3b907508b79aa02a91bde5",
+      "python_sha256": "3298013a5775975972a0f7e40e442cb3f50a15a0ab56000fa50bf14790679429",
+      "tests": [
+        [
+          [
+            3
+          ],
+          [
+            1,
+            3,
+            3,
+            1
+          ]
+        ],
+        [
+          [
+            0
+          ],
+          [
+            1
+          ]
+        ],
+        [
+          [
+            1
+          ],
+          [
+            1,
+            1
+          ]
+        ]
+      ],
+      "qualification": {
+        "problem_id": 119,
+        "slug": "pascals-triangle-ii",
+        "title": "Pascal's Triangle II",
+        "passed": true,
+        "failures": []
+      }
+    },
+    {
+      "problem_id": 150,
+      "slug": "evaluate-reverse-polish-notation",
+      "title": "Evaluate Reverse Polish Notation",
+      "difficulty": "Medium",
+      "method": "evalRPN",
+      "javascript": "'use strict';\n\n// 150. Evaluate Reverse Polish Notation (Medium).\n// Specification: https://leetcode.com/problems/evaluate-reverse-polish-notation/description/\nfunction solve(tokens) {\n  const stack = [];\n  for (const token of tokens) {\n    if (token === '+' || token === '-' || token === '*' || token === '/') {\n      const b = stack.pop(); const a = stack.pop();\n      let value = 0;\n      if (token === '+') value = a + b;\n      else if (token === '-') value = a - b;\n      else if (token === '*') value = a * b;\n      else value = Math.trunc(a / b);\n      stack.push(value);\n    } else stack.push(parseInt(token, 10));\n  }\n  return stack[0];\n}\nconst evalRPN = solve;\nclass Solution { evalRPN(tokens) { return solve(tokens); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, evalRPN };\n",
+      "python": "\"\"\"150. Evaluate Reverse Polish Notation (Medium).\n\nSpecification: https://leetcode.com/problems/evaluate-reverse-polish-notation/description/\n\"\"\"\n\n\nimport math\n\n\ndef solve(tokens: list[str]) -> int:\n    stack = []\n    for token in tokens:\n        if token in ('+', '-', '*', '/'):\n            b = stack.pop()\n            a = stack.pop()\n            if token == '+':\n                value = a + b\n            elif token == '-':\n                value = a - b\n            elif token == '*':\n                value = a * b\n            else:\n                value = math.trunc(a / b)\n            stack.append(value)\n        else:\n            stack.append(int(token))\n    return stack[0]\n\n\nclass Solution:\n    def evalRPN(self, tokens: list[str]) -> int:\n        return solve(tokens)\n",
+      "javascript_sha256": "575edccb3c80142c85762ff733e41d2197c3fc7663b93f9dbfb3d146f4de1f10",
+      "python_sha256": "85d631f0ce7fa5d85616cfa01e69cbc5dc961625f3132ff2a2ab8428ddd9c04d",
+      "tests": [
+        [
+          [
+            [
+              "2",
+              "1",
+              "+",
+              "3",
+              "*"
+            ]
+          ],
+          9
+        ],
+        [
+          [
+            [
+              "4",
+              "13",
+              "5",
+              "/",
+              "+"
+            ]
+          ],
+          6
+        ],
+        [
+          [
+            [
+              "10",
+              "6",
+              "9",
+              "3",
+              "+",
+              "-11",
+              "*",
+              "/",
+              "*",
+              "17",
+              "+",
+              "5",
+              "+"
+            ]
+          ],
+          22
+        ]
+      ],
+      "qualification": {
+        "problem_id": 150,
+        "slug": "evaluate-reverse-polish-notation",
+        "title": "Evaluate Reverse Polish Notation",
+        "passed": true,
+        "failures": []
+      }
+    },
+    {
+      "problem_id": 151,
+      "slug": "reverse-words-in-a-string",
+      "title": "Reverse Words in a String",
+      "difficulty": "Medium",
+      "method": "reverseWords",
+      "javascript": "'use strict';\n\n// 151. Reverse Words in a String (Medium).\n// Specification: https://leetcode.com/problems/reverse-words-in-a-string/description/\nfunction solve(s) {\n  return s.trim().split(/\\s+/).reverse().join(' ');\n}\nconst reverseWords = solve;\nclass Solution { reverseWords(s) { return solve(s); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, reverseWords };\n",
+      "python": "\"\"\"151. Reverse Words in a String (Medium).\n\nSpecification: https://leetcode.com/problems/reverse-words-in-a-string/description/\n\"\"\"\n\n\ndef solve(s: str) -> str:\n    return \" \".join(reversed(s.split()))\n\n\nclass Solution:\n    def reverseWords(self, s: str) -> str:\n        return solve(s)\n",
+      "javascript_sha256": "e3f2c622d8b6e1d7c1f5684d583d5a1ef4288d2504a1b5f78a338c7ce97c7579",
+      "python_sha256": "9553552214683ea70959714bf3c4c5171a02b2ec39334825394fb084562e9242",
+      "tests": [
+        [
+          [
+            "the sky is blue"
+          ],
+          "blue is sky the"
+        ],
+        [
+          [
+            "  hello world  "
+          ],
+          "world hello"
+        ],
+        [
+          [
+            "a good   example"
+          ],
+          "example good a"
+        ]
+      ],
+      "qualification": {
+        "problem_id": 151,
+        "slug": "reverse-words-in-a-string",
+        "title": "Reverse Words in a String",
+        "passed": true,
+        "failures": []
+      }
+    },
+    {
+      "problem_id": 153,
+      "slug": "find-minimum-in-rotated-sorted-array",
+      "title": "Find Minimum in Rotated Sorted Array",
+      "difficulty": "Medium",
+      "method": "findMin",
+      "javascript": "'use strict';\n\n// 153. Find Minimum in Rotated Sorted Array (Medium).\n// Specification: https://leetcode.com/problems/find-minimum-in-rotated-sorted-array/description/\nfunction solve(nums) {\n  let left = 0; let right = nums.length - 1;\n  while (left < right) {\n    const mid = Math.floor((left + right) / 2);\n    if (nums[mid] > nums[right]) left = mid + 1;\n    else right = mid;\n  }\n  return nums[left];\n}\nconst findMin = solve;\nclass Solution { findMin(nums) { return solve(nums); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, findMin };\n",
+      "python": "\"\"\"153. Find Minimum in Rotated Sorted Array (Medium).\n\nSpecification: https://leetcode.com/problems/find-minimum-in-rotated-sorted-array/description/\n\"\"\"\n\n\ndef solve(nums: list[int]) -> int:\n    left, right = 0, len(nums) - 1\n    while left < right:\n        mid = (left + right) // 2\n        if nums[mid] > nums[right]:\n            left = mid + 1\n        else:\n            right = mid\n    return nums[left]\n\n\nclass Solution:\n    def findMin(self, nums: list[int]) -> int:\n        return solve(nums)\n",
+      "javascript_sha256": "54dfb0229b1b95743ce5d1d652b3d9e82d47691f2fca40d5a479c5dcddefdbb1",
+      "python_sha256": "dd48cb04d53c55f63af94c2d21c47c4c63fa88a926eb563c24a8ea452ac81765",
+      "tests": [
+        [
+          [
+            [
+              3,
+              4,
+              5,
+              1,
+              2
+            ]
+          ],
+          1
+        ],
+        [
+          [
+            [
+              4,
+              5,
+              6,
+              7,
+              0,
+              1,
+              2
+            ]
+          ],
+          0
+        ],
+        [
+          [
+            [
+              11,
+              13,
+              15,
+              17
+            ]
+          ],
+          11
+        ]
+      ],
+      "qualification": {
+        "problem_id": 153,
+        "slug": "find-minimum-in-rotated-sorted-array",
+        "title": "Find Minimum in Rotated Sorted Array",
+        "passed": true,
+        "failures": []
+      }
+    },
+    {
+      "problem_id": 162,
+      "slug": "find-peak-element",
+      "title": "Find Peak Element",
+      "difficulty": "Medium",
+      "method": "findPeakElement",
+      "javascript": "'use strict';\n\n// 162. Find Peak Element (Medium).\n// Specification: https://leetcode.com/problems/find-peak-element/description/\nfunction solve(nums) {\n  let left = 0; let right = nums.length - 1;\n  while (left < right) {\n    const mid = Math.floor((left + right) / 2);\n    if (nums[mid] < nums[mid + 1]) left = mid + 1;\n    else right = mid;\n  }\n  return left;\n}\nconst findPeakElement = solve;\nclass Solution { findPeakElement(nums) { return solve(nums); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, findPeakElement };\n",
+      "python": "\"\"\"162. Find Peak Element (Medium).\n\nSpecification: https://leetcode.com/problems/find-peak-element/description/\n\"\"\"\n\n\ndef solve(nums: list[int]) -> int:\n    left, right = 0, len(nums) - 1\n    while left < right:\n        mid = (left + right) // 2\n        if nums[mid] < nums[mid + 1]:\n            left = mid + 1\n        else:\n            right = mid\n    return left\n\n\nclass Solution:\n    def findPeakElement(self, nums: list[int]) -> int:\n        return solve(nums)\n",
+      "javascript_sha256": "2214924ac215949177ff9588420796dc75124abcbd0581d98917584b0d082b98",
+      "python_sha256": "dfe278994fa017bc69e7ce6d4d529baacd669aaa59fc035443dcbdbb68a34e5f",
+      "tests": [
+        [
+          [
+            [
+              1,
+              2,
+              3,
+              1
+            ]
+          ],
+          2
+        ],
+        [
+          [
+            [
+              1,
+              2,
+              1,
+              3,
+              5,
+              6,
+              4
+            ]
+          ],
+          5
+        ],
+        [
+          [
+            [
+              1
+            ]
+          ],
+          0
+        ]
+      ],
+      "qualification": {
+        "problem_id": 162,
+        "slug": "find-peak-element",
+        "title": "Find Peak Element",
+        "passed": true,
+        "failures": []
+      }
+    },
+    {
+      "problem_id": 167,
+      "slug": "two-sum-ii-input-array-is-sorted",
+      "title": "Two Sum II - Input Array Is Sorted",
+      "difficulty": "Medium",
+      "method": "twoSum",
+      "javascript": "'use strict';\n\n// 167. Two Sum II - Input Array Is Sorted (Medium).\n// Specification: https://leetcode.com/problems/two-sum-ii-input-array-is-sorted/description/\nfunction solve(numbers, target) {\n  let left = 0; let right = numbers.length - 1;\n  while (left < right) {\n    const total = numbers[left] + numbers[right];\n    if (total === target) return [left + 1, right + 1];\n    if (total < target) left++;\n    else right--;\n  }\n  return [];\n}\nconst twoSum = solve;\nclass Solution { twoSum(numbers, target) { return solve(numbers, target); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, twoSum };\n",
+      "python": "\"\"\"167. Two Sum II - Input Array Is Sorted (Medium).\n\nSpecification: https://leetcode.com/problems/two-sum-ii-input-array-is-sorted/description/\n\"\"\"\n\n\ndef solve(numbers: list[int], target: int) -> list[int]:\n    left, right = 0, len(numbers) - 1\n    while left < right:\n        total = numbers[left] + numbers[right]\n        if total == target:\n            return [left + 1, right + 1]\n        if total < target:\n            left += 1\n        else:\n            right -= 1\n    return []\n\n\nclass Solution:\n    def twoSum(self, numbers: list[int], target: int) -> list[int]:\n        return solve(numbers, target)\n",
+      "javascript_sha256": "22ffa8f4278269e4b81aab6d675babb9883b1992531ef4535dee8778d85a20fd",
+      "python_sha256": "119d538801399318a84e8b8be454d81a441e73f50fc09c9763b1b40a29c84491",
+      "tests": [
+        [
+          [
+            [
+              2,
+              7,
+              11,
+              15
+            ],
+            9
+          ],
+          [
+            1,
+            2
+          ]
+        ],
+        [
+          [
+            [
+              2,
+              3,
+              4
+            ],
+            6
+          ],
+          [
+            1,
+            3
+          ]
+        ],
+        [
+          [
+            [
+              -1,
+              0
+            ],
+            -1
+          ],
+          [
+            1,
+            2
+          ]
+        ]
+      ],
+      "qualification": {
+        "problem_id": 167,
+        "slug": "two-sum-ii-input-array-is-sorted",
+        "title": "Two Sum II - Input Array Is Sorted",
+        "passed": true,
+        "failures": []
+      }
+    },
+    {
+      "problem_id": 168,
+      "slug": "excel-sheet-column-title",
+      "title": "Excel Sheet Column Title",
+      "difficulty": "Easy",
+      "method": "convertToTitle",
+      "javascript": "'use strict';\n\n// 168. Excel Sheet Column Title (Easy).\n// Specification: https://leetcode.com/problems/excel-sheet-column-title/description/\nfunction solve(columnNumber) {\n  let result = '';\n  let value = columnNumber;\n  while (value > 0) {\n    value--;\n    result = String.fromCharCode(65 + (value % 26)) + result;\n    value = Math.floor(value / 26);\n  }\n  return result;\n}\nconst convertToTitle = solve;\nclass Solution { convertToTitle(columnNumber) { return solve(columnNumber); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, convertToTitle };\n",
+      "python": "\"\"\"168. Excel Sheet Column Title (Easy).\n\nSpecification: https://leetcode.com/problems/excel-sheet-column-title/description/\n\"\"\"\n\n\ndef solve(columnNumber: int) -> str:\n    result = ''\n    value = columnNumber\n    while value > 0:\n        value -= 1\n        result = chr(65 + (value % 26)) + result\n        value //= 26\n    return result\n\n\nclass Solution:\n    def convertToTitle(self, columnNumber: int) -> str:\n        return solve(columnNumber)\n",
+      "javascript_sha256": "4188c80434a182f38f3578799595ab6a0e41b8e13e188a4c96710d5f1c663e65",
+      "python_sha256": "dbd15c44f6540d4e90357ba14e611cd45d2f6aec4b0b24038a394c64f1a61ec3",
+      "tests": [
+        [
+          [
+            1
+          ],
+          "A"
+        ],
+        [
+          [
+            28
+          ],
+          "AB"
+        ],
+        [
+          [
+            701
+          ],
+          "ZY"
+        ],
+        [
+          [
+            52
+          ],
+          "AZ"
+        ]
+      ],
+      "qualification": {
+        "problem_id": 168,
+        "slug": "excel-sheet-column-title",
+        "title": "Excel Sheet Column Title",
+        "passed": true,
+        "failures": []
+      }
+    },
+    {
+      "problem_id": 172,
+      "slug": "factorial-trailing-zeroes",
+      "title": "Factorial Trailing Zeroes",
+      "difficulty": "Medium",
+      "method": "trailingZeroes",
+      "javascript": "'use strict';\n\n// 172. Factorial Trailing Zeroes (Medium).\n// Specification: https://leetcode.com/problems/factorial-trailing-zeroes/description/\nfunction solve(n) {\n  let count = 0;\n  while (n > 0) { n = Math.floor(n / 5); count += n; }\n  return count;\n}\nconst trailingZeroes = solve;\nclass Solution { trailingZeroes(n) { return solve(n); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, trailingZeroes };\n",
+      "python": "\"\"\"172. Factorial Trailing Zeroes (Medium).\n\nSpecification: https://leetcode.com/problems/factorial-trailing-zeroes/description/\n\"\"\"\n\n\ndef solve(n: int) -> int:\n    count = 0\n    while n > 0:\n        n //= 5\n        count += n\n    return count\n\n\nclass Solution:\n    def trailingZeroes(self, n: int) -> int:\n        return solve(n)\n",
+      "javascript_sha256": "97ab78d06b3d55cdc98b31aed30a4493c9274b9160678b1d929019136b6d3ca5",
+      "python_sha256": "417176ce6be7506159e11e944b4565e4be07b041541b9200c325978a80bfcd1a",
+      "tests": [
+        [
+          [
+            3
+          ],
+          0
+        ],
+        [
+          [
+            5
+          ],
+          1
+        ],
+        [
+          [
+            25
+          ],
+          6
+        ],
+        [
+          [
+            0
+          ],
+          0
+        ]
+      ],
+      "qualification": {
+        "problem_id": 172,
+        "slug": "factorial-trailing-zeroes",
+        "title": "Factorial Trailing Zeroes",
+        "passed": true,
+        "failures": []
+      }
+    },
+    {
+      "problem_id": 179,
+      "slug": "largest-number",
+      "title": "Largest Number",
+      "difficulty": "Medium",
+      "method": "largestNumber",
+      "javascript": "'use strict';\n\n// 179. Largest Number (Medium).\n// Specification: https://leetcode.com/problems/largest-number/description/\nfunction solve(nums) {\n  const texts = nums.map(String);\n  texts.sort((a, b) => (b + a).localeCompare(a + b));\n  const result = texts.join('');\n  return result[0] === '0' ? '0' : result;\n}\nconst largestNumber = solve;\nclass Solution { largestNumber(nums) { return solve(nums); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, largestNumber };\n",
+      "python": "\"\"\"179. Largest Number (Medium).\n\nSpecification: https://leetcode.com/problems/largest-number/description/\n\"\"\"\n\n\nfrom functools import cmp_to_key\n\n\ndef _compare(a, b):\n    if a + b > b + a:\n        return -1\n    if a + b < b + a:\n        return 1\n    return 0\n\n\ndef solve(nums: list[int]) -> str:\n    texts = sorted((str(v) for v in nums), key=cmp_to_key(_compare))\n    result = \"\".join(texts)\n    return \"0\" if result and result[0] == \"0\" else result\n\n\nclass Solution:\n    def largestNumber(self, nums: list[int]) -> str:\n        return solve(nums)\n",
+      "javascript_sha256": "744367309a1f5cc2cc32d5692106e4597dc35cacaf14e18cf6b9e14e24784269",
+      "python_sha256": "7a6de84dcd95c8eb2909d792e6c7dd1ba86525571062aaf8e0e8b72c21dafbf4",
+      "tests": [
+        [
+          [
+            [
+              10,
+              2
+            ]
+          ],
+          "210"
+        ],
+        [
+          [
+            [
+              3,
+              30,
+              34,
+              5,
+              9
+            ]
+          ],
+          "9534330"
+        ],
+        [
+          [
+            [
+              0,
+              0
+            ]
+          ],
+          "0"
+        ]
+      ],
+      "qualification": {
+        "problem_id": 179,
+        "slug": "largest-number",
+        "title": "Largest Number",
+        "passed": true,
+        "failures": []
+      }
+    },
+    {
+      "problem_id": 189,
+      "slug": "rotate-array",
+      "title": "Rotate Array",
+      "difficulty": "Medium",
+      "method": "rotate",
+      "javascript": "'use strict';\n\n// 189. Rotate Array (Medium).\n// Specification: https://leetcode.com/problems/rotate-array/description/\nfunction solve(nums, k) {\n  const n = nums.length;\n  if (n === 0) return [];\n  const steps = ((k % n) + n) % n;\n  return nums.slice(n - steps).concat(nums.slice(0, n - steps));\n}\nconst rotate = solve;\nclass Solution { rotate(nums, k) { return solve(nums, k); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, rotate };\n",
+      "python": "\"\"\"189. Rotate Array (Medium).\n\nSpecification: https://leetcode.com/problems/rotate-array/description/\n\"\"\"\n\n\ndef solve(nums: list[int], k: int) -> list[int]:\n    n = len(nums)\n    if n == 0:\n        return []\n    steps = k % n\n    return nums[n - steps:] + nums[:n - steps]\n\n\nclass Solution:\n    def rotate(self, nums: list[int], k: int) -> list[int]:\n        return solve(nums, k)\n",
+      "javascript_sha256": "99f32ef91e5f8de3a7c2653f0686653f7335b1763cb0a81fa63d4fdec5ee5e29",
+      "python_sha256": "8cfad17ca22ea3ff3057d67bb7530615ec302e8de21d01792c151101ffe5036a",
+      "tests": [
+        [
+          [
+            [
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7
+            ],
+            3
+          ],
+          [
+            5,
+            6,
+            7,
+            1,
+            2,
+            3,
+            4
+          ]
+        ],
+        [
+          [
+            [
+              -1,
+              -100,
+              3,
+              99
+            ],
+            2
+          ],
+          [
+            3,
+            99,
+            -1,
+            -100
+          ]
+        ]
+      ],
+      "qualification": {
+        "problem_id": 189,
+        "slug": "rotate-array",
+        "title": "Rotate Array",
+        "passed": true,
+        "failures": []
+      }
+    },
+    {
+      "problem_id": 198,
+      "slug": "house-robber",
+      "title": "House Robber",
+      "difficulty": "Medium",
+      "method": "rob",
+      "javascript": "'use strict';\n\n// 198. House Robber (Medium).\n// Specification: https://leetcode.com/problems/house-robber/description/\nfunction solve(nums) {\n  let previous = 0; let current = 0;\n  for (const value of nums) { const next = Math.max(current, previous + value); previous = current; current = next; }\n  return current;\n}\nconst rob = solve;\nclass Solution { rob(nums) { return solve(nums); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, rob };\n",
+      "python": "\"\"\"198. House Robber (Medium).\n\nSpecification: https://leetcode.com/problems/house-robber/description/\n\"\"\"\n\n\ndef solve(nums: list[int]) -> int:\n    previous = 0\n    current = 0\n    for value in nums:\n        previous, current = current, max(current, previous + value)\n    return current\n\n\nclass Solution:\n    def rob(self, nums: list[int]) -> int:\n        return solve(nums)\n",
+      "javascript_sha256": "8e65f9e26f89cb73e0e1cb5769f605c5bb1164a7bbaa69594058ac70a7689836",
+      "python_sha256": "989daf8d747b1c0b23b5259090ced1fd71a5e56013a18f65555e1f554da7218c",
+      "tests": [
+        [
+          [
+            [
+              1,
+              2,
+              3,
+              1
+            ]
+          ],
+          4
+        ],
+        [
+          [
+            [
+              2,
+              7,
+              9,
+              3,
+              1
+            ]
+          ],
+          12
+        ],
+        [
+          [
+            [
+              0
+            ]
+          ],
+          0
+        ]
+      ],
+      "qualification": {
+        "problem_id": 198,
+        "slug": "house-robber",
+        "title": "House Robber",
+        "passed": true,
+        "failures": []
+      }
+    },
+    {
+      "problem_id": 204,
+      "slug": "count-primes",
+      "title": "Count Primes",
+      "difficulty": "Medium",
+      "method": "countPrimes",
+      "javascript": "'use strict';\n\n// 204. Count Primes (Medium).\n// Specification: https://leetcode.com/problems/count-primes/description/\nfunction solve(n) {\n  if (n <= 2) return 0;\n  const isPrime = new Array(n).fill(true);\n  isPrime[0] = false; isPrime[1] = false;\n  for (let i = 2; i * i < n; i++) {\n    if (isPrime[i]) { for (let j = i * i; j < n; j += i) isPrime[j] = false; }\n  }\n  return isPrime.filter(Boolean).length;\n}\nconst countPrimes = solve;\nclass Solution { countPrimes(n) { return solve(n); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, countPrimes };\n",
+      "python": "\"\"\"204. Count Primes (Medium).\n\nSpecification: https://leetcode.com/problems/count-primes/description/\n\"\"\"\n\n\ndef solve(n: int) -> int:\n    if n <= 2:\n        return 0\n    is_prime = [True] * n\n    is_prime[0] = False\n    is_prime[1] = False\n    i = 2\n    while i * i < n:\n        if is_prime[i]:\n            for j in range(i * i, n, i):\n                is_prime[j] = False\n        i += 1\n    return sum(is_prime)\n\n\nclass Solution:\n    def countPrimes(self, n: int) -> int:\n        return solve(n)\n",
+      "javascript_sha256": "99771b717104efd77db09c8a2fd9c9c399b32d2cef845d80f8d75454d056250f",
+      "python_sha256": "0da3e6a6d6b95e0117de01ed742cbf212f1b87c9b880b89fb5ecf5826f161621",
+      "tests": [
+        [
+          [
+            10
+          ],
+          4
+        ],
+        [
+          [
+            0
+          ],
+          0
+        ],
+        [
+          [
+            1
+          ],
+          0
+        ],
+        [
+          [
+            2
+          ],
+          0
+        ]
+      ],
+      "qualification": {
+        "problem_id": 204,
+        "slug": "count-primes",
+        "title": "Count Primes",
+        "passed": true,
+        "failures": []
+      }
+    },
+    {
+      "problem_id": 209,
+      "slug": "minimum-size-subarray-sum",
+      "title": "Minimum Size Subarray Sum",
+      "difficulty": "Medium",
+      "method": "minSubArrayLen",
+      "javascript": "'use strict';\n\n// 209. Minimum Size Subarray Sum (Medium).\n// Specification: https://leetcode.com/problems/minimum-size-subarray-sum/description/\nfunction solve(target, nums) {\n  let left = 0; let total = 0; let shortest = Infinity;\n  for (let right = 0; right < nums.length; right++) {\n    total += nums[right];\n    while (total >= target) { shortest = Math.min(shortest, right - left + 1); total -= nums[left]; left++; }\n  }\n  return shortest === Infinity ? 0 : shortest;\n}\nconst minSubArrayLen = solve;\nclass Solution { minSubArrayLen(target, nums) { return solve(target, nums); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, minSubArrayLen };\n",
+      "python": "\"\"\"209. Minimum Size Subarray Sum (Medium).\n\nSpecification: https://leetcode.com/problems/minimum-size-subarray-sum/description/\n\"\"\"\n\n\ndef solve(target: int, nums: list[int]) -> int:\n    left = 0\n    total = 0\n    shortest = float('inf')\n    for right, value in enumerate(nums):\n        total += value\n        while total >= target:\n            shortest = min(shortest, right - left + 1)\n            total -= nums[left]\n            left += 1\n    return 0 if shortest == float('inf') else shortest\n\n\nclass Solution:\n    def minSubArrayLen(self, target: int, nums: list[int]) -> int:\n        return solve(target, nums)\n",
+      "javascript_sha256": "5f98072c8e57d0550a1be861b56c5ab429dee4d4dd1457795f281cb999d707f3",
+      "python_sha256": "461f1892f8016ab1a5e088882d9d21e360e979e4d40c07a50b6736dd472c6e0c",
+      "tests": [
+        [
+          [
+            7,
+            [
+              2,
+              3,
+              1,
+              2,
+              4,
+              3
+            ]
+          ],
+          2
+        ],
+        [
+          [
+            4,
+            [
+              1,
+              4,
+              4
+            ]
+          ],
+          1
+        ],
+        [
+          [
+            11,
+            [
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ]
+          ],
+          0
+        ]
+      ],
+      "qualification": {
+        "problem_id": 209,
+        "slug": "minimum-size-subarray-sum",
+        "title": "Minimum Size Subarray Sum",
+        "passed": true,
+        "failures": []
+      }
+    },
+    {
+      "problem_id": 213,
+      "slug": "house-robber-ii",
+      "title": "House Robber II",
+      "difficulty": "Medium",
+      "method": "rob",
+      "javascript": "'use strict';\n\n// 213. House Robber II (Medium).\n// Specification: https://leetcode.com/problems/house-robber-ii/description/\nfunction robLinear(nums) {\n  let previous = 0; let current = 0;\n  for (const value of nums) { const next = Math.max(current, previous + value); previous = current; current = next; }\n  return current;\n}\nfunction solve(nums) {\n  if (nums.length === 1) return nums[0];\n  return Math.max(robLinear(nums.slice(0, -1)), robLinear(nums.slice(1)));\n}\nconst rob = solve;\nclass Solution { rob(nums) { return solve(nums); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, rob };\n",
+      "python": "\"\"\"213. House Robber II (Medium).\n\nSpecification: https://leetcode.com/problems/house-robber-ii/description/\n\"\"\"\n\n\ndef _rob_linear(nums):\n    previous = 0\n    current = 0\n    for value in nums:\n        previous, current = current, max(current, previous + value)\n    return current\n\n\ndef solve(nums: list[int]) -> int:\n    if len(nums) == 1:\n        return nums[0]\n    return max(_rob_linear(nums[:-1]), _rob_linear(nums[1:]))\n\n\nclass Solution:\n    def rob(self, nums: list[int]) -> int:\n        return solve(nums)\n",
+      "javascript_sha256": "864e7b65231215c287937d996c32b9b245f49e9584dfb0d956fb3f27f7ca0b2c",
+      "python_sha256": "605d976519f3028f4bb81a22d8cbee8d40af0dc530da98a898750d9594370af9",
+      "tests": [
+        [
+          [
+            [
+              2,
+              3,
+              2
+            ]
+          ],
+          3
+        ],
+        [
+          [
+            [
+              1,
+              2,
+              3,
+              1
+            ]
+          ],
+          4
+        ],
+        [
+          [
+            [
+              1,
+              2,
+              3
+            ]
+          ],
+          3
+        ],
+        [
+          [
+            [
+              1
+            ]
+          ],
+          1
+        ]
+      ],
+      "qualification": {
+        "problem_id": 213,
+        "slug": "house-robber-ii",
+        "title": "House Robber II",
+        "passed": true,
+        "failures": []
+      }
+    },
+    {
+      "problem_id": 215,
+      "slug": "kth-largest-element-in-an-array",
+      "title": "Kth Largest Element in an Array",
+      "difficulty": "Medium",
+      "method": "findKthLargest",
+      "javascript": "'use strict';\n\n// 215. Kth Largest Element in an Array (Medium).\n// Specification: https://leetcode.com/problems/kth-largest-element-in-an-array/description/\nfunction solve(nums, k) {\n  return nums.slice().sort((a, b) => b - a)[k - 1];\n}\nconst findKthLargest = solve;\nclass Solution { findKthLargest(nums, k) { return solve(nums, k); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, findKthLargest };\n",
+      "python": "\"\"\"215. Kth Largest Element in an Array (Medium).\n\nSpecification: https://leetcode.com/problems/kth-largest-element-in-an-array/description/\n\"\"\"\n\n\ndef solve(nums: list[int], k: int) -> int:\n    return sorted(nums, reverse=True)[k - 1]\n\n\nclass Solution:\n    def findKthLargest(self, nums: list[int], k: int) -> int:\n        return solve(nums, k)\n",
+      "javascript_sha256": "268d9dd409e58931e5bdd51a84b63503965c0cde17c4b5c66c84cda58d3616d5",
+      "python_sha256": "8e57e8d9e0d1a415f3d1155aa8e551228c81f810c19fd29802ec86c95574901a",
+      "tests": [
+        [
+          [
+            [
+              3,
+              2,
+              1,
+              5,
+              6,
+              4
+            ],
+            2
+          ],
+          5
+        ],
+        [
+          [
+            [
+              3,
+              2,
+              3,
+              1,
+              2,
+              4,
+              5,
+              5,
+              6
+            ],
+            4
+          ],
+          4
+        ]
+      ],
+      "qualification": {
+        "problem_id": 215,
+        "slug": "kth-largest-element-in-an-array",
+        "title": "Kth Largest Element in an Array",
+        "passed": true,
+        "failures": []
+      }
+    },
+    {
+      "problem_id": 221,
+      "slug": "maximal-square",
+      "title": "Maximal Square",
+      "difficulty": "Medium",
+      "method": "maximalSquare",
+      "javascript": "'use strict';\n\n// 221. Maximal Square (Medium).\n// Specification: https://leetcode.com/problems/maximal-square/description/\nfunction solve(matrix) {\n  if (matrix.length === 0) return 0;\n  const rows = matrix.length; const cols = matrix[0].length;\n  const dp = Array.from({ length: rows + 1 }, () => new Array(cols + 1).fill(0));\n  let best = 0;\n  for (let r = 0; r < rows; r++) {\n    for (let c = 0; c < cols; c++) {\n      if (matrix[r][c] === '1') {\n        dp[r + 1][c + 1] = 1 + Math.min(dp[r][c], dp[r + 1][c], dp[r][c + 1]);\n        best = Math.max(best, dp[r + 1][c + 1]);\n      }\n    }\n  }\n  return best * best;\n}\nconst maximalSquare = solve;\nclass Solution { maximalSquare(matrix) { return solve(matrix); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, maximalSquare };\n",
+      "python": "\"\"\"221. Maximal Square (Medium).\n\nSpecification: https://leetcode.com/problems/maximal-square/description/\n\"\"\"\n\n\ndef solve(matrix: list[list[str]]) -> int:\n    if not matrix:\n        return 0\n    rows, cols = len(matrix), len(matrix[0])\n    dp = [[0] * (cols + 1) for _ in range(rows + 1)]\n    best = 0\n    for r in range(rows):\n        for c in range(cols):\n            if matrix[r][c] == '1':\n                dp[r + 1][c + 1] = 1 + min(dp[r][c], dp[r + 1][c], dp[r][c + 1])\n                best = max(best, dp[r + 1][c + 1])\n    return best * best\n\n\nclass Solution:\n    def maximalSquare(self, matrix: list[list[str]]) -> int:\n        return solve(matrix)\n",
+      "javascript_sha256": "6a8ee5323f9be0b99a03382837f5260bf4feef29e0723f70d00d3ba6d5d03a0a",
+      "python_sha256": "0fe120a49cc918a18085a09f0610e543b8c00f085e2bbaa6e9ed50c8a5190d04",
+      "tests": [
+        [
+          [
+            [
+              [
+                "1",
+                "0",
+                "1",
+                "0",
+                "0"
+              ],
+              [
+                "1",
+                "0",
+                "1",
+                "1",
+                "1"
+              ],
+              [
+                "1",
+                "1",
+                "1",
+                "1",
+                "1"
+              ],
+              [
+                "1",
+                "0",
+                "0",
+                "1",
+                "0"
+              ]
+            ]
+          ],
+          4
+        ],
+        [
+          [
+            [
+              [
+                "0",
+                "1"
+              ],
+              [
+                "1",
+                "0"
+              ]
+            ]
+          ],
+          1
+        ],
+        [
+          [
+            [
+              [
+                "0"
+              ]
+            ]
+          ],
+          0
+        ]
+      ],
+      "qualification": {
+        "problem_id": 221,
+        "slug": "maximal-square",
+        "title": "Maximal Square",
+        "passed": true,
+        "failures": []
+      }
+    },
+    {
+      "problem_id": 228,
+      "slug": "summary-ranges",
+      "title": "Summary Ranges",
+      "difficulty": "Easy",
+      "method": "summaryRanges",
+      "javascript": "'use strict';\n\n// 228. Summary Ranges (Easy).\n// Specification: https://leetcode.com/problems/summary-ranges/description/\nfunction solve(nums) {\n  const result = [];\n  let start = 0;\n  for (let i = 0; i < nums.length; i++) {\n    if (i + 1 === nums.length || nums[i + 1] !== nums[i] + 1) {\n      result.push(start === i ? String(nums[start]) : `${nums[start]}->${nums[i]}`);\n      start = i + 1;\n    }\n  }\n  return result;\n}\nconst summaryRanges = solve;\nclass Solution { summaryRanges(nums) { return solve(nums); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, summaryRanges };\n",
+      "python": "\"\"\"228. Summary Ranges (Easy).\n\nSpecification: https://leetcode.com/problems/summary-ranges/description/\n\"\"\"\n\n\ndef solve(nums: list[int]) -> list[str]:\n    result = []\n    start = 0\n    for i, value in enumerate(nums):\n        if i + 1 == len(nums) or nums[i + 1] != value + 1:\n            result.append(str(nums[start]) if start == i else f\"{nums[start]}->{value}\")\n            start = i + 1\n    return result\n\n\nclass Solution:\n    def summaryRanges(self, nums: list[int]) -> list[str]:\n        return solve(nums)\n",
+      "javascript_sha256": "e077495993c993a2446829c3fe98ae23aaf314544dd5578c32c8289bd1b09bae",
+      "python_sha256": "47307e3ea9c65b9fedbea34f0773efde90b17f0bb658041ed2214e717ef4f204",
+      "tests": [
+        [
+          [
+            [
+              0,
+              1,
+              2,
+              4,
+              5,
+              7
+            ]
+          ],
+          [
+            "0->2",
+            "4->5",
+            "7"
+          ]
+        ],
+        [
+          [
+            [
+              0,
+              2,
+              3,
+              4,
+              6,
+              8,
+              9
+            ]
+          ],
+          [
+            "0",
+            "2->4",
+            "6",
+            "8->9"
+          ]
+        ],
+        [
+          [
+            []
+          ],
+          []
+        ]
+      ],
+      "qualification": {
+        "problem_id": 228,
+        "slug": "summary-ranges",
+        "title": "Summary Ranges",
+        "passed": true,
+        "failures": []
+      }
+    },
+    {
+      "problem_id": 229,
+      "slug": "majority-element-ii",
+      "title": "Majority Element II",
+      "difficulty": "Medium",
+      "method": "majorityElement",
+      "javascript": "'use strict';\n\n// 229. Majority Element II (Medium).\n// Specification: https://leetcode.com/problems/majority-element-ii/description/\nfunction solve(nums) {\n  let count1 = 0; let count2 = 0; let candidate1 = null; let candidate2 = null;\n  for (const value of nums) {\n    if (candidate1 === value) count1++;\n    else if (candidate2 === value) count2++;\n    else if (count1 === 0) { candidate1 = value; count1 = 1; }\n    else if (count2 === 0) { candidate2 = value; count2 = 1; }\n    else { count1--; count2--; }\n  }\n  const result = [];\n  for (const candidate of [candidate1, candidate2]) {\n    if (candidate !== null && nums.filter((v) => v === candidate).length > Math.floor(nums.length / 3)) result.push(candidate);\n  }\n  return result.sort((a, b) => a - b);\n}\nconst majorityElement = solve;\nclass Solution { majorityElement(nums) { return solve(nums); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, majorityElement };\n",
+      "python": "\"\"\"229. Majority Element II (Medium).\n\nSpecification: https://leetcode.com/problems/majority-element-ii/description/\n\"\"\"\n\n\ndef solve(nums: list[int]) -> list[int]:\n    count1 = 0\n    count2 = 0\n    candidate1 = None\n    candidate2 = None\n    for value in nums:\n        if candidate1 == value:\n            count1 += 1\n        elif candidate2 == value:\n            count2 += 1\n        elif count1 == 0:\n            candidate1, count1 = value, 1\n        elif count2 == 0:\n            candidate2, count2 = value, 1\n        else:\n            count1 -= 1\n            count2 -= 1\n    result = []\n    for candidate in (candidate1, candidate2):\n        if candidate is not None and nums.count(candidate) > len(nums) // 3:\n            result.append(candidate)\n    return sorted(result)\n\n\nclass Solution:\n    def majorityElement(self, nums: list[int]) -> list[int]:\n        return solve(nums)\n",
+      "javascript_sha256": "c2be2a72f03a3cc8b21f77c0709e168d7183dd8eeb0d11e9b599b6b191c1a3b6",
+      "python_sha256": "830c9cc397ec8429ea5aff59e2fb9beaac0f58c1e6f1de4dc00cbb41805d0810",
+      "tests": [
+        [
+          [
+            [
+              3,
+              2,
+              3
+            ]
+          ],
+          [
+            3
+          ]
+        ],
+        [
+          [
+            [
+              1
+            ]
+          ],
+          [
+            1
+          ]
+        ],
+        [
+          [
+            [
+              1,
+              1,
+              1,
+              3,
+              3,
+              2,
+              2,
+              2
+            ]
+          ],
+          [
+            1,
+            2
+          ]
+        ]
+      ],
+      "qualification": {
+        "problem_id": 229,
+        "slug": "majority-element-ii",
+        "title": "Majority Element II",
+        "passed": true,
+        "failures": []
+      }
+    },
+    {
+      "problem_id": 238,
+      "slug": "product-of-array-except-self",
+      "title": "Product of Array Except Self",
+      "difficulty": "Medium",
+      "method": "productExceptSelf",
+      "javascript": "'use strict';\n\n// 238. Product of Array Except Self (Medium).\n// Specification: https://leetcode.com/problems/product-of-array-except-self/description/\nfunction solve(nums) {\n  const answer = new Array(nums.length).fill(1);\n  let prefix = 1;\n  for (let i = 0; i < nums.length; i++) { answer[i] = prefix; prefix *= nums[i]; }\n  let suffix = 1;\n  for (let i = nums.length - 1; i >= 0; i--) { answer[i] *= suffix; suffix *= nums[i]; }\n  return answer;\n}\nconst productExceptSelf = solve;\nclass Solution { productExceptSelf(nums) { return solve(nums); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, productExceptSelf };\n",
+      "python": "\"\"\"238. Product of Array Except Self (Medium).\n\nSpecification: https://leetcode.com/problems/product-of-array-except-self/description/\n\"\"\"\n\n\ndef solve(nums: list[int]) -> list[int]:\n    answer = [1] * len(nums)\n    prefix = 1\n    for i, value in enumerate(nums):\n        answer[i] = prefix\n        prefix *= value\n    suffix = 1\n    for i in range(len(nums) - 1, -1, -1):\n        answer[i] *= suffix\n        suffix *= nums[i]\n    return answer\n\n\nclass Solution:\n    def productExceptSelf(self, nums: list[int]) -> list[int]:\n        return solve(nums)\n",
+      "javascript_sha256": "46725f99113990a7eca388f4dae79c178704053c9c30621bc95e07006544c1cd",
+      "python_sha256": "2ba3d45e84ec0186ba02a39d75c25d792a821fcc96b251b2881c36ebf83a1e6f",
+      "tests": [
+        [
+          [
+            [
+              1,
+              2,
+              3,
+              4
+            ]
+          ],
+          [
+            24,
+            12,
+            8,
+            6
+          ]
+        ],
+        [
+          [
+            [
+              -1,
+              1,
+              0,
+              -3,
+              3
+            ]
+          ],
+          [
+            0,
+            0,
+            9,
+            0,
+            0
+          ]
+        ]
+      ],
+      "qualification": {
+        "problem_id": 238,
+        "slug": "product-of-array-except-self",
+        "title": "Product of Array Except Self",
+        "passed": true,
+        "failures": []
+      }
+    },
+    {
+      "problem_id": 240,
+      "slug": "search-a-2d-matrix-ii",
+      "title": "Search a 2D Matrix II",
+      "difficulty": "Medium",
+      "method": "searchMatrix",
+      "javascript": "'use strict';\n\n// 240. Search a 2D Matrix II (Medium).\n// Specification: https://leetcode.com/problems/search-a-2d-matrix-ii/description/\nfunction solve(matrix, target) {\n  if (matrix.length === 0) return false;\n  let row = 0; let col = matrix[0].length - 1;\n  while (row < matrix.length && col >= 0) {\n    const value = matrix[row][col];\n    if (value === target) return true;\n    if (value > target) col--;\n    else row++;\n  }\n  return false;\n}\nconst searchMatrix = solve;\nclass Solution { searchMatrix(matrix, target) { return solve(matrix, target); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, searchMatrix };\n",
+      "python": "\"\"\"240. Search a 2D Matrix II (Medium).\n\nSpecification: https://leetcode.com/problems/search-a-2d-matrix-ii/description/\n\"\"\"\n\n\ndef solve(matrix: list[list[int]], target: int) -> bool:\n    if not matrix:\n        return False\n    row, col = 0, len(matrix[0]) - 1\n    while row < len(matrix) and col >= 0:\n        value = matrix[row][col]\n        if value == target:\n            return True\n        if value > target:\n            col -= 1\n        else:\n            row += 1\n    return False\n\n\nclass Solution:\n    def searchMatrix(self, matrix: list[list[int]], target: int) -> bool:\n        return solve(matrix, target)\n",
+      "javascript_sha256": "7de7ad451f7cb9a77f622bf5d8440f61e68c651826cd4cba6013bdff8fb83f80",
+      "python_sha256": "0b7e1138e9c60772a03a4c5cbb3f802e2ab1a99553bed3f6507f0de905c65192",
+      "tests": [
+        [
+          [
+            [
+              [
+                1,
+                4,
+                7,
+                11,
+                15
+              ],
+              [
+                2,
+                5,
+                8,
+                12,
+                19
+              ],
+              [
+                3,
+                6,
+                9,
+                16,
+                22
+              ],
+              [
+                10,
+                13,
+                14,
+                17,
+                24
+              ],
+              [
+                18,
+                21,
+                23,
+                26,
+                30
+              ]
+            ],
+            5
+          ],
+          true
+        ],
+        [
+          [
+            [
+              [
+                1,
+                4,
+                7,
+                11,
+                15
+              ],
+              [
+                2,
+                5,
+                8,
+                12,
+                19
+              ],
+              [
+                3,
+                6,
+                9,
+                16,
+                22
+              ],
+              [
+                10,
+                13,
+                14,
+                17,
+                24
+              ],
+              [
+                18,
+                21,
+                23,
+                26,
+                30
+              ]
+            ],
+            20
+          ],
+          false
+        ]
+      ],
+      "qualification": {
+        "problem_id": 240,
+        "slug": "search-a-2d-matrix-ii",
+        "title": "Search a 2D Matrix II",
+        "passed": true,
+        "failures": []
+      }
+    },
+    {
+      "problem_id": 260,
+      "slug": "single-number-iii",
+      "title": "Single Number III",
+      "difficulty": "Medium",
+      "method": "singleNumber",
+      "javascript": "'use strict';\n\n// 260. Single Number III (Medium).\n// Specification: https://leetcode.com/problems/single-number-iii/description/\nfunction solve(nums) {\n  let xor = 0;\n  for (const value of nums) xor ^= value;\n  const bit = xor & -xor;\n  let first = 0; let second = 0;\n  for (const value of nums) { if ((value & bit) !== 0) first ^= value; else second ^= value; }\n  return [first, second].sort((a, b) => a - b);\n}\nconst singleNumber = solve;\nclass Solution { singleNumber(nums) { return solve(nums); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, singleNumber };\n",
+      "python": "\"\"\"260. Single Number III (Medium).\n\nSpecification: https://leetcode.com/problems/single-number-iii/description/\n\"\"\"\n\n\ndef solve(nums: list[int]) -> list[int]:\n    xor = 0\n    for value in nums:\n        xor ^= value\n    bit = xor & -xor\n    first = 0\n    second = 0\n    for value in nums:\n        if value & bit:\n            first ^= value\n        else:\n            second ^= value\n    return sorted([first, second])\n\n\nclass Solution:\n    def singleNumber(self, nums: list[int]) -> list[int]:\n        return solve(nums)\n",
+      "javascript_sha256": "32a199fdb0b68079b14c994fdeb1b17b053f96f97d7a310196bf7ec183dba8b5",
+      "python_sha256": "351f6e9bfd9c815e34b55e32798d40f07177f9b2f83ef064f47ec3c8d1a5a3f3",
+      "tests": [
+        [
+          [
+            [
+              1,
+              2,
+              1,
+              3,
+              2,
+              5
+            ]
+          ],
+          [
+            3,
+            5
+          ]
+        ],
+        [
+          [
+            [
+              -1,
+              0
+            ]
+          ],
+          [
+            -1,
+            0
+          ]
+        ]
+      ],
+      "qualification": {
+        "problem_id": 260,
+        "slug": "single-number-iii",
+        "title": "Single Number III",
+        "passed": true,
+        "failures": []
+      }
+    },
+    {
+      "problem_id": 264,
+      "slug": "ugly-number-ii",
+      "title": "Ugly Number II",
+      "difficulty": "Medium",
+      "method": "nthUglyNumber",
+      "javascript": "'use strict';\n\n// 264. Ugly Number II (Medium).\n// Specification: https://leetcode.com/problems/ugly-number-ii/description/\nfunction solve(n) {\n  const ugly = [1];\n  let i2 = 0; let i3 = 0; let i5 = 0;\n  while (ugly.length < n) {\n    const next = Math.min(ugly[i2] * 2, ugly[i3] * 3, ugly[i5] * 5);\n    ugly.push(next);\n    if (next === ugly[i2] * 2) i2++;\n    if (next === ugly[i3] * 3) i3++;\n    if (next === ugly[i5] * 5) i5++;\n  }\n  return ugly[n - 1];\n}\nconst nthUglyNumber = solve;\nclass Solution { nthUglyNumber(n) { return solve(n); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, nthUglyNumber };\n",
+      "python": "\"\"\"264. Ugly Number II (Medium).\n\nSpecification: https://leetcode.com/problems/ugly-number-ii/description/\n\"\"\"\n\n\ndef solve(n: int) -> int:\n    ugly = [1]\n    i2 = i3 = i5 = 0\n    while len(ugly) < n:\n        nxt = min(ugly[i2] * 2, ugly[i3] * 3, ugly[i5] * 5)\n        ugly.append(nxt)\n        if nxt == ugly[i2] * 2:\n            i2 += 1\n        if nxt == ugly[i3] * 3:\n            i3 += 1\n        if nxt == ugly[i5] * 5:\n            i5 += 1\n    return ugly[n - 1]\n\n\nclass Solution:\n    def nthUglyNumber(self, n: int) -> int:\n        return solve(n)\n",
+      "javascript_sha256": "593d43e64a5aa41720ad2acea62a5506a9c34c9125de5399804b6f79561762fe",
+      "python_sha256": "17e9b266c7093a725be238bf38d12d566a176aae0d406b39ccd8291b26cdf62c",
+      "tests": [
+        [
+          [
+            10
+          ],
+          12
+        ],
+        [
+          [
+            1
+          ],
+          1
+        ],
+        [
+          [
+            11
+          ],
+          15
+        ]
+      ],
+      "qualification": {
+        "problem_id": 264,
+        "slug": "ugly-number-ii",
+        "title": "Ugly Number II",
+        "passed": true,
+        "failures": []
+      }
+    },
+    {
+      "problem_id": 274,
+      "slug": "h-index",
+      "title": "H-Index",
+      "difficulty": "Medium",
+      "method": "hIndex",
+      "javascript": "'use strict';\n\n// 274. H-Index (Medium).\n// Specification: https://leetcode.com/problems/h-index/description/\nfunction solve(citations) {\n  const sorted = citations.slice().sort((a, b) => b - a);\n  let h = 0;\n  for (let i = 0; i < sorted.length; i++) { if (sorted[i] >= i + 1) h = i + 1; else break; }\n  return h;\n}\nconst hIndex = solve;\nclass Solution { hIndex(citations) { return solve(citations); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, hIndex };\n",
+      "python": "\"\"\"274. H-Index (Medium).\n\nSpecification: https://leetcode.com/problems/h-index/description/\n\"\"\"\n\n\ndef solve(citations: list[int]) -> int:\n    ordered = sorted(citations, reverse=True)\n    h = 0\n    for i, value in enumerate(ordered):\n        if value >= i + 1:\n            h = i + 1\n        else:\n            break\n    return h\n\n\nclass Solution:\n    def hIndex(self, citations: list[int]) -> int:\n        return solve(citations)\n",
+      "javascript_sha256": "7f7aa14a74a2fa791f20f72512074756e2768f04cb9fb0ab9412a0ab953eac53",
+      "python_sha256": "7e9ccad3fe71dc6245a5a765cd6bb8ba47e356dc79906fd473f37762183ec500",
+      "tests": [
+        [
+          [
+            [
+              3,
+              0,
+              6,
+              1,
+              5
+            ]
+          ],
+          3
+        ],
+        [
+          [
+            [
+              1,
+              3,
+              1
+            ]
+          ],
+          1
+        ],
+        [
+          [
+            [
+              0
+            ]
+          ],
+          0
+        ]
+      ],
+      "qualification": {
+        "problem_id": 274,
+        "slug": "h-index",
+        "title": "H-Index",
+        "passed": true,
+        "failures": []
+      }
+    },
+    {
+      "problem_id": 275,
+      "slug": "h-index-ii",
+      "title": "H-Index II",
+      "difficulty": "Medium",
+      "method": "hIndex",
+      "javascript": "'use strict';\n\n// 275. H-Index II (Medium).\n// Specification: https://leetcode.com/problems/h-index-ii/description/\nfunction solve(citations) {\n  const n = citations.length;\n  let left = 0; let right = n;\n  while (left < right) {\n    const mid = Math.floor((left + right) / 2);\n    if (citations[mid] >= n - mid) right = mid;\n    else left = mid + 1;\n  }\n  return n - left;\n}\nconst hIndex = solve;\nclass Solution { hIndex(citations) { return solve(citations); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, hIndex };\n",
+      "python": "\"\"\"275. H-Index II (Medium).\n\nSpecification: https://leetcode.com/problems/h-index-ii/description/\n\"\"\"\n\n\ndef solve(citations: list[int]) -> int:\n    n = len(citations)\n    left, right = 0, n\n    while left < right:\n        mid = (left + right) // 2\n        if citations[mid] >= n - mid:\n            right = mid\n        else:\n            left = mid + 1\n    return n - left\n\n\nclass Solution:\n    def hIndex(self, citations: list[int]) -> int:\n        return solve(citations)\n",
+      "javascript_sha256": "06dccf799aec9df05dc36c3052ee49111dc37297857c2151b78a8120a2cd2882",
+      "python_sha256": "ef5fb47228cb418897741f53e73769098da67581f3b16995b27cf4f8a316756e",
+      "tests": [
+        [
+          [
+            [
+              0,
+              1,
+              3,
+              5,
+              6
+            ]
+          ],
+          3
+        ],
+        [
+          [
+            [
+              1,
+              2,
+              100
+            ]
+          ],
+          2
+        ],
+        [
+          [
+            [
+              0
+            ]
+          ],
+          0
+        ]
+      ],
+      "qualification": {
+        "problem_id": 275,
+        "slug": "h-index-ii",
+        "title": "H-Index II",
+        "passed": true,
+        "failures": []
+      }
+    },
+    {
+      "problem_id": 279,
+      "slug": "perfect-squares",
+      "title": "Perfect Squares",
+      "difficulty": "Medium",
+      "method": "numSquares",
+      "javascript": "'use strict';\n\n// 279. Perfect Squares (Medium).\n// Specification: https://leetcode.com/problems/perfect-squares/description/\nfunction solve(n) {\n  const dp = new Array(n + 1).fill(Infinity);\n  dp[0] = 0;\n  for (let value = 1; value <= n; value++) {\n    for (let root = 1; root * root <= value; root++) dp[value] = Math.min(dp[value], dp[value - root * root] + 1);\n  }\n  return dp[n];\n}\nconst numSquares = solve;\nclass Solution { numSquares(n) { return solve(n); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, numSquares };\n",
+      "python": "\"\"\"279. Perfect Squares (Medium).\n\nSpecification: https://leetcode.com/problems/perfect-squares/description/\n\"\"\"\n\n\ndef solve(n: int) -> int:\n    dp = [float('inf')] * (n + 1)\n    dp[0] = 0\n    for value in range(1, n + 1):\n        root = 1\n        while root * root <= value:\n            dp[value] = min(dp[value], dp[value - root * root] + 1)\n            root += 1\n    return dp[n]\n\n\nclass Solution:\n    def numSquares(self, n: int) -> int:\n        return solve(n)\n",
+      "javascript_sha256": "6da0626c42f306a8016b461033f473b913c86c81a135af953df52111a8e229c0",
+      "python_sha256": "406c38b1267b478f94543795bc77cc4f33e5e4de8b4188986a15137ad91b66e8",
+      "tests": [
+        [
+          [
+            12
+          ],
+          3
+        ],
+        [
+          [
+            13
+          ],
+          2
+        ],
+        [
+          [
+            1
+          ],
+          1
+        ],
+        [
+          [
+            4
+          ],
+          1
+        ]
+      ],
+      "qualification": {
+        "problem_id": 279,
+        "slug": "perfect-squares",
+        "title": "Perfect Squares",
+        "passed": true,
+        "failures": []
+      }
+    },
+    {
+      "problem_id": 283,
+      "slug": "move-zeroes",
+      "title": "Move Zeroes",
+      "difficulty": "Easy",
+      "method": "moveZeroes",
+      "javascript": "'use strict';\n\n// 283. Move Zeroes (Easy).\n// Specification: https://leetcode.com/problems/move-zeroes/description/\nfunction solve(nums) {\n  const result = nums.filter((value) => value !== 0);\n  while (result.length < nums.length) result.push(0);\n  return result;\n}\nconst moveZeroes = solve;\nclass Solution { moveZeroes(nums) { return solve(nums); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, moveZeroes };\n",
+      "python": "\"\"\"283. Move Zeroes (Easy).\n\nSpecification: https://leetcode.com/problems/move-zeroes/description/\n\"\"\"\n\n\ndef solve(nums: list[int]) -> list[int]:\n    result = [value for value in nums if value != 0]\n    while len(result) < len(nums):\n        result.append(0)\n    return result\n\n\nclass Solution:\n    def moveZeroes(self, nums: list[int]) -> list[int]:\n        return solve(nums)\n",
+      "javascript_sha256": "4f7839dbfad6779733888ee126daf7a096481ff89e07f302bd41e0a75d5fb2c2",
+      "python_sha256": "04da8040bcd088200902336c800728b8ead1bf782ba394ee27c1a14e146eaf49",
+      "tests": [
+        [
+          [
+            [
+              0,
+              1,
+              0,
+              3,
+              12
+            ]
+          ],
+          [
+            1,
+            3,
+            12,
+            0,
+            0
+          ]
+        ],
+        [
+          [
+            [
+              0
+            ]
+          ],
+          [
+            0
+          ]
+        ],
+        [
+          [
+            [
+              1,
+              0,
+              2
+            ]
+          ],
+          [
+            1,
+            2,
+            0
+          ]
+        ]
+      ],
+      "qualification": {
+        "problem_id": 283,
+        "slug": "move-zeroes",
+        "title": "Move Zeroes",
+        "passed": true,
+        "failures": []
+      }
+    },
+    {
+      "problem_id": 287,
+      "slug": "find-the-duplicate-number",
+      "title": "Find the Duplicate Number",
+      "difficulty": "Medium",
+      "method": "findDuplicate",
+      "javascript": "'use strict';\n\n// 287. Find the Duplicate Number (Medium).\n// Specification: https://leetcode.com/problems/find-the-duplicate-number/description/\nfunction solve(nums) {\n  const seen = new Set();\n  for (const value of nums) { if (seen.has(value)) return value; seen.add(value); }\n  return -1;\n}\nconst findDuplicate = solve;\nclass Solution { findDuplicate(nums) { return solve(nums); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, findDuplicate };\n",
+      "python": "\"\"\"287. Find the Duplicate Number (Medium).\n\nSpecification: https://leetcode.com/problems/find-the-duplicate-number/description/\n\"\"\"\n\n\ndef solve(nums: list[int]) -> int:\n    seen = set()\n    for value in nums:\n        if value in seen:\n            return value\n        seen.add(value)\n    return -1\n\n\nclass Solution:\n    def findDuplicate(self, nums: list[int]) -> int:\n        return solve(nums)\n",
+      "javascript_sha256": "a1e6c92ee30922600d60d860d197565580b0ade08726ae62944fa4d847dfd4fc",
+      "python_sha256": "2b7ae2b442a0a2d154fdc19146c149569f4b60b9daa654ef2a5c3dbb6a3523a2",
+      "tests": [
+        [
+          [
+            [
+              1,
+              3,
+              4,
+              2,
+              2
+            ]
+          ],
+          2
+        ],
+        [
+          [
+            [
+              3,
+              1,
+              3,
+              4,
+              2
+            ]
+          ],
+          3
+        ],
+        [
+          [
+            [
+              3,
+              3,
+              3,
+              3,
+              3
+            ]
+          ],
+          3
+        ]
+      ],
+      "qualification": {
+        "problem_id": 287,
+        "slug": "find-the-duplicate-number",
+        "title": "Find the Duplicate Number",
+        "passed": true,
+        "failures": []
+      }
+    },
+    {
+      "problem_id": 289,
+      "slug": "game-of-life",
+      "title": "Game of Life",
+      "difficulty": "Medium",
+      "method": "gameOfLife",
+      "javascript": "'use strict';\n\n// 289. Game of Life (Medium).\n// Specification: https://leetcode.com/problems/game-of-life/description/\nfunction solve(board) {\n  const rows = board.length; const cols = board[0].length;\n  const next = board.map((row) => row.slice());\n  const directions = [[-1, -1], [-1, 0], [-1, 1], [0, -1], [0, 1], [1, -1], [1, 0], [1, 1]];\n  for (let r = 0; r < rows; r++) {\n    for (let c = 0; c < cols; c++) {\n      let live = 0;\n      for (const [dr, dc] of directions) {\n        const nr = r + dr; const nc = c + dc;\n        if (nr >= 0 && nr < rows && nc >= 0 && nc < cols) live += board[nr][nc];\n      }\n      if (board[r][c] === 1) next[r][c] = (live === 2 || live === 3) ? 1 : 0;\n      else next[r][c] = live === 3 ? 1 : 0;\n    }\n  }\n  return next;\n}\nconst gameOfLife = solve;\nclass Solution { gameOfLife(board) { return solve(board); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, gameOfLife };\n",
+      "python": "\"\"\"289. Game of Life (Medium).\n\nSpecification: https://leetcode.com/problems/game-of-life/description/\n\"\"\"\n\n\ndef solve(board: list[list[int]]) -> list[list[int]]:\n    rows, cols = len(board), len(board[0])\n    nxt = [row[:] for row in board]\n    directions = [(-1, -1), (-1, 0), (-1, 1), (0, -1), (0, 1), (1, -1), (1, 0), (1, 1)]\n    for r in range(rows):\n        for c in range(cols):\n            live = 0\n            for dr, dc in directions:\n                nr, nc = r + dr, c + dc\n                if 0 <= nr < rows and 0 <= nc < cols:\n                    live += board[nr][nc]\n            if board[r][c] == 1:\n                nxt[r][c] = 1 if live in (2, 3) else 0\n            else:\n                nxt[r][c] = 1 if live == 3 else 0\n    return nxt\n\n\nclass Solution:\n    def gameOfLife(self, board: list[list[int]]) -> list[list[int]]:\n        return solve(board)\n",
+      "javascript_sha256": "b65d8ab37cd2ee427ef482b6abdc5d98c4261d6ee782c2b41cb6554a48a2516f",
+      "python_sha256": "8912575dbaf6dd9c3bd22e76b1e7e4b38ca8b7b18d7362d0edbbbf24a731e57b",
+      "tests": [
+        [
+          [
+            [
+              [
+                0,
+                1,
+                0
+              ],
+              [
+                0,
+                0,
+                1
+              ],
+              [
+                1,
+                1,
+                1
+              ],
+              [
+                0,
+                0,
+                0
+              ]
+            ]
+          ],
+          [
+            [
+              0,
+              0,
+              0
+            ],
+            [
+              1,
+              0,
+              1
+            ],
+            [
+              0,
+              1,
+              1
+            ],
+            [
+              0,
+              1,
+              0
+            ]
+          ]
+        ],
+        [
+          [
+            [
+              [
+                1,
+                1
+              ],
+              [
+                1,
+                0
+              ]
+            ]
+          ],
+          [
+            [
+              1,
+              1
+            ],
+            [
+              1,
+              1
+            ]
+          ]
+        ]
+      ],
+      "qualification": {
+        "problem_id": 289,
+        "slug": "game-of-life",
+        "title": "Game of Life",
+        "passed": true,
+        "failures": []
+      }
+    },
+    {
+      "problem_id": 299,
+      "slug": "bulls-and-cows",
+      "title": "Bulls and Cows",
+      "difficulty": "Medium",
+      "method": "getHint",
+      "javascript": "'use strict';\n\n// 299. Bulls and Cows (Medium).\n// Specification: https://leetcode.com/problems/bulls-and-cows/description/\nfunction solve(secret, guess) {\n  let bulls = 0;\n  const secretCounts = new Array(10).fill(0);\n  const guessCounts = new Array(10).fill(0);\n  for (let i = 0; i < secret.length; i++) {\n    if (secret[i] === guess[i]) bulls++;\n    else { secretCounts[Number(secret[i])]++; guessCounts[Number(guess[i])]++; }\n  }\n  let cows = 0;\n  for (let digit = 0; digit < 10; digit++) cows += Math.min(secretCounts[digit], guessCounts[digit]);\n  return `${bulls}A${cows}B`;\n}\nconst getHint = solve;\nclass Solution { getHint(secret, guess) { return solve(secret, guess); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, getHint };\n",
+      "python": "\"\"\"299. Bulls and Cows (Medium).\n\nSpecification: https://leetcode.com/problems/bulls-and-cows/description/\n\"\"\"\n\n\ndef solve(secret: str, guess: str) -> str:\n    bulls = 0\n    secret_counts = [0] * 10\n    guess_counts = [0] * 10\n    for i in range(len(secret)):\n        if secret[i] == guess[i]:\n            bulls += 1\n        else:\n            secret_counts[int(secret[i])] += 1\n            guess_counts[int(guess[i])] += 1\n    cows = sum(min(secret_counts[d], guess_counts[d]) for d in range(10))\n    return f\"{bulls}A{cows}B\"\n\n\nclass Solution:\n    def getHint(self, secret: str, guess: str) -> str:\n        return solve(secret, guess)\n",
+      "javascript_sha256": "5232b7488a5763935e08b194c16e95d98cededa6c8c55e7035ad85908bed3e8b",
+      "python_sha256": "c23afdeaefbf7131d369ddaed8edbe5b40e5d7cb650a80e514eeb47dc8cfba9f",
+      "tests": [
+        [
+          [
+            "1807",
+            "7810"
+          ],
+          "1A3B"
+        ],
+        [
+          [
+            "1123",
+            "0111"
+          ],
+          "1A1B"
+        ],
+        [
+          [
+            "1",
+            "0"
+          ],
+          "0A0B"
+        ]
+      ],
+      "qualification": {
+        "problem_id": 299,
+        "slug": "bulls-and-cows",
+        "title": "Bulls and Cows",
+        "passed": true,
+        "failures": []
+      }
+    },
+    {
+      "problem_id": 300,
+      "slug": "longest-increasing-subsequence",
+      "title": "Longest Increasing Subsequence",
+      "difficulty": "Medium",
+      "method": "lengthOfLIS",
+      "javascript": "'use strict';\n\n// 300. Longest Increasing Subsequence (Medium).\n// Specification: https://leetcode.com/problems/longest-increasing-subsequence/description/\nfunction solve(nums) {\n  if (nums.length === 0) return 0;\n  const dp = new Array(nums.length).fill(1);\n  let best = 1;\n  for (let i = 0; i < nums.length; i++) {\n    for (let j = 0; j < i; j++) { if (nums[j] < nums[i]) dp[i] = Math.max(dp[i], dp[j] + 1); }\n    best = Math.max(best, dp[i]);\n  }\n  return best;\n}\nconst lengthOfLIS = solve;\nclass Solution { lengthOfLIS(nums) { return solve(nums); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, lengthOfLIS };\n",
+      "python": "\"\"\"300. Longest Increasing Subsequence (Medium).\n\nSpecification: https://leetcode.com/problems/longest-increasing-subsequence/description/\n\"\"\"\n\n\ndef solve(nums: list[int]) -> int:\n    if not nums:\n        return 0\n    dp = [1] * len(nums)\n    best = 1\n    for i in range(len(nums)):\n        for j in range(i):\n            if nums[j] < nums[i]:\n                dp[i] = max(dp[i], dp[j] + 1)\n        best = max(best, dp[i])\n    return best\n\n\nclass Solution:\n    def lengthOfLIS(self, nums: list[int]) -> int:\n        return solve(nums)\n",
+      "javascript_sha256": "6afe16a75317891749e6466a1428b224173be64800af2f9a8681ba7a68038eb1",
+      "python_sha256": "2eee1bf124821d82fb23f129325d63b3f788c62db202435b5968007fff1242e4",
+      "tests": [
+        [
+          [
+            [
+              10,
+              9,
+              2,
+              5,
+              3,
+              7,
+              101,
+              18
+            ]
+          ],
+          4
+        ],
+        [
+          [
+            [
+              0,
+              1,
+              0,
+              3,
+              2,
+              3
+            ]
+          ],
+          4
+        ],
+        [
+          [
+            [
+              7,
+              7,
+              7,
+              7,
+              7,
+              7,
+              7
+            ]
+          ],
+          1
+        ]
+      ],
+      "qualification": {
+        "problem_id": 300,
+        "slug": "longest-increasing-subsequence",
+        "title": "Longest Increasing Subsequence",
+        "passed": true,
+        "failures": []
+      }
+    },
+    {
+      "problem_id": 309,
+      "slug": "best-time-to-buy-and-sell-stock-with-cooldown",
+      "title": "Best Time to Buy and Sell Stock with Cooldown",
+      "difficulty": "Medium",
+      "method": "maxProfit",
+      "javascript": "'use strict';\n\n// 309. Best Time to Buy and Sell Stock with Cooldown (Medium).\n// Specification: https://leetcode.com/problems/best-time-to-buy-and-sell-stock-with-cooldown/description/\nfunction solve(prices) {\n  let hold = -Infinity; let sold = 0; let rest = 0;\n  for (const price of prices) {\n    const previousHold = hold;\n    hold = Math.max(hold, rest - price);\n    rest = Math.max(rest, sold);\n    sold = previousHold + price;\n  }\n  return Math.max(sold, rest);\n}\nconst maxProfit = solve;\nclass Solution { maxProfit(prices) { return solve(prices); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, maxProfit };\n",
+      "python": "\"\"\"309. Best Time to Buy and Sell Stock with Cooldown (Medium).\n\nSpecification: https://leetcode.com/problems/best-time-to-buy-and-sell-stock-with-cooldown/description/\n\"\"\"\n\n\ndef solve(prices: list[int]) -> int:\n    hold = float('-inf')\n    sold = 0\n    rest = 0\n    for price in prices:\n        previous_hold = hold\n        hold = max(hold, rest - price)\n        rest = max(rest, sold)\n        sold = previous_hold + price\n    return max(sold, rest)\n\n\nclass Solution:\n    def maxProfit(self, prices: list[int]) -> int:\n        return solve(prices)\n",
+      "javascript_sha256": "04b90e115f42106b683b5d446c0f238ab1d8aed02113a61a8bab621918544ad9",
+      "python_sha256": "d09b226edc3846486314695a8115b79174854b77e5c7f9c1f2c0069af77976ad",
+      "tests": [
+        [
+          [
+            [
+              1,
+              2,
+              3,
+              0,
+              2
+            ]
+          ],
+          3
+        ],
+        [
+          [
+            [
+              1
+            ]
+          ],
+          0
+        ],
+        [
+          [
+            [
+              1,
+              2
+            ]
+          ],
+          1
+        ]
+      ],
+      "qualification": {
+        "problem_id": 309,
+        "slug": "best-time-to-buy-and-sell-stock-with-cooldown",
+        "title": "Best Time to Buy and Sell Stock with Cooldown",
+        "passed": true,
+        "failures": []
+      }
+    },
+    {
+      "problem_id": 313,
+      "slug": "super-ugly-number",
+      "title": "Super Ugly Number",
+      "difficulty": "Medium",
+      "method": "nthSuperUglyNumber",
+      "javascript": "'use strict';\n\n// 313. Super Ugly Number (Medium).\n// Specification: https://leetcode.com/problems/super-ugly-number/description/\nfunction solve(n, primes) {\n  const ugly = [1];\n  const indices = new Array(primes.length).fill(0);\n  while (ugly.length < n) {\n    const next = Math.min(...primes.map((prime, i) => prime * ugly[indices[i]]));\n    ugly.push(next);\n    for (let i = 0; i < primes.length; i++) { if (primes[i] * ugly[indices[i]] === next) indices[i]++; }\n  }\n  return ugly[n - 1];\n}\nconst nthSuperUglyNumber = solve;\nclass Solution { nthSuperUglyNumber(n, primes) { return solve(n, primes); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, nthSuperUglyNumber };\n",
+      "python": "\"\"\"313. Super Ugly Number (Medium).\n\nSpecification: https://leetcode.com/problems/super-ugly-number/description/\n\"\"\"\n\n\ndef solve(n: int, primes: list[int]) -> int:\n    ugly = [1]\n    indices = [0] * len(primes)\n    while len(ugly) < n:\n        nxt = min(primes[i] * ugly[indices[i]] for i in range(len(primes)))\n        ugly.append(nxt)\n        for i in range(len(primes)):\n            if primes[i] * ugly[indices[i]] == nxt:\n                indices[i] += 1\n    return ugly[n - 1]\n\n\nclass Solution:\n    def nthSuperUglyNumber(self, n: int, primes: list[int]) -> int:\n        return solve(n, primes)\n",
+      "javascript_sha256": "f5b618ed223648f2e0007f298d5b067e1a791f284f1f1ffbc9b77a9e38a202ca",
+      "python_sha256": "04d4413694993394a1c26ec9941f0f68295b817514d9e0915a0ecb4beda80705",
+      "tests": [
+        [
+          [
+            12,
+            [
+              2,
+              7,
+              13,
+              19
+            ]
+          ],
+          32
+        ],
+        [
+          [
+            1,
+            [
+              2,
+              3,
+              5
+            ]
+          ],
+          1
+        ]
+      ],
+      "qualification": {
+        "problem_id": 313,
+        "slug": "super-ugly-number",
+        "title": "Super Ugly Number",
+        "passed": true,
+        "failures": []
+      }
+    },
+    {
+      "problem_id": 316,
+      "slug": "remove-duplicate-letters",
+      "title": "Remove Duplicate Letters",
+      "difficulty": "Medium",
+      "method": "removeDuplicateLetters",
+      "javascript": "'use strict';\n\n// 316. Remove Duplicate Letters (Medium).\n// Specification: https://leetcode.com/problems/remove-duplicate-letters/description/\nfunction solve(s) {\n  const last = {};\n  for (let i = 0; i < s.length; i++) last[s[i]] = i;\n  const stack = [];\n  const seen = new Set();\n  for (let i = 0; i < s.length; i++) {\n    const ch = s[i];\n    if (seen.has(ch)) continue;\n    while (stack.length > 0 && stack[stack.length - 1] > ch && last[stack[stack.length - 1]] > i) { seen.delete(stack.pop()); }\n    stack.push(ch); seen.add(ch);\n  }\n  return stack.join('');\n}\nconst removeDuplicateLetters = solve;\nclass Solution { removeDuplicateLetters(s) { return solve(s); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, removeDuplicateLetters };\n",
+      "python": "\"\"\"316. Remove Duplicate Letters (Medium).\n\nSpecification: https://leetcode.com/problems/remove-duplicate-letters/description/\n\"\"\"\n\n\ndef solve(s: str) -> str:\n    last = {ch: i for i, ch in enumerate(s)}\n    stack = []\n    seen = set()\n    for i, ch in enumerate(s):\n        if ch in seen:\n            continue\n        while stack and stack[-1] > ch and last[stack[-1]] > i:\n            seen.remove(stack.pop())\n        stack.append(ch)\n        seen.add(ch)\n    return \"\".join(stack)\n\n\nclass Solution:\n    def removeDuplicateLetters(self, s: str) -> str:\n        return solve(s)\n",
+      "javascript_sha256": "30aa5892dcd073929635c0d957f8cc0590a98c99b12b380c33aa6b621029379f",
+      "python_sha256": "15b9204e27fcd939fb90a898395ad50e803ecaf6677c112104ba2fa30148e512",
+      "tests": [
+        [
+          [
+            "bcabc"
+          ],
+          "abc"
+        ],
+        [
+          [
+            "cbacdcbc"
+          ],
+          "acdb"
+        ],
+        [
+          [
+            "a"
+          ],
+          "a"
+        ]
+      ],
+      "qualification": {
+        "problem_id": 316,
+        "slug": "remove-duplicate-letters",
+        "title": "Remove Duplicate Letters",
+        "passed": true,
+        "failures": []
+      }
+    },
+    {
+      "problem_id": 318,
+      "slug": "maximum-product-of-word-lengths",
+      "title": "Maximum Product of Word Lengths",
+      "difficulty": "Medium",
+      "method": "maxProduct",
+      "javascript": "'use strict';\n\n// 318. Maximum Product of Word Lengths (Medium).\n// Specification: https://leetcode.com/problems/maximum-product-of-word-lengths/description/\nfunction maskOf(word) {\n  let mask = 0;\n  for (const ch of word) mask |= 1 << (ch.charCodeAt(0) - 97);\n  return mask;\n}\nfunction solve(words) {\n  const masks = words.map(maskOf);\n  let best = 0;\n  for (let i = 0; i < words.length; i++) {\n    for (let j = i + 1; j < words.length; j++) {\n      if ((masks[i] & masks[j]) === 0) best = Math.max(best, words[i].length * words[j].length);\n    }\n  }\n  return best;\n}\nconst maxProduct = solve;\nclass Solution { maxProduct(words) { return solve(words); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, maxProduct };\n",
+      "python": "\"\"\"318. Maximum Product of Word Lengths (Medium).\n\nSpecification: https://leetcode.com/problems/maximum-product-of-word-lengths/description/\n\"\"\"\n\n\ndef _mask_of(word):\n    mask = 0\n    for ch in word:\n        mask |= 1 << (ord(ch) - 97)\n    return mask\n\n\ndef solve(words: list[str]) -> int:\n    masks = [_mask_of(w) for w in words]\n    best = 0\n    for i in range(len(words)):\n        for j in range(i + 1, len(words)):\n            if masks[i] & masks[j] == 0:\n                best = max(best, len(words[i]) * len(words[j]))\n    return best\n\n\nclass Solution:\n    def maxProduct(self, words: list[str]) -> int:\n        return solve(words)\n",
+      "javascript_sha256": "849379871f0dcc032ad3003ec6193a5f4115de570ae1358c2d73a9bf87fbbcfe",
+      "python_sha256": "10fec037b64a4a3738dfbce3676a477136da61e4db856803b4f2e447ecd089e0",
+      "tests": [
+        [
+          [
+            [
+              "abcw",
+              "baz",
+              "foo",
+              "bar",
+              "xtfn",
+              "abcdef"
+            ]
+          ],
+          16
+        ],
+        [
+          [
+            [
+              "a",
+              "ab",
+              "abc",
+              "d",
+              "cd",
+              "bcd",
+              "abcd"
+            ]
+          ],
+          4
+        ],
+        [
+          [
+            [
+              "a",
+              "aa",
+              "aaa",
+              "aaaa"
+            ]
+          ],
+          0
+        ]
+      ],
+      "qualification": {
+        "problem_id": 318,
+        "slug": "maximum-product-of-word-lengths",
+        "title": "Maximum Product of Word Lengths",
+        "passed": true,
+        "failures": []
+      }
+    },
+    {
+      "problem_id": 319,
+      "slug": "bulb-switcher",
+      "title": "Bulb Switcher",
+      "difficulty": "Medium",
+      "method": "bulbSwitch",
+      "javascript": "'use strict';\n\n// 319. Bulb Switcher (Medium).\n// Specification: https://leetcode.com/problems/bulb-switcher/description/\nfunction solve(n) {\n  return Math.floor(Math.sqrt(n));\n}\nconst bulbSwitch = solve;\nclass Solution { bulbSwitch(n) { return solve(n); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, bulbSwitch };\n",
+      "python": "\"\"\"319. Bulb Switcher (Medium).\n\nSpecification: https://leetcode.com/problems/bulb-switcher/description/\n\"\"\"\n\n\nimport math\n\n\ndef solve(n: int) -> int:\n    return math.isqrt(n)\n\n\nclass Solution:\n    def bulbSwitch(self, n: int) -> int:\n        return solve(n)\n",
+      "javascript_sha256": "9a36abbc60619bc52935b9a087d84f264962edc2a6749c44b1cb7de384a5ddba",
+      "python_sha256": "db689e915be1963c9a087b4f09a023cdbc6cf65540b36cd74c33ac55e153d0c8",
+      "tests": [
+        [
+          [
+            3
+          ],
+          1
+        ],
+        [
+          [
+            0
+          ],
+          0
+        ],
+        [
+          [
+            1
+          ],
+          1
+        ],
+        [
+          [
+            16
+          ],
+          4
+        ]
+      ],
+      "qualification": {
+        "problem_id": 319,
+        "slug": "bulb-switcher",
+        "title": "Bulb Switcher",
+        "passed": true,
+        "failures": []
+      }
+    },
+    {
+      "problem_id": 322,
+      "slug": "coin-change",
+      "title": "Coin Change",
+      "difficulty": "Medium",
+      "method": "coinChange",
+      "javascript": "'use strict';\n\n// 322. Coin Change (Medium).\n// Specification: https://leetcode.com/problems/coin-change/description/\nfunction solve(coins, amount) {\n  const dp = new Array(amount + 1).fill(Infinity);\n  dp[0] = 0;\n  for (let value = 1; value <= amount; value++) {\n    for (const coin of coins) { if (coin <= value) dp[value] = Math.min(dp[value], dp[value - coin] + 1); }\n  }\n  return dp[amount] === Infinity ? -1 : dp[amount];\n}\nconst coinChange = solve;\nclass Solution { coinChange(coins, amount) { return solve(coins, amount); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, coinChange };\n",
+      "python": "\"\"\"322. Coin Change (Medium).\n\nSpecification: https://leetcode.com/problems/coin-change/description/\n\"\"\"\n\n\ndef solve(coins: list[int], amount: int) -> int:\n    dp = [float('inf')] * (amount + 1)\n    dp[0] = 0\n    for value in range(1, amount + 1):\n        for coin in coins:\n            if coin <= value:\n                dp[value] = min(dp[value], dp[value - coin] + 1)\n    return -1 if dp[amount] == float('inf') else dp[amount]\n\n\nclass Solution:\n    def coinChange(self, coins: list[int], amount: int) -> int:\n        return solve(coins, amount)\n",
+      "javascript_sha256": "c204110ca8865def7b8702ce3328c023551251b9eea0cd077d82ea1f595da1c3",
+      "python_sha256": "14eb3c648979eaaae36d3cc1e9cbf961b5c1b66788dcc3c9e2fa3826fed68149",
+      "tests": [
+        [
+          [
+            [
+              1,
+              2,
+              5
+            ],
+            11
+          ],
+          3
+        ],
+        [
+          [
+            [
+              2
+            ],
+            3
+          ],
+          -1
+        ],
+        [
+          [
+            [
+              1
+            ],
+            0
+          ],
+          0
+        ]
+      ],
+      "qualification": {
+        "problem_id": 322,
+        "slug": "coin-change",
+        "title": "Coin Change",
+        "passed": true,
+        "failures": []
+      }
+    },
+    {
+      "problem_id": 324,
+      "slug": "wiggle-sort-ii",
+      "title": "Wiggle Sort II",
+      "difficulty": "Medium",
+      "method": "wiggleSort",
+      "javascript": "'use strict';\n\n// 324. Wiggle Sort II (Medium).\n// Specification: https://leetcode.com/problems/wiggle-sort-ii/description/\nfunction solve(nums) {\n  const sorted = nums.slice().sort((a, b) => a - b);\n  const n = sorted.length;\n  const small = sorted.slice(0, Math.ceil(n / 2)).reverse();\n  const large = sorted.slice(Math.ceil(n / 2)).reverse();\n  const result = [];\n  for (let i = 0; i < n; i++) result.push(i % 2 === 0 ? small[Math.floor(i / 2)] : large[Math.floor(i / 2)]);\n  return result;\n}\nconst wiggleSort = solve;\nclass Solution { wiggleSort(nums) { return solve(nums); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, wiggleSort };\n",
+      "python": "\"\"\"324. Wiggle Sort II (Medium).\n\nSpecification: https://leetcode.com/problems/wiggle-sort-ii/description/\n\"\"\"\n\n\ndef solve(nums: list[int]) -> list[int]:\n    ordered = sorted(nums)\n    n = len(ordered)\n    small = ordered[:(n + 1) // 2][::-1]\n    large = ordered[(n + 1) // 2:][::-1]\n    result = []\n    for i in range(n):\n        result.append(small[i // 2] if i % 2 == 0 else large[i // 2])\n    return result\n\n\nclass Solution:\n    def wiggleSort(self, nums: list[int]) -> list[int]:\n        return solve(nums)\n",
+      "javascript_sha256": "f3e1f5dd771fc4642f4f5299c9cb1b9a52c3b72f91bbf6d82d69c76b64243ed0",
+      "python_sha256": "256c2b9f61e93d9c30513c5087b4c53ede0ea79b35e3ad122d95fdd0c1d40577",
+      "tests": [
+        [
+          [
+            [
+              1,
+              5,
+              1,
+              1,
+              6,
+              4
+            ]
+          ],
+          "WIGGLE"
+        ],
+        [
+          [
+            [
+              1,
+              3,
+              2,
+              2,
+              3,
+              1
+            ]
+          ],
+          "WIGGLE"
+        ]
+      ],
+      "qualification": {
+        "problem_id": 324,
+        "slug": "wiggle-sort-ii",
+        "title": "Wiggle Sort II",
+        "passed": true,
+        "failures": []
+      }
+    },
+    {
+      "problem_id": 334,
+      "slug": "increasing-triplet-subsequence",
+      "title": "Increasing Triplet Subsequence",
+      "difficulty": "Medium",
+      "method": "increasingTriplet",
+      "javascript": "'use strict';\n\n// 334. Increasing Triplet Subsequence (Medium).\n// Specification: https://leetcode.com/problems/increasing-triplet-subsequence/description/\nfunction solve(nums) {\n  let first = Infinity; let second = Infinity;\n  for (const value of nums) {\n    if (value <= first) first = value;\n    else if (value <= second) second = value;\n    else return true;\n  }\n  return false;\n}\nconst increasingTriplet = solve;\nclass Solution { increasingTriplet(nums) { return solve(nums); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, increasingTriplet };\n",
+      "python": "\"\"\"334. Increasing Triplet Subsequence (Medium).\n\nSpecification: https://leetcode.com/problems/increasing-triplet-subsequence/description/\n\"\"\"\n\n\ndef solve(nums: list[int]) -> bool:\n    first = float('inf')\n    second = float('inf')\n    for value in nums:\n        if value <= first:\n            first = value\n        elif value <= second:\n            second = value\n        else:\n            return True\n    return False\n\n\nclass Solution:\n    def increasingTriplet(self, nums: list[int]) -> bool:\n        return solve(nums)\n",
+      "javascript_sha256": "fa5349eeb1226ad7d6a24963325fad1f2d07150e873658aaf6692daaebc24c00",
+      "python_sha256": "6c8c12a398312cca580d332a77f18183961167a828b9e20282c24853e23d0ae2",
+      "tests": [
+        [
+          [
+            [
+              1,
+              2,
+              3,
+              4,
+              5
+            ]
+          ],
+          true
+        ],
+        [
+          [
+            [
+              5,
+              4,
+              3,
+              2,
+              1
+            ]
+          ],
+          false
+        ],
+        [
+          [
+            [
+              2,
+              1,
+              5,
+              0,
+              4,
+              6
+            ]
+          ],
+          true
+        ]
+      ],
+      "qualification": {
+        "problem_id": 334,
+        "slug": "increasing-triplet-subsequence",
+        "title": "Increasing Triplet Subsequence",
+        "passed": true,
+        "failures": []
+      }
+    },
+    {
+      "problem_id": 342,
+      "slug": "power-of-four",
+      "title": "Power of Four",
+      "difficulty": "Easy",
+      "method": "isPowerOfFour",
+      "javascript": "'use strict';\n\n// 342. Power of Four (Easy).\n// Specification: https://leetcode.com/problems/power-of-four/description/\nfunction solve(n) {\n  return n > 0 && (n & (n - 1)) === 0 && (n - 1) % 3 === 0;\n}\nconst isPowerOfFour = solve;\nclass Solution { isPowerOfFour(n) { return solve(n); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, isPowerOfFour };\n",
+      "python": "\"\"\"342. Power of Four (Easy).\n\nSpecification: https://leetcode.com/problems/power-of-four/description/\n\"\"\"\n\n\ndef solve(n: int) -> bool:\n    return n > 0 and (n & (n - 1)) == 0 and (n - 1) % 3 == 0\n\n\nclass Solution:\n    def isPowerOfFour(self, n: int) -> bool:\n        return solve(n)\n",
+      "javascript_sha256": "05efd80c50953e789ca4f3d9e42800124296ee3447d42d0aae3ad212f69ad6df",
+      "python_sha256": "d8710549a8ecf30917a8f05bfd3bd96e0150e3d94d5d4aff0897c64ac596e00b",
+      "tests": [
+        [
+          [
+            16
+          ],
+          true
+        ],
+        [
+          [
+            5
+          ],
+          false
+        ],
+        [
+          [
+            1
+          ],
+          true
+        ],
+        [
+          [
+            8
+          ],
+          false
+        ]
+      ],
+      "qualification": {
+        "problem_id": 342,
+        "slug": "power-of-four",
+        "title": "Power of Four",
+        "passed": true,
+        "failures": []
+      }
+    },
+    {
+      "problem_id": 343,
+      "slug": "integer-break",
+      "title": "Integer Break",
+      "difficulty": "Medium",
+      "method": "integerBreak",
+      "javascript": "'use strict';\n\n// 343. Integer Break (Medium).\n// Specification: https://leetcode.com/problems/integer-break/description/\nfunction solve(n) {\n  if (n <= 3) return n - 1;\n  let result = 1;\n  while (n > 4) { result *= 3; n -= 3; }\n  return result * n;\n}\nconst integerBreak = solve;\nclass Solution { integerBreak(n) { return solve(n); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, integerBreak };\n",
+      "python": "\"\"\"343. Integer Break (Medium).\n\nSpecification: https://leetcode.com/problems/integer-break/description/\n\"\"\"\n\n\ndef solve(n: int) -> int:\n    if n <= 3:\n        return n - 1\n    result = 1\n    while n > 4:\n        result *= 3\n        n -= 3\n    return result * n\n\n\nclass Solution:\n    def integerBreak(self, n: int) -> int:\n        return solve(n)\n",
+      "javascript_sha256": "75230afdf427c9cb0ed879c7c3eed20bbceaaccc817e1a1674043dcb1afc78e5",
+      "python_sha256": "99c472319c60e2eb9f7bd2d4d1ed07a8246609f69d6a957562d03df7cd41145c",
+      "tests": [
+        [
+          [
+            2
+          ],
+          1
+        ],
+        [
+          [
+            10
+          ],
+          36
+        ],
+        [
+          [
+            3
+          ],
+          2
+        ]
+      ],
+      "qualification": {
+        "problem_id": 343,
+        "slug": "integer-break",
+        "title": "Integer Break",
+        "passed": true,
+        "failures": []
+      }
+    },
+    {
+      "problem_id": 344,
+      "slug": "reverse-string",
+      "title": "Reverse String",
+      "difficulty": "Easy",
+      "method": "reverseString",
+      "javascript": "'use strict';\n\n// 344. Reverse String (Easy).\n// Specification: https://leetcode.com/problems/reverse-string/description/\nfunction solve(s) {\n  return s.slice().reverse();\n}\nconst reverseString = solve;\nclass Solution { reverseString(s) { return solve(s); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, reverseString };\n",
+      "python": "\"\"\"344. Reverse String (Easy).\n\nSpecification: https://leetcode.com/problems/reverse-string/description/\n\"\"\"\n\n\ndef solve(s: list[str]) -> list[str]:\n    return s[::-1]\n\n\nclass Solution:\n    def reverseString(self, s: list[str]) -> list[str]:\n        return solve(s)\n",
+      "javascript_sha256": "e10e17977413090cf617267ee65eb7e972756ac25d1dd47f0e0fc8bb8cd7cd98",
+      "python_sha256": "3993bcf4988c4dfdd71463c0209dcb92d21faa6c6e9f5076372a7c1df9365f49",
+      "tests": [
+        [
+          [
+            [
+              "h",
+              "e",
+              "l",
+              "l",
+              "o"
+            ]
+          ],
+          [
+            "o",
+            "l",
+            "l",
+            "e",
+            "h"
+          ]
+        ],
+        [
+          [
+            [
+              "H",
+              "a",
+              "n",
+              "n",
+              "a",
+              "h"
+            ]
+          ],
+          [
+            "h",
+            "a",
+            "n",
+            "n",
+            "a",
+            "H"
+          ]
+        ]
+      ],
+      "qualification": {
+        "problem_id": 344,
+        "slug": "reverse-string",
+        "title": "Reverse String",
+        "passed": true,
+        "failures": []
+      }
+    },
+    {
+      "problem_id": 345,
+      "slug": "reverse-vowels-of-a-string",
+      "title": "Reverse Vowels of a String",
+      "difficulty": "Easy",
+      "method": "reverseVowels",
+      "javascript": "'use strict';\n\n// 345. Reverse Vowels of a String (Easy).\n// Specification: https://leetcode.com/problems/reverse-vowels-of-a-string/description/\nconst VOWELS = new Set(['a', 'e', 'i', 'o', 'u', 'A', 'E', 'I', 'O', 'U']);\nfunction solve(s) {\n  const chars = [...s];\n  let left = 0; let right = chars.length - 1;\n  while (left < right) {\n    while (left < right && !VOWELS.has(chars[left])) left++;\n    while (left < right && !VOWELS.has(chars[right])) right--;\n    if (left < right) { const tmp = chars[left]; chars[left] = chars[right]; chars[right] = tmp; left++; right--; }\n  }\n  return chars.join('');\n}\nconst reverseVowels = solve;\nclass Solution { reverseVowels(s) { return solve(s); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, reverseVowels };\n",
+      "python": "\"\"\"345. Reverse Vowels of a String (Easy).\n\nSpecification: https://leetcode.com/problems/reverse-vowels-of-a-string/description/\n\"\"\"\n\n\nVOWELS = set('aeiouAEIOU')\n\n\ndef solve(s: str) -> str:\n    chars = list(s)\n    left, right = 0, len(chars) - 1\n    while left < right:\n        while left < right and chars[left] not in VOWELS:\n            left += 1\n        while left < right and chars[right] not in VOWELS:\n            right -= 1\n        if left < right:\n            chars[left], chars[right] = chars[right], chars[left]\n            left += 1\n            right -= 1\n    return \"\".join(chars)\n\n\nclass Solution:\n    def reverseVowels(self, s: str) -> str:\n        return solve(s)\n",
+      "javascript_sha256": "e63588b6789e771cf4a875da5e51b1f4b6c6bd5d22a75d502493592234ade84d",
+      "python_sha256": "436c16876cf5d3b414aaf55cce6f0f52d393bbc576300d5cb9ebe8d94c8df282",
+      "tests": [
+        [
+          [
+            "IceCreAm"
+          ],
+          "AceCreIm"
+        ],
+        [
+          [
+            "leetcode"
+          ],
+          "leotcede"
+        ],
+        [
+          [
+            "a"
+          ],
+          "a"
+        ]
+      ],
+      "qualification": {
+        "problem_id": 345,
+        "slug": "reverse-vowels-of-a-string",
+        "title": "Reverse Vowels of a String",
+        "passed": true,
+        "failures": []
+      }
+    },
+    {
+      "problem_id": 349,
+      "slug": "intersection-of-two-arrays",
+      "title": "Intersection of Two Arrays",
+      "difficulty": "Easy",
+      "method": "intersection",
+      "javascript": "'use strict';\n\n// 349. Intersection of Two Arrays (Easy).\n// Specification: https://leetcode.com/problems/intersection-of-two-arrays/description/\nfunction solve(nums1, nums2) {\n  const set2 = new Set(nums2);\n  return [...new Set(nums1.filter((value) => set2.has(value)))].sort((a, b) => a - b);\n}\nconst intersection = solve;\nclass Solution { intersection(nums1, nums2) { return solve(nums1, nums2); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, intersection };\n",
+      "python": "\"\"\"349. Intersection of Two Arrays (Easy).\n\nSpecification: https://leetcode.com/problems/intersection-of-two-arrays/description/\n\"\"\"\n\n\ndef solve(nums1: list[int], nums2: list[int]) -> list[int]:\n    set2 = set(nums2)\n    return sorted({value for value in nums1 if value in set2})\n\n\nclass Solution:\n    def intersection(self, nums1: list[int], nums2: list[int]) -> list[int]:\n        return solve(nums1, nums2)\n",
+      "javascript_sha256": "82182094b9ae3044c5a5b7ce16e30371db76005069cb7415eb3e66d82f88a0c8",
+      "python_sha256": "d623bb6ccd961e458fcc473c8d2b5da4de142bc404140690f326ee72a9922d4f",
+      "tests": [
+        [
+          [
+            [
+              1,
+              2,
+              2,
+              1
+            ],
+            [
+              2,
+              2
+            ]
+          ],
+          [
+            2
+          ]
+        ],
+        [
+          [
+            [
+              4,
+              9,
+              5
+            ],
+            [
+              9,
+              4,
+              9,
+              8,
+              4
+            ]
+          ],
+          [
+            4,
+            9
+          ]
+        ]
+      ],
+      "qualification": {
+        "problem_id": 349,
+        "slug": "intersection-of-two-arrays",
+        "title": "Intersection of Two Arrays",
+        "passed": true,
+        "failures": []
+      }
+    },
+    {
+      "problem_id": 350,
+      "slug": "intersection-of-two-arrays-ii",
+      "title": "Intersection of Two Arrays II",
+      "difficulty": "Easy",
+      "method": "intersect",
+      "javascript": "'use strict';\n\n// 350. Intersection of Two Arrays II (Easy).\n// Specification: https://leetcode.com/problems/intersection-of-two-arrays-ii/description/\nfunction solve(nums1, nums2) {\n  const counts = new Map();\n  for (const value of nums1) counts.set(value, (counts.get(value) || 0) + 1);\n  const result = [];\n  for (const value of nums2) {\n    if ((counts.get(value) || 0) > 0) { result.push(value); counts.set(value, counts.get(value) - 1); }\n  }\n  return result.sort((a, b) => a - b);\n}\nconst intersect = solve;\nclass Solution { intersect(nums1, nums2) { return solve(nums1, nums2); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, intersect };\n",
+      "python": "\"\"\"350. Intersection of Two Arrays II (Easy).\n\nSpecification: https://leetcode.com/problems/intersection-of-two-arrays-ii/description/\n\"\"\"\n\n\ndef solve(nums1: list[int], nums2: list[int]) -> list[int]:\n    counts = {}\n    for value in nums1:\n        counts[value] = counts.get(value, 0) + 1\n    result = []\n    for value in nums2:\n        if counts.get(value, 0) > 0:\n            result.append(value)\n            counts[value] -= 1\n    return sorted(result)\n\n\nclass Solution:\n    def intersect(self, nums1: list[int], nums2: list[int]) -> list[int]:\n        return solve(nums1, nums2)\n",
+      "javascript_sha256": "7886e2c7897fea6782a3f53cbada4625ab23f96c8a480fcb61b8b686109bbc4d",
+      "python_sha256": "be6b02679551ef3c28435f9ec42a51add5a91ce62027bd441b67ab4b3201eb03",
+      "tests": [
+        [
+          [
+            [
+              1,
+              2,
+              2,
+              1
+            ],
+            [
+              2,
+              2
+            ]
+          ],
+          [
+            2,
+            2
+          ]
+        ],
+        [
+          [
+            [
+              4,
+              9,
+              5
+            ],
+            [
+              9,
+              4,
+              9,
+              8,
+              4
+            ]
+          ],
+          [
+            4,
+            9
+          ]
+        ]
+      ],
+      "qualification": {
+        "problem_id": 350,
+        "slug": "intersection-of-two-arrays-ii",
+        "title": "Intersection of Two Arrays II",
+        "passed": true,
+        "failures": []
+      }
+    },
+    {
+      "problem_id": 357,
+      "slug": "count-numbers-with-unique-digits",
+      "title": "Count Numbers with Unique Digits",
+      "difficulty": "Medium",
+      "method": "countNumbersWithUniqueDigits",
+      "javascript": "'use strict';\n\n// 357. Count Numbers with Unique Digits (Medium).\n// Specification: https://leetcode.com/problems/count-numbers-with-unique-digits/description/\nfunction solve(n) {\n  if (n === 0) return 1;\n  let total = 10;\n  let unique = 9;\n  let available = 9;\n  for (let digits = 2; digits <= n; digits++) { unique *= available; available--; total += unique; }\n  return total;\n}\nconst countNumbersWithUniqueDigits = solve;\nclass Solution { countNumbersWithUniqueDigits(n) { return solve(n); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, countNumbersWithUniqueDigits };\n",
+      "python": "\"\"\"357. Count Numbers with Unique Digits (Medium).\n\nSpecification: https://leetcode.com/problems/count-numbers-with-unique-digits/description/\n\"\"\"\n\n\ndef solve(n: int) -> int:\n    if n == 0:\n        return 1\n    total = 10\n    unique = 9\n    available = 9\n    for _digits in range(2, n + 1):\n        unique *= available\n        available -= 1\n        total += unique\n    return total\n\n\nclass Solution:\n    def countNumbersWithUniqueDigits(self, n: int) -> int:\n        return solve(n)\n",
+      "javascript_sha256": "71b92304535874257bace57b7c03775506c52815688e53de2f59807e9c3403f2",
+      "python_sha256": "a7884ff112aafa567e5dbc70d458827c24f05c6a0dc8a4527dbd90bf29fdf82d",
+      "tests": [
+        [
+          [
+            2
+          ],
+          91
+        ],
+        [
+          [
+            0
+          ],
+          1
+        ],
+        [
+          [
+            1
+          ],
+          10
+        ]
+      ],
+      "qualification": {
+        "problem_id": 357,
+        "slug": "count-numbers-with-unique-digits",
+        "title": "Count Numbers with Unique Digits",
+        "passed": true,
+        "failures": []
+      }
+    },
+    {
+      "problem_id": 365,
+      "slug": "water-and-jug-problem",
+      "title": "Water and Jug Problem",
+      "difficulty": "Medium",
+      "method": "canMeasureWater",
+      "javascript": "'use strict';\n\n// 365. Water and Jug Problem (Medium).\n// Specification: https://leetcode.com/problems/water-and-jug-problem/description/\nfunction gcd(a, b) { while (b !== 0) { const t = a % b; a = b; b = t; } return a; }\nfunction solve(x, y, target) {\n  if (target === 0) return true;\n  if (x + y < target) return false;\n  return target % gcd(x, y) === 0;\n}\nconst canMeasureWater = solve;\nclass Solution { canMeasureWater(x, y, target) { return solve(x, y, target); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, canMeasureWater };\n",
+      "python": "\"\"\"365. Water and Jug Problem (Medium).\n\nSpecification: https://leetcode.com/problems/water-and-jug-problem/description/\n\"\"\"\n\n\nimport math\n\n\ndef solve(x: int, y: int, target: int) -> bool:\n    if target == 0:\n        return True\n    if x + y < target:\n        return False\n    return target % math.gcd(x, y) == 0\n\n\nclass Solution:\n    def canMeasureWater(self, x: int, y: int, target: int) -> bool:\n        return solve(x, y, target)\n",
+      "javascript_sha256": "2f128ca4144436af01d6bd99a89ddb0e0ccaf6d8bdbef2f22d7efead81d5ef83",
+      "python_sha256": "bae0cbaac54877fdee2f5e74255503b8e94635cb0d3856ad215f6ec267839f2b",
+      "tests": [
+        [
+          [
+            3,
+            5,
+            4
+          ],
+          true
+        ],
+        [
+          [
+            2,
+            6,
+            5
+          ],
+          false
+        ],
+        [
+          [
+            1,
+            2,
+            3
+          ],
+          true
+        ]
+      ],
+      "qualification": {
+        "problem_id": 365,
+        "slug": "water-and-jug-problem",
+        "title": "Water and Jug Problem",
+        "passed": true,
+        "failures": []
+      }
+    },
+    {
+      "problem_id": 367,
+      "slug": "valid-perfect-square",
+      "title": "Valid Perfect Square",
+      "difficulty": "Easy",
+      "method": "isPerfectSquare",
+      "javascript": "'use strict';\n\n// 367. Valid Perfect Square (Easy).\n// Specification: https://leetcode.com/problems/valid-perfect-square/description/\nfunction solve(num) {\n  let left = 1; let right = num;\n  while (left <= right) {\n    const mid = Math.floor((left + right) / 2);\n    const square = mid * mid;\n    if (square === num) return true;\n    if (square < num) left = mid + 1;\n    else right = mid - 1;\n  }\n  return false;\n}\nconst isPerfectSquare = solve;\nclass Solution { isPerfectSquare(num) { return solve(num); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, isPerfectSquare };\n",
+      "python": "\"\"\"367. Valid Perfect Square (Easy).\n\nSpecification: https://leetcode.com/problems/valid-perfect-square/description/\n\"\"\"\n\n\ndef solve(num: int) -> bool:\n    left, right = 1, num\n    while left <= right:\n        mid = (left + right) // 2\n        square = mid * mid\n        if square == num:\n            return True\n        if square < num:\n            left = mid + 1\n        else:\n            right = mid - 1\n    return False\n\n\nclass Solution:\n    def isPerfectSquare(self, num: int) -> bool:\n        return solve(num)\n",
+      "javascript_sha256": "6f1246627f86bf6d3d04c11dcb73347d352cbccd0e9cc2d2e0851ecfee096d1b",
+      "python_sha256": "b7033c57d11dd4ee577a8a17e35153cdf9467ebd5e4deb510732f2bf1952b3f4",
+      "tests": [
+        [
+          [
+            16
+          ],
+          true
+        ],
+        [
+          [
+            14
+          ],
+          false
+        ],
+        [
+          [
+            1
+          ],
+          true
+        ],
+        [
+          [
+            2
+          ],
+          false
+        ]
+      ],
+      "qualification": {
+        "problem_id": 367,
+        "slug": "valid-perfect-square",
+        "title": "Valid Perfect Square",
+        "passed": true,
+        "failures": []
+      }
+    },
+    {
+      "problem_id": 368,
+      "slug": "largest-divisible-subset",
+      "title": "Largest Divisible Subset",
+      "difficulty": "Medium",
+      "method": "largestDivisibleSubset",
+      "javascript": "'use strict';\n\n// 368. Largest Divisible Subset (Medium).\n// Specification: https://leetcode.com/problems/largest-divisible-subset/description/\nfunction solve(nums) {\n  const sorted = nums.slice().sort((a, b) => a - b);\n  const dp = new Array(sorted.length).fill(1);\n  const previous = new Array(sorted.length).fill(-1);\n  let bestIndex = 0;\n  for (let i = 0; i < sorted.length; i++) {\n    for (let j = 0; j < i; j++) {\n      if (sorted[i] % sorted[j] === 0 && dp[j] + 1 > dp[i]) { dp[i] = dp[j] + 1; previous[i] = j; }\n    }\n    if (dp[i] > dp[bestIndex]) bestIndex = i;\n  }\n  const result = [];\n  for (let index = bestIndex; index !== -1; index = previous[index]) result.push(sorted[index]);\n  return result.reverse();\n}\nconst largestDivisibleSubset = solve;\nclass Solution { largestDivisibleSubset(nums) { return solve(nums); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, largestDivisibleSubset };\n",
+      "python": "\"\"\"368. Largest Divisible Subset (Medium).\n\nSpecification: https://leetcode.com/problems/largest-divisible-subset/description/\n\"\"\"\n\n\ndef solve(nums: list[int]) -> list[int]:\n    ordered = sorted(nums)\n    dp = [1] * len(ordered)\n    previous = [-1] * len(ordered)\n    best_index = 0\n    for i in range(len(ordered)):\n        for j in range(i):\n            if ordered[i] % ordered[j] == 0 and dp[j] + 1 > dp[i]:\n                dp[i] = dp[j] + 1\n                previous[i] = j\n        if dp[i] > dp[best_index]:\n            best_index = i\n    result = []\n    index = best_index\n    while index != -1:\n        result.append(ordered[index])\n        index = previous[index]\n    return result[::-1]\n\n\nclass Solution:\n    def largestDivisibleSubset(self, nums: list[int]) -> list[int]:\n        return solve(nums)\n",
+      "javascript_sha256": "38d4b6de6e984d8169197c7e7742335edc8d5ad874fb7531ebbe7162bba55f99",
+      "python_sha256": "ee548568d626350f88dab4adfdf5f7d8391d671fbbf23824a66efd4f76f3b8e4",
+      "tests": [
+        [
+          [
+            [
+              1,
+              2,
+              3
+            ]
+          ],
+          [
+            1,
+            2
+          ]
+        ],
+        [
+          [
+            [
+              1,
+              2,
+              4,
+              8
+            ]
+          ],
+          [
+            1,
+            2,
+            4,
+            8
+          ]
+        ],
+        [
+          [
+            [
+              1
+            ]
+          ],
+          [
+            1
+          ]
+        ]
+      ],
+      "qualification": {
+        "problem_id": 368,
+        "slug": "largest-divisible-subset",
+        "title": "Largest Divisible Subset",
+        "passed": true,
+        "failures": []
+      }
+    },
+    {
+      "problem_id": 371,
+      "slug": "sum-of-two-integers",
+      "title": "Sum of Two Integers",
+      "difficulty": "Medium",
+      "method": "getSum",
+      "javascript": "'use strict';\n\n// 371. Sum of Two Integers (Medium).\n// Specification: https://leetcode.com/problems/sum-of-two-integers/description/\nfunction solve(a, b) {\n  let x = a; let y = b;\n  while (y !== 0) { const carry = (x & y) << 1; x = x ^ y; y = carry; }\n  return x;\n}\nconst getSum = solve;\nclass Solution { getSum(a, b) { return solve(a, b); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, getSum };\n",
+      "python": "\"\"\"371. Sum of Two Integers (Medium).\n\nSpecification: https://leetcode.com/problems/sum-of-two-integers/description/\n\"\"\"\n\n\nMASK = 0xFFFFFFFF\n\n\ndef solve(a: int, b: int) -> int:\n    x, y = a & MASK, b & MASK\n    while y != 0:\n        carry = ((x & y) << 1) & MASK\n        x = (x ^ y) & MASK\n        y = carry\n    return x if x <= 0x7FFFFFFF else x - 0x100000000\n\n\nclass Solution:\n    def getSum(self, a: int, b: int) -> int:\n        return solve(a, b)\n",
+      "javascript_sha256": "867597a7fb9f3d856fbeadff7931bd58d57f38ab84a20cd9c8e9475da92b9533",
+      "python_sha256": "33f76d18bfd1ac44cc055b2edd7818cdec9b7277a0ad8e9f63078d8879fc7a55",
+      "tests": [
+        [
+          [
+            1,
+            2
+          ],
+          3
+        ],
+        [
+          [
+            2,
+            3
+          ],
+          5
+        ],
+        [
+          [
+            -1,
+            1
+          ],
+          0
+        ],
+        [
+          [
+            -2,
+            -3
+          ],
+          -5
+        ]
+      ],
+      "qualification": {
+        "problem_id": 371,
+        "slug": "sum-of-two-integers",
+        "title": "Sum of Two Integers",
+        "passed": true,
+        "failures": []
+      }
+    },
+    {
+      "problem_id": 372,
+      "slug": "super-pow",
+      "title": "Super Pow",
+      "difficulty": "Medium",
+      "method": "superPow",
+      "javascript": "'use strict';\n\n// 372. Super Pow (Medium).\n// Specification: https://leetcode.com/problems/super-pow/description/\nfunction powMod(base, exponent, modulus) {\n  let result = 1;\n  let value = base % modulus;\n  for (let i = 0; i < exponent; i++) result = (result * value) % modulus;\n  return result;\n}\nfunction solve(a, b) {\n  let result = 1;\n  for (const digit of b) result = (powMod(result, 10, 1337) * powMod(a, digit, 1337)) % 1337;\n  return result;\n}\nconst superPow = solve;\nclass Solution { superPow(a, b) { return solve(a, b); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, superPow };\n",
+      "python": "\"\"\"372. Super Pow (Medium).\n\nSpecification: https://leetcode.com/problems/super-pow/description/\n\"\"\"\n\n\ndef solve(a: int, b: list[int]) -> int:\n    result = 1\n    for digit in b:\n        result = (pow(result, 10, 1337) * pow(a, digit, 1337)) % 1337\n    return result\n\n\nclass Solution:\n    def superPow(self, a: int, b: list[int]) -> int:\n        return solve(a, b)\n",
+      "javascript_sha256": "40f54c7233e0500fd33c7f5cfdb8eff80bd6285d2cb2947e8076fccf4bb3446f",
+      "python_sha256": "0cddb9ba0d4476d5257e3cf96cbb71163d2a0122f31b1f95aca49c515f303899",
+      "tests": [
+        [
+          [
+            2,
+            [
+              3
+            ]
+          ],
+          8
+        ],
+        [
+          [
+            2,
+            [
+              1,
+              0
+            ]
+          ],
+          1024
+        ],
+        [
+          [
+            1,
+            [
+              4,
+              3,
+              3,
+              8,
+              5,
+              2
+            ]
+          ],
+          1
+        ],
+        [
+          [
+            2147483647,
+            [
+              2,
+              0,
+              0
+            ]
+          ],
+          1198
+        ]
+      ],
+      "qualification": {
+        "problem_id": 372,
+        "slug": "super-pow",
+        "title": "Super Pow",
+        "passed": true,
+        "failures": []
+      }
+    },
+    {
+      "problem_id": 376,
+      "slug": "wiggle-subsequence",
+      "title": "Wiggle Subsequence",
+      "difficulty": "Medium",
+      "method": "wiggleMaxLength",
+      "javascript": "'use strict';\n\n// 376. Wiggle Subsequence (Medium).\n// Specification: https://leetcode.com/problems/wiggle-subsequence/description/\nfunction solve(nums) {\n  if (nums.length < 2) return nums.length;\n  let up = 1; let down = 1;\n  for (let i = 1; i < nums.length; i++) {\n    if (nums[i] > nums[i - 1]) up = down + 1;\n    else if (nums[i] < nums[i - 1]) down = up + 1;\n  }\n  return Math.max(up, down);\n}\nconst wiggleMaxLength = solve;\nclass Solution { wiggleMaxLength(nums) { return solve(nums); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, wiggleMaxLength };\n",
+      "python": "\"\"\"376. Wiggle Subsequence (Medium).\n\nSpecification: https://leetcode.com/problems/wiggle-subsequence/description/\n\"\"\"\n\n\ndef solve(nums: list[int]) -> int:\n    if len(nums) < 2:\n        return len(nums)\n    up = 1\n    down = 1\n    for i in range(1, len(nums)):\n        if nums[i] > nums[i - 1]:\n            up = down + 1\n        elif nums[i] < nums[i - 1]:\n            down = up + 1\n    return max(up, down)\n\n\nclass Solution:\n    def wiggleMaxLength(self, nums: list[int]) -> int:\n        return solve(nums)\n",
+      "javascript_sha256": "e9ccde820ade37befb3ac8c6cdbd1788cb7d87ec48af3eea310a72cdc0cf658d",
+      "python_sha256": "573ba42cc37af67ae72c309cae892395ed79342f1642d1257276a78997a4614f",
+      "tests": [
+        [
+          [
+            [
+              1,
+              7,
+              4,
+              9,
+              2,
+              5
+            ]
+          ],
+          6
+        ],
+        [
+          [
+            [
+              1,
+              17,
+              5,
+              10,
+              13,
+              15,
+              10,
+              5,
+              16,
+              8
+            ]
+          ],
+          7
+        ],
+        [
+          [
+            [
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9
+            ]
+          ],
+          2
+        ]
+      ],
+      "qualification": {
+        "problem_id": 376,
+        "slug": "wiggle-subsequence",
+        "title": "Wiggle Subsequence",
+        "passed": true,
+        "failures": []
+      }
+    },
+    {
+      "problem_id": 377,
+      "slug": "combination-sum-iv",
+      "title": "Combination Sum IV",
+      "difficulty": "Medium",
+      "method": "combinationSum4",
+      "javascript": "'use strict';\n\n// 377. Combination Sum IV (Medium).\n// Specification: https://leetcode.com/problems/combination-sum-iv/description/\nfunction solve(nums, target) {\n  const dp = new Array(target + 1).fill(0);\n  dp[0] = 1;\n  for (let total = 1; total <= target; total++) {\n    for (const value of nums) { if (value <= total) dp[total] += dp[total - value]; }\n  }\n  return dp[target];\n}\nconst combinationSum4 = solve;\nclass Solution { combinationSum4(nums, target) { return solve(nums, target); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, combinationSum4 };\n",
+      "python": "\"\"\"377. Combination Sum IV (Medium).\n\nSpecification: https://leetcode.com/problems/combination-sum-iv/description/\n\"\"\"\n\n\ndef solve(nums: list[int], target: int) -> int:\n    dp = [0] * (target + 1)\n    dp[0] = 1\n    for total in range(1, target + 1):\n        for value in nums:\n            if value <= total:\n                dp[total] += dp[total - value]\n    return dp[target]\n\n\nclass Solution:\n    def combinationSum4(self, nums: list[int], target: int) -> int:\n        return solve(nums, target)\n",
+      "javascript_sha256": "b12d93098090fdbcd86ec7626afbe1cb1df8db2451f6f06dbe62f8feeacf0902",
+      "python_sha256": "1b3fefc2b0fbc79485a6cb7ed0713ed247a527d32ecce6d40ad96a2959589c0b",
+      "tests": [
+        [
+          [
+            [
+              1,
+              2,
+              3
+            ],
+            4
+          ],
+          7
+        ],
+        [
+          [
+            [
+              9
+            ],
+            3
+          ],
+          0
+        ]
+      ],
+      "qualification": {
+        "problem_id": 377,
+        "slug": "combination-sum-iv",
+        "title": "Combination Sum IV",
+        "passed": true,
+        "failures": []
+      }
+    },
+    {
+      "problem_id": 378,
+      "slug": "kth-smallest-element-in-a-sorted-matrix",
+      "title": "Kth Smallest Element in a Sorted Matrix",
+      "difficulty": "Medium",
+      "method": "kthSmallest",
+      "javascript": "'use strict';\n\n// 378. Kth Smallest Element in a Sorted Matrix (Medium).\n// Specification: https://leetcode.com/problems/kth-smallest-element-in-a-sorted-matrix/description/\nfunction solve(matrix, k) {\n  const flat = [];\n  for (const row of matrix) { for (const value of row) flat.push(value); }\n  flat.sort((a, b) => a - b);\n  return flat[k - 1];\n}\nconst kthSmallest = solve;\nclass Solution { kthSmallest(matrix, k) { return solve(matrix, k); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, kthSmallest };\n",
+      "python": "\"\"\"378. Kth Smallest Element in a Sorted Matrix (Medium).\n\nSpecification: https://leetcode.com/problems/kth-smallest-element-in-a-sorted-matrix/description/\n\"\"\"\n\n\ndef solve(matrix: list[list[int]], k: int) -> int:\n    flat = [value for row in matrix for value in row]\n    flat.sort()\n    return flat[k - 1]\n\n\nclass Solution:\n    def kthSmallest(self, matrix: list[list[int]], k: int) -> int:\n        return solve(matrix, k)\n",
+      "javascript_sha256": "9b9535bc219c6a3b8f879f1dca143c6afc98ac389a28583e62c47d8d78a8469d",
+      "python_sha256": "9aed103550958791177869da4872f2525622aaf97a632bae75306aafff63c805",
+      "tests": [
+        [
+          [
+            [
+              [
+                1,
+                5,
+                9
+              ],
+              [
+                10,
+                11,
+                13
+              ],
+              [
+                12,
+                13,
+                15
+              ]
+            ],
+            8
+          ],
+          13
+        ],
+        [
+          [
+            [
+              [
+                -5
+              ]
+            ],
+            1
+          ],
+          -5
+        ]
+      ],
+      "qualification": {
+        "problem_id": 378,
+        "slug": "kth-smallest-element-in-a-sorted-matrix",
+        "title": "Kth Smallest Element in a Sorted Matrix",
+        "passed": true,
+        "failures": []
+      }
+    },
+    {
+      "problem_id": 383,
+      "slug": "ransom-note",
+      "title": "Ransom Note",
+      "difficulty": "Easy",
+      "method": "canConstruct",
+      "javascript": "'use strict';\n\n// 383. Ransom Note (Easy).\n// Specification: https://leetcode.com/problems/ransom-note/description/\nfunction solve(ransomNote, magazine) {\n  const counts = {};\n  for (const ch of magazine) counts[ch] = (counts[ch] || 0) + 1;\n  for (const ch of ransomNote) {\n    if ((counts[ch] || 0) === 0) return false;\n    counts[ch]--;\n  }\n  return true;\n}\nconst canConstruct = solve;\nclass Solution { canConstruct(ransomNote, magazine) { return solve(ransomNote, magazine); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, canConstruct };\n",
+      "python": "\"\"\"383. Ransom Note (Easy).\n\nSpecification: https://leetcode.com/problems/ransom-note/description/\n\"\"\"\n\n\ndef solve(ransomNote: str, magazine: str) -> bool:\n    counts = {}\n    for ch in magazine:\n        counts[ch] = counts.get(ch, 0) + 1\n    for ch in ransomNote:\n        if counts.get(ch, 0) == 0:\n            return False\n        counts[ch] -= 1\n    return True\n\n\nclass Solution:\n    def canConstruct(self, ransomNote: str, magazine: str) -> bool:\n        return solve(ransomNote, magazine)\n",
+      "javascript_sha256": "f68fc371b336a21e8e643dbf0500d928aebf4fc7d369ba480570b8ebd49f2bdd",
+      "python_sha256": "17649388257fc98e3c78376aec6f8cbbe8a528449d41f4539330b20943310919",
+      "tests": [
+        [
+          [
+            "a",
+            "b"
+          ],
+          false
+        ],
+        [
+          [
+            "aa",
+            "ab"
+          ],
+          false
+        ],
+        [
+          [
+            "aa",
+            "aab"
+          ],
+          true
+        ]
+      ],
+      "qualification": {
+        "problem_id": 383,
+        "slug": "ransom-note",
+        "title": "Ransom Note",
+        "passed": true,
+        "failures": []
+      }
+    },
+    {
+      "problem_id": 386,
+      "slug": "lexicographical-numbers",
+      "title": "Lexicographical Numbers",
+      "difficulty": "Medium",
+      "method": "lexicalOrder",
+      "javascript": "'use strict';\n\n// 386. Lexicographical Numbers (Medium).\n// Specification: https://leetcode.com/problems/lexicographical-numbers/description/\nfunction solve(n) {\n  const result = [];\n  for (let value = 1; value <= n; value++) result.push(value);\n  result.sort((a, b) => String(a).localeCompare(String(b)));\n  return result;\n}\nconst lexicalOrder = solve;\nclass Solution { lexicalOrder(n) { return solve(n); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, lexicalOrder };\n",
+      "python": "\"\"\"386. Lexicographical Numbers (Medium).\n\nSpecification: https://leetcode.com/problems/lexicographical-numbers/description/\n\"\"\"\n\n\ndef solve(n: int) -> list[int]:\n    return sorted(range(1, n + 1), key=str)\n\n\nclass Solution:\n    def lexicalOrder(self, n: int) -> list[int]:\n        return solve(n)\n",
+      "javascript_sha256": "9dce3083d0c75396cfbe07f592dc7fb0aa633747334913856d3152a7dd04d612",
+      "python_sha256": "0be496d40d44096db0395400022fda7c20817e0dfdbe43e8c8ff33ca2490a7f5",
+      "tests": [
+        [
+          [
+            13
+          ],
+          [
+            1,
+            10,
+            11,
+            12,
+            13,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9
+          ]
+        ],
+        [
+          [
+            2
+          ],
+          [
+            1,
+            2
+          ]
+        ]
+      ],
+      "qualification": {
+        "problem_id": 386,
+        "slug": "lexicographical-numbers",
+        "title": "Lexicographical Numbers",
+        "passed": true,
+        "failures": []
+      }
+    },
+    {
+      "problem_id": 389,
+      "slug": "find-the-difference",
+      "title": "Find the Difference",
+      "difficulty": "Easy",
+      "method": "findTheDifference",
+      "javascript": "'use strict';\n\n// 389. Find the Difference (Easy).\n// Specification: https://leetcode.com/problems/find-the-difference/description/\nfunction solve(s, t) {\n  let xor = 0;\n  for (const ch of s) xor ^= ch.charCodeAt(0);\n  for (const ch of t) xor ^= ch.charCodeAt(0);\n  return String.fromCharCode(xor);\n}\nconst findTheDifference = solve;\nclass Solution { findTheDifference(s, t) { return solve(s, t); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, findTheDifference };\n",
+      "python": "\"\"\"389. Find the Difference (Easy).\n\nSpecification: https://leetcode.com/problems/find-the-difference/description/\n\"\"\"\n\n\ndef solve(s: str, t: str) -> str:\n    xor = 0\n    for ch in s:\n        xor ^= ord(ch)\n    for ch in t:\n        xor ^= ord(ch)\n    return chr(xor)\n\n\nclass Solution:\n    def findTheDifference(self, s: str, t: str) -> str:\n        return solve(s, t)\n",
+      "javascript_sha256": "c5305f57f74f616a41ba21efed107e6c2ad494de1ce8ccbccb62cf780a574201",
+      "python_sha256": "50f1ea5d49f9d0c36d37f09305574bc978153006a4c255b5a2bf65ce8985e3f4",
+      "tests": [
+        [
+          [
+            "abcd",
+            "abcde"
+          ],
+          "e"
+        ],
+        [
+          [
+            "",
+            "y"
+          ],
+          "y"
+        ],
+        [
+          [
+            "a",
+            "aa"
+          ],
+          "a"
+        ]
+      ],
+      "qualification": {
+        "problem_id": 389,
+        "slug": "find-the-difference",
+        "title": "Find the Difference",
+        "passed": true,
+        "failures": []
+      }
+    },
+    {
+      "problem_id": 390,
+      "slug": "elimination-game",
+      "title": "Elimination Game",
+      "difficulty": "Medium",
+      "method": "lastRemaining",
+      "javascript": "'use strict';\n\n// 390. Elimination Game (Medium).\n// Specification: https://leetcode.com/problems/elimination-game/description/\nfunction solve(n) {\n  let head = 1; let step = 1; let remaining = n; let fromLeft = true;\n  while (remaining > 1) {\n    if (fromLeft || remaining % 2 === 1) head += step;\n    remaining = Math.floor(remaining / 2);\n    step *= 2;\n    fromLeft = !fromLeft;\n  }\n  return head;\n}\nconst lastRemaining = solve;\nclass Solution { lastRemaining(n) { return solve(n); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, lastRemaining };\n",
+      "python": "\"\"\"390. Elimination Game (Medium).\n\nSpecification: https://leetcode.com/problems/elimination-game/description/\n\"\"\"\n\n\ndef solve(n: int) -> int:\n    head = 1\n    step = 1\n    remaining = n\n    from_left = True\n    while remaining > 1:\n        if from_left or remaining % 2 == 1:\n            head += step\n        remaining //= 2\n        step *= 2\n        from_left = not from_left\n    return head\n\n\nclass Solution:\n    def lastRemaining(self, n: int) -> int:\n        return solve(n)\n",
+      "javascript_sha256": "db54e371e3acd5209223519df167b0207aa99f43c2cac0f3be07de35a7c052e1",
+      "python_sha256": "150f57d2608fd176d5c6292c245f7c0161df6df868e44b764e623d1d78b0c7ce",
+      "tests": [
+        [
+          [
+            9
+          ],
+          6
+        ],
+        [
+          [
+            1
+          ],
+          1
+        ],
+        [
+          [
+            2
+          ],
+          2
+        ]
+      ],
+      "qualification": {
+        "problem_id": 390,
+        "slug": "elimination-game",
+        "title": "Elimination Game",
+        "passed": true,
+        "failures": []
+      }
+    },
+    {
+      "problem_id": 392,
+      "slug": "is-subsequence",
+      "title": "Is Subsequence",
+      "difficulty": "Easy",
+      "method": "isSubsequence",
+      "javascript": "'use strict';\n\n// 392. Is Subsequence (Easy).\n// Specification: https://leetcode.com/problems/is-subsequence/description/\nfunction solve(s, t) {\n  let index = 0;\n  for (const ch of t) { if (index < s.length && ch === s[index]) index++; }\n  return index === s.length;\n}\nconst isSubsequence = solve;\nclass Solution { isSubsequence(s, t) { return solve(s, t); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, isSubsequence };\n",
+      "python": "\"\"\"392. Is Subsequence (Easy).\n\nSpecification: https://leetcode.com/problems/is-subsequence/description/\n\"\"\"\n\n\ndef solve(s: str, t: str) -> bool:\n    index = 0\n    for ch in t:\n        if index < len(s) and ch == s[index]:\n            index += 1\n    return index == len(s)\n\n\nclass Solution:\n    def isSubsequence(self, s: str, t: str) -> bool:\n        return solve(s, t)\n",
+      "javascript_sha256": "77a192a74b56d304bf98ac6d7f4cebfc708840ce7353bcc6c8ff8bf9a8a4258f",
+      "python_sha256": "30d457f2f64facf83d8b404e6f3a65c7a3e2c72fa73a54e9679606c86e799c55",
+      "tests": [
+        [
+          [
+            "abc",
+            "ahbgdc"
+          ],
+          true
+        ],
+        [
+          [
+            "axc",
+            "ahbgdc"
+          ],
+          false
+        ],
+        [
+          [
+            "",
+            "abc"
+          ],
+          true
+        ]
+      ],
+      "qualification": {
+        "problem_id": 392,
+        "slug": "is-subsequence",
+        "title": "Is Subsequence",
+        "passed": true,
+        "failures": []
+      }
+    },
+    {
+      "problem_id": 393,
+      "slug": "utf-8-validation",
+      "title": "UTF-8 Validation",
+      "difficulty": "Medium",
+      "method": "validUtf8",
+      "javascript": "'use strict';\n\n// 393. UTF-8 Validation (Medium).\n// Specification: https://leetcode.com/problems/utf-8-validation/description/\nfunction solve(data) {\n  let remaining = 0;\n  for (const byte of data) {\n    if (remaining === 0) {\n      if ((byte >> 5) === 0b110) remaining = 1;\n      else if ((byte >> 4) === 0b1110) remaining = 2;\n      else if ((byte >> 3) === 0b11110) remaining = 3;\n      else if ((byte >> 7) !== 0) return false;\n    } else {\n      if ((byte >> 6) !== 0b10) return false;\n      remaining--;\n    }\n  }\n  return remaining === 0;\n}\nconst validUtf8 = solve;\nclass Solution { validUtf8(data) { return solve(data); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, validUtf8 };\n",
+      "python": "\"\"\"393. UTF-8 Validation (Medium).\n\nSpecification: https://leetcode.com/problems/utf-8-validation/description/\n\"\"\"\n\n\ndef solve(data: list[int]) -> bool:\n    remaining = 0\n    for byte in data:\n        if remaining == 0:\n            if byte >> 5 == 0b110:\n                remaining = 1\n            elif byte >> 4 == 0b1110:\n                remaining = 2\n            elif byte >> 3 == 0b11110:\n                remaining = 3\n            elif byte >> 7 != 0:\n                return False\n        else:\n            if byte >> 6 != 0b10:\n                return False\n            remaining -= 1\n    return remaining == 0\n\n\nclass Solution:\n    def validUtf8(self, data: list[int]) -> bool:\n        return solve(data)\n",
+      "javascript_sha256": "21876f080863eab205a93ae035a8410dfb86b99402f47a97065915a4c75f011e",
+      "python_sha256": "ab471c6c9829aa0a5200601ea149e46c7559946794f49c56983aea40f4e0de2b",
+      "tests": [
+        [
+          [
+            [
+              197,
+              130,
+              1
+            ]
+          ],
+          true
+        ],
+        [
+          [
+            [
+              235,
+              140,
+              4
+            ]
+          ],
+          false
+        ],
+        [
+          [
+            [
+              255
+            ]
+          ],
+          false
+        ]
+      ],
+      "qualification": {
+        "problem_id": 393,
+        "slug": "utf-8-validation",
+        "title": "UTF-8 Validation",
+        "passed": true,
+        "failures": []
+      }
+    },
+    {
+      "problem_id": 394,
+      "slug": "decode-string",
+      "title": "Decode String",
+      "difficulty": "Medium",
+      "method": "decodeString",
+      "javascript": "'use strict';\n\n// 394. Decode String (Medium).\n// Specification: https://leetcode.com/problems/decode-string/description/\nfunction solve(s) {\n  const countStack = [];\n  const stringStack = [];\n  let current = '';\n  let number = 0;\n  for (const ch of s) {\n    if (ch >= '0' && ch <= '9') number = number * 10 + Number(ch);\n    else if (ch === '[') { countStack.push(number); stringStack.push(current); current = ''; number = 0; }\n    else if (ch === ']') { const repeat = countStack.pop(); const previous = stringStack.pop(); current = previous + current.repeat(repeat); }\n    else current += ch;\n  }\n  return current;\n}\nconst decodeString = solve;\nclass Solution { decodeString(s) { return solve(s); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, decodeString };\n",
+      "python": "\"\"\"394. Decode String (Medium).\n\nSpecification: https://leetcode.com/problems/decode-string/description/\n\"\"\"\n\n\ndef solve(s: str) -> str:\n    count_stack = []\n    string_stack = []\n    current = ''\n    number = 0\n    for ch in s:\n        if ch.isdigit():\n            number = number * 10 + int(ch)\n        elif ch == '[':\n            count_stack.append(number)\n            string_stack.append(current)\n            current = ''\n            number = 0\n        elif ch == ']':\n            repeat = count_stack.pop()\n            previous = string_stack.pop()\n            current = previous + current * repeat\n        else:\n            current += ch\n    return current\n\n\nclass Solution:\n    def decodeString(self, s: str) -> str:\n        return solve(s)\n",
+      "javascript_sha256": "50543daaa8da781423bbf57d85479dafdf41ceba7be933f6b5340e19cc57e384",
+      "python_sha256": "d4f1282d1c9072587564eb118d7b0c0db9d5630ca85165577d9aaf8447120e8b",
+      "tests": [
+        [
+          [
+            "3[a]2[bc]"
+          ],
+          "aaabcbc"
+        ],
+        [
+          [
+            "3[a2[c]]"
+          ],
+          "accaccacc"
+        ],
+        [
+          [
+            "2[abc]3[cd]ef"
+          ],
+          "abcabccdcdcdef"
+        ]
+      ],
+      "qualification": {
+        "problem_id": 394,
+        "slug": "decode-string",
+        "title": "Decode String",
+        "passed": true,
+        "failures": []
+      }
+    },
+    {
+      "problem_id": 395,
+      "slug": "longest-substring-with-at-least-k-repeating-characters",
+      "title": "Longest Substring with At Least K Repeating Characters",
+      "difficulty": "Medium",
+      "method": "longestSubstring",
+      "javascript": "'use strict';\n\n// 395. Longest Substring with At Least K Repeating Characters (Medium).\n// Specification: https://leetcode.com/problems/longest-substring-with-at-least-k-repeating-characters/description/\nfunction countIn(s, k, start, end) {\n  if (end - start < k) return 0;\n  const counts = {};\n  for (let i = start; i < end; i++) counts[s[i]] = (counts[s[i]] || 0) + 1;\n  for (let i = start; i < end; i++) {\n    if (counts[s[i]] < k) {\n      const left = countIn(s, k, start, i);\n      const right = countIn(s, k, i + 1, end);\n      return Math.max(left, right);\n    }\n  }\n  return end - start;\n}\nfunction solve(s, k) { return countIn(s, k, 0, s.length); }\nconst longestSubstring = solve;\nclass Solution { longestSubstring(s, k) { return solve(s, k); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, longestSubstring };\n",
+      "python": "\"\"\"395. Longest Substring with At Least K Repeating Characters (Medium).\n\nSpecification: https://leetcode.com/problems/longest-substring-with-at-least-k-repeating-characters/description/\n\"\"\"\n\n\ndef _count_in(s, k, start, end):\n    if end - start < k:\n        return 0\n    counts = {}\n    for i in range(start, end):\n        counts[s[i]] = counts.get(s[i], 0) + 1\n    for i in range(start, end):\n        if counts[s[i]] < k:\n            return max(_count_in(s, k, start, i), _count_in(s, k, i + 1, end))\n    return end - start\n\n\ndef solve(s: str, k: int) -> int:\n    return _count_in(s, k, 0, len(s))\n\n\nclass Solution:\n    def longestSubstring(self, s: str, k: int) -> int:\n        return solve(s, k)\n",
+      "javascript_sha256": "48d87eb6a8f11dfe7ebf48d792c0a02df326154f903a1dc14c549f518e8991df",
+      "python_sha256": "5fca3807a061c049e48d436efc619a0ab6cf44167be76687132bd01d66902c37",
+      "tests": [
+        [
+          [
+            "aaabb",
+            3
+          ],
+          3
+        ],
+        [
+          [
+            "ababbc",
+            2
+          ],
+          5
+        ],
+        [
+          [
+            "a",
+            1
+          ],
+          1
+        ]
+      ],
+      "qualification": {
+        "problem_id": 395,
+        "slug": "longest-substring-with-at-least-k-repeating-characters",
+        "title": "Longest Substring with At Least K Repeating Characters",
+        "passed": true,
+        "failures": []
+      }
+    },
+    {
+      "problem_id": 396,
+      "slug": "rotate-function",
+      "title": "Rotate Function",
+      "difficulty": "Medium",
+      "method": "maxRotateFunction",
+      "javascript": "'use strict';\n\n// 396. Rotate Function (Medium).\n// Specification: https://leetcode.com/problems/rotate-function/description/\nfunction solve(nums) {\n  const n = nums.length;\n  let total = 0; let current = 0;\n  for (let i = 0; i < n; i++) { total += nums[i]; current += i * nums[i]; }\n  let best = current;\n  for (let i = 1; i < n; i++) { current = current + total - n * nums[n - i]; best = Math.max(best, current); }\n  return best;\n}\nconst maxRotateFunction = solve;\nclass Solution { maxRotateFunction(nums) { return solve(nums); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, maxRotateFunction };\n",
+      "python": "\"\"\"396. Rotate Function (Medium).\n\nSpecification: https://leetcode.com/problems/rotate-function/description/\n\"\"\"\n\n\ndef solve(nums: list[int]) -> int:\n    n = len(nums)\n    total = sum(nums)\n    current = sum(i * value for i, value in enumerate(nums))\n    best = current\n    for i in range(1, n):\n        current = current + total - n * nums[n - i]\n        best = max(best, current)\n    return best\n\n\nclass Solution:\n    def maxRotateFunction(self, nums: list[int]) -> int:\n        return solve(nums)\n",
+      "javascript_sha256": "ba28480ecefdf13ec5de5260f37d109d2bbd03853ac48a982f1a2da81b150396",
+      "python_sha256": "dec4c7dcd08bc8e239066fc2bb7b33dad3095be99ae3a7df9afbb25aaf28bfab",
+      "tests": [
+        [
+          [
+            [
+              4,
+              3,
+              2,
+              6
+            ]
+          ],
+          26
+        ],
+        [
+          [
+            [
+              100
+            ]
+          ],
+          0
+        ]
+      ],
+      "qualification": {
+        "problem_id": 396,
+        "slug": "rotate-function",
+        "title": "Rotate Function",
+        "passed": true,
+        "failures": []
+      }
+    },
+    {
+      "problem_id": 397,
+      "slug": "integer-replacement",
+      "title": "Integer Replacement",
+      "difficulty": "Medium",
+      "method": "integerReplacement",
+      "javascript": "'use strict';\n\n// 397. Integer Replacement (Medium).\n// Specification: https://leetcode.com/problems/integer-replacement/description/\nfunction solve(n) {\n  let steps = 0;\n  let value = n;\n  while (value !== 1) {\n    if (value % 2 === 0) value = Math.floor(value / 2);\n    else if (value === 3 || value % 4 === 1) value -= 1;\n    else value += 1;\n    steps++;\n  }\n  return steps;\n}\nconst integerReplacement = solve;\nclass Solution { integerReplacement(n) { return solve(n); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, integerReplacement };\n",
+      "python": "\"\"\"397. Integer Replacement (Medium).\n\nSpecification: https://leetcode.com/problems/integer-replacement/description/\n\"\"\"\n\n\ndef solve(n: int) -> int:\n    steps = 0\n    value = n\n    while value != 1:\n        if value % 2 == 0:\n            value //= 2\n        elif value == 3 or value % 4 == 1:\n            value -= 1\n        else:\n            value += 1\n        steps += 1\n    return steps\n\n\nclass Solution:\n    def integerReplacement(self, n: int) -> int:\n        return solve(n)\n",
+      "javascript_sha256": "ff3ef02c9b18e377a64871f05f5697face9909a3535e30850e63b8b8f51c88dd",
+      "python_sha256": "429ea61120be0cd53e27c9dd93d0e6d3f4a704f05771acb9ff2a55392567dac5",
+      "tests": [
+        [
+          [
+            8
+          ],
+          3
+        ],
+        [
+          [
+            7
+          ],
+          4
+        ],
+        [
+          [
+            4
+          ],
+          2
+        ],
+        [
+          [
+            1
+          ],
+          0
+        ]
+      ],
+      "qualification": {
+        "problem_id": 397,
+        "slug": "integer-replacement",
+        "title": "Integer Replacement",
+        "passed": true,
+        "failures": []
+      }
+    }
+  ]
+}
