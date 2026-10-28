@@ -1,0 +1,518 @@
+{
+  "actual_heapq_source_independently_read_on_jupiter": true,
+  "approval_scope": "Source/contract/interface/effects/mandatory-requirement review only; no execution qualification or catalogue promotion",
+  "candidate_programs_executed": 0,
+  "execution_suggestions_sha256": "444b340fbc5c3b95449f8abc951f02621ea279bb7a0ce83d2d1cb62621b62f8e",
+  "formal_proof_claimed": false,
+  "original_failure_freeze_sha256": "efdb4b6581814ffb4e0caab0acfafdfe2e1e4bbc45996929f85ec2c05875728d",
+  "original_failure_report_sha256": "5f1230ae503c112b9d78e8f2b0f15636123937b43322c701c50e826a72b81e5f",
+  "preparation_failure_retained_note": "One initial reviewer helper invocation had a SyntaxError before checking candidates; the corrected AST and node syntax checks passed. It was not a candidate failure.",
+  "qualification_created": false,
+  "repair_author_task_identity": "/root",
+  "review_author_is_repair_author": false,
+  "review_created_at": "2026-10-28T01:30:44.912317+00:00",
+  "review_task_code_sha256": "a7d57e83dde8f4a8caa6878756e76ca2404aa33ccddc4d97005c8d4260b2983b",
+  "reviewer_task_identity": "/root/current_inventory_audit",
+  "runtime_assumption": {
+    "node": "v22.22.1",
+    "python": "Python 3.14.4",
+    "python_stdlib_heapq_sha256": "f2d644de141a488db66fc13608a794ef5f2d33162299f6751ea92c3cb0b4c9ea",
+    "upcoming_run_must_independently_pin_runtime": true
+  },
+  "schema": "gamma.independent-source-repair-review.v1",
+  "source_changes_requested": 0,
+  "source_manifest_path": "projects/algorithm_solver/catalogue/downloaded-remaining-qualification-v1/cohort68-repairs/manifest.json",
+  "source_manifest_sha256": "b6201f1cbf1b4ceec206760348f177a4e7b94c85a5b3fc525e941150903bc82b",
+  "source_reviews": [
+    {
+      "definition": {
+        "content_sha256": "297443de104c780a3c64d3cef228a2898af86588e86171d3c5b6f00d5cec3589",
+        "metadata": {
+          "name": "reverse",
+          "params": [
+            {
+              "name": "x",
+              "type": "integer"
+            }
+          ],
+          "return": {
+            "type": "integer"
+          }
+        },
+        "official_url": "https://leetcode.com/problems/reverse-integer/description/",
+        "snapshot_sha256": "514ed18664195530bfcc70b02831b2c7e4aaae84c07e376ad6b2c8875a54c43c"
+      },
+      "interface": {
+        "argument_mode": "ordered-positional",
+        "arguments": [
+          "x"
+        ],
+        "entrypoint": "solve",
+        "return_type": "integer"
+      },
+      "language": "python",
+      "needed_source_changes": [],
+      "official_wrapper_execution_status": "unchanged and unqualified; direct execution not performed in this review",
+      "original_sha256": "c53d3869b2177ab59d205be9090678f55f737bd3c5305a4010f22461815edb62",
+      "problem_id": 7,
+      "reasoning": {
+        "complexity": "O(decimal digit count) time and O(1) auxiliary storage; at most ten input digits.",
+        "limitation": "This is a source-visible bounded-integer argument, not a claim that CPython or JavaScript engine native storage/arithmetic use only32bits. JavaScript negativezero serializes as0; the integer problem does not distinguish them.",
+        "mandatory_requirement": "Every source-visible integral value is signed32: value is never abs(INT_MIN), the floor quotient is at least -214748365, corrected digit lies -9..0, accumulator multiplication occurs only when result>=-214748364, and the last-digit cutoff guarantees the addition stays above the sign-dependent minimum. Positive outputs cannot negate INT_MIN.",
+        "numerical_behavior": "Digits are consumed with truncation toward zero into a nonpositive accumulator. Python adjusts the floor divmod quotient/remainder when the remainder is nonzero; JavaScript truncates division directly. The final sign is restored only after an overflow-safe accumulation."
+      },
+      "service_effect_envelope": {
+        "inputs": "read-only",
+        "mutable_input_return_aliases": "none by source review",
+        "return": "fresh mutable list for386; scalar otherwise",
+        "thread_safety_not_claimed": true
+      },
+      "source_path": "projects/algorithm_solver/catalogue/downloaded-remaining-qualification-v1/cohort68-repairs/python/7.py",
+      "source_review_verdict": "approved_pending_frozen_execution",
+      "source_sha256": "75cbb16bfba97d67253ac2f4125d7396ebee79e20f3d827d452bb2798206ce01",
+      "syntax_check": {
+        "candidate_execution": false,
+        "forbidden_add_sub_or_unary_sign_operators": null,
+        "mode": "Python AST parse only"
+      }
+    },
+    {
+      "definition": {
+        "content_sha256": "c028672cfeb07cd1c3cd5251fdb260c62bd2157190b08143f69fb9b9fbb3ea05",
+        "metadata": {
+          "name": "findDuplicate",
+          "params": [
+            {
+              "name": "nums",
+              "type": "integer[]"
+            }
+          ],
+          "return": {
+            "type": "integer"
+          }
+        },
+        "official_url": "https://leetcode.com/problems/find-the-duplicate-number/description/",
+        "snapshot_sha256": "a9ff8c95ea583e3b21ea5ecd0b69fb45a73155a776696a35a322b0fe7a1aa02a"
+      },
+      "interface": {
+        "argument_mode": "ordered-positional",
+        "arguments": [
+          "nums"
+        ],
+        "entrypoint": "solve",
+        "return_type": "integer"
+      },
+      "language": "python",
+      "needed_source_changes": [],
+      "official_wrapper_execution_status": "unchanged and unqualified; direct execution not performed in this review",
+      "original_sha256": "2b7ae2b442a0a2d154fdc19146c149569f4b60b9daa654ef2a5c3dbb6a3523a2",
+      "problem_id": 287,
+      "reasoning": {
+        "complexity": "O(n) time and O(1) auxiliary storage; fixed scalar indices and no recursion.",
+        "limitation": "Requires the official single-distinct-duplicate domain; malformed inputs are outside this source contract.",
+        "mandatory_requirement": "No input writes or size-dependent auxiliary container. Because0 has no incoming edge and only the repeated value can have multiple predecessors, the reachable cycle entry is the duplicate even when its multiplicity exceeds two and some other values are missing.",
+        "numerical_behavior": "All array-derived indices stay in1..n; initial index0 is valid. Standard tortoise/hare starts at f(0), f(f(0)); the meeting point is reset against entry0 and both advance at equal speed until the cycle entry."
+      },
+      "service_effect_envelope": {
+        "inputs": "read-only",
+        "mutable_input_return_aliases": "none by source review",
+        "return": "fresh mutable list for386; scalar otherwise",
+        "thread_safety_not_claimed": true
+      },
+      "source_path": "projects/algorithm_solver/catalogue/downloaded-remaining-qualification-v1/cohort68-repairs/python/287.py",
+      "source_review_verdict": "approved_pending_frozen_execution",
+      "source_sha256": "cab3a277122544025a9ed3b9a9d4e01b0da57c94faa600d97d21b24d83ada129",
+      "syntax_check": {
+        "candidate_execution": false,
+        "forbidden_add_sub_or_unary_sign_operators": null,
+        "mode": "Python AST parse only"
+      }
+    },
+    {
+      "definition": {
+        "content_sha256": "16b5a17d6a9437e16df60c29ad10fdd73f9d041d63a960cbe80f1bb8cf236c8d",
+        "metadata": {
+          "name": "getSum",
+          "params": [
+            {
+              "name": "a",
+              "type": "integer"
+            },
+            {
+              "name": "b",
+              "type": "integer"
+            }
+          ],
+          "return": {
+            "type": "integer"
+          }
+        },
+        "official_url": "https://leetcode.com/problems/sum-of-two-integers/description/",
+        "snapshot_sha256": "91a0f2caeb0b8891c9dd92da8e01611a307ee0c4d90e1bf04943560ae81738e8"
+      },
+      "interface": {
+        "argument_mode": "ordered-positional",
+        "arguments": [
+          "a",
+          "b"
+        ],
+        "entrypoint": "solve",
+        "return_type": "integer"
+      },
+      "language": "python",
+      "needed_source_changes": [],
+      "official_wrapper_execution_status": "unchanged and unqualified; direct execution not performed in this review",
+      "original_sha256": "33f76d18bfd1ac44cc055b2edd7818cdec9b7277a0ad8e9f63078d8879fc7a55",
+      "problem_id": 371,
+      "reasoning": {
+        "complexity": "O(32) time and O(1) auxiliary storage for the fixed32bit domain.",
+        "limitation": "The prohibition is a source-operator requirement; a structural AST check cannot establish universal runtime behavior.",
+        "mandatory_requirement": "The solve AST has no binary Add/Sub, augmented Add/Sub, unary UAdd/USub. No helper uses them. Only bitwise xor,and,shift,complement and comparison are used for arithmetic.",
+        "numerical_behavior": "Masking realizes addition modulo2**32. The carry loop moves pending carries to higher bits and terminates within32rounds. Complement of x^MASK converts a negative signed result without subtraction. Legal input sums lie within[-2000,2000]."
+      },
+      "service_effect_envelope": {
+        "inputs": "read-only",
+        "mutable_input_return_aliases": "none by source review",
+        "return": "fresh mutable list for386; scalar otherwise",
+        "thread_safety_not_claimed": true
+      },
+      "source_path": "projects/algorithm_solver/catalogue/downloaded-remaining-qualification-v1/cohort68-repairs/python/371.py",
+      "source_review_verdict": "approved_pending_frozen_execution",
+      "source_sha256": "1cba506c8e69907ece5b971da48ff93078b16a655ee2768703d7391d9f450fcf",
+      "syntax_check": {
+        "candidate_execution": false,
+        "forbidden_add_sub_or_unary_sign_operators": [],
+        "mode": "Python AST parse only"
+      }
+    },
+    {
+      "definition": {
+        "content_sha256": "cfbbc15cc6e9e2ba52840144bb9107c0f648e1a51e590f0b44d340662a005d71",
+        "metadata": {
+          "name": "kthSmallest",
+          "params": [
+            {
+              "name": "matrix",
+              "type": "integer[][]"
+            },
+            {
+              "name": "k",
+              "type": "integer"
+            }
+          ],
+          "return": {
+            "type": "integer"
+          }
+        },
+        "official_url": "https://leetcode.com/problems/kth-smallest-element-in-a-sorted-matrix/description/",
+        "snapshot_sha256": "4313e14fbcf008df0d4de7978135149bb9b6c6e517c710807923b8c25902ad61"
+      },
+      "interface": {
+        "argument_mode": "ordered-positional",
+        "arguments": [
+          "matrix",
+          "k"
+        ],
+        "entrypoint": "solve",
+        "return_type": "integer"
+      },
+      "language": "python",
+      "needed_source_changes": [],
+      "official_wrapper_execution_status": "unchanged and unqualified; direct execution not performed in this review",
+      "original_sha256": "9aed103550958791177869da4872f2525622aaf97a632bae75306aafff63c805",
+      "problem_id": 378,
+      "reasoning": {
+        "complexity": "O(n+k*log(n)) time, O(n) live auxiliary space. O(1) memory and O(n) time are optional followups and are not claimed.",
+        "javascript_heap_invariants": "Heapify establishes the min-heap property. An advanced row head is not smaller than its consumed head, so root replacement needs only down-sifting. An exhausted row is removed by moving the final heap record to root and down-sifting. The final single-element pop leaves an empty heap and skips assignment. Equal values are interchangeable but still individually consumed.",
+        "limitation": "Live-storage asymptotics do not measure a particular garbage collector peak. The upcoming frozen run must still enforce and report actual resource limits.",
+        "mandatory_requirement": "Python heapq.merge is lazy and retains O(n) row iterators/heap entries; star-expansion adds O(n) references. JavaScript has at most one three-element record per row and constant extra live references. Neither constructs an n*n intermediate.",
+        "numerical_behavior": "Each nonexhausted sorted row contributes one current head. Removing the minimum head and advancing only its row enumerates all values with multiplicity in nondecreasing order; the kth removed value is the answer."
+      },
+      "service_effect_envelope": {
+        "inputs": "read-only",
+        "mutable_input_return_aliases": "none by source review",
+        "return": "fresh mutable list for386; scalar otherwise",
+        "thread_safety_not_claimed": true
+      },
+      "source_path": "projects/algorithm_solver/catalogue/downloaded-remaining-qualification-v1/cohort68-repairs/python/378.py",
+      "source_review_verdict": "approved_pending_frozen_execution",
+      "source_sha256": "0fcdbf22edb6ae68aa7af3a2d9e24192f61a6a88c818e06ba290798f1c4d5d63",
+      "syntax_check": {
+        "candidate_execution": false,
+        "forbidden_add_sub_or_unary_sign_operators": null,
+        "mode": "Python AST parse only"
+      }
+    },
+    {
+      "definition": {
+        "content_sha256": "db3f9a4fb89183425479eb0ae2ea074884f5cf1d9970f42d1876968c646a1143",
+        "metadata": {
+          "name": "lexicalOrder",
+          "params": [
+            {
+              "name": "n",
+              "type": "integer"
+            }
+          ],
+          "return": {
+            "type": "list<integer>"
+          }
+        },
+        "official_url": "https://leetcode.com/problems/lexicographical-numbers/description/",
+        "snapshot_sha256": "34d2e6acb16ffd888201f5cfa400ff36c9cf643d3b55044ae8aff4526b421e3e"
+      },
+      "interface": {
+        "argument_mode": "ordered-positional",
+        "arguments": [
+          "n"
+        ],
+        "entrypoint": "solve",
+        "return_type": "list<integer>"
+      },
+      "language": "python",
+      "needed_source_changes": [],
+      "official_wrapper_execution_status": "unchanged and unqualified; direct execution not performed in this review",
+      "original_sha256": "0be496d40d44096db0395400022fda7c20817e0dfdbe43e8c8ff33ca2490a7f5",
+      "problem_id": 386,
+      "reasoning": {
+        "complexity": "O(n) amortized time and O(1) auxiliary storage excluding returned output. Ascents can be charged to completed trie subtrees/previous descents; trailing9 ascents form a geometric total. The final unused cursor update is still bounded and terminates at zero before increment.",
+        "limitation": "This is an algorithmic source review, not a formal proof or measured all-input complexity certification.",
+        "mandatory_requirement": "The returned list is required output storage. Apart from it, only a fixed number of scalar variables are live; there is no sort, recursion, stack or auxiliary container.",
+        "numerical_behavior": "The scalar cursor follows decimal-trie preorder: descend to the zero child when available, otherwise ascend past exhausted suffixes and increment to the next sibling. This enumerates1..n exactly once in lexicographic order."
+      },
+      "service_effect_envelope": {
+        "inputs": "read-only",
+        "mutable_input_return_aliases": "none by source review",
+        "return": "fresh mutable list for386; scalar otherwise",
+        "thread_safety_not_claimed": true
+      },
+      "source_path": "projects/algorithm_solver/catalogue/downloaded-remaining-qualification-v1/cohort68-repairs/python/386.py",
+      "source_review_verdict": "approved_pending_frozen_execution",
+      "source_sha256": "bc4f6953acbdf12d5e37da887a0f5da1e6598d665a351eb5556266572fb41860",
+      "syntax_check": {
+        "candidate_execution": false,
+        "forbidden_add_sub_or_unary_sign_operators": null,
+        "mode": "Python AST parse only"
+      }
+    },
+    {
+      "definition": {
+        "content_sha256": "297443de104c780a3c64d3cef228a2898af86588e86171d3c5b6f00d5cec3589",
+        "metadata": {
+          "name": "reverse",
+          "params": [
+            {
+              "name": "x",
+              "type": "integer"
+            }
+          ],
+          "return": {
+            "type": "integer"
+          }
+        },
+        "official_url": "https://leetcode.com/problems/reverse-integer/description/",
+        "snapshot_sha256": "514ed18664195530bfcc70b02831b2c7e4aaae84c07e376ad6b2c8875a54c43c"
+      },
+      "interface": {
+        "argument_mode": "ordered-positional",
+        "arguments": [
+          "x"
+        ],
+        "entrypoint": "solve",
+        "return_type": "integer"
+      },
+      "language": "javascript",
+      "needed_source_changes": [],
+      "official_wrapper_execution_status": "unchanged and unqualified; direct execution not performed in this review",
+      "original_sha256": "b0bf2685226d864587ffac3b48549e304d1971a31cc7572b8142e4a37e520def",
+      "problem_id": 7,
+      "reasoning": {
+        "complexity": "O(decimal digit count) time and O(1) auxiliary storage; at most ten input digits.",
+        "limitation": "This is a source-visible bounded-integer argument, not a claim that CPython or JavaScript engine native storage/arithmetic use only32bits. JavaScript negativezero serializes as0; the integer problem does not distinguish them.",
+        "mandatory_requirement": "Every source-visible integral value is signed32: value is never abs(INT_MIN), the floor quotient is at least -214748365, corrected digit lies -9..0, accumulator multiplication occurs only when result>=-214748364, and the last-digit cutoff guarantees the addition stays above the sign-dependent minimum. Positive outputs cannot negate INT_MIN.",
+        "numerical_behavior": "Digits are consumed with truncation toward zero into a nonpositive accumulator. Python adjusts the floor divmod quotient/remainder when the remainder is nonzero; JavaScript truncates division directly. The final sign is restored only after an overflow-safe accumulation."
+      },
+      "service_effect_envelope": {
+        "inputs": "read-only",
+        "mutable_input_return_aliases": "none by source review",
+        "return": "fresh mutable list for386; scalar otherwise",
+        "thread_safety_not_claimed": true
+      },
+      "source_path": "projects/algorithm_solver/catalogue/downloaded-remaining-qualification-v1/cohort68-repairs/javascript/7.js",
+      "source_review_verdict": "approved_pending_frozen_execution",
+      "source_sha256": "4503609f90f7a070dd2eb2f63499c6fa356b0f18e83f4e0002299f61e0c9e6a9",
+      "syntax_check": {
+        "candidate_execution": false,
+        "exit_code": 0,
+        "mode": "node --check only",
+        "stderr": ""
+      }
+    },
+    {
+      "definition": {
+        "content_sha256": "c028672cfeb07cd1c3cd5251fdb260c62bd2157190b08143f69fb9b9fbb3ea05",
+        "metadata": {
+          "name": "findDuplicate",
+          "params": [
+            {
+              "name": "nums",
+              "type": "integer[]"
+            }
+          ],
+          "return": {
+            "type": "integer"
+          }
+        },
+        "official_url": "https://leetcode.com/problems/find-the-duplicate-number/description/",
+        "snapshot_sha256": "a9ff8c95ea583e3b21ea5ecd0b69fb45a73155a776696a35a322b0fe7a1aa02a"
+      },
+      "interface": {
+        "argument_mode": "ordered-positional",
+        "arguments": [
+          "nums"
+        ],
+        "entrypoint": "solve",
+        "return_type": "integer"
+      },
+      "language": "javascript",
+      "needed_source_changes": [],
+      "official_wrapper_execution_status": "unchanged and unqualified; direct execution not performed in this review",
+      "original_sha256": "a1e6c92ee30922600d60d860d197565580b0ade08726ae62944fa4d847dfd4fc",
+      "problem_id": 287,
+      "reasoning": {
+        "complexity": "O(n) time and O(1) auxiliary storage; fixed scalar indices and no recursion.",
+        "limitation": "Requires the official single-distinct-duplicate domain; malformed inputs are outside this source contract.",
+        "mandatory_requirement": "No input writes or size-dependent auxiliary container. Because0 has no incoming edge and only the repeated value can have multiple predecessors, the reachable cycle entry is the duplicate even when its multiplicity exceeds two and some other values are missing.",
+        "numerical_behavior": "All array-derived indices stay in1..n; initial index0 is valid. Standard tortoise/hare starts at f(0), f(f(0)); the meeting point is reset against entry0 and both advance at equal speed until the cycle entry."
+      },
+      "service_effect_envelope": {
+        "inputs": "read-only",
+        "mutable_input_return_aliases": "none by source review",
+        "return": "fresh mutable list for386; scalar otherwise",
+        "thread_safety_not_claimed": true
+      },
+      "source_path": "projects/algorithm_solver/catalogue/downloaded-remaining-qualification-v1/cohort68-repairs/javascript/287.js",
+      "source_review_verdict": "approved_pending_frozen_execution",
+      "source_sha256": "bdb11115540763e3a069404d7d13d90a993f25a79565d1163f9ef7d9e0d070e0",
+      "syntax_check": {
+        "candidate_execution": false,
+        "exit_code": 0,
+        "mode": "node --check only",
+        "stderr": ""
+      }
+    },
+    {
+      "definition": {
+        "content_sha256": "cfbbc15cc6e9e2ba52840144bb9107c0f648e1a51e590f0b44d340662a005d71",
+        "metadata": {
+          "name": "kthSmallest",
+          "params": [
+            {
+              "name": "matrix",
+              "type": "integer[][]"
+            },
+            {
+              "name": "k",
+              "type": "integer"
+            }
+          ],
+          "return": {
+            "type": "integer"
+          }
+        },
+        "official_url": "https://leetcode.com/problems/kth-smallest-element-in-a-sorted-matrix/description/",
+        "snapshot_sha256": "4313e14fbcf008df0d4de7978135149bb9b6c6e517c710807923b8c25902ad61"
+      },
+      "interface": {
+        "argument_mode": "ordered-positional",
+        "arguments": [
+          "matrix",
+          "k"
+        ],
+        "entrypoint": "solve",
+        "return_type": "integer"
+      },
+      "language": "javascript",
+      "needed_source_changes": [],
+      "official_wrapper_execution_status": "unchanged and unqualified; direct execution not performed in this review",
+      "original_sha256": "9b9535bc219c6a3b8f879f1dca143c6afc98ac389a28583e62c47d8d78a8469d",
+      "problem_id": 378,
+      "reasoning": {
+        "complexity": "O(n+k*log(n)) time, O(n) live auxiliary space. O(1) memory and O(n) time are optional followups and are not claimed.",
+        "javascript_heap_invariants": "Heapify establishes the min-heap property. An advanced row head is not smaller than its consumed head, so root replacement needs only down-sifting. An exhausted row is removed by moving the final heap record to root and down-sifting. The final single-element pop leaves an empty heap and skips assignment. Equal values are interchangeable but still individually consumed.",
+        "limitation": "Live-storage asymptotics do not measure a particular garbage collector peak. The upcoming frozen run must still enforce and report actual resource limits.",
+        "mandatory_requirement": "Python heapq.merge is lazy and retains O(n) row iterators/heap entries; star-expansion adds O(n) references. JavaScript has at most one three-element record per row and constant extra live references. Neither constructs an n*n intermediate.",
+        "numerical_behavior": "Each nonexhausted sorted row contributes one current head. Removing the minimum head and advancing only its row enumerates all values with multiplicity in nondecreasing order; the kth removed value is the answer."
+      },
+      "service_effect_envelope": {
+        "inputs": "read-only",
+        "mutable_input_return_aliases": "none by source review",
+        "return": "fresh mutable list for386; scalar otherwise",
+        "thread_safety_not_claimed": true
+      },
+      "source_path": "projects/algorithm_solver/catalogue/downloaded-remaining-qualification-v1/cohort68-repairs/javascript/378.js",
+      "source_review_verdict": "approved_pending_frozen_execution",
+      "source_sha256": "db4af590fc74c8eafb0921c42e72ddd07ec1bc210a6cabcd1755a2575d1baeba",
+      "syntax_check": {
+        "candidate_execution": false,
+        "exit_code": 0,
+        "mode": "node --check only",
+        "stderr": ""
+      }
+    },
+    {
+      "definition": {
+        "content_sha256": "db3f9a4fb89183425479eb0ae2ea074884f5cf1d9970f42d1876968c646a1143",
+        "metadata": {
+          "name": "lexicalOrder",
+          "params": [
+            {
+              "name": "n",
+              "type": "integer"
+            }
+          ],
+          "return": {
+            "type": "list<integer>"
+          }
+        },
+        "official_url": "https://leetcode.com/problems/lexicographical-numbers/description/",
+        "snapshot_sha256": "34d2e6acb16ffd888201f5cfa400ff36c9cf643d3b55044ae8aff4526b421e3e"
+      },
+      "interface": {
+        "argument_mode": "ordered-positional",
+        "arguments": [
+          "n"
+        ],
+        "entrypoint": "solve",
+        "return_type": "list<integer>"
+      },
+      "language": "javascript",
+      "needed_source_changes": [],
+      "official_wrapper_execution_status": "unchanged and unqualified; direct execution not performed in this review",
+      "original_sha256": "9dce3083d0c75396cfbe07f592dc7fb0aa633747334913856d3152a7dd04d612",
+      "problem_id": 386,
+      "reasoning": {
+        "complexity": "O(n) amortized time and O(1) auxiliary storage excluding returned output. Ascents can be charged to completed trie subtrees/previous descents; trailing9 ascents form a geometric total. The final unused cursor update is still bounded and terminates at zero before increment.",
+        "limitation": "This is an algorithmic source review, not a formal proof or measured all-input complexity certification.",
+        "mandatory_requirement": "The returned list is required output storage. Apart from it, only a fixed number of scalar variables are live; there is no sort, recursion, stack or auxiliary container.",
+        "numerical_behavior": "The scalar cursor follows decimal-trie preorder: descend to the zero child when available, otherwise ascend past exhausted suffixes and increment to the next sibling. This enumerates1..n exactly once in lexicographic order."
+      },
+      "service_effect_envelope": {
+        "inputs": "read-only",
+        "mutable_input_return_aliases": "none by source review",
+        "return": "fresh mutable list for386; scalar otherwise",
+        "thread_safety_not_claimed": true
+      },
+      "source_path": "projects/algorithm_solver/catalogue/downloaded-remaining-qualification-v1/cohort68-repairs/javascript/386.js",
+      "source_review_verdict": "approved_pending_frozen_execution",
+      "source_sha256": "ec41d0517d08d0f504d3b1dda0b194d87676310435202b8458c080a539948abf",
+      "syntax_check": {
+        "candidate_execution": false,
+        "exit_code": 0,
+        "mode": "node --check only",
+        "stderr": ""
+      }
+    }
+  ],
+  "trusted_runtime_api_reference": "https://docs.python.org/3.14/library/heapq.html#heapq.merge"
+}
