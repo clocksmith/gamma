@@ -1,0 +1,38 @@
+{
+  "comparison": "exact typed scalar or string",
+  "effects": "arguments unchanged",
+  "entrypoint": "solve",
+  "language": "javascript",
+  "official_interface": {
+    "name": "lexGreaterPermutation",
+    "params": [
+      {
+        "name": "s",
+        "type": "string"
+      },
+      {
+        "name": "target",
+        "type": "string"
+      }
+    ],
+    "return": {
+      "type": "string"
+    }
+  },
+  "parameters": [
+    "s",
+    "target"
+  ],
+  "problem_id": 3720,
+  "qualification": {
+    "reason": "No candidate execution; source-free references and static syntax only",
+    "status": "unknown"
+  },
+  "schema": "gamma.authored-scalar-semantics.v1",
+  "source_reasoning": {
+    "candidate_design": "match target prefix, backtrack rightmost possible strict increase, append sorted remainder",
+    "complexity_target": "O(26*n) time, O(n+26) auxiliary space",
+    "reference": "enumerate all distinct complete permutations and choose the first strict successor"
+  },
+  "source_sha256": "66ca81609e6a469adabe0a35dc6f77d5707c8a30caeecf1bd06db790540a3350"
+}
