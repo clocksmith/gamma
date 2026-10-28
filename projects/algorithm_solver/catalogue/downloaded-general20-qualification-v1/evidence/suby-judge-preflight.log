@@ -1,0 +1,282 @@
+F.F.FF.FFFFFF..FFFFFF.F..............                                    [100%]
+=================================== FAILURES ===================================
+_________________________ test_correct_solution_passes _________________________
+
+    def test_correct_solution_passes():
+        verdict = judge.judge_functional(TWO_SUM, ENTRY, TESTS, **_fast())
+>       assert verdict.passed, verdict
+E       AssertionError: Verdict(passed=False, reason='sandbox_error', tests_total=3, tests_passed=0, wall_seconds=0.0, first_failure={'detail'...t confirm payload execution (exit=1): bwrap: loopback: Failed RTM_NEWADDR: Operation not permitted
+E         '}, stderr_tail='')
+E       assert False
+E        +  where False = Verdict(passed=False, reason='sandbox_error', tests_total=3, tests_passed=0, wall_seconds=0.0, first_failure={'detail'...t confirm payload execution (exit=1): bwrap: loopback: Failed RTM_NEWADDR: Operation not permitted\n'}, stderr_tail='').passed
+
+tests/test_algorithm_solver_judge.py:57: AssertionError
+___________________________ test_wrong_answer_fails ____________________________
+
+    def test_wrong_answer_fails():
+        verdict = judge.judge_functional(_solution("return [0, 1]"), ENTRY, TESTS, **_fast())
+>       assert not verdict.passed and verdict.reason == judge.WRONG_ANSWER
+E       AssertionError: assert (not False and 'sandbox_error' == 'wrong_answer'
+E        +  where False = Verdict(passed=False, reason='sandbox_error', tests_total=3, tests_passed=0, wall_seconds=0.0, first_failure={'detail'...t confirm payload execution (exit=1): bwrap: loopback: Failed RTM_NEWADDR: Operation not permitted\n'}, stderr_tail='').passed
+E         
+E         - wrong_answer
+E         + sandbox_error)
+
+tests/test_algorithm_solver_judge.py:70: AssertionError
+______________________ test_forged_duplicate_records_fail ______________________
+
+    def test_forged_duplicate_records_fail():
+        forged = TWO_SUM + """
+    import os, json
+    os.write(3, (json.dumps({"i": 0, "result": [0, 1]}) + "\\n").encode())
+    """
+        verdict = judge.judge_functional(forged, ENTRY, TESTS, **_fast())
+>       assert not verdict.passed and verdict.reason == judge.DUPLICATE_RESULT
+E       AssertionError: assert (not False and 'sandbox_error' == 'duplicate_result'
+E        +  where False = Verdict(passed=False, reason='sandbox_error', tests_total=3, tests_passed=0, wall_seconds=0.0, first_failure={'detail'...t confirm payload execution (exit=1): bwrap: loopback: Failed RTM_NEWADDR: Operation not permitted\n'}, stderr_tail='').passed
+E         
+E         - duplicate_result
+E         + sandbox_error)
+
+tests/test_algorithm_solver_judge.py:94: AssertionError
+_____________________ test_printed_verdict_text_is_ignored _____________________
+
+    def test_printed_verdict_text_is_ignored():
+        forged = 'print("PASSED all tests"); print(\'{"passed": true}\')\n' + _solution("return []")
+        verdict = judge.judge_functional(forged, ENTRY, TESTS, **_fast())
+>       assert not verdict.passed and verdict.reason == judge.WRONG_ANSWER
+E       AssertionError: assert (not False and 'sandbox_error' == 'wrong_answer'
+E        +  where False = Verdict(passed=False, reason='sandbox_error', tests_total=3, tests_passed=0, wall_seconds=0.0, first_failure={'detail'...t confirm payload execution (exit=1): bwrap: loopback: Failed RTM_NEWADDR: Operation not permitted\n'}, stderr_tail='').passed
+E         
+E         - wrong_answer
+E         + sandbox_error)
+
+tests/test_algorithm_solver_judge.py:100: AssertionError
+____________________________ test_early_exit_fails _____________________________
+
+    def test_early_exit_fails():
+        for early in ("import sys\nsys.exit(0)\n", "import os\nos._exit(0)\n"):
+            verdict = judge.judge_functional(early + TWO_SUM, ENTRY, TESTS, **_fast())
+            assert not verdict.passed, (early, verdict)
+>           assert verdict.reason in (judge.LOAD_ERROR, judge.MISSING_RESULT)
+E           AssertionError: assert 'sandbox_error' in ('load_error', 'missing_result')
+E            +  where 'sandbox_error' = Verdict(passed=False, reason='sandbox_error', tests_total=3, tests_passed=0, wall_seconds=0.0, first_failure={'detail'...t confirm payload execution (exit=1): bwrap: loopback: Failed RTM_NEWADDR: Operation not permitted\n'}, stderr_tail='').reason
+
+tests/test_algorithm_solver_judge.py:125: AssertionError
+____________________ test_exit_after_partial_results_fails _____________________
+
+    def test_exit_after_partial_results_fails():
+        partial = _solution("""
+    import os
+    if len(nums) == 3:
+        os._exit(0)
+    return [0, 1]
+    """)
+        verdict = judge.judge_functional(partial, ENTRY, TESTS, **_fast())
+>       assert not verdict.passed and verdict.reason == judge.MISSING_RESULT
+E       AssertionError: assert (not False and 'sandbox_error' == 'missing_result'
+E        +  where False = Verdict(passed=False, reason='sandbox_error', tests_total=3, tests_passed=0, wall_seconds=0.0, first_failure={'detail'...t confirm payload execution (exit=1): bwrap: loopback: Failed RTM_NEWADDR: Operation not permitted\n'}, stderr_tail='').passed
+E         
+E         - missing_result
+E         + sandbox_error)
+
+tests/test_algorithm_solver_judge.py:136: AssertionError
+___________________________ test_cpu_hang_times_out ____________________________
+
+    def test_cpu_hang_times_out():
+        verdict = judge.judge_functional(_solution("while True:\n    pass"), ENTRY, TESTS[:1], **_fast())
+>       assert not verdict.passed and verdict.reason == judge.TIMEOUT
+E       AssertionError: assert (not False and 'sandbox_error' == 'timeout'
+E        +  where False = Verdict(passed=False, reason='sandbox_error', tests_total=1, tests_passed=0, wall_seconds=0.0, first_failure={'detail'...t confirm payload execution (exit=1): bwrap: loopback: Failed RTM_NEWADDR: Operation not permitted\n'}, stderr_tail='').passed
+E         
+E         - timeout
+E         + sandbox_error)
+
+tests/test_algorithm_solver_judge.py:141: AssertionError
+______________________ test_sleeping_hang_hits_wall_limit ______________________
+
+    def test_sleeping_hang_hits_wall_limit():
+        verdict = judge.judge_functional(
+            _solution("import time\ntime.sleep(60)"), ENTRY, TESTS[:1], per_test_cpu_seconds=1.0, wall_seconds=3.0
+        )
+>       assert not verdict.passed and verdict.reason == judge.TIMEOUT
+E       AssertionError: assert (not False and 'sandbox_error' == 'timeout'
+E        +  where False = Verdict(passed=False, reason='sandbox_error', tests_total=1, tests_passed=0, wall_seconds=0.0, first_failure={'detail'...t confirm payload execution (exit=1): bwrap: loopback: Failed RTM_NEWADDR: Operation not permitted\n'}, stderr_tail='').passed
+E         
+E         - timeout
+E         + sandbox_error)
+
+tests/test_algorithm_solver_judge.py:148: AssertionError
+_________________________ test_excessive_output_fails __________________________
+
+    def test_excessive_output_fails():
+        flood = _solution("import sys\nwhile True:\n    sys.stderr.write('x' * 65536)")
+        verdict = judge.judge_functional(flood, ENTRY, TESTS[:1], **_fast())
+>       assert not verdict.passed and verdict.reason in (judge.OUTPUT_LIMIT, judge.TIMEOUT)
+E       AssertionError: assert (not False and 'sandbox_error' in ('output_limit', 'timeout'))
+E        +  where False = Verdict(passed=False, reason='sandbox_error', tests_total=1, tests_passed=0, wall_seconds=0.0, first_failure={'detail'...t confirm payload execution (exit=1): bwrap: loopback: Failed RTM_NEWADDR: Operation not permitted\n'}, stderr_tail='').passed
+E        +  and   'sandbox_error' = Verdict(passed=False, reason='sandbox_error', tests_total=1, tests_passed=0, wall_seconds=0.0, first_failure={'detail'...t confirm payload execution (exit=1): bwrap: loopback: Failed RTM_NEWADDR: Operation not permitted\n'}, stderr_tail='').reason
+
+tests/test_algorithm_solver_judge.py:155: AssertionError
+___________________________ test_memory_limit_fails ____________________________
+
+    def test_memory_limit_fails():
+        hog = _solution("block = bytearray(2 * 1024 * 1024 * 1024)\nreturn [0, 1]")
+        verdict = judge.judge_functional(hog, ENTRY, TESTS[:1], **_fast())
+>       assert not verdict.passed and verdict.reason == judge.RUNTIME_ERROR
+E       AssertionError: assert (not False and 'sandbox_error' == 'runtime_error'
+E        +  where False = Verdict(passed=False, reason='sandbox_error', tests_total=1, tests_passed=0, wall_seconds=0.0, first_failure={'detail'...t confirm payload execution (exit=1): bwrap: loopback: Failed RTM_NEWADDR: Operation not permitted\n'}, stderr_tail='').passed
+E         
+E         - runtime_error
+E         + sandbox_error)
+
+tests/test_algorithm_solver_judge.py:162: AssertionError
+_________________________ test_network_is_unreachable __________________________
+
+    def test_network_is_unreachable():
+        probe = _solution("""
+    import socket
+    try:
+        socket.create_connection(('1.1.1.1', 53), timeout=2)
+        return [1]
+    except OSError:
+        return [0]
+    """)
+        verdict = judge.judge_functional(probe, ENTRY, [judge.FunctionalTest(args=[[1], 1], expected=[0])], **_fast())
+>       assert verdict.passed, verdict
+E       AssertionError: Verdict(passed=False, reason='sandbox_error', tests_total=1, tests_passed=0, wall_seconds=0.0, first_failure={'detail'...t confirm payload execution (exit=1): bwrap: loopback: Failed RTM_NEWADDR: Operation not permitted
+E         '}, stderr_tail='')
+E       assert False
+E        +  where False = Verdict(passed=False, reason='sandbox_error', tests_total=1, tests_passed=0, wall_seconds=0.0, first_failure={'detail'...t confirm payload execution (exit=1): bwrap: loopback: Failed RTM_NEWADDR: Operation not permitted\n'}, stderr_tail='').passed
+
+tests/test_algorithm_solver_judge.py:214: AssertionError
+_______________________ test_host_files_are_not_readable _______________________
+
+    def test_host_files_are_not_readable():
+        with tempfile.NamedTemporaryFile("w", dir=Path.home(), prefix="algsolve-secret-", delete=False) as fh:
+            fh.write("host-secret")
+            secret = fh.name
+        try:
+            probe = _solution(f"""
+    paths = [{secret!r}, '/etc/passwd', '/home', '/root']
+    seen = []
+    import os
+    for p in paths:
+        seen.append(int(os.path.exists(p)))
+    return seen
+    """)
+            verdict = judge.judge_functional(probe, ENTRY, [judge.FunctionalTest(args=[[1], 1], expected=[0, 0, 0, 0])], **_fast())
+>           assert verdict.passed, verdict
+E           AssertionError: Verdict(passed=False, reason='sandbox_error', tests_total=1, tests_passed=0, wall_seconds=0.0, first_failure={'detail'...t confirm payload execution (exit=1): bwrap: loopback: Failed RTM_NEWADDR: Operation not permitted
+E             '}, stderr_tail='')
+E           assert False
+E            +  where False = Verdict(passed=False, reason='sandbox_error', tests_total=1, tests_passed=0, wall_seconds=0.0, first_failure={'detail'...t confirm payload execution (exit=1): bwrap: loopback: Failed RTM_NEWADDR: Operation not permitted\n'}, stderr_tail='').passed
+
+tests/test_algorithm_solver_judge.py:231: AssertionError
+_______________________ test_task_directory_is_read_only _______________________
+
+    def test_task_directory_is_read_only():
+        probe = _solution("""
+    try:
+        open('/task/candidate.py', 'w').write('x')
+        return [1]
+    except OSError:
+        return [0]
+    """)
+        verdict = judge.judge_functional(probe, ENTRY, [judge.FunctionalTest(args=[[1], 1], expected=[0])], **_fast())
+>       assert verdict.passed, verdict
+E       AssertionError: Verdict(passed=False, reason='sandbox_error', tests_total=1, tests_passed=0, wall_seconds=0.0, first_failure={'detail'...t confirm payload execution (exit=1): bwrap: loopback: Failed RTM_NEWADDR: Operation not permitted
+E         '}, stderr_tail='')
+E       assert False
+E        +  where False = Verdict(passed=False, reason='sandbox_error', tests_total=1, tests_passed=0, wall_seconds=0.0, first_failure={'detail'...t confirm payload execution (exit=1): bwrap: loopback: Failed RTM_NEWADDR: Operation not permitted\n'}, stderr_tail='').passed
+
+tests/test_algorithm_solver_judge.py:245: AssertionError
+_____________________ test_linked_list_and_tree_round_trip _____________________
+
+    def test_linked_list_and_tree_round_trip():
+        source = """
+    class Solution:
+        def reverse(self, head):
+            prev = None
+            while head:
+                head.next, prev, head = prev, head, head.next
+            return prev
+    """
+        tests = [judge.FunctionalTest(args=[{"__list_node__": [1, 2, 3]}], expected={"__list_node__": [3, 2, 1]})]
+        verdict = judge.judge_functional(source, {"class": "Solution", "method": "reverse"}, tests, **_fast())
+>       assert verdict.passed, verdict
+E       AssertionError: Verdict(passed=False, reason='sandbox_error', tests_total=1, tests_passed=0, wall_seconds=0.0, first_failure={'detail'...t confirm payload execution (exit=1): bwrap: loopback: Failed RTM_NEWADDR: Operation not permitted
+E         '}, stderr_tail='')
+E       assert False
+E        +  where False = Verdict(passed=False, reason='sandbox_error', tests_total=1, tests_passed=0, wall_seconds=0.0, first_failure={'detail'...t confirm payload execution (exit=1): bwrap: loopback: Failed RTM_NEWADDR: Operation not permitted\n'}, stderr_tail='').passed
+
+tests/test_algorithm_solver_judge.py:259: AssertionError
+______________________ test_in_place_argument_comparison _______________________
+
+    def test_in_place_argument_comparison():
+        source = """
+    class Solution:
+        def rotate(self, nums, k):
+            k %= len(nums)
+            nums[:] = nums[-k:] + nums[:-k]
+    """
+        tests = [judge.FunctionalTest(args=[[1, 2, 3, 4, 5], 2], expected=[4, 5, 1, 2, 3], compare="arg:0")]
+        verdict = judge.judge_functional(source, {"class": "Solution", "method": "rotate"}, tests, **_fast())
+>       assert verdict.passed, verdict
+E       AssertionError: Verdict(passed=False, reason='sandbox_error', tests_total=1, tests_passed=0, wall_seconds=0.0, first_failure={'detail'...t confirm payload execution (exit=1): bwrap: loopback: Failed RTM_NEWADDR: Operation not permitted
+E         '}, stderr_tail='')
+E       assert False
+E        +  where False = Verdict(passed=False, reason='sandbox_error', tests_total=1, tests_passed=0, wall_seconds=0.0, first_failure={'detail'...t confirm payload execution (exit=1): bwrap: loopback: Failed RTM_NEWADDR: Operation not permitted\n'}, stderr_tail='').passed
+
+tests/test_algorithm_solver_judge.py:281: AssertionError
+______________________ test_stdin_judge_passes_and_fails _______________________
+
+    def test_stdin_judge_passes_and_fails():
+        tests = [judge.StdinTest("1 2\n", "3\n"), judge.StdinTest("5 7\n", "12")]
+        good = "a, b = map(int, input().split())\nprint(a + b)\n"
+>       assert judge.judge_stdin(good, tests, **_fast()).passed
+E       AssertionError: assert False
+E        +  where False = Verdict(passed=False, reason='sandbox_error', tests_total=2, tests_passed=0, wall_seconds=0.0, first_failure={'detail'...t confirm payload execution (exit=1): bwrap: loopback: Failed RTM_NEWADDR: Operation not permitted\n'}, stderr_tail='').passed
+E        +    where Verdict(passed=False, reason='sandbox_error', tests_total=2, tests_passed=0, wall_seconds=0.0, first_failure={'detail'...t confirm payload execution (exit=1): bwrap: loopback: Failed RTM_NEWADDR: Operation not permitted\n'}, stderr_tail='') = <function judge_stdin at 0x75431d0ceb60>('a, b = map(int, input().split())\nprint(a + b)\n', [StdinTest(input='1 2\n', expected='3\n'), StdinTest(input='5 7\n', expected='12')], **{'per_test_cpu_seconds': 1.0, 'wall_seconds': 8.0})
+E        +      where <function judge_stdin at 0x75431d0ceb60> = judge.judge_stdin
+E        +      and   {'per_test_cpu_seconds': 1.0, 'wall_seconds': 8.0} = _fast()
+
+tests/test_algorithm_solver_judge.py:287: AssertionError
+_________________ test_checker_must_give_a_recognized_verdict __________________
+
+    def test_checker_must_give_a_recognized_verdict():
+        tests = [judge.StdinTest("4\n", "2 2\n")]
+        candidate = "n = int(input())\nprint(1, n - 1)\n"
+        accepting = (
+            "import sys\n"
+            "a, b = map(int, open(sys.argv[3]).read().split())\n"
+            "n = int(open(sys.argv[1]).read())\n"
+            "print(1 if a + b == n else 0)\n"
+        )
+>       assert judge.judge_stdin(candidate, tests, checker_source=accepting, **_fast()).passed
+E       AssertionError: assert False
+E        +  where False = Verdict(passed=False, reason='sandbox_error', tests_total=1, tests_passed=0, wall_seconds=0.0, first_failure={'detail'...t confirm payload execution (exit=1): bwrap: loopback: Failed RTM_NEWADDR: Operation not permitted\n'}, stderr_tail='').passed
+E        +    where Verdict(passed=False, reason='sandbox_error', tests_total=1, tests_passed=0, wall_seconds=0.0, first_failure={'detail'...t confirm payload execution (exit=1): bwrap: loopback: Failed RTM_NEWADDR: Operation not permitted\n'}, stderr_tail='') = <function judge_stdin at 0x75431d0ceb60>('n = int(input())\nprint(1, n - 1)\n', [StdinTest(input='4\n', expected='2 2\n')], checker_source='import sys\na, b = map(int, open(sys.argv[3]).read().split())\nn = int(open(sys.argv[1]).read())\nprint(1 if a + b == n else 0)\n', **{'per_test_cpu_seconds': 1.0, 'wall_seconds': 8.0})
+E        +      where <function judge_stdin at 0x75431d0ceb60> = judge.judge_stdin
+E        +      and   {'per_test_cpu_seconds': 1.0, 'wall_seconds': 8.0} = _fast()
+
+tests/test_algorithm_solver_judge.py:314: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_algorithm_solver_judge.py::test_correct_solution_passes - A...
+FAILED tests/test_algorithm_solver_judge.py::test_wrong_answer_fails - Assert...
+FAILED tests/test_algorithm_solver_judge.py::test_forged_duplicate_records_fail
+FAILED tests/test_algorithm_solver_judge.py::test_printed_verdict_text_is_ignored
+FAILED tests/test_algorithm_solver_judge.py::test_early_exit_fails - Assertio...
+FAILED tests/test_algorithm_solver_judge.py::test_exit_after_partial_results_fails
+FAILED tests/test_algorithm_solver_judge.py::test_cpu_hang_times_out - Assert...
+FAILED tests/test_algorithm_solver_judge.py::test_sleeping_hang_hits_wall_limit
+FAILED tests/test_algorithm_solver_judge.py::test_excessive_output_fails - As...
+FAILED tests/test_algorithm_solver_judge.py::test_memory_limit_fails - Assert...
+FAILED tests/test_algorithm_solver_judge.py::test_network_is_unreachable - As...
+FAILED tests/test_algorithm_solver_judge.py::test_host_files_are_not_readable
+FAILED tests/test_algorithm_solver_judge.py::test_task_directory_is_read_only
+FAILED tests/test_algorithm_solver_judge.py::test_linked_list_and_tree_round_trip
+FAILED tests/test_algorithm_solver_judge.py::test_in_place_argument_comparison
+FAILED tests/test_algorithm_solver_judge.py::test_stdin_judge_passes_and_fails
+FAILED tests/test_algorithm_solver_judge.py::test_checker_must_give_a_recognized_verdict
+17 failed, 20 passed in 0.58s
