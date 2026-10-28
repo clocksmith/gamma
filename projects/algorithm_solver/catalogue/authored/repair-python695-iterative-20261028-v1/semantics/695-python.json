@@ -1,0 +1,56 @@
+{
+  "schema": "gamma.authored-source-semantics.v1",
+  "problem_id": 695,
+  "language": "python",
+  "source_sha256": "b04cfc350cf30124e728f3ace84114a3311f55b729f3d1a6f85bdec19bb550ec",
+  "entry": "solve",
+  "arguments": [
+    "grid"
+  ],
+  "definition_content_sha256": "01e116ee638d2e6f46bef1421a5b89a3e9bd638c47f4c6cfb43dce674cef7a96",
+  "interface": {
+    "canonical": "solve",
+    "argument_order": [
+      "grid"
+    ],
+    "official_metadata": {
+      "name": "maxAreaOfIsland",
+      "params": [
+        {
+          "name": "grid",
+          "type": "integer[][]"
+        }
+      ],
+      "return": {
+        "type": "integer"
+      }
+    },
+    "leetcode_method": "maxAreaOfIsland",
+    "official_wrapper_execution": "unrun"
+  },
+  "contract": {
+    "mutation_alias_contract": {
+      "arguments": "unchanged including grid rows",
+      "return": "immutable integer with no mutable aliases"
+    },
+    "numeric_complexity_contract": {
+      "time": "O(rows*columns), each land cell enqueued at most once and at most four neighbor checks per pop",
+      "space": "O(rows*columns), bytearray visited and explicit stack at most2500 distinct indices",
+      "recursion": "none; no recursion-limit mutation",
+      "runtime_resources": "unmeasured; isolated source-bound qualification pending"
+    },
+    "return_domain": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 2500,
+      "comparison_policy": "strict integer exact value; bool excluded"
+    }
+  },
+  "provenance": {
+    "original_source_opened": false,
+    "original_source_modified": false,
+    "original_failure": "Coordinator statically identified recursive default-depth failure on legal2500-cell component. Historical source/hash and failed gates remain owned by batch05 records; this file grants no retroactive repair.",
+    "reference_freeze_sha256": "0bf27f0639dc7c731a7076223ef766fef28c42240d5c14f4cc153db52f1938f7"
+  },
+  "qualification": "unknown; no candidate execution"
+}
