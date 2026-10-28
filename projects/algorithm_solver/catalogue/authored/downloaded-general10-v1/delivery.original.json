@@ -1,0 +1,453 @@
+{
+  "schema": "gamma.new-solutions-batch14.v1",
+  "scope": "Freshly written, not pulled from Gamma. Problems with no authored JS/Python pair in clocksmith/gamma catalogue/authored at head dd7dd823, verified by the parent before delivery, no overlaps found. Only 10 problems in IDs 1901-2050 meet the simple-input constraints; the other 28 non-authored IDs in range are SQL, premium, tree/class, or too ambiguous. This is not a claim of Gamma official independent admission.",
+  "qualification_method": "For each problem: public examples plus 20 random cross-language agreement checks per problem, JS via node and Python via import, outputs compared. Hard problems 1931 and 1960 also got brute-force checks in development. Spot-checked independently by the parent for 1903, 1931, 1960, 2009, 2012, all passed.",
+  "counts": {
+    "problems": 10,
+    "passed": 10
+  },
+  "problems": [
+    {
+      "problem_id": 1903,
+      "slug": "largest-odd-number-in-string",
+      "title": "Largest Odd Number in String",
+      "difficulty": "Easy",
+      "method": "largestOddNumber",
+      "javascript": "'use strict';\n\n// 1903. Largest Odd Number in String (Easy).\n// Specification: https://leetcode.com/problems/largest-odd-number-in-string/description/\nfunction solve(num) {\n  for (let i = num.length - 1; i >= 0; i--) {\n    if ((num.charCodeAt(i) - 48) % 2 === 1) return num.slice(0, i + 1);\n  }\n  return '';\n}\nconst largestOddNumber = solve;\nclass Solution { largestOddNumber(num) { return solve(num); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, largestOddNumber };\n",
+      "python": "\"\"\"1903. Largest Odd Number in String (Easy).\n\nSpecification: https://leetcode.com/problems/largest-odd-number-in-string/description/\n\"\"\"\n\n\ndef solve(num: str) -> str:\n    for i in range(len(num) - 1, -1, -1):\n        if int(num[i]) % 2 == 1:\n            return num[:i + 1]\n    return \"\"\n\n\nclass Solution:\n    def largestOddNumber(self, num: str) -> str:\n        return solve(num)\n",
+      "javascript_sha256": "e9ad911cbce07ee229b2605a0dba8a144fa526f2e8e15ca22566c153271413f0",
+      "python_sha256": "c2b524b3f1189fbdbd3c27a52863dde2a50ba1525f136f6c1ea561049b5250e0",
+      "tests": [
+        [
+          [
+            "52"
+          ],
+          "5"
+        ],
+        [
+          [
+            "4206"
+          ],
+          ""
+        ],
+        [
+          [
+            "35427"
+          ],
+          "35427"
+        ]
+      ],
+      "qualification": {
+        "passed": true,
+        "method": "public examples plus 20 random cross-language checks, per writing agent"
+      }
+    },
+    {
+      "problem_id": 1904,
+      "slug": "the-number-of-full-rounds-you-have-played",
+      "title": "The Number of Full Rounds You Have Played",
+      "difficulty": "Easy",
+      "method": "numberOfRounds",
+      "javascript": "'use strict';\n\n// 1904. The Number of Full Rounds You Have Played (Easy).\n// Specification: https://leetcode.com/problems/the-number-of-full-rounds-you-have-played/description/\nfunction toMinutes(t) {\n  const parts = t.split(':');\n  return Number(parts[0]) * 60 + Number(parts[1]);\n}\nfunction solve(loginTime, logoutTime) {\n  let start = toMinutes(loginTime); let end = toMinutes(logoutTime);\n  if (end <= start) end += 24 * 60;\n  return Math.floor(end / 15) - Math.ceil(start / 15);\n}\nconst numberOfRounds = solve;\nclass Solution { numberOfRounds(loginTime, logoutTime) { return solve(loginTime, logoutTime); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, numberOfRounds };\n",
+      "python": "\"\"\"1904. The Number of Full Rounds You Have Played (Easy).\n\nSpecification: https://leetcode.com/problems/the-number-of-full-rounds-you-have-played/description/\n\"\"\"\n\n\ndef to_minutes(t: str) -> int:\n    hours, minutes = t.split(\":\")\n    return int(hours) * 60 + int(minutes)\n\n\ndef solve(loginTime: str, logoutTime: str) -> int:\n    start = to_minutes(loginTime)\n    end = to_minutes(logoutTime)\n    if end <= start:\n        end += 24 * 60\n    return end // 15 - (start + 14) // 15\n\n\nclass Solution:\n    def numberOfRounds(self, loginTime: str, logoutTime: str) -> int:\n        return solve(loginTime, logoutTime)\n",
+      "javascript_sha256": "8a8cf8bba377e28b674ecddb3b3ad148fdc9fb2da7717081017cf1d31775a5c7",
+      "python_sha256": "906a6004101fc0b2bdde2b24ac325f8599ba73839b90fc93820edf0f939d73ee",
+      "tests": [
+        [
+          [
+            "09:31",
+            "10:14"
+          ],
+          1
+        ],
+        [
+          [
+            "21:30",
+            "03:00"
+          ],
+          22
+        ]
+      ],
+      "qualification": {
+        "passed": true,
+        "method": "public examples plus 20 random cross-language checks, per writing agent"
+      }
+    },
+    {
+      "problem_id": 1906,
+      "slug": "minimum-absolute-difference-queries",
+      "title": "Minimum Absolute Difference Queries",
+      "difficulty": "Medium",
+      "method": "minDifference",
+      "javascript": "'use strict';\n\n// 1906. Minimum Absolute Difference Queries (Medium).\n// Specification: https://leetcode.com/problems/minimum-absolute-difference-queries/description/\nfunction solve(nums, queries) {\n  const n = nums.length; const pref = [];\n  pref.push(new Array(101).fill(0));\n  for (let i = 0; i < n; i++) {\n    const row = pref[i].slice(); row[nums[i]]++; pref.push(row);\n  }\n  const out = [];\n  for (const q of queries) {\n    const left = q[0]; const right = q[1]; let prev = -1; let best = -1;\n    for (let v = 1; v <= 100; v++) {\n      if (pref[right + 1][v] - pref[left][v] > 0) {\n        if (prev !== -1 && (best === -1 || v - prev < best)) best = v - prev;\n        prev = v;\n      }\n    }\n    out.push(best);\n  }\n  return out;\n}\nconst minDifference = solve;\nclass Solution { minDifference(nums, queries) { return solve(nums, queries); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, minDifference };\n",
+      "python": "\"\"\"1906. Minimum Absolute Difference Queries (Medium).\n\nSpecification: https://leetcode.com/problems/minimum-absolute-difference-queries/description/\n\"\"\"\n\n\ndef solve(nums: list[int], queries: list[list[int]]) -> list[int]:\n    pref = [[0] * 101]\n    for x in nums:\n        row = pref[-1][:]\n        row[x] += 1\n        pref.append(row)\n    out = []\n    for left, right in queries:\n        prev = -1\n        best = -1\n        for v in range(1, 101):\n            if pref[right + 1][v] - pref[left][v] > 0:\n                if prev != -1 and (best == -1 or v - prev < best):\n                    best = v - prev\n                prev = v\n        out.append(best)\n    return out\n\n\nclass Solution:\n    def minDifference(self, nums: list[int], queries: list[list[int]]) -> list[int]:\n        return solve(nums, queries)\n",
+      "javascript_sha256": "d35bd3af735b8cae315907395f1b9dfb515ca538d4e78aff6d61106c0d8f362e",
+      "python_sha256": "ff04f19a580d0d26542d8901b9d58623d591e36be0a57111ab63407530a289f6",
+      "tests": [
+        [
+          [
+            [
+              1,
+              3,
+              4,
+              8
+            ],
+            [
+              [
+                0,
+                1
+              ],
+              [
+                1,
+                2
+              ],
+              [
+                2,
+                3
+              ],
+              [
+                0,
+                3
+              ]
+            ]
+          ],
+          [
+            2,
+            1,
+            4,
+            1
+          ]
+        ]
+      ],
+      "qualification": {
+        "passed": true,
+        "method": "public examples plus 20 random cross-language checks, per writing agent"
+      }
+    },
+    {
+      "problem_id": 1909,
+      "slug": "remove-one-element-to-make-the-array-strictly-increasing",
+      "title": "Remove One Element to Make the Array Strictly Increasing",
+      "difficulty": "Easy",
+      "method": "canBeIncreasing",
+      "javascript": "'use strict';\n\n// 1909. Remove One Element to Make the Array Strictly Increasing (Easy).\n// Specification: https://leetcode.com/problems/remove-one-element-to-make-the-array-strictly-increasing/description/\nfunction solve(nums) {\n  let removed = false;\n  for (let i = 1; i < nums.length; i++) {\n    if (nums[i] <= nums[i - 1]) {\n      if (removed) return false;\n      removed = true;\n      if (i > 1 && i + 1 < nums.length && nums[i] <= nums[i - 2] && nums[i + 1] <= nums[i - 1]) return false;\n    }\n  }\n  return true;\n}\nconst canBeIncreasing = solve;\nclass Solution { canBeIncreasing(nums) { return solve(nums); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, canBeIncreasing };\n",
+      "python": "\"\"\"1909. Remove One Element to Make the Array Strictly Increasing (Easy).\n\nSpecification: https://leetcode.com/problems/remove-one-element-to-make-the-array-strictly-increasing/description/\n\"\"\"\n\n\ndef solve(nums: list[int]) -> bool:\n    removed = False\n    for i in range(1, len(nums)):\n        if nums[i] <= nums[i - 1]:\n            if removed:\n                return False\n            removed = True\n            if (i > 1 and i + 1 < len(nums)\n                    and nums[i] <= nums[i - 2] and nums[i + 1] <= nums[i - 1]):\n                return False\n    return True\n\n\nclass Solution:\n    def canBeIncreasing(self, nums: list[int]) -> bool:\n        return solve(nums)\n",
+      "javascript_sha256": "8f4cd0acbc10afb31481c92cdd32146f1ad626d40bc04c13a426a4ed98eed6c7",
+      "python_sha256": "754e7c012416097beb8de6f9f7d8820e2cd9f5fc604ccf5c307a673d9db86bf1",
+      "tests": [
+        [
+          [
+            [
+              1,
+              2,
+              10,
+              5,
+              7
+            ]
+          ],
+          true
+        ],
+        [
+          [
+            [
+              2,
+              3,
+              1,
+              2
+            ]
+          ],
+          false
+        ],
+        [
+          [
+            [
+              1,
+              1,
+              1
+            ]
+          ],
+          false
+        ]
+      ],
+      "qualification": {
+        "passed": true,
+        "method": "public examples plus 20 random cross-language checks, per writing agent"
+      }
+    },
+    {
+      "problem_id": 1931,
+      "slug": "painting-a-grid-with-three-different-colors",
+      "title": "Painting a Grid With Three Different Colors",
+      "difficulty": "Hard",
+      "method": "colorTheGrid",
+      "javascript": "'use strict';\n\n// 1931. Painting a Grid With Three Different Colors (Hard).\n// Specification: https://leetcode.com/problems/painting-a-grid-with-three-different-colors/description/\nfunction solve(m, n) {\n  const mod = 1000000007;\n  const states = [];\n  function build(state) {\n    if (state.length === m) { states.push(state.slice()); return; }\n    for (let c = 0; c < 3; c++) {\n      if (state.length === 0 || state[state.length - 1] !== c) { state.push(c); build(state); state.pop(); }\n    }\n  }\n  build([]);\n  function compatible(a, b) {\n    for (let i = 0; i < m; i++) if (a[i] === b[i]) return false;\n    return true;\n  }\n  let dp = new Array(states.length).fill(1);\n  for (let col = 1; col < n; col++) {\n    const next = new Array(states.length).fill(0);\n    for (let j = 0; j < states.length; j++) {\n      for (let k = 0; k < states.length; k++) {\n        if (compatible(states[j], states[k])) next[k] = (next[k] + dp[j]) % mod;\n      }\n    }\n    dp = next;\n  }\n  let total = 0;\n  for (const v of dp) total = (total + v) % mod;\n  return total;\n}\nconst colorTheGrid = solve;\nclass Solution { colorTheGrid(m, n) { return solve(m, n); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, colorTheGrid };\n",
+      "python": "\"\"\"1931. Painting a Grid With Three Different Colors (Hard).\n\nSpecification: https://leetcode.com/problems/painting-a-grid-with-three-different-colors/description/\n\"\"\"\n\nMOD = 1000000007\n\n\ndef solve(m: int, n: int) -> int:\n    states = []\n\n    def build(state):\n        if len(state) == m:\n            states.append(tuple(state))\n            return\n        for c in range(3):\n            if not state or state[-1] != c:\n                state.append(c)\n                build(state)\n                state.pop()\n\n    build([])\n\n    def compatible(a, b):\n        return all(x != y for x, y in zip(a, b))\n\n    dp = [1] * len(states)\n    for _ in range(1, n):\n        nxt = [0] * len(states)\n        for j in range(len(states)):\n            for k in range(len(states)):\n                if compatible(states[j], states[k]):\n                    nxt[k] = (nxt[k] + dp[j]) % MOD\n        dp = nxt\n    return sum(dp) % MOD\n\n\nclass Solution:\n    def colorTheGrid(self, m: int, n: int) -> int:\n        return solve(m, n)\n",
+      "javascript_sha256": "fd402e7040f9533a8b097defee3eb0737edeea242ae8029c93dc88746fce0a66",
+      "python_sha256": "7ad480f34f7b2efabc0db0e67c1af578a6cc926e1fd6632e0e33cb4a0f2cd547",
+      "tests": [
+        [
+          [
+            1,
+            1
+          ],
+          3
+        ],
+        [
+          [
+            1,
+            2
+          ],
+          6
+        ],
+        [
+          [
+            2,
+            2
+          ],
+          18
+        ]
+      ],
+      "qualification": {
+        "passed": true,
+        "method": "public examples plus 20 random cross-language checks, per writing agent"
+      }
+    },
+    {
+      "problem_id": 1942,
+      "slug": "the-number-of-the-smallest-unoccupied-chair",
+      "title": "The Number of the Smallest Unoccupied Chair",
+      "difficulty": "Medium",
+      "method": "smallestChair",
+      "javascript": "'use strict';\n\n// 1942. The Number of the Smallest Unoccupied Chair (Medium).\n// Specification: https://leetcode.com/problems/the-number-of-the-smallest-unoccupied-chair/description/\nfunction solve(times, targetFriend) {\n  const order = times.map((t, i) => i).sort((a, b) => times[a][0] - times[b][0]);\n  let occupied = []; let free = []; let nextChair = 0;\n  for (const i of order) {\n    const arrival = times[i][0]; const departure = times[i][1];\n    const still = [];\n    for (const occ of occupied) {\n      if (occ[0] <= arrival) free.push(occ[1]); else still.push(occ);\n    }\n    occupied = still;\n    free.sort((a, b) => a - b);\n    let chair;\n    if (free.length > 0) chair = free.shift(); else chair = nextChair++;\n    if (i === targetFriend) return chair;\n    occupied.push([departure, chair]);\n  }\n  return -1;\n}\nconst smallestChair = solve;\nclass Solution { smallestChair(times, targetFriend) { return solve(times, targetFriend); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, smallestChair };\n",
+      "python": "\"\"\"1942. The Number of the Smallest Unoccupied Chair (Medium).\n\nSpecification: https://leetcode.com/problems/the-number-of-the-smallest-unoccupied-chair/description/\n\"\"\"\n\n\ndef solve(times: list[list[int]], targetFriend: int) -> int:\n    order = sorted(range(len(times)), key=lambda i: times[i][0])\n    occupied = []\n    free = []\n    next_chair = 0\n    for i in order:\n        arrival, departure = times[i]\n        still = []\n        for dep, chair in occupied:\n            if dep <= arrival:\n                free.append(chair)\n            else:\n                still.append((dep, chair))\n        occupied = still\n        free.sort()\n        if free:\n            chair = free.pop(0)\n        else:\n            chair = next_chair\n            next_chair += 1\n        if i == targetFriend:\n            return chair\n        occupied.append((departure, chair))\n    return -1\n\n\nclass Solution:\n    def smallestChair(self, times: list[list[int]], targetFriend: int) -> int:\n        return solve(times, targetFriend)\n",
+      "javascript_sha256": "7667d511b5090ca4d91c7c065a9a8c6a78861032d7576f106f482d92293cdad0",
+      "python_sha256": "257c783e0a9484de9f25e3a3d787b1ffb04d4220c93141768948746cfa2f2f15",
+      "tests": [
+        [
+          [
+            [
+              [
+                1,
+                4
+              ],
+              [
+                2,
+                3
+              ],
+              [
+                4,
+                6
+              ]
+            ],
+            1
+          ],
+          1
+        ],
+        [
+          [
+            [
+              [
+                3,
+                10
+              ],
+              [
+                1,
+                5
+              ],
+              [
+                2,
+                6
+              ]
+            ],
+            0
+          ],
+          2
+        ]
+      ],
+      "qualification": {
+        "passed": true,
+        "method": "public examples plus 20 random cross-language checks, per writing agent"
+      }
+    },
+    {
+      "problem_id": 1960,
+      "slug": "maximum-product-of-the-length-of-two-palindromic-substrings",
+      "title": "Maximum Product of the Length of Two Palindromic Substrings",
+      "difficulty": "Hard",
+      "method": "maxProduct",
+      "javascript": "'use strict';\n\n// 1960. Maximum Product of the Length of Two Palindromic Substrings (Hard).\n// Specification: https://leetcode.com/problems/maximum-product-of-the-length-of-two-palindromic-substrings/description/\nfunction solve(s) {\n  const n = s.length;\n  const pref = new Array(n).fill(0); const suff = new Array(n).fill(0);\n  for (let c = 0; c < n; c++) {\n    for (const step of [0, 1]) {\n      let l = c; let r = c + step;\n      while (l >= 0 && r < n && s[l] === s[r]) {\n        const len = r - l + 1;\n        if (len > pref[r]) pref[r] = len;\n        if (len > suff[l]) suff[l] = len;\n        l--; r++;\n      }\n    }\n  }\n  for (let i = 1; i < n; i++) if (pref[i - 1] > pref[i]) pref[i] = pref[i - 1];\n  for (let i = n - 2; i >= 0; i--) if (suff[i + 1] > suff[i]) suff[i] = suff[i + 1];\n  let best = 0;\n  for (let i = 0; i + 1 < n; i++) best = Math.max(best, pref[i] * suff[i + 1]);\n  return best;\n}\nconst maxProduct = solve;\nclass Solution { maxProduct(s) { return solve(s); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, maxProduct };\n",
+      "python": "\"\"\"1960. Maximum Product of the Length of Two Palindromic Substrings (Hard).\n\nSpecification: https://leetcode.com/problems/maximum-product-of-the-length-of-two-palindromic-substrings/description/\n\"\"\"\n\n\ndef solve(s: str) -> int:\n    n = len(s)\n    pref = [0] * n\n    suff = [0] * n\n    for c in range(n):\n        for step in (0, 1):\n            left, right = c, c + step\n            while left >= 0 and right < n and s[left] == s[right]:\n                length = right - left + 1\n                pref[right] = max(pref[right], length)\n                suff[left] = max(suff[left], length)\n                left -= 1\n                right += 1\n    for i in range(1, n):\n        pref[i] = max(pref[i], pref[i - 1])\n    for i in range(n - 2, -1, -1):\n        suff[i] = max(suff[i], suff[i + 1])\n    best = 0\n    for i in range(n - 1):\n        best = max(best, pref[i] * suff[i + 1])\n    return best\n\n\nclass Solution:\n    def maxProduct(self, s: str) -> int:\n        return solve(s)\n",
+      "javascript_sha256": "5355e443c969c2106e807a695476e6f0a9bbdfab4be2aa22519a0f7a81925b30",
+      "python_sha256": "69c9c5009bace39c738c8e8d2c366a5f53c83ef27c5798751945861f0b940788",
+      "tests": [
+        [
+          [
+            "ababbb"
+          ],
+          9
+        ],
+        [
+          [
+            "zaaaxbbby"
+          ],
+          9
+        ]
+      ],
+      "qualification": {
+        "passed": true,
+        "method": "public examples plus 20 random cross-language checks, per writing agent"
+      }
+    },
+    {
+      "problem_id": 2006,
+      "slug": "count-number-of-pairs-with-absolute-difference-k",
+      "title": "Count Number of Pairs With Absolute Difference K",
+      "difficulty": "Easy",
+      "method": "countKDifference",
+      "javascript": "'use strict';\n\n// 2006. Count Number of Pairs With Absolute Difference K (Easy).\n// Specification: https://leetcode.com/problems/count-number-of-pairs-with-absolute-difference-k/description/\nfunction solve(nums, k) {\n  const freq = new Map(); let ans = 0;\n  for (const x of nums) {\n    if (k === 0) ans += freq.get(x) || 0;\n    else ans += (freq.get(x - k) || 0) + (freq.get(x + k) || 0);\n    freq.set(x, (freq.get(x) || 0) + 1);\n  }\n  return ans;\n}\nconst countKDifference = solve;\nclass Solution { countKDifference(nums, k) { return solve(nums, k); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, countKDifference };\n",
+      "python": "\"\"\"2006. Count Number of Pairs With Absolute Difference K (Easy).\n\nSpecification: https://leetcode.com/problems/count-number-of-pairs-with-absolute-difference-k/description/\n\"\"\"\n\n\ndef solve(nums: list[int], k: int) -> int:\n    freq = {}\n    ans = 0\n    for x in nums:\n        if k == 0:\n            ans += freq.get(x, 0)\n        else:\n            ans += freq.get(x - k, 0) + freq.get(x + k, 0)\n        freq[x] = freq.get(x, 0) + 1\n    return ans\n\n\nclass Solution:\n    def countKDifference(self, nums: list[int], k: int) -> int:\n        return solve(nums, k)\n",
+      "javascript_sha256": "76a08d9ee1359ad59f2909f662926bb0e896136f7400ca970266b66e16b43a9b",
+      "python_sha256": "236dc77b7e7b2df0298094710a4bced78d295a12097128f911f2a482d186f341",
+      "tests": [
+        [
+          [
+            [
+              1,
+              2,
+              2,
+              1
+            ],
+            1
+          ],
+          4
+        ],
+        [
+          [
+            [
+              1,
+              3
+            ],
+            3
+          ],
+          0
+        ],
+        [
+          [
+            [
+              3,
+              2,
+              1,
+              5,
+              4
+            ],
+            2
+          ],
+          3
+        ]
+      ],
+      "qualification": {
+        "passed": true,
+        "method": "public examples plus 20 random cross-language checks, per writing agent"
+      }
+    },
+    {
+      "problem_id": 2009,
+      "slug": "minimum-number-of-operations-to-make-array-continuous",
+      "title": "Minimum Number of Operations to Make Array Continuous",
+      "difficulty": "Medium",
+      "method": "minOperations",
+      "javascript": "'use strict';\n\n// 2009. Minimum Number of Operations to Make Array Continuous (Medium).\n// Specification: https://leetcode.com/problems/minimum-number-of-operations-to-make-array-continuous/description/\nfunction solve(nums) {\n  const uniq = [...new Set(nums)].sort((a, b) => a - b);\n  const n = nums.length; let best = 0; let right = 0;\n  for (let left = 0; left < uniq.length; left++) {\n    while (right < uniq.length && uniq[right] - uniq[left] < n) right++;\n    if (right - left > best) best = right - left;\n  }\n  return n - best;\n}\nconst minOperations = solve;\nclass Solution { minOperations(nums) { return solve(nums); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, minOperations };\n",
+      "python": "\"\"\"2009. Minimum Number of Operations to Make Array Continuous (Medium).\n\nSpecification: https://leetcode.com/problems/minimum-number-of-operations-to-make-array-continuous/description/\n\"\"\"\n\n\ndef solve(nums: list[int]) -> int:\n    uniq = sorted(set(nums))\n    n = len(nums)\n    best = 0\n    right = 0\n    for left in range(len(uniq)):\n        while right < len(uniq) and uniq[right] - uniq[left] < n:\n            right += 1\n        best = max(best, right - left)\n    return n - best\n\n\nclass Solution:\n    def minOperations(self, nums: list[int]) -> int:\n        return solve(nums)\n",
+      "javascript_sha256": "e2b12710c4b3fdca57aa3eccadef4d75362b6531655459808b92be4a59db6552",
+      "python_sha256": "cf00270c9fd9a5452dac1366fbde2e190956f60d232431df330e4f81a7b8d6d6",
+      "tests": [
+        [
+          [
+            [
+              4,
+              2,
+              5,
+              3
+            ]
+          ],
+          0
+        ],
+        [
+          [
+            [
+              1,
+              2,
+              3,
+              5,
+              6
+            ]
+          ],
+          1
+        ],
+        [
+          [
+            [
+              1,
+              10,
+              100,
+              1000
+            ]
+          ],
+          3
+        ]
+      ],
+      "qualification": {
+        "passed": true,
+        "method": "public examples plus 20 random cross-language checks, per writing agent"
+      }
+    },
+    {
+      "problem_id": 2012,
+      "slug": "sum-of-beauty-in-the-array",
+      "title": "Sum of Beauty in the Array",
+      "difficulty": "Medium",
+      "method": "sumOfBeauties",
+      "javascript": "'use strict';\n\n// 2012. Sum of Beauty in the Array (Medium).\n// Specification: https://leetcode.com/problems/sum-of-beauty-in-the-array/description/\nfunction solve(nums) {\n  const n = nums.length;\n  const prefMax = new Array(n); const suffMin = new Array(n);\n  let cur = -Infinity;\n  for (let i = 0; i < n; i++) { prefMax[i] = cur; if (nums[i] > cur) cur = nums[i]; }\n  cur = Infinity;\n  for (let i = n - 1; i >= 0; i--) { suffMin[i] = cur; if (nums[i] < cur) cur = nums[i]; }\n  let total = 0;\n  for (let i = 1; i + 1 < n; i++) {\n    if (prefMax[i] < nums[i] && nums[i] < suffMin[i]) total += 2;\n    else if (nums[i - 1] < nums[i] && nums[i] < nums[i + 1]) total += 1;\n  }\n  return total;\n}\nconst sumOfBeauties = solve;\nclass Solution { sumOfBeauties(nums) { return solve(nums); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, sumOfBeauties };\n",
+      "python": "\"\"\"2012. Sum of Beauty in the Array (Medium).\n\nSpecification: https://leetcode.com/problems/sum-of-beauty-in-the-array/description/\n\"\"\"\n\n\ndef solve(nums: list[int]) -> int:\n    n = len(nums)\n    pref_max = [0] * n\n    suff_min = [0] * n\n    cur = float(\"-inf\")\n    for i in range(n):\n        pref_max[i] = cur\n        cur = max(cur, nums[i])\n    cur = float(\"inf\")\n    for i in range(n - 1, -1, -1):\n        suff_min[i] = cur\n        cur = min(cur, nums[i])\n    total = 0\n    for i in range(1, n - 1):\n        if pref_max[i] < nums[i] < suff_min[i]:\n            total += 2\n        elif nums[i - 1] < nums[i] < nums[i + 1]:\n            total += 1\n    return total\n\n\nclass Solution:\n    def sumOfBeauties(self, nums: list[int]) -> int:\n        return solve(nums)\n",
+      "javascript_sha256": "e5edb18062667d0c9c8740b5c1b3ab8d44d8dc1f8111bb91f96874e97eaeef7e",
+      "python_sha256": "3238d287bae03755697d16cd9152e66c7f1e187c1affe41fc4b1151a9207186e",
+      "tests": [
+        [
+          [
+            [
+              1,
+              2,
+              3
+            ]
+          ],
+          2
+        ],
+        [
+          [
+            [
+              2,
+              4,
+              6,
+              4
+            ]
+          ],
+          1
+        ],
+        [
+          [
+            [
+              3,
+              2,
+              1
+            ]
+          ],
+          0
+        ]
+      ],
+      "qualification": {
+        "passed": true,
+        "method": "public examples plus 20 random cross-language checks, per writing agent"
+      }
+    }
+  ]
+}
