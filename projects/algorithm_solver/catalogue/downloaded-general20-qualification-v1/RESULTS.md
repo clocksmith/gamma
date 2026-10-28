@@ -37,5 +37,5 @@ These are finite independent-test results for the first downloaded, explicitly
 source-exposed cohort. They do not establish formal correctness, official judge
 acceptance, held-out generalization, wrapper execution, canonical admission or
 retrieval qualification. Historical protected payloads remained sealed. Original
-authoring receipts and the registry's unknown statuses are preserved. The other
-249 downloaded problem pairs remain pending independent qualification.
+authoring receipts and the registry's unknown statuses are preserved. Later
+downloaded batches remain pending independent qualification.
