@@ -1,9 +1,11 @@
 import json
+import copy
 from pathlib import Path
 import tempfile
 import unittest
 from unittest.mock import patch
-from algsolve.authoring_variants import build, query, sha, main, from_canonical_contracts
+from algsolve.authoring_variants import (build, query, sha, main, from_canonical_contracts,
+                                        reconcile_official_identities, query_official_identity)
 
 
 class CatalogTests(unittest.TestCase):
@@ -147,6 +149,139 @@ class CatalogTests(unittest.TestCase):
         expected = (json.dumps(build([manifest]), sort_keys=True, indent=2) + '\n').encode('utf-8')
         self.assertEqual(output.read_bytes(), expected)
         self.assertNotIn(b'\r\n', output.read_bytes())
+
+
+class OfficialIdentityTests(unittest.TestCase):
+    setUp = CatalogTests.setUp
+    make = CatalogTests.make
+
+    def fixture(self, *, sources=(b'inert one',), question=None):
+        manifests, provenance = [], {}
+        for i, source in enumerate(sources):
+            path = self.make(str(i), source)
+            assignment = path.parent / 'assignment.public-safe.json'
+            packet = json.loads(assignment.read_bytes()); packet['problems'][0]['slug'] = 'original-slug'
+            raw = json.dumps(packet).encode(); assignment.write_bytes(raw)
+            manifest = json.loads(path.read_bytes()); manifest['assignment_sha256'] = sha(raw)
+            path.write_text(json.dumps(manifest)); manifests.append(path)
+            provenance[sha(raw)] = raw; provenance[sha(path.read_bytes())] = path.read_bytes()
+        catalog = build(manifests); catalog_raw = json.dumps(catalog).encode()
+        if question is None:
+            question = {'questionId': '11', 'questionFrontendId': '7', 'title': 'Current title',
+                        'titleSlug': 'current-slug', 'isPaidOnly': True,
+                        'metaData': '{"name":"f","params":[]}'}
+        metadata = json.dumps({'data': {'question': question}}).encode()
+        official = {'question_id': question['questionId'], 'frontend_id': question['questionFrontendId'],
+                    'title': question['title'], 'title_slug': question['titleSlug'],
+                    'is_paid_only': question['isPaidOnly'],
+                    'signature_metadata_sha256': sha(question['metaData'].encode()) if question['metaData'] is not None else None}
+        rows = []
+        for variant in catalog['variants']:
+            rows.append({'variant_id': variant['variant_id'], 'original_problem_id': variant['problem_id'],
+                         **{k: variant[k] for k in ('language', 'source_sha256', 'semantics_sha256',
+                                                   'problem_contract_sha256')},
+                         'provenance': variant['provenance'][0], 'delivered_slug': 'original-slug',
+                         'queried_slug': 'current-slug', 'official_metadata_sha256': sha(metadata),
+                         'official_identity': official})
+        evidence = {'schema': 'gamma.authoring-official-identity-evidence.v1',
+                    'authoring_catalog_sha256': sha(catalog_raw), 'records': rows}
+        return catalog, catalog_raw, evidence, {sha(metadata): metadata}, provenance
+
+    def run_reconcile(self, fixture, evidence=None, metadata=None, provenance=None):
+        _, raw, original, snapshots, sources = fixture
+        encoded = json.dumps(original if evidence is None else evidence).encode()
+        return reconcile_official_identities(raw, sha(raw), encoded, sha(encoded),
+                                             snapshots if metadata is None else metadata,
+                                             sources if provenance is None else provenance)
+
+    def test_multiple_variants_share_official_identity_without_relabel_or_preference(self):
+        f = self.fixture(sources=(b'inert first', b'inert second')); before = copy.deepcopy(f[0])
+        with patch('builtins.open', side_effect=AssertionError('payload open')):
+            result = self.run_reconcile(f)
+            evidence = json.dumps(f[2]).encode()
+            found = query_official_identity(f[1], sha(f[1]), evidence, sha(evidence), f[3], f[4], 7, 'python')
+        self.assertEqual(len(result['bindings']), 2)
+        self.assertEqual(found, query(f[0], 1, 'python'))
+        self.assertEqual(query(f[0], 7, 'python'), ())
+        self.assertEqual(f[0], before)
+        self.assertIsNone(f[0]['preferred_variant'])
+        self.assertTrue(all(v['qualification']['status'] == 'unknown' for v in found))
+        self.assertTrue(all(r['numeric_identity_changed'] and r['slug_changed'] for r in result['bindings']))
+        self.assertFalse(result['qualification_created']); self.assertFalse(result['semantic_contract_established'])
+        self.assertFalse(result['canonical_adoption_created']); self.assertFalse(result['original_catalog_changed'])
+        self.assertEqual(result['source_payloads_opened'], 0)
+
+    def test_exact_source_contract_assignment_and_manifest_bindings(self):
+        f = self.fixture()
+        for key in ('source_sha256', 'semantics_sha256', 'problem_contract_sha256', 'variant_id'):
+            evidence = copy.deepcopy(f[2]); evidence['records'][0][key] = '0' * 64
+            with self.subTest(key=key), self.assertRaises(ValueError): self.run_reconcile(f, evidence)
+        for key in ('assignment_sha256', 'manifest_sha256', 'source_path', 'semantics_path'):
+            evidence = copy.deepcopy(f[2]); evidence['records'][0]['provenance'][key] = 'unbound'
+            with self.subTest(key=key), self.assertRaises(ValueError): self.run_reconcile(f, evidence)
+        with self.assertRaises(ValueError): self.run_reconcile(f, provenance={})
+        for pin, raw in f[4].items():
+            snapshots = dict(f[4]); snapshots[pin] = raw + b' '
+            with self.subTest(pin=pin), self.assertRaises(ValueError): self.run_reconcile(f, provenance=snapshots)
+
+    def test_delivered_slug_is_checked_against_original_assignment(self):
+        f = self.fixture(); evidence = copy.deepcopy(f[2]); evidence['records'][0]['delivered_slug'] = 'invented-original'
+        with self.assertRaisesRegex(ValueError, 'exact original assignment'): self.run_reconcile(f, evidence)
+
+    def test_numeric_types_and_metadata_identity_claims_fail_closed(self):
+        f = self.fixture()
+        for pid in (True, 1.0, '1', None):
+            evidence = copy.deepcopy(f[2]); evidence['records'][0]['original_problem_id'] = pid
+            with self.subTest(pid=pid), self.assertRaises(ValueError): self.run_reconcile(f, evidence)
+        snapshot = json.loads(next(iter(f[3].values())))
+        for key, value in [('questionFrontendId', True), ('questionFrontendId', 7),
+                           ('questionFrontendId', '07'), ('questionId', 11.0), ('isPaidOnly', 1),
+                           ('titleSlug', ''), ('metaData', '[]')]:
+            modified = copy.deepcopy(snapshot); modified['data']['question'][key] = value
+            raw = json.dumps(modified).encode(); evidence = copy.deepcopy(f[2])
+            evidence['records'][0]['official_metadata_sha256'] = sha(raw)
+            with self.subTest(key=key, value=value), self.assertRaises(ValueError):
+                self.run_reconcile(f, evidence, {sha(raw): raw})
+        for field in ('frontend_id', 'title', 'title_slug', 'signature_metadata_sha256'):
+            evidence = copy.deepcopy(f[2]); evidence['records'][0]['official_identity'][field] = 'invented'
+            with self.subTest(field=field), self.assertRaises(ValueError): self.run_reconcile(f, evidence)
+
+    def test_duplicate_or_conflicting_variant_evidence_is_not_merged(self):
+        f = self.fixture(); evidence = copy.deepcopy(f[2]); evidence['records'] *= 2
+        with self.assertRaisesRegex(ValueError, 'ambiguous duplicate'): self.run_reconcile(f, evidence)
+
+    def test_null_official_response_stays_unresolved_without_guessing(self):
+        f = self.fixture(); raw = b'{"data":{"question":null}}'; evidence = copy.deepcopy(f[2])
+        evidence['records'][0].update(official_metadata_sha256=sha(raw), official_identity=None)
+        result = self.run_reconcile(f, evidence, {sha(raw): raw})
+        self.assertEqual(result['bindings'], [])
+        self.assertEqual(result['unresolved'][0]['reason'], 'official_question_not_found')
+        evidence['records'][0]['official_identity'] = f[2]['records'][0]['official_identity']
+        with self.assertRaises(ValueError): self.run_reconcile(f, evidence, {sha(raw): raw})
+
+    def test_metadata_hash_drift_and_non_metadata_response_are_rejected(self):
+        f = self.fixture(); pin, raw = next(iter(f[3].items()))
+        with self.assertRaises(ValueError): self.run_reconcile(f, metadata={pin: raw + b' '})
+        with self.assertRaises(ValueError): self.run_reconcile(f, metadata={})
+        snapshot = json.loads(raw); snapshot['data']['question']['content'] = 'not identity metadata'
+        modified = json.dumps(snapshot).encode(); evidence = copy.deepcopy(f[2])
+        evidence['records'][0]['official_metadata_sha256'] = sha(modified)
+        with self.assertRaisesRegex(ValueError, 'identity-only'): self.run_reconcile(f, evidence, {sha(modified): modified})
+        raw_evidence = json.dumps(f[2]).encode()
+        for catalog_pin, evidence_pin in [('0'*64, sha(raw_evidence)), (sha(f[1]), '0'*64)]:
+            with self.assertRaises(ValueError):
+                reconcile_official_identities(f[1], catalog_pin, raw_evidence, evidence_pin, f[3], f[4])
+
+    def test_official_query_revalidates_every_call_and_rejects_coercions(self):
+        f = self.fixture(); raw = json.dumps(f[2]).encode()
+        for pid in (True, '7', 7.0, 0):
+            with self.subTest(pid=pid), self.assertRaises(ValueError):
+                query_official_identity(f[1], sha(f[1]), raw, sha(raw), f[3], f[4], pid, 'python')
+        for language in ('ruby', None, []):
+            with self.subTest(language=language), self.assertRaises(ValueError):
+                query_official_identity(f[1], sha(f[1]), raw, sha(raw), f[3], f[4], 7, language)
+        with self.assertRaises(ValueError):
+            query_official_identity(f[1], sha(f[1]), raw, sha(raw), {}, f[4], 7, 'python')
 
 
 if __name__ == '__main__':

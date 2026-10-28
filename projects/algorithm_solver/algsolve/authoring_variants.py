@@ -169,6 +169,216 @@ def from_canonical_contracts(raw, expected_sha256):
             'qualification_created': False, 'source_payloads_opened': 0}
 
 
+def _identity_json(raw, expected_sha256, maximum):
+    """Decode an operator-pinned metadata value without opening any locator."""
+    if (type(raw) is not bytes or len(raw) > maximum or
+            not isinstance(expected_sha256, str) or
+            not re.fullmatch(r'[0-9a-f]{64}', expected_sha256) or sha(raw) != expected_sha256):
+        raise ValueError('Pinned bounded identity metadata required')
+    def unique(pairs):
+        value = {}
+        for key, item in pairs:
+            if key in value:
+                raise ValueError('Duplicate identity metadata field')
+            value[key] = item
+        return value
+    return json.loads(raw, object_pairs_hook=unique,
+                      parse_constant=lambda _: (_ for _ in ()).throw(ValueError('Nonfinite identity metadata')))
+
+
+def _official_identity(value):
+    fields = {'questionId', 'questionFrontendId', 'title', 'titleSlug', 'isPaidOnly', 'metaData'}
+    if type(value) is not dict or set(value) != fields:
+        raise ValueError('Exact official identity-only GraphQL fields required')
+    for key in ('questionId', 'questionFrontendId'):
+        if type(value[key]) is not str or not re.fullmatch(r'[1-9][0-9]*', value[key]):
+            raise ValueError('Exact decimal official identity required')
+    if (type(value['title']) is not str or not value['title'].strip() or
+            type(value['titleSlug']) is not str or
+            not re.fullmatch(r'[a-z0-9]+(?:-[a-z0-9]+)*', value['titleSlug']) or
+            type(value['isPaidOnly']) is not bool or
+            (value['metaData'] is not None and type(value['metaData']) is not str)):
+        raise ValueError('Malformed official title, slug, paid flag or signature metadata')
+    signature = value['metaData']
+    if signature is not None:
+        decoded = _identity_json(signature.encode(), sha(signature.encode()), 1024 * 1024)
+        if type(decoded) is not dict:
+            raise ValueError('Official signature metadata must be an object')
+    return {'question_id': value['questionId'], 'frontend_id': value['questionFrontendId'],
+            'title': value['title'], 'title_slug': value['titleSlug'], 'is_paid_only': value['isPaidOnly'],
+            'signature_metadata_sha256': sha(signature.encode()) if signature is not None else None}
+
+
+def _identity_provenance(record, snapshots):
+    provenance = record['provenance']
+    manifest_pin, assignment_pin = provenance['manifest_sha256'], provenance['assignment_sha256']
+    if any(type(pin) is not str or not re.fullmatch(r'[0-9a-f]{64}', pin)
+           for pin in (manifest_pin, assignment_pin)):
+        raise ValueError('Exact original provenance hashes required')
+    for key in ('source_path', 'semantics_path'):
+        value = provenance[key]
+        if (type(value) is not str or not value or Path(value).is_absolute() or
+                any(part in ('', '.', '..') for part in value.split('/'))):
+            raise ValueError('Exact relative original source and semantics paths required')
+    source = Path(provenance['source_path'])
+    suffix = '.js' if record['language'] == 'javascript' else '.py'
+    if (source.suffix != suffix or not source.stem.isascii() or not source.stem.isdecimal() or
+            int(source.stem) != record['original_problem_id']):
+        raise ValueError('Original source filename and identity must remain bound')
+    if manifest_pin not in snapshots or assignment_pin not in snapshots:
+        raise ValueError('Pinned original manifest and assignment snapshots required')
+    manifest = _identity_json(snapshots[manifest_pin], manifest_pin, 8 * 1024 * 1024)
+    packet = _identity_json(snapshots[assignment_pin], assignment_pin, 8 * 1024 * 1024)
+    if (type(manifest) is not dict or manifest.get('assignment_sha256') != assignment_pin or
+            type(manifest.get('files')) is not list or type(manifest.get('source_inventory')) is not list or
+            type(packet) is not dict or type(packet.get('problems')) is not list):
+        raise ValueError('Original assignment and source manifest binding required')
+    problems = {}
+    for problem in packet['problems']:
+        if (type(problem) is not dict or type(problem.get('id')) is not int or
+                problem['id'] <= 0 or problem['id'] in problems):
+            raise ValueError('Ambiguous original assignment identity')
+        problems[problem['id']] = problem
+    problem = problems.get(record['original_problem_id'])
+    if problem is None or problem.get('slug') != record['delivered_slug']:
+        raise ValueError('Delivered slug must match the exact original assignment')
+    required = ('external_interface', 'statement_constraints_snapshot', 'return_domain')
+    if any(key not in problem for key in required):
+        raise ValueError('Original authoring contract fields required')
+    contract = {key: problem[key] for key in required}
+    optional = ('objective_summary', 'domain_facts', 'comparison', 'mutation_alias_contract',
+                'numeric_complexity_contract', 'mutation_alias_review', 'public_fixed_constant')
+    contract.update({key: problem[key] for key in optional if key in problem})
+    if sha(canonical(contract).encode()) != record['problem_contract_sha256']:
+        raise ValueError('Original assignment contract identity mismatch')
+    files = {}
+    for item in manifest['files']:
+        if type(item) is not dict or type(item.get('path')) is not str or item['path'] in files:
+            raise ValueError('Ambiguous original manifest file identity')
+        files[item['path']] = item.get('sha256')
+    source_path, semantics_path = provenance['source_path'], provenance['semantics_path']
+    if (files.get(source_path) != record['source_sha256'] or
+            files.get(semantics_path) != record['semantics_sha256']):
+        raise ValueError('Original source or semantics manifest identity mismatch')
+    matches = [row for row in manifest['source_inventory'] if type(row) is dict and
+               type(row.get('id')) is int and row['id'] == record['original_problem_id'] and
+               row.get('language') == record['language'] and row.get('path') == source_path and
+               row.get('sha256') == record['source_sha256'] and
+               row.get('semantics_path', str(Path(source_path).with_suffix('.semantics.json'))) == semantics_path and
+               row.get('semantics_sha256', files.get(semantics_path)) == record['semantics_sha256']]
+    if len(matches) != 1:
+        raise ValueError('Exact original source inventory row required')
+
+
+def reconcile_official_identities(catalog_raw, catalog_sha256, evidence_raw, evidence_sha256,
+                                  metadata_snapshots, provenance_snapshots):
+    """Optional source-bound identity projection; never relabel the authoring catalog.
+
+    Inputs are exact operator-pinned catalog/evidence bytes and identity-only
+    official GraphQL snapshots and original manifest/assignment snapshots indexed
+    by their SHA-256. Hashes bind evidence,
+    not access authority. Original source, contract, assignment and manifest
+    commitments must all match an existing variant and its actual provenance.
+    No source/statement locator is followed. A frontend ID/title/signature is
+    not a complete behavioral contract, qualification or canonical adoption.
+    Missing official records stay unresolved. Multiple exact variants can map
+    to one frontend identity without selecting or merging their implementations.
+    """
+    catalog = _identity_json(catalog_raw, catalog_sha256, 32 * 1024 * 1024)
+    evidence = _identity_json(evidence_raw, evidence_sha256, 8 * 1024 * 1024)
+    if (type(catalog) is not dict or catalog.get('schema') != 'gamma.authoring-variant-catalog-pilot.v1' or
+            type(catalog.get('variants')) is not list or type(evidence) is not dict or
+            set(evidence) != {'schema', 'authoring_catalog_sha256', 'records'} or
+            evidence['schema'] != 'gamma.authoring-official-identity-evidence.v1' or
+            evidence['authoring_catalog_sha256'] != catalog_sha256 or
+            type(evidence['records']) is not list or type(metadata_snapshots) is not dict or
+            type(provenance_snapshots) is not dict):
+        raise ValueError('Exact authoring identity evidence schema and catalog binding required')
+    identity_fields = ('problem_id', 'language', 'source_sha256', 'semantics_sha256', 'problem_contract_sha256')
+    variants = {}
+    for variant in catalog['variants']:
+        if (type(variant) is not dict or type(variant.get('problem_id')) is not int or
+                variant['problem_id'] <= 0 or variant.get('language') not in ('javascript', 'python') or
+                type(variant.get('provenance')) is not list or
+                type(variant.get('qualification')) is not dict or
+                variant.get('qualification', {}).get('status') != 'unknown'):
+            raise ValueError('Existing unknown-qualified exact authoring variants required')
+        for name in ('variant_id', 'source_sha256', 'semantics_sha256', 'problem_contract_sha256'):
+            if type(variant.get(name)) is not str or not re.fullmatch(r'[0-9a-f]{64}', variant[name]):
+                raise ValueError('Invalid exact authoring identity hash')
+        identity = {key: variant[key] for key in identity_fields}
+        if variant['variant_id'] != sha(canonical(identity).encode()) or variant['variant_id'] in variants:
+            raise ValueError('Duplicate or inconsistent authoring variant identity')
+        variants[variant['variant_id']] = variant
+    fields = {'variant_id', 'original_problem_id', 'language', 'source_sha256', 'semantics_sha256',
+              'problem_contract_sha256', 'provenance', 'delivered_slug', 'queried_slug',
+              'official_metadata_sha256', 'official_identity'}
+    bindings, unresolved, seen = [], [], set()
+    for record in evidence['records']:
+        if type(record) is not dict or set(record) != fields:
+            raise ValueError('Exact source-bound official identity record required')
+        vid = record['variant_id']
+        if type(vid) is not str or vid not in variants or vid in seen:
+            raise ValueError('Unknown or ambiguous duplicate identity evidence')
+        seen.add(vid); variant = variants[vid]
+        if (type(record['original_problem_id']) is not int or
+                record['original_problem_id'] != variant['problem_id'] or
+                any(record[key] != variant[key] for key in identity_fields if key != 'problem_id') or
+                type(record['provenance']) is not dict or
+                set(record['provenance']) != {'manifest_sha256', 'assignment_sha256', 'source_path', 'semantics_path'} or
+                record['provenance'] not in variant['provenance']):
+            raise ValueError('Source, contract, assignment or manifest provenance mismatch')
+        for key in ('delivered_slug', 'queried_slug'):
+            if type(record[key]) is not str or not re.fullmatch(r'[a-z0-9]+(?:-[a-z0-9]+)*', record[key]):
+                raise ValueError('Explicit exact delivered and queried slugs required')
+        _identity_provenance(record, provenance_snapshots)
+        pin = record['official_metadata_sha256']
+        if type(pin) is not str or pin not in metadata_snapshots:
+            raise ValueError('Pinned official metadata snapshot unavailable')
+        snapshot = _identity_json(metadata_snapshots[pin], pin, 1024 * 1024)
+        if (type(snapshot) is not dict or set(snapshot) != {'data'} or
+                type(snapshot['data']) is not dict or set(snapshot['data']) != {'question'}):
+            raise ValueError('Identity-only GraphQL response required')
+        question = snapshot['data']['question']
+        if question is None:
+            if record['official_identity'] is not None:
+                raise ValueError('Missing official record cannot establish an identity')
+            unresolved.append({'variant_id': vid, 'original_problem_id': variant['problem_id'],
+                               'language': variant['language'], 'reason': 'official_question_not_found',
+                               'official_metadata_sha256': pin})
+            continue
+        official = _official_identity(question)
+        if canonical(record['official_identity']) != canonical(official):
+            raise ValueError('Official response and claimed identity differ')
+        bindings.append({**record, 'official_frontend_id': int(official['frontend_id']),
+                         'numeric_identity_changed': variant['problem_id'] != int(official['frontend_id']),
+                         'slug_changed': record['delivered_slug'] != official['title_slug'],
+                         'semantic_contract_established': False, 'qualification_created': False,
+                         'canonical_adoption_created': False})
+    order = lambda row: (row['original_problem_id'], row['language'], row['variant_id'])
+    return {'schema': 'gamma.authoring-official-identity-projection.v1',
+            'authoring_catalog_sha256': catalog_sha256, 'identity_evidence_sha256': evidence_sha256,
+            'bindings': sorted(bindings, key=order), 'unresolved': sorted(unresolved, key=order),
+            'unexamined_variant_count': len(variants) - len(seen),
+            'original_catalog_changed': False, 'source_payloads_opened': 0,
+            'semantic_contract_established': False, 'qualification_created': False,
+            'canonical_adoption_created': False}
+
+
+def query_official_identity(catalog_raw, catalog_sha256, evidence_raw, evidence_sha256,
+                           metadata_snapshots, provenance_snapshots, official_problem_id, language):
+    """Return original variants through revalidated optional official identities."""
+    if (type(official_problem_id) is not int or official_problem_id <= 0 or
+            type(language) is not str or language not in ('javascript', 'python')):
+        raise ValueError('Exact numeric official identity and language required')
+    projection = reconcile_official_identities(catalog_raw, catalog_sha256, evidence_raw,
+                                               evidence_sha256, metadata_snapshots, provenance_snapshots)
+    catalog = _identity_json(catalog_raw, catalog_sha256, 32 * 1024 * 1024)
+    matches = {row['variant_id'] for row in projection['bindings']
+               if row['official_frontend_id'] == official_problem_id and row['language'] == language}
+    return tuple(row for row in catalog['variants'] if row['variant_id'] in matches)
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('manifests', nargs='+', type=Path)
