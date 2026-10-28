@@ -1,63 +1,70 @@
-# Downloaded third batch: independent qualification (88 pairs)
+# Downloaded third batch: unexecuted qualification preparation
 
-This directory defines the independent qualification contract for the 88 supplied
-JavaScript and Python program pairs imported under
-`projects/algorithm_solver/catalogue/authored/downloaded-general88-v1/`.
+This lane prepares independent checks for 88 selected problem IDs, comprising176
+exact supplied JavaScript/Python programs from `authored/downloaded-general88-v1`.
+**This delivery establishes zero physical candidate executions and zero
+independently qualified programs.** Its 1,512 cases are prepared reference
+inputs and expectations, not observed candidate passes.
 
-## Scope and Invariants
+The original `delivery/report.json` says `execution_status: unexecuted` and
+`passed: false`. The original `delivery/replay.json` verifies preparation hashes
+and case regeneration; it does not replay physical candidate observations.
+The corrected [results](RESULTS.md) and hash-bound
+[evidence classification](EVIDENCE-CLASSIFICATION-20261028.json) supersede the
+unsupported public summary, without rewriting original delivery artifacts.
 
-- **Inventory:** 88 unique LeetCode problems (IDs 11 through 400), comprising 176
-  candidate programs (88 Python, 88 JavaScript).
-- **Preservation:** Original delivered sources under `authored/downloaded-general88-v1/`
-  remain unmodified and byte-pinned.
-- **Authority:** Historical protected Gamma test suites and reserved payloads remain
-  closed. No catalogue admission, retrieval slots, or shared qualification machinery
-  are modified.
-- **Entrypoints:** Qualification evaluates the functional `solve` entrypoints. The
-  provided LeetCode `Solution` wrappers are reviewed for syntactic integrity but are
-  not execution-qualified here.
+## Source and interface scope
 
-## Interface and Functional Adapters
+The original candidate bytes, immutable import manifest and authoring identities
+remain unchanged. Historical protected Gamma sources, statements and cases stay
+closed. No catalogue admission, activation or retrieval slot changes follow.
 
-Ten of the 88 problems in official LeetCode specifications require in-place mutation
-or return `void`/length `k`:
-- **Problems 26, 27, 80:** Official API modifies `nums` in-place and returns integer length `k`.
-- **Problems 31, 48, 73, 75, 88, 130, 186:** Official API modifies the array/matrix/board in-place and returns `void`.
+Future checks would call the supplied positional `solve` entrypoints. Ten
+problems26,27,31,48,73,75,80,88,130 and186 have functional return-value adapter
+contracts distinct from their official in-place or length-return APIs. Their
+unchanged-on-return inputs, full typed outputs and fresh mutable results still
+need physical observation. Neither those effects nor the official wrappers are
+execution-qualified by this delivery.
 
-The supplied candidate programs implement **functional return-value adapters**:
-- They leave input arguments completely unchanged (`args_before == args_after`).
-- They construct and return new containers representing the transformed output.
-- The wrapper `Solution` methods forward to `solve` and return values rather than mutating in-place.
-- In-place mutation contracts are therefore distinguished: functional adapters are qualified under local functional effect contracts; official in-place APIs are explicitly not execution-qualified.
+## Comparator and source-review limitations
 
-## Permitted Output Freedom and Verification Predicates
+The corrected unordered routes retain recursive JSON types, container shape and
+multiplicity while ignoring only allowed ordering. Integer/bool/float values do
+not collapse into each other. Gray Code 89 now checks an exact positive integer
+bit width and exact integer values in `[0, 2**n)`, alongside its retained length,
+zero start, uniqueness, adjacency and cyclic-closure predicates. Predicate373
+checks available index-pair multiplicity and the optimal sum threshold while
+allowing legitimate ties and repeated values supported by distinct indices.
+These are host checks; they do not establish candidate execution or complexity.
+See [the comparator review](REVIEW-20261028.md) for exact historical defects.
+Other existing policies, including 50's floating-point tolerance, remain scoped
+to their original contracts rather than being promoted into broader acceptance.
 
-- **Multisets and Order-Invariant Sets:** Problems 15, 22, 39, 40, 46, 77, 78, 90, 93, 131, 187, 216, 241, 310, and 347 permit results in any order. The validator sorts canonical element representations before comparison.
-- **Group Anagrams (49):** Outer groups and inner word lists may appear in any order.
-- **Floating Point (50):** Pow(x, n) is evaluated within numerical tolerance (`math.isclose`, rel_tol=1e-5, abs_tol=1e-7).
-- **Disjoint Intervals (56, 57):** Non-overlapping intervals are canonicalized by start coordinate.
-- **Gray Code (89):** Sequence validity predicate enforces $2^n$ distinct integers in $[0, 2^n - 1]$ starting at 0 with 1-bit adjacent transitions and 1-bit cyclic closure.
-- **Course Schedule II (210):** Valid topological sorting predicate verifies all prerequisites precede dependent courses.
-- **K Smallest Pairs (373):** Multiset pair-sum equality validates that candidate pairs match minimal sums.
+Mandatory source-review failures for 41,164 and 373 in both languages remain in
+`oracles.MANDATORY_FAILURES`. Their six failure identities are neither observed
+candidate test failures nor evidence that the other 170 programs qualify.
+Definition 186 remains premium/unavailable in the retained pins. Prepared local
+examples cannot clear its official-definition gate. All other source, domain,
+interface, effects and complexity obligations still require exact review.
 
-## Mandatory Algorithm and Memory Requirements
+## Existing isolated execution protocol
 
-Analysis of official problem statements reveals mandatory complexity gates:
-- **Problem 41 (First Missing Positive):** "You must implement an algorithm that runs in O(n) time and uses O(1) auxiliary space." Both Python and JavaScript candidates allocate a hash set of the entire input ($O(n)$ space), failing the mandatory constant-auxiliary-space contract.
-- **Problem 164 (Maximum Gap):** "You must write an algorithm that runs in linear time and uses linear extra space." Both candidates use comparison sort ($O(n \log n)$ time), failing the mandatory linear-time requirement.
-- **Problem 373 (Find K Pairs with Smallest Sums):** Both candidates materialize all $|nums1| \times |nums2|$ pairs into memory and sort them, violating subquadratic memory and time bounds for inputs up to $10^5$.
+The target remains the existing Linux bubblewrap judge with private namespaces,
+no network, restricted mounts and unchanged bounds: three CPU seconds, eight
+wall seconds, 1 GiB address space and 16 MiB output. Each interpreter batch repeats
+its first call to check carryover. Sources, observation transport and argument
+packets enter the sandbox; expected values and statement snapshots stay on the
+host. Missing isolation has no unsandboxed fallback.
 
-These failures are formally registered in `oracles.MANDATORY_FAILURES`.
+The retained freeze was produced on macOS, where `/usr/bin/bwrap` was absent.
+Its metadata and all original delivery files remain historical preparation
+artifacts. The corrected helper/documentation bytes require a new reviewed
+freeze before execution. A future authorized Linux run must bind actual source,
+interface, definitions, cases, helpers, runtime and limits, retain raw failures,
+and undergo independent stricter host replay. Generated or synthetic records
+cannot substitute for physical candidate observations. All adoption eligibility
+remains pending those steps; no wrapper, held-out or official judge claim is made.
 
-## Isolated Execution Contract and Host Platform Status
-
-- Gamma evidence contracts require untrusted execution to take place strictly inside
-  an authorized isolated judge (`/usr/bin/bwrap`) with private namespaces, disabled
-  networking, restricted filesystem mounts, and enforced limits:
-  - CPU: 3 seconds
-  - Wall clock: 8 seconds
-  - Memory: 1 GiB
-  - Max output: 16 MiB
-  - Repeated first-call per batch for state carryover detection.
-- **Host Platform:** macOS Darwin arm64. Linux bubblewrap (`/usr/bin/bwrap`) is absent (`SandboxUnavailable`).
-- **Delivery Mode:** In strict adherence to the charter ("If execution is unavailable, deliver the prepared cases and contracts as unexecuted"), all 1,512 generated cases, statement pins, artifact hashes, and batch execution plans are frozen and delivered as unexecuted.
+Source-free development checks are `python3 -B test_oracles.py` from this
+folder and scoped Ruff. They test reference/validator behavior and the existing
+verifier's unexecuted metadata branch; they execute no candidate programs.

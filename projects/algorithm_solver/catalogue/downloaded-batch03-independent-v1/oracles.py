@@ -1,5 +1,6 @@
 """Independent definition-based references for downloaded batch 03 (88 problems)."""
 from collections import Counter, defaultdict, deque
+from bisect import bisect_left
 from functools import lru_cache
 from itertools import combinations, permutations, product
 import heapq
@@ -1007,22 +1008,81 @@ def exact(a, b):
     return a == b
 
 
+def _typed_key(value):
+    """Sortable recursive JSON value identity, keeping bool/int/float distinct."""
+    kind = type(value)
+    if kind is list:
+        return ('list', tuple(_typed_key(item) for item in value))
+    if kind is dict:
+        return ('dict', tuple(sorted((_typed_key(key), _typed_key(item))
+                                     for key, item in value.items())))
+    if kind in (bool, int, str) or value is None:
+        return (kind.__name__, value)
+    if kind is float and math.isfinite(value):
+        return ('float', value)
+    raise ValueError('unsupported typed result value')
+
+
+def _unordered_equal(value, want, *, inner_unordered=False):
+    if type(value) is not list or type(want) is not list:
+        return False
+    def key(item):
+        if not inner_unordered:
+            return _typed_key(item)
+        if type(item) is not list:
+            raise ValueError('nested result collection must be a list')
+        return tuple(sorted(_typed_key(part) for part in item))
+    try:
+        return sorted(key(item) for item in value) == sorted(key(item) for item in want)
+    except (ValueError, TypeError, RecursionError):
+        return False
+
+
+def _smallest_pairs(args, value):
+    """Check legal index-pair multiplicity and the kth-sum threshold, not ties.
+
+    Repeated value-pairs are legitimate only when distinct input index pairs
+    supply them. Counting pairs below the largest selected sum checks that no
+    strictly smaller pair was omitted, independently of a chosen oracle witness.
+    """
+    if type(args) is not list or len(args) != 3 or type(value) is not list:
+        return False
+    nums1, nums2, k = args
+    if (type(nums1) is not list or type(nums2) is not list or type(k) is not int or k < 0
+            or any(type(x) is not int for x in nums1 + nums2)
+            or any(a > b for a, b in zip(nums1, nums1[1:]))
+            or any(a > b for a, b in zip(nums2, nums2[1:]))):
+        return False
+    if len(value) != min(k, len(nums1) * len(nums2)):
+        return False
+    if not value:
+        return True
+    first, second = Counter(nums1), Counter(nums2)
+    selected = Counter()
+    sums = []
+    for pair in value:
+        if type(pair) is not list or len(pair) != 2 or any(type(x) is not int for x in pair):
+            return False
+        a, b = pair
+        selected[a, b] += 1
+        if selected[a, b] > first[a] * second[b]:
+            return False
+        sums.append(a + b)
+    threshold = max(sums)
+    available_below = sum(bisect_left(nums2, threshold - a) for a in nums1)
+    return available_below == sum(total < threshold for total in sums)
+
+
 def matches(pid, args, value, want):
     if pid in (15, 39, 40, 77, 78, 90, 216):
         # Collections of combinations / subsets / triplets
-        if type(value) is not list:
-            return False
-        return sorted([sorted(c) for c in value]) == sorted([sorted(c) for c in want])
+        return _unordered_equal(value, want, inner_unordered=True)
     if pid in (22, 46, 93, 131, 187):
         # Permutations or collections of strings / partitions
-        if type(value) is not list:
-            return False
-        return sorted(value) == sorted(want)
+        return _unordered_equal(value, want)
     if pid == 49:
         # Group Anagrams
-        if type(value) is not list:
-            return False
-        return sorted([sorted(g) for g in value]) == sorted([sorted(g) for g in want])
+        return _unordered_equal(value, want, inner_unordered=True)
     if pid == 50:
         # Pow(x, n)
         if type(value) not in (int, float):
@@ -1030,13 +1090,16 @@ def matches(pid, args, value, want):
         return math.isclose(value, want, rel_tol=1e-5, abs_tol=1e-7)
     if pid in (56, 57):
         # Disjoint intervals
-        if type(value) is not list:
-            return False
-        return sorted(value) == sorted(want)
+        return _unordered_equal(value, want)
     if pid == 89:
         # Gray Code sequence validity predicate
+        if type(args) is not list or len(args) != 1 or type(value) is not list:
+            return False
         n = args[0]
-        if type(value) is not list or len(value) != (1 << n):
+        # Bound the shift by the supplied result size before evaluating it.
+        if type(n) is not int or n < 1 or n > len(value).bit_length():
+            return False
+        if len(value) != (1 << n) or any(type(v) is not int or not 0 <= v < (1 << n) for v in value):
             return False
         if not value or value[0] != 0:
             return False
@@ -1064,22 +1127,10 @@ def matches(pid, args, value, want):
         return True
     if pid in (241, 310, 347):
         # Lists where elements can appear in any order
-        if type(value) is not list:
-            return False
-        return sorted(value) == sorted(want)
+        return _unordered_equal(value, want)
     if pid == 373:
         # Find K Pairs with Smallest Sums
-        if type(value) is not list:
-            return False
-        nums1, nums2, k = args[0], args[1], args[2]
-        expected_len = min(k, len(nums1) * len(nums2))
-        if len(value) != expected_len:
-            return False
-        if not all(type(pair) is list and len(pair) == 2 and pair[0] in nums1 and pair[1] in nums2 for pair in value):
-            return False
-        cand_sums = sorted(pair[0] + pair[1] for pair in value)
-        want_sums = sorted(pair[0] + pair[1] for pair in want)
-        return cand_sums == want_sums
+        return _smallest_pairs(args, value)
     return exact(value, want)
 
 
