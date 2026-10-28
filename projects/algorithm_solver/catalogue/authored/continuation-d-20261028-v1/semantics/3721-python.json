@@ -1,0 +1,33 @@
+{
+  "comparison": "exact typed scalar or string",
+  "effects": "arguments unchanged",
+  "entrypoint": "solve",
+  "language": "python",
+  "official_interface": {
+    "name": "longestBalanced",
+    "params": [
+      {
+        "name": "nums",
+        "type": "integer[]"
+      }
+    ],
+    "return": {
+      "type": "integer"
+    }
+  },
+  "parameters": [
+    "nums"
+  ],
+  "problem_id": 3721,
+  "qualification": {
+    "reason": "No candidate execution; source-free references and static syntax only",
+    "status": "unknown"
+  },
+  "schema": "gamma.authored-scalar-semantics.v1",
+  "source_reasoning": {
+    "candidate_design": "for each new right endpoint, add parity sign to starts after last same-value occurrence; lazy range min/max tree finds first zero",
+    "complexity_target": "O(n log n) time, O(n) auxiliary space",
+    "reference": "enumerate intervals and rebuild distinct value sets"
+  },
+  "source_sha256": "264c8f83eb3b36ca32dff756b9feeb2e5ae1074dab492ac4669c48612b4be8fd"
+}

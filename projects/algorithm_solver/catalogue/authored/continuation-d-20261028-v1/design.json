@@ -1,0 +1,65 @@
+{
+  "effects": "solve leaves supplied arrays unchanged; only immutable scalar/string results returned. Standard wrappers delegate to solve but remain separately unexecuted.",
+  "mandatory_vs_optional": "No optional complexity follow-up is treated as a mandatory ban; targets above are candidate source reasoning, not runtime qualification.",
+  "numeric": {
+    "3702": "values < 2**30, so JavaScript 32-bit XOR preserves each bit",
+    "3704": "n <= 10**15 and ordered count <= n-1 < 2**53; JavaScript internal carry counts use BigInt and convert only final bounded answer",
+    "3714": "numeric encoding of two differences below (2*n+1)**2 < 2**53",
+    "3721": "distinct parity balances in [-n,n], safe signed32 lazy values",
+    "all_inputs_and_outputs": "exact integers or lowercase/parenthesis ASCII strings; booleans rejected"
+  },
+  "problems": {
+    "3702": {
+      "candidate_design": "XOR all values; keep all when nonzero, otherwise remove one nonzero item or return zero",
+      "complexity_target": "O(n) time, O(1) auxiliary space",
+      "reference": "enumerate nonempty index subsets and XOR them"
+    },
+    "3703": {
+      "candidate_design": "KMP prefix-state stack with deletion and restoration of prior states",
+      "complexity_target": "O(n+k) time, O(n+k) auxiliary space",
+      "reference": "repeat simultaneous literal replacement of the exact unbordered pattern"
+    },
+    "3704": {
+      "candidate_design": "low-to-high decimal carry DP with ended-number flags; units are nonzero",
+      "complexity_target": "O(decimal_digits * 8 * 100) time, constant-state space",
+      "reference": "enumerate ordered positive a and inspect decimal digits of both a and n-a"
+    },
+    "3708": {
+      "candidate_design": "maintain current Fibonacci-valid suffix length",
+      "complexity_target": "O(n) time, O(1) auxiliary space",
+      "reference": "enumerate every interval and test all its recurrence equations"
+    },
+    "3713": {
+      "candidate_design": "increment 26 counts; maximum_frequency * distinct == interval length",
+      "complexity_target": "O(n squared) time, O(26) auxiliary space",
+      "reference": "enumerate substrings and count complete frequency multisets"
+    },
+    "3714": {
+      "candidate_design": "separate one-character runs, two-character prefix balances excluding third, and repeated three-character prefix differences",
+      "complexity_target": "O(n) time, O(n) auxiliary space",
+      "reference": "enumerate substrings and count complete frequency multisets"
+    },
+    "3719": {
+      "candidate_design": "incremental distinct-value parity balance for each left endpoint",
+      "complexity_target": "O(n squared) time, O(n) auxiliary space",
+      "reference": "enumerate intervals and rebuild distinct value sets"
+    },
+    "3720": {
+      "candidate_design": "match target prefix, backtrack rightmost possible strict increase, append sorted remainder",
+      "complexity_target": "O(26*n) time, O(n+26) auxiliary space",
+      "reference": "enumerate all distinct complete permutations and choose the first strict successor"
+    },
+    "3721": {
+      "candidate_design": "for each new right endpoint, add parity sign to starts after last same-value occurrence; lazy range min/max tree finds first zero",
+      "complexity_target": "O(n log n) time, O(n) auxiliary space",
+      "reference": "enumerate intervals and rebuild distinct value sets"
+    },
+    "3722": {
+      "candidate_design": "enumerate legal reversal widths while retaining only the smallest candidate string",
+      "complexity_target": "O(n squared) time, O(n) auxiliary space",
+      "reference": "construct every prefix/suffix reversal using explicit index maps"
+    }
+  },
+  "schema": "gamma.continuation-d-sourceblind-design.v1",
+  "segment_tree_zero_test": "As left endpoint advances one step, distinct parity balance changes by0or1inabsolutevalue; within any active contiguous start range all integer values between min/max occur. Restrict zero search to starts<=right."
+}
