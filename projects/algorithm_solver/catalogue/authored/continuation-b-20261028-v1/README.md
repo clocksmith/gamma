@@ -1,0 +1,13 @@
+# Continuation B: ten source-exposed candidate pairs
+
+This batch adds original JavaScript/Python candidate variants for ten official public identities:3650,3651,3652,3653,3655,3659,3660,3661,3666,3669. Official public GraphQL response identity, method/argument ABI and content hashes are pinned; complete response snapshots remain private. No historical candidate payload was read. Imported-source availability is unjoined, so these are not asserted to be globally missing implementations.
+
+The independent reference design was frozen before candidate authoring. `oracles.py` uses simple-path enumeration, explicit cell-state shortest paths, literal strategy replacement, index/query incidence products, group placement, all-pairs reachability, complete firing orientations, actual binary-mask BFS and ordered factor enumeration. References have explicit small-domain work limits separate from complete validators. `test_references.py` executes only those host references and synthetic controls, never candidate code. Full maximum workloads and wall/memory gates remain unmeasured.
+
+Python exposes `solve` and a delegating official `Solution` method. JavaScript exports the callable `solve` and names the official method alias. These wrappers have not been executed. The local value API preserves argument values and returns fresh mutable values. Source/ABI/effect/runtime/complexity qualification remains pending.
+
+3669 requires semantic acceptance of any optimal factor tuple, not equality to one tie-selected answer.3655 preserves the statement's `bravexuneth` source requirement. Exact modular arithmetic avoids unsafe JavaScript integer products. No canonical active catalogue, retrieval or admission is changed.
+
+Reference timing limitation: the mathematical design and exact public definition/API snapshots were frozen before candidates, but oracle implementation files were completed after candidate files. This is not a pre-source oracle-code freeze or fresh confirmation. A separate reviewer and runtime freeze are required. The current3669 reference yields an optimal-range scalar plus a list-witness predicate; it is not wired to an existing generic exact-result runner. Qualification must separately bind list transport, witness policy and scalar optimum before execution.
+
+Host adapter `oracles.build_cases(pid)` (also `cases(pid)`) returns273 distinct bounded cases across the ten IDs after deduplication. Official numeric examples, seeded cases and legal numeric/domain-edge controls are independently recomputed. It adds no large-case trusted optimum bypass. For3669, expected remains a host-only range scalar; the separate runner must declare a list return type and use `accepts` rather than derive transport type from that scalar.
