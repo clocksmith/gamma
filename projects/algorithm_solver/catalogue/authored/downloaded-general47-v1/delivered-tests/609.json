@@ -1,0 +1,54 @@
+{
+  "authority": "Delivered examples and checks; not independent Gamma tests",
+  "problem_id": 609,
+  "reported_qualification": {
+    "failures": [],
+    "passed": true,
+    "problem_id": 609,
+    "random_cases": 20,
+    "slug": "find-duplicate-file-in-system",
+    "title": "Find Duplicate File in System"
+  },
+  "tests": [
+    [
+      [
+        [
+          "root/a 1.txt(abcd) 2.txt(efgh)",
+          "root/c 3.txt(abcd)",
+          "root/c/d 4.txt(efgh)",
+          "root 4.txt(efgh)"
+        ]
+      ],
+      [
+        [
+          "root/4.txt",
+          "root/a/2.txt",
+          "root/c/d/4.txt"
+        ],
+        [
+          "root/a/1.txt",
+          "root/c/3.txt"
+        ]
+      ]
+    ],
+    [
+      [
+        [
+          "root/a 1.txt(abcd) 2.txt(efgh)",
+          "root/c 3.txt(abcd)",
+          "root/c/d 4.txt(efgh)"
+        ]
+      ],
+      [
+        [
+          "root/a/1.txt",
+          "root/c/3.txt"
+        ],
+        [
+          "root/a/2.txt",
+          "root/c/d/4.txt"
+        ]
+      ]
+    ]
+  ]
+}
