@@ -1,0 +1,361 @@
+{
+  "schema": "gamma.new-solutions-batch21.v1",
+  "scope": "Freshly written, not pulled from Gamma. Problems with no authored JS/Python pair in clocksmith/gamma catalogue/authored at head dd7dd823, verified by the parent before delivery, no overlaps found. Only 6 problems in IDs 2951-3100 meet the simple-input constraints; rest are premium, SQL, API, tree, or unverifiable titles. This is not a claim of Gamma official independent admission.",
+  "qualification_method": "For each problem: public examples plus 20 random cross-language agreement checks per problem, JS via node and Python via import, outputs compared. Spot-checked independently by the parent for all 6 problems, all passed.",
+  "counts": {
+    "problems": 6,
+    "passed": 6
+  },
+  "problems": [
+    {
+      "problem_id": 2956,
+      "slug": "find-common-elements-between-two-arrays",
+      "title": "Find Common Elements Between Two Arrays",
+      "difficulty": "Easy",
+      "method": "findIntersectionValues",
+      "javascript": "'use strict';\n\n// 2956. Find Common Elements Between Two Arrays (Easy).\n// Specification: https://leetcode.com/problems/find-common-elements-between-two-arrays/description/\nfunction solve(nums1, nums2) {\n  const set1 = new Set(nums1); const set2 = new Set(nums2);\n  let count1 = 0; for (const x of nums1) if (set2.has(x)) count1++;\n  let count2 = 0; for (const x of nums2) if (set1.has(x)) count2++;\n  return [count1, count2];\n}\nconst findIntersectionValues = solve;\nclass Solution { findIntersectionValues(nums1, nums2) { return solve(nums1, nums2); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, findIntersectionValues };\n",
+      "python": "\"\"\"2956. Find Common Elements Between Two Arrays (Easy).\n\nSpecification: https://leetcode.com/problems/find-common-elements-between-two-arrays/description/\n\"\"\"\n\n\ndef solve(nums1: list[int], nums2: list[int]) -> list[int]:\n    set1 = set(nums1)\n    set2 = set(nums2)\n    count1 = sum(1 for x in nums1 if x in set2)\n    count2 = sum(1 for x in nums2 if x in set1)\n    return [count1, count2]\n\n\nclass Solution:\n    def findIntersectionValues(self, nums1: list[int], nums2: list[int]) -> list[int]:\n        return solve(nums1, nums2)\n",
+      "javascript_sha256": "5b987c59be9e19ee994e0a27d142bc28ea5b19b5a49ceb95db47a5f51aba8c54",
+      "python_sha256": "90b4029c2a9fe9adec1fd3662a4916565ea8d60823e21f67d0b0408410772f0a",
+      "tests": [
+        [
+          [
+            [
+              2,
+              3,
+              2
+            ],
+            [
+              1,
+              2
+            ]
+          ],
+          [
+            2,
+            1
+          ]
+        ],
+        [
+          [
+            [
+              4,
+              3,
+              2,
+              3,
+              1
+            ],
+            [
+              2,
+              2,
+              5,
+              2,
+              3,
+              6
+            ]
+          ],
+          [
+            3,
+            4
+          ]
+        ]
+      ],
+      "qualification": {
+        "public": "2/2",
+        "random": "20/20",
+        "passed": true
+      }
+    },
+    {
+      "problem_id": 3011,
+      "slug": "find-if-array-can-be-sorted",
+      "title": "Find if Array Can Be Sorted",
+      "difficulty": "Medium",
+      "method": "canSortArray",
+      "javascript": "'use strict';\n\n// 3011. Find if Array Can Be Sorted (Medium).\n// Specification: https://leetcode.com/problems/find-if-array-can-be-sorted/description/\nfunction countBits(x) {\n  let count = 0;\n  while (x > 0) { count += x & 1; x >>= 1; }\n  return count;\n}\nfunction solve(nums) {\n  let previousMax = -Infinity; let i = 0;\n  while (i < nums.length) {\n    const bits = countBits(nums[i]);\n    let groupMin = nums[i]; let groupMax = nums[i]; let j = i + 1;\n    while (j < nums.length && countBits(nums[j]) === bits) {\n      groupMin = Math.min(groupMin, nums[j]);\n      groupMax = Math.max(groupMax, nums[j]);\n      j++;\n    }\n    if (previousMax > groupMin) return false;\n    previousMax = groupMax;\n    i = j;\n  }\n  return true;\n}\nconst canSortArray = solve;\nclass Solution { canSortArray(nums) { return solve(nums); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, canSortArray };\n",
+      "python": "\"\"\"3011. Find if Array Can Be Sorted (Medium).\n\nSpecification: https://leetcode.com/problems/find-if-array-can-be-sorted/description/\n\"\"\"\n\n\ndef count_bits(x: int) -> int:\n    return bin(x).count(\"1\")\n\n\ndef solve(nums: list[int]) -> bool:\n    previous_max = float(\"-inf\")\n    i = 0\n    while i < len(nums):\n        bits = count_bits(nums[i])\n        group_min = nums[i]\n        group_max = nums[i]\n        j = i + 1\n        while j < len(nums) and count_bits(nums[j]) == bits:\n            group_min = min(group_min, nums[j])\n            group_max = max(group_max, nums[j])\n            j += 1\n        if previous_max > group_min:\n            return False\n        previous_max = group_max\n        i = j\n    return True\n\n\nclass Solution:\n    def canSortArray(self, nums: list[int]) -> bool:\n        return solve(nums)\n",
+      "javascript_sha256": "0e59168f0848578954b289ca9426544c6f27b70ecd0abad2675d344809171997",
+      "python_sha256": "6e8ed666b298e20198c40896012e071216ed214df607b62a9e266762b7f06229",
+      "tests": [
+        [
+          [
+            [
+              8,
+              4,
+              2,
+              30,
+              15
+            ]
+          ],
+          true
+        ],
+        [
+          [
+            [
+              1,
+              2,
+              3,
+              4,
+              5
+            ]
+          ],
+          true
+        ],
+        [
+          [
+            [
+              3,
+              16,
+              8,
+              4,
+              2
+            ]
+          ],
+          false
+        ],
+        [
+          [
+            [
+              75,
+              34,
+              30
+            ]
+          ],
+          false
+        ]
+      ],
+      "qualification": {
+        "public": "4/4",
+        "random": "20/20",
+        "passed": true
+      }
+    },
+    {
+      "problem_id": 3030,
+      "slug": "find-the-grid-of-region-average",
+      "title": "Find the Grid of Region Average",
+      "difficulty": "Medium",
+      "method": "resultGrid",
+      "javascript": "'use strict';\n\n// 3030. Find the Grid of Region Average (Medium).\n// Specification: https://leetcode.com/problems/find-the-grid-of-region-average/description/\nfunction isRegion(image, i, j, threshold) {\n  for (let x = i; x < i + 3; x++) {\n    for (let y = j; y < j + 3; y++) {\n      if (x > i && Math.abs(image[x][y] - image[x - 1][y]) > threshold) return false;\n      if (y > j && Math.abs(image[x][y] - image[x][y - 1]) > threshold) return false;\n    }\n  }\n  return true;\n}\nfunction solve(image, threshold) {\n  const m = image.length; const n = image[0].length;\n  const sums = Array.from({ length: m }, () => Array(n).fill(0));\n  const counts = Array.from({ length: m }, () => Array(n).fill(0));\n  for (let i = 0; i + 2 < m; i++) {\n    for (let j = 0; j + 2 < n; j++) {\n      if (!isRegion(image, i, j, threshold)) continue;\n      let total = 0;\n      for (let x = i; x < i + 3; x++) for (let y = j; y < j + 3; y++) total += image[x][y];\n      const average = Math.floor(total / 9);\n      for (let x = i; x < i + 3; x++) {\n        for (let y = j; y < j + 3; y++) { sums[x][y] += average; counts[x][y]++; }\n      }\n    }\n  }\n  const result = image.map((row) => row.slice());\n  for (let i = 0; i < m; i++) {\n    for (let j = 0; j < n; j++) {\n      if (counts[i][j] > 0) result[i][j] = Math.floor(sums[i][j] / counts[i][j]);\n    }\n  }\n  return result;\n}\nconst resultGrid = solve;\nclass Solution { resultGrid(image, threshold) { return solve(image, threshold); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, resultGrid };\n",
+      "python": "\"\"\"3030. Find the Grid of Region Average (Medium).\n\nSpecification: https://leetcode.com/problems/find-the-grid-of-region-average/description/\n\"\"\"\n\n\ndef is_region(image: list[list[int]], i: int, j: int, threshold: int) -> bool:\n    for x in range(i, i + 3):\n        for y in range(j, j + 3):\n            if x > i and abs(image[x][y] - image[x - 1][y]) > threshold:\n                return False\n            if y > j and abs(image[x][y] - image[x][y - 1]) > threshold:\n                return False\n    return True\n\n\ndef solve(image: list[list[int]], threshold: int) -> list[list[int]]:\n    m = len(image)\n    n = len(image[0])\n    sums = [[0] * n for _ in range(m)]\n    counts = [[0] * n for _ in range(m)]\n    for i in range(m - 2):\n        for j in range(n - 2):\n            if not is_region(image, i, j, threshold):\n                continue\n            total = sum(image[x][y] for x in range(i, i + 3) for y in range(j, j + 3))\n            average = total // 9\n            for x in range(i, i + 3):\n                for y in range(j, j + 3):\n                    sums[x][y] += average\n                    counts[x][y] += 1\n    result = [row[:] for row in image]\n    for i in range(m):\n        for j in range(n):\n            if counts[i][j] > 0:\n                result[i][j] = sums[i][j] // counts[i][j]\n    return result\n\n\nclass Solution:\n    def resultGrid(self, image: list[list[int]], threshold: int) -> list[list[int]]:\n        return solve(image, threshold)\n",
+      "javascript_sha256": "ba3065b299c42081e881ad48b321d6270fc479de34ad6ddcdb016f861ffd6dce",
+      "python_sha256": "fa7c89a9298614e4775f8327fba9f67d11261e7ef27d6ef433cc8d1b09892955",
+      "tests": [
+        [
+          [
+            [
+              [
+                5,
+                6,
+                7,
+                10
+              ],
+              [
+                8,
+                9,
+                10,
+                10
+              ],
+              [
+                11,
+                12,
+                13,
+                10
+              ]
+            ],
+            3
+          ],
+          [
+            [
+              9,
+              9,
+              9,
+              9
+            ],
+            [
+              9,
+              9,
+              9,
+              9
+            ],
+            [
+              9,
+              9,
+              9,
+              9
+            ]
+          ]
+        ],
+        [
+          [
+            [
+              [
+                10,
+                20,
+                30
+              ],
+              [
+                15,
+                25,
+                35
+              ],
+              [
+                20,
+                30,
+                40
+              ],
+              [
+                25,
+                35,
+                45
+              ]
+            ],
+            12
+          ],
+          [
+            [
+              25,
+              25,
+              25
+            ],
+            [
+              27,
+              27,
+              27
+            ],
+            [
+              27,
+              27,
+              27
+            ],
+            [
+              30,
+              30,
+              30
+            ]
+          ]
+        ]
+      ],
+      "qualification": {
+        "public": "2/2",
+        "random": "20/20",
+        "passed": true
+      }
+    },
+    {
+      "problem_id": 3076,
+      "slug": "shortest-uncommon-substring-in-an-array",
+      "title": "Shortest Uncommon Substring in an Array",
+      "difficulty": "Medium",
+      "method": "shortestSubstrings",
+      "javascript": "'use strict';\n\n// 3076. Shortest Uncommon Substring in an Array (Medium).\n// Specification: https://leetcode.com/problems/shortest-uncommon-substring-in-an-array/description/\nfunction solve(arr) {\n  const answer = [];\n  for (let i = 0; i < arr.length; i++) {\n    const s = arr[i];\n    let best = '';\n    for (let length = 1; length <= s.length && best === ''; length++) {\n      const candidates = [];\n      for (let start = 0; start + length <= s.length; start++) {\n        const sub = s.slice(start, start + length);\n        let unique = true;\n        for (let j = 0; j < arr.length; j++) {\n          if (j !== i && arr[j].includes(sub)) { unique = false; break; }\n        }\n        if (unique) candidates.push(sub);\n      }\n      if (candidates.length > 0) { candidates.sort(); best = candidates[0]; }\n    }\n    answer.push(best);\n  }\n  return answer;\n}\nconst shortestSubstrings = solve;\nclass Solution { shortestSubstrings(arr) { return solve(arr); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, shortestSubstrings };\n",
+      "python": "\"\"\"3076. Shortest Uncommon Substring in an Array (Medium).\n\nSpecification: https://leetcode.com/problems/shortest-uncommon-substring-in-an-array/description/\n\"\"\"\n\n\ndef solve(arr: list[str]) -> list[str]:\n    answer = []\n    for i, s in enumerate(arr):\n        best = \"\"\n        for length in range(1, len(s) + 1):\n            if best:\n                break\n            candidates = []\n            for start in range(len(s) - length + 1):\n                sub = s[start:start + length]\n                if all(j == i or sub not in arr[j] for j in range(len(arr))):\n                    candidates.append(sub)\n            if candidates:\n                best = min(candidates)\n        answer.append(best)\n    return answer\n\n\nclass Solution:\n    def shortestSubstrings(self, arr: list[str]) -> list[str]:\n        return solve(arr)\n",
+      "javascript_sha256": "b8715140ad18464b0d890e9bc9da6067e0bb82930abde3925cb2cc33c0d6ffb2",
+      "python_sha256": "778fd82f453c74f4a4d1b0c780d2edc20407a9cf7c819d0ee6b48ef693ab084f",
+      "tests": [
+        [
+          [
+            [
+              "cab",
+              "ad",
+              "bad",
+              "c"
+            ]
+          ],
+          [
+            "ab",
+            "",
+            "ba",
+            ""
+          ]
+        ],
+        [
+          [
+            [
+              "abc",
+              "bcd",
+              "abcd"
+            ]
+          ],
+          [
+            "",
+            "",
+            "abcd"
+          ]
+        ]
+      ],
+      "qualification": {
+        "public": "2/2",
+        "random": "20/20",
+        "passed": true
+      }
+    },
+    {
+      "problem_id": 3083,
+      "slug": "existence-of-a-substring-in-a-string-and-its-reverse",
+      "title": "Existence of a Substring in a String and Its Reverse",
+      "difficulty": "Easy",
+      "method": "isSubstringPresent",
+      "javascript": "'use strict';\n\n// 3083. Existence of a Substring in a String and Its Reverse (Easy).\n// Specification: https://leetcode.com/problems/existence-of-a-substring-in-a-string-and-its-reverse/description/\nfunction solve(s) {\n  const reversed = s.split('').reverse().join('');\n  for (let i = 0; i + 1 < s.length; i++) {\n    if (reversed.includes(s.slice(i, i + 2))) return true;\n  }\n  return false;\n}\nconst isSubstringPresent = solve;\nclass Solution { isSubstringPresent(s) { return solve(s); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, isSubstringPresent };\n",
+      "python": "\"\"\"3083. Existence of a Substring in a String and Its Reverse (Easy).\n\nSpecification: https://leetcode.com/problems/existence-of-a-substring-in-a-string-and-its-reverse/description/\n\"\"\"\n\n\ndef solve(s: str) -> bool:\n    reversed_s = s[::-1]\n    for i in range(len(s) - 1):\n        if s[i:i + 2] in reversed_s:\n            return True\n    return False\n\n\nclass Solution:\n    def isSubstringPresent(self, s: str) -> bool:\n        return solve(s)\n",
+      "javascript_sha256": "3dc86c5ca3c5963cc77c879e183199ddd01d751a7212fbd660cc856a573a2777",
+      "python_sha256": "ed3d79aaeb5334df7f11702f4c8aa41b393ee0b5dbcb087f2d3422c5ed26338e",
+      "tests": [
+        [
+          [
+            "leetcode"
+          ],
+          true
+        ],
+        [
+          [
+            "abcba"
+          ],
+          true
+        ],
+        [
+          [
+            "abcd"
+          ],
+          false
+        ]
+      ],
+      "qualification": {
+        "public": "3/3",
+        "random": "20/20",
+        "passed": true
+      }
+    },
+    {
+      "problem_id": 3100,
+      "slug": "water-bottles-ii",
+      "title": "Water Bottles II",
+      "difficulty": "Easy",
+      "method": "maxBottlesDrunk",
+      "javascript": "'use strict';\n\n// 3100. Water Bottles II (Easy).\n// Specification: https://leetcode.com/problems/water-bottles-ii/description/\nfunction solve(numBottles, numExchange) {\n  let answer = numBottles;\n  while (numBottles >= numExchange) {\n    numBottles = numBottles - numExchange + 1;\n    numExchange++;\n    answer++;\n  }\n  return answer;\n}\nconst maxBottlesDrunk = solve;\nclass Solution { maxBottlesDrunk(numBottles, numExchange) { return solve(numBottles, numExchange); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, maxBottlesDrunk };\n",
+      "python": "\"\"\"3100. Water Bottles II (Easy).\n\nSpecification: https://leetcode.com/problems/water-bottles-ii/description/\n\"\"\"\n\n\ndef solve(num_bottles: int, num_exchange: int) -> int:\n    answer = num_bottles\n    while num_bottles >= num_exchange:\n        num_bottles = num_bottles - num_exchange + 1\n        num_exchange += 1\n        answer += 1\n    return answer\n\n\nclass Solution:\n    def maxBottlesDrunk(self, num_bottles: int, num_exchange: int) -> int:\n        return solve(num_bottles, num_exchange)\n",
+      "javascript_sha256": "06d7ac2cdb1b3fd72dea0a291cdc64a9359345fc2cef14c145b5128a14e9057c",
+      "python_sha256": "c2fcc278f53c8630854eba1a13f58202497191599c6cc98591e6768210f0631d",
+      "tests": [
+        [
+          [
+            13,
+            6
+          ],
+          15
+        ],
+        [
+          [
+            10,
+            3
+          ],
+          13
+        ]
+      ],
+      "qualification": {
+        "public": "2/2",
+        "random": "20/20",
+        "passed": true
+      }
+    }
+  ]
+}

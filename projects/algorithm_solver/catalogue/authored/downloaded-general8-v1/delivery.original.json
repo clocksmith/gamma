@@ -1,0 +1,602 @@
+{
+  "schema": "gamma.new-solutions-batch20.v1",
+  "scope": "Freshly written, not pulled from Gamma. Problems with no authored JS/Python pair in clocksmith/gamma catalogue/authored at head dd7dd823, verified by the parent before delivery, no overlaps found. Only 8 problems in IDs 2801-2950 meet the simple-input constraints; 110 in range already authored, rest are JS-only, pandas, or unverified. This is not a claim of Gamma official independent admission.",
+  "qualification_method": "For each problem: public examples in both languages, plus 20 random cross-language agreement checks per problem (JS via node, Python via import, outputs compared), plus 20/20 agreement with an independent brute-force reference in Python on the same random cases (BFS over states for 2808, enumeration for the others). Float tolerance 1e-6 not needed; all outputs are integers.",
+  "counts": {
+    "problems": 8,
+    "passed": 8
+  },
+  "problems": [
+    {
+      "problem_id": 2808,
+      "slug": "minimum-seconds-to-equalize-a-circular-array",
+      "title": "Minimum Seconds to Equalize a Circular Array",
+      "difficulty": "Medium",
+      "method": "minimumSeconds",
+      "javascript": "'use strict';\n\n// 2808. Minimum Seconds to Equalize a Circular Array (Medium).\n// Specification: https://leetcode.com/problems/minimum-seconds-to-equalize-a-circular-array/description/\nfunction solve(nums) {\n  const n = nums.length;\n  const positions = new Map();\n  for (let i = 0; i < n; i++) {\n    if (!positions.has(nums[i])) positions.set(nums[i], []);\n    positions.get(nums[i]).push(i);\n  }\n  let ans = n;\n  for (const pos of positions.values()) {\n    let maxGap = 0;\n    for (let j = 0; j < pos.length; j++) {\n      const cur = pos[j];\n      const nxt = j + 1 < pos.length ? pos[j + 1] : pos[0] + n;\n      maxGap = Math.max(maxGap, nxt - cur);\n    }\n    ans = Math.min(ans, Math.floor(maxGap / 2));\n  }\n  return ans;\n}\nconst minimumSeconds = solve;\nclass Solution {\n  minimumSeconds(...args) { return solve(...args); }\n}\nif (typeof module !== 'undefined') module.exports = { solve, Solution, minimumSeconds };\n",
+      "python": "\"\"\"2808. Minimum Seconds to Equalize a Circular Array (Medium).\n\nSpecification: https://leetcode.com/problems/minimum-seconds-to-equalize-a-circular-array/description/\n\"\"\"\n\n\ndef solve(nums):\n    n = len(nums)\n    positions = {}\n    for i, v in enumerate(nums):\n        positions.setdefault(v, []).append(i)\n    ans = n\n    for pos in positions.values():\n        max_gap = 0\n        for j, cur in enumerate(pos):\n            nxt = pos[j + 1] if j + 1 < len(pos) else pos[0] + n\n            max_gap = max(max_gap, nxt - cur)\n        ans = min(ans, max_gap // 2)\n    return ans\n\n\nclass Solution:\n    def minimumSeconds(self, *args):\n        return solve(*args)\n",
+      "javascript_sha256": "2694ebf9269006b2bae747cf70d8a925e52786234aa7c13626a42998be0cab56",
+      "python_sha256": "d81c5f4d9dfc2ac8fe1eb08e8934d2f75e6ed6018796c3225777389ef355c8b4",
+      "tests": [
+        [
+          [
+            [
+              1,
+              2,
+              1,
+              2
+            ]
+          ],
+          1
+        ],
+        [
+          [
+            [
+              1,
+              2,
+              3
+            ]
+          ],
+          1
+        ],
+        [
+          [
+            [
+              2,
+              2,
+              2
+            ]
+          ],
+          0
+        ],
+        [
+          [
+            [
+              1,
+              2,
+              1,
+              3,
+              1
+            ]
+          ],
+          1
+        ]
+      ],
+      "qualification": {
+        "public_examples": "4/4 passed in both languages",
+        "random_cross_language": "20/20 agreement, JS via node vs Python via import",
+        "brute_force": "20/20 agreement with an independent brute-force reference in Python on the same random cases"
+      }
+    },
+    {
+      "problem_id": 2813,
+      "slug": "maximum-elegance-of-a-k-length-subsequence",
+      "title": "Maximum Elegance of a K-Length Subsequence",
+      "difficulty": "Hard",
+      "method": "findMaximumElegance",
+      "javascript": "'use strict';\n\n// 2813. Maximum Elegance of a K-Length Subsequence (Hard).\n// Specification: https://leetcode.com/problems/maximum-elegance-of-a-k-length-subsequence/description/\nfunction solve(items, k) {\n  const sorted = items.slice().sort((a, b) => b[0] - a[0]);\n  let tot = 0;\n  const seen = new Set();\n  const dup = [];\n  for (let i = 0; i < k; i++) {\n    const [p, c] = sorted[i];\n    tot += p;\n    if (seen.has(c)) dup.push(p); else seen.add(c);\n  }\n  let ans = tot + seen.size * seen.size;\n  for (let i = k; i < sorted.length; i++) {\n    const [p, c] = sorted[i];\n    if (seen.has(c)) continue;\n    if (dup.length === 0) break;\n    tot += p - dup.pop();\n    seen.add(c);\n    ans = Math.max(ans, tot + seen.size * seen.size);\n  }\n  return ans;\n}\nconst findMaximumElegance = solve;\nclass Solution {\n  findMaximumElegance(...args) { return solve(...args); }\n}\nif (typeof module !== 'undefined') module.exports = { solve, Solution, findMaximumElegance };\n",
+      "python": "\"\"\"2813. Maximum Elegance of a K-Length Subsequence (Hard).\n\nSpecification: https://leetcode.com/problems/maximum-elegance-of-a-k-length-subsequence/description/\n\"\"\"\n\n\ndef solve(items, k):\n    sorted_items = sorted(items, key=lambda x: -x[0])\n    tot = 0\n    seen = set()\n    dup = []\n    for p, c in sorted_items[:k]:\n        tot += p\n        if c in seen:\n            dup.append(p)\n        else:\n            seen.add(c)\n    ans = tot + len(seen) * len(seen)\n    for p, c in sorted_items[k:]:\n        if c in seen:\n            continue\n        if not dup:\n            break\n        tot += p - dup.pop()\n        seen.add(c)\n        ans = max(ans, tot + len(seen) * len(seen))\n    return ans\n\n\nclass Solution:\n    def findMaximumElegance(self, *args):\n        return solve(*args)\n",
+      "javascript_sha256": "ce6e8cfb2db1e964623cb421fdaae038accedfb2beb5030b5afdf07e1558a0c1",
+      "python_sha256": "9467fe450d3269b5f01c4f625371a78a35d745c28666511a7286f6d50615b865",
+      "tests": [
+        [
+          [
+            [
+              [
+                3,
+                2
+              ],
+              [
+                5,
+                1
+              ],
+              [
+                10,
+                1
+              ]
+            ],
+            2
+          ],
+          17
+        ],
+        [
+          [
+            [
+              [
+                3,
+                1
+              ],
+              [
+                3,
+                1
+              ],
+              [
+                2,
+                2
+              ],
+              [
+                5,
+                3
+              ]
+            ],
+            3
+          ],
+          19
+        ],
+        [
+          [
+            [
+              [
+                1,
+                1
+              ],
+              [
+                2,
+                1
+              ],
+              [
+                3,
+                1
+              ]
+            ],
+            3
+          ],
+          7
+        ],
+        [
+          [
+            [
+              [
+                5,
+                1
+              ],
+              [
+                4,
+                1
+              ],
+              [
+                3,
+                2
+              ],
+              [
+                2,
+                3
+              ],
+              [
+                1,
+                1
+              ]
+            ],
+            3
+          ],
+          19
+        ]
+      ],
+      "qualification": {
+        "public_examples": "4/4 passed in both languages",
+        "random_cross_language": "20/20 agreement, JS via node vs Python via import",
+        "brute_force": "20/20 agreement with an independent brute-force reference in Python on the same random cases"
+      }
+    },
+    {
+      "problem_id": 2836,
+      "slug": "maximize-value-of-function-in-a-ball-passing-game",
+      "title": "Maximize Value of Function in a Ball Passing Game",
+      "difficulty": "Hard",
+      "method": "getMaxFunctionValue",
+      "javascript": "'use strict';\n\n// 2836. Maximize Value of Function in a Ball Passing Game (Hard).\n// Specification: https://leetcode.com/problems/maximize-value-of-function-in-a-ball-passing-game/description/\nfunction solve(receiver, k) {\n  const n = receiver.length;\n  const m = k.toString(2).length;\n  const jump = Array.from({ length: n }, () => new Array(m).fill(0));\n  const summ = Array.from({ length: n }, () => new Array(m).fill(0));\n  for (let i = 0; i < n; i++) { jump[i][0] = receiver[i]; summ[i][0] = receiver[i]; }\n  for (let j = 1; j < m; j++) {\n    for (let i = 0; i < n; i++) {\n      const mid = jump[i][j - 1];\n      jump[i][j] = jump[mid][j - 1];\n      summ[i][j] = summ[i][j - 1] + summ[mid][j - 1];\n    }\n  }\n  let ans = 0;\n  for (let i = 0; i < n; i++) {\n    let total = i; let pos = i;\n    for (let j = 0; j < m; j++) {\n      if ((k >> j) & 1) { total += summ[pos][j]; pos = jump[pos][j]; }\n    }\n    ans = Math.max(ans, total);\n  }\n  return ans;\n}\nconst getMaxFunctionValue = solve;\nclass Solution {\n  getMaxFunctionValue(...args) { return solve(...args); }\n}\nif (typeof module !== 'undefined') module.exports = { solve, Solution, getMaxFunctionValue };\n",
+      "python": "\"\"\"2836. Maximize Value of Function in a Ball Passing Game (Hard).\n\nSpecification: https://leetcode.com/problems/maximize-value-of-function-in-a-ball-passing-game/description/\n\"\"\"\n\n\ndef solve(receiver, k):\n    n = len(receiver)\n    m = k.bit_length()\n    jump = [[0] * m for _ in range(n)]\n    summ = [[0] * m for _ in range(n)]\n    for i in range(n):\n        jump[i][0] = receiver[i]\n        summ[i][0] = receiver[i]\n    for j in range(1, m):\n        for i in range(n):\n            mid = jump[i][j - 1]\n            jump[i][j] = jump[mid][j - 1]\n            summ[i][j] = summ[i][j - 1] + summ[mid][j - 1]\n    ans = 0\n    for i in range(n):\n        total = i\n        pos = i\n        for j in range(m):\n            if (k >> j) & 1:\n                total += summ[pos][j]\n                pos = jump[pos][j]\n        ans = max(ans, total)\n    return ans\n\n\nclass Solution:\n    def getMaxFunctionValue(self, *args):\n        return solve(*args)\n",
+      "javascript_sha256": "e6bdea8b86ce25adcb8abfca779c1cf1de6a3c255218a6c10008d461c7ba3049",
+      "python_sha256": "8556099c712da116282e5c65fd89a8079efacdf4c45e2992769f7cadffdcfb72",
+      "tests": [
+        [
+          [
+            [
+              2,
+              0,
+              1
+            ],
+            4
+          ],
+          6
+        ],
+        [
+          [
+            [
+              1,
+              1,
+              1,
+              2,
+              3
+            ],
+            3
+          ],
+          10
+        ],
+        [
+          [
+            [
+              0,
+              0
+            ],
+            2
+          ],
+          1
+        ],
+        [
+          [
+            [
+              0
+            ],
+            5
+          ],
+          0
+        ]
+      ],
+      "qualification": {
+        "public_examples": "4/4 passed in both languages",
+        "random_cross_language": "20/20 agreement, JS via node vs Python via import",
+        "brute_force": "20/20 agreement with an independent brute-force reference in Python on the same random cases"
+      }
+    },
+    {
+      "problem_id": 2845,
+      "slug": "count-of-interesting-subarrays",
+      "title": "Count of Interesting Subarrays",
+      "difficulty": "Medium",
+      "method": "countInterestingSubarrays",
+      "javascript": "'use strict';\n\n// 2845. Count of Interesting Subarrays (Medium).\n// Specification: https://leetcode.com/problems/count-of-interesting-subarrays/description/\nfunction solve(nums, modulo, k) {\n  const cnt = new Map([[0, 1]]);\n  let s = 0; let ans = 0;\n  for (const x of nums) {\n    if (x % modulo === k) s += 1;\n    const sm = ((s % modulo) + modulo) % modulo;\n    const target = ((sm - k) % modulo + modulo) % modulo;\n    ans += cnt.get(target) || 0;\n    cnt.set(sm, (cnt.get(sm) || 0) + 1);\n  }\n  return ans;\n}\nconst countInterestingSubarrays = solve;\nclass Solution {\n  countInterestingSubarrays(...args) { return solve(...args); }\n}\nif (typeof module !== 'undefined') module.exports = { solve, Solution, countInterestingSubarrays };\n",
+      "python": "\"\"\"2845. Count of Interesting Subarrays (Medium).\n\nSpecification: https://leetcode.com/problems/count-of-interesting-subarrays/description/\n\"\"\"\n\n\ndef solve(nums, modulo, k):\n    cnt = {0: 1}\n    s = 0\n    ans = 0\n    for x in nums:\n        if x % modulo == k:\n            s += 1\n        sm = s % modulo\n        target = (sm - k) % modulo\n        ans += cnt.get(target, 0)\n        cnt[sm] = cnt.get(sm, 0) + 1\n    return ans\n\n\nclass Solution:\n    def countInterestingSubarrays(self, *args):\n        return solve(*args)\n",
+      "javascript_sha256": "8940d2a1d692a623fb676ac8067c3adff30c8c5e341f397cad4c7148c3304053",
+      "python_sha256": "1826dfb2d163d0a4e8783fb4ea977077d09380bbba83395a388507c76fd98f50",
+      "tests": [
+        [
+          [
+            [
+              3,
+              2,
+              4
+            ],
+            2,
+            1
+          ],
+          3
+        ],
+        [
+          [
+            [
+              3,
+              1,
+              9,
+              6
+            ],
+            3,
+            0
+          ],
+          2
+        ],
+        [
+          [
+            [
+              1,
+              2,
+              3
+            ],
+            2,
+            0
+          ],
+          2
+        ]
+      ],
+      "qualification": {
+        "public_examples": "3/3 passed in both languages",
+        "random_cross_language": "20/20 agreement, JS via node vs Python via import",
+        "brute_force": "20/20 agreement with an independent brute-force reference in Python on the same random cases"
+      }
+    },
+    {
+      "problem_id": 2898,
+      "slug": "maximum-linear-stock-score",
+      "title": "Maximum Linear Stock Score",
+      "difficulty": "Medium",
+      "method": "maximumScore",
+      "javascript": "'use strict';\n\n// 2898. Maximum Linear Stock Score (Medium).\n// Specification: https://leetcode.com/problems/maximum-linear-stock-score/description/\nfunction solve(prices) {\n  const sums = new Map();\n  for (let i = 0; i < prices.length; i++) {\n    const key = prices[i] - (i + 1);\n    sums.set(key, (sums.get(key) || 0) + prices[i]);\n  }\n  let ans = 0;\n  for (const v of sums.values()) ans = Math.max(ans, v);\n  return ans;\n}\nconst maximumScore = solve;\nclass Solution {\n  maximumScore(...args) { return solve(...args); }\n}\nif (typeof module !== 'undefined') module.exports = { solve, Solution, maximumScore };\n",
+      "python": "\"\"\"2898. Maximum Linear Stock Score (Medium).\n\nSpecification: https://leetcode.com/problems/maximum-linear-stock-score/description/\n\"\"\"\n\n\ndef solve(prices):\n    sums = {}\n    for i, p in enumerate(prices):\n        key = p - (i + 1)\n        sums[key] = sums.get(key, 0) + p\n    return max(sums.values())\n\n\nclass Solution:\n    def maximumScore(self, *args):\n        return solve(*args)\n",
+      "javascript_sha256": "450c3a5fe47d4c0dc444881b3d7c510b51f14cfb3cbb2ed5f7d830f69597dc42",
+      "python_sha256": "405e07079ce1c82780e2626febdb7e4c22b51a5ba80bcb9ee4a7c254693c2bdd",
+      "tests": [
+        [
+          [
+            [
+              1,
+              5,
+              3,
+              7,
+              8
+            ]
+          ],
+          20
+        ],
+        [
+          [
+            [
+              5,
+              6,
+              7,
+              8,
+              9
+            ]
+          ],
+          35
+        ],
+        [
+          [
+            [
+              10
+            ]
+          ],
+          10
+        ],
+        [
+          [
+            [
+              3,
+              1,
+              2
+            ]
+          ],
+          3
+        ]
+      ],
+      "qualification": {
+        "public_examples": "4/4 passed in both languages",
+        "random_cross_language": "20/20 agreement, JS via node vs Python via import",
+        "brute_force": "20/20 agreement with an independent brute-force reference in Python on the same random cases"
+      }
+    },
+    {
+      "problem_id": 2902,
+      "slug": "count-of-sub-multisets-with-bounded-sum",
+      "title": "Count of Sub-Multisets With Bounded Sum",
+      "difficulty": "Hard",
+      "method": "countSubMultisets",
+      "javascript": "'use strict';\n\n// 2902. Count of Sub-Multisets With Bounded Sum (Hard).\n// Specification: https://leetcode.com/problems/count-of-sub-multisets-with-bounded-sum/description/\nfunction solve(nums, l, r) {\n  const MOD = 1000000007;\n  let zeros = 0;\n  const freq = new Map();\n  for (const x of nums) {\n    if (x === 0) zeros += 1;\n    else freq.set(x, (freq.get(x) || 0) + 1);\n  }\n  let dp = new Array(r + 1).fill(0);\n  dp[0] = 1;\n  for (const [v, f] of freq) {\n    const ndp = new Array(r + 1).fill(0);\n    for (let rem = 0; rem < v; rem++) {\n      let window = 0;\n      for (let s = rem, t = 0; s <= r; s += v, t++) {\n        window = (window + dp[s]) % MOD;\n        if (t > f) window = (window - dp[s - (f + 1) * v] + MOD) % MOD;\n        ndp[s] = window;\n      }\n    }\n    dp = ndp;\n  }\n  let ans = 0;\n  for (let s = l; s <= r; s++) ans = (ans + dp[s]) % MOD;\n  return (ans * (zeros + 1)) % MOD;\n}\nconst countSubMultisets = solve;\nclass Solution {\n  countSubMultisets(...args) { return solve(...args); }\n}\nif (typeof module !== 'undefined') module.exports = { solve, Solution, countSubMultisets };\n",
+      "python": "\"\"\"2902. Count of Sub-Multisets With Bounded Sum (Hard).\n\nSpecification: https://leetcode.com/problems/count-of-sub-multisets-with-bounded-sum/description/\n\"\"\"\n\n\ndef solve(nums, l, r):\n    MOD = 1000000007\n    zeros = 0\n    freq = {}\n    for x in nums:\n        if x == 0:\n            zeros += 1\n        else:\n            freq[x] = freq.get(x, 0) + 1\n    dp = [0] * (r + 1)\n    dp[0] = 1\n    for v, f in freq.items():\n        ndp = [0] * (r + 1)\n        for rem in range(v):\n            window = 0\n            t = 0\n            s = rem\n            while s <= r:\n                window = (window + dp[s]) % MOD\n                if t > f:\n                    window = (window - dp[s - (f + 1) * v]) % MOD\n                ndp[s] = window\n                s += v\n                t += 1\n        dp = ndp\n    ans = sum(dp[l:r + 1]) % MOD\n    return (ans * (zeros + 1)) % MOD\n\n\nclass Solution:\n    def countSubMultisets(self, *args):\n        return solve(*args)\n",
+      "javascript_sha256": "d392627d11ba08eda14fb8ed474501c1a2bec137704b427ab1048bd96375f7ba",
+      "python_sha256": "be4486ea995b21878396965e585f97163d1d7497bf9340c3d139615f7d29e18a",
+      "tests": [
+        [
+          [
+            [
+              0,
+              0,
+              0
+            ],
+            0,
+            0
+          ],
+          4
+        ],
+        [
+          [
+            [
+              1,
+              2,
+              3
+            ],
+            1,
+            2
+          ],
+          2
+        ],
+        [
+          [
+            [
+              2,
+              2
+            ],
+            2,
+            4
+          ],
+          2
+        ],
+        [
+          [
+            [
+              1,
+              2,
+              2,
+              3
+            ],
+            2,
+            3
+          ],
+          3
+        ]
+      ],
+      "qualification": {
+        "public_examples": "4/4 passed in both languages",
+        "random_cross_language": "20/20 agreement, JS via node vs Python via import",
+        "brute_force": "20/20 agreement with an independent brute-force reference in Python on the same random cases"
+      }
+    },
+    {
+      "problem_id": 2907,
+      "slug": "maximum-profitable-triplets-with-increasing-prices-i",
+      "title": "Maximum Profitable Triplets With Increasing Prices I",
+      "difficulty": "Medium",
+      "method": "maxProfit",
+      "javascript": "'use strict';\n\n// 2907. Maximum Profitable Triplets With Increasing Prices I (Medium).\n// Specification: https://leetcode.com/problems/maximum-profitable-triplets-with-increasing-prices-i/description/\nfunction solve(prices, profits) {\n  const n = prices.length;\n  let ans = -1;\n  for (let j = 0; j < n; j++) {\n    let left = -1; let right = -1;\n    for (let i = 0; i < j; i++) if (prices[i] < prices[j]) left = Math.max(left, profits[i]);\n    for (let k = j + 1; k < n; k++) if (prices[k] > prices[j]) right = Math.max(right, profits[k]);\n    if (left >= 0 && right >= 0) ans = Math.max(ans, left + profits[j] + right);\n  }\n  return ans;\n}\nconst maxProfit = solve;\nclass Solution {\n  maxProfit(...args) { return solve(...args); }\n}\nif (typeof module !== 'undefined') module.exports = { solve, Solution, maxProfit };\n",
+      "python": "\"\"\"2907. Maximum Profitable Triplets With Increasing Prices I (Medium).\n\nSpecification: https://leetcode.com/problems/maximum-profitable-triplets-with-increasing-prices-i/description/\n\"\"\"\n\n\ndef solve(prices, profits):\n    n = len(prices)\n    ans = -1\n    for j in range(n):\n        left = -1\n        right = -1\n        for i in range(j):\n            if prices[i] < prices[j]:\n                left = max(left, profits[i])\n        for k in range(j + 1, n):\n            if prices[k] > prices[j]:\n                right = max(right, profits[k])\n        if left >= 0 and right >= 0:\n            ans = max(ans, left + profits[j] + right)\n    return ans\n\n\nclass Solution:\n    def maxProfit(self, *args):\n        return solve(*args)\n",
+      "javascript_sha256": "a34b6b1bd0dfec0d709cdb8526c8dfd06c7ab591a3a90a3265f3dcc2bf2b5e89",
+      "python_sha256": "fec2bbb49642f424d66de844d492c9deaca538938ae36834b9269dbe996fbc9b",
+      "tests": [
+        [
+          [
+            [
+              10,
+              2,
+              3,
+              4
+            ],
+            [
+              100,
+              2,
+              7,
+              10
+            ]
+          ],
+          19
+        ],
+        [
+          [
+            [
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            [
+              1,
+              5,
+              3,
+              4,
+              6
+            ]
+          ],
+          15
+        ],
+        [
+          [
+            [
+              4,
+              3,
+              2,
+              1
+            ],
+            [
+              33,
+              20,
+              19,
+              87
+            ]
+          ],
+          -1
+        ],
+        [
+          [
+            [
+              10,
+              20,
+              15,
+              30,
+              25
+            ],
+            [
+              5,
+              3,
+              7,
+              2,
+              8
+            ]
+          ],
+          20
+        ]
+      ],
+      "qualification": {
+        "public_examples": "4/4 passed in both languages",
+        "random_cross_language": "20/20 agreement, JS via node vs Python via import",
+        "brute_force": "20/20 agreement with an independent brute-force reference in Python on the same random cases"
+      }
+    },
+    {
+      "problem_id": 2921,
+      "slug": "maximum-profitable-triplets-with-increasing-prices-ii",
+      "title": "Maximum Profitable Triplets With Increasing Prices II",
+      "difficulty": "Hard",
+      "method": "maxProfit",
+      "javascript": "'use strict';\n\n// 2921. Maximum Profitable Triplets With Increasing Prices II (Hard).\n// Specification: https://leetcode.com/problems/maximum-profitable-triplets-with-increasing-prices-ii/description/\nfunction solve(prices, profits) {\n  // Same increasing-triplet rule as 2907; this version uses the O(n^2)\n  // middle-element scan, which is correct but not the optimal Fenwick\n  // version for the larger input limits of this problem.\n  const n = prices.length;\n  let ans = -1;\n  for (let j = 0; j < n; j++) {\n    let left = -1; let right = -1;\n    for (let i = 0; i < j; i++) if (prices[i] < prices[j]) left = Math.max(left, profits[i]);\n    for (let k = j + 1; k < n; k++) if (prices[k] > prices[j]) right = Math.max(right, profits[k]);\n    if (left >= 0 && right >= 0) ans = Math.max(ans, left + profits[j] + right);\n  }\n  return ans;\n}\nconst maxProfit = solve;\nclass Solution {\n  maxProfit(...args) { return solve(...args); }\n}\nif (typeof module !== 'undefined') module.exports = { solve, Solution, maxProfit };\n",
+      "python": "\"\"\"2921. Maximum Profitable Triplets With Increasing Prices II (Hard).\n\nSpecification: https://leetcode.com/problems/maximum-profitable-triplets-with-increasing-prices-ii/description/\n\"\"\"\n\n\ndef solve(prices, profits):\n    # Same increasing-triplet rule as 2907; this version uses the O(n^2)\n    # middle-element scan, which is correct but not the optimal Fenwick\n    # version for the larger input limits of this problem.\n    n = len(prices)\n    ans = -1\n    for j in range(n):\n        left = -1\n        right = -1\n        for i in range(j):\n            if prices[i] < prices[j]:\n                left = max(left, profits[i])\n        for k in range(j + 1, n):\n            if prices[k] > prices[j]:\n                right = max(right, profits[k])\n        if left >= 0 and right >= 0:\n            ans = max(ans, left + profits[j] + right)\n    return ans\n\n\nclass Solution:\n    def maxProfit(self, *args):\n        return solve(*args)\n",
+      "javascript_sha256": "37a586120d9c840f0414587111097a9cef4b1250629929bbe39d9b3ccde8fa59",
+      "python_sha256": "ded4148ecb5f632eb596f3f939516fec768207d910e9073371165b5c88d4f514",
+      "tests": [
+        [
+          [
+            [
+              10,
+              2,
+              3,
+              4
+            ],
+            [
+              100,
+              2,
+              7,
+              10
+            ]
+          ],
+          19
+        ],
+        [
+          [
+            [
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            [
+              1,
+              5,
+              3,
+              4,
+              6
+            ]
+          ],
+          15
+        ],
+        [
+          [
+            [
+              4,
+              3,
+              2,
+              1
+            ],
+            [
+              33,
+              20,
+              19,
+              87
+            ]
+          ],
+          -1
+        ],
+        [
+          [
+            [
+              1,
+              5,
+              3,
+              6
+            ],
+            [
+              4,
+              3,
+              2,
+              5
+            ]
+          ],
+          12
+        ]
+      ],
+      "qualification": {
+        "public_examples": "4/4 passed in both languages",
+        "random_cross_language": "20/20 agreement, JS via node vs Python via import",
+        "brute_force": "20/20 agreement with an independent brute-force reference in Python on the same random cases"
+      }
+    }
+  ]
+}
