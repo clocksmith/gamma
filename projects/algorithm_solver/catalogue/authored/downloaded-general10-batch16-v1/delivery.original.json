@@ -1,0 +1,565 @@
+{
+  "schema": "gamma.new-solutions-batch16.v1",
+  "scope": "Freshly written, not pulled from Gamma. Problems with no authored JS/Python pair in clocksmith/gamma catalogue/authored at head dd7dd823, verified against authored set and all previous batch bundles, no overlaps found. Only 10 problems in IDs 2201-2350 meet the simple-input constraints: 123 of 150 IDs in the range are already authored, and the remaining non-authored IDs are mostly SQL, class designs, tree problems, or a hard grid problem. This is not a claim of Gamma official independent admission.",
+  "qualification_method": "For each problem: public examples plus 20 random cross-language agreement checks per problem, JS via node and Python via import, outputs compared. Two initial public-test expectations for 2269 were corrected during qualification (430043 is divisible by 43, and for (300, 1) only the digit 3 divides 300); both solutions agreed throughout and no solution was changed for those failures.",
+  "counts": {
+    "problems": 10,
+    "passed": 10
+  },
+  "problems": [
+    {
+      "problem_id": 2201,
+      "slug": "count-artifacts-that-can-be-extracted",
+      "title": "Count Artifacts That Can Be Extracted",
+      "difficulty": "Medium",
+      "method": "digArtifacts",
+      "javascript": "'use strict';\n\n// 2201. Count Artifacts That Can Be Extracted (Medium).\n// Specification: https://leetcode.com/problems/count-artifacts-that-can-be-extracted/description/\nfunction solve(n, artifacts, dig) {\n  const dug = new Set(dig.map((c) => c[0] + ',' + c[1]));\n  let count = 0;\n  for (const art of artifacts) {\n    let ok = true;\n    for (let r = art[0]; r <= art[2] && ok; r++) {\n      for (let c = art[1]; c <= art[3]; c++) {\n        if (!dug.has(r + ',' + c)) { ok = false; break; }\n      }\n    }\n    if (ok) count++;\n  }\n  return count;\n}\nconst digArtifacts = solve;\nclass Solution { digArtifacts(n, artifacts, dig) { return solve(n, artifacts, dig); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, digArtifacts };\n",
+      "python": "\"\"\"2201. Count Artifacts That Can Be Extracted (Medium).\n\nSpecification: https://leetcode.com/problems/count-artifacts-that-can-be-extracted/description/\n\"\"\"\n\n\ndef solve(n: int, artifacts: list[list[int]], dig: list[list[int]]) -> int:\n    dug = {(r, c) for r, c in dig}\n    count = 0\n    for r1, c1, r2, c2 in artifacts:\n        if all((r, c) in dug for r in range(r1, r2 + 1) for c in range(c1, c2 + 1)):\n            count += 1\n    return count\n\n\nclass Solution:\n    def digArtifacts(self, n, artifacts, dig) -> object:\n        return solve(n, artifacts, dig)\n",
+      "javascript_sha256": "1cc512362af5354805fabcdadba9815efb35622c002393da91c2ff47c6283568",
+      "python_sha256": "535b87388a385b50b80257cc7857608c5e5bac6971b13e689126a94da214ee7b",
+      "tests": [
+        [
+          [
+            2,
+            [
+              [
+                0,
+                0,
+                0,
+                0
+              ],
+              [
+                0,
+                1,
+                1,
+                1
+              ]
+            ],
+            [
+              [
+                0,
+                0
+              ],
+              [
+                0,
+                1
+              ]
+            ]
+          ],
+          1
+        ],
+        [
+          [
+            2,
+            [
+              [
+                0,
+                0,
+                0,
+                0
+              ],
+              [
+                0,
+                1,
+                1,
+                1
+              ]
+            ],
+            [
+              [
+                0,
+                0
+              ],
+              [
+                0,
+                1
+              ],
+              [
+                1,
+                1
+              ]
+            ]
+          ],
+          2
+        ],
+        [
+          [
+            1,
+            [
+              [
+                0,
+                0,
+                0,
+                0
+              ]
+            ],
+            []
+          ],
+          0
+        ]
+      ],
+      "qualification": {
+        "problem_id": 2201,
+        "passed": true,
+        "public_passed": true,
+        "random_agreement": "20/20"
+      }
+    },
+    {
+      "problem_id": 2222,
+      "slug": "number-of-ways-to-select-buildings",
+      "title": "Number of Ways to Select Buildings",
+      "difficulty": "Medium",
+      "method": "numberOfWays",
+      "javascript": "'use strict';\n\n// 2222. Number of Ways to Select Buildings (Medium).\n// Specification: https://leetcode.com/problems/number-of-ways-to-select-buildings/description/\nfunction solve(s) {\n  const total = [0, 0];\n  for (const ch of s) total[ch === '1' ? 1 : 0]++;\n  const left = [0, 0];\n  const right = total.slice();\n  let ans = 0;\n  for (const ch of s) {\n    const x = ch === '1' ? 1 : 0;\n    right[x]--;\n    ans += left[1 - x] * right[1 - x];\n    left[x]++;\n  }\n  return ans;\n}\nconst numberOfWays = solve;\nclass Solution { numberOfWays(s) { return solve(s); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, numberOfWays };\n",
+      "python": "\"\"\"2222. Number of Ways to Select Buildings (Medium).\n\nSpecification: https://leetcode.com/problems/number-of-ways-to-select-buildings/description/\n\"\"\"\n\n\ndef solve(s: str) -> int:\n    total = [0, 0]\n    for ch in s:\n        total[1 if ch == '1' else 0] += 1\n    left = [0, 0]\n    right = total[:]\n    ans = 0\n    for ch in s:\n        x = 1 if ch == '1' else 0\n        right[x] -= 1\n        ans += left[1 - x] * right[1 - x]\n        left[x] += 1\n    return ans\n\n\nclass Solution:\n    def numberOfWays(self, s) -> object:\n        return solve(s)\n",
+      "javascript_sha256": "c5199da2e3c3134835c76f4dd8f650c47c031a5a1462f5b039cc7cc4cf0f3411",
+      "python_sha256": "ddf3500d492f4bd8a1ea87adbd66f8a04855138d3c4408cbb2877b6fd457e2fe",
+      "tests": [
+        [
+          [
+            "001101"
+          ],
+          6
+        ],
+        [
+          [
+            "11100"
+          ],
+          0
+        ],
+        [
+          [
+            "010"
+          ],
+          1
+        ]
+      ],
+      "qualification": {
+        "problem_id": 2222,
+        "passed": true,
+        "public_passed": true,
+        "random_agreement": "20/20"
+      }
+    },
+    {
+      "problem_id": 2229,
+      "slug": "check-if-an-array-is-consecutive",
+      "title": "Check if an Array Is Consecutive",
+      "difficulty": "Easy",
+      "method": "isConsecutive",
+      "javascript": "'use strict';\n\n// 2229. Check if an Array Is Consecutive (Easy).\n// Specification: https://leetcode.com/problems/check-if-an-array-is-consecutive/description/\nfunction solve(nums) {\n  if (nums.length === 0) return false;\n  const seen = new Set(nums);\n  if (seen.size !== nums.length) return false;\n  return Math.max(...nums) - Math.min(...nums) === nums.length - 1;\n}\nconst isConsecutive = solve;\nclass Solution { isConsecutive(nums) { return solve(nums); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, isConsecutive };\n",
+      "python": "\"\"\"2229. Check if an Array Is Consecutive (Easy).\n\nSpecification: https://leetcode.com/problems/check-if-an-array-is-consecutive/description/\n\"\"\"\n\n\ndef solve(nums: list[int]) -> bool:\n    if not nums:\n        return False\n    if len(set(nums)) != len(nums):\n        return False\n    return max(nums) - min(nums) == len(nums) - 1\n\n\nclass Solution:\n    def isConsecutive(self, nums) -> object:\n        return solve(nums)\n",
+      "javascript_sha256": "f97aaddb76718e324a1aadefadaae68bddcea897d0820959fe474d3260be5748",
+      "python_sha256": "d4563c4e3c1915cbaa5cca8fb15f8750453367cb6a4751b66b28283a0fd7df8f",
+      "tests": [
+        [
+          [
+            [
+              1,
+              3,
+              4,
+              2
+            ]
+          ],
+          true
+        ],
+        [
+          [
+            [
+              1,
+              3
+            ]
+          ],
+          false
+        ],
+        [
+          [
+            [
+              3,
+              5,
+              4
+            ]
+          ],
+          true
+        ],
+        [
+          [
+            [
+              1,
+              2,
+              2
+            ]
+          ],
+          false
+        ]
+      ],
+      "qualification": {
+        "problem_id": 2229,
+        "passed": true,
+        "public_passed": true,
+        "random_agreement": "20/20"
+      }
+    },
+    {
+      "problem_id": 2269,
+      "slug": "find-the-k-beauty-of-a-number",
+      "title": "Find the K-Beauty of a Number",
+      "difficulty": "Easy",
+      "method": "divisorSubstrings",
+      "javascript": "'use strict';\n\n// 2269. Find the K-Beauty of a Number (Easy).\n// Specification: https://leetcode.com/problems/find-the-k-beauty-of-a-number/description/\nfunction solve(num, k) {\n  const s = String(num);\n  let count = 0;\n  for (let i = 0; i + k <= s.length; i++) {\n    const v = parseInt(s.slice(i, i + k), 10);\n    if (v !== 0 && num % v === 0) count++;\n  }\n  return count;\n}\nconst divisorSubstrings = solve;\nclass Solution { divisorSubstrings(num, k) { return solve(num, k); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, divisorSubstrings };\n",
+      "python": "\"\"\"2269. Find the K-Beauty of a Number (Easy).\n\nSpecification: https://leetcode.com/problems/find-the-k-beauty-of-a-number/description/\n\"\"\"\n\n\ndef solve(num: int, k: int) -> int:\n    s = str(num)\n    count = 0\n    for i in range(len(s) - k + 1):\n        v = int(s[i:i + k])\n        if v != 0 and num % v == 0:\n            count += 1\n    return count\n\n\nclass Solution:\n    def divisorSubstrings(self, num, k) -> object:\n        return solve(num, k)\n",
+      "javascript_sha256": "51dea65b6bd0a5703a76ffec3e48fb754376e652245e46c4111ef65fb76dea82",
+      "python_sha256": "4facb6edf3da229b3842a7a9a92a894ed042126cef2324bb4ef84bbbcfb8a8f0",
+      "tests": [
+        [
+          [
+            240,
+            2
+          ],
+          2
+        ],
+        [
+          [
+            430043,
+            2
+          ],
+          2
+        ],
+        [
+          [
+            300,
+            1
+          ],
+          1
+        ]
+      ],
+      "qualification": {
+        "problem_id": 2269,
+        "passed": true,
+        "public_passed": true,
+        "random_agreement": "20/20"
+      }
+    },
+    {
+      "problem_id": 2295,
+      "slug": "replace-elements-in-an-array",
+      "title": "Replace Elements in an Array",
+      "difficulty": "Medium",
+      "method": "arrayChange",
+      "javascript": "'use strict';\n\n// 2295. Replace Elements in an Array (Medium).\n// Specification: https://leetcode.com/problems/replace-elements-in-an-array/description/\nfunction solve(nums, operations) {\n  const pos = new Map();\n  nums.forEach((v, i) => pos.set(v, i));\n  const out = nums.slice();\n  for (const op of operations) {\n    const idx = pos.get(op[0]);\n    out[idx] = op[1];\n    pos.delete(op[0]);\n    pos.set(op[1], idx);\n  }\n  return out;\n}\nconst arrayChange = solve;\nclass Solution { arrayChange(nums, operations) { return solve(nums, operations); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, arrayChange };\n",
+      "python": "\"\"\"2295. Replace Elements in an Array (Medium).\n\nSpecification: https://leetcode.com/problems/replace-elements-in-an-array/description/\n\"\"\"\n\n\ndef solve(nums: list[int], operations: list[list[int]]) -> list[int]:\n    pos = {v: i for i, v in enumerate(nums)}\n    out = nums[:]\n    for old, new in operations:\n        idx = pos.pop(old)\n        out[idx] = new\n        pos[new] = idx\n    return out\n\n\nclass Solution:\n    def arrayChange(self, nums, operations) -> object:\n        return solve(nums, operations)\n",
+      "javascript_sha256": "c7c37c189d1605e52b13e3118d6bfebdd8d08271aaae0b71f58a03694e056f3f",
+      "python_sha256": "91674cb1ccf566a380030b37d222e7766927d2d0a25c1166ff6c29f0352cb568",
+      "tests": [
+        [
+          [
+            [
+              1,
+              2,
+              4,
+              6
+            ],
+            [
+              [
+                1,
+                3
+              ],
+              [
+                4,
+                7
+              ],
+              [
+                6,
+                1
+              ]
+            ]
+          ],
+          [
+            3,
+            2,
+            7,
+            1
+          ]
+        ],
+        [
+          [
+            [
+              1,
+              2
+            ],
+            [
+              [
+                1,
+                3
+              ]
+            ]
+          ],
+          [
+            3,
+            2
+          ]
+        ]
+      ],
+      "qualification": {
+        "problem_id": 2295,
+        "passed": true,
+        "public_passed": true,
+        "random_agreement": "20/20"
+      }
+    },
+    {
+      "problem_id": 2300,
+      "slug": "successful-pairs-of-spells-and-potions",
+      "title": "Successful Pairs of Spells and Potions",
+      "difficulty": "Medium",
+      "method": "successfulPairs",
+      "javascript": "'use strict';\n\n// 2300. Successful Pairs of Spells and Potions (Medium).\n// Specification: https://leetcode.com/problems/successful-pairs-of-spells-and-potions/description/\nfunction solve(spells, potions, success) {\n  const sorted = potions.slice().sort((a, b) => a - b);\n  const out = [];\n  for (const spell of spells) {\n    const need = Math.ceil(success / spell);\n    let lo = 0; let hi = sorted.length;\n    while (lo < hi) {\n      const mid = (lo + hi) >> 1;\n      if (sorted[mid] < need) lo = mid + 1; else hi = mid;\n    }\n    out.push(sorted.length - lo);\n  }\n  return out;\n}\nconst successfulPairs = solve;\nclass Solution { successfulPairs(spells, potions, success) { return solve(spells, potions, success); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, successfulPairs };\n",
+      "python": "\"\"\"2300. Successful Pairs of Spells and Potions (Medium).\n\nSpecification: https://leetcode.com/problems/successful-pairs-of-spells-and-potions/description/\n\"\"\"\n\n\ndef solve(spells: list[int], potions: list[int], success: int) -> list[int]:\n    import bisect\n    import math\n    sorted_p = sorted(potions)\n    out = []\n    for spell in spells:\n        need = math.ceil(success / spell)\n        idx = bisect.bisect_left(sorted_p, need)\n        out.append(len(sorted_p) - idx)\n    return out\n\n\nclass Solution:\n    def successfulPairs(self, spells, potions, success) -> object:\n        return solve(spells, potions, success)\n",
+      "javascript_sha256": "079df7335d34898f68f329cd7b871ea59be748b59d9ff2c34242a75c150f996b",
+      "python_sha256": "c11d1d24212abbd166c19261d55defdeba46a2ada76ac94d01f13af776d05b34",
+      "tests": [
+        [
+          [
+            [
+              5,
+              1,
+              3
+            ],
+            [
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            7
+          ],
+          [
+            4,
+            0,
+            3
+          ]
+        ],
+        [
+          [
+            [
+              3,
+              1,
+              2
+            ],
+            [
+              8,
+              5,
+              8
+            ],
+            16
+          ],
+          [
+            2,
+            0,
+            2
+          ]
+        ]
+      ],
+      "qualification": {
+        "problem_id": 2300,
+        "passed": true,
+        "public_passed": true,
+        "random_agreement": "20/20"
+      }
+    },
+    {
+      "problem_id": 2327,
+      "slug": "number-of-people-aware-of-a-secret",
+      "title": "Number of People Aware of a Secret",
+      "difficulty": "Medium",
+      "method": "peopleAwareOfSecret",
+      "javascript": "'use strict';\n\n// 2327. Number of People Aware of a Secret (Medium).\n// Specification: https://leetcode.com/problems/number-of-people-aware-of-a-secret/description/\nfunction solve(n, delay, forget) {\n  const MOD = 1000000007;\n  const dp = new Array(n + 1).fill(0);\n  dp[1] = 1;\n  let window = 0;\n  for (let day = 2; day <= n; day++) {\n    if (day - delay >= 1) window = (window + dp[day - delay]) % MOD;\n    if (day - forget >= 1) window = (window - dp[day - forget] + MOD) % MOD;\n    dp[day] = window;\n  }\n  let ans = 0;\n  for (let day = n - forget + 1; day <= n; day++) {\n    if (day >= 1) ans = (ans + dp[day]) % MOD;\n  }\n  return ans;\n}\nconst peopleAwareOfSecret = solve;\nclass Solution { peopleAwareOfSecret(n, delay, forget) { return solve(n, delay, forget); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, peopleAwareOfSecret };\n",
+      "python": "\"\"\"2327. Number of People Aware of a Secret (Medium).\n\nSpecification: https://leetcode.com/problems/number-of-people-aware-of-a-secret/description/\n\"\"\"\n\n\ndef solve(n: int, delay: int, forget: int) -> int:\n    MOD = 1000000007\n    dp = [0] * (n + 1)\n    dp[1] = 1\n    window = 0\n    for day in range(2, n + 1):\n        if day - delay >= 1:\n            window = (window + dp[day - delay]) % MOD\n        if day - forget >= 1:\n            window = (window - dp[day - forget]) % MOD\n        dp[day] = window\n    ans = 0\n    for day in range(n - forget + 1, n + 1):\n        if day >= 1:\n            ans = (ans + dp[day]) % MOD\n    return ans\n\n\nclass Solution:\n    def peopleAwareOfSecret(self, n, delay, forget) -> object:\n        return solve(n, delay, forget)\n",
+      "javascript_sha256": "6fd23d3371b6fb6f8817a258470ff4767342714bfc6f552bf7140b73ed59931f",
+      "python_sha256": "f1dc87fdf3426ecfa1cc2a593bda3c49030f92ce708ebf9b29833507fa598e90",
+      "tests": [
+        [
+          [
+            6,
+            2,
+            4
+          ],
+          5
+        ],
+        [
+          [
+            4,
+            1,
+            3
+          ],
+          6
+        ],
+        [
+          [
+            1,
+            1,
+            2
+          ],
+          1
+        ]
+      ],
+      "qualification": {
+        "problem_id": 2327,
+        "passed": true,
+        "public_passed": true,
+        "random_agreement": "20/20"
+      }
+    },
+    {
+      "problem_id": 2330,
+      "slug": "valid-palindrome-iv",
+      "title": "Valid Palindrome IV",
+      "difficulty": "Medium",
+      "method": "makePalindrome",
+      "javascript": "'use strict';\n\n// 2330. Valid Palindrome IV (Medium).\n// Specification: https://leetcode.com/problems/valid-palindrome-iv/description/\nfunction solve(s) {\n  let mismatches = 0;\n  let l = 0; let r = s.length - 1;\n  while (l < r) {\n    if (s[l] !== s[r]) mismatches++;\n    l++; r--;\n  }\n  return mismatches <= 2;\n}\nconst makePalindrome = solve;\nclass Solution { makePalindrome(s) { return solve(s); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, makePalindrome };\n",
+      "python": "\"\"\"2330. Valid Palindrome IV (Medium).\n\nSpecification: https://leetcode.com/problems/valid-palindrome-iv/description/\n\"\"\"\n\n\ndef solve(s: str) -> bool:\n    mismatches = 0\n    l, r = 0, len(s) - 1\n    while l < r:\n        if s[l] != s[r]:\n            mismatches += 1\n        l += 1\n        r -= 1\n    return mismatches <= 2\n\n\nclass Solution:\n    def makePalindrome(self, s) -> object:\n        return solve(s)\n",
+      "javascript_sha256": "fb7c54bcf387bb4dff68d2ea23ba1b2c396b8a4180d8906b05bc7d769a870eaf",
+      "python_sha256": "baa643ed629089e3db7268abe73a5154ed131bc799f403129cf01303b15b7550",
+      "tests": [
+        [
+          [
+            "abcdea"
+          ],
+          true
+        ],
+        [
+          [
+            "abcdef"
+          ],
+          false
+        ],
+        [
+          [
+            "abca"
+          ],
+          true
+        ],
+        [
+          [
+            "racecar"
+          ],
+          true
+        ]
+      ],
+      "qualification": {
+        "problem_id": 2330,
+        "passed": true,
+        "public_passed": true,
+        "random_agreement": "20/20"
+      }
+    },
+    {
+      "problem_id": 2338,
+      "slug": "count-the-number-of-ideal-arrays",
+      "title": "Count the Number of Ideal Arrays",
+      "difficulty": "Hard",
+      "method": "idealArrays",
+      "javascript": "'use strict';\n\n// 2338. Count the Number of Ideal Arrays (Hard).\n// Specification: https://leetcode.com/problems/count-the-number-of-ideal-arrays/description/\nfunction solve(n, maxValue) {\n  const MOD = 1000000007;\n  let prev = new Array(maxValue + 1).fill(1);\n  prev[0] = 0;\n  for (let len = 2; len <= n; len++) {\n    const cur = new Array(maxValue + 1).fill(0);\n    for (let d = 1; d <= maxValue; d++) {\n      for (let m = d; m <= maxValue; m += d) {\n        cur[m] = (cur[m] + prev[d]) % MOD;\n      }\n    }\n    prev = cur;\n  }\n  let ans = 0;\n  for (let v = 1; v <= maxValue; v++) ans = (ans + prev[v]) % MOD;\n  return ans;\n}\nconst idealArrays = solve;\nclass Solution { idealArrays(n, maxValue) { return solve(n, maxValue); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, idealArrays };\n",
+      "python": "\"\"\"2338. Count the Number of Ideal Arrays (Hard).\n\nSpecification: https://leetcode.com/problems/count-the-number-of-ideal-arrays/description/\n\"\"\"\n\n\ndef solve(n: int, maxValue: int) -> int:\n    MOD = 1000000007\n    prev = [0] + [1] * maxValue\n    for _len in range(2, n + 1):\n        cur = [0] * (maxValue + 1)\n        for d in range(1, maxValue + 1):\n            for m in range(d, maxValue + 1, d):\n                cur[m] = (cur[m] + prev[d]) % MOD\n        prev = cur\n    return sum(prev[1:]) % MOD\n\n\nclass Solution:\n    def idealArrays(self, n, maxValue) -> object:\n        return solve(n, maxValue)\n",
+      "javascript_sha256": "efcff2c1b63e5f897e181b88d5bec11259c70f3464521504050443f52766a006",
+      "python_sha256": "7b59168937cddcb86214e05fb4fcc1e59cdaea5f5a7ab8bed1e9430c4108004b",
+      "tests": [
+        [
+          [
+            2,
+            5
+          ],
+          10
+        ],
+        [
+          [
+            5,
+            3
+          ],
+          11
+        ],
+        [
+          [
+            1,
+            4
+          ],
+          4
+        ]
+      ],
+      "qualification": {
+        "problem_id": 2338,
+        "passed": true,
+        "public_passed": true,
+        "random_agreement": "20/20"
+      }
+    },
+    {
+      "problem_id": 2344,
+      "slug": "minimum-deletions-to-make-array-divisible",
+      "title": "Minimum Deletions to Make Array Divisible",
+      "difficulty": "Medium",
+      "method": "minOperations",
+      "javascript": "'use strict';\n\n// 2344. Minimum Deletions to Make Array Divisible (Medium).\n// Specification: https://leetcode.com/problems/minimum-deletions-to-make-array-divisible/description/\nfunction solve(nums, numsDivide) {\n  const gcd = (a, b) => (b === 0 ? a : gcd(b, a % b));\n  let g = numsDivide[0];\n  for (const v of numsDivide) g = gcd(g, v);\n  const sorted = nums.slice().sort((a, b) => a - b);\n  for (let i = 0; i < sorted.length; i++) {\n    if (g % sorted[i] === 0) return i;\n  }\n  return -1;\n}\nconst minOperations = solve;\nclass Solution { minOperations(nums, numsDivide) { return solve(nums, numsDivide); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, minOperations };\n",
+      "python": "\"\"\"2344. Minimum Deletions to Make Array Divisible (Medium).\n\nSpecification: https://leetcode.com/problems/minimum-deletions-to-make-array-divisible/description/\n\"\"\"\n\n\ndef solve(nums: list[int], numsDivide: list[int]) -> int:\n    import math\n    g = numsDivide[0]\n    for v in numsDivide:\n        g = math.gcd(g, v)\n    for i, v in enumerate(sorted(nums)):\n        if g % v == 0:\n            return i\n    return -1\n\n\nclass Solution:\n    def minOperations(self, nums, numsDivide) -> object:\n        return solve(nums, numsDivide)\n",
+      "javascript_sha256": "ad3107c7a99035766a4ed0a19b08bf209a872921e890d715e10d45ee4f6dca5a",
+      "python_sha256": "d114e2caa053e947c483033dd72687b7f3f06e9874bd408fe22c7fa56d2106aa",
+      "tests": [
+        [
+          [
+            [
+              2,
+              3,
+              2,
+              4,
+              3
+            ],
+            [
+              9,
+              6,
+              9,
+              3,
+              15
+            ]
+          ],
+          2
+        ],
+        [
+          [
+            [
+              4,
+              3,
+              6
+            ],
+            [
+              8,
+              2,
+              6,
+              10
+            ]
+          ],
+          -1
+        ],
+        [
+          [
+            [
+              3
+            ],
+            [
+              6,
+              9
+            ]
+          ],
+          0
+        ]
+      ],
+      "qualification": {
+        "problem_id": 2344,
+        "passed": true,
+        "public_passed": true,
+        "random_agreement": "20/20"
+      }
+    }
+  ]
+}

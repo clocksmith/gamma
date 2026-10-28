@@ -1,0 +1,720 @@
+{
+  "schema": "gamma.new-solutions-batch17.v1",
+  "scope": "Freshly written, not pulled from Gamma. Problems with no authored JS/Python pair in clocksmith/gamma catalogue/authored at head dd7dd823, verified by the parent before delivery, no overlaps found. Only 13 problems in IDs 2351-2500 meet the simple-input constraints; 129 in range already authored, 8 non-authored skipped as SQL/tree/class/API or unverifiable. This is not a claim of Gamma official independent admission.",
+  "qualification_method": "For each problem: public examples plus 20 random cross-language agreement checks per problem, JS via node and Python via import, outputs compared. Problem 2454 uses a simple O(n squared) scan, not the optimal stack method. Spot-checked independently by the parent for 2364, 2417, 2454, 2491, 2483, all passed.",
+  "counts": {
+    "problems": 13,
+    "passed": 13
+  },
+  "problems": [
+    {
+      "problem_id": 2364,
+      "slug": "count-number-of-bad-pairs",
+      "title": "Count Number of Bad Pairs",
+      "difficulty": "Medium",
+      "method": "countBadPairs",
+      "javascript": "'use strict';\n\n// 2364. Count Number of Bad Pairs (Medium).\n// Specification: https://leetcode.com/problems/count-number-of-bad-pairs/description/\nfunction solve(nums) {\n  const seen = new Map(); let good = 0;\n  for (let i = 0; i < nums.length; i++) {\n    const key = nums[i] - i;\n    good += seen.get(key) || 0;\n    seen.set(key, (seen.get(key) || 0) + 1);\n  }\n  const n = nums.length;\n  return n * (n - 1) / 2 - good;\n}\nconst countBadPairs = solve;\nclass Solution { countBadPairs(nums) { return solve(nums); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, countBadPairs };\n",
+      "python": "\"\"\"2364. Count Number of Bad Pairs (Medium).\n\nSpecification: https://leetcode.com/problems/count-number-of-bad-pairs/description/\n\"\"\"\n\n\ndef solve(nums):\n    seen = {}\n    good = 0\n    for i, v in enumerate(nums):\n        key = v - i\n        good += seen.get(key, 0)\n        seen[key] = seen.get(key, 0) + 1\n    n = len(nums)\n    return n * (n - 1) // 2 - good\n\n\nclass Solution:\n    def countBadPairs(self, nums):\n        return solve(nums)\n",
+      "javascript_sha256": "1f05e92b63009c4e230b9a3a87fc298f64ed6ef05657476546f0445d2f39ff84",
+      "python_sha256": "479663fb46a1755c7cfcc8fdef64f840e220b3482c06450b48763a087c4083d5",
+      "tests": [
+        [
+          [
+            [
+              4,
+              1,
+              3,
+              3
+            ]
+          ],
+          5
+        ],
+        [
+          [
+            [
+              1,
+              2,
+              3,
+              4,
+              5
+            ]
+          ],
+          0
+        ],
+        [
+          [
+            [
+              1
+            ]
+          ],
+          0
+        ]
+      ],
+      "qualification": {
+        "problem_id": 2364,
+        "passed": true,
+        "public_passed": true,
+        "random_agreement": "20/20",
+        "failures": []
+      }
+    },
+    {
+      "problem_id": 2373,
+      "slug": "largest-local-values-in-a-matrix",
+      "title": "Largest Local Values in a Matrix",
+      "difficulty": "Easy",
+      "method": "largestLocal",
+      "javascript": "'use strict';\n\n// 2373. Largest Local Values in a Matrix (Easy).\n// Specification: https://leetcode.com/problems/largest-local-values-in-a-matrix/description/\nfunction solve(grid) {\n  const n = grid.length; const out = [];\n  for (let i = 0; i < n - 2; i++) {\n    const row = [];\n    for (let j = 0; j < n - 2; j++) {\n      let best = -Infinity;\n      for (let di = 0; di < 3; di++) for (let dj = 0; dj < 3; dj++) best = Math.max(best, grid[i + di][j + dj]);\n      row.push(best);\n    }\n    out.push(row);\n  }\n  return out;\n}\nconst largestLocal = solve;\nclass Solution { largestLocal(grid) { return solve(grid); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, largestLocal };\n",
+      "python": "\"\"\"2373. Largest Local Values in a Matrix (Easy).\n\nSpecification: https://leetcode.com/problems/largest-local-values-in-a-matrix/description/\n\"\"\"\n\n\ndef solve(grid):\n    n = len(grid)\n    out = []\n    for i in range(n - 2):\n        row = []\n        for j in range(n - 2):\n            best = max(grid[i + di][j + dj] for di in range(3) for dj in range(3))\n            row.append(best)\n        out.append(row)\n    return out\n\n\nclass Solution:\n    def largestLocal(self, grid):\n        return solve(grid)\n",
+      "javascript_sha256": "60586cdc2ca8a07917365c5af63ab76b74923e67864425f5669ba9a6fd43db91",
+      "python_sha256": "0b689258c0073d1b15f17488800770ef70a9bac4ae5b211e145e0cc0e973e25c",
+      "tests": [
+        [
+          [
+            [
+              [
+                9,
+                9,
+                8,
+                1
+              ],
+              [
+                5,
+                6,
+                2,
+                6
+              ],
+              [
+                8,
+                2,
+                6,
+                4
+              ],
+              [
+                6,
+                2,
+                2,
+                2
+              ]
+            ]
+          ],
+          [
+            [
+              9,
+              9
+            ],
+            [
+              8,
+              6
+            ]
+          ]
+        ],
+        [
+          [
+            [
+              [
+                1,
+                1,
+                1,
+                1,
+                1
+              ],
+              [
+                1,
+                1,
+                1,
+                1,
+                1
+              ],
+              [
+                1,
+                1,
+                2,
+                1,
+                1
+              ],
+              [
+                1,
+                1,
+                1,
+                1,
+                1
+              ],
+              [
+                1,
+                1,
+                1,
+                1,
+                1
+              ]
+            ]
+          ],
+          [
+            [
+              2,
+              2,
+              2
+            ],
+            [
+              2,
+              2,
+              2
+            ],
+            [
+              2,
+              2,
+              2
+            ]
+          ]
+        ]
+      ],
+      "qualification": {
+        "problem_id": 2373,
+        "passed": true,
+        "public_passed": true,
+        "random_agreement": "20/20",
+        "failures": []
+      }
+    },
+    {
+      "problem_id": 2377,
+      "slug": "check-if-number-has-equal-digit-count-and-digit-value",
+      "title": "Check if Number Has Equal Digit Count and Digit Value",
+      "difficulty": "Easy",
+      "method": "digitCount",
+      "javascript": "'use strict';\n\n// 2377. Check if Number Has Equal Digit Count and Digit Value (Easy).\n// Specification: https://leetcode.com/problems/check-if-number-has-equal-digit-count-and-digit-value/description/\nfunction solve(num) {\n  for (let i = 0; i < num.length; i++) {\n    let count = 0;\n    for (const ch of num) if (ch === String(i)) count++;\n    if (count !== Number(num[i])) return false;\n  }\n  return true;\n}\nconst digitCount = solve;\nclass Solution { digitCount(num) { return solve(num); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, digitCount };\n",
+      "python": "\"\"\"2377. Check if Number Has Equal Digit Count and Digit Value (Easy).\n\nSpecification: https://leetcode.com/problems/check-if-number-has-equal-digit-count-and-digit-value/description/\n\"\"\"\n\n\ndef solve(num):\n    for i in range(len(num)):\n        if num.count(str(i)) != int(num[i]):\n            return False\n    return True\n\n\nclass Solution:\n    def digitCount(self, num):\n        return solve(num)\n",
+      "javascript_sha256": "3d7d7911aa8a41c561ad583db05cf97eaf119f3834ad66572d519c0cc02138e4",
+      "python_sha256": "af5fe74d50c5a0d8a1fe41f50a6039b10fe30cf6b0db3fe53bd1a2f0bce8ac58",
+      "tests": [
+        [
+          [
+            "1210"
+          ],
+          true
+        ],
+        [
+          [
+            "030"
+          ],
+          false
+        ],
+        [
+          [
+            "1"
+          ],
+          false
+        ]
+      ],
+      "qualification": {
+        "problem_id": 2377,
+        "passed": true,
+        "public_passed": true,
+        "random_agreement": "20/20",
+        "failures": []
+      }
+    },
+    {
+      "problem_id": 2388,
+      "slug": "replace-elements-in-an-array",
+      "title": "Replace Elements in an Array",
+      "difficulty": "Medium",
+      "method": "arrayChange",
+      "javascript": "'use strict';\n\n// 2388. Replace Elements in an Array (Medium).\n// Specification: https://leetcode.com/problems/replace-elements-in-an-array/description/\nfunction solve(nums, operations) {\n  const pos = new Map();\n  nums.forEach((v, i) => pos.set(v, i));\n  for (const [a, b] of operations) {\n    const idx = pos.get(a);\n    nums[idx] = b;\n    pos.delete(a);\n    pos.set(b, idx);\n  }\n  return nums;\n}\nconst arrayChange = solve;\nclass Solution { arrayChange(nums, operations) { return solve(nums, operations); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, arrayChange };\n",
+      "python": "\"\"\"2388. Replace Elements in an Array (Medium).\n\nSpecification: https://leetcode.com/problems/replace-elements-in-an-array/description/\n\"\"\"\n\n\ndef solve(nums, operations):\n    pos = {v: i for i, v in enumerate(nums)}\n    for a, b in operations:\n        idx = pos.pop(a)\n        nums[idx] = b\n        pos[b] = idx\n    return nums\n\n\nclass Solution:\n    def arrayChange(self, nums, operations):\n        return solve(nums, operations)\n",
+      "javascript_sha256": "44ecf34522d3513bde489ee015b4581b16a1c7bc58ec643ecd45d73a234577d7",
+      "python_sha256": "81f3f9795ffebf5f28d527b2d060a366e53f618952c888e865a2a05722ec4ed6",
+      "tests": [
+        [
+          [
+            [
+              1,
+              2,
+              4,
+              6
+            ],
+            [
+              [
+                1,
+                3
+              ],
+              [
+                4,
+                7
+              ],
+              [
+                6,
+                1
+              ]
+            ]
+          ],
+          [
+            3,
+            2,
+            7,
+            1
+          ]
+        ],
+        [
+          [
+            [
+              1,
+              2
+            ],
+            [
+              [
+                1,
+                3
+              ],
+              [
+                2,
+                1
+              ],
+              [
+                3,
+                2
+              ]
+            ]
+          ],
+          [
+            2,
+            1
+          ]
+        ]
+      ],
+      "qualification": {
+        "problem_id": 2388,
+        "passed": true,
+        "public_passed": true,
+        "random_agreement": "20/20",
+        "failures": []
+      }
+    },
+    {
+      "problem_id": 2400,
+      "slug": "number-of-ways-to-reach-a-position-after-exactly-k-steps",
+      "title": "Number of Ways to Reach a Position After Exactly k Steps",
+      "difficulty": "Medium",
+      "method": "numberOfWays",
+      "javascript": "'use strict';\n\n// 2400. Number of Ways to Reach a Position After Exactly k Steps (Medium).\n// Specification: https://leetcode.com/problems/number-of-ways-to-reach-a-position-after-exactly-k-steps/description/\nfunction solve(startPos, endPos, k) {\n  const MOD = 1000000007;\n  let cur = new Map([[Math.abs(startPos - endPos), 1]]);\n  for (let step = 0; step < k; step++) {\n    const nxt = new Map();\n    for (const [d, ways] of cur) {\n      const add = (nd) => nxt.set(nd, ((nxt.get(nd) || 0) + ways) % MOD);\n      add(d + 1);\n      add(Math.abs(d - 1));\n    }\n    cur = nxt;\n  }\n  return cur.get(0) || 0;\n}\nconst numberOfWays = solve;\nclass Solution { numberOfWays(startPos, endPos, k) { return solve(startPos, endPos, k); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, numberOfWays };\n",
+      "python": "\"\"\"2400. Number of Ways to Reach a Position After Exactly k Steps (Medium).\n\nSpecification: https://leetcode.com/problems/number-of-ways-to-reach-a-position-after-exactly-k-steps/description/\n\"\"\"\n\n\ndef solve(startPos, endPos, k):\n    MOD = 1000000007\n    cur = {abs(startPos - endPos): 1}\n    for _ in range(k):\n        nxt = {}\n        for d, ways in cur.items():\n            for nd in (d + 1, abs(d - 1)):\n                nxt[nd] = (nxt.get(nd, 0) + ways) % MOD\n        cur = nxt\n    return cur.get(0, 0)\n\n\nclass Solution:\n    def numberOfWays(self, startPos, endPos, k):\n        return solve(startPos, endPos, k)\n",
+      "javascript_sha256": "39c424db14c48d21ca295b8073afe185552f3e453cf55c39e8bac6b88be15b10",
+      "python_sha256": "4c85a2cc47fef6ff2bd20abcf61e83a2d068576615ecc1ab9f0dc37cd506054b",
+      "tests": [
+        [
+          [
+            1,
+            2,
+            3
+          ],
+          3
+        ],
+        [
+          [
+            2,
+            5,
+            10
+          ],
+          0
+        ],
+        [
+          [
+            1,
+            1,
+            2
+          ],
+          2
+        ]
+      ],
+      "qualification": {
+        "problem_id": 2400,
+        "passed": true,
+        "public_passed": true,
+        "random_agreement": "20/20",
+        "failures": []
+      }
+    },
+    {
+      "problem_id": 2417,
+      "slug": "closest-fair-integer",
+      "title": "Closest Fair Integer",
+      "difficulty": "Medium",
+      "method": "closestFair",
+      "javascript": "'use strict';\n\n// 2417. Closest Fair Integer (Medium).\n// Specification: https://leetcode.com/problems/closest-fair-integer/description/\nfunction solve(n) {\n  const isFair = (x) => {\n    const s = String(x);\n    if (s.length % 2 === 1) return false;\n    let odd = 0, even = 0;\n    for (const ch of s) { if (Number(ch) % 2 === 1) odd++; else even++; }\n    return odd === even;\n  };\n  let n0 = n;\n  while (true) {\n    if (isFair(n0)) return n0;\n    const k = String(n0).length;\n    if (k % 2 === 1) {\n      const ones = '1'.repeat(k >> 1);\n      return Math.pow(10, k) + (ones === '' ? 0 : Number(ones));\n    }\n    n0++;\n  }\n}\nconst closestFair = solve;\nclass Solution { closestFair(n) { return solve(n); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, closestFair };\n",
+      "python": "\"\"\"2417. Closest Fair Integer (Medium).\n\nSpecification: https://leetcode.com/problems/closest-fair-integer/description/\n\"\"\"\n\n\ndef solve(n):\n    def is_fair(x):\n        s = str(x)\n        if len(s) % 2 == 1:\n            return False\n        odd = sum(1 for ch in s if int(ch) % 2 == 1)\n        even = len(s) - odd\n        return odd == even\n    n0 = n\n    while True:\n        if is_fair(n0):\n            return n0\n        k = len(str(n0))\n        if k % 2 == 1:\n            ones = '1' * (k // 2)\n            return 10 ** k + (int(ones) if ones else 0)\n        n0 += 1\n\n\nclass Solution:\n    def closestFair(self, n):\n        return solve(n)\n",
+      "javascript_sha256": "d52ae1c05cdf05e8a234b3594bba6ef0685d511f033702388555215af64de541",
+      "python_sha256": "819a8ba579d9642106802aa6f8d1a50262c1c96a5c2b0f5fff3833b1d4ef29a7",
+      "tests": [
+        [
+          [
+            2
+          ],
+          10
+        ],
+        [
+          [
+            4
+          ],
+          10
+        ],
+        [
+          [
+            11
+          ],
+          12
+        ]
+      ],
+      "qualification": {
+        "problem_id": 2417,
+        "passed": true,
+        "public_passed": true,
+        "random_agreement": "20/20",
+        "failures": []
+      }
+    },
+    {
+      "problem_id": 2422,
+      "slug": "merge-operations-to-turn-array-into-a-palindrome",
+      "title": "Merge Operations to Turn Array Into a Palindrome",
+      "difficulty": "Medium",
+      "method": "minimumOperations",
+      "javascript": "'use strict';\n\n// 2422. Merge Operations to Turn Array Into a Palindrome (Medium).\n// Specification: https://leetcode.com/problems/merge-operations-to-turn-array-into-a-palindrome/description/\nfunction solve(nums) {\n  let i = 0, j = nums.length - 1, left = nums[0], right = nums[nums.length - 1], ops = 0;\n  while (i < j) {\n    if (left === right) {\n      i++; j--;\n      if (i < j) { left = nums[i]; right = nums[j]; }\n    } else if (left < right) {\n      i++; left += nums[i]; ops++;\n    } else {\n      j--; right += nums[j]; ops++;\n    }\n  }\n  return ops;\n}\nconst minimumOperations = solve;\nclass Solution { minimumOperations(nums) { return solve(nums); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, minimumOperations };\n",
+      "python": "\"\"\"2422. Merge Operations to Turn Array Into a Palindrome (Medium).\n\nSpecification: https://leetcode.com/problems/merge-operations-to-turn-array-into-a-palindrome/description/\n\"\"\"\n\n\ndef solve(nums):\n    i, j = 0, len(nums) - 1\n    left, right, ops = nums[0], nums[-1], 0\n    while i < j:\n        if left == right:\n            i += 1\n            j -= 1\n            if i < j:\n                left, right = nums[i], nums[j]\n        elif left < right:\n            i += 1\n            left += nums[i]\n            ops += 1\n        else:\n            j -= 1\n            right += nums[j]\n            ops += 1\n    return ops\n\n\nclass Solution:\n    def minimumOperations(self, nums):\n        return solve(nums)\n",
+      "javascript_sha256": "e378bbb78640480b0a60cd204579725c2da90f674e20177c7aae87cf346b3b28",
+      "python_sha256": "ffe9fbae82734f76161a6e8a54a6ad9459ecb091acf2040b9ec866bd69802b04",
+      "tests": [
+        [
+          [
+            [
+              4,
+              3,
+              2,
+              1,
+              2,
+              3,
+              1
+            ]
+          ],
+          2
+        ],
+        [
+          [
+            [
+              1,
+              2,
+              3,
+              2,
+              1
+            ]
+          ],
+          0
+        ],
+        [
+          [
+            [
+              1,
+              2,
+              3
+            ]
+          ],
+          1
+        ]
+      ],
+      "qualification": {
+        "problem_id": 2422,
+        "passed": true,
+        "public_passed": true,
+        "random_agreement": "20/20",
+        "failures": []
+      }
+    },
+    {
+      "problem_id": 2430,
+      "slug": "maximum-deletions-on-a-string",
+      "title": "Maximum Deletions on a String",
+      "difficulty": "Hard",
+      "method": "deleteString",
+      "javascript": "'use strict';\n\n// 2430. Maximum Deletions on a String (Hard).\n// Specification: https://leetcode.com/problems/maximum-deletions-on-a-string/description/\nfunction solve(s) {\n  const n = s.length;\n  const dp = new Array(n + 1).fill(0);\n  for (let i = n - 1; i >= 0; i--) {\n    dp[i] = 1;\n    for (let len = 1; len <= Math.floor((n - i) / 2); len++) {\n      if (s.slice(i, i + len) === s.slice(i + len, i + 2 * len)) dp[i] = Math.max(dp[i], 1 + dp[i + len]);\n    }\n  }\n  return dp[0];\n}\nconst deleteString = solve;\nclass Solution { deleteString(s) { return solve(s); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, deleteString };\n",
+      "python": "\"\"\"2430. Maximum Deletions on a String (Hard).\n\nSpecification: https://leetcode.com/problems/maximum-deletions-on-a-string/description/\n\"\"\"\n\n\ndef solve(s):\n    n = len(s)\n    dp = [0] * (n + 1)\n    for i in range(n - 1, -1, -1):\n        dp[i] = 1\n        for length in range(1, (n - i) // 2 + 1):\n            if s[i:i + length] == s[i + length:i + 2 * length]:\n                dp[i] = max(dp[i], 1 + dp[i + length])\n    return dp[0]\n\n\nclass Solution:\n    def deleteString(self, s):\n        return solve(s)\n",
+      "javascript_sha256": "27600df12a468bcdfad3c59774298c141d58f3313fd6959aeb81f3a1fc0dbff9",
+      "python_sha256": "aacc75199930e5b2d257e78e1c04aec5908cb1f0a07054b07ad2bab03ce9322b",
+      "tests": [
+        [
+          [
+            "abc"
+          ],
+          1
+        ],
+        [
+          [
+            "aa"
+          ],
+          2
+        ],
+        [
+          [
+            "abab"
+          ],
+          2
+        ],
+        [
+          [
+            "aaaa"
+          ],
+          4
+        ]
+      ],
+      "qualification": {
+        "problem_id": 2430,
+        "passed": true,
+        "public_passed": true,
+        "random_agreement": "20/20",
+        "failures": []
+      }
+    },
+    {
+      "problem_id": 2454,
+      "slug": "next-greater-element-iv",
+      "title": "Next Greater Element IV",
+      "difficulty": "Hard",
+      "method": "secondGreaterElement",
+      "javascript": "'use strict';\n\n// 2454. Next Greater Element IV (Hard).\n// Specification: https://leetcode.com/problems/next-greater-element-iv/description/\nfunction solve(nums) {\n  const n = nums.length; const ans = new Array(n).fill(-1);\n  for (let i = 0; i < n; i++) {\n    let seen = 0;\n    for (let j = i + 1; j < n; j++) {\n      if (nums[j] > nums[i]) {\n        seen++;\n        if (seen === 2) { ans[i] = nums[j]; break; }\n      }\n    }\n  }\n  return ans;\n}\nconst secondGreaterElement = solve;\nclass Solution { secondGreaterElement(nums) { return solve(nums); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, secondGreaterElement };\n",
+      "python": "\"\"\"2454. Next Greater Element IV (Hard).\n\nSpecification: https://leetcode.com/problems/next-greater-element-iv/description/\n\"\"\"\n\n\ndef solve(nums):\n    n = len(nums)\n    ans = [-1] * n\n    for i in range(n):\n        seen = 0\n        for j in range(i + 1, n):\n            if nums[j] > nums[i]:\n                seen += 1\n                if seen == 2:\n                    ans[i] = nums[j]\n                    break\n    return ans\n\n\nclass Solution:\n    def secondGreaterElement(self, nums):\n        return solve(nums)\n",
+      "javascript_sha256": "7c7b513a899513f5bab557d08d57598e0f2470bf0b452489405d3d398571ff31",
+      "python_sha256": "e736d8571104f428f167078a46f2cfff8c50bc699ab73e309a05051f650323d6",
+      "tests": [
+        [
+          [
+            [
+              2,
+              4,
+              0,
+              9,
+              6
+            ]
+          ],
+          [
+            9,
+            6,
+            6,
+            -1,
+            -1
+          ]
+        ],
+        [
+          [
+            [
+              3,
+              3
+            ]
+          ],
+          [
+            -1,
+            -1
+          ]
+        ],
+        [
+          [
+            [
+              1,
+              2,
+              4,
+              3
+            ]
+          ],
+          [
+            4,
+            3,
+            -1,
+            -1
+          ]
+        ]
+      ],
+      "qualification": {
+        "problem_id": 2454,
+        "passed": true,
+        "public_passed": true,
+        "random_agreement": "20/20",
+        "failures": []
+      }
+    },
+    {
+      "problem_id": 2468,
+      "slug": "split-message-based-on-limit",
+      "title": "Split Message Based on Limit",
+      "difficulty": "Hard",
+      "method": "splitMessage",
+      "javascript": "'use strict';\n\n// 2468. Split Message Based on Limit (Hard).\n// Specification: https://leetcode.com/problems/split-message-based-on-limit/description/\nfunction solve(message, limit) {\n  const n = message.length;\n  let sa = 0;\n  for (let k = 1; k <= n; k++) {\n    sa += String(k).length;\n    const sb = String(k).length * k;\n    const sc = 3 * k;\n    if (String(k).length * 2 + 3 >= limit) continue;\n    if (limit * k - (sa + sb + sc) >= n) {\n      const out = []; let idx = 0;\n      for (let part = 1; part <= k; part++) {\n        const tag = '<' + part + '/' + k + '>';\n        const cap = limit - tag.length;\n        const chunk = message.slice(idx, idx + cap);\n        idx += chunk.length;\n        out.push(chunk + tag);\n      }\n      return out;\n    }\n  }\n  return [];\n}\nconst splitMessage = solve;\nclass Solution { splitMessage(message, limit) { return solve(message, limit); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, splitMessage };\n",
+      "python": "\"\"\"2468. Split Message Based on Limit (Hard).\n\nSpecification: https://leetcode.com/problems/split-message-based-on-limit/description/\n\"\"\"\n\n\ndef solve(message, limit):\n    n = len(message)\n    sa = 0\n    for k in range(1, n + 1):\n        sa += len(str(k))\n        sb = len(str(k)) * k\n        sc = 3 * k\n        if len(str(k)) * 2 + 3 >= limit:\n            continue\n        if limit * k - (sa + sb + sc) >= n:\n            out = []\n            idx = 0\n            for part in range(1, k + 1):\n                tag = f'<{part}/{k}>'\n                cap = limit - len(tag)\n                chunk = message[idx:idx + cap]\n                idx += len(chunk)\n                out.append(chunk + tag)\n            return out\n    return []\n\n\nclass Solution:\n    def splitMessage(self, message, limit):\n        return solve(message, limit)\n",
+      "javascript_sha256": "8e2d8d3375d17e5b954391ff0f61f412bcab56465d8e87da3645482e654bf852",
+      "python_sha256": "ebb90efaaacb185bafaa550ccb2826a8bf66b107e693d8ccdd937c732df73910",
+      "tests": [
+        [
+          [
+            "short message",
+            15
+          ],
+          [
+            "short mess<1/2>",
+            "age<2/2>"
+          ]
+        ],
+        [
+          [
+            "this is really a very awesome message",
+            9
+          ],
+          [
+            "thi<1/14>",
+            "s i<2/14>",
+            "s r<3/14>",
+            "eal<4/14>",
+            "ly <5/14>",
+            "a v<6/14>",
+            "ery<7/14>",
+            " aw<8/14>",
+            "eso<9/14>",
+            "me<10/14>",
+            " m<11/14>",
+            "es<12/14>",
+            "sa<13/14>",
+            "ge<14/14>"
+          ]
+        ]
+      ],
+      "qualification": {
+        "problem_id": 2468,
+        "passed": true,
+        "public_passed": true,
+        "random_agreement": "20/20",
+        "failures": []
+      }
+    },
+    {
+      "problem_id": 2481,
+      "slug": "minimum-cuts-to-divide-a-circle",
+      "title": "Minimum Cuts to Divide a Circle",
+      "difficulty": "Easy",
+      "method": "numberOfCuts",
+      "javascript": "'use strict';\n\n// 2481. Minimum Cuts to Divide a Circle (Easy).\n// Specification: https://leetcode.com/problems/minimum-cuts-to-divide-a-circle/description/\nfunction solve(n) {\n  if (n === 1) return 0;\n  return n % 2 === 0 ? n / 2 : n;\n}\nconst numberOfCuts = solve;\nclass Solution { numberOfCuts(n) { return solve(n); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, numberOfCuts };\n",
+      "python": "\"\"\"2481. Minimum Cuts to Divide a Circle (Easy).\n\nSpecification: https://leetcode.com/problems/minimum-cuts-to-divide-a-circle/description/\n\"\"\"\n\n\ndef solve(n):\n    if n == 1:\n        return 0\n    return n // 2 if n % 2 == 0 else n\n\n\nclass Solution:\n    def numberOfCuts(self, n):\n        return solve(n)\n",
+      "javascript_sha256": "2b4d4110ddf7bb34a846e96cbe985c47ff84083287a7ac6b4b488b31eb6f196d",
+      "python_sha256": "3184d4a0feb1327c7eb427597f727cc8a01a3284121bca2443db0f36be5b741d",
+      "tests": [
+        [
+          [
+            1
+          ],
+          0
+        ],
+        [
+          [
+            2
+          ],
+          1
+        ],
+        [
+          [
+            3
+          ],
+          3
+        ],
+        [
+          [
+            4
+          ],
+          2
+        ]
+      ],
+      "qualification": {
+        "problem_id": 2481,
+        "passed": true,
+        "public_passed": true,
+        "random_agreement": "20/20",
+        "failures": []
+      }
+    },
+    {
+      "problem_id": 2483,
+      "slug": "minimum-penalty-for-a-shop",
+      "title": "Minimum Penalty for a Shop",
+      "difficulty": "Medium",
+      "method": "bestClosingTime",
+      "javascript": "'use strict';\n\n// 2483. Minimum Penalty for a Shop (Medium).\n// Specification: https://leetcode.com/problems/minimum-penalty-for-a-shop/description/\nfunction solve(customers) {\n  let totalY = 0;\n  for (const ch of customers) if (ch === 'Y') totalY++;\n  let prefixN = 0, suffixY = totalY, best = 0, bestPen = Infinity;\n  for (let j = 0; j <= customers.length; j++) {\n    const pen = prefixN + suffixY;\n    if (pen < bestPen) { bestPen = pen; best = j; }\n    if (j < customers.length) {\n      if (customers[j] === 'N') prefixN++; else suffixY--;\n    }\n  }\n  return best;\n}\nconst bestClosingTime = solve;\nclass Solution { bestClosingTime(customers) { return solve(customers); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, bestClosingTime };\n",
+      "python": "\"\"\"2483. Minimum Penalty for a Shop (Medium).\n\nSpecification: https://leetcode.com/problems/minimum-penalty-for-a-shop/description/\n\"\"\"\n\n\ndef solve(customers):\n    total_y = customers.count('Y')\n    prefix_n, suffix_y, best, best_pen = 0, total_y, 0, float('inf')\n    for j in range(len(customers) + 1):\n        pen = prefix_n + suffix_y\n        if pen < best_pen:\n            best_pen, best = pen, j\n        if j < len(customers):\n            if customers[j] == 'N':\n                prefix_n += 1\n            else:\n                suffix_y -= 1\n    return best\n\n\nclass Solution:\n    def bestClosingTime(self, customers):\n        return solve(customers)\n",
+      "javascript_sha256": "1802601e2d6c72e9da4c72d9855b52f759599865972d9306211730efa74068b2",
+      "python_sha256": "3a5fab18285550eafd3fba0bc2c12d52e6185333469190c772a0bb7340c4adab",
+      "tests": [
+        [
+          [
+            "YYNY"
+          ],
+          2
+        ],
+        [
+          [
+            "NNNNN"
+          ],
+          0
+        ],
+        [
+          [
+            "YYYY"
+          ],
+          4
+        ]
+      ],
+      "qualification": {
+        "problem_id": 2483,
+        "passed": true,
+        "public_passed": true,
+        "random_agreement": "20/20",
+        "failures": []
+      }
+    },
+    {
+      "problem_id": 2491,
+      "slug": "divide-players-into-teams-of-equal-skill",
+      "title": "Divide Players Into Teams of Equal Skill",
+      "difficulty": "Medium",
+      "method": "dividePlayers",
+      "javascript": "'use strict';\n\n// 2491. Divide Players Into Teams of Equal Skill (Medium).\n// Specification: https://leetcode.com/problems/divide-players-into-teams-of-equal-skill/description/\nfunction solve(skill) {\n  const sorted = [...skill].sort((a, b) => a - b);\n  if (sorted.length % 2 === 1) return -1;\n  const target = sorted[0] + sorted[sorted.length - 1];\n  let total = 0;\n  for (let i = 0; i < sorted.length / 2; i++) {\n    if (sorted[i] + sorted[sorted.length - 1 - i] !== target) return -1;\n    total += sorted[i] * sorted[sorted.length - 1 - i];\n  }\n  return total;\n}\nconst dividePlayers = solve;\nclass Solution { dividePlayers(skill) { return solve(skill); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, dividePlayers };\n",
+      "python": "\"\"\"2491. Divide Players Into Teams of Equal Skill (Medium).\n\nSpecification: https://leetcode.com/problems/divide-players-into-teams-of-equal-skill/description/\n\"\"\"\n\n\ndef solve(skill):\n    s = sorted(skill)\n    if len(s) % 2 == 1:\n        return -1\n    target = s[0] + s[-1]\n    total = 0\n    for i in range(len(s) // 2):\n        if s[i] + s[-1 - i] != target:\n            return -1\n        total += s[i] * s[-1 - i]\n    return total\n\n\nclass Solution:\n    def dividePlayers(self, skill):\n        return solve(skill)\n",
+      "javascript_sha256": "3e8e00065dffc358f96ffb6fcc1a5c19092746f204c827dbe1b71b181d79ae01",
+      "python_sha256": "82158834a176a4fb40aca78f621a488b96cd869d37f419b316c62012f2482d8e",
+      "tests": [
+        [
+          [
+            [
+              3,
+              2,
+              5,
+              1,
+              3,
+              4
+            ]
+          ],
+          22
+        ],
+        [
+          [
+            [
+              1,
+              1,
+              2,
+              3
+            ]
+          ],
+          -1
+        ]
+      ],
+      "qualification": {
+        "problem_id": 2491,
+        "passed": true,
+        "public_passed": true,
+        "random_agreement": "20/20",
+        "failures": []
+      }
+    }
+  ]
+}
