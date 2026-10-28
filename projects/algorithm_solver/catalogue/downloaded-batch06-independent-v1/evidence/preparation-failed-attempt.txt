@@ -1,0 +1,57 @@
+{
+  "protocol": "deco.task.v1",
+  "op": "result",
+  "ok": true,
+  "workId": "gamma-downloaded-batch06-independent-20261027",
+  "attemptId": "gamma-downloaded-batch06-independent-20261027.a1",
+  "state": "failed",
+  "reason": "runner exited 1",
+  "stopped": true,
+  "receipt": {
+    "protocol": "deco.task.v1",
+    "workId": "gamma-downloaded-batch06-independent-20261027",
+    "attemptId": "gamma-downloaded-batch06-independent-20261027.a1",
+    "state": "failed",
+    "reason": "runner exited 1",
+    "member": "128",
+    "account": "x",
+    "hostname": "jupiter",
+    "runner": "shell",
+    "runnerSession": null,
+    "startedAt": "2026-10-28T01:37:32.221Z",
+    "endedAt": "2026-10-28T01:37:32.749Z",
+    "exitCode": 1,
+    "signal": null,
+    "source": {
+      "repository": "gamma",
+      "testedCommit": "b93df63b84bc50c535b4d27f057a783fc020ae50",
+      "dirtyPaths": []
+    },
+    "checks": [],
+    "artifacts": [
+      {
+        "path": "projects/algorithm_solver/runs/downloaded-batch06-independent-20261027/results/report.json",
+        "error": "ENOENT"
+      },
+      {
+        "path": "projects/algorithm_solver/runs/downloaded-batch06-independent-20261027/results/replay.json",
+        "error": "ENOENT"
+      }
+    ],
+    "publication": null,
+    "deployment": null,
+    "notes": [
+      "Deployment receipts come from the owning project; the executor does not observe live routes."
+    ]
+  }
+}
+Traceback (most recent call last):
+  File "/home/x/deco/gamma/projects/algorithm_solver/runs/downloaded-batch06-independent-20261027/source/projects/algorithm_solver/catalogue/downloaded-batch06-independent-v1/qualify.py", line 246, in <module>
+    main()
+    ~~~~^^
+  File "/home/x/deco/gamma/projects/algorithm_solver/runs/downloaded-batch06-independent-20261027/source/projects/algorithm_solver/catalogue/downloaded-batch06-independent-v1/qualify.py", line 242, in main
+    (freeze if args.operation == 'freeze' else execute)(args)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/home/x/deco/gamma/projects/algorithm_solver/runs/downloaded-batch06-independent-20261027/source/projects/algorithm_solver/catalogue/downloaded-batch06-independent-v1/qualify.py", line 187, in execute
+    raise ValueError('generated test drift')
+ValueError: generated test drift
