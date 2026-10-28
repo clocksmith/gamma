@@ -11,7 +11,7 @@ import re
 import subprocess
 import sys
 
-import cases
+import repair_cases as cases
 import oracles as o
 o.IDS=cases.IDS
 
@@ -90,6 +90,7 @@ def artifacts():
             raise ValueError('source identity mismatch')
         paths.append(p)
     paths += [HERE/'cohort68-repairs/manifest.json']
+    paths += sorted((HERE/'cohort68-repairs/review').glob('*.json'))
     paths += [HERE/r['source_path'] for r in REPAIRS.values()]
     for row in REPAIRS.values():
         assert sha((ROOT/row['original_path']).read_bytes())==row['original_sha256']
