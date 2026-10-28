@@ -1,0 +1,1028 @@
+{
+  "schema": "gamma.new-solutions-batch10.v1",
+  "scope": "Freshly written, not pulled from Gamma. Problems with no authored JS/Python pair in clocksmith/gamma catalogue/authored at head dd7dd823, verified by the parent before delivery, no overlaps found. Shortfall noted: only 16 problems in IDs 1301-1450 meet the simple-input constraints, because 99 of 150 IDs in that range are already authored and 35 of the remaining 51 are tree, SQL, class, or API problems. This is not a claim of Gamma official independent admission.",
+  "qualification_method": "For each problem: public examples plus 20 random cross-language agreement checks per problem, JS via node and Python via import, outputs compared, float tolerance 1e-6. Spot-checked independently by the parent for 1314, 1328, 1344, 1418, 1442, all passed.",
+  "counts": {
+    "problems": 16,
+    "passed": 16
+  },
+  "problems": [
+    {
+      "problem_id": 1311,
+      "slug": "get-watched-videos-by-your-friends",
+      "title": "Get Watched Videos by Your Friends",
+      "difficulty": "Medium",
+      "method": "watchedVideosByFriends",
+      "javascript": "'use strict';\n\n// 1311. Get Watched Videos by Your Friends (Medium).\n// Specification: https://leetcode.com/problems/get-watched-videos-by-your-friends/description/\nfunction solve(watchedVideos, friends, id, level) {\n  const seen = new Set([id]);\n  let frontier = [id];\n  for (let step = 0; step < level; step++) {\n    const next = [];\n    for (const person of frontier) {\n      for (const friend of friends[person]) {\n        if (!seen.has(friend)) { seen.add(friend); next.push(friend); }\n      }\n    }\n    frontier = next;\n  }\n  const counts = new Map();\n  for (const person of frontier) {\n    for (const video of watchedVideos[person]) {\n      counts.set(video, (counts.get(video) || 0) + 1);\n    }\n  }\n  return [...counts.entries()].sort((a, b) => (a[1] - b[1]) || (a[0] < b[0] ? -1 : 1)).map((entry) => entry[0]);\n}\nconst watchedVideosByFriends = solve;\nclass Solution { watchedVideosByFriends(...args) { return solve(...args); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, watchedVideosByFriends };\n",
+      "python": "\"\"\"1311. Get Watched Videos by Your Friends (Medium).\n\nSpecification: https://leetcode.com/problems/get-watched-videos-by-your-friends/description/\n\"\"\"\n\n\ndef solve(watchedVideos, friends, id, level):\n    seen = {id}\n    frontier = [id]\n    for _ in range(level):\n        nxt = []\n        for person in frontier:\n            for friend in friends[person]:\n                if friend not in seen:\n                    seen.add(friend)\n                    nxt.append(friend)\n        frontier = nxt\n    counts = {}\n    for person in frontier:\n        for video in watchedVideos[person]:\n            counts[video] = counts.get(video, 0) + 1\n    return [name for name, _ in sorted(counts.items(), key=lambda item: (item[1], item[0]))]\n\n\nclass Solution:\n    def watchedVideosByFriends(self, watchedVideos, friends, id, level):\n        return solve(watchedVideos, friends, id, level)\n",
+      "javascript_sha256": "ebfde38817a5ff2b3080c5769f889dd8bea57baddc4d2dedf212f4e98763d500",
+      "python_sha256": "423b9a19b9582ffba09aad70dcea5e374e1c7ba7c5849450fb50b046cb575aa5",
+      "tests": [
+        [
+          [
+            [
+              [
+                "A",
+                "B"
+              ],
+              [
+                "C"
+              ],
+              [
+                "B",
+                "C"
+              ],
+              [
+                "D"
+              ]
+            ],
+            [
+              [
+                1,
+                2
+              ],
+              [
+                0,
+                3
+              ],
+              [
+                0,
+                3
+              ],
+              [
+                1,
+                2
+              ]
+            ],
+            0,
+            1
+          ],
+          [
+            "B",
+            "C"
+          ]
+        ],
+        [
+          [
+            [
+              [
+                "A",
+                "B"
+              ],
+              [
+                "C"
+              ],
+              [
+                "B",
+                "C"
+              ],
+              [
+                "D"
+              ]
+            ],
+            [
+              [
+                1,
+                2
+              ],
+              [
+                0,
+                3
+              ],
+              [
+                0,
+                3
+              ],
+              [
+                1,
+                2
+              ]
+            ],
+            0,
+            2
+          ],
+          [
+            "D"
+          ]
+        ],
+        [
+          [
+            [
+              [
+                "A"
+              ]
+            ],
+            [
+              []
+            ],
+            0,
+            0
+          ],
+          [
+            "A"
+          ]
+        ]
+      ],
+      "qualification": {
+        "passed": true,
+        "method": "public examples plus 20 random cross-language checks, per writing agent, spot-checked by parent"
+      }
+    },
+    {
+      "problem_id": 1314,
+      "slug": "matrix-block-sum",
+      "title": "Matrix Block Sum",
+      "difficulty": "Medium",
+      "method": "matrixBlockSum",
+      "javascript": "'use strict';\n\n// 1314. Matrix Block Sum (Medium).\n// Specification: https://leetcode.com/problems/matrix-block-sum/description/\nfunction solve(mat, k) {\n  const m = mat.length; const n = mat[0].length;\n  const prefix = Array.from({ length: m + 1 }, () => new Array(n + 1).fill(0));\n  for (let i = 1; i <= m; i++) {\n    for (let j = 1; j <= n; j++) {\n      prefix[i][j] = prefix[i - 1][j] + prefix[i][j - 1] - prefix[i - 1][j - 1] + mat[i - 1][j - 1];\n    }\n  }\n  const answer = Array.from({ length: m }, () => new Array(n).fill(0));\n  for (let i = 0; i < m; i++) {\n    for (let j = 0; j < n; j++) {\n      const r1 = Math.max(0, i - k); const c1 = Math.max(0, j - k);\n      const r2 = Math.min(m - 1, i + k); const c2 = Math.min(n - 1, j + k);\n      answer[i][j] = prefix[r2 + 1][c2 + 1] - prefix[r1][c2 + 1] - prefix[r2 + 1][c1] + prefix[r1][c1];\n    }\n  }\n  return answer;\n}\nconst matrixBlockSum = solve;\nclass Solution { matrixBlockSum(...args) { return solve(...args); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, matrixBlockSum };\n",
+      "python": "\"\"\"1314. Matrix Block Sum (Medium).\n\nSpecification: https://leetcode.com/problems/matrix-block-sum/description/\n\"\"\"\n\n\ndef solve(mat, k):\n    m, n = len(mat), len(mat[0])\n    prefix = [[0] * (n + 1) for _ in range(m + 1)]\n    for i in range(1, m + 1):\n        for j in range(1, n + 1):\n            prefix[i][j] = prefix[i - 1][j] + prefix[i][j - 1] - prefix[i - 1][j - 1] + mat[i - 1][j - 1]\n    answer = [[0] * n for _ in range(m)]\n    for i in range(m):\n        for j in range(n):\n            r1, c1 = max(0, i - k), max(0, j - k)\n            r2, c2 = min(m - 1, i + k), min(n - 1, j + k)\n            answer[i][j] = prefix[r2 + 1][c2 + 1] - prefix[r1][c2 + 1] - prefix[r2 + 1][c1] + prefix[r1][c1]\n    return answer\n\n\nclass Solution:\n    def matrixBlockSum(self, mat, k):\n        return solve(mat, k)\n",
+      "javascript_sha256": "d92082dbd9d000d1fae40d0b70fc5e483529297b61a801fc5fee77aed68c3357",
+      "python_sha256": "9377f09b49d51de32a4ebb2ddc4e911b045589eff21ee409f122c9aa73247137",
+      "tests": [
+        [
+          [
+            [
+              [
+                1,
+                2,
+                3
+              ],
+              [
+                4,
+                5,
+                6
+              ],
+              [
+                7,
+                8,
+                9
+              ]
+            ],
+            1
+          ],
+          [
+            [
+              12,
+              21,
+              16
+            ],
+            [
+              27,
+              45,
+              33
+            ],
+            [
+              24,
+              39,
+              28
+            ]
+          ]
+        ],
+        [
+          [
+            [
+              [
+                1,
+                2,
+                3
+              ],
+              [
+                4,
+                5,
+                6
+              ],
+              [
+                7,
+                8,
+                9
+              ]
+            ],
+            2
+          ],
+          [
+            [
+              45,
+              45,
+              45
+            ],
+            [
+              45,
+              45,
+              45
+            ],
+            [
+              45,
+              45,
+              45
+            ]
+          ]
+        ],
+        [
+          [
+            [
+              [
+                5
+              ]
+            ],
+            0
+          ],
+          [
+            [
+              5
+            ]
+          ]
+        ]
+      ],
+      "qualification": {
+        "passed": true,
+        "method": "public examples plus 20 random cross-language checks, per writing agent, spot-checked by parent"
+      }
+    },
+    {
+      "problem_id": 1328,
+      "slug": "break-a-palindrome",
+      "title": "Break a Palindrome",
+      "difficulty": "Medium",
+      "method": "breakPalindrome",
+      "javascript": "'use strict';\n\n// 1328. Break a Palindrome (Medium).\n// Specification: https://leetcode.com/problems/break-a-palindrome/description/\nfunction solve(palindrome) {\n  const n = palindrome.length;\n  if (n === 1) return \"\";\n  const chars = palindrome.split(\"\");\n  let i = 0;\n  while (i < Math.floor(n / 2) && chars[i] === \"a\") i++;\n  if (i === Math.floor(n / 2)) chars[n - 1] = \"b\"; else chars[i] = \"a\";\n  return chars.join(\"\");\n}\nconst breakPalindrome = solve;\nclass Solution { breakPalindrome(...args) { return solve(...args); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, breakPalindrome };\n",
+      "python": "\"\"\"1328. Break a Palindrome (Medium).\n\nSpecification: https://leetcode.com/problems/break-a-palindrome/description/\n\"\"\"\n\n\ndef solve(palindrome):\n    n = len(palindrome)\n    if n == 1:\n        return \"\"\n    chars = list(palindrome)\n    i = 0\n    while i < n // 2 and chars[i] == \"a\":\n        i += 1\n    if i == n // 2:\n        chars[n - 1] = \"b\"\n    else:\n        chars[i] = \"a\"\n    return \"\".join(chars)\n\n\nclass Solution:\n    def breakPalindrome(self, palindrome):\n        return solve(palindrome)\n",
+      "javascript_sha256": "24fb8032c62eddd1b135d536cb95a0142ba8cf2c1efba81fab45f4162adbb524",
+      "python_sha256": "5c171a52b20df47ec1d0568ba265549a40b3d0d910be363843e41616a4af19b1",
+      "tests": [
+        [
+          [
+            "abccba"
+          ],
+          "aaccba"
+        ],
+        [
+          [
+            "a"
+          ],
+          ""
+        ],
+        [
+          [
+            "aaaa"
+          ],
+          "aaab"
+        ],
+        [
+          [
+            "aba"
+          ],
+          "abb"
+        ]
+      ],
+      "qualification": {
+        "passed": true,
+        "method": "public examples plus 20 random cross-language checks, per writing agent, spot-checked by parent"
+      }
+    },
+    {
+      "problem_id": 1329,
+      "slug": "sort-the-matrix-diagonally",
+      "title": "Sort the Matrix Diagonally",
+      "difficulty": "Medium",
+      "method": "diagonalSort",
+      "javascript": "'use strict';\n\n// 1329. Sort the Matrix Diagonally (Medium).\n// Specification: https://leetcode.com/problems/sort-the-matrix-diagonally/description/\nfunction solve(mat) {\n  const m = mat.length; const n = mat[0].length;\n  const diagonals = new Map();\n  for (let i = 0; i < m; i++) {\n    for (let j = 0; j < n; j++) {\n      const key = i - j;\n      if (!diagonals.has(key)) diagonals.set(key, []);\n      diagonals.get(key).push(mat[i][j]);\n    }\n  }\n  for (const values of diagonals.values()) values.sort((a, b) => a - b);\n  const positions = new Map();\n  const answer = Array.from({ length: m }, () => new Array(n).fill(0));\n  for (let i = 0; i < m; i++) {\n    for (let j = 0; j < n; j++) {\n      const key = i - j;\n      const index = positions.get(key) || 0;\n      positions.set(key, index + 1);\n      answer[i][j] = diagonals.get(key)[index];\n    }\n  }\n  return answer;\n}\nconst diagonalSort = solve;\nclass Solution { diagonalSort(...args) { return solve(...args); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, diagonalSort };\n",
+      "python": "\"\"\"1329. Sort the Matrix Diagonally (Medium).\n\nSpecification: https://leetcode.com/problems/sort-the-matrix-diagonally/description/\n\"\"\"\n\n\ndef solve(mat):\n    m, n = len(mat), len(mat[0])\n    diagonals = {}\n    for i in range(m):\n        for j in range(n):\n            diagonals.setdefault(i - j, []).append(mat[i][j])\n    for values in diagonals.values():\n        values.sort()\n    positions = {}\n    answer = [[0] * n for _ in range(m)]\n    for i in range(m):\n        for j in range(n):\n            key = i - j\n            index = positions.get(key, 0)\n            positions[key] = index + 1\n            answer[i][j] = diagonals[key][index]\n    return answer\n\n\nclass Solution:\n    def diagonalSort(self, mat):\n        return solve(mat)\n",
+      "javascript_sha256": "97f57729af9a496aed0d42813e6988daf81ba039841c7e840547ed2c6fac36f8",
+      "python_sha256": "4a060be6ca08a475efbea4b141ae884bfdfc1714397f6dc27d03bc86f9566ef8",
+      "tests": [
+        [
+          [
+            [
+              [
+                3,
+                3,
+                1,
+                1
+              ],
+              [
+                2,
+                2,
+                1,
+                2
+              ],
+              [
+                1,
+                1,
+                1,
+                2
+              ]
+            ]
+          ],
+          [
+            [
+              1,
+              1,
+              1,
+              1
+            ],
+            [
+              1,
+              2,
+              2,
+              2
+            ],
+            [
+              1,
+              2,
+              3,
+              3
+            ]
+          ]
+        ],
+        [
+          [
+            [
+              [
+                1
+              ]
+            ]
+          ],
+          [
+            [
+              1
+            ]
+          ]
+        ]
+      ],
+      "qualification": {
+        "passed": true,
+        "method": "public examples plus 20 random cross-language checks, per writing agent, spot-checked by parent"
+      }
+    },
+    {
+      "problem_id": 1332,
+      "slug": "remove-palindromic-subsequences",
+      "title": "Remove Palindromic Subsequences",
+      "difficulty": "Easy",
+      "method": "removePalindromeSub",
+      "javascript": "'use strict';\n\n// 1332. Remove Palindromic Subsequences (Easy).\n// Specification: https://leetcode.com/problems/remove-palindromic-subsequences/description/\nfunction solve(s) {\n  if (s.length === 0) return 0;\n  if (s === s.split(\"\").reverse().join(\"\")) return 1;\n  return 2;\n}\nconst removePalindromeSub = solve;\nclass Solution { removePalindromeSub(...args) { return solve(...args); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, removePalindromeSub };\n",
+      "python": "\"\"\"1332. Remove Palindromic Subsequences (Easy).\n\nSpecification: https://leetcode.com/problems/remove-palindromic-subsequences/description/\n\"\"\"\n\n\ndef solve(s):\n    if not s:\n        return 0\n    if s == s[::-1]:\n        return 1\n    return 2\n\n\nclass Solution:\n    def removePalindromeSub(self, s):\n        return solve(s)\n",
+      "javascript_sha256": "e05bb0beba647afe162a864e3865684e7725598cb77f76d799a0fa7796cc5f04",
+      "python_sha256": "1901206eb7c68d6e7789037bf46e20dfcd990d2a456d10846699d7174d1dea37",
+      "tests": [
+        [
+          [
+            "ababa"
+          ],
+          1
+        ],
+        [
+          [
+            "abb"
+          ],
+          2
+        ],
+        [
+          [
+            "baabb"
+          ],
+          2
+        ],
+        [
+          [
+            ""
+          ],
+          0
+        ],
+        [
+          [
+            "b"
+          ],
+          1
+        ]
+      ],
+      "qualification": {
+        "passed": true,
+        "method": "public examples plus 20 random cross-language checks, per writing agent, spot-checked by parent"
+      }
+    },
+    {
+      "problem_id": 1344,
+      "slug": "angle-between-hands-of-a-clock",
+      "title": "Angle Between Hands of a Clock",
+      "difficulty": "Easy",
+      "method": "angleClock",
+      "javascript": "'use strict';\n\n// 1344. Angle Between Hands of a Clock (Easy).\n// Specification: https://leetcode.com/problems/angle-between-hands-of-a-clock/description/\nfunction solve(hour, minutes) {\n  const hourAngle = 30 * (hour % 12) + 0.5 * minutes;\n  const minuteAngle = 6 * minutes;\n  const diff = Math.abs(hourAngle - minuteAngle);\n  return Math.min(diff, 360 - diff);\n}\nconst angleClock = solve;\nclass Solution { angleClock(...args) { return solve(...args); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, angleClock };\n",
+      "python": "\"\"\"1344. Angle Between Hands of a Clock (Easy).\n\nSpecification: https://leetcode.com/problems/angle-between-hands-of-a-clock/description/\n\"\"\"\n\n\ndef solve(hour, minutes):\n    hour_angle = 30 * (hour % 12) + 0.5 * minutes\n    minute_angle = 6 * minutes\n    diff = abs(hour_angle - minute_angle)\n    return min(diff, 360 - diff)\n\n\nclass Solution:\n    def angleClock(self, hour, minutes):\n        return solve(hour, minutes)\n",
+      "javascript_sha256": "eae4c9c465cf112b90b94dc49b0857ed320b2763bdde4688e0ec4d8e8e794247",
+      "python_sha256": "327e3ff1d218bb2e8f3402d7bd22b9a16f6ed34040941901cc41b7699817e7fa",
+      "tests": [
+        [
+          [
+            12,
+            30
+          ],
+          165
+        ],
+        [
+          [
+            3,
+            30
+          ],
+          75
+        ],
+        [
+          [
+            3,
+            15
+          ],
+          7.5
+        ],
+        [
+          [
+            4,
+            50
+          ],
+          155
+        ],
+        [
+          [
+            12,
+            0
+          ],
+          0
+        ]
+      ],
+      "qualification": {
+        "passed": true,
+        "method": "public examples plus 20 random cross-language checks, per writing agent, spot-checked by parent"
+      }
+    },
+    {
+      "problem_id": 1375,
+      "slug": "number-of-times-binary-string-is-prefix-aligned",
+      "title": "Number of Times Binary String Is Prefix-Aligned",
+      "difficulty": "Medium",
+      "method": "numTimesAllBlue",
+      "javascript": "'use strict';\n\n// 1375. Number of Times Binary String Is Prefix-Aligned (Medium).\n// Specification: https://leetcode.com/problems/number-of-times-binary-string-is-prefix-aligned/description/\nfunction solve(flips) {\n  let best = 0; let count = 0;\n  for (let i = 0; i < flips.length; i++) {\n    best = Math.max(best, flips[i]);\n    if (best === i + 1) count++;\n  }\n  return count;\n}\nconst numTimesAllBlue = solve;\nclass Solution { numTimesAllBlue(...args) { return solve(...args); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, numTimesAllBlue };\n",
+      "python": "\"\"\"1375. Number of Times Binary String Is Prefix-Aligned (Medium).\n\nSpecification: https://leetcode.com/problems/number-of-times-binary-string-is-prefix-aligned/description/\n\"\"\"\n\n\ndef solve(flips):\n    best = 0\n    count = 0\n    for i, value in enumerate(flips):\n        best = max(best, value)\n        if best == i + 1:\n            count += 1\n    return count\n\n\nclass Solution:\n    def numTimesAllBlue(self, flips):\n        return solve(flips)\n",
+      "javascript_sha256": "420d10c84a3811595dd5383867c941eea39b8322318af1ba18c284541cb28d9e",
+      "python_sha256": "45da6957a5db72baba5582a8195a10fdcba0638dc32932561e1dbcd8dcde8962",
+      "tests": [
+        [
+          [
+            [
+              3,
+              2,
+              4,
+              1,
+              5
+            ]
+          ],
+          2
+        ],
+        [
+          [
+            [
+              4,
+              1,
+              2,
+              3
+            ]
+          ],
+          1
+        ],
+        [
+          [
+            [
+              1
+            ]
+          ],
+          1
+        ]
+      ],
+      "qualification": {
+        "passed": true,
+        "method": "public examples plus 20 random cross-language checks, per writing agent, spot-checked by parent"
+      }
+    },
+    {
+      "problem_id": 1386,
+      "slug": "cinema-seat-allocation",
+      "title": "Cinema Seat Allocation",
+      "difficulty": "Medium",
+      "method": "maxNumberOfFamilies",
+      "javascript": "'use strict';\n\n// 1386. Cinema Seat Allocation (Medium).\n// Specification: https://leetcode.com/problems/cinema-seat-allocation/description/\nfunction solve(n, reservedSeats) {\n  const rows = new Map();\n  for (const [row, seat] of reservedSeats) {\n    if (!rows.has(row)) rows.set(row, new Set());\n    rows.get(row).add(seat);\n  }\n  let families = (n - rows.size) * 2;\n  for (const seats of rows.values()) {\n    const left = ![2, 3, 4, 5].some((seat) => seats.has(seat));\n    const middle = ![4, 5, 6, 7].some((seat) => seats.has(seat));\n    const right = ![6, 7, 8, 9].some((seat) => seats.has(seat));\n    if (left && right) families += 2; else if (left || middle || right) families += 1;\n  }\n  return families;\n}\nconst maxNumberOfFamilies = solve;\nclass Solution { maxNumberOfFamilies(...args) { return solve(...args); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, maxNumberOfFamilies };\n",
+      "python": "\"\"\"1386. Cinema Seat Allocation (Medium).\n\nSpecification: https://leetcode.com/problems/cinema-seat-allocation/description/\n\"\"\"\n\n\ndef solve(n, reservedSeats):\n    rows = {}\n    for row, seat in reservedSeats:\n        rows.setdefault(row, set()).add(seat)\n    families = (n - len(rows)) * 2\n    for seats in rows.values():\n        left = not any(seat in seats for seat in (2, 3, 4, 5))\n        middle = not any(seat in seats for seat in (4, 5, 6, 7))\n        right = not any(seat in seats for seat in (6, 7, 8, 9))\n        if left and right:\n            families += 2\n        elif left or middle or right:\n            families += 1\n    return families\n\n\nclass Solution:\n    def maxNumberOfFamilies(self, n, reservedSeats):\n        return solve(n, reservedSeats)\n",
+      "javascript_sha256": "d1e3f75912f6ea12123497b8cd539fbf8ce679905a5ad8ca9c90db8864d1b2b9",
+      "python_sha256": "e555f2c45957e3d7c02b875c2a9c435cf30c0eb453cd7485bc6dfff8d91101ac",
+      "tests": [
+        [
+          [
+            3,
+            [
+              [
+                1,
+                2
+              ],
+              [
+                1,
+                3
+              ],
+              [
+                1,
+                8
+              ],
+              [
+                2,
+                6
+              ],
+              [
+                3,
+                1
+              ],
+              [
+                3,
+                10
+              ]
+            ]
+          ],
+          4
+        ],
+        [
+          [
+            1,
+            []
+          ],
+          2
+        ],
+        [
+          [
+            1,
+            [
+              [
+                1,
+                2
+              ],
+              [
+                1,
+                3
+              ],
+              [
+                1,
+                4
+              ],
+              [
+                1,
+                5
+              ],
+              [
+                1,
+                6
+              ],
+              [
+                1,
+                7
+              ],
+              [
+                1,
+                8
+              ],
+              [
+                1,
+                9
+              ]
+            ]
+          ],
+          0
+        ]
+      ],
+      "qualification": {
+        "passed": true,
+        "method": "public examples plus 20 random cross-language checks, per writing agent, spot-checked by parent"
+      }
+    },
+    {
+      "problem_id": 1394,
+      "slug": "find-lucky-integer-in-an-array",
+      "title": "Find Lucky Integer in an Array",
+      "difficulty": "Easy",
+      "method": "findLucky",
+      "javascript": "'use strict';\n\n// 1394. Find Lucky Integer in an Array (Easy).\n// Specification: https://leetcode.com/problems/find-lucky-integer-in-an-array/description/\nfunction solve(arr) {\n  const counts = new Map();\n  for (const value of arr) counts.set(value, (counts.get(value) || 0) + 1);\n  let best = -1;\n  for (const [value, count] of counts.entries()) {\n    if (value === count) best = Math.max(best, value);\n  }\n  return best;\n}\nconst findLucky = solve;\nclass Solution { findLucky(...args) { return solve(...args); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, findLucky };\n",
+      "python": "\"\"\"1394. Find Lucky Integer in an Array (Easy).\n\nSpecification: https://leetcode.com/problems/find-lucky-integer-in-an-array/description/\n\"\"\"\n\n\ndef solve(arr):\n    counts = {}\n    for value in arr:\n        counts[value] = counts.get(value, 0) + 1\n    best = -1\n    for value, count in counts.items():\n        if value == count:\n            best = max(best, value)\n    return best\n\n\nclass Solution:\n    def findLucky(self, arr):\n        return solve(arr)\n",
+      "javascript_sha256": "f5aad04cee2dbafc84c5567755aad0ff5d4ce5eb245f0db3e1218a16a9a9f1e8",
+      "python_sha256": "c1b61d683a51e57d9d7b18985c1fb30db50095fda9f4995de23cfe88b391e1ab",
+      "tests": [
+        [
+          [
+            [
+              2,
+              2,
+              3,
+              4
+            ]
+          ],
+          2
+        ],
+        [
+          [
+            [
+              1,
+              2,
+              2,
+              3,
+              3,
+              3
+            ]
+          ],
+          3
+        ],
+        [
+          [
+            [
+              2,
+              2,
+              2,
+              3,
+              3
+            ]
+          ],
+          -1
+        ],
+        [
+          [
+            [
+              5
+            ]
+          ],
+          -1
+        ]
+      ],
+      "qualification": {
+        "passed": true,
+        "method": "public examples plus 20 random cross-language checks, per writing agent, spot-checked by parent"
+      }
+    },
+    {
+      "problem_id": 1402,
+      "slug": "reducing-dishes",
+      "title": "Reducing Dishes",
+      "difficulty": "Hard",
+      "method": "maxSatisfaction",
+      "javascript": "'use strict';\n\n// 1402. Reducing Dishes (Hard).\n// Specification: https://leetcode.com/problems/reducing-dishes/description/\nfunction solve(satisfaction) {\n  const sorted = [...satisfaction].sort((a, b) => b - a);\n  let running = 0; let total = 0;\n  for (const value of sorted) {\n    running += value;\n    if (running > 0) total += running; else break;\n  }\n  return total;\n}\nconst maxSatisfaction = solve;\nclass Solution { maxSatisfaction(...args) { return solve(...args); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, maxSatisfaction };\n",
+      "python": "\"\"\"1402. Reducing Dishes (Hard).\n\nSpecification: https://leetcode.com/problems/reducing-dishes/description/\n\"\"\"\n\n\ndef solve(satisfaction):\n    running = 0\n    total = 0\n    for value in sorted(satisfaction, reverse=True):\n        running += value\n        if running > 0:\n            total += running\n        else:\n            break\n    return total\n\n\nclass Solution:\n    def maxSatisfaction(self, satisfaction):\n        return solve(satisfaction)\n",
+      "javascript_sha256": "c1aca7b2376e36c5375bfa09e7a7c7b4b917dcf72edac9ce2f82be0f87e2b306",
+      "python_sha256": "fc0dd8947b91df5149ba5c27471196be344959fc3c0b948f39cdc3d682a2512d",
+      "tests": [
+        [
+          [
+            [
+              -1,
+              -8,
+              0,
+              5,
+              -9
+            ]
+          ],
+          14
+        ],
+        [
+          [
+            [
+              4,
+              3,
+              2
+            ]
+          ],
+          20
+        ],
+        [
+          [
+            [
+              -1,
+              -4,
+              -5
+            ]
+          ],
+          0
+        ]
+      ],
+      "qualification": {
+        "passed": true,
+        "method": "public examples plus 20 random cross-language checks, per writing agent, spot-checked by parent"
+      }
+    },
+    {
+      "problem_id": 1410,
+      "slug": "html-entity-parser",
+      "title": "HTML Entity Parser",
+      "difficulty": "Medium",
+      "method": "entityParser",
+      "javascript": "'use strict';\n\n// 1410. HTML Entity Parser (Medium).\n// Specification: https://leetcode.com/problems/html-entity-parser/description/\nfunction solve(text) {\n  return text\n    .split(\"&quot;\").join('\"')\n    .split(\"&apos;\").join(\"'\")\n    .split(\"&gt;\").join(\">\")\n    .split(\"&lt;\").join(\"<\")\n    .split(\"&frasl;\").join(\"/\")\n    .split(\"&amp;\").join(\"&\");\n}\nconst entityParser = solve;\nclass Solution { entityParser(...args) { return solve(...args); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, entityParser };\n",
+      "python": "\"\"\"1410. HTML Entity Parser (Medium).\n\nSpecification: https://leetcode.com/problems/html-entity-parser/description/\n\"\"\"\n\n\ndef solve(text):\n    return (\n        text.replace(\"&quot;\", '\"')\n        .replace(\"&apos;\", \"'\")\n        .replace(\"&gt;\", \">\")\n        .replace(\"&lt;\", \"<\")\n        .replace(\"&frasl;\", \"/\")\n        .replace(\"&amp;\", \"&\")\n    )\n\n\nclass Solution:\n    def entityParser(self, text):\n        return solve(text)\n",
+      "javascript_sha256": "19d197621a125972ae77cd3c1160926ade89b6fc604450379c487992b5ae81d4",
+      "python_sha256": "532e07786578cc312dafeeec5397438c8e1dd3c2f93d18f032b63b678a6abeb3",
+      "tests": [
+        [
+          [
+            "&amp; is an HTML entity but &ambassador; is not."
+          ],
+          "& is an HTML entity but &ambassador; is not."
+        ],
+        [
+          [
+            "and I quote: &quot;...&quot;"
+          ],
+          "and I quote: \"...\""
+        ],
+        [
+          [
+            "Stay home! Practice on Leetcode :)"
+          ],
+          "Stay home! Practice on Leetcode :)"
+        ],
+        [
+          [
+            "x &gt; y &amp;&amp; x &lt; y"
+          ],
+          "x > y && x < y"
+        ]
+      ],
+      "qualification": {
+        "passed": true,
+        "method": "public examples plus 20 random cross-language checks, per writing agent, spot-checked by parent"
+      }
+    },
+    {
+      "problem_id": 1418,
+      "slug": "display-table-of-food-orders-in-a-restaurant",
+      "title": "Display Table of Food Orders in a Restaurant",
+      "difficulty": "Medium",
+      "method": "displayTable",
+      "javascript": "'use strict';\n\n// 1418. Display Table of Food Orders in a Restaurant (Medium).\n// Specification: https://leetcode.com/problems/display-table-of-food-orders-in-a-restaurant/description/\nfunction solve(orders) {\n  const foods = new Set();\n  const tables = new Map();\n  for (const [customer, table, food] of orders) {\n    foods.add(food);\n    if (!tables.has(table)) tables.set(table, new Map());\n    const counts = tables.get(table);\n    counts.set(food, (counts.get(food) || 0) + 1);\n  }\n  const sortedFoods = [...foods].sort();\n  const header = [\"Table\", ...sortedFoods];\n  const rows = [...tables.entries()]\n    .sort((a, b) => Number(a[0]) - Number(b[0]))\n    .map(([table, counts]) => [table, ...sortedFoods.map((food) => String(counts.get(food) || 0))]);\n  return [header, ...rows];\n}\nconst displayTable = solve;\nclass Solution { displayTable(...args) { return solve(...args); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, displayTable };\n",
+      "python": "\"\"\"1418. Display Table of Food Orders in a Restaurant (Medium).\n\nSpecification: https://leetcode.com/problems/display-table-of-food-orders-in-a-restaurant/description/\n\"\"\"\n\n\ndef solve(orders):\n    foods = set()\n    tables = {}\n    for customer, table, food in orders:\n        foods.add(food)\n        counts = tables.setdefault(table, {})\n        counts[food] = counts.get(food, 0) + 1\n    sorted_foods = sorted(foods)\n    header = [\"Table\"] + sorted_foods\n    rows = []\n    for table in sorted(tables, key=lambda value: int(value)):\n        counts = tables[table]\n        rows.append([table] + [str(counts.get(food, 0)) for food in sorted_foods])\n    return [header] + rows\n\n\nclass Solution:\n    def displayTable(self, orders):\n        return solve(orders)\n",
+      "javascript_sha256": "b0ed390c4ef70128102a6fc0f8dd1542de8289de844dba6bcfe916217b20ad48",
+      "python_sha256": "dabd80765b85e69ce6929d576ab1dab2021ed1c9c052e52925d20c0296e981d6",
+      "tests": [
+        [
+          [
+            [
+              [
+                "David",
+                "3",
+                "Ceviche"
+              ],
+              [
+                "Corina",
+                "10",
+                "Beef Burrito"
+              ],
+              [
+                "David",
+                "3",
+                "Fried Chicken"
+              ],
+              [
+                "Carla",
+                "5",
+                "Water"
+              ],
+              [
+                "Carla",
+                "5",
+                "Ceviche"
+              ],
+              [
+                "Rous",
+                "3",
+                "Ceviche"
+              ]
+            ]
+          ],
+          [
+            [
+              "Table",
+              "Beef Burrito",
+              "Ceviche",
+              "Fried Chicken",
+              "Water"
+            ],
+            [
+              "3",
+              "0",
+              "2",
+              "1",
+              "0"
+            ],
+            [
+              "5",
+              "0",
+              "1",
+              "0",
+              "1"
+            ],
+            [
+              "10",
+              "1",
+              "0",
+              "0",
+              "0"
+            ]
+          ]
+        ]
+      ],
+      "qualification": {
+        "passed": true,
+        "method": "public examples plus 20 random cross-language checks, per writing agent, spot-checked by parent"
+      }
+    },
+    {
+      "problem_id": 1419,
+      "slug": "minimum-number-of-frogs-croaking",
+      "title": "Minimum Number of Frogs Croaking",
+      "difficulty": "Medium",
+      "method": "minNumberOfFrogs",
+      "javascript": "'use strict';\n\n// 1419. Minimum Number of Frogs Croaking (Medium).\n// Specification: https://leetcode.com/problems/minimum-number-of-frogs-croaking/description/\nfunction solve(croakOfFrogs) {\n  const order = { c: 0, r: 1, o: 2, a: 3, k: 4 };\n  const counts = [0, 0, 0, 0, 0];\n  let active = 0; let best = 0;\n  for (const ch of croakOfFrogs) {\n    const stage = order[ch];\n    if (stage === undefined) return -1;\n    if (stage > 0 && counts[stage] >= counts[stage - 1]) return -1;\n    counts[stage]++;\n    if (stage === 0) { active++; best = Math.max(best, active); }\n    if (stage === 4) active--;\n  }\n  if (active !== 0) return -1;\n  for (let i = 1; i < 5; i++) if (counts[i] !== counts[0]) return -1;\n  return best;\n}\nconst minNumberOfFrogs = solve;\nclass Solution { minNumberOfFrogs(...args) { return solve(...args); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, minNumberOfFrogs };\n",
+      "python": "\"\"\"1419. Minimum Number of Frogs Croaking (Medium).\n\nSpecification: https://leetcode.com/problems/minimum-number-of-frogs-croaking/description/\n\"\"\"\n\n\ndef solve(croakOfFrogs):\n    order = {\"c\": 0, \"r\": 1, \"o\": 2, \"a\": 3, \"k\": 4}\n    counts = [0, 0, 0, 0, 0]\n    active = 0\n    best = 0\n    for ch in croakOfFrogs:\n        if ch not in order:\n            return -1\n        stage = order[ch]\n        if stage > 0 and counts[stage] >= counts[stage - 1]:\n            return -1\n        counts[stage] += 1\n        if stage == 0:\n            active += 1\n            best = max(best, active)\n        if stage == 4:\n            active -= 1\n    if active != 0:\n        return -1\n    if any(counts[i] != counts[0] for i in range(1, 5)):\n        return -1\n    return best\n\n\nclass Solution:\n    def minNumberOfFrogs(self, croakOfFrogs):\n        return solve(croakOfFrogs)\n",
+      "javascript_sha256": "2a0f8a25164c98a63183a37fb10316c75c97461f71eec9069764df06cbd92888",
+      "python_sha256": "2c67564a6b02814fcb0eacfa5daf97ba2027fba1b7caed494d4e3464cc16325b",
+      "tests": [
+        [
+          [
+            "croakcroak"
+          ],
+          1
+        ],
+        [
+          [
+            "crcoakroak"
+          ],
+          2
+        ],
+        [
+          [
+            "croakcrook"
+          ],
+          -1
+        ],
+        [
+          [
+            "croakcroa"
+          ],
+          -1
+        ]
+      ],
+      "qualification": {
+        "passed": true,
+        "method": "public examples plus 20 random cross-language checks, per writing agent, spot-checked by parent"
+      }
+    },
+    {
+      "problem_id": 1427,
+      "slug": "perform-string-shifts",
+      "title": "Perform String Shifts",
+      "difficulty": "Easy",
+      "method": "stringShift",
+      "javascript": "'use strict';\n\n// 1427. Perform String Shifts (Easy).\n// Specification: https://leetcode.com/problems/perform-string-shifts/description/\nfunction solve(s, shift) {\n  if (s.length === 0) return s;\n  let net = 0;\n  for (const [direction, amount] of shift) net += direction === 1 ? amount : -amount;\n  net = ((net % s.length) + s.length) % s.length;\n  if (net === 0) return s;\n  return s.slice(-net) + s.slice(0, s.length - net);\n}\nconst stringShift = solve;\nclass Solution { stringShift(...args) { return solve(...args); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, stringShift };\n",
+      "python": "\"\"\"1427. Perform String Shifts (Easy).\n\nSpecification: https://leetcode.com/problems/perform-string-shifts/description/\n\"\"\"\n\n\ndef solve(s, shift):\n    if not s:\n        return s\n    net = 0\n    for direction, amount in shift:\n        net += amount if direction == 1 else -amount\n    net %= len(s)\n    if net == 0:\n        return s\n    return s[-net:] + s[:-net]\n\n\nclass Solution:\n    def stringShift(self, s, shift):\n        return solve(s, shift)\n",
+      "javascript_sha256": "5fbdfc52b828f6d47bb34045b3e63cd51881012a3f14d1020715800dd26f6d05",
+      "python_sha256": "d5dd65c6f0924d709c47768f1370cb4da4cbdd905b748ef187716c43712ca996",
+      "tests": [
+        [
+          [
+            "abc",
+            [
+              [
+                0,
+                1
+              ],
+              [
+                1,
+                2
+              ]
+            ]
+          ],
+          "cab"
+        ],
+        [
+          [
+            "abcdefg",
+            [
+              [
+                1,
+                1
+              ],
+              [
+                1,
+                1
+              ],
+              [
+                0,
+                2
+              ],
+              [
+                1,
+                3
+              ]
+            ]
+          ],
+          "efgabcd"
+        ],
+        [
+          [
+            "abc",
+            []
+          ],
+          "abc"
+        ]
+      ],
+      "qualification": {
+        "passed": true,
+        "method": "public examples plus 20 random cross-language checks, per writing agent, spot-checked by parent"
+      }
+    },
+    {
+      "problem_id": 1433,
+      "slug": "check-if-a-string-can-break-another-string",
+      "title": "Check If a String Can Break Another String",
+      "difficulty": "Medium",
+      "method": "checkIfCanBreak",
+      "javascript": "'use strict';\n\n// 1433. Check If a String Can Break Another String (Medium).\n// Specification: https://leetcode.com/problems/check-if-a-string-can-break-another-string/description/\nfunction solve(s1, s2) {\n  const a = s1.split(\"\").sort().join(\"\");\n  const b = s2.split(\"\").sort().join(\"\");\n  let aBreaks = true; let bBreaks = true;\n  for (let i = 0; i < a.length; i++) {\n    if (a[i] < b[i]) aBreaks = false;\n    if (b[i] < a[i]) bBreaks = false;\n  }\n  return aBreaks || bBreaks;\n}\nconst checkIfCanBreak = solve;\nclass Solution { checkIfCanBreak(...args) { return solve(...args); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, checkIfCanBreak };\n",
+      "python": "\"\"\"1433. Check If a String Can Break Another String (Medium).\n\nSpecification: https://leetcode.com/problems/check-if-a-string-can-break-another-string/description/\n\"\"\"\n\n\ndef solve(s1, s2):\n    a = sorted(s1)\n    b = sorted(s2)\n    a_breaks = all(x >= y for x, y in zip(a, b))\n    b_breaks = all(y >= x for x, y in zip(a, b))\n    return a_breaks or b_breaks\n\n\nclass Solution:\n    def checkIfCanBreak(self, s1, s2):\n        return solve(s1, s2)\n",
+      "javascript_sha256": "0c2cb0557423bb6357029725a912cdccd6c8ba507143a02b28d4d64f225d825e",
+      "python_sha256": "9f453ca291fc97e509e02134cbcee31baa1fcce01c7eff2d809f133b19980ffb",
+      "tests": [
+        [
+          [
+            "abc",
+            "xya"
+          ],
+          true
+        ],
+        [
+          [
+            "abe",
+            "acd"
+          ],
+          false
+        ],
+        [
+          [
+            "leetcodee",
+            "interview"
+          ],
+          true
+        ]
+      ],
+      "qualification": {
+        "passed": true,
+        "method": "public examples plus 20 random cross-language checks, per writing agent, spot-checked by parent"
+      }
+    },
+    {
+      "problem_id": 1442,
+      "slug": "count-triplets-that-can-form-two-arrays-of-equal-xor",
+      "title": "Count Triplets That Can Form Two Arrays of Equal XOR",
+      "difficulty": "Medium",
+      "method": "countTriplets",
+      "javascript": "'use strict';\n\n// 1442. Count Triplets That Can Form Two Arrays of Equal XOR (Medium).\n// Specification: https://leetcode.com/problems/count-triplets-that-can-form-two-arrays-of-equal-xor/description/\nfunction solve(arr) {\n  const prefix = [0];\n  for (const value of arr) prefix.push(prefix[prefix.length - 1] ^ value);\n  let count = 0;\n  for (let i = 0; i < prefix.length; i++) {\n    for (let q = i + 2; q < prefix.length; q++) {\n      if (prefix[i] === prefix[q]) count += q - i - 1;\n    }\n  }\n  return count;\n}\nconst countTriplets = solve;\nclass Solution { countTriplets(...args) { return solve(...args); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, countTriplets };\n",
+      "python": "\"\"\"1442. Count Triplets That Can Form Two Arrays of Equal XOR (Medium).\n\nSpecification: https://leetcode.com/problems/count-triplets-that-can-form-two-arrays-of-equal-xor/description/\n\"\"\"\n\n\ndef solve(arr):\n    prefix = [0]\n    for value in arr:\n        prefix.append(prefix[-1] ^ value)\n    count = 0\n    for i in range(len(prefix)):\n        for q in range(i + 2, len(prefix)):\n            if prefix[i] == prefix[q]:\n                count += q - i - 1\n    return count\n\n\nclass Solution:\n    def countTriplets(self, arr):\n        return solve(arr)\n",
+      "javascript_sha256": "6d5047a9b642ee7c97703c42bd089ce097d83b583e727ea0b336b656bfad94ee",
+      "python_sha256": "085d884ef36327181d06866e92b1093ab310797579650f8eb692178605498c7e",
+      "tests": [
+        [
+          [
+            [
+              2,
+              3,
+              1,
+              6,
+              7
+            ]
+          ],
+          4
+        ],
+        [
+          [
+            [
+              1,
+              1,
+              1,
+              1,
+              1
+            ]
+          ],
+          10
+        ],
+        [
+          [
+            [
+              2,
+              3
+            ]
+          ],
+          0
+        ]
+      ],
+      "qualification": {
+        "passed": true,
+        "method": "public examples plus 20 random cross-language checks, per writing agent, spot-checked by parent"
+      }
+    }
+  ]
+}
