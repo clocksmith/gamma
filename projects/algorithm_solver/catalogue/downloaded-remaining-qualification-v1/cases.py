@@ -1,5 +1,8 @@
 """New deterministic cases; no delivered expected outputs are oracle inputs."""
 from itertools import combinations, permutations, product
+import ast
+import html
+import re
 import json
 from pathlib import Path
 import random
@@ -19,6 +22,12 @@ def build(_statements=None):
         if key in seen[pid]:return
         seen[pid].add(key)
         data[pid].append({'args':args,'expected':o.expected(pid,args) if want is None else want,'category':category})
+    if _statements is not None:
+        for pid in IDS:
+            for args,declared in official_examples(Path(_statements)/f'{pid}.json'):
+                want=o.expected(pid,args)
+                assert o.matches(pid,args,declared,want),('official-example-oracle-disagreement',pid,args,declared,want)
+                add(pid,args,'official-example')
     # Complete bounded scalar domains and arithmetic edge neighborhoods.
     for n in list(range(-256,257))+[-2**31,2**31-1,1534236469,1463847412,1563847412,-1563847412,1000000000]:
         add(7,[n],'int32-reversal-and-overflow');add(9,[n],'signed-palindromes')
@@ -112,3 +121,18 @@ def build(_statements=None):
     for pid in IDS:
         assert data[pid],pid
     return data
+
+
+def official_examples(path):
+    question=json.loads(path.read_text())['data']['question']
+    body=re.sub(r'</?(?:p|pre|div|li|ul|ol|br)\b[^>]*>','\n',question['content'])
+    body=html.unescape(re.sub(r'<[^>]*>','',body))
+    examples=[]
+    for match in re.finditer(r'Input:\s*(.*?)\s*Output:\s*(.*?)(?=Explanation:|Example\s*\d+:|Constraints:|Follow up:|$)',body,re.S):
+        node=ast.parse('f('+match[1].strip()+')',mode='eval').body
+        assert isinstance(node,ast.Call) and not node.args and node.keywords
+        args=[ast.literal_eval(k.value) for k in node.keywords]
+        declared,_=json.JSONDecoder().raw_decode(match[2].strip())
+        examples.append((args,declared))
+    assert examples,question['questionFrontendId']
+    return examples
