@@ -3,8 +3,9 @@
 Each new expected value comes from a method different from the candidates:
 closed-form distances on paths and spiders (3820), counting below a bound with
 binary search (3821), a Fenwick-tree LIS or an analytic chain (3825), brute
-force or closed-form window counts (3835), and per-value net-count combinatorics
-(3850). Nothing here reads a candidate source.
+force, sparse-table binary search or closed-form window counts (3835), and
+per-value net-count combinatorics (3850). Boundary rows that repeat an original
+row are dropped. Nothing here reads a candidate source.
 """
 from __future__ import annotations
 import importlib.util
@@ -147,10 +148,40 @@ def windows_up_to(n, longest):
 
 
 def spike_count(n, spike, k, base=1, peak=10**9):
-    left, right = spike, n-1-spike
-    longest = k//(peak-base) if peak > base else n
+    # One-element windows cost 0; a longer window containing the spike costs |peak-base|*length.
+    left, right = spike, n-1-spike; gap = abs(peak-base)
+    longest = max(1, k//gap) if gap else n
     containing = sum(max(0, min(spike, n-length)-max(0, spike-length+1)+1) for length in range(1, min(n, longest)+1))
     return left*(left+1)//2 + right*(right+1)//2 + containing
+
+
+def alternating_count(n, k, low=1, high=10**9):
+    # One-element windows cost 0; every longer window holds both values.
+    return n+windows_up_to(n, max(1, k//(high-low)))-windows_up_to(n, 1)
+
+
+def count_windows_sparse(nums, k):
+    # Range minimum/maximum tables answer each window cost in O(1); binary search finds each cut-off.
+    n = len(nums); low, high = [nums[:]], [nums[:]]; step = 1
+    while 2*step <= n:
+        a, b = low[-1], high[-1]
+        low.append([min(a[i], a[i+step]) for i in range(n-2*step+1)])
+        high.append([max(b[i], b[i+step]) for i in range(n-2*step+1)])
+        step *= 2
+    def cost(left, right):
+        level = (right-left+1).bit_length()-1; span = 1 << level
+        return (max(high[level][left], high[level][right-span+1])-min(low[level][left], low[level][right-span+1]))*(right-left+1)
+    total = 0
+    for left in range(n):
+        lo, hi = left, n-1
+        while lo < hi:
+            middle = (lo+hi+1)//2
+            if cost(left, middle) <= k:
+                lo = middle
+            else:
+                hi = middle-1
+        total += lo-left+1
+    return total
 
 
 # 3850: elements of one value contribute a net count m = pluses - minuses.
@@ -188,16 +219,15 @@ def count_sequences(nums, k):
     return total*3**c[1]
 
 
-def _random_reachable_k(nums, rng):
-    exponents = [0, 0, 0]
-    for x in nums:
-        sign = rng.choice((-1, 0, 1))
-        for i, d in enumerate(VECTORS.get(x, (0, 0, 0))):
-            exponents[i] += sign*d
-    if min(exponents) < 0:
-        return 1
-    k = 2**exponents[0]*3**exponents[1]*5**exponents[2]
-    return k if k <= 10**15 else 1
+def _subset_product_k(nums, rng):
+    # Multiplying a random subset always yields a reachable k; other sign choices often reach it too.
+    while True:
+        k = 1
+        for x in nums:
+            if rng.random() < 0.6:
+                k *= x
+        if k <= 10**15:
+            return k
 
 
 def boundary_rows(pid):
@@ -210,10 +240,13 @@ def boundary_rows(pid):
         rows.append(row)
     if pid == 3820:
         n = 100000
-        # (46500, 62000, 77500) is a triple whose squares leave the signed 32-bit range unequally.
-        for positions, shuffled in (((36000, 48000, 60000), False), ((46500, 62000, 77500), False), ((0, 99999, 50000), True), ((12, 99990, 70001), True)):
+        # (46500, 62000, 77500): a true triple whose squares, stored as signed 32-bit and summed as doubles,
+        # stop comparing equal. (0, 49152, 81920): a non-triple that consistent 32-bit wraparound counts.
+        for positions, shuffled in (((36000, 48000, 60000), False), ((36000, 48000, 60000), True), ((46500, 62000, 77500), False),
+                                    ((0, 49152, 81920), False), ((0, 99999, 50000), True), ((12, 99990, 70001), True)):
             add(*path_case(n, rng, positions, shuffled), isolate=True)
         add(*spider_case([33333, 33333, 33333], rng, [(0, 30000), (1, 20000), (2, 33333)]), isolate=True)
+        add(*spider_case([30000, 24000, 18000, 27999], rng, [(0, 30000), (1, 24000), (2, 18000)]), isolate=True)
         add(*spider_case([60000, 39999], rng, [(0, 36000), (0, 60000), (1, 39999)]), isolate=True)
         for size in (4, 5, 30, 200, 1500):
             add(*path_case(size, rng, rng.sample(range(size), 3), True))
@@ -231,6 +264,7 @@ def boundary_rows(pid):
         add([[high+i for i in range(100000)]], 100000, isolate=True)
         add([[10**9-i for i in range(100000)]], 1, isolate=True)
         add([[939524096+600*i for i in range(100000)]], 100000, isolate=True)
+        add([[939524096+(i << 9)+511 for i in range(100000)]], 100000, isolate=True)  # about 20 set bits per value
         for _ in range(8):
             nums = [rng.randrange(high, 10**9+1) if rng.random() < 0.4 else rng.randrange(0, 10**9+1) for _ in range(3000)]
             add([nums], longest_and_lis(nums))
@@ -240,7 +274,10 @@ def boundary_rows(pid):
             nums = [1]*n; nums[n//2] = peak; k = (peak-1)*m
             add([nums, k], spike_count(n, n//2, k), isolate=True)
         for k in ((peak-1)*50000, (peak-1)*50000-1, (peak-1)*2):
-            add([[1, peak]*50000, k], 100000+windows_up_to(100000, k//(peak-1))-windows_up_to(100000, 1), isolate=True)
+            add([[1, peak]*50000, k], alternating_count(100000, k), isolate=True)
+        valley = [peak-9000*i for i in range(50000)]+[peak-9000*(50000-i) for i in range(50000)]
+        for k in (10**12, 3*10**13):
+            add([valley, k], count_windows_sparse(valley, k), isolate=True)
         longest = (1+isqrt(1+4*10**9))//2  # largest length with length*(length-1) <= 10**9
         add([list(range(1, 100001)), 10**9], windows_up_to(100000, longest), isolate=True)
         for size in (200, 600, 1500):
@@ -255,13 +292,19 @@ def boundary_rows(pid):
         add([[2]*10+[4]*9, 2**28], count_sequences([2]*10+[4]*9, 2**28))
         add([[4]*8+[5]*11, 10**15], count_sequences([4]*8+[5]*11, 10**15))
         add([[6]*19, 6], count_sequences([6]*19, 6))
+        add([[6]*19, 6**17], count_sequences([6]*19, 6**17))
+        add([[4]*19, 4**17], count_sequences([4]*19, 4**17))
         for _ in range(16):
             nums = [rng.randint(1, 6) for _ in range(19)]
-            k = _random_reachable_k(nums, rng) if rng.random() < 0.8 else rng.choice((1, 7, 10**15, 2**49))
+            k = _subset_product_k(nums, rng) if rng.random() < 0.8 else rng.choice((1, 7, 10**15, 2**49))
             add([nums, k], count_sequences(nums, k))
     return rows
 
 
 def build_cases(pid):
     original = J_CASES.build_cases(pid, include_maximum=True) if pid in IDS['j'] else K_ORACLES.build_cases(pid)
-    return [dict(row) for row in original]+boundary_rows(pid)
+    rows = [dict(row) for row in original]; seen = {repr(row['args']) for row in rows}
+    for row in boundary_rows(pid):
+        if repr(row['args']) not in seen:
+            seen.add(repr(row['args'])); rows.append(row)
+    return rows
