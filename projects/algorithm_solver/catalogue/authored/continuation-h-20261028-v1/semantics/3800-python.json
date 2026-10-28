@@ -1,0 +1,53 @@
+{
+  "comparison": "exact typed JSON result",
+  "effects": "arguments unchanged",
+  "entrypoint": "solve",
+  "language": "python",
+  "official_interface": {
+    "name": "minimumCost",
+    "params": [
+      {
+        "name": "s",
+        "type": "string"
+      },
+      {
+        "name": "t",
+        "type": "string"
+      },
+      {
+        "name": "flipCost",
+        "type": "integer"
+      },
+      {
+        "name": "swapCost",
+        "type": "integer"
+      },
+      {
+        "name": "crossCost",
+        "type": "integer"
+      }
+    ],
+    "return": {
+      "type": "long"
+    }
+  },
+  "parameters": [
+    "s",
+    "t",
+    "flipCost",
+    "swapCost",
+    "crossCost"
+  ],
+  "problem_id": 3800,
+  "qualification": {
+    "reason": "No candidate execution; source-free references and static syntax only",
+    "status": "unknown"
+  },
+  "schema": "gamma.authored-scalar-semantics.v1",
+  "source_reasoning": {
+    "candidate_design": "pair opposite mismatch orientations using min(swap,2flip); remaining same-orientation pairs min(cross+swap,2flip), odd remainder flip",
+    "complexity_target": "O(n) time/O(1) space",
+    "reference": "full weighted-state Dijkstra over two strings, literal flip/swap/cross operations"
+  },
+  "source_sha256": "6ecc9ef16670115a35b415c94698c57df55108b0bfbe55c0856512136feea8e6"
+}

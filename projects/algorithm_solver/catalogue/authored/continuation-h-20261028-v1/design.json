@@ -1,0 +1,56 @@
+{
+  "problems": {
+    "3781": {
+      "reference": "BFS reachable binary strings under01\u219210 swaps",
+      "candidate_design": "scan deadlines(original1positions); take max unused prefix weight from heap for each1",
+      "complexity_target": "O(n log n) time/O(n) space"
+    },
+    "3784": {
+      "reference": "enumerate every nonempty kept-index subset",
+      "candidate_design": "total deletion cost minus maximum retained cost of a character",
+      "complexity_target": "O(n) time/O(26) space"
+    },
+    "3788": {
+      "reference": "recompute prefix sum and suffix min per split",
+      "candidate_design": "suffix min preprocessing plus running prefix sum",
+      "complexity_target": "O(n) time/O(n) space"
+    },
+    "3789": {
+      "reference": "enumerate counts of all three item types",
+      "candidate_design": "evaluate piecewise-linear cost at combined-item counts0,min(needs),max(needs)",
+      "complexity_target": "O(1) time/space"
+    },
+    "3790": {
+      "reference": "build arbitrary-precision repunits and test divisibility",
+      "candidate_design": "iterate remainder recurrence up to k; reject factors2or5",
+      "complexity_target": "O(k) time/O(1) space"
+    },
+    "3791": {
+      "reference": "enumerate each number and compare alternating digit slices",
+      "candidate_design": "fixed-width padded digitDP signed position sums; equality invariant under leadingzero sign, exclude numbers<10",
+      "complexity_target": "O(digits**2*digitsum*10) time/O(digits*digitsum) space"
+    },
+    "3795": {
+      "reference": "enumerate intervals and sum literal distinct sets",
+      "candidate_design": "positive-value sliding window with frequency and distinct sum",
+      "complexity_target": "O(n) time/O(n) space"
+    },
+    "3799": {
+      "reference": "all four-index permutations test four corner equalities",
+      "candidate_design": "sorted words and explicit four distinct loops with early corner pruning",
+      "complexity_target": "O(w**4) time/O(output) space"
+    },
+    "3800": {
+      "reference": "full weighted-state Dijkstra over two strings, literal flip/swap/cross operations",
+      "candidate_design": "pair opposite mismatch orientations using min(swap,2flip); remaining same-orientation pairs min(cross+swap,2flip), odd remainder flip",
+      "complexity_target": "O(n) time/O(1) space"
+    },
+    "3801": {
+      "reference": "literal exhaustive merge-order search on sorted tuples",
+      "candidate_design": "subset lengths+medians via sorted tagged original values; binary merge-tree partition DP, anchor bit avoids symmetric partitions",
+      "complexity_target": "O(2**m*T+3**m) time/O(2**m+T) space"
+    }
+  },
+  "numeric": "all totals bounded below2**53:3789<=2e15 (individual-only strategy),3791 count<=1e15,3800<=1e14,3801<=11*(2000+2e9); JS uses Number exact integer arithmetic; no bitwise numeric coercions except masks<=4095",
+  "effects": "all input/nested arrays unchanged;3799 returned rows fresh and lexicographically sorted"
+}
