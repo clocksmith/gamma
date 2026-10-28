@@ -1,0 +1,78 @@
+{
+  "pre_sourci_reference_freeze_sha256": "31027e89c6bb3ae0bb226a9a4328d3a431ed7182578282cfc3e6d022a553f1ca",
+  "problem_contract": {
+    "external_interface": {
+      "argument_order": [
+        "nums",
+        "k",
+        "m"
+      ],
+      "canonical": "solve",
+      "leetcode_method": "maximumAND",
+      "official_metadata": {
+        "name": "maximumAND",
+        "params": [
+          {
+            "name": "nums",
+            "type": "integer[]"
+          },
+          {
+            "name": "k",
+            "type": "integer"
+          },
+          {
+            "name": "m",
+            "type": "integer"
+          }
+        ],
+        "return": {
+          "type": "integer"
+        }
+      },
+      "wrapper_execution": "unrun"
+    },
+    "id": 3806,
+    "mutation_alias_contract": {
+      "canonical_solve": "Inputs unchanged; scalar/string or fresh list output; no aliased input return",
+      "official_wrapper": "Delegating wrapper unexecuted"
+    },
+    "numeric_complexity_contract": {
+      "algorithm": "Greedy high bits30..0; for proposed mask compute each value's least upward supermask via its highest missing required bit, select m smallest costs. Feasibility downward closed under deleting required bits. O(31*n log n) time/O(n) space.",
+      "numeric": "Optimal values<=original+k<=2000000000<2^31. Trial masks/supermasks<2^31; JS bitwise values stay nonnegative. Summed costs<=107374182350000<2^53. Unit2^31 computed as Number, not signed shift.",
+      "resource_acceptance": "unmeasured"
+    },
+    "objective_summary": "New original source-exposed candidate; imported inventory unknown; no global missing, qualification, adoption or held-out claim",
+    "official_content_sha256": "e576cb5928737ce077cde85769300c061756cc2ff4f6bb5cbd58c79eb40dd6a4",
+    "official_question_frontend_id": "3806",
+    "official_response_sha256": "8a009ff831e6053d616f56539df09e9a63238e91c8bccbaf8c77f10010a4a034",
+    "return_domain": {
+      "comparison_policy": "exact top-level type and value, no coercion",
+      "independent_review": "pending",
+      "type": "integer"
+    },
+    "slug": "maximum-bitwise-and-after-increment-operations",
+    "statement_constraints_snapshot": {
+      "domain_validator": "oracles.validate",
+      "full_official_snapshot": "Pinned privately; full statement omitted",
+      "independent_review": "pending",
+      "summary": "n1..50000; values1..1000000000; increment budgetk1..1000000000; choose exactlym1..n indices; maximize their AND after<=k total increments"
+    },
+    "supplied_reference_url": "https://leetcode.com/problems/maximum-bitwise-and-after-increment-operations/description/",
+    "title": "Maximum Bitwise AND After Increment Operations"
+  },
+  "problem_id": 3806,
+  "qualification": {
+    "active_adopted": false,
+    "independent_runtime_assessment": false,
+    "status": "unknown"
+  },
+  "reference": {
+    "candidate_execution": "not performed",
+    "comparison": "matches",
+    "domain": "validate",
+    "expected": "expected",
+    "generator": "build_cases",
+    "module": "oracles.py"
+  },
+  "schema": "gamma.authored-source-semantics.v1"
+}
