@@ -1,11 +1,13 @@
 """Cross-check reference oracles and verify verdict boundaries for batch 03."""
 from collections import deque
 import copy
-from itertools import combinations, permutations, product
+from itertools import combinations, combinations_with_replacement, permutations, product
 import math
 from pathlib import Path
 import sys
+import tempfile
 import unittest
+from unittest.mock import patch
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import oracles as o
@@ -113,6 +115,129 @@ class ReferenceChecks(unittest.TestCase):
         self.assertIn((164, 'javascript'), o.MANDATORY_FAILURES)
         self.assertIn((373, 'python'), o.MANDATORY_FAILURES)
         self.assertIn((373, 'javascript'), o.MANDATORY_FAILURES)
+
+
+class ComparatorRepairs(unittest.TestCase):
+    def test_gray_code_range_types_and_cycle_are_all_required(self):
+        self.assertTrue(o.matches(89, [1], [0, 1], [0, 1]))
+        self.assertTrue(o.matches(89, [2], [0, 2, 3, 1], [0, 1, 3, 2]))
+        for value in ([0, 2], [0, -1], [False, 1], [0, True], [0, 1.0], [0, 0],
+                      [1, 0], [0], (0, 1), [0, 1, 5, 4]):
+            with self.subTest(value=value):
+                self.assertFalse(o.matches(89, [1 if len(value) <= 2 else 2], value, []))
+        for args in ([], [True], [1.0], [-1], [0], [1000000000], [1, 2], (1,)):
+            with self.subTest(args=args):
+                self.assertFalse(o.matches(89, args, [0, 1], []))
+
+    def test_published_boolean_subset_counterexample_is_rejected(self):
+        args, want = [[0]], [[], [0]]
+        self.assertFalse(o.matches(78, args, [[], [False]], want))
+        record = {'result': [[], [False]], 'result_type': 'list',
+                  'args_before': args, 'args_after': args, 'alias_edges': []}
+        self.assertEqual(o.compare(78, args, want, record, 'python'), (False, 'result_value'))
+        record['result_type'] = 'object'
+        self.assertEqual(o.compare(78, args, want, record, 'javascript'), (False, 'result_value'))
+
+    def test_nested_unordered_routes_preserve_types_shape_and_multiplicity(self):
+        for pid in (15, 39, 40, 77, 78, 90, 216):
+            with self.subTest(pid=pid):
+                self.assertTrue(o.matches(pid, [], [[2, 1], []], [[], [1, 2]]))
+                for value in ([[True]], [[1.0]], [(1,)], [1], [[1], [1]], {'x': [1]}):
+                    self.assertFalse(o.matches(pid, [], value, [[1]]))
+        self.assertTrue(o.matches(49, [], [['eat', 'tea'], ['bat']], [['bat'], ['tea', 'eat']]))
+        self.assertFalse(o.matches(49, [], [['eat', 'eat']], [['eat', 'tea']]))
+
+    def test_outer_unordered_routes_keep_recursive_types_and_inner_order(self):
+        for pid in (46, 56, 57):
+            self.assertTrue(o.matches(pid, [], [[3, 4], [1, 2]], [[1, 2], [3, 4]]))
+            self.assertFalse(o.matches(pid, [], [[1, True]], [[1, 1]]))
+            self.assertFalse(o.matches(pid, [], [[1, 2.0]], [[1, 2]]))
+            self.assertFalse(o.matches(pid, [], [[2, 1]], [[1, 2]]))
+        self.assertFalse(o.matches(46, [], [[[False]]], [[[0]]]))
+        self.assertFalse(o.matches(131, [], [['b', 'a']], [['a', 'b']]))
+        for pid in (241, 310, 347):
+            self.assertTrue(o.matches(pid, [], [2, 1], [1, 2]))
+            self.assertFalse(o.matches(pid, [], [True, 2], [1, 2]))
+            self.assertFalse(o.matches(pid, [], [1.0, 2], [1, 2]))
+        for pid in (22, 93, 187):
+            self.assertTrue(o.matches(pid, [], ['b', 'a'], ['a', 'b']))
+            self.assertFalse(o.matches(pid, [], ['a', 'a'], ['a', 'b']))
+
+    def test_published_overused_pair_counterexample_is_rejected(self):
+        args = [[1, 2], [1, 2], 3]
+        want = [[1, 1], [1, 2], [2, 1]]
+        self.assertFalse(o.matches(373, args, [[1, 1], [1, 2], [1, 2]], want))
+        self.assertTrue(o.matches(373, args, [[2, 1], [1, 1], [1, 2]], want))
+
+    def test_pair_threshold_accepts_real_ties_and_index_multiplicity(self):
+        args = [[1, 2], [1, 2], 2]
+        self.assertTrue(o.matches(373, args, [[1, 1], [2, 1]], [[1, 1], [1, 2]]))
+        self.assertFalse(o.matches(373, args, [[1, 2], [2, 1]], [[1, 1], [1, 2]]))
+        self.assertFalse(o.matches(373, args, [[1, 1], [2, 2]], [[1, 1], [1, 2]]))
+        self.assertTrue(o.matches(373, [[1, 1], [2, 2], 3], [[1, 2]] * 3, None))
+        self.assertTrue(o.matches(373, [[1, 1], [2, 2], 9], [[1, 2]] * 4, None))
+        self.assertFalse(o.matches(373, [[1, 1], [2, 2], 3], [[1, 2]] * 4, None))
+        self.assertTrue(o.matches(373, [[-3, -1], [-2, 4], 2], [[-3, -2], [-1, -2]], None))
+
+    def test_pair_output_types_and_unknown_values_fail_closed(self):
+        args = [[0, 1], [1, 2], 1]
+        for value in ([[False, 1]], [[0.0, 1]], [(0, 1)], [[0, 1, 2]],
+                      [[0]], [[0, 3]], None, [0], {'pair': [0, 1]}):
+            with self.subTest(value=value):
+                self.assertFalse(o.matches(373, args, value, [[0, 1]]))
+        self.assertFalse(o.matches(373, [[1], [1], True], [[1, 1]], None))
+        self.assertTrue(o.matches(373, [[1], [1], 0], [], None))
+        self.assertTrue(o.matches(373, [[], [1], 1], [], None))
+
+    def test_pair_witnesses_against_exhaustive_distinct_index_subsets(self):
+        arrays = [list(a) for size in range(1, 4)
+                  for a in combinations_with_replacement((-1, 1), size)]
+        for left, right in product(arrays, repeat=2):
+            index_pairs = [(a, b) for a in left for b in right]
+            values = sorted(set(index_pairs))
+            for k in range(min(3, len(index_pairs)) + 1):
+                choices = list(combinations(range(len(index_pairs)), k))
+                optimum = min(sum(sum(index_pairs[i]) for i in choice) for choice in choices)
+                admitted = {tuple(sorted(index_pairs[i] for i in choice)) for choice in choices
+                            if sum(sum(index_pairs[i]) for i in choice) == optimum}
+                for candidate in combinations_with_replacement(values, k):
+                    self.assertEqual(o.matches(373, [left, right, k], [list(p) for p in candidate], None),
+                                     candidate in admitted, (left, right, k, candidate))
+
+
+class UnexecutedEvidenceChecks(unittest.TestCase):
+    def test_preparation_verifier_does_not_promote_unexecuted_delivery(self):
+        # Exercise the existing verifier's metadata path with wholly synthetic
+        # records. No private snapshots, raw streams or candidates are loaded.
+        import verify as verifier
+        from qualify import encoded, sha
+        import json
+        data = {11: [{'args': [[1, 1]], 'expected': 1}]}
+        artifacts = {'synthetic-helper.py': '0' * 64}
+        contract = {'artifact_hashes': artifacts, 'cases_sha256': sha(encoded(data)),
+                    'statement_pins': [{'id': 11}]}
+        raw = json.dumps(contract).encode()
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            freeze = root / 'freeze.json'; freeze.write_bytes(raw)
+            output = root / 'delivery'; output.mkdir()
+            for name, value in {
+                'run-identity.json': {'freeze_sha256': sha(raw)},
+                'report.json': {'freeze_sha256': sha(raw), 'execution_status': 'unexecuted', 'passed': False},
+                'unexecuted-receipt.json': {'freeze_sha256': sha(raw), 'execution_status': 'unexecuted',
+                                           'judge_binary_required': '/usr/bin/bwrap'},
+            }.items():
+                (output / name).write_text(json.dumps(value))
+            with patch.object(verifier, 'artifacts', return_value=artifacts), \
+                    patch.object(verifier, 'load_cases', return_value=data), \
+                    patch.object(verifier, 'verdict', side_effect=AssertionError('no execution replay allowed')):
+                result = verifier.verify(freeze, root / 'unused-statements', output)
+        self.assertEqual(result['execution_status'], 'unexecuted')
+        self.assertEqual(result['cases_regenerated'], 1)
+        self.assertTrue(result['unexecuted_receipt_verified'])
+        self.assertNotIn('programs_passed', result)
+        self.assertNotIn('programs_qualified', result)
+        self.assertNotIn('all_observations_match_report', result)
 
 
 if __name__ == '__main__':
