@@ -1,0 +1,594 @@
+{
+  "authorization": "Exact ten rows authorized_source_and_statement in private-next-q-authorized.json; no protected or unknown payload reads",
+  "problems": [
+    {
+      "comparison": {
+        "duplicates_forbidden": true,
+        "policy": "unordered complete distinct sequence set"
+      },
+      "external_interface": {
+        "argument_order": [
+          "beginWord",
+          "endWord",
+          "wordList"
+        ],
+        "canonical": "solve",
+        "language_parameter_names": {
+          "javascript": [
+            "beginWord",
+            "endWord",
+            "wordList"
+          ],
+          "python": [
+            "beginWord",
+            "endWord",
+            "wordList"
+          ]
+        },
+        "native_profile_required": false,
+        "official": {
+          "name": "findLadders",
+          "params": [
+            {
+              "name": "beginWord",
+              "type": "string"
+            },
+            {
+              "name": "endWord",
+              "type": "string"
+            },
+            {
+              "name": "wordList",
+              "type": "list<string>"
+            }
+          ],
+          "return": {
+            "type": "list<list<string>>"
+          }
+        },
+        "serialized_model_is_native_api": false
+      },
+      "id": 126,
+      "mutation_alias_contract": {
+        "arguments": "all original fields/edges/containers unchanged",
+        "return": "fresh containers for list results; immutable scalar otherwise"
+      },
+      "numeric_complexity_contract": {
+        "candidate_design": "BFS shortest-distance parent DAG via singleletter replacements then iterative path enumeration",
+        "complexity_target": "O(words*length*26*length+output) time/O(graph+output) space",
+        "reference": "BFS all simple paths in explicit pairwise wordgraph"
+      },
+      "qualification_status": "unknown",
+      "return_domain": {
+        "type": "list<list<string>>"
+      },
+      "slug": "word-ladder-ii",
+      "statement_constraints_snapshot": {
+        "domain_owner": "oracles.py validate_domain; exact public bounds",
+        "full_text_location": "private continuation-q definition snapshot",
+        "official_response_sha256": "07edde599ccf3a56b5567ac45bb3599c00a5e933237e5b91e7e85b6a7849ba1d",
+        "statement_html_sha256": "d4383c0caf2e0666b7b678e484617e6dda0d4669731f01668fef88abcdfb31f9"
+      },
+      "title": "Word Ladder II"
+    },
+    {
+      "comparison": {
+        "binding": "native-bindings.json",
+        "policy": "native identity/effect observer required; serializedmodel alone insufficient"
+      },
+      "external_interface": {
+        "argument_order": [
+          "root"
+        ],
+        "canonical": "solve",
+        "language_parameter_names": {
+          "javascript": [
+            "root"
+          ],
+          "python": [
+            "root"
+          ]
+        },
+        "native_profile_required": true,
+        "official": {
+          "name": "sumNumbers",
+          "params": [
+            {
+              "name": "root",
+              "type": "TreeNode"
+            }
+          ],
+          "return": {
+            "type": "integer"
+          }
+        },
+        "serialized_model_is_native_api": false
+      },
+      "id": 129,
+      "mutation_alias_contract": {
+        "arguments": "all original fields/edges/containers unchanged",
+        "return": "fresh containers for list results; immutable scalar otherwise"
+      },
+      "numeric_complexity_contract": {
+        "candidate_design": "native iterative DFS prefix numeric value",
+        "complexity_target": "O(nodes) time/O(depth) stack",
+        "reference": "enumerate serialized root-leaf digit paths and parse decimal integers"
+      },
+      "qualification_status": "unknown",
+      "return_domain": {
+        "type": "integer"
+      },
+      "slug": "sum-root-to-leaf-numbers",
+      "statement_constraints_snapshot": {
+        "domain_owner": "oracles.py validate_domain; exact public bounds",
+        "full_text_location": "private continuation-q definition snapshot",
+        "official_response_sha256": "72ace11ce417dc2ce7ae50243cbba6916ec077917cae86e48e3629860e49d9aa",
+        "statement_html_sha256": "0c55ea4a0650eb4b84df96c5f480b9f691b23245313495e76203fbc1dd63f3ad"
+      },
+      "title": "Sum Root to Leaf Numbers"
+    },
+    {
+      "comparison": {
+        "policy": "exact typed JSON result"
+      },
+      "external_interface": {
+        "argument_order": [
+          "s"
+        ],
+        "canonical": "solve",
+        "language_parameter_names": {
+          "javascript": [
+            "s"
+          ],
+          "python": [
+            "s"
+          ]
+        },
+        "native_profile_required": false,
+        "official": {
+          "name": "minCut",
+          "params": [
+            {
+              "name": "s",
+              "type": "string"
+            }
+          ],
+          "return": {
+            "type": "integer"
+          }
+        },
+        "serialized_model_is_native_api": false
+      },
+      "id": 132,
+      "mutation_alias_contract": {
+        "arguments": "all original fields/edges/containers unchanged",
+        "return": "fresh containers for list results; immutable scalar otherwise"
+      },
+      "numeric_complexity_contract": {
+        "candidate_design": "odd/even center expansion with prefix mincuts",
+        "complexity_target": "O(n**2) time/O(n) space",
+        "reference": "enumerate every cutmask and literal palindrome tests"
+      },
+      "qualification_status": "unknown",
+      "return_domain": {
+        "type": "integer"
+      },
+      "slug": "palindrome-partitioning-ii",
+      "statement_constraints_snapshot": {
+        "domain_owner": "oracles.py validate_domain; exact public bounds",
+        "full_text_location": "private continuation-q definition snapshot",
+        "official_response_sha256": "09366e38941d272868b691a67560144194a617e42bd1625a75124388ff7b0ce6",
+        "statement_html_sha256": "15eaf86cce02904ac138620e34c82a91d292f4ab9047c1e581183d47e7206096"
+      },
+      "title": "Palindrome Partitioning II"
+    },
+    {
+      "comparison": {
+        "binding": "native-bindings.json",
+        "policy": "native identity/effect observer required; serializedmodel alone insufficient"
+      },
+      "external_interface": {
+        "argument_order": [
+          "node"
+        ],
+        "canonical": "solve",
+        "language_parameter_names": {
+          "javascript": [
+            "node"
+          ],
+          "python": [
+            "node"
+          ]
+        },
+        "native_profile_required": true,
+        "official": {
+          "name": "cloneGraph",
+          "params": [
+            {
+              "name": "node",
+              "type": "Node"
+            }
+          ],
+          "return": {
+            "type": "Node"
+          }
+        },
+        "serialized_model_is_native_api": false
+      },
+      "id": 133,
+      "mutation_alias_contract": {
+        "arguments": "all original fields/edges/containers unchanged",
+        "return": "fully disjoint deepclone pool/topology"
+      },
+      "numeric_complexity_contract": {
+        "candidate_design": "native BFS original\u2192freshNode map, reconstruct each neighbor list",
+        "complexity_target": "O(V+E) time/O(V+E) space",
+        "reference": "indexed graph clone structure expected plus independent identity conditions"
+      },
+      "qualification_status": "unknown",
+      "return_domain": {
+        "type": "Node"
+      },
+      "slug": "clone-graph",
+      "statement_constraints_snapshot": {
+        "domain_owner": "oracles.py validate_domain; exact public bounds",
+        "full_text_location": "private continuation-q definition snapshot",
+        "official_response_sha256": "340a4c97a9425a7a3df7c829e66db0f70213bc90edbc244c5bcaeaecfd81a6e7",
+        "statement_html_sha256": "af0c99e45dd5ef48d58a02d15d639eaed7f69af3ce8e1c7efee1f0972674b0e1"
+      },
+      "title": "Clone Graph"
+    },
+    {
+      "comparison": {
+        "binding": "native-bindings.json",
+        "policy": "native identity/effect observer required; serializedmodel alone insufficient"
+      },
+      "external_interface": {
+        "argument_order": [
+          "head"
+        ],
+        "canonical": "solve",
+        "language_parameter_names": {
+          "javascript": [
+            "head"
+          ],
+          "python": [
+            "head"
+          ]
+        },
+        "native_profile_required": true,
+        "official": {
+          "name": "copyRandomList",
+          "params": [
+            {
+              "name": "head",
+              "type": "RandomNode"
+            }
+          ],
+          "return": {
+            "type": "RandomNode"
+          }
+        },
+        "serialized_model_is_native_api": false
+      },
+      "id": 138,
+      "mutation_alias_contract": {
+        "arguments": "all original fields/edges/containers unchanged",
+        "return": "fully disjoint deepclone pool/topology"
+      },
+      "numeric_complexity_contract": {
+        "candidate_design": "two-pass map oldnodes\u2192freshNode with next/random edges",
+        "complexity_target": "O(n) time/O(n) space",
+        "reference": "indexed next-order/random indices expected plus fresh/disjoint identityconditions"
+      },
+      "qualification_status": "unknown",
+      "return_domain": {
+        "type": "RandomNode"
+      },
+      "slug": "copy-list-with-random-pointer",
+      "statement_constraints_snapshot": {
+        "domain_owner": "oracles.py validate_domain; exact public bounds",
+        "full_text_location": "private continuation-q definition snapshot",
+        "official_response_sha256": "c2f36a646ca8340a193046070c7a165b321fea99f1c983abe359eaa0fbebaa45",
+        "statement_html_sha256": "7a0098151f5507debdc2ba7bca569241d569b65d6711f88a3b5641a08db02a4e"
+      },
+      "title": "Copy List with Random Pointer"
+    },
+    {
+      "comparison": {
+        "duplicates_forbidden": true,
+        "policy": "unordered complete distinct sequence set"
+      },
+      "external_interface": {
+        "argument_order": [
+          "s",
+          "wordDict"
+        ],
+        "canonical": "solve",
+        "language_parameter_names": {
+          "javascript": [
+            "s",
+            "wordDict"
+          ],
+          "python": [
+            "s",
+            "wordDict"
+          ]
+        },
+        "native_profile_required": false,
+        "official": {
+          "name": "wordBreak",
+          "params": [
+            {
+              "name": "s",
+              "type": "string"
+            },
+            {
+              "name": "wordDict",
+              "type": "list<string>"
+            }
+          ],
+          "return": {
+            "dealloc": true,
+            "type": "list<string>"
+          }
+        },
+        "serialized_model_is_native_api": false
+      },
+      "id": 140,
+      "mutation_alias_contract": {
+        "arguments": "all original fields/edges/containers unchanged",
+        "return": "fresh containers for list results; immutable scalar otherwise"
+      },
+      "numeric_complexity_contract": {
+        "candidate_design": "suffix sentence DP with dictionary lookup, return complete segmentations",
+        "complexity_target": "O(n*maxlength+output) time/O(output) space",
+        "reference": "all cut masks and dictionary membership"
+      },
+      "qualification_status": "unknown",
+      "return_domain": {
+        "dealloc": true,
+        "type": "list<string>"
+      },
+      "slug": "word-break-ii",
+      "statement_constraints_snapshot": {
+        "domain_owner": "oracles.py validate_domain; exact public bounds",
+        "full_text_location": "private continuation-q definition snapshot",
+        "official_response_sha256": "fb6d7bde530846d25f015c4739f8d8f548b39a55045148fc27d7f5003d94be30",
+        "statement_html_sha256": "e31b9b8b71cfa0a9ee127cd2cfd43085e9b417ce0f8e9d132ff47ebc1b5beec1"
+      },
+      "title": "Word Break II"
+    },
+    {
+      "comparison": {
+        "binding": "native-bindings.json",
+        "policy": "native identity/effect observer required; serializedmodel alone insufficient"
+      },
+      "external_interface": {
+        "argument_order": [
+          "head"
+        ],
+        "canonical": "solve",
+        "language_parameter_names": {
+          "javascript": [
+            "head"
+          ],
+          "python": [
+            "head"
+          ]
+        },
+        "native_profile_required": true,
+        "official": {
+          "name": "hasCycle",
+          "params": [
+            {
+              "name": "head",
+              "type": "ListNode"
+            }
+          ],
+          "return": {
+            "type": "boolean"
+          }
+        },
+        "serialized_model_is_native_api": false
+      },
+      "id": 141,
+      "mutation_alias_contract": {
+        "arguments": "all original fields/edges/containers unchanged",
+        "return": "fresh containers for list results; immutable scalar otherwise"
+      },
+      "numeric_complexity_contract": {
+        "candidate_design": "native Floyd slow/fast identity comparison",
+        "complexity_target": "O(n) time/O(1) space",
+        "reference": "serialized successor walk with seen index set"
+      },
+      "qualification_status": "unknown",
+      "return_domain": {
+        "type": "boolean"
+      },
+      "slug": "linked-list-cycle",
+      "statement_constraints_snapshot": {
+        "domain_owner": "oracles.py validate_domain; exact public bounds",
+        "full_text_location": "private continuation-q definition snapshot",
+        "official_response_sha256": "85bf3148e9a984068e159eca1250f37e33372d14174c8dcc91073b335204ea86",
+        "statement_html_sha256": "5536e7f38eae173efee6068bd3d3560ee74c68d2ead177025ded5686b5b8b332"
+      },
+      "title": "Linked List Cycle"
+    },
+    {
+      "comparison": {
+        "binding": "native-bindings.json",
+        "policy": "native identity/effect observer required; serializedmodel alone insufficient"
+      },
+      "external_interface": {
+        "argument_order": [
+          "head"
+        ],
+        "canonical": "solve",
+        "language_parameter_names": {
+          "javascript": [
+            "head"
+          ],
+          "python": [
+            "head"
+          ]
+        },
+        "native_profile_required": true,
+        "official": {
+          "name": "detectCycle",
+          "params": [
+            {
+              "name": "head",
+              "type": "ListNode"
+            }
+          ],
+          "return": {
+            "type": "ListNode"
+          }
+        },
+        "serialized_model_is_native_api": false
+      },
+      "id": 142,
+      "mutation_alias_contract": {
+        "arguments": "all original fields/edges/containers unchanged",
+        "return": "original cycleentry identity or null"
+      },
+      "numeric_complexity_contract": {
+        "candidate_design": "native Floyd meeting and reset-to-head phase returns ORIGINAL entrynode",
+        "complexity_target": "O(n) time/O(1) space",
+        "reference": "serialized seen index walk returns first repeated original index"
+      },
+      "qualification_status": "unknown",
+      "return_domain": {
+        "type": "ListNode"
+      },
+      "slug": "linked-list-cycle-ii",
+      "statement_constraints_snapshot": {
+        "domain_owner": "oracles.py validate_domain; exact public bounds",
+        "full_text_location": "private continuation-q definition snapshot",
+        "official_response_sha256": "25ec9d6b2108c1db656054bc3d486ee1e002b4ee90217a6debeba13f57ab8c95",
+        "statement_html_sha256": "da334452f915f1db5839cc59d85bc9c5356a42f0e7a0002b097462cdf66b1ef7"
+      },
+      "title": "Linked List Cycle II"
+    },
+    {
+      "comparison": {
+        "binding": "native-bindings.json",
+        "policy": "native identity/effect observer required; serializedmodel alone insufficient"
+      },
+      "external_interface": {
+        "argument_order": [
+          "head"
+        ],
+        "canonical": "solve",
+        "language_parameter_names": {
+          "javascript": [
+            "head"
+          ],
+          "python": [
+            "head"
+          ]
+        },
+        "native_profile_required": true,
+        "official": {
+          "name": "reorderList",
+          "output": {
+            "paramindex": 0
+          },
+          "params": [
+            {
+              "name": "head",
+              "type": "ListNode"
+            }
+          ],
+          "return": {
+            "type": "void"
+          }
+        },
+        "serialized_model_is_native_api": false
+      },
+      "id": 143,
+      "mutation_alias_contract": {
+        "arguments": "same original nodepool/head/values; next edges only reordered; voidreturn",
+        "return": "void; exact original identity order required"
+      },
+      "numeric_complexity_contract": {
+        "candidate_design": "native mid split, reverse second half, interleave ORIGINAL nodes, voidreturn",
+        "complexity_target": "O(n) time/O(1) space",
+        "reference": "index deque order0,n-1,1,n-2 preserving values"
+      },
+      "qualification_status": "unknown",
+      "return_domain": {
+        "type": "void"
+      },
+      "slug": "reorder-list",
+      "statement_constraints_snapshot": {
+        "domain_owner": "oracles.py validate_domain; exact public bounds",
+        "full_text_location": "private continuation-q definition snapshot",
+        "official_response_sha256": "221d139ab6266f48e5f39825f2f6c44c91a81b19932b265dc3ad1c657744d82a",
+        "statement_html_sha256": "521eaf31b49edbb247c3ae288eb6ee1efee5179fdd9b6a18be1a490be58b67ba"
+      },
+      "title": "Reorder List"
+    },
+    {
+      "comparison": {
+        "binding": "native-bindings.json",
+        "policy": "native identity/effect observer required; serializedmodel alone insufficient"
+      },
+      "external_interface": {
+        "argument_order": [
+          "root"
+        ],
+        "canonical": "solve",
+        "language_parameter_names": {
+          "javascript": [
+            "root"
+          ],
+          "python": [
+            "root"
+          ]
+        },
+        "native_profile_required": true,
+        "official": {
+          "name": "preorderTraversal",
+          "params": [
+            {
+              "name": "root",
+              "type": "TreeNode"
+            }
+          ],
+          "return": {
+            "dealloc": true,
+            "type": "list<integer>"
+          }
+        },
+        "serialized_model_is_native_api": false
+      },
+      "id": 144,
+      "mutation_alias_contract": {
+        "arguments": "all original fields/edges/containers unchanged",
+        "return": "fresh containers for list results; immutable scalar otherwise"
+      },
+      "numeric_complexity_contract": {
+        "candidate_design": "native iterative stack rightthenleft",
+        "complexity_target": "O(n) time/O(n) stack",
+        "reference": "serialized recursive preorder model"
+      },
+      "qualification_status": "unknown",
+      "return_domain": {
+        "dealloc": true,
+        "type": "list<integer>"
+      },
+      "slug": "binary-tree-preorder-traversal",
+      "statement_constraints_snapshot": {
+        "domain_owner": "oracles.py validate_domain; exact public bounds",
+        "full_text_location": "private continuation-q definition snapshot",
+        "official_response_sha256": "2caf6ca6360409f2509127ba8b767123d41ccf4f762b0f2745ea26060ebc95e7",
+        "statement_html_sha256": "a131b6baa0a2acb9280b174c4296427c321271cff079221eb4b8b1e24449bc25"
+      },
+      "title": "Binary Tree Preorder Traversal"
+    }
+  ],
+  "schema": "gamma.authored-assignment-public-safe.v1",
+  "status": "new development variants only; independent isolated qualification pending"
+}

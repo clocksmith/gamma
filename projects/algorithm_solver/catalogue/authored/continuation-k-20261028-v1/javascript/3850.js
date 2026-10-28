@@ -1,0 +1,4 @@
+function solve(nums,k){const target=[];for(const p of [2,3,5]){let power=0;while(k%p===0){power++;k/=p;}target.push(power);}if(k!==1)return 0;const vectors=[[0,0,0],[0,0,0],[1,0,0],[0,1,0],[2,0,0],[0,0,1],[1,1,0]];function half(values){let states=new Map([['0,0,0',1]]);for(const x of values){const delta=vectors[x],following=new Map();for(const [key,count] of states){const state=key.split(',').map(Number);for(const sign of [-1,0,1]){const next=state.map((v,i)=>v+sign*delta[i]).join(',');following.set(next,(following.get(next)||0)+count);}}states=following;}return states;}const middle=Math.floor(nums.length/2),left=half(nums.slice(0,middle)),right=half(nums.slice(middle));let answer=0;for(const [key,count] of left){const state=key.split(',').map(Number),wanted=target.map((x,i)=>x-state[i]).join(',');answer+=count*(right.get(wanted)||0);}return answer;}
+
+var countSequences = solve;
+module.exports = solve;

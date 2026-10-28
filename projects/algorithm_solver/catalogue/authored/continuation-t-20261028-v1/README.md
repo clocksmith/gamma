@@ -1,0 +1,11 @@
+# T independent pre-source design
+
+Requested226,230,232,233,234,235,236,237,243,245.243and245areofficialpremium and explicitly BLOCKED; no references/sources/qualification invented and no replacementmembership. Eightactive public definitions and BOTH-language codeSnippets fullyverified before any candidate code. Canonicalmetadataownership checked, no existing authoredmanifestoverlap; importedinventoryunknown, no globalabsenceclaim.
+
+Actual235/236arguments are originalroot/p/qTreeNodeobjects, not rawintegerfixturemetadata.237actualdeleteNode receives ONLYtargetnode, neverhead; hiddenfixturehead lives locally in trustedobserver. Required single-valueTreeNode/ListNode constructorforms235/236/237 are distinct from defaultconstructors226/230/234.232realMyQueue usesactualconstructor/prototypes inJS andclass inPython. Stack-onlyimplementation mandatory.
+
+Independent references: pool-edge mirror map vs nodewalk; sortedvalues vs BSTinorder; hostFIFOdeque vs two-stack queue; weighted digitDP vs positionaldecimalcycles; value-sequence palindrome vs physicalhalf-reverse/restore; bottom-up subtreep/qmarkcounts vs BSTvaluepath/generalparentancestormap; logicalvalue removal plus explicit prospectivecopy-nextpoolfields vs actualnode-onlycode.237selectedeffect does not pretendothercorrectlogicalimplementations forbidden. Detachedsuccessornode remains in snapshots unchanged, targetidentity remains butvalue/linkchange.234alloriginalfields restored evenfalse. LCAexactoriginalidentity, aliases includeactualp/q/root matches.
+
+Semantic/effectmodels alone cannot qualify an entry. SeparateTprofile guards true languageentry/prototype/sourceconstructors/returntypes/aliases/fielddescriptors.237is reviewed-source isolation, NOT hostile-source tamperresistance; noexpectedvalue/verdict passed to candidate.18Python+18JS toyobserver/fullhostbridge controls passed before source. Finalprospectiveprofilepin remains separate from this referencefreeze.
+
+Eleven source-free referencecontrols,syntax andscopedRuff passed.2,174cases include max100000nodeLCAdepth/palindrome and identitypermutations; no actualcandidateexecution. Allsourceworklocal, publicpublicationdenied/pendingapproval. NoGit/privatecopy/runtimeinstall/adoption.

@@ -1,0 +1,90 @@
+{
+  "schema": "gamma.authored-source-semantics.v1",
+  "problem_id": 126,
+  "language": "python",
+  "source_sha256": "7e8a4eba62dee7fcfb1381ece1550ff7741c319e0d41d95bb481687f6f44074a",
+  "entrypoint": "Solution.findLadders",
+  "official_interface": {
+    "canonical": "findLadders",
+    "argument_order": [
+      "beginWord",
+      "endWord",
+      "wordList"
+    ],
+    "official_metadata": {
+      "name": "findLadders",
+      "params": [
+        {
+          "name": "beginWord",
+          "type": "string"
+        },
+        {
+          "name": "endWord",
+          "type": "string"
+        },
+        {
+          "name": "wordList",
+          "type": "list<string>"
+        }
+      ],
+      "return": {
+        "type": "list<list<string>>"
+      }
+    },
+    "python_entry": "Solution.findLadders",
+    "javascript_entry": "module.exports.findLadders",
+    "solve_fallback": false,
+    "record_checker": "host_check.py; NEW frozen induced-path certificate bridge",
+    "observer_interface": "Existing Q official wire/harness bytes only; NEW exact-source execution freeze required"
+  },
+  "contract": {
+    "statement_constraints_snapshot": {
+      "snapshot_sha256": "07edde599ccf3a56b5567ac45bb3599c00a5e933237e5b91e7e85b6a7849ba1d",
+      "content_sha256": "d4383c0caf2e0666b7b678e484617e6dda0d4669731f01668fef88abcdfb31f9",
+      "official_template_sha256": {
+        "python3": "13d68aaa30b34db1e0486ddabbfa1abe80750971ac86764109fb1f4662382add",
+        "javascript": "6df02351357cf884ff72abfa431680e68da29f1ab734062f12ab680988bf3008"
+      },
+      "word_length": [
+        1,
+        5
+      ],
+      "dictionary_size": [
+        1,
+        500
+      ],
+      "dictionary_unique": true,
+      "begin_differs_from_end": true,
+      "alphabet": "lowercase English letters",
+      "full_statement_redistributed": false
+    },
+    "return_domain": {
+      "type": "list<list<string>>",
+      "comparison_policy": "complete unordered DISTINCT shortest paths; each inner path order exact; duplicates forbidden"
+    },
+    "mutation_alias_contract": {
+      "arguments": "unchanged including wordList",
+      "output": "fresh outer and per-answer path containers; immutable word strings; no mutable input aliases"
+    },
+    "numeric_complexity_contract": {
+      "parameters": {
+        "N": "dictionary plus begin distinct vertex count, at most501",
+        "L": "common word length, at most5",
+        "E": "stored shortest-parent edge count",
+        "K": "sum of answer path word counts",
+        "A": "sum of answer word characters, equalsL*K",
+        "D": "shortest ladder edge depth at mostN-1"
+      },
+      "time": "Expected O(26*N*L^2+K), standard hash maps and amortized arrays; emission O(K) without extra depth factor",
+      "space_including_output": "O(N+E+K+D+L); L<=5 gives O(parentGraph+output+depth)",
+      "recursion": "none; explicit mutable path and cursor stacks",
+      "proof": "README.md; parent distances strictly decrease, every enumerated prefix completes, leaf copies only",
+      "execution_measurements": "none; isolated source-bound qualification pending"
+    }
+  },
+  "provenance_sha256": "9e96e95bfc9dc0502043072ce439d4459c8699d984cfe87e87110899df9b6226",
+  "qualification": {
+    "status": "unknown",
+    "reason": "Source-free reference/static checks only; no candidate execution"
+  }
+}

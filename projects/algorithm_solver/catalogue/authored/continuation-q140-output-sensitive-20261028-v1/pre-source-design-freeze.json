@@ -1,0 +1,43 @@
+{
+  "schema": "gamma.q140-post-source-complexity-repair-design-freeze.v1",
+  "created_at": "2026-10-28T03:52:47.119652+00:00",
+  "problem_id": 140,
+  "source_body_reads": 0,
+  "new_candidate_sources_exist": false,
+  "reference_controls_passed": 4,
+  "original_manifest_sha256": "43de88ced83dc345116644eed018af0f73f92c72befd3cda5218d6e3b5208eb3",
+  "original_140_variants": [
+    {
+      "id": 140,
+      "language": "python",
+      "path": "python/140.py",
+      "semantics_path": "semantics/140-python.json",
+      "semantics_sha256": "00cfecd8c71955715694bdd138dd3a33afea0e896e5daf85b14089e938b59e12",
+      "sha256": "36876d5c86fecc6180f4b7a731e5881d3000439492d3fe424e98428444061077"
+    },
+    {
+      "id": 140,
+      "language": "javascript",
+      "path": "javascript/140.js",
+      "semantics_path": "semantics/140-javascript.json",
+      "semantics_sha256": "5e56d9dd42980217882a4a5f70533166b83cf954081378114cb6b98ed01ee368",
+      "sha256": "387338f09c0073e6f3743b74f0a3e268100101f4ff3eeae626cdb3972d218567"
+    }
+  ],
+  "reference_sha256": "fccb48156f19f5d622f34c6db2693be411b8dd522e4b305cf3a3ba9d9916c92b",
+  "original_cases_sha256": "63a703ee3ca7f94dc5931f6ed0b2c15c9734ffe288c591533e718cb2df3bb2d2",
+  "new_cases_sha256": "e67a7c2e88ab58b36616ea736879454ed144d4df3ce3ffd6b07dcf360c54501a",
+  "new_reference_controls_sha256": "1f85b2efb9eac873d11bd78932aae731f3ddd130d02cb30c7415893e9a6af209",
+  "design": "Fixed26-way charged trie; collect all matching edges as string references, suffix feasibility, prune infeasible edges ONCE, DFS only feasible word paths and create sentences at complete leaves.",
+  "parameters": {
+    "D": "sum dictionary word lengths",
+    "n": "input string length",
+    "W": "maximum dictionary word length",
+    "A": "sum of all returned sentence character lengths, including spaces"
+  },
+  "time_bound": "O(D+n*W+A) with fixed26-character alphabet, amortized array/list operations; no answer-prefix/suffix sentence list materialization",
+  "auxiliary_space_including_output": "O(D+n*W+n+A), equivalently O(D+n*W+A) since W>=1",
+  "dfs_depth": "at most n+1<=21, unchanged recursion settings",
+  "original_issue": "Root static review found old all-suffix-sentence materialization contradicts declared output-sensitive bound on dense unreachable suffix input. Original source bytes/claims/receipts preserved; no retroactive pass.",
+  "timing": "New independent design/control freeze before repair source creation, after original Q source authorship; not unseen or fresh generalization."
+}

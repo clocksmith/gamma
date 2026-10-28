@@ -1,0 +1,48 @@
+{
+  "schema": "gamma.q126-post-source-complexity-repair-design-freeze.v1",
+  "created_at": "2026-10-28T04:08:02.289405+00:00",
+  "problem_id": 126,
+  "old_source_body_opens": 0,
+  "new_candidate_sources_exist": false,
+  "reference_controls_passed": 6,
+  "old_q_manifest_sha256": "43de88ced83dc345116644eed018af0f73f92c72befd3cda5218d6e3b5208eb3",
+  "old_126_variants": [
+    {
+      "id": 126,
+      "language": "python",
+      "path": "python/126.py",
+      "semantics_path": "semantics/126-python.json",
+      "semantics_sha256": "c4ef4569397d68ab26d128d3d81bba829b223f083a3882dd9e5a570a9d70e231",
+      "sha256": "9cb67537b3e47e52245742c32f128dfd932537ba4fd73e2ea198dbd0fe027d0a"
+    },
+    {
+      "id": 126,
+      "language": "javascript",
+      "path": "javascript/126.js",
+      "semantics_path": "semantics/126-javascript.json",
+      "semantics_sha256": "63828d88dbb7a44f365a81c76e1bb714b47f52283bf0758d57bb18ee6d067a19",
+      "sha256": "b1d32328990e2d0cadd7df690b8a3d596b19df1c1e60ba99f8e913d7d41c1be7"
+    }
+  ],
+  "old_reference_sha256": "fccb48156f19f5d622f34c6db2693be411b8dd522e4b305cf3a3ba9d9916c92b",
+  "old_cases_sha256": "63a703ee3ca7f94dc5931f6ed0b2c15c9734ffe288c591533e718cb2df3bb2d2",
+  "frozen_q_checker_sha256": "34007c4c210ed9c635fa16bee3e29c106ad4b34d335fd5ec739eec5f22ec4951",
+  "new_reference_artifacts": {
+    "cases.py": "456d2f002826beb581417bea848c4183171a6920d45cf04d4ab1fc5273b9d5c6",
+    "host_check.py": "b52f124428fd348ed4f2bd113e09131319b6053825ef9fba5793aea902f0121c",
+    "test_references.py": "76481f13e6b9112b373d99dbc60338dadd128655e37960aab09f99c6d2878672"
+  },
+  "design": "BFS shortest-parent DAG, then ONE mutable reverse path with integer cursor stack; copy/reverse into output ONLY at beginWord leaf. No per-edge path copies; no recursion.",
+  "parameters": {
+    "N": "dictionary plus begin distinct vertex count, at most501",
+    "L": "common word length, at most5",
+    "E": "stored shortest-parent edge count",
+    "K": "sum of answer path word counts",
+    "A": "sum of answer word characters, equalsL*K",
+    "D": "shortest ladder edge depth at mostN-1"
+  },
+  "time": "Expected O(26*N*L^2+K), with standard hash-map lookup and amortized arrays; emission O(K), not O(K*D)",
+  "space": "O(N+E+K+D+L) live space; L<=5 so O(parentGraph+output+depth)",
+  "old_issue": "Root actual-source review found per-edge reverse_path+[parent]/path.concat costs unsupported extra depth factor; old sources/contracts/receipts remain unchanged and unpassed.",
+  "timing": "All new certificate/bridge/control artifacts frozen BEFORE repair candidate source creation, AFTER original Q source authorship; no source-blind or held-out timing reset."
+}

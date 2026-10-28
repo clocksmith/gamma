@@ -1,0 +1,11 @@
+# Local S original sources
+
+Twenty actual Python/JavaScript sourcevariants were authored only after exact independent reference freeze `98d37a1f4eca10438f8789dcb7a2af40ecbab47bccd7842d69b787a5339ca9e5`, following BOTH-language official codeSnippet/fullspec verification and fresh40gates. All frozen reference/spec/case/test/README bytes remain unchanged.2,111cases include permuted original list identities, maxlist/tree/callcount/depth witnesses, exactboardwordsets and queuebehavior. No candidate loaded or executed.
+
+Ordinary Python uses actual Solution methods; ordinary JavaScript actualtopfunctions.208/211/225are real Trie/WordDictionary/MyStack constructors and declared methods. SourceTreeNode/ListNode have exact official fields/defaults.203/206return original nodes with pinned pool effects;199/222readonly;212board/wordsreadonly with distinctunorderedoutput and no invented freshnessrestriction.
+
+Mandatory222sublinear algorithm follows one subtree perlevel withperfectsubtree counts, O(log²n).225uses only oneFIFOqueue and standardqueueops, completehelperincluded/charged;pushO(n),othersO(1). Staticselfaudit is not independentacceptance. Exactsource staticreview and execution/runtime/effect/resource evidence remainpending.
+
+The separate S observer/profile is final-bound prospectively after referencefreeze; not allprofilebytes are claimed pre-source. It guards actualoriginalexport/prototype/ownmethod/freshreceiver/returntypes/nativeidentities/aliases. All2,111cases retained in84plannedbatches/2,195calls perlanguage. Largest plannedinput1,655,736bytes, conservativesuccessstdout11,624,730bytes; zero planningblocks under precedingR16MiB envelopes, butexecutor MUSTconfirm actualunchangedcaps. These are bounds/projections, not execution or measuredresourceclaims. No capchanged.
+
+Twenty syntaxchecks, fatal/scopedRuff, ten reference-onlycontrols and existingauthoringregistry build passed.17Python+17JS observertoys/alltenbridge/planningcontrols were independently supplied byobserverowner. Candidateexecution, independentqualification, activeadoption allzero inthisauthoringtask. Publicsourcepublication remains denied/approvalpending; localonly, noGit/upload/privatepackettransfer.

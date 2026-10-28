@@ -1,0 +1,38 @@
+{
+  "comparison": "exact typed JSON result",
+  "effects": "arguments unchanged",
+  "entrypoint": "solve",
+  "language": "python",
+  "official_interface": {
+    "name": "countWordOccurrences",
+    "params": [
+      {
+        "name": "chunks",
+        "type": "string[]"
+      },
+      {
+        "name": "queries",
+        "type": "string[]"
+      }
+    ],
+    "return": {
+      "type": "integer[]"
+    }
+  },
+  "parameters": [
+    "chunks",
+    "queries"
+  ],
+  "problem_id": 3926,
+  "qualification": {
+    "reason": "No candidate execution; source-free references and static syntax only",
+    "status": "unknown"
+  },
+  "schema": "gamma.authored-scalar-semantics.v1",
+  "source_reasoning": {
+    "candidate_design": "regex lowercase words with isolated internal hyphens, full chunkconcat",
+    "complexity_target": "O(totaltext+totalqueries) time/O(totaltext+totalqueries) space",
+    "reference": "literal character/joiner classification and maximal runs"
+  },
+  "source_sha256": "9716e2e0d2a2d49176a896e812389544679d34b8a9133e19927cf98bb62d190c"
+}

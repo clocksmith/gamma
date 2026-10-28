@@ -1,0 +1,57 @@
+{
+  "problems": {
+    "126": {
+      "reference": "BFS all simple paths in explicit pairwise wordgraph",
+      "candidate_design": "BFS shortest-distance parent DAG via singleletter replacements then iterative path enumeration",
+      "complexity_target": "O(words*length*26*length+output) time/O(graph+output) space"
+    },
+    "129": {
+      "reference": "enumerate serialized root-leaf digit paths and parse decimal integers",
+      "candidate_design": "native iterative DFS prefix numeric value",
+      "complexity_target": "O(nodes) time/O(depth) stack"
+    },
+    "132": {
+      "reference": "enumerate every cutmask and literal palindrome tests",
+      "candidate_design": "odd/even center expansion with prefix mincuts",
+      "complexity_target": "O(n**2) time/O(n) space"
+    },
+    "133": {
+      "reference": "indexed graph clone structure expected plus independent identity conditions",
+      "candidate_design": "native BFS original\u2192freshNode map, reconstruct each neighbor list",
+      "complexity_target": "O(V+E) time/O(V+E) space"
+    },
+    "138": {
+      "reference": "indexed next-order/random indices expected plus fresh/disjoint identityconditions",
+      "candidate_design": "two-pass map oldnodes\u2192freshNode with next/random edges",
+      "complexity_target": "O(n) time/O(n) space"
+    },
+    "140": {
+      "reference": "all cut masks and dictionary membership",
+      "candidate_design": "suffix sentence DP with dictionary lookup, return complete segmentations",
+      "complexity_target": "O(n*maxlength+output) time/O(output) space"
+    },
+    "141": {
+      "reference": "serialized successor walk with seen index set",
+      "candidate_design": "native Floyd slow/fast identity comparison",
+      "complexity_target": "O(n) time/O(1) space"
+    },
+    "142": {
+      "reference": "serialized seen index walk returns first repeated original index",
+      "candidate_design": "native Floyd meeting and reset-to-head phase returns ORIGINAL entrynode",
+      "complexity_target": "O(n) time/O(1) space"
+    },
+    "143": {
+      "reference": "index deque order0,n-1,1,n-2 preserving values",
+      "candidate_design": "native mid split, reverse second half, interleave ORIGINAL nodes, voidreturn",
+      "complexity_target": "O(n) time/O(1) space"
+    },
+    "144": {
+      "reference": "serialized recursive preorder model",
+      "candidate_design": "native iterative stack rightthenleft",
+      "complexity_target": "O(n) time/O(n) stack"
+    }
+  },
+  "numeric": "129answer<=2**31-1,depth<=10;otherintegerreturnsboundedn;allJSNumberexact",
+  "effects": "126/140 outputorder irrelevant, complete distinct sequences;129/144/141/142 inputobjectgraph unchanged;133/138 deepclone fullydisjoint;142 result ORIGINAL node identity;143 voidreturn only nextedges maychange, SAME original nodes/values/head, noaddednodes/cycles",
+  "scope": "serializedexpectedmodels are NOT nativeABI or identityqualification"
+}

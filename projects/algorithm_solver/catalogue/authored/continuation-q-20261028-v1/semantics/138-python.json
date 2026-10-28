@@ -1,0 +1,34 @@
+{
+  "comparison": "exact typed JSON result",
+  "effects": "126/140 outputorder irrelevant, complete distinct sequences;129/144/141/142 inputobjectgraph unchanged;133/138 deepclone fullydisjoint;142 result ORIGINAL node identity;143 voidreturn only nextedges maychange, SAME original nodes/values/head, noaddednodes/cycles",
+  "entrypoint": "solve",
+  "language": "python",
+  "native_binding": "native-bindings.json",
+  "official_interface": {
+    "name": "copyRandomList",
+    "params": [
+      {
+        "name": "head",
+        "type": "RandomNode"
+      }
+    ],
+    "return": {
+      "type": "RandomNode"
+    }
+  },
+  "parameters": [
+    "head"
+  ],
+  "problem_id": 138,
+  "qualification": {
+    "reason": "No candidate execution; source-free references and static syntax only",
+    "status": "unknown"
+  },
+  "schema": "gamma.authored-scalar-semantics.v1",
+  "source_reasoning": {
+    "candidate_design": "two-pass map oldnodes\u2192freshNode with next/random edges",
+    "complexity_target": "O(n) time/O(n) space",
+    "reference": "indexed next-order/random indices expected plus fresh/disjoint identityconditions"
+  },
+  "source_sha256": "67bdeb4b2808f592ec6341d261b0286ee1d97a10eb28972d05eb0148882182b0"
+}

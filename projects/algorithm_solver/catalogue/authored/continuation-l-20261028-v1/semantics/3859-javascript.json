@@ -1,0 +1,43 @@
+{
+  "comparison": "exact typed JSON result",
+  "effects": "arguments unchanged",
+  "entrypoint": "solve",
+  "language": "javascript",
+  "official_interface": {
+    "name": "countSubarrays",
+    "params": [
+      {
+        "name": "nums",
+        "type": "integer[]"
+      },
+      {
+        "name": "k",
+        "type": "integer"
+      },
+      {
+        "name": "m",
+        "type": "integer"
+      }
+    ],
+    "return": {
+      "type": "long"
+    }
+  },
+  "parameters": [
+    "nums",
+    "k",
+    "m"
+  ],
+  "problem_id": 3859,
+  "qualification": {
+    "reason": "No candidate execution; source-free references and static syntax only",
+    "status": "unknown"
+  },
+  "schema": "gamma.authored-scalar-semantics.v1",
+  "source_reasoning": {
+    "candidate_design": "at-most-k sliding window; active-value segment-tree minimum of global mth-last occurrence bounds valid starts",
+    "complexity_target": "O(n log distinct) time/O(n+distinct) space",
+    "reference": "Counter of each literal interval"
+  },
+  "source_sha256": "d2fa4b6bd150821223f6cfea94d0a0046e956ddf984fb077b907f375d3ec51b4"
+}

@@ -1,0 +1,56 @@
+{
+  "problems": {
+    "3855": {
+      "reference": "enumerate all digit tuples and positional integer values",
+      "candidate_design": "modular digit sum * choices**(k-1) * repunit(k) using inverse9",
+      "complexity_target": "O(log k) time/O(1) space"
+    },
+    "3857": {
+      "reference": "recursive exhaustive split-tree optimum",
+      "candidate_design": "potential invariant sum cross pairs n*(n-1)/2",
+      "complexity_target": "O(1) time/space"
+    },
+    "3858": {
+      "reference": "Cartesian product of all row selections",
+      "candidate_design": "greedily clear high bits of allowed mask if every row has subset-compatible option",
+      "complexity_target": "O(17*m*n) time/O(1) auxiliary"
+    },
+    "3859": {
+      "reference": "Counter of each literal interval",
+      "candidate_design": "at-most-k sliding window; active-value segment-tree minimum of global mth-last occurrence bounds valid starts",
+      "complexity_target": "O(n log distinct) time/O(n+distinct) space"
+    },
+    "3862": {
+      "reference": "literal exact arbitrary-precision suffix product per index",
+      "candidate_design": "suffix products capped above total positive sum, guarded multiplication; compare left running sum",
+      "complexity_target": "O(n) time/O(n) space"
+    },
+    "3863": {
+      "reference": "BFS all proper substring sorts",
+      "candidate_design": "sorted0,n2reverse impossible,endpoint globalextreme1,interior extremum2,otherwise3",
+      "complexity_target": "O(n) time/O(1) space"
+    },
+    "3864": {
+      "reference": "enumerate all valid recursive equal-half partition costs",
+      "candidate_design": "prefix sensitive counts plus recursive min unsplit vs equal-half split, prune empty segments",
+      "complexity_target": "O(n) time/O(n) space"
+    },
+    "3867": {
+      "reference": "divisor-enumeration gcd, recomputed prefix maxima, sorted endpoint pairs",
+      "candidate_design": "running maximum Euclidean gcd values then sorted endpoint gcds",
+      "complexity_target": "O(n log n+n log maxval) time/O(n) space"
+    },
+    "3868": {
+      "reference": "BFS canonical sorted multisets with literal cross swaps, free permutation quotient",
+      "candidate_design": "combined counts must even; half of total positive excess from one array needs cross swaps",
+      "complexity_target": "O(n) time/O(distinct) space"
+    },
+    "3869": {
+      "reference": "enumerate each integer and inspect monotonic digits and digit sum",
+      "candidate_design": "digit-sum DP counts good-sum numbers, enumerate strictlymonotone numbers not already good-sum, subtract zero",
+      "complexity_target": "O(digits**2*10+2**10) time/O(digits**2+2**10) space"
+    }
+  },
+  "numeric": "JS BigInt modular products3855;3862 products guarded against totalSum<=1e14 before multiplication;3864 unsplit<=1e15;3869 counts<=1e15;all final results exact below2**53",
+  "effects": "input arrays/nested grid unchanged; scalar outputs only"
+}

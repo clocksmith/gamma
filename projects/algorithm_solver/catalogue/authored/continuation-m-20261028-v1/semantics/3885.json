@@ -1,0 +1,113 @@
+{
+  "pre_source_reference_freeze_sha256": "381976b3fc38a9053a8fceb77652e948db5d4c1202fad9b463d72e37854a979d",
+  "problem_contract": {
+    "external_interface": {
+      "argument_order": [
+        "operations",
+        "arguments"
+      ],
+      "canonical": "EventManager",
+      "constructor_argument_order": [
+        "events"
+      ],
+      "native_class": "EventManager",
+      "native_methods": {
+        "pollHighest": {
+          "arity": 0,
+          "returns": "integer"
+        },
+        "updatePriority": {
+          "arity": 2,
+          "returns": "void"
+        }
+      },
+      "native_route": "direct-event-manager-v1",
+      "observer_profile": "native-bindings.json",
+      "official_metadata": {
+        "classname": "EventManager",
+        "constructor": {
+          "params": [
+            {
+              "name": "events",
+              "type": "integer[][]"
+            }
+          ]
+        },
+        "methods": [
+          {
+            "name": "updatePriority",
+            "params": [
+              {
+                "name": "eventId",
+                "type": "integer"
+              },
+              {
+                "name": "newPriority",
+                "type": "integer"
+              }
+            ],
+            "return": {
+              "type": "void"
+            }
+          },
+          {
+            "name": "pollHighest",
+            "params": [],
+            "return": {
+              "type": "integer"
+            }
+          }
+        ],
+        "return": {
+          "type": "boolean"
+        },
+        "systemdesign": true
+      },
+      "solve_fallback": false,
+      "wrapper_execution": "unrun"
+    },
+    "id": 3885,
+    "mutation_alias_contract": {
+      "canonical": "Inputsunchanged; freshreturnedlistwhereapplicable; native3885freshreceiverpertrace/samereceiverwithintrace",
+      "official_execution": "unrun"
+    },
+    "numeric_complexity_contract": {
+      "algorithm": "Realclass withcopiedactive map and priorityheap; updates append heapentry; polling discards stale priorities and removesactivewinner. O(n)construction; O((n+q)log(n+q))aggregate heapwork; O(n+q)space. Separatelyversioned directclass traceadapter, no solvefallback.",
+      "numeric": "IDs/priorities<=1e9 exact; update returns actualNone/undefined;poll exactint. Fresh receiverpertrace, same receiverwithintrace. Constructorinputandmethodargs unchanged; scalarresultsnoalias.",
+      "resource_acceptance": "unmeasured"
+    },
+    "objective_summary": "Original candidates; importedinventoryunknown; no qualification/adoption/globalabsence/heldoutclaim",
+    "official_content_sha256": "ff035812e355c205f74f3ffac1504a879e502d0eb942ddc7d7e164a86c1d9398",
+    "official_question_frontend_id": "3885",
+    "official_response_sha256": "53f1e205204748912a118903023bf9d95d4e5cf6ec0ea1459f72766be62f84ff",
+    "return_domain": {
+      "comparison_policy": "exact recursively typed values, no bool/intcoercion; orderedresults",
+      "independent_review": "pending",
+      "type": "native ordered trace:null constructor/updates,integerpolls"
+    },
+    "slug": "design-event-manager",
+    "statement_constraints_snapshot": {
+      "domain_validator": "oracles.validate",
+      "full_official_snapshot": "Pinned privately; fullstatement omitted",
+      "independent_review": "pending",
+      "summary": "EventManager nativeclass constructor(events),1..100000uniqueids1..1000000000,priorities1..1000000000;atmost100000totalcalls;updateonlyactiveid;pollremoves highestpriority, ties smallestid, empty-1"
+    },
+    "supplied_reference_url": "https://leetcode.com/problems/design-event-manager/description/",
+    "title": "Design Event Manager"
+  },
+  "problem_id": 3885,
+  "qualification": {
+    "active_adopted": false,
+    "independent_runtime_assessment": false,
+    "status": "unknown"
+  },
+  "reference": {
+    "candidate_execution": "not performed",
+    "comparison": "matches",
+    "domain": "validate",
+    "expected": "expected",
+    "generator": "build_cases",
+    "module": "oracles.py"
+  },
+  "schema": "gamma.authored-source-semantics.v1"
+}

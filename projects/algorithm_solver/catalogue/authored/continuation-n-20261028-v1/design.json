@@ -1,0 +1,56 @@
+{
+  "problems": {
+    "3891": {
+      "reference": "enumerate all bounded incremented final vectors; lexicographically maximize peaks then minimize increments",
+      "candidate_design": "cardinality-first mincost independent-set DP over interior peak costs",
+      "complexity_target": "O(n) time/O(1) space"
+    },
+    "3895": {
+      "reference": "literal decimal string counts",
+      "candidate_design": "repeated arithmetic digit extraction",
+      "complexity_target": "O(total digits) time/O(1) space"
+    },
+    "3896": {
+      "reference": "trial division and literal increments per position",
+      "candidate_design": "sieve up to2max (Bertrand), next-prime table; odd primes need1increment except2 needs2",
+      "complexity_target": "O(maxval loglog maxval+n) time/O(maxval) space"
+    },
+    "3897": {
+      "reference": "all segment permutations, literal maximum binary integer",
+      "candidate_design": "allones first, mixed moreones first then fewerzeros, allzeros last; modular power2 concatenation",
+      "complexity_target": "O(totalbits+n log n) time/O(totalbits+n) space"
+    },
+    "3899": {
+      "reference": "highprecision Heron area and atan2 angle construction",
+      "candidate_design": "law-of-cosines acos clamped and sorted by opposite side",
+      "complexity_target": "O(1) time/space"
+    },
+    "3900": {
+      "reference": "every possible one-swap string then every balanced substring",
+      "candidate_design": "prefix differences0or\u00b12 under global minority cap; earliest prefix queues with moving lowerbound",
+      "complexity_target": "O(n) time/O(n) space"
+    },
+    "3901": {
+      "reference": "every proper nonempty subsequence gcd after each query",
+      "candidate_design": "gcd segmenttree for p-divisibles; if all n eligible and n<=16 use explicit exclude-one gcd; if n>16 minimal gcd witness cannot use all n",
+      "complexity_target": "O((n+q) log n+q*16) time/O(n) space"
+    },
+    "3904": {
+      "reference": "recompute maxprefix/minsuffix each index",
+      "candidate_design": "suffixmin and running prefixmax",
+      "complexity_target": "O(n) time/O(n) space"
+    },
+    "3905": {
+      "reference": "nearest Manhattan source with largest-color tie",
+      "candidate_design": "layered simultaneous proposals maximumcolor beforecommit",
+      "complexity_target": "O(n*m) time/O(n*m) space"
+    },
+    "3906": {
+      "reference": "literal padded4x4 grid/path per integer",
+      "candidate_design": "16-position digitDP with last visiteddigit and upperbound tightness",
+      "complexity_target": "O(16*10*10) time/O(16*10) space"
+    }
+  },
+  "numeric": "3897 JS BigInt modularproducts;3891sum<=5e13;3906 bounds/count<=9e15<2**53;3899 finite doubles absolute tolerance1e-5, invalidtriangleemptyarray;all other results exact integers",
+  "effects": "all inputs including nested queries/sources unchanged; float/resultgrid containers fresh;3901updates localcopy only"
+}

@@ -1,0 +1,44 @@
+{
+  "comparison": "exact typed JSON result",
+  "effects": "126/140 outputorder irrelevant, complete distinct sequences;129/144/141/142 inputobjectgraph unchanged;133/138 deepclone fullydisjoint;142 result ORIGINAL node identity;143 voidreturn only nextedges maychange, SAME original nodes/values/head, noaddednodes/cycles",
+  "entrypoint": "solve",
+  "language": "javascript",
+  "native_binding": null,
+  "official_interface": {
+    "name": "findLadders",
+    "params": [
+      {
+        "name": "beginWord",
+        "type": "string"
+      },
+      {
+        "name": "endWord",
+        "type": "string"
+      },
+      {
+        "name": "wordList",
+        "type": "list<string>"
+      }
+    ],
+    "return": {
+      "type": "list<list<string>>"
+    }
+  },
+  "parameters": [
+    "beginWord",
+    "endWord",
+    "wordList"
+  ],
+  "problem_id": 126,
+  "qualification": {
+    "reason": "No candidate execution; source-free references and static syntax only",
+    "status": "unknown"
+  },
+  "schema": "gamma.authored-scalar-semantics.v1",
+  "source_reasoning": {
+    "candidate_design": "BFS shortest-distance parent DAG via singleletter replacements then iterative path enumeration",
+    "complexity_target": "O(words*length*26*length+output) time/O(graph+output) space",
+    "reference": "BFS all simple paths in explicit pairwise wordgraph"
+  },
+  "source_sha256": "b1d32328990e2d0cadd7df690b8a3d596b19df1c1e60ba99f8e913d7d41c1be7"
+}

@@ -1,0 +1,37 @@
+{
+  "comparison": "exact typed JSON result",
+  "effects": "126/140 outputorder irrelevant, complete distinct sequences;129/144/141/142 inputobjectgraph unchanged;133/138 deepclone fullydisjoint;142 result ORIGINAL node identity;143 voidreturn only nextedges maychange, SAME original nodes/values/head, noaddednodes/cycles",
+  "entrypoint": "solve",
+  "language": "python",
+  "native_binding": "native-bindings.json",
+  "official_interface": {
+    "name": "reorderList",
+    "output": {
+      "paramindex": 0
+    },
+    "params": [
+      {
+        "name": "head",
+        "type": "ListNode"
+      }
+    ],
+    "return": {
+      "type": "void"
+    }
+  },
+  "parameters": [
+    "head"
+  ],
+  "problem_id": 143,
+  "qualification": {
+    "reason": "No candidate execution; source-free references and static syntax only",
+    "status": "unknown"
+  },
+  "schema": "gamma.authored-scalar-semantics.v1",
+  "source_reasoning": {
+    "candidate_design": "native mid split, reverse second half, interleave ORIGINAL nodes, voidreturn",
+    "complexity_target": "O(n) time/O(1) space",
+    "reference": "index deque order0,n-1,1,n-2 preserving values"
+  },
+  "source_sha256": "aeccc4bf060db0507a8b61f54a00193b8f8bd9952c7155c0902e567b74a3971e"
+}
