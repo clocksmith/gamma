@@ -1,0 +1,1008 @@
+{
+  "schema": "gamma.new-solutions-batch18.v1",
+  "scope": "Freshly written, not pulled from Gamma. Problems with no authored JS/Python pair in clocksmith/gamma catalogue/authored at head dd7dd823, verified by the parent before delivery, no overlaps found. Only 12 problems in IDs 2501-2650 meet the simple-input constraints; 113 in range already authored, 25 non-authored skipped as SQL, class, or JavaScript-only 30-day problems. This is not a claim of Gamma official independent admission.",
+  "qualification_method": "For each problem: public examples plus 20 random cross-language agreement checks per problem, JS via node and Python via import, outputs compared. Spot-checked independently by the parent for 2510, 2563, 2564, 2604, 2605, all passed.",
+  "counts": {
+    "problems": 12,
+    "passed": 12
+  },
+  "problems": [
+    {
+      "problem_id": 2510,
+      "slug": "check-if-there-is-a-path-with-equal-number-of-0-s-and-1-s",
+      "title": "Check if There is a Path With Equal Number of 0's And 1's",
+      "difficulty": "Medium",
+      "method": "isThereAPath",
+      "javascript": "'use strict';\n\n// 2510. Check if There is a Path With Equal Number of 0's And 1's (Medium).\n// Specification: https://leetcode.com/problems/check-if-there-is-a-path-with-equal-number-of-0-s-and-1-s/description/\nfunction solve(grid) {\n  const m = grid.length; const n = grid[0].length;\n  const total = m + n - 1;\n  if (total % 2 !== 0) return false;\n  const target = total / 2;\n  const dp = Array.from({ length: m }, () => Array.from({ length: n }, () => new Set()));\n  dp[0][0].add(grid[0][0]);\n  for (let i = 0; i < m; i++) {\n    for (let j = 0; j < n; j++) {\n      if (i === 0 && j === 0) continue;\n      const s = new Set();\n      const addFrom = (prev) => { for (const c of prev) { const nc = c + grid[i][j]; if (nc <= target) s.add(nc); } };\n      if (i > 0) addFrom(dp[i - 1][j]);\n      if (j > 0) addFrom(dp[i][j - 1]);\n      dp[i][j] = s;\n    }\n  }\n  return dp[m - 1][n - 1].has(target);\n}\nconst isThereAPath = solve;\nclass Solution { isThereAPath(grid) { return solve(grid); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, isThereAPath };\n",
+      "python": "\"\"\"2510. Check if There is a Path With Equal Number of 0's And 1's (Medium).\n\nSpecification: https://leetcode.com/problems/check-if-there-is-a-path-with-equal-number-of-0-s-and-1-s/description/\n\"\"\"\n\n\ndef solve(grid):\n    m, n = len(grid), len(grid[0])\n    total = m + n - 1\n    if total % 2 != 0:\n        return False\n    target = total // 2\n    dp = [[set() for _ in range(n)] for _ in range(m)]\n    dp[0][0].add(grid[0][0])\n    for i in range(m):\n        for j in range(n):\n            if i == 0 and j == 0:\n                continue\n            s = set()\n            if i > 0:\n                for c in dp[i - 1][j]:\n                    nc = c + grid[i][j]\n                    if nc <= target:\n                        s.add(nc)\n            if j > 0:\n                for c in dp[i][j - 1]:\n                    nc = c + grid[i][j]\n                    if nc <= target:\n                        s.add(nc)\n            dp[i][j] = s\n    return target in dp[m - 1][n - 1]\n\n\nclass Solution:\n    def isThereAPath(self, grid):\n        return solve(grid)\n",
+      "javascript_sha256": "86b4e763fbf17937185fc5a740190c7fc81ed7d60e7f543f3dff949d197bf8c2",
+      "python_sha256": "44557b876977a435d6983142862451bc476ebee4d513c2dd320f31bb4c8415a6",
+      "tests": [
+        [
+          [
+            [
+              [
+                0,
+                1,
+                0,
+                0
+              ],
+              [
+                0,
+                1,
+                0,
+                0
+              ],
+              [
+                1,
+                0,
+                1,
+                0
+              ]
+            ]
+          ],
+          true
+        ],
+        [
+          [
+            [
+              [
+                1,
+                0,
+                0
+              ],
+              [
+                0,
+                1,
+                1
+              ]
+            ]
+          ],
+          true
+        ],
+        [
+          [
+            [
+              [
+                1,
+                0,
+                1
+              ],
+              [
+                0,
+                1,
+                0
+              ],
+              [
+                1,
+                0,
+                1
+              ]
+            ]
+          ],
+          false
+        ],
+        [
+          [
+            [
+              [
+                0,
+                0
+              ],
+              [
+                0,
+                0
+              ]
+            ]
+          ],
+          false
+        ],
+        [
+          [
+            [
+              [
+                0,
+                1
+              ],
+              [
+                1,
+                0
+              ]
+            ]
+          ],
+          false
+        ],
+        [
+          [
+            [
+              [
+                0,
+                1
+              ],
+              [
+                0,
+                1
+              ]
+            ]
+          ],
+          false
+        ]
+      ],
+      "qualification": {
+        "problem_id": 2510,
+        "passed": true,
+        "public_tests": 6,
+        "random_checks": 20,
+        "random_agreement": 20
+      }
+    },
+    {
+      "problem_id": 2519,
+      "slug": "count-the-number-of-k-big-indices",
+      "title": "Count the Number of K-Big Indices",
+      "difficulty": "Hard",
+      "method": "kBigIndices",
+      "javascript": "'use strict';\n\n// 2519. Count the Number of K-Big Indices (Hard).\n// Specification: https://leetcode.com/problems/count-the-number-of-k-big-indices/description/\nfunction solve(nums, k) {\n  class BIT {\n    constructor(n) { this.n = n; this.c = new Array(n + 1).fill(0); }\n    update(x, delta) { while (x <= this.n) { this.c[x] += delta; x += x & -x; } }\n    query(x) { let s = 0; while (x > 0) { s += this.c[x]; x -= x & -x; } return s; }\n  }\n  const vals = Array.from(new Set(nums)).sort((a, b) => a - b);\n  const rank = new Map(vals.map((v, i) => [v, i + 1]));\n  const left = new BIT(vals.length); const right = new BIT(vals.length);\n  for (const v of nums) right.update(rank.get(v), 1);\n  let ans = 0;\n  for (const v of nums) {\n    const r = rank.get(v);\n    right.update(r, -1);\n    if (left.query(r - 1) >= k && right.query(r - 1) >= k) ans++;\n    left.update(r, 1);\n  }\n  return ans;\n}\nconst kBigIndices = solve;\nclass Solution { kBigIndices(nums, k) { return solve(nums, k); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, kBigIndices };\n",
+      "python": "\"\"\"2519. Count the Number of K-Big Indices (Hard).\n\nSpecification: https://leetcode.com/problems/count-the-number-of-k-big-indices/description/\n\"\"\"\n\n\ndef solve(nums, k):\n    class BIT:\n        def __init__(self, n):\n            self.n = n\n            self.c = [0] * (n + 1)\n\n        def update(self, x, delta):\n            while x <= self.n:\n                self.c[x] += delta\n                x += x & -x\n\n        def query(self, x):\n            s = 0\n            while x > 0:\n                s += self.c[x]\n                x -= x & -x\n            return s\n\n    vals = sorted(set(nums))\n    rank = {v: i + 1 for i, v in enumerate(vals)}\n    left = BIT(len(vals))\n    right = BIT(len(vals))\n    for v in nums:\n        right.update(rank[v], 1)\n    ans = 0\n    for v in nums:\n        r = rank[v]\n        right.update(r, -1)\n        if left.query(r - 1) >= k and right.query(r - 1) >= k:\n            ans += 1\n        left.update(r, 1)\n    return ans\n\n\nclass Solution:\n    def kBigIndices(self, nums, k):\n        return solve(nums, k)\n",
+      "javascript_sha256": "9a551b9dc12e640b72b2c0492353b3a869555b57e68804f78301c43f36875b3c",
+      "python_sha256": "8240a3532e12ef325a44df4850ca8bf07f10837da41689b10c2245dd0c74ce54",
+      "tests": [
+        [
+          [
+            [
+              2,
+              3,
+              6,
+              5,
+              2,
+              3
+            ],
+            2
+          ],
+          2
+        ],
+        [
+          [
+            [
+              1,
+              1,
+              1
+            ],
+            3
+          ],
+          0
+        ],
+        [
+          [
+            [
+              1,
+              3,
+              2
+            ],
+            1
+          ],
+          1
+        ],
+        [
+          [
+            [
+              1,
+              2,
+              3,
+              4
+            ],
+            1
+          ],
+          0
+        ],
+        [
+          [
+            [
+              5,
+              4,
+              3,
+              2,
+              1
+            ],
+            1
+          ],
+          0
+        ]
+      ],
+      "qualification": {
+        "problem_id": 2519,
+        "passed": true,
+        "public_tests": 5,
+        "random_checks": 20,
+        "random_agreement": 20
+      }
+    },
+    {
+      "problem_id": 2524,
+      "slug": "maximum-frequency-score-of-a-subarray",
+      "title": "Maximum Frequency Score of a Subarray",
+      "difficulty": "Hard",
+      "method": "maxFrequencyScore",
+      "javascript": "'use strict';\n\n// 2524. Maximum Frequency Score of a Subarray (Hard).\n// Specification: https://leetcode.com/problems/maximum-frequency-score-of-a-subarray/description/\nfunction solve(nums, k) {\n  const MOD = 1000000007n;\n  function powMod(base, exp) {\n    let b = BigInt(base) % MOD; let e = BigInt(exp); let r = 1n;\n    while (e > 0n) { if (e & 1n) r = (r * b) % MOD; b = (b * b) % MOD; e >>= 1n; }\n    return Number(r);\n  }\n  const freq = new Map();\n  let score = 0;\n  const addContrib = (v, f) => { if (f > 0) score = (score + powMod(v, f)) % 1000000007; };\n  const subContrib = (v, f) => { if (f > 0) score = (score - powMod(v, f)) % 1000000007; };\n  for (let i = 0; i < k; i++) {\n    const v = nums[i]; const f = freq.get(v) || 0;\n    subContrib(v, f); freq.set(v, f + 1); addContrib(v, f + 1);\n  }\n  let ans = ((score % 1000000007) + 1000000007) % 1000000007;\n  for (let i = k; i < nums.length; i++) {\n    const out = nums[i - k]; const inn = nums[i];\n    if (out !== inn) {\n      let f = freq.get(out);\n      subContrib(out, f); freq.set(out, f - 1); addContrib(out, f - 1);\n      f = freq.get(inn) || 0;\n      subContrib(inn, f); freq.set(inn, f + 1); addContrib(inn, f + 1);\n    }\n    const cur = ((score % 1000000007) + 1000000007) % 1000000007;\n    if (cur > ans) ans = cur;\n  }\n  return ans;\n}\nconst maxFrequencyScore = solve;\nclass Solution { maxFrequencyScore(nums, k) { return solve(nums, k); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, maxFrequencyScore };\n",
+      "python": "\"\"\"2524. Maximum Frequency Score of a Subarray (Hard).\n\nSpecification: https://leetcode.com/problems/maximum-frequency-score-of-a-subarray/description/\n\"\"\"\n\n\ndef solve(nums, k):\n    MOD = 1000000007\n    freq = {}\n    score = 0\n    for i in range(k):\n        v = nums[i]\n        f = freq.get(v, 0)\n        if f > 0:\n            score -= pow(v, f, MOD)\n        freq[v] = f + 1\n        score += pow(v, f + 1, MOD)\n    ans = score % MOD\n    for i in range(k, len(nums)):\n        out, inn = nums[i - k], nums[i]\n        if out != inn:\n            f = freq[out]\n            score -= pow(out, f, MOD)\n            freq[out] = f - 1\n            if f - 1 > 0:\n                score += pow(out, f - 1, MOD)\n            f = freq.get(inn, 0)\n            if f > 0:\n                score -= pow(inn, f, MOD)\n            freq[inn] = f + 1\n            score += pow(inn, f + 1, MOD)\n        ans = max(ans, score % MOD)\n    return ans\n\n\nclass Solution:\n    def maxFrequencyScore(self, nums, k):\n        return solve(nums, k)\n",
+      "javascript_sha256": "0f9fb17423ae219ca23cda0e15a2bd50c0c1e4954df5dd226eaacada9b5a7eff",
+      "python_sha256": "4219de9043393bd5bfd24f801792aa3a85599405063f02bcd484642830cedb2d",
+      "tests": [
+        [
+          [
+            [
+              1,
+              1,
+              1,
+              2,
+              1,
+              2
+            ],
+            3
+          ],
+          5
+        ],
+        [
+          [
+            [
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ],
+            4
+          ],
+          1
+        ],
+        [
+          [
+            [
+              5,
+              4,
+              5,
+              7,
+              4,
+              4
+            ],
+            6
+          ],
+          96
+        ],
+        [
+          [
+            [
+              1,
+              2,
+              3
+            ],
+            3
+          ],
+          6
+        ],
+        [
+          [
+            [
+              2,
+              2
+            ],
+            2
+          ],
+          4
+        ]
+      ],
+      "qualification": {
+        "problem_id": 2524,
+        "passed": true,
+        "public_tests": 5,
+        "random_checks": 20,
+        "random_agreement": 20
+      }
+    },
+    {
+      "problem_id": 2534,
+      "slug": "time-taken-to-cross-the-door",
+      "title": "Time Taken to Cross the Door",
+      "difficulty": "Hard",
+      "method": "timeTaken",
+      "javascript": "'use strict';\n\n// 2534. Time Taken to Cross the Door (Hard).\n// Specification: https://leetcode.com/problems/time-taken-to-cross-the-door/description/\nfunction solve(arrival, state) {\n  const n = arrival.length;\n  const q = [[], []];\n  const head = [0, 0];\n  const ans = new Array(n).fill(0);\n  let t = 0; let i = 0; let st = 1;\n  const size = (d) => q[d].length - head[d];\n  while (i < n || size(0) > 0 || size(1) > 0) {\n    while (i < n && arrival[i] <= t) { q[state[i]].push(i); i++; }\n    if (size(0) > 0 && size(1) > 0) {\n      ans[q[st][head[st]++]] = t;\n    } else if (size(0) > 0 || size(1) > 0) {\n      st = size(0) > 0 ? 0 : 1;\n      ans[q[st][head[st]++]] = t;\n    } else {\n      st = 1;\n    }\n    t++;\n  }\n  return ans;\n}\nconst timeTaken = solve;\nclass Solution { timeTaken(arrival, state) { return solve(arrival, state); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, timeTaken };\n",
+      "python": "\"\"\"2534. Time Taken to Cross the Door (Hard).\n\nSpecification: https://leetcode.com/problems/time-taken-to-cross-the-door/description/\n\"\"\"\n\n\nfrom collections import deque\n\n\ndef solve(arrival, state):\n    n = len(arrival)\n    q = [deque(), deque()]\n    ans = [0] * n\n    t = i = 0\n    st = 1\n    while i < n or q[0] or q[1]:\n        while i < n and arrival[i] <= t:\n            q[state[i]].append(i)\n            i += 1\n        if q[0] and q[1]:\n            ans[q[st].popleft()] = t\n        elif q[0] or q[1]:\n            st = 0 if q[0] else 1\n            ans[q[st].popleft()] = t\n        else:\n            st = 1\n        t += 1\n    return ans\n\n\nclass Solution:\n    def timeTaken(self, arrival, state):\n        return solve(arrival, state)\n",
+      "javascript_sha256": "280bbc4247b38511ccdf0be0c9591de5410714916cf0e4d140410305b2158401",
+      "python_sha256": "c5be2b8f65c8bb75f19d84655752db536284c2e7756f848a0bf81fcfb0c2c457",
+      "tests": [
+        [
+          [
+            [
+              0,
+              1,
+              1,
+              2,
+              4
+            ],
+            [
+              0,
+              1,
+              0,
+              0,
+              1
+            ]
+          ],
+          [
+            0,
+            3,
+            1,
+            2,
+            4
+          ]
+        ],
+        [
+          [
+            [
+              0,
+              0,
+              0
+            ],
+            [
+              1,
+              0,
+              1
+            ]
+          ],
+          [
+            0,
+            2,
+            1
+          ]
+        ],
+        [
+          [
+            [
+              0
+            ],
+            [
+              0
+            ]
+          ],
+          [
+            0
+          ]
+        ],
+        [
+          [
+            [
+              0
+            ],
+            [
+              1
+            ]
+          ],
+          [
+            0
+          ]
+        ],
+        [
+          [
+            [
+              1,
+              1
+            ],
+            [
+              0,
+              1
+            ]
+          ],
+          [
+            2,
+            1
+          ]
+        ]
+      ],
+      "qualification": {
+        "problem_id": 2534,
+        "passed": true,
+        "public_tests": 5,
+        "random_checks": 20,
+        "random_agreement": 20
+      }
+    },
+    {
+      "problem_id": 2539,
+      "slug": "count-the-number-of-good-subsequences",
+      "title": "Count the Number of Good Subsequences",
+      "difficulty": "Medium",
+      "method": "countGoodSubsequences",
+      "javascript": "'use strict';\n\n// 2539. Count the Number of Good Subsequences (Medium).\n// Specification: https://leetcode.com/problems/count-the-number-of-good-subsequences/description/\nfunction solve(s) {\n  const MOD = 1000000007n;\n  const freq = new Map();\n  for (const ch of s) freq.set(ch, (freq.get(ch) || 0) + 1);\n  const counts = Array.from(freq.values());\n  const mx = Math.max(...counts);\n  const fact = [1n]; const invFact = [1n];\n  for (let i = 1; i <= mx; i++) fact[i] = (fact[i - 1] * BigInt(i)) % MOD;\n  function modPow(b, e) { let r = 1n; let x = b % MOD; while (e > 0n) { if (e & 1n) r = (r * x) % MOD; x = (x * x) % MOD; e >>= 1n; } return r; }\n  invFact[mx] = modPow(fact[mx], MOD - 2n);\n  for (let i = mx; i > 0; i--) invFact[i - 1] = (invFact[i] * BigInt(i)) % MOD;\n  function comb(n, k) {\n    if (k < 0 || k > n) return 0n;\n    return (((fact[n] * invFact[k]) % MOD) * invFact[n - k]) % MOD;\n  }\n  let ans = 0n;\n  for (let f = 1; f <= mx; f++) {\n    let prod = 1n;\n    for (const c of counts) prod = (prod * (comb(c, f) + 1n)) % MOD;\n    ans = (ans + prod - 1n) % MOD;\n  }\n  return Number((ans + MOD) % MOD);\n}\nconst countGoodSubsequences = solve;\nclass Solution { countGoodSubsequences(s) { return solve(s); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, countGoodSubsequences };\n",
+      "python": "\"\"\"2539. Count the Number of Good Subsequences (Medium).\n\nSpecification: https://leetcode.com/problems/count-the-number-of-good-subsequences/description/\n\"\"\"\n\n\ndef solve(s):\n    MOD = 1000000007\n    counts = {}\n    for ch in s:\n        counts[ch] = counts.get(ch, 0) + 1\n    vals = list(counts.values())\n    mx = max(vals)\n    fact = [1] * (mx + 1)\n    for i in range(1, mx + 1):\n        fact[i] = fact[i - 1] * i % MOD\n    inv_fact = [1] * (mx + 1)\n    inv_fact[mx] = pow(fact[mx], MOD - 2, MOD)\n    for i in range(mx, 0, -1):\n        inv_fact[i - 1] = inv_fact[i] * i % MOD\n\n    def comb(n, k):\n        if k < 0 or k > n:\n            return 0\n        return fact[n] * inv_fact[k] % MOD * inv_fact[n - k] % MOD\n\n    ans = 0\n    for f in range(1, mx + 1):\n        prod = 1\n        for c in vals:\n            prod = prod * (comb(c, f) + 1) % MOD\n        ans = (ans + prod - 1) % MOD\n    return ans\n\n\nclass Solution:\n    def countGoodSubsequences(self, s):\n        return solve(s)\n",
+      "javascript_sha256": "e5cb6ebb385802e9d8e663164b13102ddfa8369ffa52ce9ff684f4c1443d3c75",
+      "python_sha256": "c6654dcec2e39306a4fa517ab247799238eee16119df4f15849a15f145bc31fa",
+      "tests": [
+        [
+          [
+            "aabb"
+          ],
+          11
+        ],
+        [
+          [
+            "leet"
+          ],
+          12
+        ],
+        [
+          [
+            "abcd"
+          ],
+          15
+        ],
+        [
+          [
+            "a"
+          ],
+          1
+        ],
+        [
+          [
+            "aa"
+          ],
+          3
+        ]
+      ],
+      "qualification": {
+        "problem_id": 2539,
+        "passed": true,
+        "public_tests": 5,
+        "random_checks": 20,
+        "random_agreement": 20
+      }
+    },
+    {
+      "problem_id": 2549,
+      "slug": "count-distinct-numbers-on-board",
+      "title": "Count Distinct Numbers on Board",
+      "difficulty": "Easy",
+      "method": "distinctIntegers",
+      "javascript": "'use strict';\n\n// 2549. Count Distinct Numbers on Board (Easy).\n// Specification: https://leetcode.com/problems/count-distinct-numbers-on-board/description/\nfunction solve(n) {\n  // Starting from n, each step adds n-1, then n-2, and so on down to 2;\n  // for n = 1 nothing new appears.\n  return Math.max(n - 1, 1);\n}\nconst distinctIntegers = solve;\nclass Solution { distinctIntegers(n) { return solve(n); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, distinctIntegers };\n",
+      "python": "\"\"\"2549. Count Distinct Numbers on Board (Easy).\n\nSpecification: https://leetcode.com/problems/count-distinct-numbers-on-board/description/\n\"\"\"\n\n\ndef solve(n):\n    # Starting from n, each step adds n-1, then n-2, and so on down to 2;\n    # for n = 1 nothing new appears.\n    return max(n - 1, 1)\n\n\nclass Solution:\n    def distinctIntegers(self, n):\n        return solve(n)\n",
+      "javascript_sha256": "5b8f6f20aaa8927872770590fedc716a36b6a000a78c6dfabd64310514d690fd",
+      "python_sha256": "ec10ee53a2e06c152c5779e2526f560623a4222fa1b88ae401f57df9516d7921",
+      "tests": [
+        [
+          [
+            5
+          ],
+          4
+        ],
+        [
+          [
+            3
+          ],
+          2
+        ],
+        [
+          [
+            1
+          ],
+          1
+        ],
+        [
+          [
+            2
+          ],
+          1
+        ],
+        [
+          [
+            10
+          ],
+          9
+        ]
+      ],
+      "qualification": {
+        "problem_id": 2549,
+        "passed": true,
+        "public_tests": 5,
+        "random_checks": 20,
+        "random_agreement": 20
+      }
+    },
+    {
+      "problem_id": 2554,
+      "slug": "maximum-number-of-integers-to-choose-from-a-range-i",
+      "title": "Maximum Number of Integers to Choose From a Range I",
+      "difficulty": "Easy",
+      "method": "maxCount",
+      "javascript": "'use strict';\n\n// 2554. Maximum Number of Integers to Choose From a Range I (Easy).\n// Specification: https://leetcode.com/problems/maximum-number-of-integers-to-choose-from-a-range-i/description/\nfunction solve(banned, n, maxSum) {\n  const bannedSet = new Set(banned);\n  let sum = 0; let cnt = 0;\n  for (let x = 1; x <= n; x++) {\n    if (bannedSet.has(x)) continue;\n    if (sum + x > maxSum) break;\n    sum += x; cnt++;\n  }\n  return cnt;\n}\nconst maxCount = solve;\nclass Solution { maxCount(banned, n, maxSum) { return solve(banned, n, maxSum); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, maxCount };\n",
+      "python": "\"\"\"2554. Maximum Number of Integers to Choose From a Range I (Easy).\n\nSpecification: https://leetcode.com/problems/maximum-number-of-integers-to-choose-from-a-range-i/description/\n\"\"\"\n\n\ndef solve(banned, n, maxSum):\n    banned_set = set(banned)\n    total = 0\n    cnt = 0\n    for x in range(1, n + 1):\n        if x in banned_set:\n            continue\n        if total + x > maxSum:\n            break\n        total += x\n        cnt += 1\n    return cnt\n\n\nclass Solution:\n    def maxCount(self, banned, n, maxSum):\n        return solve(banned, n, maxSum)\n",
+      "javascript_sha256": "7fa4050e1d36a64940718afcf30dfa582bdfc70f7801270178def6a5f73986e4",
+      "python_sha256": "f48f2fd9851b6b5c33c040c515178580edfc9dd1a96dfac78dd0bb6a2e588283",
+      "tests": [
+        [
+          [
+            [
+              1,
+              6,
+              5
+            ],
+            5,
+            6
+          ],
+          2
+        ],
+        [
+          [
+            [
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7
+            ],
+            8,
+            1
+          ],
+          0
+        ],
+        [
+          [
+            [
+              11
+            ],
+            7,
+            50
+          ],
+          7
+        ],
+        [
+          [
+            [
+              2
+            ],
+            3,
+            10
+          ],
+          2
+        ]
+      ],
+      "qualification": {
+        "problem_id": 2554,
+        "passed": true,
+        "public_tests": 4,
+        "random_checks": 20,
+        "random_agreement": 20
+      }
+    },
+    {
+      "problem_id": 2556,
+      "slug": "disconnect-path-in-a-binary-matrix-by-at-most-one-flip",
+      "title": "Disconnect Path in a Binary Matrix by at Most One Flip",
+      "difficulty": "Medium",
+      "method": "isPossibleToCutPath",
+      "javascript": "'use strict';\n\n// 2556. Disconnect Path in a Binary Matrix by at Most One Flip (Medium).\n// Specification: https://leetcode.com/problems/disconnect-path-in-a-binary-matrix-by-at-most-one-flip/description/\nfunction solve(grid) {\n  const g = grid.map((row) => row.slice());\n  const m = g.length; const n = g[0].length;\n  function dfs(i, j) {\n    if (i >= m || j >= n || g[i][j] !== 1) return false;\n    if (i === m - 1 && j === n - 1) return true;\n    g[i][j] = 0;\n    return dfs(i + 1, j) || dfs(i, j + 1);\n  }\n  const a = dfs(0, 0);\n  g[0][0] = 1; g[m - 1][n - 1] = 1;\n  const b = dfs(0, 0);\n  return !(a && b);\n}\nconst isPossibleToCutPath = solve;\nclass Solution { isPossibleToCutPath(grid) { return solve(grid); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, isPossibleToCutPath };\n",
+      "python": "\"\"\"2556. Disconnect Path in a Binary Matrix by at Most One Flip (Medium).\n\nSpecification: https://leetcode.com/problems/disconnect-path-in-a-binary-matrix-by-at-most-one-flip/description/\n\"\"\"\n\n\ndef solve(grid):\n    g = [row[:] for row in grid]\n    m, n = len(g), len(g[0])\n\n    def dfs(i, j):\n        if i >= m or j >= n or g[i][j] != 1:\n            return False\n        if i == m - 1 and j == n - 1:\n            return True\n        g[i][j] = 0\n        return dfs(i + 1, j) or dfs(i, j + 1)\n\n    a = dfs(0, 0)\n    g[0][0] = 1\n    g[m - 1][n - 1] = 1\n    b = dfs(0, 0)\n    return not (a and b)\n\n\nclass Solution:\n    def isPossibleToCutPath(self, grid):\n        return solve(grid)\n",
+      "javascript_sha256": "12deb526518b25830ae38870c8dcac6eac0a6cd18ca91829a6124cdf5892473f",
+      "python_sha256": "2facb72cdd9d20fcdb077318b43167609d18eb8862a8d487d27a61783074ac82",
+      "tests": [
+        [
+          [
+            [
+              [
+                1,
+                1,
+                1
+              ],
+              [
+                1,
+                0,
+                0
+              ],
+              [
+                1,
+                1,
+                1
+              ]
+            ]
+          ],
+          true
+        ],
+        [
+          [
+            [
+              [
+                1,
+                1,
+                1
+              ],
+              [
+                1,
+                0,
+                1
+              ],
+              [
+                1,
+                1,
+                1
+              ]
+            ]
+          ],
+          false
+        ],
+        [
+          [
+            [
+              [
+                1,
+                1
+              ],
+              [
+                1,
+                1
+              ]
+            ]
+          ],
+          false
+        ],
+        [
+          [
+            [
+              [
+                1,
+                0
+              ],
+              [
+                0,
+                1
+              ]
+            ]
+          ],
+          true
+        ],
+        [
+          [
+            [
+              [
+                1
+              ]
+            ]
+          ],
+          false
+        ]
+      ],
+      "qualification": {
+        "problem_id": 2556,
+        "passed": true,
+        "public_tests": 5,
+        "random_checks": 20,
+        "random_agreement": 20
+      }
+    },
+    {
+      "problem_id": 2563,
+      "slug": "count-the-number-of-fair-pairs",
+      "title": "Count the Number of Fair Pairs",
+      "difficulty": "Medium",
+      "method": "countFairPairs",
+      "javascript": "'use strict';\n\n// 2563. Count the Number of Fair Pairs (Medium).\n// Specification: https://leetcode.com/problems/count-the-number-of-fair-pairs/description/\nfunction solve(nums, lower, upper) {\n  const a = nums.slice().sort((x, y) => x - y);\n  function countLess(target) {\n    let l = 0; let r = a.length - 1; let cnt = 0;\n    while (l < r) {\n      if (a[l] + a[r] < target) { cnt += r - l; l++; } else { r--; }\n    }\n    return cnt;\n  }\n  return countLess(upper + 1) - countLess(lower);\n}\nconst countFairPairs = solve;\nclass Solution { countFairPairs(nums, lower, upper) { return solve(nums, lower, upper); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, countFairPairs };\n",
+      "python": "\"\"\"2563. Count the Number of Fair Pairs (Medium).\n\nSpecification: https://leetcode.com/problems/count-the-number-of-fair-pairs/description/\n\"\"\"\n\n\ndef solve(nums, lower, upper):\n    a = sorted(nums)\n\n    def count_less(target):\n        l, r = 0, len(a) - 1\n        cnt = 0\n        while l < r:\n            if a[l] + a[r] < target:\n                cnt += r - l\n                l += 1\n            else:\n                r -= 1\n        return cnt\n\n    return count_less(upper + 1) - count_less(lower)\n\n\nclass Solution:\n    def countFairPairs(self, nums, lower, upper):\n        return solve(nums, lower, upper)\n",
+      "javascript_sha256": "193e9665e3b6040465a998d2fd589048993b835691c34dc6907a06acd84d899e",
+      "python_sha256": "a95d1f1e91d410e4bd20301f35d5ad21048f2dccb25d9ad71e2d36271c4a1773",
+      "tests": [
+        [
+          [
+            [
+              0,
+              1,
+              7,
+              4,
+              4,
+              5
+            ],
+            3,
+            6
+          ],
+          6
+        ],
+        [
+          [
+            [
+              1,
+              7,
+              9,
+              2,
+              5
+            ],
+            11,
+            11
+          ],
+          1
+        ],
+        [
+          [
+            [
+              -2,
+              -1,
+              3,
+              4
+            ],
+            -1,
+            2
+          ],
+          3
+        ],
+        [
+          [
+            [
+              1,
+              1,
+              1
+            ],
+            2,
+            2
+          ],
+          3
+        ]
+      ],
+      "qualification": {
+        "problem_id": 2563,
+        "passed": true,
+        "public_tests": 4,
+        "random_checks": 20,
+        "random_agreement": 20
+      }
+    },
+    {
+      "problem_id": 2564,
+      "slug": "substring-xor-queries",
+      "title": "Substring XOR Queries",
+      "difficulty": "Medium",
+      "method": "substringXorQueries",
+      "javascript": "'use strict';\n\n// 2564. Substring XOR Queries (Medium).\n// Specification: https://leetcode.com/problems/substring-xor-queries/description/\nfunction solve(s, queries) {\n  const best = new Map();\n  const n = s.length;\n  const LIMIT = 1 << 30;\n  for (let i = 0; i < n; i++) {\n    let val = 0;\n    for (let j = i; j < Math.min(n, i + 30); j++) {\n      val = val * 2 + (s.charCodeAt(j) - 48);\n      if (val >= LIMIT) break;\n      const len = j - i + 1;\n      const cur = best.get(val);\n      if (!cur || len < cur[2] || (len === cur[2] && i < cur[0])) best.set(val, [i, j, len]);\n      if (s[i] === '0') break;\n    }\n  }\n  return queries.map(([first, second]) => {\n    const hit = best.get(first ^ second);\n    return hit ? [hit[0], hit[1]] : [-1, -1];\n  });\n}\nconst substringXorQueries = solve;\nclass Solution { substringXorQueries(s, queries) { return solve(s, queries); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, substringXorQueries };\n",
+      "python": "\"\"\"2564. Substring XOR Queries (Medium).\n\nSpecification: https://leetcode.com/problems/substring-xor-queries/description/\n\"\"\"\n\n\ndef solve(s, queries):\n    best = {}\n    n = len(s)\n    limit = 1 << 30\n    for i in range(n):\n        val = 0\n        for j in range(i, min(n, i + 30)):\n            val = val * 2 + int(s[j])\n            if val >= limit:\n                break\n            length = j - i + 1\n            cur = best.get(val)\n            if cur is None or length < cur[2] or (length == cur[2] and i < cur[0]):\n                best[val] = [i, j, length]\n            if s[i] == '0':\n                break\n    ans = []\n    for first, second in queries:\n        hit = best.get(first ^ second)\n        ans.append([hit[0], hit[1]] if hit is not None else [-1, -1])\n    return ans\n\n\nclass Solution:\n    def substringXorQueries(self, s, queries):\n        return solve(s, queries)\n",
+      "javascript_sha256": "845373c487ecad0f9fb4e4c64a48199f174528c55ce6eefd4dfeb4b9b8c62252",
+      "python_sha256": "ddc32c57e20e854c31cc8a9de89bf0bf9ba722e2ffcc51dadaba1f7a2d6ff066",
+      "tests": [
+        [
+          [
+            "101101",
+            [
+              [
+                0,
+                5
+              ],
+              [
+                1,
+                2
+              ]
+            ]
+          ],
+          [
+            [
+              0,
+              2
+            ],
+            [
+              2,
+              3
+            ]
+          ]
+        ],
+        [
+          [
+            "0101",
+            [
+              [
+                12,
+                8
+              ]
+            ]
+          ],
+          [
+            [
+              -1,
+              -1
+            ]
+          ]
+        ],
+        [
+          [
+            "1",
+            [
+              [
+                4,
+                5
+              ]
+            ]
+          ],
+          [
+            [
+              0,
+              0
+            ]
+          ]
+        ],
+        [
+          [
+            "0101",
+            [
+              [
+                0,
+                5
+              ]
+            ]
+          ],
+          [
+            [
+              1,
+              3
+            ]
+          ]
+        ]
+      ],
+      "qualification": {
+        "problem_id": 2564,
+        "passed": true,
+        "public_tests": 4,
+        "random_checks": 20,
+        "random_agreement": 20
+      }
+    },
+    {
+      "problem_id": 2604,
+      "slug": "minimum-time-to-eat-all-grains",
+      "title": "Minimum Time to Eat All Grains",
+      "difficulty": "Hard",
+      "method": "minimumTime",
+      "javascript": "'use strict';\n\n// 2604. Minimum Time to Eat All Grains (Hard).\n// Specification: https://leetcode.com/problems/minimum-time-to-eat-all-grains/description/\nfunction solve(hens, grains) {\n  const h = hens.slice().sort((a, b) => a - b);\n  const g = grains.slice().sort((a, b) => a - b);\n  const m = g.length;\n  function check(t) {\n    let j = 0;\n    for (const x of h) {\n      if (j === m) return true;\n      const y = g[j];\n      if (y <= x) {\n        const d = x - y;\n        if (d > t) return false;\n        while (j < m && g[j] <= x) j++;\n        while (j < m && Math.min(d, g[j] - x) + g[j] - y <= t) j++;\n      } else {\n        while (j < m && g[j] - x <= t) j++;\n      }\n    }\n    return j === m;\n  }\n  let lo = 0;\n  let hi = Math.abs(h[0] - g[0]) + g[m - 1] - g[0];\n  while (lo < hi) {\n    const mid = (lo + hi) >> 1;\n    if (check(mid)) hi = mid; else lo = mid + 1;\n  }\n  return lo;\n}\nconst minimumTime = solve;\nclass Solution { minimumTime(hens, grains) { return solve(hens, grains); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, minimumTime };\n",
+      "python": "\"\"\"2604. Minimum Time to Eat All Grains (Hard).\n\nSpecification: https://leetcode.com/problems/minimum-time-to-eat-all-grains/description/\n\"\"\"\n\n\ndef solve(hens, grains):\n    h = sorted(hens)\n    g = sorted(grains)\n    m = len(g)\n\n    def check(t):\n        j = 0\n        for x in h:\n            if j == m:\n                return True\n            y = g[j]\n            if y <= x:\n                d = x - y\n                if d > t:\n                    return False\n                while j < m and g[j] <= x:\n                    j += 1\n                while j < m and min(d, g[j] - x) + g[j] - y <= t:\n                    j += 1\n            else:\n                while j < m and g[j] - x <= t:\n                    j += 1\n        return j == m\n\n    lo = 0\n    hi = abs(h[0] - g[0]) + g[m - 1] - g[0]\n    while lo < hi:\n        mid = (lo + hi) // 2\n        if check(mid):\n            hi = mid\n        else:\n            lo = mid + 1\n    return lo\n\n\nclass Solution:\n    def minimumTime(self, hens, grains):\n        return solve(hens, grains)\n",
+      "javascript_sha256": "b6da362573ff190967d0f024fd6582ea3e0dd53f82a91f8d44cba3ec368283bb",
+      "python_sha256": "b2e46c07b758cbaca287c5bdcd6abab13f6335c1549b1886e1cb5a210deac8d9",
+      "tests": [
+        [
+          [
+            [
+              1
+            ],
+            [
+              1
+            ]
+          ],
+          0
+        ],
+        [
+          [
+            [
+              0
+            ],
+            [
+              10
+            ]
+          ],
+          10
+        ],
+        [
+          [
+            [
+              4,
+              6,
+              109,
+              111,
+              213,
+              215
+            ],
+            [
+              5,
+              110,
+              214
+            ]
+          ],
+          1
+        ],
+        [
+          [
+            [
+              2
+            ],
+            [
+              1,
+              3
+            ]
+          ],
+          3
+        ],
+        [
+          [
+            [
+              0,
+              10
+            ],
+            [
+              5
+            ]
+          ],
+          5
+        ]
+      ],
+      "qualification": {
+        "problem_id": 2604,
+        "passed": true,
+        "public_tests": 5,
+        "random_checks": 20,
+        "random_agreement": 20
+      }
+    },
+    {
+      "problem_id": 2605,
+      "slug": "form-smallest-number-from-two-digit-arrays",
+      "title": "Form Smallest Number From Two Digit Arrays",
+      "difficulty": "Easy",
+      "method": "minNumber",
+      "javascript": "'use strict';\n\n// 2605. Form Smallest Number From Two Digit Arrays (Easy).\n// Specification: https://leetcode.com/problems/form-smallest-number-from-two-digit-arrays/description/\nfunction solve(nums1, nums2) {\n  const set1 = new Set(nums1);\n  let common = null;\n  for (const d of nums2) if (set1.has(d) && (common === null || d < common)) common = d;\n  if (common !== null) return common;\n  const m1 = Math.min(...nums1); const m2 = Math.min(...nums2);\n  return Math.min(m1, m2) * 10 + Math.max(m1, m2);\n}\nconst minNumber = solve;\nclass Solution { minNumber(nums1, nums2) { return solve(nums1, nums2); } }\nif (typeof module !== 'undefined') module.exports = { solve, Solution, minNumber };\n",
+      "python": "\"\"\"2605. Form Smallest Number From Two Digit Arrays (Easy).\n\nSpecification: https://leetcode.com/problems/form-smallest-number-from-two-digit-arrays/description/\n\"\"\"\n\n\ndef solve(nums1, nums2):\n    common = set(nums1) & set(nums2)\n    if common:\n        return min(common)\n    m1, m2 = min(nums1), min(nums2)\n    return min(m1, m2) * 10 + max(m1, m2)\n\n\nclass Solution:\n    def minNumber(self, nums1, nums2):\n        return solve(nums1, nums2)\n",
+      "javascript_sha256": "c22241e515d8a77c7a6aedde6f6f38e565f958ff820f212f224462caf6cf698e",
+      "python_sha256": "041e705c37717bc63c68b47a85ebe73cdd98a3ed09115ec7a673717dcf5d606b",
+      "tests": [
+        [
+          [
+            [
+              4,
+              1,
+              3
+            ],
+            [
+              5,
+              7
+            ]
+          ],
+          15
+        ],
+        [
+          [
+            [
+              3,
+              5,
+              2,
+              6
+            ],
+            [
+              3,
+              1,
+              7
+            ]
+          ],
+          3
+        ],
+        [
+          [
+            [
+              1
+            ],
+            [
+              1
+            ]
+          ],
+          1
+        ],
+        [
+          [
+            [
+              9
+            ],
+            [
+              2
+            ]
+          ],
+          29
+        ]
+      ],
+      "qualification": {
+        "problem_id": 2605,
+        "passed": true,
+        "public_tests": 4,
+        "random_checks": 20,
+        "random_agreement": 20
+      }
+    }
+  ]
+}
