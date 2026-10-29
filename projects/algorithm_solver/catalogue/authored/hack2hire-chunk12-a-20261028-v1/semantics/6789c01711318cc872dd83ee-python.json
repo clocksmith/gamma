@@ -1,0 +1,40 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:6789c01711318cc872dd83ee",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "s"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "longestValidBrackets",
+  "params": [
+   {
+    "name": "s",
+    "type": "string"
+   }
+  ],
+  "return": {
+   "type": "integer"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "interval recursion: s[i:j] is valid when s[i] opens a pair closed at some k whose content is valid and holds no higher-ranked opener, followed by a valid rest; take the longest valid substring",
+  "candidate_design": "one stack pass: each open frame remembers its position and the highest rank of pairs closed inside it; a matching closer with an allowed rank pops the frame and measures back to the next frame or the last barrier, anything else resets the stack at a barrier",
+  "complexity_target": "O(n) time/O(n) space"
+ },
+ "source_sha256": "8e0fc008502bcf4e358161f64e331975d384deece9d9ded6c4e0f336c62545dc",
+ "wrapper": "Solution.longestValidBrackets"
+}

@@ -1,0 +1,50 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:69efd5e296981f58ae1f6dc7",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "layers",
+  "energy",
+  "K"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "maxLevels",
+  "params": [
+   {
+    "name": "layers",
+    "type": "integer[]"
+   },
+   {
+    "name": "energy",
+    "type": "integer[]"
+   },
+   {
+    "name": "K",
+    "type": "integer"
+   }
+  ],
+  "return": {
+   "type": "integer[]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "simulate the run from every start",
+  "candidate_design": "prefix sums: level j passes from start i exactly when prefix[j + 1] + energy[j] <= K + prefix[i]; with non-negative layers the first failing level never moves left as i grows, so a second pointer finds it",
+  "complexity_target": "O(n) time/O(n) space"
+ },
+ "source_sha256": "54c51fb20b627b1e35fe34e0c4c2fdae5c40c9cbad11fc79c2adc8d2cd972c84",
+ "wrapper": "Solution.maxLevels"
+}

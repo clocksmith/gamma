@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:688b838d3867670cfb89414c",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "root1",
+  "root2"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "mergeTrees",
+  "params": [
+   {
+    "name": "root1",
+    "type": "(integer|null)[]"
+   },
+   {
+    "name": "root2",
+    "type": "(integer|null)[]"
+   }
+  ],
+  "return": {
+   "type": "(integer|null)[]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "convert both lists to nested (value, children) tuples, merge recursively and serialize breadth-first",
+  "candidate_design": "parse both lists into child-index arrays, then walk aligned node pairs breadth-first (either side may be missing) and write the merged level-order list directly",
+  "complexity_target": "O(n1 + n2) time/O(n1 + n2) space"
+ },
+ "source_sha256": "ce6bedd0b211472771d29b573d7c8cbdc45e1f97ff3d9bf199f8f9212b060e91",
+ "wrapper": "named export mergeTrees"
+}

@@ -1,0 +1,856 @@
+{
+ "schema": "gamma.authored-assignment-public-safe.v1",
+ "authorization": "Coordinator worklist h2h-chunk12-a (16 Hack2Hire groups, 18 variants); public group previews only; no full-content or solution endpoints",
+ "status": "new development variants over INFERRED specifications; independent isolated qualification pending; official specification unavailable",
+ "problems": [
+  {
+   "uid": "hack2hire:68dc2e1c9736cfa4e906240c",
+   "title": "Level With Maximum Nodes in an N-ary Tree",
+   "variant_ordinal": 1,
+   "group_post_id": "68dc07829736cfa4e90623e2",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "levelWithMaxNodes",
+     "params": [
+      {
+       "name": "root",
+       "type": "(integer|null)[]"
+      }
+     ],
+     "return": {
+      "type": "integer"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "rebuild parent links and find every node's level by walking its parent chain to the root, then count per level",
+    "candidate_design": "parse the level-order list once, counting nodes per level breadth-first; keep the first level whose count beats the best so far",
+    "complexity_target": "O(n) time/O(n) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "687bb9c0fde0f1e9dd97f098336386af65dbe01e884597d2824a9543f04fcc69",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:697c3db29731315964cfb08b",
+   "title": "Linked User Records by Similarity",
+   "variant_ordinal": 1,
+   "group_post_id": "697c3da69731315964cfb08a",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "linkedPairs",
+     "params": [
+      {
+       "name": "records",
+       "type": "string[][]"
+      },
+      {
+       "name": "weights",
+       "type": "string[]"
+      },
+      {
+       "name": "threshold",
+       "type": "number"
+      }
+     ],
+     "return": {
+      "type": "string[][]"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "score every pair of rows with Fraction arithmetic and keep the pairs reaching the threshold",
+    "candidate_design": "convert weights and threshold to integer ten-thousandths; bucket rows by (field, value) so each row adds its shared-field weights to a score array of later rows, then scan the array against the threshold",
+    "complexity_target": "O(n^2 + n * fields) time/O(n * fields) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "238fe389a1daa020b966f49c96b8b5161e75307449cd264bec91a92352499df5",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:697d9ce2b8c468a441586158",
+   "title": "Linked User Records by Similarity",
+   "variant_ordinal": 2,
+   "group_post_id": "697c3da69731315964cfb08a",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "linkedGroups",
+     "params": [
+      {
+       "name": "records",
+       "type": "string[][]"
+      },
+      {
+       "name": "weights",
+       "type": "string[]"
+      },
+      {
+       "name": "threshold",
+       "type": "number"
+      }
+     ],
+     "return": {
+      "type": "string[][]"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "score every pair with Fraction arithmetic, then propagate the smallest row label across linked pairs until nothing changes",
+    "candidate_design": "integer-scaled weights and bucketed score accumulation as in level 1, joining linked rows in a union-find with path halving; collect members per root in row order",
+    "complexity_target": "O(n^2 alpha(n) + n * fields) time/O(n * fields) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "238fe389a1daa020b966f49c96b8b5161e75307449cd264bec91a92352499df5",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:697da047b8c468a441586160",
+   "title": "Linked User Records by Similarity",
+   "variant_ordinal": 3,
+   "group_post_id": "697c3da69731315964cfb08a",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "bestMatches",
+     "params": [
+      {
+       "name": "records",
+       "type": "string[][]"
+      },
+      {
+       "name": "weights",
+       "type": "string[]"
+      },
+      {
+       "name": "threshold",
+       "type": "number"
+      }
+     ],
+     "return": {
+      "type": "string[]"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "for each row, score every other row with Fraction arithmetic and take the maximum of (score, -row) among linked rows",
+    "candidate_design": "integer-scaled weights; for each row accumulate scores against all rows through the value buckets, then scan once for the highest linked score with the earliest row",
+    "complexity_target": "O(n^2 + n * fields) time/O(n * fields) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "238fe389a1daa020b966f49c96b8b5161e75307449cd264bec91a92352499df5",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:67cf7ef7aca6a2fa74a72d1f",
+   "title": "Load Factor Calculation",
+   "variant_ordinal": 1,
+   "group_post_id": "67cf7c4eaca6a2fa74a72d1c",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "loadFactors",
+     "params": [
+      {
+       "name": "dependencies",
+       "type": "string[][]"
+      },
+      {
+       "name": "entry",
+       "type": "string"
+      }
+     ],
+     "return": {
+      "type": "(string|integer)[][]"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "fixed-point relaxation: recompute every service's load as the sum of its callers' loads (plus 1 for entry) until nothing changes",
+    "candidate_design": "Kahn topological order with a queue over the whole graph, pushing each service's load to its callees once its own load is final; sort names at the end",
+    "complexity_target": "O(V log V + E) time/O(V + E) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "6aeb3aea20758ed857f102179c36ef7a16829187332ff58ba4ac9f571c787e77",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:6789c01711318cc872dd83ee",
+   "title": "Longest Valid Parentheses",
+   "variant_ordinal": 1,
+   "group_post_id": "6789bea411318cc872dd83ed",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "longestValidBrackets",
+     "params": [
+      {
+       "name": "s",
+       "type": "string"
+      }
+     ],
+     "return": {
+      "type": "integer"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "interval recursion: s[i:j] is valid when s[i] opens a pair closed at some k whose content is valid and holds no higher-ranked opener, followed by a valid rest; take the longest valid substring",
+    "candidate_design": "one stack pass: each open frame remembers its position and the highest rank of pairs closed inside it; a matching closer with an allowed rank pops the frame and measures back to the next frame or the last barrier, anything else resets the stack at a barrier",
+    "complexity_target": "O(n) time/O(n) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "ccbc8328fd8b9f9fdf6019d3ad9eaa3b72834ceaebcca788bb1cdb5b5e217590",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:6866f15ea2d59460201f2c7e",
+   "title": "Matrix Escape",
+   "variant_ordinal": 1,
+   "group_post_id": "6865a598cb498a83f3920c40",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "escapeMatrix",
+     "params": [
+      {
+       "name": "grid",
+       "type": "string[]"
+      }
+     ],
+     "return": {
+      "type": "integer"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "minute-by-minute simulation of the set of reachable positions and the set of threatened cells",
+    "candidate_design": "multi-source BFS for threat times from every P, then a BFS from U that enters a cell only when its arrival minute is below the threat time; stop at the first border cell",
+    "complexity_target": "O(m * n) time/O(m * n) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "faa347ebb6b8a355ae90459c8decb5a95872f202a03c1884dc26fbd693f35d7d",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:67800c576fee41e51af73dd8",
+   "title": "Max Consecutive ON Servers",
+   "variant_ordinal": 1,
+   "group_post_id": "678005e76fee41e51af73dd7",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "maxConsecutiveOn",
+     "params": [
+      {
+       "name": "states",
+       "type": "string"
+      },
+      {
+       "name": "k",
+       "type": "integer"
+      }
+     ],
+     "return": {
+      "type": "integer"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "scan every window, counting maximal zero blocks inside it, and keep the longest window with at most k blocks",
+    "candidate_design": "sliding window over the string tracking the number of zero blocks that start inside it; advance the left edge past a whole block when the count exceeds k",
+    "complexity_target": "O(n) time/O(1) extra space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "ae8e1540b7291ebd3df03bb9ea11cc67caf3c57b9fd8867b4f8f4ae16276e279",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:67fd5511d2adf72ba62b0ec8",
+   "title": "Max Fly Distance",
+   "variant_ordinal": 1,
+   "group_post_id": "67fd53c9d2adf72ba62b0ec7",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "maxFlyDistance",
+     "params": [
+      {
+       "name": "arr",
+       "type": "integer[]"
+      },
+      {
+       "name": "k",
+       "type": "integer"
+      }
+     ],
+     "return": {
+      "type": "integer"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "enumerate every fly/rest choice per day and simulate the energy",
+    "candidate_design": "dynamic programming over days with one best distance per energy level 0..k (unreachable levels marked), or the plain sum when k >= n",
+    "complexity_target": "O(n * k) time/O(k) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "b84b3cb3949923dc0d63a0ecc274fc62b22d2c09f90312ca5cfe93218daa6ed7",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:69efd5e296981f58ae1f6dc7",
+   "title": "Max Levels from Each Index",
+   "variant_ordinal": 1,
+   "group_post_id": "69efd5d696981f58ae1f6dc6",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "maxLevels",
+     "params": [
+      {
+       "name": "layers",
+       "type": "integer[]"
+      },
+      {
+       "name": "energy",
+       "type": "integer[]"
+      },
+      {
+       "name": "K",
+       "type": "integer"
+      }
+     ],
+     "return": {
+      "type": "integer[]"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "simulate the run from every start",
+    "candidate_design": "prefix sums: level j passes from start i exactly when prefix[j + 1] + energy[j] <= K + prefix[i]; with non-negative layers the first failing level never moves left as i grows, so a second pointer finds it",
+    "complexity_target": "O(n) time/O(n) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "717b97940337889af7d36082c7668516832cc93c2d10133bfd62e62b9631f7bd",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:6a8615b8701a76fc6843aed0",
+   "title": "Maximum Balanced Task Assignment",
+   "variant_ordinal": 1,
+   "group_post_id": "6a8614f1701a76fc6843aeca",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "maxBalancedTasks",
+     "params": [
+      {
+       "name": "m",
+       "type": "integer"
+      },
+      {
+       "name": "task",
+       "type": "integer[]"
+      }
+     ],
+     "return": {
+      "type": "integer"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "for t from the largest possible down, test the assignment with augmenting-path maximum flow (source to nodes with capacity t, node to type 1, type to sink its count)",
+    "candidate_design": "count each type with a hash map; a type can serve at most min(count, m) nodes, and t per node is feasible exactly when the sum of min(count, m) is at least m * t (the counting function is concave), so t = floor(sum / m)",
+    "complexity_target": "O(n) time/O(distinct types) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "ce0503aad9456cdc74503bb0789d1ce254e75cea11082653fd7719b11377ac97",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:67c766dc6c89e288437c3026",
+   "title": "Maximum Building Height",
+   "variant_ordinal": 1,
+   "group_post_id": "67c763516c89e288437c3025",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "maxBuildingHeight",
+     "params": [
+      {
+       "name": "grid",
+       "type": "string[]"
+      }
+     ],
+     "return": {
+      "type": "integer"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "a separate BFS from every building tile to its nearest P",
+    "candidate_design": "one multi-source BFS from all P tiles through non-X tiles; take the largest distance and check every building tile was reached",
+    "complexity_target": "O(m * n) time/O(m * n) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "6d6756acd6f609c0a1c08dc5c6b936f7afb06073070747a475411fe219f315f8",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:68eda9cd5abdefad4f6693be",
+   "title": "Maximum Interval Overlap Count",
+   "variant_ordinal": 1,
+   "group_post_id": "68eda9b25abdefad4f6693bd",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "maxOverlap",
+     "params": [
+      {
+       "name": "intervals",
+       "type": "integer[][]"
+      }
+     ],
+     "return": {
+      "type": "integer"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "for every interval start, count the intervals containing that point",
+    "candidate_design": "sort starts and ends separately and sweep, consuming a start before an end at the same coordinate because intervals are closed",
+    "complexity_target": "O(n log n) time/O(n) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "fdef8f9b969b158e17350aed25459f087c1163e799557274639c52102972e9dd",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:67e4468750b60b77022f381c",
+   "title": "Maximum Multiplier Path",
+   "variant_ordinal": 1,
+   "group_post_id": "67e4438350b60b77022f381b",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "maxMultiplierProduct",
+     "params": [
+      {
+       "name": "n",
+       "type": "integer"
+      },
+      {
+       "name": "edges",
+       "type": "integer[][]"
+      },
+      {
+       "name": "start",
+       "type": "integer"
+      },
+      {
+       "name": "end",
+       "type": "integer"
+      }
+     ],
+     "return": {
+      "type": "integer"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "depth-first enumeration of every simple path from start, multiplying along the way",
+    "candidate_design": "dynamic programming over visited-node bitmasks: best[mask][v] is the largest product of a simple path from start that visits exactly mask and ends at v",
+    "complexity_target": "O(2^n * n^2) time/O(2^n * n) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "0e3f292e5c1289bb7e121b8afad0f35c9bae29880d7c77f8fae296dfb2c0981f",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:69953e87312381f4e70fdb95",
+   "title": "Maximum Vacation With Minimum Flights",
+   "variant_ordinal": 1,
+   "group_post_id": "69952fd9312381f4e70fdb57",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "maxVacation",
+     "params": [
+      {
+       "name": "days",
+       "type": "integer[][]"
+      }
+     ],
+     "return": {
+      "type": "integer[]"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "week-by-week DP over every (previous city, city) pair, comparing (days, -flights) tuples",
+    "candidate_design": "week-by-week DP keeping (days, flights) per city; the best flight into city c comes from the best other city, so keep the top two previous cities and compare lexicographically",
+    "complexity_target": "O(m * n) time/O(m) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "3568e953dfa36fcbe8cdf13e3a8874bbefcc3facc67930fd9aadf65da1604144",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:688b838d3867670cfb89414c",
+   "title": "Merge N-ary Tree",
+   "variant_ordinal": 1,
+   "group_post_id": "688b83823867670cfb89414b",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "mergeTrees",
+     "params": [
+      {
+       "name": "root1",
+       "type": "(integer|null)[]"
+      },
+      {
+       "name": "root2",
+       "type": "(integer|null)[]"
+      }
+     ],
+     "return": {
+      "type": "(integer|null)[]"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "convert both lists to nested (value, children) tuples, merge recursively and serialize breadth-first",
+    "candidate_design": "parse both lists into child-index arrays, then walk aligned node pairs breadth-first (either side may be missing) and write the merged level-order list directly",
+    "complexity_target": "O(n1 + n2) time/O(n1 + n2) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "a2176a4311491bb9e75783c725f5789445504b0b3bfbc1dc56c14738885af307",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:68d849afae12841706c1fc74",
+   "title": "Min Root-to-Leaf Path Sum of N-ary Tree",
+   "variant_ordinal": 1,
+   "group_post_id": "68d84917ae12841706c1fc73",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "minPathSum",
+     "params": [
+      {
+       "name": "root",
+       "type": "(integer|null)[]"
+      }
+     ],
+     "return": {
+      "type": "integer"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "for every leaf, walk parent links up to the root and add the values",
+    "candidate_design": "parse the level-order list breadth-first, giving each node its path sum from its parent, and take the minimum over leaves",
+    "complexity_target": "O(n) time/O(n) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "9648bb907e5bddb619039c12999d7a53a4282886e60693917605c38ab8d033ab",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:68d84fa6ae12841706c1fc81",
+   "title": "MinMax Queue",
+   "variant_ordinal": 1,
+   "group_post_id": "68d84f7eae12841706c1fc80",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "classname": "MinMaxQueue",
+     "constructor": {
+      "params": []
+     },
+     "methods": [
+      {
+       "name": "enqueue",
+       "params": [
+        {
+         "name": "val",
+         "type": "integer"
+        }
+       ],
+       "return": {
+        "type": "void"
+       }
+      },
+      {
+       "name": "dequeue",
+       "params": [],
+       "return": {
+        "type": "integer"
+       }
+      },
+      {
+       "name": "getMin",
+       "params": [],
+       "return": {
+        "type": "integer"
+       }
+      },
+      {
+       "name": "getMax",
+       "params": [],
+       "return": {
+        "type": "integer"
+       }
+      }
+     ]
+    },
+    "native_class": "MinMaxQueue"
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "a plain list: pop from the front and scan for min and max on every query",
+    "candidate_design": "an array queue with a head index plus two monotonic deques (non-decreasing for min, non-increasing for max) with head indices; dequeue drops the deque fronts equal to the leaving value",
+    "complexity_target": "O(1) amortised per call/O(n) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "8db2d07a2d104f1950f0373a5ffc45733047ccaaed1ac6f82d1b8eef9eca5e7e",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  }
+ ]
+}

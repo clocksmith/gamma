@@ -1,0 +1,55 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:67e4468750b60b77022f381c",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "n",
+  "edges",
+  "start",
+  "end"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "maxMultiplierProduct",
+  "params": [
+   {
+    "name": "n",
+    "type": "integer"
+   },
+   {
+    "name": "edges",
+    "type": "integer[][]"
+   },
+   {
+    "name": "start",
+    "type": "integer"
+   },
+   {
+    "name": "end",
+    "type": "integer"
+   }
+  ],
+  "return": {
+   "type": "integer"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "depth-first enumeration of every simple path from start, multiplying along the way",
+  "candidate_design": "dynamic programming over visited-node bitmasks: best[mask][v] is the largest product of a simple path from start that visits exactly mask and ends at v",
+  "complexity_target": "O(2^n * n^2) time/O(2^n * n) space"
+ },
+ "source_sha256": "5b3b03be998366244f21f05a2cc13f7815bf467e223e2cd6ac3af492cb17e743",
+ "wrapper": "Solution.maxMultiplierProduct"
+}

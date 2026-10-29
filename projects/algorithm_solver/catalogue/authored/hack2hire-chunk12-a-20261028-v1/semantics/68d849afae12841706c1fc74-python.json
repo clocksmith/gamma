@@ -1,0 +1,40 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:68d849afae12841706c1fc74",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "root"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "minPathSum",
+  "params": [
+   {
+    "name": "root",
+    "type": "(integer|null)[]"
+   }
+  ],
+  "return": {
+   "type": "integer"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "for every leaf, walk parent links up to the root and add the values",
+  "candidate_design": "parse the level-order list breadth-first, giving each node its path sum from its parent, and take the minimum over leaves",
+  "complexity_target": "O(n) time/O(n) space"
+ },
+ "source_sha256": "018f095249a81e9d7a891ec1ddca82dbda898e82d7edeba837fb85a04209b05b",
+ "wrapper": "Solution.minPathSum"
+}

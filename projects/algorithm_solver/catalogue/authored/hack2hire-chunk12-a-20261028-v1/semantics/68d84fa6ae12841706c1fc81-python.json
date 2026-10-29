@@ -1,0 +1,74 @@
+{
+ "schema": "gamma.authored-native-trace-semantics.v1",
+ "problem_uid": "hack2hire:68d84fa6ae12841706c1fc81",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "operation_names",
+  "argument_lists"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "classname": "MinMaxQueue",
+  "constructor": {
+   "params": []
+  },
+  "methods": [
+   {
+    "name": "enqueue",
+    "params": [
+     {
+      "name": "val",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "void"
+    }
+   },
+   {
+    "name": "dequeue",
+    "params": [],
+    "return": {
+     "type": "integer"
+    }
+   },
+   {
+    "name": "getMin",
+    "params": [],
+    "return": {
+     "type": "integer"
+    }
+   },
+   {
+    "name": "getMax",
+    "params": [],
+    "return": {
+     "type": "integer"
+    }
+   }
+  ]
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON trace result; no bool/int coercion",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "a plain list: pop from the front and scan for min and max on every query",
+  "candidate_design": "an array queue with a head index plus two monotonic deques (non-decreasing for min, non-increasing for max) with head indices; dequeue drops the deque fronts equal to the leaving value",
+  "complexity_target": "O(1) amortised per call/O(n) space"
+ },
+ "source_sha256": "3ecc4c026cb011015c1c552139f87e17c9b437d2da21cd0acb6446f95340b8db",
+ "native_class": "MinMaxQueue",
+ "native_symbol": "module global MinMaxQueue",
+ "void_methods": [
+  "enqueue"
+ ]
+}

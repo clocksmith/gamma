@@ -1,0 +1,50 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:697d9ce2b8c468a441586158",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "records",
+  "weights",
+  "threshold"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "linkedGroups",
+  "params": [
+   {
+    "name": "records",
+    "type": "string[][]"
+   },
+   {
+    "name": "weights",
+    "type": "string[]"
+   },
+   {
+    "name": "threshold",
+    "type": "number"
+   }
+  ],
+  "return": {
+   "type": "string[][]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "score every pair with Fraction arithmetic, then propagate the smallest row label across linked pairs until nothing changes",
+  "candidate_design": "integer-scaled weights and bucketed score accumulation as in level 1, joining linked rows in a union-find with path halving; collect members per root in row order",
+  "complexity_target": "O(n^2 alpha(n) + n * fields) time/O(n * fields) space"
+ },
+ "source_sha256": "ecc1b0ca8d8ab2c7c8d8b65807e262b42f8ef9bd0ec4e1476ace276ce6b80e39",
+ "wrapper": "Solution.linkedGroups"
+}

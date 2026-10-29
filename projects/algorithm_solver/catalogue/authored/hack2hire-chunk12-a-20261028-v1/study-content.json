@@ -1,0 +1,1722 @@
+{
+ "schema": "gamma.hack2hire-chunk12-a-study-content.v1",
+ "authored_by": "claude-opus-5-5 subagent, 2026-10-29",
+ "note": "Teaching text, clarifying questions, inferred constraints and own examples. Inferred, not official. Examples are small generated inputs with outputs from the independent references in oracles.py.",
+ "variants": {
+  "hack2hire:68dc2e1c9736cfa4e906240c": {
+   "constraints": [
+    "0 <= number of nodes <= 1e5",
+    "-1e9 <= node value <= 1e9",
+    "root is a canonical LeetCode N-ary level-order list"
+   ],
+   "clarifyingQuestions": [
+    "How is the tree passed: node objects or a serialized list?",
+    "Which level wins a tie?",
+    "What is returned for an empty tree?"
+   ],
+   "hints": [
+    "Breadth-first search visits a whole level before the next one.",
+    "In the level-order list, each null closes the child group of one node in breadth-first order.",
+    "Count the nodes of each level as you walk and keep the first strictly larger count."
+   ],
+   "invariants": [
+    "levels are visited in increasing order",
+    "the answer only changes on a strictly larger count"
+   ],
+   "chooseWhen": [
+    "Per-level aggregates of a tree"
+   ],
+   "tradeoffs": [
+    "The parse already walks the tree breadth-first, so no node objects are needed"
+   ],
+   "variantLabel": "Inferred single variant: widest level of an N-ary tree",
+   "examples": [
+    {
+     "input": [
+      []
+     ],
+     "output": 0,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       5,
+       null,
+       3,
+       -6,
+       7,
+       12,
+       -3,
+       null,
+       16,
+       null,
+       -14,
+       -14,
+       null,
+       -6,
+       3,
+       -13,
+       null,
+       null,
+       null,
+       19,
+       null,
+       11,
+       6,
+       null,
+       null,
+       13,
+       -3,
+       null,
+       null,
+       null,
+       -17,
+       null,
+       -18,
+       null,
+       15,
+       null,
+       9,
+       -17,
+       null,
+       -9,
+       null,
+       -2,
+       8,
+       null,
+       null,
+       null,
+       19,
+       5,
+       null,
+       6,
+       17,
+       null,
+       -13,
+       null,
+       null,
+       -3,
+       null,
+       -17,
+       15,
+       null,
+       16,
+       9,
+       null,
+       null,
+       null,
+       null,
+       4,
+       3,
+       null,
+       -5,
+       null,
+       -2,
+       null,
+       null,
+       null,
+       7,
+       null,
+       null,
+       9,
+       -2,
+       -16,
+       null,
+       null,
+       null,
+       11,
+       5,
+       null,
+       0,
+       null,
+       -19,
+       5,
+       11,
+       19,
+       null,
+       null,
+       -6,
+       -15,
+       -6,
+       null,
+       null,
+       null,
+       null,
+       null,
+       19,
+       null,
+       -7,
+       null,
+       null,
+       null,
+       -17,
+       null,
+       0
+      ]
+     ],
+     "output": 6,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:697c3db29731315964cfb08b": {
+   "constraints": [
+    "1 <= records.length <= 501 (header plus up to 500 rows)",
+    "2 <= header length <= 6; field names match [a-z]{1,10}",
+    "cell values match [A-Za-z0-9@._-]{0,12}",
+    "weights: decimals with at most 4 places summing to exactly 1",
+    "threshold in [0, 1] with at most 4 decimal places"
+   ],
+   "clarifyingQuestions": [
+    "How is the similarity of two records computed from the weights?",
+    "Do two empty values count as a match?",
+    "Is the threshold inclusive?",
+    "In which order should pairs be listed?"
+   ],
+   "hints": [
+    "Decimal weights with at most 4 places become exact integers when scaled by 10000.",
+    "Rows that share a value in a field can be found through a hash map from value to rows.",
+    "Accumulate each row's scores against later rows in an array, then compare each entry with the threshold."
+   ],
+   "invariants": [
+    "every score is an integer count of ten-thousandths",
+    "pairs are emitted in row order"
+   ],
+   "chooseWhen": [
+    "Weighted exact-match deduplication of small tables"
+   ],
+   "tradeoffs": [
+    "Listing all pairs is quadratic in the worst case; blocking only helps when values are diverse"
+   ],
+   "variantLabel": "Inferred level 1 of 3: list linked record pairs",
+   "examples": [
+    {
+     "input": [
+      [
+       [
+        "id",
+        "name"
+       ]
+      ],
+      [
+       "name:1"
+      ],
+      0.5
+     ],
+     "output": [],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       [
+        "id",
+        "name",
+        "email",
+        "company"
+       ],
+       [
+        "1",
+        "Ann",
+        "a@x.io",
+        "Acme"
+       ],
+       [
+        "2",
+        "Ann",
+        "a@x.io",
+        "Bolt"
+       ],
+       [
+        "3",
+        "Bo",
+        "b@x.io",
+        "Acme"
+       ],
+       [
+        "4",
+        "Bo",
+        "a@x.io",
+        ""
+       ],
+       [
+        "5",
+        "Cy",
+        "",
+        ""
+       ]
+      ],
+      [
+       "name:0.5",
+       "email:0.3",
+       "company:0.2"
+      ],
+      0.5
+     ],
+     "output": [
+      [
+       "1",
+       "2"
+      ],
+      [
+       "3",
+       "4"
+      ]
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:697d9ce2b8c468a441586158": {
+   "constraints": [
+    "1 <= records.length <= 501 (header plus up to 500 rows)",
+    "2 <= header length <= 6; field names match [a-z]{1,10}",
+    "cell values match [A-Za-z0-9@._-]{0,12}",
+    "weights: decimals with at most 4 places summing to exactly 1",
+    "threshold in [0, 1] with at most 4 decimal places"
+   ],
+   "clarifyingQuestions": [
+    "Are links transitive?",
+    "Should single unlinked records be reported?",
+    "How are groups and their members ordered?"
+   ],
+   "hints": [
+    "Linked records form the edges of a graph; groups are its connected components.",
+    "A union-find joins rows as links are found.",
+    "Visit rows in order and append each to its root's group so members and groups come out in row order."
+   ],
+   "invariants": [
+    "two rows share a root exactly when a chain of links joins them",
+    "groups are listed by their first row"
+   ],
+   "chooseWhen": [
+    "Clustering records by a pairwise match rule"
+   ],
+   "tradeoffs": [
+    "Union-find needs every linked pair to be found; the pair scan stays quadratic"
+   ],
+   "variantLabel": "Inferred level 2 of 3: transitive groups of linked records",
+   "examples": [
+    {
+     "input": [
+      [
+       [
+        "id",
+        "name"
+       ]
+      ],
+      [
+       "name:1"
+      ],
+      0.5
+     ],
+     "output": [],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       [
+        "id",
+        "name",
+        "email",
+        "company"
+       ],
+       [
+        "1",
+        "Ann",
+        "a@x.io",
+        "Acme"
+       ],
+       [
+        "2",
+        "Ann",
+        "a@x.io",
+        "Bolt"
+       ],
+       [
+        "3",
+        "Bo",
+        "b@x.io",
+        "Acme"
+       ],
+       [
+        "4",
+        "Bo",
+        "a@x.io",
+        ""
+       ],
+       [
+        "5",
+        "Cy",
+        "",
+        ""
+       ]
+      ],
+      [
+       "name:0.5",
+       "email:0.3",
+       "company:0.2"
+      ],
+      0.5
+     ],
+     "output": [
+      [
+       "1",
+       "2"
+      ],
+      [
+       "3",
+       "4"
+      ]
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:697da047b8c468a441586160": {
+   "constraints": [
+    "1 <= records.length <= 501 (header plus up to 500 rows)",
+    "2 <= header length <= 6; field names match [a-z]{1,10}",
+    "cell values match [A-Za-z0-9@._-]{0,12}",
+    "weights: decimals with at most 4 places summing to exactly 1",
+    "threshold in [0, 1] with at most 4 decimal places"
+   ],
+   "clarifyingQuestions": [
+    "Which match is reported when several records tie?",
+    "What is reported for a record with no link?",
+    "Can a record match itself?"
+   ],
+   "hints": [
+    "Each row needs its score against every other row.",
+    "Scaled integer weights make score comparisons exact.",
+    "Scan scores in row order and replace the best only on a strictly larger score so the earliest row wins ties."
+   ],
+   "invariants": [
+    "a record never matches itself",
+    "the reported match has the largest linked score"
+   ],
+   "chooseWhen": [
+    "Nearest-neighbour lookup under an additive exact-match score"
+   ],
+   "tradeoffs": [
+    "Keeping a full score row per record costs O(n) memory at a time instead of O(1)"
+   ],
+   "variantLabel": "Inferred level 3 of 3: best linked match per record",
+   "examples": [
+    {
+     "input": [
+      [
+       [
+        "id",
+        "name"
+       ]
+      ],
+      [
+       "name:1"
+      ],
+      0.5
+     ],
+     "output": [],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       [
+        "id",
+        "name",
+        "email",
+        "company"
+       ],
+       [
+        "1",
+        "Ann",
+        "a@x.io",
+        "Acme"
+       ],
+       [
+        "2",
+        "Ann",
+        "a@x.io",
+        "Bolt"
+       ],
+       [
+        "3",
+        "Bo",
+        "b@x.io",
+        "Acme"
+       ],
+       [
+        "4",
+        "Bo",
+        "a@x.io",
+        ""
+       ],
+       [
+        "5",
+        "Cy",
+        "",
+        ""
+       ]
+      ],
+      [
+       "name:0.5",
+       "email:0.3",
+       "company:0.2"
+      ],
+      0.5
+     ],
+     "output": [
+      "2",
+      "1",
+      "4",
+      "3",
+      ""
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:67cf7ef7aca6a2fa74a72d1f": {
+   "constraints": [
+    "0 <= dependencies.length <= 2e5",
+    "service names match [a-z0-9_]{1,10}",
+    "no self edges, no duplicate edges, no cycles",
+    "every load factor <= 2**53 - 1"
+   ],
+   "clarifyingQuestions": [
+    "Does a service split its load among dependencies or send the full load to each?",
+    "Should unreachable services be listed?",
+    "How should the result be ordered?"
+   ],
+   "hints": [
+    "The load of a service is the sum of the loads of the services calling it.",
+    "Process services in topological order so each load is final before it is passed on.",
+    "Kahn's algorithm gives that order with a queue of services whose callers are all done."
+   ],
+   "invariants": [
+    "a service leaves the queue only after all its callers",
+    "load factors equal path counts from the entry"
+   ],
+   "chooseWhen": [
+    "Counting paths or propagating flow in a DAG"
+   ],
+   "tradeoffs": [
+    "Path counts grow exponentially with depth, so exact integers need a bound or big integers"
+   ],
+   "variantLabel": "Inferred single variant: path-count load factors in a service DAG",
+   "examples": [
+    {
+     "input": [
+      [],
+      "api"
+     ],
+     "output": [
+      [
+       "api",
+       1
+      ]
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       [
+        "api",
+        "auth"
+       ],
+       [
+        "api",
+        "db"
+       ],
+       [
+        "auth",
+        "db"
+       ],
+       [
+        "db",
+        "disk"
+       ],
+       [
+        "cache",
+        "db"
+       ]
+      ],
+      "api"
+     ],
+     "output": [
+      [
+       "api",
+       1
+      ],
+      [
+       "auth",
+       1
+      ],
+      [
+       "cache",
+       0
+      ],
+      [
+       "db",
+       2
+      ],
+      [
+       "disk",
+       2
+      ]
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6789c01711318cc872dd83ee": {
+   "constraints": [
+    "0 <= s.length <= 1e5",
+    "s contains only ( ) [ ] { }"
+   ],
+   "clarifyingQuestions": [
+    "Which bracket kinds may contain which?",
+    "May a bracket contain the same kind?",
+    "Is the answer a length or the substring?"
+   ],
+   "hints": [
+    "The classic stack solution for one bracket kind measures a valid run back to the last unmatched position.",
+    "A frame on the stack can also remember the highest rank closed inside it.",
+    "A closer that mismatches or would hold a higher rank becomes a barrier: clear the stack there."
+   ],
+   "invariants": [
+    "the text after the bottom barrier and each open frame is a valid concatenation",
+    "each frame's rank record covers exactly the pairs closed inside it"
+   ],
+   "chooseWhen": [
+    "Longest well-formed run under nesting constraints"
+   ],
+   "tradeoffs": [
+    "The interval recursion handles arbitrary grammars but is cubic"
+   ],
+   "variantLabel": "Inferred single variant: longest valid substring under ranked nesting",
+   "examples": [
+    {
+     "input": [
+      ""
+     ],
+     "output": 0,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      "}}(){}[(([({}]{((})))"
+     ],
+     "output": 4,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6866f15ea2d59460201f2c7e": {
+   "constraints": [
+    "1 <= m * n <= 2e5",
+    "rows have equal length and contain only U P . X",
+    "exactly one U"
+   ],
+   "clarifyingQuestions": [
+    "Is the exit any border cell or a marked cell?",
+    "Who moves first in a minute, you or the threat?",
+    "Can you share a cell with the threat at the moment it arrives?",
+    "Does a border start count as escaped?"
+   ],
+   "hints": [
+    "Threat arrival times do not depend on your moves.",
+    "One multi-source BFS from every P gives each cell's threat time.",
+    "A second BFS from U may enter a cell only if it arrives strictly before the threat."
+   ],
+   "invariants": [
+    "BFS arrival minutes are the earliest possible",
+    "a visited cell was safe on arrival"
+   ],
+   "chooseWhen": [
+    "Shortest escape under time-dependent blocking that spreads at the same speed"
+   ],
+   "tradeoffs": [
+    "Precomputing threat times costs a full grid pass even when the exit is near"
+   ],
+   "variantLabel": "Inferred single variant: reach the border ahead of a spreading threat",
+   "examples": [
+    {
+     "input": [
+      [
+       "U"
+      ]
+     ],
+     "output": 0,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "...XXXPX.P",
+       "PX...P..XX",
+       ".XX.....P.",
+       "..P....X.P",
+       "....XX..X.",
+       "...X.X.P.X",
+       ".X.X.U..X."
+      ]
+     ],
+     "output": 0,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:67800c576fee41e51af73dd8": {
+   "constraints": [
+    "1 <= states.length <= 1e5",
+    "states contains only 0 and 1",
+    "0 <= k <= 1e5"
+   ],
+   "clarifyingQuestions": [
+    "How are the states encoded?",
+    "Is the answer the length of the run or the flips used?",
+    "Can a flip cover servers that are already ON?"
+   ],
+   "hints": [
+    "Flipping ON servers off never helps.",
+    "Each operation can turn at most one maximal block of OFF servers inside the final run into ON.",
+    "So find the longest window containing at most k zero blocks with a sliding window."
+   ],
+   "invariants": [
+    "the window holds at most k zero blocks",
+    "blocks are counted where they start inside the window"
+   ],
+   "chooseWhen": [
+    "Longest segment with at most k \"bad\" groups"
+   ],
+   "tradeoffs": [
+    "Counting blocks instead of zeros needs care when the left edge cuts a block"
+   ],
+   "variantLabel": "Inferred single variant: longest ON run after at most k range flips",
+   "examples": [
+    {
+     "input": [
+      "0",
+      0
+     ],
+     "output": 0,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      "0010010100000000000101",
+      3
+     ],
+     "output": 18,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:67fd5511d2adf72ba62b0ec8": {
+   "constraints": [
+    "1 <= arr.length <= 1e5",
+    "0 <= arr[i] <= 1e9",
+    "0 <= k <= 1e5",
+    "arr.length * k <= 1e6"
+   ],
+   "clarifyingQuestions": [
+    "Can you fly with 0 energy?",
+    "Does resting at full energy do anything?",
+    "Is the answer the total distance?"
+   ],
+   "hints": [
+    "The state after each day is just the remaining energy.",
+    "Keep the best distance for each energy level.",
+    "With k >= n you can fly every day."
+   ],
+   "invariants": [
+    "dp[e] is the best distance with exactly e energy after the processed days",
+    "energy stays within 0..k"
+   ],
+   "chooseWhen": [
+    "Resource-limited choices with a small resource range"
+   ],
+   "tradeoffs": [
+    "O(n * k) is only practical for small k; the bound n * k <= 1e6 is inferred"
+   ],
+   "variantLabel": "Inferred single variant: maximise distance with capped energy",
+   "examples": [
+    {
+     "input": [
+      [
+       5
+      ],
+      0
+     ],
+     "output": 0,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       1,
+       100,
+       1000000000,
+       2,
+       0,
+       9,
+       100,
+       1,
+       2,
+       0,
+       100,
+       1000000000
+      ],
+      3
+     ],
+     "output": 2000000311,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:69efd5e296981f58ae1f6dc7": {
+   "constraints": [
+    "1 <= n <= 1e5",
+    "0 <= layers[i], energy[i] <= 1e9",
+    "0 <= K <= 1e14"
+   ],
+   "clarifyingQuestions": [
+    "Can layers be negative?",
+    "What is returned: every start's score or the best one?",
+    "Does a failed level consume energy?"
+   ],
+   "hints": [
+    "Remaining energy after level j from start i is K minus a range sum of layers.",
+    "Rewrite the pass test as prefix[j + 1] + energy[j] <= K + prefix[i].",
+    "The right side grows with i, so the first failing level can be tracked with a pointer that only moves right."
+   ],
+   "invariants": [
+    "all levels between the start and the pointer pass",
+    "the pointer never moves left"
+   ],
+   "chooseWhen": [
+    "Per-start runs with a monotone threshold"
+   ],
+   "tradeoffs": [
+    "Negative layer values would break the monotone pointer"
+   ],
+   "variantLabel": "Inferred single variant: levels passed from every start",
+   "examples": [
+    {
+     "input": [
+      [
+       1
+      ],
+      [
+       0
+      ],
+      0
+     ],
+     "output": [
+      0
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       3,
+       0,
+       4,
+       0,
+       1,
+       2,
+       4,
+       2,
+       5
+      ],
+      [
+       0,
+       1,
+       5,
+       6,
+       6,
+       0,
+       6,
+       0,
+       1
+      ],
+      12
+     ],
+     "output": [
+      3,
+      5,
+      4,
+      3,
+      2,
+      3,
+      3,
+      2,
+      1
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6a8615b8701a76fc6843aed0": {
+   "constraints": [
+    "1 <= m <= 1e5",
+    "0 <= task.length <= 1e5",
+    "1 <= task[i] <= 1e9"
+   ],
+   "clarifyingQuestions": [
+    "Is the answer the per-node count or the total?",
+    "Can a node receive no tasks?",
+    "Do all tasks have to be assigned?"
+   ],
+   "hints": [
+    "Only the count of each type matters.",
+    "A type can be used by at most min(count, m) different nodes.",
+    "Show that t per node works exactly when the sum of min(count, m) is at least m * t."
+   ],
+   "invariants": [
+    "a type contributes at most one task per node",
+    "the total is a multiple of m"
+   ],
+   "chooseWhen": [
+    "Uniform bipartite degree feasibility"
+   ],
+   "tradeoffs": [
+    "The closed form needs a feasibility proof; the flow reference is slower but direct"
+   ],
+   "variantLabel": "Inferred single variant: equal-size distinct-type assignment",
+   "examples": [
+    {
+     "input": [
+      1,
+      []
+     ],
+     "output": 0,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      3,
+      [
+       5,
+       2,
+       1,
+       2,
+       2,
+       4,
+       1,
+       3
+      ]
+     ],
+     "output": 6,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:67c766dc6c89e288437c3026": {
+   "constraints": [
+    "1 <= m * n <= 2e5",
+    "rows have equal length and contain only P - X"
+   ],
+   "clarifyingQuestions": [
+    "Can paths pass through X tiles?",
+    "Is the answer the tallest building or the whole height map?",
+    "What if a building cannot reach any parking lot?"
+   ],
+   "hints": [
+    "Every building's height is its distance to the nearest P.",
+    "Start one BFS from all P tiles at once.",
+    "Any building tile left unvisited has no bound."
+   ],
+   "invariants": [
+    "BFS distances are nearest-P distances",
+    "X tiles are never entered"
+   ],
+   "chooseWhen": [
+    "Distance to the nearest of many sources on a grid"
+   ],
+   "tradeoffs": [
+    "Returning only the maximum hides the height map, which the same BFS produces"
+   ],
+   "variantLabel": "Inferred single variant: tallest building by distance to parking",
+   "examples": [
+    {
+     "input": [
+      [
+       "P"
+      ]
+     ],
+     "output": 0,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "P----",
+       "-P-PP",
+       "P----",
+       "-----",
+       "-----",
+       "XX--X",
+       "P----"
+      ]
+     ],
+     "output": 4,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:68eda9cd5abdefad4f6693be": {
+   "constraints": [
+    "0 <= intervals.length <= 1e5",
+    "-1e9 <= start <= end <= 1e9"
+   ],
+   "clarifyingQuestions": [
+    "Are the intervals closed or half-open?",
+    "Do intervals touching at one point overlap?",
+    "What is returned for no intervals?"
+   ],
+   "hints": [
+    "The best point can always be taken at some interval start.",
+    "Sweep sorted starts and ends with a counter.",
+    "With closed intervals, process starts before ends at equal coordinates."
+   ],
+   "invariants": [
+    "the counter equals the number of intervals open at the sweep point",
+    "ties put starts first"
+   ],
+   "chooseWhen": [
+    "Maximum concurrency of intervals"
+   ],
+   "tradeoffs": [
+    "A sort is needed; with small coordinate ranges a difference array would be linear"
+   ],
+   "variantLabel": "Inferred single variant: maximum point overlap of closed intervals",
+   "examples": [
+    {
+     "input": [
+      []
+     ],
+     "output": 0,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       [
+        7,
+        9
+       ],
+       [
+        0,
+        1
+       ],
+       [
+        5,
+        6
+       ],
+       [
+        -7,
+        -2
+       ],
+       [
+        -1,
+        0
+       ],
+       [
+        7,
+        8
+       ],
+       [
+        8,
+        17
+       ],
+       [
+        -9,
+        -9
+       ],
+       [
+        0,
+        0
+       ],
+       [
+        8,
+        10
+       ],
+       [
+        -8,
+        -6
+       ],
+       [
+        8,
+        13
+       ],
+       [
+        -3,
+        -3
+       ],
+       [
+        0,
+        5
+       ],
+       [
+        5,
+        10
+       ],
+       [
+        3,
+        3
+       ],
+       [
+        9,
+        18
+       ],
+       [
+        6,
+        11
+       ],
+       [
+        -6,
+        -5
+       ]
+      ]
+     ],
+     "output": 7,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:67e4468750b60b77022f381c": {
+   "constraints": [
+    "1 <= n <= 12",
+    "edges [u, v, w]: 0 <= u, v < n, u != v, 0 <= w <= 10, no duplicate (u, v)",
+    "0 <= start, end < n"
+   ],
+   "clarifyingQuestions": [
+    "Are multipliers real numbers or integers?",
+    "Must the path be simple?",
+    "What is returned when end is unreachable or equals start?"
+   ],
+   "hints": [
+    "Multipliers above 1 make this a longest-path problem, so shortest-path tricks fail.",
+    "With few nodes, a simple path is determined by its visited set and last node.",
+    "Extend best[mask][v] along every edge v -> w with w not in mask."
+   ],
+   "invariants": [
+    "every mask state is a simple path from start",
+    "products only grow by multiplying non-negative integers"
+   ],
+   "chooseWhen": [
+    "Best simple path in a tiny graph"
+   ],
+   "tradeoffs": [
+    "Exponential in n; usable only for small graphs"
+   ],
+   "variantLabel": "Inferred single variant: best product over simple paths",
+   "examples": [
+    {
+     "input": [
+      1,
+      [],
+      0,
+      0
+     ],
+     "output": 1,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      7,
+      [
+       [
+        3,
+        0,
+        0
+       ],
+       [
+        6,
+        5,
+        1
+       ],
+       [
+        3,
+        2,
+        6
+       ],
+       [
+        2,
+        0,
+        6
+       ],
+       [
+        0,
+        1,
+        1
+       ],
+       [
+        6,
+        1,
+        8
+       ],
+       [
+        4,
+        2,
+        7
+       ],
+       [
+        5,
+        0,
+        7
+       ],
+       [
+        2,
+        5,
+        0
+       ],
+       [
+        3,
+        5,
+        10
+       ],
+       [
+        3,
+        4,
+        0
+       ],
+       [
+        0,
+        3,
+        6
+       ],
+       [
+        1,
+        4,
+        1
+       ],
+       [
+        0,
+        2,
+        2
+       ],
+       [
+        3,
+        6,
+        6
+       ],
+       [
+        6,
+        2,
+        0
+       ],
+       [
+        5,
+        3,
+        6
+       ],
+       [
+        4,
+        1,
+        9
+       ],
+       [
+        2,
+        1,
+        9
+       ],
+       [
+        5,
+        1,
+        10
+       ]
+      ],
+      2,
+      4
+     ],
+     "output": 3600,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:69953e87312381f4e70fdb95": {
+   "constraints": [
+    "1 <= m, n",
+    "m * n <= 2e5",
+    "0 <= days[c][w] <= 7"
+   ],
+   "clarifyingQuestions": [
+    "How is the vacation table laid out?",
+    "Is the flight count a tie-breaker or a separate objective?",
+    "Does flying in week 0 count?"
+   ],
+   "hints": [
+    "The state each week is just the current city.",
+    "Compare plans by days first, then fewer flights.",
+    "Flying into c uses the best other city, which is the best or second-best city of the previous week."
+   ],
+   "invariants": [
+    "each city's pair is the lexicographic best ending there",
+    "the top two previous cities are distinct"
+   ],
+   "chooseWhen": [
+    "Lexicographic DP with a complete transition graph"
+   ],
+   "tradeoffs": [
+    "The top-two trick relies on every city being reachable from every other"
+   ],
+   "variantLabel": "Inferred single variant: most vacation days, then fewest flights",
+   "examples": [
+    {
+     "input": [
+      [
+       [
+        0
+       ]
+      ]
+     ],
+     "output": [
+      0,
+      0
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       [
+        1,
+        4,
+        7,
+        3,
+        6,
+        5
+       ],
+       [
+        2,
+        3,
+        0,
+        4,
+        5,
+        7
+       ],
+       [
+        7,
+        2,
+        4,
+        4,
+        5,
+        2
+       ],
+       [
+        0,
+        5,
+        7,
+        0,
+        3,
+        5
+       ],
+       [
+        3,
+        7,
+        4,
+        0,
+        4,
+        2
+       ]
+      ]
+     ],
+     "output": [
+      38,
+      6
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:688b838d3867670cfb89414c": {
+   "constraints": [
+    "0 <= nodes per tree <= 1e5",
+    "-1e9 <= node value <= 1e9",
+    "both inputs are canonical LeetCode N-ary level-order lists"
+   ],
+   "clarifyingQuestions": [
+    "How are the trees passed and returned?",
+    "Are children aligned by index?",
+    "May the inputs be reused or modified?"
+   ],
+   "hints": [
+    "Merged nodes come from pairs of positions where either side may be missing.",
+    "A breadth-first walk over such pairs visits the merged tree in level order.",
+    "Emit each pair's children followed by null to rebuild the level-order list."
+   ],
+   "invariants": [
+    "each queue entry is a pair of aligned positions with at least one present",
+    "output groups follow breadth-first order"
+   ],
+   "chooseWhen": [
+    "Position-wise combination of trees"
+   ],
+   "tradeoffs": [
+    "An iterative walk avoids recursion limits on deep trees"
+   ],
+   "variantLabel": "Inferred single variant: index-aligned N-ary tree merge",
+   "examples": [
+    {
+     "input": [
+      [],
+      []
+     ],
+     "output": [],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       14,
+       null,
+       11,
+       13,
+       null,
+       -14,
+       null,
+       -3,
+       null,
+       -13,
+       null,
+       -4
+      ],
+      [
+       -11,
+       null,
+       -13,
+       15,
+       null,
+       null,
+       1,
+       -20,
+       null,
+       -12,
+       null,
+       5,
+       -11,
+       15,
+       null,
+       10,
+       null,
+       null,
+       -9,
+       -3,
+       null,
+       null,
+       -16,
+       -15,
+       -14,
+       18,
+       null,
+       6,
+       null,
+       -14,
+       null,
+       null,
+       null,
+       12,
+       null,
+       10,
+       null,
+       -17,
+       14,
+       null,
+       15,
+       12,
+       null,
+       null,
+       4,
+       null,
+       12,
+       null,
+       null,
+       null,
+       null,
+       -20,
+       null,
+       null,
+       2,
+       null,
+       -18,
+       6,
+       null,
+       -9,
+       null,
+       15,
+       null,
+       -19
+      ]
+     ],
+     "output": [
+      3,
+      null,
+      -2,
+      28,
+      null,
+      -14,
+      null,
+      -2,
+      -20,
+      null,
+      -13,
+      null,
+      -16,
+      null,
+      5,
+      -11,
+      15,
+      null,
+      null,
+      10,
+      null,
+      null,
+      -9,
+      -3,
+      null,
+      null,
+      -16,
+      -15,
+      -14,
+      18,
+      null,
+      6,
+      null,
+      -14,
+      null,
+      null,
+      null,
+      12,
+      null,
+      10,
+      null,
+      -17,
+      14,
+      null,
+      15,
+      12,
+      null,
+      null,
+      4,
+      null,
+      12,
+      null,
+      null,
+      null,
+      null,
+      -20,
+      null,
+      null,
+      2,
+      null,
+      -18,
+      6,
+      null,
+      -9,
+      null,
+      15,
+      null,
+      -19
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:68d849afae12841706c1fc74": {
+   "constraints": [
+    "0 <= number of nodes <= 1e5",
+    "-1e9 <= node value <= 1e9 (path sums stay within 1e14)",
+    "root is a canonical LeetCode N-ary level-order list"
+   ],
+   "clarifyingQuestions": [
+    "How is the tree passed?",
+    "Can values be negative?",
+    "What is returned for an empty tree?"
+   ],
+   "hints": [
+    "A node's path sum is its parent's plus its own value.",
+    "Breadth-first order visits parents before children.",
+    "Only nodes without children are candidates."
+   ],
+   "invariants": [
+    "each node's sum covers exactly its root path",
+    "negative values prevent pruning"
+   ],
+   "chooseWhen": [
+    "Root-to-leaf aggregates"
+   ],
+   "tradeoffs": [
+    "Iterating avoids recursion depth limits on long chains"
+   ],
+   "variantLabel": "Inferred single variant: minimum root-to-leaf sum",
+   "examples": [
+    {
+     "input": [
+      []
+     ],
+     "output": 0,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       6,
+       null,
+       10,
+       20,
+       null,
+       18,
+       null,
+       8,
+       -7,
+       null,
+       9,
+       null,
+       -13,
+       8,
+       null,
+       6,
+       null,
+       8,
+       null,
+       4,
+       -7,
+       null,
+       11,
+       null,
+       -11,
+       10,
+       null,
+       null,
+       -19,
+       null,
+       0,
+       null,
+       null,
+       null,
+       null,
+       0,
+       null,
+       -13
+      ]
+     ],
+     "output": 1,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:68d84fa6ae12841706c1fc81": {
+   "constraints": [
+    "up to 2e5 calls",
+    "-1e9 <= val <= 1e9",
+    "dequeue, getMin and getMax only on a non-empty queue"
+   ],
+   "clarifyingQuestions": [
+    "What are the min and max method names?",
+    "What happens on an empty queue?",
+    "Is O(1) amortised acceptable?"
+   ],
+   "hints": [
+    "A deque of candidates can hold the minimum of a sliding window.",
+    "Keep the min deque non-decreasing: drop larger back entries before appending.",
+    "On dequeue, pop a deque front only if it equals the leaving value."
+   ],
+   "invariants": [
+    "the min deque is non-decreasing and its front is the queue minimum",
+    "the max deque is non-increasing and its front is the queue maximum"
+   ],
+   "chooseWhen": [
+    "Sliding-window extremes or queues with range queries"
+   ],
+   "tradeoffs": [
+    "Amortised O(1); a single enqueue can pop many deque entries"
+   ],
+   "variantLabel": "Inferred single variant: queue with O(1) min and max",
+   "examples": [
+    {
+     "input": [
+      [
+       "MinMaxQueue"
+      ],
+      [
+       []
+      ]
+     ],
+     "output": [
+      null
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "MinMaxQueue",
+       "enqueue",
+       "enqueue",
+       "enqueue",
+       "getMin",
+       "getMax",
+       "dequeue",
+       "getMax",
+       "dequeue",
+       "getMin",
+       "enqueue",
+       "getMax",
+       "dequeue",
+       "getMin"
+      ],
+      [
+       [],
+       [
+        3
+       ],
+       [
+        1
+       ],
+       [
+        2
+       ],
+       [],
+       [],
+       [],
+       [],
+       [],
+       [],
+       [
+        2
+       ],
+       [],
+       [],
+       []
+      ]
+     ],
+     "output": [
+      null,
+      null,
+      null,
+      null,
+      1,
+      3,
+      3,
+      2,
+      1,
+      2,
+      null,
+      2,
+      2,
+      2
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  }
+ }
+}

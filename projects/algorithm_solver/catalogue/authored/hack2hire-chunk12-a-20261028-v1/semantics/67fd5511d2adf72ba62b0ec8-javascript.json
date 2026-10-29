@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:67fd5511d2adf72ba62b0ec8",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "arr",
+  "k"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "maxFlyDistance",
+  "params": [
+   {
+    "name": "arr",
+    "type": "integer[]"
+   },
+   {
+    "name": "k",
+    "type": "integer"
+   }
+  ],
+  "return": {
+   "type": "integer"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "enumerate every fly/rest choice per day and simulate the energy",
+  "candidate_design": "dynamic programming over days with one best distance per energy level 0..k (unreachable levels marked), or the plain sum when k >= n",
+  "complexity_target": "O(n * k) time/O(k) space"
+ },
+ "source_sha256": "f7f8d089e4590df97bdde1c9fded8fcdd33e6b79ee1adde38ee5848d79e23039",
+ "wrapper": "named export maxFlyDistance"
+}

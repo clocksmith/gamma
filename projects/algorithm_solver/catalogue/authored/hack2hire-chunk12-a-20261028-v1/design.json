@@ -1,0 +1,94 @@
+{
+ "problems": {
+  "hack2hire:68dc2e1c9736cfa4e906240c": {
+   "reference": "rebuild parent links and find every node's level by walking its parent chain to the root, then count per level",
+   "candidate_design": "parse the level-order list once, counting nodes per level breadth-first; keep the first level whose count beats the best so far",
+   "complexity_target": "O(n) time/O(n) space"
+  },
+  "hack2hire:697c3db29731315964cfb08b": {
+   "reference": "score every pair of rows with Fraction arithmetic and keep the pairs reaching the threshold",
+   "candidate_design": "convert weights and threshold to integer ten-thousandths; bucket rows by (field, value) so each row adds its shared-field weights to a score array of later rows, then scan the array against the threshold",
+   "complexity_target": "O(n^2 + n * fields) time/O(n * fields) space"
+  },
+  "hack2hire:697d9ce2b8c468a441586158": {
+   "reference": "score every pair with Fraction arithmetic, then propagate the smallest row label across linked pairs until nothing changes",
+   "candidate_design": "integer-scaled weights and bucketed score accumulation as in level 1, joining linked rows in a union-find with path halving; collect members per root in row order",
+   "complexity_target": "O(n^2 alpha(n) + n * fields) time/O(n * fields) space"
+  },
+  "hack2hire:697da047b8c468a441586160": {
+   "reference": "for each row, score every other row with Fraction arithmetic and take the maximum of (score, -row) among linked rows",
+   "candidate_design": "integer-scaled weights; for each row accumulate scores against all rows through the value buckets, then scan once for the highest linked score with the earliest row",
+   "complexity_target": "O(n^2 + n * fields) time/O(n * fields) space"
+  },
+  "hack2hire:67cf7ef7aca6a2fa74a72d1f": {
+   "reference": "fixed-point relaxation: recompute every service's load as the sum of its callers' loads (plus 1 for entry) until nothing changes",
+   "candidate_design": "Kahn topological order with a queue over the whole graph, pushing each service's load to its callees once its own load is final; sort names at the end",
+   "complexity_target": "O(V log V + E) time/O(V + E) space"
+  },
+  "hack2hire:6789c01711318cc872dd83ee": {
+   "reference": "interval recursion: s[i:j] is valid when s[i] opens a pair closed at some k whose content is valid and holds no higher-ranked opener, followed by a valid rest; take the longest valid substring",
+   "candidate_design": "one stack pass: each open frame remembers its position and the highest rank of pairs closed inside it; a matching closer with an allowed rank pops the frame and measures back to the next frame or the last barrier, anything else resets the stack at a barrier",
+   "complexity_target": "O(n) time/O(n) space"
+  },
+  "hack2hire:6866f15ea2d59460201f2c7e": {
+   "reference": "minute-by-minute simulation of the set of reachable positions and the set of threatened cells",
+   "candidate_design": "multi-source BFS for threat times from every P, then a BFS from U that enters a cell only when its arrival minute is below the threat time; stop at the first border cell",
+   "complexity_target": "O(m * n) time/O(m * n) space"
+  },
+  "hack2hire:67800c576fee41e51af73dd8": {
+   "reference": "scan every window, counting maximal zero blocks inside it, and keep the longest window with at most k blocks",
+   "candidate_design": "sliding window over the string tracking the number of zero blocks that start inside it; advance the left edge past a whole block when the count exceeds k",
+   "complexity_target": "O(n) time/O(1) extra space"
+  },
+  "hack2hire:67fd5511d2adf72ba62b0ec8": {
+   "reference": "enumerate every fly/rest choice per day and simulate the energy",
+   "candidate_design": "dynamic programming over days with one best distance per energy level 0..k (unreachable levels marked), or the plain sum when k >= n",
+   "complexity_target": "O(n * k) time/O(k) space"
+  },
+  "hack2hire:69efd5e296981f58ae1f6dc7": {
+   "reference": "simulate the run from every start",
+   "candidate_design": "prefix sums: level j passes from start i exactly when prefix[j + 1] + energy[j] <= K + prefix[i]; with non-negative layers the first failing level never moves left as i grows, so a second pointer finds it",
+   "complexity_target": "O(n) time/O(n) space"
+  },
+  "hack2hire:6a8615b8701a76fc6843aed0": {
+   "reference": "for t from the largest possible down, test the assignment with augmenting-path maximum flow (source to nodes with capacity t, node to type 1, type to sink its count)",
+   "candidate_design": "count each type with a hash map; a type can serve at most min(count, m) nodes, and t per node is feasible exactly when the sum of min(count, m) is at least m * t (the counting function is concave), so t = floor(sum / m)",
+   "complexity_target": "O(n) time/O(distinct types) space"
+  },
+  "hack2hire:67c766dc6c89e288437c3026": {
+   "reference": "a separate BFS from every building tile to its nearest P",
+   "candidate_design": "one multi-source BFS from all P tiles through non-X tiles; take the largest distance and check every building tile was reached",
+   "complexity_target": "O(m * n) time/O(m * n) space"
+  },
+  "hack2hire:68eda9cd5abdefad4f6693be": {
+   "reference": "for every interval start, count the intervals containing that point",
+   "candidate_design": "sort starts and ends separately and sweep, consuming a start before an end at the same coordinate because intervals are closed",
+   "complexity_target": "O(n log n) time/O(n) space"
+  },
+  "hack2hire:67e4468750b60b77022f381c": {
+   "reference": "depth-first enumeration of every simple path from start, multiplying along the way",
+   "candidate_design": "dynamic programming over visited-node bitmasks: best[mask][v] is the largest product of a simple path from start that visits exactly mask and ends at v",
+   "complexity_target": "O(2^n * n^2) time/O(2^n * n) space"
+  },
+  "hack2hire:69953e87312381f4e70fdb95": {
+   "reference": "week-by-week DP over every (previous city, city) pair, comparing (days, -flights) tuples",
+   "candidate_design": "week-by-week DP keeping (days, flights) per city; the best flight into city c comes from the best other city, so keep the top two previous cities and compare lexicographically",
+   "complexity_target": "O(m * n) time/O(m) space"
+  },
+  "hack2hire:688b838d3867670cfb89414c": {
+   "reference": "convert both lists to nested (value, children) tuples, merge recursively and serialize breadth-first",
+   "candidate_design": "parse both lists into child-index arrays, then walk aligned node pairs breadth-first (either side may be missing) and write the merged level-order list directly",
+   "complexity_target": "O(n1 + n2) time/O(n1 + n2) space"
+  },
+  "hack2hire:68d849afae12841706c1fc74": {
+   "reference": "for every leaf, walk parent links up to the root and add the values",
+   "candidate_design": "parse the level-order list breadth-first, giving each node its path sum from its parent, and take the minimum over leaves",
+   "complexity_target": "O(n) time/O(n) space"
+  },
+  "hack2hire:68d84fa6ae12841706c1fc81": {
+   "reference": "a plain list: pop from the front and scan for min and max on every query",
+   "candidate_design": "an array queue with a head index plus two monotonic deques (non-decreasing for min, non-increasing for max) with head indices; dequeue drops the deque fronts equal to the leaving value",
+   "complexity_target": "O(1) amortised per call/O(n) space"
+  }
+ }
+}
