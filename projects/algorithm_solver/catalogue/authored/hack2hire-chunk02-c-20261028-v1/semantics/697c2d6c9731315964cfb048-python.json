@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:697c2d6c9731315964cfb048",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "header",
+  "supported"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-28"
+ },
+ "inferred_interface": {
+  "name": "parseAcceptLanguage",
+  "params": [
+   {
+    "name": "header",
+    "type": "string"
+   },
+   {
+    "name": "supported",
+    "type": "string[]"
+   }
+  ],
+  "return": {
+   "type": "string[]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "per token scan the whole supported list",
+  "candidate_design": "hash set of supported tags plus emitted set",
+  "complexity_target": "O(H+S) time/O(S) space"
+ },
+ "source_sha256": "f773724255e9578fbcea0a09887b129cfd909ed19def53344b0bdbe024187c2e",
+ "wrapper": "Solution.parseAcceptLanguage"
+}

@@ -1,0 +1,40 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:6945c7632c048134ada834fb",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "pages"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-28"
+ },
+ "inferred_interface": {
+  "name": "mergePages",
+  "params": [
+   {
+    "name": "pages",
+    "type": "list<list<[integer,string]>>"
+   }
+  ],
+  "return": {
+   "type": "list<[integer,string]>"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "collect into a dict, sort keys",
+  "candidate_design": "k-way merge with a min-heap of page heads, skip equal last id",
+  "complexity_target": "O(N log k) time/O(k) extra space"
+ },
+ "source_sha256": "f86d292d244fd9aafa72828e00b7467ee01c13653b11b6c75a430ad5bbe5e136",
+ "wrapper": "Solution.mergePages"
+}

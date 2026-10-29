@@ -1,0 +1,37 @@
+{
+  "schema": "gamma.hack2hire-chunk02-c-pre-source-freeze.v1",
+  "at": "2026-10-29T01:58:07.624215+00:00",
+  "files": {
+    "oracles.py": "27fc5c6843f3a2f2bf3b18ade93951a7ea37070a90841f16291f71c163fa53e0",
+    "test_oracles.py": "4b60975f436b7e64876d0be3ef99766cacf18806b61534a78f6d1f5bde9f7914",
+    "cases.py": "6c655f4c8ea066774766e77f69752feb088bd33c50049c5efb9cd47100664a38",
+    "contracts.json": "e78fecca0c3e7bf1a8160840d3593a2b46fad19339f62eeffe8e39cd701a48c7",
+    "design.json": "5a2b4c25f23be3bfc9c3d65d68caf8e8d3ce5692ea23889d8f0f13bc59078813"
+  },
+  "candidate_sources_exist": false,
+  "candidate_executions": 0,
+  "source_free_tests_passed": 20,
+  "spec_basis": "inferred (claude-opus-5-5 subagent, 2026-10-28)",
+  "amendments": [
+    {
+      "file": "cases.py",
+      "after_candidates_existed": true,
+      "change": "analytic-maximum rows resized: TransactionSystem getBalances 2500 -> 1000 calls; CustomerRevenueSystem referral chain 1500 -> 1000 customers with 1000 queries; DocumentLibrary common-phrase searches 1000 -> 150; CloudStorage L4 backup/restore row 2000 -> 400 files (1500 backup/restore pairs)",
+      "reason": "per-case CPU budget (well under 1 s under node --jitless); output size or per-restore work is inherent to these inferred contracts; every resized expectation re-verified against the unbudgeted reference; no reference, validator or expected-value rule changed"
+    },
+    {
+      "file": "design.json",
+      "after_candidates_existed": true,
+      "sha256_before": "5a2b4c25f23be3bfc9c3d65d68caf8e8d3ce5692ea23889d8f0f13bc59078813",
+      "change": "CloudStorage L2-L4 candidate_design/complexity_target now describe the sorted name index used by findFile",
+      "reason": "candidate algorithm revised for the per-case budget (findFile previously scanned every file per query: 2.25 s under node --jitless for two executions)"
+    }
+  ],
+  "current_sha256": {
+    "oracles.py": "27fc5c6843f3a2f2bf3b18ade93951a7ea37070a90841f16291f71c163fa53e0",
+    "test_oracles.py": "4b60975f436b7e64876d0be3ef99766cacf18806b61534a78f6d1f5bde9f7914",
+    "cases.py": "0b6db782a195f6b2f09fa61cd65a50fb2aeeadffdcb17549c47f5b718cef2c7b",
+    "contracts.json": "e78fecca0c3e7bf1a8160840d3593a2b46fad19339f62eeffe8e39cd701a48c7",
+    "design.json": "0903fc5224e1cfd7556a964f7bd01fa1c2314946f47bd78a07d2a33c98e229bc"
+  }
+}

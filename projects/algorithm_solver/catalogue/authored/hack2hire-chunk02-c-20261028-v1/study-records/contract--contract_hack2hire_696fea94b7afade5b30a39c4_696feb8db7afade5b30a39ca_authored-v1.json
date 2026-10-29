@@ -1,0 +1,331 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:696fea94b7afade5b30a39c4:696feb8db7afade5b30a39ca:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-c-20261028-v1/contracts.json",
+   "sha256": "e78fecca0c3e7bf1a8160840d3593a2b46fad19339f62eeffe8e39cd701a48c7",
+   "selector": "/problems/10"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/696fea94b7afade5b30a39c4.json",
+   "sha256": "115a07955625c7a368cdde98e8d24a7612a250651feeab9762bf80f84f8a85c8",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-c-20261028-v1/study-content.json",
+   "sha256": "89e5903398bfbab864a583f3e6d5aa5c4a17c7bf3e81a7d9ed033f603e2d2131",
+   "selector": "/variants/hack2hire:696feb8db7afade5b30a39ca"
+  }
+ ],
+ "problemId": "hack2hire:696fea94b7afade5b30a39c4",
+ "variantId": "696feb8db7afade5b30a39ca",
+ "variantLabel": {
+  "status": "present",
+  "value": "Variant 1: row validation",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-c-20261028-v1/study-content.json",
+    "sha256": "89e5903398bfbab864a583f3e6d5aa5c4a17c7bf3e81a7d9ed033f603e2d2131",
+    "selector": "/variants/hack2hire:696feb8db7afade5b30a39ca/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "data[0] is a header and is skipped. A data row is valid when: it splits on commas into exactly 6 fields; no field is empty or has leading/trailing spaces; field1 (id) is ASCII alphanumeric and differs from every earlier valid row id; field5 (amount) is a non-negative integer without leading zeros, optionally with exactly two decimals; field6 is a real calendar date YYYY-MM-DD in 1900..2099; fields 2-4 contain no forbidden word (words = maximal lowercase [a-z0-9] runs); and the word sequence of field2 differs from that of field3 after removing ignore words. Return the indices (into data) of valid rows in ascending order.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-c-20261028-v1/contracts.json",
+    "sha256": "e78fecca0c3e7bf1a8160840d3593a2b46fad19339f62eeffe8e39cd701a48c7",
+    "selector": "/problems/10/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "data[0] is a header and is skipped.",
+   "A data row is valid when: it splits on commas into exactly 6 fields; no field is empty or has leading/trailing spaces; field1 (id) is ASCII alphanumeric and differs from every earlier valid row id; field5 (amount) is a non-negative integer without leading zeros, optionally with exactly two decimals; field6 is a real calendar date YYYY-MM-DD in 1900..2099; fields 2-4 contain no forbidden word (words = maximal lowercase [a-z0-9] runs); and the word sequence of field2 differs from that of field3 after removing ignore words.",
+   "Return the indices (into data) of valid rows in ascending order."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-c-20261028-v1/contracts.json",
+    "sha256": "e78fecca0c3e7bf1a8160840d3593a2b46fad19339f62eeffe8e39cd701a48c7",
+    "selector": "/problems/10/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "1..1e4 rows of printable ASCII up to 200 chars",
+   "up to 100 forbidden and ignore words [a-z0-9]{1,10}"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-c-20261028-v1/study-content.json",
+    "sha256": "89e5903398bfbab864a583f3e6d5aa5c4a17c7bf3e81a7d9ed033f603e2d2131",
+    "selector": "/variants/hack2hire:696feb8db7afade5b30a39ca/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-28; it is not the official statement.",
+    "basis": "preview fields used: title; algorithmTags; contentPreview inputs data (6 columns, header first), forbiddenWords, ignoreWords for cross-column comparison; preview response sha256 398eb56416c45c2ffb14d5b5723b97f25bfae0d1de09e549a57e18b85e507ae8"
+   },
+   {
+    "statement": "Uncertainty: very high: the preview names the inputs but not the column meanings or rules; every rule here is the author's invention consistent with the description",
+    "basis": "the public group preview is partial (854 characters, group-level)"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-c-20261028-v1/contracts.json",
+    "sha256": "e78fecca0c3e7bf1a8160840d3593a2b46fad19339f62eeffe8e39cd701a48c7",
+    "selector": "/problems/10/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-c-20261028-v1/contracts.json",
+    "sha256": "e78fecca0c3e7bf1a8160840d3593a2b46fad19339f62eeffe8e39cd701a48c7",
+    "selector": "/problems/10/inference_uncertainty"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "What does each column mean and which rules apply?",
+   "Is the output the valid rows, the invalid rows or error messages?",
+   "Do duplicate ids count against invalid earlier rows?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-c-20261028-v1/study-content.json",
+    "sha256": "89e5903398bfbab864a583f3e6d5aa5c4a17c7bf3e81a7d9ed033f603e2d2131",
+    "selector": "/variants/hack2hire:696feb8db7afade5b30a39ca/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [
+      "h"
+     ],
+     [],
+     []
+    ],
+    "output": [],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      "h",
+      "a1,Acme Corp,the acme corp,retail,10.50,2024-02-29",
+      "a1,Acme,widgets,retail,1,2024-01-01",
+      "a2,x,y,bad,1,2024-01-01"
+     ],
+     [
+      "bad"
+     ],
+     [
+      "the"
+     ]
+    ],
+    "output": [
+     2
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-c-20261028-v1/study-content.json",
+    "sha256": "89e5903398bfbab864a583f3e6d5aa5c4a17c7bf3e81a7d9ed033f603e2d2131",
+    "selector": "/variants/hack2hire:696feb8db7afade5b30a39ca/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-c-20261028-v1/oracles.py",
+    "sha256": "27fc5c6843f3a2f2bf3b18ade93951a7ea37070a90841f16291f71c163fa53e0",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "def validateRows(data, forbiddenWords, ignoreWords) -> integer[]",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-c-20261028-v1/contracts.json",
+      "sha256": "e78fecca0c3e7bf1a8160840d3593a2b46fad19339f62eeffe8e39cd701a48c7",
+      "selector": "/problems/10/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-c-20261028-v1/semantics/696feb8db7afade5b30a39ca-python.json",
+     "inferredInterface": {
+      "name": "validateRows",
+      "params": [
+       {
+        "name": "data",
+        "type": "string[]"
+       },
+       {
+        "name": "forbiddenWords",
+        "type": "string[]"
+       },
+       {
+        "name": "ignoreWords",
+        "type": "string[]"
+       }
+      ],
+      "return": {
+       "type": "integer[]"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-c-20261028-v1/semantics/696feb8db7afade5b30a39ca-python.json",
+      "sha256": "803e712eb80ed1ef83530fd83acb257bb55f3a7d3be76dc0265df294c1727708",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "function validateRows(data, forbiddenWords, ignoreWords) /* -> integer[] */",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-c-20261028-v1/contracts.json",
+      "sha256": "e78fecca0c3e7bf1a8160840d3593a2b46fad19339f62eeffe8e39cd701a48c7",
+      "selector": "/problems/10/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-c-20261028-v1/semantics/696feb8db7afade5b30a39ca-javascript.json",
+     "inferredInterface": {
+      "name": "validateRows",
+      "params": [
+       {
+        "name": "data",
+        "type": "string[]"
+       },
+       {
+        "name": "forbiddenWords",
+        "type": "string[]"
+       },
+       {
+        "name": "ignoreWords",
+        "type": "string[]"
+       }
+      ],
+      "return": {
+       "type": "integer[]"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-c-20261028-v1/semantics/696feb8db7afade5b30a39ca-javascript.json",
+      "sha256": "5e185b130ddec5676c153413601aa24925ce7037d3fdfe9d67f22ba6699352c5",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-c-20261028-v1/contracts.json",
+    "sha256": "e78fecca0c3e7bf1a8160840d3593a2b46fad19339f62eeffe8e39cd701a48c7",
+    "selector": "/problems/10/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON result",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-c-20261028-v1/contracts.json",
+    "sha256": "e78fecca0c3e7bf1a8160840d3593a2b46fad19339f62eeffe8e39cd701a48c7",
+    "selector": "/problems/10/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

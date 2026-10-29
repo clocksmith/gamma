@@ -1,0 +1,40 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:678314d4d0faf7ec64cc3ad6",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "records"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-28"
+ },
+ "inferred_interface": {
+  "name": "calculateSalary",
+  "params": [
+   {
+    "name": "records",
+    "type": "list<[string,string,string]>"
+   }
+  ],
+  "return": {
+   "type": "integer"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "minute-by-minute sweep counting active delivered orders",
+  "candidate_design": "per-order accepted/delivered maps, sum of durations",
+  "complexity_target": "O(n) time/O(n) space"
+ },
+ "source_sha256": "4af8931bdaa843d41345c23a63ff951a429fcf2c7e3c418c74f76ea66a17ee30",
+ "wrapper": "Solution.calculateSalary"
+}

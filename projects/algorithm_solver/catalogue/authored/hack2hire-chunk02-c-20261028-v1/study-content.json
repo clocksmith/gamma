@@ -1,0 +1,3476 @@
+{
+ "schema": "gamma.hack2hire-chunk02-c-study-content.v1",
+ "authored_by": "claude-opus-5-5 subagent, 2026-10-28",
+ "note": "Teaching text, clarifying questions, inferred constraints and own examples. Inferred, not official. Examples are small boundary inputs with outputs from the independent references in oracles.py.",
+ "variants": {
+  "hack2hire:6778936c775a4a31045ead0e": {
+   "constraints": [
+    "1 <= capacity <= 1e5, 1 <= windowSize <= 1e9",
+    "keys, values, times 0..1e9; times non-decreasing",
+    "up to 2e4 operations"
+   ],
+   "clarifyingQuestions": [
+    "Does get refresh recency?",
+    "Is an entry exactly windowSize old still visible?",
+    "Are expired entries removed eagerly or count toward capacity?"
+   ],
+   "hints": [
+    "This is an LRU cache whose reads also check an age condition.",
+    "A hash map that remembers insertion order gives recency for free if you delete and re-insert on use.",
+    "On a successful get or any put, move the key to the end; evict from the front when size exceeds capacity."
+   ],
+   "invariants": [
+    "map order is least to most recently used",
+    "size never exceeds capacity after put"
+   ],
+   "chooseWhen": [
+    "LRU semantics with an extra per-entry validity test"
+   ],
+   "tradeoffs": [
+    "Lazy expiry keeps code simple but lets stale keys occupy capacity"
+   ],
+   "variantLabel": "Variant 1: LRU store with time-window reads",
+   "examples": [
+    {
+     "input": [
+      [
+       "WindowedKeyValueStore",
+       "put",
+       "get",
+       "get",
+       "put",
+       "get",
+       "get"
+      ],
+      [
+       [
+        1,
+        1
+       ],
+       [
+        1,
+        1,
+        0
+       ],
+       [
+        1,
+        0
+       ],
+       [
+        1,
+        1
+       ],
+       [
+        2,
+        2,
+        1
+       ],
+       [
+        1,
+        1
+       ],
+       [
+        2,
+        1
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      null,
+      1,
+      -1,
+      null,
+      -1,
+      2
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "WindowedKeyValueStore",
+       "put",
+       "put",
+       "get",
+       "put",
+       "get",
+       "get",
+       "get"
+      ],
+      [
+       [
+        2,
+        10
+       ],
+       [
+        1,
+        1,
+        0
+       ],
+       [
+        2,
+        2,
+        0
+       ],
+       [
+        1,
+        5
+       ],
+       [
+        3,
+        3,
+        6
+       ],
+       [
+        2,
+        6
+       ],
+       [
+        1,
+        9
+       ],
+       [
+        1,
+        10
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      null,
+      null,
+      1,
+      null,
+      -1,
+      1,
+      -1
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:697c2d6c9731315964cfb048": {
+   "constraints": [
+    "1..200 header tokens",
+    "0..200 distinct supported tags ll-CC"
+   ],
+   "clarifyingQuestions": [
+    "Is matching case-insensitive?",
+    "Can the header repeat a tag?"
+   ],
+   "hints": [
+    "Split on commas and trim spaces.",
+    "Keep supported tags in a set for O(1) membership.",
+    "Track emitted tags so repeats are skipped."
+   ],
+   "invariants": [
+    "output has no duplicates",
+    "output order follows header order"
+   ],
+   "chooseWhen": [
+    "Simple preference filtering"
+   ],
+   "tradeoffs": [
+    "None material"
+   ],
+   "variantLabel": "Variant 1: exact tags",
+   "examples": [
+    {
+     "input": [
+      "en-US, fr-CA, fr-FR",
+      [
+       "fr-FR",
+       "en-US"
+      ]
+     ],
+     "output": [
+      "en-US",
+      "fr-FR"
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      "fr-FR",
+      []
+     ],
+     "output": [],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:697c2f499731315964cfb056": {
+   "constraints": [
+    "1..200 header tokens",
+    "0..200 distinct supported tags ll-CC"
+   ],
+   "clarifyingQuestions": [
+    "Should a bare language match tags already returned?",
+    "In which order are a language's tags returned?"
+   ],
+   "hints": [
+    "A bare token has no hyphen.",
+    "Group supported tags by their first two letters, preserving supported order.",
+    "Skip tags already emitted."
+   ],
+   "invariants": [
+    "each supported tag appears at most once"
+   ],
+   "chooseWhen": [
+    "Prefix matching over small tag lists"
+   ],
+   "tradeoffs": [
+    "Grouping costs a precomputation pass"
+   ],
+   "variantLabel": "Variant 2: bare language tokens",
+   "examples": [
+    {
+     "input": [
+      "en-US, fr-CA, fr-FR",
+      [
+       "fr-FR",
+       "en-US"
+      ]
+     ],
+     "output": [
+      "en-US",
+      "fr-FR"
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      "fr-FR",
+      []
+     ],
+     "output": [],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:697c325b9731315964cfb05c": {
+   "constraints": [
+    "1..200 header tokens",
+    "0..200 distinct supported tags ll-CC"
+   ],
+   "clarifyingQuestions": [
+    "Does * come last in practice or may it appear anywhere?"
+   ],
+   "hints": [
+    "* is just a token that matches everything.",
+    "Emit remaining tags in supported order.",
+    "An emitted set makes all three token kinds uniform."
+   ],
+   "invariants": [
+    "each supported tag appears at most once"
+   ],
+   "chooseWhen": [
+    "Preference lists with catch-all"
+   ],
+   "tradeoffs": [
+    "None material"
+   ],
+   "variantLabel": "Variant 3: wildcard",
+   "examples": [
+    {
+     "input": [
+      "en-US, fr-CA, fr-FR",
+      [
+       "fr-FR",
+       "en-US"
+      ]
+     ],
+     "output": [
+      "en-US",
+      "fr-FR"
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      "fr-FR",
+      []
+     ],
+     "output": [],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:697c341a9731315964cfb061": {
+   "constraints": [
+    "1..200 header tokens",
+    "q in 0..1 with up to 3 decimals",
+    "0..200 distinct supported tags"
+   ],
+   "clarifyingQuestions": [
+    "Which token wins when several match one tag?",
+    "Is q=0 an explicit exclusion?",
+    "How are equal qualities ordered?"
+   ],
+   "hints": [
+    "Parse q into integer thousandths to avoid floats.",
+    "For each tag, the most specific matching token decides its quality.",
+    "Sort tags by (-q, earliest matching token, supported index)."
+   ],
+   "invariants": [
+    "quality comes from the most specific matching token"
+   ],
+   "chooseWhen": [
+    "Weighted content negotiation"
+   ],
+   "tradeoffs": [
+    "Sorting adds log factor"
+   ],
+   "variantLabel": "Variant 4: quality factors",
+   "examples": [
+    {
+     "input": [
+      "en-US, fr-CA, fr-FR",
+      [
+       "fr-FR",
+       "en-US"
+      ]
+     ],
+     "output": [
+      "en-US",
+      "fr-FR"
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      "fr-FR",
+      []
+     ],
+     "output": [],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:67957d70010c9ed2f849b1f9": {
+   "constraints": [
+    "1..1000 accounts, balances 0..1e9",
+    "0..5000 transactions, percent 0..100, from != to",
+    "up to 5000 queries"
+   ],
+   "clarifyingQuestions": [
+    "Is the transferred amount rounded, and how?",
+    "Can a transaction mention an unknown account?"
+   ],
+   "hints": [
+    "Each transfer depends on the current balance, so order matters.",
+    "Simulate once and store results.",
+    "Use integer floor division to stay exact."
+   ],
+   "invariants": [
+    "total money is conserved"
+   ],
+   "chooseWhen": [
+    "Batch simulation with repeated reads"
+   ],
+   "tradeoffs": [
+    "Precomputation holds all balances in memory"
+   ],
+   "variantLabel": "Variant 1: final balances",
+   "examples": [
+    {
+     "input": [
+      [
+       "TransactionSystem",
+       "getBalances",
+       "getBalance"
+      ],
+      [
+       [
+        [
+         [
+          "a",
+          100
+         ],
+         [
+          "b",
+          0
+         ]
+        ],
+        [
+         [
+          "a",
+          "b",
+          50
+         ],
+         [
+          "b",
+          "a",
+          33
+         ]
+        ]
+       ],
+       [],
+       [
+        "b"
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      [
+       [
+        "a",
+        66
+       ],
+       [
+        "b",
+        34
+       ]
+      ],
+      34
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "TransactionSystem",
+       "getBalance",
+       "getBalances",
+       "getBalance"
+      ],
+      [
+       [
+        [
+         [
+          "a",
+          7
+         ],
+         [
+          "b",
+          691517503
+         ],
+         [
+          "c",
+          100
+         ],
+         [
+          "d",
+          1
+         ],
+         [
+          "e",
+          7
+         ]
+        ],
+        []
+       ],
+       [
+        "a"
+       ],
+       [],
+       [
+        "b"
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      7,
+      [
+       [
+        "a",
+        7
+       ],
+       [
+        "b",
+        691517503
+       ],
+       [
+        "c",
+        100
+       ],
+       [
+        "d",
+        1
+       ],
+       [
+        "e",
+        7
+       ]
+      ],
+      691517503
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:67957d75010c9ed2f849b1fa": {
+   "constraints": [
+    "1..1000 accounts",
+    "0..5000 transactions",
+    "up to 5000 queries"
+   ],
+   "clarifyingQuestions": [
+    "Is k a count of applied transactions or an index?"
+   ],
+   "hints": [
+    "Only two accounts change per transaction.",
+    "Record (step, newBalance) per changed account.",
+    "Binary search the last record with step <= k."
+   ],
+   "invariants": [
+    "each account history is sorted by step"
+   ],
+   "chooseWhen": [
+    "Many historical reads over one fixed log"
+   ],
+   "tradeoffs": [
+    "Extra memory proportional to transactions"
+   ],
+   "variantLabel": "Variant 2: point-in-time balance",
+   "examples": [
+    {
+     "input": [
+      [
+       "TransactionSystem",
+       "getBalances",
+       "getBalance",
+       "getBalanceAfter",
+       "getBalanceAfter",
+       "getBalanceAfter"
+      ],
+      [
+       [
+        [
+         [
+          "a",
+          100
+         ],
+         [
+          "b",
+          0
+         ]
+        ],
+        [
+         [
+          "a",
+          "b",
+          50
+         ],
+         [
+          "b",
+          "a",
+          33
+         ]
+        ]
+       ],
+       [],
+       [
+        "b"
+       ],
+       [
+        "b",
+        0
+       ],
+       [
+        "b",
+        1
+       ],
+       [
+        "q",
+        2
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      [
+       [
+        "a",
+        66
+       ],
+       [
+        "b",
+        34
+       ]
+      ],
+      34,
+      0,
+      50,
+      -1
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "TransactionSystem",
+       "getBalances",
+       "getBalances",
+       "getBalances",
+       "getBalanceAfter"
+      ],
+      [
+       [
+        [
+         [
+          "a",
+          186768184
+         ],
+         [
+          "b",
+          999
+         ],
+         [
+          "c",
+          100
+         ],
+         [
+          "d",
+          1
+         ]
+        ],
+        [
+         [
+          "c",
+          "a",
+          0
+         ],
+         [
+          "b",
+          "d",
+          99
+         ],
+         [
+          "b",
+          "a",
+          100
+         ],
+         [
+          "d",
+          "b",
+          99
+         ],
+         [
+          "c",
+          "d",
+          1
+         ]
+        ]
+       ],
+       [],
+       [],
+       [],
+       [
+        "a",
+        5
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      [
+       [
+        "a",
+        186768194
+       ],
+       [
+        "b",
+        980
+       ],
+       [
+        "c",
+        99
+       ],
+       [
+        "d",
+        11
+       ]
+      ],
+      [
+       [
+        "a",
+        186768194
+       ],
+       [
+        "b",
+        980
+       ],
+       [
+        "c",
+        99
+       ],
+       [
+        "d",
+        11
+       ]
+      ],
+      [
+       [
+        "a",
+        186768194
+       ],
+       [
+        "b",
+        980
+       ],
+       [
+        "c",
+        99
+       ],
+       [
+        "d",
+        11
+       ]
+      ],
+      186768194
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6a4fae98665efda9311f5607": {
+   "constraints": [
+    "0..1e5 items",
+    "values -1e9..1e9"
+   ],
+   "clarifyingQuestions": [
+    "Ties ascending or descending by value?"
+   ],
+   "hints": [
+    "Count occurrences first.",
+    "Sort distinct values, not the full array.",
+    "Expand each value count times."
+   ],
+   "invariants": [
+    "output is a permutation of items"
+   ],
+   "chooseWhen": [
+    "Ordering by a derived statistic"
+   ],
+   "tradeoffs": [
+    "None material"
+   ],
+   "variantLabel": "Variant 1: frequency ascending, value ascending",
+   "examples": [
+    {
+     "input": [
+      []
+     ],
+     "output": [],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       5
+      ]
+     ],
+     "output": [
+      5
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6a7f873dd713d873ca7adc2f": {
+   "constraints": [
+    "0..1e5 ads, heights 1..1e9"
+   ],
+   "clarifyingQuestions": [
+    "Should the result be indices, heights or final totals?"
+   ],
+   "hints": [
+    "Only the two totals matter.",
+    "Compare totals before placing each ad; ties go left."
+   ],
+   "invariants": [
+    "totals equal the sums of assigned heights"
+   ],
+   "chooseWhen": [
+    "Online balanced placement"
+   ],
+   "tradeoffs": [
+    "Greedy is not globally balanced"
+   ],
+   "variantLabel": "Variant 1: two columns",
+   "examples": [
+    {
+     "input": [
+      []
+     ],
+     "output": [
+      [],
+      []
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       3
+      ]
+     ],
+     "output": [
+      [
+       0
+      ],
+      []
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6a7f88b6d713d873ca7adc47": {
+   "constraints": [
+    "0..1e5 ads, heights 1..1e9",
+    "1 <= k <= 1000"
+   ],
+   "clarifyingQuestions": [
+    "How are ties between columns broken?"
+   ],
+   "hints": [
+    "You repeatedly need the smallest (total, index) pair.",
+    "A min-heap keyed by (total, column) gives it in O(log k).",
+    "Pop, assign, push back with the new total."
+   ],
+   "invariants": [
+    "heap holds exactly one entry per column"
+   ],
+   "chooseWhen": [
+    "Many columns"
+   ],
+   "tradeoffs": [
+    "Heap overhead is wasted for k=2"
+   ],
+   "variantLabel": "Variant 2: k columns",
+   "examples": [
+    {
+     "input": [
+      [],
+      3
+     ],
+     "output": [
+      [],
+      [],
+      []
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       1,
+       2,
+       3,
+       4
+      ],
+      1
+     ],
+     "output": [
+      [
+       0,
+       1,
+       2,
+       3
+      ]
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:696feb8db7afade5b30a39ca": {
+   "constraints": [
+    "1..1e4 rows of printable ASCII up to 200 chars",
+    "up to 100 forbidden and ignore words [a-z0-9]{1,10}"
+   ],
+   "clarifyingQuestions": [
+    "What does each column mean and which rules apply?",
+    "Is the output the valid rows, the invalid rows or error messages?",
+    "Do duplicate ids count against invalid earlier rows?"
+   ],
+   "hints": [
+    "Validate each field independently, cheapest checks first.",
+    "Lowercase and tokenize once; forbidden and ignore lists become sets.",
+    "Track ids only from rows that passed every rule."
+   ],
+   "invariants": [
+    "ids set contains exactly the ids of accepted rows"
+   ],
+   "chooseWhen": [
+    "Streaming record validation"
+   ],
+   "tradeoffs": [
+    "Hand-written date validation avoids library differences between languages"
+   ],
+   "variantLabel": "Variant 1: row validation",
+   "examples": [
+    {
+     "input": [
+      [
+       "h"
+      ],
+      [],
+      []
+     ],
+     "output": [],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "h",
+       "a1,Acme Corp,the acme corp,retail,10.50,2024-02-29",
+       "a1,Acme,widgets,retail,1,2024-01-01",
+       "a2,x,y,bad,1,2024-01-01"
+      ],
+      [
+       "bad"
+      ],
+      [
+       "the"
+      ]
+     ],
+     "output": [
+      2
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:678314d4d0faf7ec64cc3ad6": {
+   "constraints": [
+    "0..2e4 records",
+    "times HH:MM within one day"
+   ],
+   "clarifyingQuestions": [
+    "What is the pay rate and unit?",
+    "Are canceled orders paid for time already spent?",
+    "Does concurrency change the rate?"
+   ],
+   "hints": [
+    "Pair each order's ACCEPTED and terminal record.",
+    "With a per-order rate, concurrency multiplies pay linearly, so per-order durations add."
+   ],
+   "invariants": [
+    "pay is linear in total delivered minutes"
+   ],
+   "chooseWhen": [
+    "Event logs with per-entity durations"
+   ],
+   "tradeoffs": [
+    "A sweep generalizes to non-linear concurrency pay at higher cost"
+   ],
+   "variantLabel": "Variant 1: pay for delivered minutes",
+   "examples": [
+    {
+     "input": [
+      []
+     ],
+     "output": 0,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       [
+        "o1",
+        "00:00",
+        "ACCEPTED"
+       ],
+       [
+        "o1",
+        "23:59",
+        "DELIVERED"
+       ]
+      ]
+     ],
+     "output": 43170,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6a121534653f4ff494e2c7ea": {
+   "constraints": [
+    "up to 2e4 operations",
+    "ids and timestamps 0..1e9, logs up to 30 printable chars"
+   ],
+   "clarifyingQuestions": [
+    "Does a camera only see its own commands?",
+    "How do users receive logs?",
+    "Should polling block?"
+   ],
+   "hints": [
+    "Each camera needs its own FIFO.",
+    "Use an array plus head index (or deque) for O(1) pops."
+   ],
+   "invariants": [
+    "commands for one camera leave in arrival order"
+   ],
+   "chooseWhen": [
+    "Producer/consumer relays"
+   ],
+   "tradeoffs": [
+    "A sequential model cannot test locking"
+   ],
+   "variantLabel": "Variant 1: relay queues",
+   "examples": [
+    {
+     "input": [
+      [
+       "CameraLogServer",
+       "pollLog",
+       "pollCommand",
+       "requestLog",
+       "requestLog",
+       "requestLog",
+       "pollCommand",
+       "sendLog",
+       "pollLog",
+       "pollCommand",
+       "pollCommand"
+      ],
+      [
+       [],
+       [],
+       [
+        1
+       ],
+       [
+        1,
+        5
+       ],
+       [
+        2,
+        6
+       ],
+       [
+        1,
+        7
+       ],
+       [
+        1
+       ],
+       [
+        1,
+        5,
+        "x"
+       ],
+       [],
+       [
+        1
+       ],
+       [
+        1
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      null,
+      -1,
+      null,
+      null,
+      null,
+      5,
+      null,
+      [
+       1,
+       5,
+       "x"
+      ],
+      7,
+      -1
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "CameraLogServer",
+       "pollLog",
+       "sendLog",
+       "pollLog",
+       "sendLog"
+      ],
+      [
+       [],
+       [],
+       [
+        0,
+        33,
+        "motion at door"
+       ],
+       [],
+       [
+        2,
+        41,
+        "motion at door"
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      null,
+      null,
+      [
+       0,
+       33,
+       "motion at door"
+      ],
+      null
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6945c50a2c048134ada834f9": {
+   "constraints": [
+    "1..1e5 messages",
+    "0..1e5 queries, before/after 0..1e5"
+   ],
+   "clarifyingQuestions": [
+    "Are adjacent but non-overlapping ranges merged?",
+    "Is the output ids, messages or ranges?"
+   ],
+   "hints": [
+    "Convert ids to positions in the sorted list.",
+    "Each query becomes an index interval.",
+    "Sort intervals by start and merge when next start <= current end + 1."
+   ],
+   "invariants": [
+    "merged intervals are disjoint and non-adjacent"
+   ],
+   "chooseWhen": [
+    "Interval union"
+   ],
+   "tradeoffs": [
+    "Sorting vs a coverage array: both linearithmic/linear"
+   ],
+   "variantLabel": "Variant 1: merged message ranges",
+   "examples": [
+    {
+     "input": [
+      [
+       [
+        1,
+        "a"
+       ]
+      ],
+      []
+     ],
+     "output": [],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       [
+        1,
+        "a"
+       ],
+       [
+        5,
+        "b"
+       ],
+       [
+        9,
+        "c"
+       ],
+       [
+        12,
+        "d"
+       ]
+      ],
+      [
+       [
+        1,
+        0,
+        0
+       ],
+       [
+        9,
+        0,
+        0
+       ],
+       [
+        5,
+        0,
+        0
+       ]
+      ]
+     ],
+     "output": [
+      [
+       1,
+       9
+      ]
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6945c7632c048134ada834fb": {
+   "constraints": [
+    "0..2000 pages, total messages <= 1e5"
+   ],
+   "clarifyingQuestions": [
+    "Can two pages disagree on content for one id?"
+   ],
+   "hints": [
+    "Every page is already sorted.",
+    "Keep the current head of each page in a min-heap.",
+    "Skip an id equal to the last one emitted."
+   ],
+   "invariants": [
+    "emitted ids strictly increase"
+   ],
+   "chooseWhen": [
+    "Merging many sorted streams"
+   ],
+   "tradeoffs": [
+    "Heap merge avoids a global sort but needs heap code in JS"
+   ],
+   "variantLabel": "Variant 2: k-way page merge",
+   "examples": [
+    {
+     "input": [
+      []
+     ],
+     "output": [],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       [],
+       []
+      ]
+     ],
+     "output": [],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6973d4f9a0697bac5fdca7ad": {
+   "constraints": [
+    "0..2000 usage rows, hours 0..1e6",
+    "rates up to 999999.9999 with <= 4 decimals"
+   ],
+   "clarifyingQuestions": [
+    "How should unpriced services be handled?",
+    "What precision and rounding does the total use?"
+   ],
+   "hints": [
+    "Never parse money into floats.",
+    "Scale each rate to an integer number of 1e-4 dollars.",
+    "Round once at the end: (x + 50) // 100 cents."
+   ],
+   "invariants": [
+    "running total is an exact integer in 1e-4 dollars"
+   ],
+   "chooseWhen": [
+    "Billing"
+   ],
+   "tradeoffs": [
+    "JS needs BigInt for totals above 2**53"
+   ],
+   "variantLabel": "Variant 1: flat hourly rates",
+   "examples": [
+    {
+     "input": [
+      {
+       "region": "us-east-1",
+       "services": []
+      },
+      {}
+     ],
+     "output": "0.00",
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      {
+       "region": "us-east-1",
+       "services": [
+        {
+         "service": "db.t3",
+         "hours": 20
+        },
+        {
+         "service": "x",
+         "hours": 5
+        }
+       ]
+      },
+      {
+       "us-east-1": {
+        "db.t3": "0.017"
+       }
+      }
+     ],
+     "output": "0.34",
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:69791ddab6043fbfd6027f47": {
+   "constraints": [
+    "0..2000 usage rows, hours 0..1e6",
+    "up to 6 tiers per service"
+   ],
+   "clarifyingQuestions": [
+    "Are tiers applied per row or per service total?",
+    "Is a tier limit inclusive?"
+   ],
+   "hints": [
+    "Sum hours per service first.",
+    "Walk tiers, charging the hours that fall in each slice.",
+    "Keep everything in scaled integers."
+   ],
+   "invariants": [
+    "charged hours across tiers sum to the service total"
+   ],
+   "chooseWhen": [
+    "Volume discounts"
+   ],
+   "tradeoffs": [
+    "Aggregation loses per-row attribution"
+   ],
+   "variantLabel": "Variant 2: tiered rates",
+   "examples": [
+    {
+     "input": [
+      {
+       "region": "us-east-1",
+       "services": []
+      },
+      {}
+     ],
+     "output": "0.00",
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      {
+       "region": "us-east-1",
+       "services": [
+        {
+         "service": "db.t3",
+         "hours": 20
+        },
+        {
+         "service": "x",
+         "hours": 5
+        }
+       ]
+      },
+      {
+       "us-east-1": {
+        "db.t3": "0.017"
+       }
+      }
+     ],
+     "output": "0.34",
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:697921bbb6043fbfd6027f52": {
+   "constraints": [
+    "as variant 2"
+   ],
+   "clarifyingQuestions": [
+    "Is the total the sum of rounded lines or the rounded exact sum?",
+    "How are lines ordered?"
+   ],
+   "hints": [
+    "Compute exact per-service costs before rounding.",
+    "Sort on the exact value, not the rounded string.",
+    "Round the total from the exact sum."
+   ],
+   "invariants": [
+    "total is rounded once from the exact sum"
+   ],
+   "chooseWhen": [
+    "Invoices"
+   ],
+   "tradeoffs": [
+    "Line items may not add up to the total by a cent"
+   ],
+   "variantLabel": "Variant 3: per-service breakdown",
+   "examples": [
+    {
+     "input": [
+      {
+       "region": "us-east-1",
+       "services": []
+      },
+      {}
+     ],
+     "output": {
+      "total": "0.00",
+      "services": []
+     },
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      {
+       "region": "us-east-1",
+       "services": [
+        {
+         "service": "db.t3",
+         "hours": 20
+        },
+        {
+         "service": "x",
+         "hours": 5
+        }
+       ]
+      },
+      {
+       "us-east-1": {
+        "db.t3": "0.017"
+       }
+      }
+     ],
+     "output": {
+      "total": "0.34",
+      "services": [
+       [
+        "db.t3",
+        "0.34"
+       ]
+      ]
+     },
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:689cf810aee746eb1c84ba38": {
+   "constraints": [
+    "up to 5000 operations",
+    "names [a-z0-9/._]{1,20}, sizes 0..1e9"
+   ],
+   "clarifyingQuestions": [
+    "What makes a name a directory?"
+   ],
+   "hints": [
+    "A dictionary from name to size covers every operation.",
+    "Check both endpoints before copying."
+   ],
+   "invariants": [
+    "each name maps to exactly one size"
+   ],
+   "chooseWhen": [
+    "Key-value storage"
+   ],
+   "tradeoffs": [
+    "None material"
+   ],
+   "variantLabel": "Level 1: add, copy, size",
+   "examples": [
+    {
+     "input": [
+      [
+       "CloudStorage",
+       "addFile",
+       "addFile",
+       "copyFile",
+       "copyFile",
+       "getFilesize",
+       "getFilesize"
+      ],
+      [
+       [],
+       [
+        "a/b.txt",
+        10
+       ],
+       [
+        "a/b.txt",
+        3
+       ],
+       [
+        "a",
+        "x"
+       ],
+       [
+        "a/b.txt",
+        "c.txt"
+       ],
+       [
+        "c.txt"
+       ],
+       [
+        "a"
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      true,
+      false,
+      false,
+      true,
+      10,
+      -1
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "CloudStorage",
+       "addFile",
+       "addFile",
+       "addFile",
+       "addFile",
+       "addFile",
+       "copyFile",
+       "copyFile",
+       "getFilesize",
+       "addFile",
+       "addFile",
+       "addFile",
+       "getFilesize",
+       "copyFile",
+       "addFile",
+       "getFilesize",
+       "getFilesize",
+       "addFile",
+       "copyFile",
+       "addFile",
+       "addFile",
+       "getFilesize",
+       "addFile",
+       "addFile",
+       "addFile",
+       "copyFile",
+       "addFile",
+       "addFile",
+       "copyFile"
+      ],
+      [
+       [],
+       [
+        "cab",
+        3
+       ],
+       [
+        "a/b.txt",
+        8
+       ],
+       [
+        "a",
+        1
+       ],
+       [
+        "cab",
+        2
+       ],
+       [
+        "a/b.txt",
+        16
+       ],
+       [
+        "c/a.txt",
+        "b.txt"
+       ],
+       [
+        "a/b.txt",
+        "cab"
+       ],
+       [
+        "a/b"
+       ],
+       [
+        "cab",
+        12
+       ],
+       [
+        "a",
+        16
+       ],
+       [
+        "a/b",
+        7
+       ],
+       [
+        "a/b.txt"
+       ],
+       [
+        "cab",
+        "cab"
+       ],
+       [
+        "a/b.txt",
+        13
+       ],
+       [
+        "c/a.txt"
+       ],
+       [
+        "a"
+       ],
+       [
+        "a/b.txt",
+        2
+       ],
+       [
+        "a/b.txt",
+        "a"
+       ],
+       [
+        "a/b.txt",
+        12
+       ],
+       [
+        "b.txt",
+        2
+       ],
+       [
+        "cab"
+       ],
+       [
+        "a/b.txt",
+        1
+       ],
+       [
+        "c/a.txt",
+        3
+       ],
+       [
+        "c/a.txt",
+        12
+       ],
+       [
+        "b.txt",
+        "cab"
+       ],
+       [
+        "a/b",
+        19
+       ],
+       [
+        "a",
+        12
+       ],
+       [
+        "a",
+        "a/b.txt"
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      true,
+      true,
+      true,
+      false,
+      false,
+      false,
+      false,
+      -1,
+      false,
+      false,
+      true,
+      8,
+      false,
+      false,
+      -1,
+      1,
+      false,
+      false,
+      false,
+      true,
+      3,
+      false,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:689e4cd5735253d430dee92d": {
+   "constraints": [
+    "up to 5000 operations"
+   ],
+   "clarifyingQuestions": [
+    "How are equal sizes ordered?",
+    "Is there a result limit?"
+   ],
+   "hints": [
+    "Filter, then sort with a composite key."
+   ],
+   "invariants": [
+    "output sorted by (-size, name)"
+   ],
+   "chooseWhen": [
+    "Ad-hoc search on small stores"
+   ],
+   "tradeoffs": [
+    "Linear scan per query; a trie would help only for prefixes"
+   ],
+   "variantLabel": "Level 2: find by prefix and suffix",
+   "examples": [
+    {
+     "input": [
+      [
+       "CloudStorage",
+       "addFile",
+       "addFile",
+       "copyFile",
+       "copyFile",
+       "getFilesize",
+       "getFilesize",
+       "findFile",
+       "findFile",
+       "addFile",
+       "findFile"
+      ],
+      [
+       [],
+       [
+        "a/b.txt",
+        10
+       ],
+       [
+        "a/b.txt",
+        3
+       ],
+       [
+        "a",
+        "x"
+       ],
+       [
+        "a/b.txt",
+        "c.txt"
+       ],
+       [
+        "c.txt"
+       ],
+       [
+        "a"
+       ],
+       [
+        "a",
+        ".txt"
+       ],
+       [
+        "",
+        ""
+       ],
+       [
+        "a.txt",
+        10
+       ],
+       [
+        "a",
+        "txt"
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      true,
+      false,
+      false,
+      true,
+      10,
+      -1,
+      [
+       "a/b.txt(10)"
+      ],
+      [
+       "a/b.txt(10)",
+       "c.txt(10)"
+      ],
+      true,
+      [
+       "a.txt(10)",
+       "a/b.txt(10)"
+      ]
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "CloudStorage",
+       "getFilesize",
+       "addFile",
+       "findFile",
+       "addFile",
+       "addFile",
+       "addFile",
+       "addFile",
+       "copyFile",
+       "copyFile",
+       "addFile",
+       "copyFile",
+       "addFile",
+       "addFile",
+       "findFile",
+       "addFile",
+       "findFile",
+       "copyFile",
+       "addFile",
+       "addFile"
+      ],
+      [
+       [],
+       [
+        "a/b.txt"
+       ],
+       [
+        "c/a.txt",
+        9
+       ],
+       [
+        "a/",
+        ".txt"
+       ],
+       [
+        "c/a.txt",
+        6
+       ],
+       [
+        "cab",
+        8
+       ],
+       [
+        "a",
+        11
+       ],
+       [
+        "a/b.txt",
+        10
+       ],
+       [
+        "b.txt",
+        "a"
+       ],
+       [
+        "a",
+        "b.txt"
+       ],
+       [
+        "cab",
+        13
+       ],
+       [
+        "b.txt",
+        "a/b"
+       ],
+       [
+        "a/b.txt",
+        13
+       ],
+       [
+        "c/a.txt",
+        0
+       ],
+       [
+        "",
+        "b"
+       ],
+       [
+        "c/a.txt",
+        6
+       ],
+       [
+        "a",
+        "b"
+       ],
+       [
+        "a/b",
+        "b.txt"
+       ],
+       [
+        "a/b",
+        5
+       ],
+       [
+        "cab",
+        9
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      -1,
+      true,
+      [],
+      false,
+      true,
+      true,
+      true,
+      false,
+      true,
+      false,
+      true,
+      false,
+      false,
+      [
+       "a/b(11)",
+       "cab(8)"
+      ],
+      false,
+      [
+       "a/b(11)"
+      ],
+      false,
+      false,
+      false
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:689e4cd8735253d430dee92e": {
+   "constraints": [
+    "up to 5000 operations",
+    "user ids u[a-z0-9]{0,7}, capacities 0..1e9"
+   ],
+   "clarifyingQuestions": [
+    "Who owns files added without a user?",
+    "Does a copy count against the owner's capacity?",
+    "What does merge return?"
+   ],
+   "hints": [
+    "Track used bytes per user incrementally.",
+    "Store the owner with each file.",
+    "Merge moves file ownership and adds capacities."
+   ],
+   "invariants": [
+    "used[u] equals the size sum of files owned by u"
+   ],
+   "chooseWhen": [
+    "Quota-managed storage"
+   ],
+   "tradeoffs": [
+    "Owned-name sets cost memory but make merges proportional to moved files"
+   ],
+   "variantLabel": "Level 3: users and capacity",
+   "examples": [
+    {
+     "input": [
+      [
+       "CloudStorage",
+       "addFile",
+       "addFile",
+       "copyFile",
+       "copyFile",
+       "getFilesize",
+       "getFilesize",
+       "findFile",
+       "findFile",
+       "addFile",
+       "findFile",
+       "addUser",
+       "addUser",
+       "addFileBy",
+       "copyFile",
+       "addFileBy",
+       "addUser",
+       "mergeUser",
+       "mergeUser"
+      ],
+      [
+       [],
+       [
+        "a/b.txt",
+        10
+       ],
+       [
+        "a/b.txt",
+        3
+       ],
+       [
+        "a",
+        "x"
+       ],
+       [
+        "a/b.txt",
+        "c.txt"
+       ],
+       [
+        "c.txt"
+       ],
+       [
+        "a"
+       ],
+       [
+        "a",
+        ".txt"
+       ],
+       [
+        "",
+        ""
+       ],
+       [
+        "a.txt",
+        10
+       ],
+       [
+        "a",
+        "txt"
+       ],
+       [
+        "u1",
+        15
+       ],
+       [
+        "u1",
+        3
+       ],
+       [
+        "u1",
+        "u.txt",
+        10
+       ],
+       [
+        "u.txt",
+        "v.txt"
+       ],
+       [
+        "u1",
+        "w",
+        5
+       ],
+       [
+        "u2",
+        4
+       ],
+       [
+        "u1",
+        "u2"
+       ],
+       [
+        "u1",
+        "u1"
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      true,
+      false,
+      false,
+      true,
+      10,
+      -1,
+      [
+       "a/b.txt(10)"
+      ],
+      [
+       "a/b.txt(10)",
+       "c.txt(10)"
+      ],
+      true,
+      [
+       "a.txt(10)",
+       "a/b.txt(10)"
+      ],
+      true,
+      false,
+      5,
+      false,
+      0,
+      true,
+      4,
+      -1
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "CloudStorage",
+       "addFileBy",
+       "findFile",
+       "copyFile",
+       "addFile",
+       "addUser",
+       "addFile",
+       "addFileBy",
+       "addFileBy",
+       "copyFile",
+       "addFile",
+       "addFile",
+       "addFileBy",
+       "addUser",
+       "addFile",
+       "addUser",
+       "addFile"
+      ],
+      [
+       [],
+       [
+        "u3",
+        "a/b.txt",
+        12
+       ],
+       [
+        "a/",
+        ".txt"
+       ],
+       [
+        "a",
+        "a"
+       ],
+       [
+        "b.txt",
+        4
+       ],
+       [
+        "u3",
+        34
+       ],
+       [
+        "c/a.txt",
+        9
+       ],
+       [
+        "u2",
+        "a/b.txt",
+        5
+       ],
+       [
+        "u2",
+        "b.txt",
+        15
+       ],
+       [
+        "c/a.txt",
+        "c/a.txt"
+       ],
+       [
+        "a/b.txt",
+        2
+       ],
+       [
+        "a",
+        18
+       ],
+       [
+        "u1",
+        "a",
+        15
+       ],
+       [
+        "u2",
+        3
+       ],
+       [
+        "a/b.txt",
+        15
+       ],
+       [
+        "u3",
+        10
+       ],
+       [
+        "c/a.txt",
+        10
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      -1,
+      [],
+      false,
+      true,
+      true,
+      true,
+      -1,
+      -1,
+      false,
+      true,
+      true,
+      -1,
+      true,
+      false,
+      false,
+      false
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:689e4cd9735253d430dee92f": {
+   "constraints": [
+    "up to 5000 operations"
+   ],
+   "clarifyingQuestions": [
+    "What happens to files that conflict on restore?",
+    "Does merge transfer backups?"
+   ],
+   "hints": [
+    "A backup is a copied list of (name,size).",
+    "Restore = delete owned files, then re-add free names."
+   ],
+   "invariants": [
+    "restore never overwrites another owner's file"
+   ],
+   "chooseWhen": [
+    "Snapshot/restore"
+   ],
+   "tradeoffs": [
+    "Full snapshots cost memory proportional to files"
+   ],
+   "variantLabel": "Level 4: backup and restore",
+   "examples": [
+    {
+     "input": [
+      [
+       "CloudStorage",
+       "addFile",
+       "addFile",
+       "copyFile",
+       "copyFile",
+       "getFilesize",
+       "getFilesize",
+       "findFile",
+       "findFile",
+       "addFile",
+       "findFile",
+       "addUser",
+       "addUser",
+       "addFileBy",
+       "copyFile",
+       "addFileBy",
+       "addUser",
+       "mergeUser",
+       "mergeUser",
+       "backupUser",
+       "addFileBy",
+       "restoreUser",
+       "getFilesize",
+       "restoreUser"
+      ],
+      [
+       [],
+       [
+        "a/b.txt",
+        10
+       ],
+       [
+        "a/b.txt",
+        3
+       ],
+       [
+        "a",
+        "x"
+       ],
+       [
+        "a/b.txt",
+        "c.txt"
+       ],
+       [
+        "c.txt"
+       ],
+       [
+        "a"
+       ],
+       [
+        "a",
+        ".txt"
+       ],
+       [
+        "",
+        ""
+       ],
+       [
+        "a.txt",
+        10
+       ],
+       [
+        "a",
+        "txt"
+       ],
+       [
+        "u1",
+        15
+       ],
+       [
+        "u1",
+        3
+       ],
+       [
+        "u1",
+        "u.txt",
+        10
+       ],
+       [
+        "u.txt",
+        "v.txt"
+       ],
+       [
+        "u1",
+        "w",
+        5
+       ],
+       [
+        "u2",
+        4
+       ],
+       [
+        "u1",
+        "u2"
+       ],
+       [
+        "u1",
+        "u1"
+       ],
+       [
+        "u1"
+       ],
+       [
+        "u1",
+        "z",
+        1
+       ],
+       [
+        "u1"
+       ],
+       [
+        "z"
+       ],
+       [
+        "u9"
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      true,
+      false,
+      false,
+      true,
+      10,
+      -1,
+      [
+       "a/b.txt(10)"
+      ],
+      [
+       "a/b.txt(10)",
+       "c.txt(10)"
+      ],
+      true,
+      [
+       "a.txt(10)",
+       "a/b.txt(10)"
+      ],
+      true,
+      false,
+      5,
+      false,
+      0,
+      true,
+      4,
+      -1,
+      2,
+      3,
+      2,
+      -1,
+      -1
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "CloudStorage",
+       "addFile",
+       "getFilesize",
+       "copyFile",
+       "findFile",
+       "getFilesize",
+       "addFile",
+       "restoreUser",
+       "backupUser",
+       "addFileBy",
+       "mergeUser",
+       "getFilesize",
+       "getFilesize",
+       "addFileBy",
+       "addFile",
+       "restoreUser"
+      ],
+      [
+       [],
+       [
+        "a/b.txt",
+        6
+       ],
+       [
+        "a"
+       ],
+       [
+        "a/b.txt",
+        "a/b.txt"
+       ],
+       [
+        "c",
+        "xt"
+       ],
+       [
+        "b.txt"
+       ],
+       [
+        "cab",
+        12
+       ],
+       [
+        "u3"
+       ],
+       [
+        "u3"
+       ],
+       [
+        "u1",
+        "b.txt",
+        14
+       ],
+       [
+        "u1",
+        "u3"
+       ],
+       [
+        "c/a.txt"
+       ],
+       [
+        "a"
+       ],
+       [
+        "u1",
+        "b.txt",
+        5
+       ],
+       [
+        "a/b",
+        19
+       ],
+       [
+        "u3"
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      true,
+      -1,
+      false,
+      [],
+      -1,
+      true,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      true,
+      -1
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:69e926affbaf3da641828639": {
+   "constraints": [
+    "0..1e5 printable ASCII characters (plus tab/newline)"
+   ],
+   "clarifyingQuestions": [
+    "Are words with digits or uppercase letters snake case?",
+    "What about double or trailing underscores?",
+    "Inside string literals too?"
+   ],
+   "hints": [
+    "Work run by run, not character by character.",
+    "Strip leading underscores, then split on \"_\".",
+    "Reject runs with empty parts or uppercase letters."
+   ],
+   "invariants": [
+    "non-identifier characters are copied verbatim"
+   ],
+   "chooseWhen": [
+    "Lightweight source rewriting"
+   ],
+   "tradeoffs": [
+    "No language-aware parsing, so string literals are rewritten too"
+   ],
+   "variantLabel": "Variant 1: in-place conversion",
+   "examples": [
+    {
+     "input": [
+      ""
+     ],
+     "output": "",
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      "my_counter = my_counter + 1"
+     ],
+     "output": "myCounter = myCounter + 1",
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:69a8a9fe4b133b6a8f3a5ef3": {
+   "constraints": [
+    "0..100 transactions, size 1..1e4, fee 0..1e6",
+    "blockSize 0..5000"
+   ],
+   "clarifyingQuestions": [
+    "Is greedy by fee rate acceptable or must it be optimal?"
+   ],
+   "hints": [
+    "Greedy by fee/size is not optimal for 0/1 choices.",
+    "dp[c] = best fee within capacity c.",
+    "Iterate capacities downward per item."
+   ],
+   "invariants": [
+    "dp[c] is the best fee using processed items within capacity c"
+   ],
+   "chooseWhen": [
+    "Small integer capacities"
+   ],
+   "tradeoffs": [
+    "Pseudo-polynomial in blockSize"
+   ],
+   "variantLabel": "Variant 1: maximum fee",
+   "examples": [
+    {
+     "input": [
+      [],
+      0
+     ],
+     "output": 0,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       [
+        "a",
+        1,
+        0
+       ]
+      ],
+      1
+     ],
+     "output": 0,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:69a8acc74b133b6a8f3a5efd": {
+   "constraints": [
+    "as variant 1"
+   ],
+   "clarifyingQuestions": [
+    "Which optimal set should be returned on ties?"
+   ],
+   "hints": [
+    "Build best values over suffixes so earlier choices can be tested.",
+    "Include item i whenever doing so still reaches the optimum.",
+    "Compare (fee, -size) pairs."
+   ],
+   "invariants": [
+    "the remaining optimum is reachable after every decision"
+   ],
+   "chooseWhen": [
+    "Need the witness, not just the value"
+   ],
+   "tradeoffs": [
+    "Full table costs n*B memory"
+   ],
+   "variantLabel": "Variant 2: chosen transactions",
+   "examples": [
+    {
+     "input": [
+      [],
+      0
+     ],
+     "output": [],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       [
+        "a",
+        1,
+        0
+       ]
+      ],
+      1
+     ],
+     "output": [],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:69ab56434b133b6a8f3a68a2": {
+   "constraints": [
+    "0..100 transactions",
+    "blockSize 0..2000",
+    "parents form a forest"
+   ],
+   "clarifyingQuestions": [
+    "Can a transaction have several parents?"
+   ],
+   "hints": [
+    "Order nodes in DFS preorder with subtree ends.",
+    "Skipping a node skips its whole subtree.",
+    "dp[i][c] = max(take i, jump to end of subtree)."
+   ],
+   "invariants": [
+    "a chosen node always has its parent chosen"
+   ],
+   "chooseWhen": [
+    "Precedence-constrained knapsack on trees"
+   ],
+   "tradeoffs": [
+    "O(n*B) memory for the table"
+   ],
+   "variantLabel": "Variant 3: parent dependencies",
+   "examples": [
+    {
+     "input": [
+      [],
+      0
+     ],
+     "output": 0,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       [
+        "a",
+        5,
+        1,
+        null
+       ],
+       [
+        "b",
+        1,
+        10,
+        "a"
+       ]
+      ],
+      5
+     ],
+     "output": 1,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:678951e8402dc47b67a14951": {
+   "constraints": [
+    "up to 120 edges, 30 currencies",
+    "rates (0, 9999.9999]"
+   ],
+   "clarifyingQuestions": [
+    "Are reverse rates implied (1/r)?",
+    "Can there be arbitrage cycles?",
+    "What precision is expected?"
+   ],
+   "hints": [
+    "Max product is a longest path in log space; without positive cycles it is well defined.",
+    "Relax edges V-1 times keeping the best product.",
+    "Keep products exact as integer / 10^(4k)."
+   ],
+   "invariants": [
+    "best[x] never decreases; at most V-1 rounds improve"
+   ],
+   "chooseWhen": [
+    "Exact conversion chains"
+   ],
+   "tradeoffs": [
+    "Big integers grow with path length"
+   ],
+   "variantLabel": "Variant 1: best rate",
+   "examples": [
+    {
+     "input": [
+      [],
+      "USD",
+      "USD"
+     ],
+     "output": "1",
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [],
+      "USD",
+      "EUR"
+     ],
+     "output": "-1",
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6855e42cc201117d348a2630": {
+   "constraints": [
+    "up to 3000 operations",
+    "revenue 0..1e6, k 0..100"
+   ],
+   "clarifyingQuestions": [
+    "Is the threshold inclusive?",
+    "How are ties ordered?"
+   ],
+   "hints": [
+    "Only the referrer's total changes on a referred insert.",
+    "Keep (total,id) pairs sorted.",
+    "Binary search the first pair with total >= minTotal."
+   ],
+   "invariants": [
+    "sorted list holds exactly one pair per customer"
+   ],
+   "chooseWhen": [
+    "Frequent ranked queries"
+   ],
+   "tradeoffs": [
+    "Array insertion is O(n); a balanced tree would be O(log n)"
+   ],
+   "variantLabel": "Variant 1: direct referrals",
+   "examples": [
+    {
+     "input": [
+      [
+       "CustomerRevenueSystem",
+       "insert",
+       "insertWithReferrer",
+       "insertWithReferrer",
+       "getLowestK",
+       "getLowestK",
+       "getLowestK"
+      ],
+      [
+       [],
+       [
+        10
+       ],
+       [
+        5,
+        0
+       ],
+       [
+        7,
+        1
+       ],
+       [
+        3,
+        0
+       ],
+       [
+        0,
+        0
+       ],
+       [
+        5,
+        13
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      0,
+      1,
+      2,
+      [
+       2,
+       1,
+       0
+      ],
+      [],
+      [
+       0
+      ]
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "CustomerRevenueSystem",
+       "insert",
+       "insertWithReferrer",
+       "insert",
+       "insertWithReferrer",
+       "insert",
+       "getLowestK"
+      ],
+      [
+       [],
+       [
+        7
+       ],
+       [
+        4,
+        0
+       ],
+       [
+        18
+       ],
+       [
+        4,
+        0
+       ],
+       [
+        17
+       ],
+       [
+        0,
+        10
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      0,
+      1,
+      2,
+      3,
+      4,
+      []
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:69445eb8867a3f9f539ff53d": {
+   "constraints": [
+    "up to 3000 operations",
+    "maxDepth 0..2e4"
+   ],
+   "clarifyingQuestions": [
+    "Is depth 0 own revenue only?"
+   ],
+   "hints": [
+    "Store children of each customer.",
+    "BFS level by level and stop at maxDepth."
+   ],
+   "invariants": [
+    "each customer visited at most once per query"
+   ],
+   "chooseWhen": [
+    "Bounded hierarchy aggregation"
+   ],
+   "tradeoffs": [
+    "Per-query cost grows with subtree size"
+   ],
+   "variantLabel": "Variant 2: nested referral revenue",
+   "examples": [
+    {
+     "input": [
+      [
+       "CustomerRevenueSystem",
+       "insert",
+       "insertWithReferrer",
+       "insertWithReferrer",
+       "getLowestK",
+       "getLowestK",
+       "getLowestK",
+       "getNestedRevenue",
+       "getNestedRevenue",
+       "getNestedRevenue",
+       "getNestedRevenue"
+      ],
+      [
+       [],
+       [
+        10
+       ],
+       [
+        5,
+        0
+       ],
+       [
+        7,
+        1
+       ],
+       [
+        3,
+        0
+       ],
+       [
+        0,
+        0
+       ],
+       [
+        5,
+        13
+       ],
+       [
+        0,
+        0
+       ],
+       [
+        0,
+        1
+       ],
+       [
+        0,
+        2
+       ],
+       [
+        2,
+        5
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      0,
+      1,
+      2,
+      [
+       2,
+       1,
+       0
+      ],
+      [],
+      [
+       0
+      ],
+      10,
+      15,
+      22,
+      7
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "CustomerRevenueSystem",
+       "insert",
+       "getNestedRevenue",
+       "insertWithReferrer",
+       "insertWithReferrer",
+       "insert",
+       "insertWithReferrer",
+       "getNestedRevenue",
+       "insertWithReferrer",
+       "getNestedRevenue",
+       "insert",
+       "getNestedRevenue",
+       "insertWithReferrer",
+       "getNestedRevenue",
+       "insert"
+      ],
+      [
+       [],
+       [
+        14
+       ],
+       [
+        0,
+        3
+       ],
+       [
+        18,
+        0
+       ],
+       [
+        15,
+        1
+       ],
+       [
+        18
+       ],
+       [
+        2,
+        3
+       ],
+       [
+        1,
+        3
+       ],
+       [
+        17,
+        4
+       ],
+       [
+        0,
+        0
+       ],
+       [
+        10
+       ],
+       [
+        5,
+        0
+       ],
+       [
+        6,
+        2
+       ],
+       [
+        0,
+        1
+       ],
+       [
+        7
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      0,
+      14,
+      1,
+      2,
+      3,
+      4,
+      33,
+      5,
+      14,
+      6,
+      17,
+      7,
+      32,
+      8
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:68b93d5483188776facc8ff6": {
+   "constraints": [
+    "up to 5000 moves, columns -1..7"
+   ],
+   "clarifyingQuestions": [
+    "How are invalid moves reported?",
+    "Are columns 0- or 1-based?"
+   ],
+   "hints": [
+    "Only lines through the new disc can become wins.",
+    "Count same-colour discs both ways along each direction.",
+    "Win when count >= 4."
+   ],
+   "invariants": [
+    "heights[c] equals discs in column c"
+   ],
+   "chooseWhen": [
+    "Incremental win detection"
+   ],
+   "tradeoffs": [
+    "None material"
+   ],
+   "variantLabel": "Variant 1: drop and detect",
+   "examples": [
+    {
+     "input": [
+      [
+       "ConnectFour",
+       "play",
+       "play",
+       "play",
+       "play",
+       "play",
+       "play",
+       "play",
+       "play"
+      ],
+      [
+       [],
+       [
+        0
+       ],
+       [
+        1
+       ],
+       [
+        0
+       ],
+       [
+        1
+       ],
+       [
+        0
+       ],
+       [
+        1
+       ],
+       [
+        0
+       ],
+       [
+        1
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      "ONGOING",
+      "ONGOING",
+      "ONGOING",
+      "ONGOING",
+      "ONGOING",
+      "ONGOING",
+      "A_WINS",
+      "INVALID"
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "ConnectFour",
+       "play",
+       "play",
+       "play",
+       "play",
+       "play",
+       "play",
+       "play"
+      ],
+      [
+       [],
+       [
+        0
+       ],
+       [
+        0
+       ],
+       [
+        1
+       ],
+       [
+        1
+       ],
+       [
+        2
+       ],
+       [
+        2
+       ],
+       [
+        3
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      "ONGOING",
+      "ONGOING",
+      "ONGOING",
+      "ONGOING",
+      "ONGOING",
+      "ONGOING",
+      "A_WINS"
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:67a19e53b41c4108d8ccb3d4": {
+   "constraints": [
+    "up to 2e4 operations",
+    "keys/values [a-z0-9]{1,8}"
+   ],
+   "clarifyingQuestions": [
+    "Does commit close only the innermost or all transactions?",
+    "What do rollback/commit return without a transaction?"
+   ],
+   "hints": [
+    "Snapshots are simple but copy the whole store.",
+    "Instead log the previous value of each key changed inside a transaction.",
+    "Maintain value counts incrementally on every write and undo."
+   ],
+   "invariants": [
+    "counts[v] equals the number of keys currently mapped to v"
+   ],
+   "chooseWhen": [
+    "Undoable state with cheap reads"
+   ],
+   "tradeoffs": [
+    "Undo logs grow with writes inside long transactions"
+   ],
+   "variantLabel": "Variant 1: nested transactions",
+   "examples": [
+    {
+     "input": [
+      [
+       "InMemoryKVDB",
+       "rollback",
+       "commit",
+       "set",
+       "begin",
+       "set",
+       "begin",
+       "delete",
+       "count",
+       "rollback",
+       "get",
+       "count",
+       "commit",
+       "get",
+       "rollback"
+      ],
+      [
+       [],
+       [],
+       [],
+       [
+        "a",
+        "1"
+       ],
+       [],
+       [
+        "a",
+        "2"
+       ],
+       [],
+       [
+        "a"
+       ],
+       [
+        "2"
+       ],
+       [],
+       [
+        "a"
+       ],
+       [
+        "2"
+       ],
+       [],
+       [
+        "a"
+       ],
+       []
+      ]
+     ],
+     "output": [
+      null,
+      false,
+      false,
+      null,
+      null,
+      null,
+      null,
+      null,
+      0,
+      true,
+      "2",
+      1,
+      true,
+      "2",
+      false
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "InMemoryKVDB",
+       "begin",
+       "set",
+       "get",
+       "set",
+       "get",
+       "count",
+       "set",
+       "set",
+       "count",
+       "delete",
+       "rollback",
+       "rollback",
+       "set",
+       "delete",
+       "count",
+       "rollback"
+      ],
+      [
+       [],
+       [],
+       [
+        "c",
+        "2"
+       ],
+       [
+        "d"
+       ],
+       [
+        "c",
+        "1"
+       ],
+       [
+        "c"
+       ],
+       [
+        "3"
+       ],
+       [
+        "c",
+        "2"
+       ],
+       [
+        "b",
+        "1"
+       ],
+       [
+        "1"
+       ],
+       [
+        "d"
+       ],
+       [],
+       [],
+       [
+        "b",
+        "1"
+       ],
+       [
+        "d"
+       ],
+       [
+        "1"
+       ],
+       []
+      ]
+     ],
+     "output": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      "1",
+      0,
+      null,
+      null,
+      1,
+      null,
+      true,
+      false,
+      null,
+      null,
+      1,
+      false
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:677ae48578175fce2ecdfc0a": {
+   "constraints": [
+    "up to 1000 documents, total text 1e5",
+    "up to 2000 searches"
+   ],
+   "clarifyingQuestions": [
+    "What counts as a word?",
+    "Must phrase words be consecutive?",
+    "Result order?"
+   ],
+   "hints": [
+    "Index each word with the documents and positions where it occurs.",
+    "Candidates come from the first word's postings.",
+    "Check that word j occurs at position p+j."
+   ],
+   "invariants": [
+    "postings positions are increasing per document"
+   ],
+   "chooseWhen": [
+    "Many searches over a static corpus"
+   ],
+   "tradeoffs": [
+    "Index memory is proportional to corpus size"
+   ],
+   "variantLabel": "Variant 1: phrase search",
+   "examples": [
+    {
+     "input": [
+      [
+       "DocumentLibrary",
+       "search"
+      ],
+      [
+       [
+        []
+       ],
+       [
+        "x"
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      []
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "DocumentLibrary",
+       "search",
+       "search",
+       "search",
+       "search"
+      ],
+      [
+       [
+        [
+         [
+          "d1",
+          "The quick brown fox"
+         ],
+         [
+          "d2",
+          "quick, BROWN!"
+         ],
+         [
+          "d3",
+          "brown quick"
+         ]
+        ]
+       ],
+       [
+        "Quick brown"
+       ],
+       [
+        ""
+       ],
+       [
+        "!!"
+       ],
+       [
+        "fox"
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      [
+       "d1",
+       "d2"
+      ],
+      [],
+      [],
+      [
+       "d1"
+      ]
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  }
+ }
+}

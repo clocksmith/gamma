@@ -1,0 +1,763 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:689cf808aee746eb1c84ba37:689e4cd8735253d430dee92e:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-c-20261028-v1/contracts.json",
+   "sha256": "e78fecca0c3e7bf1a8160840d3593a2b46fad19339f62eeffe8e39cd701a48c7",
+   "selector": "/problems/20"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/689cf808aee746eb1c84ba37.json",
+   "sha256": "2a662ad7e04f6d449731abe2a28578da66d76a8ddb011a00fd10ab4a2a501f66",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-c-20261028-v1/study-content.json",
+   "sha256": "89e5903398bfbab864a583f3e6d5aa5c4a17c7bf3e81a7d9ed033f603e2d2131",
+   "selector": "/variants/hack2hire:689e4cd8735253d430dee92e"
+  }
+ ],
+ "problemId": "hack2hire:689cf808aee746eb1c84ba37",
+ "variantId": "689e4cd8735253d430dee92e",
+ "variantLabel": {
+  "status": "present",
+  "value": "Level 3: users and capacity",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-c-20261028-v1/study-content.json",
+    "sha256": "89e5903398bfbab864a583f3e6d5aa5c4a17c7bf3e81a7d9ed033f603e2d2131",
+    "selector": "/variants/hack2hire:689e4cd8735253d430dee92e/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "Variant 2 plus users. addUser(id,capacity) fails if the user exists. addFileBy(user,name,size) stores a file owned by the user if the user exists, the name is free and used+size <= capacity; it returns remaining capacity, otherwise -1. Files from addFile belong to an unlimited admin owner. copyFile charges the source owner and fails if it would exceed that owner's capacity. mergeUser(a,b) (a != b, both exist) moves b's files and capacity to a, deletes b and returns a's remaining capacity, else -1.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-c-20261028-v1/contracts.json",
+    "sha256": "e78fecca0c3e7bf1a8160840d3593a2b46fad19339f62eeffe8e39cd701a48c7",
+    "selector": "/problems/20/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "Variant 2 plus users. addUser(id,capacity) fails if the user exists. addFileBy(user,name,size) stores a file owned by the user if the user exists, the name is free and used+size <= capacity; it returns remaining capacity, otherwise -1.",
+   "Files from addFile belong to an unlimited admin owner. copyFile charges the source owner and fails if it would exceed that owner's capacity. mergeUser(a,b) (a != b, both exist) moves b's files and capacity to a, deletes b and returns a's remaining capacity, else -1."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-c-20261028-v1/contracts.json",
+    "sha256": "e78fecca0c3e7bf1a8160840d3593a2b46fad19339f62eeffe8e39cd701a48c7",
+    "selector": "/problems/20/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "up to 5000 operations",
+   "user ids u[a-z0-9]{0,7}, capacities 0..1e9"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-c-20261028-v1/study-content.json",
+    "sha256": "89e5903398bfbab864a583f3e6d5aa5c4a17c7bf3e81a7d9ed033f603e2d2131",
+    "selector": "/variants/hack2hire:689e4cd8735253d430dee92e/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-28; it is not the official statement.",
+    "basis": "preview fields used: title; algorithmTags; contentPreview level-1 contracts; variant ordinal; preview response sha256 07c49e10f450e0ddefd83c421b8ee7086adbfdd30e161085b39de00dac582b0c"
+   },
+   {
+    "statement": "Uncertainty: high: user, capacity and merge semantics are inferred",
+    "basis": "the public group preview is partial (879 characters, group-level)"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-c-20261028-v1/contracts.json",
+    "sha256": "e78fecca0c3e7bf1a8160840d3593a2b46fad19339f62eeffe8e39cd701a48c7",
+    "selector": "/problems/20/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-c-20261028-v1/contracts.json",
+    "sha256": "e78fecca0c3e7bf1a8160840d3593a2b46fad19339f62eeffe8e39cd701a48c7",
+    "selector": "/problems/20/inference_uncertainty"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "Who owns files added without a user?",
+   "Does a copy count against the owner's capacity?",
+   "What does merge return?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-c-20261028-v1/study-content.json",
+    "sha256": "89e5903398bfbab864a583f3e6d5aa5c4a17c7bf3e81a7d9ed033f603e2d2131",
+    "selector": "/variants/hack2hire:689e4cd8735253d430dee92e/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [
+      "CloudStorage",
+      "addFile",
+      "addFile",
+      "copyFile",
+      "copyFile",
+      "getFilesize",
+      "getFilesize",
+      "findFile",
+      "findFile",
+      "addFile",
+      "findFile",
+      "addUser",
+      "addUser",
+      "addFileBy",
+      "copyFile",
+      "addFileBy",
+      "addUser",
+      "mergeUser",
+      "mergeUser"
+     ],
+     [
+      [],
+      [
+       "a/b.txt",
+       10
+      ],
+      [
+       "a/b.txt",
+       3
+      ],
+      [
+       "a",
+       "x"
+      ],
+      [
+       "a/b.txt",
+       "c.txt"
+      ],
+      [
+       "c.txt"
+      ],
+      [
+       "a"
+      ],
+      [
+       "a",
+       ".txt"
+      ],
+      [
+       "",
+       ""
+      ],
+      [
+       "a.txt",
+       10
+      ],
+      [
+       "a",
+       "txt"
+      ],
+      [
+       "u1",
+       15
+      ],
+      [
+       "u1",
+       3
+      ],
+      [
+       "u1",
+       "u.txt",
+       10
+      ],
+      [
+       "u.txt",
+       "v.txt"
+      ],
+      [
+       "u1",
+       "w",
+       5
+      ],
+      [
+       "u2",
+       4
+      ],
+      [
+       "u1",
+       "u2"
+      ],
+      [
+       "u1",
+       "u1"
+      ]
+     ]
+    ],
+    "output": [
+     null,
+     true,
+     false,
+     false,
+     true,
+     10,
+     -1,
+     [
+      "a/b.txt(10)"
+     ],
+     [
+      "a/b.txt(10)",
+      "c.txt(10)"
+     ],
+     true,
+     [
+      "a.txt(10)",
+      "a/b.txt(10)"
+     ],
+     true,
+     false,
+     5,
+     false,
+     0,
+     true,
+     4,
+     -1
+    ],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      "CloudStorage",
+      "addFileBy",
+      "findFile",
+      "copyFile",
+      "addFile",
+      "addUser",
+      "addFile",
+      "addFileBy",
+      "addFileBy",
+      "copyFile",
+      "addFile",
+      "addFile",
+      "addFileBy",
+      "addUser",
+      "addFile",
+      "addUser",
+      "addFile"
+     ],
+     [
+      [],
+      [
+       "u3",
+       "a/b.txt",
+       12
+      ],
+      [
+       "a/",
+       ".txt"
+      ],
+      [
+       "a",
+       "a"
+      ],
+      [
+       "b.txt",
+       4
+      ],
+      [
+       "u3",
+       34
+      ],
+      [
+       "c/a.txt",
+       9
+      ],
+      [
+       "u2",
+       "a/b.txt",
+       5
+      ],
+      [
+       "u2",
+       "b.txt",
+       15
+      ],
+      [
+       "c/a.txt",
+       "c/a.txt"
+      ],
+      [
+       "a/b.txt",
+       2
+      ],
+      [
+       "a",
+       18
+      ],
+      [
+       "u1",
+       "a",
+       15
+      ],
+      [
+       "u2",
+       3
+      ],
+      [
+       "a/b.txt",
+       15
+      ],
+      [
+       "u3",
+       10
+      ],
+      [
+       "c/a.txt",
+       10
+      ]
+     ]
+    ],
+    "output": [
+     null,
+     -1,
+     [],
+     false,
+     true,
+     true,
+     true,
+     -1,
+     -1,
+     false,
+     true,
+     true,
+     -1,
+     true,
+     false,
+     false,
+     false
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-c-20261028-v1/study-content.json",
+    "sha256": "89e5903398bfbab864a583f3e6d5aa5c4a17c7bf3e81a7d9ed033f603e2d2131",
+    "selector": "/variants/hack2hire:689e4cd8735253d430dee92e/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-c-20261028-v1/oracles.py",
+    "sha256": "27fc5c6843f3a2f2bf3b18ade93951a7ea37070a90841f16291f71c163fa53e0",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "class",
+   "declaration": {
+    "status": "present",
+    "value": "class CloudStorage: __init__(self); addFile(name, size) -> boolean; copyFile(nameFrom, nameTo) -> boolean; getFilesize(name) -> integer; findFile(prefix, suffix) -> string[]; addUser(userId, capacity) -> boolean; addFileBy(userId, name, size) -> integer; mergeUser(userId1, userId2) -> integer",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-c-20261028-v1/contracts.json",
+      "sha256": "e78fecca0c3e7bf1a8160840d3593a2b46fad19339f62eeffe8e39cd701a48c7",
+      "selector": "/problems/20/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-c-20261028-v1/semantics/689e4cd8735253d430dee92e-python.json",
+     "inferredInterface": {
+      "classname": "CloudStorage",
+      "constructor": {
+       "params": []
+      },
+      "methods": [
+       {
+        "name": "addFile",
+        "params": [
+         {
+          "name": "name",
+          "type": "string"
+         },
+         {
+          "name": "size",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "boolean"
+        }
+       },
+       {
+        "name": "copyFile",
+        "params": [
+         {
+          "name": "nameFrom",
+          "type": "string"
+         },
+         {
+          "name": "nameTo",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "boolean"
+        }
+       },
+       {
+        "name": "getFilesize",
+        "params": [
+         {
+          "name": "name",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "integer"
+        }
+       },
+       {
+        "name": "findFile",
+        "params": [
+         {
+          "name": "prefix",
+          "type": "string"
+         },
+         {
+          "name": "suffix",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "string[]"
+        }
+       },
+       {
+        "name": "addUser",
+        "params": [
+         {
+          "name": "userId",
+          "type": "string"
+         },
+         {
+          "name": "capacity",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "boolean"
+        }
+       },
+       {
+        "name": "addFileBy",
+        "params": [
+         {
+          "name": "userId",
+          "type": "string"
+         },
+         {
+          "name": "name",
+          "type": "string"
+         },
+         {
+          "name": "size",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "integer"
+        }
+       },
+       {
+        "name": "mergeUser",
+        "params": [
+         {
+          "name": "userId1",
+          "type": "string"
+         },
+         {
+          "name": "userId2",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "integer"
+        }
+       }
+      ]
+     },
+     "traceAdapter": {
+      "name": "solve",
+      "argument_order": [
+       "operation_names",
+       "argument_lists"
+      ],
+      "constructor_output": null,
+      "void_method_output": null,
+      "result_order": "constructor followed by every method call",
+      "scope": "Explicit class trace adapter, separate from direct native observer checks."
+     }
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-c-20261028-v1/semantics/689e4cd8735253d430dee92e-python.json",
+      "sha256": "5d355eea71f6e77eb80f339f34b32e9c8cbe4934205a778a1e1647ffc606ce39",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "class",
+   "declaration": {
+    "status": "present",
+    "value": "class CloudStorage { constructor(); addFile(name, size) -> boolean; copyFile(nameFrom, nameTo) -> boolean; getFilesize(name) -> integer; findFile(prefix, suffix) -> string[]; addUser(userId, capacity) -> boolean; addFileBy(userId, name, size) -> integer; mergeUser(userId1, userId2) -> integer }",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-c-20261028-v1/contracts.json",
+      "sha256": "e78fecca0c3e7bf1a8160840d3593a2b46fad19339f62eeffe8e39cd701a48c7",
+      "selector": "/problems/20/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-c-20261028-v1/semantics/689e4cd8735253d430dee92e-javascript.json",
+     "inferredInterface": {
+      "classname": "CloudStorage",
+      "constructor": {
+       "params": []
+      },
+      "methods": [
+       {
+        "name": "addFile",
+        "params": [
+         {
+          "name": "name",
+          "type": "string"
+         },
+         {
+          "name": "size",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "boolean"
+        }
+       },
+       {
+        "name": "copyFile",
+        "params": [
+         {
+          "name": "nameFrom",
+          "type": "string"
+         },
+         {
+          "name": "nameTo",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "boolean"
+        }
+       },
+       {
+        "name": "getFilesize",
+        "params": [
+         {
+          "name": "name",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "integer"
+        }
+       },
+       {
+        "name": "findFile",
+        "params": [
+         {
+          "name": "prefix",
+          "type": "string"
+         },
+         {
+          "name": "suffix",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "string[]"
+        }
+       },
+       {
+        "name": "addUser",
+        "params": [
+         {
+          "name": "userId",
+          "type": "string"
+         },
+         {
+          "name": "capacity",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "boolean"
+        }
+       },
+       {
+        "name": "addFileBy",
+        "params": [
+         {
+          "name": "userId",
+          "type": "string"
+         },
+         {
+          "name": "name",
+          "type": "string"
+         },
+         {
+          "name": "size",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "integer"
+        }
+       },
+       {
+        "name": "mergeUser",
+        "params": [
+         {
+          "name": "userId1",
+          "type": "string"
+         },
+         {
+          "name": "userId2",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "integer"
+        }
+       }
+      ]
+     },
+     "traceAdapter": {
+      "name": "solve",
+      "argument_order": [
+       "operation_names",
+       "argument_lists"
+      ],
+      "constructor_output": null,
+      "void_method_output": null,
+      "result_order": "constructor followed by every method call",
+      "scope": "Explicit class trace adapter, separate from direct native observer checks."
+     }
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-c-20261028-v1/semantics/689e4cd8735253d430dee92e-javascript.json",
+      "sha256": "c68ff1dc7c69e51927a34a2844a98cfd2d1be25ebd059959e9717a34c3c0fc53",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-c-20261028-v1/contracts.json",
+    "sha256": "e78fecca0c3e7bf1a8160840d3593a2b46fad19339f62eeffe8e39cd701a48c7",
+    "selector": "/problems/20/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON trace result; no bool/int coercion",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-c-20261028-v1/contracts.json",
+    "sha256": "e78fecca0c3e7bf1a8160840d3593a2b46fad19339f62eeffe8e39cd701a48c7",
+    "selector": "/problems/20/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

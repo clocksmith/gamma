@@ -1,0 +1,40 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:6a7f873dd713d873ca7adc2f",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "heights"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-28"
+ },
+ "inferred_interface": {
+  "name": "assignColumns",
+  "params": [
+   {
+    "name": "heights",
+    "type": "integer[]"
+   }
+  ],
+  "return": {
+   "type": "integer[][]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "generic min-scan over columns",
+  "candidate_design": "two running totals compared directly",
+  "complexity_target": "O(n) time/O(n) output"
+ },
+ "source_sha256": "caac11b2e0a774acb85b7f681ca9fe1e3ededac2e9552b560cbcc6d41d18ecab",
+ "wrapper": "Solution.assignColumns"
+}

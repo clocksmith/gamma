@@ -1,0 +1,82 @@
+{
+ "schema": "gamma.authored-native-trace-semantics.v1",
+ "problem_uid": "hack2hire:6855e42cc201117d348a2630",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "operation_names",
+  "argument_lists"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-28"
+ },
+ "inferred_interface": {
+  "classname": "CustomerRevenueSystem",
+  "constructor": {
+   "params": []
+  },
+  "methods": [
+   {
+    "name": "insert",
+    "params": [
+     {
+      "name": "revenue",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   {
+    "name": "insertWithReferrer",
+    "params": [
+     {
+      "name": "revenue",
+      "type": "integer"
+     },
+     {
+      "name": "referrerId",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   {
+    "name": "getLowestK",
+    "params": [
+     {
+      "name": "k",
+      "type": "integer"
+     },
+     {
+      "name": "minTotal",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "integer[]"
+    }
+   }
+  ]
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON trace result; no bool/int coercion",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "recompute all totals and sort per query",
+  "candidate_design": "sorted array of (total,id) with binary-search insert/remove; scan from lower bound",
+  "complexity_target": "O(n) per update, O(log n + k) per query"
+ },
+ "source_sha256": "2930ae60c798da3dcb4a604e627c864cc8af74ebc24f3f59a80917dc018527c2",
+ "native_class": "CustomerRevenueSystem",
+ "native_symbol": "module global CustomerRevenueSystem"
+}

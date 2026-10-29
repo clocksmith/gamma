@@ -1,0 +1,602 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:67a19b2ab41c4108d8ccb3d3:67a19e53b41c4108d8ccb3d4:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-c-20261028-v1/contracts.json",
+   "sha256": "e78fecca0c3e7bf1a8160840d3593a2b46fad19339f62eeffe8e39cd701a48c7",
+   "selector": "/problems/30"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/67a19b2ab41c4108d8ccb3d3.json",
+   "sha256": "531a80b518886babcb68e77f9800d8ab4c22a004aa675eecf647242f85184abb",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-c-20261028-v1/study-content.json",
+   "sha256": "89e5903398bfbab864a583f3e6d5aa5c4a17c7bf3e81a7d9ed033f603e2d2131",
+   "selector": "/variants/hack2hire:67a19e53b41c4108d8ccb3d4"
+  }
+ ],
+ "problemId": "hack2hire:67a19b2ab41c4108d8ccb3d3",
+ "variantId": "67a19e53b41c4108d8ccb3d4",
+ "variantLabel": {
+  "status": "present",
+  "value": "Variant 1: nested transactions",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-c-20261028-v1/study-content.json",
+    "sha256": "89e5903398bfbab864a583f3e6d5aa5c4a17c7bf3e81a7d9ed033f603e2d2131",
+    "selector": "/variants/hack2hire:67a19e53b41c4108d8ccb3d4/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "InMemoryKVDB(): set(key,value), get(key) -> value or null, delete(key), count(value) -> number of keys with that value, begin() opens a nested transaction, rollback() undoes the innermost open transaction (false if none), commit() makes all open transactions permanent and closes them (false if none).",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-c-20261028-v1/contracts.json",
+    "sha256": "e78fecca0c3e7bf1a8160840d3593a2b46fad19339f62eeffe8e39cd701a48c7",
+    "selector": "/problems/30/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "InMemoryKVDB(): set(key,value), get(key) -> value or null, delete(key), count(value) -> number of keys with that value, begin() opens a nested transaction, rollback() undoes the innermost open transaction (false if none), commit() makes all open transactions permanent and closes them (false if none)."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-c-20261028-v1/contracts.json",
+    "sha256": "e78fecca0c3e7bf1a8160840d3593a2b46fad19339f62eeffe8e39cd701a48c7",
+    "selector": "/problems/30/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "up to 2e4 operations",
+   "keys/values [a-z0-9]{1,8}"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-c-20261028-v1/study-content.json",
+    "sha256": "89e5903398bfbab864a583f3e6d5aa5c4a17c7bf3e81a7d9ed033f603e2d2131",
+    "selector": "/variants/hack2hire:67a19e53b41c4108d8ccb3d4/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-28; it is not the official statement.",
+    "basis": "preview fields used: title; algorithmTags; contentPreview set/get/remove/count plus begin/rollback/commit nested transactions; preview response sha256 034cc7287374995f01c341972ec41a1fe25d1aaaca2a399d591069b33b89bd66"
+   },
+   {
+    "statement": "Uncertainty: medium: operations are stated; method names, return values and commit-all semantics follow the common form and are inferred",
+    "basis": "the public group preview is partial (454 characters, group-level)"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-c-20261028-v1/contracts.json",
+    "sha256": "e78fecca0c3e7bf1a8160840d3593a2b46fad19339f62eeffe8e39cd701a48c7",
+    "selector": "/problems/30/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-c-20261028-v1/contracts.json",
+    "sha256": "e78fecca0c3e7bf1a8160840d3593a2b46fad19339f62eeffe8e39cd701a48c7",
+    "selector": "/problems/30/inference_uncertainty"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "Does commit close only the innermost or all transactions?",
+   "What do rollback/commit return without a transaction?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-c-20261028-v1/study-content.json",
+    "sha256": "89e5903398bfbab864a583f3e6d5aa5c4a17c7bf3e81a7d9ed033f603e2d2131",
+    "selector": "/variants/hack2hire:67a19e53b41c4108d8ccb3d4/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [
+      "InMemoryKVDB",
+      "rollback",
+      "commit",
+      "set",
+      "begin",
+      "set",
+      "begin",
+      "delete",
+      "count",
+      "rollback",
+      "get",
+      "count",
+      "commit",
+      "get",
+      "rollback"
+     ],
+     [
+      [],
+      [],
+      [],
+      [
+       "a",
+       "1"
+      ],
+      [],
+      [
+       "a",
+       "2"
+      ],
+      [],
+      [
+       "a"
+      ],
+      [
+       "2"
+      ],
+      [],
+      [
+       "a"
+      ],
+      [
+       "2"
+      ],
+      [],
+      [
+       "a"
+      ],
+      []
+     ]
+    ],
+    "output": [
+     null,
+     false,
+     false,
+     null,
+     null,
+     null,
+     null,
+     null,
+     0,
+     true,
+     "2",
+     1,
+     true,
+     "2",
+     false
+    ],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      "InMemoryKVDB",
+      "begin",
+      "set",
+      "get",
+      "set",
+      "get",
+      "count",
+      "set",
+      "set",
+      "count",
+      "delete",
+      "rollback",
+      "rollback",
+      "set",
+      "delete",
+      "count",
+      "rollback"
+     ],
+     [
+      [],
+      [],
+      [
+       "c",
+       "2"
+      ],
+      [
+       "d"
+      ],
+      [
+       "c",
+       "1"
+      ],
+      [
+       "c"
+      ],
+      [
+       "3"
+      ],
+      [
+       "c",
+       "2"
+      ],
+      [
+       "b",
+       "1"
+      ],
+      [
+       "1"
+      ],
+      [
+       "d"
+      ],
+      [],
+      [],
+      [
+       "b",
+       "1"
+      ],
+      [
+       "d"
+      ],
+      [
+       "1"
+      ],
+      []
+     ]
+    ],
+    "output": [
+     null,
+     null,
+     null,
+     null,
+     null,
+     "1",
+     0,
+     null,
+     null,
+     1,
+     null,
+     true,
+     false,
+     null,
+     null,
+     1,
+     false
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-c-20261028-v1/study-content.json",
+    "sha256": "89e5903398bfbab864a583f3e6d5aa5c4a17c7bf3e81a7d9ed033f603e2d2131",
+    "selector": "/variants/hack2hire:67a19e53b41c4108d8ccb3d4/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-c-20261028-v1/oracles.py",
+    "sha256": "27fc5c6843f3a2f2bf3b18ade93951a7ea37070a90841f16291f71c163fa53e0",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "class",
+   "declaration": {
+    "status": "present",
+    "value": "class InMemoryKVDB: __init__(self); set(key, value) -> void; get(key) -> string|null; delete(key) -> void; count(value) -> integer; begin() -> void; rollback() -> boolean; commit() -> boolean",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-c-20261028-v1/contracts.json",
+      "sha256": "e78fecca0c3e7bf1a8160840d3593a2b46fad19339f62eeffe8e39cd701a48c7",
+      "selector": "/problems/30/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-c-20261028-v1/semantics/67a19e53b41c4108d8ccb3d4-python.json",
+     "inferredInterface": {
+      "classname": "InMemoryKVDB",
+      "constructor": {
+       "params": []
+      },
+      "methods": [
+       {
+        "name": "set",
+        "params": [
+         {
+          "name": "key",
+          "type": "string"
+         },
+         {
+          "name": "value",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "void"
+        }
+       },
+       {
+        "name": "get",
+        "params": [
+         {
+          "name": "key",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "string|null"
+        }
+       },
+       {
+        "name": "delete",
+        "params": [
+         {
+          "name": "key",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "void"
+        }
+       },
+       {
+        "name": "count",
+        "params": [
+         {
+          "name": "value",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "integer"
+        }
+       },
+       {
+        "name": "begin",
+        "params": [],
+        "return": {
+         "type": "void"
+        }
+       },
+       {
+        "name": "rollback",
+        "params": [],
+        "return": {
+         "type": "boolean"
+        }
+       },
+       {
+        "name": "commit",
+        "params": [],
+        "return": {
+         "type": "boolean"
+        }
+       }
+      ]
+     },
+     "traceAdapter": {
+      "name": "solve",
+      "argument_order": [
+       "operation_names",
+       "argument_lists"
+      ],
+      "constructor_output": null,
+      "void_method_output": null,
+      "result_order": "constructor followed by every method call",
+      "scope": "Explicit class trace adapter, separate from direct native observer checks."
+     }
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-c-20261028-v1/semantics/67a19e53b41c4108d8ccb3d4-python.json",
+      "sha256": "954f0a014cdaa60ae6f2ac2ffe1fe98f4862e7c1bc20359dc1c4b27850547591",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "class",
+   "declaration": {
+    "status": "present",
+    "value": "class InMemoryKVDB { constructor(); set(key, value) -> void; get(key) -> string|null; delete(key) -> void; count(value) -> integer; begin() -> void; rollback() -> boolean; commit() -> boolean }",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-c-20261028-v1/contracts.json",
+      "sha256": "e78fecca0c3e7bf1a8160840d3593a2b46fad19339f62eeffe8e39cd701a48c7",
+      "selector": "/problems/30/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-c-20261028-v1/semantics/67a19e53b41c4108d8ccb3d4-javascript.json",
+     "inferredInterface": {
+      "classname": "InMemoryKVDB",
+      "constructor": {
+       "params": []
+      },
+      "methods": [
+       {
+        "name": "set",
+        "params": [
+         {
+          "name": "key",
+          "type": "string"
+         },
+         {
+          "name": "value",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "void"
+        }
+       },
+       {
+        "name": "get",
+        "params": [
+         {
+          "name": "key",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "string|null"
+        }
+       },
+       {
+        "name": "delete",
+        "params": [
+         {
+          "name": "key",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "void"
+        }
+       },
+       {
+        "name": "count",
+        "params": [
+         {
+          "name": "value",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "integer"
+        }
+       },
+       {
+        "name": "begin",
+        "params": [],
+        "return": {
+         "type": "void"
+        }
+       },
+       {
+        "name": "rollback",
+        "params": [],
+        "return": {
+         "type": "boolean"
+        }
+       },
+       {
+        "name": "commit",
+        "params": [],
+        "return": {
+         "type": "boolean"
+        }
+       }
+      ]
+     },
+     "traceAdapter": {
+      "name": "solve",
+      "argument_order": [
+       "operation_names",
+       "argument_lists"
+      ],
+      "constructor_output": null,
+      "void_method_output": null,
+      "result_order": "constructor followed by every method call",
+      "scope": "Explicit class trace adapter, separate from direct native observer checks."
+     }
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-c-20261028-v1/semantics/67a19e53b41c4108d8ccb3d4-javascript.json",
+      "sha256": "d205221541fc167a26e297c80c198046e64723a6bb1a8d3f2f19b5653af15d4e",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-c-20261028-v1/contracts.json",
+    "sha256": "e78fecca0c3e7bf1a8160840d3593a2b46fad19339f62eeffe8e39cd701a48c7",
+    "selector": "/problems/30/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON trace result; no bool/int coercion",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-c-20261028-v1/contracts.json",
+    "sha256": "e78fecca0c3e7bf1a8160840d3593a2b46fad19339f62eeffe8e39cd701a48c7",
+    "selector": "/problems/30/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

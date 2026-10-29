@@ -1,0 +1,111 @@
+{
+ "candidate_filenames": {
+  "javascript": "program.cjs",
+  "python": "program.py"
+ },
+ "constructor_injection": false,
+ "constructor_arguments": "taken from the trace's first argument list (WindowedKeyValueStore takes capacity and windowSize; TransactionSystem takes accounts and transactions; DocumentLibrary takes documents; all others take none)",
+ "execution_status": "not executed by the isolated judge; runtime hashes and actual isolated source-bound evidence remain required",
+ "expected_outputs_in_sandbox": false,
+ "external_dependencies": {
+  "projects/algorithm_solver/algsolve/judge/sandbox.py": {
+   "copy_bytes_unchanged": true,
+   "sandbox_filename": null,
+   "sha256": "04fe78fcc41dac4c22430d0cacc1d2b40c40daafc2b609ebfe47246030c3fd74"
+  },
+  "projects/algorithm_solver/catalogue/public-domain-qualification-easy16-v1/harness.cjs": {
+   "copy_bytes_unchanged": true,
+   "sandbox_filename": "transport.cjs",
+   "sha256": "2956b35d09f0f58d436308411dbd400ee5a444784f8e2f5bc797ba7dcba29c7f"
+  },
+  "projects/algorithm_solver/catalogue/public-domain-qualification-easy16-v1/harness.py": {
+   "copy_bytes_unchanged": true,
+   "sandbox_filename": "transport.py",
+   "sha256": "a7d6d5c86ac58a05626573de789ad88390e299e4bd82a007590a8484162908f0"
+  }
+ },
+ "functional_routes": {
+  "javascript": "commonjs-function-solve-v1",
+  "python": "global-solve-v1"
+ },
+ "host_only_artifacts": [
+  "oracles.py",
+  "cases.py",
+  "native_protocol.py",
+  "contracts.json",
+  "test_oracles.py",
+  "test_native_observer.py",
+  "expected values and qualification verdicts"
+ ],
+ "host_protocol": "native_protocol.py",
+ "input_packet_schema": "gamma.native-class-transport.v1",
+ "identity_key": "native_problem_uid (string 'hack2hire:<variant id>'), replacing the integer native_problem_id of requested-22-a",
+ "limits_policy": "Reuse existing caller-frozen isolation/resource limits and runtime flags; missing runtime or oversized packet fails closed. No new cap or unsandboxed fallback.",
+ "native_class_by_uid": {
+  "hack2hire:6778936c775a4a31045ead0e": "WindowedKeyValueStore",
+  "hack2hire:67957d70010c9ed2f849b1f9": "TransactionSystem",
+  "hack2hire:67957d75010c9ed2f849b1fa": "TransactionSystem",
+  "hack2hire:6a121534653f4ff494e2c7ea": "CameraLogServer",
+  "hack2hire:689cf810aee746eb1c84ba38": "CloudStorage",
+  "hack2hire:689e4cd5735253d430dee92d": "CloudStorage",
+  "hack2hire:689e4cd8735253d430dee92e": "CloudStorage",
+  "hack2hire:689e4cd9735253d430dee92f": "CloudStorage",
+  "hack2hire:6855e42cc201117d348a2630": "CustomerRevenueSystem",
+  "hack2hire:69445eb8867a3f9f539ff53d": "CustomerRevenueSystem",
+  "hack2hire:68b93d5483188776facc8ff6": "ConnectFour",
+  "hack2hire:67a19e53b41c4108d8ccb3d4": "InMemoryKVDB",
+  "hack2hire:677ae48578175fce2ecdfc0a": "DocumentLibrary"
+ },
+ "void_methods_by_uid": {
+  "hack2hire:6778936c775a4a31045ead0e": [
+   "put"
+  ],
+  "hack2hire:67957d70010c9ed2f849b1f9": [],
+  "hack2hire:67957d75010c9ed2f849b1fa": [],
+  "hack2hire:6a121534653f4ff494e2c7ea": [
+   "requestLog",
+   "sendLog"
+  ],
+  "hack2hire:689cf810aee746eb1c84ba38": [],
+  "hack2hire:689e4cd5735253d430dee92d": [],
+  "hack2hire:689e4cd8735253d430dee92e": [],
+  "hack2hire:689e4cd9735253d430dee92f": [],
+  "hack2hire:6855e42cc201117d348a2630": [],
+  "hack2hire:69445eb8867a3f9f539ff53d": [],
+  "hack2hire:68b93d5483188776facc8ff6": [],
+  "hack2hire:67a19e53b41c4108d8ccb3d4": [
+   "begin",
+   "delete",
+   "set"
+  ],
+  "hack2hire:677ae48578175fce2ecdfc0a": []
+ },
+ "native_route": "direct-class-v1",
+ "observer_filenames": {
+  "javascript": "native_harness.cjs",
+  "python": "native_harness.py"
+ },
+ "sandbox_file_allowlist": {
+  "javascript": [
+   "program.cjs",
+   "native_harness.cjs",
+   "transport.cjs",
+   "inputs.json"
+  ],
+  "python": [
+   "program.py",
+   "native_harness.py",
+   "transport.py",
+   "inputs.json"
+  ]
+ },
+ "schema": "gamma.native-class-observer-bindings.v1",
+ "solve_fallback": false,
+ "void_return_policy": "Void methods must return None/undefined and are normalised to null in the trace; return kinds per method are taken from contracts.json inferred_interface and checked by native_protocol.check",
+ "interface_status": "inferred interfaces; no official class interface is available",
+ "helper_sha256": {
+  "native_harness.cjs": "5f7a64e43ab85c04d28697783203cf14e1261f5bb5316f29121acee4388b30a7",
+  "native_harness.py": "e8da5fb1df748df8a2e56257c853bf4e2f72d98659503f6d6d8b532b868dc9fb",
+  "native_protocol.py": "e77ff91df21deb0548fdca25425cae7ea537a3da22005822b0fc5768fa513af8"
+ }
+}

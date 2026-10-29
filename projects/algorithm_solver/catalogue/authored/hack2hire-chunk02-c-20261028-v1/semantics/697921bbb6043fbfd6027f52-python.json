@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:697921bbb6043fbfd6027f52",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "usageReport",
+  "pricingTable"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-28"
+ },
+ "inferred_interface": {
+  "name": "calculateCost",
+  "params": [
+   {
+    "name": "usageReport",
+    "type": "object"
+   },
+   {
+    "name": "pricingTable",
+    "type": "object"
+   }
+  ],
+  "return": {
+   "type": "{total:string,services:list<[string,string]>}"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "per-hour Fractions then sort",
+  "candidate_design": "scaled-integer tier slices, sort by (-exact cost, name)",
+  "complexity_target": "O(rows + s log s) time/O(s) space"
+ },
+ "source_sha256": "b6d603c4e6e12eff759414b157fda0f792856de3317f1d0977574dffc4d8bb1f",
+ "wrapper": "Solution.calculateCost"
+}

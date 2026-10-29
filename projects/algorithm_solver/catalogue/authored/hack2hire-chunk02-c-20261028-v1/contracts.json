@@ -1,0 +1,2596 @@
+{
+ "schema": "gamma.authored-inferred-contracts.v1",
+ "source_bank": "projects/question_bank/hack2hire/bank.json",
+ "note": "Every spec is inferred from a partial public preview, title and tags; paraphrased, never the official statement.",
+ "problems": [
+  {
+   "uid": "hack2hire:6778936c775a4a31045ead0e",
+   "variant_id": "6778936c775a4a31045ead0e",
+   "variant_ordinal": 1,
+   "title": "Windowed Key-Value Store",
+   "source": {
+    "post_id": "67775e328df5ec401f786db1",
+    "group_title": "Windowed Key-Value Store",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/67775e328df5ec401f786db1",
+    "preview_response_sha256": "c9ac4a18cce040b4cbc09ce4d694f97da5586162022fa7a76fc79f0d3c7aa735",
+    "preview_content_sha256": "8edf71d577cbda42795e6c73a7fafb391cd6bac72372a6b668b411656eaa7a3d",
+    "preview_characters": 846,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/67775e328df5ec401f786db1.json",
+    "algorithm_tags": [
+     "HASH_TABLE",
+     "LINKED_LIST"
+    ],
+    "companies": [
+     "CONFLUENT"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "title",
+    "algorithmTags",
+    "contentPreview constructor and put description (LRU Cache variation)"
+   ],
+   "inferred_spec": "WindowedKeyValueStore(capacity, windowSize). put(key,val,time) updates value and time of an existing key or inserts it; either way the key becomes most recently used; inserting beyond capacity evicts the least recently used key. get(key,time) returns the value if the key is stored and time - storedTime < windowSize (one-minute units), marking it most recently used; otherwise -1 with no change. Expired keys stay until evicted or overwritten. Times are non-decreasing across calls.",
+   "inference_uncertainty": "high: the preview stops before get; the get signature, the window test (strict <), read-refreshes-recency and lazy expiry are inferred",
+   "inferred_interface": {
+    "classname": "WindowedKeyValueStore",
+    "constructor": {
+     "params": [
+      {
+       "name": "capacity",
+       "type": "integer"
+      },
+      {
+       "name": "windowSize",
+       "type": "integer"
+      }
+     ]
+    },
+    "methods": [
+     {
+      "name": "put",
+      "params": [
+       {
+        "name": "key",
+        "type": "integer"
+       },
+       {
+        "name": "val",
+        "type": "integer"
+       },
+       {
+        "name": "time",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "void"
+      }
+     },
+     {
+      "name": "get",
+      "params": [
+       {
+        "name": "key",
+        "type": "integer"
+       },
+       {
+        "name": "time",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "integer"
+      }
+     }
+    ]
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON trace result; no bool/int coercion",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "transcript_interface": {
+    "name": "solve",
+    "argument_order": [
+     "operation_names",
+     "argument_lists"
+    ],
+    "constructor_output": null,
+    "void_method_output": null,
+    "result_order": "constructor followed by every method call",
+    "scope": "Explicit class trace adapter, separate from direct native observer checks."
+   }
+  },
+  {
+   "uid": "hack2hire:697c2d6c9731315964cfb048",
+   "variant_id": "697c2d6c9731315964cfb048",
+   "variant_ordinal": 1,
+   "title": "Accept-Language Header Matching",
+   "source": {
+    "post_id": "697c2d689731315964cfb047",
+    "group_title": "Accept-Language Header Matching",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/697c2d689731315964cfb047",
+    "preview_response_sha256": "f8ac90b6cb162ee5c72e8a0b69630f21cc2b81506f8280e279a381e5bd5d164f",
+    "preview_content_sha256": "43ad4ba9e5d2eb2ea6a6b5abf10c86b0ffc1148a662935ec2992a30b455bd840",
+    "preview_characters": 463,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/697c2d689731315964cfb047.json",
+    "algorithm_tags": [
+     "STRING"
+    ],
+    "companies": [
+     "STRIPE"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 4
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "title",
+    "algorithmTags",
+    "contentPreview header format and preference order"
+   ],
+   "inferred_spec": "Parse a comma-separated Accept-Language header (whitespace around commas ignored) and a list of distinct supported tags. Every header token is a full tag ll-CC. Return the supported tags the header names, in header preference order, each at most once. Matching is exact and case-sensitive.",
+   "inference_uncertainty": "medium: function shape, case-sensitivity and duplicate handling are inferred; follow-up parts are inferred from common progressions",
+   "inferred_interface": {
+    "name": "parseAcceptLanguage",
+    "params": [
+     {
+      "name": "header",
+      "type": "string"
+     },
+     {
+      "name": "supported",
+      "type": "string[]"
+     }
+    ],
+    "return": {
+     "type": "string[]"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers"
+  },
+  {
+   "uid": "hack2hire:697c2f499731315964cfb056",
+   "variant_id": "697c2f499731315964cfb056",
+   "variant_ordinal": 2,
+   "title": "Accept-Language Header Matching",
+   "source": {
+    "post_id": "697c2d689731315964cfb047",
+    "group_title": "Accept-Language Header Matching",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/697c2d689731315964cfb047",
+    "preview_response_sha256": "f8ac90b6cb162ee5c72e8a0b69630f21cc2b81506f8280e279a381e5bd5d164f",
+    "preview_content_sha256": "43ad4ba9e5d2eb2ea6a6b5abf10c86b0ffc1148a662935ec2992a30b455bd840",
+    "preview_characters": 463,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/697c2d689731315964cfb047.json",
+    "algorithm_tags": [
+     "STRING"
+    ],
+    "companies": [
+     "STRIPE"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 4
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "title",
+    "algorithmTags",
+    "contentPreview header format; variant ordinal"
+   ],
+   "inferred_spec": "As variant 1, but a header token may also be a bare language ll. A full-tag token matches only that tag; a bare language matches every supported tag with that language. Walk the header in order; each token appends its not-yet-returned matches in supported-list order.",
+   "inference_uncertainty": "high: variant content is not visible; bare-language expansion order is inferred",
+   "inferred_interface": {
+    "name": "parseAcceptLanguage",
+    "params": [
+     {
+      "name": "header",
+      "type": "string"
+     },
+     {
+      "name": "supported",
+      "type": "string[]"
+     }
+    ],
+    "return": {
+     "type": "string[]"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers"
+  },
+  {
+   "uid": "hack2hire:697c325b9731315964cfb05c",
+   "variant_id": "697c325b9731315964cfb05c",
+   "variant_ordinal": 3,
+   "title": "Accept-Language Header Matching",
+   "source": {
+    "post_id": "697c2d689731315964cfb047",
+    "group_title": "Accept-Language Header Matching",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/697c2d689731315964cfb047",
+    "preview_response_sha256": "f8ac90b6cb162ee5c72e8a0b69630f21cc2b81506f8280e279a381e5bd5d164f",
+    "preview_content_sha256": "43ad4ba9e5d2eb2ea6a6b5abf10c86b0ffc1148a662935ec2992a30b455bd840",
+    "preview_characters": 463,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/697c2d689731315964cfb047.json",
+    "algorithm_tags": [
+     "STRING"
+    ],
+    "companies": [
+     "STRIPE"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 4
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "title",
+    "algorithmTags",
+    "contentPreview header format; variant ordinal"
+   ],
+   "inferred_spec": "As variant 2, plus the wildcard token * which matches every supported tag not yet returned, appended in supported-list order.",
+   "inference_uncertainty": "high: variant content is not visible; wildcard semantics follow common HTTP usage",
+   "inferred_interface": {
+    "name": "parseAcceptLanguage",
+    "params": [
+     {
+      "name": "header",
+      "type": "string"
+     },
+     {
+      "name": "supported",
+      "type": "string[]"
+     }
+    ],
+    "return": {
+     "type": "string[]"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers"
+  },
+  {
+   "uid": "hack2hire:697c341a9731315964cfb061",
+   "variant_id": "697c341a9731315964cfb061",
+   "variant_ordinal": 4,
+   "title": "Accept-Language Header Matching",
+   "source": {
+    "post_id": "697c2d689731315964cfb047",
+    "group_title": "Accept-Language Header Matching",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/697c2d689731315964cfb047",
+    "preview_response_sha256": "f8ac90b6cb162ee5c72e8a0b69630f21cc2b81506f8280e279a381e5bd5d164f",
+    "preview_content_sha256": "43ad4ba9e5d2eb2ea6a6b5abf10c86b0ffc1148a662935ec2992a30b455bd840",
+    "preview_characters": 463,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/697c2d689731315964cfb047.json",
+    "algorithm_tags": [
+     "STRING"
+    ],
+    "companies": [
+     "STRIPE"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 4
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "title",
+    "algorithmTags",
+    "contentPreview header format; variant ordinal"
+   ],
+   "inferred_spec": "As variant 3, plus an optional ;q=<value> quality per token (0..1, up to 3 decimals, default 1). Each supported tag takes the quality of its most specific matching token (exact tag > bare language > *; first such token if repeated). Tags with no matching token or quality 0 are excluded. Order by quality descending, then by the position of the earliest header token matching the tag at all, then supported-list order.",
+   "inference_uncertainty": "high: specificity precedence, q=0 exclusion and tie-break order are inferred (RFC-like)",
+   "inferred_interface": {
+    "name": "parseAcceptLanguage",
+    "params": [
+     {
+      "name": "header",
+      "type": "string"
+     },
+     {
+      "name": "supported",
+      "type": "string[]"
+     }
+    ],
+    "return": {
+     "type": "string[]"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers"
+  },
+  {
+   "uid": "hack2hire:67957d70010c9ed2f849b1f9",
+   "variant_id": "67957d70010c9ed2f849b1f9",
+   "variant_ordinal": 1,
+   "title": "Account Balance Transfer",
+   "source": {
+    "post_id": "6793090c6828628f54397d9a",
+    "group_title": "Account Balance Transfer",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6793090c6828628f54397d9a",
+    "preview_response_sha256": "2c83dcc3e97b429b80a33ddbd7c0d61917f8921dc9ae97dd145ad3622ca59712",
+    "preview_content_sha256": "b2c262b8ac93aba1261b6ed13aca89d8fb82fb0dd792ab331dfbf813713a9ebb",
+    "preview_characters": 295,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/6793090c6828628f54397d9a.json",
+    "algorithm_tags": [
+     "HASH_TABLE"
+    ],
+    "companies": [
+     "COINBASE"
+    ],
+    "source_difficulty": 1,
+    "variant_count": 2
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "title",
+    "algorithmTags",
+    "contentPreview transactions move a percentage of current from-balance; accounts with initial balance"
+   ],
+   "inferred_spec": "TransactionSystem(accounts, transactions): accounts [[name,balance]] with integer balances; transactions [[from,to,percent]] applied in order, each moving floor(balance(from)*percent/100) from from to to. getBalance(name) returns the final balance or -1 for an unknown name; getBalances() returns [[name,balance]] in account input order.",
+   "inference_uncertainty": "high: the preview stops at the class header; integer floor of the percentage, method names and the -1 sentinel are inferred",
+   "inferred_interface": {
+    "classname": "TransactionSystem",
+    "constructor": {
+     "params": [
+      {
+       "name": "accounts",
+       "type": "list<[string,integer]>"
+      },
+      {
+       "name": "transactions",
+       "type": "list<[string,string,integer]>"
+      }
+     ]
+    },
+    "methods": [
+     {
+      "name": "getBalance",
+      "params": [
+       {
+        "name": "name",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "integer"
+      }
+     },
+     {
+      "name": "getBalances",
+      "params": [],
+      "return": {
+       "type": "list<[string,integer]>"
+      }
+     }
+    ]
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON trace result; no bool/int coercion",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "transcript_interface": {
+    "name": "solve",
+    "argument_order": [
+     "operation_names",
+     "argument_lists"
+    ],
+    "constructor_output": null,
+    "void_method_output": null,
+    "result_order": "constructor followed by every method call",
+    "scope": "Explicit class trace adapter, separate from direct native observer checks."
+   }
+  },
+  {
+   "uid": "hack2hire:67957d75010c9ed2f849b1fa",
+   "variant_id": "67957d75010c9ed2f849b1fa",
+   "variant_ordinal": 2,
+   "title": "Account Balance Transfer",
+   "source": {
+    "post_id": "6793090c6828628f54397d9a",
+    "group_title": "Account Balance Transfer",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6793090c6828628f54397d9a",
+    "preview_response_sha256": "2c83dcc3e97b429b80a33ddbd7c0d61917f8921dc9ae97dd145ad3622ca59712",
+    "preview_content_sha256": "b2c262b8ac93aba1261b6ed13aca89d8fb82fb0dd792ab331dfbf813713a9ebb",
+    "preview_characters": 295,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/6793090c6828628f54397d9a.json",
+    "algorithm_tags": [
+     "HASH_TABLE"
+    ],
+    "companies": [
+     "COINBASE"
+    ],
+    "source_difficulty": 1,
+    "variant_count": 2
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "title",
+    "algorithmTags",
+    "contentPreview; variant ordinal"
+   ],
+   "inferred_spec": "Variant 1 plus getBalanceAfter(name,k): the balance of name after only the first k transactions (0 <= k <= number of transactions), -1 for an unknown name.",
+   "inference_uncertainty": "high: the follow-up content is not visible; a historical balance query is an inferred extension",
+   "inferred_interface": {
+    "classname": "TransactionSystem",
+    "constructor": {
+     "params": [
+      {
+       "name": "accounts",
+       "type": "list<[string,integer]>"
+      },
+      {
+       "name": "transactions",
+       "type": "list<[string,string,integer]>"
+      }
+     ]
+    },
+    "methods": [
+     {
+      "name": "getBalance",
+      "params": [
+       {
+        "name": "name",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "integer"
+      }
+     },
+     {
+      "name": "getBalances",
+      "params": [],
+      "return": {
+       "type": "list<[string,integer]>"
+      }
+     },
+     {
+      "name": "getBalanceAfter",
+      "params": [
+       {
+        "name": "name",
+        "type": "string"
+       },
+       {
+        "name": "k",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "integer"
+      }
+     }
+    ]
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON trace result; no bool/int coercion",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "transcript_interface": {
+    "name": "solve",
+    "argument_order": [
+     "operation_names",
+     "argument_lists"
+    ],
+    "constructor_output": null,
+    "void_method_output": null,
+    "result_order": "constructor followed by every method call",
+    "scope": "Explicit class trace adapter, separate from direct native observer checks."
+   }
+  },
+  {
+   "uid": "hack2hire:6a4fae98665efda9311f5607",
+   "variant_id": "6a4fae98665efda9311f5607",
+   "variant_ordinal": 1,
+   "title": "Array Frequency Sort",
+   "source": {
+    "post_id": "6a4fae8d665efda9311f5606",
+    "group_title": "Array Frequency Sort",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6a4fae8d665efda9311f5606",
+    "preview_response_sha256": "5ab00de1fcde3c356583a05f8d41739bd604604d8ebd7ddc4ffefd1f49317cca",
+    "preview_content_sha256": "82b853f3ff69c799b9befebfeeba595d665c03ee35ee668a7c116e5510d0057a",
+    "preview_characters": 452,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/6a4fae8d665efda9311f5606.json",
+    "algorithm_tags": [
+     "ARRAY",
+     "SORTING"
+    ],
+    "companies": [
+     "POINT72"
+    ],
+    "source_difficulty": 1,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "title",
+    "algorithmTags",
+    "contentPreview ordering rule (LeetCode 1636 variation)"
+   ],
+   "inferred_spec": "Return a new array with the values of items ordered by frequency ascending, ties by value ascending (each value repeated as often as it occurs). Input is not modified.",
+   "inference_uncertainty": "low: the preview states both ordering keys; bounds are inferred",
+   "inferred_interface": {
+    "name": "frequencySort",
+    "params": [
+     {
+      "name": "items",
+      "type": "integer[]"
+     }
+    ],
+    "return": {
+     "type": "integer[]"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers"
+  },
+  {
+   "uid": "hack2hire:6a7f873dd713d873ca7adc2f",
+   "variant_id": "6a7f873dd713d873ca7adc2f",
+   "variant_ordinal": 1,
+   "title": "Balance Ads Across Columns",
+   "source": {
+    "post_id": "6a7f83d7d713d873ca7adc07",
+    "group_title": "Balance Ads Across Columns",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6a7f83d7d713d873ca7adc07",
+    "preview_response_sha256": "3ecf8962e5e3d489ca93bd4b686790779b43d4aa27e21bf5371798eaca387643",
+    "preview_content_sha256": "2db8d5e12e67a2474bc068b5063d9f39aa9ca4773ba1b6eae58c467470c4f8ec",
+    "preview_characters": 496,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/6a7f83d7d713d873ca7adc07.json",
+    "algorithm_tags": [
+     "GREEDY",
+     "HEAP"
+    ],
+    "companies": [
+     "PINTEREST"
+    ],
+    "source_difficulty": 1,
+    "variant_count": 2
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "title",
+    "algorithmTags",
+    "contentPreview two-column greedy rule with left tie-break"
+   ],
+   "inferred_spec": "Ads are placed left to right; each goes to the column with the smaller current total height, the left column on ties. Return [leftIndices, rightIndices] (0-based ad indices in placement order).",
+   "inference_uncertainty": "medium: the placement rule is stated; the output shape (index lists) is inferred",
+   "inferred_interface": {
+    "name": "assignColumns",
+    "params": [
+     {
+      "name": "heights",
+      "type": "integer[]"
+     }
+    ],
+    "return": {
+     "type": "integer[][]"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers"
+  },
+  {
+   "uid": "hack2hire:6a7f88b6d713d873ca7adc47",
+   "variant_id": "6a7f88b6d713d873ca7adc47",
+   "variant_ordinal": 2,
+   "title": "Balance Ads Across Columns",
+   "source": {
+    "post_id": "6a7f83d7d713d873ca7adc07",
+    "group_title": "Balance Ads Across Columns",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6a7f83d7d713d873ca7adc07",
+    "preview_response_sha256": "3ecf8962e5e3d489ca93bd4b686790779b43d4aa27e21bf5371798eaca387643",
+    "preview_content_sha256": "2db8d5e12e67a2474bc068b5063d9f39aa9ca4773ba1b6eae58c467470c4f8ec",
+    "preview_characters": 496,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/6a7f83d7d713d873ca7adc07.json",
+    "algorithm_tags": [
+     "GREEDY",
+     "HEAP"
+    ],
+    "companies": [
+     "PINTEREST"
+    ],
+    "source_difficulty": 1,
+    "variant_count": 2
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "title",
+    "algorithmTags HEAP",
+    "contentPreview greedy rule; variant ordinal"
+   ],
+   "inferred_spec": "Generalisation to k columns: each ad goes to the column with the smallest current total, lowest column index on ties. Return k lists of 0-based ad indices.",
+   "inference_uncertainty": "high: the follow-up is not visible; k columns is inferred from the HEAP tag",
+   "inferred_interface": {
+    "name": "assignColumns",
+    "params": [
+     {
+      "name": "heights",
+      "type": "integer[]"
+     },
+     {
+      "name": "k",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "integer[][]"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers"
+  },
+  {
+   "uid": "hack2hire:696feb8db7afade5b30a39ca",
+   "variant_id": "696feb8db7afade5b30a39ca",
+   "variant_ordinal": 1,
+   "title": "Business CSV Data Validator",
+   "source": {
+    "post_id": "696fea94b7afade5b30a39c4",
+    "group_title": "Business CSV Data Validator",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/696fea94b7afade5b30a39c4",
+    "preview_response_sha256": "398eb56416c45c2ffb14d5b5723b97f25bfae0d1de09e549a57e18b85e507ae8",
+    "preview_content_sha256": "2a7039acc84069cf935810cc46b5c4d6031216195ff4f60477aebb900a303d4b",
+    "preview_characters": 854,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/696fea94b7afade5b30a39c4.json",
+    "algorithm_tags": [
+     "STRING",
+     "SIMULATION"
+    ],
+    "companies": [
+     "STRIPE"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "title",
+    "algorithmTags",
+    "contentPreview inputs data (6 columns, header first), forbiddenWords, ignoreWords for cross-column comparison"
+   ],
+   "inferred_spec": "data[0] is a header and is skipped. A data row is valid when: it splits on commas into exactly 6 fields; no field is empty or has leading/trailing spaces; field1 (id) is ASCII alphanumeric and differs from every earlier valid row id; field5 (amount) is a non-negative integer without leading zeros, optionally with exactly two decimals; field6 is a real calendar date YYYY-MM-DD in 1900..2099; fields 2-4 contain no forbidden word (words = maximal lowercase [a-z0-9] runs); and the word sequence of field2 differs from that of field3 after removing ignore words. Return the indices (into data) of valid rows in ascending order.",
+   "inference_uncertainty": "very high: the preview names the inputs but not the column meanings or rules; every rule here is the author's invention consistent with the description",
+   "inferred_interface": {
+    "name": "validateRows",
+    "params": [
+     {
+      "name": "data",
+      "type": "string[]"
+     },
+     {
+      "name": "forbiddenWords",
+      "type": "string[]"
+     },
+     {
+      "name": "ignoreWords",
+      "type": "string[]"
+     }
+    ],
+    "return": {
+     "type": "integer[]"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers"
+  },
+  {
+   "uid": "hack2hire:678314d4d0faf7ec64cc3ad6",
+   "variant_id": "678314d4d0faf7ec64cc3ad6",
+   "variant_ordinal": 1,
+   "title": "Calculate Dasher Salary",
+   "source": {
+    "post_id": "67831497d0faf7ec64cc3ad5",
+    "group_title": "Calculate Dasher Salary",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/67831497d0faf7ec64cc3ad5",
+    "preview_response_sha256": "df0f24e0116152a3e1d107be2fb48043772e81158343b4c383885177f36e5e02",
+    "preview_content_sha256": "e4b0c6698a0048a8af03d820a41dce3d172d3d1f2145e6459d9cc84f896e6b68",
+    "preview_characters": 273,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/67831497d0faf7ec64cc3ad5.json",
+    "algorithm_tags": [
+     "HASH_TABLE"
+    ],
+    "companies": [
+     "DOORDASH"
+    ],
+    "source_difficulty": 1,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "title",
+    "algorithmTags",
+    "contentPreview record fields orderId,timestamp,status and three statuses"
+   ],
+   "inferred_spec": "Records [orderId, \"HH:MM\", status] (any order, one day). Each order has one ACCEPTED record and at most one CANCELED or DELIVERED record at or after it. The dasher earns 30 cents per minute per active delivered order between ACCEPTED and DELIVERED; canceled or unfinished orders earn nothing. Concurrent orders each earn (rate times concurrency). Return total pay in integer cents.",
+   "inference_uncertainty": "high: the pay rate, minute granularity, canceled-order treatment and cents output are inferred",
+   "inferred_interface": {
+    "name": "calculateSalary",
+    "params": [
+     {
+      "name": "records",
+      "type": "list<[string,string,string]>"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers"
+  },
+  {
+   "uid": "hack2hire:6a121534653f4ff494e2c7ea",
+   "variant_id": "6a121534653f4ff494e2c7ea",
+   "variant_ordinal": 1,
+   "title": "Camera Log Relay Server",
+   "source": {
+    "post_id": "6a121524653f4ff494e2c7e9",
+    "group_title": "Camera Log Relay Server",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6a121524653f4ff494e2c7e9",
+    "preview_response_sha256": "156e9c0c4ae3c9a71703385ffba8e5c109be33b18cbfb153496b890b224ecf45",
+    "preview_content_sha256": "ac6486fe6842f580d927b727f7d7166386ac3f222f2c74037403d190304e3d2d",
+    "preview_characters": 513,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/6a121524653f4ff494e2c7e9.json",
+    "algorithm_tags": [
+     "QUEUE",
+     "DESIGN"
+    ],
+    "companies": [
+     "VERKADA"
+    ],
+    "source_difficulty": 1,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "title",
+    "algorithmTags",
+    "contentPreview users request logs, cameras poll commands and send logs; empty command and log queues"
+   ],
+   "inferred_spec": "CameraLogServer(): requestLog(cameraId,timestamp) queues a command; pollCommand(cameraId) removes and returns the oldest pending timestamp for that camera or -1 (non-blocking); sendLog(cameraId,timestamp,log) appends to the log queue; pollLog() removes and returns the oldest log as [cameraId,timestamp,log] or null. Concurrency is modelled as one deterministic linearized sequence of calls; thread safety is out of scope for this exact-trace contract.",
+   "inference_uncertainty": "high: method names, per-camera command routing and the log retrieval API are inferred; real thread-safety cannot be observed by a sequential trace",
+   "inferred_interface": {
+    "classname": "CameraLogServer",
+    "constructor": {
+     "params": []
+    },
+    "methods": [
+     {
+      "name": "requestLog",
+      "params": [
+       {
+        "name": "cameraId",
+        "type": "integer"
+       },
+       {
+        "name": "timestamp",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "void"
+      }
+     },
+     {
+      "name": "pollCommand",
+      "params": [
+       {
+        "name": "cameraId",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "integer"
+      }
+     },
+     {
+      "name": "sendLog",
+      "params": [
+       {
+        "name": "cameraId",
+        "type": "integer"
+       },
+       {
+        "name": "timestamp",
+        "type": "integer"
+       },
+       {
+        "name": "log",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "void"
+      }
+     },
+     {
+      "name": "pollLog",
+      "params": [],
+      "return": {
+       "type": "[integer,integer,string]|null"
+      }
+     }
+    ]
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON trace result; no bool/int coercion",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "transcript_interface": {
+    "name": "solve",
+    "argument_order": [
+     "operation_names",
+     "argument_lists"
+    ],
+    "constructor_output": null,
+    "void_method_output": null,
+    "result_order": "constructor followed by every method call",
+    "scope": "Explicit class trace adapter, separate from direct native observer checks."
+   }
+  },
+  {
+   "uid": "hack2hire:6945c50a2c048134ada834f9",
+   "variant_id": "6945c50a2c048134ada834f9",
+   "variant_ordinal": 1,
+   "title": "Chat Message Range Merge",
+   "source": {
+    "post_id": "6945c23f2c048134ada834f1",
+    "group_title": "Chat Message Range Merge",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6945c23f2c048134ada834f1",
+    "preview_response_sha256": "147209e18a4229bba591cdcb5c452c647a62a7c9c4a6899d49869b1e39e3d9f8",
+    "preview_content_sha256": "f9c3efd7fbe1cdf955db7c26e87bde1bcae1d63ca88a171fcb64b7e5a5705bf5",
+    "preview_characters": 575,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/6945c23f2c048134ada834f1.json",
+    "algorithm_tags": [
+     "HEAP",
+     "DESIGN"
+    ],
+    "companies": [
+     "REDDIT"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 2
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "title",
+    "algorithmTags",
+    "contentPreview Message{id,content} sorted history and a getChatMessages(around id) API"
+   ],
+   "inferred_spec": "messages [[id,content]] sorted by strictly increasing id; queries [[targetId,before,after]] each select the target message plus up to before messages before it and after messages after it (clamped). Return the union as maximal runs of consecutive messages, [[firstId,lastId]] in id order; runs that touch or overlap merge.",
+   "inference_uncertainty": "high: the getChatMessages signature and the output (id ranges) are inferred",
+   "inferred_interface": {
+    "name": "mergeChatRanges",
+    "params": [
+     {
+      "name": "messages",
+      "type": "list<[integer,string]>"
+     },
+     {
+      "name": "queries",
+      "type": "list<[integer,integer,integer]>"
+     }
+    ],
+    "return": {
+     "type": "list<[integer,integer]>"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers"
+  },
+  {
+   "uid": "hack2hire:6945c7632c048134ada834fb",
+   "variant_id": "6945c7632c048134ada834fb",
+   "variant_ordinal": 2,
+   "title": "Chat Message Range Merge",
+   "source": {
+    "post_id": "6945c23f2c048134ada834f1",
+    "group_title": "Chat Message Range Merge",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6945c23f2c048134ada834f1",
+    "preview_response_sha256": "147209e18a4229bba591cdcb5c452c647a62a7c9c4a6899d49869b1e39e3d9f8",
+    "preview_content_sha256": "f9c3efd7fbe1cdf955db7c26e87bde1bcae1d63ca88a171fcb64b7e5a5705bf5",
+    "preview_characters": 575,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/6945c23f2c048134ada834f1.json",
+    "algorithm_tags": [
+     "HEAP",
+     "DESIGN"
+    ],
+    "companies": [
+     "REDDIT"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 2
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "title",
+    "algorithmTags HEAP, DESIGN",
+    "contentPreview sorted message model; variant ordinal"
+   ],
+   "inferred_spec": "pages: several fetched result pages, each a list of [id,content] sorted by strictly increasing id, possibly overlapping (same id always has the same content). Return one deduplicated list sorted by id.",
+   "inference_uncertainty": "high: the follow-up is not visible; k-way merge is inferred from the HEAP tag",
+   "inferred_interface": {
+    "name": "mergePages",
+    "params": [
+     {
+      "name": "pages",
+      "type": "list<list<[integer,string]>>"
+     }
+    ],
+    "return": {
+     "type": "list<[integer,string]>"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers"
+  },
+  {
+   "uid": "hack2hire:6973d4f9a0697bac5fdca7ad",
+   "variant_id": "6973d4f9a0697bac5fdca7ad",
+   "variant_ordinal": 1,
+   "title": "Cloud Service Usage Cost",
+   "source": {
+    "post_id": "6973cad1a0697bac5fdca793",
+    "group_title": "Cloud Service Usage Cost",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6973cad1a0697bac5fdca793",
+    "preview_response_sha256": "ce1396ede94281a91d489da0fb645e7ccb95d0b1095b00479ddeb9038bf57cdf",
+    "preview_content_sha256": "42cebe835470f635afe0db34a4bae9a2f4322bab90cec07bc14bb255174ed929",
+    "preview_characters": 422,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/6973cad1a0697bac5fdca793.json",
+    "algorithm_tags": [
+     "HASH_TABLE"
+    ],
+    "companies": [
+     "STRIPE"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 3
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "title",
+    "algorithmTags",
+    "contentPreview usage_report region/services/hours and regional hourly pricing_table"
+   ],
+   "inferred_spec": "usageReport {region, services:[{service,hours}]} and pricingTable {region:{service:rate}} with rates as decimal strings (up to 4 decimals) and integer hours. Total = sum over report rows of rate*hours for services priced in the report region; unpriced services or an unknown region contribute 0. Return the exact total rounded half-up to cents as \"<dollars>.<cc>\".",
+   "inference_uncertainty": "medium: decimal-string rates, unpriced-service handling and half-up cents are inferred",
+   "inferred_interface": {
+    "name": "calculateCost",
+    "params": [
+     {
+      "name": "usageReport",
+      "type": "object"
+     },
+     {
+      "name": "pricingTable",
+      "type": "object"
+     }
+    ],
+    "return": {
+     "type": "string"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers"
+  },
+  {
+   "uid": "hack2hire:69791ddab6043fbfd6027f47",
+   "variant_id": "69791ddab6043fbfd6027f47",
+   "variant_ordinal": 2,
+   "title": "Cloud Service Usage Cost",
+   "source": {
+    "post_id": "6973cad1a0697bac5fdca793",
+    "group_title": "Cloud Service Usage Cost",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6973cad1a0697bac5fdca793",
+    "preview_response_sha256": "ce1396ede94281a91d489da0fb645e7ccb95d0b1095b00479ddeb9038bf57cdf",
+    "preview_content_sha256": "42cebe835470f635afe0db34a4bae9a2f4322bab90cec07bc14bb255174ed929",
+    "preview_characters": 422,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/6973cad1a0697bac5fdca793.json",
+    "algorithm_tags": [
+     "HASH_TABLE"
+    ],
+    "companies": [
+     "STRIPE"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 3
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "title",
+    "algorithmTags",
+    "contentPreview pricing table; variant ordinal"
+   ],
+   "inferred_spec": "As variant 1, but a rate may instead be a tier list [[upToHours,rate],...,[null,rate]] with strictly increasing limits. Hours for the same service are summed across report rows first; hour h (1-based cumulative) is charged at the first tier whose limit is >= h (null = unbounded). Return the rounded total.",
+   "inference_uncertainty": "high: tier representation and cumulative-per-service tiering are inferred",
+   "inferred_interface": {
+    "name": "calculateCost",
+    "params": [
+     {
+      "name": "usageReport",
+      "type": "object"
+     },
+     {
+      "name": "pricingTable",
+      "type": "object"
+     }
+    ],
+    "return": {
+     "type": "string"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers"
+  },
+  {
+   "uid": "hack2hire:697921bbb6043fbfd6027f52",
+   "variant_id": "697921bbb6043fbfd6027f52",
+   "variant_ordinal": 3,
+   "title": "Cloud Service Usage Cost",
+   "source": {
+    "post_id": "6973cad1a0697bac5fdca793",
+    "group_title": "Cloud Service Usage Cost",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6973cad1a0697bac5fdca793",
+    "preview_response_sha256": "ce1396ede94281a91d489da0fb645e7ccb95d0b1095b00479ddeb9038bf57cdf",
+    "preview_content_sha256": "42cebe835470f635afe0db34a4bae9a2f4322bab90cec07bc14bb255174ed929",
+    "preview_characters": 422,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/6973cad1a0697bac5fdca793.json",
+    "algorithm_tags": [
+     "HASH_TABLE"
+    ],
+    "companies": [
+     "STRIPE"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 3
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "title",
+    "algorithmTags",
+    "contentPreview pricing table; variant ordinal"
+   ],
+   "inferred_spec": "Same pricing as variant 2. Return {\"total\": rounded exact total, \"services\": [[service, cost]]} for priced services that appear, each cost rounded individually, ordered by exact cost descending then service name ascending.",
+   "inference_uncertainty": "high: the breakdown output shape and ordering are inferred",
+   "inferred_interface": {
+    "name": "calculateCost",
+    "params": [
+     {
+      "name": "usageReport",
+      "type": "object"
+     },
+     {
+      "name": "pricingTable",
+      "type": "object"
+     }
+    ],
+    "return": {
+     "type": "{total:string,services:list<[string,string]>}"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers"
+  },
+  {
+   "uid": "hack2hire:689cf810aee746eb1c84ba38",
+   "variant_id": "689cf810aee746eb1c84ba38",
+   "variant_ordinal": 1,
+   "title": "Cloud Storage System",
+   "source": {
+    "post_id": "689cf808aee746eb1c84ba37",
+    "group_title": "Cloud Storage System",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/689cf808aee746eb1c84ba37",
+    "preview_response_sha256": "07c49e10f450e0ddefd83c421b8ee7086adbfdd30e161085b39de00dac582b0c",
+    "preview_content_sha256": "6a0be30d55d4f8a4b26225b69dbcda9cea890bda0b8ea420b3faaf9064edd55e",
+    "preview_characters": 879,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/689cf808aee746eb1c84ba37.json",
+    "algorithm_tags": [
+     "DESIGN"
+    ],
+    "companies": [
+     "ANTHROPIC",
+     "COINBASE",
+     "EBAY",
+     "HUBSPOT",
+     "INSTACART",
+     "RAMP"
+    ],
+    "source_difficulty": 3,
+    "variant_count": 4
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "title",
+    "algorithmTags",
+    "contentPreview addFile/copyFile/getFilesize contracts"
+   ],
+   "inferred_spec": "Flat file store keyed by name. addFile(name,size) succeeds unless the name already exists. copyFile(from,to) succeeds only if from is an existing file and to does not exist; the copy has the same size. getFilesize returns the size or -1. Names are opaque strings; a directory-like name that is not itself a stored file cannot be copied.",
+   "inference_uncertainty": "medium: the level-1 operations are visible; directory semantics are reduced to \"not a stored file\"",
+   "inferred_interface": {
+    "classname": "CloudStorage",
+    "constructor": {
+     "params": []
+    },
+    "methods": [
+     {
+      "name": "addFile",
+      "params": [
+       {
+        "name": "name",
+        "type": "string"
+       },
+       {
+        "name": "size",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "boolean"
+      }
+     },
+     {
+      "name": "copyFile",
+      "params": [
+       {
+        "name": "nameFrom",
+        "type": "string"
+       },
+       {
+        "name": "nameTo",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "boolean"
+      }
+     },
+     {
+      "name": "getFilesize",
+      "params": [
+       {
+        "name": "name",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "integer"
+      }
+     }
+    ]
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON trace result; no bool/int coercion",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "transcript_interface": {
+    "name": "solve",
+    "argument_order": [
+     "operation_names",
+     "argument_lists"
+    ],
+    "constructor_output": null,
+    "void_method_output": null,
+    "result_order": "constructor followed by every method call",
+    "scope": "Explicit class trace adapter, separate from direct native observer checks."
+   }
+  },
+  {
+   "uid": "hack2hire:689e4cd5735253d430dee92d",
+   "variant_id": "689e4cd5735253d430dee92d",
+   "variant_ordinal": 2,
+   "title": "Cloud Storage System",
+   "source": {
+    "post_id": "689cf808aee746eb1c84ba37",
+    "group_title": "Cloud Storage System",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/689cf808aee746eb1c84ba37",
+    "preview_response_sha256": "07c49e10f450e0ddefd83c421b8ee7086adbfdd30e161085b39de00dac582b0c",
+    "preview_content_sha256": "6a0be30d55d4f8a4b26225b69dbcda9cea890bda0b8ea420b3faaf9064edd55e",
+    "preview_characters": 879,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/689cf808aee746eb1c84ba37.json",
+    "algorithm_tags": [
+     "DESIGN"
+    ],
+    "companies": [
+     "ANTHROPIC",
+     "COINBASE",
+     "EBAY",
+     "HUBSPOT",
+     "INSTACART",
+     "RAMP"
+    ],
+    "source_difficulty": 3,
+    "variant_count": 4
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "title",
+    "algorithmTags",
+    "contentPreview level-1 contracts; variant ordinal"
+   ],
+   "inferred_spec": "Variant 1 plus findFile(prefix,suffix): every stored file whose name starts with prefix and ends with suffix, formatted \"name(size)\", ordered by size descending then name ascending.",
+   "inference_uncertainty": "high: findFile is inferred from the common multi-level form of this problem",
+   "inferred_interface": {
+    "classname": "CloudStorage",
+    "constructor": {
+     "params": []
+    },
+    "methods": [
+     {
+      "name": "addFile",
+      "params": [
+       {
+        "name": "name",
+        "type": "string"
+       },
+       {
+        "name": "size",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "boolean"
+      }
+     },
+     {
+      "name": "copyFile",
+      "params": [
+       {
+        "name": "nameFrom",
+        "type": "string"
+       },
+       {
+        "name": "nameTo",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "boolean"
+      }
+     },
+     {
+      "name": "getFilesize",
+      "params": [
+       {
+        "name": "name",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "integer"
+      }
+     },
+     {
+      "name": "findFile",
+      "params": [
+       {
+        "name": "prefix",
+        "type": "string"
+       },
+       {
+        "name": "suffix",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "string[]"
+      }
+     }
+    ]
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON trace result; no bool/int coercion",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "transcript_interface": {
+    "name": "solve",
+    "argument_order": [
+     "operation_names",
+     "argument_lists"
+    ],
+    "constructor_output": null,
+    "void_method_output": null,
+    "result_order": "constructor followed by every method call",
+    "scope": "Explicit class trace adapter, separate from direct native observer checks."
+   }
+  },
+  {
+   "uid": "hack2hire:689e4cd8735253d430dee92e",
+   "variant_id": "689e4cd8735253d430dee92e",
+   "variant_ordinal": 3,
+   "title": "Cloud Storage System",
+   "source": {
+    "post_id": "689cf808aee746eb1c84ba37",
+    "group_title": "Cloud Storage System",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/689cf808aee746eb1c84ba37",
+    "preview_response_sha256": "07c49e10f450e0ddefd83c421b8ee7086adbfdd30e161085b39de00dac582b0c",
+    "preview_content_sha256": "6a0be30d55d4f8a4b26225b69dbcda9cea890bda0b8ea420b3faaf9064edd55e",
+    "preview_characters": 879,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/689cf808aee746eb1c84ba37.json",
+    "algorithm_tags": [
+     "DESIGN"
+    ],
+    "companies": [
+     "ANTHROPIC",
+     "COINBASE",
+     "EBAY",
+     "HUBSPOT",
+     "INSTACART",
+     "RAMP"
+    ],
+    "source_difficulty": 3,
+    "variant_count": 4
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "title",
+    "algorithmTags",
+    "contentPreview level-1 contracts; variant ordinal"
+   ],
+   "inferred_spec": "Variant 2 plus users. addUser(id,capacity) fails if the user exists. addFileBy(user,name,size) stores a file owned by the user if the user exists, the name is free and used+size <= capacity; it returns remaining capacity, otherwise -1. Files from addFile belong to an unlimited admin owner. copyFile charges the source owner and fails if it would exceed that owner's capacity. mergeUser(a,b) (a != b, both exist) moves b's files and capacity to a, deletes b and returns a's remaining capacity, else -1.",
+   "inference_uncertainty": "high: user, capacity and merge semantics are inferred",
+   "inferred_interface": {
+    "classname": "CloudStorage",
+    "constructor": {
+     "params": []
+    },
+    "methods": [
+     {
+      "name": "addFile",
+      "params": [
+       {
+        "name": "name",
+        "type": "string"
+       },
+       {
+        "name": "size",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "boolean"
+      }
+     },
+     {
+      "name": "copyFile",
+      "params": [
+       {
+        "name": "nameFrom",
+        "type": "string"
+       },
+       {
+        "name": "nameTo",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "boolean"
+      }
+     },
+     {
+      "name": "getFilesize",
+      "params": [
+       {
+        "name": "name",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "integer"
+      }
+     },
+     {
+      "name": "findFile",
+      "params": [
+       {
+        "name": "prefix",
+        "type": "string"
+       },
+       {
+        "name": "suffix",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "string[]"
+      }
+     },
+     {
+      "name": "addUser",
+      "params": [
+       {
+        "name": "userId",
+        "type": "string"
+       },
+       {
+        "name": "capacity",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "boolean"
+      }
+     },
+     {
+      "name": "addFileBy",
+      "params": [
+       {
+        "name": "userId",
+        "type": "string"
+       },
+       {
+        "name": "name",
+        "type": "string"
+       },
+       {
+        "name": "size",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "integer"
+      }
+     },
+     {
+      "name": "mergeUser",
+      "params": [
+       {
+        "name": "userId1",
+        "type": "string"
+       },
+       {
+        "name": "userId2",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "integer"
+      }
+     }
+    ]
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON trace result; no bool/int coercion",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "transcript_interface": {
+    "name": "solve",
+    "argument_order": [
+     "operation_names",
+     "argument_lists"
+    ],
+    "constructor_output": null,
+    "void_method_output": null,
+    "result_order": "constructor followed by every method call",
+    "scope": "Explicit class trace adapter, separate from direct native observer checks."
+   }
+  },
+  {
+   "uid": "hack2hire:689e4cd9735253d430dee92f",
+   "variant_id": "689e4cd9735253d430dee92f",
+   "variant_ordinal": 4,
+   "title": "Cloud Storage System",
+   "source": {
+    "post_id": "689cf808aee746eb1c84ba37",
+    "group_title": "Cloud Storage System",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/689cf808aee746eb1c84ba37",
+    "preview_response_sha256": "07c49e10f450e0ddefd83c421b8ee7086adbfdd30e161085b39de00dac582b0c",
+    "preview_content_sha256": "6a0be30d55d4f8a4b26225b69dbcda9cea890bda0b8ea420b3faaf9064edd55e",
+    "preview_characters": 879,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/689cf808aee746eb1c84ba37.json",
+    "algorithm_tags": [
+     "DESIGN"
+    ],
+    "companies": [
+     "ANTHROPIC",
+     "COINBASE",
+     "EBAY",
+     "HUBSPOT",
+     "INSTACART",
+     "RAMP"
+    ],
+    "source_difficulty": 3,
+    "variant_count": 4
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "title",
+    "algorithmTags",
+    "contentPreview level-1 contracts; variant ordinal"
+   ],
+   "inferred_spec": "Variant 3 plus backupUser(id): snapshot the user's files (name,size), replacing any older backup; returns the file count or -1 for an unknown user. restoreUser(id): delete all the user's current files, then re-add backed-up files whose names are currently free; returns the number restored (0 with no backup) or -1. mergeUser discards the merged-away user's backup.",
+   "inference_uncertainty": "high: backup/restore semantics, conflict skipping and merge interaction are inferred",
+   "inferred_interface": {
+    "classname": "CloudStorage",
+    "constructor": {
+     "params": []
+    },
+    "methods": [
+     {
+      "name": "addFile",
+      "params": [
+       {
+        "name": "name",
+        "type": "string"
+       },
+       {
+        "name": "size",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "boolean"
+      }
+     },
+     {
+      "name": "copyFile",
+      "params": [
+       {
+        "name": "nameFrom",
+        "type": "string"
+       },
+       {
+        "name": "nameTo",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "boolean"
+      }
+     },
+     {
+      "name": "getFilesize",
+      "params": [
+       {
+        "name": "name",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "integer"
+      }
+     },
+     {
+      "name": "findFile",
+      "params": [
+       {
+        "name": "prefix",
+        "type": "string"
+       },
+       {
+        "name": "suffix",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "string[]"
+      }
+     },
+     {
+      "name": "addUser",
+      "params": [
+       {
+        "name": "userId",
+        "type": "string"
+       },
+       {
+        "name": "capacity",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "boolean"
+      }
+     },
+     {
+      "name": "addFileBy",
+      "params": [
+       {
+        "name": "userId",
+        "type": "string"
+       },
+       {
+        "name": "name",
+        "type": "string"
+       },
+       {
+        "name": "size",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "integer"
+      }
+     },
+     {
+      "name": "mergeUser",
+      "params": [
+       {
+        "name": "userId1",
+        "type": "string"
+       },
+       {
+        "name": "userId2",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "integer"
+      }
+     },
+     {
+      "name": "backupUser",
+      "params": [
+       {
+        "name": "userId",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "integer"
+      }
+     },
+     {
+      "name": "restoreUser",
+      "params": [
+       {
+        "name": "userId",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "integer"
+      }
+     }
+    ]
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON trace result; no bool/int coercion",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "transcript_interface": {
+    "name": "solve",
+    "argument_order": [
+     "operation_names",
+     "argument_lists"
+    ],
+    "constructor_output": null,
+    "void_method_output": null,
+    "result_order": "constructor followed by every method call",
+    "scope": "Explicit class trace adapter, separate from direct native observer checks."
+   }
+  },
+  {
+   "uid": "hack2hire:69e926affbaf3da641828639",
+   "variant_id": "69e926affbaf3da641828639",
+   "variant_ordinal": 1,
+   "title": "Convert Snake Case to Camel Case",
+   "source": {
+    "post_id": "69e91b59fbaf3da641828611",
+    "group_title": "Convert Snake Case to Camel Case",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/69e91b59fbaf3da641828611",
+    "preview_response_sha256": "fb9f2ed8a103055736b6935d29cc541bab34a5d12dde9fda080b29cce5c873d8",
+    "preview_content_sha256": "6df2689b5a5813c53f84187bdeeb3fbcecb2b4f210dfa90d846418772437ce3d",
+    "preview_characters": 663,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/69e91b59fbaf3da641828611.json",
+    "algorithm_tags": [
+     "STRING"
+    ],
+    "companies": [
+     "EBAY",
+     "RAMP"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "title",
+    "algorithmTags",
+    "contentPreview single-underscore words and leading-underscore preservation"
+   ],
+   "inferred_spec": "Scan src for maximal runs of [A-Za-z0-9_]. A run is snake case when, after removing its leading underscores, it is two or more words joined by single underscores, each word lowercase letters/digits and the first word starting with a letter. Convert such runs to lower camel case (uppercase the first character of each later word, digits unchanged) keeping the leading underscores; leave every other character and run unchanged.",
+   "inference_uncertainty": "medium: the word alphabet, digit handling, trailing/double underscores and token boundaries are inferred",
+   "inferred_interface": {
+    "name": "snakeToCamel",
+    "params": [
+     {
+      "name": "src",
+      "type": "string"
+     }
+    ],
+    "return": {
+     "type": "string"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers"
+  },
+  {
+   "uid": "hack2hire:69a8a9fe4b133b6a8f3a5ef3",
+   "variant_id": "69a8a9fe4b133b6a8f3a5ef3",
+   "variant_ordinal": 1,
+   "title": "Crypto Block Mining",
+   "source": {
+    "post_id": "69a8a9f34b133b6a8f3a5ef1",
+    "group_title": "Crypto Block Mining",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/69a8a9f34b133b6a8f3a5ef1",
+    "preview_response_sha256": "a064785ed1997d39442f1b579a72d2e600741cb1b67c69bfbf757d5b96df1e32",
+    "preview_content_sha256": "d4e5257e1a8fa7af10e2bc5ef005e5488b80f3582dc0ddf2c64ab766d8a7ea89",
+    "preview_characters": 407,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/69a8a9f34b133b6a8f3a5ef1.json",
+    "algorithm_tags": [
+     "GREEDY",
+     "DYNAMIC_PROGRAMMING"
+    ],
+    "companies": [
+     "COINBASE"
+    ],
+    "source_difficulty": 3,
+    "variant_count": 3
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "title",
+    "algorithmTags",
+    "contentPreview maximize fees under blockSize"
+   ],
+   "inferred_spec": "Mempool transactions [id,size,fee] and blockSize. Choose a subset with total size <= blockSize maximizing total fee (0/1 knapsack). Return the maximum fee.",
+   "inference_uncertainty": "medium: the knapsack objective is stated; the input shape and bounds are inferred",
+   "inferred_interface": {
+    "name": "maxFees",
+    "params": [
+     {
+      "name": "transactions",
+      "type": "list<[string,integer,integer]>"
+     },
+     {
+      "name": "blockSize",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers"
+  },
+  {
+   "uid": "hack2hire:69a8acc74b133b6a8f3a5efd",
+   "variant_id": "69a8acc74b133b6a8f3a5efd",
+   "variant_ordinal": 2,
+   "title": "Crypto Block Mining",
+   "source": {
+    "post_id": "69a8a9f34b133b6a8f3a5ef1",
+    "group_title": "Crypto Block Mining",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/69a8a9f34b133b6a8f3a5ef1",
+    "preview_response_sha256": "a064785ed1997d39442f1b579a72d2e600741cb1b67c69bfbf757d5b96df1e32",
+    "preview_content_sha256": "d4e5257e1a8fa7af10e2bc5ef005e5488b80f3582dc0ddf2c64ab766d8a7ea89",
+    "preview_characters": 407,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/69a8a9f34b133b6a8f3a5ef1.json",
+    "algorithm_tags": [
+     "GREEDY",
+     "DYNAMIC_PROGRAMMING"
+    ],
+    "companies": [
+     "COINBASE"
+    ],
+    "source_difficulty": 3,
+    "variant_count": 3
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "title",
+    "algorithmTags",
+    "contentPreview; variant ordinal"
+   ],
+   "inferred_spec": "As variant 1 but return the chosen transaction ids in input order. Ties: maximum fee, then minimum total size, then the lexicographically smallest list of input indices.",
+   "inference_uncertainty": "high: the follow-up is not visible; returning ids and the tie-break chain are inferred",
+   "inferred_interface": {
+    "name": "selectTransactions",
+    "params": [
+     {
+      "name": "transactions",
+      "type": "list<[string,integer,integer]>"
+     },
+     {
+      "name": "blockSize",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "string[]"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers"
+  },
+  {
+   "uid": "hack2hire:69ab56434b133b6a8f3a68a2",
+   "variant_id": "69ab56434b133b6a8f3a68a2",
+   "variant_ordinal": 3,
+   "title": "Crypto Block Mining",
+   "source": {
+    "post_id": "69a8a9f34b133b6a8f3a5ef1",
+    "group_title": "Crypto Block Mining",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/69a8a9f34b133b6a8f3a5ef1",
+    "preview_response_sha256": "a064785ed1997d39442f1b579a72d2e600741cb1b67c69bfbf757d5b96df1e32",
+    "preview_content_sha256": "d4e5257e1a8fa7af10e2bc5ef005e5488b80f3582dc0ddf2c64ab766d8a7ea89",
+    "preview_characters": 407,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/69a8a9f34b133b6a8f3a5ef1.json",
+    "algorithm_tags": [
+     "GREEDY",
+     "DYNAMIC_PROGRAMMING"
+    ],
+    "companies": [
+     "COINBASE"
+    ],
+    "source_difficulty": 3,
+    "variant_count": 3
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "title",
+    "algorithmTags",
+    "contentPreview; variant ordinal"
+   ],
+   "inferred_spec": "Transactions [id,size,fee,parentId|null]: a child may be included only if its parent is included (dependencies form a forest, parents may appear anywhere). Return the maximum total fee within blockSize.",
+   "inference_uncertainty": "high: dependency semantics (child requires parent) are inferred",
+   "inferred_interface": {
+    "name": "maxFeesWithDependencies",
+    "params": [
+     {
+      "name": "transactions",
+      "type": "list<[string,integer,integer,string|null]>"
+     },
+     {
+      "name": "blockSize",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers"
+  },
+  {
+   "uid": "hack2hire:678951e8402dc47b67a14951",
+   "variant_id": "678951e8402dc47b67a14951",
+   "variant_ordinal": 1,
+   "title": "Currency Exchange",
+   "source": {
+    "post_id": "67895195402dc47b67a14950",
+    "group_title": "Currency Exchange",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/67895195402dc47b67a14950",
+    "preview_response_sha256": "b608c9b12a2e8695eab77e75f157dd4259ded5ef273423c1f3df8dc06439ce9e",
+    "preview_content_sha256": "a1343c7d21cc0b1f375762a7eebd6cf8c0ea1ac1800f1aa42b2e98cd85d33072",
+    "preview_characters": 185,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/67895195402dc47b67a14950.json",
+    "algorithm_tags": [
+     "DEPTH_FIRST_SEARCH"
+    ],
+    "companies": [
+     "COINBASE",
+     "OPTIVER",
+     "UBER"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "title",
+    "algorithmTags",
+    "contentPreview currency relationships with exchange values and best exchange rate query"
+   ],
+   "inferred_spec": "rates [[from,to,rate]] are directed conversions with decimal-string rates (up to 4 decimals, > 0) and no arbitrage (every cycle multiplies to at most 1). Return the maximum product of rates along any path from fromCurrency to toCurrency as an exact shortest decimal string; \"1\" when they are equal; \"-1\" when unreachable.",
+   "inference_uncertainty": "high: the preview stops before the assumptions; directed edges, no-arbitrage and exact decimal output are inferred",
+   "inferred_interface": {
+    "name": "bestExchangeRate",
+    "params": [
+     {
+      "name": "rates",
+      "type": "list<[string,string,string]>"
+     },
+     {
+      "name": "fromCurrency",
+      "type": "string"
+     },
+     {
+      "name": "toCurrency",
+      "type": "string"
+     }
+    ],
+    "return": {
+     "type": "string"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers"
+  },
+  {
+   "uid": "hack2hire:6855e42cc201117d348a2630",
+   "variant_id": "6855e42cc201117d348a2630",
+   "variant_ordinal": 1,
+   "title": "Customer Revenue System",
+   "source": {
+    "post_id": "6854486ad887027976facf61",
+    "group_title": "Customer Revenue System",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6854486ad887027976facf61",
+    "preview_response_sha256": "faf38df806cb8b63d36095e1bd33602dd3d3ffef8da03dbcde0772e83deb3ad4",
+    "preview_content_sha256": "deaddb4baa1f4c3f425516ed4af9208a355b18026039c311fd8f2b8658e427e4",
+    "preview_characters": 482,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/6854486ad887027976facf61.json",
+    "algorithm_tags": [
+     "HEAP",
+     "BREADTH_FIRST_SEARCH"
+    ],
+    "companies": [
+     "DATABRICKS"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 2
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "title",
+    "algorithmTags",
+    "contentPreview revenue credited to referrer and referred; total = own + direct referrals"
+   ],
+   "inferred_spec": "CustomerRevenueSystem(): insert(revenue) and insertWithReferrer(revenue, referrerId) create customers with sequential ids from 0 and return the id. A customer's total = own revenue + own revenue of customers they directly referred. getLowestK(k, minTotal) returns up to k ids with total >= minTotal, ordered by total ascending then id ascending.",
+   "inference_uncertainty": "medium: totals follow the preview; method names, >= threshold and tie order are inferred",
+   "inferred_interface": {
+    "classname": "CustomerRevenueSystem",
+    "constructor": {
+     "params": []
+    },
+    "methods": [
+     {
+      "name": "insert",
+      "params": [
+       {
+        "name": "revenue",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "integer"
+      }
+     },
+     {
+      "name": "insertWithReferrer",
+      "params": [
+       {
+        "name": "revenue",
+        "type": "integer"
+       },
+       {
+        "name": "referrerId",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "integer"
+      }
+     },
+     {
+      "name": "getLowestK",
+      "params": [
+       {
+        "name": "k",
+        "type": "integer"
+       },
+       {
+        "name": "minTotal",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "integer[]"
+      }
+     }
+    ]
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON trace result; no bool/int coercion",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "transcript_interface": {
+    "name": "solve",
+    "argument_order": [
+     "operation_names",
+     "argument_lists"
+    ],
+    "constructor_output": null,
+    "void_method_output": null,
+    "result_order": "constructor followed by every method call",
+    "scope": "Explicit class trace adapter, separate from direct native observer checks."
+   }
+  },
+  {
+   "uid": "hack2hire:69445eb8867a3f9f539ff53d",
+   "variant_id": "69445eb8867a3f9f539ff53d",
+   "variant_ordinal": 2,
+   "title": "Customer Revenue System",
+   "source": {
+    "post_id": "6854486ad887027976facf61",
+    "group_title": "Customer Revenue System",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6854486ad887027976facf61",
+    "preview_response_sha256": "faf38df806cb8b63d36095e1bd33602dd3d3ffef8da03dbcde0772e83deb3ad4",
+    "preview_content_sha256": "deaddb4baa1f4c3f425516ed4af9208a355b18026039c311fd8f2b8658e427e4",
+    "preview_characters": 482,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/6854486ad887027976facf61.json",
+    "algorithm_tags": [
+     "HEAP",
+     "BREADTH_FIRST_SEARCH"
+    ],
+    "companies": [
+     "DATABRICKS"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 2
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "title",
+    "algorithmTags HEAP, BREADTH_FIRST_SEARCH",
+    "contentPreview referral model; variant ordinal"
+   ],
+   "inferred_spec": "Variant 1 plus getNestedRevenue(customerId, maxDepth): own revenue plus revenue of every customer in the referral subtree within maxDepth levels (depth 1 = direct referrals).",
+   "inference_uncertainty": "high: the follow-up is not visible; depth-limited BFS is inferred from the BREADTH_FIRST_SEARCH tag",
+   "inferred_interface": {
+    "classname": "CustomerRevenueSystem",
+    "constructor": {
+     "params": []
+    },
+    "methods": [
+     {
+      "name": "insert",
+      "params": [
+       {
+        "name": "revenue",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "integer"
+      }
+     },
+     {
+      "name": "insertWithReferrer",
+      "params": [
+       {
+        "name": "revenue",
+        "type": "integer"
+       },
+       {
+        "name": "referrerId",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "integer"
+      }
+     },
+     {
+      "name": "getLowestK",
+      "params": [
+       {
+        "name": "k",
+        "type": "integer"
+       },
+       {
+        "name": "minTotal",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "integer[]"
+      }
+     },
+     {
+      "name": "getNestedRevenue",
+      "params": [
+       {
+        "name": "customerId",
+        "type": "integer"
+       },
+       {
+        "name": "maxDepth",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "integer"
+      }
+     }
+    ]
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON trace result; no bool/int coercion",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "transcript_interface": {
+    "name": "solve",
+    "argument_order": [
+     "operation_names",
+     "argument_lists"
+    ],
+    "constructor_output": null,
+    "void_method_output": null,
+    "result_order": "constructor followed by every method call",
+    "scope": "Explicit class trace adapter, separate from direct native observer checks."
+   }
+  },
+  {
+   "uid": "hack2hire:68b93d5483188776facc8ff6",
+   "variant_id": "68b93d5483188776facc8ff6",
+   "variant_ordinal": 1,
+   "title": "Design Connect Four",
+   "source": {
+    "post_id": "68b93a9883188776facc8ff5",
+    "group_title": "Design Connect Four",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/68b93a9883188776facc8ff5",
+    "preview_response_sha256": "fecc5172e24b4eff766e72e66c154b289a8f40021f4d4e8b78ac0daf98d80c78",
+    "preview_content_sha256": "4eb7b2b7b3e96356a31c0cbc020da696e884a190c53fb1f7eccaeec2ccc9bcd1",
+    "preview_characters": 688,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/68b93a9883188776facc8ff5.json",
+    "algorithm_tags": [
+     "SIMULATION"
+    ],
+    "companies": [
+     "AIRBNB",
+     "JANE_STREET",
+     "SQUARE"
+    ],
+    "source_difficulty": 3,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "title",
+    "algorithmTags",
+    "contentPreview 6x7 board, A and B alternate, lowest cell, four in a row, draw"
+   ],
+   "inferred_spec": "ConnectFour() on a 6x7 board; A moves first and players alternate. play(column) drops a disc in 0-based column. Returns \"INVALID\" (column out of range, column full, or game already over; turn not consumed), \"A_WINS\"/\"B_WINS\" when the move makes four in a row horizontally, vertically or diagonally, \"DRAW\" when the board fills without a winner, else \"ONGOING\".",
+   "inference_uncertainty": "medium: rules are stated; the method name, 0-based columns and result strings are inferred",
+   "inferred_interface": {
+    "classname": "ConnectFour",
+    "constructor": {
+     "params": []
+    },
+    "methods": [
+     {
+      "name": "play",
+      "params": [
+       {
+        "name": "column",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "string"
+      }
+     }
+    ]
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON trace result; no bool/int coercion",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "transcript_interface": {
+    "name": "solve",
+    "argument_order": [
+     "operation_names",
+     "argument_lists"
+    ],
+    "constructor_output": null,
+    "void_method_output": null,
+    "result_order": "constructor followed by every method call",
+    "scope": "Explicit class trace adapter, separate from direct native observer checks."
+   }
+  },
+  {
+   "uid": "hack2hire:67a19e53b41c4108d8ccb3d4",
+   "variant_id": "67a19e53b41c4108d8ccb3d4",
+   "variant_ordinal": 1,
+   "title": "Design In-Memory Key-Value Database",
+   "source": {
+    "post_id": "67a19b2ab41c4108d8ccb3d3",
+    "group_title": "Design In-Memory Key-Value Database",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/67a19b2ab41c4108d8ccb3d3",
+    "preview_response_sha256": "034cc7287374995f01c341972ec41a1fe25d1aaaca2a399d591069b33b89bd66",
+    "preview_content_sha256": "30b4464f45d7d446cc0d265826684912c614feddb84efe09dc969b065c19794e",
+    "preview_characters": 454,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/67a19b2ab41c4108d8ccb3d3.json",
+    "algorithm_tags": [
+     "DESIGN",
+     "HASH_TABLE"
+    ],
+    "companies": [
+     "LYFT"
+    ],
+    "source_difficulty": 3,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "title",
+    "algorithmTags",
+    "contentPreview set/get/remove/count plus begin/rollback/commit nested transactions"
+   ],
+   "inferred_spec": "InMemoryKVDB(): set(key,value), get(key) -> value or null, delete(key), count(value) -> number of keys with that value, begin() opens a nested transaction, rollback() undoes the innermost open transaction (false if none), commit() makes all open transactions permanent and closes them (false if none).",
+   "inference_uncertainty": "medium: operations are stated; method names, return values and commit-all semantics follow the common form and are inferred",
+   "inferred_interface": {
+    "classname": "InMemoryKVDB",
+    "constructor": {
+     "params": []
+    },
+    "methods": [
+     {
+      "name": "set",
+      "params": [
+       {
+        "name": "key",
+        "type": "string"
+       },
+       {
+        "name": "value",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "void"
+      }
+     },
+     {
+      "name": "get",
+      "params": [
+       {
+        "name": "key",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "string|null"
+      }
+     },
+     {
+      "name": "delete",
+      "params": [
+       {
+        "name": "key",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "void"
+      }
+     },
+     {
+      "name": "count",
+      "params": [
+       {
+        "name": "value",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "integer"
+      }
+     },
+     {
+      "name": "begin",
+      "params": [],
+      "return": {
+       "type": "void"
+      }
+     },
+     {
+      "name": "rollback",
+      "params": [],
+      "return": {
+       "type": "boolean"
+      }
+     },
+     {
+      "name": "commit",
+      "params": [],
+      "return": {
+       "type": "boolean"
+      }
+     }
+    ]
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON trace result; no bool/int coercion",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "transcript_interface": {
+    "name": "solve",
+    "argument_order": [
+     "operation_names",
+     "argument_lists"
+    ],
+    "constructor_output": null,
+    "void_method_output": null,
+    "result_order": "constructor followed by every method call",
+    "scope": "Explicit class trace adapter, separate from direct native observer checks."
+   }
+  },
+  {
+   "uid": "hack2hire:677ae48578175fce2ecdfc0a",
+   "variant_id": "677ae48578175fce2ecdfc0a",
+   "variant_ordinal": 1,
+   "title": "Design Inverted Index",
+   "source": {
+    "post_id": "6779fd08dcf91f8e3c1c3111",
+    "group_title": "Design Inverted Index",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6779fd08dcf91f8e3c1c3111",
+    "preview_response_sha256": "501726263649f11801d8b4509107974d8ff669352475d077d97706b6cefd4618",
+    "preview_content_sha256": "5c876cb360388cd7f77615ba1a67f40b5db8a1cbd71704d14a96cc92111bfd36",
+    "preview_characters": 547,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/6779fd08dcf91f8e3c1c3111.json",
+    "algorithm_tags": [
+     "STRING",
+     "HASH_TABLE"
+    ],
+    "companies": [
+     "CONFLUENT"
+    ],
+    "source_difficulty": 3,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "title",
+    "algorithmTags",
+    "contentPreview DocumentLibrary(documents), search(phrase) case-insensitive"
+   ],
+   "inferred_spec": "DocumentLibrary(documents [[id,text]]). Text is split into lowercase words (maximal [a-z0-9] runs). search(phrase) returns ids (in document input order) of documents containing the phrase's words as a consecutive sequence; a phrase with no words returns [].",
+   "inference_uncertainty": "medium: case-insensitive phrase search is stated; tokenization and ordering are inferred",
+   "inferred_interface": {
+    "classname": "DocumentLibrary",
+    "constructor": {
+     "params": [
+      {
+       "name": "documents",
+       "type": "list<[string,string]>"
+      }
+     ]
+    },
+    "methods": [
+     {
+      "name": "search",
+      "params": [
+       {
+        "name": "phrase",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "string[]"
+      }
+     }
+    ]
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON trace result; no bool/int coercion",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "transcript_interface": {
+    "name": "solve",
+    "argument_order": [
+     "operation_names",
+     "argument_lists"
+    ],
+    "constructor_output": null,
+    "void_method_output": null,
+    "result_order": "constructor followed by every method call",
+    "scope": "Explicit class trace adapter, separate from direct native observer checks."
+   }
+  }
+ ]
+}

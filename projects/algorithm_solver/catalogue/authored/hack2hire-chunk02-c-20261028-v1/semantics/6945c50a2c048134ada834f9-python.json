@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:6945c50a2c048134ada834f9",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "messages",
+  "queries"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-28"
+ },
+ "inferred_interface": {
+  "name": "mergeChatRanges",
+  "params": [
+   {
+    "name": "messages",
+    "type": "list<[integer,string]>"
+   },
+   {
+    "name": "queries",
+    "type": "list<[integer,integer,integer]>"
+   }
+  ],
+  "return": {
+   "type": "list<[integer,integer]>"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "mark coverage per message index",
+  "candidate_design": "id->index map, index intervals sorted and merged",
+  "complexity_target": "O(n + q log q) time/O(n+q) space"
+ },
+ "source_sha256": "a106e16ba9db99838cd45c5a7ed5f3bce4700f74e43b403055d4b2850be271a8",
+ "wrapper": "Solution.mergeChatRanges"
+}
