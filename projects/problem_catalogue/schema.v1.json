@@ -1,0 +1,4196 @@
+{
+  "$defs": {
+    "Admission": {
+      "additionalProperties": false,
+      "properties": {
+        "contract": {
+          "$ref": "#/$defs/Ref"
+        },
+        "decidedAt": {
+          "type": "string"
+        },
+        "decidedBy": {
+          "type": "string"
+        },
+        "decision": {
+          "enum": [
+            "approved",
+            "rejected",
+            "blocked",
+            "retired"
+          ]
+        },
+        "evidence": {
+          "items": {
+            "$ref": "#/$defs/Ref"
+          },
+          "type": "array"
+        },
+        "explanation": {
+          "type": "string"
+        },
+        "id": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "kind": {
+          "const": "admission"
+        },
+        "limitations": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "origin": {
+          "items": {
+            "$ref": "#/$defs/SourcePointer"
+          },
+          "minItems": 1,
+          "type": "array"
+        },
+        "purpose": {
+          "enum": [
+            "observer-reference",
+            "solver-reference",
+            "study-publication",
+            "simulation-execution",
+            "deployment-release"
+          ]
+        },
+        "schema": {
+          "const": "study.record.v1"
+        },
+        "target": {
+          "$ref": "#/$defs/Ref"
+        },
+        "version": {
+          "minimum": 1,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "kind",
+        "id",
+        "version",
+        "schema",
+        "origin",
+        "target",
+        "contract",
+        "purpose",
+        "decision",
+        "decidedBy",
+        "decidedAt",
+        "evidence",
+        "explanation",
+        "limitations"
+      ],
+      "type": "object"
+    },
+    "Approach": {
+      "additionalProperties": false,
+      "properties": {
+        "chooseWhen": {
+          "$ref": "#/$defs/ListField"
+        },
+        "contract": {
+          "$ref": "#/$defs/Ref"
+        },
+        "explanation": {
+          "$ref": "#/$defs/TextField"
+        },
+        "hints": {
+          "$ref": "#/$defs/ListField"
+        },
+        "id": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "invariants": {
+          "$ref": "#/$defs/ListField"
+        },
+        "kind": {
+          "const": "approach"
+        },
+        "native": {
+          "$ref": "#/$defs/Ref"
+        },
+        "origin": {
+          "items": {
+            "$ref": "#/$defs/SourcePointer"
+          },
+          "minItems": 1,
+          "type": "array"
+        },
+        "problemId": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "representation": {
+          "enum": [
+            "coding",
+            "conceptual-design",
+            "simulation",
+            "unknown"
+          ]
+        },
+        "schema": {
+          "const": "study.record.v1"
+        },
+        "sequenceStatus": {
+          "enum": [
+            "imported",
+            "draft",
+            "study-ready"
+          ]
+        },
+        "stages": {
+          "items": {
+            "$ref": "#/$defs/Stage"
+          },
+          "type": "array"
+        },
+        "title": {
+          "$ref": "#/$defs/TextField"
+        },
+        "tradeoffs": {
+          "$ref": "#/$defs/ListField"
+        },
+        "version": {
+          "minimum": 1,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "kind",
+        "id",
+        "version",
+        "schema",
+        "origin",
+        "problemId",
+        "contract",
+        "title",
+        "representation",
+        "explanation",
+        "chooseWhen",
+        "tradeoffs",
+        "invariants",
+        "hints",
+        "stages",
+        "sequenceStatus",
+        "native"
+      ],
+      "type": "object"
+    },
+    "ArchitectureCommand": {
+      "oneOf": [
+        {
+          "additionalProperties": false,
+          "properties": {
+            "node": {
+              "$ref": "#/$defs/ArchitectureNode"
+            },
+            "op": {
+              "const": "insert"
+            },
+            "positions": {
+              "additionalProperties": {
+                "$ref": "#/$defs/GraphPosition"
+              },
+              "type": "object"
+            }
+          },
+          "required": [
+            "op",
+            "node"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "nodeId": {
+              "type": "string"
+            },
+            "op": {
+              "const": "remove"
+            }
+          },
+          "required": [
+            "op",
+            "nodeId"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "edge": {
+              "$ref": "#/$defs/ArchitectureEdge"
+            },
+            "op": {
+              "const": "connect"
+            }
+          },
+          "required": [
+            "op",
+            "edge"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "edgeId": {
+              "type": "string"
+            },
+            "op": {
+              "const": "disconnect"
+            }
+          },
+          "required": [
+            "op",
+            "edgeId"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "edge": {
+              "$ref": "#/$defs/ArchitectureEdge"
+            },
+            "edgeId": {
+              "type": "string"
+            },
+            "op": {
+              "const": "reconnect"
+            },
+            "reason": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "op",
+            "edgeId",
+            "edge",
+            "reason"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "componentId": {
+              "type": "string"
+            },
+            "componentVersion": {
+              "minimum": 1,
+              "type": "integer"
+            },
+            "label": {
+              "type": "string"
+            },
+            "migration": {
+              "type": "string"
+            },
+            "nodeId": {
+              "type": "string"
+            },
+            "op": {
+              "const": "replace"
+            }
+          },
+          "required": [
+            "op",
+            "nodeId",
+            "componentId",
+            "migration"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "boundaryId": {
+              "type": "string"
+            },
+            "edges": {
+              "items": {
+                "$ref": "#/$defs/ArchitectureEdge"
+              },
+              "type": "array"
+            },
+            "nodeId": {
+              "type": "string"
+            },
+            "nodes": {
+              "items": {
+                "$ref": "#/$defs/ArchitectureNode"
+              },
+              "type": "array"
+            },
+            "op": {
+              "const": "expand"
+            },
+            "positions": {
+              "additionalProperties": {
+                "additionalProperties": {
+                  "$ref": "#/$defs/GraphPosition"
+                },
+                "type": "object"
+              },
+              "type": "object"
+            }
+          },
+          "required": [
+            "op",
+            "nodeId",
+            "boundaryId",
+            "nodes",
+            "edges"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "boundaryId": {
+              "type": "string"
+            },
+            "nodeId": {
+              "type": "string"
+            },
+            "op": {
+              "const": "rebind"
+            },
+            "reason": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "op",
+            "nodeId",
+            "boundaryId",
+            "reason"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "node": {
+              "$ref": "#/$defs/ArchitectureNode"
+            },
+            "nodeIds": {
+              "items": {
+                "type": "string"
+              },
+              "minItems": 2,
+              "type": "array",
+              "uniqueItems": true
+            },
+            "op": {
+              "const": "merge"
+            },
+            "positions": {
+              "additionalProperties": {
+                "$ref": "#/$defs/GraphPosition"
+              },
+              "type": "object"
+            },
+            "reason": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "op",
+            "nodeIds",
+            "node",
+            "reason"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "label": {
+              "type": "string"
+            },
+            "nodeId": {
+              "type": "string"
+            },
+            "op": {
+              "const": "relabel"
+            }
+          },
+          "required": [
+            "op",
+            "nodeId",
+            "label"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "groupId": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "nodeId": {
+              "type": "string"
+            },
+            "op": {
+              "const": "regroup"
+            }
+          },
+          "required": [
+            "op",
+            "nodeId"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "groups": {
+              "items": {
+                "$ref": "#/$defs/ArchitectureGroup"
+              },
+              "type": "array"
+            },
+            "op": {
+              "const": "setGroups"
+            }
+          },
+          "required": [
+            "op",
+            "groups"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "nodeId": {
+              "type": "string"
+            },
+            "op": {
+              "const": "move"
+            },
+            "view": {
+              "enum": [
+                "lucyd",
+                "study"
+              ]
+            },
+            "x": {
+              "type": "number"
+            },
+            "y": {
+              "type": "number"
+            }
+          },
+          "required": [
+            "op",
+            "nodeId",
+            "view",
+            "x",
+            "y"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "binding": {
+              "additionalProperties": {},
+              "type": "object"
+            },
+            "nodeId": {
+              "type": "string"
+            },
+            "op": {
+              "const": "bind"
+            }
+          },
+          "required": [
+            "op",
+            "nodeId",
+            "binding"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "nodeId": {
+              "type": "string"
+            },
+            "op": {
+              "const": "unbind"
+            }
+          },
+          "required": [
+            "op",
+            "nodeId"
+          ],
+          "type": "object"
+        }
+      ]
+    },
+    "ArchitectureDefinitions": {
+      "additionalProperties": false,
+      "properties": {
+        "boundaries": {
+          "items": {
+            "$ref": "#/$defs/GraphBoundary"
+          },
+          "type": "array"
+        },
+        "components": {
+          "items": {
+            "$ref": "#/$defs/GraphComponent"
+          },
+          "type": "array"
+        },
+        "contracts": {
+          "items": {
+            "$ref": "#/$defs/GraphContract"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "contracts",
+        "components",
+        "boundaries"
+      ],
+      "type": "object"
+    },
+    "ArchitectureEdge": {
+      "additionalProperties": false,
+      "properties": {
+        "contractId": {
+          "type": "string"
+        },
+        "from": {
+          "$ref": "#/$defs/GraphEndpoint"
+        },
+        "id": {
+          "type": "string"
+        },
+        "label": {
+          "type": "string"
+        },
+        "mode": {
+          "enum": [
+            "request-response",
+            "event-stream",
+            "storage",
+            "local-call",
+            "message"
+          ]
+        },
+        "to": {
+          "$ref": "#/$defs/GraphEndpoint"
+        }
+      },
+      "required": [
+        "id",
+        "from",
+        "to",
+        "contractId",
+        "mode"
+      ],
+      "type": "object"
+    },
+    "ArchitectureGraph": {
+      "additionalProperties": false,
+      "properties": {
+        "edges": {
+          "items": {
+            "$ref": "#/$defs/ArchitectureEdge"
+          },
+          "type": "array"
+        },
+        "groups": {
+          "items": {
+            "$ref": "#/$defs/ArchitectureGroup"
+          },
+          "type": "array"
+        },
+        "nodes": {
+          "items": {
+            "$ref": "#/$defs/ArchitectureNode"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "nodes",
+        "edges",
+        "groups"
+      ],
+      "type": "object"
+    },
+    "ArchitectureGroup": {
+      "additionalProperties": false,
+      "properties": {
+        "capacity": {
+          "minimum": 1,
+          "type": "integer"
+        },
+        "id": {
+          "type": "string"
+        },
+        "kind": {
+          "type": "string"
+        },
+        "label": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "label",
+        "kind"
+      ],
+      "type": "object"
+    },
+    "ArchitectureModel": {
+      "additionalProperties": false,
+      "properties": {
+        "definitions": {
+          "$ref": "#/$defs/ArchitectureDefinitions"
+        },
+        "description": {
+          "type": "string"
+        },
+        "graph": {
+          "$ref": "#/$defs/ArchitectureGraph"
+        },
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "presentation": {
+          "additionalProperties": false,
+          "properties": {
+            "lucyd": {
+              "additionalProperties": {},
+              "type": "object"
+            },
+            "study": {
+              "additionalProperties": {},
+              "type": "object"
+            }
+          },
+          "required": [],
+          "type": "object"
+        },
+        "schema": {
+          "const": "simulatte.architecture.v1"
+        },
+        "simulation": {
+          "type": [
+            "object",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "schema",
+        "id",
+        "name",
+        "definitions",
+        "graph",
+        "simulation",
+        "presentation"
+      ],
+      "type": "object"
+    },
+    "ArchitectureNode": {
+      "additionalProperties": false,
+      "properties": {
+        "boundaryId": {
+          "type": "string"
+        },
+        "componentId": {
+          "type": "string"
+        },
+        "componentVersion": {
+          "minimum": 1,
+          "type": "integer"
+        },
+        "groupId": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "id": {
+          "type": "string"
+        },
+        "label": {
+          "type": "string"
+        },
+        "lineageIds": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "parentId": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "label",
+        "componentId",
+        "componentVersion"
+      ],
+      "type": "object"
+    },
+    "ArchitectureTransition": {
+      "additionalProperties": false,
+      "properties": {
+        "after": {
+          "$ref": "#/$defs/ArchitectureModel"
+        },
+        "before": {
+          "$ref": "#/$defs/ArchitectureModel"
+        },
+        "operations": {
+          "items": {
+            "$ref": "#/$defs/ArchitectureCommand"
+          },
+          "type": "array"
+        },
+        "schema": {
+          "const": "study.architectureTransition.v1"
+        }
+      },
+      "required": [
+        "schema",
+        "before",
+        "operations",
+        "after"
+      ],
+      "type": "object"
+    },
+    "Artifact": {
+      "additionalProperties": false,
+      "properties": {
+        "approachId": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "complexityClaims": {
+          "$ref": "#/$defs/ListField"
+        },
+        "contract": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Ref"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "documentSchema": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "executionKind": {
+          "enum": [
+            "conceptual",
+            "simulation",
+            "code",
+            "reference-only",
+            "unknown"
+          ]
+        },
+        "externalLocator": {
+          "$ref": "#/$defs/JsonField"
+        },
+        "file": {
+          "oneOf": [
+            {
+              "additionalProperties": false,
+              "properties": {
+                "provenance": {
+                  "items": {
+                    "$ref": "#/$defs/SourcePointer"
+                  },
+                  "minItems": 1,
+                  "type": "array"
+                },
+                "status": {
+                  "const": "present"
+                },
+                "value": {
+                  "$ref": "#/$defs/FileRef"
+                }
+              },
+              "required": [
+                "status",
+                "value",
+                "provenance"
+              ],
+              "type": "object"
+            },
+            {
+              "additionalProperties": false,
+              "properties": {
+                "reason": {
+                  "type": "string"
+                },
+                "status": {
+                  "const": "missing"
+                }
+              },
+              "required": [
+                "status",
+                "reason"
+              ],
+              "type": "object"
+            },
+            {
+              "additionalProperties": false,
+              "properties": {
+                "reason": {
+                  "type": "string"
+                },
+                "status": {
+                  "const": "unknown"
+                }
+              },
+              "required": [
+                "status",
+                "reason"
+              ],
+              "type": "object"
+            },
+            {
+              "additionalProperties": false,
+              "properties": {
+                "reason": {
+                  "type": "string"
+                },
+                "status": {
+                  "const": "not-applicable"
+                }
+              },
+              "required": [
+                "status",
+                "reason"
+              ],
+              "type": "object"
+            }
+          ]
+        },
+        "id": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "kind": {
+          "const": "artifact"
+        },
+        "language": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "nativeMetadata": {
+          "$ref": "#/$defs/JsonField"
+        },
+        "origin": {
+          "items": {
+            "$ref": "#/$defs/SourcePointer"
+          },
+          "minItems": 1,
+          "type": "array"
+        },
+        "problemId": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "schema": {
+          "const": "study.record.v1"
+        },
+        "title": {
+          "type": "string"
+        },
+        "type": {
+          "enum": [
+            "implementation",
+            "diagram",
+            "graph-change",
+            "code-change",
+            "api-contract",
+            "workload",
+            "fault-schedule",
+            "test-suite",
+            "check",
+            "runtime",
+            "adapter",
+            "pseudocode",
+            "source-native",
+            "integration-reference"
+          ]
+        },
+        "version": {
+          "minimum": 1,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "kind",
+        "id",
+        "version",
+        "schema",
+        "origin",
+        "type",
+        "title",
+        "problemId",
+        "approachId",
+        "contract",
+        "file",
+        "externalLocator",
+        "language",
+        "documentSchema",
+        "executionKind",
+        "complexityClaims",
+        "nativeMetadata"
+      ],
+      "type": "object"
+    },
+    "Company": {
+      "additionalProperties": false,
+      "properties": {
+        "aliases": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "id": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "kind": {
+          "const": "company"
+        },
+        "name": {
+          "type": "string"
+        },
+        "origin": {
+          "items": {
+            "$ref": "#/$defs/SourcePointer"
+          },
+          "minItems": 1,
+          "type": "array"
+        },
+        "schema": {
+          "const": "study.record.v1"
+        },
+        "version": {
+          "minimum": 1,
+          "type": "integer"
+        },
+        "website": {
+          "$ref": "#/$defs/TextField"
+        }
+      },
+      "required": [
+        "kind",
+        "id",
+        "version",
+        "schema",
+        "origin",
+        "name",
+        "aliases",
+        "website"
+      ],
+      "type": "object"
+    },
+    "CompanyReport": {
+      "additionalProperties": false,
+      "properties": {
+        "attribution": {
+          "enum": [
+            "company-published",
+            "candidate-reported",
+            "aggregator-reported",
+            "authored-practice",
+            "unverified"
+          ]
+        },
+        "claim": {
+          "enum": [
+            "asked-in-interview",
+            "published-practice-question",
+            "company-inspired-practice",
+            "unresolved"
+          ]
+        },
+        "company": {
+          "$ref": "#/$defs/Ref"
+        },
+        "contract": {
+          "$ref": "#/$defs/Ref"
+        },
+        "frequency": {
+          "$ref": "#/$defs/JsonField"
+        },
+        "id": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "kind": {
+          "const": "company-report"
+        },
+        "nativeMetadata": {
+          "$ref": "#/$defs/JsonField"
+        },
+        "origin": {
+          "items": {
+            "$ref": "#/$defs/SourcePointer"
+          },
+          "minItems": 1,
+          "type": "array"
+        },
+        "reportedAt": {
+          "$ref": "#/$defs/TextField"
+        },
+        "role": {
+          "$ref": "#/$defs/TextField"
+        },
+        "schema": {
+          "const": "study.record.v1"
+        },
+        "source": {
+          "$ref": "#/$defs/Ref"
+        },
+        "version": {
+          "minimum": 1,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "kind",
+        "id",
+        "version",
+        "schema",
+        "origin",
+        "company",
+        "contract",
+        "source",
+        "claim",
+        "attribution",
+        "frequency",
+        "reportedAt",
+        "role",
+        "nativeMetadata"
+      ],
+      "type": "object"
+    },
+    "ComposableStudyDocument": {
+      "additionalProperties": false,
+      "description": "Conceptual architecture progression. It does not claim kernel execution or production deployment. Foreign runtime or editor state belongs in a separate workspace envelope, not this authored document.",
+      "properties": {
+        "components": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "extends": {
+                "additionalProperties": false,
+                "properties": {
+                  "id": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "version": {
+                    "minimum": 1,
+                    "type": "integer"
+                  }
+                },
+                "required": [
+                  "id",
+                  "version"
+                ],
+                "type": "object"
+              },
+              "id": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "label": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "ports": {
+                "items": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "contractId": {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "direction": {
+                      "enum": [
+                        "in",
+                        "out"
+                      ]
+                    },
+                    "id": {
+                      "minLength": 1,
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "direction",
+                    "contractId"
+                  ],
+                  "type": "object"
+                },
+                "type": "array"
+              },
+              "responsibility": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "stateOwnership": {
+                "items": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "version": {
+                "const": 1
+              }
+            },
+            "required": [
+              "id",
+              "version",
+              "extends",
+              "label",
+              "responsibility",
+              "stateOwnership",
+              "ports"
+            ],
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "contracts": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "id": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "request": {
+                "additionalProperties": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "minProperties": 1,
+                "type": "object"
+              },
+              "response": {
+                "additionalProperties": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "minProperties": 1,
+                "type": "object"
+              },
+              "version": {
+                "const": 1
+              }
+            },
+            "required": [
+              "id",
+              "version",
+              "request",
+              "response"
+            ],
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "execution": {
+          "additionalProperties": false,
+          "properties": {
+            "implementation": {
+              "type": "null"
+            },
+            "kind": {
+              "const": "conceptual-design"
+            }
+          },
+          "required": [
+            "kind",
+            "implementation"
+          ],
+          "type": "object"
+        },
+        "problem": {
+          "additionalProperties": false,
+          "properties": {
+            "referenceId": {
+              "pattern": "^L[0-9]{3}$",
+              "type": "string"
+            },
+            "requirements": {
+              "items": {
+                "additionalProperties": false,
+                "properties": {
+                  "id": {
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "text": {
+                    "minLength": 1,
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "id",
+                  "text"
+                ],
+                "type": "object"
+              },
+              "type": "array"
+            },
+            "scope": {
+              "minLength": 1,
+              "type": "string"
+            },
+            "studyLabel": {
+              "minLength": 1,
+              "type": "string"
+            }
+          },
+          "required": [
+            "referenceId",
+            "studyLabel",
+            "scope",
+            "requirements"
+          ],
+          "type": "object"
+        },
+        "provenance": {
+          "additionalProperties": false,
+          "properties": {
+            "kind": {
+              "const": "authored-practice"
+            },
+            "note": {
+              "minLength": 1,
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind",
+            "note"
+          ],
+          "type": "object"
+        },
+        "references": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "id": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "scope": {
+                "const": "background"
+              },
+              "supports": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "title": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "url": {
+                "pattern": "^https://",
+                "type": "string"
+              }
+            },
+            "required": [
+              "id",
+              "title",
+              "url",
+              "scope",
+              "supports"
+            ],
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "schema": {
+          "const": "simulatte.composableStudy.v2"
+        },
+        "solutions": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "acceptanceCases": {
+                "items": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "evidence": {
+                      "additionalProperties": false,
+                      "properties": {
+                        "kind": {
+                          "const": "reference-test"
+                        },
+                        "testFile": {
+                          "minLength": 1,
+                          "type": "string"
+                        },
+                        "testName": {
+                          "minLength": 1,
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "kind",
+                        "testFile",
+                        "testName"
+                      ],
+                      "type": "object"
+                    },
+                    "given": {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "id": {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "relatedRequirementIds": {
+                      "items": {
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      "type": "array"
+                    },
+                    "then": {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "when": {
+                      "minLength": 1,
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "given",
+                    "when",
+                    "then",
+                    "relatedRequirementIds"
+                  ],
+                  "type": "object"
+                },
+                "type": "array"
+              },
+              "algorithms": {
+                "items": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "code": {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "guarantees": {
+                      "items": {
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      "type": "array"
+                    },
+                    "id": {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "language": {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "ownerNodeId": {
+                      "minLength": 1,
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "ownerNodeId",
+                    "language",
+                    "code",
+                    "guarantees"
+                  ],
+                  "type": "object"
+                },
+                "type": "array"
+              },
+              "apis": {
+                "items": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "errors": {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "method": {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "ownerNodeId": {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "path": {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "request": {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "response": {
+                      "minLength": 1,
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "method",
+                    "path",
+                    "request",
+                    "response",
+                    "errors",
+                    "ownerNodeId"
+                  ],
+                  "type": "object"
+                },
+                "type": "array"
+              },
+              "assumptions": {
+                "items": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "minItems": 1,
+                "type": "array"
+              },
+              "chooseWhen": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "id": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "initialGraph": {
+                "$ref": "#/$defs/Study_graph"
+              },
+              "stages": {
+                "items": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "checkIds": {
+                      "items": {
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      "minItems": 1,
+                      "type": "array"
+                    },
+                    "code": {
+                      "items": {
+                        "additionalProperties": false,
+                        "properties": {
+                          "id": {
+                            "minLength": 1,
+                            "type": "string"
+                          },
+                          "kind": {
+                            "enum": [
+                              "api",
+                              "pseudocode"
+                            ]
+                          },
+                          "language": {
+                            "minLength": 1,
+                            "type": "string"
+                          },
+                          "text": {
+                            "minLength": 1,
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "kind",
+                          "language",
+                          "text"
+                        ],
+                        "type": "object"
+                      },
+                      "type": "array"
+                    },
+                    "explanation": {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "followupIds": {
+                      "items": {
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      "type": "array"
+                    },
+                    "graph": {
+                      "$ref": "#/$defs/Study_graph"
+                    },
+                    "id": {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "invariants": {
+                      "items": {
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      "minItems": 1,
+                      "type": "array"
+                    },
+                    "notes": {
+                      "items": {
+                        "minLength": 1,
+                        "type": "string"
+                      },
+                      "type": "array"
+                    },
+                    "number": {
+                      "minimum": 1,
+                      "type": "integer"
+                    },
+                    "operations": {
+                      "items": {
+                        "oneOf": [
+                          {
+                            "additionalProperties": false,
+                            "properties": {
+                              "node": {
+                                "$ref": "#/$defs/Study_node"
+                              },
+                              "op": {
+                                "const": "insert"
+                              }
+                            },
+                            "required": [
+                              "op",
+                              "node"
+                            ],
+                            "type": "object"
+                          },
+                          {
+                            "additionalProperties": false,
+                            "properties": {
+                              "edge": {
+                                "$ref": "#/$defs/Study_edge"
+                              },
+                              "op": {
+                                "const": "connect"
+                              }
+                            },
+                            "required": [
+                              "op",
+                              "edge"
+                            ],
+                            "type": "object"
+                          },
+                          {
+                            "additionalProperties": false,
+                            "properties": {
+                              "edgeId": {
+                                "minLength": 1,
+                                "type": "string"
+                              },
+                              "op": {
+                                "const": "disconnect"
+                              }
+                            },
+                            "required": [
+                              "op",
+                              "edgeId"
+                            ],
+                            "type": "object"
+                          },
+                          {
+                            "additionalProperties": false,
+                            "properties": {
+                              "edge": {
+                                "$ref": "#/$defs/Study_edge"
+                              },
+                              "edgeId": {
+                                "minLength": 1,
+                                "type": "string"
+                              },
+                              "op": {
+                                "const": "reconnect"
+                              },
+                              "reason": {
+                                "minLength": 1,
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "op",
+                              "edgeId",
+                              "edge",
+                              "reason"
+                            ],
+                            "type": "object"
+                          },
+                          {
+                            "additionalProperties": false,
+                            "properties": {
+                              "nodeId": {
+                                "minLength": 1,
+                                "type": "string"
+                              },
+                              "op": {
+                                "const": "rebind"
+                              },
+                              "reason": {
+                                "minLength": 1,
+                                "type": "string"
+                              },
+                              "subsystemId": {
+                                "minLength": 1,
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "op",
+                              "nodeId",
+                              "subsystemId",
+                              "reason"
+                            ],
+                            "type": "object"
+                          },
+                          {
+                            "additionalProperties": false,
+                            "properties": {
+                              "definitionId": {
+                                "minLength": 1,
+                                "type": "string"
+                              },
+                              "label": {
+                                "minLength": 1,
+                                "type": "string"
+                              },
+                              "migration": {
+                                "minLength": 1,
+                                "type": "string"
+                              },
+                              "nodeId": {
+                                "minLength": 1,
+                                "type": "string"
+                              },
+                              "op": {
+                                "const": "replace"
+                              }
+                            },
+                            "required": [
+                              "op",
+                              "nodeId",
+                              "definitionId",
+                              "migration"
+                            ],
+                            "type": "object"
+                          },
+                          {
+                            "additionalProperties": false,
+                            "properties": {
+                              "edges": {
+                                "items": {
+                                  "$ref": "#/$defs/Study_edge"
+                                },
+                                "type": "array"
+                              },
+                              "nodeId": {
+                                "minLength": 1,
+                                "type": "string"
+                              },
+                              "nodes": {
+                                "items": {
+                                  "$ref": "#/$defs/Study_node"
+                                },
+                                "type": "array"
+                              },
+                              "op": {
+                                "const": "expand"
+                              },
+                              "subsystemId": {
+                                "minLength": 1,
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "op",
+                              "nodeId",
+                              "subsystemId",
+                              "nodes",
+                              "edges"
+                            ],
+                            "type": "object"
+                          },
+                          {
+                            "additionalProperties": false,
+                            "properties": {
+                              "node": {
+                                "$ref": "#/$defs/Study_node"
+                              },
+                              "nodeIds": {
+                                "items": {
+                                  "minLength": 1,
+                                  "type": "string"
+                                },
+                                "minItems": 2,
+                                "type": "array",
+                                "uniqueItems": true
+                              },
+                              "op": {
+                                "const": "merge"
+                              },
+                              "reason": {
+                                "minLength": 1,
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "op",
+                              "nodeIds",
+                              "node",
+                              "reason"
+                            ],
+                            "type": "object"
+                          }
+                        ]
+                      },
+                      "minItems": 1,
+                      "type": "array"
+                    },
+                    "question": {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "reason": {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "title": {
+                      "minLength": 1,
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "number",
+                    "title",
+                    "question",
+                    "reason",
+                    "operations",
+                    "graph",
+                    "invariants",
+                    "checkIds"
+                  ],
+                  "type": "object"
+                },
+                "minItems": 8,
+                "type": "array"
+              },
+              "title": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "tradeoffs": {
+                "items": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "minItems": 1,
+                "type": "array"
+              }
+            },
+            "required": [
+              "id",
+              "title",
+              "chooseWhen",
+              "tradeoffs",
+              "assumptions",
+              "initialGraph",
+              "stages",
+              "apis",
+              "algorithms",
+              "acceptanceCases"
+            ],
+            "type": "object"
+          },
+          "minItems": 2,
+          "type": "array"
+        },
+        "subsystems": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "definitionId": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "id": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "ports": {
+                "items": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "contractId": {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "direction": {
+                      "enum": [
+                        "in",
+                        "out"
+                      ]
+                    },
+                    "id": {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "target": {
+                      "additionalProperties": false,
+                      "properties": {
+                        "nodeId": {
+                          "minLength": 1,
+                          "type": "string"
+                        },
+                        "portId": {
+                          "minLength": 1,
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "nodeId",
+                        "portId"
+                      ],
+                      "type": "object"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "direction",
+                    "contractId",
+                    "target"
+                  ],
+                  "type": "object"
+                },
+                "type": "array"
+              },
+              "version": {
+                "const": 1
+              }
+            },
+            "required": [
+              "id",
+              "version",
+              "definitionId",
+              "ports"
+            ],
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "version": {
+          "const": 1
+        }
+      },
+      "required": [
+        "schema",
+        "version",
+        "problem",
+        "execution",
+        "provenance",
+        "references",
+        "contracts",
+        "components",
+        "subsystems",
+        "solutions"
+      ],
+      "title": "Lucyd composable interview study problem, version 2",
+      "type": "object"
+    },
+    "ConceptResponsibility": {
+      "additionalProperties": false,
+      "properties": {
+        "binding": {
+          "additionalProperties": false,
+          "properties": {
+            "classId": {
+              "type": "string"
+            },
+            "ports": {
+              "additionalProperties": {
+                "type": "string"
+              },
+              "type": "object"
+            }
+          },
+          "required": [
+            "classId",
+            "ports"
+          ],
+          "type": "object"
+        },
+        "id": {
+          "type": "string"
+        },
+        "label": {
+          "type": "string"
+        },
+        "ports": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "direction": {
+                "enum": [
+                  "in",
+                  "out"
+                ]
+              },
+              "id": {
+                "type": "string"
+              },
+              "payloadType": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "id",
+              "direction",
+              "payloadType"
+            ],
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "responsibility": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "label",
+        "responsibility",
+        "ports"
+      ],
+      "type": "object"
+    },
+    "Contract": {
+      "additionalProperties": false,
+      "properties": {
+        "assumptions": {
+          "$ref": "#/$defs/ListField"
+        },
+        "clarifyingQuestions": {
+          "$ref": "#/$defs/ListField"
+        },
+        "comparison": {
+          "$ref": "#/$defs/JsonField"
+        },
+        "constraints": {
+          "$ref": "#/$defs/ListField"
+        },
+        "contentScope": {
+          "enum": [
+            "full-statement",
+            "preview",
+            "authored",
+            "unknown"
+          ]
+        },
+        "effects": {
+          "$ref": "#/$defs/JsonField"
+        },
+        "examples": {
+          "$ref": "#/$defs/ListField"
+        },
+        "id": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "interfaces": {
+          "items": {
+            "$ref": "#/$defs/Interface"
+          },
+          "type": "array"
+        },
+        "kind": {
+          "const": "contract"
+        },
+        "native": {
+          "items": {
+            "$ref": "#/$defs/Ref"
+          },
+          "type": "array"
+        },
+        "origin": {
+          "items": {
+            "$ref": "#/$defs/SourcePointer"
+          },
+          "minItems": 1,
+          "type": "array"
+        },
+        "problemId": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "requirements": {
+          "$ref": "#/$defs/ListField"
+        },
+        "schema": {
+          "const": "study.record.v1"
+        },
+        "sources": {
+          "items": {
+            "$ref": "#/$defs/Ref"
+          },
+          "type": "array"
+        },
+        "statement": {
+          "$ref": "#/$defs/TextField"
+        },
+        "variantId": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "variantLabel": {
+          "$ref": "#/$defs/TextField"
+        },
+        "version": {
+          "minimum": 1,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "kind",
+        "id",
+        "version",
+        "schema",
+        "origin",
+        "problemId",
+        "variantId",
+        "variantLabel",
+        "statement",
+        "contentScope",
+        "requirements",
+        "constraints",
+        "assumptions",
+        "clarifyingQuestions",
+        "examples",
+        "interfaces",
+        "effects",
+        "comparison",
+        "sources",
+        "native"
+      ],
+      "type": "object"
+    },
+    "EmbeddingEntry": {
+      "additionalProperties": false,
+      "properties": {
+        "chunkOrdinal": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "field": {
+          "type": "string"
+        },
+        "id": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "owner": {
+          "$ref": "#/$defs/Ref"
+        },
+        "purpose": {
+          "enum": [
+            "problem-discovery",
+            "solution-study",
+            "artifact-search"
+          ]
+        },
+        "textSha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "type": "string"
+        },
+        "vectorRow": {
+          "minimum": 0,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "id",
+        "purpose",
+        "owner",
+        "field",
+        "chunkOrdinal",
+        "textSha256",
+        "vectorRow"
+      ],
+      "type": "object"
+    },
+    "EmbeddingIndex": {
+      "additionalProperties": false,
+      "properties": {
+        "access": {
+          "type": "string"
+        },
+        "dimensions": {
+          "minimum": 1,
+          "type": "integer"
+        },
+        "distance": {
+          "enum": [
+            "cosine",
+            "dot-product"
+          ]
+        },
+        "encoderFingerprint": {
+          "pattern": "^[a-f0-9]{64}$",
+          "type": "string"
+        },
+        "encoderIdentity": {
+          "$ref": "#/$defs/EncoderIdentity"
+        },
+        "encoderProgramSha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "type": "string"
+        },
+        "encoding": {
+          "const": "float32-le"
+        },
+        "entries": {
+          "items": {
+            "$ref": "#/$defs/EmbeddingEntry"
+          },
+          "type": "array"
+        },
+        "purpose": {
+          "enum": [
+            "problem-discovery",
+            "solution-study",
+            "artifact-search"
+          ]
+        },
+        "recipe": {
+          "$ref": "#/$defs/EmbeddingRecipe"
+        },
+        "schema": {
+          "const": "study.embedding-index.v1"
+        },
+        "vectors": {
+          "$ref": "#/$defs/FileRef"
+        }
+      },
+      "required": [
+        "schema",
+        "purpose",
+        "encoderFingerprint",
+        "encoderProgramSha256",
+        "encoderIdentity",
+        "recipe",
+        "dimensions",
+        "encoding",
+        "distance",
+        "entries",
+        "vectors",
+        "access"
+      ],
+      "type": "object"
+    },
+    "EmbeddingRecipe": {
+      "additionalProperties": false,
+      "properties": {
+        "chunker": {
+          "const": "codepoint-window-v1"
+        },
+        "maxCharacters": {
+          "const": 1200
+        },
+        "overlapCharacters": {
+          "const": 100
+        }
+      },
+      "required": [
+        "chunker",
+        "maxCharacters",
+        "overlapCharacters"
+      ],
+      "type": "object"
+    },
+    "EmbeddingRelease": {
+      "additionalProperties": false,
+      "properties": {
+        "indexes": {
+          "items": {
+            "$ref": "#/$defs/FileRef"
+          },
+          "type": "array"
+        },
+        "schema": {
+          "const": "study.embedding-release.v1"
+        }
+      },
+      "required": [
+        "schema",
+        "indexes"
+      ],
+      "type": "object"
+    },
+    "EncoderContract": {
+      "additionalProperties": false,
+      "properties": {
+        "command": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "type": "array"
+        },
+        "commandFile": {
+          "type": "string"
+        },
+        "commandFileSha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "type": "string"
+        },
+        "dimensions": {
+          "minimum": 1,
+          "type": "integer"
+        },
+        "encoderIdentity": {
+          "$ref": "#/$defs/EncoderIdentity"
+        },
+        "recipe": {
+          "$ref": "#/$defs/EmbeddingRecipe"
+        },
+        "schema": {
+          "const": "study.encoder-contract.v1"
+        }
+      },
+      "required": [
+        "schema",
+        "command",
+        "commandFile",
+        "commandFileSha256",
+        "encoderIdentity",
+        "recipe",
+        "dimensions"
+      ],
+      "type": "object"
+    },
+    "EncoderIdentity": {
+      "additionalProperties": false,
+      "properties": {
+        "adapterSha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "type": "string"
+        },
+        "documentInstruction": {
+          "type": "string"
+        },
+        "dtype": {
+          "type": "string"
+        },
+        "maxTokens": {
+          "minimum": 1,
+          "type": "integer"
+        },
+        "modelId": {
+          "type": "string"
+        },
+        "modelManifestSha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "type": "string"
+        },
+        "modelRevision": {
+          "type": "string"
+        },
+        "normalization": {
+          "enum": [
+            "none",
+            "l2"
+          ]
+        },
+        "pooling": {
+          "type": "string"
+        },
+        "queryInstruction": {
+          "type": "string"
+        },
+        "runtimeManifestSha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "type": "string"
+        },
+        "tokenizerManifestSha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "type": "string"
+        },
+        "truncation": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "modelId",
+        "modelRevision",
+        "modelManifestSha256",
+        "tokenizerManifestSha256",
+        "adapterSha256",
+        "runtimeManifestSha256",
+        "pooling",
+        "normalization",
+        "dtype",
+        "documentInstruction",
+        "queryInstruction",
+        "maxTokens",
+        "truncation"
+      ],
+      "type": "object"
+    },
+    "Evidence": {
+      "additionalProperties": false,
+      "properties": {
+        "admissionEffect": {
+          "const": "none"
+        },
+        "bindingStatus": {
+          "enum": [
+            "bound",
+            "partial",
+            "unbound"
+          ]
+        },
+        "bindings": {
+          "$ref": "#/$defs/JsonField"
+        },
+        "contract": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Ref"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "id": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "kind": {
+          "const": "evidence"
+        },
+        "limitations": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "method": {
+          "enum": [
+            "historical-report",
+            "execution",
+            "manual-review",
+            "simulation",
+            "measured-operation",
+            "model-generated-suggestion"
+          ]
+        },
+        "origin": {
+          "items": {
+            "$ref": "#/$defs/SourcePointer"
+          },
+          "minItems": 1,
+          "type": "array"
+        },
+        "report": {
+          "$ref": "#/$defs/Ref"
+        },
+        "results": {
+          "$ref": "#/$defs/JsonField"
+        },
+        "schema": {
+          "const": "study.record.v1"
+        },
+        "subjects": {
+          "items": {
+            "$ref": "#/$defs/Ref"
+          },
+          "type": "array"
+        },
+        "version": {
+          "minimum": 1,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "kind",
+        "id",
+        "version",
+        "schema",
+        "origin",
+        "contract",
+        "subjects",
+        "method",
+        "bindingStatus",
+        "bindings",
+        "results",
+        "report",
+        "limitations",
+        "admissionEffect"
+      ],
+      "type": "object"
+    },
+    "FileRef": {
+      "additionalProperties": false,
+      "properties": {
+        "bytes": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "mediaType": {
+          "type": "string"
+        },
+        "path": {
+          "type": "string"
+        },
+        "sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "type": "string"
+        }
+      },
+      "required": [
+        "path",
+        "sha256",
+        "bytes",
+        "mediaType"
+      ],
+      "type": "object"
+    },
+    "GraphBoundary": {
+      "additionalProperties": false,
+      "properties": {
+        "componentId": {
+          "type": "string"
+        },
+        "componentVersion": {
+          "minimum": 1,
+          "type": "integer"
+        },
+        "id": {
+          "type": "string"
+        },
+        "ports": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "contractId": {
+                "type": "string"
+              },
+              "direction": {
+                "enum": [
+                  "in",
+                  "out"
+                ]
+              },
+              "id": {
+                "type": "string"
+              },
+              "target": {
+                "$ref": "#/$defs/GraphEndpoint"
+              }
+            },
+            "required": [
+              "id",
+              "direction",
+              "contractId",
+              "target"
+            ],
+            "type": "object"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "id",
+        "componentId",
+        "componentVersion",
+        "ports"
+      ],
+      "type": "object"
+    },
+    "GraphComponent": {
+      "additionalProperties": true,
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "ports": {
+          "items": {
+            "$ref": "#/$defs/GraphPort"
+          },
+          "type": "array"
+        },
+        "version": {
+          "minimum": 1,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "id",
+        "version"
+      ],
+      "type": "object"
+    },
+    "GraphContract": {
+      "additionalProperties": true,
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "request": {},
+        "response": {},
+        "version": {
+          "minimum": 1,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "id"
+      ],
+      "type": "object"
+    },
+    "GraphEndpoint": {
+      "additionalProperties": false,
+      "properties": {
+        "nodeId": {
+          "type": "string"
+        },
+        "portId": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "nodeId",
+        "portId"
+      ],
+      "type": "object"
+    },
+    "GraphPort": {
+      "additionalProperties": false,
+      "properties": {
+        "contractId": {
+          "type": "string"
+        },
+        "direction": {
+          "enum": [
+            "in",
+            "out"
+          ]
+        },
+        "id": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "direction",
+        "contractId"
+      ],
+      "type": "object"
+    },
+    "GraphPosition": {
+      "additionalProperties": false,
+      "properties": {
+        "x": {
+          "type": "number"
+        },
+        "y": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "x",
+        "y"
+      ],
+      "type": "object"
+    },
+    "Interface": {
+      "additionalProperties": false,
+      "properties": {
+        "declaration": {
+          "oneOf": [
+            {
+              "additionalProperties": false,
+              "properties": {
+                "provenance": {
+                  "items": {
+                    "$ref": "#/$defs/SourcePointer"
+                  },
+                  "minItems": 1,
+                  "type": "array"
+                },
+                "status": {
+                  "const": "present"
+                },
+                "value": {}
+              },
+              "required": [
+                "status",
+                "value",
+                "provenance"
+              ],
+              "type": "object"
+            },
+            {
+              "additionalProperties": false,
+              "properties": {
+                "reason": {
+                  "type": "string"
+                },
+                "status": {
+                  "const": "missing"
+                }
+              },
+              "required": [
+                "status",
+                "reason"
+              ],
+              "type": "object"
+            },
+            {
+              "additionalProperties": false,
+              "properties": {
+                "reason": {
+                  "type": "string"
+                },
+                "status": {
+                  "const": "unknown"
+                }
+              },
+              "required": [
+                "status",
+                "reason"
+              ],
+              "type": "object"
+            },
+            {
+              "additionalProperties": false,
+              "properties": {
+                "reason": {
+                  "type": "string"
+                },
+                "status": {
+                  "const": "not-applicable"
+                }
+              },
+              "required": [
+                "status",
+                "reason"
+              ],
+              "type": "object"
+            }
+          ]
+        },
+        "kind": {
+          "enum": [
+            "function",
+            "class",
+            "sql",
+            "unknown"
+          ]
+        },
+        "language": {
+          "type": "string"
+        },
+        "nativeMetadata": {
+          "$ref": "#/$defs/JsonField"
+        }
+      },
+      "required": [
+        "language",
+        "kind",
+        "declaration",
+        "nativeMetadata"
+      ],
+      "type": "object"
+    },
+    "JsonField": {
+      "oneOf": [
+        {
+          "additionalProperties": false,
+          "properties": {
+            "provenance": {
+              "items": {
+                "$ref": "#/$defs/SourcePointer"
+              },
+              "minItems": 1,
+              "type": "array"
+            },
+            "status": {
+              "const": "present"
+            },
+            "value": {}
+          },
+          "required": [
+            "status",
+            "value",
+            "provenance"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "reason": {
+              "type": "string"
+            },
+            "status": {
+              "const": "missing"
+            }
+          },
+          "required": [
+            "status",
+            "reason"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "reason": {
+              "type": "string"
+            },
+            "status": {
+              "const": "unknown"
+            }
+          },
+          "required": [
+            "status",
+            "reason"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "reason": {
+              "type": "string"
+            },
+            "status": {
+              "const": "not-applicable"
+            }
+          },
+          "required": [
+            "status",
+            "reason"
+          ],
+          "type": "object"
+        }
+      ]
+    },
+    "ListField": {
+      "oneOf": [
+        {
+          "additionalProperties": false,
+          "properties": {
+            "provenance": {
+              "items": {
+                "$ref": "#/$defs/SourcePointer"
+              },
+              "minItems": 1,
+              "type": "array"
+            },
+            "status": {
+              "const": "present"
+            },
+            "value": {
+              "items": {},
+              "type": "array"
+            }
+          },
+          "required": [
+            "status",
+            "value",
+            "provenance"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "reason": {
+              "type": "string"
+            },
+            "status": {
+              "const": "missing"
+            }
+          },
+          "required": [
+            "status",
+            "reason"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "reason": {
+              "type": "string"
+            },
+            "status": {
+              "const": "unknown"
+            }
+          },
+          "required": [
+            "status",
+            "reason"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "reason": {
+              "type": "string"
+            },
+            "status": {
+              "const": "not-applicable"
+            }
+          },
+          "required": [
+            "status",
+            "reason"
+          ],
+          "type": "object"
+        }
+      ]
+    },
+    "Problem": {
+      "additionalProperties": false,
+      "properties": {
+        "aliases": {
+          "items": {},
+          "type": "array"
+        },
+        "approaches": {
+          "items": {
+            "$ref": "#/$defs/Ref"
+          },
+          "type": "array"
+        },
+        "artifacts": {
+          "items": {
+            "$ref": "#/$defs/Ref"
+          },
+          "type": "array"
+        },
+        "companyReports": {
+          "items": {
+            "$ref": "#/$defs/Ref"
+          },
+          "type": "array"
+        },
+        "contracts": {
+          "items": {
+            "$ref": "#/$defs/Ref"
+          },
+          "type": "array"
+        },
+        "difficulty": {
+          "$ref": "#/$defs/JsonField"
+        },
+        "evidence": {
+          "items": {
+            "$ref": "#/$defs/Ref"
+          },
+          "type": "array"
+        },
+        "id": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "identity": {
+          "additionalProperties": false,
+          "properties": {
+            "explanation": {
+              "type": "string"
+            },
+            "status": {
+              "enum": [
+                "source-declared",
+                "reviewed",
+                "unresolved"
+              ]
+            }
+          },
+          "required": [
+            "status",
+            "explanation"
+          ],
+          "type": "object"
+        },
+        "kind": {
+          "const": "problem"
+        },
+        "origin": {
+          "items": {
+            "$ref": "#/$defs/SourcePointer"
+          },
+          "minItems": 1,
+          "type": "array"
+        },
+        "relationships": {
+          "items": {
+            "$ref": "#/$defs/Ref"
+          },
+          "type": "array"
+        },
+        "schema": {
+          "const": "study.record.v1"
+        },
+        "sources": {
+          "items": {
+            "$ref": "#/$defs/Ref"
+          },
+          "type": "array"
+        },
+        "title": {
+          "$ref": "#/$defs/TextField"
+        },
+        "topics": {
+          "$ref": "#/$defs/ListField"
+        },
+        "type": {
+          "enum": [
+            "coding",
+            "system-design",
+            "sql",
+            "ml-design",
+            "ood",
+            "unknown"
+          ]
+        },
+        "version": {
+          "minimum": 1,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "kind",
+        "id",
+        "version",
+        "schema",
+        "origin",
+        "title",
+        "type",
+        "topics",
+        "difficulty",
+        "aliases",
+        "contracts",
+        "approaches",
+        "artifacts",
+        "evidence",
+        "sources",
+        "companyReports",
+        "relationships",
+        "identity"
+      ],
+      "type": "object"
+    },
+    "Ref": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "kind": {
+          "enum": [
+            "problem",
+            "contract",
+            "approach",
+            "artifact",
+            "evidence",
+            "source",
+            "company",
+            "company-report",
+            "relationship",
+            "admission"
+          ]
+        },
+        "path": {
+          "type": "string"
+        },
+        "sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "type": "string"
+        },
+        "version": {
+          "minimum": 1,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "kind",
+        "id",
+        "version",
+        "path",
+        "sha256"
+      ],
+      "type": "object"
+    },
+    "Relationship": {
+      "additionalProperties": false,
+      "properties": {
+        "evidence": {
+          "items": {
+            "$ref": "#/$defs/Ref"
+          },
+          "type": "array"
+        },
+        "explanation": {
+          "type": "string"
+        },
+        "fromContract": {
+          "$ref": "#/$defs/Ref"
+        },
+        "id": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "kind": {
+          "const": "relationship"
+        },
+        "mergeAllowed": {
+          "const": false
+        },
+        "origin": {
+          "items": {
+            "$ref": "#/$defs/SourcePointer"
+          },
+          "minItems": 1,
+          "type": "array"
+        },
+        "relation": {
+          "enum": [
+            "related",
+            "variant-of",
+            "source-cites",
+            "title-match-candidate",
+            "reviewed-contract-equivalent"
+          ]
+        },
+        "schema": {
+          "const": "study.record.v1"
+        },
+        "sources": {
+          "items": {
+            "$ref": "#/$defs/Ref"
+          },
+          "type": "array"
+        },
+        "to": {
+          "$ref": "#/$defs/JsonField"
+        },
+        "version": {
+          "minimum": 1,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "kind",
+        "id",
+        "version",
+        "schema",
+        "origin",
+        "fromContract",
+        "to",
+        "relation",
+        "explanation",
+        "sources",
+        "evidence",
+        "mergeAllowed"
+      ],
+      "type": "object"
+    },
+    "SimulationClass": {
+      "additionalProperties": false,
+      "properties": {
+        "category": {
+          "type": "string"
+        },
+        "defaults": {
+          "additionalProperties": {},
+          "type": "object"
+        },
+        "description": {
+          "type": "string"
+        },
+        "extends": {
+          "type": "string"
+        },
+        "glyph": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        },
+        "label": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "label",
+        "extends",
+        "defaults"
+      ],
+      "type": "object"
+    },
+    "SimulationDiagramV4": {
+      "additionalProperties": false,
+      "properties": {
+        "classes": {
+          "items": {
+            "$ref": "#/$defs/SimulationClass"
+          },
+          "type": "array"
+        },
+        "description": {
+          "type": "string"
+        },
+        "edges": {
+          "items": {
+            "$ref": "#/$defs/SimulationEdge"
+          },
+          "type": "array"
+        },
+        "faults": {
+          "items": {
+            "$ref": "#/$defs/SimulationFault"
+          },
+          "type": "array"
+        },
+        "groups": {
+          "items": {
+            "$ref": "#/$defs/SimulationGroup"
+          },
+          "type": "array"
+        },
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "nodes": {
+          "items": {
+            "$ref": "#/$defs/SimulationNode"
+          },
+          "type": "array"
+        },
+        "notes": {
+          "items": {
+            "$ref": "#/$defs/SimulationNote"
+          },
+          "type": "array"
+        },
+        "run": {
+          "additionalProperties": false,
+          "properties": {
+            "horizonSec": {
+              "exclusiveMinimum": 0,
+              "type": "number"
+            }
+          },
+          "required": [
+            "horizonSec"
+          ],
+          "type": "object"
+        },
+        "schema": {
+          "const": "simulatte.systemDiagram.v4"
+        },
+        "seed": {
+          "maximum": 4294967295,
+          "minimum": 0,
+          "type": "integer"
+        },
+        "subsystems": {
+          "items": {
+            "$ref": "#/$defs/SimulationSubsystem"
+          },
+          "type": "array"
+        },
+        "view": {
+          "additionalProperties": false,
+          "properties": {
+            "x": {
+              "type": "number"
+            },
+            "y": {
+              "type": "number"
+            },
+            "zoom": {
+              "exclusiveMinimum": 0,
+              "type": "number"
+            }
+          },
+          "required": [
+            "x",
+            "y",
+            "zoom"
+          ],
+          "type": "object"
+        }
+      },
+      "required": [
+        "schema",
+        "id",
+        "name",
+        "seed",
+        "run",
+        "classes",
+        "nodes",
+        "edges",
+        "groups",
+        "notes",
+        "faults",
+        "view"
+      ],
+      "type": "object"
+    },
+    "SimulationDiagramV5": {
+      "additionalProperties": false,
+      "properties": {
+        "classes": {
+          "items": {
+            "$ref": "#/$defs/SimulationClass"
+          },
+          "type": "array"
+        },
+        "concepts": {
+          "items": {
+            "$ref": "#/$defs/ConceptResponsibility"
+          },
+          "type": "array"
+        },
+        "description": {
+          "type": "string"
+        },
+        "edges": {
+          "items": {
+            "$ref": "#/$defs/SimulationEdge"
+          },
+          "type": "array"
+        },
+        "faults": {
+          "items": {
+            "$ref": "#/$defs/SimulationFault"
+          },
+          "type": "array"
+        },
+        "groups": {
+          "items": {
+            "$ref": "#/$defs/SimulationGroup"
+          },
+          "type": "array"
+        },
+        "id": {
+          "type": "string"
+        },
+        "intent": {
+          "additionalProperties": false,
+          "properties": {
+            "constraints": {
+              "type": "string"
+            },
+            "outcome": {
+              "type": "string"
+            },
+            "success": {
+              "type": "string"
+            },
+            "users": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "outcome",
+            "users",
+            "constraints",
+            "success"
+          ],
+          "type": "object"
+        },
+        "name": {
+          "type": "string"
+        },
+        "nodes": {
+          "items": {
+            "$ref": "#/$defs/SimulationNode"
+          },
+          "type": "array"
+        },
+        "notes": {
+          "items": {
+            "$ref": "#/$defs/SimulationNote"
+          },
+          "type": "array"
+        },
+        "run": {
+          "additionalProperties": false,
+          "properties": {
+            "horizonSec": {
+              "exclusiveMinimum": 0,
+              "type": "number"
+            }
+          },
+          "required": [
+            "horizonSec"
+          ],
+          "type": "object"
+        },
+        "schema": {
+          "const": "simulatte.systemDiagram.v5"
+        },
+        "seed": {
+          "maximum": 4294967295,
+          "minimum": 0,
+          "type": "integer"
+        },
+        "subsystems": {
+          "items": {
+            "$ref": "#/$defs/SimulationSubsystem"
+          },
+          "type": "array"
+        },
+        "view": {
+          "additionalProperties": false,
+          "properties": {
+            "x": {
+              "type": "number"
+            },
+            "y": {
+              "type": "number"
+            },
+            "zoom": {
+              "exclusiveMinimum": 0,
+              "type": "number"
+            }
+          },
+          "required": [
+            "x",
+            "y",
+            "zoom"
+          ],
+          "type": "object"
+        }
+      },
+      "required": [
+        "schema",
+        "id",
+        "name",
+        "seed",
+        "run",
+        "classes",
+        "nodes",
+        "edges",
+        "groups",
+        "notes",
+        "faults",
+        "view",
+        "concepts"
+      ],
+      "type": "object"
+    },
+    "SimulationEdge": {
+      "additionalProperties": false,
+      "properties": {
+        "from": {
+          "$ref": "#/$defs/GraphEndpoint"
+        },
+        "id": {
+          "type": "string"
+        },
+        "label": {
+          "type": "string"
+        },
+        "params": {
+          "additionalProperties": {},
+          "type": "object"
+        },
+        "to": {
+          "$ref": "#/$defs/GraphEndpoint"
+        }
+      },
+      "required": [
+        "id",
+        "from",
+        "to",
+        "params"
+      ],
+      "type": "object"
+    },
+    "SimulationFault": {
+      "additionalProperties": false,
+      "properties": {
+        "atSec": {
+          "minimum": 0,
+          "type": "number"
+        },
+        "id": {
+          "type": "string"
+        },
+        "params": {
+          "additionalProperties": {},
+          "type": "object"
+        },
+        "target": {
+          "additionalProperties": false,
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "kind": {
+              "enum": [
+                "node",
+                "edge",
+                "group"
+              ]
+            }
+          },
+          "required": [
+            "kind",
+            "id"
+          ],
+          "type": "object"
+        },
+        "type": {
+          "type": "string"
+        },
+        "untilSec": {
+          "type": [
+            "number",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "id",
+        "atSec",
+        "untilSec",
+        "target",
+        "type",
+        "params"
+      ],
+      "type": "object"
+    },
+    "SimulationGroup": {
+      "additionalProperties": false,
+      "properties": {
+        "capacity": {
+          "maximum": 64,
+          "minimum": 1,
+          "type": "integer"
+        },
+        "collapsed": {
+          "type": "boolean"
+        },
+        "h": {
+          "exclusiveMinimum": 0,
+          "type": "number"
+        },
+        "id": {
+          "type": "string"
+        },
+        "kind": {
+          "enum": [
+            "zone",
+            "region",
+            "boundary",
+            "resource"
+          ]
+        },
+        "label": {
+          "type": "string"
+        },
+        "w": {
+          "exclusiveMinimum": 0,
+          "type": "number"
+        },
+        "x": {
+          "type": "number"
+        },
+        "y": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "id",
+        "label",
+        "kind",
+        "x",
+        "y",
+        "w",
+        "h"
+      ],
+      "type": "object"
+    },
+    "SimulationNode": {
+      "additionalProperties": false,
+      "properties": {
+        "classId": {
+          "type": "string"
+        },
+        "groupId": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "id": {
+          "type": "string"
+        },
+        "label": {
+          "type": "string"
+        },
+        "overrides": {
+          "additionalProperties": {},
+          "type": "object"
+        },
+        "params": {
+          "additionalProperties": {},
+          "type": "object"
+        },
+        "x": {
+          "type": "number"
+        },
+        "y": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "id",
+        "classId",
+        "label",
+        "x",
+        "y",
+        "params"
+      ],
+      "type": "object"
+    },
+    "SimulationNote": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "text": {
+          "type": "string"
+        },
+        "w": {
+          "type": "number"
+        },
+        "x": {
+          "type": "number"
+        },
+        "y": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "id",
+        "text",
+        "x",
+        "y"
+      ],
+      "type": "object"
+    },
+    "SimulationSubsystem": {
+      "additionalProperties": false,
+      "properties": {
+        "edges": {
+          "items": {
+            "$ref": "#/$defs/SimulationEdge"
+          },
+          "type": "array"
+        },
+        "faults": {
+          "items": {
+            "$ref": "#/$defs/SimulationFault"
+          },
+          "type": "array"
+        },
+        "groups": {
+          "items": {
+            "$ref": "#/$defs/SimulationGroup"
+          },
+          "type": "array"
+        },
+        "id": {
+          "type": "string"
+        },
+        "label": {
+          "type": "string"
+        },
+        "nodes": {
+          "items": {
+            "$ref": "#/$defs/SimulationNode"
+          },
+          "type": "array"
+        },
+        "notes": {
+          "items": {
+            "$ref": "#/$defs/SimulationNote"
+          },
+          "type": "array"
+        },
+        "ports": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "direction": {
+                "enum": [
+                  "in",
+                  "out"
+                ]
+              },
+              "id": {
+                "type": "string"
+              },
+              "label": {
+                "type": "string"
+              },
+              "target": {
+                "$ref": "#/$defs/GraphEndpoint"
+              }
+            },
+            "required": [
+              "id",
+              "label",
+              "direction",
+              "target"
+            ],
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "version": {
+          "minimum": 1,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "id",
+        "version",
+        "label",
+        "nodes",
+        "edges",
+        "groups",
+        "notes",
+        "faults",
+        "ports"
+      ],
+      "type": "object"
+    },
+    "Source": {
+      "additionalProperties": false,
+      "properties": {
+        "contentScope": {
+          "enum": [
+            "metadata",
+            "preview",
+            "full",
+            "reference-only"
+          ]
+        },
+        "id": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "kind": {
+          "const": "source"
+        },
+        "license": {
+          "$ref": "#/$defs/TextField"
+        },
+        "native": {
+          "$ref": "#/$defs/Ref"
+        },
+        "origin": {
+          "items": {
+            "$ref": "#/$defs/SourcePointer"
+          },
+          "minItems": 1,
+          "type": "array"
+        },
+        "publisher": {
+          "$ref": "#/$defs/TextField"
+        },
+        "redistribution": {
+          "enum": [
+            "permitted",
+            "prohibited",
+            "unknown"
+          ]
+        },
+        "schema": {
+          "const": "study.record.v1"
+        },
+        "sourceType": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "url": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "version": {
+          "minimum": 1,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "kind",
+        "id",
+        "version",
+        "schema",
+        "origin",
+        "title",
+        "url",
+        "publisher",
+        "sourceType",
+        "contentScope",
+        "license",
+        "redistribution",
+        "native"
+      ],
+      "type": "object"
+    },
+    "SourcePointer": {
+      "additionalProperties": false,
+      "properties": {
+        "path": {
+          "type": "string"
+        },
+        "repository": {
+          "type": "string"
+        },
+        "revision": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "selector": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "type": "string"
+        }
+      },
+      "required": [
+        "repository",
+        "revision",
+        "path",
+        "sha256",
+        "selector"
+      ],
+      "type": "object"
+    },
+    "Stage": {
+      "additionalProperties": false,
+      "properties": {
+        "artifacts": {
+          "items": {
+            "$ref": "#/$defs/Ref"
+          },
+          "type": "array"
+        },
+        "checks": {
+          "items": {
+            "$ref": "#/$defs/Ref"
+          },
+          "type": "array"
+        },
+        "explanation": {
+          "$ref": "#/$defs/TextField"
+        },
+        "hints": {
+          "$ref": "#/$defs/ListField"
+        },
+        "id": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "instructions": {
+          "$ref": "#/$defs/ListField"
+        },
+        "native": {
+          "$ref": "#/$defs/Ref"
+        },
+        "observations": {
+          "$ref": "#/$defs/ListField"
+        },
+        "question": {
+          "$ref": "#/$defs/TextField"
+        },
+        "rationale": {
+          "$ref": "#/$defs/TextField"
+        },
+        "requirementIds": {
+          "$ref": "#/$defs/ListField"
+        },
+        "title": {
+          "$ref": "#/$defs/TextField"
+        },
+        "type": {
+          "enum": [
+            "reasoning",
+            "coding",
+            "design",
+            "validation",
+            "simulation"
+          ]
+        }
+      },
+      "required": [
+        "id",
+        "type",
+        "title",
+        "question",
+        "explanation",
+        "rationale",
+        "instructions",
+        "observations",
+        "hints",
+        "requirementIds",
+        "checks",
+        "artifacts",
+        "native"
+      ],
+      "type": "object"
+    },
+    "Study_edge": {
+      "additionalProperties": false,
+      "properties": {
+        "contractId": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "from": {
+          "additionalProperties": false,
+          "properties": {
+            "nodeId": {
+              "minLength": 1,
+              "type": "string"
+            },
+            "portId": {
+              "minLength": 1,
+              "type": "string"
+            }
+          },
+          "required": [
+            "nodeId",
+            "portId"
+          ],
+          "type": "object"
+        },
+        "id": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "label": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "mode": {
+          "enum": [
+            "request-response",
+            "event-stream",
+            "storage",
+            "local-call"
+          ]
+        },
+        "to": {
+          "additionalProperties": false,
+          "properties": {
+            "nodeId": {
+              "minLength": 1,
+              "type": "string"
+            },
+            "portId": {
+              "minLength": 1,
+              "type": "string"
+            }
+          },
+          "required": [
+            "nodeId",
+            "portId"
+          ],
+          "type": "object"
+        }
+      },
+      "required": [
+        "id",
+        "from",
+        "to",
+        "contractId",
+        "mode"
+      ],
+      "type": "object"
+    },
+    "Study_graph": {
+      "additionalProperties": false,
+      "properties": {
+        "edges": {
+          "items": {
+            "$ref": "#/$defs/Study_edge"
+          },
+          "type": "array"
+        },
+        "nodes": {
+          "items": {
+            "$ref": "#/$defs/Study_node"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "nodes",
+        "edges"
+      ],
+      "type": "object"
+    },
+    "Study_node": {
+      "additionalProperties": false,
+      "properties": {
+        "definitionId": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "id": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "label": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "lineageIds": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "parentId": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "position": {
+          "additionalProperties": false,
+          "properties": {
+            "x": {
+              "type": "number"
+            },
+            "y": {
+              "type": "number"
+            }
+          },
+          "required": [
+            "x",
+            "y"
+          ],
+          "type": "object"
+        },
+        "subsystemId": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "version": {
+          "minimum": 1,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "id",
+        "definitionId",
+        "version",
+        "label",
+        "position"
+      ],
+      "type": "object"
+    },
+    "TextField": {
+      "oneOf": [
+        {
+          "additionalProperties": false,
+          "properties": {
+            "provenance": {
+              "items": {
+                "$ref": "#/$defs/SourcePointer"
+              },
+              "minItems": 1,
+              "type": "array"
+            },
+            "status": {
+              "const": "present"
+            },
+            "value": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "status",
+            "value",
+            "provenance"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "reason": {
+              "type": "string"
+            },
+            "status": {
+              "const": "missing"
+            }
+          },
+          "required": [
+            "status",
+            "reason"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "reason": {
+              "type": "string"
+            },
+            "status": {
+              "const": "unknown"
+            }
+          },
+          "required": [
+            "status",
+            "reason"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "reason": {
+              "type": "string"
+            },
+            "status": {
+              "const": "not-applicable"
+            }
+          },
+          "required": [
+            "status",
+            "reason"
+          ],
+          "type": "object"
+        }
+      ]
+    }
+  },
+  "$id": "urn:deco:study-record:v1",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "oneOf": [
+    {
+      "$ref": "#/$defs/Problem"
+    },
+    {
+      "$ref": "#/$defs/Contract"
+    },
+    {
+      "$ref": "#/$defs/Approach"
+    },
+    {
+      "$ref": "#/$defs/Artifact"
+    },
+    {
+      "$ref": "#/$defs/Evidence"
+    },
+    {
+      "$ref": "#/$defs/Source"
+    },
+    {
+      "$ref": "#/$defs/Company"
+    },
+    {
+      "$ref": "#/$defs/CompanyReport"
+    },
+    {
+      "$ref": "#/$defs/Relationship"
+    },
+    {
+      "$ref": "#/$defs/Admission"
+    }
+  ]
+}

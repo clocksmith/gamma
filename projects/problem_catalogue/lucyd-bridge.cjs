@@ -1,0 +1,9 @@
+// Read only pinned migration snapshots. No candidate code or simulator run is executed.
+const fs=require('node:fs'),path=require('node:path'),crypto=require('node:crypto');
+const [publicRoot,output]=process.argv.slice(2),data=path.join(publicRoot,'data/system-diagram'),code=path.join(publicRoot,'simulatte/system-diagram');
+const A=require(path.join(code,'architecture-adapters.js')),S=require(path.join(code,'study/composable-study.js')),L=require(path.join(code,'class-library.js'));
+const json=p=>JSON.parse(fs.readFileSync(p,'utf8')),library=L.loadSync(data),config=json(path.join(data,'config.json'));
+const result={schema:'study.lucyd-migration-validation.v1',simulation:[],study:[],errors:[],simulationExecuted:false};
+for(const p of json(path.join(data,'problems.json')).problems){try{const model=A.fromLucydProblem(p,library,config);A.verifyStudy(model);result.simulation.push({problemId:p.id,referenceId:p.referenceId,approaches:model.solutions.length,stages:model.solutions.reduce((a,s)=>a+s.stages.length,0)});}catch(e){result.errors.push({problemId:p.id,view:'simulation',error:e.message});}}
+for(const entry of json(path.join(data,'composable-solutions/manifest.json')).problems){try{const raw=fs.readFileSync(path.join(data,'composable-solutions',entry.path));if(crypto.createHash('sha256').update(raw).digest('hex')!==entry.sha256)throw Error('Manifest hash mismatch');const p=S.validate(JSON.parse(raw)),model=A.fromStudyDocument(p,entry.problemId);A.verifyStudy(model);result.study.push({problemId:entry.problemId,referenceId:entry.referenceId,approaches:p.solutions.length,stages:p.solutions.reduce((a,s)=>a+s.stages.length,0)});}catch(e){result.errors.push({problemId:entry.problemId,view:'study',error:e.message});}}
+fs.writeFileSync(output,JSON.stringify(result,null,2)+'\n');if(result.errors.length)process.exitCode=1;
