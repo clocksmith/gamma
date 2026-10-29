@@ -1,0 +1,83 @@
+{
+  "candidate_executions": 0,
+  "candidate_source_body_reads": 0,
+  "cost_measurement": "observer-cost-measurements.json",
+  "draft_observer_against_new_tests": {
+    "failing_reproducers": [
+      "review S222"
+    ],
+    "random_mismatches_at_600_cases": 198
+  },
+  "equivalence_random": {
+    "adversarial_modes_added_after_review": [
+      "Proxy on constructor chain",
+      "Proxy on prototype chain",
+      "armed chain trap throws once",
+      "armed chain trap keeps throwing",
+      "armed chain trap mutates node",
+      "off-chain Proxy child with list or primitive result"
+    ],
+    "cases_per_seed": 6003,
+    "compared": "record JSON or error string, plus ordered Proxy-trap/toJSON/constructor event log",
+    "jitless_cases_per_seed": 2003,
+    "jitless_mismatches": 0,
+    "jitless_runtimes": [
+      "node v22.20.0",
+      "node v22.22.1"
+    ],
+    "mismatches": 0,
+    "runtimes": [
+      "node v22.20.0 (local macOS)",
+      "node v22.22.1 (Linux executor /usr/bin/node)"
+    ],
+    "seeds": [
+      20261028,
+      7
+    ],
+    "test": "test_equivalence.cjs"
+  },
+  "equivalence_scope": "programs that do not replace JS intrinsics v1 itself uses unguarded; finite tests are evidence, not proof",
+  "equivalence_stdout": {
+    "byte_identical": 6,
+    "flags": [
+      "--jitless",
+      "--single-threaded",
+      "--max-old-space-size=256"
+    ],
+    "independent_review_reproducers": [
+      "review S222"
+    ],
+    "packets": 6,
+    "runtimes": [
+      "node v22.20.0",
+      "node v22.22.1"
+    ],
+    "test": "test_stdout_equivalence.cjs"
+  },
+  "mutation_sensitivity": {
+    "detected": 11,
+    "mismatches_at_600_cases_per_route": {
+      "Proxy child not aborted": 77,
+      "always reuse after-snapshot": 313,
+      "fast data error without v1 rerun": 188,
+      "fast rows error without v1 rerun": 77,
+      "guard ignores enumerable": 54,
+      "guard ignores value": 33,
+      "guard ignores writable": 57,
+      "mark taken after first snapshot": 14,
+      "no Proxy fallback in data": 20,
+      "no per-construct guard": 648,
+      "proxy class chain not marked": 184
+    },
+    "mutants": 11,
+    "tooling": "scratch copies; not retained",
+    "undetectable_by_design": {
+      "guard call moved inside fast-path try": "unreachable once a Proxy chain makes the graph non-plain; plain guards are pure",
+      "quiet without graph.plain": "redundant with the foreign count once a Proxy chain counts each guard call"
+    }
+  },
+  "python_unittest_test_integration_observers_planning": "20 passed",
+  "qualification_claim": false,
+  "schema": "gamma.s-observer-v2-sourcefree-validation.v1",
+  "v1_synthetic_javascript_tests_against_v2": 17
+}

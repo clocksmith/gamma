@@ -1,0 +1,46 @@
+"use strict";
+// T observer harness v2: continuation-t-observers-20261028-v1/harness.cjs with one change.
+// v1 took a post-call snapshot, handled the result, then took the snapshot again and kept the second.
+// v2 keeps the first when neither it nor anything after it could run candidate code (plain graph:
+// no Proxy node or class chain; no Proxy reached; and, on the clone(value) branch, no object/function/bigint result), so the second would be equal.
+const fs=require('fs'),{classGuard,Graph,build,object}=require('./native_graphs.cjs');
+const IDS=[226,230,232,233,234,235,236,237],METHODS={226:'invertTree',230:'kthSmallest',233:'countDigitOne',234:'isPalindrome',235:'lowestCommonAncestor',236:'lowestCommonAncestor',237:'deleteNode'},CLASSES={232:['MyQueue',{push:1,pop:0,peek:0,empty:0},['push'],100]},SEEN=new WeakSet();
+const clone=value=>JSON.parse(JSON.stringify(value));
+function fresh(receiver){if(SEEN.has(receiver))throw TypeError('original receiver reused');SEEN.add(receiver);}
+function exportGuard(namespace,name){const before=Object.getOwnPropertyDescriptor(namespace,name);if(!before||!Object.hasOwn(before,'value')||typeof before.value!=='function')throw TypeError('original own exported function/class required');const value=before.value,guard=classGuard(value);return {value,check(){guard();const after=Object.getOwnPropertyDescriptor(namespace,name);if(!after||Reflect.ownKeys(before).length!==Reflect.ownKeys(after).length||Reflect.ownKeys(before).some(key=>before[key]!==after[key]))throw TypeError('original export descriptor changed');}};}
+function aliases(args,result){const originals=new Map(),seen=new Set(),todo=args.map((value,i)=>[value,`args.${i}`]);while(todo.length){const [value,path]=todo.pop();if(value===null||typeof value!=='object'||seen.has(value))continue;seen.add(value);originals.set(value,path);for(const key of Object.keys(value))todo.push([value[key],`${path}.${key}`]);}const edges=[],visited=new Set(),pending=[[result,'result']];while(pending.length){const [value,path]=pending.pop();if(value===null||typeof value!=='object'||visited.has(value))continue;visited.add(value);if(originals.has(value))edges.push([path,originals.get(value)]);for(const key of Object.keys(value))pending.push([value[key],`${path}.${key}`]);}return edges.sort();}
+function observe(namespace,pid,call){
+ if(!Number.isInteger(pid)||!IDS.includes(pid)||!object(call,['args'])||!Array.isArray(call.args))throw Error('fixed T argument-only call');
+ const args=clone(call.args),beforeArgs=clone(args),record={native_route:'official-t-v1',problem_id:pid,method:null,entry_kind:null,result:null,result_type:null,args_before:beforeArgs,args_after:null,alias_edges:[],node_identity:null,node_integrity:null,entry_integrity:{schema:'gamma.t-entry-integrity.v1',original_export_unchanged:true,class_or_prototype_unchanged:true,method_descriptor_unchanged:true,fresh_receiver:Object.hasOwn(CLASSES,pid)?true:null},native_class:null,native_receiver_count:null,native_method_return_types:null,native_method_snapshots:null};
+ if(Object.hasOwn(CLASSES,pid)){
+  const [name,methods,voidMethods,limit]=CLASSES[pid];if(args.length!==2||!Array.isArray(args[0])||!Array.isArray(args[1])||args[0].length!==args[1].length||!args[0].length||args[0][0]!==name||!Array.isArray(args[1][0])||args[1][0].length!==0||args[0].length-1>limit||args[1].some(row=>!Array.isArray(row)))throw Error('one bounded constructor trace');
+  const binding=exportGuard(namespace,name),cls=binding.value,receiver=new cls();binding.check();if(Object.getPrototypeOf(receiver)!==cls.prototype)throw TypeError('original design receiver prototype');fresh(receiver);
+  const outputs=[null],types=['constructed'],snapshots=[null];
+  for(let i=1;i<args[0].length;i++){
+   const method=args[0][i],row=args[1][i];if(typeof method!=='string'||!Object.hasOwn(methods,method)||row.length!==methods[method])throw Error('declared own method arity');
+   if(Object.hasOwn(receiver,method))throw TypeError('receiver may not shadow original prototype method');const descriptor=Object.getOwnPropertyDescriptor(cls.prototype,method);if(!descriptor||!Object.hasOwn(descriptor,'value')||typeof descriptor.value!=='function')throw TypeError('original own prototype method required');
+   const value=Reflect.apply(descriptor.value,receiver,row);if(Object.getPrototypeOf(receiver)!==cls.prototype)throw TypeError('receiver prototype changed');
+   if(voidMethods.includes(method)){if(value!==undefined)throw TypeError('official void returns undefined');}else if(method==='empty'){if(typeof value!=='boolean')throw TypeError('exact native boolean return');}else if(!Number.isSafeInteger(value))throw TypeError('exact native integer return');
+   binding.check();if(Object.keys(methods).some(name=>Object.hasOwn(receiver,name)))throw TypeError('receiver shadows original prototype method');outputs.push(value===undefined?null:value);types.push(typeof value);snapshots.push(value===undefined?null:clone(value));
+  }
+  Object.assign(record,{entry_kind:'javascript-native-class',result:outputs,result_type:'object',native_class:name,native_receiver_count:1,native_method_return_types:types,native_method_snapshots:snapshots});
+ }else{
+  const arity=[235,236].includes(pid)?3:[230,237].includes(pid)?2:1;if(args.length!==arity)throw Error('official function arity');const method=METHODS[pid],binding=exportGuard(namespace,method),fn=binding.value;let graph=null,root=null,initial=[],nodeBinding=null,nativeArgs=args,argumentRoots=[],fixtureRoots=[];
+  if(pid!==233){const name=[226,230,235,236].includes(pid)?'TreeNode':'ListNode';nodeBinding=exportGuard(namespace,name);graph=new Graph(nodeBinding.value,[226,230,235,236].includes(pid)?'tree':'list',({226:100,230:10000,234:100000,235:100000,236:100000,237:1000})[pid],[235,236,237].includes(pid));root=build(graph,pid,args[0]);initial=graph.snapshot();argumentRoots=[graph.identify(root)];nativeArgs=[root];
+   if(pid===230){if(!Number.isInteger(args[1])||args[1]<1||args[1]>graph.nodes.length)throw Error('k domain');nativeArgs.push(args[1]);}
+   else if([235,236].includes(pid)){const [p,q]=args.slice(1);if([p,q].some(i=>!Number.isInteger(i)||i<0||i>=graph.nodes.length)||p===q)throw Error('original distinct p/q identities');nativeArgs.push(graph.nodes[p],graph.nodes[q]);argumentRoots.push(p,q);}
+   else if(pid===237){const target=args[1];if(!Number.isInteger(target)||target<0||target>=graph.nodes.length||graph.data(graph.nodes[target]).next===null)throw Error('non-tail original target');fixtureRoots=[graph.identify(root)];argumentRoots=[target];nativeArgs=[graph.nodes[target]];}
+  }
+  const value=Reflect.apply(fn,undefined,nativeArgs);binding.check();Object.assign(record,{method,entry_kind:'javascript-official-function',result_type:typeof value});
+  if(graph){graph.guard();nodeBinding.check();const mark=graph.foreign;let after=graph.snapshot(),resultRoot=null,order=null;const quiet=graph.plain&&([226,235,236,237].includes(pid)||value===null||!['object','function','bigint'].includes(typeof value));
+   if([226,235,236].includes(pid)){resultRoot=graph.identify(value);if([235,236].includes(pid)&&resultRoot===null)throw Error('LCA must be original existing node');record.result=resultRoot===null?null:{original_id:resultRoot,value:graph.data(value).val};if(resultRoot!==null)record.alias_edges=[['result',`args.0.pool.${resultRoot}`],...argumentRoots.flatMap((index,i)=>index===resultRoot?[['result',`args.${i}`]]:[])].sort();}
+   else if(pid===237){if(value!==undefined)throw TypeError('deleteNode must return undefined');const visible=graph.linked(root);record.result={return:null,...visible};order=visible.order;}
+   else record.result=clone(value);
+   if(!quiet||graph.foreign!==mark){graph.guard();after=graph.snapshot();}record.node_identity={before:initial,after,argument_roots:argumentRoots,fixture_roots:fixtureRoots,result_root:resultRoot,result_order:order};record.node_integrity={schema:'gamma.t-native-integrity.v1',class_or_prototype_unchanged:true,own_field_descriptors_unchanged:true,original_node_classes_unchanged:true,checked_node_count:graph.nodes.length,native_aliases_in_identity_table:true};
+  }else{record.alias_edges=aliases(args,value);record.result=clone(value);}
+ }
+
+ record.args_after=clone(args);return record;
+}
+function main(){const packet=JSON.parse(fs.readFileSync('inputs.json','utf8'));if(!object(packet,['schema','problem_id','calls'])||packet.schema!=='gamma.t-official-packet.v1'||!Number.isInteger(packet.problem_id)||!IDS.includes(packet.problem_id)||!Array.isArray(packet.calls)||packet.calls.length<1||packet.calls.length>33)throw Error('fixed T official packet');const namespace=require('./program.cjs');for(let i=0;i<packet.calls.length;i++){let record;try{record={i,...observe(namespace,packet.problem_id,packet.calls[i])};}catch(error){record={i,error:String(error).slice(0,300)};}process.stdout.write(JSON.stringify(record)+'\n');}process.stdout.write(JSON.stringify({done:packet.calls.length})+'\n');}
+if(require.main===module)main();module.exports={IDS,METHODS,CLASSES,observe};
