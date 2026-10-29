@@ -1,0 +1,104 @@
+{
+ "problems": {
+  "hack2hire:67955715010c9ed2f849b1f7": {
+   "reference": "linear scans for the first equal index and the last smaller index",
+   "candidate_design": "one lower-bound binary search; return it if arr[lb]==target else lb-1",
+   "complexity_target": "O(log n) time/O(1) space"
+  },
+  "hack2hire:68f012a4742c37be9dc830dd": {
+   "reference": "re-sort the whole pool by (count, creation id) before every merge",
+   "candidate_design": "count characters, then a binary min-heap keyed by (count, creation id); merge two at a time",
+   "complexity_target": "O(n + d log d) time/O(d) space, d <= 52 distinct characters"
+  },
+  "hack2hire:6a222b9c981072682a6f1e5a": {
+   "reference": "group by user, sort, count with a dictionary",
+   "candidate_design": "hash map user->entries, sort each user by integer timestamp, hash map of edge counts, final sort",
+   "complexity_target": "O(n log n) time/O(n) space"
+  },
+  "hack2hire:67c7604e6c89e288437c3024": {
+   "reference": "copy stock and test each order literally",
+   "candidate_design": "single pass with three running counters",
+   "complexity_target": "O(n) time/O(1) extra space"
+  },
+  "hack2hire:68811ae3f96758aa78e1d687": {
+   "reference": "fixed-point passes evaluating every assignment whose operands are known (Kahn order for large inputs)",
+   "candidate_design": "parse into name->terms; iterative post-order DFS from the target with memoised values",
+   "complexity_target": "O(total terms) time/O(variables) space"
+  },
+  "hack2hire:68811dddf96758aa78e1d688": {
+   "reference": "fixed-point passes evaluating every assignment whose operands are known (Kahn order for large inputs)",
+   "candidate_design": "parse into name->signed terms; iterative post-order DFS from the target with memoised values",
+   "complexity_target": "O(total terms) time/O(variables) space"
+  },
+  "hack2hire:68813e86f96758aa78e1d69b": {
+   "reference": "fixed-point passes evaluating every assignment whose operands are known (Kahn order for large inputs)",
+   "candidate_design": "iterative three-colour DFS from the target; a grey hit or missing name marks failure and propagates",
+   "complexity_target": "O(total terms) time/O(variables) space"
+  },
+  "hack2hire:6796f907b10bc587828f27b2": {
+   "reference": "literal queue simulation hour by hour",
+   "candidate_design": "completion of task i = sum_j min(a_j, a_i - 1) + #{j <= i : a_j >= a_i}; sorted prefix sums plus a Fenwick tree over value ranks",
+   "complexity_target": "O(n log n) time/O(n) space"
+  },
+  "hack2hire:690cf5190a0bc710235894b8": {
+   "reference": "scan every elevator with the eligibility predicate",
+   "candidate_design": "single scan keeping the best (distance, index)",
+   "complexity_target": "O(n) time/O(1) space"
+  },
+  "hack2hire:6a579fe2665efda9311f9375": {
+   "reference": "keep every event and count matches by a full scan per query",
+   "candidate_design": "per-user queue of timestamps; evict entries below timestamp-m+1 before answering",
+   "complexity_target": "amortised O(1) per call; O(events inside the window) memory"
+  },
+  "hack2hire:6a579fe4665efda9311f9376": {
+   "reference": "keep every event and count matches by a full scan per query",
+   "candidate_design": "per-user and per-chat timestamp queues with front eviction",
+   "complexity_target": "amortised O(1) per call; O(events inside the window) memory"
+  },
+  "hack2hire:6a579fe5665efda9311f9377": {
+   "reference": "keep every event and count matches by a full scan per query",
+   "candidate_design": "per-chat queue of (timestamp, user) plus a per-chat user->multiplicity map; evict and decrement",
+   "complexity_target": "amortised O(1) per call; O(events inside the window) memory"
+  },
+  "hack2hire:67cd24763363b83a81fc99af": {
+   "reference": "prefix DP over old positions for every character of new",
+   "candidate_design": "greedy two pointers: advance in old when new[i] or its successor equals the next old char",
+   "complexity_target": "O(total length) time/O(1) extra space"
+  },
+  "hack2hire:68fd47ba47bea664c0bba33c": {
+   "reference": "deterministic Miller-Rabin with bases 2, 3, 5, 7 on every rotation",
+   "candidate_design": "rotate with arithmetic; 6k+-1 trial division up to sqrt per rotation",
+   "complexity_target": "O(d * sqrt(n)) time/O(1) space"
+  },
+  "hack2hire:6a1f2f7c8b879849ebc10f9a": {
+   "reference": "check every candidate position slot by slot",
+   "candidate_design": "boolean slot array; single scan with a running free-run length over offsets 0..T+k-2; free-count shortcut",
+   "complexity_target": "O(T + k) per store, O(k) per free"
+  },
+  "hack2hire:6a4ffdfb665efda9311f57f2": {
+   "reference": "exhaustive enumeration of all choice vectors with simulation",
+   "candidate_design": "DP over (house, energy capped at n) with max coins; -1 marks unreachable",
+   "complexity_target": "O(n^2) time/O(n) space"
+  },
+  "hack2hire:68d833b5ae12841706c1fc58": {
+   "reference": "direct loop",
+   "candidate_design": "direct loop with exact integer halving; values stay below 2**53 for n <= 1e7",
+   "complexity_target": "O(steps) time/O(1) space"
+  },
+  "hack2hire:6818d209aa9eb23a3dba07f0": {
+   "reference": "2x2 matrix power over (ends in last colour, ends elsewhere) states, checked against exhaustive enumeration",
+   "candidate_design": "closed form ((k-1)^(n-1) + (k-1)(-1)^(n-1))/k (same colours) or ((k-1)^(n-1) - (-1)^(n-1))/k, with modular inverse; BigInt in JavaScript",
+   "complexity_target": "O(log n) time/O(1) space"
+  },
+  "hack2hire:69753e2817272b5c868d5eb3": {
+   "reference": "per-server pairwise scan for the burst rule",
+   "candidate_design": "hash map server->times; sort times; burst if previous time within 60 s or next time equal",
+   "complexity_target": "O(n log n) time/O(n) space"
+  },
+  "hack2hire:69e8f141fbaf3da641828530": {
+   "reference": "lookaround regular expressions on the lower-cased text",
+   "candidate_design": "manual tokenisation into alphanumeric words, then word and bigram checks",
+   "complexity_target": "O(total text) time/O(longest description) space"
+  }
+ }
+}

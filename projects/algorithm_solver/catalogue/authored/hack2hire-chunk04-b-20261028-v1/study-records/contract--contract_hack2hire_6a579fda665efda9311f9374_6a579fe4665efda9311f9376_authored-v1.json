@@ -1,0 +1,461 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:6a579fda665efda9311f9374:6a579fe4665efda9311f9376:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-b-20261028-v1/contracts.json",
+   "sha256": "eed8c950dbf7e6d29ee3c5ccfbb42ee3263f6bf22b851c7d275e5e30f1074095",
+   "selector": "/problems/10"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/6a579fda665efda9311f9374.json",
+   "sha256": "0c6fd31ca82537812d7a6cf2dc4ea02b835e8a4e99d037a40a6a8e99244ed9fa",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-b-20261028-v1/study-content.json",
+   "sha256": "d60c3d4a5293b5babafc6c351299329fbd7fe839d64d37909c9e0218a16d0b4b",
+   "selector": "/variants/hack2hire:6a579fe4665efda9311f9376"
+  }
+ ],
+ "problemId": "hack2hire:6a579fda665efda9311f9374",
+ "variantId": "6a579fe4665efda9311f9376",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred level 2: per-chat trailing-window counts",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-b-20261028-v1/study-content.json",
+    "sha256": "d60c3d4a5293b5babafc6c351299329fbd7fe839d64d37909c9e0218a16d0b4b",
+    "selector": "/variants/hack2hire:6a579fe4665efda9311f9376/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "As level 1, plus getChatCount(timestamp, chatId): the number of events in that chat (from any user) with time in [timestamp - m + 1, timestamp]. Several users may record in the same chat at the same second.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-b-20261028-v1/contracts.json",
+    "sha256": "eed8c950dbf7e6d29ee3c5ccfbb42ee3263f6bf22b851c7d275e5e30f1074095",
+    "selector": "/problems/10/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "As level 1, plus getChatCount(timestamp, chatId): the number of events in that chat (from any user) with time in [timestamp - m + 1, timestamp].",
+   "Several users may record in the same chat at the same second."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-b-20261028-v1/contracts.json",
+    "sha256": "eed8c950dbf7e6d29ee3c5ccfbb42ee3263f6bf22b851c7d275e5e30f1074095",
+    "selector": "/problems/10/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "1 <= m <= 1e9",
+   "timestamps 0..1e9, non-decreasing across all calls",
+   "per-user event timestamps strictly increasing",
+   "up to 30000 calls"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-b-20261028-v1/study-content.json",
+    "sha256": "d60c3d4a5293b5babafc6c351299329fbd7fe839d64d37909c9e0218a16d0b4b",
+    "selector": "/variants/hack2hire:6a579fe4665efda9311f9376/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-28; it is not the official statement.",
+    "basis": "preview fields used: contentPreview: class name, constructor ChatEventAggregator(m), inclusive trailing window, per-user strictly increasing timestamps, memory efficiency; algorithmTags: HASH_TABLE; codingQuestions (variant count/order); source-cited LeetCode 362 relationship; preview response sha256 1611e3c39de7838ca33368946eac31b0a5cdd8cc0d01e29c13afc675b27c852e"
+   },
+   {
+    "statement": "Uncertainty: high: as level 1; the per-chat query as the level-2 extension is inferred",
+    "basis": "the public group preview is partial (932 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: variants inferred as cumulative levels 1-3 (per-user counts; per-chat counts; distinct users per chat)",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-b-20261028-v1/contracts.json",
+    "sha256": "eed8c950dbf7e6d29ee3c5ccfbb42ee3263f6bf22b851c7d275e5e30f1074095",
+    "selector": "/problems/10/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-b-20261028-v1/contracts.json",
+    "sha256": "eed8c950dbf7e6d29ee3c5ccfbb42ee3263f6bf22b851c7d275e5e30f1074095",
+    "selector": "/problems/10/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-b-20261028-v1/contracts.json",
+    "sha256": "eed8c950dbf7e6d29ee3c5ccfbb42ee3263f6bf22b851c7d275e5e30f1074095",
+    "selector": "/problems/10/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "Are query timestamps non-decreasing too?",
+   "Can different users record at the same second?",
+   "What does a query for an unknown user or chat return?",
+   "Do chat counts include every user?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-b-20261028-v1/study-content.json",
+    "sha256": "d60c3d4a5293b5babafc6c351299329fbd7fe839d64d37909c9e0218a16d0b4b",
+    "selector": "/variants/hack2hire:6a579fe4665efda9311f9376/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [
+      "ChatEventAggregator"
+     ],
+     [
+      [
+       1
+      ]
+     ]
+    ],
+    "output": [
+     null
+    ],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      "ChatEventAggregator",
+      "getUserCount"
+     ],
+     [
+      [
+       2
+      ],
+      [
+       4,
+       "bo"
+      ]
+     ]
+    ],
+    "output": [
+     null,
+     0
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-b-20261028-v1/study-content.json",
+    "sha256": "d60c3d4a5293b5babafc6c351299329fbd7fe839d64d37909c9e0218a16d0b4b",
+    "selector": "/variants/hack2hire:6a579fe4665efda9311f9376/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-b-20261028-v1/oracles.py",
+    "sha256": "3fad1afd3f45e3779d3d0de862d57d14b77fb8f4f99cde105457630660ced23d",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "class",
+   "declaration": {
+    "status": "present",
+    "value": "class ChatEventAggregator:\n    def __init__(self, m)\n    def recordEvent(self, timestamp, userId, chatId) -> void\n    def getUserCount(self, timestamp, userId) -> integer\n    def getChatCount(self, timestamp, chatId) -> integer",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-b-20261028-v1/contracts.json",
+      "sha256": "eed8c950dbf7e6d29ee3c5ccfbb42ee3263f6bf22b851c7d275e5e30f1074095",
+      "selector": "/problems/10/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-b-20261028-v1/semantics/6a579fe4665efda9311f9376-python.json",
+     "inferredInterface": {
+      "classname": "ChatEventAggregator",
+      "constructor": {
+       "params": [
+        {
+         "name": "m",
+         "type": "integer"
+        }
+       ]
+      },
+      "methods": [
+       {
+        "name": "recordEvent",
+        "params": [
+         {
+          "name": "timestamp",
+          "type": "integer"
+         },
+         {
+          "name": "userId",
+          "type": "string"
+         },
+         {
+          "name": "chatId",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "void"
+        }
+       },
+       {
+        "name": "getUserCount",
+        "params": [
+         {
+          "name": "timestamp",
+          "type": "integer"
+         },
+         {
+          "name": "userId",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "integer"
+        }
+       },
+       {
+        "name": "getChatCount",
+        "params": [
+         {
+          "name": "timestamp",
+          "type": "integer"
+         },
+         {
+          "name": "chatId",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "integer"
+        }
+       }
+      ]
+     },
+     "traceAdapter": {
+      "name": "solve",
+      "argument_order": [
+       "operation_names",
+       "argument_lists"
+      ],
+      "constructor_output": null,
+      "void_method_output": null,
+      "result_order": "constructor followed by every method call",
+      "scope": "Explicit class trace adapter, separate from direct native observer checks."
+     }
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-b-20261028-v1/semantics/6a579fe4665efda9311f9376-python.json",
+      "sha256": "4fc07b01a27d887536784934abf304415aeadfe211cfce9d2002631521efd5b4",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "class",
+   "declaration": {
+    "status": "present",
+    "value": "class ChatEventAggregator {\n  constructor(m)\n  recordEvent(timestamp, userId, chatId) /* -> void */\n  getUserCount(timestamp, userId) /* -> integer */\n  getChatCount(timestamp, chatId) /* -> integer */\n}",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-b-20261028-v1/contracts.json",
+      "sha256": "eed8c950dbf7e6d29ee3c5ccfbb42ee3263f6bf22b851c7d275e5e30f1074095",
+      "selector": "/problems/10/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-b-20261028-v1/semantics/6a579fe4665efda9311f9376-javascript.json",
+     "inferredInterface": {
+      "classname": "ChatEventAggregator",
+      "constructor": {
+       "params": [
+        {
+         "name": "m",
+         "type": "integer"
+        }
+       ]
+      },
+      "methods": [
+       {
+        "name": "recordEvent",
+        "params": [
+         {
+          "name": "timestamp",
+          "type": "integer"
+         },
+         {
+          "name": "userId",
+          "type": "string"
+         },
+         {
+          "name": "chatId",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "void"
+        }
+       },
+       {
+        "name": "getUserCount",
+        "params": [
+         {
+          "name": "timestamp",
+          "type": "integer"
+         },
+         {
+          "name": "userId",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "integer"
+        }
+       },
+       {
+        "name": "getChatCount",
+        "params": [
+         {
+          "name": "timestamp",
+          "type": "integer"
+         },
+         {
+          "name": "chatId",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "integer"
+        }
+       }
+      ]
+     },
+     "traceAdapter": {
+      "name": "solve",
+      "argument_order": [
+       "operation_names",
+       "argument_lists"
+      ],
+      "constructor_output": null,
+      "void_method_output": null,
+      "result_order": "constructor followed by every method call",
+      "scope": "Explicit class trace adapter, separate from direct native observer checks."
+     }
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-b-20261028-v1/semantics/6a579fe4665efda9311f9376-javascript.json",
+      "sha256": "6dd0a3e9ca81114b1d86b1b6c785f12e12b0e1699b4963a4a85e14c20c2f82d0",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-b-20261028-v1/contracts.json",
+    "sha256": "eed8c950dbf7e6d29ee3c5ccfbb42ee3263f6bf22b851c7d275e5e30f1074095",
+    "selector": "/problems/10/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON trace result; no bool/int coercion",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-b-20261028-v1/contracts.json",
+    "sha256": "eed8c950dbf7e6d29ee3c5ccfbb42ee3263f6bf22b851c7d275e5e30f1074095",
+    "selector": "/problems/10/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

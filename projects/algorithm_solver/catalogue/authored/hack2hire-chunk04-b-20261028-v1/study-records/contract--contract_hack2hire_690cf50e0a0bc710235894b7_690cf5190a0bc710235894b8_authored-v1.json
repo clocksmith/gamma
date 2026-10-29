@@ -1,0 +1,338 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:690cf50e0a0bc710235894b7:690cf5190a0bc710235894b8:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-b-20261028-v1/contracts.json",
+   "sha256": "eed8c950dbf7e6d29ee3c5ccfbb42ee3263f6bf22b851c7d275e5e30f1074095",
+   "selector": "/problems/8"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/690cf50e0a0bc710235894b7.json",
+   "sha256": "634b5636abb3bff186ef72a33536a1d781dd5d5aa3a08dd38440f257f697cfb3",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-b-20261028-v1/study-content.json",
+   "sha256": "d60c3d4a5293b5babafc6c351299329fbd7fe839d64d37909c9e0218a16d0b4b",
+   "selector": "/variants/hack2hire:690cf5190a0bc710235894b8"
+  }
+ ],
+ "problemId": "hack2hire:690cf50e0a0bc710235894b7",
+ "variantId": "690cf5190a0bc710235894b8",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred: nearest eligible elevator index",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-b-20261028-v1/study-content.json",
+    "sha256": "d60c3d4a5293b5babafc6c351299329fbd7fe839d64d37909c9e0218a16d0b4b",
+    "selector": "/variants/hack2hire:690cf5190a0bc710235894b8/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "Each elevator is [floor, state] with floor a decimal string and state up/down/idle; the request is [floor, direction]. Eligible: an idle elevator; an elevator moving up at or below the passenger floor for an up call; an elevator moving down at or above the passenger floor for a down call (inferred). Return the index of the eligible elevator closest to the passenger floor, the lowest index on ties, or -1 if none.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-b-20261028-v1/contracts.json",
+    "sha256": "eed8c950dbf7e6d29ee3c5ccfbb42ee3263f6bf22b851c7d275e5e30f1074095",
+    "selector": "/problems/8/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "Each elevator is [floor, state] with floor a decimal string and state up/down/idle.",
+   "the request is [floor, direction].",
+   "Eligible: an idle elevator.",
+   "an elevator moving up at or below the passenger floor for an up call.",
+   "an elevator moving down at or above the passenger floor for a down call (inferred).",
+   "Return the index of the eligible elevator closest to the passenger floor, the lowest index on ties, or -1 if none."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-b-20261028-v1/contracts.json",
+    "sha256": "eed8c950dbf7e6d29ee3c5ccfbb42ee3263f6bf22b851c7d275e5e30f1074095",
+    "selector": "/problems/8/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "0 <= elevators.length <= 1e5",
+   "floors 0..999999999 as decimal strings",
+   "states up/down/idle; directions up/down"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-b-20261028-v1/study-content.json",
+    "sha256": "d60c3d4a5293b5babafc6c351299329fbd7fe839d64d37909c9e0218a16d0b4b",
+    "selector": "/variants/hack2hire:690cf5190a0bc710235894b8/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-28; it is not the official statement.",
+    "basis": "preview fields used: contentPreview: elevator and request shapes, idle rule; algorithmTags: GREEDY; preview response sha256 29bb5611de9a4821a777eafafba9aec3c411ed3560d647d61092a3ec0e21c324"
+   },
+   {
+    "statement": "Uncertainty: high: only the idle rule is visible; the moving-elevator rules, nearest choice, tie-break and index result are inferred",
+    "basis": "the public group preview is partial (649 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: single variant",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-b-20261028-v1/contracts.json",
+    "sha256": "eed8c950dbf7e6d29ee3c5ccfbb42ee3263f6bf22b851c7d275e5e30f1074095",
+    "selector": "/problems/8/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-b-20261028-v1/contracts.json",
+    "sha256": "eed8c950dbf7e6d29ee3c5ccfbb42ee3263f6bf22b851c7d275e5e30f1074095",
+    "selector": "/problems/8/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-b-20261028-v1/contracts.json",
+    "sha256": "eed8c950dbf7e6d29ee3c5ccfbb42ee3263f6bf22b851c7d275e5e30f1074095",
+    "selector": "/problems/8/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "May a moving elevator take a call in the opposite direction?",
+   "Is an elevator at the passenger floor eligible?",
+   "How are ties broken?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-b-20261028-v1/study-content.json",
+    "sha256": "d60c3d4a5293b5babafc6c351299329fbd7fe839d64d37909c9e0218a16d0b4b",
+    "selector": "/variants/hack2hire:690cf5190a0bc710235894b8/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [],
+     [
+      "0",
+      "up"
+     ]
+    ],
+    "output": -1,
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      [
+       "1",
+       "up"
+      ],
+      [
+       "5",
+       "up"
+      ]
+     ],
+     [
+      "6",
+      "up"
+     ]
+    ],
+    "output": 1,
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-b-20261028-v1/study-content.json",
+    "sha256": "d60c3d4a5293b5babafc6c351299329fbd7fe839d64d37909c9e0218a16d0b4b",
+    "selector": "/variants/hack2hire:690cf5190a0bc710235894b8/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-b-20261028-v1/oracles.py",
+    "sha256": "3fad1afd3f45e3779d3d0de862d57d14b77fb8f4f99cde105457630660ced23d",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "def callElevator(elevators, request) -> integer",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-b-20261028-v1/contracts.json",
+      "sha256": "eed8c950dbf7e6d29ee3c5ccfbb42ee3263f6bf22b851c7d275e5e30f1074095",
+      "selector": "/problems/8/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-b-20261028-v1/semantics/690cf5190a0bc710235894b8-python.json",
+     "inferredInterface": {
+      "name": "callElevator",
+      "params": [
+       {
+        "name": "elevators",
+        "type": "list<[string,string]>"
+       },
+       {
+        "name": "request",
+        "type": "[string,string]"
+       }
+      ],
+      "return": {
+       "type": "integer"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-b-20261028-v1/semantics/690cf5190a0bc710235894b8-python.json",
+      "sha256": "7a396034da0cf7d0438aa9d839078e5cb48dc31034058404310e33c517752f6d",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "function callElevator(elevators, request) /* -> integer */",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-b-20261028-v1/contracts.json",
+      "sha256": "eed8c950dbf7e6d29ee3c5ccfbb42ee3263f6bf22b851c7d275e5e30f1074095",
+      "selector": "/problems/8/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-b-20261028-v1/semantics/690cf5190a0bc710235894b8-javascript.json",
+     "inferredInterface": {
+      "name": "callElevator",
+      "params": [
+       {
+        "name": "elevators",
+        "type": "list<[string,string]>"
+       },
+       {
+        "name": "request",
+        "type": "[string,string]"
+       }
+      ],
+      "return": {
+       "type": "integer"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-b-20261028-v1/semantics/690cf5190a0bc710235894b8-javascript.json",
+      "sha256": "bb2e1b770017c7be399f67853d276584e714956344ba6c43902c9c8f566f7675",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-b-20261028-v1/contracts.json",
+    "sha256": "eed8c950dbf7e6d29ee3c5ccfbb42ee3263f6bf22b851c7d275e5e30f1074095",
+    "selector": "/problems/8/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON result",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-b-20261028-v1/contracts.json",
+    "sha256": "eed8c950dbf7e6d29ee3c5ccfbb42ee3263f6bf22b851c7d275e5e30f1074095",
+    "selector": "/problems/8/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

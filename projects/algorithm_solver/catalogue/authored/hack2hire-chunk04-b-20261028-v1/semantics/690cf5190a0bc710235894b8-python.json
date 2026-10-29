@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:690cf5190a0bc710235894b8",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "elevators",
+  "request"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-28"
+ },
+ "inferred_interface": {
+  "name": "callElevator",
+  "params": [
+   {
+    "name": "elevators",
+    "type": "list<[string,string]>"
+   },
+   {
+    "name": "request",
+    "type": "[string,string]"
+   }
+  ],
+  "return": {
+   "type": "integer"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "scan every elevator with the eligibility predicate",
+  "candidate_design": "single scan keeping the best (distance, index)",
+  "complexity_target": "O(n) time/O(1) space"
+ },
+ "source_sha256": "f15b0374957475551a6439912019dfbbe329659a975149308a4575069d0c8aa6",
+ "wrapper": "Solution.callElevator"
+}

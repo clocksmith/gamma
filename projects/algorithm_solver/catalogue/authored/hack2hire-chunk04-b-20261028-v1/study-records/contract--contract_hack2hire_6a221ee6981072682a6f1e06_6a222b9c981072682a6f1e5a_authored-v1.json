@@ -1,0 +1,329 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:6a221ee6981072682a6f1e06:6a222b9c981072682a6f1e5a:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-b-20261028-v1/contracts.json",
+   "sha256": "eed8c950dbf7e6d29ee3c5ccfbb42ee3263f6bf22b851c7d275e5e30f1074095",
+   "selector": "/problems/2"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/6a221ee6981072682a6f1e06.json",
+   "sha256": "08c14d5deb0bf2fb749b9e0456deb6941c291b8a87b5db85c77f5e16630d6946",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-b-20261028-v1/study-content.json",
+   "sha256": "d60c3d4a5293b5babafc6c351299329fbd7fe839d64d37909c9e0218a16d0b4b",
+   "selector": "/variants/hack2hire:6a222b9c981072682a6f1e5a"
+  }
+ ],
+ "problemId": "hack2hire:6a221ee6981072682a6f1e06",
+ "variantId": "6a222b9c981072682a6f1e5a",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred: transition counts as sorted triples",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-b-20261028-v1/study-content.json",
+    "sha256": "d60c3d4a5293b5babafc6c351299329fbd7fe839d64d37909c9e0218a16d0b4b",
+    "selector": "/variants/hack2hire:6a222b9c981072682a6f1e5a/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "logs are unordered [timestamp, userId, resource] string triples; timestamps are decimal integer strings, distinct per user. For each user, sort their entries by numeric timestamp to get a path r1..rN and count the transitions START->r1, r_i->r_{i+1} and rN->END. Counts accumulate across users. Return [from, to, count] rows sorted by from then to in plain string (code-point) order (inferred output shape).",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-b-20261028-v1/contracts.json",
+    "sha256": "eed8c950dbf7e6d29ee3c5ccfbb42ee3263f6bf22b851c7d275e5e30f1074095",
+    "selector": "/problems/2/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "logs are unordered [timestamp, userId, resource] string triples.",
+   "timestamps are decimal integer strings, distinct per user.",
+   "For each user, sort their entries by numeric timestamp to get a path r1..rN and count the transitions START->r1, r_i->r_{i+1} and rN->END.",
+   "Counts accumulate across users.",
+   "Return [from, to, count] rows sorted by from then to in plain string (code-point) order (inferred output shape)."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-b-20261028-v1/contracts.json",
+    "sha256": "eed8c950dbf7e6d29ee3c5ccfbb42ee3263f6bf22b851c7d275e5e30f1074095",
+    "selector": "/problems/2/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "0 <= logs.length <= 1e5",
+   "timestamps are decimal strings without leading zeros, below 2**53",
+   "resource names are not 'START' or 'END'"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-b-20261028-v1/study-content.json",
+    "sha256": "d60c3d4a5293b5babafc6c351299329fbd7fe839d64d37909c9e0218a16d0b4b",
+    "selector": "/variants/hack2hire:6a222b9c981072682a6f1e5a/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-28; it is not the official statement.",
+    "basis": "preview fields used: contentPreview: log shape, START/END transitions, accumulation; algorithmTags: HASH_TABLE; preview response sha256 09a7a06cd5719d498836f7bfcc320ddece96de3fb66ad339075ae6f8a67140be"
+   },
+   {
+    "statement": "Uncertainty: medium: the transition rules are in the preview; the output shape, ordering and numeric timestamp format are inferred",
+    "basis": "the public group preview is partial (629 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: single variant",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-b-20261028-v1/contracts.json",
+    "sha256": "eed8c950dbf7e6d29ee3c5ccfbb42ee3263f6bf22b851c7d275e5e30f1074095",
+    "selector": "/problems/2/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-b-20261028-v1/contracts.json",
+    "sha256": "eed8c950dbf7e6d29ee3c5ccfbb42ee3263f6bf22b851c7d275e5e30f1074095",
+    "selector": "/problems/2/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-b-20261028-v1/contracts.json",
+    "sha256": "eed8c950dbf7e6d29ee3c5ccfbb42ee3263f6bf22b851c7d275e5e30f1074095",
+    "selector": "/problems/2/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "Should the result be a nested map or a list of edges?",
+   "Are timestamps compared numerically or as strings?",
+   "Does a user with one entry produce START->r and r->END?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-b-20261028-v1/study-content.json",
+    "sha256": "d60c3d4a5293b5babafc6c351299329fbd7fe839d64d37909c9e0218a16d0b4b",
+    "selector": "/variants/hack2hire:6a222b9c981072682a6f1e5a/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     []
+    ],
+    "output": [],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      [
+       "5",
+       "u1",
+       "/a"
+      ]
+     ]
+    ],
+    "output": [
+     [
+      "/a",
+      "END",
+      1
+     ],
+     [
+      "START",
+      "/a",
+      1
+     ]
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-b-20261028-v1/study-content.json",
+    "sha256": "d60c3d4a5293b5babafc6c351299329fbd7fe839d64d37909c9e0218a16d0b4b",
+    "selector": "/variants/hack2hire:6a222b9c981072682a6f1e5a/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-b-20261028-v1/oracles.py",
+    "sha256": "3fad1afd3f45e3779d3d0de862d57d14b77fb8f4f99cde105457630660ced23d",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "def buildTransitionGraph(logs) -> list<[string,string,integer]>",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-b-20261028-v1/contracts.json",
+      "sha256": "eed8c950dbf7e6d29ee3c5ccfbb42ee3263f6bf22b851c7d275e5e30f1074095",
+      "selector": "/problems/2/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-b-20261028-v1/semantics/6a222b9c981072682a6f1e5a-python.json",
+     "inferredInterface": {
+      "name": "buildTransitionGraph",
+      "params": [
+       {
+        "name": "logs",
+        "type": "list<[string,string,string]>"
+       }
+      ],
+      "return": {
+       "type": "list<[string,string,integer]>"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-b-20261028-v1/semantics/6a222b9c981072682a6f1e5a-python.json",
+      "sha256": "1b7707a43b7f842e1d215f47bed9c8d7f7105a702bad5b1ba0cf102bfc5e0891",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "function buildTransitionGraph(logs) /* -> list<[string,string,integer]> */",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-b-20261028-v1/contracts.json",
+      "sha256": "eed8c950dbf7e6d29ee3c5ccfbb42ee3263f6bf22b851c7d275e5e30f1074095",
+      "selector": "/problems/2/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-b-20261028-v1/semantics/6a222b9c981072682a6f1e5a-javascript.json",
+     "inferredInterface": {
+      "name": "buildTransitionGraph",
+      "params": [
+       {
+        "name": "logs",
+        "type": "list<[string,string,string]>"
+       }
+      ],
+      "return": {
+       "type": "list<[string,string,integer]>"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-b-20261028-v1/semantics/6a222b9c981072682a6f1e5a-javascript.json",
+      "sha256": "c59d3124e67f92aba4f604cd050ca3241a31e59c15e8f0c23c30dbf983fa015f",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-b-20261028-v1/contracts.json",
+    "sha256": "eed8c950dbf7e6d29ee3c5ccfbb42ee3263f6bf22b851c7d275e5e30f1074095",
+    "selector": "/problems/2/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON result",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-b-20261028-v1/contracts.json",
+    "sha256": "eed8c950dbf7e6d29ee3c5ccfbb42ee3263f6bf22b851c7d275e5e30f1074095",
+    "selector": "/problems/2/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

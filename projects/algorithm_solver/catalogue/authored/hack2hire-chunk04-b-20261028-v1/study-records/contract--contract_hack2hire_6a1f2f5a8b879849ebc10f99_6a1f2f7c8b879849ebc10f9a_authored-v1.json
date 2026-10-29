@@ -1,0 +1,331 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:6a1f2f5a8b879849ebc10f99:6a1f2f7c8b879849ebc10f9a:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-b-20261028-v1/contracts.json",
+   "sha256": "eed8c950dbf7e6d29ee3c5ccfbb42ee3263f6bf22b851c7d275e5e30f1074095",
+   "selector": "/problems/14"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/6a1f2f5a8b879849ebc10f99.json",
+   "sha256": "c4d9b54cdc8e0a3b3ba879b2caddd62d3e339699e49a87cfe1af3411e903a0bc",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-b-20261028-v1/study-content.json",
+   "sha256": "d60c3d4a5293b5babafc6c351299329fbd7fe839d64d37909c9e0218a16d0b4b",
+   "selector": "/variants/hack2hire:6a1f2f7c8b879849ebc10f9a"
+  }
+ ],
+ "problemId": "hack2hire:6a1f2f5a8b879849ebc10f99",
+ "variantId": "6a1f2f7c8b879849ebc10f9a",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred: circular first-fit store and range free",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-b-20261028-v1/study-content.json",
+    "sha256": "d60c3d4a5293b5babafc6c351299329fbd7fe839d64d37909c9e0218a16d0b4b",
+    "selector": "/variants/hack2hire:6a1f2f7c8b879849ebc10f9a/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "totalSlots slots in a circle start empty. requests are [type, startIndex, numberOfSlots] strings. store: from startIndex scan candidate positions circularly; the first position p whose numberOfSlots consecutive circular slots are all free is used and p returned; -1 if none of the totalSlots positions works. free (inferred second type): mark the numberOfSlots circular slots starting at startIndex free and return how many of them were in use.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-b-20261028-v1/contracts.json",
+    "sha256": "eed8c950dbf7e6d29ee3c5ccfbb42ee3263f6bf22b851c7d275e5e30f1074095",
+    "selector": "/problems/14/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "totalSlots slots in a circle start empty.",
+   "requests are [type, startIndex, numberOfSlots] strings.",
+   "store: from startIndex scan candidate positions circularly.",
+   "the first position p whose numberOfSlots consecutive circular slots are all free is used and p returned.",
+   "-1 if none of the totalSlots positions works.",
+   "free (inferred second type): mark the numberOfSlots circular slots starting at startIndex free and return how many of them were in use."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-b-20261028-v1/contracts.json",
+    "sha256": "eed8c950dbf7e6d29ee3c5ccfbb42ee3263f6bf22b851c7d275e5e30f1074095",
+    "selector": "/problems/14/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "1 <= totalSlots <= 2000",
+   "up to 2000 requests",
+   "1 <= numberOfSlots <= totalSlots, 0 <= startIndex < totalSlots"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-b-20261028-v1/study-content.json",
+    "sha256": "d60c3d4a5293b5babafc6c351299329fbd7fe839d64d37909c9e0218a16d0b4b",
+    "selector": "/variants/hack2hire:6a1f2f7c8b879849ebc10f9a/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-28; it is not the official statement.",
+    "basis": "preview fields used: contentPreview: circular slots, store request rule; algorithmTags: ARRAY, SIMULATION; source-cited LeetCode 2502 relationship; preview response sha256 168e0d54ad18b743e51b43d29827b4c2e1ee8b7f4db18df53c5661559a902944"
+   },
+   {
+    "statement": "Uncertainty: medium-high: the store rule is in the preview; the second request type (name, arguments and result) is inferred from the LeetCode 2502 relationship",
+    "basis": "the public group preview is partial (992 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: single variant",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-b-20261028-v1/contracts.json",
+    "sha256": "eed8c950dbf7e6d29ee3c5ccfbb42ee3263f6bf22b851c7d275e5e30f1074095",
+    "selector": "/problems/14/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-b-20261028-v1/contracts.json",
+    "sha256": "eed8c950dbf7e6d29ee3c5ccfbb42ee3263f6bf22b851c7d275e5e30f1074095",
+    "selector": "/problems/14/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-b-20261028-v1/contracts.json",
+    "sha256": "eed8c950dbf7e6d29ee3c5ccfbb42ee3263f6bf22b851c7d275e5e30f1074095",
+    "selector": "/problems/14/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "What does the second request type look like and return?",
+   "May a block wrap past the last slot?",
+   "Is the scan order startIndex, startIndex+1, ...?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-b-20261028-v1/study-content.json",
+    "sha256": "d60c3d4a5293b5babafc6c351299329fbd7fe839d64d37909c9e0218a16d0b4b",
+    "selector": "/variants/hack2hire:6a1f2f7c8b879849ebc10f9a/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     1,
+     []
+    ],
+    "output": [],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     3,
+     [
+      [
+       "store",
+       "1",
+       "2"
+      ]
+     ]
+    ],
+    "output": [
+     1
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-b-20261028-v1/study-content.json",
+    "sha256": "d60c3d4a5293b5babafc6c351299329fbd7fe839d64d37909c9e0218a16d0b4b",
+    "selector": "/variants/hack2hire:6a1f2f7c8b879849ebc10f9a/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-b-20261028-v1/oracles.py",
+    "sha256": "3fad1afd3f45e3779d3d0de862d57d14b77fb8f4f99cde105457630660ced23d",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "def processRequests(totalSlots, requests) -> integer[]",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-b-20261028-v1/contracts.json",
+      "sha256": "eed8c950dbf7e6d29ee3c5ccfbb42ee3263f6bf22b851c7d275e5e30f1074095",
+      "selector": "/problems/14/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-b-20261028-v1/semantics/6a1f2f7c8b879849ebc10f9a-python.json",
+     "inferredInterface": {
+      "name": "processRequests",
+      "params": [
+       {
+        "name": "totalSlots",
+        "type": "integer"
+       },
+       {
+        "name": "requests",
+        "type": "list<[string,string,string]>"
+       }
+      ],
+      "return": {
+       "type": "integer[]"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-b-20261028-v1/semantics/6a1f2f7c8b879849ebc10f9a-python.json",
+      "sha256": "612d4263e524756773ac1c23623c3b137ffea06f4c472367bd2806d3353d01f1",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "function processRequests(totalSlots, requests) /* -> integer[] */",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-b-20261028-v1/contracts.json",
+      "sha256": "eed8c950dbf7e6d29ee3c5ccfbb42ee3263f6bf22b851c7d275e5e30f1074095",
+      "selector": "/problems/14/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-b-20261028-v1/semantics/6a1f2f7c8b879849ebc10f9a-javascript.json",
+     "inferredInterface": {
+      "name": "processRequests",
+      "params": [
+       {
+        "name": "totalSlots",
+        "type": "integer"
+       },
+       {
+        "name": "requests",
+        "type": "list<[string,string,string]>"
+       }
+      ],
+      "return": {
+       "type": "integer[]"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-b-20261028-v1/semantics/6a1f2f7c8b879849ebc10f9a-javascript.json",
+      "sha256": "66443f9e1758debecf1bba0a3b9f38f5806c92134c4bc9d1e5bf443ef5f4d116",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-b-20261028-v1/contracts.json",
+    "sha256": "eed8c950dbf7e6d29ee3c5ccfbb42ee3263f6bf22b851c7d275e5e30f1074095",
+    "selector": "/problems/14/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON result",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-b-20261028-v1/contracts.json",
+    "sha256": "eed8c950dbf7e6d29ee3c5ccfbb42ee3263f6bf22b851c7d275e5e30f1074095",
+    "selector": "/problems/14/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

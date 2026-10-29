@@ -1,0 +1,40 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:68d833b5ae12841706c1fc58",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "n"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-28"
+ },
+ "inferred_interface": {
+  "name": "collatzSteps",
+  "params": [
+   {
+    "name": "n",
+    "type": "integer"
+   }
+  ],
+  "return": {
+   "type": "integer"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "direct loop",
+  "candidate_design": "direct loop with exact integer halving; values stay below 2**53 for n <= 1e7",
+  "complexity_target": "O(steps) time/O(1) space"
+ },
+ "source_sha256": "ee3a8e881602df11407b3fa5df1ab66d09d1e05f04c91542dd38ef1c62ef68b7",
+ "wrapper": "Solution.collatzSteps"
+}

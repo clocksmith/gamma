@@ -1,0 +1,316 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:68f0129c742c37be9dc830dc:68f012a4742c37be9dc830dd:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-b-20261028-v1/contracts.json",
+   "sha256": "eed8c950dbf7e6d29ee3c5ccfbb42ee3263f6bf22b851c7d275e5e30f1074095",
+   "selector": "/problems/1"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/68f0129c742c37be9dc830dc.json",
+   "sha256": "a3b60bbdb2ffb94c54e2e34a8e7c93c9264e8e0dd312415f61e84f32b485dee1",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-b-20261028-v1/study-content.json",
+   "sha256": "d60c3d4a5293b5babafc6c351299329fbd7fe839d64d37909c9e0218a16d0b4b",
+   "selector": "/variants/hack2hire:68f012a4742c37be9dc830dd"
+  }
+ ],
+ "problemId": "hack2hire:68f0129c742c37be9dc830dc",
+ "variantId": "68f012a4742c37be9dc830dd",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred: Huffman-style merge tree with deterministic ties",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-b-20261028-v1/study-content.json",
+    "sha256": "d60c3d4a5293b5babafc6c351299329fbd7fe839d64d37909c9e0218a16d0b4b",
+    "selector": "/variants/hack2hire:68f012a4742c37be9dc830dd/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "s contains only ASCII letters. Build a tree whose leaves are the distinct characters (node {ch, count, left: null, right: null}) and whose internal nodes have ch '#' and count equal to the sum of their two children. The construction is inferred to be Huffman-style: start with the leaves ordered by character code, repeatedly merge the two lowest-count nodes (ties broken by creation order, leaves first by character code, merged nodes numbered afterwards in creation order), the first removed becoming the left child. Return the root, or null for an empty string.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-b-20261028-v1/contracts.json",
+    "sha256": "eed8c950dbf7e6d29ee3c5ccfbb42ee3263f6bf22b851c7d275e5e30f1074095",
+    "selector": "/problems/1/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "s contains only ASCII letters.",
+   "Build a tree whose leaves are the distinct characters (node {ch, count, left: null, right: null}) and whose internal nodes have ch '#' and count equal to the sum of their two children.",
+   "The construction is inferred to be Huffman-style: start with the leaves ordered by character code, repeatedly merge the two lowest-count nodes (ties broken by creation order, leaves first by character code, merged nodes numbered afterwards in creation order), the first removed becoming the left child.",
+   "Return the root, or null for an empty string."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-b-20261028-v1/contracts.json",
+    "sha256": "eed8c950dbf7e6d29ee3c5ccfbb42ee3263f6bf22b851c7d275e5e30f1074095",
+    "selector": "/problems/1/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "0 <= s.length <= 1e5",
+   "s contains only 'A'-'Z' and 'a'-'z'",
+   "at most 52 leaves, so depth <= 51"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-b-20261028-v1/study-content.json",
+    "sha256": "d60c3d4a5293b5babafc6c351299329fbd7fe839d64d37909c9e0218a16d0b4b",
+    "selector": "/variants/hack2hire:68f012a4742c37be9dc830dd/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-28; it is not the official statement.",
+    "basis": "preview fields used: contentPreview: leaf and internal-node rules; title; algorithmTags: BINARY_TREE; preview response sha256 3c3a238e19aa6b0cb669d6d458baa37a614ba147da00bca21cc629a329b32752"
+   },
+   {
+    "statement": "Uncertainty: high: the preview lists leaf and internal-node invariants but stops before any shape rule; the merge order, tie-break and node encoding are inferred so that the output is unique",
+    "basis": "the public group preview is partial (622 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: single variant",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-b-20261028-v1/contracts.json",
+    "sha256": "eed8c950dbf7e6d29ee3c5ccfbb42ee3263f6bf22b851c7d275e5e30f1074095",
+    "selector": "/problems/1/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-b-20261028-v1/contracts.json",
+    "sha256": "eed8c950dbf7e6d29ee3c5ccfbb42ee3263f6bf22b851c7d275e5e30f1074095",
+    "selector": "/problems/1/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-b-20261028-v1/contracts.json",
+    "sha256": "eed8c950dbf7e6d29ee3c5ccfbb42ee3263f6bf22b851c7d275e5e30f1074095",
+    "selector": "/problems/1/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "Is any valid tree accepted, or a specific shape?",
+   "How are equal counts ordered?",
+   "What is returned for an empty string?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-b-20261028-v1/study-content.json",
+    "sha256": "d60c3d4a5293b5babafc6c351299329fbd7fe839d64d37909c9e0218a16d0b4b",
+    "selector": "/variants/hack2hire:68f012a4742c37be9dc830dd/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     ""
+    ],
+    "output": null,
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     "a"
+    ],
+    "output": {
+     "ch": "a",
+     "count": 1,
+     "left": null,
+     "right": null
+    },
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-b-20261028-v1/study-content.json",
+    "sha256": "d60c3d4a5293b5babafc6c351299329fbd7fe839d64d37909c9e0218a16d0b4b",
+    "selector": "/variants/hack2hire:68f012a4742c37be9dc830dd/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-b-20261028-v1/oracles.py",
+    "sha256": "3fad1afd3f45e3779d3d0de862d57d14b77fb8f4f99cde105457630660ced23d",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "def buildTree(s) -> node|null (node = {ch, count, left, right})",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-b-20261028-v1/contracts.json",
+      "sha256": "eed8c950dbf7e6d29ee3c5ccfbb42ee3263f6bf22b851c7d275e5e30f1074095",
+      "selector": "/problems/1/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-b-20261028-v1/semantics/68f012a4742c37be9dc830dd-python.json",
+     "inferredInterface": {
+      "name": "buildTree",
+      "params": [
+       {
+        "name": "s",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "node|null (node = {ch, count, left, right})"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-b-20261028-v1/semantics/68f012a4742c37be9dc830dd-python.json",
+      "sha256": "e10d4308f32ee2e9a18058e7eeade5da8b0cc74b714d60f88ce3158dd6ef51e5",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "function buildTree(s) /* -> node|null (node = {ch, count, left, right}) */",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-b-20261028-v1/contracts.json",
+      "sha256": "eed8c950dbf7e6d29ee3c5ccfbb42ee3263f6bf22b851c7d275e5e30f1074095",
+      "selector": "/problems/1/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-b-20261028-v1/semantics/68f012a4742c37be9dc830dd-javascript.json",
+     "inferredInterface": {
+      "name": "buildTree",
+      "params": [
+       {
+        "name": "s",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "node|null (node = {ch, count, left, right})"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-b-20261028-v1/semantics/68f012a4742c37be9dc830dd-javascript.json",
+      "sha256": "179f95f0040ad52a1725efdb8fb2d47f5ed7c2d9b1cc066faac4361c049fda21",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-b-20261028-v1/contracts.json",
+    "sha256": "eed8c950dbf7e6d29ee3c5ccfbb42ee3263f6bf22b851c7d275e5e30f1074095",
+    "selector": "/problems/1/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON result",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk04-b-20261028-v1/contracts.json",
+    "sha256": "eed8c950dbf7e6d29ee3c5ccfbb42ee3263f6bf22b851c7d275e5e30f1074095",
+    "selector": "/problems/1/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

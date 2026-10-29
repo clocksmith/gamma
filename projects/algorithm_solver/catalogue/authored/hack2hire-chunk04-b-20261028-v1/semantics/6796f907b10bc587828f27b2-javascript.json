@@ -1,0 +1,40 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:6796f907b10bc587828f27b2",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "arr"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-28"
+ },
+ "inferred_interface": {
+  "name": "totalWaitingTime",
+  "params": [
+   {
+    "name": "arr",
+    "type": "integer[]"
+   }
+  ],
+  "return": {
+   "type": "integer"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "literal queue simulation hour by hour",
+  "candidate_design": "completion of task i = sum_j min(a_j, a_i - 1) + #{j <= i : a_j >= a_i}; sorted prefix sums plus a Fenwick tree over value ranks",
+  "complexity_target": "O(n log n) time/O(n) space"
+ },
+ "source_sha256": "fa08e91e48bfe705e107377d60a9c02bcf67ec5aa15a44135518c0e89300ebfe",
+ "wrapper": "named export totalWaitingTime"
+}
