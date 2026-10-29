@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:695c711d68e2c0dd046c4955",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "str",
+  "n"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-28"
+ },
+ "inferred_interface": {
+  "name": "mostFrequentSubstring",
+  "params": [
+   {
+    "name": "str",
+    "type": "string"
+   },
+   {
+    "name": "n",
+    "type": "integer"
+   }
+  ],
+  "return": {
+   "type": "string"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "count each distinct window by scanning every start position",
+  "candidate_design": "one pass counting every window in a hash map, then a scan for the best (count, string)",
+  "complexity_target": "O(len(str) * n) time"
+ },
+ "source_sha256": "37659ca5e839c55aa5a3b711b7a852b35d22945fa894360b4f6a182fdb1eff25",
+ "wrapper": "named export mostFrequentSubstring"
+}

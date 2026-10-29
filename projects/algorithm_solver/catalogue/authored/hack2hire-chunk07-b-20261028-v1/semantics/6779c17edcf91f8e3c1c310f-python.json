@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:6779c17edcf91f8e3c1c310f",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "monsters",
+  "root"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-28"
+ },
+ "inferred_interface": {
+  "name": "canDefeatAll",
+  "params": [
+   {
+    "name": "monsters",
+    "type": "[string,string[]][]"
+   },
+   {
+    "name": "root",
+    "type": "string"
+   }
+  ],
+  "return": {
+   "type": "string[]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "for each non-hostile monster, collect its descendants by BFS and test that they contain every hostile",
+  "candidate_design": "one iterative post-order pass counting hostile monsters strictly below each node; a node qualifies when the count equals the total",
+  "complexity_target": "O(monsters) time and space"
+ },
+ "source_sha256": "516d8186504f75ccfed6140f6f0bd4c5dff08105ac820d88def2f110acbccb88",
+ "wrapper": "Solution.canDefeatAll"
+}

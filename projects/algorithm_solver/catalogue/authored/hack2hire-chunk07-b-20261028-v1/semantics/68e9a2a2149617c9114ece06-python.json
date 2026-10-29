@@ -1,0 +1,55 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:68e9a2a2149617c9114ece06",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "lines",
+  "a",
+  "b",
+  "eps"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-28"
+ },
+ "inferred_interface": {
+  "name": "minimizeConvex",
+  "params": [
+   {
+    "name": "lines",
+    "type": "integer[][]"
+   },
+   {
+    "name": "a",
+    "type": "integer"
+   },
+   {
+    "name": "b",
+    "type": "integer"
+   },
+   {
+    "name": "eps",
+    "type": "integer"
+   }
+  ],
+  "return": {
+   "type": "integer"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "evaluate F at every grid point and keep the first minimum",
+  "candidate_design": "binary search for the first grid index j with F(x_j) <= F(x_{j+1}) (convexity makes the grid sequence unimodal), O(lines) per evaluation",
+  "complexity_target": "O(lines * log((b - a) / eps)) time, O(1) extra space"
+ },
+ "source_sha256": "ab7f5cf4991f6746f10e1cba02bbbfa003cd6cd5931a1963c2e326df0ac687db",
+ "wrapper": "Solution.minimizeConvex"
+}

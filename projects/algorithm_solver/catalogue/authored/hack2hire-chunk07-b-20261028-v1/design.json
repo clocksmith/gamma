@@ -1,0 +1,109 @@
+{
+ "problems": {
+  "hack2hire:68e9a2a2149617c9114ece06": {
+   "reference": "evaluate F at every grid point and keep the first minimum",
+   "candidate_design": "binary search for the first grid index j with F(x_j) <= F(x_{j+1}) (convexity makes the grid sequence unimodal), O(lines) per evaluation",
+   "complexity_target": "O(lines * log((b - a) / eps)) time, O(1) extra space"
+  },
+  "hack2hire:69a4da066e73e4abccc9c43f": {
+   "reference": "event simulation of every insertion with explicit ready times",
+   "candidate_design": "prefix sums of usage; in steady state battery i is idle for (total usage - usage[i]) minutes, so feasibility after the first pass is one check per battery; full passes are counted arithmetically and the last partial pass by binary search on the prefix sums",
+   "complexity_target": "O(n log n) time, O(n) space"
+  },
+  "hack2hire:696eb8a4920c39311a3992be": {
+   "reference": "undirected adjacency lists, then breadth-first search from p",
+   "candidate_design": "iterative DFS recording parent and depth of every node, then lift the deeper node and walk both up to their lowest common ancestor",
+   "complexity_target": "O(nodes) time and space"
+  },
+  "hack2hire:6976fe265ed12b33b05f1134": {
+   "reference": "BFS from every node of groupA, taking the minimum distance to any node of groupB",
+   "candidate_design": "multi-source BFS over the undirected tree started from all of groupA at once, stopping at the first node of groupB",
+   "complexity_target": "O(nodes) time and space"
+  },
+  "hack2hire:696aacf2cc483345efb1b29f": {
+   "reference": "exact Fraction DP that sums min(x + E[i-1][j], p + E[i-1][j-1]) over every price x",
+   "candidate_design": "integer DP over numerators with common denominator m**i (m = b - a + 1); each state sums the min over all prices with one threshold split and arithmetic series, exact big integers",
+   "complexity_target": "O(n * min(n, k)) big-integer operations"
+  },
+  "hack2hire:68b82be483188776facc8f08": {
+   "reference": "try every subset of the entries that contain at least one wanted item",
+   "candidate_design": "bitmask DP over covered wanted items: dp[mask | entryMask] = min(dp[mask] + price), masks in increasing order",
+   "complexity_target": "O(2**w * entries) time, O(2**w) space"
+  },
+  "hack2hire:68b830b783188776facc8f09": {
+   "reference": "every subset of relevant entries, compared by (price, size)",
+   "candidate_design": "the level-1 bitmask DP over lexicographic (price, count) pairs",
+   "complexity_target": "O(2**w * entries) time, O(2**w) space"
+  },
+  "hack2hire:68b8f94083188776facc8fc9": {
+   "reference": "enumerate every subset of usable entries, keep exact covers, then keep those with the minimum price",
+   "candidate_design": "memoised DFS on the remaining-item mask that always covers the lowest remaining item; best[mask] gives the minimum, then a second DFS enumerates only branches that stay on the optimum",
+   "complexity_target": "O(2**w * entries) time plus output size"
+  },
+  "hack2hire:67fc0d33216af53465a721dd": {
+   "reference": "try every final start position of the red block and sum the displacements",
+   "candidate_design": "shift red position i by i and move the block to the median of the shifted positions; sum absolute differences",
+   "complexity_target": "O(n) time, O(number of red balls) space"
+  },
+  "hack2hire:69a3aa7d6e73e4abccc9c109": {
+   "reference": "re-simulation over copied lists that pop defeated monsters from the front",
+   "candidate_design": "index pointers to the current front monster of each team and copied health arrays; one log line per event",
+   "complexity_target": "O(number of log lines) time"
+  },
+  "hack2hire:69a3adea6e73e4abccc9c115": {
+   "reference": "re-simulation over copied lists that pop defeated monsters from the front",
+   "candidate_design": "index pointers per team, copied health arrays, damage from attack and defense",
+   "complexity_target": "O(number of log lines) time"
+  },
+  "hack2hire:6a56e302665efda9311f8dcb": {
+   "reference": "re-simulation over copied lists; each round sorts the two fronts by (speed, team)",
+   "candidate_design": "index pointers per team; each round orders the two fronts by speed and performs one or two attacks",
+   "complexity_target": "O(number of log lines) time"
+  },
+  "hack2hire:6779c17edcf91f8e3c1c310f": {
+   "reference": "for each non-hostile monster, collect its descendants by BFS and test that they contain every hostile",
+   "candidate_design": "one iterative post-order pass counting hostile monsters strictly below each node; a node qualifies when the count equals the total",
+   "complexity_target": "O(monsters) time and space"
+  },
+  "hack2hire:6779eef9dcf91f8e3c1c3110": {
+   "reference": "try every subset of non-hostile monsters",
+   "candidate_design": "tree DP: need[u] = min(cost(u) if u is non-hostile, sum over children c of need[c] or infinity when c is hostile), with need[u] = 0 when no hostile is strictly below u",
+   "complexity_target": "O(monsters) time and space"
+  },
+  "hack2hire:695c711d68e2c0dd046c4955": {
+   "reference": "count each distinct window by scanning every start position",
+   "candidate_design": "one pass counting every window in a hash map, then a scan for the best (count, string)",
+   "complexity_target": "O(len(str) * n) time"
+  },
+  "hack2hire:695ecf112e3ae59d53a81ea7": {
+   "reference": "the built-in sort of the whole list",
+   "candidate_design": "split into k near-equal segments, sort each copy, then merge pairs of runs round by round until one remains",
+   "complexity_target": "O(n log n) time, O(n) space"
+  },
+  "hack2hire:680984a8cbb5948f87732b46": {
+   "reference": "recursive conversion to frozensets of atoms and frozensets",
+   "candidate_design": "iterative post-order hash-consing: every atom and every list gets an integer id; a list's key is its sorted distinct child ids",
+   "complexity_target": "O(N log N) time over all elements"
+  },
+  "hack2hire:699939266e73e4abccc9a3b1": {
+   "reference": "for each line, try adding words one by one and test the joined string length",
+   "candidate_design": "running line length with one pass over the words; pad with repeat",
+   "complexity_target": "O(total output characters)"
+  },
+  "hack2hire:67eb157b4c9bb801bfd0ef6f": {
+   "reference": "after every step recompute the committed prefix by scanning 0, 1, 2, ... in a set",
+   "candidate_design": "hash set of completed offsets and a pointer to the next uncommitted offset that only moves forward",
+   "complexity_target": "O(len(offsets)) amortised time"
+  },
+  "hack2hire:69e92eb7fbaf3da641828669": {
+   "reference": "per query, walk up to the root keeping letter parities and count prefixes with at most one odd letter",
+   "candidate_design": "root-to-node parity masks P; the path q..v has mask P[q] xor P[parent(v)]; an iterative DFS keeps counts of the masks of the strict ancestors (plus 0 for v = root) and looks up P[q] and its 26 one-bit neighbours",
+   "complexity_target": "O((n + m) * 26) time, O(n) space"
+  },
+  "hack2hire:67ccdb573363b83a81fc9983": {
+   "reference": "literal reduction rounds through a queue of digits",
+   "candidate_design": "the final digits are sums of binomial coefficients C(L - 2, i) times the digits, mod 10; C mod 2 and mod 5 by Lucas' theorem, combined by CRT",
+   "complexity_target": "O(L log L) time, O(1) extra space"
+  }
+ }
+}

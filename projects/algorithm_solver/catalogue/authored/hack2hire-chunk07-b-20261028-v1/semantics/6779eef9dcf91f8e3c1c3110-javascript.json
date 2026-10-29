@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:6779eef9dcf91f8e3c1c3110",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "monsters",
+  "root"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-28"
+ },
+ "inferred_interface": {
+  "name": "minTeamCost",
+  "params": [
+   {
+    "name": "monsters",
+    "type": "[string,integer,string[]][]"
+   },
+   {
+    "name": "root",
+    "type": "string"
+   }
+  ],
+  "return": {
+   "type": "integer"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "try every subset of non-hostile monsters",
+  "candidate_design": "tree DP: need[u] = min(cost(u) if u is non-hostile, sum over children c of need[c] or infinity when c is hostile), with need[u] = 0 when no hostile is strictly below u",
+  "complexity_target": "O(monsters) time and space"
+ },
+ "source_sha256": "2f7d0188f40d4788573a0cd496c28ccead449d735c3176c7becf382c765ac1ca",
+ "wrapper": "named export minTeamCost"
+}

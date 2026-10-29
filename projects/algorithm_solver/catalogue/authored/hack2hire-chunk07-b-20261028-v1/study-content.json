@@ -1,0 +1,1341 @@
+{
+ "schema": "gamma.hack2hire-chunk07-b-study-content.v1",
+ "authored_by": "claude-opus-5-5 subagent, 2026-10-28",
+ "note": "Teaching text, clarifying questions, inferred constraints and own examples. Inferred, not official. Examples are small generated inputs with outputs from the independent references in oracles.py.",
+ "variants": {
+  "hack2hire:68e9a2a2149617c9114ece06": {
+   "constraints": [
+    "1 to 2000 lines",
+    "|slope| <= 10**6, |intercept| <= 10**12",
+    "-10**9 <= a <= b <= 10**9",
+    "1 <= eps <= 2 * 10**9",
+    "every F value stays below 2**53"
+   ],
+   "clarifyingQuestions": [
+    "How is the black-box function passed in a test (a callable, or a description of F)?",
+    "Must the answer be a specific point, or is any point within eps accepted?",
+    "Which point is returned when F is flat over several grid points?"
+   ],
+   "hints": [
+    "A convex function restricted to evenly spaced points is still convex: it decreases, then stays flat, then increases.",
+    "Compare F at two neighbouring grid points: the sign tells you which side of the minimum you are on.",
+    "Binary search for the first index j with F(x_j) <= F(x_{j+1}); if none exists the last grid point is the answer.",
+    "Evaluate F as the maximum of slope * x + intercept over all lines; keep everything in exact integers."
+   ],
+   "invariants": [
+    "every index left of the answer has F(x_j) > F(x_{j+1})",
+    "every index from the answer on has F(x_j) <= F(x_{j+1})"
+   ],
+   "chooseWhen": [
+    "The function is unimodal (convex) and each evaluation is expensive"
+   ],
+   "tradeoffs": [
+    "Binary search on neighbour differences needs two evaluations per step but no derivative"
+   ],
+   "variantLabel": "Inferred: max-of-lines function, leftmost grid minimiser",
+   "examples": [
+    {
+     "input": [
+      [
+       [
+        0,
+        0
+       ]
+      ],
+      0,
+      0,
+      1
+     ],
+     "output": 0,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       [
+        1,
+        0
+       ]
+      ],
+      -5,
+      5,
+      1
+     ],
+     "output": -5,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:69a4da066e73e4abccc9c43f": {
+   "constraints": [
+    "1 <= n <= 100000",
+    "1 <= usageDuration[i] <= 10**9",
+    "0 <= chargeTime[i] <= 10**9",
+    "1 <= duration <= 10**15"
+   ],
+   "clarifyingQuestions": [
+    "What is returned when the call cannot be kept alive?",
+    "Is a battery that becomes ready exactly when it is needed usable?",
+    "Are all batteries charged at the start?"
+   ],
+   "hints": [
+    "Simulate the first full pass: every battery is charged, so only the running total matters.",
+    "From the second pass on, battery i waits exactly (total usage - usage[i]) minutes between being drained and being needed again.",
+    "If any battery cannot recharge in that window, the call can only reach as far as the first such battery in pass two.",
+    "Otherwise passes repeat: count whole passes arithmetically and finish with a binary search on the prefix sums."
+   ],
+   "invariants": [
+    "powered time after j insertions equals the prefix sum of usage along the circular order",
+    "the idle window of battery i is the same in every pass after the first"
+   ],
+   "chooseWhen": [
+    "A periodic process can be characterised by one period plus a warm-up"
+   ],
+   "tradeoffs": [
+    "The closed form avoids a simulation whose length grows with duration, at the cost of a careful case split"
+   ],
+   "variantLabel": "Inferred: count insertions in circular order with recharge feasibility",
+   "examples": [
+    {
+     "input": [
+      [
+       5
+      ],
+      [
+       1
+      ],
+      6
+     ],
+     "output": -1,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       5
+      ],
+      [
+       1
+      ],
+      5
+     ],
+     "output": 1,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:696eb8a4920c39311a3992be": {
+   "constraints": [
+    "1 to 100000 nodes",
+    "unique integer val in [-10**9, 10**9]",
+    "tree depth at most 90 levels (JSON nesting stays below 200)"
+   ],
+   "clarifyingQuestions": [
+    "Is the distance counted in edges or in nodes?",
+    "Are both values guaranteed to be present?",
+    "Can p equal q?"
+   ],
+   "hints": [
+    "The path between two nodes goes up to their lowest common ancestor and down again.",
+    "distance(p, q) = depth(p) + depth(q) - 2 * depth(lca).",
+    "Record each node's parent and depth with an explicit stack, then lift the deeper node until both depths match.",
+    "Walk both nodes up together until they meet; that meeting node is the LCA."
+   ],
+   "invariants": [
+    "after lifting, both pointers have equal depth",
+    "the walk ends at the lowest common ancestor"
+   ],
+   "chooseWhen": [
+    "A single distance query on a rooted tree"
+   ],
+   "tradeoffs": [
+    "Parent pointers cost O(n) memory but make every later query cheap"
+   ],
+   "variantLabel": "Inferred level 1: distance between two nodes",
+   "examples": [
+    {
+     "input": [
+      {
+       "val": 7,
+       "children": []
+      },
+      7,
+      7
+     ],
+     "output": 0,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      {
+       "val": 1,
+       "children": [
+        {
+         "val": 2,
+         "children": []
+        }
+       ]
+      },
+      2,
+      1
+     ],
+     "output": 1,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6976fe265ed12b33b05f1134": {
+   "constraints": [
+    "1 to 100000 nodes",
+    "unique integer val in [-10**9, 10**9]",
+    "tree depth at most 90 levels (JSON nesting stays below 200)",
+    "groupA and groupB each hold 1 to 100000 vals"
+   ],
+   "clarifyingQuestions": [
+    "Do the groups possibly overlap?",
+    "Is the answer the minimum over all pairs or a distance per pair?",
+    "Are the vals guaranteed to be in the tree?"
+   ],
+   "hints": [
+    "Running a BFS per source is too slow when the groups are large.",
+    "Start one BFS from every node of groupA at distance 0.",
+    "Treat the tree as undirected: neighbours are the children and the parent.",
+    "The first dequeued node that belongs to groupB gives the answer."
+   ],
+   "invariants": [
+    "nodes leave the queue in non-decreasing distance from groupA",
+    "every node is enqueued at most once"
+   ],
+   "chooseWhen": [
+    "Distances from a set of sources to a set of targets"
+   ],
+   "tradeoffs": [
+    "A multi-source BFS needs an explicit parent map because the input only stores children"
+   ],
+   "variantLabel": "Inferred level 2: minimum distance between two node sets",
+   "examples": [
+    {
+     "input": [
+      {
+       "val": 7,
+       "children": []
+      },
+      [
+       7
+      ],
+      [
+       7
+      ]
+     ],
+     "output": 0,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      {
+       "val": -6,
+       "children": [
+        {
+         "val": 16,
+         "children": [
+          {
+           "val": 35,
+           "children": []
+          },
+          {
+           "val": 40,
+           "children": []
+          }
+         ]
+        },
+        {
+         "val": -5,
+         "children": []
+        }
+       ]
+      },
+      [
+       16,
+       40
+      ],
+      [
+       -5,
+       35
+      ]
+     ],
+     "output": 1,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:696aacf2cc483345efb1b29f": {
+   "constraints": [
+    "1 <= n <= 100",
+    "0 <= k <= 100",
+    "0 <= a <= b <= 1000",
+    "0 <= p <= 1000"
+   ],
+   "clarifyingQuestions": [
+    "Is the price continuous or integer-valued?",
+    "How should the expected value be printed (decimals, rounding)?",
+    "May k exceed n?"
+   ],
+   "hints": [
+    "Let E[i][j] be the optimal expected cost of i remaining units with j fixed-price uses left.",
+    "Seeing price x, pay x and go to E[i-1][j], or pay p and go to E[i-1][j-1]; take the cheaper.",
+    "min(x + A, B) switches from the first to the second branch at one threshold price, so the sum over prices splits into an arithmetic series and a constant block.",
+    "Keep numerators over the common denominator m**i so every step stays in exact integers; round only at the end."
+   ],
+   "invariants": [
+    "E[i][j] is non-increasing in j",
+    "every stored numerator is an exact integer over m**i"
+   ],
+   "chooseWhen": [
+    "Optimal stopping / option problems with a small state"
+   ],
+   "tradeoffs": [
+    "Exact rationals avoid floating-point drift but need big integers"
+   ],
+   "variantLabel": "Inferred: discrete uniform prices, exact expectation rounded to 6 decimals",
+   "examples": [
+    {
+     "input": [
+      1,
+      0,
+      0,
+      0,
+      0
+     ],
+     "output": "0.000000",
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      3,
+      5,
+      1,
+      2,
+      1
+     ],
+     "output": "3.000000",
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:68b82be483188776facc8f08": {
+   "constraints": [
+    "1 to 300 menu entries",
+    "entry = [id, price, items]; ids unique [A-Za-z0-9_]{1,12}; price 1..10**6 (integer cents)",
+    "items: 1 to 10 unique names [a-z]{1,10} joined by commas",
+    "1 to 12 unique wanted items"
+   ],
+   "clarifyingQuestions": [
+    "May an order include items the customer did not ask for?",
+    "Can the same entry be bought twice?",
+    "What is returned if some item is unavailable?"
+   ],
+   "hints": [
+    "With at most 12 wanted items, a set of covered items fits in a bitmask.",
+    "Reduce each entry to the mask of wanted items it contains and drop entries with an empty mask.",
+    "dp[mask] = cheapest cost to cover at least mask; relax dp[mask | e] from dp[mask] in increasing mask order.",
+    "Keep only the cheapest entry per distinct mask to shrink the inner loop."
+   ],
+   "invariants": [
+    "dp[mask] only decreases",
+    "mask | e >= mask, so increasing order processes every state after all its predecessors"
+   ],
+   "chooseWhen": [
+    "Set cover with a small universe"
+   ],
+   "tradeoffs": [
+    "Exponential in the number of wanted items but linear in menu size"
+   ],
+   "variantLabel": "Inferred level 1: minimum covering cost",
+   "examples": [
+    {
+     "input": [
+      [
+       [
+        "x",
+        5,
+        "a"
+       ]
+      ],
+      [
+       "a"
+      ]
+     ],
+     "output": 5,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       [
+        "x",
+        5,
+        "a"
+       ]
+      ],
+      [
+       "b"
+      ]
+     ],
+     "output": -1,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:68b830b783188776facc8f09": {
+   "constraints": [
+    "1 to 300 menu entries",
+    "entry = [id, price, items]; ids unique [A-Za-z0-9_]{1,12}; price 1..10**6 (integer cents)",
+    "items: 1 to 10 unique names [a-z]{1,10} joined by commas",
+    "1 to 12 unique wanted items"
+   ],
+   "clarifyingQuestions": [
+    "Which secondary objective breaks price ties?",
+    "Is the count of entries or of items reported?",
+    "What is returned when impossible?"
+   ],
+   "hints": [
+    "The DP state is the same as for level 1.",
+    "Store a pair (price, count) per mask and compare pairs lexicographically.",
+    "Relax dp[mask | e] with (price + p_e, count + 1).",
+    "When deduplicating entries by mask, keep the cheapest; count 1 is the same for all of them."
+   ],
+   "invariants": [
+    "dp pairs only decrease lexicographically"
+   ],
+   "chooseWhen": [
+    "Two objectives where one strictly dominates the other"
+   ],
+   "tradeoffs": [
+    "A lexicographic pair keeps one DP pass; a weighted sum would need care to avoid overflow"
+   ],
+   "variantLabel": "Inferred level 2: minimum cost, then fewest entries",
+   "examples": [
+    {
+     "input": [
+      [
+       [
+        "x",
+        5,
+        "a"
+       ]
+      ],
+      [
+       "a"
+      ]
+     ],
+     "output": [
+      5,
+      1
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       [
+        "e0",
+        10,
+        "a"
+       ]
+      ],
+      [
+       "a"
+      ]
+     ],
+     "output": [
+      10,
+      1
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:68b8f94083188776facc8fc9": {
+   "constraints": [
+    "1 to 40 menu entries",
+    "entry = [id, price, items]; ids unique; price 1..10**6",
+    "1 to 10 unique wanted items",
+    "at most 5000 optimal combinations in the generated cases"
+   ],
+   "clarifyingQuestions": [
+    "Must each wanted item be covered exactly once, or at least once?",
+    "Are only the cheapest combinations wanted, or all of them?",
+    "How are the combinations ordered?"
+   ],
+   "hints": [
+    "Every exact cover contains exactly one entry with the lowest uncovered item.",
+    "Branch only on entries containing that item and disjoint from what is covered: no combination is produced twice.",
+    "Memoise best[mask], the cheapest exact cover of the remaining items.",
+    "Enumerate again, following only entries e with price(e) + best[rest] == best[mask]; sort ids inside each set and then the sets."
+   ],
+   "invariants": [
+    "each produced set covers each wanted item exactly once",
+    "the lowest-item rule makes every set appear once"
+   ],
+   "chooseWhen": [
+    "Enumerating all optimal solutions of a small exact-cover problem"
+   ],
+   "tradeoffs": [
+    "Two passes (value, then enumeration) avoid storing every partial combination"
+   ],
+   "variantLabel": "Inferred: all minimum-price exact covers",
+   "examples": [
+    {
+     "input": [
+      [
+       [
+        "x",
+        5,
+        "a"
+       ]
+      ],
+      [
+       "a"
+      ]
+     ],
+     "output": [
+      [
+       "x"
+      ]
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       [
+        "e0",
+        2,
+        "a"
+       ]
+      ],
+      [
+       "a"
+      ]
+     ],
+     "output": [
+      [
+       "e0"
+      ]
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:67fc0d33216af53465a721dd": {
+   "constraints": [
+    "1 <= len(balls) <= 200000",
+    "balls contains only R and W"
+   ],
+   "clarifyingQuestions": [
+    "Is there a cap on the answer?",
+    "Is an empty string possible?",
+    "Must the block be at a fixed place?"
+   ],
+   "hints": [
+    "Red balls never need to pass each other, so the i-th red ball ends at start + i.",
+    "Subtract i from the i-th red position; the problem becomes moving points to one common value.",
+    "The sum of absolute deviations is minimised at the median.",
+    "Sum |shifted_i - median|; the result fits in 2**53."
+   ],
+   "invariants": [
+    "shifted positions are non-decreasing",
+    "the median minimises the sum of absolute deviations"
+   ],
+   "chooseWhen": [
+    "Gathering items with adjacent swaps"
+   ],
+   "tradeoffs": [
+    "The median trick is O(n) but only works because relative order is preserved"
+   ],
+   "variantLabel": "Stated: adjacent swaps grouping red balls",
+   "examples": [
+    {
+     "input": [
+      "R"
+     ],
+     "output": 0,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      "RWR"
+     ],
+     "output": 1,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:69a3aa7d6e73e4abccc9c109": {
+   "constraints": [
+    "each team holds 1 to 100 monsters",
+    "names unique across both teams, [A-Za-z0-9_]{1,12}",
+    "1 <= health <= 1000, 1 <= attack <= 1000"
+   ],
+   "clarifyingQuestions": [
+    "What exactly does one log line say?",
+    "Which team acts first?",
+    "Is the remaining health clamped at zero?"
+   ],
+   "hints": [
+    "Copy the health values; the input monsters must not change.",
+    "Keep one pointer per team to its first surviving monster.",
+    "Alternate the acting team; after each hit check for defeat and advance the pointer.",
+    "Stop as soon as a pointer passes the end of its team and append the winner line."
+   ],
+   "invariants": [
+    "monsters before a team pointer are defeated, those after it are untouched",
+    "exactly one attack happens per turn"
+   ],
+   "chooseWhen": [
+    "Deterministic event simulation with a required transcript"
+   ],
+   "tradeoffs": [
+    "A literal simulation is simple but output size is proportional to the total health"
+   ],
+   "variantLabel": "Inferred level 1: alternating attacks",
+   "examples": [
+    {
+     "input": [
+      [
+       {
+        "name": "m8",
+        "health": 3,
+        "attack": 4
+       }
+      ],
+      [
+       {
+        "name": "m6",
+        "health": 2,
+        "attack": 1
+       }
+      ]
+     ],
+     "output": [
+      "m8 attacks m6 for 4 damage, m6 has 0 health left",
+      "m6 is defeated",
+      "Team A wins"
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       {
+        "name": "m0",
+        "health": 10,
+        "attack": 4
+       }
+      ],
+      [
+       {
+        "name": "m1",
+        "health": 5,
+        "attack": 1
+       }
+      ]
+     ],
+     "output": [
+      "m0 attacks m1 for 4 damage, m1 has 1 health left",
+      "m1 attacks m0 for 1 damage, m0 has 9 health left",
+      "m0 attacks m1 for 4 damage, m1 has 0 health left",
+      "m1 is defeated",
+      "Team A wins"
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:69a3adea6e73e4abccc9c115": {
+   "constraints": [
+    "each team holds 1 to 100 monsters",
+    "names unique across both teams, [A-Za-z0-9_]{1,12}",
+    "1 <= health <= 1000, 1 <= attack <= 1000",
+    "0 <= defense <= 1000"
+   ],
+   "clarifyingQuestions": [
+    "What exactly does one log line say?",
+    "Which team acts first?",
+    "Is the remaining health clamped at zero?",
+    "Can damage be zero?"
+   ],
+   "hints": [
+    "Same loop as level 1.",
+    "Damage depends on both the attacker and the defender, so compute it at every attack.",
+    "Clamp damage below at 1 so the battle always ends.",
+    "Log the clamped remaining health, then the defeat line if any."
+   ],
+   "invariants": [
+    "damage is at least 1, so every attack lowers some health",
+    "team pointers only move forward"
+   ],
+   "chooseWhen": [
+    "Simulation where damage depends on both sides"
+   ],
+   "tradeoffs": [
+    "Clamping damage to 1 guarantees termination but changes balance compared with allowing 0"
+   ],
+   "variantLabel": "Inferred level 2: defense",
+   "examples": [
+    {
+     "input": [
+      [
+       {
+        "name": "m6",
+        "health": 2,
+        "attack": 4,
+        "defense": 1
+       }
+      ],
+      [
+       {
+        "name": "m5",
+        "health": 5,
+        "attack": 4,
+        "defense": 0
+       }
+      ]
+     ],
+     "output": [
+      "m6 attacks m5 for 4 damage, m5 has 1 health left",
+      "m5 attacks m6 for 3 damage, m6 has 0 health left",
+      "m6 is defeated",
+      "Team B wins"
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       {
+        "name": "m0",
+        "health": 5,
+        "attack": 3,
+        "defense": 1
+       }
+      ],
+      [
+       {
+        "name": "m24",
+        "health": 3,
+        "attack": 1,
+        "defense": 0
+       }
+      ]
+     ],
+     "output": [
+      "m0 attacks m24 for 3 damage, m24 has 0 health left",
+      "m24 is defeated",
+      "Team A wins"
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6a56e302665efda9311f8dcb": {
+   "constraints": [
+    "each team holds 1 to 100 monsters",
+    "names unique across both teams, [A-Za-z0-9_]{1,12}",
+    "1 <= health <= 1000, 1 <= attack <= 1000",
+    "0 <= defense <= 1000",
+    "1 <= speed <= 1000"
+   ],
+   "clarifyingQuestions": [
+    "What exactly does one log line say?",
+    "Which team acts first?",
+    "Is the remaining health clamped at zero?",
+    "Does a monster that comes forward mid-round act in that round?"
+   ],
+   "hints": [
+    "A round is between the two monsters at the front when it starts.",
+    "Order the two by speed, team A first on ties.",
+    "The second attacker only acts if the first attack did not defeat it.",
+    "After a defeat the round ends; the next round starts with the new front monster."
+   ],
+   "invariants": [
+    "each round has one or two attacks",
+    "a defeated monster never attacks"
+   ],
+   "chooseWhen": [
+    "Simulation with initiative order"
+   ],
+   "tradeoffs": [
+    "Rounds make the order explicit but need a rule for monsters entering mid-round"
+   ],
+   "variantLabel": "Inferred level 3: speed-ordered rounds",
+   "examples": [
+    {
+     "input": [
+      [
+       {
+        "name": "m28",
+        "health": 1,
+        "attack": 3,
+        "defense": 1,
+        "speed": 2
+       }
+      ],
+      [
+       {
+        "name": "m26",
+        "health": 2,
+        "attack": 3,
+        "defense": 2,
+        "speed": 2
+       }
+      ]
+     ],
+     "output": [
+      "m28 attacks m26 for 1 damage, m26 has 1 health left",
+      "m26 attacks m28 for 2 damage, m28 has 0 health left",
+      "m28 is defeated",
+      "Team B wins"
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       {
+        "name": "m8",
+        "health": 3,
+        "attack": 1,
+        "defense": 1000,
+        "speed": 3
+       }
+      ],
+      [
+       {
+        "name": "m2",
+        "health": 5,
+        "attack": 1,
+        "defense": 5,
+        "speed": 1
+       }
+      ]
+     ],
+     "output": [
+      "m8 attacks m2 for 1 damage, m2 has 4 health left",
+      "m2 attacks m8 for 1 damage, m8 has 2 health left",
+      "m8 attacks m2 for 1 damage, m2 has 3 health left",
+      "m2 attacks m8 for 1 damage, m8 has 1 health left",
+      "m8 attacks m2 for 1 damage, m2 has 2 health left",
+      "m2 attacks m8 for 1 damage, m8 has 0 health left",
+      "m8 is defeated",
+      "Team B wins"
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6779c17edcf91f8e3c1c310f": {
+   "constraints": [
+    "1 to 100000 monsters",
+    "names [A-Za-z0-9_]{1,12}",
+    "hierarchy depth up to 100000 (rows, not nested JSON)"
+   ],
+   "clarifyingQuestions": [
+    "Is \"can defeat\" transitive down the hierarchy?",
+    "What is returned when there are no hostile monsters?",
+    "In which order are the names returned?"
+   ],
+   "hints": [
+    "A monster can defeat everything below it, so it must be an ancestor of every hostile monster.",
+    "Count hostile monsters in each subtree with a post-order traversal.",
+    "A non-hostile node qualifies when the hostile count strictly below it equals the total count.",
+    "Use an explicit stack: the hierarchy can be a long chain."
+   ],
+   "invariants": [
+    "below[u] = sum over children of (below[c] + hostile(c))",
+    "the qualifying nodes form a prefix of a root path"
+   ],
+   "chooseWhen": [
+    "Subtree aggregates on a tree"
+   ],
+   "tradeoffs": [
+    "One pass with counts beats per-node searches but needs a child-to-parent order"
+   ],
+   "variantLabel": "Inferred level 1: monsters that defeat every hostile",
+   "examples": [
+    {
+     "input": [
+      [
+       [
+        "a",
+        []
+       ]
+      ],
+      "a"
+     ],
+     "output": [
+      "a"
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       [
+        "m39",
+        []
+       ]
+      ],
+      "m39"
+     ],
+     "output": [
+      "m39"
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6779eef9dcf91f8e3c1c3110": {
+   "constraints": [
+    "1 to 100000 monsters",
+    "cost 1..10**6 (hostile costs are ignored)",
+    "hierarchy depth up to 100000"
+   ],
+   "clarifyingQuestions": [
+    "Does every monster have a cost?",
+    "Can one chosen monster defeat many hostiles?",
+    "What if a hostile monster cannot be reached by any non-hostile ancestor?"
+   ],
+   "hints": [
+    "Choosing u defeats everything below it, so inside its subtree nothing else is needed.",
+    "Otherwise every child subtree must be handled on its own, and a hostile child itself can then never be covered.",
+    "need[u] = min(cost(u), sum of children contributions); a hostile child contributes infinity.",
+    "The answer is need[root]; a hostile root is never covered."
+   ],
+   "invariants": [
+    "need[u] = 0 when no hostile lies strictly below u",
+    "need[u] is finite whenever u is non-hostile and below[u] > 0"
+   ],
+   "chooseWhen": [
+    "Tree covering with costs"
+   ],
+   "tradeoffs": [
+    "Bottom-up DP is linear but needs an infinity sentinel for impossible subtrees"
+   ],
+   "variantLabel": "Inferred level 2: cheapest covering team",
+   "examples": [
+    {
+     "input": [
+      [
+       [
+        "a",
+        1,
+        []
+       ]
+      ],
+      "a"
+     ],
+     "output": 0,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       [
+        "a*",
+        1,
+        []
+       ]
+      ],
+      "a"
+     ],
+     "output": -1,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:695c711d68e2c0dd046c4955": {
+   "constraints": [
+    "0 <= len(str) <= 100000",
+    "1 <= n <= 100"
+   ],
+   "clarifyingQuestions": [
+    "Do overlapping occurrences count?",
+    "What if n is larger than the string?",
+    "Is the comparison by code point?"
+   ],
+   "hints": [
+    "There are len(str) - n + 1 windows of length n.",
+    "Count each window in a hash map.",
+    "Keep the best window: higher count wins, and on equal counts the smaller string wins.",
+    "Return \"\" when there is no window."
+   ],
+   "invariants": [
+    "the map holds the count of every window seen so far"
+   ],
+   "chooseWhen": [
+    "Counting fixed-length windows"
+   ],
+   "tradeoffs": [
+    "Slicing costs O(n) per window; a rolling hash would be faster for long windows but needs collision handling"
+   ],
+   "variantLabel": "Stated: most frequent fixed-length substring",
+   "examples": [
+    {
+     "input": [
+      "",
+      1
+     ],
+     "output": "",
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      "",
+      4
+     ],
+     "output": "",
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:695ecf112e3ae59d53a81ea7": {
+   "constraints": [
+    "0 <= len(nums) <= 100000",
+    "|nums[i]| <= 10**9",
+    "1 <= k <= 1000 (k may exceed len(nums))"
+   ],
+   "clarifyingQuestions": [
+    "How are segment sizes distributed when n is not divisible by k?",
+    "Is the merge also parallel?",
+    "May k exceed n?"
+   ],
+   "hints": [
+    "Segment i gets floor(n / k) elements, plus one for the first n mod k segments.",
+    "Sort each segment on its own copy: no segment reads another.",
+    "Merge sorted runs two at a time; each round halves the number of runs.",
+    "The merge is the only step that sees elements from different segments."
+   ],
+   "invariants": [
+    "after each merge round every run is sorted",
+    "the multiset of elements never changes"
+   ],
+   "chooseWhen": [
+    "Parallel sort with a final merge"
+   ],
+   "tradeoffs": [
+    "Pairwise merge rounds cost O(n log k) after the segment sorts"
+   ],
+   "variantLabel": "Inferred: segment sort plus merge, sequential",
+   "examples": [
+    {
+     "input": [
+      [],
+      1
+     ],
+     "output": [],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       3
+      ],
+      1
+     ],
+     "output": [
+      3
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:680984a8cbb5948f87732b46": {
+   "constraints": [
+    "at most 100000 elements in total",
+    "atoms [a-z0-9]{1,10}",
+    "nesting at most 190 levels (JSON nesting stays below 200)"
+   ],
+   "clarifyingQuestions": [
+    "Are repeated elements significant?",
+    "Is \"a\" equal to [\"a\"]?",
+    "How deep can the nesting be?"
+   ],
+   "hints": [
+    "Two sets are equal when they have the same distinct elements.",
+    "Give every distinct atom and every distinct canonical list a small integer id.",
+    "A list's canonical key is the sorted list of its distinct child ids; children must be processed first.",
+    "Share one id table across both inputs and compare the two root ids."
+   ],
+   "invariants": [
+    "equal ids exactly when equal nested sets",
+    "a child gets its id before its parent"
+   ],
+   "chooseWhen": [
+    "Canonical forms for unordered structures"
+   ],
+   "tradeoffs": [
+    "Sorting child ids costs log factors but avoids building long canonical strings"
+   ],
+   "variantLabel": "Inferred: set semantics (duplicates ignored)",
+   "examples": [
+    {
+     "input": [
+      [],
+      []
+     ],
+     "output": true,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "a"
+      ],
+      [
+       "a"
+      ]
+     ],
+     "output": true,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:699939266e73e4abccc9a3b1": {
+   "constraints": [
+    "1 to 100 paragraphs, each 1 to 1000 words, at most 20000 words in total",
+    "aligns[i] is LEFT or RIGHT",
+    "1 <= width <= 1000; every word is 1..width characters of [A-Za-z0-9.,!?-]"
+   ],
+   "clarifyingQuestions": [
+    "Is the page surrounded by a border?",
+    "Is there a blank line between paragraphs?",
+    "Can a word be longer than width?"
+   ],
+   "hints": [
+    "A word fits on the current line when line length + 1 + word length <= width.",
+    "Start a new line with the word otherwise.",
+    "Pad each finished line to width on the side given by the paragraph's alignment.",
+    "Add the \"*\" frame: one border line on top and bottom, one \"*\" on each side of every text line."
+   ],
+   "invariants": [
+    "every text line has exactly width characters before framing",
+    "words keep their order"
+   ],
+   "chooseWhen": [
+    "Line breaking with fixed-width output"
+   ],
+   "tradeoffs": [
+    "Greedy packing is optimal for line count but not for raggedness"
+   ],
+   "variantLabel": "Inferred: greedy packing with a \"*\" border",
+   "examples": [
+    {
+     "input": [
+      [
+       [
+        "a"
+       ]
+      ],
+      [
+       "LEFT"
+      ],
+      1
+     ],
+     "output": [
+      "***",
+      "*a*",
+      "***"
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       [
+        "b"
+       ]
+      ],
+      [
+       "LEFT"
+      ],
+      3
+     ],
+     "output": [
+      "*****",
+      "*b  *",
+      "*****"
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:67eb157b4c9bb801bfd0ef6f": {
+   "constraints": [
+    "1 to 200000 offsets",
+    "distinct integers 0..10**9"
+   ],
+   "clarifyingQuestions": [
+    "What is output when processing an offset does not allow a commit?",
+    "Is the committed value the last offset or the next one?",
+    "Can offsets skip values?"
+   ],
+   "hints": [
+    "Keep the set of completed offsets.",
+    "Keep next = the smallest offset not yet completed; everything below it is committable.",
+    "After adding an offset, advance next while it is in the set.",
+    "If next moved, output next - 1; otherwise -1."
+   ],
+   "invariants": [
+    "all offsets below next are completed",
+    "next never decreases"
+   ],
+   "chooseWhen": [
+    "Watermark tracking in out-of-order streams"
+   ],
+   "tradeoffs": [
+    "The set grows with gaps; a bitmap would be smaller for dense offsets"
+   ],
+   "variantLabel": "Inferred: per-step commit or -1",
+   "examples": [
+    {
+     "input": [
+      [
+       0
+      ]
+     ],
+     "output": [
+      0
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       1
+      ]
+     ],
+     "output": [
+      -1
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:69e92eb7fbaf3da641828669": {
+   "constraints": [
+    "1 <= n <= 100000",
+    "arr[i] in a..z",
+    "1 <= m <= 100000; 0 <= queries[i] < n",
+    "tree depth up to 100000"
+   ],
+   "clarifyingQuestions": [
+    "Is arr a string or a list of characters?",
+    "Does the count include the query node itself?",
+    "Can the tree be a long chain?"
+   ],
+   "hints": [
+    "A multiset of letters can form a palindrome iff at most one letter has an odd count.",
+    "Store letter parities as a 26-bit mask; the mask of a path segment is an xor of two root prefixes.",
+    "During a DFS keep a count of the prefix masks of the current root path; for v on that path, segment q..v has mask P[q] xor P[parent(v)].",
+    "Count prefixes equal to P[q] or differing in one bit; use an explicit stack because the tree may be a chain."
+   ],
+   "invariants": [
+    "the counter holds exactly the masks P[parent(v)] for v on the current root path",
+    "a mask with at most one set bit means palindrome-able"
+   ],
+   "chooseWhen": [
+    "Path queries about letter parities"
+   ],
+   "tradeoffs": [
+    "27 hash lookups per node trade memory for a linear-time pass"
+   ],
+   "variantLabel": "Stated: palindromic ancestor paths",
+   "examples": [
+    {
+     "input": [
+      [
+       "a"
+      ],
+      [],
+      [],
+      [
+       0
+      ]
+     ],
+     "output": [
+      1
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "a",
+       "c"
+      ],
+      [
+       1
+      ],
+      [
+       0
+      ],
+      [
+       0,
+       0
+      ]
+     ],
+     "output": [
+      1,
+      1
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:67ccdb573363b83a81fc9983": {
+   "constraints": [
+    "2 <= len(digits) <= 100000",
+    "digits are 0-9"
+   ],
+   "clarifyingQuestions": [
+    "When does the reduction stop: one digit or two?",
+    "Is the sum taken mod 10?",
+    "Are leading zeros kept?"
+   ],
+   "hints": [
+    "One round maps a string of length L to length L - 1, so L - 2 rounds are needed.",
+    "Digit 0 of the result is sum over i of C(L - 2, i) * d[i] mod 10, a row of Pascal's triangle.",
+    "Compute C mod 2 and C mod 5 with Lucas' theorem and combine them by the Chinese remainder theorem.",
+    "Digit 1 uses the same coefficients on d[i + 1]."
+   ],
+   "invariants": [
+    "the rounds are linear with Pascal-triangle coefficients",
+    "Lucas gives C mod prime from base-p digits"
+   ],
+   "chooseWhen": [
+    "Repeated linear reductions over many rounds"
+   ],
+   "tradeoffs": [
+    "The binomial form is far faster than O(L**2) rounds but needs number theory"
+   ],
+   "variantLabel": "Inferred: adjacent-sum reduction to two digits",
+   "examples": [
+    {
+     "input": [
+      "12"
+     ],
+     "output": "12",
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      "00"
+     ],
+     "output": "00",
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  }
+ }
+}

@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:6a56e302665efda9311f8dcb",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "teamA",
+  "teamB"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-28"
+ },
+ "inferred_interface": {
+  "name": "battleLog",
+  "params": [
+   {
+    "name": "teamA",
+    "type": "Monster[]"
+   },
+   {
+    "name": "teamB",
+    "type": "Monster[]"
+   }
+  ],
+  "return": {
+   "type": "string[]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "re-simulation over copied lists; each round sorts the two fronts by (speed, team)",
+  "candidate_design": "index pointers per team; each round orders the two fronts by speed and performs one or two attacks",
+  "complexity_target": "O(number of log lines) time"
+ },
+ "source_sha256": "062e1aca66d6d5f9bd9b080e86a2d9c7488fd70b883121c6d06fffb603e19f12",
+ "wrapper": "named export battleLog"
+}
