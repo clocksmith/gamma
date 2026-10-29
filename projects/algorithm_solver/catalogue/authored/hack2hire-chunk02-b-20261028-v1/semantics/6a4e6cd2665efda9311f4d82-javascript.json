@@ -1,0 +1,60 @@
+{
+ "comparison": "exact typed JSON result",
+ "effects": "arguments unchanged",
+ "entrypoint": "solve",
+ "language": "javascript",
+ "inferred_interface": {
+  "name": "simulateDfa",
+  "params": [
+   {
+    "name": "input",
+    "type": "string"
+   },
+   {
+    "name": "transitions",
+    "type": "integer[][]"
+   },
+   {
+    "name": "start",
+    "type": "integer"
+   },
+   {
+    "name": "accepting",
+    "type": "integer[]"
+   }
+  ],
+  "return": {
+   "type": "boolean"
+  }
+ },
+ "spec_basis": "inferred",
+ "inference": {
+  "by": "claude-opus-5-5 subagent",
+  "date": "2026-10-28",
+  "basis": [
+   "payload.data.title",
+   "payload.data.contentPreview (partial public group preview)",
+   "payload.data.algorithmTags",
+   "payload.data.codingQuestions (variant ids only)",
+   "bank.json companies/tags/variants"
+  ]
+ },
+ "parameters": [
+  "input",
+  "transitions",
+  "start",
+  "accepting"
+ ],
+ "uid": "hack2hire:6a4e6cd2665efda9311f4d82",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified: specification is inferred from a partial public preview, and the only executions are author-local runs of own candidates against own generated cases; no isolated independent qualification"
+ },
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "source_reasoning": {
+  "reference": "backward computation of the set of states that accept the remaining suffix",
+  "candidate_design": "forward table walk",
+  "complexity_target": "O(|input|) time/O(states) space"
+ },
+ "source_sha256": "851b266ec64f262c5092a02e3814ce659ca2e37b32d00e498977707c0c4a3349"
+}

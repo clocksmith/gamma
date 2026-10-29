@@ -1,0 +1,1607 @@
+{
+ "schema": "gamma.hack2hire-chunk02-b-study-content.v1",
+ "authored_by": "claude-opus-5-5 subagent, 2026-10-28",
+ "note": "Teaching text, clarifying questions, inferred constraints and own examples. Inferred, not official. Examples are small generated inputs with outputs from the independent references in oracles.py.",
+ "variants": {
+  "hack2hire:6941d017e79fe20cf9ff443f": {
+   "variantLabel": "Inferred variant 1: indented pre-order hierarchy",
+   "constraints": [
+    "1..20000 relationship rows, at most 40000 names in total",
+    "names match [A-Za-z][A-Za-z0-9]{0,9} and are unique employees",
+    "each manager heads at most one row; exactly one top-level manager; rows may appear in any order"
+   ],
+   "clarifyingQuestions": [
+    "What exact indentation or prefix marks each level?",
+    "Are direct reports printed in listed order or sorted?",
+    "Is printing to stdout required, or may lines be returned?"
+   ],
+   "hints": [
+    "The top manager is the only name that never appears as a report.",
+    "A pre-order walk prints a manager before everyone below it.",
+    "Use an explicit stack, pushing direct reports in reverse so they pop in listed order; carry depth with each entry."
+   ],
+   "invariants": [
+    "every line is emitted after its manager's line",
+    "siblings appear in their listed order"
+   ],
+   "chooseWhen": [
+    "Deep chains where recursion could overflow"
+   ],
+   "tradeoffs": [
+    "Recursive DFS is shorter but limited by recursion depth"
+   ],
+   "validationHints": [
+    "Compare against the independent reference on tiny inputs first, then on boundary inputs at the inferred maximum bounds."
+   ],
+   "examples": [
+    {
+     "input": [
+      [
+       [
+        "E0"
+       ]
+      ]
+     ],
+     "output": [
+      "E0"
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       [
+        "Solo"
+       ]
+      ]
+     ],
+     "output": [
+      "Solo"
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6945a3fbe85c245612a9786c": {
+   "variantLabel": "Inferred variant 2: hierarchy lines with total report counts",
+   "constraints": [
+    "1..20000 relationship rows, at most 40000 names in total",
+    "names match [A-Za-z][A-Za-z0-9]{0,9} and are unique employees",
+    "each manager heads at most one row; exactly one top-level manager; rows may appear in any order"
+   ],
+   "clarifyingQuestions": [
+    "Does the count include indirect reports or only direct ones?",
+    "How is the count formatted on the line?"
+   ],
+   "hints": [
+    "A manager's total reports equal the sum over direct reports of (1 + their totals).",
+    "Totals need children finished first: a post-order quantity.",
+    "Record the pre-order sequence once, then sweep it backwards adding each node's total + 1 to its manager."
+   ],
+   "invariants": [
+    "when a node is processed in reverse pre-order, all its descendants are already final",
+    "line order equals variant 1"
+   ],
+   "chooseWhen": [
+    "Needing a subtree aggregate alongside pre-order output"
+   ],
+   "tradeoffs": [
+    "Two passes over the order list instead of a recursive return value"
+   ],
+   "validationHints": [
+    "Compare against the independent reference on tiny inputs first, then on boundary inputs at the inferred maximum bounds."
+   ],
+   "examples": [
+    {
+     "input": [
+      [
+       [
+        "E0"
+       ]
+      ]
+     ],
+     "output": [
+      "E0 (0)"
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       [
+        "Solo"
+       ]
+      ]
+     ],
+     "output": [
+      "Solo (0)"
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6945a578e85c245612a9786f": {
+   "variantLabel": "Inferred variant 3: chain from the top manager to one employee",
+   "constraints": [
+    "1..20000 relationship rows, at most 40000 names in total",
+    "names match [A-Za-z][A-Za-z0-9]{0,9} and are unique employees",
+    "each manager heads at most one row; exactly one top-level manager; rows may appear in any order",
+    "the named employee exists"
+   ],
+   "clarifyingQuestions": [
+    "Is the chain ordered top-down or bottom-up?",
+    "Are the top manager and the employee both included?"
+   ],
+   "hints": [
+    "Each employee has exactly one manager.",
+    "Map every report to its manager.",
+    "Walk upward from the employee until no manager exists, then reverse."
+   ],
+   "invariants": [
+    "each step moves exactly one level up",
+    "the walk ends at the unique root"
+   ],
+   "chooseWhen": [
+    "Single path queries on a tree given as adjacency rows"
+   ],
+   "tradeoffs": [
+    "A parent map costs O(n) memory but makes each query O(depth)"
+   ],
+   "validationHints": [
+    "Compare against the independent reference on tiny inputs first, then on boundary inputs at the inferred maximum bounds."
+   ],
+   "examples": [
+    {
+     "input": [
+      [
+       [
+        "Solo"
+       ]
+      ],
+      "Solo"
+     ],
+     "output": [
+      "Solo"
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       [
+        "E1",
+        "E0"
+       ]
+      ],
+      "E0"
+     ],
+     "output": [
+      "E1",
+      "E0"
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6945ada2e85c245612a97880": {
+   "variantLabel": "Inferred variant 4: closest common manager of two employees",
+   "constraints": [
+    "1..20000 relationship rows, at most 40000 names in total",
+    "names match [A-Za-z][A-Za-z0-9]{0,9} and are unique employees",
+    "each manager heads at most one row; exactly one top-level manager; rows may appear in any order",
+    "both named employees exist"
+   ],
+   "clarifyingQuestions": [
+    "Can one of the two employees be the answer?",
+    "What is returned when both names are the same?"
+   ],
+   "hints": [
+    "Think of both reporting chains up to the top manager.",
+    "Equalise depths first; two equal-depth walkers meet at the common manager.",
+    "Compute both depths by walking the parent map, lift the deeper employee, then step both up together until they match."
+   ],
+   "invariants": [
+    "after lifting, both walkers are at the same depth",
+    "walkers meet at the deepest shared ancestor"
+   ],
+   "chooseWhen": [
+    "One-off lowest-common-ancestor queries without preprocessing"
+   ],
+   "tradeoffs": [
+    "Binary lifting answers many queries faster but needs O(n log n) setup"
+   ],
+   "validationHints": [
+    "Compare against the independent reference on tiny inputs first, then on boundary inputs at the inferred maximum bounds."
+   ],
+   "examples": [
+    {
+     "input": [
+      [
+       [
+        "E0"
+       ]
+      ],
+      "E0",
+      "E0"
+     ],
+     "output": "E0",
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       [
+        "Solo"
+       ]
+      ],
+      "Solo",
+      "Solo"
+     ],
+     "output": "Solo",
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6883f1d260cda5e061502874": {
+   "variantLabel": "Inferred: product by month profit pivot",
+   "constraints": [
+    "1..10000 order rows after the header",
+    "cost and sell_price are non-negative decimals with at most two fractional digits and at most 7 integer digits",
+    "dates are YYYY-MM-DD; header has 5..10 unique lowercase columns in any order"
+   ],
+   "clarifyingQuestions": [
+    "What are the pivot rows and columns (product x month assumed)?",
+    "How should amounts be formatted?",
+    "Should products or months with no orders appear?"
+   ],
+   "hints": [
+    "Locate columns by header name, not position.",
+    "Floating-point sums of money drift; use integer cents.",
+    "Aggregate (product, YYYY-MM) to cents in a map, then emit sorted rows with fixed two-decimal formatting."
+   ],
+   "invariants": [
+    "all money is held as exact integer cents",
+    "missing cells format as 0.00"
+   ],
+   "chooseWhen": [
+    "Exact money aggregation over string records"
+   ],
+   "tradeoffs": [
+    "Decimal libraries are simpler to read but slower; integer cents need careful parsing"
+   ],
+   "validationHints": [
+    "Compare against the independent reference on tiny inputs first, then on boundary inputs at the inferred maximum bounds."
+   ],
+   "examples": [
+    {
+     "input": [
+      [
+       [
+        "product",
+        "sell_price",
+        "cost",
+        "order_id",
+        "date"
+       ]
+      ]
+     ],
+     "output": [
+      [
+       "product"
+      ]
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       [
+        "order_id",
+        "cost",
+        "date",
+        "sell_price",
+        "product",
+        "state"
+       ],
+       [
+        "o0",
+        "1",
+        "2024-11-01",
+        "0",
+        "eggs",
+        "CA"
+       ]
+      ]
+     ],
+     "output": [
+      [
+       "product",
+       "2024-11"
+      ],
+      [
+       "eggs",
+       "-1.00"
+      ]
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6a4fb137665efda9311f561b": {
+   "variantLabel": "Inferred: nearest-rank price percentile",
+   "constraints": [
+    "1..100000 records \"price,count\"",
+    "0 <= price <= 999999999 cents, 1 <= count <= 1000000",
+    "1 <= percentile <= 100"
+   ],
+   "clarifyingQuestions": [
+    "Which percentile definition applies (nearest-rank assumed)?",
+    "Is the answer the cutoff price or the number of transactions at or above it?"
+   ],
+   "hints": [
+    "Combine counts for equal prices first.",
+    "Walk prices in ascending order keeping a running count.",
+    "Stop at the first price with running*100 >= percentile*total, comparing integers exactly."
+   ],
+   "invariants": [
+    "running equals the number of transactions priced at or below the current price"
+   ],
+   "chooseWhen": [
+    "Counts are large so expanding transactions is infeasible"
+   ],
+   "tradeoffs": [
+    "Sorting distinct prices is O(d log d); a counting array is possible only for small price ranges"
+   ],
+   "validationHints": [
+    "Compare against the independent reference on tiny inputs first, then on boundary inputs at the inferred maximum bounds."
+   ],
+   "examples": [
+    {
+     "input": [
+      [
+       "0,1"
+      ],
+      1
+     ],
+     "output": 0,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "1,3"
+      ],
+      67
+     ],
+     "output": 1,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6987d34fdce67a3d5ecc12bd": {
+   "variantLabel": "Inferred: count nodes whose distances to x, y, z form a Pythagorean triple",
+   "constraints": [
+    "1 <= n <= 100000; edges form a tree on 0..n-1",
+    "x, y, z are nodes (may repeat)"
+   ],
+   "clarifyingQuestions": [
+    "Are the three query nodes given as input?",
+    "Do zero distances count as a valid triple?"
+   ],
+   "hints": [
+    "You need dist(u, x), dist(u, y), dist(u, z) for every u.",
+    "In an unweighted tree one BFS gives all distances from a source.",
+    "Run three BFS passes, sort each triple and test a*a + b*b == c*c."
+   ],
+   "invariants": [
+    "each BFS assigns every node its exact edge distance"
+   ],
+   "chooseWhen": [
+    "Only a fixed small number of sources"
+   ],
+   "tradeoffs": [
+    "All-pairs distances would be O(n^2); three BFS passes are O(n)"
+   ],
+   "validationHints": [
+    "Compare against the independent reference on tiny inputs first, then on boundary inputs at the inferred maximum bounds."
+   ],
+   "examples": [
+    {
+     "input": [
+      1,
+      [],
+      [],
+      0,
+      0,
+      0
+     ],
+     "output": 1,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      9,
+      [
+       1,
+       6,
+       0,
+       6,
+       7,
+       7,
+       3,
+       0
+      ],
+      [
+       5,
+       1,
+       4,
+       8,
+       2,
+       0,
+       1,
+       1
+      ],
+      5,
+      4,
+      1
+     ],
+     "output": 0,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:695c6e4d68e2c0dd046c494f": {
+   "variantLabel": "Inferred: stream of queries acknowledged and matched against logs",
+   "constraints": [
+    "up to 5000 events",
+    "events are \"Q: words\" or \"L: words\" with lowercase alphanumeric words separated by single spaces"
+   ],
+   "clarifyingQuestions": [
+    "What exact acknowledgement and match lines are printed?",
+    "Is matching by whole words, all words of the query, and case-sensitive?",
+    "Do repeated query words matter?"
+   ],
+   "hints": [
+    "A query matches a log when every distinct query word is in the log.",
+    "Index queries by word so a log only touches relevant queries.",
+    "For each distinct log word, increment a hit counter for every query containing it; queries whose hits equal their distinct-word count match."
+   ],
+   "invariants": [
+    "a query's hit count never exceeds its distinct word count",
+    "ids are assigned in arrival order starting at 1"
+   ],
+   "chooseWhen": [
+    "Many queries but logs share few words with most of them"
+   ],
+   "tradeoffs": [
+    "Inverted-index cost grows with posting-list length for very common words"
+   ],
+   "validationHints": [
+    "Compare against the independent reference on tiny inputs first, then on boundary inputs at the inferred maximum bounds."
+   ],
+   "examples": [
+    {
+     "input": [
+      []
+     ],
+     "output": [],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "Q: a a",
+       "L: a"
+      ]
+     ],
+     "output": [
+      "ACK: a a; ID=1",
+      "M: a; Q=1"
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6a04eafa3141bbc31efdd672": {
+   "variantLabel": "Inferred: final array after 1-based range negations",
+   "constraints": [
+    "1 <= n <= 100000, |data[i]| <= 1e9",
+    "up to 100000 updates [l, r] with 1 <= l <= r <= n"
+   ],
+   "clarifyingQuestions": [
+    "Is the final array returned, or an aggregate such as its sum?",
+    "Are indices 1-based and inclusive (assumed from the preview)?"
+   ],
+   "hints": [
+    "Negating twice restores the value; only parity matters.",
+    "Each update toggles parity on a contiguous range.",
+    "Mark parity toggles at l-1 and r in a difference array and prefix-XOR once."
+   ],
+   "invariants": [
+    "prefix XOR at i equals the number of updates covering i modulo 2"
+   ],
+   "chooseWhen": [
+    "Many updates over large arrays"
+   ],
+   "tradeoffs": [
+    "Literal negation is O(n*q); the difference array is O(n+q)"
+   ],
+   "validationHints": [
+    "Compare against the independent reference on tiny inputs first, then on boundary inputs at the inferred maximum bounds."
+   ],
+   "examples": [
+    {
+     "input": [
+      [
+       0
+      ],
+      []
+     ],
+     "output": [
+      0
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       5
+      ],
+      [
+       [
+        1,
+        1
+       ]
+      ]
+     ],
+     "output": [
+      -5
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:68ac50961bf7d2097f647ef5": {
+   "variantLabel": "Remove strict prefixes of other words",
+   "constraints": [
+    "up to 10000 unique words",
+    "each word is 1..50 lowercase letters"
+   ],
+   "clarifyingQuestions": [
+    "Is the comparison case-sensitive?",
+    "Must the output keep input order (the preview says yes)?"
+   ],
+   "hints": [
+    "A word is removable if some longer word starts with it.",
+    "In sorted order, every word starting with w follows w contiguously.",
+    "Sort a copy; w is a prefix of something iff its sorted successor starts with w."
+   ],
+   "invariants": [
+    "words are unique so the successor is strictly longer when it starts with w"
+   ],
+   "chooseWhen": [
+    "Moderate word counts without needing a trie"
+   ],
+   "tradeoffs": [
+    "A trie avoids the sort but costs more memory"
+   ],
+   "validationHints": [
+    "Compare against the independent reference on tiny inputs first, then on boundary inputs at the inferred maximum bounds."
+   ],
+   "examples": [
+    {
+     "input": [
+      []
+     ],
+     "output": [],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "a"
+      ]
+     ],
+     "output": [
+      "a"
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6834d05d071112104d71e177": {
+   "variantLabel": "Inferred: all decodings of a count-and-say encoding",
+   "constraints": [
+    "encoded is 1..20 digits",
+    "run lengths are 1..99 written without leading zeros"
+   ],
+   "clarifyingQuestions": [
+    "Should all decodings be returned or just one?",
+    "In what order?",
+    "What is the largest run length (two-digit counts assumed)?"
+   ],
+   "hints": [
+    "Each group is a 1- or 2-digit count followed by one digit.",
+    "Reject counts with a leading zero and adjacent groups with the same digit, since runs are maximal.",
+    "Backtrack over the two count widths with those two pruning rules; every completed parse is a distinct valid decoding."
+   ],
+   "invariants": [
+    "adjacent groups always have different digits",
+    "every count is in 1..99"
+   ],
+   "chooseWhen": [
+    "Short encodings with ambiguous count widths"
+   ],
+   "tradeoffs": [
+    "Output size can grow exponentially with input length"
+   ],
+   "validationHints": [
+    "Compare against the independent reference on tiny inputs first, then on boundary inputs at the inferred maximum bounds."
+   ],
+   "examples": [
+    {
+     "input": [
+      "32"
+     ],
+     "output": [
+      "222"
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      "10"
+     ],
+     "output": [
+      "0"
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:69c3477921f6ab42269655fa": {
+   "variantLabel": "Inferred: apply one Reversi move",
+   "constraints": [
+    "1 <= n <= 60 square board of \"B\", \"W\", \".\"",
+    "0 <= row, col < n; player is \"B\" or \"W\""
+   ],
+   "clarifyingQuestions": [
+    "What is returned for an illegal move?",
+    "Is the board a list of character lists or strings?"
+   ],
+   "hints": [
+    "A move flips a direction only if opponents are closed off by the player's own piece.",
+    "Check all eight directions independently.",
+    "Walk each direction collecting opponent cells; keep them only when the walk ends on a player piece; place and flip if anything was kept."
+   ],
+   "invariants": [
+    "the input board is copied, never modified",
+    "only bracketed opponent runs flip"
+   ],
+   "chooseWhen": [
+    "Single-move simulation"
+   ],
+   "tradeoffs": [
+    "Precomputing per-direction runs is unnecessary for one move"
+   ],
+   "validationHints": [
+    "Compare against the independent reference on tiny inputs first, then on boundary inputs at the inferred maximum bounds."
+   ],
+   "examples": [
+    {
+     "input": [
+      [
+       [
+        "."
+       ]
+      ],
+      0,
+      0,
+      "B"
+     ],
+     "output": [
+      [
+       "."
+      ]
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       [
+        "B"
+       ]
+      ],
+      0,
+      0,
+      "W"
+     ],
+     "output": [
+      [
+       "B"
+      ]
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6abed50f2faad6972d969c67": {
+   "variantLabel": "Inferred variant 1: totals over valid records",
+   "constraints": [
+    "up to 1000 records of at most 40 printable ASCII characters",
+    "digit-only numeric fields have at most 6 digits"
+   ],
+   "clarifyingQuestions": [
+    "Are leading zeros or a plus sign allowed in numbers?",
+    "Is whitespace around fields trimmed?",
+    "What shape does the answer take?"
+   ],
+   "hints": [
+    "Split on \"|\" and require exactly four fields.",
+    "Valid numbers are non-empty strings of digits only.",
+    "Accumulate quantity and quantity * unit price in integer cents."
+   ],
+   "invariants": [
+    "invalid records contribute nothing"
+   ],
+   "chooseWhen": [
+    "Simple validation-and-sum pipelines"
+   ],
+   "tradeoffs": [
+    "Regular expressions are compact but slower than manual checks"
+   ],
+   "validationHints": [
+    "Compare against the independent reference on tiny inputs first, then on boundary inputs at the inferred maximum bounds."
+   ],
+   "examples": [
+    {
+     "input": [
+      []
+     ],
+     "output": [
+      0,
+      0
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "s1|apple|7|59"
+      ]
+     ],
+     "output": [
+      7,
+      413
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6abed5372faad6972d969c6a": {
+   "variantLabel": "Inferred variant 2: per-SKU aggregation",
+   "constraints": [
+    "up to 1000 records of at most 40 printable ASCII characters",
+    "digit-only numeric fields have at most 6 digits"
+   ],
+   "clarifyingQuestions": [
+    "Are leading zeros or a plus sign allowed in numbers?",
+    "Is whitespace around fields trimmed?",
+    "Which product name represents a SKU with several names?"
+   ],
+   "hints": [
+    "Same validity rule as variant 1.",
+    "Group by SKU in a map holding name, quantity and cost.",
+    "Keep the first valid name, then emit lines sorted by SKU."
+   ],
+   "invariants": [
+    "each SKU appears once in the output"
+   ],
+   "chooseWhen": [
+    "Grouped reporting"
+   ],
+   "tradeoffs": [
+    "Sorting at the end costs O(s log s)"
+   ],
+   "validationHints": [
+    "Compare against the independent reference on tiny inputs first, then on boundary inputs at the inferred maximum bounds."
+   ],
+   "examples": [
+    {
+     "input": [
+      []
+     ],
+     "output": [],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "s|n|0|0"
+      ]
+     ],
+     "output": [
+      "s|n|0|0"
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6abed6282faad6972d969c6f": {
+   "variantLabel": "Inferred variant 3: top-k SKUs by total cost",
+   "constraints": [
+    "up to 1000 records of at most 40 printable ASCII characters",
+    "digit-only numeric fields have at most 6 digits",
+    "1 <= k <= 1000"
+   ],
+   "clarifyingQuestions": [
+    "Are leading zeros or a plus sign allowed in numbers?",
+    "Is whitespace around fields trimmed?",
+    "How are cost ties broken?"
+   ],
+   "hints": [
+    "Aggregate per SKU as in variant 2.",
+    "Rank by total cost descending, then SKU ascending.",
+    "Sort once and take the first k (a heap helps only when k is far smaller than the SKU count)."
+   ],
+   "invariants": [
+    "ranking is total: no two SKUs compare equal"
+   ],
+   "chooseWhen": [
+    "Small SKU counts"
+   ],
+   "tradeoffs": [
+    "A size-k heap is O(s log k) but more code"
+   ],
+   "validationHints": [
+    "Compare against the independent reference on tiny inputs first, then on boundary inputs at the inferred maximum bounds."
+   ],
+   "examples": [
+    {
+     "input": [
+      [],
+      3
+     ],
+     "output": [],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "s|n|0|0"
+      ],
+      2
+     ],
+     "output": [
+      "s|n|0|0"
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6a4e6cd2665efda9311f4d82": {
+   "variantLabel": "Inferred generalisation: simulate an injected DFA over {a, b}",
+   "constraints": [
+    "input has 0..100000 characters from {a, b}",
+    "1..100 states; transitions[s] = [next on a, next on b]"
+   ],
+   "clarifyingQuestions": [
+    "What is the fixed automaton in the original diagram (not visible)?",
+    "Is the empty string accepted?"
+   ],
+   "hints": [
+    "A DFA has exactly one next state per symbol.",
+    "Keep only the current state.",
+    "Index the transition table with 0 for a and 1 for b, then test membership in the accepting set."
+   ],
+   "invariants": [
+    "after i characters, the state is the unique state reached by that prefix"
+   ],
+   "chooseWhen": [
+    "Any deterministic automaton"
+   ],
+   "tradeoffs": [
+    "Table lookup is O(1) per character; no backtracking is needed"
+   ],
+   "validationHints": [
+    "Compare against the independent reference on tiny inputs first, then on boundary inputs at the inferred maximum bounds."
+   ],
+   "examples": [
+    {
+     "input": [
+      "",
+      [
+       [
+        0,
+        0
+       ]
+      ],
+      0,
+      []
+     ],
+     "output": false,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      "",
+      [
+       [
+        0,
+        0
+       ]
+      ],
+      0,
+      [
+       0
+      ]
+     ],
+     "output": true,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:68504f81839fbdf76404b1d1": {
+   "variantLabel": "Inferred: set with insertion-ordered snapshot iterators",
+   "constraints": [
+    "up to 3000 operations",
+    "values are integers in [-1e9, 1e9]",
+    "next is called only when hasNext is true"
+   ],
+   "clarifyingQuestions": [
+    "What do add and remove return?",
+    "Does a removed then re-added value move to the end?",
+    "How are iterators represented in a JSON trace?"
+   ],
+   "hints": [
+    "Copying the set at each iterator creation is simple but costly.",
+    "Keep an append-only log of insertions and stamp removals with a version number.",
+    "An iterator remembers the version and log length at creation and skips entries removed at or before its version."
+   ],
+   "invariants": [
+    "an entry is visible to an iterator iff it was appended before creation and not removed at or before its version"
+   ],
+   "chooseWhen": [
+    "Many iterators over a large set"
+   ],
+   "tradeoffs": [
+    "The log grows with every re-add; compaction would need reference tracking"
+   ],
+   "validationHints": [
+    "Compare against the independent reference on tiny inputs first, then on boundary inputs at the inferred maximum bounds."
+   ],
+   "examples": [
+    {
+     "input": [
+      [
+       "SnapshotSet"
+      ],
+      [
+       []
+      ]
+     ],
+     "output": [
+      null
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "SnapshotSet",
+       "add",
+       "remove"
+      ],
+      [
+       [],
+       [
+        0
+       ],
+       [
+        -3
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      true,
+      false
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6987a577fedd959e9aa444e4": {
+   "variantLabel": "Inferred: split the drainage tree to balance flow",
+   "constraints": [
+    "2 <= n <= 100000; parent[0] = -1 and parents form a tree",
+    "0 <= input[i] <= 10000"
+   ],
+   "clarifyingQuestions": [
+    "Is the second array the water entering at each node?",
+    "Is the objective the minimum absolute difference?"
+   ],
+   "hints": [
+    "Cutting the pipe above node i separates exactly the subtree of i.",
+    "Subtree sums give both halves: s and total - s.",
+    "Compute subtree sums bottom-up from a BFS order, then minimise |total - 2s|."
+   ],
+   "invariants": [
+    "subtree[i] is final before it is added to its parent"
+   ],
+   "chooseWhen": [
+    "Single-edge cut objectives on trees"
+   ],
+   "tradeoffs": [
+    "Recursion is natural but deep chains need an explicit order"
+   ],
+   "validationHints": [
+    "Compare against the independent reference on tiny inputs first, then on boundary inputs at the inferred maximum bounds."
+   ],
+   "examples": [
+    {
+     "input": [
+      [
+       -1,
+       0
+      ],
+      [
+       0,
+       0
+      ]
+     ],
+     "output": 0,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       -1,
+       0
+      ],
+      [
+       7,
+       3
+      ]
+     ],
+     "output": 4,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:69dd8c3595e80ae213e5b9c7": {
+   "variantLabel": "Inferred variant 1: tasks with direct dependencies",
+   "constraints": [
+    "up to 3000 operations",
+    "ids are 1..8 lowercase letters or digits; statuses are uppercase words"
+   ],
+   "clarifyingQuestions": [
+    "What does add do for an existing id?",
+    "What does addDependency return for unknown or duplicate edges?"
+   ],
+   "hints": [
+    "Store each task row in a map keyed by id.",
+    "Keep an ordered list plus a set of edges per task to reject duplicates.",
+    "Return copies so callers cannot mutate internal state."
+   ],
+   "invariants": [
+    "each dependency edge is stored once",
+    "get returns a fresh list"
+   ],
+   "chooseWhen": [
+    "Simple dependency bookkeeping"
+   ],
+   "tradeoffs": [
+    "An edge set doubles memory but makes duplicate checks O(1)"
+   ],
+   "validationHints": [
+    "Compare against the independent reference on tiny inputs first, then on boundary inputs at the inferred maximum bounds."
+   ],
+   "examples": [
+    {
+     "input": [
+      [
+       "ToDoList"
+      ],
+      [
+       []
+      ]
+     ],
+     "output": [
+      null
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "ToDoList",
+       "addDependency"
+      ],
+      [
+       [],
+       [
+        "t1",
+        "t2"
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      false
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:69dd8d2795e80ae213e5b9cf": {
+   "variantLabel": "Inferred variant 2: cycle-free dependencies and execution order",
+   "constraints": [
+    "up to 3000 operations",
+    "ids are 1..8 lowercase letters or digits; statuses are uppercase words"
+   ],
+   "clarifyingQuestions": [
+    "Should a cycle-creating dependency be rejected?",
+    "Which order is returned when several tasks are ready?"
+   ],
+   "hints": [
+    "A new edge t -> d creates a cycle iff t is already reachable from d.",
+    "Topological order: prerequisites before dependents.",
+    "Check reachability with DFS per edge; produce the order with Kahn's algorithm and a min-heap for the smallest ready id."
+   ],
+   "invariants": [
+    "the dependency graph stays acyclic",
+    "a task enters the heap only after all prerequisites are emitted"
+   ],
+   "chooseWhen": [
+    "Deterministic ordering with tie-breaking"
+   ],
+   "tradeoffs": [
+    "Per-edge DFS is O(V+E); incremental topological maintenance is faster but complex"
+   ],
+   "validationHints": [
+    "Compare against the independent reference on tiny inputs first, then on boundary inputs at the inferred maximum bounds."
+   ],
+   "examples": [
+    {
+     "input": [
+      [
+       "ToDoList"
+      ],
+      [
+       []
+      ]
+     ],
+     "output": [
+      null
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "ToDoList",
+       "add"
+      ],
+      [
+       [],
+       [
+        "t2",
+        "eval",
+        "IN_PROGRESS"
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      null
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:69c733a121f6ab4226966853": {
+   "variantLabel": "Inferred variant 1: pre-order traversal of a row-encoded tree",
+   "constraints": [
+    "1..20000 rows; row 0 is the root",
+    "keys are 1..4 lowercase letters; |value| <= 1e6"
+   ],
+   "clarifyingQuestions": [
+    "Which traversal order is requested?",
+    "Is the root always row 0?"
+   ],
+   "hints": [
+    "Children indices are listed left to right in each row.",
+    "Pre-order visits a node before its children.",
+    "Pop from a stack and push the children in reverse."
+   ],
+   "invariants": [
+    "the stack top is always the next node in pre-order"
+   ],
+   "chooseWhen": [
+    "Deep trees"
+   ],
+   "tradeoffs": [
+    "Recursion is simpler but depth-limited (the stack tag suggests the explicit version)"
+   ],
+   "validationHints": [
+    "Compare against the independent reference on tiny inputs first, then on boundary inputs at the inferred maximum bounds."
+   ],
+   "examples": [
+    {
+     "input": [
+      [
+       [
+        "a",
+        5
+       ]
+      ]
+     ],
+     "output": [
+      [
+       "a",
+       5
+      ]
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       [
+        "d",
+        40
+       ]
+      ]
+     ],
+     "output": [
+      [
+       "d",
+       40
+      ]
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:69c7438121f6ab4226966890": {
+   "variantLabel": "Inferred variant 2: merge two row-encoded trees by sibling key",
+   "constraints": [
+    "each tree has 1..20000 rows",
+    "sibling keys are unique; both roots share a key"
+   ],
+   "clarifyingQuestions": [
+    "How are nodes matched (sibling key assumed)?",
+    "How are values combined (sum assumed)?",
+    "How is the merged tree numbered?"
+   ],
+   "hints": [
+    "Matched nodes add values; unmatched subtrees are copied whole.",
+    "Process pairs (nodeA or null, nodeB or null).",
+    "Use a stack of pairs plus the output parent index; emit rows in pre-order so numbering and child lists follow automatically."
+   ],
+   "invariants": [
+    "every output row is created before its children",
+    "A children come first, then unmatched B children"
+   ],
+   "chooseWhen": [
+    "Merging deep trees"
+   ],
+   "tradeoffs": [
+    "Building nested objects first is clearer but uses more memory"
+   ],
+   "validationHints": [
+    "Compare against the independent reference on tiny inputs first, then on boundary inputs at the inferred maximum bounds."
+   ],
+   "examples": [
+    {
+     "input": [
+      [
+       [
+        "r",
+        1
+       ]
+      ],
+      [
+       [
+        "r",
+        -1
+       ]
+      ]
+     ],
+     "output": [
+      [
+       "r",
+       0
+      ]
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       [
+        "a",
+        -39
+       ]
+      ],
+      [
+       [
+        "a",
+        -25,
+        2
+       ],
+       [
+        "b",
+        38
+       ],
+       [
+        "c",
+        21,
+        3,
+        1
+       ],
+       [
+        "c",
+        -10
+       ]
+      ]
+     ],
+     "output": [
+      [
+       "a",
+       -64,
+       1
+      ],
+      [
+       "c",
+       21,
+       2,
+       3
+      ],
+      [
+       "c",
+       -10
+      ],
+      [
+       "b",
+       38
+      ]
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:69f3d14942791c82ab992e68": {
+   "variantLabel": "Inferred variant 1: BFS for the Congrats url",
+   "constraints": [
+    "up to 5000 maze entries and 50000 links",
+    "urls are \"/\" followed by up to 20 characters from [a-z0-9/]"
+   ],
+   "clarifyingQuestions": [
+    "What is returned if no exit exists?",
+    "How does the helper respond to an unknown url?"
+   ],
+   "hints": [
+    "Discovery order matters: use a FIFO queue.",
+    "Mark urls as seen when discovered, not when requested.",
+    "Return the first requested url whose message is Congrats."
+   ],
+   "invariants": [
+    "each url is requested at most once",
+    "requests follow discovery order"
+   ],
+   "chooseWhen": [
+    "Shortest-discovery exploration"
+   ],
+   "tradeoffs": [
+    "DFS would request urls in a different order"
+   ],
+   "validationHints": [
+    "Compare against the independent reference on tiny inputs first, then on boundary inputs at the inferred maximum bounds."
+   ],
+   "examples": [
+    {
+     "input": [
+      {}
+     ],
+     "output": "",
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      {
+       "/": {
+        "message": "Congrats",
+        "next": []
+       }
+      }
+     ],
+     "output": "/",
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:69f4bff979b9906debda5492": {
+   "variantLabel": "Inferred variant 2: BFS where responses pass headers to discovered urls",
+   "constraints": [
+    "up to 5000 maze entries and 50000 links",
+    "urls are \"/\" followed by up to 20 characters from [a-z0-9/]",
+    "header maps have at most 4 entries"
+   ],
+   "clarifyingQuestions": [
+    "How do headers flow between requests (invented model)?",
+    "Can a url be retried with different headers?"
+   ],
+   "hints": [
+    "Carry the headers to send with each queued url.",
+    "A url gets the headers of the response that first discovered it.",
+    "An entry with requiredHeaders answers Unauthorized when any pair is missing or different."
+   ],
+   "invariants": [
+    "each queued url carries exactly one header map"
+   ],
+   "chooseWhen": [
+    "Authenticated crawling models"
+   ],
+   "tradeoffs": [
+    "First-discovery headers can lock out urls that later pages could unlock"
+   ],
+   "validationHints": [
+    "Compare against the independent reference on tiny inputs first, then on boundary inputs at the inferred maximum bounds."
+   ],
+   "examples": [
+    {
+     "input": [
+      {}
+     ],
+     "output": "",
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      {
+       "/": {
+        "message": "Congrats",
+        "next": []
+       }
+      }
+     ],
+     "output": "/",
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6a2091c38b879849ebc118ad": {
+   "variantLabel": "Inferred: user journey trie with per-node user counts",
+   "constraints": [
+    "up to 20000 logs",
+    "timestamps are digit strings without leading zeros (up to 18 digits), distinct per user"
+   ],
+   "clarifyingQuestions": [
+    "What is the exact line format?",
+    "How are children ordered?",
+    "Is the root printed?"
+   ],
+   "hints": [
+    "Sort each user's actions by numeric timestamp, not string order.",
+    "Insert each user's sequence once; every node on the path gains one user.",
+    "Compare timestamps by length then digits to stay exact, then print the trie in pre-order with sorted children."
+   ],
+   "invariants": [
+    "a node count equals the number of users whose journey has that prefix"
+   ],
+   "chooseWhen": [
+    "Prefix aggregation across users"
+   ],
+   "tradeoffs": [
+    "Comparing digit strings avoids big-integer conversion"
+   ],
+   "validationHints": [
+    "Compare against the independent reference on tiny inputs first, then on boundary inputs at the inferred maximum bounds."
+   ],
+   "examples": [
+    {
+     "input": [
+      []
+     ],
+     "output": [],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       [
+        "u4",
+        "2",
+        "buy"
+       ]
+      ]
+     ],
+     "output": [
+      "buy (1)"
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:677b491778175fce2ecdfc10": {
+   "variantLabel": "Inferred: function library with variadic matching",
+   "constraints": [
+    "up to 3000 operations; names unique",
+    "up to 8 parameter types and 12 query arguments, types are 1..6 lowercase letters"
+   ],
+   "clarifyingQuestions": [
+    "Can the variadic tail be empty?",
+    "In what order are matches returned?"
+   ],
+   "hints": [
+    "Exact signatures can be hashed directly.",
+    "A variadic function with k parameters matches when the query starts with them and the rest repeat the last type.",
+    "Find the start of the trailing run of equal types; only prefixes ending inside that run can match variadic keys."
+   ],
+   "invariants": [
+    "probed variadic keys always end inside the trailing equal-type run"
+   ],
+   "chooseWhen": [
+    "Many registered functions, short queries"
+   ],
+   "tradeoffs": [
+    "Probing O(L) prefixes costs O(L^2) hashing per query"
+   ],
+   "validationHints": [
+    "Compare against the independent reference on tiny inputs first, then on boundary inputs at the inferred maximum bounds."
+   ],
+   "examples": [
+    {
+     "input": [
+      [
+       "FunctionLibrary",
+       "findMatches"
+      ],
+      [
+       [],
+       [
+        []
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      []
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "FunctionLibrary",
+       "register",
+       "findMatches"
+      ],
+      [
+       [],
+       [
+        "f",
+        [],
+        false
+       ],
+       [
+        []
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      null,
+      [
+       "f"
+      ]
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  }
+ }
+}

@@ -1,0 +1,45 @@
+{
+ "comparison": "exact typed JSON result",
+ "effects": "arguments unchanged",
+ "entrypoint": "solve",
+ "language": "python",
+ "inferred_interface": {
+  "name": "pivotProfit",
+  "params": [
+   {
+    "name": "records",
+    "type": "string[][]"
+   }
+  ],
+  "return": {
+   "type": "string[][]"
+  }
+ },
+ "spec_basis": "inferred",
+ "inference": {
+  "by": "claude-opus-5-5 subagent",
+  "date": "2026-10-28",
+  "basis": [
+   "payload.data.title",
+   "payload.data.contentPreview (partial public group preview)",
+   "payload.data.algorithmTags",
+   "payload.data.codingQuestions (variant ids only)",
+   "bank.json companies/tags/variants"
+  ]
+ },
+ "parameters": [
+  "records"
+ ],
+ "uid": "hack2hire:6883f1d260cda5e061502874",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified: specification is inferred from a partial public preview, and the only executions are author-local runs of own candidates against own generated cases; no isolated independent qualification"
+ },
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "source_reasoning": {
+  "reference": "decimal.Decimal sums keyed by (product, month)",
+  "candidate_design": "parse amounts to integer cents, hash-map aggregation, sorted keys, cents formatting",
+  "complexity_target": "O(r log r) time/O(r) space"
+ },
+ "source_sha256": "df5952f126ec80cb0b83f48c8fb3e131c6ad8d9e9a81bb5d0b01f08d72aa6167"
+}

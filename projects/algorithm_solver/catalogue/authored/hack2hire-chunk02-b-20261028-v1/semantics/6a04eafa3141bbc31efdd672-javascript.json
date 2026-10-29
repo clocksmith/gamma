@@ -1,0 +1,50 @@
+{
+ "comparison": "exact typed JSON result",
+ "effects": "arguments unchanged",
+ "entrypoint": "solve",
+ "language": "javascript",
+ "inferred_interface": {
+  "name": "applyRangeNegations",
+  "params": [
+   {
+    "name": "data",
+    "type": "integer[]"
+   },
+   {
+    "name": "updates",
+    "type": "integer[][]"
+   }
+  ],
+  "return": {
+   "type": "integer[]"
+  }
+ },
+ "spec_basis": "inferred",
+ "inference": {
+  "by": "claude-opus-5-5 subagent",
+  "date": "2026-10-28",
+  "basis": [
+   "payload.data.title",
+   "payload.data.contentPreview (partial public group preview)",
+   "payload.data.algorithmTags",
+   "payload.data.codingQuestions (variant ids only)",
+   "bank.json companies/tags/variants"
+  ]
+ },
+ "parameters": [
+  "data",
+  "updates"
+ ],
+ "uid": "hack2hire:6a04eafa3141bbc31efdd672",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified: specification is inferred from a partial public preview, and the only executions are author-local runs of own candidates against own generated cases; no isolated independent qualification"
+ },
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "source_reasoning": {
+  "reference": "literal per-element negation for each update",
+  "candidate_design": "parity difference array then one prefix pass",
+  "complexity_target": "O(n+q) time/O(n) space"
+ },
+ "source_sha256": "8819a8178d55feec7c9a4827c83604165fef25bfb25d5a227c83a38a0a8c657b"
+}

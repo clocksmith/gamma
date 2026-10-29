@@ -1,0 +1,45 @@
+{
+ "comparison": "exact typed JSON result",
+ "effects": "arguments unchanged",
+ "entrypoint": "solve",
+ "language": "javascript",
+ "inferred_interface": {
+  "name": "preorderTraversal",
+  "params": [
+   {
+    "name": "nodes",
+    "type": "list[]"
+   }
+  ],
+  "return": {
+   "type": "list[]"
+  }
+ },
+ "spec_basis": "inferred",
+ "inference": {
+  "by": "claude-opus-5-5 subagent",
+  "date": "2026-10-28",
+  "basis": [
+   "payload.data.title",
+   "payload.data.contentPreview (partial public group preview)",
+   "payload.data.algorithmTags",
+   "payload.data.codingQuestions (variant ids only)",
+   "bank.json companies/tags/variants"
+  ]
+ },
+ "parameters": [
+  "nodes"
+ ],
+ "uid": "hack2hire:69c733a121f6ab4226966853",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified: specification is inferred from a partial public preview, and the only executions are author-local runs of own candidates against own generated cases; no isolated independent qualification"
+ },
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "source_reasoning": {
+  "reference": "recursive pre-order",
+  "candidate_design": "explicit stack pushing children in reverse",
+  "complexity_target": "O(n) time/O(n) space"
+ },
+ "source_sha256": "9004095fcefa3037b6e2d99654e7021271f86aae955feac9307de91d095ff5bf"
+}

@@ -1,0 +1,115 @@
+{
+ "comparison": "exact typed JSON result; trace result, no bool/int coercion",
+ "effects": {
+  "trace_inputs": "unchanged including nested argument lists",
+  "native_state": "changes only through declared mutators",
+  "returned_mutable_containers": "fresh"
+ },
+ "entrypoint": "solve",
+ "language": "javascript",
+ "inferred_interface": {
+  "classname": "SnapshotSet",
+  "constructor": {
+   "params": []
+  },
+  "methods": [
+   {
+    "name": "add",
+    "params": [
+     {
+      "name": "value",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "boolean"
+    }
+   },
+   {
+    "name": "remove",
+    "params": [
+     {
+      "name": "value",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "boolean"
+    }
+   },
+   {
+    "name": "contains",
+    "params": [
+     {
+      "name": "value",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "boolean"
+    }
+   },
+   {
+    "name": "getIterator",
+    "params": [],
+    "return": {
+     "type": "integer"
+    }
+   },
+   {
+    "name": "hasNext",
+    "params": [
+     {
+      "name": "iteratorId",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "boolean"
+    }
+   },
+   {
+    "name": "next",
+    "params": [
+     {
+      "name": "iteratorId",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   }
+  ]
+ },
+ "spec_basis": "inferred",
+ "inference": {
+  "by": "claude-opus-5-5 subagent",
+  "date": "2026-10-28",
+  "basis": [
+   "payload.data.title",
+   "payload.data.contentPreview (partial public group preview)",
+   "payload.data.algorithmTags",
+   "payload.data.codingQuestions (variant ids only)",
+   "bank.json companies/tags/variants"
+  ]
+ },
+ "parameters": [
+  "operation_names",
+  "argument_lists"
+ ],
+ "uid": "hack2hire:68504f81839fbdf76404b1d1",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified: specification is inferred from a partial public preview, and the only executions are author-local runs of own candidates against own generated cases; no isolated independent qualification"
+ },
+ "schema": "gamma.authored-native-trace-semantics.v1",
+ "source_reasoning": {
+  "reference": "copy the member list at every getIterator",
+  "candidate_design": "append-only entry log with add/remove versions; iterator = (version, end index, cursor) skipping entries not live at its version",
+  "complexity_target": "O(1) per mutation, amortized O(snapshot length) per iterator"
+ },
+ "source_sha256": "4d382bd86c1a5806c66e58d305b2ba0e4d7bf65d56bdc96d800f250e20c15105",
+ "native_class": "SnapshotSet",
+ "native_symbol": "property of the CommonJS solve export"
+}

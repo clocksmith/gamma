@@ -1,0 +1,60 @@
+{
+ "comparison": "exact typed JSON result",
+ "effects": "arguments unchanged",
+ "entrypoint": "solve",
+ "language": "javascript",
+ "inferred_interface": {
+  "name": "reversiMove",
+  "params": [
+   {
+    "name": "board",
+    "type": "character[][]"
+   },
+   {
+    "name": "row",
+    "type": "integer"
+   },
+   {
+    "name": "col",
+    "type": "integer"
+   },
+   {
+    "name": "player",
+    "type": "character"
+   }
+  ],
+  "return": {
+   "type": "character[][]"
+  }
+ },
+ "spec_basis": "inferred",
+ "inference": {
+  "by": "claude-opus-5-5 subagent",
+  "date": "2026-10-28",
+  "basis": [
+   "payload.data.title",
+   "payload.data.contentPreview (partial public group preview)",
+   "payload.data.algorithmTags",
+   "payload.data.codingQuestions (variant ids only)",
+   "bank.json companies/tags/variants"
+  ]
+ },
+ "parameters": [
+  "board",
+  "row",
+  "col",
+  "player"
+ ],
+ "uid": "hack2hire:69c3477921f6ab42269655fa",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified: specification is inferred from a partial public preview, and the only executions are author-local runs of own candidates against own generated cases; no isolated independent qualification"
+ },
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "source_reasoning": {
+  "reference": "per opponent cell: line-of-sight test from the move with a closing player piece",
+  "candidate_design": "eight-direction ray walk with collection of bracketed cells",
+  "complexity_target": "O(n) time/O(n^2) space for the copy"
+ },
+ "source_sha256": "4833c80870419fef2205f86c5ca4fd0a630d911b6abc1f7e10ba31931ac3ae26"
+}

@@ -1,0 +1,136 @@
+{
+ "problems": {
+  "hack2hire:6941d017e79fe20cf9ff443f": {
+   "reference": "parent-chain sibling-position keys sorted lexicographically (no traversal)",
+   "candidate_design": "iterative explicit-stack pre-order DFS over a name->children map",
+   "complexity_target": "O(n) time/O(n) space"
+  },
+  "hack2hire:6945a3fbe85c245612a9786c": {
+   "reference": "ancestor-chain membership count per employee pair",
+   "candidate_design": "iterative pre-order then reverse-order subtree size accumulation",
+   "complexity_target": "O(n) time/O(n) space"
+  },
+  "hack2hire:6945a578e85c245612a9786f": {
+   "reference": "repeated parent lookup then reverse",
+   "candidate_design": "report->manager map, walk upward, reverse",
+   "complexity_target": "O(n) time/O(n) space"
+  },
+  "hack2hire:6945ada2e85c245612a97880": {
+   "reference": "intersection of the two full chains, last common element",
+   "candidate_design": "depths by upward walk, then lift the deeper one and step both upward together",
+   "complexity_target": "O(n) time/O(n) space"
+  },
+  "hack2hire:6883f1d260cda5e061502874": {
+   "reference": "decimal.Decimal sums keyed by (product, month)",
+   "candidate_design": "parse amounts to integer cents, hash-map aggregation, sorted keys, cents formatting",
+   "complexity_target": "O(r log r) time/O(r) space"
+  },
+  "hack2hire:6a4fb137665efda9311f561b": {
+   "reference": "expand every transaction into a sorted list and index the nearest rank",
+   "candidate_design": "combine counts in a map, sort distinct prices, cumulative scan with exact integer comparison",
+   "complexity_target": "O(r log r) time/O(r) space"
+  },
+  "hack2hire:6987d34fdce67a3d5ecc12bd": {
+   "reference": "Floyd-Warshall all-pairs distances",
+   "candidate_design": "three BFS passes from x, y, z",
+   "complexity_target": "O(n) time/O(n) space"
+  },
+  "hack2hire:695c6e4d68e2c0dd046c494f": {
+   "reference": "for each log, test every earlier query word list against the log words",
+   "candidate_design": "inverted index word->query ids with per-log hit counters compared to distinct query word counts",
+   "complexity_target": "O(total words + postings touched) time/O(total words) space"
+  },
+  "hack2hire:6a04eafa3141bbc31efdd672": {
+   "reference": "literal per-element negation for each update",
+   "candidate_design": "parity difference array then one prefix pass",
+   "complexity_target": "O(n+q) time/O(n) space"
+  },
+  "hack2hire:68ac50961bf7d2097f647ef5": {
+   "reference": "quadratic startswith test over all pairs",
+   "candidate_design": "sorted copy; a word is a strict prefix of some word iff its sorted successor starts with it",
+   "complexity_target": "O(n log n * L) time/O(n) space"
+  },
+  "hack2hire:6834d05d071112104d71e177": {
+   "reference": "enumerate all cuts into 2/3-character pieces, decode literally, keep exact re-encodings",
+   "candidate_design": "backtracking over 1- or 2-digit counts rejecting zero/leading-zero counts and equal adjacent digits",
+   "complexity_target": "O(2^(m/2) * output) time/O(output) space"
+  },
+  "hack2hire:69c3477921f6ab42269655fa": {
+   "reference": "per opponent cell: line-of-sight test from the move with a closing player piece",
+   "candidate_design": "eight-direction ray walk with collection of bracketed cells",
+   "complexity_target": "O(n) time/O(n^2) space for the copy"
+  },
+  "hack2hire:6abed50f2faad6972d969c67": {
+   "reference": "regular-expression record match and Counter sums",
+   "candidate_design": "manual split and character-code digit checks",
+   "complexity_target": "O(total characters) time/O(1) extra space"
+  },
+  "hack2hire:6abed5372faad6972d969c6a": {
+   "reference": "regular-expression record match and Counter sums",
+   "candidate_design": "manual parse, insertion-ordered map aggregation, sort by sku",
+   "complexity_target": "O(total characters + s log s) time/O(s) space"
+  },
+  "hack2hire:6abed6282faad6972d969c6f": {
+   "reference": "regular-expression record match, full sort, slice",
+   "candidate_design": "manual parse, map aggregation, sort by (-cost, sku), slice",
+   "complexity_target": "O(total characters + s log s) time/O(s) space"
+  },
+  "hack2hire:6a4e6cd2665efda9311f4d82": {
+   "reference": "backward computation of the set of states that accept the remaining suffix",
+   "candidate_design": "forward table walk",
+   "complexity_target": "O(|input|) time/O(states) space"
+  },
+  "hack2hire:68504f81839fbdf76404b1d1": {
+   "reference": "copy the member list at every getIterator",
+   "candidate_design": "append-only entry log with add/remove versions; iterator = (version, end index, cursor) skipping entries not live at its version",
+   "complexity_target": "O(1) per mutation, amortized O(snapshot length) per iterator"
+  },
+  "hack2hire:6987a577fedd959e9aa444e4": {
+   "reference": "for each cut, flood one side and sum",
+   "candidate_design": "iterative post-order subtree sums, min |total - 2*sub|",
+   "complexity_target": "O(n) time/O(n) space"
+  },
+  "hack2hire:69dd8c3595e80ae213e5b9c7": {
+   "reference": "plain dict/list state replay",
+   "candidate_design": "hash map of task rows plus per-task ordered prerequisite list and edge set",
+   "complexity_target": "O(1) expected per operation (O(d) copy for getDependencies)"
+  },
+  "hack2hire:69dd8d2795e80ae213e5b9cf": {
+   "reference": "transitive closure per addDependency; repeated min scan for the order",
+   "candidate_design": "DFS reachability check per edge; Kahn with a binary min-heap",
+   "complexity_target": "O(V+E) per addDependency; O((V+E) log V) per order"
+  },
+  "hack2hire:69c733a121f6ab4226966853": {
+   "reference": "recursive pre-order",
+   "candidate_design": "explicit stack pushing children in reverse",
+   "complexity_target": "O(n) time/O(n) space"
+  },
+  "hack2hire:69c7438121f6ab4226966890": {
+   "reference": "recursive tuple merge then pre-order numbering",
+   "candidate_design": "explicit-stack pairwise merge emitting rows in pre-order",
+   "complexity_target": "O(n_A + n_B) time/O(n_A + n_B) space"
+  },
+  "hack2hire:69f3d14942791c82ab992e68": {
+   "reference": "level-by-level list BFS",
+   "candidate_design": "queue BFS with a seen set",
+   "complexity_target": "O(urls + links) time/O(urls) space"
+  },
+  "hack2hire:69f4bff979b9906debda5492": {
+   "reference": "level-by-level list BFS with header maps",
+   "candidate_design": "queue BFS carrying the discovering response's header map",
+   "complexity_target": "O(urls + links) time/O(urls) space"
+  },
+  "hack2hire:6a2091c38b879849ebc118ad": {
+   "reference": "Counter over all journey prefix tuples, tuples sorted",
+   "candidate_design": "trie of maps with per-node user counts, stack pre-order with sorted children; timestamps compared by length then digits",
+   "complexity_target": "O(L log L) time/O(L) space"
+  },
+  "hack2hire:677b491778175fce2ecdfc10": {
+   "reference": "expand each variadic signature to the query length and compare",
+   "candidate_design": "hash maps keyed by joined type lists; query probes exact key and each prefix within the trailing equal-type run",
+   "complexity_target": "O(L^2) per query/O(total parameters) space"
+  }
+ },
+ "numeric": "All integer results stay below 2**53 inside the inferred domains (largest: CART1 total cents ~1e15, PCT cumulative*100 ~1e13); PIVOT uses integer cents; JS Number is exact; JOURNEY timestamps compared by digit length then digits (no Number conversion).",
+ "effects": "inputs (including nested lists and maps) unchanged; fresh return containers; class traces mutate only the receiver"
+}

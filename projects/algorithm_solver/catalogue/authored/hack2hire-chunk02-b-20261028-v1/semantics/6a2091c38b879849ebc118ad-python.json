@@ -1,0 +1,45 @@
+{
+ "comparison": "exact typed JSON result",
+ "effects": "arguments unchanged",
+ "entrypoint": "solve",
+ "language": "python",
+ "inferred_interface": {
+  "name": "userJourneyTrie",
+  "params": [
+   {
+    "name": "logs",
+    "type": "string[][]"
+   }
+  ],
+  "return": {
+   "type": "string[]"
+  }
+ },
+ "spec_basis": "inferred",
+ "inference": {
+  "by": "claude-opus-5-5 subagent",
+  "date": "2026-10-28",
+  "basis": [
+   "payload.data.title",
+   "payload.data.contentPreview (partial public group preview)",
+   "payload.data.algorithmTags",
+   "payload.data.codingQuestions (variant ids only)",
+   "bank.json companies/tags/variants"
+  ]
+ },
+ "parameters": [
+  "logs"
+ ],
+ "uid": "hack2hire:6a2091c38b879849ebc118ad",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified: specification is inferred from a partial public preview, and the only executions are author-local runs of own candidates against own generated cases; no isolated independent qualification"
+ },
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "source_reasoning": {
+  "reference": "Counter over all journey prefix tuples, tuples sorted",
+  "candidate_design": "trie of maps with per-node user counts, stack pre-order with sorted children; timestamps compared by length then digits",
+  "complexity_target": "O(L log L) time/O(L) space"
+ },
+ "source_sha256": "5c5a2d1fd5bbe5ed99af832d1bedfe6bee23d197ac6759000f6cfd405f82d5fb"
+}

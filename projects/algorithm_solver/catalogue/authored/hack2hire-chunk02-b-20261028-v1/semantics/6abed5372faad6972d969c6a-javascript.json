@@ -1,0 +1,45 @@
+{
+ "comparison": "exact typed JSON result",
+ "effects": "arguments unchanged",
+ "entrypoint": "solve",
+ "language": "javascript",
+ "inferred_interface": {
+  "name": "checkoutBySku",
+  "params": [
+   {
+    "name": "items",
+    "type": "string[]"
+   }
+  ],
+  "return": {
+   "type": "string[]"
+  }
+ },
+ "spec_basis": "inferred",
+ "inference": {
+  "by": "claude-opus-5-5 subagent",
+  "date": "2026-10-28",
+  "basis": [
+   "payload.data.title",
+   "payload.data.contentPreview (partial public group preview)",
+   "payload.data.algorithmTags",
+   "payload.data.codingQuestions (variant ids only)",
+   "bank.json companies/tags/variants"
+  ]
+ },
+ "parameters": [
+  "items"
+ ],
+ "uid": "hack2hire:6abed5372faad6972d969c6a",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified: specification is inferred from a partial public preview, and the only executions are author-local runs of own candidates against own generated cases; no isolated independent qualification"
+ },
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "source_reasoning": {
+  "reference": "regular-expression record match and Counter sums",
+  "candidate_design": "manual parse, insertion-ordered map aggregation, sort by sku",
+  "complexity_target": "O(total characters + s log s) time/O(s) space"
+ },
+ "source_sha256": "1933859b9cb063f59d5136bbb4a4b0baf89943b847918cb64df5b1763543cd7c"
+}
