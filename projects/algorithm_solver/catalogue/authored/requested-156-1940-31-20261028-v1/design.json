@@ -1,0 +1,1609 @@
+{
+  "problems": [
+    {
+      "calling_convention": {
+        "arguments": [
+          {
+            "name": "root",
+            "type": "TreeNode|list[int|None]"
+          }
+        ],
+        "entrypoint": "solve",
+        "official": {
+          "name": "upsideDownBinaryTree",
+          "params": [
+            {
+              "name": "root",
+              "type": "TreeNode"
+            }
+          ],
+          "return": {
+            "type": "TreeNode"
+          }
+        }
+      },
+      "id": 156,
+      "mutation_alias_contract": {
+        "arguments": "unchanged",
+        "return": "fresh containers for list results; immutable scalar otherwise"
+      },
+      "numeric_complexity_contract": {
+        "candidate_design": "Iterative pointer rotation down the left spine.",
+        "complexity_target": "O(n) time, O(1) auxiliary space",
+        "reference": "Iterative left-spine rotation"
+      },
+      "qualification_status": "unknown",
+      "return_domain": {
+        "type": "TreeNode"
+      },
+      "slug": "binary-tree-upside-down",
+      "statement_constraints_snapshot": {
+        "domain_owner": "oracles.py validate_domain; exact public bounds",
+        "full_text_location": "private requested-156-1940-31 definition snapshot",
+        "official_response_sha256": "aed682d60182b9ce32ec03dc450905737d365655169c89a4d6a840fe7e3304d8",
+        "statement_html_sha256": "a3c8f304808289d814861d974dcbc2313e331fd56537eabf6f5a85a8bcecb634"
+      },
+      "title": "Binary Tree Upside Down"
+    },
+    {
+      "calling_convention": {
+        "arguments": [
+          {
+            "name": "s",
+            "type": "str"
+          }
+        ],
+        "entrypoint": "solve",
+        "official": {
+          "name": "lengthOfLongestSubstringTwoDistinct",
+          "params": [
+            {
+              "name": "s",
+              "type": "string"
+            }
+          ],
+          "return": {
+            "type": "integer"
+          }
+        }
+      },
+      "id": 159,
+      "mutation_alias_contract": {
+        "arguments": "unchanged",
+        "return": "fresh containers for list results; immutable scalar otherwise"
+      },
+      "numeric_complexity_contract": {
+        "candidate_design": "Two-pointer sliding window with at-most-2 character frequency map.",
+        "complexity_target": "O(n) time, O(1) space",
+        "reference": "Sliding window"
+      },
+      "qualification_status": "unknown",
+      "return_domain": {
+        "type": "integer"
+      },
+      "slug": "longest-substring-with-at-most-two-distinct-characters",
+      "statement_constraints_snapshot": {
+        "domain_owner": "oracles.py validate_domain; exact public bounds",
+        "full_text_location": "private requested-156-1940-31 definition snapshot",
+        "official_response_sha256": "3da36c8622aee0fa3abdcce722bf5339857d0742f6b40e888572d745b0d1bb0a",
+        "statement_html_sha256": "2d80eff07ab219e71c6ba7173a67e93d31ed81eca31cd198d2464d716baf1904"
+      },
+      "title": "Longest Substring with At Most Two Distinct Characters"
+    },
+    {
+      "calling_convention": {
+        "arguments": [
+          {
+            "name": "s",
+            "type": "str"
+          },
+          {
+            "name": "t",
+            "type": "str"
+          }
+        ],
+        "entrypoint": "solve",
+        "official": {
+          "name": "isOneEditDistance",
+          "params": [
+            {
+              "name": "s",
+              "type": "string"
+            },
+            {
+              "name": "t",
+              "type": "string"
+            }
+          ],
+          "return": {
+            "type": "boolean"
+          }
+        }
+      },
+      "id": 161,
+      "mutation_alias_contract": {
+        "arguments": "unchanged",
+        "return": "fresh containers for list results; immutable scalar otherwise"
+      },
+      "numeric_complexity_contract": {
+        "candidate_design": "Find first mismatch index and verify remaining suffixes match.",
+        "complexity_target": "O(n) time, O(1) space",
+        "reference": "First mismatch suffix check"
+      },
+      "qualification_status": "unknown",
+      "return_domain": {
+        "type": "boolean"
+      },
+      "slug": "one-edit-distance",
+      "statement_constraints_snapshot": {
+        "domain_owner": "oracles.py validate_domain; exact public bounds",
+        "full_text_location": "private requested-156-1940-31 definition snapshot",
+        "official_response_sha256": "19b8dcbb7c5e29e3caada30f5d87167d60c6e819f3b2e4a038ac67cda8db627e",
+        "statement_html_sha256": "8dfb79a486b54b3ee366f89e3923b743af5e7fb2ebfa12682fc5bf108f6ef7e1"
+      },
+      "title": "One Edit Distance"
+    },
+    {
+      "calling_convention": {
+        "arguments": [
+          {
+            "name": "nums",
+            "type": "list[int]"
+          },
+          {
+            "name": "lower",
+            "type": "int"
+          },
+          {
+            "name": "upper",
+            "type": "int"
+          }
+        ],
+        "entrypoint": "solve",
+        "official": {
+          "name": "findMissingRanges",
+          "params": [
+            {
+              "name": "nums",
+              "type": "integer[]"
+            },
+            {
+              "name": "lower",
+              "type": "integer"
+            },
+            {
+              "name": "upper",
+              "type": "integer"
+            }
+          ],
+          "return": {
+            "type": "integer[][]"
+          }
+        }
+      },
+      "id": 163,
+      "mutation_alias_contract": {
+        "arguments": "unchanged",
+        "return": "fresh containers for list results; immutable scalar otherwise"
+      },
+      "numeric_complexity_contract": {
+        "candidate_design": "Single pass over sorted nums with sentinels lower-1 and upper+1.",
+        "complexity_target": "O(n) time, O(n) space",
+        "reference": "Sentinel gap scan"
+      },
+      "qualification_status": "unknown",
+      "return_domain": {
+        "type": "integer[][]"
+      },
+      "slug": "missing-ranges",
+      "statement_constraints_snapshot": {
+        "domain_owner": "oracles.py validate_domain; exact public bounds",
+        "full_text_location": "private requested-156-1940-31 definition snapshot",
+        "official_response_sha256": "3c79895b014853f91d50424cb4421df3c52e194d510f0b045f032ec5b79f8f19",
+        "statement_html_sha256": "ce0e955789f5e6fb871135b4a4c37eebf438ca6d38cabd3e559d3064cd0f78b9"
+      },
+      "title": "Missing Ranges"
+    },
+    {
+      "calling_convention": {
+        "arguments": [
+          {
+            "name": "nums",
+            "type": "list[int]"
+          }
+        ],
+        "entrypoint": "solve",
+        "official": {
+          "name": "wiggleSort",
+          "params": [
+            {
+              "name": "nums",
+              "type": "integer[]"
+            }
+          ],
+          "return": {
+            "type": "integer[]"
+          }
+        }
+      },
+      "id": 280,
+      "mutation_alias_contract": {
+        "arguments": "unchanged",
+        "return": "fresh containers for list results; immutable scalar otherwise"
+      },
+      "numeric_complexity_contract": {
+        "candidate_design": "Single pass swapping adjacent elements when parity order is violated.",
+        "complexity_target": "O(n) time, O(n) space",
+        "reference": "Single pass adjacent swap"
+      },
+      "qualification_status": "unknown",
+      "return_domain": {
+        "type": "integer[]"
+      },
+      "slug": "wiggle-sort",
+      "statement_constraints_snapshot": {
+        "domain_owner": "oracles.py validate_domain; exact public bounds",
+        "full_text_location": "private requested-156-1940-31 definition snapshot",
+        "official_response_sha256": "4bddb6c9a5ef06f7ca2c5731dceb6a27d9da5d195d4a40999d0895d40d2520ce",
+        "statement_html_sha256": "0efcff8245a922f2270625d2b674654a6428fb97df02b4375d1141a5f3bd0c90"
+      },
+      "title": "Wiggle Sort"
+    },
+    {
+      "calling_convention": {
+        "arguments": [
+          {
+            "name": "rooms",
+            "type": "list[list[int]]"
+          }
+        ],
+        "entrypoint": "solve",
+        "official": {
+          "name": "wallsAndGates",
+          "params": [
+            {
+              "name": "rooms",
+              "type": "integer[][]"
+            }
+          ],
+          "return": {
+            "type": "integer[][]"
+          }
+        }
+      },
+      "id": 286,
+      "mutation_alias_contract": {
+        "arguments": "unchanged",
+        "return": "fresh containers for list results; immutable scalar otherwise"
+      },
+      "numeric_complexity_contract": {
+        "candidate_design": "Multi-source BFS from all gate cells.",
+        "complexity_target": "O(m * n) time, O(m * n) space",
+        "reference": "Multi-source BFS"
+      },
+      "qualification_status": "unknown",
+      "return_domain": {
+        "type": "integer[][]"
+      },
+      "slug": "walls-and-gates",
+      "statement_constraints_snapshot": {
+        "domain_owner": "oracles.py validate_domain; exact public bounds",
+        "full_text_location": "private requested-156-1940-31 definition snapshot",
+        "official_response_sha256": "acb8f9a4c381061a43821e156303d987f4c4b44627a93c7a75a0be452fc13adc",
+        "statement_html_sha256": "f64c2b1c10d8eac8bc40c6008ad19161a1d4bb9731a7eacf891e7a8ebd93aff0"
+      },
+      "title": "Walls and Gates"
+    },
+    {
+      "calling_convention": {
+        "arguments": [
+          {
+            "name": "currentState",
+            "type": "str"
+          }
+        ],
+        "entrypoint": "solve",
+        "official": {
+          "name": "canWin",
+          "params": [
+            {
+              "name": "currentState",
+              "type": "string"
+            }
+          ],
+          "return": {
+            "type": "boolean"
+          }
+        }
+      },
+      "id": 294,
+      "mutation_alias_contract": {
+        "arguments": "unchanged",
+        "return": "fresh containers for list results; immutable scalar otherwise"
+      },
+      "numeric_complexity_contract": {
+        "candidate_design": "Sprague-Grundy Nim values over contiguous '+' segments.",
+        "complexity_target": "O(n^2) time, O(n) space",
+        "reference": "Sprague-Grundy mex DP"
+      },
+      "qualification_status": "unknown",
+      "return_domain": {
+        "type": "boolean"
+      },
+      "slug": "flip-game-ii",
+      "statement_constraints_snapshot": {
+        "domain_owner": "oracles.py validate_domain; exact public bounds",
+        "full_text_location": "private requested-156-1940-31 definition snapshot",
+        "official_response_sha256": "65eb371f6b6c9f86e5c9adc405a597fa11ce83e01b63a825eef2805b49b04331",
+        "statement_html_sha256": "6ded538175611cb3d3d36748fd9b6ae6f7ae56be7290639df6fba019c5f3b8b7"
+      },
+      "title": "Flip Game II"
+    },
+    {
+      "calling_convention": {
+        "arguments": [
+          {
+            "name": "sentence1",
+            "type": "list[str]"
+          },
+          {
+            "name": "sentence2",
+            "type": "list[str]"
+          },
+          {
+            "name": "similarPairs",
+            "type": "list[list[str]]"
+          }
+        ],
+        "entrypoint": "solve",
+        "official": {
+          "name": "areSentencesSimilarTwo",
+          "params": [
+            {
+              "name": "sentence1",
+              "type": "string[]"
+            },
+            {
+              "name": "sentence2",
+              "type": "string[]"
+            },
+            {
+              "name": "similarPairs",
+              "type": "string[][]"
+            }
+          ],
+          "return": {
+            "type": "boolean"
+          }
+        }
+      },
+      "id": 737,
+      "mutation_alias_contract": {
+        "arguments": "unchanged",
+        "return": "fresh containers for list results; immutable scalar otherwise"
+      },
+      "numeric_complexity_contract": {
+        "candidate_design": "Union-Find equivalence classes over similarPairs.",
+        "complexity_target": "O((N + P) alpha(P)) time, O(P) space",
+        "reference": "Disjoint set union"
+      },
+      "qualification_status": "unknown",
+      "return_domain": {
+        "type": "boolean"
+      },
+      "slug": "sentence-similarity-ii",
+      "statement_constraints_snapshot": {
+        "domain_owner": "oracles.py validate_domain; exact public bounds",
+        "full_text_location": "private requested-156-1940-31 definition snapshot",
+        "official_response_sha256": "dcc56a24dcdc58944b304c86d49586babe3d94cf8d612f08dd77dea274e8ef0b",
+        "statement_html_sha256": "4f77a4d8297956fd4e12fbd842cc7f0944961d863996f3238e6edd06e5abddd1"
+      },
+      "title": "Sentence Similarity II"
+    },
+    {
+      "calling_convention": {
+        "arguments": [
+          {
+            "name": "root",
+            "type": "TreeNode|list[int|None]"
+          },
+          {
+            "name": "k",
+            "type": "int"
+          }
+        ],
+        "entrypoint": "solve",
+        "official": {
+          "name": "findClosestLeaf",
+          "params": [
+            {
+              "name": "root",
+              "type": "TreeNode"
+            },
+            {
+              "name": "k",
+              "type": "integer"
+            }
+          ],
+          "return": {
+            "type": "integer"
+          }
+        }
+      },
+      "id": 742,
+      "mutation_alias_contract": {
+        "arguments": "unchanged",
+        "return": "fresh containers for list results; immutable scalar otherwise"
+      },
+      "numeric_complexity_contract": {
+        "candidate_design": "Build undirected tree adjacency list and run BFS from target k.",
+        "complexity_target": "O(n) time, O(n) space",
+        "reference": "Graph conversion + BFS"
+      },
+      "qualification_status": "unknown",
+      "return_domain": {
+        "type": "integer"
+      },
+      "slug": "closest-leaf-in-a-binary-tree",
+      "statement_constraints_snapshot": {
+        "domain_owner": "oracles.py validate_domain; exact public bounds",
+        "full_text_location": "private requested-156-1940-31 definition snapshot",
+        "official_response_sha256": "20c75a07ef0507e2c7651eb5cb86bb033e80bba027d4aedeee83fa60ebd1dc51",
+        "statement_html_sha256": "9715bb696dab28455397fdb4ef256c2605a9f71aeedd37d2f7ba0a31cea77108"
+      },
+      "title": "Closest Leaf in a Binary Tree"
+    },
+    {
+      "calling_convention": {
+        "arguments": [
+          {
+            "name": "ip",
+            "type": "str"
+          },
+          {
+            "name": "n",
+            "type": "int"
+          }
+        ],
+        "entrypoint": "solve",
+        "official": {
+          "name": "ipToCIDR",
+          "params": [
+            {
+              "name": "ip",
+              "type": "string"
+            },
+            {
+              "name": "n",
+              "type": "integer"
+            }
+          ],
+          "return": {
+            "type": "string[]"
+          }
+        }
+      },
+      "id": 751,
+      "mutation_alias_contract": {
+        "arguments": "unchanged",
+        "return": "fresh containers for list results; immutable scalar otherwise"
+      },
+      "numeric_complexity_contract": {
+        "candidate_design": "Greedy largest aligned power-of-two block step.",
+        "complexity_target": "O(log n) time, O(log n) space",
+        "reference": "Bitwise aligned block decomposition"
+      },
+      "qualification_status": "unknown",
+      "return_domain": {
+        "type": "string[]"
+      },
+      "slug": "ip-to-cidr",
+      "statement_constraints_snapshot": {
+        "domain_owner": "oracles.py validate_domain; exact public bounds",
+        "full_text_location": "private requested-156-1940-31 definition snapshot",
+        "official_response_sha256": "6846917f544a3ffe5d496bedae6cca0bf4e3f527782e1c9890e7b81c73e5ab0a",
+        "statement_html_sha256": "35534c480bbe729d2837527ea644e5f9eca49f1496512fba4ba16a02f48d1615"
+      },
+      "title": "IP to CIDR"
+    },
+    {
+      "calling_convention": {
+        "arguments": [
+          {
+            "name": "heights",
+            "type": "list[int]"
+          },
+          {
+            "name": "volume",
+            "type": "int"
+          },
+          {
+            "name": "k",
+            "type": "int"
+          }
+        ],
+        "entrypoint": "solve",
+        "official": {
+          "name": "pourWater",
+          "params": [
+            {
+              "name": "heights",
+              "type": "integer[]"
+            },
+            {
+              "name": "volume",
+              "type": "integer"
+            },
+            {
+              "name": "k",
+              "type": "integer"
+            }
+          ],
+          "return": {
+            "type": "integer[]"
+          }
+        }
+      },
+      "id": 755,
+      "mutation_alias_contract": {
+        "arguments": "unchanged",
+        "return": "fresh containers for list results; immutable scalar otherwise"
+      },
+      "numeric_complexity_contract": {
+        "candidate_design": "Simulate each droplet scanning left then right for earliest lowest local minimum.",
+        "complexity_target": "O(volume * n) time, O(n) space",
+        "reference": "Direct droplet simulation"
+      },
+      "qualification_status": "unknown",
+      "return_domain": {
+        "type": "integer[]"
+      },
+      "slug": "pour-water",
+      "statement_constraints_snapshot": {
+        "domain_owner": "oracles.py validate_domain; exact public bounds",
+        "full_text_location": "private requested-156-1940-31 definition snapshot",
+        "official_response_sha256": "75f9d80cd9eb4952083c28872c4e7ca72432494b2af0d47d4271a2255d574587",
+        "statement_html_sha256": "70152fd912756c7d86c5f7b96dca84b0ca11f99a9b4f70ee7ad5c8c1225475f6"
+      },
+      "title": "Pour Water"
+    },
+    {
+      "calling_convention": {
+        "arguments": [
+          {
+            "name": "words",
+            "type": "list[str]"
+          },
+          {
+            "name": "s",
+            "type": "str"
+          }
+        ],
+        "entrypoint": "solve",
+        "official": {
+          "name": "boldWords",
+          "params": [
+            {
+              "name": "words",
+              "type": "string[]"
+            },
+            {
+              "name": "s",
+              "type": "string"
+            }
+          ],
+          "return": {
+            "type": "string"
+          }
+        }
+      },
+      "id": 758,
+      "mutation_alias_contract": {
+        "arguments": "unchanged",
+        "return": "fresh containers for list results; immutable scalar otherwise"
+      },
+      "numeric_complexity_contract": {
+        "candidate_design": "Boolean coverage mask over substring matches and tag wrapping.",
+        "complexity_target": "O(W * n) time, O(n) space",
+        "reference": "Boolean mask interval tagging"
+      },
+      "qualification_status": "unknown",
+      "return_domain": {
+        "type": "string"
+      },
+      "slug": "bold-words-in-string",
+      "statement_constraints_snapshot": {
+        "domain_owner": "oracles.py validate_domain; exact public bounds",
+        "full_text_location": "private requested-156-1940-31 definition snapshot",
+        "official_response_sha256": "7bb85d70d9defc0cced71a35b84f4c8de98cb8c9c71852bd493f113f8213786e",
+        "statement_html_sha256": "7a41748f62d3cbf1da951c75b3252c031dd54f8afc6a2fe5d0ba38ec8b13ea0c"
+      },
+      "title": "Bold Words in String"
+    },
+    {
+      "calling_convention": {
+        "arguments": [
+          {
+            "name": "s",
+            "type": "str"
+          }
+        ],
+        "entrypoint": "solve",
+        "official": {
+          "name": "calculate",
+          "params": [
+            {
+              "name": "s",
+              "type": "string"
+            }
+          ],
+          "return": {
+            "type": "integer"
+          }
+        }
+      },
+      "id": 772,
+      "mutation_alias_contract": {
+        "arguments": "unchanged",
+        "return": "fresh containers for list results; immutable scalar otherwise"
+      },
+      "numeric_complexity_contract": {
+        "candidate_design": "Recursive descent with operator stack and truncation toward zero.",
+        "complexity_target": "O(n) time, O(n) space",
+        "reference": "Recursive descent expression evaluator"
+      },
+      "qualification_status": "unknown",
+      "return_domain": {
+        "type": "integer"
+      },
+      "slug": "basic-calculator-iii",
+      "statement_constraints_snapshot": {
+        "domain_owner": "oracles.py validate_domain; exact public bounds",
+        "full_text_location": "private requested-156-1940-31 definition snapshot",
+        "official_response_sha256": "f3e18c5557dae1ed89ecf5dd59807f02cfe6989740c5c0a757f4de172cf9d09d",
+        "statement_html_sha256": "496a3f0c3600ee7eb9ee3aca4b68f3a6a662ef3c946edc53c7b27d0e2fa93c6c"
+      },
+      "title": "Basic Calculator III"
+    },
+    {
+      "calling_convention": {
+        "arguments": [
+          {
+            "name": "stations",
+            "type": "list[int]"
+          },
+          {
+            "name": "k",
+            "type": "int"
+          }
+        ],
+        "entrypoint": "solve",
+        "official": {
+          "name": "minmaxGasDist",
+          "params": [
+            {
+              "name": "stations",
+              "type": "integer[]"
+            },
+            {
+              "name": "k",
+              "type": "integer"
+            }
+          ],
+          "return": {
+            "type": "double"
+          }
+        }
+      },
+      "id": 774,
+      "mutation_alias_contract": {
+        "arguments": "unchanged",
+        "return": "fresh containers for list results; immutable scalar otherwise"
+      },
+      "numeric_complexity_contract": {
+        "candidate_design": "Fixed-iteration binary search on maximum adjacent station distance.",
+        "complexity_target": "O(n log(M / eps)) time, O(n) space",
+        "reference": "Binary search on real answer"
+      },
+      "qualification_status": "unknown",
+      "return_domain": {
+        "type": "double"
+      },
+      "slug": "minimize-max-distance-to-gas-station",
+      "statement_constraints_snapshot": {
+        "domain_owner": "oracles.py validate_domain; exact public bounds",
+        "full_text_location": "private requested-156-1940-31 definition snapshot",
+        "official_response_sha256": "53c2076b07f1af5dfd54423af55fc8499f5591c6504dc7db6fa11203c66d0ec7",
+        "statement_html_sha256": "34b421260bfbdf2dda29744dde7b3334ffc26f28569fe6d47a420365925aa7c4"
+      },
+      "title": "Minimize Max Distance to Gas Station"
+    },
+    {
+      "calling_convention": {
+        "arguments": [
+          {
+            "name": "s",
+            "type": "str"
+          }
+        ],
+        "entrypoint": "solve",
+        "official": {
+          "name": "numPermsDISequence",
+          "params": [
+            {
+              "name": "s",
+              "type": "string"
+            }
+          ],
+          "return": {
+            "type": "integer"
+          }
+        }
+      },
+      "id": 903,
+      "mutation_alias_contract": {
+        "arguments": "unchanged",
+        "return": "fresh containers for list results; immutable scalar otherwise"
+      },
+      "numeric_complexity_contract": {
+        "candidate_design": "Prefix/suffix sum DP over relative rank of last element.",
+        "complexity_target": "O(n^2) time, O(n) space",
+        "reference": "Prefix/suffix rank DP"
+      },
+      "qualification_status": "unknown",
+      "return_domain": {
+        "type": "integer"
+      },
+      "slug": "valid-permutations-for-di-sequence",
+      "statement_constraints_snapshot": {
+        "domain_owner": "oracles.py validate_domain; exact public bounds",
+        "full_text_location": "private requested-156-1940-31 definition snapshot",
+        "official_response_sha256": "8a826111c2f1224acdb97a4544000ba83c3a3c58d3481cc08560461bebf33555",
+        "statement_html_sha256": "ef93540bcedf3b71a2c4075f0cd8fcf6c7d5ee7e5cab7536eca6b045e8125eab"
+      },
+      "title": "Valid Permutations for DI Sequence"
+    },
+    {
+      "calling_convention": {
+        "arguments": [
+          {
+            "name": "operation_names",
+            "type": "list[str]"
+          },
+          {
+            "name": "argument_lists",
+            "type": "list[list]"
+          }
+        ],
+        "entrypoint": "solve",
+        "official": {
+          "name": "TopVotedCandidate",
+          "params": [
+            {
+              "name": "persons",
+              "type": "integer[]"
+            },
+            {
+              "name": "times",
+              "type": "integer[]"
+            }
+          ],
+          "return": {
+            "type": "list"
+          }
+        }
+      },
+      "id": 911,
+      "mutation_alias_contract": {
+        "arguments": "unchanged",
+        "return": "fresh containers for list results; immutable scalar otherwise"
+      },
+      "numeric_complexity_contract": {
+        "candidate_design": "Precompute running leader array and binary search query timestamp.",
+        "complexity_target": "O(N + Q log N) time, O(N) space",
+        "reference": "Precomputed leaders + binary search"
+      },
+      "qualification_status": "unknown",
+      "return_domain": {
+        "type": "list"
+      },
+      "slug": "online-election",
+      "statement_constraints_snapshot": {
+        "domain_owner": "oracles.py validate_domain; exact public bounds",
+        "full_text_location": "private requested-156-1940-31 definition snapshot",
+        "official_response_sha256": "d2ae7595633029b4266424217a8d1f32a2f9aabbf13602efba0bc9c609297baa",
+        "statement_html_sha256": "06a4826330ed242de4ed878fa4943e1125da8b01aa95d785fcce96a209812e80"
+      },
+      "title": "Online Election"
+    },
+    {
+      "calling_convention": {
+        "arguments": [
+          {
+            "name": "arr1",
+            "type": "list[int]"
+          },
+          {
+            "name": "arr2",
+            "type": "list[int]"
+          },
+          {
+            "name": "arr3",
+            "type": "list[int]"
+          }
+        ],
+        "entrypoint": "solve",
+        "official": {
+          "name": "arraysIntersection",
+          "params": [
+            {
+              "name": "arr1",
+              "type": "integer[]"
+            },
+            {
+              "name": "arr2",
+              "type": "integer[]"
+            },
+            {
+              "name": "arr3",
+              "type": "integer[]"
+            }
+          ],
+          "return": {
+            "type": "integer[]"
+          }
+        }
+      },
+      "id": 1213,
+      "mutation_alias_contract": {
+        "arguments": "unchanged",
+        "return": "fresh containers for list results; immutable scalar otherwise"
+      },
+      "numeric_complexity_contract": {
+        "candidate_design": "Three-pointer synchronized scan.",
+        "complexity_target": "O(n1 + n2 + n3) time, O(1) auxiliary space",
+        "reference": "Three-pointer scan"
+      },
+      "qualification_status": "unknown",
+      "return_domain": {
+        "type": "integer[]"
+      },
+      "slug": "intersection-of-three-sorted-arrays",
+      "statement_constraints_snapshot": {
+        "domain_owner": "oracles.py validate_domain; exact public bounds",
+        "full_text_location": "private requested-156-1940-31 definition snapshot",
+        "official_response_sha256": "41b76e42660d79e03d1264c369d725c03cb1b9b426e97fa51fe18bc6c01a22d6",
+        "statement_html_sha256": "bb1e1c1f0d8747e8d5a6d0ff93ffb09d901f4b6ccd2a2130d67a435d09a7a1f3"
+      },
+      "title": "Intersection of Three Sorted Arrays"
+    },
+    {
+      "calling_convention": {
+        "arguments": [
+          {
+            "name": "root1",
+            "type": "TreeNode|list[int|None]"
+          },
+          {
+            "name": "root2",
+            "type": "TreeNode|list[int|None]"
+          },
+          {
+            "name": "target",
+            "type": "int"
+          }
+        ],
+        "entrypoint": "solve",
+        "official": {
+          "name": "twoSumBSTs",
+          "params": [
+            {
+              "name": "root1",
+              "type": "TreeNode"
+            },
+            {
+              "name": "root2",
+              "type": "TreeNode"
+            },
+            {
+              "name": "target",
+              "type": "integer"
+            }
+          ],
+          "return": {
+            "type": "boolean"
+          }
+        }
+      },
+      "id": 1214,
+      "mutation_alias_contract": {
+        "arguments": "unchanged",
+        "return": "fresh containers for list results; immutable scalar otherwise"
+      },
+      "numeric_complexity_contract": {
+        "candidate_design": "Collect first tree values into hash set and probe target - y from second tree.",
+        "complexity_target": "O(n1 + n2) time, O(n1 + n2) space",
+        "reference": "Hash set complement lookup"
+      },
+      "qualification_status": "unknown",
+      "return_domain": {
+        "type": "boolean"
+      },
+      "slug": "two-sum-bsts",
+      "statement_constraints_snapshot": {
+        "domain_owner": "oracles.py validate_domain; exact public bounds",
+        "full_text_location": "private requested-156-1940-31 definition snapshot",
+        "official_response_sha256": "7fc23438272879d8a81fabd8dd0190d95f3b3428316cc2bdf1dadb5185e926fc",
+        "statement_html_sha256": "0164420f04e132cb79697d5ccfa0096eefebde03c0b3291434b226d3fbc2de71"
+      },
+      "title": "Two Sum BSTs"
+    },
+    {
+      "calling_convention": {
+        "arguments": [
+          {
+            "name": "low",
+            "type": "int"
+          },
+          {
+            "name": "high",
+            "type": "int"
+          }
+        ],
+        "entrypoint": "solve",
+        "official": {
+          "name": "countSteppingNumbers",
+          "params": [
+            {
+              "name": "low",
+              "type": "integer"
+            },
+            {
+              "name": "high",
+              "type": "integer"
+            }
+          ],
+          "return": {
+            "type": "integer[]"
+          }
+        }
+      },
+      "id": 1215,
+      "mutation_alias_contract": {
+        "arguments": "unchanged",
+        "return": "fresh containers for list results; immutable scalar otherwise"
+      },
+      "numeric_complexity_contract": {
+        "candidate_design": "BFS from 1..9 extending last digit by +-1.",
+        "complexity_target": "O(2^(log10(high))) time, O(2^(log10(high))) space",
+        "reference": "BFS digit extension"
+      },
+      "qualification_status": "unknown",
+      "return_domain": {
+        "type": "integer[]"
+      },
+      "slug": "stepping-numbers",
+      "statement_constraints_snapshot": {
+        "domain_owner": "oracles.py validate_domain; exact public bounds",
+        "full_text_location": "private requested-156-1940-31 definition snapshot",
+        "official_response_sha256": "26bb4d72ba61935228d4ea6301bd2dd87c13b6a618e6ee004758cc2d3da4a3b4",
+        "statement_html_sha256": "a5f51fd8a7ee2dd5278e1f82ae6d4f405f7d4c3f492370e58e631b602baa4189"
+      },
+      "title": "Stepping Numbers"
+    },
+    {
+      "calling_convention": {
+        "arguments": [
+          {
+            "name": "slots1",
+            "type": "list[list[int]]"
+          },
+          {
+            "name": "slots2",
+            "type": "list[list[int]]"
+          },
+          {
+            "name": "duration",
+            "type": "int"
+          }
+        ],
+        "entrypoint": "solve",
+        "official": {
+          "name": "minAvailableDuration",
+          "params": [
+            {
+              "name": "slots1",
+              "type": "integer[][]"
+            },
+            {
+              "name": "slots2",
+              "type": "integer[][]"
+            },
+            {
+              "name": "duration",
+              "type": "integer"
+            }
+          ],
+          "return": {
+            "type": "integer[]"
+          }
+        }
+      },
+      "id": 1229,
+      "mutation_alias_contract": {
+        "arguments": "unchanged",
+        "return": "fresh containers for list results; immutable scalar otherwise"
+      },
+      "numeric_complexity_contract": {
+        "candidate_design": "Filter intervals >= duration, sort, and two-pointer intersection scan.",
+        "complexity_target": "O(n log n + m log m) time, O(n + m) space",
+        "reference": "Sort + two pointers"
+      },
+      "qualification_status": "unknown",
+      "return_domain": {
+        "type": "integer[]"
+      },
+      "slug": "meeting-scheduler",
+      "statement_constraints_snapshot": {
+        "domain_owner": "oracles.py validate_domain; exact public bounds",
+        "full_text_location": "private requested-156-1940-31 definition snapshot",
+        "official_response_sha256": "dc62ecfa29bb0820ae847ea323e7b46984c517ee031a88b23691bfbc18d7eb9d",
+        "statement_html_sha256": "ec9bcd08cfdead01d2a90b6d49ff24bd83d5ffe0142381f2bb494e5bb7cc8575"
+      },
+      "title": "Meeting Scheduler"
+    },
+    {
+      "calling_convention": {
+        "arguments": [
+          {
+            "name": "prob",
+            "type": "list[float]"
+          },
+          {
+            "name": "target",
+            "type": "int"
+          }
+        ],
+        "entrypoint": "solve",
+        "official": {
+          "name": "probabilityOfHeads",
+          "params": [
+            {
+              "name": "prob",
+              "type": "double[]"
+            },
+            {
+              "name": "target",
+              "type": "integer"
+            }
+          ],
+          "return": {
+            "type": "double"
+          }
+        }
+      },
+      "id": 1230,
+      "mutation_alias_contract": {
+        "arguments": "unchanged",
+        "return": "fresh containers for list results; immutable scalar otherwise"
+      },
+      "numeric_complexity_contract": {
+        "candidate_design": "1D Poisson-binomial DP over head count.",
+        "complexity_target": "O(n * target) time, O(target) space",
+        "reference": "1D probability DP"
+      },
+      "qualification_status": "unknown",
+      "return_domain": {
+        "type": "double"
+      },
+      "slug": "toss-strange-coins",
+      "statement_constraints_snapshot": {
+        "domain_owner": "oracles.py validate_domain; exact public bounds",
+        "full_text_location": "private requested-156-1940-31 definition snapshot",
+        "official_response_sha256": "a591c907722f6cfcf369f64a626778dd52bdd5fc2ae4dbc26ec173c557da1bd6",
+        "statement_html_sha256": "63c132cdd550d83d2043134a70d65ebaabbdb0923fa304eb74aed6ae54272ba0"
+      },
+      "title": "Toss Strange Coins"
+    },
+    {
+      "calling_convention": {
+        "arguments": [
+          {
+            "name": "n",
+            "type": "int"
+          },
+          {
+            "name": "k",
+            "type": "int"
+          }
+        ],
+        "entrypoint": "solve",
+        "official": {
+          "name": "waysToDistribute",
+          "params": [
+            {
+              "name": "n",
+              "type": "integer"
+            },
+            {
+              "name": "k",
+              "type": "integer"
+            }
+          ],
+          "return": {
+            "type": "integer"
+          }
+        }
+      },
+      "id": 1692,
+      "mutation_alias_contract": {
+        "arguments": "unchanged",
+        "return": "fresh containers for list results; immutable scalar otherwise"
+      },
+      "numeric_complexity_contract": {
+        "candidate_design": "Rolling Stirling numbers of the second kind S(n, k) mod 10^9+7.",
+        "complexity_target": "O(n * k) time, O(k) space",
+        "reference": "Stirling number recurrence"
+      },
+      "qualification_status": "unknown",
+      "return_domain": {
+        "type": "integer"
+      },
+      "slug": "count-ways-to-distribute-candies",
+      "statement_constraints_snapshot": {
+        "domain_owner": "oracles.py validate_domain; exact public bounds",
+        "full_text_location": "private requested-156-1940-31 definition snapshot",
+        "official_response_sha256": "7d7da7c11d8401d8a393c74ce31f097206238da8ee9f203fbb0d07ef8bd3cb11",
+        "statement_html_sha256": "9ae4e14dac29345b7fc5bc229c80f85230345a42bfa0d2b38215ecfe4536b4d2"
+      },
+      "title": "Count Ways to Distribute Candies"
+    },
+    {
+      "calling_convention": {
+        "arguments": [
+          {
+            "name": "nums",
+            "type": "list[int]"
+          },
+          {
+            "name": "queries",
+            "type": "list[list[int]]"
+          }
+        ],
+        "entrypoint": "solve",
+        "official": {
+          "name": "solve",
+          "params": [
+            {
+              "name": "nums",
+              "type": "integer[]"
+            },
+            {
+              "name": "queries",
+              "type": "integer[][]"
+            }
+          ],
+          "return": {
+            "type": "integer[]"
+          }
+        }
+      },
+      "id": 1714,
+      "mutation_alias_contract": {
+        "arguments": "unchanged",
+        "return": "fresh containers for list results; immutable scalar otherwise"
+      },
+      "numeric_complexity_contract": {
+        "candidate_design": "Sqrt-decomposition precomputing suffix sums for step y < sqrt(n).",
+        "complexity_target": "O((n + q) * sqrt(n)) time, O(n * sqrt(n)) space",
+        "reference": "Sqrt decomposition suffix table"
+      },
+      "qualification_status": "unknown",
+      "return_domain": {
+        "type": "integer[]"
+      },
+      "slug": "sum-of-special-evenly-spaced-elements-in-array",
+      "statement_constraints_snapshot": {
+        "domain_owner": "oracles.py validate_domain; exact public bounds",
+        "full_text_location": "private requested-156-1940-31 definition snapshot",
+        "official_response_sha256": "17bfafbb49e537311916655130f2faf40748b7d88e92b91c5ab4b68fcf188f2d",
+        "statement_html_sha256": "1dd566d7194438b59e52b8121f0fa6622263f2067298d93ff9fa74775b564083"
+      },
+      "title": "Sum Of Special Evenly-Spaced Elements In Array"
+    },
+    {
+      "calling_convention": {
+        "arguments": [
+          {
+            "name": "root",
+            "type": "TreeNode|list[int|None]"
+          },
+          {
+            "name": "p",
+            "type": "int"
+          },
+          {
+            "name": "q",
+            "type": "int"
+          }
+        ],
+        "entrypoint": "solve",
+        "official": {
+          "name": "findDistance",
+          "params": [
+            {
+              "name": "root",
+              "type": "TreeNode"
+            },
+            {
+              "name": "p",
+              "type": "integer"
+            },
+            {
+              "name": "q",
+              "type": "integer"
+            }
+          ],
+          "return": {
+            "type": "integer"
+          }
+        }
+      },
+      "id": 1740,
+      "mutation_alias_contract": {
+        "arguments": "unchanged",
+        "return": "fresh containers for list results; immutable scalar otherwise"
+      },
+      "numeric_complexity_contract": {
+        "candidate_design": "Find lowest common ancestor of p and q and sum depths from LCA.",
+        "complexity_target": "O(n) time, O(h) space",
+        "reference": "LCA + depth sum"
+      },
+      "qualification_status": "unknown",
+      "return_domain": {
+        "type": "integer"
+      },
+      "slug": "find-distance-in-a-binary-tree",
+      "statement_constraints_snapshot": {
+        "domain_owner": "oracles.py validate_domain; exact public bounds",
+        "full_text_location": "private requested-156-1940-31 definition snapshot",
+        "official_response_sha256": "38322c5263817bc7c10a62e18786775c17f7e536e8d066f03d81a87822c10993",
+        "statement_html_sha256": "73d15a7a5014f59e3e5ca2bb0d77322c51372613fb06df0f25ca81ba5eebfbe0"
+      },
+      "title": "Find Distance in a Binary Tree"
+    },
+    {
+      "calling_convention": {
+        "arguments": [
+          {
+            "name": "grid",
+            "type": "list[list[int]]"
+          }
+        ],
+        "entrypoint": "solve",
+        "official": {
+          "name": "maximumInvitations",
+          "params": [
+            {
+              "name": "grid",
+              "type": "integer[][]"
+            }
+          ],
+          "return": {
+            "type": "integer"
+          }
+        }
+      },
+      "id": 1820,
+      "mutation_alias_contract": {
+        "arguments": "unchanged",
+        "return": "fresh containers for list results; immutable scalar otherwise"
+      },
+      "numeric_complexity_contract": {
+        "candidate_design": "Kuhn augmenting-path maximum bipartite matching.",
+        "complexity_target": "O(m * n * min(m, n)) time, O(n) space",
+        "reference": "Kuhn bipartite matching"
+      },
+      "qualification_status": "unknown",
+      "return_domain": {
+        "type": "integer"
+      },
+      "slug": "maximum-number-of-accepted-invitations",
+      "statement_constraints_snapshot": {
+        "domain_owner": "oracles.py validate_domain; exact public bounds",
+        "full_text_location": "private requested-156-1940-31 definition snapshot",
+        "official_response_sha256": "63a9838e49d3c27a9d7d6d5f1891627e15c9575afa1eee2b01d9b8158549b40f",
+        "statement_html_sha256": "40360d966fdb25b3d4369406952e4a08fe48153f0e76a1291a9962d283cf4998"
+      },
+      "title": "Maximum Number of Accepted Invitations"
+    },
+    {
+      "calling_convention": {
+        "arguments": [
+          {
+            "name": "sensor1",
+            "type": "list[int]"
+          },
+          {
+            "name": "sensor2",
+            "type": "list[int]"
+          }
+        ],
+        "entrypoint": "solve",
+        "official": {
+          "name": "badSensor",
+          "params": [
+            {
+              "name": "sensor1",
+              "type": "integer[]"
+            },
+            {
+              "name": "sensor2",
+              "type": "integer[]"
+            }
+          ],
+          "return": {
+            "type": "integer"
+          }
+        }
+      },
+      "id": 1826,
+      "mutation_alias_contract": {
+        "arguments": "unchanged",
+        "return": "fresh containers for list results; immutable scalar otherwise"
+      },
+      "numeric_complexity_contract": {
+        "candidate_design": "Find first mismatch index and test shifted suffix alignment.",
+        "complexity_target": "O(n) time, O(1) space",
+        "reference": "First mismatch shift comparison"
+      },
+      "qualification_status": "unknown",
+      "return_domain": {
+        "type": "integer"
+      },
+      "slug": "faulty-sensor",
+      "statement_constraints_snapshot": {
+        "domain_owner": "oracles.py validate_domain; exact public bounds",
+        "full_text_location": "private requested-156-1940-31 definition snapshot",
+        "official_response_sha256": "ecbe7adab12b7564acd0921270fdd29c6bb161e08ea3469278390437b1cd3266",
+        "statement_html_sha256": "3c315d2bf7e6cf1a185253845aba9b12b0096f6d5781c33946fcdf52623b950e"
+      },
+      "title": "Faulty Sensor"
+    },
+    {
+      "calling_convention": {
+        "arguments": [
+          {
+            "name": "piles",
+            "type": "list[int]"
+          }
+        ],
+        "entrypoint": "solve",
+        "official": {
+          "name": "nimGame",
+          "params": [
+            {
+              "name": "piles",
+              "type": "integer[]"
+            }
+          ],
+          "return": {
+            "type": "boolean"
+          }
+        }
+      },
+      "id": 1908,
+      "mutation_alias_contract": {
+        "arguments": "unchanged",
+        "return": "fresh containers for list results; immutable scalar otherwise"
+      },
+      "numeric_complexity_contract": {
+        "candidate_design": "Bouton theorem: XOR sum of pile sizes is non-zero.",
+        "complexity_target": "O(n) time, O(1) space",
+        "reference": "Nim-sum XOR"
+      },
+      "qualification_status": "unknown",
+      "return_domain": {
+        "type": "boolean"
+      },
+      "slug": "game-of-nim",
+      "statement_constraints_snapshot": {
+        "domain_owner": "oracles.py validate_domain; exact public bounds",
+        "full_text_location": "private requested-156-1940-31 definition snapshot",
+        "official_response_sha256": "9c3cdcec0c10a21760276317e4191e9c5e4c4d3f124285f28cc551fceddd4ed2",
+        "statement_html_sha256": "1d49ea6b3bb308095537aa28c70a0c5808e496e5c829080892f7ad86f14ce7c5"
+      },
+      "title": "Game of Nim"
+    },
+    {
+      "calling_convention": {
+        "arguments": [
+          {
+            "name": "nums",
+            "type": "list[int]"
+          },
+          {
+            "name": "k",
+            "type": "int"
+          }
+        ],
+        "entrypoint": "solve",
+        "official": {
+          "name": "kthSmallestSubarraySum",
+          "params": [
+            {
+              "name": "nums",
+              "type": "integer[]"
+            },
+            {
+              "name": "k",
+              "type": "integer"
+            }
+          ],
+          "return": {
+            "type": "integer"
+          }
+        }
+      },
+      "id": 1918,
+      "mutation_alias_contract": {
+        "arguments": "unchanged",
+        "return": "fresh containers for list results; immutable scalar otherwise"
+      },
+      "numeric_complexity_contract": {
+        "candidate_design": "Binary search on subarray sum with two-pointer count.",
+        "complexity_target": "O(n log(sum(nums))) time, O(1) space",
+        "reference": "Binary search + sliding window"
+      },
+      "qualification_status": "unknown",
+      "return_domain": {
+        "type": "integer"
+      },
+      "slug": "kth-smallest-subarray-sum",
+      "statement_constraints_snapshot": {
+        "domain_owner": "oracles.py validate_domain; exact public bounds",
+        "full_text_location": "private requested-156-1940-31 definition snapshot",
+        "official_response_sha256": "8315e0dba5f5d2e25b8a6c28d27b7e626ba55acdef72ee2a05962ae575805442",
+        "statement_html_sha256": "5dcd1f868f251e48411eb8d723ada2d442b4da59c47d217087f8b95bed6b2aca"
+      },
+      "title": "Kth Smallest Subarray Sum"
+    },
+    {
+      "calling_convention": {
+        "arguments": [
+          {
+            "name": "trees",
+            "type": "list[list[int]]"
+          }
+        ],
+        "entrypoint": "solve",
+        "official": {
+          "name": "outerTrees",
+          "params": [
+            {
+              "name": "trees",
+              "type": "integer[][]"
+            }
+          ],
+          "return": {
+            "type": "double[]"
+          }
+        }
+      },
+      "id": 1924,
+      "mutation_alias_contract": {
+        "arguments": "unchanged",
+        "return": "fresh containers for list results; immutable scalar otherwise"
+      },
+      "numeric_complexity_contract": {
+        "candidate_design": "Incremental minimum enclosing circle (Welzl iterative).",
+        "complexity_target": "O(n^3) worst-case, O(n) average time, O(n) space",
+        "reference": "Minimum enclosing circle"
+      },
+      "qualification_status": "unknown",
+      "return_domain": {
+        "type": "double[]"
+      },
+      "slug": "erect-the-fence-ii",
+      "statement_constraints_snapshot": {
+        "domain_owner": "oracles.py validate_domain; exact public bounds",
+        "full_text_location": "private requested-156-1940-31 definition snapshot",
+        "official_response_sha256": "a8549b48b3f9be077547e850fb5a001bd0a868156d6683def8d85f896b0cbf85",
+        "statement_html_sha256": "92961034da7d58d8a9d39ca2073828d3b95d0b2be9ba33eeb8b47f7cfd77cbcf"
+      },
+      "title": "Erect the Fence II"
+    },
+    {
+      "calling_convention": {
+        "arguments": [
+          {
+            "name": "s",
+            "type": "str"
+          }
+        ],
+        "entrypoint": "solve",
+        "official": {
+          "name": "isDecomposable",
+          "params": [
+            {
+              "name": "s",
+              "type": "string"
+            }
+          ],
+          "return": {
+            "type": "boolean"
+          }
+        }
+      },
+      "id": 1933,
+      "mutation_alias_contract": {
+        "arguments": "unchanged",
+        "return": "fresh containers for list results; immutable scalar otherwise"
+      },
+      "numeric_complexity_contract": {
+        "candidate_design": "Verify run lengths mod 3 have zero 1s and exactly one 2.",
+        "complexity_target": "O(n) time, O(1) space",
+        "reference": "Run-length modulo-3 check"
+      },
+      "qualification_status": "unknown",
+      "return_domain": {
+        "type": "boolean"
+      },
+      "slug": "check-if-string-is-decomposable-into-value-equal-substrings",
+      "statement_constraints_snapshot": {
+        "domain_owner": "oracles.py validate_domain; exact public bounds",
+        "full_text_location": "private requested-156-1940-31 definition snapshot",
+        "official_response_sha256": "2a6fd0ad1dd9948915e15ed3662266d62771eefa9412da4bdc2c0c09549005c9",
+        "statement_html_sha256": "e541adaf4e16114a52c6e70747b795269613fc98207ea9dfaef06edd4d927889"
+      },
+      "title": "Check if String Is Decomposable Into Value-Equal Substrings"
+    },
+    {
+      "calling_convention": {
+        "arguments": [
+          {
+            "name": "arrays",
+            "type": "list[list[int]]"
+          }
+        ],
+        "entrypoint": "solve",
+        "official": {
+          "name": "longestCommonSubsequence",
+          "params": [
+            {
+              "name": "arrays",
+              "type": "integer[][]"
+            }
+          ],
+          "return": {
+            "type": "integer[]"
+          }
+        }
+      },
+      "id": 1940,
+      "mutation_alias_contract": {
+        "arguments": "unchanged",
+        "return": "fresh containers for list results; immutable scalar otherwise"
+      },
+      "numeric_complexity_contract": {
+        "candidate_design": "Count element frequencies across strictly increasing arrays and filter count == m.",
+        "complexity_target": "O(sum(|arr|)) time, O(U) space",
+        "reference": "Frequency count filter"
+      },
+      "qualification_status": "unknown",
+      "return_domain": {
+        "type": "integer[]"
+      },
+      "slug": "longest-common-subsequence-between-sorted-arrays",
+      "statement_constraints_snapshot": {
+        "domain_owner": "oracles.py validate_domain; exact public bounds",
+        "full_text_location": "private requested-156-1940-31 definition snapshot",
+        "official_response_sha256": "82c3c23fd17836dbb7814cdce1822d5aaf3d12baeb7ae11891f45e1a2057d4fa",
+        "statement_html_sha256": "2e2bafa74c592be402198a939ce5392d0f68822bcfd904351f53c6ed02842e6a"
+      },
+      "title": "Longest Common Subsequence Between Sorted Arrays"
+    }
+  ],
+  "numeric": "All integer and floating-point operations stay within exact IEEE-754 double / BigInt bounds.",
+  "effects": "input arrays, nested grids, and trace lists unchanged; fresh outputs only"
+}
