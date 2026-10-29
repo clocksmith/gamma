@@ -1,0 +1,333 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:6a7fdd14d713d873ca7adf13:6a7fdd1bd713d873ca7adf14:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/contracts.json",
+   "sha256": "b379953144287fffb14d286c61502eb70825b215ff72daf1b6bde6281724ef8b",
+   "selector": "/problems/3"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/6a7fdd14d713d873ca7adf13.json",
+   "sha256": "a2a0da4627b4f46d76214e9f0edc0dc1dd855291c0197089727fe28065e38141",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/study-content.json",
+   "sha256": "0c6dc4787ffa20b6824b7899b7c6b28ba367131b470a6feb9f099d0f21dbd054",
+   "selector": "/variants/hack2hire:6a7fdd1bd713d873ca7adf14"
+  }
+ ],
+ "problemId": "hack2hire:6a7fdd14d713d873ca7adf13",
+ "variantId": "6a7fdd1bd713d873ca7adf14",
+ "variantLabel": {
+  "status": "present",
+  "value": "Single variant: least walking with 10-unit scooters",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/study-content.json",
+    "sha256": "0c6dc4787ffa20b6824b7899b7c6b28ba367131b470a6feb9f099d0f21dbd054",
+    "selector": "/variants/hack2hire:6a7fdd1bd713d873ca7adf14/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "finish is a positive integer and scooters is a list of distinct non-negative integer positions. You start at 0 and move right only. At any scooter position you may take that scooter, leaving any scooter you ride; a scooter carries you at most 10 units to the right. Every unit not covered by a scooter is walked. Return the minimum total distance walked to reach finish, which equals finish minus the length of the union of the segments [s, min(s + 10, finish)] over scooters s < finish.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/contracts.json",
+    "sha256": "b379953144287fffb14d286c61502eb70825b215ff72daf1b6bde6281724ef8b",
+    "selector": "/problems/3/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "finish is a positive integer and scooters is a list of distinct non-negative integer positions.",
+   "You start at 0 and move right only.",
+   "At any scooter position you may take that scooter, leaving any scooter you ride; a scooter carries you at most 10 units to the right.",
+   "Every unit not covered by a scooter is walked.",
+   "Return the minimum total distance walked to reach finish, which equals finish minus the length of the union of the segments [s, min(s + 10, finish)] over scooters s < finish."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/contracts.json",
+    "sha256": "b379953144287fffb14d286c61502eb70825b215ff72daf1b6bde6281724ef8b",
+    "selector": "/problems/3/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "1 <= finish <= 1e9",
+   "0 <= scooters.length <= 1e5",
+   "0 <= scooters[i] <= 1e9, distinct"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/study-content.json",
+    "sha256": "0c6dc4787ffa20b6824b7899b7c6b28ba367131b470a6feb9f099d0f21dbd054",
+    "selector": "/variants/hack2hire:6a7fdd1bd713d873ca7adf14/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: contentPreview: a street on the integer line from 0 to finish (> 0); scooters stand at the distinct positions in scooters; each scooter carries a rider at most 10 units to the right (the question sentence is cut off); algorithmTags: SORTING, SIMULATION; preview response sha256 73f999d651ba191df447e77c2c126dc9c67b985364bc62c50d658ab9c9800762"
+   },
+   {
+    "statement": "Uncertainty: very high: the street, the scooter positions and the 10-unit range are in the preview; that the question asks for the minimum walking distance, and that switching to a fresh scooter is allowed whenever one is passed, are inferred (the official version may instead force riding a scooter until its battery is empty)",
+    "basis": "the public group preview is partial (590 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: single variant",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/contracts.json",
+    "sha256": "b379953144287fffb14d286c61502eb70825b215ff72daf1b6bde6281724ef8b",
+    "selector": "/problems/3/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/contracts.json",
+    "sha256": "b379953144287fffb14d286c61502eb70825b215ff72daf1b6bde6281724ef8b",
+    "selector": "/problems/3/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/contracts.json",
+    "sha256": "b379953144287fffb14d286c61502eb70825b215ff72daf1b6bde6281724ef8b",
+    "selector": "/problems/3/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "What exactly is returned: walking distance, number of scooters or time?",
+   "May you switch scooters when riding past another one?",
+   "Can scooters stand at or past finish?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/study-content.json",
+    "sha256": "0c6dc4787ffa20b6824b7899b7c6b28ba367131b470a6feb9f099d0f21dbd054",
+    "selector": "/variants/hack2hire:6a7fdd1bd713d873ca7adf14/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     1,
+     [
+      0
+     ]
+    ],
+    "output": 0,
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     45,
+     [
+      46,
+      41,
+      20,
+      18,
+      57,
+      14,
+      63,
+      45
+     ]
+    ],
+    "output": 25,
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/study-content.json",
+    "sha256": "0c6dc4787ffa20b6824b7899b7c6b28ba367131b470a6feb9f099d0f21dbd054",
+    "selector": "/variants/hack2hire:6a7fdd1bd713d873ca7adf14/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/oracles.py",
+    "sha256": "e39f79e2865a7838e665ba7dc8ca5290f77253d2c638a2d446bd15032dd7efa9",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "def minWalkingDistance(finish, scooters) -> integer",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/contracts.json",
+      "sha256": "b379953144287fffb14d286c61502eb70825b215ff72daf1b6bde6281724ef8b",
+      "selector": "/problems/3/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/semantics/6a7fdd1bd713d873ca7adf14-python.json",
+     "inferredInterface": {
+      "name": "minWalkingDistance",
+      "params": [
+       {
+        "name": "finish",
+        "type": "integer"
+       },
+       {
+        "name": "scooters",
+        "type": "integer[]"
+       }
+      ],
+      "return": {
+       "type": "integer"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/semantics/6a7fdd1bd713d873ca7adf14-python.json",
+      "sha256": "5eabcef40fff958e72aa7e32fcbf3975d49faba5c28dbb5d35b0602ac2da0c3f",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "function minWalkingDistance(finish, scooters) /* -> integer */",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/contracts.json",
+      "sha256": "b379953144287fffb14d286c61502eb70825b215ff72daf1b6bde6281724ef8b",
+      "selector": "/problems/3/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/semantics/6a7fdd1bd713d873ca7adf14-javascript.json",
+     "inferredInterface": {
+      "name": "minWalkingDistance",
+      "params": [
+       {
+        "name": "finish",
+        "type": "integer"
+       },
+       {
+        "name": "scooters",
+        "type": "integer[]"
+       }
+      ],
+      "return": {
+       "type": "integer"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/semantics/6a7fdd1bd713d873ca7adf14-javascript.json",
+      "sha256": "e36c259bf4fd7f0944613d92c60c0f0d7b1adce8b8c1e1134bd73962bee3d1ee",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/contracts.json",
+    "sha256": "b379953144287fffb14d286c61502eb70825b215ff72daf1b6bde6281724ef8b",
+    "selector": "/problems/3/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON result",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/contracts.json",
+    "sha256": "b379953144287fffb14d286c61502eb70825b215ff72daf1b6bde6281724ef8b",
+    "selector": "/problems/3/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

@@ -1,0 +1,444 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:68dc0afd9736cfa4e90623e8:68dc6c86dd5418be11109b14:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/contracts.json",
+   "sha256": "b379953144287fffb14d286c61502eb70825b215ff72daf1b6bde6281724ef8b",
+   "selector": "/problems/7"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/68dc0afd9736cfa4e90623e8.json",
+   "sha256": "dd8dd109da3b8bf9d45954cc5e42b29b8d794656a66ac4be30f8a8ac524d61e8",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/study-content.json",
+   "sha256": "0c6dc4787ffa20b6824b7899b7c6b28ba367131b470a6feb9f099d0f21dbd054",
+   "selector": "/variants/hack2hire:68dc6c86dd5418be11109b14"
+  }
+ ],
+ "problemId": "hack2hire:68dc0afd9736cfa4e90623e8",
+ "variantId": "68dc6c86dd5418be11109b14",
+ "variantLabel": {
+  "status": "present",
+  "value": "Single variant: rank stocks by total traded quantity with caching",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/study-content.json",
+    "sha256": "0c6dc4787ffa20b6824b7899b7c6b28ba367131b470a6feb9f099d0f21dbd054",
+    "selector": "/variants/hack2hire:68dc6c86dd5418be11109b14/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "StockTracker() starts with no trades. recordTrade(stockName, quantity) adds quantity to the stock's total, creating it when new. getRankedStocks() returns the names of all stocks with at least one trade, ordered by total quantity descending and then by name ascending in code-point order, as a fresh list. Every method call is answered in call order on one instance; void methods return nothing.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/contracts.json",
+    "sha256": "b379953144287fffb14d286c61502eb70825b215ff72daf1b6bde6281724ef8b",
+    "selector": "/problems/7/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "StockTracker() starts with no trades.",
+   "recordTrade(stockName, quantity) adds quantity to the stock's total, creating it when new.",
+   "getRankedStocks() returns the names of all stocks with at least one trade, ordered by total quantity descending and then by name ascending in code-point order, as a fresh list.",
+   "Every method call is answered in call order on one instance; void methods return nothing."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/contracts.json",
+    "sha256": "b379953144287fffb14d286c61502eb70825b215ff72daf1b6bde6281724ef8b",
+    "selector": "/problems/7/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "at most 1e5 calls",
+   "stock names are 1 to 10 uppercase letters",
+   "1 <= quantity <= 1e6",
+   "the total length of all returned rankings is at most 2e6"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/study-content.json",
+    "sha256": "0c6dc4787ffa20b6824b7899b7c6b28ba367131b470a6feb9f099d0f21dbd054",
+    "selector": "/variants/hack2hire:68dc6c86dd5418be11109b14/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: contentPreview: class StockTracker() starts empty; void recordTrade(String stockName, int quantity) adds quantity to the stock's total; the system ranks stocks by total quantity on demand and should be fast when a ranking is requested many times in a row (the ranking method is cut off); algorithmTags: HASH_TABLE, SORTING; preview response sha256 f65815aaffd65af45ce12dd613882a3edf7c9c86cb8470810ef5667fb22fcda0"
+   },
+   {
+    "statement": "Uncertainty: medium: the class, recordTrade and ranking by total quantity are in the preview; the ranking method name, returning all names, and the tie rule (name ascending) are inferred",
+    "basis": "the public group preview is partial (526 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: single variant",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/contracts.json",
+    "sha256": "b379953144287fffb14d286c61502eb70825b215ff72daf1b6bde6281724ef8b",
+    "selector": "/problems/7/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/contracts.json",
+    "sha256": "b379953144287fffb14d286c61502eb70825b215ff72daf1b6bde6281724ef8b",
+    "selector": "/problems/7/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/contracts.json",
+    "sha256": "b379953144287fffb14d286c61502eb70825b215ff72daf1b6bde6281724ef8b",
+    "selector": "/problems/7/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "How are ties between equal totals ordered?",
+   "Does the ranking include every stock or the top k?",
+   "Can quantities be negative (sells)?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/study-content.json",
+    "sha256": "0c6dc4787ffa20b6824b7899b7c6b28ba367131b470a6feb9f099d0f21dbd054",
+    "selector": "/variants/hack2hire:68dc6c86dd5418be11109b14/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [
+      "StockTracker"
+     ],
+     [
+      []
+     ]
+    ],
+    "output": [
+     null
+    ],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      "StockTracker",
+      "getRankedStocks",
+      "recordTrade",
+      "getRankedStocks",
+      "getRankedStocks",
+      "getRankedStocks",
+      "recordTrade",
+      "getRankedStocks",
+      "recordTrade",
+      "recordTrade",
+      "recordTrade",
+      "recordTrade"
+     ],
+     [
+      [],
+      [],
+      [
+       "ZZ",
+       2
+      ],
+      [],
+      [],
+      [],
+      [
+       "A",
+       1000000
+      ],
+      [],
+      [
+       "C",
+       1
+      ],
+      [
+       "A",
+       5
+      ],
+      [
+       "AB",
+       2
+      ],
+      [
+       "B",
+       1
+      ]
+     ]
+    ],
+    "output": [
+     null,
+     [],
+     null,
+     [
+      "ZZ"
+     ],
+     [
+      "ZZ"
+     ],
+     [
+      "ZZ"
+     ],
+     null,
+     [
+      "A",
+      "ZZ"
+     ],
+     null,
+     null,
+     null,
+     null
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/study-content.json",
+    "sha256": "0c6dc4787ffa20b6824b7899b7c6b28ba367131b470a6feb9f099d0f21dbd054",
+    "selector": "/variants/hack2hire:68dc6c86dd5418be11109b14/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/oracles.py",
+    "sha256": "e39f79e2865a7838e665ba7dc8ca5290f77253d2c638a2d446bd15032dd7efa9",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "class",
+   "declaration": {
+    "status": "present",
+    "value": "class StockTracker:\n    def __init__(self)\n    def recordTrade(self, stockName, quantity) -> void\n    def getRankedStocks(self) -> string[]",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/contracts.json",
+      "sha256": "b379953144287fffb14d286c61502eb70825b215ff72daf1b6bde6281724ef8b",
+      "selector": "/problems/7/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/semantics/68dc6c86dd5418be11109b14-python.json",
+     "inferredInterface": {
+      "classname": "StockTracker",
+      "constructor": {
+       "params": []
+      },
+      "methods": [
+       {
+        "name": "recordTrade",
+        "params": [
+         {
+          "name": "stockName",
+          "type": "string"
+         },
+         {
+          "name": "quantity",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "void"
+        }
+       },
+       {
+        "name": "getRankedStocks",
+        "params": [],
+        "return": {
+         "type": "string[]"
+        }
+       }
+      ]
+     },
+     "traceAdapter": {
+      "name": "solve",
+      "argument_order": [
+       "operation_names",
+       "argument_lists"
+      ],
+      "constructor_output": null,
+      "void_method_output": null,
+      "result_order": "constructor followed by every method call",
+      "scope": "Explicit class trace adapter, separate from direct native observer checks."
+     }
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/semantics/68dc6c86dd5418be11109b14-python.json",
+      "sha256": "4811b5bf7e86287135b37b4d1f9cdb24e85ad53ab360ae0e97409cb72b55038e",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "class",
+   "declaration": {
+    "status": "present",
+    "value": "class StockTracker {\n  constructor()\n  recordTrade(stockName, quantity) /* -> void */\n  getRankedStocks() /* -> string[] */\n}",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/contracts.json",
+      "sha256": "b379953144287fffb14d286c61502eb70825b215ff72daf1b6bde6281724ef8b",
+      "selector": "/problems/7/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/semantics/68dc6c86dd5418be11109b14-javascript.json",
+     "inferredInterface": {
+      "classname": "StockTracker",
+      "constructor": {
+       "params": []
+      },
+      "methods": [
+       {
+        "name": "recordTrade",
+        "params": [
+         {
+          "name": "stockName",
+          "type": "string"
+         },
+         {
+          "name": "quantity",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "void"
+        }
+       },
+       {
+        "name": "getRankedStocks",
+        "params": [],
+        "return": {
+         "type": "string[]"
+        }
+       }
+      ]
+     },
+     "traceAdapter": {
+      "name": "solve",
+      "argument_order": [
+       "operation_names",
+       "argument_lists"
+      ],
+      "constructor_output": null,
+      "void_method_output": null,
+      "result_order": "constructor followed by every method call",
+      "scope": "Explicit class trace adapter, separate from direct native observer checks."
+     }
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/semantics/68dc6c86dd5418be11109b14-javascript.json",
+      "sha256": "5c282e632d8af21d279c9add98a32ed2e086b2b7ca52b76f321441db78bd0fe4",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/contracts.json",
+    "sha256": "b379953144287fffb14d286c61502eb70825b215ff72daf1b6bde6281724ef8b",
+    "selector": "/problems/7/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON trace result; no bool/int coercion",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/contracts.json",
+    "sha256": "b379953144287fffb14d286c61502eb70825b215ff72daf1b6bde6281724ef8b",
+    "selector": "/problems/7/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

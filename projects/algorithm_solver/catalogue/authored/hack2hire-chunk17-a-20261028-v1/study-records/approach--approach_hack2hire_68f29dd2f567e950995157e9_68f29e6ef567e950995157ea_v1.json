@@ -1,0 +1,461 @@
+{
+ "kind": "approach",
+ "id": "approach:hack2hire:68f29dd2f567e950995157e9:68f29e6ef567e950995157ea:v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/design.json",
+   "sha256": "9f09eab5bc432668f8a969e9c2d973126ec502cd221810b5de9968f341833753",
+   "selector": "/problems/hack2hire:68f29e6ef567e950995157ea"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/study-content.json",
+   "sha256": "0c6dc4787ffa20b6824b7899b7c6b28ba367131b470a6feb9f099d0f21dbd054",
+   "selector": "/variants/hack2hire:68f29e6ef567e950995157ea"
+  }
+ ],
+ "problemId": "hack2hire:68f29dd2f567e950995157e9",
+ "contract": {
+  "kind": "contract",
+  "id": "contract:hack2hire:68f29dd2f567e950995157e9:68f29e6ef567e950995157ea:authored-v1",
+  "version": 1,
+  "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/study-records/contract--contract_hack2hire_68f29dd2f567e950995157e9_68f29e6ef567e950995157ea_authored-v1.json",
+  "sha256": "6e57a834f90eb004a1041e7cb53894de3d2fa1795efcd3ac0573cbaae23c7445"
+ },
+ "title": {
+  "status": "present",
+  "value": "keep the accumulated snow per point, update it once per day, and recompute the ascent with one pass",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/design.json",
+    "sha256": "9f09eab5bc432668f8a969e9c2d973126ec502cd221810b5de9968f341833753",
+    "selector": "/problems/hack2hire:68f29e6ef567e950995157ea/candidate_design"
+   }
+  ]
+ },
+ "representation": "coding",
+ "explanation": {
+  "status": "present",
+  "value": "keep the accumulated snow per point, update it once per day, and recompute the ascent with one pass. Complexity target: O(D * n) time/O(n) extra space.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/design.json",
+    "sha256": "9f09eab5bc432668f8a969e9c2d973126ec502cd221810b5de9968f341833753",
+    "selector": "/problems/hack2hire:68f29e6ef567e950995157ea"
+   }
+  ]
+ },
+ "chooseWhen": {
+  "status": "present",
+  "value": [
+   "Day-by-day grid simulation"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/study-content.json",
+    "sha256": "0c6dc4787ffa20b6824b7899b7c6b28ba367131b470a6feb9f099d0f21dbd054",
+    "selector": "/variants/hack2hire:68f29e6ef567e950995157ea/chooseWhen"
+   }
+  ]
+ },
+ "tradeoffs": {
+  "status": "present",
+  "value": [
+   "Incremental state is linear per day; replaying history is quadratic in the number of days"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/study-content.json",
+    "sha256": "0c6dc4787ffa20b6824b7899b7c6b28ba367131b470a6feb9f099d0f21dbd054",
+    "selector": "/variants/hack2hire:68f29e6ef567e950995157ea/tradeoffs"
+   }
+  ]
+ },
+ "invariants": {
+  "status": "present",
+  "value": [
+   "snow depth is never negative",
+   "each day uses only the previous day's depths"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/study-content.json",
+    "sha256": "0c6dc4787ffa20b6824b7899b7c6b28ba367131b470a6feb9f099d0f21dbd054",
+    "selector": "/variants/hack2hire:68f29e6ef567e950995157ea/invariants"
+   }
+  ]
+ },
+ "hints": {
+  "status": "present",
+  "value": [
+   "Simulate the snow depth at each point day by day; it never goes below zero.",
+   "The ascent only counts upward steps between neighbours.",
+   "Keep one array of accumulated snow; each day add the snowfall, subtract min(melt, depth), then sum max(0, h[i+1] - h[i])."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/study-content.json",
+    "sha256": "0c6dc4787ffa20b6824b7899b7c6b28ba367131b470a6feb9f099d0f21dbd054",
+    "selector": "/variants/hack2hire:68f29e6ef567e950995157ea/hints"
+   }
+  ]
+ },
+ "stages": [
+  {
+   "id": "approach:hack2hire:68f29dd2f567e950995157e9:68f29e6ef567e950995157ea:v1:stage:reasoning",
+   "type": "reasoning",
+   "title": {
+    "status": "present",
+    "value": "Reason about the inferred contract",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/study-content.json",
+      "sha256": "0c6dc4787ffa20b6824b7899b7c6b28ba367131b470a6feb9f099d0f21dbd054",
+      "selector": "/variants/hack2hire:68f29e6ef567e950995157ea"
+     }
+    ]
+   },
+   "question": {
+    "status": "present",
+    "value": "Which representation makes every operation in the inferred contract cheap?",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/study-content.json",
+      "sha256": "0c6dc4787ffa20b6824b7899b7c6b28ba367131b470a6feb9f099d0f21dbd054",
+      "selector": "/variants/hack2hire:68f29e6ef567e950995157ea"
+     }
+    ]
+   },
+   "explanation": {
+    "status": "present",
+    "value": "keep the accumulated snow per point, update it once per day, and recompute the ascent with one pass",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/design.json",
+      "sha256": "9f09eab5bc432668f8a969e9c2d973126ec502cd221810b5de9968f341833753",
+      "selector": "/problems/hack2hire:68f29e6ef567e950995157ea/candidate_design"
+     }
+    ]
+   },
+   "rationale": {
+    "status": "present",
+    "value": "Target O(D * n) time/O(n) extra space; the independent reference (for every day replay all days from day 0 to rebuild the snow, then sum the ascents) is too slow at the inferred bounds.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/design.json",
+      "sha256": "9f09eab5bc432668f8a969e9c2d973126ec502cd221810b5de9968f341833753",
+      "selector": "/problems/hack2hire:68f29e6ef567e950995157ea"
+     }
+    ]
+   },
+   "instructions": {
+    "status": "present",
+    "value": [
+     "Restate the inferred contract and its open questions.",
+     "Identify the quantity each operation needs.",
+     "Choose a structure that maintains it incrementally."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/study-content.json",
+      "sha256": "0c6dc4787ffa20b6824b7899b7c6b28ba367131b470a6feb9f099d0f21dbd054",
+      "selector": "/variants/hack2hire:68f29e6ef567e950995157ea"
+     }
+    ]
+   },
+   "observations": {
+    "status": "not-applicable",
+    "reason": "Local runs are recorded in checks.json, not in study records"
+   },
+   "hints": {
+    "status": "present",
+    "value": [
+     "Simulate the snow depth at each point day by day; it never goes below zero.",
+     "The ascent only counts upward steps between neighbours."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/study-content.json",
+      "sha256": "0c6dc4787ffa20b6824b7899b7c6b28ba367131b470a6feb9f099d0f21dbd054",
+      "selector": "/variants/hack2hire:68f29e6ef567e950995157ea/hints"
+     }
+    ]
+   },
+   "requirementIds": {
+    "status": "not-applicable",
+    "reason": "Requirements are prose items without stable ids"
+   },
+   "checks": [],
+   "artifacts": [],
+   "native": {
+    "kind": "artifact",
+    "id": "artifact:hack2hire:68f29dd2f567e950995157e9:68f29e6ef567e950995157ea:approach-native:v1",
+    "version": 1,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/study-records/artifact--artifact_hack2hire_68f29dd2f567e950995157e9_68f29e6ef567e950995157ea_approach-native_v1.json",
+    "sha256": "ca62f7d278d9fde1d1f163ffd5ef6a1c5ce725168768db6c6d8f25e5f9c814fc"
+   }
+  },
+  {
+   "id": "approach:hack2hire:68f29dd2f567e950995157e9:68f29e6ef567e950995157ea:v1:stage:coding",
+   "type": "coding",
+   "title": {
+    "status": "present",
+    "value": "Implement in Python and JavaScript",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/study-content.json",
+      "sha256": "0c6dc4787ffa20b6824b7899b7c6b28ba367131b470a6feb9f099d0f21dbd054",
+      "selector": "/variants/hack2hire:68f29e6ef567e950995157ea"
+     }
+    ]
+   },
+   "question": {
+    "status": "present",
+    "value": "How is the design written without mutating inputs and with exact numerics in both languages?",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/study-content.json",
+      "sha256": "0c6dc4787ffa20b6824b7899b7c6b28ba367131b470a6feb9f099d0f21dbd054",
+      "selector": "/variants/hack2hire:68f29e6ef567e950995157ea"
+     }
+    ]
+   },
+   "explanation": {
+    "status": "present",
+    "value": "Write solve plus the inferred wrapper totalAscentByDay, using only the standard library and returning fresh containers.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/contracts.json",
+      "sha256": "b379953144287fffb14d286c61502eb70825b215ff72daf1b6bde6281724ef8b",
+      "selector": "/problems/6/inferred_interface"
+     }
+    ]
+   },
+   "rationale": {
+    "status": "present",
+    "value": "The same algorithm in both languages keeps behaviour comparable; integer results and accumulators stay below 2**53 so JavaScript Number is exact.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/design.json",
+      "sha256": "9f09eab5bc432668f8a969e9c2d973126ec502cd221810b5de9968f341833753",
+      "selector": "/problems/hack2hire:68f29e6ef567e950995157ea"
+     }
+    ]
+   },
+   "instructions": {
+    "status": "present",
+    "value": [
+     "Copy before modifying any input container.",
+     "Keep each file self-contained.",
+     "Use exact integer arithmetic for every count, amount and accumulator."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/study-content.json",
+      "sha256": "0c6dc4787ffa20b6824b7899b7c6b28ba367131b470a6feb9f099d0f21dbd054",
+      "selector": "/variants/hack2hire:68f29e6ef567e950995157ea"
+     }
+    ]
+   },
+   "observations": {
+    "status": "not-applicable",
+    "reason": "Local runs are recorded in checks.json, not in study records"
+   },
+   "hints": {
+    "status": "present",
+    "value": [
+     "Keep one array of accumulated snow; each day add the snowfall, subtract min(melt, depth), then sum max(0, h[i+1] - h[i])."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/study-content.json",
+      "sha256": "0c6dc4787ffa20b6824b7899b7c6b28ba367131b470a6feb9f099d0f21dbd054",
+      "selector": "/variants/hack2hire:68f29e6ef567e950995157ea/hints"
+     }
+    ]
+   },
+   "requirementIds": {
+    "status": "not-applicable",
+    "reason": "Requirements are prose items without stable ids"
+   },
+   "checks": [],
+   "artifacts": [
+    {
+     "kind": "artifact",
+     "id": "artifact:hack2hire:68f29dd2f567e950995157e9:68f29e6ef567e950995157ea:python:v1",
+     "version": 1,
+     "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/study-records/artifact--artifact_hack2hire_68f29dd2f567e950995157e9_68f29e6ef567e950995157ea_python_v1.json",
+     "sha256": "d02283d6c7985fe303976887d4dfb20fde8f99b17deb8cd55a839b34b46a8e97"
+    },
+    {
+     "kind": "artifact",
+     "id": "artifact:hack2hire:68f29dd2f567e950995157e9:68f29e6ef567e950995157ea:javascript:v1",
+     "version": 1,
+     "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/study-records/artifact--artifact_hack2hire_68f29dd2f567e950995157e9_68f29e6ef567e950995157ea_javascript_v1.json",
+     "sha256": "ab7467f6e8a1fb276724fb82b4bdffeea5ecd8df3592aeaf0caf5661799515e4"
+    }
+   ],
+   "native": {
+    "kind": "artifact",
+    "id": "artifact:hack2hire:68f29dd2f567e950995157e9:68f29e6ef567e950995157ea:approach-native:v1",
+    "version": 1,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/study-records/artifact--artifact_hack2hire_68f29dd2f567e950995157e9_68f29e6ef567e950995157ea_approach-native_v1.json",
+    "sha256": "ca62f7d278d9fde1d1f163ffd5ef6a1c5ce725168768db6c6d8f25e5f9c814fc"
+   }
+  },
+  {
+   "id": "approach:hack2hire:68f29dd2f567e950995157e9:68f29e6ef567e950995157ea:v1:stage:validation",
+   "type": "validation",
+   "title": {
+    "status": "present",
+    "value": "Validate against an independent reference",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/study-content.json",
+      "sha256": "0c6dc4787ffa20b6824b7899b7c6b28ba367131b470a6feb9f099d0f21dbd054",
+      "selector": "/variants/hack2hire:68f29e6ef567e950995157ea"
+     }
+    ]
+   },
+   "question": {
+    "status": "present",
+    "value": "How do you gain confidence without the official tests?",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/study-content.json",
+      "sha256": "0c6dc4787ffa20b6824b7899b7c6b28ba367131b470a6feb9f099d0f21dbd054",
+      "selector": "/variants/hack2hire:68f29e6ef567e950995157ea"
+     }
+    ]
+   },
+   "explanation": {
+    "status": "present",
+    "value": "Compare against the independent reference (for every day replay all days from day 0 to rebuild the snow, then sum the ascents) on small random and boundary cases, and against analytic expectations at the inferred maximum bounds.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/design.json",
+      "sha256": "9f09eab5bc432668f8a969e9c2d973126ec502cd221810b5de9968f341833753",
+      "selector": "/problems/hack2hire:68f29e6ef567e950995157ea/reference"
+     }
+    ]
+   },
+   "rationale": {
+    "status": "present",
+    "value": "Matching a self-written reference checks the implementation against the inferred contract only, not against the official problem.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/contracts.json",
+      "sha256": "b379953144287fffb14d286c61502eb70825b215ff72daf1b6bde6281724ef8b",
+      "selector": "/problems/6/spec_basis"
+     }
+    ]
+   },
+   "instructions": {
+    "status": "present",
+    "value": [
+     "Run test_oracles.py References, then Candidates.",
+     "For classes, run test_native_observer.py.",
+     "Check inputs are unchanged after every call."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/test_oracles.py",
+      "sha256": "98e4a8da7ddf5e149dc027f027fae9bbc2e301c87ca626d327a6d567f16a66d4",
+      "selector": null
+     }
+    ]
+   },
+   "observations": {
+    "status": "not-applicable",
+    "reason": "Local runs are recorded in checks.json, not in study records"
+   },
+   "hints": {
+    "status": "present",
+    "value": [
+     "Look for boundary cases at empty inputs and at the inferred maximum bounds."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/study-content.json",
+      "sha256": "0c6dc4787ffa20b6824b7899b7c6b28ba367131b470a6feb9f099d0f21dbd054",
+      "selector": "/variants/hack2hire:68f29e6ef567e950995157ea"
+     }
+    ]
+   },
+   "requirementIds": {
+    "status": "not-applicable",
+    "reason": "Requirements are prose items without stable ids"
+   },
+   "checks": [],
+   "artifacts": [],
+   "native": {
+    "kind": "artifact",
+    "id": "artifact:hack2hire:68f29dd2f567e950995157e9:68f29e6ef567e950995157ea:approach-native:v1",
+    "version": 1,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/study-records/artifact--artifact_hack2hire_68f29dd2f567e950995157e9_68f29e6ef567e950995157ea_approach-native_v1.json",
+    "sha256": "ca62f7d278d9fde1d1f163ffd5ef6a1c5ce725168768db6c6d8f25e5f9c814fc"
+   }
+  }
+ ],
+ "sequenceStatus": "draft",
+ "native": {
+  "kind": "artifact",
+  "id": "artifact:hack2hire:68f29dd2f567e950995157e9:68f29e6ef567e950995157ea:approach-native:v1",
+  "version": 1,
+  "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/study-records/artifact--artifact_hack2hire_68f29dd2f567e950995157e9_68f29e6ef567e950995157ea_approach-native_v1.json",
+  "sha256": "ca62f7d278d9fde1d1f163ffd5ef6a1c5ce725168768db6c6d8f25e5f9c814fc"
+ }
+}

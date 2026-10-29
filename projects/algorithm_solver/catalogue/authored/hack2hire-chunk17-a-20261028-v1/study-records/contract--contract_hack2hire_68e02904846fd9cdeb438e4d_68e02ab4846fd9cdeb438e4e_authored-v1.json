@@ -1,0 +1,323 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:68e02904846fd9cdeb438e4d:68e02ab4846fd9cdeb438e4e:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/contracts.json",
+   "sha256": "b379953144287fffb14d286c61502eb70825b215ff72daf1b6bde6281724ef8b",
+   "selector": "/problems/17"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/68e02904846fd9cdeb438e4d.json",
+   "sha256": "6d14daa89051e97653574c35d6109d9c0c953f6e91ab2877b11d9a10d65417ea",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/study-content.json",
+   "sha256": "0c6dc4787ffa20b6824b7899b7c6b28ba367131b470a6feb9f099d0f21dbd054",
+   "selector": "/variants/hack2hire:68e02ab4846fd9cdeb438e4e"
+  }
+ ],
+ "problemId": "hack2hire:68e02904846fd9cdeb438e4d",
+ "variantId": "68e02ab4846fd9cdeb438e4e",
+ "variantLabel": {
+  "status": "present",
+  "value": "Single variant: query string to key-value mapping",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/study-content.json",
+    "sha256": "0c6dc4787ffa20b6824b7899b7c6b28ba367131b470a6feb9f099d0f21dbd054",
+    "selector": "/variants/hack2hire:68e02ab4846fd9cdeb438e4e/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "url is a string. If it has no \"?\" return an empty mapping. Otherwise the query is everything after the first \"?\". Split the query on \"&\" and skip empty pieces. Split each piece at its first \"=\"; the key is the part before it and the value the part after it, or \"\" when the piece has no \"=\". Skip pieces with an empty key. A key that occurs once maps to its value as a string; a key that occurs more than once maps to the list of its values in order of appearance. No percent-decoding is applied.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/contracts.json",
+    "sha256": "b379953144287fffb14d286c61502eb70825b215ff72daf1b6bde6281724ef8b",
+    "selector": "/problems/17/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "url is a string.",
+   "If it has no \"?\" return an empty mapping.",
+   "Otherwise the query is everything after the first \"?\".",
+   "Split the query on \"&\" and skip empty pieces.",
+   "Split each piece at its first \"=\"; the key is the part before it and the value the part after it, or \"\" when the piece has no \"=\".",
+   "Skip pieces with an empty key.",
+   "A key that occurs once maps to its value as a string; a key that occurs more than once maps to the list of its values in order of appearance.",
+   "No percent-decoding is applied."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/contracts.json",
+    "sha256": "b379953144287fffb14d286c61502eb70825b215ff72daf1b6bde6281724ef8b",
+    "selector": "/problems/17/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "0 <= url.length <= 1e5",
+   "url characters are letters, digits and \"/:.~-=&?\"",
+   "no percent-encoding and no fragment"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/study-content.json",
+    "sha256": "0c6dc4787ffa20b6824b7899b7c6b28ba367131b470a6feb9f099d0f21dbd054",
+    "selector": "/variants/hack2hire:68e02ab4846fd9cdeb438e4e/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: contentPreview: an HTTP GET URL whose query string is the part after the first \"?\"; parse the query parameters into a mapping from keys to values; rule 1: each key=value pair maps key to value, e.g. \"year=100&type=action\" gives two string entries (later rules are cut off); algorithmTags: STRING; preview response sha256 97b89e924b0ce3941afc9bf00094fa3fa746a3bc71f66249280feff68e0e30a3"
+   },
+   {
+    "statement": "Uncertainty: high: the query position and rule 1 are in the preview; the handling of keys without \"=\", empty pieces, empty keys and repeated keys (a list of values) is inferred",
+    "basis": "the public group preview is partial (503 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: single variant",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/contracts.json",
+    "sha256": "b379953144287fffb14d286c61502eb70825b215ff72daf1b6bde6281724ef8b",
+    "selector": "/problems/17/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/contracts.json",
+    "sha256": "b379953144287fffb14d286c61502eb70825b215ff72daf1b6bde6281724ef8b",
+    "selector": "/problems/17/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/contracts.json",
+    "sha256": "b379953144287fffb14d286c61502eb70825b215ff72daf1b6bde6281724ef8b",
+    "selector": "/problems/17/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "What does a key without \"=\" map to?",
+   "How are repeated keys represented?",
+   "Is percent-encoding decoded?",
+   "Are empty pairs ignored?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/study-content.json",
+    "sha256": "0c6dc4787ffa20b6824b7899b7c6b28ba367131b470a6feb9f099d0f21dbd054",
+    "selector": "/variants/hack2hire:68e02ab4846fd9cdeb438e4e/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     ""
+    ],
+    "output": {},
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     "http://site.com/path?a=a=b&a=q?r&&Year=q?r&=v&a=x.y"
+    ],
+    "output": {
+     "a": [
+      "a=b",
+      "q?r",
+      "x.y"
+     ],
+     "Year": "q?r"
+    },
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/study-content.json",
+    "sha256": "0c6dc4787ffa20b6824b7899b7c6b28ba367131b470a6feb9f099d0f21dbd054",
+    "selector": "/variants/hack2hire:68e02ab4846fd9cdeb438e4e/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/oracles.py",
+    "sha256": "e39f79e2865a7838e665ba7dc8ca5290f77253d2c638a2d446bd15032dd7efa9",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "def parseQuery(url) -> map<string,string|string[]>",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/contracts.json",
+      "sha256": "b379953144287fffb14d286c61502eb70825b215ff72daf1b6bde6281724ef8b",
+      "selector": "/problems/17/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/semantics/68e02ab4846fd9cdeb438e4e-python.json",
+     "inferredInterface": {
+      "name": "parseQuery",
+      "params": [
+       {
+        "name": "url",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "map<string,string|string[]>"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/semantics/68e02ab4846fd9cdeb438e4e-python.json",
+      "sha256": "12aef50727b5fc8a291b26a24898867e40d2ebae1a91e583dafef65fa91b2bff",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "function parseQuery(url) /* -> map<string,string|string[]> */",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/contracts.json",
+      "sha256": "b379953144287fffb14d286c61502eb70825b215ff72daf1b6bde6281724ef8b",
+      "selector": "/problems/17/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/semantics/68e02ab4846fd9cdeb438e4e-javascript.json",
+     "inferredInterface": {
+      "name": "parseQuery",
+      "params": [
+       {
+        "name": "url",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "map<string,string|string[]>"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/semantics/68e02ab4846fd9cdeb438e4e-javascript.json",
+      "sha256": "acf0a97a9c634ab5e418ad03bd3ca9b07b017faecad7e0351a8adaadf0adc22b",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/contracts.json",
+    "sha256": "b379953144287fffb14d286c61502eb70825b215ff72daf1b6bde6281724ef8b",
+    "selector": "/problems/17/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON result",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/contracts.json",
+    "sha256": "b379953144287fffb14d286c61502eb70825b215ff72daf1b6bde6281724ef8b",
+    "selector": "/problems/17/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

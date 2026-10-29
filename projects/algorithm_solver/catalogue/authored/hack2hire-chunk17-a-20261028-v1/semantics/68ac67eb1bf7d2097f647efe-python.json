@@ -1,0 +1,50 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:68ac67eb1bf7d2097f647efe",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "nums",
+  "k",
+  "randomInts"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "randomPartition",
+  "params": [
+   {
+    "name": "nums",
+    "type": "integer[]"
+   },
+   {
+    "name": "k",
+    "type": "integer"
+   },
+   {
+    "name": "randomInts",
+    "type": "integer[]"
+   }
+  ],
+  "return": {
+   "type": "integer[][]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "apply the swaps to an identity list of indices, then map each final index back to nums and cut the result into k pieces",
+  "candidate_design": "Fisher-Yates swaps on a copy of nums, then k slices of length n / k",
+  "complexity_target": "O(n) time/O(n) space"
+ },
+ "source_sha256": "42cdd82ad060a649e151165997705f98f386a23416455b5ef0f1b2b4f3687609",
+ "wrapper": "Solution.randomPartition"
+}

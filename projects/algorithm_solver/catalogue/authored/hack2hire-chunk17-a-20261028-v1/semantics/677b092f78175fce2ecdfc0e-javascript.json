@@ -1,0 +1,40 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:677b092f78175fce2ecdfc0e",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "expression"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "simplifyExpression",
+  "params": [
+   {
+    "name": "expression",
+    "type": "string"
+   }
+  ],
+  "return": {
+   "type": "string"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "recursive-descent parser that returns the signed term list of each parenthesised group and negates it under a minus",
+  "candidate_design": "one left-to-right pass with a stack of group signs; each variable takes the product of its own sign and the enclosing group sign",
+  "complexity_target": "O(n) time/O(n) space"
+ },
+ "source_sha256": "7fc7accbb4441c3f91ff367d8ea11378295c83048264e82c793c5350f1118258",
+ "wrapper": "named export simplifyExpression"
+}

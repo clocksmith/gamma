@@ -1,0 +1,365 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:68c9aaec212d48d6e0f5977b:68c9aaf3212d48d6e0f5977c:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/contracts.json",
+   "sha256": "b379953144287fffb14d286c61502eb70825b215ff72daf1b6bde6281724ef8b",
+   "selector": "/problems/14"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/68c9aaec212d48d6e0f5977b.json",
+   "sha256": "21bdd552ea80de10153f851da9a7f83daf3d26a8fa81c17b68a0893fa52a5faf",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/study-content.json",
+   "sha256": "0c6dc4787ffa20b6824b7899b7c6b28ba367131b470a6feb9f099d0f21dbd054",
+   "selector": "/variants/hack2hire:68c9aaf3212d48d6e0f5977c"
+  }
+ ],
+ "problemId": "hack2hire:68c9aaec212d48d6e0f5977b",
+ "variantId": "68c9aaf3212d48d6e0f5977c",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred variant 1: end squares of one turn",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/study-content.json",
+    "sha256": "0c6dc4787ffa20b6824b7899b7c6b28ba367131b470a6feb9f099d0f21dbd054",
+    "selector": "/variants/hack2hire:68c9aaf3212d48d6e0f5977c/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "teleporters is a list of \"from,to\" strings, dieSides >= 1, 0 <= currentSquare < lastSquare. For each roll r in 1..dieSides, the turn ends at lastSquare when currentSquare + r >= lastSquare, otherwise at the teleporter destination of the landing square if it has one, otherwise on the landing square. Return the distinct end squares of one turn in ascending order.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/contracts.json",
+    "sha256": "b379953144287fffb14d286c61502eb70825b215ff72daf1b6bde6281724ef8b",
+    "selector": "/problems/14/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "teleporters is a list of \"from,to\" strings, dieSides >= 1, 0 <= currentSquare < lastSquare.",
+   "For each roll r in 1..dieSides, the turn ends at lastSquare when currentSquare + r >= lastSquare, otherwise at the teleporter destination of the landing square if it has one, otherwise on the landing square.",
+   "Return the distinct end squares of one turn in ascending order."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/contracts.json",
+    "sha256": "b379953144287fffb14d286c61502eb70825b215ff72daf1b6bde6281724ef8b",
+    "selector": "/problems/14/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "1 <= lastSquare <= 1e5",
+   "1 <= dieSides <= 12",
+   "teleporters are \"from,to\" with 1 <= from < lastSquare, 0 <= to <= lastSquare, to != from, from unique",
+   "at most lastSquare - 1 teleporters",
+   "0 <= currentSquare < lastSquare"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/study-content.json",
+    "sha256": "0c6dc4787ffa20b6824b7899b7c6b28ba367131b470a6feb9f099d0f21dbd054",
+    "selector": "/variants/hack2hire:68c9aaf3212d48d6e0f5977c/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: contentPreview: squares 0 to lastSquare; teleporters are \"from,to\" strings with unique from; a turn starts on currentSquare and rolls a die with dieSides faces; the player moves forward by the roll, stops at lastSquare without teleporting when the move reaches or passes it, and otherwise follows at most one teleporter from the landing square (the question is cut off); algorithmTags: HASH_TABLE, BREADTH_FIRST_SEARCH; two variant ids; preview response sha256 a9c43cbf4bc4d9ed92bf6303b156f5fae0c6398b61268473da2542725f21c4b7"
+   },
+   {
+    "statement": "Uncertainty: medium: the turn rules are in the preview; that variant 1 returns every possible end square of one turn, sorted ascending without duplicates, is inferred",
+    "basis": "the public group preview is partial (903 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: inferred: variant 1 of 2 lists the squares reachable in one turn",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/contracts.json",
+    "sha256": "b379953144287fffb14d286c61502eb70825b215ff72daf1b6bde6281724ef8b",
+    "selector": "/problems/14/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/contracts.json",
+    "sha256": "b379953144287fffb14d286c61502eb70825b215ff72daf1b6bde6281724ef8b",
+    "selector": "/problems/14/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/contracts.json",
+    "sha256": "b379953144287fffb14d286c61502eb70825b215ff72daf1b6bde6281724ef8b",
+    "selector": "/problems/14/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "Is the output sorted and deduplicated?",
+   "Does a teleporter destination with its own teleporter chain?",
+   "Is lastSquare reachable by overshooting?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/study-content.json",
+    "sha256": "0c6dc4787ffa20b6824b7899b7c6b28ba367131b470a6feb9f099d0f21dbd054",
+    "selector": "/variants/hack2hire:68c9aaf3212d48d6e0f5977c/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [],
+     2,
+     0,
+     6
+    ],
+    "output": [
+     1,
+     2
+    ],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      "1,18",
+      "14,18",
+      "12,21",
+      "4,7",
+      "9,21",
+      "3,10",
+      "17,13",
+      "6,12",
+      "22,3",
+      "8,14",
+      "20,2",
+      "13,23",
+      "19,15",
+      "21,3",
+      "16,21",
+      "11,13",
+      "15,20"
+     ],
+     1,
+     18,
+     24
+    ],
+    "output": [
+     15
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/study-content.json",
+    "sha256": "0c6dc4787ffa20b6824b7899b7c6b28ba367131b470a6feb9f099d0f21dbd054",
+    "selector": "/variants/hack2hire:68c9aaf3212d48d6e0f5977c/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/oracles.py",
+    "sha256": "e39f79e2865a7838e665ba7dc8ca5290f77253d2c638a2d446bd15032dd7efa9",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "def possibleDestinations(teleporters, dieSides, currentSquare, lastSquare) -> integer[]",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/contracts.json",
+      "sha256": "b379953144287fffb14d286c61502eb70825b215ff72daf1b6bde6281724ef8b",
+      "selector": "/problems/14/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/semantics/68c9aaf3212d48d6e0f5977c-python.json",
+     "inferredInterface": {
+      "name": "possibleDestinations",
+      "params": [
+       {
+        "name": "teleporters",
+        "type": "string[]"
+       },
+       {
+        "name": "dieSides",
+        "type": "integer"
+       },
+       {
+        "name": "currentSquare",
+        "type": "integer"
+       },
+       {
+        "name": "lastSquare",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "integer[]"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/semantics/68c9aaf3212d48d6e0f5977c-python.json",
+      "sha256": "31f0c1391393e27c6e0b86ded74134618de3f6ce74bf08e2c3175c78635ad30c",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "function possibleDestinations(teleporters, dieSides, currentSquare, lastSquare) /* -> integer[] */",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/contracts.json",
+      "sha256": "b379953144287fffb14d286c61502eb70825b215ff72daf1b6bde6281724ef8b",
+      "selector": "/problems/14/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/semantics/68c9aaf3212d48d6e0f5977c-javascript.json",
+     "inferredInterface": {
+      "name": "possibleDestinations",
+      "params": [
+       {
+        "name": "teleporters",
+        "type": "string[]"
+       },
+       {
+        "name": "dieSides",
+        "type": "integer"
+       },
+       {
+        "name": "currentSquare",
+        "type": "integer"
+       },
+       {
+        "name": "lastSquare",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "integer[]"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/semantics/68c9aaf3212d48d6e0f5977c-javascript.json",
+      "sha256": "799fa145e647a4f18cbc5123398c90c223ea69255502ee0ee5dd3d93e76cfd2b",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/contracts.json",
+    "sha256": "b379953144287fffb14d286c61502eb70825b215ff72daf1b6bde6281724ef8b",
+    "selector": "/problems/14/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON result",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/contracts.json",
+    "sha256": "b379953144287fffb14d286c61502eb70825b215ff72daf1b6bde6281724ef8b",
+    "selector": "/problems/14/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

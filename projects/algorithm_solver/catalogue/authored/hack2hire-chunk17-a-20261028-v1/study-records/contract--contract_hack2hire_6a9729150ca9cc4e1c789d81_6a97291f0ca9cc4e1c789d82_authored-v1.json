@@ -1,0 +1,346 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:6a9729150ca9cc4e1c789d81:6a97291f0ca9cc4e1c789d82:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/contracts.json",
+   "sha256": "b379953144287fffb14d286c61502eb70825b215ff72daf1b6bde6281724ef8b",
+   "selector": "/problems/13"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/6a9729150ca9cc4e1c789d81.json",
+   "sha256": "95d86b020641a81f34a8912f7e742844aa59311f13f2f651c963be38c2702d8c",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/study-content.json",
+   "sha256": "0c6dc4787ffa20b6824b7899b7c6b28ba367131b470a6feb9f099d0f21dbd054",
+   "selector": "/variants/hack2hire:6a97291f0ca9cc4e1c789d82"
+  }
+ ],
+ "problemId": "hack2hire:6a9729150ca9cc4e1c789d81",
+ "variantId": "6a97291f0ca9cc4e1c789d82",
+ "variantLabel": {
+  "status": "present",
+  "value": "Single variant: count of windows whose average reaches the threshold",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/study-content.json",
+    "sha256": "0c6dc4787ffa20b6824b7899b7c6b28ba367131b470a6feb9f099d0f21dbd054",
+    "selector": "/variants/hack2hire:6a97291f0ca9cc4e1c789d82/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "numCalls is a non-empty list of non-negative integers, precedingMinutes = k is a positive integer and alertThreshold is a non-negative integer. For every minute i >= k - 1, the window numCalls[i - k + 1 .. i] raises an alert when its average is at least alertThreshold (sum >= alertThreshold * k, compared exactly). Return the number of alerts.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/contracts.json",
+    "sha256": "b379953144287fffb14d286c61502eb70825b215ff72daf1b6bde6281724ef8b",
+    "selector": "/problems/13/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "numCalls is a non-empty list of non-negative integers, precedingMinutes = k is a positive integer and alertThreshold is a non-negative integer.",
+   "For every minute i >= k - 1, the window numCalls[i - k + 1 .",
+   "i] raises an alert when its average is at least alertThreshold (sum >= alertThreshold * k, compared exactly).",
+   "Return the number of alerts."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/contracts.json",
+    "sha256": "b379953144287fffb14d286c61502eb70825b215ff72daf1b6bde6281724ef8b",
+    "selector": "/problems/13/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "1 <= numCalls.length <= 1e5",
+   "0 <= numCalls[i] <= 1e4",
+   "1 <= precedingMinutes <= 1e5",
+   "0 <= alertThreshold <= 1e4"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/study-content.json",
+    "sha256": "0c6dc4787ffa20b6824b7899b7c6b28ba367131b470a6feb9f099d0f21dbd054",
+    "selector": "/variants/hack2hire:6a97291f0ca9cc4e1c789d82/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: contentPreview: stated as a variation of LeetCode 1343; numCalls gives the calls per minute in order; for every minute with at least precedingMinutes values, consider the trailing window of exactly precedingMinutes values ending at that minute; no alert before a full window exists (the alert rule is cut off); algorithmTags: SLIDING_WINDOW; preview response sha256 8c9062b37d6b60f5d1f9f271f9521244f7234d02784d9c619c9b5124e470b609"
+   },
+   {
+    "statement": "Uncertainty: medium: the window definition is in the preview; the alert rule (average at least the threshold, as in LeetCode 1343), the threshold parameter name and returning a count are inferred",
+    "basis": "the public group preview is partial (683 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: single variant",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/contracts.json",
+    "sha256": "b379953144287fffb14d286c61502eb70825b215ff72daf1b6bde6281724ef8b",
+    "selector": "/problems/13/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/contracts.json",
+    "sha256": "b379953144287fffb14d286c61502eb70825b215ff72daf1b6bde6281724ef8b",
+    "selector": "/problems/13/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/contracts.json",
+    "sha256": "b379953144287fffb14d286c61502eb70825b215ff72daf1b6bde6281724ef8b",
+    "selector": "/problems/13/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "Is the comparison average >= threshold or strictly greater?",
+   "What if precedingMinutes exceeds the number of minutes?",
+   "Is a count or the list of alert minutes returned?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/study-content.json",
+    "sha256": "0c6dc4787ffa20b6824b7899b7c6b28ba367131b470a6feb9f099d0f21dbd054",
+    "selector": "/variants/hack2hire:6a97291f0ca9cc4e1c789d82/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [
+      1
+     ],
+     2,
+     0
+    ],
+    "output": 0,
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      3,
+      0,
+      3,
+      5,
+      3,
+      3,
+      0,
+      2,
+      4,
+      0,
+      2
+     ],
+     11,
+     0
+    ],
+    "output": 1,
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/study-content.json",
+    "sha256": "0c6dc4787ffa20b6824b7899b7c6b28ba367131b470a6feb9f099d0f21dbd054",
+    "selector": "/variants/hack2hire:6a97291f0ca9cc4e1c789d82/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/oracles.py",
+    "sha256": "e39f79e2865a7838e665ba7dc8ca5290f77253d2c638a2d446bd15032dd7efa9",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "def countAlerts(numCalls, precedingMinutes, alertThreshold) -> integer",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/contracts.json",
+      "sha256": "b379953144287fffb14d286c61502eb70825b215ff72daf1b6bde6281724ef8b",
+      "selector": "/problems/13/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/semantics/6a97291f0ca9cc4e1c789d82-python.json",
+     "inferredInterface": {
+      "name": "countAlerts",
+      "params": [
+       {
+        "name": "numCalls",
+        "type": "integer[]"
+       },
+       {
+        "name": "precedingMinutes",
+        "type": "integer"
+       },
+       {
+        "name": "alertThreshold",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "integer"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/semantics/6a97291f0ca9cc4e1c789d82-python.json",
+      "sha256": "bc0260c677e6be6a46fceaf4d9f3431416b03295f9c59fbb868b52a5827040dd",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "function countAlerts(numCalls, precedingMinutes, alertThreshold) /* -> integer */",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/contracts.json",
+      "sha256": "b379953144287fffb14d286c61502eb70825b215ff72daf1b6bde6281724ef8b",
+      "selector": "/problems/13/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/semantics/6a97291f0ca9cc4e1c789d82-javascript.json",
+     "inferredInterface": {
+      "name": "countAlerts",
+      "params": [
+       {
+        "name": "numCalls",
+        "type": "integer[]"
+       },
+       {
+        "name": "precedingMinutes",
+        "type": "integer"
+       },
+       {
+        "name": "alertThreshold",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "integer"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/semantics/6a97291f0ca9cc4e1c789d82-javascript.json",
+      "sha256": "f9895f4fcc59ed64a103da03567d9fa8621065dc3fdf4d620c63e594d6af885c",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/contracts.json",
+    "sha256": "b379953144287fffb14d286c61502eb70825b215ff72daf1b6bde6281724ef8b",
+    "selector": "/problems/13/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON result",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/contracts.json",
+    "sha256": "b379953144287fffb14d286c61502eb70825b215ff72daf1b6bde6281724ef8b",
+    "selector": "/problems/13/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

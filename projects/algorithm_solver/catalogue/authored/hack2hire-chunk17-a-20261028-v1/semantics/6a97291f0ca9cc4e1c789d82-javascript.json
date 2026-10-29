@@ -1,0 +1,50 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:6a97291f0ca9cc4e1c789d82",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "numCalls",
+  "precedingMinutes",
+  "alertThreshold"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "countAlerts",
+  "params": [
+   {
+    "name": "numCalls",
+    "type": "integer[]"
+   },
+   {
+    "name": "precedingMinutes",
+    "type": "integer"
+   },
+   {
+    "name": "alertThreshold",
+    "type": "integer"
+   }
+  ],
+  "return": {
+   "type": "integer"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "sum every complete window directly",
+  "candidate_design": "running window sum, compared with alertThreshold * k in integers",
+  "complexity_target": "O(n) time/O(1) space"
+ },
+ "source_sha256": "820d56ab2fc32a4b0375ec2f90322fd0ca6921e61c862a4d3cf26b89dc6eb129",
+ "wrapper": "named export countAlerts"
+}

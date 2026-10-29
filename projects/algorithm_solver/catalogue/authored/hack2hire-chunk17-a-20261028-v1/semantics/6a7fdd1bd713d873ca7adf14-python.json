@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:6a7fdd1bd713d873ca7adf14",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "finish",
+  "scooters"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "minWalkingDistance",
+  "params": [
+   {
+    "name": "finish",
+    "type": "integer"
+   },
+   {
+    "name": "scooters",
+    "type": "integer[]"
+   }
+  ],
+  "return": {
+   "type": "integer"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "unit-by-unit simulation from 0 to finish with a battery counter reset to 10 at every scooter position",
+  "candidate_design": "sort a copy of the positions below finish and sweep the union of [s, min(s + 10, finish)]",
+  "complexity_target": "O(m log m) time/O(m) space, m = scooters"
+ },
+ "source_sha256": "5ac48b750544a05028fdcbce2b1a2ba4935b1408826707aaa35000bfe0a1ba1b",
+ "wrapper": "Solution.minWalkingDistance"
+}

@@ -1,0 +1,461 @@
+{
+ "kind": "approach",
+ "id": "approach:hack2hire:69c1e00c21f6ab4226964e06:69c1e01c21f6ab4226964e08:v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/design.json",
+   "sha256": "9f09eab5bc432668f8a969e9c2d973126ec502cd221810b5de9968f341833753",
+   "selector": "/problems/hack2hire:69c1e01c21f6ab4226964e08"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/study-content.json",
+   "sha256": "0c6dc4787ffa20b6824b7899b7c6b28ba367131b470a6feb9f099d0f21dbd054",
+   "selector": "/variants/hack2hire:69c1e01c21f6ab4226964e08"
+  }
+ ],
+ "problemId": "hack2hire:69c1e00c21f6ab4226964e06",
+ "contract": {
+  "kind": "contract",
+  "id": "contract:hack2hire:69c1e00c21f6ab4226964e06:69c1e01c21f6ab4226964e08:authored-v1",
+  "version": 1,
+  "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/study-records/contract--contract_hack2hire_69c1e00c21f6ab4226964e06_69c1e01c21f6ab4226964e08_authored-v1.json",
+  "sha256": "039de68ae01ea5dadea1251b55e1bdeea4abf2d48772ad81fd70d76bdf84aa93"
+ },
+ "title": {
+  "status": "present",
+  "value": "two Fenwick trees over a difference array of positions 0 to 1e6 (speed sums and report counts), allocated on the first report, plus a hash map counting live copies of each (start, end, speed); a query is two prefix sums",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/design.json",
+    "sha256": "9f09eab5bc432668f8a969e9c2d973126ec502cd221810b5de9968f341833753",
+    "selector": "/problems/hack2hire:69c1e01c21f6ab4226964e08/candidate_design"
+   }
+  ]
+ },
+ "representation": "coding",
+ "explanation": {
+  "status": "present",
+  "value": "two Fenwick trees over a difference array of positions 0 to 1e6 (speed sums and report counts), allocated on the first report, plus a hash map counting live copies of each (start, end, speed); a query is two prefix sums. Complexity target: O(log C) per call, C = 1e6/O(C + u) space.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/design.json",
+    "sha256": "9f09eab5bc432668f8a969e9c2d973126ec502cd221810b5de9968f341833753",
+    "selector": "/problems/hack2hire:69c1e01c21f6ab4226964e08"
+   }
+  ]
+ },
+ "chooseWhen": {
+  "status": "present",
+  "value": [
+   "Range updates with point queries"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/study-content.json",
+    "sha256": "0c6dc4787ffa20b6824b7899b7c6b28ba367131b470a6feb9f099d0f21dbd054",
+    "selector": "/variants/hack2hire:69c1e01c21f6ab4226964e08/chooseWhen"
+   }
+  ]
+ },
+ "tradeoffs": {
+  "status": "present",
+  "value": [
+   "Fenwick trees need bounded integer coordinates; a dynamic segment tree handles larger ranges at a higher constant"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/study-content.json",
+    "sha256": "0c6dc4787ffa20b6824b7899b7c6b28ba367131b470a6feb9f099d0f21dbd054",
+    "selector": "/variants/hack2hire:69c1e01c21f6ab4226964e08/tradeoffs"
+   }
+  ]
+ },
+ "invariants": {
+  "status": "present",
+  "value": [
+   "the prefix sums at p equal the totals over live reports covering p",
+   "a removal only touches the trees when a live copy exists"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/study-content.json",
+    "sha256": "0c6dc4787ffa20b6824b7899b7c6b28ba367131b470a6feb9f099d0f21dbd054",
+    "selector": "/variants/hack2hire:69c1e01c21f6ab4226964e08/invariants"
+   }
+  ]
+ },
+ "hints": {
+  "status": "present",
+  "value": [
+   "A point query of a range update is a prefix sum over a difference array.",
+   "Keep two difference arrays: one for speed sums and one for report counts.",
+   "Use Fenwick trees for the difference arrays: add at start, subtract at end; the average at p is prefix-sum(p) / prefix-count(p), and a hash map of live copies decides removals."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/study-content.json",
+    "sha256": "0c6dc4787ffa20b6824b7899b7c6b28ba367131b470a6feb9f099d0f21dbd054",
+    "selector": "/variants/hack2hire:69c1e01c21f6ab4226964e08/hints"
+   }
+  ]
+ },
+ "stages": [
+  {
+   "id": "approach:hack2hire:69c1e00c21f6ab4226964e06:69c1e01c21f6ab4226964e08:v1:stage:reasoning",
+   "type": "reasoning",
+   "title": {
+    "status": "present",
+    "value": "Reason about the inferred contract",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/study-content.json",
+      "sha256": "0c6dc4787ffa20b6824b7899b7c6b28ba367131b470a6feb9f099d0f21dbd054",
+      "selector": "/variants/hack2hire:69c1e01c21f6ab4226964e08"
+     }
+    ]
+   },
+   "question": {
+    "status": "present",
+    "value": "Which representation makes every operation in the inferred contract cheap?",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/study-content.json",
+      "sha256": "0c6dc4787ffa20b6824b7899b7c6b28ba367131b470a6feb9f099d0f21dbd054",
+      "selector": "/variants/hack2hire:69c1e01c21f6ab4226964e08"
+     }
+    ]
+   },
+   "explanation": {
+    "status": "present",
+    "value": "two Fenwick trees over a difference array of positions 0 to 1e6 (speed sums and report counts), allocated on the first report, plus a hash map counting live copies of each (start, end, speed); a query is two prefix sums",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/design.json",
+      "sha256": "9f09eab5bc432668f8a969e9c2d973126ec502cd221810b5de9968f341833753",
+      "selector": "/problems/hack2hire:69c1e01c21f6ab4226964e08/candidate_design"
+     }
+    ]
+   },
+   "rationale": {
+    "status": "present",
+    "value": "Target O(log C) per call, C = 1e6/O(C + u) space; the independent reference (plain list of live reports; a query scans every report and averages the covering speeds with exact fractions) is too slow at the inferred bounds.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/design.json",
+      "sha256": "9f09eab5bc432668f8a969e9c2d973126ec502cd221810b5de9968f341833753",
+      "selector": "/problems/hack2hire:69c1e01c21f6ab4226964e08"
+     }
+    ]
+   },
+   "instructions": {
+    "status": "present",
+    "value": [
+     "Restate the inferred contract and its open questions.",
+     "Identify the quantity each operation needs.",
+     "Choose a structure that maintains it incrementally."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/study-content.json",
+      "sha256": "0c6dc4787ffa20b6824b7899b7c6b28ba367131b470a6feb9f099d0f21dbd054",
+      "selector": "/variants/hack2hire:69c1e01c21f6ab4226964e08"
+     }
+    ]
+   },
+   "observations": {
+    "status": "not-applicable",
+    "reason": "Local runs are recorded in checks.json, not in study records"
+   },
+   "hints": {
+    "status": "present",
+    "value": [
+     "A point query of a range update is a prefix sum over a difference array.",
+     "Keep two difference arrays: one for speed sums and one for report counts."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/study-content.json",
+      "sha256": "0c6dc4787ffa20b6824b7899b7c6b28ba367131b470a6feb9f099d0f21dbd054",
+      "selector": "/variants/hack2hire:69c1e01c21f6ab4226964e08/hints"
+     }
+    ]
+   },
+   "requirementIds": {
+    "status": "not-applicable",
+    "reason": "Requirements are prose items without stable ids"
+   },
+   "checks": [],
+   "artifacts": [],
+   "native": {
+    "kind": "artifact",
+    "id": "artifact:hack2hire:69c1e00c21f6ab4226964e06:69c1e01c21f6ab4226964e08:approach-native:v1",
+    "version": 1,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/study-records/artifact--artifact_hack2hire_69c1e00c21f6ab4226964e06_69c1e01c21f6ab4226964e08_approach-native_v1.json",
+    "sha256": "fab8d1e8a2fd681369f93b49b7b1a94c5a81184cf99ac7dec6af071c2955aa28"
+   }
+  },
+  {
+   "id": "approach:hack2hire:69c1e00c21f6ab4226964e06:69c1e01c21f6ab4226964e08:v1:stage:coding",
+   "type": "coding",
+   "title": {
+    "status": "present",
+    "value": "Implement in Python and JavaScript",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/study-content.json",
+      "sha256": "0c6dc4787ffa20b6824b7899b7c6b28ba367131b470a6feb9f099d0f21dbd054",
+      "selector": "/variants/hack2hire:69c1e01c21f6ab4226964e08"
+     }
+    ]
+   },
+   "question": {
+    "status": "present",
+    "value": "How is the design written without mutating inputs and with exact numerics in both languages?",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/study-content.json",
+      "sha256": "0c6dc4787ffa20b6824b7899b7c6b28ba367131b470a6feb9f099d0f21dbd054",
+      "selector": "/variants/hack2hire:69c1e01c21f6ab4226964e08"
+     }
+    ]
+   },
+   "explanation": {
+    "status": "present",
+    "value": "Write solve plus the inferred native class RoadwaySpeedTracker, using only the standard library and returning fresh containers.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/contracts.json",
+      "sha256": "b379953144287fffb14d286c61502eb70825b215ff72daf1b6bde6281724ef8b",
+      "selector": "/problems/2/inferred_interface"
+     }
+    ]
+   },
+   "rationale": {
+    "status": "present",
+    "value": "The same algorithm in both languages keeps behaviour comparable; integer results and accumulators stay below 2**53 so JavaScript Number is exact; the float average is one correctly rounded division of exact integers in both languages.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/design.json",
+      "sha256": "9f09eab5bc432668f8a969e9c2d973126ec502cd221810b5de9968f341833753",
+      "selector": "/problems/hack2hire:69c1e01c21f6ab4226964e08"
+     }
+    ]
+   },
+   "instructions": {
+    "status": "present",
+    "value": [
+     "Copy before modifying any input container.",
+     "Keep each file self-contained.",
+     "Use exact integer arithmetic for every count, amount and accumulator."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/study-content.json",
+      "sha256": "0c6dc4787ffa20b6824b7899b7c6b28ba367131b470a6feb9f099d0f21dbd054",
+      "selector": "/variants/hack2hire:69c1e01c21f6ab4226964e08"
+     }
+    ]
+   },
+   "observations": {
+    "status": "not-applicable",
+    "reason": "Local runs are recorded in checks.json, not in study records"
+   },
+   "hints": {
+    "status": "present",
+    "value": [
+     "Use Fenwick trees for the difference arrays: add at start, subtract at end; the average at p is prefix-sum(p) / prefix-count(p), and a hash map of live copies decides removals."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/study-content.json",
+      "sha256": "0c6dc4787ffa20b6824b7899b7c6b28ba367131b470a6feb9f099d0f21dbd054",
+      "selector": "/variants/hack2hire:69c1e01c21f6ab4226964e08/hints"
+     }
+    ]
+   },
+   "requirementIds": {
+    "status": "not-applicable",
+    "reason": "Requirements are prose items without stable ids"
+   },
+   "checks": [],
+   "artifacts": [
+    {
+     "kind": "artifact",
+     "id": "artifact:hack2hire:69c1e00c21f6ab4226964e06:69c1e01c21f6ab4226964e08:python:v1",
+     "version": 1,
+     "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/study-records/artifact--artifact_hack2hire_69c1e00c21f6ab4226964e06_69c1e01c21f6ab4226964e08_python_v1.json",
+     "sha256": "eea390d0468309d924c2fa0912aa9a119c537da242efe6dce9e5b5a30ef84d77"
+    },
+    {
+     "kind": "artifact",
+     "id": "artifact:hack2hire:69c1e00c21f6ab4226964e06:69c1e01c21f6ab4226964e08:javascript:v1",
+     "version": 1,
+     "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/study-records/artifact--artifact_hack2hire_69c1e00c21f6ab4226964e06_69c1e01c21f6ab4226964e08_javascript_v1.json",
+     "sha256": "6432de61da192424fcafefe82e3770b4aa68e584d860af0a7309b90609d3292b"
+    }
+   ],
+   "native": {
+    "kind": "artifact",
+    "id": "artifact:hack2hire:69c1e00c21f6ab4226964e06:69c1e01c21f6ab4226964e08:approach-native:v1",
+    "version": 1,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/study-records/artifact--artifact_hack2hire_69c1e00c21f6ab4226964e06_69c1e01c21f6ab4226964e08_approach-native_v1.json",
+    "sha256": "fab8d1e8a2fd681369f93b49b7b1a94c5a81184cf99ac7dec6af071c2955aa28"
+   }
+  },
+  {
+   "id": "approach:hack2hire:69c1e00c21f6ab4226964e06:69c1e01c21f6ab4226964e08:v1:stage:validation",
+   "type": "validation",
+   "title": {
+    "status": "present",
+    "value": "Validate against an independent reference",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/study-content.json",
+      "sha256": "0c6dc4787ffa20b6824b7899b7c6b28ba367131b470a6feb9f099d0f21dbd054",
+      "selector": "/variants/hack2hire:69c1e01c21f6ab4226964e08"
+     }
+    ]
+   },
+   "question": {
+    "status": "present",
+    "value": "How do you gain confidence without the official tests?",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/study-content.json",
+      "sha256": "0c6dc4787ffa20b6824b7899b7c6b28ba367131b470a6feb9f099d0f21dbd054",
+      "selector": "/variants/hack2hire:69c1e01c21f6ab4226964e08"
+     }
+    ]
+   },
+   "explanation": {
+    "status": "present",
+    "value": "Compare against the independent reference (plain list of live reports; a query scans every report and averages the covering speeds with exact fractions) on small random and boundary cases, and against analytic expectations at the inferred maximum bounds.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/design.json",
+      "sha256": "9f09eab5bc432668f8a969e9c2d973126ec502cd221810b5de9968f341833753",
+      "selector": "/problems/hack2hire:69c1e01c21f6ab4226964e08/reference"
+     }
+    ]
+   },
+   "rationale": {
+    "status": "present",
+    "value": "Matching a self-written reference checks the implementation against the inferred contract only, not against the official problem.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/contracts.json",
+      "sha256": "b379953144287fffb14d286c61502eb70825b215ff72daf1b6bde6281724ef8b",
+      "selector": "/problems/2/spec_basis"
+     }
+    ]
+   },
+   "instructions": {
+    "status": "present",
+    "value": [
+     "Run test_oracles.py References, then Candidates.",
+     "For classes, run test_native_observer.py.",
+     "Check inputs are unchanged after every call."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/test_oracles.py",
+      "sha256": "98e4a8da7ddf5e149dc027f027fae9bbc2e301c87ca626d327a6d567f16a66d4",
+      "selector": null
+     }
+    ]
+   },
+   "observations": {
+    "status": "not-applicable",
+    "reason": "Local runs are recorded in checks.json, not in study records"
+   },
+   "hints": {
+    "status": "present",
+    "value": [
+     "Look for boundary cases at empty inputs and at the inferred maximum bounds."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/study-content.json",
+      "sha256": "0c6dc4787ffa20b6824b7899b7c6b28ba367131b470a6feb9f099d0f21dbd054",
+      "selector": "/variants/hack2hire:69c1e01c21f6ab4226964e08"
+     }
+    ]
+   },
+   "requirementIds": {
+    "status": "not-applicable",
+    "reason": "Requirements are prose items without stable ids"
+   },
+   "checks": [],
+   "artifacts": [],
+   "native": {
+    "kind": "artifact",
+    "id": "artifact:hack2hire:69c1e00c21f6ab4226964e06:69c1e01c21f6ab4226964e08:approach-native:v1",
+    "version": 1,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/study-records/artifact--artifact_hack2hire_69c1e00c21f6ab4226964e06_69c1e01c21f6ab4226964e08_approach-native_v1.json",
+    "sha256": "fab8d1e8a2fd681369f93b49b7b1a94c5a81184cf99ac7dec6af071c2955aa28"
+   }
+  }
+ ],
+ "sequenceStatus": "draft",
+ "native": {
+  "kind": "artifact",
+  "id": "artifact:hack2hire:69c1e00c21f6ab4226964e06:69c1e01c21f6ab4226964e08:approach-native:v1",
+  "version": 1,
+  "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/study-records/artifact--artifact_hack2hire_69c1e00c21f6ab4226964e06_69c1e01c21f6ab4226964e08_approach-native_v1.json",
+  "sha256": "fab8d1e8a2fd681369f93b49b7b1a94c5a81184cf99ac7dec6af071c2955aa28"
+ }
+}

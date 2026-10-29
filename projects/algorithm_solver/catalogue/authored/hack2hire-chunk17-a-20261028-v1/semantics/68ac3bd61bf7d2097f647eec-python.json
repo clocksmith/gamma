@@ -1,0 +1,50 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:68ac3bd61bf7d2097f647eec",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "nums",
+  "targetIndex",
+  "windowSize"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "mostTargetWindow",
+  "params": [
+   {
+    "name": "nums",
+    "type": "integer[]"
+   },
+   {
+    "name": "targetIndex",
+    "type": "integer"
+   },
+   {
+    "name": "windowSize",
+    "type": "integer"
+   }
+  ],
+  "return": {
+   "type": "integer"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "count the target in every window directly",
+  "candidate_design": "sliding window count: add the entering element and remove the leaving one; update the best start only on a strict improvement",
+  "complexity_target": "O(n) time/O(1) space"
+ },
+ "source_sha256": "71e00b5a111ca961efcd67d698c27d7c879459f50c8f3eaf9a5cfe22dffc74a0",
+ "wrapper": "Solution.mostTargetWindow"
+}

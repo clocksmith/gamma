@@ -1,0 +1,55 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:68c9aaf3212d48d6e0f5977c",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "teleporters",
+  "dieSides",
+  "currentSquare",
+  "lastSquare"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "possibleDestinations",
+  "params": [
+   {
+    "name": "teleporters",
+    "type": "string[]"
+   },
+   {
+    "name": "dieSides",
+    "type": "integer"
+   },
+   {
+    "name": "currentSquare",
+    "type": "integer"
+   },
+   {
+    "name": "lastSquare",
+    "type": "integer"
+   }
+  ],
+  "return": {
+   "type": "integer[]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "build the teleporter table by regular-expression parsing, collect the end square of every roll in a set and sort it",
+  "candidate_design": "parse the teleporters into a hash map, compute the end square of each roll, and deduplicate with a set before sorting",
+  "complexity_target": "O(t + d log d) time/O(t) space"
+ },
+ "source_sha256": "2b99130dfa735406defbd64a10b178dbb5b91eb39f213b0fba8e2a5dde539650",
+ "wrapper": "named export possibleDestinations"
+}

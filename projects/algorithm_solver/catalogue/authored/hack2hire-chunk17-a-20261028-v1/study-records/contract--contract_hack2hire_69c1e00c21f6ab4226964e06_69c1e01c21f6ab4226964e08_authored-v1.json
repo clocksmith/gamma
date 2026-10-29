@@ -1,0 +1,510 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:69c1e00c21f6ab4226964e06:69c1e01c21f6ab4226964e08:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/contracts.json",
+   "sha256": "b379953144287fffb14d286c61502eb70825b215ff72daf1b6bde6281724ef8b",
+   "selector": "/problems/2"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/69c1e00c21f6ab4226964e06.json",
+   "sha256": "922c1f4bb014a515825aa559f432587d77490bab16cb175d5ae1ff1b28fd8517",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/study-content.json",
+   "sha256": "0c6dc4787ffa20b6824b7899b7c6b28ba367131b470a6feb9f099d0f21dbd054",
+   "selector": "/variants/hack2hire:69c1e01c21f6ab4226964e08"
+  }
+ ],
+ "problemId": "hack2hire:69c1e00c21f6ab4226964e06",
+ "variantId": "69c1e01c21f6ab4226964e08",
+ "variantLabel": {
+  "status": "present",
+  "value": "Single variant: average reported speed at a point with add and remove",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/study-content.json",
+    "sha256": "0c6dc4787ffa20b6824b7899b7c6b28ba367131b470a6feb9f099d0f21dbd054",
+    "selector": "/variants/hack2hire:69c1e01c21f6ab4226964e08/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "RoadwaySpeedTracker() starts with no reports. addReport(start, end, speed) adds a report covering every integer point p with start <= p < end. removeReport(start, end, speed) removes one live report with exactly these three values and returns true, or returns false and changes nothing when there is none. getAverageSpeed(point) returns the arithmetic mean of the speeds of the live reports covering point as a floating-point number (sum / count, correctly rounded), or -1.0 when no live report covers it. Every method call is answered in call order on one instance; void methods return nothing.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/contracts.json",
+    "sha256": "b379953144287fffb14d286c61502eb70825b215ff72daf1b6bde6281724ef8b",
+    "selector": "/problems/2/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "RoadwaySpeedTracker() starts with no reports.",
+   "addReport(start, end, speed) adds a report covering every integer point p with start <= p < end.",
+   "removeReport(start, end, speed) removes one live report with exactly these three values and returns true, or returns false and changes nothing when there is none.",
+   "getAverageSpeed(point) returns the arithmetic mean of the speeds of the live reports covering point as a floating-point number (sum / count, correctly rounded), or -1.0 when no live report covers it.",
+   "Every method call is answered in call order on one instance; void methods return nothing."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/contracts.json",
+    "sha256": "b379953144287fffb14d286c61502eb70825b215ff72daf1b6bde6281724ef8b",
+    "selector": "/problems/2/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "at most 1e5 calls",
+   "0 <= start < end <= 1e6",
+   "0 <= point <= 1e6",
+   "1 <= speed <= 1e6"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/study-content.json",
+    "sha256": "0c6dc4787ffa20b6824b7899b7c6b28ba367131b470a6feb9f099d0f21dbd054",
+    "selector": "/variants/hack2hire:69c1e01c21f6ab4226964e08/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: contentPreview: a roadway as a number line from 0; each speed report covers a half-open segment [start, end) and reports may overlap; a tracker adds a report, removes a previously added report and queries the average speed at a point; class RoadwaySpeedTracker() starts empty (the method list is cut off); algorithmTags: SEGMENT_TREE; preview response sha256 b1abb9e9e89ab246a7aacddeb188e2c7bef992433af903bb67e4325d2ae85ad3"
+   },
+   {
+    "statement": "Uncertainty: high: the class name, half-open segments and the three operations are in the preview; the method names, removal by matching (start, end, speed), the boolean removal result, the -1.0 sentinel, integer coordinates and the bounds are inferred",
+    "basis": "the public group preview is partial (593 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: single variant",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/contracts.json",
+    "sha256": "b379953144287fffb14d286c61502eb70825b215ff72daf1b6bde6281724ef8b",
+    "selector": "/problems/2/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/contracts.json",
+    "sha256": "b379953144287fffb14d286c61502eb70825b215ff72daf1b6bde6281724ef8b",
+    "selector": "/problems/2/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/contracts.json",
+    "sha256": "b379953144287fffb14d286c61502eb70825b215ff72daf1b6bde6281724ef8b",
+    "selector": "/problems/2/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "How is a report identified for removal?",
+   "What does a query return when no report covers the point?",
+   "Is the average a float or rounded?",
+   "Are coordinates integers?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/study-content.json",
+    "sha256": "0c6dc4787ffa20b6824b7899b7c6b28ba367131b470a6feb9f099d0f21dbd054",
+    "selector": "/variants/hack2hire:69c1e01c21f6ab4226964e08/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [
+      "RoadwaySpeedTracker"
+     ],
+     [
+      []
+     ]
+    ],
+    "output": [
+     null
+    ],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      "RoadwaySpeedTracker",
+      "addReport",
+      "addReport",
+      "removeReport",
+      "removeReport",
+      "getAverageSpeed",
+      "addReport",
+      "removeReport",
+      "removeReport",
+      "addReport",
+      "getAverageSpeed"
+     ],
+     [
+      [],
+      [
+       1,
+       2,
+       7
+      ],
+      [
+       8,
+       9,
+       1
+      ],
+      [
+       1,
+       2,
+       7
+      ],
+      [
+       8,
+       9,
+       1
+      ],
+      [
+       6
+      ],
+      [
+       6,
+       13,
+       6
+      ],
+      [
+       6,
+       13,
+       6
+      ],
+      [
+       6,
+       11,
+       7
+      ],
+      [
+       7,
+       10,
+       5
+      ],
+      [
+       3
+      ]
+     ]
+    ],
+    "output": [
+     null,
+     null,
+     null,
+     true,
+     true,
+     -1.0,
+     null,
+     true,
+     false,
+     null,
+     -1.0
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/study-content.json",
+    "sha256": "0c6dc4787ffa20b6824b7899b7c6b28ba367131b470a6feb9f099d0f21dbd054",
+    "selector": "/variants/hack2hire:69c1e01c21f6ab4226964e08/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/oracles.py",
+    "sha256": "e39f79e2865a7838e665ba7dc8ca5290f77253d2c638a2d446bd15032dd7efa9",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "class",
+   "declaration": {
+    "status": "present",
+    "value": "class RoadwaySpeedTracker:\n    def __init__(self)\n    def addReport(self, start, end, speed) -> void\n    def removeReport(self, start, end, speed) -> boolean\n    def getAverageSpeed(self, point) -> float",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/contracts.json",
+      "sha256": "b379953144287fffb14d286c61502eb70825b215ff72daf1b6bde6281724ef8b",
+      "selector": "/problems/2/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/semantics/69c1e01c21f6ab4226964e08-python.json",
+     "inferredInterface": {
+      "classname": "RoadwaySpeedTracker",
+      "constructor": {
+       "params": []
+      },
+      "methods": [
+       {
+        "name": "addReport",
+        "params": [
+         {
+          "name": "start",
+          "type": "integer"
+         },
+         {
+          "name": "end",
+          "type": "integer"
+         },
+         {
+          "name": "speed",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "void"
+        }
+       },
+       {
+        "name": "removeReport",
+        "params": [
+         {
+          "name": "start",
+          "type": "integer"
+         },
+         {
+          "name": "end",
+          "type": "integer"
+         },
+         {
+          "name": "speed",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "boolean"
+        }
+       },
+       {
+        "name": "getAverageSpeed",
+        "params": [
+         {
+          "name": "point",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "float"
+        }
+       }
+      ]
+     },
+     "traceAdapter": {
+      "name": "solve",
+      "argument_order": [
+       "operation_names",
+       "argument_lists"
+      ],
+      "constructor_output": null,
+      "void_method_output": null,
+      "result_order": "constructor followed by every method call",
+      "scope": "Explicit class trace adapter, separate from direct native observer checks."
+     }
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/semantics/69c1e01c21f6ab4226964e08-python.json",
+      "sha256": "48e593f9d7e9b8aadb0d50a44560e3f3c90685a5e3e60ba8173d28fbc5923477",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "class",
+   "declaration": {
+    "status": "present",
+    "value": "class RoadwaySpeedTracker {\n  constructor()\n  addReport(start, end, speed) /* -> void */\n  removeReport(start, end, speed) /* -> boolean */\n  getAverageSpeed(point) /* -> float */\n}",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/contracts.json",
+      "sha256": "b379953144287fffb14d286c61502eb70825b215ff72daf1b6bde6281724ef8b",
+      "selector": "/problems/2/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/semantics/69c1e01c21f6ab4226964e08-javascript.json",
+     "inferredInterface": {
+      "classname": "RoadwaySpeedTracker",
+      "constructor": {
+       "params": []
+      },
+      "methods": [
+       {
+        "name": "addReport",
+        "params": [
+         {
+          "name": "start",
+          "type": "integer"
+         },
+         {
+          "name": "end",
+          "type": "integer"
+         },
+         {
+          "name": "speed",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "void"
+        }
+       },
+       {
+        "name": "removeReport",
+        "params": [
+         {
+          "name": "start",
+          "type": "integer"
+         },
+         {
+          "name": "end",
+          "type": "integer"
+         },
+         {
+          "name": "speed",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "boolean"
+        }
+       },
+       {
+        "name": "getAverageSpeed",
+        "params": [
+         {
+          "name": "point",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "float"
+        }
+       }
+      ]
+     },
+     "traceAdapter": {
+      "name": "solve",
+      "argument_order": [
+       "operation_names",
+       "argument_lists"
+      ],
+      "constructor_output": null,
+      "void_method_output": null,
+      "result_order": "constructor followed by every method call",
+      "scope": "Explicit class trace adapter, separate from direct native observer checks."
+     }
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/semantics/69c1e01c21f6ab4226964e08-javascript.json",
+      "sha256": "4aa0b2be4d477c1624a2fa5a063e5240daf597e0fcc14465b50e944097f52317",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/contracts.json",
+    "sha256": "b379953144287fffb14d286c61502eb70825b215ff72daf1b6bde6281724ef8b",
+    "selector": "/problems/2/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON trace result; no bool/int coercion; getAverageSpeed results are floats: Python must return float, and JavaScript, which cannot tag an integral float, is compared by numeric value",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/contracts.json",
+    "sha256": "b379953144287fffb14d286c61502eb70825b215ff72daf1b6bde6281724ef8b",
+    "selector": "/problems/2/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

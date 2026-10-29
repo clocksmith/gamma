@@ -1,0 +1,93 @@
+{
+ "schema": "gamma.authored-native-trace-semantics.v1",
+ "problem_uid": "hack2hire:69c1e01c21f6ab4226964e08",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "operation_names",
+  "argument_lists"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "classname": "RoadwaySpeedTracker",
+  "constructor": {
+   "params": []
+  },
+  "methods": [
+   {
+    "name": "addReport",
+    "params": [
+     {
+      "name": "start",
+      "type": "integer"
+     },
+     {
+      "name": "end",
+      "type": "integer"
+     },
+     {
+      "name": "speed",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "void"
+    }
+   },
+   {
+    "name": "removeReport",
+    "params": [
+     {
+      "name": "start",
+      "type": "integer"
+     },
+     {
+      "name": "end",
+      "type": "integer"
+     },
+     {
+      "name": "speed",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "boolean"
+    }
+   },
+   {
+    "name": "getAverageSpeed",
+    "params": [
+     {
+      "name": "point",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "float"
+    }
+   }
+  ]
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON trace result; no bool/int coercion; getAverageSpeed results are floats: Python must return float, and JavaScript, which cannot tag an integral float, is compared by numeric value",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "plain list of live reports; a query scans every report and averages the covering speeds with exact fractions",
+  "candidate_design": "two Fenwick trees over a difference array of positions 0 to 1e6 (speed sums and report counts), allocated on the first report, plus a hash map counting live copies of each (start, end, speed); a query is two prefix sums",
+  "complexity_target": "O(log C) per call, C = 1e6/O(C + u) space"
+ },
+ "source_sha256": "27abc6d9f139a90fe7f7cfe3ed8f627a1298df8d11b85e76f6e42f4bcfec44b6",
+ "native_class": "RoadwaySpeedTracker",
+ "native_symbol": "module global RoadwaySpeedTracker",
+ "void_methods": [
+  "addReport"
+ ]
+}

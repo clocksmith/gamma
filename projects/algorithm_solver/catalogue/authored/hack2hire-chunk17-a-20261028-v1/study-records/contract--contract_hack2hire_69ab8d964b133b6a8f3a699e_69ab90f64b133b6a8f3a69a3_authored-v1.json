@@ -1,0 +1,334 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:69ab8d964b133b6a8f3a699e:69ab90f64b133b6a8f3a69a3:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/contracts.json",
+   "sha256": "b379953144287fffb14d286c61502eb70825b215ff72daf1b6bde6281724ef8b",
+   "selector": "/problems/12"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/69ab8d964b133b6a8f3a699e.json",
+   "sha256": "e6530f6f7635bda9770470cb08b46bd3cad611d39ffefd61999e8f419449aa11",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/study-content.json",
+   "sha256": "0c6dc4787ffa20b6824b7899b7c6b28ba367131b470a6feb9f099d0f21dbd054",
+   "selector": "/variants/hack2hire:69ab90f64b133b6a8f3a69a3"
+  }
+ ],
+ "problemId": "hack2hire:69ab8d964b133b6a8f3a699e",
+ "variantId": "69ab90f64b133b6a8f3a69a3",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred variant 2: per-thread entry count and time range",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/study-content.json",
+    "sha256": "0c6dc4787ffa20b6824b7899b7c6b28ba367131b470a6feb9f099d0f21dbd054",
+    "selector": "/variants/hack2hire:69ab90f64b133b6a8f3a69a3/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "logs is a list of entries \"<processId>:<threadId>:<timestamp>:<content>\", split at the first three colons. For every distinct (processId, threadId) pair return one string \"<processId>:<threadId>:<count>:<first>:<last>\", where count is the number of its entries and first and last are its smallest and largest timestamps. Order the strings by processId, then threadId, in code-point order.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/contracts.json",
+    "sha256": "b379953144287fffb14d286c61502eb70825b215ff72daf1b6bde6281724ef8b",
+    "selector": "/problems/12/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "logs is a list of entries \"<processId>:<threadId>:<timestamp>:<content>\", split at the first three colons.",
+   "For every distinct (processId, threadId) pair return one string \"<processId>:<threadId>:<count>:<first>:<last>\", where count is the number of its entries and first and last are its smallest and largest timestamps.",
+   "Order the strings by processId, then threadId, in code-point order."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/contracts.json",
+    "sha256": "b379953144287fffb14d286c61502eb70825b215ff72daf1b6bde6281724ef8b",
+    "selector": "/problems/12/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "0 <= logs.length <= 1e5",
+   "processId and threadId are 1 to 8 letters or digits",
+   "timestamps are integers 0 to 1e9 without leading zeros",
+   "content is 0 to 30 printable ASCII characters and may contain \":\""
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/study-content.json",
+    "sha256": "0c6dc4787ffa20b6824b7899b7c6b28ba367131b470a6feb9f099d0f21dbd054",
+    "selector": "/variants/hack2hire:69ab90f64b133b6a8f3a69a3/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: contentPreview: log entries \"<processId>:<threadId>:<timestamp>:<content>\"; process and thread ids are alphanumeric, the timestamp is an integer number of seconds and the content is a message (the task itself is cut off); algorithmTags: STRING; two variant ids; preview response sha256 055bcccdd78f8ff12ba4447917e912b71c3ed5c8364dcf166aa6a51103f4153a"
+   },
+   {
+    "statement": "Uncertainty: very high: only the log format is in the preview; a per-thread summary (entry count and active time range) is an inferred follow-up for the second variant",
+    "basis": "the public group preview is partial (379 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: inferred: variant 2 of 2 summarises each thread by entry count and first and last timestamp",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/contracts.json",
+    "sha256": "b379953144287fffb14d286c61502eb70825b215ff72daf1b6bde6281724ef8b",
+    "selector": "/problems/12/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/contracts.json",
+    "sha256": "b379953144287fffb14d286c61502eb70825b215ff72daf1b6bde6281724ef8b",
+    "selector": "/problems/12/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/contracts.json",
+    "sha256": "b379953144287fffb14d286c61502eb70825b215ff72daf1b6bde6281724ef8b",
+    "selector": "/problems/12/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "Which statistics should each thread report?",
+   "Is a thread identified by threadId alone or by (processId, threadId)?",
+   "What is the output format?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/study-content.json",
+    "sha256": "0c6dc4787ffa20b6824b7899b7c6b28ba367131b470a6feb9f099d0f21dbd054",
+    "selector": "/variants/hack2hire:69ab90f64b133b6a8f3a69a3/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     []
+    ],
+    "output": [],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      "p2:t1:5:xba",
+      "p2:t1:1000000000: :",
+      "10:t1:10:",
+      "10:t1:1000000000:a ",
+      "p1:T:10:a ",
+      "9:t1:100:x  ",
+      "P1:T:1000000000::",
+      "10:t1:5: ",
+      "p2:t1:9:9b:",
+      "10:T:100:9:xxb",
+      "9:t2:10:a",
+      "p1:T:1000000000::: x9",
+      "10:t2:9:: x9a"
+     ]
+    ],
+    "output": [
+     "10:T:1:100:100",
+     "10:t1:3:5:1000000000",
+     "10:t2:1:9:9",
+     "9:t1:1:100:100",
+     "9:t2:1:10:10",
+     "P1:T:1:1000000000:1000000000",
+     "p1:T:2:10:1000000000",
+     "p2:t1:3:5:1000000000"
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/study-content.json",
+    "sha256": "0c6dc4787ffa20b6824b7899b7c6b28ba367131b470a6feb9f099d0f21dbd054",
+    "selector": "/variants/hack2hire:69ab90f64b133b6a8f3a69a3/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/oracles.py",
+    "sha256": "e39f79e2865a7838e665ba7dc8ca5290f77253d2c638a2d446bd15032dd7efa9",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "def summarizeThreads(logs) -> string[]",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/contracts.json",
+      "sha256": "b379953144287fffb14d286c61502eb70825b215ff72daf1b6bde6281724ef8b",
+      "selector": "/problems/12/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/semantics/69ab90f64b133b6a8f3a69a3-python.json",
+     "inferredInterface": {
+      "name": "summarizeThreads",
+      "params": [
+       {
+        "name": "logs",
+        "type": "string[]"
+       }
+      ],
+      "return": {
+       "type": "string[]"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/semantics/69ab90f64b133b6a8f3a69a3-python.json",
+      "sha256": "9d6560b7dd65066eaa4befcbfc854de3c1f587cd6d010be30c32a91cd5c39e1f",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "function summarizeThreads(logs) /* -> string[] */",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/contracts.json",
+      "sha256": "b379953144287fffb14d286c61502eb70825b215ff72daf1b6bde6281724ef8b",
+      "selector": "/problems/12/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/semantics/69ab90f64b133b6a8f3a69a3-javascript.json",
+     "inferredInterface": {
+      "name": "summarizeThreads",
+      "params": [
+       {
+        "name": "logs",
+        "type": "string[]"
+       }
+      ],
+      "return": {
+       "type": "string[]"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/semantics/69ab90f64b133b6a8f3a69a3-javascript.json",
+      "sha256": "b7abd9c20ae4cb8f6287e51dfe88449b132ab2e6f0783d9e4fdb1ad5bca0cfd0",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/contracts.json",
+    "sha256": "b379953144287fffb14d286c61502eb70825b215ff72daf1b6bde6281724ef8b",
+    "selector": "/problems/12/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON result",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk17-a-20261028-v1/contracts.json",
+    "sha256": "b379953144287fffb14d286c61502eb70825b215ff72daf1b6bde6281724ef8b",
+    "selector": "/problems/12/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}
