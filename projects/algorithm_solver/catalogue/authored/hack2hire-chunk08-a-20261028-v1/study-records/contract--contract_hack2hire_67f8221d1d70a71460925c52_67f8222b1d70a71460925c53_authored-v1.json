@@ -1,0 +1,341 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:67f8221d1d70a71460925c52:67f8222b1d70a71460925c53:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/contracts.json",
+   "sha256": "a475a05a254c28bcbe408996482bb2fff51af43b571d12bc76b9f7074d39813a",
+   "selector": "/problems/3"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/67f8221d1d70a71460925c52.json",
+   "sha256": "9f0912aec5729323a0d02bd63ed359e7d7f75040fa6429551d1e3c5f4a3860ef",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/study-content.json",
+   "sha256": "dc6de40664d46b62dd7440877e5701f10e2edff739d73d3a288efd3d01b7b3f6",
+   "selector": "/variants/hack2hire:67f8222b1d70a71460925c53"
+  }
+ ],
+ "problemId": "hack2hire:67f8221d1d70a71460925c52",
+ "variantId": "67f8222b1d70a71460925c53",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred single variant: all matches for every typed prefix",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/study-content.json",
+    "sha256": "dc6de40664d46b62dd7440877e5701f10e2edff739d73d3a288efd3d01b7b3f6",
+    "selector": "/variants/hack2hire:67f8222b1d70a71460925c53/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "bizNames is a list of names made of words of ASCII letters and digits separated by single spaces; searchWord is a non-empty word of ASCII letters and digits typed one character at a time. For every i from 1 to len(searchWord), the query is searchWord[0:i]. A name matches a query when at least one of its words starts with the query, ignoring ASCII case; its sort key is (index of its first matching word, counting from 0; the name in code-point order). Return one list per query with all matching names in key order (duplicates kept).",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/contracts.json",
+    "sha256": "a475a05a254c28bcbe408996482bb2fff51af43b571d12bc76b9f7074d39813a",
+    "selector": "/problems/3/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "bizNames is a list of names made of words of ASCII letters and digits separated by single spaces; searchWord is a non-empty word of ASCII letters and digits typed one character at a time.",
+   "For every i from 1 to len(searchWord), the query is searchWord[0:i].",
+   "A name matches a query when at least one of its words starts with the query, ignoring ASCII case; its sort key is (index of its first matching word, counting from 0; the name in code-point order).",
+   "Return one list per query with all matching names in key order (duplicates kept)."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/contracts.json",
+    "sha256": "a475a05a254c28bcbe408996482bb2fff51af43b571d12bc76b9f7074d39813a",
+    "selector": "/problems/3/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "0 <= bizNames.length <= 3000",
+   "each name has 1..5 words of [A-Za-z0-9]{1,12}",
+   "1 <= searchWord.length <= 20"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/study-content.json",
+    "sha256": "dc6de40664d46b62dd7440877e5701f10e2edff739d73d3a288efd3d01b7b3f6",
+    "selector": "/variants/hack2hire:67f8222b1d70a71460925c53/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: title; contentPreview: LeetCode 1268 variation; all names with a word starting with each prefix query, case-insensitive, first matching word used for sorting; algorithmTags: TRIE; preview response sha256 47e2093ab0874fdfef31ba2060bf63fa1732a379080b6ef704ca86a8fa9ec08a"
+   },
+   {
+    "statement": "Uncertainty: high: matching, case-insensitivity and first-occurrence sorting are in the preview; the 1268-style query series (every prefix of a typed word), returning all matches (no top-3 cap) and the alphabetical tie rule are inferred",
+    "basis": "the public group preview is partial (615 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: single variant",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/contracts.json",
+    "sha256": "a475a05a254c28bcbe408996482bb2fff51af43b571d12bc76b9f7074d39813a",
+    "selector": "/problems/3/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/contracts.json",
+    "sha256": "a475a05a254c28bcbe408996482bb2fff51af43b571d12bc76b9f7074d39813a",
+    "selector": "/problems/3/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/contracts.json",
+    "sha256": "a475a05a254c28bcbe408996482bb2fff51af43b571d12bc76b9f7074d39813a",
+    "selector": "/problems/3/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "Are queries every prefix of one typed word, or an independent list?",
+   "Is the result capped (like the top 3 of LeetCode 1268)?",
+   "Is the alphabetical tie rule case-sensitive?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/study-content.json",
+    "sha256": "dc6de40664d46b62dd7440877e5701f10e2edff739d73d3a288efd3d01b7b3f6",
+    "selector": "/variants/hack2hire:67f8222b1d70a71460925c53/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [],
+     "q"
+    ],
+    "output": [
+     []
+    ],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      "aa aa A",
+      "x x",
+      "A bb",
+      "11 x",
+      "A bb",
+      "xx 11 AA",
+      "x cc B"
+     ],
+     "BB"
+    ],
+    "output": [
+     [
+      "A bb",
+      "A bb",
+      "x cc B"
+     ],
+     [
+      "A bb",
+      "A bb"
+     ]
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/study-content.json",
+    "sha256": "dc6de40664d46b62dd7440877e5701f10e2edff739d73d3a288efd3d01b7b3f6",
+    "selector": "/variants/hack2hire:67f8222b1d70a71460925c53/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/oracles.py",
+    "sha256": "4ca26189bdfdd6c328e95aa523aaf622dc11efb3cc7fc03dd32c69834e055f95",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "def searchSuggestions(bizNames, searchWord) -> list<string[]>",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/contracts.json",
+      "sha256": "a475a05a254c28bcbe408996482bb2fff51af43b571d12bc76b9f7074d39813a",
+      "selector": "/problems/3/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/semantics/67f8222b1d70a71460925c53-python.json",
+     "inferredInterface": {
+      "name": "searchSuggestions",
+      "params": [
+       {
+        "name": "bizNames",
+        "type": "string[]"
+       },
+       {
+        "name": "searchWord",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "list<string[]>"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/semantics/67f8222b1d70a71460925c53-python.json",
+      "sha256": "c985e52c06b70d93edf0815b6ecf12a1d59be4cae9abbc2d097dee62a5a0478f",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "function searchSuggestions(bizNames, searchWord) /* -> list<string[]> */",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/contracts.json",
+      "sha256": "a475a05a254c28bcbe408996482bb2fff51af43b571d12bc76b9f7074d39813a",
+      "selector": "/problems/3/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/semantics/67f8222b1d70a71460925c53-javascript.json",
+     "inferredInterface": {
+      "name": "searchSuggestions",
+      "params": [
+       {
+        "name": "bizNames",
+        "type": "string[]"
+       },
+       {
+        "name": "searchWord",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "list<string[]>"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/semantics/67f8222b1d70a71460925c53-javascript.json",
+      "sha256": "216ba6a886fbb68d036788ad4af197ba063cb6fc7c215550fa4d9e0d4c29015f",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/contracts.json",
+    "sha256": "a475a05a254c28bcbe408996482bb2fff51af43b571d12bc76b9f7074d39813a",
+    "selector": "/problems/3/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON result",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/contracts.json",
+    "sha256": "a475a05a254c28bcbe408996482bb2fff51af43b571d12bc76b9f7074d39813a",
+    "selector": "/problems/3/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

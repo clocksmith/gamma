@@ -1,0 +1,394 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:69a39f116e73e4abccc9c0e6:69a3a0426e73e4abccc9c0e9:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/contracts.json",
+   "sha256": "a475a05a254c28bcbe408996482bb2fff51af43b571d12bc76b9f7074d39813a",
+   "selector": "/problems/10"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/69a39f116e73e4abccc9c0e6.json",
+   "sha256": "473ca9e5b7de9ee4bb72e05b1dc7cf0d56796ec0e9ae69db9dbb679c53d501bc",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/study-content.json",
+   "sha256": "dc6de40664d46b62dd7440877e5701f10e2edff739d73d3a288efd3d01b7b3f6",
+   "selector": "/variants/hack2hire:69a3a0426e73e4abccc9c0e9"
+  }
+ ],
+ "problemId": "hack2hire:69a39f116e73e4abccc9c0e6",
+ "variantId": "69a3a0426e73e4abccc9c0e9",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred single variant: move count along the forced right-moving path",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/study-content.json",
+    "sha256": "dc6de40664d46b62dd7440877e5701f10e2edff739d73d3a288efd3d01b7b3f6",
+    "selector": "/variants/hack2hire:69a3a0426e73e4abccc9c0e9/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "grid is a rectangle of 0 (empty) and 1 (obstacle); teleports is a list of [r1, c1, r2, c2] rows: entering cell (r1, c1) instantly moves the robot to (r2, c2). The robot starts at (0, 0) and wants (n-1, m-1). Repeat: if the robot is at the destination, stop; if it is in the last column, or the cell to its right is an obstacle, it is stuck; otherwise it moves one cell right (one move) and, if that cell is a teleport entrance, is moved to the exit at no cost. If the robot ever returns to a position it already occupied it loops forever. Return the number of right moves needed to reach the destination, or -1 if it gets stuck or loops. Entrances are distinct empty cells; exits are empty cells that are not entrances; the start and the destination are empty and not entrances.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/contracts.json",
+    "sha256": "a475a05a254c28bcbe408996482bb2fff51af43b571d12bc76b9f7074d39813a",
+    "selector": "/problems/10/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "grid is a rectangle of 0 (empty) and 1 (obstacle); teleports is a list of [r1, c1, r2, c2] rows: entering cell (r1, c1) instantly moves the robot to (r2, c2).",
+   "The robot starts at (0, 0) and wants (n-1, m-1).",
+   "Repeat: if the robot is at the destination, stop; if it is in the last column, or the cell to its right is an obstacle, it is stuck; otherwise it moves one cell right (one move) and, if that cell is a teleport entrance, is moved to the exit at no cost.",
+   "If the robot ever returns to a position it already occupied it loops forever.",
+   "Return the number of right moves needed to reach the destination, or -1 if it gets stuck or loops.",
+   "Entrances are distinct empty cells; exits are empty cells that are not entrances; the start and the destination are empty and not entrances."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/contracts.json",
+    "sha256": "a475a05a254c28bcbe408996482bb2fff51af43b571d12bc76b9f7074d39813a",
+    "selector": "/problems/10/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "1 <= n * m <= 1e5",
+   "0 <= teleports.length <= 1e4",
+   "grid values are 0 or 1"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/study-content.json",
+    "sha256": "dc6de40664d46b62dd7440877e5701f10e2edff739d73d3a288efd3d01b7b3f6",
+    "selector": "/variants/hack2hire:69a3a0426e73e4abccc9c0e9/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: title; contentPreview: LeetCode 63 variation; robot at [0,0] must reach [n-1,m-1] moving only right; cells empty (0), obstacle (1) or teleport entrance, which jumps to its exit and continues right; algorithmTags: HASH_TABLE; preview response sha256 1c0e5c7ff3aa75a4e03cc4cce014b577fec89c4ac5e831c28c9437afbda3a33b"
+   },
+   {
+    "statement": "Uncertainty: high: the movement rule and cell kinds are in the preview; the teleport input as a separate list, the move count as the result, -1 for stuck or looping, and the restrictions on entrance/exit placement are inferred",
+    "basis": "the public group preview is partial (898 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: single variant",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/contracts.json",
+    "sha256": "a475a05a254c28bcbe408996482bb2fff51af43b571d12bc76b9f7074d39813a",
+    "selector": "/problems/10/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/contracts.json",
+    "sha256": "a475a05a254c28bcbe408996482bb2fff51af43b571d12bc76b9f7074d39813a",
+    "selector": "/problems/10/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/contracts.json",
+    "sha256": "a475a05a254c28bcbe408996482bb2fff51af43b571d12bc76b9f7074d39813a",
+    "selector": "/problems/10/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "What is the result: reachability, the move count, or a number of paths?",
+   "Does a teleport count as a move?",
+   "Can teleports form loops, and what then?",
+   "Can an exit itself be an entrance?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/study-content.json",
+    "sha256": "dc6de40664d46b62dd7440877e5701f10e2edff739d73d3a288efd3d01b7b3f6",
+    "selector": "/variants/hack2hire:69a3a0426e73e4abccc9c0e9/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [
+      [
+       0
+      ]
+     ],
+     []
+    ],
+    "output": 0,
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      [
+       0,
+       0,
+       0,
+       0,
+       0,
+       0
+      ],
+      [
+       0,
+       0,
+       0,
+       0,
+       0,
+       0
+      ],
+      [
+       0,
+       0,
+       0,
+       0,
+       0,
+       0
+      ],
+      [
+       1,
+       0,
+       0,
+       0,
+       0,
+       0
+      ],
+      [
+       0,
+       0,
+       0,
+       0,
+       0,
+       0
+      ]
+     ],
+     [
+      [
+       0,
+       5,
+       1,
+       4
+      ],
+      [
+       1,
+       5,
+       2,
+       4
+      ],
+      [
+       2,
+       5,
+       3,
+       4
+      ],
+      [
+       3,
+       5,
+       4,
+       3
+      ]
+     ]
+    ],
+    "output": 10,
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/study-content.json",
+    "sha256": "dc6de40664d46b62dd7440877e5701f10e2edff739d73d3a288efd3d01b7b3f6",
+    "selector": "/variants/hack2hire:69a3a0426e73e4abccc9c0e9/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/oracles.py",
+    "sha256": "4ca26189bdfdd6c328e95aa523aaf622dc11efb3cc7fc03dd32c69834e055f95",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "def reachEnd(grid, teleports) -> integer",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/contracts.json",
+      "sha256": "a475a05a254c28bcbe408996482bb2fff51af43b571d12bc76b9f7074d39813a",
+      "selector": "/problems/10/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/semantics/69a3a0426e73e4abccc9c0e9-python.json",
+     "inferredInterface": {
+      "name": "reachEnd",
+      "params": [
+       {
+        "name": "grid",
+        "type": "integer[][]"
+       },
+       {
+        "name": "teleports",
+        "type": "list<integer[4]>"
+       }
+      ],
+      "return": {
+       "type": "integer"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/semantics/69a3a0426e73e4abccc9c0e9-python.json",
+      "sha256": "773e7bf6deda3559841b3cfa980c8a0158bf054531ac7746cdfbff73ca262529",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "function reachEnd(grid, teleports) /* -> integer */",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/contracts.json",
+      "sha256": "a475a05a254c28bcbe408996482bb2fff51af43b571d12bc76b9f7074d39813a",
+      "selector": "/problems/10/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/semantics/69a3a0426e73e4abccc9c0e9-javascript.json",
+     "inferredInterface": {
+      "name": "reachEnd",
+      "params": [
+       {
+        "name": "grid",
+        "type": "integer[][]"
+       },
+       {
+        "name": "teleports",
+        "type": "list<integer[4]>"
+       }
+      ],
+      "return": {
+       "type": "integer"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/semantics/69a3a0426e73e4abccc9c0e9-javascript.json",
+      "sha256": "cd87dc8d1f3bb94f78738c91b97bbc150527969b9d1ab075692500c288bdb143",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/contracts.json",
+    "sha256": "a475a05a254c28bcbe408996482bb2fff51af43b571d12bc76b9f7074d39813a",
+    "selector": "/problems/10/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON result",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/contracts.json",
+    "sha256": "a475a05a254c28bcbe408996482bb2fff51af43b571d12bc76b9f7074d39813a",
+    "selector": "/problems/10/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

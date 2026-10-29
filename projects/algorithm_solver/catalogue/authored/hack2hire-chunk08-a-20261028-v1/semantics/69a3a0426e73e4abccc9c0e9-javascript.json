@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:69a3a0426e73e4abccc9c0e9",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "grid",
+  "teleports"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "reachEnd",
+  "params": [
+   {
+    "name": "grid",
+    "type": "integer[][]"
+   },
+   {
+    "name": "teleports",
+    "type": "list<integer[4]>"
+   }
+  ],
+  "return": {
+   "type": "integer"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "literal walk with a step budget of n*m + 1 and a list search for teleport entrances",
+  "candidate_design": "hash map from entrance cell index to exit cell index, a visited byte array, and a single walk that stops on the destination, a block, or a revisit",
+  "complexity_target": "O(n*m + t) time/O(n*m + t) space"
+ },
+ "source_sha256": "396408dc05778ed41956612831949731d5b3cf07d4a0a520e20b50c1eca58661",
+ "wrapper": "named export reachEnd"
+}

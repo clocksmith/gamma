@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:67a43f105141b0ac3b8be4df",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "recipes",
+  "ingredients"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "countRecipes",
+  "params": [
+   {
+    "name": "recipes",
+    "type": "string[]"
+   },
+   {
+    "name": "ingredients",
+    "type": "string"
+   }
+  ],
+  "return": {
+   "type": "integer"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "per recipe, per distinct character, count occurrences in both strings with str.count",
+  "candidate_design": "one 26-entry supply count; per recipe a 26-entry need count compared against it",
+  "complexity_target": "O(total characters) time/O(1) extra space"
+ },
+ "source_sha256": "b60027ac223a38bd843fa939899058b29dc1442e1e2c0ace2ec176f7dc78bade",
+ "wrapper": "named export countRecipes"
+}

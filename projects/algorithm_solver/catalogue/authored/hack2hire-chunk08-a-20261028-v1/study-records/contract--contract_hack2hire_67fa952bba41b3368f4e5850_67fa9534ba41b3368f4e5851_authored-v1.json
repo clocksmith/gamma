@@ -1,0 +1,366 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:67fa952bba41b3368f4e5850:67fa9534ba41b3368f4e5851:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/contracts.json",
+   "sha256": "a475a05a254c28bcbe408996482bb2fff51af43b571d12bc76b9f7074d39813a",
+   "selector": "/problems/7"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/67fa952bba41b3368f4e5850.json",
+   "sha256": "47cff9d1f6fac918c87d59dab42b9f51da5c3c1b8a509c715f5cb525326bfe69",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/study-content.json",
+   "sha256": "dc6de40664d46b62dd7440877e5701f10e2edff739d73d3a288efd3d01b7b3f6",
+   "selector": "/variants/hack2hire:67fa9534ba41b3368f4e5851"
+  }
+ ],
+ "problemId": "hack2hire:67fa952bba41b3368f4e5850",
+ "variantId": "67fa9534ba41b3368f4e5851",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred level 1: reproducible uniform pairing",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/study-content.json",
+    "sha256": "dc6de40664d46b62dd7440877e5701f10e2edff739d73d3a288efd3d01b7b3f6",
+    "selector": "/variants/hack2hire:67fa9534ba41b3368f4e5851/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "users is a list of user names; randomInts supplies the random choices so that the result is reproducible (it has exactly 2 * floor(n / 2) entries, each in [0, 1e9]). Keep a pool equal to a copy of users. Repeatedly, while the pool has at least 2 users: take the next random value r, pick index r mod (pool size), remove that user by moving the last pool user into its slot; do the same with the next random value for the second user; record [first, second]. If one user remains, append [thatUser]. Return the list of pairs (and the final single).",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/contracts.json",
+    "sha256": "a475a05a254c28bcbe408996482bb2fff51af43b571d12bc76b9f7074d39813a",
+    "selector": "/problems/7/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "users is a list of user names; randomInts supplies the random choices so that the result is reproducible (it has exactly 2 * floor(n / 2) entries, each in [0, 1e9]).",
+   "Keep a pool equal to a copy of users.",
+   "Repeatedly, while the pool has at least 2 users: take the next random value r, pick index r mod (pool size), remove that user by moving the last pool user into its slot; do the same with the next random value for the second user; record [first, second].",
+   "If one user remains, append [thatUser].",
+   "Return the list of pairs (and the final single)."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/contracts.json",
+    "sha256": "a475a05a254c28bcbe408996482bb2fff51af43b571d12bc76b9f7074d39813a",
+    "selector": "/problems/7/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "0 <= users.length <= 1e5",
+   "names match [A-Za-z0-9_]{1,20}",
+   "randomInts.length == 2 * floor(users.length / 2)",
+   "0 <= randomInts[i] <= 1e9"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/study-content.json",
+    "sha256": "dc6de40664d46b62dd7440877e5701f10e2edff739d73d3a288efd3d01b7b3f6",
+    "selector": "/variants/hack2hire:67fa9534ba41b3368f4e5851/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: title; contentPreview: uniformly random pairing by repeatedly choosing two distinct users, one user left over when the count is odd; algorithmTags: GREEDY, HEAP; codingQuestions (variant count/order); preview response sha256 c03b34e1a515ebb65efdaab32604539a19d75bed5ba8c60508c9381c6f9887b4"
+   },
+   {
+    "statement": "Uncertainty: very high: the preview asks for uniformly random pairings; an explicit list of random integers, the swap-with-last pool removal, the modulo rule and the trailing single-user entry are all inferred so that results can be checked exactly",
+    "basis": "the public group preview is partial (489 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: variants inferred as two levels: 1 = reproducible uniform pairing driven by supplied random integers, 2 = greedy cross-group pairing with a max-heap (GREEDY/HEAP tags)",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/contracts.json",
+    "sha256": "a475a05a254c28bcbe408996482bb2fff51af43b571d12bc76b9f7074d39813a",
+    "selector": "/problems/7/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/contracts.json",
+    "sha256": "a475a05a254c28bcbe408996482bb2fff51af43b571d12bc76b9f7074d39813a",
+    "selector": "/problems/7/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/contracts.json",
+    "sha256": "a475a05a254c28bcbe408996482bb2fff51af43b571d12bc76b9f7074d39813a",
+    "selector": "/problems/7/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "How is randomness made testable: a seed, a supplied generator, or a list of draws?",
+   "Is the unmatched user reported, and how?",
+   "Must every pairing be equally likely, and how would you argue it?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/study-content.json",
+    "sha256": "dc6de40664d46b62dd7440877e5701f10e2edff739d73d3a288efd3d01b7b3f6",
+    "selector": "/variants/hack2hire:67fa9534ba41b3368f4e5851/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [],
+     []
+    ],
+    "output": [],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      "u2",
+      "u7",
+      "u11",
+      "u17",
+      "u16",
+      "u9",
+      "u19",
+      "u14",
+      "u18",
+      "u17"
+     ],
+     [
+      353117911,
+      7,
+      3,
+      167542901,
+      1,
+      983865461,
+      3,
+      1,
+      3,
+      1
+     ]
+    ],
+    "output": [
+     [
+      "u7",
+      "u14"
+     ],
+     [
+      "u17",
+      "u17"
+     ],
+     [
+      "u19",
+      "u9"
+     ],
+     [
+      "u18",
+      "u16"
+     ],
+     [
+      "u11",
+      "u2"
+     ]
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/study-content.json",
+    "sha256": "dc6de40664d46b62dd7440877e5701f10e2edff739d73d3a288efd3d01b7b3f6",
+    "selector": "/variants/hack2hire:67fa9534ba41b3368f4e5851/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/oracles.py",
+    "sha256": "4ca26189bdfdd6c328e95aa523aaf622dc11efb3cc7fc03dd32c69834e055f95",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "def pairUsers(users, randomInts) -> list<string[]>",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/contracts.json",
+      "sha256": "a475a05a254c28bcbe408996482bb2fff51af43b571d12bc76b9f7074d39813a",
+      "selector": "/problems/7/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/semantics/67fa9534ba41b3368f4e5851-python.json",
+     "inferredInterface": {
+      "name": "pairUsers",
+      "params": [
+       {
+        "name": "users",
+        "type": "string[]"
+       },
+       {
+        "name": "randomInts",
+        "type": "integer[]"
+       }
+      ],
+      "return": {
+       "type": "list<string[]>"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/semantics/67fa9534ba41b3368f4e5851-python.json",
+      "sha256": "27b8a6c3ef8468b9ba9bc1e6970ddca8006092c41ad77142cdbd568704ebc8ac",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "function pairUsers(users, randomInts) /* -> list<string[]> */",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/contracts.json",
+      "sha256": "a475a05a254c28bcbe408996482bb2fff51af43b571d12bc76b9f7074d39813a",
+      "selector": "/problems/7/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/semantics/67fa9534ba41b3368f4e5851-javascript.json",
+     "inferredInterface": {
+      "name": "pairUsers",
+      "params": [
+       {
+        "name": "users",
+        "type": "string[]"
+       },
+       {
+        "name": "randomInts",
+        "type": "integer[]"
+       }
+      ],
+      "return": {
+       "type": "list<string[]>"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/semantics/67fa9534ba41b3368f4e5851-javascript.json",
+      "sha256": "bfb311bafd657e60f0beff2acc38f8b2635f6ec00f726ca4c4f84cb3aeed3832",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/contracts.json",
+    "sha256": "a475a05a254c28bcbe408996482bb2fff51af43b571d12bc76b9f7074d39813a",
+    "selector": "/problems/7/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON result",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/contracts.json",
+    "sha256": "a475a05a254c28bcbe408996482bb2fff51af43b571d12bc76b9f7074d39813a",
+    "selector": "/problems/7/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

@@ -1,0 +1,50 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:67f5703f83ba2e5f057e6dfb",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "bizNames",
+  "prefix",
+  "k"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "topKBusinessNames",
+  "params": [
+   {
+    "name": "bizNames",
+    "type": "string[]"
+   },
+   {
+    "name": "prefix",
+    "type": "string"
+   },
+   {
+    "name": "k",
+    "type": "integer"
+   }
+  ],
+  "return": {
+   "type": "string[]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "lower-case every word, collect all matches with their keys and sort the whole list",
+  "candidate_design": "scan each name once for its first matching word, keep the best k (position, name) keys with heapq.nsmallest / a bounded selection, then order them",
+  "complexity_target": "O(total characters + m log k) time/O(m) space"
+ },
+ "source_sha256": "7d70b6cbf04fa3a189cf7ab48a7298181821efe824aaf0857397d9618ba5ceb8",
+ "wrapper": "Solution.topKBusinessNames"
+}

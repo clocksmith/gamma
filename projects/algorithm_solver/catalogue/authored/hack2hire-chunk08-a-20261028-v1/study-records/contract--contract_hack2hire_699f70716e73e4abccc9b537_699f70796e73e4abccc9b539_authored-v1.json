@@ -1,0 +1,537 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:699f70716e73e4abccc9b537:699f70796e73e4abccc9b539:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/contracts.json",
+   "sha256": "a475a05a254c28bcbe408996482bb2fff51af43b571d12bc76b9f7074d39813a",
+   "selector": "/problems/4"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/699f70716e73e4abccc9b537.json",
+   "sha256": "176db86831fc5afd96f1f7f5d3c1834797a6ef3f0c37d73cc2d4dce2d1e2b057",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/study-content.json",
+   "sha256": "dc6de40664d46b62dd7440877e5701f10e2edff739d73d3a288efd3d01b7b3f6",
+   "selector": "/variants/hack2hire:699f70796e73e4abccc9b539"
+  }
+ ],
+ "problemId": "hack2hire:699f70716e73e4abccc9b537",
+ "variantId": "699f70796e73e4abccc9b539",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred single variant: cache with expiry, priority and LRU eviction",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/study-content.json",
+    "sha256": "dc6de40664d46b62dd7440877e5701f10e2edff739d73d3a288efd3d01b7b3f6",
+    "selector": "/variants/hack2hire:699f70796e73e4abccc9b539/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "PriorityExpiryLRUCache(capacity) holds at most capacity keys. Time is passed explicitly and never decreases across calls. get(key, currentTime): if key is absent return -1; if its expiryTime <= currentTime remove it and return -1; otherwise mark it accessed now and return its value. set(key, value, priority, expiryTime, currentTime): if key is present (expired or not) replace its value, priority and expiryTime and mark it accessed now. Otherwise, if the cache is full, evict exactly one item first: if some item has expiryTime <= currentTime, the one with the smallest expiryTime; otherwise the one with the smallest priority; ties in either case go to the least recently accessed item (accesses are ordered by call order). Then insert the new item, accessed now.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/contracts.json",
+    "sha256": "a475a05a254c28bcbe408996482bb2fff51af43b571d12bc76b9f7074d39813a",
+    "selector": "/problems/4/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "PriorityExpiryLRUCache(capacity) holds at most capacity keys.",
+   "Time is passed explicitly and never decreases across calls.",
+   "get(key, currentTime): if key is absent return -1; if its expiryTime <= currentTime remove it and return -1; otherwise mark it accessed now and return its value.",
+   "set(key, value, priority, expiryTime, currentTime): if key is present (expired or not) replace its value, priority and expiryTime and mark it accessed now.",
+   "Otherwise, if the cache is full, evict exactly one item first: if some item has expiryTime <= currentTime, the one with the smallest expiryTime; otherwise the one with the smallest priority; ties in either case go to the least recently accessed item (accesses are ordered by call order).",
+   "Then insert the new item, accessed now."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/contracts.json",
+    "sha256": "a475a05a254c28bcbe408996482bb2fff51af43b571d12bc76b9f7074d39813a",
+    "selector": "/problems/4/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "1 <= capacity <= 1e5",
+   "up to 1e5 calls",
+   "keys match [a-z0-9]{1,10}",
+   "0 <= value, priority <= 1e9",
+   "0 <= expiryTime, currentTime <= 2e9; currentTime never decreases"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/study-content.json",
+    "sha256": "dc6de40664d46b62dd7440877e5701f10e2edff739d73d3a288efd3d01b7b3f6",
+    "selector": "/variants/hack2hire:699f70796e73e4abccc9b539/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: title; contentPreview: class name PriorityExpiryLRUCache, fixed capacity, per-item value/priority/expiryTime/lastAccessedTime, eviction hierarchy of expiry, priority and recency; algorithmTags: HASH_TABLE; preview response sha256 341cb37ecaa5c04b574d921d7a79b439bc4e8f405542e44b87701adb491fb215"
+   },
+   {
+    "statement": "Uncertainty: high: the class name, stored fields and the expiry > priority > recency hierarchy are in the preview; method names, explicit currentTime arguments, the -1 miss value, the expiry test expiryTime <= currentTime, evicting exactly one item and update-in-place on an existing key are inferred",
+    "basis": "the public group preview is partial (465 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: single variant",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/contracts.json",
+    "sha256": "a475a05a254c28bcbe408996482bb2fff51af43b571d12bc76b9f7074d39813a",
+    "selector": "/problems/4/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/contracts.json",
+    "sha256": "a475a05a254c28bcbe408996482bb2fff51af43b571d12bc76b9f7074d39813a",
+    "selector": "/problems/4/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/contracts.json",
+    "sha256": "a475a05a254c28bcbe408996482bb2fff51af43b571d12bc76b9f7074d39813a",
+    "selector": "/problems/4/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "Does an item expire when currentTime equals expiryTime?",
+   "When the cache is full, are all expired items removed or only one?",
+   "Does set on an existing key count as an access, and can it evict?",
+   "What does get return for a miss?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/study-content.json",
+    "sha256": "dc6de40664d46b62dd7440877e5701f10e2edff739d73d3a288efd3d01b7b3f6",
+    "selector": "/variants/hack2hire:699f70796e73e4abccc9b539/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [
+      "PriorityExpiryLRUCache",
+      "get"
+     ],
+     [
+      [
+       1
+      ],
+      [
+       "a",
+       0
+      ]
+     ]
+    ],
+    "output": [
+     null,
+     -1
+    ],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      "PriorityExpiryLRUCache",
+      "get",
+      "set",
+      "set",
+      "set",
+      "set",
+      "set",
+      "set",
+      "get",
+      "set",
+      "get",
+      "get"
+     ],
+     [
+      [
+       3
+      ],
+      [
+       "a",
+       0
+      ],
+      [
+       "e",
+       14,
+       2,
+       1,
+       2
+      ],
+      [
+       "a",
+       14,
+       2,
+       2,
+       2
+      ],
+      [
+       "f",
+       3,
+       0,
+       3,
+       2
+      ],
+      [
+       "b",
+       12,
+       1,
+       3,
+       4
+      ],
+      [
+       "b",
+       10,
+       1,
+       7,
+       6
+      ],
+      [
+       "d",
+       44,
+       3,
+       10,
+       8
+      ],
+      [
+       "f",
+       10
+      ],
+      [
+       "d",
+       15,
+       2,
+       25,
+       15
+      ],
+      [
+       "e",
+       15
+      ],
+      [
+       "c",
+       16
+      ]
+     ]
+    ],
+    "output": [
+     null,
+     -1,
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     -1,
+     null,
+     -1,
+     -1
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/study-content.json",
+    "sha256": "dc6de40664d46b62dd7440877e5701f10e2edff739d73d3a288efd3d01b7b3f6",
+    "selector": "/variants/hack2hire:699f70796e73e4abccc9b539/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/oracles.py",
+    "sha256": "4ca26189bdfdd6c328e95aa523aaf622dc11efb3cc7fc03dd32c69834e055f95",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "class",
+   "declaration": {
+    "status": "present",
+    "value": "class PriorityExpiryLRUCache:\n    def __init__(self, capacity)\n    def get(self, key, currentTime) -> integer\n    def set(self, key, value, priority, expiryTime, currentTime) -> void",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/contracts.json",
+      "sha256": "a475a05a254c28bcbe408996482bb2fff51af43b571d12bc76b9f7074d39813a",
+      "selector": "/problems/4/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/semantics/699f70796e73e4abccc9b539-python.json",
+     "inferredInterface": {
+      "classname": "PriorityExpiryLRUCache",
+      "constructor": {
+       "params": [
+        {
+         "name": "capacity",
+         "type": "integer"
+        }
+       ]
+      },
+      "methods": [
+       {
+        "name": "get",
+        "params": [
+         {
+          "name": "key",
+          "type": "string"
+         },
+         {
+          "name": "currentTime",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "integer"
+        }
+       },
+       {
+        "name": "set",
+        "params": [
+         {
+          "name": "key",
+          "type": "string"
+         },
+         {
+          "name": "value",
+          "type": "integer"
+         },
+         {
+          "name": "priority",
+          "type": "integer"
+         },
+         {
+          "name": "expiryTime",
+          "type": "integer"
+         },
+         {
+          "name": "currentTime",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "void"
+        }
+       }
+      ]
+     },
+     "traceAdapter": {
+      "name": "solve",
+      "argument_order": [
+       "operation_names",
+       "argument_lists"
+      ],
+      "constructor_output": null,
+      "void_method_output": null,
+      "result_order": "constructor followed by every method call",
+      "scope": "Explicit class trace adapter, separate from direct native observer checks."
+     }
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/semantics/699f70796e73e4abccc9b539-python.json",
+      "sha256": "aad0d3b1afd4a0efa1d79314a731913250c538899bdd9d008b3d6774c5e79f7e",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "class",
+   "declaration": {
+    "status": "present",
+    "value": "class PriorityExpiryLRUCache {\n  constructor(capacity)\n  get(key, currentTime) /* -> integer */\n  set(key, value, priority, expiryTime, currentTime) /* -> void */\n}",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/contracts.json",
+      "sha256": "a475a05a254c28bcbe408996482bb2fff51af43b571d12bc76b9f7074d39813a",
+      "selector": "/problems/4/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/semantics/699f70796e73e4abccc9b539-javascript.json",
+     "inferredInterface": {
+      "classname": "PriorityExpiryLRUCache",
+      "constructor": {
+       "params": [
+        {
+         "name": "capacity",
+         "type": "integer"
+        }
+       ]
+      },
+      "methods": [
+       {
+        "name": "get",
+        "params": [
+         {
+          "name": "key",
+          "type": "string"
+         },
+         {
+          "name": "currentTime",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "integer"
+        }
+       },
+       {
+        "name": "set",
+        "params": [
+         {
+          "name": "key",
+          "type": "string"
+         },
+         {
+          "name": "value",
+          "type": "integer"
+         },
+         {
+          "name": "priority",
+          "type": "integer"
+         },
+         {
+          "name": "expiryTime",
+          "type": "integer"
+         },
+         {
+          "name": "currentTime",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "void"
+        }
+       }
+      ]
+     },
+     "traceAdapter": {
+      "name": "solve",
+      "argument_order": [
+       "operation_names",
+       "argument_lists"
+      ],
+      "constructor_output": null,
+      "void_method_output": null,
+      "result_order": "constructor followed by every method call",
+      "scope": "Explicit class trace adapter, separate from direct native observer checks."
+     }
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/semantics/699f70796e73e4abccc9b539-javascript.json",
+      "sha256": "c4c68a6c4fac9e1f4b33daa18c0d7958f4f1ee7e909ecba6a1d2b4c0f4fde4dc",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/contracts.json",
+    "sha256": "a475a05a254c28bcbe408996482bb2fff51af43b571d12bc76b9f7074d39813a",
+    "selector": "/problems/4/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON trace result; no bool/int coercion",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/contracts.json",
+    "sha256": "a475a05a254c28bcbe408996482bb2fff51af43b571d12bc76b9f7074d39813a",
+    "selector": "/problems/4/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

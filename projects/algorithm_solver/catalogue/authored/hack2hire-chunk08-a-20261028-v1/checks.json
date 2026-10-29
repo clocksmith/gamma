@@ -1,0 +1,79 @@
+{
+ "active_adoption": 0,
+ "independent_qualification": 0,
+ "spec_basis": "inferred by claude-opus-5-5 subagent 2026-10-29 from partial public previews; no official statement, interface or constraints",
+ "author_local_candidate_runs": {
+  "scope": "Author ran own candidates locally after the pre-source freeze against own generated cases for INFERRED specs; this is not isolated or independent qualification and cannot establish correctness against the official problems",
+  "python_cases_passed": 5157,
+  "javascript_cases_passed": 5157,
+  "cases_total_per_language": 5157,
+  "inferred_wrappers_and_native_classes_checked": true,
+  "inputs_unchanged_all_cases": true,
+  "extra_python_reference_fuzz_rows_passed": 40792,
+  "native_observer_self_check": "5 native-class variants (PriorityExpiryLRUCache, BookingSystem, RangeIterator, DetectionSystem, Table): python and javascript candidates passed native_harness.observe + native_protocol.check on all 1281 of their cases each with the unchanged easy16 transport (javascript under node --jitless)",
+  "heaviest_case_cpu_seconds": {
+   "python3": {
+    "hack2hire:68b996c98c4a0a9996afdd81": 0.0352,
+    "hack2hire:6a330e686849fecc81440a3c": 0.0815,
+    "hack2hire:67f5703f83ba2e5f057e6dfb": 0.0601,
+    "hack2hire:67f8222b1d70a71460925c53": 0.0077,
+    "hack2hire:699f70796e73e4abccc9b539": 0.0646,
+    "hack2hire:67a2d68216a8465483dca727": 0.0147,
+    "hack2hire:68b975348c4a0a9996afdd79": 0.0068,
+    "hack2hire:67fa9534ba41b3368f4e5851": 0.0123,
+    "hack2hire:67fa954aba41b3368f4e5852": 0.0894,
+    "hack2hire:678d7c57fa7ce9616e190fb5": 0.0134,
+    "hack2hire:69a3a0426e73e4abccc9c0e9": 0.0165,
+    "hack2hire:68ad7692cdaebe9459ce9a78": 0.0404,
+    "hack2hire:67a43f105141b0ac3b8be4df": 0.0553,
+    "hack2hire:69499ed489ec36a1b1e2c13f": 0.0131,
+    "hack2hire:6949a92289ec36a1b1e2c15c": 0.011,
+    "hack2hire:6949b64a89ec36a1b1e2c16d": 0.0295,
+    "hack2hire:6a373b356849fecc81442862": 0.0215,
+    "hack2hire:6a373b366849fecc81442863": 0.0462,
+    "hack2hire:69ff8062574d87bc49006e92": 0.0126,
+    "hack2hire:69d17a8817b72775cc49bfe0": 0.0233
+   },
+   "node_jitless": {
+    "hack2hire:68b996c98c4a0a9996afdd81": 0.0484,
+    "hack2hire:6a330e686849fecc81440a3c": 0.0326,
+    "hack2hire:67f5703f83ba2e5f057e6dfb": 0.1922,
+    "hack2hire:67f8222b1d70a71460925c53": 0.0111,
+    "hack2hire:699f70796e73e4abccc9b539": 0.2766,
+    "hack2hire:67a2d68216a8465483dca727": 0.0085,
+    "hack2hire:68b975348c4a0a9996afdd79": 0.0037,
+    "hack2hire:67fa9534ba41b3368f4e5851": 0.0101,
+    "hack2hire:67fa954aba41b3368f4e5852": 0.3198,
+    "hack2hire:678d7c57fa7ce9616e190fb5": 0.0101,
+    "hack2hire:69a3a0426e73e4abccc9c0e9": 0.0081,
+    "hack2hire:68ad7692cdaebe9459ce9a78": 0.0351,
+    "hack2hire:67a43f105141b0ac3b8be4df": 0.0384,
+    "hack2hire:69499ed489ec36a1b1e2c13f": 0.0253,
+    "hack2hire:6949a92289ec36a1b1e2c15c": 0.0235,
+    "hack2hire:6949b64a89ec36a1b1e2c16d": 0.0654,
+    "hack2hire:6a373b356849fecc81442862": 0.0207,
+    "hack2hire:6a373b366849fecc81442863": 0.0381,
+    "hack2hire:69ff8062574d87bc49006e92": 0.011,
+    "hack2hire:69d17a8817b72775cc49bfe0": 0.0218
+   }
+  },
+  "timing_note": "per case, (solve or trace adapter + inferred wrapper/direct-class execution)/2 CPU seconds, python3 time.process_time and node --jitless process.cpuUsage; not resource qualification",
+  "timing_revision": {
+   "reason": "align the JavaScript heap with the Python heapify and keep the heaviest node --jitless case well under 1 CPU s",
+   "previous_heaviest_node_jitless": {
+    "hack2hire:67fa954aba41b3368f4e5852": 0.5476
+   },
+   "algorithm_changes": {
+    "Random User Pairing v2 (javascript only)": "build the group max-heap with one bottom-up heapify (as heapq.heapify does in the Python candidate) and sift with a hole instead of destructuring swaps; each heap entry carries its member list and next index; same greedy pairing and output"
+   }
+  },
+  "resource_note": "author-local peak RSS: 311 MB for the whole python3 candidate run including case generation; 135 MB for node --jitless on the heaviest single rows; largest argument JSON 5.4 MB (Payment Refund Allocation, 1e5 rows)"
+ },
+ "javascript_candidate_syntax_checks": 20,
+ "python_candidate_compiles": 20,
+ "ruff_fatal_subset": "E9,F63,F7,F82 passed",
+ "source_free_reference_contract_tests": 18,
+ "native_observer_toy_controls": 4,
+ "study_record_tests": 6,
+ "study_records": 100
+}

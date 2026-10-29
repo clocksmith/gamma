@@ -1,0 +1,397 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:69499eb489ec36a1b1e2c13e:6949a92289ec36a1b1e2c15c:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/contracts.json",
+   "sha256": "a475a05a254c28bcbe408996482bb2fff51af43b571d12bc76b9f7074d39813a",
+   "selector": "/problems/14"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/69499eb489ec36a1b1e2c13e.json",
+   "sha256": "e8cb7ec7c34d1171ebf898661119585000f97b269fd8cfb3c36db6690ec72471",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/study-content.json",
+   "sha256": "dc6de40664d46b62dd7440877e5701f10e2edff739d73d3a288efd3d01b7b3f6",
+   "selector": "/variants/hack2hire:6949a92289ec36a1b1e2c15c"
+  }
+ ],
+ "problemId": "hack2hire:69499eb489ec36a1b1e2c13e",
+ "variantId": "6949a92289ec36a1b1e2c15c",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred level 2: balances as of a timestamp",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/study-content.json",
+    "sha256": "dc6de40664d46b62dd7440877e5701f10e2edff739d73d3a288efd3d01b7b3f6",
+    "selector": "/variants/hack2hire:6949a92289ec36a1b1e2c15c/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "transactions is an unordered list of rows [transactionId, userId, adDeliveryPennies, paymentPennies, transactionTimestamp] of strings; amounts are decimal integer strings or \"\" (missing, treated as 0) and the timestamp is a decimal integer string. A row adds its ad-delivery amount to the user's balance and subtracts its payment amount. Level 2: given an integer timestamp, use only rows whose timestamp is <= that value and return [userId, balance] for every user with at least one such row, sorted by userId in code-point order.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/contracts.json",
+    "sha256": "a475a05a254c28bcbe408996482bb2fff51af43b571d12bc76b9f7074d39813a",
+    "selector": "/problems/14/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "transactions is an unordered list of rows [transactionId, userId, adDeliveryPennies, paymentPennies, transactionTimestamp] of strings; amounts are decimal integer strings or \"\" (missing, treated as 0) and the timestamp is a decimal integer string.",
+   "A row adds its ad-delivery amount to the user's balance and subtracts its payment amount.",
+   "Level 2: given an integer timestamp, use only rows whose timestamp is <= that value and return [userId, balance] for every user with at least one such row, sorted by userId in code-point order."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/contracts.json",
+    "sha256": "a475a05a254c28bcbe408996482bb2fff51af43b571d12bc76b9f7074d39813a",
+    "selector": "/problems/14/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "0 <= transactions.length <= 1e5",
+   "transaction ids are unique and match [A-Za-z0-9_]{1,20}; user ids match [A-Za-z0-9_]{1,20}",
+   "amounts are \"\" or decimal 0..1e9",
+   "0 <= timestamp <= 1e9",
+   "0 <= timestamp argument <= 1e9"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/study-content.json",
+    "sha256": "dc6de40664d46b62dd7440877e5701f10e2edff739d73d3a288efd3d01b7b3f6",
+    "selector": "/variants/hack2hire:6949a92289ec36a1b1e2c15c/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: title; contentPreview: unordered transactions [transactionId, userId, adDeliveryPennies, paymentPennies, transactionTimestamp], missing amounts as empty strings, reconstruct final billing status per user; algorithmTags: SIMULATION, DESIGN; codingQuestions (variant count/order); preview response sha256 4dbe50c2386c0f53aefa4a656eb2e8c92e8c0ed62fd24eba5c5fbf7f0c8d024a"
+   },
+   {
+    "statement": "Uncertainty: very high: the second variant is unseen; a point-in-time reconstruction (status as of a timestamp) is inferred from the unordered-history theme",
+    "basis": "the public group preview is partial (827 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: variants inferred as three levels: 1 = final balances, 2 = balances as of a query timestamp, 3 = final and peak balances in chronological order",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/contracts.json",
+    "sha256": "a475a05a254c28bcbe408996482bb2fff51af43b571d12bc76b9f7074d39813a",
+    "selector": "/problems/14/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/contracts.json",
+    "sha256": "a475a05a254c28bcbe408996482bb2fff51af43b571d12bc76b9f7074d39813a",
+    "selector": "/problems/14/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/contracts.json",
+    "sha256": "a475a05a254c28bcbe408996482bb2fff51af43b571d12bc76b9f7074d39813a",
+    "selector": "/problems/14/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "What does billing status mean: a balance, a label, or more?",
+   "Is a positive balance money owed by the user?",
+   "How are users ordered in the result?",
+   "Is a row at exactly the query timestamp included?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/study-content.json",
+    "sha256": "dc6de40664d46b62dd7440877e5701f10e2edff739d73d3a288efd3d01b7b3f6",
+    "selector": "/variants/hack2hire:6949a92289ec36a1b1e2c15c/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [],
+     0
+    ],
+    "output": [],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      [
+       "t73x3",
+       "u1",
+       "",
+       "7",
+       "0"
+      ],
+      [
+       "t619x6",
+       "u2",
+       "0",
+       "0",
+       "5"
+      ],
+      [
+       "t929x5",
+       "u1",
+       "5",
+       "7",
+       "2"
+      ],
+      [
+       "t719x7",
+       "U",
+       "1000000000",
+       "0",
+       "1"
+      ],
+      [
+       "t49x4",
+       "U",
+       "1000000000",
+       "",
+       "9"
+      ],
+      [
+       "t305x1",
+       "U",
+       "1000000000",
+       "1000000000",
+       "2"
+      ],
+      [
+       "t514x0",
+       "u2",
+       "5",
+       "7",
+       "2"
+      ],
+      [
+       "t208x2",
+       "w_9",
+       "",
+       "0",
+       "0"
+      ]
+     ],
+     2
+    ],
+    "output": [
+     [
+      "U",
+      1000000000
+     ],
+     [
+      "u1",
+      -9
+     ],
+     [
+      "u2",
+      -2
+     ],
+     [
+      "w_9",
+      0
+     ]
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/study-content.json",
+    "sha256": "dc6de40664d46b62dd7440877e5701f10e2edff739d73d3a288efd3d01b7b3f6",
+    "selector": "/variants/hack2hire:6949a92289ec36a1b1e2c15c/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/oracles.py",
+    "sha256": "4ca26189bdfdd6c328e95aa523aaf622dc11efb3cc7fc03dd32c69834e055f95",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "def billingStatusAt(transactions, timestamp) -> list<[string,integer]>",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/contracts.json",
+      "sha256": "a475a05a254c28bcbe408996482bb2fff51af43b571d12bc76b9f7074d39813a",
+      "selector": "/problems/14/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/semantics/6949a92289ec36a1b1e2c15c-python.json",
+     "inferredInterface": {
+      "name": "billingStatusAt",
+      "params": [
+       {
+        "name": "transactions",
+        "type": "list<string[5]>"
+       },
+       {
+        "name": "timestamp",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "list<[string,integer]>"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/semantics/6949a92289ec36a1b1e2c15c-python.json",
+      "sha256": "520aa9223db6097b8eaf264b94c3cf10987301da359e3b8799ed7e402b13b8e3",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "function billingStatusAt(transactions, timestamp) /* -> list<[string,integer]> */",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/contracts.json",
+      "sha256": "a475a05a254c28bcbe408996482bb2fff51af43b571d12bc76b9f7074d39813a",
+      "selector": "/problems/14/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/semantics/6949a92289ec36a1b1e2c15c-javascript.json",
+     "inferredInterface": {
+      "name": "billingStatusAt",
+      "params": [
+       {
+        "name": "transactions",
+        "type": "list<string[5]>"
+       },
+       {
+        "name": "timestamp",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "list<[string,integer]>"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/semantics/6949a92289ec36a1b1e2c15c-javascript.json",
+      "sha256": "60a0fdc227d9d77dad8d873d363cb720088abe27aebf2921b6b813338e718d1c",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/contracts.json",
+    "sha256": "a475a05a254c28bcbe408996482bb2fff51af43b571d12bc76b9f7074d39813a",
+    "selector": "/problems/14/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON result",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/contracts.json",
+    "sha256": "a475a05a254c28bcbe408996482bb2fff51af43b571d12bc76b9f7074d39813a",
+    "selector": "/problems/14/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

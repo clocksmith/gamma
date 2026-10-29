@@ -1,0 +1,388 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:67fa952bba41b3368f4e5850:67fa954aba41b3368f4e5852:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/contracts.json",
+   "sha256": "a475a05a254c28bcbe408996482bb2fff51af43b571d12bc76b9f7074d39813a",
+   "selector": "/problems/8"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/67fa952bba41b3368f4e5850.json",
+   "sha256": "47cff9d1f6fac918c87d59dab42b9f51da5c3c1b8a509c715f5cb525326bfe69",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/study-content.json",
+   "sha256": "dc6de40664d46b62dd7440877e5701f10e2edff739d73d3a288efd3d01b7b3f6",
+   "selector": "/variants/hack2hire:67fa954aba41b3368f4e5852"
+  }
+ ],
+ "problemId": "hack2hire:67fa952bba41b3368f4e5850",
+ "variantId": "67fa954aba41b3368f4e5852",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred level 2: greedy cross-group pairing",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/study-content.json",
+    "sha256": "dc6de40664d46b62dd7440877e5701f10e2edff739d73d3a288efd3d01b7b3f6",
+    "selector": "/variants/hack2hire:67fa954aba41b3368f4e5852/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "users is a list of [name, group] rows. Pair users so that the two users of a pair always come from different groups. Greedy rule: while at least two groups still have unpaired users, take the group with the most unpaired users and the group with the second most (ties to the smaller group name in code-point order), and pair the earliest-listed unpaired user of the first with the earliest-listed unpaired user of the second, recording [user of the larger group, user of the other group]. Return the pairs in the order formed; users left unpaired are not reported.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/contracts.json",
+    "sha256": "a475a05a254c28bcbe408996482bb2fff51af43b571d12bc76b9f7074d39813a",
+    "selector": "/problems/8/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "users is a list of [name, group] rows.",
+   "Pair users so that the two users of a pair always come from different groups.",
+   "Greedy rule: while at least two groups still have unpaired users, take the group with the most unpaired users and the group with the second most (ties to the smaller group name in code-point order), and pair the earliest-listed unpaired user of the first with the earliest-listed unpaired user of the second, recording [user of the larger group, user of the other group].",
+   "Return the pairs in the order formed; users left unpaired are not reported."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/contracts.json",
+    "sha256": "a475a05a254c28bcbe408996482bb2fff51af43b571d12bc76b9f7074d39813a",
+    "selector": "/problems/8/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "0 <= users.length <= 1e5",
+   "names and groups match [A-Za-z0-9_]{1,20}"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/study-content.json",
+    "sha256": "dc6de40664d46b62dd7440877e5701f10e2edff739d73d3a288efd3d01b7b3f6",
+    "selector": "/variants/hack2hire:67fa954aba41b3368f4e5852/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: title; contentPreview: uniformly random pairing by repeatedly choosing two distinct users, one user left over when the count is odd; algorithmTags: GREEDY, HEAP; codingQuestions (variant count/order); preview response sha256 c03b34e1a515ebb65efdaab32604539a19d75bed5ba8c60508c9381c6f9887b4"
+   },
+   {
+    "statement": "Uncertainty: very high: the second variant is unseen; a cross-group pairing driven by a max-heap of group sizes is inferred from the GREEDY and HEAP tags; the group input, tie rules and output order are author choices",
+    "basis": "the public group preview is partial (489 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: variants inferred as two levels: 1 = reproducible uniform pairing driven by supplied random integers, 2 = greedy cross-group pairing with a max-heap (GREEDY/HEAP tags)",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/contracts.json",
+    "sha256": "a475a05a254c28bcbe408996482bb2fff51af43b571d12bc76b9f7074d39813a",
+    "selector": "/problems/8/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/contracts.json",
+    "sha256": "a475a05a254c28bcbe408996482bb2fff51af43b571d12bc76b9f7074d39813a",
+    "selector": "/problems/8/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/contracts.json",
+    "sha256": "a475a05a254c28bcbe408996482bb2fff51af43b571d12bc76b9f7074d39813a",
+    "selector": "/problems/8/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "Must paired users come from different groups?",
+   "Which groups are paired first when several have the same size?",
+   "Are unpaired users reported?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/study-content.json",
+    "sha256": "dc6de40664d46b62dd7440877e5701f10e2edff739d73d3a288efd3d01b7b3f6",
+    "selector": "/variants/hack2hire:67fa954aba41b3368f4e5852/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     []
+    ],
+    "output": [],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      [
+       "u0",
+       "g2"
+      ],
+      [
+       "u1",
+       "g2"
+      ],
+      [
+       "u2",
+       "g3"
+      ],
+      [
+       "u3",
+       "g1"
+      ],
+      [
+       "u4",
+       "g2"
+      ],
+      [
+       "u5",
+       "g2"
+      ],
+      [
+       "u6",
+       "g1"
+      ],
+      [
+       "u7",
+       "g2"
+      ],
+      [
+       "u8",
+       "g1"
+      ],
+      [
+       "u9",
+       "g3"
+      ],
+      [
+       "u10",
+       "g1"
+      ],
+      [
+       "u11",
+       "g3"
+      ],
+      [
+       "u12",
+       "g2"
+      ]
+     ]
+    ],
+    "output": [
+     [
+      "u0",
+      "u3"
+     ],
+     [
+      "u1",
+      "u6"
+     ],
+     [
+      "u4",
+      "u2"
+     ],
+     [
+      "u5",
+      "u8"
+     ],
+     [
+      "u7",
+      "u9"
+     ],
+     [
+      "u10",
+      "u12"
+     ]
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/study-content.json",
+    "sha256": "dc6de40664d46b62dd7440877e5701f10e2edff739d73d3a288efd3d01b7b3f6",
+    "selector": "/variants/hack2hire:67fa954aba41b3368f4e5852/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/oracles.py",
+    "sha256": "4ca26189bdfdd6c328e95aa523aaf622dc11efb3cc7fc03dd32c69834e055f95",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "def pairAcrossGroups(users) -> list<string[]>",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/contracts.json",
+      "sha256": "a475a05a254c28bcbe408996482bb2fff51af43b571d12bc76b9f7074d39813a",
+      "selector": "/problems/8/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/semantics/67fa954aba41b3368f4e5852-python.json",
+     "inferredInterface": {
+      "name": "pairAcrossGroups",
+      "params": [
+       {
+        "name": "users",
+        "type": "list<[string,string]>"
+       }
+      ],
+      "return": {
+       "type": "list<string[]>"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/semantics/67fa954aba41b3368f4e5852-python.json",
+      "sha256": "7477d2acd75215891d0d7a97ce4f8d9cc5360e6f46cbd952b6e7dde236ad17fc",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "function pairAcrossGroups(users) /* -> list<string[]> */",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/contracts.json",
+      "sha256": "a475a05a254c28bcbe408996482bb2fff51af43b571d12bc76b9f7074d39813a",
+      "selector": "/problems/8/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/semantics/67fa954aba41b3368f4e5852-javascript.json",
+     "inferredInterface": {
+      "name": "pairAcrossGroups",
+      "params": [
+       {
+        "name": "users",
+        "type": "list<[string,string]>"
+       }
+      ],
+      "return": {
+       "type": "list<string[]>"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/semantics/67fa954aba41b3368f4e5852-javascript.json",
+      "sha256": "7ee74b8ed3a6c99414ab77604ad7aee59f501dd02f0f81cf70898296ed326b1a",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/contracts.json",
+    "sha256": "a475a05a254c28bcbe408996482bb2fff51af43b571d12bc76b9f7074d39813a",
+    "selector": "/problems/8/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON result",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/contracts.json",
+    "sha256": "a475a05a254c28bcbe408996482bb2fff51af43b571d12bc76b9f7074d39813a",
+    "selector": "/problems/8/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

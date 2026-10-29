@@ -1,0 +1,60 @@
+{
+ "schema": "gamma.authored-native-trace-semantics.v1",
+ "problem_uid": "hack2hire:68b975348c4a0a9996afdd79",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "operation_names",
+  "argument_lists"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "classname": "BookingSystem",
+  "constructor": {
+   "params": [
+    {
+     "name": "properties",
+     "type": "list<string[3]>"
+    }
+   ]
+  },
+  "methods": [
+   {
+    "name": "book",
+    "params": [
+     {
+      "name": "neighborhood",
+      "type": "string"
+     },
+     {
+      "name": "groupSize",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "string[]"
+    }
+   }
+  ]
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON trace result; no bool/int coercion",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "enumerate every subset of the neighborhood's free properties as a bitmask and take the minimum of (size, total, sorted ids)",
+  "candidate_design": "free properties per neighborhood sorted by id; the smallest feasible size comes from the largest capacities; backtracking over combinations of that size in id order keeps the first one with the smallest total",
+  "complexity_target": "O(C(m, s) * s) per booking for m free properties in the neighborhood/O(p) space"
+ },
+ "source_sha256": "80072976f8d4011f7f213e754f068e48e199e54a1d49565711126b4b996168b4",
+ "native_class": "BookingSystem",
+ "native_symbol": "module global BookingSystem",
+ "void_methods": []
+}

@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:6949a92289ec36a1b1e2c15c",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "transactions",
+  "timestamp"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "billingStatusAt",
+  "params": [
+   {
+    "name": "transactions",
+    "type": "list<string[5]>"
+   },
+   {
+    "name": "timestamp",
+    "type": "integer"
+   }
+  ],
+  "return": {
+   "type": "list<[string,integer]>"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "filter the rows, then per user rescan the filtered rows",
+  "candidate_design": "one pass that skips rows after the timestamp and accumulates into a hash map, then sort the user ids",
+  "complexity_target": "O(t + u log u) time/O(u) space"
+ },
+ "source_sha256": "1829cc8ff76cb559b73c4e8474b1d260332179ded39076d4505ffe954ba54c78",
+ "wrapper": "named export billingStatusAt"
+}

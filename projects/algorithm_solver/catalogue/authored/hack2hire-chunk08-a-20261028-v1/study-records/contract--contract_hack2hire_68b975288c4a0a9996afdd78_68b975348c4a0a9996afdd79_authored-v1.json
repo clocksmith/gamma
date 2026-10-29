@@ -1,0 +1,477 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:68b975288c4a0a9996afdd78:68b975348c4a0a9996afdd79:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/contracts.json",
+   "sha256": "a475a05a254c28bcbe408996482bb2fff51af43b571d12bc76b9f7074d39813a",
+   "selector": "/problems/6"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/68b975288c4a0a9996afdd78.json",
+   "sha256": "f4d1bfdf7c1a50ed51737248f1d8a083dcdb9483c2cb7ca7ccfd99d343475f25",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/study-content.json",
+   "sha256": "dc6de40664d46b62dd7440877e5701f10e2edff739d73d3a288efd3d01b7b3f6",
+   "selector": "/variants/hack2hire:68b975348c4a0a9996afdd79"
+  }
+ ],
+ "problemId": "hack2hire:68b975288c4a0a9996afdd78",
+ "variantId": "68b975348c4a0a9996afdd79",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred single variant: fewest, then tightest, then smallest-id group booking",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/study-content.json",
+    "sha256": "dc6de40664d46b62dd7440877e5701f10e2edff739d73d3a288efd3d01b7b3f6",
+    "selector": "/variants/hack2hire:68b975348c4a0a9996afdd79/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "BookingSystem(properties) receives rows [id, neighborhood, capacity] of strings (capacity a decimal integer). book(neighborhood, groupSize) considers the properties of that neighborhood that are not yet booked and picks a set whose total capacity is at least groupSize, by these rules in order: fewest properties; then smallest total capacity; then the lexicographically smallest list of ids sorted in code-point order. The chosen properties become booked for every later call. Return the chosen ids sorted in code-point order, or [] (booking nothing) when no set is large enough.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/contracts.json",
+    "sha256": "a475a05a254c28bcbe408996482bb2fff51af43b571d12bc76b9f7074d39813a",
+    "selector": "/problems/6/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "BookingSystem(properties) receives rows [id, neighborhood, capacity] of strings (capacity a decimal integer).",
+   "book(neighborhood, groupSize) considers the properties of that neighborhood that are not yet booked and picks a set whose total capacity is at least groupSize, by these rules in order: fewest properties; then smallest total capacity; then the lexicographically smallest list of ids sorted in code-point order.",
+   "The chosen properties become booked for every later call.",
+   "Return the chosen ids sorted in code-point order, or [] (booking nothing) when no set is large enough."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/contracts.json",
+    "sha256": "a475a05a254c28bcbe408996482bb2fff51af43b571d12bc76b9f7074d39813a",
+    "selector": "/problems/6/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "0 <= properties.length <= 300",
+   "ids are unique and match [A-Za-z0-9_]{1,10}; neighborhoods match [A-Za-z0-9_]{1,10}",
+   "at most 12 properties per neighborhood",
+   "1 <= capacity <= 1000",
+   "1 <= groupSize <= 20000",
+   "up to 300 book calls"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/study-content.json",
+    "sha256": "dc6de40664d46b62dd7440877e5701f10e2edff739d73d3a288efd3d01b7b3f6",
+    "selector": "/variants/hack2hire:68b975348c4a0a9996afdd79/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: title; contentPreview: BookingSystem(String[][] properties) with [id, neighborhood, capacity] rows, List<String> book(neighborhood, groupSize) following ordered rules (rules not visible); algorithmTags: BACKTRACKING; preview response sha256 ea43bcfbe018338eb7e99ae62d7d62418c1cfe4991ce89542069ba878cafe755"
+   },
+   {
+    "statement": "Uncertainty: very high: the constructor, the book signature and that rules are applied in order are in the preview; the rules themselves (fewest properties, least total capacity, smallest sorted ids), permanent booking and the empty result are inferred",
+    "basis": "the public group preview is partial (687 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: single variant",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/contracts.json",
+    "sha256": "a475a05a254c28bcbe408996482bb2fff51af43b571d12bc76b9f7074d39813a",
+    "selector": "/problems/6/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/contracts.json",
+    "sha256": "a475a05a254c28bcbe408996482bb2fff51af43b571d12bc76b9f7074d39813a",
+    "selector": "/problems/6/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/contracts.json",
+    "sha256": "a475a05a254c28bcbe408996482bb2fff51af43b571d12bc76b9f7074d39813a",
+    "selector": "/problems/6/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "In what order are the selection rules applied?",
+   "Is a booked property unavailable forever?",
+   "What is returned when the group cannot be housed?",
+   "How are ties between equally good sets broken?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/study-content.json",
+    "sha256": "dc6de40664d46b62dd7440877e5701f10e2edff739d73d3a288efd3d01b7b3f6",
+    "selector": "/variants/hack2hire:68b975348c4a0a9996afdd79/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [
+      "BookingSystem",
+      "book"
+     ],
+     [
+      [
+       []
+      ],
+      [
+       "a",
+       1
+      ]
+     ]
+    ],
+    "output": [
+     null,
+     []
+    ],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      "BookingSystem",
+      "book",
+      "book",
+      "book",
+      "book",
+      "book"
+     ],
+     [
+      [
+       [
+        [
+         "b8",
+         "n2",
+         "1"
+        ],
+        [
+         "a2",
+         "n2",
+         "8"
+        ],
+        [
+         "a0",
+         "Up",
+         "1"
+        ],
+        [
+         "z1",
+         "n2",
+         "5"
+        ],
+        [
+         "x5",
+         "Up",
+         "1000"
+        ],
+        [
+         "c7",
+         "n2",
+         "1000"
+        ],
+        [
+         "z3",
+         "n1",
+         "2"
+        ],
+        [
+         "y6",
+         "n2",
+         "10"
+        ],
+        [
+         "y4",
+         "n1",
+         "4"
+        ]
+       ]
+      ],
+      [
+       "n2",
+       5
+      ],
+      [
+       "n1",
+       7
+      ],
+      [
+       "n2",
+       1
+      ],
+      [
+       "Up",
+       20
+      ],
+      [
+       "n2",
+       3
+      ]
+     ]
+    ],
+    "output": [
+     null,
+     [
+      "z1"
+     ],
+     [],
+     [
+      "b8"
+     ],
+     [
+      "x5"
+     ],
+     [
+      "a2"
+     ]
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/study-content.json",
+    "sha256": "dc6de40664d46b62dd7440877e5701f10e2edff739d73d3a288efd3d01b7b3f6",
+    "selector": "/variants/hack2hire:68b975348c4a0a9996afdd79/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/oracles.py",
+    "sha256": "4ca26189bdfdd6c328e95aa523aaf622dc11efb3cc7fc03dd32c69834e055f95",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "class",
+   "declaration": {
+    "status": "present",
+    "value": "class BookingSystem:\n    def __init__(self, properties)\n    def book(self, neighborhood, groupSize) -> string[]",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/contracts.json",
+      "sha256": "a475a05a254c28bcbe408996482bb2fff51af43b571d12bc76b9f7074d39813a",
+      "selector": "/problems/6/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/semantics/68b975348c4a0a9996afdd79-python.json",
+     "inferredInterface": {
+      "classname": "BookingSystem",
+      "constructor": {
+       "params": [
+        {
+         "name": "properties",
+         "type": "list<string[3]>"
+        }
+       ]
+      },
+      "methods": [
+       {
+        "name": "book",
+        "params": [
+         {
+          "name": "neighborhood",
+          "type": "string"
+         },
+         {
+          "name": "groupSize",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "string[]"
+        }
+       }
+      ]
+     },
+     "traceAdapter": {
+      "name": "solve",
+      "argument_order": [
+       "operation_names",
+       "argument_lists"
+      ],
+      "constructor_output": null,
+      "void_method_output": null,
+      "result_order": "constructor followed by every method call",
+      "scope": "Explicit class trace adapter, separate from direct native observer checks."
+     }
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/semantics/68b975348c4a0a9996afdd79-python.json",
+      "sha256": "1c5edcaf84b38d38c0ff270b3a52b685fc54a9735a2abe6075211ec9c1ecb8be",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "class",
+   "declaration": {
+    "status": "present",
+    "value": "class BookingSystem {\n  constructor(properties)\n  book(neighborhood, groupSize) /* -> string[] */\n}",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/contracts.json",
+      "sha256": "a475a05a254c28bcbe408996482bb2fff51af43b571d12bc76b9f7074d39813a",
+      "selector": "/problems/6/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/semantics/68b975348c4a0a9996afdd79-javascript.json",
+     "inferredInterface": {
+      "classname": "BookingSystem",
+      "constructor": {
+       "params": [
+        {
+         "name": "properties",
+         "type": "list<string[3]>"
+        }
+       ]
+      },
+      "methods": [
+       {
+        "name": "book",
+        "params": [
+         {
+          "name": "neighborhood",
+          "type": "string"
+         },
+         {
+          "name": "groupSize",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "string[]"
+        }
+       }
+      ]
+     },
+     "traceAdapter": {
+      "name": "solve",
+      "argument_order": [
+       "operation_names",
+       "argument_lists"
+      ],
+      "constructor_output": null,
+      "void_method_output": null,
+      "result_order": "constructor followed by every method call",
+      "scope": "Explicit class trace adapter, separate from direct native observer checks."
+     }
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/semantics/68b975348c4a0a9996afdd79-javascript.json",
+      "sha256": "e4a7760ce3e76c4794ec970df1b6798f9f9c5c6fc0e09688c8637d86d1a3533f",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/contracts.json",
+    "sha256": "a475a05a254c28bcbe408996482bb2fff51af43b571d12bc76b9f7074d39813a",
+    "selector": "/problems/6/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON trace result; no bool/int coercion",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk08-a-20261028-v1/contracts.json",
+    "sha256": "a475a05a254c28bcbe408996482bb2fff51af43b571d12bc76b9f7074d39813a",
+    "selector": "/problems/6/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}
