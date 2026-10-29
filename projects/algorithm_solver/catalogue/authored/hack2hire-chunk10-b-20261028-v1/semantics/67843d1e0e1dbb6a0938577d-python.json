@@ -1,0 +1,40 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:67843d1e0e1dbb6a0938577d",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "orderIds"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "eligibleOrderSequence",
+  "params": [
+   {
+    "name": "orderIds",
+    "type": "integer[]"
+   }
+  ],
+  "return": {
+   "type": "integer[]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "literal simulation: rescan the whole current array for eligible orders and remove the smallest",
+  "candidate_design": "doubly linked list over indices plus a min-heap of eligible orders; after a removal only the two new neighbours can become eligible",
+  "complexity_target": "O(n log n) time/O(n) space"
+ },
+ "source_sha256": "b717e2798d9a242a257d0d854d627d53f98d987b8010cf9768c1b4cac153d1f5",
+ "wrapper": "Solution.eligibleOrderSequence"
+}

@@ -1,0 +1,470 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:68560fd24d16ce2ead6e1758:685637ce4d16ce2ead6e1769:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/contracts.json",
+   "sha256": "0829f1b98e3a4aa7bfc32413e21359791d60ea7c8efe9cf209942feec47b0ca8",
+   "selector": "/problems/10"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/68560fd24d16ce2ead6e1758.json",
+   "sha256": "1983669e2405661af6f6d0645ec63d1b2f1dd117881decfcd9e281746c8a596c",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/study-content.json",
+   "sha256": "823fac1f7f9050a1dc42391d4476ac1679855d65eac111bc661508f17561c79e",
+   "selector": "/variants/hack2hire:685637ce4d16ce2ead6e1769"
+  }
+ ],
+ "problemId": "hack2hire:68560fd24d16ce2ead6e1758",
+ "variantId": "685637ce4d16ce2ead6e1769",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred single variant: RLE for runs of 3+, 8-value bit-packed chunks otherwise",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/study-content.json",
+    "sha256": "823fac1f7f9050a1dc42391d4476ac1679855d65eac111bc661508f17561c79e",
+    "selector": "/variants/hack2hire:685637ce4d16ce2ead6e1769/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "Codec() has encode(nums) and decode(runs). encode scans nums left to right: every maximal run of at least 3 equal values becomes \"RLE[value, count]\"; the remaining values between such runs are grouped, in order, into chunks of at most 8 values, each written \"BP[width, v1, ..., vk]\" where width is the largest bit length among the chunk's values (at least 1). decode(runs) expands each \"RLE[value, count]\" into count copies of value and each \"BP[width, v1, ..., vk]\" into v1..vk, concatenated in order. Items are separated by \", \".",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/contracts.json",
+    "sha256": "0829f1b98e3a4aa7bfc32413e21359791d60ea7c8efe9cf209942feec47b0ca8",
+    "selector": "/problems/10/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "Codec() has encode(nums) and decode(runs).",
+   "encode scans nums left to right: every maximal run of at least 3 equal values becomes \"RLE[value, count]\"; the remaining values between such runs are grouped, in order, into chunks of at most 8 values, each written \"BP[width, v1, ..., vk]\" where width is the largest bit length among the chunk's values (at least 1).",
+   "decode(runs) expands each \"RLE[value, count]\" into count copies of value and each \"BP[width, v1, ..., vk]\" into v1..vk, concatenated in order.",
+   "Items are separated by \", \"."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/contracts.json",
+    "sha256": "0829f1b98e3a4aa7bfc32413e21359791d60ea7c8efe9cf209942feec47b0ca8",
+    "selector": "/problems/10/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "0 <= nums.length <= 1e5",
+   "0 <= nums[i] <= 1e9",
+   "decode input is well formed: count <= 1e5, 1..8 BP values each below 2**width, width <= 30",
+   "up to 1000 calls, 2e5 values in total"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/study-content.json",
+    "sha256": "823fac1f7f9050a1dc42391d4476ac1679855d65eac111bc661508f17561c79e",
+    "selector": "/variants/hack2hire:685637ce4d16ce2ead6e1769/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: title; contentPreview: non-negative integer array, encoder to human-readable run descriptors and decoder back, two run kinds Run-Length Encoding with format \"RLE[value, count]\" and Bit-Packing (BP format and the choice rule not visible); algorithmTags: STRING; preview response sha256 036ca5e336918dd5dd7cb9768b6197b4790cb3ede2e7f353605e79b4dd3cf82f"
+   },
+   {
+    "statement": "Uncertainty: very high: only the RLE format and the two run kinds are in the preview; the BP format, the threshold of 3 for RLE, the chunk size of 8, the width field and the class shape are inferred",
+    "basis": "the public group preview is partial (470 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: single variant",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/contracts.json",
+    "sha256": "0829f1b98e3a4aa7bfc32413e21359791d60ea7c8efe9cf209942feec47b0ca8",
+    "selector": "/problems/10/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/contracts.json",
+    "sha256": "0829f1b98e3a4aa7bfc32413e21359791d60ea7c8efe9cf209942feec47b0ca8",
+    "selector": "/problems/10/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/contracts.json",
+    "sha256": "0829f1b98e3a4aa7bfc32413e21359791d60ea7c8efe9cf209942feec47b0ca8",
+    "selector": "/problems/10/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "What is the BP descriptor format, and does it carry a bit width?",
+   "When is RLE preferred over BP (threshold)?",
+   "How many values may one BP run hold?",
+   "What does decode do with malformed input?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/study-content.json",
+    "sha256": "823fac1f7f9050a1dc42391d4476ac1679855d65eac111bc661508f17561c79e",
+    "selector": "/variants/hack2hire:685637ce4d16ce2ead6e1769/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [
+      "Codec",
+      "encode"
+     ],
+     [
+      [],
+      [
+       []
+      ]
+     ]
+    ],
+    "output": [
+     null,
+     []
+    ],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      "Codec",
+      "encode",
+      "encode",
+      "encode",
+      "decode"
+     ],
+     [
+      [],
+      [
+       [
+        0,
+        256,
+        0
+       ]
+      ],
+      [
+       [
+        7,
+        7,
+        7,
+        2,
+        2,
+        2,
+        2
+       ]
+      ],
+      [
+       [
+        255,
+        255,
+        255,
+        255,
+        255,
+        255,
+        255,
+        255,
+        255,
+        255,
+        255,
+        255,
+        256,
+        256,
+        256,
+        256,
+        256,
+        256,
+        256,
+        256,
+        256,
+        1000000000,
+        1,
+        1000000000,
+        1000000000
+       ]
+      ],
+      [
+       [
+        "BP[30, 6, 5, 0, 1, 0, 5, 1, 1]"
+       ]
+      ]
+     ]
+    ],
+    "output": [
+     null,
+     [
+      "BP[9, 0, 256, 0]"
+     ],
+     [
+      "RLE[7, 3]",
+      "RLE[2, 4]"
+     ],
+     [
+      "RLE[255, 12]",
+      "RLE[256, 9]",
+      "BP[30, 1000000000, 1, 1000000000, 1000000000]"
+     ],
+     [
+      6,
+      5,
+      0,
+      1,
+      0,
+      5,
+      1,
+      1
+     ]
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/study-content.json",
+    "sha256": "823fac1f7f9050a1dc42391d4476ac1679855d65eac111bc661508f17561c79e",
+    "selector": "/variants/hack2hire:685637ce4d16ce2ead6e1769/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/oracles.py",
+    "sha256": "cbc4732d69a7104fa8970dbd020de95f43bd18ae09d919f24c7a33b8d405edcf",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "class",
+   "declaration": {
+    "status": "present",
+    "value": "class Codec:\n    def __init__(self)\n    def encode(self, nums) -> string[]\n    def decode(self, runs) -> integer[]",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/contracts.json",
+      "sha256": "0829f1b98e3a4aa7bfc32413e21359791d60ea7c8efe9cf209942feec47b0ca8",
+      "selector": "/problems/10/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/semantics/685637ce4d16ce2ead6e1769-python.json",
+     "inferredInterface": {
+      "classname": "Codec",
+      "constructor": {
+       "params": []
+      },
+      "methods": [
+       {
+        "name": "encode",
+        "params": [
+         {
+          "name": "nums",
+          "type": "integer[]"
+         }
+        ],
+        "return": {
+         "type": "string[]"
+        }
+       },
+       {
+        "name": "decode",
+        "params": [
+         {
+          "name": "runs",
+          "type": "string[]"
+         }
+        ],
+        "return": {
+         "type": "integer[]"
+        }
+       }
+      ]
+     },
+     "traceAdapter": {
+      "name": "solve",
+      "argument_order": [
+       "operation_names",
+       "argument_lists"
+      ],
+      "constructor_output": null,
+      "void_method_output": null,
+      "result_order": "constructor followed by every method call",
+      "scope": "Explicit class trace adapter, separate from direct native observer checks."
+     }
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/semantics/685637ce4d16ce2ead6e1769-python.json",
+      "sha256": "56d7a8dd5ea3d5a524f90119e062bedf54c6ad59d4d984c0e7f7c8cbc21dc9e8",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "class",
+   "declaration": {
+    "status": "present",
+    "value": "class Codec {\n  constructor()\n  encode(nums) /* -> string[] */\n  decode(runs) /* -> integer[] */\n}",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/contracts.json",
+      "sha256": "0829f1b98e3a4aa7bfc32413e21359791d60ea7c8efe9cf209942feec47b0ca8",
+      "selector": "/problems/10/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/semantics/685637ce4d16ce2ead6e1769-javascript.json",
+     "inferredInterface": {
+      "classname": "Codec",
+      "constructor": {
+       "params": []
+      },
+      "methods": [
+       {
+        "name": "encode",
+        "params": [
+         {
+          "name": "nums",
+          "type": "integer[]"
+         }
+        ],
+        "return": {
+         "type": "string[]"
+        }
+       },
+       {
+        "name": "decode",
+        "params": [
+         {
+          "name": "runs",
+          "type": "string[]"
+         }
+        ],
+        "return": {
+         "type": "integer[]"
+        }
+       }
+      ]
+     },
+     "traceAdapter": {
+      "name": "solve",
+      "argument_order": [
+       "operation_names",
+       "argument_lists"
+      ],
+      "constructor_output": null,
+      "void_method_output": null,
+      "result_order": "constructor followed by every method call",
+      "scope": "Explicit class trace adapter, separate from direct native observer checks."
+     }
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/semantics/685637ce4d16ce2ead6e1769-javascript.json",
+      "sha256": "433c8eb134d7593e11c83bf97c33d3325dbd029864e3dc8d3945ebf49ad19b18",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/contracts.json",
+    "sha256": "0829f1b98e3a4aa7bfc32413e21359791d60ea7c8efe9cf209942feec47b0ca8",
+    "selector": "/problems/10/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON trace result; no bool/int coercion",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/contracts.json",
+    "sha256": "0829f1b98e3a4aa7bfc32413e21359791d60ea7c8efe9cf209942feec47b0ca8",
+    "selector": "/problems/10/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

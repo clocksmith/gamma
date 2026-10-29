@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:680fc04e2590daeb41a329b9",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "blocks",
+  "totalDays"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "commonFreeIntervals",
+  "params": [
+   {
+    "name": "blocks",
+    "type": "integer[][]"
+   },
+   {
+    "name": "totalDays",
+    "type": "integer"
+   }
+  ],
+  "return": {
+   "type": "integer[][]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "mark every day of the horizon and group consecutive free days",
+  "candidate_design": "sort blocks by start, merge them, and emit the gaps between merged intervals inside [1, totalDays]",
+  "complexity_target": "O(b log b) time/O(b) space"
+ },
+ "source_sha256": "a846dedffacb866a905ac987f4edce58dc9554be01771c3d1b22a0a015afda2d",
+ "wrapper": "named export commonFreeIntervals"
+}

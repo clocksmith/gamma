@@ -1,0 +1,135 @@
+{
+ "schema": "gamma.authored-native-trace-semantics.v1",
+ "problem_uid": "hack2hire:69efc92d96981f58ae1f6d75",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "operation_names",
+  "argument_lists"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "classname": "TaskManager",
+  "constructor": {
+   "params": []
+  },
+  "methods": [
+   {
+    "name": "addTask",
+    "params": [
+     {
+      "name": "timestamp",
+      "type": "integer"
+     },
+     {
+      "name": "name",
+      "type": "string"
+     },
+     {
+      "name": "priority",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "string"
+    }
+   },
+   {
+    "name": "updateTask",
+    "params": [
+     {
+      "name": "timestamp",
+      "type": "integer"
+     },
+     {
+      "name": "taskId",
+      "type": "string"
+     },
+     {
+      "name": "name",
+      "type": "string"
+     },
+     {
+      "name": "priority",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "boolean"
+    }
+   },
+   {
+    "name": "getTask",
+    "params": [
+     {
+      "name": "timestamp",
+      "type": "integer"
+     },
+     {
+      "name": "taskId",
+      "type": "string"
+     }
+    ],
+    "return": {
+     "type": "string"
+    }
+   },
+   {
+    "name": "searchTasks",
+    "params": [
+     {
+      "name": "timestamp",
+      "type": "integer"
+     },
+     {
+      "name": "nameFilter",
+      "type": "string"
+     },
+     {
+      "name": "maxResults",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "string[]"
+    }
+   },
+   {
+    "name": "listTasksSorted",
+    "params": [
+     {
+      "name": "timestamp",
+      "type": "integer"
+     },
+     {
+      "name": "limit",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "string[]"
+    }
+   }
+  ]
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON trace result; no bool/int coercion",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "rescan all tasks with a fresh sort for each query",
+  "candidate_design": "level-1 map kept in creation order; each query filters by substring and sorts by (-priority, creation number) once, then cuts to the limit",
+  "complexity_target": "O(t log t) per query/O(tasks) space"
+ },
+ "source_sha256": "7cfbaa1c86d3f6ad9664c4d31c3335362fa930bdb00e2d77c5077b4dc2732d8d",
+ "native_class": "TaskManager",
+ "native_symbol": "property TaskManager of the CommonJS solve export",
+ "void_methods": []
+}

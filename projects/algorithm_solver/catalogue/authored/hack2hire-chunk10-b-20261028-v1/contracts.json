@@ -1,0 +1,2707 @@
+{
+ "schema": "gamma.authored-inferred-contracts.v1",
+ "source_bank": "projects/question_bank/hack2hire/bank.json",
+ "note": "Every spec is inferred from a partial public preview, title and tags; paraphrased, never the official statement.",
+ "problems": [
+  {
+   "uid": "hack2hire:695d85f19c1c1f40daea73a0",
+   "variant_id": "695d85f19c1c1f40daea73a0",
+   "variant_ordinal": 1,
+   "title": "Design Token Limiter",
+   "source": {
+    "post_id": "695d85ec9c1c1f40daea739f",
+    "group_title": "Design Token Limiter",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/695d85ec9c1c1f40daea739f",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/695d85ec9c1c1f40daea739f/practice?questionId=695d85f19c1c1f40daea73a0",
+    "preview_response_sha256": "3b94cae41ff0c8c95f635bb5ea5d9a8dae69d339580c9108532216092e22423b",
+    "preview_content_sha256": "5f571b15329d6b0fb8aafa89fea2fb75a7d533933fcedf9ad0ee11eb6ed5b1a5",
+    "preview_characters": 452,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/695d85ec9c1c1f40daea739f.json",
+    "algorithm_tags": [
+     "HASH_TABLE",
+     "DESIGN"
+    ],
+    "companies": [
+     "XAI"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: per-user token bucket for an AI API, custom policy per user (maximum tokens, tokens added per refill, refill interval in seconds), uneven request times, class TokenLimiter (methods not visible)",
+    "algorithmTags: HASH_TABLE, DESIGN"
+   ],
+   "inferred_spec": "TokenLimiter() starts with no users. setPolicy(userId, maxTokens, refillAmount, refillInterval, timestamp) creates or replaces the user's bucket: it is full (maxTokens) at timestamp, and refills happen at timestamp + k * refillInterval for k = 1, 2, .... Each refill adds refillAmount tokens, capped at maxTokens. consume(userId, tokens, timestamp) first applies every refill due at or before timestamp, then removes tokens and returns true when the bucket holds at least that many; otherwise it removes nothing and returns false. An unknown user cannot consume (false). getTokens(userId, timestamp) applies due refills and returns the bucket level, or -1 for an unknown user. Timestamps never decrease across calls.",
+   "inference_uncertainty": "high: the class name, the three policy fields and per-user buckets are in the preview; the method names, the timestamp arguments, the full initial bucket, discrete refills anchored at the policy time, policy replacement and the -1 sentinel are inferred",
+   "inferred_interface": {
+    "classname": "TokenLimiter",
+    "constructor": {
+     "params": []
+    },
+    "methods": [
+     {
+      "name": "setPolicy",
+      "params": [
+       {
+        "name": "userId",
+        "type": "string"
+       },
+       {
+        "name": "maxTokens",
+        "type": "integer"
+       },
+       {
+        "name": "refillAmount",
+        "type": "integer"
+       },
+       {
+        "name": "refillInterval",
+        "type": "integer"
+       },
+       {
+        "name": "timestamp",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "void"
+      }
+     },
+     {
+      "name": "consume",
+      "params": [
+       {
+        "name": "userId",
+        "type": "string"
+       },
+       {
+        "name": "tokens",
+        "type": "integer"
+       },
+       {
+        "name": "timestamp",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "boolean"
+      }
+     },
+     {
+      "name": "getTokens",
+      "params": [
+       {
+        "name": "userId",
+        "type": "string"
+       },
+       {
+        "name": "timestamp",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "integer"
+      }
+     }
+    ]
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON trace result; no bool/int coercion",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "TKL",
+   "transcript_interface": {
+    "name": "solve",
+    "argument_order": [
+     "operation_names",
+     "argument_lists"
+    ],
+    "constructor_output": null,
+    "void_method_output": null,
+    "result_order": "constructor followed by every method call",
+    "scope": "Explicit class trace adapter, separate from direct native observer checks."
+   }
+  },
+  {
+   "uid": "hack2hire:68a4bbecc11d63d6052ea307",
+   "variant_id": "68a4bbecc11d63d6052ea307",
+   "variant_ordinal": 1,
+   "title": "Design Worker Management System",
+   "source": {
+    "post_id": "68a4bbdfc11d63d6052ea306",
+    "group_title": "Design Worker Management System",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/68a4bbdfc11d63d6052ea306",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/68a4bbdfc11d63d6052ea306/practice?questionId=68a4bbecc11d63d6052ea307",
+    "preview_response_sha256": "be35a9f6d5990bc2c2261091fc5154d3f3e62f1f9e61435943ed6ec2830cd3b4",
+    "preview_content_sha256": "ee2f18f3501172cec75aa9b174477129e1f8cdeed0b615b25834252a6d3c8ad9",
+    "preview_characters": 1785,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/68a4bbdfc11d63d6052ea306.json",
+    "algorithm_tags": [
+     "DESIGN"
+    ],
+    "companies": [
+     "ANTHROPIC",
+     "COINBASE",
+     "HUBSPOT",
+     "INSTACART",
+     "RAMP"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 4
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: addWorker / registerWorker / get signatures and return values, letters-and-spaces ids, increasing registerWorker timestamps, finished sessions only, -1 for unknown worker (level 1 text only)",
+    "algorithmTags: DESIGN",
+    "variant order from codingQuestions (1 of 4)"
+   ],
+   "inferred_spec": "WorkerManagementSystem() starts empty. addWorker(workerId, position, compensation) adds a worker and returns true, or returns false and changes nothing when the id exists. registerWorker(workerId, timestamp) returns \"invalid_request\" for an unknown worker; otherwise it records an entry when the worker is outside the office and an exit when inside, and returns \"registered\". registerWorker timestamps strictly increase. get(workerId) returns the total length (exit - entry) of the worker's finished sessions, or -1 for an unknown worker; an open session does not count.",
+   "inference_uncertainty": "low-medium: level 1 operations, return values and the finished-session rule are in the preview; the class name, boolean (not string) returns of addWorker, and half-open session lengths are inferred",
+   "inferred_interface": {
+    "classname": "WorkerManagementSystem",
+    "constructor": {
+     "params": []
+    },
+    "methods": [
+     {
+      "name": "addWorker",
+      "params": [
+       {
+        "name": "workerId",
+        "type": "string"
+       },
+       {
+        "name": "position",
+        "type": "string"
+       },
+       {
+        "name": "compensation",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "boolean"
+      }
+     },
+     {
+      "name": "registerWorker",
+      "params": [
+       {
+        "name": "workerId",
+        "type": "string"
+       },
+       {
+        "name": "timestamp",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "string"
+      }
+     },
+     {
+      "name": "get",
+      "params": [
+       {
+        "name": "workerId",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "integer"
+      }
+     }
+    ]
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON trace result; no bool/int coercion",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "variant 1 of 4: cumulative level 1 (add/register/get)",
+   "oracle_constant": "WMS1",
+   "transcript_interface": {
+    "name": "solve",
+    "argument_order": [
+     "operation_names",
+     "argument_lists"
+    ],
+    "constructor_output": null,
+    "void_method_output": null,
+    "result_order": "constructor followed by every method call",
+    "scope": "Explicit class trace adapter, separate from direct native observer checks."
+   }
+  },
+  {
+   "uid": "hack2hire:68a4bbf8c11d63d6052ea308",
+   "variant_id": "68a4bbf8c11d63d6052ea308",
+   "variant_ordinal": 2,
+   "title": "Design Worker Management System",
+   "source": {
+    "post_id": "68a4bbdfc11d63d6052ea306",
+    "group_title": "Design Worker Management System",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/68a4bbdfc11d63d6052ea306",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/68a4bbdfc11d63d6052ea306/practice?questionId=68a4bbf8c11d63d6052ea308",
+    "preview_response_sha256": "be35a9f6d5990bc2c2261091fc5154d3f3e62f1f9e61435943ed6ec2830cd3b4",
+    "preview_content_sha256": "ee2f18f3501172cec75aa9b174477129e1f8cdeed0b615b25834252a6d3c8ad9",
+    "preview_characters": 1785,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/68a4bbdfc11d63d6052ea306.json",
+    "algorithm_tags": [
+     "DESIGN"
+    ],
+    "companies": [
+     "ANTHROPIC",
+     "COINBASE",
+     "HUBSPOT",
+     "INSTACART",
+     "RAMP"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 4
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: addWorker / registerWorker / get signatures and return values, letters-and-spaces ids, increasing registerWorker timestamps, finished sessions only, -1 for unknown worker (level 1 text only)",
+    "algorithmTags: DESIGN",
+    "variant order from codingQuestions (2 of 4)"
+   ],
+   "inferred_spec": "WorkerManagementSystem() starts empty. addWorker(workerId, position, compensation) adds a worker and returns true, or returns false and changes nothing when the id exists. registerWorker(workerId, timestamp) returns \"invalid_request\" for an unknown worker; otherwise it records an entry when the worker is outside the office and an exit when inside, and returns \"registered\". registerWorker timestamps strictly increase. get(workerId) returns the total length (exit - entry) of the worker's finished sessions, or -1 for an unknown worker; an open session does not count. topNWorkers(n, position) ranks the workers whose current position equals position by their finished time in that position, longest first and then by workerId ascending (code-point order), and returns the first n as \"id(time)\" items joined by \", \" (an empty string when none).",
+   "inference_uncertainty": "high: no public text exists for this variant; its content is inferred from the group preview, the title and the usual level ladder of this multi-level design format; the method names, ranking order, output format are inferred",
+   "inferred_interface": {
+    "classname": "WorkerManagementSystem",
+    "constructor": {
+     "params": []
+    },
+    "methods": [
+     {
+      "name": "addWorker",
+      "params": [
+       {
+        "name": "workerId",
+        "type": "string"
+       },
+       {
+        "name": "position",
+        "type": "string"
+       },
+       {
+        "name": "compensation",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "boolean"
+      }
+     },
+     {
+      "name": "registerWorker",
+      "params": [
+       {
+        "name": "workerId",
+        "type": "string"
+       },
+       {
+        "name": "timestamp",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "string"
+      }
+     },
+     {
+      "name": "get",
+      "params": [
+       {
+        "name": "workerId",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "integer"
+      }
+     },
+     {
+      "name": "topNWorkers",
+      "params": [
+       {
+        "name": "n",
+        "type": "integer"
+       },
+       {
+        "name": "position",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "string"
+      }
+     }
+    ]
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON trace result; no bool/int coercion",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "variant 2 of 4: cumulative level 2 (+ topNWorkers)",
+   "oracle_constant": "WMS2",
+   "transcript_interface": {
+    "name": "solve",
+    "argument_order": [
+     "operation_names",
+     "argument_lists"
+    ],
+    "constructor_output": null,
+    "void_method_output": null,
+    "result_order": "constructor followed by every method call",
+    "scope": "Explicit class trace adapter, separate from direct native observer checks."
+   }
+  },
+  {
+   "uid": "hack2hire:68a4bbfac11d63d6052ea309",
+   "variant_id": "68a4bbfac11d63d6052ea309",
+   "variant_ordinal": 3,
+   "title": "Design Worker Management System",
+   "source": {
+    "post_id": "68a4bbdfc11d63d6052ea306",
+    "group_title": "Design Worker Management System",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/68a4bbdfc11d63d6052ea306",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/68a4bbdfc11d63d6052ea306/practice?questionId=68a4bbfac11d63d6052ea309",
+    "preview_response_sha256": "be35a9f6d5990bc2c2261091fc5154d3f3e62f1f9e61435943ed6ec2830cd3b4",
+    "preview_content_sha256": "ee2f18f3501172cec75aa9b174477129e1f8cdeed0b615b25834252a6d3c8ad9",
+    "preview_characters": 1785,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/68a4bbdfc11d63d6052ea306.json",
+    "algorithm_tags": [
+     "DESIGN"
+    ],
+    "companies": [
+     "ANTHROPIC",
+     "COINBASE",
+     "HUBSPOT",
+     "INSTACART",
+     "RAMP"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 4
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: addWorker / registerWorker / get signatures and return values, letters-and-spaces ids, increasing registerWorker timestamps, finished sessions only, -1 for unknown worker (level 1 text only)",
+    "algorithmTags: DESIGN",
+    "variant order from codingQuestions (3 of 4)"
+   ],
+   "inferred_spec": "WorkerManagementSystem() starts empty. addWorker(workerId, position, compensation) adds a worker and returns true, or returns false and changes nothing when the id exists. registerWorker(workerId, timestamp) returns \"invalid_request\" for an unknown worker; otherwise it records an entry when the worker is outside the office and an exit when inside, and returns \"registered\". registerWorker timestamps strictly increase. get(workerId) returns the total length (exit - entry) of the worker's finished sessions, or -1 for an unknown worker; an open session does not count. topNWorkers(n, position) ranks the workers whose current position equals position by their finished time in that position, longest first and then by workerId ascending (code-point order), and returns the first n as \"id(time)\" items joined by \", \" (an empty string when none). promote(workerId, newPosition, newCompensation, startTimestamp) returns \"invalid_request\" for an unknown worker or one that already has a pending promotion; otherwise it stores the promotion and returns \"success\". A pending promotion takes effect at the worker's first entry with timestamp >= startTimestamp: position and compensation change before that session starts. topNWorkers then counts only sessions started since the promotion took effect. calcSalary(workerId, startTimestamp, endTimestamp) returns, for an unknown worker -1, otherwise the sum over finished sessions [entry, exit) of the length of their overlap with [startTimestamp, endTimestamp) times the compensation in force when the session started.",
+   "inference_uncertainty": "high: no public text exists for this variant; its content is inferred from the group preview, the title and the usual level ladder of this multi-level design format; the method names, ranking order, output format, promotion timing, stint-based ranking, per-session compensation are inferred",
+   "inferred_interface": {
+    "classname": "WorkerManagementSystem",
+    "constructor": {
+     "params": []
+    },
+    "methods": [
+     {
+      "name": "addWorker",
+      "params": [
+       {
+        "name": "workerId",
+        "type": "string"
+       },
+       {
+        "name": "position",
+        "type": "string"
+       },
+       {
+        "name": "compensation",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "boolean"
+      }
+     },
+     {
+      "name": "registerWorker",
+      "params": [
+       {
+        "name": "workerId",
+        "type": "string"
+       },
+       {
+        "name": "timestamp",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "string"
+      }
+     },
+     {
+      "name": "get",
+      "params": [
+       {
+        "name": "workerId",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "integer"
+      }
+     },
+     {
+      "name": "topNWorkers",
+      "params": [
+       {
+        "name": "n",
+        "type": "integer"
+       },
+       {
+        "name": "position",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "string"
+      }
+     },
+     {
+      "name": "promote",
+      "params": [
+       {
+        "name": "workerId",
+        "type": "string"
+       },
+       {
+        "name": "newPosition",
+        "type": "string"
+       },
+       {
+        "name": "newCompensation",
+        "type": "integer"
+       },
+       {
+        "name": "startTimestamp",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "string"
+      }
+     },
+     {
+      "name": "calcSalary",
+      "params": [
+       {
+        "name": "workerId",
+        "type": "string"
+       },
+       {
+        "name": "startTimestamp",
+        "type": "integer"
+       },
+       {
+        "name": "endTimestamp",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "integer"
+      }
+     }
+    ]
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON trace result; no bool/int coercion",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "variant 3 of 4: cumulative level 3 (+ promote/calcSalary)",
+   "oracle_constant": "WMS3",
+   "transcript_interface": {
+    "name": "solve",
+    "argument_order": [
+     "operation_names",
+     "argument_lists"
+    ],
+    "constructor_output": null,
+    "void_method_output": null,
+    "result_order": "constructor followed by every method call",
+    "scope": "Explicit class trace adapter, separate from direct native observer checks."
+   }
+  },
+  {
+   "uid": "hack2hire:68a4bbfbc11d63d6052ea30a",
+   "variant_id": "68a4bbfbc11d63d6052ea30a",
+   "variant_ordinal": 4,
+   "title": "Design Worker Management System",
+   "source": {
+    "post_id": "68a4bbdfc11d63d6052ea306",
+    "group_title": "Design Worker Management System",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/68a4bbdfc11d63d6052ea306",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/68a4bbdfc11d63d6052ea306/practice?questionId=68a4bbfbc11d63d6052ea30a",
+    "preview_response_sha256": "be35a9f6d5990bc2c2261091fc5154d3f3e62f1f9e61435943ed6ec2830cd3b4",
+    "preview_content_sha256": "ee2f18f3501172cec75aa9b174477129e1f8cdeed0b615b25834252a6d3c8ad9",
+    "preview_characters": 1785,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/68a4bbdfc11d63d6052ea306.json",
+    "algorithm_tags": [
+     "DESIGN"
+    ],
+    "companies": [
+     "ANTHROPIC",
+     "COINBASE",
+     "HUBSPOT",
+     "INSTACART",
+     "RAMP"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 4
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: addWorker / registerWorker / get signatures and return values, letters-and-spaces ids, increasing registerWorker timestamps, finished sessions only, -1 for unknown worker (level 1 text only)",
+    "algorithmTags: DESIGN",
+    "variant order from codingQuestions (4 of 4)"
+   ],
+   "inferred_spec": "WorkerManagementSystem() starts empty. addWorker(workerId, position, compensation) adds a worker and returns true, or returns false and changes nothing when the id exists. registerWorker(workerId, timestamp) returns \"invalid_request\" for an unknown worker; otherwise it records an entry when the worker is outside the office and an exit when inside, and returns \"registered\". registerWorker timestamps strictly increase. get(workerId) returns the total length (exit - entry) of the worker's finished sessions, or -1 for an unknown worker; an open session does not count. topNWorkers(n, position) ranks the workers whose current position equals position by their finished time in that position, longest first and then by workerId ascending (code-point order), and returns the first n as \"id(time)\" items joined by \", \" (an empty string when none). promote(workerId, newPosition, newCompensation, startTimestamp) returns \"invalid_request\" for an unknown worker or one that already has a pending promotion; otherwise it stores the promotion and returns \"success\". A pending promotion takes effect at the worker's first entry with timestamp >= startTimestamp: position and compensation change before that session starts. topNWorkers then counts only sessions started since the promotion took effect. calcSalary(workerId, startTimestamp, endTimestamp) returns, for an unknown worker -1, otherwise the sum over finished sessions [entry, exit) of the length of their overlap with [startTimestamp, endTimestamp) times the compensation in force when the session started. setDoublePaid(startTimestamp, endTimestamp) marks [startTimestamp, endTimestamp) as double-pay time (overlapping periods do not stack). In calcSalary every overlapped time unit that is also double-pay time is paid twice.",
+   "inference_uncertainty": "high: no public text exists for this variant; its content is inferred from the group preview, the title and the usual level ladder of this multi-level design format; the method names, ranking order, output format, promotion timing, stint-based ranking, per-session compensation, and non-stacking double-pay periods are inferred",
+   "inferred_interface": {
+    "classname": "WorkerManagementSystem",
+    "constructor": {
+     "params": []
+    },
+    "methods": [
+     {
+      "name": "addWorker",
+      "params": [
+       {
+        "name": "workerId",
+        "type": "string"
+       },
+       {
+        "name": "position",
+        "type": "string"
+       },
+       {
+        "name": "compensation",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "boolean"
+      }
+     },
+     {
+      "name": "registerWorker",
+      "params": [
+       {
+        "name": "workerId",
+        "type": "string"
+       },
+       {
+        "name": "timestamp",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "string"
+      }
+     },
+     {
+      "name": "get",
+      "params": [
+       {
+        "name": "workerId",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "integer"
+      }
+     },
+     {
+      "name": "topNWorkers",
+      "params": [
+       {
+        "name": "n",
+        "type": "integer"
+       },
+       {
+        "name": "position",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "string"
+      }
+     },
+     {
+      "name": "promote",
+      "params": [
+       {
+        "name": "workerId",
+        "type": "string"
+       },
+       {
+        "name": "newPosition",
+        "type": "string"
+       },
+       {
+        "name": "newCompensation",
+        "type": "integer"
+       },
+       {
+        "name": "startTimestamp",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "string"
+      }
+     },
+     {
+      "name": "calcSalary",
+      "params": [
+       {
+        "name": "workerId",
+        "type": "string"
+       },
+       {
+        "name": "startTimestamp",
+        "type": "integer"
+       },
+       {
+        "name": "endTimestamp",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "integer"
+      }
+     },
+     {
+      "name": "setDoublePaid",
+      "params": [
+       {
+        "name": "startTimestamp",
+        "type": "integer"
+       },
+       {
+        "name": "endTimestamp",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "void"
+      }
+     }
+    ]
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON trace result; no bool/int coercion",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "variant 4 of 4: cumulative level 4 (+ setDoublePaid)",
+   "oracle_constant": "WMS4",
+   "transcript_interface": {
+    "name": "solve",
+    "argument_order": [
+     "operation_names",
+     "argument_lists"
+    ],
+    "constructor_output": null,
+    "void_method_output": null,
+    "result_order": "constructor followed by every method call",
+    "scope": "Explicit class trace adapter, separate from direct native observer checks."
+   }
+  },
+  {
+   "uid": "hack2hire:69efc8ea96981f58ae1f6d74",
+   "variant_id": "69efc8ea96981f58ae1f6d74",
+   "variant_ordinal": 1,
+   "title": "Design a Task Assignment System",
+   "source": {
+    "post_id": "69efc8e696981f58ae1f6d73",
+    "group_title": "Design a Task Assignment System",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/69efc8e696981f58ae1f6d73",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/69efc8e696981f58ae1f6d73/practice?questionId=69efc8ea96981f58ae1f6d74",
+    "preview_response_sha256": "961339354c92b5cf6328f0d3ee0672d697ac5ba92200d4e350b2923194e46c44",
+    "preview_content_sha256": "0794cd2e81cd20c39597b015b873b24470ad1890108e7e6ee5df343fcf3ad729",
+    "preview_characters": 816,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/69efc8e696981f58ae1f6d73.json",
+    "algorithm_tags": [
+     "HASH_TABLE",
+     "DESIGN"
+    ],
+    "companies": [
+     "ANTHROPIC",
+     "COINBASE",
+     "HUBSPOT",
+     "INSTACART",
+     "RAMP"
+    ],
+    "source_difficulty": 3,
+    "variant_count": 4
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: TaskManager class, addTask(timestamp, name, priority) returning sequential \"taskId<n>\", updateTask returning boolean, retrieval of task details (method not visible; level 1 text only)",
+    "algorithmTags: HASH_TABLE, DESIGN",
+    "variant order from codingQuestions (1 of 4)"
+   ],
+   "inferred_spec": "TaskManager() starts empty; every call carries a timestamp and timestamps strictly increase. addTask(timestamp, name, priority) stores a task and returns its id \"taskId<n>\" with n = 1, 2, ... in creation order (duplicates allowed). updateTask(timestamp, taskId, name, priority) replaces both fields and returns true, or returns false for an unknown id. getTask(timestamp, taskId) returns \"<name>(<priority>)\", or \"\" for an unknown id.",
+   "inference_uncertainty": "medium: the class, addTask and updateTask are in the preview; getTask, its \"name(priority)\" format and the \"\" sentinel are inferred",
+   "inferred_interface": {
+    "classname": "TaskManager",
+    "constructor": {
+     "params": []
+    },
+    "methods": [
+     {
+      "name": "addTask",
+      "params": [
+       {
+        "name": "timestamp",
+        "type": "integer"
+       },
+       {
+        "name": "name",
+        "type": "string"
+       },
+       {
+        "name": "priority",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "string"
+      }
+     },
+     {
+      "name": "updateTask",
+      "params": [
+       {
+        "name": "timestamp",
+        "type": "integer"
+       },
+       {
+        "name": "taskId",
+        "type": "string"
+       },
+       {
+        "name": "name",
+        "type": "string"
+       },
+       {
+        "name": "priority",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "boolean"
+      }
+     },
+     {
+      "name": "getTask",
+      "params": [
+       {
+        "name": "timestamp",
+        "type": "integer"
+       },
+       {
+        "name": "taskId",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "string"
+      }
+     }
+    ]
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON trace result; no bool/int coercion",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "variant 1 of 4: cumulative level 1 (add/update/get)",
+   "oracle_constant": "TAS1",
+   "transcript_interface": {
+    "name": "solve",
+    "argument_order": [
+     "operation_names",
+     "argument_lists"
+    ],
+    "constructor_output": null,
+    "void_method_output": null,
+    "result_order": "constructor followed by every method call",
+    "scope": "Explicit class trace adapter, separate from direct native observer checks."
+   }
+  },
+  {
+   "uid": "hack2hire:69efc92d96981f58ae1f6d75",
+   "variant_id": "69efc92d96981f58ae1f6d75",
+   "variant_ordinal": 2,
+   "title": "Design a Task Assignment System",
+   "source": {
+    "post_id": "69efc8e696981f58ae1f6d73",
+    "group_title": "Design a Task Assignment System",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/69efc8e696981f58ae1f6d73",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/69efc8e696981f58ae1f6d73/practice?questionId=69efc92d96981f58ae1f6d75",
+    "preview_response_sha256": "961339354c92b5cf6328f0d3ee0672d697ac5ba92200d4e350b2923194e46c44",
+    "preview_content_sha256": "0794cd2e81cd20c39597b015b873b24470ad1890108e7e6ee5df343fcf3ad729",
+    "preview_characters": 816,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/69efc8e696981f58ae1f6d73.json",
+    "algorithm_tags": [
+     "HASH_TABLE",
+     "DESIGN"
+    ],
+    "companies": [
+     "ANTHROPIC",
+     "COINBASE",
+     "HUBSPOT",
+     "INSTACART",
+     "RAMP"
+    ],
+    "source_difficulty": 3,
+    "variant_count": 4
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: TaskManager class, addTask(timestamp, name, priority) returning sequential \"taskId<n>\", updateTask returning boolean, retrieval of task details (method not visible; level 1 text only)",
+    "algorithmTags: HASH_TABLE, DESIGN",
+    "variant order from codingQuestions (2 of 4)"
+   ],
+   "inferred_spec": "TaskManager() starts empty; every call carries a timestamp and timestamps strictly increase. addTask(timestamp, name, priority) stores a task and returns its id \"taskId<n>\" with n = 1, 2, ... in creation order (duplicates allowed). updateTask(timestamp, taskId, name, priority) replaces both fields and returns true, or returns false for an unknown id. getTask(timestamp, taskId) returns \"<name>(<priority>)\", or \"\" for an unknown id. searchTasks(timestamp, nameFilter, maxResults) returns the ids of tasks whose current name contains nameFilter (case-sensitive substring), ordered by priority descending and then creation order, at most maxResults of them. listTasksSorted(timestamp, limit) returns the first limit ids of all tasks in the same order.",
+   "inference_uncertainty": "high: no public text exists for this variant; its content is inferred from the group preview, the title and the usual level ladder of this multi-level design format; every level-2 method, ordering, quota and expiry rule is inferred (the title suggests user assignment)",
+   "inferred_interface": {
+    "classname": "TaskManager",
+    "constructor": {
+     "params": []
+    },
+    "methods": [
+     {
+      "name": "addTask",
+      "params": [
+       {
+        "name": "timestamp",
+        "type": "integer"
+       },
+       {
+        "name": "name",
+        "type": "string"
+       },
+       {
+        "name": "priority",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "string"
+      }
+     },
+     {
+      "name": "updateTask",
+      "params": [
+       {
+        "name": "timestamp",
+        "type": "integer"
+       },
+       {
+        "name": "taskId",
+        "type": "string"
+       },
+       {
+        "name": "name",
+        "type": "string"
+       },
+       {
+        "name": "priority",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "boolean"
+      }
+     },
+     {
+      "name": "getTask",
+      "params": [
+       {
+        "name": "timestamp",
+        "type": "integer"
+       },
+       {
+        "name": "taskId",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "string"
+      }
+     },
+     {
+      "name": "searchTasks",
+      "params": [
+       {
+        "name": "timestamp",
+        "type": "integer"
+       },
+       {
+        "name": "nameFilter",
+        "type": "string"
+       },
+       {
+        "name": "maxResults",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "string[]"
+      }
+     },
+     {
+      "name": "listTasksSorted",
+      "params": [
+       {
+        "name": "timestamp",
+        "type": "integer"
+       },
+       {
+        "name": "limit",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "string[]"
+      }
+     }
+    ]
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON trace result; no bool/int coercion",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "variant 2 of 4: cumulative level 2 (+ search/list)",
+   "oracle_constant": "TAS2",
+   "transcript_interface": {
+    "name": "solve",
+    "argument_order": [
+     "operation_names",
+     "argument_lists"
+    ],
+    "constructor_output": null,
+    "void_method_output": null,
+    "result_order": "constructor followed by every method call",
+    "scope": "Explicit class trace adapter, separate from direct native observer checks."
+   }
+  },
+  {
+   "uid": "hack2hire:69efc94196981f58ae1f6d76",
+   "variant_id": "69efc94196981f58ae1f6d76",
+   "variant_ordinal": 3,
+   "title": "Design a Task Assignment System",
+   "source": {
+    "post_id": "69efc8e696981f58ae1f6d73",
+    "group_title": "Design a Task Assignment System",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/69efc8e696981f58ae1f6d73",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/69efc8e696981f58ae1f6d73/practice?questionId=69efc94196981f58ae1f6d76",
+    "preview_response_sha256": "961339354c92b5cf6328f0d3ee0672d697ac5ba92200d4e350b2923194e46c44",
+    "preview_content_sha256": "0794cd2e81cd20c39597b015b873b24470ad1890108e7e6ee5df343fcf3ad729",
+    "preview_characters": 816,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/69efc8e696981f58ae1f6d73.json",
+    "algorithm_tags": [
+     "HASH_TABLE",
+     "DESIGN"
+    ],
+    "companies": [
+     "ANTHROPIC",
+     "COINBASE",
+     "HUBSPOT",
+     "INSTACART",
+     "RAMP"
+    ],
+    "source_difficulty": 3,
+    "variant_count": 4
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: TaskManager class, addTask(timestamp, name, priority) returning sequential \"taskId<n>\", updateTask returning boolean, retrieval of task details (method not visible; level 1 text only)",
+    "algorithmTags: HASH_TABLE, DESIGN",
+    "variant order from codingQuestions (3 of 4)"
+   ],
+   "inferred_spec": "TaskManager() starts empty; every call carries a timestamp and timestamps strictly increase. addTask(timestamp, name, priority) stores a task and returns its id \"taskId<n>\" with n = 1, 2, ... in creation order (duplicates allowed). updateTask(timestamp, taskId, name, priority) replaces both fields and returns true, or returns false for an unknown id. getTask(timestamp, taskId) returns \"<name>(<priority>)\", or \"\" for an unknown id. searchTasks(timestamp, nameFilter, maxResults) returns the ids of tasks whose current name contains nameFilter (case-sensitive substring), ordered by priority descending and then creation order, at most maxResults of them. listTasksSorted(timestamp, limit) returns the first limit ids of all tasks in the same order. addUser(timestamp, userId, quota) adds a user and returns true, or false when the user exists. An assignment is active at time t while finishTime > t. assignTask(timestamp, taskId, userId, finishTime) returns false when the task or user is unknown, the user already has an active assignment of that task, or the user's active assignments already number quota; otherwise it records the assignment and returns true. getUserTasks(timestamp, userId) returns the task ids of the user's active assignments ordered by finishTime and then assignment order ([] for an unknown user).",
+   "inference_uncertainty": "high: no public text exists for this variant; its content is inferred from the group preview, the title and the usual level ladder of this multi-level design format; every level-3 method, ordering, quota and expiry rule is inferred (the title suggests user assignment)",
+   "inferred_interface": {
+    "classname": "TaskManager",
+    "constructor": {
+     "params": []
+    },
+    "methods": [
+     {
+      "name": "addTask",
+      "params": [
+       {
+        "name": "timestamp",
+        "type": "integer"
+       },
+       {
+        "name": "name",
+        "type": "string"
+       },
+       {
+        "name": "priority",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "string"
+      }
+     },
+     {
+      "name": "updateTask",
+      "params": [
+       {
+        "name": "timestamp",
+        "type": "integer"
+       },
+       {
+        "name": "taskId",
+        "type": "string"
+       },
+       {
+        "name": "name",
+        "type": "string"
+       },
+       {
+        "name": "priority",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "boolean"
+      }
+     },
+     {
+      "name": "getTask",
+      "params": [
+       {
+        "name": "timestamp",
+        "type": "integer"
+       },
+       {
+        "name": "taskId",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "string"
+      }
+     },
+     {
+      "name": "searchTasks",
+      "params": [
+       {
+        "name": "timestamp",
+        "type": "integer"
+       },
+       {
+        "name": "nameFilter",
+        "type": "string"
+       },
+       {
+        "name": "maxResults",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "string[]"
+      }
+     },
+     {
+      "name": "listTasksSorted",
+      "params": [
+       {
+        "name": "timestamp",
+        "type": "integer"
+       },
+       {
+        "name": "limit",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "string[]"
+      }
+     },
+     {
+      "name": "addUser",
+      "params": [
+       {
+        "name": "timestamp",
+        "type": "integer"
+       },
+       {
+        "name": "userId",
+        "type": "string"
+       },
+       {
+        "name": "quota",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "boolean"
+      }
+     },
+     {
+      "name": "assignTask",
+      "params": [
+       {
+        "name": "timestamp",
+        "type": "integer"
+       },
+       {
+        "name": "taskId",
+        "type": "string"
+       },
+       {
+        "name": "userId",
+        "type": "string"
+       },
+       {
+        "name": "finishTime",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "boolean"
+      }
+     },
+     {
+      "name": "getUserTasks",
+      "params": [
+       {
+        "name": "timestamp",
+        "type": "integer"
+       },
+       {
+        "name": "userId",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "string[]"
+      }
+     }
+    ]
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON trace result; no bool/int coercion",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "variant 3 of 4: cumulative level 3 (+ users and assignments)",
+   "oracle_constant": "TAS3",
+   "transcript_interface": {
+    "name": "solve",
+    "argument_order": [
+     "operation_names",
+     "argument_lists"
+    ],
+    "constructor_output": null,
+    "void_method_output": null,
+    "result_order": "constructor followed by every method call",
+    "scope": "Explicit class trace adapter, separate from direct native observer checks."
+   }
+  },
+  {
+   "uid": "hack2hire:69efc96396981f58ae1f6d77",
+   "variant_id": "69efc96396981f58ae1f6d77",
+   "variant_ordinal": 4,
+   "title": "Design a Task Assignment System",
+   "source": {
+    "post_id": "69efc8e696981f58ae1f6d73",
+    "group_title": "Design a Task Assignment System",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/69efc8e696981f58ae1f6d73",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/69efc8e696981f58ae1f6d73/practice?questionId=69efc96396981f58ae1f6d77",
+    "preview_response_sha256": "961339354c92b5cf6328f0d3ee0672d697ac5ba92200d4e350b2923194e46c44",
+    "preview_content_sha256": "0794cd2e81cd20c39597b015b873b24470ad1890108e7e6ee5df343fcf3ad729",
+    "preview_characters": 816,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/69efc8e696981f58ae1f6d73.json",
+    "algorithm_tags": [
+     "HASH_TABLE",
+     "DESIGN"
+    ],
+    "companies": [
+     "ANTHROPIC",
+     "COINBASE",
+     "HUBSPOT",
+     "INSTACART",
+     "RAMP"
+    ],
+    "source_difficulty": 3,
+    "variant_count": 4
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: TaskManager class, addTask(timestamp, name, priority) returning sequential \"taskId<n>\", updateTask returning boolean, retrieval of task details (method not visible; level 1 text only)",
+    "algorithmTags: HASH_TABLE, DESIGN",
+    "variant order from codingQuestions (4 of 4)"
+   ],
+   "inferred_spec": "TaskManager() starts empty; every call carries a timestamp and timestamps strictly increase. addTask(timestamp, name, priority) stores a task and returns its id \"taskId<n>\" with n = 1, 2, ... in creation order (duplicates allowed). updateTask(timestamp, taskId, name, priority) replaces both fields and returns true, or returns false for an unknown id. getTask(timestamp, taskId) returns \"<name>(<priority>)\", or \"\" for an unknown id. searchTasks(timestamp, nameFilter, maxResults) returns the ids of tasks whose current name contains nameFilter (case-sensitive substring), ordered by priority descending and then creation order, at most maxResults of them. listTasksSorted(timestamp, limit) returns the first limit ids of all tasks in the same order. addUser(timestamp, userId, quota) adds a user and returns true, or false when the user exists. An assignment is active at time t while finishTime > t. assignTask(timestamp, taskId, userId, finishTime) returns false when the task or user is unknown, the user already has an active assignment of that task, or the user's active assignments already number quota; otherwise it records the assignment and returns true. getUserTasks(timestamp, userId) returns the task ids of the user's active assignments ordered by finishTime and then assignment order ([] for an unknown user). completeTask(timestamp, taskId, userId) marks the user's active assignment of taskId as completed (it stops being active) and returns true, or returns false when there is none. getOverdueAssignments(timestamp, userId) returns, in assignment order, the task ids of the user's assignments with finishTime <= timestamp that were never completed.",
+   "inference_uncertainty": "high: no public text exists for this variant; its content is inferred from the group preview, the title and the usual level ladder of this multi-level design format; every level-4 method, ordering, quota and expiry rule is inferred (the title suggests user assignment)",
+   "inferred_interface": {
+    "classname": "TaskManager",
+    "constructor": {
+     "params": []
+    },
+    "methods": [
+     {
+      "name": "addTask",
+      "params": [
+       {
+        "name": "timestamp",
+        "type": "integer"
+       },
+       {
+        "name": "name",
+        "type": "string"
+       },
+       {
+        "name": "priority",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "string"
+      }
+     },
+     {
+      "name": "updateTask",
+      "params": [
+       {
+        "name": "timestamp",
+        "type": "integer"
+       },
+       {
+        "name": "taskId",
+        "type": "string"
+       },
+       {
+        "name": "name",
+        "type": "string"
+       },
+       {
+        "name": "priority",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "boolean"
+      }
+     },
+     {
+      "name": "getTask",
+      "params": [
+       {
+        "name": "timestamp",
+        "type": "integer"
+       },
+       {
+        "name": "taskId",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "string"
+      }
+     },
+     {
+      "name": "searchTasks",
+      "params": [
+       {
+        "name": "timestamp",
+        "type": "integer"
+       },
+       {
+        "name": "nameFilter",
+        "type": "string"
+       },
+       {
+        "name": "maxResults",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "string[]"
+      }
+     },
+     {
+      "name": "listTasksSorted",
+      "params": [
+       {
+        "name": "timestamp",
+        "type": "integer"
+       },
+       {
+        "name": "limit",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "string[]"
+      }
+     },
+     {
+      "name": "addUser",
+      "params": [
+       {
+        "name": "timestamp",
+        "type": "integer"
+       },
+       {
+        "name": "userId",
+        "type": "string"
+       },
+       {
+        "name": "quota",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "boolean"
+      }
+     },
+     {
+      "name": "assignTask",
+      "params": [
+       {
+        "name": "timestamp",
+        "type": "integer"
+       },
+       {
+        "name": "taskId",
+        "type": "string"
+       },
+       {
+        "name": "userId",
+        "type": "string"
+       },
+       {
+        "name": "finishTime",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "boolean"
+      }
+     },
+     {
+      "name": "getUserTasks",
+      "params": [
+       {
+        "name": "timestamp",
+        "type": "integer"
+       },
+       {
+        "name": "userId",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "string[]"
+      }
+     },
+     {
+      "name": "completeTask",
+      "params": [
+       {
+        "name": "timestamp",
+        "type": "integer"
+       },
+       {
+        "name": "taskId",
+        "type": "string"
+       },
+       {
+        "name": "userId",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "boolean"
+      }
+     },
+     {
+      "name": "getOverdueAssignments",
+      "params": [
+       {
+        "name": "timestamp",
+        "type": "integer"
+       },
+       {
+        "name": "userId",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "string[]"
+      }
+     }
+    ]
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON trace result; no bool/int coercion",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "variant 4 of 4: cumulative level 4 (+ completion and overdue)",
+   "oracle_constant": "TAS4",
+   "transcript_interface": {
+    "name": "solve",
+    "argument_order": [
+     "operation_names",
+     "argument_lists"
+    ],
+    "constructor_output": null,
+    "void_method_output": null,
+    "result_order": "constructor followed by every method call",
+    "scope": "Explicit class trace adapter, separate from direct native observer checks."
+   }
+  },
+  {
+   "uid": "hack2hire:69026c73d18315042523a913",
+   "variant_id": "69026c73d18315042523a913",
+   "variant_ordinal": 1,
+   "title": "Design an Interactive Paginator",
+   "source": {
+    "post_id": "69026c68d18315042523a912",
+    "group_title": "Design an Interactive Paginator",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/69026c68d18315042523a912",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/69026c68d18315042523a912/practice?questionId=69026c73d18315042523a913",
+    "preview_response_sha256": "a7dc5e5732ac71681876b16d97bd055bbee5535bd8eca707528dff8197fa75c9",
+    "preview_content_sha256": "d3485298f807a100c81e16e3d4e3147ccd2b077a3c155592afe58ed4968f4c64",
+    "preview_characters": 594,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/69026c68d18315042523a912.json",
+    "algorithm_tags": [
+     "SIMULATION"
+    ],
+    "companies": [
+     "SQUARE"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: stateful Paginator(totalPages, visibleCount, currentPage), 1-indexed pages, separate stateless static render method producing a UI string (methods and format not visible)",
+    "algorithmTags: SIMULATION"
+   ],
+   "inferred_spec": "Paginator(totalPages, visibleCount, currentPage) stores the state. next() and prev() move the current page by one, and goTo(page) jumps to page; every move clamps the page into [1, totalPages] and returns the rendered string for the new state. The static render(totalPages, visibleCount, currentPage) shows a window of v = min(visibleCount, totalPages) consecutive pages: its start is currentPage - floor((visibleCount - 1) / 2), clamped into [1, totalPages - v + 1]. Tokens, separated by single spaces: \"<\" when currentPage > 1, \"...\" when the window starts after page 1, each page number with the current one written as \"[p]\", \"...\" when the window ends before totalPages, and \">\" when currentPage < totalPages.",
+   "inference_uncertainty": "very high: only the constructor and the existence of a static render are in the preview; the method names next/prev/goTo, clamping, the window rule and the whole string format are inferred",
+   "inferred_interface": {
+    "classname": "Paginator",
+    "constructor": {
+     "params": [
+      {
+       "name": "totalPages",
+       "type": "integer"
+      },
+      {
+       "name": "visibleCount",
+       "type": "integer"
+      },
+      {
+       "name": "currentPage",
+       "type": "integer"
+      }
+     ]
+    },
+    "methods": [
+     {
+      "name": "next",
+      "params": [],
+      "return": {
+       "type": "string"
+      }
+     },
+     {
+      "name": "prev",
+      "params": [],
+      "return": {
+       "type": "string"
+      }
+     },
+     {
+      "name": "goTo",
+      "params": [
+       {
+        "name": "page",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "string"
+      }
+     }
+    ]
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON trace result; no bool/int coercion",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "PAG",
+   "transcript_interface": {
+    "name": "solve",
+    "argument_order": [
+     "operation_names",
+     "argument_lists"
+    ],
+    "constructor_output": null,
+    "void_method_output": null,
+    "result_order": "constructor followed by every method call",
+    "scope": "Explicit class trace adapter, separate from direct native observer checks."
+   }
+  },
+  {
+   "uid": "hack2hire:685637ce4d16ce2ead6e1769",
+   "variant_id": "685637ce4d16ce2ead6e1769",
+   "variant_ordinal": 1,
+   "title": "Encode And Decode",
+   "source": {
+    "post_id": "68560fd24d16ce2ead6e1758",
+    "group_title": "Encode And Decode",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/68560fd24d16ce2ead6e1758",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/68560fd24d16ce2ead6e1758/practice?questionId=685637ce4d16ce2ead6e1769",
+    "preview_response_sha256": "036ca5e336918dd5dd7cb9768b6197b4790cb3ede2e7f353605e79b4dd3cf82f",
+    "preview_content_sha256": "8d7b2786cb3376528bce3333a94bde34ea76ae849dc364cf6577482b7bf474e2",
+    "preview_characters": 470,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/68560fd24d16ce2ead6e1758.json",
+    "algorithm_tags": [
+     "STRING"
+    ],
+    "companies": [
+     "DATABRICKS"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: non-negative integer array, encoder to human-readable run descriptors and decoder back, two run kinds Run-Length Encoding with format \"RLE[value, count]\" and Bit-Packing (BP format and the choice rule not visible)",
+    "algorithmTags: STRING"
+   ],
+   "inferred_spec": "Codec() has encode(nums) and decode(runs). encode scans nums left to right: every maximal run of at least 3 equal values becomes \"RLE[value, count]\"; the remaining values between such runs are grouped, in order, into chunks of at most 8 values, each written \"BP[width, v1, ..., vk]\" where width is the largest bit length among the chunk's values (at least 1). decode(runs) expands each \"RLE[value, count]\" into count copies of value and each \"BP[width, v1, ..., vk]\" into v1..vk, concatenated in order. Items are separated by \", \".",
+   "inference_uncertainty": "very high: only the RLE format and the two run kinds are in the preview; the BP format, the threshold of 3 for RLE, the chunk size of 8, the width field and the class shape are inferred",
+   "inferred_interface": {
+    "classname": "Codec",
+    "constructor": {
+     "params": []
+    },
+    "methods": [
+     {
+      "name": "encode",
+      "params": [
+       {
+        "name": "nums",
+        "type": "integer[]"
+       }
+      ],
+      "return": {
+       "type": "string[]"
+      }
+     },
+     {
+      "name": "decode",
+      "params": [
+       {
+        "name": "runs",
+        "type": "string[]"
+       }
+      ],
+      "return": {
+       "type": "integer[]"
+      }
+     }
+    ]
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON trace result; no bool/int coercion",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "ENC",
+   "transcript_interface": {
+    "name": "solve",
+    "argument_order": [
+     "operation_names",
+     "argument_lists"
+    ],
+    "constructor_output": null,
+    "void_method_output": null,
+    "result_order": "constructor followed by every method call",
+    "scope": "Explicit class trace adapter, separate from direct native observer checks."
+   }
+  },
+  {
+   "uid": "hack2hire:68d9756679db2fbcd7d7db74",
+   "variant_id": "68d9756679db2fbcd7d7db74",
+   "variant_ordinal": 1,
+   "title": "Equal Frequency After One Deletion",
+   "source": {
+    "post_id": "68d9755f79db2fbcd7d7db73",
+    "group_title": "Equal Frequency After One Deletion",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/68d9755f79db2fbcd7d7db73",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/68d9755f79db2fbcd7d7db73/practice?questionId=68d9756679db2fbcd7d7db74",
+    "preview_response_sha256": "91339c70ab0924a68635007625ef86854f141470b9f081b831425d8fdcc27c2f",
+    "preview_content_sha256": "c374f14b5c9c8324bca70e3a4a616b34612d7a8d13fc54db3e0671a6946b170c",
+    "preview_characters": 450,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/68d9755f79db2fbcd7d7db73.json",
+    "algorithm_tags": [
+     "HASH_TABLE",
+     "STRING"
+    ],
+    "companies": [
+     "BLOOMBERG"
+    ],
+    "source_difficulty": 1,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: lowercase string s, make it good by removing at most one character, good means every present character has the same frequency, worked aabb/abac illustration",
+    "algorithmTags: HASH_TABLE, STRING"
+   ],
+   "inferred_spec": "s is a non-empty lowercase string. Return true when s is already good, or when deleting exactly one character occurrence makes it good; otherwise false. A string is good when all letters that appear in it occur the same number of times (a letter whose count drops to zero no longer appears).",
+   "inference_uncertainty": "low: the rule is in the preview; the output type (boolean) and the empty-result case are inferred",
+   "inferred_interface": {
+    "name": "equalFrequency",
+    "params": [
+     {
+      "name": "s",
+      "type": "string"
+     }
+    ],
+    "return": {
+     "type": "boolean"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "EQF"
+  },
+  {
+   "uid": "hack2hire:68102bc42590daeb41a329e6",
+   "variant_id": "68102bc42590daeb41a329e6",
+   "variant_ordinal": 1,
+   "title": "Equalize Server Latency",
+   "source": {
+    "post_id": "6810271f2590daeb41a329e5",
+    "group_title": "Equalize Server Latency",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6810271f2590daeb41a329e5",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6810271f2590daeb41a329e5/practice?questionId=68102bc42590daeb41a329e6",
+    "preview_response_sha256": "41568789a279f0918c126a3e01e3610c26c042bd34a5b40842fc45adc9a19f57",
+    "preview_content_sha256": "9e7602508e6e2393299aa19f338d2ef573a4a0def965e9810a699e46733c584b",
+    "preview_characters": 669,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/6810271f2590daeb41a329e5.json",
+    "algorithm_tags": [
+     "DEPTH_FIRST_SEARCH",
+     "BINARY_TREE"
+    ],
+    "companies": [
+     "TIKTOK"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: perfect binary tree of n servers numbered 0..n-1, parent floor((i - 1) / 2), children 2i+1 and 2i+2, root handles requests first and passes them down (latency values and goal not visible)",
+    "algorithmTags: DEPTH_FIRST_SEARCH, BINARY_TREE"
+   ],
+   "inferred_spec": "n = 2^h - 1 servers form a perfect binary tree (children of i are 2i+1 and 2i+2). latency[i] >= 1 is the latency added at server i; a request to a leaf costs the sum of latencies on the root-to-leaf path. Latencies may only be increased, by any integer amounts. Return the minimum total increase that makes every root-to-leaf path cost equal.",
+   "inference_uncertainty": "high: the tree layout is in the preview; the latency array, the increase-only rule and the minimum-total-increase objective are inferred (structure of LeetCode 2673)",
+   "inferred_interface": {
+    "name": "minIncrements",
+    "params": [
+     {
+      "name": "n",
+      "type": "integer"
+     },
+     {
+      "name": "latency",
+      "type": "integer[]"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "ESL"
+  },
+  {
+   "uid": "hack2hire:694f5ef093309f91cc14412f",
+   "variant_id": "694f5ef093309f91cc14412f",
+   "variant_ordinal": 1,
+   "title": "Evaluate JSON Expression Tree",
+   "source": {
+    "post_id": "694f5cb393309f91cc14412c",
+    "group_title": "Evaluate JSON Expression Tree",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/694f5cb393309f91cc14412c",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/694f5cb393309f91cc14412c/practice?questionId=694f5ef093309f91cc14412f",
+    "preview_response_sha256": "e60f023b838f3dcd121ccbd78e280f82fb10c56612b75fa0e96c27bca7a40baa",
+    "preview_content_sha256": "1109eba84f16b5daf4871e1973784eee9fc06e1f0819be98507dfaa8014eeee6",
+    "preview_characters": 448,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/694f5cb393309f91cc14412c.json",
+    "algorithm_tags": [
+     "RECURSION"
+    ],
+    "companies": [
+     "HUBSPOT"
+    ],
+    "source_difficulty": 1,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: binary expression tree as a JSON object, CONSTANT_NUMBER nodes with integer value, ADD/SUBTRACT/MULTIPLY/DIVIDE nodes with exactly two inputs",
+    "algorithmTags: RECURSION"
+   ],
+   "inferred_spec": "expression is a JSON object: {\"operation\": \"CONSTANT_NUMBER\", \"value\": v} with integer v, or {\"operation\": op, \"inputs\": [left, right]} with op one of ADD, SUBTRACT, MULTIPLY, DIVIDE. Return the integer value of the tree, where DIVIDE is integer division truncated toward zero. Inputs never divide by zero.",
+   "inference_uncertainty": "medium: the node shapes are in the preview; integer division truncating toward zero and the integer result type are inferred",
+   "inferred_interface": {
+    "name": "evaluate",
+    "params": [
+     {
+      "name": "expression",
+      "type": "object"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "EJT"
+  },
+  {
+   "uid": "hack2hire:68c32db81f64f4312b0a3e26",
+   "variant_id": "68c32db81f64f4312b0a3e26",
+   "variant_ordinal": 1,
+   "title": "F1 Last Lap Improvement",
+   "source": {
+    "post_id": "68c32daf1f64f4312b0a3e25",
+    "group_title": "F1 Last Lap Improvement",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/68c32daf1f64f4312b0a3e25",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/68c32daf1f64f4312b0a3e25/practice?questionId=68c32db81f64f4312b0a3e26",
+    "preview_response_sha256": "cc0429a30df24d5b40837c1fe7efe27d9c4362cd02aa08f353ba16afdaa29404",
+    "preview_content_sha256": "108c784ac111789526039648a8755c14deda92020e62a8d8bed505d06991d5b3",
+    "preview_characters": 896,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/68c32daf1f64f4312b0a3e25.json",
+    "algorithm_tags": [
+     "ARRAY",
+     "STRING"
+    ],
+    "companies": [
+     "ATLASSIAN"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 2
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: drivers and lapTimes (same lap count, in order), improvement = average of laps before the last minus the last lap, return the driver with the greatest improvement, ties by lexicographically smallest name",
+    "algorithmTags: ARRAY, STRING",
+    "variant order from codingQuestions (1 of 2)"
+   ],
+   "inferred_spec": "drivers are distinct names and lapTimes[i] lists driver i's integer lap times (every driver has the same number L >= 2 of laps). A driver's improvement is the average of the first L - 1 laps minus the last lap, compared exactly (no rounding). Return the name of the driver with the greatest improvement; among equal improvements return the lexicographically smallest name.",
+   "inference_uncertainty": "low: the rule is in the preview; integer lap times and exact comparison are inferred",
+   "inferred_interface": {
+    "name": "bestLastLapImprovement",
+    "params": [
+     {
+      "name": "drivers",
+      "type": "string[]"
+     },
+     {
+      "name": "lapTimes",
+      "type": "integer[][]"
+     }
+    ],
+    "return": {
+     "type": "string"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "variant 1 of 2: the single best driver (matches the preview)",
+   "oracle_constant": "F1A"
+  },
+  {
+   "uid": "hack2hire:68c32f681f64f4312b0a3e27",
+   "variant_id": "68c32f681f64f4312b0a3e27",
+   "variant_ordinal": 2,
+   "title": "F1 Last Lap Improvement",
+   "source": {
+    "post_id": "68c32daf1f64f4312b0a3e25",
+    "group_title": "F1 Last Lap Improvement",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/68c32daf1f64f4312b0a3e25",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/68c32daf1f64f4312b0a3e25/practice?questionId=68c32f681f64f4312b0a3e27",
+    "preview_response_sha256": "cc0429a30df24d5b40837c1fe7efe27d9c4362cd02aa08f353ba16afdaa29404",
+    "preview_content_sha256": "108c784ac111789526039648a8755c14deda92020e62a8d8bed505d06991d5b3",
+    "preview_characters": 896,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/68c32daf1f64f4312b0a3e25.json",
+    "algorithm_tags": [
+     "ARRAY",
+     "STRING"
+    ],
+    "companies": [
+     "ATLASSIAN"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 2
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: drivers and lapTimes (same lap count, in order), improvement = average of laps before the last minus the last lap, return the driver with the greatest improvement, ties by lexicographically smallest name",
+    "algorithmTags: ARRAY, STRING",
+    "variant order from codingQuestions (2 of 2)"
+   ],
+   "inferred_spec": "drivers are distinct names and lapTimes[i] lists driver i's integer lap times (every driver has the same number L >= 2 of laps). A driver's improvement is the average of the first L - 1 laps minus the last lap, compared exactly (no rounding). Return all driver names ordered by improvement, greatest first; equal improvements are ordered by name ascending.",
+   "inference_uncertainty": "high: no public text exists for this variant; its content is inferred from the group preview, the title and the usual level ladder of this multi-part question format; returning the full ranking is inferred",
+   "inferred_interface": {
+    "name": "rankLastLapImprovement",
+    "params": [
+     {
+      "name": "drivers",
+      "type": "string[]"
+     },
+     {
+      "name": "lapTimes",
+      "type": "integer[][]"
+     }
+    ],
+    "return": {
+     "type": "string[]"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "variant 2 of 2: full ranking (inferred follow-up)",
+   "oracle_constant": "F1B"
+  },
+  {
+   "uid": "hack2hire:6a0226e62608e589a944a229",
+   "variant_id": "6a0226e62608e589a944a229",
+   "variant_ordinal": 1,
+   "title": "Fill Layover With Experiences",
+   "source": {
+    "post_id": "6a0226da2608e589a944a228",
+    "group_title": "Fill Layover With Experiences",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6a0226da2608e589a944a228",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6a0226da2608e589a944a228/practice?questionId=6a0226e62608e589a944a229",
+    "preview_response_sha256": "14d91728897f703d43a22e65d33a3ca239c66946a757fef912b82f055694399e",
+    "preview_content_sha256": "2634225659802776480f42fc34c988d18283c42a1b4a8d39106e300eeb54b5c2",
+    "preview_characters": 507,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/6a0226da2608e589a944a228.json",
+    "algorithm_tags": [
+     "DYNAMIC_PROGRAMMING"
+    ],
+    "companies": [
+     "AIRBNB"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: variation of LeetCode 322 Coin Change, fill an X-hour layover exactly with repeatable fixed-duration experiences using the minimum number of bookings, target totalHours",
+    "algorithmTags: DYNAMIC_PROGRAMMING"
+   ],
+   "inferred_spec": "durations lists experience lengths in hours (positive integers, duplicates allowed); each may be booked any number of times. Return the minimum number of bookings whose durations sum to exactly totalHours, 0 when totalHours is 0, or -1 when it is impossible.",
+   "inference_uncertainty": "low-medium: the objective is in the preview; the input shape (plain durations, not named experiences), the -1 sentinel and the return of a count rather than a list are inferred",
+   "inferred_interface": {
+    "name": "minBookings",
+    "params": [
+     {
+      "name": "durations",
+      "type": "integer[]"
+     },
+     {
+      "name": "totalHours",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "FLX"
+  },
+  {
+   "uid": "hack2hire:6acfb93f2e3a0349b3a8eb2d",
+   "variant_id": "6acfb93f2e3a0349b3a8eb2d",
+   "variant_ordinal": 1,
+   "title": "Financial Account Ledger",
+   "source": {
+    "post_id": "6acfb9382e3a0349b3a8eb2c",
+    "group_title": "Financial Account Ledger",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6acfb9382e3a0349b3a8eb2c",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6acfb9382e3a0349b3a8eb2c/practice?questionId=6acfb93f2e3a0349b3a8eb2d",
+    "preview_response_sha256": "6b94a58ab847b03735006342a55da92df4a264e4027d2eb0c1219847a3f10009",
+    "preview_content_sha256": "29c3751a246c5bad630b6598bcdf2567903e3891bf933ba9495c6d9a59c78b4f",
+    "preview_characters": 721,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/6acfb9382e3a0349b3a8eb2c.json",
+    "algorithm_tags": [
+     "HASH_TABLE",
+     "SIMULATION"
+    ],
+    "companies": [
+     "STRIPE"
+    ],
+    "source_difficulty": 3,
+    "variant_count": 4
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: space-separated commands, integer minor units, INIT commands precede timestamped commands in chronological day order with input order inside a day, funding counts only after it settles, BALANCE reports the settled balance at its point (later FUND cannot change it); FUND/BALANCE argument layouts not visible",
+    "algorithmTags: HASH_TABLE, SIMULATION",
+    "variant order from codingQuestions (1 of 4)"
+   ],
+   "inferred_spec": "commands is a list of space-separated strings; amounts are integer minor units. \"INIT <account> <balance>\" commands come first and create accounts. Timestamped commands follow in non-decreasing day order and are processed in input order. \"FUND <day> <account> <amount> <delay>\" is accepted when the account exists and settles on day + delay. \"BALANCE <day> <account>\" reports the settled balance at that point: the starting balance plus accepted funding settled by that day plus all earlier accepted balance changes, or -1 for an unknown account. Return the reported values in order.",
+   "inference_uncertainty": "medium: ordering and the settled-balance rule are in the preview; the argument layout of INIT/FUND/BALANCE, the settlement delay field, acceptance conditions and the -1 sentinel are inferred",
+   "inferred_interface": {
+    "name": "processLedger",
+    "params": [
+     {
+      "name": "commands",
+      "type": "string[]"
+     }
+    ],
+    "return": {
+     "type": "integer[]"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "variant 1 of 4: cumulative level 1 (INIT/FUND/BALANCE)",
+   "oracle_constant": "FAL1"
+  },
+  {
+   "uid": "hack2hire:6acfbd2f2e3a0349b3a8eb4e",
+   "variant_id": "6acfbd2f2e3a0349b3a8eb4e",
+   "variant_ordinal": 2,
+   "title": "Financial Account Ledger",
+   "source": {
+    "post_id": "6acfb9382e3a0349b3a8eb2c",
+    "group_title": "Financial Account Ledger",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6acfb9382e3a0349b3a8eb2c",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6acfb9382e3a0349b3a8eb2c/practice?questionId=6acfbd2f2e3a0349b3a8eb4e",
+    "preview_response_sha256": "6b94a58ab847b03735006342a55da92df4a264e4027d2eb0c1219847a3f10009",
+    "preview_content_sha256": "29c3751a246c5bad630b6598bcdf2567903e3891bf933ba9495c6d9a59c78b4f",
+    "preview_characters": 721,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/6acfb9382e3a0349b3a8eb2c.json",
+    "algorithm_tags": [
+     "HASH_TABLE",
+     "SIMULATION"
+    ],
+    "companies": [
+     "STRIPE"
+    ],
+    "source_difficulty": 3,
+    "variant_count": 4
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: space-separated commands, integer minor units, INIT commands precede timestamped commands in chronological day order with input order inside a day, funding counts only after it settles, BALANCE reports the settled balance at its point (later FUND cannot change it); FUND/BALANCE argument layouts not visible",
+    "algorithmTags: HASH_TABLE, SIMULATION",
+    "variant order from codingQuestions (2 of 4)"
+   ],
+   "inferred_spec": "commands is a list of space-separated strings; amounts are integer minor units. \"INIT <account> <balance>\" commands come first and create accounts. Timestamped commands follow in non-decreasing day order and are processed in input order. \"FUND <day> <account> <amount> <delay>\" is accepted when the account exists and settles on day + delay. \"BALANCE <day> <account>\" reports the settled balance at that point: the starting balance plus accepted funding settled by that day plus all earlier accepted balance changes, or -1 for an unknown account. Return the reported values in order. \"WITHDRAW <day> <account> <amount>\" is accepted when the account exists and amount does not exceed its settled balance at that point; it lowers the balance immediately.",
+   "inference_uncertainty": "very high: no public text exists for this variant; its content is inferred from the group preview, the title and the usual level ladder of this multi-level design format; the WITHDRAW command and its acceptance rule are inferred",
+   "inferred_interface": {
+    "name": "processLedger",
+    "params": [
+     {
+      "name": "commands",
+      "type": "string[]"
+     }
+    ],
+    "return": {
+     "type": "integer[]"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "variant 2 of 4: cumulative level 2 (+ WITHDRAW)",
+   "oracle_constant": "FAL2"
+  },
+  {
+   "uid": "hack2hire:6acfd33d2e3a0349b3a8ec32",
+   "variant_id": "6acfd33d2e3a0349b3a8ec32",
+   "variant_ordinal": 3,
+   "title": "Financial Account Ledger",
+   "source": {
+    "post_id": "6acfb9382e3a0349b3a8eb2c",
+    "group_title": "Financial Account Ledger",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6acfb9382e3a0349b3a8eb2c",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6acfb9382e3a0349b3a8eb2c/practice?questionId=6acfd33d2e3a0349b3a8ec32",
+    "preview_response_sha256": "6b94a58ab847b03735006342a55da92df4a264e4027d2eb0c1219847a3f10009",
+    "preview_content_sha256": "29c3751a246c5bad630b6598bcdf2567903e3891bf933ba9495c6d9a59c78b4f",
+    "preview_characters": 721,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/6acfb9382e3a0349b3a8eb2c.json",
+    "algorithm_tags": [
+     "HASH_TABLE",
+     "SIMULATION"
+    ],
+    "companies": [
+     "STRIPE"
+    ],
+    "source_difficulty": 3,
+    "variant_count": 4
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: space-separated commands, integer minor units, INIT commands precede timestamped commands in chronological day order with input order inside a day, funding counts only after it settles, BALANCE reports the settled balance at its point (later FUND cannot change it); FUND/BALANCE argument layouts not visible",
+    "algorithmTags: HASH_TABLE, SIMULATION",
+    "variant order from codingQuestions (3 of 4)"
+   ],
+   "inferred_spec": "commands is a list of space-separated strings; amounts are integer minor units. \"INIT <account> <balance>\" commands come first and create accounts. Timestamped commands follow in non-decreasing day order and are processed in input order. \"FUND <day> <account> <amount> <delay>\" is accepted when the account exists and settles on day + delay. \"BALANCE <day> <account>\" reports the settled balance at that point: the starting balance plus accepted funding settled by that day plus all earlier accepted balance changes, or -1 for an unknown account. Return the reported values in order. \"WITHDRAW <day> <account> <amount>\" is accepted when the account exists and amount does not exceed its settled balance at that point; it lowers the balance immediately. \"TRANSFER <day> <from> <to> <amount>\" is accepted when both accounts exist, they differ, and amount does not exceed the sender's settled balance; it moves the amount immediately as settled money.",
+   "inference_uncertainty": "very high: no public text exists for this variant; its content is inferred from the group preview, the title and the usual level ladder of this multi-level design format; the TRANSFER command and its acceptance rule are inferred",
+   "inferred_interface": {
+    "name": "processLedger",
+    "params": [
+     {
+      "name": "commands",
+      "type": "string[]"
+     }
+    ],
+    "return": {
+     "type": "integer[]"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "variant 3 of 4: cumulative level 3 (+ TRANSFER)",
+   "oracle_constant": "FAL3"
+  },
+  {
+   "uid": "hack2hire:6acfd3602e3a0349b3a8ec34",
+   "variant_id": "6acfd3602e3a0349b3a8ec34",
+   "variant_ordinal": 4,
+   "title": "Financial Account Ledger",
+   "source": {
+    "post_id": "6acfb9382e3a0349b3a8eb2c",
+    "group_title": "Financial Account Ledger",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6acfb9382e3a0349b3a8eb2c",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6acfb9382e3a0349b3a8eb2c/practice?questionId=6acfd3602e3a0349b3a8ec34",
+    "preview_response_sha256": "6b94a58ab847b03735006342a55da92df4a264e4027d2eb0c1219847a3f10009",
+    "preview_content_sha256": "29c3751a246c5bad630b6598bcdf2567903e3891bf933ba9495c6d9a59c78b4f",
+    "preview_characters": 721,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/6acfb9382e3a0349b3a8eb2c.json",
+    "algorithm_tags": [
+     "HASH_TABLE",
+     "SIMULATION"
+    ],
+    "companies": [
+     "STRIPE"
+    ],
+    "source_difficulty": 3,
+    "variant_count": 4
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: space-separated commands, integer minor units, INIT commands precede timestamped commands in chronological day order with input order inside a day, funding counts only after it settles, BALANCE reports the settled balance at its point (later FUND cannot change it); FUND/BALANCE argument layouts not visible",
+    "algorithmTags: HASH_TABLE, SIMULATION",
+    "variant order from codingQuestions (4 of 4)"
+   ],
+   "inferred_spec": "commands is a list of space-separated strings; amounts are integer minor units. \"INIT <account> <balance>\" commands come first and create accounts. Timestamped commands follow in non-decreasing day order and are processed in input order. \"FUND <day> <account> <amount> <delay>\" is accepted when the account exists and settles on day + delay. \"BALANCE <day> <account>\" reports the settled balance at that point: the starting balance plus accepted funding settled by that day plus all earlier accepted balance changes, or -1 for an unknown account. Return the reported values in order. \"WITHDRAW <day> <account> <amount>\" is accepted when the account exists and amount does not exceed its settled balance at that point; it lowers the balance immediately. \"TRANSFER <day> <from> <to> <amount>\" is accepted when both accounts exist, they differ, and amount does not exceed the sender's settled balance; it moves the amount immediately as settled money. \"PENDING <day> <account>\" reports the sum of accepted, uncancelled funding not yet settled at that day (-1 for an unknown account). \"CANCEL <day> <account>\" cancels the most recently accepted funding request of the account that is neither settled at that day nor cancelled; it does nothing if there is none.",
+   "inference_uncertainty": "very high: no public text exists for this variant; its content is inferred from the group preview, the title and the usual level ladder of this multi-level design format; the PENDING and CANCEL commands and their acceptance rules are inferred",
+   "inferred_interface": {
+    "name": "processLedger",
+    "params": [
+     {
+      "name": "commands",
+      "type": "string[]"
+     }
+    ],
+    "return": {
+     "type": "integer[]"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "variant 4 of 4: cumulative level 4 (+ PENDING/CANCEL)",
+   "oracle_constant": "FAL4"
+  },
+  {
+   "uid": "hack2hire:695d3f8768e2c0dd046c4aa3",
+   "variant_id": "695d3f8768e2c0dd046c4aa3",
+   "variant_ordinal": 1,
+   "title": "Find Bad GPU Nodes",
+   "source": {
+    "post_id": "695d3da168e2c0dd046c4aa1",
+    "group_title": "Find Bad GPU Nodes",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/695d3da168e2c0dd046c4aa1",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/695d3da168e2c0dd046c4aa1/practice?questionId=695d3f8768e2c0dd046c4aa3",
+    "preview_response_sha256": "d3dd25ce92ccfd3deb091d6836687a31d063bbb72307ceb3ed5bcfd093391e5d",
+    "preview_content_sha256": "fe6cea6c314342b0584837faa3dcd02e784d05adc0d6d80ee30bdb82dd5f1539",
+    "preview_characters": 476,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/695d3da168e2c0dd046c4aa1.json",
+    "algorithm_tags": [
+     "DIVIDE_AND_CONQUER"
+    ],
+    "companies": [
+     "XAI"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: GPU nodes 0..n-1 each good or bad, status known only through TestServer.test(list) which returns true when every listed node is good (query budget and output not visible)",
+    "algorithmTags: DIVIDE_AND_CONQUER"
+   ],
+   "inferred_spec": "Offline adaptation of the interactive task: n nodes and the hidden set badNodes are given, and test(list) is simulated as \"no listed node is bad\". The searcher uses a fixed divide-and-conquer strategy: test the whole range [0, n); whenever a tested range [lo, hi) fails and holds more than one node, test [lo, mid) and then [mid, hi) with mid = floor((lo + hi) / 2); a failing single node is bad. Return [the bad nodes in ascending order, the number of test calls made].",
+   "inference_uncertainty": "very high: the TestServer API is in the preview; the offline simulation, the fixed halving strategy (so the call count is defined) and the two-part output are inferred",
+   "inferred_interface": {
+    "name": "findBadNodes",
+    "params": [
+     {
+      "name": "n",
+      "type": "integer"
+     },
+     {
+      "name": "badNodes",
+      "type": "integer[]"
+     }
+    ],
+    "return": {
+     "type": "[integer[], integer]"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "GPU"
+  },
+  {
+   "uid": "hack2hire:69e9376dfbaf3da6418286a5",
+   "variant_id": "69e9376dfbaf3da6418286a5",
+   "variant_ordinal": 1,
+   "title": "Find Balanced Prefix in Permutation",
+   "source": {
+    "post_id": "69e9375efbaf3da6418286a4",
+    "group_title": "Find Balanced Prefix in Permutation",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/69e9375efbaf3da6418286a4",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/69e9375efbaf3da6418286a4/practice?questionId=69e9376dfbaf3da6418286a5",
+    "preview_response_sha256": "4394cf164fb91cebd9d704adf74a8eee751b6b2e2b4ad666c58c4e538b67fa22",
+    "preview_content_sha256": "d321c2808a3b536944fe1a66dcbc300d9ee223a5ef9fe4226fae4c8d2f4025c9",
+    "preview_characters": 502,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/69e9375efbaf3da6418286a4.json",
+    "algorithm_tags": [
+     "HASH_TABLE",
+     "GREEDY"
+    ],
+    "companies": [
+     "UBER"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: permutation p of 1..n, k balanced when some subarray is a permutation of 1..k, return a binary string with character k = 1 when balanced",
+    "algorithmTags: HASH_TABLE, GREEDY"
+   ],
+   "inferred_spec": "p is a permutation of 1..n (n >= 1). k is balanced when some contiguous subarray of p is a permutation of 1..k. Return a string of length n whose k-th character is \"1\" when k is balanced and \"0\" otherwise. The title says prefix while the preview describes any contiguous subarray; the cohort follows the preview.",
+   "inference_uncertainty": "low: the rule is in the preview; the title/preview wording difference (prefix vs subarray) is noted",
+   "inferred_interface": {
+    "name": "balancedNumbers",
+    "params": [
+     {
+      "name": "p",
+      "type": "integer[]"
+     }
+    ],
+    "return": {
+     "type": "string"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "BPP"
+  },
+  {
+   "uid": "hack2hire:680fc0442590daeb41a329b8",
+   "variant_id": "680fc0442590daeb41a329b8",
+   "variant_ordinal": 1,
+   "title": "Find Common Free Days",
+   "source": {
+    "post_id": "680fba682590daeb41a329b4",
+    "group_title": "Find Common Free Days",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/680fba682590daeb41a329b4",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/680fba682590daeb41a329b4/practice?questionId=680fc0442590daeb41a329b8",
+    "preview_response_sha256": "a0edf7404f82d6b6d5dcce3003d13ad734c5d2dc91c8c5e318c532638d437707",
+    "preview_content_sha256": "fb75a52a3751712a976841c398c60b996add7268de5672764de3b4deb1ff3c6c",
+    "preview_characters": 345,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/680fba682590daeb41a329b4.json",
+    "algorithm_tags": [
+     "ARRAY",
+     "PREFIX_SUM"
+    ],
+    "companies": [
+     "GOOGLE",
+     "MICROSOFT",
+     "VERKADA"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 3
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: busy blocks [person_id, start_day, end_day] inclusive, days 1-indexed, find days when all people are free, blocks of the same person should be merged (day range and output form not visible)",
+    "algorithmTags: ARRAY, PREFIX_SUM",
+    "variant order from codingQuestions (1 of 3)"
+   ],
+   "inferred_spec": "blocks lists busy periods [personId, startDay, endDay] (inclusive days, 1-indexed; a person may have overlapping blocks). The horizon is days 1..totalDays; blocks may extend past it. Return, in ascending order, every day in 1..totalDays on which no block is busy (everyone is free).",
+   "inference_uncertainty": "medium: the block format and the all-free rule are in the preview; the totalDays horizon and the list-of-days output are inferred",
+   "inferred_interface": {
+    "name": "commonFreeDays",
+    "params": [
+     {
+      "name": "blocks",
+      "type": "integer[][]"
+     },
+     {
+      "name": "totalDays",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "integer[]"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "variant 1 of 3: list every common free day",
+   "oracle_constant": "CFD1"
+  },
+  {
+   "uid": "hack2hire:680fc04e2590daeb41a329b9",
+   "variant_id": "680fc04e2590daeb41a329b9",
+   "variant_ordinal": 2,
+   "title": "Find Common Free Days",
+   "source": {
+    "post_id": "680fba682590daeb41a329b4",
+    "group_title": "Find Common Free Days",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/680fba682590daeb41a329b4",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/680fba682590daeb41a329b4/practice?questionId=680fc04e2590daeb41a329b9",
+    "preview_response_sha256": "a0edf7404f82d6b6d5dcce3003d13ad734c5d2dc91c8c5e318c532638d437707",
+    "preview_content_sha256": "fb75a52a3751712a976841c398c60b996add7268de5672764de3b4deb1ff3c6c",
+    "preview_characters": 345,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/680fba682590daeb41a329b4.json",
+    "algorithm_tags": [
+     "ARRAY",
+     "PREFIX_SUM"
+    ],
+    "companies": [
+     "GOOGLE",
+     "MICROSOFT",
+     "VERKADA"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 3
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: busy blocks [person_id, start_day, end_day] inclusive, days 1-indexed, find days when all people are free, blocks of the same person should be merged (day range and output form not visible)",
+    "algorithmTags: ARRAY, PREFIX_SUM",
+    "variant order from codingQuestions (2 of 3)"
+   ],
+   "inferred_spec": "blocks lists busy periods [personId, startDay, endDay] (inclusive days, 1-indexed; a person may have overlapping blocks). The horizon is days 1..totalDays; blocks may extend past it. Return the maximal runs of common free days as [start, end] pairs in ascending order (totalDays may be large).",
+   "inference_uncertainty": "high: no public text exists for this variant; its content is inferred from the group preview, the title and the usual level ladder of this multi-part question format; returning maximal free intervals for a large horizon is inferred",
+   "inferred_interface": {
+    "name": "commonFreeIntervals",
+    "params": [
+     {
+      "name": "blocks",
+      "type": "integer[][]"
+     },
+     {
+      "name": "totalDays",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "integer[][]"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "variant 2 of 3: maximal free intervals over a large horizon",
+   "oracle_constant": "CFD2"
+  },
+  {
+   "uid": "hack2hire:680fc04f2590daeb41a329ba",
+   "variant_id": "680fc04f2590daeb41a329ba",
+   "variant_ordinal": 3,
+   "title": "Find Common Free Days",
+   "source": {
+    "post_id": "680fba682590daeb41a329b4",
+    "group_title": "Find Common Free Days",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/680fba682590daeb41a329b4",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/680fba682590daeb41a329b4/practice?questionId=680fc04f2590daeb41a329ba",
+    "preview_response_sha256": "a0edf7404f82d6b6d5dcce3003d13ad734c5d2dc91c8c5e318c532638d437707",
+    "preview_content_sha256": "fb75a52a3751712a976841c398c60b996add7268de5672764de3b4deb1ff3c6c",
+    "preview_characters": 345,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/680fba682590daeb41a329b4.json",
+    "algorithm_tags": [
+     "ARRAY",
+     "PREFIX_SUM"
+    ],
+    "companies": [
+     "GOOGLE",
+     "MICROSOFT",
+     "VERKADA"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 3
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: busy blocks [person_id, start_day, end_day] inclusive, days 1-indexed, find days when all people are free, blocks of the same person should be merged (day range and output form not visible)",
+    "algorithmTags: ARRAY, PREFIX_SUM",
+    "variant order from codingQuestions (3 of 3)"
+   ],
+   "inferred_spec": "blocks lists busy periods [personId, startDay, endDay] (inclusive days, 1-indexed; a person may have overlapping blocks). The horizon is days 1..totalDays; blocks may extend past it. The people are the distinct person ids in blocks. Given k (0 <= k <= number of people), return the maximal runs of days in 1..totalDays on which at least k people are free, as [start, end] pairs in ascending order. A person is busy on a day covered by any of their blocks; overlapping blocks of one person count once.",
+   "inference_uncertainty": "very high: no public text exists for this variant; its content is inferred from the group preview, the title and the usual level ladder of this multi-part question format; the at-least-k relaxation and its parameter are inferred (the preview's per-person merge rule is what makes it matter)",
+   "inferred_interface": {
+    "name": "freeIntervalsForAtLeast",
+    "params": [
+     {
+      "name": "blocks",
+      "type": "integer[][]"
+     },
+     {
+      "name": "totalDays",
+      "type": "integer"
+     },
+     {
+      "name": "k",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "integer[][]"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "variant 3 of 3: days when at least k people are free",
+   "oracle_constant": "CFD3"
+  },
+  {
+   "uid": "hack2hire:690416e84845d25b8e994885",
+   "variant_id": "690416e84845d25b8e994885",
+   "variant_ordinal": 1,
+   "title": "Find Complete Flight Path",
+   "source": {
+    "post_id": "68fe46fd7e1bd8f9501bf144",
+    "group_title": "Find Complete Flight Path",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/68fe46fd7e1bd8f9501bf144",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/68fe46fd7e1bd8f9501bf144/practice?questionId=690416e84845d25b8e994885",
+    "preview_response_sha256": "ebb181de2e1fdaea733e65916ceac34a72c63e70634701ad2da36e42c76de225",
+    "preview_content_sha256": "5caf40c5df8d299c1f02b3fd1e580654fbf11f5ec29102c4cd2eb882327f2d76",
+    "preview_characters": 721,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/68fe46fd7e1bd8f9501bf144.json",
+    "algorithm_tags": [
+     "GRAPH"
+    ],
+    "companies": [
+     "CITADEL"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: variation of LeetCode 332 Reconstruct Itinerary, tickets [from, to] each used exactly once, starting airport not given and must be deduced, lexicographically smallest itinerary as one sequence when several exist",
+    "algorithmTags: GRAPH"
+   ],
+   "inferred_spec": "tickets lists flights [from, to] between three-letter uppercase airport codes; a valid itinerary using every ticket exactly once is guaranteed. Return the lexicographically smallest itinerary (airport sequence) among all valid ones. The start is the airport with one more outgoing than incoming ticket when it exists; otherwise every valid itinerary is a cycle and it starts at the smallest airport.",
+   "inference_uncertainty": "low-medium: the rule is in the preview; the three-letter codes (which make list and string comparison agree) and the start rule for the balanced case are inferred",
+   "inferred_interface": {
+    "name": "findItinerary",
+    "params": [
+     {
+      "name": "tickets",
+      "type": "string[][]"
+     }
+    ],
+    "return": {
+     "type": "string[]"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "FCP"
+  },
+  {
+   "uid": "hack2hire:67843d1e0e1dbb6a0938577d",
+   "variant_id": "67843d1e0e1dbb6a0938577d",
+   "variant_ordinal": 1,
+   "title": "Find Eligible Order Sequence",
+   "source": {
+    "post_id": "678439bb0e1dbb6a0938577c",
+    "group_title": "Find Eligible Order Sequence",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/678439bb0e1dbb6a0938577c",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/678439bb0e1dbb6a0938577c/practice?questionId=67843d1e0e1dbb6a0938577d",
+    "preview_response_sha256": "5b00a40851d46f9c0662133751ecfc9047be6fa6a96075d7fd9f8a40fd829a77",
+    "preview_content_sha256": "7d24c316d0d177155452edf059e6a1017f1861a99a18596d1c5036e30ef713b6",
+    "preview_characters": 325,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/678439bb0e1dbb6a0938577c.json",
+    "algorithm_tags": [
+     "HEAP"
+    ],
+    "companies": [
+     "DOORDASH"
+    ],
+    "source_difficulty": 3,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: array of unique integer orderIds, the chef processes one eligible order at a time and removes it from the array (eligibility conditions not visible)",
+    "algorithmTags: HEAP"
+   ],
+   "inferred_spec": "orderIds lists unique integers. An order is eligible when it is greater than each of its current neighbours in the array (an end element has one neighbour; a lone element is eligible). Repeatedly process the smallest eligible order and remove it from the array. Return the orders in processing order.",
+   "inference_uncertainty": "very high: the preview stops before the eligibility conditions; the neighbour rule and smallest-first choice are inferred from the HEAP tag and the removal process",
+   "inferred_interface": {
+    "name": "eligibleOrderSequence",
+    "params": [
+     {
+      "name": "orderIds",
+      "type": "integer[]"
+     }
+    ],
+    "return": {
+     "type": "integer[]"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "EOS"
+  }
+ ]
+}

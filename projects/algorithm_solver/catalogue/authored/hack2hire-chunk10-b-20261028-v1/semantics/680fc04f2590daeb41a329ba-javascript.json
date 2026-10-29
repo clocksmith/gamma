@@ -1,0 +1,50 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:680fc04f2590daeb41a329ba",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "blocks",
+  "totalDays",
+  "k"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "freeIntervalsForAtLeast",
+  "params": [
+   {
+    "name": "blocks",
+    "type": "integer[][]"
+   },
+   {
+    "name": "totalDays",
+    "type": "integer"
+   },
+   {
+    "name": "k",
+    "type": "integer"
+   }
+  ],
+  "return": {
+   "type": "integer[][]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "for each day, collect the set of busy people by scanning every block",
+  "candidate_design": "merge blocks per person, sweep +1/-1 events of the merged intervals in day order, and emit the clipped segments where people - busy >= k",
+  "complexity_target": "O(b log b) time/O(b) space"
+ },
+ "source_sha256": "e3fb1bef6f267c091a44b3d11bed50b22a541cffe8c267a6bf191921a10ef140",
+ "wrapper": "named export freeIntervalsForAtLeast"
+}

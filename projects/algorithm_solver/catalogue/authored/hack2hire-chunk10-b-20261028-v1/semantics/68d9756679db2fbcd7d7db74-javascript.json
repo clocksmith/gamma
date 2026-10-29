@@ -1,0 +1,40 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:68d9756679db2fbcd7d7db74",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "s"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "equalFrequency",
+  "params": [
+   {
+    "name": "s",
+    "type": "string"
+   }
+  ],
+  "return": {
+   "type": "boolean"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "try no deletion and every single-position deletion, counting letters from scratch each time",
+  "candidate_design": "count letters, then count how many letters share each frequency; accept one distinct frequency, or two frequencies where one letter can drop to the other value (or to zero from 1)",
+  "complexity_target": "O(n) time/O(1) space"
+ },
+ "source_sha256": "d248daad446ed94b1cf8d8c07f10496e1e5acdd28df9b7bf4e01bd55942d165f",
+ "wrapper": "named export equalFrequency"
+}

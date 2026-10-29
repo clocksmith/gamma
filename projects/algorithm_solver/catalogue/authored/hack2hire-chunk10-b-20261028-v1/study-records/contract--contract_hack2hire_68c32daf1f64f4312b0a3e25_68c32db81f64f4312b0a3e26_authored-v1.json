@@ -1,0 +1,361 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:68c32daf1f64f4312b0a3e25:68c32db81f64f4312b0a3e26:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/contracts.json",
+   "sha256": "0829f1b98e3a4aa7bfc32413e21359791d60ea7c8efe9cf209942feec47b0ca8",
+   "selector": "/problems/14"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/68c32daf1f64f4312b0a3e25.json",
+   "sha256": "7527d0aa88980bec727ed2dc42fafffc917ac42ee22d43e0c548588aed39ecb1",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/study-content.json",
+   "sha256": "823fac1f7f9050a1dc42391d4476ac1679855d65eac111bc661508f17561c79e",
+   "selector": "/variants/hack2hire:68c32db81f64f4312b0a3e26"
+  }
+ ],
+ "problemId": "hack2hire:68c32daf1f64f4312b0a3e25",
+ "variantId": "68c32db81f64f4312b0a3e26",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred variant 1 of 2: best last-lap improvement",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/study-content.json",
+    "sha256": "823fac1f7f9050a1dc42391d4476ac1679855d65eac111bc661508f17561c79e",
+    "selector": "/variants/hack2hire:68c32db81f64f4312b0a3e26/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "drivers are distinct names and lapTimes[i] lists driver i's integer lap times (every driver has the same number L >= 2 of laps). A driver's improvement is the average of the first L - 1 laps minus the last lap, compared exactly (no rounding). Return the name of the driver with the greatest improvement; among equal improvements return the lexicographically smallest name.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/contracts.json",
+    "sha256": "0829f1b98e3a4aa7bfc32413e21359791d60ea7c8efe9cf209942feec47b0ca8",
+    "selector": "/problems/14/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "drivers are distinct names and lapTimes[i] lists driver i's integer lap times (every driver has the same number L >= 2 of laps).",
+   "A driver's improvement is the average of the first L - 1 laps minus the last lap, compared exactly (no rounding).",
+   "Return the name of the driver with the greatest improvement; among equal improvements return the lexicographically smallest name."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/contracts.json",
+    "sha256": "0829f1b98e3a4aa7bfc32413e21359791d60ea7c8efe9cf209942feec47b0ca8",
+    "selector": "/problems/14/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "1 <= drivers.length <= 1000, names match [A-Za-z]{1,20}",
+   "2 <= L, drivers * L <= 2e5",
+   "1 <= lap time <= 1e6"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/study-content.json",
+    "sha256": "823fac1f7f9050a1dc42391d4476ac1679855d65eac111bc661508f17561c79e",
+    "selector": "/variants/hack2hire:68c32db81f64f4312b0a3e26/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: title; contentPreview: drivers and lapTimes (same lap count, in order), improvement = average of laps before the last minus the last lap, return the driver with the greatest improvement, ties by lexicographically smallest name; algorithmTags: ARRAY, STRING; variant order from codingQuestions (1 of 2); preview response sha256 cc0429a30df24d5b40837c1fe7efe27d9c4362cd02aa08f353ba16afdaa29404"
+   },
+   {
+    "statement": "Uncertainty: low: the rule is in the preview; integer lap times and exact comparison are inferred",
+    "basis": "the public group preview is partial (896 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: variant 1 of 2: the single best driver (matches the preview)",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/contracts.json",
+    "sha256": "0829f1b98e3a4aa7bfc32413e21359791d60ea7c8efe9cf209942feec47b0ca8",
+    "selector": "/problems/14/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/contracts.json",
+    "sha256": "0829f1b98e3a4aa7bfc32413e21359791d60ea7c8efe9cf209942feec47b0ca8",
+    "selector": "/problems/14/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/contracts.json",
+    "sha256": "0829f1b98e3a4aa7bfc32413e21359791d60ea7c8efe9cf209942feec47b0ca8",
+    "selector": "/problems/14/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "Are lap times integers or decimals?",
+   "Should the comparison be exact or rounded?",
+   "Is \"lexicographical\" case-sensitive code-point order?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/study-content.json",
+    "sha256": "823fac1f7f9050a1dc42391d4476ac1679855d65eac111bc661508f17561c79e",
+    "selector": "/variants/hack2hire:68c32db81f64f4312b0a3e26/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [
+      "Al"
+     ],
+     [
+      [
+       1,
+       2
+      ]
+     ]
+    ],
+    "output": "Al",
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      "Zed",
+      "Bo",
+      "Cy",
+      "Bob"
+     ],
+     [
+      [
+       1,
+       60,
+       1000000,
+       1000000,
+       1000000
+      ],
+      [
+       3,
+       1000000,
+       2,
+       1000000,
+       59
+      ],
+      [
+       61,
+       59,
+       60,
+       1000000,
+       2
+      ],
+      [
+       1000000,
+       1,
+       3,
+       1000000,
+       1
+      ]
+     ]
+    ],
+    "output": "Bob",
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/study-content.json",
+    "sha256": "823fac1f7f9050a1dc42391d4476ac1679855d65eac111bc661508f17561c79e",
+    "selector": "/variants/hack2hire:68c32db81f64f4312b0a3e26/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/oracles.py",
+    "sha256": "cbc4732d69a7104fa8970dbd020de95f43bd18ae09d919f24c7a33b8d405edcf",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "def bestLastLapImprovement(drivers, lapTimes) -> string",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/contracts.json",
+      "sha256": "0829f1b98e3a4aa7bfc32413e21359791d60ea7c8efe9cf209942feec47b0ca8",
+      "selector": "/problems/14/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/semantics/68c32db81f64f4312b0a3e26-python.json",
+     "inferredInterface": {
+      "name": "bestLastLapImprovement",
+      "params": [
+       {
+        "name": "drivers",
+        "type": "string[]"
+       },
+       {
+        "name": "lapTimes",
+        "type": "integer[][]"
+       }
+      ],
+      "return": {
+       "type": "string"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/semantics/68c32db81f64f4312b0a3e26-python.json",
+      "sha256": "56af1bb19a516dc4eb1ff614e211c5b931f5fcdfc6f4119692f6446e790a5aa6",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "function bestLastLapImprovement(drivers, lapTimes) /* -> string */",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/contracts.json",
+      "sha256": "0829f1b98e3a4aa7bfc32413e21359791d60ea7c8efe9cf209942feec47b0ca8",
+      "selector": "/problems/14/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/semantics/68c32db81f64f4312b0a3e26-javascript.json",
+     "inferredInterface": {
+      "name": "bestLastLapImprovement",
+      "params": [
+       {
+        "name": "drivers",
+        "type": "string[]"
+       },
+       {
+        "name": "lapTimes",
+        "type": "integer[][]"
+       }
+      ],
+      "return": {
+       "type": "string"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/semantics/68c32db81f64f4312b0a3e26-javascript.json",
+      "sha256": "2c5d0a6bfcb6212fe113611c145627c5c4ff6ac1549fb74edd4138ef268c2179",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/contracts.json",
+    "sha256": "0829f1b98e3a4aa7bfc32413e21359791d60ea7c8efe9cf209942feec47b0ca8",
+    "selector": "/problems/14/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON result",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/contracts.json",
+    "sha256": "0829f1b98e3a4aa7bfc32413e21359791d60ea7c8efe9cf209942feec47b0ca8",
+    "selector": "/problems/14/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

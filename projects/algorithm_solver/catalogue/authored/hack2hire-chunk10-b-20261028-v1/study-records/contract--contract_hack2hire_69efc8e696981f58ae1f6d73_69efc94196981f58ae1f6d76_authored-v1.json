@@ -1,0 +1,731 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:69efc8e696981f58ae1f6d73:69efc94196981f58ae1f6d76:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/contracts.json",
+   "sha256": "0829f1b98e3a4aa7bfc32413e21359791d60ea7c8efe9cf209942feec47b0ca8",
+   "selector": "/problems/7"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/69efc8e696981f58ae1f6d73.json",
+   "sha256": "ab312be4383b3d1983734a97ea0aa428e993a7c5ce6a3ea0a071ee5904b59edb",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/study-content.json",
+   "sha256": "823fac1f7f9050a1dc42391d4476ac1679855d65eac111bc661508f17561c79e",
+   "selector": "/variants/hack2hire:69efc94196981f58ae1f6d76"
+  }
+ ],
+ "problemId": "hack2hire:69efc8e696981f58ae1f6d73",
+ "variantId": "69efc94196981f58ae1f6d76",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred level 3 of 4: user assignments with quota and expiry",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/study-content.json",
+    "sha256": "823fac1f7f9050a1dc42391d4476ac1679855d65eac111bc661508f17561c79e",
+    "selector": "/variants/hack2hire:69efc94196981f58ae1f6d76/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "TaskManager() starts empty; every call carries a timestamp and timestamps strictly increase. addTask(timestamp, name, priority) stores a task and returns its id \"taskId<n>\" with n = 1, 2, ... in creation order (duplicates allowed). updateTask(timestamp, taskId, name, priority) replaces both fields and returns true, or returns false for an unknown id. getTask(timestamp, taskId) returns \"<name>(<priority>)\", or \"\" for an unknown id. searchTasks(timestamp, nameFilter, maxResults) returns the ids of tasks whose current name contains nameFilter (case-sensitive substring), ordered by priority descending and then creation order, at most maxResults of them. listTasksSorted(timestamp, limit) returns the first limit ids of all tasks in the same order. addUser(timestamp, userId, quota) adds a user and returns true, or false when the user exists. An assignment is active at time t while finishTime > t. assignTask(timestamp, taskId, userId, finishTime) returns false when the task or user is unknown, the user already has an active assignment of that task, or the user's active assignments already number quota; otherwise it records the assignment and returns true. getUserTasks(timestamp, userId) returns the task ids of the user's active assignments ordered by finishTime and then assignment order ([] for an unknown user).",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/contracts.json",
+    "sha256": "0829f1b98e3a4aa7bfc32413e21359791d60ea7c8efe9cf209942feec47b0ca8",
+    "selector": "/problems/7/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "TaskManager() starts empty; every call carries a timestamp and timestamps strictly increase.",
+   "addTask(timestamp, name, priority) stores a task and returns its id \"taskId<n>\" with n = 1, 2, ..",
+   "in creation order (duplicates allowed).",
+   "updateTask(timestamp, taskId, name, priority) replaces both fields and returns true, or returns false for an unknown id.",
+   "getTask(timestamp, taskId) returns \"<name>(<priority>)\", or \"\" for an unknown id.",
+   "searchTasks(timestamp, nameFilter, maxResults) returns the ids of tasks whose current name contains nameFilter (case-sensitive substring), ordered by priority descending and then creation order, at most maxResults of them.",
+   "listTasksSorted(timestamp, limit) returns the first limit ids of all tasks in the same order.",
+   "addUser(timestamp, userId, quota) adds a user and returns true, or false when the user exists.",
+   "An assignment is active at time t while finishTime > t.",
+   "assignTask(timestamp, taskId, userId, finishTime) returns false when the task or user is unknown, the user already has an active assignment of that task, or the user's active assignments already number quota; otherwise it records the assignment and returns true.",
+   "getUserTasks(timestamp, userId) returns the task ids of the user's active assignments ordered by finishTime and then assignment order ([] for an unknown user)."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/contracts.json",
+    "sha256": "0829f1b98e3a4aa7bfc32413e21359791d60ea7c8efe9cf209942feec47b0ca8",
+    "selector": "/problems/7/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "up to 1e5 calls",
+   "timestamps strictly increasing, 0..1e9",
+   "names match [A-Za-z0-9 ]{1,20}",
+   "-1e9 <= priority <= 1e9",
+   "sum over search/list calls of the task count <= 2e6",
+   "userId matches [a-z0-9_]{1,20}",
+   "1 <= quota <= 1e5",
+   "timestamp < finishTime <= 2e9"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/study-content.json",
+    "sha256": "823fac1f7f9050a1dc42391d4476ac1679855d65eac111bc661508f17561c79e",
+    "selector": "/variants/hack2hire:69efc94196981f58ae1f6d76/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: title; contentPreview: TaskManager class, addTask(timestamp, name, priority) returning sequential \"taskId<n>\", updateTask returning boolean, retrieval of task details (method not visible; level 1 text only); algorithmTags: HASH_TABLE, DESIGN; variant order from codingQuestions (3 of 4); preview response sha256 961339354c92b5cf6328f0d3ee0672d697ac5ba92200d4e350b2923194e46c44"
+   },
+   {
+    "statement": "Uncertainty: high: no public text exists for this variant; its content is inferred from the group preview, the title and the usual level ladder of this multi-level design format; every level-3 method, ordering, quota and expiry rule is inferred (the title suggests user assignment)",
+    "basis": "the public group preview is partial (816 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: variant 3 of 4: cumulative level 3 (+ users and assignments)",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/contracts.json",
+    "sha256": "0829f1b98e3a4aa7bfc32413e21359791d60ea7c8efe9cf209942feec47b0ca8",
+    "selector": "/problems/7/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/contracts.json",
+    "sha256": "0829f1b98e3a4aa7bfc32413e21359791d60ea7c8efe9cf209942feec47b0ca8",
+    "selector": "/problems/7/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/contracts.json",
+    "sha256": "0829f1b98e3a4aa7bfc32413e21359791d60ea7c8efe9cf209942feec47b0ca8",
+    "selector": "/problems/7/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "When does an assignment stop counting toward the quota?",
+   "May the same task be assigned twice to one user?",
+   "How are a user's tasks ordered?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/study-content.json",
+    "sha256": "823fac1f7f9050a1dc42391d4476ac1679855d65eac111bc661508f17561c79e",
+    "selector": "/variants/hack2hire:69efc94196981f58ae1f6d76/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [
+      "TaskManager",
+      "getUserTasks"
+     ],
+     [
+      [],
+      [
+       1,
+       "u"
+      ]
+     ]
+    ],
+    "output": [
+     null,
+     []
+    ],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      "TaskManager",
+      "addTask",
+      "addTask",
+      "addTask",
+      "listTasksSorted",
+      "getTask",
+      "assignTask",
+      "addTask",
+      "addTask",
+      "addTask"
+     ],
+     [
+      [],
+      [
+       2,
+       "bugfix",
+       1
+      ],
+      [
+       4,
+       "fix bug",
+       3
+      ],
+      [
+       5,
+       "Bug",
+       -5
+      ],
+      [
+       6,
+       1
+      ],
+      [
+       9,
+       "taskId2"
+      ],
+      [
+       10,
+       "taskId3",
+       "u",
+       12
+      ],
+      [
+       12,
+       "bugfix",
+       1
+      ],
+      [
+       14,
+       "fix bug",
+       3
+      ],
+      [
+       16,
+       "write docs",
+       0
+      ]
+     ]
+    ],
+    "output": [
+     null,
+     "taskId1",
+     "taskId2",
+     "taskId3",
+     [
+      "taskId2"
+     ],
+     "fix bug(3)",
+     false,
+     "taskId4",
+     "taskId5",
+     "taskId6"
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/study-content.json",
+    "sha256": "823fac1f7f9050a1dc42391d4476ac1679855d65eac111bc661508f17561c79e",
+    "selector": "/variants/hack2hire:69efc94196981f58ae1f6d76/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/oracles.py",
+    "sha256": "cbc4732d69a7104fa8970dbd020de95f43bd18ae09d919f24c7a33b8d405edcf",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "class",
+   "declaration": {
+    "status": "present",
+    "value": "class TaskManager:\n    def __init__(self)\n    def addTask(self, timestamp, name, priority) -> string\n    def updateTask(self, timestamp, taskId, name, priority) -> boolean\n    def getTask(self, timestamp, taskId) -> string\n    def searchTasks(self, timestamp, nameFilter, maxResults) -> string[]\n    def listTasksSorted(self, timestamp, limit) -> string[]\n    def addUser(self, timestamp, userId, quota) -> boolean\n    def assignTask(self, timestamp, taskId, userId, finishTime) -> boolean\n    def getUserTasks(self, timestamp, userId) -> string[]",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/contracts.json",
+      "sha256": "0829f1b98e3a4aa7bfc32413e21359791d60ea7c8efe9cf209942feec47b0ca8",
+      "selector": "/problems/7/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/semantics/69efc94196981f58ae1f6d76-python.json",
+     "inferredInterface": {
+      "classname": "TaskManager",
+      "constructor": {
+       "params": []
+      },
+      "methods": [
+       {
+        "name": "addTask",
+        "params": [
+         {
+          "name": "timestamp",
+          "type": "integer"
+         },
+         {
+          "name": "name",
+          "type": "string"
+         },
+         {
+          "name": "priority",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "string"
+        }
+       },
+       {
+        "name": "updateTask",
+        "params": [
+         {
+          "name": "timestamp",
+          "type": "integer"
+         },
+         {
+          "name": "taskId",
+          "type": "string"
+         },
+         {
+          "name": "name",
+          "type": "string"
+         },
+         {
+          "name": "priority",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "boolean"
+        }
+       },
+       {
+        "name": "getTask",
+        "params": [
+         {
+          "name": "timestamp",
+          "type": "integer"
+         },
+         {
+          "name": "taskId",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "string"
+        }
+       },
+       {
+        "name": "searchTasks",
+        "params": [
+         {
+          "name": "timestamp",
+          "type": "integer"
+         },
+         {
+          "name": "nameFilter",
+          "type": "string"
+         },
+         {
+          "name": "maxResults",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "string[]"
+        }
+       },
+       {
+        "name": "listTasksSorted",
+        "params": [
+         {
+          "name": "timestamp",
+          "type": "integer"
+         },
+         {
+          "name": "limit",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "string[]"
+        }
+       },
+       {
+        "name": "addUser",
+        "params": [
+         {
+          "name": "timestamp",
+          "type": "integer"
+         },
+         {
+          "name": "userId",
+          "type": "string"
+         },
+         {
+          "name": "quota",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "boolean"
+        }
+       },
+       {
+        "name": "assignTask",
+        "params": [
+         {
+          "name": "timestamp",
+          "type": "integer"
+         },
+         {
+          "name": "taskId",
+          "type": "string"
+         },
+         {
+          "name": "userId",
+          "type": "string"
+         },
+         {
+          "name": "finishTime",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "boolean"
+        }
+       },
+       {
+        "name": "getUserTasks",
+        "params": [
+         {
+          "name": "timestamp",
+          "type": "integer"
+         },
+         {
+          "name": "userId",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "string[]"
+        }
+       }
+      ]
+     },
+     "traceAdapter": {
+      "name": "solve",
+      "argument_order": [
+       "operation_names",
+       "argument_lists"
+      ],
+      "constructor_output": null,
+      "void_method_output": null,
+      "result_order": "constructor followed by every method call",
+      "scope": "Explicit class trace adapter, separate from direct native observer checks."
+     }
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/semantics/69efc94196981f58ae1f6d76-python.json",
+      "sha256": "6c8826add5cb1d15ef1d4bcc7cfb0e098ede9f3a7536b3814c14a58a00537bd8",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "class",
+   "declaration": {
+    "status": "present",
+    "value": "class TaskManager {\n  constructor()\n  addTask(timestamp, name, priority) /* -> string */\n  updateTask(timestamp, taskId, name, priority) /* -> boolean */\n  getTask(timestamp, taskId) /* -> string */\n  searchTasks(timestamp, nameFilter, maxResults) /* -> string[] */\n  listTasksSorted(timestamp, limit) /* -> string[] */\n  addUser(timestamp, userId, quota) /* -> boolean */\n  assignTask(timestamp, taskId, userId, finishTime) /* -> boolean */\n  getUserTasks(timestamp, userId) /* -> string[] */\n}",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/contracts.json",
+      "sha256": "0829f1b98e3a4aa7bfc32413e21359791d60ea7c8efe9cf209942feec47b0ca8",
+      "selector": "/problems/7/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/semantics/69efc94196981f58ae1f6d76-javascript.json",
+     "inferredInterface": {
+      "classname": "TaskManager",
+      "constructor": {
+       "params": []
+      },
+      "methods": [
+       {
+        "name": "addTask",
+        "params": [
+         {
+          "name": "timestamp",
+          "type": "integer"
+         },
+         {
+          "name": "name",
+          "type": "string"
+         },
+         {
+          "name": "priority",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "string"
+        }
+       },
+       {
+        "name": "updateTask",
+        "params": [
+         {
+          "name": "timestamp",
+          "type": "integer"
+         },
+         {
+          "name": "taskId",
+          "type": "string"
+         },
+         {
+          "name": "name",
+          "type": "string"
+         },
+         {
+          "name": "priority",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "boolean"
+        }
+       },
+       {
+        "name": "getTask",
+        "params": [
+         {
+          "name": "timestamp",
+          "type": "integer"
+         },
+         {
+          "name": "taskId",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "string"
+        }
+       },
+       {
+        "name": "searchTasks",
+        "params": [
+         {
+          "name": "timestamp",
+          "type": "integer"
+         },
+         {
+          "name": "nameFilter",
+          "type": "string"
+         },
+         {
+          "name": "maxResults",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "string[]"
+        }
+       },
+       {
+        "name": "listTasksSorted",
+        "params": [
+         {
+          "name": "timestamp",
+          "type": "integer"
+         },
+         {
+          "name": "limit",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "string[]"
+        }
+       },
+       {
+        "name": "addUser",
+        "params": [
+         {
+          "name": "timestamp",
+          "type": "integer"
+         },
+         {
+          "name": "userId",
+          "type": "string"
+         },
+         {
+          "name": "quota",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "boolean"
+        }
+       },
+       {
+        "name": "assignTask",
+        "params": [
+         {
+          "name": "timestamp",
+          "type": "integer"
+         },
+         {
+          "name": "taskId",
+          "type": "string"
+         },
+         {
+          "name": "userId",
+          "type": "string"
+         },
+         {
+          "name": "finishTime",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "boolean"
+        }
+       },
+       {
+        "name": "getUserTasks",
+        "params": [
+         {
+          "name": "timestamp",
+          "type": "integer"
+         },
+         {
+          "name": "userId",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "string[]"
+        }
+       }
+      ]
+     },
+     "traceAdapter": {
+      "name": "solve",
+      "argument_order": [
+       "operation_names",
+       "argument_lists"
+      ],
+      "constructor_output": null,
+      "void_method_output": null,
+      "result_order": "constructor followed by every method call",
+      "scope": "Explicit class trace adapter, separate from direct native observer checks."
+     }
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/semantics/69efc94196981f58ae1f6d76-javascript.json",
+      "sha256": "68817da4a66456b5f02fa392beea76fdd657ca8385024e4d0434ee43913fc5b7",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/contracts.json",
+    "sha256": "0829f1b98e3a4aa7bfc32413e21359791d60ea7c8efe9cf209942feec47b0ca8",
+    "selector": "/problems/7/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON trace result; no bool/int coercion",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/contracts.json",
+    "sha256": "0829f1b98e3a4aa7bfc32413e21359791d60ea7c8efe9cf209942feec47b0ca8",
+    "selector": "/problems/7/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

@@ -1,0 +1,601 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:69efc8e696981f58ae1f6d73:69efc92d96981f58ae1f6d75:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/contracts.json",
+   "sha256": "0829f1b98e3a4aa7bfc32413e21359791d60ea7c8efe9cf209942feec47b0ca8",
+   "selector": "/problems/6"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/69efc8e696981f58ae1f6d73.json",
+   "sha256": "ab312be4383b3d1983734a97ea0aa428e993a7c5ce6a3ea0a071ee5904b59edb",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/study-content.json",
+   "sha256": "823fac1f7f9050a1dc42391d4476ac1679855d65eac111bc661508f17561c79e",
+   "selector": "/variants/hack2hire:69efc92d96981f58ae1f6d75"
+  }
+ ],
+ "problemId": "hack2hire:69efc8e696981f58ae1f6d73",
+ "variantId": "69efc92d96981f58ae1f6d75",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred level 2 of 4: search and sorted listing",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/study-content.json",
+    "sha256": "823fac1f7f9050a1dc42391d4476ac1679855d65eac111bc661508f17561c79e",
+    "selector": "/variants/hack2hire:69efc92d96981f58ae1f6d75/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "TaskManager() starts empty; every call carries a timestamp and timestamps strictly increase. addTask(timestamp, name, priority) stores a task and returns its id \"taskId<n>\" with n = 1, 2, ... in creation order (duplicates allowed). updateTask(timestamp, taskId, name, priority) replaces both fields and returns true, or returns false for an unknown id. getTask(timestamp, taskId) returns \"<name>(<priority>)\", or \"\" for an unknown id. searchTasks(timestamp, nameFilter, maxResults) returns the ids of tasks whose current name contains nameFilter (case-sensitive substring), ordered by priority descending and then creation order, at most maxResults of them. listTasksSorted(timestamp, limit) returns the first limit ids of all tasks in the same order.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/contracts.json",
+    "sha256": "0829f1b98e3a4aa7bfc32413e21359791d60ea7c8efe9cf209942feec47b0ca8",
+    "selector": "/problems/6/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "TaskManager() starts empty; every call carries a timestamp and timestamps strictly increase.",
+   "addTask(timestamp, name, priority) stores a task and returns its id \"taskId<n>\" with n = 1, 2, ..",
+   "in creation order (duplicates allowed).",
+   "updateTask(timestamp, taskId, name, priority) replaces both fields and returns true, or returns false for an unknown id.",
+   "getTask(timestamp, taskId) returns \"<name>(<priority>)\", or \"\" for an unknown id.",
+   "searchTasks(timestamp, nameFilter, maxResults) returns the ids of tasks whose current name contains nameFilter (case-sensitive substring), ordered by priority descending and then creation order, at most maxResults of them.",
+   "listTasksSorted(timestamp, limit) returns the first limit ids of all tasks in the same order."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/contracts.json",
+    "sha256": "0829f1b98e3a4aa7bfc32413e21359791d60ea7c8efe9cf209942feec47b0ca8",
+    "selector": "/problems/6/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "up to 1e5 calls",
+   "timestamps strictly increasing, 0..1e9",
+   "names match [A-Za-z0-9 ]{1,20}",
+   "-1e9 <= priority <= 1e9",
+   "sum over search/list calls of the task count <= 2e6"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/study-content.json",
+    "sha256": "823fac1f7f9050a1dc42391d4476ac1679855d65eac111bc661508f17561c79e",
+    "selector": "/variants/hack2hire:69efc92d96981f58ae1f6d75/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: title; contentPreview: TaskManager class, addTask(timestamp, name, priority) returning sequential \"taskId<n>\", updateTask returning boolean, retrieval of task details (method not visible; level 1 text only); algorithmTags: HASH_TABLE, DESIGN; variant order from codingQuestions (2 of 4); preview response sha256 961339354c92b5cf6328f0d3ee0672d697ac5ba92200d4e350b2923194e46c44"
+   },
+   {
+    "statement": "Uncertainty: high: no public text exists for this variant; its content is inferred from the group preview, the title and the usual level ladder of this multi-level design format; every level-2 method, ordering, quota and expiry rule is inferred (the title suggests user assignment)",
+    "basis": "the public group preview is partial (816 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: variant 2 of 4: cumulative level 2 (+ search/list)",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/contracts.json",
+    "sha256": "0829f1b98e3a4aa7bfc32413e21359791d60ea7c8efe9cf209942feec47b0ca8",
+    "selector": "/problems/6/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/contracts.json",
+    "sha256": "0829f1b98e3a4aa7bfc32413e21359791d60ea7c8efe9cf209942feec47b0ca8",
+    "selector": "/problems/6/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/contracts.json",
+    "sha256": "0829f1b98e3a4aa7bfc32413e21359791d60ea7c8efe9cf209942feec47b0ca8",
+    "selector": "/problems/6/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "Is the name filter a substring or prefix match, case-sensitive?",
+   "How are equal priorities ordered?",
+   "What if maxResults exceeds the matches?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/study-content.json",
+    "sha256": "823fac1f7f9050a1dc42391d4476ac1679855d65eac111bc661508f17561c79e",
+    "selector": "/variants/hack2hire:69efc92d96981f58ae1f6d75/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [
+      "TaskManager",
+      "getTask"
+     ],
+     [
+      [],
+      [
+       1,
+       "taskId1"
+      ]
+     ]
+    ],
+    "output": [
+     null,
+     ""
+    ],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      "TaskManager",
+      "getTask",
+      "searchTasks",
+      "searchTasks",
+      "getTask",
+      "getTask",
+      "searchTasks",
+      "searchTasks",
+      "searchTasks",
+      "updateTask"
+     ],
+     [
+      [],
+      [
+       2,
+       "taskId1"
+      ],
+      [
+       5,
+       "Bug",
+       2
+      ],
+      [
+       6,
+       "o",
+       1
+      ],
+      [
+       7,
+       "taskId1"
+      ],
+      [
+       8,
+       "taskId1"
+      ],
+      [
+       9,
+       "z",
+       2
+      ],
+      [
+       10,
+       "z",
+       2
+      ],
+      [
+       11,
+       " ",
+       5
+      ],
+      [
+       12,
+       "taskId1",
+       "docs",
+       2
+      ]
+     ]
+    ],
+    "output": [
+     null,
+     "",
+     [],
+     [],
+     "",
+     "",
+     [],
+     [],
+     [],
+     false
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/study-content.json",
+    "sha256": "823fac1f7f9050a1dc42391d4476ac1679855d65eac111bc661508f17561c79e",
+    "selector": "/variants/hack2hire:69efc92d96981f58ae1f6d75/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/oracles.py",
+    "sha256": "cbc4732d69a7104fa8970dbd020de95f43bd18ae09d919f24c7a33b8d405edcf",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "class",
+   "declaration": {
+    "status": "present",
+    "value": "class TaskManager:\n    def __init__(self)\n    def addTask(self, timestamp, name, priority) -> string\n    def updateTask(self, timestamp, taskId, name, priority) -> boolean\n    def getTask(self, timestamp, taskId) -> string\n    def searchTasks(self, timestamp, nameFilter, maxResults) -> string[]\n    def listTasksSorted(self, timestamp, limit) -> string[]",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/contracts.json",
+      "sha256": "0829f1b98e3a4aa7bfc32413e21359791d60ea7c8efe9cf209942feec47b0ca8",
+      "selector": "/problems/6/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/semantics/69efc92d96981f58ae1f6d75-python.json",
+     "inferredInterface": {
+      "classname": "TaskManager",
+      "constructor": {
+       "params": []
+      },
+      "methods": [
+       {
+        "name": "addTask",
+        "params": [
+         {
+          "name": "timestamp",
+          "type": "integer"
+         },
+         {
+          "name": "name",
+          "type": "string"
+         },
+         {
+          "name": "priority",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "string"
+        }
+       },
+       {
+        "name": "updateTask",
+        "params": [
+         {
+          "name": "timestamp",
+          "type": "integer"
+         },
+         {
+          "name": "taskId",
+          "type": "string"
+         },
+         {
+          "name": "name",
+          "type": "string"
+         },
+         {
+          "name": "priority",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "boolean"
+        }
+       },
+       {
+        "name": "getTask",
+        "params": [
+         {
+          "name": "timestamp",
+          "type": "integer"
+         },
+         {
+          "name": "taskId",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "string"
+        }
+       },
+       {
+        "name": "searchTasks",
+        "params": [
+         {
+          "name": "timestamp",
+          "type": "integer"
+         },
+         {
+          "name": "nameFilter",
+          "type": "string"
+         },
+         {
+          "name": "maxResults",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "string[]"
+        }
+       },
+       {
+        "name": "listTasksSorted",
+        "params": [
+         {
+          "name": "timestamp",
+          "type": "integer"
+         },
+         {
+          "name": "limit",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "string[]"
+        }
+       }
+      ]
+     },
+     "traceAdapter": {
+      "name": "solve",
+      "argument_order": [
+       "operation_names",
+       "argument_lists"
+      ],
+      "constructor_output": null,
+      "void_method_output": null,
+      "result_order": "constructor followed by every method call",
+      "scope": "Explicit class trace adapter, separate from direct native observer checks."
+     }
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/semantics/69efc92d96981f58ae1f6d75-python.json",
+      "sha256": "b8e0349e4d6cc30cc58e6e4f6873379ec8de1c7e38b988bab5c729b641306e68",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "class",
+   "declaration": {
+    "status": "present",
+    "value": "class TaskManager {\n  constructor()\n  addTask(timestamp, name, priority) /* -> string */\n  updateTask(timestamp, taskId, name, priority) /* -> boolean */\n  getTask(timestamp, taskId) /* -> string */\n  searchTasks(timestamp, nameFilter, maxResults) /* -> string[] */\n  listTasksSorted(timestamp, limit) /* -> string[] */\n}",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/contracts.json",
+      "sha256": "0829f1b98e3a4aa7bfc32413e21359791d60ea7c8efe9cf209942feec47b0ca8",
+      "selector": "/problems/6/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/semantics/69efc92d96981f58ae1f6d75-javascript.json",
+     "inferredInterface": {
+      "classname": "TaskManager",
+      "constructor": {
+       "params": []
+      },
+      "methods": [
+       {
+        "name": "addTask",
+        "params": [
+         {
+          "name": "timestamp",
+          "type": "integer"
+         },
+         {
+          "name": "name",
+          "type": "string"
+         },
+         {
+          "name": "priority",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "string"
+        }
+       },
+       {
+        "name": "updateTask",
+        "params": [
+         {
+          "name": "timestamp",
+          "type": "integer"
+         },
+         {
+          "name": "taskId",
+          "type": "string"
+         },
+         {
+          "name": "name",
+          "type": "string"
+         },
+         {
+          "name": "priority",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "boolean"
+        }
+       },
+       {
+        "name": "getTask",
+        "params": [
+         {
+          "name": "timestamp",
+          "type": "integer"
+         },
+         {
+          "name": "taskId",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "string"
+        }
+       },
+       {
+        "name": "searchTasks",
+        "params": [
+         {
+          "name": "timestamp",
+          "type": "integer"
+         },
+         {
+          "name": "nameFilter",
+          "type": "string"
+         },
+         {
+          "name": "maxResults",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "string[]"
+        }
+       },
+       {
+        "name": "listTasksSorted",
+        "params": [
+         {
+          "name": "timestamp",
+          "type": "integer"
+         },
+         {
+          "name": "limit",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "string[]"
+        }
+       }
+      ]
+     },
+     "traceAdapter": {
+      "name": "solve",
+      "argument_order": [
+       "operation_names",
+       "argument_lists"
+      ],
+      "constructor_output": null,
+      "void_method_output": null,
+      "result_order": "constructor followed by every method call",
+      "scope": "Explicit class trace adapter, separate from direct native observer checks."
+     }
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/semantics/69efc92d96981f58ae1f6d75-javascript.json",
+      "sha256": "0cabeedc8c032eeddb5865011ed14dfd6f06186cf38fecd40da5fa6ce2b880b0",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/contracts.json",
+    "sha256": "0829f1b98e3a4aa7bfc32413e21359791d60ea7c8efe9cf209942feec47b0ca8",
+    "selector": "/problems/6/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON trace result; no bool/int coercion",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/contracts.json",
+    "sha256": "0829f1b98e3a4aa7bfc32413e21359791d60ea7c8efe9cf209942feec47b0ca8",
+    "selector": "/problems/6/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

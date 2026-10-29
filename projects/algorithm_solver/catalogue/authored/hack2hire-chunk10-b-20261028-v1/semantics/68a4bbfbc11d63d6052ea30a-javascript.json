@@ -1,0 +1,165 @@
+{
+ "schema": "gamma.authored-native-trace-semantics.v1",
+ "problem_uid": "hack2hire:68a4bbfbc11d63d6052ea30a",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "operation_names",
+  "argument_lists"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "classname": "WorkerManagementSystem",
+  "constructor": {
+   "params": []
+  },
+  "methods": [
+   {
+    "name": "addWorker",
+    "params": [
+     {
+      "name": "workerId",
+      "type": "string"
+     },
+     {
+      "name": "position",
+      "type": "string"
+     },
+     {
+      "name": "compensation",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "boolean"
+    }
+   },
+   {
+    "name": "registerWorker",
+    "params": [
+     {
+      "name": "workerId",
+      "type": "string"
+     },
+     {
+      "name": "timestamp",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "string"
+    }
+   },
+   {
+    "name": "get",
+    "params": [
+     {
+      "name": "workerId",
+      "type": "string"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   {
+    "name": "topNWorkers",
+    "params": [
+     {
+      "name": "n",
+      "type": "integer"
+     },
+     {
+      "name": "position",
+      "type": "string"
+     }
+    ],
+    "return": {
+     "type": "string"
+    }
+   },
+   {
+    "name": "promote",
+    "params": [
+     {
+      "name": "workerId",
+      "type": "string"
+     },
+     {
+      "name": "newPosition",
+      "type": "string"
+     },
+     {
+      "name": "newCompensation",
+      "type": "integer"
+     },
+     {
+      "name": "startTimestamp",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "string"
+    }
+   },
+   {
+    "name": "calcSalary",
+    "params": [
+     {
+      "name": "workerId",
+      "type": "string"
+     },
+     {
+      "name": "startTimestamp",
+      "type": "integer"
+     },
+     {
+      "name": "endTimestamp",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   {
+    "name": "setDoublePaid",
+    "params": [
+     {
+      "name": "startTimestamp",
+      "type": "integer"
+     },
+     {
+      "name": "endTimestamp",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "void"
+    }
+   }
+  ]
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON trace result; no bool/int coercion",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "scan every finished session, mark every overlapped time unit and test it against every double-pay period",
+  "candidate_design": "level-3 state plus a merged, sorted list of double-pay periods with prefix lengths, rebuilt lazily after setDoublePaid; each overlapped session adds compensation times (overlap + doubled part of the overlap) via binary search",
+  "complexity_target": "O(log p + overlapping sessions * log p) per calcSalary, O(p log p) per rebuild/O(sessions + p) space"
+ },
+ "source_sha256": "a44a806743ee1e2c228cda30e56e0c229875777c767f9e287d0089a56b26f6d1",
+ "native_class": "WorkerManagementSystem",
+ "native_symbol": "property WorkerManagementSystem of the CommonJS solve export",
+ "void_methods": [
+  "setDoublePaid"
+ ]
+}

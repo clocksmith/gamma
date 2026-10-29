@@ -1,0 +1,40 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:694f5ef093309f91cc14412f",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "expression"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "evaluate",
+  "params": [
+   {
+    "name": "expression",
+    "type": "object"
+   }
+  ],
+  "return": {
+   "type": "integer"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "convert the tree to postfix with an explicit stack and evaluate it with exact fractions",
+  "candidate_design": "recursive post-order evaluation; division uses magnitudes and a sign so it truncates toward zero exactly in both languages",
+  "complexity_target": "O(nodes) time/O(depth) space"
+ },
+ "source_sha256": "a67231627e495089a429a9f045ef4a75a137205d35503c89cbc7affa12163655",
+ "wrapper": "Solution.evaluate"
+}

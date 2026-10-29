@@ -1,0 +1,525 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:69efc8e696981f58ae1f6d73:69efc8ea96981f58ae1f6d74:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/contracts.json",
+   "sha256": "0829f1b98e3a4aa7bfc32413e21359791d60ea7c8efe9cf209942feec47b0ca8",
+   "selector": "/problems/5"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/69efc8e696981f58ae1f6d73.json",
+   "sha256": "ab312be4383b3d1983734a97ea0aa428e993a7c5ce6a3ea0a071ee5904b59edb",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/study-content.json",
+   "sha256": "823fac1f7f9050a1dc42391d4476ac1679855d65eac111bc661508f17561c79e",
+   "selector": "/variants/hack2hire:69efc8ea96981f58ae1f6d74"
+  }
+ ],
+ "problemId": "hack2hire:69efc8e696981f58ae1f6d73",
+ "variantId": "69efc8ea96981f58ae1f6d74",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred level 1 of 4: task store",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/study-content.json",
+    "sha256": "823fac1f7f9050a1dc42391d4476ac1679855d65eac111bc661508f17561c79e",
+    "selector": "/variants/hack2hire:69efc8ea96981f58ae1f6d74/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "TaskManager() starts empty; every call carries a timestamp and timestamps strictly increase. addTask(timestamp, name, priority) stores a task and returns its id \"taskId<n>\" with n = 1, 2, ... in creation order (duplicates allowed). updateTask(timestamp, taskId, name, priority) replaces both fields and returns true, or returns false for an unknown id. getTask(timestamp, taskId) returns \"<name>(<priority>)\", or \"\" for an unknown id.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/contracts.json",
+    "sha256": "0829f1b98e3a4aa7bfc32413e21359791d60ea7c8efe9cf209942feec47b0ca8",
+    "selector": "/problems/5/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "TaskManager() starts empty; every call carries a timestamp and timestamps strictly increase.",
+   "addTask(timestamp, name, priority) stores a task and returns its id \"taskId<n>\" with n = 1, 2, ..",
+   "in creation order (duplicates allowed).",
+   "updateTask(timestamp, taskId, name, priority) replaces both fields and returns true, or returns false for an unknown id.",
+   "getTask(timestamp, taskId) returns \"<name>(<priority>)\", or \"\" for an unknown id."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/contracts.json",
+    "sha256": "0829f1b98e3a4aa7bfc32413e21359791d60ea7c8efe9cf209942feec47b0ca8",
+    "selector": "/problems/5/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "up to 1e5 calls",
+   "timestamps strictly increasing, 0..1e9",
+   "names match [A-Za-z0-9 ]{1,20}",
+   "-1e9 <= priority <= 1e9"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/study-content.json",
+    "sha256": "823fac1f7f9050a1dc42391d4476ac1679855d65eac111bc661508f17561c79e",
+    "selector": "/variants/hack2hire:69efc8ea96981f58ae1f6d74/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: title; contentPreview: TaskManager class, addTask(timestamp, name, priority) returning sequential \"taskId<n>\", updateTask returning boolean, retrieval of task details (method not visible; level 1 text only); algorithmTags: HASH_TABLE, DESIGN; variant order from codingQuestions (1 of 4); preview response sha256 961339354c92b5cf6328f0d3ee0672d697ac5ba92200d4e350b2923194e46c44"
+   },
+   {
+    "statement": "Uncertainty: medium: the class, addTask and updateTask are in the preview; getTask, its \"name(priority)\" format and the \"\" sentinel are inferred",
+    "basis": "the public group preview is partial (816 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: variant 1 of 4: cumulative level 1 (add/update/get)",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/contracts.json",
+    "sha256": "0829f1b98e3a4aa7bfc32413e21359791d60ea7c8efe9cf209942feec47b0ca8",
+    "selector": "/problems/5/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/contracts.json",
+    "sha256": "0829f1b98e3a4aa7bfc32413e21359791d60ea7c8efe9cf209942feec47b0ca8",
+    "selector": "/problems/5/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/contracts.json",
+    "sha256": "0829f1b98e3a4aa7bfc32413e21359791d60ea7c8efe9cf209942feec47b0ca8",
+    "selector": "/problems/5/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "What does getTask return, and in what format?",
+   "What happens for an unknown task id?",
+   "Do ids restart or skip after updates?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/study-content.json",
+    "sha256": "823fac1f7f9050a1dc42391d4476ac1679855d65eac111bc661508f17561c79e",
+    "selector": "/variants/hack2hire:69efc8ea96981f58ae1f6d74/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [
+      "TaskManager",
+      "getTask"
+     ],
+     [
+      [],
+      [
+       1,
+       "taskId1"
+      ]
+     ]
+    ],
+    "output": [
+     null,
+     ""
+    ],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      "TaskManager",
+      "updateTask",
+      "updateTask",
+      "getTask",
+      "getTask",
+      "getTask",
+      "getTask",
+      "addTask",
+      "addTask",
+      "getTask"
+     ],
+     [
+      [],
+      [
+       1,
+       "taskId0",
+       "bug",
+       3
+      ],
+      [
+       2,
+       "taskId0",
+       "docs",
+       2
+      ],
+      [
+       3,
+       "taskid1"
+      ],
+      [
+       6,
+       "taskId1"
+      ],
+      [
+       8,
+       "taskId0"
+      ],
+      [
+       9,
+       "taskId0"
+      ],
+      [
+       12,
+       "a",
+       0
+      ],
+      [
+       13,
+       "a",
+       1
+      ],
+      [
+       14,
+       "taskid1"
+      ]
+     ]
+    ],
+    "output": [
+     null,
+     false,
+     false,
+     "",
+     "",
+     "",
+     "",
+     "taskId1",
+     "taskId2",
+     ""
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/study-content.json",
+    "sha256": "823fac1f7f9050a1dc42391d4476ac1679855d65eac111bc661508f17561c79e",
+    "selector": "/variants/hack2hire:69efc8ea96981f58ae1f6d74/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/oracles.py",
+    "sha256": "cbc4732d69a7104fa8970dbd020de95f43bd18ae09d919f24c7a33b8d405edcf",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "class",
+   "declaration": {
+    "status": "present",
+    "value": "class TaskManager:\n    def __init__(self)\n    def addTask(self, timestamp, name, priority) -> string\n    def updateTask(self, timestamp, taskId, name, priority) -> boolean\n    def getTask(self, timestamp, taskId) -> string",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/contracts.json",
+      "sha256": "0829f1b98e3a4aa7bfc32413e21359791d60ea7c8efe9cf209942feec47b0ca8",
+      "selector": "/problems/5/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/semantics/69efc8ea96981f58ae1f6d74-python.json",
+     "inferredInterface": {
+      "classname": "TaskManager",
+      "constructor": {
+       "params": []
+      },
+      "methods": [
+       {
+        "name": "addTask",
+        "params": [
+         {
+          "name": "timestamp",
+          "type": "integer"
+         },
+         {
+          "name": "name",
+          "type": "string"
+         },
+         {
+          "name": "priority",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "string"
+        }
+       },
+       {
+        "name": "updateTask",
+        "params": [
+         {
+          "name": "timestamp",
+          "type": "integer"
+         },
+         {
+          "name": "taskId",
+          "type": "string"
+         },
+         {
+          "name": "name",
+          "type": "string"
+         },
+         {
+          "name": "priority",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "boolean"
+        }
+       },
+       {
+        "name": "getTask",
+        "params": [
+         {
+          "name": "timestamp",
+          "type": "integer"
+         },
+         {
+          "name": "taskId",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "string"
+        }
+       }
+      ]
+     },
+     "traceAdapter": {
+      "name": "solve",
+      "argument_order": [
+       "operation_names",
+       "argument_lists"
+      ],
+      "constructor_output": null,
+      "void_method_output": null,
+      "result_order": "constructor followed by every method call",
+      "scope": "Explicit class trace adapter, separate from direct native observer checks."
+     }
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/semantics/69efc8ea96981f58ae1f6d74-python.json",
+      "sha256": "f2834e27272fa8678e4676239ca33e3083ff92d09dce976efc7dcb425fb629bd",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "class",
+   "declaration": {
+    "status": "present",
+    "value": "class TaskManager {\n  constructor()\n  addTask(timestamp, name, priority) /* -> string */\n  updateTask(timestamp, taskId, name, priority) /* -> boolean */\n  getTask(timestamp, taskId) /* -> string */\n}",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/contracts.json",
+      "sha256": "0829f1b98e3a4aa7bfc32413e21359791d60ea7c8efe9cf209942feec47b0ca8",
+      "selector": "/problems/5/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/semantics/69efc8ea96981f58ae1f6d74-javascript.json",
+     "inferredInterface": {
+      "classname": "TaskManager",
+      "constructor": {
+       "params": []
+      },
+      "methods": [
+       {
+        "name": "addTask",
+        "params": [
+         {
+          "name": "timestamp",
+          "type": "integer"
+         },
+         {
+          "name": "name",
+          "type": "string"
+         },
+         {
+          "name": "priority",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "string"
+        }
+       },
+       {
+        "name": "updateTask",
+        "params": [
+         {
+          "name": "timestamp",
+          "type": "integer"
+         },
+         {
+          "name": "taskId",
+          "type": "string"
+         },
+         {
+          "name": "name",
+          "type": "string"
+         },
+         {
+          "name": "priority",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "boolean"
+        }
+       },
+       {
+        "name": "getTask",
+        "params": [
+         {
+          "name": "timestamp",
+          "type": "integer"
+         },
+         {
+          "name": "taskId",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "string"
+        }
+       }
+      ]
+     },
+     "traceAdapter": {
+      "name": "solve",
+      "argument_order": [
+       "operation_names",
+       "argument_lists"
+      ],
+      "constructor_output": null,
+      "void_method_output": null,
+      "result_order": "constructor followed by every method call",
+      "scope": "Explicit class trace adapter, separate from direct native observer checks."
+     }
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/semantics/69efc8ea96981f58ae1f6d74-javascript.json",
+      "sha256": "f8bdc47d5f147f484849dec048b46a3dcd8bf41e9e6d3d0dd6944c641e12a877",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/contracts.json",
+    "sha256": "0829f1b98e3a4aa7bfc32413e21359791d60ea7c8efe9cf209942feec47b0ca8",
+    "selector": "/problems/5/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON trace result; no bool/int coercion",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk10-b-20261028-v1/contracts.json",
+    "sha256": "0829f1b98e3a4aa7bfc32413e21359791d60ea7c8efe9cf209942feec47b0ca8",
+    "selector": "/problems/5/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}
