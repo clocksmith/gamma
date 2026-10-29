@@ -1,0 +1,50 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:6976850c5ed12b33b05f0f0f",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "routes",
+  "source",
+  "target"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "directRoutes",
+  "params": [
+   {
+    "name": "routes",
+    "type": "string[]"
+   },
+   {
+    "name": "source",
+    "type": "string"
+   },
+   {
+    "name": "target",
+    "type": "string"
+   }
+  ],
+  "return": {
+   "type": "[string, integer][]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "scan every route and keep matches, then sort by an explicit pair comparison",
+  "candidate_design": "parse each route once, filter by source and target, sort by (cost, method)",
+  "complexity_target": "O(R log R) time/O(R) space"
+ },
+ "source_sha256": "1da811ea3ff8ee3b88199e89051f5eb0c01dff59e933d88899758c34d9282cba",
+ "wrapper": "named export directRoutes"
+}

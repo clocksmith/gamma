@@ -1,0 +1,422 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:6975228817272b5c868d5e45:69752cb217272b5c868d5e84:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/contracts.json",
+   "sha256": "d42a2aaa6884197543966061aec63c5999854605e9e095e93495bc3e43045591",
+   "selector": "/problems/7"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/6975228817272b5c868d5e45.json",
+   "sha256": "50fcfd93a0b6d2568a453f7fc9c16ab22b633f9950be68ce01a4df23ccbe9753",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/study-content.json",
+   "sha256": "090481e11ecb7df5f50c5f228bd585a3448c683bad99572df7a87ca263d5a6c2",
+   "selector": "/variants/hack2hire:69752cb217272b5c868d5e84"
+  }
+ ],
+ "problemId": "hack2hire:6975228817272b5c868d5e45",
+ "variantId": "69752cb217272b5c868d5e84",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred single variant: earliest-departure first fit with all-or-nothing orders",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/study-content.json",
+    "sha256": "090481e11ecb7df5f50c5f228bd585a3448c683bad99572df7a87ca263d5a6c2",
+    "selector": "/variants/hack2hire:69752cb217272b5c868d5e84/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "planes lists [departureTime, capacity] with distinct departure times; orders lists [shipTime, items] in processing order. For each order, place its items in the given order: each item goes to the plane with the earliest departure time strictly after shipTime whose remaining capacity is at least the item size, and that capacity shrinks by the size. If some item fits no eligible plane, the order is rejected and every capacity returns to its value before the order. Return one list per order: the departure times of the planes chosen for its items, in item order, or [] for a rejected order.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/contracts.json",
+    "sha256": "d42a2aaa6884197543966061aec63c5999854605e9e095e93495bc3e43045591",
+    "selector": "/problems/7/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "planes lists [departureTime, capacity] with distinct departure times; orders lists [shipTime, items] in processing order.",
+   "For each order, place its items in the given order: each item goes to the plane with the earliest departure time strictly after shipTime whose remaining capacity is at least the item size, and that capacity shrinks by the size.",
+   "If some item fits no eligible plane, the order is rejected and every capacity returns to its value before the order.",
+   "Return one list per order: the departure times of the planes chosen for its items, in item order, or [] for a rejected order."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/contracts.json",
+    "sha256": "d42a2aaa6884197543966061aec63c5999854605e9e095e93495bc3e43045591",
+    "selector": "/problems/7/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "0 <= planes.length <= 2e4",
+   "0 <= departureTime, capacity <= 1e9",
+   "0 <= orders.length <= 2e4",
+   "0 <= shipTime <= 1e9",
+   "1 <= items per order <= 20, total items <= 1e5",
+   "1 <= item size <= 1e9"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/study-content.json",
+    "sha256": "090481e11ecb7df5f50c5f228bd585a3448c683bad99572df7a87ca263d5a6c2",
+    "selector": "/variants/hack2hire:69752cb217272b5c868d5e84/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: title; contentPreview: planes with unique departure times and capacities that shrink as items are assigned; orders with a ship time and indivisible item sizes may use only planes departing strictly after the ship time, items of one order may go to different planes; a deterministic rule is applied per order and a failed item rejects the whole order with capacities restored (the rule and output are cut off); algorithmTags: BINARY_SEARCH, GREEDY; preview response sha256 29088502adf16aa7262d1079a9977407bd41b231b6d50fd8e9d9321935d5c652"
+   },
+   {
+    "statement": "Uncertainty: high: eligibility, splitting, rejection and rollback are in the preview; the earliest-departure first-fit rule, processing items and orders in input order, and the output (chosen departure times or [] when rejected) are inferred from the tags",
+    "basis": "the public group preview is partial (641 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: single variant",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/contracts.json",
+    "sha256": "d42a2aaa6884197543966061aec63c5999854605e9e095e93495bc3e43045591",
+    "selector": "/problems/7/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/contracts.json",
+    "sha256": "d42a2aaa6884197543966061aec63c5999854605e9e095e93495bc3e43045591",
+    "selector": "/problems/7/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/contracts.json",
+    "sha256": "d42a2aaa6884197543966061aec63c5999854605e9e095e93495bc3e43045591",
+    "selector": "/problems/7/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "Which eligible plane receives an item: earliest departure, best fit or largest capacity?",
+   "Are items placed in the given order or sorted?",
+   "What is returned for a rejected order?",
+   "Are orders processed in input order or by ship time?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/study-content.json",
+    "sha256": "090481e11ecb7df5f50c5f228bd585a3448c683bad99572df7a87ca263d5a6c2",
+    "selector": "/variants/hack2hire:69752cb217272b5c868d5e84/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [],
+     []
+    ],
+    "output": [],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      [
+       0,
+       5
+      ],
+      [
+       5,
+       0
+      ],
+      [
+       19,
+       5
+      ],
+      [
+       14,
+       0
+      ],
+      [
+       4,
+       3
+      ],
+      [
+       15,
+       3
+      ]
+     ],
+     [
+      [
+       19,
+       [
+        6,
+        4,
+        6
+       ]
+      ],
+      [
+       4,
+       [
+        5,
+        4,
+        1
+       ]
+      ],
+      [
+       8,
+       [
+        6,
+        4
+       ]
+      ],
+      [
+       7,
+       [
+        2
+       ]
+      ],
+      [
+       2,
+       [
+        5,
+        6,
+        3
+       ]
+      ],
+      [
+       16,
+       [
+        5,
+        4,
+        5
+       ]
+      ],
+      [
+       17,
+       [
+        3,
+        4
+       ]
+      ],
+      [
+       12,
+       [
+        5
+       ]
+      ]
+     ]
+    ],
+    "output": [
+     [],
+     [],
+     [],
+     [
+      15
+     ],
+     [],
+     [],
+     [],
+     [
+      19
+     ]
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/study-content.json",
+    "sha256": "090481e11ecb7df5f50c5f228bd585a3448c683bad99572df7a87ca263d5a6c2",
+    "selector": "/variants/hack2hire:69752cb217272b5c868d5e84/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/oracles.py",
+    "sha256": "d793c4b27910a76fa38a612efa95625b518db8e86a2af524b0a0395b6dc6abf9",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "def scheduleOrders(planes, orders) -> integer[][]",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/contracts.json",
+      "sha256": "d42a2aaa6884197543966061aec63c5999854605e9e095e93495bc3e43045591",
+      "selector": "/problems/7/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/semantics/69752cb217272b5c868d5e84-python.json",
+     "inferredInterface": {
+      "name": "scheduleOrders",
+      "params": [
+       {
+        "name": "planes",
+        "type": "integer[][]"
+       },
+       {
+        "name": "orders",
+        "type": "[integer, integer[]][]"
+       }
+      ],
+      "return": {
+       "type": "integer[][]"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/semantics/69752cb217272b5c868d5e84-python.json",
+      "sha256": "b0564fa233511a1ac0df8a860abb5de929ab3ddf6964acbb224e5db82936520b",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "function scheduleOrders(planes, orders) /* -> integer[][] */",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/contracts.json",
+      "sha256": "d42a2aaa6884197543966061aec63c5999854605e9e095e93495bc3e43045591",
+      "selector": "/problems/7/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/semantics/69752cb217272b5c868d5e84-javascript.json",
+     "inferredInterface": {
+      "name": "scheduleOrders",
+      "params": [
+       {
+        "name": "planes",
+        "type": "integer[][]"
+       },
+       {
+        "name": "orders",
+        "type": "[integer, integer[]][]"
+       }
+      ],
+      "return": {
+       "type": "integer[][]"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/semantics/69752cb217272b5c868d5e84-javascript.json",
+      "sha256": "51b1532d73ca532fc52222cf3288bcf17822c975f5255dcfb1b389b1097fff58",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/contracts.json",
+    "sha256": "d42a2aaa6884197543966061aec63c5999854605e9e095e93495bc3e43045591",
+    "selector": "/problems/7/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON result",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/contracts.json",
+    "sha256": "d42a2aaa6884197543966061aec63c5999854605e9e095e93495bc3e43045591",
+    "selector": "/problems/7/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

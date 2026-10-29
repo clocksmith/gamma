@@ -1,0 +1,384 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:69767fdf5ed12b33b05f0efe:697690985ed12b33b05f0f2c:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/contracts.json",
+   "sha256": "d42a2aaa6884197543966061aec63c5999854605e9e095e93495bc3e43045591",
+   "selector": "/problems/16"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/69767fdf5ed12b33b05f0efe.json",
+   "sha256": "8b2bcb8e4761c76426c92482c852d68066c515341ac16e93c66e44ff2d36597b",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/study-content.json",
+   "sha256": "090481e11ecb7df5f50c5f228bd585a3448c683bad99572df7a87ca263d5a6c2",
+   "selector": "/variants/hack2hire:697690985ed12b33b05f0f2c"
+  }
+ ],
+ "problemId": "hack2hire:69767fdf5ed12b33b05f0efe",
+ "variantId": "697690985ed12b33b05f0f2c",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred level 2: paths with at most one transfer",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/study-content.json",
+    "sha256": "090481e11ecb7df5f50c5f228bd585a3448c683bad99572df7a87ca263d5a6c2",
+    "selector": "/variants/hack2hire:697690985ed12b33b05f0f2c/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "routes lists strings \"<source>:<target>:<method>:<cost>\" (country codes of 2 or 3 capital letters, source != target, method letters, positive integer cost), each a directed route; no two routes share source, target and method. Level 2 (source != target): return every path from source to target using one route, or two routes through an intermediate country other than source and target, as [path, totalCost] where path is \"<source>:<method>:<target>\" or \"<source>:<method1>:<middle>:<method2>:<target>\"; order by total cost and then path (code point).",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/contracts.json",
+    "sha256": "d42a2aaa6884197543966061aec63c5999854605e9e095e93495bc3e43045591",
+    "selector": "/problems/16/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "routes lists strings \"<source>:<target>:<method>:<cost>\" (country codes of 2 or 3 capital letters, source != target, method letters, positive integer cost), each a directed route; no two routes share source, target and method.",
+   "Level 2 (source != target): return every path from source to target using one route, or two routes through an intermediate country other than source and target, as [path, totalCost] where path is \"<source>:<method>:<target>\" or \"<source>:<method1>:<middle>:<method2>:<target>\"; order by total cost and then path (code point)."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/contracts.json",
+    "sha256": "d42a2aaa6884197543966061aec63c5999854605e9e095e93495bc3e43045591",
+    "selector": "/problems/16/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "1 <= routes.length <= 2000",
+   "country codes match [A-Z]{2,3}",
+   "methods match [A-Za-z]{1,10}",
+   "1 <= cost <= 1e6",
+   "at most 2e4 qualifying paths"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/study-content.json",
+    "sha256": "090481e11ecb7df5f50c5f228bd585a3448c683bad99572df7a87ca263d5a6c2",
+    "selector": "/variants/hack2hire:697690985ed12b33b05f0f2c/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: title; contentPreview: shipping routes given as strings \"<source>:<target>:<method>:<cost>\"; help customers discover the possible shipping paths between countries (the parts and output formats are cut off); algorithmTags: GRAPH; preview response sha256 eb88d80ce265e6e1e6c687624a014b405809f0c6595cdf75aa3d5a2bad491bcc"
+   },
+   {
+    "statement": "Uncertainty: very high: level 2 has no public text; at most one transfer, the path string format and the order are inferred",
+    "basis": "the public group preview is partial (352 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: inferred: variant 2 of 3 allows one transfer",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/contracts.json",
+    "sha256": "d42a2aaa6884197543966061aec63c5999854605e9e095e93495bc3e43045591",
+    "selector": "/problems/16/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/contracts.json",
+    "sha256": "d42a2aaa6884197543966061aec63c5999854605e9e095e93495bc3e43045591",
+    "selector": "/problems/16/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/contracts.json",
+    "sha256": "d42a2aaa6884197543966061aec63c5999854605e9e095e93495bc3e43045591",
+    "selector": "/problems/16/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "Are routes directed?",
+   "How many transfers may a path use in each part?",
+   "How are paths and costs reported, and in what order?",
+   "What is returned when no path exists?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/study-content.json",
+    "sha256": "090481e11ecb7df5f50c5f228bd585a3448c683bad99572df7a87ca263d5a6c2",
+    "selector": "/variants/hack2hire:697690985ed12b33b05f0f2c/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [
+      "AB:CD:x:1"
+     ],
+     "AB",
+     "CD"
+    ],
+    "output": [
+     [
+      "AB:x:CD",
+      1
+     ]
+    ],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      "AA:CC:Sea:4",
+      "AA:CC:x:1",
+      "CC:BB:Sea:10",
+      "BB:CC:UPS:8",
+      "DD:CC:x:3",
+      "CC:EEE:x:5",
+      "EEE:BB:UPS:9",
+      "DD:BB:Sea:11",
+      "DD:CC:UPS:7",
+      "BB:EEE:Air:2",
+      "EEE:CC:Sea:2",
+      "BB:AA:UPS:2",
+      "EEE:AA:UPS:4",
+      "CC:AA:UPS:6",
+      "EEE:BB:Sea:1",
+      "DD:AA:x:7",
+      "BB:AA:Sea:9",
+      "BB:EEE:x:2",
+      "DD:BB:x:4"
+     ],
+     "DD",
+     "EEE"
+    ],
+    "output": [
+     [
+      "DD:x:BB:Air:EEE",
+      6
+     ],
+     [
+      "DD:x:BB:x:EEE",
+      6
+     ],
+     [
+      "DD:x:CC:x:EEE",
+      8
+     ],
+     [
+      "DD:UPS:CC:x:EEE",
+      12
+     ],
+     [
+      "DD:Sea:BB:Air:EEE",
+      13
+     ],
+     [
+      "DD:Sea:BB:x:EEE",
+      13
+     ]
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/study-content.json",
+    "sha256": "090481e11ecb7df5f50c5f228bd585a3448c683bad99572df7a87ca263d5a6c2",
+    "selector": "/variants/hack2hire:697690985ed12b33b05f0f2c/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/oracles.py",
+    "sha256": "d793c4b27910a76fa38a612efa95625b518db8e86a2af524b0a0395b6dc6abf9",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "def pathsWithOneTransfer(routes, source, target) -> [string, integer][]",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/contracts.json",
+      "sha256": "d42a2aaa6884197543966061aec63c5999854605e9e095e93495bc3e43045591",
+      "selector": "/problems/16/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/semantics/697690985ed12b33b05f0f2c-python.json",
+     "inferredInterface": {
+      "name": "pathsWithOneTransfer",
+      "params": [
+       {
+        "name": "routes",
+        "type": "string[]"
+       },
+       {
+        "name": "source",
+        "type": "string"
+       },
+       {
+        "name": "target",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "[string, integer][]"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/semantics/697690985ed12b33b05f0f2c-python.json",
+      "sha256": "a8e94ea4ffd643a54de3965defb02894b37ea78e3356d322f09cc72b7283a6b7",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "function pathsWithOneTransfer(routes, source, target) /* -> [string, integer][] */",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/contracts.json",
+      "sha256": "d42a2aaa6884197543966061aec63c5999854605e9e095e93495bc3e43045591",
+      "selector": "/problems/16/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/semantics/697690985ed12b33b05f0f2c-javascript.json",
+     "inferredInterface": {
+      "name": "pathsWithOneTransfer",
+      "params": [
+       {
+        "name": "routes",
+        "type": "string[]"
+       },
+       {
+        "name": "source",
+        "type": "string"
+       },
+       {
+        "name": "target",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "[string, integer][]"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/semantics/697690985ed12b33b05f0f2c-javascript.json",
+      "sha256": "2c4e74df4efd7baef0b731dc0cc68044d36a3f8361273382746ac464eb9b4d31",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/contracts.json",
+    "sha256": "d42a2aaa6884197543966061aec63c5999854605e9e095e93495bc3e43045591",
+    "selector": "/problems/16/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON result",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/contracts.json",
+    "sha256": "d42a2aaa6884197543966061aec63c5999854605e9e095e93495bc3e43045591",
+    "selector": "/problems/16/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

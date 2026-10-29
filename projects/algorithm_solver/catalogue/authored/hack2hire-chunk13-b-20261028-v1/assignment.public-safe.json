@@ -1,0 +1,1059 @@
+{
+ "schema": "gamma.authored-assignment-public-safe.v1",
+ "authorization": "Coordinator worklist h2h-chunk13-b (16 Hack2Hire groups, 21 variants); public group previews only; no full-content or solution endpoints",
+ "status": "new development variants over INFERRED specifications; independent isolated qualification pending; official specification unavailable",
+ "problems": [
+  {
+   "uid": "hack2hire:69557daa4a0202df9569e982",
+   "title": "Related Communities Finder",
+   "variant_ordinal": 1,
+   "group_post_id": "69557d994a0202df9569e981",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "findRelatedCommunities",
+     "params": [
+      {
+       "name": "communityToFollowers",
+       "type": "string[][]"
+      },
+      {
+       "name": "followerToCommunities",
+       "type": "string[][]"
+      },
+      {
+       "name": "communityIdx",
+       "type": "integer"
+      }
+     ],
+     "return": {
+      "type": "string[]"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "for every other community, test whether its follower list and the target follower list share an element by nested list scans",
+    "candidate_design": "walk the target community followers, and for each follower its community list, marking community indices in a boolean array; collect marked indices in increasing order",
+    "complexity_target": "O(n + memberships reachable in two steps) time/O(n) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "b23b606374978928c77d0d32a1075bd723435901ce466f907e19f05be202f66e",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:69557dad4a0202df9569e983",
+   "title": "Related Communities Finder",
+   "variant_ordinal": 2,
+   "group_post_id": "69557d994a0202df9569e981",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "findConnectedCommunities",
+     "params": [
+      {
+       "name": "communityToFollowers",
+       "type": "string[][]"
+      },
+      {
+       "name": "followerToCommunities",
+       "type": "string[][]"
+      },
+      {
+       "name": "communityIdx",
+       "type": "integer"
+      }
+     ],
+     "return": {
+      "type": "string[]"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "grow a reached set by repeated full rescans: add any community that shares a follower with a reached community, until nothing changes",
+    "candidate_design": "breadth-first search over the bipartite community/follower graph with visited arrays for both sides",
+    "complexity_target": "O(n + m + memberships) time/O(n + m) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "b23b606374978928c77d0d32a1075bd723435901ce466f907e19f05be202f66e",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:684dee4b5e4cf21833c0611f",
+   "title": "Remove Covered Point",
+   "variant_ordinal": 1,
+   "group_post_id": "684db91acab8e9bb7ea93b44",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "removeCoveredPoint",
+     "params": [
+      {
+       "name": "intervals",
+       "type": "integer[][]"
+      },
+      {
+       "name": "idx",
+       "type": "integer"
+      }
+     ],
+     "return": {
+      "type": "integer[][]"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "enumerate covered points one by one with a counter until the counter reaches idx",
+    "candidate_design": "subtract interval lengths from idx until it falls inside an interval, then split that interval arithmetically",
+    "complexity_target": "O(n) time/O(n) output space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "97a5c0a579ece3feb5fb9c835dad45f19c8b3761aa3cd4f380a6447976d26d38",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:69a32b466e73e4abccc9bf13",
+   "title": "Reverse Middle of Vowel Words",
+   "variant_ordinal": 1,
+   "group_post_id": "69a32b2b6e73e4abccc9bf12",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "reverseVowelWordMiddles",
+     "params": [
+      {
+       "name": "text",
+       "type": "string[]"
+      }
+     ],
+     "return": {
+      "type": "string[]"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "explicit two-pointer swap on a character list for each qualifying word",
+    "candidate_design": "string slicing: first character + reversed middle slice + last character for qualifying words",
+    "complexity_target": "O(total characters) time/O(total characters) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "2de86947892d1db7769ecea7280826d58891350db80763723ffb78e609c2210f",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:6801c3b66cd5d6c88778f20c",
+   "title": "Role Privilege System",
+   "variant_ordinal": 1,
+   "group_post_id": "6801bfbd6cd5d6c88778f209",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "finalPrivileges",
+     "params": [
+      {
+       "name": "roles",
+       "type": "string[]"
+      },
+      {
+       "name": "parents",
+       "type": "string[][]"
+      },
+      {
+       "name": "allowed",
+       "type": "string[][]"
+      },
+      {
+       "name": "disallowed",
+       "type": "string[][]"
+      }
+     ],
+     "return": {
+      "type": "string[][]"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "fixed-point iteration: recompute every role from its parents until no set changes",
+    "candidate_design": "Kahn topological order over parent -> child edges, computing each role once from its already-final parents with hash sets, then sorting",
+    "complexity_target": "O((n + edges) * P + n P log P) time for P distinct privileges/O(n P) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "788902152f66d01a4f7d057d801b87124a6c6b292f3cfe719ba0e7b1f4a8afd9",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:69cae7e2ff3ebde766ceda54",
+   "title": "Route Nearest Checkpoint",
+   "variant_ordinal": 1,
+   "group_post_id": "69cae7d8ff3ebde766ceda53",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "nearestCheckpoints",
+     "params": [
+      {
+       "name": "coordinates",
+       "type": "integer[][]"
+      },
+      {
+       "name": "distances",
+       "type": "integer[]"
+      }
+     ],
+     "return": {
+      "type": "integer[]"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "walk the segments from the start for each query and compare squared distances as exact fractions",
+    "candidate_design": "prefix sums of segment lengths with binary search for the segment, then integer squared distances scaled by the segment length squared compared over all waypoints",
+    "complexity_target": "O(N + Q (log N + N)) time/O(N + Q) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "79770835d3f8378e0c619a3af40dc0d2f6a2cbd4bf20e50be8d90d38b9b0ecb2",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:68aebce1c8631a6568126eb4",
+   "title": "Same Word of HTML Labels",
+   "variant_ordinal": 1,
+   "group_post_id": "68ae8e14c8631a6568126dd7",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "sameWord",
+     "params": [
+      {
+       "name": "tree1",
+       "type": "[string, integer[]][]"
+      },
+      {
+       "name": "tree2",
+       "type": "[string, integer[]][]"
+      }
+     ],
+     "return": {
+      "type": "boolean"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "build both words completely by a recursive pre-order walk and compare the strings",
+    "candidate_design": "two explicit stacks produce leaf texts lazily; compare character by character, advancing whichever leaf is exhausted, stopping at the first difference",
+    "complexity_target": "O(N1 + N2) time/O(height) extra space beyond the input"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "dc7039fa977b32ace3c222eae9cace3087933b6af856501f651fc72f454c780a",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:69752cb217272b5c868d5e84",
+   "title": "Schedule Orders onto Planes",
+   "variant_ordinal": 1,
+   "group_post_id": "6975228817272b5c868d5e45",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "scheduleOrders",
+     "params": [
+      {
+       "name": "planes",
+       "type": "integer[][]"
+      },
+      {
+       "name": "orders",
+       "type": "[integer, integer[]][]"
+      }
+     ],
+     "return": {
+      "type": "integer[][]"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "sort planes by departure and scan linearly for every item, copying capacities before each order for rollback",
+    "candidate_design": "segment tree of remaining capacities over planes sorted by departure; a binary search finds the first eligible index and a descent finds the first plane with enough room; changes are logged and undone on rejection",
+    "complexity_target": "O(P log P + items log P) time/O(P) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "29088502adf16aa7262d1079a9977407bd41b231b6d50fd8e9d9321935d5c652",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:678879df402dc47b67a14946",
+   "title": "Search History System",
+   "variant_ordinal": 1,
+   "group_post_id": "678878d0402dc47b67a14945",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "classname": "SearchHistory",
+     "constructor": {
+      "params": [
+       {
+        "name": "capacity",
+        "type": "integer"
+       }
+      ]
+     },
+     "methods": [
+      {
+       "name": "add",
+       "params": [
+        {
+         "name": "term",
+         "type": "string"
+        }
+       ],
+       "return": {
+        "type": "void"
+       }
+      },
+      {
+       "name": "getTopK",
+       "params": [
+        {
+         "name": "k",
+         "type": "integer"
+        }
+       ],
+       "return": {
+        "type": "string[]"
+       }
+      }
+     ]
+    },
+    "native_class": "SearchHistory"
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "plain list in recency order: remove the term by linear search, append it, drop the front when over capacity",
+    "candidate_design": "hash map from term to node of a doubly linked list with sentinels; add relinks at the head and unlinks the tail on overflow; getTopK walks k nodes from the head",
+    "complexity_target": "O(1) per add, O(k) per getTopK/O(capacity) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "12fd9a603bb6a75576c038f61831341b1ea4eae593c89a4e05312132cc580ca3",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:6a4809cfca956256d786d255",
+   "title": "Segment Sequence Reconstruction",
+   "variant_ordinal": 1,
+   "group_post_id": "6a4809beca956256d786d254",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "reconstructSequence",
+     "params": [
+      {
+       "name": "segments",
+       "type": "string[][]"
+      }
+     ],
+     "return": {
+      "type": "string"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "repeated quadratic scans: find the segment whose start is no segment end, then repeatedly search the whole list for the segment that starts at the current end",
+    "candidate_design": "hash map from startId to segment and a set of endIds; the head is the only start that is not an end; follow the map and join payloads once",
+    "complexity_target": "O(total length) time/O(n) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "dfc319ef349d7a93ffbc189e112b167c1f1f48d2ba8f45ccea40b4ed735d34ad",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:6a480ba0ca956256d786d277",
+   "title": "Segment Sequence Reconstruction",
+   "variant_ordinal": 2,
+   "group_post_id": "6a4809beca956256d786d254",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "reconstructSequence",
+     "params": [
+      {
+       "name": "segments",
+       "type": "string[][]"
+      }
+     ],
+     "return": {
+      "type": "string"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "repeated quadratic scans: find the segment whose start is no segment end, then repeatedly search the whole list for the segment that starts at the current end; invalid when no head, several heads, or the walk misses segments",
+    "candidate_design": "hash map walk from the unique head with a step count; invalid when the number of heads is not one or the walk does not visit every segment",
+    "complexity_target": "O(total length) time/O(n) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "dfc319ef349d7a93ffbc189e112b167c1f1f48d2ba8f45ccea40b4ed735d34ad",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:6a480bbbca956256d786d279",
+   "title": "Segment Sequence Reconstruction",
+   "variant_ordinal": 3,
+   "group_post_id": "6a4809beca956256d786d254",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "reconstructAllSequences",
+     "params": [
+      {
+       "name": "segments",
+       "type": "string[][]"
+      }
+     ],
+     "return": {
+      "type": "string[]"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "repeated quadratic scans: find the segment whose start is no segment end, then repeatedly search the whole list for the segment that starts at the current end; repeat for every head after sorting heads",
+    "candidate_design": "hash map from startId; collect heads (starts that are not ends), sort them, and walk each chain",
+    "complexity_target": "O(total length + h log h) time/O(n) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "dfc319ef349d7a93ffbc189e112b167c1f1f48d2ba8f45ccea40b4ed735d34ad",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:699bb05f6e73e4abccc9a9e4",
+   "title": "Sentence Variations with Anagram",
+   "variant_ordinal": 1,
+   "group_post_id": "699b517e6e73e4abccc9a847",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "sentenceVariations",
+     "params": [
+      {
+       "name": "wordSet",
+       "type": "string[]"
+      },
+      {
+       "name": "sentences",
+       "type": "string[]"
+      }
+     ],
+     "return": {
+      "type": "string[][]"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "generate the Cartesian product of the option sets for each sentence, de-duplicate and sort the joined strings",
+    "candidate_design": "group wordSet by sorted-letter signature; for each word take its sorted option list, then expand the product position by position in order; because anagrams have equal length the product order is already sorted",
+    "complexity_target": "O(sum of output length + wordSet letters log) time/O(output) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "35cfaf37f877a6b95c6d3e4c6067cfc587f949b8a1916553a7cc8257f2eac2d8",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:69a3c6546e73e4abccc9c150",
+   "title": "Shard Rebalancing",
+   "variant_ordinal": 1,
+   "group_post_id": "69a3c4396e73e4abccc9c14c",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "rebalance",
+     "params": [
+      {
+       "name": "limit",
+       "type": "integer"
+      },
+      {
+       "name": "shards",
+       "type": "string[]"
+      }
+     ],
+     "return": {
+      "type": "string[]"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "brute force over integer keys: for each shard find the last key in its range already covered by limit kept shards by counting coverage key by key, then fill gaps by a linear walk",
+    "candidate_design": "sorted arrays of kept starts and ends; coverage at x is (#starts <= x) - (#ends < x), which is non-increasing from the current start, so a binary search over candidate points finds the trimmed start",
+    "complexity_target": "O(n log n + n * insertion cost) time/O(n) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "87ce99757527ba150c85862220ab7023593ddb00f925ef24ede31ca28b389bfd",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:6a32d45b65569fa70cc7eb97",
+   "title": "Shift Units Protection",
+   "variant_ordinal": 1,
+   "group_post_id": "6a32d41a65569fa70cc7eb93",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "maxProtectedPopulation",
+     "params": [
+      {
+       "name": "population",
+       "type": "integer[]"
+      },
+      {
+       "name": "unit",
+       "type": "string"
+      }
+     ],
+     "return": {
+      "type": "integer"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "enumerate every stay/move choice for the movable units and score the protected cities",
+    "candidate_design": "greedy over maximal runs of 1s: a run of L units starting at s > 0 protects any L of the L + 1 cities s - 1 .. s + L - 1, so add their sum minus the minimum; a run at s = 0 protects all its cities",
+    "complexity_target": "O(n) time/O(1) extra space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "85566724ccfbb981ee747d26005653d9b274577486200b0c38bf7dae4ba6a998",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:6976850c5ed12b33b05f0f0f",
+   "title": "Shipping Route Cost Paths",
+   "variant_ordinal": 1,
+   "group_post_id": "69767fdf5ed12b33b05f0efe",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "directRoutes",
+     "params": [
+      {
+       "name": "routes",
+       "type": "string[]"
+      },
+      {
+       "name": "source",
+       "type": "string"
+      },
+      {
+       "name": "target",
+       "type": "string"
+      }
+     ],
+     "return": {
+      "type": "[string, integer][]"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "scan every route and keep matches, then sort by an explicit pair comparison",
+    "candidate_design": "parse each route once, filter by source and target, sort by (cost, method)",
+    "complexity_target": "O(R log R) time/O(R) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "eb88d80ce265e6e1e6c687624a014b405809f0c6595cdf75aa3d5a2bad491bcc",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:697690985ed12b33b05f0f2c",
+   "title": "Shipping Route Cost Paths",
+   "variant_ordinal": 2,
+   "group_post_id": "69767fdf5ed12b33b05f0efe",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "pathsWithOneTransfer",
+     "params": [
+      {
+       "name": "routes",
+       "type": "string[]"
+      },
+      {
+       "name": "source",
+       "type": "string"
+      },
+      {
+       "name": "target",
+       "type": "string"
+      }
+     ],
+     "return": {
+      "type": "[string, integer][]"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "enumerate every route and every ordered pair of routes, keep those forming a path, then sort",
+    "candidate_design": "adjacency lists by source; for each route out of source, either it reaches target or extend with routes from its target that reach target",
+    "complexity_target": "O(R + paths log paths) time/O(R + paths) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "eb88d80ce265e6e1e6c687624a014b405809f0c6595cdf75aa3d5a2bad491bcc",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:697692bb5ed12b33b05f0f34",
+   "title": "Shipping Route Cost Paths",
+   "variant_ordinal": 3,
+   "group_post_id": "69767fdf5ed12b33b05f0efe",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "cheapestShippingCost",
+     "params": [
+      {
+       "name": "routes",
+       "type": "string[]"
+      },
+      {
+       "name": "source",
+       "type": "string"
+      },
+      {
+       "name": "target",
+       "type": "string"
+      }
+     ],
+     "return": {
+      "type": "integer"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "Bellman-Ford relaxation over all routes until no distance changes",
+    "candidate_design": "Dijkstra with a binary heap over parsed adjacency lists",
+    "complexity_target": "O(R log R) time/O(R) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "eb88d80ce265e6e1e6c687624a014b405809f0c6595cdf75aa3d5a2bad491bcc",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:68dc5856dd5418be11109afb",
+   "title": "Shortest Path with Gas Stations",
+   "variant_ordinal": 1,
+   "group_post_id": "68dc09c39736cfa4e90623e6",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "shortestPathWithFuel",
+     "params": [
+      {
+       "name": "grid",
+       "type": "string[]"
+      },
+      {
+       "name": "fuelCapacity",
+       "type": "integer"
+      }
+     ],
+     "return": {
+      "type": "integer"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "breadth-first search over (cell, fuel) states with a full visited table",
+    "candidate_design": "breadth-first search by move count keeping the best fuel seen per cell; a state is expanded only when it arrives with strictly more fuel than any earlier state at that cell",
+    "complexity_target": "O(m n (F + 1)) time worst case/O(m n) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "05166b5340f5cc93e1c5e501cc0d5fe80a4ebc72ba6d7c3711d8fc9bebd4cfed",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:690d00010a0bc710235894c4",
+   "title": "Sparse Matrix Operation",
+   "variant_ordinal": 1,
+   "group_post_id": "690cfffd0a0bc710235894c3",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "classname": "SparseMatrix",
+     "constructor": {
+      "params": [
+       {
+        "name": "matrix",
+        "type": "integer[][]"
+       }
+      ]
+     },
+     "methods": [
+      {
+       "name": "get",
+       "params": [
+        {
+         "name": "row",
+         "type": "integer"
+        },
+        {
+         "name": "col",
+         "type": "integer"
+        }
+       ],
+       "return": {
+        "type": "integer"
+       }
+      },
+      {
+       "name": "set",
+       "params": [
+        {
+         "name": "row",
+         "type": "integer"
+        },
+        {
+         "name": "col",
+         "type": "integer"
+        },
+        {
+         "name": "value",
+         "type": "integer"
+        }
+       ],
+       "return": {
+        "type": "void"
+       }
+      },
+      {
+       "name": "add",
+       "params": [
+        {
+         "name": "other",
+         "type": "integer[][]"
+        }
+       ],
+       "return": {
+        "type": "integer[][]"
+       }
+      },
+      {
+       "name": "multiply",
+       "params": [
+        {
+         "name": "other",
+         "type": "integer[][]"
+        }
+       ],
+       "return": {
+        "type": "integer[][]"
+       }
+      }
+     ]
+    },
+    "native_class": "SparseMatrix"
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "dense copy of the matrix updated on set; add and multiply by full nested loops",
+    "candidate_design": "per-row hash maps of non-zero columns; add merges the other matrix's non-zeros into a copy of the touched rows; multiply converts the operand to per-row non-zero lists and accumulates only non-zero products",
+    "complexity_target": "O(1) get/set, O(rows cols) add, O(rows cols + nnz(A) * row nnz(B)) multiply/O(nnz) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "8f989e37fd97a08e331a2199c14f8bc9d57d10099c166dac1fff0381c9b078d2",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:67db949600e020b60078a44d",
+   "title": "Split Array with Equal Sum",
+   "variant_ordinal": 1,
+   "group_post_id": "67db901200e020b60078a44b",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "findSplitIndex",
+     "params": [
+      {
+       "name": "nums",
+       "type": "integer[]"
+      }
+     ],
+     "return": {
+      "type": "integer"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "for every index compute both sums from scratch",
+    "candidate_design": "one pass with the total and a running prefix sum",
+    "complexity_target": "O(n) time/O(1) extra space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "b0a2f248b1678b87973aeab8469cfb14aba1b2bc8aa100004542dcf84dfff0ab",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  }
+ ]
+}

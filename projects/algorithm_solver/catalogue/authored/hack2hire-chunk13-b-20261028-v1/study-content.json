@@ -1,0 +1,2955 @@
+{
+ "schema": "gamma.hack2hire-chunk13-b-study-content.v1",
+ "authored_by": "claude-opus-5-5 subagent, 2026-10-29",
+ "note": "Teaching text, clarifying questions, inferred constraints and own examples. Inferred, not official. Examples are small generated inputs with outputs from the independent references in oracles.py.",
+ "variants": {
+  "hack2hire:69557daa4a0202df9569e982": {
+   "constraints": [
+    "0 <= communityToFollowers.length <= 2e4",
+    "0 <= followerToCommunities.length <= 2e4",
+    "total memberships <= 1e5 in each list",
+    "-10 <= communityIdx <= 1e5"
+   ],
+   "clarifyingQuestions": [
+    "In which order should the community ids be returned?",
+    "Can the two lists disagree with each other?",
+    "What does the second part change: are chains of shared followers counted?",
+    "Can communityIdx be negative?"
+   ],
+   "hints": [
+    "Two communities are related when some follower follows both: start from the followers of communityIdx.",
+    "For each such follower, followerToCommunities lists every community it follows; mark those.",
+    "Unmark communityIdx itself and emit marked indices in increasing order, parsing the number after \"C\" and \"F\"."
+   ],
+   "invariants": [
+    "a community appears at most once in the result",
+    "communityIdx never appears in the result"
+   ],
+   "chooseWhen": [
+    "Bipartite membership data where a two-step neighbourhood is needed"
+   ],
+   "tradeoffs": [
+    "Marking by index needs O(n) memory; a hash set is smaller when results are sparse but needs a sort"
+   ],
+   "variantLabel": "Inferred level 1: direct shared-follower communities",
+   "examples": [
+    {
+     "input": [
+      [],
+      [],
+      0
+     ],
+     "output": [],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       [
+        "F2",
+        "F0",
+        "F1",
+        "F6"
+       ],
+       [
+        "F1",
+        "F3"
+       ],
+       [
+        "F0",
+        "F1",
+        "F6"
+       ],
+       [
+        "F0",
+        "F4",
+        "F2",
+        "F5"
+       ],
+       [
+        "F1",
+        "F3"
+       ],
+       [
+        "F4",
+        "F2",
+        "F6",
+        "F3",
+        "F5"
+       ]
+      ],
+      [
+       [
+        "C0",
+        "C3",
+        "C2"
+       ],
+       [
+        "C0",
+        "C2",
+        "C1",
+        "C4"
+       ],
+       [
+        "C3",
+        "C5",
+        "C0"
+       ],
+       [
+        "C5",
+        "C1",
+        "C4"
+       ],
+       [
+        "C5",
+        "C3"
+       ],
+       [
+        "C3",
+        "C5"
+       ],
+       [
+        "C0",
+        "C2",
+        "C5"
+       ]
+      ],
+      5
+     ],
+     "output": [
+      "C0",
+      "C1",
+      "C2",
+      "C3",
+      "C4"
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:69557dad4a0202df9569e983": {
+   "constraints": [
+    "0 <= communityToFollowers.length <= 2e4",
+    "0 <= followerToCommunities.length <= 2e4",
+    "total memberships <= 1e5 in each list",
+    "-10 <= communityIdx <= 1e5"
+   ],
+   "clarifyingQuestions": [
+    "In which order should the community ids be returned?",
+    "Can the two lists disagree with each other?",
+    "What does the second part change: are chains of shared followers counted?",
+    "Can communityIdx be negative?"
+   ],
+   "hints": [
+    "Treat communities and followers as the two sides of one graph.",
+    "A breadth-first search from communityIdx alternates community -> follower -> community.",
+    "Mark visited followers too, so each membership is examined once; report visited communities except the start in index order."
+   ],
+   "invariants": [
+    "each community and follower is enqueued at most once",
+    "the result is closed under shared followers"
+   ],
+   "chooseWhen": [
+    "Connected components in bipartite membership data"
+   ],
+   "tradeoffs": [
+    "A union-find over all memberships answers many queries at once; one BFS is simpler for a single query"
+   ],
+   "variantLabel": "Inferred level 2: communities connected through chains of shared followers",
+   "examples": [
+    {
+     "input": [
+      [],
+      [],
+      0
+     ],
+     "output": [],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       [
+        "F2",
+        "F4",
+        "F0"
+       ],
+       [
+        "F1",
+        "F0",
+        "F3"
+       ],
+       [
+        "F2",
+        "F4",
+        "F0",
+        "F3"
+       ],
+       [
+        "F4",
+        "F2"
+       ],
+       [
+        "F2"
+       ],
+       [
+        "F4",
+        "F0",
+        "F1",
+        "F3"
+       ],
+       [
+        "F1",
+        "F4",
+        "F2"
+       ]
+      ],
+      [
+       [
+        "C5",
+        "C1",
+        "C0",
+        "C2"
+       ],
+       [
+        "C5",
+        "C1",
+        "C6"
+       ],
+       [
+        "C0",
+        "C3",
+        "C2",
+        "C4",
+        "C6"
+       ],
+       [
+        "C2",
+        "C1",
+        "C5"
+       ],
+       [
+        "C3",
+        "C6",
+        "C0",
+        "C5",
+        "C2"
+       ]
+      ],
+      5
+     ],
+     "output": [
+      "C0",
+      "C1",
+      "C2",
+      "C3",
+      "C4",
+      "C6"
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:684dee4b5e4cf21833c0611f": {
+   "constraints": [
+    "0 <= intervals.length <= 1e5",
+    "-1e9 <= start < end <= 1e9",
+    "intervals do not overlap",
+    "0 <= idx <= 4e9"
+   ],
+   "clarifyingQuestions": [
+    "What is returned: the remaining intervals, the removed value, or the new flattened list?",
+    "Are the input intervals sorted?",
+    "What happens when idx is past the last covered point?",
+    "Should an emptied interval be kept?"
+   ],
+   "hints": [
+    "Each interval [s, e) contributes e - s points to the flattened sequence.",
+    "Skip whole intervals while idx is at least their length, subtracting it.",
+    "The point is p = s + idx inside the interval reached; emit [s, p) and [p + 1, e) when non-empty and copy every other interval."
+   ],
+   "invariants": [
+    "total covered points decrease by exactly one when idx is in range",
+    "output intervals stay non-overlapping"
+   ],
+   "chooseWhen": [
+    "Index arithmetic over run-length encoded ranges"
+   ],
+   "tradeoffs": [
+    "A prefix-sum array plus binary search helps for many removals; a single removal needs one linear pass"
+   ],
+   "variantLabel": "Inferred single variant: remove the idx-th covered point and return remaining intervals",
+   "examples": [
+    {
+     "input": [
+      [],
+      0
+     ],
+     "output": [],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       [
+        -8,
+        1
+       ],
+       [
+        5,
+        9
+       ],
+       [
+        -27,
+        -26
+       ],
+       [
+        -14,
+        -8
+       ],
+       [
+        19,
+        24
+       ],
+       [
+        -26,
+        -14
+       ],
+       [
+        24,
+        26
+       ],
+       [
+        16,
+        19
+       ],
+       [
+        26,
+        27
+       ],
+       [
+        1,
+        5
+       ]
+      ],
+      19
+     ],
+     "output": [
+      [
+       -8,
+       1
+      ],
+      [
+       5,
+       9
+      ],
+      [
+       -27,
+       -26
+      ],
+      [
+       -14,
+       -9
+      ],
+      [
+       19,
+       24
+      ],
+      [
+       -26,
+       -14
+      ],
+      [
+       24,
+       26
+      ],
+      [
+       16,
+       19
+      ],
+      [
+       26,
+       27
+      ],
+      [
+       1,
+       5
+      ]
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:69a32b466e73e4abccc9bf13": {
+   "constraints": [
+    "0 <= text.length <= 1e5",
+    "1 <= text[i].length <= 20",
+    "text[i] consists of ASCII letters"
+   ],
+   "clarifyingQuestions": [
+    "Is y a vowel?",
+    "Are one-letter words like \"a\" changed?",
+    "May words contain digits or punctuation?",
+    "Should the input array be modified in place?"
+   ],
+   "hints": [
+    "Check text[i][0] and text[i][-1] against the vowel set in lowercase.",
+    "Only the characters strictly between the first and last positions move.",
+    "Swap from both ends toward the middle (or reverse the middle slice), leaving the ends in place."
+   ],
+   "invariants": [
+    "word lengths are preserved",
+    "non-qualifying words are returned unchanged"
+   ],
+   "chooseWhen": [
+    "Per-token string transforms"
+   ],
+   "tradeoffs": [
+    "Building new strings costs O(length) per word; in-place swaps need a mutable character array"
+   ],
+   "variantLabel": "Inferred single variant: reverse the middle of words that start and end with a vowel",
+   "examples": [
+    {
+     "input": [
+      []
+     ],
+     "output": [],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "baOu",
+       "Udby",
+       "EiAxobx",
+       "yu",
+       "ucc",
+       "UiazAd",
+       "b",
+       "yeuYddI",
+       "iuIyuu",
+       "eoII",
+       "OOozUE"
+      ]
+     ],
+     "output": [
+      "baOu",
+      "Udby",
+      "EiAxobx",
+      "yu",
+      "ucc",
+      "UiazAd",
+      "b",
+      "yeuYddI",
+      "iuyIuu",
+      "eIoI",
+      "OUzoOE"
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6801c3b66cd5d6c88778f20c": {
+   "constraints": [
+    "1 <= roles.length <= 2000",
+    "role names match [a-z0-9]{1,8}",
+    "total parent links <= 1e4",
+    "privilege names match [a-z_]{1,10}",
+    "allowed[i] and disallowed[i] each hold at most 10 distinct names",
+    "at most 50 distinct privileges overall"
+   ],
+   "clarifyingQuestions": [
+    "Does a disallow on a role override privileges it inherits?",
+    "Does a child inherit what a parent explicitly disallows from its own parents?",
+    "Can a role allow and disallow the same privilege?",
+    "In what order are roles and privileges returned?"
+   ],
+   "hints": [
+    "A role depends only on its parents, so roles must be processed after all their parents: a topological order.",
+    "Count unprocessed parents per role and start with roles that have none (Kahn's algorithm), avoiding recursion on deep chains.",
+    "For each role take the union of its allowed list and its parents' final sets, remove its disallowed list, then sort for output."
+   ],
+   "invariants": [
+    "a role is computed only after all its parents",
+    "no privilege in disallowed[i] appears in the final set of roles[i]"
+   ],
+   "chooseWhen": [
+    "Inherited configuration over a DAG"
+   ],
+   "tradeoffs": [
+    "Materialising full sets per role costs O(n P) memory; bitsets shrink this when privileges are few"
+   ],
+   "variantLabel": "Inferred single variant: final privileges through inheritance with disallow overrides",
+   "examples": [
+    {
+     "input": [
+      [
+       "r0"
+      ],
+      [
+       []
+      ],
+      [
+       []
+      ],
+      [
+       [
+        "audit"
+       ]
+      ]
+     ],
+     "output": [
+      []
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "r0",
+       "r1",
+       "r2",
+       "r3",
+       "r4",
+       "r5",
+       "r6"
+      ],
+      [
+       [
+        "r5"
+       ],
+       [
+        "r6"
+       ],
+       [
+        "r6"
+       ],
+       [
+        "r5",
+        "r6"
+       ],
+       [
+        "r1",
+        "r5",
+        "r2"
+       ],
+       [
+        "r1",
+        "r6"
+       ],
+       []
+      ],
+      [
+       [
+        "del_x",
+        "exec",
+        "audit"
+       ],
+       [
+        "read"
+       ],
+       [
+        "audit",
+        "read"
+       ],
+       [
+        "admin"
+       ],
+       [
+        "exec",
+        "del_x"
+       ],
+       [
+        "exec"
+       ],
+       []
+      ],
+      [
+       [
+        "audit"
+       ],
+       [],
+       [
+        "audit",
+        "read"
+       ],
+       [],
+       [
+        "read"
+       ],
+       [],
+       [
+        "write",
+        "del_x"
+       ]
+      ]
+     ],
+     "output": [
+      [
+       "del_x",
+       "exec",
+       "read"
+      ],
+      [
+       "read"
+      ],
+      [],
+      [
+       "admin",
+       "exec",
+       "read"
+      ],
+      [
+       "del_x",
+       "exec"
+      ],
+      [
+       "exec",
+       "read"
+      ],
+      []
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:69cae7e2ff3ebde766ceda54": {
+   "constraints": [
+    "1 <= coordinates.length <= 500",
+    "0 <= x, y <= 1000",
+    "consecutive waypoints distinct with integer segment length",
+    "0 <= distances.length <= 500",
+    "0 <= distances[i] <= 1e7"
+   ],
+   "clarifyingQuestions": [
+    "What is returned per distance: a distance value, a waypoint index or a coordinate?",
+    "Is nearness measured to every waypoint or only the current segment ends?",
+    "What happens past the end of the route?",
+    "How are ties broken?"
+   ],
+   "hints": [
+    "Prefix sums of segment lengths tell which segment a distance d falls on.",
+    "On segment A -> B of length L, the position is A + (r / L)(B - A) with r = d minus the prefix; multiply through by L to stay in integers.",
+    "Compare (L(Ax - Wx) + r(Bx - Ax))^2 + (L(Ay - Wy) + r(By - Ay))^2 over waypoints W: the common factor L^2 does not change the order."
+   ],
+   "invariants": [
+    "positions are monotone along the route in d",
+    "all comparisons are exact integer comparisons"
+   ],
+   "chooseWhen": [
+    "Geometry where exact arithmetic avoids floating-point ties"
+   ],
+   "tradeoffs": [
+    "Scanning all waypoints per query is O(N Q); a spatial index helps only for much larger inputs"
+   ],
+   "variantLabel": "Inferred single variant: nearest waypoint index at each travelled distance",
+   "examples": [
+    {
+     "input": [
+      [
+       [
+        0,
+        0
+       ]
+      ],
+      [
+       0,
+       5
+      ]
+     ],
+     "output": [
+      0,
+      0
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       [
+        821,
+        857
+       ],
+       [
+        821,
+        858
+       ],
+       [
+        809,
+        863
+       ],
+       [
+        811,
+        863
+       ],
+       [
+        811,
+        861
+       ],
+       [
+        815,
+        864
+       ],
+       [
+        819,
+        861
+       ],
+       [
+        825,
+        869
+       ],
+       [
+        829,
+        866
+       ],
+       [
+        828,
+        866
+       ]
+      ],
+      [
+       27,
+       37,
+       44,
+       5,
+       14,
+       44,
+       48,
+       38,
+       20
+      ]
+     ],
+     "output": [
+      6,
+      7,
+      9,
+      6,
+      2,
+      9,
+      9,
+      7,
+      3
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:68aebce1c8631a6568126eb4": {
+   "constraints": [
+    "1 <= nodes per tree <= 1e5",
+    "leaf texts match [a-z]{1,10}",
+    "trees may be as deep as their node count"
+   ],
+   "clarifyingQuestions": [
+    "Is the question whether the visible text is identical, or whether the structure is identical?",
+    "Can text be split differently across labels and still match?",
+    "Can grouping labels carry text?",
+    "How deep can the trees be?"
+   ],
+   "hints": [
+    "Only leaf texts in pre-order matter, so the structure can differ between the trees.",
+    "An explicit stack of node indices gives the next leaf without recursion, so deep trees are safe.",
+    "Keep a position inside the current leaf of each tree and compare one character at a time; both sides must run out together."
+   ],
+   "invariants": [
+    "each node is pushed at most once per tree",
+    "characters are compared in word order"
+   ],
+   "chooseWhen": [
+    "Comparing streams produced by two different tree shapes"
+   ],
+   "tradeoffs": [
+    "Lazy comparison stops at the first mismatch; building both strings is simpler but always pays O(word length)"
+   ],
+   "variantLabel": "Inferred single variant: equal concatenated leaf text of two label trees",
+   "examples": [
+    {
+     "input": [
+      [
+       [
+        "",
+        [
+         1
+        ]
+       ],
+       [
+        "b",
+        []
+       ]
+      ],
+      [
+       [
+        "b",
+        []
+       ]
+      ]
+     ],
+     "output": true,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       [
+        "",
+        [
+         3
+        ]
+       ],
+       [
+        "ab",
+        []
+       ],
+       [
+        "baa",
+        []
+       ],
+       [
+        "",
+        [
+         6,
+         5,
+         4
+        ]
+       ],
+       [
+        "ba",
+        []
+       ],
+       [
+        "",
+        [
+         7,
+         1
+        ]
+       ],
+       [
+        "",
+        [
+         2
+        ]
+       ],
+       [
+        "b",
+        []
+       ]
+      ],
+      [
+       [
+        "",
+        [
+         2,
+         1,
+         7
+        ]
+       ],
+       [
+        "",
+        [
+         3,
+         13
+        ]
+       ],
+       [
+        "",
+        [
+         14
+        ]
+       ],
+       [
+        "",
+        [
+         9
+        ]
+       ],
+       [
+        "a",
+        []
+       ],
+       [
+        "",
+        [
+         4
+        ]
+       ],
+       [
+        "bb",
+        []
+       ],
+       [
+        "",
+        [
+         6,
+         11
+        ]
+       ],
+       [
+        "",
+        [
+         5,
+         12
+        ]
+       ],
+       [
+        "",
+        [
+         8
+        ]
+       ],
+       [
+        "ba",
+        []
+       ],
+       [
+        "a",
+        []
+       ],
+       [
+        "a",
+        []
+       ],
+       [
+        "",
+        [
+         10
+        ]
+       ],
+       [
+        "b",
+        []
+       ]
+      ]
+     ],
+     "output": true,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:69752cb217272b5c868d5e84": {
+   "constraints": [
+    "0 <= planes.length <= 2e4",
+    "0 <= departureTime, capacity <= 1e9",
+    "0 <= orders.length <= 2e4",
+    "0 <= shipTime <= 1e9",
+    "1 <= items per order <= 20, total items <= 1e5",
+    "1 <= item size <= 1e9"
+   ],
+   "clarifyingQuestions": [
+    "Which eligible plane receives an item: earliest departure, best fit or largest capacity?",
+    "Are items placed in the given order or sorted?",
+    "What is returned for a rejected order?",
+    "Are orders processed in input order or by ship time?"
+   ],
+   "hints": [
+    "Sort planes by departure; the eligible planes for an order form a suffix found by binary search.",
+    "The first plane in that suffix with remaining capacity >= size can be found with a max segment tree by descending into the leftmost child that is large enough.",
+    "Record each capacity change during an order and undo them in reverse when an item fails."
+   ],
+   "invariants": [
+    "capacities never go negative",
+    "a rejected order leaves every capacity unchanged"
+   ],
+   "chooseWhen": [
+    "First-fit allocation over an ordered resource list"
+   ],
+   "tradeoffs": [
+    "A segment tree makes each placement logarithmic; a linear scan is simpler and fine for small fleets"
+   ],
+   "variantLabel": "Inferred single variant: earliest-departure first fit with all-or-nothing orders",
+   "examples": [
+    {
+     "input": [
+      [],
+      []
+     ],
+     "output": [],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       [
+        0,
+        5
+       ],
+       [
+        5,
+        0
+       ],
+       [
+        19,
+        5
+       ],
+       [
+        14,
+        0
+       ],
+       [
+        4,
+        3
+       ],
+       [
+        15,
+        3
+       ]
+      ],
+      [
+       [
+        19,
+        [
+         6,
+         4,
+         6
+        ]
+       ],
+       [
+        4,
+        [
+         5,
+         4,
+         1
+        ]
+       ],
+       [
+        8,
+        [
+         6,
+         4
+        ]
+       ],
+       [
+        7,
+        [
+         2
+        ]
+       ],
+       [
+        2,
+        [
+         5,
+         6,
+         3
+        ]
+       ],
+       [
+        16,
+        [
+         5,
+         4,
+         5
+        ]
+       ],
+       [
+        17,
+        [
+         3,
+         4
+        ]
+       ],
+       [
+        12,
+        [
+         5
+        ]
+       ]
+      ]
+     ],
+     "output": [
+      [],
+      [],
+      [],
+      [
+       15
+      ],
+      [],
+      [],
+      [],
+      [
+       19
+      ]
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:678879df402dc47b67a14946": {
+   "constraints": [
+    "1 <= capacity <= 1e5",
+    "up to 1e5 calls",
+    "terms match [a-z]{1,10}",
+    "0 <= k <= 100"
+   ],
+   "clarifyingQuestions": [
+    "Does a repeated search move the term to the front?",
+    "Does getTopK count as a use for eviction?",
+    "In which order are top k terms returned?",
+    "What if k exceeds the number of stored terms?"
+   ],
+   "hints": [
+    "A hash map finds a term in O(1); a doubly linked list keeps recency order with O(1) moves.",
+    "Use head and tail sentinel nodes so insertion and removal never special-case the ends.",
+    "On overflow remove the node before the tail sentinel and delete its key; getTopK follows next pointers from the head."
+   ],
+   "invariants": [
+    "map size equals list length and never exceeds capacity",
+    "list order is strictly by last add"
+   ],
+   "chooseWhen": [
+    "LRU caches that also need ordered reads of the newest entries"
+   ],
+   "tradeoffs": [
+    "A linked list costs extra pointers per entry; an insertion-ordered map can replace it when only the oldest entry must be found"
+   ],
+   "variantLabel": "Inferred single variant: LRU search history with most-recent-first top k",
+   "examples": [
+    {
+     "input": [
+      [
+       "SearchHistory",
+       "getTopK"
+      ],
+      [
+       [
+        5
+       ],
+       [
+        2
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      []
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "SearchHistory",
+       "getTopK",
+       "getTopK",
+       "add",
+       "add",
+       "getTopK",
+       "add",
+       "add",
+       "add",
+       "add",
+       "getTopK",
+       "add",
+       "add",
+       "add",
+       "getTopK",
+       "add",
+       "add",
+       "add",
+       "getTopK"
+      ],
+      [
+       [
+        1
+       ],
+       [
+        3
+       ],
+       [
+        1
+       ],
+       [
+        "c"
+       ],
+       [
+        "c"
+       ],
+       [
+        3
+       ],
+       [
+        "d"
+       ],
+       [
+        "f"
+       ],
+       [
+        "f"
+       ],
+       [
+        "d"
+       ],
+       [
+        7
+       ],
+       [
+        "f"
+       ],
+       [
+        "e"
+       ],
+       [
+        "c"
+       ],
+       [
+        5
+       ],
+       [
+        "a"
+       ],
+       [
+        "b"
+       ],
+       [
+        "e"
+       ],
+       [
+        0
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      [],
+      [],
+      null,
+      null,
+      [
+       "c"
+      ],
+      null,
+      null,
+      null,
+      null,
+      [
+       "d"
+      ],
+      null,
+      null,
+      null,
+      [
+       "c"
+      ],
+      null,
+      null,
+      null,
+      []
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6a4809cfca956256d786d255": {
+   "constraints": [
+    "1 <= segments.length <= 1e5",
+    "ids match [a-z0-9]{1,8}",
+    "payloads match [a-z]{0,10}"
+   ],
+   "clarifyingQuestions": [
+    "Is the input always one valid chain?",
+    "What is returned when segments form a cycle or several chains?",
+    "Can a segment start and end at the same id?",
+    "May payloads be empty?"
+   ],
+   "hints": [
+    "The chain head is the one segment whose startId is not any segment's endId.",
+    "Index segments by startId so the successor of a segment is a single lookup of its endId.",
+    "Collect payloads in a list and join once at the end to avoid quadratic string building."
+   ],
+   "invariants": [
+    "each segment is visited once",
+    "the walk ends at the only end that is not a start"
+   ],
+   "chooseWhen": [
+    "Reassembling ordered fragments keyed by their boundaries"
+   ],
+   "tradeoffs": [
+    "A hash map costs O(n) memory; sorting by keys cannot recover chain order"
+   ],
+   "variantLabel": "Inferred level 1: reconstruct one valid chain",
+   "examples": [
+    {
+     "input": [
+      [
+       [
+        "cg",
+        "au",
+        ""
+       ]
+      ]
+     ],
+     "output": "",
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       [
+        "bk",
+        "bg",
+        "prp"
+       ],
+       [
+        "bo",
+        "bp",
+        "pr"
+       ],
+       [
+        "bg",
+        "af",
+        "rqp"
+       ],
+       [
+        "bp",
+        "bq",
+        "q"
+       ],
+       [
+        "af",
+        "bo",
+        "qqr"
+       ]
+      ]
+     ],
+     "output": "prprqpqqrprq",
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6a480ba0ca956256d786d277": {
+   "constraints": [
+    "1 <= segments.length <= 1e5",
+    "ids match [a-z0-9]{1,8}",
+    "payloads match [a-z]{0,10}"
+   ],
+   "clarifyingQuestions": [
+    "Is the input always one valid chain?",
+    "What is returned when segments form a cycle or several chains?",
+    "Can a segment start and end at the same id?",
+    "May payloads be empty?"
+   ],
+   "hints": [
+    "With unique starts and unique ends, segments form disjoint paths and cycles.",
+    "A single chain has exactly one head (a start that is not an end) and a walk from it visits every segment.",
+    "Count heads first; then walk and compare the number of visited segments with n."
+   ],
+   "invariants": [
+    "valid input has exactly one head",
+    "a cycle has no head"
+   ],
+   "chooseWhen": [
+    "Validating linked structures given as unordered records"
+   ],
+   "tradeoffs": [
+    "Checking the visit count is cheaper than detecting cycles explicitly"
+   ],
+   "variantLabel": "Inferred level 2: reconstruct or reject an unvalidated chain",
+   "examples": [
+    {
+     "input": [
+      [
+       [
+        "a",
+        "a",
+        "x"
+       ]
+      ]
+     ],
+     "output": "",
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       [
+        "x1",
+        "cg",
+        ""
+       ],
+       [
+        "ch",
+        "x1",
+        "qq"
+       ],
+       [
+        "ah",
+        "bt",
+        "qqq"
+       ],
+       [
+        "bm",
+        "bx",
+        "r"
+       ],
+       [
+        "ae",
+        "be",
+        "rqr"
+       ],
+       [
+        "bt",
+        "bb",
+        ""
+       ],
+       [
+        "cb",
+        "bs",
+        "rq"
+       ],
+       [
+        "au",
+        "ae",
+        "qr"
+       ],
+       [
+        "aj",
+        "bm",
+        ""
+       ],
+       [
+        "bq",
+        "ah",
+        "p"
+       ],
+       [
+        "be",
+        "aj",
+        "q"
+       ],
+       [
+        "bx",
+        "au",
+        "p"
+       ],
+       [
+        "cg",
+        "cb",
+        "qr"
+       ],
+       [
+        "bs",
+        "ar",
+        "qr"
+       ]
+      ]
+     ],
+     "output": "",
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6a480bbbca956256d786d279": {
+   "constraints": [
+    "0 <= segments.length <= 1e5",
+    "ids match [a-z0-9]{1,8}",
+    "payloads match [a-z]{0,10}",
+    "no cycles"
+   ],
+   "clarifyingQuestions": [
+    "Is the input always one valid chain?",
+    "What is returned when segments form a cycle or several chains?",
+    "Can a segment start and end at the same id?",
+    "May payloads be empty?"
+   ],
+   "hints": [
+    "Every chain has exactly one head: a startId that is no segment's endId.",
+    "Sort the heads by id to fix the output order.",
+    "Walk each chain through a startId map; every segment belongs to exactly one chain."
+   ],
+   "invariants": [
+    "each segment is visited exactly once over all walks",
+    "the number of outputs equals the number of heads"
+   ],
+   "chooseWhen": [
+    "Reassembling several independent fragment streams"
+   ],
+   "tradeoffs": [
+    "Sorting heads costs O(h log h); walking order is otherwise linear"
+   ],
+   "variantLabel": "Inferred level 3: reconstruct several disjoint chains",
+   "examples": [
+    {
+     "input": [
+      []
+     ],
+     "output": [],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       [
+        "bv",
+        "ar",
+        "r"
+       ],
+       [
+        "ao",
+        "cb",
+        "qqq"
+       ],
+       [
+        "bs",
+        "bp",
+        "r"
+       ],
+       [
+        "cf",
+        "aq",
+        "qq"
+       ],
+       [
+        "cb",
+        "as",
+        ""
+       ],
+       [
+        "al",
+        "ba",
+        "rpp"
+       ],
+       [
+        "bd",
+        "cf",
+        ""
+       ],
+       [
+        "bl",
+        "bs",
+        ""
+       ],
+       [
+        "ar",
+        "ap",
+        ""
+       ],
+       [
+        "ba",
+        "av",
+        ""
+       ],
+       [
+        "av",
+        "z9",
+        "pp"
+       ],
+       [
+        "y22",
+        "at",
+        "q"
+       ],
+       [
+        "z9",
+        "y22",
+        "r"
+       ],
+       [
+        "as",
+        "bd",
+        ""
+       ],
+       [
+        "ap",
+        "bl",
+        "rpp"
+       ]
+      ]
+     ],
+     "output": [
+      "rpppprq",
+      "qqqqq",
+      "rrppr"
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:699bb05f6e73e4abccc9a9e4": {
+   "constraints": [
+    "0 <= wordSet.length <= 1e4",
+    "words match [a-z]{1,10}",
+    "0 <= sentences.length <= 1000",
+    "1 to 20 words per sentence",
+    "at most 1000 variations per sentence and 5e4 in total"
+   ],
+   "clarifyingQuestions": [
+    "Should the answer list the sentences or only count them?",
+    "Is the original word always allowed even when it is not in wordSet?",
+    "In what order should variations be returned?",
+    "Can a sentence contain the same word twice?"
+   ],
+   "hints": [
+    "Anagrams share a signature: the word with its letters sorted.",
+    "Group wordSet by signature once; each sentence word then has a sorted option list (its group plus itself).",
+    "Expand the product left to right; equal-length options keep the joined strings in sorted order without a final sort."
+   ],
+   "invariants": [
+    "every variation has the same word lengths as the original sentence",
+    "the number of variations is the product of option counts"
+   ],
+   "chooseWhen": [
+    "Enumerating combinations of interchangeable tokens"
+   ],
+   "tradeoffs": [
+    "Output size can be exponential in sentence length; counting alone would only need the product"
+   ],
+   "variantLabel": "Inferred single variant: all anagram substitutions of each sentence",
+   "examples": [
+    {
+     "input": [
+      [],
+      []
+     ],
+     "output": [],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "rts",
+       "xyz",
+       "cba",
+       "tsr",
+       "rst",
+       "nm",
+       "zxy",
+       "bca",
+       "ab",
+       "baa",
+       "aab",
+       "xzy",
+       "pq",
+       "qq",
+       "zyx",
+       "str",
+       "ba",
+       "abc"
+      ],
+      [
+       "ba zyx",
+       "xyz hello xyz",
+       "xyz xyz cab tsr",
+       "tsr xyz tsr abc"
+      ]
+     ],
+     "output": [
+      [
+       "ab xyz",
+       "ab xzy",
+       "ab zxy",
+       "ab zyx",
+       "ba xyz",
+       "ba xzy",
+       "ba zxy",
+       "ba zyx"
+      ],
+      [
+       "xyz hello xyz",
+       "xyz hello xzy",
+       "xyz hello zxy",
+       "xyz hello zyx",
+       "xzy hello xyz",
+       "xzy hello xzy",
+       "xzy hello zxy",
+       "xzy hello zyx",
+       "zxy hello xyz",
+       "zxy hello xzy",
+       "zxy hello zxy",
+       "zxy hello zyx",
+       "zyx hello xyz",
+       "zyx hello xzy",
+       "zyx hello zxy",
+       "zyx hello zyx"
+      ],
+      [
+       "xyz xyz abc rst",
+       "xyz xyz abc rts",
+       "xyz xyz abc str",
+       "xyz xyz abc tsr",
+       "xyz xyz bca rst",
+       "xyz xyz bca rts",
+       "xyz xyz bca str",
+       "xyz xyz bca tsr",
+       "xyz xyz cab rst",
+       "xyz xyz cab rts",
+       "xyz xyz cab str",
+       "xyz xyz cab tsr",
+       "xyz xyz cba rst",
+       "xyz xyz cba rts",
+       "xyz xyz cba str",
+       "xyz xyz cba tsr",
+       "xyz xzy abc rst",
+       "xyz xzy abc rts",
+       "xyz xzy abc str",
+       "xyz xzy abc tsr",
+       "xyz xzy bca rst",
+       "xyz xzy bca rts",
+       "xyz xzy bca str",
+       "xyz xzy bca tsr",
+       "xyz xzy cab rst",
+       "xyz xzy cab rts",
+       "xyz xzy cab str",
+       "xyz xzy cab tsr",
+       "xyz xzy cba rst",
+       "xyz xzy cba rts",
+       "xyz xzy cba str",
+       "xyz xzy cba tsr",
+       "xyz zxy abc rst",
+       "xyz zxy abc rts",
+       "xyz zxy abc str",
+       "xyz zxy abc tsr",
+       "xyz zxy bca rst",
+       "xyz zxy bca rts",
+       "xyz zxy bca str",
+       "xyz zxy bca tsr",
+       "xyz zxy cab rst",
+       "xyz zxy cab rts",
+       "xyz zxy cab str",
+       "xyz zxy cab tsr",
+       "xyz zxy cba rst",
+       "xyz zxy cba rts",
+       "xyz zxy cba str",
+       "xyz zxy cba tsr",
+       "xyz zyx abc rst",
+       "xyz zyx abc rts",
+       "xyz zyx abc str",
+       "xyz zyx abc tsr",
+       "xyz zyx bca rst",
+       "xyz zyx bca rts",
+       "xyz zyx bca str",
+       "xyz zyx bca tsr",
+       "xyz zyx cab rst",
+       "xyz zyx cab rts",
+       "xyz zyx cab str",
+       "xyz zyx cab tsr",
+       "xyz zyx cba rst",
+       "xyz zyx cba rts",
+       "xyz zyx cba str",
+       "xyz zyx cba tsr",
+       "xzy xyz abc rst",
+       "xzy xyz abc rts",
+       "xzy xyz abc str",
+       "xzy xyz abc tsr",
+       "xzy xyz bca rst",
+       "xzy xyz bca rts",
+       "xzy xyz bca str",
+       "xzy xyz bca tsr",
+       "xzy xyz cab rst",
+       "xzy xyz cab rts",
+       "xzy xyz cab str",
+       "xzy xyz cab tsr",
+       "xzy xyz cba rst",
+       "xzy xyz cba rts",
+       "xzy xyz cba str",
+       "xzy xyz cba tsr",
+       "xzy xzy abc rst",
+       "xzy xzy abc rts",
+       "xzy xzy abc str",
+       "xzy xzy abc tsr",
+       "xzy xzy bca rst",
+       "xzy xzy bca rts",
+       "xzy xzy bca str",
+       "xzy xzy bca tsr",
+       "xzy xzy cab rst",
+       "xzy xzy cab rts",
+       "xzy xzy cab str",
+       "xzy xzy cab tsr",
+       "xzy xzy cba rst",
+       "xzy xzy cba rts",
+       "xzy xzy cba str",
+       "xzy xzy cba tsr",
+       "xzy zxy abc rst",
+       "xzy zxy abc rts",
+       "xzy zxy abc str",
+       "xzy zxy abc tsr",
+       "xzy zxy bca rst",
+       "xzy zxy bca rts",
+       "xzy zxy bca str",
+       "xzy zxy bca tsr",
+       "xzy zxy cab rst",
+       "xzy zxy cab rts",
+       "xzy zxy cab str",
+       "xzy zxy cab tsr",
+       "xzy zxy cba rst",
+       "xzy zxy cba rts",
+       "xzy zxy cba str",
+       "xzy zxy cba tsr",
+       "xzy zyx abc rst",
+       "xzy zyx abc rts",
+       "xzy zyx abc str",
+       "xzy zyx abc tsr",
+       "xzy zyx bca rst",
+       "xzy zyx bca rts",
+       "xzy zyx bca str",
+       "xzy zyx bca tsr",
+       "xzy zyx cab rst",
+       "xzy zyx cab rts",
+       "xzy zyx cab str",
+       "xzy zyx cab tsr",
+       "xzy zyx cba rst",
+       "xzy zyx cba rts",
+       "xzy zyx cba str",
+       "xzy zyx cba tsr",
+       "zxy xyz abc rst",
+       "zxy xyz abc rts",
+       "zxy xyz abc str",
+       "zxy xyz abc tsr",
+       "zxy xyz bca rst",
+       "zxy xyz bca rts",
+       "zxy xyz bca str",
+       "zxy xyz bca tsr",
+       "zxy xyz cab rst",
+       "zxy xyz cab rts",
+       "zxy xyz cab str",
+       "zxy xyz cab tsr",
+       "zxy xyz cba rst",
+       "zxy xyz cba rts",
+       "zxy xyz cba str",
+       "zxy xyz cba tsr",
+       "zxy xzy abc rst",
+       "zxy xzy abc rts",
+       "zxy xzy abc str",
+       "zxy xzy abc tsr",
+       "zxy xzy bca rst",
+       "zxy xzy bca rts",
+       "zxy xzy bca str",
+       "zxy xzy bca tsr",
+       "zxy xzy cab rst",
+       "zxy xzy cab rts",
+       "zxy xzy cab str",
+       "zxy xzy cab tsr",
+       "zxy xzy cba rst",
+       "zxy xzy cba rts",
+       "zxy xzy cba str",
+       "zxy xzy cba tsr",
+       "zxy zxy abc rst",
+       "zxy zxy abc rts",
+       "zxy zxy abc str",
+       "zxy zxy abc tsr",
+       "zxy zxy bca rst",
+       "zxy zxy bca rts",
+       "zxy zxy bca str",
+       "zxy zxy bca tsr",
+       "zxy zxy cab rst",
+       "zxy zxy cab rts",
+       "zxy zxy cab str",
+       "zxy zxy cab tsr",
+       "zxy zxy cba rst",
+       "zxy zxy cba rts",
+       "zxy zxy cba str",
+       "zxy zxy cba tsr",
+       "zxy zyx abc rst",
+       "zxy zyx abc rts",
+       "zxy zyx abc str",
+       "zxy zyx abc tsr",
+       "zxy zyx bca rst",
+       "zxy zyx bca rts",
+       "zxy zyx bca str",
+       "zxy zyx bca tsr",
+       "zxy zyx cab rst",
+       "zxy zyx cab rts",
+       "zxy zyx cab str",
+       "zxy zyx cab tsr",
+       "zxy zyx cba rst",
+       "zxy zyx cba rts",
+       "zxy zyx cba str",
+       "zxy zyx cba tsr",
+       "zyx xyz abc rst",
+       "zyx xyz abc rts",
+       "zyx xyz abc str",
+       "zyx xyz abc tsr",
+       "zyx xyz bca rst",
+       "zyx xyz bca rts",
+       "zyx xyz bca str",
+       "zyx xyz bca tsr",
+       "zyx xyz cab rst",
+       "zyx xyz cab rts",
+       "zyx xyz cab str",
+       "zyx xyz cab tsr",
+       "zyx xyz cba rst",
+       "zyx xyz cba rts",
+       "zyx xyz cba str",
+       "zyx xyz cba tsr",
+       "zyx xzy abc rst",
+       "zyx xzy abc rts",
+       "zyx xzy abc str",
+       "zyx xzy abc tsr",
+       "zyx xzy bca rst",
+       "zyx xzy bca rts",
+       "zyx xzy bca str",
+       "zyx xzy bca tsr",
+       "zyx xzy cab rst",
+       "zyx xzy cab rts",
+       "zyx xzy cab str",
+       "zyx xzy cab tsr",
+       "zyx xzy cba rst",
+       "zyx xzy cba rts",
+       "zyx xzy cba str",
+       "zyx xzy cba tsr",
+       "zyx zxy abc rst",
+       "zyx zxy abc rts",
+       "zyx zxy abc str",
+       "zyx zxy abc tsr",
+       "zyx zxy bca rst",
+       "zyx zxy bca rts",
+       "zyx zxy bca str",
+       "zyx zxy bca tsr",
+       "zyx zxy cab rst",
+       "zyx zxy cab rts",
+       "zyx zxy cab str",
+       "zyx zxy cab tsr",
+       "zyx zxy cba rst",
+       "zyx zxy cba rts",
+       "zyx zxy cba str",
+       "zyx zxy cba tsr",
+       "zyx zyx abc rst",
+       "zyx zyx abc rts",
+       "zyx zyx abc str",
+       "zyx zyx abc tsr",
+       "zyx zyx bca rst",
+       "zyx zyx bca rts",
+       "zyx zyx bca str",
+       "zyx zyx bca tsr",
+       "zyx zyx cab rst",
+       "zyx zyx cab rts",
+       "zyx zyx cab str",
+       "zyx zyx cab tsr",
+       "zyx zyx cba rst",
+       "zyx zyx cba rts",
+       "zyx zyx cba str",
+       "zyx zyx cba tsr"
+      ],
+      [
+       "rst xyz rst abc",
+       "rst xyz rst bca",
+       "rst xyz rst cba",
+       "rst xyz rts abc",
+       "rst xyz rts bca",
+       "rst xyz rts cba",
+       "rst xyz str abc",
+       "rst xyz str bca",
+       "rst xyz str cba",
+       "rst xyz tsr abc",
+       "rst xyz tsr bca",
+       "rst xyz tsr cba",
+       "rst xzy rst abc",
+       "rst xzy rst bca",
+       "rst xzy rst cba",
+       "rst xzy rts abc",
+       "rst xzy rts bca",
+       "rst xzy rts cba",
+       "rst xzy str abc",
+       "rst xzy str bca",
+       "rst xzy str cba",
+       "rst xzy tsr abc",
+       "rst xzy tsr bca",
+       "rst xzy tsr cba",
+       "rst zxy rst abc",
+       "rst zxy rst bca",
+       "rst zxy rst cba",
+       "rst zxy rts abc",
+       "rst zxy rts bca",
+       "rst zxy rts cba",
+       "rst zxy str abc",
+       "rst zxy str bca",
+       "rst zxy str cba",
+       "rst zxy tsr abc",
+       "rst zxy tsr bca",
+       "rst zxy tsr cba",
+       "rst zyx rst abc",
+       "rst zyx rst bca",
+       "rst zyx rst cba",
+       "rst zyx rts abc",
+       "rst zyx rts bca",
+       "rst zyx rts cba",
+       "rst zyx str abc",
+       "rst zyx str bca",
+       "rst zyx str cba",
+       "rst zyx tsr abc",
+       "rst zyx tsr bca",
+       "rst zyx tsr cba",
+       "rts xyz rst abc",
+       "rts xyz rst bca",
+       "rts xyz rst cba",
+       "rts xyz rts abc",
+       "rts xyz rts bca",
+       "rts xyz rts cba",
+       "rts xyz str abc",
+       "rts xyz str bca",
+       "rts xyz str cba",
+       "rts xyz tsr abc",
+       "rts xyz tsr bca",
+       "rts xyz tsr cba",
+       "rts xzy rst abc",
+       "rts xzy rst bca",
+       "rts xzy rst cba",
+       "rts xzy rts abc",
+       "rts xzy rts bca",
+       "rts xzy rts cba",
+       "rts xzy str abc",
+       "rts xzy str bca",
+       "rts xzy str cba",
+       "rts xzy tsr abc",
+       "rts xzy tsr bca",
+       "rts xzy tsr cba",
+       "rts zxy rst abc",
+       "rts zxy rst bca",
+       "rts zxy rst cba",
+       "rts zxy rts abc",
+       "rts zxy rts bca",
+       "rts zxy rts cba",
+       "rts zxy str abc",
+       "rts zxy str bca",
+       "rts zxy str cba",
+       "rts zxy tsr abc",
+       "rts zxy tsr bca",
+       "rts zxy tsr cba",
+       "rts zyx rst abc",
+       "rts zyx rst bca",
+       "rts zyx rst cba",
+       "rts zyx rts abc",
+       "rts zyx rts bca",
+       "rts zyx rts cba",
+       "rts zyx str abc",
+       "rts zyx str bca",
+       "rts zyx str cba",
+       "rts zyx tsr abc",
+       "rts zyx tsr bca",
+       "rts zyx tsr cba",
+       "str xyz rst abc",
+       "str xyz rst bca",
+       "str xyz rst cba",
+       "str xyz rts abc",
+       "str xyz rts bca",
+       "str xyz rts cba",
+       "str xyz str abc",
+       "str xyz str bca",
+       "str xyz str cba",
+       "str xyz tsr abc",
+       "str xyz tsr bca",
+       "str xyz tsr cba",
+       "str xzy rst abc",
+       "str xzy rst bca",
+       "str xzy rst cba",
+       "str xzy rts abc",
+       "str xzy rts bca",
+       "str xzy rts cba",
+       "str xzy str abc",
+       "str xzy str bca",
+       "str xzy str cba",
+       "str xzy tsr abc",
+       "str xzy tsr bca",
+       "str xzy tsr cba",
+       "str zxy rst abc",
+       "str zxy rst bca",
+       "str zxy rst cba",
+       "str zxy rts abc",
+       "str zxy rts bca",
+       "str zxy rts cba",
+       "str zxy str abc",
+       "str zxy str bca",
+       "str zxy str cba",
+       "str zxy tsr abc",
+       "str zxy tsr bca",
+       "str zxy tsr cba",
+       "str zyx rst abc",
+       "str zyx rst bca",
+       "str zyx rst cba",
+       "str zyx rts abc",
+       "str zyx rts bca",
+       "str zyx rts cba",
+       "str zyx str abc",
+       "str zyx str bca",
+       "str zyx str cba",
+       "str zyx tsr abc",
+       "str zyx tsr bca",
+       "str zyx tsr cba",
+       "tsr xyz rst abc",
+       "tsr xyz rst bca",
+       "tsr xyz rst cba",
+       "tsr xyz rts abc",
+       "tsr xyz rts bca",
+       "tsr xyz rts cba",
+       "tsr xyz str abc",
+       "tsr xyz str bca",
+       "tsr xyz str cba",
+       "tsr xyz tsr abc",
+       "tsr xyz tsr bca",
+       "tsr xyz tsr cba",
+       "tsr xzy rst abc",
+       "tsr xzy rst bca",
+       "tsr xzy rst cba",
+       "tsr xzy rts abc",
+       "tsr xzy rts bca",
+       "tsr xzy rts cba",
+       "tsr xzy str abc",
+       "tsr xzy str bca",
+       "tsr xzy str cba",
+       "tsr xzy tsr abc",
+       "tsr xzy tsr bca",
+       "tsr xzy tsr cba",
+       "tsr zxy rst abc",
+       "tsr zxy rst bca",
+       "tsr zxy rst cba",
+       "tsr zxy rts abc",
+       "tsr zxy rts bca",
+       "tsr zxy rts cba",
+       "tsr zxy str abc",
+       "tsr zxy str bca",
+       "tsr zxy str cba",
+       "tsr zxy tsr abc",
+       "tsr zxy tsr bca",
+       "tsr zxy tsr cba",
+       "tsr zyx rst abc",
+       "tsr zyx rst bca",
+       "tsr zyx rst cba",
+       "tsr zyx rts abc",
+       "tsr zyx rts bca",
+       "tsr zyx rts cba",
+       "tsr zyx str abc",
+       "tsr zyx str bca",
+       "tsr zyx str cba",
+       "tsr zyx tsr abc",
+       "tsr zyx tsr bca",
+       "tsr zyx tsr cba"
+      ]
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:69a3c6546e73e4abccc9c150": {
+   "constraints": [
+    "1 <= limit <= 10",
+    "0 <= shards.length <= 2e4",
+    "ids match [a-z0-9]{1,8}",
+    "0 <= start <= end <= 1e9"
+   ],
+   "clarifyingQuestions": [
+    "Which shard gives way when too many overlap: the later one, the longer one?",
+    "Is a shard trimmed at its start, its end, or split?",
+    "How are gaps filled, and by which shard?",
+    "Are fully covered shards removed?",
+    "In which order are shards returned?"
+   ],
+   "hints": [
+    "Process shards by start: then only already kept shards constrain the current one.",
+    "With this order the kept coverage is non-increasing from the current start onward, so the keys still over the limit form a prefix of the shard.",
+    "Binary search the first point where coverage drops below the limit, using sorted starts and ends; afterwards walk kept shards by start and pull each start back to close a gap."
+   ],
+   "invariants": [
+    "no key is covered by more than limit kept shards",
+    "kept ranges only shrink before the gap fill, which only extends starts backward"
+   ],
+   "chooseWhen": [
+    "Interval capacity enforcement with a deterministic tie order"
+   ],
+   "tradeoffs": [
+    "Sorted-array insertion is O(n) per shard; a balanced tree or Fenwick tree over compressed keys removes that cost"
+   ],
+   "variantLabel": "Inferred single variant: trim shards to a coverage limit, then fill gaps",
+   "examples": [
+    {
+     "input": [
+      1,
+      []
+     ],
+     "output": [],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      2,
+      [
+       "bv:29:30",
+       "id69:11:21",
+       "id21:0:14",
+       "id75:7:12",
+       "id87:20:27",
+       "id27:28:33",
+       "db:1:2",
+       "id15:39:51"
+      ]
+     ],
+     "output": [
+      "id21:0:14",
+      "db:1:2",
+      "id75:7:12",
+      "id69:13:21",
+      "id87:20:27",
+      "id27:28:33",
+      "bv:29:30",
+      "id15:34:51"
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6a32d45b65569fa70cc7eb97": {
+   "constraints": [
+    "1 <= n <= 1e5",
+    "0 <= population[i] <= 1e9",
+    "unit consists of 0 and 1"
+   ],
+   "clarifyingQuestions": [
+    "What is maximised: protected population or number of protected cities?",
+    "Can a unit move more than once or to the right?",
+    "Can two units protect the same city?",
+    "Is the unit at city 0 able to move?"
+   ],
+   "hints": [
+    "A unit can only reach its own city or the one to its left, so runs of consecutive units act independently.",
+    "A run of L units starting at s can cover L of the cities s - 1 .. s + L - 1: units left of the skipped city move left, the others stay.",
+    "For each run skip the least populated of those L + 1 cities; a run starting at city 0 has no city to its left and covers itself."
+   ],
+   "invariants": [
+    "each run is handled once",
+    "the answer never exceeds the total population"
+   ],
+   "chooseWhen": [
+    "Assignment problems on a line with one-step moves"
+   ],
+   "tradeoffs": [
+    "The run argument is O(n) and exact; a two-state DP generalises to other costs"
+   ],
+   "variantLabel": "Inferred single variant: maximise protected population with one-step left moves",
+   "examples": [
+    {
+     "input": [
+      [
+       5
+      ],
+      "1"
+     ],
+     "output": 5,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       18,
+       20,
+       7,
+       1,
+       20,
+       18,
+       16,
+       17,
+       4,
+       14,
+       6,
+       18
+      ],
+      "111011010101"
+     ],
+     "output": 132,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6976850c5ed12b33b05f0f0f": {
+   "constraints": [
+    "1 <= routes.length <= 2000",
+    "country codes match [A-Z]{2,3}",
+    "methods match [A-Za-z]{1,10}",
+    "1 <= cost <= 1e6"
+   ],
+   "clarifyingQuestions": [
+    "Are routes directed?",
+    "How many transfers may a path use in each part?",
+    "How are paths and costs reported, and in what order?",
+    "What is returned when no path exists?"
+   ],
+   "hints": [
+    "Split each route on \":\" into four fields and convert the cost to an integer.",
+    "Keep routes whose source and target match.",
+    "Sort by cost, then by method name."
+   ],
+   "invariants": [
+    "each matching route appears once",
+    "output costs are non-decreasing"
+   ],
+   "chooseWhen": [
+    "Parsing and filtering delimited records"
+   ],
+   "tradeoffs": [
+    "Parsing all routes is O(R) even for one query; an index pays off for many queries"
+   ],
+   "variantLabel": "Inferred level 1: direct routes between two countries",
+   "examples": [
+    {
+     "input": [
+      [
+       "AB:CD:x:1"
+      ],
+      "AB",
+      "CD"
+     ],
+     "output": [
+      [
+       "x",
+       1
+      ]
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "BB:DD:Sea:5",
+       "DD:BB:Sea:11",
+       "DD:BB:x:8",
+       "CC:DD:Air:3",
+       "AA:BB:UPS:4",
+       "AA:EEE:Sea:9",
+       "BB:EEE:x:6",
+       "EEE:BB:x:8",
+       "EEE:CC:Sea:2",
+       "AA:DD:x:4",
+       "BB:DD:x:8",
+       "AA:CC:Sea:3",
+       "EEE:BB:Sea:3",
+       "AA:BB:x:5",
+       "BB:CC:UPS:1",
+       "DD:AA:x:3",
+       "EEE:CC:UPS:4",
+       "CC:EEE:x:11",
+       "AA:CC:UPS:9"
+      ],
+      "CC",
+      "DD"
+     ],
+     "output": [
+      [
+       "Air",
+       3
+      ]
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:697690985ed12b33b05f0f2c": {
+   "constraints": [
+    "1 <= routes.length <= 2000",
+    "country codes match [A-Z]{2,3}",
+    "methods match [A-Za-z]{1,10}",
+    "1 <= cost <= 1e6",
+    "at most 2e4 qualifying paths"
+   ],
+   "clarifyingQuestions": [
+    "Are routes directed?",
+    "How many transfers may a path use in each part?",
+    "How are paths and costs reported, and in what order?",
+    "What is returned when no path exists?"
+   ],
+   "hints": [
+    "Group routes by source country.",
+    "Direct routes source -> target are paths; a route source -> X followed by X -> target is a path when X is neither endpoint.",
+    "Build path strings with \":\" and sort by (cost, path)."
+   ],
+   "invariants": [
+    "no path revisits source or target",
+    "total cost is the sum of its route costs"
+   ],
+   "chooseWhen": [
+    "Bounded-length path enumeration"
+   ],
+   "tradeoffs": [
+    "Enumeration size is the product of degrees; only small hop limits stay tractable"
+   ],
+   "variantLabel": "Inferred level 2: paths with at most one transfer",
+   "examples": [
+    {
+     "input": [
+      [
+       "AB:CD:x:1"
+      ],
+      "AB",
+      "CD"
+     ],
+     "output": [
+      [
+       "AB:x:CD",
+       1
+      ]
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "AA:CC:Sea:4",
+       "AA:CC:x:1",
+       "CC:BB:Sea:10",
+       "BB:CC:UPS:8",
+       "DD:CC:x:3",
+       "CC:EEE:x:5",
+       "EEE:BB:UPS:9",
+       "DD:BB:Sea:11",
+       "DD:CC:UPS:7",
+       "BB:EEE:Air:2",
+       "EEE:CC:Sea:2",
+       "BB:AA:UPS:2",
+       "EEE:AA:UPS:4",
+       "CC:AA:UPS:6",
+       "EEE:BB:Sea:1",
+       "DD:AA:x:7",
+       "BB:AA:Sea:9",
+       "BB:EEE:x:2",
+       "DD:BB:x:4"
+      ],
+      "DD",
+      "EEE"
+     ],
+     "output": [
+      [
+       "DD:x:BB:Air:EEE",
+       6
+      ],
+      [
+       "DD:x:BB:x:EEE",
+       6
+      ],
+      [
+       "DD:x:CC:x:EEE",
+       8
+      ],
+      [
+       "DD:UPS:CC:x:EEE",
+       12
+      ],
+      [
+       "DD:Sea:BB:Air:EEE",
+       13
+      ],
+      [
+       "DD:Sea:BB:x:EEE",
+       13
+      ]
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:697692bb5ed12b33b05f0f34": {
+   "constraints": [
+    "1 <= routes.length <= 2000",
+    "country codes match [A-Z]{2,3}",
+    "methods match [A-Za-z]{1,10}",
+    "1 <= cost <= 1e6"
+   ],
+   "clarifyingQuestions": [
+    "Are routes directed?",
+    "How many transfers may a path use in each part?",
+    "How are paths and costs reported, and in what order?",
+    "What is returned when no path exists?"
+   ],
+   "hints": [
+    "Costs are positive, so the cheapest path never repeats a country.",
+    "Several methods between the same countries only matter through their cheapest one.",
+    "Run Dijkstra from source with a binary heap and stop when target is popped."
+   ],
+   "invariants": [
+    "popped distances are final",
+    "distances are sums of positive integers below 2**53"
+   ],
+   "chooseWhen": [
+    "Single-pair shortest paths with positive weights"
+   ],
+   "tradeoffs": [
+    "Dijkstra is O(R log R); Bellman-Ford is simpler but O(V R)"
+   ],
+   "variantLabel": "Inferred level 3: cheapest path with any number of transfers",
+   "examples": [
+    {
+     "input": [
+      [
+       "AB:CD:x:1"
+      ],
+      "AB",
+      "CD"
+     ],
+     "output": 1,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "CC:DD:Sea:2",
+       "DD:CC:UPS:8",
+       "DD:AA:Sea:6",
+       "AA:CC:UPS:1",
+       "CC:AA:Air:4",
+       "BB:EEE:x:2",
+       "EEE:BB:x:4",
+       "EEE:AA:x:11",
+       "DD:EEE:Air:11",
+       "AA:BB:Sea:5",
+       "AA:BB:x:2",
+       "DD:AA:x:9",
+       "CC:BB:x:10",
+       "DD:BB:Air:10",
+       "BB:EEE:Air:11",
+       "BB:CC:Air:3",
+       "BB:AA:UPS:9",
+       "EEE:BB:UPS:1",
+       "DD:BB:x:4"
+      ],
+      "EEE",
+      "AA"
+     ],
+     "output": 8,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:68dc5856dd5418be11109afb": {
+   "constraints": [
+    "1 <= m, n <= 50",
+    "0 <= fuelCapacity <= 100",
+    "exactly one S and one D"
+   ],
+   "clarifyingQuestions": [
+    "Does entering a station refill to full or add a fixed amount?",
+    "What is returned when D is unreachable?",
+    "Can you pass through D or S again?",
+    "Does reaching D with zero fuel count?"
+   ],
+   "hints": [
+    "The state is the cell together with remaining fuel; plain BFS on cells alone is wrong.",
+    "BFS explores states by move count, so a later state at a cell is useful only if it carries more fuel than every earlier one.",
+    "Track the best fuel per cell and skip dominated states; refill on G before expanding."
+   ],
+   "invariants": [
+    "move counts are non-decreasing in BFS order",
+    "a pruned state is dominated by an earlier state with at least as much fuel"
+   ],
+   "chooseWhen": [
+    "Shortest paths with a resource that resets"
+   ],
+   "tradeoffs": [
+    "Dominance pruning keeps typical searches near O(m n); the worst case is still O(m n F)"
+   ],
+   "variantLabel": "Inferred single variant: fewest moves with fuel limit and refuelling stations",
+   "examples": [
+    {
+     "input": [
+      [
+       "SD"
+      ],
+      0
+     ],
+     "output": -1,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "#G..#.",
+       "G.DSGG",
+       "G...#.",
+       ".#..G.",
+       "G...G.",
+       "...G..",
+       "..##.."
+      ],
+      3
+     ],
+     "output": 1,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:690d00010a0bc710235894c4": {
+   "constraints": [
+    "1 <= rows, cols, k <= 60",
+    "-1000 <= entries <= 1000",
+    "up to 300 calls",
+    "operand shapes match"
+   ],
+   "clarifyingQuestions": [
+    "How is a matrix passed in and returned: dense lists or sparse triples?",
+    "Do add and multiply modify the stored matrix?",
+    "Which other operations are needed?",
+    "Should zero results be stored or reported?"
+   ],
+   "hints": [
+    "Store only non-zero entries, keyed by row then column.",
+    "For multiplication, a non-zero A[i][k] only meets the non-zeros of row k of the operand.",
+    "Delete entries that become zero so the store stays minimal, and sort row and column keys when emitting triples."
+   ],
+   "invariants": [
+    "the store never holds a zero value",
+    "operations return fresh lists and leave the operand unchanged"
+   ],
+   "chooseWhen": [
+    "Linear algebra on mostly-zero data"
+   ],
+   "tradeoffs": [
+    "Hash maps per row cost more per entry than CSR arrays but allow O(1) updates"
+   ],
+   "variantLabel": "Inferred single variant: sparse matrix class with get, set, add and multiply",
+   "examples": [
+    {
+     "input": [
+      [
+       "SparseMatrix"
+      ],
+      [
+       [
+        [
+         [
+          3,
+          7,
+          0
+         ]
+        ]
+       ]
+      ]
+     ],
+     "output": [
+      null
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "SparseMatrix",
+       "add",
+       "set",
+       "add",
+       "add",
+       "set",
+       "get"
+      ],
+      [
+       [
+        [
+         [
+          1,
+          1,
+          -2,
+          0
+         ],
+         [
+          -2,
+          0,
+          0,
+          -2
+         ],
+         [
+          0,
+          -2,
+          7,
+          1
+         ]
+        ]
+       ],
+       [
+        [
+         [
+          0,
+          1,
+          0,
+          1
+         ],
+         [
+          3,
+          0,
+          0,
+          1
+         ],
+         [
+          -2,
+          3,
+          -2,
+          1
+         ]
+        ]
+       ],
+       [
+        1,
+        2,
+        4
+       ],
+       [
+        [
+         [
+          0,
+          1,
+          1,
+          0
+         ],
+         [
+          -2,
+          0,
+          0,
+          0
+         ],
+         [
+          7,
+          -2,
+          1,
+          3
+         ]
+        ]
+       ],
+       [
+        [
+         [
+          0,
+          0,
+          0,
+          0
+         ],
+         [
+          0,
+          -2,
+          1,
+          -2
+         ],
+         [
+          0,
+          0,
+          1,
+          0
+         ]
+        ]
+       ],
+       [
+        0,
+        1,
+        -5
+       ],
+       [
+        0,
+        0
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      [
+       [
+        0,
+        0,
+        1
+       ],
+       [
+        0,
+        1,
+        2
+       ],
+       [
+        0,
+        2,
+        -2
+       ],
+       [
+        0,
+        3,
+        1
+       ],
+       [
+        1,
+        0,
+        1
+       ],
+       [
+        1,
+        3,
+        -1
+       ],
+       [
+        2,
+        0,
+        -2
+       ],
+       [
+        2,
+        1,
+        1
+       ],
+       [
+        2,
+        2,
+        5
+       ],
+       [
+        2,
+        3,
+        2
+       ]
+      ],
+      null,
+      [
+       [
+        0,
+        0,
+        1
+       ],
+       [
+        0,
+        1,
+        2
+       ],
+       [
+        0,
+        2,
+        -1
+       ],
+       [
+        1,
+        0,
+        -4
+       ],
+       [
+        1,
+        2,
+        4
+       ],
+       [
+        1,
+        3,
+        -2
+       ],
+       [
+        2,
+        0,
+        7
+       ],
+       [
+        2,
+        1,
+        -4
+       ],
+       [
+        2,
+        2,
+        8
+       ],
+       [
+        2,
+        3,
+        4
+       ]
+      ],
+      [
+       [
+        0,
+        0,
+        1
+       ],
+       [
+        0,
+        1,
+        1
+       ],
+       [
+        0,
+        2,
+        -2
+       ],
+       [
+        1,
+        0,
+        -2
+       ],
+       [
+        1,
+        1,
+        -2
+       ],
+       [
+        1,
+        2,
+        5
+       ],
+       [
+        1,
+        3,
+        -4
+       ],
+       [
+        2,
+        1,
+        -2
+       ],
+       [
+        2,
+        2,
+        8
+       ],
+       [
+        2,
+        3,
+        1
+       ]
+      ],
+      null,
+      1
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:67db949600e020b60078a44d": {
+   "constraints": [
+    "1 <= nums.length <= 1e5",
+    "1 <= nums[i] <= 1e9"
+   ],
+   "clarifyingQuestions": [
+    "Must both parts be non-empty?",
+    "Which index is returned if several exist?",
+    "Can values be zero or negative?"
+   ],
+   "hints": [
+    "Compute the total once.",
+    "Walk left to right keeping the prefix sum through index i.",
+    "Return i when 2 * prefix equals the total; stop early once the prefix exceeds half."
+   ],
+   "invariants": [
+    "the prefix sum strictly increases",
+    "sums stay below 2**53"
+   ],
+   "chooseWhen": [
+    "Balance points in arrays"
+   ],
+   "tradeoffs": [
+    "Positive values make the split unique; with zeros several indices could qualify"
+   ],
+   "variantLabel": "Inferred single variant: equal-sum split index",
+   "examples": [
+    {
+     "input": [
+      [
+       1
+      ]
+     ],
+     "output": -1,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       2,
+       4,
+       5,
+       4,
+       3,
+       4,
+       1,
+       3,
+       3,
+       5,
+       1,
+       1
+      ]
+     ],
+     "output": 4,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  }
+ }
+}

@@ -1,0 +1,109 @@
+{
+ "problems": {
+  "hack2hire:69557daa4a0202df9569e982": {
+   "reference": "for every other community, test whether its follower list and the target follower list share an element by nested list scans",
+   "candidate_design": "walk the target community followers, and for each follower its community list, marking community indices in a boolean array; collect marked indices in increasing order",
+   "complexity_target": "O(n + memberships reachable in two steps) time/O(n) space"
+  },
+  "hack2hire:69557dad4a0202df9569e983": {
+   "reference": "grow a reached set by repeated full rescans: add any community that shares a follower with a reached community, until nothing changes",
+   "candidate_design": "breadth-first search over the bipartite community/follower graph with visited arrays for both sides",
+   "complexity_target": "O(n + m + memberships) time/O(n + m) space"
+  },
+  "hack2hire:684dee4b5e4cf21833c0611f": {
+   "reference": "enumerate covered points one by one with a counter until the counter reaches idx",
+   "candidate_design": "subtract interval lengths from idx until it falls inside an interval, then split that interval arithmetically",
+   "complexity_target": "O(n) time/O(n) output space"
+  },
+  "hack2hire:69a32b466e73e4abccc9bf13": {
+   "reference": "explicit two-pointer swap on a character list for each qualifying word",
+   "candidate_design": "string slicing: first character + reversed middle slice + last character for qualifying words",
+   "complexity_target": "O(total characters) time/O(total characters) space"
+  },
+  "hack2hire:6801c3b66cd5d6c88778f20c": {
+   "reference": "fixed-point iteration: recompute every role from its parents until no set changes",
+   "candidate_design": "Kahn topological order over parent -> child edges, computing each role once from its already-final parents with hash sets, then sorting",
+   "complexity_target": "O((n + edges) * P + n P log P) time for P distinct privileges/O(n P) space"
+  },
+  "hack2hire:69cae7e2ff3ebde766ceda54": {
+   "reference": "walk the segments from the start for each query and compare squared distances as exact fractions",
+   "candidate_design": "prefix sums of segment lengths with binary search for the segment, then integer squared distances scaled by the segment length squared compared over all waypoints",
+   "complexity_target": "O(N + Q (log N + N)) time/O(N + Q) space"
+  },
+  "hack2hire:68aebce1c8631a6568126eb4": {
+   "reference": "build both words completely by a recursive pre-order walk and compare the strings",
+   "candidate_design": "two explicit stacks produce leaf texts lazily; compare character by character, advancing whichever leaf is exhausted, stopping at the first difference",
+   "complexity_target": "O(N1 + N2) time/O(height) extra space beyond the input"
+  },
+  "hack2hire:69752cb217272b5c868d5e84": {
+   "reference": "sort planes by departure and scan linearly for every item, copying capacities before each order for rollback",
+   "candidate_design": "segment tree of remaining capacities over planes sorted by departure; a binary search finds the first eligible index and a descent finds the first plane with enough room; changes are logged and undone on rejection",
+   "complexity_target": "O(P log P + items log P) time/O(P) space"
+  },
+  "hack2hire:678879df402dc47b67a14946": {
+   "reference": "plain list in recency order: remove the term by linear search, append it, drop the front when over capacity",
+   "candidate_design": "hash map from term to node of a doubly linked list with sentinels; add relinks at the head and unlinks the tail on overflow; getTopK walks k nodes from the head",
+   "complexity_target": "O(1) per add, O(k) per getTopK/O(capacity) space"
+  },
+  "hack2hire:6a4809cfca956256d786d255": {
+   "reference": "repeated quadratic scans: find the segment whose start is no segment end, then repeatedly search the whole list for the segment that starts at the current end",
+   "candidate_design": "hash map from startId to segment and a set of endIds; the head is the only start that is not an end; follow the map and join payloads once",
+   "complexity_target": "O(total length) time/O(n) space"
+  },
+  "hack2hire:6a480ba0ca956256d786d277": {
+   "reference": "repeated quadratic scans: find the segment whose start is no segment end, then repeatedly search the whole list for the segment that starts at the current end; invalid when no head, several heads, or the walk misses segments",
+   "candidate_design": "hash map walk from the unique head with a step count; invalid when the number of heads is not one or the walk does not visit every segment",
+   "complexity_target": "O(total length) time/O(n) space"
+  },
+  "hack2hire:6a480bbbca956256d786d279": {
+   "reference": "repeated quadratic scans: find the segment whose start is no segment end, then repeatedly search the whole list for the segment that starts at the current end; repeat for every head after sorting heads",
+   "candidate_design": "hash map from startId; collect heads (starts that are not ends), sort them, and walk each chain",
+   "complexity_target": "O(total length + h log h) time/O(n) space"
+  },
+  "hack2hire:699bb05f6e73e4abccc9a9e4": {
+   "reference": "generate the Cartesian product of the option sets for each sentence, de-duplicate and sort the joined strings",
+   "candidate_design": "group wordSet by sorted-letter signature; for each word take its sorted option list, then expand the product position by position in order; because anagrams have equal length the product order is already sorted",
+   "complexity_target": "O(sum of output length + wordSet letters log) time/O(output) space"
+  },
+  "hack2hire:69a3c6546e73e4abccc9c150": {
+   "reference": "brute force over integer keys: for each shard find the last key in its range already covered by limit kept shards by counting coverage key by key, then fill gaps by a linear walk",
+   "candidate_design": "sorted arrays of kept starts and ends; coverage at x is (#starts <= x) - (#ends < x), which is non-increasing from the current start, so a binary search over candidate points finds the trimmed start",
+   "complexity_target": "O(n log n + n * insertion cost) time/O(n) space"
+  },
+  "hack2hire:6a32d45b65569fa70cc7eb97": {
+   "reference": "enumerate every stay/move choice for the movable units and score the protected cities",
+   "candidate_design": "greedy over maximal runs of 1s: a run of L units starting at s > 0 protects any L of the L + 1 cities s - 1 .. s + L - 1, so add their sum minus the minimum; a run at s = 0 protects all its cities",
+   "complexity_target": "O(n) time/O(1) extra space"
+  },
+  "hack2hire:6976850c5ed12b33b05f0f0f": {
+   "reference": "scan every route and keep matches, then sort by an explicit pair comparison",
+   "candidate_design": "parse each route once, filter by source and target, sort by (cost, method)",
+   "complexity_target": "O(R log R) time/O(R) space"
+  },
+  "hack2hire:697690985ed12b33b05f0f2c": {
+   "reference": "enumerate every route and every ordered pair of routes, keep those forming a path, then sort",
+   "candidate_design": "adjacency lists by source; for each route out of source, either it reaches target or extend with routes from its target that reach target",
+   "complexity_target": "O(R + paths log paths) time/O(R + paths) space"
+  },
+  "hack2hire:697692bb5ed12b33b05f0f34": {
+   "reference": "Bellman-Ford relaxation over all routes until no distance changes",
+   "candidate_design": "Dijkstra with a binary heap over parsed adjacency lists",
+   "complexity_target": "O(R log R) time/O(R) space"
+  },
+  "hack2hire:68dc5856dd5418be11109afb": {
+   "reference": "breadth-first search over (cell, fuel) states with a full visited table",
+   "candidate_design": "breadth-first search by move count keeping the best fuel seen per cell; a state is expanded only when it arrives with strictly more fuel than any earlier state at that cell",
+   "complexity_target": "O(m n (F + 1)) time worst case/O(m n) space"
+  },
+  "hack2hire:690d00010a0bc710235894c4": {
+   "reference": "dense copy of the matrix updated on set; add and multiply by full nested loops",
+   "candidate_design": "per-row hash maps of non-zero columns; add merges the other matrix's non-zeros into a copy of the touched rows; multiply converts the operand to per-row non-zero lists and accumulates only non-zero products",
+   "complexity_target": "O(1) get/set, O(rows cols) add, O(rows cols + nnz(A) * row nnz(B)) multiply/O(nnz) space"
+  },
+  "hack2hire:67db949600e020b60078a44d": {
+   "reference": "for every index compute both sums from scratch",
+   "candidate_design": "one pass with the total and a running prefix sum",
+   "complexity_target": "O(n) time/O(1) extra space"
+  }
+ }
+}

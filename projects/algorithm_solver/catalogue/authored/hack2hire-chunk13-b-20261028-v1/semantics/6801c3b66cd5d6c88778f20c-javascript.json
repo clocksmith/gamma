@@ -1,0 +1,55 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:6801c3b66cd5d6c88778f20c",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "roles",
+  "parents",
+  "allowed",
+  "disallowed"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "finalPrivileges",
+  "params": [
+   {
+    "name": "roles",
+    "type": "string[]"
+   },
+   {
+    "name": "parents",
+    "type": "string[][]"
+   },
+   {
+    "name": "allowed",
+    "type": "string[][]"
+   },
+   {
+    "name": "disallowed",
+    "type": "string[][]"
+   }
+  ],
+  "return": {
+   "type": "string[][]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "fixed-point iteration: recompute every role from its parents until no set changes",
+  "candidate_design": "Kahn topological order over parent -> child edges, computing each role once from its already-final parents with hash sets, then sorting",
+  "complexity_target": "O((n + edges) * P + n P log P) time for P distinct privileges/O(n P) space"
+ },
+ "source_sha256": "a637925899a9f9728f1697e5ff65ba409977a20f2c769f9215661e3335cb0a67",
+ "wrapper": "named export finalPrivileges"
+}

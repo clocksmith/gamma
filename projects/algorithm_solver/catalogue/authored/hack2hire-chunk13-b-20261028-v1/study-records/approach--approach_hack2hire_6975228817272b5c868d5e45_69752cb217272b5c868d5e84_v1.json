@@ -1,0 +1,461 @@
+{
+ "kind": "approach",
+ "id": "approach:hack2hire:6975228817272b5c868d5e45:69752cb217272b5c868d5e84:v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/design.json",
+   "sha256": "d93fb8a1168dc55cfb3806750989fc44fdf3c7defe0a0d68e84f6f285890f53b",
+   "selector": "/problems/hack2hire:69752cb217272b5c868d5e84"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/study-content.json",
+   "sha256": "090481e11ecb7df5f50c5f228bd585a3448c683bad99572df7a87ca263d5a6c2",
+   "selector": "/variants/hack2hire:69752cb217272b5c868d5e84"
+  }
+ ],
+ "problemId": "hack2hire:6975228817272b5c868d5e45",
+ "contract": {
+  "kind": "contract",
+  "id": "contract:hack2hire:6975228817272b5c868d5e45:69752cb217272b5c868d5e84:authored-v1",
+  "version": 1,
+  "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/study-records/contract--contract_hack2hire_6975228817272b5c868d5e45_69752cb217272b5c868d5e84_authored-v1.json",
+  "sha256": "758106a8e2dce4d487816343a21c8ba0247a4be92fdc2d233b2854a49f274200"
+ },
+ "title": {
+  "status": "present",
+  "value": "segment tree of remaining capacities over planes sorted by departure; a binary search finds the first eligible index and a descent finds the first plane with enough room; changes are logged and undone on rejection",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/design.json",
+    "sha256": "d93fb8a1168dc55cfb3806750989fc44fdf3c7defe0a0d68e84f6f285890f53b",
+    "selector": "/problems/hack2hire:69752cb217272b5c868d5e84/candidate_design"
+   }
+  ]
+ },
+ "representation": "coding",
+ "explanation": {
+  "status": "present",
+  "value": "segment tree of remaining capacities over planes sorted by departure; a binary search finds the first eligible index and a descent finds the first plane with enough room; changes are logged and undone on rejection. Complexity target: O(P log P + items log P) time/O(P) space.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/design.json",
+    "sha256": "d93fb8a1168dc55cfb3806750989fc44fdf3c7defe0a0d68e84f6f285890f53b",
+    "selector": "/problems/hack2hire:69752cb217272b5c868d5e84"
+   }
+  ]
+ },
+ "chooseWhen": {
+  "status": "present",
+  "value": [
+   "First-fit allocation over an ordered resource list"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/study-content.json",
+    "sha256": "090481e11ecb7df5f50c5f228bd585a3448c683bad99572df7a87ca263d5a6c2",
+    "selector": "/variants/hack2hire:69752cb217272b5c868d5e84/chooseWhen"
+   }
+  ]
+ },
+ "tradeoffs": {
+  "status": "present",
+  "value": [
+   "A segment tree makes each placement logarithmic; a linear scan is simpler and fine for small fleets"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/study-content.json",
+    "sha256": "090481e11ecb7df5f50c5f228bd585a3448c683bad99572df7a87ca263d5a6c2",
+    "selector": "/variants/hack2hire:69752cb217272b5c868d5e84/tradeoffs"
+   }
+  ]
+ },
+ "invariants": {
+  "status": "present",
+  "value": [
+   "capacities never go negative",
+   "a rejected order leaves every capacity unchanged"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/study-content.json",
+    "sha256": "090481e11ecb7df5f50c5f228bd585a3448c683bad99572df7a87ca263d5a6c2",
+    "selector": "/variants/hack2hire:69752cb217272b5c868d5e84/invariants"
+   }
+  ]
+ },
+ "hints": {
+  "status": "present",
+  "value": [
+   "Sort planes by departure; the eligible planes for an order form a suffix found by binary search.",
+   "The first plane in that suffix with remaining capacity >= size can be found with a max segment tree by descending into the leftmost child that is large enough.",
+   "Record each capacity change during an order and undo them in reverse when an item fails."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/study-content.json",
+    "sha256": "090481e11ecb7df5f50c5f228bd585a3448c683bad99572df7a87ca263d5a6c2",
+    "selector": "/variants/hack2hire:69752cb217272b5c868d5e84/hints"
+   }
+  ]
+ },
+ "stages": [
+  {
+   "id": "approach:hack2hire:6975228817272b5c868d5e45:69752cb217272b5c868d5e84:v1:stage:reasoning",
+   "type": "reasoning",
+   "title": {
+    "status": "present",
+    "value": "Reason about the inferred contract",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/study-content.json",
+      "sha256": "090481e11ecb7df5f50c5f228bd585a3448c683bad99572df7a87ca263d5a6c2",
+      "selector": "/variants/hack2hire:69752cb217272b5c868d5e84"
+     }
+    ]
+   },
+   "question": {
+    "status": "present",
+    "value": "Which representation makes every operation in the inferred contract cheap?",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/study-content.json",
+      "sha256": "090481e11ecb7df5f50c5f228bd585a3448c683bad99572df7a87ca263d5a6c2",
+      "selector": "/variants/hack2hire:69752cb217272b5c868d5e84"
+     }
+    ]
+   },
+   "explanation": {
+    "status": "present",
+    "value": "segment tree of remaining capacities over planes sorted by departure; a binary search finds the first eligible index and a descent finds the first plane with enough room; changes are logged and undone on rejection",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/design.json",
+      "sha256": "d93fb8a1168dc55cfb3806750989fc44fdf3c7defe0a0d68e84f6f285890f53b",
+      "selector": "/problems/hack2hire:69752cb217272b5c868d5e84/candidate_design"
+     }
+    ]
+   },
+   "rationale": {
+    "status": "present",
+    "value": "Target O(P log P + items log P) time/O(P) space; the independent reference (sort planes by departure and scan linearly for every item, copying capacities before each order for rollback) is too slow at the inferred bounds.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/design.json",
+      "sha256": "d93fb8a1168dc55cfb3806750989fc44fdf3c7defe0a0d68e84f6f285890f53b",
+      "selector": "/problems/hack2hire:69752cb217272b5c868d5e84"
+     }
+    ]
+   },
+   "instructions": {
+    "status": "present",
+    "value": [
+     "Restate the inferred contract and its open questions.",
+     "Identify the quantity each operation needs.",
+     "Choose a structure that maintains it incrementally."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/study-content.json",
+      "sha256": "090481e11ecb7df5f50c5f228bd585a3448c683bad99572df7a87ca263d5a6c2",
+      "selector": "/variants/hack2hire:69752cb217272b5c868d5e84"
+     }
+    ]
+   },
+   "observations": {
+    "status": "not-applicable",
+    "reason": "Local runs are recorded in checks.json, not in study records"
+   },
+   "hints": {
+    "status": "present",
+    "value": [
+     "Sort planes by departure; the eligible planes for an order form a suffix found by binary search.",
+     "The first plane in that suffix with remaining capacity >= size can be found with a max segment tree by descending into the leftmost child that is large enough."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/study-content.json",
+      "sha256": "090481e11ecb7df5f50c5f228bd585a3448c683bad99572df7a87ca263d5a6c2",
+      "selector": "/variants/hack2hire:69752cb217272b5c868d5e84/hints"
+     }
+    ]
+   },
+   "requirementIds": {
+    "status": "not-applicable",
+    "reason": "Requirements are prose items without stable ids"
+   },
+   "checks": [],
+   "artifacts": [],
+   "native": {
+    "kind": "artifact",
+    "id": "artifact:hack2hire:6975228817272b5c868d5e45:69752cb217272b5c868d5e84:approach-native:v1",
+    "version": 1,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/study-records/artifact--artifact_hack2hire_6975228817272b5c868d5e45_69752cb217272b5c868d5e84_approach-native_v1.json",
+    "sha256": "bd6f128738dc240c9c3afba5178848dc09ae8f0219d25a1230604159da8b04a9"
+   }
+  },
+  {
+   "id": "approach:hack2hire:6975228817272b5c868d5e45:69752cb217272b5c868d5e84:v1:stage:coding",
+   "type": "coding",
+   "title": {
+    "status": "present",
+    "value": "Implement in Python and JavaScript",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/study-content.json",
+      "sha256": "090481e11ecb7df5f50c5f228bd585a3448c683bad99572df7a87ca263d5a6c2",
+      "selector": "/variants/hack2hire:69752cb217272b5c868d5e84"
+     }
+    ]
+   },
+   "question": {
+    "status": "present",
+    "value": "How is the design written without mutating inputs and with exact numerics in both languages?",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/study-content.json",
+      "sha256": "090481e11ecb7df5f50c5f228bd585a3448c683bad99572df7a87ca263d5a6c2",
+      "selector": "/variants/hack2hire:69752cb217272b5c868d5e84"
+     }
+    ]
+   },
+   "explanation": {
+    "status": "present",
+    "value": "Write solve plus the inferred wrapper scheduleOrders, using only the standard library and returning fresh containers.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/contracts.json",
+      "sha256": "d42a2aaa6884197543966061aec63c5999854605e9e095e93495bc3e43045591",
+      "selector": "/problems/7/inferred_interface"
+     }
+    ]
+   },
+   "rationale": {
+    "status": "present",
+    "value": "The same algorithm in both languages keeps behaviour comparable; integer results stay below 2**53 so JavaScript Number is exact.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/design.json",
+      "sha256": "d93fb8a1168dc55cfb3806750989fc44fdf3c7defe0a0d68e84f6f285890f53b",
+      "selector": "/problems/hack2hire:69752cb217272b5c868d5e84"
+     }
+    ]
+   },
+   "instructions": {
+    "status": "present",
+    "value": [
+     "Copy before modifying any input container.",
+     "Keep each file self-contained.",
+     "Use exact integer arithmetic for every count, amount and accumulator."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/study-content.json",
+      "sha256": "090481e11ecb7df5f50c5f228bd585a3448c683bad99572df7a87ca263d5a6c2",
+      "selector": "/variants/hack2hire:69752cb217272b5c868d5e84"
+     }
+    ]
+   },
+   "observations": {
+    "status": "not-applicable",
+    "reason": "Local runs are recorded in checks.json, not in study records"
+   },
+   "hints": {
+    "status": "present",
+    "value": [
+     "Record each capacity change during an order and undo them in reverse when an item fails."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/study-content.json",
+      "sha256": "090481e11ecb7df5f50c5f228bd585a3448c683bad99572df7a87ca263d5a6c2",
+      "selector": "/variants/hack2hire:69752cb217272b5c868d5e84/hints"
+     }
+    ]
+   },
+   "requirementIds": {
+    "status": "not-applicable",
+    "reason": "Requirements are prose items without stable ids"
+   },
+   "checks": [],
+   "artifacts": [
+    {
+     "kind": "artifact",
+     "id": "artifact:hack2hire:6975228817272b5c868d5e45:69752cb217272b5c868d5e84:python:v1",
+     "version": 1,
+     "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/study-records/artifact--artifact_hack2hire_6975228817272b5c868d5e45_69752cb217272b5c868d5e84_python_v1.json",
+     "sha256": "3b162ae9599e8fbd5aac99ce7ad05f28d5be700b477234dde1ff7c4aaf1e140b"
+    },
+    {
+     "kind": "artifact",
+     "id": "artifact:hack2hire:6975228817272b5c868d5e45:69752cb217272b5c868d5e84:javascript:v1",
+     "version": 1,
+     "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/study-records/artifact--artifact_hack2hire_6975228817272b5c868d5e45_69752cb217272b5c868d5e84_javascript_v1.json",
+     "sha256": "690e8ab1d92a6aacf82e470d5a7d52b2d0c90ed4035f94c53bc2980c57347520"
+    }
+   ],
+   "native": {
+    "kind": "artifact",
+    "id": "artifact:hack2hire:6975228817272b5c868d5e45:69752cb217272b5c868d5e84:approach-native:v1",
+    "version": 1,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/study-records/artifact--artifact_hack2hire_6975228817272b5c868d5e45_69752cb217272b5c868d5e84_approach-native_v1.json",
+    "sha256": "bd6f128738dc240c9c3afba5178848dc09ae8f0219d25a1230604159da8b04a9"
+   }
+  },
+  {
+   "id": "approach:hack2hire:6975228817272b5c868d5e45:69752cb217272b5c868d5e84:v1:stage:validation",
+   "type": "validation",
+   "title": {
+    "status": "present",
+    "value": "Validate against an independent reference",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/study-content.json",
+      "sha256": "090481e11ecb7df5f50c5f228bd585a3448c683bad99572df7a87ca263d5a6c2",
+      "selector": "/variants/hack2hire:69752cb217272b5c868d5e84"
+     }
+    ]
+   },
+   "question": {
+    "status": "present",
+    "value": "How do you gain confidence without the official tests?",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/study-content.json",
+      "sha256": "090481e11ecb7df5f50c5f228bd585a3448c683bad99572df7a87ca263d5a6c2",
+      "selector": "/variants/hack2hire:69752cb217272b5c868d5e84"
+     }
+    ]
+   },
+   "explanation": {
+    "status": "present",
+    "value": "Compare against the independent reference (sort planes by departure and scan linearly for every item, copying capacities before each order for rollback) on small random and boundary cases, and against analytic expectations at the inferred maximum bounds.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/design.json",
+      "sha256": "d93fb8a1168dc55cfb3806750989fc44fdf3c7defe0a0d68e84f6f285890f53b",
+      "selector": "/problems/hack2hire:69752cb217272b5c868d5e84/reference"
+     }
+    ]
+   },
+   "rationale": {
+    "status": "present",
+    "value": "Matching a self-written reference checks the implementation against the inferred contract only, not against the official problem.",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/contracts.json",
+      "sha256": "d42a2aaa6884197543966061aec63c5999854605e9e095e93495bc3e43045591",
+      "selector": "/problems/7/spec_basis"
+     }
+    ]
+   },
+   "instructions": {
+    "status": "present",
+    "value": [
+     "Run test_oracles.py References, then Candidates.",
+     "For classes, run test_native_observer.py.",
+     "Check inputs are unchanged after every call."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/test_oracles.py",
+      "sha256": "ea295763e3d64eef0ef96ff979c95147944426ad9935647c3e3b3a22a3008d51",
+      "selector": null
+     }
+    ]
+   },
+   "observations": {
+    "status": "not-applicable",
+    "reason": "Local runs are recorded in checks.json, not in study records"
+   },
+   "hints": {
+    "status": "present",
+    "value": [
+     "Look for boundary cases at empty inputs and at the inferred maximum bounds."
+    ],
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/study-content.json",
+      "sha256": "090481e11ecb7df5f50c5f228bd585a3448c683bad99572df7a87ca263d5a6c2",
+      "selector": "/variants/hack2hire:69752cb217272b5c868d5e84"
+     }
+    ]
+   },
+   "requirementIds": {
+    "status": "not-applicable",
+    "reason": "Requirements are prose items without stable ids"
+   },
+   "checks": [],
+   "artifacts": [],
+   "native": {
+    "kind": "artifact",
+    "id": "artifact:hack2hire:6975228817272b5c868d5e45:69752cb217272b5c868d5e84:approach-native:v1",
+    "version": 1,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/study-records/artifact--artifact_hack2hire_6975228817272b5c868d5e45_69752cb217272b5c868d5e84_approach-native_v1.json",
+    "sha256": "bd6f128738dc240c9c3afba5178848dc09ae8f0219d25a1230604159da8b04a9"
+   }
+  }
+ ],
+ "sequenceStatus": "draft",
+ "native": {
+  "kind": "artifact",
+  "id": "artifact:hack2hire:6975228817272b5c868d5e45:69752cb217272b5c868d5e84:approach-native:v1",
+  "version": 1,
+  "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/study-records/artifact--artifact_hack2hire_6975228817272b5c868d5e45_69752cb217272b5c868d5e84_approach-native_v1.json",
+  "sha256": "bd6f128738dc240c9c3afba5178848dc09ae8f0219d25a1230604159da8b04a9"
+ }
+}

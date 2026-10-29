@@ -1,0 +1,50 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:69557dad4a0202df9569e983",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "communityToFollowers",
+  "followerToCommunities",
+  "communityIdx"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "findConnectedCommunities",
+  "params": [
+   {
+    "name": "communityToFollowers",
+    "type": "string[][]"
+   },
+   {
+    "name": "followerToCommunities",
+    "type": "string[][]"
+   },
+   {
+    "name": "communityIdx",
+    "type": "integer"
+   }
+  ],
+  "return": {
+   "type": "string[]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "grow a reached set by repeated full rescans: add any community that shares a follower with a reached community, until nothing changes",
+  "candidate_design": "breadth-first search over the bipartite community/follower graph with visited arrays for both sides",
+  "complexity_target": "O(n + m + memberships) time/O(n + m) space"
+ },
+ "source_sha256": "1c26a01e14a5a2263202cae6cd5b490c5c37a3c3d1a712f9ea0b270405dacfe4",
+ "wrapper": "Solution.findConnectedCommunities"
+}

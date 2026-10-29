@@ -1,0 +1,745 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:690cfffd0a0bc710235894c3:690d00010a0bc710235894c4:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/contracts.json",
+   "sha256": "d42a2aaa6884197543966061aec63c5999854605e9e095e93495bc3e43045591",
+   "selector": "/problems/19"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/690cfffd0a0bc710235894c3.json",
+   "sha256": "669a6b9965cfae038ae8a279fc5e55ad6be9ea91499b6fa3b563c5c1b0bb1b4b",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/study-content.json",
+   "sha256": "090481e11ecb7df5f50c5f228bd585a3448c683bad99572df7a87ca263d5a6c2",
+   "selector": "/variants/hack2hire:690d00010a0bc710235894c4"
+  }
+ ],
+ "problemId": "hack2hire:690cfffd0a0bc710235894c3",
+ "variantId": "690d00010a0bc710235894c4",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred single variant: sparse matrix class with get, set, add and multiply",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/study-content.json",
+    "sha256": "090481e11ecb7df5f50c5f228bd585a3448c683bad99572df7a87ca263d5a6c2",
+    "selector": "/variants/hack2hire:690d00010a0bc710235894c4/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "SparseMatrix(matrix) stores a dense rows x cols integer matrix (rows, cols >= 1) keeping only non-zero entries. get(row, col) returns the entry. set(row, col, value) overwrites it. add(other) takes a dense matrix of the same shape and returns the sum as its non-zero entries [row, col, value] sorted by row then column, without changing the stored matrix. multiply(other) takes a dense cols x k matrix and returns the product the same way. Every method call is answered in call order on one instance; void methods return nothing.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/contracts.json",
+    "sha256": "d42a2aaa6884197543966061aec63c5999854605e9e095e93495bc3e43045591",
+    "selector": "/problems/19/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "SparseMatrix(matrix) stores a dense rows x cols integer matrix (rows, cols >= 1) keeping only non-zero entries.",
+   "get(row, col) returns the entry.",
+   "set(row, col, value) overwrites it.",
+   "add(other) takes a dense matrix of the same shape and returns the sum as its non-zero entries [row, col, value] sorted by row then column, without changing the stored matrix.",
+   "multiply(other) takes a dense cols x k matrix and returns the product the same way.",
+   "Every method call is answered in call order on one instance; void methods return nothing."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/contracts.json",
+    "sha256": "d42a2aaa6884197543966061aec63c5999854605e9e095e93495bc3e43045591",
+    "selector": "/problems/19/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "1 <= rows, cols, k <= 60",
+   "-1000 <= entries <= 1000",
+   "up to 300 calls",
+   "operand shapes match"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/study-content.json",
+    "sha256": "090481e11ecb7df5f50c5f228bd585a3448c683bad99572df7a87ca263d5a6c2",
+    "selector": "/variants/hack2hire:690d00010a0bc710235894c4/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: title; contentPreview: a variation of LeetCode 311 Sparse Matrix Multiplication; design a class that stores sparse matrices compactly and supports operations such as addition and multiplication with minimum space (method names and formats are cut off); algorithmTags: HASH_TABLE; preview response sha256 8f989e37fd97a08e331a2199c14f8bc9d57d10099c166dac1fff0381c9b078d2"
+   },
+   {
+    "statement": "Uncertainty: very high: the class purpose, addition and multiplication are in the preview; the constructor from a dense matrix, the get/set methods, dense operands and the sorted triple output are inferred",
+    "basis": "the public group preview is partial (582 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: single variant",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/contracts.json",
+    "sha256": "d42a2aaa6884197543966061aec63c5999854605e9e095e93495bc3e43045591",
+    "selector": "/problems/19/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/contracts.json",
+    "sha256": "d42a2aaa6884197543966061aec63c5999854605e9e095e93495bc3e43045591",
+    "selector": "/problems/19/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/contracts.json",
+    "sha256": "d42a2aaa6884197543966061aec63c5999854605e9e095e93495bc3e43045591",
+    "selector": "/problems/19/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "How is a matrix passed in and returned: dense lists or sparse triples?",
+   "Do add and multiply modify the stored matrix?",
+   "Which other operations are needed?",
+   "Should zero results be stored or reported?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/study-content.json",
+    "sha256": "090481e11ecb7df5f50c5f228bd585a3448c683bad99572df7a87ca263d5a6c2",
+    "selector": "/variants/hack2hire:690d00010a0bc710235894c4/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [
+      "SparseMatrix"
+     ],
+     [
+      [
+       [
+        [
+         3,
+         7,
+         0
+        ]
+       ]
+      ]
+     ]
+    ],
+    "output": [
+     null
+    ],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      "SparseMatrix",
+      "add",
+      "set",
+      "add",
+      "add",
+      "set",
+      "get"
+     ],
+     [
+      [
+       [
+        [
+         1,
+         1,
+         -2,
+         0
+        ],
+        [
+         -2,
+         0,
+         0,
+         -2
+        ],
+        [
+         0,
+         -2,
+         7,
+         1
+        ]
+       ]
+      ],
+      [
+       [
+        [
+         0,
+         1,
+         0,
+         1
+        ],
+        [
+         3,
+         0,
+         0,
+         1
+        ],
+        [
+         -2,
+         3,
+         -2,
+         1
+        ]
+       ]
+      ],
+      [
+       1,
+       2,
+       4
+      ],
+      [
+       [
+        [
+         0,
+         1,
+         1,
+         0
+        ],
+        [
+         -2,
+         0,
+         0,
+         0
+        ],
+        [
+         7,
+         -2,
+         1,
+         3
+        ]
+       ]
+      ],
+      [
+       [
+        [
+         0,
+         0,
+         0,
+         0
+        ],
+        [
+         0,
+         -2,
+         1,
+         -2
+        ],
+        [
+         0,
+         0,
+         1,
+         0
+        ]
+       ]
+      ],
+      [
+       0,
+       1,
+       -5
+      ],
+      [
+       0,
+       0
+      ]
+     ]
+    ],
+    "output": [
+     null,
+     [
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       1,
+       2
+      ],
+      [
+       0,
+       2,
+       -2
+      ],
+      [
+       0,
+       3,
+       1
+      ],
+      [
+       1,
+       0,
+       1
+      ],
+      [
+       1,
+       3,
+       -1
+      ],
+      [
+       2,
+       0,
+       -2
+      ],
+      [
+       2,
+       1,
+       1
+      ],
+      [
+       2,
+       2,
+       5
+      ],
+      [
+       2,
+       3,
+       2
+      ]
+     ],
+     null,
+     [
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       1,
+       2
+      ],
+      [
+       0,
+       2,
+       -1
+      ],
+      [
+       1,
+       0,
+       -4
+      ],
+      [
+       1,
+       2,
+       4
+      ],
+      [
+       1,
+       3,
+       -2
+      ],
+      [
+       2,
+       0,
+       7
+      ],
+      [
+       2,
+       1,
+       -4
+      ],
+      [
+       2,
+       2,
+       8
+      ],
+      [
+       2,
+       3,
+       4
+      ]
+     ],
+     [
+      [
+       0,
+       0,
+       1
+      ],
+      [
+       0,
+       1,
+       1
+      ],
+      [
+       0,
+       2,
+       -2
+      ],
+      [
+       1,
+       0,
+       -2
+      ],
+      [
+       1,
+       1,
+       -2
+      ],
+      [
+       1,
+       2,
+       5
+      ],
+      [
+       1,
+       3,
+       -4
+      ],
+      [
+       2,
+       1,
+       -2
+      ],
+      [
+       2,
+       2,
+       8
+      ],
+      [
+       2,
+       3,
+       1
+      ]
+     ],
+     null,
+     1
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/study-content.json",
+    "sha256": "090481e11ecb7df5f50c5f228bd585a3448c683bad99572df7a87ca263d5a6c2",
+    "selector": "/variants/hack2hire:690d00010a0bc710235894c4/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/oracles.py",
+    "sha256": "d793c4b27910a76fa38a612efa95625b518db8e86a2af524b0a0395b6dc6abf9",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "class",
+   "declaration": {
+    "status": "present",
+    "value": "class SparseMatrix:\n    def __init__(self, matrix)\n    def get(self, row, col) -> integer\n    def set(self, row, col, value) -> void\n    def add(self, other) -> integer[][]\n    def multiply(self, other) -> integer[][]",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/contracts.json",
+      "sha256": "d42a2aaa6884197543966061aec63c5999854605e9e095e93495bc3e43045591",
+      "selector": "/problems/19/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/semantics/690d00010a0bc710235894c4-python.json",
+     "inferredInterface": {
+      "classname": "SparseMatrix",
+      "constructor": {
+       "params": [
+        {
+         "name": "matrix",
+         "type": "integer[][]"
+        }
+       ]
+      },
+      "methods": [
+       {
+        "name": "get",
+        "params": [
+         {
+          "name": "row",
+          "type": "integer"
+         },
+         {
+          "name": "col",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "integer"
+        }
+       },
+       {
+        "name": "set",
+        "params": [
+         {
+          "name": "row",
+          "type": "integer"
+         },
+         {
+          "name": "col",
+          "type": "integer"
+         },
+         {
+          "name": "value",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "void"
+        }
+       },
+       {
+        "name": "add",
+        "params": [
+         {
+          "name": "other",
+          "type": "integer[][]"
+         }
+        ],
+        "return": {
+         "type": "integer[][]"
+        }
+       },
+       {
+        "name": "multiply",
+        "params": [
+         {
+          "name": "other",
+          "type": "integer[][]"
+         }
+        ],
+        "return": {
+         "type": "integer[][]"
+        }
+       }
+      ]
+     },
+     "traceAdapter": {
+      "name": "solve",
+      "argument_order": [
+       "operation_names",
+       "argument_lists"
+      ],
+      "constructor_output": null,
+      "void_method_output": null,
+      "result_order": "constructor followed by every method call",
+      "scope": "Explicit class trace adapter, separate from direct native observer checks."
+     }
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/semantics/690d00010a0bc710235894c4-python.json",
+      "sha256": "85439ba70d2c51bca1fda2c008f822058acd06e47a2723f601a1a514423189d3",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "class",
+   "declaration": {
+    "status": "present",
+    "value": "class SparseMatrix {\n  constructor(matrix)\n  get(row, col) /* -> integer */\n  set(row, col, value) /* -> void */\n  add(other) /* -> integer[][] */\n  multiply(other) /* -> integer[][] */\n}",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/contracts.json",
+      "sha256": "d42a2aaa6884197543966061aec63c5999854605e9e095e93495bc3e43045591",
+      "selector": "/problems/19/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/semantics/690d00010a0bc710235894c4-javascript.json",
+     "inferredInterface": {
+      "classname": "SparseMatrix",
+      "constructor": {
+       "params": [
+        {
+         "name": "matrix",
+         "type": "integer[][]"
+        }
+       ]
+      },
+      "methods": [
+       {
+        "name": "get",
+        "params": [
+         {
+          "name": "row",
+          "type": "integer"
+         },
+         {
+          "name": "col",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "integer"
+        }
+       },
+       {
+        "name": "set",
+        "params": [
+         {
+          "name": "row",
+          "type": "integer"
+         },
+         {
+          "name": "col",
+          "type": "integer"
+         },
+         {
+          "name": "value",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "void"
+        }
+       },
+       {
+        "name": "add",
+        "params": [
+         {
+          "name": "other",
+          "type": "integer[][]"
+         }
+        ],
+        "return": {
+         "type": "integer[][]"
+        }
+       },
+       {
+        "name": "multiply",
+        "params": [
+         {
+          "name": "other",
+          "type": "integer[][]"
+         }
+        ],
+        "return": {
+         "type": "integer[][]"
+        }
+       }
+      ]
+     },
+     "traceAdapter": {
+      "name": "solve",
+      "argument_order": [
+       "operation_names",
+       "argument_lists"
+      ],
+      "constructor_output": null,
+      "void_method_output": null,
+      "result_order": "constructor followed by every method call",
+      "scope": "Explicit class trace adapter, separate from direct native observer checks."
+     }
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/semantics/690d00010a0bc710235894c4-javascript.json",
+      "sha256": "adf4812177116e8554ca7055821e687dbd5f43e5590dba4f5133980167d4e02e",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/contracts.json",
+    "sha256": "d42a2aaa6884197543966061aec63c5999854605e9e095e93495bc3e43045591",
+    "selector": "/problems/19/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON trace result; no bool/int coercion",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/contracts.json",
+    "sha256": "d42a2aaa6884197543966061aec63c5999854605e9e095e93495bc3e43045591",
+    "selector": "/problems/19/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

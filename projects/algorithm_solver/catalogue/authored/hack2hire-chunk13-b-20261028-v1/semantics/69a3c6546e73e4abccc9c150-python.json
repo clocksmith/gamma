@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:69a3c6546e73e4abccc9c150",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "limit",
+  "shards"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "rebalance",
+  "params": [
+   {
+    "name": "limit",
+    "type": "integer"
+   },
+   {
+    "name": "shards",
+    "type": "string[]"
+   }
+  ],
+  "return": {
+   "type": "string[]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "brute force over integer keys: for each shard find the last key in its range already covered by limit kept shards by counting coverage key by key, then fill gaps by a linear walk",
+  "candidate_design": "sorted arrays of kept starts and ends; coverage at x is (#starts <= x) - (#ends < x), which is non-increasing from the current start, so a binary search over candidate points finds the trimmed start",
+  "complexity_target": "O(n log n + n * insertion cost) time/O(n) space"
+ },
+ "source_sha256": "e5c03148f73d0470e54b6506f5f9fea0b8722abffcf40d1fb884973324dca534",
+ "wrapper": "Solution.rebalance"
+}

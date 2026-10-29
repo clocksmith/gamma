@@ -1,0 +1,454 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:6801bfbd6cd5d6c88778f209:6801c3b66cd5d6c88778f20c:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/contracts.json",
+   "sha256": "d42a2aaa6884197543966061aec63c5999854605e9e095e93495bc3e43045591",
+   "selector": "/problems/4"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/6801bfbd6cd5d6c88778f209.json",
+   "sha256": "4a628b141563c73ceb9ecc64fbbb74cfbdf3aa70c110a3854bb9ee658017d1b1",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/study-content.json",
+   "sha256": "090481e11ecb7df5f50c5f228bd585a3448c683bad99572df7a87ca263d5a6c2",
+   "selector": "/variants/hack2hire:6801c3b66cd5d6c88778f20c"
+  }
+ ],
+ "problemId": "hack2hire:6801bfbd6cd5d6c88778f209",
+ "variantId": "6801c3b66cd5d6c88778f20c",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred single variant: final privileges through inheritance with disallow overrides",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/study-content.json",
+    "sha256": "090481e11ecb7df5f50c5f228bd585a3448c683bad99572df7a87ca263d5a6c2",
+    "selector": "/variants/hack2hire:6801c3b66cd5d6c88778f20c/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "roles lists n distinct role names; parents[i] lists the distinct roles that roles[i] inherits from (the inheritance graph is acyclic); allowed[i] and disallowed[i] list privilege names for roles[i]. The final privilege set of a role is (its allowed privileges plus the final privileges of every parent) minus its disallowed privileges, so a disallow overrides both its own allow and anything inherited, and a role inherits only what its parents finally hold. Return, for each role in input order, its final privileges sorted by code point.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/contracts.json",
+    "sha256": "d42a2aaa6884197543966061aec63c5999854605e9e095e93495bc3e43045591",
+    "selector": "/problems/4/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "roles lists n distinct role names; parents[i] lists the distinct roles that roles[i] inherits from (the inheritance graph is acyclic); allowed[i] and disallowed[i] list privilege names for roles[i].",
+   "The final privilege set of a role is (its allowed privileges plus the final privileges of every parent) minus its disallowed privileges, so a disallow overrides both its own allow and anything inherited, and a role inherits only what its parents finally hold.",
+   "Return, for each role in input order, its final privileges sorted by code point."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/contracts.json",
+    "sha256": "d42a2aaa6884197543966061aec63c5999854605e9e095e93495bc3e43045591",
+    "selector": "/problems/4/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "1 <= roles.length <= 2000",
+   "role names match [a-z0-9]{1,8}",
+   "total parent links <= 1e4",
+   "privilege names match [a-z_]{1,10}",
+   "allowed[i] and disallowed[i] each hold at most 10 distinct names",
+   "at most 50 distinct privileges overall"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/study-content.json",
+    "sha256": "090481e11ecb7df5f50c5f228bd585a3448c683bad99572df7a87ca263d5a6c2",
+    "selector": "/variants/hack2hire:6801c3b66cd5d6c88778f20c/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: title; contentPreview: roles in a directed acyclic inheritance hierarchy, each with explicitly allowed and disallowed privilege lists; determine the final set of privileges each role is permitted (input format and precedence rules are cut off); algorithmTags: GRAPH, SORTING; preview response sha256 788902152f66d01a4f7d057d801b87124a6c6b292f3cfe719ba0e7b1f4a8afd9"
+   },
+   {
+    "statement": "Uncertainty: very high: the DAG, allow and disallow lists and the per-role final set are in the preview; the parallel-list input format, that a parent passes on its final set, that disallow wins over allow and inheritance, and the sorted list output are inferred",
+    "basis": "the public group preview is partial (319 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: single variant",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/contracts.json",
+    "sha256": "d42a2aaa6884197543966061aec63c5999854605e9e095e93495bc3e43045591",
+    "selector": "/problems/4/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/contracts.json",
+    "sha256": "d42a2aaa6884197543966061aec63c5999854605e9e095e93495bc3e43045591",
+    "selector": "/problems/4/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/contracts.json",
+    "sha256": "d42a2aaa6884197543966061aec63c5999854605e9e095e93495bc3e43045591",
+    "selector": "/problems/4/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "Does a disallow on a role override privileges it inherits?",
+   "Does a child inherit what a parent explicitly disallows from its own parents?",
+   "Can a role allow and disallow the same privilege?",
+   "In what order are roles and privileges returned?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/study-content.json",
+    "sha256": "090481e11ecb7df5f50c5f228bd585a3448c683bad99572df7a87ca263d5a6c2",
+    "selector": "/variants/hack2hire:6801c3b66cd5d6c88778f20c/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [
+      "r0"
+     ],
+     [
+      []
+     ],
+     [
+      []
+     ],
+     [
+      [
+       "audit"
+      ]
+     ]
+    ],
+    "output": [
+     []
+    ],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      "r0",
+      "r1",
+      "r2",
+      "r3",
+      "r4",
+      "r5",
+      "r6"
+     ],
+     [
+      [
+       "r5"
+      ],
+      [
+       "r6"
+      ],
+      [
+       "r6"
+      ],
+      [
+       "r5",
+       "r6"
+      ],
+      [
+       "r1",
+       "r5",
+       "r2"
+      ],
+      [
+       "r1",
+       "r6"
+      ],
+      []
+     ],
+     [
+      [
+       "del_x",
+       "exec",
+       "audit"
+      ],
+      [
+       "read"
+      ],
+      [
+       "audit",
+       "read"
+      ],
+      [
+       "admin"
+      ],
+      [
+       "exec",
+       "del_x"
+      ],
+      [
+       "exec"
+      ],
+      []
+     ],
+     [
+      [
+       "audit"
+      ],
+      [],
+      [
+       "audit",
+       "read"
+      ],
+      [],
+      [
+       "read"
+      ],
+      [],
+      [
+       "write",
+       "del_x"
+      ]
+     ]
+    ],
+    "output": [
+     [
+      "del_x",
+      "exec",
+      "read"
+     ],
+     [
+      "read"
+     ],
+     [],
+     [
+      "admin",
+      "exec",
+      "read"
+     ],
+     [
+      "del_x",
+      "exec"
+     ],
+     [
+      "exec",
+      "read"
+     ],
+     []
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/study-content.json",
+    "sha256": "090481e11ecb7df5f50c5f228bd585a3448c683bad99572df7a87ca263d5a6c2",
+    "selector": "/variants/hack2hire:6801c3b66cd5d6c88778f20c/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/oracles.py",
+    "sha256": "d793c4b27910a76fa38a612efa95625b518db8e86a2af524b0a0395b6dc6abf9",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "def finalPrivileges(roles, parents, allowed, disallowed) -> string[][]",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/contracts.json",
+      "sha256": "d42a2aaa6884197543966061aec63c5999854605e9e095e93495bc3e43045591",
+      "selector": "/problems/4/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/semantics/6801c3b66cd5d6c88778f20c-python.json",
+     "inferredInterface": {
+      "name": "finalPrivileges",
+      "params": [
+       {
+        "name": "roles",
+        "type": "string[]"
+       },
+       {
+        "name": "parents",
+        "type": "string[][]"
+       },
+       {
+        "name": "allowed",
+        "type": "string[][]"
+       },
+       {
+        "name": "disallowed",
+        "type": "string[][]"
+       }
+      ],
+      "return": {
+       "type": "string[][]"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/semantics/6801c3b66cd5d6c88778f20c-python.json",
+      "sha256": "3c9e2185f5513815803d6fb89be0374b794439ce57d0077112def392d5556e07",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "function",
+   "declaration": {
+    "status": "present",
+    "value": "function finalPrivileges(roles, parents, allowed, disallowed) /* -> string[][] */",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/contracts.json",
+      "sha256": "d42a2aaa6884197543966061aec63c5999854605e9e095e93495bc3e43045591",
+      "selector": "/problems/4/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/semantics/6801c3b66cd5d6c88778f20c-javascript.json",
+     "inferredInterface": {
+      "name": "finalPrivileges",
+      "params": [
+       {
+        "name": "roles",
+        "type": "string[]"
+       },
+       {
+        "name": "parents",
+        "type": "string[][]"
+       },
+       {
+        "name": "allowed",
+        "type": "string[][]"
+       },
+       {
+        "name": "disallowed",
+        "type": "string[][]"
+       }
+      ],
+      "return": {
+       "type": "string[][]"
+      }
+     },
+     "traceAdapter": null
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/semantics/6801c3b66cd5d6c88778f20c-javascript.json",
+      "sha256": "a826224b2b2c6aa280cc58ee14147ff26a3d1738e4e992619df40432e77d20dc",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/contracts.json",
+    "sha256": "d42a2aaa6884197543966061aec63c5999854605e9e095e93495bc3e43045591",
+    "selector": "/problems/4/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON result",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk13-b-20261028-v1/contracts.json",
+    "sha256": "d42a2aaa6884197543966061aec63c5999854605e9e095e93495bc3e43045591",
+    "selector": "/problems/4/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

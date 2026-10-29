@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:68aebce1c8631a6568126eb4",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "tree1",
+  "tree2"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "sameWord",
+  "params": [
+   {
+    "name": "tree1",
+    "type": "[string, integer[]][]"
+   },
+   {
+    "name": "tree2",
+    "type": "[string, integer[]][]"
+   }
+  ],
+  "return": {
+   "type": "boolean"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "build both words completely by a recursive pre-order walk and compare the strings",
+  "candidate_design": "two explicit stacks produce leaf texts lazily; compare character by character, advancing whichever leaf is exhausted, stopping at the first difference",
+  "complexity_target": "O(N1 + N2) time/O(height) extra space beyond the input"
+ },
+ "source_sha256": "52a2d59d55115c7366147b87e7c807990f484ccb6d797cb008c6187a73d4c1e3",
+ "wrapper": "Solution.sameWord"
+}
