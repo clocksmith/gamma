@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:69eb97bffbaf3da6418293cf",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "lines1",
+  "lines2"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-28"
+ },
+ "inferred_interface": {
+  "name": "uniqueCommonAnchors",
+  "params": [
+   {
+    "name": "lines1",
+    "type": "string[]"
+   },
+   {
+    "name": "lines2",
+    "type": "string[]"
+   }
+  ],
+  "return": {
+   "type": "integer[][]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "O(k^2) suffix DP with explicit lexicographic comparison of index lists",
+  "candidate_design": "patience LIS on reversed order for suffix chain lengths; greedy smallest-index pick per length level via bisect",
+  "complexity_target": "O(k log k)"
+ },
+ "source_sha256": "8fbb727e52ac9c138db8f56d2a5407718bef27957aeb06505ba8711386cc1ef0",
+ "wrapper": "named export uniqueCommonAnchors"
+}

@@ -1,0 +1,43 @@
+{
+  "schema": "gamma.hack2hire-chunk02-d-pre-source-freeze.v1",
+  "at": "2026-10-29T01:39:17.463025+00:00",
+  "files": {
+    "oracles.py": "ffb0dcc412758ab7a919a006c70b4c85c77627ab6f370864e8c2ddf0a8277c91",
+    "test_oracles.py": "dd1de2228ea9e0b6d9609a913ed549c77628b362e91269950feeb7ef97390d2d",
+    "cases.py": "ab81a9b664dd74427095349459654fc3353eb9bebe3983de5229eff9fad5097f",
+    "contracts.json": "7e75d357ee7d49de34833384f59f0a09fe71899e4ffcf7c255994873126f08a6",
+    "design.json": "d986ba22d82fc4c2c2cac8b545faad2b08b3c8016d174bc2032408516e99ff9c"
+  },
+  "candidate_sources_exist": false,
+  "candidate_executions": 0,
+  "source_free_tests_passed": 22,
+  "note": "References, inferred contracts, case generator and designs frozen before any candidate source was written.",
+  "spec_basis": "inferred (claude-opus-5-5 subagent, 2026-10-28)",
+  "amendments": [
+    {
+      "file": "oracles.py + cases.py",
+      "after_candidates_existed": true,
+      "change": "tree depth cap 5000 -> 200 (validator) and permission maximum row chain depth 4999 -> 199",
+      "reason": "test-harness/transport recursion limit (copy.deepcopy and the easy16 recursive encoder overflow on deep nested dicts); no expected-value or reference rule changed"
+    },
+    {
+      "file": "cases.py",
+      "after_candidates_existed": true,
+      "change": "spreadsheet analytic-maximum chain 1000 -> 600 cells and 300 -> 100 reads",
+      "reason": "per-case CPU budget (level-2 cycle checks are quadratic on a chain; heaviest was ~0.6-0.7 s); no reference rule changed"
+    },
+    {
+      "file": "contracts.json",
+      "after_candidates_existed": true,
+      "change": "rows reshaped to the hack2hire-chunk01-a contract-row schema (source block, inference_uncertainty, variant_split_inference, transcript_interface); trace_adapter/systemdesign moved out of inferred_interface",
+      "reason": "match sibling cohort adaptation; inferred_spec text, interfaces and semantics unchanged"
+    }
+  ],
+  "current_sha256": {
+    "oracles.py": "835d874bb60ce64d055c150a50d55640901958cb4e5de62ec06465af0ee4fc62",
+    "test_oracles.py": "dd1de2228ea9e0b6d9609a913ed549c77628b362e91269950feeb7ef97390d2d",
+    "cases.py": "53f2ac6f1a0427783e6cad07562906ccfb58c25a87ff62b81034d839a2ed3fbd",
+    "contracts.json": "9dc06e544b8d452ad77c5a02cf0a5eda67cb3970df7c62f7334e794e995e29ad",
+    "design.json": "d986ba22d82fc4c2c2cac8b545faad2b08b3c8016d174bc2032408516e99ff9c"
+  }
+}

@@ -1,0 +1,82 @@
+{
+ "schema": "gamma.authored-native-trace-semantics.v1",
+ "problem_uid": "hack2hire:69f78c6830f41dfd539fc6dc",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "operation_names",
+  "argument_lists"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-28"
+ },
+ "inferred_interface": {
+  "classname": "Spreadsheet",
+  "constructor": {
+   "params": []
+  },
+  "methods": [
+   {
+    "name": "setCell",
+    "params": [
+     {
+      "name": "cell",
+      "type": "string"
+     },
+     {
+      "name": "value",
+      "type": "string"
+     }
+    ],
+    "return": {
+     "type": "void"
+    }
+   },
+   {
+    "name": "getCell",
+    "params": [
+     {
+      "name": "cell",
+      "type": "string"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   {
+    "name": "resetCell",
+    "params": [
+     {
+      "name": "cell",
+      "type": "string"
+     }
+    ],
+    "return": {
+     "type": "void"
+    }
+   }
+  ]
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON trace result; no bool/int coercion",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "recursive memoised evaluation of every cell after each set; cycle = re-entry",
+  "candidate_design": "parsed term lists; getCell iterative post-order DFS with per-call memo; v2 iterative reachability check before storing",
+  "complexity_target": "O(V+E) per getCell and per v2 setCell"
+ },
+ "source_sha256": "86f5e69b7f1719d5770b1216e4ccf3d5c51b4478c8a3258f90c4b3584ce081a8",
+ "native_class": "Spreadsheet",
+ "native_symbol": "property Spreadsheet of the CommonJS solve export",
+ "void_methods": [
+  "resetCell",
+  "setCell"
+ ]
+}

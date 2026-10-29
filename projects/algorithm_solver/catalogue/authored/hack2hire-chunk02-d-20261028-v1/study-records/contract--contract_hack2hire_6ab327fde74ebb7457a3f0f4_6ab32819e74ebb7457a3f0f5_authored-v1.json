@@ -1,0 +1,503 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:6ab327fde74ebb7457a3f0f4:6ab32819e74ebb7457a3f0f5:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-d-20261028-v1/contracts.json",
+   "sha256": "9dc06e544b8d452ad77c5a02cf0a5eda67cb3970df7c62f7334e794e995e29ad",
+   "selector": "/problems/13"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/6ab327fde74ebb7457a3f0f4.json",
+   "sha256": "cdec79307fa498aaf9408f8073458b4ed95cbf4ad15b5cf498118d3dd4046d16",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-d-20261028-v1/study-content.json",
+   "sha256": "645a56c1f8c06237ef678dff6e01c7f9ec4638eb9233182e2a48e1dcd4e5d458",
+   "selector": "/variants/hack2hire:6ab32819e74ebb7457a3f0f5"
+  }
+ ],
+ "problemId": "hack2hire:6ab327fde74ebb7457a3f0f4",
+ "variantId": "6ab32819e74ebb7457a3f0f5",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred level 1: leases, retries and dead letters",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-d-20261028-v1/study-content.json",
+    "sha256": "645a56c1f8c06237ef678dff6e01c7f9ec4638eb9233182e2a48e1dcd4e5d458",
+    "selector": "/variants/hack2hire:6ab32819e74ebb7457a3f0f5/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "Logical-time work queue. All method times are non-decreasing across calls. Before handling any call at time t, every reservation with reservedAt+leaseDuration <= t expires, processed in (deadline, reservation order). A task released by expiry or by fail() returns to the tail of the ready queue if its reservation count is below maxAttempts, otherwise it is moved to the dead-letter queue (DLQ). reserve(t) pops the ready head, counts an attempt and returns its id, or -1. complete(t,id) / fail(t,id) return true iff id currently holds an unexpired reservation; complete finishes it permanently. getDeadLetters(t) returns DLQ ids in the order they entered it. Concurrency is modelled as this deterministic single-threaded call sequence.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-d-20261028-v1/contracts.json",
+    "sha256": "9dc06e544b8d452ad77c5a02cf0a5eda67cb3970df7c62f7334e794e995e29ad",
+    "selector": "/problems/13/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "Logical-time work queue.",
+   "All method times are non-decreasing across calls.",
+   "Before handling any call at time t, every reservation with reservedAt+leaseDuration <= t expires, processed in (deadline, reservation order).",
+   "A task released by expiry or by fail() returns to the tail of the ready queue if its reservation count is below maxAttempts, otherwise it is moved to the dead-letter queue (DLQ).",
+   "reserve(t) pops the ready head, counts an attempt and returns its id, or -1.",
+   "complete(t,id) / fail(t,id) return true iff id currently holds an unexpired reservation.",
+   "complete finishes it permanently.",
+   "getDeadLetters(t) returns DLQ ids in the order they entered it.",
+   "Concurrency is modelled as this deterministic single-threaded call sequence."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-d-20261028-v1/contracts.json",
+    "sha256": "9dc06e544b8d452ad77c5a02cf0a5eda67cb3970df7c62f7334e794e995e29ad",
+    "selector": "/problems/13/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "up to 20000 tasks and 20000 calls",
+   "lease 1..1e9, maxAttempts 1..1000",
+   "call times non-decreasing"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-d-20261028-v1/study-content.json",
+    "sha256": "645a56c1f8c06237ef678dff6e01c7f9ec4638eb9233182e2a48e1dcd4e5d458",
+    "selector": "/variants/hack2hire:6ab32819e74ebb7457a3f0f5/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-28; it is not the official statement.",
+    "basis": "preview fields used: title; contentPreview; algorithmTags; codingQuestions (variant count/order); preview response sha256 5b746cb7c10c70dcf11461c38c9a3252c0c5fa8348fc63ece6e7348f1400b5ca"
+   },
+   {
+    "statement": "Uncertainty: medium-high: the lifecycle is in the preview; method names, logical-time parameters and expiry order are inferred",
+    "basis": "the public group preview is partial (1098 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: variants inferred as levels 1-2",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-d-20261028-v1/contracts.json",
+    "sha256": "9dc06e544b8d452ad77c5a02cf0a5eda67cb3970df7c62f7334e794e995e29ad",
+    "selector": "/problems/13/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-d-20261028-v1/contracts.json",
+    "sha256": "9dc06e544b8d452ad77c5a02cf0a5eda67cb3970df7c62f7334e794e995e29ad",
+    "selector": "/problems/13/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-d-20261028-v1/contracts.json",
+    "sha256": "9dc06e544b8d452ad77c5a02cf0a5eda67cb3970df7c62f7334e794e995e29ad",
+    "selector": "/problems/13/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "Is time passed into each call?",
+   "Does a retried task go to the front or the back?",
+   "Does fail() count as an attempt?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-d-20261028-v1/study-content.json",
+    "sha256": "645a56c1f8c06237ef678dff6e01c7f9ec4638eb9233182e2a48e1dcd4e5d458",
+    "selector": "/variants/hack2hire:6ab32819e74ebb7457a3f0f5/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [
+      "WorkQueue",
+      "fail"
+     ],
+     [
+      [
+       [],
+       1,
+       1
+      ],
+      [
+       1,
+       99
+      ]
+     ]
+    ],
+    "output": [
+     null,
+     false
+    ],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      "WorkQueue",
+      "complete"
+     ],
+     [
+      [
+       [
+        22,
+        8
+       ],
+       2,
+       3
+      ],
+      [
+       2,
+       99
+      ]
+     ]
+    ],
+    "output": [
+     null,
+     false
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-d-20261028-v1/study-content.json",
+    "sha256": "645a56c1f8c06237ef678dff6e01c7f9ec4638eb9233182e2a48e1dcd4e5d458",
+    "selector": "/variants/hack2hire:6ab32819e74ebb7457a3f0f5/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-d-20261028-v1/oracles.py",
+    "sha256": "835d874bb60ce64d055c150a50d55640901958cb4e5de62ec06465af0ee4fc62",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "class",
+   "declaration": {
+    "status": "present",
+    "value": "class WorkQueue:\n    def __init__(self, taskIds, leaseDuration, maxAttempts)\n    def reserve(self, time) -> integer\n    def complete(self, time, taskId) -> boolean\n    def fail(self, time, taskId) -> boolean\n    def getDeadLetters(self, time) -> integer[]",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-d-20261028-v1/contracts.json",
+      "sha256": "9dc06e544b8d452ad77c5a02cf0a5eda67cb3970df7c62f7334e794e995e29ad",
+      "selector": "/problems/13/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-d-20261028-v1/semantics/6ab32819e74ebb7457a3f0f5-python.json",
+     "inferredInterface": {
+      "classname": "WorkQueue",
+      "constructor": {
+       "params": [
+        {
+         "name": "taskIds",
+         "type": "integer[]"
+        },
+        {
+         "name": "leaseDuration",
+         "type": "integer"
+        },
+        {
+         "name": "maxAttempts",
+         "type": "integer"
+        }
+       ]
+      },
+      "methods": [
+       {
+        "name": "reserve",
+        "params": [
+         {
+          "name": "time",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "integer"
+        }
+       },
+       {
+        "name": "complete",
+        "params": [
+         {
+          "name": "time",
+          "type": "integer"
+         },
+         {
+          "name": "taskId",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "boolean"
+        }
+       },
+       {
+        "name": "fail",
+        "params": [
+         {
+          "name": "time",
+          "type": "integer"
+         },
+         {
+          "name": "taskId",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "boolean"
+        }
+       },
+       {
+        "name": "getDeadLetters",
+        "params": [
+         {
+          "name": "time",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "integer[]"
+        }
+       }
+      ]
+     },
+     "traceAdapter": {
+      "name": "solve",
+      "argument_order": [
+       "operation_names",
+       "argument_lists"
+      ],
+      "constructor_output": null,
+      "void_method_output": null,
+      "result_order": "constructor followed by every method call",
+      "scope": "Explicit class trace adapter, separate from direct native observer checks."
+     }
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-d-20261028-v1/semantics/6ab32819e74ebb7457a3f0f5-python.json",
+      "sha256": "e9e069ba526fbcccdf0997e8b9a2e48009bc66e23861fb0ab260ac79b8c77b38",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "class",
+   "declaration": {
+    "status": "present",
+    "value": "class WorkQueue {\n  constructor(taskIds, leaseDuration, maxAttempts)\n  reserve(time) /* -> integer */\n  complete(time, taskId) /* -> boolean */\n  fail(time, taskId) /* -> boolean */\n  getDeadLetters(time) /* -> integer[] */\n}",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-d-20261028-v1/contracts.json",
+      "sha256": "9dc06e544b8d452ad77c5a02cf0a5eda67cb3970df7c62f7334e794e995e29ad",
+      "selector": "/problems/13/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-d-20261028-v1/semantics/6ab32819e74ebb7457a3f0f5-javascript.json",
+     "inferredInterface": {
+      "classname": "WorkQueue",
+      "constructor": {
+       "params": [
+        {
+         "name": "taskIds",
+         "type": "integer[]"
+        },
+        {
+         "name": "leaseDuration",
+         "type": "integer"
+        },
+        {
+         "name": "maxAttempts",
+         "type": "integer"
+        }
+       ]
+      },
+      "methods": [
+       {
+        "name": "reserve",
+        "params": [
+         {
+          "name": "time",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "integer"
+        }
+       },
+       {
+        "name": "complete",
+        "params": [
+         {
+          "name": "time",
+          "type": "integer"
+         },
+         {
+          "name": "taskId",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "boolean"
+        }
+       },
+       {
+        "name": "fail",
+        "params": [
+         {
+          "name": "time",
+          "type": "integer"
+         },
+         {
+          "name": "taskId",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "boolean"
+        }
+       },
+       {
+        "name": "getDeadLetters",
+        "params": [
+         {
+          "name": "time",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "integer[]"
+        }
+       }
+      ]
+     },
+     "traceAdapter": {
+      "name": "solve",
+      "argument_order": [
+       "operation_names",
+       "argument_lists"
+      ],
+      "constructor_output": null,
+      "void_method_output": null,
+      "result_order": "constructor followed by every method call",
+      "scope": "Explicit class trace adapter, separate from direct native observer checks."
+     }
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-d-20261028-v1/semantics/6ab32819e74ebb7457a3f0f5-javascript.json",
+      "sha256": "ef9915d6a80338215b716cb23dd06be66be7c3260cb99e2e18b7b8e573917551",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-d-20261028-v1/contracts.json",
+    "sha256": "9dc06e544b8d452ad77c5a02cf0a5eda67cb3970df7c62f7334e794e995e29ad",
+    "selector": "/problems/13/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON trace result; no bool/int coercion",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-d-20261028-v1/contracts.json",
+    "sha256": "9dc06e544b8d452ad77c5a02cf0a5eda67cb3970df7c62f7334e794e995e29ad",
+    "selector": "/problems/13/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:697bdf8c9731315964cfaf78",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "reservations",
+  "emailTouchpoints"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-28"
+ },
+ "inferred_interface": {
+  "name": "buildEmailSchedule",
+  "params": [
+   {
+    "name": "reservations",
+    "type": "object[]"
+   },
+   {
+    "name": "emailTouchpoints",
+    "type": "object"
+   }
+  ],
+  "return": {
+   "type": "list<[integer,string,string]>"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "tuple sort of all generated triples",
+  "candidate_design": "generate triples then comparator sort (day, guest, touchpoint)",
+  "complexity_target": "O(R*T log(R*T))"
+ },
+ "source_sha256": "1c0301123619451c4bcf07841c8dc5edacd2f6f7832f8eb970df30a889aa0e96",
+ "wrapper": "Solution.buildEmailSchedule"
+}

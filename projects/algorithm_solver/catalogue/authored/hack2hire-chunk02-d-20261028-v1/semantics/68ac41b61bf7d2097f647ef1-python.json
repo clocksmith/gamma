@@ -1,0 +1,50 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:68ac41b61bf7d2097f647ef1",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "timestamps",
+  "windowSize",
+  "maxRequests"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-28"
+ },
+ "inferred_interface": {
+  "name": "rateLimit",
+  "params": [
+   {
+    "name": "timestamps",
+    "type": "integer[]"
+   },
+   {
+    "name": "windowSize",
+    "type": "integer"
+   },
+   {
+    "name": "maxRequests",
+    "type": "integer"
+   }
+  ],
+  "return": {
+   "type": "boolean[]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "literal per-request count of previously allowed timestamps inside the window",
+  "candidate_design": "deque of allowed timestamps; evict below t-windowSize+1; allow if size<maxRequests",
+  "complexity_target": "O(n) time/O(n) space"
+ },
+ "source_sha256": "84704aaa57ce3e7bfd160fa9be5227e785c2229243ce6109534abba62fa83da1",
+ "wrapper": "Solution.rateLimit"
+}

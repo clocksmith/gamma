@@ -1,0 +1,119 @@
+{
+ "schema": "gamma.authored-native-trace-semantics.v1",
+ "problem_uid": "hack2hire:6ac952f0339e3a32c154ddd2",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "operation_names",
+  "argument_lists"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-28"
+ },
+ "inferred_interface": {
+  "classname": "RectangleBoard",
+  "constructor": {
+   "params": [
+    {
+     "name": "width",
+     "type": "integer"
+    },
+    {
+     "name": "height",
+     "type": "integer"
+    }
+   ]
+  },
+  "methods": [
+   {
+    "name": "addRectangle",
+    "params": [
+     {
+      "name": "x1",
+      "type": "integer"
+     },
+     {
+      "name": "y1",
+      "type": "integer"
+     },
+     {
+      "name": "x2",
+      "type": "integer"
+     },
+     {
+      "name": "y2",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   {
+    "name": "getTopRectangle",
+    "params": [
+     {
+      "name": "x",
+      "type": "integer"
+     },
+     {
+      "name": "y",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   {
+    "name": "removeRectangle",
+    "params": [
+     {
+      "name": "id",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "boolean"
+    }
+   },
+   {
+    "name": "bringToFront",
+    "params": [
+     {
+      "name": "id",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "boolean"
+    }
+   },
+   {
+    "name": "undo",
+    "params": [],
+    "return": {
+     "type": "boolean"
+    }
+   }
+  ]
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON trace result; no bool/int coercion",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "explicit bottom-to-top id list with full-state snapshots for undo",
+  "candidate_design": "id->(box,z-key,active); fresh increasing z-keys; topmost by max key scan; undo stack of inverse operations",
+  "complexity_target": "O(1) mutations; O(R) getTopRectangle; O(R) space"
+ },
+ "source_sha256": "ceaa7f9bb257ac7c30b2cf1f425835c90985a90a5adb38ff9180e83ba5963b00",
+ "native_class": "RectangleBoard",
+ "native_symbol": "module global RectangleBoard",
+ "void_methods": []
+}

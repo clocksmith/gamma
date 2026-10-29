@@ -1,0 +1,490 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:694af9626e481a4b09cbc77c:694b08dc6e481a4b09cbc807:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-d-20261028-v1/contracts.json",
+   "sha256": "9dc06e544b8d452ad77c5a02cf0a5eda67cb3970df7c62f7334e794e995e29ad",
+   "selector": "/problems/3"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/694af9626e481a4b09cbc77c.json",
+   "sha256": "98e912059a9ddc4ac880144e3fb6c96c845190081af3cf39f1584e63a0d80692",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-d-20261028-v1/study-content.json",
+   "sha256": "645a56c1f8c06237ef678dff6e01c7f9ec4638eb9233182e2a48e1dcd4e5d458",
+   "selector": "/variants/hack2hire:694b08dc6e481a4b09cbc807"
+  }
+ ],
+ "problemId": "hack2hire:694af9626e481a4b09cbc77c",
+ "variantId": "694b08dc6e481a4b09cbc807",
+ "variantLabel": {
+  "status": "present",
+  "value": "Inferred level 3: point-in-time queries",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-d-20261028-v1/study-content.json",
+    "sha256": "645a56c1f8c06237ef678dff6e01c7f9ec4638eb9233182e2a48e1dcd4e5d458",
+    "selector": "/variants/hack2hire:694b08dc6e481a4b09cbc807/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "Inferred log record shape [time, userId, action] with action ADD or REMOVE; records are in non-decreasing time order and later records win ties. Replaying the log: ADD of an inactive user makes them an active moderator whose rank is the position of that ADD record; ADD of an already-active user is a no-op (keeps the earlier rank); REMOVE of an active user deactivates them; REMOVE of an inactive user is a no-op. An earlier rank is a higher level. canRemove(actor, target) is true iff both are active, actor != target and actor ranks strictly higher than target (state after the whole log). Level 2 adds getModerators(). Level 3 adds point-in-time queries canRemoveAt(time, actor, target) and getModeratorsAt(time), evaluated on the state after replaying only records with record time <= time.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-d-20261028-v1/contracts.json",
+    "sha256": "9dc06e544b8d452ad77c5a02cf0a5eda67cb3970df7c62f7334e794e995e29ad",
+    "selector": "/problems/3/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "Inferred log record shape [time, userId, action] with action ADD or REMOVE.",
+   "records are in non-decreasing time order and later records win ties.",
+   "Replaying the log: ADD of an inactive user makes them an active moderator whose rank is the position of that ADD record.",
+   "ADD of an already-active user is a no-op (keeps the earlier rank).",
+   "REMOVE of an active user deactivates them.",
+   "REMOVE of an inactive user is a no-op.",
+   "An earlier rank is a higher level.",
+   "canRemove(actor, target) is true iff both are active, actor != target and actor ranks strictly higher than target (state after the whole log).",
+   "Level 2 adds getModerators().",
+   "Level 3 adds point-in-time queries canRemoveAt(time, actor, target) and getModeratorsAt(time), evaluated on the state after replaying only records with record time <= time."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-d-20261028-v1/contracts.json",
+    "sha256": "9dc06e544b8d452ad77c5a02cf0a5eda67cb3970df7c62f7334e794e995e29ad",
+    "selector": "/problems/3/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "up to 20000 log records, times 0..1e9 non-decreasing",
+   "user ids 1..12 lowercase characters",
+   "up to 20000 method calls"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-d-20261028-v1/study-content.json",
+    "sha256": "645a56c1f8c06237ef678dff6e01c7f9ec4638eb9233182e2a48e1dcd4e5d458",
+    "selector": "/variants/hack2hire:694b08dc6e481a4b09cbc807/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-28; it is not the official statement.",
+    "basis": "preview fields used: title; contentPreview; algorithmTags; codingQuestions (variant count/order); preview response sha256 a906b3462d1e241b77ad17b54263eea3abfea7a43c7941fe1befc2042136349a"
+   },
+   {
+    "statement": "Uncertainty: very high: historical queries are an inference from the time-ordered log wording",
+    "basis": "the public group preview is partial (607 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: variants inferred as cumulative levels 1-3",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-d-20261028-v1/contracts.json",
+    "sha256": "9dc06e544b8d452ad77c5a02cf0a5eda67cb3970df7c62f7334e794e995e29ad",
+    "selector": "/problems/3/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-d-20261028-v1/contracts.json",
+    "sha256": "9dc06e544b8d452ad77c5a02cf0a5eda67cb3970df7c62f7334e794e995e29ad",
+    "selector": "/problems/3/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-d-20261028-v1/contracts.json",
+    "sha256": "9dc06e544b8d452ad77c5a02cf0a5eda67cb3970df7c62f7334e794e995e29ad",
+    "selector": "/problems/3/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "What does each log record contain and is the log sorted?",
+   "Does re-adding an active moderator change their rank?",
+   "Can a moderator remove themselves?",
+   "Is a query at time t inclusive of records stamped t?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-d-20261028-v1/study-content.json",
+    "sha256": "645a56c1f8c06237ef678dff6e01c7f9ec4638eb9233182e2a48e1dcd4e5d458",
+    "selector": "/variants/hack2hire:694b08dc6e481a4b09cbc807/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [
+      "ModSystem",
+      "canRemove"
+     ],
+     [
+      [
+       []
+      ],
+      [
+       "al",
+       "al"
+      ]
+     ]
+    ],
+    "output": [
+     null,
+     false
+    ],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      "ModSystem",
+      "getModeratorsAt"
+     ],
+     [
+      [
+       [
+        [
+         5,
+         "di",
+         "ADD"
+        ],
+        [
+         5,
+         "ed",
+         "ADD"
+        ]
+       ]
+      ],
+      [
+       4
+      ]
+     ]
+    ],
+    "output": [
+     null,
+     []
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-d-20261028-v1/study-content.json",
+    "sha256": "645a56c1f8c06237ef678dff6e01c7f9ec4638eb9233182e2a48e1dcd4e5d458",
+    "selector": "/variants/hack2hire:694b08dc6e481a4b09cbc807/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-d-20261028-v1/oracles.py",
+    "sha256": "835d874bb60ce64d055c150a50d55640901958cb4e5de62ec06465af0ee4fc62",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "class",
+   "declaration": {
+    "status": "present",
+    "value": "class ModSystem:\n    def __init__(self, logs)\n    def canRemove(self, actorId, targetId) -> boolean\n    def getModerators(self) -> string[]\n    def canRemoveAt(self, time, actorId, targetId) -> boolean\n    def getModeratorsAt(self, time) -> string[]",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-d-20261028-v1/contracts.json",
+      "sha256": "9dc06e544b8d452ad77c5a02cf0a5eda67cb3970df7c62f7334e794e995e29ad",
+      "selector": "/problems/3/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-d-20261028-v1/semantics/694b08dc6e481a4b09cbc807-python.json",
+     "inferredInterface": {
+      "classname": "ModSystem",
+      "constructor": {
+       "params": [
+        {
+         "name": "logs",
+         "type": "list<[integer,string,string]>"
+        }
+       ]
+      },
+      "methods": [
+       {
+        "name": "canRemove",
+        "params": [
+         {
+          "name": "actorId",
+          "type": "string"
+         },
+         {
+          "name": "targetId",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "boolean"
+        }
+       },
+       {
+        "name": "getModerators",
+        "params": [],
+        "return": {
+         "type": "string[]"
+        }
+       },
+       {
+        "name": "canRemoveAt",
+        "params": [
+         {
+          "name": "time",
+          "type": "integer"
+         },
+         {
+          "name": "actorId",
+          "type": "string"
+         },
+         {
+          "name": "targetId",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "boolean"
+        }
+       },
+       {
+        "name": "getModeratorsAt",
+        "params": [
+         {
+          "name": "time",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "string[]"
+        }
+       }
+      ]
+     },
+     "traceAdapter": {
+      "name": "solve",
+      "argument_order": [
+       "operation_names",
+       "argument_lists"
+      ],
+      "constructor_output": null,
+      "void_method_output": null,
+      "result_order": "constructor followed by every method call",
+      "scope": "Explicit class trace adapter, separate from direct native observer checks."
+     }
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-d-20261028-v1/semantics/694b08dc6e481a4b09cbc807-python.json",
+      "sha256": "50eace031e3c6beb19d051c54848f4931b548e9f9808133e34b474e42b5c72a3",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "class",
+   "declaration": {
+    "status": "present",
+    "value": "class ModSystem {\n  constructor(logs)\n  canRemove(actorId, targetId) /* -> boolean */\n  getModerators() /* -> string[] */\n  canRemoveAt(time, actorId, targetId) /* -> boolean */\n  getModeratorsAt(time) /* -> string[] */\n}",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-d-20261028-v1/contracts.json",
+      "sha256": "9dc06e544b8d452ad77c5a02cf0a5eda67cb3970df7c62f7334e794e995e29ad",
+      "selector": "/problems/3/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-d-20261028-v1/semantics/694b08dc6e481a4b09cbc807-javascript.json",
+     "inferredInterface": {
+      "classname": "ModSystem",
+      "constructor": {
+       "params": [
+        {
+         "name": "logs",
+         "type": "list<[integer,string,string]>"
+        }
+       ]
+      },
+      "methods": [
+       {
+        "name": "canRemove",
+        "params": [
+         {
+          "name": "actorId",
+          "type": "string"
+         },
+         {
+          "name": "targetId",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "boolean"
+        }
+       },
+       {
+        "name": "getModerators",
+        "params": [],
+        "return": {
+         "type": "string[]"
+        }
+       },
+       {
+        "name": "canRemoveAt",
+        "params": [
+         {
+          "name": "time",
+          "type": "integer"
+         },
+         {
+          "name": "actorId",
+          "type": "string"
+         },
+         {
+          "name": "targetId",
+          "type": "string"
+         }
+        ],
+        "return": {
+         "type": "boolean"
+        }
+       },
+       {
+        "name": "getModeratorsAt",
+        "params": [
+         {
+          "name": "time",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "string[]"
+        }
+       }
+      ]
+     },
+     "traceAdapter": {
+      "name": "solve",
+      "argument_order": [
+       "operation_names",
+       "argument_lists"
+      ],
+      "constructor_output": null,
+      "void_method_output": null,
+      "result_order": "constructor followed by every method call",
+      "scope": "Explicit class trace adapter, separate from direct native observer checks."
+     }
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-d-20261028-v1/semantics/694b08dc6e481a4b09cbc807-javascript.json",
+      "sha256": "afb4e8cbd36cef99899fe9f49c58bc33d00026b14a801d17ca3d2d4bffbdf13f",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-d-20261028-v1/contracts.json",
+    "sha256": "9dc06e544b8d452ad77c5a02cf0a5eda67cb3970df7c62f7334e794e995e29ad",
+    "selector": "/problems/3/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON trace result; no bool/int coercion",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk02-d-20261028-v1/contracts.json",
+    "sha256": "9dc06e544b8d452ad77c5a02cf0a5eda67cb3970df7c62f7334e794e995e29ad",
+    "selector": "/problems/3/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

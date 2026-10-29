@@ -1,0 +1,2093 @@
+{
+ "schema": "gamma.hack2hire-chunk02-d-study-content.v1",
+ "authored_by": "claude-opus-5-5 subagent, 2026-10-28",
+ "note": "Teaching text, clarifying questions, inferred constraints and own examples. Inferred, not official. Examples are small generated inputs with outputs from the independent references in oracles.py.",
+ "variants": {
+  "hack2hire:68ac41b61bf7d2097f647ef1": {
+   "constraints": [
+    "0 <= requests <= 1e5, timestamps 0..1e9 non-decreasing",
+    "1 <= windowSize <= 1e9",
+    "1 <= maxRequests <= 1e5"
+   ],
+   "clarifyingQuestions": [
+    "Do rejected requests count toward the window?",
+    "Are timestamps guaranteed sorted?",
+    "Should the result be booleans or a count?"
+   ],
+   "hints": [
+    "Only allowed requests occupy the window.",
+    "Requests older than t-windowSize+1 can never matter again.",
+    "Keep allowed timestamps in a queue and drop the stale front before each decision."
+   ],
+   "invariants": [
+    "the queue holds exactly the allowed timestamps inside the current window",
+    "queue length <= maxRequests"
+   ],
+   "chooseWhen": [
+    "Timestamps arrive in order and the window is fixed"
+   ],
+   "tradeoffs": [
+    "A queue costs O(maxRequests) memory; a counting array would need bounded time ranges"
+   ],
+   "variantLabel": "Inferred: per-request allow/reject over a sliding window",
+   "examples": [
+    {
+     "input": [
+      [],
+      1,
+      1
+     ],
+     "output": [],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       5
+      ],
+      1,
+      1
+     ],
+     "output": [
+      true
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:694af9676e481a4b09cbc77d": {
+   "constraints": [
+    "up to 20000 log records, times 0..1e9 non-decreasing",
+    "user ids 1..12 lowercase characters",
+    "up to 20000 method calls"
+   ],
+   "clarifyingQuestions": [
+    "What does each log record contain and is the log sorted?",
+    "Does re-adding an active moderator change their rank?",
+    "Can a moderator remove themselves?"
+   ],
+   "hints": [
+    "Replay the log once; you only need who is active and when they most recently became a moderator.",
+    "Rank by the position of the effective ADD record.",
+    "canRemove compares two ranks after checking both users are active and distinct."
+   ],
+   "invariants": [
+    "rank map contains exactly the active moderators",
+    "lower rank value = higher level"
+   ],
+   "chooseWhen": [
+    "The log is fixed at construction and queried many times"
+   ],
+   "tradeoffs": [
+    "Precomputing ranks makes every check O(1) at O(U) memory"
+   ],
+   "variantLabel": "Inferred level 1: removal permission check",
+   "examples": [
+    {
+     "input": [
+      [
+       "ModSystem",
+       "canRemove"
+      ],
+      [
+       [
+        []
+       ],
+       [
+        "al",
+        "al"
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      false
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "ModSystem",
+       "canRemove"
+      ],
+      [
+       [
+        [
+         [
+          1,
+          "al",
+          "ADD"
+         ],
+         [
+          1,
+          "al",
+          "ADD"
+         ]
+        ]
+       ],
+       [
+        "cy",
+        "ed"
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      false
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:694b056e6e481a4b09cbc7e4": {
+   "constraints": [
+    "up to 20000 log records, times 0..1e9 non-decreasing",
+    "user ids 1..12 lowercase characters",
+    "up to 20000 method calls"
+   ],
+   "clarifyingQuestions": [
+    "What does each log record contain and is the log sorted?",
+    "Does re-adding an active moderator change their rank?",
+    "Can a moderator remove themselves?",
+    "Should the list be highest-first?"
+   ],
+   "hints": [
+    "Level 1 ranks already define the order.",
+    "Sort active users by rank once after replay.",
+    "Return a copy so callers cannot mutate the stored order."
+   ],
+   "invariants": [
+    "stored order is ascending by rank",
+    "returned lists are fresh"
+   ],
+   "chooseWhen": [
+    "Lists are requested repeatedly from a fixed log"
+   ],
+   "tradeoffs": [
+    "Sorting once costs O(U log U); per-call sorting would repeat that work"
+   ],
+   "variantLabel": "Inferred level 2: ordered moderator list",
+   "examples": [
+    {
+     "input": [
+      [
+       "ModSystem",
+       "getModerators"
+      ],
+      [
+       [
+        []
+       ],
+       []
+      ]
+     ],
+     "output": [
+      null,
+      []
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "ModSystem",
+       "canRemove"
+      ],
+      [
+       [
+        []
+       ],
+       [
+        "al",
+        "al"
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      false
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:694b08dc6e481a4b09cbc807": {
+   "constraints": [
+    "up to 20000 log records, times 0..1e9 non-decreasing",
+    "user ids 1..12 lowercase characters",
+    "up to 20000 method calls"
+   ],
+   "clarifyingQuestions": [
+    "What does each log record contain and is the log sorted?",
+    "Does re-adding an active moderator change their rank?",
+    "Can a moderator remove themselves?",
+    "Is a query at time t inclusive of records stamped t?"
+   ],
+   "hints": [
+    "A user's status only changes at their effective log records.",
+    "Store, per user, the times of effective changes and the rank after each.",
+    "Binary-search that list for the last change at or before t."
+   ],
+   "invariants": [
+    "per-user change times are non-decreasing",
+    "rank after a REMOVE is recorded as inactive"
+   ],
+   "chooseWhen": [
+    "Many historical queries over a long log"
+   ],
+   "tradeoffs": [
+    "Per-user histories cost O(L) memory; full snapshots per time would cost O(L*U)"
+   ],
+   "variantLabel": "Inferred level 3: point-in-time queries",
+   "examples": [
+    {
+     "input": [
+      [
+       "ModSystem",
+       "canRemove"
+      ],
+      [
+       [
+        []
+       ],
+       [
+        "al",
+        "al"
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      false
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "ModSystem",
+       "getModeratorsAt"
+      ],
+      [
+       [
+        [
+         [
+          5,
+          "di",
+          "ADD"
+         ],
+         [
+          5,
+          "ed",
+          "ADD"
+         ]
+        ]
+       ],
+       [
+        4
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      []
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6ac95215339e3a32c154ddc3": {
+   "constraints": [
+    "1 <= width, height <= 1e9",
+    "up to 5000 operations",
+    "rectangles lie inside the board"
+   ],
+   "clarifyingQuestions": [
+    "What does a query return for an empty cell?",
+    "Are coordinates inclusive?",
+    "Can ids be reused after removal?"
+   ],
+   "hints": [
+    "The newest covering rectangle wins.",
+    "The board can be huge, so store rectangles, not cells.",
+    "Scan rectangles and keep the covering one with the greatest stacking key."
+   ],
+   "invariants": [
+    "stacking keys strictly increase with insertion"
+   ],
+   "chooseWhen": [
+    "Board area is large and rectangle count is modest"
+   ],
+   "tradeoffs": [
+    "O(R) queries; a 2D index would add much complexity"
+   ],
+   "variantLabel": "Inferred level 1: add and top-at-cell",
+   "examples": [
+    {
+     "input": [
+      [
+       "RectangleBoard",
+       "getTopRectangle"
+      ],
+      [
+       [
+        1,
+        1
+       ],
+       [
+        0,
+        0
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      -1
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "RectangleBoard",
+       "getTopRectangle"
+      ],
+      [
+       [
+        4,
+        2
+       ],
+       [
+        1,
+        0
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      -1
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6ac95252339e3a32c154ddc8": {
+   "constraints": [
+    "1 <= width, height <= 1e9",
+    "up to 5000 operations",
+    "rectangles lie inside the board"
+   ],
+   "clarifyingQuestions": [
+    "What does a query return for an empty cell?",
+    "Are coordinates inclusive?",
+    "Can ids be reused after removal?",
+    "What does removing an unknown id return?"
+   ],
+   "hints": [
+    "Removal only hides a rectangle.",
+    "Keep an active flag per id.",
+    "Skip inactive ids during the scan."
+   ],
+   "invariants": [
+    "ids are never reused",
+    "inactive rectangles never answer queries"
+   ],
+   "chooseWhen": [
+    "Removals are frequent and cheap"
+   ],
+   "tradeoffs": [
+    "Inactive entries still cost scan time"
+   ],
+   "variantLabel": "Inferred level 2: remove by id",
+   "examples": [
+    {
+     "input": [
+      [
+       "RectangleBoard",
+       "removeRectangle"
+      ],
+      [
+       [
+        5,
+        3
+       ],
+       [
+        0
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      false
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "RectangleBoard",
+       "removeRectangle"
+      ],
+      [
+       [
+        1,
+        5
+       ],
+       [
+        1
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      false
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6ac95279339e3a32c154ddca": {
+   "constraints": [
+    "1 <= width, height <= 1e9",
+    "up to 5000 operations",
+    "rectangles lie inside the board"
+   ],
+   "clarifyingQuestions": [
+    "What does a query return for an empty cell?",
+    "Are coordinates inclusive?",
+    "Can ids be reused after removal?",
+    "Does bringing to front change the id?"
+   ],
+   "hints": [
+    "Only relative stacking matters.",
+    "Give the rectangle a fresh, larger key.",
+    "Queries already pick the largest key."
+   ],
+   "invariants": [
+    "keys stay unique"
+   ],
+   "chooseWhen": [
+    "Reordering must be O(1)"
+   ],
+   "tradeoffs": [
+    "Keys grow without bound but stay small integers here"
+   ],
+   "variantLabel": "Inferred level 3: bring to front",
+   "examples": [
+    {
+     "input": [
+      [
+       "RectangleBoard",
+       "bringToFront"
+      ],
+      [
+       [
+        1,
+        4
+       ],
+       [
+        -1
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      false
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "RectangleBoard",
+       "removeRectangle"
+      ],
+      [
+       [
+        3,
+        3
+       ],
+       [
+        0
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      false
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6ac952f0339e3a32c154ddd2": {
+   "constraints": [
+    "1 <= width, height <= 1e9",
+    "up to 5000 operations",
+    "rectangles lie inside the board"
+   ],
+   "clarifyingQuestions": [
+    "What does a query return for an empty cell?",
+    "Are coordinates inclusive?",
+    "Can ids be reused after removal?",
+    "Which operations are undoable?",
+    "Does undoing an add free the id?"
+   ],
+   "hints": [
+    "Every successful mutation needs an inverse.",
+    "Push (kind, id, old key) on a stack.",
+    "Pop and apply the inverse: deactivate, reactivate or restore the old key."
+   ],
+   "invariants": [
+    "the history stack holds only successful mutations",
+    "undo restores the exact previous stacking order"
+   ],
+   "chooseWhen": [
+    "Undo depth is unbounded and mutations are cheap"
+   ],
+   "tradeoffs": [
+    "Inverse operations avoid full-state snapshots"
+   ],
+   "variantLabel": "Inferred level 4: undo",
+   "examples": [
+    {
+     "input": [
+      [
+       "RectangleBoard",
+       "undo"
+      ],
+      [
+       [
+        5,
+        5
+       ],
+       []
+      ]
+     ],
+     "output": [
+      null,
+      false
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "RectangleBoard",
+       "undo"
+      ],
+      [
+       [
+        4,
+        5
+       ],
+       []
+      ]
+     ],
+     "output": [
+      null,
+      false
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:69f78c6830f41dfd539fc6dc": {
+   "constraints": [
+    "cells A1..Z100",
+    "literals 0..1e6",
+    "1..20 terms per formula",
+    "up to 3000 operations",
+    "results <= 2^53-1"
+   ],
+   "clarifyingQuestions": [
+    "Which operators may formulas use?",
+    "Are values doubles or integers?",
+    "Should getCell reflect later edits to referenced cells?"
+   ],
+   "hints": [
+    "Store the formula, not its value, so edits propagate.",
+    "A cell may be referenced many times; memoise within one evaluation.",
+    "Evaluate with an explicit stack so long reference chains do not overflow recursion."
+   ],
+   "invariants": [
+    "an unset cell is 0",
+    "within one getCell every cell is evaluated once"
+   ],
+   "chooseWhen": [
+    "Reads are less frequent than writes"
+   ],
+   "tradeoffs": [
+    "Evaluation on read is O(V+E) per read; eager propagation would make writes expensive"
+   ],
+   "variantLabel": "Inferred level 1: live formulas without cycles",
+   "examples": [
+    {
+     "input": [
+      [
+       "Spreadsheet",
+       "getCell"
+      ],
+      [
+       [],
+       [
+        "A2"
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      0
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "Spreadsheet",
+       "getCell"
+      ],
+      [
+       [],
+       [
+        "C3"
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      0
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:69f78ced30f41dfd539fc6e1": {
+   "constraints": [
+    "cells A1..Z100",
+    "literals 0..1e6",
+    "1..20 terms per formula",
+    "up to 3000 operations",
+    "results <= 2^53-1"
+   ],
+   "clarifyingQuestions": [
+    "What should happen when a formula creates a cycle?",
+    "Is a self-reference a cycle?",
+    "Does a rejected set keep the old content?"
+   ],
+   "hints": [
+    "A new formula creates a cycle only if the target is reachable from what it references.",
+    "Search the current reference graph from the new references.",
+    "Reject before storing so the graph stays acyclic."
+   ],
+   "invariants": [
+    "the stored reference graph is always acyclic"
+   ],
+   "chooseWhen": [
+    "Writes must keep reads safe"
+   ],
+   "tradeoffs": [
+    "Each write pays an O(V+E) reachability search"
+   ],
+   "variantLabel": "Inferred level 2: reject circular references",
+   "examples": [
+    {
+     "input": [
+      [
+       "Spreadsheet",
+       "getCell"
+      ],
+      [
+       [],
+       [
+        "A2"
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      0
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "Spreadsheet",
+       "getCell"
+      ],
+      [
+       [],
+       [
+        "B1"
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      0
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6a330d046849fecc81440a2f": {
+   "constraints": [
+    "1..1e5 unique servers, coordinates within +-1e9",
+    "0..1e5 redirects"
+   ],
+   "clarifyingQuestions": [
+    "Does a redirect jump to the nearest server or the farthest?",
+    "What happens when no server lies on the diagonal?",
+    "Is the answer the final coordinate?"
+   ],
+   "hints": [
+    "Points on one diagonal share x-y (or x+y).",
+    "Group servers by diagonal key and sort by x.",
+    "Binary-search the neighbour on the correct side for each redirect."
+   ],
+   "invariants": [
+    "each server appears once in each of its two diagonal lists"
+   ],
+   "chooseWhen": [
+    "Many redirects over a fixed fleet"
+   ],
+   "tradeoffs": [
+    "O(n log n) preprocessing; a per-redirect scan would be O(n)"
+   ],
+   "variantLabel": "Inferred: nearest server along each diagonal",
+   "examples": [
+    {
+     "input": [
+      [
+       [
+        0,
+        0
+       ]
+      ],
+      []
+     ],
+     "output": [
+      0,
+      0
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       [
+        0,
+        -3
+       ]
+      ],
+      []
+     ],
+     "output": [
+      0,
+      -3
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:691f8b9d9abeeebe6fae3eb5": {
+   "constraints": [
+    "up to 200 rules and 5000 expenses",
+    "amounts are non-negative decimals with at most two fractional digits"
+   ],
+   "clarifyingQuestions": [
+    "What columns does an expense row have?",
+    "Does a rule describe what is allowed or what is forbidden?",
+    "In what order should violations be reported?"
+   ],
+   "hints": [
+    "A rule applies only when its conditional matches.",
+    "Compare money exactly, in integer cents.",
+    "Loop rules then expenses, recording [ruleId, expenseId] when the requirement fails."
+   ],
+   "invariants": [
+    "amounts are compared as integer cents"
+   ],
+   "chooseWhen": [
+    "Few rules, many expenses"
+   ],
+   "tradeoffs": [
+    "O(R*E) is simple; indexing by conditional value would help only with many rules"
+   ],
+   "variantLabel": "Inferred level 1: per-expense rule violations",
+   "examples": [
+    {
+     "input": [
+      [],
+      []
+     ],
+     "output": [],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       [
+        "expense",
+        "R0",
+        "vendor_name",
+        "==",
+        "airline",
+        "vendor_type",
+        "airline"
+       ]
+      ],
+      [
+       [
+        "E0",
+        "T0",
+        "120",
+        "meals",
+        "airline",
+        "acme"
+       ]
+      ]
+     ],
+     "output": [
+      [
+       "R0",
+       "E0"
+      ]
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6920bd4a94b324049c3251a5": {
+   "constraints": [
+    "up to 200 rules and 5000 expenses",
+    "amounts are non-negative decimals with at most two fractional digits"
+   ],
+   "clarifyingQuestions": [
+    "What does a trip rule aggregate?",
+    "Are trips without matching expenses evaluated?",
+    "How are trip violations ordered?"
+   ],
+   "hints": [
+    "Trip rules apply to sums, not single expenses.",
+    "Accumulate applicable amounts per trip in first-appearance order.",
+    "Check each trip total against the requirement."
+   ],
+   "invariants": [
+    "trip sums include only expenses passing the conditional"
+   ],
+   "chooseWhen": [
+    "Aggregate policies per trip"
+   ],
+   "tradeoffs": [
+    "An insertion-ordered map keeps output order without sorting"
+   ],
+   "variantLabel": "Inferred level 2: trip-level aggregate rules",
+   "examples": [
+    {
+     "input": [
+      [],
+      []
+     ],
+     "output": [],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       [
+        "expense",
+        "R0",
+        "expense_type",
+        "==",
+        "airline",
+        "",
+        ""
+       ]
+      ],
+      [
+       [
+        "E0",
+        "T0",
+        "89",
+        "meals",
+        "airline",
+        "joes"
+       ],
+       [
+        "E1",
+        "T2",
+        "124",
+        "travel",
+        "shop",
+        "joes"
+       ],
+       [
+        "E2",
+        "T2",
+        "0",
+        "meals",
+        "airline",
+        "acme"
+       ]
+      ]
+     ],
+     "output": [
+      [
+       "R0",
+       "E0"
+      ],
+      [
+       "R0",
+       "E1"
+      ],
+      [
+       "R0",
+       "E2"
+      ]
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6ab32819e74ebb7457a3f0f5": {
+   "constraints": [
+    "up to 20000 tasks and 20000 calls",
+    "lease 1..1e9, maxAttempts 1..1000",
+    "call times non-decreasing"
+   ],
+   "clarifyingQuestions": [
+    "Is time passed into each call?",
+    "Does a retried task go to the front or the back?",
+    "Does fail() count as an attempt?"
+   ],
+   "hints": [
+    "Expire stale leases before handling any call.",
+    "Keep leases in a min-heap by deadline.",
+    "Stale heap entries can be skipped by checking the current holder sequence number."
+   ],
+   "invariants": [
+    "a task is in at most one of ready, reserved, done, dead",
+    "attempts never exceed maxAttempts"
+   ],
+   "chooseWhen": [
+    "Many leases with different deadlines"
+   ],
+   "tradeoffs": [
+    "Lazy heap deletion trades memory for O(log n) updates"
+   ],
+   "variantLabel": "Inferred level 1: leases, retries and dead letters",
+   "examples": [
+    {
+     "input": [
+      [
+       "WorkQueue",
+       "fail"
+      ],
+      [
+       [
+        [],
+        1,
+        1
+       ],
+       [
+        1,
+        99
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      false
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "WorkQueue",
+       "complete"
+      ],
+      [
+       [
+        [
+         22,
+         8
+        ],
+        2,
+        3
+       ],
+       [
+        2,
+        99
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      false
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6ab328bbe74ebb7457a3f0fc": {
+   "constraints": [
+    "up to 20000 tasks and 20000 calls",
+    "lease 1..1e9, maxAttempts 1..1000",
+    "call times non-decreasing",
+    "dependencies form a DAG, up to 40000 edges"
+   ],
+   "clarifyingQuestions": [
+    "Is time passed into each call?",
+    "Does a retried task go to the front or the back?",
+    "Does fail() count as an attempt?",
+    "What happens to dependents of a dead-lettered task?"
+   ],
+   "hints": [
+    "A task becomes ready when its last prerequisite completes.",
+    "Count missing prerequisites per task.",
+    "When a task dies, walk its dependents breadth-first and dead-letter them."
+   ],
+   "invariants": [
+    "missing count = prerequisites not yet completed",
+    "dead tasks never become ready"
+   ],
+   "chooseWhen": [
+    "Workflows with prerequisite tasks"
+   ],
+   "tradeoffs": [
+    "Cascading dead-letters makes failures visible immediately"
+   ],
+   "variantLabel": "Inferred level 2: task dependencies",
+   "examples": [
+    {
+     "input": [
+      [
+       "WorkQueue",
+       "getDeadLetters"
+      ],
+      [
+       [
+        [
+         19
+        ],
+        [],
+        4,
+        1
+       ],
+       [
+        1
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      []
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "WorkQueue",
+       "reserve"
+      ],
+      [
+       [
+        [
+         13,
+         5
+        ],
+        [
+         [
+          13,
+          5
+         ]
+        ],
+        3,
+        1
+       ],
+       [
+        1
+       ]
+      ]
+     ],
+     "output": [
+      null,
+      13
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:69d184ef17b72775cc49c04e": {
+   "constraints": [
+    "up to 100000 entities, depth <= 200",
+    "up to 100000 queries"
+   ],
+   "clarifyingQuestions": [
+    "What exactly must be answered: one check, a list of accessible entities, or both?",
+    "Is an unknown uuid an error or false?",
+    "Do teams nest?"
+   ],
+   "hints": [
+    "Access to a node means access to its whole subtree.",
+    "Number nodes by DFS entry time; a subtree is a contiguous interval.",
+    "For each user keep the outermost granted intervals and binary-search the query node."
+   ],
+   "invariants": [
+    "subtree of v = entry times in [tin(v), tout(v)]",
+    "kept intervals per user are disjoint and sorted"
+   ],
+   "chooseWhen": [
+    "Many queries over a static tree"
+   ],
+   "tradeoffs": [
+    "Preprocessing is O(N log N); walking ancestors per query costs O(depth)"
+   ],
+   "variantLabel": "Inferred: batch access checks with inherited permissions",
+   "examples": [
+    {
+     "input": [
+      [],
+      [
+       [
+        "u1",
+        "x"
+       ]
+      ]
+     ],
+     "output": [
+      false
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       {
+        "uuid": "n1",
+        "type": "TEAM",
+        "userIds": [],
+        "children": []
+       }
+      ],
+      [
+       [
+        "u1",
+        "n2"
+       ]
+      ]
+     ],
+     "output": [
+      false
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:67c76f386c89e288437c3031": {
+   "constraints": [
+    "1..7 operands, each 0..99",
+    "target 0..1e15"
+   ],
+   "clarifyingQuestions": [
+    "Is the input a digit string or separate numbers?",
+    "May numbers be concatenated?",
+    "Should all expressions be returned or just one?"
+   ],
+   "hints": [
+    "Different groupings can print the same string; count canonical forms instead.",
+    "A sum is a sequence of non-sum parts; a product is a sequence of non-product factors.",
+    "Memoise the forms of each operand interval with their values."
+   ],
+   "invariants": [
+    "each rendering is produced exactly once",
+    "parentheses appear only around a sum used as a factor"
+   ],
+   "chooseWhen": [
+    "Small operand counts with an exhaustive answer"
+   ],
+   "tradeoffs": [
+    "Output can be exponential in k, so k stays small"
+   ],
+   "variantLabel": "Inferred: every minimally-parenthesised +/* expression hitting the target",
+   "examples": [
+    {
+     "input": [
+      "0 = 0"
+     ],
+     "output": [
+      "0"
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      "2 = 2"
+     ],
+     "output": [
+      "2"
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:68fd342247bea664c0bba313": {
+   "constraints": [
+    "up to 20000 events",
+    "times 00:00..23:59",
+    "1 <= k <= 1440"
+   ],
+   "clarifyingQuestions": [
+    "Is an end time inclusive?",
+    "What is returned when no slot exists?",
+    "Does the action word ever mean free time?"
+   ],
+   "hints": [
+    "Only the union of busy time matters.",
+    "Sort intervals by start and sweep.",
+    "The first gap of at least k free minutes gives the answer."
+   ],
+   "invariants": [
+    "freeFrom is the first minute not covered by earlier intervals"
+   ],
+   "chooseWhen": [
+    "Many events, one query"
+   ],
+   "tradeoffs": [
+    "Sorting costs O(e log e); a 1440 bitmap would also work at this scale"
+   ],
+   "variantLabel": "Inferred: earliest common free slot of k minutes",
+   "examples": [
+    {
+     "input": [
+      [],
+      1
+     ],
+     "output": "00:00",
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [],
+      2
+     ],
+     "output": "00:00",
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6a7cd372d713d873ca7ac6ef": {
+   "constraints": [
+    "ID space 0..999",
+    "up to 1000 non-overlapping ranges"
+   ],
+   "clarifyingQuestions": [
+    "Should output ranges be strings or integers?",
+    "Are touching ranges merged?"
+   ],
+   "hints": [
+    "Free space lies between allocations.",
+    "Sort allocations by start.",
+    "Emit each gap between consecutive ranges and after the last one."
+   ],
+   "invariants": [
+    "cursor is the first ID not yet accounted for"
+   ],
+   "chooseWhen": [
+    "Any number of allocations"
+   ],
+   "tradeoffs": [
+    "Sorting dominates at O(r log r)"
+   ],
+   "variantLabel": "Inferred level 1: all free ranges",
+   "examples": [
+    {
+     "input": [
+      []
+     ],
+     "output": [
+      [
+       "0",
+       "999"
+      ]
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      []
+     ],
+     "output": [
+      [
+       "0",
+       "999"
+      ]
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6a7cd38bd713d873ca7ac6f0": {
+   "constraints": [
+    "ID space 0..999",
+    "up to 1000 non-overlapping ranges",
+    "1 <= minSize <= 1000"
+   ],
+   "clarifyingQuestions": [
+    "What does the follow-up add: a size filter, an allocation, or a bucket filter?"
+   ],
+   "hints": [
+    "Reuse the gap sweep.",
+    "Measure each gap as end-start+1.",
+    "Keep gaps at least minSize long."
+   ],
+   "invariants": [
+    "returned gaps are maximal"
+   ],
+   "chooseWhen": [
+    "Allocating a block of a given size"
+   ],
+   "tradeoffs": [
+    "Same cost as level 1"
+   ],
+   "variantLabel": "Inferred level 2: free ranges of a minimum size",
+   "examples": [
+    {
+     "input": [
+      [],
+      1
+     ],
+     "output": [
+      [
+       "0",
+       "999"
+      ]
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [],
+      5
+     ],
+     "output": [
+      [
+       "0",
+       "999"
+      ]
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6a0b74fac84b6e8a3be18c83": {
+   "constraints": [
+    "up to 20000 nodes, depth <= 200",
+    "up to 2e6 characters of text"
+   ],
+   "clarifyingQuestions": [
+    "How are addresses delimited inside a line?",
+    "Are leading zeros allowed?",
+    "Lexicographic order of strings or of numeric octets?"
+   ],
+   "hints": [
+    "Traverse every file node; directories only hold children.",
+    "Split each line into maximal runs of digits and dots.",
+    "Accept a run only if it has four octets 0..255 without leading zeros."
+   ],
+   "invariants": [
+    "a run is never split, so 1.2.3.4.5 is rejected"
+   ],
+   "chooseWhen": [
+    "Deep trees"
+   ],
+   "tradeoffs": [
+    "An explicit stack avoids recursion limits"
+   ],
+   "variantLabel": "Inferred: unique valid IPv4 addresses in a file tree",
+   "examples": [
+    {
+     "input": [
+      {
+       "name": "r",
+       "isFile": false,
+       "lines": [],
+       "children": []
+      }
+     ],
+     "output": [],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      {
+       "name": "f48",
+       "isFile": true,
+       "lines": [
+        "90.0.0.0"
+       ],
+       "children": []
+      }
+     ],
+     "output": [
+      "90.0.0.0"
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:6a21c269d5c5b3e5f9c34546": {
+   "constraints": [
+    "1..12 cells",
+    "start and target have equal length"
+   ],
+   "clarifyingQuestions": [
+    "Is the task to list next moves, count moves or decide reachability?",
+    "Is the target the swapped arrangement?",
+    "Must the minimum number of moves be returned?"
+   ],
+   "hints": [
+    "Tile counts never change.",
+    "The state space is small; search it.",
+    "Use DFS with a visited set over board strings."
+   ],
+   "invariants": [
+    "R tiles only move right, B tiles only move left"
+   ],
+   "chooseWhen": [
+    "Small boards"
+   ],
+   "tradeoffs": [
+    "Exhaustive search is exponential in board length"
+   ],
+   "variantLabel": "Inferred: can the target arrangement be reached",
+   "examples": [
+    {
+     "input": [
+      [
+       "_"
+      ],
+      [
+       "_"
+      ]
+     ],
+     "output": true,
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "B"
+      ],
+      [
+       "B"
+      ]
+     ],
+     "output": true,
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:67d793931989183df53824a0": {
+   "constraints": [
+    "up to 1e5 orders sorted by symbol",
+    "inventory 0..99 hundredths per symbol",
+    "prices in cents 1..99999999"
+   ],
+   "clarifyingQuestions": [
+    "When inventory is short, how many whole shares are bought?",
+    "Is excess inventory sold back?",
+    "How are dollar amounts rounded to fractions?"
+   ],
+   "hints": [
+    "Work in integer hundredths of a share.",
+    "A shortfall is covered by the fewest whole shares.",
+    "After a sell, keep only the fractional remainder."
+   ],
+   "invariants": [
+    "inventory stays in 0..99 after every order"
+   ],
+   "chooseWhen": [
+    "Exact money arithmetic"
+   ],
+   "tradeoffs": [
+    "Integer arithmetic avoids float rounding"
+   ],
+   "variantLabel": "Inferred: house inventory after fractional orders",
+   "examples": [
+    {
+     "input": [
+      [],
+      []
+     ],
+     "output": [],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [],
+      [
+       [
+        "AAPL",
+        "27"
+       ]
+      ]
+     ],
+     "output": [
+      [
+       "AAPL",
+       "27"
+      ]
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:68fd2f6247bea664c0bba309": {
+   "constraints": [
+    "1 <= n <= 1000",
+    "up to 5000 undirected friendships, no duplicates"
+   ],
+   "clarifyingQuestions": [
+    "Is a candidate with zero mutual friends allowed?",
+    "How are ties broken?",
+    "What is returned when nobody qualifies?"
+   ],
+   "hints": [
+    "Mutual friends of u and v are paths u-w-v.",
+    "For each user, count friends-of-friends that are not already friends.",
+    "Pick the highest count, ties to the smaller id, resetting counters between users."
+   ],
+   "invariants": [
+    "counters are zero at the start of each user"
+   ],
+   "chooseWhen": [
+    "Sparse graphs"
+   ],
+   "tradeoffs": [
+    "Cost is the sum of friend degrees, which can be quadratic in hubs"
+   ],
+   "variantLabel": "Inferred: one recommendation per user by mutual friends",
+   "examples": [
+    {
+     "input": [
+      1,
+      []
+     ],
+     "output": [
+      -1
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      3,
+      []
+     ],
+     "output": [
+      -1,
+      -1,
+      -1
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:69308197cd79766b0b310225": {
+   "constraints": [
+    "up to 20000 samples, times strictly increasing",
+    "function names 1..12 characters"
+   ],
+   "clarifyingQuestions": [
+    "Is a function that reappears at the same depth the same call?",
+    "Should frames still open at the end be closed?",
+    "How are events formatted?"
+   ],
+   "hints": [
+    "Consecutive samples share a common prefix of frames.",
+    "Frames past the prefix in the old stack ended; frames past it in the new stack started.",
+    "Emit ends innermost-first, then starts outermost-first."
+   ],
+   "invariants": [
+    "open frames equal the previous sample's stack"
+   ],
+   "chooseWhen": [
+    "Streaming samples"
+   ],
+   "tradeoffs": [
+    "O(total frames)"
+   ],
+   "variantLabel": "Inferred level 1: start/end events from samples",
+   "examples": [
+    {
+     "input": [
+      []
+     ],
+     "output": [],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "1:h"
+      ]
+     ],
+     "output": [
+      [
+       "start",
+       "h",
+       1
+      ]
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:69308714cd79766b0b310228": {
+   "constraints": [
+    "up to 20000 samples, times strictly increasing",
+    "function names 1..12 characters",
+    "1 <= minSamples <= 20000"
+   ],
+   "clarifyingQuestions": [
+    "Is a function that reappears at the same depth the same call?",
+    "Should frames still open at the end be closed?",
+    "How is a short call defined: samples or time?"
+   ],
+   "hints": [
+    "A frame instance lives for a run of consecutive samples.",
+    "Track the first sample index of each open frame.",
+    "Emit its events only if the run is long enough; sort the kept events at the end."
+   ],
+   "invariants": [
+    "a kept child implies a kept parent"
+   ],
+   "chooseWhen": [
+    "Noisy samplers"
+   ],
+   "tradeoffs": [
+    "Buffering events costs O(E log E) for the final sort"
+   ],
+   "variantLabel": "Inferred level 2: ignore short-lived frames",
+   "examples": [
+    {
+     "input": [
+      [],
+      1
+     ],
+     "output": [],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "0:f"
+      ],
+      1
+     ],
+     "output": [
+      [
+       "start",
+       "f",
+       0
+      ]
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:69308716cd79766b0b310229": {
+   "constraints": [
+    "up to 20000 samples, times strictly increasing",
+    "function names 1..12 characters"
+   ],
+   "clarifyingQuestions": [
+    "Is a function that reappears at the same depth the same call?",
+    "Should frames still open at the end be closed?",
+    "Does the last sample contribute time?"
+   ],
+   "hints": [
+    "Between two samples, only the innermost function is running.",
+    "Charge t_next - t to the top of the earlier stack.",
+    "Report every function name seen, sorted."
+   ],
+   "invariants": [
+    "total charged time = last time - first time minus empty-stack gaps"
+   ],
+   "chooseWhen": [
+    "Profiling summaries"
+   ],
+   "tradeoffs": [
+    "A single pass; no stack needed"
+   ],
+   "variantLabel": "Inferred level 3: exclusive time per function",
+   "examples": [
+    {
+     "input": [
+      []
+     ],
+     "output": [],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "1:g"
+      ]
+     ],
+     "output": [
+      [
+       "g",
+       0
+      ]
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:697bdcee9731315964cfaf6f": {
+   "constraints": [
+    "up to 5000 reservations, up to 20 touchpoints",
+    "check_in_day 0..1e6, stay_length 1..365",
+    "offsets -365..365"
+   ],
+   "clarifyingQuestions": [
+    "What does a touchpoint specify?",
+    "How is the schedule ordered?",
+    "Are emails before day 0 dropped?"
+   ],
+   "hints": [
+    "Each reservation and touchpoint pair yields one email.",
+    "Send day = check-in day + offset.",
+    "Sort by day, then guest, then touchpoint."
+   ],
+   "invariants": [
+    "one entry per (reservation, touchpoint)"
+   ],
+   "chooseWhen": [
+    "Batch scheduling"
+   ],
+   "tradeoffs": [
+    "Sorting dominates"
+   ],
+   "variantLabel": "Inferred level 1: offsets from check-in",
+   "examples": [
+    {
+     "input": [
+      [],
+      {}
+     ],
+     "output": [],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       {
+        "guest_name": "Cy",
+        "room_type": "king",
+        "check_in_day": 3,
+        "stay_length": 3
+       }
+      ],
+      {
+       "survey": 4
+      }
+     ],
+     "output": [
+      [
+       7,
+       "Cy",
+       "survey"
+      ]
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:697bdf679731315964cfaf77": {
+   "constraints": [
+    "up to 5000 reservations, up to 20 touchpoints",
+    "check_in_day 0..1e6, stay_length 1..365",
+    "offsets -365..365"
+   ],
+   "clarifyingQuestions": [
+    "What does a touchpoint specify?",
+    "How is the schedule ordered?",
+    "Are emails before day 0 dropped?",
+    "Is check-out day check-in + stay_length?"
+   ],
+   "hints": [
+    "Some emails relate to departure.",
+    "Compute check-out = check-in + stay_length.",
+    "Add the offset to the chosen anchor."
+   ],
+   "invariants": [
+    "anchor is check-in or check-out"
+   ],
+   "chooseWhen": [
+    "Post-stay surveys"
+   ],
+   "tradeoffs": [
+    "Same cost as level 1"
+   ],
+   "variantLabel": "Inferred level 2: check-in or check-out anchors",
+   "examples": [
+    {
+     "input": [
+      [],
+      {}
+     ],
+     "output": [],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       {
+        "guest_name": "Ann",
+        "room_type": "twin",
+        "check_in_day": 8,
+        "stay_length": 4
+       }
+      ],
+      {
+       "survey": {
+        "anchor": "check_in",
+        "offset": -4
+       }
+      }
+     ],
+     "output": [
+      [
+       4,
+       "Ann",
+       "survey"
+      ]
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:697bdf8c9731315964cfaf78": {
+   "constraints": [
+    "up to 5000 reservations, up to 20 touchpoints",
+    "check_in_day 0..1e6, stay_length 1..365",
+    "offsets -365..365"
+   ],
+   "clarifyingQuestions": [
+    "What does a touchpoint specify?",
+    "How is the schedule ordered?",
+    "Are emails before day 0 dropped?",
+    "Does an empty room_types list mean none or all?"
+   ],
+   "hints": [
+    "Some touchpoints target certain rooms.",
+    "Skip pairs whose room type is not listed.",
+    "An absent list means all rooms; an empty list means none."
+   ],
+   "invariants": [
+    "filtered pairs produce no entry"
+   ],
+   "chooseWhen": [
+    "Segmented campaigns"
+   ],
+   "tradeoffs": [
+    "Same cost as level 2"
+   ],
+   "variantLabel": "Inferred level 3: room-type targeting",
+   "examples": [
+    {
+     "input": [
+      [],
+      {}
+     ],
+     "output": [],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       {
+        "guest_name": "Ann",
+        "room_type": "king",
+        "check_in_day": 13,
+        "stay_length": 5
+       }
+      ],
+      {
+       "upsell": {
+        "anchor": "check_in",
+        "offset": 4
+       }
+      }
+     ],
+     "output": [
+      [
+       17,
+       "Ann",
+       "upsell"
+      ]
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:69bd5fda1cbff60a929be96f": {
+   "constraints": [
+    "up to 1e5 lines per side (2000 for level 3)",
+    "lines 0..40 printable characters"
+   ],
+   "clarifyingQuestions": [
+    "Which answer is expected when several exist?"
+   ],
+   "hints": [
+    "Count occurrences on both sides.",
+    "A line qualifies with count 1 on each side.",
+    "Scan lines1 in order and return the first qualifying pair."
+   ],
+   "invariants": [
+    "counts are exact multiplicities"
+   ],
+   "chooseWhen": [
+    "Anchor search for diffs"
+   ],
+   "tradeoffs": [
+    "Two hash maps, O(n+m)"
+   ],
+   "variantLabel": "Inferred level 1: any unique common line (smallest i)",
+   "examples": [
+    {
+     "input": [
+      [],
+      []
+     ],
+     "output": [
+      -1,
+      -1
+     ],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "a"
+      ],
+      [
+       "a"
+      ]
+     ],
+     "output": [
+      0,
+      0
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:69eb97bffbaf3da6418293cf": {
+   "constraints": [
+    "up to 1e5 lines per side (2000 for level 3)",
+    "lines 0..40 printable characters"
+   ],
+   "clarifyingQuestions": [
+    "Should the chain be the longest increasing one?",
+    "How are ties between longest chains broken?"
+   ],
+   "hints": [
+    "Pairs ordered by i need increasing j: a longest increasing subsequence.",
+    "Compute, for each pair, the longest chain starting there.",
+    "Walk levels from longest to 1, each time taking the smallest valid index."
+   ],
+   "invariants": [
+    "within one level, j decreases as i increases"
+   ],
+   "chooseWhen": [
+    "Patience diff anchors"
+   ],
+   "tradeoffs": [
+    "O(k log k) with patience piles"
+   ],
+   "variantLabel": "Inferred level 2: longest chain of unique common lines",
+   "examples": [
+    {
+     "input": [
+      [],
+      []
+     ],
+     "output": [],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [
+       "a"
+      ],
+      [
+       "a"
+      ]
+     ],
+     "output": [
+      [
+       0,
+       0
+      ]
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  },
+  "hack2hire:69eb97f0fbaf3da6418293d1": {
+   "constraints": [
+    "up to 1e5 lines per side (2000 for level 3)",
+    "lines 0..40 printable characters"
+   ],
+   "clarifyingQuestions": [
+    "What output format marks kept, removed and added lines?",
+    "What happens when a gap has no unique common lines?"
+   ],
+   "hints": [
+    "Trim the common prefix and suffix first.",
+    "Anchor on the unique-common-line chain and recurse on the gaps between anchors.",
+    "Without anchors, emit removals then additions; use an explicit work stack."
+   ],
+   "invariants": [
+    "kept plus removed lines reproduce lines1; kept plus added reproduce lines2"
+   ],
+   "chooseWhen": [
+    "Readable diffs of moved blocks"
+   ],
+   "tradeoffs": [
+    "Worst case O(n^2) from repeated gap scans"
+   ],
+   "variantLabel": "Inferred level 3: recursive patience diff",
+   "examples": [
+    {
+     "input": [
+      [],
+      []
+     ],
+     "output": [],
+     "source": "oracles.reference over a cases.py row"
+    },
+    {
+     "input": [
+      [],
+      [
+       "c"
+      ]
+     ],
+     "output": [
+      "+ c"
+     ],
+     "source": "oracles.reference over a cases.py row"
+    }
+   ]
+  }
+ }
+}

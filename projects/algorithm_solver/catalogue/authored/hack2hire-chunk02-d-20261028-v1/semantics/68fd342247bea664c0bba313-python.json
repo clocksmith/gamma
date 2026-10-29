@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:68fd342247bea664c0bba313",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "events",
+  "k"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-28"
+ },
+ "inferred_interface": {
+  "name": "earliestMeetingSlot",
+  "params": [
+   {
+    "name": "events",
+    "type": "string[]"
+   },
+   {
+    "name": "k",
+    "type": "integer"
+   }
+  ],
+  "return": {
+   "type": "string"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "1440-entry busy minute array and sliding scan",
+  "candidate_design": "parse, sort intervals, sweep merged busy blocks checking each gap length",
+  "complexity_target": "O(e log e) time/O(e) space"
+ },
+ "source_sha256": "69171f1dafb00c67cec5dcba63f071aabaada5bef97a65c6a9aed3024030d2a3",
+ "wrapper": "Solution.earliestMeetingSlot"
+}

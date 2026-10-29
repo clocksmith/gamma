@@ -1,0 +1,2592 @@
+{
+ "schema": "gamma.authored-inferred-contracts.v1",
+ "source_bank": "projects/question_bank/hack2hire/bank.json",
+ "note": "Every spec is inferred from a partial public preview, title and tags; paraphrased, never the official statement.",
+ "problems": [
+  {
+   "uid": "hack2hire:68ac41b61bf7d2097f647ef1",
+   "variant_id": "68ac41b61bf7d2097f647ef1",
+   "variant_ordinal": 1,
+   "title": "Design Request Rate limiter",
+   "source": {
+    "post_id": "68ac40c41bf7d2097f647eef",
+    "group_title": "Design Request Rate limiter",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/68ac40c41bf7d2097f647eef",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/68ac40c41bf7d2097f647eef/practice?questionId=68ac41b61bf7d2097f647ef1",
+    "preview_response_sha256": "5c783dafe29bf57fcee4dda72b13231be1aa749de15aa42ed9ef5d1149e4e81e",
+    "preview_content_sha256": "57184b5b0f56c8bdf3864087c4e6c17e4dda25533942b5391492f2f73ea9efa2",
+    "preview_characters": 430,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/68ac40c41bf7d2097f647eef.json",
+    "algorithm_tags": [
+     "SLIDING_WINDOW"
+    ],
+    "companies": [
+     "ROBLOX"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "contentPreview: allow rule over inclusive window",
+    "algorithmTags: SLIDING_WINDOW"
+   ],
+   "inferred_spec": "timestamps are non-decreasing request times. Request i at time t is allowed iff the number of previously ALLOWED requests with time in [t-windowSize+1, t], plus this one, is at most maxRequests. Rejected requests do not consume capacity (inference). Returns one boolean per request.",
+   "inference_uncertainty": "medium: the allow rule is visible in the preview; whether rejected requests consume capacity and the return shape are inferred",
+   "inferred_interface": {
+    "name": "rateLimit",
+    "params": [
+     {
+      "name": "timestamps",
+      "type": "integer[]"
+     },
+     {
+      "name": "windowSize",
+      "type": "integer"
+     },
+     {
+      "name": "maxRequests",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "boolean[]"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "RATE"
+  },
+  {
+   "uid": "hack2hire:694af9676e481a4b09cbc77d",
+   "variant_id": "694af9676e481a4b09cbc77d",
+   "variant_ordinal": 1,
+   "title": "Design a Moderator System",
+   "source": {
+    "post_id": "694af9626e481a4b09cbc77c",
+    "group_title": "Design a Moderator System",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/694af9626e481a4b09cbc77c",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/694af9626e481a4b09cbc77c/practice?questionId=694af9676e481a4b09cbc77d",
+    "preview_response_sha256": "a906b3462d1e241b77ad17b54263eea3abfea7a43c7941fe1befc2042136349a",
+    "preview_content_sha256": "776ae7338a478d619f6d77aef702551cc5453e42d255eda5987b953a246d03ed",
+    "preview_characters": 607,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/694af9626e481a4b09cbc77c.json",
+    "algorithm_tags": [
+     "HASH_TABLE",
+     "DESIGN"
+    ],
+    "companies": [
+     "REDDIT"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 3
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview",
+    "algorithmTags",
+    "codingQuestions (variant count/order)"
+   ],
+   "inferred_spec": "Inferred log record shape [time, userId, action] with action ADD or REMOVE; records are in non-decreasing time order and later records win ties. Replaying the log: ADD of an inactive user makes them an active moderator whose rank is the position of that ADD record; ADD of an already-active user is a no-op (keeps the earlier rank); REMOVE of an active user deactivates them; REMOVE of an inactive user is a no-op. An earlier rank is a higher level. canRemove(actor, target) is true iff both are active, actor != target and actor ranks strictly higher than target (state after the whole log).",
+   "inference_uncertainty": "high: the preview stops at the class header; method names, log record shape and no-op rules are inferred",
+   "inferred_interface": {
+    "classname": "ModSystem",
+    "constructor": {
+     "params": [
+      {
+       "name": "logs",
+       "type": "list<[integer,string,string]>"
+      }
+     ]
+    },
+    "methods": [
+     {
+      "name": "canRemove",
+      "params": [
+       {
+        "name": "actorId",
+        "type": "string"
+       },
+       {
+        "name": "targetId",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "boolean"
+      }
+     }
+    ]
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON trace result; no bool/int coercion",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "variants inferred as cumulative levels 1-3",
+   "oracle_constant": "MOD1",
+   "transcript_interface": {
+    "name": "solve",
+    "argument_order": [
+     "operation_names",
+     "argument_lists"
+    ],
+    "constructor_output": null,
+    "void_method_output": null,
+    "result_order": "constructor followed by every method call",
+    "scope": "Explicit class trace adapter, separate from direct native observer checks."
+   }
+  },
+  {
+   "uid": "hack2hire:694b056e6e481a4b09cbc7e4",
+   "variant_id": "694b056e6e481a4b09cbc7e4",
+   "variant_ordinal": 2,
+   "title": "Design a Moderator System",
+   "source": {
+    "post_id": "694af9626e481a4b09cbc77c",
+    "group_title": "Design a Moderator System",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/694af9626e481a4b09cbc77c",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/694af9626e481a4b09cbc77c/practice?questionId=694b056e6e481a4b09cbc7e4",
+    "preview_response_sha256": "a906b3462d1e241b77ad17b54263eea3abfea7a43c7941fe1befc2042136349a",
+    "preview_content_sha256": "776ae7338a478d619f6d77aef702551cc5453e42d255eda5987b953a246d03ed",
+    "preview_characters": 607,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/694af9626e481a4b09cbc77c.json",
+    "algorithm_tags": [
+     "HASH_TABLE",
+     "DESIGN"
+    ],
+    "companies": [
+     "REDDIT"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 3
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview",
+    "algorithmTags",
+    "codingQuestions (variant count/order)"
+   ],
+   "inferred_spec": "Inferred log record shape [time, userId, action] with action ADD or REMOVE; records are in non-decreasing time order and later records win ties. Replaying the log: ADD of an inactive user makes them an active moderator whose rank is the position of that ADD record; ADD of an already-active user is a no-op (keeps the earlier rank); REMOVE of an active user deactivates them; REMOVE of an inactive user is a no-op. An earlier rank is a higher level. canRemove(actor, target) is true iff both are active, actor != target and actor ranks strictly higher than target (state after the whole log). Level 2 adds getModerators(): active moderators from highest to lowest level.",
+   "inference_uncertainty": "high: as level 1; the list order (highest level first) follows the preview hierarchy wording",
+   "inferred_interface": {
+    "classname": "ModSystem",
+    "constructor": {
+     "params": [
+      {
+       "name": "logs",
+       "type": "list<[integer,string,string]>"
+      }
+     ]
+    },
+    "methods": [
+     {
+      "name": "canRemove",
+      "params": [
+       {
+        "name": "actorId",
+        "type": "string"
+       },
+       {
+        "name": "targetId",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "boolean"
+      }
+     },
+     {
+      "name": "getModerators",
+      "params": [],
+      "return": {
+       "type": "string[]"
+      }
+     }
+    ]
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON trace result; no bool/int coercion",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "variants inferred as cumulative levels 1-3",
+   "oracle_constant": "MOD2",
+   "transcript_interface": {
+    "name": "solve",
+    "argument_order": [
+     "operation_names",
+     "argument_lists"
+    ],
+    "constructor_output": null,
+    "void_method_output": null,
+    "result_order": "constructor followed by every method call",
+    "scope": "Explicit class trace adapter, separate from direct native observer checks."
+   }
+  },
+  {
+   "uid": "hack2hire:694b08dc6e481a4b09cbc807",
+   "variant_id": "694b08dc6e481a4b09cbc807",
+   "variant_ordinal": 3,
+   "title": "Design a Moderator System",
+   "source": {
+    "post_id": "694af9626e481a4b09cbc77c",
+    "group_title": "Design a Moderator System",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/694af9626e481a4b09cbc77c",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/694af9626e481a4b09cbc77c/practice?questionId=694b08dc6e481a4b09cbc807",
+    "preview_response_sha256": "a906b3462d1e241b77ad17b54263eea3abfea7a43c7941fe1befc2042136349a",
+    "preview_content_sha256": "776ae7338a478d619f6d77aef702551cc5453e42d255eda5987b953a246d03ed",
+    "preview_characters": 607,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/694af9626e481a4b09cbc77c.json",
+    "algorithm_tags": [
+     "HASH_TABLE",
+     "DESIGN"
+    ],
+    "companies": [
+     "REDDIT"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 3
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview",
+    "algorithmTags",
+    "codingQuestions (variant count/order)"
+   ],
+   "inferred_spec": "Inferred log record shape [time, userId, action] with action ADD or REMOVE; records are in non-decreasing time order and later records win ties. Replaying the log: ADD of an inactive user makes them an active moderator whose rank is the position of that ADD record; ADD of an already-active user is a no-op (keeps the earlier rank); REMOVE of an active user deactivates them; REMOVE of an inactive user is a no-op. An earlier rank is a higher level. canRemove(actor, target) is true iff both are active, actor != target and actor ranks strictly higher than target (state after the whole log). Level 2 adds getModerators(). Level 3 adds point-in-time queries canRemoveAt(time, actor, target) and getModeratorsAt(time), evaluated on the state after replaying only records with record time <= time.",
+   "inference_uncertainty": "very high: historical queries are an inference from the time-ordered log wording",
+   "inferred_interface": {
+    "classname": "ModSystem",
+    "constructor": {
+     "params": [
+      {
+       "name": "logs",
+       "type": "list<[integer,string,string]>"
+      }
+     ]
+    },
+    "methods": [
+     {
+      "name": "canRemove",
+      "params": [
+       {
+        "name": "actorId",
+        "type": "string"
+       },
+       {
+        "name": "targetId",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "boolean"
+      }
+     },
+     {
+      "name": "getModerators",
+      "params": [],
+      "return": {
+       "type": "string[]"
+      }
+     },
+     {
+      "name": "canRemoveAt",
+      "params": [
+       {
+        "name": "time",
+        "type": "integer"
+       },
+       {
+        "name": "actorId",
+        "type": "string"
+       },
+       {
+        "name": "targetId",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "boolean"
+      }
+     },
+     {
+      "name": "getModeratorsAt",
+      "params": [
+       {
+        "name": "time",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "string[]"
+      }
+     }
+    ]
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON trace result; no bool/int coercion",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "variants inferred as cumulative levels 1-3",
+   "oracle_constant": "MOD3",
+   "transcript_interface": {
+    "name": "solve",
+    "argument_order": [
+     "operation_names",
+     "argument_lists"
+    ],
+    "constructor_output": null,
+    "void_method_output": null,
+    "result_order": "constructor followed by every method call",
+    "scope": "Explicit class trace adapter, separate from direct native observer checks."
+   }
+  },
+  {
+   "uid": "hack2hire:6ac95215339e3a32c154ddc3",
+   "variant_id": "6ac95215339e3a32c154ddc3",
+   "variant_ordinal": 1,
+   "title": "Design a Rectangle Board",
+   "source": {
+    "post_id": "6ac93bca339e3a32c154dd1b",
+    "group_title": "Design a Rectangle Board",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6ac93bca339e3a32c154dd1b",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6ac93bca339e3a32c154dd1b/practice?questionId=6ac95215339e3a32c154ddc3",
+    "preview_response_sha256": "c107b35373d2d761a709166823a9d9720987721dc94cfa328e37e152ab2cc3ef",
+    "preview_content_sha256": "1e0d28c148f1a3f1d8a5988a652660b29bba133370224e10aea8896af0e175ab",
+    "preview_characters": 607,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/6ac93bca339e3a32c154dd1b.json",
+    "algorithm_tags": [
+     "DESIGN",
+     "STACK"
+    ],
+    "companies": [
+     "OPENAI"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 4
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview",
+    "algorithmTags",
+    "codingQuestions (variant count/order)"
+   ],
+   "inferred_spec": "Board of width columns and height rows; rectangles are inclusive cell boxes given by top-left (x1,y1) and bottom-right (x2,y2) with x1<=x2, y1<=y2 inside the board. addRectangle returns the next positive id starting at 1 (ids never reused) and places it on top. getTopRectangle(x,y) returns the id of the topmost active rectangle covering the cell, or -1 if none.",
+   "inference_uncertainty": "medium: add/top semantics are in the preview; method names and the -1 sentinel are inferred",
+   "inferred_interface": {
+    "classname": "RectangleBoard",
+    "constructor": {
+     "params": [
+      {
+       "name": "width",
+       "type": "integer"
+      },
+      {
+       "name": "height",
+       "type": "integer"
+      }
+     ]
+    },
+    "methods": [
+     {
+      "name": "addRectangle",
+      "params": [
+       {
+        "name": "x1",
+        "type": "integer"
+       },
+       {
+        "name": "y1",
+        "type": "integer"
+       },
+       {
+        "name": "x2",
+        "type": "integer"
+       },
+       {
+        "name": "y2",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "integer"
+      }
+     },
+     {
+      "name": "getTopRectangle",
+      "params": [
+       {
+        "name": "x",
+        "type": "integer"
+       },
+       {
+        "name": "y",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "integer"
+      }
+     }
+    ]
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON trace result; no bool/int coercion",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "variants inferred as cumulative levels 1-4",
+   "oracle_constant": "RECT1",
+   "transcript_interface": {
+    "name": "solve",
+    "argument_order": [
+     "operation_names",
+     "argument_lists"
+    ],
+    "constructor_output": null,
+    "void_method_output": null,
+    "result_order": "constructor followed by every method call",
+    "scope": "Explicit class trace adapter, separate from direct native observer checks."
+   }
+  },
+  {
+   "uid": "hack2hire:6ac95252339e3a32c154ddc8",
+   "variant_id": "6ac95252339e3a32c154ddc8",
+   "variant_ordinal": 2,
+   "title": "Design a Rectangle Board",
+   "source": {
+    "post_id": "6ac93bca339e3a32c154dd1b",
+    "group_title": "Design a Rectangle Board",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6ac93bca339e3a32c154dd1b",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6ac93bca339e3a32c154dd1b/practice?questionId=6ac95252339e3a32c154ddc8",
+    "preview_response_sha256": "c107b35373d2d761a709166823a9d9720987721dc94cfa328e37e152ab2cc3ef",
+    "preview_content_sha256": "1e0d28c148f1a3f1d8a5988a652660b29bba133370224e10aea8896af0e175ab",
+    "preview_characters": 607,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/6ac93bca339e3a32c154dd1b.json",
+    "algorithm_tags": [
+     "DESIGN",
+     "STACK"
+    ],
+    "companies": [
+     "OPENAI"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 4
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview",
+    "algorithmTags",
+    "codingQuestions (variant count/order)"
+   ],
+   "inferred_spec": "Board of width columns and height rows; rectangles are inclusive cell boxes given by top-left (x1,y1) and bottom-right (x2,y2) with x1<=x2, y1<=y2 inside the board. addRectangle returns the next positive id starting at 1 (ids never reused) and places it on top. getTopRectangle(x,y) returns the id of the topmost active rectangle covering the cell, or -1 if none. Level 2 adds removeRectangle(id): true and removes it if id is active, else false.",
+   "inference_uncertainty": "medium-high: removal is a natural follow-up; the boolean result is inferred",
+   "inferred_interface": {
+    "classname": "RectangleBoard",
+    "constructor": {
+     "params": [
+      {
+       "name": "width",
+       "type": "integer"
+      },
+      {
+       "name": "height",
+       "type": "integer"
+      }
+     ]
+    },
+    "methods": [
+     {
+      "name": "addRectangle",
+      "params": [
+       {
+        "name": "x1",
+        "type": "integer"
+       },
+       {
+        "name": "y1",
+        "type": "integer"
+       },
+       {
+        "name": "x2",
+        "type": "integer"
+       },
+       {
+        "name": "y2",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "integer"
+      }
+     },
+     {
+      "name": "getTopRectangle",
+      "params": [
+       {
+        "name": "x",
+        "type": "integer"
+       },
+       {
+        "name": "y",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "integer"
+      }
+     },
+     {
+      "name": "removeRectangle",
+      "params": [
+       {
+        "name": "id",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "boolean"
+      }
+     }
+    ]
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON trace result; no bool/int coercion",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "variants inferred as cumulative levels 1-4",
+   "oracle_constant": "RECT2",
+   "transcript_interface": {
+    "name": "solve",
+    "argument_order": [
+     "operation_names",
+     "argument_lists"
+    ],
+    "constructor_output": null,
+    "void_method_output": null,
+    "result_order": "constructor followed by every method call",
+    "scope": "Explicit class trace adapter, separate from direct native observer checks."
+   }
+  },
+  {
+   "uid": "hack2hire:6ac95279339e3a32c154ddca",
+   "variant_id": "6ac95279339e3a32c154ddca",
+   "variant_ordinal": 3,
+   "title": "Design a Rectangle Board",
+   "source": {
+    "post_id": "6ac93bca339e3a32c154dd1b",
+    "group_title": "Design a Rectangle Board",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6ac93bca339e3a32c154dd1b",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6ac93bca339e3a32c154dd1b/practice?questionId=6ac95279339e3a32c154ddca",
+    "preview_response_sha256": "c107b35373d2d761a709166823a9d9720987721dc94cfa328e37e152ab2cc3ef",
+    "preview_content_sha256": "1e0d28c148f1a3f1d8a5988a652660b29bba133370224e10aea8896af0e175ab",
+    "preview_characters": 607,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/6ac93bca339e3a32c154dd1b.json",
+    "algorithm_tags": [
+     "DESIGN",
+     "STACK"
+    ],
+    "companies": [
+     "OPENAI"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 4
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview",
+    "algorithmTags",
+    "codingQuestions (variant count/order)"
+   ],
+   "inferred_spec": "Board of width columns and height rows; rectangles are inclusive cell boxes given by top-left (x1,y1) and bottom-right (x2,y2) with x1<=x2, y1<=y2 inside the board. addRectangle returns the next positive id starting at 1 (ids never reused) and places it on top. getTopRectangle(x,y) returns the id of the topmost active rectangle covering the cell, or -1 if none. Level 2 adds removeRectangle(id). Level 3 adds bringToFront(id): if active, moves it above all others and returns true; else false.",
+   "inference_uncertainty": "high: z-order change is an inference from the stacking rule",
+   "inferred_interface": {
+    "classname": "RectangleBoard",
+    "constructor": {
+     "params": [
+      {
+       "name": "width",
+       "type": "integer"
+      },
+      {
+       "name": "height",
+       "type": "integer"
+      }
+     ]
+    },
+    "methods": [
+     {
+      "name": "addRectangle",
+      "params": [
+       {
+        "name": "x1",
+        "type": "integer"
+       },
+       {
+        "name": "y1",
+        "type": "integer"
+       },
+       {
+        "name": "x2",
+        "type": "integer"
+       },
+       {
+        "name": "y2",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "integer"
+      }
+     },
+     {
+      "name": "getTopRectangle",
+      "params": [
+       {
+        "name": "x",
+        "type": "integer"
+       },
+       {
+        "name": "y",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "integer"
+      }
+     },
+     {
+      "name": "removeRectangle",
+      "params": [
+       {
+        "name": "id",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "boolean"
+      }
+     },
+     {
+      "name": "bringToFront",
+      "params": [
+       {
+        "name": "id",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "boolean"
+      }
+     }
+    ]
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON trace result; no bool/int coercion",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "variants inferred as cumulative levels 1-4",
+   "oracle_constant": "RECT3",
+   "transcript_interface": {
+    "name": "solve",
+    "argument_order": [
+     "operation_names",
+     "argument_lists"
+    ],
+    "constructor_output": null,
+    "void_method_output": null,
+    "result_order": "constructor followed by every method call",
+    "scope": "Explicit class trace adapter, separate from direct native observer checks."
+   }
+  },
+  {
+   "uid": "hack2hire:6ac952f0339e3a32c154ddd2",
+   "variant_id": "6ac952f0339e3a32c154ddd2",
+   "variant_ordinal": 4,
+   "title": "Design a Rectangle Board",
+   "source": {
+    "post_id": "6ac93bca339e3a32c154dd1b",
+    "group_title": "Design a Rectangle Board",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6ac93bca339e3a32c154dd1b",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6ac93bca339e3a32c154dd1b/practice?questionId=6ac952f0339e3a32c154ddd2",
+    "preview_response_sha256": "c107b35373d2d761a709166823a9d9720987721dc94cfa328e37e152ab2cc3ef",
+    "preview_content_sha256": "1e0d28c148f1a3f1d8a5988a652660b29bba133370224e10aea8896af0e175ab",
+    "preview_characters": 607,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/6ac93bca339e3a32c154dd1b.json",
+    "algorithm_tags": [
+     "DESIGN",
+     "STACK"
+    ],
+    "companies": [
+     "OPENAI"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 4
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview",
+    "algorithmTags",
+    "codingQuestions (variant count/order)"
+   ],
+   "inferred_spec": "Board of width columns and height rows; rectangles are inclusive cell boxes given by top-left (x1,y1) and bottom-right (x2,y2) with x1<=x2, y1<=y2 inside the board. addRectangle returns the next positive id starting at 1 (ids never reused) and places it on top. getTopRectangle(x,y) returns the id of the topmost active rectangle covering the cell, or -1 if none. Levels 2-3 add removeRectangle and bringToFront. Level 4 (STACK tag) adds undo(): reverts the most recent not-yet-undone successful add/remove/bringToFront exactly (undoing an add deactivates that id without freeing it; undoing a remove restores its previous stacking position; undoing bringToFront restores the previous order) and returns true, or false if nothing remains. Failed calls are not recorded.",
+   "inference_uncertainty": "very high: undo is inferred from the STACK tag",
+   "inferred_interface": {
+    "classname": "RectangleBoard",
+    "constructor": {
+     "params": [
+      {
+       "name": "width",
+       "type": "integer"
+      },
+      {
+       "name": "height",
+       "type": "integer"
+      }
+     ]
+    },
+    "methods": [
+     {
+      "name": "addRectangle",
+      "params": [
+       {
+        "name": "x1",
+        "type": "integer"
+       },
+       {
+        "name": "y1",
+        "type": "integer"
+       },
+       {
+        "name": "x2",
+        "type": "integer"
+       },
+       {
+        "name": "y2",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "integer"
+      }
+     },
+     {
+      "name": "getTopRectangle",
+      "params": [
+       {
+        "name": "x",
+        "type": "integer"
+       },
+       {
+        "name": "y",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "integer"
+      }
+     },
+     {
+      "name": "removeRectangle",
+      "params": [
+       {
+        "name": "id",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "boolean"
+      }
+     },
+     {
+      "name": "bringToFront",
+      "params": [
+       {
+        "name": "id",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "boolean"
+      }
+     },
+     {
+      "name": "undo",
+      "params": [],
+      "return": {
+       "type": "boolean"
+      }
+     }
+    ]
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON trace result; no bool/int coercion",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "variants inferred as cumulative levels 1-4",
+   "oracle_constant": "RECT4",
+   "transcript_interface": {
+    "name": "solve",
+    "argument_order": [
+     "operation_names",
+     "argument_lists"
+    ],
+    "constructor_output": null,
+    "void_method_output": null,
+    "result_order": "constructor followed by every method call",
+    "scope": "Explicit class trace adapter, separate from direct native observer checks."
+   }
+  },
+  {
+   "uid": "hack2hire:69f78c6830f41dfd539fc6dc",
+   "variant_id": "69f78c6830f41dfd539fc6dc",
+   "variant_ordinal": 1,
+   "title": "Design a Spreadsheet with Formula Evaluation",
+   "source": {
+    "post_id": "69f789f030f41dfd539fc6bb",
+    "group_title": "Design a Spreadsheet with Formula Evaluation",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/69f789f030f41dfd539fc6bb",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/69f789f030f41dfd539fc6bb/practice?questionId=69f78c6830f41dfd539fc6dc",
+    "preview_response_sha256": "56874d0a2db9a508036ce249652a683fd52b56ad0cc868bcc7b580cffcc523ab",
+    "preview_content_sha256": "df6cad57266a4bda68890007705c22d5fb627db1f4a92acf703e871e5ac9bee2",
+    "preview_characters": 728,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/69f789f030f41dfd539fc6bb.json",
+    "algorithm_tags": [
+     "GRAPH",
+     "DEPTH_FIRST_SEARCH"
+    ],
+    "companies": [
+     "OPENAI",
+     "RAMP"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 2
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview",
+    "algorithmTags",
+    "codingQuestions (variant count/order)",
+    "LeetCode 3484 relationship named in preview"
+   ],
+   "inferred_spec": "Cells A1..Z100, all initially 0. Inferred exact-numeric domain: a cell holds a non-negative decimal integer literal (<=10^6) or a formula \"=\" t1 \"+\" t2 ... (1..20 terms) where each term is a cell reference or such a literal. getCell evaluates live (references reflect later edits) and returns an integer; resetCell restores 0. Inference narrows the source's double values to integers so both languages are exact; results above 2^53-1 are outside the inferred domain. Level 1 inputs never create a circular reference.",
+   "inference_uncertainty": "high: the preview names the grid and setCell; the formula grammar, integer domain and resetCell are inferred (the source uses doubles)",
+   "inferred_interface": {
+    "classname": "Spreadsheet",
+    "constructor": {
+     "params": []
+    },
+    "methods": [
+     {
+      "name": "setCell",
+      "params": [
+       {
+        "name": "cell",
+        "type": "string"
+       },
+       {
+        "name": "value",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "void"
+      }
+     },
+     {
+      "name": "getCell",
+      "params": [
+       {
+        "name": "cell",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "integer"
+      }
+     },
+     {
+      "name": "resetCell",
+      "params": [
+       {
+        "name": "cell",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "void"
+      }
+     }
+    ]
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON trace result; no bool/int coercion",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "variants inferred as levels 1-2 (cycles appear in level 2)",
+   "oracle_constant": "SHEET1",
+   "transcript_interface": {
+    "name": "solve",
+    "argument_order": [
+     "operation_names",
+     "argument_lists"
+    ],
+    "constructor_output": null,
+    "void_method_output": null,
+    "result_order": "constructor followed by every method call",
+    "scope": "Explicit class trace adapter, separate from direct native observer checks."
+   }
+  },
+  {
+   "uid": "hack2hire:69f78ced30f41dfd539fc6e1",
+   "variant_id": "69f78ced30f41dfd539fc6e1",
+   "variant_ordinal": 2,
+   "title": "Design a Spreadsheet with Formula Evaluation",
+   "source": {
+    "post_id": "69f789f030f41dfd539fc6bb",
+    "group_title": "Design a Spreadsheet with Formula Evaluation",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/69f789f030f41dfd539fc6bb",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/69f789f030f41dfd539fc6bb/practice?questionId=69f78ced30f41dfd539fc6e1",
+    "preview_response_sha256": "56874d0a2db9a508036ce249652a683fd52b56ad0cc868bcc7b580cffcc523ab",
+    "preview_content_sha256": "df6cad57266a4bda68890007705c22d5fb627db1f4a92acf703e871e5ac9bee2",
+    "preview_characters": 728,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/69f789f030f41dfd539fc6bb.json",
+    "algorithm_tags": [
+     "GRAPH",
+     "DEPTH_FIRST_SEARCH"
+    ],
+    "companies": [
+     "OPENAI",
+     "RAMP"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 2
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview",
+    "algorithmTags",
+    "codingQuestions (variant count/order)",
+    "LeetCode 3484 relationship named in preview"
+   ],
+   "inferred_spec": "Cells A1..Z100, all initially 0. Inferred exact-numeric domain: a cell holds a non-negative decimal integer literal (<=10^6) or a formula \"=\" t1 \"+\" t2 ... (1..20 terms) where each term is a cell reference or such a literal. getCell evaluates live (references reflect later edits) and returns an integer; resetCell restores 0. Inference narrows the source's double values to integers so both languages are exact; results above 2^53-1 are outside the inferred domain. Level 2 (GRAPH/DFS tags): setCell returns false and leaves the cell unchanged if the new content would create a circular reference (including self-reference); otherwise stores it and returns true.",
+   "inference_uncertainty": "high: cycle handling is inferred from the GRAPH and DEPTH_FIRST_SEARCH tags",
+   "inferred_interface": {
+    "classname": "Spreadsheet",
+    "constructor": {
+     "params": []
+    },
+    "methods": [
+     {
+      "name": "setCell",
+      "params": [
+       {
+        "name": "cell",
+        "type": "string"
+       },
+       {
+        "name": "value",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "boolean"
+      }
+     },
+     {
+      "name": "getCell",
+      "params": [
+       {
+        "name": "cell",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "integer"
+      }
+     },
+     {
+      "name": "resetCell",
+      "params": [
+       {
+        "name": "cell",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "void"
+      }
+     }
+    ]
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON trace result; no bool/int coercion",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "variants inferred as levels 1-2 (cycles appear in level 2)",
+   "oracle_constant": "SHEET2",
+   "transcript_interface": {
+    "name": "solve",
+    "argument_order": [
+     "operation_names",
+     "argument_lists"
+    ],
+    "constructor_output": null,
+    "void_method_output": null,
+    "result_order": "constructor followed by every method call",
+    "scope": "Explicit class trace adapter, separate from direct native observer checks."
+   }
+  },
+  {
+   "uid": "hack2hire:6a330d046849fecc81440a2f",
+   "variant_id": "6a330d046849fecc81440a2f",
+   "variant_ordinal": 1,
+   "title": "Diagonal Server Redirects",
+   "source": {
+    "post_id": "6a330ced6849fecc81440a2e",
+    "group_title": "Diagonal Server Redirects",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6a330ced6849fecc81440a2e",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6a330ced6849fecc81440a2e/practice?questionId=6a330d046849fecc81440a2f",
+    "preview_response_sha256": "f52b9b7632f239c9a7acf67ded81235bd563938fc5deabb09e5522fd61f62b8b",
+    "preview_content_sha256": "0f441548f4e0f0370e4b70e7d8706deefef04d1c36d24b6211c440f1531c6888",
+    "preview_characters": 755,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/6a330ced6849fecc81440a2e.json",
+    "algorithm_tags": [
+     "HASH_TABLE"
+    ],
+    "companies": [
+     "AMAZON"
+    ],
+    "source_difficulty": 3,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "contentPreview: direction definitions",
+    "algorithmTags: HASH_TABLE"
+   ],
+   "inferred_spec": "Start at locations[0]. For each direction in order, move to the server on that diagonal ray with the smallest Z>=1; if no server lies on the ray the request stays put (inference). Return the final [x, y].",
+   "inference_uncertainty": "medium: directions are in the preview; nearest-hop choice and staying put when blocked are inferred",
+   "inferred_interface": {
+    "name": "findFinalServer",
+    "params": [
+     {
+      "name": "locations",
+      "type": "integer[][]"
+     },
+     {
+      "name": "redirectRecords",
+      "type": "integer[]"
+     }
+    ],
+    "return": {
+     "type": "integer[]"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "DIAG"
+  },
+  {
+   "uid": "hack2hire:691f8b9d9abeeebe6fae3eb5",
+   "variant_id": "691f8b9d9abeeebe6fae3eb5",
+   "variant_ordinal": 1,
+   "title": "Expense System",
+   "source": {
+    "post_id": "691f8b969abeeebe6fae3eb4",
+    "group_title": "Expense System",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/691f8b969abeeebe6fae3eb4",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/691f8b969abeeebe6fae3eb4/practice?questionId=691f8b9d9abeeebe6fae3eb5",
+    "preview_response_sha256": "8493bbe262af2dccc0bbe67093a47ddb3968afe314ac0933e0b2d3ce19e51ec2",
+    "preview_content_sha256": "cee55c23ca95f7842194927c5b9ed9038d0d392870a504869b9173ff7236022c",
+    "preview_characters": 756,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/691f8b969abeeebe6fae3eb4.json",
+    "algorithm_tags": [
+     "SIMULATION",
+     "DESIGN"
+    ],
+    "companies": [
+     "RIPPLING"
+    ],
+    "source_difficulty": 3,
+    "variant_count": 2
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "contentPreview: rule field layout",
+    "algorithmTags: SIMULATION, DESIGN"
+   ],
+   "inferred_spec": "Inferred expense row: [expense_id, trip_id, amount, expense_type, vendor_type, vendor_name], amount a non-negative decimal with at most two fractional digits (compared exactly). Rule [ruleType, id, field, operator, value, conditionalField, conditionalValue] states a requirement \"field operator value\" (operators < <= > >= == != for amount, == != for text fields) applying only to expenses whose conditionalField equals conditionalValue (empty conditionalField = all). Every applicable expense failing the requirement yields [ruleId, expenseId]; output in rule order, then expense order.",
+   "inference_uncertainty": "high: the rule layout is in the preview; the expense row layout, operator set and output order are inferred",
+   "inferred_interface": {
+    "name": "findViolations",
+    "params": [
+     {
+      "name": "rules",
+      "type": "string[][]"
+     },
+     {
+      "name": "expenses",
+      "type": "string[][]"
+     }
+    ],
+    "return": {
+     "type": "string[][]"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "variants inferred as levels 1-2",
+   "oracle_constant": "EXP1"
+  },
+  {
+   "uid": "hack2hire:6920bd4a94b324049c3251a5",
+   "variant_id": "6920bd4a94b324049c3251a5",
+   "variant_ordinal": 2,
+   "title": "Expense System",
+   "source": {
+    "post_id": "691f8b969abeeebe6fae3eb4",
+    "group_title": "Expense System",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/691f8b969abeeebe6fae3eb4",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/691f8b969abeeebe6fae3eb4/practice?questionId=6920bd4a94b324049c3251a5",
+    "preview_response_sha256": "8493bbe262af2dccc0bbe67093a47ddb3968afe314ac0933e0b2d3ce19e51ec2",
+    "preview_content_sha256": "cee55c23ca95f7842194927c5b9ed9038d0d392870a504869b9173ff7236022c",
+    "preview_characters": 756,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/691f8b969abeeebe6fae3eb4.json",
+    "algorithm_tags": [
+     "SIMULATION",
+     "DESIGN"
+    ],
+    "companies": [
+     "RIPPLING"
+    ],
+    "source_difficulty": 3,
+    "variant_count": 2
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "contentPreview: ruleType field",
+    "title",
+    "variant order"
+   ],
+   "inferred_spec": "As level 1, plus ruleType \"trip\": field must be amount; for each trip (first-appearance order among the rule's applicable expenses) the sum of applicable amounts must satisfy the requirement, else [ruleId, tripId]. Output in rule order.",
+   "inference_uncertainty": "very high: the trip aggregation is inferred from the ruleType field and the trip concept",
+   "inferred_interface": {
+    "name": "findViolations",
+    "params": [
+     {
+      "name": "rules",
+      "type": "string[][]"
+     },
+     {
+      "name": "expenses",
+      "type": "string[][]"
+     }
+    ],
+    "return": {
+     "type": "string[][]"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "variants inferred as levels 1-2",
+   "oracle_constant": "EXP2"
+  },
+  {
+   "uid": "hack2hire:6ab32819e74ebb7457a3f0f5",
+   "variant_id": "6ab32819e74ebb7457a3f0f5",
+   "variant_ordinal": 1,
+   "title": "Fault-Tolerant Work Queue",
+   "source": {
+    "post_id": "6ab327fde74ebb7457a3f0f4",
+    "group_title": "Fault-Tolerant Work Queue",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6ab327fde74ebb7457a3f0f4",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6ab327fde74ebb7457a3f0f4/practice?questionId=6ab32819e74ebb7457a3f0f5",
+    "preview_response_sha256": "5b746cb7c10c70dcf11461c38c9a3252c0c5fa8348fc63ece6e7348f1400b5ca",
+    "preview_content_sha256": "d803bba82442f43375d0ac37b717f3b26337dae7f4d8967848c9e9f5c023b7e3",
+    "preview_characters": 1098,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/6ab327fde74ebb7457a3f0f4.json",
+    "algorithm_tags": [
+     "DESIGN",
+     "GRAPH"
+    ],
+    "companies": [
+     "OPENAI"
+    ],
+    "source_difficulty": 3,
+    "variant_count": 2
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview",
+    "algorithmTags",
+    "codingQuestions (variant count/order)"
+   ],
+   "inferred_spec": "Logical-time work queue. All method times are non-decreasing across calls. Before handling any call at time t, every reservation with reservedAt+leaseDuration <= t expires, processed in (deadline, reservation order). A task released by expiry or by fail() returns to the tail of the ready queue if its reservation count is below maxAttempts, otherwise it is moved to the dead-letter queue (DLQ). reserve(t) pops the ready head, counts an attempt and returns its id, or -1. complete(t,id) / fail(t,id) return true iff id currently holds an unexpired reservation; complete finishes it permanently. getDeadLetters(t) returns DLQ ids in the order they entered it. Concurrency is modelled as this deterministic single-threaded call sequence.",
+   "inference_uncertainty": "medium-high: the lifecycle is in the preview; method names, logical-time parameters and expiry order are inferred",
+   "inferred_interface": {
+    "classname": "WorkQueue",
+    "constructor": {
+     "params": [
+      {
+       "name": "taskIds",
+       "type": "integer[]"
+      },
+      {
+       "name": "leaseDuration",
+       "type": "integer"
+      },
+      {
+       "name": "maxAttempts",
+       "type": "integer"
+      }
+     ]
+    },
+    "methods": [
+     {
+      "name": "reserve",
+      "params": [
+       {
+        "name": "time",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "integer"
+      }
+     },
+     {
+      "name": "complete",
+      "params": [
+       {
+        "name": "time",
+        "type": "integer"
+       },
+       {
+        "name": "taskId",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "boolean"
+      }
+     },
+     {
+      "name": "fail",
+      "params": [
+       {
+        "name": "time",
+        "type": "integer"
+       },
+       {
+        "name": "taskId",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "boolean"
+      }
+     },
+     {
+      "name": "getDeadLetters",
+      "params": [
+       {
+        "name": "time",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "integer[]"
+      }
+     }
+    ]
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON trace result; no bool/int coercion",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "variants inferred as levels 1-2",
+   "oracle_constant": "WQ1",
+   "transcript_interface": {
+    "name": "solve",
+    "argument_order": [
+     "operation_names",
+     "argument_lists"
+    ],
+    "constructor_output": null,
+    "void_method_output": null,
+    "result_order": "constructor followed by every method call",
+    "scope": "Explicit class trace adapter, separate from direct native observer checks."
+   }
+  },
+  {
+   "uid": "hack2hire:6ab328bbe74ebb7457a3f0fc",
+   "variant_id": "6ab328bbe74ebb7457a3f0fc",
+   "variant_ordinal": 2,
+   "title": "Fault-Tolerant Work Queue",
+   "source": {
+    "post_id": "6ab327fde74ebb7457a3f0f4",
+    "group_title": "Fault-Tolerant Work Queue",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6ab327fde74ebb7457a3f0f4",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6ab327fde74ebb7457a3f0f4/practice?questionId=6ab328bbe74ebb7457a3f0fc",
+    "preview_response_sha256": "5b746cb7c10c70dcf11461c38c9a3252c0c5fa8348fc63ece6e7348f1400b5ca",
+    "preview_content_sha256": "d803bba82442f43375d0ac37b717f3b26337dae7f4d8967848c9e9f5c023b7e3",
+    "preview_characters": 1098,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/6ab327fde74ebb7457a3f0f4.json",
+    "algorithm_tags": [
+     "DESIGN",
+     "GRAPH"
+    ],
+    "companies": [
+     "OPENAI"
+    ],
+    "source_difficulty": 3,
+    "variant_count": 2
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview",
+    "algorithmTags",
+    "codingQuestions (variant count/order)"
+   ],
+   "inferred_spec": "Logical-time work queue. All method times are non-decreasing across calls. Before handling any call at time t, every reservation with reservedAt+leaseDuration <= t expires, processed in (deadline, reservation order). A task released by expiry or by fail() returns to the tail of the ready queue if its reservation count is below maxAttempts, otherwise it is moved to the dead-letter queue (DLQ). reserve(t) pops the ready head, counts an attempt and returns its id, or -1. complete(t,id) / fail(t,id) return true iff id currently holds an unexpired reservation; complete finishes it permanently. getDeadLetters(t) returns DLQ ids in the order they entered it. Concurrency is modelled as this deterministic single-threaded call sequence. Level 2 (GRAPH tag): dependencies [before, after] form a DAG; a task is ready initially only without prerequisites, and joins the ready tail when its last prerequisite completes (several unlocked at once join in taskIds order). When a task is dead-lettered, every not-yet-dead transitive dependent is dead-lettered too, breadth-first, each node's dependents in taskIds order.",
+   "inference_uncertainty": "very high: dependencies are inferred from the GRAPH tag",
+   "inferred_interface": {
+    "classname": "WorkQueue",
+    "constructor": {
+     "params": [
+      {
+       "name": "taskIds",
+       "type": "integer[]"
+      },
+      {
+       "name": "dependencies",
+       "type": "integer[][]"
+      },
+      {
+       "name": "leaseDuration",
+       "type": "integer"
+      },
+      {
+       "name": "maxAttempts",
+       "type": "integer"
+      }
+     ]
+    },
+    "methods": [
+     {
+      "name": "reserve",
+      "params": [
+       {
+        "name": "time",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "integer"
+      }
+     },
+     {
+      "name": "complete",
+      "params": [
+       {
+        "name": "time",
+        "type": "integer"
+       },
+       {
+        "name": "taskId",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "boolean"
+      }
+     },
+     {
+      "name": "fail",
+      "params": [
+       {
+        "name": "time",
+        "type": "integer"
+       },
+       {
+        "name": "taskId",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "boolean"
+      }
+     },
+     {
+      "name": "getDeadLetters",
+      "params": [
+       {
+        "name": "time",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "integer[]"
+      }
+     }
+    ]
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON trace result; no bool/int coercion",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "variants inferred as levels 1-2",
+   "oracle_constant": "WQ2",
+   "transcript_interface": {
+    "name": "solve",
+    "argument_order": [
+     "operation_names",
+     "argument_lists"
+    ],
+    "constructor_output": null,
+    "void_method_output": null,
+    "result_order": "constructor followed by every method call",
+    "scope": "Explicit class trace adapter, separate from direct native observer checks."
+   }
+  },
+  {
+   "uid": "hack2hire:69d184ef17b72775cc49c04e",
+   "variant_id": "69d184ef17b72775cc49c04e",
+   "variant_ordinal": 1,
+   "title": "File System Permissions",
+   "source": {
+    "post_id": "69d184e717b72775cc49c04d",
+    "group_title": "File System Permissions",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/69d184e717b72775cc49c04d",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/69d184e717b72775cc49c04d/practice?questionId=69d184ef17b72775cc49c04e",
+    "preview_response_sha256": "26d79267b94a30f6d08f19511db113207eed1d7e3f1d2c2d1f201c0868ed878d",
+    "preview_content_sha256": "f8edabcbf24e15037de1127466e0f6a02c4fec95a7cf269f0998327a229957ca",
+    "preview_characters": 662,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/69d184e717b72775cc49c04d.json",
+    "algorithm_tags": [
+     "DEPTH_FIRST_SEARCH"
+    ],
+    "companies": [
+     "FIGMA"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "contentPreview: entity model and inheritance rule",
+    "algorithmTags: DEPTH_FIRST_SEARCH"
+   ],
+   "inferred_spec": "Entity is {uuid, type: TEAM|FOLDER|FILE, userIds, children}; teams are roots, files have no children, uuids are unique. A user can access an entity iff the user is listed on it or on any ancestor. For each query [userId, uuid] return that boolean (unknown uuid -> false). The batch-query interface is an inference.",
+   "inference_uncertainty": "medium-high: the entity model and inheritance rule are in the preview; the batch-query interface is inferred",
+   "inferred_interface": {
+    "name": "checkAccess",
+    "params": [
+     {
+      "name": "teams",
+      "type": "Entity[]"
+     },
+     {
+      "name": "queries",
+      "type": "string[][]"
+     }
+    ],
+    "return": {
+     "type": "boolean[]"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "PERM"
+  },
+  {
+   "uid": "hack2hire:67c76f386c89e288437c3031",
+   "variant_id": "67c76f386c89e288437c3031",
+   "variant_ordinal": 1,
+   "title": "Fill Equation with Operators",
+   "source": {
+    "post_id": "67c76c906c89e288437c3030",
+    "group_title": "Fill Equation with Operators",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/67c76c906c89e288437c3030",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/67c76c906c89e288437c3030/practice?questionId=67c76f386c89e288437c3031",
+    "preview_response_sha256": "a8da61f16152556ae06b104ff7e52194e690ea8ed160581f78874f468976a6a6",
+    "preview_content_sha256": "9065420c8a4e50fe8ff98e89ee13f227ca7098c86ce7623c139e096688d56bbb",
+    "preview_characters": 527,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/67c76c906c89e288437c3030.json",
+    "algorithm_tags": [
+     "RECURSION",
+     "MEMOIZATION"
+    ],
+    "companies": [
+     "AMAZON",
+     "GOOGLE"
+    ],
+    "source_difficulty": 3,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "contentPreview: operators and precedence",
+    "LeetCode 282 relationship",
+    "algorithmTags: RECURSION, MEMOIZATION"
+   ],
+   "inferred_spec": "Inferred input \"n1 n2 ... nk = target\" (1<=k<=7, each 0..99, kept as separate operands in order). Insert + or * between every adjacent pair and any grouping; render each expression with parentheses only where needed (around a sum that is an operand of *), no spaces. Return the distinct renderings whose value equals target, sorted by code point.",
+   "inference_uncertainty": "very high: the input format, operand handling (no concatenation) and output form are inferred",
+   "inferred_interface": {
+    "name": "fillOperators",
+    "params": [
+     {
+      "name": "equation",
+      "type": "string"
+     }
+    ],
+    "return": {
+     "type": "string[]"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "FILL"
+  },
+  {
+   "uid": "hack2hire:68fd342247bea664c0bba313",
+   "variant_id": "68fd342247bea664c0bba313",
+   "variant_ordinal": 1,
+   "title": "Find Earliest Available Meeting Slot",
+   "source": {
+    "post_id": "68f5628e577eec16d6b9c92a",
+    "group_title": "Find Earliest Available Meeting Slot",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/68f5628e577eec16d6b9c92a",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/68f5628e577eec16d6b9c92a/practice?questionId=68fd342247bea664c0bba313",
+    "preview_response_sha256": "5d9ebc17fa403901e5fe24d70e807ea1528525e2675711387c3e92122c33de0b",
+    "preview_content_sha256": "0e570b9fadb435dbf1af2b9d76fa42a7b0e8c431b1d6d894b5c93cf252680c53",
+    "preview_characters": 763,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/68f5628e577eec16d6b9c92a.json",
+    "algorithm_tags": [
+     "STRING",
+     "ARRAY"
+    ],
+    "companies": [
+     "CITADEL"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "contentPreview: format, inclusive busy rule, day bounds",
+    "LeetCode 759 relationship"
+   ],
+   "inferred_spec": "events are \"<name> <action> HH:MM HH:MM\"; every event is busy time (the action word is a label) covering whole minutes start..end inclusive. Minutes 00:00..23:59 are 1440 unit slots. Return the earliest start \"HH:MM\" of k consecutive minutes free for everyone, or \"-1\" if none (sentinel inferred).",
+   "inference_uncertainty": "medium: format and inclusive busy rule are in the preview; the minute-cell model and the \"-1\" sentinel are inferred",
+   "inferred_interface": {
+    "name": "earliestMeetingSlot",
+    "params": [
+     {
+      "name": "events",
+      "type": "string[]"
+     },
+     {
+      "name": "k",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "string"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "MEET"
+  },
+  {
+   "uid": "hack2hire:6a7cd372d713d873ca7ac6ef",
+   "variant_id": "6a7cd372d713d873ca7ac6ef",
+   "variant_ordinal": 1,
+   "title": "Find Free Bucket ID Ranges",
+   "source": {
+    "post_id": "6a7cd36cd713d873ca7ac6ee",
+    "group_title": "Find Free Bucket ID Ranges",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6a7cd36cd713d873ca7ac6ee",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6a7cd36cd713d873ca7ac6ee/practice?questionId=6a7cd372d713d873ca7ac6ef",
+    "preview_response_sha256": "734edd48d1bba28b2eeecca576a264eabec89411781366599e30c619aeebbcb0",
+    "preview_content_sha256": "c01361ee5ceef5fd37c79f41e1d191ac5c625cded66d86aad9a2670b79b530d6",
+    "preview_characters": 379,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/6a7cd36cd713d873ca7ac6ee.json",
+    "algorithm_tags": [
+     "ARRAY",
+     "SIMULATION"
+    ],
+    "companies": [
+     "PINTEREST"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 2
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "contentPreview: ID space and row format"
+   ],
+   "inferred_spec": "ID space 0..999. bucketRanges rows [bucketName, startId, endId] (inclusive decimal strings, non-overlapping, any order). Return the maximal unallocated ranges as [startId, endId] decimal strings in ascending order.",
+   "inference_uncertainty": "medium: input format is in the preview; output shape is inferred",
+   "inferred_interface": {
+    "name": "findFreeRanges",
+    "params": [
+     {
+      "name": "bucketRanges",
+      "type": "string[][]"
+     }
+    ],
+    "return": {
+     "type": "string[][]"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "variants inferred as levels 1-2",
+   "oracle_constant": "FREE1"
+  },
+  {
+   "uid": "hack2hire:6a7cd38bd713d873ca7ac6f0",
+   "variant_id": "6a7cd38bd713d873ca7ac6f0",
+   "variant_ordinal": 2,
+   "title": "Find Free Bucket ID Ranges",
+   "source": {
+    "post_id": "6a7cd36cd713d873ca7ac6ee",
+    "group_title": "Find Free Bucket ID Ranges",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6a7cd36cd713d873ca7ac6ee",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6a7cd36cd713d873ca7ac6ee/practice?questionId=6a7cd38bd713d873ca7ac6f0",
+    "preview_response_sha256": "734edd48d1bba28b2eeecca576a264eabec89411781366599e30c619aeebbcb0",
+    "preview_content_sha256": "c01361ee5ceef5fd37c79f41e1d191ac5c625cded66d86aad9a2670b79b530d6",
+    "preview_characters": 379,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/6a7cd36cd713d873ca7ac6ee.json",
+    "algorithm_tags": [
+     "ARRAY",
+     "SIMULATION"
+    ],
+    "companies": [
+     "PINTEREST"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 2
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "contentPreview",
+    "variant order"
+   ],
+   "inferred_spec": "As level 1, keeping only free ranges with at least minSize IDs (the follow-up parameter is an inference).",
+   "inference_uncertainty": "high: the minimum-size parameter is an inference",
+   "inferred_interface": {
+    "name": "findFreeRanges",
+    "params": [
+     {
+      "name": "bucketRanges",
+      "type": "string[][]"
+     },
+     {
+      "name": "minSize",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "string[][]"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "variants inferred as levels 1-2",
+   "oracle_constant": "FREE2"
+  },
+  {
+   "uid": "hack2hire:6a0b74fac84b6e8a3be18c83",
+   "variant_id": "6a0b74fac84b6e8a3be18c83",
+   "variant_ordinal": 1,
+   "title": "Find IPv4 Addresses in Nested Files",
+   "source": {
+    "post_id": "6a0b74f4c84b6e8a3be18c82",
+    "group_title": "Find IPv4 Addresses in Nested Files",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6a0b74f4c84b6e8a3be18c82",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6a0b74f4c84b6e8a3be18c82/practice?questionId=6a0b74fac84b6e8a3be18c83",
+    "preview_response_sha256": "54967ffda4313388368249561d601ac6cf77167f29d03667f505979ace2ccf93",
+    "preview_content_sha256": "58e91e9b6c4160af9e2dd51b3e5fd3be285e31a8e3c0c0b8330a7e2050f23a3d",
+    "preview_characters": 472,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/6a0b74f4c84b6e8a3be18c82.json",
+    "algorithm_tags": [
+     "STRING",
+     "DEPTH_FIRST_SEARCH"
+    ],
+    "companies": [
+     "VERKADA"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "contentPreview: node shape, uniqueness and ordering"
+   ],
+   "inferred_spec": "Node is {name, isFile, lines, children}. Scan every line of every file; each maximal run of digits and dots is a candidate and is kept iff it is exactly four dot-separated decimal octets 0..255 without leading zeros (token rule inferred). Return unique addresses sorted lexicographically.",
+   "inference_uncertainty": "medium: node shape, uniqueness and ordering are in the preview; the token boundary rule is inferred",
+   "inferred_interface": {
+    "name": "findIpAddresses",
+    "params": [
+     {
+      "name": "root",
+      "type": "Node"
+     }
+    ],
+    "return": {
+     "type": "string[]"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "IPV4"
+  },
+  {
+   "uid": "hack2hire:6a21c269d5c5b3e5f9c34546",
+   "variant_id": "6a21c269d5c5b3e5f9c34546",
+   "variant_ordinal": 1,
+   "title": "Find Valid Tile Moves",
+   "source": {
+    "post_id": "6a21c264d5c5b3e5f9c34545",
+    "group_title": "Find Valid Tile Moves",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6a21c264d5c5b3e5f9c34545",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6a21c264d5c5b3e5f9c34545/practice?questionId=6a21c269d5c5b3e5f9c34546",
+    "preview_response_sha256": "f0815f4e1de22aa07659161b41661630b714ef7240f54bf1f7af50b9666d9a31",
+    "preview_content_sha256": "215c9d4f74763c1432ebd332ef0da049728624aaa9149327b29897415238caae",
+    "preview_characters": 457,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/6a21c264d5c5b3e5f9c34545.json",
+    "algorithm_tags": [
+     "DEPTH_FIRST_SEARCH"
+    ],
+    "companies": [
+     "ATLASSIAN",
+     "GOOGLE",
+     "WHATNOT"
+    ],
+    "source_difficulty": 3,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "contentPreview: move rules",
+    "algorithmTags: DEPTH_FIRST_SEARCH"
+   ],
+   "inferred_spec": "Tiles R (moves right), B (moves left), _ (empty). A move slides a tile one cell into an empty cell in its direction, or jumps it over exactly one adjacent opposite-colour tile into the empty cell beyond. Return whether target is reachable from start by zero or more moves (question form inferred).",
+   "inference_uncertainty": "very high: the move rules are in the preview but the question form (reachability) is inferred",
+   "inferred_interface": {
+    "name": "canReach",
+    "params": [
+     {
+      "name": "start",
+      "type": "string[]"
+     },
+     {
+      "name": "target",
+      "type": "string[]"
+     }
+    ],
+    "return": {
+     "type": "boolean"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "TILE"
+  },
+  {
+   "uid": "hack2hire:67d793931989183df53824a0",
+   "variant_id": "67d793931989183df53824a0",
+   "variant_ordinal": 1,
+   "title": "Fractional Inventory",
+   "source": {
+    "post_id": "67d739167e869a20cd523ea8",
+    "group_title": "Fractional Inventory",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/67d739167e869a20cd523ea8",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/67d739167e869a20cd523ea8/practice?questionId=67d793931989183df53824a0",
+    "preview_response_sha256": "19bbfd3aa59df27dc9fdd59391b2fe382d1311dff5f5ca58d0271bfd275a9566",
+    "preview_content_sha256": "bb4b3303b411c7da7de04ad889ef69e39212120dccab6886216de8f7a1342f20",
+    "preview_characters": 629,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/67d739167e869a20cd523ea8.json",
+    "algorithm_tags": [
+     "HASH_TABLE"
+    ],
+    "companies": [
+     "ROBINHOOD"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "contentPreview: order/inventory fields and units"
+   ],
+   "inferred_spec": "Inventory amounts are hundredths of a share (0..99 initially). Order quantity \"q\" is shares with at most two decimals; \"$d\" is dollars, converted to floor(d_cents*100/unit_price_cents) hundredths. Buy q: if inventory < q, buy the fewest whole shares (+100 each) to cover, then subtract q. Sell q: add q, then sell all whole shares so inventory < 100. Return [symbol, hundredths] for every symbol seen, sorted.",
+   "inference_uncertainty": "high: units are in the preview; the buy-whole-shares and sell-whole-shares rules are inferred",
+   "inferred_interface": {
+    "name": "fractionalInventory",
+    "params": [
+     {
+      "name": "orders",
+      "type": "string[][]"
+     },
+     {
+      "name": "inventory",
+      "type": "string[][]"
+     }
+    ],
+    "return": {
+     "type": "string[][]"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "FRAC"
+  },
+  {
+   "uid": "hack2hire:68fd2f6247bea664c0bba309",
+   "variant_id": "68fd2f6247bea664c0bba309",
+   "variant_ordinal": 1,
+   "title": "Friend Recommendations by Mutual Friends",
+   "source": {
+    "post_id": "68f56256577eec16d6b9c928",
+    "group_title": "Friend Recommendations by Mutual Friends",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/68f56256577eec16d6b9c928",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/68f56256577eec16d6b9c928/practice?questionId=68fd2f6247bea664c0bba309",
+    "preview_response_sha256": "2dea5d95f226abb234f8f6e17989afe88cf45431ec82cb896dc9789d291fd835",
+    "preview_content_sha256": "415c9c87628c9430c28f9a488b9a6e14128d60e9ec75699c92c9764c4892ee42",
+    "preview_characters": 376,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/68f56256577eec16d6b9c928.json",
+    "algorithm_tags": [
+     "GRAPH"
+    ],
+    "companies": [
+     "CITADEL",
+     "ORACLE"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "contentPreview: one recommendation per user, ordered rules",
+    "algorithmTags: GRAPH"
+   ],
+   "inferred_spec": "For each user i, recommend the non-friend j != i with the most mutual friends, ties to the smaller id; -1 if no non-friend shares at least one mutual friend (priority rules inferred).",
+   "inference_uncertainty": "medium-high: the goal is in the preview; the priority rules and -1 sentinel are inferred",
+   "inferred_interface": {
+    "name": "recommendFriends",
+    "params": [
+     {
+      "name": "n",
+      "type": "integer"
+     },
+     {
+      "name": "friendships",
+      "type": "integer[][]"
+     }
+    ],
+    "return": {
+     "type": "integer[]"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "FRIEND"
+  },
+  {
+   "uid": "hack2hire:69308197cd79766b0b310225",
+   "variant_id": "69308197cd79766b0b310225",
+   "variant_ordinal": 1,
+   "title": "Generate Function Profiling Events",
+   "source": {
+    "post_id": "69308191cd79766b0b310224",
+    "group_title": "Generate Function Profiling Events",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/69308191cd79766b0b310224",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/69308191cd79766b0b310224/practice?questionId=69308197cd79766b0b310225",
+    "preview_response_sha256": "0c3b907dfd2057ffa47e8590f822aa9ed1c820cabc48c4a4e8df0621f7d1abde",
+    "preview_content_sha256": "5733ae21a9db9932a59e876c255b05cb2aab6b9eb4c9dbbfd328732ea6b91e5c",
+    "preview_characters": 835,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/69308191cd79766b0b310224.json",
+    "algorithm_tags": [
+     "HASH_TABLE",
+     "STRING"
+    ],
+    "companies": [
+     "ANTHROPIC"
+    ],
+    "source_difficulty": 3,
+    "variant_count": 3
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview",
+    "algorithmTags",
+    "codingQuestions (variant count/order)",
+    "LeetCode 636 relationship"
+   ],
+   "inferred_spec": "Each sample is \"<time>:<f1->f2->...>\" with strictly increasing integer times; an empty stack is allowed. A frame instance at depth d continues from one sample to the next iff the stacks agree on positions 0..d (so recursion and re-entry are distinguished by position). Emit [\"start\", name, t] when a frame instance first appears at sample time t and [\"end\", name, t] at the sample time where it is first absent; at one time ends come first (innermost first) then starts (outermost first). Frames open after the last sample get no end event.",
+   "inference_uncertainty": "medium-high: the sample format is in the preview; event shape and ordering are inferred",
+   "inferred_interface": {
+    "name": "generateEvents",
+    "params": [
+     {
+      "name": "samples",
+      "type": "string[]"
+     }
+    ],
+    "return": {
+     "type": "list<[string,string,integer]>"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "variants inferred as levels 1-3",
+   "oracle_constant": "PROF1"
+  },
+  {
+   "uid": "hack2hire:69308714cd79766b0b310228",
+   "variant_id": "69308714cd79766b0b310228",
+   "variant_ordinal": 2,
+   "title": "Generate Function Profiling Events",
+   "source": {
+    "post_id": "69308191cd79766b0b310224",
+    "group_title": "Generate Function Profiling Events",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/69308191cd79766b0b310224",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/69308191cd79766b0b310224/practice?questionId=69308714cd79766b0b310228",
+    "preview_response_sha256": "0c3b907dfd2057ffa47e8590f822aa9ed1c820cabc48c4a4e8df0621f7d1abde",
+    "preview_content_sha256": "5733ae21a9db9932a59e876c255b05cb2aab6b9eb4c9dbbfd328732ea6b91e5c",
+    "preview_characters": 835,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/69308191cd79766b0b310224.json",
+    "algorithm_tags": [
+     "HASH_TABLE",
+     "STRING"
+    ],
+    "companies": [
+     "ANTHROPIC"
+    ],
+    "source_difficulty": 3,
+    "variant_count": 3
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview",
+    "algorithmTags",
+    "codingQuestions (variant count/order)",
+    "LeetCode 636 relationship"
+   ],
+   "inferred_spec": "Each sample is \"<time>:<f1->f2->...>\" with strictly increasing integer times; an empty stack is allowed. A frame instance at depth d continues from one sample to the next iff the stacks agree on positions 0..d (so recursion and re-entry are distinguished by position). As level 1, but only frame instances present in at least minSamples consecutive samples are reported (noise filter inferred).",
+   "inference_uncertainty": "very high: the minimum-sample filter is an inference",
+   "inferred_interface": {
+    "name": "generateEvents",
+    "params": [
+     {
+      "name": "samples",
+      "type": "string[]"
+     },
+     {
+      "name": "minSamples",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "list<[string,string,integer]>"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "variants inferred as levels 1-3",
+   "oracle_constant": "PROF2"
+  },
+  {
+   "uid": "hack2hire:69308716cd79766b0b310229",
+   "variant_id": "69308716cd79766b0b310229",
+   "variant_ordinal": 3,
+   "title": "Generate Function Profiling Events",
+   "source": {
+    "post_id": "69308191cd79766b0b310224",
+    "group_title": "Generate Function Profiling Events",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/69308191cd79766b0b310224",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/69308191cd79766b0b310224/practice?questionId=69308716cd79766b0b310229",
+    "preview_response_sha256": "0c3b907dfd2057ffa47e8590f822aa9ed1c820cabc48c4a4e8df0621f7d1abde",
+    "preview_content_sha256": "5733ae21a9db9932a59e876c255b05cb2aab6b9eb4c9dbbfd328732ea6b91e5c",
+    "preview_characters": 835,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/69308191cd79766b0b310224.json",
+    "algorithm_tags": [
+     "HASH_TABLE",
+     "STRING"
+    ],
+    "companies": [
+     "ANTHROPIC"
+    ],
+    "source_difficulty": 3,
+    "variant_count": 3
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview",
+    "algorithmTags",
+    "codingQuestions (variant count/order)",
+    "LeetCode 636 relationship"
+   ],
+   "inferred_spec": "Each sample is \"<time>:<f1->f2->...>\" with strictly increasing integer times; an empty stack is allowed. A frame instance at depth d continues from one sample to the next iff the stacks agree on positions 0..d (so recursion and re-entry are distinguished by position). The interval [t_i, t_{i+1}) is charged to the innermost function of sample i (if any); the last sample charges nothing. Return [name, exclusive time] for every name seen, sorted by name.",
+   "inference_uncertainty": "high: exclusive time follows the cited LeetCode 636 relationship; interval attribution is inferred",
+   "inferred_interface": {
+    "name": "exclusiveTimes",
+    "params": [
+     {
+      "name": "samples",
+      "type": "string[]"
+     }
+    ],
+    "return": {
+     "type": "list<[string,integer]>"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "variants inferred as levels 1-3",
+   "oracle_constant": "PROF3"
+  },
+  {
+   "uid": "hack2hire:697bdcee9731315964cfaf6f",
+   "variant_id": "697bdcee9731315964cfaf6f",
+   "variant_ordinal": 1,
+   "title": "Hotel Booking Reminder",
+   "source": {
+    "post_id": "697bdcdd9731315964cfaf6e",
+    "group_title": "Hotel Booking Reminder",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/697bdcdd9731315964cfaf6e",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/697bdcdd9731315964cfaf6e/practice?questionId=697bdcee9731315964cfaf6f",
+    "preview_response_sha256": "282b1d0810deabf40275c33ec02c76560deac2d23b9e8336081c72cfbf83def8",
+    "preview_content_sha256": "9a971d333c797f65d974485b12bcd1312945eff44f90683401b1700eded2ee7f",
+    "preview_characters": 450,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/697bdcdd9731315964cfaf6e.json",
+    "algorithm_tags": [
+     "HASH_TABLE"
+    ],
+    "companies": [
+     "STRIPE"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 3
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "contentPreview: reservation fields",
+    "title"
+   ],
+   "inferred_spec": "reservations is a list of objects {guest_name, room_type, check_in_day, stay_length}; check_out_day = check_in_day + stay_length. Output is every (send_day, guest_name, touchpoint_name) triple, sorted ascending by day, then guest name, then touchpoint name (code-point order); duplicates are kept. Level 1: emailTouchpoints maps touchpoint name -> day offset from check_in_day.",
+   "inference_uncertainty": "high: reservation fields are in the preview; the touchpoint shape and output are inferred",
+   "inferred_interface": {
+    "name": "buildEmailSchedule",
+    "params": [
+     {
+      "name": "reservations",
+      "type": "object[]"
+     },
+     {
+      "name": "emailTouchpoints",
+      "type": "object"
+     }
+    ],
+    "return": {
+     "type": "list<[integer,string,string]>"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "variants inferred as levels 1-3",
+   "oracle_constant": "HOTEL1"
+  },
+  {
+   "uid": "hack2hire:697bdf679731315964cfaf77",
+   "variant_id": "697bdf679731315964cfaf77",
+   "variant_ordinal": 2,
+   "title": "Hotel Booking Reminder",
+   "source": {
+    "post_id": "697bdcdd9731315964cfaf6e",
+    "group_title": "Hotel Booking Reminder",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/697bdcdd9731315964cfaf6e",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/697bdcdd9731315964cfaf6e/practice?questionId=697bdf679731315964cfaf77",
+    "preview_response_sha256": "282b1d0810deabf40275c33ec02c76560deac2d23b9e8336081c72cfbf83def8",
+    "preview_content_sha256": "9a971d333c797f65d974485b12bcd1312945eff44f90683401b1700eded2ee7f",
+    "preview_characters": 450,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/697bdcdd9731315964cfaf6e.json",
+    "algorithm_tags": [
+     "HASH_TABLE"
+    ],
+    "companies": [
+     "STRIPE"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 3
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "contentPreview: stay_length field",
+    "variant order"
+   ],
+   "inferred_spec": "reservations is a list of objects {guest_name, room_type, check_in_day, stay_length}; check_out_day = check_in_day + stay_length. Output is every (send_day, guest_name, touchpoint_name) triple, sorted ascending by day, then guest name, then touchpoint name (code-point order); duplicates are kept. Level 2: each touchpoint is {anchor: check_in|check_out, offset}.",
+   "inference_uncertainty": "high: anchors are inferred from stay_length",
+   "inferred_interface": {
+    "name": "buildEmailSchedule",
+    "params": [
+     {
+      "name": "reservations",
+      "type": "object[]"
+     },
+     {
+      "name": "emailTouchpoints",
+      "type": "object"
+     }
+    ],
+    "return": {
+     "type": "list<[integer,string,string]>"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "variants inferred as levels 1-3",
+   "oracle_constant": "HOTEL2"
+  },
+  {
+   "uid": "hack2hire:697bdf8c9731315964cfaf78",
+   "variant_id": "697bdf8c9731315964cfaf78",
+   "variant_ordinal": 3,
+   "title": "Hotel Booking Reminder",
+   "source": {
+    "post_id": "697bdcdd9731315964cfaf6e",
+    "group_title": "Hotel Booking Reminder",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/697bdcdd9731315964cfaf6e",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/697bdcdd9731315964cfaf6e/practice?questionId=697bdf8c9731315964cfaf78",
+    "preview_response_sha256": "282b1d0810deabf40275c33ec02c76560deac2d23b9e8336081c72cfbf83def8",
+    "preview_content_sha256": "9a971d333c797f65d974485b12bcd1312945eff44f90683401b1700eded2ee7f",
+    "preview_characters": 450,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/697bdcdd9731315964cfaf6e.json",
+    "algorithm_tags": [
+     "HASH_TABLE"
+    ],
+    "companies": [
+     "STRIPE"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 3
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "contentPreview: room_type field",
+    "variant order"
+   ],
+   "inferred_spec": "reservations is a list of objects {guest_name, room_type, check_in_day, stay_length}; check_out_day = check_in_day + stay_length. Output is every (send_day, guest_name, touchpoint_name) triple, sorted ascending by day, then guest name, then touchpoint name (code-point order); duplicates are kept. Level 3: as level 2 plus optional room_types list; when present the touchpoint applies only to those room types.",
+   "inference_uncertainty": "very high: the room-type filter is inferred from room_type",
+   "inferred_interface": {
+    "name": "buildEmailSchedule",
+    "params": [
+     {
+      "name": "reservations",
+      "type": "object[]"
+     },
+     {
+      "name": "emailTouchpoints",
+      "type": "object"
+     }
+    ],
+    "return": {
+     "type": "list<[integer,string,string]>"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "variants inferred as levels 1-3",
+   "oracle_constant": "HOTEL3"
+  },
+  {
+   "uid": "hack2hire:69bd5fda1cbff60a929be96f",
+   "variant_id": "69bd5fda1cbff60a929be96f",
+   "variant_ordinal": 1,
+   "title": "Implement Simplified Git Diff",
+   "source": {
+    "post_id": "69bc635c1cbff60a929be395",
+    "group_title": "Implement Simplified Git Diff",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/69bc635c1cbff60a929be395",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/69bc635c1cbff60a929be395/practice?questionId=69bd5fda1cbff60a929be96f",
+    "preview_response_sha256": "c0c010c7d05669807a12b01c0a53cd0ac2109fe640ee4ab46477d7e963a6e010",
+    "preview_content_sha256": "652f075ecf08e8d8d6b7f8a5e18dd5b63acca7328fcbb707763e0e81af74cf80",
+    "preview_characters": 543,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/69bc635c1cbff60a929be395.json",
+    "algorithm_tags": [
+     "DIVIDE_AND_CONQUER"
+    ],
+    "companies": [
+     "JANE_STREET"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 3
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "contentPreview: full level-1 statement"
+   ],
+   "inferred_spec": "A unique common line is a string occurring exactly once in lines1 and exactly once in lines2. Return [i, j] for the unique common line with the smallest i (inferred deterministic choice for the source's \"any\"), or [-1, -1].",
+   "inference_uncertainty": "low: the preview states level 1; only the deterministic tie-break is inferred",
+   "inferred_interface": {
+    "name": "findUniqueCommonLine",
+    "params": [
+     {
+      "name": "lines1",
+      "type": "string[]"
+     },
+     {
+      "name": "lines2",
+      "type": "string[]"
+     }
+    ],
+    "return": {
+     "type": "integer[]"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "variants inferred as patience-diff levels 1-3",
+   "oracle_constant": "DIFF1"
+  },
+  {
+   "uid": "hack2hire:69eb97bffbaf3da6418293cf",
+   "variant_id": "69eb97bffbaf3da6418293cf",
+   "variant_ordinal": 2,
+   "title": "Implement Simplified Git Diff",
+   "source": {
+    "post_id": "69bc635c1cbff60a929be395",
+    "group_title": "Implement Simplified Git Diff",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/69bc635c1cbff60a929be395",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/69bc635c1cbff60a929be395/practice?questionId=69eb97bffbaf3da6418293cf",
+    "preview_response_sha256": "c0c010c7d05669807a12b01c0a53cd0ac2109fe640ee4ab46477d7e963a6e010",
+    "preview_content_sha256": "652f075ecf08e8d8d6b7f8a5e18dd5b63acca7328fcbb707763e0e81af74cf80",
+    "preview_characters": 543,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/69bc635c1cbff60a929be395.json",
+    "algorithm_tags": [
+     "DIVIDE_AND_CONQUER"
+    ],
+    "companies": [
+     "JANE_STREET"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 3
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "title (git diff)",
+    "algorithmTags: DIVIDE_AND_CONQUER",
+    "variant order"
+   ],
+   "inferred_spec": "A unique common line is a string occurring exactly once in lines1 and exactly once in lines2. Anchors are the longest chain of unique common lines whose indices increase in both arrays (patience-diff LCS); among longest chains the one whose list of lines1 indices is lexicographically smallest is chosen (inferred deterministic tie-break for the source's \"any\"). Return the chosen chain as [[i, j], ...] in increasing order.",
+   "inference_uncertainty": "high: the anchor chain is inferred from the git-diff title and the divide-and-conquer tag",
+   "inferred_interface": {
+    "name": "uniqueCommonAnchors",
+    "params": [
+     {
+      "name": "lines1",
+      "type": "string[]"
+     },
+     {
+      "name": "lines2",
+      "type": "string[]"
+     }
+    ],
+    "return": {
+     "type": "integer[][]"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "variants inferred as patience-diff levels 1-3",
+   "oracle_constant": "DIFF2"
+  },
+  {
+   "uid": "hack2hire:69eb97f0fbaf3da6418293d1",
+   "variant_id": "69eb97f0fbaf3da6418293d1",
+   "variant_ordinal": 3,
+   "title": "Implement Simplified Git Diff",
+   "source": {
+    "post_id": "69bc635c1cbff60a929be395",
+    "group_title": "Implement Simplified Git Diff",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/69bc635c1cbff60a929be395",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/69bc635c1cbff60a929be395/practice?questionId=69eb97f0fbaf3da6418293d1",
+    "preview_response_sha256": "c0c010c7d05669807a12b01c0a53cd0ac2109fe640ee4ab46477d7e963a6e010",
+    "preview_content_sha256": "652f075ecf08e8d8d6b7f8a5e18dd5b63acca7328fcbb707763e0e81af74cf80",
+    "preview_characters": 543,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/69bc635c1cbff60a929be395.json",
+    "algorithm_tags": [
+     "DIVIDE_AND_CONQUER"
+    ],
+    "companies": [
+     "JANE_STREET"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 3
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-28"
+   },
+   "inference_basis_fields": [
+    "title (git diff)",
+    "algorithmTags: DIVIDE_AND_CONQUER",
+    "variant order"
+   ],
+   "inferred_spec": "A unique common line is a string occurring exactly once in lines1 and exactly once in lines2. Recursive patience diff of a segment pair: emit the common prefix and (after the middle) common suffix as \"  line\"; in the middle, find anchors among lines unique within the middle segments (Anchors are the longest chain of unique common lines whose indices increase in both arrays (patience-diff LCS); among longest chains the one whose list of lines1 indices is lexicographically smallest is chosen (inferred deterministic tie-break for the source's \"any\").); with no anchors emit \"- \" for every middle line of lines1 then \"+ \" for every middle line of lines2; otherwise recurse on each gap before/between/after anchors and emit each anchor as \"  line\".",
+   "inference_uncertainty": "very high: the full diff output format and recursion rules are inferred",
+   "inferred_interface": {
+    "name": "patienceDiff",
+    "params": [
+     {
+      "name": "lines1",
+      "type": "string[]"
+     },
+     {
+      "name": "lines2",
+      "type": "string[]"
+     }
+    ],
+    "return": {
+     "type": "string[]"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "variants inferred as patience-diff levels 1-3",
+   "oracle_constant": "DIFF3"
+  }
+ ]
+}

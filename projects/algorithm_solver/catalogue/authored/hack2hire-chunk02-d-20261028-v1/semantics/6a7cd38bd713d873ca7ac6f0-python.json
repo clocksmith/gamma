@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:6a7cd38bd713d873ca7ac6f0",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "bucketRanges",
+  "minSize"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-28"
+ },
+ "inferred_interface": {
+  "name": "findFreeRanges",
+  "params": [
+   {
+    "name": "bucketRanges",
+    "type": "string[][]"
+   },
+   {
+    "name": "minSize",
+    "type": "integer"
+   }
+  ],
+  "return": {
+   "type": "string[][]"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "1000-entry used array scan",
+  "candidate_design": "sort ranges by start; sweep gaps between consecutive ranges and to 999",
+  "complexity_target": "O(r log r) time/O(r) space"
+ },
+ "source_sha256": "5e3c2184d5a1475d595a046c2e157fc9dd538d32bd86e631e9416cd6c429fafb",
+ "wrapper": "Solution.findFreeRanges"
+}
